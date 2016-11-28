@@ -1,4 +1,4 @@
-#Include C:\Users\thebo\ahk\source\common\
+#Include %A_LineFile%\..
 
 #Include borgConfig.ahk ; Must be first in this section.
 

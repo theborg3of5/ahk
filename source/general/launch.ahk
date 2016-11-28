@@ -31,10 +31,10 @@
 	return
 	
 	; Selector launchers
-	#p::  Selector.select("epic_phone.ini",        "CALL")
-	^+!h::Selector.select("epic_environments.ini", "DO_HYPERSPACE",     , "C:\Program Files (x86)\Epic\v8.3\Shared Files\EpicD83.exe")
-	^+!r::Selector.select("epic_environments.ini", "DO_THUNDER",        , "C:\Program Files (x86)\PuTTY\putty.exe")
-	^+!t::Selector.select("epic_outlookTLG.ini",   "OUTLOOK_TLG")
+	#p::  Selector.select("local/phone.ini",            "CALL")
+	^+!h::Selector.select("local/epicEnvironments.ini", "DO_HYPERSPACE",     , "C:\Program Files (x86)\Epic\v8.3\Shared Files\EpicD83.exe")
+	^+!r::Selector.select("local/epicEnvironments.ini", "DO_THUNDER",        , "C:\Program Files (x86)\PuTTY\putty.exe")
+	^+!t::Selector.select("local/outlookTLG.ini",       "OUTLOOK_TLG")
 
 	; Themes
 	^+!d::Selector.select("theme.ini",             "CHANGE_THEME",  "dw")

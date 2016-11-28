@@ -18,16 +18,20 @@
 #IfWinActive
 
 ; Mail activity.
-#If WinActive("Inbox - " localEmailAddress " - Outlook") || WinActive("Do - " localEmailAddress " - Outlook") || WinActive("Wait - " localEmailAddress " - Outlook")
+#If WinActive("Inbox - " epicEmailAddress " - Outlook") || WinActive("Do - " epicEmailAddress " - Outlook") || WinActive("Wait - " epicEmailAddress " - Outlook")
 	; Archive the current message.
 	$^e::
 		Send, ^q
 		Send, !1
 	return
+	
+	^b::
+		MsgBox, eh?
+	return
 #If
 
 ; Calendar activity.
-#If WinActive("Calendar - " localEmailAddress " - Outlook") || WinActive("TLG - " localEmailAddress " - Outlook")
+#If WinActive("Calendar - " epicEmailAddress " - Outlook") || WinActive("TLG - " epicEmailAddress " - Outlook")
 	; Calendar view: 3-day view, week view, and month view.
 	$^e::Send, !3
 	^w::Send, ^!3

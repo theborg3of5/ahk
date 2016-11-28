@@ -1,0 +1,6 @@
+Icons
+
+hash.ico
+	Icon by Everaldo Coelho (http://www.everaldo.com/)
+redHash.ico
+	Based on icon by Everaldo Coelho (http://www.everaldo.com/) - modified slightly.

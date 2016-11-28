@@ -1,0 +1,84 @@
+﻿{ ; Includes, other here-to-stay auto-execute things.
+	#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+	SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
+	SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+	; #NoTrayIcon
+	#SingleInstance force
+	
+	#Include <autoInclude>
+	suspended := 0
+	
+	; Icon setup.
+	states                 := []
+	states["suspended", 0] := "Icons\test.ico"
+	states["suspended", 1] := "Icons\testSuspended.ico"
+	setupTrayIcons(states)
+}
+
+; --------------------------------------------------------------------------
+
+; Any specific auto-execute things that are needed go here.
+
+
+; --------------------------------------------------------------------------
+
+^b::
+	
+return
+
+;^h::
+;	; Get user input.
+;	FileSelectFile, fileName
+;	
+;	list := TableList.parseFile(fileName)
+;	DEBUG.popup(list, "Parsed List")
+;return
+
+; --------------------------------------------------------------------------
+{ ; Hotkeys that don't change.
+	; Hotkey to open test.ahk for editing.
+	^+e::
+		editScript(A_LineFile)
+	return
+
+	F6::
+		WinGetClass, currClass, A
+		WinGetTitle, currTitle, A
+		ControlGetFocus, currControl, A
+		DEBUG.popup(currClass, "Class", currTitle, "Title", currControl, "Control")
+	return
+	F7::
+		WinGetClass, currClass, A
+		clipboard := currClass
+	return
+	F8::
+		WinGetTitle, currTitle, A
+		clipboard := currTitle
+	return
+	F9::
+		clipboard := getFocusedControl()
+	return
+	
+	!XButton1::
+	!XButton2::
+		clipboard := getTooltipText()
+		DEBUG.popup("Tooltip text", clipboard)
+	return
+}
+
+{ ; Exit/reload hotkeys.
+	~#!x::
+		Suspend
+		suspended := !suspended
+		updateTrayIcon()
+	return
+
+	; Exit, reload, and suspend.
+	~!+x::ExitApp
+	; ~#!x::Suspend
+	^!r::
+	~!+r::
+		Suspend, Permit
+		Reload
+	return
+}

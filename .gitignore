@@ -1,0 +1,22 @@
+# General files and extensions that should be ignored
+Thumbs.db
+*.bak
+*.tmp
+*.exe
+
+# Do include colorette's exe, though
+!Colorette.exe
+
+# Ignore the config/local folder entirely.
+config/local/
+
+# Test folder, ignore most things, but not subdirectories
+test/*
+!test/*/
+
+# Ignore everything inside share/*/Includes folders, except the specific _NeededIncludes file.
+share/**/Includes/*
+!_NeededIncludes
+
+# Always include keep.txt files.
+!keep.txt

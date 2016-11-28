@@ -1,0 +1,9 @@
+..\..\share\_trayHelper.ahk
+
+data.ahk
+io.ahk
+selector.ahk
+selectorRow.ahk
+string.ahk
+tableList.ahk
+tableListMod.ahk

@@ -1,0 +1,16 @@
+..\..\share\_trayHelper.ahk
+
+actionObject.ahk
+data.ahk
+debug.ahk
+epic.ahk
+io.ahk
+runCommands.ahk
+selector.ahk
+selectorRow.ahk
+string.ahk
+tableList.ahk
+tableListMod.ahk
+window.ahk
+
+..\..\resources\epic_actionObject.ini

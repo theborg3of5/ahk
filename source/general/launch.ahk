@@ -39,10 +39,10 @@
 	; Themes
 	^+!d::Selector.select("theme.ini",             "CHANGE_THEME",  "dw")
 	^+!l::Selector.select("theme.ini",             "CHANGE_THEME",  "lw")
-	
-	; Resize window
-	#!r:: Selector.select("resize.ini",            "RESIZE")
 #If
+	
+; Resize window
+#!r::Selector.select("resize.ini",            "RESIZE")
 
 ; Folders
 !+a::openFolder("ahkRoot")

@@ -170,8 +170,8 @@ class Selector {
 					this.filePath := fPath
 				} else if(FileExist("Includes\" fPath)) {  ; If there's an Includes folder in the same directory, check in there as well.
 					this.filePath := "Includes\" fPath
-				} else if(FileExist(ahkRootPath "resources\" fPath)) {  ; Default folder for selector INIs
-					this.filePath := ahkRootPath "resources\" fPath
+				} else if(FileExist(ahkRootPath "config\" fPath)) {  ; Default folder for selector INIs
+					this.filePath := ahkRootPath "config\" fPath
 				} else {
 					this.errPop(fPath, "File doesn't exist")
 					fPath := ""

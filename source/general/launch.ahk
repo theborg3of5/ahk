@@ -19,6 +19,11 @@
 ^!#/::activateProgram("WinSpy")
 ^!#s::activateProgram("Snapper")
 
+!+g::
+	progInfo := BorgConfig.getProgram("GitHub")
+	RunCommand(progInfo["PATH"])
+return
+
 #If !BorgConfig.isMachine(EPIC_DESKTOP)
 	!+l::activateProgram("League")
 #If

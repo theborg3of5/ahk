@@ -6,7 +6,7 @@
 	
 	; Opens the phone.ini file for editing.
 	NumpadAdd::
-		Run, % ahkRootPath "resources\epic_phone.ini"
+		Run, %  localConfigFolder "phone.ini"
 	return
 #IfWinActive
 

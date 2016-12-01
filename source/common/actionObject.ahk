@@ -205,7 +205,7 @@ class ActionObject {
 		
 		; While here later on? Doesn't fit in selector's single-minded aspect right now.
 		if(!type || !action || (!subType && needsST) || (!subAction && needsSA)) {
-			objInfo   := Selector.select("epic_actionObject.ini", "RET_DATA", "", "", {TYPE: type, ACTION: action, SUBTYPE: subType, SUBACTION: subAction, ID: input})
+			objInfo   := Selector.select("local/actionObject.ini", "RET_DATA", "", "", {TYPE: type, ACTION: action, SUBTYPE: subType, SUBACTION: subAction, ID: input})
 			type      := objInfo["TYPE"]
 			action    := objInfo["ACTION"]
 			subType   := objInfo["SUBTYPE"]
@@ -216,7 +216,7 @@ class ActionObject {
 		; Additional processing on user-given info as needed.
 		if(type = TYPE_EMC2) { ; EMC2 - subType might need conversion (QAN->ZQN, etc)
 			if(subType) { ; But if it's blank, don't ask the user again.
-				objInfo := Selector.select("epic_actionObject.ini", "RET_DATA", subType)
+				objInfo := Selector.select("local/actionObject.ini", "RET_DATA", subType)
 				subType := objInfo["SUBTYPE"]
 			}
 		}

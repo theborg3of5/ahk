@@ -39,9 +39,6 @@
 	:*:uname::
 		Send, % userName
 	return
-	:*:.unixpass::
-		Send, % epicDefaultUnixPass
-	return
 	:*:.ecid::
 		Send, % epicComputerName
 	return
@@ -281,7 +278,7 @@
 		return
 	}
 
-	{ ; Epic
+	{ ; Epic - General
 		:*:epf::
 			Send, % epicPersonalFolder
 		return
@@ -302,51 +299,35 @@
 			Send, % epicHBFolder "Dev\Partial Installers\"
 		return
 		
+		:*c:xesf::
+			Send, % epicServerDataCDE
+		return
+	}
+	
+	{ ; Epic - Source
 		:*c:esf::
-			Send, % epicSource83St1
+			Send, % epicSourceCurrentS1
 		return
 		
 		:*c:hesf::
-			Send, % epicSource83St1 epicSourceHBFolder
+			Send, % epicSourceCurrentS1 epicSourceHBFolder
 		return
 		:*c:eesf::
-			Send, % epicSource83St1 epicSourceEBFolder
-		return
-		:*c:cesf::
-			Send, % epicSource83St1 epicSourceCadFolder
-		return
-		
-		:*c:fesf::
-			Send, % epicSource83St1 epicFoundationProject
+			Send, % epicSourceCurrentS1 epicSourceEBFolder
 		return
 		
 		:*c:posf::
-			Send, % epicSource83St1 epicSourceEBFolder "PmtPost\"
+			Send, % epicSourceCurrentS1 epicSourceEBFolder "PmtPost\"
 		return
 		:*c:ciesf::
-			Send, % epicSource83St1 epicSourceCadFolder "CheckIn\AR Copay\"
+			Send, % epicSourceCurrentS1 "Cadence\CheckIn\AR Copay\"
 		return
 		
-		:*c:pesf::
-			Send, % epicProgramFolder82
+		:*c:fesf::
+			Send, % epicSourceCurrentS1 epicFoundationProject
 		return
-		:*c:iesf::
-			Send, % epicImagesFolder82
-		return
-		:*c:sfesf::
-			Send, % epicSharedFiles82
-		return
-		
-		:*c:tesf::
-			Send, % epicTempData
-		return
-		:*c:xesf::
-		:*c:sdesf::
-			Send, % epicServerDataCDE
-		return
-		
 		:*c:edf::
-			Send, % epicSourceFolder83 "DLG-"
+			Send, % epicSourceCurrentS1 "DLG-"
 		return
 	}
 

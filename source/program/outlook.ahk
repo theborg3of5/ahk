@@ -24,10 +24,6 @@
 		Send, ^q
 		Send, !1
 	return
-	
-	^b::
-		MsgBox, eh?
-	return
 #If
 
 ; Calendar activity.

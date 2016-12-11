@@ -27,16 +27,6 @@ processOverride(defaultVal, overrideVal) {
 	else
 		return defaultVal
 }
-; Looped version of processOverride.
-processOverrides(defaults, overrides) {
-	; DEBUG.popup("Defaults", defaults, "Overrides", overrides)
-	outputSettings := []
-	
-	For key,defaultVal in defaults
-		outputSettings[key] := processOverride(defaultVal, overrides[key])
-	
-	return outputSettings
-}
 
 ; Inserts an item at the beginning of an array.
 insertFront(ByRef arr, new) {

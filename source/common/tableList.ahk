@@ -177,7 +177,7 @@ class TableList {
 		defaultChars["MODEL"]       := "("
 		defaultChars["PLACEHOLDER"] := ""
 		defaultChars["PASS"]        := ["#"] ; This one supports multiple entries
-		this.chars := processOverrides(defaultChars, overrides["CHARS"])
+		this.chars := mergeArrays(defaultChars, overrides["CHARS"])
 		
 		; Format defaults and overrides
 		this.separateMap := processOverride([], overrides["FORMAT", "SEPARATE_MAP"])

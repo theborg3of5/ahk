@@ -59,7 +59,7 @@
 #If isEpicEnvironmentListWindow()
 	; Shows a list to the user, who can decide which environment they want to launch, then it will find and focus that one in the environment list window.
 	^f::
-		data := Selector.select("epic_environments.ini", "RET_DATA")
+		data := Selector.select("epic_environments.tl", "RET_DATA")
 		pickEnvironment(data["ENV_TITLE"], data["ENV_GROUP"])
 	return
 #If

@@ -2,9 +2,9 @@
 	
 	'Fixes'
 		EMC2 check needs to be more granular - check ahk_exe as well as title.
+		Fix setup - still doing zips and such. :\
 	
 	'New ideas'
-		Fix setup - still doing zips and such. :\
 		Move specificication of placeholder char for INIs to setting in INI itself
 			In order to do this, we need to move processing of (at least some) +settings to TableList.
 		Do we really need processOverride anymore, or is mergeArrays() what we really want, and better?

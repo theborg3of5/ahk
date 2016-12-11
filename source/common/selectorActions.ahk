@@ -290,9 +290,9 @@ CHANGE_THEME(actionRow) {
 		}
 		
 		if(otherKey1)
-			Selector.select("theme.ini", "CHANGE_THEME", otherKey1)
+			Selector.select("theme.tl", "CHANGE_THEME", otherKey1)
 		if(otherKey2)
-			Selector.select("theme.ini", "CHANGE_THEME", otherKey2)
+			Selector.select("theme.tl", "CHANGE_THEME", otherKey2)
 		
 	} else {
 		DEBUG.popup("Undefined theme change operation", actionType)

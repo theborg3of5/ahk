@@ -32,14 +32,14 @@ return
 return
 
 ; ^a::
-	; DEBUG.popup("test", doTest("Selector", "selector.ini", "selectorSource1.ini"))
+	; DEBUG.popup("test", doTest("Selector", "selector.tl", "selectorSource1.tl"))
 ; return
 
 ; Gather info for unit test action.
 getUnitTestInfo(type, ByRef area, ByRef subArea, ByRef inFile, ByRef outFile, ByRef sourceFile = "", ByRef error = "") {
 	errMsgs := []
 	
-	areaInfo 	:= Selector.select("unitTestAreas.ini", "RET_DATA")
+	areaInfo 	:= Selector.select("unitTestAreas.tl", "RET_DATA")
 	area			:= areaInfo["AREA"]
 	subArea		:= areaInfo["SUBAREA"]
 	inFile		:= areaInfo["INPUT"]

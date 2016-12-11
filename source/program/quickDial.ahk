@@ -4,9 +4,9 @@
 		Send, {Tab 6}
 	return
 	
-	; Opens the phone.ini file for editing.
+	; Opens the phone.tl file for editing.
 	NumpadAdd::
-		Run, %  localConfigFolder "phone.ini"
+		Run, %  localConfigFolder "phone.tl"
 	return
 #IfWinActive
 

@@ -30,18 +30,18 @@ class BorgConfig {
 	static windows  := []
 	static programs := []
 	
-	init(settingsINI, windowsINI, programsINI) {
-		this.loadSettings(settingsINI)
-		this.loadWindows(windowsINI)
-		this.loadPrograms(programsINI)
+	init(settingsFile, windowsFile, programsFile) {
+		this.loadSettings(settingsFile)
+		this.loadWindows(windowsFile)
+		this.loadPrograms(programsFile)
 		
 		; DEBUG.popup("BorgConfig", "End of init", "Settings", this.settings, "Window settings", this.windows, "Program info", this.programs)
 	}
 	
-	loadSettings(iniPath) {
+	loadSettings(filePath) {
 		For i,configName in this.settingsIndices {
-			IniRead, value, %iniPath%, Main, %configName%
-			; DEBUG.popup("INI", iniPath, "Config name", configName, "Value", value)
+			IniRead, value, %filePath%, Main, %configName%
+			; DEBUG.popup("Filepath", filePath, "Config name", configName, "Value", value)
 		
 			; Multi-entry value, put into an array.
 			if(stringContains(value, this.multiDelim)) {
@@ -57,26 +57,26 @@ class BorgConfig {
 			}
 		}
 		
-		; DEBUG.popup("Script", A_ScriptFullPath, "AHK Root", ahkRootPath, "User path", userPath, "AHK Lib", ahkLibPath, "Borg ini path", iniPath, "Settings", this.settings)
+		; DEBUG.popup("Script", A_ScriptFullPath, "AHK Root", ahkRootPath, "User path", userPath, "AHK Lib", ahkLibPath, "Borg file path", filePath, "Settings", this.settings)
 	}
 	
-	loadWindows(iniPath) {
+	loadWindows(filePath) {
 		settings := []
 		settings["CHARS"] := []
 		settings["CHARS", "PLACEHOLDER"] := "-"
 		settings["FILTER", "COLUMN"] := "MACHINE"
 		settings["FILTER", "INCLUDE", "VALUE"] := BorgConfig.getMachine()
 		
-		this.windows := TableList.parseFile(iniPath, settings)
+		this.windows := TableList.parseFile(filePath, settings)
 		; DEBUG.popup("BorgConfig", "loadWindows", "Loaded windows", this.windows)
 	}
 	
-	loadPrograms(iniPath) {
+	loadPrograms(filePath) {
 		settings := []
 		settings["CHARS"] := []
 		settings["CHARS", "ESCAPE"] := "" ; No escape char, to let single backslashes through.
 		settings["CHARS", "PLACEHOLDER"] := "-"
-		rawPrograms := TableList.parseFile(iniPath, settings) ; Format: rawPrograms[idx] := [program info array]
+		rawPrograms := TableList.parseFile(filePath, settings) ; Format: rawPrograms[idx] := [program info array]
 		; DEBUG.popup("BorgConfig", "loadPrograms", "Raw table", rawPrograms)
 		
 		; Index it by name and machine.
@@ -123,11 +123,11 @@ class BorgConfig {
 		else
 			return this.settings
 	}
-	setSetting(settingName, value, saveToINI = false) {
+	setSetting(settingName, value, saveToFile = false) {
 		this.settings[settingName] := value
 		
-		if(saveToINI) {
-			; If it's an array, turn it into a delimited string to write it to the INI.
+		if(saveToFile) {
+			; If it's an array, turn it into a delimited string to write it to the file.
 			if(isObject(value)) {
 				For i,v in value {
 					if(i > 1)
@@ -139,7 +139,7 @@ class BorgConfig {
 				valToWrite := value
 			}
 			
-			IniWrite, %valToWrite%, %configFolder%settings.ini, Main, %settingName%
+			IniWrite, %valToWrite%, %configFolder%settings.tl, Main, %settingName%
 		}
 	}
 	
@@ -164,7 +164,7 @@ class BorgConfig {
 		return retWindow
 	}
 	
-	; Subscripts available (only set if set in INI):
+	; Subscripts available (only set if set in file):
 	;	NAME    - Program name
 	;	CLASS   - ahk_class (or sometimes title prefaced with "{NAME} ")
 	;	PATH    - Full path to the executable, including the executable.
@@ -210,4 +210,4 @@ class BorgConfig {
 	}
 }
 
-BorgConfig.init(localConfigFolder "settings.ini", configFolder "windows.ini", configFolder "programs.ini")
+BorgConfig.init(localConfigFolder "settings.tl", configFolder "windows.tl", configFolder "programs.tl")

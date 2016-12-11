@@ -36,18 +36,18 @@ return
 	return
 	
 	; Selector launchers
-	#p::  Selector.select("local/phone.ini",            "CALL")
-	^+!h::Selector.select("local/epicEnvironments.ini", "DO_HYPERSPACE",     , "C:\Program Files (x86)\Epic\v8.3\Shared Files\EpicD83.exe")
-	^+!r::Selector.select("local/epicEnvironments.ini", "DO_THUNDER",        , "C:\Program Files (x86)\PuTTY\putty.exe")
-	^+!t::Selector.select("local/outlookTLG.ini",       "OUTLOOK_TLG")
+	#p::  Selector.select("local/phone.tl",            "CALL")
+	^+!h::Selector.select("local/epicEnvironments.tl", "DO_HYPERSPACE",     , "C:\Program Files (x86)\Epic\v8.3\Shared Files\EpicD83.exe")
+	^+!r::Selector.select("local/epicEnvironments.tl", "DO_THUNDER",        , "C:\Program Files (x86)\PuTTY\putty.exe")
+	^+!t::Selector.select("local/outlookTLG.tl",       "OUTLOOK_TLG")
 
 	; Themes
-	^+!d::Selector.select("theme.ini",             "CHANGE_THEME",  "dw")
-	^+!l::Selector.select("theme.ini",             "CHANGE_THEME",  "lw")
+	^+!d::Selector.select("theme.tl", "CHANGE_THEME",  "dw")
+	^+!l::Selector.select("theme.tl", "CHANGE_THEME",  "lw")
 #If
 	
 ; Resize window
-#!r::Selector.select("resize.ini",            "RESIZE")
+#!r::Selector.select("resize.tl", "RESIZE")
 
 ; Folders
 !+a::openFolder("ahkRoot")
@@ -68,7 +68,7 @@ return
 	!+f::
 		text := gatherText(TEXT_SOURCE_SEL_CLIP)
 		
-		data := Selector.select("search.ini", "RET_DATA", "", "", {"ARG1": text})
+		data := Selector.select("search.tl", "RET_DATA", "", "", {"ARG1": text})
 		searchType := data["SEARCH_TYPE"]
 		searchTypes := StrSplit(data["SUBTYPE"], "|") ; In case multiple post types, pipe-delimited.
 		
@@ -129,14 +129,14 @@ return
 ; Folder List - Open
 ^+!w::openFolder()
 
-; Query this machine's folders INI file (prompt the user if nothing given) and open it.
+; Query this machine's folders TL file (prompt the user if nothing given) and open it.
 openFolder(folderName = "") {
 	global configFolder
 	
 	tableListSettings := []
 	tableListSettings["FILTER", "COLUMN"] := "MACHINE"
 	tableListSettings["FILTER", "INCLUDE", "VALUE"]  := BorgConfig.getMachine()
-	folderPath := Selector.select(configFolder "folders.ini", "RET", folderName, , , , tableListSettings)
+	folderPath := Selector.select(configFolder "folders.tl", "RET", folderName, , , , tableListSettings)
 	
 	; Replace any special tags with real paths.
 	folderPath := StrReplace(folderPath, "<AHKROOT>", SubStr(ahkRootPath, 1, -1)) ; Assuming that global path vars have a \ on the end that we don't want.

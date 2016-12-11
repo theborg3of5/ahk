@@ -55,7 +55,7 @@ callIfExists(functionName, params*) { ; params is given as discrete arguemnts, b
 
 ; Opens the given script in Notepad++.
 editScript(script) {
-	Run, % BorgConfig.getProgram("Notepad++", "PATH") " " script
+	Run, % MainConfig.getProgram("Notepad++", "PATH") " " script
 }
 
 ; Reloads an AHK script.
@@ -64,8 +64,8 @@ reloadScript(script, prompt) {
 	IfMsgBox No
 		return
 	
-	if(script = BORG_CENTRAL_SCRIPT) {
-		Run, %ahkRootPath%source\borg.ahk, %ahkRootPath%source\
+	if(script = MAIN_CENTRAL_SCRIPT) {
+		Run, %ahkRootPath%source\main.ahk, %ahkRootPath%source\
 	} else {
 		Reload
 	}

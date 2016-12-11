@@ -145,7 +145,7 @@ isFocusedControl(testControl) {
 
 ; Focus a window, running the program if it doesn't yet exist.
 activateProgram(progName) {
-	progInfo := BorgConfig.getProgram(progName)
+	progInfo := MainConfig.getProgram(progName)
 	; DEBUG.popup("window.activateProgram", "start", "Program name", progName, "Program info", progInfo)
 	
 	winTitle := progInfo["TITLE"]
@@ -165,7 +165,7 @@ activateProgram(progName) {
 }
 runProgram(progName, progInfo = "") {
 	if(!progInfo)
-		progInfo := BorgConfig.getProgram(progName)
+		progInfo := MainConfig.getProgram(progName)
 	
 	; DEBUG.popup("Run path", progInfo["PATH"])
 	RunAsUser(progInfo["PATH"], progInfo["ARGS"])
@@ -183,7 +183,7 @@ processWindow(ByRef winTitle = "", ByRef winClass = "", ByRef controlClass = "",
 	}
 	
 	if(!IsObject(winSettings)) {
-		winSettings := BorgConfig.getWindow(winTitle, winClass, controlClass)
+		winSettings := MainConfig.getWindow(winTitle, winClass, controlClass)
 		
 		if(fillFromActive) {
 			if(!winSettings["WIN_TITLE"])
@@ -362,8 +362,8 @@ doWindowActionSpecial(action, winTitle = "", winClass = "", controlClass = "", w
 		
 	} else if(action = ACTION_MIN) {
 		; Windows explorer
-		if(winClass = BorgConfig.getProgram("Explorer", "CLASS")) {
-			if(BorgConfig.isMachine(EPIC_DESKTOP)) { ; QTTabBar's min to tray
+		if(winClass = MainConfig.getProgram("Explorer", "CLASS")) {
+			if(MainConfig.isMachine(EPIC_DESKTOP)) { ; QTTabBar's min to tray
 				Send, !q
 				method := ACTION_NONE
 			} else {
@@ -572,11 +572,11 @@ getWindowMonitor(winID, monitorList = "") {
 	WinGetPos, winX, winY, , , %winID%
 	
 	; Fudge the X value a little if needed.
-	winX += BorgConfig.getSetting("WINDOW_EDGE_OFFSET")
+	winX += MainConfig.getSetting("WINDOW_EDGE_OFFSET")
 	
 	WinGet, minMaxState, MinMax, %winID%
 	if(minMaxState = 1) ; Window is maximized
-		winX += BorgConfig.getSetting("MAX_EXTRA_WINDOW_EDGE_OFFSET")
+		winX += MainConfig.getSetting("MAX_EXTRA_WINDOW_EDGE_OFFSET")
 	
 	; Iterate over all monitors until we find a match.
 	For i,mon in monitorList {

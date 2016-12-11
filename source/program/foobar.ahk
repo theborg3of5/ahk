@@ -4,7 +4,7 @@
 	^!Down::
 	^!Left::
 	^!Right::
-		RunAsUser(BorgConfig.getProgram("Foobar", "PATH"))
+		RunAsUser(MainConfig.getProgram("Foobar", "PATH"))
 	return
 #IfWinNotExist
 

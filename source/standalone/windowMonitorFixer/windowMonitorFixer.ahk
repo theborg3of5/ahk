@@ -8,7 +8,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include <autoInclude>
 isSingleUserScript := true
 
-winListFilePath := BorgConfig.getSetting("MACHINE") "_WINDOWS.ini"
+winListFilePath := MainConfig.getSetting("MACHINE") "_WINDOWS.ini"
 
 ; Get the list of monitors and their dimensions.
 monitorList := getMonitorInfo()

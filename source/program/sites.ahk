@@ -25,12 +25,12 @@ return
 
 ; ^+!f::Run, % "http://www.facebook.com/"
 
-#If BorgConfig.isMachine(BORG_DESKTOP)
+#If MainConfig.isMachine(HOME_DESKTOP)
 	^+!r::Run, % "http://www.reddit.com/"
 #If
 
 ^+!f::Run, % "http://feedly.com/i/latest"
 
-#If BorgConfig.isMachine(EPIC_DESKTOP)
+#If MainConfig.isMachine(EPIC_DESKTOP)
 	!+c::Run, % "iexplore.exe http://barleywine/xenappqa/"
 #If

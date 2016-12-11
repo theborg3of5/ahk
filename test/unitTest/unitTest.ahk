@@ -171,7 +171,7 @@ doTest(area, subArea, inFile, sourceFile) {
 		if(subArea = "SETTINGS") {
 			tlSettings := []
 			tlSettings["FILTER", "COLUMN"] := "MACHINE"
-			tlSettings["FILTER", "INCLUDE", "VALUE"]  := "BORG_DESKTOP"
+			tlSettings["FILTER", "INCLUDE", "VALUE"]  := "HOME_DESKTOP"
 			; tlSettings["FILTER", "INCLUDE", "BLANKS"] ; Defaults to true
 		}
 		

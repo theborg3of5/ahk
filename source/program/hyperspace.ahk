@@ -28,11 +28,10 @@
 	{ ; HTML things.
 		; Grab the html, stuff it in a file, and show it in IE for dev tools.
 		^!c::
-			htmlFilePath := "C:\Users\gborg\Dev\hsOutput.html"
 			html := getHyperspaceHTML()
-			FileDelete, %htmlFilePath%
-			FileAppend, %html%, %htmlFilePath%
-			Run, C:\Program Files\Internet Explorer\iexplore.exe %htmlFilePath%
+			FileDelete, %localDevHTMLOutputFilePath%
+			FileAppend, %html%, %localDevHTMLOutputFilePath%
+			Run, C:\Program Files\Internet Explorer\iexplore.exe %localDevHTMLOutputFilePath%
 		return
 		
 		; With XML debug on - grabs the path to the tempdata folder from the bottom of the screen, opens it.

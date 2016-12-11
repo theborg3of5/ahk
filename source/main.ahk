@@ -1,4 +1,4 @@
-﻿; ===== Inclusion of all AHK scripts for Borg. ===== ;
+﻿; ===== Inclusion of all AHK scripts for Main. ===== ;
 
 ; Common functions, hotkeys, and other such setup.
 #Include <autoInclude>
@@ -6,7 +6,7 @@
 ; Standalone scripts. Must be first to execute so they can spin off and be on their own.
 standaloneFolder := A_ScriptDir "\standalone\"
 Run, % standaloneFolder "vimBindings\vimBindings.ahk"
-if(BorgConfig.isMachine(EPIC_DESKTOP)) { ; Not needed except on Epic machine.
+if(MainConfig.isMachine(EPIC_DESKTOP)) { ; Not needed except on Epic machine.
 	Run, % standaloneFolder "killUAC.ahk"
 	Run, % standaloneFolder "tortoiseFillerDLG\tortoiseFillerDLG.ahk"
 	Run, % standaloneFolder "dlgNumTracker\dlgNumTracker.ahk"

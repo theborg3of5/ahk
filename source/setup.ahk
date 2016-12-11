@@ -18,4 +18,4 @@ states["suspended", 1] := "shellRed.ico"
 setupTrayIcons(states)
 
 ; For common hotkeys.
-isBorgMasterScript := 1
+isMainMasterScript := 1

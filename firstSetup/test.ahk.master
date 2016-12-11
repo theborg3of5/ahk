@@ -10,8 +10,8 @@
 	
 	; Icon setup.
 	states                 := []
-	states["suspended", 0] := "Icons\test.ico"
-	states["suspended", 1] := "Icons\testSuspended.ico"
+	states["suspended", 0] := "icons\testGreen.ico"
+	states["suspended", 1] := "icons\testRed.ico"
 	setupTrayIcons(states)
 }
 

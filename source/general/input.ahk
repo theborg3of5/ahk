@@ -30,17 +30,17 @@ return
 return
 
 ; Menu key does different things on laptops without a mouse.
-#If BorgConfig.getSetting("MENU_KEY_ACTION") = menuKeyActionMiddleClick
+#If MainConfig.getSetting("MENU_KEY_ACTION") = menuKeyActionMiddleClick
 	AppsKey::MButton
-#If BorgConfig.getSetting("MENU_KEY_ACTION") = menuKeyActionWindowsKey
+#If MainConfig.getSetting("MENU_KEY_ACTION") = menuKeyActionWindowsKey
 	AppsKey::RWin
 #If
 
-#If BorgConfig.isMachine(BORG_DESKTOP)
+#If MainConfig.isMachine(HOME_DESKTOP)
 	$Volume_Mute::DllCall("LockWorkStation")	; Lock workstation.
 #If
 
-#If BorgConfig.isMachine(EPIC_DESKTOP)
+#If MainConfig.isMachine(EPIC_DESKTOP)
 	; For ergonomic keyboard.
 	browser_back up::
 		Click

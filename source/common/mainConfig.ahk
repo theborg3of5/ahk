@@ -3,14 +3,14 @@
 
 ; Constants for machines.
 global EPIC_DESKTOP   := "EPIC_DESKTOP"
-global BORG_ASUS      := "BORG_ASUS"
-global BORG_DESKTOP   := "BORG_DESKTOP"
+global HOME_ASUS      := "HOME_ASUS"
+global HOME_DESKTOP   := "HOME_DESKTOP"
 
 ; Constants for what the menu key should do.
 global menuKeyActionMiddleClick := "MIDDLE_CLICK"
 global menuKeyActionWindowsKey  := "WINDOWS_KEY"
 
-global BORG_CENTRAL_SCRIPT := "BORG_CENTRAL_SCRIPT"
+global MAIN_CENTRAL_SCRIPT := "MAIN_CENTRAL_SCRIPT"
 
 ; Calculate some useful paths and put them in globals.
 global ahkRootPath  := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
@@ -21,7 +21,7 @@ global localConfigFolder := configFolder "local\"
 ; DEBUG.popup("Script", A_ScriptFullPath, "AHK Root", ahkRootPath, "User path", userPath, "AHK Lib", ahkLibPath, "Config folder", configFolder, "Local config folder", localConfigFolder)
 
 ; Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
-class BorgConfig {
+class MainConfig {
 	static multiDelim := "|"
 	static settingsIndices := ["MACHINE", "MENU_KEY_ACTION", "VIM_CLOSE_KEY", "WINDOW_EDGE_OFFSET", "MAX_EXTRA_WINDOW_EDGE_OFFSET"]
 	
@@ -35,7 +35,7 @@ class BorgConfig {
 		this.loadWindows(windowsFile)
 		this.loadPrograms(programsFile)
 		
-		; DEBUG.popup("BorgConfig", "End of init", "Settings", this.settings, "Window settings", this.windows, "Program info", this.programs)
+		; DEBUG.popup("MainConfig", "End of init", "Settings", this.settings, "Window settings", this.windows, "Program info", this.programs)
 	}
 	
 	loadSettings(filePath) {
@@ -57,7 +57,7 @@ class BorgConfig {
 			}
 		}
 		
-		; DEBUG.popup("Script", A_ScriptFullPath, "AHK Root", ahkRootPath, "User path", userPath, "AHK Lib", ahkLibPath, "Borg file path", filePath, "Settings", this.settings)
+		; DEBUG.popup("Script", A_ScriptFullPath, "AHK Root", ahkRootPath, "User path", userPath, "AHK Lib", ahkLibPath, "Main file path", filePath, "Settings", this.settings)
 	}
 	
 	loadWindows(filePath) {
@@ -65,10 +65,10 @@ class BorgConfig {
 		settings["CHARS"] := []
 		settings["CHARS", "PLACEHOLDER"] := "-"
 		settings["FILTER", "COLUMN"] := "MACHINE"
-		settings["FILTER", "INCLUDE", "VALUE"] := BorgConfig.getMachine()
+		settings["FILTER", "INCLUDE", "VALUE"] := MainConfig.getMachine()
 		
 		this.windows := TableList.parseFile(filePath, settings)
-		; DEBUG.popup("BorgConfig", "loadWindows", "Loaded windows", this.windows)
+		; DEBUG.popup("MainConfig", "loadWindows", "Loaded windows", this.windows)
 	}
 	
 	loadPrograms(filePath) {
@@ -77,7 +77,7 @@ class BorgConfig {
 		settings["CHARS", "ESCAPE"] := "" ; No escape char, to let single backslashes through.
 		settings["CHARS", "PLACEHOLDER"] := "-"
 		rawPrograms := TableList.parseFile(filePath, settings) ; Format: rawPrograms[idx] := [program info array]
-		; DEBUG.popup("BorgConfig", "loadPrograms", "Raw table", rawPrograms)
+		; DEBUG.popup("MainConfig", "loadPrograms", "Raw table", rawPrograms)
 		
 		; Index it by name and machine.
 		indexedProgs := [] ; Format: indexedProgs[NAME][MACHINE] := [program info array]
@@ -111,7 +111,7 @@ class BorgConfig {
 					this.programs[name][idx] := val
 		}
 		
-		; DEBUG.popup("BorgConfig", "loadPrograms", "Finished programs", this.programs)
+		; DEBUG.popup("MainConfig", "loadPrograms", "Finished programs", this.programs)
 	}
 	
 	
@@ -210,4 +210,4 @@ class BorgConfig {
 	}
 }
 
-BorgConfig.init(localConfigFolder "settings.tl", configFolder "windows.tl", configFolder "programs.tl")
+MainConfig.init(localConfigFolder "settings.tl", configFolder "windows.tl", configFolder "programs.tl")

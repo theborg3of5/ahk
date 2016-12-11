@@ -85,8 +85,8 @@ vimActive(vimOn = 1, titlesOn = 1) {
 
 ; Closes the browser tab if the close key matches what was pressed.
 closeTab() {
-	; DEBUG.popup("Borg Close Key", BorgConfig.getSetting("VIM_CLOSE_KEY"), "Given Key", A_ThisHotkey)
-	if(BorgConfig.isValue("VIM_CLOSE_KEY", A_ThisHotkey)) {
+	; DEBUG.popup("Main Close Key", MainConfig.getSetting("VIM_CLOSE_KEY"), "Given Key", A_ThisHotkey)
+	if(MainConfig.isValue("VIM_CLOSE_KEY", A_ThisHotkey)) {
 		Send, ^w
 		setVimState(true)
 	}
@@ -149,7 +149,7 @@ sendToOmniboxAndGo(url) {
 }
 #If
 
-#If vimActive() && ( (BorgConfig.isMachine(BORG_ASUS)) || (BorgConfig.isMachine(BORG_DESKTOP)) )
+#If vimActive() && ( (MainConfig.isMachine(HOME_ASUS)) || (MainConfig.isMachine(HOME_DESKTOP)) )
 {
 	RCtrl & Right::sendToOmniboxAndGo("+") ; Increment.
 }

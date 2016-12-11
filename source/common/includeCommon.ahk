@@ -1,6 +1,6 @@
 #Include %A_LineFile%\..
 
-#Include borgConfig.ahk ; Must be first in this section.
+#Include mainConfig.ahk ; Must be first in this section.
 
 #Include actionObject.ahk
 #Include data.ahk

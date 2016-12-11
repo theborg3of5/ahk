@@ -1,6 +1,6 @@
 ﻿; === Hotkeys that all scripts should use. === ;
 
-#If isBorgMasterScript
+#If isMainMasterScript
 	; Hotkey to die.
 	^+!#r::
 		Suspend, Permit
@@ -27,7 +27,7 @@
 	!+x::return
 #If
 
-#If !isBorgMasterScript
+#If !isMainMasterScript
 	; Hotkey to die.
 	~^+!#r::
 		Suspend, Permit

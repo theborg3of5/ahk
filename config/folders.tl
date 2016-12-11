@@ -5,7 +5,7 @@
 	# General
 	Downloads			dl|downloads	<USERROOT>\Downloads\
 	Shortcuts			sc					<USERROOT>\Shortcuts\																								EPIC_DESKTOP
-	Music					mu|music			<USERROOT>\Music\																										BORG_DESKTOP|BORG_ASUS
+	Music					mu|music			<USERROOT>\Music\																										HOME_DESKTOP|HOME_ASUS
 	Music					mu|music			D:\Music\																												EPIC_DESKTOP
 	Public				pub				F:\Personal\gborg\Public\																							EPIC_DESKTOP
 	

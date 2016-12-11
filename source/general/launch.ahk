@@ -20,15 +20,15 @@
 ^!#s::activateProgram("Snapper")
 
 !+g::
-	progInfo := BorgConfig.getProgram("GitHub")
+	progInfo := MainConfig.getProgram("GitHub")
 	RunCommand(progInfo["PATH"])
 return
 
-#If !BorgConfig.isMachine(EPIC_DESKTOP)
+#If !MainConfig.isMachine(EPIC_DESKTOP)
 	!+l::activateProgram("League")
 #If
 
-#If BorgConfig.isMachine(EPIC_DESKTOP)
+#If MainConfig.isMachine(EPIC_DESKTOP)
 	; VB - have to not have shift held down when it actually opens.
 	^+!v::
 		KeyWait, Shift
@@ -63,7 +63,7 @@ return
 	return
 #IfWinExist
 
-#If BorgConfig.isMachine(EPIC_DESKTOP)
+#If MainConfig.isMachine(EPIC_DESKTOP)
 	; Launch CodeSearch.
 	!+f::
 		text := gatherText(TEXT_SOURCE_SEL_CLIP)
@@ -135,7 +135,7 @@ openFolder(folderName = "") {
 	
 	tableListSettings := []
 	tableListSettings["FILTER", "COLUMN"] := "MACHINE"
-	tableListSettings["FILTER", "INCLUDE", "VALUE"]  := BorgConfig.getMachine()
+	tableListSettings["FILTER", "INCLUDE", "VALUE"]  := MainConfig.getMachine()
 	folderPath := Selector.select(configFolder "folders.tl", "RET", folderName, , , , tableListSettings)
 	
 	; Replace any special tags with real paths.

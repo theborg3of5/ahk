@@ -101,14 +101,14 @@ INI_WRITE(actionRow) {
 
 ; Updates specific settings out of the main script's configuration file, then reloads it.
 UPDATE_AHK_SETTINGS(actionRow) {
-	global BORG_CENTRAL_SCRIPT
+	global MAIN_CENTRAL_SCRIPT
 	INI_WRITE(actionRow) ; Has its own debug handling.
 	
 	; Also reload the script to reflect the updated settings.
 	if(actionRow.isDebug) ; Debug mode.
 		return ; actionRow.debugResult already set by INI_WRITE.
 	else
-		reloadScript(BORG_CENTRAL_SCRIPT, true)
+		reloadScript(MAIN_CENTRAL_SCRIPT, true)
 }
 
 
@@ -147,7 +147,7 @@ DO_THUNDER(actionRow) {
 	}
 	
 	if(isNum(thunderID))
-		runString := BorgConfig.getProgram("Thunder", "PATH") " " thunderID
+		runString := MainConfig.getProgram("Thunder", "PATH") " " thunderID
 	else if(thunderID = "SHOWTHUNDER") ; Special keyword - just show Thunder itself, don't launch an environment.
 		runString := thunderID
 	

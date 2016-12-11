@@ -72,8 +72,8 @@
 #If
 
 ; Universal new email.
-#If BorgConfig.isMachine(EPIC_DESKTOP)
+#If MainConfig.isMachine(EPIC_DESKTOP)
 	^!m::
-		Run, % BorgConfig.getProgram("Outlook", "PATH") " /c ipm.note"
+		Run, % MainConfig.getProgram("Outlook", "PATH") " /c ipm.note"
 	return
 #If

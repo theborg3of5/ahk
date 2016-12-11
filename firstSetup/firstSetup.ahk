@@ -28,7 +28,7 @@ iniSetupPath     := "setup.ini"
 gitHelperSrcPath := "gitHelper.ahk"
 gitHelperExePath := rootPath "zip\gitHelper.exe"
 startupFolder    := rootPath "source\"
-borgAHKPath      := startupFolder "borg.ahk"
+mainAHKPath      := startupFolder "main.ahk"
 
 tagsToReplace := []
 tagsToReplace["ROOT"]                  := rootPath
@@ -91,12 +91,6 @@ For from,to in copyPaths {
 	FileAppend, %fileContents%, %to%
 }
 
-; Compile gitHelper.exe, for use here and with 
-RunWait, % ahkCompilePath " /in " gitHelperSrcPath " /out " gitHelperExePath
-
-; Prompt for password and unzip all zipped files.
-RunWait, % gitHelperExePath " u"
-
 ; Hide all .git system files and folders, for a cleaner appearance.
 For i,n in gitNames {
 	Loop, Files, %rootPath%*%n%, RDF
@@ -107,7 +101,7 @@ For i,n in gitNames {
 
 MsgBox, 4, , Run now?
 IfMsgBox Yes
-	Run, %borgAHKPath%, %startupFolder%
+	Run, %mainAHKPath%, %startupFolder%
 
 ExitApp
 

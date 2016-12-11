@@ -483,14 +483,14 @@ return
 ; Get current screen boarders for monitor where mouse cursor is
 GetCurrentScreenBoarders(ByRef CurrentScreenLeft, ByRef CurrentScreenRight, ByRef CurrentScreenTop, ByRef CurrentScreenBottom, winID) {
 	; Figure out offsets.
-	leftOffset   := BorgConfig.getSetting("WINDOW_EDGE_OFFSET")
-	rightOffset  := BorgConfig.getSetting("WINDOW_EDGE_OFFSET")
-	topOffset    := 0 ; BorgConfig.getSetting("WINDOW_EDGE_OFFSET") ; top offset hasn't changed, that's where my taskbar is.
-	bottomOffset := BorgConfig.getSetting("WINDOW_EDGE_OFFSET")
+	leftOffset   := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
+	rightOffset  := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
+	topOffset    := 0 ; MainConfig.getSetting("WINDOW_EDGE_OFFSET") ; top offset hasn't changed, that's where my taskbar is.
+	bottomOffset := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
 	
 	WinGet, minMaxState, MinMax
 	if(minMaxState = 1) ; Window is maximized
-		leftOffset += BorgConfig.getSetting("MAX_EXTRA_WINDOW_EDGE_OFFSET")
+		leftOffset += MainConfig.getSetting("MAX_EXTRA_WINDOW_EDGE_OFFSET")
 	
 	; Get current screen boarders for snapping, do this within the loop to allow snapping an all monitors without releasing button
 	MouseGetPos, Mouse_X, Mouse_Y

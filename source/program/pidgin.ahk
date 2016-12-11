@@ -15,5 +15,5 @@
 #IfWinActive
 
 pidginMessageToUser(user) {
-	Run, % BorgConfig.getProgram("Pidgin", "PATH") " --protocolhandler=xmpp:" user "?message"
+	Run, % MainConfig.getProgram("Pidgin", "PATH") " --protocolhandler=xmpp:" user "?message"
 }

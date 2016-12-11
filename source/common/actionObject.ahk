@@ -241,7 +241,7 @@ class ActionObject {
 				; DEBUG.popup("actionObject.perform", "Got link to run", "Link", link)
 				
 				if((subAction != SUBACTION_WEB) && !WinExist("ahk_class ThunderRT6MDIForm", , "Hyperspace")) ; Launch EMC2 if it's not running.
-					RunWait, % BorgConfig.getProgram("EMC2", "PATH")
+					RunWait, % MainConfig.getProgram("EMC2", "PATH")
 				
 				Run, % link
 				

@@ -128,7 +128,7 @@ openEpicStudioRoutine(text = "", routineName = "", tag = "") {
 	
 	; Launch ES if not running.
 	activateProgram("EpicStudio")
-	exeName := BorgConfig.getProgram("EpicStudio", "EXE")
+	exeName := MainConfig.getProgram("EpicStudio", "EXE")
 	WinWaitActive, ahk_exe %exeName%
 	waitUntilWindowState("active", " - EpicStudio", , 2)
 	
@@ -151,7 +151,7 @@ openEpicStudioRoutine(text = "", routineName = "", tag = "") {
 
 openEpicStudioDLG(dlgNum) {
 	activateProgram("EpicStudio")
-	exeName := BorgConfig.getProgram("EpicStudio", "EXE")
+	exeName := MainConfig.getProgram("EpicStudio", "EXE")
 	WinWaitActive, ahk_exe %exeName%
 	
 	Send, ^!e

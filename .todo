@@ -11,16 +11,8 @@
 		Change selector/tableList INIs to a new extension - .tl, maybe?
 		Audit all scripts for unused hotkeys
 			Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
-		Expand debug to have a yes/no choice (or just take MsgBox options in general)
-			Maybe a settings array as argument
-				A simple "Continue?" with yes/no option
-				Could be at beginning or end - would need something special to tell what it was, though.
-					Maybe a special subscript set?
 		Have remote desktop script mute volume on a loop, or whenever a new connection is made.
-		Expand ^+t shortcut for logging into HS - selector of different destinations?
-			Would probably use all = stuff
-				Though maybe not? Could potentially wait for the user to pick a patient, then continue (WinWait, look out for cancel case, etc).
-	
+		
 	'Scripts to Share'
 	
 	'Documentation'

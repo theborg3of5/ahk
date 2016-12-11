@@ -21,14 +21,12 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include window.ahk
 
 ; Various paths needed throughout.
-ahkCompilePath   := reduceFilePath(A_AhkPath, 1) "Compiler\Ahk2Exe.exe"
-rootPath         := reduceFilepath(A_ScriptDir, 1)
-userPath         := reduceFilepath(A_Desktop, 1)
-iniSetupPath     := "setup.ini"
-gitHelperSrcPath := "gitHelper.ahk"
-gitHelperExePath := rootPath "zip\gitHelper.exe"
-startupFolder    := rootPath "source\"
-mainAHKPath      := startupFolder "main.ahk"
+ahkCompilePath := reduceFilePath(A_AhkPath, 1) "Compiler\Ahk2Exe.exe"
+rootPath       := reduceFilepath(A_ScriptDir, 1)
+userPath       := reduceFilepath(A_Desktop, 1)
+tlSetupPath    := "setup.tl"
+startupFolder  := rootPath "source\"
+mainAHKPath    := startupFolder "main.ahk"
 
 tagsToReplace := []
 tagsToReplace["ROOT"]                  := rootPath
@@ -39,10 +37,9 @@ tagsToReplace["EDGE_OFFSET"]           := ""
 tagsToReplace["MAX_EXTRA_EDGE_OFFSET"] := ""
 
 copyPaths := []
-copyPaths["autoInclude.ahk.master"]         := userPath "Documents\AutoHotkey\Lib\autoInclude.ahk"
-copyPaths["local_settings.ini.master"]      := rootPath "config\local_settings.ini"
-copyPaths["local_test.ahk.master"]          := rootPath "test\local_test.ahk"
-copyPaths["post-merge.master"]              := rootPath ".git\hooks\post-merge"
+copyPaths["autoInclude.ahk.master"] := userPath "Documents\AutoHotkey\Lib\autoInclude.ahk"
+copyPaths["settings.tl.master"]     := rootPath "config\local\settings.tl"
+copyPaths["test.ahk.master"]        := rootPath "test\test.ahk"
 
 gitNames := []
 gitNames.Push(".git")
@@ -51,7 +48,7 @@ gitNames.Push(".gitattributes")
 
 
 ; Prompt the user for which computer this is.
-machineInfo := Selector.select(iniSetupPath, "RET_DATA")
+machineInfo := Selector.select(tlSetupPath, "RET_DATA")
 if(machineInfo = "") {
 	MsgBox, No machine given, exiting setup...
 	ExitApp
@@ -64,7 +61,7 @@ For tag,v in tagsToReplace {
 	if(machineValue)
 		tagsToReplace[tag] := machineValue
 }
-; DEBUG.popup("Finished tags to replace", tagsToReplace)
+DEBUG.popup("Finished tags to replace", tagsToReplace)
 
 ; Loop over files we need to process and put places.
 For from,to in copyPaths {
@@ -74,6 +71,8 @@ For from,to in copyPaths {
 	; Replace any palceholder tags in the file contents.
 	; DEBUG.popup("From", from, "To", to, "Starting contents", fileContents)
 	For tag,value in tagsToReplace {
+		if(IsObject(value))
+			value := arrayJoin(value)
 		StringReplace, fileContents, fileContents, <%tag%>, %value%, A
 	}
 	; DEBUG.popup("From", from, "To", to, "Finished contents", fileContents)

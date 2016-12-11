@@ -174,6 +174,16 @@ mergeArrays(base, overrides) {
 	return retAry
 }
 
+; Counterpart to SplitStr - puts together all parts of an array with the given delimiter (defaults to "|")
+arrayJoin(arrayToJoin, delim = "|") {
+	outStr := ""
+	
+	For index,value in arrayToJoin
+		outStr .= delim value
+	
+	return SubStr(outStr, StrLen(delim) + 1) ; Trim off the leading delimiter.
+}
+
 
 
 ; Eval() function and helpers - turn a numeric expression in a string into a result.

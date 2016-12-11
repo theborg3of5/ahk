@@ -2,7 +2,6 @@
 	
 	'Fixes'
 		EMC2 check needs to be more granular - check ahk_exe as well as title.
-		Fix setup - still doing zips and such. :\
 	
 	'New ideas'
 		Move specificication of placeholder char for INIs to setting in INI itself

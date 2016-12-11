@@ -5,5 +5,5 @@
 (	NAME					ABBREV		WHICH_MACHINE		VIM_CLOSE_KEY	MENU_KEY_ACTION	EDGE_OFFSET		MAX_EXTRA_EDGE_OFFSET
 )	0						0				0						1					2						3					4
 
-	Home Desktop		desk			MAIN_DESKTOP		F8|F9				\x						7					1
+	Home Desktop		desk			HOME_DESKTOP		F8|F9				\x						7					1
 	Epic Desktop		epic			EPIC_DESKTOP		F6					WINDOWS_KEY                      

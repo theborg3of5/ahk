@@ -61,7 +61,7 @@ For tag,v in tagsToReplace {
 	if(machineValue)
 		tagsToReplace[tag] := machineValue
 }
-DEBUG.popup("Finished tags to replace", tagsToReplace)
+; DEBUG.popup("Finished tags to replace", tagsToReplace)
 
 ; Loop over files we need to process and put places.
 For from,to in copyPaths {

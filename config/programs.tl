@@ -43,3 +43,5 @@
 
 	GitHub				-				-																start C:\users\thebo\Desktop\GitHub.appref-ms							-									HOME_DESKTOP
 	GitHub				-				-																start C:\users\gborg\Desktop\GitHub.appref-ms							-									EPIC_DESKTOP
+	
+	FirefoxPortable	-				-																S:\FirefoxPortable\FirefoxPortable.exe										-									HOME_DESKTOP

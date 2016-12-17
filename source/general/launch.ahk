@@ -18,6 +18,7 @@
 ^!#n::     runProgram("Notepad")
 ^!#/::activateProgram("WinSpy")
 ^!#s::activateProgram("Snapper")
+^!#f::     runProgram("FirefoxPortable")
 
 !+g::
 	progInfo := MainConfig.getProgram("GitHub")

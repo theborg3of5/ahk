@@ -2,8 +2,11 @@
 	
 	'Fixes'
 		EMC2 check needs to be more granular - check ahk_exe as well as title.
+		Update GitHub pointing in programs.tl for EPIC_DESKTOP and HOME_DESKTOP.
 	
 	'New ideas'
+		Condense more global constants into constants.ahk
+			May need to move up in includeCommon.ahk, to before mainConfig.ahk?
 		Move specificication of placeholder char for INIs to setting in INI itself
 			In order to do this, we need to move processing of (at least some) +settings to TableList.
 		Audit all scripts for unused hotkeys

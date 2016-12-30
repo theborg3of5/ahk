@@ -14,11 +14,11 @@ parsePhone(input) {
 	StringLen, len, nums
 	; DEBUG.popup(input, "Input", nums, "Nums", len, "Len")
 	
-	if(len = 4) ; Old extension.
+	if(len = 4)  ; Old extension.
 		return "7" nums
-	if(len = 5) ; Extension.
+	if(len = 5)  ; Extension.
 		return nums
-	if(len = 7) ; Normal
+	if(len = 7)  ; Normal
 		return nums
 	if(len = 10) ; Normal with area code.
 		return "81" nums
@@ -89,22 +89,32 @@ getNewLines(i) {
 
 ; Turns all double quotes (") into double double quotes ("") or more, if second argument given.
 escapeDoubleQuotes(s, num = 2) {
+	global QUOTES
+	
 	replString := ""
 	while(num > 0) {
-		replString .= """"
+		replString .= QUOTES
 		num--
 	}
 	
-	StringReplace, s, s, ", %replString%, All		; For syntax! "
+	StringReplace, s, s, ", %replString%, All		; For syntax highlighting, an ending quote: "
 	return s
+}
+
+wrapInQuotes(inputString) {
+	global QUOTES
+	
+	return QUOTES escapeDoubleQuotes(inputString) QUOTES
 }
 
 ; Wraps each line of the array in quotes, turning any quotes already there into double double quotes.
 quoteWrapArrayDouble(arr) {
+	global QUOTES
+	
 	outArr := []
 	
 	For i,a in arr {
-		outArr.insert("""" escapeDoubleQuotes(a) """")
+		outArr.insert(wrapInQuotes(a))
 	}
 	
 	return outArr

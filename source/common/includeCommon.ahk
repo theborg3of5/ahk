@@ -3,6 +3,7 @@
 #Include mainConfig.ahk ; Must be first in this section.
 
 #Include actionObject.ahk
+#Include constants.ahk
 #Include data.ahk
 #Include dateTime.ahk
 #Include debug.ahk

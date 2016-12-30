@@ -20,9 +20,14 @@
 ^!#s::activateProgram("Snapper")
 ^!#f::     runProgram("FirefoxPortable")
 
+; Special programs/specific params.
 !+g::
 	progInfo := MainConfig.getProgram("GitHub")
-	RunCommand(progInfo["PATH"])
+	Run, % wrapInQuotes(progInfo["PATH"])
+return
+^!#z::
+	progInfo := MainConfig.getProgram("FileZilla")
+	Run, % wrapInQuotes(progInfo["PATH"]) filezillaSiteCowbox
 return
 
 #If !MainConfig.isMachine(EPIC_DESKTOP)

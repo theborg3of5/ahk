@@ -251,6 +251,9 @@
 		:*c:arf::
 			Send, % ahkRootPath
 		return
+		:*c:aconf::
+			Send, % ahkRootPath "config\"
+		return
 		:*c:asf::
 			Send, % ahkRootPath "source\"
 		return

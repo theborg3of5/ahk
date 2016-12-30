@@ -6,5 +6,5 @@
 )	0						0				0						1					2						3					4
 
 	Home Desktop		desk			HOME_DESKTOP		F8|F9				\x						7					1                      
-	Home Laptop			laptop		HOME_LAPTOP			F8|F9				WINDOWS_KEY			7					1
+	Home Laptop			laptop		HOME_LAPTOP			F8|F9|F10		WINDOWS_KEY			7					1
 	Epic Desktop		epic			EPIC_DESKTOP		F6					WINDOWS_KEY

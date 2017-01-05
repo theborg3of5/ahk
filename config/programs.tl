@@ -35,7 +35,7 @@
 	Notepad				-				-																System32\notepad.exe
 []
 	
-	League				-				-																C:\Riot Games\League of Legends\lol.launcher.exe
+	League				-				-																C:\Riot Games\League of Legends\LeagueClient.exe
 	
 	OneNote				-				Framework::CFrame											C:\Program Files (x86)\Microsoft Office\Office15\ONENOTE.EXE		-									EPIC_DESKTOP
 	OneNote				-				Framework::CFrame											C:\Program Files (x86)\Microsoft Office\root\Office16\ONENOTE.EXE	-									HOME_DESKTOP

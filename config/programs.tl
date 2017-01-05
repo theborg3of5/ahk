@@ -41,7 +41,6 @@
 	OneNote				-				Framework::CFrame											C:\Program Files (x86)\Microsoft Office\root\Office16\ONENOTE.EXE	-									HOME_DESKTOP
 	OneNote				-				Framework::CFrame											C:\Program Files\Microsoft Office 15\root\office15\ONENOTE.EXE		-									HOME_ASUS
 
-	GitHub				-				-																start C:\users\thebo\Desktop\GitHub.appref-ms							-									HOME_DESKTOP
 	GitHub				-				-																C:\Users\thebo\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\GitHub, Inc\GitHub.appref-ms
 	GitHub				-				-																start C:\users\gborg\Desktop\GitHub.appref-ms							-									EPIC_DESKTOP
 	

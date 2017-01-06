@@ -3,6 +3,9 @@
 	'Fixes'
 	
 	'New ideas'
+		Universal opener/linker - make it easier to pick view-only version?
+			Field that allows just "v" instead of full "VIEW"?
+			dv, etc shortcuts?
 		Condense more global constants into constants.ahk
 			May need to move up in includeCommon.ahk, to before mainConfig.ahk?
 		Move specificication of placeholder char for INIs to setting in INI itself

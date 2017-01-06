@@ -1,5 +1,5 @@
 ; Check for EMC2 title since it overlaps window classes and such with Hyperspace.
-#If isWindowInState("active", " - EMC2", , 2)
+#If exeActive("EpicD82.exe") && isWindowInState("active", " - EMC2", , 2)
 	; Make F5 work everywhere by mapping it to shift + F5.
 	$F5::+F5
 	

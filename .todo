@@ -1,7 +1,6 @@
 # AHK To Do
 	
 	'Fixes'
-		EMC2 check needs to be more granular - check ahk_exe as well as title.
 	
 	'New ideas'
 		Condense more global constants into constants.ahk

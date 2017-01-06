@@ -2,7 +2,6 @@
 	
 	'Fixes'
 		EMC2 check needs to be more granular - check ahk_exe as well as title.
-		Update GitHub pointing in programs.tl for EPIC_DESKTOP.
 	
 	'New ideas'
 		Condense more global constants into constants.ahk

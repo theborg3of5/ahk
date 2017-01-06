@@ -41,9 +41,11 @@
 	OneNote				-				Framework::CFrame											C:\Program Files (x86)\Microsoft Office\root\Office16\ONENOTE.EXE	-									HOME_DESKTOP
 	OneNote				-				Framework::CFrame											C:\Program Files\Microsoft Office 15\root\office15\ONENOTE.EXE		-									HOME_ASUS
 
-	GitHub				-				-																C:\Users\thebo\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\GitHub, Inc\GitHub.appref-ms
-	GitHub				-				-																start C:\users\gborg\Desktop\GitHub.appref-ms							-									EPIC_DESKTOP
-	
+[{PATH}e:AppData\Roaming\Microsoft\Windows\Start Menu\Programs\GitHub, Inc\GitHub.appref-ms]
+	GitHub				-				-																C:\Users\thebo\
+	GitHub				-				-																C:\Users\gborg\																	-									EPIC_DESKTOP
+[]
+
 	FirefoxPortable	-				-																S:\FirefoxPortable\FirefoxPortable.exe										-									HOME_DESKTOP
 	
 	FileZilla			-				-																C:\Program Files\FileZilla FTP Client\filezilla.exe

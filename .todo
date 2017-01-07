@@ -1,7 +1,6 @@
 # AHK To Do
 	
 	'Fixes'
-		Make sure that actionObject path still works correctly (switched placeholder from \x to -)
 	
 	'New ideas'
 		Universal opener/linker - make it easier to pick view-only version?

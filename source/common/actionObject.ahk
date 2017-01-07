@@ -76,7 +76,6 @@ global SUPERTYPE_EPIC := "EPIC"
 
 global TYPE_UNKNOWN        := ""
 global TYPE_EMC2           := "EMC2"
-global TYPE_SERVER_ROUTINE := "SERVER_ROUTINE"
 global TYPE_PATH           := "PATH"
 
 global ACTION_NONE := ""
@@ -127,9 +126,8 @@ class ActionObject {
 		
 		; Do a little preprocessing to pick out needed info. (All args but input are ByRef)
 		isPathType := isPath(input, pathType)
-		isServerRoutineType := isServerRoutine(input, routine, tag)
 		isEMC2ObjectType := isEMC2Object(input, ini, id)
-		; DEBUG.popup("ActionObject.process", "Type preprocessing done", "Input", input, "Is path", isPathType, "Path type", pathType, "Is server", isServerRoutineType, "Routine", routine, "Tag", tag, "Is EMC2", isEMC2ObjectType, "INI", ini, "ID", id)
+		; DEBUG.popup("ActionObject.process", "Type preprocessing done", "Input", input, "Is path", isPathType, "Path type", pathType, "Is EMC2", isEMC2ObjectType, "INI", ini, "ID", id)
 		
 		; First, if there's no type (or a supertype), figure out what it is.
 		if(type = "") {
@@ -137,15 +135,11 @@ class ActionObject {
 				type := TYPE_PATH
 			else if(isEMC2ObjectType = 2)
 				type := TYPE_EMC2
-			else if(isServerRoutineType)
-				type := TYPE_SERVER_ROUTINE
 			else if(isEMC2ObjectType = 1) ; Not specific enough, but false positive OK considering its high usage.
 				type := TYPE_EMC2
 		; Only test epic things.
 		} else if(type = SUPERTYPE_EPIC) {
-			if(isServerRoutineType) 
-				type := TYPE_SERVER_ROUTINE
-			else if(isEMC2ObjectType) ; Not specific enough, but false positive OK considering its high usage.
+			if(isEMC2ObjectType) ; Not specific enough, but false positive OK considering its high usage.
 				type := TYPE_EMC2
 		}
 		; DEBUG.popup("ActionObject.process", "Type", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
@@ -153,7 +147,6 @@ class ActionObject {
 		; Next, determine actions.
 		if(action = "") {
 			if (type = TYPE_PATH)
-			|| (type = TYPE_SERVER_ROUTINE)
 			|| (type = TYPE_EMC2)
 			{
 				action := ACTION_RUN
@@ -163,9 +156,7 @@ class ActionObject {
 		
 		; Determine subType as needed.
 		if(subType = "") {
-			if(type = TYPE_SERVER_ROUTINE)
-				subType := tag
-			else if(type = TYPE_EMC2)
+			if(type = TYPE_EMC2)
 				subType := ini
 			else if(type = TYPE_PATH)
 				subType := pathType
@@ -174,38 +165,31 @@ class ActionObject {
 		
 		; Determine subAction as needed.
 		if(subAction = "") {
-			if (type = TYPE_SERVER_ROUTINE)
-			|| (type = TYPE_EMC2)
-			{
+			if(type = TYPE_EMC2)
 				subAction := SUBACTION_EDIT
-			}
 		}
 		; DEBUG.popup("ActionObject.process", "Subaction", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
 		; Update input as needed.
 		if(type = TYPE_EMC2)
 			input := id
-		else if(type = TYPE_SERVER_ROUTINE)
-			input := routine
 		; DEBUG.popup("ActionObject.process", "Input", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 	}
 	
 	; Prompt the user for any missing info (generally just subType) via a Selector popup.
 	selectInfo(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
 		; DEBUG.popup("ActionObject.selectInfo", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
+		tlSettingOverrides["CHARS", "PLACEHOLDER"] := "-"
 		
 		; Determine if we need subType or subAction based on what we know so far.
 		if(type = TYPE_EMC2) {
 			needsST := true
 			needsSA := true
-		} else if(type = TYPE_SERVER_ROUTINE) {
-			if(action = ACTION_LINK)
-				needsSA := true
 		}
 		
 		; While here later on? Doesn't fit in selector's single-minded aspect right now.
 		if(!type || !action || (!subType && needsST) || (!subAction && needsSA)) {
-			objInfo   := Selector.select("local/actionObject.tl", "RET_DATA", "", "", {TYPE: type, ACTION: action, SUBTYPE: subType, SUBACTION: subAction, ID: input})
+			objInfo   := Selector.select("local/actionObject.tl", "RET_DATA", "", "", {TYPE: type, ACTION: action, SUBTYPE: subType, SUBACTION: subAction, ID: input}, , tlSettingOverrides)
 			type      := objInfo["TYPE"]
 			action    := objInfo["ACTION"]
 			subType   := objInfo["SUBTYPE"]
@@ -216,7 +200,7 @@ class ActionObject {
 		; Additional processing on user-given info as needed.
 		if(type = TYPE_EMC2) { ; EMC2 - subType might need conversion (QAN->ZQN, etc)
 			if(subType) { ; But if it's blank, don't ask the user again.
-				objInfo := Selector.select("local/actionObject.tl", "RET_DATA", subType)
+				objInfo := Selector.select("local/actionObject.tl", "RET_DATA", subType, , , , tlSettingOverrides)
 				subType := objInfo["SUBTYPE"]
 			}
 		}
@@ -229,10 +213,7 @@ class ActionObject {
 		if(action = ACTION_NONE) {
 			return
 		} else if(action = ACTION_RUN) {
-			if(type = TYPE_SERVER_ROUTINE) {
-				openEpicStudioRoutine( , input, subType)
-				
-			} else if(type = TYPE_EMC2) {
+			if(type = TYPE_EMC2) {
 				; If they never gave us a subtype, just fail silently.
 				if(!subType)
 					return
@@ -260,12 +241,7 @@ class ActionObject {
 			}
 			
 		} else if(action = ACTION_LINK) {
-			if(type = TYPE_SERVER_ROUTINE) {
-				routine := input
-				tag := subType
-				link := codeSearchURLBase
-				link .= routine "#" tag
-			} else if(type = TYPE_EMC2) {
+			if(type = TYPE_EMC2) {
 				ini := subType
 				id := input
 				

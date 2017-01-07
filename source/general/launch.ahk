@@ -43,8 +43,8 @@ return
 	
 	; Selector launchers
 	#p::  Selector.select("local/phone.tl",            "CALL")
-	^+!h::Selector.select("local/epicEnvironments.tl", "DO_HYPERSPACE",     , "C:\Program Files (x86)\Epic\v8.3\Shared Files\EpicD83.exe")
-	^+!r::Selector.select("local/epicEnvironments.tl", "DO_THUNDER",        , "C:\Program Files (x86)\PuTTY\putty.exe")
+	^+!h::Selector.select("local/epicEnvironments.tl", "DO_HYPERSPACE", , "C:\Program Files (x86)\Epic\v8.3\Shared Files\EpicD83.exe")
+	^+!r::Selector.select("local/epicEnvironments.tl", "DO_THUNDER",    , "C:\Program Files (x86)\PuTTY\putty.exe")
 	^+!t::Selector.select("local/outlookTLG.tl",       "OUTLOOK_TLG")
 
 	; Themes

@@ -182,51 +182,6 @@ buildHyperspaceRunString(versionMajor, versionMinor, environment) {
 	return runString
 }
 
-sendKHDFCommand(command = "", value = "", subscripts*) {
-	leftsNeeded := 0
-	
-	SendRaw, % buildKHDFCommand(command, value, leftsNeeded, subscripts)
-	
-	if(value)
-		leftsNeeded += StrLen(value)
-	
-	Send, {Left %leftsNeeded%}
-}
-
-; Subscripts will be added onto the end of "Switch", and should be in an array.
-buildKHDFCommand(command = "", value = "", ByRef extraLeftsNeeded = 0, subs = "") {
-	global epicKHDFStart
-	outStr := ""
-	quote := """"
-	
-	if(command)
-		outStr .= command " "
-	
-	outStr .= epicKHDFStart
-	For i,s in subs {
-		outStr .= "," quote s quote
-		if((i = subs.MaxIndex()) && (s = "")) {
-			extraLeftsNeeded += 1
-			if(command)
-				extraLeftsNeeded += 1
-		}
-	}
-	
-	if(command)
-		outStr .= ")"
-	
-	if(value || (command = "s")) {
-		outStr .= "="
-		if(extraLeftsNeeded)
-			extraLeftsNeeded += 1
-	}
-	
-	if(value)
-		outStr .= value
-	
-	return outStr
-}
-
 buildCodeSearchURL(searchType, criteria = "", appID = 0, inline = false, exact = false, logic = "", case = false, nameFilter = 0, nameFilterText = "", perPage = 50) {
 	versionID := 10
 	showAll := 0 ; Whether to show every single matched line per result shown.

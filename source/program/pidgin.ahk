@@ -1,6 +1,6 @@
 ﻿
 ; Hotkeys for opening a pidgin chat window with specific users
-#+m::pidginMessageToUser(mikalAddress)
+#+m::pidginMessageToUser(mikalEmailAddress)
 
 #IfWinActive, Buddy List
 	; Hide buddy list when active.

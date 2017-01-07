@@ -357,7 +357,7 @@ global VB_REF_SAME_THRESHOLD := 10
 		outStr := "' "
 		if(extraSpace)
 			outStr .= " "
-		outStr .= "*gdb " date " " SubStr(dlgName, 4) " - "
+		outStr .= "*" USER_INITIALS " " date " " SubStr(dlgName, 4) " - "
 		
 		return outStr
 	}

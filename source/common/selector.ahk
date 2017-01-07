@@ -211,13 +211,13 @@ class Selector {
 	
 	/* DESCRIPTION:   Main programmatic access point. Sets up and displays the selector gui, processes the choice, etc.
 		PARAMETERS:
-			filePath          - Filename (including path and extension) for the input file to generate choices from
-			actionType        - Name of the function to call once a choice has been picked (can default from INI if not given here)
-			silentChoice      - If supplied, run the selection logic to get a result back using this instead of a user's input (never show the UI)
-			iconName          - Filename for the icon.
-			data[]            - Assocative array of indices or data labels to data values to default into arbitrary inputs. Only applies if arbitrary inputs are turned on with +ShowArbitraryInputs.
-			selRows           - Array of SelectorRow objects to use directly instead of reading from filePath.
-			tableListSettings - Settings to override for when we read in a file using a TableList object.
+			filePath            - Filename (including path and extension) for the input file to generate choices from
+			actionType          - Name of the function to call once a choice has been picked (can default from INI if not given here)
+			silentChoice        - If supplied, run the selection logic to get a result back using this instead of a user's input (never show the UI)
+			iconName            - Filename for the icon.
+			data[]              - Assocative array of indices or data labels to data values to default into arbitrary inputs. Only applies if arbitrary inputs are turned on with +ShowArbitraryInputs.
+			selRows[]           - Array of SelectorRow objects to use directly instead of reading from filePath.
+			tableListSettings[] - Settings to override for when we read in a file using a TableList object.
 	*/
 	select(filePath, actionType = "", silentChoice = "", iconName = "", data = "", selRows = "", tableListSettings = "") {
 		; DEBUG.popup("Filepath", filePath, "Action Type", actionType, "Silent Choice", silentChoice, "Icon name", iconName, "Data", data)

@@ -3,13 +3,13 @@
 #IfWinNotActive, ahk_class RiotWindowClass ; Disable for League.
 { ; Emails.
 	:*:emaila::
-		Send, % emailAddress
+		Send, % USER_EMAIL
 	return
 	:*:gemaila::
-		Send, % emailAddressGDB
+		Send, % USER_EMAIL_2
 	return
 	:*:eemaila::
-		Send, % epicEmailAddress
+		Send, % USER_WORK_EMAIL
 	return
 }
 
@@ -17,18 +17,9 @@
 	:*:waddr::
 		SendRaw, % madisonAddress
 	return
-	:*:fwaddr::
-		Send, % madisonAddressFill
-	return
-	:*:lwaddr::
-		Send, % madisonAddressLine
-	return
 	
 	:*:eaddr::
 		Send, % epicAddress
-	return
-	:*:feaddr::
-		Send, % epicAddressFill
 	return
 	::ezip::
 		Send, % epicAddressZip
@@ -37,19 +28,16 @@
 
 { ; Logins.
 	:*:uname::
-		Send, % userName
-	return
-	:*:.ecid::
-		Send, % epicComputerName
+		Send, % USER_USERNAME
 	return
 }
 
 { ; Phone numbers.
 	:*:phoneno::
-		Send, % phoneNumber
+		Send, % USER_PHONE_NUM
 	return
 	:*:fphoneno::
-		Send, % phoneNumberFormatted
+		Send, % reformatPhone(USER_PHONE_NUM)
 	return
 }
 
@@ -127,41 +115,10 @@
 		
 		:*:asig::and so it goes, and so it goes, and you're the only one who knows...
 	}
-	
-	{ ; Healthcare
-		:*:Med'c::Medicare
-		:*:Med'a::Medicaid
-		:*:Medi'c::Medicare
-		:*:Medi'a::Medicaid
-		:*:p't::patient
-	}
 
 	{ ; Billing
 		:*:col'n::collection
 		:*:coll'n::collection
-		:*:prebal::previous balance
-	}
-	
-	{ ; Command line/code
-		:*:rkhdf::
-			sendKHDFCommand("", "", "")
-		return
-		:*:skhdf::
-			sendKHDFCommand("s", "", "")
-		return
-		; :*:kkhdf::
-			; sendKHDFCommand("k", "", "")
-		; return
-		
-		:*:prkhdf::
-			sendKHDFCommand("", "", khdfPOS)
-		return
-		:*:pskhdf::
-			sendKHDFCommand("s", "", khdfPOS, "")
-		return
-		:*:psskhdf::
-			sendKHDFCommand("s", "", khdfPOS, khdfPOSSingle)
-		return
 	}
 }
 	

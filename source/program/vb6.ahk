@@ -346,6 +346,8 @@ global VB_REF_SAME_THRESHOLD := 10
 { ; Functions.
 	; Builds a contact comment with as much info as we can muster.
 	generateContactComment(extraSpace = false) {
+		global USER_INITIALS
+		
 		; Date
 		FormatTime, date, , MM/yy
 		

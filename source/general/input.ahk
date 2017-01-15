@@ -11,7 +11,11 @@ $^Backspace::deleteWord()
 	SetCapsLockState, On
 return
 
-#If !(WinActive("ahk_exe Overwatch.exe") || WinActive("ahk_exe insurgency.exe") || WinActive("ahk_exe RainbowSixGame.exe") || WinActive("ahk_exe kfgame.exe"))
+#If !(WinActive("ahk_exe Overwatch.exe") 
+	|| WinActive("ahk_exe insurgency.exe") 
+	|| WinActive("ahk_exe RainbowSixGame.exe") 
+	|| WinActive("ahk_exe kfgame.exe")
+	|| WinActive("ahk_exe HeroesOfTheStorm_x64.exe"))
 	XButton1::^Tab
 	XButton2::^+Tab
 #If

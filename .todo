@@ -3,6 +3,7 @@
 	'Fixes'
 	
 	'New ideas'
+		Move sites.ahk to launch.ahk instead.
 		Condense more global constants into constants.ahk
 			May need to move up in includeCommon.ahk, to before mainConfig.ahk?
 		Resizing windows - add optional param to also center the newly resized window?

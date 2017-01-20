@@ -48,8 +48,8 @@ return
 	^+!t::Selector.select("local/outlookTLG.tl",       "OUTLOOK_TLG")
 
 	; Themes
-	^+!d::Selector.select("theme.tl", "CHANGE_THEME",  "dw")
-	^+!l::Selector.select("theme.tl", "CHANGE_THEME",  "lw")
+	; ^+!d::Selector.select("theme.tl", "CHANGE_THEME",  "dw")
+	; ^+!l::Selector.select("theme.tl", "CHANGE_THEME",  "lw")
 #If
 	
 ; Resize window

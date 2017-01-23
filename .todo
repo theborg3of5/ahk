@@ -3,6 +3,7 @@
 	'Fixes'
 	
 	'New ideas'
+		Add to vimKeys - modification for twitter like -> m key
 		Alt+drag stuff seems to work oddly on Win10 (home desktop) - investigate.
 		Move sites.ahk to launch.ahk instead.
 		Condense more global constants into constants.ahk

@@ -160,8 +160,8 @@ sendToOmniboxAndGo(url) {
 	; Up/Down/Left/Right.
 	j::Send, {Down}
 	k::Send, {Up}
-	h::Send, {Left}
-	l::Send, {Right}
+	; h::Send, {Left}
+	; l::Send, {Right}
 	
 	; Page Up/Down/Top/Bottom.
 	`;::Send, {PgDn}
@@ -199,6 +199,8 @@ sendToOmniboxAndGo(url) {
 	~d::
 	~e::
 	~f::
+	~h::
+	~l::
 	~m::
 	~n::
 	~q::

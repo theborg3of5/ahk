@@ -1,6 +1,7 @@
 # AHK To Do
 	
 	'Fixes'
+		Have centering hotkey take height of taskbar into account?
 	
 	'New ideas'
 		Add to vimKeys - modification for twitter like -> m key

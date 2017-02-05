@@ -7,7 +7,6 @@
 		Add to vimKeys - modification for twitter like -> m key
 		Alt+drag has some interesting quirks with certain program (just OneNote on Win10 so far?)
 			Add to framework, new column in programs.tl?
-		Move sites.ahk to launch.ahk instead.
 		Condense more global constants into constants.ahk
 			May need to move up in includeCommon.ahk, to before mainConfig.ahk?
 		Resizing windows - add optional param to also center the newly resized window?

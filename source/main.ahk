@@ -46,7 +46,6 @@ if(MainConfig.isMachine(EPIC_DESKTOP)) { ; Not needed except on Epic machine.
 #Include putty.ahk
 #Include quickDial.ahk
 #Include remoteDesktop.ahk
-#Include sites.ahk
 #Include skype.ahk
 #Include sumatraPDF.ahk
 #Include tortoiseGit.ahk

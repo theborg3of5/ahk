@@ -483,10 +483,19 @@ return
 ; Get current screen boarders for monitor where mouse cursor is
 GetCurrentScreenBoarders(ByRef CurrentScreenLeft, ByRef CurrentScreenRight, ByRef CurrentScreenTop, ByRef CurrentScreenBottom, winID) {
 	; Figure out offsets.
-	leftOffset   := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
-	rightOffset  := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
-	topOffset    := 0 ; MainConfig.getSetting("WINDOW_EDGE_OFFSET") ; top offset hasn't changed, that's where my taskbar is.
-	bottomOffset := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
+	
+	WinGet, ahkEXE, ProcessName, ahk_id %winId%
+	if(ahkEXE = "ONENOTE.EXE") {
+		leftOffset   := 0
+		rightOffset  := 0
+		topOffset    := 0
+		bottomOffset := 0
+	} else {
+		leftOffset   := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
+		rightOffset  := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
+		topOffset    := 0 ; MainConfig.getSetting("WINDOW_EDGE_OFFSET") ; top offset hasn't changed, that's where my taskbar is.
+		bottomOffset := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
+	}
 	
 	WinGet, minMaxState, MinMax
 	if(minMaxState = 1) ; Window is maximized

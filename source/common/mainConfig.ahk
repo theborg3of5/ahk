@@ -210,4 +210,4 @@ class MainConfig {
 	}
 }
 
-MainConfig.init(localConfigFolder "settings.tl", configFolder "windows.tl", configFolder "programs.tl")
+MainConfig.init(localConfigFolder "settings.ini", configFolder "windows.tl", configFolder "programs.tl")

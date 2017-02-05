@@ -54,46 +54,15 @@
 	}
 	
 	{ ; Content/formatting modifiers.
-		; Adds a new sub-bullet that won't disappear.
-		^+a::
-			Send, {End}{Enter}{Tab}A{Backspace}
-		return
-
-		; Bolds the full row.
-		^+b::
-			Send, {Home}{Shift Down}{End}{Shift Up}^b{Down}{Home}
-		return
-		
-		; Copy the full row.
-		^+c::
-			SendPlay, {Home}{Down}{Home}{Shift Down}{Up}{Shift Up}
-			Send, ^c
-		return
-		
-		; Cut the full row.
-		^+x::
-			SendPlay, {Home}{Down}{Home}{Shift Down}{Up}{Shift Up}
-			Send, ^x
-		return
-		
 		; Deletes a full line.
 		^d::
-			SendPlay, {Home}{Down}{Home}{Shift Down}{Up}{Shift Up}
+			Send, {Home}
+			Send, ^{Down}
+			Send, {Home}
+			Send, {Shift Down}
+			Send, ^{Up}
+			Send, {Shift Up}
 			Send, {Delete}
-		return
-		
-		; Turn link a more reasonable color (assuming selected) and pop up linkbox.
-		$^+k::
-			Send, !h
-			Send, fc
-			Send, {Down 7}{Right}
-			Send, {Enter}
-			Send, ^k
-		return
-		
-		; Remap add Outlook task hotkey since linking is using it.
-		^+t::
-			Send, ^+k
 		return
 		
 		; Make line movement alt + up/down instead of alt + shift + up/down to match notepad++ and ES.

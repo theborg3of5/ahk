@@ -46,19 +46,24 @@
 	
 	; Run EpicStudio in debug mode, given a particular string to search for.
 	esRunDebug(searchString) {
-		; Always send F6, even in debug mode - continue.
+		; Always send F5, even in debug mode - continue.
 		Send, {F5}
 		
 		; Don't try and debug again if ES is already doing so.
 		if(!isESDebugging()) {
-		
 			WinWait, Attach to Process, , 5
 			if(!ErrorLevel) {
-				Send, {Tab}{Down 2}
-				SendRaw, % searchString
-				Send, {Enter}{Down}
+				ControlGet, currFilter, Line, 1, Edit1, A
+				if(!currFilter) {
+					ControlFocus, WindowsForms10.BUTTON.app.0.141b42a_r12_ad11, A
+					ControlSend, WindowsForms10.BUTTON.app.0.141b42a_r12_ad11, {Space}, A
+					ControlFocus, Edit1, A
+					
+					Send, % searchString
+					Send, {Enter}{Down}
+				}
 			} else {
-				; DEBUG.popup(ErrorLevel, "ES Debug WinWait ErrorLevel")
+				DEBUG.popup("ES Debug WinWait ErrorLevel", ErrorLevel)
 			}
 		
 		}

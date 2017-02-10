@@ -2,6 +2,13 @@
 ; Hotkeys for opening a pidgin chat window with specific users
 #+m::pidginMessageToUser(mikalEmailAddress)
 
+; Unread facebook group chat windows (don't respond to ^+i correctly).
+#If WinExist("* ahk_exe " MainConfig.getProgram("Pidgin", "EXE"))
+	^+i::
+		WinActivate, % "* ahk_exe " MainConfig.getProgram("Pidgin", "EXE")
+	return
+#If
+
 #IfWinActive, Buddy List
 	; Hide buddy list when active.
 	^!d::

@@ -13,7 +13,7 @@
 	Thunder				-				-																Thunder\Thunder.exe
 	VMWarePlayer		-				-																VMware\VMware Player\vmplayer.exe
 	VB6					-				-																Microsoft Visual Studio\VB98\VB6.EXE
-	Pidgin				-				-																Pidgin\pidgin.exe
+	Pidgin				-				-																Pidgin\pidgin.exe																	-									-					pidgin.exe
 	Snapper				-				-																Epic\Snapper\Snapper.exe
 	VMWareView			-				-																VMware\VMware Horizon View Client\vmware-view.exe
 []

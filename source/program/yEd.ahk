@@ -1,4 +1,3 @@
-
 #IfWinActive, ahk_exe yEd.exe
 	
 	; Use numpad symbols as normal, don't zoom using those.
@@ -19,7 +18,7 @@
 	return
 	
 	; Allow spacebar drag a la Paint.NET.
-	Space & LButton::
+	~Space & LButton::
 		Send, {RButton Down}
 		KeyWait, LButton ; Wait until user releases the button, then release our artificial click accordingly.
 		Send, {RButton Up}

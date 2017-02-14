@@ -53,6 +53,7 @@ if(MainConfig.isMachine(EPIC_DESKTOP)) { ; Not needed except on Epic machine.
 #Include vb6.ahk
 #Include vlc.ahk
 #Include word.ahk
+#Include yEd.ahk
 
 ; Universal suspend, reload, and exit hotkeys.
 #Include %A_ScriptDir%\common\commonHotkeys.ahk

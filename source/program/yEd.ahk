@@ -18,4 +18,11 @@
 		Send, {LButton Up}
 	return
 	
+	; Allow spacebar drag a la Paint.NET.
+	Space & LButton::
+		Send, {RButton Down}
+		KeyWait, LButton ; Wait until user releases the button, then release our artificial click accordingly.
+		Send, {RButton Up}
+	return
+	
 #IfWinActive

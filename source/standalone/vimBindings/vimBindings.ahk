@@ -110,7 +110,6 @@ sendToOmniboxAndGo(url) {
 	F6::
 	F8::
 	F9::
-	F10::
 		closeTab()
 	return
 	

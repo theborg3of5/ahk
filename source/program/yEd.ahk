@@ -24,4 +24,10 @@
 		Send, {RButton Up}
 	return
 	
+	^r::
+		Send, !t
+		Sleep, 100
+		Send, n
+	return
+	
 #IfWinActive

@@ -24,26 +24,9 @@
 	return
 	
 	{ ; SmartText hotstrings. Added to favorites to deal with duplicate/similar names.
-		; General Description: HB SU approval
-		:*:hb.su::
-			insertSmartText("HB DEVELOPMENT APPROVAL")
-		return
-		
-		; Visible and Functional Changes: Design Development
-		:*:hb.dd::
-			insertSmartText("DESIGN DEVELOPMENT")
-			
-			; Insert design number and pick the "WHOLE design" option
-			if(isNum(clipboard)) {
-				Send, {F2}
-				SendRaw, % clipboard
-				Send, {F2}{Enter}
-			}
-		return
-		
-		; QA Instructions: HB QA Instructions
-		:*:hb.qa::
-			insertSmartText("HB QA INSTRUCTIONS")
+		; QA Instructions: DBC QA INSTRUCTIONS
+		:*:dbc.qa::
+			insertSmartText("DBC QA INSTRUCTIONS")
 		return
 	}
 	

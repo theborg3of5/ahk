@@ -4,9 +4,10 @@
 		Have centering hotkey take height of taskbar into account?
 	
 	'New ideas'
+		Snapper supports URLs as well - add support for that to ActionObject?
 		Add to vimKeys - modification for twitter like -> m key
 		Clean up vimKeys stuff - should really make a separate function for whether in super mode (if even used anymore?).
-		Alt+drag has some interesting quirks with certain program (just OneNote on Win10 so far?)
+		Alt+drag has some interesting quirks with certain programs (just OneNote on Win10 so far?)
 			Add to framework, new column in programs.tl?
 		Condense more global constants into constants.ahk
 			May need to move up in includeCommon.ahk, to before mainConfig.ahk?

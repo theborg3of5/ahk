@@ -2,9 +2,7 @@
 #IfWinActive, ahk_class XLMAIN
 	; Auto-fix column width 
 	^+w::
-		Send, !h
-		Send, o
-		Send, i
+		autoFixColumnWidth()
 	return
 
 	; Insert/delete row
@@ -24,4 +22,26 @@
 	^+Tab:: ; Have to make sure the shift gets released (not blind mode like the above one).
 		Send, ^{PgUp}
 	return
+	
+	; Filter and format table nicely.
+	^+b::
+		Send, ^a
+		Send, ^a
+		
+		Send, !at      ; Filter
+		
+		autoFixColumnWidth()
+		
+		Send, ^{Home}  ; Get back to top-left cell
+		Send, +{Space} ; Select whole row
+		Send, ^b       ; Bold it
+		Send, !wfr		; Freeze top row
+	return
+	
+	autoFixColumnWidth() {
+		Send, !h
+		Send, o
+		Send, i
+	}
+	
 #IfWinActive

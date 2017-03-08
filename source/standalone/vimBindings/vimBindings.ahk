@@ -159,8 +159,6 @@ sendToOmniboxAndGo(url) {
 	; Up/Down/Left/Right.
 	j::Send, {Down}
 	k::Send, {Up}
-	; h::Send, {Left}
-	; l::Send, {Right}
 	
 	; Page Up/Down/Top/Bottom.
 	`;::Send, {PgDn}
@@ -168,23 +166,9 @@ sendToOmniboxAndGo(url) {
 	[::Send, {Home}
 	]::Send, {End}
 	
-	; Forward, to match backspace for back.
-	\::Send, !{Right}
-	
 	; Find
-	/::
-		Send, ^f
 	~^f::
 		setVimState(false, , , 1)
-	return
-
-	; Feedly: if gg, pause script until enter or esc.
-	~g::
-		WinGetTitle, pageTitle, A
-		
-		if(InStr(pageTitle, " - feedly")) {
-			setVimState(false, 1)
-		}
 	return
 	
 	; Bookmarklet hotkeys.
@@ -198,6 +182,7 @@ sendToOmniboxAndGo(url) {
 	~d::
 	~e::
 	~f::
+	~g::
 	~h::
 	~l::
 	~m::

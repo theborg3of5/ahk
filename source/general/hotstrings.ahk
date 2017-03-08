@@ -112,7 +112,7 @@
 		:*:heir'l::hierarchical
 		:*:c'i::check-in
 		:*:c'o::check-out
-		::qai::QA Instructions
+		:*:qai::QA Instructions
 		
 		:*:asig::and so it goes, and so it goes, and you're the only one who knows...
 	}

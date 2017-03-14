@@ -18,10 +18,8 @@
 	Item Approval			ia					\\epic.com\files\docs\Hospital Billing\Designs\Items Approval\											EPIC_DESKTOP
 	VM Templates			vt					\\epic.com\files\apps\vmware\SU Development\																	EPIC_DESKTOP
 	Partial Installers	pi					F:\Hospital Billing\Dev\Partial Installers\																	EPIC_DESKTOP
+	Net Home					nh					\\epic-nfs\net_home\gborg\																							EPIC_DESKTOP
 	
 	# For Hotkeys
 	AHK Root					ar|ahkRoot		<AHKROOT>\
 	AHK Config				ac|ahkConfig	<AHKROOT>\config\
-
-	# Reason Not Collecting
-	Screenshots				rnc				F:\personal\gborg\Screenshots\Reason Not Collecting\														EPIC_DESKTOP

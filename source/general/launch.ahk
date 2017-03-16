@@ -76,7 +76,7 @@ return
 		
 		data := Selector.select("search.tl", "RET_DATA", "", "", {"ARG1": text})
 		searchType := data["SEARCH_TYPE"]
-		searchTypes := StrSplit(data["SUBTYPE"], "|") ; In case multiple post types, pipe-delimited.
+		subTypes := forceArray(data["SUBTYPE"])
 		
 		criteria := []
 		Loop, 5 {
@@ -84,7 +84,7 @@ return
 		}
 		
 		if(searchType = "CODESEARCH") {
-			For i,st in searchTypes {
+			For i,st in subTypes { ; There could be multiple here?
 				url := buildCodeSearchURL(st, criteria)
 				if(url)
 					Run, % url

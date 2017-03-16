@@ -20,6 +20,16 @@ getArraySize(ary) {
 	return size
 }
 
+; If the given object is already an array, return it. Otherwise, return an array with the given object as its only element (index 0).
+forceArray(obj) {
+	if(IsObject(obj))
+		return obj
+	
+	newArray := []
+	newArray[0] := obj
+	return newArray
+}
+
 ; Basically an easier-to-read ternary operator.
 processOverride(defaultVal, overrideVal) {
 	if(overrideVal || IsObject(overrideVal))

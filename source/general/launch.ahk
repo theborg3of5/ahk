@@ -80,7 +80,9 @@ return
 		
 		criteria := []
 		Loop, 5 {
-			criteria[A_Index] := data["ARG" A_Index]
+			arg := data["ARG" A_Index]
+			escapedArg := escapeDoubleQuotes(arg, 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
+			criteria[A_Index] := escapedArg
 		}
 		
 		if(searchType = "CODESEARCH") {

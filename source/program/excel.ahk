@@ -18,8 +18,12 @@
 	return
 
 	; Next/previous worksheet
-	^Tab::^PgDn
-	^+Tab:: ; Have to make sure the shift gets released (not blind mode like the above one).
+	^Tab::
+	XButton1::
+		Send, ^{PgDn}
+	return
+	^+Tab:: ; Have to make sure the shift gets released, so can't be basic hotkey (which acts as blind mode?).
+	XButton2::
 		Send, ^{PgUp}
 	return
 	

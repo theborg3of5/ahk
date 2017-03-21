@@ -16,6 +16,7 @@ return
 	|| WinActive("ahk_exe RainbowSixGame.exe") 
 	|| WinActive("ahk_exe kfgame.exe")
 	|| WinActive("ahk_exe HeroesOfTheStorm_x64.exe"))
+	
 	XButton1::^Tab
 	XButton2::^+Tab
 #If

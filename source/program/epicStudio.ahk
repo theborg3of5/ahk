@@ -63,7 +63,7 @@
 					Send, {Enter}{Down}
 				}
 			} else {
-				DEBUG.popup("ES Debug WinWait ErrorLevel", ErrorLevel)
+				; DEBUG.popup("ES Debug WinWait ErrorLevel", ErrorLevel)
 			}
 		
 		}

@@ -14,6 +14,7 @@
 ^+!s::activateProgram("EpicStudio")
 ^+!u::activateProgram("Thunder")
 ^+!e::activateProgram("EMC2")
+^+!y::activateProgram("yEd")
 ^!#e::activateProgram("Outlook")
 ^!#n::     runProgram("Notepad")
 ^!#/::activateProgram("WinSpy")

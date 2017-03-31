@@ -25,6 +25,7 @@
 	TrueCrypt			-				CustomDlg													TrueCrypt\TrueCrypt.exe
 	OxygenXML			-				SunAwtFrame													Oxygen XML Editor 13\oxygen13.2.exe
 	WinSpy				-				-																AutoHotkey\AU3_Spy.exe
+	yEd					-				-																yWorks\yEd\yEd.exe
 []
 
 [{PATH}b:C:\Users\gborg\AppData\]

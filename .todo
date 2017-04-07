@@ -9,6 +9,7 @@
 			Would need to make epic pieces specific?
 				Could be done in same way as program filtering stuff works.
 		Snapper supports URLs as well - add support for that to ActionObject?
+			Also include support for multiple things - maybe add that in general too?
 		Add to vimKeys - modification for twitter like -> m key
 		Clean up vimKeys stuff - should really make a separate function for whether in super mode (if even used anymore?).
 		Alt+drag has some interesting quirks with certain programs (just OneNote on Win10 so far?)

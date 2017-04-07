@@ -4,6 +4,11 @@
 	^+w::
 		autoFixColumnWidth()
 	return
+	
+	; Save as
+	^+s::
+		Send, {F12}
+	return
 
 	; Insert/delete row
 	^=::
@@ -27,9 +32,20 @@
 		Send, ^{PgUp}
 	return
 	
+	; Autosum
+	^!s::
+		Sleep, 200
+		Send, !hus
+	return
+	
+	; Unfreeze everything (when something frozen)
+	^+f::
+		Send, !wff
+	return
+	
 	; Filter and format table nicely.
 	^+b::
-		Send, ^a
+		Send, ^a	      ; Select all
 		Send, ^a
 		
 		Send, !at      ; Filter
@@ -43,6 +59,8 @@
 	return
 	
 	autoFixColumnWidth() {
+		Send, ^a
+		Send, ^a
 		Send, !h
 		Send, o
 		Send, i

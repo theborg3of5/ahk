@@ -8,6 +8,7 @@
 			Include google, youtube, etc. mainly.
 			Would need to make epic pieces specific?
 				Could be done in same way as program filtering stuff works.
+		Make a simpler icon setup function - almost everything (vimKeys is the only exception) just needs on/off.
 		Snapper supports URLs as well - add support for that to ActionObject?
 			Also include support for multiple things - maybe add that in general too?
 		Add to vimKeys - modification for twitter like -> m key

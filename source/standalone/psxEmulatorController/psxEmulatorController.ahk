@@ -2,7 +2,6 @@
 #SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
-
 #Include <autoInclude>
 
 ; State flags.
@@ -16,7 +15,7 @@ setupTrayIcons(states)
 
 loopDuration := 100 ; 100 ms
 SetTimer, MainLoop, %loopDuration% ; Timer for "MainLoop" will be toggled by commonHotkeys' suspend hotkey.
-
+XInput_Init()
 
 MainLoop:
 	if(!WinActive("ahk_class EPSX"))
@@ -43,6 +42,7 @@ return
 
 ; Emulator checks for key being down, not an actual keypress, so this is needed.
 sendEmulatorKey(key) {
+	; DEBUG.popup("Sending key", key)
 	SendInput, {%key% Down}
 	Sleep, 50
 	SendInput, {%key% Up}

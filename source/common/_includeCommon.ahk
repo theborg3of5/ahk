@@ -20,3 +20,4 @@
 #Include tray.ahk
 #Include VA.ahk
 #Include window.ahk
+#Include XInput.ahk

@@ -10,6 +10,8 @@ if(MainConfig.isMachine(EPIC_DESKTOP)) { ; Not needed except on Epic machine.
 	Run, % standaloneFolder "killUAC.ahk"
 	Run, % standaloneFolder "tortoiseFillerDLG\tortoiseFillerDLG.ahk"
 	Run, % standaloneFolder "dlgNumTracker\dlgNumTracker.ahk"
+} else if(MainConfig.isMachine(HOME_DESKTOP)) {
+	Run, % standaloneFolder "psxEmulatorController\psxEmulatorController.ahk"
 }
 
 #Include setup.ahk ; Setup for this script.

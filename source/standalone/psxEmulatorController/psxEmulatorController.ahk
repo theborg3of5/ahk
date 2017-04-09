@@ -10,34 +10,45 @@ global suspended := 0
 
 ; Icon setup.
 states                 := []
-states["suspended", 0] := "hash.ico"
-states["suspended", 1] := "redHash.ico"
+states["suspended", 0] := "controllerGreen.ico"
+states["suspended", 1] := "controllerRed.ico"
 setupTrayIcons(states)
 
-loopDuration := 10 * 1000 ; 10 seconds
+loopDuration := 100 ; 100 ms
 SetTimer, MainLoop, %loopDuration% ; Timer for "MainLoop" will be toggled by commonHotkeys' suspend hotkey.
 
-global currDLGId
-
-SetTitleMatchMode, 2 ; Partial title matching.
-emc2Title := " - EMC2 ahk_exe EpicD82.exe"
 
 MainLoop:
-	; Don't do anything if EMC2 isn't open.
-	if(!WinExist(emc2Title))
+	if(!WinActive("ahk_class EPSX"))
 		return
 	
-	getEMC2Info(ini, id, emc2Title)
-	if(ini != "DLG")
-		return
-	
-	currDLGId := id
-	Menu, Tray, Tip, Press Ctrl + Alt + i to insert DLG number. `nCurrent DLG: %currDLGId%
+	if State := XInput_GetState(0) { ; 0 - First controller
+		if(State.wButtons & XINPUT_GAMEPAD_DPAD_UP)
+			sendEmulatorKey("F2") ; Switch save state
+		if(State.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)
+			sendEmulatorKey("F4") ; Lock/unlock framerate
+	}
 return
 
-^!i::
-	Send, % currDLGId
-return
+
+#IfWinActive, ahk_class EPSX
+	Joy9::
+		sendEmulatorKey("F1") ; Save state
+	return
+	Joy10::
+		sendEmulatorKey("F3") ; Load state
+	return
+#IfWinActive
+
+
+; Emulator checks for key being down, not an actual keypress, so this is needed.
+sendEmulatorKey(key) {
+	SendInput, {%key% Down}
+	Sleep, 50
+	SendInput, {%key% Up}
+	Sleep, 100
+}
+
 
 ; Universal suspend, reload, and exit hotkeys.
 #Include %A_ScriptDir%\..\..\common\commonHotkeys.ahk

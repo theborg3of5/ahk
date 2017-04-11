@@ -1,14 +1,6 @@
 ; OneNote hotkeys.
 #IfWinActive, ahk_class Framework::CFrame
 	{ ; Quick access toolbar commands.
-		; Sync This Notebook Now
-		^s::
-			Send, !1
-		return
-		; Sync All Notebooks Now
-		^+s::
-			Send, !2
-		return
 		; New Subpage
 		$^+n::
 			Send, !3
@@ -78,6 +70,15 @@
 			Send, ^+n
 		return
 	}
+	
+	; Sync This Notebook Now
+	^s::
+		Send, +{F9}
+	return
+	; Sync All Notebooks Now
+	^+s::
+		Send, {F9}
+	return
 	
 	; Copy link to page.
 	!c::

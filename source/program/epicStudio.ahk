@@ -31,17 +31,17 @@
 	
 	; Debug, auto-search for workstation ID and Reflection exe.
 	F6::
-		esRunDebug("ws:" epicComputerName " exe:" epicReflectionExe)
+		esRunDebug("ws:" epicComputerName) ; " exe:" epicReflectionExe)
 	return
 	
 	; Debug, auto-search for workstation ID and EpicD exe (aka Hyperspace).
 	F7::
-		esRunDebug("ws:" epicComputerName " exe:" epicHyperspaceExeStart)
+		esRunDebug("ws:" epicComputerName) ; " exe:" epicHyperspaceExeStart)
 	return
 	
 	; Debug, auto-search for workstation ID and VB exe.
 	F8::
-		esRunDebug("ws:" epicComputerName " exe:" epicVBExe)
+		esRunDebug("ws:" epicComputerName) ; " exe:" epicVBExe)
 	return
 	
 	; Run EpicStudio in debug mode, given a particular string to search for.

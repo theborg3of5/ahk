@@ -71,6 +71,9 @@
 		return
 	}
 	
+	; Disable ^t hotkey making a new section
+	^t::return
+	
 	; Sync This Notebook Now
 	^s::
 		Send, +{F9}

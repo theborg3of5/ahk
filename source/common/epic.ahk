@@ -221,6 +221,62 @@ buildGuruURL(criteria) {
 	return outURL criteria
 }
 
+; ini/id defaults are "X" as a dummy - URL will still connect to desired environment.
+buildSnapperURL(environment, ini = "X", id = "X") {
+	if(!environment)
+		return ""
+	
+	record        := []
+	record["ENV"] := environment
+	record["INI"] := ini
+	record["ID"]  := id
+	recordsAry    := []
+	recordsAry.push(record)
+	
+	return buildSnapperURLAry(recordsAry)
+}
+
+; record format (single entry in recordsAry):
+;   record["ENV"]     = Environment
+;         ["INI"]     = Record INI
+;         ["ID"]      = Record ID
+;         ["COMPARE"] = 1 to include record in compare argument
+buildSnapperURLAry(recordsAry) {
+	if(!recordsAry || !IsObject(recordsAry))
+		return ""
+	
+	outURL     := snapperURLBase
+	compareAry := []
+	
+	For i,record in recordsAry {
+		; DEBUG.popup("Index", i, "Record", record)
+		environment   := record["ENV"]
+		ini           := record["INI"]
+		id            := record["ID"]
+		shouldCompare := record["COMPARE"]
+		
+		if(!environment || !ini || !id)
+			Continue
+		
+		outURL .= ini "." id "." environment "/"
+		
+		if(shouldCompare)
+			compareAry.push(i)
+	}
+	
+	if(compareAry.length() > 0) {
+		compareString := "compare"
+		For i,idx in compareAry
+			compareString .= "." idx
+		
+		outURL .= compareString
+	}
+	
+	return outURL
+}
+
+
+
 ; Within an Epic environment list window (title is usually "Connection Status"), pick the given environment by name (exact name match).
 ; For remote (Citrix) windows, it won't select the specific environment, but will pick the given environment group and focus the environment list.
 pickEnvironment(envName, envGroup = "<All Environments>") {

@@ -2,6 +2,7 @@
 	
 	'Fixes'
 		Have centering hotkey take height of taskbar into account?
+		ActionObject.process - needs* variables don't exist, but we're using them?
 	
 	'New ideas'
 		Generalize finding stuff

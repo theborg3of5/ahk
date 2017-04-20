@@ -160,10 +160,19 @@ DO_THUNDER(actionRow) {
 		Run, % runString
 }
 
-; Run a citrix session through Thunder.
-DO_CITRIX(actionRow) {
-	actionRow.data["THUNDERID"] := actionRow.data["CITRIXTHUNDERID"]
-	DO_THUNDER(actionRow)
+; Open an environment in Snapper using a dummy record.
+DO_SNAPPER(actionRow) {
+	environment := actionRow.data["COMMID"]
+	
+	url := callIfExists("buildSnapperURL", environment) ; buildSnapperURL(environment)
+	
+	; Debug mode.
+	if(actionRow.isDebug) {
+		actionRow.debugResult := url
+		return
+	}
+	
+	Run, % url
 }
 
 ; Open a homebrew timer (script located in the filepath below).

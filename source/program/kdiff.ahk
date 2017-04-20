@@ -1,4 +1,11 @@
 #IfWinActive, ahk_exe kdiff3.exe
+	; Show/hide whitespace differences.
+	^i::
+		Send, !i
+		Send, {Down}
+		Send, {Enter}
+	return
+	
 	; Hotkey to toggle line wrapping.
 	^+w::
 		Send, !i

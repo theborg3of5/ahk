@@ -5,6 +5,8 @@
 		ActionObject.process - needs* variables don't exist, but we're using them?
 	
 	'New ideas'
+		Make it easier to get correct, drive-mapped paths
+			Maybe when copy, check for epic:// and replace with correct drive letter accordingly?
 		Generalize finding stuff
 			Include google, youtube, etc. mainly.
 			Would need to make epic pieces specific?

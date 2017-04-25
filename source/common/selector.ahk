@@ -151,12 +151,13 @@ class Selector {
 		this.tableListSettings["FORMAT", "DEFAULT_INDICES"] := ["NAME", "ABBREV", "DOACTION"]
 	}
 	
-	init(fPath, action, iconName, selRows, tlSettingOverrides) {
+	init(fPath, action, iconName, selRows, tlSettingOverrides, settingOverrides, extData) {
 		; DEBUG.popup("init Filepath", fPath, "Action", action, "Icon name", iconName, "SelRows", selRows)
 		
 		this.startupConstants()
 		
-		
+		if(extData)
+			this.extraData := extData
 		
 		; If we were given pre-formed SelectorRows, awesome. Otherwise, read from file.
 		if(selRows) {
@@ -192,6 +193,8 @@ class Selector {
 		; Setting overrides.
 		if(action)
 			this.actionType := action
+		if(settingOverrides["ShowArbitraryInputs"])
+			this.showArbitraryInputs := settingOverrides["ShowArbitraryInputs"]
 		
 		; Get paths for the icon file, and read them in.
 		if(iconName) { ; Use the icon name override if given.
@@ -219,11 +222,11 @@ class Selector {
 			selRows[]           - Array of SelectorRow objects to use directly instead of reading from filePath.
 			tableListSettings[] - Settings to override for when we read in a file using a TableList object.
 	*/
-	select(filePath, actionType = "", silentChoice = "", iconName = "", data = "", selRows = "", tableListSettings = "") {
+	select(filePath, actionType = "", silentChoice = "", iconName = "", data = "", selRows = "", tableListSettings = "", settingOverrides = "", extraData = "") {
 		; DEBUG.popup("Filepath", filePath, "Action Type", actionType, "Silent Choice", silentChoice, "Icon name", iconName, "Data", data)
 		
 		; Set up our various information, read-ins, etc.
-		this.init(filePath, actionType, iconName, selRows, tableListSettings)
+		this.init(filePath, actionType, iconName, selRows, tableListSettings, settingOverrides, extraData)
 		
 		; Loop until we get good input, or the user gives up.
 		while(rowToDo = "" && !done) {
@@ -496,7 +499,7 @@ class Selector {
 			editWidth := indexW + offsetDataInputX + abbrevW
 			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%inputX% y%bottomHeight% w%editWidth% h24 -E0x200 +Border
 			
-			numArbitInputs := this.labelIndices.MaxIndex()
+			numArbitInputs := this.labelIndices.length() + this.extraData.length()
 			leftoverWidth := guiWidth - startNameX - offsetX ; offsetX is rightmost padding on GUI
 			editWidth := (leftoverWidth / numArbitInputs) - ((numArbitInputs - 1) * offsetDataInputX)
 			
@@ -512,6 +515,20 @@ class Selector {
 				Gui %SEL_GUI%: Add, Edit, vGuiIn%l% x%posX% y%bottomHeight% w%editWidth% h24 -E0x200 +Border, % tempData
 				posX += editWidth + offsetDataInputX
 			}
+			
+			For idx,d in this.extraData {
+				For label,dataToDefault in d {
+					if(dataToDefault) ; Data given as default
+						tempData := dataToDefault
+					else              ; Data label
+						tempData := label
+					
+					; DEBUG.popup("Index", idx, "Extra data label", label, "Extra data", dataToDefault)
+					Gui %SEL_GUI%: Add, Edit, vGuiIn%idx% x%posX% y%bottomHeight% w%editWidth% h24 -E0x200 +Border, % tempData ; GDB TODO - switch out vGuiIn%idx% with something that continues the count from labelIndices loop
+					posX += editWidth + offsetDataInputX
+				}
+			}
+			
 		} else {
 			; Add the edit control with almost the width of the window.
 			editWidth := guiWidth - (offsetX * 2)
@@ -544,6 +561,20 @@ class Selector {
 					; DEBUG.popup("Index", i, "Model index", m, "Label at index", this.dataLabels[i], "Label at data index", this.dataLabels[m], "Data at index", GuiIn%i%, "Data at data index", GuiIn%m%, "DataLabels Array", this.dataLabels, "DataIndices Array", this.dataIndices, "ModelIndices Array", this.modelIndices, "Model Indices Reversed", this.modelIndicesReverse)
 					guiDataFilled := true
 					guiData[l] := GuiIn%i%
+				}
+			}
+			
+			; GDB TODO - need loop continuation here too.
+			For i,d in this.extraData {
+				inputVal := GuiIn%i%
+				
+				; GDB TODO - should only be 1, find a better way or restructure the data structure.
+				For label,dataToDefault in d
+					tempLabel := label
+				
+				if(inputVal && (inputVal != tempLabel)) {
+					guiDataFilled := true
+					guiData[tempLabel] := GuiIn%i%
 				}
 			}
 		}

@@ -45,7 +45,22 @@ return
 	#p::  Selector.select("local/phone.tl",            "CALL")
 	^+!h::Selector.select("local/epicEnvironments.tl", "DO_HYPERSPACE", , "C:\Program Files (x86)\Epic\v8.3\Shared Files\EpicD83.exe")
 	^+!r::Selector.select("local/epicEnvironments.tl", "DO_THUNDER",    , "C:\Program Files (x86)\PuTTY\putty.exe")
-	^!#s::Selector.select("local/epicEnvironments.tl", "DO_SNAPPER",    , "C:\Program Files (x86)\Epic\Snapper\Snapper.exe")
+	^!#s::
+		settings := []
+		settings["ShowArbitraryInputs"] := 1
+		
+		extraData := []
+		
+		subData := []
+		subData["INI"] := ""
+		extraData.push(subData)
+		
+		subData := []
+		subData["ID"] := ""
+		extraData.push(subData)
+		
+		Selector.select("local/epicEnvironments.tl", "DO_SNAPPER",    , "C:\Program Files (x86)\Epic\Snapper\Snapper.exe",,,,settings,extraData)
+	return
 	^+!t::Selector.select("local/outlookTLG.tl",       "OUTLOOK_TLG")
 
 	; Themes

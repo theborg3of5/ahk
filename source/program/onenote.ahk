@@ -15,7 +15,10 @@
 		return
 		; Delete Page
 		$^+d::
-			Send, !6
+			; Confirmation to avoid accidental page deletion
+			MsgBox, 4, Delete page?, Are you sure you want to delete this page?
+			IfMsgBox, Yes
+				Send, !6
 		return
 	}
 	

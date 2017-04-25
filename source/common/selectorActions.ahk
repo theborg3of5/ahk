@@ -163,8 +163,10 @@ DO_THUNDER(actionRow) {
 ; Open an environment in Snapper using a dummy record.
 DO_SNAPPER(actionRow) {
 	environment := actionRow.data["COMMID"]
+	ini         := actionRow.data["INI"]
+	id          := actionRow.data["ID"]
 	
-	url := callIfExists("buildSnapperURL", environment) ; buildSnapperURL(environment)
+	url := callIfExists("buildSnapperURL", environment, ini, id) ; buildSnapperURL(environment, ini, id)
 	
 	; Debug mode.
 	if(actionRow.isDebug) {

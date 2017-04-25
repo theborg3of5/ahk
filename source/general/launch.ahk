@@ -59,7 +59,7 @@ return
 		subData["ID"] := ""
 		extraData.push(subData)
 		
-		Selector.select("local/epicEnvironments.tl", "DO_SNAPPER",    , "C:\Program Files (x86)\Epic\Snapper\Snapper.exe",,,,settings,extraData)
+		Selector.select("local/epicEnvironments.tl", "DO_SNAPPER",    , "C:\Program Files (x86)\Epic\Snapper\Snapper.exe", [], , , settings, extraData)
 	return
 	^+!t::Selector.select("local/outlookTLG.tl",       "OUTLOOK_TLG")
 

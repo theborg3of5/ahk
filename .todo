@@ -3,6 +3,9 @@
 	'Fixes'
 		Have centering hotkey take height of taskbar into account?
 		ActionObject.process - needs* variables don't exist, but we're using them?
+		Finish cleaning up recent rough changes
+			Snapper URL stuff
+			M code for loop snippet
 	
 	'New ideas'
 		Make it easier to get correct, drive-mapped paths

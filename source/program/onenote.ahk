@@ -102,13 +102,13 @@
 		clipboard := link
 	return
 
-	; More intelligent escape key - don't close when quitting out of searchbox.
-	$Escape::
-		ControlGetFocus, currControl, A
-		if(currControl = "RICHEDIT60W1") {
-			Send, {Escape}
-		} else {
-			WinClose
-		}
-	return
+	; ; More intelligent escape key - don't close when quitting out of searchbox.
+	; $Escape::
+		; ControlGetFocus, currControl, A
+		; if(currControl = "RICHEDIT60W1") {
+			; Send, {Escape}
+		; } else {
+			; WinClose
+		; }
+	; return
 #IfWinActive

@@ -8,6 +8,7 @@
 			M code for loop snippet
 	
 	'New ideas'
+		Rewrite Selector and TableList from scratch.
 		Make it easier to get correct, drive-mapped paths
 			Maybe when copy, check for epic:// and replace with correct drive letter accordingly?
 		Generalize finding stuff

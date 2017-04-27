@@ -100,7 +100,7 @@ gatherText(source, cleanUpText = true, windowTitle = "A") {
 	return outText
 }
 
-; Grabs the selected text using the clipboard, fixing the clipboard as it finishes.
+; Sends the selected text using the clipboard, fixing the clipboard as it finishes.
 sendTextWithClipboard(text) {
 	; DEBUG.popup(text, "Text to send with clipboard")
 	

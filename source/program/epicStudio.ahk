@@ -114,6 +114,17 @@
 		
 		clipboard := splitTitle1
 	return
+	
+	
+	:*:.forloop::
+		Send, {Shift Down}{Left}{Shift Up}
+		if(getSelectedText() = ";")
+			Send, {Backspace} ; Start with no semicolon in front.
+		else
+			Send, {End}
+		
+		doMForLoop()
+	return
 
 	; GUI input for Chronicles Data Operation GENERATE code.
 	:*:`;cdo::

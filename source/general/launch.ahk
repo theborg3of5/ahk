@@ -86,7 +86,7 @@ return
 #IfWinExist
 
 #If MainConfig.isMachine(EPIC_DESKTOP)
-	; Launch CodeSearch.
+	; Generic search.
 	!+f::
 		text := gatherText(TEXT_SOURCE_SEL_CLIP)
 		
@@ -109,6 +109,10 @@ return
 			}
 		} else if(searchType = "GURU") {
 			url := buildGuruURL(criteria[1])
+			if(url)
+				Run, % url
+		} else if(searchType = "WIKI") { ; Epic wiki search.
+			url := buildEpicWikiSearchURL(subTypes[0], criteria[1])
 			if(url)
 				Run, % url
 		}

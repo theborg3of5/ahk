@@ -239,6 +239,18 @@ buildGuruURL(criteria) {
 	return outURL criteria
 }
 
+buildEpicWikiSearchURL(category, criteria) {
+	outURL := epicWikiSearchBase
+	outURL := RegExReplace(outURL, "<QUERY>", criteria)
+	
+	if(category) {
+		outURL .= epicWikiSearchFilters
+		outURL := RegExReplace(outURL, "<CATEGORIES>", "'" category "'")
+	}
+	
+	return outURL
+}
+
 ; ini/id defaults are "X" as a dummy - URL will still connect to desired environment.
 buildSnapperURL(environment, ini = "X", id = "X") {
 	if(!environment)

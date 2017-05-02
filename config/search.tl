@@ -17,3 +17,4 @@
 	
 # Other
 	Guru					gu				\x												GURU
+	DBC Wiki				d				dbc											WIKI

@@ -129,27 +129,24 @@ return
 
 ; Generic opener - opens a variety of different things based on the selected/clipboard text.
 ^!#o::
-	KeyWait, Ctrl
-	KeyWait, LWin
-	KeyWait, Alt
 	text := gatherText(TEXT_SOURCE_SEL_CLIP)
-	ActionObject.do(text)
+	ActionObject.do(text, , , , SUBACTION_WEB)
 return
 ^!#+o::
 	text := gatherText(TEXT_SOURCE_SEL_CLIP)
-	ActionObject.do(text, , , , SUBACTION_WEB)
+	ActionObject.do(text)
 return
 
 ; Generic linker - will allow coming from clipboard or selected text, or input entirely. Puts the link on the clipboard.
 ^!#l::
 	text := gatherText(TEXT_SOURCE_SEL_CLIP)
-	link := ActionObject.do(text, , ACTION_LINK)
+	link := ActionObject.do(text, , ACTION_LINK, , SUBACTION_WEB)
 	if(link)
 		clipboard := link
 return
 ^!#+l::
 	text := gatherText(TEXT_SOURCE_SEL_CLIP)
-	link := ActionObject.do(text, , ACTION_LINK, , SUBACTION_WEB)
+	link := ActionObject.do(text, , ACTION_LINK)
 	if(link)
 		clipboard := link
 return

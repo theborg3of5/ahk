@@ -15,6 +15,9 @@
 		; Set view as desired.
 		Send, !1 ; 1 day.
 	return
+	
+	; Bulleted list.
+	^.::^+l
 #IfWinActive
 
 ; Mail activity.

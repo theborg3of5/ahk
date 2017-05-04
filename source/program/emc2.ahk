@@ -53,6 +53,30 @@
 				openEpicStudioDLG(id)
 		return
 	}
+	
+	; Open all related QANs from an object in EMC2.
+	::openall::
+		Send, {Up}  ; Get back to first row in case they hit enter to submit this.
+		Send, {Tab} ; Reset field if they didn't hit enter.
+		Send, +{Tab}
+		
+		relatedQANsAry := getRelatedQANsAry()
+		; DEBUG.popup("QANs found", relatedQANsAry)
+		
+		urlsAry := buildQANURLsAry(relatedQANsAry)
+		; DEBUG.popup("URLs", urlsAry)
+		
+		numQANs := relatedQANsAry.length()
+		if(numQANs > 10) {
+			MsgBox, 4, Many QANs, We found %numQANs% QANs. Are you sure you want to open them all?
+			IfMsgBox, No
+				return
+		}
+		
+		For i,url in urlsAry
+			if(url)
+				Run, % url
+	return
 #If
 
 ; Log mover window

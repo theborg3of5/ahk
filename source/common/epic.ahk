@@ -69,6 +69,62 @@
 		
 		return idLevel
 	}
+	
+	getRelatedQANsAry() {
+		if(!isWindowInState("active","DLG  ahk_class ThunderRT6MDIForm ahk_exe EpicD82.exe"))
+			return ""
+		if(!isWindowInState("active"," - EMC2","",2))
+			return ""
+		
+		; Assuming you're in the first row of the table already.
+		
+		outAry := []
+		Loop {
+			Send, {End}
+			Send, {Left}
+			Send, {Ctrl Down}{Shift Down}
+			Send, {Left}
+			Send, {Ctrl Up}
+			Send, {Right}
+			Send, {Shift Up}
+			
+			qan := getSelectedText()
+			if(!qan)
+				break
+			
+			Send, {Tab}
+			version := getSelectedText()
+			
+			; Avoid duplicate entries (for multiple versions
+			if(qan != oldQAN)
+				outAry.push(qan)
+			
+			; Loop quit condition - same QAN again (table ends on last filled row), also same version
+			if( (qan = oldQAN) && (version = oldVersion) )
+				break
+			oldQAN     := qan
+			oldVersion := version
+			
+			Send, +{Tab}
+			Send, {Down}
+		}
+		
+		return outAry
+	}
+
+	buildQANURLsAry(relatedQANsAry) {
+		if(!relatedQANsAry)
+			return ""
+		
+		urlsAry := []
+		For i,qan in relatedQANsAry {
+			link := ActionObject.do(qan, TYPE_EMC2, ACTION_LINK, "QAN", SUBACTION_WEB)
+			if(link)
+				urlsAry.push(link)
+		}
+		
+		return urlsAry
+	}
 }
 
 { ; Phone-related functions.

@@ -246,7 +246,7 @@
 			Send, % epicPersonalFolder
 		return
 		:*:ssf::
-			Send, % epicPersonalFolder "Screenshots\"
+			Send, % userPath "Screenshots\"
 		return
 		:*c:emf::
 			Send, % epicMonthlyFolder

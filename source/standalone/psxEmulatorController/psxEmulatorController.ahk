@@ -21,11 +21,14 @@ MainLoop:
 	if(!WinActive("ahk_class EPSX"))
 		return
 	
-	if State := XInput_GetState(0) { ; 0 - First controller
-		if(State.wButtons & XINPUT_GAMEPAD_DPAD_UP)
-			sendEmulatorKey("F2") ; Switch save state
-		if(State.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)
-			sendEmulatorKey("F4") ; Lock/unlock framerate
+	Loop, 4 {
+		controllerNum := A_Index - 1 ; Controllers are 0-3
+		if State := XInput_GetState(controllerNum) {
+			if(State.wButtons & XINPUT_GAMEPAD_DPAD_UP)
+				sendEmulatorKey("F2") ; Switch save state
+			if(State.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)
+				sendEmulatorKey("F4") ; Lock/unlock framerate
+		}
 	}
 return
 

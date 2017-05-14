@@ -73,11 +73,11 @@ reloadScript(script, prompt) {
 
 ; Runs something and returns the result from standard out.
 RunReturn(command) {
-	 fullCommand := comspec . " /c """ . command . """"
-    shell := comobjcreate("wscript.shell")
-    exec := (shell.exec(fullCommand))
-    stdout := exec.stdout.readall()
-    return stdout
+	fullCommand := comspec . " /c """ . command . """"
+	shell := comobjcreate("wscript.shell")
+	exec := (shell.exec(fullCommand))
+	stdout := exec.stdout.readall()
+	return stdout
 }
 
 ; Runs a command with cmd.exe.
@@ -107,46 +107,62 @@ RunCommand(commandToRun = "", stayOpen = false) {
 	Run, % runString
 }
 
+; Run as a non-elevated user (since main script typically needs to run as admin).
+RunAsUser(application, args = "") {
+	ShellRun(application, args)
+}
+
 /*
-	Adapted from http://www.autohotkey.com/board/topic/79136-run-as-normal-user-not-as-admin-when-user-is-admin/
+	ShellRun by Lexikos
+		requires: AutoHotkey_L
+		license: http://creativecommons.org/publicdomain/zero/1.0/
+
+	Credit for explaining this method goes to BrandonLive:
+	http://brandonlive.com/2008/04/27/getting-the-shell-to-run-an-application-for-you-part-2-how/
+
+	Shell.ShellExecute(File [, Arguments, Directory, Operation, Show])
+	http://msdn.microsoft.com/en-us/library/windows/desktop/gg537745
+
+	Function found here:
+	https://autohotkey.com/board/topic/108434-run-ahk-as-admin-or-not-dilemma/#entry648428
+
+	Parameters
+		1 application to launch
+		2 command line parameters
+		3 working directory for the new process
+		4 "Verb" (For example, pass "RunAs" to run as administrator)
+		5 Suggestion to the application about how to show its window - see the msdn link for possible values
 */
-RunAsUser(command, args = "", workingDir = "") {
-   static TASK_TRIGGER_REGISTRATION := 7   ; trigger on registration. 
-   static TASK_ACTION_EXEC := 0  ; specifies an executable action. 
-   static TASK_CREATE := 2
-   static TASK_RUNLEVEL_LUA := 0
-   static TASK_LOGON_INTERACTIVE_TOKEN := 3
-   objService := ComObjCreate("Schedule.Service") 
-   objService.Connect() 
-
-   objFolder := objService.GetFolder("") 
-   objTaskDefinition := objService.NewTask(0) 
-
-   principal := objTaskDefinition.Principal 
-   principal.LogonType := TASK_LOGON_INTERACTIVE_TOKEN    ; Set the logon type to TASK_LOGON_PASSWORD 
-   principal.RunLevel := TASK_RUNLEVEL_LUA  ; Tasks will be run with the least privileges. 
-
-   colTasks := objTaskDefinition.Triggers
-   objTrigger := colTasks.Create(TASK_TRIGGER_REGISTRATION) 
-   endTime += 1, Minutes  ;end time = 1 minutes from now 
-   FormatTime,endTime,%endTime%,yyyy-MM-ddTHH`:mm`:ss
-   objTrigger.EndBoundary := endTime
-   colActions := objTaskDefinition.Actions 
-   objAction := colActions.Create(TASK_ACTION_EXEC) 
-   objAction.ID := "7plus run" 
-   objAction.Path := command
-   objAction.Arguments := args
-   objAction.WorkingDirectory := workingDir ? workingDir : A_WorkingDir
-   objInfo := objTaskDefinition.RegistrationInfo
-   objInfo.Author := "7plus" 
-   objInfo.Description := "Runs a program as non-elevated user" 
-   objSettings := objTaskDefinition.Settings 
-   objSettings.Enabled := True 
-   objSettings.Hidden := False 
-   objSettings.DeleteExpiredTaskAfter := "PT0S"
-   objSettings.StartWhenAvailable := True 
-   objSettings.ExecutionTimeLimit := "PT0S"
-   objSettings.DisallowStartIfOnBatteries := False
-   objSettings.StopIfGoingOnBatteries := False
-   objFolder.RegisterTaskDefinition("", objTaskDefinition, TASK_CREATE , "", "", TASK_LOGON_INTERACTIVE_TOKEN ) 
+ShellRun(prms*)
+{
+    shellWindows := ComObjCreate("{9BA05972-F6A8-11CF-A442-00A0C90A8F39}")
+    
+    desktop := shellWindows.Item(ComObj(19, 8)) ; VT_UI4, SCW_DESKTOP                
+   
+    ; Retrieve top-level browser object.
+    if ptlb := ComObjQuery(desktop
+        , "{4C96BE40-915C-11CF-99D3-00AA004AE837}"  ; SID_STopLevelBrowser
+        , "{000214E2-0000-0000-C000-000000000046}") ; IID_IShellBrowser
+    {
+        ; IShellBrowser.QueryActiveShellView -> IShellView
+        if DllCall(NumGet(NumGet(ptlb+0)+15*A_PtrSize), "ptr", ptlb, "ptr*", psv:=0) = 0
+        {
+            ; Define IID_IDispatch.
+            VarSetCapacity(IID_IDispatch, 16)
+            NumPut(0x46000000000000C0, NumPut(0x20400, IID_IDispatch, "int64"), "int64")
+           
+            ; IShellView.GetItemObject -> IDispatch (object which implements IShellFolderViewDual)
+            DllCall(NumGet(NumGet(psv+0)+15*A_PtrSize), "ptr", psv
+                , "uint", 0, "ptr", &IID_IDispatch, "ptr*", pdisp:=0)
+           
+            ; Get Shell object.
+            shell := ComObj(9,pdisp,1).Application
+           
+            ; IShellDispatch2.ShellExecute
+            shell.ShellExecute(prms*)
+           
+            ObjRelease(psv)
+        }
+        ObjRelease(ptlb)
+    }
 }

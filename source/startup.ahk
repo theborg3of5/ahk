@@ -2,6 +2,7 @@
 
 ; @Lock fixing.
 	SetCapsLockState, AlwaysOff
+	SetScrollLockState, AlwaysOff
 ; @End Lock fixing.
 
 ; @KDE Mover-Sizer.

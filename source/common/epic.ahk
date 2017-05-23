@@ -308,9 +308,14 @@ buildEpicWikiSearchURL(category, criteria) {
 }
 
 ; ini/id defaults are "X" as a dummy - URL will still connect to desired environment.
-buildSnapperURL(environment, ini = "X", id = "X") {
+buildSnapperURL(environment, ini = "", id = "") {
 	if(!environment)
 		return ""
+	
+	if(!ini && !id) {
+		ini := "X"
+		id  := "X"
+	}
 	
 	record        := []
 	record["ENV"] := environment

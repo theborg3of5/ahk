@@ -90,9 +90,9 @@ return
 	!+f::
 		text := gatherText(TEXT_SOURCE_SEL_CLIP)
 		
-		data := Selector.select("search.tl", "RET_DATA", "", "", {"ARG1": text})
+		data       := Selector.select("search.tl", "RET_DATA", "", "", {"ARG1": text})
 		searchType := data["SEARCH_TYPE"]
-		subTypes := forceArray(data["SUBTYPE"])
+		subTypes   := forceArray(data["SUBTYPE"])
 		
 		criteria := []
 		Loop, 5 {
@@ -101,21 +101,18 @@ return
 			criteria[A_Index] := escapedArg
 		}
 		
-		if(searchType = "CODESEARCH") {
-			For i,st in subTypes { ; There could be multiple here?
+		if(searchType = "CODESEARCH")
+			For i,st in subTypes ; There could be multiple here?
 				url := buildCodeSearchURL(st, criteria)
-				if(url)
-					Run, % url
-			}
-		} else if(searchType = "GURU") {
+		else if(searchType = "GURU")
 			url := buildGuruURL(criteria[1])
-			if(url)
-				Run, % url
-		} else if(searchType = "WIKI") { ; Epic wiki search.
+		else if(searchType = "WIKI") ; Epic wiki search.
 			url := buildEpicWikiSearchURL(subTypes[0], criteria[1])
-			if(url)
-				Run, % url
-		}
+		else if(searchType = "WEB")
+			url := StrReplace(subTypes[0], "%s", criteria[1])
+		
+		if(url)
+			Run, % url
 	return
 #If
 

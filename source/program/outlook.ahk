@@ -21,7 +21,7 @@
 #IfWinActive
 
 ; Mail activity.
-#If WinActive("Inbox - " USER_WORK_EMAIL " - Outlook") || WinActive("Do - " USER_WORK_EMAIL " - Outlook") || WinActive("Wait - " USER_WORK_EMAIL " - Outlook")
+#If WinActive("Inbox - " USER_WORK_EMAIL " - Outlook") || WinActive("Do - " USER_WORK_EMAIL " - Outlook") || WinActive("Wait - " USER_WORK_EMAIL " - Outlook") || WinActive("Later Use - " USER_WORK_EMAIL " - Outlook")
 	; Archive the current message.
 	$^e::
 		Send, ^q

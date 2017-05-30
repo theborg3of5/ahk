@@ -5,6 +5,9 @@
 		autoFixColumnWidth()
 	return
 	
+	^+b::
+	return
+	
 	; Save as
 	^+s::
 		Send, {F12}
@@ -44,18 +47,14 @@
 	return
 	
 	; Filter and format table nicely.
-	^+b::
-		Send, ^a	      ; Select all
-		Send, ^a
+	!b::
+		Send, ^a	      ; Select
+		Send, ^a			; All
 		
 		Send, !at      ; Filter
 		
 		autoFixColumnWidth()
 		
-		Send, ^{Home}  ; Get back to top-left cell
-		Send, +{Space} ; Select whole row
-		Send, ^b       ; Bold it
-		Send, !wfr		; Freeze top row
 	return
 	
 	autoFixColumnWidth() {
@@ -64,6 +63,12 @@
 		Send, !h
 		Send, o
 		Send, i
+	}
+	
+		Send, ^{Home}  ; Get back to top-left cell
+		Send, +{Space} ; Select whole row
+		Send, ^b       ; Bold it
+		Send, !wfr		; Freeze top row
 	}
 	
 #IfWinActive

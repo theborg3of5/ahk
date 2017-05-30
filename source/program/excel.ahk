@@ -6,6 +6,7 @@
 	return
 	
 	^+b::
+		boldFreezeHeaderRow()
 	return
 	
 	; Save as
@@ -55,6 +56,7 @@
 		
 		autoFixColumnWidth()
 		
+		boldFreezeHeaderRow()
 	return
 	
 	autoFixColumnWidth() {
@@ -65,6 +67,7 @@
 		Send, i
 	}
 	
+	boldFreezeHeaderRow() {
 		Send, ^{Home}  ; Get back to top-left cell
 		Send, +{Space} ; Select whole row
 		Send, ^b       ; Bold it

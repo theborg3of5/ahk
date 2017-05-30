@@ -41,7 +41,7 @@ exeActive(exeName, partialMatch = false) {
 }
 
 ; See if a window exists or is active with a given TitleMatchMode.
-isWindowInStates(states, titles, texts, matchMode = 1, matchSpeed = "Fast", findHidden = "Off") {
+isWindowInStates(states = "", titles = "", texts = "", matchMode = 1, matchSpeed = "Fast", findHidden = "Off") {
 	if(!states)
 		states := [""]
 	if(!titles)

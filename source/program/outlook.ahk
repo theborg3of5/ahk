@@ -1,5 +1,27 @@
 ; Outlook Hotkeys.
 
+isEmailFolderActive(userEmail) {
+	titles := []
+	titles.push(buildOutlookWindowTitle(userEmail, "Inbox"))
+	titles.push(buildOutlookWindowTitle(userEmail, "Do"))
+	titles.push(buildOutlookWindowTitle(userEmail, "Wait"))
+	titles.push(buildOutlookWindowTitle(userEmail, "Later Use"))
+	
+	return isWindowInStates(["active"], titles)
+}
+
+isCalendarFolderActive(userEmail = "") {
+	titles := []
+	titles.push(buildOutlookWindowTitle(userEmail, "Calendar"))
+	titles.push(buildOutlookWindowTitle(userEmail, "TLG"))
+	
+	return isWindowInStates(["active"], titles)
+}
+
+buildOutlookWindowTitle(userEmail, folderName) {
+	return folderName " - " userEmail " - Outlook"
+}
+
 ; Program in general.
 #IfWinActive, ahk_class rctrl_renwnd32
 	; Shortcut to go to today on the calendar. (In desired, 3-day view.)
@@ -21,7 +43,7 @@
 #IfWinActive
 
 ; Mail activity.
-#If WinActive("Inbox - " USER_WORK_EMAIL " - Outlook") || WinActive("Do - " USER_WORK_EMAIL " - Outlook") || WinActive("Wait - " USER_WORK_EMAIL " - Outlook") || WinActive("Later Use - " USER_WORK_EMAIL " - Outlook")
+#If isEmailFolderActive(USER_WORK_EMAIL)
 	; Archive the current message.
 	$^e::
 		Send, ^q
@@ -30,7 +52,7 @@
 #If
 
 ; Calendar activity.
-#If WinActive("Calendar - " USER_WORK_EMAIL " - Outlook") || WinActive("TLG - " USER_WORK_EMAIL " - Outlook")
+#If isCalendarFolderActive(USER_WORK_EMAIL)
 	; Calendar view: 3-day view, week view, and month view.
 	$^e::Send, !3
 	^w::Send, ^!3
@@ -50,21 +72,21 @@
 	return
 	
 	; Time Scale on calendar: 15m and 30m.
-	^4::
-	^+1::
-		Send, !v
-		Send, sc
-		Send, 1
-	return
-	^3::
-	^+3::
-		Send, !v
-		Send, sc
-		Send, 3
-	return
+	; ^4::
+	; ^+1::
+		; Send, !v
+		; Send, sc
+		; Send, 1
+	; return
+	; ^3::
+	; ^+3::
+		; Send, !v
+		; Send, sc
+		; Send, 3
+	; return
 	
 	; Category application: Make ^F1 usable.
-	^F1::^F12
+	; ^F1::^F12
 	
 	; Show a popup for picking an arbitrary calendar to display.
 	^a::

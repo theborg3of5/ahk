@@ -34,6 +34,7 @@ Small (800x600)							sm					800		600
 
 # Specific cases
 Official screenshots						shot				1024		768
+PuTTY on laptop screen					pl					1084		1046
 
 # POSPP
 ; Actual HTML size in Cadence								700		510

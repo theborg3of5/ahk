@@ -141,10 +141,10 @@
 		sendDateTime("M_d_yy")
 	return
 	:*:didate::
-		sendDateTime("dddd`, M/d/yy")
+		sendDateTime("dddd`, M/d")
 	return
 	:*:iddate::
-		sendDateTime("M/d/yy`, dddd")
+		sendDateTime("M/d`, dddd")
 	return
 	
 	:*:itime::

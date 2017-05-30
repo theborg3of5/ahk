@@ -19,6 +19,14 @@
 		Send, +{Insert}
 	return
 	
+	; Force ^c to copy, replace breaking behavior with a harder-to-accidentally-press hotkey.
+	^c::
+		Send, ^{Insert}
+	return
+	^+c::
+		Send, ^c
+	return
+	
 	; Paste clipboard, insering spaces to overwrite first.
 	$!v::
 		; Get the length of the string we're going to add.

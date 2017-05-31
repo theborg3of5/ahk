@@ -50,6 +50,11 @@
 		Send, l
 	return
 	
+	; Open up settings window.
+	!o::
+		openPuttySettingsWindow()
+	return
+	
 	{ ; Various commands.
 		^z::
 			SendRaw, d ^`%ZeW
@@ -163,16 +168,54 @@
 		return
 	}
 	
-	; Fast Forward macro (Home + F9).
-	F1::
-		Send, {Home}
-		Send, {F9}
-		Sleep, 100
-		Send, t{Enter}
-	return
-	
 	; Allow reverse field navigation.
 	+Tab::
 		Send, {Left}
 	return
+	
+	; Open up the current log file.
+	^+o::
+		logFilePath := GetPuttyLogFile()
+		if(logFilePath)
+			Run, % logFilePath
+	return
+	
+	; Make page up/down actually move a page up/down (each Shift+Up/Down does a half a page).
+	^PgUp::
+		Send, +{PgUp 2}
+	return
+	^PgDn::
+		Send, +{PgDn 2}
+	return	
 #IfWinActive
+
+
+; Opens the Change Settings menu for putty. 0x112 is WM_SYSCOMMAND, and
+; 0x50 is IDM_RECONF, the change settings option. It's found in putty's
+; source code in window.c:
+; https://github.com/codexns/putty/blob/master/windows/window.c
+openPuttySettingsWindow() {
+	PostMessage, 0x112, 0x50, 0
+}
+
+; GDB TODO - IN PROGRESS
+; Modified from http://wiki.epic.com/main/PuTTY#AutoHotKey_for_PuTTY_Macros
+getPuttyLogFile() {
+	if(!WinActive("ahk_class PuTTY"))
+		return ""
+	
+	openPuttySettingsWindow()
+	
+	; need to wait a bit for the popup to show up
+	Sleep, 50 ; GDB TODO - replace this with a WinWait?
+	
+	Send, !g ; Category pane
+	Send, l  ; Logging tree node
+	Send, !f ; Log file name field
+	
+	; GDB TODO - replace this with getSelectedText stuff.
+	logFile := getSelectedText()
+	
+	Send, !c ; Cancel
+	return logFile
+}

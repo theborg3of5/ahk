@@ -143,6 +143,10 @@ class TableList {
 		return this.table
 	}
 	
+	getTable() {
+		return this.table
+	}
+	
 	getSeparateRows(name) {
 		return this.separateRows[name]
 	}

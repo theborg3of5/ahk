@@ -2,7 +2,9 @@
 	
 	'TableList/Selector Rewrite'
 		Move filtering behavior outside of TableList
-			Or, at least to a sub-function of it?
+			Update selector with better way to pass filter info, instead of old method conversiony thing.
+				openFolder in launch.ahk uses the old way, looks like the only place.
+		Switch Selector to use new getSeparateRows(name) function instead of using direct .separateRows
 		Can we make all special characters support multiple inputs?
 			Seems like overkill, probably remove that ability for placeholder too.
 		Debug - make a debug "builder" that stores off number of tabs and whatever last argument is?

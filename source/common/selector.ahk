@@ -294,8 +294,13 @@ class Selector {
 	
 	; Load the choices and other such things from a specially formatted file.
 	loadChoicesFromFile(filePath) {
-		; Parse those lines into a N x N array, where the meaningful lines have become a size 3 array (Name, Abbrev, Action) each.
-		list := TableList.parseFile(filePath, this.tableListSettings)
+		
+		tl := new TableList(filepath, this.tableListSettings)
+		if(this.tableListSettings["FILTER", "COLUMN"])
+			list := tl.getFilteredTable(this.tableListSettings["FILTER", "COLUMN"], this.tableListSettings["FILTER", "INCLUDE", "VALUE"])
+		else
+			list := tl.getTable()
+		
 		; DEBUG.popup("Filepath", filePath, "Parsed List", list, "Index labels", TableList.indexLabels, "Separate rows", TableList.separateRows)
 		
 		; Special model row that tells us how a file with more than 3 columns should be laid out.

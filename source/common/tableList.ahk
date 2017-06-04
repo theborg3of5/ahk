@@ -159,8 +159,6 @@ class TableList {
 		defaultFilter := []
 		defaultFilter["INCLUDE","BLANKS"] := true
 		this.filter := mergeArrays(defaultFilter, settings["FILTER"])
-		
-		; DEBUG.popup("TableList", "Setup processing done", "Chars", this.chars, "Formats", this.formats, "Filter", this.filter)
 	}
 	
 	; Special character defaults

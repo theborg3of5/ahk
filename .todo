@@ -4,7 +4,7 @@
 		Move filtering behavior outside of TableList
 			Or, at least to a sub-function of it?
 		Can we make all special characters support multiple inputs?
-			What about strings instead of characters?
+			Seems like overkill, probably remove that ability for placeholder too.
 	
 	'Fixes'
 		Have centering hotkey take height of taskbar into account?

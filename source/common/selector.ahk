@@ -347,7 +347,7 @@ class Selector {
 				
 				; If blank, extra newline.
 				if(StrLen(currItem[1]) < 3) {
-					this.nonChoices.Insert(" ")
+					this.nonChoices.push(" ")
 				
 				; If title, #{Space}Title.
 				} else {
@@ -355,7 +355,7 @@ class Selector {
 					if(this.choices.MaxIndex())
 						idx := this.choices.MaxIndex()
 					
-					this.nonChoices.Insert(idx + 1, SubStr(currItem[1], 3))
+					this.nonChoices.InsertAt(idx + 1, SubStr(currItem[1], 3))
 					; DEBUG.popup("Just added nonchoice:", this.nonChoices[this.nonChoices.MaxIndex()], "At index", idx + 1)
 				}
 				
@@ -364,12 +364,12 @@ class Selector {
 				; DEBUG.popup("Hidden char", this.hiddenChar, "First char", firstChar, "Row", currRow)
 				
 				; DEBUG.popup("Hidden choice added", currRow)
-				this.hiddenChoices.Insert(currRow)
+				this.hiddenChoices.push(currRow)
 			
 			; Otherwise, it's a visible, viable choice!
 			} else {
 				; DEBUG.popup("Choice added", currRow)
-				this.choices.Insert(currRow)
+				this.choices.push(currRow)
 			}
 		}
 	}

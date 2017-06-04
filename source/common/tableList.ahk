@@ -139,14 +139,11 @@ class TableList {
 		
 		this.init(settings)
 		
-		; Read the file into an array.
 		lines := fileLinesToArray(fileName)
-		; DEBUG.popup("Filename", fileName, "Lines from file", lines)
-		
 		return this.parseList(lines)
 	}
 	
-	init(overrides) {
+	init(settings) {
 		; Debug info
 		this.debugNoRecurse := true
 		this.debugName      := "TableList"
@@ -156,16 +153,16 @@ class TableList {
 		this.table := []
 		
 		defaultChars := this.getDefaultChars()
-		this.chars   := mergeArrays(defaultChars, overrides["CHARS"])
+		this.chars   := mergeArrays(defaultChars, settings["CHARS"])
 		
-		; Format defaults and overrides
-		this.separateMap := processOverride([], overrides["FORMAT", "SEPARATE_MAP"])
-		this.indexLabels := processOverride([], overrides["FORMAT", "DEFAULT_INDICES"])
+		; Format defaults and settings
+		this.separateMap := processOverride([], settings["FORMAT", "SEPARATE_MAP"])
+		this.indexLabels := processOverride([], settings["FORMAT", "DEFAULT_INDICES"])
 		
 		; Other settings
 		defaultFilter := []
 		defaultFilter["INCLUDE","BLANKS"] := true
-		this.filter := mergeArrays(defaultFilter, overrides["FILTER"])
+		this.filter := mergeArrays(defaultFilter, settings["FILTER"])
 		
 		; DEBUG.popup("TableList", "Setup processing done", "Chars", this.chars, "Formats", this.formats, "Filter", this.filter)
 	}
@@ -173,7 +170,6 @@ class TableList {
 	; Special character defaults
 	getDefaultChars() {
 		chars := []
-		chars["DELIMITER"]  := A_Tab
 		chars["WHITESPACE"] := [ A_Space, A_Tab ]
 		
 		chars["MODSTART"] := "["
@@ -181,7 +177,7 @@ class TableList {
 		chars["MODEL"]    := "("
 		chars["PASS"]     := ["#"] ; This one supports multiple entries
 		
-		chars["PLACEHOLDER"] := ""
+		chars["PLACEHOLDER"] := "" ; No default
 		chars["MULTIENTRY"]  := "|"
 		
 		chars["MOD","BEGIN"]  := "b"
@@ -198,25 +194,12 @@ class TableList {
 		
 		; Loop through and do work on them.
 		For i,row in lines {
-			; Strip off any leading whitespace.
-			Loop {
-				firstChar := SubStr(row, 1, 1)
+			row := dropWhitespace(row)
 			
-				if(!contains(this.chars["WHITESPACE"], firstChar)) {
-					; DEBUG.popup("First not blank, moving on", firstChar)
-					Break
-				}
-				
-				; originalRow := row
-				StringTrimLeft, row, row, 1
-				; DEBUG.popup("Row", originalRow, "First Char", firstChar, "Trimmed", row)
-			}
-			
-			; Squash any empty spots, so only one delimeter in between each element.
+			; Trim out any extra delimiters.
 			Loop {
 				if(!stringContains(row, delim delim))
 					Break
-				
 				StringReplace, row, row, %delim%%delim%, %delim%
 			}
 			
@@ -238,8 +221,8 @@ class TableList {
 			} else if(contains(this.chars["PASS"], firstChar)) {
 				; DEBUG.popup("Pass line", row, "First Char", firstChar)
 				currItem := Object()
-				currItem.Insert(row)
-				this.table.Insert(currItem)
+				currItem.push(row)
+				this.table.push(currItem)
 			
 			; Separate characters mean that we split the row, but always store it numerically and separately from everything else.
 			} else if(this.separateMap.hasKey(firstChar)) {
@@ -283,7 +266,7 @@ class TableList {
 				
 				; DEBUG.popup("Normal Row", originalRow, "Input rowbits", rowBits, "Current Mods", this.mods, "Processed Row", currItem, "Table", this.table)
 				if(this.shouldIncludeItem(currItem))
-					this.table.Insert(currItem)
+					this.table.push(currItem)
 			}
 			
 		}
@@ -372,7 +355,7 @@ class TableList {
 					; DEBUG.popup("Adding label", label)
 				} else {
 					newMod := this.parseModLine(currMod, label)
-					this.mods.Insert(newMod)
+					this.mods.push(newMod)
 				}
 				
 				; DEBUG.popup("Mod processed", currMod, "First Char", firstChar, "Label", label, "Premod", preMod, "Current Mods", this.mods)

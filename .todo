@@ -6,6 +6,7 @@
 		Can we make all special characters support multiple inputs?
 			Seems like overkill, probably remove that ability for placeholder too.
 		Debug - make a debug "builder" that stores off number of tabs and whatever last argument is?
+		MainConfig - turn loadSettings() stuff into an inner function called however many times, not a loop over an array of settings.
 	
 	'Fixes'
 		Have centering hotkey take height of taskbar into account?

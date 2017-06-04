@@ -20,7 +20,6 @@
 
 [{PATH}b:C:\Program Files\]
 	Everything			-				EVERYTHING													Everything\Everything.exe
-	Executor				Executor		-																Executor\Executor.exe
 	Notepad++			-				Notepad++													Notepad++\notepad++.exe															-									EPIC_DESKTOP
 	TrueCrypt			-				CustomDlg													TrueCrypt\TrueCrypt.exe
 	OxygenXML			-				SunAwtFrame													Oxygen XML Editor 13\oxygen13.2.exe

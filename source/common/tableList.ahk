@@ -1,6 +1,8 @@
 /* Generic, flexible custom class for parsing lists.
 	
-	This class will read in a file (using TableList.parseFile()) and return a multi-dimensional array:
+	Throughout this documentation, "tl" will refer to an instance of this class.
+	
+	This class will read in a file (using tl.parseFile()) and return a multi-dimensional array:
 		array[i]   = line i from the file
 		array[i,j] = entry j from line i (split up by one or more tabs)
 	
@@ -37,7 +39,7 @@
 		settings["FORMAT", "SEPARATE_MAP"]
 			Associative array of CHAR => NAME.
 			Rows that begin with a character that's a key (CHAR) in this array will be:
-				Stored separately in TableList.separateRows[NAME]
+				Stored separately, can be retrieved with tl.getSeparateRows(NAME)
 				Split like a normal row, but will always be numerically indexed
 					This is true even if there is a model row, or the DEFAULT_INDICES setting is set.
 			Example
@@ -47,7 +49,7 @@
 						(	NAME	ABBREV	DOACTION
 				Input row
 					)	A	B	C
-				Output array (stored in TableList.separateRows["DATA_INDEX"])
+				Output array (can get via tl.getSeparateRows("DATA_INDEX"))
 					[1]	A
 					[2]	B
 					[3]	C
@@ -66,14 +68,6 @@
 					["DOACTION"]	C
 					[4]				D
 					[5]				E
-		
-		settings["FILTER", "COLUMN"]
-			Which row to filter rows by, defaults to none.
-		settings["FILTER", "VALUE"]
-			Ignored unless settings["FILTER", "COLUMN"] is set.
-			Any rows where the column specified by settings["FILTER", "COLUMN"] doesn't match the given value will be excluded from the output.
-		settings["FILTER", "INCLUDE", "BLANKS"]
-			If set to true (default), rows with no value in the filter column will be included in the output.
 		
 	
 	Mods are created by specially-formatted rows in the file that affect any rows that come after them in the file. The format for mod rows is as follows:
@@ -129,6 +123,10 @@
 */
 
 class TableList {
+	; ==============================
+	; == Public ====================
+	; ==============================
+	
 	__New(fileName, settings) {
 		this.parseFile(fileName, settings)
 	}
@@ -140,8 +138,98 @@ class TableList {
 		this.init(settings)
 		
 		lines := fileLinesToArray(fileName)
-		return this.parseList(lines)
+		this.parseList(lines)
+		
+		return this.table
 	}
+	
+	getSeparateRows(name) {
+		return this.separateRows[name]
+	}
+	
+	; Return a table of all rows that have the allowed value in the filterColumn column.
+	; Will only affect normal rows (i.e. what you get from tl.getTable())
+	; column        - which column to filter rows by.
+	; allowedValue   - if a row has a value set for the given column, it must be set to this value to be included.
+	; includeBlanks - if this is false, any rows with no value for the given column will also be excluded.
+	getFilteredTable(column, allowedValue = "", includeBlanks = true) {
+		if(!column)
+			return ""
+		
+		filteredTable := []
+		For i,currRow in this.table {
+			if(this.shouldExcludeItem(currRow, column, allowedValue, includeBlanks))
+				Continue
+			
+			filteredTable.push(currRow)
+		}
+		
+		return filteredTable
+	}
+	
+	; Return a table of all rows that have the allowed value in the filterColumn.
+	; However, return only one row per unique value of the uniqueColumn - a row with 
+	; a blank filterColumn value will be dropped if there's another row with the same 
+	; uniqueColumn value, with the correct allowedValue in the filterColumn column. 
+	; If there are multiple rows with the same uniqueColumn, with the same filterColumn
+	; value (either blank or allowedValue), the first one in the file wins.
+	getFilteredTableUnique(uniqueColumn, filterColumn, allowedValue = "") {
+		if(!uniqueColumn || !filterColumn)
+			return ""
+		
+		uniqueIndex   := [] ; uniqueColumn value => {"Index": indexInTable, "FilterValue": filterValue}
+		For i,currRow in this.table {
+			if(this.shouldExcludeItem(currRow, filterColumn, allowedValue, true))
+				Continue
+			
+			uniqueValue := currRow[uniqueColumn]
+			filterValue := currRow[filterColumn]
+			
+			if(!uniqueIndex[uniqueValue]) {
+				uniqueIndex[uniqueValue] := [] ; Initialize array if it isn't already
+				uniqueIndex[uniqueValue,"Index"]       := i
+				uniqueIndex[uniqueValue,"FilterValue"] := filterValue
+			} else if( (filterValue = allowedValue) && (uniqueIndex[uniqueValue]["FilterValue"] != allowedValue) ) {
+				uniqueIndex[uniqueValue,"Index"] := i
+				uniqueIndex[uniqueValue,"FilterValue"] := filterValue
+			}
+		}
+		
+		filteredTable := []
+		For i,ary in uniqueIndex {
+			index := ary["Index"]
+			filteredTable.push(this.table[index])
+		}
+		
+		return filteredTable
+	}
+	
+	; If a filter is given, exclude any rows that don't fit.
+	shouldExcludeItem(currRow, column, allowedValue = "", includeBlanks = true) {
+		if(!column)
+			return false
+		
+		valueToCompare := currRow[column]
+		
+		if(includeBlanks && !valueToCompare)
+			return false
+		
+		if(valueToCompare = allowedValue)
+			return false
+		
+		; Array case - multiple values in filter column.
+		if(IsObject(valueToCompare) && contains(valueToCompare, allowedValue))
+			return false
+		
+		return true
+	}
+	
+	
+	
+	
+	; ==============================
+	; == Private ===================
+	; ==============================
 	
 	init(settings) {
 		; Initialize the objects.
@@ -154,11 +242,6 @@ class TableList {
 		; Format defaults and settings
 		this.separateMap := processOverride([], settings["FORMAT", "SEPARATE_MAP"])
 		this.indexLabels := processOverride([], settings["FORMAT", "DEFAULT_INDICES"])
-		
-		; Other settings
-		defaultFilter := []
-		defaultFilter["INCLUDE","BLANKS"] := true
-		this.filter := mergeArrays(defaultFilter, settings["FILTER"])
 	}
 	
 	; Special character defaults
@@ -184,7 +267,7 @@ class TableList {
 	
 	parseList(lines) {
 		delim := A_Tab
-		currItem := []
+		currRow := []
 		
 		; Loop through and do work on them.
 		For i,row in lines {
@@ -205,9 +288,9 @@ class TableList {
 			} else if(firstChar = this.chars["MODSTART"]) {
 				this.updateMods(row)
 			} else if(contains(this.chars["PASS"], firstChar)) {
-				currItem := Object()
-				currItem.push(row)
-				this.table.push(currItem)
+				currRow := Object()
+				currRow.push(row)
+				this.table.push(currRow)
 			} else if(this.separateMap.hasKey(firstChar)) { ; Separate characters mean that we split the row, but always store it numerically and separately from everything else.
 				this.parseSeparateRow(firstChar, rowBits)
 			} else if(firstChar = this.chars["MODEL"]) { ; Model row, causes us to use string subscripts instead of numeric per entry.
@@ -217,8 +300,6 @@ class TableList {
 			}
 			
 		}
-		
-		return this.table
 	}
 
 	; Update the given modifier string given the new one.
@@ -331,20 +412,19 @@ class TableList {
 		if(IsObject(this.indexLabels))
 			rowAry := this.applyIndexLabels(rowAry)
 		
-		currItem := this.applyMods(rowAry)
+		currRow := this.applyMods(rowAry)
 		
 		; If any of the values were a placeholder, remove them now.
-		For i,value in currItem
+		For i,value in currRow
 			if(value = this.chars["PLACEHOLDER"])
-				currItem.Delete(i)
+				currRow.Delete(i)
 		
 		; Split up any entries that include the multi-entry character (pipe by default).
-		For i,value in currItem
+		For i,value in currRow
 			if(stringContains(value, this.chars["MULTIENTRY"]))
-				currItem[i] := StrSplit(value, this.chars["MULTIENTRY"])
+				currRow[i] := StrSplit(value, this.chars["MULTIENTRY"])
 		
-		if(this.shouldIncludeItem(currItem))
-			this.table.push(currItem)
+		this.table.push(currRow)
 	}
 	
 	applyIndexLabels(rowAry) {
@@ -372,27 +452,6 @@ class TableList {
 		}
 		
 		return rowBits
-	}
-	
-	; If a filter is given, exclude any rows that don't fit.
-	shouldIncludeItem(currItem) {
-		valueToCompare := currItem[this.filter["COLUMN"]]
-		
-		if(!this.filter["COLUMN"])
-			return true
-		
-		; DEBUG.popup("Filter column", this.filter["COLUMN"], "Filter value", this.filter["INCLUDE","VALUE"], "Value to compare", valueToCompare)
-		if(this.filter["INCLUDE","BLANKS"] && !valueToCompare)
-			return true
-		
-		if(valueToCompare = this.filter["INCLUDE","VALUE"])
-			return true
-		
-		; Array case - multiple values in filter column.
-		if(IsObject(valueToCompare) && contains(valueToCompare, this.filter["INCLUDE","VALUE"]))
-			return true
-		
-		return false
 	}
 	
 	; Debug info

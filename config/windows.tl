@@ -23,13 +23,13 @@
 	Hyperspace/EMC2			ThunderMDIForm					-								-								-					-					-					CTRL_SHIFT
 	Hyperspace/EMC2			ThunderFormDC					-								-								-					-					-					CTRL_SHIFT
 	
-	Executor						TSetupForm						-								-								-					-					-					CTRL_SHIFT
 	ES New Object Window		New Object						-								-								-					-					-					CTRL_SHIFT
 	ES Tokenize String		Tokenize String				-								-								-					-					-					CTRL_SHIFT
 	Selector GUI				-									[SLCT]						-								-					-					-					CTRL_SHIFT
 	
 	; Web popups
 	Pushbullet					Chrome_WidgetWin_1			Pushbullet					-								CLOSE_WINDOW
+	TickTick						Chrome_WidgetWin_1			All - TickTick				-								CLOSE_WINDOW
 	
 	;								Framework::CFrame				-								-								CLOSE_WINDOW
 	;								TfrmMain							-								-								CLOSE_WINDOW

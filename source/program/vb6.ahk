@@ -317,29 +317,6 @@ global VB_REF_SAME_THRESHOLD := 10
 			MsgBox, Reference not found in list!
 		}
 	return
-
-	^a::
-		; Get user input.
-		FileSelectFile, fileName
-		if(!fileName)
-			return
-		
-		; Read in the list of names.
-		referenceLines := fileLinesToArray(fileName)
-		
-		; Parse the list into nice, uniform reference lines.
-		references := TableList.parseList(referenceLines)
-		
-		textOut := ""
-		refsLen := references.MaxIndex()
-		Loop, %refsLen% {
-			textOut .= references[A_Index, LIST_ITEM] . "	" . references[A_Index, LIST_NUM] . "`n"
-			; MsgBox, % references[A_Index, LIST_ITEM] . "	" . references[A_Index, LIST_NUM]
-			findReferenceLine(references[A_Index, LIST_ITEM], references[A_Index, LIST_NUM], true)
-		}
-		
-		MsgBox, Selected References: `n`n%textOut%
-	return
 #IfWinActive
 }
 

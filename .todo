@@ -1,5 +1,11 @@
 # AHK To Do
 	
+	'TableList/Selector Rewrite'
+		Move filtering behavior outside of TableList
+			Or, at least to a sub-function of it?
+		Can we make all special characters support multiple inputs?
+			What about strings instead of characters?
+	
 	'Fixes'
 		Have centering hotkey take height of taskbar into account?
 		ActionObject.process - needs* variables don't exist, but we're using them?

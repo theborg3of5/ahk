@@ -1,36 +1,45 @@
 /* Generic, flexible custom class for parsing lists.
 	
-	This class will read in a file (using TableList.parseFile()) and return an array of arrays, where each 2nd-level array corresponds to a row in the file (excluding mods, see below). The inner arrays will be the contents of each row, broken up by any number of tabs (>1 tabs are ignored until the next non-tab character), and changed based on the mods that were active at that point in the file.
+	This class will read in a file (using TableList.parseFile()) and return a multi-dimensional array:
+		array[i]   = line i from the file
+		array[i,j] = entry j from line i (split up by one or more tabs)
+	
+	Any line may be indented as desired:
+		Spaces and tabs at the beginning of any line are ignored.
+		Multiple tabs in a row within a row are treated as a single tab.
 	
 	Certain characters have special meaning when parsing the lines of a file. They include:
-		[ - Mod
-			A line which begins with this character will be processed as a mod (see mod section below for details).
+		At the start of a row:
+			# - Pass
+				Any row that begins with one of these characters will not be broken up into multiple pieces, but will be a single-element array in the final output.
+				Override with settings["CHARS", "PASS"].
+			
+			; - Comment
+				If at the beginning of a line (ignoring any whitespace before that), the line is ignored and not added to the array of lines.
+				Override with settings["CHARS", "COMMENT"].
+			
+			( - Model
+				You can have each line use string indices per value by creating a row that begins with this character. You can tab-separate this line to visually line up with your rows.
+				Override with settings["CHARS", "MODEL"].
 		
-		# - Pass
-			Any row that begins with one of these characters will not be broken up into multiple pieces, but will be a single-element array in the final output.
-			Override (with an array) with settings["CHARS", "PASS"].
+			[ - Mod
+				A line which begins with this character will be processed as a mod (see mod section below for details).
 		
-		; - Comment
-			If at the beginning of a line (ignoring any whitespace before that), the line is ignored and not added to the array of lines.
-			Override with settings["CHARS", "COMMENT"].
+		Within a "normal" row (not started with any of the special characters above):
+			<No default> - Placeholder
+				Having this allows you to have a truly empty value for a column in a given row (useful when optional columns are in the middle).
+				Override with settings["CHARS", "PLACEHOLDER"].
+			
+			| - Multiple
+				In a row that's being split, if an individual column within the row has this character, then that entry will be an array of the pipe-delimited values.
 		
-		( - Model
-			You can have each line use string indices per value by creating a row that begins with this character. You can tab-separate this line to visually line up with your rows.
-			Override with settings["CHARS", "MODEL"].
-		
-		<No default> - Placeholder
-			Having this allows you to have a truly empty value for a column in a given row (useful when optional columns are in the middle).
-			Override with settings["CHARS", "PLACEHOLDER"].
-		
-		| - Multiple
-			In a row that's being split, if an individual column within the row has this character, then that entry will be an array of the pipe-delimited values.
-	
 	These settings are also available:
 		settings["FORMAT", "SEPARATE_MAP"]
 			Associative array of CHAR => NAME.
 			Rows that begin with a character that's a key (CHAR) in this array will be:
-				Split like the rest, but will be numerically indexed (even if a model row is given or DEFAULT_INDICES setting is set)
 				Stored separately in TableList.separateRows[NAME]
+				Split like a normal row, but will always be numerically indexed
+					This is true even if there is a model row, or the DEFAULT_INDICES setting is set.
 			Example
 				Settings
 					settings["FORMAT", "SEPARATE_MAP"] := {")": "DATA_INDEX"}
@@ -42,8 +51,7 @@
 					[1]	A
 					[2]	B
 					[3]	C
-					
-			
+		
 		settings["FORMAT", "DEFAULT_INDICES"]
 			Numerically-indexed array that provides what string indices should be used. A model row will override this, and any data that falls outside of the given indices will be numerically indexed.
 			Example
@@ -66,11 +74,11 @@
 			Any rows where the column specified by settings["FILTER", "COLUMN"] doesn't match the given value will be excluded from the output.
 		settings["FILTER", "INCLUDE", "BLANKS"]
 			If set to true (default), rows with no value in the filter column will be included in the output.
-			
+		
 	
-	The bulk of the utility that this class provides comes from mods. Mods are created by specially-formatted rows in the file, and are represented by TableListMod objects. Note that each mod object holds only one sort of operation, to one piece of affected rows - mod creation rows with multiple operations specified will result in one mod per operation. Mods are typically executed in the order that they were added, with the exception of the pre-process modifier (*, see below). The format for mod rows is as follows:
+	Mods are created by specially-formatted rows in the file that affect any rows that come after them in the file. The format for mod rows is as follows:
 	
-	1. Mod rows should always start and end with square brackets (start with [, end with ]).
+	1. Mod rows should always be wrapped in square brackets (start with [, end with ]).
 	2. Mod rows may have any number of the following mod actions per line, separated by pipes (|):
 			[] - Clear all mods
 				A line with nothing but "[]" on it will clear all current mods added before that point in the file.
@@ -95,42 +103,6 @@
 					Result
 						AAAeee
 			
-			m(x,y) - Modify (x can be any number, y can be any number. y is optional and defaults to 0.)
-				Changes the given string, replace the given range with the given text.
-				Example
-					Mods
-						[m(2,3):eee]
-					Input
-						AAABBBCCCDDD
-					Result
-						AAeeeDDD
-			
-	3. Mod actions can be further changed by the following modifiers (placed at the beginning of the mod action, in order declared here):
-			* - Pre-process mod
-				Places that mod first in order of execution, before any mods above it.
-				Example
-					Mods
-						[e:.exe]
-						[*e:Portable]
-					Input
-						firefox
-					Result
-						firefoxPortable.exe
-			
-			{x} - Row part to modify with mod (x can be any number, defaults to 1)
-				Sets which part of each row the mod will affect. Default is 1, first element.
-				Example
-					Mods
-						[{3}b:AAA]
-					Input
-						W	X	Y	Z
-					Result
-						W
-						X
-						AAAY
-						Z
-			
-	4. Mod rows may also have these modifiers (typically the first thing in the mod line, separated from other actions by pipes):
 			+x - Add label (x can be any number)
 				Labels all following mods on the same row with the given numeric label, which can be used to remove them from executing on further lines further on with the - operator.
 				Example: adds action1 and action2 as mods, both with a label of 5.
@@ -141,43 +113,50 @@
 				Example: Removes all mods with the label 5.
 					[-5]
 			
-	
+	3. By default, all mods apply only to the first tab-separated entry in each row. 
+			You can specify which entry in a row a mod should apply to by adding {x} before the mod action, where x can be any number.
+			Example
+				Mods
+					[{3}b:AAA]
+				Input
+					W	X	Y	Z
+				Result
+					W
+					X
+					AAAY
+					Z
 
 */
 
 class TableList {
-	static debugNoRecurse := true
-	static debugName := "TableList"
+	__New(settings) {
+		this.parseFile(fileName, settings)
+	}
 	
-	static whiteSpaceChars := [ A_Space, A_Tab ]
-	static multiEntryChar := "|"
-	
-	static preChar := "*"
-	static addChar := "+"
-	static remChar := "-"
-	
-	static modBeginChar  := "b"
-	static modEndChar    := "e"
-	static modModifyChar := "m"
-	static modFirstChar  := "["
-	
-	__New() {
-		this.init()
+	parseFile(fileName, settings = "") {
+		if(!fileName || !FileExist(fileName))
+			return ""
+		
+		this.init(settings)
+		
+		; Read the file into an array.
+		lines := fileLinesToArray(fileName)
+		; DEBUG.popup("Filename", fileName, "Lines from file", lines)
+		
+		return this.parseList(lines)
 	}
 	
 	init(overrides) {
+		; Debug info
+		this.debugNoRecurse := true
+		this.debugName      := "TableList"
+		
 		; Initialize the objects.
 		this.mods  := []
 		this.table := []
 		
-		; Character defaults and overrides
-		defaultChars := []
-		defaultChars["DELIMITER"]   := A_Tab
-		defaultChars["COMMENT"]     := ";"
-		defaultChars["MODEL"]       := "("
-		defaultChars["PLACEHOLDER"] := ""
-		defaultChars["PASS"]        := ["#"] ; This one supports multiple entries
-		this.chars := mergeArrays(defaultChars, overrides["CHARS"])
+		defaultChars := this.getDefaultChars()
+		this.chars   := mergeArrays(defaultChars, overrides["CHARS"])
 		
 		; Format defaults and overrides
 		this.separateMap := processOverride([], overrides["FORMAT", "SEPARATE_MAP"])
@@ -191,22 +170,30 @@ class TableList {
 		; DEBUG.popup("TableList", "Setup processing done", "Chars", this.chars, "Formats", this.formats, "Filter", this.filter)
 	}
 	
-	parseFile(fileName, settings = "") {
-		if(!fileName || !FileExist(fileName)) {
-			; DEBUG.popup("File does not exist", fPath)
-			return ""
-		}
+	; Special character defaults
+	getDefaultChars() {
+		chars := []
+		chars["DELIMITER"]  := A_Tab
+		chars["WHITESPACE"] := [ A_Space, A_Tab ]
 		
-		; Read the file into an array.
-		lines := fileLinesToArray(fileName)
-		; DEBUG.popup("Filename", fileName, "Lines from file", lines)
+		chars["MODSTART"] := "["
+		chars["COMMENT"]  := ";"
+		chars["MODEL"]    := "("
+		chars["PASS"]     := ["#"] ; This one supports multiple entries
 		
-		return this.parseList(lines, settings)
+		chars["PLACEHOLDER"] := ""
+		chars["MULTIENTRY"]  := "|"
+		
+		chars["MOD","BEGIN"]  := "b"
+		chars["MOD","END"]    := "e"
+		chars["MOD","ADD"]    := "+"
+		chars["MOD","REMOVE"] := "-"
+		
+		return chars
 	}
 	
-	parseList(lines, settings = "") {
-		this.init(settings)
-		delim := this.chars["DELIMITER"]
+	parseList(lines) {
+		delim := A_Tab
 		currItem := []
 		
 		; Loop through and do work on them.
@@ -215,7 +202,7 @@ class TableList {
 			Loop {
 				firstChar := SubStr(row, 1, 1)
 			
-				if(!contains(TableList.whiteSpaceChars, firstChar)) {
+				if(!contains(this.chars["WHITESPACE"], firstChar)) {
 					; DEBUG.popup("First not blank, moving on", firstChar)
 					Break
 				}
@@ -243,7 +230,7 @@ class TableList {
 				; DEBUG.popup("Comment or blank line", firstChar)
 			
 			; Special row for modifying the current modifications in play.
-			} else if(firstChar = this.modFirstChar) {
+			} else if(firstChar = this.chars["MODSTART"]) {
 				; DEBUG.popup("Modifier Line", row, "First Char", firstChar)
 				this.updateMods(row)
 			
@@ -288,10 +275,10 @@ class TableList {
 						currItem.Delete(i)
 				}
 				
-				; Split up any entries that include the multiEntryChar (pipe by default).
+				; Split up any entries that include the multi-entry character (pipe by default).
 				For i,value in currItem {
-					if(stringContains(value, this.multiEntryChar))
-						currItem[i] := StrSplit(value, this.multiEntryChar)
+					if(stringContains(value, this.chars["MULTIENTRY"]))
+						currItem[i] := StrSplit(value, this.chars["MULTIENTRY"])
 				}
 				
 				; DEBUG.popup("Normal Row", originalRow, "Input rowbits", rowBits, "Current Mods", this.mods, "Processed Row", currItem, "Table", this.table)
@@ -365,7 +352,7 @@ class TableList {
 		} else {
 			; Check for a remove row label.
 			; Assuming here that it will be the first and only thing in the mod row.
-			if(SubStr(newRow, 1, 1) = this.remChar) {
+			if(SubStr(newRow, 1, 1) = this.chars["MOD","REMOVE"]) {
 				remLabel := SubStr(newRow, 2)
 				this.killMods(remLabel)
 				label := 0
@@ -380,18 +367,12 @@ class TableList {
 				firstChar := SubStr(currMod, 1, 1)
 				
 				; Check for an add row label.
-				if(i = 1 && firstChar = this.addChar) {
+				if(i = 1 && firstChar = this.chars["MOD","ADD"]) {
 					label := SubStr(currMod, 2)
 					; DEBUG.popup("Adding label", label)
 				} else {
-					; Allow backwards stacking - that is, a later mod can go first in mod order.
-					if(firstChar = this.preChar) {
-						newMod := this.parseModLine(SubStr(currMod, 2), label)
-						this.mods := insertFront(this.mods, newMod)
-					} else {
-						newMod := this.parseModLine(currMod, label)
-						this.mods.Insert(newMod)
-					}
+					newMod := this.parseModLine(currMod, label)
+					this.mods.Insert(newMod)
 				}
 				
 				; DEBUG.popup("Mod processed", currMod, "First Char", firstChar, "Label", label, "Premod", preMod, "Current Mods", this.mods)
@@ -420,9 +401,9 @@ class TableList {
 		
 		; First character of remaining string indicates what sort of operation we're dealing with: b, e, or m.
 		currMod.operation := Substr(modLine, 1, 1)
-		if(currMod.operation = this.modBeginChar) {
+		if(currMod.operation = this.chars["MOD","BEGIN"]) {
 			currMod.start := 1
-		} else if(currMod.operation = this.modEndChar) {
+		} else if(currMod.operation = this.chars["MOD","END"]) {
 			currMod.start := -1
 		}
 		
@@ -434,18 +415,7 @@ class TableList {
 		closeParenPos := InStr(modLine, ")")
 		
 		; Snag the rest of the info.
-		if(currMod.operation = this.modModifyChar) {
-			currMod.text := SubStr(modLine, closeParenPos + 2)
-			if(commaPos) { ; two arguments in parens.
-				currMod.start := SubStr(modLine, 2, commaPos - 2)
-				currMod.len := SubStr(modLine, commaPos + 1, closeParenPos - (commaPos + 1))
-			} else {
-				currMod.start := SubStr(modLine, 2, closeParenPos - 2)
-				currMod.len := 0
-			}
-		} else {
-			currMod.text := SubStr(modLine, 2)
-		}
+		currMod.text := SubStr(modLine, 2)
 		
 		; DEBUG.popup("Mod Line", origModLine, "Mod processed", currMod, "Comma position", commaPos, "Close paren position", closeParenPos)
 		return currMod

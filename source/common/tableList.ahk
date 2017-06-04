@@ -147,8 +147,19 @@ class TableList {
 		return this.table
 	}
 	
-	getSeparateRows(name) {
+	getSeparateRows() {
+		return this.separateRows
+	}
+	
+	getSeparateRow(name) {
 		return this.separateRows[name]
+	}
+	
+	getIndexLabels() {
+		return this.indexLabels
+	}
+	getIndexLabel(index) {
+		return this.indexLabels[index]
 	}
 	
 	; Return a table of all rows that have the allowed value in the filterColumn column.

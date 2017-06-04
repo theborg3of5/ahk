@@ -301,18 +301,18 @@ class Selector {
 		else
 			list := tl.getTable()
 		
-		; DEBUG.popup("Filepath", filePath, "Parsed List", list, "Index labels", TableList.indexLabels, "Separate rows", TableList.separateRows)
+		; DEBUG.popup("Filepath", filePath, "Parsed List", list, "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows())
 		
 		; Special model row that tells us how a file with more than 3 columns should be laid out.
-		if(IsObject(TableList.indexLabels) && IsObject(TableList.separateRows)) {
-			screenIndices := TableList.separateRows["DATA_INDEX"]
+		if(IsObject(tl.getIndexLabels()) && IsObject(tl.getSeparateRows())) {
+			screenIndices := tl.getSeparateRow("DATA_INDEX")
 			this.labelIndices := []
 			For i,s in screenIndices {
 				if(s > 0)
-					this.labelIndices[s] := TableList.indexLabels[i] ; Index onscreen => label
+					this.labelIndices[s] := tl.getIndexLabel(i) ; Index onscreen => label
 			}
 		}
-		; DEBUG.popup("Selector.loadChoicesFromFile", "Processed indices", "Index labels", TableList.indexLabels, "Separate rows", TableList.separateRows, "Selector label indices", this.labelIndices)
+		; DEBUG.popup("Selector.loadChoicesFromFile", "Processed indices", "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows(), "Selector label indices", this.labelIndices)
 		
 		For i,currItem in list {
 			; Parse this size-n array into a new SelectorRow object.

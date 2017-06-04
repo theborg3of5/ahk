@@ -104,10 +104,6 @@ global GuiIn11, GuiIn12, GuiIn13, GuiIn14, GuiIn15, GuiIn16, GuiIn17, GuiIn18, G
 ; Selector class which reads in and stores data from a file, and given an index, abbreviation or action, does that action.
 class Selector {
 	startupConstants() {
-		; Special debug behavior flags.
-		this.debugNoRecurse := true
-		this.debugName      := "Selector"
-		
 		; Constants and such.
 		this.titleChar           := "="
 		this.labelChar           := "#"
@@ -680,8 +676,9 @@ class Selector {
 		}
 	}
 	
-	; Function to output this object as a string for debug purposes.
-	toDebugString(numTabs = 0) {
+	; Debug info
+	debugName := "Selector"
+	debugToString(numTabs = 0) {
 		outStr .= DEBUG.buildDebugString("Choices", this.choices, numTabs)
 		outStr .= DEBUG.buildDebugString("Hidden Choices", this.hiddenChoices, numTabs)
 		outStr .= DEBUG.buildDebugString("Non-Choices", this.nonChoices, numTabs)

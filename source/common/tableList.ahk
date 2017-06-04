@@ -144,10 +144,6 @@ class TableList {
 	}
 	
 	init(settings) {
-		; Debug info
-		this.debugNoRecurse := true
-		this.debugName      := "TableList"
-		
 		; Initialize the objects.
 		this.mods  := []
 		this.table := []
@@ -401,7 +397,9 @@ class TableList {
 		return false
 	}
 	
-	toDebugString(numTabs = 0) {
+	; Debug info
+	debugName := "TableList"
+	debugToString(numTabs = 0) {
 		outStr .= DEBUG.buildDebugString("Mods", this.mods, numTabs)
 		outStr .= DEBUG.buildDebugString("Table", this.table, numTabs)
 		return outStr

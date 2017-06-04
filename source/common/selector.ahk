@@ -327,20 +327,8 @@ class Selector {
 			
 			; Options for the selector in general.
 			} else if(firstChar = this.settingsChar) {
-				settingString := SubStr(currRow.data[1], 2)
-				setting := StrSplit(settingString, "=")
-				if(setting[1] = "ShowArbitraryInputs")
-					this.showArbitraryInputs := (setting[2] = "1")
-				else if(setting[1] = "RowsPerColumn")
-					this.rowsPerColumn := setting[2]
-				else if(setting[1] = "ColumnWidth")
-					this.columnWidth := setting[2]
-				else if(setting[1] = "TrayIcon")
-					this.iconPath := setting[2]
-				else if(setting[1] = "DefaultAction")
-					this.actionType := setting[2]
-				else if(setting[1] = "DefaultReturnColumn")
-					this.returnColumn := setting[2]
+				settingString := SubStr(currRow.data[1], 2) ; Strip off the = at the beginning
+				this.processSetting(settingString)
 			
 			; Special: add a title and/or blank row in the list display.
 			} else if(firstChar = this.labelChar) {
@@ -373,6 +361,28 @@ class Selector {
 				this.choices.push(currRow)
 			}
 		}
+	}
+	
+	processSetting(settingString) {
+		if(!settingString)
+			return
+		
+		settingSplit := StrSplit(settingString, "=")
+		name  := settingSplit[1]
+		value := settingSplit[2]
+		
+		if(name = "ShowArbitraryInputs")
+			this.showArbitraryInputs := (value = "1")
+		else if(name = "RowsPerColumn")
+			this.rowsPerColumn := value
+		else if(name = "ColumnWidth")
+			this.columnWidth := value
+		else if(name = "TrayIcon")
+			this.iconPath := value
+		else if(name = "DefaultAction")
+			this.actionType := value
+		else if(name = "DefaultReturnColumn")
+			this.returnColumn := value
 	}
 	
 	; Generate the text for the GUI and display it, returning the user's response.

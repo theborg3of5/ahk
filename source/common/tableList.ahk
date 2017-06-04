@@ -146,11 +146,13 @@ class TableList {
 	getTable() {
 		return this.table
 	}
+	getRow(index) {
+		return this.table[index]
+	}
 	
 	getSeparateRows() {
 		return this.separateRows
 	}
-	
 	getSeparateRow(name) {
 		return this.separateRows[name]
 	}

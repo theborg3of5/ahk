@@ -6,6 +6,7 @@
 		Finish cleaning up recent rough changes
 			Snapper URL stuff
 			M code for loop snippet
+		Fix the EpicStudio CDO generator to include tabs at beginning of lines to do better.
 	
 	'New ideas'
 		isWindowInStates - update to allow passing either an array or a single value for each parameter.
@@ -35,7 +36,6 @@
 			dv, etc shortcuts?
 		Turn the "; Special programs/specific params." section in launch.ahk into a parameter to activate/run program?
 			Or maybe stick the quotes in the config somehow?
-		Fix the EpicStudio CDO generator to include tabs at beginning of lines to do better.
 		Expand emulator controller to support other systems, perhaps?
 			At least separate general form (loop + joybuttons) from specific meanings?
 		

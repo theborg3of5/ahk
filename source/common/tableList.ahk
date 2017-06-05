@@ -194,26 +194,26 @@ class TableList {
 		if(!uniqueColumn || !filterColumn)
 			return ""
 		
-		uniqueIndex   := [] ; uniqueColumn value => {"Index": indexInTable, "FilterValue": filterValue}
+		uniqueAry := [] ; uniqueVal => {"Index": indexInTable, "FilterValue": filterVal}
 		For i,currRow in this.table {
 			if(this.shouldExcludeItem(currRow, filterColumn, allowedValue, true))
 				Continue
 			
-			uniqueValue := currRow[uniqueColumn]
-			filterValue := currRow[filterColumn]
+			uniqueVal := currRow[uniqueColumn]
+			filterVal := currRow[filterColumn]
 			
-			if(!uniqueIndex[uniqueValue]) {
-				uniqueIndex[uniqueValue] := [] ; Initialize array if it isn't already
-				uniqueIndex[uniqueValue,"Index"]       := i
-				uniqueIndex[uniqueValue,"FilterValue"] := filterValue
-			} else if( (filterValue = allowedValue) && (uniqueIndex[uniqueValue]["FilterValue"] != allowedValue) ) {
-				uniqueIndex[uniqueValue,"Index"] := i
-				uniqueIndex[uniqueValue,"FilterValue"] := filterValue
+			if(!uniqueAry[uniqueVal]) {
+				uniqueAry[uniqueVal] := []
+				uniqueAry[uniqueVal,"Index"]     := i
+				uniqueAry[uniqueVal,"FilterVal"] := filterVal
+			} else if( (filterVal = allowedValue) && (uniqueAry[uniqueVal]["FilterVal"] != allowedValue) ) {
+				uniqueAry[uniqueVal,"Index"]     := i
+				uniqueAry[uniqueVal,"FilterVal"] := filterVal
 			}
 		}
 		
 		filteredTable := []
-		For i,ary in uniqueIndex {
+		For i,ary in uniqueAry {
 			index := ary["Index"]
 			filteredTable.push(this.table[index])
 		}
@@ -242,8 +242,6 @@ class TableList {
 	}
 	
 	
-	
-	
 	; ==============================
 	; == Private ===================
 	; ==============================
@@ -257,8 +255,8 @@ class TableList {
 		this.chars   := mergeArrays(defaultChars, settings["CHARS"])
 		
 		; Format defaults and settings
-		this.separateMap := processOverride([], settings["FORMAT", "SEPARATE_MAP"])
-		this.indexLabels := processOverride([], settings["FORMAT", "DEFAULT_INDICES"])
+		this.separateMap := mergeArrays([], settings["FORMAT", "SEPARATE_MAP"])
+		this.indexLabels := mergeArrays([], settings["FORMAT", "DEFAULT_INDICES"])
 	}
 	
 	; Special character defaults

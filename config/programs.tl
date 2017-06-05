@@ -1,5 +1,5 @@
-; Where there's double rows, they should come out of TableList processing as an array - them we can determine which entry to pare it down to later on.
-; +PlaceholderString=-
+@PlaceholderChar=-
+
 (	NAME					TITLE			CLASS															PATH																					ARGS								MACHINE			EXE
 
 [{PATH}b:C:\Program Files (x86)\]

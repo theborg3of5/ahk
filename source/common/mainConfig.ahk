@@ -63,7 +63,6 @@ class MainConfig {
 	loadWindows(filePath) {
 		settings := []
 		settings["CHARS"] := []
-		settings["CHARS", "PLACEHOLDER"] := "-"
 		
 		tl := new TableList(filePath, settings)
 		this.windows := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
@@ -74,7 +73,6 @@ class MainConfig {
 		settings := []
 		settings["CHARS"] := []
 		settings["CHARS", "ESCAPE"] := "" ; No escape char, to let single backslashes through.
-		settings["CHARS", "PLACEHOLDER"] := "-"
 		
 		tl := new TableList(filePath, settings)
 		uniquePrograms := tl.getFilteredTableUnique("NAME", "MACHINE", this.getMachine())

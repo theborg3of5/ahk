@@ -12,6 +12,11 @@
 	
 	Certain characters have special meaning when parsing the lines of a file. They include:
 		At the start of a row:
+			@ - Setting
+				Any row that begins with one of these is assumed to be of the form @SettingName=value, where SettingName is one of the following:
+					PlaceholderChar - the placeholder character to use
+				Note that if any of these conflict with the settings passed programmatically, the programmatic settings win.
+			
 			# - Pass
 				Any row that begins with one of these characters will not be broken up into multiple pieces, but will be a single-element array in the final output.
 				Override with settings["CHARS", "PASS"].
@@ -30,7 +35,7 @@
 		Within a "normal" row (not started with any of the special characters above):
 			<No default> - Placeholder
 				Having this allows you to have a truly empty value for a column in a given row (useful when optional columns are in the middle).
-				Override with settings["CHARS", "PLACEHOLDER"].
+				Override with @PlaceholderChar or settings["CHARS", "PLACEHOLDER"].
 			
 			| - Multiple
 				In a row that's being split, if an individual column within the row has this character, then that entry will be an array of the pipe-delimited values.
@@ -264,6 +269,7 @@ class TableList {
 		chars["COMMENT"]  := ";"
 		chars["MODEL"]    := "("
 		chars["PASS"]     := ["#"] ; This one supports multiple entries
+		chars["SETTING"]  := "@"
 		
 		chars["PLACEHOLDER"] := "" ; No default
 		chars["MULTIENTRY"]  := "|"
@@ -296,6 +302,9 @@ class TableList {
 			
 			if(firstChar = this.chars["COMMENT"] || firstChar = "") {
 				; Ignore - it's either empty or a comment row.
+			} else if(firstChar = this.chars["SETTING"]) {
+				this.processSetting(SubStr(row, 2)) ; Strip off the @ at the beginning
+				
 			} else if(firstChar = this.chars["MODSTART"]) {
 				this.updateMods(row)
 			} else if(contains(this.chars["PASS"], firstChar)) {
@@ -311,6 +320,18 @@ class TableList {
 			}
 			
 		}
+	}
+	
+	processSetting(settingString) {
+		if(!settingString)
+			return
+		
+		settingSplit := StrSplit(settingString, "=")
+		name  := settingSplit[1]
+		value := settingSplit[2]
+		
+		if(name = "PlaceholderChar")
+			this.chars["SETTING"] := value
 	}
 
 	; Update the given modifier string given the new one.

@@ -34,15 +34,9 @@
 			Add to framework, new column in programs.tl?
 		Condense more global constants into constants.ahk
 			May need to move up in includeCommon.ahk, to before mainConfig.ahk?
-		Resizing windows - add optional param to also center the newly resized window?
-		Move specificication of placeholder char for INIs to setting in INI itself
-			In order to do this, we need to move processing of (at least some) +settings to TableList.
 		Audit all scripts for unused hotkeys
 			Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
 		Have remote desktop script mute volume on a loop, or whenever a new connection is made.
-		Universal opener/linker - make it easier to pick view-only version?
-			Field that allows just "v" instead of full "VIEW"?
-			dv, etc shortcuts?
 		Turn the "; Special programs/specific params." section in launch.ahk into a parameter to activate/run program?
 			Or maybe stick the quotes in the config somehow?
 		Expand emulator controller to support other systems, perhaps?

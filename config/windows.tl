@@ -1,3 +1,5 @@
+@PlaceholderChar=-
+
 (	NAME							WIN_CLASS						WIN_TITLE					CONTROL_CLASS				ESC				MIN				SELECT_ALL		DELETE_WORD
 
 	7-zip							FM									-								-								CLOSE_WINDOW	

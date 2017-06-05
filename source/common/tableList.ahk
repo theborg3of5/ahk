@@ -490,7 +490,7 @@ class TableList {
 	; Debug info
 	debugName := "TableList"
 	debugToString(numTabs = 0) {
-		outStr .= DEBUG.buildDebugString("Mods", this.mods, numTabs)
+		outStr .= DEBUG.buildDebugString("Mods",  this.mods,  numTabs)
 		outStr .= DEBUG.buildDebugString("Table", this.table, numTabs)
 		return outStr
 	}

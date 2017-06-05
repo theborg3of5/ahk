@@ -74,9 +74,9 @@
 
 global SUPERTYPE_EPIC := "EPIC"
 
-global TYPE_UNKNOWN        := ""
-global TYPE_EMC2           := "EMC2"
-global TYPE_PATH           := "PATH"
+global TYPE_UNKNOWN := ""
+global TYPE_EMC2    := "EMC2"
+global TYPE_PATH    := "PATH"
 
 global ACTION_NONE := ""
 global ACTION_LINK := "LINK"

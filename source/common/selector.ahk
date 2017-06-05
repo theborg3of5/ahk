@@ -699,9 +699,9 @@ class Selector {
 	; Debug info
 	debugName := "Selector"
 	debugToString(numTabs = 0) {
-		outStr .= DEBUG.buildDebugString("Choices", this.choices, numTabs)
+		outStr .= DEBUG.buildDebugString("Choices",        this.choices,       numTabs)
 		outStr .= DEBUG.buildDebugString("Hidden Choices", this.hiddenChoices, numTabs)
-		outStr .= DEBUG.buildDebugString("Non-Choices", this.nonChoices, numTabs)
+		outStr .= DEBUG.buildDebugString("Non-Choices",    this.nonChoices,    numTabs)
 		return outStr
 	}
 }

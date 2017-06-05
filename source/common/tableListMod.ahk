@@ -24,20 +24,18 @@ class TableListMod {
 		
 		startOffset := 0
 		endOffset := 0
-		if(this.len > 0) {
+		if(this.len > 0)
 			endOffset := this.len
-		} else if(this.len < 0) {
+		else if(this.len < 0)
 			startOffset := this.len
-		}
 		
 		rowBitLen := StrLen(rowBit)
-		if(this.start > 0) {
+		if(this.start > 0)
 			startLen := this.start - 1
-		} else if(this.start < 0) {
+		else if(this.start < 0)
 			startLen := rowBitLen + this.start + 1
-		} else {
+		else
 			startLen := rowBitLen // 2
-		}
 		
 		outBit := SubStr(rowBit, 1, startLen + startOffset)
 		outBit .= this.text

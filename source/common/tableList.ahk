@@ -247,16 +247,12 @@ class TableList {
 	; ==============================
 	
 	init(settings) {
-		; Initialize the objects.
 		this.mods  := []
 		this.table := []
 		
-		defaultChars := this.getDefaultChars()
-		this.chars   := mergeArrays(defaultChars, settings["CHARS"])
-		
-		; Format defaults and settings
-		this.separateMap := mergeArrays([], settings["FORMAT", "SEPARATE_MAP"])
-		this.indexLabels := mergeArrays([], settings["FORMAT", "DEFAULT_INDICES"])
+		this.chars       := mergeArrays(this.getDefaultChars(), settings["CHARS"])
+		this.separateMap := mergeArrays([],                     settings["FORMAT", "SEPARATE_MAP"])
+		this.indexLabels := mergeArrays([],                     settings["FORMAT", "DEFAULT_INDICES"])
 	}
 	
 	; Special character defaults

@@ -30,8 +30,6 @@
 		Clean up vimKeys stuff - should really make a separate function for whether in super mode (if even used anymore?).
 		Alt+drag has some interesting quirks with certain programs (just OneNote on Win10 so far?)
 			Add to framework, new column in programs.tl?
-		Condense more global constants into constants.ahk
-			May need to move up in includeCommon.ahk, to before mainConfig.ahk?
 		Audit all scripts for unused hotkeys
 			Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
 		Have remote desktop script mute volume on a loop, or whenever a new connection is made.

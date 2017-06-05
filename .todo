@@ -1,12 +1,9 @@
 # AHK To Do
 	
 	'TableList/Selector Rewrite'
-		Move filtering behavior outside of TableList
-			Update selector with better way to pass filter info, instead of old method conversiony thing.
-				openFolder in launch.ahk uses the old way, looks like the only place.
+		Rework Selector and TableList, possibly rewrite from scratch.
 		Can we make all special characters support multiple inputs?
 			Seems like overkill, probably remove that ability for placeholder too.
-		Debug - make a debug "builder" that stores off number of tabs and whatever last argument is?
 		MainConfig - turn loadSettings() stuff into an inner function called however many times, not a loop over an array of settings.
 	
 	'Fixes'
@@ -18,8 +15,9 @@
 		Fix the EpicStudio CDO generator to include tabs at beginning of lines to do better.
 	
 	'New ideas'
+		Debug - why are there two different build string functions, again?
+		Debug - make a debug "builder" that stores off number of tabs and whatever last argument is?
 		isWindowInStates - update to allow passing either an array or a single value for each parameter.
-		Rewrite Selector and TableList from scratch.
 		Make it easier to get correct, drive-mapped paths
 			Maybe when copy, check for epic:// and replace with correct drive letter accordingly?
 		Generalize finding stuff

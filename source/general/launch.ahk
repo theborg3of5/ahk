@@ -185,10 +185,8 @@ return
 openFolder(folderName = "") {
 	global configFolder
 	
-	tableListSettings := []
-	tableListSettings["FILTER", "COLUMN"] := "MACHINE"
-	tableListSettings["FILTER", "INCLUDE", "VALUE"]  := MainConfig.getMachine()
-	folderPath := Selector.select(configFolder "folders.tl", "RET", folderName, , , , tableListSettings)
+	filter := MainConfig.getMachineTableListFilter()
+	folderPath := Selector.select(configFolder "folders.tl", "RET", folderName, , , , , , , filter)
 	
 	; Replace any special tags with real paths.
 	folderPath := StrReplace(folderPath, "<AHKROOT>", SubStr(ahkRootPath, 1, -1)) ; Assuming that global path vars have a \ on the end that we don't want.

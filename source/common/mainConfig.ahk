@@ -188,6 +188,14 @@ class MainConfig {
 	isMachine(machineName) {
 		return this.isValue("MACHINE", machineName)
 	}
+	
+	getMachineTableListFilter() {
+		filter := []
+		filter["COLUMN"] := "MACHINE"
+		filter["VALUE"]  := this.getMachine()
+		
+		return filter
+	}
 }
 
 MainConfig.init(localConfigFolder "settings.ini", configFolder "windows.tl", configFolder "programs.tl")

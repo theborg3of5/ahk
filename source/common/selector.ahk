@@ -146,7 +146,7 @@ class Selector {
 		this.tableListSettings["FORMAT", "DEFAULT_INDICES"] := ["NAME", "ABBREV", "DOACTION"]
 	}
 	
-	init(fPath, action, iconName, selRows, tlSettingOverrides, settingOverrides) {
+	init(fPath, action, iconName, selRows, tlSettingOverrides, settingOverrides, newFilter) {
 		; DEBUG.popup("init Filepath", fPath, "Action", action, "Icon name", iconName, "SelRows", selRows)
 		
 		this.startupConstants()
@@ -176,6 +176,7 @@ class Selector {
 			; DEBUG.popup("Filepath after", this.filePath)			
 			
 			this.tableListSettings := mergeArrays(this.tableListSettings, tlSettingOverrides)
+			this.filter := newFilter
 			
 			; Load up the choices.
 			if(this.filePath)
@@ -213,12 +214,17 @@ class Selector {
 			data[]              - Assocative array of indices or data labels to data values to default into arbitrary inputs. Only applies if arbitrary inputs are turned on with +ShowArbitraryInputs.
 			selRows[]           - Array of SelectorRow objects to use directly instead of reading from filePath.
 			tableListSettings[] - Settings to override for when we read in a file using a TableList object.
+			... GDB TODO
+			filter[]            - If you want to filter the given file down to only some of its choices, pass an array with the following subscripts:
+			                         filter["COLUMN"]         = The column to filter on
+											       ["VALUE"]          = The value that the column has to be equal to. Can be blank if you're looking for only rows with no value in the filter column.
+													 ["EXCLUDE_BLANKS"] = (Optional) if this is false (default), columns with a blank value for the filter column will be included even if ["VALUE"] is not blank.
 	*/
-	select(filePath, actionType = "", silentChoice = "", iconName = "", data = "", selRows = "", tableListSettings = "", settingOverrides = "", extraData = "") {
-		; DEBUG.popup("Filepath", filePath, "Action Type", actionType, "Silent Choice", silentChoice, "Icon name", iconName, "Data", data)
+	select(filePath, actionType = "", silentChoice = "", iconName = "", data = "", selRows = "", tableListSettings = "", settingOverrides = "", extraData = "", filter = "") {
+		; DEBUG.popup("Filepath", filePath, "Action Type", actionType, "Silent Choice", silentChoice, "Icon name", iconName, "Data", data, "selRows", selRows, "tableListSettings", tableListSettings, "settingOverrides", settingOverrides, "extraData", extraData, "filter", filter)
 		
 		; Set up our various information, read-ins, etc.
-		this.init(filePath, actionType, iconName, selRows, tableListSettings, settingOverrides, extraData)
+		this.init(filePath, actionType, iconName, selRows, tableListSettings, settingOverrides, filter)
 		
 		if(extraData) {
 			baseLength := this.labelIndices.maxIndex()
@@ -294,10 +300,9 @@ class Selector {
 	
 	; Load the choices and other such things from a specially formatted file.
 	loadChoicesFromFile(filePath) {
-		
 		tl := new TableList(filepath, this.tableListSettings)
-		if(this.tableListSettings["FILTER", "COLUMN"])
-			list := tl.getFilteredTable(this.tableListSettings["FILTER", "COLUMN"], this.tableListSettings["FILTER", "INCLUDE", "VALUE"])
+		if(this.filter)
+			list := tl.getFilteredTable(this.filter["COLUMN"], this.filter["VALUE"], this.filter["EXCLUDE_BLANKS"])
 		else
 			list := tl.getTable()
 		

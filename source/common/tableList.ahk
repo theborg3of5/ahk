@@ -171,16 +171,17 @@ class TableList {
 	
 	; Return a table of all rows that have the allowed value in the filterColumn column.
 	; Will only affect normal rows (i.e. what you get from tl.getTable())
-	; column        - which column to filter rows by.
-	; allowedValue   - if a row has a value set for the given column, it must be set to this value to be included.
-	; includeBlanks - if this is false, any rows with no value for the given column will also be excluded.
-	getFilteredTable(column, allowedValue = "", includeBlanks = true) {
+	; column        - Which column to filter rows by.
+	; allowedValue  - If a row has a value set for the given column, it must be set to this value to be included.
+	; excludeBlanks - By default, rows with a blank value for the filter column will be included. Set this to true to exclude them.
+	getFilteredTable(column, allowedValue = "", excludeBlanks = false) {
+		; DEBUG.popup("column",column, "allowedValue",allowedValue, "excludeBlanks",excludeBlanks)
 		if(!column)
 			return ""
 		
 		filteredTable := []
 		For i,currRow in this.table {
-			if(this.shouldExcludeItem(currRow, column, allowedValue, includeBlanks))
+			if(this.shouldExcludeItem(currRow, column, allowedValue, excludeBlanks))
 				Continue
 			
 			filteredTable.push(currRow)
@@ -201,7 +202,7 @@ class TableList {
 		
 		uniqueAry := [] ; uniqueVal => {"Index": indexInTable, "FilterValue": filterVal}
 		For i,currRow in this.table {
-			if(this.shouldExcludeItem(currRow, filterColumn, allowedValue, true))
+			if(this.shouldExcludeItem(currRow, filterColumn, allowedValue))
 				Continue
 			
 			uniqueVal := currRow[uniqueColumn]
@@ -227,13 +228,13 @@ class TableList {
 	}
 	
 	; If a filter is given, exclude any rows that don't fit.
-	shouldExcludeItem(currRow, column, allowedValue = "", includeBlanks = true) {
+	shouldExcludeItem(currRow, column, allowedValue = "", excludeBlanks = false) {
 		if(!column)
 			return false
 		
 		valueToCompare := currRow[column]
 		
-		if(includeBlanks && !valueToCompare)
+		if(!excludeBlanks && !valueToCompare)
 			return false
 		
 		if(valueToCompare = allowedValue)

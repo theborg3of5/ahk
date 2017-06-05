@@ -15,7 +15,7 @@ Shortcuts:
 Notes:
 	The INI file is in a tab-separated format:
 		Columns must be separated by one or more tabs. Extra tabs are ignored.
-		All columns are not required, but because we ignore extra tabs, you must have some non-whitespace character in order to skip a column (for example, the \x for the Guru line) to keep columns aligned.
+		All columns are not required, but because we ignore extra tabs, you must have some non-whitespace character in order to skip a column (for example, the - for the Guru line) to keep columns aligned.
 		Columns are as follows:
 			NAME        - Title shown for the given environment in the popup
 			ABBREV      - Abbreviation shown for the environment

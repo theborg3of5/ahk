@@ -1,3 +1,5 @@
+@PlaceholderChar=-
+
 =Select type of search to run and input search text:
 +ShowArbitraryInputs=1
 +ColumnWidth=500
@@ -16,7 +18,7 @@
 [-1]
 	
 # Other
-	Guru					gu				\x																	GURU
+	Guru					gu				-																	GURU
 	DBC Wiki				d				dbc																WIKI
 
 # General

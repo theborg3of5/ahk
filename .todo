@@ -2,9 +2,6 @@
 	
 	'TableList/Selector Rewrite'
 		Rework Selector and TableList, possibly rewrite from scratch.
-		Can we make all special characters support multiple inputs?
-			Seems like overkill, probably remove that ability for placeholder too.
-		MainConfig - turn loadSettings() stuff into an inner function called however many times, not a loop over an array of settings.
 	
 	'Fixes'
 		Have centering hotkey take height of taskbar into account?
@@ -15,6 +12,7 @@
 		Fix the EpicStudio CDO generator to include tabs at beginning of lines to do better.
 	
 	'New ideas'
+		MainConfig - turn loadSettings() stuff into an inner function called however many times, not a loop over an array of settings.
 		Debug - why are there two different build string functions, again?
 		Debug - make a debug "builder" that stores off number of tabs and whatever last argument is?
 		isWindowInStates - update to allow passing either an array or a single value for each parameter.

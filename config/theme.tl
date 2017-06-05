@@ -1,5 +1,6 @@
-=Select a theme to apply:
+@PlaceholderChar=-
 
+=Select a theme to apply:
 +TrayIcon=C:\\Users\\gborg\\System Tools\\Themes\\ThemeSwitcher.exe
 
 (	NAME				ABBREV	ACTIONTYPE		FROMFILE			TOFILE			FROMFOLDER	TOFOLDER
@@ -8,14 +9,10 @@
 
 # Windows Theme
 [+1|{FROMFILE}b:C:\\Users\\gborg\\System Tools\\Themes\\ThemeSwitcher.exe "|{FROMFILE}e:"]
-	Dark 				dw			RUN				Dark 2			\x					\x				dv
-	Super Dark 		sdw		RUN				Dark 2			MOUSEFIX			\x				dv
-	Light 			lw			RUN				Light 2			\x					\x				lv
-	Super Light 	slw		RUN				SuperLight 2	MOUSEFIX			\x				lv
-	; Dark 				dw			RUN				Dark 2			\x					des			dv
-	; Super Dark 		sdw		RUN				Dark 2			MOUSEFIX			des			dv
-	; Light 			lw			RUN				Light 2			\x					les			lv
-	; Super Light 	slw		RUN				SuperLight 2	MOUSEFIX			les			lv
+	Dark 				dw			RUN				Dark 2			-					-				dv
+	Super Dark 		sdw		RUN				Dark 2			MOUSEFIX			-				dv
+	Light 			lw			RUN				Light 2			-					-				lv
+	Super Light 	slw		RUN				SuperLight 2	MOUSEFIX			-				lv
 [-1]
 
 # VB Theme

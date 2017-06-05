@@ -140,7 +140,6 @@ class Selector {
 		; Settings to use with TableList object when parsing input file.
 		this.tableListSettings := []
 		this.tableListSettings["CHARS"] := []
-		this.tableListSettings["CHARS",  "PLACEHOLDER"]     := "\x"
 		this.tableListSettings["CHARS",  "PASS"]            := [this.titleChar, this.labelChar, this.settingsChar]
 		this.tableListSettings["FORMAT", "SEPARATE_MAP"]    := {this.startModelIndexChar: "DATA_INDEX"} 
 		this.tableListSettings["FORMAT", "DEFAULT_INDICES"] := ["NAME", "ABBREV", "DOACTION"]

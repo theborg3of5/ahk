@@ -3,9 +3,11 @@
 isEmailFolderActive(userEmail) {
 	titles := []
 	titles.push(buildOutlookWindowTitle(userEmail, "Inbox"))
-	titles.push(buildOutlookWindowTitle(userEmail, "Do"))
 	titles.push(buildOutlookWindowTitle(userEmail, "Wait"))
 	titles.push(buildOutlookWindowTitle(userEmail, "Later Use"))
+	titles.push(buildOutlookWindowTitle(userEmail, "Archive"))
+	titles.push(buildOutlookWindowTitle(userEmail, "Sent Items"))
+	titles.push(buildOutlookWindowTitle(userEmail, "Deleted Items"))
 	
 	return isWindowInStates(["active"], titles)
 }

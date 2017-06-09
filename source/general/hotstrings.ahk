@@ -116,6 +116,8 @@
 		:*:c'o::check-out
 		:*:qai::QA Instructions
 		
+		:*:.iai::...I'll allow it
+		:*:iai::I'll allow it
 		:*:asig::and so it goes, and so it goes, and you're the only one who knows...
 	}
 

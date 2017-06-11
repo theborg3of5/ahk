@@ -10,6 +10,7 @@
 			Snapper URL stuff
 			M code for loop snippet
 		Fix the EpicStudio CDO generator to include tabs at beginning of lines to do better.
+		Seems like standalone scripts reload once on their own, then are restarted again by main script - should either have them not restart, or don't need main script to reload them too.
 	
 	'New ideas'
 		MainConfig - turn loadSettings() stuff into an inner function called however many times, not a loop over an array of settings.

@@ -5,8 +5,8 @@
 [{PATH}b:C:\Program Files (x86)\]
 	Chrome				-				Chrome_WidgetWin_1										Google\Chrome\Application\chrome.exe
 	Outlook				-				rctrl_renwnd32												Microsoft Office\Office15\OUTLOOK.EXE
-	ProcessExplorer	-				PROCEXPL														Process Explorer\procexp.exe
-	EpicStudio			-				WindowsForms10.Window.8.app.0.2bf8098_r33_ad1	EpicStudio\EpicStudio.exe														-									-					EpicStudio.exe
+	ProcessExplorer	-				PROCEXPL														Process Explorer\procexp.exe													-									EPIC_DESKTOP
+	EpicStudio			-				WindowsForms10.Window.8.app.0.2bf8098_r33_ad1	EpicStudio\EpicStudio.exe														-									EPIC_DESKTOP	EpicStudio.exe
 	Foobar				-				{97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}				foobar2000\foobar2000.exe
 	Notepad++			-				Notepad++													Notepad++\notepad++.exe
 	EMC2					EMC2			-																Epic\v8.2\EMC2\Shared Files\EpicD82.exe									EMC2Update env=TRACKAPPTCP
@@ -25,6 +25,7 @@
 	OxygenXML			-				SunAwtFrame													Oxygen XML Editor 13\oxygen13.2.exe
 	WinSpy				-				-																AutoHotkey\AU3_Spy.exe
 	yEd					-				-																yWorks\yEd\yEd.exe
+	ProcessExplorer	-				PROCEXPL														ProcessExplorer\procexp.exe													-									
 []
 
 [{PATH}b:C:\Users\gborg\AppData\]

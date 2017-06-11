@@ -321,6 +321,8 @@ class TableList {
 			}
 			
 		}
+		
+		; DEBUG.popup("TableList.parseList", "Finish", "State", this)
 	}
 	
 	processSetting(settingString) {
@@ -332,7 +334,7 @@ class TableList {
 		value := settingSplit[2]
 		
 		if(name = "PlaceholderChar")
-			this.chars["SETTING"] := value
+			this.chars["PLACEHOLDER"] := value
 	}
 
 	; Update the given modifier string given the new one.
@@ -490,8 +492,11 @@ class TableList {
 	; Debug info
 	debugName := "TableList"
 	debugToString(numTabs = 0) {
-		outStr .= DEBUG.buildDebugString("Mods",  this.mods,  numTabs)
-		outStr .= DEBUG.buildDebugString("Table", this.table, numTabs)
+		outStr .= DEBUG.buildDebugString("Chars",         this.chars,       numTabs)
+		outStr .= DEBUG.buildDebugString("Separate Map",  this.separateMap, numTabs)
+		outStr .= DEBUG.buildDebugString("Index labels",  this.indexLabels, numTabs)
+		outStr .= DEBUG.buildDebugString("Mods",          this.mods,        numTabs)
+		outStr .= DEBUG.buildDebugString("Table",         this.table,       numTabs)
 		return outStr
 	}
 }

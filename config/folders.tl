@@ -8,6 +8,7 @@
 	Music						mu|music			<USERROOT>\Music\																										HOME_DESKTOP|HOME_ASUS
 	Music						mu|music			D:\Music\																												EPIC_DESKTOP
 	Public					pub				F:\Personal\gborg\Public\																							EPIC_DESKTOP
+	QuickRef					qr					<USERROOT>\QuickRef\																									EPIC_DESKTOP
 	
 	# System
 	Startup					start				<USERROOT>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\

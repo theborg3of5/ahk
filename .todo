@@ -25,6 +25,7 @@
 		Make a simpler icon setup function - almost everything (vimKeys is the only exception) just needs on/off.
 		Snapper supports URLs as well - add support for that to ActionObject?
 			Also include support for multiple things - maybe add that in general too?
+				Also support newline separation (though likely just turn it into comma-separated for a consistent format).
 		Add to vimKeys - modification for twitter like -> m key
 		Clean up vimKeys stuff - should really make a separate function for whether in super mode (if even used anymore?).
 		Alt+drag has some interesting quirks with certain programs (just OneNote on Win10 so far?)

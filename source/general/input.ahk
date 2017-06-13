@@ -34,6 +34,13 @@ return
 	SendRaw, %outStr%
 return
 
+; Clipboard typing - gives an easy place to type things that will then stick them on the clipboard if submitted.
+$!v::
+	InputBox, outVar, Set Clipboard, Enter text to set the clipboard to:
+	if(outVar && !ErrorLevel)
+		clipboard := outVar
+return
+
 ; Menu key does different things on laptops without a mouse.
 #If MainConfig.getSetting("MENU_KEY_ACTION") = menuKeyActionMiddleClick
 	AppsKey::MButton

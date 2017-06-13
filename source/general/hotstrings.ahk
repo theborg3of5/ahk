@@ -253,6 +253,12 @@
 		:*c:emf::
 			Send, % epicMonthlyFolder
 		return
+		:*:enfs::
+			Send, % epicNFS3DayPersonal
+		return
+		:*:eunfs::
+			Send, % epicUnixNFS3DayPersonal
+		return
 		
 		:*:ehbf::
 			Send, % epicHBFolder

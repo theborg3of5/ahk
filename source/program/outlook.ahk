@@ -48,16 +48,13 @@ buildOutlookWindowTitle(userEmail, folderName) {
 #If isEmailFolderActive(USER_WORK_EMAIL)
 	; Move selected message(s) to a particular folder, and mark them as read.
 	$^e::
-		Send, ^q
-		Send, !1 ; Archive
+		Send, ^+1 ; Archive
 	return
 	^w::
-		Send, ^q
-		Send, !2 ; Wait
+		Send, ^+2 ; Wait
 	return
 	^l::
-		Send, ^q
-		Send, !3 ; Later use
+		Send, ^+3 ; Later use
 	return
 #If
 

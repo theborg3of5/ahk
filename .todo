@@ -9,6 +9,8 @@
 		Fix the EpicStudio CDO generator to include tabs at beginning of lines to do better.
 	
 	'New ideas'
+		VB IDE - make a nice way to add the usual Exit Sub/Handler/Call ErrorHandler snippet
+			Should be able to get the function name from the comboboxes at the top
 		isWindowInStates - update to allow passing either an array or a single value for each parameter.
 		Rewrite Selector and TableList from scratch.
 		Make it easier to get correct, drive-mapped paths

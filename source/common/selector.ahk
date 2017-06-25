@@ -432,8 +432,6 @@ class Selector {
 		Gui %SEL_GUI%: +LastFound
 		GuiHWND := WinExist()
 		
-		titleStyle := "w700 underline" ; Bold, underline.
-		
 		; Generate the text to display from the various choice objects.
 		displayText := ""
 		lineNum := 1
@@ -443,55 +441,44 @@ class Selector {
 		For i,c in this.choices {
 			title := this.nonChoices[i]
 			
-			if(SubStr(title, 1, 2) = this.newColumnChar " ") {
-				title := SubStr(title, 3)
-				forceNewCol := true
-			}
-			
 			; Add a new column as needed.
-			if(forceNewCol || (lineNum > this.rowsPerColumn) || (title && ((lineNum + 1) > this.rowsPerColumn))) {
-				forceNewCol := false
-				xTitle += this.columnWidth
-				xIndex += this.columnWidth
-				xAbbrev += this.columnWidth
-				xName += this.columnWidth
-				bottomHeight := max(bottomHeight, yCurrLine)
+			if(this.needNewColumn(title, lineNum, this.rowsPerColumn)) {
 				numColumns++
+				xTitle  += this.columnWidth
+				xIndex  += this.columnWidth
+				xAbbrev += this.columnWidth
+				xName   += this.columnWidth
+				maxColumnHeight := max(maxColumnHeight, yCurrLine)
 				
 				if(!title) { ; We're not starting a new title here, so show the previous one, continued.
 					titleInstance++
 					title := currTitle " (" titleInstance ")"
-					lineNum := 0
-				} else {
-					lineNum := 1
+					isContinuedTitle := true
 				}
 				
+				lineNum   := 1
 				yCurrLine := marginTop
 			}
 			
 			; Title rows.
 			if(title) {
-				if(lineNum = 0) {
-					lineNum++
-				} else {
-					currTitle := title
+				if(!isContinuedTitle) {
 					titleInstance := 1
+					currTitle     := title
+				} else {
+					isContinuedTitle := false
 				}
 				
-				if((title != " ") && (lineNum > 1)) {
+				; Extra newline above titles, unless they're on the first line of a column.
+				if(lineNum > 1) {
 					yCurrLine += heightLine
 					lineNum++
 				}
 				
-				; Title formatting.
-				Gui %SEL_GUI%: Font, % titleStyle
+				this.addTitleLine(title, xTitle, yCurrLine, SEL_GUI)
 				
-				Gui %SEL_GUI%: Add, Text, x%xTitle% y%yCurrLine%, %title%
 				yCurrLine += heightLine
 				lineNum++
-				
-				; Clear title formatting.
-				Gui %SEL_GUI%: Font, norm
 			}
 			
 			name := c.data["NAME"]
@@ -509,7 +496,7 @@ class Selector {
 			lineNum++
 		}
 		
-		bottomHeight := max(bottomHeight, yCurrLine)
+		maxColumnHeight := max(maxColumnHeight, yCurrLine)
 		
 		if(this.columnWidth) {
 			guiWidth := numColumns * this.columnWidth
@@ -519,14 +506,14 @@ class Selector {
 			WinGetPos, , , guiWidth, H, A
 		}
 		guiWidth -= 5 ; Bezels and such. ; GDB TODO handle this better?
-		bottomHeight += heightLine ; Extra row down for aesthetics.
+		maxColumnHeight += heightLine ; Extra row down for aesthetics.
 		
 		; DEBUG.popup("Index", i, "Data Index", m, "Label at index", this.dataLabels[i], "Label at data index", this.dataLabels[m], "Data at index", GuiIn%i%, "Data at data index", GuiIn%m%, "DataLabels Array", this.dataLabels, "DataIndices Array", this.dataIndices, "ModelIndices Array", this.modelIndices)
 		
 		if(this.showArbitraryInputs) {
 			; Main edit control is equally sized with index + abbrev columns.
 			editWidth := widthIndex + padIndexAbbrev + widthAbbrev
-			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%bottomHeight% w%editWidth% h24 -E0x200 +Border
+			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%maxColumnHeight% w%editWidth% h24 -E0x200 +Border
 			
 			numArbitInputs := this.labelIndices.length()
 			leftoverWidth := guiWidth - xNameFirstCol - marginRight
@@ -541,18 +528,18 @@ class Selector {
 					tempData := d
 					
 				; DEBUG.popup("Index", i, "ModelIndex", m, "Data at index", guiData[m], "Label", this.dataLabels[m], "Data at label", guiData[this.dataLabels[m]], "Using data", tempData)
-				Gui %SEL_GUI%: Add, Edit, vGuiIn%l% x%posX% y%bottomHeight% w%editWidth% h24 -E0x200 +Border, % tempData
+				Gui %SEL_GUI%: Add, Edit, vGuiIn%l% x%posX% y%maxColumnHeight% w%editWidth% h24 -E0x200 +Border, % tempData
 				posX += editWidth + padInputData
 			}
 			
 		} else {
 			; Add the edit control with almost the width of the window.
 			editWidth := guiWidth - (marginLeft + marginRight)
-			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%bottomHeight% w%editWidth% h24 -E0x200 +Border
+			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%maxColumnHeight% w%editWidth% h24 -E0x200 +Border
 		}
 		
 		; Resize the GUI to show the newly added edit control row.
-		finalHeight += bottomHeight + 30
+		finalHeight += maxColumnHeight + 30
 		Gui %SEL_GUI%: Show, h%finalHeight%, % this.title
 		
 		; Hidden OK button for {Enter} submission.
@@ -582,6 +569,37 @@ class Selector {
 		}
 		
 		return GuiIn0
+	}
+	
+	needNewColumn(ByRef title, lineNum, rowsPerColumn) {
+		; Special character in title forces a new column
+		if(SubStr(title, 1, 2) = this.newColumnChar " ") {
+			title := SubStr(title, 3) ; Strip special character and space off, they've served their purpose.
+			return true
+		}
+		
+		; Out of space in the column
+		if(lineNum > rowsPerColumn)
+			return true
+		
+		; Technically have one left, but the current one is a title
+		; (which would leave the title by itself at the end of a column)
+		if(title && ((lineNum + 1) > rowsPerColumn))
+			return true
+		
+		return false
+	}
+	
+	addTitleLine(title, x, y, guiNum) {
+		this.applyTitleFormat(guiNum)
+		Gui %guiNum%: Add, Text, x%x% y%y%, %title%
+		this.clearTitleFormat(guiNum)
+	}
+	applyTitleFormat(guiNum) {
+		Gui %guiNum%: Font, w600 underline ; Bold, underline.
+	}
+	clearTitleFormat(guiNum) {
+		Gui %guiNum%: Font, norm
 	}
 	
 	; Function to turn the input into something useful.

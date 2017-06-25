@@ -1,7 +1,7 @@
 # AHK To Do
 	
 	'TableList/Selector Rewrite'
-		Rework Selector and TableList, possibly rewrite from scratch.
+		Rework Selector, possibly rewrite from scratch.
 	
 	'Fixes'
 		Have centering hotkey take height of taskbar into account?

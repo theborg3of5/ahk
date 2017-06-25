@@ -77,6 +77,7 @@
 
 global SEL_GUI := 2 ; GDB TODO - find a way to generate this on the fly instead of making it a constant.
 
+; GDB TODO sounds like we could possibly use functions instead of this janky stuff: https://autohotkey.com/docs/commands/Gui.htm#Events (Gosub section)
 ; GUI subroutines. They are initially pass-through with no functionality until Selector.loaded is set.
 SelectorEscape:
 SelectorClose:
@@ -486,7 +487,19 @@ class Selector {
 			; DEBUG.popup("Choice putting into UI", c, "Index", i, "Name", name, "Abbreviation", abbrev)
 			Gui %SEL_GUI%: Add, Text, x%xIndex% Right w%widthIndex% y%yCurrLine%, % i ")"
 			Gui %SEL_GUI%: Add, Text, x%xAbbrev% y%yCurrLine%, % abbrev ":"
-			Gui %SEL_GUI%: Add, Text, x%xName% y%yCurrLine%, % name
+			; Gui %SEL_GUI%: Add, Text, x%xName% y%yCurrLine%, % name
+			
+			
+			
+			
+				this.cheatStatic(name, i, xName, yCurrLine)
+			; if(name = "Downloads") {
+			; } else {
+				; Gui %SEL_GUI%: Add, Text, x%xName% y%yCurrLine%, % name
+			; }
+			
+			
+			
 			
 			yCurrLine += heightLine
 			lineNum++
@@ -495,23 +508,23 @@ class Selector {
 		maxColumnHeight := max(maxColumnHeight, yCurrLine)
 		
 		if(this.columnWidth) {
-			guiWidth := numColumns * this.columnWidth
+			widthTotal := numColumns * this.columnWidth
 		} else {
 			; Show the window in order to get its width.
 			Gui %SEL_GUI%: Show, , % this.title
-			WinGetPos, , , guiWidth, H, A
+			WinGetPos, , , widthTotal, , A
 		}
-		guiWidth -= 5 ; Bezels and such. ; GDB TODO handle this better?
+		widthTotal -= 5 ; Bezels and such. ; GDB TODO handle this better?
 		maxColumnHeight += heightLine ; Extra empty row before inputs.
 		
 		if(this.showArbitraryInputs) {
 			; Main edit control is equally sized with index + abbrev columns.
-			editWidth := widthIndex + padIndexAbbrev + widthAbbrev
-			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%maxColumnHeight% w%editWidth% h%heightEdit% -E0x200 +Border
+			widthEdit := widthIndex + padIndexAbbrev + widthAbbrev
+			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%maxColumnHeight% w%widthEdit% h%heightEdit% -E0x200 +Border
 			
 			numArbitInputs := this.labelIndices.length()
-			leftoverWidth := guiWidth - xNameFirstCol - marginRight
-			editWidth := (leftoverWidth / numArbitInputs) - ((numArbitInputs - 1) * padInputData)
+			leftoverWidth := widthTotal - xNameFirstCol - marginRight
+			widthEdit := (leftoverWidth / numArbitInputs) - ((numArbitInputs - 1) * padInputData)
 			
 			posX := xNameFirstCol
 			; DEBUG.popup("Whole data array", guiData)
@@ -521,14 +534,14 @@ class Selector {
 				else           ; Data label
 					tempData := d
 				
-				Gui %SEL_GUI%: Add, Edit, vGuiIn%l% x%posX% y%maxColumnHeight% w%editWidth% h%heightEdit% -E0x200 +Border, % tempData
-				posX += editWidth + padInputData
+				Gui %SEL_GUI%: Add, Edit, vGuiIn%l% x%posX% y%maxColumnHeight% w%widthEdit% h%heightEdit% -E0x200 +Border, % tempData
+				posX += widthEdit + padInputData
 			}
 			
 		} else {
 			; Add the edit control with almost the width of the window.
-			editWidth := guiWidth - (marginLeft + marginRight)
-			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%maxColumnHeight% w%editWidth% h%heightEdit% -E0x200 +Border
+			widthEdit := widthTotal - (marginLeft + marginRight)
+			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%maxColumnHeight% w%widthEdit% h%heightEdit% -E0x200 +Border
 		}
 		
 		; Resize the GUI to show the newly added edit control row.
@@ -559,6 +572,17 @@ class Selector {
 		
 		return GuiIn0
 	}
+	
+	
+	
+	cheatStatic(name, index, xName, yCurrLine) {
+		static
+		Gui 2: Add, Text, vVar%Index% x%xName% y%yCurrLine%, % name
+		GuiControlGet, out, 2:Pos, Var%Index%
+		MsgBox, % outW "x" ErrorLevel
+	}
+	
+	
 	
 	createSelectorGui(guiNum) {
 		Gui %guiNum%: +LabelSelector  ; Allows use of LabelSelector* subroutine labels (custom label to override number behavior)

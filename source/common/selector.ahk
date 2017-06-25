@@ -75,7 +75,7 @@
 	
 */
 
-global SEL_GUI := 2
+global SEL_GUI := 2 ; GDB TODO - find a way to generate this on the fly instead of making it a constant.
 
 ; GUI subroutines. They are initially pass-through with no functionality until Selector.loaded is set.
 SelectorEscape:
@@ -96,7 +96,7 @@ SelectorSubmit:
 ; The above subroutines don't do anything until this flag is set.
 Selector.loaded := true
 
-; These must be static or global to use with Edit control.
+; These must be static or global to use with Edit control. ; GDB TODO move these into one of the GUI functions, rather than having them sit around out here?
 global GuiIn0
 global GuiIn1,  GuiIn2,  GuiIn3,  GuiIn4,  GuiIn5,  GuiIn6,  GuiIn7,  GuiIn8,  GuiIn9,  GuiIn10
 global GuiIn11, GuiIn12, GuiIn13, GuiIn14, GuiIn15, GuiIn16, GuiIn17, GuiIn18, GuiIn19, GuiIn20
@@ -396,10 +396,10 @@ class Selector {
 			guiData := Object()
 		
 		; GUI sizes
-		marginLeft  := 10
-		marginRight := 10
-		marginTop   := 10
-		; GDB TODO should there be a marginBottom?
+		marginLeft   := 10
+		marginRight  := 10
+		marginTop    := 10
+		marginBottom := 10
 		
 		padIndexAbbrev := 5
 		padAbbrevName  := 10
@@ -408,6 +408,7 @@ class Selector {
 		widthIndex  := 25
 		widthAbbrev := 50
 		heightLine  := 25
+		heightEdit  := 24
 	
 		; Element starting positions
 		xTitle       := 10
@@ -426,14 +427,9 @@ class Selector {
 		}
 		
 		; Create and begin styling the GUI.
-		Gui %SEL_GUI%: +LabelSelector  ;*gdb 10/14 - Make labels up top work using a custom label to override number behavior.
-		Gui %SEL_GUI%: Color, 2A211C
-		Gui %SEL_GUI%: Font, s12 cBDAE9D
-		Gui %SEL_GUI%: +LastFound
-		GuiHWND := WinExist()
+		guiHandle := this.createSelectorGui(SEL_GUI)
 		
 		; Generate the text to display from the various choice objects.
-		displayText := ""
 		lineNum := 1
 		numColumns := 1
 		titleInstance := 1
@@ -456,7 +452,7 @@ class Selector {
 					isContinuedTitle := true
 				}
 				
-				lineNum   := 1
+				lineNum := 1
 				yCurrLine := marginTop
 			}
 			
@@ -506,14 +502,12 @@ class Selector {
 			WinGetPos, , , guiWidth, H, A
 		}
 		guiWidth -= 5 ; Bezels and such. ; GDB TODO handle this better?
-		maxColumnHeight += heightLine ; Extra row down for aesthetics.
-		
-		; DEBUG.popup("Index", i, "Data Index", m, "Label at index", this.dataLabels[i], "Label at data index", this.dataLabels[m], "Data at index", GuiIn%i%, "Data at data index", GuiIn%m%, "DataLabels Array", this.dataLabels, "DataIndices Array", this.dataIndices, "ModelIndices Array", this.modelIndices)
+		maxColumnHeight += heightLine ; Extra empty row before inputs.
 		
 		if(this.showArbitraryInputs) {
 			; Main edit control is equally sized with index + abbrev columns.
 			editWidth := widthIndex + padIndexAbbrev + widthAbbrev
-			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%maxColumnHeight% w%editWidth% h24 -E0x200 +Border
+			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%maxColumnHeight% w%editWidth% h%heightEdit% -E0x200 +Border
 			
 			numArbitInputs := this.labelIndices.length()
 			leftoverWidth := guiWidth - xNameFirstCol - marginRight
@@ -526,31 +520,27 @@ class Selector {
 					tempData := guiData[d]
 				else           ; Data label
 					tempData := d
-					
-				; DEBUG.popup("Index", i, "ModelIndex", m, "Data at index", guiData[m], "Label", this.dataLabels[m], "Data at label", guiData[this.dataLabels[m]], "Using data", tempData)
-				Gui %SEL_GUI%: Add, Edit, vGuiIn%l% x%posX% y%maxColumnHeight% w%editWidth% h24 -E0x200 +Border, % tempData
+				
+				Gui %SEL_GUI%: Add, Edit, vGuiIn%l% x%posX% y%maxColumnHeight% w%editWidth% h%heightEdit% -E0x200 +Border, % tempData
 				posX += editWidth + padInputData
 			}
 			
 		} else {
 			; Add the edit control with almost the width of the window.
 			editWidth := guiWidth - (marginLeft + marginRight)
-			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%maxColumnHeight% w%editWidth% h24 -E0x200 +Border
+			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%maxColumnHeight% w%editWidth% h%heightEdit% -E0x200 +Border
 		}
 		
 		; Resize the GUI to show the newly added edit control row.
-		finalHeight += maxColumnHeight + 30
+		finalHeight += maxColumnHeight + heightEdit + marginBottom
 		Gui %SEL_GUI%: Show, h%finalHeight%, % this.title
-		
-		; Hidden OK button for {Enter} submission.
-		Gui %SEL_GUI%: Add, Button, Hidden Default +gSelectorSubmit, SubmitSelector
 		
 		; Focus the edit control.
 		GuiControl, %SEL_GUI%:Focus, GuiIn0
 		GuiControl, %SEL_GUI%:+0x800000, GuiIn0
 		
 		; Wait for the user to submit the GUI.
-		WinWaitClose, ahk_id %GuiHWND%
+		WinWaitClose, ahk_id %guiHandle%
 		
 		
 		; == GUI is now waiting for user to do something ==
@@ -561,7 +551,6 @@ class Selector {
 			For i,l in this.labelIndices {
 				inputVal := GuiIn%i%
 				if(inputVal && (inputVal != l)) {
-					; DEBUG.popup("Index", i, "Model index", m, "Label at index", this.dataLabels[i], "Label at data index", this.dataLabels[m], "Data at index", GuiIn%i%, "Data at data index", GuiIn%m%, "DataLabels Array", this.dataLabels, "DataIndices Array", this.dataIndices, "ModelIndices Array", this.modelIndices, "Model Indices Reversed", this.modelIndicesReverse)
 					guiDataFilled := true
 					guiData[l] := GuiIn%i%
 				}
@@ -569,6 +558,15 @@ class Selector {
 		}
 		
 		return GuiIn0
+	}
+	
+	createSelectorGui(guiNum) {
+		Gui %guiNum%: +LabelSelector  ; Allows use of LabelSelector* subroutine labels (custom label to override number behavior)
+		Gui %guiNum%: Color, 2A211C
+		Gui %guiNum%: Font, s12 cBDAE9D
+		Gui %guiNum%: +LastFound
+		Gui %guiNum%: Add, Button, Hidden Default +gSelectorSubmit, SubmitSelector ; Hidden OK button for {Enter} submission.
+		return WinExist()
 	}
 	
 	needNewColumn(ByRef title, lineNum, rowsPerColumn) {

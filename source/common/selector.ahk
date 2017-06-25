@@ -395,24 +395,29 @@ class Selector {
 		if(!IsObject(guiData))
 			guiData := Object()
 		
-		; Various GUI element dimensions.
-		offsetX            := 10
-		offsetIndexAbbrevX := 5
-		offsetDataInputX   := 5
-		offsetY            := 10
+		; GUI sizes
+		marginLeft  := 10
+		marginRight := 10
+		marginTop   := 10
+		; GDB TODO should there be a marginBottom?
 		
-		titleX     := 10
-		indexX     := 10
-		indexW     := 25
-		abbrevX    := indexX + indexW + offsetIndexAbbrevX
-		abbrevW    := 50
-		nameX      := abbrevX + abbrevW + offsetX
-		startNameX := nameX
+		padIndexAbbrev := 5
+		padAbbrevName  := 10
+		padInputData   := 5
 		
-		inputX := offsetX
+		widthIndex  := 25
+		widthAbbrev := 50
+		heightLine  := 25
+	
+		; Element starting positions
+		xTitle       := 10
+		xIndex       := 10
+		xAbbrev      := xIndex  + widthIndex  + padIndexAbbrev
+		xName        := xAbbrev + widthAbbrev + padAbbrevName
+		xInputChoice := marginLeft
 		
-		currY := offsetY
-		lineHeight := 25
+		xNameFirstCol := xName
+		yCurrLine     := marginTop
 		
 		; Change the tray icon.
 		if(this.iconPath && FileExist(this.iconPath)) {
@@ -446,11 +451,11 @@ class Selector {
 			; Add a new column as needed.
 			if(forceNewCol || (lineNum > this.rowsPerColumn) || (title && ((lineNum + 1) > this.rowsPerColumn))) {
 				forceNewCol := false
-				titleX += this.columnWidth
-				indexX += this.columnWidth
-				abbrevX += this.columnWidth
-				nameX += this.columnWidth
-				bottomHeight := max(bottomHeight, currY)
+				xTitle += this.columnWidth
+				xIndex += this.columnWidth
+				xAbbrev += this.columnWidth
+				xName += this.columnWidth
+				bottomHeight := max(bottomHeight, yCurrLine)
 				numColumns++
 				
 				if(!title) { ; We're not starting a new title here, so show the previous one, continued.
@@ -461,7 +466,7 @@ class Selector {
 					lineNum := 1
 				}
 				
-				currY := offsetY
+				yCurrLine := marginTop
 			}
 			
 			; Title rows.
@@ -474,15 +479,15 @@ class Selector {
 				}
 				
 				if((title != " ") && (lineNum > 1)) {
-					currY += lineHeight
+					yCurrLine += heightLine
 					lineNum++
 				}
 				
 				; Title formatting.
 				Gui %SEL_GUI%: Font, % titleStyle
 				
-				Gui %SEL_GUI%: Add, Text, x%titleX% y%currY%, %title%
-				currY += lineHeight
+				Gui %SEL_GUI%: Add, Text, x%xTitle% y%yCurrLine%, %title%
+				yCurrLine += heightLine
 				lineNum++
 				
 				; Clear title formatting.
@@ -496,15 +501,15 @@ class Selector {
 				abbrev := c.data["ABBREV"]
 			
 			; DEBUG.popup("Choice putting into UI", c, "Index", i, "Name", name, "Abbreviation", abbrev)
-			Gui %SEL_GUI%: Add, Text, x%indexX% Right w%indexW% y%currY%, % i ")"
-			Gui %SEL_GUI%: Add, Text, x%abbrevX% y%currY%, % abbrev ":"
-			Gui %SEL_GUI%: Add, Text, x%nameX% y%currY%, % name
+			Gui %SEL_GUI%: Add, Text, x%xIndex% Right w%widthIndex% y%yCurrLine%, % i ")"
+			Gui %SEL_GUI%: Add, Text, x%xAbbrev% y%yCurrLine%, % abbrev ":"
+			Gui %SEL_GUI%: Add, Text, x%xName% y%yCurrLine%, % name
 			
-			currY += lineHeight
+			yCurrLine += heightLine
 			lineNum++
 		}
 		
-		bottomHeight := max(bottomHeight, currY)
+		bottomHeight := max(bottomHeight, yCurrLine)
 		
 		if(this.columnWidth) {
 			guiWidth := numColumns * this.columnWidth
@@ -513,21 +518,21 @@ class Selector {
 			Gui %SEL_GUI%: Show, , % this.title
 			WinGetPos, , , guiWidth, H, A
 		}
-		guiWidth -= 5 ; Bezels and such.
-		bottomHeight += lineHeight ; Extra row down for aesthetics.
+		guiWidth -= 5 ; Bezels and such. ; GDB TODO handle this better?
+		bottomHeight += heightLine ; Extra row down for aesthetics.
 		
 		; DEBUG.popup("Index", i, "Data Index", m, "Label at index", this.dataLabels[i], "Label at data index", this.dataLabels[m], "Data at index", GuiIn%i%, "Data at data index", GuiIn%m%, "DataLabels Array", this.dataLabels, "DataIndices Array", this.dataIndices, "ModelIndices Array", this.modelIndices)
 		
 		if(this.showArbitraryInputs) {
 			; Main edit control is equally sized with index + abbrev columns.
-			editWidth := indexW + offsetDataInputX + abbrevW
-			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%inputX% y%bottomHeight% w%editWidth% h24 -E0x200 +Border
+			editWidth := widthIndex + padIndexAbbrev + widthAbbrev
+			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%bottomHeight% w%editWidth% h24 -E0x200 +Border
 			
 			numArbitInputs := this.labelIndices.length()
-			leftoverWidth := guiWidth - startNameX - offsetX ; offsetX is rightmost padding on GUI
-			editWidth := (leftoverWidth / numArbitInputs) - ((numArbitInputs - 1) * offsetDataInputX)
+			leftoverWidth := guiWidth - xNameFirstCol - marginRight
+			editWidth := (leftoverWidth / numArbitInputs) - ((numArbitInputs - 1) * padInputData)
 			
-			posX := startNameX
+			posX := xNameFirstCol
 			; DEBUG.popup("Whole data array", guiData)
 			For l,d in this.labelIndices { ; need to change meaning of dataIndices
 				if(guiData[d]) ; Data given as default
@@ -537,13 +542,13 @@ class Selector {
 					
 				; DEBUG.popup("Index", i, "ModelIndex", m, "Data at index", guiData[m], "Label", this.dataLabels[m], "Data at label", guiData[this.dataLabels[m]], "Using data", tempData)
 				Gui %SEL_GUI%: Add, Edit, vGuiIn%l% x%posX% y%bottomHeight% w%editWidth% h24 -E0x200 +Border, % tempData
-				posX += editWidth + offsetDataInputX
+				posX += editWidth + padInputData
 			}
 			
 		} else {
 			; Add the edit control with almost the width of the window.
-			editWidth := guiWidth - (offsetX * 2)
-			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%inputX% y%bottomHeight% w%editWidth% h24 -E0x200 +Border
+			editWidth := guiWidth - (marginLeft + marginRight)
+			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%bottomHeight% w%editWidth% h24 -E0x200 +Border
 		}
 		
 		; Resize the GUI to show the newly added edit control row.

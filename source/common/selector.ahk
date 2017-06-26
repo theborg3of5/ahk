@@ -143,13 +143,11 @@ class Selector {
 		if(selRows) {
 			this.choices := selRows
 		} else {
-			; DEBUG.popup("Filepath before", fPath)
-			
 			this.filePath := this.fixFilePath(fPath)
-			if(!this.filePath)
+			if(!this.filePath) {
 				this.errPop(fPath, "No file given")
-
-			; DEBUG.popup("Filepath after", this.filePath)			
+				return
+			}
 			
 			this.tableListSettings := mergeArrays(this.tableListSettings, tlSettingOverrides)
 			this.filter := newFilter
@@ -172,11 +170,8 @@ class Selector {
 			this.iconPath := SubStr(this.filePath, 1, -4) this.iconEnding
 		}
 		
-		; DEBUG.popup("Selector.init", "Pre-icon-path-processing", "Parameter icon", iconName, "INI icon", this.iniIconPath, "Chosen icon path", this.iconPath, "Exists", FileExist(this.iconPath))
-		
 		if(!FileExist(this.iconPath))
 			this.iconPath := ahkRootPath "resources\" this.iconPath
-		; DEBUG.popup("Selector.init", "Post-icon-path-processing", "Icon file path", this.iconPath)
 		
 		; DEBUG.popup("Selector.init", "Finish", "Object", this)
 	}
@@ -402,7 +397,7 @@ class Selector {
 		
 		widthIndex  := 25
 		widthAbbrev := 50
-		; (widthTitle, widthName and widthInput exist but are calculated)
+		; (widthTitle, widthName and widthInput* exist but are calculated)
 		
 		heightLine  := 25
 		heightInput := 24
@@ -427,9 +422,9 @@ class Selector {
 			
 			; Add a new column as needed.
 			if(this.needNewColumn(title, lineNum, this.rowsPerColumn)) {
-				xLastColumnOffset := columnWidths[columnNum] + padColumn
-				
 				columnNum++
+				
+				xLastColumnOffset := columnWidths[columnNum - 1] + padColumn
 				xTitle  += xLastColumnOffset
 				xIndex  += xLastColumnOffset
 				xAbbrev += xLastColumnOffset
@@ -490,33 +485,30 @@ class Selector {
 		
 		widthTotal := this.getTotalWidth(columnWidths, padColumn, marginLeft, marginRight)
 		
-		static GuiInChoice
 		yInput := maxColumnHeight + heightLine ; Extra empty row before inputs.
+		
+		if(this.showArbitraryInputs)
+			widthInputChoice := widthIndex + padIndexAbbrev + widthAbbrev ; Main edit control is same size as index + abbrev columns combined.
+		else
+			widthInputChoice := widthTotal - (marginLeft + marginRight)   ; Main edit control is nearly full width.
+		static GuiInChoice
+		Gui, Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInputChoice% h%heightInput% -E0x200 +Border
+		
 		if(this.showArbitraryInputs) {
-			; Main edit control is equally sized with index + abbrev columns.
-			widthInput := widthIndex + padIndexAbbrev + widthAbbrev
-			Gui, Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInput% h%heightInput% -E0x200 +Border
-			
 			numArbitInputs := this.labelIndices.length()
-			leftoverWidth := widthTotal - xNameFirstCol - marginRight
-			widthInput := (leftoverWidth / numArbitInputs) - ((numArbitInputs - 1) * padInputData)
+			leftoverWidth  := widthTotal - xNameFirstCol - marginRight
+			widthInputData := (leftoverWidth / numArbitInputs) - ((numArbitInputs - 1) * padInputData)
 			
 			xInput := xNameFirstCol
-			; DEBUG.popup("Whole data array", guiData)
-			For l,d in this.labelIndices {
+			For num,d in this.labelIndices {
 				if(guiData[d]) ; Data given as default
 					tempData := guiData[d]
 				else           ; Data label
 					tempData := d
 				
-				addInputField("GuiIn" l, xInput, yInput, widthInput, heightInput, tempData)
-				xInput += widthInput + padInputData
+				addInputField("GuiIn" num, xInput, yInput, widthInputData, heightInput, tempData)
+				xInput += widthInputData + padInputData
 			}
-			
-		} else {
-			; Add the edit control with almost the width of the window.
-			widthInput := widthTotal - (marginLeft + marginRight)
-			Gui, Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInput% h%heightInput% -E0x200 +Border
 		}
 		
 		; Resize the GUI to show the newly added edit control row.
@@ -534,13 +526,12 @@ class Selector {
 		; == GUI waits for user to do something ==
 		
 		
-		; DEBUG.popup("DataLabels Array", this.dataLabels, "DataIndices Array", this.dataIndices, "ModelIndices Array", this.modelIndices, "Model Indices Reversed", this.modelIndicesReverse)
 		if(this.showArbitraryInputs) {
 			For i,l in this.labelIndices {
-				inputVal := GuiIn%i%
+				inputVal := GuiIn%i% ; GuiIn* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
 				if(inputVal && (inputVal != l)) {
 					guiDataFilled := true
-					guiData[l] := GuiIn%i%
+					guiData[l] := inputVal
 				}
 			}
 		}
@@ -549,7 +540,7 @@ class Selector {
 	}
 	
 	createSelectorGui() {
-		Gui, +LabelSelector  ; Allows use of LabelSelector* subroutine labels (custom label to override number behavior)
+		Gui, +LabelSelector  ; Allows use of LabelSelector* functions (custom label to override using default GuiClose, GuiSubmit, etc.)
 		Gui, Color, 2A211C
 		Gui, Font, s12 cBDAE9D
 		Gui, +LastFound
@@ -596,8 +587,6 @@ class Selector {
 		
 		rowToDo := ""
 		rest := SubStr(userIn, 2)
-		
-		; DEBUG.popup("Selector.parseChoice", "Start", "User in", userIn, "Settings char pos", settingsCharPos)
 		
 		; No input in main box, but others possibly filled out
 		if(userIn = "") {
@@ -674,13 +663,13 @@ class Selector {
 		; DEBUG.popup("Action type", actionType, "Row to run", rowToDo, "Action", action)
 		
 		if(!actionType)
-			actionType := "RET" ; Default action if none given.
-		
-		if(actionType = "RET") ; Special case for simple return action, passing in the column to return.
+			actionType := "RET"      ; Default action if none given.
+
+		if(actionType = "RET")      ; Special case for simple return action, passing in the column to return.
 			result := RET(rowToDo, this.returnColumn)
 		else if(isFunc(actionType)) ; Generic caller for many possible actions.
 			result := actionType.(rowToDo)
-		else ; Error catch.
+		else                        ; Error catch.
 			this.errPop("Action " actionType " not defined!")
 		
 		; Debug case - show a popup with row info and copy it to the clipboard, don't do the actual action.

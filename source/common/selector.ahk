@@ -89,18 +89,13 @@ SelectorClose:
 
 SelectorSubmit:
 	if(Selector.loaded) {
-		Gui %SEL_GUI%: Submit ; Actually saves edit controls' values to GuiIn0, GuiIn1, etc.
+		Gui %SEL_GUI%: Submit ; Actually saves edit controls' values to respective GuiIn* variables
 		Gui %SEL_GUI%: Destroy
 		return
 	}
 
 ; The above subroutines don't do anything until this flag is set.
 Selector.loaded := true
-
-; These must be static or global to use with Edit control. ; GDB TODO move these into one of the GUI functions, rather than having them sit around out here?
-global GuiIn0
-global GuiIn1,  GuiIn2,  GuiIn3,  GuiIn4,  GuiIn5,  GuiIn6,  GuiIn7,  GuiIn8,  GuiIn9,  GuiIn10
-global GuiIn11, GuiIn12, GuiIn13, GuiIn14, GuiIn15, GuiIn16, GuiIn17, GuiIn18, GuiIn19, GuiIn20
 
 ; Selector class which reads in and stores data from a file, and given an index, abbreviation or action, does that action.
 class Selector {
@@ -244,7 +239,6 @@ class Selector {
 			dataFilled := false
 			
 			; Make sure to clear out the variables that we're assocating with the edit controls.
-			nullGlobals("GuiIn", 0, 20) ; Numbers should be kept in sync with global GuiIn0... declarations at top.
 			
 			; Get the choice.
 			if(silentChoice != "") { ; If they've given us a silent choice, run silently, even without the flag.
@@ -421,10 +415,10 @@ class Selector {
 		
 		widthIndex  := 25
 		widthAbbrev := 50
-		; (widthTitle and widthName exist but are calculated)
+		; (widthTitle, widthName and widthInput exist but are calculated)
 		
 		heightLine  := 25
-		heightEdit  := 24
+		heightInput := 24
 	
 		; Element starting positions (these get updated per column)
 		xTitle       := marginLeft
@@ -509,47 +503,48 @@ class Selector {
 		
 		widthTotal := this.getTotalWidth(columnWidths, padColumn, marginLeft, marginRight)
 		
+		static GuiInChoice
 		yInput := maxColumnHeight + heightLine ; Extra empty row before inputs.
 		if(this.showArbitraryInputs) {
 			; Main edit control is equally sized with index + abbrev columns.
-			widthEdit := widthIndex + padIndexAbbrev + widthAbbrev
-			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%yInput% w%widthEdit% h%heightEdit% -E0x200 +Border
+			widthInput := widthIndex + padIndexAbbrev + widthAbbrev
+			Gui %SEL_GUI%: Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInput% h%heightInput% -E0x200 +Border
 			
 			numArbitInputs := this.labelIndices.length()
 			leftoverWidth := widthTotal - xNameFirstCol - marginRight
-			widthEdit := (leftoverWidth / numArbitInputs) - ((numArbitInputs - 1) * padInputData)
+			widthInput := (leftoverWidth / numArbitInputs) - ((numArbitInputs - 1) * padInputData)
 			
-			posX := xNameFirstCol
+			xInput := xNameFirstCol
 			; DEBUG.popup("Whole data array", guiData)
-			For l,d in this.labelIndices { ; need to change meaning of dataIndices
+			For l,d in this.labelIndices {
 				if(guiData[d]) ; Data given as default
 					tempData := guiData[d]
 				else           ; Data label
 					tempData := d
 				
-				Gui %SEL_GUI%: Add, Edit, vGuiIn%l% x%posX% y%yInput% w%widthEdit% h%heightEdit% -E0x200 +Border, % tempData
-				posX += widthEdit + padInputData
+				this.addInputField("GuiIn" l, xInput, yInput, widthInput, heightInput, tempData, SEL_GUI)
+				xInput += widthInput + padInputData
 			}
 			
 		} else {
 			; Add the edit control with almost the width of the window.
-			widthEdit := widthTotal - (marginLeft + marginRight)
-			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%yInput% w%widthEdit% h%heightEdit% -E0x200 +Border
+			widthInput := widthTotal - (marginLeft + marginRight)
+			Gui %SEL_GUI%: Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInput% h%heightInput% -E0x200 +Border
 		}
 		
 		; Resize the GUI to show the newly added edit control row.
-		heightTotal += maxColumnHeight + heightLine + heightEdit + marginBottom ; maxColumnHeight includes marginTop, heightLine is for extra line between labels and inputs
+		heightTotal += maxColumnHeight + heightLine + heightInput + marginBottom ; maxColumnHeight includes marginTop, heightLine is for extra line between labels and inputs
 		Gui %SEL_GUI%: Show, h%heightTotal% w%widthTotal%, % this.title
 		
 		; Focus the edit control.
-		GuiControl, %SEL_GUI%:Focus, GuiIn0
-		GuiControl, %SEL_GUI%:+0x800000, GuiIn0
+		GuiControl, %SEL_GUI%:Focus, GuiInChoice
+		GuiControl, %SEL_GUI%:+0x800000, GuiInChoice
 		
 		; Wait for the user to submit the GUI.
 		WinWaitClose, ahk_id %guiHandle%
 		
 		
-		; == GUI is now waiting for user to do something ==
+		; == GUI waits for user to do something ==
 		
 		
 		; DEBUG.popup("DataLabels Array", this.dataLabels, "DataIndices Array", this.dataIndices, "ModelIndices Array", this.modelIndices, "Model Indices Reversed", this.modelIndicesReverse)
@@ -563,7 +558,7 @@ class Selector {
 			}
 		}
 		
-		return GuiIn0
+		return GuiInChoice
 	}
 	
 	createSelectorGui(guiNum) {
@@ -622,6 +617,11 @@ class Selector {
 		totalWidth += rightMargin
 		
 		return totalWidth
+	}
+	
+	addInputField(varName, x, y, width, height, data, guiNum) {
+		global ; This allows us to get at the variable named in varName later on.
+		Gui %guiNum%: Add, Edit, %varName% x%x% y%y% w%width% h%height% -E0x200 +Border, % data
 	}
 	
 	; Function to turn the input into something useful.

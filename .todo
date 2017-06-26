@@ -13,6 +13,7 @@
 		Seems like standalone scripts reload once on their own, then are restarted again by main script - should either have them not restart, or don't need main script to reload them too.
 	
 	'New ideas'
+		Check out function objects for selector action stuff: https://autohotkey.com/docs/objects/Functor.htm
 		MainConfig - turn loadSettings() stuff into an inner function called however many times, not a loop over an array of settings.
 		Debug - why are there two different build string functions, again?
 		Debug - make a debug "builder" that stores off number of tabs and whatever last argument is?

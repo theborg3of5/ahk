@@ -75,24 +75,17 @@
 	
 */
 
-; GDB TODO sounds like we could possibly use functions instead of this janky stuff: https://autohotkey.com/docs/commands/Gui.htm#Events (Gosub section)
-; GUI subroutines. They are initially pass-through with no functionality until Selector.loaded is set.
-SelectorEscape:
-SelectorClose:
-	if(Selector.loaded) {
-		Gui, Destroy
-		return
-	}
-
-SelectorSubmit:
-	if(Selector.loaded) {
-		Gui, Submit ; Actually saves edit controls' values to respective GuiIn* variables
-		Gui, Destroy
-		return
-	}
-
-; The above subroutines don't do anything until this flag is set.
-Selector.loaded := true
+; GUI Events
+SelectorEscape() {
+	SelectorClose()
+}
+SelectorClose() {
+	Gui, Destroy
+}
+SelectorSubmit() {
+	Gui, Submit ; Actually saves edit controls' values to respective GuiIn* variables
+	Gui, Destroy
+}
 
 ; Selector class which reads in and stores data from a file, and given an index, abbreviation or action, does that action.
 class Selector {

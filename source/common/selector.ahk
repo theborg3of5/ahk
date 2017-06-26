@@ -75,8 +75,6 @@
 	
 */
 
-global SEL_GUI := 2 ; GDB TODO - find a way to generate this on the fly instead of making it a constant.
-
 ; GDB TODO sounds like we could possibly use functions instead of this janky stuff: https://autohotkey.com/docs/commands/Gui.htm#Events (Gosub section)
 ; GUI subroutines. They are initially pass-through with no functionality until Selector.loaded is set.
 SelectorEscape:
@@ -144,7 +142,9 @@ class Selector {
 		; DEBUG.popup("init Filepath", fPath, "Action", action, "Icon name", iconName, "SelRows", selRows)
 		
 		this.startupConstants()
-		Gui, %SEL_GUI%:Default
+		
+		guiId := "Selector" getNextGuiId()
+		Gui, %guiId%:Default
 		
 		; If we were given pre-formed SelectorRows, awesome. Otherwise, read from file.
 		if(selRows) {
@@ -286,6 +286,8 @@ class Selector {
 		return this.doAction(rowToDo, this.actionType)
 	}
 	
+	; GDB TODO move these two tray icon functions to gui.ahk instead (and add a parameter for icon path/original icon path)
+	; GDB TODO do these even really need to be separate functions?
 	updateTrayIcon() {
 		if(!this.iconPath || !FileExist(this.iconPath))
 			return
@@ -589,6 +591,7 @@ class Selector {
 		return false
 	}
 	
+	; GDB TODO move these two title format functions to gui.ahk instead
 	applyTitleFormat() {
 		Gui, Font, w600 underline ; Bold, underline.
 	}
@@ -596,6 +599,7 @@ class Selector {
 		Gui, Font, norm
 	}
 	
+	; GDB TODO move this to gui.ahk instead
 	getLabelWidthForText(name, uniqueId) {
 		static ; Assumes-static mode - means that any variables that are used in here are assumed to be static
 		Gui, Add, Text, vVar%uniqueId%, % name
@@ -619,6 +623,7 @@ class Selector {
 		return totalWidth
 	}
 	
+	; GDB TODO move this to gui.ahk instead? (maybe)
 	addInputField(varName, x, y, width, height, data) {
 		global ; This allows us to get at the variable named in varName later on.
 		Gui, Add, Edit, %varName% x%x% y%y% w%width% h%height% -E0x200 +Border, % data

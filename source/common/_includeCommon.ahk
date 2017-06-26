@@ -8,6 +8,7 @@
 #Include dateTime.ahk
 #Include debug.ahk
 #Include epic.ahk
+#Include gui.ahk
 #Include HTTPRequest.ahk
 #Include io.ahk
 #Include runCommands.ahk

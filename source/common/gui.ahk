@@ -40,5 +40,5 @@ getLabelWidthForText(name, uniqueId) {
 ; Assumes the default gui name is set to whatever GUI you want to deal with.
 addInputField(varName, x, y, width, height, data) {
 	global ; This allows us to get at the variable named in varName later on.
-	Gui, Add, Edit, %varName% x%x% y%y% w%width% h%height% -E0x200 +Border, % data
+	Gui, Add, Edit, v%varName% x%x% y%y% w%width% h%height% -E0x200 +Border, % data
 }

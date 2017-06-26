@@ -437,9 +437,8 @@ class Selector {
 		yCurrLine     := marginTop
 		
 		lineNum := 0
-		numColumns := 1
+		columnNum := 1
 		columnWidths := []
-		columnWidths[1] := this.minColumnWidth
 		
 		For i,c in this.choices {
 			lineNum++
@@ -447,9 +446,9 @@ class Selector {
 			
 			; Add a new column as needed.
 			if(this.needNewColumn(title, lineNum, this.rowsPerColumn)) {
-				xLastColumnOffset := columnWidths[numColumns] + padColumn
+				xLastColumnOffset := columnWidths[columnNum] + padColumn
 				
-				numColumns++
+				columnNum++
 				xTitle  += xLastColumnOffset
 				xIndex  += xLastColumnOffset
 				xAbbrev += xLastColumnOffset
@@ -463,7 +462,6 @@ class Selector {
 				
 				lineNum := 1
 				yCurrLine := marginTop
-				columnWidths[numColumns] := this.minColumnWidth
 			}
 			
 			; Title rows.
@@ -485,10 +483,8 @@ class Selector {
 				
 				this.applyTitleFormat(SEL_GUI)
 				Gui %SEL_GUI%: Add, Text, x%xTitle% y%yCurrLine%, %title%
-				widthTitle := this.getLabelWidthForText(title, "title" i, SEL_GUI) ; This must happen before we revert formatting, so that current styling (mainly bolding) is taken into account.
+				colWidthFromTitle := this.getLabelWidthForText(title, "title" i, SEL_GUI) ; This must happen before we revert formatting, so that current styling (mainly bolding) is taken into account.
 				this.clearTitleFormat(SEL_GUI)
-
-				columnWidths[numColumns] := max(columnWidths[numColumns], widthTitle)
 				
 				yCurrLine += heightLine
 				lineNum++
@@ -503,10 +499,11 @@ class Selector {
 			Gui %SEL_GUI%: Add, Text, x%xIndex%  y%yCurrLine% w%widthIndex% Right, % i ")"
 			Gui %SEL_GUI%: Add, Text, x%xAbbrev% y%yCurrLine% w%widthAbbrev%,      % abbrev ":"
 			Gui %SEL_GUI%: Add, Text, x%xName%   y%yCurrLine%,                     % name
-			widthName := this.getLabelWidthForText(name, "name" i, SEL_GUI)
 			
-			colWidth := widthIndex + padIndexAbbrev + widthAbbrev + padAbbrevName + widthName
-			columnWidths[numColumns] := max(columnWidths[numColumns], colWidth)
+			widthName := this.getLabelWidthForText(name, "name" i, SEL_GUI)
+			colWidthFromName := widthIndex + padIndexAbbrev + widthAbbrev + padAbbrevName + widthName
+			
+			columnWidths[columnNum] := max(columnWidths[columnNum], colWidthFromTitle, colWidthFromName, this.minColumnWidth)
 			
 			yCurrLine += heightLine
 			maxColumnHeight := max(maxColumnHeight, yCurrLine)
@@ -543,8 +540,8 @@ class Selector {
 		}
 		
 		; Resize the GUI to show the newly added edit control row.
-		finalHeight += maxColumnHeight + heightLine + heightEdit + marginBottom ; Extra heightLine is for extra line between text and inputs
-		Gui %SEL_GUI%: Show, h%finalHeight% w%widthTotal%, % this.title
+		heightTotal += maxColumnHeight + heightLine + heightEdit + marginBottom ; maxColumnHeight includes marginTop, heightLine is for extra line between labels and inputs
+		Gui %SEL_GUI%: Show, h%heightTotal% w%widthTotal%, % this.title
 		
 		; Focus the edit control.
 		GuiControl, %SEL_GUI%:Focus, GuiIn0

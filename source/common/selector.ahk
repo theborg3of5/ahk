@@ -487,13 +487,13 @@ class Selector {
 		if(this.showArbitraryInputs) {
 			numDataInputs := this.dataIndices.length()
 			leftoverWidth  := widthTotal - xNameFirstCol - marginRight
-			widthInputData := (leftoverWidth / numDataInputs) - ((numDataInputs - 1) * padInputData)
+			widthInputData := (leftoverWidth - ((numDataInputs - 1) * padInputData)) / numDataInputs
 			
 			xInput := xNameFirstCol
 			For num,label in this.dataIndices {
 				if(guiData[label]) ; Data given as default
 					tempData := guiData[label]
-				else           ; Data label
+				else               ; Data label
 					tempData := label
 				
 				addInputField("GuiIn" num, xInput, yInput, widthInputData, heightInput, tempData)

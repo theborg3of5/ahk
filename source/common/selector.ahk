@@ -32,8 +32,8 @@
 				RowsPerColumn
 					Set this to any number X to have the UI start a new column when it hits that many rows in the current column. Note that the current section label will carry over with a (2) if it's the first time it's been broken across columns, (3) if it's the second time, etc.
 				
-				ColumnWidth
-					Set this to any number X to have the UI be X pixels wide (per column if multiple columns are shown).
+				MinColumnWidth
+					Set this to any number X to have the UI be X pixels wide at a minimum (per column if multiple columns are shown). The UI might be larger if names are too long to fit.
 				
 				TrayIcon
 					Set this to a path or icon filename to use that icon in the tray.
@@ -124,7 +124,7 @@ class Selector {
 		
 		this.showArbitraryInputs := false
 		this.rowsPerColumn       := 99
-		this.columnWidth         := 300
+		this.minColumnWidth      := 300
 		this.iconPath            := ""
 		this.actionType          := ""
 		this.returnColumn        := "DOACTION"
@@ -380,8 +380,8 @@ class Selector {
 			this.showArbitraryInputs := (value = "1")
 		else if(name = "RowsPerColumn")
 			this.rowsPerColumn := value
-		else if(name = "ColumnWidth")
-			this.columnWidth := value
+		else if(name = "MinColumnWidth")
+			this.minColumnWidth := value
 		else if(name = "TrayIcon")
 			this.iconPath := value
 		else if(name = "DefaultAction")
@@ -395,6 +395,8 @@ class Selector {
 		guiDataFilled := false
 		if(!IsObject(guiData))
 			guiData := Object()
+		
+		columnWidths := []
 		
 		; GUI sizes
 		marginLeft   := 10
@@ -435,17 +437,23 @@ class Selector {
 		numColumns := 1
 		titleInstance := 1
 		
+		; First column
+		columnWidths[1] := this.minColumnWidth ; GDB TODO could this be structured better?
+		
 		For i,c in this.choices {
 			title := this.nonChoices[i]
 			
 			; Add a new column as needed.
 			if(this.needNewColumn(title, lineNum, this.rowsPerColumn)) {
-				numColumns++
-				xTitle  += this.columnWidth
-				xIndex  += this.columnWidth
-				xAbbrev += this.columnWidth
-				xName   += this.columnWidth
+				lastColumnWidth := columnWidths[numColumns]
 				maxColumnHeight := max(maxColumnHeight, yCurrLine)
+				
+				numColumns++
+				xTitle  += lastColumnWidth
+				xIndex  += lastColumnWidth
+				xAbbrev += lastColumnWidth
+				xName   += lastColumnWidth
+				columnWidths[numColumns] := this.minColumnWidth
 				
 				if(!title) { ; We're not starting a new title here, so show the previous one, continued.
 					titleInstance++
@@ -472,7 +480,7 @@ class Selector {
 					lineNum++
 				}
 				
-				this.addTitleLine(title, xTitle, yCurrLine, SEL_GUI)
+				this.addTitleLine(title, xTitle, yCurrLine, SEL_GUI) ; GDB TODO figure out how to take this width into account too, like we're doing for names.
 				
 				yCurrLine += heightLine
 				lineNum++
@@ -487,40 +495,27 @@ class Selector {
 			; DEBUG.popup("Choice putting into UI", c, "Index", i, "Name", name, "Abbreviation", abbrev)
 			Gui %SEL_GUI%: Add, Text, x%xIndex% Right w%widthIndex% y%yCurrLine%, % i ")"
 			Gui %SEL_GUI%: Add, Text, x%xAbbrev% y%yCurrLine%, % abbrev ":"
-			; Gui %SEL_GUI%: Add, Text, x%xName% y%yCurrLine%, % name
+			Gui %SEL_GUI%: Add, Text, x%xName% y%yCurrLine%, % name
 			
-			
-			
-			
-				this.cheatStatic(name, i, xName, yCurrLine)
-			; if(name = "Downloads") {
-			; } else {
-				; Gui %SEL_GUI%: Add, Text, x%xName% y%yCurrLine%, % name
-			; }
-			
-			
-			
+			widthName := this.getNameWidth(name, i, SEL_GUI)
+			colWidth := widthIndex + padIndexAbbrev + widthAbbrev + padAbbrevName + widthName
+			columnWidths[numColumns] := max(columnWidths[numColumns], colWidth)
 			
 			yCurrLine += heightLine
 			lineNum++
 		}
 		
-		maxColumnHeight := max(maxColumnHeight, yCurrLine)
+		maxColumnHeight := max(maxColumnHeight, yCurrLine) ; GDB TODO could this be structured better?
 		
-		if(this.columnWidth) {
-			widthTotal := numColumns * this.columnWidth
-		} else {
-			; Show the window in order to get its width.
-			Gui %SEL_GUI%: Show, , % this.title
-			WinGetPos, , , widthTotal, , A
-		}
-		widthTotal -= 5 ; Bezels and such. ; GDB TODO handle this better?
-		maxColumnHeight += heightLine ; Extra empty row before inputs.
+		widthTotal := marginLeft + marginRight
+		Loop, %numColumns%
+			widthTotal += columnWidths[A_Index]
 		
+		yInput := maxColumnHeight + heightLine ; Extra empty row before inputs.
 		if(this.showArbitraryInputs) {
 			; Main edit control is equally sized with index + abbrev columns.
 			widthEdit := widthIndex + padIndexAbbrev + widthAbbrev
-			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%maxColumnHeight% w%widthEdit% h%heightEdit% -E0x200 +Border
+			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%yInput% w%widthEdit% h%heightEdit% -E0x200 +Border
 			
 			numArbitInputs := this.labelIndices.length()
 			leftoverWidth := widthTotal - xNameFirstCol - marginRight
@@ -534,19 +529,19 @@ class Selector {
 				else           ; Data label
 					tempData := d
 				
-				Gui %SEL_GUI%: Add, Edit, vGuiIn%l% x%posX% y%maxColumnHeight% w%widthEdit% h%heightEdit% -E0x200 +Border, % tempData
+				Gui %SEL_GUI%: Add, Edit, vGuiIn%l% x%posX% y%yInput% w%widthEdit% h%heightEdit% -E0x200 +Border, % tempData
 				posX += widthEdit + padInputData
 			}
 			
 		} else {
 			; Add the edit control with almost the width of the window.
 			widthEdit := widthTotal - (marginLeft + marginRight)
-			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%maxColumnHeight% w%widthEdit% h%heightEdit% -E0x200 +Border
+			Gui %SEL_GUI%: Add, Edit, vGuiIn0 x%xInputChoice% y%yInput% w%widthEdit% h%heightEdit% -E0x200 +Border
 		}
 		
 		; Resize the GUI to show the newly added edit control row.
-		finalHeight += maxColumnHeight + heightEdit + marginBottom
-		Gui %SEL_GUI%: Show, h%finalHeight%, % this.title
+		finalHeight += maxColumnHeight + heightLine + heightEdit + marginBottom ; Extra heightLine is for extra line between text and inputs
+		Gui %SEL_GUI%: Show, h%finalHeight% w%widthTotal%, % this.title
 		
 		; Focus the edit control.
 		GuiControl, %SEL_GUI%:Focus, GuiIn0
@@ -572,17 +567,6 @@ class Selector {
 		
 		return GuiIn0
 	}
-	
-	
-	
-	cheatStatic(name, index, xName, yCurrLine) {
-		static
-		Gui 2: Add, Text, vVar%Index% x%xName% y%yCurrLine%, % name
-		GuiControlGet, out, 2:Pos, Var%Index%
-		MsgBox, % outW "x" ErrorLevel
-	}
-	
-	
 	
 	createSelectorGui(guiNum) {
 		Gui %guiNum%: +LabelSelector  ; Allows use of LabelSelector* subroutine labels (custom label to override number behavior)
@@ -623,6 +607,16 @@ class Selector {
 	clearTitleFormat(guiNum) {
 		Gui %guiNum%: Font, norm
 	}
+	
+	getNameWidth(name, index, guiNum) {
+		static ; Assumes-static mode - means that any variables that are used in here are assumed to be static
+		Gui %guiNum%: Add, Text, vVar%Index%, % name
+		GuiControlGet, out, %guiNum%:Pos, Var%Index%
+		GuiControl %guiNum%: Hide, Var%index%
+		
+		return outW
+	}
+	
 	
 	; Function to turn the input into something useful.
 	parseChoice(userIn) {

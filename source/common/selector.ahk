@@ -240,7 +240,7 @@ class Selector {
 				this.hideErrors := true
 			} else { ; Otherwise, popup time.
 				userIn := this.launchSelectorPopup(data, dataFilled)
-				this.restoreIcon() ; Restore the original tray icon before we start potentially quitting. Will be re-changed by launchSelectorPopup if it loops.
+				setTrayIcon(this.originalIconPath) ; Restore the original tray icon before we start potentially quitting. Will be re-changed by launchSelectorPopup if it loops.
 			}
 			
 			; Blank input, we bail.
@@ -277,22 +277,6 @@ class Selector {
 			return ""
 		
 		return this.doAction(rowToDo, this.actionType)
-	}
-	
-	; GDB TODO move these two tray icon functions to gui.ahk instead (and add a parameter for icon path/original icon path)
-	; GDB TODO do these even really need to be separate functions?
-	updateTrayIcon() {
-		if(!this.iconPath || !FileExist(this.iconPath))
-			return
-		
-		this.originalIconPath := A_IconFile ; Back up the current icon before changing it.
-		Menu, Tray, Icon, % this.iconPath
-	}
-	
-	; Restore the tray icon if it was something else before.
-	restoreIcon() {
-		if(this.originalIconPath)
-			Menu, Tray, Icon, % this.originalIconPath
 	}
 	
 	; Load the choices and other such things from a specially formatted file.
@@ -394,7 +378,7 @@ class Selector {
 			guiData := Object()
 		
 		; Create and begin styling the GUI.
-		this.updateTrayIcon()
+		this.originalIconPath := setTrayIcon(this.iconPath)
 		guiHandle := this.createSelectorGui()
 		
 		; GUI sizes
@@ -468,10 +452,10 @@ class Selector {
 					lineNum++
 				}
 				
-				this.applyTitleFormat()
+				applyTitleFormat()
 				Gui, Add, Text, x%xTitle% y%yCurrLine%, %title%
-				colWidthFromTitle := this.getLabelWidthForText(title, "title" i) ; This must happen before we revert formatting, so that current styling (mainly bolding) is taken into account.
-				this.clearTitleFormat()
+				colWidthFromTitle := getLabelWidthForText(title, "title" i) ; This must happen before we revert formatting, so that current styling (mainly bolding) is taken into account.
+				clearTitleFormat()
 				
 				yCurrLine += heightLine
 				lineNum++
@@ -487,7 +471,7 @@ class Selector {
 			Gui, Add, Text, x%xAbbrev% y%yCurrLine% w%widthAbbrev%,        % abbrev ":"
 			Gui, Add, Text, x%xName%   y%yCurrLine%,                       % name
 			
-			widthName := this.getLabelWidthForText(name, "name" i)
+			widthName := getLabelWidthForText(name, "name" i)
 			colWidthFromName := widthIndex + padIndexAbbrev + widthAbbrev + padAbbrevName + widthName
 			
 			columnWidths[columnNum] := max(columnWidths[columnNum], colWidthFromTitle, colWidthFromName, this.minColumnWidth)
@@ -517,7 +501,7 @@ class Selector {
 				else           ; Data label
 					tempData := d
 				
-				this.addInputField("GuiIn" l, xInput, yInput, widthInput, heightInput, tempData)
+				addInputField("GuiIn" l, xInput, yInput, widthInput, heightInput, tempData)
 				xInput += widthInput + padInputData
 			}
 			
@@ -584,24 +568,6 @@ class Selector {
 		return false
 	}
 	
-	; GDB TODO move these two title format functions to gui.ahk instead
-	applyTitleFormat() {
-		Gui, Font, w600 underline ; Bold, underline.
-	}
-	clearTitleFormat() {
-		Gui, Font, norm
-	}
-	
-	; GDB TODO move this to gui.ahk instead
-	getLabelWidthForText(name, uniqueId) {
-		static ; Assumes-static mode - means that any variables that are used in here are assumed to be static
-		Gui, Add, Text, vVar%uniqueId%, % name
-		GuiControlGet, out, Pos, Var%uniqueId%
-		GuiControl, Hide, Var%uniqueId%
-		
-		return outW
-	}
-	
 	getTotalWidth(columnWidths, paddingBetweenColumns, leftMargin, rightMargin) {
 		totalWidth := 0
 		
@@ -614,12 +580,6 @@ class Selector {
 		totalWidth += rightMargin
 		
 		return totalWidth
-	}
-	
-	; GDB TODO move this to gui.ahk instead? (maybe)
-	addInputField(varName, x, y, width, height, data) {
-		global ; This allows us to get at the variable named in varName later on.
-		Gui, Add, Edit, %varName% x%x% y%y% w%width% h%height% -E0x200 +Border, % data
 	}
 	
 	; Function to turn the input into something useful.

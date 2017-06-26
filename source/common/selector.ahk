@@ -436,18 +436,18 @@ class Selector {
 		xNameFirstCol := xName
 		yCurrLine     := marginTop
 		
-		lineNum := 1
+		lineNum := 0
 		numColumns := 1
-		titleInstance := 1
 		columnWidths := []
+		columnWidths[1] := this.minColumnWidth
 		
 		For i,c in this.choices {
+			lineNum++
 			title := this.nonChoices[i]
 			
 			; Add a new column as needed.
 			if(this.needNewColumn(title, lineNum, this.rowsPerColumn)) {
 				xLastColumnOffset := columnWidths[numColumns] + padColumn
-				maxColumnHeight := max(maxColumnHeight, yCurrLine)
 				
 				numColumns++
 				xTitle  += xLastColumnOffset
@@ -463,6 +463,7 @@ class Selector {
 				
 				lineNum := 1
 				yCurrLine := marginTop
+				columnWidths[numColumns] := this.minColumnWidth
 			}
 			
 			; Title rows.
@@ -508,17 +509,10 @@ class Selector {
 			columnWidths[numColumns] := max(columnWidths[numColumns], colWidth)
 			
 			yCurrLine += heightLine
-			lineNum++
+			maxColumnHeight := max(maxColumnHeight, yCurrLine)
 		}
 		
-		maxColumnHeight := max(maxColumnHeight, yCurrLine) ; GDB TODO could this be structured better?
-		
-		widthTotal := marginLeft + marginRight
-		Loop, %numColumns% {
-			if(A_Index > 1)
-				widthTotal += padColumn
-			widthTotal += max(columnWidths[A_Index], this.minColumnWidth)
-		}
+		widthTotal := this.getTotalWidth(columnWidths, padColumn, marginLeft, marginRight)
 		
 		yInput := maxColumnHeight + heightLine ; Extra empty row before inputs.
 		if(this.showArbitraryInputs) {
@@ -621,6 +615,19 @@ class Selector {
 		return outW
 	}
 	
+	getTotalWidth(columnWidths, paddingBetweenColumns, leftMargin, rightMargin) {
+		totalWidth := 0
+		
+		totalWidth += leftMargin
+		Loop, % columnWidths.MaxIndex() {
+			if(A_Index > 1)
+				totalWidth += paddingBetweenColumns
+			totalWidth += columnWidths[A_Index]
+		}
+		totalWidth += rightMargin
+		
+		return totalWidth
+	}
 	
 	; Function to turn the input into something useful.
 	parseChoice(userIn) {

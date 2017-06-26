@@ -2,7 +2,7 @@
 
 =Select type of search to run and input search text:
 +ShowArbitraryInputs=1
-+ColumnWidth=500
++MinColumnWidth=500
 
 (	NAME					ABBREV		SUBTYPE															SEARCH_TYPE		ARG1		ARG2		ARG3		ARG4		ARG5
 )	0						0				0																	0					1			2			3			4			5

@@ -1,7 +1,7 @@
 =Unit test for Selector
 +ShowArbitraryInputs=1
 +RowsPerColumn=5
-+ColumnWidth=500
++MinColumnWidth=500
 
 (	NAME												ABBREV	RESULT	MODIFIER
 )	0													0			1			2

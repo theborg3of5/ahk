@@ -1,7 +1,7 @@
 =Resize active window to size:
 +ShowArbitraryInputs=1
-; +ColumnWidth=500
-+ColumnWidth=350
+; +MinColumnWidth=500
++MinColumnWidth=350
 
 ; (NAME										ABBREV			WIDTH		HEIGHT		WRATIO	HRATIO
 ; )0											0					1			2				3			4

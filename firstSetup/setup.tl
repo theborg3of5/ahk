@@ -2,7 +2,7 @@
 
 =Select Machine to set up:
 +ShowArbitraryInputs=1
-+ColumnWidth=1000
++MinColumnWidth=1000
 
 (	NAME					ABBREV		WHICH_MACHINE		VIM_CLOSE_KEY	MENU_KEY_ACTION	EDGE_OFFSET		MAX_EXTRA_EDGE_OFFSET
 )	0						0				0						1					2						3					4

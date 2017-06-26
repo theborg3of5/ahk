@@ -288,7 +288,7 @@ cleanupText(text) {
 		isClean := true
 		
 		; Leading/trailing whitespace
-		temp = dropWhitespace(text)
+		temp := dropWhitespace(text)
 		if(temp != text) {
 			text := temp
 			isClean := false

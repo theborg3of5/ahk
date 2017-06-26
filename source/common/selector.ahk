@@ -421,7 +421,7 @@ class Selector {
 		
 		widthIndex  := 25
 		widthAbbrev := 50
-		; (widthTitle and widthName exists but are calculated)
+		; (widthTitle and widthName exist but are calculated)
 		
 		heightLine  := 25
 		heightEdit  := 24
@@ -468,7 +468,7 @@ class Selector {
 			if(title) {
 				if(!isContinuedTitle) {
 					titleInstance := 1
-					currTitle     := title
+					currTitle := title
 				} else {
 					isContinuedTitle := false
 				}
@@ -478,8 +478,6 @@ class Selector {
 					yCurrLine += heightLine
 					lineNum++
 				}
-				
-				this.addTitleLine(title, xTitle, yCurrLine, SEL_GUI)
 				
 				this.applyTitleFormat(SEL_GUI)
 				Gui %SEL_GUI%: Add, Text, x%xTitle% y%yCurrLine%, %title%
@@ -496,9 +494,9 @@ class Selector {
 			else
 				abbrev := c.data["ABBREV"]
 			
-			Gui %SEL_GUI%: Add, Text, x%xIndex%  y%yCurrLine% w%widthIndex% Right, % i ")"
-			Gui %SEL_GUI%: Add, Text, x%xAbbrev% y%yCurrLine% w%widthAbbrev%,      % abbrev ":"
-			Gui %SEL_GUI%: Add, Text, x%xName%   y%yCurrLine%,                     % name
+			Gui %SEL_GUI%: Add, Text, x%xIndex%  y%yCurrLine% w%widthIndex%   Right, % i ")"
+			Gui %SEL_GUI%: Add, Text, x%xAbbrev% y%yCurrLine% w%widthAbbrev%,        % abbrev ":"
+			Gui %SEL_GUI%: Add, Text, x%xName%   y%yCurrLine%,                       % name
 			
 			widthName := this.getLabelWidthForText(name, "name" i, SEL_GUI)
 			colWidthFromName := widthIndex + padIndexAbbrev + widthAbbrev + padAbbrevName + widthName

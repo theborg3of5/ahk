@@ -144,22 +144,10 @@ class Selector {
 			this.choices := selRows
 		} else {
 			; DEBUG.popup("Filepath before", fPath)
-
-			; Read in the choices file.
-			if(fPath != "") {
-				if(FileExist(fPath)) {                                  ; In the current folder, or full path
-					this.filePath := fPath
-				} else if(FileExist("Includes\" fPath)) {  ; If there's an Includes folder in the same directory, check in there as well.
-					this.filePath := "Includes\" fPath
-				} else if(FileExist(ahkRootPath "config\" fPath)) {  ; Default folder for selector INIs
-					this.filePath := ahkRootPath "config\" fPath
-				} else {
-					this.errPop(fPath, "File doesn't exist")
-					fPath := ""
-				}
-			} else {
+			
+			this.filePath := this.fixFilePath(fPath)
+			if(!this.filePath)
 				this.errPop(fPath, "No file given")
-			}
 
 			; DEBUG.popup("Filepath after", this.filePath)			
 			
@@ -191,6 +179,26 @@ class Selector {
 		; DEBUG.popup("Selector.init", "Post-icon-path-processing", "Icon file path", this.iconPath)
 		
 		; DEBUG.popup("Selector.init", "Finish", "Object", this)
+	}
+	
+	fixFilePath(path) {
+		if(!path)
+			return ""
+		
+		; In the current folder, or full path
+		if(FileExist(path))
+			return path
+		
+		; If there's an Includes folder in the same directory, check in there as well.
+		if(FileExist("Includes\" path))
+			return "Includes\" path
+		
+		; Default folder for selector INIs
+		if(FileExist(ahkRootPath "config\" path))
+			return ahkRootPath "config\" path
+		
+		this.errPop(path, "File doesn't exist")
+		return ""
 	}
 	
 	/* DESCRIPTION:   Main programmatic access point. Sets up and displays the selector gui, processes the choice, etc.

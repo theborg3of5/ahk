@@ -292,6 +292,14 @@ class Selector {
 		return this.doAction(rowToDo, this.actionType)
 	}
 	
+	updateTrayIcon() {
+		if(!this.iconPath || !FileExist(this.iconPath))
+			return
+		
+		this.originalIconPath := A_IconFile ; Back up the current icon before changing it.
+		Menu, Tray, Icon, % this.iconPath
+	}
+	
 	; Restore the tray icon if it was something else before.
 	restoreIcon() {
 		if(this.originalIconPath)
@@ -396,7 +404,9 @@ class Selector {
 		if(!IsObject(guiData))
 			guiData := Object()
 		
-		columnWidths := []
+		; Create and begin styling the GUI.
+		this.updateTrayIcon()
+		guiHandle := this.createSelectorGui(SEL_GUI)
 		
 		; GUI sizes
 		marginLeft   := 10
@@ -407,15 +417,18 @@ class Selector {
 		padIndexAbbrev := 5
 		padAbbrevName  := 10
 		padInputData   := 5
+		padColumn      := 5
 		
 		widthIndex  := 25
 		widthAbbrev := 50
+		; (widthTitle and widthName exists but are calculated)
+		
 		heightLine  := 25
 		heightEdit  := 24
 	
-		; Element starting positions
-		xTitle       := 10
-		xIndex       := 10
+		; Element starting positions (these get updated per column)
+		xTitle       := marginLeft
+		xIndex       := marginLeft
 		xAbbrev      := xIndex  + widthIndex  + padIndexAbbrev
 		xName        := xAbbrev + widthAbbrev + padAbbrevName
 		xInputChoice := marginLeft
@@ -423,37 +436,24 @@ class Selector {
 		xNameFirstCol := xName
 		yCurrLine     := marginTop
 		
-		; Change the tray icon.
-		if(this.iconPath && FileExist(this.iconPath)) {
-			this.originalIconPath := A_IconFile ; Back up the current icon before changing it.
-			Menu, Tray, Icon, % this.iconPath
-		}
-		
-		; Create and begin styling the GUI.
-		guiHandle := this.createSelectorGui(SEL_GUI)
-		
-		; Generate the text to display from the various choice objects.
 		lineNum := 1
 		numColumns := 1
 		titleInstance := 1
-		
-		; First column
-		columnWidths[1] := this.minColumnWidth ; GDB TODO could this be structured better?
+		columnWidths := []
 		
 		For i,c in this.choices {
 			title := this.nonChoices[i]
 			
 			; Add a new column as needed.
 			if(this.needNewColumn(title, lineNum, this.rowsPerColumn)) {
-				lastColumnWidth := columnWidths[numColumns]
+				xLastColumnOffset := columnWidths[numColumns] + padColumn
 				maxColumnHeight := max(maxColumnHeight, yCurrLine)
 				
 				numColumns++
-				xTitle  += lastColumnWidth
-				xIndex  += lastColumnWidth
-				xAbbrev += lastColumnWidth
-				xName   += lastColumnWidth
-				columnWidths[numColumns] := this.minColumnWidth
+				xTitle  += xLastColumnOffset
+				xIndex  += xLastColumnOffset
+				xAbbrev += xLastColumnOffset
+				xName   += xLastColumnOffset
 				
 				if(!title) { ; We're not starting a new title here, so show the previous one, continued.
 					titleInstance++
@@ -480,7 +480,14 @@ class Selector {
 					lineNum++
 				}
 				
-				this.addTitleLine(title, xTitle, yCurrLine, SEL_GUI) ; GDB TODO figure out how to take this width into account too, like we're doing for names.
+				this.addTitleLine(title, xTitle, yCurrLine, SEL_GUI)
+				
+				this.applyTitleFormat(SEL_GUI)
+				Gui %SEL_GUI%: Add, Text, x%xTitle% y%yCurrLine%, %title%
+				widthTitle := this.getLabelWidthForText(title, "title" i, SEL_GUI) ; This must happen before we revert formatting, so that current styling (mainly bolding) is taken into account.
+				this.clearTitleFormat(SEL_GUI)
+
+				columnWidths[numColumns] := max(columnWidths[numColumns], widthTitle)
 				
 				yCurrLine += heightLine
 				lineNum++
@@ -492,12 +499,11 @@ class Selector {
 			else
 				abbrev := c.data["ABBREV"]
 			
-			; DEBUG.popup("Choice putting into UI", c, "Index", i, "Name", name, "Abbreviation", abbrev)
-			Gui %SEL_GUI%: Add, Text, x%xIndex% Right w%widthIndex% y%yCurrLine%, % i ")"
-			Gui %SEL_GUI%: Add, Text, x%xAbbrev% y%yCurrLine%, % abbrev ":"
-			Gui %SEL_GUI%: Add, Text, x%xName% y%yCurrLine%, % name
+			Gui %SEL_GUI%: Add, Text, x%xIndex%  y%yCurrLine% w%widthIndex% Right, % i ")"
+			Gui %SEL_GUI%: Add, Text, x%xAbbrev% y%yCurrLine% w%widthAbbrev%,      % abbrev ":"
+			Gui %SEL_GUI%: Add, Text, x%xName%   y%yCurrLine%,                     % name
+			widthName := this.getLabelWidthForText(name, "name" i, SEL_GUI)
 			
-			widthName := this.getNameWidth(name, i, SEL_GUI)
 			colWidth := widthIndex + padIndexAbbrev + widthAbbrev + padAbbrevName + widthName
 			columnWidths[numColumns] := max(columnWidths[numColumns], colWidth)
 			
@@ -508,8 +514,11 @@ class Selector {
 		maxColumnHeight := max(maxColumnHeight, yCurrLine) ; GDB TODO could this be structured better?
 		
 		widthTotal := marginLeft + marginRight
-		Loop, %numColumns%
-			widthTotal += columnWidths[A_Index]
+		Loop, %numColumns% {
+			if(A_Index > 1)
+				widthTotal += padColumn
+			widthTotal += max(columnWidths[A_Index], this.minColumnWidth)
+		}
 		
 		yInput := maxColumnHeight + heightLine ; Extra empty row before inputs.
 		if(this.showArbitraryInputs) {
@@ -596,11 +605,6 @@ class Selector {
 		return false
 	}
 	
-	addTitleLine(title, x, y, guiNum) {
-		this.applyTitleFormat(guiNum)
-		Gui %guiNum%: Add, Text, x%x% y%y%, %title%
-		this.clearTitleFormat(guiNum)
-	}
 	applyTitleFormat(guiNum) {
 		Gui %guiNum%: Font, w600 underline ; Bold, underline.
 	}
@@ -608,11 +612,11 @@ class Selector {
 		Gui %guiNum%: Font, norm
 	}
 	
-	getNameWidth(name, index, guiNum) {
+	getLabelWidthForText(name, uniqueId, guiNum) {
 		static ; Assumes-static mode - means that any variables that are used in here are assumed to be static
-		Gui %guiNum%: Add, Text, vVar%Index%, % name
-		GuiControlGet, out, %guiNum%:Pos, Var%Index%
-		GuiControl %guiNum%: Hide, Var%index%
+		Gui %guiNum%: Add, Text, vVar%uniqueId%, % name
+		GuiControlGet, out, %guiNum%:Pos, Var%uniqueId%
+		GuiControl %guiNum%: Hide, Var%uniqueId%
 		
 		return outW
 	}

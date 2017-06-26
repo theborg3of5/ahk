@@ -82,15 +82,14 @@ global SEL_GUI := 2 ; GDB TODO - find a way to generate this on the fly instead 
 SelectorEscape:
 SelectorClose:
 	if(Selector.loaded) {
-		; Gui %SEL_GUI%: Cancel ;*gdb 11/14 - Was causing weird issues when a value was in the box.
-		Gui %SEL_GUI%: Destroy
+		Gui, Destroy
 		return
 	}
 
 SelectorSubmit:
 	if(Selector.loaded) {
-		Gui %SEL_GUI%: Submit ; Actually saves edit controls' values to respective GuiIn* variables
-		Gui %SEL_GUI%: Destroy
+		Gui, Submit ; Actually saves edit controls' values to respective GuiIn* variables
+		Gui, Destroy
 		return
 	}
 
@@ -145,6 +144,7 @@ class Selector {
 		; DEBUG.popup("init Filepath", fPath, "Action", action, "Icon name", iconName, "SelRows", selRows)
 		
 		this.startupConstants()
+		Gui, %SEL_GUI%:Default
 		
 		; If we were given pre-formed SelectorRows, awesome. Otherwise, read from file.
 		if(selRows) {
@@ -400,7 +400,7 @@ class Selector {
 		
 		; Create and begin styling the GUI.
 		this.updateTrayIcon()
-		guiHandle := this.createSelectorGui(SEL_GUI)
+		guiHandle := this.createSelectorGui()
 		
 		; GUI sizes
 		marginLeft   := 10
@@ -473,10 +473,10 @@ class Selector {
 					lineNum++
 				}
 				
-				this.applyTitleFormat(SEL_GUI)
-				Gui %SEL_GUI%: Add, Text, x%xTitle% y%yCurrLine%, %title%
-				colWidthFromTitle := this.getLabelWidthForText(title, "title" i, SEL_GUI) ; This must happen before we revert formatting, so that current styling (mainly bolding) is taken into account.
-				this.clearTitleFormat(SEL_GUI)
+				this.applyTitleFormat()
+				Gui, Add, Text, x%xTitle% y%yCurrLine%, %title%
+				colWidthFromTitle := this.getLabelWidthForText(title, "title" i) ; This must happen before we revert formatting, so that current styling (mainly bolding) is taken into account.
+				this.clearTitleFormat()
 				
 				yCurrLine += heightLine
 				lineNum++
@@ -488,11 +488,11 @@ class Selector {
 			else
 				abbrev := c.data["ABBREV"]
 			
-			Gui %SEL_GUI%: Add, Text, x%xIndex%  y%yCurrLine% w%widthIndex%   Right, % i ")"
-			Gui %SEL_GUI%: Add, Text, x%xAbbrev% y%yCurrLine% w%widthAbbrev%,        % abbrev ":"
-			Gui %SEL_GUI%: Add, Text, x%xName%   y%yCurrLine%,                       % name
+			Gui, Add, Text, x%xIndex%  y%yCurrLine% w%widthIndex%   Right, % i ")"
+			Gui, Add, Text, x%xAbbrev% y%yCurrLine% w%widthAbbrev%,        % abbrev ":"
+			Gui, Add, Text, x%xName%   y%yCurrLine%,                       % name
 			
-			widthName := this.getLabelWidthForText(name, "name" i, SEL_GUI)
+			widthName := this.getLabelWidthForText(name, "name" i)
 			colWidthFromName := widthIndex + padIndexAbbrev + widthAbbrev + padAbbrevName + widthName
 			
 			columnWidths[columnNum] := max(columnWidths[columnNum], colWidthFromTitle, colWidthFromName, this.minColumnWidth)
@@ -508,7 +508,7 @@ class Selector {
 		if(this.showArbitraryInputs) {
 			; Main edit control is equally sized with index + abbrev columns.
 			widthInput := widthIndex + padIndexAbbrev + widthAbbrev
-			Gui %SEL_GUI%: Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInput% h%heightInput% -E0x200 +Border
+			Gui, Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInput% h%heightInput% -E0x200 +Border
 			
 			numArbitInputs := this.labelIndices.length()
 			leftoverWidth := widthTotal - xNameFirstCol - marginRight
@@ -522,23 +522,23 @@ class Selector {
 				else           ; Data label
 					tempData := d
 				
-				this.addInputField("GuiIn" l, xInput, yInput, widthInput, heightInput, tempData, SEL_GUI)
+				this.addInputField("GuiIn" l, xInput, yInput, widthInput, heightInput, tempData)
 				xInput += widthInput + padInputData
 			}
 			
 		} else {
 			; Add the edit control with almost the width of the window.
 			widthInput := widthTotal - (marginLeft + marginRight)
-			Gui %SEL_GUI%: Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInput% h%heightInput% -E0x200 +Border
+			Gui, Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInput% h%heightInput% -E0x200 +Border
 		}
 		
 		; Resize the GUI to show the newly added edit control row.
 		heightTotal += maxColumnHeight + heightLine + heightInput + marginBottom ; maxColumnHeight includes marginTop, heightLine is for extra line between labels and inputs
-		Gui %SEL_GUI%: Show, h%heightTotal% w%widthTotal%, % this.title
+		Gui, Show, h%heightTotal% w%widthTotal%, % this.title
 		
 		; Focus the edit control.
-		GuiControl, %SEL_GUI%:Focus, GuiInChoice
-		GuiControl, %SEL_GUI%:+0x800000, GuiInChoice
+		GuiControl, Focus,     GuiInChoice
+		GuiControl, +0x800000, GuiInChoice
 		
 		; Wait for the user to submit the GUI.
 		WinWaitClose, ahk_id %guiHandle%
@@ -561,12 +561,12 @@ class Selector {
 		return GuiInChoice
 	}
 	
-	createSelectorGui(guiNum) {
-		Gui %guiNum%: +LabelSelector  ; Allows use of LabelSelector* subroutine labels (custom label to override number behavior)
-		Gui %guiNum%: Color, 2A211C
-		Gui %guiNum%: Font, s12 cBDAE9D
-		Gui %guiNum%: +LastFound
-		Gui %guiNum%: Add, Button, Hidden Default +gSelectorSubmit, SubmitSelector ; Hidden OK button for {Enter} submission.
+	createSelectorGui() {
+		Gui, +LabelSelector  ; Allows use of LabelSelector* subroutine labels (custom label to override number behavior)
+		Gui, Color, 2A211C
+		Gui, Font, s12 cBDAE9D
+		Gui, +LastFound
+		Gui, Add, Button, Hidden Default +gSelectorSubmit, SubmitSelector ; Hidden OK button for {Enter} submission.
 		return WinExist()
 	}
 	
@@ -589,18 +589,18 @@ class Selector {
 		return false
 	}
 	
-	applyTitleFormat(guiNum) {
-		Gui %guiNum%: Font, w600 underline ; Bold, underline.
+	applyTitleFormat() {
+		Gui, Font, w600 underline ; Bold, underline.
 	}
-	clearTitleFormat(guiNum) {
-		Gui %guiNum%: Font, norm
+	clearTitleFormat() {
+		Gui, Font, norm
 	}
 	
-	getLabelWidthForText(name, uniqueId, guiNum) {
+	getLabelWidthForText(name, uniqueId) {
 		static ; Assumes-static mode - means that any variables that are used in here are assumed to be static
-		Gui %guiNum%: Add, Text, vVar%uniqueId%, % name
-		GuiControlGet, out, %guiNum%:Pos, Var%uniqueId%
-		GuiControl %guiNum%: Hide, Var%uniqueId%
+		Gui, Add, Text, vVar%uniqueId%, % name
+		GuiControlGet, out, Pos, Var%uniqueId%
+		GuiControl, Hide, Var%uniqueId%
 		
 		return outW
 	}
@@ -619,9 +619,9 @@ class Selector {
 		return totalWidth
 	}
 	
-	addInputField(varName, x, y, width, height, data, guiNum) {
+	addInputField(varName, x, y, width, height, data) {
 		global ; This allows us to get at the variable named in varName later on.
-		Gui %guiNum%: Add, Edit, %varName% x%x% y%y% w%width% h%height% -E0x200 +Border, % data
+		Gui, Add, Edit, %varName% x%x% y%y% w%width% h%height% -E0x200 +Border, % data
 	}
 	
 	; Function to turn the input into something useful.

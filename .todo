@@ -1,7 +1,32 @@
 # AHK To Do
 	
-	'TableList/Selector Rewrite'
-		Rework Selector, possibly rewrite from scratch.
+	'Selector Rewrite'
+		Reconsider calling format
+			Retire extraData - those are better handled with a return action, and passing the extra stuff yourself.
+				Only usecase - Snapper selector, passing INI/ID (multiple of each?)
+					Better to just pass all data out (can include a comma-separated list of IDs if we want, if the user gives us a comma-separated list in the respective field)
+			Retire iconName in favor of settingOverrides TrayIcon subscript
+			Separate out calling abilities by function, like TableList - filtering vs reading in.
+				Data in
+					s = new Selector(filePath, selRows)
+				Process data (automatically done by Select [with no arguments] if not done here - make sure to document that it's totally optional unless you wanna do special stuff.)
+					s.setTableListSettings(tableListSettings)
+					s.setFilter(filter)
+				Select
+					s.selectGui(actionType, data, settingOverrides)
+						(settingOverrides should only be Selector-specific things anyways)
+				Select special (alternative callers from Select)
+					s.selectChoice(actionType, data, silentChoice)
+						(not settingOverrides - all current settings either have a separate parameter [action] or are GUI-specific)
+		Move more things to arrays like TableList?
+			Characters
+			Settings
+		Reduce number of this.* variables where possible - a lot of them seem unnecessary to put at class-level.
+		Reexamine inner data structure of indices, labels, data, etc.
+			labelIndices
+			guiData (+guiDataFilled)
+		"ShowArbitraryInputs" -> "ShowDataInputs"
+		Reconsider actionObject.ahk top documentation - is it mostly duplicated from selector.ahk?
 	
 	'Fixes'
 		Have centering hotkey take height of taskbar into account?

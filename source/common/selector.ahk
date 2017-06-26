@@ -3,10 +3,10 @@
 	This class will read in a file (using the TableList class) and turn it into a group of choices, which is then displayed to the user in a graphical list. The programmatic entry point is Selector.select().
 	
 	Certain characters have special meaning when parsing the lines of a file. They include:
-		= - Title
+		= - Window title
 			This character starts a line that will be the title shown on the popup UI as a whole.
 		
-		# - Label
+		# - Section title
 			This character starts a line that will be shown as a section label in the UI (to group individual choices).
 		
 		| - Abbreviation delimiter
@@ -21,8 +21,8 @@
 		) - Model Index
 			This row corresponds to the model row, giving each of the named columns an index, which is the order in which the additional arbitrary fields in the UI (turned on using +ShowArbitraryInputs, see settings below) will be shown. An index of 0 tells the UI not to show the field corresponding to that column at all.
 		
-		| - New column (in label row)
-			If this character is put at the beginning of a label row (with a space on either side, such as "# | Title"), that label will force a new column in the UI.
+		| - New column (in section title row)
+			If this character is put at the beginning of a section title row (with a space on either side, such as "# | Title"), that title will force a new column in the UI.
 		
 		+ - Settings
 			Lines which start with this character denote a setting that changes how the UI acts in some manner. They are always in the form "+Option=x", and include:
@@ -30,7 +30,7 @@
 					If set to 1, the UI will show an additional input box on the UI for each piece defined by the model row (excluding NAME, ABBREV, and ACTION). Note that these will be shown in the order they are listed by the model row, unless a model index row is present, at which point it respects that.
 				
 				RowsPerColumn
-					Set this to any number X to have the UI start a new column when it hits that many rows in the current column. Note that the current section label will carry over with a (2) if it's the first time it's been broken across columns, (3) if it's the second time, etc.
+					Set this to any number X to have the UI start a new column when it hits that many rows in the current column. Note that the current section title will carry over with a (2) if it's the first time it's been broken across columns, (3) if it's the second time, etc.
 				
 				MinColumnWidth
 					Set this to any number X to have the UI be X pixels wide at a minimum (per column if multiple columns are shown). The UI might be larger if names are too long to fit.
@@ -60,10 +60,6 @@
 			Resulting SelectorRow will have the various pieces in named subscripts of its data array, where the names are those from the model row. Note that name and abbreviation are still separate from the data array, and arbitrary additions are ignored entirely (as the user can use the additional inputs instead).
 		
 	The input that the user puts in the first (sometimes only) input box can also include some special characters:
-		
-		. - Arbitrary
-			Ingored if +ShowArbitraryInputs=1. Allows the user to add additional information to the end of the action eventually performed on the given choice.
-		
 		+ - Special actions
 			These are special changes that can be made to the choice/UI at runtime, when the user is interacting with the UI. They include:
 				e - edit
@@ -91,21 +87,17 @@ SelectorSubmit() {
 class Selector {
 	startupConstants() {
 		; Constants and such.
-		this.titleChar           := "="
-		this.labelChar           := "#"
-		this.newColumnChar       := "|"
-		this.hiddenChar          := "*"
-		this.startModelIndexChar := ")"
-		this.settingsChar        := "+"
+		this.windowTitleChar  := "="
+		this.sectionTitleChar := "#"
+		this.newColumnChar    := "|"
+		this.hiddenChar       := "*"
+		this.modelChar        := ")"
+		this.settingsChar     := "+"
 		
 		this.iconEnding := ".ico"
 		
 		this.editStrings  := ["e", "edit"]
 		this.debugStrings := ["d", "debug"]
-		
-		this.defaultNameIndex   := 1
-		this.defaultAbbrevIndex := 2
-		this.defaultActionIndex := 3
 		
 		this.showArbitraryInputs := false
 		this.rowsPerColumn       := 99
@@ -113,7 +105,7 @@ class Selector {
 		this.iconPath            := ""
 		this.actionType          := ""
 		this.returnColumn        := "DOACTION"
-		this.labelIndices        := [1, 2, 3]
+		this.dataIndices        := [1, 2, 3] ; These are a mapping from data input field => (string or numeric) index in the data arrays.
 		
 		; Various choice data objects.
 		this.choices       := [] ; Visible choices the user can pick from.
@@ -121,13 +113,13 @@ class Selector {
 		this.nonChoices    := [] ; Lines that will be displayed as titles, extra newlines, etc, but have no other significance.
 		
 		; Other init values.
-		this.title := "Please make a choice by either number or abbreviation:"
+		this.windowTitle := "Please make a choice by either number or abbreviation:"
 		
 		; Settings to use with TableList object when parsing input file.
 		this.tableListSettings := []
 		this.tableListSettings["CHARS"] := []
-		this.tableListSettings["CHARS",  "PASS"]            := [this.titleChar, this.labelChar, this.settingsChar]
-		this.tableListSettings["FORMAT", "SEPARATE_MAP"]    := {this.startModelIndexChar: "DATA_INDEX"} 
+		this.tableListSettings["CHARS",  "PASS"]            := [this.windowTitleChar, this.sectionTitleChar, this.settingsChar]
+		this.tableListSettings["FORMAT", "SEPARATE_MAP"]    := {this.modelChar: "DATA_INDEX"} 
 		this.tableListSettings["FORMAT", "DEFAULT_INDICES"] := ["NAME", "ABBREV", "DOACTION"]
 	}
 	
@@ -202,7 +194,7 @@ class Selector {
 			actionType          - Name of the function to call once a choice has been picked (can default from INI if not given here)
 			silentChoice        - If supplied, run the selection logic to get a result back using this instead of a user's input (never show the UI)
 			iconName            - Filename for the icon.
-			data[]              - Assocative array of indices or data labels to data values to default into arbitrary inputs. Only applies if arbitrary inputs are turned on with +ShowArbitraryInputs.
+			data[]              - Assocative array of indices or data labels to data values to default into data inputs. Only applies if data inputs are turned on with +ShowArbitraryInputs.
 			selRows[]           - Array of SelectorRow objects to use directly instead of reading from filePath.
 			tableListSettings[] - Settings to override for when we read in a file using a TableList object.
 			... GDB TODO
@@ -217,14 +209,14 @@ class Selector {
 		; Set up our various information, read-ins, etc.
 		this.init(filePath, actionType, iconName, selRows, tableListSettings, settingOverrides, filter)
 		
-		if(extraData) {
-			baseLength := this.labelIndices.maxIndex()
+		if(extraData) { ; GDB TODO - get rid of extraData entirely.
+			baseLength := this.dataIndices.maxIndex()
 			if(!baseLength)
 				baseLength := 0
 			
 			For i,d in extraData {
 				For label,dataToDefault in d { ; GDB TODO - there should only ever be one at this layer, find a better way to pick out the index?
-					this.labelIndices[baseLength + i] := label
+					this.dataIndices[baseLength + i] := label
 					data[label] := dataToDefault ; GDB TODO - This only works for associative array style stuff right now, do better.
 				}
 			}
@@ -233,8 +225,6 @@ class Selector {
 		; Loop until we get good input, or the user gives up.
 		while(rowToDo = "" && !done) {
 			dataFilled := false
-			
-			; Make sure to clear out the variables that we're assocating with the edit controls.
 			
 			; Get the choice.
 			if(silentChoice != "") { ; If they've given us a silent choice, run silently, even without the flag.
@@ -257,19 +247,19 @@ class Selector {
 					Continue
 			}
 			
-			; They filled something into the arbitrary fields (everything except the first one).
+			; They filled something into the data fields (everything except the first one).
 			if(dataFilled) {
 				done := true
 				if(!rowToDo)
 					rowToDo := new SelectorRow()
 			}
 			
-			; Blow in any data from the arbitrary input boxes.
+			; Blow in any data from the data input boxes.
 			if(IsObject(data)) {
-				For i,l in this.labelIndices {
+				For num,label in this.dataIndices {
 					; DEBUG.popup("Data labels", this.dataLabels, "Data", data, "Label", v, "Data grabbed", data[v])
-					if(data[l])
-						rowToDo.data[l] := data[l]
+					if(data[label])
+						rowToDo.data[label] := data[label]
 				}
 			}
 			
@@ -294,14 +284,14 @@ class Selector {
 		
 		; Special model row that tells us how a file with more than 3 columns should be laid out.
 		if(IsObject(tl.getIndexLabels()) && IsObject(tl.getSeparateRows())) {
-			screenIndices := tl.getSeparateRow("DATA_INDEX")
-			this.labelIndices := []
-			For i,s in screenIndices {
+			fieldIndices := tl.getSeparateRow("DATA_INDEX")
+			this.dataIndices := []
+			For i,s in fieldIndices {
 				if(s > 0)
-					this.labelIndices[s] := tl.getIndexLabel(i) ; Index onscreen => label
+					this.dataIndices[s] := tl.getIndexLabel(i) ; Field index => label
 			}
 		}
-		; DEBUG.popup("Selector.loadChoicesFromFile", "Processed indices", "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows(), "Selector label indices", this.labelIndices)
+		; DEBUG.popup("Selector.loadChoicesFromFile", "Processed indices", "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows(), "Selector label indices", this.dataIndices)
 		
 		For i,currItem in list {
 			; Parse this size-n array into a new SelectorRow object.
@@ -310,18 +300,18 @@ class Selector {
 			; DEBUG.popup("Curr Row", currRow, "First Char", firstChar)
 			
 			; Popup title.
-			if(i = 1 && firstChar = this.titleChar) {
-				; DEBUG.popup("Title char", this.titleChar, "First char", firstChar, "Row", currRow)
-				this.title := SubStr(currItem[1], 2) " [SLCT]"
+			if(i = 1 && firstChar = this.windowTitleChar) {
+				; DEBUG.popup("Title char", this.windowTitleChar, "First char", firstChar, "Row", currRow)
+				this.windowTitle := SubStr(currItem[1], 2) " [SLCT]"
 			
 			; Options for the selector in general.
 			} else if(firstChar = this.settingsChar) {
 				settingString := SubStr(currRow.data[1], 2) ; Strip off the = at the beginning
 				this.processSetting(settingString)
 			
-			; Special: add a title and/or blank row in the list display.
-			} else if(firstChar = this.labelChar) {
-				; DEBUG.popup("Label char", this.labelChar, "First char", firstChar, "Row", currRow)
+			; Special: add a section title to the list display.
+			} else if(firstChar = this.sectionTitleChar) {
+				; DEBUG.popup("Label char", this.sectionTitleChar, "First char", firstChar, "Row", currRow)
 				
 				; If blank, extra newline.
 				if(StrLen(currItem[1]) < 3) {
@@ -495,16 +485,16 @@ class Selector {
 		Gui, Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInputChoice% h%heightInput% -E0x200 +Border
 		
 		if(this.showArbitraryInputs) {
-			numArbitInputs := this.labelIndices.length()
+			numDataInputs := this.dataIndices.length()
 			leftoverWidth  := widthTotal - xNameFirstCol - marginRight
-			widthInputData := (leftoverWidth / numArbitInputs) - ((numArbitInputs - 1) * padInputData)
+			widthInputData := (leftoverWidth / numDataInputs) - ((numDataInputs - 1) * padInputData)
 			
 			xInput := xNameFirstCol
-			For num,d in this.labelIndices {
-				if(guiData[d]) ; Data given as default
-					tempData := guiData[d]
+			For num,label in this.dataIndices {
+				if(guiData[label]) ; Data given as default
+					tempData := guiData[label]
 				else           ; Data label
-					tempData := d
+					tempData := label
 				
 				addInputField("GuiIn" num, xInput, yInput, widthInputData, heightInput, tempData)
 				xInput += widthInputData + padInputData
@@ -513,7 +503,7 @@ class Selector {
 		
 		; Resize the GUI to show the newly added edit control row.
 		heightTotal += maxColumnHeight + heightLine + heightInput + marginBottom ; maxColumnHeight includes marginTop, heightLine is for extra line between labels and inputs
-		Gui, Show, h%heightTotal% w%widthTotal%, % this.title
+		Gui, Show, h%heightTotal% w%widthTotal%, % this.windowTitle
 		
 		; Focus the edit control.
 		GuiControl, Focus,     GuiInChoice
@@ -527,11 +517,11 @@ class Selector {
 		
 		
 		if(this.showArbitraryInputs) {
-			For i,l in this.labelIndices {
-				inputVal := GuiIn%i% ; GuiIn* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
-				if(inputVal && (inputVal != l)) {
+			For num,label in this.dataIndices {
+				inputVal := GuiIn%num% ; GuiIn* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
+				if(inputVal && (inputVal != label)) {
 					guiDataFilled := true
-					guiData[l] := inputVal
+					guiData[label] := inputVal
 				}
 			}
 		}

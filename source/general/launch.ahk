@@ -186,7 +186,12 @@ openFolder(folderName = "") {
 	global configFolder
 	
 	filter := MainConfig.getMachineTableListFilter()
-	folderPath := Selector.select(configFolder "folders.tl", "RET", folderName, , , , , , , filter)
+	s := new Selector("folders.tl", "", filter)
+	
+	if(folderName)
+		folderPath := s.selectChoice(folderName)
+	else
+		folderPath := s.selectGui()
 	
 	; Replace any special tags with real paths.
 	folderPath := StrReplace(folderPath, "<AHKROOT>", SubStr(ahkRootPath, 1, -1)) ; Assuming that global path vars have a \ on the end that we don't want.

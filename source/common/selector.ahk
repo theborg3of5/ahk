@@ -85,6 +85,103 @@ SelectorSubmit() {
 
 ; Selector class which reads in and stores data from a file, and given an index, abbreviation or action, does that action.
 class Selector {
+	; Data in
+		; s = new Selector(filePath, selRows)
+	__New(filePath = "", tableListSettings = "", filter = "") {
+		this.startupConstants() ; GDB TODO rethink this bit, reconsider how many of these we actually need.
+		
+		guiId := "Selector" getNextGuiId()
+		Gui, %guiId%:Default ; GDB TODO if we want to truly run Selectors in parallel, we'll probably need to add guiId as a property and add it to all the Gui* calls.
+		
+		if(filePath)
+			this.filePath := this.fixFilePath(filePath) ; GDB TODO watch out for this not working right because of same variable name twice
+		if(tableListSettings)
+			this.tableListSettings := mergeArrays(this.tableListSettings, tableListSettings)
+		if(filter)
+			this.filter := filter
+		
+		if(this.filePath)
+			this.loadChoicesFromFile(this.filePath)
+		
+		; DEBUG.popup("Selector.__New", "Finish", "Filepath", this.filePath, "TableListSettings", this.tableListSettings, "Filter", this.filter, "State", this)
+	}
+	
+	setChoices(choices) {
+		this.choices := choices
+	}
+	
+	; Select
+		; s.selectGui(actionType, data, guiSettingOverrides)
+			; (guiSettingOverrides should only be Selector-specific things anyways)
+	selectGui(actionType = "", defaultData = "", guiSettingOverrides = "") {
+		; DEBUG.popup("Selector.selectGui", "Start", "ActionType", actionType, "Default data", defaultData, "GUI Settings Overrides", guiSettingOverrides)
+		
+		if(actionType)
+			this.actionType := actionType
+		
+		this.processGuiSettingOverrides(guiSettingOverrides)
+		
+		; Loop until we get good input, or the user gives up.
+		while(rowToDo = "") {
+			
+			; Get the choice.
+			userIn := this.launchSelectorPopup(data, dataFilled)
+			setTrayIcon(this.originalIconPath) ; Restore the original tray icon before we start potentially quitting. Will be re-changed by launchSelectorPopup if it loops.
+			
+			; Blank input, we bail.
+			if(!userIn && !dataFilled)
+				return ""
+			
+			; User put something in the first box, which should come from the choices shown.
+			if(userIn)
+				rowToDo := this.parseChoice(userIn)
+			
+			; Blow in any data from the data input boxes.
+			if(dataFilled && !rowToDo)
+				rowToDo := new SelectorRow()
+			if(IsObject(data)) {
+				For num,label in this.dataIndices {
+					if(data[label])
+						rowToDo.data[label] := data[label]
+				}
+			}
+			
+			; DEBUG.popup("User Input", userIn, "Row Parse Result", rowToDo, "Action type", this.actionType, "Data filled", dataFilled)
+		}
+		
+		return this.doAction(rowToDo, this.actionType)
+	}
+	
+	; Select special (alternative callers from Select)
+		; s.selectChoice(actionType, silentChoice)
+			; (not guiSettingOverrides - all current settings either have a separate parameter [action] or are GUI-specific)
+	selectChoice(choice, actionType = "") {
+		if(!choice)
+			return ""
+		
+		if(actionType)
+			this.actionType := actionType
+		
+		this.hideErrors := true ; GDB TODO call this out in documentation.
+		
+		rowToDo := this.parseChoice(choice)
+		if(!rowToDo)
+			return ""
+		
+		return this.doAction(rowToDo, this.actionType)
+	}
+	
+	
+	processGuiSettingOverrides(overrides) {
+		if(overrides["ShowArbitraryInputs"])
+			this.showArbitraryInputs := overrides["ShowArbitraryInputs"]
+		if(overrides["IconPath"])
+			this.iconPath := this.fixFilePath(overrides["IconPath"])
+	}
+	
+	
+	
+	
 	startupConstants() {
 		; Constants and such.
 		this.windowTitleChar  := "="
@@ -93,8 +190,6 @@ class Selector {
 		this.hiddenChar       := "*"
 		this.modelChar        := ")"
 		this.settingsChar     := "+"
-		
-		this.iconEnding := ".ico"
 		
 		this.editStrings  := ["e", "edit"]
 		this.debugStrings := ["d", "debug"]
@@ -105,10 +200,11 @@ class Selector {
 		this.iconPath            := ""
 		this.actionType          := ""
 		this.returnColumn        := "DOACTION"
-		this.dataIndices        := [1, 2, 3] ; These are a mapping from data input field => (string or numeric) index in the data arrays.
+		this.dataIndices         := [1, 2, 3] ; These are a mapping from data input field => (string or numeric) index in the data arrays. They map to defaultIndices.
+		defaultIndices           := ["NAME", "ABBREV", "DOACTION"]
 		
 		; Various choice data objects.
-		this.choices       := [] ; Visible choices the user can pick from.
+		; this.choices       := [] ; Visible choices the user can pick from.
 		this.hiddenChoices := [] ; Invisible choices the user can pick from.
 		this.nonChoices    := [] ; Lines that will be displayed as titles, extra newlines, etc, but have no other significance.
 		
@@ -120,52 +216,7 @@ class Selector {
 		this.tableListSettings["CHARS"] := []
 		this.tableListSettings["CHARS",  "PASS"]            := [this.windowTitleChar, this.sectionTitleChar, this.settingsChar]
 		this.tableListSettings["FORMAT", "SEPARATE_MAP"]    := {this.modelChar: "DATA_INDEX"} 
-		this.tableListSettings["FORMAT", "DEFAULT_INDICES"] := ["NAME", "ABBREV", "DOACTION"]
-	}
-	
-	init(fPath, action, iconName, selRows, tlSettingOverrides, settingOverrides, newFilter) {
-		; DEBUG.popup("init Filepath", fPath, "Action", action, "Icon name", iconName, "SelRows", selRows)
-		
-		this.startupConstants()
-		
-		guiId := "Selector" getNextGuiId()
-		Gui, %guiId%:Default
-		
-		; If we were given pre-formed SelectorRows, awesome. Otherwise, read from file.
-		if(selRows) {
-			this.choices := selRows
-		} else {
-			this.filePath := this.fixFilePath(fPath)
-			if(!this.filePath) {
-				this.errPop(fPath, "No file given")
-				return
-			}
-			
-			this.tableListSettings := mergeArrays(this.tableListSettings, tlSettingOverrides)
-			this.filter := newFilter
-			
-			; Load up the choices.
-			if(this.filePath)
-				this.loadChoicesFromFile(this.filePath)
-		}
-		
-		; Setting overrides.
-		if(action)
-			this.actionType := action
-		if(settingOverrides["ShowArbitraryInputs"])
-			this.showArbitraryInputs := settingOverrides["ShowArbitraryInputs"]
-		
-		; Get paths for the icon file, and read them in.
-		if(iconName) { ; Use the icon name override if given.
-			this.iconPath := iconName
-		} else if(!this.iconPath) {
-			this.iconPath := SubStr(this.filePath, 1, -4) this.iconEnding
-		}
-		
-		if(!FileExist(this.iconPath))
-			this.iconPath := ahkRootPath "resources\" this.iconPath
-		
-		; DEBUG.popup("Selector.init", "Finish", "Object", this)
+		this.tableListSettings["FORMAT", "DEFAULT_INDICES"] := defaultIndices
 	}
 	
 	fixFilePath(path) {
@@ -184,8 +235,58 @@ class Selector {
 		if(FileExist(ahkRootPath "config\" path))
 			return ahkRootPath "config\" path
 		
-		this.errPop(path, "File doesn't exist")
+		this.errPop("File doesn't exist", path)
 		return ""
+	}
+	
+	
+	
+	
+	
+	
+	init(fPath, action, iconName, selRows, tlSettingOverrides, settingOverrides, newFilter) {
+		; DEBUG.popup("init Filepath", fPath, "Action", action, "Icon name", iconName, "SelRows", selRows)
+		
+		; this.startupConstants()
+		
+		; guiId := "Selector" getNextGuiId()
+		; Gui, %guiId%:Default
+		
+		; ; If we were given pre-formed SelectorRows, awesome. Otherwise, read from file.
+		; if(selRows) {
+			; this.choices := selRows
+		; } else {
+			; this.filePath := this.fixFilePath(fPath)
+			; if(!this.filePath) {
+				; this.errPop(fPath, "No file given")
+				; return
+			; }
+			
+			; this.tableListSettings := mergeArrays(this.tableListSettings, tlSettingOverrides)
+			; this.filter := newFilter
+			
+			; ; Load up the choices.
+			; if(this.filePath)
+				; this.loadChoicesFromFile(this.filePath)
+		; }
+		
+		; Setting overrides.
+		; if(action)
+			; this.actionType := action
+		; if(settingOverrides["ShowArbitraryInputs"])
+			; this.showArbitraryInputs := settingOverrides["ShowArbitraryInputs"]
+		
+		; ; Get paths for the icon file, and read them in.
+		; if(iconName) { ; Use the icon name override if given.
+			; this.iconPath := iconName
+		; } else if(!this.iconPath) {
+			; this.iconPath := SubStr(this.filePath, 1, -4) ".ico"
+		; }
+		
+		; if(!FileExist(this.iconPath))
+			; this.iconPath := ahkRootPath "resources\" this.iconPath
+		
+		; DEBUG.popup("Selector.init", "Finish", "Object", this)
 	}
 	
 	/* DESCRIPTION:   Main programmatic access point. Sets up and displays the selector gui, processes the choice, etc.
@@ -207,88 +308,94 @@ class Selector {
 		; DEBUG.popup("Filepath", filePath, "Action Type", actionType, "Silent Choice", silentChoice, "Icon name", iconName, "Data", data, "selRows", selRows, "tableListSettings", tableListSettings, "settingOverrides", settingOverrides, "extraData", extraData, "filter", filter)
 		
 		; Set up our various information, read-ins, etc.
-		this.init(filePath, actionType, iconName, selRows, tableListSettings, settingOverrides, filter)
+		; this.init(filePath, actionType, iconName, selRows, tableListSettings, settingOverrides, filter)
 		
-		if(extraData) { ; GDB TODO - get rid of extraData entirely.
-			baseLength := this.dataIndices.maxIndex()
-			if(!baseLength)
-				baseLength := 0
+		; if(extraData) { ; GDB TODO - get rid of extraData entirely.
+			; baseLength := this.dataIndices.maxIndex()
+			; if(!baseLength)
+				; baseLength := 0
 			
-			For i,d in extraData {
-				For label,dataToDefault in d { ; GDB TODO - there should only ever be one at this layer, find a better way to pick out the index?
-					this.dataIndices[baseLength + i] := label
-					data[label] := dataToDefault ; GDB TODO - This only works for associative array style stuff right now, do better.
-				}
-			}
-		}
+			; For i,d in extraData {
+				; For label,dataToDefault in d { ; GDB TODO - there should only ever be one at this layer, find a better way to pick out the index?
+					; this.dataIndices[baseLength + i] := label
+					; data[label] := dataToDefault ; GDB TODO - This only works for associative array style stuff right now, do better.
+				; }
+			; }
+		; }
 		
-		; Loop until we get good input, or the user gives up.
-		while(rowToDo = "" && !done) {
-			dataFilled := false
+		; ; Loop until we get good input, or the user gives up.
+		; while(rowToDo = "" && !done) {
+			; dataFilled := false
 			
-			; Get the choice.
-			if(silentChoice != "") { ; If they've given us a silent choice, run silently, even without the flag.
-				userIn := silentChoice
-				done := true ; only try this once, don't repeat.
-				this.hideErrors := true
-			} else { ; Otherwise, popup time.
-				userIn := this.launchSelectorPopup(data, dataFilled)
-				setTrayIcon(this.originalIconPath) ; Restore the original tray icon before we start potentially quitting. Will be re-changed by launchSelectorPopup if it loops.
-			}
+			; ; Get the choice.
+			; if(silentChoice != "") { ; If they've given us a silent choice, run silently, even without the flag.
+				; userIn := silentChoice
+				; done := true ; only try this once, don't repeat.
+				; this.hideErrors := true
+			; } else { ; Otherwise, popup time.
+				; userIn := this.launchSelectorPopup(data, dataFilled)
+				; setTrayIcon(this.originalIconPath) ; Restore the original tray icon before we start potentially quitting. Will be re-changed by launchSelectorPopup if it loops.
+			; }
 			
-			; Blank input, we bail.
-			if(!userIn && !dataFilled)
-				return ""
+			; ; Blank input, we bail.
+			; if(!userIn && !dataFilled)
+				; return ""
 			
-			; User put something in the first box, which should come from the choices shown.
-			if(userIn) {
-				rowToDo := this.parseChoice(userIn)
-				if(!rowToDo) ; We didn't find a match at all, and showed them an error - next iteration of the loop so they can try again.
-					Continue
-			}
+			; ; User put something in the first box, which should come from the choices shown.
+			; if(userIn) {
+				; rowToDo := this.parseChoice(userIn)
+				; if(!rowToDo) ; We didn't find a match at all, and showed them an error - next iteration of the loop so they can try again.
+					; Continue
+			; }
 			
-			; They filled something into the data fields (everything except the first one).
-			if(dataFilled) {
-				done := true
-				if(!rowToDo)
-					rowToDo := new SelectorRow()
-			}
+			; ; They filled something into the data fields (everything except the first one).
+			; if(dataFilled) {
+				; done := true
+				; if(!rowToDo)
+					; rowToDo := new SelectorRow()
+			; }
 			
-			; Blow in any data from the data input boxes.
-			if(IsObject(data)) {
-				For num,label in this.dataIndices {
-					; DEBUG.popup("Data labels", this.dataLabels, "Data", data, "Label", v, "Data grabbed", data[v])
-					if(data[label])
-						rowToDo.data[label] := data[label]
-				}
-			}
+			; ; Blow in any data from the data input boxes.
+			; if(IsObject(data)) {
+				; For num,label in this.dataIndices {
+					; ; DEBUG.popup("Data labels", this.dataLabels, "Data", data, "Label", v, "Data grabbed", data[v])
+					; if(data[label])
+						; rowToDo.data[label] := data[label]
+				; }
+			; }
 			
-			; DEBUG.popup("User Input", userIn, "Row Parse Result", rowToDo, "Action type", this.actionType, "Data filled", dataFilled)
-		}
+			; ; DEBUG.popup("User Input", userIn, "Row Parse Result", rowToDo, "Action type", this.actionType, "Data filled", dataFilled)
+		; }
 		
-		if(!rowToDo)
-			return ""
+		; if(!rowToDo)
+			; return ""
 		
-		return this.doAction(rowToDo, this.actionType)
+		; return this.doAction(rowToDo, this.actionType)
 	}
 	
 	; Load the choices and other such things from a specially formatted file.
 	loadChoicesFromFile(filePath) {
+		this.choices := []
+		
 		tl := new TableList(filepath, this.tableListSettings)
 		if(this.filter)
 			list := tl.getFilteredTable(this.filter["COLUMN"], this.filter["VALUE"], this.filter["EXCLUDE_BLANKS"])
 		else
 			list := tl.getTable()
-		
 		; DEBUG.popup("Filepath", filePath, "Parsed List", list, "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows())
 		
 		; Special model row that tells us how a file with more than 3 columns should be laid out.
-		if(IsObject(tl.getIndexLabels()) && IsObject(tl.getSeparateRows())) {
-			fieldIndices := tl.getSeparateRow("DATA_INDEX")
+		if(IsObject(tl.getIndexLabels())) {
 			this.dataIndices := []
-			For i,s in fieldIndices {
-				if(s > 0)
-					this.dataIndices[s] := tl.getIndexLabel(i) ; Field index => label
+			if(IsObject(tl.getSeparateRows())) {
+				fieldIndices := tl.getSeparateRow("DATA_INDEX")
+				For i,s in fieldIndices {
+					if(s > 0)
+						this.dataIndices[s] := tl.getIndexLabel(i) ; Field index => label
+				}
+			} else {
+				For i,label in tl.getIndexLabels()
+					this.dataIndices[label] := i
 			}
 		}
 		; DEBUG.popup("Selector.loadChoicesFromFile", "Processed indices", "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows(), "Selector label indices", this.dataIndices)
@@ -660,7 +767,7 @@ class Selector {
 		else if(isFunc(actionType)) ; Generic caller for many possible actions.
 			result := actionType.(rowToDo)
 		else                        ; Error catch.
-			this.errPop("Action " actionType " not defined!")
+			this.errPop("Action not defined", actionType)
 		
 		; Debug case - show a popup with row info and copy it to the clipboard, don't do the actual action.
 		if(rowToDo.isDebug) {
@@ -674,14 +781,14 @@ class Selector {
 	}
 	
 	; Centralized MsgBox clone that respects the silencer flag.
-	errPop(text, label = "") {
+	errPop(label, var) {
 		if(!this.hideErrors) {
 			if(!label)
 				label := "Error"
 			if(isFunc("DEBUG.popup"))
-				DEBUG.popup(label, text)
+				DEBUG.popup(label, var)
 			else
-				MsgBox, % "Label: `n`t" label "`nText: `n`t" text
+				MsgBox, % "Label: `n`t" label "`nText: `n`t" var
 		}
 	}
 	

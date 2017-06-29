@@ -1,6 +1,7 @@
 @PlaceholderChar=-
 
 =Select Machine to set up:
++DefaultAction=RET_DATA
 +ShowArbitraryInputs=1
 +MinColumnWidth=1000
 

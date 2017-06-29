@@ -179,7 +179,6 @@ class ActionObject {
 	; Prompt the user for any missing info (generally just subType) via a Selector popup.
 	selectInfo(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
 		; DEBUG.popup("ActionObject.selectInfo", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
-		tlSettingOverrides["CHARS", "PLACEHOLDER"] := "-"
 		
 		; Determine if we need subType or subAction based on what we know so far.
 		if(type = TYPE_EMC2) {
@@ -187,9 +186,12 @@ class ActionObject {
 			needsSA := true
 		}
 		
-		; While here later on? Doesn't fit in selector's single-minded aspect right now.
+		; GDB TODO: while here later on? Doesn't fit in selector's single-minded aspect right now.
 		if(!type || !action || (!subType && needsST) || (!subAction && needsSA)) {
-			objInfo   := Selector.select("local/actionObject.tl", "RET_DATA", "", "", {TYPE: type, ACTION: action, SUBTYPE: subType, SUBACTION: subAction, ID: input}, , tlSettingOverrides)
+			filter := MainConfig.getMachineTableListFilter()
+			s := new Selector("local/actionObject.tl", "", filter)
+			objInfo := s.selectGui("", {TYPE: type, ACTION: action, SUBTYPE: subType, SUBACTION: subAction, ID: input})
+			
 			type      := objInfo["TYPE"]
 			action    := objInfo["ACTION"]
 			subType   := objInfo["SUBTYPE"]
@@ -200,7 +202,8 @@ class ActionObject {
 		; Additional processing on user-given info as needed.
 		if(type = TYPE_EMC2) { ; EMC2 - subType might need conversion (QAN->ZQN, etc)
 			if(subType) { ; But if it's blank, don't ask the user again.
-				objInfo := Selector.select("local/actionObject.tl", "RET_DATA", subType, , , , tlSettingOverrides)
+				s := new Selector("local/actionObject.tl")
+				objInfo := s.selectChoice(subType)
 				subType := objInfo["SUBTYPE"]
 			}
 		}

@@ -30,6 +30,12 @@ forceArray(obj) {
 	return newArray
 }
 
+forceNumber(data) {
+	if(isNum(data))
+		return data
+	return 0
+}
+
 ; Inserts an item at the beginning of an array.
 insertFront(ByRef arr, new) {
 	arr2 := Object()

@@ -28,11 +28,6 @@ return
 	}
 return
 
-#w::
-	Sleep, 5000
-	SendMessage, 0x112, 0xF170, 2,, Program Manager
-return
-
 !+w::
 	rows := []
 	
@@ -46,7 +41,10 @@ return
 	rows.Insert(new SelectorRow("", "Control", "o", currControl, true))
 	rows.Insert(new SelectorRow("", "Tooltip", "p", tooltipText, true))
 	
-	textToCopy := Selector.select("", "RET", , , , rows)
+	s := new Selector()
+	s.setChoices(rows)
+	textToCopy := s.selectGui()
+	
 	if(textToCopy) {
 		clipboard := textToCopy
 		DEBUG.popup("Copied to clipboard", textToCopy)

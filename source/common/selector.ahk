@@ -35,7 +35,7 @@
 				MinColumnWidth
 					Set this to any number X to have the UI be X pixels wide at a minimum (per column if multiple columns are shown). The UI might be larger if names are too long to fit.
 				
-				TrayIcon
+				Icon
 					Set this to a path or icon filename to use that icon in the tray.
 				
 				DefaultAction
@@ -70,6 +70,18 @@
 					Selector will show that result (if given) using DEBUG.popup() (requires debug.ahk).
 	
 */
+
+; Wrapper functions
+doSelect(filePath, actionType = "", iconPath = "") {
+	s := new Selector(filePath)
+	
+	if(iconPath) {
+		guiOverrideSettings := []
+		guiOverrideSettings["IconPath"] := iconPath
+	}
+	
+	return s.selectGui(actionType, "", guiOverrideSettings)
+}
 
 ; GUI Events
 SelectorEscape() {
@@ -118,6 +130,8 @@ class Selector {
 		
 		if(actionType)
 			this.actionType := actionType
+		if(defaultData)
+			data := defaultData
 		
 		this.processGuiSettingOverrides(guiSettingOverrides)
 		
@@ -177,6 +191,11 @@ class Selector {
 			this.showArbitraryInputs := overrides["ShowArbitraryInputs"]
 		if(overrides["IconPath"])
 			this.iconPath := this.fixFilePath(overrides["IconPath"])
+		if(overrides["ExtraDataFields"]) {
+			baseLength := forceNumber(this.dataIndices.maxIndex())
+			For i,label in overrides["ExtraDataFields"]
+				this.dataIndices[baseLength + i] := label
+		}
 	}
 	
 	
@@ -240,139 +259,6 @@ class Selector {
 	}
 	
 	
-	
-	
-	
-	
-	init(fPath, action, iconName, selRows, tlSettingOverrides, settingOverrides, newFilter) {
-		; DEBUG.popup("init Filepath", fPath, "Action", action, "Icon name", iconName, "SelRows", selRows)
-		
-		; this.startupConstants()
-		
-		; guiId := "Selector" getNextGuiId()
-		; Gui, %guiId%:Default
-		
-		; ; If we were given pre-formed SelectorRows, awesome. Otherwise, read from file.
-		; if(selRows) {
-			; this.choices := selRows
-		; } else {
-			; this.filePath := this.fixFilePath(fPath)
-			; if(!this.filePath) {
-				; this.errPop(fPath, "No file given")
-				; return
-			; }
-			
-			; this.tableListSettings := mergeArrays(this.tableListSettings, tlSettingOverrides)
-			; this.filter := newFilter
-			
-			; ; Load up the choices.
-			; if(this.filePath)
-				; this.loadChoicesFromFile(this.filePath)
-		; }
-		
-		; Setting overrides.
-		; if(action)
-			; this.actionType := action
-		; if(settingOverrides["ShowArbitraryInputs"])
-			; this.showArbitraryInputs := settingOverrides["ShowArbitraryInputs"]
-		
-		; ; Get paths for the icon file, and read them in.
-		; if(iconName) { ; Use the icon name override if given.
-			; this.iconPath := iconName
-		; } else if(!this.iconPath) {
-			; this.iconPath := SubStr(this.filePath, 1, -4) ".ico"
-		; }
-		
-		; if(!FileExist(this.iconPath))
-			; this.iconPath := ahkRootPath "resources\" this.iconPath
-		
-		; DEBUG.popup("Selector.init", "Finish", "Object", this)
-	}
-	
-	/* DESCRIPTION:   Main programmatic access point. Sets up and displays the selector gui, processes the choice, etc.
-		PARAMETERS:
-			filePath            - Filename (including path and extension) for the input file to generate choices from
-			actionType          - Name of the function to call once a choice has been picked (can default from INI if not given here)
-			silentChoice        - If supplied, run the selection logic to get a result back using this instead of a user's input (never show the UI)
-			iconName            - Filename for the icon.
-			data[]              - Assocative array of indices or data labels to data values to default into data inputs. Only applies if data inputs are turned on with +ShowArbitraryInputs.
-			selRows[]           - Array of SelectorRow objects to use directly instead of reading from filePath.
-			tableListSettings[] - Settings to override for when we read in a file using a TableList object.
-			... GDB TODO
-			filter[]            - If you want to filter the given file down to only some of its choices, pass an array with the following subscripts:
-			                         filter["COLUMN"]         = The column to filter on
-											       ["VALUE"]          = The value that the column has to be equal to. Can be blank if you're looking for only rows with no value in the filter column.
-													 ["EXCLUDE_BLANKS"] = (Optional) if this is false (default), columns with a blank value for the filter column will be included even if ["VALUE"] is not blank.
-	*/
-	select(filePath, actionType = "", silentChoice = "", iconName = "", data = "", selRows = "", tableListSettings = "", settingOverrides = "", extraData = "", filter = "") {
-		; DEBUG.popup("Filepath", filePath, "Action Type", actionType, "Silent Choice", silentChoice, "Icon name", iconName, "Data", data, "selRows", selRows, "tableListSettings", tableListSettings, "settingOverrides", settingOverrides, "extraData", extraData, "filter", filter)
-		
-		; Set up our various information, read-ins, etc.
-		; this.init(filePath, actionType, iconName, selRows, tableListSettings, settingOverrides, filter)
-		
-		; if(extraData) { ; GDB TODO - get rid of extraData entirely.
-			; baseLength := this.dataIndices.maxIndex()
-			; if(!baseLength)
-				; baseLength := 0
-			
-			; For i,d in extraData {
-				; For label,dataToDefault in d { ; GDB TODO - there should only ever be one at this layer, find a better way to pick out the index?
-					; this.dataIndices[baseLength + i] := label
-					; data[label] := dataToDefault ; GDB TODO - This only works for associative array style stuff right now, do better.
-				; }
-			; }
-		; }
-		
-		; ; Loop until we get good input, or the user gives up.
-		; while(rowToDo = "" && !done) {
-			; dataFilled := false
-			
-			; ; Get the choice.
-			; if(silentChoice != "") { ; If they've given us a silent choice, run silently, even without the flag.
-				; userIn := silentChoice
-				; done := true ; only try this once, don't repeat.
-				; this.hideErrors := true
-			; } else { ; Otherwise, popup time.
-				; userIn := this.launchSelectorPopup(data, dataFilled)
-				; setTrayIcon(this.originalIconPath) ; Restore the original tray icon before we start potentially quitting. Will be re-changed by launchSelectorPopup if it loops.
-			; }
-			
-			; ; Blank input, we bail.
-			; if(!userIn && !dataFilled)
-				; return ""
-			
-			; ; User put something in the first box, which should come from the choices shown.
-			; if(userIn) {
-				; rowToDo := this.parseChoice(userIn)
-				; if(!rowToDo) ; We didn't find a match at all, and showed them an error - next iteration of the loop so they can try again.
-					; Continue
-			; }
-			
-			; ; They filled something into the data fields (everything except the first one).
-			; if(dataFilled) {
-				; done := true
-				; if(!rowToDo)
-					; rowToDo := new SelectorRow()
-			; }
-			
-			; ; Blow in any data from the data input boxes.
-			; if(IsObject(data)) {
-				; For num,label in this.dataIndices {
-					; ; DEBUG.popup("Data labels", this.dataLabels, "Data", data, "Label", v, "Data grabbed", data[v])
-					; if(data[label])
-						; rowToDo.data[label] := data[label]
-				; }
-			; }
-			
-			; ; DEBUG.popup("User Input", userIn, "Row Parse Result", rowToDo, "Action type", this.actionType, "Data filled", dataFilled)
-		; }
-		
-		; if(!rowToDo)
-			; return ""
-		
-		; return this.doAction(rowToDo, this.actionType)
-	}
-	
 	; Load the choices and other such things from a specially formatted file.
 	loadChoicesFromFile(filePath) {
 		this.choices := []
@@ -385,17 +271,12 @@ class Selector {
 		; DEBUG.popup("Filepath", filePath, "Parsed List", list, "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows())
 		
 		; Special model row that tells us how a file with more than 3 columns should be laid out.
-		if(IsObject(tl.getIndexLabels())) {
+		if(IsObject(tl.getIndexLabels()) && IsObject(tl.getSeparateRows())) {
 			this.dataIndices := []
-			if(IsObject(tl.getSeparateRows())) {
-				fieldIndices := tl.getSeparateRow("DATA_INDEX")
-				For i,s in fieldIndices {
-					if(s > 0)
-						this.dataIndices[s] := tl.getIndexLabel(i) ; Field index => label
-				}
-			} else {
-				For i,label in tl.getIndexLabels()
-					this.dataIndices[label] := i
+			fieldIndices := tl.getSeparateRow("DATA_INDEX")
+			For i,s in fieldIndices {
+				if(s > 0)
+					this.dataIndices[s] := tl.getIndexLabel(i) ; Field index => label
 			}
 		}
 		; DEBUG.popup("Selector.loadChoicesFromFile", "Processed indices", "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows(), "Selector label indices", this.dataIndices)
@@ -463,7 +344,7 @@ class Selector {
 			this.rowsPerColumn := value
 		else if(name = "MinColumnWidth")
 			this.minColumnWidth := value
-		else if(name = "TrayIcon")
+		else if(name = "Icon")
 			this.iconPath := value
 		else if(name = "DefaultAction")
 			this.actionType := value

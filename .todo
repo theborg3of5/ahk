@@ -1,20 +1,15 @@
 # AHK To Do
 	
 	'Selector Rewrite'
-		Reconsider calling format
-			Retire extraData - those are better handled with a return action, and passing the extra stuff yourself.
-				Only usecase - Snapper selector, passing INI/ID (multiple of each?)
-					Better to just pass all data out (can include a comma-separated list of IDs if we want, if the user gives us a comma-separated list in the respective field)
-			Retire iconName in favor of settingOverrides TrayIcon subscript
 		Move more things to arrays like TableList?
 			Characters
 			Settings
 		Reduce number of this.* variables where possible - a lot of them seem unnecessary to put at class-level.
 		Reexamine inner data structure of indices, labels, data, etc.
-			labelIndices
 			guiData (+guiDataFilled)
 		"ShowArbitraryInputs" -> "ShowDataInputs"
 		Reconsider actionObject.ahk top documentation - is it mostly duplicated from selector.ahk?
+		Bug: new filtering on search does weird stuff with the section headers (pulls one with nothing in it?)
 	
 	'Fixes'
 		Have centering hotkey take height of taskbar into account?

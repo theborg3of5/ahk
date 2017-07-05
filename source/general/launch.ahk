@@ -48,11 +48,11 @@ return
 	^+!r::doSelect("local/epicEnvironments.tl", "DO_THUNDER",    "C:\Program Files (x86)\PuTTY\putty.exe")
 	^!#s::
 		s := new Selector("local/epicEnvironments.tl")
-		guiOverrideSettings := []
-		guiOverrideSettings["Icon"] := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
-		guiOverrideSettings["ShowDataInputs"] := 1
-		guiOverrideSettings["ExtraDataFields"] := ["INI", "ID"]
-		s.selectGui("DO_SNAPPER", "", guiOverrideSettings)
+		guiSettings := []
+		guiSettings["Icon"] := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
+		guiSettings["ShowDataInputs"] := 1
+		guiSettings["ExtraDataFields"] := ["INI", "ID"]
+		s.selectGui("DO_SNAPPER", "", guiSettings)
 	return
 #If
 	

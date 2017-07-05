@@ -1,12 +1,17 @@
 # AHK To Do
 	
 	'Selector Rewrite'
-		Move more things to arrays like TableList?
-			Characters
-			Settings
+		Various settings arrays
+			guiSettings - should we split any that involve additional processing off? Would allow us to just use mergeArrays() instead of having a separate function call in .selectGui().
+				Separate params?
+				Separate function calls to set them?
+				Have separate behavior:
+					TrayIcon - Fixing path
+					ExtraDataFields - Adding to dataIndices
 		Reduce number of this.* variables where possible - a lot of them seem unnecessary to put at class-level.
 		Reexamine inner data structure of indices, labels, data, etc.
 			guiData (+guiDataFilled)
+		TableList - check if going beyond model row/default indices length actually goes numeric or not. Either remove documentation if it doesn't, or handle better if it does.
 	
 	'Fixes'
 		Have centering hotkey take height of taskbar into account?

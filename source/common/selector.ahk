@@ -19,14 +19,14 @@
 			You can have more than the simple layout of NAME-ABBREV-ACTION by using a model row that begins with this character. This line is tab-separated in the same way as the choices, with each entry being the name for the corresponding column of each choice.
 		
 		) - Model Index
-			This row corresponds to the model row, giving each of the named columns an index, which is the order in which the additional arbitrary fields in the UI (turned on using +ShowArbitraryInputs, see settings below) will be shown. An index of 0 tells the UI not to show the field corresponding to that column at all.
+			This row corresponds to the model row, giving each of the named columns an index, which is the order in which the additional arbitrary fields in the UI (turned on using +ShowDataInputs, see settings below) will be shown. An index of 0 tells the UI not to show the field corresponding to that column at all.
 		
 		| - New column (in section title row)
 			If this character is put at the beginning of a section title row (with a space on either side, such as "# | Title"), that title will force a new column in the UI.
 		
 		+ - Settings
 			Lines which start with this character denote a setting that changes how the UI acts in some manner. They are always in the form "+Option=x", and include:
-				ShowArbitraryInputs
+				ShowDataInputs
 					If set to 1, the UI will show an additional input box on the UI for each piece defined by the model row (excluding NAME, ABBREV, and ACTION). Note that these will be shown in the order they are listed by the model row, unless a model index row is present, at which point it respects that.
 				
 				RowsPerColumn
@@ -47,15 +47,15 @@
 	When the user selects their choice, the action passed in at the beginning will be evaluated as a function which receives a loaded SelectorRow object to perform the action on. See SelectorRow class for data structure.
 	
 	Once the UI is shown, the user can enter either the index or abbreviation for the choice that they would like to select. The user can give information to the popup in a variety of ways:
-		Simplest case (+ShowArbitraryInputs != 1, no model or model index rows):
+		Simplest case (+ShowDataInputs != 1, no model or model index rows):
 			The user will only have a single input box, where they can add their choice and additional input using the arbitrary character (see below)
 			Resulting SelectorRow object will have the name, abbreviation, and action. Arbitrary input is added to the end of the action.
 		
-		Model row, but +ShowArbitraryInputs != 1
+		Model row, but +ShowDataInputs != 1
 			The user still has a single input box.
 			Resulting SelectorRow will have the various pieces in named subscripts of its data array, where the names are those from the model row. Note that name and abbreviation are still separate from the data array, and arbitrary additions are added to action, whether it is set or not.
 		
-		Model row, with +ShowArbitraryInputs=1 (model index row optional)
+		Model row, with +ShowDataInputs=1 (model index row optional)
 			The user will see multiple input boxes, in the order listed in the input file, or in the order of the model index row if defined. The user can override the values defined by the selected choice for each of the columns shown before the requested action is performed.
 			Resulting SelectorRow will have the various pieces in named subscripts of its data array, where the names are those from the model row. Note that name and abbreviation are still separate from the data array, and arbitrary additions are ignored entirely (as the user can use the additional inputs instead).
 		
@@ -187,8 +187,8 @@ class Selector {
 	
 	
 	processGuiSettingOverrides(overrides) {
-		if(overrides["ShowArbitraryInputs"])
-			this.showArbitraryInputs := overrides["ShowArbitraryInputs"]
+		if(overrides["ShowDataInputs"])
+			this.showDataInputs := overrides["ShowDataInputs"]
 		if(overrides["IconPath"])
 			this.iconPath := this.fixFilePath(overrides["IconPath"])
 		if(overrides["ExtraDataFields"]) {
@@ -213,7 +213,7 @@ class Selector {
 		this.editStrings  := ["e", "edit"]
 		this.debugStrings := ["d", "debug"]
 		
-		this.showArbitraryInputs := false
+		this.showDataInputs := false
 		this.rowsPerColumn       := 99
 		this.minColumnWidth      := 300
 		this.iconPath            := ""
@@ -338,8 +338,8 @@ class Selector {
 		name  := settingSplit[1]
 		value := settingSplit[2]
 		
-		if(name = "ShowArbitraryInputs")
-			this.showArbitraryInputs := (value = "1")
+		if(name = "ShowDataInputs")
+			this.showDataInputs := (value = "1")
 		else if(name = "RowsPerColumn")
 			this.rowsPerColumn := value
 		else if(name = "MinColumnWidth")
@@ -465,14 +465,14 @@ class Selector {
 		
 		yInput := maxColumnHeight + heightLine ; Extra empty row before inputs.
 		
-		if(this.showArbitraryInputs)
+		if(this.showDataInputs)
 			widthInputChoice := widthIndex + padIndexAbbrev + widthAbbrev ; Main edit control is same size as index + abbrev columns combined.
 		else
 			widthInputChoice := widthTotal - (marginLeft + marginRight)   ; Main edit control is nearly full width.
 		static GuiInChoice
 		Gui, Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInputChoice% h%heightInput% -E0x200 +Border
 		
-		if(this.showArbitraryInputs) {
+		if(this.showDataInputs) {
 			numDataInputs := this.dataIndices.length()
 			leftoverWidth  := widthTotal - xNameFirstCol - marginRight
 			widthInputData := (leftoverWidth - ((numDataInputs - 1) * padInputData)) / numDataInputs
@@ -504,7 +504,7 @@ class Selector {
 		; == GUI waits for user to do something ==
 		
 		
-		if(this.showArbitraryInputs) {
+		if(this.showDataInputs) {
 			For num,label in this.dataIndices {
 				inputVal := GuiIn%num% ; GuiIn* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
 				if(inputVal && (inputVal != label)) {

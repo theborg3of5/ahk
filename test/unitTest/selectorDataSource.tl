@@ -1,5 +1,5 @@
 =Unit test for Selector
-+ShowArbitraryInputs=1
++ShowDataInputs=1
 +RowsPerColumn=5
 +MinColumnWidth=500
 

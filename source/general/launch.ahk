@@ -50,7 +50,7 @@ return
 		s := new Selector("local/epicEnvironments.tl")
 		guiOverrideSettings := []
 		guiOverrideSettings["Icon"] := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
-		guiOverrideSettings["ShowArbitraryInputs"] := 1
+		guiOverrideSettings["ShowDataInputs"] := 1
 		guiOverrideSettings["ExtraDataFields"] := ["INI", "ID"]
 		s.selectGui("DO_SNAPPER", "", guiOverrideSettings)
 	return

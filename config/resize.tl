@@ -1,6 +1,6 @@
 =Resize active window to size:
 +DefaultAction=RESIZE
-+ShowArbitraryInputs=1
++ShowDataInputs=1
 +MinColumnWidth=350
 
 (	NAME										ABBREV			WIDTH		HEIGHT

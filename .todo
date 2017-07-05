@@ -7,8 +7,6 @@
 		Reduce number of this.* variables where possible - a lot of them seem unnecessary to put at class-level.
 		Reexamine inner data structure of indices, labels, data, etc.
 			guiData (+guiDataFilled)
-		"ShowArbitraryInputs" -> "ShowDataInputs"
-		Reconsider actionObject.ahk top documentation - is it mostly duplicated from selector.ahk?
 		Bug: new filtering on search does weird stuff with the section headers (pulls one with nothing in it?)
 	
 	'Fixes'

@@ -2,7 +2,7 @@
 
 =Select Machine to set up:
 +DefaultAction=RET_DATA
-+ShowArbitraryInputs=1
++ShowDataInputs=1
 +MinColumnWidth=1000
 
 (	NAME					ABBREV		WHICH_MACHINE		VIM_CLOSE_KEY	MENU_KEY_ACTION	EDGE_OFFSET		MAX_EXTRA_EDGE_OFFSET

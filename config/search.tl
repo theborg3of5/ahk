@@ -2,7 +2,7 @@
 
 =Select type of search to run and input search text:
 +DefaultAction=RET_DATA
-+ShowArbitraryInputs=1
++ShowDataInputs=1
 +MinColumnWidth=500
 
 (		NAME					ABBREV		SUBTYPE															SEARCH_TYPE		ARG1		ARG2		ARG3		ARG4		ARG5	MACHINE

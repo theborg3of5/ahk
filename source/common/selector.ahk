@@ -101,13 +101,13 @@ class Selector {
 		this.guiSettings    := this.getDefaultGuiSettings()
 		this.returnSettings := this.getDefaultReturnSettings() ; GDB TODO should this move down to be an if() \n mergeArrays() type call?
 		
+		this.tableListSettings := mergeArrays(this.getDefaultTableListSettings(), tableListSettings)
+		
 		guiId := "Selector" getNextGuiId()
 		Gui, %guiId%:Default ; GDB TODO if we want to truly run Selectors in parallel, we'll probably need to add guiId as a property and add it to all the Gui* calls.
 		
 		if(filePath)
 			this.filePath := this.findTrueFilePath(filePath)
-		if(tableListSettings)
-			this.tableListSettings := mergeArrays(this.getDefaultTableListSettings(), tableListSettings)
 		if(filter)
 			this.filter := filter
 		
@@ -278,6 +278,7 @@ class Selector {
 		this.hiddenChoices := [] ; Invisible choices the user can pick from.
 		this.nonChoices    := [] ; Lines that will be displayed as titles, extra newlines, etc, but have no other significance.
 		
+		; DEBUG.popup("TableList Settings", this.tableListSettings)
 		tl := new TableList(filepath, this.tableListSettings)
 		if(this.filter)
 			list := tl.getFilteredTable(this.filter["COLUMN"], this.filter["VALUE"], this.filter["EXCLUDE_BLANKS"])

@@ -275,7 +275,7 @@ class Selector {
 			this.dataIndices := []
 			fieldIndices := tl.getSeparateRow("DATA_INDEX")
 			For i,s in fieldIndices {
-				if(s > 0)
+				if(s > 0) ; Filters out data columns we don't want fields for
 					this.dataIndices[s] := tl.getIndexLabel(i) ; Field index => label
 			}
 		}
@@ -290,7 +290,7 @@ class Selector {
 			; Popup title.
 			if(i = 1 && firstChar = this.windowTitleChar) {
 				; DEBUG.popup("Title char", this.windowTitleChar, "First char", firstChar, "Row", currRow)
-				this.windowTitle := SubStr(currItem[1], 2) " [SLCT]"
+				this.windowTitle := SubStr(currItem[1], 2) " [SLCT]" ; GDB TODO is there a better way to identify Selector popups than by title?
 			
 			; Options for the selector in general.
 			} else if(firstChar = this.settingsChar) {
@@ -300,20 +300,14 @@ class Selector {
 			; Special: add a section title to the list display.
 			} else if(firstChar = this.sectionTitleChar) {
 				; DEBUG.popup("Label char", this.sectionTitleChar, "First char", firstChar, "Row", currRow)
+				; Format should be #{Space}Title
+				idx := 0
+				if(this.choices.MaxIndex())
+					idx := this.choices.MaxIndex()
+				idx++ ; The next actual choice will be the first one under this header, so match that.
 				
-				; If blank, extra newline.
-				if(StrLen(currItem[1]) < 3) {
-					this.nonChoices.push(" ")
-				
-				; If title, #{Space}Title.
-				} else {
-					idx := 0
-					if(this.choices.MaxIndex())
-						idx := this.choices.MaxIndex()
-					
-					this.nonChoices.InsertAt(idx + 1, SubStr(currItem[1], 3))
-					; DEBUG.popup("Just added nonchoice:", this.nonChoices[this.nonChoices.MaxIndex()], "At index", idx + 1)
-				}
+				this.nonChoices[idx] := SubStr(currItem[1], 3) ; If there are multiple headers in a row (for example when choices are filtered out) they should get overwritten in order here (which is correct).
+				; DEBUG.popup("Just added nonchoice:", this.nonChoices[this.nonChoices.MaxIndex()], "At index", idx)
 				
 			; Invisible, but viable, choice.
 			} else if(firstChar = this.hiddenChar) {

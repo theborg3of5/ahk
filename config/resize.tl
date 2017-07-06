@@ -13,6 +13,7 @@ Standard (1280x1024)						sd					1280		1024
 Small (800x600)							sm					800		600
 
 # Specific cases
+Fake maximized								fm					1920		1050
 Minimum Hyperspace						min				800		550
 Official screenshots						shot				1024		768
 PuTTY on laptop screen					pl					1084		1046

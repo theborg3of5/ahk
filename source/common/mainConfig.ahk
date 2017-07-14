@@ -130,11 +130,11 @@ class MainConfig {
 		
 		For i,w in this.windows {
 			; DEBUG.popup("Class", ahkClass, "Title", title, "Control", controlClass, "Against settings", w)
-			if(ahkClass && w["WIN_CLASS"] && ahkClass != w["WIN_CLASS"])
+			if(ahkClass && w["WIN_CLASS"] && (ahkClass != w["WIN_CLASS"]) )
 				Continue
-			if(title && w["WIN_TITLE"] && title != w["WIN_TITLE"])
+			if(title && w["WIN_TITLE"] && (title != w["WIN_TITLE"]) )
 				Continue
-			if(controlClass && w["CONTROL_CLASS"] && controlClass != w["CONTROL_CLASS"])
+			if(controlClass && w["CONTROL_CLASS"] && (controlClass != w["CONTROL_CLASS"]) )
 				Continue
 			
 			retWindow := w

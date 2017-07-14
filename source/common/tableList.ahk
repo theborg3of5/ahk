@@ -450,7 +450,7 @@ class TableList {
 		currRow := this.applyMods(rowAry)
 		
 		; If any of the values were a placeholder, remove them now.
-		For i,value in currRow
+		For i,value in currRow.clone() ; Clone since we're deleting things.
 			if(value = this.chars["PLACEHOLDER"])
 				currRow.Delete(i)
 		

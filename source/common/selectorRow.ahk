@@ -26,7 +26,6 @@ class SelectorRow {
 	}
 	
 	buildSelectorRow(title, abbrev, action, addActionToTitle = false) {
-		
 		return new SelectorRow()
 	}
 	

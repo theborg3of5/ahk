@@ -94,25 +94,26 @@ SelectorSubmit() {
 
 ; Selector class which reads in and stores data from a file, and given an index, abbreviation or action, does that action.
 class Selector {
-	; Data in
-		; s = new Selector(filePath, selRows)
+	
+	
+	; ==============================
+	; == Public ====================
+	; ==============================
+	
 	__New(filePath = "", tableListSettings = "", filter = "") {
 		this.chars          := this.getSpecialChars()
 		this.guiSettings    := this.getDefaultGuiSettings()
-		this.returnSettings := this.getDefaultReturnSettings() ; GDB TODO should this move down to be an if() \n mergeArrays() type call?
+		this.returnSettings := this.getDefaultReturnSettings()
 		
-		this.tableListSettings := mergeArrays(this.getDefaultTableListSettings(), tableListSettings)
+		tlSettings := mergeArrays(this.getDefaultTableListSettings(), tableListSettings)
 		
 		guiId := "Selector" getNextGuiId()
 		Gui, %guiId%:Default ; GDB TODO if we want to truly run Selectors in parallel, we'll probably need to add guiId as a property and add it to all the Gui* calls.
 		
-		if(filePath)
+		if(filePath) {
 			this.filePath := this.findTrueFilePath(filePath)
-		if(filter)
-			this.filter := filter
-		
-		if(this.filePath)
-			this.loadChoicesFromFile(this.filePath)
+			this.loadChoicesFromFile(tlSettings, filter)
+		}
 		
 		; DEBUG.popup("Selector.__New", "Finish", "Filepath", this.filePath, "TableListSettings", this.tableListSettings, "Filter", this.filter, "State", this)
 	}
@@ -121,9 +122,6 @@ class Selector {
 		this.choices := choices
 	}
 	
-	; Select
-		; s.selectGui(actionType, data, guiSettings)
-			; (guiSettings should only be Selector-specific things anyways)
 	selectGui(actionType = "", defaultData = "", guiSettings = "") {
 		; DEBUG.popup("Selector.selectGui", "Start", "ActionType", actionType, "Default data", defaultData, "GUI Settings", guiSettings)
 		
@@ -162,12 +160,9 @@ class Selector {
 			; DEBUG.popup("User Input", userIn, "Row Parse Result", rowToDo, "Action type", this.returnSettings["ActionType"], "Data filled", dataFilled)
 		}
 		
-		return this.doAction(rowToDo, this.returnSettings["ActionType"])
+		return this.doAction(rowToDo)
 	}
 	
-	; Select special (alternative callers from Select)
-		; s.selectChoice(actionType, silentChoice)
-			; (not guiSettings - all current settings either have a separate parameter [action] or are GUI-specific)
 	selectChoice(choice, actionType = "") {
 		if(!choice)
 			return ""
@@ -181,9 +176,13 @@ class Selector {
 		if(!rowToDo)
 			return ""
 		
-		return this.doAction(rowToDo, this.returnSettings["ActionType"])
+		return this.doAction(rowToDo)
 	}
 	
+	
+	; ==============================
+	; == Private ===================
+	; ==============================
 	
 	processGuiSettings(settings) {
 		if(settings["ShowDataInputs"]) ; This one can be set in the file too, so don't clear it if it's not passed.
@@ -273,18 +272,18 @@ class Selector {
 	
 	
 	; Load the choices and other such things from a specially formatted file.
-	loadChoicesFromFile(filePath) {
+	loadChoicesFromFile(tableListSettings, filter) {
 		this.choices       := [] ; Visible choices the user can pick from.
 		this.hiddenChoices := [] ; Invisible choices the user can pick from.
 		this.nonChoices    := [] ; Lines that will be displayed as titles, extra newlines, etc, but have no other significance.
 		
-		; DEBUG.popup("TableList Settings", this.tableListSettings)
-		tl := new TableList(filepath, this.tableListSettings)
-		if(this.filter)
-			list := tl.getFilteredTable(this.filter["COLUMN"], this.filter["VALUE"], this.filter["EXCLUDE_BLANKS"])
+		; DEBUG.popup("TableList Settings", tableListSettings)
+		tl := new TableList(this.filePath, tableListSettings)
+		if(filter)
+			list := tl.getFilteredTable(filter["COLUMN"], filter["VALUE"], filter["EXCLUDE_BLANKS"])
 		else
 			list := tl.getTable()
-		; DEBUG.popup("Filepath", filePath, "Parsed List", list, "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows())
+		; DEBUG.popup("Filepath", this.filePath, "Parsed List", list, "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows())
 		
 		if(!IsObject(tl.getIndexLabels())) {
 			this.errPop("Invalid settings", "No column index labels")
@@ -650,8 +649,9 @@ class Selector {
 	}
 
 	; Function to do what it is we want done, then exit.
-	doAction(rowToDo, actionType) {
+	doAction(rowToDo) {
 		; DEBUG.popup("Action type", actionType, "Row to run", rowToDo, "Action", action)
+		actionType := this.returnSettings["ActionType"]
 		
 		if(actionType = "RET")      ; Special case for simple return action, passing in the column to return.
 			result := RET(rowToDo, this.returnSettings["ReturnColumn"])

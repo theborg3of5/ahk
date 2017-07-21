@@ -1,13 +1,6 @@
 # AHK To Do
 	
 	'Selector Rewrite'
-		Various settings arrays
-			guiSettings - should we split any that involve additional processing off? Would allow us to just use mergeArrays() instead of having a separate function call in .selectGui().
-				Separate params?
-				Separate function calls to set them?
-				Have separate behavior:
-					TrayIcon - Fixing path
-					ExtraDataFields - Adding to dataIndices
 		Reduce number of this.* variables where possible - a lot of them seem unnecessary to put at class-level.
 		Reexamine inner data structure of indices, labels, data, etc.
 			guiData (+guiDataFilled)

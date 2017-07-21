@@ -1,7 +1,6 @@
 # AHK To Do
 	
 	'Selector Rewrite'
-		Reduce number of this.* variables where possible - a lot of them seem unnecessary to put at class-level.
 		Reexamine inner data structure of indices, labels, data, etc.
 			guiData (+guiDataFilled)
 	

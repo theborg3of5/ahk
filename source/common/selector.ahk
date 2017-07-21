@@ -363,10 +363,10 @@ class Selector {
 	}
 	
 	; Generate the text for the GUI and display it, returning the user's response.
-	launchSelectorPopup(ByRef guiData, ByRef guiDataFilled) {
-		guiDataFilled := false
-		if(!IsObject(guiData))
-			guiData := Object()
+	launchSelectorPopup(ByRef data, ByRef dataFilled) {
+		dataFilled := false
+		if(!IsObject(data))
+			data := Object()
 		
 		; Create and begin styling the GUI.
 		this.originalIconPath := setTrayIcon(this.guiSettings["IconPath"])
@@ -472,9 +472,7 @@ class Selector {
 		}
 		
 		widthTotal := this.getTotalWidth(columnWidths, padColumn, marginLeft, marginRight)
-		
 		yInput := maxColumnHeight + heightLine ; Extra empty row before inputs.
-		
 		if(this.guiSettings["ShowDataInputs"])
 			widthInputChoice := widthIndex + padIndexAbbrev + widthAbbrev ; Main edit control is same size as index + abbrev columns combined.
 		else
@@ -489,8 +487,8 @@ class Selector {
 			
 			xInput := xNameFirstCol
 			For num,label in this.dataIndices {
-				if(guiData[label]) ; Data given as default
-					tempData := guiData[label]
+				if(data[label]) ; Data given as default
+					tempData := data[label]
 				else               ; Data label
 					tempData := label
 				
@@ -514,16 +512,7 @@ class Selector {
 		; == GUI waits for user to do something ==
 		
 		
-		if(this.guiSettings["ShowDataInputs"]) {
-			For num,label in this.dataIndices {
-				inputVal := GuiIn%num% ; GuiIn* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
-				if(inputVal && (inputVal != label)) {
-					guiDataFilled := true
-					guiData[label] := inputVal
-				}
-			}
-		}
-		
+		dataFilled := this.getDataFromGui(data)
 		return GuiInChoice
 	}
 	
@@ -567,6 +556,22 @@ class Selector {
 		totalWidth += rightMargin
 		
 		return totalWidth
+	}
+	
+	getDataFromGui(ByRef data) {
+		if(this.guiSettings["ShowDataInputs"])
+			return false
+		
+		haveData := false
+		For num,label in this.dataIndices {
+			inputVal := GuiIn%num% ; GuiIn* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
+			if(inputVal && (inputVal != label)) {
+				haveData := true
+				data[label] := inputVal
+			}
+		}
+		
+		return haveData
 	}
 	
 	; Function to turn the input into something useful.

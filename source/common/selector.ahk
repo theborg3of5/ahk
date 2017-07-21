@@ -385,7 +385,7 @@ class Selector {
 		
 		widthIndex  := 25
 		widthAbbrev := 50
-		; (widthTitle, widthName and widthInput* exist but are calculated)
+		; (widthName and widthInputChoice/widthInputData exist but are calculated)
 		
 		heightLine  := 25
 		heightInput := 24

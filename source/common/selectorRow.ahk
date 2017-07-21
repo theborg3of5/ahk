@@ -11,9 +11,6 @@ class SelectorRow {
 	data := []
 	isDebug := false
 	
-	static debugNoRecurse := true
-	static debugName := "SelectorRow"
-	
 	; Constructor.
 	__New(arr = "", name = "", abbrev = "", action = "", addActionToTitle = false) {
 		if(arr) {
@@ -29,7 +26,6 @@ class SelectorRow {
 	}
 	
 	buildSelectorRow(title, abbrev, action, addActionToTitle = false) {
-		
 		return new SelectorRow()
 	}
 	
@@ -44,8 +40,9 @@ class SelectorRow {
 		return temp
 	}
 	
-	; Function to output this object as a string for debug purposes.
-	toDebugString(numTabs = 0) {
+	; Debug info
+	debugName := "SelectorRow"
+	debugToString(numTabs = 0) {
 		outStr .= DEBUG.buildDebugString("Data", this.data, numTabs)
 		outStr .= DEBUG.buildDebugString("IsDebug", this.isDebug, numTabs, true)
 		outStr .= DEBUG.buildDebugString("DebugResult", this.debugResult, numTabs, true)

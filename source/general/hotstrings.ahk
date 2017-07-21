@@ -237,10 +237,6 @@
 		:*c:ashf::
 			Send, % ahkRootPath "share\"
 		return
-		
-		:*c:aself::
-			Send, % ahkRootPath "resources\Selector\"
-		return
 	}
 
 	{ ; Epic - General

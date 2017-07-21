@@ -40,11 +40,19 @@
 		return
 		
 		; Expand and collapse outlines.
-		!Left::
+		$!Left::
 			Send, !+-
 		return
-		!Right::
+		$!Right::
 			Send, !+=
+		return
+		
+		; Replacement history back/forward.
+		!+Left::
+			Send, !{Left}
+		return
+		!+Right::
+			Send, !{Right}
 		return
 	}
 	

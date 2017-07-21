@@ -69,7 +69,7 @@ class DEBUG {
 	; 
 	; Relevant special properties of objects:
 	;  value.debugName - Rather than the generic "Array", text will contain {value.debugName}.
-	;  value.toDebugString - If exists for the object, we will call it with parameters (numTabs) rather than looping over the objects subscripts.
+	;  value.debugToString - If exists for the object, we will call it with parameters (numTabs) rather than looping over the objects subscripts.
 	; 
 	; Parameters:
 	;  value    - Object to put together a string about.
@@ -105,14 +105,13 @@ class DEBUG {
 		}
 		
 		; If an object has its own debug printout, use that rather than looping.
-		if(isFunc(value.toDebugString)) {
-			outStr .= "`n" value.toDebugString(numTabs + 1)
+		if(isFunc(value.debugToString)) {
+			outStr .= "`n" value.debugToString(numTabs + 1)
 			
 		} else {
 			; Loop over the object's subscripts.
-			For i,v in value {
+			For i,v in value
 				outStr .= "`n" this.buildObjectString(v, numTabs + 1, i)
-			}
 		}
 		
 		
@@ -148,8 +147,8 @@ class DEBUG {
 		; firstHalfString := outStr
 		
 		; Variable.
-		if(IsObject(var) && IsFunc(var.toDebugString) && var.debugNoRecurse) {
-			outStr .= var.toDebugString(numTabs + 1)
+		if(IsObject(var) && IsFunc(var.debugToString)) {
+			outStr .= var.debugToString(numTabs + 1)
 			
 		} else if(IsObject(var)) { ; Array, time to start recursing.
 			if(!labelSameLine)

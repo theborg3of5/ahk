@@ -18,19 +18,14 @@ return
 	MouseGetPos,,, WinHndl, CtlHndl, 2
 	
 	WinGet, Style, Style, ahk_id %WinHndl%
-	if (Style & 0x8000000) { ; WS_DISABLED.
+	if (Style & WS_DISABLED) {
 		WinSet, Enable,, ahk_id %WinHndl%
 	}
 	
 	WinGet, Style, Style, ahk_id %CtlHndl%
-	if (Style & 0x8000000) { ; WS_DISABLED.
+	if (Style & WS_DISABLED) {
 		WinSet, Enable,, ahk_id %CtlHndl%
 	}
-return
-
-#w::
-	Sleep, 5000
-	SendMessage, 0x112, 0xF170, 2,, Program Manager
 return
 
 !+w::
@@ -46,7 +41,10 @@ return
 	rows.Insert(new SelectorRow("", "Control", "o", currControl, true))
 	rows.Insert(new SelectorRow("", "Tooltip", "p", tooltipText, true))
 	
-	textToCopy := Selector.select("", "RET", , , , rows)
+	s := new Selector()
+	s.setChoices(rows)
+	textToCopy := s.selectGui()
+	
 	if(textToCopy) {
 		clipboard := textToCopy
 		DEBUG.popup("Copied to clipboard", textToCopy)

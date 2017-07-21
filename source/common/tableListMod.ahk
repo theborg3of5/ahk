@@ -1,23 +1,20 @@
 /* Modification class for parsing lists.
 */
 class TableListMod {
-	debugNoRecurse := true
-	debugName := "TableListMod"
-	
-	mod := ""
-	bit := 1
-	start := 1
-	len := 0
-	text := ""
-	label := 0
+	mod       := ""
+	bit       := 1
+	start     := 1
+	len       := 0
+	text      := ""
+	label     := 0
 	operation := ""
 	
 	__New(m, s, l, t, a, o) {
-		this.mod := m
-		this.start := s
-		this.len := l
-		this.text := t
-		this.label := a
+		this.mod       := m
+		this.start     := s
+		this.len       := l
+		this.text      := t
+		this.label     := a
 		this.operation := o
 	}
 	
@@ -27,25 +24,22 @@ class TableListMod {
 		
 		startOffset := 0
 		endOffset := 0
-		if(this.len > 0) {
+		if(this.len > 0)
 			endOffset := this.len
-		} else if(this.len < 0) {
+		else if(this.len < 0)
 			startOffset := this.len
-		}
 		
 		rowBitLen := StrLen(rowBit)
-		if(this.start > 0) {
+		if(this.start > 0)
 			startLen := this.start - 1
-		} else if(this.start < 0) {
+		else if(this.start < 0)
 			startLen := rowBitLen + this.start + 1
-		} else {
+		else
 			startLen := rowBitLen // 2
-		}
 		
 		outBit := SubStr(rowBit, 1, startLen + startOffset)
 		outBit .= this.text
 		outBit .= SubStr(rowBit, (startLen + 1) + endOffset)
-		; DEBUG.popup("Row to apply to", rowBits, "Mod applied", this, "On row bit", rowBit, "Finished bit", outBit, "Start len", startLen, "Start offset", startOffset, "Start len + 1", startLen + 1, "End offset", endOffset)
 		
 		; Put the bit back into the full row.
 		rowBits[this.bit] := outBit
@@ -53,15 +47,16 @@ class TableListMod {
 		return rowBits
 	}
 	
-	toDebugString(numTabs = 0) {
-		outStr .= DEBUG.buildDebugString("Mod", this.mod, numTabs, true)
-		outStr .= DEBUG.buildDebugString("Bit", this.bit, numTabs, true)
-		outStr .= DEBUG.buildDebugString("Start", this.start, numTabs, true)
-		outStr .= DEBUG.buildDebugString("Length", this.len, numTabs, true)
-		outStr .= DEBUG.buildDebugString("Text", this.text, numTabs, true)
-		outStr .= DEBUG.buildDebugString("Label", this.label, numTabs, true)
+	; Debug info
+	debugName := "TableListMod"
+	debugToString(numTabs = 0) {
+		outStr .= DEBUG.buildDebugString("Mod",       this.mod,       numTabs, true)
+		outStr .= DEBUG.buildDebugString("Bit",       this.bit,       numTabs, true)
+		outStr .= DEBUG.buildDebugString("Start",     this.start,     numTabs, true)
+		outStr .= DEBUG.buildDebugString("Length",    this.len,       numTabs, true)
+		outStr .= DEBUG.buildDebugString("Text",      this.text,      numTabs, true)
+		outStr .= DEBUG.buildDebugString("Label",     this.label,     numTabs, true)
 		outStr .= DEBUG.buildDebugString("Operation", this.operation, numTabs, true)
-		
 		return outStr
 	}
 }

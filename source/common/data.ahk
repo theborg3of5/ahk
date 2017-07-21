@@ -30,12 +30,10 @@ forceArray(obj) {
 	return newArray
 }
 
-; Basically an easier-to-read ternary operator.
-processOverride(defaultVal, overrideVal) {
-	if(overrideVal || IsObject(overrideVal))
-		return overrideVal
-	else
-		return defaultVal
+forceNumber(data) {
+	if(isNum(data))
+		return data
+	return 0
 }
 
 ; Inserts an item at the beginning of an array.
@@ -168,15 +166,15 @@ reIndexArray(inputAry, indexMap) {
 }
 
 ; overrides wins if they both have an index.
-mergeArrays(base, overrides) {
-	if(IsObject(base))
-		retAry := base.clone()
+mergeArrays(default, overrides) {
+	if(IsObject(default))
+		retAry := default.clone()
 	else
 		retAry := []
 	
 	For i,v in overrides {
 		if(IsObject(v))
-			retAry[i] := mergeArrays(base[i], v)
+			retAry[i] := mergeArrays(default[i], v)
 		else
 			retAry[i] := v
 	}

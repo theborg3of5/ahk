@@ -20,6 +20,7 @@
 	VM Templates			vt					\\epic.com\files\apps\vmware\SU Development\																	EPIC_DESKTOP
 	Partial Installers	pi					F:\Hospital Billing\Dev\Partial Installers\																	EPIC_DESKTOP
 	Net Home					nh					\\epic-nfs\net_home\gborg\																							EPIC_DESKTOP
+	NFS 3 Day				n3					\\epic-nfs\nfs_3day\gborg\																							EPIC_DESKTOP
 	
 	# For Hotkeys
 	AHK Root					ar|ahkRoot		<AHKROOT>\

@@ -1,7 +1,3 @@
-global LIST_ITEM := 1
-global LIST_NUM  := 2
-global VB_REF_SAME_THRESHOLD := 10
-
 { ; Main VB window.
 #IfWinActive, ahk_class wndclass_desked_gsk
 	{ ; Normal replacements/shortcuts.
@@ -317,29 +313,6 @@ global VB_REF_SAME_THRESHOLD := 10
 			MsgBox, Reference not found in list!
 		}
 	return
-
-	^a::
-		; Get user input.
-		FileSelectFile, fileName
-		if(!fileName)
-			return
-		
-		; Read in the list of names.
-		referenceLines := fileLinesToArray(fileName)
-		
-		; Parse the list into nice, uniform reference lines.
-		references := TableList.parseList(referenceLines)
-		
-		textOut := ""
-		refsLen := references.MaxIndex()
-		Loop, %refsLen% {
-			textOut .= references[A_Index, LIST_ITEM] . "	" . references[A_Index, LIST_NUM] . "`n"
-			; MsgBox, % references[A_Index, LIST_ITEM] . "	" . references[A_Index, LIST_NUM]
-			findReferenceLine(references[A_Index, LIST_ITEM], references[A_Index, LIST_NUM], true)
-		}
-		
-		MsgBox, Selected References: `n`n%textOut%
-	return
 #IfWinActive
 }
 
@@ -435,14 +408,14 @@ global VB_REF_SAME_THRESHOLD := 10
 			currRow := SubStr(currRowFull, 1, StrLen(lineToFind))
 			; MsgBox, %currRow%
 			
-			; Just in case we hit the end of the listbox: if we see the same row VB_REF_SAME_THRESHOLD times, finish.
+			; Just in case we hit the end of the listbox: if we see the same row 10 times, finish.
 			if(currRowFull = prevRow) {
 				numSame++
 			} else {
 				numSame := 1
 			}
 			; MsgBox, Row: %currRow% `nPrevious: %prevRow% `nnumSame: %numSame%
-			if(numSame = VB_REF_SAME_THRESHOLD) {
+			if(numSame = 10) {
 				return false
 			}
 			prevRow := currRowFull

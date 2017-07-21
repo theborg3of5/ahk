@@ -42,34 +42,22 @@ return
 	return
 	
 	; Selector launchers
-	#p::  Selector.select("local/phone.tl",            "CALL")
-	^+!h::Selector.select("local/epicEnvironments.tl", "DO_HYPERSPACE", , "C:\Program Files (x86)\Epic\v8.3\Shared Files\EpicD83.exe")
-	^+!r::Selector.select("local/epicEnvironments.tl", "DO_THUNDER",    , "C:\Program Files (x86)\PuTTY\putty.exe")
+	#p::doSelect("local/phone.tl")
+	^+!t::doSelect("local/outlookTLG.tl")
+	^+!h::doSelect("local/epicEnvironments.tl", "DO_HYPERSPACE", "C:\Program Files (x86)\Epic\v8.3\Shared Files\EpicD83.exe")
+	^+!r::doSelect("local/epicEnvironments.tl", "DO_THUNDER",    "C:\Program Files (x86)\PuTTY\putty.exe")
 	^!#s::
-		settings := []
-		settings["ShowArbitraryInputs"] := 1
-		
-		extraData := []
-		
-		subData := []
-		subData["INI"] := ""
-		extraData.push(subData)
-		
-		subData := []
-		subData["ID"] := ""
-		extraData.push(subData)
-		
-		Selector.select("local/epicEnvironments.tl", "DO_SNAPPER",    , "C:\Program Files (x86)\Epic\Snapper\Snapper.exe", [], , , settings, extraData)
+		s := new Selector("local/epicEnvironments.tl")
+		guiSettings := []
+		guiSettings["Icon"] := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
+		guiSettings["ShowDataInputs"] := 1
+		guiSettings["ExtraDataFields"] := ["INI", "ID"]
+		s.selectGui("DO_SNAPPER", "", guiSettings)
 	return
-	^+!t::Selector.select("local/outlookTLG.tl",       "OUTLOOK_TLG")
-
-	; Themes
-	; ^+!d::Selector.select("theme.tl", "CHANGE_THEME",  "dw")
-	; ^+!l::Selector.select("theme.tl", "CHANGE_THEME",  "lw")
 #If
 	
 ; Resize window
-#!r::Selector.select("resize.tl", "RESIZE")
+#!r::doSelect("resize.tl")
 
 ; Folders
 !+a::openFolder("ahkRoot")
@@ -85,36 +73,37 @@ return
 	return
 #IfWinExist
 
-#If MainConfig.isMachine(EPIC_DESKTOP)
-	; Generic search.
-	!+f::
-		text := gatherText(TEXT_SOURCE_SEL_CLIP)
-		
-		data       := Selector.select("search.tl", "RET_DATA", "", "", {"ARG1": text})
-		searchType := data["SEARCH_TYPE"]
-		subTypes   := forceArray(data["SUBTYPE"])
-		
-		criteria := []
-		Loop, 5 {
-			arg := data["ARG" A_Index]
-			escapedArg := escapeDoubleQuotes(arg, 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
-			criteria[A_Index] := escapedArg
-		}
-		
-		if(searchType = "CODESEARCH")
-			For i,st in subTypes ; There could be multiple here?
-				url := buildCodeSearchURL(st, criteria)
-		else if(searchType = "GURU")
-			url := buildGuruURL(criteria[1])
-		else if(searchType = "WIKI") ; Epic wiki search.
-			url := buildEpicWikiSearchURL(subTypes[0], criteria[1])
-		else if(searchType = "WEB")
-			url := StrReplace(subTypes[0], "%s", criteria[1])
-		
-		if(url)
-			Run, % url
-	return
-#If
+; Generic search.
+!+f::
+	text := gatherText(TEXT_SOURCE_SEL_CLIP)
+	
+	filter := MainConfig.getMachineTableListFilter()
+	s := new Selector("search.tl", "", filter)
+	data := s.selectGui("", {"ARG1": text})
+	
+	searchType := data["SEARCH_TYPE"]
+	subTypes   := forceArray(data["SUBTYPE"])
+	
+	criteria := []
+	Loop, 5 {
+		arg := data["ARG" A_Index]
+		escapedArg := escapeDoubleQuotes(arg, 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
+		criteria[A_Index] := escapedArg
+	}
+	
+	if(searchType = "CODESEARCH")
+		For i,st in subTypes ; There could be multiple here?
+			url := buildCodeSearchURL(st, criteria)
+	else if(searchType = "GURU")
+		url := buildGuruURL(criteria[1])
+	else if(searchType = "WIKI") ; Epic wiki search.
+		url := buildEpicWikiSearchURL(subTypes[0], criteria[1])
+	else if(searchType = "WEB")
+		url := StrReplace(subTypes[0], "%s", criteria[1])
+	
+	if(url)
+		Run, % url
+return
 
 ; ; Take the selected number, show a popup that takes what math to do on it (i.e., +25), and put the result back in place.
 ; !+c::
@@ -185,10 +174,13 @@ return
 openFolder(folderName = "") {
 	global configFolder
 	
-	tableListSettings := []
-	tableListSettings["FILTER", "COLUMN"] := "MACHINE"
-	tableListSettings["FILTER", "INCLUDE", "VALUE"]  := MainConfig.getMachine()
-	folderPath := Selector.select(configFolder "folders.tl", "RET", folderName, , , , tableListSettings)
+	filter := MainConfig.getMachineTableListFilter()
+	s := new Selector("folders.tl", "", filter)
+	
+	if(folderName)
+		folderPath := s.selectChoice(folderName)
+	else
+		folderPath := s.selectGui()
 	
 	; Replace any special tags with real paths.
 	folderPath := StrReplace(folderPath, "<AHKROOT>", SubStr(ahkRootPath, 1, -1)) ; Assuming that global path vars have a \ on the end that we don't want.

@@ -1,36 +1,52 @@
 /* Generic, flexible custom class for parsing lists.
 	
-	This class will read in a file (using TableList.parseFile()) and return an array of arrays, where each 2nd-level array corresponds to a row in the file (excluding mods, see below). The inner arrays will be the contents of each row, broken up by any number of tabs (>1 tabs are ignored until the next non-tab character), and changed based on the mods that were active at that point in the file.
+	Throughout this documentation, "tl" will refer to an instance of this class.
+	
+	This class will read in a file (using tl.parseFile()) and return a multi-dimensional array:
+		array[i]   = line i from the file
+		array[i,j] = entry j from line i (split up by one or more tabs)
+	
+	Any line may be indented as desired:
+		Spaces and tabs at the beginning of any line are ignored.
+		Multiple tabs in a row within a row are treated as a single tab.
 	
 	Certain characters have special meaning when parsing the lines of a file. They include:
-		[ - Mod
-			A line which begins with this character will be processed as a mod (see mod section below for details).
+		At the start of a row:
+			@ - Setting
+				Any row that begins with one of these is assumed to be of the form @SettingName=value, where SettingName is one of the following:
+					PlaceholderChar - the placeholder character to use
+				Note that if any of these conflict with the settings passed programmatically, the programmatic settings win.
+			
+			# - Pass
+				Any row that begins with one of these characters will not be broken up into multiple pieces, but will be a single-element array in the final output.
+				Override with settings["CHARS", "PASS"].
+			
+			; - Comment
+				If at the beginning of a line (ignoring any whitespace before that), the line is ignored and not added to the array of lines.
+				Override with settings["CHARS", "COMMENT"].
+			
+			( - Model
+				You can have each line use string indices per value by creating a row that begins with this character. You can tab-separate this line to visually line up with your rows.
+				Override with settings["CHARS", "MODEL"].
 		
-		# - Pass
-			Any row that begins with one of these characters will not be broken up into multiple pieces, but will be a single-element array in the final output.
-			Override (with an array) with settings["CHARS", "PASS"].
+			[ - Mod
+				A line which begins with this character will be processed as a mod (see mod section below for details).
 		
-		; - Comment
-			If at the beginning of a line (ignoring any whitespace before that), the line is ignored and not added to the array of lines.
-			Override with settings["CHARS", "COMMENT"].
+		Within a "normal" row (not started with any of the special characters above):
+			<No default> - Placeholder
+				Having this allows you to have a truly empty value for a column in a given row (useful when optional columns are in the middle).
+				Override with @PlaceholderChar or settings["CHARS", "PLACEHOLDER"].
+			
+			| - Multiple
+				In a row that's being split, if an individual column within the row has this character, then that entry will be an array of the pipe-delimited values.
 		
-		( - Model
-			You can have each line use string indices per value by creating a row that begins with this character. You can tab-separate this line to visually line up with your rows.
-			Override with settings["CHARS", "MODEL"].
-		
-		<No default> - Placeholder
-			Having this allows you to have a truly empty value for a column in a given row (useful when optional columns are in the middle).
-			Override with settings["CHARS", "PLACEHOLDER"].
-		
-		| - Multiple
-			In a row that's being split, if an individual column within the row has this character, then that entry will be an array of the pipe-delimited values.
-	
 	These settings are also available:
 		settings["FORMAT", "SEPARATE_MAP"]
 			Associative array of CHAR => NAME.
 			Rows that begin with a character that's a key (CHAR) in this array will be:
-				Split like the rest, but will be numerically indexed (even if a model row is given or DEFAULT_INDICES setting is set)
-				Stored separately in TableList.separateRows[NAME]
+				Stored separately, can be retrieved with tl.getSeparateRows(NAME)
+				Split like a normal row, but will always be numerically indexed
+					This is true even if there is a model row, or the DEFAULT_INDICES setting is set.
 			Example
 				Settings
 					settings["FORMAT", "SEPARATE_MAP"] := {")": "DATA_INDEX"}
@@ -38,12 +54,11 @@
 						(	NAME	ABBREV	DOACTION
 				Input row
 					)	A	B	C
-				Output array (stored in TableList.separateRows["DATA_INDEX"])
+				Output array (can get via tl.getSeparateRows("DATA_INDEX"))
 					[1]	A
 					[2]	B
 					[3]	C
-					
-			
+		
 		settings["FORMAT", "DEFAULT_INDICES"]
 			Numerically-indexed array that provides what string indices should be used. A model row will override this, and any data that falls outside of the given indices will be numerically indexed.
 			Example
@@ -59,18 +74,10 @@
 					[4]				D
 					[5]				E
 		
-		settings["FILTER", "COLUMN"]
-			Which row to filter rows by, defaults to none.
-		settings["FILTER", "VALUE"]
-			Ignored unless settings["FILTER", "COLUMN"] is set.
-			Any rows where the column specified by settings["FILTER", "COLUMN"] doesn't match the given value will be excluded from the output.
-		settings["FILTER", "INCLUDE", "BLANKS"]
-			If set to true (default), rows with no value in the filter column will be included in the output.
-			
 	
-	The bulk of the utility that this class provides comes from mods. Mods are created by specially-formatted rows in the file, and are represented by TableListMod objects. Note that each mod object holds only one sort of operation, to one piece of affected rows - mod creation rows with multiple operations specified will result in one mod per operation. Mods are typically executed in the order that they were added, with the exception of the pre-process modifier (*, see below). The format for mod rows is as follows:
+	Mods are created by specially-formatted rows in the file that affect any rows that come after them in the file. The format for mod rows is as follows:
 	
-	1. Mod rows should always start and end with square brackets (start with [, end with ]).
+	1. Mod rows should always be wrapped in square brackets (start with [, end with ]).
 	2. Mod rows may have any number of the following mod actions per line, separated by pipes (|):
 			[] - Clear all mods
 				A line with nothing but "[]" on it will clear all current mods added before that point in the file.
@@ -95,42 +102,6 @@
 					Result
 						AAAeee
 			
-			m(x,y) - Modify (x can be any number, y can be any number. y is optional and defaults to 0.)
-				Changes the given string, replace the given range with the given text.
-				Example
-					Mods
-						[m(2,3):eee]
-					Input
-						AAABBBCCCDDD
-					Result
-						AAeeeDDD
-			
-	3. Mod actions can be further changed by the following modifiers (placed at the beginning of the mod action, in order declared here):
-			* - Pre-process mod
-				Places that mod first in order of execution, before any mods above it.
-				Example
-					Mods
-						[e:.exe]
-						[*e:Portable]
-					Input
-						firefox
-					Result
-						firefoxPortable.exe
-			
-			{x} - Row part to modify with mod (x can be any number, defaults to 1)
-				Sets which part of each row the mod will affect. Default is 1, first element.
-				Example
-					Mods
-						[{3}b:AAA]
-					Input
-						W	X	Y	Z
-					Result
-						W
-						X
-						AAAY
-						Z
-			
-	4. Mod rows may also have these modifiers (typically the first thing in the mod line, separated from other actions by pipes):
 			+x - Add label (x can be any number)
 				Labels all following mods on the same row with the given numeric label, which can be used to remove them from executing on further lines further on with the - operator.
 				Example: adds action1 and action2 as mods, both with a label of 5.
@@ -141,219 +112,233 @@
 				Example: Removes all mods with the label 5.
 					[-5]
 			
-	
+	3. By default, all mods apply only to the first tab-separated entry in each row. 
+			You can specify which entry in a row a mod should apply to by adding {x} before the mod action, where x can be any number.
+			Example
+				Mods
+					[{3}b:AAA]
+				Input
+					W	X	Y	Z
+				Result
+					W
+					X
+					AAAY
+					Z
 
 */
 
 class TableList {
-	static debugNoRecurse := true
-	static debugName := "TableList"
+	; ==============================
+	; == Public ====================
+	; ==============================
 	
-	static whiteSpaceChars := [ A_Space, A_Tab ]
-	static multiEntryChar := "|"
-	
-	static preChar := "*"
-	static addChar := "+"
-	static remChar := "-"
-	
-	static modBeginChar  := "b"
-	static modEndChar    := "e"
-	static modModifyChar := "m"
-	static modFirstChar  := "["
-	
-	__New() {
-		this.init()
-	}
-	
-	init(overrides) {
-		; Initialize the objects.
-		this.mods  := []
-		this.table := []
-		
-		; Character defaults and overrides
-		defaultChars := []
-		defaultChars["DELIMITER"]   := A_Tab
-		defaultChars["COMMENT"]     := ";"
-		defaultChars["MODEL"]       := "("
-		defaultChars["PLACEHOLDER"] := ""
-		defaultChars["PASS"]        := ["#"] ; This one supports multiple entries
-		this.chars := mergeArrays(defaultChars, overrides["CHARS"])
-		
-		; Format defaults and overrides
-		this.separateMap := processOverride([], overrides["FORMAT", "SEPARATE_MAP"])
-		this.indexLabels := processOverride([], overrides["FORMAT", "DEFAULT_INDICES"])
-		
-		; Other settings
-		defaultFilter := []
-		defaultFilter["INCLUDE","BLANKS"] := true
-		this.filter := mergeArrays(defaultFilter, overrides["FILTER"])
-		
-		; DEBUG.popup("TableList", "Setup processing done", "Chars", this.chars, "Formats", this.formats, "Filter", this.filter)
+	__New(fileName, settings) {
+		this.parseFile(fileName, settings)
 	}
 	
 	parseFile(fileName, settings = "") {
-		if(!fileName || !FileExist(fileName)) {
-			; DEBUG.popup("File does not exist", fPath)
+		if(!fileName || !FileExist(fileName))
 			return ""
-		}
 		
-		; Read the file into an array.
-		lines := fileLinesToArray(fileName)
-		; DEBUG.popup("Filename", fileName, "Lines from file", lines)
-		
-		return this.parseList(lines, settings)
-	}
-	
-	parseList(lines, settings = "") {
 		this.init(settings)
-		delim := this.chars["DELIMITER"]
-		currItem := []
 		
-		; Loop through and do work on them.
-		For i,row in lines {
-			; Strip off any leading whitespace.
-			Loop {
-				firstChar := SubStr(row, 1, 1)
-			
-				if(!contains(TableList.whiteSpaceChars, firstChar)) {
-					; DEBUG.popup("First not blank, moving on", firstChar)
-					Break
-				}
-				
-				; originalRow := row
-				StringTrimLeft, row, row, 1
-				; DEBUG.popup("Row", originalRow, "First Char", firstChar, "Trimmed", row)
-			}
-			
-			; Squash any empty spots, so only one delimeter in between each element.
-			Loop {
-				if(!stringContains(row, delim delim))
-					Break
-				
-				StringReplace, row, row, %delim%%delim%, %delim%
-			}
-			
-			; Split up the row by tabs.
-			rowBits := StrSplit(row, delim)
-			firstChar := SubStr(row, 1, 1)
-			; DEBUG.popup("Looking at row", row, "Bits", rowBits, "First char", firstChar)
-			
-			; Ignore it entirely if it's an empty line or beings with ; (a comment).
-			if(firstChar = this.chars["COMMENT"] || firstChar = "") {
-				; DEBUG.popup("Comment or blank line", firstChar)
-			
-			; Special row for modifying the current modifications in play.
-			} else if(firstChar = this.modFirstChar) {
-				; DEBUG.popup("Modifier Line", row, "First Char", firstChar)
-				this.updateMods(row)
-			
-			; Special row for label/title later on, leave it untouched.
-			} else if(contains(this.chars["PASS"], firstChar)) {
-				; DEBUG.popup("Pass line", row, "First Char", firstChar)
-				currItem := Object()
-				currItem.Insert(row)
-				this.table.Insert(currItem)
-			
-			; Separate characters mean that we split the row, but always store it numerically and separately from everything else.
-			} else if(this.separateMap.hasKey(firstChar)) {
-				; DEBUG.popup("Separate row", rowBits)
-				this.parseSeparateRow(firstChar, rowBits)
-			
-			; Model row, causes us to use string subscripts instead of numeric per entry.
-			} else if(firstChar = this.chars["MODEL"]) {
-				this.parseModelRow(rowBits)
-			
-			; Normal line.
-			} else {
-				; Transform to use string indices if given.
-				if(IsObject(this.indexLabels)) {
-					tempBits := rowBits
-					rowBits := []
-					For i,value in tempBits {
-						idxLabel := this.indexLabels[i]
-						if(idxLabel)
-							rowBits[idxLabel] := value
-						else
-							rowBits[i] := value
-					}
-					; DEBUG.popup("Bits before named indices", tempBits, "After named indices", rowBits)
-				}
-				
-				; Apply any active modifications.
-				currItem := this.applyMods(rowBits)
-				
-				; If any of the values were a placeholder, remove them now.
-				For i,value in currItem.clone() { ; Have to clone array as calling .Delete changes the indices (causing us to miss some in our loop).
-					if(value = this.chars["PLACEHOLDER"])
-						currItem.Delete(i)
-				}
-				
-				; Split up any entries that include the multiEntryChar (pipe by default).
-				For i,value in currItem {
-					if(stringContains(value, this.multiEntryChar))
-						currItem[i] := StrSplit(value, this.multiEntryChar)
-				}
-				
-				; DEBUG.popup("Normal Row", originalRow, "Input rowbits", rowBits, "Current Mods", this.mods, "Processed Row", currItem, "Table", this.table)
-				if(this.shouldIncludeItem(currItem))
-					this.table.Insert(currItem)
-			}
-			
-		}
+		lines := fileLinesToArray(fileName)
+		this.parseList(lines)
 		
 		return this.table
 	}
 	
+	getTable() {
+		return this.table
+	}
+	getRow(index) {
+		return this.table[index]
+	}
+	
+	getSeparateRows() {
+		return this.separateRows
+	}
+	getSeparateRow(name) {
+		return this.separateRows[name]
+	}
+	
+	getIndexLabels() {
+		return this.indexLabels
+	}
+	getIndexLabel(index) {
+		return this.indexLabels[index]
+	}
+	
+	; Return a table of all rows that have the allowed value in the filterColumn column.
+	; Will only affect normal rows (i.e. what you get from tl.getTable())
+	; column        - Which column to filter rows by.
+	; allowedValue  - If a row has a value set for the given column, it must be set to this value to be included.
+	; excludeBlanks - By default, rows with a blank value for the filter column will be included. Set this to true to exclude them.
+	getFilteredTable(column, allowedValue = "", excludeBlanks = false) {
+		; DEBUG.popup("column",column, "allowedValue",allowedValue, "excludeBlanks",excludeBlanks)
+		if(!column)
+			return ""
+		
+		filteredTable := []
+		For i,currRow in this.table {
+			if(this.shouldExcludeItem(currRow, column, allowedValue, excludeBlanks))
+				Continue
+			
+			filteredTable.push(currRow)
+		}
+		
+		return filteredTable
+	}
+	
+	; Return a table of all rows that have the allowed value in the filterColumn.
+	; However, return only one row per unique value of the uniqueColumn - a row with 
+	; a blank filterColumn value will be dropped if there's another row with the same 
+	; uniqueColumn value, with the correct allowedValue in the filterColumn column. 
+	; If there are multiple rows with the same uniqueColumn, with the same filterColumn
+	; value (either blank or allowedValue), the first one in the file wins.
+	getFilteredTableUnique(uniqueColumn, filterColumn, allowedValue = "") {
+		if(!uniqueColumn || !filterColumn)
+			return ""
+		
+		uniqueAry := [] ; uniqueVal => {"Index": indexInTable, "FilterValue": filterVal}
+		For i,currRow in this.table {
+			if(this.shouldExcludeItem(currRow, filterColumn, allowedValue))
+				Continue
+			
+			uniqueVal := currRow[uniqueColumn]
+			filterVal := currRow[filterColumn]
+			
+			if(!uniqueAry[uniqueVal]) {
+				uniqueAry[uniqueVal] := []
+				uniqueAry[uniqueVal,"Index"]     := i
+				uniqueAry[uniqueVal,"FilterVal"] := filterVal
+			} else if( (filterVal = allowedValue) && (uniqueAry[uniqueVal]["FilterVal"] != allowedValue) ) {
+				uniqueAry[uniqueVal,"Index"]     := i
+				uniqueAry[uniqueVal,"FilterVal"] := filterVal
+			}
+		}
+		
+		filteredTable := []
+		For i,ary in uniqueAry {
+			index := ary["Index"]
+			filteredTable.push(this.table[index])
+		}
+		
+		return filteredTable
+	}
+	
 	; If a filter is given, exclude any rows that don't fit.
-	shouldIncludeItem(currItem) {
-		valueToCompare := currItem[this.filter["COLUMN"]]
+	shouldExcludeItem(currRow, column, allowedValue = "", excludeBlanks = false) {
+		if(!column)
+			return false
 		
-		if(!this.filter["COLUMN"])
-			return true
+		valueToCompare := currRow[column]
 		
-		; DEBUG.popup("Filter column", this.filter["COLUMN"], "Filter value", this.filter["INCLUDE","VALUE"], "Value to compare", valueToCompare)
-		if(this.filter["INCLUDE","BLANKS"] && !valueToCompare)
-			return true
+		if(!excludeBlanks && !valueToCompare)
+			return false
 		
-		if(valueToCompare = this.filter["INCLUDE","VALUE"])
-			return true
+		if(valueToCompare = allowedValue)
+			return false
 		
 		; Array case - multiple values in filter column.
-		if(IsObject(valueToCompare) && contains(valueToCompare, this.filter["INCLUDE","VALUE"]))
-			return true
+		if(IsObject(valueToCompare) && contains(valueToCompare, allowedValue))
+			return false
 		
-		return false
+		return true
 	}
 	
-	; Function to deal with special model rows.
-	parseModelRow(rowBits) {
-		this.indexLabels := []
+	
+	; ==============================
+	; == Private ===================
+	; ==============================
+	
+	init(settings) {
+		this.mods  := []
+		this.table := []
 		
-		rowBits.RemoveAt(1) ; Get rid of the "(" bit.
-		; DEBUG.popup("Row bits", rowBits)
-		
-		For i,r in rowBits
-			this.indexLabels[i] := r
-		
-		; DEBUG.popup("Index labels", this.indexLabels)
+		this.chars       := mergeArrays(this.getDefaultChars(), settings["CHARS"])
+		this.separateMap := mergeArrays([],                     settings["FORMAT", "SEPARATE_MAP"])
+		this.indexLabels := mergeArrays([],                     settings["FORMAT", "DEFAULT_INDICES"])
 	}
 	
-	; Row that starts with a special char, where we keep the row split but don't apply mods or labels.
-	parseSeparateRow(char, rowBits) {
-		if(!IsObject(this.separateRows))
-			this.separateRows := []
+	; Special character defaults
+	getDefaultChars() {
+		chars := []
+		chars["WHITESPACE"] := [ A_Space, A_Tab ]
 		
-		rowBits.RemoveAt(1) ; Get rid of the separate char bit.
-		; DEBUG.popup("Row bits", rowBits)
+		chars["MODSTART"] := "["
+		chars["COMMENT"]  := ";"
+		chars["MODEL"]    := "("
+		chars["PASS"]     := ["#"] ; This one supports multiple entries
+		chars["SETTING"]  := "@"
 		
-		this.separateRows[this.separateMap[char]] := rowBits
-		; DEBUG.popup("Separate rows", this.separateRows)
+		chars["PLACEHOLDER"] := "" ; No default
+		chars["MULTIENTRY"]  := "|"
+		
+		chars["MOD","BEGIN"]  := "b"
+		chars["MOD","END"]    := "e"
+		chars["MOD","ADD"]    := "+"
+		chars["MOD","REMOVE"] := "-"
+		
+		return chars
+	}
+	
+	parseList(lines) {
+		delim := A_Tab
+		currRow := []
+		
+		; Loop through and do work on them.
+		For i,row in lines {
+			row := dropWhitespace(row)
+			
+			; Reduce any sets of multiple delimiters in a row to a single one.
+			Loop {
+				if(!stringContains(row, delim delim))
+					Break
+				StringReplace, row, row, %delim%%delim%, %delim%
+			}
+			
+			rowBits := StrSplit(row, delim)
+			firstChar := SubStr(row, 1, 1)
+			
+			if(firstChar = this.chars["COMMENT"] || firstChar = "") {
+				; Ignore - it's either empty or a comment row.
+			} else if(firstChar = this.chars["SETTING"]) {
+				this.processSetting(SubStr(row, 2)) ; Strip off the @ at the beginning
+				
+			} else if(firstChar = this.chars["MODSTART"]) {
+				this.updateMods(row)
+			} else if(contains(this.chars["PASS"], firstChar)) {
+				currRow := Object()
+				currRow.push(row)
+				this.table.push(currRow)
+			} else if(this.separateMap.hasKey(firstChar)) { ; Separate characters mean that we split the row, but always store it numerically and separately from everything else.
+				this.parseSeparateRow(firstChar, rowBits)
+			} else if(firstChar = this.chars["MODEL"]) { ; Model row, causes us to use string subscripts instead of numeric per entry.
+				this.parseModelRow(rowBits)
+			} else {
+				this.parseNormalRow(rowBits)
+			}
+			
+		}
+		
+		; DEBUG.popup("TableList.parseList", "Finish", "State", this)
+	}
+	
+	processSetting(settingString) {
+		if(!settingString)
+			return
+		
+		settingSplit := StrSplit(settingString, "=")
+		name  := settingSplit[1]
+		value := settingSplit[2]
+		
+		if(name = "PlaceholderChar")
+			this.chars["PLACEHOLDER"] := value
 	}
 
 	; Update the given modifier string given the new one.
 	updateMods(newRow) {
-		; DEBUG.popup("Current Mods", this.mods, "New Mod", newRow)
-		
 		label := 0
 		
 		; Strip off the square brackets.
@@ -365,7 +350,7 @@ class TableList {
 		} else {
 			; Check for a remove row label.
 			; Assuming here that it will be the first and only thing in the mod row.
-			if(SubStr(newRow, 1, 1) = this.remChar) {
+			if(SubStr(newRow, 1, 1) = this.chars["MOD","REMOVE"]) {
 				remLabel := SubStr(newRow, 2)
 				this.killMods(remLabel)
 				label := 0
@@ -375,26 +360,16 @@ class TableList {
 			
 			; Split new into individual mods.
 			newModsSplit := StrSplit(newRow, "|")
-			; DEBUG.popup("Row", newRow, "Row Split", newModsSplit)
 			For i,currMod in newModsSplit {
 				firstChar := SubStr(currMod, 1, 1)
 				
 				; Check for an add row label.
-				if(i = 1 && firstChar = this.addChar) {
+				if(i = 1 && firstChar = this.chars["MOD","ADD"]) {
 					label := SubStr(currMod, 2)
-					; DEBUG.popup("Adding label", label)
 				} else {
-					; Allow backwards stacking - that is, a later mod can go first in mod order.
-					if(firstChar = this.preChar) {
-						newMod := this.parseModLine(SubStr(currMod, 2), label)
-						this.mods := insertFront(this.mods, newMod)
-					} else {
-						newMod := this.parseModLine(currMod, label)
-						this.mods.Insert(newMod)
-					}
+					newMod := this.parseModLine(currMod, label)
+					this.mods.push(newMod)
 				}
-				
-				; DEBUG.popup("Mod processed", currMod, "First Char", firstChar, "Label", label, "Premod", preMod, "Current Mods", this.mods)
 			}
 		}
 	}
@@ -404,25 +379,21 @@ class TableList {
 		origModLine := modLine
 		
 		currMod := new TableListMod(modLine, 1, 0, "", label, "")
-		; MsgBox % currMod.__Class
-		; MsgBox, % "Modline " modLine "`nIsObject " IsObject(currMod) "`nIsFunc " IsFunc(currMod.toDebugString) "`nDebug no recurse " currMod.debugNoRecurse
 		
 		; Next, check to see whether we have an explicit bit. Syntax: starts with {#}
 		firstChar := SubStr(modLine, 1, 1)
 		if(firstChar = "{") {
 			closeCurlyPos := InStr(modLine, "}")
 			currMod.bit := SubStr(modLine, 2, closeCurlyPos - 2)
-			; DEBUG.popup(currMod.bit, "Which bit")
 			
 			modLine := SubStr(modLine, closeCurlyPos + 1)
-			; DEBUG.popup(modLine, "Trimmed current mod")
 		}
 		
 		; First character of remaining string indicates what sort of operation we're dealing with: b, e, or m.
 		currMod.operation := Substr(modLine, 1, 1)
-		if(currMod.operation = this.modBeginChar) {
+		if(currMod.operation = this.chars["MOD","BEGIN"]) {
 			currMod.start := 1
-		} else if(currMod.operation = this.modEndChar) {
+		} else if(currMod.operation = this.chars["MOD","END"]) {
 			currMod.start := -1
 		}
 		
@@ -434,66 +405,98 @@ class TableList {
 		closeParenPos := InStr(modLine, ")")
 		
 		; Snag the rest of the info.
-		if(currMod.operation = this.modModifyChar) {
-			currMod.text := SubStr(modLine, closeParenPos + 2)
-			if(commaPos) { ; two arguments in parens.
-				currMod.start := SubStr(modLine, 2, commaPos - 2)
-				currMod.len := SubStr(modLine, commaPos + 1, closeParenPos - (commaPos + 1))
-			} else {
-				currMod.start := SubStr(modLine, 2, closeParenPos - 2)
-				currMod.len := 0
-			}
-		} else {
-			currMod.text := SubStr(modLine, 2)
-		}
+		currMod.text := SubStr(modLine, 2)
 		
-		; DEBUG.popup("Mod Line", origModLine, "Mod processed", currMod, "Comma position", commaPos, "Close paren position", closeParenPos)
 		return currMod
 	}
 
 	; Kill mods with the given label.
 	killMods(killLabel = 0) {
-		; DEBUG.popup(killLabel, "Killing all mods with label")
-		
 		i := 1
 		modsLen := this.mods.MaxIndex()
 		Loop, %modsLen% {
 			if(this.mods[i].label = killLabel) {
-				; DEBUG.popup(mods[i], "Removing Mod")
 				this.mods.Remove(i)
 				i--
 			}
 			i++
 		}
 	}
+	
+	; Row that starts with a special char, where we keep the row split but don't apply mods or labels.
+	parseSeparateRow(char, rowBits) {
+		if(!IsObject(this.separateRows))
+			this.separateRows := []
+		
+		rowBits.RemoveAt(1) ; Get rid of the separate char bit.
+		
+		this.separateRows[this.separateMap[char]] := rowBits
+	}
+	
+	; Function to deal with special model rows.
+	parseModelRow(rowBits) {
+		this.indexLabels := []
+		
+		rowBits.RemoveAt(1) ; Get rid of the "(" bit.
+		
+		For i,r in rowBits
+			this.indexLabels[i] := r
+	}
+	
+	parseNormalRow(rowAry) {
+		if(IsObject(this.indexLabels))
+			rowAry := this.applyIndexLabels(rowAry)
+		
+		currRow := this.applyMods(rowAry)
+		
+		; If any of the values were a placeholder, remove them now.
+		For i,value in currRow.clone() ; Clone since we're deleting things.
+			if(value = this.chars["PLACEHOLDER"])
+				currRow.Delete(i)
+		
+		; Split up any entries that include the multi-entry character (pipe by default).
+		For i,value in currRow
+			if(stringContains(value, this.chars["MULTIENTRY"]))
+				currRow[i] := StrSplit(value, this.chars["MULTIENTRY"])
+		
+		this.table.push(currRow)
+	}
+	
+	applyIndexLabels(rowAry) {
+		tempAry := []
+		For i,value in rowAry {
+			idxLabel := this.indexLabels[i]
+			if(idxLabel)
+				tempAry[idxLabel] := value
+			else
+				tempAry[i] := value
+		}
+		
+		return tempAry
+	}
 
 	; Apply currently active string modifications to given row.
 	applyMods(rowBits) {
-		; DEBUG.popup("Row", row, "Row bits", rowBits)
-		; origBits := rowBits
-		
 		; If there aren't any mods, just split the row and send it on.
 		if(this.mods.MaxIndex() != "") {
 			; Apply the mods.
-			For i,currMod in this.mods {
-				; beforeBits := rowBits
-				
+			For i,currMod in this.mods
 				rowBits := currMod.executeMod(rowBits)
-				
-				; DEBUG.popup("Row bits", beforeBits, "Mod to apply", currMod, "Processed bits", rowBits)
-			}
 			
-			; DEBUG.popup("Row bits", origBits, "Finished bits", rowBits)
 			return rowBits
 		}
 		
 		return rowBits
 	}
 	
-	toDebugString(numTabs = 0) {
-		outStr .= DEBUG.buildDebugString("Mods", this.mods, numTabs)
-		outStr .= DEBUG.buildDebugString("Table", this.table, numTabs)
-		
+	; Debug info
+	debugName := "TableList"
+	debugToString(numTabs = 0) {
+		outStr .= DEBUG.buildDebugString("Chars",         this.chars,       numTabs)
+		outStr .= DEBUG.buildDebugString("Separate Map",  this.separateMap, numTabs)
+		outStr .= DEBUG.buildDebugString("Index labels",  this.indexLabels, numTabs)
+		outStr .= DEBUG.buildDebugString("Mods",          this.mods,        numTabs)
+		outStr .= DEBUG.buildDebugString("Table",         this.table,       numTabs)
 		return outStr
 	}
 }

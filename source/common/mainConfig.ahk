@@ -63,11 +63,9 @@ class MainConfig {
 	loadWindows(filePath) {
 		settings := []
 		settings["CHARS"] := []
-		settings["CHARS", "PLACEHOLDER"] := "-"
-		settings["FILTER", "COLUMN"] := "MACHINE"
-		settings["FILTER", "INCLUDE", "VALUE"] := MainConfig.getMachine()
 		
-		this.windows := TableList.parseFile(filePath, settings)
+		tl := new TableList(filePath, settings)
+		this.windows := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
 		; DEBUG.popup("MainConfig", "loadWindows", "Loaded windows", this.windows)
 	}
 	
@@ -75,42 +73,24 @@ class MainConfig {
 		settings := []
 		settings["CHARS"] := []
 		settings["CHARS", "ESCAPE"] := "" ; No escape char, to let single backslashes through.
-		settings["CHARS", "PLACEHOLDER"] := "-"
-		rawPrograms := TableList.parseFile(filePath, settings) ; Format: rawPrograms[idx] := [program info array]
-		; DEBUG.popup("MainConfig", "loadPrograms", "Raw table", rawPrograms)
+		
+		tl := new TableList(filePath, settings)
+		uniquePrograms := tl.getFilteredTableUnique("NAME", "MACHINE", this.getMachine())
+		; DEBUG.popup("MainConfig", "loadPrograms", "Unique table", uniquePrograms)
 		
 		; Index it by name and machine.
-		indexedProgs := [] ; Format: indexedProgs[NAME][MACHINE] := [program info array]
-		For i,pAry in rawPrograms {
+		For i,pAry in uniquePrograms {
 			name    := pAry["NAME"]    ; Identifying name of this entry (which this.programs will be indexed by)
 			machine := pAry["MACHINE"] ; Which machine this is specific to
 			
-			if(!IsObject(indexedProgs[name])) ; Initialize the array.
-				indexedProgs[name] := []
+			if(!IsObject(this.programs[name])) ; Initialize the array.
+				this.programs[name] := []
 			
 			if(!machine) ; No machine means it's for all of them, or at least the default.
 				machine := "ALL"
 			
-			indexedProgs[name][machine] := pAry
+			this.programs[name] := pAry
 		}
-		; DEBUG.popup("Programs indexed by name and machine", indexedProgs)
-		
-		; Condense down to our local machine, using machine = "ALL" for fallbacks where empty.
-		For name,machinesAry in indexedProgs {
-			this.programs[name] := []
-			
-			; Default values across all machines.
-			allAry := machinesAry["ALL"]
-			For idx,val in allAry
-				this.programs[name][idx] := val
-			
-			; Specific overrides for this machine.
-			specificAry := machinesAry[this.getMachine()]
-			For idx,val in specificAry
-				if(val)
-					this.programs[name][idx] := val
-		}
-		
 		; DEBUG.popup("MainConfig", "loadPrograms", "Finished programs", this.programs)
 	}
 	
@@ -150,11 +130,11 @@ class MainConfig {
 		
 		For i,w in this.windows {
 			; DEBUG.popup("Class", ahkClass, "Title", title, "Control", controlClass, "Against settings", w)
-			if(ahkClass && w["WIN_CLASS"] && ahkClass != w["WIN_CLASS"])
+			if(ahkClass && w["WIN_CLASS"] && (ahkClass != w["WIN_CLASS"]) )
 				Continue
-			if(title && w["WIN_TITLE"] && title != w["WIN_TITLE"])
+			if(title && w["WIN_TITLE"] && (title != w["WIN_TITLE"]) )
 				Continue
-			if(controlClass && w["CONTROL_CLASS"] && controlClass != w["CONTROL_CLASS"])
+			if(controlClass && w["CONTROL_CLASS"] && (controlClass != w["CONTROL_CLASS"]) )
 				Continue
 			
 			retWindow := w
@@ -207,6 +187,14 @@ class MainConfig {
 	}
 	isMachine(machineName) {
 		return this.isValue("MACHINE", machineName)
+	}
+	
+	getMachineTableListFilter() {
+		filter := []
+		filter["COLUMN"] := "MACHINE"
+		filter["VALUE"]  := this.getMachine()
+		
+		return filter
 	}
 }
 

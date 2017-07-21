@@ -287,8 +287,8 @@ cleanupText(text) {
 	while(!isClean) {
 		isClean := true
 		
-		; Drop any leading/trailing whitespace. (Note using = not :=)
-		temp = %text%
+		; Leading/trailing whitespace
+		temp := dropWhitespace(text)
 		if(temp != text) {
 			text := temp
 			isClean := false
@@ -314,3 +314,8 @@ cleanupText(text) {
 	return text
 }
 
+; Drop any leading/trailing whitespace.
+dropWhitespace(text) {
+	newText = %text% ; Note using = not :=, to drop whitespace.
+	return newText
+}

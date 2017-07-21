@@ -95,7 +95,6 @@ SelectorSubmit() {
 ; Selector class which reads in and stores data from a file, and given an index, abbreviation or action, does that action.
 class Selector {
 	
-	
 	; ==============================
 	; == Public ====================
 	; ==============================
@@ -184,17 +183,22 @@ class Selector {
 	; == Private ===================
 	; ==============================
 	
-	processGuiSettings(settings) {
-		if(settings["ShowDataInputs"]) ; This one can be set in the file too, so don't clear it if it's not passed.
-			this.guiSettings["ShowDataInputs"] := settings["ShowDataInputs"]
+	getSpecialChars() {
+		chars := []
 		
-		this.guiSettings["IconPath"] := this.findTrueFilePath(settings["IconPath"])
+		chars["WINDOW_TITLE"]  := "="
+		chars["SECTION_TITLE"] := "#"
+		chars["NEW_COLUMN"]    := "|"
+		chars["HIDDEN"]        := "*"
+		chars["MODEL_INDEX"]   := ")"
+		chars["SETTING"]       := "+"
+		chars["COMMAND"]       := "+"
 		
-		if(settings["ExtraDataFields"]) {
-			baseLength := forceNumber(this.dataIndices.maxIndex())
-			For i,label in settings["ExtraDataFields"]
-				this.dataIndices[baseLength + i] := label
-		}
+		chars["COMMANDS"] := []
+		chars["COMMANDS", "EDIT"]  := "e"
+		chars["COMMANDS", "DEBUG"] := "d"
+		
+		return chars
 	}
 	
 	getDefaultGuiSettings() {
@@ -229,25 +233,6 @@ class Selector {
 		tableListSettings["FORMAT", "DEFAULT_INDICES"] := ["NAME", "ABBREV", "DOACTION"]
 		
 		return tableListSettings
-	}
-	
-	; Special character defaults
-	getSpecialChars() {
-		chars := []
-		
-		chars["WINDOW_TITLE"]  := "="
-		chars["SECTION_TITLE"] := "#"
-		chars["NEW_COLUMN"]    := "|"
-		chars["HIDDEN"]        := "*"
-		chars["MODEL_INDEX"]   := ")"
-		chars["SETTING"]       := "+"
-		chars["COMMAND"]       := "+"
-		
-		chars["COMMANDS"] := []
-		chars["COMMANDS", "EDIT"]  := "e"
-		chars["COMMANDS", "DEBUG"] := "d"
-		
-		return chars
 	}
 	
 	findTrueFilePath(path) {
@@ -362,6 +347,19 @@ class Selector {
 			this.returnSettings["ActionType"] := value
 		else if(name = "DefaultReturnColumn")
 			this.returnSettings["ReturnColumn"] := value
+	}
+	
+	processGuiSettings(settings) {
+		if(settings["ShowDataInputs"]) ; This one can be set in the file too, so don't clear it if it's not passed.
+			this.guiSettings["ShowDataInputs"] := settings["ShowDataInputs"]
+		
+		this.guiSettings["IconPath"] := this.findTrueFilePath(settings["IconPath"])
+		
+		if(settings["ExtraDataFields"]) {
+			baseLength := forceNumber(this.dataIndices.maxIndex())
+			For i,label in settings["ExtraDataFields"]
+				this.dataIndices[baseLength + i] := label
+		}
 	}
 	
 	; Generate the text for the GUI and display it, returning the user's response.
@@ -538,10 +536,10 @@ class Selector {
 		return WinExist()
 	}
 	
-	needNewColumn(ByRef title, lineNum, rowsPerColumn) {
-		; Special character in title forces a new column
-		if(SubStr(title, 1, 2) = this.chars["NEW_COLUMN"] " ") {
-			title := SubStr(title, 3) ; Strip special character and space off, they've served their purpose.
+	needNewColumn(ByRef sectionTitle, lineNum, rowsPerColumn) {
+		; Special character in sectionTitle forces a new column
+		if(SubStr(sectionTitle, 1, 2) = this.chars["NEW_COLUMN"] " ") {
+			sectionTitle := SubStr(sectionTitle, 3) ; Strip special character and space off, they've served their purpose.
 			return true
 		}
 		
@@ -551,7 +549,7 @@ class Selector {
 		
 		; Technically have one left, but the current one is a title
 		; (which would leave the title by itself at the end of a column)
-		if(title && ((lineNum + 1) > rowsPerColumn))
+		if(sectionTitle && ((lineNum + 1) > rowsPerColumn))
 			return true
 		
 		return false
@@ -670,6 +668,7 @@ class Selector {
 		
 		return result
 	}
+	
 	
 	; Centralized MsgBox clone that respects the silencer flag.
 	errPop(label, var) {

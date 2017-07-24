@@ -559,7 +559,7 @@ class Selector {
 	}
 	
 	getDataFromGui(ByRef data) {
-		if(this.guiSettings["ShowDataInputs"])
+		if(!this.guiSettings["ShowDataInputs"])
 			return false
 		
 		haveData := false
@@ -571,6 +571,7 @@ class Selector {
 			}
 		}
 		
+		; DEBUG.popup("Got data", data, "Have data flag", haveData)
 		return haveData
 	}
 	

@@ -10,6 +10,7 @@
 		Seems like standalone scripts reload once on their own, then are restarted again by main script - should either have them not restart, or don't need main script to reload them too.
 	
 	'New ideas'
+		Figure out auto-updating the running script when source saved, specifically for test.ahk
 		Switch foobar stuff to just use media keys instead of the random numpad stuff?
 		Check out function objects for selector action stuff: https://autohotkey.com/docs/objects/Functor.htm
 		MainConfig - turn loadSettings() stuff into an inner function called however many times, not a loop over an array of settings.

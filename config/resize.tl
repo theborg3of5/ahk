@@ -14,7 +14,8 @@ Small (800x600)							sm					800		600
 
 # Specific cases
 Fake maximized								fm					1920		1050
-Minimum Hyperspace						min				800		550
+Minimum Hyperspace (2015-)				minOld			800		550
+Minimum Hyperspace (2017+)				min				1280		768
 Official screenshots						shot				1024		768
 PuTTY on laptop screen					pl					1084		1046
 

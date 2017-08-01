@@ -28,6 +28,9 @@
 		:*:dbc.qa::
 			insertSmartText("DBC QA INSTRUCTIONS")
 		return
+		:*:qa.new::
+			insertSmartText("QA INSTRUCTIONS - NEW CHANGES")
+		return
 	}
 	
 	{ ; Link and record number things.
@@ -91,9 +94,14 @@
 	return
 #IfWinActive
 
-insertSmartText(smartTextName) {
+insertSmartText(smartTextName, focusFirstField = true) {
 	Send, ^{F10}
 	WinWait, SmartText Selection
 	SendRaw, %smartTextName%
 	Send, {Enter 2}
+	
+	WinWaitClose, SmartText Selection
+	Sleep, 500 ; EMC2 takes a while to get back to ready.
+	if(focusFirstField)
+		Send, {F2}
 }

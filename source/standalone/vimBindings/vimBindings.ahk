@@ -69,20 +69,6 @@ unpauseSpecial() {
 		setVimState(true, 0, 0, 0, 0)
 }
 
-; Returns false if the given conditions fail against the page title, etc.
-vimActive(vimOn = 1, titlesOn = 1) {
-	if(!browserActive())
-		return false
-	
-	if(vimOn && !vimKeysOn)
-		return false
-		
-	if(titlesOn && titleContains(offTitles))
-		return false
-	
-	return true
-}
-
 ; Closes the browser tab if the close key matches what was pressed.
 closeTab() {
 	; DEBUG.popup("Main Close Key", MainConfig.getSetting("VIM_CLOSE_KEY"), "Given Key", A_ThisHotkey)
@@ -99,14 +85,12 @@ sendToOmniboxAndGo(url) {
 	Send, {Enter}
 }
 
+; Run on any page in the browser, regardless of state.
 #If browserActive()
 	!m::
 		setVimState(true)
 	return
-#If
-
-#If vimActive(0, 0)
-{ ; Run on any page in the browser, regardless of state.
+	
 	F6::
 	F8::
 	F9::
@@ -114,16 +98,12 @@ sendToOmniboxAndGo(url) {
 	return
 	
 	; Special addition for when j/k turned off because special page.
-	; ' & j::Send, {Down}
-	; ' & k::Send, {Up}
-	; ' Up::Send, '
 	RAlt & j::Send, {Down}
 	RAlt & k::Send, {Up}
-}
 #If
 
-#If vimActive(1, 0)
-{ ; Run as long as vimkeys are on, ignoring page exclusions.
+; Run as long as vimkeys are on.
+#If vimKeysOn
 	; Pause/suspend.
 	~^l::
 	~^t::
@@ -135,27 +115,20 @@ sendToOmniboxAndGo(url) {
 	; Next/Previous Tab.
 	o::Send, ^{Tab}
 	u::Send, ^+{Tab}
-}
 #If
 
-#If vimActive(0, 1)
-{ ; Run as long as we're not on an exclude page.
+; Run as long as we're not on an exclude page.
+#If titleContains(offTitles)
 	; Unpause for special cases.
 	~$Esc::
 	~$Enter::
 		unpauseSpecial()
 	return
-}
 #If
 
-#If vimActive() && ( (MainConfig.isMachine(HOME_ASUS)) || (MainConfig.isMachine(HOME_DESKTOP)) )
-{
-	RCtrl & Right::sendToOmniboxAndGo("+") ; Increment.
-}
-#If
-
-#If vimActive()
-{ ; Run if we're not on an excluded page and vimkeys are on.
+; Normal key commands
+; Run if vimkeys are on and we're not on an excluded page.
+#If vimKeysOn && titleContains(offTitles)
 	; Up/Down/Left/Right.
 	j::Send, {Down}
 	k::Send, {Up}
@@ -174,9 +147,14 @@ sendToOmniboxAndGo(url) {
 	; Bookmarklet hotkeys.
 	RAlt & `;::sendToOmniboxAndGo("d") ; Darken bookmarklet hotkey.
 	; RAlt & z::sendToOmniboxAndGo("pz") ; PageZipper.
+	RCtrl & Right::
+		if(MainConfig.isMachine(HOME_DESKTOP) || MainConfig.isMachine(HOME_ASUS)) ; Limit this to home.
+			return
+		sendToOmniboxAndGo("+") ; Increment.
+	return
 	
-	; Letters that carry no vim meaning, so are normal typing.
-	~a::
+	; Keys that turn vimkeys off, because you're probably typing something else.
+	~a:: ; Letters
 	~b::
 	~c::
 	~d::
@@ -196,9 +174,20 @@ sendToOmniboxAndGo(url) {
 	~x::
 	~y::
 	~z::
-	
-	; Shifted letters never carry any vim meaning.
-	~+a::
+	~0:: ; Numbers
+	~1::
+	~2::
+	~3::
+	~4::
+	~5::
+	~6::
+	~7::
+	~8::
+	~9::
+	~`:: ; Symbols
+	~-::
+	~=::
+	~+a:: ; Shift + Letters
 	~+b::
 	~+c::
 	~+d::
@@ -224,19 +213,7 @@ sendToOmniboxAndGo(url) {
 	~+x::
 	~+y::
 	~+z::
-	
-	; Numbers and shifted numbers never carry any vim meaning.
-	~0::
-	~1::
-	~2::
-	~3::
-	~4::
-	~5::
-	~6::
-	~7::
-	~8::
-	~9::
-	~+0::
+	~+0:: ; Shift + Numbers
 	~+1::
 	~+2::
 	~+3::
@@ -246,17 +223,10 @@ sendToOmniboxAndGo(url) {
 	~+7::
 	~+8::
 	~+9::
-	
-	; Symbols that don't carry any vim meaning, plus shifted versions.
-	~`::
-	~-::
-	~=::
-	~+`::
+	~+`:: ; Shift + Symbols
 	~+-::
 	~+=::
-	
-	; Symbols that normally carry vim meaning, but don't when shifted.
-	~+[::
+	~+[:: ; Shift + Symbols (where the unshifted version does something)
 	~+]::
 	~+`;::
 	~+'::
@@ -264,9 +234,8 @@ sendToOmniboxAndGo(url) {
 	~+,::
 	~+.::
 		setVimState(false, , , , 1)
-		justOtherKeyPressed := 1
+		justOtherKeyPressed := 1 ; GDB TODO doesn't setVimState do exactly this already?
 	return
-}
 #If
 
 ; Universal suspend, reload, and exit hotkeys.

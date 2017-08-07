@@ -10,8 +10,6 @@
 	global suspended := 0
 	global vimKeysOn := 1
 	
-	global IDLE_TIME := 5 * 60 * 1000 ; 5 minutes
-	
 	; Icon setup.
 	states                                 := []
 	states["suspended", 1]                 := "vimSuspend.ico"
@@ -20,19 +18,15 @@
 	setupTrayIcons(states)
 	
 	global offTitles := getExcludedTitles()
-
-	; Special flags for previous action.
-	global justFound := 0
-	global justOmnibox := 0
-	global justFeedlySearched := 0
-	global justOtherKeyPressed := 0
+	global IDLE_TIME := 5 * 60 * 1000 ; 5 minutes
+	global autoPaused := false ; Says whether we just temporarily paused vimKeys automatically (like for ^l)
 }
 
 ; Timer stuff.
 SetTimer, vimIdle, %IDLE_TIME%
 vimIdle:
 	if(!browserActive())
-		setVimState(true)
+		vimOn()
 return
 
 getExcludedTitles() {
@@ -49,37 +43,32 @@ browserActive() {
 	return WinActive("ahk_class Chrome_WidgetWin_1") || WinActive("ahk_class MozillaWindowClass")
 }
 
-; Sets the various on/off switches.
-setVimState(toState, feedly = -1, omni = -1, found = -1, other = -1) {
-	global justFeedlySearched, justOmnibox, justFound, justOtherKeyPressed
-	
-	if(feedly != -1)
-		justFeedlySearched := feedly
-	if(omni != -1)
-		justOmnibox := omni
-	if(found != -1)
-		justFound := found
-	if(other != -1)
-		justOtherKeyPressed := other
-	
+vimOn() {
+	setVimState(true)
+}
+vimOffManual() {
+	global autoPaused
+	autoPaused := false
+	setVimState(false)
+}
+vimOffAuto() {
+	global autoPaused
+	autoPaused := true
+	setVimState(false)
+}
+
+setVimState(toState) {
+	global vimKeysOn
 	vimKeysOn := toState
 	updateTrayIcon()
 }
 
-; Only unpause vimKeys if we came from something else special.
-unpauseSpecial() {
-	global justFeedlySearched, justOmnibox, justFound
-	
-	if(justFeedlySearched || justOmnibox || justFound)
-		setVimState(true, 0, 0, 0, 0)
-}
-
-; Closes the browser tab if the close key matches what was pressed.
-closeTab() {
+; Closes the browser tab if the configured close key matches what was pressed.
+tryCloseTab() {
 	; DEBUG.popup("Main Close Key", MainConfig.getSetting("VIM_CLOSE_KEY"), "Given Key", A_ThisHotkey)
 	if(MainConfig.isValue("VIM_CLOSE_KEY", A_ThisHotkey)) {
 		Send, ^w
-		setVimState(true)
+		vimOn()
 	}
 }
 
@@ -93,13 +82,13 @@ sendToOmniboxAndGo(url) {
 ; Run on any page in the browser, regardless of state.
 #If browserActive()
 	!m::
-		setVimState(true)
+		vimOn()
 	return
 	
 	F6::
 	F8::
 	F9::
-		closeTab()
+		tryCloseTab()
 	return
 	
 	; Special addition for when j/k turned off because special page.
@@ -108,32 +97,36 @@ sendToOmniboxAndGo(url) {
 #If
 
 ; Run as long as vimkeys are on.
-#If vimKeysOn
+#If browserActive() && vimKeysOn
 	; Pause/suspend.
-	~^l::
-	~^t::
-		justOmnibox := 1
 	i::
-		setVimState(false)
+		vimOffManual()
 	return
 	
 	; Next/Previous Tab.
 	o::Send, ^{Tab}
 	u::Send, ^+{Tab}
+	
+	; Auto-pause (so we'll switch back on enter/escape)
+	~^l::
+	~^t::
+		vimOffAuto()
+	return
 #If
 
 ; Run as long as we're not on an exclude page.
-#If titleContains(offTitles)
+#If browserActive() && titleContains(offTitles)
 	; Unpause for special cases.
 	~$Esc::
 	~$Enter::
-		unpauseSpecial()
+		if(autoPaused)
+			vimOn()
 	return
 #If
 
 ; Normal key commands
 ; Run if vimkeys are on and we're not on an excluded page.
-#If vimKeysOn && titleContains(offTitles)
+#If browserActive() && vimKeysOn && titleContains(offTitles)
 	; Up/Down/Left/Right.
 	j::Send, {Down}
 	k::Send, {Up}
@@ -146,17 +139,13 @@ sendToOmniboxAndGo(url) {
 	
 	; Find
 	~^f::
-		setVimState(false, , , 1)
+		vimOffAuto()
 	return
 	
 	; Bookmarklet hotkeys.
 	RAlt & `;::sendToOmniboxAndGo("d") ; Darken bookmarklet hotkey.
 	; RAlt & z::sendToOmniboxAndGo("pz") ; PageZipper.
-	RCtrl & Right::
-		if(MainConfig.isMachine(HOME_DESKTOP) || MainConfig.isMachine(HOME_ASUS)) ; Limit this to home.
-			return
-		sendToOmniboxAndGo("+") ; Increment.
-	return
+	RCtrl & Right::sendToOmniboxAndGo("+") ; Increment.
 	
 	; Keys that turn vimkeys off, because you're probably typing something else.
 	~a:: ; Letters
@@ -238,8 +227,7 @@ sendToOmniboxAndGo(url) {
 	~+/::
 	~+,::
 	~+.::
-		setVimState(false, , , , 1)
-		justOtherKeyPressed := 1 ; GDB TODO doesn't setVimState do exactly this already?
+		vimOffManual()
 	return
 #If
 

@@ -15,7 +15,7 @@
 	states["suspended", 1]                 := "vimSuspend.ico"
 	states["suspended", 0, "vimKeysOn", 0] := "vimPause.ico"
 	states["suspended", 0, "vimKeysOn", 1] := "vim.ico"
-	setupTrayIcons(states)
+	setUpTrayIcons(states)
 	
 	global offTitles := getExcludedTitles()
 	global IDLE_TIME := 5 * 60 * 1000 ; 5 minutes

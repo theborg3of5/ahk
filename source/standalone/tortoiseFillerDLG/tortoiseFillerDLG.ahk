@@ -2,17 +2,11 @@
 #SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
-
 #Include <autoInclude>
 
-; State flags.
+; State flag and icons
 global suspended := 0
-
-; Icon setup.
-states                 := []
-states["suspended", 0] := "turtle.ico"
-states["suspended", 1] := "turtleRed.ico"
-setupTrayIcons(states)
+setUpTrayIconsSimple("suspended", "turtle.ico", "turtleRed.ico")
 
 SetTitleMatchMode, RegEx
 

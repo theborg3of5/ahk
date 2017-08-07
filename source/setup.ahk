@@ -8,14 +8,9 @@ DetectHiddenWindows, On
 ; #NoTrayIcon
 ; #Warn All
 
-; State flags.
+; State flag and icons
 global suspended := 0
-
-; Icon setup.
-states                 := []
-states["suspended", 0] := "shellGreen.ico"
-states["suspended", 1] := "shellRed.ico"
-setupTrayIcons(states)
+setUpTrayIconsSimple("suspended", "shellGreen.ico", "shellRed.ico")
 
 ; For common hotkeys.
 isMainMasterScript := 1

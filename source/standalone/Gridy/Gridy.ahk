@@ -2,22 +2,16 @@
 ; *gdb - Added my own library setup in order to support icon (without compiling) and add close hotkey.
 
 { ; Setup.
+	; #NoTrayIcon
 	#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 	SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 	SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	#SingleInstance force ; Force just one instance, we don't want muliple of this running around.
-	; #NoTrayIcon
-	
 	#Include <autoInclude>
-	
-	; State flags.
+
+	; State flag and icons
 	global suspended := 0
-	
-	; Icon setup.
-	states                 := []
-	states["suspended", 0] := "Gridy.ico"
-	states["suspended", 1] := "GridySuspend.ico"
-	setupTrayIcons(states)
+	setUpTrayIconsSimple("suspended", "Gridy.ico", "GridySuspend.ico")
 	
 	isSingleUserScript := true
 }

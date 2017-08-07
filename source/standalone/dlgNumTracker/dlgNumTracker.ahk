@@ -4,14 +4,9 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <autoInclude>
 
-; State flags.
+; State flag and icons
 global suspended := 0
-
-; Icon setup.
-states                 := []
-states["suspended", 0] := "hash.ico"
-states["suspended", 1] := "redHash.ico"
-setupTrayIcons(states)
+setUpTrayIconsSimple("suspended", "hash.ico", "redHash.ico")
 
 loopDuration := 10 * 1000 ; 10 seconds
 SetTimer, MainLoop, %loopDuration% ; Timer for "MainLoop" will be toggled by commonHotkeys' suspend hotkey.

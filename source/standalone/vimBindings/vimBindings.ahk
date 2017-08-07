@@ -19,11 +19,7 @@
 	states["suspended", 0, "vimKeysOn", 1] := "vim.ico"
 	setupTrayIcons(states)
 	
-	global offTitles := Object()
-	offTitles.insert(" - Google Inbox")
-	offTitles.insert(" - feedly")
-	offTitles.insert(" - Reddit")
-	offTitles.insert("Login") ; Lastpass
+	global offTitles := getExcludedTitles()
 
 	; Special flags for previous action.
 	global justFound := 0
@@ -38,6 +34,15 @@ vimIdle:
 	if(!browserActive())
 		setVimState(true)
 return
+
+getExcludedTitles() {
+	titles := Object()
+	titles.insert(" - Gmail")
+	titles.insert(" - feedly")
+	titles.insert(" - Reddit")
+	titles.insert("Login") ; Lastpass
+	return titles
+}
 
 ; Chrome or Firefox.
 browserActive() {

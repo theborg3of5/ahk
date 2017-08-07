@@ -25,9 +25,6 @@
 		Snapper supports URLs as well - add support for that to ActionObject?
 			Also include support for multiple things - maybe add that in general too?
 				Also support newline separation (though likely just turn it into comma-separated for a consistent format).
-		Clean up vimKeys stuff
-			setVimState() is ugly and confusing
-			So is vimActive()
 		Alt+drag has some interesting quirks with certain programs (just OneNote on Win10 so far?)
 			Add to framework, new column in programs.tl?
 		Audit all scripts for unused hotkeys

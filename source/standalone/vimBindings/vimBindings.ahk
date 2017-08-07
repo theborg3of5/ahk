@@ -110,12 +110,13 @@ sendToOmniboxAndGo(url) {
 	; Auto-pause (so we'll switch back on enter/escape)
 	~^l::
 	~^t::
+	~^f::
 		vimOffAuto()
 	return
 #If
 
 ; Run as long as we're not on an exclude page.
-#If browserActive() && titleContains(offTitles)
+#If browserActive() && !titleContains(offTitles)
 	; Unpause for special cases.
 	~$Esc::
 	~$Enter::
@@ -126,7 +127,7 @@ sendToOmniboxAndGo(url) {
 
 ; Normal key commands
 ; Run if vimkeys are on and we're not on an excluded page.
-#If browserActive() && vimKeysOn && titleContains(offTitles)
+#If browserActive() && vimKeysOn && !titleContains(offTitles)
 	; Up/Down/Left/Right.
 	j::Send, {Down}
 	k::Send, {Up}
@@ -136,11 +137,6 @@ sendToOmniboxAndGo(url) {
 	p::Send, {PgUp}
 	[::Send, {Home}
 	]::Send, {End}
-	
-	; Find
-	~^f::
-		vimOffAuto()
-	return
 	
 	; Bookmarklet hotkeys.
 	RAlt & `;::sendToOmniboxAndGo("d") ; Darken bookmarklet hotkey.

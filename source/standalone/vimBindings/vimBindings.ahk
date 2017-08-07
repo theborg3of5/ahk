@@ -38,7 +38,7 @@ return
 getExcludedTitles() {
 	titles := Object()
 	titles.insert(" - Gmail")
-	titles.insert(" - feedly")
+	titles.insert(" - Feedly")
 	titles.insert(" - Reddit")
 	titles.insert("Login") ; Lastpass
 	return titles

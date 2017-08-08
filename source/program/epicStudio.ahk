@@ -12,36 +12,30 @@
 	; Make copy line location !c.
 	!c::Send, ^!{Numpad9}
 	
-	; Duplicate Line.
-	; ^d::
-		; Send, {End}{Shift Down}{Home}{Shift Up}
-		; ; Send, ^c
-		; ; Sleep, 100
-		; line := getSelectedText()
-		
-		; Send, {End}{Enter}
-		; SendRaw, %line%
-		; Send, {Up}{End}
-	; return
-	
 	; ; Debug, auto-search for workstation ID.
-	$F5::
-		esRunDebug("ws:" epicComputerName)
-	return
-	
-	; Debug, auto-search for workstation ID and Reflection exe.
-	F6::
-		esRunDebug("ws:" epicComputerName) ; " exe:" epicReflectionExe)
-	return
-	
-	; Debug, auto-search for workstation ID and EpicD exe (aka Hyperspace).
-	F7::
-		esRunDebug("ws:" epicComputerName) ; " exe:" epicHyperspaceExeStart)
-	return
-	
-	; Debug, auto-search for workstation ID and VB exe.
-	F8::
-		esRunDebug("ws:" epicComputerName) ; " exe:" epicVBExe)
+	~F5::
+		if(isESDebugging())
+			return
+		
+		WinWait, Attach to Process, , 5
+		if(ErrorLevel)
+			return
+		
+		ControlGet, currFilter, Line, 1, Edit1, A
+		if(currFilter) {
+			ControlFocus, Edit1, A
+			return ; There's already something plugged into the field, so just put the focus there in case they want to change it.
+		}
+		
+		; Pick the radio button for "Other existing process:" and pick it.
+		otherProcessRadioButtonClass := WindowsForms10.BUTTON.app.0.2bf8098_r9_ad11
+		ControlFocus, %otherProcessRadioButtonClass%, A
+		ControlSend, %otherProcessRadioButtonClass%, {Space}, A
+		
+		; Focus the filter field and send what we want to send.
+		ControlFocus, Edit1, A
+		Send, % "ws:" epicComputerName
+		Send, {Enter}{Down}
 	return
 	
 	; Run EpicStudio in debug mode, given a particular string to search for.
@@ -59,7 +53,7 @@
 					ControlSend, WindowsForms10.BUTTON.app.0.141b42a_r12_ad11, {Space}, A
 					ControlFocus, Edit1, A
 					
-					Send, % searchString
+					Send, % "ws:" epicComputerName
 					Send, {Enter}{Down}
 				}
 			} else {
@@ -74,7 +68,7 @@
 		global epicReflectionExe, epicHyperspaceExeStart, epicVBExe
 		
 		states := ["active"]
-		titles := ["", "[Debug]"]
+		titles := ["[Debug]"]
 		texts := [epicReflectionExe, epicHyperspaceExeStart, epicVBExe]
 		
 		return isWindowInStates(states, titles, texts, 2, "Slow")

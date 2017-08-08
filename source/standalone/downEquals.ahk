@@ -34,7 +34,7 @@ Menu, Tray, Tip,
 	
 	; Confirmation if it's a really big number
 	if(numToSend > 100) {
-		MsgBox, 4, Delete page?, Are you sure you want to delete this page?
+		MsgBox, 4, Delete page?, Are you sure you want to send Down+Equals %numToSend% times?
 		IfMsgBox, No
 			return
 		else IfMsgBox, Cancel

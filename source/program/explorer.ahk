@@ -1,16 +1,10 @@
-; Since win+e is ceded to FreeCommander, give explorer something different.
-!#e::
-	Send, #e
-return
-~$#e::
-	; Don't close if this is the first tab to open.
-	if(!WinExist("ahk_class CabinetWClass"))
-		return
-	
-	if(!WinActive("ahk_class CabinetWClass")) { ; Explorer gets focused, but close the tab.
-		WinWaitActive, ahk_class CabinetWClass
-		Send, ^w
-	}
+$#e::
+	if(WinActive("ahk_class CabinetWClass"))
+		Run, ::{20d04fe0-3aea-1069-a2d8-08002b30309d} ; Open the "This PC" special folder
+	else if(!WinExist("ahk_class CabinetWClass"))
+		Send, #e ; Open a new session if nothing exists
+	else
+		WinActivate ; Show the existing window
 return
 
 #IfWinActive, ahk_class CabinetWClass

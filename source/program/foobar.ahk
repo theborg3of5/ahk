@@ -10,10 +10,10 @@
 
 ; If foobar is indeed running.
 #IfWinExists, ahk_class {97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}
-	^!Up::   Send, ^!{NumPad1} ; {Media_Stop}
-	^!Down:: Send, ^!{NumPad2} ; {Media_Play_Pause}
-	^!Left:: Send, ^!{NumPad3} ; {Media_Prev}
-	^!Right::Send, ^!{NumPad4} ; {Media_Next}
+	^!Up::   Send, {Media_Stop}
+	^!Down:: Send, {Media_Play_Pause}
+	^!Left:: Send, {Media_Prev}
+	^!Right::Send, {Media_Next}
 	
 	; Special activation of foobar window for search.
 	~#j::

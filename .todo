@@ -11,7 +11,6 @@
 	
 	'New ideas'
 		Figure out auto-updating the running script when source saved, specifically for test.ahk
-		Switch foobar stuff to just use media keys instead of the random numpad stuff?
 		Check out function objects for selector action stuff: https://autohotkey.com/docs/objects/Functor.htm
 		MainConfig - turn loadSettings() stuff into an inner function called however many times, not a loop over an array of settings.
 		Debug - why are there two different build string functions, again?

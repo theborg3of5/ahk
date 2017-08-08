@@ -16,8 +16,6 @@
 		MainConfig - turn loadSettings() stuff into an inner function called however many times, not a loop over an array of settings.
 		Debug - why are there two different build string functions, again?
 		Debug - make a debug "builder" that stores off number of tabs and whatever last argument is?
-		VB IDE - make a nice way to add the usual Exit Sub/Handler/Call ErrorHandler snippet
-			Should be able to get the function name from the comboboxes at the top
 		isWindowInStates - update to allow passing either an array or a single value for each parameter.
 		Make it easier to get correct, drive-mapped paths
 			Maybe when copy, check for epic:// and replace with correct drive letter accordingly?

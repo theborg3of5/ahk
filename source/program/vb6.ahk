@@ -148,23 +148,37 @@
 			Send, !p
 		return
 	}
-
-	{ ; Show/hide different toolbars/windows.
-		; Code vs. design swap. Note: only works if mini-window within window is maximized within outer window.
-		Pause::
-			WinGetTitle, title
-			StringTrimRight, title, title, 2
-			parenPos := InStr(title, "(")
-			StringTrimLeft, title, title, parenPos
-			
-			if(title = "Code") {
-				Send, +{F7}
-			} else if(title = "Form" || title = "UserControl") {
-				Send, {F7}
-			}
-		return
-	}
-
+	
+	; Code vs. design swap. Note: only works if mini-window within window is maximized within outer window.
+	Pause::
+		WinGetTitle, title
+		StringTrimRight, title, title, 2
+		parenPos := InStr(title, "(")
+		StringTrimLeft, title, title, parenPos
+		
+		if(title = "Code") {
+			Send, +{F7}
+		} else if(title = "Form" || title = "UserControl") {
+			Send, {F7}
+		}
+	return
+	
+	; Add basic error handler stuff.
+	^+e::
+		vbGetComboBoxClasses("", procedureComboClass)
+		ControlGet, currentProcedure, List, Selected, %procedureComboClass%
+		; DEBUG.popup("Current procedure", currentProcedure)
+		if(!currentProcedure)
+			MsgBox, No function name found.
+		
+		; Assuming that we're starting in the middle of an empty function.
+		Send, {Tab}On Error Goto Handler{Enter}
+		Send, {Enter}{Backspace}
+		Send, Exit Sub{Enter} ; GDB TODO can this be more generic and determine which it is?
+		Send, Handler:{Enter}
+		Send, {Tab}Call ErrorHandler("%currentProcedure%")
+	return
+	
 	{ ; Button-based hotkeys.
 		; Comment/uncomment hotkeys.
 		^`;::
@@ -179,18 +193,18 @@
 			clickUsingMode(1910, 11, "Client")
 		return
 	}
-
+	
 	{ ; Large, loop-over-everything hotkeys.	
 		; Create all required procedure stubs from an interface.
 		^+f::
-			vbGetComboBoxClasses(firstField, secondField)
-			; DEBUG.popup("First", firstField, "Second", secondField)
+			vbGetComboBoxClasses(objectComboClass, procedureComboClass)
+			; DEBUG.popup("Object", objectComboClass, "Procedure", procedureComboClass)
 			
-			ControlGet, CurrentProcedure, List, Selected, %secondField%
-			; DEBUG.popup("Current procedure", CurrentProcedure)
+			ControlGet, objectName, List, Selected, %objectComboClass%
+			; DEBUG.popup("Current object", objectName)
 			
 			; Allow being on "Implements ..." line instead of having left combobox correctly selected first.
-			if(CurrentProcedure = "(General)") {
+			if(objectName = "(General)") {
 				ClipSave := clipboard ; Save the current clipboard.
 				
 				Send, {End}{Shift Down}{Home}{Shift Up}
@@ -208,11 +222,11 @@
 				className = %className%
 				
 				; Open the dropdown so we can see everything.
-				ControlFocus, %secondField%, A
+				ControlFocus, %objectComboClass%, A
 				Send, {Down}
 				Sleep, 100
 				
-				ControlGet, ObjectList, List, , %secondField%
+				ControlGet, ObjectList, List, , %objectComboClass%
 				; DEBUG.popup("List of objects", ObjectList)
 				
 				classRow := 0
@@ -226,36 +240,33 @@
 					}
 				}
 				
-				Control, Choose, %classRow%, %secondField%, A
+				Control, Choose, %classRow%, %objectComboClass%, A
 			}
 			
 			LastItem := ""
 			SelectedItem := ""
 			
-			ControlFocus, %firstField%, A
+			ControlFocus, %objectComboClass%, A
 			Send, {Down}
 			
 			Sleep, 100
 			
-			ControlGet, List, List, , %firstField%
+			ControlGet, List, List, , %procedureComboClass%
 			; DEBUG.popup("List of functions", List)
 			
 			RegExReplace(List, "`n", "", countNewLines)
 			countNewLines++
 			
 			Loop %countNewLines% {
-				ControlFocus, %firstField%, A
-				Control, Choose, %A_Index%, %firstField%, A
+				ControlFocus, %procedureComboClass%, A
+				Control, Choose, %A_Index%, %procedureComboClass%, A
 			}
 		return
 		
 		; Add function headers to all functions.
 		^!h::
-			vbGetComboBoxClasses(firstField, secondField)
-			; DEBUG.popup("First", firstField, "Second", secondField)
-			
-			objectComboClass := secondField
-			procedureComboClass := firstField
+			vbGetComboBoxClasses(objectComboClass, procedureComboClass)
+			; DEBUG.popup("Object", objectComboClass, "Procedure", procedureComboClass)
 			
 			objectComboValue := ""
 			objectComboValuePast := ""
@@ -338,7 +349,7 @@
 	}
 	
 	; Obtains the classNNs for the two top comboboxes.
-	vbGetComboBoxClasses(ByRef firstField, ByRef secondField) {
+	vbGetComboBoxClasses(ByRef objectComboClass, ByRef procedureComboClass) {
 		WinGet, List, ControlList, A
 		; DEBUG.popup(List, "Control list in window")
 		
@@ -351,17 +362,17 @@
 				; When two in a row have the same y value, they're what we're looking for.
 				if(y = yPast) {
 					; DEBUG.popup(x, "Got two! `nX", y, "Y", yPast, "Y past")
-					firstField := A_LoopField
+					procedureComboClass := A_LoopField
 					
 					break
 				}
 				
 				yPast := y
-				secondField := A_LoopField
+				objectComboClass := A_LoopField
 			}
 		}
 		
-		; DEBUG.popup(secondField, "Field 1", firstField, "Field 2")
+		; DEBUG.popup("Object", objectComboClass, "Procedure", procedureComboClass)
 	}
 
 	; Finds and checks a single reference.

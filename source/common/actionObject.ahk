@@ -155,9 +155,6 @@ class ActionObject {
 				link := this.perform(TYPE_EMC2, ACTION_LINK, subType, subAction, input)
 				; DEBUG.popup("actionObject.perform", "Got link to run", "Link", link)
 				
-				if((subAction != SUBACTION_WEB) && !WinExist("ahk_class ThunderRT6MDIForm", , "Hyperspace")) ; Launch EMC2 if it's not running.
-					RunWait, % MainConfig.getProgram("EMC2", "PATH")
-				
 				Run, % link
 				
 			} else if(type = TYPE_PATH) {
@@ -184,6 +181,8 @@ class ActionObject {
 					link := emc2LinkBase ini "/" id "?action=EDIT"
 				else if(subAction = SUBACTION_VIEW && ( (ini = "DLG") || (ini = "ZQN") || (ini = "XDS") )) ; EMC2 supports view-only mode for these INIs.
 					link := emc2LinkBase ini "/" id "?action=EDIT&runparams=1"
+				else if(subAction = SUBACTION_VIEW && ( ini = "SLG" )) ; Special "view" mode in browser for SLGs - Sherlock
+					link := sherlockSLGBase id
 				else if(subAction = SUBACTION_WEB || subAction = SUBACTION_VIEW)
 					link := emc2LinkBaseWeb ini "/" id
 			}

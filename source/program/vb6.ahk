@@ -147,6 +147,16 @@
 			Send, {Up}{Enter}
 			Send, !p
 		return
+		
+		; Comment and indentation for new lines.
+		^Enter:: ; Normal line
+			Send, {Enter}
+			Send, '{Space}
+		return
+		^+Enter:: ; Function headers (lines up with edge of description, etc.)
+			Send, {Enter}
+			Send, '{Space 15}
+		return
 	}
 	
 	; Code vs. design swap. Note: only works if mini-window within window is maximized within outer window.

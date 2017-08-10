@@ -158,8 +158,9 @@ return
 	Send, {Shift Up}{Ctrl Up}
 return
 
-^+!m::Run, % "https://mail.google.com/mail/u/0/#inbox"
+^+!m::Run, % "https://www.messenger.com"
 ^+!f::Run, % "http://feedly.com/i/latest"
+^!#m::Run, % "https://mail.google.com/mail/u/0/#inbox"
 
 #If MainConfig.isMachine(HOME_DESKTOP)
 	^+!r::Run, % "http://www.reddit.com/"

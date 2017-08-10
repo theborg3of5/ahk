@@ -269,7 +269,7 @@ buildCodeSearchURL(searchType, criteria = "", appKey = "", inline = false, exact
 	
 	appId := getEpicAppIdFromKey(appKey)
 	
-	DEBUG.popup("buildCodeSearchURL", "Start", "Search type", searchType, "Criteria", criteria, "App key", appKey, "App ID", appId, "Inline", inline, "Exact", exact, "Logic", logic, "Case", case, "Name filter", nameFilter, "Name filter text", nameFilterText, "Per page", perPage)
+	; DEBUG.popup("buildCodeSearchURL", "Start", "Search type", searchType, "Criteria", criteria, "App key", appKey, "App ID", appId, "Inline", inline, "Exact", exact, "Logic", logic, "Case", case, "Name filter", nameFilter, "Name filter text", nameFilterText, "Per page", perPage)
 	
 	; Gotta have some sort of criteria to open a search.
 	if(!criteria || (searchType = ""))

@@ -8,8 +8,21 @@
 			M code for loop snippet
 		Fix the EpicStudio CDO generator to include tabs at beginning of lines to do better.
 		Seems like standalone scripts reload once on their own, then are restarted again by main script - should either have them not restart, or don't need main script to reload them too.
+		Selector should not return a value (even if there was stuff in the data input boxes) if it was cancelled.
+			Return false from selection?
+			How to tell how the window was closed?
+				guiHandle in an array outside of the Selector object
+				At least SelectorClose should have an optional GuiHwnd param we can use to put into array: https://autohotkey.com/docs/commands/Gui.htm#GuiClose
+					Maybe SelectorEscape too?
+						Might need to do a WinClose instead of just calling SelectorClose directly if it doesn't have the param
+					Maybe SelectorSubmit too?
+						Should be able to use A_Gui to get hWnd.
+						https://autohotkey.com/docs/commands/Gui.htm#Events
 	
 	'New ideas'
+		TableList - add new mod that replaces piece - either "r:" or no mod start at all (support both)
+			Will let us to the specific codesearch for DBC nicer.
+		Remove ARG2-ARG5 from search - not particularly useful, really.
 		Figure out auto-updating the running script when source saved, specifically for test.ahk
 		Check out function objects for selector action stuff: https://autohotkey.com/docs/objects/Functor.htm
 		MainConfig - turn loadSettings() stuff into an inner function called however many times, not a loop over an array of settings.

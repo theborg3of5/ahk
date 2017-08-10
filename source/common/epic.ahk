@@ -235,6 +235,13 @@ doMForLoop() {
 	sendTextWithClipboard(loopString)
 }
 
+getEpicAppIdFromKey(appKey) {
+	global epicAppKeyToIdAry
+	if(!appKey)
+		return 0
+	return epicAppKeyToIdAry[appKey]
+}
+
 buildHyperspaceRunString(versionMajor, versionMinor, environment) {
 	global epicExeBase
 	runString := epicExeBase
@@ -256,9 +263,13 @@ buildHyperspaceRunString(versionMajor, versionMinor, environment) {
 	return runString
 }
 
-buildCodeSearchURL(searchType, criteria = "", appID = 0, inline = false, exact = false, logic = "", case = false, nameFilter = 0, nameFilterText = "", perPage = 50) {
+buildCodeSearchURL(searchType, criteria = "", appKey = "", inline = false, exact = false, logic = "", case = false, nameFilter = 0, nameFilterText = "", perPage = 50) {
 	versionID := 10
 	showAll := 0 ; Whether to show every single matched line per result shown.
+	
+	appId := getEpicAppIdFromKey(appKey)
+	
+	DEBUG.popup("buildCodeSearchURL", "Start", "Search type", searchType, "Criteria", criteria, "App key", appKey, "App ID", appId, "Inline", inline, "Exact", exact, "Logic", logic, "Case", case, "Name filter", nameFilter, "Name filter text", nameFilterText, "Per page", perPage)
 	
 	; Gotta have some sort of criteria to open a search.
 	if(!criteria || (searchType = ""))
@@ -276,7 +287,7 @@ buildCodeSearchURL(searchType, criteria = "", appID = 0, inline = false, exact =
 	}
 	
 	; Add on parameters.
-	outURL .= "&applicationid="  appID
+	outURL .= "&applicationid="  appId
 	outURL .= "&inline="         inline
 	outURL .= "&exact="          exact
 	outURL .= "&logic="          logic

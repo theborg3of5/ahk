@@ -91,9 +91,10 @@ return
 		criteria[A_Index] := escapedArg
 	}
 	
+	url := ""
 	if(searchType = "CODESEARCH")
 		For i,st in subTypes ; There could be multiple here?
-			url := buildCodeSearchURL(st, criteria)
+			url := buildCodeSearchURL(st, criteria, data["APPKEY"])
 	else if(searchType = "GURU")
 		url := buildGuruURL(criteria[1])
 	else if(searchType = "WIKI") ; Epic wiki search.

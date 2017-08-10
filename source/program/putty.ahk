@@ -145,11 +145,11 @@
 		return
 		
 		:*:.lock::
-			SendRaw, w $$zlock^elibEALIB1(" ; Extra comment/quote here to fix syntax highlighting. "
+			SendRaw, w $$zlock(" ; Extra comment/quote here to fix syntax highlighting. "
 		return
 		
 		:*:.unlock::
-			SendRaw, w $$zunlock^elibEALIB1(" ; Extra comment/quote here to fix syntax highlighting. "
+			SendRaw, w $$zunlock(" ; Extra comment/quote here to fix syntax highlighting. "
 		return
 		
 		:C1R*:^XITEMSET::^XSETITEM

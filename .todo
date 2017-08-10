@@ -22,7 +22,6 @@
 	'New ideas'
 		TableList - add new mod that replaces piece - either "r:" or no mod start at all (support both)
 			Will let us to the specific codesearch for DBC nicer.
-		Remove ARG2-ARG5 from search - not particularly useful, really.
 		Figure out auto-updating the running script when source saved, specifically for test.ahk
 		Check out function objects for selector action stuff: https://autohotkey.com/docs/objects/Functor.htm
 		MainConfig - turn loadSettings() stuff into an inner function called however many times, not a loop over an array of settings.

@@ -66,12 +66,9 @@
 	; Checks if ES is already in debug mode or not.
 	isESDebugging() {
 		global epicReflectionExe, epicHyperspaceExeStart, epicVBExe
-		
-		states := ["active"]
-		titles := ["[Debug]"]
 		texts := [epicReflectionExe, epicHyperspaceExeStart, epicVBExe]
 		
-		return isWindowInStates(states, titles, texts, 2, "Slow")
+		return isWindowInState("active", "", texts, 2, "Slow")
 	}
 	
 	; Link routine to currently open (in object explorer tab) DLG.

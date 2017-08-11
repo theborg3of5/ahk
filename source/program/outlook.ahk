@@ -9,7 +9,7 @@ isEmailFolderActive(userEmail) {
 	titles.push(buildOutlookWindowTitle(userEmail, "Sent Items"))
 	titles.push(buildOutlookWindowTitle(userEmail, "Deleted Items"))
 	
-	return isWindowInStates(["active"], titles)
+	return isWindowInState("active", titles)
 }
 
 isCalendarFolderActive(userEmail = "") {
@@ -17,7 +17,7 @@ isCalendarFolderActive(userEmail = "") {
 	titles.push(buildOutlookWindowTitle(userEmail, "Calendar"))
 	titles.push(buildOutlookWindowTitle(userEmail, "TLG"))
 	
-	return isWindowInStates(["active"], titles)
+	return isWindowInState("active", titles)
 }
 
 buildOutlookWindowTitle(userEmail, folderName) {

@@ -31,47 +31,35 @@ exeActive(exeName, partialMatch = false) {
 }
 
 ; See if a window exists or is active with a given TitleMatchMode.
-isWindowInStates(states = "", titles = "", texts = "", matchMode = 1, matchSpeed = "Fast", findHidden = "Off") {
-	if(!states)
-		states := [""]
-	if(!titles)
-		titles := [""]
-	if(!texts)
-		texts := [""]
-	
+isWindowInState(states = "", titles = "", texts = "", matchMode = 1, matchSpeed = "Fast", findHidden = "Off") {
+	; Make sure these are arrays so we can loop on them below.
+	states := forceArray(states)
+	titles := forceArray(titles)
+	texts  := forceArray(texts)
 	; DEBUG.popup("Window states to check", states, "Window titles to match", titles, "Window texts to match", texts, "Title match mode", matchMode)
 	
-	retVal := false
-	For i,s in states {
-		For j,t in titles {
-			For k,x in texts {
-				if(isWindowInState(s, t, x, matchMode, matchSpeed)) {
-					return true
-				}
+	; Plug in the new match settings.
+	origMatchSettings := setMatchSettings(matchMode, matchSpeed, findHidden)
+	
+	windowMatch := false
+	For i,state in states {
+		For j,title in titles {
+			For k,text in texts {
+				if(state = "active")
+					windowMatch := WinActive(title, text)
+				else if(stringContains(state, "exist")) ; Allow "exist" and "exists" both
+					windowMatch := WinExist(title, text)
+				
+				if(windowMatch)
+					break 3 ; Break out of outermost loop
 			}
 		}
 	}
 	
-	return false
-}
-
-isWindowInState(state, title = "", text = "", matchMode = 1, matchSpeed = "Fast") {
-	; DEBUG.popup("Window state to check", state, "Window title to match", title, "Window text to match", text, "Title match mode", matchMode, "Title match speed", matchSpeed)
-	
-	; Plug in the new match settings.
-	origMatchSettings := setMatchSettings(matchMode, matchSpeed)
-	
-	retVal := false
-	if(state = "active")
-		retVal := WinActive(title, text)
-	else if(stringContains(state, "exist"))
-		retVal := WinExist(title, text)
-	
 	; Restore defaults when done.
 	restoreMatchSettings(origMatchSettings)
 	
-	; DEBUG.popup("Window state to check", state, "Window title to match", title, "Window text to match", text, "Title match mode", matchMode, "Result", retVal)
-	return retVal
+	return windowMatch
 }
 
 waitUntilWindowState(state, title = "", text = "", matchMode = 1, matchSpeed = "Fast") {

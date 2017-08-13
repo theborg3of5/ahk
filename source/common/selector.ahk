@@ -183,18 +183,16 @@ class Selector {
 	; == Private ===================
 	; ==============================
 	
-	chars          := [] ; Special characters
-	choices        := [] ; Visible choices the user can pick from.
-	hiddenChoices  := [] ; Invisible choices the user can pick from.
-	nonChoices     := [] ; Lines that will be displayed as titles, extra newlines, etc, but have no other significance.
-	dataIndices    := [] ; Mapping from data field indices => data labels (column headers)
-	guiSettings    := [] ; Settings related to the GUI popup we show
-	returnSettings := [] ; Settings related to what we return from a selection
-
-	filePath := ""         ; Where the .tl file lives if we're reading one in.
-	originalIconPath := "" ; What the current script's current icon is - used to restore it after we finish a gui popup (which takes an icon if given)
-
-	hideErrors := false ; Whether to suppress error popups (used by programmatic selections with no GUI)
+	chars            := []    ; Special characters (see getSpecialChars)
+	choices          := []    ; Visible choices the user can pick from (array of SelectorRow objects).
+	hiddenChoices    := []    ; Invisible choices the user can pick from (array of SelectorRow objects).
+	nonChoices       := []    ; Lines that will be displayed as titles, extra newlines, etc, but we won't search through.
+	dataIndices      := []    ; Mapping from data field indices => data labels (column headers)
+	guiSettings      := []    ; Settings related to the GUI popup we show
+	returnSettings   := []    ; Settings related to what we return from a selection
+	filePath         := ""    ; Where the .tl file lives if we're reading one in.
+	originalIconPath := ""    ; What the current script's current icon is - used to restore it after we finish a gui popup (which takes an icon if given)
+	hideErrors       := false ; Whether to suppress error popups (used by programmatic selections with no GUI)
 	
 	getSpecialChars() {
 		chars := []

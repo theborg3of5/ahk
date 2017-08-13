@@ -38,7 +38,7 @@ tagsToReplace["MAX_EXTRA_EDGE_OFFSET"] := ""
 
 copyPaths := []
 copyPaths["autoInclude.ahk.master"] := userPath "Documents\AutoHotkey\Lib\autoInclude.ahk"
-copyPaths["settings.tl.master"]     := rootPath "config\local\settings.tl"
+copyPaths["settings.ini.master"]    := rootPath "config\local\settings.ini"
 copyPaths["test.ahk.master"]        := rootPath "test\test.ahk"
 
 gitNames := []

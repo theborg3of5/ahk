@@ -489,6 +489,7 @@ class Selector {
 		else
 			widthInputChoice := widthTotal - (marginLeft + marginRight)   ; Main edit control is nearly full width.
 		static GuiInChoice
+		GuiInChoice := "" ; Clear this to prevent bleed-over from previous uses. Must be on a separate line from the static declaration or it only happens once.
 		Gui, Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInputChoice% h%heightInput% -E0x200 +Border
 		
 		if(this.guiSettings["ShowDataInputs"]) {

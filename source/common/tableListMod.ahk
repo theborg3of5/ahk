@@ -1,45 +1,35 @@
 /* Modification class for parsing lists.
 */
+
+global MODOP_REPLACE := "r"
+global MODOP_BEGIN   := "b"
+global MODOP_END     := "e"
+
 class TableListMod {
-	mod       := ""
 	bit       := 1
-	start     := 1
-	len       := 0
+	operation := ""
 	text      := ""
 	label     := 0
-	operation := ""
 	
-	__New(m, s, l, t, a, o) {
-		this.mod       := m
-		this.start     := s
-		this.len       := l
-		this.text      := t
-		this.label     := a
+	__New(b, o, t, l) {
+		this.bit       := b
 		this.operation := o
+		this.text      := t
+		this.label     := l
 	}
 	
 	; Actually do what this mod describes to the given row.
-	executeMod(rowBits) {
+	executeMod(rowBits, temp = false) {
 		rowBit := rowBits[this.bit]
 		
-		startOffset := 0
-		endOffset := 0
-		if(this.len > 0)
-			endOffset := this.len
-		else if(this.len < 0)
-			startOffset := this.len
+		if(this.operation = MODOP_REPLACE)
+			outBit := this.text
+		else if(this.operation = MODOP_BEGIN)
+			outBit := this.text rowBit
+		else if(this.operation = MODOP_END)
+			outBit := rowBit this.text
 		
-		rowBitLen := StrLen(rowBit)
-		if(this.start > 0)
-			startLen := this.start - 1
-		else if(this.start < 0)
-			startLen := rowBitLen + this.start + 1
-		else
-			startLen := rowBitLen // 2
-		
-		outBit := SubStr(rowBit, 1, startLen + startOffset)
-		outBit .= this.text
-		outBit .= SubStr(rowBit, (startLen + 1) + endOffset)
+		; DEBUG.popup("Row bits", rowBits, "Row bit to modify", rowBit, "Operation", this.operation, "Text", this.text, "Result", outBit, "Begin", MODOP_BEGIN)
 		
 		; Put the bit back into the full row.
 		rowBits[this.bit] := outBit
@@ -50,13 +40,10 @@ class TableListMod {
 	; Debug info
 	debugName := "TableListMod"
 	debugToString(numTabs = 0) {
-		outStr .= DEBUG.buildDebugString("Mod",       this.mod,       numTabs, true)
 		outStr .= DEBUG.buildDebugString("Bit",       this.bit,       numTabs, true)
-		outStr .= DEBUG.buildDebugString("Start",     this.start,     numTabs, true)
-		outStr .= DEBUG.buildDebugString("Length",    this.len,       numTabs, true)
+		outStr .= DEBUG.buildDebugString("Operation", this.operation, numTabs, true)
 		outStr .= DEBUG.buildDebugString("Text",      this.text,      numTabs, true)
 		outStr .= DEBUG.buildDebugString("Label",     this.label,     numTabs, true)
-		outStr .= DEBUG.buildDebugString("Operation", this.operation, numTabs, true)
 		return outStr
 	}
 }

@@ -7,8 +7,8 @@
 (		NAME					ABBREV		SUBTYPE															SEARCH_TYPE		ARG1		ARG2		ARG3		ARG4		ARG5	APPKEY	MACHINE
 )		0						0				0																	0					1			2			3			4			5		0			0
 
-[+1|{MACHINE}b:EPIC_DESKTOP]
-	[+2|{SEARCH_TYPE}b:CODESEARCH]
+[+1|{MACHINE}r:EPIC_DESKTOP]
+	[+2|{SEARCH_TYPE}r:CODESEARCH]
 		# Codesearch
 		Server				s				Server
 		Client				c				Client
@@ -16,10 +16,11 @@
 		Records				r				Records
 		Other					o|p			ProgPoint
 		All					a				Server|Client|Records|ProgPoint
-	[-2]
 		
 		# Codesearch Specifics
 		Server DBC			sd				Server															CODESEARCH		-			-			-			-			-		DBC
+	[-2]
+		
 		
 		# | Other
 		Guru					gu				-																	GURU

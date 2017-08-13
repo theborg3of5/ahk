@@ -82,6 +82,16 @@
 			[] - Clear all mods
 				A line with nothing but "[]" on it will clear all current mods added before that point in the file.
 			
+			r - Replace
+				Replaces the part with the given string.
+				Example
+					Mods
+						[r:zzz]
+					Input
+						AAA
+					Result
+						zzz
+			
 			b - Begin
 				Adds the given string at the beginning of the part.
 				Example
@@ -275,8 +285,6 @@ class TableList {
 		chars["PLACEHOLDER"] := "" ; No default
 		chars["MULTIENTRY"]  := "|"
 		
-		chars["MOD","BEGIN"]  := "b"
-		chars["MOD","END"]    := "e"
 		chars["MOD","ADD"]    := "+"
 		chars["MOD","REMOVE"] := "-"
 		
@@ -374,40 +382,26 @@ class TableList {
 		}
 	}
 
-	; Takes a modifier string and spits out the mod object/array. Assumes no [] around it, and no special chars at start.
+	; Takes a modifier string and constructs a mod object. Assumes no [] around it, and no special chars at start.
 	parseModLine(modLine, label = 0) {
 		origModLine := modLine
 		
-		currMod := new TableListMod(modLine, 1, 0, "", label, "")
-		
-		; Next, check to see whether we have an explicit bit. Syntax: starts with {#}
+		; Check to see whether we have an explicit bit. Syntax: line starts with {bitLabel}
 		firstChar := SubStr(modLine, 1, 1)
 		if(firstChar = "{") {
 			closeCurlyPos := InStr(modLine, "}")
-			currMod.bit := SubStr(modLine, 2, closeCurlyPos - 2)
+			bit := SubStr(modLine, 2, closeCurlyPos - 2)
 			
 			modLine := SubStr(modLine, closeCurlyPos + 1)
 		}
 		
-		; First character of remaining string indicates what sort of operation we're dealing with: b, e, or m.
-		currMod.operation := Substr(modLine, 1, 1)
-		if(currMod.operation = this.chars["MOD","BEGIN"]) {
-			currMod.start := 1
-		} else if(currMod.operation = this.chars["MOD","END"]) {
-			currMod.start := -1
-		}
+		operation := Substr(modLine, 1, 1)
+		text := SubStr(modLine, 3) ; Ignore mod and colon at start
 		
-		; Shave that off too. (leaving colon)
-		StringTrimLeft, modLine, modLine, 1
+		newMod := new TableListMod(bit, operation, text, label)
+		; DEBUG.popup("New mod", newMod, "Original mod line", origModLine, "Mod line without bit", modLine, "Operation", operation, "Text", text)
 		
-		; Figure out the rest of the innards: parentheses and string.
-		commaPos := InStr(modLine, ",")
-		closeParenPos := InStr(modLine, ")")
-		
-		; Snag the rest of the info.
-		currMod.text := SubStr(modLine, 2)
-		
-		return currMod
+		return newMod
 	}
 
 	; Kill mods with the given label.

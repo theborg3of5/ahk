@@ -197,5 +197,3 @@ class MainConfig {
 		return filter
 	}
 }
-
-MainConfig.init(localConfigFolder "settings.ini", configFolder "windows.tl", configFolder "programs.tl")

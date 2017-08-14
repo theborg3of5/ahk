@@ -8,9 +8,12 @@ $#e::
 return
 
 #IfWinActive, ahk_class CabinetWClass
-	; Firefox-like ctrl+l shortcut
 	^l::
 		Send, !d
+	return
+	
+	^t::
+		Run, ::{20d04fe0-3aea-1069-a2d8-08002b30309d} ; Open the "This PC" special folder
 	return
 #IfWinActive
 

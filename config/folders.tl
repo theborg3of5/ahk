@@ -16,8 +16,8 @@
 	EpicStudio Config		esc				<USERROOT>\AppData\Local\Epic Systems Corporation\EpicStudio											EPIC_DESKTOP
 	
 	# Development
-	Item Approval			ia					\\epic.com\files\docs\Hospital Billing\Designs\Items Approval\											EPIC_DESKTOP
-	VM Templates			vt					\\epic.com\files\apps\vmware\SU Development\																	EPIC_DESKTOP
+	Dev						dev				<USERROOT>\Dev\																										EPIC_DESKTOP
+	Templates				temp				<USERROOT>\Dev\Templates																							EPIC_DESKTOP
 	Partial Installers	pi					F:\Hospital Billing\Dev\Partial Installers\																	EPIC_DESKTOP
 	Net Home					nh					\\epic-nfs\net_home\gborg\																							EPIC_DESKTOP
 	NFS 3 Day				n3					\\epic-nfs\nfs_3day\gborg\																							EPIC_DESKTOP

@@ -13,16 +13,16 @@ Standard (1280x1024)						sd					1280		1024
 Small (800x600)							sm					800		600
 
 # Specific cases
-Fake maximized								fm					1920		1050
+Fake maximized								fm					1934		1057
 Minimum Hyperspace (2015-)				minOld			800		550
 Minimum Hyperspace (2017+)				min				1280		768
-Official screenshots						shot				1024		768
 PuTTY on laptop screen					pl					1084		1046
 
-# POSPP
+; # POSPP
 ; Actual HTML size in Cadence								700		510
 ; Actual HTML size in popup								980		658
 ; Added size of IE11 chrome								16			110
-Default Cadence IE Equivalent			iecad				716		620
-POSPP Popup									pop				996		768
+; Default Cadence IE Equivalent			iecad				716		620
+; POSPP Popup									pop				996		768
 
+; From AHK Active Window Info, these numbers should match the top set of w/h, not the client ones.

@@ -16,9 +16,6 @@
 		Snapper supports URLs as well - add support for that to ActionObject?
 			Also include support for multiple things - maybe add that in general too?
 				Also support newline separation (though likely just turn it into comma-separated for a consistent format).
-		Alt+drag has some interesting quirks with certain programs (just OneNote on Win10 so far?)
-			Add to framework, new column in programs.tl?
-			Looks like it's other office programs as well - at least Outlook has it bad.
 		Audit all scripts for unused hotkeys
 			Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
 		Have remote desktop script mute volume on a loop, or whenever a new connection is made.
@@ -26,6 +23,7 @@
 			Or maybe stick the quotes in the config somehow?
 		Expand emulator controller to support other systems, perhaps?
 			At least separate general form (loop + joybuttons) from specific meanings?
+		Rework kdeMoverSizer to bring it up to my own coding style?
 		
 	'Scripts to Share'
 	

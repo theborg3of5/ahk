@@ -149,6 +149,22 @@ runProgram(progName, progInfo = "") {
 	RunAsUser(progInfo["PATH"], progInfo["ARGS"])
 }
 
+getActiveWindowSettingsAry() {
+	WinGetTitle, winTitle, A
+	WinGetClass, winClass, A
+	controlClass := getFocusedControl()
+	
+	return MainConfig.getWindow(winTitle, winClass, controlClass)
+}
+
+getActiveWindowSetting(settingName) {
+	if(!settingName)
+		return ""
+	
+	winSettings := getActiveWindowSettingsAry()
+	return winSettings[settingName]
+}
+
 ; fillFromActive - whether to overwrite winTitle, winClass, and controlClass from the active window if they're blank.
 processWindow(ByRef winTitle = "", ByRef winClass = "", ByRef controlClass = "", ByRef winSettings = "", action = "", fillFromActive = true) {
 	if(fillFromActive) {

@@ -19,11 +19,6 @@ Usage:
 		F6		Same as F5, but also fills in the exe string for Text (aka Reflection).
 		F7		Same as F5, but also fills in the exe string for Hyperspace.
 		F8		Same as F5, but also fills in the exe string for VB.
-	For CDO:
-		1. Put your cursor at the end of a line that is blank except for a semicolon (EpicStudio automatically fills in semicolons on blank lines).
-		2. After the semicolon, type “;cdo”. Note that that’s two semicolons total.
-		3. A window will pop up with the various generate fields in it, which you can fill in and submit. When you do that, the script will fill in the needed #GENERATE code for you.
-		Note that the global and lookback fields are optional, and their respective lines will be omitted if left blank.
 
 Notes:
 	None.
@@ -61,14 +56,13 @@ Notes:
 	
 	; Tray setup for double-click help popup, icon, etc.
 	title       := "EpicStudio hotkeys"
-	description := "Adds debug hotkeys to EpicStudio which use the workstation configured above to make finding the right process easy. Also adds a CDO creation GUI."
+	description := "Adds debug hotkeys to EpicStudio which use the workstation configured above to make finding the right process easy."
 	
 	hotkeys     := []
 	hotkeys.Push(["Debug w/ WS",               "F5"])
 	hotkeys.Push(["Debug w/ WS + Text search", "F6"])
 	hotkeys.Push(["Debug w/ WS + HS search",   "F7"])
 	hotkeys.Push(["Debug w/ WS + VB search",   "F8"])
-	hotkeys.Push(["CDO Gui",                   "Put your cursor after the `; on an empty line, and type `;cdo"])
 	hotkeys.Push(["Emergency exit",            "Ctrl + Shift + Alt + Win + R"])
 	
 	setupTray(title, description, hotkeys, iconPath)
@@ -99,63 +93,6 @@ Notes:
 	; Debug, auto-search for workstation ID and VB exe.
 	F8::
 		esRunDebug("ws:" epicComputerName " exe:" vbExe)
-	return
-#IfWinActive
-	; GUI input for Chronicles Data Operation GENERATE code.
-	:*:`;cdo::
-		Gui, Add, Text, , Type: 
-		Gui, Add, Text, , Tag: 
-		Gui, Add, Text, , INI: 
-		Gui, Add, Text, , Lookback: 
-		Gui, Add, Text, , Global: 
-		Gui, Add, Text, , Items: 
-		
-		Gui, Add, Edit, vType x100 ym, Load
-		Gui, Add, Edit, vTag,
-		Gui, Add, Edit, vINI,
-		Gui, Add, Edit, vLookback,
-		Gui, Add, Edit, vGlobal,
-		Gui, Add, Edit, vItems,
-		
-		;Gui, Font,, Courier New
-		Gui, Add, Button, Default, Generate
-		Gui, Show,, Generate CDO Comment
-	return
-
-	ButtonGenerate:
-		Gui, Submit
-		
-		; Make sure we're on a clean line.
-		Send, {Down}{Up}{End}{Backspace}
-		SendRaw, % ";;#GENERATE#"
-		Send, {Enter}
-		
-		Send, {Space} ; Indent the following lines by one space.
-		
-		SendRaw, % "Type: " Type
-		Send, {Enter}
-		SendRaw, % "Tag: " Tag
-		Send, {Enter}
-		SendRaw, % "INI: " INI
-		Send, {Enter}
-		if(Lookback) {
-			SendRaw, % "Lookback: " Lookback
-			Send, {Enter}
-		}
-		if(Global) {
-			SendRaw, % "Global: " Global
-			Send, {Enter}
-		}
-		SendRaw, % "Items:"
-		Send, {Enter}
-		SendRaw, % Items
-		Send, {Enter}
-		
-		Send, {Backspace} ; Get rid of the indent for the final line.
-		
-		SendRaw, % ";#ENDGEN#"
-		
-		Gui, Destroy
 	return
 #IfWinActive
 }

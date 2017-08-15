@@ -51,10 +51,6 @@ class ActionObject {
 	process(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
 		; DEBUG.popup("ActionObject.process", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
-		; If we already have all the info we need, leave.
-		if((type != "") && (action != "") && ((subType != "") || !needsST) && ((subAction != "") || !needsSA))
-			return
-		
 		; Do a little preprocessing to pick out needed info. (All args but input are ByRef)
 		isPathType := isPath(input, pathType)
 		isEMC2ObjectType := isEMC2Object(input, ini, id)
@@ -113,12 +109,12 @@ class ActionObject {
 		
 		; Determine if we need subType or subAction based on what we know so far.
 		if(type = TYPE_EMC2) {
-			needsST := true
-			needsSA := true
+			needsSubType := true
+			needsSubAction := true
 		}
 		
 		; GDB TODO: while here later on? Doesn't fit in selector's single-minded aspect right now.
-		if(!type || !action || (!subType && needsST) || (!subAction && needsSA)) {
+		if(!type || !action || (!subType && needsSubType) || (!subAction && needsSubAction)) {
 			filter := MainConfig.getMachineTableListFilter()
 			s := new Selector("local/actionObject.tl", "", filter)
 			objInfo := s.selectGui("", {TYPE: type, ACTION: action, SUBTYPE: subType, SUBACTION: subAction, ID: input})

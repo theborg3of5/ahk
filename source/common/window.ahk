@@ -570,7 +570,7 @@ getWindowMonitor(winID, monitorList = "") {
 	
 	WinGet, minMaxState, MinMax, %winID%
 	if(minMaxState = 1) ; Window is maximized
-		winX += MainConfig.getSetting("MAX_EXTRA_WINDOW_EDGE_OFFSET")
+		winX += 1
 	
 	; Iterate over all monitors until we find a match.
 	For i,mon in monitorList {

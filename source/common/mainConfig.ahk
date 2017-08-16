@@ -23,9 +23,7 @@ global localConfigFolder := configFolder "local\"
 ; Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
 class MainConfig {
 	static multiDelim := "|"
-	static settingsIndices := ["MACHINE", "MENU_KEY_ACTION", "VIM_CLOSE_KEY", "WINDOW_EDGE_OFFSET", "MAX_EXTRA_WINDOW_EDGE_OFFSET"]
-	
-	static defaultSettings := {"VIM_CLOSE_KEY": "F9", "WINDOW_EDGE_OFFSET": 0, "MAX_EXTRA_WINDOW_EDGE_OFFSET": 0}
+	static defaultSettings := {"VIM_CLOSE_KEY": "F9", "WINDOW_EDGE_OFFSET": 0}
 	static settings := []
 	static windows  := []
 	static programs := []
@@ -39,25 +37,29 @@ class MainConfig {
 	}
 	
 	loadSettings(filePath) {
-		For i,configName in this.settingsIndices {
-			IniRead, value, %filePath%, Main, %configName%
-			; DEBUG.popup("Filepath", filePath, "Config name", configName, "Value", value)
-		
-			; Multi-entry value, put into an array.
-			if(stringContains(value, this.multiDelim)) {
-				this.settings[configName] := StrSplit(value, this.multiDelim)
-			
-			; Single value, use it as-is.
-			} else if(value) {
-				this.settings[configName] := value
-			
-			; Empty value, use default.
-			} else {
-				this.settings[configName] := this.defaultSettings[configName]
-			}
-		}
+		this.loadSetting(filePath, "MACHINE")            ; Which machine this is, from MACHINE_* constants
+		this.loadSetting(filePath, "MENU_KEY_ACTION")    ; What to do with the menu key, from MENU_KEY_ACTION_* constants
+		this.loadSetting(filePath, "VIM_CLOSE_KEY")      ; Which keys should close tabs via vimBindings (generally F-keys).
+		this.loadSetting(filePath, "WINDOW_EDGE_OFFSET") ; How far windows are treated as being away from the edge of the screen. This makes it so we can snap to the visual edge of the screen.
 		
 		; DEBUG.popup("Script", A_ScriptFullPath, "AHK Root", ahkRootPath, "User path", userPath, "AHK Lib", ahkLibPath, "Main file path", filePath, "Settings", this.settings)
+	}
+	loadSetting(filePath, configName) {
+		IniRead, value, %filePath%, Main, %configName%
+		; DEBUG.popup("Filepath", filePath, "Config name", configName, "Value", value)
+	
+		; Multi-entry value, put into an array.
+		if(stringContains(value, this.multiDelim)) {
+			this.settings[configName] := StrSplit(value, this.multiDelim)
+		
+		; Single value, use it as-is.
+		} else if(value) {
+			this.settings[configName] := value
+		
+		; Empty value, use default.
+		} else {
+			this.settings[configName] := this.defaultSettings[configName]
+		}
 	}
 	
 	loadWindows(filePath) {

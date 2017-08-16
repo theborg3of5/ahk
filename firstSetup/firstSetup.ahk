@@ -34,7 +34,6 @@ tagsToReplace["WHICH_MACHINE"]         := ""
 tagsToReplace["VIM_CLOSE_KEY"]         := ""
 tagsToReplace["MENU_KEY_ACTION"]       := ""
 tagsToReplace["EDGE_OFFSET"]           := ""
-tagsToReplace["MAX_EXTRA_EDGE_OFFSET"] := ""
 
 copyPaths := []
 copyPaths["autoInclude.ahk.master"] := userPath "Documents\AutoHotkey\Lib\autoInclude.ahk"

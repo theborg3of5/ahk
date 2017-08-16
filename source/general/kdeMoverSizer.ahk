@@ -326,10 +326,6 @@ GetCurrentScreenBoarders(ByRef CurrentScreenLeft, ByRef CurrentScreenRight, ByRe
 		bottomOffset := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
 	}
 	
-	WinGet, minMaxState, MinMax
-	if(minMaxState = 1) ; Window is maximized
-		leftOffset += MainConfig.getSetting("MAX_EXTRA_WINDOW_EDGE_OFFSET")
-	
 	; Get current screen boarders for snapping, do this within the loop to allow snapping an all monitors without releasing button
 	MouseGetPos, Mouse_X, Mouse_Y
 	SysGet, MonitorCount, MonitorCount

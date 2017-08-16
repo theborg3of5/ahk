@@ -6,11 +6,11 @@
 ; Standalone scripts. Must be first to execute so they can spin off and be on their own.
 standaloneFolder := A_ScriptDir "\standalone\"
 Run, % standaloneFolder "vimBindings\vimBindings.ahk"
-if(MainConfig.isMachine(EPIC_DESKTOP)) { ; Not needed except on Epic machine.
+if(MainConfig.isMachine(MACHINE_EPIC_LAPTOP)) { ; Not needed except on Epic machine.
 	Run, % standaloneFolder "killUAC.ahk"
 	Run, % standaloneFolder "tortoiseFillerDLG\tortoiseFillerDLG.ahk"
 	Run, % standaloneFolder "dlgNumTracker\dlgNumTracker.ahk"
-} else if(MainConfig.isMachine(HOME_DESKTOP)) {
+} else if(MainConfig.isMachine(MACHINE_HOME_DESKTOP)) {
 	Run, % standaloneFolder "psxEmulatorController\psxEmulatorController.ahk"
 }
 

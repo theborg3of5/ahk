@@ -357,7 +357,7 @@ doWindowActionSpecial(action, winTitle = "", winClass = "", controlClass = "", w
 	} else if(action = WIN_ACTION_MIN) {
 		; Windows explorer
 		if(winClass = MainConfig.getProgram("Explorer", "CLASS")) {
-			if(MainConfig.isMachine(EPIC_DESKTOP)) { ; QTTabBar's min to tray
+			if(MainConfig.isMachine(MACHINE_EPIC_LAPTOP)) { ; QTTabBar's min to tray
 				Send, !q
 				method := WIN_ACTION_NONE
 			} else {

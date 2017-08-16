@@ -48,11 +48,11 @@ return
 	AppsKey::RWin
 #If
 
-#If MainConfig.isMachine(HOME_DESKTOP)
+#If MainConfig.isMachine(MACHINE_HOME_DESKTOP)
 	$Volume_Mute::DllCall("LockWorkStation")	; Lock workstation.
 #If
 
-#If MainConfig.isMachine(EPIC_DESKTOP)
+#If MainConfig.isMachine(MACHINE_EPIC_LAPTOP)
 	; For ergonomic keyboard.
 	browser_back up::
 		Click

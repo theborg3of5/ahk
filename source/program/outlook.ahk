@@ -104,7 +104,7 @@ buildOutlookWindowTitle(userEmail, folderName) {
 #If
 
 ; Universal new email.
-#If MainConfig.isMachine(EPIC_DESKTOP)
+#If MainConfig.isMachine(MACHINE_EPIC_LAPTOP)
 	^!m::
 		Run, % MainConfig.getProgram("Outlook", "PATH") " /c ipm.note"
 	return

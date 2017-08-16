@@ -5,8 +5,8 @@
 [{PATH}b:C:\Program Files (x86)\]
 	Chrome				-				Chrome_WidgetWin_1										Google\Chrome\Application\chrome.exe
 	Outlook				-				rctrl_renwnd32												Microsoft Office\Office15\OUTLOOK.EXE
-	ProcessExplorer	-				PROCEXPL														Process Explorer\procexp.exe													-									EPIC_DESKTOP
-	EpicStudio			-				WindowsForms10.Window.8.app.0.2bf8098_r33_ad1	EpicStudio\EpicStudio.exe														-									EPIC_DESKTOP	EpicStudio.exe
+	ProcessExplorer	-				PROCEXPL														Process Explorer\procexp.exe													-									EPIC_LAPTOP
+	EpicStudio			-				WindowsForms10.Window.8.app.0.2bf8098_r33_ad1	EpicStudio\EpicStudio.exe														-									EPIC_LAPTOP		EpicStudio.exe
 	Foobar				-				{97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}				foobar2000\foobar2000.exe
 	Notepad++			-				Notepad++													Notepad++\notepad++.exe
 	EMC2					EMC2			-																Epic\v8.2\EMC2\Shared Files\EpicD82.exe									EMC2Update env=TRACKAPPTCP
@@ -20,7 +20,7 @@
 
 [{PATH}b:C:\Program Files\]
 	Everything			-				EVERYTHING													Everything\Everything.exe
-	Notepad++			-				Notepad++													Notepad++\notepad++.exe															-									EPIC_DESKTOP
+	Notepad++			-				Notepad++													Notepad++\notepad++.exe															-									EPIC_LAPTOP
 	TrueCrypt			-				CustomDlg													TrueCrypt\TrueCrypt.exe
 	OxygenXML			-				SunAwtFrame													Oxygen XML Editor 13\oxygen13.2.exe
 	WinSpy				-				-																AutoHotkey\AU3_Spy.exe
@@ -39,13 +39,13 @@
 	
 	League				-				-																C:\Riot Games\League of Legends\LeagueClient.exe
 	
-	OneNote				-				Framework::CFrame											C:\Program Files (x86)\Microsoft Office\Office15\ONENOTE.EXE		-									EPIC_DESKTOP
+	OneNote				-				Framework::CFrame											C:\Program Files (x86)\Microsoft Office\Office15\ONENOTE.EXE		-									EPIC_LAPTOP
 	OneNote				-				Framework::CFrame											C:\Program Files (x86)\Microsoft Office\root\Office16\ONENOTE.EXE	-									HOME_DESKTOP
 	OneNote				-				Framework::CFrame											C:\Program Files\Microsoft Office 15\root\office15\ONENOTE.EXE		-									HOME_ASUS
 
 [{PATH}e:AppData\Roaming\Microsoft\Windows\Start Menu\Programs\GitHub, Inc\GitHub.appref-ms]
 	GitHub				-				-																C:\Users\thebo\
-	GitHub				-				-																C:\Users\gborg\																	-									EPIC_DESKTOP
+	GitHub				-				-																C:\Users\gborg\																	-									EPIC_LAPTOP
 []
 
 	FirefoxPortable	-				-																S:\FirefoxPortable\FirefoxPortable.exe										-									HOME_DESKTOP

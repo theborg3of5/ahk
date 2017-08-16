@@ -7,7 +7,7 @@
 (		NAME					ABBREV		SUBTYPE															SEARCH_TYPE		ARG1		ARG2		ARG3		ARG4		ARG5	APPKEY	MACHINE
 )		0						0				0																	0					1			2			3			4			5		0			0
 
-[+1|{MACHINE}r:EPIC_DESKTOP]
+[+1|{MACHINE}r:EPIC_LAPTOP]
 	[+2|{SEARCH_TYPE}r:CODESEARCH]
 		# Codesearch
 		Server				s				Server

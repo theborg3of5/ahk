@@ -5,9 +5,9 @@
 +ShowDataInputs=1
 +MinColumnWidth=1000
 
-(	NAME					ABBREV		WHICH_MACHINE		VIM_CLOSE_KEY	MENU_KEY_ACTION	EDGE_OFFSET
-)	0						0				0						1					2						3
+(	NAME					ABBREV		WHICH_MACHINE	VIM_CLOSE_KEY	MENU_KEY_ACTION	EDGE_OFFSET
+)	0						0				0					1					2						3
 
-	Home Desktop		desk			HOME_DESKTOP		F8|F9				-						7
-	Home Laptop			laptop		HOME_LAPTOP			F8|F9|F10		WINDOWS_KEY			7
-	Epic Laptop			epic			EPIC_DESKTOP		F6					WINDOWS_KEY			7
+	Home Desktop		desk			HOME_DESKTOP	F8|F9				-						7
+	Home Laptop			laptop		HOME_ASUS		F8|F9|F10		WINDOWS_KEY			7
+	Epic Laptop			epic			EPIC_LAPTOP		F6					WINDOWS_KEY			7

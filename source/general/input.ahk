@@ -42,17 +42,17 @@ $!v::
 return
 
 ; Menu key does different things on laptops without a mouse.
-#If MainConfig.getSetting("MENU_KEY_ACTION") = MENUKEYACTION_MIDDLECLICK
+#If MainConfig.getSetting("MENU_KEY_ACTION") = MENUKEYACTION_MiddleClick
 	AppsKey::MButton
-#If MainConfig.getSetting("MENU_KEY_ACTION") = MENUKEYACTION_WINDOWSKEY
+#If MainConfig.getSetting("MENU_KEY_ACTION") = MENUKEYACTION_WindowsKey
 	AppsKey::RWin
 #If
 
-#If MainConfig.isMachine(MACHINE_HOME_DESKTOP)
+#If MainConfig.isMachine(MACHINE_HomeDesktop)
 	$Volume_Mute::DllCall("LockWorkStation")	; Lock workstation.
 #If
 
-#If MainConfig.isMachine(MACHINE_EPIC_LAPTOP)
+#If MainConfig.isMachine(MACHINE_EpicLaptop)
 	; For ergonomic keyboard.
 	browser_back up::
 		Click

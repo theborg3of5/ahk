@@ -2,13 +2,13 @@
 #Include *i %A_LineFile%/../../../config/local/privateVariables.ahk
 
 ; Constants for machines.
-global MACHINE_EPIC_LAPTOP  := "EPIC_LAPTOP"
-global MACHINE_HOME_ASUS    := "HOME_ASUS"
-global MACHINE_HOME_DESKTOP := "HOME_DESKTOP"
+global MACHINE_EpicLaptop  := "EPIC_LAPTOP"
+global MACHINE_HomeAsus    := "HOME_ASUS"
+global MACHINE_HomeDesktop := "HOME_DESKTOP"
 
 ; Constants for what the menu key should do.
-global MENUKEYACTION_MIDDLECLICK := "MIDDLE_CLICK"
-global MENUKEYACTION_WINDOWSKEY  := "WINDOWS_KEY"
+global MENUKEYACTION_MiddleClick := "MIDDLE_CLICK"
+global MENUKEYACTION_WindowsKey  := "WINDOWS_KEY"
 
 global MAIN_CENTRAL_SCRIPT := "MAIN_CENTRAL_SCRIPT"
 

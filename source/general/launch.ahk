@@ -30,11 +30,11 @@ return
 	Run, % wrapInQuotes(progInfo["PATH"]) filezillaSiteCowbox
 return
 
-#If !MainConfig.isMachine(MACHINE_EPIC_LAPTOP)
+#If !MainConfig.isMachine(MACHINE_EpicLaptop)
 	!+l::activateProgram("League")
 #If
 
-#If MainConfig.isMachine(MACHINE_EPIC_LAPTOP)
+#If MainConfig.isMachine(MACHINE_EpicLaptop)
 	; VB - have to not have shift held down when it actually opens.
 	^+!v::
 		KeyWait, Shift
@@ -162,10 +162,10 @@ return
 ^+!f::Run, % "http://feedly.com/i/latest"
 ^!#m::Run, % "https://mail.google.com/mail/u/0/#inbox"
 
-#If MainConfig.isMachine(MACHINE_HOME_DESKTOP)
+#If MainConfig.isMachine(MACHINE_HomeDesktop)
 	^+!r::Run, % "http://www.reddit.com/"
 #If
-#If MainConfig.isMachine(MACHINE_EPIC_LAPTOP)
+#If MainConfig.isMachine(MACHINE_EpicLaptop)
 	!+c::Run, % "iexplore.exe http://barleywine/xenappqa/"
 #If
 

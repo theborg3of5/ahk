@@ -42,9 +42,9 @@ $!v::
 return
 
 ; Menu key does different things on laptops without a mouse.
-#If MainConfig.getSetting("MENU_KEY_ACTION") = menuKeyActionMiddleClick
+#If MainConfig.getSetting("MENU_KEY_ACTION") = MENUKEYACTION_MIDDLECLICK
 	AppsKey::MButton
-#If MainConfig.getSetting("MENU_KEY_ACTION") = menuKeyActionWindowsKey
+#If MainConfig.getSetting("MENU_KEY_ACTION") = MENUKEYACTION_WINDOWSKEY
 	AppsKey::RWin
 #If
 

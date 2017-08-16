@@ -7,8 +7,8 @@ global MACHINE_HOME_ASUS    := "HOME_ASUS"
 global MACHINE_HOME_DESKTOP := "HOME_DESKTOP"
 
 ; Constants for what the menu key should do.
-global menuKeyActionMiddleClick := "MIDDLE_CLICK"
-global menuKeyActionWindowsKey  := "WINDOWS_KEY"
+global MENUKEYACTION_MIDDLECLICK := "MIDDLE_CLICK"
+global MENUKEYACTION_WINDOWSKEY  := "WINDOWS_KEY"
 
 global MAIN_CENTRAL_SCRIPT := "MAIN_CENTRAL_SCRIPT"
 

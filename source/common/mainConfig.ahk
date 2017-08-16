@@ -23,7 +23,7 @@ global localConfigFolder := configFolder "local\"
 ; Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
 class MainConfig {
 	static multiDelim := "|"
-	static defaultSettings := {"VIM_CLOSE_KEY": "F9", "WINDOW_EDGE_OFFSET": 0}
+	static defaultSettings := {"VIM_CLOSE_KEY":"F9", "WINDOW_EDGE_OFFSET":0}
 	static settings := []
 	static windows  := []
 	static programs := []

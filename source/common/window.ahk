@@ -149,19 +149,20 @@ runProgram(progName, progInfo = "") {
 	RunAsUser(progInfo["PATH"], progInfo["ARGS"])
 }
 
-getActiveWindowSettingsAry() {
-	WinGetTitle, winTitle, A
-	WinGetClass, winClass, A
-	controlClass := getFocusedControl()
+getWindowSettingsAry(titleString = "A") {
+	WinGetTitle, winTitle, %titleString%
+	WinGetClass, winClass, %titleString%
+	WinGet, winExe, ProcessName, %titleString%
+	if(titleString = "A")
+		controlClass := getFocusedControl()
 	
-	return MainConfig.getWindow(winTitle, winClass, controlClass)
+	return MainConfig.getWindow(winTitle, winClass, winExe, controlClass)
 }
-
-getActiveWindowSetting(settingName) {
+getWindowSetting(settingName, titleString = "A") {
 	if(!settingName)
 		return ""
 	
-	winSettings := getActiveWindowSettingsAry()
+	winSettings := getWindowSettingsAry(titleString)
 	return winSettings[settingName]
 }
 
@@ -177,7 +178,7 @@ processWindow(ByRef winTitle = "", ByRef winClass = "", ByRef controlClass = "",
 	}
 	
 	if(!IsObject(winSettings)) {
-		winSettings := MainConfig.getWindow(winTitle, winClass, controlClass)
+		winSettings := MainConfig.getWindow(winTitle, winClass, "", controlClass)
 		
 		if(fillFromActive) {
 			if(!winSettings["WIN_TITLE"])

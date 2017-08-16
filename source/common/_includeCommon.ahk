@@ -1,9 +1,8 @@
 #Include %A_LineFile%\..
 
-#Include mainConfig.ahk ; Must be first in this section.
+#Include constants.ahk  ; Constants must be first so that they're available to all other scripts.
 
 #Include actionObject.ahk
-#Include constants.ahk
 #Include data.ahk
 #Include dateTime.ahk
 #Include debug.ahk
@@ -11,6 +10,7 @@
 #Include gui.ahk
 #Include HTTPRequest.ahk
 #Include io.ahk
+#Include mainConfig.ahk
 #Include runCommands.ahk
 #Include selector.ahk
 #Include selectorActions.ahk

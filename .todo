@@ -4,9 +4,10 @@
 		Have centering hotkey take height of taskbar into account?
 		Seems like standalone scripts reload once on their own, then are restarted again by main script - should either have them not restart, or don't need main script to reload them too.
 		Make server routine stuff work again (or ditch it entirely, or make only the web link work) for ActionObject.
-		Some other programs have the opposite snapping problem - Notepad++ and grepWin among them.
+		Replace if(titleString = "A") bit in window.ahk with something that works with any given window, not just the active one.
 	
 	'New ideas'
+		Clean up window stuff for special behaviors - processWindow is way overcomplex.
 		Figure out auto-updating the running script when source saved, specifically for test.ahk
 		Check out function objects for selector action stuff: https://autohotkey.com/docs/objects/Functor.htm
 		Debug - why are there two different build string functions, again?

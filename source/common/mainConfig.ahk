@@ -68,7 +68,6 @@ class MainConfig {
 		
 		tl := new TableList(filePath, settings)
 		this.windows := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
-		; DEBUG.popup("MainConfig", "loadWindows", "Loaded windows", this.windows)
 	}
 	
 	loadPrograms(filePath) {
@@ -125,18 +124,20 @@ class MainConfig {
 		}
 	}
 	
-	getWindow(title = "", ahkClass = "", controlClass = "") {
+	getWindow(title = "", ahkClass = "", exe = "", controlClass = "") {
 		retWindow := ""
-		if(!title && !ahkClass && !controlClass)
+		if(!title && !ahkClass && !controlClass && !exe)
 			return ""
 		
 		For i,w in this.windows {
-			; DEBUG.popup("Class", ahkClass, "Title", title, "Control", controlClass, "Against settings", w)
+			; DEBUG.popup("Class", ahkClass, "Title", title, "EXE", exe, "Control", controlClass, "Against settings", w)
 			if(ahkClass && w["WIN_CLASS"] && (ahkClass != w["WIN_CLASS"]) )
 				Continue
 			if(title && w["WIN_TITLE"] && (title != w["WIN_TITLE"]) )
 				Continue
 			if(controlClass && w["CONTROL_CLASS"] && (controlClass != w["CONTROL_CLASS"]) )
+				Continue
+			if(exe && w["EXE"] && (exe != w["EXE"]) )
 				Continue
 			
 			retWindow := w

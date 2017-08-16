@@ -78,14 +78,6 @@ waitUntilWindowState(state, title = "", text = "", matchMode = 1, matchSpeed = "
 }
 
 ; Get/set/restore various matching behavior states all at once.
-getMatchSettings() {
-	settings := Object()
-	settings["MODE"]          := A_TitleMatchMode
-	settings["SPEED"]         := A_TitleMatchModeSpeed
-	settings["DETECT_HIDDEN"] := A_DetectHiddenWindows
-	
-	return settings
-}
 setMatchSettings(mode = "", speed = "", detectHidden = "") {
 	; Save off the previous settings - nice if we want to restore later.
 	prevSettings := getMatchSettings()
@@ -99,6 +91,14 @@ setMatchSettings(mode = "", speed = "", detectHidden = "") {
 	
 	return prevSettings ; Return the previous settings (to be used with restoreMatchSettings() if desired).
 }
+getMatchSettings() {
+	settings := Object()
+	settings["MODE"]          := A_TitleMatchMode
+	settings["SPEED"]         := A_TitleMatchModeSpeed
+	settings["DETECT_HIDDEN"] := A_DetectHiddenWindows
+	
+	return settings
+}
 restoreMatchSettings(settings) {
 	if(!settings)
 		return
@@ -109,16 +109,9 @@ restoreMatchSettings(settings) {
 }
 
 ; Get current control in a functional wrapper.
-getFocusedControl() {
-	ControlGetFocus, outControl, A
+getFocusedControl(titleString = "A") {
+	ControlGetFocus, outControl, %titleString%
 	return outControl
-}
-
-; Check current control for a match.
-isFocusedControl(testControl) {
-	if(testControl = getFocusedControl())
-		return true
-	return false
 }
 
 ; Focus a window, running the program if it doesn't yet exist.
@@ -153,8 +146,7 @@ getWindowSettingsAry(titleString = "A") {
 	WinGetTitle, winTitle, %titleString%
 	WinGetClass, winClass, %titleString%
 	WinGet, winExe, ProcessName, %titleString%
-	if(titleString = "A")
-		controlClass := getFocusedControl()
+	controlClass := getFocusedControl(titleString)
 	
 	return MainConfig.getWindow(winTitle, winClass, winExe, controlClass)
 }

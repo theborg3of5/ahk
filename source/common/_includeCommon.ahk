@@ -6,6 +6,7 @@
 #Include data.ahk
 #Include dateTime.ahk
 #Include debug.ahk
+#Include debugBuilder.ahk
 #Include epic.ahk
 #Include gui.ahk
 #Include HTTPRequest.ahk

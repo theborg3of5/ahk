@@ -42,11 +42,9 @@ class SelectorRow {
 	
 	; Debug info
 	debugName := "SelectorRow"
-	debugToString(numTabs = 0) {
-		outStr .= DEBUG.buildDebugString("Data",        this.data,        numTabs, true)
-		outStr .= DEBUG.buildDebugString("IsDebug",     this.isDebug,     numTabs)
-		outStr .= DEBUG.buildDebugString("DebugResult", this.debugResult, numTabs)
-		
-		return outStr
+	debugToString(debugBuilder) {
+		debugBuilder.addLine("Data",        this.data)
+		debugBuilder.addLine("IsDebug",     this.isDebug)
+		debugBuilder.addLine("DebugResult", this.debugResult)
 	}
 }

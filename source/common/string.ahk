@@ -319,3 +319,14 @@ dropWhitespace(text) {
 	newText = %text% ; Note using = not :=, to drop whitespace.
 	return newText
 }
+
+appendLine(baseText, textToAdd) {
+	updatedString := ""
+	updatedString := baseText
+	
+	if(updatedString != "")
+		updatedString .= "`n"
+	updatedString .= textToAdd
+	
+	return updatedString
+}

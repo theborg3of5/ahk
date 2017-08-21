@@ -485,12 +485,11 @@ class TableList {
 	
 	; Debug info
 	debugName := "TableList"
-	debugToString(numTabs = 0) {
-		outStr .= DEBUG.buildDebugString("Chars",         this.chars,       numTabs, true)
-		outStr .= DEBUG.buildDebugString("Separate Map",  this.separateMap, numTabs)
-		outStr .= DEBUG.buildDebugString("Index labels",  this.indexLabels, numTabs)
-		outStr .= DEBUG.buildDebugString("Mods",          this.mods,        numTabs)
-		outStr .= DEBUG.buildDebugString("Table",         this.table,       numTabs)
-		return outStr
+	debugToString(debugBuilder) {
+		debugBuilder.addLine("Chars",        this.chars)
+		debugBuilder.addLine("Separate Map", this.separateMap)
+		debugBuilder.addLine("Index labels", this.indexLabels)
+		debugBuilder.addLine("Mods",         this.mods)
+		debugBuilder.addLine("Table",        this.table)
 	}
 }

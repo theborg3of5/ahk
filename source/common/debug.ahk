@@ -1,7 +1,7 @@
 ; Debugger object and functions.
 
 class DEBUG {
-	static spacesPerTab := 6 ; How many spaces are in a tab that we indent things by.
+	static spacesPerTab := 4 ; How many spaces are in a tab that we indent things by.
 	
 	; Input in any number of pairs of (label, value), in that order. They will be formatted as described in DEBUG.buildDebugString.
 	popup(params*) {
@@ -17,18 +17,20 @@ class DEBUG {
 		
 		MsgBox, % this.buildDebugPopup(pairedParams)
 	}
-
+	
 	; Given any number of pairs of (label, value), build a debug popup.
 	; Parameters:
 	;  params  - Array of (label, value) arrays.
 	;  numTabs - Number of tabs to indent label part of each pair by. Values will be indented by numTabs+1.
 	buildDebugPopup(params, numTabs = 0) {
-		outStr := ""
+		outString := ""
 		
-		For i,p in params
-			outStr .= this.buildDebugString(p[1], p[2], numTabs) "`n"
+		For i,p in params {
+			newString := this.buildDebugString(p[1], p[2], numTabs)
+			outString := appendLine(outString, newString)
+		}
 		
-		return outStr
+		return outString
 	}
 	
 	; Puts together a string in the form:
@@ -44,24 +46,19 @@ class DEBUG {
 	;  label       - Label to show the value with
 	;  value       - Value to show. If this is an object, we will call into DEBUG.buildObjectString() for a more complete description.
 	;  numTabs     - Number of tabs of indentation to start at. Sub-values (for array indices or custom debug function) will be indented by numTabs+1.
-	;  isFirstLine - True if this is the first line (and should not have a newline before it).
-	buildDebugString(label, value, numTabs = 0, isFirstLine = false) {
-		outStr := ""
-		
-		if(!isFirstLine)
-			outStr .= "`n"
-		outStr .= getTabs(numTabs, DEBUG.spacesPerTab) label ": "  ; Label
-		outStr .= this.buildObjectString(value, numTabs, "", true) ; Value
-		
-		return outStr
+	buildDebugString(label, value, numTabs = 0) {
+		outString := ""
+		outString .= getTabs(numTabs, DEBUG.spacesPerTab) label ": "  ; Label
+		outString .= this.buildObjectString(value, numTabs, "", true) ; Value
+		return outString
 	}
 	
 	; Puts together a string describing the value given.
 	; 
 	; Relevant special properties of objects:
 	;  value.debugName     - Rather than the generic "Array", text will contain {value.debugName}.
-	;  value.debugToString - If exists for the object, we will call it with parameters (numTabs) rather than looping over the objects subscripts.
-	; 
+	;  value.debugToString - If exists for the object, we will call it with the parameter (debugBuilder) rather than looping over the objects subscripts.
+	;									debugBuilder - A DebugBuilder object (see debugBuilder.ahk)
 	; Parameters:
 	;  value    - Object to put together a string about.
 	;  numTabs  - How much to indent the start of the string. Subitems will be indented by numTabs+1.
@@ -70,27 +67,32 @@ class DEBUG {
 	;              NOTE: subitems will still be indented by numTabs+1.
 	buildObjectString(value, numTabs = 0, index = "", noIndent = false) {
 		if(!noIndent)
-			outStr := getTabs(numTabs, DEBUG.spacesPerTab)
+			outString := getTabs(numTabs, DEBUG.spacesPerTab)
 		
 		; Index
 		if(index != "")
-			outStr .= "[" index "] "
+			outString .= "[" index "] "
 		
 		; Base case - not a complex object, just add our value and be done.
 		if(!isObject(value)) {
-			outStr .= value
-			return outStr
+			outString .= value
+			return outString
 		}
 		
-		outStr .= this.getObjectName(value)
+		outString .= this.getObjectName(value)
 		
-		if(isFunc(value.debugToString)) ; If an object has its own debug printout, use that rather than looping.
-			outStr .= "`n" value.debugToString(numTabs + 1)
-		else
+		; If an object has its own debug printout, use that rather than looping.
+		if(isFunc(value.debugToString)) {
+			builder := new DebugBuilder(numTabs + 1)
+			value.debugToString(builder)
+			outString .= "`n" builder.toString()
+			builder := ""
+		} else {
 			For subIndex,subVal in value
-				outStr .= "`n" this.buildObjectString(subVal, numTabs + 1, subIndex)
+				outString .= "`n" this.buildObjectString(subVal, numTabs + 1, subIndex)
+		}
 		
-		return outStr
+		return outString
 	}
 	
 	getObjectName(value) {

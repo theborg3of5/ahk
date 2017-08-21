@@ -704,17 +704,16 @@ class Selector {
 	
 	; Debug info
 	debugName := "Selector"
-	debugToString(numTabs = 0) {
-		outStr .= DEBUG.buildDebugString("Chars",              this.chars,            numTabs, true)
-		outStr .= DEBUG.buildDebugString("Data indices",       this.dataIndices,      numTabs)
-		outStr .= DEBUG.buildDebugString("GUI settings",       this.guiSettings,      numTabs)
-		outStr .= DEBUG.buildDebugString("Return settings",    this.returnSettings,   numTabs)
-		outStr .= DEBUG.buildDebugString("Filepath",           this.filePath,         numTabs)
-		outStr .= DEBUG.buildDebugString("Original icon path", this.originalIconPath, numTabs)
-		outStr .= DEBUG.buildDebugString("Hide errors",        this.hideErrors,       numTabs)
-		outStr .= DEBUG.buildDebugString("Choices",            this.choices,          numTabs)
-		outStr .= DEBUG.buildDebugString("Hidden Choices",     this.hiddenChoices,    numTabs)
-		outStr .= DEBUG.buildDebugString("Non-Choices",        this.nonChoices,       numTabs)
-		return outStr
+	debugToString(debugBuilder) {
+		debugBuilder.addLine("Chars",              this.chars)
+		debugBuilder.addLine("Data indices",       this.dataIndices)
+		debugBuilder.addLine("GUI settings",       this.guiSettings)
+		debugBuilder.addLine("Return settings",    this.returnSettings)
+		debugBuilder.addLine("Filepath",           this.filePath)
+		debugBuilder.addLine("Original icon path", this.originalIconPath)
+		debugBuilder.addLine("Hide errors",        this.hideErrors)
+		debugBuilder.addLine("Choices",            this.choices)
+		debugBuilder.addLine("Hidden Choices",     this.hiddenChoices)
+		debugBuilder.addLine("Non-Choices",        this.nonChoices)
 	}
 }

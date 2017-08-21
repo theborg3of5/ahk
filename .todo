@@ -9,7 +9,6 @@
 		Clean up window stuff for special behaviors - processWindow is way overcomplex.
 		Figure out auto-updating the running script when source saved, specifically for test.ahk
 		Check out function objects for selector action stuff: https://autohotkey.com/docs/objects/Functor.htm
-		Debug - why are there two different build string functions, again?
 		Debug - make a debug "builder" that stores off number of tabs and whatever last argument is?
 		Make it easier to get correct, drive-mapped paths
 			Maybe when copy, check for epic:// and replace with correct drive letter accordingly?

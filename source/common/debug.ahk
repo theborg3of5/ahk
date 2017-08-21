@@ -33,10 +33,8 @@ class DEBUG {
 	
 	; Puts together a string in the form:
 	; 
-	; label1:
-	;        value1
-	; label2:
-	;        value2
+	; label:
+	;        value
 	; 
 	; Parameters:
 	;  label         - Label to show the value with
@@ -115,55 +113,6 @@ class DEBUG {
 		}
 		
 		
-		
-		return outStr
-	}
-	
-	; Given any number of pairs of (label, value), build a debug string to put into a popup.
-	buildDebugString2(var, label = "", index = "", numTabs = 0, labelSameLine = false) {
-		outStr := ""
-		if(label)
-			label .= ": "
-		if(var.debugName)
-			label .= "[" var.debugName "]"
-		
-		; numTabsStart := numTabs
-		
-		outStr .= getTabs(numTabs, DEBUG.spacesPerTab)
-		
-		; Label.
-		if(label) {
-			outStr .= label
-			if(!labelSameLine) {
-				outStr .= "`n"
-				numTabs++
-			}
-			
-		} else if(index) { ; Index means it stays on the same line.
-			outStr .= "[" index "] "
-		}
-		
-		; numTabsHalf := numTabs
-		; firstHalfString := outStr
-		
-		; Variable.
-		if(IsObject(var) && IsFunc(var.debugToString)) {
-			outStr .= var.debugToString(numTabs + 1)
-			
-		} else if(IsObject(var)) { ; Array, time to start recursing.
-			if(!labelSameLine)
-				outStr .= getTabs(numTabs, DEBUG.spacesPerTab)
-			outStr .= "Array (" var.MaxIndex() ")`n"
-			For i,v in var
-				outStr .= this.buildDebugString(v, , i, numTabs + 1)
-			
-		} else { ; Lowest level - show the value.
-			if(!index && !labelSameLine)
-				outStr .= getTabs(numTabs, DEBUG.spacesPerTab)
-			outStr .= var "`n"
-		}
-		
-		; MsgBox, % "x Label:`n" label "`nx Variable:`n" var "`nx NumTabs Start:`n" numTabsStart "`nx NumTabs Half:`n" numTabsHalf "`nx First half:`n" firstHalfString "z`nx Final:`n" outStr "z"
 		
 		return outStr
 	}

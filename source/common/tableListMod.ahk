@@ -41,9 +41,9 @@ class TableListMod {
 	debugName := "TableListMod"
 	debugToString(numTabs = 0) {
 		outStr .= DEBUG.buildDebugString("Bit",       this.bit,       numTabs, true)
-		outStr .= DEBUG.buildDebugString("Operation", this.operation, numTabs, true)
-		outStr .= DEBUG.buildDebugString("Text",      this.text,      numTabs, true)
-		outStr .= DEBUG.buildDebugString("Label",     this.label,     numTabs, true)
+		outStr .= DEBUG.buildDebugString("Operation", this.operation, numTabs)
+		outStr .= DEBUG.buildDebugString("Text",      this.text,      numTabs)
+		outStr .= DEBUG.buildDebugString("Label",     this.label,     numTabs)
 		return outStr
 	}
 }

@@ -1,7 +1,7 @@
 ; Debugger object and functions.
 
 class DEBUG {
-	static spacesPerTab := 6
+	static spacesPerTab := 6 ; How many spaces are in a tab that we indent things by.
 	
 	; Input in any number of pairs of (label, value), in that order. They will be formatted as described in DEBUG.buildDebugString.
 	popup(params*) {
@@ -32,33 +32,26 @@ class DEBUG {
 	}
 	
 	; Puts together a string in the form:
-	; 
-	; label:
-	;        value
+	;  label: value
+	; For arrays, format looks like this:
+	;  label: Array (numIndices)
+	;     [index] value
+	;     [index] value
+	;     ...
+	; Also respects custom debug names and debug functions - see buildObjectString() for details.
 	; 
 	; Parameters:
-	;  label         - Label to show the value with
-	;  value         - Value to show. If this is an object, we will call into DEBUG.buildObjectString() for a more complete description.
-	;  numTabs       - Number of tabs of indentation to start at. Value will be indented by numTabs+1.
-	;  labelSameLine - If set to true, we won't put a newline and indentation between the label and value, only a space.
-	buildDebugString(label, value, numTabs = 0, labelSameLine = false) {
+	;  label       - Label to show the value with
+	;  value       - Value to show. If this is an object, we will call into DEBUG.buildObjectString() for a more complete description.
+	;  numTabs     - Number of tabs of indentation to start at. Sub-values (for array indices or custom debug function) will be indented by numTabs+1.
+	;  isFirstLine - True if this is the first line (and should not have a newline before it).
+	buildDebugString(label, value, numTabs = 0, isFirstLine = false) {
 		outStr := ""
 		
-		; Label
-		outStr .= getTabs(numTabs, DEBUG.spacesPerTab) label ": "
-		
-		; More complex case - call recusive object function.
-		if(isObject(value)) {
-			outStr .= this.buildObjectString(value, numTabs, "", true)
-		
-		; Simple string or numeric value - just put it into place and return, we're done.
-		} else {
-			if(!labelSameLine)
-				outStr .= "`n" getTabs(numTabs + 1, DEBUG.spacesPerTab)
-			outStr .= value
-		}
-		
-		outStr .= "`n"
+		if(!isFirstLine)
+			outStr .= "`n"
+		outStr .= getTabs(numTabs, DEBUG.spacesPerTab) label ": "  ; Label
+		outStr .= this.buildObjectString(value, numTabs, "", true) ; Value
 		
 		return outStr
 	}
@@ -66,14 +59,14 @@ class DEBUG {
 	; Puts together a string describing the value given.
 	; 
 	; Relevant special properties of objects:
-	;  value.debugName - Rather than the generic "Array", text will contain {value.debugName}.
+	;  value.debugName     - Rather than the generic "Array", text will contain {value.debugName}.
 	;  value.debugToString - If exists for the object, we will call it with parameters (numTabs) rather than looping over the objects subscripts.
 	; 
 	; Parameters:
 	;  value    - Object to put together a string about.
 	;  numTabs  - How much to indent the start of the string. Subitems will be indented by numTabs+1.
 	;  index    - If set, row will be prefaced with "[index] "
-	;  noIndent - If true, we will NOT indent this line. Typically used because caller has already done the indentation.
+	;  noIndent - If true, we will NOT indent this line. Typically used because we're still on the label line.
 	;              NOTE: subitems will still be indented by numTabs+1.
 	buildObjectString(value, numTabs = 0, index = "", noIndent = false) {
 		if(!noIndent)
@@ -91,15 +84,11 @@ class DEBUG {
 		
 		outStr .= this.getObjectName(value)
 		
-		; If an object has its own debug printout, use that rather than looping.
-		if(isFunc(value.debugToString)) {
+		if(isFunc(value.debugToString)) ; If an object has its own debug printout, use that rather than looping.
 			outStr .= "`n" value.debugToString(numTabs + 1)
-			
-		} else {
-			; Loop over the object's subscripts.
-			For i,v in value
-				outStr .= "`n" this.buildObjectString(v, numTabs + 1, i)
-		}
+		else
+			For subIndex,subVal in value
+				outStr .= "`n" this.buildObjectString(subVal, numTabs + 1, subIndex)
 		
 		return outStr
 	}

@@ -486,7 +486,7 @@ class TableList {
 	; Debug info
 	debugName := "TableList"
 	debugToString(numTabs = 0) {
-		outStr .= DEBUG.buildDebugString("Chars",         this.chars,       numTabs)
+		outStr .= DEBUG.buildDebugString("Chars",         this.chars,       numTabs, true)
 		outStr .= DEBUG.buildDebugString("Separate Map",  this.separateMap, numTabs)
 		outStr .= DEBUG.buildDebugString("Index labels",  this.indexLabels, numTabs)
 		outStr .= DEBUG.buildDebugString("Mods",          this.mods,        numTabs)

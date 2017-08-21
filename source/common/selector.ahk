@@ -705,7 +705,7 @@ class Selector {
 	; Debug info
 	debugName := "Selector"
 	debugToString(numTabs = 0) {
-		outStr .= DEBUG.buildDebugString("Chars",              this.chars,            numTabs)
+		outStr .= DEBUG.buildDebugString("Chars",              this.chars,            numTabs, true)
 		outStr .= DEBUG.buildDebugString("Data indices",       this.dataIndices,      numTabs)
 		outStr .= DEBUG.buildDebugString("GUI settings",       this.guiSettings,      numTabs)
 		outStr .= DEBUG.buildDebugString("Return settings",    this.returnSettings,   numTabs)

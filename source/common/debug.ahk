@@ -89,18 +89,7 @@ class DEBUG {
 			return outStr
 		}
 		
-		; If an object has its own name specified, use it.
-		if(value.debugName) {
-			outStr .= "{" value.debugName "}"
-		
-		; Otherwise, just use a generic "Array" label and add the number of elements.
-		} else {
-			arraySize := getArraySize(value)
-			if(!arraySize)
-				outStr .= "`n" ; Empty array, no number or subitems.
-			else
-				outStr .= "Array (" arraySize ")"
-		}
+		outStr .= this.getObjectName(value)
 		
 		; If an object has its own debug printout, use that rather than looping.
 		if(isFunc(value.debugToString)) {
@@ -112,8 +101,15 @@ class DEBUG {
 				outStr .= "`n" this.buildObjectString(v, numTabs + 1, i)
 		}
 		
-		
-		
 		return outStr
+	}
+	
+	getObjectName(value) {
+		; If an object has its own name specified, use it.
+		if(value.debugName)
+			return "{" value.debugName "}"
+			
+		; For other objects, just use a generic "Array" label and add the number of elements.
+		return "Array (" getArraySize(value) ")"
 	}
 }

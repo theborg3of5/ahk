@@ -159,6 +159,8 @@ class Selector {
 			; DEBUG.popup("User Input", userIn, "Row Parse Result", rowToDo, "Action type", this.returnSettings["ActionType"], "Data filled", dataFilled)
 		}
 		
+		DEBUG.popup("Selector debug", this)
+		
 		return this.doAction(rowToDo)
 	}
 	
@@ -703,9 +705,16 @@ class Selector {
 	; Debug info
 	debugName := "Selector"
 	debugToString(numTabs = 0) {
-		outStr .= DEBUG.buildDebugString("Choices",        this.choices,       numTabs)
-		outStr .= DEBUG.buildDebugString("Hidden Choices", this.hiddenChoices, numTabs)
-		outStr .= DEBUG.buildDebugString("Non-Choices",    this.nonChoices,    numTabs)
+		outStr .= DEBUG.buildDebugString("Chars",              this.chars,            numTabs)
+		outStr .= DEBUG.buildDebugString("Data indices",       this.dataIndices,      numTabs)
+		outStr .= DEBUG.buildDebugString("GUI settings",       this.guiSettings,      numTabs)
+		outStr .= DEBUG.buildDebugString("Return settings",    this.returnSettings,   numTabs)
+		outStr .= DEBUG.buildDebugString("Filepath",           this.filePath,         numTabs)
+		outStr .= DEBUG.buildDebugString("Original icon path", this.originalIconPath, numTabs)
+		outStr .= DEBUG.buildDebugString("Hide errors",        this.hideErrors,       numTabs)
+		outStr .= DEBUG.buildDebugString("Choices",            this.choices,          numTabs)
+		outStr .= DEBUG.buildDebugString("Hidden Choices",     this.hiddenChoices,    numTabs)
+		outStr .= DEBUG.buildDebugString("Non-Choices",        this.nonChoices,       numTabs)
 		return outStr
 	}
 }

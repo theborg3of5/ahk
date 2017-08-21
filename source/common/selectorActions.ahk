@@ -237,6 +237,15 @@ OUTLOOK_TLG(actionRow) {
 	dlg      := actionRow.data["DLG"]
 	customer := actionRow.data["CUST"]
 	
+	; Sanity check - if the message is an EMC2 ID (or P.emc2Id) and the DLG is not, swap them.
+	if(!isEMC2Id(dlg) && (SubStr(dlg, 1, 2) != "P.") ) {
+		if(isEMC2Id(message)) {
+			newDLG  := message
+			message := dlg
+			dlg     := newDLG
+		}
+	}
+	
 	actionRow.data["DOACTION"] := tlp "/" customer "///" dlg ", " message
 	
 	; Do it.

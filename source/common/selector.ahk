@@ -159,8 +159,6 @@ class Selector {
 			; DEBUG.popup("User Input", userIn, "Row Parse Result", rowToDo, "Action type", this.returnSettings["ActionType"], "Data filled", dataFilled)
 		}
 		
-		DEBUG.popup("Selector debug", this)
-		
 		return this.doAction(rowToDo)
 	}
 	

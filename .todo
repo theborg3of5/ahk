@@ -9,9 +9,9 @@
 		Clean up window stuff for special behaviors - processWindow is way overcomplex.
 		Figure out auto-updating the running script when source saved, specifically for test.ahk
 		Check out function objects for selector action stuff: https://autohotkey.com/docs/objects/Functor.htm
-		Debug - make a debug "builder" that stores off number of tabs and whatever last argument is?
 		Make it easier to get correct, drive-mapped paths
 			Maybe when copy, check for epic:// and replace with correct drive letter accordingly?
+			Actually, a custom paste might be better - don't want to modify the clipboard needlessly.
 		Snapper supports URLs as well - add support for that to ActionObject?
 			Also include support for multiple things - maybe add that in general too?
 				Also support newline separation (though likely just turn it into comma-separated for a consistent format).

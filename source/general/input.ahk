@@ -23,15 +23,9 @@ return
 
 ; Special paste for when paste not allowed - just send the contents of the clipboard.
 ^!v::
-	KeyWait, Ctrl
-	KeyWait, Alt
-	SendRaw, %clipboard%
-return
-
-; Clean paste - remove leading/trailing whitespace, odd chars, and newlines from clipboard and send it.
-^#!v::
-	outStr := cleanupText(clipboard)
-	SendRaw, %outStr%
+	Send, ^+v
+	WinWaitActive, ahk_class QPasteClass
+	Send, +{Enter}
 return
 
 ; Clipboard typing - gives an easy place to type things that will then stick them on the clipboard if submitted.

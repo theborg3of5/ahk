@@ -4,7 +4,6 @@
 		Have centering hotkey take height of taskbar into account?
 		Seems like standalone scripts reload once on their own, then are restarted again by main script - should either have them not restart, or don't need main script to reload them too.
 		Make server routine stuff work again (or ditch it entirely, or make only the web link work) for ActionObject.
-		Replace if(titleString = "A") bit in window.ahk with something that works with any given window, not just the active one.
 	
 	'New ideas'
 		Clean up window stuff for special behaviors - processWindow is way overcomplex.

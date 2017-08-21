@@ -73,11 +73,8 @@ class DEBUG {
 	;  value    - Object to put together a string about.
 	;  numTabs  - How much to indent the start of the string. Subitems will be indented by numTabs+1.
 	;  index    - If set, row will be prefaced with "[index] "
-	;  noIndent - If true, we will NOT indent this line. Typically used because caller has already done the indentation.
-	;              NOTE: subitems will still be indented by numTabs+1.
-	buildObjectString(value, numTabs = 0, index = "", noIndent = false) {
-		if(!noIndent)
-			outStr := getTabs(numTabs, DEBUG.spacesPerTab)
+	buildObjectString(value, numTabs = 0, index = "") {
+		outStr := getTabs(numTabs, DEBUG.spacesPerTab)
 		
 		; Index
 		if(index != "")

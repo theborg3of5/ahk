@@ -316,17 +316,17 @@ GetCurrentScreenBoarders(ByRef CurrentScreenLeft, ByRef CurrentScreenRight, ByRe
 	offsetOverride := getWindowSetting("WINDOW_EDGE_OFFSET_OVERRIDE", "ahk_id " winId)
 	; DEBUG.popup("Offset override", offsetOverride)
 	if(offsetOverride != "") {
-		leftOffset   := offsetOverride
-		rightOffset  := offsetOverride
-		topOffset    := offsetOverride
-		bottomOffset := offsetOverride
+		offsetLeft   := offsetOverride
+		offsetRight  := offsetOverride
+		offsetTop    := offsetOverride
+		offsetBottom := offsetOverride
 	} else {
-		leftOffset   := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
-		rightOffset  := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
-		topOffset    := 0 ; MainConfig.getSetting("WINDOW_EDGE_OFFSET") ; top offset hasn't changed, that's where my taskbar is.
-		bottomOffset := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
+		offsetLeft   := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
+		offsetRight  := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
+		offsetTop    := 0 ; MainConfig.getSetting("WINDOW_EDGE_OFFSET") ; top offset hasn't changed, that's where my taskbar is.
+		offsetBottom := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
 	}
-	; DEBUG.popup("kdeMoverSizer.GetCurrentScreenBoarders", "Got settings", "Left offset", leftOffset, "Right offset", rightOffset, "Top offset", topOffset, "Bottom offset", bottomOffset)
+	; DEBUG.popup("kdeMoverSizer.GetCurrentScreenBoarders", "Got settings", "Left offset", offsetLeft, "Right offset", offsetRight, "Top offset", offsetTop, "Bottom offset", offsetBottom)
 	
 	; Get current screen boarders for snapping, do this within the loop to allow snapping an all monitors without releasing button
 	MouseGetPos, Mouse_X, Mouse_Y
@@ -335,10 +335,10 @@ GetCurrentScreenBoarders(ByRef CurrentScreenLeft, ByRef CurrentScreenRight, ByRe
 	{
 		SysGet, MonitorWorkArea, MonitorWorkArea, %A_Index%
 		if( (Mouse_X >= MonitorWorkAreaLeft) AND (Mouse_X <= MonitorWorkAreaRight) AND (Mouse_Y >= MonitorWorkAreaTop) AND (Mouse_Y <= MonitorWorkAreaBottom) ) {
-			CurrentScreenLeft   := MonitorWorkAreaLeft   - leftOffset
-			CurrentScreenRight  := MonitorWorkAreaRight  + rightOffset
-			CurrentScreenTop    := MonitorWorkAreaTop    - topOffset
-			CurrentScreenBottom := MonitorWorkAreaBottom + bottomOffset
+			CurrentScreenLeft   := MonitorWorkAreaLeft   - offsetLeft
+			CurrentScreenRight  := MonitorWorkAreaRight  + offsetRight
+			CurrentScreenTop    := MonitorWorkAreaTop    - offsetTop
+			CurrentScreenBottom := MonitorWorkAreaBottom + offsetBottom
 		}
 	}
 }

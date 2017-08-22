@@ -387,15 +387,42 @@ buildWindowTitleString(winTitle = "", winClass = "", winID = "", processID = "",
 	return outStr
 }
 
-; Centers a window on the screen. "A" will use the active window, and passing nothing will use the last found window.
-centerWindow(title = "") {
-	if(!title)
-		WinGetTitle, title
-	else if(title = "A")
-		WinGetTitle, title, A
+; Centers a window on the screen. Passing "" will use the last found window.
+centerWindow(titleString = "A") {
+	global TASKBAR_HEIGHT
 	
-	WinGetPos, , , Width, Height, %title%
-	WinMove, %title%, , (A_ScreenWidth / 2) - (Width / 2), (A_ScreenHeight / 2) - (Height / 2)
+	if(!titleString)
+		WinGetTitle, titleString
+	
+	; GDB TODO get ahk_id to use with rest of these calls (WinExist(), maybe?)
+	
+	WinGetPos, , , winW, winH, %titleString%
+	
+	; Account for negative border oddities as needed
+	offsetOverride := getWindowSetting("WINDOW_EDGE_OFFSET_OVERRIDE", titleString)
+	if(offsetOverride != "") {
+		offsetLeft   := offsetOverride
+		offsetRight  := offsetOverride
+		offsetTop    := offsetOverride
+		offsetBottom := offsetOverride
+	} else {
+		offsetLeft   := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
+		offsetRight  := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
+		offsetTop    := 0 ; MainConfig.getSetting("WINDOW_EDGE_OFFSET") ; top offset hasn't changed, that's where my taskbar is.
+		offsetBottom := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
+	}
+	
+	winW -= offsetLeft + offsetRight
+	winH -= offsetBottom ; + offsetTop ; taskbar on top
+	
+	screenW := A_ScreenWidth
+	screenH := A_ScreenHeight - TASKBAR_HEIGHT
+	
+	x := ((screenW - winW) / 2) - offsetLeft
+	y := ((screenH - winH) / 2) + TASKBAR_HEIGHT ; + offsetTop
+	
+	; DEBUG.popup("ScreenW", screenW, "WinW", winW, "ScreenH", screenH, "WinH", winH, "X", x, "Y", y)
+	WinMove, %titleString%, , x, y
 }
 
 activateLastWindow() {

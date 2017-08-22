@@ -7,3 +7,6 @@ global WS_POPUP            = 0x80000000
 
 ; Delimiters and special characters.
 global QUOTES := """"
+
+; Window sizing/positioning
+global TASKBAR_HEIGHT := 30

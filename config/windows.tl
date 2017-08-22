@@ -40,4 +40,5 @@
 	Excel							-									-								-								EXCEL.EXE
 	PowerPoint					-									-								-								POWERPNT.EXE
 	OneNote						-									-								-								ONENOTE.EXE
+	GitHub						-									-								-								GitHub.exe
 [-1]

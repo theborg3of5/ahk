@@ -387,19 +387,28 @@ buildWindowTitleString(winTitle = "", winClass = "", winID = "", processID = "",
 	return outStr
 }
 
-; Centers a window on the screen. Passing "" will use the last found window.
+; Centers a window on the screen.
 centerWindow(titleString = "A") {
 	global TASKBAR_HEIGHT
+	winId := WinExist(titleString)
+	idString := "ahk_id " winId
 	
-	if(!titleString)
-		WinGetTitle, titleString
+	WinGetPos, , , winW, winH, %idString%
+	getWindowOffsets(idString, offsetLeft, offsetRight, offsetTop, offsetBottom) ; Account for negative border oddities as needed
+	winW -= offsetLeft + offsetRight
+	winH -= offsetBottom ; + offsetTop ; taskbar on top
 	
-	; GDB TODO get ahk_id to use with rest of these calls (WinExist(), maybe?)
+	screenW := A_ScreenWidth
+	screenH := A_ScreenHeight - TASKBAR_HEIGHT
+	x := ((screenW - winW) / 2) - offsetLeft
+	y := ((screenH - winH) / 2) + TASKBAR_HEIGHT ; + offsetTop
 	
-	WinGetPos, , , winW, winH, %titleString%
-	
-	; Account for negative border oddities as needed
-	offsetOverride := getWindowSetting("WINDOW_EDGE_OFFSET_OVERRIDE", titleString)
+	; DEBUG.popup("ScreenW", screenW, "WinW", winW, "ScreenH", screenH, "WinH", winH, "X", x, "Y", y)
+	WinMove, %idString%, , x, y
+}
+
+getWindowOffsets(idString, ByRef offsetLeft, ByRef offsetRight, ByRef offsetTop, ByRef offsetBottom) {
+	offsetOverride := getWindowSetting("WINDOW_EDGE_OFFSET_OVERRIDE", idString)
 	if(offsetOverride != "") {
 		offsetLeft   := offsetOverride
 		offsetRight  := offsetOverride
@@ -411,82 +420,6 @@ centerWindow(titleString = "A") {
 		offsetTop    := 0 ; MainConfig.getSetting("WINDOW_EDGE_OFFSET") ; top offset hasn't changed, that's where my taskbar is.
 		offsetBottom := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
 	}
-	
-	winW -= offsetLeft + offsetRight
-	winH -= offsetBottom ; + offsetTop ; taskbar on top
-	
-	screenW := A_ScreenWidth
-	screenH := A_ScreenHeight - TASKBAR_HEIGHT
-	
-	x := ((screenW - winW) / 2) - offsetLeft
-	y := ((screenH - winH) / 2) + TASKBAR_HEIGHT ; + offsetTop
-	
-	; DEBUG.popup("ScreenW", screenW, "WinW", winW, "ScreenH", screenH, "WinH", winH, "X", x, "Y", y)
-	WinMove, %titleString%, , x, y
-}
-
-activateLastWindow() {
-	WinActivate, % "ahk_id " getPreviousWindowID()
-}
-
-getPreviousWindowID() {
-	; Gather a list of running programs to loop over.
-	WinGet, windowList, List
-	WinGetTitle, oldTitle, A
-	WinGetClass, oldClass, A
-	
-	; Loop until we have the previous window.
-	Loop, %windowList%
-	{
-		; Gather information on the window.
-		currID := windowList%A_Index%
-		WinGetTitle, currTitle, ahk_id %currID%
-		WinGet, currStyle, Style, ahk_id %currID%
-		WinGet, currExStyle, ExStyle, ahk_id %currID%
-		WinGetClass, currClass, ahk_id %currID%
-		currParent := decimalToHex(DllCall("GetParent", "uint", currID))
-		WinGet, currParentStyle, Style, ahk_id %currParent%
-		; DEBUG.popup(currID, "Current ID", currStyle, "Current style", currExStyle, "Current extended style", currParentStyle, "Current parent style", currParent, "Current parent")
-		
-		; Skip unimportant windows.
-		if((currStyle & WS_DISABLED) || !(currTitle))
-			Continue
-		
-		; Skip tool-type windows.
-		if(currExStyle & WS_EX_TOOLWINDOW)
-			Continue
-		
-		; Skip pspad child windows.
-		if (currExStyle & WS_EX_CONTROLPARENT) 
-		&& (currClass != "#32770") 
-		&& !(currStyle & WS_POPUP) 
-		&& !(currExStyle & WS_EX_APPWINDOW)
-		{
-			Continue
-		}
-		
-		; Skip notepad find windows.
-		if(currParent && (currStyle & WS_POPUP) && ((currParentStyle & WS_DISABLED) = 0))
-			Continue
-		
-		; Skip other random windows.
-		if (currClass = "#32770")
-		|| (currClass = "AU3Reveal")
-		|| (currClass = "Progman")
-		|| (currClass = "AutoHotkey")
-		|| (currClass = "AutoHotkeyGUI")
-		{
-			Continue
-		}
-		
-		; Don't get yourself, either.
-		if(oldClass = currClass || oldTitle = currTitle)
-			Continue
-
-		break
-	}
-	
-	return, currID
 }
 
 ; Jacked from http://www.howtogeek.com/howto/28663/create-a-hotkey-to-resize-windows-to-a-specific-size-with-autohotkey/

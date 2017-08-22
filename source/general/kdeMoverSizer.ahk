@@ -311,21 +311,9 @@ return
 ; Function definitions
 
 ; Get current screen boarders for monitor where mouse cursor is
-GetCurrentScreenBoarders(ByRef CurrentScreenLeft, ByRef CurrentScreenRight, ByRef CurrentScreenTop, ByRef CurrentScreenBottom, winID) {
-	; Figure out offsets to use, per window.
-	offsetOverride := getWindowSetting("WINDOW_EDGE_OFFSET_OVERRIDE", "ahk_id " winId)
-	; DEBUG.popup("Offset override", offsetOverride)
-	if(offsetOverride != "") {
-		offsetLeft   := offsetOverride
-		offsetRight  := offsetOverride
-		offsetTop    := offsetOverride
-		offsetBottom := offsetOverride
-	} else {
-		offsetLeft   := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
-		offsetRight  := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
-		offsetTop    := 0 ; MainConfig.getSetting("WINDOW_EDGE_OFFSET") ; top offset hasn't changed, that's where my taskbar is.
-		offsetBottom := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
-	}
+GetCurrentScreenBoarders(ByRef CurrentScreenLeft, ByRef CurrentScreenRight, ByRef CurrentScreenTop, ByRef CurrentScreenBottom, winId) {
+	getWindowOffsets("ahk_id " winId, offsetLeft, offsetRight, offsetTop, offsetBottom)
+	
 	; DEBUG.popup("kdeMoverSizer.GetCurrentScreenBoarders", "Got settings", "Left offset", offsetLeft, "Right offset", offsetRight, "Top offset", offsetTop, "Bottom offset", offsetBottom)
 	
 	; Get current screen boarders for snapping, do this within the loop to allow snapping an all monitors without releasing button

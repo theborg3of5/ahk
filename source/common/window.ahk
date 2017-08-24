@@ -365,15 +365,15 @@ doWindowActionSpecial(action, winTitle = "", winClass = "", controlClass = "", w
 
 
 ; Puts together a string that can be used with the likes of WinActivate, etc.
-buildWindowTitleString(winTitle = "", winClass = "", winID = "", processID = "", exeName = "", groupName = "") {
+buildWindowTitleString(winTitle = "", winClass = "", winId = "", processID = "", exeName = "", groupName = "") {
 	if(winTitle)
 		outStr .= winTitle
 	
 	if(winClass)
 		outStr .= " ahk_class " winClass
 	
-	if(winID)
-		outStr .= " ahk_id " winID
+	if(winId)
+		outStr .= " ahk_id " winId
 	
 	if(processID)
 		outStr .= " ahk_pid " processID
@@ -398,10 +398,15 @@ centerWindow(titleString = "A") {
 	winW -= offsetLeft + offsetRight
 	winH -= offsetBottom ; + offsetTop ; taskbar on top
 	
-	screenW := A_ScreenWidth
-	screenH := A_ScreenHeight - TASKBAR_HEIGHT
-	x := ((screenW - winW) / 2) - offsetLeft
-	y := ((screenH - winH) / 2) + TASKBAR_HEIGHT ; + offsetTop
+	; Make sure that our screen sizes take which monitor we're on into account.
+	monitorList := getMonitorInfo()
+	currMonitorNum := getWindowMonitor(idString, monitorList)
+	currMonitor := monitorList[currMonitorNum]
+	screenW := currMonitor["RIGHT"] - currMonitor["LEFT"]
+	screenH := currMonitor["BOTTOM"] - currMonitor["TOP"] - TASKBAR_HEIGHT
+	
+	x := currMonitor["LEFT"] + ((screenW - winW) / 2)                    - offsetLeft
+	y := currMonitor["TOP"]  + ((screenH - winH) / 2) + TASKBAR_HEIGHT ; + offsetTop
 	
 	; DEBUG.popup("ScreenW", screenW, "WinW", winW, "ScreenH", screenH, "WinH", winH, "X", x, "Y", y)
 	WinMove, %idString%, , x, y
@@ -435,8 +440,8 @@ resizeWindow(width = 0, height = 0) {
 	WinMove, A, , %X%, %Y%, %width%, %height%
 }
 
-getWindowTitle(winID = "A", winText = "", excludeTitle = "", excludeText = "") {
-	WinGetTitle, title, %winID%, %winText%, %excludeTitle%, %excludeText%
+getWindowTitle(winId = "A", winText = "", excludeTitle = "", excludeText = "") {
+	WinGetTitle, title, %winId%, %winText%, %excludeTitle%, %excludeText%
 	return title
 }
 
@@ -465,63 +470,60 @@ getMonitorInfo() {
 	return monitorList
 }
 
-moveWindowToMonitor(winID, destMonitor, monitorList = "") {
+moveWindowToMonitor(titleString, destMonitor, monitorList = "") {
 	; If monitorList isn't given, make our own.
 	if(!IsObject(monitorList))
 		monitorList := getMonitorInfo()
 	
-	currMonitor := getWindowMonitor(winID, monitorList)
+	currMonitor := getWindowMonitor(titleString, monitorList)
 	if(currMonitor = -1) ; Couldn't find what monitor the window is on.
 		return
-	
-	; DEBUG.popup("WindowMonitorFixer", "Found matching window", "ID", winID, "Title", getWindowTitle(winID), "Current monitor", currMonitor, "Destination monitor", destMonitor)
 	
 	; Window is already on the correct monitor, or we couldn't figure out what monitor this window was on.
 	if( (currMonitor = destMonitor) || !currMonitor)
 		return
 	
-	; DEBUG.popup("WindowMonitorFixer", "Moving window", "ID", winID, "Title", getWindowTitle(winID), "Current monitor", currMonitor, "Destination monitor", destMonitor)
+	; DEBUG.popup("WindowMonitorFixer", "Moving window", "ID", titleString, "Title", getWindowTitle(titleString), "Current monitor", currMonitor, "Destination monitor", destMonitor)
 	
 	; Move the window to the correct monitor.
 	
 	; If the window is maximized, restore it.
-	WinGet, minMaxState, MinMax, %winID%
+	WinGet, minMaxState, MinMax, %titleString%
 	if(minMaxState = 1)
-		WinRestore, %winID%
+		WinRestore, %titleString%
 	
 	; Calculate the new position for the window.
-	WinGetPos, winX, winY, , , %winID%
+	WinGetPos, winX, winY, , , %titleString%
 	oldMon := monitorList[currMonitor]
 	newMon := monitorList[destMonitor]
 	newX := winX - oldMon["LEFT"] + newMon["LEFT"]
 	newY := winY - oldMon["TOP"]  + newMon["TOP"]
 	
-	; DEBUG.popup("Moving window", getWindowTitle(winID), "Curr X", winX, "Curr Y", winY, "New X", newX, "New Y", newY, "Old mon (" currMonitor ")", oldMon, "New mon (" destMonitor ")", newMon)
+	; DEBUG.popup("Moving window", getWindowTitle(titleString), "Curr X", winX, "Curr Y", winY, "New X", newX, "New Y", newY, "Old mon (" currMonitor ")", oldMon, "New mon (" destMonitor ")", newMon)
 	
 	; Move it there.
-	WinMove, %winID%, , newX, newY
+	WinMove, %titleString%, , newX, newY
 	
 	; If the window was maximized before, re-maximize it.
 	if(minMaxState = 1)
-		WinMaximize, %winID%
+		WinMaximize, %titleString%
 }
 
 ; Get the index of the monitor containing the specified x and y co-ordinates.
 ; Adapted from http://www.autohotkey.com/board/topic/69464-how-to-determine-a-window-is-in-which-monitor/
-getWindowMonitor(winID, monitorList = "") {
+getWindowMonitor(titleString, monitorList = "") {
 	; If monitorList isn't given, make our own...with blackjack and hookers.
 	if(!IsObject(monitorList))
 		monitorList := getMonitorInfo()
-	
-	; DEBUG.popup("Monitor list", monitorList)
+	; DEBUG.popup("Monitor list", monitorList, "Title string", titleString)
 	
 	; Get the X/Y for the given window.
-	WinGetPos, winX, winY, , , %winID%
+	WinGetPos, winX, winY, , , %titleString%
 	
 	; Fudge the X value a little if needed.
 	winX += MainConfig.getSetting("WINDOW_EDGE_OFFSET")
 	
-	WinGet, minMaxState, MinMax, %winID%
+	WinGet, minMaxState, MinMax, %titleString%
 	if(minMaxState = 1) ; Window is maximized
 		winX += 1
 	

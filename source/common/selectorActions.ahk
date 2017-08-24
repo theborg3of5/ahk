@@ -213,10 +213,13 @@ CALL(actionRow) {
 
 ; Resizes the active window to the given dimensions.
 RESIZE(actionRow) {
+	global RESIZE_EXTRA_CENTER
+	
 	width  := actionRow.data["WIDTH"]
 	height := actionRow.data["HEIGHT"]
 	ratioW := actionRow.data["WRATIO"]
 	ratioH := actionRow.data["HRATIO"]
+	extra  := actionRow.data["EXTRA"]
 	
 	if(ratioW)
 		width *= ratioW
@@ -224,10 +227,13 @@ RESIZE(actionRow) {
 		height *= ratioH
 	
 	; Do it.
-	if(actionRow.isDebug) ; Debug mode.
+	if(actionRow.isDebug) { ; Debug mode.
 		actionRow.debugResult := {"Width":width, "Height":height}
-	else
+	} else {
 		WinMove, A, , , , width, height
+		if(extra = RESIZE_EXTRA_CENTER)
+			centerWindow()
+	}
 }
 
 ; Builds a string to add to a calendar event (with the format the outlook/tlg calendar needs to import happily into Delorean), then sends it and an Enter keystroke to save it.

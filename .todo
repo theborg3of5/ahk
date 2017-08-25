@@ -10,8 +10,6 @@
 			Take a titleString instead of classes, EXEs, etc
 			Turn that titleString into an ID and make an idString (ahk_id %winId%)
 			Use the idString instead of titleString
-		Window sizing/positioning offsets - separate left/right/top/bottom
-			Dynamically figure out which side the taskbar is on, so we can handle that regardless of where it is?
 		Clean up window stuff for special behaviors - processWindow is way overcomplex.
 		Figure out auto-updating the running script when source saved, specifically for test.ahk
 		Check out function objects for selector action stuff: https://autohotkey.com/docs/objects/Functor.htm

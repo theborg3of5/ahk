@@ -413,6 +413,20 @@ centerWindow(titleString = "A") {
 	WinMove, %idString%, , x, y
 }
 
+; Jacked from http://www.howtogeek.com/howto/28663/create-a-hotkey-to-resize-windows-to-a-specific-size-with-autohotkey/
+resizeWindow(width = 0, height = 0) {
+	WinGetPos, X, Y, W, H, A
+	
+	if(width = 0)
+		width := W
+	
+	if(height = 0)
+		height := H
+	
+	WinMove, A, , %X%, %Y%, %width%, %height%
+}
+
+
 getWindowOffsets(titleString) {
 	global SM_CXMAXIMIZED, SM_CYMAXIMIZED, SM_CXBORDER, SM_CYBORDER
 	offsetsAry := []
@@ -446,21 +460,6 @@ getWindowOffsets(titleString) {
 	
 	return offsetsAry
 }
-
-; Jacked from http://www.howtogeek.com/howto/28663/create-a-hotkey-to-resize-windows-to-a-specific-size-with-autohotkey/
-resizeWindow(width = 0, height = 0) {
-	WinGetPos, X, Y, W, H, A
-	
-	if(width = 0)
-		width := W
-	
-	if(height = 0)
-		height := H
-	
-	WinMove, A, , %X%, %Y%, %width%, %height%
-}
-
-
 
 getMonitorBounds(monitorNum = "", titleString = "") {
 	monitorsAry := getMonitorBoundsAry()
@@ -496,8 +495,6 @@ getMonitorBoundsAry() {
 	
 	return monitorsAry
 }
-
-
 
 
 moveWindowToMonitor(titleString, destMonitor, monitorsAry = "") {

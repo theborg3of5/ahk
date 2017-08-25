@@ -448,18 +448,17 @@ getWindowTitle(winId = "A", winText = "", excludeTitle = "", excludeText = "") {
 getMonitorInfo() {
 	monitorList := []
 	
-	SysGet, m, MonitorCount
-	Loop, %m%
+	SysGet, numMonitors, MonitorCount
+	Loop, %numMonitors%
 	{
-		; Dimensions of this monitor go in Moni*
-		SysGet, Moni, Monitor, %A_Index%
+		; Dimensions of this monitor go in Mon*
+		SysGet, Mon, Monitor, %A_Index%
 		
-		mon := []
-		mon["LEFT"]   := MoniLeft
-		mon["RIGHT"]  := MoniRight
-		mon["TOP"]    := MoniTop
-		mon["BOTTOM"] := MoniBottom
-		
+		mon           := []
+		mon["LEFT"]   := MonLeft
+		mon["RIGHT"]  := MonRight
+		mon["TOP"]    := MonTop
+		mon["BOTTOM"] := MonBottom
 		; DEBUG.popup("Monitor " A_Index, mon)
 		
 		monitorList.Push(mon)

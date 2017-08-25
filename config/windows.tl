@@ -41,4 +41,5 @@
 	PowerPoint					-									-								-								POWERPNT.EXE
 	OneNote						-									-								-								ONENOTE.EXE
 	GitHub						-									-								-								GitHub.exe
+	Chrome						-									-								-								chrome.exe
 [-1]

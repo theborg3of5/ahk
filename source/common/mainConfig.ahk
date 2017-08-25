@@ -23,7 +23,7 @@ global localConfigFolder := configFolder "local\"
 ; Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
 class MainConfig {
 	static multiDelim := "|"
-	static defaultSettings := {"VIM_CLOSE_KEY":"F9", "WINDOW_EDGE_OFFSET":0}
+	static defaultSettings := {"VIM_CLOSE_KEY":"F9"}
 	static settings := []
 	static windows  := []
 	static programs := []
@@ -40,7 +40,6 @@ class MainConfig {
 		this.loadSetting(filePath, "MACHINE")            ; Which machine this is, from MACHINE_* constants
 		this.loadSetting(filePath, "MENU_KEY_ACTION")    ; What to do with the menu key, from MENU_KEY_ACTION_* constants
 		this.loadSetting(filePath, "VIM_CLOSE_KEY")      ; Which keys should close tabs via vimBindings (generally F-keys).
-		this.loadSetting(filePath, "WINDOW_EDGE_OFFSET") ; How far windows are treated as being away from the edge of the screen. This makes it so we can snap to the visual edge of the screen.
 		
 		; DEBUG.popup("Script", A_ScriptFullPath, "AHK Root", ahkRootPath, "User path", userPath, "AHK Lib", ahkLibPath, "Main file path", filePath, "Settings", this.settings)
 	}

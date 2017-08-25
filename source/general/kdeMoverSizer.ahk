@@ -331,4 +331,4 @@ GetCurrentScreenBoarders(ByRef CurrentScreenLeft, ByRef CurrentScreenRight, ByRe
 	}
 }
 
-#IfWinNotActive 
+#IfWinNotActive

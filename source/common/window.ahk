@@ -412,8 +412,8 @@ centerWindow(titleString = "A") {
 	WinMove, %idString%, , x, y
 }
 
-getWindowOffsets(idString, ByRef offsetLeft, ByRef offsetRight, ByRef offsetTop, ByRef offsetBottom) {
-	offsetOverride := getWindowSetting("WINDOW_EDGE_OFFSET_OVERRIDE", idString)
+getWindowOffsets(titleString, ByRef offsetLeft, ByRef offsetRight, ByRef offsetTop, ByRef offsetBottom) {
+	offsetOverride := getWindowSetting("WINDOW_EDGE_OFFSET_OVERRIDE", titleString)
 	if(offsetOverride != "") {
 		offsetLeft   := offsetOverride
 		offsetRight  := offsetOverride

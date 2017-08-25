@@ -312,9 +312,8 @@ return
 
 ; Get current screen boarders for monitor where mouse cursor is
 GetCurrentScreenBoarders(ByRef CurrentScreenLeft, ByRef CurrentScreenRight, ByRef CurrentScreenTop, ByRef CurrentScreenBottom, winId) {
-	getWindowOffsets("ahk_id " winId, offsetLeft, offsetRight, offsetTop, offsetBottom)
-	
-	; DEBUG.popup("kdeMoverSizer.GetCurrentScreenBoarders", "Got settings", "Left offset", offsetLeft, "Right offset", offsetRight, "Top offset", offsetTop, "Bottom offset", offsetBottom)
+	offsetsAry := getWindowOffsets("ahk_id " winId)
+	; DEBUG.popup("kdeMoverSizer.GetCurrentScreenBoarders", "Got offsets", "Offsets", offsetsAry)
 	
 	; Get current screen boarders for snapping, do this within the loop to allow snapping an all monitors without releasing button
 	MouseGetPos, Mouse_X, Mouse_Y
@@ -323,10 +322,10 @@ GetCurrentScreenBoarders(ByRef CurrentScreenLeft, ByRef CurrentScreenRight, ByRe
 	{
 		SysGet, MonitorWorkArea, MonitorWorkArea, %A_Index%
 		if( (Mouse_X >= MonitorWorkAreaLeft) AND (Mouse_X <= MonitorWorkAreaRight) AND (Mouse_Y >= MonitorWorkAreaTop) AND (Mouse_Y <= MonitorWorkAreaBottom) ) {
-			CurrentScreenLeft   := MonitorWorkAreaLeft   - offsetLeft
-			CurrentScreenRight  := MonitorWorkAreaRight  + offsetRight
-			CurrentScreenTop    := MonitorWorkAreaTop    - offsetTop
-			CurrentScreenBottom := MonitorWorkAreaBottom + offsetBottom
+			CurrentScreenLeft   := MonitorWorkAreaLeft   - offsetsAry["LEFT"]
+			CurrentScreenRight  := MonitorWorkAreaRight  + offsetsAry["RIGHT"]
+			CurrentScreenTop    := MonitorWorkAreaTop    - offsetsAry["TOP"]
+			CurrentScreenBottom := MonitorWorkAreaBottom + offsetsAry["BOTTOM"]
 		}
 	}
 }

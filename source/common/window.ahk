@@ -389,42 +389,62 @@ buildWindowTitleString(winTitle = "", winClass = "", winId = "", processID = "",
 
 ; Centers a window on the screen.
 centerWindow(titleString = "A") {
-	global TASKBAR_HEIGHT
 	winId := WinExist(titleString)
 	idString := "ahk_id " winId
 	
+	; Window size
 	WinGetPos, , , winW, winH, %idString%
-	getWindowOffsets(idString, offsetLeft, offsetRight, offsetTop, offsetBottom) ; Account for negative border oddities as needed
-	winW -= offsetLeft + offsetRight
-	winH -= offsetBottom ; + offsetTop ; taskbar on top
+	offsetsAry := getWindowOffsets(idString)
+	winW -= (offsetsAry["LEFT"]   + offsetsAry["RIGHT"]) ; The window is wider/taller than it looks by these offsets.
+	winH -= (offsetsAry["BOTTOM"] + offsetsAry["TOP"]  )
 	
 	; Make sure that our screen sizes take which monitor we're on into account.
-	monitorList := getMonitorInfo()
-	currMonitorNum := getWindowMonitor(idString, monitorList)
-	currMonitor := monitorList[currMonitorNum]
-	screenW := currMonitor["RIGHT"] - currMonitor["LEFT"]
-	screenH := currMonitor["BOTTOM"] - currMonitor["TOP"] - TASKBAR_HEIGHT
+	currMonbounds := getMonitorBounds("", idString)
 	
-	x := currMonitor["LEFT"] + ((screenW - winW) / 2)                    - offsetLeft
-	y := currMonitor["TOP"]  + ((screenH - winH) / 2) + TASKBAR_HEIGHT ; + offsetTop
+	; Coordinates relative to screen
+	relX := (currMonbounds["WIDTH"]  - winW) / 2
+	relY := (currMonbounds["HEIGHT"] - winH) / 2
 	
-	; DEBUG.popup("ScreenW", screenW, "WinW", winW, "ScreenH", screenH, "WinH", winH, "X", x, "Y", y)
+	; True coordinates
+	x := currMonbounds["LEFT"] + relX - offsetsAry["LEFT"]
+	y := currMonbounds["TOP"]  + relY - offsetsAry["TOP"]
+	
+	; DEBUG.popup("Screen bounds", currMonbounds, "Offsets", offsetsAry, "WinW", winW, "WinH", winH, "Relative X", relX, "Relative Y", relY, "X", x, "Y", y)
 	WinMove, %idString%, , x, y
 }
 
-getWindowOffsets(titleString, ByRef offsetLeft, ByRef offsetRight, ByRef offsetTop, ByRef offsetBottom) {
+getWindowOffsets(titleString) {
+	global SM_CXMAXIMIZED, SM_CYMAXIMIZED, SM_CXBORDER, SM_CYBORDER
+	offsetsAry := []
+	
 	offsetOverride := getWindowSetting("WINDOW_EDGE_OFFSET_OVERRIDE", titleString)
-	if(offsetOverride != "") {
-		offsetLeft   := offsetOverride
-		offsetRight  := offsetOverride
-		offsetTop    := offsetOverride
-		offsetBottom := offsetOverride
-	} else {
-		offsetLeft   := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
-		offsetRight  := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
-		offsetTop    := 0 ; MainConfig.getSetting("WINDOW_EDGE_OFFSET") ; top offset hasn't changed, that's where my taskbar is.
-		offsetBottom := MainConfig.getSetting("WINDOW_EDGE_OFFSET")
+	if(offsetOverride != "") { ; Specific window has an override.
+		offsetsAry["LEFT"]   := offsetOverride
+		offsetsAry["RIGHT"]  := offsetOverride
+		offsetsAry["TOP"]    := offsetOverride
+		offsetsAry["BOTTOM"] := offsetOverride
+	} else { ; Calculate it.
+		SysGet, maximizedWidth,    %SM_CXMAXIMIZED% ; For non-3D windows (which should be most), the width of the border on the left and right.
+		SysGet, maximizedHeight,   %SM_CYMAXIMIZED% ; For non-3D windows (which should be most), the width of the border on the top and bottom.
+		SysGet, borderWidthX,      %SM_CXBORDER%    ; Width of a maximized window on the primary monitor. Includes any weird offsets.
+		SysGet, borderWidthY,      %SM_CYBORDER%    ; Height of a maximized window on the primary monitor. Includes any weird offsets.
+		SysGet, primaryMonitorNum, MonitorPrimary   ; We're assuming the taskbar is the same on all monitors, which is fine for my purposes.
+		bounds := getMonitorBounds(primaryMonitorNum)
+		
+		; (Maximized size - monitor working area - both borders) / 2
+		offsetX := (maximizedWidth  - bounds["WIDTH"]  - (borderWidthX * 2)) / 2
+		offsetY := (maximizedHeight - bounds["HEIGHT"] - (borderWidthY * 2)) / 2
+		
+		offsetsAry["LEFT"]   := offsetX
+		offsetsAry["RIGHT"]  := offsetX
+		offsetsAry["TOP"]    := offsetY
+		offsetsAry["BOTTOM"] := offsetY
 	}
+	
+	; Assuming the taskbar is on top, otherwise could use something like https://autohotkey.com/board/topic/91513-function-get-the-taskbar-location-win7/ to figure out where it is.
+	offsetsAry["TOP"] := 0 ; Taskbar side never has an offset.
+	
+	return offsetsAry
 }
 
 ; Jacked from http://www.howtogeek.com/howto/28663/create-a-hotkey-to-resize-windows-to-a-specific-size-with-autohotkey/
@@ -440,41 +460,52 @@ resizeWindow(width = 0, height = 0) {
 	WinMove, A, , %X%, %Y%, %width%, %height%
 }
 
-getWindowTitle(winId = "A", winText = "", excludeTitle = "", excludeText = "") {
-	WinGetTitle, title, %winId%, %winText%, %excludeTitle%, %excludeText%
-	return title
-}
 
-getMonitorInfo() {
-	monitorList := []
+
+getMonitorBounds(monitorNum = "", titleString = "") {
+	monitorsAry := getMonitorBoundsAry()
+	
+	if(!monitorNum)
+		monitorNum := getWindowMonitor(titleString, monitorsAry)
+	
+	return monitorsAry[monitorNum]
+}
+; Returns an array of monitors with LEFT/RIGHT/TOP/BOTTOM values for their working area (doesn't include taskbar or other toolbars).
+getMonitorBoundsAry() {
+	monitorsAry := []
 	
 	SysGet, numMonitors, MonitorCount
 	Loop, %numMonitors%
 	{
 		; Dimensions of this monitor go in Mon*
-		SysGet, Mon, Monitor, %A_Index%
+		SysGet, Mon, MonitorWorkArea, %A_Index%
 		
 		mon           := []
 		mon["LEFT"]   := MonLeft
 		mon["RIGHT"]  := MonRight
 		mon["TOP"]    := MonTop
 		mon["BOTTOM"] := MonBottom
+		
+		mon["WIDTH"]  := MonRight  - MonLeft
+		mon["HEIGHT"] := MonBottom - MonTop
 		; DEBUG.popup("Monitor " A_Index, mon)
 		
-		monitorList.Push(mon)
+		monitorsAry.Push(mon)
 	}
+	; DEBUG.popup("Monitor List", monitorsAry)
 	
-	; DEBUG.popup("Monitor List", monitorList)
-	
-	return monitorList
+	return monitorsAry
 }
 
-moveWindowToMonitor(titleString, destMonitor, monitorList = "") {
-	; If monitorList isn't given, make our own.
-	if(!IsObject(monitorList))
-		monitorList := getMonitorInfo()
+
+
+
+moveWindowToMonitor(titleString, destMonitor, monitorsAry = "") {
+	; If monitorsAry isn't given, make our own.
+	if(!IsObject(monitorsAry))
+		monitorsAry := getMonitorBoundsAry()
 	
-	currMonitor := getWindowMonitor(titleString, monitorList)
+	currMonitor := getWindowMonitor(titleString, monitorsAry)
 	if(currMonitor = -1) ; Couldn't find what monitor the window is on.
 		return
 	
@@ -482,7 +513,7 @@ moveWindowToMonitor(titleString, destMonitor, monitorList = "") {
 	if( (currMonitor = destMonitor) || !currMonitor)
 		return
 	
-	; DEBUG.popup("WindowMonitorFixer", "Moving window", "ID", titleString, "Title", getWindowTitle(titleString), "Current monitor", currMonitor, "Destination monitor", destMonitor)
+	; DEBUG.popup("WindowMonitorFixer", "Moving window", "ID", titleString, "Current monitor", currMonitor, "Destination monitor", destMonitor)
 	
 	; Move the window to the correct monitor.
 	
@@ -493,12 +524,12 @@ moveWindowToMonitor(titleString, destMonitor, monitorList = "") {
 	
 	; Calculate the new position for the window.
 	WinGetPos, winX, winY, , , %titleString%
-	oldMon := monitorList[currMonitor]
-	newMon := monitorList[destMonitor]
+	oldMon := monitorsAry[currMonitor]
+	newMon := monitorsAry[destMonitor]
 	newX := winX - oldMon["LEFT"] + newMon["LEFT"]
 	newY := winY - oldMon["TOP"]  + newMon["TOP"]
 	
-	; DEBUG.popup("Moving window", getWindowTitle(titleString), "Curr X", winX, "Curr Y", winY, "New X", newX, "New Y", newY, "Old mon (" currMonitor ")", oldMon, "New mon (" destMonitor ")", newMon)
+	; DEBUG.popup("Moving window", "", "Curr X", winX, "Curr Y", winY, "New X", newX, "New Y", newY, "Old mon (" currMonitor ")", oldMon, "New mon (" destMonitor ")", newMon)
 	
 	; Move it there.
 	WinMove, %titleString%, , newX, newY
@@ -510,24 +541,26 @@ moveWindowToMonitor(titleString, destMonitor, monitorList = "") {
 
 ; Get the index of the monitor containing the specified x and y co-ordinates.
 ; Adapted from http://www.autohotkey.com/board/topic/69464-how-to-determine-a-window-is-in-which-monitor/
-getWindowMonitor(titleString, monitorList = "") {
-	; If monitorList isn't given, make our own...with blackjack and hookers.
-	if(!IsObject(monitorList))
-		monitorList := getMonitorInfo()
-	; DEBUG.popup("Monitor list", monitorList, "Title string", titleString)
+getWindowMonitor(titleString, monitorsAry = "") {
+	; If monitorsAry isn't given, make our own...with blackjack and hookers.
+	if(!IsObject(monitorsAry))
+		monitorsAry := getMonitorBoundsAry()
+	; DEBUG.popup("Monitor list", monitorsAry, "Title string", titleString)
 	
 	; Get the X/Y for the given window.
 	WinGetPos, winX, winY, , , %titleString%
 	
-	; Fudge the X value a little if needed.
-	winX += MainConfig.getSetting("WINDOW_EDGE_OFFSET")
+	; Account for any window offsets.
+	offsetsAry := getWindowOffsets(idString)
+	winX += offsetsAry["LEFT"] ; The window is wider/taller than it looks by these offsets.
+	winY += offsetsAry["TOP"]
 	
 	WinGet, minMaxState, MinMax, %titleString%
 	if(minMaxState = 1) ; Window is maximized
 		winX += 1
 	
 	; Iterate over all monitors until we find a match.
-	For i,mon in monitorList {
+	For i,mon in monitorsAry {
 		monLeft   := mon["LEFT"]
 		monRight  := mon["RIGHT"]
 		monTop    := mon["TOP"]

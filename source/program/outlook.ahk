@@ -1,29 +1,5 @@
 ; Outlook Hotkeys.
 
-isEmailFolderActive(userEmail) {
-	titles := []
-	titles.push(buildOutlookWindowTitle(userEmail, "Inbox"))
-	titles.push(buildOutlookWindowTitle(userEmail, "Wait"))
-	titles.push(buildOutlookWindowTitle(userEmail, "Later Use"))
-	titles.push(buildOutlookWindowTitle(userEmail, "Archive"))
-	titles.push(buildOutlookWindowTitle(userEmail, "Sent Items"))
-	titles.push(buildOutlookWindowTitle(userEmail, "Deleted Items"))
-	
-	return isWindowInState("active", titles)
-}
-
-isCalendarFolderActive(userEmail = "") {
-	titles := []
-	titles.push(buildOutlookWindowTitle(userEmail, "Calendar"))
-	titles.push(buildOutlookWindowTitle(userEmail, "TLG"))
-	
-	return isWindowInState("active", titles)
-}
-
-buildOutlookWindowTitle(userEmail, folderName) {
-	return folderName " - " userEmail " - Outlook"
-}
-
 ; Program in general.
 #IfWinActive, ahk_class rctrl_renwnd32
 	; Shortcut to go to today on the calendar. (In desired, 3-day view.)
@@ -109,3 +85,29 @@ buildOutlookWindowTitle(userEmail, folderName) {
 		Run, % MainConfig.getProgram("Outlook", "PATH") " /c ipm.note"
 	return
 #If
+
+
+
+isEmailFolderActive(userEmail) {
+	titles := []
+	titles.push(buildOutlookWindowTitle(userEmail, "Inbox"))
+	titles.push(buildOutlookWindowTitle(userEmail, "Wait"))
+	titles.push(buildOutlookWindowTitle(userEmail, "Later Use"))
+	titles.push(buildOutlookWindowTitle(userEmail, "Archive"))
+	titles.push(buildOutlookWindowTitle(userEmail, "Sent Items"))
+	titles.push(buildOutlookWindowTitle(userEmail, "Deleted Items"))
+	
+	return isWindowInState("active", titles)
+}
+
+isCalendarFolderActive(userEmail = "") {
+	titles := []
+	titles.push(buildOutlookWindowTitle(userEmail, "Calendar"))
+	titles.push(buildOutlookWindowTitle(userEmail, "TLG"))
+	
+	return isWindowInState("active", titles)
+}
+
+buildOutlookWindowTitle(userEmail, folderName) {
+	return folderName " - " userEmail " - Outlook"
+}

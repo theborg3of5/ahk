@@ -51,7 +51,8 @@ if(MainConfig.isMachine(MACHINE_EpicLaptop)) { ; Not needed except on Epic machi
 #Include skype.ahk
 #Include sumatraPDF.ahk
 #Include tortoiseSVN.ahk
-#Include vlc.ahk
+#Include vb6.ahk
+#Include wilma.ahk
 #Include word.ahk
 #Include yEd.ahk
 

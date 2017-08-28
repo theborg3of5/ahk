@@ -1,39 +1,35 @@
-# AHK To Do
+# Fixes
+	Seems like standalone scripts reload once on their own, then are restarted again by main script - should either have them not restart, or don't need main script to reload them too.
+	Make server routine stuff work again (or ditch it entirely, or make only the web link work) for ActionObject.
+	Fix monitor fixer script or get rid of it entirely.
 	
-	'Fixes'
-		Seems like standalone scripts reload once on their own, then are restarted again by main script - should either have them not restart, or don't need main script to reload them too.
-		Make server routine stuff work again (or ditch it entirely, or make only the web link work) for ActionObject.
-		Fix monitor fixer script or get rid of it entirely.
+# New ideas
+	Standardize window functions
+		Take a titleString instead of classes, EXEs, etc
+		Turn that titleString into an ID and make an idString (ahk_id %winId%)
+		Use the idString instead of titleString
+	Clean up window stuff for special behaviors - processWindow is way overcomplex.
+	Figure out auto-updating the running script when source saved, specifically for test.ahk
+	Check out function objects for selector action stuff: https://autohotkey.com/docs/objects/Functor.htm
+	Make it easier to get correct, drive-mapped paths
+		Maybe when copy, check for epic:// and replace with correct drive letter accordingly?
+		Actually, a custom paste might be better - don't want to modify the clipboard needlessly.
+	Snapper supports URLs as well - add support for that to ActionObject?
+		Also include support for multiple things - maybe add that in general too?
+			Also support newline separation (though likely just turn it into comma-separated for a consistent format).
+	Audit all scripts for unused hotkeys
+		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
+	Have remote desktop script mute volume on a loop, or whenever a new connection is made.
+	Turn the "; Special programs/specific params." section in launch.ahk into a parameter to activate/run program?
+		Or maybe stick the quotes in the config somehow?
+	Expand emulator controller to support other systems, perhaps?
+		At least separate general form (loop + joybuttons) from specific meanings?
+	Rework kdeMoverSizer to bring it up to my own coding style?
 	
-	'New ideas'
-		Standardize window functions
-			Take a titleString instead of classes, EXEs, etc
-			Turn that titleString into an ID and make an idString (ahk_id %winId%)
-			Use the idString instead of titleString
-		Clean up window stuff for special behaviors - processWindow is way overcomplex.
-		Figure out auto-updating the running script when source saved, specifically for test.ahk
-		Check out function objects for selector action stuff: https://autohotkey.com/docs/objects/Functor.htm
-		Make it easier to get correct, drive-mapped paths
-			Maybe when copy, check for epic:// and replace with correct drive letter accordingly?
-			Actually, a custom paste might be better - don't want to modify the clipboard needlessly.
-		Snapper supports URLs as well - add support for that to ActionObject?
-			Also include support for multiple things - maybe add that in general too?
-				Also support newline separation (though likely just turn it into comma-separated for a consistent format).
-		Audit all scripts for unused hotkeys
-			Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
-		Have remote desktop script mute volume on a loop, or whenever a new connection is made.
-		Turn the "; Special programs/specific params." section in launch.ahk into a parameter to activate/run program?
-			Or maybe stick the quotes in the config somehow?
-		Expand emulator controller to support other systems, perhaps?
-			At least separate general form (loop + joybuttons) from specific meanings?
-		Rework kdeMoverSizer to bring it up to my own coding style?
-		
-	'Scripts to Share'
-	
-	'Documentation'
-		Debug
-	
-	'Unit Tests'
-		ActionObject
-	
-# .
+# Scripts to Share
+
+# Documentation
+	Debug
+
+# Unit Tests
+	ActionObject

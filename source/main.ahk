@@ -50,9 +50,7 @@ if(MainConfig.isMachine(MACHINE_EpicLaptop)) { ; Not needed except on Epic machi
 #Include remoteDesktop.ahk
 #Include skype.ahk
 #Include sumatraPDF.ahk
-#Include tortoiseGit.ahk
 #Include tortoiseSVN.ahk
-#Include vb6.ahk
 #Include vlc.ahk
 #Include word.ahk
 #Include yEd.ahk

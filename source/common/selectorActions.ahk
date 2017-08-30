@@ -164,9 +164,9 @@ DO_THUNDER(actionRow) {
 DO_SNAPPER(actionRow) {
 	environment := actionRow.data["COMMID"]
 	ini         := actionRow.data["INI"]
-	id          := actionRow.data["ID"]
+	idList      := actionRow.data["ID"]
 	
-	url := callIfExists("buildSnapperURL", environment, ini, id) ; buildSnapperURL(environment, ini, id)
+	url := callIfExists("buildSnapperURL", environment, ini, idList) ; buildSnapperURL(environment, ini, idList)
 	
 	; Debug mode.
 	if(actionRow.isDebug) {

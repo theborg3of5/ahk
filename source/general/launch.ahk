@@ -52,7 +52,7 @@ return
 		guiSettings["Icon"]            := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
 		guiSettings["ShowDataInputs"]  := 1
 		guiSettings["ExtraDataFields"] := ["INI", "ID"]
-		s.selectGui("DO_SNAPPER", "", guiSettings)
+		s.selectGui("DO_SNAPPER", {"ID":getSelectedText()}, guiSettings)
 	return
 #If
 

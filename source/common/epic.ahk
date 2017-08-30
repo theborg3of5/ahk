@@ -318,60 +318,23 @@ buildEpicWikiSearchURL(category, criteria) {
 	return outURL
 }
 
-; ini/id defaults are "X" as a dummy - URL will still connect to desired environment.
-buildSnapperURL(environment, ini = "", id = "") {
+; ini/id defaults are "X" as a dummy - URL will still connect to desired environment (and show an error popup).
+buildSnapperURL(environment, ini = "X", idList = "X") { ; idList is a comma-separated list of IDs
 	if(!environment)
 		return ""
 	
-	if(!ini && !id) {
-		ini := "X"
-		id  := "X"
-	}
+	if(stringContains(idList, ","))
+		idAry := StrSplit(idList, ",")
+	else
+		idAry := [idList]
 	
-	record        := []
-	record["ENV"] := environment
-	record["INI"] := ini
-	record["ID"]  := id
-	recordsAry    := []
-	recordsAry.push(record)
-	
-	return buildSnapperURLAry(recordsAry)
-}
-
-; record format (single entry in recordsAry):
-;   record["ENV"]     = Environment
-;         ["INI"]     = Record INI
-;         ["ID"]      = Record ID
-;         ["COMPARE"] = 1 to include record in compare argument
-buildSnapperURLAry(recordsAry) {
-	if(!recordsAry || !IsObject(recordsAry))
-		return ""
-	
-	outURL     := snapperURLBase
-	compareAry := []
-	
-	For i,record in recordsAry {
-		; DEBUG.popup("Index", i, "Record", record)
-		environment   := record["ENV"]
-		ini           := record["INI"]
-		id            := record["ID"]
-		shouldCompare := record["COMPARE"]
-		
-		if(!environment || !ini || !id)
+	outURL := snapperURLBase
+	For i,id in idAry {
+		; DEBUG.popup("Index", i, "ID", id)
+		if(!id)
 			Continue
 		
 		outURL .= ini "." id "." environment "/"
-		
-		if(shouldCompare)
-			compareAry.push(i)
-	}
-	
-	if(compareAry.length() > 0) {
-		compareString := "compare"
-		For i,idx in compareAry
-			compareString .= "." idx
-		
-		outURL .= compareString
 	}
 	
 	return outURL

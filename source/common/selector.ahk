@@ -74,7 +74,7 @@ doSelect(filePath, actionType = "", iconPath = "") {
 	
 	if(iconPath) {
 		guiSettings := []
-		guiSettings["IconPath"] := iconPath
+		guiSettings["Icon"] := iconPath
 	}
 	
 	return s.selectGui(actionType, "", guiSettings)

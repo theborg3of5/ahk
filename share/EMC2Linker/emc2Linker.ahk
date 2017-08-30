@@ -109,25 +109,25 @@ Notes:
 		KeyWait, Ctrl
 		KeyWait, LWin
 		KeyWait, Alt
-		text := gatherText(TEXT_SOURCE_SEL_CLIP)
+		text := getSelectedText()
 		ActionObject.do(text)
 	return
 	; Open web version
 	^!#+o::
-		text := gatherText(TEXT_SOURCE_SEL_CLIP)
+		text := getSelectedText()
 		ActionObject.do(text, , , , SUBACTION_WEB)
 	return
 
 	; Generic linker - will allow coming from clipboard or selected text, or input entirely. Puts the link on the clipboard.
 	^!#l::
-		text := gatherText(TEXT_SOURCE_SEL_CLIP)
+		text := getSelectedText()
 		link := ActionObject.do(text, , ACTION_LINK)
 		if(link)
 			clipboard := link
 	return
 	; Get link to web version
 	^!#+l::
-		text := gatherText(TEXT_SOURCE_SEL_CLIP)
+		text := getSelectedText()
 		link := ActionObject.do(text, , ACTION_LINK, , SUBACTION_WEB)
 		if(link)
 			clipboard := link

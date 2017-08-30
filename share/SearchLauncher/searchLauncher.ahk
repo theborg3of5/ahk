@@ -91,7 +91,7 @@ Notes:
 {	
 	; Takes the selected text and searches for it based on the user's choice.
 	+!f::
-		text := gatherText(TEXT_SOURCE_SEL_CLIP)
+		text := getSelectedText()
 		
 		data := Selector.select(filePath, "RET_DATA", "", "", {"ARG1": text})
 		searchType := data["SEARCH_TYPE"]

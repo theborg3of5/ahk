@@ -66,7 +66,7 @@ sendRawWithTabs(input) {
 }
 
 ; Grabs the selected text using the clipboard, fixing the clipboard as it finishes.
-getSelectedText(orClipboard = false) {
+getSelectedText() {
 	ClipSaved := ClipboardAll ; Save the entire clipboard to a variable of your choice.
 	clipboard :=              ; Clear the clipboard
 	
@@ -78,26 +78,7 @@ getSelectedText(orClipboard = false) {
 	clipboard := ClipSaved    ; Restore the original clipboard. Note the use of Clipboard (not ClipboardAll).
 	ClipSaved =               ; Free the memory in case the clipboard was very large.
 	
-	; If there wasn't any text selected, return clipboard contents instead.
-	if(!textFound && orClipboard)
-		textFound := clipboard
-	
 	return textFound
-}
-
-; Grabs text from a variety of different sources.
-gatherText(source, cleanUpText = true, windowTitle = "A") {
-	if(source = TEXT_SOURCE_SEL_CLIP) { ; Selection or clipboard.
-		outText := getSelectedText(true)
-	} else if(source = TEXT_SOURCE_TITLE) {
-		WinGetTitle, outText, %windowTitle%
-	}
-	
-	; Clean up the text before returning it if specified.
-	if(cleanUpText)
-		outText := cleanupText(outText)
-	
-	return outText
 }
 
 ; Sends the selected text using the clipboard, fixing the clipboard as it finishes.

@@ -42,7 +42,7 @@ return
 	return
 	
 	; Selector launchers
-	#p::doSelect("local\phone.tl")
+	#p::  doSelect("local\phone.tl")
 	^+!t::doSelect("local\outlookTLG.tl")
 	^+!h::doSelect("local\epicEnvironments.tl", "DO_HYPERSPACE", "C:\Program Files (x86)\Epic\v8.3\Shared Files\EpicD83.exe")
 	^+!r::doSelect("local\epicEnvironments.tl", "DO_THUNDER",    "C:\Program Files (x86)\PuTTY\putty.exe")
@@ -55,7 +55,7 @@ return
 		s.selectGui("DO_SNAPPER", "", guiSettings)
 	return
 #If
-	
+
 ; Resize window
 #!r::doSelect("resize.tl")
 
@@ -75,7 +75,7 @@ return
 
 ; Generic search.
 !+f::
-	text := gatherText(TEXT_SOURCE_SEL_CLIP)
+	text := getSelectedText()
 	
 	filter := MainConfig.getMachineTableListFilter()
 	s := new Selector("search.tl", "", filter)
@@ -116,23 +116,23 @@ return
 
 ; Generic opener - opens a variety of different things based on the selected/clipboard text.
 ^!#o::
-	text := gatherText(TEXT_SOURCE_SEL_CLIP)
+	text := getSelectedText()
 	ActionObject.do(text, , , , SUBACTION_WEB)
 return
 ^!#+o::
-	text := gatherText(TEXT_SOURCE_SEL_CLIP)
+	text := getSelectedText()
 	ActionObject.do(text)
 return
 
 ; Generic linker - will allow coming from clipboard or selected text, or input entirely. Puts the link on the clipboard.
 ^!#l::
-	text := gatherText(TEXT_SOURCE_SEL_CLIP)
+	text := getSelectedText()
 	link := ActionObject.do(text, , ACTION_LINK, , SUBACTION_WEB)
 	if(link)
 		clipboard := link
 return
 ^!#+l::
-	text := gatherText(TEXT_SOURCE_SEL_CLIP)
+	text := getSelectedText()
 	link := ActionObject.do(text, , ACTION_LINK)
 	if(link)
 		clipboard := link

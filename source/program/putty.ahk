@@ -213,7 +213,6 @@ getPuttyLogFile() {
 	Send, l  ; Logging tree node
 	Send, !f ; Log file name field
 	
-	; GDB TODO - replace this with getSelectedText stuff.
 	logFile := getSelectedText()
 	
 	Send, !c ; Cancel

@@ -444,17 +444,17 @@ pickEnvironment(envName, envGroup = "<All Environments>") {
 
 
 getEMC2Info(ByRef ini = "", ByRef id = "", windowTitle = "A") {
-	text := gatherText(TEXT_SOURCE_TITLE, "", windowTitle)
+	WinGetTitle, title, %windowTitle%
 	
 	; If no info available, finish here.
-	if((text = "") or (text = "EMC2"))
+	if((title = "") or (title = "EMC2"))
 		return
 	
 	; Split the input.
-	titleSplit := StrSplit(text, "-")
-	text := SubStr(titleSplit[1], 1, -1) ; Trim off the trailing space.
+	titleSplit := StrSplit(title, "-")
+	title := SubStr(titleSplit[1], 1, -1) ; Trim off the trailing space.
 	
-	objInfo := StrSplit(text, A_Space)
+	objInfo := StrSplit(title, A_Space)
 	ini := objInfo[1]
 	id := objInfo[2]
 	

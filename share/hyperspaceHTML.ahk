@@ -107,7 +107,7 @@ Shortcuts:
 	}
 	
 	; Grabs the selected text using the clipboard, fixing the clipboard as it finishes.
-	getSelectedText(orClipboard = false) {
+	getSelectedText() {
 		ClipSaved := ClipboardAll ; Save the entire clipboard to a variable of your choice.
 		clipboard :=              ; Clear the clipboard
 		
@@ -118,10 +118,6 @@ Shortcuts:
 		
 		clipboard := ClipSaved    ; Restore the original clipboard. Note the use of Clipboard (not ClipboardAll).
 		ClipSaved =               ; Free the memory in case the clipboard was very large.
-		
-		; If there wasn't any text selected, return clipboard contents instead.
-		if(!textFound && orClipboard)
-			textFound := clipboard
 		
 		return textFound
 	}

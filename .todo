@@ -17,9 +17,6 @@
 	Make it easier to get correct, drive-mapped paths
 		Maybe when copy, check for epic:// and replace with correct drive letter accordingly?
 		Actually, a custom paste might be better - don't want to modify the clipboard needlessly.
-	Snapper supports URLs as well - add support for that to ActionObject?
-		Also include support for multiple things - maybe add that in general too?
-			Also support newline separation (though likely just turn it into comma-separated for a consistent format).
 	Audit all scripts for unused hotkeys
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
 	Have remote desktop script mute volume on a loop, or whenever a new connection is made.

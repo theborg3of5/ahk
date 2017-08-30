@@ -48,9 +48,9 @@ return
 	^+!r::doSelect("local\epicEnvironments.tl", "DO_THUNDER",    "C:\Program Files (x86)\PuTTY\putty.exe")
 	^!#s::
 		s := new Selector("local\epicEnvironments.tl")
-		guiSettings := []
-		guiSettings["Icon"] := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
-		guiSettings["ShowDataInputs"] := 1
+		guiSettings                    := []
+		guiSettings["Icon"]            := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
+		guiSettings["ShowDataInputs"]  := 1
 		guiSettings["ExtraDataFields"] := ["INI", "ID"]
 		s.selectGui("DO_SNAPPER", "", guiSettings)
 	return

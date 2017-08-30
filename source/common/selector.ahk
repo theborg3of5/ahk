@@ -364,7 +364,7 @@ class Selector {
 		if(settings["ShowDataInputs"]) ; This one can be set in the file too, so don't clear it if it's not passed.
 			this.guiSettings["ShowDataInputs"] := settings["ShowDataInputs"]
 		
-		this.guiSettings["IconPath"] := this.findTrueFilePath(settings["IconPath"])
+		this.guiSettings["IconPath"] := this.findTrueFilePath(settings["Icon"])
 		
 		if(settings["ExtraDataFields"]) {
 			baseLength := forceNumber(this.dataIndices.maxIndex())

@@ -113,7 +113,6 @@ class ActionObject {
 			needsSubAction := true
 		}
 		
-		; GDB TODO: while here later on? Doesn't fit in selector's single-minded aspect right now.
 		if(!type || !action || (!subType && needsSubType) || (!subAction && needsSubAction)) {
 			filter := MainConfig.getMachineTableListFilter()
 			s := new Selector("local/actionObject.tl", "", filter)

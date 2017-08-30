@@ -102,7 +102,7 @@ class Selector {
 	__New(filePath = "", tableListSettings = "", filter = "") {
 		this.chars          := this.getSpecialChars()
 		this.guiSettings    := this.getDefaultGuiSettings()
-		this.returnSettings := this.getDefaultReturnSettings()
+		this.actionSettings := this.getDefaultActionSettings()
 		
 		tlSettings := mergeArrays(this.getDefaultTableListSettings(), tableListSettings)
 		
@@ -125,7 +125,7 @@ class Selector {
 		; DEBUG.popup("Selector.selectGui", "Start", "ActionType", actionType, "Default data", defaultData, "GUI Settings", guiSettings)
 		
 		if(actionType)
-			this.returnSettings["ActionType"] := actionType
+			this.actionSettings["ActionType"] := actionType
 		if(defaultData)
 			data := defaultData
 		
@@ -156,7 +156,7 @@ class Selector {
 				}
 			}
 			
-			; DEBUG.popup("User Input", userIn, "Row Parse Result", rowToDo, "Action type", this.returnSettings["ActionType"], "Data filled", dataFilled)
+			; DEBUG.popup("User Input", userIn, "Row Parse Result", rowToDo, "Action type", this.actionSettings["ActionType"], "Data filled", dataFilled)
 		}
 		
 		return this.doAction(rowToDo)
@@ -167,7 +167,7 @@ class Selector {
 			return ""
 		
 		if(actionType)
-			this.returnSettings["ActionType"] := actionType
+			this.actionSettings["ActionType"] := actionType
 		
 		this.hideErrors := true ; GDB TODO call this out in documentation.
 		
@@ -189,7 +189,7 @@ class Selector {
 	nonChoices       := []    ; Lines that will be displayed as titles, extra newlines, etc, but we won't search through.
 	dataIndices      := []    ; Mapping from data field indices => data labels (column headers)
 	guiSettings      := []    ; Settings related to the GUI popup we show
-	returnSettings   := []    ; Settings related to what we return from a selection
+	actionSettings   := []    ; Settings related to what we do with the selection
 	filePath         := ""    ; Where the .tl file lives if we're reading one in.
 	originalIconPath := ""    ; What the current script's current icon is - used to restore it after we finish a gui popup (which takes an icon if given)
 	hideErrors       := false ; Whether to suppress error popups (used by programmatic selections with no GUI)
@@ -225,7 +225,7 @@ class Selector {
 		return settings
 	}
 	
-	getDefaultReturnSettings() {
+	getDefaultActionSettings() {
 		settings := []
 		
 		settings["ReturnColumn"] := "DOACTION"
@@ -355,9 +355,9 @@ class Selector {
 		else if(name = "MinColumnWidth")
 			this.guiSettings["MinColumnWidth"] := value
 		else if(name = "DefaultAction")
-			this.returnSettings["ActionType"] := value
+			this.actionSettings["ActionType"] := value
 		else if(name = "DefaultReturnColumn")
-			this.returnSettings["ReturnColumn"] := value
+			this.actionSettings["ReturnColumn"] := value
 	}
 	
 	processGuiSettings(settings) {
@@ -605,7 +605,7 @@ class Selector {
 			
 			; Special case: +e is the edit action, which will open the current INI file for editing.
 			if(commandChar = this.chars["COMMANDS", "EDIT"]) {
-				this.returnSettings["ActionType"] := "DO"
+				this.actionSettings["ActionType"] := "DO"
 				rowToDo := new SelectorRow()
 				rowToDo.data["DOACTION"] := this.filePath
 			
@@ -667,10 +667,10 @@ class Selector {
 	; Function to do what it is we want done, then exit.
 	doAction(rowToDo) {
 		; DEBUG.popup("Action type", actionType, "Row to run", rowToDo, "Action", action)
-		actionType := this.returnSettings["ActionType"]
+		actionType := this.actionSettings["ActionType"]
 		
 		if(actionType = "RET")      ; Special case for simple return action, passing in the column to return.
-			result := RET(rowToDo, this.returnSettings["ReturnColumn"])
+			result := RET(rowToDo, this.actionSettings["ReturnColumn"])
 		else if(isFunc(actionType)) ; Generic caller for many possible actions.
 			result := actionType.(rowToDo)
 		else                        ; Error catch.
@@ -706,7 +706,7 @@ class Selector {
 		debugBuilder.addLine("Chars",              this.chars)
 		debugBuilder.addLine("Data indices",       this.dataIndices)
 		debugBuilder.addLine("GUI settings",       this.guiSettings)
-		debugBuilder.addLine("Return settings",    this.returnSettings)
+		debugBuilder.addLine("Return settings",    this.actionSettings)
 		debugBuilder.addLine("Filepath",           this.filePath)
 		debugBuilder.addLine("Original icon path", this.originalIconPath)
 		debugBuilder.addLine("Hide errors",        this.hideErrors)

@@ -4,6 +4,7 @@
 	Fix monitor fixer script or get rid of it entirely.
 	
 # New ideas
+	Review activateProgram/runProgram framework - VB seems to always run even though it's activate, for example (though that's the desired behavior anyway).
 	Standardize window functions
 		Take a titleString instead of classes, EXEs, etc
 		Turn that titleString into an ID and make an idString (ahk_id %winId%)

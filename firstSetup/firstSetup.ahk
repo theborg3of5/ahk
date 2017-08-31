@@ -9,6 +9,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include data.ahk
 #Include debug.ahk
 #Include epic.ahk
+#Include gui.ahk
 #Include HTTPRequest.ahk
 #Include runCommands.ahk
 #Include selector.ahk

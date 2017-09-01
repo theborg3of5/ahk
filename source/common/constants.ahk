@@ -16,6 +16,3 @@ global QUOTES := """"
 
 ; Window sizing/positioning
 global TASKBAR_HEIGHT := 30
-
-; Extra actions that can happen after resizing a window.
-global RESIZE_EXTRA_CENTER := "CENTER"

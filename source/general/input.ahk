@@ -30,7 +30,7 @@ return
 
 ; Clipboard typing - gives an easy place to type things that will then stick them on the clipboard if submitted.
 $!v::
-	InputBox, outVar, Set Clipboard, Enter text to set the clipboard to:
+	InputBox, outVar, Set Clipboard, Enter text to set the clipboard to:, , , , , , , , %clipboard%
 	if(outVar && !ErrorLevel)
 		clipboard := outVar
 return

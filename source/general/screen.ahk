@@ -11,7 +11,13 @@ return
 #Space::Winset, Alwaysontop, , A
 
 ; Center current window onscreen.
-#!c::centerWindow("A")
+#+c::centerWindow()
+
+; Fake-maximize the window and center it.
+#+m::
+	WinMove, A, , , , 1934, 1057
+	centerWindow()
+return
 
 ; Enable any window mouse is currently over.
 #c::

@@ -103,10 +103,19 @@
 		Sleep, 500
 		
 		; Trim off the paragraph-specific part.
-		link := RegExReplace(clipboard, "&object-id.*")
+		copiedLink := RegExReplace(clipboard, "&object-id.*")
 		
-		link .= "&end"
+		; If there are two links involved (seems to happen with free version of OneNote), keep only the "onenote:" one (second line).
+		if(stringContains(copiedLink, "`n")) {
+			linkAry := StrSplit(copiedLink, "`n")
+			For i,link in linkAry {
+				if(stringContains(link, "onenote:"))
+					linkToUse := link
+			}
+		} else {
+			linkToUse := copiedLink
+		}
 		
-		clipboard := link
+		clipboard := linkToUse
 	return
 #IfWinActive

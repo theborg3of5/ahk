@@ -4,8 +4,6 @@
 	Fix monitor fixer script or get rid of it entirely.
 	
 # New ideas
-	OneNote copying link on home computer copies two links - have copy hotkey trim to only the onenote: one.
-		Seems just newline-separated.
 	Review activateProgram/runProgram framework - VB seems to always run even though it's activate, for example (though that's the desired behavior anyway).
 	Standardize window functions
 		Take a titleString instead of classes, EXEs, etc

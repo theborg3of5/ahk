@@ -42,4 +42,5 @@
 	OneNote						-									-								-								ONENOTE.EXE
 	GitHub						-									-								-								GitHub.exe
 	Chrome						-									-								-								chrome.exe
+	Steam							-									-								-								Steam.exe
 [-1]

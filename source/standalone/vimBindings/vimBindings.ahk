@@ -66,7 +66,7 @@ setVimState(toState) {
 ; Closes the browser tab if the configured close key matches what was pressed.
 tryCloseTab() {
 	; DEBUG.popup("Main Close Key", MainConfig.getSetting("VIM_CLOSE_KEY"), "Given Key", A_ThisHotkey)
-	if(MainConfig.isValue("VIM_CLOSE_KEY", A_ThisHotkey)) {
+	if(MainConfig.settingIsValue("VIM_CLOSE_KEY", A_ThisHotkey)) {
 		Send, ^w
 		vimOn()
 	}

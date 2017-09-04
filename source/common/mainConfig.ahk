@@ -73,7 +73,6 @@ class MainConfig {
 		settings := []
 		settings["CHARS"] := []
 		settings["CHARS", "ESCAPE"] := "" ; No escape char, to let single backslashes through.
-		
 		tl := new TableList(filePath, settings)
 		uniquePrograms := tl.getFilteredTableUnique("NAME", "MACHINE", this.getMachine())
 		; DEBUG.popup("MainConfig", "loadPrograms", "Unique table", uniquePrograms)
@@ -166,7 +165,7 @@ class MainConfig {
 	; === Comparison functions for easy "check if this hotkey should trigger X" type needs ===
 	
 	; Checks for the given value (regardless of whether the desired setting is an array or not).
-	isValue(configName, value) {
+	settingIsValue(configName, value) {
 		; DEBUG.popup("Name", configName, "Check value", value, "Name value", this.settings[configName], "All settings", this.settings)
 		
 		; If the setting has multiple values, loop over them and return true if it's in there.
@@ -188,9 +187,8 @@ class MainConfig {
 		return this.getSetting("MACHINE")
 	}
 	isMachine(machineName) {
-		return this.isValue("MACHINE", machineName)
+		return this.settingIsValue("MACHINE", machineName)
 	}
-	
 	getMachineTableListFilter() {
 		filter := []
 		filter["COLUMN"] := "MACHINE"

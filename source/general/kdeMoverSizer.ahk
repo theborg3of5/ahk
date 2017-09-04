@@ -77,7 +77,7 @@
 ;	It's quite easy once you do it a few times, simply roll your thumb and finger on and off.
 ;
 ;
-return
+; return
 
 ;
 ; KDE-Mover-Sizer (created with AutoHotKey: autohotkey.com)		    

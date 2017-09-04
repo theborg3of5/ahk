@@ -4,7 +4,6 @@
 	Fix monitor fixer script or get rid of it entirely.
 	
 # New ideas
-	Make list of games read from a file to make easier to add.
 	Review activateProgram/runProgram framework - VB seems to always run even though it's activate, for example (though that's the desired behavior anyway).
 	Standardize window functions
 		Take a titleString instead of classes, EXEs, etc

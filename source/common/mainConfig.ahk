@@ -27,11 +27,13 @@ class MainConfig {
 	static settings := []
 	static windows  := []
 	static programs := []
+	static games    := []
 	
-	init(settingsFile, windowsFile, programsFile) {
+	init(settingsFile, windowsFile, programsFile, gamesFile) {
 		this.loadSettings(settingsFile)
 		this.loadWindows(windowsFile)
 		this.loadPrograms(programsFile)
+		this.loadGames(gamesFile)
 		
 		; DEBUG.popup("MainConfig", "End of init", "Settings", this.settings, "Window settings", this.windows, "Program info", this.programs)
 	}
@@ -91,6 +93,11 @@ class MainConfig {
 			this.programs[name] := pAry
 		}
 		; DEBUG.popup("MainConfig", "loadPrograms", "Finished programs", this.programs)
+	}
+	
+	loadGames(filePath) {
+		tl := new TableList(filePath)
+		this.games := tl.getTable()
 	}
 	
 	
@@ -176,6 +183,19 @@ class MainConfig {
 			}
 		} else {
 			if(this.settings[configName] = value)
+				return true
+		}
+		
+		return false
+	}
+	
+	windowIsGame(titleString := "A") {
+		WinGet, ahkExe, ProcessName, %titleString%
+		if(!ahkExe)
+			return false
+		
+		For i,game in this.games {
+			if(ahkExe = game["EXE"])
 				return true
 		}
 		

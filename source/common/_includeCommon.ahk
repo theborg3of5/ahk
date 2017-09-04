@@ -24,4 +24,4 @@
 #Include window.ahk
 #Include XInput.ahk
 
-MainConfig.init(localConfigFolder "settings.ini", configFolder "windows.tl", configFolder "programs.tl")
+MainConfig.init(localConfigFolder "settings.ini", configFolder "windows.tl", configFolder "programs.tl", configFolder "games.tl")

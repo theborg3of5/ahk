@@ -414,20 +414,18 @@ centerWindow(titleString = "A") {
 }
 
 ; Jacked from http://www.howtogeek.com/howto/28663/create-a-hotkey-to-resize-windows-to-a-specific-size-with-autohotkey/
-resizeWindow(width = 0, height = 0) {
+resizeWindow(width = "", height = "") {
 	WinGetPos, X, Y, W, H, A
-	
-	if(width = 0)
-		width := W
-	
-	if(height = 0)
+	if(!width)
+		width  := W
+	if(!height)
 		height := H
 	
 	WinMove, A, , %X%, %Y%, %width%, %height%
 }
 
 
-getWindowOffsets(titleString) {
+getWindowOffsets(titleString = "A") {
 	global SM_CXMAXIMIZED, SM_CYMAXIMIZED, SM_CXBORDER, SM_CYBORDER
 	offsetsAry := []
 	
@@ -442,7 +440,7 @@ getWindowOffsets(titleString) {
 		SysGet, maximizedHeight,   %SM_CYMAXIMIZED% ; For non-3D windows (which should be most), the width of the border on the top and bottom.
 		SysGet, borderWidthX,      %SM_CXBORDER%    ; Width of a maximized window on the primary monitor. Includes any weird offsets.
 		SysGet, borderWidthY,      %SM_CYBORDER%    ; Height of a maximized window on the primary monitor. Includes any weird offsets.
-		SysGet, primaryMonitorNum, MonitorPrimary   ; We're assuming the taskbar is the same on all monitors, which is fine for my purposes.
+		SysGet, primaryMonitorNum, MonitorPrimary   ; We're assuming the taskbar is in the same place on all monitors, which is fine for my purposes.
 		bounds := getMonitorBounds(primaryMonitorNum)
 		
 		; (Maximized size - monitor working area - both borders) / 2
@@ -484,7 +482,6 @@ getMonitorBoundsAry() {
 		mon["RIGHT"]  := MonRight
 		mon["TOP"]    := MonTop
 		mon["BOTTOM"] := MonBottom
-		
 		mon["WIDTH"]  := MonRight  - MonLeft
 		mon["HEIGHT"] := MonBottom - MonTop
 		; DEBUG.popup("Monitor " A_Index, mon)

@@ -121,11 +121,6 @@
 
 ; *********** MOVING WINDOW ***********
 !LButton::
-	if(MainConfig.windowIsGame()) {
-		Send {Blind}{LButton}
-		return
-	}
-	
 	; Vista+ Alt-Tab fix by jordoex..
 	IfWinActive ahk_class TaskSwitcherWnd
 	{
@@ -136,6 +131,11 @@
 	; Get the initial mouse position and window id, and
 	; WinRestore if the window is maximized.
 	MouseGetPos, KDE_X1, KDE_Y1, KDE_id
+	if(MainConfig.windowIsGame("ahk_id " KDE_id)) {
+		Send {Blind}{LButton}
+		return
+	}
+	
 	WinGet, KDE_Win, MinMax, ahk_id %KDE_id%
 	If KDE_Win
 	{
@@ -189,15 +189,16 @@ return
 
 ; *********** RESIZING WINDOW ***********
 !RButton::
-	if(MainConfig.windowIsGame()) {
+	; Get the initial mouse position and window id, and
+	; WinRestore if the window is maximized.
+	MouseGetPos, KDE_X1, KDE_Y1, KDE_id
+	if(MainConfig.windowIsGame("ahk_id " KDE_id)) {
 		Send {Blind}{RButton}
 		return
 	}
 	
-	; Get the initial mouse position and window id, and
-	; WinRestore if the window is maximized.
-	MouseGetPos, KDE_X1, KDE_Y1, KDE_id
 	WinGet, KDE_Win, MinMax, ahk_id %KDE_id%
+	
 	If KDE_Win
 	{
 		if DoRestoreOnResize
@@ -307,12 +308,12 @@ return
 
 ; Toggle window Maximize/Original size with Alt+Middle mouse button
 !MButton::
-	if(MainConfig.windowIsGame()) {
+	MouseGetPos, , , KDE_id
+	
+	if(MainConfig.windowIsGame("ahk_id " KDE_id)) {
 		Send {Blind}{MButton}
 		return
 	}
-	
-	MouseGetPos, , , KDE_id
 	
 	; Toggle between maximized and restored state.
 	WinGet, KDE_Win, MinMax, ahk_id %KDE_id%

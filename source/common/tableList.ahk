@@ -142,7 +142,7 @@ class TableList {
 	; == Public ====================
 	; ==============================
 	
-	__New(fileName, settings) {
+	__New(fileName, settings = "") {
 		this.parseFile(fileName, settings)
 	}
 	

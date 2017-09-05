@@ -1,12 +1,12 @@
 ﻿#IfWinActive, ahk_class SUMATRA_PDF_FRAME
 	; Bookmarks panel.
-	^b::Send {F12}
+	^b::Send, {F12}
 
 	; Vim-like navigation.
 	$`;::
 		ControlGetFocus, currControl
 		if(currControl != "Edit2") {
-			Send {PgDn}
+			Send, {PgDn}
 		} else {
 			Send, % stripHotkeyString(A_ThisHotkey)
 		}
@@ -14,7 +14,7 @@
 	$p::
 		ControlGetFocus, currControl
 		if(currControl != "Edit2") {
-			Send {PgUp}
+			Send, {PgUp}
 		} else {
 			Send, % stripHotkeyString(A_ThisHotkey)
 		}
@@ -54,9 +54,12 @@
 	return
 
 	; Kill unconventional hotkey to quit.
-	^q::Return
+	^q::return
 	
 	; Find forward/back.
 	^g::F3
 	^+g::+F3
+	
+	; Save as is Ctrl+S
+	^+s::Send, ^s
 #IfWinActive

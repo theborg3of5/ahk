@@ -21,7 +21,6 @@ titleContains(haystack) {
 	WinGetActiveTitle, title
 	return containsAnyOf(title, haystack) > 0
 }
-
 exeActive(exeName, partialMatch = false) {
 	WinGet, currEXE, ProcessName, A
 	if(partialMatch)
@@ -61,7 +60,6 @@ isWindowInState(states = "", titles = "", texts = "", matchMode = 1, matchSpeed 
 	
 	return windowMatch
 }
-
 waitUntilWindowState(state, title = "", text = "", matchMode = 1, matchSpeed = "Fast") {
 	; Plug in the new match settings.
 	origMatchSettings := setMatchSettings(matchMode, matchSpeed)

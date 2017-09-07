@@ -319,9 +319,14 @@ buildEpicWikiSearchURL(category, criteria) {
 }
 
 ; ini/id defaults are "X" as a dummy - URL will still connect to desired environment (and show an error popup).
-buildSnapperURL(environment, ini = "X", idList = "X") { ; idList is a comma-separated list of IDs
+buildSnapperURL(environment, ini = "", idList = "") { ; idList is a comma-separated list of IDs
 	if(!environment)
 		return ""
+	
+	if(!ini && !id) { ; These aren't be parameter defaults in case of blank parameters (not simply not passed at all)
+		ini    := "X"
+		idList := "X"
+	}
 	
 	if(stringContains(idList, ","))
 		idAry := StrSplit(idList, ",")

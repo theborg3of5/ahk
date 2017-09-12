@@ -8,7 +8,10 @@
 !+o:: activateProgram("OxygenXML")
 !+v::      runProgram("VMWareView")
 ^+!g::activateProgram("Chrome")
-^+!o::activateProgram("OneNote")
+^+!o::
+	Sleep, 500
+	activateProgram("OneNote")
+return
 ^+!x::activateProgram("Launchy")
 ^+!n::activateProgram("Notepad++")
 ^+!s::activateProgram("EpicStudio")

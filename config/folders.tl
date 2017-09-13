@@ -21,6 +21,7 @@
 	Partial Installers	pi					F:\Hospital Billing\Dev\Partial Installers\																	EPIC_LAPTOP
 	Net Home					nh					\\epic-nfs\net_home\gborg\																							EPIC_LAPTOP
 	NFS 3 Day				n3					\\epic-nfs\nfs_3day\gborg\																							EPIC_LAPTOP
+	NFS Ask					na					\\epic-nfs\nfs_ask\gborg\																							EPIC_LAPTOP
 	
 	# For Hotkeys
 	AHK Root					ar|ahkRoot		<AHKROOT>\

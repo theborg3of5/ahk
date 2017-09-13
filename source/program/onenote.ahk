@@ -118,4 +118,16 @@
 		
 		clipboard := linkToUse
 	return
+	
+	; Make a copy of the current page in the Do section.
+	^+m::
+		Send, ^!m     ; Move or copy page
+		WinWaitActive, Move or Copy Pages
+		Send, Do      ; Section to put it in
+		Send, !c      ; Copy button
+		Sleep, 500    ; Wait a half-second for the new page to appear
+		Send, ^{PgDn} ; Switch to (presumably) new page
+		Send, !5      ; Demote Subpage (Make Subpage)
+		Send, ^a      ; Select title (to replace with new day/date)
+	return
 #IfWinActive

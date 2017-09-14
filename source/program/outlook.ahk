@@ -26,10 +26,10 @@
 	$^e::
 		Send, ^+1 ; Archive
 	return
-	^w::
+	^+w::
 		Send, ^+2 ; Wait
 	return
-	^l::
+	^+l::
 		Send, ^+3 ; Later use
 	return
 #If

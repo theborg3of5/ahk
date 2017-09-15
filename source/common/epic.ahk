@@ -213,6 +213,8 @@ openEpicStudioDLG(dlgNum) {
 	Send, ^!e
 	WinWaitActive, Open DLG
 	
+	Send, ^a
+	Send, {Delete} ; Make sure the DLG that defaults in it cleared before we add our own.
 	Send, % dlgNum
 	Send, {Enter 2}
 }

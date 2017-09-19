@@ -25,7 +25,7 @@
 	
 	{ ; SmartText hotstrings. Added to favorites to deal with duplicate/similar names.
 		; QA Instructions: DBC QA INSTRUCTIONS
-		:*:dbc.qa::
+		:*:qa.dbc::
 			insertSmartText("DBC QA INSTRUCTIONS")
 		return
 		:*:qa.new::

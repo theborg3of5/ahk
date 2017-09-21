@@ -12,15 +12,25 @@ $^Backspace::deleteWord()
 return
 
 #If !MainConfig.windowIsGame()
-	XButton1::
+	XButton1::^Tab
 		MouseGetPos, , , winId
 		WinActivate, % "ahk_id " winId
+		
+		; Allow the Ctrl+Tab to be caught and handled by other hotkeys.
+		startSendLevel := A_SendLevel
+		SendLevel, 1
 		Send, ^{Tab}
+		SendLevel, % startSendLevel
 	return
 	XButton2::
 		MouseGetPos, , , winId
 		WinActivate, % "ahk_id " winId
+		
+		; Allow the Ctrl+Tab to be caught and handled by other hotkeys.
+		startSendLevel := A_SendLevel
+		SendLevel, 1
 		Send, ^+{Tab}
+		SendLevel, % startSendLevel
 	return
 #If
 

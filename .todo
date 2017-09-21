@@ -14,7 +14,6 @@
 		Tag from selection (or nothing, just open routine)
 		Could also support line number highlight
 			Probably overkill, though.
-	Update extra mouse button hotkeys to also focus window under mouse if it's not active?
 	Review activateProgram/runProgram framework - VB seems to always run even though it's activate, for example (though that's the desired behavior anyway).
 	Standardize window functions
 		Take a titleString instead of classes, EXEs, etc

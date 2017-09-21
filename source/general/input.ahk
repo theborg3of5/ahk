@@ -12,8 +12,16 @@ $^Backspace::deleteWord()
 return
 
 #If !MainConfig.windowIsGame()
-	XButton1::^Tab
-	XButton2::^+Tab
+	XButton1::
+		MouseGetPos, , , winId
+		WinActivate, % "ahk_id " winId
+		Send, ^{Tab}
+	return
+	XButton2::
+		MouseGetPos, , , winId
+		WinActivate, % "ahk_id " winId
+		Send, ^+{Tab}
+	return
 #If
 
 ; Special paste for when paste not allowed - just send the contents of the clipboard.

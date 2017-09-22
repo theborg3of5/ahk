@@ -125,6 +125,7 @@
 		WinWaitActive, Move or Copy Pages
 		Send, Do      ; Section to put it in
 		Send, !c      ; Copy button
+		WinWaitClose, Move or Copy Pages
 		Sleep, 500    ; Wait a half-second for the new page to appear
 		Send, ^{PgDn} ; Switch to (presumably) new page
 		Send, !5      ; Demote Subpage (Make Subpage)

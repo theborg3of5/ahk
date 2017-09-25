@@ -62,8 +62,7 @@
 		return
 		
 		^e::
-			SendRaw, d ^e
-			Send, {Enter}
+			Send, e{Space}
 		return
 		
 		; $!e::

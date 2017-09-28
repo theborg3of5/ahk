@@ -11,14 +11,14 @@ global suspended := 0
 ; Set mouseover text for icon
 Menu, Tray, Tip, 
 (LTrim
-	Down+Equals Sender
-	Ctrl+R to prompt for how many down+equals keystrokes to send.
+	Equals+Down Sender
+	Ctrl+R to prompt for how many Equals+Down keystrokes to send.
 	
 	Emergency Exit: Ctrl+Shift+Alt+Win+R
 )
 
 ^r::
-	InputBox, numToSend, Send Down+Equals Keystrokes, Enter how many times to send Down+Equals:
+	InputBox, numToSend, Send Equals+Down Keystrokes, Enter how many times to send Equals+Down:
 	if(!numToSend || ErrorLevel)
 		return
 	
@@ -34,7 +34,7 @@ Menu, Tray, Tip,
 	
 	; Confirmation if it's a really big number
 	if(numToSend > 100) {
-		MsgBox, 4, Delete page?, Are you sure you want to send Down+Equals %numToSend% times?
+		MsgBox, 4, Delete page?, Are you sure you want to send Equals+Down %numToSend% times?
 		IfMsgBox, No
 			return
 		else IfMsgBox, Cancel

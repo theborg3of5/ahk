@@ -143,6 +143,12 @@
 			Send, 2{Enter}
 		return
 		
+		^+s::
+			SendRaw, d ^KECR
+			Send, {Enter}
+			Send, 1{Enter}
+		return
+		
 		:*:.lock::
 			SendRaw, w $$zlock(" ; Extra comment/quote here to fix syntax highlighting. "
 		return

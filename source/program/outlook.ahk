@@ -18,6 +18,14 @@
 	
 	; Bulleted list.
 	^.::^+l
+	
+	; Format as code (using custom styles)
+	^+c::
+		Send, !1
+		WinWaitActive, Apply Styles
+		Send, Code
+		Send, {Enter}
+	return
 #IfWinActive
 
 ; Mail activity.

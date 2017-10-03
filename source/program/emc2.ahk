@@ -23,6 +23,11 @@
 		Send, !o
 	return
 	
+	; Change code formatting hotkey to something more universal.
+	^+c::
+		Send, ^e
+	return
+	
 	{ ; SmartText hotstrings. Added to favorites to deal with duplicate/similar names.
 		; QA Instructions: DBC QA INSTRUCTIONS
 		:*:qa.dbc::
@@ -35,7 +40,7 @@
 	
 	{ ; Link and record number things.
 		; Get DLG number from title.
-		^+c::
+		!c::
 			getEMC2Info( , id)
 			if(id)
 				clipboard := id

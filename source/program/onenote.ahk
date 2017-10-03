@@ -3,22 +3,27 @@
 	{ ; Quick access toolbar commands.
 		; New Subpage
 		$^+n::
-			Send, !3
+			Send, !1
 		return
 		; Promote Subpage
 		^+[::
-			Send, !4
+			Send, !2
 		return
 		; Demote Subpage (Make Subpage)
 		^+]::
-			Send, !5
+			Send, !3
 		return
 		; Delete Page
 		$^+d::
 			; Confirmation to avoid accidental page deletion
 			MsgBox, 4, Delete page?, Are you sure you want to delete this page?
 			IfMsgBox, Yes
-				Send, !6
+				Send, !4
+		return
+		; Format as code (using custom styles)
+		^+c::
+			Send, !5
+			Send, {Enter}
 		return
 	}
 	

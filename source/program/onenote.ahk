@@ -3,26 +3,26 @@
 	{ ; Quick access toolbar commands.
 		; New Subpage
 		$^+n::
-			Send, !1
+			oneNoteNewSubpage()
 		return
 		; Promote Subpage
 		^+[::
-			Send, !2
+			oneNotePromoteSubpage()
 		return
 		; Demote Subpage (Make Subpage)
 		^+]::
-			Send, !3
+			oneNoteDemoteSubpage()
 		return
 		; Delete Page
 		$^+d::
 			; Confirmation to avoid accidental page deletion
 			MsgBox, 4, Delete page?, Are you sure you want to delete this page?
 			IfMsgBox, Yes
-				Send, !4
+				oneNoteDeletePage()
 		return
 		; Format as code (using custom styles)
 		^+c::
-			Send, !5
+			oneNoteCustomStyles()
 			Send, {Enter}
 		return
 	}
@@ -126,18 +126,36 @@
 	
 	; Make a copy of the current page in the Do section.
 	^+m::
-		Send, ^!m     ; Move or copy page
+		Send, ^!m                  ; Move or copy page
 		WinWaitActive, Move or Copy Pages
-		Send, Do      ; Section to put it in
-		Send, !c      ; Copy button
+		Sleep, 500                 ; Wait a half second for the popup to be input-ready
+		Send, Do                   ; Section to put it in
+		Send, !c                   ; Copy button
 		WinWaitClose, Move or Copy Pages
-		Sleep, 500    ; Wait a half-second for the new page to appear
-		Send, ^{PgDn} ; Switch to (presumably) new page
-		Send, !5      ; Demote Subpage (Make Subpage)
-		Send, ^a      ; Select title (to replace with new day/date)
+		Sleep, 500                 ; Wait a half-second for the new page to appear
+		Send, ^{PgDn}              ; Switch to (presumably) new page
+		Send, !3                   ; Demote Subpage (Make Subpage)
+		Send, ^a                   ; Select title (to replace with new day/date)
 		
-		Sleep, 500    ; Wait for selection to take
+		Sleep, 500                 ; Wait for selection to take
 		sendDateTime("M/d`, dddd") ; Send today's day/date
-		Send, ^a      ; Select title again in case you want a different date.
+		Send, ^a                   ; Select title again in case you want a different date.
 	return
+	
+	; Named functions for which commands are which in the quick access toolbar.
+	oneNoteNewSubpage() {
+		Send, !1
+	}
+	oneNotePromoteSubpage() {
+		Send, !2
+	}
+	oneNoteDemoteSubpage() {
+		Send, !3
+	}
+	oneNoteDeletePage() {
+		Send, !4
+	}
+	oneNoteCustomStyles() {	; Custom styles from OneTastic
+		Send, !5
+	}
 #IfWinActive

@@ -248,8 +248,6 @@ buildHyperspaceRunString(versionMajor, versionMinor, environment) {
 	global epicExeBase
 	runString := epicExeBase
 	
-	; tempRun := runString ; DEBUG
-	
 	; Handling for 2010 special path.
 	if(versionMajor = 7 && versionMinor = 8)
 		runString := RegExReplace(runString, "<EPICNAME>", "EpicSys")
@@ -345,6 +343,15 @@ buildSnapperURL(environment, ini = "", idList = "") { ; idList is a comma-separa
 	}
 	
 	return outURL
+}
+
+buildVDIRunString(vdiId) {
+	global epicVDIBase
+	runString := epicVDIBase
+	
+	runString := RegExReplace(runString, "<VDI_ID>", vdiId)
+	
+	return runString
 }
 
 ; iteratorsAry is array of variables to loop in nested for loops, in top-down order.

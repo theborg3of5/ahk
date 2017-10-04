@@ -115,9 +115,9 @@ UPDATE_AHK_SETTINGS(actionRow) {
 ; == Open specific programs ==
 ; Run Hyperspace.
 DO_HYPERSPACE(actionRow) {
+	environment  := actionRow.data["COMM_ID"]
 	versionMajor := actionRow.data["MAJOR"]
 	versionMinor := actionRow.data["MINOR"]
-	environment  := actionRow.data["COMMID"]
 	
 	; Error check.
 	if(!versionMajor || !versionMinor) {
@@ -138,31 +138,50 @@ DO_HYPERSPACE(actionRow) {
 ; Run something through Thunder, generally a text session or Citrix.
 DO_THUNDER(actionRow) {
 	runString := ""
-	thunderID := actionRow.data["THUNDERID"]
+	thunderId := actionRow.data["THUNDERID"]
 	
 	; Error check.
-	if(!thunderID) {
-		DEBUG.popup("DO_THUNDER", "Missing info", "Thunder ID", thunderID)
+	if(!thunderId) {
+		DEBUG.popup("DO_THUNDER", "Missing info", "Thunder ID", thunderId)
 		return
 	}
 	
-	if(isNum(thunderID))
-		runString := MainConfig.getProgram("Thunder", "PATH") " " thunderID
-	else if(thunderID = "SHOWTHUNDER") ; Special keyword - just show Thunder itself, don't launch an environment.
-		runString := thunderID
+	runString := MainConfig.getProgram("Thunder", "PATH") " " thunderId
 	
 	; Do it.
-	if(actionRow.isDebug) ; Debug mode.
-		actionRow.debugResult := runString
-	else if(runString = "SHOWTHUNDER")
+	if(thunderId = "SHOW_THUNDER") ; Special keyword - just show Thunder itself, don't launch an environment.
 		activateProgram("Thunder")
+	else if(actionRow.isDebug) ; Debug mode.
+		actionRow.debugResult := runString
+	else
+		Run, % runString
+}
+
+; Run a VDI.
+DO_VDI(actionRow) {
+	vdiId := actionRow.data["VDI_ID"]
+	
+	; Error check.
+	if(!vdiId) {
+		DEBUG.popup("DO_VDI", "Missing info", "VDI ID", vdiId)
+		return
+	}
+	
+	; Build run path.
+	runString := callIfExists("buildVDIRunString", vdiId) ; buildVDIRunString(vdiId)
+	
+	; Do it.
+	if(vdiId = "SHOW_VMWARE") ; Special keyword - just show VMWare itself, don't launch a specific VDI.
+		runProgram("VMWareView")
+	else if(actionRow.isDebug) ; Debug mode.
+		actionRow.debugResult := runString
 	else
 		Run, % runString
 }
 
 ; Open an environment in Snapper using a dummy record.
 DO_SNAPPER(actionRow) {
-	environment := actionRow.data["COMMID"]
+	environment := actionRow.data["COMM_ID"]
 	ini         := actionRow.data["INI"]
 	idList      := actionRow.data["ID"]
 	

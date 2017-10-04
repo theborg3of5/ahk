@@ -6,7 +6,6 @@
 !`::  activateProgram("ProcessExplorer")
 !+b::      runProgram("VMWarePlayer")
 !+o:: activateProgram("OxygenXML")
-!+v::      runProgram("VMWareView")
 ^+!g::activateProgram("Chrome")
 ^+!o::
 	Sleep, 500
@@ -49,6 +48,7 @@ return
 	^+!t::doSelect("local\outlookTLG.tl")
 	^+!h::doSelect("local\epicEnvironments.tl", "DO_HYPERSPACE", "C:\Program Files (x86)\Epic\v8.3\Shared Files\EpicD83.exe")
 	^+!r::doSelect("local\epicEnvironments.tl", "DO_THUNDER",    "C:\Program Files (x86)\PuTTY\putty.exe")
+	!+v:: doSelect("local\epicEnvironments.tl", "DO_VDI",        "C:\Program Files (x86)\VMware\VMware Horizon View Client\vmware-view.exe")
 	^!#s::
 		s := new Selector("local\epicEnvironments.tl")
 		guiSettings                    := []
@@ -111,7 +111,7 @@ return
 
 ; ; Take the selected number, show a popup that takes what math to do on it (i.e., +25), and put the result back in place.
 ; !+c::
-	; text := GetSelectedText()
+	; text := getSelectedText()
 	; outText := mathPopup(text)
 	; if(outText)
 		; sendTextWithClipboard(outText)

@@ -19,9 +19,9 @@ Notes:
 		Important columns are as follows (others are unused and may be removed):
 			NAME    - Title shown for the given environment in the popup
 			ABBREV  - Abbreviation shown for the environment
+			COMM_ID - Identifier for the environment, can be found in EMC2. If not given, we'll just launch the given version with the usual environment selection popup.
 			MAJOR   - Major version (example: 2015 is 8.2, so major version is 8)
 			MINOR   - Minor version (example: 2015 is 8.2, so minor version is 2)
-			COMMID  - Identifier for the environment, can be found in EMC2. If not given, we'll just launch the given version with the usual environment selection popup.
 		You can separate blocks of environments with titles using rows that begin with the # character.
 		There are other special characters available, see selector.ahk if you're curious.
 */
@@ -109,7 +109,7 @@ Notes:
 	DO_HYPERSPACE(actionRow) {
 		versionMajor := actionRow.data["MAJOR"]
 		versionMinor := actionRow.data["MINOR"]
-		environment  := actionRow.data["COMMID"]
+		environment  := actionRow.data["COMM_ID"]
 		
 		; Build run path.
 		runString := buildHyperspaceRunString(versionMajor, versionMinor, environment)

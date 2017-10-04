@@ -370,48 +370,6 @@ buildMForLoopString(loopAryName, iteratorsAry) {
 }
 
 
-; Within an Epic environment list window (title is usually "Connection Status"), pick the given environment by name (exact name match).
-; For remote (Citrix) windows, it won't select the specific environment, but will pick the given environment group and focus the environment list.
-pickEnvironment(envName, envGroup = "<All Environments>") {
-	; Figure out if we're dealing with a local or remote (like Citrix) window.
-	isLocal := !(exeActive("WFICA32.EXE") || exeActive("mstsc.exe")) ; Citrix, remote desktop
-	
-	; DEBUG.popup("epic", "pickEnvironment", "Environment name", envName, "Group", envGroup, "Current window is local", isLocal)
-
-	; If you're local, make sure that the group listbox is focused.
-	; Note that for Citrix, we have to assume the group listbox is focused (which it typically is by default).
-	if(isLocal)
-		ControlFocus, ThunderRT6ComboBox1, A
-	
-	SendRaw, %envGroup% ; Pick the given environment group (or <All Environments> by default)
-	Send, {Tab}{Home}   ; Focus environment list and start at the top
-	
-	if(isLocal) {
-		Loop, 5 { ; Try a few times in case it's a large environment list for the group.
-			Sleep, 500
-			
-			; Get the list from the listbox.
-			ControlGet, envList, List, , ThunderRT6ListBox1, A ; List doesn't support Selected option, so we'll have to figure it out ourselves.		
-			if(envList)
-				Break
-		}
-		; DEBUG.popup("Finished trying to get the environment list", envList)
-		
-		; Parse through list to find where our desired environment is.
-		Loop, Parse, envList, `n ; Each line is an entry in the list.
-		{
-			if(A_LoopField = envName) {
-				countFromTop := A_Index - 1
-				Break
-			}
-		}
-		; DEBUG.popup("Environment list raw", envList, "Looking for", envName, "Found at line-1", countFromTop)
-		
-		Send, {Down %countFromTop%} ; Down as many times as needed to hit the desired row.
-	}
-}
-
-
 
 getEMC2Info(ByRef ini = "", ByRef id = "", windowTitle = "A") {
 	WinGetTitle, title, %windowTitle%

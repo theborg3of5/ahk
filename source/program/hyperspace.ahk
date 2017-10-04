@@ -54,35 +54,6 @@
 	}
 #If
 
-; Epic environment list window - title contains "Connection Status", and EXE is one of Snapper, Hyperspace (partial EXE name match), VB, or Citrix.
-#If isEpicEnvironmentListWindow()
-	; Shows a list to the user, who can decide which environment they want to launch, then it will find and focus that one in the environment list window.
-	^f::
-		data := doSelect("local\epic_environments.tl", "RET_DATA")
-		pickEnvironment(data["ENV_TITLE"], data["ENV_GROUP"])
-	return
-#If
-
-
-isEpicEnvironmentListWindow() {
-	; Title always contains "Connection Status".
-	if(!isWindowInState("active", "Connection Status", , 2))
-		return false
-	
-	; Executable matches one of the following
-	if(exeActive("Snapper.exe")) ; Snapper
-		return true
-	if(exeActive("EpicD", true)) ; Any version of Hyperspace (second parameter is partial name matching)
-		return true
-	if(exeActive("VB6.EXE"))     ; VB6
-		return true
-	if(exeActive("WFICA32.exe")) ; Citrix
-		return true
-	if(exeActive("mstsc.exe"))   ; Remote desktop
-	
-	return false
-}
-
 getHyperspaceHTML() {
 	; Save off the clipboard to restore and wipe it for our own use.
 	ClipSaved := ClipboardAll

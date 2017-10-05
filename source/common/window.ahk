@@ -411,9 +411,24 @@ centerWindow(titleString = "A") {
 	WinMove, %idString%, , x, y
 }
 
+fakeMaximizeWindow(titleString = "A") {
+	winId := WinExist(titleString)
+	idString := "ahk_id " winId
+	
+	boundsAry  := getMonitorBounds( , idString)
+	offsetsAry := getWindowOffsets(idString)
+	
+	newWidth  := boundsAry["WIDTH"] + offsetsAry["LEFT"] + offsetsAry["RIGHT"]
+	newHeight := boundsAry["HEIGHT"] + offsetsAry["TOP"] + offsetsAry["BOTTOM"]
+	
+	; DEBUG.popup("Bounds", boundsAry, "Offsets", offsetsAry, "New width", newWidth, "New height", newHeight)
+	resizeWindow(newWidth, newHeight, idString)
+	centerWindow()
+}
+
 ; Jacked from http://www.howtogeek.com/howto/28663/create-a-hotkey-to-resize-windows-to-a-specific-size-with-autohotkey/
-resizeWindow(width = "", height = "") {
-	WinGetPos, X, Y, W, H, A
+resizeWindow(width = "", height = "", titleString = "A") {
+	WinGetPos, X, Y, W, H, %titleString%
 	if(!width)
 		width  := W
 	if(!height)

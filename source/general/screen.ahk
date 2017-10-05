@@ -14,10 +14,7 @@ return
 #+c::centerWindow()
 
 ; Fake-maximize the window and center it.
-#+m::
-	WinMove, A, , , , 1934, 1057
-	centerWindow()
-return
+#+m::fakeMaximizeWindow()
 
 ; Enable any window mouse is currently over.
 #c::

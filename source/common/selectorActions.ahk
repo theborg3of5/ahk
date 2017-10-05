@@ -151,7 +151,7 @@ DO_THUNDER(actionRow) {
 	; Do it.
 	if(thunderId = "SHOW_THUNDER") ; Special keyword - just show Thunder itself, don't launch an environment.
 		activateProgram("Thunder")
-	else if(actionRow.isDebug) ; Debug mode.
+	else if(actionRow.isDebug)     ; Debug mode.
 		actionRow.debugResult := runString
 	else
 		Run, % runString
@@ -171,12 +171,17 @@ DO_VDI(actionRow) {
 	runString := callIfExists("buildVDIRunString", vdiId) ; buildVDIRunString(vdiId)
 	
 	; Do it.
-	if(vdiId = "SHOW_VMWARE") ; Special keyword - just show VMWare itself, don't launch a specific VDI.
+	if(vdiId = "SHOW_VMWARE") {    ; Special keyword - just show VMWare itself, don't launch a specific VDI.
 		runProgram("VMWareView")
-	else if(actionRow.isDebug) ; Debug mode.
+	} else if(actionRow.isDebug) { ; Debug mode.
 		actionRow.debugResult := runString
-	else
+	} else {
 		Run, % runString
+		
+		; Also fake-maximize the window once it shows up.
+		WinWaitActive, ahk_exe vmware-view.exe, , , VMware Horizon Client ; Ignore the loading-type popup that happens initially with excluded title.
+		fakeMaximizeWindow()
+	}
 }
 
 ; Open an environment in Snapper using a dummy record.

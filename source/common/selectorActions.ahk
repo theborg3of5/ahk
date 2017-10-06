@@ -138,20 +138,14 @@ DO_HYPERSPACE(actionRow) {
 ; Run something through Thunder, generally a text session or Citrix.
 DO_THUNDER(actionRow) {
 	runString := ""
-	thunderId := actionRow.data["THUNDERID"]
-	
-	; Error check.
-	if(!thunderId) {
-		DEBUG.popup("DO_THUNDER", "Missing info", "Thunder ID", thunderId)
-		return
-	}
+	thunderId := actionRow.data["THUNDER_ID"]
 	
 	runString := MainConfig.getProgram("Thunder", "PATH") " " thunderId
 	
 	; Do it.
-	if(thunderId = "SHOW_THUNDER") ; Special keyword - just show Thunder itself, don't launch an environment.
+	if(actionRow.data["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
 		activateProgram("Thunder")
-	else if(actionRow.isDebug)     ; Debug mode.
+	else if(actionRow.isDebug)               ; Debug mode.
 		actionRow.debugResult := runString
 	else
 		Run, % runString
@@ -161,19 +155,13 @@ DO_THUNDER(actionRow) {
 DO_VDI(actionRow) {
 	vdiId := actionRow.data["VDI_ID"]
 	
-	; Error check.
-	if(!vdiId) {
-		DEBUG.popup("DO_VDI", "Missing info", "VDI ID", vdiId)
-		return
-	}
-	
 	; Build run path.
 	runString := callIfExists("buildVDIRunString", vdiId) ; buildVDIRunString(vdiId)
 	
 	; Do it.
-	if(vdiId = "SHOW_VMWARE") {    ; Special keyword - just show VMWare itself, don't launch a specific VDI.
+	if(actionRow.data["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.
 		runProgram("VMWareView")
-	} else if(actionRow.isDebug) { ; Debug mode.
+	} else if(actionRow.isDebug) {             ; Debug mode.
 		actionRow.debugResult := runString
 	} else {
 		Run, % runString
@@ -192,13 +180,13 @@ DO_SNAPPER(actionRow) {
 	
 	url := callIfExists("buildSnapperURL", environment, ini, idList) ; buildSnapperURL(environment, ini, idList)
 	
-	; Debug mode.
-	if(actionRow.isDebug) {
+	; Do it.
+	if(actionRow.data["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
+		runProgram("Snapper")
+	else if(actionRow.isDebug)               ; Debug mode.
 		actionRow.debugResult := url
-		return
-	}
-	
-	Run, % url
+	else
+		Run, % url
 }
 
 ; Open a homebrew timer (script located in the filepath below).

@@ -4,6 +4,7 @@
 	Fix monitor fixer script or get rid of it entirely.
 	
 # New ideas
+	Standardize folder hotstring rules - all over the place currently
 	VB6 - ^F2 focuses first dropdown
 	Sanitize data coming into Selector to remove newlines
 	OneNote issue with Onetastic not appearing when Ctrl held down

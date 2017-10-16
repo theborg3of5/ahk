@@ -195,14 +195,17 @@
 		:*c:auf::
 			Send, % userPath
 		return
-		:*c:dsf::
-			Send, % A_Desktop
-		return
+		; :*c:dsf::
+			; Send, % A_Desktop
+		; return
 		:*c:dlf::
 			Send, % userPath "Downloads\"
 		return
 		:*c:ddf::
 			Send, % userPath "Dev\"
+		return
+		:*c:dsf::
+			Send, % userPath "Design\"
 		return
 	}
 

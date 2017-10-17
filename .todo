@@ -5,6 +5,8 @@
 	
 # New ideas
 	Standardize folder hotstring rules - all over the place currently
+		Always start with "f" or ".f" or "f.", perhaps?
+		Could potentially have a hotstring launch a selector window (or at least use a non-GUI selector)
 	VB6 - ^F2 focuses first dropdown
 	Sanitize data coming into Selector to remove newlines
 	OneNote issue with Onetastic not appearing when Ctrl held down

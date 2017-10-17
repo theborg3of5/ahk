@@ -196,13 +196,16 @@
 			Send, % userPath
 		return
 		; :*c:dsf::
-			; Send, % A_Desktop
+			; Send, % A_Desktop "\"
 		; return
 		:*c:dlf::
 			Send, % userPath "Downloads\"
 		return
 		:*c:ddf::
 			Send, % userPath "Dev\"
+		return
+		:*c:compf::
+			Send, % userPath "Dev\Compile\"
 		return
 		:*c:dsf::
 			Send, % userPath "Design\"

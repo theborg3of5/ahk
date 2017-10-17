@@ -34,13 +34,6 @@ return
 	return
 #If
 
-; Special paste for when paste not allowed - just send the contents of the clipboard.
-^!v::
-	Send, ^+v
-	WinWaitActive, ahk_class QPasteClass
-	Send, +{Enter}
-return
-
 ; Clipboard typing - gives an easy place to type things that will then stick them on the clipboard if submitted.
 $!v::
 	InputBox, outVar, Set Clipboard, Enter text to set the clipboard to:, , , , , , , , %clipboard%

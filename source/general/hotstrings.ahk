@@ -306,6 +306,9 @@
 
 	{ ; Program-specific
 		:*c:ex.::explorer.exe
+		:*c:.excludestatus::
+			Send, % "-9100,-9110,-9120"
+		return
 	}
 }
 

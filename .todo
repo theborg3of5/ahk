@@ -4,6 +4,9 @@
 	Fix monitor fixer script or get rid of it entirely.
 	
 # New ideas
+	New selector for status items
+		Use to send exclusion strings (-item,-item, etc) to Snapper
+			Directly to field on hotkey?
 	Standardize folder hotstring rules - all over the place currently
 		Always start with "f" or ".f" or "f.", perhaps?
 		Could potentially have a hotstring launch a selector window (or at least use a non-GUI selector)

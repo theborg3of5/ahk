@@ -39,6 +39,8 @@ return
 	currControl := getFocusedControl()
 	tooltipText := getTooltipText()
 	
+	; DEBUG.popup("Class", currClass, "Title", currTitle, "Control", currControl, "Tooltip text", tooltipText)
+	
 	rows.Insert(new SelectorRow("", "Class",   "c", currClass,   true))
 	rows.Insert(new SelectorRow("", "Title",   "t", currTitle,   true))
 	rows.Insert(new SelectorRow("", "Control", "o", currControl, true))

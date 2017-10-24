@@ -4,6 +4,8 @@
 	Fix monitor fixer script or get rid of it entirely.
 	
 # New ideas
+	Add something like VimBindings for Outlook?
+		At least j/k and ;/p would be nice.
 	New selector for status items
 		Use to send exclusion strings (-item,-item, etc) to Snapper
 			Directly to field on hotkey?

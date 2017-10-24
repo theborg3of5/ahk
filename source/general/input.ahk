@@ -41,6 +41,10 @@ $!v::
 		clipboard := outVar
 return
 
+^!v::
+	SendRaw, % clipboard
+return
+
 ; Menu key does different things on laptops without a mouse.
 #If MainConfig.getSetting("MENU_KEY_ACTION") = MENUKEYACTION_MiddleClick
 	AppsKey::MButton

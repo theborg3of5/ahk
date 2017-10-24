@@ -27,17 +27,17 @@
 		Send, ^c
 	return
 	
-	; Paste clipboard, insering spaces to overwrite first.
-	$!v::
-		; Get the length of the string we're going to add.
-		inputLength := StrLen(clipboard)
+	; ; Paste clipboard, insering spaces to overwrite first.
+	; $!v::
+		; ; Get the length of the string we're going to add.
+		; inputLength := StrLen(clipboard)
 		
-		; Insert that many spaces.
-		Send, {Insert %inputLength%}
+		; ; Insert that many spaces.
+		; Send, {Insert %inputLength%}
 		
-		; Actually send our input text.
-		SendRaw, % clipboard
-	return
+		; ; Actually send our input text.
+		; SendRaw, % clipboard
+	; return
 	
 	; Screen wipe
 	^l::

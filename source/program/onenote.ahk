@@ -142,6 +142,12 @@
 		Send, ^a                   ; Select title again in case you want a different date.
 	return
 	
+	; Insert a contact comment.
+	^+8::
+		FormatTime, date, , MM/yy
+		SendRaw, % "*" USER_INITIALS " " date
+	return
+	
 	; Named functions for which commands are which in the quick access toolbar.
 	oneNoteNewSubpage() {
 		Send, !1

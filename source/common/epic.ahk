@@ -390,11 +390,7 @@ buildSnapperURL(environment, ini = "", idList = "") { ; idList is a comma-separa
 
 buildVDIRunString(vdiId) {
 	global epicVDIBase
-	runString := epicVDIBase
-	
-	runString := RegExReplace(runString, "<VDI_ID>", vdiId)
-	
-	return runString
+	return replaceTags(epicVDIBase, {"VDI_ID":vdiId})
 }
 
 ; iteratorsAry is array of variables to loop in nested for loops, in top-down order.

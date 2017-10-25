@@ -339,3 +339,11 @@ replaceMulti(inputString, replaceAry) {
 	
 	return outputString
 }
+
+replaceTags(inputString, tagNamesAry) {
+	tagsAry := []
+	For tagName, replacement in tagNamesAry
+		tagsAry["<" tagName ">"] := replacement
+	
+	return replaceMulti(inputString, tagsAry)
+}

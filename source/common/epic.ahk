@@ -272,7 +272,7 @@ buildEMC2Link(ini, id, subAction) {
 	}
 	
 	link .= paramString
-	link := replaceMulti(link, {"<INI>":ini, "<ID>":id})
+	link := replaceTags(link, {"INI":ini, "ID":id})
 	
 	return link
 }
@@ -318,41 +318,29 @@ buildHyperspaceRunString(versionMajor, versionMinor, environment) {
 	return runString
 }
 
-buildCodeSearchURL(searchType, criteria = "", appKey = "", inline = false, exact = false, logic = "", case = false, nameFilter = 0, nameFilterText = "", perPage = 50) {
+buildCodeSearchURL(searchType, criteriaAry, appKey = "") {
+	global codeSearchBase
 	versionID := 10
 	showAll := 0 ; Whether to show every single matched line per result shown.
 	
 	appId := getEpicAppIdFromKey(appKey)
+	; DEBUG.popup("buildCodeSearchURL", "Start", "Search type", searchType, "Criteria", criteriaAry, "App key", appKey, "App ID", appId)
 	
-	; DEBUG.popup("buildCodeSearchURL", "Start", "Search type", searchType, "Criteria", criteria, "App key", appKey, "App ID", appId, "Inline", inline, "Exact", exact, "Logic", logic, "Case", case, "Name filter", nameFilter, "Name filter text", nameFilterText, "Per page", perPage)
-	
-	; Gotta have some sort of criteria to open a search.
-	if(!criteria || (searchType = ""))
+	; Gotta have some sort of criteria (and a type) to run a search.
+	if(!criteriaAry || !searchType)
 		return ""
 	
-	; Basic URL, without parameters
-	outURL := codeSearchBase searchType	codeSearchEnd versionID
+	criteriaString := "a=" criteriaAry[1]
+	if(criteriaAry[2])
+		criteriaString .= "&b=" criteriaAry[2]
+	if(criteriaAry[3])
+		criteriaString .= "&c=" criteriaAry[3]
+	if(criteriaAry[4])
+		criteriaString .= "&d=" criteriaAry[4]
+	if(criteriaAry[5])
+		criteriaString .= "&e=" criteriaAry[5]
 	
-	; Add the search criteria.
-	i := 97 ; start at 'a'
-	For j,c in criteria {
-		Transform, letter, Chr, %i%
-		outURL .= "&" letter "=" c
-		i++
-	}
-	
-	; Add on parameters.
-	outURL .= "&applicationid="  appId
-	outURL .= "&inline="         inline
-	outURL .= "&exact="          exact
-	outURL .= "&logic="          logic
-	outURL .= "&case="           case
-	outURL .= "&namefilter="     nameFilter
-	outURL .= "&namefiltertext=" nameFilterText
-	outURL .= "&perPage="        perpage
-	outURL .= "&showall="        showall
-	
-	return outURL
+	return replaceTags(codeSearchBase, {"SEARCH_TYPE":searchType, "APP_ID":appId, "CRITERIA":criteriaString})
 }
 
 buildGuruURL(criteria) {

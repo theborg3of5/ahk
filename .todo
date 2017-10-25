@@ -4,7 +4,6 @@
 	Fix monitor fixer script or get rid of it entirely.
 	
 # New ideas
-	Reduce URLs from privateVariables.ahk to just be a single base path/URL with <PARAM>s instead of beginning/end stuff.
 	Add grepWin'ing AHK source folder to search selector.
 	Add something like VimBindings for Outlook?
 		At least j/k and ;/p would be nice.

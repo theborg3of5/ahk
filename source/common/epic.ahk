@@ -244,6 +244,61 @@ getEpicAppIdFromKey(appKey) {
 	return epicAppKeyToIdAry[appKey]
 }
 
+buildEMC2Link(ini, id, subAction) {
+	global SUBACTION_EDIT, SUBACTION_VIEW, SUBACTION_WEB
+	if(!ini || !id)
+		return ""
+	
+	; View basically goes one way or the other depending on INI:
+	;  * If it can be viewed in EMC2, use EDIT with a special view-only parameter.
+	;  * Otherwise, create a web link instead.
+	if(subAction = SUBACTION_VIEW) {
+		if(canViewINIInEMC2(ini)) {
+			subAction   := SUBACTION_EDIT
+			paramString := "&runparams=1"
+		} else {
+			subAction   := SUBACTION_WEB
+		}
+	}
+	
+	; Pick one of the types of links - edit in EMC2, web summary or Sherlock.
+	if(subAction = SUBACTION_EDIT) {
+		link := emc2LinkBase
+	} else if(subAction = SUBACTION_WEB) {
+		if(isSherlockINI(ini))
+			link := sherlockBase
+		else
+			link := emc2LinkBaseWeb
+	}
+	
+	link .= paramString
+	link := replaceMulti(link, {"<INI>":ini, "<ID>":id})
+	
+	return link
+}
+canViewINIInEMC2(ini) {
+	if(!ini)
+		return false
+	
+	if(ini = "DLG")
+		return true
+	if(ini = "ZQN")
+		return true
+	if(ini = "XDS")
+		return true
+	
+	return false
+}
+isSherlockINI(ini) {
+	if(!ini)
+		return false
+	
+	if(ini = "SLG")
+		return true
+	
+	return false
+}
+
 buildHyperspaceRunString(versionMajor, versionMinor, environment) {
 	global epicExeBase
 	runString := epicExeBase

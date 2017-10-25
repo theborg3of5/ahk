@@ -150,7 +150,8 @@ class ActionObject {
 				link := this.perform(TYPE_EMC2, ACTION_LINK, subType, subAction, input)
 				; DEBUG.popup("actionObject.perform", "Got link to run", "Link", link)
 				
-				Run, % link
+				if(link)
+					Run, % link
 				
 			} else if(type = TYPE_PATH) {
 				if(subType = SUBTYPE_FILEPATH) {
@@ -167,20 +168,8 @@ class ActionObject {
 			}
 			
 		} else if(action = ACTION_LINK) {
-			if(type = TYPE_EMC2) {
-				ini := subType
-				id := input
-				
-				; Add the edit/view/web arguments.
-				if((subAction = SUBACTION_EDIT) || !subAction) ; Edit is the default.
-					link := emc2LinkBase ini "/" id "?action=EDIT"
-				else if(subAction = SUBACTION_VIEW && ( (ini = "DLG") || (ini = "ZQN") || (ini = "XDS") )) ; EMC2 supports view-only mode for these INIs.
-					link := emc2LinkBase ini "/" id "?action=EDIT&runparams=1"
-				else if(subAction = SUBACTION_VIEW && ( ini = "SLG" )) ; Special "view" mode in browser for SLGs - Sherlock
-					link := sherlockSLGBase id
-				else if(subAction = SUBACTION_WEB || subAction = SUBACTION_VIEW)
-					link := emc2LinkBaseWeb ini "/" id
-			}
+			if(type = TYPE_EMC2)
+				link := buildEMC2Link(subType, input, subAction)
 			
 			return link
 		} else if(type || action || subType || subAction || input) {

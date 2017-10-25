@@ -330,3 +330,12 @@ appendLine(baseText, textToAdd) {
 	
 	return updatedString
 }
+
+replaceMulti(inputString, replaceAry) {
+	outputString := inputString
+	
+	For toReplace, replaceWith in replaceAry
+		outputString := RegExReplace(outputString, toReplace, replaceWith)
+	
+	return outputString
+}

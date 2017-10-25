@@ -95,18 +95,20 @@ return
 	}
 	
 	url := ""
-	if(searchType = "CODESEARCH")
-		For i,st in subTypes ; There could be multiple here?
-			url := buildCodeSearchURL(st, criteria, data["APPKEY"])
-	else if(searchType = "GURU")
-		url := buildGuruURL(criteria[1])
-	else if(searchType = "WIKI") ; Epic wiki search.
-		url := buildEpicWikiSearchURL(subTypes[0], criteria[1])
-	else if(searchType = "WEB")
-		url := StrReplace(subTypes[0], "%s", criteria[1])
+	For i,type in subTypes { ; For searching multiple at once.
+		if(searchType = "CODESEARCH")
+			url := buildCodeSearchURL(type, criteria, data["APPKEY"])
+		else if(searchType = "GURU")
+			url := buildGuruURL(criteria[1])
+		else if(searchType = "WIKI") ; Epic wiki search.
+			url := buildEpicWikiSearchURL(subTypes[0], criteria[1])
+		else if(searchType = "WEB")
+			url := StrReplace(subTypes[0], "%s", criteria[1])
+		
+		if(url)
+			Run, % url
+	}
 	
-	if(url)
-		Run, % url
 return
 
 ; ; Take the selected number, show a popup that takes what math to do on it (i.e., +25), and put the result back in place.

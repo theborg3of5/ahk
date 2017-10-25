@@ -4,11 +4,16 @@
 	Fix monitor fixer script or get rid of it entirely.
 	
 # New ideas
+	Implement Sherlock linking better - maybe a different type of thing, beyond EMC2?
+		That way can use WEB subaction without a problem.
+	Reduce URLs from privateVariables.ahk to just be a single base path/URL with <PARAM>s instead of beginning/end stuff.
 	Add something like VimBindings for Outlook?
 		At least j/k and ;/p would be nice.
 	Replace !v popup with hotkeys to edit clipboard via Ditto?
 		^+v, wait for ditto popup (ahk_class QPasteClass), ^e
 		In edit window (ahk_class Ditto Edit Wnd) - make saving and putting on clipboard something more obvious (^Enter or !a or both > +Esc)
+	Hotkey to send environment ID?
+		Could be useful in EpicStudio/EMC2 compare windows.
 	New selector for status items
 		Use to send exclusion strings (-item,-item, etc) to Snapper
 			Directly to field on hotkey?

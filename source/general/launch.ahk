@@ -192,8 +192,10 @@ openFolder(folderName = "") {
 		folderPath := s.selectGui()
 	
 	; Replace any special tags with real paths.
-	folderPath := StrReplace(folderPath, "<AHKROOT>", SubStr(ahkRootPath, 1, -1)) ; Assuming that global path vars have a \ on the end that we don't want.
-	folderPath := StrReplace(folderPath, "<USERROOT>", SubStr(userPath, 1, -1))
+	replaceAry := []
+	replaceAry["AHKROOT"] := SubStr(ahkRootPath, 1, -1) ; Assuming that global path vars have a \ on the end that we don't want.
+	replaceAry["USERROOT"] := SubStr(userPath, 1, -1)
+	folderPath := replaceTags(folderPath, replaceAry)
 	
 	if(folderPath && FileExist(folderPath))
 		Run, % folderPath

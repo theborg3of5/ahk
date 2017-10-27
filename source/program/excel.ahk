@@ -54,9 +54,8 @@
 		
 		Send, !at      ; Filter
 		
-		autoFixColumnWidth()
-		
 		boldFreezeHeaderRow()
+		autoFixColumnWidth()
 	return
 	
 	autoFixColumnWidth() {

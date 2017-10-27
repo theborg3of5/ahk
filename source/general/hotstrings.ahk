@@ -193,55 +193,52 @@
 		:*:.x8:: (x86)\
 		
 		:*c:auf::
-			Send, % userPath
+			Send, % userPath "\"
 		return
 		; :*c:dsf::
 			; Send, % A_Desktop "\"
 		; return
 		:*c:dlf::
-			Send, % userPath "Downloads\"
+			Send, % userPath "\Downloads\"
 		return
 		:*c:ddf::
-			Send, % userPath "Dev\"
+			Send, % userPath "\Dev\"
 		return
 		:*c:compf::
-			Send, % userPath "Dev\Compile\"
+			Send, % userPath "\Dev\Compile\"
 		return
 		:*c:dsf::
-			Send, % userPath "Design\"
+			Send, % userPath" \Design\"
 		return
 	}
 
 	{ ; AHK
-		:*c:alf::
-			Send, % ahkLibPath
-		return
 		:*c:arf::
-			Send, % ahkRootPath
+			Send, % ahkRootPath "\"
 		return
 		:*c:aconf::
-			Send, % ahkRootPath "config\"
+			Send, % ahkRootPath "\config\"
 		return
 		:*c:asf::
-			Send, % ahkRootPath "source\"
+			Send, % ahkRootPath "\source\"
 		return
 		:*c:acf::
-			Send, % ahkRootPath "source\common\"
+			Send, % ahkRootPath "\source\common\"
 		return
 		:*c:apf::
-			Send, % ahkRootPath "source\program\"
+			Send, % ahkRootPath "\source\program\"
 		return
 		:*c:agf::
-			Send, % ahkRootPath "source\general\"
+			Send, % ahkRootPath "\source\general\"
 		return
 		:*c:astf::
-			Send, % ahkRootPath "source\standalone\"
+			Send, % ahkRootPath "\source\standalone\"
 		return
 		:*c:atf::
-			Send, % ahkRootPath "test\"
+			Send, % ahkRootPath "\test\"
 		return
 		:*c:ashf::
-			Send, % ahkRootPath "share\"
+			Send, % ahkRootPath "\share\"
 		return
 	}
 
@@ -250,7 +247,7 @@
 			Send, % epicPersonalFolder
 		return
 		:*:ssf::
-			Send, % userPath "Screenshots\"
+			Send, % userPath "\Screenshots\"
 		return
 		:*c:emf::
 			Send, % epicMonthlyFolder

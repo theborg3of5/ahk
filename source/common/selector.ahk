@@ -259,8 +259,8 @@ class Selector {
 			return "Includes\" path
 		
 		; Default folder for selector INIs
-		if(FileExist(ahkRootPath "config\" path))
-			return ahkRootPath "config\" path
+		if(FileExist(ahkRootPath "\config\" path))
+			return ahkRootPath "\config\" path
 		
 		this.errPop("File doesn't exist", path)
 		return ""

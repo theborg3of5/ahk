@@ -1,26 +1,13 @@
-; Functions related to file input/output and user input.
+; Functions related to input/output and user input.
 
 global TEXT_SOURCE_PASSED   := "PASS"
 global TEXT_SOURCE_SEL_CLIP := "SELECTION/CLIPBOARD"
 global TEXT_SOURCE_TITLE    := "TITLE"
 
-; Read in a file and return it as an array.
-fileLinesToArray(fileName) {
-	lines := Object()
-	
-	Loop Read, %fileName% 
-	{
-		lines[A_Index] := A_LoopReadLine
-	}
-	
-	return lines
-}
-
 ; Get text from a control, send it to another, and focus a third.
 ControlGet_Send_Return(fromControl, toControl, retControl = "") {
 	ControlGetText, data, %fromControl%, A
-	
-	; DEBUG.popup(data, "Data from control")
+	; DEBUG.popup("Data from control", data)
 	
 	ControlSend_Return(toControl, data, retControl)
 }
@@ -30,7 +17,7 @@ ControlSend_Return(toControl, keys, retControl = "") {
 	if(!retControl) {
 		ControlGetFocus, retControl, A
 	}
-	; DEBUG.popup(toControl, "Control to send to", retControl, "Control to return to", keys, "Keys to send")
+	; DEBUG.popup("Control to send to",toControl, "Control to return to",retControl, "Keys to send",keys)
 	
 	if(toControl) {
 		ControlFocus, %toControl%
@@ -108,17 +95,6 @@ runAndReturnOutput(command, outputFile = "cmdOutput.tmp") {
 		return 0
 	} else {
 		return outputFileContents
-	}
-}
-
-; Compares two files.
-compareFiles(file1, file2) {
-	compared := runAndReturnOutput("fc " file1 " " file2)
-	; MsgBox, % file1 "`n" file2 "`n" compared
-	if(inStr(compared, "FC: no differences encountered")) {
-		return false
-	} else {
-		return true
 	}
 }
 

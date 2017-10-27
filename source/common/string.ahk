@@ -1,6 +1,6 @@
 ; String manipulation functions.
 
-; NOTE: this file needs to be in ANSI encoding, to preseve some odd characters.
+; NOTE: this file needs to be in ANSI encoding, to preserve some odd characters.
 
 global STRING_CASE_MIXED := 0
 global STRING_CASE_UPPER := 1
@@ -235,21 +235,6 @@ stripHotkeyString(hotkeyString, leaveDollarSign = 0, leaveStar = 0) {
 	} else {
 		return A_ThisHotkey
 	}
-}
-
-; Reduces a given filepath down by the number of levels given, from right to left.
-reduceFilepath(path, levelsDown) {
-	outPath := ""
-	splitPath := StrSplit(path, "\") ; Start with this exact file (commonVariables.ahk).
-	pathSize := splitPath.MaxIndex()
-	For i,p in splitPath {
-		if(i = (pathSize - levelsDown + 1))
-			Break
-		outPath .= p "\"
-	}
-	; DEBUG.popup("Split Path", splitPath, "Size", pathSize, "Final path", outPath)
-	
-	return outPath
 }
 
 ; Show a popup that takes what math on the given number.

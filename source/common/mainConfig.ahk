@@ -14,10 +14,10 @@ global MAIN_CENTRAL_SCRIPT := "MAIN_CENTRAL_SCRIPT"
 
 ; Calculate some useful paths and put them in globals.
 global ahkRootPath       := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
-global userPath          := reduceFilepath(A_Desktop, 1)
-global ahkLibPath        := A_MyDocuments "\AutoHotkey\Lib\" ; This built-in AHK variable doesn't return a \ on the end (before "AutoHotkey\") so add it.
-global configFolder      := ahkRootPath "config\"
-global localConfigFolder := configFolder "local\"
+global userPath          := reduceFilepath(A_Desktop,  1)
+global ahkLibPath        := A_MyDocuments "\AutoHotkey\Lib"
+global configFolder      := ahkRootPath "\config"
+global localConfigFolder := configFolder "\local"
 ; DEBUG.popup("Script", A_ScriptFullPath, "AHK Root", ahkRootPath, "User path", userPath, "AHK Lib", ahkLibPath, "Config folder", configFolder, "Local config folder", localConfigFolder)
 
 ; Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
@@ -125,7 +125,7 @@ class MainConfig {
 				valToWrite := value
 			}
 			
-			IniWrite, %valToWrite%, %configFolder%settings.tl, Main, %settingName%
+			IniWrite, %valToWrite%, %configFolder%\settings.tl, Main, %settingName%
 		}
 	}
 	

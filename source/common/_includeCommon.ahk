@@ -8,6 +8,7 @@
 #Include debug.ahk
 #Include debugBuilder.ahk
 #Include epic.ahk
+#Include file.ahk
 #Include gui.ahk
 #Include HTTPRequest.ahk
 #Include io.ahk
@@ -24,4 +25,4 @@
 #Include window.ahk
 #Include XInput.ahk
 
-MainConfig.init(localConfigFolder "settings.ini", configFolder "windows.tl", configFolder "programs.tl", configFolder "games.tl")
+MainConfig.init(localConfigFolder "\settings.ini", configFolder "\windows.tl", configFolder "\programs.tl", configFolder "\games.tl")

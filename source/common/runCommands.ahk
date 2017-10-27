@@ -65,7 +65,7 @@ reloadScript(script, prompt) {
 		return
 	
 	if(script = MAIN_CENTRAL_SCRIPT) {
-		Run, %ahkRootPath%source\main.ahk /restart, %ahkRootPath%source\
+		Run, %ahkRootPath%\source\main.ahk /restart, %ahkRootPath%\source\
 	} else {
 		Reload
 	}

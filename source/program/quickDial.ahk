@@ -6,7 +6,7 @@
 	
 	; Opens the phone.tl file for editing.
 	NumpadAdd::
-		Run, %  localConfigFolder "phone.tl"
+		Run, %  localConfigFolder "\phone.tl"
 	return
 #IfWinActive
 

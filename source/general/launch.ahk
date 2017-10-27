@@ -178,25 +178,3 @@ return
 
 ; Folder List - Open
 ^+!w::openFolder()
-
-; Query this machine's folders TL file (prompt the user if nothing given) and open it.
-openFolder(folderName = "") {
-	global configFolder
-	
-	filter := MainConfig.getMachineTableListFilter()
-	s := new Selector("folders.tl", "", filter)
-	
-	if(folderName)
-		folderPath := s.selectChoice(folderName)
-	else
-		folderPath := s.selectGui()
-	
-	; Replace any special tags with real paths.
-	replaceAry := []
-	replaceAry["AHKROOT"] := SubStr(ahkRootPath, 1, -1) ; Assuming that global path vars have a \ on the end that we don't want.
-	replaceAry["USERROOT"] := SubStr(userPath, 1, -1)
-	folderPath := replaceTags(folderPath, replaceAry)
-	
-	if(folderPath && FileExist(folderPath))
-		Run, % folderPath
-}

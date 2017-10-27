@@ -7,9 +7,6 @@
 	Add grepWin'ing AHK source folder to search selector.
 	Add something like VimBindings for Outlook?
 		At least j/k and ;/p would be nice.
-	Replace !v popup with hotkeys to edit clipboard via Ditto?
-		^+v, wait for ditto popup (ahk_class QPasteClass), ^e
-		In edit window (ahk_class Ditto Edit Wnd) - make saving and putting on clipboard something more obvious (^Enter or !a or both > +Esc)
 	Hotkey to send environment ID?
 		Could be useful in EpicStudio/EMC2 compare windows.
 	New selector for status items

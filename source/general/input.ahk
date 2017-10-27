@@ -34,13 +34,6 @@ return
 	return
 #If
 
-; Clipboard typing - gives an easy place to type things that will then stick them on the clipboard if submitted.
-$!v::
-	InputBox, outVar, Edit Clipboard, , , , , , , , , %clipboard%
-	if(!ErrorLevel)
-		clipboard := outVar
-return
-
 ^!v::
 	SendRaw, % clipboard
 return

@@ -4,3 +4,19 @@
 		Send, {AppsKey}o
 	return
 #IfWinActive
+
+#IfWinActive, ahk_class Ditto Edit Wnd
+	; Better hotkey to save clip and put it on the clipboard.
+	^s::
+	+Enter::
+	^Enter::
+		Send, +{Escape}
+	return
+#IfWinActive
+
+; Edit the clipboard using Ditto.
+$!v::
+	Send, ^+v
+	WinWaitActive, ahk_class QPasteClass
+	Send, ^e
+return

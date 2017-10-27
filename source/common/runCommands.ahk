@@ -166,3 +166,12 @@ ShellRun(prms*)
         ObjRelease(ptlb)
     }
 }
+
+searchWithGrepWin(pathToSearch, textToSearch = "") {
+	runPath := MainConfig.getProgram("grepWin", "PATH") " /regex:no /content"
+	runPath .= " /searchpath:""" pathToSearch " """ ; Extra space after path, otherwise trailing backslash escapes ending double quote
+	if(textToSearch)
+		runPath .= "/searchfor:""" textToSearch """ /execute" ; Run it immediately if we got what to search for
+	
+	Run, % runPath
+}

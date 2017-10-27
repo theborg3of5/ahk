@@ -104,6 +104,8 @@ return
 			url := buildEpicWikiSearchURL(subTypes[0], criteria[1])
 		else if(searchType = "WEB")
 			url := StrReplace(subTypes[0], "%s", criteria[1])
+		else if(searchType = "GREPWIN")
+			searchWithGrepWin(type, criteria[1])
 		
 		if(url)
 			Run, % url

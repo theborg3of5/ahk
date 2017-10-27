@@ -29,6 +29,7 @@
 	ProcessExplorer	-				PROCEXPL														Process Explorer\procexp.exe									-									EPIC_LAPTOP
 	ProcessExplorer	-				PROCEXPL														ProcessExplorer\procexp.exe									-									
 	OneNote				-				Framework::CFrame											Microsoft Office 15\root\office15\ONENOTE.EXE			-									HOME_ASUS
+	grepWin				-				-																grepWin\grepWin.exe
 []
 
 [{PATH}b:C:\Users\gborg\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\]

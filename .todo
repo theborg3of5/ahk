@@ -4,6 +4,8 @@
 	Fix monitor fixer script or get rid of it entirely.
 	Ditch short shortcut names for "AHK Root" and other meta ones, use hiding behavior instead.
 	Fix selector hiding behavior (* char)
+	Figure out why we need settings array in MainConfig.loadWindows()
+		Remove if not needed, comment why if needed.
 	
 # New ideas
 	Add grepWin'ing AHK source folder to search selector.

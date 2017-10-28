@@ -63,10 +63,10 @@ return
 #!r::doSelect("resize.tl")
 
 ; Folders
-!+a::openFolder("ahkRoot")
-!+m::openFolder("music")
-!+x::openFolder("ahkConfig")
-!+d::openFolder("downloads")
+!+a::openFolder("AHK_ROOT")
+!+m::openFolder("MUSIC")
+!+x::openFolder("AHK_CONFIG")
+!+d::openFolder("DOWNLOADS")
 
 ; TrueCrypt
 #IfWinNotExist, ahk_class CustomDlg

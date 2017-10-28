@@ -1,13 +1,13 @@
 @PlaceholderChar=-
 +DefaultReturnColumn=PATH
 
-(	NAME						ABBREV			PATH																														MACHINE			TAG
+(	NAME						ABBREV			PATH																														MACHINE
 
 	# General
-	Downloads				dl|downloads	<USER_ROOT>\Downloads\																								
+	Downloads				dl|DOWNLOADS	<USER_ROOT>\Downloads\																								
 	Shortcuts				sc					<USER_ROOT>\Shortcuts\																								EPIC_LAPTOP
-	Music						mu|music			<USER_ROOT>\Music\																									HOME_DESKTOP|HOME_ASUS
-	Music						mu|music			D:\Music\																												EPIC_LAPTOP
+	Music						mu|MUSIC			<USER_ROOT>\Music\																									HOME_DESKTOP|HOME_ASUS
+	Music						mu|MUSIC			D:\Music\																												EPIC_LAPTOP
 	Public					pub				F:\Personal\gborg\Public\																							EPIC_LAPTOP
 	QuickRef					qr					<USER_ROOT>\QuickRef\																								EPIC_LAPTOP
 	
@@ -24,8 +24,8 @@
 	NFS 3 Day				n3					\\epic-nfs\nfs_3day\gborg\																							EPIC_LAPTOP
 	NFS Ask					na					\\epic-nfs\nfs_ask\gborg\																							EPIC_LAPTOP
 	
-	# Tag-Only (GDB TODO - hide these and ditch short shortcuts)
-	Config					ac|ahkConfig	<AHK_ROOT>\config\																									-					AHK_CONFIG
-	Source					as|ahkSource	<AHK_ROOT>\source\																									-					AHK_SOURCE
-	User Root				ur|userRoot		<USER_ROOT>\																											-					USER_ROOT
-	AHK Root					ar|ahkRoot		<AHK_ROOT>\																												-					AHK_ROOT
+	# For code use (GDB TODO - hide these and ditch short shortcuts)
+	User Root				USER_ROOT		<USER_ROOT>\
+	AHK Root					AHK_ROOT			<AHK_ROOT>\
+	AHK Config				AHK_CONFIG		<AHK_ROOT>\config\
+	AHK Source				AHK_SOURCE		<AHK_ROOT>\source\

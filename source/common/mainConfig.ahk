@@ -15,10 +15,9 @@ global MAIN_CENTRAL_SCRIPT := "MAIN_CENTRAL_SCRIPT"
 ; Calculate some useful paths and put them in globals.
 global ahkRootPath       := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
 global userPath          := reduceFilepath(A_Desktop,  1)
-global ahkLibPath        := A_MyDocuments "\AutoHotkey\Lib"
 global configFolder      := ahkRootPath "\config"
 global localConfigFolder := configFolder "\local"
-; DEBUG.popup("Script", A_ScriptFullPath, "AHK Root", ahkRootPath, "User path", userPath, "AHK Lib", ahkLibPath, "Config folder", configFolder, "Local config folder", localConfigFolder)
+; DEBUG.popup("Script", A_ScriptFullPath, "AHK Root", ahkRootPath, "User path", userPath, "Config folder", configFolder, "Local config folder", localConfigFolder)
 
 ; Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
 class MainConfig {
@@ -26,14 +25,20 @@ class MainConfig {
 	static defaultSettings := {"VIM_CLOSE_KEY":"F9"}
 	static settings := []
 	static windows  := []
+	static folders  := [] ; abbrev => path
 	static programs := []
 	static games    := []
 	
-	init(settingsFile, windowsFile, programsFile, gamesFile) {
+	init(settingsFile, windowsFile, foldersFile, programsFile, gamesFile) {
 		this.loadSettings(settingsFile)
 		this.loadWindows(windowsFile)
+		this.folders  := this.loadFolders(foldersFile)
 		this.loadPrograms(programsFile)
 		this.loadGames(gamesFile)
+		; this.settings := this.loadSettings(settingsFile) ; GDB TODO - switch to this style to reduce this.* references in load* functions
+		; this.windows  := this.loadWindows(windowsFile)
+		; this.programs := this.loadPrograms(programsFile)
+		; this.games    := this.loadGames(gamesFile)
 		
 		; DEBUG.popup("MainConfig", "End of init", "Settings", this.settings, "Window settings", this.windows, "Program info", this.programs)
 	}
@@ -43,7 +48,7 @@ class MainConfig {
 		this.loadSetting(filePath, "MENU_KEY_ACTION")    ; What to do with the menu key, from MENU_KEY_ACTION_* constants
 		this.loadSetting(filePath, "VIM_CLOSE_KEY")      ; Which keys should close tabs via vimBindings (generally F-keys).
 		
-		; DEBUG.popup("Script", A_ScriptFullPath, "AHK Root", ahkRootPath, "User path", userPath, "AHK Lib", ahkLibPath, "Main file path", filePath, "Settings", this.settings)
+		; DEBUG.popup("Script", A_ScriptFullPath, "AHK Root", ahkRootPath, "User path", userPath, "Main file path", filePath, "Settings", this.settings)
 	}
 	loadSetting(filePath, configName) {
 		IniRead, value, %filePath%, Main, %configName%
@@ -71,6 +76,32 @@ class MainConfig {
 		this.windows := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
 	}
 	
+	loadFolders(filePath) {
+		global ahkRootPath,userPath
+		
+		; Tags that can be used in folders.tl
+		systemTags := []
+		systemTags["AHK_ROOT"]  := ahkRootPath
+		systemTags["USER_ROOT"] := userPath
+		
+		tl := new TableList(filePath)
+		folderTable := tl.getFilteredTableUnique("NAME", "MACHINE", MainConfig.getMachine())
+		
+		; Build abbrev-indexed array of entries.
+		folderPaths := []
+		For i,folder in folderTable {
+			abbrevAry := forceArray(folder["ABBREV"])
+			For j,abbrev in abbrevAry { ; Handle having multiple abbrevs defined (with | syntax)
+				if(!abbrev) ; Ignore folders with no shortcuts, mostly headers and Selector settings.
+					Continue
+				
+				folderPaths[abbrev] := replaceTags(folder["PATH"], systemTags)
+			}
+		}
+		
+		return folderPaths
+	}
+	
 	loadPrograms(filePath) {
 		settings := []
 		settings["CHARS"] := []
@@ -82,13 +113,9 @@ class MainConfig {
 		; Index it by name and machine.
 		For i,pAry in uniquePrograms {
 			name    := pAry["NAME"]    ; Identifying name of this entry (which this.programs will be indexed by)
-			machine := pAry["MACHINE"] ; Which machine this is specific to
 			
 			if(!IsObject(this.programs[name])) ; Initialize the array.
 				this.programs[name] := []
-			
-			if(!machine) ; No machine means it's for all of them, or at least the default.
-				machine := "ALL"
 			
 			this.programs[name] := pAry
 		}
@@ -150,6 +177,15 @@ class MainConfig {
 		}
 		
 		return retWindow
+	}
+	
+	getFolder(abbrev) {
+		if(!abbrev)
+			return ""
+		return this.folders[abbrev]
+	}
+	replacePathTags(inputPath) {
+		return replaceTags(inputPath, this.folders)
 	}
 	
 	; Subscripts available (only set if set in file):

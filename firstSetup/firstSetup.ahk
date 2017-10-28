@@ -23,14 +23,14 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 ; Various paths needed throughout.
 ahkCompilePath := reduceFilePath(A_AhkPath, 1) "Compiler\Ahk2Exe.exe"
-rootPath       := reduceFilepath(A_ScriptDir, 1)
+ahkRootPath    := reduceFilepath(A_ScriptDir, 1)
 userPath       := reduceFilepath(A_Desktop, 1)
 tlSetupPath    := "setup.tl"
-startupFolder  := rootPath "source\"
+startupFolder  := ahkRootPath "source\"
 mainAHKPath    := startupFolder "main.ahk"
 
 tagsToReplace := []
-tagsToReplace["ROOT"]                  := rootPath
+tagsToReplace["ROOT"]                  := ahkRootPath
 tagsToReplace["WHICH_MACHINE"]         := ""
 tagsToReplace["VIM_CLOSE_KEY"]         := ""
 tagsToReplace["MENU_KEY_ACTION"]       := ""
@@ -38,8 +38,8 @@ tagsToReplace["EDGE_OFFSET"]           := ""
 
 copyPaths := []
 copyPaths["autoInclude.ahk.master"] := userPath "Documents\AutoHotkey\Lib\autoInclude.ahk"
-copyPaths["settings.ini.master"]    := rootPath "config\local\settings.ini"
-copyPaths["test.ahk.master"]        := rootPath "test\test.ahk"
+copyPaths["settings.ini.master"]    := ahkRootPath "config\local\settings.ini"
+copyPaths["test.ahk.master"]        := ahkRootPath "test\test.ahk"
 
 gitNames := []
 gitNames.Push(".git")
@@ -92,7 +92,7 @@ For from,to in copyPaths {
 
 ; Hide all .git system files and folders, for a cleaner appearance.
 For i,n in gitNames {
-	Loop, Files, %rootPath%*%n%, RDF
+	Loop, Files, %ahkRootPath%*%n%, RDF
 	{
 		FileSetAttrib, +H, %A_LoopFileFullPath%
 	}

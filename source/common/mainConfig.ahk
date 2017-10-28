@@ -30,50 +30,43 @@ class MainConfig {
 	static games    := []
 	
 	init(settingsFile, windowsFile, foldersFile, programsFile, gamesFile) {
-		this.loadSettings(settingsFile)
-		this.loadWindows(windowsFile)
+		this.settings := this.loadSettings(settingsFile)
+		this.windows  := this.loadWindows(windowsFile)
 		this.folders  := this.loadFolders(foldersFile)
-		this.loadPrograms(programsFile)
-		this.loadGames(gamesFile)
-		; this.settings := this.loadSettings(settingsFile) ; GDB TODO - switch to this style to reduce this.* references in load* functions
-		; this.windows  := this.loadWindows(windowsFile)
-		; this.programs := this.loadPrograms(programsFile)
-		; this.games    := this.loadGames(gamesFile)
+		this.programs := this.loadPrograms(programsFile)
+		this.games    := this.loadGames(gamesFile)
 		
 		; DEBUG.popup("MainConfig", "End of init", "Settings", this.settings, "Window settings", this.windows, "Program info", this.programs)
 	}
 	
 	loadSettings(filePath) {
-		this.loadSetting(filePath, "MACHINE")            ; Which machine this is, from MACHINE_* constants
-		this.loadSetting(filePath, "MENU_KEY_ACTION")    ; What to do with the menu key, from MENU_KEY_ACTION_* constants
-		this.loadSetting(filePath, "VIM_CLOSE_KEY")      ; Which keys should close tabs via vimBindings (generally F-keys).
+		settingsAry := []
+		settingsAry["MACHINE"]         := this.loadSettingFromFile(filePath, "MACHINE")         ; Which machine this is, from MACHINE_* constants
+		settingsAry["MENU_KEY_ACTION"] := this.loadSettingFromFile(filePath, "MENU_KEY_ACTION") ; What to do with the menu key, from MENU_KEY_ACTION_* constants
+		settingsAry["VIM_CLOSE_KEY"]   := this.loadSettingFromFile(filePath, "VIM_CLOSE_KEY")   ; Which keys should close tabs via vimBindings (generally F-keys).
 		
-		; DEBUG.popup("Script", A_ScriptFullPath, "AHK Root", ahkRootPath, "User path", userPath, "Main file path", filePath, "Settings", this.settings)
+		; DEBUG.popup("Settings", settingsAry)
+		return settingsAry
 	}
-	loadSetting(filePath, configName) {
+	loadSettingFromFile(filePath, configName) {
 		IniRead, value, %filePath%, Main, %configName%
 		; DEBUG.popup("Filepath", filePath, "Config name", configName, "Value", value)
-	
+		
 		; Multi-entry value, put into an array.
-		if(stringContains(value, this.multiDelim)) {
-			this.settings[configName] := StrSplit(value, this.multiDelim)
+		if(stringContains(value, this.multiDelim))
+			return StrSplit(value, this.multiDelim)
 		
 		; Single value, use it as-is.
-		} else if(value) {
-			this.settings[configName] := value
+		else if(value)
+			return value
 		
 		; Empty value, use default.
-		} else {
-			this.settings[configName] := this.defaultSettings[configName]
-		}
+		return this.defaultSettings[configName]
 	}
 	
 	loadWindows(filePath) {
-		settings := []
-		settings["CHARS"] := []
-		
-		tl := new TableList(filePath, settings)
-		this.windows := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
+		tl := new TableList(filePath)
+		return tl.getFilteredTable("MACHINE", MainConfig.getMachine())
 	}
 	
 	loadFolders(filePath) {
@@ -103,28 +96,28 @@ class MainConfig {
 	}
 	
 	loadPrograms(filePath) {
-		settings := []
-		settings["CHARS"] := []
-		settings["CHARS", "ESCAPE"] := "" ; No escape char, to let single backslashes through.
-		tl := new TableList(filePath, settings)
+		tl := new TableList(filePath)
 		uniquePrograms := tl.getFilteredTableUnique("NAME", "MACHINE", this.getMachine())
 		; DEBUG.popup("MainConfig", "loadPrograms", "Unique table", uniquePrograms)
 		
 		; Index it by name and machine.
+		programsAry := []
 		For i,pAry in uniquePrograms {
 			name    := pAry["NAME"]    ; Identifying name of this entry (which this.programs will be indexed by)
 			
-			if(!IsObject(this.programs[name])) ; Initialize the array.
-				this.programs[name] := []
+			if(!IsObject(programsAry[name])) ; Initialize the array.
+				programsAry[name] := []
 			
-			this.programs[name] := pAry
+			programsAry[name] := pAry
 		}
-		; DEBUG.popup("MainConfig", "loadPrograms", "Finished programs", this.programs)
+		; DEBUG.popup("MainConfig", "loadPrograms", "Finished programs", programsAry)
+		
+		return programsAry
 	}
 	
 	loadGames(filePath) {
 		tl := new TableList(filePath)
-		this.games := tl.getTable()
+		return tl.getTable()
 	}
 	
 	

@@ -2,15 +2,12 @@
 	Seems like standalone scripts reload once on their own, then are restarted again by main script - should either have them not restart, or don't need main script to reload them too.
 	Make server routine stuff work again (or ditch it entirely, or make only the web link work) for ActionObject.
 	Fix monitor fixer script or get rid of it entirely.
-	Ditch short shortcut names for "AHK Root" and other meta ones, use hiding behavior instead.
-	Fix selector hiding behavior (* char)
+	Fix selector hiding behavior (* char) and use in code entries of folders.tl
 	Figure out why we need settings array in MainConfig.loadWindows()
 		Remove if not needed, comment why if needed.
+	Replace other references to configFolder, ahkRootFolder, userFolder, etc. with calls to MainConfig.getFolder().
 	
 # New ideas
-	Add grepWin'ing AHK source folder to search selector.
-		Now functional.
-		Next: Move some logic to MainConfig?
 	Add something like VimBindings for Outlook?
 		At least j/k and ;/p would be nice.
 	Hotkey to send environment ID?

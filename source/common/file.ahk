@@ -60,4 +60,30 @@ openFolder(folderName = "") {
 		Run, % folderPath
 }
 
+searchWithGrepWin(pathToSearch, textToSearch = "") {
+	runPath := MainConfig.getProgram("grepWin", "PATH") " /regex:no"
+	
+	; runPath := replaceTags
+	runPath .= " /searchpath:""" pathToSearch " """ ; Extra space after path, otherwise trailing backslash escapes ending double quote
+	
+	if(textToSearch)
+		runPath .= "/searchfor:""" textToSearch """ /execute" ; Run it immediately if we got what to search for
+	
+	Run, % runPath
+}
 
+replacePathTags(path) {
+	global configFolder
+	newPath := path
+	
+	settings["CHARS"] := []
+	settings["CHARS", "IGNORE"] := ["=", "#", "+"]
+	tl := new TableList(configFolder "\folders.tl", settings)
+	filteredTable := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
+	
+	; GDB TODO some sort of pre-processing ot get calculated paths (<USER_ROOT>, <AHK_ROOT>) replaced
+	
+	For i,folder in filteredTable {
+		newPath := replaceTags(newPath, {folder["TAG"]:}) ; GDB todo figure out how associative arrays work with variable indices
+	}
+}

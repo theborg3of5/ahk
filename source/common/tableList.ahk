@@ -17,13 +17,10 @@
 					PlaceholderChar - the placeholder character to use
 				Note that if any of these conflict with the settings passed programmatically, the programmatic settings win.
 			
-			# - Pass
-				Any row that begins with one of these characters will not be broken up into multiple pieces, but will be a single-element array in the final output.
-				Override with settings["CHARS", "PASS"].
-			
-			; - Comment
-				If at the beginning of a line (ignoring any whitespace before that), the line is ignored and not added to the array of lines.
-				Override with settings["CHARS", "COMMENT"].
+			; - Ignore[]
+				If any of these characters are at the beginning of a line (ignoring any whitespace before that), the line is ignored and not added 
+				to the array of lines.
+				Override with settings["CHARS", "IGNORE"].
 			
 			( - Model
 				You can have each line use string indices per value by creating a row that begins with this character. You can tab-separate this line to visually line up with your rows.
@@ -32,6 +29,10 @@
 			[ - Mod
 				A line which begins with this character will be processed as a mod (see mod section below for details).
 		
+			(no default) - Pass[]
+				Any row that begins with one of these characters will not be broken up into multiple pieces, but will be a single-element array in the final output.
+				Override with settings["CHARS", "PASS"].
+			
 		Within a "normal" row (not started with any of the special characters above):
 			<No default> - Placeholder
 				Having this allows you to have a truly empty value for a column in a given row (useful when optional columns are in the middle).
@@ -237,26 +238,6 @@ class TableList {
 		return filteredTable
 	}
 	
-	; If a filter is given, exclude any rows that don't fit.
-	shouldExcludeItem(currRow, column, allowedValue = "", excludeBlanks = false) {
-		if(!column)
-			return false
-		
-		valueToCompare := currRow[column]
-		
-		if(!excludeBlanks && !valueToCompare)
-			return false
-		
-		if(valueToCompare = allowedValue)
-			return false
-		
-		; Array case - multiple values in filter column.
-		if(IsObject(valueToCompare) && contains(valueToCompare, allowedValue))
-			return false
-		
-		return true
-	}
-	
 	
 	; ==============================
 	; == Private ===================
@@ -277,10 +258,10 @@ class TableList {
 		chars["WHITESPACE"] := [ A_Space, A_Tab ]
 		
 		chars["MODSTART"] := "["
-		chars["COMMENT"]  := ";"
+		chars["IGNORE"]   := [";"]
 		chars["MODEL"]    := "("
-		chars["PASS"]     := ["#"] ; This one supports multiple entries
 		chars["SETTING"]  := "@"
+		chars["PASS"]     := [] ; This one supports multiple entries
 		
 		chars["PLACEHOLDER"] := "" ; No default
 		chars["MULTIENTRY"]  := "|"
@@ -309,7 +290,7 @@ class TableList {
 			rowBits := StrSplit(row, delim)
 			firstChar := SubStr(row, 1, 1)
 			
-			if(firstChar = this.chars["COMMENT"] || firstChar = "") {
+			if(contains(this.chars["IGNORE"], firstChar) || firstChar = "") {
 				; Ignore - it's either empty or a comment row.
 			} else if(firstChar = this.chars["SETTING"]) {
 				this.processSetting(SubStr(row, 2)) ; Strip off the @ at the beginning
@@ -481,6 +462,26 @@ class TableList {
 		}
 		
 		return rowBits
+	}
+	
+	; If a filter is given, exclude any rows that don't fit.
+	shouldExcludeItem(currRow, column, allowedValue = "", excludeBlanks = false) {
+		if(!column)
+			return false
+		
+		valueToCompare := currRow[column]
+		
+		if(!excludeBlanks && !valueToCompare)
+			return false
+		
+		if(valueToCompare = allowedValue)
+			return false
+		
+		; Array case - multiple values in filter column.
+		if(IsObject(valueToCompare) && contains(valueToCompare, allowedValue))
+			return false
+		
+		return true
 	}
 	
 	; Debug info

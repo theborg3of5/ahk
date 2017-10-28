@@ -208,7 +208,7 @@
 			Send, % userPath "\Dev\Compile\"
 		return
 		:*c:dsf::
-			Send, % userPath" \Design\"
+			Send, % userPath "\Design\"
 		return
 	}
 

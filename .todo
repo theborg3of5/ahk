@@ -7,9 +7,8 @@
 	
 # New ideas
 	Add grepWin'ing AHK source folder to search selector.
-		Temp in place: hard-coded folder that will only work for work laptop.
-		Next: Create a generic path-processor that replaces named tags
-			Tags should be either shortcuts or additional column in folders.tl.
+		Now functional.
+		Next: Move some logic to MainConfig?
 	Add something like VimBindings for Outlook?
 		At least j/k and ;/p would be nice.
 	Hotkey to send environment ID?

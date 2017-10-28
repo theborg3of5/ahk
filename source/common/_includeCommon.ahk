@@ -25,4 +25,6 @@
 #Include window.ahk
 #Include XInput.ahk
 
-MainConfig.init(localConfigFolder "\settings.ini", configFolder "\windows.tl", configFolder "\folders.tl", configFolder "\programs.tl", configFolder "\games.tl")
+ahkRootPath := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
+configFolder := ahkRootPath "\config"
+MainConfig.init(configFolder "\local\settings.ini", configFolder "\windows.tl", configFolder "\folders.tl", configFolder "\programs.tl", configFolder "\games.tl")

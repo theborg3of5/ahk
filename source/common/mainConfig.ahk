@@ -12,13 +12,6 @@ global MENUKEYACTION_WindowsKey  := "WINDOWS_KEY"
 
 global MAIN_CENTRAL_SCRIPT := "MAIN_CENTRAL_SCRIPT"
 
-; Calculate some useful paths and put them in globals.
-global ahkRootPath       := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
-global userPath          := reduceFilepath(A_Desktop,  1)
-global configFolder      := ahkRootPath "\config"
-global localConfigFolder := configFolder "\local"
-; DEBUG.popup("Script", A_ScriptFullPath, "AHK Root", ahkRootPath, "User path", userPath, "Config folder", configFolder, "Local config folder", localConfigFolder)
-
 ; Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
 class MainConfig {
 	static multiDelim := "|"
@@ -70,12 +63,10 @@ class MainConfig {
 	}
 	
 	loadFolders(filePath) {
-		global ahkRootPath,userPath
-		
 		; Tags that can be used in folders.tl
 		systemTags := []
-		systemTags["AHK_ROOT"]  := ahkRootPath
-		systemTags["USER_ROOT"] := userPath
+		systemTags["AHK_ROOT"]  := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
+		systemTags["USER_ROOT"] := reduceFilepath(A_Desktop,  1)
 		
 		tl := new TableList(filePath)
 		folderTable := tl.getFilteredTableUnique("NAME", "MACHINE", MainConfig.getMachine())

@@ -193,52 +193,52 @@
 		:*:.x8:: (x86)\
 		
 		:*c:auf::
-			Send, % userPath "\"
+			Send, % MainConfig.getFolder("USER_ROOT") "\"
 		return
 		; :*c:dsf::
 			; Send, % A_Desktop "\"
 		; return
 		:*c:dlf::
-			Send, % userPath "\Downloads\"
+			Send, % MainConfig.getFolder("USER_ROOT") "\Downloads\"
 		return
 		:*c:ddf::
-			Send, % userPath "\Dev\"
+			Send, % MainConfig.getFolder("USER_ROOT") "\Dev\"
 		return
 		:*c:compf::
-			Send, % userPath "\Dev\Compile\"
+			Send, % MainConfig.getFolder("USER_ROOT") "\Dev\Compile\"
 		return
 		:*c:dsf::
-			Send, % userPath "\Design\"
+			Send, % MainConfig.getFolder("USER_ROOT") "\Design\"
 		return
 	}
 
 	{ ; AHK
 		:*c:arf::
-			Send, % ahkRootPath "\"
+			Send, % MainConfig.getFolder("AHK_ROOT") "\"
 		return
 		:*c:aconf::
-			Send, % ahkRootPath "\config\"
+			Send, % MainConfig.getFolder("AHK_ROOT") "\config\"
 		return
 		:*c:asf::
-			Send, % ahkRootPath "\source\"
+			Send, % MainConfig.getFolder("AHK_ROOT") "\source\"
 		return
 		:*c:acf::
-			Send, % ahkRootPath "\source\common\"
+			Send, % MainConfig.getFolder("AHK_ROOT") "\source\common\"
 		return
 		:*c:apf::
-			Send, % ahkRootPath "\source\program\"
+			Send, % MainConfig.getFolder("AHK_ROOT") "\source\program\"
 		return
 		:*c:agf::
-			Send, % ahkRootPath "\source\general\"
+			Send, % MainConfig.getFolder("AHK_ROOT") "\source\general\"
 		return
 		:*c:astf::
-			Send, % ahkRootPath "\source\standalone\"
+			Send, % MainConfig.getFolder("AHK_ROOT") "\source\standalone\"
 		return
 		:*c:atf::
-			Send, % ahkRootPath "\test\"
+			Send, % MainConfig.getFolder("AHK_ROOT") "\test\"
 		return
 		:*c:ashf::
-			Send, % ahkRootPath "\share\"
+			Send, % MainConfig.getFolder("AHK_ROOT") "\share\"
 		return
 	}
 
@@ -247,7 +247,7 @@
 			Send, % epicPersonalFolder
 		return
 		:*:ssf::
-			Send, % userPath "\Screenshots\"
+			Send, % MainConfig.getFolder("USER_ROOT") "\Screenshots\"
 		return
 		:*c:emf::
 			Send, % epicMonthlyFolder

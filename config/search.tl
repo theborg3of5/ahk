@@ -26,11 +26,15 @@
 		Guru					gu				-																	GURU
 		DBC Wiki				d				dbc																WIKI
 [-1]
-	
-		# General
-		Google				g				https://www.google.com/search?q=%s						WEB
-		Youtube				yt				https://www.youtube.com/results?search_query=%s		WEB
-		AutoHotkey Docs	ahk			https://cse.google.com/cse?cx=010629462602499112316:ywoq_rufgic&q=menu#gsc.tab=0&gsc.q=%s&gsc.sort=&gsc.page=1&gsc.ref=more%3Adocumentation	WEB
 
+[+3|{SEARCH_TYPE}r:WEB]
+		# Web
+		; (SUBTYPE = URL)
+		Google				g				https://www.google.com/search?q=%s
+		Youtube				yt				https://www.youtube.com/results?search_query=%s
+		AutoHotkey Docs	ahk			https://cse.google.com/cse?cx=010629462602499112316:ywoq_rufgic&q=menu#gsc.tab=0&gsc.q=%s&gsc.sort=&gsc.page=1&gsc.ref=more%3Adocumentation
+[-3]
+		
 		# GrepWin
-		AHK Source			ahks			<AHK_ROOT>														GREPWIN
+		; (SUBTYPE = folder)
+		AHK Source			ahkf			<AHK_SOURCE>													GREPWIN

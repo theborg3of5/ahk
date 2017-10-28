@@ -2,7 +2,7 @@
 	Seems like standalone scripts reload once on their own, then are restarted again by main script - should either have them not restart, or don't need main script to reload them too.
 	Make server routine stuff work again (or ditch it entirely, or make only the web link work) for ActionObject.
 	Fix monitor fixer script or get rid of it entirely.
-	Ditch short shortcut names for "AHK Root" and other, use hiding behavior instead.
+	Ditch short shortcut names for "AHK Root" and other meta ones, use hiding behavior instead.
 	Fix selector hiding behavior (* char)
 	
 # New ideas

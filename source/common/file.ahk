@@ -53,37 +53,53 @@ openFolder(folderName = "") {
 	else
 		folderPath := s.selectGui()
 	
-	; Replace any special tags with real paths.
-	folderPath := replaceTags(folderPath, {"AHK_ROOT":ahkRootPath, "USER_ROOT":userPath})
+	folderPath := replaceSystemTags(folderPath)
 	
 	if(folderPath && FileExist(folderPath))
 		Run, % folderPath
 }
 
+replacePathTags(path) { ; GDB TODO move to MainConfig.
+	global configFolder
+	
+	tl := new TableList(configFolder "\folders.tl")
+	folderTable := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
+	
+	; Build tag-indexed array of paths.
+	folderPaths := []
+	For i,folder in folderTable {
+		tag := folder["TAG"]
+		if(!tag) ; We only care about folders with defined tags. Also filters out headers and Selector settings.
+			Continue
+		
+		folderPaths[tag] := replaceSystemTags(folder["PATH"])
+	}
+	
+	; Replace tags in the input path
+	return replaceTags(path, folderPaths)
+}
+
+replaceSystemTags(path) { ; GDB TODO move to MainConfig?
+	global ahkRootPath,userPath
+	
+	; Tags pre-defined by MainConfig
+	replaceAry := []
+	replaceAry["AHK_ROOT"]  := ahkRootPath
+	replaceAry["USER_ROOT"] := userPath
+	
+	; Replace any special tags with real paths.
+	return replaceTags(path, replaceAry)
+}
+
 searchWithGrepWin(pathToSearch, textToSearch = "") {
 	runPath := MainConfig.getProgram("grepWin", "PATH") " /regex:no"
 	
-	; runPath := replaceTags
-	runPath .= " /searchpath:""" pathToSearch " """ ; Extra space after path, otherwise trailing backslash escapes ending double quote
+	convertedPath := replacePathTags(pathToSearch)
+	runPath .= " /searchpath:""" convertedPath " """ ; Extra space after path, otherwise trailing backslash escapes ending double quote
 	
 	if(textToSearch)
 		runPath .= "/searchfor:""" textToSearch """ /execute" ; Run it immediately if we got what to search for
 	
+	; DEBUG.popup("Path to search",pathToSearch, "Converted path",convertedPath, "To search",textToSearch, "Run path",runPath)
 	Run, % runPath
-}
-
-replacePathTags(path) {
-	global configFolder
-	newPath := path
-	
-	settings["CHARS"] := []
-	settings["CHARS", "IGNORE"] := ["=", "#", "+"]
-	tl := new TableList(configFolder "\folders.tl", settings)
-	filteredTable := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
-	
-	; GDB TODO some sort of pre-processing ot get calculated paths (<USER_ROOT>, <AHK_ROOT>) replaced
-	
-	For i,folder in filteredTable {
-		newPath := replaceTags(newPath, {folder["TAG"]:}) ; GDB todo figure out how associative arrays work with variable indices
-	}
 }

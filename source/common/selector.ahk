@@ -300,7 +300,10 @@ class Selector {
 		For i,currItem in list {
 			; Parse this size-n array into a new SelectorRow object.
 			currRow := new SelectorRow(currItem)
-			firstChar := SubStr(currItem[1], 1, 1) ; Only really populated for the non-normal rows.
+			if(currItem["NAME"])
+				firstChar := SubStr(currItem["NAME"], 1, 1)
+			else
+				firstChar := SubStr(currItem[1], 1, 1) ; Only really populated for the non-normal rows.
 			; DEBUG.popup("Curr Row", currRow, "First Char", firstChar)
 			
 			; Popup title.

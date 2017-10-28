@@ -24,8 +24,8 @@
 	NFS 3 Day				n3					\\epic-nfs\nfs_3day\gborg\																							EPIC_LAPTOP
 	NFS Ask					na					\\epic-nfs\nfs_ask\gborg\																							EPIC_LAPTOP
 	
-	# For code use (GDB TODO - hide these and ditch short shortcuts)
-	User Root				USER_ROOT		<USER_ROOT>\
-	AHK Root					AHK_ROOT			<AHK_ROOT>\
-	AHK Config				AHK_CONFIG		<AHK_ROOT>\config\
-	AHK Source				AHK_SOURCE		<AHK_ROOT>\source\
+	# For code use
+	*User Root				USER_ROOT		<USER_ROOT>\
+	*AHK Root					AHK_ROOT			<AHK_ROOT>\
+	*AHK Config				AHK_CONFIG		<AHK_ROOT>\config\
+	*AHK Source				AHK_SOURCE		<AHK_ROOT>\source\

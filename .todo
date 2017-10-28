@@ -3,8 +3,6 @@
 	Make server routine stuff work again (or ditch it entirely, or make only the web link work) for ActionObject.
 	Fix monitor fixer script or get rid of it entirely.
 	Fix selector hiding behavior (* char) and use in code entries of folders.tl
-	Figure out why we need settings array in MainConfig.loadWindows()
-		Remove if not needed, comment why if needed.
 	Replace other references to configFolder, ahkRootFolder, userFolder, etc. with calls to MainConfig.getFolder().
 	
 # New ideas

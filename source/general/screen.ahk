@@ -42,9 +42,9 @@ F1::
 	; DEBUG.popup("Class", currClass, "Title", currTitle, "Control", currControl, "Tooltip text", tooltipText)
 	
 	rows.Insert(new SelectorRow("", "Class",   "c", currClass,   true))
-	rows.Insert(new SelectorRow("", "Title",   "t", currTitle,   true))
+	rows.Insert(new SelectorRow("", "Tooltip", "t", tooltipText, true))
+	rows.Insert(new SelectorRow("", "Title",   "i", currTitle,   true))
 	rows.Insert(new SelectorRow("", "Control", "o", currControl, true))
-	rows.Insert(new SelectorRow("", "Tooltip", "p", tooltipText, true))
 	
 	s := new Selector()
 	s.setChoices(rows)

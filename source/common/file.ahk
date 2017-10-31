@@ -33,6 +33,33 @@ reduceFilepath(path, levelsDown) {
 
 ; Select a folder based on input (or prompt if no input) and open it.
 openFolder(folderName = "") {
+	folderPath := selectFolder(folderName)
+	
+	if(folderPath && FileExist(folderPath))
+		Run, % folderPath
+}
+
+sendFolderPath(folderName = "", subPath = "") {
+	folderPath := selectFolder(folderName)
+	
+	if(!folderPath)
+		return
+	
+	; Add a trailing backslash if there's not one already.
+	if(SubStr(folderPath, 0) != "\")
+		folderPath .= "\"
+	
+	; Append a further subPath if they gave that to us
+	if(subPath) {
+		folderPath .= subPath "\"
+		if(SubStr(folderPath, 0) != "\") ; Trailing backslash on the end of the subPath, too.
+			folderPath .= "\"
+	}
+	
+	Send, % folderPath
+}
+
+selectFolder(folderName = "") {
 	filter := MainConfig.getMachineTableListFilter()
 	s := new Selector("folders.tl", "", filter)
 	
@@ -41,10 +68,7 @@ openFolder(folderName = "") {
 	else
 		folderPath := s.selectGui()
 	
-	folderPath := MainConfig.replacePathTags(folderPath)
-	
-	if(folderPath && FileExist(folderPath))
-		Run, % folderPath
+	return MainConfig.replacePathTags(folderPath)
 }
 
 searchWithGrepWin(pathToSearch, textToSearch = "") {

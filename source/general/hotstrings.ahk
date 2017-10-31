@@ -190,55 +190,52 @@
 	{ ; General
 		:*c:pff::C:\Program Files\
 		:*c:xpff::C:\Program Files (x86)\
-		:*:.x8:: (x86)\
 		
 		:*c:auf::
-			Send, % MainConfig.getFolder("USER_ROOT") "\"
-		return
-		; :*c:dsf::
-			; Send, % A_Desktop "\"
-		; return
-		:*c:dlf::
-			Send, % MainConfig.getFolder("USER_ROOT") "\Downloads\"
-		return
-		:*c:ddf::
-			Send, % MainConfig.getFolder("USER_ROOT") "\Dev\"
-		return
-		:*c:compf::
-			Send, % MainConfig.getFolder("USER_ROOT") "\Dev\Compile\"
+			sendFolderPath("USER_ROOT")
 		return
 		:*c:dsf::
-			Send, % MainConfig.getFolder("USER_ROOT") "\Design\"
+			; Send, % A_Desktop "\"
+			sendFolderPath("USER_ROOT", "Design")
+		return
+		:*c:dlf::
+			sendFolderPath("DOWNLOADS")
+		return
+		:*c:ddf::
+			sendFolderPath("USER_ROOT", "Dev")
+		return
+		:*c:compf::
+			sendFolderPath("USER_ROOT", "Dev\Compile")
 		return
 	}
 
 	{ ; AHK
 		:*c:arf::
-			Send, % MainConfig.getFolder("AHK_ROOT") "\"
+			sendFolderPath("AHK_ROOT")
 		return
 		:*c:aconf::
-			Send, % MainConfig.getFolder("AHK_ROOT") "\config\"
-		return
-		:*c:asf::
-			Send, % MainConfig.getFolder("AHK_ROOT") "\source\"
-		return
-		:*c:acf::
-			Send, % MainConfig.getFolder("AHK_ROOT") "\source\common\"
-		return
-		:*c:apf::
-			Send, % MainConfig.getFolder("AHK_ROOT") "\source\program\"
-		return
-		:*c:agf::
-			Send, % MainConfig.getFolder("AHK_ROOT") "\source\general\"
-		return
-		:*c:astf::
-			Send, % MainConfig.getFolder("AHK_ROOT") "\source\standalone\"
+			sendFolderPath("AHK_CONFIG")
 		return
 		:*c:atf::
-			Send, % MainConfig.getFolder("AHK_ROOT") "\test\"
+			sendFolderPath("AHK_ROOT", "test")
 		return
-		:*c:ashf::
-			Send, % MainConfig.getFolder("AHK_ROOT") "\share\"
+		; :*c:ashf::
+			; sendFolderPath("AHK_ROOT", "share")
+		; return
+		:*c:asf::
+			sendFolderPath("AHK_SOURCE")
+		return
+		:*c:acf::
+			sendFolderPath("AHK_SOURCE", "common")
+		return
+		:*c:apf::
+			sendFolderPath("AHK_SOURCE", "program")
+		return
+		:*c:agf::
+			sendFolderPath("AHK_SOURCE", "general")
+		return
+		:*c:astf::
+			sendFolderPath("AHK_SOURCE", "standalone")
 		return
 	}
 
@@ -247,7 +244,7 @@
 			Send, % epicPersonalFolder
 		return
 		:*:ssf::
-			Send, % MainConfig.getFolder("USER_ROOT") "\Screenshots\"
+			sendFolderPath("USER_ROOT", "Screenshots")
 		return
 		:*c:emf::
 			Send, % epicMonthlyFolder

@@ -11,6 +11,8 @@
 	+Enter::
 	^Enter::
 		Send, +{Escape}
+		WinWaitActive, Copy Properties
+		Send, {Enter}
 	return
 #IfWinActive
 
@@ -18,5 +20,5 @@
 $!v::
 	Send, ^+v
 	WinWaitActive, ahk_class QPasteClass
-	Send, ^e
+	Send, ^n ; New clip
 return

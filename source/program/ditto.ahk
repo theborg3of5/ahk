@@ -21,4 +21,7 @@ $!v::
 	Send, ^+v
 	WinWaitActive, ahk_class QPasteClass
 	Send, ^n ; New clip
+	WinWaitActive, ahk_class Ditto Edit Wnd
+	SendRaw, % clipboard ; Start with the current clipboard rather than from scratch.
+	Send, ^a
 return

@@ -1,7 +1,4 @@
 ﻿
-; ; Hotkeys for opening a pidgin chat window with specific users
-; #+m::pidginMessageToUser(mikalEmailAddress)
-
 ; Unread facebook group chat windows (don't respond to ^+i correctly).
 #If WinExist("* ahk_exe " MainConfig.getProgram("Pidgin", "EXE"))
 	^+i::
@@ -20,7 +17,3 @@
 		ControlSend, gdkWindowChild14, ^!s, Buddy List
 	return
 #IfWinActive
-
-pidginMessageToUser(user) {
-	Run, % MainConfig.getProgram("Pidgin", "PATH") " --protocolhandler=xmpp:" user "?message"
-}

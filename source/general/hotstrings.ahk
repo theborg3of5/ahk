@@ -11,6 +11,9 @@
 	:*:eemaila::
 		Send, % USER_WORK_EMAIL
 	return
+	:*:oemaila::
+		Send, % USER_OUTLOOK_EMAIL
+	return
 }
 
 { ; Addresses.
@@ -80,7 +83,6 @@
 
 { ; Expansions.
 	{ ; General
-		:*:btw::by the way
 		:*:gov't::government
 		:*:eq'm::equilibrium
 		:*:f'n::function

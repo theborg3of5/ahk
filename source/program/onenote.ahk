@@ -25,6 +25,10 @@
 			oneNoteCustomStyles()
 			Send, {Enter}
 		return
+		; Create linked Specific page (using OneTastic macro)
+		^l::
+			oneNoteLinkedSpecificsPage()
+		return
 	}
 	
 	{ ; Navigation.
@@ -163,5 +167,8 @@
 	}
 	oneNoteCustomStyles() {	; Custom styles from OneTastic
 		Send, !5
+	}
+	oneNoteLinkedSpecificsPage() { ; Custom OneTastic macro
+		Send, !6
 	}
 #IfWinActive

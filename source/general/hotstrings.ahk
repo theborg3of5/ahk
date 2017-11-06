@@ -257,41 +257,12 @@
 		:*:eunfs::
 			Send, % epicUnixNFS3DayPersonal
 		return
-		
-		:*:ehbf::
-			Send, % epicHBFolder
-		return
-		:*:ehbd::
-			Send, % epicHBFolder "Dev\"
-		return
-		:*:ehbp::
-			Send, % epicHBFolder "Dev\Partial Installers\"
-		return
-		
-		:*c:xesf::
-			Send, % epicServerDataCDE
-		return
 	}
 	
 	{ ; Epic - Source
 		:*c:esf::
 			Send, % epicSourceCurrentS1
 		return
-		
-		:*c:hesf::
-			Send, % epicSourceCurrentS1 epicSourceHBFolder
-		return
-		:*c:eesf::
-			Send, % epicSourceCurrentS1 epicSourceEBFolder
-		return
-		
-		:*c:posf::
-			Send, % epicSourceCurrentS1 epicSourceEBFolder "PmtPost\"
-		return
-		:*c:ciesf::
-			Send, % epicSourceCurrentS1 "Cadence\CheckIn\AR Copay\"
-		return
-		
 		:*c:fesf::
 			Send, % epicSourceCurrentS1 epicFoundationProject
 		return

@@ -117,6 +117,7 @@
 		:*:c'i::check-in
 		:*:c'o::check-out
 		:*:qai::QA Instructions
+		:*:acc'n::association
 		
 		:*:.iai::...I'll allow it
 		:*:iai::I'll allow it

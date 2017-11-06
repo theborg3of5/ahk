@@ -257,6 +257,10 @@
 		:*:eunfs::
 			Send, % epicUnixNFS3DayPersonal
 		return
+		
+		:*:ecf::
+			sendFolderPath("VB6_COMPILE")
+		return
 	}
 	
 	{ ; Epic - Source

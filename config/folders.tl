@@ -20,6 +20,7 @@
 	Dev						dev					<USER_ROOT>\Dev																									EPIC_LAPTOP
 	Templates				temp					<USER_ROOT>\Dev\Templates																						EPIC_LAPTOP
 	; Partial Installers	pi						F:\Hospital Billing\Dev\Partial Installers		GDB TODO switch to DBC equivalent			EPIC_LAPTOP
+	Compile					comp|VB6_COMPILE	<USER_ROOT>\Dev\Temp\Compile																					EPIC_LAPTOP
 	Net Home					nh						\\epic-nfs\net_home\gborg																						EPIC_LAPTOP
 	NFS 3 Day				n3						\\epic-nfs\nfs_3day\gborg																						EPIC_LAPTOP
 	NFS Ask					na						\\epic-nfs\nfs_ask\gborg																						EPIC_LAPTOP

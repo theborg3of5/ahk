@@ -4,10 +4,6 @@
 	Fix monitor fixer script or get rid of it entirely.
 	
 # New ideas
-	Move folders from epic folder private variables into folders.tl (with special tags). Remaining:
-		net_home
-		NFS ask
-		Epic source folders
 	Add something like VimBindings for Outlook?
 		At least j/k and ;/p would be nice.
 	Hotkey to send environment ID?

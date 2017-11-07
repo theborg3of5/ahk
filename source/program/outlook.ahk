@@ -29,7 +29,7 @@
 #IfWinActive
 
 ; Mail activity.
-#If isEmailFolderActive(USER_WORK_EMAIL)
+#If isEmailFolderActive(EPIC_EMAIL)
 	; Move selected message(s) to a particular folder, and mark them as read.
 	$^e::
 		Send, ^+1 ; Archive
@@ -43,7 +43,7 @@
 #If
 
 ; Calendar activity.
-#If isCalendarFolderActive(USER_WORK_EMAIL)
+#If isCalendarFolderActive(EPIC_EMAIL)
 	; Calendar view: 3-day view, week view, and month view.
 	$^e::Send, !3
 	^w::Send, ^!3

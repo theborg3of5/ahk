@@ -67,12 +67,16 @@ class MainConfig {
 		
 		; Tags that can be used in folders.tl
 		systemTags := []
-		systemTags["AHK_ROOT"]                   := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
-		systemTags["USER_ROOT"]                  := reduceFilepath(A_Desktop,  1)
-		systemTags["EPIC_PERSONAL"]              := epicPersonalFolder
-		systemTags["EPIC_MONTHLY"]               := epicMonthlyFolder
-		systemTags["EPIC_NFS3DAY_PERSONAL_UNIX"] := epicNFS3DayPersonalUnix
-		systemTags["EPIC_NFS3DAY_PERSONAL"]      := epicNFS3DayPersonal
+		systemTags["AHK_ROOT"]           := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
+		systemTags["USER_ROOT"]          := reduceFilepath(A_Desktop,  1)
+		systemTags["EPIC_PERSONAL"]      := epicPersonal
+		systemTags["EPIC_NFS_3DAY_UNIX"] := epicNFS3DayUnix
+		systemTags["EPIC_NFS_3DAY"]      := epicNFS3Day
+		systemTags["EPIC_NFS_ASK"]       := epicNFSAsk
+		systemTags["EPIC_NET_HOME"]      := epicNetHome
+		systemTags["EPIC_SOURCE_S1"]     := epicSourceCurrentS1
+		systemTags["EPIC_SOURCE_S2"]     := epicSourceCurrentS2
+		systemTags["EPIC_USERNAME"]      := epicUsername
 		
 		tl := new TableList(filePath)
 		folderTable := tl.getFilteredTableUnique("NAME", "MACHINE", MainConfig.getMachine())

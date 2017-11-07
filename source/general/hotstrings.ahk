@@ -9,7 +9,7 @@
 		Send, % USER_EMAIL_2
 	return
 	:*:eemaila::
-		Send, % USER_WORK_EMAIL
+		Send, % EPIC_EMAIL
 	return
 	:*:oemaila::
 		Send, % USER_OUTLOOK_EMAIL
@@ -250,10 +250,10 @@
 			sendFolderPath("USER_ROOT", "Screenshots")
 		return
 		:*:enfs::
-			sendFolderPath("EPIC_NFS3DAY_PERSONAL")
+			sendFolderPath("EPIC_NFS_3DAY")
 		return
 		:*:eunfs::
-			sendUnixFolderPath("EPIC_NFS3DAY_PERSONAL_UNIX")
+			sendUnixFolderPath("EPIC_NFS_3DAY_UNIX")
 		return
 		
 		:*:ecf::

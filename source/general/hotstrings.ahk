@@ -208,7 +208,7 @@
 			sendFolderPath("USER_ROOT", "Dev")
 		return
 		:*:compf::
-			sendFolderPath("USER_ROOT", "Dev\Compile")
+			sendFolderPath("VB6_COMPILE")
 		return
 	}
 

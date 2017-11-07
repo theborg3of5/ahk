@@ -272,3 +272,23 @@ OUTLOOK_TLG(actionRow) {
 		; ControlSend, %focusedControl%, {Enter}, ahk_class rctrl_renwnd32
 	}
 }
+
+; Builds and sends a string to exclude the items specified, for Snapper.
+SEND_SNAPPER_EXCLUDE_ITEMS(actionRow) {
+	itemsList := actionRow.data["STATUS_ITEMS"]
+	itemsAry := StrSplit(itemsList, ",")
+	
+	For i,item in itemsAry {
+		if(i > 1)
+			excludeItemsString .= ","
+		excludeItemsString .= "-" item
+	}
+	
+	; Do it.
+	if(actionRow.isDebug) { ; Debug mode.
+		actionRow.debugResult := excludeItemsString
+	} else {
+		Send, % excludeItemsString
+		Send, {Enter}
+	}
+}

@@ -186,58 +186,58 @@
 }
 
 { ; URLs.
-	:*c:lpv::chrome-extension://hdokiejnpimakedhajhdlcegeplioahd/vault.html
+	:*:lpv::chrome-extension://hdokiejnpimakedhajhdlcegeplioahd/vault.html
 }
 
 { ; Folders and paths.
 	{ ; General
-		:*c:pff::C:\Program Files\
-		:*c:xpff::C:\Program Files (x86)\
+		:*:pff::C:\Program Files\
+		:*:xpff::C:\Program Files (x86)\
 		
-		:*c:auf::
+		:*:auf::
 			sendFolderPath("USER_ROOT")
 		return
-		:*c:dsf::
+		:*:dsf::
 			; Send, % A_Desktop "\"
 			sendFolderPath("USER_ROOT", "Design")
 		return
-		:*c:dlf::
+		:*:dlf::
 			sendFolderPath("DOWNLOADS")
 		return
-		:*c:ddf::
+		:*:ddf::
 			sendFolderPath("USER_ROOT", "Dev")
 		return
-		:*c:compf::
+		:*:compf::
 			sendFolderPath("USER_ROOT", "Dev\Compile")
 		return
 	}
 
 	{ ; AHK
-		:*c:arf::
+		:*:arf::
 			sendFolderPath("AHK_ROOT")
 		return
-		:*c:aconf::
+		:*:aconf::
 			sendFolderPath("AHK_CONFIG")
 		return
-		:*c:atf::
+		:*:atf::
 			sendFolderPath("AHK_ROOT", "test")
 		return
-		; :*c:ashf::
+		; :*:ashf::
 			; sendFolderPath("AHK_ROOT", "share")
 		; return
-		:*c:asf::
+		:*:asf::
 			sendFolderPath("AHK_SOURCE")
 		return
-		:*c:acf::
+		:*:acf::
 			sendFolderPath("AHK_SOURCE", "common")
 		return
-		:*c:apf::
+		:*:apf::
 			sendFolderPath("AHK_SOURCE", "program")
 		return
-		:*c:agf::
+		:*:agf::
 			sendFolderPath("AHK_SOURCE", "general")
 		return
-		:*c:astf::
+		:*:astf::
 			sendFolderPath("AHK_SOURCE", "standalone")
 		return
 	}
@@ -262,16 +262,16 @@
 	}
 	
 	{ ; Epic - Source
-		:*c:esf::
+		:*:esf::
 			sendFolderPath("EPIC_SOURCE_S1")
 		return
-		:*c:fesf::
+		:*:fesf::
 			sendFilePath("EPIC_SOURCE_S1", epicDesktopProject)
 		return
 	}
 
 	{ ; Program-specific
-		:*c:ex.::explorer.exe
+		:*:ex.::explorer.exe
 	}
 }
 

@@ -49,6 +49,7 @@ if(MainConfig.isMachine(MACHINE_EpicLaptop)) { ; Not needed except on Epic machi
 #Include quickDial.ahk
 #Include remoteDesktop.ahk
 #Include skype.ahk
+#Include snapper.ahk
 #Include sumatraPDF.ahk
 #Include tortoiseSVN.ahk
 #Include vb6.ahk

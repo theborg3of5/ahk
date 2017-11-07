@@ -63,10 +63,16 @@ class MainConfig {
 	}
 	
 	loadFolders(filePath) {
+		global epicPersonalFolder
+		
 		; Tags that can be used in folders.tl
 		systemTags := []
-		systemTags["AHK_ROOT"]  := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
-		systemTags["USER_ROOT"] := reduceFilepath(A_Desktop,  1)
+		systemTags["AHK_ROOT"]                   := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
+		systemTags["USER_ROOT"]                  := reduceFilepath(A_Desktop,  1)
+		systemTags["EPIC_PERSONAL"]              := epicPersonalFolder
+		systemTags["EPIC_MONTHLY"]               := epicMonthlyFolder
+		systemTags["EPIC_NFS3DAY_PERSONAL_UNIX"] := epicNFS3DayPersonalUnix
+		systemTags["EPIC_NFS3DAY_PERSONAL"]      := epicNFS3DayPersonal
 		
 		tl := new TableList(filePath)
 		folderTable := tl.getFilteredTableUnique("NAME", "MACHINE", MainConfig.getMachine())

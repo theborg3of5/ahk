@@ -39,21 +39,30 @@ openFolder(folderName = "") {
 		Run, % folderPath
 }
 
-sendFolderPath(folderName = "", subPath = "") {
+sendUnixFolderPath(folderName = "", subPath = "") {
+	sendFolderPath(folderName, subPath, true)
+}
+
+sendFolderPath(folderName = "", subPath = "", isUnixPath = false) {
 	folderPath := selectFolder(folderName)
+	
+	if(isUnixPath)
+		slashChar := "/"
+	else
+		slashChar := "\"
 	
 	if(!folderPath)
 		return
 	
 	; Add a trailing backslash if there's not one already.
-	if(SubStr(folderPath, 0) != "\")
-		folderPath .= "\"
+	if(SubStr(folderPath, 0) != slashChar)
+		folderPath .= slashChar
 	
 	; Append a further subPath if they gave that to us
 	if(subPath) {
-		folderPath .= subPath "\"
-		if(SubStr(folderPath, 0) != "\") ; Trailing backslash on the end of the subPath, too.
-			folderPath .= "\"
+		folderPath .= subPath slashChar
+		if(SubStr(folderPath, 0) != slashChar) ; Trailing backslash on the end of the subPath, too.
+			folderPath .= slashChar
 	}
 	
 	Send, % folderPath

@@ -244,19 +244,16 @@
 
 	{ ; Epic - General
 		:*:epf::
-			Send, % epicPersonalFolder
+			sendFolderPath("EPIC_PERSONAL")
 		return
 		:*:ssf::
 			sendFolderPath("USER_ROOT", "Screenshots")
 		return
-		:*c:emf::
-			Send, % epicMonthlyFolder
-		return
 		:*:enfs::
-			Send, % epicNFS3DayPersonal
+			sendFolderPath("EPIC_NFS3DAY_PERSONAL")
 		return
 		:*:eunfs::
-			Send, % epicUnixNFS3DayPersonal
+			sendUnixFolderPath("EPIC_NFS3DAY_PERSONAL_UNIX")
 		return
 		
 		:*:ecf::

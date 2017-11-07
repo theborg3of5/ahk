@@ -263,13 +263,10 @@
 	
 	{ ; Epic - Source
 		:*c:esf::
-			Send, % epicSourceCurrentS1
+			sendFolderPath("EPIC_SOURCE_S1")
 		return
 		:*c:fesf::
-			Send, % epicSourceCurrentS1 epicFoundationProject
-		return
-		:*c:edf::
-			Send, % epicSourceCurrentS1 "DLG-"
+			sendFilePath("EPIC_SOURCE_S1", epicDesktopProject)
 		return
 	}
 
@@ -281,7 +278,7 @@
 { ; AHK.
 	:*:dbpop::
 		SendRaw, DEBUG.popup()
-		Send, {Left} ; For right paren
+		Send, {Left} ; Get inside parens
 	return
 }
 #IfWinNotActive

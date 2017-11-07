@@ -39,33 +39,39 @@ openFolder(folderName = "") {
 		Run, % folderPath
 }
 
-sendUnixFolderPath(folderName = "", subPath = "") {
-	sendFolderPath(folderName, subPath, true)
+sendFilePath(folderName = "", subPath = "") {
+	sendFolderPath(folderName, subPath, false)
 }
-
-sendFolderPath(folderName = "", subPath = "", isUnixPath = false) {
+sendUnixFolderPath(folderName = "", subPath = "") {
+	sendFolderPath(folderName, subPath, , true)
+}
+sendFolderPath(folderName = "", subPath = "", trailingSlash = true, isUnixPath = false) {
 	folderPath := selectFolder(folderName)
+	if(!folderPath)
+		return
 	
 	if(isUnixPath)
 		slashChar := "/"
 	else
 		slashChar := "\"
 	
-	if(!folderPath)
-		return
-	
-	; Add a trailing backslash if there's not one already.
-	if(SubStr(folderPath, 0) != slashChar)
-		folderPath .= slashChar
-	
 	; Append a further subPath if they gave that to us
 	if(subPath) {
-		folderPath .= subPath slashChar
-		if(SubStr(folderPath, 0) != slashChar) ; Trailing backslash on the end of the subPath, too.
-			folderPath .= slashChar
+		folderPath := appendCharIfMissing(folderPath, slashChar)
+		folderPath .= subPath
 	}
 	
+	if(trailingSlash)
+		folderPath := appendCharIfMissing(folderPath, slashChar)
+	
 	Send, % folderPath
+}
+
+appendCharIfMissing(inputString, charToAppend) {
+	if(SubStr(inputString, 0) != charToAppend)
+		inputString .= charToAppend
+	
+	return inputString
 }
 
 selectFolder(folderName = "") {

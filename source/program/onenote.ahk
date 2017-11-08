@@ -166,9 +166,9 @@
 		Send, !4
 	}
 	oneNoteCustomStyles() {	; Custom styles from OneTastic
-		Send, !5
+		Send, !7
 	}
 	oneNoteLinkedSpecificsPage() { ; Custom OneTastic macro
-		Send, !6
+		Send, !8
 	}
 #IfWinActive

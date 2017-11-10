@@ -44,10 +44,6 @@
 	return
 }
 
-{ ; Skype.
-	:*:ssquirrel::(heidy)
-}
-
 { ; Typo correction.
 	::,3::<3
 	:*:<#::<3
@@ -77,7 +73,6 @@
 	::previou::previous
 	:*:previosu::previous
 	:*:dcb::dbc
-	
 	:*:h?::oh?
 }
 
@@ -194,21 +189,20 @@
 		:*:pff::C:\Program Files\
 		:*:xpff::C:\Program Files (x86)\
 		
-		:*:auf::
+		:*:urf::
 			sendFolderPath("USER_ROOT")
 		return
+		:*:deskf::
+			sendFolderPath("USER_ROOT", "Desktop")
+		return
 		:*:dsf::
-			; Send, % A_Desktop "\"
 			sendFolderPath("USER_ROOT", "Design")
 		return
 		:*:dlf::
 			sendFolderPath("DOWNLOADS")
 		return
-		:*:ddf::
+		:*:devf::
 			sendFolderPath("USER_ROOT", "Dev")
-		return
-		:*:compf::
-			sendFolderPath("VB6_COMPILE")
 		return
 	}
 
@@ -219,12 +213,12 @@
 		:*:aconf::
 			sendFolderPath("AHK_CONFIG")
 		return
+		:*:alconf::
+			sendFolderPath("AHK_LOCAL_CONFIG")
+		return
 		:*:atf::
 			sendFolderPath("AHK_ROOT", "test")
 		return
-		; :*:ashf::
-			; sendFolderPath("AHK_ROOT", "share")
-		; return
 		:*:asf::
 			sendFolderPath("AHK_SOURCE")
 		return
@@ -249,14 +243,14 @@
 		:*:ssf::
 			sendFolderPath("USER_ROOT", "Screenshots")
 		return
-		:*:enfs::
+		:*:enfsf::
 			sendFolderPath("EPIC_NFS_3DAY")
 		return
-		:*:eunfs::
+		:*:eunfsf::
 			sendUnixFolderPath("EPIC_NFS_3DAY_UNIX")
 		return
 		
-		:*:ecf::
+		:*:ecompf::
 			sendFolderPath("VB6_COMPILE")
 		return
 	}
@@ -268,10 +262,6 @@
 		:*:fesf::
 			sendFilePath("EPIC_SOURCE_S1", epicDesktopProject)
 		return
-	}
-
-	{ ; Program-specific
-		:*:ex.::explorer.exe
 	}
 }
 

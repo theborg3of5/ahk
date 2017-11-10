@@ -113,14 +113,6 @@ return
 	
 return
 
-; ; Take the selected number, show a popup that takes what math to do on it (i.e., +25), and put the result back in place.
-; !+c::
-	; text := getSelectedText()
-	; outText := mathPopup(text)
-	; if(outText)
-		; sendTextWithClipboard(outText)
-; return
-
 ; Generic opener - opens a variety of different things based on the selected/clipboard text.
 ^!#o::
 	text := getSelectedText()

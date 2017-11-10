@@ -8,10 +8,6 @@
 		At least j/k and ;/p would be nice.
 	Hotkey to send environment ID?
 		Could be useful in EpicStudio/EMC2 compare windows.
-	Standardize folder hotstring rules - all over the place currently
-		Always start with "f" or ".f" or "f.", perhaps?
-		Could potentially have a hotstring launch a selector window (or at least use a non-GUI selector)
-		Could do something really fancy and show a multi-line tooltip with matching strings, kind of like SmartText?
 	VB6 - ^F2 focuses first dropdown
 	Sanitize data coming into Selector to remove newlines
 	OneNote issue with Onetastic not appearing when Ctrl held down

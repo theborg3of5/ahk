@@ -178,6 +178,11 @@
 		if(time)
 			SendRaw, % time
 	return
+	
+	; Specifics
+	:*:epicmfp::
+		Send, % "epic" getDateTime("yyyyMMdd")
+	return
 }
 
 { ; URLs.

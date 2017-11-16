@@ -349,11 +349,17 @@
 		ControlGetText, projectName, PROJECT1
 		splitName := StrSplit(projectName, A_Space)
 		dlgName := splitName[splitName.MaxIndex()]
+		dlgId := SubStr(dlgName, 4)
+		
+		; Ignore anything after a dash (usually used by me so I can break up projects).
+		dashPosition := stringContains(dlgId, "-")
+		if(dashPosition)
+			dlgId := SubStr(dlgId, 1, dashPosition-1)
 		
 		outStr := "' "
 		if(extraSpace)
 			outStr .= " "
-		outStr .= "*" USER_INITIALS " " date " " SubStr(dlgName, 4) " - "
+		outStr .= "*" USER_INITIALS " " date " " dlgId " - "
 		
 		return outStr
 	}

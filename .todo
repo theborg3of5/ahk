@@ -4,6 +4,7 @@
 	Fix monitor fixer script or get rid of it entirely.
 	
 # New ideas
+	Add file search (using Everything) to search Selector.
 	Add something like VimBindings for Outlook?
 		At least j/k and ;/p would be nice.
 	Hotkey to send environment ID?

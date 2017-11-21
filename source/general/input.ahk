@@ -35,6 +35,8 @@ return
 #If
 
 ^!v::
+	KeyWait, Ctrl
+	KeyWait, Alt
 	SendRaw, % clipboard
 return
 

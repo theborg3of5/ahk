@@ -39,4 +39,4 @@
 		
 		# GrepWin
 		; (SUBTYPE = folder)
-		AHK Source						ahkf			<AHK_SOURCE>													GREPWIN
+		AHK Source						ahkf|ahks	<AHK_SOURCE>													GREPWIN

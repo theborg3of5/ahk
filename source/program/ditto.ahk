@@ -25,3 +25,20 @@ $!v::
 	SendRaw, % clipboard ; Start with the current clipboard rather than from scratch.
 	Send, ^a
 return
+
+; Compare the selected text to the last-copied clip.
+^+x::
+	; Put the selected text on the clipboard.
+	Send, ^c
+	
+	; Open Ditto and wait for it to appear
+	Send, ^+v
+	WinWaitActive, ahk_class QPasteClass
+	
+	; Select both the latest clip (auto-selected) and the next one down (which was previously the last-copied clip).
+	Sleep, 500 ; Takes a smidge longer before we can do this for some reason.
+	Send, +{Down}
+	
+	; Compare with Ditto functionality.
+	Send, ^{F2}
+return

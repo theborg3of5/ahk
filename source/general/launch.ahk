@@ -8,7 +8,9 @@
 !+o:: activateProgram("OxygenXML")
 ^+!g::activateProgram("Chrome")
 ^+!o::
-	Sleep, 500
+	KeyWait, Ctrl
+	KeyWait, Shift
+	KeyWait, Alt
 	activateProgram("OneNote")
 return
 ^+!x::activateProgram("Launchy")

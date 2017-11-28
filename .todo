@@ -12,8 +12,9 @@
 	VB6 - ^F2 focuses first dropdown
 	Sanitize data coming into Selector to remove newlines
 	OneNote issue with Onetastic not appearing when Ctrl held down
-		Temp fix with Sleep
+		Temp fix with KeyWait
 		Long-term: either always sleep as part of activateProgram/runProgram, or find a way to do KeyWait based on A_Hotkey.
+			At the least, a function that takes a list of keys to wait on.
 	New open-from-codesearch hotkey in Chrome - ^+o?
 		Routine from title
 		Tag from selection (or nothing, just open routine)

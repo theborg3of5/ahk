@@ -27,7 +27,7 @@ $!v::
 return
 
 ; Compare the selected text to the last-copied clip.
-^+x::
+#+d::
 	; Put the selected text on the clipboard.
 	Send, ^c
 	

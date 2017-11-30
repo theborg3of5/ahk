@@ -51,6 +51,8 @@ class ActionObject {
 	process(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
 		; DEBUG.popup("ActionObject.process", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
+		input := cleanupText(input)
+		
 		; Do a little preprocessing to pick out needed info. (All args but input are ByRef)
 		isPathType := isPath(input, pathType)
 		isEMC2ObjectType := isEMC2Object(input, ini, id)

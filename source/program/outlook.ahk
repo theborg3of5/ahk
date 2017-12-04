@@ -21,7 +21,7 @@
 	
 	; Format as code (using custom styles)
 	^+c::
-		Send, !1
+		Send, ^+s
 		WinWaitActive, Apply Styles
 		Send, Code
 		Send, {Enter}

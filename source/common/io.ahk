@@ -54,23 +54,21 @@ sendRawWithTabs(input) {
 
 ; Grabs the selected text using the clipboard, fixing the clipboard as it finishes.
 getSelectedText() {
-	ClipSaved := ClipboardAll ; Save the entire clipboard to a variable of your choice.
-	clipboard :=              ; Clear the clipboard
+	originalClipboard := clipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
+	clipboard :=                      ; Clear the clipboard so we can tell when something is added by ^c.
 	
-	Send, ^c
-	ClipWait, 1               ; Wait for the clipboard to actually contain data.
+	Send, ^c                          ; Copy selected text to the clipboard.
+	ClipWait, 1                       ; Wait for the clipboard to actually contain data.
 	
 	textFound := clipboard
-	
-	clipboard := ClipSaved    ; Restore the original clipboard. Note the use of Clipboard (not ClipboardAll).
-	ClipSaved =               ; Free the memory in case the clipboard was very large.
+	clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
 	
 	return textFound
 }
 
 ; Sends the selected text using the clipboard, fixing the clipboard as it finishes.
 sendTextWithClipboard(text) {
-	; DEBUG.popup(text, "Text to send with clipboard")
+	; DEBUG.popup("Text to send with clipboard", text)
 	
 	ClipSaved := ClipboardAll   ; Save the entire clipboard to a variable of your choice.
 	Clipboard := "" ; Clear the clipboard

@@ -87,6 +87,13 @@
 	return
 #If
 
+; Design open
+#If exeActive("EpicD82.exe") && WinActive("XDS ")
+	^k::
+		clickUsingMode(515, 226, "Client")
+	return
+#If
+
 ; Log mover window
 #IfWinActive, Move Server Objects
 	; XSL merge message template.

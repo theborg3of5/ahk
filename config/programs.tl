@@ -4,7 +4,7 @@
 
 [{PATH}b:C:\Program Files (x86)\]
 	Chrome				-				Chrome_WidgetWin_1										Google\Chrome\Application\chrome.exe
-	Outlook				-				rctrl_renwnd32												Microsoft Office\Office15\OUTLOOK.EXE
+	Outlook				-				rctrl_renwnd32												Microsoft Office\Office16\OUTLOOK.EXE
 	EpicStudio			-				WindowsForms10.Window.8.app.0.2bf8098_r33_ad1	EpicStudio\EpicStudio.exe										-									EPIC_LAPTOP		EpicStudio.exe
 	Foobar				-				{97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}				foobar2000\foobar2000.exe
 	Notepad++			-				Notepad++													Notepad++\notepad++.exe
@@ -15,7 +15,7 @@
 	Pidgin				-				-																Pidgin\pidgin.exe													-									-					pidgin.exe
 	Snapper				-				-																Epic\Snapper\Snapper.exe
 	VMWareView			-				-																VMware\VMware Horizon View Client\vmware-view.exe
-	OneNote				-				Framework::CFrame											Microsoft Office\Office15\ONENOTE.EXE						-									EPIC_LAPTOP
+	OneNote				-				Framework::CFrame											Microsoft Office\Office16\ONENOTE.EXE						-									EPIC_LAPTOP
 	OneNote				-				Framework::CFrame											Microsoft Office\root\Office16\ONENOTE.EXE				-									HOME_DESKTOP
 []
 

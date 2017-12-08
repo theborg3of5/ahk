@@ -118,7 +118,6 @@ return
 ; Generic opener - opens a variety of different things based on the selected/clipboard text.
 ^!#o::
 	text := getSelectedText()
-	DEBUG.popup("Finished getting selected text")
 	ActionObject.do(text, , ACTION_RUN, , SUBACTION_WEB)
 return
 ^!#+o::

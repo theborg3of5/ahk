@@ -135,6 +135,8 @@ class ActionObject {
 				subType := objInfo["SUBTYPE"]
 			}
 		}
+		
+		; DEBUG.popup("ActionObject.selectInfo", "Input", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 	}
 	
 	; Do the action.

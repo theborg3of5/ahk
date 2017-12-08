@@ -58,7 +58,7 @@ getSelectedText() {
 	clipboard :=                      ; Clear the clipboard so we can tell when something is added by ^c.
 	
 	Send, ^c                          ; Copy selected text to the clipboard.
-	ClipWait, 1                       ; Wait for the clipboard to actually contain data.
+	ClipWait, 0.5                     ; Wait for the clipboard to actually contain data (minimum time).
 	
 	textFound := clipboard
 	clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).

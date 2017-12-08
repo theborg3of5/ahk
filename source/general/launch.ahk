@@ -118,11 +118,12 @@ return
 ; Generic opener - opens a variety of different things based on the selected/clipboard text.
 ^!#o::
 	text := getSelectedText()
-	ActionObject.do(text, , , , SUBACTION_WEB)
+	DEBUG.popup("Finished getting selected text")
+	ActionObject.do(text, , ACTION_RUN, , SUBACTION_WEB)
 return
 ^!#+o::
 	text := getSelectedText()
-	ActionObject.do(text)
+	ActionObject.do(text, , ACTION_RUN)
 return
 
 ; Generic linker - will allow coming from clipboard or selected text, or input entirely. Puts the link on the clipboard.

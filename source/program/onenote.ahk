@@ -68,12 +68,7 @@
 	{ ; Content/formatting modifiers.
 		; Deletes a full line.
 		^d::
-			Send, {Home}
-			Send, ^{Down}
-			Send, {Home}
-			Send, {Shift Down}
-			Send, ^{Up}
-			Send, {Shift Up}
+			Send, ^a ; Select all - gets entire line, including newline at end.
 			Send, {Delete}
 		return
 		

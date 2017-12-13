@@ -125,6 +125,11 @@
 	
 	; Make a copy of the current page in the Do section.
 	^+m::
+		; Change the page color before we leave, so it's noticeable if I end up there.
+		Send, !w
+		Send, pc
+		Send, {Enter}
+		
 		Send, ^!m                  ; Move or copy page
 		WinWaitActive, Move or Copy Pages
 		Sleep, 500                 ; Wait a half second for the popup to be input-ready
@@ -134,6 +139,12 @@
 		Sleep, 500                 ; Wait a half-second for the new page to appear
 		Send, ^{PgDn}              ; Switch to (presumably) new page
 		Send, !3                   ; Demote Subpage (Make Subpage)
+		
+		; Make the current page have no background color.
+		Send, !w
+		Send, pc
+		Send, n
+		
 		Send, ^a                   ; Select title (to replace with new day/date)
 		
 		Sleep, 500                 ; Wait for selection to take

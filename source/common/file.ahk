@@ -1,4 +1,44 @@
 
+saveClipboardToFile(filePath = "") {
+	; If no path was given, prompt the user with a popup.
+	if(!filePath)
+		FileSelectFile, filePath, S, %A_ScriptDir%\clips\*.clip, What file should the clipboard be saved to?, *.clip
+	if(!filePath)
+		return
+	
+	FileAppend, %ClipboardAll%, %filePath%
+}
+
+sendFileWithClipboard(filePath = "") {
+	; If no path was given, prompt the user with a popup.
+	if(!filePath)
+		FileSelectFile, filePath, S, %A_ScriptDir%\clips\*.clip, What file should be sent?
+	if(!filePath)
+		return
+	
+	; Save off the current clipboard and blank it out so we can wait for it to be filled from the file.
+	tempClip := ClipboardAll
+	Clipboard := 
+	
+	readFileToClipboard(filePath)
+	
+	Send, ^v
+	
+	Sleep, 500 ; If this isn't delayed, it overwrites the clipboard before the paste actually happens.
+	Clipboard := tempClip
+}
+
+; Read a file (which we assume is in clipboard format, saved from the clipboard) and put it on the clipboard.
+readFileToClipboard(filePath = "") {
+	; If no path was given, prompt the user with a popup.
+	if(!filePath)
+		FileSelectFile, filePath, S, , What file should be placed on the clipboard?, *.clip
+	if(!filePath)
+		return
+	
+	FileRead, Clipboard, *c %filePath% ; *c = clipboard-format file
+	ClipWait, 5, 1
+}
 
 ; Read in a file and return it as an array.
 fileLinesToArray(fileName) {

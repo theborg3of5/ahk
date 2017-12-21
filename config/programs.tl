@@ -16,7 +16,7 @@
 	Snapper				-				-																Epic\Snapper\Snapper.exe
 	VMWareView			-				-																VMware\VMware Horizon View Client\vmware-view.exe
 	OneNote				-				Framework::CFrame											Microsoft Office\Office16\ONENOTE.EXE						-									EPIC_LAPTOP
-	OneNote				-				Framework::CFrame											Microsoft Office\root\Office16\ONENOTE.EXE				-									HOME_DESKTOP
+	OneNote				-				Framework::CFrame											Microsoft Office\root\Office16\ONENOTE.EXE				-									
 []
 
 [{PATH}b:C:\Program Files\]
@@ -28,7 +28,6 @@
 	yEd					-				-																yWorks\yEd\yEd.exe
 	ProcessExplorer	-				PROCEXPL														Process Explorer\procexp.exe									-									EPIC_LAPTOP
 	ProcessExplorer	-				PROCEXPL														ProcessExplorer\procexp.exe									-									
-	OneNote				-				Framework::CFrame											Microsoft Office 15\root\office15\ONENOTE.EXE			-									HOME_ASUS
 	grepWin				-				-																grepWin\grepWin.exe
 []
 

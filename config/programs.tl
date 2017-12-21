@@ -44,7 +44,7 @@
 	League				-				-																C:\Riot Games\League of Legends\LeagueClient.exe
 	
 
-[{PATH}e:AppData\Roaming\Microsoft\Windows\Start Menu\Programs\GitHub, Inc\GitHub.appref-ms]
+[{PATH}e:AppData\Local\GitHubDesktop\app-1.0.11\GitHubDesktop.exe]
 	GitHub				-				-																C:\Users\thebo\
 	GitHub				-				-																C:\Users\gborg\													-									EPIC_LAPTOP
 []

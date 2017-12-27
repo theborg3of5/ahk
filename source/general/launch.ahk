@@ -69,6 +69,7 @@ return
 !+m::openFolder("MUSIC")
 !+x::openFolder("AHK_CONFIG")
 !+d::openFolder("DOWNLOADS")
+!+u::openFolder("USER_ROOT")
 
 ; TrueCrypt
 #IfWinNotExist, ahk_class CustomDlg

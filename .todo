@@ -4,6 +4,9 @@
 	Fix monitor fixer script or get rid of it entirely.
 	
 # New ideas
+	Create packaged settings for AHK notepad++?
+		At least styling
+		Shortcuts, languages, etc as well?
 	Add file search (using Everything) to search Selector.
 	Add something like VimBindings for Outlook?
 		At least j/k and ;/p would be nice.

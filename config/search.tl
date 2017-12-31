@@ -40,3 +40,6 @@
 		# GrepWin
 		; (SUBTYPE = folder)
 		AHK Source						ahkf|ahks	<AHK_SOURCE>													GREPWIN
+		
+		# Other
+		Everything (file search)	ev				-																	EVERYTHING

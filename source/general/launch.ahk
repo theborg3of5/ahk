@@ -109,6 +109,8 @@ return
 			url := StrReplace(subTypes[0], "%s", criteria[1])
 		else if(searchType = "GREPWIN")
 			searchWithGrepWin(type, criteria[1])
+		else if(searchType = "EVERYTHING")
+			searchWithEverything(criteria[1])
 		
 		if(url)
 			Run, % url

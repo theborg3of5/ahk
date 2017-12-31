@@ -138,3 +138,12 @@ searchWithGrepWin(pathToSearch, textToSearch = "") {
 	; DEBUG.popup("Path to search",pathToSearch, "Converted path",convertedPath, "To search",textToSearch, "Run path",runPath)
 	Run, % runPath
 }
+
+searchWithEverything(textToSearch) {
+	runPath := MainConfig.getProgram("Everything", "PATH")
+	
+	if(textToSearch)
+		runPath .= " -search " textToSearch
+	
+	Run, % runPath
+}

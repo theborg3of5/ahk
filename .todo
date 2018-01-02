@@ -9,7 +9,6 @@
 	Hotkey to send environment ID?
 		Could be useful in EpicStudio/EMC2 compare windows.
 	VB6 - ^F2 focuses first dropdown
-	Sanitize data coming into Selector to remove newlines
 	OneNote issue with Onetastic not appearing when Ctrl held down
 		Temp fix with KeyWait
 		Long-term: either always sleep as part of activateProgram/runProgram, or find a way to do KeyWait based on A_Hotkey.

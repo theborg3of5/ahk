@@ -52,6 +52,11 @@ sendRawWithTabs(input) {
 	}
 }
 
+getFirstLineOfSelectedText() {
+	text := getSelectedText()
+	return getFirstLine(text)
+}
+
 ; Grabs the selected text using the clipboard, fixing the clipboard as it finishes.
 getSelectedText() {
 	originalClipboard := clipboardAll ; Back up the clipboard since we're going to use it to get the selected text.

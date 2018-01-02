@@ -37,6 +37,10 @@ class ActionObject {
 	do(input, type = "", action = "", subType = "", subAction = "") { ; type = TYPE_UNKNOWN, action = ACTION_NONE
 		; DEBUG.popup("ActionObject.do", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
+		; Clean up input.
+		input := getFirstLine(input)
+		input := cleanupText(input)
+		
 		; Determine what we need to do.
 		this.process(input, type, action, subType, subAction)
 		
@@ -50,8 +54,6 @@ class ActionObject {
 	; Based on the parameters given, determines as many missing pieces as we can.
 	process(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
 		; DEBUG.popup("ActionObject.process", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
-		
-		input := cleanupText(input)
 		
 		; Do a little preprocessing to pick out needed info. (All args but input are ByRef)
 		isPathType := isPath(input, pathType)

@@ -48,16 +48,18 @@ return
 	; Selector launchers
 	#p::  doSelect("local\phone.tl")
 	^+!t::doSelect("local\outlookTLG.tl")
-	^+!h::doSelect("local\epicEnvironments.tl", "DO_HYPERSPACE", "C:\Program Files (x86)\Epic\v8.3\Shared Files\EpicD83.exe")
+	^+!h::doSelect("local\epicEnvironments.tl", "DO_HYPERSPACE", "C:\Program Files (x86)\Epic\v8.4\Shared Files\EpicD84.exe")
 	^+!r::doSelect("local\epicEnvironments.tl", "DO_THUNDER",    "C:\Program Files (x86)\PuTTY\putty.exe")
 	!+v:: doSelect("local\epicEnvironments.tl", "DO_VDI",        "C:\Program Files (x86)\VMware\VMware Horizon View Client\vmware-view.exe")
 	^!#s::
+		text := getFirstLineOfSelectedText()
+		
 		s := new Selector("local\epicEnvironments.tl")
 		guiSettings                    := []
 		guiSettings["Icon"]            := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
 		guiSettings["ShowDataInputs"]  := 1
 		guiSettings["ExtraDataFields"] := ["INI", "ID"]
-		s.selectGui("DO_SNAPPER", {"ID":getSelectedText()}, guiSettings)
+		s.selectGui("DO_SNAPPER", {"ID":text}, guiSettings)
 	return
 #If
 
@@ -81,7 +83,7 @@ return
 
 ; Generic search.
 !+f::
-	text := getSelectedText()
+	text := getFirstLineOfSelectedText()
 	
 	filter := MainConfig.getMachineTableListFilter()
 	s := new Selector("search.tl", "", filter)
@@ -120,23 +122,23 @@ return
 
 ; Generic opener - opens a variety of different things based on the selected/clipboard text.
 ^!#o::
-	text := getSelectedText()
+	text := getFirstLineOfSelectedText()
 	ActionObject.do(text, , ACTION_RUN, , SUBACTION_WEB)
 return
 ^!#+o::
-	text := getSelectedText()
+	text := getFirstLineOfSelectedText()
 	ActionObject.do(text, , ACTION_RUN)
 return
 
 ; Generic linker - will allow coming from clipboard or selected text, or input entirely. Puts the link on the clipboard.
 ^!#l::
-	text := getSelectedText()
+	text := getFirstLineOfSelectedText()
 	link := ActionObject.do(text, , ACTION_LINK, , SUBACTION_WEB)
 	if(link)
 		clipboard := link
 return
 ^!#+l::
-	text := getSelectedText()
+	text := getFirstLineOfSelectedText()
 	link := ActionObject.do(text, , ACTION_LINK)
 	if(link)
 		clipboard := link

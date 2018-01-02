@@ -251,6 +251,12 @@ mathPopup(inputNum, operations = "") {
 	return result
 }
 
+; Return only the first line of the given string.
+getFirstLine(inputString) {
+	splitAry := StrSplit(inputString, "`n")
+	return splitAry[1]
+}
+
 ; Cleans a hard-coded list of characters out of a (should be single-line) string, including whitespace.
 cleanupText(text) {
 	charCodesToRemove := []

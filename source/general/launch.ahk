@@ -5,14 +5,9 @@
 #b::  activateProgram("Foobar")
 !`::  activateProgram("ProcessExplorer")
 !+b::      runProgram("VMWarePlayer")
-!+o:: activateProgram("OxygenXML")
+!+g::      runProgram("GitHub")
+; !+o:: activateProgram("OxygenXML")
 ^+!g::activateProgram("Chrome")
-^+!o::
-	KeyWait, Ctrl
-	KeyWait, Shift
-	KeyWait, Alt
-	activateProgram("OneNote")
-return
 ^+!x::activateProgram("Launchy")
 ^+!n::activateProgram("Notepad++")
 ^+!s::activateProgram("EpicStudio")
@@ -25,13 +20,15 @@ return
 ^!#f::     runProgram("FirefoxPortable")
 
 ; Special programs/specific params.
-!+g::
-	progInfo := MainConfig.getProgram("GitHub")
-	Run, % wrapInQuotes(progInfo["PATH"])
+^+!o::
+	KeyWait, Ctrl
+	KeyWait, Shift
+	KeyWait, Alt
+	activateProgram("OneNote")
 return
 ^!#z::
 	progInfo := MainConfig.getProgram("FileZilla")
-	Run, % wrapInQuotes(progInfo["PATH"]) filezillaSiteCowbox
+	Run, % wrapInQuotes(progInfo["PATH"]) " --site=""0/CowBox""" ; Connect to the "CowBox" site at startup.
 return
 
 #If !MainConfig.isMachine(MACHINE_EpicLaptop)

@@ -45,14 +45,6 @@ DO(actionRow) {
 	else
 		Run, % actionRow.data["DOACTION"]
 }
-	
-; Run the action, waiting for it to finish.
-DO_WAIT(actionRow) {
-	if(actionRow.isDebug) ; Debug mode.
-		actionRow.debugResult := actionRow
-	else
-		RunWait, % actionRow.data["DOACTION"]
-}
 
 
 ; == File operations ==

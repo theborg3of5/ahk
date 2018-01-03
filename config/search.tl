@@ -21,7 +21,6 @@
 		Server DBC						sd				Server															CODESEARCH		-			-			-			-			-		DBC
 	[-2]
 		
-		
 		# | Other
 		Guru								gu				-																	GURU
 		DBC Wiki							d				dbc																WIKI
@@ -32,14 +31,17 @@
 		; (SUBTYPE = <URL with %s for query>)
 		Google							g				https://www.google.com/search?q=%s
 		Youtube							yt				https://www.youtube.com/results?search_query=%s
-		AutoHotkey Docs				ahk			https://cse.google.com/cse?cx=010629462602499112316:ywoq_rufgic&q=menu#gsc.tab=0&gsc.q=%s&gsc.sort=&gsc.page=1&gsc.ref=more%3Adocumentation
+		AutoHotkey Docs				ahkd			https://cse.google.com/cse?cx=010629462602499112316:ywoq_rufgic&q=menu#gsc.tab=0&gsc.q=%s&gsc.sort=&gsc.page=1&gsc.ref=more%3Adocumentation
 		Translate Dutch > English	tde|detrans	https://translate.google.com/#nl/en/%s
 		Translate English > Dutch	ted|edtrans	https://translate.google.com/#en/nl/%s
 [-3]
 		
+[+4|{SEARCH_TYPE}r:GREPWIN]
 		# GrepWin
 		; (SUBTYPE = folder)
-		AHK Source						ahkf|ahks	<AHK_SOURCE>													GREPWIN
+		AHK Root							ahkr			<AHK_ROOT>
+		AHK Source						ahkf|ahks	<AHK_SOURCE>
+[-4]
 		
 		# Other
 		Everything (file search)	ev				-																	EVERYTHING

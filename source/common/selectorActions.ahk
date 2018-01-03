@@ -144,6 +144,7 @@ SEND_ENVIRONMENT_ID(actionRow) {
 		actionRow.debugResult := environmentId
 	else
 		Send, % environmentId
+		Send, {Enter} ; Submit it too.
 }
 
 ; Run something through Thunder, generally a text session or Citrix.

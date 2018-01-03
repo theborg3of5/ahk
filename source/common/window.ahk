@@ -122,7 +122,6 @@ activateProgram(progName) {
 	titleFindString := buildWindowTitleString(winTitle, winClass)
 	; DEBUG.popup("Title string", titleFindString)
 	
-	; DEBUG.popup("Hotkey", A_ThisHotkey)
 	waitForHotkeyRelease()
 	
 	; If the program is already running, go ahead and activate it.
@@ -138,6 +137,8 @@ activateProgram(progName) {
 runProgram(progName, progInfo = "") {
 	if(!progInfo)
 		progInfo := MainConfig.getProgram(progName)
+	
+	waitForHotkeyRelease()
 	
 	; DEBUG.popup("Run path", progInfo["PATH"])
 	RunAsUser(progInfo["PATH"], progInfo["ARGS"])

@@ -4,6 +4,21 @@
 ;	You can check whether we're in debug mode via the flag actionRow.debugResult (boolean), so you can quit early before actually doing the action.
 ;  You can also populate actionRow.debugResult with info about what WOULD have run. Feel free to use objects - the calling code will use DEBUG.popup to display it to the user, which handles objects gracefully.
 
+; Example function:
+; EXAMPLE(actionRow) {
+	; column := actionRow.data["COLUMN"]
+	; id     := actionRow.data["ID"]
+	
+	; ; Processing as needed
+	; finishedResult := column " " id
+	
+	; actionRow.debugResult := finishedResult
+	; if(actionRow.isDebug)
+		; return
+	
+	; Run, % finishedResult
+; }
+
 
 ; == Return functions (just return the actionRow object or a specific piece of it) ==
 ; Just return the requested subscript (defaults to "DOACTION").

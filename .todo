@@ -18,9 +18,6 @@
 		Turn that titleString into an ID and make an idString (ahk_id %winId%)
 		Use the idString instead of titleString
 		Add support for ahk_exe instead of just class - would make Discord/Chrome confusion easier to fix.
-	Update SelectorAction code style/formatting to be more standardized
-		Can I standardize the common stuff?
-		At least the debug cop-out, maybe?
 	Clean up window stuff for special behaviors - processWindow is way overcomplex.
 	Figure out auto-updating the running script when source saved, specifically for test.ahk
 		Alternatively, just give it a different restart hotkey.

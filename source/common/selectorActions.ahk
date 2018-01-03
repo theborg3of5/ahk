@@ -1,37 +1,38 @@
 ; Central place for functions called from Selector.
 ; All of them should take just one argument, a SelectorRow object (defined in selectorRow.ahk), generally named actionRow.
 ; There's also a debug mode that most of these should support:
-;	You can check whether we're in debug mode via the flag actionRow.debugResult (boolean)
-;	If we're in debug mode, the function should NOT perform its usual action, but should instead set actionRow.debugResult to what it WOULD be doing otherwise.
-;		For example, if a function normally runs an executable with arguments:
-;			Run, C:\full\path\to\executable.exe /a fileNameAndStuff
-;		Then when debug mode is on it might store the full string is WOULD have run:
-;			actionRow.debugResult := "C:\full\path\to\executable.exe /a fileNameAndStuff"
-;	The Selector itself will show that result via DEBUG.popup(), which will show the contents of that variable in a popup.
-;		Note that DEBUG.popup() handles objects and will drill down into them, see that class (defined in debug.ahk) for details.
+;	You can check whether we're in debug mode via the flag actionRow.debugResult (boolean), so you can quit early before actually doing the action.
+;  You can also populate actionRow.debugResult with info about what WOULD have run. Feel free to use objects - the calling code will use DEBUG.popup to display it to the user, which handles objects gracefully.
 
 
 ; == Return functions (just return the actionRow object or a specific piece of it) ==
 ; Just return the requested subscript (defaults to "DOACTION").
 RET(actionRow, subToReturn = "DOACTION") {
-	if(actionRow.isDebug) ; Debug mode.
-		actionRow.debugResult := actionRow.data[subToReturn]
+	val := actionRow.data[subToReturn]
 	
-	return actionRow.data[subToReturn]
+	actionRow.debugResult := val
+	if(actionRow.isDebug)
+		return
+	
+	return val
 }
 
 ; Return data array, for when we want more than just one value back.
 RET_DATA(actionRow) {
-	if(actionRow.isDebug) ; Debug mode.
-		actionRow.debugResult := actionRow.data
+	data := actionRow.data
 	
-	return actionRow.data
+	actionRow.debugResult := data
+	if(actionRow.isDebug)
+		return
+	
+	return data
 }
 
 ; Return entire object.
 RET_OBJ(actionRow) {
-	if(actionRow.isDebug) ; Debug mode.
-		actionRow.debugResult := actionRow
+	actionRow.debugResult := actionRow
+	if(actionRow.isDebug)
+		return
 	
 	return actionRow
 }
@@ -40,10 +41,13 @@ RET_OBJ(actionRow) {
 ; == Run functions (simply run DOACTION subscript of the actionRow object) ==
 ; Run the action.
 DO(actionRow) {
-	if(actionRow.isDebug) ; Debug mode.
-		actionRow.debugResult := actionRow
-	else
-		Run, % actionRow.data["DOACTION"]
+	action := actionRow.data["DOACTION"]
+	
+	actionRow.debugResult := action
+	if(actionRow.isDebug)
+		return
+	
+	Run, % action
 }
 
 
@@ -56,10 +60,11 @@ REG_WRITE(actionRow) {
 	rootKey   := actionRow.data["ROOT_KEY"]
 	regFolder := actionRow.data["REG_FOLDER"]
 	
-	if(actionRow.isDebug) ; Debug mode.
-		actionRow.debugResult := {"Key name":keyName, "Key value":keyValue, "Key Type":keyType, "Root key":rootKey, "Key folder":regFolder}
-	else
-		RegWrite, %keyType%, %rootKey%, %regFolder%, %keyName%, %keyValue%
+	actionRow.debugResult := {"Key name":keyName, "Key value":keyValue, "Key Type":keyType, "Root key":rootKey, "Key folder":regFolder}
+	if(actionRow.isDebug)
+		return
+	
+	RegWrite, %keyType%, %rootKey%, %regFolder%, %keyName%, %keyValue%
 }
 
 ; Change a value in an ini file.
@@ -80,10 +85,9 @@ INI_WRITE(actionRow) {
 		val  := !contains(offStrings, actionRow.userInput)
 	}
 	
-	if(actionRow.isDebug) { ; Debug mode.
-		actionRow.debugResult := {"File":file, "Section":sect, "Key":key, "Value":val}
+	actionRow.debugResult := {"File":file, "Section":sect, "Key":key, "Value":val}
+	if(actionRow.isDebug)
 		return
-	}
 	
 	if(!val) ; Came from post-pended arbitrary piece.
 		IniDelete, %file%, %sect%, %key%
@@ -96,15 +100,15 @@ UPDATE_AHK_SETTINGS(actionRow) {
 	global MAIN_CENTRAL_SCRIPT
 	INI_WRITE(actionRow) ; Has its own debug handling.
 	
+	if(actionRow.isDebug)
+		return
+	
 	; Also reload the script to reflect the updated settings.
-	if(actionRow.isDebug) ; Debug mode.
-		return ; actionRow.debugResult already set by INI_WRITE.
-	else
-		reloadScript(MAIN_CENTRAL_SCRIPT, true)
+	reloadScript(MAIN_CENTRAL_SCRIPT, true)
 }
 
 
-; == Open specific programs ==
+; == Open specific programs / send built strings ==
 ; Run Hyperspace.
 DO_HYPERSPACE(actionRow) {
 	environment  := actionRow.data["COMM_ID"]
@@ -120,23 +124,23 @@ DO_HYPERSPACE(actionRow) {
 	; Build run path.
 	runString := callIfExists("buildHyperspaceRunString", versionMajor, versionMinor, environment) ; buildHyperspaceRunString(versionMajor, versionMinor, environment)
 	
-	; Do it.
-	if(actionRow.isDebug) ; Debug mode.
-		actionRow.debugResult := runString
-	else
-		Run, % runString
+	actionRow.debugResult := runString
+	if(actionRow.isDebug)
+		return
+	
+	Run, % runString
 }
 
 ; Send internal ID of an environment.
 SEND_ENVIRONMENT_ID(actionRow) {
 	environmentId := actionRow.data["ENV_ID"]
 	
-	; Do it.
-	if(actionRow.isDebug) ; Debug mode.
-		actionRow.debugResult := environmentId
-	else
-		Send, % environmentId
-		Send, {Enter} ; Submit it too.
+	actionRow.debugResult := environmentId
+	if(actionRow.isDebug)
+		return
+	
+	Send, % environmentId
+	Send, {Enter} ; Submit it too.
 }
 
 ; Run something through Thunder, generally a text session or Citrix.
@@ -146,11 +150,12 @@ DO_THUNDER(actionRow) {
 	
 	runString := MainConfig.getProgram("Thunder", "PATH") " " thunderId
 	
-	; Do it.
+	actionRow.debugResult := runString
+	if(actionRow.isDebug)
+		return
+	
 	if(actionRow.data["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
 		activateProgram("Thunder")
-	else if(actionRow.isDebug)               ; Debug mode.
-		actionRow.debugResult := runString
 	else
 		Run, % runString
 }
@@ -162,11 +167,12 @@ DO_VDI(actionRow) {
 	; Build run path.
 	runString := callIfExists("buildVDIRunString", vdiId) ; buildVDIRunString(vdiId)
 	
-	; Do it.
+	actionRow.debugResult := runString
+	if(actionRow.isDebug)
+		return
+	
 	if(actionRow.data["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.
 		runProgram("VMWareView")
-	} else if(actionRow.isDebug) {             ; Debug mode.
-		actionRow.debugResult := runString
 	} else {
 		Run, % runString
 		
@@ -184,11 +190,12 @@ DO_SNAPPER(actionRow) {
 	
 	url := callIfExists("buildSnapperURL", environment, ini, idList) ; buildSnapperURL(environment, ini, idList)
 	
-	; Do it.
+	actionRow.debugResult := url
+	if(actionRow.isDebug)
+		return
+	
 	if(actionRow.data["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
 		runProgram("Snapper")
-	else if(actionRow.isDebug)               ; Debug mode.
-		actionRow.debugResult := url
 	else
 		Run, % url
 }
@@ -198,11 +205,11 @@ TIMER(actionRow) {
 	time := actionRow.data["TIME"]
 	runString := MainConfig.getFolder("AHK_ROOT") "\source\standalone\timer\timer.ahk " time
 	
-	; Do it.
-	if(actionRow.isDebug) ; Debug mode.
-		actionRow.debugResult := runString
-	else
-		Run, % runString
+	actionRow.debugResult := runString
+	if(actionRow.isDebug)
+		return
+	
+	Run, % runString
 }
 
 
@@ -212,10 +219,9 @@ CALL(actionRow) {
 	num := actionRow.data["NUMBER"]
 	special := actionRow.data["SPECIAL"]
 	
-	if(actionRow.isDebug) { ; Debug mode.
-		actionRow.debugResult := {"Number":num, "Special":special}
+	actionRow.debugResult := {"Number":num, "Special":special}
+	if(actionRow.isDebug)
 		return
-	}
 	
 	if(special = "SEARCH") { ; Use QuickDial to search for the given name (not a number)
 		callIfExists("activateProgram", "QuickDialer") ; activateProgram("QuickDialer")
@@ -235,15 +241,15 @@ RESIZE(actionRow) {
 	ratioH := actionRow.data["HRATIO"]
 	
 	if(ratioW)
-		width *= ratioW
+		width  *= ratioW
 	if(ratioH)
 		height *= ratioH
 	
-	; Do it.
-	if(actionRow.isDebug) ; Debug mode.
-		actionRow.debugResult := {"Width":width, "Height":height}
-	else
-		WinMove, A, , , , width, height
+	actionRow.debugResult := {"Width":width, "Height":height}
+	if(actionRow.isDebug)
+		return
+	
+	WinMove, A, , , , width, height
 }
 
 ; Builds a string to add to a calendar event (with the format the outlook/tlg calendar needs to import happily into Delorean), then sends it and an Enter keystroke to save it.
@@ -261,38 +267,31 @@ OUTLOOK_TLG(actionRow) {
 			dlg     := newDLG
 		}
 	}
+	textToSend := tlp "/" customer "///" dlg ", " message
 	
-	actionRow.data["DOACTION"] := tlp "/" customer "///" dlg ", " message
+	actionRow.debugResult := textToSend
+	if(actionRow.isDebug)
+		return
 	
-	; Do it.
-	if(actionRow.isDebug) { ; Debug mode.
-		actionRow.debugResult := actionRow.data["DOACTION"]
-	} else {
-		; focusedControl := getFocusedControl()
-		textToSend := actionRow.data["DOACTION"]
-		SendRaw, % textToSend
-		Send, {Enter}
-		; ControlSendRaw, %focusedControl%, %textToSend%, ahk_class rctrl_renwnd32
-		; ControlSend, %focusedControl%, {Enter}, ahk_class rctrl_renwnd32
-	}
+	SendRaw, % textToSend
+	Send, {Enter}
 }
 
 ; Builds and sends a string to exclude the items specified, for Snapper.
 SEND_SNAPPER_EXCLUDE_ITEMS(actionRow) {
 	itemsList := actionRow.data["STATUS_ITEMS"]
-	itemsAry := StrSplit(itemsList, ",")
 	
+	itemsAry  := StrSplit(itemsList, ",")
 	For i,item in itemsAry {
 		if(i > 1)
 			excludeItemsString .= ","
 		excludeItemsString .= "-" item
 	}
 	
-	; Do it.
-	if(actionRow.isDebug) { ; Debug mode.
-		actionRow.debugResult := excludeItemsString
-	} else {
-		Send, % excludeItemsString
-		Send, {Enter}
-	}
+	actionRow.debugResult := excludeItemsString
+	if(actionRow.isDebug)
+		return
+	
+	Send, % excludeItemsString
+	Send, {Enter}
 }

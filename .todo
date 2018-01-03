@@ -7,10 +7,6 @@
 	Add something like VimBindings for Outlook?
 		At least j/k and ;/p would be nice.
 	VB6 - ^F2 focuses first dropdown
-	OneNote issue with Onetastic not appearing when Ctrl held down
-		Temp fix with KeyWait
-		Long-term: either always sleep as part of activateProgram/runProgram, or find a way to do KeyWait based on A_Hotkey.
-			At the least, a function that takes a list of keys to wait on.
 	New open-from-codesearch hotkey in Chrome - ^+o?
 		Routine from title
 		Tag from selection (or nothing, just open routine)
@@ -23,6 +19,8 @@
 		Use the idString instead of titleString
 		Add support for ahk_exe instead of just class - would make Discord/Chrome confusion easier to fix.
 	Update SelectorAction code style/formatting to be more standardized
+		Can I standardize the common stuff?
+		At least the debug cop-out, maybe?
 	Clean up window stuff for special behaviors - processWindow is way overcomplex.
 	Figure out auto-updating the running script when source saved, specifically for test.ahk
 		Alternatively, just give it a different restart hotkey.

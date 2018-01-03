@@ -35,8 +35,6 @@
 	Audit all scripts for unused hotkeys
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
 	Have remote desktop script mute volume on a loop, or whenever a new connection is made.
-	Turn the "; Special programs/specific params." section in launch.ahk into a parameter to activate/run program?
-		Or maybe stick the quotes in the config somehow?
 	
 # Scripts to Share
 

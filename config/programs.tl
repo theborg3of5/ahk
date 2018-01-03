@@ -29,6 +29,7 @@
 	ProcessExplorer	-				PROCEXPL														Process Explorer\procexp.exe									-									EPIC_LAPTOP
 	ProcessExplorer	-				PROCEXPL														ProcessExplorer\procexp.exe									-									
 	grepWin				-				-																grepWin\grepWin.exe
+	FileZilla			-				-																FileZilla FTP Client\filezilla.exe							--site="0/CowBox"
 []
 
 [{PATH}b:C:\Users\gborg\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\]
@@ -50,4 +51,3 @@
 
 	FirefoxPortable	-				-																S:\FirefoxPortable\FirefoxPortable.exe						-									HOME_DESKTOP
 	
-	FileZilla			-				-																C:\Program Files\FileZilla FTP Client\filezilla.exe	--site="0/CowBox"

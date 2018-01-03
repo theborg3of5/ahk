@@ -15,7 +15,7 @@
 	
 	; Split diff
 	^q::
-		KeyWait, Ctrl
+		waitForHotkeyRelease()
 		Send, {Alt}
 		Send, {Left 4}{Down}
 		Send, {Up 3}

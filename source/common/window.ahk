@@ -122,6 +122,9 @@ activateProgram(progName) {
 	titleFindString := buildWindowTitleString(winTitle, winClass)
 	; DEBUG.popup("Title string", titleFindString)
 	
+	; DEBUG.popup("Hotkey", A_ThisHotkey)
+	waitForHotkeyRelease()
+	
 	; If the program is already running, go ahead and activate it.
 	if(WinExist(titleFindString)) {
 		activateWindow(winTitle, winClass)

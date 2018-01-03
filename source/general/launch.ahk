@@ -21,12 +21,6 @@
 ^!#/::activateProgram("WinSpy")
 
 ; Special programs/specific params.
-^+!o::
-	KeyWait, Ctrl
-	KeyWait, Shift
-	KeyWait, Alt
-	activateProgram("OneNote")
-return
 ^!#z::
 	progInfo := MainConfig.getProgram("FileZilla")
 	Run, % wrapInQuotes(progInfo["PATH"]) " --site=""0/CowBox""" ; Connect to the "CowBox" site at startup.
@@ -38,10 +32,7 @@ return
 
 #If MainConfig.isMachine(MACHINE_EpicLaptop)
 	; VB - have to not have shift held down when it actually opens.
-	^+!v::
-		KeyWait, Shift
-		activateProgram("VB6")
-	return
+	^+!v::activateProgram("VB6")
 	
 	; Selector launchers
 	#p::  doSelect("local\phone.tl")

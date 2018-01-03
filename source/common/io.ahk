@@ -140,3 +140,44 @@ clickUsingMode(x = "", y = "", mouseCoordMode = "") {
 	; Move the mouse back to its former position.
 	MouseMove, prevX, prevY
 }
+
+waitForHotkeyRelease(hotkeyString = "") {
+	if(!hotkeyString)
+		hotkeyString := A_ThisHotkey
+	
+	Loop, Parse, hotkeyString
+	{
+		keyName := getKeyNameFromHotkeyChar(A_LoopField)
+		if(keyName)
+			KeyWait, % keyName
+	}
+}
+
+; Partial - doesn't cover everything possible. Doesn't cover UP, for example.
+getKeyNameFromHotkeyChar(hotkeyChar = "") {
+	if(!hotkeyChar)
+		return ""
+	
+	; Special characters for how a hotkey is checked
+	if(hotkeyChar = "*")
+		return ""
+	if(hotkeyChar = "$")
+		return ""
+	if(hotkeyChar = "~")
+		return ""
+	if(hotkeyChar = " ")
+		return "" ; Space within hotkey - probably around an & or similar.
+	
+	; Modifier keys
+	if(hotkeyChar = "#")
+		return "LWin" ; There's no generic "Win", so just pick the left one.
+	if(hotkeyChar = "!")
+		return "Alt"
+	if(hotkeyChar = "^")
+		return "Ctrl"
+	if(hotkeyChar = "+")
+		return "Shift"
+	
+	; Otherwise, probably a letter or number.
+	return hotkeyChar
+}

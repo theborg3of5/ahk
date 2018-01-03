@@ -35,8 +35,7 @@ return
 #If
 
 ^!v::
-	KeyWait, Ctrl
-	KeyWait, Alt
+	waitForHotkeyRelease()
 	SendRaw, % clipboard
 return
 

@@ -114,33 +114,28 @@ getFocusedControl(titleString = "A") {
 
 ; Focus a window, running the program if it doesn't yet exist.
 activateProgram(progName) {
+	waitForHotkeyRelease()
+	
 	progInfo := MainConfig.getProgram(progName)
 	; DEBUG.popup("window.activateProgram", "start", "Program name", progName, "Program info", progInfo)
 	
-	winTitle := progInfo["TITLE"]
-	winClass := progInfo["CLASS"]
+	winTitle        := progInfo["TITLE"]
+	winClass        := progInfo["CLASS"]
 	titleFindString := buildWindowTitleString(winTitle, winClass)
 	; DEBUG.popup("Title string", titleFindString)
 	
-	waitForHotkeyRelease()
-	
 	; If the program is already running, go ahead and activate it.
-	if(WinExist(titleFindString)) {
+	if(WinExist(titleFindString))
 		activateWindow(winTitle, winClass)
-		
 	; If it doesn't exist yet, we need to run the executable to make it happen.
-	} else {
-		; DEBUG.popup("Run path", progInfo["PATH"])
-		runProgram(progName, progInfo)
-	}
+	else
+		RunAsUser(progInfo["PATH"], progInfo["ARGS"])
 }
-runProgram(progName, progInfo = "") {
-	if(!progInfo)
-		progInfo := MainConfig.getProgram(progName)
-	
+runProgram(progName) {
 	waitForHotkeyRelease()
 	
-	; DEBUG.popup("Run path", progInfo["PATH"])
+	progInfo := MainConfig.getProgram(progName)
+	
 	RunAsUser(progInfo["PATH"], progInfo["ARGS"])
 }
 

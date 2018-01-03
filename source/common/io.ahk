@@ -141,6 +141,7 @@ clickUsingMode(x = "", y = "", mouseCoordMode = "") {
 	MouseMove, prevX, prevY
 }
 
+; Wait for a hotkey to be fully released
 waitForHotkeyRelease(hotkeyString = "") {
 	if(!hotkeyString)
 		hotkeyString := A_ThisHotkey

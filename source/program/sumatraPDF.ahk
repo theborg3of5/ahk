@@ -5,19 +5,17 @@
 	; Vim-like navigation.
 	$`;::
 		ControlGetFocus, currControl
-		if(currControl != "Edit2") {
+		if(currControl != "Edit2")
 			Send, {PgDn}
-		} else {
-			Send, % stripHotkeyString(A_ThisHotkey)
-		}
+		else
+			Send, `;
 	return
 	$p::
 		ControlGetFocus, currControl
-		if(currControl != "Edit2") {
+		if(currControl != "Edit2")
 			Send, {PgUp}
-		} else {
-			Send, % stripHotkeyString(A_ThisHotkey)
-		}
+		else
+			Send, p
 	return
 
 	; Show/hide toolbar.
@@ -44,13 +42,12 @@
 	; Want to close on Esc, but also just unfocus controls at top if focused.
 	Escape::
 		ControlGetFocus, currControl, A
-		if(currControl = "Edit1") {
+		if(currControl = "Edit1")
 			Send, {Tab 2}
-		} else if(currControl = "Edit2") {
+		else if(currControl = "Edit2")
 			Send, {Tab}
-		} else {
+		else
 			WinClose
-		}
 	return
 
 	; Kill unconventional hotkey to quit.

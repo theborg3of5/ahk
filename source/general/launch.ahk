@@ -4,7 +4,7 @@
 #b::  activateProgram("Foobar")
 #f::  activateProgram("Everything")
 !+b::      runProgram("VMWarePlayer")
-!+g::      runProgram("GitHub")
+!+g:: activateProgram("GitHub")
 !`::  activateProgram("ProcessExplorer")
 ; !+o:: activateProgram("OxygenXML")
 ^+!e::activateProgram("EMC2")

@@ -88,7 +88,7 @@ INI_WRITE(actionRow) {
 	if(!val) ; Came from post-pended arbitrary piece.
 		IniDelete, %file%, %sect%, %key%
 	else
-		IniWrite, %val%, %file%, %sect%, %key%
+		IniWrite,  %val%,  %file%, %sect%, %key%
 }
 
 ; Updates specific settings out of the main script's configuration file, then reloads it.

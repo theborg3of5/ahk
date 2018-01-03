@@ -50,4 +50,4 @@
 
 	FirefoxPortable	-				-																S:\FirefoxPortable\FirefoxPortable.exe						-									HOME_DESKTOP
 	
-	FileZilla			-				-																C:\Program Files\FileZilla FTP Client\filezilla.exe
+	FileZilla			-				-																C:\Program Files\FileZilla FTP Client\filezilla.exe	--site="0/CowBox"

@@ -18,13 +18,8 @@
 ^!#e::activateProgram("Outlook")
 ^!#f::     runProgram("FirefoxPortable")
 ^!#n::     runProgram("Notepad")
+^!#z::activateProgram("FileZilla")
 ^!#/::activateProgram("WinSpy")
-
-; Special programs/specific params.
-^!#z::
-	progInfo := MainConfig.getProgram("FileZilla")
-	Run, % wrapInQuotes(progInfo["PATH"]) " --site=""0/CowBox""" ; Connect to the "CowBox" site at startup.
-return
 
 #If !MainConfig.isMachine(MACHINE_EpicLaptop)
 	!+l::activateProgram("League")

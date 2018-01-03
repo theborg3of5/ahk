@@ -33,6 +33,7 @@
 	#p::  doSelect("local\phone.tl")
 	^+!t::doSelect("local\outlookTLG.tl")
 	^+!h::doSelect("local\epicEnvironments.tl", "DO_HYPERSPACE", "C:\Program Files (x86)\Epic\v8.4\Shared Files\EpicD84.exe")
+	^+!i::doSelect("local\epicEnvironments.tl", "SEND_ENVIRONMENT_ID")
 	^+!r::doSelect("local\epicEnvironments.tl", "DO_THUNDER",    "C:\Program Files (x86)\PuTTY\putty.exe")
 	!+v:: doSelect("local\epicEnvironments.tl", "DO_VDI",        "C:\Program Files (x86)\VMware\VMware Horizon View Client\vmware-view.exe")
 	^!#s::

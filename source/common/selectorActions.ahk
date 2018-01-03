@@ -135,6 +135,17 @@ DO_HYPERSPACE(actionRow) {
 		Run, % runString
 }
 
+; Send internal ID of an environment.
+SEND_ENVIRONMENT_ID(actionRow) {
+	environmentId := actionRow.data["ENV_ID"]
+	
+	; Do it.
+	if(actionRow.isDebug) ; Debug mode.
+		actionRow.debugResult := environmentId
+	else
+		Send, % environmentId
+}
+
 ; Run something through Thunder, generally a text session or Citrix.
 DO_THUNDER(actionRow) {
 	runString := ""

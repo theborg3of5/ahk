@@ -6,8 +6,6 @@
 # New ideas
 	Add something like VimBindings for Outlook?
 		At least j/k and ;/p would be nice.
-	Hotkey to send environment ID?
-		Could be useful in EpicStudio/EMC2 compare windows.
 	VB6 - ^F2 focuses first dropdown
 	OneNote issue with Onetastic not appearing when Ctrl held down
 		Temp fix with KeyWait

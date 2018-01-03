@@ -1,23 +1,24 @@
 ; Launch various programs, URLs, etc.
 
 ; General programs.
-#f::  activateProgram("Everything")
 #b::  activateProgram("Foobar")
-!`::  activateProgram("ProcessExplorer")
+#f::  activateProgram("Everything")
 !+b::      runProgram("VMWarePlayer")
 !+g::      runProgram("GitHub")
+!`::  activateProgram("ProcessExplorer")
 ; !+o:: activateProgram("OxygenXML")
+^+!e::activateProgram("EMC2")
 ^+!g::activateProgram("Chrome")
-^+!x::activateProgram("Launchy")
 ^+!n::activateProgram("Notepad++")
+^+!o::activateProgram("OneNote")
 ^+!s::activateProgram("EpicStudio")
 ^+!u::activateProgram("Thunder")
-^+!e::activateProgram("EMC2")
+^+!x::activateProgram("Launchy")
 ^+!y::activateProgram("yEd")
 ^!#e::activateProgram("Outlook")
+^!#f::     runProgram("FirefoxPortable")
 ^!#n::     runProgram("Notepad")
 ^!#/::activateProgram("WinSpy")
-^!#f::     runProgram("FirefoxPortable")
 
 ; Special programs/specific params.
 ^+!o::

@@ -38,7 +38,7 @@ class ActionObject {
 		; DEBUG.popup("ActionObject.do", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
 		; Clean up input.
-		input := getFirstLine(input)
+		input := getFirstLine(input) ; Comes first so that we can clean from end of first line (even if there are multiple).
 		input := cleanupText(input)
 		
 		; Determine what we need to do.

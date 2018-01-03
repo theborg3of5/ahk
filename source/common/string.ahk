@@ -224,19 +224,6 @@ isPath(ByRef text, ByRef type = "") {
 	return type
 }
 
-; Strips the dollar sign/asterisk off of the front of hotkeys if it's there.
-stripHotkeyString(hotkeyString, leaveDollarSign = 0, leaveStar = 0) {
-	if(!leaveDollarSign && InStr(hotkeyString, "$")) {
-		StringReplace, returnKey, hotkeyString, $
-		return returnKey
-	} else if(!leaveStar && InStr(hotkeyString, "*")) {
-		StringReplace, returnKey, hotkeyString, *
-		return returnKey
-	} else {
-		return A_ThisHotkey
-	}
-}
-
 ; Show a popup that takes what math on the given number.
 mathPopup(inputNum, operations = "") {
 	if(!isNum(inputNum))

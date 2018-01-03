@@ -709,7 +709,7 @@ class Selector {
 		debugBuilder.addLine("Chars",              this.chars)
 		debugBuilder.addLine("Data indices",       this.dataIndices)
 		debugBuilder.addLine("GUI settings",       this.guiSettings)
-		debugBuilder.addLine("Return settings",    this.actionSettings)
+		debugBuilder.addLine("Action settings",    this.actionSettings)
 		debugBuilder.addLine("Filepath",           this.filePath)
 		debugBuilder.addLine("Original icon path", this.originalIconPath)
 		debugBuilder.addLine("Hide errors",        this.hideErrors)

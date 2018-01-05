@@ -1,0 +1,8 @@
+(from https://github.com/desktop/desktop/issues/1515#issuecomment-345139507)
+
+var html_file = require("path").join(process.resourcesPath, "app/index.html");
+var html = require("fs").readFileSync(html_file, "utf8");
+var link_to_inject = '<link href="https://rawgit.com/1j01/d8f8d11785d8fb21a70654e7aa8a4553/raw/desktop-dark.css" rel="stylesheet">';
+html = html.replace(link_to_inject, "").replace("</head>", `\n${link_to_inject}</head>`);
+require("fs").writeFileSync(html_file, html, "utf8");
+location.reload();

@@ -49,7 +49,7 @@
 #If
 
 ; Resize window
-#!r::doSelect("resize.tl")
+#+r::doSelect("resize.tl")
 
 ; Folders
 !+a::openFolder("AHK_ROOT")

@@ -141,7 +141,7 @@ sendToOmniboxAndGo(url) {
 	; Bookmarklet hotkeys.
 	RAlt & `;::sendToOmniboxAndGo("d") ; Darken bookmarklet hotkey.
 	; RAlt & z::sendToOmniboxAndGo("pz") ; PageZipper.
-	RCtrl & Right::sendToOmniboxAndGo("+") ; Increment.
+	; RCtrl & Right::sendToOmniboxAndGo("+") ; Increment.
 	
 	; Keys that turn vimkeys off, because you're probably typing something else.
 	~a:: ; Letters

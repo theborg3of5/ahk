@@ -2,6 +2,8 @@
 	Seems like standalone scripts reload once on their own, then are restarted again by main script - should either have them not restart, or don't need main script to reload them too.
 	Make server routine stuff work again (or ditch it entirely, or make only the web link work) for ActionObject.
 	Fix monitor fixer script or get rid of it entirely.
+	Make Chrome program checks more specific (ahk_exe instead of class, probably?)
+		Other things use the same class - GitHub desktop, Discord, etc.
 	
 # New ideas
 	Add something like VimBindings for Outlook?

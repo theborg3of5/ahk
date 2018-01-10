@@ -31,7 +31,7 @@ return
 	}
 return
 
-F1::
+F10::
 	rows := []
 	
 	WinGetClass, currClass, A

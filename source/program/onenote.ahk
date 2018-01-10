@@ -145,11 +145,11 @@
 		Send, pc
 		Send, n
 		
-		Send, ^a                   ; Select title (to replace with new day/date)
+		Send, ^+t                  ; Select title (to replace with new day/date)
 		
 		Sleep, 750                 ; Wait for selection to take
 		sendDateTime("M/d`, dddd") ; Send today's day/date
-		Send, ^a                   ; Select title again in case you want a different date.
+		Send, ^+t                  ; Select title again in case you want a different date.
 	return
 	
 	; Insert a contact comment.

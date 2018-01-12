@@ -31,31 +31,6 @@ return
 	}
 return
 
-F1::
-	rows := []
-	
-	WinGetClass, currClass, A
-	WinGetTitle, currTitle, A
-	currControl := getFocusedControl()
-	tooltipText := getTooltipText()
-	
-	; DEBUG.popup("Class", currClass, "Title", currTitle, "Control", currControl, "Tooltip text", tooltipText)
-	
-	rows.Insert(new SelectorRow("", "Class",   "c", currClass,   true))
-	rows.Insert(new SelectorRow("", "Tooltip", "t", tooltipText, true))
-	rows.Insert(new SelectorRow("", "Title",   "i", currTitle,   true))
-	rows.Insert(new SelectorRow("", "Control", "o", currControl, true))
-	
-	s := new Selector()
-	s.setChoices(rows)
-	textToCopy := s.selectGui()
-	
-	if(textToCopy) {
-		clipboard := textToCopy
-		DEBUG.popup("Copied to clipboard", textToCopy)
-	}
-return
-
 ; Call the Windows API function "SetSuspendState" to have the system suspend or hibernate.
 ; Parameter #1: Pass 1 instead of 0 to hibernate rather than suspend.
 ; Parameter #2: Pass 1 instead of 0 to suspend immediately rather than asking each application for permission.

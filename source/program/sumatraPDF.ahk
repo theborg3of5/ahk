@@ -25,20 +25,6 @@
 		Send, t
 	return
 
-	; Show/hide favorites.
-	$F11::
-	^e::
-		Send, !a
-		Sleep, 100
-		Send, {Down 2}
-		Send, {Enter}
-	return
-
-	; Retain fullscreening ability.
-	!Enter::
-		Send, {F11}
-	return
-
 	; Want to close on Esc, but also just unfocus controls at top if focused.
 	Escape::
 		ControlGetFocus, currControl, A

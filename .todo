@@ -4,6 +4,8 @@
 	Fix monitor fixer script or get rid of it entirely.
 	Make Chrome program checks more specific (ahk_exe instead of class, probably?)
 		Other things use the same class - GitHub desktop, Discord, etc.
+	Make selectors work from PuTTY - by not sending ^c to get selected text.
+		Program-level exclusion where we assume it's already on the clipboard?
 	
 # New ideas
 	Hotstring for making a new row in OneNote Do stuff

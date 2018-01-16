@@ -13,6 +13,7 @@
 			(Specifics page with specific formats per INI)
 		Take care of linking (to record in string, at least), too?
 			What about new specifics page? Separate hotstring that includes that as well?
+		Remove "DBC" with whatever separator (-/\) from start, since that's not particularly needed?
 	Add something like VimBindings for Outlook?
 		At least j/k and ;/p would be nice.
 	VB6 - ^F2 focuses first dropdown

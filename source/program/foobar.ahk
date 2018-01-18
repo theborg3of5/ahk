@@ -1,24 +1,25 @@
 ; Hotkey catches for if foobar isn't running.
 #IfWinNotExist, ahk_class {97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}
-	^!Up::
-	^!Down::
-	^!Left::
-	^!Right::
-	~Media_Stop::
-	~Media_Play_Pause::
-	~Media_Prev::
-	~Media_Next::
+	; ^!Up::
+	; ^!Down::
+	; ^!Left::
+	; ^!Right::
+	; ~Media_Stop::
+	; ~Media_Play_Pause::
+	; ~Media_Prev::
+	; ~Media_Next::
 	#j::
 		RunAsUser(MainConfig.getProgram("Foobar", "PATH"))
 	return
 #IfWinNotExist
 
+^!Up::   Send, {Media_Stop}
+^!Down:: Send, {Media_Play_Pause}
+^!Left:: Send, {Media_Prev}
+^!Right::Send, {Media_Next}
+
 ; If foobar is indeed running.
 #IfWinExists, ahk_class {97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}
-	^!Up::   Send, {Media_Stop}
-	^!Down:: Send, {Media_Play_Pause}
-	^!Left:: Send, {Media_Prev}
-	^!Right::Send, {Media_Next}
 	
 	#j::
 		Send, ^+j

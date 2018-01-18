@@ -189,6 +189,9 @@ DO_VDI(actionRow) {
 	if(actionRow.data["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.
 		runProgram("VMWareView")
 	} else {
+		if(!vdiId) ; Safety check - don't try to launch with no VDI specified (that's what the "LAUNCH" COMM_ID is for).
+			return
+		
 		Run, % runString
 		
 		; Also fake-maximize the window once it shows up.

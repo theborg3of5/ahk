@@ -49,5 +49,10 @@
 	GitHub				-				-																C:\Users\gborg\													-									EPIC_LAPTOP
 []
 
+[{PATH}e:AppData\Roaming\Spotify\Spotify.exe]
+	Spotify				-				SpotifyMainWindow											C:\Users\thebo\
+	Spotify				-				SpotifyMainWindow											C:\Users\gborg\													-									EPIC_LAPTOP
+[]
+	
 	FirefoxPortable	-				-																S:\FirefoxPortable\FirefoxPortable.exe						-									HOME_DESKTOP
 	

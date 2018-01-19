@@ -2,6 +2,7 @@
 
 ; General programs.
 #b::  activateProgram("Foobar")
+#s::  activateProgram("Spotify")
 #f::  activateProgram("Everything")
 !+b::      runProgram("VMWarePlayer")
 !+g:: activateProgram("GitHub")

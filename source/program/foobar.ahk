@@ -18,6 +18,8 @@
 ^!Left:: Send, {Media_Prev}
 ^!Right::Send, {Media_Next}
 
+^!Space::Send, {Volume_Down}{Volume_Up} ; Makes Windows 10 media panel show up
+
 ; If foobar is indeed running.
 #IfWinExists, ahk_class {97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}
 	

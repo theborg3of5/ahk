@@ -1,4 +1,4 @@
-(from https://github.com/desktop/desktop/issues/1515#issuecomment-345139507)
+// (from https://github.com/desktop/desktop/issues/1515#issuecomment-345139507)
 
 var html_file = require("path").join(process.resourcesPath, "app/index.html");
 var html = require("fs").readFileSync(html_file, "utf8");

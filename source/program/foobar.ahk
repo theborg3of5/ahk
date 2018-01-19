@@ -8,9 +8,9 @@
 	; ~Media_Play_Pause::
 	; ~Media_Prev::
 	; ~Media_Next::
-	#j::
-		RunAsUser(MainConfig.getProgram("Foobar", "PATH"))
-	return
+	; #j::
+		; RunAsUser(MainConfig.getProgram("Foobar", "PATH"))
+	; return
 #IfWinNotExist
 
 ^!Up::   Send, {Media_Stop}
@@ -19,15 +19,19 @@
 ^!Right::Send, {Media_Next}
 
 ^!Space::Send, {Volume_Down}{Volume_Up} ; Makes Windows 10 media panel show up
+#j::
+	activateProgram("Spotify")
+	Send, ^l
+return
 
 ; If foobar is indeed running.
 #IfWinExists, ahk_class {97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}
 	
-	#j::
-		Send, ^+j
-		WinWait, Media Library Search ahk_exe foobar2000.exe
-		WinActivate
-	return
+	; #j::
+		; Send, ^+j
+		; WinWait, Media Library Search ahk_exe foobar2000.exe
+		; WinActivate
+	; return
 #IfWinExists
 
 ; Media library search.

@@ -40,7 +40,7 @@
 		# GrepWin
 		; (SUBTYPE = folder)
 		AHK Root							ahkr			<AHK_ROOT>
-		AHK Source						ahkf|ahks	<AHK_SOURCE>
+		AHK Source						ahks|ahkf	<AHK_SOURCE>
 [-4]
 		
 		# Other

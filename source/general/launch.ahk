@@ -22,10 +22,6 @@
 ^!#z::activateProgram("FileZilla")
 ^!#/::activateProgram("WinSpy")
 
-#If !MainConfig.isMachine(MACHINE_EpicLaptop)
-	!+l::activateProgram("League")
-#If
-
 #If MainConfig.isMachine(MACHINE_EpicLaptop)
 	; VB - have to not have shift held down when it actually opens.
 	^+!v::activateProgram("VB6")

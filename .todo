@@ -8,9 +8,9 @@
 		Program-level exclusion where we assume it's already on the clipboard?
 	Finish switching over to Spotify as main music player
 		New ahk file, etc.
-	Try and clean out/reduce windows.tl
-		In particular, the control class thing is only used by a single row - likely not worth it.
-		Could we combine programs.tl and windows.tl?
+	Clean out/reduce/standardize windows.tl and programs.tl
+		Their "finding" criteria should match - say (NAME/)EXE/CLASS/TITLE
+			Always use EXE (if possible), then filter down with class/title only if needed
 	
 # New ideas
 	Hotstring for making a new row in OneNote Do stuff

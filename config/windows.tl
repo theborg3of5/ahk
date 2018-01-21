@@ -14,7 +14,6 @@
 	Cisco AnyConnect VPN		-									Cisco AnyConnect Secure Mobility Client	-		-					CLOSE_WINDOW	
 	VB6 Object Browser		-									Object Browser				-								-					CLOSE_WINDOW	
 	Foobar						{97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}	-				-								-					MIN				POST_MESSAGE
-	Spotify						SpotifyMainWindow				-								-								-					CLOSE_WINDOW	CLOSE_WINDOW
 	Windows Explorer			CabinetWClass					-								-								-					MIN				OTHER
 	Guru Quick Dial			-									Quick Dial					-								-					MIN				HIDE_TOOL_WIN
 	Guru Quick Dial Popup	WindowsForms10.Window.8.app.0.1517e87	-				-								-					OTHER
@@ -44,4 +43,5 @@
 	GitHub						-									-								-								GitHub.exe
 	Chrome						-									-								-								chrome.exe
 	Steam							-									-								-								Steam.exe
+	Spotify						SpotifyMainWindow				-								-								Spotify.exe		CLOSE_WINDOW	CLOSE_WINDOW
 [-1]

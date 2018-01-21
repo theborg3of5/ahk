@@ -10,6 +10,7 @@
 		New ahk file, etc.
 	Try and clean out/reduce windows.tl
 		In particular, the control class thing is only used by a single row - likely not worth it.
+		Could we combine programs.tl and windows.tl?
 	
 # New ideas
 	Hotstring for making a new row in OneNote Do stuff

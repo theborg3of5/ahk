@@ -146,7 +146,7 @@ getWindowSettingsAry(titleString = "A") {
 	WinGetTitle, winTitle, %titleString%
 	controlClass := getFocusedControl(titleString)
 	
-	return MainConfig.getWindow(winExe, winClass, winTitle, controlClass)
+	return MainConfig.getWindow("", winExe, winClass, winTitle, controlClass)
 }
 getWindowSetting(settingName, titleString = "A") {
 	if(!settingName)
@@ -158,6 +158,8 @@ getWindowSetting(settingName, titleString = "A") {
 
 ; fillFromActive - whether to overwrite winTitle, winClass, and controlClass from the active window if they're blank.
 processWindow(ByRef winExe = "", ByRef winClass = "", ByRef winTitle = "", ByRef controlClass = "", ByRef winSettings = "", action = "", fillFromActive = true) {
+	; DEBUG.popup("processWindow","Start", "Exe",winExe, "Class",winClass, "Title",winTitle, "Control class",controlClass, "Settings",winSettings, "Action",action, "Fill from active",fillFromActive)
+	
 	if(fillFromActive) {
 		if(!winExe)
 			WinGet,      winExe, ProcessName, A
@@ -170,7 +172,7 @@ processWindow(ByRef winExe = "", ByRef winClass = "", ByRef winTitle = "", ByRef
 	}
 	
 	if(!IsObject(winSettings)) {
-		winSettings := MainConfig.getWindow(winExe, winClass, winTitle, controlClass)
+		winSettings := MainConfig.getWindow("", winExe, winClass, winTitle, controlClass)
 		
 		if(fillFromActive) {
 			if(!winSettings["EXE"])
@@ -256,7 +258,7 @@ activateWindow(winExe = "", winClass = "", winTitle = "", controlClass = "", win
 doEscAction(winExe = "", winClass = "", winTitle = "", controlClass = "", winSettings = "") {
 	; Gather any needed info we're not given.
 	method := processWindow(winExe, winClass, winTitle, controlClass, winSettings, WIN_ACTION_ESC)
-	; DEBUG.popup("doEscAction", "", "Action", method, "Window settings", winSettings, "Class", winClass, "Title", winTitle)
+	; DEBUG.popup("doEscAction", "", "Action", method, "Window settings", winSettings, "Exe", winExe, "Class", winClass, "Title", winTitle)
 	
 	if(method = WIN_METHOD_DEFAULT) { ; Default is to do nothing.
 		return
@@ -276,7 +278,7 @@ closeWindow(winExe = "", winClass = "", winTitle = "", controlClass = "", winSet
 minimizeWindow(winExe = "", winClass = "", winTitle = "", controlClass = "", winSettings = "") {
 	; Gather any needed info we're not given.
 	method := processWindow(winExe, winClass, winTitle, controlClass, winSettings, WIN_ACTION_MIN)
-	; DEBUG.popup("minimizeWindow", "", "Min method", method, "Window settings", winSettings, "Class", winClass, "Title", winTitle)
+	; DEBUG.popup("minimizeWindow", "", "Min method", method, "Window settings", winSettings, "Exe", winExe, "Class", winClass, "Title", winTitle)
 	
 	; Do it!
 	titleFindString := buildWindowTitleString(winExe, winClass, winTitle)
@@ -301,7 +303,7 @@ minimizeWindow(winExe = "", winClass = "", winTitle = "", controlClass = "", win
 selectAll(winExe = "", winClass = "", winTitle = "", controlClass = "", winSettings = "") {
 	; Gather any needed info we're not given.
 	method := processWindow(winExe, winClass, winTitle, controlClass, winSettings, WIN_ACTION_SELECT_ALL)
-	; DEBUG.popup("selectAll", "", "Select method", method, "Window settings", winSettings, "Class", winClass, "Title", winTitle)
+	; DEBUG.popup("selectAll", "", "Select method", method, "Window settings", winSettings, "Exe", winExe, "Class", winClass, "Title", winTitle)
 
 	; Do it!
 	if(method = WIN_METHOD_DEFAULT) { ; Generic case.
@@ -320,7 +322,7 @@ selectAll(winExe = "", winClass = "", winTitle = "", controlClass = "", winSetti
 deleteWord(winExe = "", winClass = "", winTitle = "", controlClass = "", winSettings = "") {
 	; Gather any needed info we're not given.
 	method := processWindow(winExe, winClass, winTitle, controlClass, winSettings, WIN_ACTION_DELETE_WORD)
-	; DEBUG.popup("deleteWord", "", "Delete method", method, "Window settings", winSettings, "Class", winClass, "Title", winTitle)
+	; DEBUG.popup("deleteWord", "", "Delete method", method, "Window settings", winSettings, "Exe", winExe, "Class", winClass, "Title", winTitle)
 
 	; Do it!
 	if(method = WIN_METHOD_DEFAULT) { ; Generic case.
@@ -365,6 +367,22 @@ doWindowActionSpecial(action, winExe = "", winClass = "", winTitle = "", control
 	return method
 }
 
+
+; Convenience function to get the full window title string using the NAME column in windows.tl.
+getWindowTitleString(winName) {
+	if(!winName)
+		return ""
+	
+	winSettings := MainConfig.getWindow(winName)
+	winExe   := winSettings["EXE"]
+	winClass := winSettings["CLASS"]
+	winTitle := winSettings["TITLE"]
+	
+	titleString := buildWindowTitleString(winExe, winClass, winTitle)
+	; DEBUG.popup("getWindowTitleString","", "winName",winName, "winExe",winExe, "winClass",winClass, "winTitle",winTitle, "Title string",titleString)
+	
+	return titleString
+}
 
 ; Puts together a string that can be used with the likes of WinActivate, etc.
 buildWindowTitleString(exeName = "", winClass = "", winTitle = "") {

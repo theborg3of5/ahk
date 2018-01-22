@@ -241,14 +241,7 @@ CALL(actionRow) {
 	if(actionRow.isDebug)
 		return
 	
-	if(special = "SEARCH") { ; Use QuickDial to search for the given name (not a number)
-		callIfExists("activateProgram", "QuickDialer") ; activateProgram("QuickDialer")
-		WinWaitActive, Quick Dial
-		if(num != "SEARCH")
-			SendRaw, %num%
-	} else {
-		callIfExists("callNumber", num, actionRow.data["NAME"]) ; callNumber(num, actionRow.data["NAME"])
-	}
+	callIfExists("callNumber", num, actionRow.data["NAME"]) ; callNumber(num, actionRow.data["NAME"])
 }
 
 ; Resizes the active window to the given dimensions.

@@ -104,7 +104,7 @@ class MainConfig {
 		; Index it by name and machine.
 		programsAry := []
 		For i,pAry in uniquePrograms {
-			name    := pAry["NAME"]    ; Identifying name of this entry (which this.programs will be indexed by)
+			name := pAry["NAME"] ; Identifying name of this entry (which this.programs will be indexed by)
 			
 			if(!IsObject(programsAry[name])) ; Initialize the array.
 				programsAry[name] := []
@@ -150,20 +150,20 @@ class MainConfig {
 		}
 	}
 	
-	getWindow(title = "", ahkClass = "", exe = "", controlClass = "") {
+	getWindow(exe = "", title = "", ahkClass = "", controlClass = "") {
 		retWindow := ""
-		if(!title && !ahkClass && !controlClass && !exe)
+		if(!exe && !ahkClass && !title && !controlClass)
 			return ""
 		
 		For i,w in this.windows {
-			; DEBUG.popup("Class", ahkClass, "Title", title, "EXE", exe, "Control", controlClass, "Against settings", w)
-			if(ahkClass && w["WIN_CLASS"] && (ahkClass != w["WIN_CLASS"]) )
+			; DEBUG.popup("EXE", exe, "Class", ahkClass, "Title", title, "Control", controlClass, "Against settings", w)
+			if(exe && w["EXE"] && (exe != w["EXE"]) )
 				Continue
-			if(title && w["WIN_TITLE"] && (title != w["WIN_TITLE"]) )
+			if(ahkClass && w["CLASS"] && (ahkClass != w["CLASS"]) )
+				Continue
+			if(title && w["TITLE"] && (title != w["TITLE"]) )
 				Continue
 			if(controlClass && w["CONTROL_CLASS"] && (controlClass != w["CONTROL_CLASS"]) )
-				Continue
-			if(exe && w["EXE"] && (exe != w["EXE"]) )
 				Continue
 			
 			retWindow := w

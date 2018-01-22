@@ -10,6 +10,7 @@
 	Figure out something better than "[SLCT]" for selector window special stuff.
 	
 # New ideas
+	Add HDR as a thing we can open with ActionObject?
 	Hotstring for making a new row in OneNote Do stuff
 		Trim out/replace chars as needed based on INI: "[]:#"
 			(Specifics page with specific formats per INI)

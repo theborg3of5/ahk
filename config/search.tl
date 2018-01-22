@@ -18,7 +18,7 @@
 		All								a				Server|Client|Records|ProgPoint
 		
 		# Codesearch Specifics
-		Server DBC						sd				Server															CODESEARCH		-			-			-			-			-		DBC
+		Server DBC						sd				Server															-					-			-			-			-			-		DBC
 	[-2]
 		
 		# | Other

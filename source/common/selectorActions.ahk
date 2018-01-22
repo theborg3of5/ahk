@@ -195,7 +195,9 @@ DO_VDI(actionRow) {
 		Run, % runString
 		
 		; Also fake-maximize the window once it shows up.
-		WinWaitActive, ahk_exe vmware-view.exe, , , VMware Horizon Client ; Ignore the loading-type popup that happens initially with excluded title.
+		WinWaitActive, ahk_exe vmware-view.exe, , 5, VMware Horizon Client ; Ignore the loading-type popup that happens initially with excluded title.
+		if(ErrorLevel) ; Set if we timed out or if somethign else went wrong.
+			return
 		fakeMaximizeWindow()
 	}
 }

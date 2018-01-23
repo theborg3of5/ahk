@@ -150,7 +150,7 @@ class MainConfig {
 		}
 	}
 	
-	getWindow(name = "", exe = "", title = "", ahkClass = "", controlClass = "") {
+	getWindow(name = "", exe = "", ahkClass = "", title = "", controlClass = "") {
 		retWindow := ""
 		if(!name && !exe && !ahkClass && !title && !controlClass)
 			return ""

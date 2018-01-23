@@ -32,8 +32,8 @@
 	
 	; Web popups - close on Escape.
 [{ESC}r:CLOSE_WINDOW]
-	Pushbullet					chrome.exe						Chrome_WidgetWin_1			Pushbullet
-	TickTick						chrome.exe						Chrome_WidgetWin_1			All - TickTick
+	Pushbullet					chrome.exe						-									Pushbullet
+	TickTick						chrome.exe						-									All - TickTick
 []
 	
 	; Windows that have odd borders and need different offsets - mainly Office programs.
@@ -42,7 +42,7 @@
 	Word							WINWORD.EXE
 	Excel							EXCEL.EXE
 	PowerPoint					POWERPNT.EXE
-	; OneNote						ONENOTE.EXE
+	OneNote						ONENOTE.EXE
 	GitHub						GitHubDesktop.exe
 	Chrome						chrome.exe
 	Steam							Steam.exe

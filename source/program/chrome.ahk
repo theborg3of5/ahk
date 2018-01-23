@@ -1,5 +1,5 @@
 ﻿; Google Chrome hotkeys.
-#IfWinActive, ahk_class Chrome_WidgetWin_1
+#IfWinActive, ahk_exe chrome.exe
 	; Options hotkey.
 	!o::
 		Send, !e

@@ -7,7 +7,6 @@
 	Make selectors work from PuTTY - by not sending ^c to get selected text.
 		Program-level exclusion where we assume it's already on the clipboard?
 	windows.tl - get Hyperspace/EMC2 ones updated
-	Figure out something better than "[SLCT]" for selector window special stuff.
 	
 # New ideas
 	Add HDR as a thing we can open with ActionObject?

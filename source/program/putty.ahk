@@ -19,10 +19,8 @@
 		Send, +{Insert}
 	return
 	
-	; Force ^c to copy, replace breaking behavior with a harder-to-accidentally-press hotkey.
-	^c::
-		Send, ^{Insert}
-	return
+	; Disable breaking behavior for ^c, replace with a harder-to-accidentally-press hotkey.
+	^c::return
 	^+c::
 		Send, ^c
 	return

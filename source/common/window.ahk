@@ -144,9 +144,8 @@ getWindowSettingsAry(titleString = "A") {
 	WinGet, winExe, ProcessName, %titleString%
 	WinGetClass, winClass, %titleString%
 	WinGetTitle, winTitle, %titleString%
-	controlClass := getFocusedControl(titleString)
 	
-	return MainConfig.getWindow("", winExe, winClass, winTitle, controlClass)
+	return MainConfig.getWindow("", winExe, winClass, winTitle)
 }
 getWindowSetting(settingName, titleString = "A") {
 	if(!settingName)
@@ -156,9 +155,9 @@ getWindowSetting(settingName, titleString = "A") {
 	return winSettings[settingName]
 }
 
-; fillFromActive - whether to overwrite winTitle, winClass, and controlClass from the active window if they're blank.
-processWindow(ByRef winExe = "", ByRef winClass = "", ByRef winTitle = "", ByRef controlClass = "", ByRef winSettings = "", action = "", fillFromActive = true) {
-	; DEBUG.popup("processWindow","Start", "Exe",winExe, "Class",winClass, "Title",winTitle, "Control class",controlClass, "Settings",winSettings, "Action",action, "Fill from active",fillFromActive)
+; fillFromActive - whether to overwrite winExe, winClass, and winTitle from the active window if they're blank.
+processWindow(ByRef winExe = "", ByRef winClass = "", ByRef winTitle = "", ByRef winSettings = "", action = "", fillFromActive = true) {
+	; DEBUG.popup("processWindow","Start", "Exe",winExe, "Class",winClass, "Title",winTitle, "Settings",winSettings, "Action",action, "Fill from active",fillFromActive)
 	
 	if(fillFromActive) {
 		if(!winExe)
@@ -167,12 +166,10 @@ processWindow(ByRef winExe = "", ByRef winClass = "", ByRef winTitle = "", ByRef
 			WinGetClass, winClass, A
 		if(!winTitle)
 			WinGetTitle, winTitle, A
-		if(!controlClass)
-			controlClass := getFocusedControl()
 	}
 	
 	if(!IsObject(winSettings)) {
-		winSettings := MainConfig.getWindow("", winExe, winClass, winTitle, controlClass)
+		winSettings := MainConfig.getWindow("", winExe, winClass, winTitle)
 		
 		if(fillFromActive) {
 			if(!winSettings["EXE"])
@@ -181,8 +178,6 @@ processWindow(ByRef winExe = "", ByRef winClass = "", ByRef winTitle = "", ByRef
 				winSettings["CLASS"] := winClass
 			if(!winSettings["TITLE"])
 				winSettings["TITLE"] := winTitle
-			if(!winSettings["CONTROL_CLASS"])
-				winSettings["CONTROL_CLASS"] := controlClass
 		}
 	}
 	; DEBUG.popup("window.processWindow", "Got winSettings", "Window Settings", winSettings)
@@ -190,19 +185,19 @@ processWindow(ByRef winExe = "", ByRef winClass = "", ByRef winTitle = "", ByRef
 	; Figure out the method.
 	method := winSettings[action]
 	if(method = WIN_ACTION_OTHER) ; Special handling - WIN_ACTION_OTHER goes to a separate function first.
-		method := doWindowActionSpecial(action, winExe, winClass, winTitle, controlClass, winSettings)
+		method := doWindowActionSpecial(action, winExe, winClass, winTitle, winSettings)
 	if(!method) ; Return default if nothing found.
 		method := WIN_METHOD_DEFAULT
 	
 	return method
 }
 
-doWindowAction(action, winSettings = "", winExe = "", winClass = "", winTitle = "", controlClass = "") {
+doWindowAction(action, winSettings = "", winExe = "", winClass = "", winTitle = "") {
 	if(!action)
 		return
 	
 	; Gather any needed info we're not given.
-	processWindow(winExe, winClass, winTitle, controlClass, winSettings)
+	processWindow(winExe, winClass, winTitle, winSettings)
 	; DEBUG.popup("doWindowAction", "", "Action", action, "Window settings", winSettings, "Exe", winExe, "Class", winClass, "Title", winTitle)
 	
 	; Do that action.
@@ -210,31 +205,31 @@ doWindowAction(action, winSettings = "", winExe = "", winClass = "", winTitle = 
 		return
 		
 	} else if(action = WIN_ACTION_ACTIVATE) {     ; Activate the given window
-		activateWindow(winExe, winClass, winTitle, controlClass, winSettings)
+		activateWindow(winExe, winClass, winTitle, winSettings)
 		
 	} else if(action = WIN_ACTION_CLOSE_WINDOW) { ; Close the given window
-		closeWindow(winExe, winClass, winTitle, controlClass, winSettings)
+		closeWindow(winExe, winClass, winTitle, winSettings)
 		
 	} else if(action = WIN_ACTION_ESC) {          ; React to the escape key (generally ends up minimizing or closing)
-		doEscAction(winExe, winClass, winTitle, controlClass, winSettings)
+		doEscAction(winExe, winClass, winTitle, winSettings)
 		
 	} else if(action = WIN_ACTION_MIN) {          ; Minimize the given window
-		minimizeWindow(winExe, winClass, winTitle, controlClass, winSettings)
+		minimizeWindow(winExe, winClass, winTitle, winSettings)
 	
 	} else if(action = WIN_ACTION_SELECT_ALL) {   ; Select all
-		selectAll(winExe, winClass, winTitle, controlClass, winSettings)
+		selectAll(winExe, winClass, winTitle, winSettings)
 		
 	} else if(action = WIN_ACTION_DELETE_WORD) {  ; Delete one word, a la Ctrl+Backspace
-		deleteWord(winExe, winClass, winTitle, controlClass, winSettings)
+		deleteWord(winExe, winClass, winTitle, winSettings)
 	
 	} else {
 		DEBUG.popup("window.doWindowAction", "Error", "Action not found", action)
 	}
 }
 
-activateWindow(winExe = "", winClass = "", winTitle = "", controlClass = "", winSettings = "") { ; , winText = "", matchMode = "", matchSpeed = "", detectHidden = "") {
+activateWindow(winExe = "", winClass = "", winTitle = "", winSettings = "") { ; , winText = "", matchMode = "", matchSpeed = "", detectHidden = "") {
 	; Gather any needed info we're not given.
-	method := processWindow(winExe, winClass, winTitle, controlClass, winSettings, WIN_ACTION_ACTIVATE, false) ; Last parameter - don't overwrite a blank winTitle, winClass, or controlClass.
+	method := processWindow(winExe, winClass, winTitle, winSettings, WIN_ACTION_ACTIVATE, false) ; Last parameter - don't overwrite a blank exe, title, or class.
 	; DEBUG.popup("activateWindow", "", "Activate method", method, "Window settings", winSettings, "Class", winClass, "Title", winTitle)
 	
 	; Get default window match settings for the given window from config.
@@ -251,33 +246,33 @@ activateWindow(winExe = "", winClass = "", winTitle = "", controlClass = "", win
 		restoreMatchSettings(origMatchSettings)
 		
 	} else {
-		doWindowAction(method, winSettings, winExe, winClass, winTitle, controlClass)
+		doWindowAction(method, winSettings, winExe, winClass, winTitle)
 	}
 }
 
-doEscAction(winExe = "", winClass = "", winTitle = "", controlClass = "", winSettings = "") {
+doEscAction(winExe = "", winClass = "", winTitle = "", winSettings = "") {
 	; Gather any needed info we're not given.
-	method := processWindow(winExe, winClass, winTitle, controlClass, winSettings, WIN_ACTION_ESC)
+	method := processWindow(winExe, winClass, winTitle, winSettings, WIN_ACTION_ESC)
 	; DEBUG.popup("doEscAction", "", "Action", method, "Window settings", winSettings, "Exe", winExe, "Class", winClass, "Title", winTitle)
 	
 	if(method = WIN_METHOD_DEFAULT) { ; Default is to do nothing.
 		return
 	} else {
-		doWindowAction(method, winSettings, winExe, winClass, winTitle, controlClass)
+		doWindowAction(method, winSettings, winExe, winClass, winTitle)
 	}
 }
 
-closeWindow(winExe = "", winClass = "", winTitle = "", controlClass = "", winSettings = "") { ; controlClass and closeMethod currently ignored/unused, but left in for consistency with other methods and future needs.
+closeWindow(winExe = "", winClass = "", winTitle = "", winSettings = "") {
 	; No special cases for closing, and not likely to be one, so ignoring method and other such stuff for now.
-	; DEBUG.popup("Settings", winSettings, "Title", winTitle, "Control class", controlClass, "Close method", closeMethod)
+	; DEBUG.popup("Settings", winSettings, "Title", winTitle)
 	
 	titleString := buildWindowTitleString(winExe, winClass, winTitle)
 	WinClose, %titleString%
 }
 
-minimizeWindow(winExe = "", winClass = "", winTitle = "", controlClass = "", winSettings = "") {
+minimizeWindow(winExe = "", winClass = "", winTitle = "", winSettings = "") {
 	; Gather any needed info we're not given.
-	method := processWindow(winExe, winClass, winTitle, controlClass, winSettings, WIN_ACTION_MIN)
+	method := processWindow(winExe, winClass, winTitle, winSettings, WIN_ACTION_MIN)
 	; DEBUG.popup("minimizeWindow", "", "Min method", method, "Window settings", winSettings, "Exe", winExe, "Class", winClass, "Title", winTitle)
 	
 	; Do it!
@@ -295,14 +290,14 @@ minimizeWindow(winExe = "", winClass = "", winTitle = "", controlClass = "", win
 		WinSet, Bottom
 		
 	} else {
-		doWindowAction(method, winSettings, winExe, winClass, winTitle, controlClass)
+		doWindowAction(method, winSettings, winExe, winClass, winTitle)
 	}
 }
 
 ; Select all text in a control, generally via use fo the Ctrl+A hotkey.
-selectAll(winExe = "", winClass = "", winTitle = "", controlClass = "", winSettings = "") {
+selectAll(winExe = "", winClass = "", winTitle = "", winSettings = "") {
 	; Gather any needed info we're not given.
-	method := processWindow(winExe, winClass, winTitle, controlClass, winSettings, WIN_ACTION_SELECT_ALL)
+	method := processWindow(winExe, winClass, winTitle, winSettings, WIN_ACTION_SELECT_ALL)
 	; DEBUG.popup("selectAll", "", "Select method", method, "Window settings", winSettings, "Exe", winExe, "Class", winClass, "Title", winTitle)
 
 	; Do it!
@@ -314,14 +309,14 @@ selectAll(winExe = "", winClass = "", winTitle = "", controlClass = "", winSetti
 		Send, ^+{End}
 		
 	} else {
-		doWindowAction(method, winSettings, winExe, winClass, winTitle, controlClass)
+		doWindowAction(method, winSettings, winExe, winClass, winTitle)
 	}
 }
 
 ; Delete a word, generally via use of the Ctrl+Backspace hotkey.
-deleteWord(winExe = "", winClass = "", winTitle = "", controlClass = "", winSettings = "") {
+deleteWord(winExe = "", winClass = "", winTitle = "", winSettings = "") {
 	; Gather any needed info we're not given.
-	method := processWindow(winExe, winClass, winTitle, controlClass, winSettings, WIN_ACTION_DELETE_WORD)
+	method := processWindow(winExe, winClass, winTitle, winSettings, WIN_ACTION_DELETE_WORD)
 	; DEBUG.popup("deleteWord", "", "Delete method", method, "Window settings", winSettings, "Exe", winExe, "Class", winClass, "Title", winTitle)
 
 	; Do it!
@@ -333,14 +328,14 @@ deleteWord(winExe = "", winClass = "", winTitle = "", controlClass = "", winSett
 		Send, {Backspace}
 		
 	} else {
-		doWindowAction(method, winSettings, winExe, winClass, winTitle, controlClass)
+		doWindowAction(method, winSettings, winExe, winClass, winTitle)
 	}
 }
 
 ; For all special cases for just a single case, so not worth creating a new constant, etc for.
 ; The return value should be what we should do from here - so if we end up deciding that a 
 ; standard method works, just return that constant.
-doWindowActionSpecial(action, winExe = "", winClass = "", winTitle = "", controlClass = "", winSettings = "") {
+doWindowActionSpecial(action, winExe = "", winClass = "", winTitle = "", winSettings = "") {
 	method := WIN_ACTION_NONE ; Start with the assumption that we shouldn't do anything after this - the specific cases will say otherwise if needed.
 	
 	if(action = WIN_ACTION_ESC) {

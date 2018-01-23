@@ -8,7 +8,7 @@
 	WinSpy						AU3_Spy.exe						-									-								-								CLOSE_WINDOW
 	Thunder						Thunder.exe						-									-								-								CLOSE_WINDOW	
 	Pidgin Buddy List			pidgin.exe						-									Buddy List					-								CLOSE_WINDOW	CLOSE_WINDOW
-	Cisco AnyConnect VPN		vpnui.exe						-									Cisco AnyConnect Secure Mobility Client			CLOSE_WINDOW	
+	Cisco AnyConnect VPN		vpnui.exe						-									Cisco AnyConnect Secure Mobility Client	-		CLOSE_WINDOW	
 	Foobar						foobar2000.exe					{97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}	-				-								MIN				POST_MESSAGE
 	Windows Explorer			explorer.exe					CabinetWClass					-								-								MIN				OTHER
 	Process Explorer			PROCEXP64.exe					-									-								-								CLOSE_WINDOW	CLOSE_WINDOW
@@ -17,12 +17,8 @@
 	VB6							VB6.exe							wndclass_desked_gsk			-								-								-					POST_MESSAGE
 	VB6 Object Browser		VB6.exe							-									Object Browser				-								CLOSE_WINDOW	
 	
-	; EMC2/Hyperspace (main and popups) GDBTODO - update these as needed
-	EMC2 Email box				GDBTODO							ThunderRT6FormDC				-								ThunderRT6TextBox1		-					-					HOME_END
-	Hyperspace/EMC2			GDBTODO							ThunderRT6MDIForm				-								-								-					-					-					CTRL_SHIFT
-	Hyperspace/EMC2			GDBTODO							ThunderRT6FormDC				-								-								-					-					-					CTRL_SHIFT
-	Hyperspace/EMC2			GDBTODO							ThunderMDIForm					-								-								-					-					-					CTRL_SHIFT
-	Hyperspace/EMC2			GDBTODO							ThunderFormDC					-								-								-					-					-					CTRL_SHIFT
+	; EMC2 popups
+	EMC2 Email box				EpicD82.exe						ThunderRT6FormDC				-								-								CLOSE_WINDOW	-					HOME_END			CTRL_SHIFT
 	
 	; EpicStudio popups
 	ES New Object Window		EpicStudio.exe					New Object						-								-								-					-					-					CTRL_SHIFT

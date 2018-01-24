@@ -147,12 +147,10 @@ return
 ^+!m::Run, % "https://www.messenger.com"
 ^+!f::Run, % "http://feedly.com/i/latest"
 ^!#m::Run, % "https://mail.google.com/mail/u/0/#inbox"
+!+o::Run, % "https://www.onenote.com/hrd"
 
 #If MainConfig.isMachine(MACHINE_HomeDesktop)
 	^+!r::Run, % "http://www.reddit.com/"
-#If
-#If MainConfig.isMachine(MACHINE_EpicLaptop)
-	!+c::Run, % "iexplore.exe http://barleywine/xenappqa/"
 #If
 
 ; Folder List - Open

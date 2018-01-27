@@ -44,7 +44,7 @@
 		
 		; Timers
 		if(IsFunc(customToggleTimerFunc))       ; If there's a custom toggleTimers() function, use that.
-			customToggleTimerFunc.(suspended)
+			%customToggleTimerFunc%(suspended)
 		else if(IsLabel(defaultTimerLoopLabel)) ; Otherwise, if the label "MainLoop" exists, turn that timer off.
 			SetTimer, %defaultTimerLoopLabel%, % suspended ? "Off" : "On" ; If script is suspended, toggle it off, otherwise on.
 	return

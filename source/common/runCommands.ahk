@@ -45,10 +45,10 @@ scriptArgsToVars(varNames, placeholderChar = "") {
 ;		Using callIfExists():
 ;			callIfExists("popup", , "asdf") ; popup("asdf")
 ;
-callIfExists(functionName, params*) { ; params is given as discrete arguemnts, but comes in as an array.
+callIfExists(functionName, params*) { ; params is given as discrete arguments, but comes in as an array.
 	; DEBUG.popup("runCommands", "callIfExists", "Function name", functionName, "Params", params)
 	if(isFunc(functionName))
-		return functionName.(params*) ; Calling this way sticks the parameters into the function we're calling expanded, not as an array.
+		return %functionName%(params*) ; Calling this way sticks the parameters into the function we're calling expanded, not as an array.
 	else
 		return "FUNCTION_DOES_NOT_EXIST"
 }

@@ -675,7 +675,7 @@ class Selector {
 		if(actionType = "RET")      ; Special case for simple return action, passing in the column to return.
 			result := RET(rowToDo, this.actionSettings["ReturnColumn"])
 		else if(isFunc(actionType)) ; Generic caller for many possible actions.
-			result := actionType.(rowToDo)
+			result := %actionType%(rowToDo)
 		else                        ; Error catch.
 			this.errPop("Action not defined", actionType)
 		

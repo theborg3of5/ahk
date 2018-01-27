@@ -165,7 +165,7 @@
 		
 		; Blank means an error or they said no to calling.
 		if(URL != "") {
-			callIfExists("HTTPRequest", URL, In := "", Out := "") ; HTTPRequest(URL, In := "", Out := "")
+			HTTPRequest(URL, In := "", Out := "")
 			return true
 		}
 		

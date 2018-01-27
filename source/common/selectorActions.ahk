@@ -137,7 +137,7 @@ DO_HYPERSPACE(actionRow) {
 	}
 	
 	; Build run path.
-	runString := callIfExists("buildHyperspaceRunString", versionMajor, versionMinor, environment) ; buildHyperspaceRunString(versionMajor, versionMinor, environment)
+	runString := buildHyperspaceRunString(versionMajor, versionMinor, environment)
 	
 	actionRow.debugResult := runString
 	if(actionRow.isDebug)
@@ -180,7 +180,7 @@ DO_VDI(actionRow) {
 	vdiId := actionRow.data["VDI_ID"]
 	
 	; Build run path.
-	runString := callIfExists("buildVDIRunString", vdiId) ; buildVDIRunString(vdiId)
+	runString := buildVDIRunString(vdiId)
 	
 	actionRow.debugResult := runString
 	if(actionRow.isDebug)
@@ -208,7 +208,7 @@ DO_SNAPPER(actionRow) {
 	ini         := actionRow.data["INI"]
 	idList      := actionRow.data["ID"]
 	
-	url := callIfExists("buildSnapperURL", environment, ini, idList) ; buildSnapperURL(environment, ini, idList)
+	url := buildSnapperURL(environment, ini, idList)
 	
 	actionRow.debugResult := url
 	if(actionRow.isDebug)
@@ -243,7 +243,7 @@ CALL(actionRow) {
 	if(actionRow.isDebug)
 		return
 	
-	callIfExists("callNumber", num, actionRow.data["NAME"]) ; callNumber(num, actionRow.data["NAME"])
+	callNumber(num, actionRow.data["NAME"])
 }
 
 ; Resizes the active window to the given dimensions.

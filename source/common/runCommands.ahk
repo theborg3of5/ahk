@@ -24,35 +24,6 @@ scriptArgsToVars(varNames, placeholderChar = "") {
 	}
 }
 
-; Indirection of sorts - checks whether the given function exists, then calls it.
-; Parameters:
-;	functionName    - Function to try and call
-;	params*         - Rest of parameters (this is a variadic function), same as if you'd called the function directly.
-; Returns:
-;		If function exists, return value of that function.
-;		If function does not exist, "FUNCTION_DOES_NOT_EXIST"
-; For searchability's sake, you should include the function call you'd make normally in a comment.
-;
-; Simple example:
-;		Given this function:
-;			popup(string) {
-;				MsgBox, %string%
-;			}
-;
-;		Existing call:
-;			popup("asdf")
-;
-;		Using callIfExists():
-;			callIfExists("popup", , "asdf") ; popup("asdf")
-;
-callIfExists(functionName, params*) { ; params is given as discrete arguments, but comes in as an array.
-	; DEBUG.popup("runCommands", "callIfExists", "Function name", functionName, "Params", params)
-	if(isFunc(functionName))
-		return %functionName%(params*) ; Calling this way sticks the parameters into the function we're calling expanded, not as an array.
-	else
-		return "FUNCTION_DOES_NOT_EXIST"
-}
-
 ; Opens the given script in Notepad++.
 editScript(script) {
 	Run, % MainConfig.getProgram("Notepad++", "PATH") " " script

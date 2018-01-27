@@ -49,7 +49,6 @@
 	Clean up window stuff for special behaviors - processWindow is way overcomplex.
 	Figure out auto-updating the running script when source saved, specifically for test.ahk
 		Alternatively, just give it a different restart hotkey.
-	Check out function objects for selector action stuff: https://autohotkey.com/docs/objects/Functor.htm
 	Make it easier to get correct, drive-mapped paths
 		Maybe when copy, check for epic:// and replace with correct drive letter accordingly?
 		Actually, a custom paste might be better - don't want to modify the clipboard needlessly.

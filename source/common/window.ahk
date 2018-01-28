@@ -16,6 +16,50 @@ global WIN_SELECT_ALL_HOME_END := "HOME_END"
 
 global WIN_DELETE_CTRL_SHIFT := "CTRL_SHIFT"
 
+; Convenience function to get the full window title string using the NAME column in programs.tl.
+getProgramTitleString(progName, ByRef progInfo = "") {
+	if(!progName)
+		return ""
+	if(!progInfo)
+		progInfo := MainConfig.getProgram(progName)
+	
+	winExe   := progInfo["EXE"]
+	winClass := progInfo["CLASS"]
+	winTitle := progInfo["TITLE"]
+	titleString := buildWindowTitleString(winExe, winClass, winTitle)
+	; DEBUG.popup("getProgramTitleString","", "progName",progName, "winExe",winExe, "winClass",winClass, "winTitle",winTitle, "Title string",titleString)
+	
+	return titleString
+}
+; Convenience function to get the full window title string using the NAME column in windows.tl.
+getWindowTitleString(winName) {
+	if(!winName)
+		return ""
+	
+	winSettings := MainConfig.getWindow(winName)
+	winExe   := winSettings["EXE"]
+	winClass := winSettings["CLASS"]
+	winTitle := winSettings["TITLE"]
+	
+	titleString := buildWindowTitleString(winExe, winClass, winTitle)
+	; DEBUG.popup("getWindowTitleString","", "winName",winName, "winExe",winExe, "winClass",winClass, "winTitle",winTitle, "Title string",titleString)
+	
+	return titleString
+}
+; Puts together a string that can be used with the likes of WinActivate, etc.
+buildWindowTitleString(exeName = "", winClass = "", winTitle = "") {
+	if(winTitle) ; Title has to go first since it doesn't have an "ahk_" identifier to go with it.
+		outStr .= winTitle
+	
+	if(exeName)
+		outStr .= " ahk_exe " exeName
+	
+	if(winClass)
+		outStr .= " ahk_class " winClass
+	
+	return outStr
+}
+
 ; Returns true if the current window's title contains any of a given array of strings.
 titleContains(haystack) {
 	WinGetActiveTitle, title
@@ -116,11 +160,8 @@ getFocusedControl(titleString = "A") {
 activateProgram(progName) {
 	waitForHotkeyRelease()
 	
-	progInfo := MainConfig.getProgram(progName)
-	winExe   := progInfo["EXE"]
-	winClass := progInfo["CLASS"]
-	winTitle := progInfo["TITLE"]
-	titleString := buildWindowTitleString(winExe, winClass, winTitle)
+	progInfo := ""
+	titleString := getProgramTitleString(progName, progInfo) ; progInfo should be set and passed back
 	; DEBUG.popup("window.activateProgram","start", "Program name",progName, "Program info",progInfo, "Title string",titleString)
 	
 	; If the program is already running, go ahead and activate it.
@@ -139,10 +180,9 @@ runProgram(progName) {
 }
 
 getWindowSettingsAry(titleString = "A") {
-	WinGet, winExe, ProcessName, %titleString%
+	WinGet,      winExe, ProcessName, %titleString%
 	WinGetClass, winClass, %titleString%
 	WinGetTitle, winTitle, %titleString%
-	
 	return MainConfig.getWindow("", winExe, winClass, winTitle)
 }
 getWindowSetting(settingName, titleString = "A") {
@@ -295,36 +335,6 @@ getWindowMethodSpecial(titleString = "A", action = "", winSettings = "") {
 	
 	; DEBUG.popup("window.doWindowActionSpecial", "Finished", "Action", action, "Method", method)
 	return method
-}
-
-; Convenience function to get the full window title string using the NAME column in windows.tl.
-getWindowTitleString(winName) {
-	if(!winName)
-		return ""
-	
-	winSettings := MainConfig.getWindow(winName)
-	winExe   := winSettings["EXE"]
-	winClass := winSettings["CLASS"]
-	winTitle := winSettings["TITLE"]
-	
-	titleString := buildWindowTitleString(winExe, winClass, winTitle)
-	; DEBUG.popup("getWindowTitleString","", "winName",winName, "winExe",winExe, "winClass",winClass, "winTitle",winTitle, "Title string",titleString)
-	
-	return titleString
-}
-
-; Puts together a string that can be used with the likes of WinActivate, etc.
-buildWindowTitleString(exeName = "", winClass = "", winTitle = "") {
-	if(winTitle) ; Title has to go first since it doesn't have an "ahk_" identifier to go with it.
-		outStr .= winTitle
-	
-	if(exeName)
-		outStr .= " ahk_exe " exeName
-	
-	if(winClass)
-		outStr .= " ahk_class " winClass
-	
-	return outStr
 }
 
 ; Centers a window on the screen.

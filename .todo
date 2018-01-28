@@ -29,9 +29,12 @@
 						Trim off customer (chars up until first ":")
 						Trim off responsible person (end of string back to the first "--" string, iff that string exists)
 				Remainder of string
-	Support just a single (associative array) argument for DEBUG.popup
-		Could call like this:
-			DEBUG.popup({"Label":value, "Label":value})
+	DEBUG.popup improvements
+		Support just a single (associative array) argument for DEBUG.popup
+			Could call like this:
+				DEBUG.popup({"Label":value, "Label":value})
+		Support just a simple array of variable names?
+			Would need to have assuming variables through to DEBUG.popup() function to work
 	Add something like VimBindings for Outlook?
 		At least j/k and ;/p would be nice.
 	VB6 - ^F2 focuses first dropdown

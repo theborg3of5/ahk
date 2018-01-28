@@ -339,17 +339,14 @@ getWindowMethodSpecial(titleString = "A", action = "", winSettings = "") {
 
 ; Centers a window on the screen.
 centerWindow(titleString = "A") {
-	winId := WinExist(titleString)
-	idString := "ahk_id " winId
-	
 	; Window size
-	WinGetPos, , , winW, winH, %idString%
-	offsetsAry := getWindowOffsets(idString)
+	WinGetPos, , , winW, winH, %titleString%
+	offsetsAry := getWindowOffsets(titleString)
 	winW -= (offsetsAry["LEFT"]   + offsetsAry["RIGHT"]) ; The window is wider/taller than it looks by these offsets.
 	winH -= (offsetsAry["BOTTOM"] + offsetsAry["TOP"]  )
 	
 	; Make sure that our screen sizes take which monitor we're on into account.
-	currMonbounds := getMonitorBounds("", idString)
+	currMonbounds := getMonitorBounds("", titleString)
 	
 	; Coordinates relative to screen
 	relX := (currMonbounds["WIDTH"]  - winW) / 2
@@ -360,21 +357,18 @@ centerWindow(titleString = "A") {
 	y := currMonbounds["TOP"]  + relY - offsetsAry["TOP"]
 	
 	; DEBUG.popup("Screen bounds", currMonbounds, "Offsets", offsetsAry, "WinW", winW, "WinH", winH, "Relative X", relX, "Relative Y", relY, "X", x, "Y", y)
-	WinMove, %idString%, , x, y
+	WinMove, %titleString%, , x, y
 }
 
 fakeMaximizeWindow(titleString = "A") {
-	winId := WinExist(titleString)
-	idString := "ahk_id " winId
-	
-	boundsAry  := getMonitorBounds( , idString)
-	offsetsAry := getWindowOffsets(idString)
+	boundsAry  := getMonitorBounds( , titleString)
+	offsetsAry := getWindowOffsets(titleString)
 	
 	newWidth  := boundsAry["WIDTH"] + offsetsAry["LEFT"] + offsetsAry["RIGHT"]
 	newHeight := boundsAry["HEIGHT"] + offsetsAry["TOP"] + offsetsAry["BOTTOM"]
 	
 	; DEBUG.popup("Bounds", boundsAry, "Offsets", offsetsAry, "New width", newWidth, "New height", newHeight)
-	resizeWindow(newWidth, newHeight, idString)
+	resizeWindow(newWidth, newHeight, titleString)
 	centerWindow()
 }
 
@@ -510,7 +504,7 @@ getWindowMonitor(titleString, monitorsAry = "") {
 	WinGetPos, winX, winY, , , %titleString%
 	
 	; Account for any window offsets.
-	offsetsAry := getWindowOffsets(idString)
+	offsetsAry := getWindowOffsets(titleString)
 	winX += offsetsAry["LEFT"] ; The window is wider/taller than it looks by these offsets.
 	winY += offsetsAry["TOP"]
 	

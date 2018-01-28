@@ -338,23 +338,12 @@ deleteWord(winExe = "", winClass = "", winTitle = "", winSettings = "") {
 doWindowActionSpecial(action, winExe = "", winClass = "", winTitle = "", winSettings = "") {
 	method := WIN_ACTION_NONE ; Start with the assumption that we shouldn't do anything after this - the specific cases will say otherwise if needed.
 	
-	if(action = WIN_ACTION_ESC) {
-		; Guru Quick Dial Popup
-		if(winClass = "WindowsForms10.Window.8.app.0.1517e87") {
-			ControlFocus, WindowsForms10.BUTTON.app.0.1517e871, A ; Hang up button
-			Send, {Space}
-			method := WIN_ACTION_NONE
-		}
-		
-	} else if(action = WIN_ACTION_MIN) {
+	if(action = WIN_ACTION_MIN) {
 		; Windows explorer
-		if(winClass = MainConfig.getProgram("Explorer", "CLASS")) {
-			if(MainConfig.isMachine(MACHINE_EpicLaptop)) { ; QTTabBar's min to tray
-				Send, !q
-				method := WIN_ACTION_NONE
-			} else {
-				method := WIN_METHOD_DEFAULT
-			}
+		if(winClass = MainConfig.getProgram("Explorer", "CLASS")) { ; GDB TODO switch this out with just checking the window name from winSettings?
+			; QTTabBar's min to tray
+			Send, !q
+			method := WIN_ACTION_NONE
 		}
 	}
 	

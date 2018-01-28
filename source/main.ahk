@@ -45,7 +45,6 @@ if(MainConfig.isMachine(MACHINE_EpicLaptop)) { ; Not needed except on Epic machi
 #Include pidgin.ahk
 #Include powerpoint.ahk
 #Include putty.ahk
-#Include quickDial.ahk
 #Include remoteDesktop.ahk
 #Include skype.ahk
 #Include snapper.ahk

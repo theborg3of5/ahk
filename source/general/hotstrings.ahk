@@ -272,8 +272,8 @@
 
 { ; AHK.
 	:*:dbpop::
-		SendRaw, DEBUG.popup(") ; ending quote for syntax highlighting: "
-		Send, {Left} ; Get inside parens
+		SendRaw, DEBUG.popup("")
+		Send, {Left 2} ; Get inside parens and quotes
 	return
 }
 #IfWinNotActive

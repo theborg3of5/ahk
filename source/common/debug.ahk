@@ -5,17 +5,34 @@ class DEBUG {
 	
 	; Input in any number of pairs of (label, value), in that order. They will be formatted as described in DEBUG.buildDebugString.
 	popup(params*) {
-		; Convert params array into array of (label, value) pairs.
-		pairedParams := []
-		i := 1
-		while(i <= params.length()) {
-			; MsgBox, % "Label`n`t" params[i] "`nValue:`n`t" params[i + 1])
-			pairedParams.Push([params[i], params[i + 1]])
-			i += 2
-		}
-		; MsgBox, % pairedParams[1][1] "`n" pairedParams[1][2]
+		; Single parameter with an (assumed-to-be) associative array.
+		if( (params.length() = 1) && isObject(params) ) {
+			paramObject := params[1]
+			
+			pairedParams := []
+			For label,value in paramObject {
+				; MsgBox, % "Label`n`t" label "`nValue:`n`t" value)
+				pairedParams.Push([label, value])
+			}
+			
+			; MsgBox, % pairedParams[1][1] "`n" pairedParams[1][2]
+			outString := this.buildDebugPopup(pairedParams)
 		
-		MsgBox, % this.buildDebugPopup(pairedParams)
+		; Assume we have a list of label,value pairs (2 parameters at a time go together).
+		} else {
+			; Convert params array into array of (label, value) pairs.
+			pairedParams := []
+			i := 1
+			while(i <= params.length()) {
+				; MsgBox, % "Label`n`t" params[i] "`nValue:`n`t" params[i + 1])
+				pairedParams.Push([params[i], params[i + 1]])
+				i += 2
+			}
+			; MsgBox, % pairedParams[1][1] "`n" pairedParams[1][2]
+			outString := this.buildDebugPopup(pairedParams)
+		}
+		
+		MsgBox, % outString
 	}
 	
 	; Given any number of pairs of (label, value), build a debug popup.

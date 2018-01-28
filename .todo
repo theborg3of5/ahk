@@ -7,8 +7,6 @@
 # New ideas
 	Add HDR as a thing we can open with ActionObject?
 	VB6 - ^F2 focuses first dropdown
-	Figure out auto-updating the running script when source saved, specifically for test.ahk
-		Alternatively, just give it a different restart hotkey.
 	Hotstring for making a new row in OneNote Do stuff
 		Trim out/replace chars as needed based on INI: "[]:#"
 			(Specifics page with specific formats per INI)

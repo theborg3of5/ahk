@@ -38,6 +38,16 @@ return
 		editScript(A_LineFile)
 	return
 	
+#IfWinActive, ahk_class Notepad++
+	; Auto-reload this script when it's saved.
+	~^s::
+		; Suspend, Permit ; Allow this to run when the script is suspended.
+		WinGetActiveTitle, winTitle
+		if(stringContains(winTitle, A_ScriptFullPath))
+			Reload
+	return
+#IfWinActive
+	
 	F1::
 		rows := []
 		

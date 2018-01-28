@@ -41,12 +41,18 @@
 		Could also support line number highlight
 			Probably overkill, though.
 	Review activateProgram/runProgram framework - VB seems to always run even though it's activate, for example (though that's the desired behavior anyway).
-	Standardize window functions
-		Take a titleString instead of classes, EXEs, etc
-		Turn that titleString into an ID and make an idString (ahk_id %winId%)
-		Use the idString instead of titleString
-		Add support for ahk_exe instead of just class - would make Discord/Chrome confusion easier to fix.
-	Clean up window stuff for special behaviors - processWindow is way overcomplex.
+	Standardize/clean up window functions
+		Main functions (minimize, close, etc) should take these parameters:
+			titleString (for identifying the window to apply action to, default to "A" for active)
+			winSettings (for action/exe/class/title/etc. access as needed)
+		processWindow
+			Get rid of fillFromActive parameter
+			Info fed to MainConfig.getWindow() comes from window identified by titleString (default to "A" for active)
+				Safety quit if titleString is explitly blank?
+			Update titleString (ByRef) if it's blank coming in
+				Based on values that come from winSettings
+		
+		Switch the other functions in this file that use idString (generated from a titleString) to just use a titleString, no reason to have that step.
 	Figure out auto-updating the running script when source saved, specifically for test.ahk
 		Alternatively, just give it a different restart hotkey.
 	Make it easier to get correct, drive-mapped paths

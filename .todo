@@ -51,7 +51,6 @@
 				Safety quit if titleString is explitly blank?
 			Update titleString (ByRef) if it's blank coming in
 				Based on values that come from winSettings
-		
 		Switch the other functions in this file that use idString (generated from a titleString) to just use a titleString, no reason to have that step.
 	Figure out auto-updating the running script when source saved, specifically for test.ahk
 		Alternatively, just give it a different restart hotkey.

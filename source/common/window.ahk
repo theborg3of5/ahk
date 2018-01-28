@@ -181,12 +181,8 @@ processWindow(titleString = "A", action = "", ByRef winSettings = "") {
 		return ""
 	
 	; Identify the window with regards to our settings.
-	if(!IsObject(winSettings)) {
-		WinGet,      winExe, ProcessName, %titleString%
-		WinGetClass, winClass, %titleString%
-		WinGetTitle, winTitle, %titleString%
-		winSettings := MainConfig.getWindow("", winExe, winClass, winTitle)
-	}
+	if(!IsObject(winSettings))
+		winSettings := getWindowSettingsAry(titleString)
 	; DEBUG.popup("window.processWindow", "Got winSettings", "Window Settings", winSettings)
 	
 	; Figure out the method (how we're going to perform the action).

@@ -5,17 +5,34 @@ class DEBUG {
 	
 	; Input in any number of pairs of (label, value), in that order. They will be formatted as described in DEBUG.buildDebugString.
 	popup(params*) {
-		; Convert params array into array of (label, value) pairs.
-		pairedParams := []
-		i := 1
-		while(i <= params.length()) {
-			; MsgBox, % "Label`n`t" params[i] "`nValue:`n`t" params[i + 1])
-			pairedParams.Push([params[i], params[i + 1]])
-			i += 2
-		}
-		; MsgBox, % pairedParams[1][1] "`n" pairedParams[1][2]
+		; Single parameter with an (assumed-to-be) associative array.
+		if( (params.length() = 1) && isObject(params) ) {
+			paramObject := params[1]
+			
+			pairedParams := []
+			For label,value in paramObject {
+				; MsgBox, % "Label`n`t" label "`nValue:`n`t" value)
+				pairedParams.Push([label, value])
+			}
+			
+			; MsgBox, % pairedParams[1][1] "`n" pairedParams[1][2]
+			outString := this.buildDebugPopup(pairedParams)
 		
-		MsgBox, % this.buildDebugPopup(pairedParams)
+		; Assume we have a list of label,value pairs (2 parameters at a time go together).
+		} else {
+			; Convert params array into array of (label, value) pairs.
+			pairedParams := []
+			i := 1
+			while(i <= params.length()) {
+				; MsgBox, % "Label`n`t" params[i] "`nValue:`n`t" params[i + 1])
+				pairedParams.Push([params[i], params[i + 1]])
+				i += 2
+			}
+			; MsgBox, % pairedParams[1][1] "`n" pairedParams[1][2]
+			outString := this.buildDebugPopup(pairedParams)
+		}
+		
+		MsgBox, % outString
 	}
 	
 	; Given any number of pairs of (label, value), build a debug popup.
@@ -48,8 +65,8 @@ class DEBUG {
 	;  numTabs     - Number of tabs of indentation to start at. Sub-values (for array indices or custom debug function) will be indented by numTabs+1.
 	buildDebugString(label, value, numTabs = 0) {
 		outString := ""
-		outString .= getTabs(numTabs, DEBUG.spacesPerTab) label ": "  ; Label
-		outString .= this.buildObjectString(value, numTabs, "", true) ; Value
+		outString .= getTabs(numTabs, DEBUG.spacesPerTab) label ": " ; Label
+		outString .= this.buildObjectString(value, numTabs)          ; Value
 		return outString
 	}
 	
@@ -62,15 +79,15 @@ class DEBUG {
 	; Parameters:
 	;  value    - Object to put together a string about.
 	;  numTabs  - How much to indent the start of the string. Subitems will be indented by numTabs+1.
+	;  newLine  - If true, we will indent this line. Typically used because the value is going on a new line (as opposed to next to the current label).
+	;              NOTE: subitems will be indented by numTabs+1 regardless.
 	;  index    - If set, row will be prefaced with "[index] "
-	;  noIndent - If true, we will NOT indent this line. Typically used because we're still on the label line.
-	;              NOTE: subitems will still be indented by numTabs+1.
-	buildObjectString(value, numTabs = 0, index = "", noIndent = false) {
-		if(!noIndent)
+	buildObjectString(value, numTabs = 0, newLine = false, index = "") {
+		if(newLine)
 			outString := getTabs(numTabs, DEBUG.spacesPerTab)
 		
 		; Index
-		if(index != "")
+		if(index)
 			outString .= "[" index "] "
 		
 		; Base case - not a complex object, just add our value and be done.
@@ -86,10 +103,9 @@ class DEBUG {
 			builder := new DebugBuilder(numTabs + 1)
 			value.debugToString(builder)
 			outString .= "`n" builder.toString()
-			builder := ""
 		} else {
 			For subIndex,subVal in value
-				outString .= "`n" this.buildObjectString(subVal, numTabs + 1, subIndex)
+				outString .= "`n" this.buildObjectString(subVal, numTabs + 1, true, subIndex)
 		}
 		
 		return outString

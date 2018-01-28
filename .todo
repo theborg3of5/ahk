@@ -11,8 +11,6 @@
 		Support just a single (associative array) argument for DEBUG.popup
 			Could call like this:
 				DEBUG.popup({"Label":value, "Label":value})
-		Support just a simple array of variable names?
-			Would need to have assuming variables through to DEBUG.popup() function to work
 	Figure out auto-updating the running script when source saved, specifically for test.ahk
 		Alternatively, just give it a different restart hotkey.
 	Hotstring for making a new row in OneNote Do stuff

@@ -215,5 +215,3 @@ XInput_Term() {
     if _XInput_hm
         DllCall("FreeLibrary","uint",_XInput_hm), _XInput_hm :=_XInput_GetState :=_XInput_SetState :=_XInput_GetCapabilities :=0
 }
-
-; TODO: XInputEnable, 'GetBatteryInformation and 'GetKeystroke.

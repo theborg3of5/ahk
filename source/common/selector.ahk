@@ -309,7 +309,7 @@ class Selector {
 			; Popup title.
 			if(firstChar = this.chars["WINDOW_TITLE"]) {
 				; DEBUG.popup("Title char", this.chars["WINDOW_TITLE"], "First char", firstChar, "Row", currRow)
-				this.guiSettings["WindowTitle"] := SubStr(currItem[1], 2) " [SLCT]" ; GDB TODO is there a better way to identify Selector popups than by title?
+				this.guiSettings["WindowTitle"] := SubStr(currItem[1], 2)
 			
 			; Options for the selector in general.
 			} else if(firstChar = this.chars["SETTING"]) {

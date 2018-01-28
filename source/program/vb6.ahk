@@ -184,7 +184,7 @@
 		; Assuming that we're starting in the middle of an empty function.
 		Send, {Tab}On Error Goto Handler{Enter}
 		Send, {Enter}{Backspace}
-		Send, Exit Sub{Enter} ; GDB TODO can this be more generic and determine which it is?
+		Send, Exit Sub{Enter}
 		Send, Handler:{Enter}
 		Send, {Tab}Call ErrorHandler("%currentProcedure%")
 	return

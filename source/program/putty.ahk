@@ -201,7 +201,6 @@ openPuttySettingsWindow() {
 	PostMessage, 0x112, 0x50, 0
 }
 
-; GDB TODO - IN PROGRESS
 ; Modified from http://wiki.epic.com/main/PuTTY#AutoHotKey_for_PuTTY_Macros
 getPuttyLogFile() {
 	if(!WinActive("ahk_class PuTTY"))

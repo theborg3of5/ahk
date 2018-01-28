@@ -6,17 +6,8 @@ class DEBUG {
 	; Input in any number of pairs of (label, value), in that order. They will be formatted as described in DEBUG.buildDebugString.
 	popup(params*) {
 		; Single parameter with an (assumed-to-be) associative array.
-		if( (params.length() = 1) && isObject(params) ) {
-			paramObject := params[1]
-			
-			pairedParams := []
-			For label,value in paramObject {
-				; MsgBox, % "Label`n`t" label "`nValue:`n`t" value)
-				pairedParams.Push([label, value])
-			}
-			
-			; MsgBox, % pairedParams[1][1] "`n" pairedParams[1][2]
-			outString := this.buildDebugPopup(pairedParams)
+		if(params.length() = 1) {
+			outString := this.buildObjectString(params[1])
 		
 		; Assume we have a list of label,value pairs (2 parameters at a time go together).
 		} else {

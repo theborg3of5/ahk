@@ -23,20 +23,8 @@
 	
 return
 
-;^h::
-;	; Get user input.
-;	FileSelectFile, fileName
-;	
-;	list := TableList.parseFile(fileName)
-;	DEBUG.popup(list, "Parsed List")
-;return
-
 ; --------------------------------------------------------------------------
 { ; Hotkeys that don't change.
-	; Hotkey to open test.ahk for editing.
-	^+e::
-		editScript(A_LineFile)
-	return
 	
 #IfWinActive, ahk_class Notepad++
 	; Auto-reload this script when it's saved.
@@ -47,6 +35,11 @@ return
 			Reload
 	return
 #IfWinActive
+	
+	; Hotkey to open test.ahk for editing.
+	^+e::
+		editScript(A_LineFile)
+	return
 	
 	F1::
 		rows := []

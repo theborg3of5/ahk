@@ -327,13 +327,11 @@ getWindowMethodSpecial(titleString = "A", action = "", winSettings = "") {
 	
 	if(action = WIN_ACTION_MIN) {
 		; Windows explorer
-		if(winSettings["NAME"] = "Explorer") { ; QTTabBar's min to tray
+		if(winSettings["NAME"] = "Explorer") ; QTTabBar's min to tray
 			Send, !q
-			method := WIN_ACTION_NONE
-		}
 	}
 	
-	; DEBUG.popup("window.doWindowActionSpecial", "Finished", "Action", action, "Method", method)
+	; DEBUG.popup("window.getWindowMethodSpecial","Finished", "Action",action, "Method",method, "Settings",winSettings)
 	return method
 }
 

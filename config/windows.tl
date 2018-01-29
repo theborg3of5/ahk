@@ -10,7 +10,7 @@
 	Pidgin Buddy List			pidgin.exe						-									Buddy List											CLOSE_WINDOW	CLOSE_WINDOW
 	Cisco AnyConnect VPN		vpnui.exe						-									Cisco AnyConnect Secure Mobility Client	CLOSE_WINDOW	
 	Foobar						foobar2000.exe					{97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}	-										MIN				POST_MESSAGE
-	Windows Explorer			explorer.exe					CabinetWClass					-														MIN				OTHER
+	Explorer						explorer.exe					CabinetWClass					-														MIN				OTHER
 	Process Explorer			PROCEXP64.exe					-									-														CLOSE_WINDOW	CLOSE_WINDOW
 	
 	; VB6

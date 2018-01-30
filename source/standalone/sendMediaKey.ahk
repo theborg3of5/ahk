@@ -5,4 +5,7 @@ inputKey = %1% ; Input from command line
 if(!inputKey)
 	ExitApp
 
-Send, {%inputKey%}
+inputKeyAry := StrSplit(inputKey, ",")
+
+For i,inputKey in inputKeyAry
+	Send, {%inputKey%}

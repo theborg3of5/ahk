@@ -35,7 +35,7 @@
 	Notepad				notepad.exe				-																-					System32\notepad.exe
 []
 
-[{PATH}e:AppData\Local\GitHubDesktop\app-1.0.11\GitHubDesktop.exe]
+[{PATH}e:AppData\Local\GitHubDesktop\app-1.0.13\GitHubDesktop.exe]
 	GitHub				GitHubDesktop.exe		-																-					C:\Users\thebo\
 	GitHub				GitHubDesktop.exe		-																-					C:\Users\gborg\													-									EPIC_LAPTOP
 []

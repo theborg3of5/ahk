@@ -5,6 +5,9 @@
 	Review activateProgram/runProgram framework - VB seems to always run even though it's activate, for example (though that's the desired behavior anyway).
 	
 # New ideas
+	Add additional hotkey to onenote online, that launches specific notebook (and maybe section, but not page if possible)
+		Do section
+		Life (shared notebook)
 	Add HDR as a thing we can open with ActionObject?
 	VB6 - ^F2 focuses first dropdown
 	Hotstring for making a new row in OneNote Do stuff

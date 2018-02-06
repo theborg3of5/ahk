@@ -9,7 +9,7 @@
 	Foobar				foobar2000.exe			{97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}				-					foobar2000\foobar2000.exe
 	Notepad++			notepad++.exe			Notepad++													-					Notepad++\notepad++.exe
 	Outlook				OUTLOOK.EXE				rctrl_renwnd32												-					Microsoft Office\Office16\OUTLOOK.EXE
-	Thunder				Thunder.exe				-																-					Thunder\Thunder.exe
+	Thunder				Thunder.exe				-																Thunder			Thunder\Thunder.exe
 	VB6					VB6.exe					-																-					Microsoft Visual Studio\VB98\VB6.EXE
 	Pidgin				pidgin.exe				-																-					Pidgin\pidgin.exe
 	Snapper				Snapper.exe				-																-					Epic\Snapper\Snapper.exe

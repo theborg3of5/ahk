@@ -74,6 +74,7 @@ reduceFilepath(path, levelsDown) {
 ; Select a folder based on input (or prompt if no input) and open it.
 openFolder(folderName = "") {
 	folderPath := selectFolder(folderName)
+	; DEBUG.popup("Folder name",folderName, "Path",folderPath)
 	
 	if(folderPath && FileExist(folderPath))
 		Run, % folderPath

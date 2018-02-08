@@ -49,7 +49,7 @@
 ; Folders
 !+a::openFolder("AHK_ROOT")
 !+m::openFolder("MUSIC")
-!+x::openFolder("AHK_CONFIG")
+!+c::openFolder("AHK_CONFIG")
 !+d::openFolder("DOWNLOADS")
 !+u::openFolder("USER_ROOT")
 

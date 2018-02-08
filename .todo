@@ -5,6 +5,10 @@
 	Fix monitor fixer script or get rid of it entirely.
 	
 # New ideas
+	Review isSingleUserScript and !+x hotkeys for standalone/test scripts
+		Maybe we shouldn't try to catch it from main script anymore?
+		Review common hotkeys in general - weird reloading stuff above is probably related.
+		At least, no pass-through for !+x.
 	Add additional hotkey to onenote online, that launches specific notebook (and maybe section, but not page if possible)
 		Do section
 		Life (shared notebook)

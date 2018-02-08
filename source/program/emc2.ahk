@@ -8,11 +8,6 @@
 		Send, %epicID%
 	return
 	
-	; Allow my ^s save reflex to live on. Return to the field we were in when we finish.
-	^s::
-		ControlSend_Return("", "!s")
-	return
-	
 	; Make ^h for server object, similar to ^g for client object.
 	^h::
 		Send, ^7

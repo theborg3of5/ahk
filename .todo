@@ -1,6 +1,7 @@
 # Fixes
 	Seems like standalone scripts reload once on their own, then are restarted again by main script - should either have them not restart, or don't need main script to reload them too.
 	Make server routine stuff work again (or ditch it entirely, or make only the web link work) for ActionObject.
+		Make web version be codesearch routine thing?
 	Fix monitor fixer script or get rid of it entirely.
 	
 # New ideas

@@ -9,11 +9,6 @@
 		Send, %epicID%
 	return
 	
-	; Allow my ^s save reflex to live on. Return to the field we were in when we finish.
-	^s::
-		ControlSend_Return("", "!s")
-	return
-	
 	; Login hotkeys.
 	^+t::
 		Send, %epicID%{Tab}

@@ -1,34 +1,5 @@
 ; Functions related to input/output and user input.
 
-global TEXT_SOURCE_PASSED   := "PASS"
-global TEXT_SOURCE_SEL_CLIP := "SELECTION/CLIPBOARD"
-global TEXT_SOURCE_TITLE    := "TITLE"
-
-; Get text from a control, send it to another, and focus a third.
-ControlGet_Send_Return(fromControl, toControl, retControl = "") {
-	ControlGetText, data, %fromControl%, A
-	; DEBUG.popup("Data from control", data)
-	
-	ControlSend_Return(toControl, data, retControl)
-}
-
-; Send text to a particular control, then focus another.
-ControlSend_Return(toControl, keys, retControl = "") {
-	if(!retControl) {
-		ControlGetFocus, retControl, A
-	}
-	; DEBUG.popup("Control to send to",toControl, "Control to return to",retControl, "Keys to send",keys)
-	
-	if(toControl) {
-		ControlFocus, %toControl%
-	}
-	
-	Sleep, 100
-	Send, %keys%
-	Sleep, 100
-	ControlFocus, %retControl%, A
-}
-
 ; Allows SendRaw'ing of input with tabs to programs which auto-indent text.
 sendRawWithTabs(input) {
 	; Split the input text on newlines, as that's where the tabs will be an issue.

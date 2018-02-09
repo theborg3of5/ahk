@@ -16,3 +16,8 @@ global QUOTES := """"
 
 ; Window sizing/positioning
 global TASKBAR_HEIGHT := 30
+
+; Different sets of common hotkeys
+global HOTKEY_TYPE_STANDALONE := 0
+global HOTKEY_TYPE_MASTER     := 1
+global HOTKEY_TYPE_SUB_MASTER := 2

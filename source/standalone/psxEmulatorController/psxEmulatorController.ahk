@@ -3,6 +3,7 @@
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <autoInclude>
+scriptHotkeyType := HOTKEY_TYPE_SUB_MASTER
 
 ; State flag and icons
 global suspended := 0
@@ -47,6 +48,4 @@ sendEmulatorKey(key) {
 	Sleep, 100
 }
 
-
-; Universal suspend, reload, and exit hotkeys.
 #Include %A_ScriptDir%\..\..\common\commonHotkeys.ahk

@@ -8,6 +8,8 @@
 		Send, 1
 	return
 	
+	!+x::return
+	
 	; ; Contact comment.
 	; ^+8::
 		; Send, % "  `;*" 

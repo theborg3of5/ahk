@@ -1,5 +1,8 @@
 ; Input change/fixing functions.
 
+; Pop up the keys pressed/debug window.
+^!k::KeyHistory
+
 ; Select all with exceptions.
 $^a::selectAll()
 

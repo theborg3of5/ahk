@@ -3,6 +3,8 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #SingleInstance force
 ;#NoTrayIcon
+#Include <autoInclude>
+scriptHotkeyType := HOTKEY_TYPE_STANDALONE
 
 mirror_1 = 0
 mirror_2 = 9
@@ -130,5 +132,4 @@ if state1 = D
 Send %Modifiers%{%MirrorKey%}
 return
 
-~+!x::ExitApp			;Shift+Alt+X = Emergency Exit
-~!+r::Reload			;Shift+Alt+R = Reload
+#Include %A_ScriptDir%\..\common\commonHotkeys.ahk

@@ -1,12 +1,12 @@
 ﻿; === Hotkeys that all scripts should use. === ;
 
-#If isMainMasterScript
-	; Hotkey to die.
-	^+!#r::
-		Suspend, Permit
-		ExitApp
-	return
-	
+; Emergency exit
+~^+!#r::
+	Suspend, Permit
+	ExitApp
+return
+
+#If scriptHotkeyType = HOTKEY_TYPE_MASTER
 	; Suspend hotkey, change tray icon too.
 	!#x::
 		Suspend, Toggle
@@ -19,27 +19,14 @@
 		Suspend, Permit
 		Reload
 	return
-	
-	; Pop up the keys pressed/debug window.
-	^!k::KeyHistory
-
-	; Universal closer for other AHK scripts, catch it here to prevent going to the underlying window.
-	!+x::return
 #If
 
-#If !isMainMasterScript
-	; Hotkey to die.
-	~^+!#r::
-		Suspend, Permit
-		ExitApp
-	return
-	
-	; Suspend hotkey.
+; All standalone - both those that main script runs, and one-off scripts
+#If (scriptHotkeyType = HOTKEY_TYPE_SUB_MASTER) || (scriptHotkeyType = HOTKEY_TYPE_STANDALONE)
+	; Suspend hotkey (with pass-thru so it applies to all scripts)
 	~!#x::
 		Suspend, Toggle
 		suspended := !suspended
-		
-		; Update tray icon
 		updateTrayIcon()
 		
 		; Timers
@@ -48,15 +35,20 @@
 		else if(IsLabel(defaultTimerLoopLabel)) ; Otherwise, if the label "MainLoop" exists, turn that timer off.
 			SetTimer, %defaultTimerLoopLabel%, % suspended ? "Off" : "On" ; If script is suspended, toggle it off, otherwise on.
 	return
-
-	; Hotkey for reloading entire script.
-	~!+r::
-		Suspend, Permit
-		Reload
-	return
 #If
 
 ; One-off scripts
-#If isSingleUserScript
-	~!+x::ExitApp
+#If scriptHotkeyType = HOTKEY_TYPE_STANDALONE
+	; Normal exit
+	!+x::ExitApp
+	
+	; Auto-reload script when it's saved.
+	~^s::
+		if(!WinActive("ahk_class Notepad++"))
+			return
+		
+		WinGetActiveTitle, winTitle
+		if(stringContains(winTitle, A_ScriptFullPath))
+			Reload
+	return
 #If

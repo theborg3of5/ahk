@@ -1,7 +1,18 @@
-﻿; ===== Inclusion of all AHK scripts for Main. ===== ;
-
-; Common functions, hotkeys, and other such setup.
+﻿#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
+#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
+SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
+SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
+DetectHiddenWindows, On
+; #Warn All
 #Include <autoInclude>
+scriptHotkeyType := HOTKEY_TYPE_MASTER
+
+; State flag and icons
+global suspended := 0
+setUpTrayIconsSimple("suspended", "shellGreen.ico", "shellRed.ico")
+
+; Setup (auto-executing code) for various scripts below.
+#Include startup.ahk
 
 ; Standalone scripts. Must be first to execute so they can spin off and be on their own.
 standaloneFolder := A_ScriptDir "\standalone\"
@@ -14,9 +25,7 @@ if(MainConfig.isMachine(MACHINE_EpicLaptop)) { ; Not needed except on Epic machi
 	Run, % standaloneFolder "psxEmulatorController\psxEmulatorController.ahk"
 }
 
-#Include setup.ahk ; Setup for this script.
-#Include startup.ahk ; Setup for rest of scripts. (Variables, etc.) Includes all auto-executing code.
-
+; === Include other scripts ===
 #Include %A_ScriptDir%\general\ ; General hotkeys.
 #Include hotstrings.ahk ; Must go after startup, but before hotkeys begin.
 #Include input.ahk
@@ -56,5 +65,4 @@ if(MainConfig.isMachine(MACHINE_EpicLaptop)) { ; Not needed except on Epic machi
 #Include word.ahk
 #Include yEd.ahk
 
-; Universal suspend, reload, and exit hotkeys.
-#Include %A_ScriptDir%\common\commonHotkeys.ahk
+#Include %A_ScriptDir%\common\commonHotkeys.ahk ; Common hotkeys - should last so it overrides anything else.

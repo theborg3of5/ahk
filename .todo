@@ -1,14 +1,10 @@
 # Fixes
-	Seems like standalone scripts reload once on their own, then are restarted again by main script - should either have them not restart, or don't need main script to reload them too.
 	Make server routine stuff work again (or ditch it entirely, or make only the web link work) for ActionObject.
 		Make web version be codesearch routine thing?
-	Fix monitor fixer script or get rid of it entirely.
+	Standardize formatting of vimBindings to match other standalone scripts.
+	Update or get rid of timer - formatting, general code cleanup, even functionality?
 	
 # New ideas
-	Review isSingleUserScript and !+x hotkeys for standalone/test scripts
-		Maybe we shouldn't try to catch it from main script anymore?
-		Review common hotkeys in general - weird reloading stuff above is probably related.
-		At least, no pass-through for !+x.
 	Add additional hotkey to onenote online, that launches specific notebook (and maybe section, but not page if possible)
 		Do section
 		Life (shared notebook)

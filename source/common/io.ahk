@@ -46,11 +46,6 @@ getSelectedText() {
 	return textFound
 }
 
-; Wrapper for copying text that takes into account if ^c does something besides copying for the current program.
-copySelectedText() {
-	
-}
-
 ; Sends the selected text using the clipboard, fixing the clipboard as it finishes.
 sendTextWithClipboard(text) {
 	; DEBUG.popup("Text to send with clipboard", text)

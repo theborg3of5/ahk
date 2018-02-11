@@ -1,6 +1,6 @@
 /* Generic, flexible custom class for selecting from multiple choices, adding arbitrary input, and performing an action.
 	
-	This class will read in a file (using the TableList class) and turn it into a group of choices, which is then displayed to the user in a graphical list. The programmatic entry point is Selector.select().
+	This class will read in a file (using the TableList class) and turn it into a group of choices, which is then displayed to the user in a graphical list. The programmatic entry points are .selectGui() and .selectChoice().
 	
 	Certain characters have special meaning when parsing the lines of a file. They include:
 		= - Window title

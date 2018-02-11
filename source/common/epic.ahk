@@ -415,6 +415,63 @@ buildMForLoopString(loopAryName, iteratorsAry) {
 	return retStr
 }
 
+; line - title of EMC2 email, or title from top of web view.
+; Returns standard string for OneNote use.
+standardizeEMC2ObjectString(line) {
+	if(SubStr(line, 1, 1) = "[") {
+		line := SubStr(line, 2) ; Trim off open bracket
+		
+		closeBracketPos := stringContains(line, "]")
+		id := SubStr(line, 1, closeBracketPos - 1)
+		line := SubStr(line, closeBracketPos + 2) ; +2 for close bracket and following space
+		
+		title := line
+		
+		; INI won't be in the string for this format, so ask the user for it.
+		s := new Selector("local/actionObject.tl")
+		objInfo := s.selectGui("", "", {"ShowDataInputs":false})
+		ini := objInfo["SUBTYPE"]
+	} else {
+		spacePos := stringContains(line, " ")
+		hashPos  := stringContains(line, "#")
+		
+		; Find which comes first - *Pos is 0 if it doesn't exist in the string.
+		endPos := spacePos
+		if( (hashPos > 0) && (hashPos < spacePos) )
+			endPos := hashPos
+		
+		ini  := SubStr(line, 1, endPos - 1)
+		line := SubStr(line, endPos + 1) ; +1 for hash/space we stopped at
+		
+		; In case it's not the real INI (like "Design"), run it through a Selector to get the true INI.
+		s := new Selector("local/actionObject.tl")
+		objInfo := s.selectChoice(ini)
+		ini := objInfo["SUBTYPE"]
+		
+		colonPos := stringContains(line, ":")
+		id := SubStr(line, 1, colonPos - 1)
+		line := SubStr(line, colonPos + 2) ; +2 for colon and following space
+		
+		title := line
+		
+		; For SLG, "-CUSTOMER" is on end of ID - trim it off.
+		if(ini = "SLG") {
+			dashPos := stringContains(id, "-")
+			id := SubStr(id, 1, dashPos - 1)
+			
+			; "--Assigned to: ***" might be on the end - trim it off.
+			assignedPos := stringContains(title, "--Assigned To:")
+			if(assignedPos > 0)
+				title := SubStr(title, 1, assignedPos - 1)
+		}
+	}
+	
+	standardString := ini " " id " - " title
+	
+	; DEBUG.popup("Line",line, "INI",ini, "ID",id, "Title",title, "Standard string",standardString)
+	return standardString
+}
+
 
 
 getEMC2Info(ByRef ini = "", ByRef id = "", windowTitle = "A") {

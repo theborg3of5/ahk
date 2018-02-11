@@ -147,8 +147,8 @@ return
 ^+!m::Run, % "https://www.messenger.com"
 ^+!f::Run, % "http://feedly.com/i/latest"
 ^!#m::Run, % "https://mail.google.com/mail/u/0/#inbox"
-!+o::Run, % "https://www.onenote.com/notebooks?auth=1&nf=1&fromAR=1"
-!+t::Run, % onenoteOnlinePersonalDoSection
+!+o:: Run, % "https://www.onenote.com/notebooks?auth=1&nf=1&fromAR=1"
+!+t:: Run, % onenoteOnlinePersonalDoSection
 
 #If MainConfig.isMachine(MACHINE_HomeDesktop)
 	^+!r::Run, % "http://www.reddit.com/"
@@ -156,3 +156,13 @@ return
 
 ; Folder List - Open
 ^+!w::openFolder()
+
+; Turn selected text or clipboard into standard string for OneNote use.
+!+n::
+	line := getFirstLineOfSelectedText()
+	if(!line) ; Fall back to clipboard if nothing selected
+		line := clipboard
+	
+	standardString := standardizeEMC2ObjectString(line)
+	sendTextWithClipboard(standardString)
+return

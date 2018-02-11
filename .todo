@@ -11,29 +11,9 @@
 	Add HDR as a thing we can open with ActionObject?
 	VB6 - ^F2 focuses first dropdown
 	Hotstring for making a new row in OneNote Do stuff
-		Trim out/replace chars as needed based on INI: "[]:#"
-			(Specifics page with specific formats per INI)
+		Remove "DBC" with whatever separator "-/\ " from start of title, since that's not particularly needed?
 		Take care of linking (to record in string, at least), too?
 			What about new specifics page? Separate hotstring that includes that as well?
-		Remove "DBC" with whatever separator "-/\ " from start of title, since that's not particularly needed?
-		Brainstormed logic:
-			INI/ID
-				Is first char [
-					Yes
-						ID is next characters up to the first ]
-							(or: all chars in alphanumeric set used by epic.ahk > isEMC2Id)
-						INI is unknown, ask user (via Selector popup?)
-					No
-						INI string is first string (not just 3 chars) up to first " " or "#"
-							Run through selector for true INI, or ask user if not found there
-						ID is remaining string (after delimiter from above) up until first ":" or "-"
-							(or: all chars in alphanumeric set used by epic.ahk > isEMC2Id)
-			Title
-				Is SLG?
-					Yes
-						Trim off customer (chars up until first ":")
-						Trim off responsible person (end of string back to the first "--" string, iff that string exists)
-				Remainder of string
 	Add something like VimBindings for Outlook?
 		At least j/k and ;/p would be nice.
 	New open-from-codesearch hotkey in Chrome - ^+o?

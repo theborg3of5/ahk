@@ -3,6 +3,8 @@
 		Make web version be codesearch routine thing?
 	Standardize formatting of vimBindings to match other standalone scripts.
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
+	Document Selector settings passed in programmatically
+	Selector - add new parameter (maybe to both entry points?) for column to return?
 	
 # New ideas
 	Move commonHotkeys to something like autoinclude - no specific path that way.

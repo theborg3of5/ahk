@@ -245,7 +245,7 @@ getFirstLine(inputString) {
 }
 
 ; Cleans a hard-coded list of characters out of a (should be single-line) string, including whitespace.
-cleanupText(text) {
+cleanupText(text, additionalStringsToRemove = "") {
 	charCodesToRemove := []
 	charCodesToRemove[1] := [13,10]    ; Newline
 	charCodesToRemove[2] := [8226,9]   ; First level bullet (filled circle) + tab
@@ -261,6 +261,10 @@ cleanupText(text) {
 			charsToRemove[i] .= newChar
 		}
 	}
+	For i,str in additionalStringsToRemove {
+		charsToRemove.push(str)
+	}
+	; DEBUG.popup("Text",text, "Chars to remove",charsToRemove)
 	
 	while(!isClean) {
 		isClean := true
@@ -276,7 +280,7 @@ cleanupText(text) {
 		index := containsAnyOf(text, charsToRemove, CONTAINS_BEG) ; Beginning of string
 		if(index) {
 			needle := charsToRemove[index]
-			text := RegExReplace(text, needle, "", "", 1) ; Get only the first replaceable one.
+			text := StrReplace(text, needle, "", "", 1) ; Get only the first replaceable one.
 			isClean := false
 		}
 		index := containsAnyOf(text, charsToRemove, CONTAINS_END) ; End of string

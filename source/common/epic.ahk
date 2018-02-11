@@ -459,13 +459,21 @@ standardizeEMC2ObjectString(line) {
 			dashPos := stringContains(id, "-")
 			id := SubStr(id, 1, dashPos - 1)
 			
-			; "--Assigned to: ***" might be on the end - trim it off.
+			; "--Assigned to: USER" might be on the end - trim it off.
 			assignedPos := stringContains(title, "--Assigned To:")
 			if(assignedPos > 0)
 				title := SubStr(title, 1, assignedPos - 1)
 		}
 	}
 	
+	; Remove "DBC" and any separators/whitespace from beginning of title
+	title := cleanupText(title)
+	if(SubStr(title, 1, 3) = "DBC") {
+		title := SubStr(title, 4)
+		title := cleanupText(title, ["-", "/", "\"])
+	}
+	
+	; Build standardized string from pieces
 	standardString := ini " " id " - " title
 	
 	; DEBUG.popup("Line",line, "INI",ini, "ID",id, "Title",title, "Standard string",standardString)

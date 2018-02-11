@@ -5,6 +5,7 @@
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
 	
 # New ideas
+	Move commonHotkeys to something like autoinclude - no specific path that way.
 	Add HDR as a thing we can open with ActionObject?
 	VB6 - ^F2 focuses first dropdown
 	Hotstring for making a new row in OneNote Do stuff

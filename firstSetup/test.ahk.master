@@ -6,6 +6,7 @@
 	#SingleInstance force
 	
 	#Include <autoInclude>
+	isSingleUserScript := true
 	
 	; State flag and icons
 	global suspended := 0
@@ -20,6 +21,10 @@
 ; --------------------------------------------------------------------------
 
 ^b::
+	
+return
+
+^+b::
 	
 return
 
@@ -91,19 +96,4 @@ return
 	return
 }
 
-{ ; Exit/reload hotkeys.
-	~#!x::
-		Suspend
-		suspended := !suspended
-		updateTrayIcon()
-	return
-
-	; Exit, reload, and suspend.
-	~!+x::ExitApp
-	; ~#!x::Suspend
-	^!r::
-	~!+r::
-		Suspend, Permit
-		Reload
-	return
-}
+#Include %A_ScriptDir%\..\source\common\commonHotkeys.ahk

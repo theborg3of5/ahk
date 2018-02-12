@@ -12,6 +12,8 @@
 	Add HDR as a thing we can open with ActionObject?
 	VB6 - ^F2 focuses first dropdown
 	Hotstring for making a new row in OneNote Do stuff
+		Can we grab it from the title of chrome window?
+			Hotkey to copy title from chrome (maybe excluding the "- Google Chrome" bit), then can just use new one to go from clipboard
 		Take care of linking (to record in string, at least), too?
 			What about new specifics page? Separate hotstring that includes that as well?
 	Add something like VimBindings for Outlook?

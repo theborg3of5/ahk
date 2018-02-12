@@ -445,7 +445,10 @@ standardizeEMC2ObjectString(line) {
 		
 		; In case it's not the real INI (like "Design"), run it through a Selector to get the true INI.
 		s := new Selector("local/actionObject.tl")
-		objInfo := s.selectChoice(ini)
+		if(ini)
+			objInfo := s.selectChoice(ini)
+		else
+			objInfo := s.selectGui("", "", {"ShowDataInputs":false})
 		ini := objInfo["SUBTYPE"]
 		
 		colonPos := stringContains(line, ":")

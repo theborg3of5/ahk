@@ -473,7 +473,7 @@ standardizeEMC2ObjectString(line) {
 	title := cleanupText(title)
 	if(SubStr(title, 1, 3) = "DBC") {
 		title := SubStr(title, 4)
-		title := cleanupText(title, ["-", "/", "\"])
+		title := cleanupText(title, ["-", "/", "\", ":"])
 	}
 	
 	; Build standardized string from pieces

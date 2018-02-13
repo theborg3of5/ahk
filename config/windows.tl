@@ -30,6 +30,7 @@
 [{ESC}r:CLOSE_WINDOW]
 	Pushbullet					chrome.exe						-									Pushbullet
 	TickTick						chrome.exe						-									All - TickTick
+	Join							chrome.exe						-									Join
 []
 	
 	; Windows that have odd borders and need different offsets - mainly Office programs.

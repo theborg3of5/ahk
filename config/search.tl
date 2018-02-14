@@ -23,7 +23,7 @@
 		
 		# | Other
 		Guru								gu				-																	GURU
-		DBC Wiki							d				dbc																WIKI
+		DBC Wiki							d|dbc			dbc																WIKI
 [-1]
 
 [+3|{SEARCH_TYPE}r:WEB]

@@ -476,6 +476,10 @@ standardizeEMC2ObjectString(line) {
 		title := cleanupText(title, ["-", "/", "\", ":"])
 	}
 	
+	; Substitution for visual sake
+	if(ini = "ZQN")
+		ini := "QAN"
+	
 	; Build standardized string from pieces
 	standardString := ini " " id " - " title
 	

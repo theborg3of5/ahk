@@ -9,9 +9,6 @@
 # New ideas
 	Move commonHotkeys to something like autoinclude - no specific path that way.
 	Add HDR as a thing we can open with ActionObject?
-	Hotstring for making a new row in OneNote Do stuff
-		Take care of linking (to record in string, at least), too?
-			What about new specifics page? Separate hotstring that includes that as well?
 	New open-from-codesearch hotkey in Chrome - ^+o?
 		Routine from title
 		Tag from selection (or nothing, just open routine)

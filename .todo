@@ -10,7 +10,6 @@
 	Go through RegExReplace calls and reconsider whether we should use StrReplace instead.
 	Move commonHotkeys to something like autoinclude - no specific path that way.
 	Add HDR as a thing we can open with ActionObject?
-	VB6 - ^F2 focuses first dropdown
 	Hotstring for making a new row in OneNote Do stuff
 		Can we grab it from the title of chrome window?
 			Hotkey to copy title from chrome (maybe excluding the "- Google Chrome" bit), then can just use new one to go from clipboard

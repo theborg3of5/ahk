@@ -192,30 +192,6 @@ arrayJoin(arrayToJoin, delim = "|") {
 	return SubStr(outStr, StrLen(delim) + 1) ; Trim off the leading delimiter.
 }
 
-
-
-; Eval() function and helpers - turn a numeric expression in a string into a result.
-; From http://www.autohotkey.com/board/topic/15675-monster-evaluate-math-expressions-in-strings/?p=231869 .
-Eval(x) {   ; Evaluate arithmetic expression with numbers, + - / * ( )
-   Return Eval#(RegExReplace(x,"-","#")) ; # = subtraction, to distinguish from sign
-}
-
-Eval#(x) {  ; Evaluate expression with numbers, + #(subtract) / * ( ). Recurse into (..)
-   Return RegExMatch(x,"(.*)\(([^\(\)]+)\)(.*)",y) ? Eval#(y1 . Eval@(y2) . y3) : Eval@(x)
-}
-
-Eval@(x) {  ; Evaluate expression with numbers, + #(subtract) / *
-   RegExMatch(x,"(.*)(\+|#)(.*)",y)    ; last + or -
-   IfEqual y2,+, Return Eval@(y1) + Eval@(y3)
-   IfEqual y2,#, Return Eval@(y1) - Eval@(y3)
-
-   RegExMatch(x,"(.*)(\*|/)(.*)",y)    ; last * or /
-   IfEqual y2,*, Return Eval@(y1) * Eval@(y3)
-   IfEqual y2,/, Return Eval@(y1) / Eval@(y3)
-
-   Return x ? x : 0                    ; empty expression: 0, number: unchanged
-}
-
 ; Sets global variables to null.
 nullGlobals(baseName, startIndex, endIndex) {
 	global

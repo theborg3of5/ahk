@@ -7,7 +7,6 @@
 	Selector - add new parameter (maybe to both entry points?) for column to return?
 	
 # New ideas
-	Go through RegExReplace calls and reconsider whether we should use StrReplace instead.
 	Move commonHotkeys to something like autoinclude - no specific path that way.
 	Add HDR as a thing we can open with ActionObject?
 	Hotstring for making a new row in OneNote Do stuff

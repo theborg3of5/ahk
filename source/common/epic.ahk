@@ -305,14 +305,12 @@ buildHyperspaceRunString(versionMajor, versionMinor, environment) {
 	
 	; Handling for 2010 special path.
 	if(versionMajor = 7 && versionMinor = 8)
-		runString := RegExReplace(runString, "<EPICNAME>", "EpicSys")
+		runString := replaceTag(runString, "EPICNAME", "EpicSys")
 	else
-		runString := RegExReplace(runString, "<EPICNAME>", "Epic")
+		runString := replaceTag(runString, "EPICNAME", "Epic")
 	
 	; Versioning and environment.
-	runString := RegExReplace(runString, "<MAJOR>", versionMajor)
-	runString := RegExReplace(runString, "<MINOR>", versionMinor)
-	runString := RegExReplace(runString, "<ENVIRONMENT>", environment)
+	runString := replaceTags(runString, {"MAJOR":versionMajor, "MINOR":versionMinor, "ENVIRONMENT":environment})
 	
 	; DEBUG.popup("Start string", tempRun, "Finished string", runString, "Major", versionMajor, "Minor", versionMinor, "Environment", environment)
 	return runString
@@ -351,11 +349,12 @@ buildGuruURL(criteria) {
 
 buildEpicWikiSearchURL(category, criteria) {
 	outURL := epicWikiSearchBase
-	outURL := RegExReplace(outURL, "<QUERY>", criteria)
+	outURL := replaceTag(outURL, "QUERY", criteria)
 	
 	if(category) {
+		category := "'" category "'"
 		outURL .= epicWikiSearchFilters
-		outURL := RegExReplace(outURL, "<CATEGORIES>", "'" category "'")
+		outURL := replaceTag(outURL, "CATEGORIES", category)
 	}
 	
 	return outURL
@@ -390,7 +389,7 @@ buildSnapperURL(environment, ini = "", idList = "") { ; idList is a comma-separa
 
 buildVDIRunString(vdiId) {
 	global epicVDIBase
-	return replaceTags(epicVDIBase, {"VDI_ID":vdiId})
+	return replaceTag(epicVDIBase, "VDI_ID", vdiId)
 }
 
 ; iteratorsAry is array of variables to loop in nested for loops, in top-down order.

@@ -134,6 +134,18 @@ doubleBackslashes(in) {
 	return out
 }
 
+escapeRegExChars(inputString) {
+	outputString := ""
+	Loop, Parse, inputString
+	{
+		if(stringContains("\.*?+[{|()^$", A_LoopField))
+			outputString .= "\"
+		outputString .= A_LoopField
+	}
+	
+	return outputString
+}
+
 ; Given an array of strings, put them all together.
 arrayToString(arr, spacesBetween = true, preString = "", postString = "") {
 	outStr := ""
@@ -209,8 +221,8 @@ isPath(ByRef text, ByRef type = "") {
 	
 	if(subStr(text, 1, 8) = "file:///") { ; URL'd filepath.
 		text := subStr(text, 9) ; strip off the file:///
-		text := RegExReplace(text, "%20", A_Space)
-		; DEBUG.popup("Trimmed path", text)
+		text := StrReplace(text, "%20", A_Space)
+		; DEBUG.popup("Updated path", text)
 		type := SUBTYPE_FILEPATH
 	} else if(subStr(text, 2, 2) = ":\") { ; Windows filepath
 		type := SUBTYPE_FILEPATH
@@ -222,20 +234,6 @@ isPath(ByRef text, ByRef type = "") {
 	
 	; DEBUG.popup("isPath", "Finish", "Type", type)
 	return type
-}
-
-; Show a popup that takes what math on the given number.
-mathPopup(inputNum, operations = "") {
-	if(!isNum(inputNum))
-		return ""
-	
-	if(!operations)
-		InputBox, operations, Do Math, Math operations to make on number:
-	
-	result := Eval(inputNum operations)
-	
-	; DEBUG.popup("mathPopup", "Got ops", "InputNum", inputNum, "Ops", operations, "Result", result)
-	return result
 }
 
 ; Return only the first line of the given string.
@@ -280,13 +278,13 @@ cleanupText(text, additionalStringsToRemove = "") {
 		index := containsAnyOf(text, charsToRemove, CONTAINS_BEG) ; Beginning of string
 		if(index) {
 			needle := charsToRemove[index]
-			text := StrReplace(text, needle, "", "", 1) ; Get only the first replaceable one.
+			text := StrReplace(text, needle, "", , 1) ; Get only the first replaceable one.
 			isClean := false
 		}
 		index := containsAnyOf(text, charsToRemove, CONTAINS_END) ; End of string
 		if(index) {
-			needle := charsToRemove[index]
-			text := RegExReplace(text, needle, "", "", 1, strlen(text) - strlen(needle)) ; Get only the last replaceable one.
+			needle := escapeRegExChars(charsToRemove[index])
+			text := RegExReplace(text, needle, "", , 1, strlen(text) - strlen(needle)) ; Get only the last replaceable one.
 			isClean := false
 		}
 		
@@ -313,19 +311,15 @@ appendLine(baseText, textToAdd) {
 	return updatedString
 }
 
-replaceMulti(inputString, replaceAry) {
+replaceTags(inputString, tagNamesAry) {
 	outputString := inputString
 	
-	For toReplace, replaceWith in replaceAry
-		outputString := RegExReplace(outputString, toReplace, replaceWith)
+	For tagName, replacement in tagNamesAry
+		outputString := replaceTag(outputString, tagName, replacement)
 	
 	return outputString
 }
 
-replaceTags(inputString, tagNamesAry) {
-	tagsAry := []
-	For tagName, replacement in tagNamesAry
-		tagsAry["<" tagName ">"] := replacement
-	
-	return replaceMulti(inputString, tagsAry)
+replaceTag(inputString, tagName, replacement) {
+	return StrReplace(inputString, "<" tagName ">", replacement)
 }

@@ -130,7 +130,7 @@ class ActionObject {
 		}
 		
 		; Additional processing on user-given info as needed.
-		if(type = TYPE_EMC2) { ; EMC2 - subType might need conversion (QAN->ZQN, etc)
+		if(type = TYPE_EMC2) {
 			if(subType) { ; But if it's blank, don't ask the user again.
 				s := new Selector("local/actionObject.tl")
 				objInfo := s.selectChoice(subType)

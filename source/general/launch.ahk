@@ -163,6 +163,27 @@ return
 	if(!line) ; Fall back to clipboard if nothing selected
 		line := clipboard
 	
-	standardString := standardizeEMC2ObjectString(line)
+	infoAry := extractEMC2ObjectInfo(line)
+	ini   := infoAry["INI"]
+	id    := infoAry["ID"]
+	title := infoAry["TITLE"]
+	
+	standardString := buildStandardEMC2ObjectString(ini, id, title)
 	sendTextWithClipboard(standardString)
+	
+	; Try to link the ini/id as well where applicable.
+	if(WinActive(getWindowTitleString("OneNote"))) {
+		standardStringLen := strLen(standardString)
+		Send, {Left %standardStringLen%} ; Get to start of line
+		
+		iniIdLen := strLen(ini) + 1 + strLen(id)
+		Send, {Shift Down}{Right %iniIdLen%}{Shift Up} ; Select INI/ID
+		
+		Send, ^k ; Hyperlink
+		WinWaitActive, Link ahk_class NUIDialog
+		
+		Send, !e ; Address field
+		sendTextWithClipboard(buildEMC2Link(ini, id))
+		Send, {Enter}{Left}
+	}
 return

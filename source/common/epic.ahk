@@ -244,7 +244,7 @@ getEpicAppIdFromKey(appKey) {
 	return epicAppKeyToIdAry[appKey]
 }
 
-buildEMC2Link(ini, id, subAction) {
+buildEMC2Link(ini, id, subAction = "VIEW") { ; subAction = SUBACTION_VIEW
 	global SUBACTION_EDIT, SUBACTION_VIEW, SUBACTION_WEB
 	if(!ini || !id)
 		return ""
@@ -282,7 +282,7 @@ canViewINIInEMC2(ini) {
 	
 	if(ini = "DLG")
 		return true
-	if(ini = "ZQN")
+	if( (ini = "QAN") || (ini = "ZQN") )
 		return true
 	if(ini = "XDS")
 		return true
@@ -415,8 +415,7 @@ buildMForLoopString(loopAryName, iteratorsAry) {
 }
 
 ; line - title of EMC2 email, or title from top of web view.
-; Returns standard string for OneNote use.
-standardizeEMC2ObjectString(line) {
+extractEMC2ObjectInfo(line) {
 	if(SubStr(line, 1, 1) = "[") {
 		line := SubStr(line, 2) ; Trim off open bracket
 		
@@ -475,15 +474,12 @@ standardizeEMC2ObjectString(line) {
 		title := cleanupText(title, ["-", "/", "\", ":"])
 	}
 	
-	; Substitution for visual sake
-	if(ini = "ZQN")
-		ini := "QAN"
-	
-	; Build standardized string from pieces
-	standardString := ini " " id " - " title
-	
-	; DEBUG.popup("Line",line, "INI",ini, "ID",id, "Title",title, "Standard string",standardString)
-	return standardString
+	return {"INI":ini, "ID":id, "TITLE":title}
+}
+
+; Returns standard string for OneNote use.
+buildStandardEMC2ObjectString(ini, id, title) {
+	return ini " " id " - " title
 }
 
 

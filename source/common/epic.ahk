@@ -244,7 +244,7 @@ getEpicAppIdFromKey(appKey) {
 	return epicAppKeyToIdAry[appKey]
 }
 
-buildEMC2Link(ini, id, subAction = "VIEW") { ; subAction = SUBACTION_VIEW
+buildEMC2Link(ini, id, subAction = "WEB") { ; subAction = SUBACTION_WEB
 	global SUBACTION_EDIT, SUBACTION_VIEW, SUBACTION_WEB
 	if(!ini || !id)
 		return ""

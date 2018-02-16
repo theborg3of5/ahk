@@ -10,12 +10,8 @@
 	Move commonHotkeys to something like autoinclude - no specific path that way.
 	Add HDR as a thing we can open with ActionObject?
 	Hotstring for making a new row in OneNote Do stuff
-		Can we grab it from the title of chrome window?
-			Hotkey to copy title from chrome (maybe excluding the "- Google Chrome" bit), then can just use new one to go from clipboard
 		Take care of linking (to record in string, at least), too?
 			What about new specifics page? Separate hotstring that includes that as well?
-	Add something like VimBindings for Outlook?
-		At least j/k and ;/p would be nice.
 	New open-from-codesearch hotkey in Chrome - ^+o?
 		Routine from title
 		Tag from selection (or nothing, just open routine)

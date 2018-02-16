@@ -96,4 +96,4 @@ return
 	return
 }
 
-#Include %A_ScriptDir%\..\source\common\commonHotkeys.ahk
+#Include <commonHotkeys>

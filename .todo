@@ -7,7 +7,6 @@
 	Selector - add new parameter (maybe to both entry points?) for column to return?
 	
 # New ideas
-	Move commonHotkeys to something like autoinclude - no specific path that way.
 	Add HDR as a thing we can open with ActionObject?
 	New open-from-codesearch hotkey in Chrome - ^+o?
 		Routine from title

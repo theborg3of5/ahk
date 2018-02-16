@@ -77,4 +77,4 @@ Loop, Files, %includesFileName%, R ; Recurse, only look for files (not folders)
 ExitApp
 
 ; Universal suspend, reload, and exit hotkeys.
-#Include %A_ScriptDir%\..\source\common\commonHotkeys.ahk
+#Include <commonHotkeys>

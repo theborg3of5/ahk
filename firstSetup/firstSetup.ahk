@@ -2,13 +2,13 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 #SingleInstance force  ; Ensures that if this script is running, running it again replaces the first instance.
-; #NoTrayIcon  ; Uncomment to hide the tray icon.
 
 #Include %A_ScriptDir%\..\source\common
 #Include io.ahk
 #Include data.ahk
 #Include debug.ahk
 #Include epic.ahk
+#Include file.ahk
 #Include gui.ahk
 #Include HTTPRequest.ahk
 #Include runCommands.ahk
@@ -20,13 +20,14 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include tableListMod.ahk
 #Include tray.ahk
 #Include window.ahk
+scriptHotkeyType := HOTKEY_TYPE_STANDALONE
 
 ; Various paths needed throughout.
 ahkCompilePath := reduceFilePath(A_AhkPath, 1) "Compiler\Ahk2Exe.exe"
 ahkRootPath    := reduceFilepath(A_ScriptDir, 1)
 userPath       := reduceFilepath(A_Desktop, 1)
 tlSetupPath    := "setup.tl"
-startupFolder  := ahkRootPath "source\"
+startupFolder  := ahkRootPath "\source\"
 mainAHKPath    := startupFolder "main.ahk"
 
 tagsToReplace := []
@@ -37,9 +38,10 @@ tagsToReplace["MENU_KEY_ACTION"]       := ""
 tagsToReplace["EDGE_OFFSET"]           := ""
 
 copyPaths := []
-copyPaths["autoInclude.ahk.master"] := userPath "Documents\AutoHotkey\Lib\autoInclude.ahk"
-copyPaths["settings.ini.master"]    := ahkRootPath "config\local\settings.ini"
-copyPaths["test.ahk.master"]        := ahkRootPath "test\test.ahk"
+copyPaths["autoInclude.ahk.master"]   := userPath "Documents\AutoHotkey\Lib\autoInclude.ahk"
+copyPaths["commonHotkeys.ahk.master"] := userPath "Documents\AutoHotkey\Lib\commonHotkeys.ahk"
+copyPaths["settings.ini.master"]      := ahkRootPath "config\local\settings.ini"
+copyPaths["test.ahk.master"]          := ahkRootPath "test\test.ahk"
 
 gitNames := []
 gitNames.Push(".git")
@@ -61,7 +63,7 @@ For tag,v in tagsToReplace {
 	if(machineValue)
 		tagsToReplace[tag] := machineValue
 }
-; DEBUG.popup("Finished tags to replace", tagsToReplace)
+; DEBUG.popup("Finished tags to replace",tagsToReplace)
 
 ; Loop over files we need to process and put places.
 For from,to in copyPaths {
@@ -105,4 +107,4 @@ IfMsgBox Yes
 ExitApp
 
 ; Universal suspend, reload, and exit hotkeys.
-#Include commonHotkeys.ahk
+#Include _commonHotkeys.ahk

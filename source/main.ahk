@@ -65,4 +65,4 @@ if(MainConfig.isMachine(MACHINE_EpicLaptop)) { ; Not needed except on Epic machi
 #Include word.ahk
 #Include yEd.ahk
 
-#Include %A_ScriptDir%\common\commonHotkeys.ahk ; Common hotkeys - should last so it overrides anything else.
+#Include <commonHotkeys> ; Common hotkeys - should last so it overrides anything else.

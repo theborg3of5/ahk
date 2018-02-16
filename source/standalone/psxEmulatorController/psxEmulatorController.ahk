@@ -48,4 +48,4 @@ sendEmulatorKey(key) {
 	Sleep, 100
 }
 
-#Include %A_ScriptDir%\..\..\common\commonHotkeys.ahk
+#Include <commonHotkeys>

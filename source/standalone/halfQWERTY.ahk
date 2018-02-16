@@ -132,4 +132,4 @@ if state1 = D
 Send %Modifiers%{%MirrorKey%}
 return
 
-#Include %A_ScriptDir%\..\common\commonHotkeys.ahk
+#Include <commonHotkeys>

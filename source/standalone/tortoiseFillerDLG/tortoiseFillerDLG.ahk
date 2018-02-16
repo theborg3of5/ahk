@@ -32,4 +32,4 @@ MainLoop:
 	}
 return
 
-#Include %A_ScriptDir%\..\..\common\commonHotkeys.ahk
+#Include <commonHotkeys>

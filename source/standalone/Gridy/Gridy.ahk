@@ -861,5 +861,4 @@ GetMonitorUnderMouse() {
 }
 
 
-; *gdb - Universal suspend, reload, and exit hotkeys.
-#Include %A_ScriptDir%\..\..\common\commonHotkeys.ahk
+#Include <commonHotkeys>

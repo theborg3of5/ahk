@@ -227,4 +227,4 @@ sendToOmniboxAndGo(url) {
 	return
 #If
 
-#Include %A_ScriptDir%\..\..\common\commonHotkeys.ahk
+#Include <commonHotkeys>

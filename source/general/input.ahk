@@ -14,6 +14,10 @@ $^Backspace::deleteWord()
 	SetCapsLockState, On
 return
 
+; Scroll horizontally with Shift held down.
++WheelUp::WheelLeft
++WheelDown::WheelRight
+
 #If !MainConfig.windowIsGame()
 	XButton1::^Tab
 		MouseGetPos, , , winId

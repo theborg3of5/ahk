@@ -456,7 +456,7 @@ processEMC2ObjectInfo(infoAry) {
 	id := cleanupText(id)
 	
 	; Title
-	title := cleanupText(title, ["-", "/", "\", ":", "DBC", "(Developer has reset your status)"]) ; Drop odd characters and non-useful strings
+	title := cleanupText(title, ["-", "/", "\", ":", "DBC", "(Developer has reset your status)", "(Stage 1 QAer is Waiting for Changes)", "(Stage 2 QAer is Waiting for Changes)"]) ; Drop odd characters and non-useful strings
 	if(ini = "SLG") {
 		; "--Assigned to: USER" might be on the end for SLGs - trim it off.
 		assignedPos := stringContains(title, "--Assigned To:")

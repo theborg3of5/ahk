@@ -416,62 +416,52 @@ buildMForLoopString(loopAryName, iteratorsAry) {
 
 ; line - title of EMC2 email, or title from top of web view.
 extractEMC2ObjectInfo(line) {
-	if(SubStr(line, 1, 1) = "[") {
-		line := SubStr(line, 2) ; Trim off open bracket
-		
-		closeBracketPos := stringContains(line, "]")
-		id := SubStr(line, 1, closeBracketPos - 1)
-		line := SubStr(line, closeBracketPos + 2) ; +2 for close bracket and following space
-		
-		title := line
-		
-		; INI won't be in the string for this format, so ask the user for it.
-		s := new Selector("local/actionObject.tl")
-		objInfo := s.selectGui("", "", {"ShowDataInputs":false})
-		ini := objInfo["SUBTYPE"]
-	} else {
-		spacePos := stringContains(line, " ")
-		hashPos  := stringContains(line, "#")
-		
-		; Find which comes first - *Pos is 0 if it doesn't exist in the string.
-		endPos := spacePos
-		if( (hashPos > 0) && (hashPos < spacePos) )
-			endPos := hashPos
-		
-		ini  := SubStr(line, 1, endPos - 1)
-		line := SubStr(line, endPos + 1) ; +1 for hash/space we stopped at
-		
-		; In case it's not the real INI (like "Design"), run it through a Selector to get the true INI.
-		s := new Selector("local/actionObject.tl")
-		if(ini)
-			objInfo := s.selectChoice(ini)
-		else
-			objInfo := s.selectGui("", "", {"ShowDataInputs":false})
-		ini := objInfo["SUBTYPE"]
-		
-		colonPos := stringContains(line, ":")
-		id := SubStr(line, 1, colonPos - 1)
-		line := SubStr(line, colonPos + 2) ; +2 for colon and following space
-		
-		title := line
-		
-		; For SLG, "-CUSTOMER" is on end of ID - trim it off.
-		if(ini = "SLG") {
-			dashPos := stringContains(id, "-")
-			id := SubStr(id, 1, dashPos - 1)
-			
-			; "--Assigned to: USER" might be on the end - trim it off.
-			assignedPos := stringContains(title, "--Assigned To:")
-			if(assignedPos > 0)
-				title := SubStr(title, 1, assignedPos - 1)
-		}
+	infoAry := extractEMC2ObjectInfoRaw(line)
+	return processEMC2ObjectInfo(infoAry)
+}
+extractEMC2ObjectInfoRaw(line) {
+	line := cleanupText(line, ["["]) ; Remove any odd leading/trailing characters (and also remove open brackets)
+	
+	; INI is first characters up to the first delimiter
+	if(isAlpha(subStr(line, 1, 1))) { ; Make sure we're starting with an INI (instead of an ID) by checking whether the first character is a letter (not a number).
+		delimPos := stringContainsAnyOf(line, [" ", "#"])
+		ini  := SubStr(line, 1, delimPos - 1)
+		line := SubStr(line, delimPos + 1) ; +1 to drop delimiter too
 	}
 	
-	; Remove "DBC" and any separators/whitespace from beginning of title
-	title := cleanupText(title)
-	if(SubStr(title, 1, 3) = "DBC") {
-		title := SubStr(title, 4)
-		title := cleanupText(title, ["-", "/", "\", ":"])
+	; ID is remaining up to the next delimiter
+	delimPos := stringContainsAnyOf(line, [":", "-", "]"])
+	id := SubStr(line, 1, delimPos - 1)
+	line := SubStr(line, delimPos + 1) ; +1 to drop delimiter too
+	
+	; Title is everything left
+	title := line
+	
+	return {"INI":ini, "ID":id, "TITLE":title}
+}
+processEMC2ObjectInfo(infoAry) {
+	ini   := infoAry["INI"]
+	id    := infoAry["ID"]
+	title := infoAry["TITLE"]
+	
+	; INI
+	s := new Selector("local/actionObject.tl")
+	if(ini) ; Turn any not-really-ini strings (like "Design") into actual INI
+		objInfo := s.selectChoice(ini)
+	else    ; If no INI found at all, ask the user for it
+		objInfo := s.selectGui("", "", {"ShowDataInputs":false})
+	ini := objInfo["SUBTYPE"]
+	
+	; ID
+	id := cleanupText(id)
+	
+	; Title
+	title := cleanupText(title, ["-", "/", "\", ":", "DBC", "(Developer has reset your status)"]) ; Drop odd characters and non-useful strings
+	if(ini = "SLG") {
+		; "--Assigned to: USER" might be on the end for SLGs - trim it off.
+		assignedPos := stringContains(title, "--Assigned To:")
+		if(assignedPos > 0)
+			title := SubStr(title, 1, assignedPos - 1)
 	}
 	
 	return {"INI":ini, "ID":id, "TITLE":title}

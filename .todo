@@ -5,7 +5,6 @@
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
 	Document Selector settings passed in programmatically
 	Selector - add new parameter (maybe to both entry points?) for column to return?
-	Standardized onenote emc2 object string - make it work with a hyphen between ID and title too (so it can support the standardized format)
 	
 # New ideas
 	Make adding copied link to text in OneNote (and maybe other places?) more generic (separate hotkey)

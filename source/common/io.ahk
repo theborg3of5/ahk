@@ -157,3 +157,30 @@ getKeyNameFromHotkeyChar(hotkeyChar = "") {
 	; Otherwise, probably a letter or number.
 	return hotkeyChar
 }
+
+; Link the selected text with the given URL.
+linkSelectedText(url) {
+	if(!url)
+		return
+	
+	if(WinActive("ahk_exe ONENOTE.EXE")) {
+		Send, ^k
+		WinWaitActive, Link ahk_class NUIDialog
+		if(!WinActive("Link ahk_class NUIDialog"))
+			return
+		sendTextWithClipboard(url)
+		Send, {Enter}{Right}
+	} else if(WinActive("ahk_exe OUTLOOK.EXE")) {
+		Send, ^k
+		WinWaitActive, ahk_class bosa_sdm_Mso96
+		if(!WinActive("ahk_class bosa_sdm_Mso96"))
+			return
+		sendTextWithClipboard(url)
+		Send, {Enter}
+	} else if(WinActive("DLG ahk_exe EpicD82.exe ahk_class ThunderRT6MDIForm")) { ; EMC2, specifically DLG activities
+		Send, ^k
+		Sleep, 100 ; It's a fake pop-up so we can't wait for it (or sense it at all, really)
+		sendTextWithClipboard(url)
+		Send, {Enter}
+	}
+}

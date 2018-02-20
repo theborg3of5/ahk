@@ -179,11 +179,11 @@ return
 		iniIdLen := strLen(ini) + 1 + strLen(id)
 		Send, {Shift Down}{Right %iniIdLen%}{Shift Up} ; Select INI/ID
 		
-		Send, ^k ; Hyperlink
-		WinWaitActive, Link ahk_class NUIDialog
-		
-		Send, !e ; Address field
-		sendTextWithClipboard(buildEMC2Link(ini, id))
-		Send, {Enter}{Left}
+		linkSelectedText(buildEMC2Link(ini, id))
 	}
+return
+
+; Turn the selected text into a link to the URL on the clipboard.
+^+k::
+	linkSelectedText(clipboard)
 return

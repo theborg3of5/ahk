@@ -7,7 +7,6 @@
 	Selector - add new parameter (maybe to both entry points?) for column to return?
 	
 # New ideas
-	Make adding copied link to text in OneNote (and maybe other places?) more generic (separate hotkey)
 	Add HDR as a thing we can open with ActionObject?
 	New open-from-codesearch hotkey in Chrome - ^+o?
 		Routine from title

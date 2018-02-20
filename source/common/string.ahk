@@ -170,12 +170,19 @@ stringContains(haystack, needle, caseSensitive = "") {
 
 ; See if a string contains any of the strings in the array.
 stringContainsAnyOf(haystack, needles) {
+	firstPos := 0
 	For i,n in needles {
-		if(stringContains(haystack, n))
-			return true
+		currPos := stringContains(haystack, n)
+		if(!currPos)
+			Continue
+		if(firstPos && (firstPos < currPos) )
+			Continue
+		
+		; DEBUG.popup("Found needle",n, "At position",currPos)
+		firstPos := currPos
 	}
 	
-	return false
+	return firstPos
 }
 
 ; Wrapper function for "If var Is Alpha" statements.
@@ -228,7 +235,7 @@ isPath(ByRef text, ByRef type = "") {
 		type := SUBTYPE_FILEPATH
 	} else if(subStr(text, 1, 2) = "\\") { ; Windows network path
 		type := SUBTYPE_FILEPATH
-	} else if(colonSlashPos && stringContainsAnyOf(subStr(text, 1, colonSlashPos), protocols) ) { ; URL.
+	} else if( colonSlashPos && stringContainsAnyOf(subStr(text, 1, colonSlashPos), protocols) ) { ; URL.
 		type := SUBTYPE_URL
 	}
 	
@@ -245,10 +252,11 @@ getFirstLine(inputString) {
 ; Cleans a hard-coded list of characters out of a (should be single-line) string, including whitespace.
 cleanupText(text, additionalStringsToRemove = "") {
 	charCodesToRemove := []
-	charCodesToRemove[1] := [13,10]    ; Newline
-	charCodesToRemove[2] := [8226,9]   ; First level bullet (filled circle) + tab
-	charCodesToRemove[3] := [111,9]    ; Second level bullet (empty circle) + tab
-	charCodesToRemove[4] := [61607,9]  ; Third level bullet (filled square) + tab
+	charCodesToRemove[1] := [13,10]   ; Newline
+	charCodesToRemove[1] := [32]      ; Space
+	charCodesToRemove[2] := [8226,9]  ; First level bullet (filled circle) + tab
+	charCodesToRemove[3] := [111,9]   ; Second level bullet (empty circle) + tab
+	charCodesToRemove[4] := [61607,9] ; Third level bullet (filled square) + tab
 	
 	; Transform the codes above so we can check whether it's in the string.
 	charsToRemove := []

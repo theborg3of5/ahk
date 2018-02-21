@@ -23,12 +23,11 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 scriptHotkeyType := HOTKEY_TYPE_STANDALONE
 
 ; Various paths needed throughout.
-ahkCompilePath := reduceFilePath(A_AhkPath, 1) "Compiler\Ahk2Exe.exe"
 ahkRootPath    := reduceFilepath(A_ScriptDir, 1)
 userPath       := reduceFilepath(A_Desktop, 1)
 tlSetupPath    := "setup.tl"
-startupFolder  := ahkRootPath "\source\"
-mainAHKPath    := startupFolder "main.ahk"
+startupFolder  := ahkRootPath "\source"
+mainAHKPath    := startupFolder "\main.ahk"
 
 tagsToReplace := []
 tagsToReplace["ROOT"]                  := ahkRootPath
@@ -38,10 +37,10 @@ tagsToReplace["MENU_KEY_ACTION"]       := ""
 tagsToReplace["EDGE_OFFSET"]           := ""
 
 copyPaths := []
-copyPaths["autoInclude.ahk.master"]   := userPath "Documents\AutoHotkey\Lib\autoInclude.ahk"
-copyPaths["commonHotkeys.ahk.master"] := userPath "Documents\AutoHotkey\Lib\commonHotkeys.ahk"
-copyPaths["settings.ini.master"]      := ahkRootPath "config\local\settings.ini"
-copyPaths["test.ahk.master"]          := ahkRootPath "test\test.ahk"
+copyPaths["autoInclude.ahk.master"]   := userPath "\Documents\AutoHotkey\Lib\autoInclude.ahk"
+copyPaths["commonHotkeys.ahk.master"] := userPath "\Documents\AutoHotkey\Lib\commonHotkeys.ahk"
+copyPaths["settings.ini.master"]      := ahkRootPath "\config\local\settings.ini"
+copyPaths["test.ahk.master"]          := ahkRootPath "\test\test.ahk"
 
 gitNames := []
 gitNames.Push(".git")
@@ -77,7 +76,7 @@ For from,to in copyPaths {
 			value := arrayJoin(value)
 		StringReplace, fileContents, fileContents, <%tag%>, %value%, A
 	}
-	; DEBUG.popup("From", from, "To", to, "Finished contents", fileContents)
+	; DEBUG.popup("From",from, "To",to, "Finished contents",fileContents)
 	
 	; Generate the folder path if needed.
 	containingFolder := reduceFilepath(to, 1)

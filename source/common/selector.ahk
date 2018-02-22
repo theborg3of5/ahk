@@ -150,9 +150,9 @@ class Selector {
 			if(dataFilled && !rowToDo)
 				rowToDo := new SelectorRow()
 			if(IsObject(data)) {
-				For num,label in this.dataIndices {
-					if(data[label])
-						rowToDo.data[label] := data[label]
+				For label,value in data { ; Loop over the actual data given (as opposed to this.dataIndices) - this allows any data that came in via defaultData, but is not shown, to come along.
+					if(value)
+						rowToDo.data[label] := value
 				}
 			}
 			

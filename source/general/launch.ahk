@@ -1,28 +1,26 @@
 ; Launch various programs, URLs, etc.
 
 ; General programs.
-#b::  activateProgram("Foobar")
 #s::  activateProgram("Spotify")
 #f::  activateProgram("Everything")
 !+g:: activateProgram("GitHub")
 !`::  activateProgram("ProcessExplorer")
-^+!e::activateProgram("EMC2")
 ^+!g::activateProgram("Chrome")
 ^+!n::activateProgram("Notepad++")
 ^+!o::activateProgram("OneNote")
-^+!s::activateProgram("EpicStudio")
-^+!u::activateProgram("Thunder")
 ^+!x::activateProgram("Launchy")
 ^+!y::activateProgram("yEd")
-^!#e::activateProgram("Outlook")
 ^!#f::     runProgram("FirefoxPortable")
 ^!#n::     runProgram("Notepad")
 ^!#z::activateProgram("FileZilla")
 ^!#/::activateProgram("WinSpy")
 
 #If MainConfig.isMachine(MACHINE_EpicLaptop)
-	; VB - have to not have shift held down when it actually opens.
+	^+!e::activateProgram("EMC2")
+	^+!s::activateProgram("EpicStudio")
+	^+!u::activateProgram("Thunder")
 	^+!v::activateProgram("VB6")
+	^!#e::activateProgram("Outlook")
 	
 	; Selector launchers
 	#p::  doSelect("local\phone.tl")
@@ -32,14 +30,17 @@
 	^+!r::doSelect("local\epicEnvironments.tl", "DO_THUNDER",    "C:\Program Files (x86)\PuTTY\putty.exe")
 	!+v:: doSelect("local\epicEnvironments.tl", "DO_VDI",        "C:\Program Files (x86)\VMware\VMware Horizon View Client\vmware-view.exe")
 	^!#s::
-		text := getFirstLineOfSelectedText()
+		; Default data from selection and Snapper if it's open.
+		defaultData            := []
+		defaultData["ID"]      := getFirstLineOfSelectedText()
+		defaultData["COMM_ID"] := getCurrentSnapperEnvironment()
 		
 		s := new Selector("local\epicEnvironments.tl")
 		guiSettings                    := []
 		guiSettings["Icon"]            := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
 		guiSettings["ShowDataInputs"]  := 1
 		guiSettings["ExtraDataFields"] := ["INI", "ID"]
-		s.selectGui("DO_SNAPPER", {"ID":text}, guiSettings)
+		s.selectGui("DO_SNAPPER", defaultData, guiSettings)
 	return
 #If
 

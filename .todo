@@ -8,7 +8,6 @@
 	
 # New ideas
 	Add snapper URL launching for multiple records from within snapper itself
-	Pull default environment for snapper-ing from snapper itself if open?
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
 	Add HDR as a thing we can open with ActionObject?
 	New open-from-codesearch hotkey in Chrome - ^+o?

@@ -414,6 +414,19 @@ buildMForLoopString(loopAryName, iteratorsAry) {
 	return retStr
 }
 
+getCurrentSnapperEnvironment() {
+	snapperTitleString := "Snapper ahk_exe Snapper.exe"
+	if(!WinExist(snapperTitleString))
+		return ""
+	
+	ControlGetText, environmentText, ThunderRT6ComboBox2, %snapperTitleString%
+	textLen  := strLen(environmentText)
+	startPos := stringContains(environmentText, "[") + 1 ; Don't want the bracket itself
+	commId   := subStr(environmentText, startPos, textLen - startPos) ; Cutting off the last char, which should be a "]" (we don't want it)
+	
+	return commId
+}
+
 ; line - title of EMC2 email, or title from top of web view.
 extractEMC2ObjectInfo(line) {
 	infoAry := extractEMC2ObjectInfoRaw(line)

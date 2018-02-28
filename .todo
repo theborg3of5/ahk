@@ -5,6 +5,7 @@
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
 	Document Selector settings passed in programmatically
 	Selector - add new parameter (maybe to both entry points?) for column to return?
+	Snapper environment sensing - currently overriding an explicit overall choice from user
 	
 # New ideas
 	Add snapper back as a way to link/run things

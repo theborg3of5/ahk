@@ -5,7 +5,6 @@
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
 	Document Selector settings passed in programmatically
 	Selector - add new parameter (maybe to both entry points?) for column to return?
-	Selector originalIconPath field should just be a local variable in launchSelectorPopup, not used anywhere else
 	
 # New ideas
 	Add snapper back as a way to link/run things

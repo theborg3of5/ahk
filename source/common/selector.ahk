@@ -136,7 +136,6 @@ class Selector {
 			
 			; Get the choice.
 			userIn := this.launchSelectorPopup(data, dataFilled)
-			setTrayIcon(this.originalIconPath) ; Restore the original tray icon before we start potentially quitting. Will be re-changed by launchSelectorPopup if it loops.
 			
 			; Blank input, we bail.
 			if(!userIn && !dataFilled)
@@ -191,7 +190,6 @@ class Selector {
 	guiSettings      := []    ; Settings related to the GUI popup we show
 	actionSettings   := []    ; Settings related to what we do with the selection
 	filePath         := ""    ; Where the .tl file lives if we're reading one in.
-	originalIconPath := ""    ; What the current script's current icon is - used to restore it after we finish a gui popup (which takes an icon if given)
 	hideErrors       := false ; Whether to suppress error popups (used by programmatic selections with no GUI)
 	
 	getSpecialChars() {
@@ -383,7 +381,7 @@ class Selector {
 			data := Object()
 		
 		; Create and begin styling the GUI.
-		this.originalIconPath := setTrayIcon(this.guiSettings["IconPath"])
+		originalIconPath := setTrayIcon(this.guiSettings["IconPath"])
 		guiHandle := this.createSelectorGui()
 		
 		; GUI sizes
@@ -528,6 +526,8 @@ class Selector {
 		
 		
 		dataFilled := this.getDataFromGui(data)
+		
+		setTrayIcon(originalIconPath) ; Restore the original tray icon
 		return GuiInChoice
 	}
 	
@@ -711,7 +711,6 @@ class Selector {
 		debugBuilder.addLine("GUI settings",       this.guiSettings)
 		debugBuilder.addLine("Action settings",    this.actionSettings)
 		debugBuilder.addLine("Filepath",           this.filePath)
-		debugBuilder.addLine("Original icon path", this.originalIconPath)
 		debugBuilder.addLine("Hide errors",        this.hideErrors)
 		debugBuilder.addLine("Choices",            this.choices)
 		debugBuilder.addLine("Hidden Choices",     this.hiddenChoices)

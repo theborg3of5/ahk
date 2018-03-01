@@ -84,6 +84,13 @@
 		^!n::
 			Send, ^+n
 		return
+		
+		; Bold an entire line.
+		^+b::
+			Send, ^a ; Select all (gets whole line/paragraph)
+			Send, ^b
+			Send, {Right} ; Put cursor at end of line
+		return
 	}
 	
 	; Disable ^t hotkey making a new section

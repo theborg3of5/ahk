@@ -5,8 +5,6 @@
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
 	Document Selector settings passed in programmatically
 	Selector - add new parameter (maybe to both entry points?) for column to return?
-	Snapper environment sensing - currently overriding an explicit overall choice from user
-		Problem: defaultData is actually default OVERRIDE data, since the additional input fields always override.
 	Selector originalIconPath field should just be a local variable in launchSelectorPopup, not used anywhere else
 	
 # New ideas
@@ -27,6 +25,7 @@
 
 # Documentation
 	Debug
+	Selector
 
 # Unit Tests
 	ActionObject

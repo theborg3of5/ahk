@@ -30,17 +30,16 @@
 	^+!r::doSelect("local\epicEnvironments.tl", "DO_THUNDER",    "C:\Program Files (x86)\PuTTY\putty.exe")
 	!+v:: doSelect("local\epicEnvironments.tl", "DO_VDI",        "C:\Program Files (x86)\VMware\VMware Horizon View Client\vmware-view.exe")
 	^!#s::
-		; Default data from selection and Snapper if it's open.
-		defaultData            := []
-		defaultData["ID"]      := getFirstLineOfSelectedText()
-		defaultData["COMM_ID"] := getCurrentSnapperEnvironment()
+		; Default data from selection.
+		defaultOverrideData       := []
+		defaultOverrideData["ID"] := getFirstLineOfSelectedText()
 		
 		s := new Selector("local\epicEnvironments.tl")
 		guiSettings                    := []
 		guiSettings["Icon"]            := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
 		guiSettings["ShowDataInputs"]  := 1
 		guiSettings["ExtraDataFields"] := ["INI", "ID"]
-		s.selectGui("DO_SNAPPER", defaultData, guiSettings)
+		s.selectGui("DO_SNAPPER", defaultOverrideData, guiSettings)
 	return
 #If
 

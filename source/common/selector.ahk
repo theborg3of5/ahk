@@ -121,13 +121,13 @@ class Selector {
 		this.choices := choices
 	}
 	
-	selectGui(actionType = "", defaultData = "", guiSettings = "") {
-		; DEBUG.popup("Selector.selectGui", "Start", "ActionType", actionType, "Default data", defaultData, "GUI Settings", guiSettings)
+	selectGui(actionType = "", defaultOverrideData = "", guiSettings = "") {
+		; DEBUG.popup("Selector.selectGui", "Start", "ActionType", actionType, "Default override data", defaultOverrideData, "GUI Settings", guiSettings)
 		
 		if(actionType)
 			this.actionSettings["ActionType"] := actionType
-		if(defaultData)
-			data := defaultData
+		if(defaultOverrideData)
+			data := defaultOverrideData
 		
 		this.processGuiSettings(guiSettings)
 		
@@ -150,7 +150,7 @@ class Selector {
 			if(dataFilled && !rowToDo)
 				rowToDo := new SelectorRow()
 			if(IsObject(data)) {
-				For label,value in data { ; Loop over the actual data given (as opposed to this.dataIndices) - this allows any data that came in via defaultData, but is not shown, to come along.
+				For label,value in data { ; Loop over the actual data given (as opposed to this.dataIndices) - this allows any data that came in via defaultOverrideData, but is not shown, to come along.
 					if(value)
 						rowToDo.data[label] := value
 				}

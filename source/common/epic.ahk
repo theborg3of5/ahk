@@ -361,7 +361,9 @@ buildEpicWikiSearchURL(category, criteria) {
 }
 
 ; ini/id defaults are "X" as a dummy - URL will still connect to desired environment (and show an error popup).
-buildSnapperURL(environment, ini = "", idList = "") { ; idList is a comma-separated list of IDs
+buildSnapperURL(environment = "", ini = "", idList = "") { ; idList is a comma-separated list of IDs
+	if(!environment)
+		environment := getCurrentSnapperEnvironment() ; Try to default from what Snapper has open right now if no environment given.
 	if(!environment)
 		return ""
 	

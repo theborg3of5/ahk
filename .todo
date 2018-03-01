@@ -6,6 +6,8 @@
 	Document Selector settings passed in programmatically
 	Selector - add new parameter (maybe to both entry points?) for column to return?
 	Snapper environment sensing - currently overriding an explicit overall choice from user
+		Problem: defaultData is actually default OVERRIDE data, since the additional input fields always override.
+	Selector originalIconPath field should just be a local variable in launchSelectorPopup, not used anywhere else
 	
 # New ideas
 	Add snapper back as a way to link/run things

@@ -16,7 +16,6 @@
 			Probably overkill, though.
 	Audit all scripts for unused hotkeys
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
-	Have remote desktop script mute volume on a loop, or whenever a new connection is made.
 	
 # Scripts to Share
 

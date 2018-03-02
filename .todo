@@ -2,6 +2,8 @@
 	Make server routine stuff work again (or ditch it entirely, or make only the web link work) for ActionObject.
 		Make web version be codesearch routine thing?
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
+		Build in selector for times
+			Can have hard-coded list of choices to pass in
 	
 # New ideas
 	Selector - add new parameter (maybe to both entry points?) for column to return?

@@ -3,10 +3,9 @@
 		Make web version be codesearch routine thing?
 	Standardize formatting of vimBindings to match other standalone scripts.
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
-	Document Selector settings passed in programmatically
-	Selector - add new parameter (maybe to both entry points?) for column to return?
 	
 # New ideas
+	Selector - add new parameter (maybe to both entry points?) for column to return?
 	Add snapper back as a way to link/run things
 		Could make links this way too
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
@@ -25,6 +24,7 @@
 # Documentation
 	Debug
 	Selector
+		Settings passed in programmatically
 
 # Unit Tests
 	ActionObject

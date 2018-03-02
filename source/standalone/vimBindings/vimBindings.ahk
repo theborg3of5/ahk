@@ -1,83 +1,29 @@
-{ ; Setup.
-	#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
-	#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
-	SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
-	SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
-	#Include <autoInclude>
-	scriptHotkeyType := HOTKEY_TYPE_SUB_MASTER
-	
-	; State flags.
-	global suspended := 0
-	global vimKeysOn := 1
-	
-	; Icon setup.
-	states                                 := []
-	states["suspended", 1]                 := "vimSuspend.ico"
-	states["suspended", 0, "vimKeysOn", 0] := "vimPause.ico"
-	states["suspended", 0, "vimKeysOn", 1] := "vim.ico"
-	setUpTrayIcons(states)
-	
-	global offTitles := getExcludedTitles()
-	global IDLE_TIME := 5 * 60 * 1000 ; 5 minutes
-	global autoPaused := false ; Says whether we just temporarily paused vimKeys automatically (like for ^l)
-}
+#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
+#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
+SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
+SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
+#Include <autoInclude>
+scriptHotkeyType := HOTKEY_TYPE_SUB_MASTER
 
-; Timer stuff.
+global suspended := 0
+global vimKeysOn := 1
+states                                 := []
+states["suspended", 1]                 := "vimSuspend.ico"
+states["suspended", 0, "vimKeysOn", 0] := "vimPause.ico"
+states["suspended", 0, "vimKeysOn", 1] := "vim.ico"
+setUpTrayIcons(states)
+
+global offTitles := getExcludedTitles()
+global autoPaused := false ; Says whether we just temporarily paused vimKeys automatically (like for ^l)
+
+
+; After a certain time not having browser focused, reset vimKeys to on.
+IDLE_TIME := 5 * 60 * 1000 ; 5 minutes
 SetTimer, vimIdle, %IDLE_TIME%
 vimIdle:
 	if(!browserActive())
 		vimOn()
 return
-
-getExcludedTitles() {
-	titles := Object()
-	titles.insert(" - Gmail")
-	titles.insert(" - Feedly")
-	titles.insert(" - Reddit")
-	titles.insert("Login") ; Lastpass
-	return titles
-}
-
-; Chrome or Firefox.
-browserActive() {
-	return WinActive("ahk_class Chrome_WidgetWin_1") || WinActive("ahk_class MozillaWindowClass")
-}
-
-vimOn() {
-	setVimState(true)
-}
-vimOffManual() {
-	global autoPaused
-	autoPaused := false
-	setVimState(false)
-}
-vimOffAuto() {
-	global autoPaused
-	autoPaused := true
-	setVimState(false)
-}
-
-setVimState(toState) {
-	global vimKeysOn
-	vimKeysOn := toState
-	updateTrayIcon()
-}
-
-; Closes the browser tab if the configured close key matches what was pressed.
-tryCloseTab() {
-	; DEBUG.popup("Main Close Key", MainConfig.getSetting("VIM_CLOSE_KEY"), "Given Key", A_ThisHotkey)
-	if(MainConfig.settingIsValue("VIM_CLOSE_KEY", A_ThisHotkey)) {
-		Send, ^w
-		vimOn()
-	}
-}
-
-sendToOmniboxAndGo(url) {
-	Send, ^l
-	Sleep, 100
-	SendRaw, %url%
-	Send, {Enter}
-}
 
 ; Run on any page in the browser, regardless of state.
 #If browserActive()
@@ -140,8 +86,6 @@ sendToOmniboxAndGo(url) {
 	
 	; Bookmarklet hotkeys.
 	RAlt & `;::sendToOmniboxAndGo("d") ; Darken bookmarklet hotkey.
-	; RAlt & z::sendToOmniboxAndGo("pz") ; PageZipper.
-	; RCtrl & Right::sendToOmniboxAndGo("+") ; Increment.
 	
 	; Keys that turn vimkeys off, because you're probably typing something else.
 	~a:: ; Letters
@@ -226,5 +170,56 @@ sendToOmniboxAndGo(url) {
 		vimOffManual()
 	return
 #If
+
+
+getExcludedTitles() {
+	titles := Object()
+	titles.insert(" - Gmail")
+	titles.insert(" - Feedly")
+	titles.insert(" - Reddit")
+	titles.insert("Login") ; Lastpass
+	return titles
+}
+
+; Chrome or Firefox.
+browserActive() {
+	return WinActive("ahk_class Chrome_WidgetWin_1") || WinActive("ahk_class MozillaWindowClass")
+}
+
+vimOn() {
+	setVimState(true)
+}
+vimOffManual() {
+	global autoPaused
+	autoPaused := false
+	setVimState(false)
+}
+vimOffAuto() {
+	global autoPaused
+	autoPaused := true
+	setVimState(false)
+}
+
+setVimState(toState) {
+	global vimKeysOn
+	vimKeysOn := toState
+	updateTrayIcon()
+}
+
+; Closes the browser tab if the configured close key matches what was pressed.
+tryCloseTab() {
+	; DEBUG.popup("Main Close Key", MainConfig.getSetting("VIM_CLOSE_KEY"), "Given Key", A_ThisHotkey)
+	if(MainConfig.settingIsValue("VIM_CLOSE_KEY", A_ThisHotkey)) {
+		Send, ^w
+		vimOn()
+	}
+}
+
+sendToOmniboxAndGo(url) {
+	Send, ^l
+	Sleep, 100
+	SendRaw, %url%
+	Send, {Enter}
+}
 
 #Include <commonHotkeys>

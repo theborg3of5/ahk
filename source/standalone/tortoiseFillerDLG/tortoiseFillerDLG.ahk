@@ -5,13 +5,12 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <autoInclude>
 scriptHotkeyType := HOTKEY_TYPE_SUB_MASTER
 
-; State flag and icons
 global suspended := 0
 setUpTrayIconsSimple("suspended", "turtle.ico", "turtleRed.ico")
+SetTimer, MainLoop, 5000 ; 5s, timer toggled by commonHotkeys' suspend hotkey.
 
 SetTitleMatchMode, RegEx
 
-SetTimer, MainLoop, 5000 ; Timer for "MainLoop" will be toggled by commonHotkeys' suspend hotkey.
 
 MainLoop:
 	WinWaitActive, ^C:\\EpicSource\\\d\.\d\\DLG-(\w+)[-\\].* - Commit - TortoiseSVN

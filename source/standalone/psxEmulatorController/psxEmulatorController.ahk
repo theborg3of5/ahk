@@ -5,13 +5,12 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <autoInclude>
 scriptHotkeyType := HOTKEY_TYPE_SUB_MASTER
 
-; State flag and icons
 global suspended := 0
 setUpTrayIconsSimple("suspended", "controllerGreen.ico", "controllerRed.ico")
+SetTimer, MainLoop, 100 ; 100ms, timer toggled by commonHotkeys' suspend hotkey.
 
-loopDuration := 100 ; 100 ms
-SetTimer, MainLoop, %loopDuration% ; Timer for "MainLoop" will be toggled by commonHotkeys' suspend hotkey.
 XInput_Init()
+
 
 MainLoop:
 	if(!WinActive("ahk_class EPSX"))

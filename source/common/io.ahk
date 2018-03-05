@@ -177,6 +177,13 @@ linkSelectedText(url) {
 			return
 		sendTextWithClipboard(url)
 		Send, {Enter}
+	} else if(WinActive("ahk_exe WINWORD.EXE")) {
+		Send, ^k
+		WinWaitActive, ahk_class bosa_sdm_msword
+		if(!WinActive("ahk_class bosa_sdm_msword"))
+			return
+		sendTextWithClipboard(url)
+		Send, {Enter}
 	} else if(WinActive("DLG ahk_exe EpicD82.exe ahk_class ThunderRT6MDIForm")) { ; EMC2, specifically DLG activities
 		Send, ^k
 		Sleep, 100 ; It's a fake pop-up so we can't wait for it (or sense it at all, really)

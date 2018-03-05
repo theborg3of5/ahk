@@ -182,8 +182,3 @@ return
 		linkSelectedText(buildEMC2Link(ini, id))
 	}
 return
-
-; Turn the selected text into a link to the URL on the clipboard.
-^+k::
-	linkSelectedText(clipboard)
-return

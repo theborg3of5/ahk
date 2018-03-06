@@ -3,8 +3,6 @@
 	The programmatic entry point is ActionObject.do().
 */
 
-global SUPERTYPE_EPIC := "EPIC"
-
 global TYPE_UNKNOWN := ""
 global TYPE_EMC2    := "EMC2"
 global TYPE_PATH    := "PATH"
@@ -60,17 +58,11 @@ class ActionObject {
 		isEMC2ObjectType := isEMC2Object(input, ini, id)
 		; DEBUG.popup("ActionObject.process", "Type preprocessing done", "Input", input, "Is path", isPathType, "Path type", pathType, "Is EMC2", isEMC2ObjectType, "INI", ini, "ID", id)
 		
-		; First, if there's no type (or a supertype), figure out what it is.
+		; First, if there's no type, try to figure out what it is.
 		if(type = "") {
 			if(isPathType)
 				type := TYPE_PATH
-			else if(isEMC2ObjectType = 2)
-				type := TYPE_EMC2
-			else if(isEMC2ObjectType = 1) ; Not specific enough, but false positive OK considering its high usage.
-				type := TYPE_EMC2
-		; Only test epic things.
-		} else if(type = SUPERTYPE_EPIC) {
-			if(isEMC2ObjectType) ; Not specific enough, but false positive OK considering its high usage.
+			else if(isEMC2ObjectType)
 				type := TYPE_EMC2
 		}
 		; DEBUG.popup("ActionObject.process", "Type", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)

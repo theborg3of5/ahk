@@ -7,6 +7,7 @@
 	Some sort of bug with selector popup width, when there are 5 data bits passed in but only 4 are supposed to show (widths are still as if there are 5)
 	
 # New ideas
+	Eliminate VIM_CLOSE_KEY setting, and just use F6+F8+F9 everywhere?
 	Add snapper back as a way to link/run things
 		Could make links this way too
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?

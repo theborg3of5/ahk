@@ -9,6 +9,8 @@
 	
 # New ideas
 	In _commonHotkeys, move all the "suspend" logic to a function that takes scriptHotkeyType?
+		Also update to toggle SetScrollLockState, etc.
+			Maybe a common function for toggling those, that startup calls?
 	Eliminate VIM_CLOSE_KEY setting, and just use F6+F8+F9 everywhere?
 	Add snapper back as a way to link/run things
 		Could make links this way too

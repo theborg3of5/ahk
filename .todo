@@ -6,7 +6,6 @@
 			Can have hard-coded list of choices to pass in
 	
 # New ideas
-	Selector - add new parameter (maybe to both entry points?) for column to return?
 	Add snapper back as a way to link/run things
 		Could make links this way too
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?

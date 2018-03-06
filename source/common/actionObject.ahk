@@ -46,6 +46,8 @@ class ActionObject {
 		; Expand shortcuts and gather more info as needed.
 		this.selectInfo(input, type, action, subType, subAction)
 		
+		this.postProcess(input, type, action, subType, subAction)
+		
 		; Just do it.
 		return this.perform(type, action, subType, subAction, input)
 	}
@@ -122,16 +124,14 @@ class ActionObject {
 			input     := objInfo["ID"]
 		}
 		
-		; Additional processing on user-given info as needed.
-		if(type = TYPE_EMC2) { ; Turn subType (INI) into true INI
-			if(subType) { ; But if it's blank, don't ask the user again.
-				s := new Selector("local/actionObject.tl")
-				objInfo := s.selectChoice(subType)
-				subType := objInfo["SUBTYPE"]
-			}
-		}
-		
 		; DEBUG.popup("ActionObject.selectInfo", "Input", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
+	}
+	
+	; Do any post-processing now that we (hopefully) have all the info we need.
+	postProcess(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
+		if(type = TYPE_EMC2) { ; Turn subType (INI) into true INI
+			subType := getTrueINI(subType)
+		}
 	}
 	
 	; Do the action.

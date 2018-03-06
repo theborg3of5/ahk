@@ -458,6 +458,15 @@ buildStandardEMC2ObjectString(ini, id, title) {
 	return ini " " id " - " title
 }
 
+; Turn descriptors that aren't real INIs (like "Design") into the corresponding INI.
+getTrueINI(iniString) {
+	if(!iniString)
+		return ""
+	
+	s := new Selector("local/actionObject.tl")
+	objInfo := s.selectChoice(iniString)
+	return objInfo["SUBTYPE"]
+}
 
 
 getEMC2Info(ByRef ini = "", ByRef id = "", windowTitle = "A") {

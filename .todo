@@ -6,6 +6,7 @@
 			Can have hard-coded list of choices to pass in
 	
 # New ideas
+	Phase out separate script of startup logic - just set input lock states directly in main, and toggle them in commonHotkeys.
 	In _commonHotkeys, move all the "suspend" logic to a function that takes scriptHotkeyType?
 	Split up common folder, into classes and groups of functions
 	Add snapper back as a way to link/run things

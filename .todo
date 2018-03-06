@@ -8,6 +8,7 @@
 		In addition, should it just be a function that converts maybe-INIs into true INIs?
 	
 # New ideas
+	In _commonHotkeys, move all the "suspend" logic to a function that takes scriptHotkeyType?
 	Eliminate VIM_CLOSE_KEY setting, and just use F6+F8+F9 everywhere?
 	Add snapper back as a way to link/run things
 		Could make links this way too

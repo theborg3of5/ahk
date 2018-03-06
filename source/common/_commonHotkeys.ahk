@@ -10,6 +10,12 @@ return
 	; Suspend hotkey, change tray icon too.
 	!#x::
 		Suspend, Toggle
+		
+		if(suspended)
+			SetCapsLockState, AlwaysOff
+		else
+			SetCapsLockState, Off
+		
 		suspended := !suspended
 		updateTrayIcon()
 	return

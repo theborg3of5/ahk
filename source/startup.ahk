@@ -18,7 +18,3 @@
 
 	MayToggle := true
 ; @End KDE Mover-Sizer.
-
-; @Office.
-	incrementor = 1
-; @End office.

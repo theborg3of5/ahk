@@ -4,7 +4,6 @@
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
-	Some sort of bug with selector popup width, when there are 5 data bits passed in but only 4 are supposed to show (widths are still as if there are 5)
 	
 # New ideas
 	Eliminate VIM_CLOSE_KEY setting, and just use F6+F8+F9 everywhere?

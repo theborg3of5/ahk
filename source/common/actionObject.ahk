@@ -5,6 +5,7 @@
 
 global TYPE_UNKNOWN := ""
 global TYPE_EMC2    := "EMC2"
+global TYPE_ROUTINE := "ROUTINE" ; Server routine
 global TYPE_PATH    := "PATH"
 
 global ACTION_NONE := ""
@@ -105,7 +106,7 @@ class ActionObject {
 		
 		; Determine if we need subType or subAction based on what we know so far.
 		if(type = TYPE_EMC2) {
-			needsSubType := true
+			needsSubType   := true
 			needsSubAction := true
 		}
 		
@@ -122,7 +123,7 @@ class ActionObject {
 		}
 		
 		; Additional processing on user-given info as needed.
-		if(type = TYPE_EMC2) {
+		if(type = TYPE_EMC2) { ; Turn subType (INI) into true INI
 			if(subType) { ; But if it's blank, don't ask the user again.
 				s := new Selector("local/actionObject.tl")
 				objInfo := s.selectChoice(subType)

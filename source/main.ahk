@@ -43,6 +43,7 @@ if(MainConfig.isMachine(MACHINE_EpicLaptop)) { ; Not needed except on Epic machi
 #Include excel.ahk
 #Include explorer.ahk
 #Include fastStoneImageViewer.ahk
+#Include githubDesktop.ahk
 #Include hyperspace.ahk
 #Include kdiff.ahk
 #Include launchy.ahk

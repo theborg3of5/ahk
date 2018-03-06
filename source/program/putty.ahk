@@ -189,7 +189,7 @@
 	return
 	^PgDn::
 		Send, +{PgDn 2}
-	return	
+	return
 #IfWinActive
 
 

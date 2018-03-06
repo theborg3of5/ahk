@@ -11,10 +11,16 @@ return
 	!#x::
 		Suspend, Toggle
 		
-		if(suspended)
-			SetCapsLockState, AlwaysOff
-		else
-			SetCapsLockState, Off
+		; Allow caps lock/scroll lock to be used normally while the script is suspended.
+		if(suspended) {
+			SetCapsLockState,   AlwaysOff
+			SetScrollLockState, AlwaysOff
+			SetNumLockState,    AlwaysOn
+		} else {
+			SetCapsLockState,   Off
+			SetScrollLockState, Off
+			SetNumLockState,    On
+		}
 		
 		suspended := !suspended
 		updateTrayIcon()

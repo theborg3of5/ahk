@@ -11,6 +11,11 @@ scriptHotkeyType := HOTKEY_TYPE_MASTER
 global suspended := 0
 setUpTrayIconsSimple("suspended", "shellGreen.ico", "shellRed.ico")
 
+; Turn off caps lock and scroll lock (mainly so we can use them as hotkeys) and force num lock to stay on.
+SetCapsLockState,   AlwaysOff
+SetScrollLockState, AlwaysOff
+SetNumLockState,    AlwaysOn
+
 ; Setup (auto-executing code) for various scripts below.
 #Include startup.ahk
 

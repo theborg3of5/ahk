@@ -1,10 +1,5 @@
 ﻿; Startup, auto-execute sections for all scripts.
 
-; @Lock fixing.
-	SetCapsLockState, AlwaysOff
-	SetScrollLockState, AlwaysOff
-; @End Lock fixing.
-
 ; @KDE Mover-Sizer.
 	SnapOnSizeEnabled := 1
 	SnapOnMoveEnabled := 1

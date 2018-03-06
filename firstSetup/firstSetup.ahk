@@ -32,7 +32,6 @@ mainAHKPath    := startupFolder "\main.ahk"
 tagsToReplace := []
 tagsToReplace["ROOT"]                  := ahkRootPath
 tagsToReplace["WHICH_MACHINE"]         := ""
-tagsToReplace["VIM_CLOSE_KEY"]         := ""
 tagsToReplace["MENU_KEY_ACTION"]       := ""
 tagsToReplace["EDGE_OFFSET"]           := ""
 

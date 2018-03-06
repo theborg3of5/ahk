@@ -34,7 +34,8 @@ return
 	F6::
 	F8::
 	F9::
-		tryCloseTab()
+		Send, ^w
+		vimOn()
 	return
 	
 	; Special addition for when j/k turned off because special page.
@@ -204,15 +205,6 @@ setVimState(toState) {
 	global vimKeysOn
 	vimKeysOn := toState
 	updateTrayIcon()
-}
-
-; Closes the browser tab if the configured close key matches what was pressed.
-tryCloseTab() {
-	; DEBUG.popup("Main Close Key", MainConfig.getSetting("VIM_CLOSE_KEY"), "Given Key", A_ThisHotkey)
-	if(MainConfig.settingIsValue("VIM_CLOSE_KEY", A_ThisHotkey)) {
-		Send, ^w
-		vimOn()
-	}
 }
 
 sendToOmniboxAndGo(url) {

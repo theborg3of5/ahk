@@ -15,7 +15,7 @@ global MAIN_CENTRAL_SCRIPT := "MAIN_CENTRAL_SCRIPT"
 ; Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
 class MainConfig {
 	static multiDelim := "|"
-	static defaultSettings := {"VIM_CLOSE_KEY":"F9"}
+	static defaultSettings := {}
 	static settings := []
 	static windows  := []
 	static folders  := [] ; abbrev => path

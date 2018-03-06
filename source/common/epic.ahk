@@ -18,35 +18,6 @@
 		return 0
 	}
 
-	; Check if it's an epic object string.
-	isEpicObject(text, ByRef ini = "", ByRef id = "") {
-		if(isServerRoutine(text)) {
-			ini := "SVR"
-			id := text
-			return true
-		} else if(isEMC2Object(text, ini, id)) {
-			return true
-		}
-		
-		return false
-	}
-
-	; Returns true if the input looks like a server routine (has a ^ in it or is entirely all-caps letters).
-	isServerRoutine(text, ByRef routine = "", ByRef tag = "") {
-		; DEBUG.popup(text, "Text", isAlpha(text), "Is Alpha", isCase(text, STRING_CASE_UPPER), "Is Uppercase", STRING_CASE_UPPER, "Upper Constant")
-		if(stringContains(text, "^")) {
-			o := StrSplit(text, "^")
-			tag := o[1]
-			routine := o[2]
-			return true
-		} else if(!isNum(text) && isAlphaNum(text) && isCase(text, STRING_CASE_UPPER)) {
-			routine := text
-			return true
-		}
-		
-		return false
-	}
-
 	; Check if it's a valid EMC2 string.
 	isEMC2Object(text, ByRef ini = "", ByRef id = "") {
 		objInfo := StrSplit(text, A_Space)

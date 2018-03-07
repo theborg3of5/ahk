@@ -5,7 +5,6 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New ideas
-	Split up common folder, into classes and groups of functions
 	Add HDR as a thing we can open with ActionObject?
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
 	Audit all scripts for unused hotkeys

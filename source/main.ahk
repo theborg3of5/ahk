@@ -16,9 +16,6 @@ SetCapsLockState,   AlwaysOff
 SetScrollLockState, AlwaysOff
 SetNumLockState,    AlwaysOn
 
-; Setup (auto-executing code) for various scripts below.
-#Include startup.ahk
-
 ; Standalone scripts. Must be first to execute so they can spin off and be on their own.
 standaloneFolder := A_ScriptDir "\standalone\"
 Run, % standaloneFolder "vimBindings\vimBindings.ahk"

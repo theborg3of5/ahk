@@ -121,6 +121,9 @@
 
 ; *********** MOVING WINDOW ***********
 !LButton::
+	SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
+	CoordMode, Mouse, Screen
+	
 	; Vista+ Alt-Tab fix by jordoex..
 	IfWinActive ahk_class TaskSwitcherWnd
 	{
@@ -162,19 +165,18 @@
 		; get current screen boarders for snapping, do this within the loop to allow snapping an all monitors without releasing button
 		GetCurrentScreenBoarders(CurrentScreenLeft, CurrentScreenRight, CurrentScreenTop, CurrentScreenBottom, KDE_id)
 
-		if(SnapOnMoveEnabled) {
-			if(KDE_WinX2 < CurrentScreenLeft + SnappingDistance) AND (KDE_WinX2 > CurrentScreenLeft - SnappingDistance)
-				KDE_WinX2 := CurrentScreenLeft 
+		SnappingDistance := 10
+		if(KDE_WinX2 < CurrentScreenLeft + SnappingDistance) AND (KDE_WinX2 > CurrentScreenLeft - SnappingDistance)
+			KDE_WinX2 := CurrentScreenLeft 
 
-			if(KDE_WinY2 < CurrentScreenTop + SnappingDistance) AND (KDE_WinY2 > CurrentScreenTop - SnappingDistance)
-				KDE_WinY2 := CurrentScreenTop
+		if(KDE_WinY2 < CurrentScreenTop + SnappingDistance) AND (KDE_WinY2 > CurrentScreenTop - SnappingDistance)
+			KDE_WinY2 := CurrentScreenTop
 
-			if(KDE_WinX2 + KDE_WinW > CurrentScreenRight - SnappingDistance) AND (KDE_WinX2 + KDE_WinW < CurrentScreenRight + SnappingDistance)
-				KDE_WinX2 := CurrentScreenRight - KDE_WinW
+		if(KDE_WinX2 + KDE_WinW > CurrentScreenRight - SnappingDistance) AND (KDE_WinX2 + KDE_WinW < CurrentScreenRight + SnappingDistance)
+			KDE_WinX2 := CurrentScreenRight - KDE_WinW
 
-			if(KDE_WinY2 + KDE_WinH > CurrentScreenBottom - SnappingDistance) AND (KDE_WinY2 + KDE_WinH < CurrentScreenBottom + SnappingDistance)
-				KDE_WinY2 := CurrentScreenBottom - KDE_WinH
-		}
+		if(KDE_WinY2 + KDE_WinH > CurrentScreenBottom - SnappingDistance) AND (KDE_WinY2 + KDE_WinH < CurrentScreenBottom + SnappingDistance)
+			KDE_WinY2 := CurrentScreenBottom - KDE_WinH
 
 		WinMove, ahk_id %KDE_id%, , %KDE_WinX2%, %KDE_WinY2% ; Move the window to the new position.
 
@@ -189,6 +191,9 @@ return
 
 ; *********** RESIZING WINDOW ***********
 !RButton::
+	SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
+	CoordMode, Mouse, Screen
+	
 	; Get the initial mouse position and window id, and
 	; WinRestore if the window is maximized.
 	MouseGetPos, KDE_X1, KDE_Y1, KDE_id
@@ -201,17 +206,7 @@ return
 	
 	If KDE_Win
 	{
-		if DoRestoreOnResize
-			WinRestore, ahk_id %KDE_id%
-		else
-		{
-			GetCurrentScreenBoarders(CurrentScreenLeft, CurrentScreenRight, CurrentScreenTop, CurrentScreenBottom, KDE_id)
-			WinRestore, ahk_id %KDE_id%
-			WinMove, ahk_id %KDE_id%, , CurrentScreenLeft                       ; X of resized window
-											  , CurrentScreenTop                        ; Y of resized window
-											  , CurrentScreenRight  - CurrentScreenLeft ; W of resized window
-											  , CurrentScreenBottom - CurrentScreenTop  ; H of resized window
-		}
+		WinRestore, ahk_id %KDE_id%
 	}
 
 	; Get the initial window position and size.
@@ -242,59 +237,25 @@ return
 		 ; get current screen boarders for snapping, do this within the loop to allow snapping an all monitors without releasing button
 		 GetCurrentScreenBoarders(CurrentScreenLeft, CurrentScreenRight, CurrentScreenTop, CurrentScreenBottom, KDE_id)
 
-		 if (SnapOnSizeEnabled AND NOT SnapOnResizeMagnetic)    ; "normal" resizing
-		 {
-			  KDE_WinX2 := (KDE_WinX1 + (KDE_WinLeft + 1) / 2 * KDE_X2) ; X of resized windows
-			  KDE_WinY2 := (KDE_WinY1 + (KDE_WinUp   + 1) / 2 * KDE_Y2) ; Y of resized windows
-			  KDE_WinW2 := (KDE_WinW  -  KDE_WinLeft          * KDE_X2) ; W of resized windows
-			  KDE_WinH2 := (KDE_WinH  -  KDE_WinUp            * KDE_Y2) ; H of resized windows
-
-			  if (KDE_WinX2 < CurrentScreenLeft + SnappingDistance) AND (KDE_WinX2 > CurrentScreenLeft - SnappingDistance) AND (KDE_WinLeft > 0) {
-					KDE_WinW2 := KDE_WinW + KDE_WinX1 - CurrentScreenLeft
-					KDE_WinX2 := CurrentScreenLeft
-			  }
-			  if (KDE_WinY2 < CurrentScreenTop + SnappingDistance) AND (KDE_WinY2 > CurrentScreenTop - SnappingDistance) AND (KDE_WinUp > 0) {
-					KDE_WinH2 := KDE_WinH + KDE_WinY1 - CurrentScreenTop
-					KDE_WinY2 := CurrentScreenTop
-			  }
-			  if (KDE_WinX2 + KDE_WinW2 > CurrentScreenRight - SnappingDistance) AND (KDE_WinX2 + KDE_WinW2 < CurrentScreenRight + SnappingDistance)  AND (KDE_WinLeft < 0) {
-					KDE_WinW2 := - KDE_WinX1 + CurrentScreenRight
-			  }
-			  if (KDE_WinY2 + KDE_WinH2 > CurrentScreenBottom - SnappingDistance) AND (KDE_WinY2 + KDE_WinH2 < CurrentScreenBottom + SnappingDistance) AND (KDE_WinUp < 0) {
-					KDE_WinH2 := - KDE_WinY1 + CurrentScreenBottom
-			  }
+		 KDE_WinX2 := (KDE_WinX1 + (KDE_WinLeft + 1) / 2 * KDE_X2) ; X of resized windows
+		 KDE_WinY2 := (KDE_WinY1 + (KDE_WinUp   + 1) / 2 * KDE_Y2) ; Y of resized windows
+		 KDE_WinW2 := (KDE_WinW  -  KDE_WinLeft          * KDE_X2) ; W of resized windows
+		 KDE_WinH2 := (KDE_WinH  -  KDE_WinUp            * KDE_Y2) ; H of resized windows
+		 
+		 SnappingDistance := 10
+		 if (KDE_WinX2 < CurrentScreenLeft + SnappingDistance) AND (KDE_WinX2 > CurrentScreenLeft - SnappingDistance) AND (KDE_WinLeft > 0) {
+				KDE_WinW2 := KDE_WinW + KDE_WinX1 - CurrentScreenLeft
+				KDE_WinX2 := CurrentScreenLeft
 		 }
-		 else if (SnapOnSizeEnabled AND SnapOnResizeMagnetic)    ;  Magnetic Edges resize the window but keep the edge "locked"
-		 {
-			  ; Get the current window position and size.
-			  WinGetPos, KDE_WinX1, KDE_WinY1, KDE_WinW, KDE_WinH, ahk_id %KDE_id%
-
-			  if (KDE_WinX1 < CurrentScreenLeft + SnappingDistance) ;AND (KDE_WinX1 > CurrentScreenLeft - SnappingDistance)
-					KDE_WinX1 := CurrentScreenLeft
-
-			  if (KDE_WinY1 < CurrentScreenTop + SnappingDistance) ;AND (KDE_WinY1 > CurrentScreenTop - SnappingDistance)
-					KDE_WinY1 := CurrentScreenTop
-
-			  if (KDE_WinX1 + KDE_WinW > CurrentScreenRight - SnappingDistance) ;AND (KDE_WinX1 + KDE_WinW < CurrentScreenRight + SnappingDistance)
-					KDE_WinX1 := CurrentScreenRight - KDE_WinW
-
-			  if (KDE_WinY1 + KDE_WinH > CurrentScreenBottom - SnappingDistance) ;AND (KDE_WinY1 + KDE_WinH < CurrentScreenBottom + SnappingDistance)
-					KDE_WinY1 := CurrentScreenBottom - KDE_WinH
-
-			  KDE_WinX2 := (KDE_WinX1 + (KDE_WinLeft + 1) / 2 * KDE_X2) ; X of resized windows
-			  KDE_WinY2 := (KDE_WinY1 + (KDE_WinUp   + 1) / 2 * KDE_Y2) ; Y of resized windows
-			  KDE_WinW2 := (KDE_WinW  -  KDE_WinLeft          * KDE_X2) ; W of resized windows
-			  KDE_WinH2 := (KDE_WinH  -  KDE_WinUp            * KDE_Y2) ; H of resized windows
-	 
-			  KDE_X1 := (KDE_X2 + KDE_X1) ; Reset the initial position for the next iteration.
-			  KDE_Y1 := (KDE_Y2 + KDE_Y1)
+		 if (KDE_WinY2 < CurrentScreenTop + SnappingDistance) AND (KDE_WinY2 > CurrentScreenTop - SnappingDistance) AND (KDE_WinUp > 0) {
+				KDE_WinH2 := KDE_WinH + KDE_WinY1 - CurrentScreenTop
+				KDE_WinY2 := CurrentScreenTop
 		 }
-		 else    ; no snapping, just resizing
-		 {
-			  KDE_WinX2 := (KDE_WinX1 + (KDE_WinLeft + 1) / 2 * KDE_X2) ; X of resized windows
-			  KDE_WinY2 := (KDE_WinY1 + (KDE_WinUp   + 1) / 2 * KDE_Y2) ; Y of resized windows
-			  KDE_WinW2 := (KDE_WinW  -  KDE_WinLeft          * KDE_X2) ; W of resized windows
-			  KDE_WinH2 := (KDE_WinH  -  KDE_WinUp            * KDE_Y2) ; H of resized windows
+		 if (KDE_WinX2 + KDE_WinW2 > CurrentScreenRight - SnappingDistance) AND (KDE_WinX2 + KDE_WinW2 < CurrentScreenRight + SnappingDistance)  AND (KDE_WinLeft < 0) {
+				KDE_WinW2 := - KDE_WinX1 + CurrentScreenRight
+		 }
+		 if (KDE_WinY2 + KDE_WinH2 > CurrentScreenBottom - SnappingDistance) AND (KDE_WinY2 + KDE_WinH2 < CurrentScreenBottom + SnappingDistance) AND (KDE_WinUp < 0) {
+				KDE_WinH2 := - KDE_WinY1 + CurrentScreenBottom
 		 }
 
 		 ; Then, act according to the defined region.
@@ -308,6 +269,9 @@ return
 
 ; Toggle window Maximize/Original size with Alt+Middle mouse button
 !MButton::
+	SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
+	CoordMode, Mouse, Screen
+	
 	MouseGetPos, , , KDE_id
 	
 	if(MainConfig.windowIsGame("ahk_id " KDE_id)) {

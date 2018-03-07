@@ -230,11 +230,11 @@ isPath(ByRef text, ByRef type = "") {
 		text := subStr(text, 9) ; strip off the file:///
 		text := StrReplace(text, "%20", A_Space)
 		; DEBUG.popup("Updated path", text)
-		type := SUBTYPE_FILEPATH
+		type := SUBTYPE_FilePath
 	} else if(subStr(text, 2, 2) = ":\") { ; Windows filepath
-		type := SUBTYPE_FILEPATH
+		type := SUBTYPE_FilePath
 	} else if(subStr(text, 1, 2) = "\\") { ; Windows network path
-		type := SUBTYPE_FILEPATH
+		type := SUBTYPE_FilePath
 	} else if( colonSlashPos && stringContainsAnyOf(subStr(text, 1, colonSlashPos), protocols) ) { ; URL.
 		type := SUBTYPE_URL
 	}

@@ -89,7 +89,7 @@
 		
 		urlsAry := []
 		For i,qan in relatedQANsAry {
-			link := ActionObject.do(qan, TYPE_EMC2, ACTION_LINK, "QAN", SUBACTION_WEB)
+			link := ActionObject.do(qan, TYPE_EMC2, ACTION_Link, "QAN", SUBACTION_Web)
 			if(link)
 				urlsAry.push(link)
 		}
@@ -215,27 +215,27 @@ getEpicAppIdFromKey(appKey) {
 	return epicAppKeyToIdAry[appKey]
 }
 
-buildEMC2Link(ini, id, subAction = "WEB") { ; subAction = SUBACTION_WEB
-	global SUBACTION_EDIT, SUBACTION_VIEW, SUBACTION_WEB
+buildEMC2Link(ini, id, subAction = "WEB") { ; subAction = SUBACTION_Web
+	global SUBACTION_Edit, SUBACTION_View, SUBACTION_Web
 	if(!ini || !id)
 		return ""
 	
 	; View basically goes one way or the other depending on INI:
 	;  * If it can be viewed in EMC2, use EDIT with a special view-only parameter.
 	;  * Otherwise, create a web link instead.
-	if(subAction = SUBACTION_VIEW) {
+	if(subAction = SUBACTION_View) {
 		if(canViewINIInEMC2(ini)) {
-			subAction   := SUBACTION_EDIT
+			subAction   := SUBACTION_Edit
 			paramString := "&runparams=1"
 		} else {
-			subAction   := SUBACTION_WEB
+			subAction   := SUBACTION_Web
 		}
 	}
 	
 	; Pick one of the types of links - edit in EMC2, web summary or Sherlock.
-	if(subAction = SUBACTION_EDIT) {
+	if(subAction = SUBACTION_Edit) {
 		link := emc2LinkBase
-	} else if(subAction = SUBACTION_WEB) {
+	} else if(subAction = SUBACTION_Web) {
 		if(isSherlockINI(ini))
 			link := sherlockBase
 		else

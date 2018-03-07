@@ -44,7 +44,7 @@
 		; Open web version of the current object in EMC2.
 		!w::
 			getEMC2Info(ini, id)
-			link := ActionObject.do(id, TYPE_EMC2, ACTION_LINK, ini, SUBACTION_WEB)
+			link := ActionObject.do(id, TYPE_EMC2, ACTION_Link, ini, SUBACTION_Web)
 			if(link)
 				Run, % link
 		return

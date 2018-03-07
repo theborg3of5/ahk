@@ -49,7 +49,7 @@ Shortcuts:
 	setupTray(title, description, hotkeys, iconPath)
 	scriptLoaded := true
 	
-	global SUBTYPE_FILEPATH := "FILEPATH"
+	global SUBTYPE_FilePath := "FILEPATH"
 }
 
 
@@ -132,11 +132,11 @@ Shortcuts:
 			text := subStr(text, 9) ; strip off the file:///
 			text := RegExReplace(text, "%20", A_Space)
 			; DEBUG.popup("Trimmed path", text)
-			type := SUBTYPE_FILEPATH
+			type := SUBTYPE_FilePath
 		} else if(subStr(text, 2, 2) = ":\") { ; Windows filepath
-			type := SUBTYPE_FILEPATH
+			type := SUBTYPE_FilePath
 		} else if(subStr(text, 1, 2) = "\\") { ; Windows network path
-			type := SUBTYPE_FILEPATH
+			type := SUBTYPE_FilePath
 		}
 		
 		; DEBUG.popup("isPath", "Finish", "Type", type)

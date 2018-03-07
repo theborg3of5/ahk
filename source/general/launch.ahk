@@ -103,23 +103,23 @@ return
 ; Generic opener - opens a variety of different things based on the selected/clipboard text.
 ^!#o::
 	text := getFirstLineOfSelectedText()
-	ActionObject.do(text, , ACTION_RUN, , SUBACTION_WEB)
+	ActionObject.do(text, , ACTION_Run, , SUBACTION_Web)
 return
 ^!#+o::
 	text := getFirstLineOfSelectedText()
-	ActionObject.do(text, , ACTION_RUN)
+	ActionObject.do(text, , ACTION_Run)
 return
 
 ; Generic linker - will allow coming from clipboard or selected text, or input entirely. Puts the link on the clipboard.
 ^!#l::
 	text := getFirstLineOfSelectedText()
-	link := ActionObject.do(text, , ACTION_LINK, , SUBACTION_WEB)
+	link := ActionObject.do(text, , ACTION_Link, , SUBACTION_Web)
 	if(link)
 		clipboard := link
 return
 ^!#+l::
 	text := getFirstLineOfSelectedText()
-	link := ActionObject.do(text, , ACTION_LINK)
+	link := ActionObject.do(text, , ACTION_Link)
 	if(link)
 		clipboard := link
 return

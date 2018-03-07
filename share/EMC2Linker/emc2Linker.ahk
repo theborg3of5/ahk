@@ -115,20 +115,20 @@ Notes:
 	; Open web version
 	^!#+o::
 		text := getSelectedText()
-		ActionObject.do(text, , , , SUBACTION_WEB)
+		ActionObject.do(text, , , , SUBACTION_Web)
 	return
 
 	; Generic linker - will allow coming from clipboard or selected text, or input entirely. Puts the link on the clipboard.
 	^!#l::
 		text := getSelectedText()
-		link := ActionObject.do(text, , ACTION_LINK)
+		link := ActionObject.do(text, , ACTION_Link)
 		if(link)
 			clipboard := link
 	return
 	; Get link to web version
 	^!#+l::
 		text := getSelectedText()
-		link := ActionObject.do(text, , ACTION_LINK, , SUBACTION_WEB)
+		link := ActionObject.do(text, , ACTION_Link, , SUBACTION_Web)
 		if(link)
 			clipboard := link
 	return

@@ -3,21 +3,21 @@
 	The programmatic entry point is ActionObject.do().
 */
 
-global TYPE_UNKNOWN := ""
+global TYPE_Unknown := ""
 global TYPE_EMC2    := "EMC2"
 global TYPE_ROUTINE := "ROUTINE" ; Server routine
-global TYPE_PATH    := "PATH"
+global TYPE_Path    := "PATH"
 
-global ACTION_NONE := ""
-global ACTION_LINK := "LINK"
-global ACTION_RUN  := "RUN"
+global ACTION_None := ""
+global ACTION_Link := "LINK"
+global ACTION_Run  := "RUN"
 
-global SUBTYPE_FILEPATH := "FILEPATH"
+global SUBTYPE_FilePath := "FILEPATH"
 global SUBTYPE_URL      := "URL"
 
-global SUBACTION_EDIT := "EDIT"
-global SUBACTION_VIEW := "VIEW"
-global SUBACTION_WEB  := "WEB"
+global SUBACTION_Edit := "EDIT"
+global SUBACTION_View := "VIEW"
+global SUBACTION_Web  := "WEB"
 
 
 ; Class that centralizes the ability to link to/do a variety of things based on some given text.
@@ -31,9 +31,9 @@ class ActionObject {
 			subType   - From SUBTYPE_* constants above: within a given type, further divisions.
 			subAction - From SUBACTION_* constants above: within a given action, further divisions.
 		Example: view-only link to DLG 123456:
-			ActionObject.do(123456, TYPE_EMC2, ACTION_LINK, "DLG", SUBACTION_VIEW)
+			ActionObject.do(123456, TYPE_EMC2, ACTION_Link, "DLG", SUBACTION_View)
 	*/
-	do(input, type = "", action = "", subType = "", subAction = "") { ; type = TYPE_UNKNOWN, action = ACTION_NONE
+	do(input, type = "", action = "", subType = "", subAction = "") { ; type = TYPE_Unknown, action = ACTION_None
 		; DEBUG.popup("ActionObject.do", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
 		; Clean up input.
@@ -64,7 +64,7 @@ class ActionObject {
 		; First, if there's no type, try to figure out what it is.
 		if(type = "") {
 			if(isPathType)
-				type := TYPE_PATH
+				type := TYPE_Path
 			else if(isEMC2ObjectType)
 				type := TYPE_EMC2
 		}
@@ -72,10 +72,10 @@ class ActionObject {
 		
 		; Next, determine actions.
 		if(action = "") {
-			if (type = TYPE_PATH)
+			if (type = TYPE_Path)
 			|| (type = TYPE_EMC2)
 			{
-				action := ACTION_RUN
+				action := ACTION_Run
 			}
 		}
 		; DEBUG.popup("ActionObject.process", "Action", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
@@ -84,7 +84,7 @@ class ActionObject {
 		if(subType = "") {
 			if(type = TYPE_EMC2)
 				subType := ini
-			else if(type = TYPE_PATH)
+			else if(type = TYPE_Path)
 				subType := pathType
 		}
 		; DEBUG.popup("ActionObject.process", "Subtype", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
@@ -92,7 +92,7 @@ class ActionObject {
 		; Determine subAction as needed.
 		if(subAction = "") {
 			if(type = TYPE_EMC2)
-				subAction := SUBACTION_EDIT
+				subAction := SUBACTION_Edit
 		}
 		; DEBUG.popup("ActionObject.process", "Subaction", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
@@ -138,22 +138,16 @@ class ActionObject {
 	perform(type, action, subType, subAction, input) {
 		; DEBUG.popup("ActionObject.perform", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
-		if(action = ACTION_NONE) {
+		if(action = ACTION_None) {
 			return
-		} else if(action = ACTION_RUN) {
+		} else if(action = ACTION_Run) {
 			if(type = TYPE_EMC2) {
-				; If they never gave us a subtype, just fail silently.
-				if(!subType)
-					return
-				
-				link := this.perform(TYPE_EMC2, ACTION_LINK, subType, subAction, input)
-				; DEBUG.popup("actionObject.perform", "Got link to run", "Link", link)
-				
+				link := this.perform(TYPE_EMC2, ACTION_Link, subType, subAction, input)
 				if(link)
 					Run, % link
 				
-			} else if(type = TYPE_PATH) {
-				if(subType = SUBTYPE_FILEPATH) {
+			} else if(type = TYPE_Path) {
+				if(subType = SUBTYPE_FilePath) {
 					IfExist, %input%
 						Run, % input
 					Else
@@ -166,7 +160,7 @@ class ActionObject {
 				Run, % input
 			}
 			
-		} else if(action = ACTION_LINK) {
+		} else if(action = ACTION_Link) {
 			if(type = TYPE_EMC2)
 				link := buildEMC2Link(subType, input, subAction)
 			

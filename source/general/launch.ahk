@@ -30,9 +30,15 @@
 	^+!r::doSelect("local\epicEnvironments.tl", "DO_THUNDER",    "C:\Program Files (x86)\PuTTY\putty.exe")
 	!+v:: doSelect("local\epicEnvironments.tl", "DO_VDI",        "C:\Program Files (x86)\VMware\VMware Horizon View Client\vmware-view.exe")
 	^!#s::
+		selectedText := cleanupText(getFirstLineOfSelectedText())
+		textAry := StrSplit(selectedText, " ")
+		ini := textAry[1]
+		id  := textAry[textAry.MaxIndex()] ; Handles when it's only the ID
+		
 		; Default data from selection.
-		defaultOverrideData       := []
-		defaultOverrideData["ID"] := getFirstLineOfSelectedText()
+		defaultOverrideData        := []
+		defaultOverrideData["INI"] := ini
+		defaultOverrideData["ID"]  := id
 		
 		s := new Selector("local\epicEnvironments.tl")
 		guiSettings                    := []

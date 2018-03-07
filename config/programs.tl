@@ -11,11 +11,12 @@
 	Outlook				OUTLOOK.EXE				rctrl_renwnd32												-					Microsoft Office\Office16\OUTLOOK.EXE
 	Thunder				Thunder.exe				-																Thunder			Thunder\Thunder.exe
 	VB6					VB6.exe					-																-					Microsoft Visual Studio\VB98\VB6.EXE
+	VisualStudio		devenv.exe				HwndWrapper[DefaultDomain;;1de383cf-081d-40c4-9729-7ed10666752f]	-	Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.exe	-				EPIC_LAPTOP
 	Pidgin				pidgin.exe				-																-					Pidgin\pidgin.exe
 	Snapper				Snapper.exe				-																-					Epic\Snapper\Snapper.exe
 	VMWareView			vmware-view.exe		-																-					VMware\VMware Horizon View Client\vmware-view.exe
 	OneNote				ONENOTE.EXE				Framework::CFrame											-					Microsoft Office\Office16\ONENOTE.EXE						-										EPIC_LAPTOP
-	OneNote				ONENOTE.EXE				Framework::CFrame											-					Microsoft Office\root\Office16\ONENOTE.EXE				-									
+	OneNote				ONENOTE.EXE				Framework::CFrame											-					Microsoft Office\root\Office16\ONENOTE.EXE				-
 []
 
 [{PATH}b:C:\Program Files\]

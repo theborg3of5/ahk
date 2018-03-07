@@ -19,8 +19,9 @@
 	^+!e::activateProgram("EMC2")
 	^+!s::activateProgram("EpicStudio")
 	^+!u::activateProgram("Thunder")
-	^+!v::activateProgram("VB6")
+	^+!v::activateProgram("VisualStudio")
 	^!#e::activateProgram("Outlook")
+	^!#v::activateProgram("VB6")
 	
 	; Selector launchers
 	#p::  doSelect("local\phone.tl")

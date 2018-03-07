@@ -5,7 +5,7 @@
 	; #NoTrayIcon
 	#SingleInstance force
 	
-	#Include <autoInclude>
+	#Include <includeCommon>
 	isSingleUserScript := true
 	
 	; State flag and icons

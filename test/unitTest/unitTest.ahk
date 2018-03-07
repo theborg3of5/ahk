@@ -5,7 +5,7 @@
 	; #NoTrayIcon
 	#SingleInstance force
 	
-	#Include <autoInclude>
+	#Include <includeCommon>
 	
 	; State flags.
 	global suspended := 0

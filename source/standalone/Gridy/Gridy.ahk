@@ -7,7 +7,7 @@
 	SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 	SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	#SingleInstance force ; Force just one instance, we don't want muliple of this running around.
-	#Include <autoInclude>
+	#Include <includeCommon>
 
 	; State flag and icons
 	global suspended := 0

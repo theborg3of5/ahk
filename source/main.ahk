@@ -4,7 +4,7 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 DetectHiddenWindows, On
 ; #Warn All
-#Include <autoInclude>
+#Include <includeCommon>
 scriptHotkeyType := HOTKEY_TYPE_MASTER
 
 ; State flag and icons

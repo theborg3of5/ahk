@@ -4,7 +4,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #SingleInstance force
 ; #NoTrayIcon
 
-#Include <autoInclude>
+#Include <includeCommon>
 
 ; Mute the remote computer (this one)'s volume.
 startMuteState := VA_GetMasterMute()

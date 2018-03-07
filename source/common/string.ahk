@@ -331,3 +331,13 @@ replaceTags(inputString, tagNamesAry) {
 replaceTag(inputString, tagName, replacement) {
 	return StrReplace(inputString, "<" tagName ">", replacement)
 }
+
+removeStringFromEnd(inputString, endingToRemove) {
+	inputLen  := strLen(inputString)
+	endingLen := strLen(endingToRemove)
+	
+	if(subStr(inputString, inputLen - endingLen + 1) = endingToRemove)
+		return subStr(inputString, 1, inputLen - endingLen)
+	else
+		return inputString
+}

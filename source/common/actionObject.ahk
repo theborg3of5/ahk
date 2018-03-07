@@ -156,7 +156,8 @@ class ActionObject {
 				
 			} else if(type = TYPE_ServerCode) {
 				if(subAction = SUBACTION_Edit) {
-					openEpicStudioRoutine(input)
+					splitServerLocation(input, routine, tag)
+					openEpicStudioRoutine(routine, tag)
 				} else if(subAction = SUBACTION_View || subAction = SUBACTION_Web) {
 					link := this.perform(type, ACTION_Link, subType, subAction, input)
 					if(link)

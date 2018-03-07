@@ -144,9 +144,8 @@
 	}
 }
 
-; Launches a routine of the form tag^routine (or ^routine, or routine) in EpicStudio.
-openEpicStudioRoutine(serverLocation = "") {
-	splitServerLocation(serverLocation, tag, routine)
+; Launches a routine in EpicStudio (and focuses a specific tag if given).
+openEpicStudioRoutine(routine, tag = "") {
 	if(!routine)
 		return
 	
@@ -165,7 +164,7 @@ openEpicStudioRoutine(serverLocation = "") {
 }
 
 ; Split serverLocation into routine and tag (assume it's just the routine if no ^ included)
-splitServerLocation(serverLocation, ByRef tag = "", ByRef routine = "") {
+splitServerLocation(serverLocation, ByRef routine = "", ByRef tag = "") {
 	locationAry := StrSplit(serverLocation, "^")
 	tag     := locationAry[1]
 	routine := locationAry[locationAry.MaxIndex()] ; Handles when it's only the routine (without a ^)
@@ -361,7 +360,7 @@ buildVDIRunString(vdiId) {
 buildServerCodeLink(serverLocation) {
 	global serverCodeBase
 	
-	splitServerLocation(serverLocation, tag, routine)
+	splitServerLocation(serverLocation, routine, tag)
 	
 	url := serverCodeBase
 	url := replaceTag(url, "ROUTINE", routine)

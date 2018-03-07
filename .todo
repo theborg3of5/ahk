@@ -6,13 +6,8 @@
 	
 # New ideas
 	Split up common folder, into classes and groups of functions
-	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
 	Add HDR as a thing we can open with ActionObject?
-	New open-in-EpicStudio-from-codesearch hotkey in Chrome - ^+o?
-		Routine from title
-		Tag from selection (or nothing, just open routine)
-		Could also support line number highlight
-			Probably overkill, though.
+	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
 	Audit all scripts for unused hotkeys
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
 	

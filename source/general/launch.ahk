@@ -107,7 +107,7 @@ return
 return
 ^!#+o::
 	text := getFirstLineOfSelectedText()
-	ActionObject.do(text, , ACTION_Run)
+	ActionObject.do(text, , ACTION_Run, , SUBACTION_Edit)
 return
 
 ; Generic linker - will allow coming from clipboard or selected text, or input entirely. Puts the link on the clipboard.
@@ -119,7 +119,7 @@ return
 return
 ^!#+l::
 	text := getFirstLineOfSelectedText()
-	link := ActionObject.do(text, , ACTION_Link)
+	link := ActionObject.do(text, , ACTION_Link, , SUBACTION_Edit)
 	if(link)
 		clipboard := link
 return

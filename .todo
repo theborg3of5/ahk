@@ -1,18 +1,16 @@
 # Fixes
-	Make server routine stuff work again (or ditch it entirely, or make only the web link work) for ActionObject.
-		Make web version be codesearch routine thing?
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
-	
-# New ideas
 	Rewrite/clean up coding style for kdeMoverSizer
-	Split up common folder, into classes and groups of functions
 	Add snapper back as a way to link/run things
 		Could make links this way too
+	
+# New ideas
+	Split up common folder, into classes and groups of functions
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
 	Add HDR as a thing we can open with ActionObject?
-	New open-from-codesearch hotkey in Chrome - ^+o?
+	New open-in-EpicStudio-from-codesearch hotkey in Chrome - ^+o?
 		Routine from title
 		Tag from selection (or nothing, just open routine)
 		Could also support line number highlight

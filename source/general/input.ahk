@@ -33,7 +33,7 @@ return
 		MouseGetPos, , , winId
 		WinActivate, % "ahk_id " winId
 		
-		; Allow the Ctrl+Tab to be caught and handled by other hotkeys.
+		; Allow the Ctrl+Shift+Tab to be caught and handled by other hotkeys.
 		startSendLevel := A_SendLevel
 		SendLevel, 1
 		Send, ^+{Tab}

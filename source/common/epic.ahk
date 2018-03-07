@@ -144,36 +144,31 @@
 	}
 }
 
-; Launches a routine of the form rag^routine (or ^routine, or routine) in EpicStudio.
-openEpicStudioRoutine(text = "", routineName = "", tag = "") {
-	if(!routineName) {
-		objInfo := StrSplit(text, "^")
-		tag := objInfo[1]
-		routineName := objInfo[objInfo.MaxIndex()]
-	}
-	; DEBUG.popup("openEpicStudioRoutine", "Post-processing", "Open string", text, "Object info", objInfo, "Routine Name", routineName, "Tag", tag)
+; Launches a routine of the form tag^routine (or ^routine, or routine) in EpicStudio.
+openEpicStudioRoutine(serverLocation = "") {
+	splitServerLocation(serverLocation, tag, routine)
+	if(!routine)
+		return
 	
-	; Launch ES if not running.
-	activateProgram("EpicStudio")
+	; Open routine in EpicStudio, wait until it's open
+	Run, % MainConfig.getProgram("EpicStudio", "PATH") " " routine
 	exeName := MainConfig.getProgram("EpicStudio", "EXE")
-	WinWaitActive, ahk_exe %exeName%
-	waitUntilWindowState("active", " - EpicStudio", , 2)
-	
-	; Open correct routine.
-	Send, ^o
-	WinWaitActive, Open Object
-	SendRaw, %routineName%
-	Send, {Enter}
+	WinWaitActive, %routine% ahk_exe %exeName%
 	
 	; Focus correct tag if given.
 	if(tag) {
-		WinWaitActive, %routineName%
 		Send, ^+o
-		WinActivate, Go To
-		WinWait, Go To
+		WinWaitActive, Go To
 		SendRaw, %tag%
 		Send, {Enter}
 	}
+}
+
+; Split serverLocation into routine and tag (assume it's just the routine if no ^ included)
+splitServerLocation(serverLocation, ByRef tag = "", ByRef routine = "") {
+	locationAry := StrSplit(serverLocation, "^")
+	tag     := locationAry[1]
+	routine := locationAry[locationAry.MaxIndex()] ; Handles when it's only the routine (without a ^)
 }
 
 openEpicStudioDLG(dlgNum) {
@@ -289,8 +284,6 @@ buildHyperspaceRunString(versionMajor, versionMinor, environment) {
 
 buildCodeSearchURL(searchType, criteriaAry, appKey = "") {
 	global codeSearchBase
-	versionID := 10
-	showAll := 0 ; Whether to show every single matched line per result shown.
 	
 	appId := getEpicAppIdFromKey(appKey)
 	; DEBUG.popup("buildCodeSearchURL", "Start", "Search type", searchType, "Criteria", criteriaAry, "App key", appKey, "App ID", appId)
@@ -363,6 +356,19 @@ buildSnapperURL(environment = "", ini = "", idList = "") { ; idList is a comma-s
 buildVDIRunString(vdiId) {
 	global epicVDIBase
 	return replaceTag(epicVDIBase, "VDI_ID", vdiId)
+}
+
+buildServerCodeLink(serverLocation) {
+	global serverCodeBase
+	
+	splitServerLocation(serverLocation, tag, routine)
+	
+	url := serverCodeBase
+	url := replaceTag(url, "ROUTINE", routine)
+	url := replaceTag(url, "TAG", tag)
+	
+	; DEBUG.popup("epic","buildServerCodeLink", "Server location",serverLocation, "Tag",tag, "Routine",routine, "URL",url)
+	return url
 }
 
 ; iteratorsAry is array of variables to loop in nested for loops, in top-down order.

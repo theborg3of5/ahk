@@ -5,10 +5,9 @@
 
 global TYPE_Unknown := ""
 global TYPE_EMC2    := "EMC2"
-global TYPE_ROUTINE := "ROUTINE" ; Server routine
+global TYPE_ServerCode := "SERVERCODE"
 global TYPE_Path    := "PATH"
 
-global ACTION_None := ""
 global ACTION_Link := "LINK"
 global ACTION_Run  := "RUN"
 
@@ -33,7 +32,7 @@ class ActionObject {
 		Example: view-only link to DLG 123456:
 			ActionObject.do(123456, TYPE_EMC2, ACTION_Link, "DLG", SUBACTION_View)
 	*/
-	do(input, type = "", action = "", subType = "", subAction = "") { ; type = TYPE_Unknown, action = ACTION_None
+	do(input, type = "", action = "", subType = "", subAction = "") {
 		; DEBUG.popup("ActionObject.do", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
 		; Clean up input.
@@ -129,20 +128,19 @@ class ActionObject {
 	
 	; Do any post-processing now that we (hopefully) have all the info we need.
 	postProcess(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
-		if(type = TYPE_EMC2) { ; Turn subType (INI) into true INI
+		if(type = TYPE_EMC2) ; Turn subType (INI) into true INI
 			subType := getTrueINI(subType)
-		}
 	}
 	
 	; Do the action.
 	perform(type, action, subType, subAction, input) {
 		; DEBUG.popup("ActionObject.perform", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
-		
-		if(action = ACTION_None) {
+		if(!type || !action)
 			return
-		} else if(action = ACTION_Run) {
+		
+		if(action = ACTION_Run) {
 			if(type = TYPE_EMC2) {
-				link := this.perform(TYPE_EMC2, ACTION_Link, subType, subAction, input)
+				link := this.perform(type, ACTION_Link, subType, subAction, input)
 				if(link)
 					Run, % link
 				
@@ -156,17 +154,26 @@ class ActionObject {
 					Run, % input
 				}
 				
-			} else {
-				Run, % input
+			} else if(type = TYPE_ServerCode) {
+				if(subAction = SUBACTION_Edit) {
+					openEpicStudioRoutine(input)
+				} else if(subAction = SUBACTION_View || subAction = SUBACTION_Web) {
+					link := this.perform(type, ACTION_Link, subType, subAction, input)
+					if(link)
+						Run, % link
+				}
 			}
 			
 		} else if(action = ACTION_Link) {
-			if(type = TYPE_EMC2)
-				link := buildEMC2Link(subType, input, subAction)
+			if(type = TYPE_EMC2) {
+				return buildEMC2Link(subType, input, subAction)
+			} else if(type = TYPE_ServerCode) {
+				; subAction = SUBACTION_Edit doesn't apply here - we can't get a link to EpicStudio.
+				if(subAction = SUBACTION_View || subAction = SUBACTION_Web) {
+					return buildServerCodeLink(input)
+				}
+			}
 			
-			return link
-		} else if(type || action || subType || subAction || input) {
-			this.errPop("Missing", "Type", "Type", type, "Action", action, "Subtype", subType, "Subaction", subAction, "Input", input)
 		}
 	}
 	

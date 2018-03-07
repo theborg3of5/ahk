@@ -1,12 +1,9 @@
-﻿global customToggleTimerFunc := "toggleTimers"
-global defaultTimerLoopLabel := "MainLoop"
-
-; Simple wrapper to set up needed state array of icons.
-; suspendedVar - name of variable that will be true if the script is suspended.
-setUpTrayIconsSimple(suspendedVar, normalIcon, suspendedIcon) {
-	states              := []
-	states[suspendedVar, 0] := normalIcon
-	states[suspendedVar, 1] := suspendedIcon
+﻿; Simple wrapper to set up needed state array of icons.
+; suspendStateVar - name of variable that will be true if the script is suspended.
+setUpTrayIconsSimple(suspendStateVar, normalIcon, suspendedIcon) {
+	states                     := []
+	states[suspendStateVar, 0] := normalIcon
+	states[suspendStateVar, 1] := suspendedIcon
 	setUpTrayIcons(states)
 }
 

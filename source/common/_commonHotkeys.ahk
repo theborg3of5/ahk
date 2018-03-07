@@ -10,20 +10,19 @@ return
 	; Suspend hotkey, change tray icon too.
 	!#x::
 		Suspend, Toggle
+		suspended := !suspended
+		updateTrayIcon()
 		
 		; Allow caps lock/scroll lock to be used normally while the script is suspended.
 		if(suspended) {
-			SetCapsLockState,   AlwaysOff
-			SetScrollLockState, AlwaysOff
-			SetNumLockState,    AlwaysOn
-		} else {
 			SetCapsLockState,   Off
 			SetScrollLockState, Off
 			SetNumLockState,    On
+		} else {
+			SetCapsLockState,   AlwaysOff
+			SetScrollLockState, AlwaysOff
+			SetNumLockState,    AlwaysOn
 		}
-		
-		suspended := !suspended
-		updateTrayIcon()
 	return
 
 	; Hotkey for reloading entire script.
@@ -42,10 +41,13 @@ return
 		updateTrayIcon()
 		
 		; Timers
-		if(IsFunc(customToggleTimerFunc))       ; If there's a custom toggleTimers() function, use that.
-			%customToggleTimerFunc%(suspended)
-		else if(IsLabel(defaultTimerLoopLabel)) ; Otherwise, if the label "MainLoop" exists, turn that timer off.
-			SetTimer, %defaultTimerLoopLabel%, % suspended ? "Off" : "On" ; If script is suspended, toggle it off, otherwise on.
+		mainLoop := "MainLoop" ; Have to put this in a variable, otherwise it fails at startup for scripts that don't have a MainLoop label
+		if(IsLabel(mainLoop)) { ; If the label "MainLoop" exists, turn that timer off.
+			if(suspended)
+				SetTimer, %mainLoop%, Off
+			else
+				SetTimer, %mainLoop%, On
+		}
 	return
 #If
 

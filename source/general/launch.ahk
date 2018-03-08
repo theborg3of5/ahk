@@ -31,6 +31,8 @@
 	^+!r::doSelect("local\epicEnvironments.tl", "DO_THUNDER",    "C:\Program Files (x86)\PuTTY\putty.exe")
 	!+v:: doSelect("local\epicEnvironments.tl", "DO_VDI",        "C:\Program Files (x86)\VMware\VMware Horizon View Client\vmware-view.exe")
 	^!#s::
+		ini := ""
+		id  := ""
 		selectedText := cleanupText(getFirstLineOfSelectedText())
 		splitRecordString(selectedText, ini, id)
 		

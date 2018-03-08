@@ -20,20 +20,7 @@
 
 	; Check if it's a valid EMC2 string.
 	isEMC2Object(text, ByRef ini = "", ByRef id = "") {
-		objInfo := StrSplit(text, A_Space)
-		data1 := objInfo[1]
-		data2 := objInfo[2]
-		; DEBUG.popup(text, "Text", data1, "Data1", data2, "Data2")
-		
-		; Look at the data gathered and determine which parts are which.
-		if(data1 && data2) { ; Two parts, likely everything we need.
-			if(isEMC2Id(data2)) {
-				ini := data1
-				id  := data2
-			}
-		} else if(data1) { ; Only one. Possible id on its own.
-			id := data1
-		}
+		splitRecordString(text, ini, id)
 		
 		idLevel := isEMC2Id(id)
 		; DEBUG.popup("Text", text, "Data1", data1, "Data2", data2, "INI", ini, "ID", id, "ID Level", idLevel)
@@ -163,11 +150,26 @@ openEpicStudioRoutine(routine, tag = "") {
 	}
 }
 
+; Split "INI ID" string into INI and ID (assume it's just the ID if no space included)
+splitRecordString(recordString, ByRef ini = "", ByRef id = "") {
+	recordString := cleanupText(recordString)
+	recordPartsAry := StrSplit(recordString, " ")
+	
+	maxIndex := recordPartsAry.MaxIndex()
+	if(maxIndex > 1)
+		ini := recordPartsAry[1]
+	id := recordPartsAry[maxIndex] ; Always the last piece (works whether there was an INI before it or not)
+}
+
 ; Split serverLocation into routine and tag (assume it's just the routine if no ^ included)
 splitServerLocation(serverLocation, ByRef routine = "", ByRef tag = "") {
+	serverLocation := cleanupText(serverLocation)
 	locationAry := StrSplit(serverLocation, "^")
-	tag     := locationAry[1]
-	routine := locationAry[locationAry.MaxIndex()] ; Handles when it's only the routine (without a ^)
+	
+	maxIndex := locationAry.MaxIndex()
+	if(maxIndex > 1)
+		tag := locationAry[1]
+	routine := locationAry[maxIndex] ; Always the last piece (works whether there was a tag before it or not)
 }
 
 openEpicStudioDLG(dlgNum) {
@@ -474,20 +476,15 @@ getTrueINI(iniString) {
 }
 
 
-getEMC2Info(ByRef ini = "", ByRef id = "", windowTitle = "A") {
-	WinGetTitle, title, %windowTitle%
+getEMC2Info(ByRef ini = "", ByRef id = "", titleString = "A") {
+	WinGetTitle, title, %titleString%
+	title := removeStringFromEnd(title, " - EMC2")
 	
 	; If no info available, finish here.
 	if((title = "") or (title = "EMC2"))
 		return
 	
 	; Split the input.
-	titleSplit := StrSplit(title, "-")
-	title := SubStr(titleSplit[1], 1, -1) ; Trim off the trailing space.
-	
-	objInfo := StrSplit(title, A_Space)
-	ini := objInfo[1]
-	id := objInfo[2]
-	
-	; DEBUG.popup("getEMC2Info", "Finish", "Source", source, "INI", ini, "ID", id)
+	splitRecordString(title, ini, id)
+	; DEBUG.popup("getEMC2Info","Finish", "INI",ini, "ID",id)
 }

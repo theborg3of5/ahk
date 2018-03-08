@@ -11,15 +11,14 @@ SetTimer, MainLoop, 10000 ; 10s, timer toggled by commonHotkeys' suspend hotkey.
 
 global currDLGId
 SetTitleMatchMode, 2 ; Partial title matching.
-emc2Title := " - EMC2 ahk_exe EpicD82.exe"
 
 
 MainLoop:
 	; Don't do anything if EMC2 isn't open.
-	if(!WinExist(emc2Title))
+	if(!WinExist(" - EMC2 ahk_exe EpicD82.exe"))
 		return
 	
-	getEMC2Info(ini, id, emc2Title)
+	getEMC2Info(ini, id, " - EMC2 ahk_exe EpicD82.exe")
 	if(ini != "DLG")
 		return
 	

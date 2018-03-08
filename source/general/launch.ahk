@@ -32,9 +32,7 @@
 	!+v:: doSelect("local\epicEnvironments.tl", "DO_VDI",        "C:\Program Files (x86)\VMware\VMware Horizon View Client\vmware-view.exe")
 	^!#s::
 		selectedText := cleanupText(getFirstLineOfSelectedText())
-		textAry := StrSplit(selectedText, " ")
-		ini := textAry[1]
-		id  := textAry[textAry.MaxIndex()] ; Handles when it's only the ID
+		splitRecordString(selectedText, ini, id)
 		
 		; Default data from selection.
 		defaultOverrideData        := []

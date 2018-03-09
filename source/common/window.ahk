@@ -238,7 +238,7 @@ processWindow(ByRef titleString = "A", action = "", ByRef winSettings = "") {
 	; Figure out the method (how we're going to perform the action).
 	method := winSettings[action]
 	if(method = WIN_ACTION_OTHER) ; Special handling - WIN_ACTION_OTHER goes to a separate function first.
-		method := getWindowMethodSpecial(winSettings, action)
+		method := windowMethodSpecial(winSettings, action)
 	if(!method) ; Return default if nothing found.
 		method := WIN_METHOD_DEFAULT
 	
@@ -247,9 +247,7 @@ processWindow(ByRef titleString = "A", action = "", ByRef winSettings = "") {
 
 activateWindow(titleString = "A", winSettings = "") {
 	method := processWindow(titleString, WIN_ACTION_ACTIVATE, winSettings)
-	DEBUG.popup("activateWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
-	
-	; Always convert to an ID-based titleString here, so we can respect
+	; DEBUG.popup("activateWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 	
 	if(method = WIN_METHOD_DEFAULT) {
 		WinShow,     %titleString%
@@ -278,7 +276,7 @@ closeWindow(titleString = "A", winSettings = "") {
 }
 minimizeWindow(titleString = "A", winSettings = "") {
 	method := processWindow(titleString, WIN_ACTION_MIN, winSettings)
-	DEBUG.popup("minimizeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
+	; DEBUG.popup("minimizeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 	
 	if(method = WIN_METHOD_DEFAULT) {
 		WinMinimize, %titleString%
@@ -324,20 +322,40 @@ deleteWord(titleString = "A", winSettings = "") {
 }
 ; For all special cases for just a single case, so not worth creating a new constant, etc for.
 ; The return value should be what we should do from here - so if we end up deciding that a 
-; standard method works, just return that constant.
-getWindowMethodSpecial(winSettings = "", action = "") {
+; standard method works, just return that constant. If it's not standard, just do it and then 
+; return WIN_ACTION_NONE.
+windowMethodSpecial(winSettings = "", action = "") {
+	global TITLE_MATCH_MODE_CONTAIN
+	DEBUG.popup("windowMethodSpecial","", "Settings",winSettings, "Action",action)
+	
 	if(!action)
 		return ""
 	
 	method := WIN_ACTION_NONE ; Start with the assumption that we shouldn't do anything after this - the specific cases will say otherwise if needed.
 	
-	if(action = WIN_ACTION_MIN) {
-		; Windows explorer
-		if(winSettings["NAME"] = "Explorer") ; QTTabBar's min to tray
-			Send, !q
+	; Windows explorer
+	if(winSettings["NAME"] = "Explorer")
+		if(action = WIN_ACTION_MIN)
+			Send, !q ; QTTabBar's min to tray
+	
+	; Spotify
+	if(winSettings["NAME"] = "Spotify") {
+		if(action = WIN_ACTION_ACTIVATE) {
+			; Spotify has a whole bunch of windows that are difficult to tell apart from the real thing
+			
+			; Title is "Spotify" if not playing anything, and has a hyphen between the title and artist if it is playing something.
+			spotifyTitleBase := " ahk_exe Spotify.exe"
+			titleAry := []
+			titleAry.push("Spotify" spotifyTitleBase)
+			titleAry.push("-" spotifyTitleBase)
+			
+			winId := isWindowInState("exists", titleAry, "", TITLE_MATCH_MODE_CONTAIN, "", "On")
+			WinShow, ahk_id %winId%
+			WinActivate, ahk_id %winId%
+		}
 	}
 	
-	; DEBUG.popup("window.getWindowMethodSpecial","Finished", "Action",action, "Method",method, "Settings",winSettings)
+	; DEBUG.popup("window.windowMethodSpecial","Finished", "Action",action, "Method",method, "Settings",winSettings)
 	return method
 }
 

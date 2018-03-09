@@ -9,7 +9,7 @@ $^a::selectAll()
 ; Backspace shortcut for those that don't handle it well.
 $^Backspace::deleteWord()
 
-; Executor normally uses CapsLock, but (very) occasionally, we need to use it for its intended purpose.
+; Launchy normally uses CapsLock, but (very) occasionally, we need to use it for its intended purpose.
 ^!CapsLock::
 	SetCapsLockState, On
 return
@@ -18,8 +18,8 @@ return
 +WheelUp::WheelLeft
 +WheelDown::WheelRight
 
-#If !MainConfig.windowIsGame()
-	XButton1::^Tab
+#If !MainConfig.windowIsGame() && !WinActive("ahk_class TscShellContainerClass")
+	XButton1::
 		MouseGetPos, , , winId
 		WinActivate, % "ahk_id " winId
 		

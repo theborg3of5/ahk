@@ -202,13 +202,13 @@ doWindowAction(action, titleString = "A", winSettings = "") {
 		activateWindow(titleString, winSettings)
 	else if(action = WIN_ACTION_CLOSE)       ; Close the given window
 		closeWindow(titleString, winSettings)
-	else if(action = WIN_ACTION_ESC)         ; React to the escape key (generally ends up minimizing or closing)
+	else if(action = WIN_ACTION_ESC)         ; React to the escape key (generally to minimize or close the window)
 		doEscAction(titleString, winSettings)
 	else if(action = WIN_ACTION_MIN)         ; Minimize the given window
 		minimizeWindow(titleString, winSettings)
 	else if(action = WIN_ACTION_SELECT_ALL)  ; Select all
 		selectAll(titleString, winSettings)
-	else if(action = WIN_ACTION_DELETE_WORD) ; Delete one word, a la Ctrl+Backspace
+	else if(action = WIN_ACTION_DELETE_WORD) ; Backspace one word
 		deleteWord(titleString, winSettings)
 	else
 		DEBUG.popup("window.doWindowAction", "Error", "Action not found", action)
@@ -223,10 +223,10 @@ processWindow(ByRef titleString = "A", action = "", ByRef winSettings = "") {
 		winSettings := getWindowSettingsAry(titleString)
 	; DEBUG.popup("window.processWindow", "Got winSettings", "Window Settings", winSettings)
 	
-	; If it's just the active window we're working with, make sure we get 
-	; the unique window ID (that has winSettings["TEXT"] in it), 
-	; in case there are multiple windows that fit just the titleString.
-	if(titleString = "A") {
+	; If we have the info to do so, turn titleString into something specific 
+	; to the window we want (that has winSettings["TEXT"] in it), 
+	; in case there are multiple windows that fit the existing titleString.
+	if(winSettings) {
 		winExe   := winSettings["EXE"]
 		winClass := winSettings["CLASS"]
 		winTitle := winSettings["TITLE"]
@@ -278,7 +278,7 @@ closeWindow(titleString = "A", winSettings = "") {
 }
 minimizeWindow(titleString = "A", winSettings = "") {
 	method := processWindow(titleString, WIN_ACTION_MIN, winSettings)
-	; DEBUG.popup("minimizeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
+	DEBUG.popup("minimizeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 	
 	if(method = WIN_METHOD_DEFAULT) {
 		WinMinimize, %titleString%

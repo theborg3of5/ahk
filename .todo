@@ -3,7 +3,6 @@
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
-	Minimizing hotkey broken in general?
 	Update rest of window actions framework to work based on IDs, so we can handle cases where multiple windows meet non-winText conditions
 		Have processWindow return an idString instead of updating titleString
 		Have processWindow always make the change from titleString to idString, not only when titleString = "A"

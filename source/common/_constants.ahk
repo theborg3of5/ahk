@@ -21,3 +21,9 @@ global TASKBAR_HEIGHT := 30
 global HOTKEY_TYPE_STANDALONE := 0
 global HOTKEY_TYPE_MASTER     := 1
 global HOTKEY_TYPE_SUB_MASTER := 2
+
+; Title match modes
+global TITLE_MATCH_MODE_START   := 1
+global TITLE_MATCH_MODE_CONTAIN := 2
+global TITLE_MATCH_MODE_EXACT   := 3
+

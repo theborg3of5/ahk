@@ -31,16 +31,6 @@ return
 ; --------------------------------------------------------------------------
 { ; Hotkeys that don't change.
 	
-#IfWinActive, ahk_class Notepad++
-	; Auto-reload this script when it's saved.
-	~^s::
-		; Suspend, Permit ; Allow this to run when the script is suspended.
-		WinGetActiveTitle, winTitle
-		if(stringContains(winTitle, A_ScriptFullPath))
-			Reload
-	return
-#IfWinActive
-	
 	; Hotkey to open test.ahk for editing.
 	^+e::
 		editScript(A_LineFile)

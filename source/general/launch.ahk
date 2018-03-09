@@ -1,7 +1,7 @@
 ; Launch various programs, URLs, etc.
 
 ; General programs.
-#s::  activateProgram("Spotify")
+#s::       runProgram("Spotify") ; Can't unminimize from tray with any reasonable logic, so re-run to do so.
 #f::  activateProgram("Everything")
 !+g:: activateProgram("GitHub")
 !`::  activateProgram("ProcessExplorer")

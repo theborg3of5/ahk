@@ -149,13 +149,13 @@ class MainConfig {
 		}
 	}
 	
-	getWindow(name = "", exe = "", ahkClass = "", title = "") {
+	getWindow(name = "", exe = "", ahkClass = "", title = "", text = "") {
 		retWindow := ""
-		if(!name && !exe && !ahkClass && !title)
+		if(!name && !exe && !ahkClass && !title && !text)
 			return ""
 		
 		For i,w in this.windows {
-			; DEBUG.popup("EXE", exe, "Class", ahkClass, "Title", title, "Against settings", w)
+			; DEBUG.popup("Name",name, "EXE",exe, "Class",ahkClass, "Title",title, "Text",text, "Against settings",w)
 			if(name && w["NAME"] && (name != w["NAME"]) )
 				Continue
 			if(exe && w["EXE"] && (exe != w["EXE"]) )
@@ -163,6 +163,8 @@ class MainConfig {
 			if(ahkClass && w["CLASS"] && (ahkClass != w["CLASS"]) )
 				Continue
 			if(title && w["TITLE"] && (title != w["TITLE"]) )
+				Continue
+			if(text && w["TEXT"] && !stringContains(text, w["TEXT"]) )
 				Continue
 			
 			retWindow := w.clone()

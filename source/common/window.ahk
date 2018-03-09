@@ -1,16 +1,15 @@
-global WIN_ACTION_NONE         := "NONE"
-global WIN_ACTION_OTHER        := "OTHER"
-global WIN_ACTION_ACTIVATE     := "ACTIVATE"
-global WIN_ACTION_CLOSE_WINDOW := "CLOSE_WINDOW"
-global WIN_ACTION_ESC          := "ESC"
-global WIN_ACTION_MIN          := "MIN"
-global WIN_ACTION_SELECT_ALL   := "SELECT_ALL"
-global WIN_ACTION_DELETE_WORD  := "DELETE_WORD"
+global WIN_ACTION_NONE        := "NONE"
+global WIN_ACTION_OTHER       := "OTHER"
+global WIN_ACTION_ACTIVATE    := "ACTIVATE"
+global WIN_ACTION_CLOSE       := "CLOSE"
+global WIN_ACTION_ESC         := "ESC"
+global WIN_ACTION_MIN         := "MIN"
+global WIN_ACTION_SELECT_ALL  := "SELECT_ALL"
+global WIN_ACTION_DELETE_WORD := "DELETE_WORD"
 
 global WIN_METHOD_DEFAULT := "DEFAULT"
 
 global WIN_MIN_POST_MESSAGE  := "POST_MESSAGE"
-global WIN_MIN_HIDE_TOOL_WIN := "HIDE_TOOL_WIN"
 
 global WIN_SELECT_ALL_HOME_END := "HOME_END"
 
@@ -40,10 +39,9 @@ getWindowTitleString(winName) {
 	winExe   := winSettings["EXE"]
 	winClass := winSettings["CLASS"]
 	winTitle := winSettings["TITLE"]
-	
 	titleString := buildWindowTitleString(winExe, winClass, winTitle)
-	; DEBUG.popup("getWindowTitleString","", "winName",winName, "winExe",winExe, "winClass",winClass, "winTitle",winTitle, "Title string",titleString)
 	
+	; DEBUG.popup("getWindowTitleString","", "winName",winName, "winExe",winExe, "winClass",winClass, "winTitle",winTitle, "Title string",titleString)
 	return titleString
 }
 ; Puts together a string that can be used with the likes of WinActivate, etc.
@@ -160,8 +158,8 @@ getFocusedControl(titleString = "A") {
 activateProgram(progName) {
 	waitForHotkeyRelease()
 	
-	progInfo := ""
-	titleString := getProgramTitleString(progName, progInfo) ; progInfo should be set and passed back
+	progInfo := MainConfig.getProgram(progName)
+	titleString := getProgramTitleString(progName, progInfo)
 	; DEBUG.popup("window.activateProgram","start", "Program name",progName, "Program info",progInfo, "Title string",titleString)
 	
 	; If the program is already running, go ahead and activate it.
@@ -198,19 +196,19 @@ doWindowAction(action, titleString = "A", winSettings = "") {
 		return
 	
 	; Do that action.
-	if(action = WIN_ACTION_NONE)              ; WIN_ACTION_NONE means do nothing.
+	if(action = WIN_ACTION_NONE)             ; WIN_ACTION_NONE means do nothing.
 		return
-	else if(action = WIN_ACTION_ACTIVATE)     ; Activate the given window
+	else if(action = WIN_ACTION_ACTIVATE)    ; Activate the given window
 		activateWindow(titleString, winSettings)
-	else if(action = WIN_ACTION_CLOSE_WINDOW) ; Close the given window
+	else if(action = WIN_ACTION_CLOSE)       ; Close the given window
 		closeWindow(titleString, winSettings)
-	else if(action = WIN_ACTION_ESC)          ; React to the escape key (generally ends up minimizing or closing)
+	else if(action = WIN_ACTION_ESC)         ; React to the escape key (generally ends up minimizing or closing)
 		doEscAction(titleString, winSettings)
-	else if(action = WIN_ACTION_MIN)          ; Minimize the given window
+	else if(action = WIN_ACTION_MIN)         ; Minimize the given window
 		minimizeWindow(titleString, winSettings)
-	else if(action = WIN_ACTION_SELECT_ALL)   ; Select all
+	else if(action = WIN_ACTION_SELECT_ALL)  ; Select all
 		selectAll(titleString, winSettings)
-	else if(action = WIN_ACTION_DELETE_WORD)  ; Delete one word, a la Ctrl+Backspace
+	else if(action = WIN_ACTION_DELETE_WORD) ; Delete one word, a la Ctrl+Backspace
 		deleteWord(titleString, winSettings)
 	else
 		DEBUG.popup("window.doWindowAction", "Error", "Action not found", action)
@@ -256,7 +254,7 @@ doEscAction(titleString = "A", winSettings = "") {
 		doWindowAction(method, titleString, winSettings)
 }
 closeWindow(titleString = "A", winSettings = "") {
-	method := processWindow(titleString, WIN_ACTION_CLOSE_WINDOW, winSettings)
+	method := processWindow(titleString, WIN_ACTION_CLOSE, winSettings)
 	; DEBUG.popup("closeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 	
 	if(method = WIN_METHOD_DEFAULT)
@@ -273,12 +271,6 @@ minimizeWindow(titleString = "A", winSettings = "") {
 	
 	} else if(method = WIN_MIN_POST_MESSAGE) {
 		PostMessage, 0x112, 0xF020 , , , %titleString%
-	
-	} else if(method = WIN_MIN_HIDE_TOOL_WIN) { ; Special deal to hide away tool-type windows (hidden from taskbar)
-		WinMinimize
-		WinHide
-		WinSet, Redraw
-		WinSet, Bottom
 	
 	} else {
 		doWindowAction(method, titleString, winSettings)

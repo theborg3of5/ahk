@@ -163,7 +163,7 @@ activateProgram(progName) {
 	; DEBUG.popup("window.activateProgram","start", "Program name",progName, "Program info",progInfo, "Title string",titleString)
 	
 	; If the program is already running, go ahead and activate it.
-	if(WinExist(titleString))
+	if(WinExist(titleString, progInfo["TEXT"]))
 		activateWindow(titleString)
 	; If it doesn't exist yet, we need to run the executable to make it happen.
 	else
@@ -181,7 +181,8 @@ getWindowSettingsAry(titleString = "A") {
 	WinGet,      winExe, ProcessName, %titleString%
 	WinGetClass, winClass, %titleString%
 	WinGetTitle, winTitle, %titleString%
-	return MainConfig.getWindow("", winExe, winClass, winTitle)
+	WinGetText,  winText, %titleString%
+	return MainConfig.getWindow("", winExe, winClass, winTitle, winText)
 }
 getWindowSetting(settingName, titleString = "A") {
 	if(!settingName)
@@ -235,11 +236,14 @@ processWindow(titleString = "A", action = "", ByRef winSettings = "") {
 
 activateWindow(titleString = "A", winSettings = "") {
 	method := processWindow(titleString, WIN_ACTION_ACTIVATE, winSettings)
-	; DEBUG.popup("activateWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
+	DEBUG.popup("activateWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
+	
+	if(titleString != "A")
+		winText := winSettings["TEXT"]
 	
 	if(method = WIN_METHOD_DEFAULT) {
-		WinShow,     % titleString
-		WinActivate, % titleString
+		WinShow,     %titleString%, %winText%
+		WinActivate, %titleString%, %winText%
 	} else {
 		doWindowAction(method, titleString, winSettings)
 	}
@@ -257,8 +261,11 @@ closeWindow(titleString = "A", winSettings = "") {
 	method := processWindow(titleString, WIN_ACTION_CLOSE, winSettings)
 	; DEBUG.popup("closeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 	
+	if(titleString != "A")
+		winText := winSettings["TEXT"]
+	
 	if(method = WIN_METHOD_DEFAULT)
-		WinClose, %titleString%
+		WinClose, %titleString%, %winText%
 	else
 		doWindowAction(method, titleString, winSettings)
 }
@@ -266,11 +273,14 @@ minimizeWindow(titleString = "A", winSettings = "") {
 	method := processWindow(titleString, WIN_ACTION_MIN, winSettings)
 	; DEBUG.popup("minimizeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 	
+	if(titleString != "A")
+		winText := winSettings["TEXT"]
+	
 	if(method = WIN_METHOD_DEFAULT) {
-		WinMinimize, %titleString%
+		WinMinimize, %titleString%, %winText%
 	
 	} else if(method = WIN_MIN_POST_MESSAGE) {
-		PostMessage, 0x112, 0xF020 , , , %titleString%
+		PostMessage, 0x112, 0xF020 , , , %titleString%, %winText%
 	
 	} else {
 		doWindowAction(method, titleString, winSettings)

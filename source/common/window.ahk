@@ -326,7 +326,7 @@ deleteWord(titleString = "A", winSettings = "") {
 ; return WIN_ACTION_NONE.
 windowMethodSpecial(winSettings = "", action = "") {
 	global TITLE_MATCH_MODE_CONTAIN
-	DEBUG.popup("windowMethodSpecial","", "Settings",winSettings, "Action",action)
+	; DEBUG.popup("windowMethodSpecial","", "Settings",winSettings, "Action",action)
 	
 	if(!action)
 		return ""
@@ -337,23 +337,6 @@ windowMethodSpecial(winSettings = "", action = "") {
 	if(winSettings["NAME"] = "Explorer")
 		if(action = WIN_ACTION_MIN)
 			Send, !q ; QTTabBar's min to tray
-	
-	; Spotify
-	if(winSettings["NAME"] = "Spotify") {
-		if(action = WIN_ACTION_ACTIVATE) {
-			; Spotify has a whole bunch of windows that are difficult to tell apart from the real thing
-			
-			; Title is "Spotify" if not playing anything, and has a hyphen between the title and artist if it is playing something.
-			spotifyTitleBase := " ahk_exe Spotify.exe"
-			titleAry := []
-			titleAry.push("Spotify" spotifyTitleBase)
-			titleAry.push("-" spotifyTitleBase)
-			
-			winId := isWindowInState("exists", titleAry, "", TITLE_MATCH_MODE_CONTAIN, "", "On")
-			WinShow, ahk_id %winId%
-			WinActivate, ahk_id %winId%
-		}
-	}
 	
 	; DEBUG.popup("window.windowMethodSpecial","Finished", "Action",action, "Method",method, "Settings",winSettings)
 	return method

@@ -223,11 +223,11 @@ processWindow(ByRef titleString = "A", action = "", ByRef winSettings = "") {
 		winSettings := getWindowSettingsAry(titleString)
 	; DEBUG.popup("window.processWindow", "Got winSettings", "Window Settings", winSettings)
 	
-	; If we have the info to do so, turn titleString into something specific 
-	; to the window we want (that has winSettings["TEXT"] in it), 
-	; in case there are multiple windows that fit the existing titleString.
-	; Leave "A" (active window) alone, since that's already a single target.
-	if(titleString != "A" && winSettings) {
+	; If there's some text that has to be in the window, turn the titleString 
+	; into one with a unique window ID, so that's taken into account.
+	; Leave active window (A) alone though, since you can't use window text 
+	; with that and it's already a single target by definition.
+	if(winSettings["TEXT"] && titleString != "A") {
 		winExe   := winSettings["EXE"]
 		winClass := winSettings["CLASS"]
 		winTitle := winSettings["TITLE"]

@@ -238,12 +238,9 @@ activateWindow(titleString = "A", winSettings = "") {
 	method := processWindow(titleString, WIN_ACTION_ACTIVATE, winSettings)
 	DEBUG.popup("activateWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 	
-	if(titleString != "A")
-		winText := winSettings["TEXT"]
-	
 	if(method = WIN_METHOD_DEFAULT) {
-		WinShow,     %titleString%, %winText%
-		WinActivate, %titleString%, %winText%
+		WinShow,     %titleString%
+		WinActivate, %titleString%
 	} else {
 		doWindowAction(method, titleString, winSettings)
 	}
@@ -261,11 +258,8 @@ closeWindow(titleString = "A", winSettings = "") {
 	method := processWindow(titleString, WIN_ACTION_CLOSE, winSettings)
 	; DEBUG.popup("closeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 	
-	if(titleString != "A")
-		winText := winSettings["TEXT"]
-	
 	if(method = WIN_METHOD_DEFAULT)
-		WinClose, %titleString%, %winText%
+		WinClose, %titleString%
 	else
 		doWindowAction(method, titleString, winSettings)
 }
@@ -273,14 +267,11 @@ minimizeWindow(titleString = "A", winSettings = "") {
 	method := processWindow(titleString, WIN_ACTION_MIN, winSettings)
 	; DEBUG.popup("minimizeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 	
-	if(titleString != "A")
-		winText := winSettings["TEXT"]
-	
 	if(method = WIN_METHOD_DEFAULT) {
-		WinMinimize, %titleString%, %winText%
+		WinMinimize, %titleString%
 	
 	} else if(method = WIN_MIN_POST_MESSAGE) {
-		PostMessage, 0x112, 0xF020 , , , %titleString%, %winText%
+		PostMessage, 0x112, 0xF020 , , , %titleString%
 	
 	} else {
 		doWindowAction(method, titleString, winSettings)

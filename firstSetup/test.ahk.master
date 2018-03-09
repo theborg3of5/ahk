@@ -6,7 +6,7 @@
 	#SingleInstance force
 	
 	#Include <includeCommon>
-	isSingleUserScript := true
+	scriptHotkeyType := HOTKEY_TYPE_STANDALONE
 	
 	; State flag and icons
 	global suspended := 0

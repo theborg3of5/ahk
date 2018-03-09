@@ -36,7 +36,6 @@ class MainConfig {
 		settingsAry := []
 		settingsAry["MACHINE"]         := this.loadSettingFromFile(filePath, "MACHINE")         ; Which machine this is, from MACHINE_* constants
 		settingsAry["MENU_KEY_ACTION"] := this.loadSettingFromFile(filePath, "MENU_KEY_ACTION") ; What to do with the menu key, from MENUKEYACTION_* constants
-		settingsAry["VIM_CLOSE_KEY"]   := this.loadSettingFromFile(filePath, "VIM_CLOSE_KEY")   ; Which keys should close tabs via vimBindings (generally F-keys).
 		
 		; DEBUG.popup("Settings", settingsAry)
 		return settingsAry

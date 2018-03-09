@@ -30,10 +30,9 @@ startupFolder  := ahkRootPath "\source"
 mainAHKPath    := startupFolder "\main.ahk"
 
 tagsToReplace := []
-tagsToReplace["ROOT"]                  := ahkRootPath
-tagsToReplace["WHICH_MACHINE"]         := ""
-tagsToReplace["MENU_KEY_ACTION"]       := ""
-tagsToReplace["EDGE_OFFSET"]           := ""
+tagsToReplace["ROOT"]            := ahkRootPath
+tagsToReplace["WHICH_MACHINE"]   := ""
+tagsToReplace["MENU_KEY_ACTION"] := ""
 
 copyPaths := []
 copyPaths["includeCommon.ahk.master"]   := userPath "\Documents\AutoHotkey\Lib\includeCommon.ahk"

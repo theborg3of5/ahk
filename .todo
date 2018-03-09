@@ -3,6 +3,7 @@
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
+	Minimizing hotkey broken in general?
 	
 # New ideas
 	Add HDR as a thing we can open with ActionObject?

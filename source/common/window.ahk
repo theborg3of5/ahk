@@ -162,11 +162,10 @@ activateProgram(progName) {
 	titleString := getProgramTitleString(progName, progInfo)
 	; DEBUG.popup("window.activateProgram","start", "Program name",progName, "Program info",progInfo, "Title string",titleString)
 	
-	; If the program is already running, go ahead and activate it.
-	if(WinExist(titleString, progInfo["TEXT"]))
-		activateWindow(titleString)
-	; If it doesn't exist yet, we need to run the executable to make it happen.
-	else
+	winId := WinExist(titleString, progInfo["TEXT"])
+	if(winId) ; If the program is already running, go ahead and activate it.
+		activateWindow("ahk_id " winId)
+	else ; If it doesn't exist yet, we need to run the executable to make it happen.
 		RunAsUser(progInfo["PATH"], progInfo["ARGS"])
 }
 runProgram(progName) {
@@ -215,7 +214,7 @@ doWindowAction(action, titleString = "A", winSettings = "") {
 		DEBUG.popup("window.doWindowAction", "Error", "Action not found", action)
 }
 
-processWindow(titleString = "A", action = "", ByRef winSettings = "") {
+processWindow(ByRef titleString = "A", action = "", ByRef winSettings = "") {
 	if(!titleString)
 		return ""
 	
@@ -224,10 +223,22 @@ processWindow(titleString = "A", action = "", ByRef winSettings = "") {
 		winSettings := getWindowSettingsAry(titleString)
 	; DEBUG.popup("window.processWindow", "Got winSettings", "Window Settings", winSettings)
 	
+	; If it's just the active window we're working with, make sure we get 
+	; the unique window ID (that has winSettings["TEXT"] in it), 
+	; in case there are multiple windows that fit just the titleString.
+	if(titleString = "A") {
+		winExe   := winSettings["EXE"]
+		winClass := winSettings["CLASS"]
+		winTitle := winSettings["TITLE"]
+		winText  := winSettings["TEXT"]
+		
+		titleString := "ahk_id " WinExist(buildWindowTitleString(winExe, winClass, winTitle), winText)
+	}
+	
 	; Figure out the method (how we're going to perform the action).
 	method := winSettings[action]
 	if(method = WIN_ACTION_OTHER) ; Special handling - WIN_ACTION_OTHER goes to a separate function first.
-		method := getWindowMethodSpecial(titleString, action, winSettings)
+		method := getWindowMethodSpecial(winSettings, action)
 	if(!method) ; Return default if nothing found.
 		method := WIN_METHOD_DEFAULT
 	
@@ -237,6 +248,8 @@ processWindow(titleString = "A", action = "", ByRef winSettings = "") {
 activateWindow(titleString = "A", winSettings = "") {
 	method := processWindow(titleString, WIN_ACTION_ACTIVATE, winSettings)
 	DEBUG.popup("activateWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
+	
+	; Always convert to an ID-based titleString here, so we can respect
 	
 	if(method = WIN_METHOD_DEFAULT) {
 		WinShow,     %titleString%
@@ -312,7 +325,7 @@ deleteWord(titleString = "A", winSettings = "") {
 ; For all special cases for just a single case, so not worth creating a new constant, etc for.
 ; The return value should be what we should do from here - so if we end up deciding that a 
 ; standard method works, just return that constant.
-getWindowMethodSpecial(titleString = "A", action = "", winSettings = "") {
+getWindowMethodSpecial(winSettings = "", action = "") {
 	if(!action)
 		return ""
 	

@@ -1,6 +1,6 @@
 @PlaceholderChar=-
 
-(	NAME							EXE					CLASS						TITLE					TEXT							ESC		MIN		SELECT_ALL	DELETE_WORD		WINDOW_EDGE_OFFSET_OVERRIDE
+(	NAME							EXE					CLASS						TITLE					TEXT							ESC		MIN		SELECT_ALL	DELETE_WORD		CLOSE		WINDOW_EDGE_OFFSET_OVERRIDE
 
 	Skype Buddy List			Skype.exe			-							-						-								CLOSE
 	KDiff							kdiff3.exe			-							-						-								CLOSE
@@ -42,5 +42,5 @@
 	GitHub						GitHubDesktop.exe
 	Chrome						chrome.exe
 	Steam							Steam.exe
-	Spotify						Spotify.exe			-							-						Chrome Legacy Window		CLOSE		CLOSE		-				-
+	Spotify						Spotify.exe			-							-						Chrome Legacy Window		CLOSE		CLOSE		-				-					OTHER
 []

@@ -226,7 +226,8 @@ processWindow(ByRef titleString = "A", action = "", ByRef winSettings = "") {
 	; If we have the info to do so, turn titleString into something specific 
 	; to the window we want (that has winSettings["TEXT"] in it), 
 	; in case there are multiple windows that fit the existing titleString.
-	if(winSettings) {
+	; Leave "A" (active window) alone, since that's already a single target.
+	if(titleString != "A" && winSettings) {
 		winExe   := winSettings["EXE"]
 		winClass := winSettings["CLASS"]
 		winTitle := winSettings["TITLE"]
@@ -337,6 +338,23 @@ windowMethodSpecial(winSettings = "", action = "") {
 	if(winSettings["NAME"] = "Explorer")
 		if(action = WIN_ACTION_MIN)
 			Send, !q ; QTTabBar's min to tray
+	
+	; Spotify
+	if(winSettings["NAME"] = "Spotify") {
+		if(action = WIN_ACTION_CLOSE) {
+			; Spotify has a whole bunch of windows that are difficult to tell apart from 
+			; the real thing, so make sure we're closing the right one.
+			
+			; Title is "Spotify" if not playing anything, and has a hyphen between the title and artist if it is playing something.
+			spotifyTitleBase := " ahk_exe Spotify.exe"
+			titleAry := []
+			titleAry.push("Spotify" spotifyTitleBase)
+			titleAry.push("-" spotifyTitleBase)
+			
+			winId := isWindowInState("exists", titleAry, "", TITLE_MATCH_MODE_CONTAIN, "", "On")
+			WinClose, ahk_id %winId%
+		}
+	}
 	
 	; DEBUG.popup("window.windowMethodSpecial","Finished", "Action",action, "Method",method, "Settings",winSettings)
 	return method

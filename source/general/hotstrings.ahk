@@ -2,46 +2,32 @@
 
 #If !MainConfig.windowIsGame()
 { ; Emails.
-	:*:emaila::
-		Send, % USER_EMAIL
-	return
-	:*:gemaila::
-		Send, % USER_EMAIL_2
-	return
-	:*:eemaila::
-		Send, % EPIC_EMAIL
-	return
-	:*:oemaila::
-		Send, % USER_OUTLOOK_EMAIL
-	return
+	:*X:emaila::Send,  % USER_EMAIL
+	:*X:gemaila::Send, % USER_EMAIL_2
+	:*X:eemaila::Send, % EPIC_EMAIL
+	:*X:oemaila::Send, % USER_OUTLOOK_EMAIL
 }
 
 { ; Addresses.
-	:*:waddr::
+	:*X:waddr::
 		SendRaw, % madisonAddress
 	return
 	
-	:*:eaddr::
+	:*X:eaddr::
 		Send, % epicAddress
 	return
-	::ezip::
+	:X:ezip::
 		Send, % epicAddressZip
 	return
 }
 
 { ; Logins.
-	:*:uname::
-		Send, % USER_USERNAME
-	return
+	:*X:uname::Send, % USER_USERNAME
 }
 
 { ; Phone numbers.
-	:*:phoneno::
-		Send, % USER_PHONE_NUM
-	return
-	:*:fphoneno::
-		Send, % reformatPhone(USER_PHONE_NUM)
-	return
+	:*X:phoneno::Send, % USER_PHONE_NUM
+	:*X:fphoneno::Send, % reformatPhone(USER_PHONE_NUM)
 }
 
 { ; Typo correction.
@@ -134,22 +120,12 @@
 			Send, {Tab}
 	return
 	
-	:*:dashidate::
-		sendDateTime("M-d-yy")
-	return
-	:*:uidate::
-		sendDateTime("M_d_yy")
-	return
-	:*:didate::
-		sendDateTime("dddd`, M/d")
-	return
-	:*:iddate::
-		sendDateTime("M/d`, dddd")
-	return
+	:*X:dashidate::sendDateTime("M-d-yy")
+	:*X:uidate::sendDateTime("M_d_yy")
+	:*X:didate::sendDateTime("dddd`, M/d")
+	:*X:iddate::sendDateTime("M/d`, dddd")
 	
-	:*:itime::
-		sendDateTime("h:mm tt")
-	return
+	:*X:itime::sendDateTime("h:mm tt")
 	
 	:*:idatetime::
 	:*:itimedate::
@@ -157,15 +133,9 @@
 	return
 	
 	; Arbitrary dates/times, translates
-	:*:aidate::
-		queryDateAndSend()
-	return
-	:*:aiddate::
-		queryDateAndSend("M/d/yy`, dddd")
-	return
-	:*:adidate::
-		queryDateAndSend("dddd`, M/d/yy")
-	return
+	:*X:aidate::queryDateAndSend()
+	:*X:aiddate::queryDateAndSend("M/d/yy`, dddd")
+	:*X:adidate::queryDateAndSend("dddd`, M/d/yy")
 	queryDateAndSend(format = "M/d/yy") {
 		date := queryDate(format)
 		if(date)
@@ -189,79 +159,37 @@
 		:*:pff::C:\Program Files\
 		:*:xpff::C:\Program Files (x86)\
 		
-		:*:urf::
-			sendFolderPath("USER_ROOT")
-		return
-		:*:deskf::
-			sendFolderPath("USER_ROOT", "Desktop")
-		return
-		:*:dsf::
-			sendFolderPath("USER_ROOT", "Design")
-		return
-		:*:dlf::
-			sendFolderPath("DOWNLOADS")
-		return
-		:*:devf::
-			sendFolderPath("USER_ROOT", "Dev")
-		return
+		:*X:urf::sendFolderPath("USER_ROOT")
+		:*X:deskf::sendFolderPath("USER_ROOT", "Desktop")
+		:*X:dsf::sendFolderPath("USER_ROOT", "Design")
+		:*X:dlf::sendFolderPath("DOWNLOADS")
+		:*X:devf::sendFolderPath("USER_ROOT", "Dev")
 	}
 
 	{ ; AHK
-		:*:arf::
-			sendFolderPath("AHK_ROOT")
-		return
-		:*:aconf::
-			sendFolderPath("AHK_CONFIG")
-		return
-		:*:alconf::
-			sendFolderPath("AHK_LOCAL_CONFIG")
-		return
-		:*:atf::
-			sendFolderPath("AHK_ROOT", "test")
-		return
-		:*:asf::
-			sendFolderPath("AHK_SOURCE")
-		return
-		:*:acf::
-			sendFolderPath("AHK_SOURCE", "common")
-		return
-		:*:apf::
-			sendFolderPath("AHK_SOURCE", "program")
-		return
-		:*:agf::
-			sendFolderPath("AHK_SOURCE", "general")
-		return
-		:*:astf::
-			sendFolderPath("AHK_SOURCE", "standalone")
-		return
+		:*X:arf::sendFolderPath("AHK_ROOT")
+		:*X:aconf::sendFolderPath("AHK_CONFIG")
+		:*X:alconf::sendFolderPath("AHK_LOCAL_CONFIG")
+		:*X:atf::sendFolderPath("AHK_ROOT", "test")
+		:*X:asf::sendFolderPath("AHK_SOURCE")
+		:*X:acf::sendFolderPath("AHK_SOURCE", "common")
+		:*X:apf::sendFolderPath("AHK_SOURCE", "program")
+		:*X:agf::sendFolderPath("AHK_SOURCE", "general")
+		:*X:astf::sendFolderPath("AHK_SOURCE", "standalone")
 	}
 
 	{ ; Epic - General
-		:*:epf::
-			sendFolderPath("EPIC_PERSONAL")
-		return
-		:*:ssf::
-			sendFolderPath("USER_ROOT", "Screenshots")
-		return
-		:*:enfsf::
-			sendFolderPath("EPIC_NFS_3DAY")
-		return
-		:*:eunfsf::
-			sendUnixFolderPath("EPIC_NFS_3DAY_UNIX")
-		return
+		:*X:epf::sendFolderPath("EPIC_PERSONAL")
+		:*X:ssf::sendFolderPath("USER_ROOT", "Screenshots")
+		:*X:enfsf::sendFolderPath("EPIC_NFS_3DAY")
+		:*X:eunfsf::sendUnixFolderPath("EPIC_NFS_3DAY_UNIX")
 		
-		:*:ecompf::
-			sendFolderPath("VB6_COMPILE")
-		return
+		:*X:ecompf::sendFolderPath("VB6_COMPILE")
 	}
 	
 	{ ; Epic - Source
-		:*:esf::
-			sendFolderPath("EPIC_SOURCE_S1")
-		return
-		:*:fesf::
-			sendFilePath("EPIC_SOURCE_S1", epicDesktopProject)
-		return
+		:*X:esf::sendFolderPath("EPIC_SOURCE_S1")
+		:*X:fesf::sendFilePath("EPIC_SOURCE_S1", epicDesktopProject)
 	}
 }
 

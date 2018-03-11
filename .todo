@@ -4,12 +4,21 @@
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
 	Go through warnings that appear when #Warn is enabled in main
+	Go back through last commit's changes and potentially use function hotkeys instead of defining and calling a function (https://autohotkey.com/docs/Hotkeys.htm#function-details)
+		Also function hotstrings (https://autohotkey.com/docs/Hotstrings.htm#Function)
+	Update winspy hotkey to use WindowSpy.ahk (https://autohotkey.com/docs/AHKL_ChangeLog.htm#Changes_12)
+	Check whether we have our own min/max functions, possibly replace with new built-in ones (https://autohotkey.com/docs/commands/Math.htm#Min)
+	For standalone scripts, take a look at A_Args to see if it would be cleaner than using %1% and the like (https://autohotkey.com/docs/Variables.htm#Args)
 	Update tray icon and global hotkeys to make use of A_IsSuspended instead of a custom "suspended" variable?
 		Remember to retain custom ability somehow with vimBindings
 	Consider making scriptHotkeyType stuff explicitly global
 		On the one hand, more explicit
 		On the other hand, fewer "global"s if we just put it in the place that reads the variable?
 		On the other hand, does it really need to be a super-global?
+	Update hotstrings to use X option (https://autohotkey.com/docs/Hotstrings.htm#X)
+	Possibly try Send, {Text} for raw clipboard sending (instead of SendRaw), might be more reliable (https://autohotkey.com/docs/commands/Send.htm#SendText)
+		Also T option for hotstrings (if applicable at all)
+	Check out File.* methods for reading from file (https://autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.24.04)
 	
 # New ideas
 	Add HDR as a thing we can open with ActionObject?

@@ -2,15 +2,10 @@
 	#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 	SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 	SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-	; #NoTrayIcon
 	#SingleInstance force
-	
 	#Include <includeCommon>
 	scriptHotkeyType := HOTKEY_TYPE_STANDALONE
-	
-	; State flag and icons
-	global suspended := 0
-	setUpTrayIcons("suspended", "icons\testGreen.ico", "icons\testRed.ico")
+	setUpTrayIcons("icons\testGreen.ico", "icons\testRed.ico")
 }
 
 ; --------------------------------------------------------------------------

@@ -4,11 +4,9 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 scriptHotkeyType := HOTKEY_TYPE_SUB_MASTER
+setUpTrayIcons("controllerGreen.ico", "controllerRed.ico")
 
-global suspended := 0
-setUpTrayIcons("suspended", "controllerGreen.ico", "controllerRed.ico")
 SetTimer, MainLoop, 100 ; 100ms, timer toggled by commonHotkeys' suspend hotkey.
-
 XInput_Init()
 
 

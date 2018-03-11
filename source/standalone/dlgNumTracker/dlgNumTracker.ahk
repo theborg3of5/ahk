@@ -4,12 +4,10 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 scriptHotkeyType := HOTKEY_TYPE_SUB_MASTER
-
-global suspended := 0
-setUpTrayIcons("suspended", "hash.ico", "redHash.ico")
-SetTimer, MainLoop, 10000 ; 10s, timer toggled by commonHotkeys' suspend hotkey.
+setUpTrayIcons("hash.ico", "redHash.ico")
 
 global currDLGId
+SetTimer, MainLoop, 10000 ; 10s, timer toggled by commonHotkeys' suspend hotkey.
 SetTitleMatchMode, 2 ; Partial title matching.
 
 

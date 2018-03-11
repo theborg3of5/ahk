@@ -5,12 +5,11 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 scriptHotkeyType := HOTKEY_TYPE_SUB_MASTER
 
-global suspended := 0
 global vimKeysOn := 1
-states                                 := []
-states["suspended", 1]                 := "vimSuspend.ico"
-states["suspended", 0, "vimKeysOn", 0] := "vimPause.ico"
-states["suspended", 0, "vimKeysOn", 1] := "vim.ico"
+states                                     := []
+states["A_IsSuspended", 1]                 := "vimSuspend.ico"
+states["A_IsSuspended", 0, "vimKeysOn", 0] := "vimPause.ico"
+states["A_IsSuspended", 0, "vimKeysOn", 1] := "vim.ico"
 setUpTrayIconStates(states)
 
 global offTitles := getExcludedTitles()

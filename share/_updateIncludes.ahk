@@ -4,9 +4,8 @@
 #SingleInstance, force
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-
 #Include <includeCommon>
-isSingleUserScript := true
+scriptHotkeyType := HOTKEY_TYPE_STANDALONE
 
 rootPath         := reduceFilepath(A_ScriptDir, 1)
 commonFolder     := rootPath "source\common\"

@@ -2,13 +2,9 @@
 	#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 	SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 	SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-	; #NoTrayIcon
 	#SingleInstance force
-	
 	#Include <includeCommon>
-	
-	global suspended := 0
-	setUpTrayIcons("suspended", "unitTest.ico", "unitTest.ico")
+	setUpTrayIcons("unitTest.ico", "unitTest.ico")
 	
 	global RUN_TEST		:= 1
 	global GENERATE_TEST := 2

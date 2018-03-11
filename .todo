@@ -4,8 +4,6 @@
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
 	Go through warnings that appear when #Warn is enabled in main
-	Update tray icon and global hotkeys to make use of A_IsSuspended instead of a custom "suspended" variable?
-		Remember to retain custom ability somehow with vimBindings
 	Take another pass through Selector GUI stuff - seems like there's more options for positioning things now (https://autohotkey.com/docs/commands/Gui.htm#PosSize)
 	Check out File.* methods for reading from file (https://autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.24.04)
 	

@@ -2,7 +2,6 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 #SingleInstance force  ; Ensures that if this script is running, running it again replaces the first instance.
-; #NoTrayIcon  ; Uncomment to hide the tray icon.
 Menu, Tray, Icon, timer.ico
 
 

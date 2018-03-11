@@ -4,18 +4,11 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 #SingleInstance force  ; Ensures that if this script is running, running it again replaces the first instance.
-; #NoTrayIcon  ; Uncomment to hide the tray icon.
+#Include <includeCommon>
+scriptHotkeyType := HOTKEY_TYPE_STANDALONE
 
 ; Setup.
 keyboardControl := false
-
-; Exit, reload, and suspend.
-~!+x::ExitApp
-~#!x::Suspend
-~!+r::
-	Suspend, Permit
-	Reload
-return
 
 #If !keyboardControl
 	^+!Space::
@@ -49,3 +42,5 @@ return
 		Send, {Click Up}
 	return
 #If
+
+#Include <commonHotkeys>

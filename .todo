@@ -7,10 +7,6 @@
 	Update tray icon and global hotkeys to make use of A_IsSuspended instead of a custom "suspended" variable?
 		Remember to retain custom ability somehow with vimBindings
 	Take another pass through Selector GUI stuff - seems like there's more options for positioning things now (https://autohotkey.com/docs/commands/Gui.htm#PosSize)
-	Standardize how scriptHotkeyType stuff is declared global
-		On the one hand, more explicit to put it on each use (in individual scripts)
-		On the other hand, fewer "global"s if we just put it in the place that reads the variable?
-		On the other hand, does it really need to be a super-global?
 	Check out File.* methods for reading from file (https://autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.24.04)
 	
 # New ideas

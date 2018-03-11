@@ -415,7 +415,9 @@ class Selector {
 		lineNum := 0
 		columnNum := 1
 		columnWidths := []
+		columnWidths[columnNum] := 0
 		
+		maxColumnHeight := 0
 		For i,c in this.choices {
 			lineNum++
 			title := this.nonChoices[i]
@@ -423,6 +425,7 @@ class Selector {
 			; Add a new column as needed.
 			if(this.needNewColumn(title, lineNum, this.guiSettings["RowsPerColumn"])) {
 				columnNum++
+				columnWidths[columnNum] := 0
 				
 				xLastColumnOffset := columnWidths[columnNum - 1] + padColumn
 				xTitle  += xLastColumnOffset

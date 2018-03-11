@@ -121,171 +121,174 @@
 
 ; *********** MOVING WINDOW ***********
 !LButton::
-	SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
-	CoordMode, Mouse, Screen
-	
-	; Vista+ Alt-Tab fix by jordoex..
-	IfWinActive ahk_class TaskSwitcherWnd
-	{
-		Send {Blind}{LButton}
-		return
+	altLeftButton() {
+		SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
+		CoordMode, Mouse, Screen
+		
+		; Vista+ Alt-Tab fix by jordoex..
+		IfWinActive ahk_class TaskSwitcherWnd
+		{
+			Send {Blind}{LButton}
+			return
+		}
+
+		; Get the initial mouse position and window id, and
+		; WinRestore if the window is maximized.
+		MouseGetPos, KDE_X1, KDE_Y1, KDE_id
+		if(MainConfig.windowIsGame("ahk_id " KDE_id)) {
+			Send {Blind}{LButton}
+			return
+		}
+		
+		WinGet, KDE_Win, MinMax, ahk_id %KDE_id%
+		If KDE_Win
+		{
+			WinRestore, ahk_id %KDE_id%
+			; return    ; restore window size instead of abort
+		}
+
+		; Get the initial window position.
+		WinGetPos, KDE_WinX1, KDE_WinY1, KDE_WinW, KDE_WinH, ahk_id %KDE_id%
+		Loop
+		{
+			GetKeyState,KDE_Button, LButton, P ; Break if button has been released.
+			If KDE_Button = U
+				break
+			MouseGetPos,Mouse_X2, Mouse_Y2 ; Get the current mouse position.
+			KDE_X2 := Mouse_X2
+			KDE_Y2 := Mouse_Y2
+			KDE_X2 -= KDE_X1    ; Obtain an offset from the initial mouse position.
+			KDE_Y2 -= KDE_Y1
+
+			KDE_WinX2 := (KDE_WinX1 + KDE_X2) ; Apply this offset to the window position.
+			KDE_WinY2 := (KDE_WinY1 + KDE_Y2)
+
+			; get current screen boarders for snapping, do this within the loop to allow snapping an all monitors without releasing button
+			GetCurrentScreenBoarders(CurrentScreenLeft, CurrentScreenRight, CurrentScreenTop, CurrentScreenBottom, KDE_id)
+
+			SnappingDistance := 10
+			if(KDE_WinX2 < CurrentScreenLeft + SnappingDistance) AND (KDE_WinX2 > CurrentScreenLeft - SnappingDistance)
+				KDE_WinX2 := CurrentScreenLeft 
+
+			if(KDE_WinY2 < CurrentScreenTop + SnappingDistance) AND (KDE_WinY2 > CurrentScreenTop - SnappingDistance)
+				KDE_WinY2 := CurrentScreenTop
+
+			if(KDE_WinX2 + KDE_WinW > CurrentScreenRight - SnappingDistance) AND (KDE_WinX2 + KDE_WinW < CurrentScreenRight + SnappingDistance)
+				KDE_WinX2 := CurrentScreenRight - KDE_WinW
+
+			if(KDE_WinY2 + KDE_WinH > CurrentScreenBottom - SnappingDistance) AND (KDE_WinY2 + KDE_WinH < CurrentScreenBottom + SnappingDistance)
+				KDE_WinY2 := CurrentScreenBottom - KDE_WinH
+
+			WinMove, ahk_id %KDE_id%, , %KDE_WinX2%, %KDE_WinY2% ; Move the window to the new position.
+
+			;; BEGIN GAVIN CHANGES
+			; Focus findow if CTRL is pressed.
+			GetKeyState, ctrlState, LControl
+			if ctrlState = D
+				WinActivate, ahk_id %KDE_id%
+			;; END GAVIN CHANGES
+		}
 	}
-
-	; Get the initial mouse position and window id, and
-	; WinRestore if the window is maximized.
-	MouseGetPos, KDE_X1, KDE_Y1, KDE_id
-	if(MainConfig.windowIsGame("ahk_id " KDE_id)) {
-		Send {Blind}{LButton}
-		return
-	}
-	
-	WinGet, KDE_Win, MinMax, ahk_id %KDE_id%
-	If KDE_Win
-	{
-		WinRestore, ahk_id %KDE_id%
-		; return    ; restore window size instead of abort
-	}
-
-	; Get the initial window position.
-	WinGetPos, KDE_WinX1, KDE_WinY1, KDE_WinW, KDE_WinH, ahk_id %KDE_id%
-	Loop
-	{
-		GetKeyState,KDE_Button, LButton, P ; Break if button has been released.
-		If KDE_Button = U
-			break
-		MouseGetPos,Mouse_X2, Mouse_Y2 ; Get the current mouse position.
-		KDE_X2 := Mouse_X2
-		KDE_Y2 := Mouse_Y2
-		KDE_X2 -= KDE_X1    ; Obtain an offset from the initial mouse position.
-		KDE_Y2 -= KDE_Y1
-
-		KDE_WinX2 := (KDE_WinX1 + KDE_X2) ; Apply this offset to the window position.
-		KDE_WinY2 := (KDE_WinY1 + KDE_Y2)
-
-		; get current screen boarders for snapping, do this within the loop to allow snapping an all monitors without releasing button
-		GetCurrentScreenBoarders(CurrentScreenLeft, CurrentScreenRight, CurrentScreenTop, CurrentScreenBottom, KDE_id)
-
-		SnappingDistance := 10
-		if(KDE_WinX2 < CurrentScreenLeft + SnappingDistance) AND (KDE_WinX2 > CurrentScreenLeft - SnappingDistance)
-			KDE_WinX2 := CurrentScreenLeft 
-
-		if(KDE_WinY2 < CurrentScreenTop + SnappingDistance) AND (KDE_WinY2 > CurrentScreenTop - SnappingDistance)
-			KDE_WinY2 := CurrentScreenTop
-
-		if(KDE_WinX2 + KDE_WinW > CurrentScreenRight - SnappingDistance) AND (KDE_WinX2 + KDE_WinW < CurrentScreenRight + SnappingDistance)
-			KDE_WinX2 := CurrentScreenRight - KDE_WinW
-
-		if(KDE_WinY2 + KDE_WinH > CurrentScreenBottom - SnappingDistance) AND (KDE_WinY2 + KDE_WinH < CurrentScreenBottom + SnappingDistance)
-			KDE_WinY2 := CurrentScreenBottom - KDE_WinH
-
-		WinMove, ahk_id %KDE_id%, , %KDE_WinX2%, %KDE_WinY2% ; Move the window to the new position.
-
-		;; BEGIN GAVIN CHANGES
-		; Focus findow if CTRL is pressed.
-		GetKeyState, ctrlState, LControl
-		if ctrlState = D
-			WinActivate, ahk_id %KDE_id%
-		;; END GAVIN CHANGES
-	}
-return
 
 ; *********** RESIZING WINDOW ***********
 !RButton::
-	SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
-	CoordMode, Mouse, Screen
-	
-	; Get the initial mouse position and window id, and
-	; WinRestore if the window is maximized.
-	MouseGetPos, KDE_X1, KDE_Y1, KDE_id
-	if(MainConfig.windowIsGame("ahk_id " KDE_id)) {
-		Send {Blind}{RButton}
-		return
+	altRightButton() {
+		SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
+		CoordMode, Mouse, Screen
+		
+		; Get the initial mouse position and window id, and
+		; WinRestore if the window is maximized.
+		MouseGetPos, KDE_X1, KDE_Y1, KDE_id
+		if(MainConfig.windowIsGame("ahk_id " KDE_id)) {
+			Send {Blind}{RButton}
+			return
+		}
+		
+		WinGet, KDE_Win, MinMax, ahk_id %KDE_id%
+		
+		If KDE_Win
+		{
+			WinRestore, ahk_id %KDE_id%
+		}
+
+		; Get the initial window position and size.
+		WinGetPos, KDE_WinX1, KDE_WinY1, KDE_WinW, KDE_WinH, ahk_id %KDE_id%
+		; Define the window region the mouse is currently in.
+		; The four regions are Up and Left, Up and Right, Down and Left, Down and Right.
+		If (KDE_X1 < KDE_WinX1 + KDE_WinW / 2)
+			KDE_WinLeft := 1
+		Else
+			KDE_WinLeft := -1
+		If (KDE_Y1 < KDE_WinY1 + KDE_WinH / 2)
+			KDE_WinUp := 1
+		Else
+			KDE_WinUp := -1
+		Loop
+		{
+			 GetKeyState, KDE_Button, RButton, P ; Break if button has been released.
+			 If KDE_Button = U
+				  break
+			 MouseGetPos, Mouse_X2, Mouse_Y2 ; Get the current mouse position.
+			 KDE_X2 := Mouse_X2
+			 KDE_Y2 := Mouse_Y2
+			 KDE_X2 -= KDE_X1 ; Obtain an offset from the initial mouse position.
+			 KDE_Y2 -= KDE_Y1
+
+			 ; snap the window to the edge of the screen if closer than 10 pixels to border
+			 ; first, get current screen boarders for snapping, do this within the loop to allow snapping an all monitors without releasing button
+			 ; get current screen boarders for snapping, do this within the loop to allow snapping an all monitors without releasing button
+			 GetCurrentScreenBoarders(CurrentScreenLeft, CurrentScreenRight, CurrentScreenTop, CurrentScreenBottom, KDE_id)
+
+			 KDE_WinX2 := (KDE_WinX1 + (KDE_WinLeft + 1) / 2 * KDE_X2) ; X of resized windows
+			 KDE_WinY2 := (KDE_WinY1 + (KDE_WinUp   + 1) / 2 * KDE_Y2) ; Y of resized windows
+			 KDE_WinW2 := (KDE_WinW  -  KDE_WinLeft          * KDE_X2) ; W of resized windows
+			 KDE_WinH2 := (KDE_WinH  -  KDE_WinUp            * KDE_Y2) ; H of resized windows
+			 
+			 SnappingDistance := 10
+			 if (KDE_WinX2 < CurrentScreenLeft + SnappingDistance) AND (KDE_WinX2 > CurrentScreenLeft - SnappingDistance) AND (KDE_WinLeft > 0) {
+					KDE_WinW2 := KDE_WinW + KDE_WinX1 - CurrentScreenLeft
+					KDE_WinX2 := CurrentScreenLeft
+			 }
+			 if (KDE_WinY2 < CurrentScreenTop + SnappingDistance) AND (KDE_WinY2 > CurrentScreenTop - SnappingDistance) AND (KDE_WinUp > 0) {
+					KDE_WinH2 := KDE_WinH + KDE_WinY1 - CurrentScreenTop
+					KDE_WinY2 := CurrentScreenTop
+			 }
+			 if (KDE_WinX2 + KDE_WinW2 > CurrentScreenRight - SnappingDistance) AND (KDE_WinX2 + KDE_WinW2 < CurrentScreenRight + SnappingDistance)  AND (KDE_WinLeft < 0) {
+					KDE_WinW2 := - KDE_WinX1 + CurrentScreenRight
+			 }
+			 if (KDE_WinY2 + KDE_WinH2 > CurrentScreenBottom - SnappingDistance) AND (KDE_WinY2 + KDE_WinH2 < CurrentScreenBottom + SnappingDistance) AND (KDE_WinUp < 0) {
+					KDE_WinH2 := - KDE_WinY1 + CurrentScreenBottom
+			 }
+
+			 ; Then, act according to the defined region.
+			 WinMove, ahk_id %KDE_id%, , KDE_WinX2  ; X of resized window
+												, KDE_WinY2  ; Y of resized window
+												, KDE_WinW2  ; W of resized window
+												, KDE_WinH2  ; H of resized window
+		}
 	}
-	
-	WinGet, KDE_Win, MinMax, ahk_id %KDE_id%
-	
-	If KDE_Win
-	{
-		WinRestore, ahk_id %KDE_id%
-	}
-
-	; Get the initial window position and size.
-	WinGetPos, KDE_WinX1, KDE_WinY1, KDE_WinW, KDE_WinH, ahk_id %KDE_id%
-	; Define the window region the mouse is currently in.
-	; The four regions are Up and Left, Up and Right, Down and Left, Down and Right.
-	If (KDE_X1 < KDE_WinX1 + KDE_WinW / 2)
-		KDE_WinLeft := 1
-	Else
-		KDE_WinLeft := -1
-	If (KDE_Y1 < KDE_WinY1 + KDE_WinH / 2)
-		KDE_WinUp := 1
-	Else
-		KDE_WinUp := -1
-	Loop
-	{
-		 GetKeyState, KDE_Button, RButton, P ; Break if button has been released.
-		 If KDE_Button = U
-			  break
-		 MouseGetPos, Mouse_X2, Mouse_Y2 ; Get the current mouse position.
-		 KDE_X2 := Mouse_X2
-		 KDE_Y2 := Mouse_Y2
-		 KDE_X2 -= KDE_X1 ; Obtain an offset from the initial mouse position.
-		 KDE_Y2 -= KDE_Y1
-
-		 ; snap the window to the edge of the screen if closer than 10 pixels to border
-		 ; first, get current screen boarders for snapping, do this within the loop to allow snapping an all monitors without releasing button
-		 ; get current screen boarders for snapping, do this within the loop to allow snapping an all monitors without releasing button
-		 GetCurrentScreenBoarders(CurrentScreenLeft, CurrentScreenRight, CurrentScreenTop, CurrentScreenBottom, KDE_id)
-
-		 KDE_WinX2 := (KDE_WinX1 + (KDE_WinLeft + 1) / 2 * KDE_X2) ; X of resized windows
-		 KDE_WinY2 := (KDE_WinY1 + (KDE_WinUp   + 1) / 2 * KDE_Y2) ; Y of resized windows
-		 KDE_WinW2 := (KDE_WinW  -  KDE_WinLeft          * KDE_X2) ; W of resized windows
-		 KDE_WinH2 := (KDE_WinH  -  KDE_WinUp            * KDE_Y2) ; H of resized windows
-		 
-		 SnappingDistance := 10
-		 if (KDE_WinX2 < CurrentScreenLeft + SnappingDistance) AND (KDE_WinX2 > CurrentScreenLeft - SnappingDistance) AND (KDE_WinLeft > 0) {
-				KDE_WinW2 := KDE_WinW + KDE_WinX1 - CurrentScreenLeft
-				KDE_WinX2 := CurrentScreenLeft
-		 }
-		 if (KDE_WinY2 < CurrentScreenTop + SnappingDistance) AND (KDE_WinY2 > CurrentScreenTop - SnappingDistance) AND (KDE_WinUp > 0) {
-				KDE_WinH2 := KDE_WinH + KDE_WinY1 - CurrentScreenTop
-				KDE_WinY2 := CurrentScreenTop
-		 }
-		 if (KDE_WinX2 + KDE_WinW2 > CurrentScreenRight - SnappingDistance) AND (KDE_WinX2 + KDE_WinW2 < CurrentScreenRight + SnappingDistance)  AND (KDE_WinLeft < 0) {
-				KDE_WinW2 := - KDE_WinX1 + CurrentScreenRight
-		 }
-		 if (KDE_WinY2 + KDE_WinH2 > CurrentScreenBottom - SnappingDistance) AND (KDE_WinY2 + KDE_WinH2 < CurrentScreenBottom + SnappingDistance) AND (KDE_WinUp < 0) {
-				KDE_WinH2 := - KDE_WinY1 + CurrentScreenBottom
-		 }
-
-		 ; Then, act according to the defined region.
-		 WinMove, ahk_id %KDE_id%, , KDE_WinX2  ; X of resized window
-											, KDE_WinY2  ; Y of resized window
-											, KDE_WinW2  ; W of resized window
-											, KDE_WinH2  ; H of resized window
-	}
-return
 
 
 ; Toggle window Maximize/Original size with Alt+Middle mouse button
 !MButton::
-	SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
-	CoordMode, Mouse, Screen
-	
-	MouseGetPos, , , KDE_id
-	
-	if(MainConfig.windowIsGame("ahk_id " KDE_id)) {
-		Send {Blind}{MButton}
-		return
+	altMiddleButton() {
+		SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
+		CoordMode, Mouse, Screen
+		
+		MouseGetPos, , , KDE_id
+		
+		if(MainConfig.windowIsGame("ahk_id " KDE_id)) {
+			Send {Blind}{MButton}
+			return
+		}
+		
+		; Toggle between maximized and restored state.
+		WinGet, KDE_Win, MinMax, ahk_id %KDE_id%
+		if(KDE_Win)
+		  WinRestore, ahk_id %KDE_id%
+		else
+		  WinMaximize, ahk_id %KDE_id%
 	}
-	
-	; Toggle between maximized and restored state.
-	WinGet, KDE_Win, MinMax, ahk_id %KDE_id%
-	if(KDE_Win)
-	  WinRestore, ahk_id %KDE_id%
-	else
-	  WinMaximize, ahk_id %KDE_id%
-return
 
 
 ; Function definitions

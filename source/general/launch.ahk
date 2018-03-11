@@ -31,22 +31,22 @@
 	^+!r::doSelect("local\epicEnvironments.tl", "DO_THUNDER",    "C:\Program Files (x86)\PuTTY\putty.exe")
 	!+v:: doSelect("local\epicEnvironments.tl", "DO_VDI",        "C:\Program Files (x86)\VMware\VMware Horizon View Client\vmware-view.exe")
 	^!#s::
-		ini := ""
-		id  := ""
-		selectedText := cleanupText(getFirstLineOfSelectedText())
-		splitRecordString(selectedText, ini, id)
-		
-		; Default data from selection.
-		defaultOverrideData        := []
-		defaultOverrideData["INI"] := ini
-		defaultOverrideData["ID"]  := id
-		
-		s := new Selector("local\epicEnvironments.tl")
-		guiSettings                    := []
-		guiSettings["Icon"]            := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
-		guiSettings["ShowDataInputs"]  := 1
-		guiSettings["ExtraDataFields"] := ["INI", "ID"]
-		s.selectGui("DO_SNAPPER", defaultOverrideData, guiSettings)
+		snapperSelector() {
+			selectedText := cleanupText(getFirstLineOfSelectedText())
+			splitRecordString(selectedText, ini, id)
+			
+			; Default data from selection.
+			defaultOverrideData        := []
+			defaultOverrideData["INI"] := ini
+			defaultOverrideData["ID"]  := id
+			
+			s := new Selector("local\epicEnvironments.tl")
+			guiSettings                    := []
+			guiSettings["Icon"]            := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
+			guiSettings["ShowDataInputs"]  := 1
+			guiSettings["ExtraDataFields"] := ["INI", "ID"]
+			s.selectGui("DO_SNAPPER", defaultOverrideData, guiSettings)
+		}
 	return
 #If
 
@@ -70,80 +70,75 @@
 
 ; Generic search.
 !+f::
-	text := getFirstLineOfSelectedText()
-	
-	filter := MainConfig.getMachineTableListFilter()
-	s := new Selector("search.tl", "", filter)
-	data := s.selectGui("", {"SEARCH_TERM":text})
-	
-	searchTerm := escapeDoubleQuotes(data["SEARCH_TERM"], 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
-	searchType := data["SEARCH_TYPE"]
-	subTypes   := forceArray(data["SUBTYPE"])
-	
-	url := ""
-	For i,type in subTypes { ; For searching multiple at once.
-		if(searchType = "CODESEARCH")
-			url := buildCodeSearchURL(type, searchTerm, data["APP_KEY"])
-		else if(searchType = "GURU")
-			url := buildGuruURL(searchTerm)
-		else if(searchType = "WIKI") ; Epic wiki search.
-			url := buildEpicWikiSearchURL(subTypes[0], searchTerm)
-		else if(searchType = "WEB")
-			url := StrReplace(subTypes[0], "%s", searchTerm)
-		else if(searchType = "GREPWIN")
-			searchWithGrepWin(type, searchTerm)
-		else if(searchType = "EVERYTHING")
-			searchWithEverything(searchTerm)
+	genericSearch() {
+		text := getFirstLineOfSelectedText()
 		
-		if(url)
-			Run, % url
+		filter := MainConfig.getMachineTableListFilter()
+		s := new Selector("search.tl", "", filter)
+		data := s.selectGui("", {"SEARCH_TERM":text})
+		
+		searchTerm := escapeDoubleQuotes(data["SEARCH_TERM"], 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
+		searchType := data["SEARCH_TYPE"]
+		subTypes   := forceArray(data["SUBTYPE"])
+		
+		url := ""
+		For i,type in subTypes { ; For searching multiple at once.
+			if(searchType = "CODESEARCH")
+				url := buildCodeSearchURL(type, searchTerm, data["APP_KEY"])
+			else if(searchType = "GURU")
+				url := buildGuruURL(searchTerm)
+			else if(searchType = "WIKI") ; Epic wiki search.
+				url := buildEpicWikiSearchURL(subTypes[0], searchTerm)
+			else if(searchType = "WEB")
+				url := StrReplace(subTypes[0], "%s", searchTerm)
+			else if(searchType = "GREPWIN")
+				searchWithGrepWin(type, searchTerm)
+			else if(searchType = "EVERYTHING")
+				searchWithEverything(searchTerm)
+			
+			if(url)
+				Run, % url
+		}
 	}
-	
-return
 
 ; Generic opener - opens a variety of different things based on the selected/clipboard text.
-^!#o::
+^!#o:: genericOpen(SUBACTION_Web)
+^!#+o::genericOpen(SUBACTION_Edit)
+genericOpen(subAction) {
 	text := getFirstLineOfSelectedText()
-	ActionObject.do(text, , ACTION_Run, , SUBACTION_Web)
-return
-^!#+o::
-	text := getFirstLineOfSelectedText()
-	ActionObject.do(text, , ACTION_Run, , SUBACTION_Edit)
-return
+	ActionObject.do(text, , ACTION_Run, , subAction)
+}
 
 ; Generic linker - will allow coming from clipboard or selected text, or input entirely. Puts the link on the clipboard.
-^!#l::
+^!#l:: genericLink(SUBACTION_Web)
+^!#+l::genericLink(SUBACTION_Edit)
+genericLink(subAction) {
 	text := getFirstLineOfSelectedText()
-	link := ActionObject.do(text, , ACTION_Link, , SUBACTION_Web)
+	link := ActionObject.do(text, , ACTION_Link, , subAction)
 	if(link)
 		clipboard := link
-return
-^!#+l::
-	text := getFirstLineOfSelectedText()
-	link := ActionObject.do(text, , ACTION_Link, , SUBACTION_Edit)
-	if(link)
-		clipboard := link
-return
+}
 
 ; Sites
 ^+!a::
-	sites := Object()
-	sites.Push("https://mail.google.com/mail/u/0/#inbox")
-	sites.Push("http://www.facebook.com/")
-	sites.Push("http://www.reddit.com/")
-	sites.Push("http://feedly.com/i/latest")
-	
-	sitesLen := sites.MaxIndex()
-	Loop, %sitesLen% {
-		Run, % sites[A_Index]
-		Sleep, 100
+	openAllSites() {
+		sites := Object()
+		sites.Push("https://mail.google.com/mail/u/0/#inbox")
+		sites.Push("http://www.facebook.com/")
+		sites.Push("http://www.reddit.com/")
+		sites.Push("http://feedly.com/i/latest")
+		
+		sitesLen := sites.MaxIndex()
+		Loop, %sitesLen% {
+			Run, % sites[A_Index]
+			Sleep, 100
+		}
+		sitesLen--
+		
+		Send, {Ctrl Down}{Shift Down}
+		Send, {Tab %sitesLen%}
+		Send, {Shift Up}{Ctrl Up}
 	}
-	sitesLen--
-	
-	Send, {Ctrl Down}{Shift Down}
-	Send, {Tab %sitesLen%}
-	Send, {Shift Up}{Ctrl Up}
-return
 
 ^+!m::Run, % "https://www.messenger.com"
 ^+!f::Run, % "http://feedly.com/i/latest"
@@ -160,26 +155,27 @@ return
 
 ; Turn selected text or clipboard into standard string for OneNote use.
 !+n::
-	line := getFirstLineOfSelectedText()
-	if(!line) ; Fall back to clipboard if nothing selected
-		line := clipboard
-	
-	infoAry := extractEMC2ObjectInfo(line)
-	ini   := infoAry["INI"]
-	id    := infoAry["ID"]
-	title := infoAry["TITLE"]
-	
-	standardString := buildStandardEMC2ObjectString(ini, id, title)
-	sendTextWithClipboard(standardString)
-	
-	; Try to link the ini/id as well where applicable.
-	if(WinActive(getWindowTitleString("OneNote"))) {
-		standardStringLen := strLen(standardString)
-		Send, {Left %standardStringLen%} ; Get to start of line
+	sendAndLinkStandardOneNoteString() {
+		line := getFirstLineOfSelectedText()
+		if(!line) ; Fall back to clipboard if nothing selected
+			line := clipboard
 		
-		iniIdLen := strLen(ini) + 1 + strLen(id)
-		Send, {Shift Down}{Right %iniIdLen%}{Shift Up} ; Select INI/ID
+		infoAry := extractEMC2ObjectInfo(line)
+		ini   := infoAry["INI"]
+		id    := infoAry["ID"]
+		title := infoAry["TITLE"]
 		
-		linkSelectedText(buildEMC2Link(ini, id))
+		standardString := buildStandardEMC2ObjectString(ini, id, title)
+		sendTextWithClipboard(standardString)
+		
+		; Try to link the ini/id as well where applicable.
+		if(WinActive(getWindowTitleString("OneNote"))) {
+			standardStringLen := strLen(standardString)
+			Send, {Left %standardStringLen%} ; Get to start of line
+			
+			iniIdLen := strLen(ini) + 1 + strLen(id)
+			Send, {Shift Down}{Right %iniIdLen%}{Shift Up} ; Select INI/ID
+			
+			linkSelectedText(buildEMC2Link(ini, id))
+		}
 	}
-return

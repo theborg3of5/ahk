@@ -39,15 +39,19 @@ return
 		updateTrayIcon()
 		
 		; Timers
-		mainLoop := "MainLoop" ; Have to put this in a variable, otherwise it fails at startup for scripts that don't have a MainLoop label
-		if(IsLabel(mainLoop)) { ; If the label "MainLoop" exists, turn that timer off.
-			if(A_IsSuspended)
-				SetTimer, %mainLoop%, Off
-			else
-				SetTimer, %mainLoop%, On
-		}
+		setTimerRunning("MainLoop", !A_IsSuspended)
 	return
+	setTimerRunning(timerLabel, shouldRun = 1) {
+		if(!timerLabel || !IsLabel(timerLabel))
+			return
+		
+		if(shouldRun)
+			SetTimer, %timerLabel%, On
+		else
+			SetTimer, %timerLabel%, Off
+	}
 #If
+
 
 ; One-off scripts
 #If scriptHotkeyType = HOTKEY_TYPE_STANDALONE
@@ -56,11 +60,12 @@ return
 	
 	; Auto-reload script when it's saved.
 	~^s::
-		if(!WinActive("ahk_class Notepad++"))
-			return
-		
-		WinGetActiveTitle, winTitle
-		if(stringContains(winTitle, A_ScriptFullPath))
-			Reload
-	return
+		reloadScriptWhenSaved() {
+			if(!WinActive("ahk_class Notepad++"))
+				return
+			
+			WinGetActiveTitle, winTitle
+			if(stringContains(winTitle, A_ScriptFullPath))
+				Reload
+		}
 #If

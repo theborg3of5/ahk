@@ -11,7 +11,7 @@ states                                 := []
 states["suspended", 1]                 := "vimSuspend.ico"
 states["suspended", 0, "vimKeysOn", 0] := "vimPause.ico"
 states["suspended", 0, "vimKeysOn", 1] := "vim.ico"
-setUpTrayIcons(states)
+setUpTrayIconStates(states)
 
 global offTitles := getExcludedTitles()
 global autoPaused := false ; Says whether we just temporarily paused vimKeys automatically (like for ^l)

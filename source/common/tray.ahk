@@ -1,14 +1,14 @@
 ﻿; Simple wrapper to set up needed state array of icons.
 ; suspendStateVar - name of variable that will be true if the script is suspended.
-setUpTrayIconsSimple(suspendStateVar, normalIcon, suspendedIcon) {
+setUpTrayIcons(suspendStateVar, normalIcon, suspendedIcon) {
 	states                     := []
 	states[suspendStateVar, 0] := normalIcon
 	states[suspendStateVar, 1] := suspendedIcon
-	setUpTrayIcons(states)
+	setUpTrayIconStates(states)
 }
 
 ; Stores off an array representing which tray icons to show in different situations. See evalStateIcon for input format and examples.
-setUpTrayIcons(states) {
+setUpTrayIconStates(states) {
 	global stateIcons
 	stateIcons := states
 	

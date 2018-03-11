@@ -5,10 +5,6 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 scriptHotkeyType := HOTKEY_TYPE_STANDALONE
 
-; State flag and icons
-global suspended := 0
-; setUpTrayIconsSimple("suspended", "hash.ico", "redHash.ico")
-
 ; Set mouseover text for icon
 Menu, Tray, Tip, 
 (LTrim

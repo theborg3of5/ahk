@@ -7,14 +7,8 @@
 	
 	#Include <includeCommon>
 	
-	; State flags.
 	global suspended := 0
-	
-	; Icon setup.
-	states                 := []
-	states["suspended", 1] := "unitTest.ico"
-	states["suspended", 0] := "unitTest.ico"
-	setupTrayIcons(states)
+	setUpTrayIcons("suspended", "unitTest.ico", "unitTest.ico")
 	
 	global RUN_TEST		:= 1
 	global GENERATE_TEST := 2
@@ -217,20 +211,4 @@ doTest(area, subArea, inFile, sourceFile) {
 	return outLines
 }
 
-
-{ ; Exit/reload hotkeys.
-	~#!x::
-		Suspend
-		suspended := !suspended
-		updateTrayIcon()
-	return
-
-	; Exit, reload, and suspend.
-	~!+x::ExitApp
-	; ~#!x::Suspend
-	~^!r::
-	~!+r::
-		Suspend, Permit
-		Reload
-	return
-}
+#Include <commonHotkeys>

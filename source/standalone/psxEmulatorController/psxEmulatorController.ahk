@@ -6,7 +6,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 scriptHotkeyType := HOTKEY_TYPE_SUB_MASTER
 
 global suspended := 0
-setUpTrayIconsSimple("suspended", "controllerGreen.ico", "controllerRed.ico")
+setUpTrayIcons("suspended", "controllerGreen.ico", "controllerRed.ico")
 SetTimer, MainLoop, 100 ; 100ms, timer toggled by commonHotkeys' suspend hotkey.
 
 XInput_Init()

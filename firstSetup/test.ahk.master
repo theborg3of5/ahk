@@ -10,7 +10,7 @@
 	
 	; State flag and icons
 	global suspended := 0
-	setUpTrayIconsSimple("suspended", "icons\testGreen.ico", "icons\testRed.ico")
+	setUpTrayIcons("suspended", "icons\testGreen.ico", "icons\testRed.ico")
 }
 
 ; --------------------------------------------------------------------------

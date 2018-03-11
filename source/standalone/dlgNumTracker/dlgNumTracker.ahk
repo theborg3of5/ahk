@@ -6,7 +6,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 scriptHotkeyType := HOTKEY_TYPE_SUB_MASTER
 
 global suspended := 0
-setUpTrayIconsSimple("suspended", "hash.ico", "redHash.ico")
+setUpTrayIcons("suspended", "hash.ico", "redHash.ico")
 SetTimer, MainLoop, 10000 ; 10s, timer toggled by commonHotkeys' suspend hotkey.
 
 global currDLGId

@@ -11,7 +11,7 @@
 
 	; State flag and icons
 	global suspended := 0
-	setUpTrayIconsSimple("suspended", "Gridy.ico", "GridySuspend.ico")
+	setUpTrayIcons("suspended", "Gridy.ico", "GridySuspend.ico")
 	
 	isSingleUserScript := true
 }

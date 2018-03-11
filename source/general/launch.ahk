@@ -74,32 +74,26 @@
 	
 	filter := MainConfig.getMachineTableListFilter()
 	s := new Selector("search.tl", "", filter)
-	data := s.selectGui("", {"ARG1": text})
+	data := s.selectGui("", {"SEARCH_TERM":text})
 	
+	searchTerm := escapeDoubleQuotes(data["SEARCH_TERM"], 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
 	searchType := data["SEARCH_TYPE"]
 	subTypes   := forceArray(data["SUBTYPE"])
-	
-	criteria := []
-	Loop, 5 {
-		arg := data["ARG" A_Index]
-		escapedArg := escapeDoubleQuotes(arg, 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
-		criteria[A_Index] := escapedArg
-	}
 	
 	url := ""
 	For i,type in subTypes { ; For searching multiple at once.
 		if(searchType = "CODESEARCH")
-			url := buildCodeSearchURL(type, criteria, data["APPKEY"])
+			url := buildCodeSearchURL(type, searchTerm, data["APP_KEY"])
 		else if(searchType = "GURU")
-			url := buildGuruURL(criteria[1])
+			url := buildGuruURL(searchTerm)
 		else if(searchType = "WIKI") ; Epic wiki search.
-			url := buildEpicWikiSearchURL(subTypes[0], criteria[1])
+			url := buildEpicWikiSearchURL(subTypes[0], searchTerm)
 		else if(searchType = "WEB")
-			url := StrReplace(subTypes[0], "%s", criteria[1])
+			url := StrReplace(subTypes[0], "%s", searchTerm)
 		else if(searchType = "GREPWIN")
-			searchWithGrepWin(type, criteria[1])
+			searchWithGrepWin(type, searchTerm)
 		else if(searchType = "EVERYTHING")
-			searchWithEverything(criteria[1])
+			searchWithEverything(searchTerm)
 		
 		if(url)
 			Run, % url

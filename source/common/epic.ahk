@@ -283,38 +283,29 @@ buildHyperspaceRunString(versionMajor, versionMinor, environment) {
 	return runString
 }
 
-buildCodeSearchURL(searchType, criteriaAry, appKey = "") {
+buildCodeSearchURL(searchType, searchTerm, appKey = "") {
 	global codeSearchBase
 	
 	appId := getEpicAppIdFromKey(appKey)
-	; DEBUG.popup("buildCodeSearchURL", "Start", "Search type", searchType, "Criteria", criteriaAry, "App key", appKey, "App ID", appId)
+	; DEBUG.popup("buildCodeSearchURL", "Start", "Search type", searchType, "Search term", searchTerm, "App key", appKey, "App ID", appId)
 	
-	; Gotta have some sort of criteria (and a type) to run a search.
-	if(!criteriaAry || !searchType)
+	; Gotta have something to search for (and a type) to run a search.
+	if(!searchTerm || !searchType)
 		return ""
 	
-	criteriaString := "a=" criteriaAry[1]
-	if(criteriaAry[2])
-		criteriaString .= "&b=" criteriaAry[2]
-	if(criteriaAry[3])
-		criteriaString .= "&c=" criteriaAry[3]
-	if(criteriaAry[4])
-		criteriaString .= "&d=" criteriaAry[4]
-	if(criteriaAry[5])
-		criteriaString .= "&e=" criteriaAry[5]
-	
+	criteriaString := "a=" searchTerm
 	return replaceTags(codeSearchBase, {"SEARCH_TYPE":searchType, "APP_ID":appId, "CRITERIA":criteriaString})
 }
 
-buildGuruURL(criteria) {
+buildGuruURL(searchTerm) {
 	outURL := guruSearchBase
 	
-	return outURL criteria
+	return outURL searchTerm
 }
 
-buildEpicWikiSearchURL(category, criteria) {
+buildEpicWikiSearchURL(category, searchTerm) {
 	outURL := epicWikiSearchBase
-	outURL := replaceTag(outURL, "QUERY", criteria)
+	outURL := replaceTag(outURL, "QUERY", searchTerm)
 	
 	if(category) {
 		category := "'" category "'"

@@ -4,6 +4,12 @@
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
 	Go through warnings that appear when #Warn is enabled in main
+	Update tray icon and global hotkeys to make use of A_IsSuspended instead of a custom "suspended" variable?
+		Remember to retain custom ability somehow with vimBindings
+	Consider making scriptHotkeyType stuff explicitly global
+		On the one hand, more explicit
+		On the other hand, fewer "global"s if we just put it in the place that reads the variable?
+		On the other hand, does it really need to be a super-global?
 	
 # New ideas
 	Add HDR as a thing we can open with ActionObject?

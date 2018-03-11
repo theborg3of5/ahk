@@ -550,3 +550,8 @@ getWindowMonitor(titleString, monitorsAry = "") {
 	
 	return -1
 }
+
+activateWindowUnderMouse() {
+	MouseGetPos, , , winId
+	activateWindow("ahk_id " winId)
+}

@@ -17,15 +17,7 @@ SetScrollLockState, AlwaysOff
 SetNumLockState,    AlwaysOn
 
 ; Standalone scripts. Must be first to execute so they can spin off and be on their own.
-standaloneFolder := A_ScriptDir "\standalone\"
-Run, % standaloneFolder "vimBindings\vimBindings.ahk"
-if(MainConfig.isMachine(MACHINE_EpicLaptop)) { ; Not needed except on Epic machine.
-	Run, % standaloneFolder "killUAC.ahk"
-	Run, % standaloneFolder "tortoiseFillerDLG\tortoiseFillerDLG.ahk"
-	Run, % standaloneFolder "dlgNumTracker\dlgNumTracker.ahk"
-} else if(MainConfig.isMachine(MACHINE_HomeDesktop)) {
-	Run, % standaloneFolder "psxEmulatorController\psxEmulatorController.ahk"
-}
+runStandaloneScripts()
 
 ; === Include other scripts ===
 #Include %A_ScriptDir%\general\ ; General hotkeys.
@@ -69,3 +61,15 @@ if(MainConfig.isMachine(MACHINE_EpicLaptop)) { ; Not needed except on Epic machi
 #Include yEd.ahk
 
 #Include <commonHotkeys> ; Common hotkeys - should last so it overrides anything else.
+
+runStandaloneScripts() {
+	standaloneFolder := A_ScriptDir "\standalone\"
+	Run, % standaloneFolder "vimBindings\vimBindings.ahk"
+	if(MainConfig.isMachine(MACHINE_EpicLaptop)) { ; Not needed except on Epic machine.
+		Run, % standaloneFolder "killUAC.ahk"
+		Run, % standaloneFolder "tortoiseFillerDLG\tortoiseFillerDLG.ahk"
+		Run, % standaloneFolder "dlgNumTracker\dlgNumTracker.ahk"
+	} else if(MainConfig.isMachine(MACHINE_HomeDesktop)) {
+		Run, % standaloneFolder "psxEmulatorController\psxEmulatorController.ahk"
+	}
+}

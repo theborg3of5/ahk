@@ -20,25 +20,18 @@ return
 
 #If !MainConfig.windowIsGame() && !WinActive("ahk_class TscShellContainerClass")
 	XButton1::
-		MouseGetPos, , , winId
-		WinActivate, % "ahk_id " winId
+		activateWindowUnderMouse()
 		
 		; Allow the Ctrl+Tab to be caught and handled by other hotkeys.
-		startSendLevel := A_SendLevel
-		SendLevel, 1
-		Send, ^{Tab}
-		SendLevel, % startSendLevel
+		sendUsingLevel("^{Tab}", 1)
 	return
 	XButton2::
-		MouseGetPos, , , winId
-		WinActivate, % "ahk_id " winId
+		activateWindowUnderMouse()
 		
 		; Allow the Ctrl+Shift+Tab to be caught and handled by other hotkeys.
-		startSendLevel := A_SendLevel
-		SendLevel, 1
-		Send, ^+{Tab}
-		SendLevel, % startSendLevel
+		sendUsingLevel("^+{Tab}", 1)
 	return
+	
 #If
 
 ^!v::

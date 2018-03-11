@@ -97,6 +97,12 @@ getTooltipText() {
 }
 
 
+sendUsingLevel(hotkeyString, level) {
+	startSendLevel := A_SendLevel
+	SendLevel, %level%
+	Send, %hotkeyString%
+	SendLevel, % startSendLevel
+}
 
 clickUsingMode(x = "", y = "", mouseCoordMode = "") {
 	; Store the old mouse position to move back to once we're finished.

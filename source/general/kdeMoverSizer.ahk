@@ -1,5 +1,5 @@
 ; So that this doesn't mess with remote desktop.
-#If !WinActive("ahk_class TscShellContainerClass") && !WinActive("ahk_class RiotWindowClass")
+#If !WinActive("ahk_class TscShellContainerClass") && !MainConfig.windowIsGame()
 
 ;	Internationally known as "KDE Mover-Sizer"							Version 1.3
 ;

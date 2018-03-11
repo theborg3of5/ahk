@@ -62,8 +62,6 @@ class MainConfig {
 	}
 	
 	loadFolders(filePath) {
-		global epicPersonalFolder
-		
 		; Tags that can be used in folders.tl
 		systemTags := []
 		systemTags["AHK_ROOT"]           := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
@@ -130,6 +128,7 @@ class MainConfig {
 			return this.settings
 	}
 	setSetting(settingName, value, saveToFile = false) {
+		global configFolder
 		this.settings[settingName] := value
 		
 		if(saveToFile) {

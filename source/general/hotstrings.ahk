@@ -1,6 +1,6 @@
 ; note to self: this must be in UTF-8 encoding.
 
-#IfWinNotActive, ahk_class RiotWindowClass ; Disable for League.
+#If !MainConfig.windowIsGame()
 { ; Emails.
 	:*:emaila::
 		Send, % USER_EMAIL
@@ -156,33 +156,30 @@
 		sendDateTime("h:mm tt M/d/yy")
 	return
 	
-	; Arbitrary dates, translates
+	; Arbitrary dates/times, translates
 	:*:aidate::
-		date := queryDate()
-		if(date)
-			SendRaw, % date
+		queryDateAndSend()
 	return
 	:*:aiddate::
-		date := queryDate("M/d/yy`, dddd")
-		if(date)
-			SendRaw, % date
+		queryDateAndSend("M/d/yy`, dddd")
 	return
 	:*:adidate::
-		date := queryDate("dddd`, M/d/yy")
+		queryDateAndSend("dddd`, M/d/yy")
+	return
+	queryDateAndSend(format = "M/d/yy") {
+		date := queryDate(format)
 		if(date)
 			SendRaw, % date
-	return
+	}
 	
 	:*:aitime::
+		queryTimeAndSend()
+	return
+	queryTimeAndSend() {
 		time := queryTime()
 		if(time)
 			SendRaw, % time
-	return
-	
-	; Specifics
-	:*:epicmfp::
-		Send, % "epic" getDateTime("yyyyMMdd")
-	return
+	}
 }
 
 { ; URLs.

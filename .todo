@@ -4,7 +4,6 @@
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
 	Go through warnings that appear when #Warn is enabled in main
-	Check whether we have our own min/max functions, possibly replace with new built-in ones (https://autohotkey.com/docs/commands/Math.htm#Min)
 	For standalone scripts, take a look at A_Args to see if it would be cleaner than using %1% and the like (https://autohotkey.com/docs/Variables.htm#Args)
 	Update tray icon and global hotkeys to make use of A_IsSuspended instead of a custom "suspended" variable?
 		Remember to retain custom ability somehow with vimBindings

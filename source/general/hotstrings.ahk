@@ -173,13 +173,11 @@
 	}
 	
 	:*:aitime::
-		queryTimeAndSend()
-	return
-	queryTimeAndSend() {
-		time := queryTime()
-		if(time)
-			SendRaw, % time
-	}
+		queryTimeAndSend() {
+			time := queryTime()
+			if(time)
+				SendRaw, % time
+		}
 }
 
 { ; URLs.

@@ -22,7 +22,7 @@
 	ES New Object Window		EpicStudio.exe		New Object				-						-		-			-			-				CTRL_SHIFT
 	ES Tokenize String		EpicStudio.exe		Tokenize String		-						-		-			-			-				CTRL_SHIFT
 	
-	AHK GUIs						AutoHotkey.exe		AutoHotkeyGUI			-						-		-			-			-				CTRL_SHIFT
+	AHK GUIs						AutoHotkey.exe		AutoHotkeyGUI			-						-		CLOSE		-			-				CTRL_SHIFT
 	
 	; Web popups - close on Escape.
 [{ESC}r:CLOSE]

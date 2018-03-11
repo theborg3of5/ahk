@@ -22,7 +22,7 @@
 	Everything			Everything.exe			EVERYTHING				-				-								Everything\Everything.exe
 	Notepad++			notepad++.exe			Notepad++				-				-								Notepad++\notepad++.exe															-										EPIC_LAPTOP
 	TrueCrypt			TrueCrypt.exe			CustomDlg				-				-								TrueCrypt\TrueCrypt.exe
-	WinSpy				AU3_Spy.exe				-							-				-								AutoHotkey\AU3_Spy.exe
+	WinSpy				AutoHotkey.exe			AutoHotkeyGUI			-				-								AutoHotkey\WindowSpy.ahk
 	yEd					yEd.exe					-							-				-								yWorks\yEd\yEd.exe
 	ProcessExplorer	PROCEXP64.exe			PROCEXPL					-				-								Process Explorer\procexp.exe													-										EPIC_LAPTOP
 	ProcessExplorer	PROCEXP64.exe			PROCEXPL					-				-								ProcessExplorer\procexp.exe

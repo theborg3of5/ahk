@@ -9,6 +9,7 @@
 	; Better hotkey to save clip and put it on the clipboard.
 	^s::
 	Enter::
+	NumPadEnter::
 		Send, +{Escape}
 		WinWaitActive, Copy Properties
 		Send, {Enter}

@@ -34,11 +34,11 @@ runStandaloneScripts()
 #Include excel.ahk
 #Include explorer.ahk
 #Include fastStoneImageViewer.ahk
+#Include games.ahk
 #Include githubDesktop.ahk
 #Include hyperspace.ahk
 #Include kdiff.ahk
 #Include launchy.ahk
-#Include league.ahk
 #Include notepad++.ahk
 #Include onenote.ahk
 #Include outlook.ahk

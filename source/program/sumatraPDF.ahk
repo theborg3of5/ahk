@@ -3,20 +3,15 @@
 	^b::Send, {F12}
 
 	; Vim-like navigation.
-	$`;::
+	$`;::sendUnlessControlFocused("{PgDn}", "Edit2")
+	$p::sendUnlessControlFocused("{PgUp}", "Edit2")
+	sendUnlessControlFocused(keysToSend, unlessControl) {
 		ControlGetFocus, currControl
-		if(currControl != "Edit2")
-			Send, {PgDn}
+		if(currControl != unlessControl)
+			Send, % keysToSend
 		else
-			Send, `;
-	return
-	$p::
-		ControlGetFocus, currControl
-		if(currControl != "Edit2")
-			Send, {PgUp}
-		else
-			Send, p
-	return
+			Send, % A_ThisHotkey
+	}
 
 	; Show/hide toolbar.
 	^/::
@@ -27,14 +22,15 @@
 
 	; Want to close on Esc, but also just unfocus controls at top if focused.
 	Escape::
-		ControlGetFocus, currControl, A
-		if(currControl = "Edit1")
-			Send, {Tab 2}
-		else if(currControl = "Edit2")
-			Send, {Tab}
-		else
-			WinClose
-	return
+		sendEscapeToSumatra() {
+			ControlGetFocus, currControl, A
+			if(currControl = "Edit1")
+				Send, {Tab 2}
+			else if(currControl = "Edit2")
+				Send, {Tab}
+			else
+				WinClose
+		}
 
 	; Kill unconventional hotkey to quit.
 	^q::return

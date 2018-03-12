@@ -8,15 +8,16 @@
 ; Add record window
 #IfWinActive, Add a Record ahk_exe Snapper.exe
 	^Enter::
-		url := getSnapperURLFromAddRecordPopup()
-		if(url) {
-			Send, !c ; Close add record popup (can't use WinClose as that triggers validation on ID field)
-			WinWaitActive, Snapper
-			Run, % url
-		} else {
-			Send, {Enter}
+		addMultipleRecordsToSnapper() {
+			url := getSnapperURLFromAddRecordPopup()
+			if(url) {
+				Send, !c ; Close add record popup (can't use WinClose as that triggers validation on ID field)
+				WinWaitActive, Snapper
+				Run, % url
+			} else {
+				Send, {Enter}
+			}
 		}
-	return
 #IfWinActive
 
 getSnapperURLFromAddRecordPopup() {

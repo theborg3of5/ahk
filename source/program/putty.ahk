@@ -1,29 +1,26 @@
 #IfWinActive, ahk_class PuTTY
 	; Insert arbitrary text, inserting needed spaces to overwrite.
 	^i::
-		; Block and buffer input until {ENTER} is pressed.
-		Input, textIn, , {Enter}
-		
-		; Get the length of the string we're going to add.
-		inputLength := StrLen(textIn)
-		
-		; Insert that many spaces.
-		Send, {Insert %inputLength%}
-		
-		; Actually send our input text.
-		SendRaw, % textIn
-	return
+		insertArbitraryText() {
+			; Block and buffer input until {ENTER} is pressed.
+			Input, textIn, , {Enter}
+			
+			; Get the length of the string we're going to add.
+			inputLength := StrLen(textIn)
+			
+			; Insert that many spaces.
+			Send, {Insert %inputLength%}
+			
+			; Actually send our input text.
+			SendRaw, % textIn
+		}
 	
 	; Normal paste, without all the inserting of spaces.
-	^v::
-		Send, +{Insert}
-	return
+	^v::Send, +{Insert}
 	
 	; Disable breaking behavior for ^c, replace with a harder-to-accidentally-press hotkey.
 	^c::return
-	^+c::
-		Send, ^c
-	return
+	^+c::Send, ^c
 	
 	; ; Paste clipboard, insering spaces to overwrite first.
 	; $!v::
@@ -178,10 +175,11 @@
 	
 	; Open up the current log file.
 	^+o::
-		logFilePath := GetPuttyLogFile()
-		if(logFilePath)
-			Run, % logFilePath
-	return
+		openCurrentLogFile() {
+			logFilePath := GetPuttyLogFile()
+			if(logFilePath)
+				Run, % logFilePath
+		}
 	
 	; Make page up/down actually move a page up/down (each Shift+Up/Down does a half a page).
 	^PgUp::

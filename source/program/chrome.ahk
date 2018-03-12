@@ -9,22 +9,24 @@
 	
 	; Copy title, stripping off the " - Google Chrome" at the end.
 	!c::
-		WinGetActiveTitle, title
-		clipboard := removeStringFromEnd(title, " - Google Chrome")
-	return
+		copyChromeTitle() {
+			WinGetActiveTitle, title
+			clipboard := removeStringFromEnd(title, " - Google Chrome")
+		}
 #IfWinActive
 	
 #If WinActive("ahk_exe chrome.exe") && MainConfig.isMachine(MACHINE_EpicLaptop)
 	^+o::
-		tag := cleanupText(getFirstLineOfSelectedText())
-		
-		WinGetActiveTitle, title
-		title := removeStringFromEnd(title, " - Google Chrome")
-		titleAry := strSplit(title, "/")
-		routine := titleAry[1]
-		if(!routine)
-			return
-		
-		openEpicStudioRoutine(routine, tag)
-	return
+		openEpicStudioRoutineFromCodesearch() {
+			tag := cleanupText(getFirstLineOfSelectedText())
+			
+			WinGetActiveTitle, title
+			title := removeStringFromEnd(title, " - Google Chrome")
+			titleAry := strSplit(title, "/")
+			routine := titleAry[1]
+			if(!routine)
+				return
+			
+			openEpicStudioRoutine(routine, tag)
+		}
 #If

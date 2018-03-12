@@ -131,6 +131,18 @@ matches(compareVars*) {
 	return true
 }
 
+; Maximum of any number of numeric arguments.
+max(nums*) {
+	; DEBUG.popup("Max", "Start", "Nums", nums)
+	max := nums[1]
+	For i,n in nums {
+		if((max = "") || (max < n))
+			max := n
+	}
+	
+	return max
+}
+
 ; Change a pesky pseudoarray into the real deal.
 convertPseudoArrayToObject(arrayName) {
 	; DEBUG.popup("Array name", arrayName, "Matched Count", %arrayName%, "First matched entry", %arrayName%1)

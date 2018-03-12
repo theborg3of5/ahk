@@ -107,28 +107,29 @@
 	
 	; Copy link to page.
 	!c::
-		; Get the link to the current paragraph.
-		Send, +{F10}
-		Sleep, 100
-		Send, p
-		Sleep, 500
-		
-		; Trim off the paragraph-specific part.
-		copiedLink := RegExReplace(clipboard, "&object-id.*")
-		
-		; If there are two links involved (seems to happen with free version of OneNote), keep only the "onenote:" one (second line).
-		if(stringContains(copiedLink, "`n")) {
-			linkAry := StrSplit(copiedLink, "`n")
-			For i,link in linkAry {
-				if(stringContains(link, "onenote:"))
-					linkToUse := link
+		copyOneNoteLink() {
+			; Get the link to the current paragraph.
+			Send, +{F10}
+			Sleep, 100
+			Send, p
+			Sleep, 500
+			
+			; Trim off the paragraph-specific part.
+			copiedLink := RegExReplace(clipboard, "&object-id.*")
+			
+			; If there are two links involved (seems to happen with free version of OneNote), keep only the "onenote:" one (second line).
+			if(stringContains(copiedLink, "`n")) {
+				linkAry := StrSplit(copiedLink, "`n")
+				For i,link in linkAry {
+					if(stringContains(link, "onenote:"))
+						linkToUse := link
+				}
+			} else {
+				linkToUse := copiedLink
 			}
-		} else {
-			linkToUse := copiedLink
+			
+			clipboard := linkToUse
 		}
-		
-		clipboard := linkToUse
-	return
 	
 	; Make a copy of the current page in the Do section.
 	^+m::
@@ -161,9 +162,10 @@
 	
 	; Insert a contact comment.
 	^+8::
-		FormatTime, date, , MM/yy
-		SendRaw, % "*" USER_INITIALS " " date
-	return
+		insertOneNoteContactComment() {
+			FormatTime, date, , MM/yy
+			SendRaw, % "*" USER_INITIALS " " date
+		}
 	
 	; Named functions for which commands are which in the quick access toolbar.
 	oneNoteNewSubpage() {

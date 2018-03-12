@@ -23,29 +23,31 @@
 	{ ; HTML things.
 		; Grab the html, stuff it in a file, and show it in IE for dev tools.
 		^!c::
-			html := getHyperspaceHTML()
-			FileDelete, %localDevHTMLOutputFilePath%
-			FileAppend, %html%, %localDevHTMLOutputFilePath%
-			Run, C:\Program Files\Internet Explorer\iexplore.exe %localDevHTMLOutputFilePath%
+			openHyperspaceHTML() {
+				html := getHyperspaceHTML()
+				FileDelete, %localDevHTMLOutputFilePath%
+				FileAppend, %html%, %localDevHTMLOutputFilePath%
+				Run, C:\Program Files\Internet Explorer\iexplore.exe %localDevHTMLOutputFilePath%
+			}
 		return
 		
-		; With XML debug on - grabs the path to the tempdata folder from the bottom of the screen, opens it.
-		^!o::
-			Send, ^a
-			text := getSelectedText()
-			Loop, Parse, text, `n, `r
-			{
-				; DEBUG.popup(A_LoopField)
-				if(isPath(A_LoopField)) {
-					filePath := A_LoopField
-					break
-				}
-			}
+		; ; With XML debug on - grabs the path to the tempdata folder from the bottom of the screen, opens it.
+		; ^!o::
+			; Send, ^a
+			; text := getSelectedText()
+			; Loop, Parse, text, `n, `r
+			; {
+				; ; DEBUG.popup(A_LoopField)
+				; if(isPath(A_LoopField)) {
+					; filePath := A_LoopField
+					; break
+				; }
+			; }
 			
-			; DEBUG.popup("Found path", filePath)
-			if(filePath)
-				Run, % filePath
-		return
+			; ; DEBUG.popup("Found path", filePath)
+			; if(filePath)
+				; Run, % filePath
+		; return
 	}
 #If
 

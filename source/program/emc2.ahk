@@ -36,50 +36,52 @@
 	{ ; Link and record number things.
 		; Get DLG number from title.
 		!c::
-			getEMC2Info( , id)
-			if(id)
-				clipboard := id
-		return
+			copyEMC2RecordId() {
+				getEMC2Info( , id)
+				if(id)
+					clipboard := id
+			}
 		
 		; Open web version of the current object in EMC2.
 		!w::
-			getEMC2Info(ini, id)
-			link := ActionObject.do(id, TYPE_EMC2, ACTION_Link, ini, SUBACTION_Web)
-			if(link)
-				Run, % link
-		return
+			openEMC2RecordWeb() {
+				getEMC2Info(ini, id)
+				ActionObject.do(id, TYPE_EMC2, ACTION_Run, ini, SUBACTION_Web)
+			}
 		
 		; Take DLG # and pop up the DLG in EpicStudio sidebar.
 		^+o::
-			getEMC2Info(ini, id)
-			if(ini = "DLG" && id)
-				openEpicStudioDLG(id)
-		return
+			openEMC2EpicStudioDLG() {
+				getEMC2Info(ini, id)
+				if(ini = "DLG" && id)
+					openEpicStudioDLG(id)
+			}
 	}
 	
 	; Open all related QANs from an object in EMC2.
 	::openall::
-		Send, {Up}  ; Get back to first row in case they hit enter to submit this.
-		Send, {Tab} ; Reset field if they didn't hit enter.
-		Send, +{Tab}
-		
-		relatedQANsAry := getRelatedQANsAry()
-		; DEBUG.popup("QANs found", relatedQANsAry)
-		
-		urlsAry := buildQANURLsAry(relatedQANsAry)
-		; DEBUG.popup("URLs", urlsAry)
-		
-		numQANs := relatedQANsAry.length()
-		if(numQANs > 10) {
-			MsgBox, 4, Many QANs, We found %numQANs% QANs. Are you sure you want to open them all?
-			IfMsgBox, No
-				return
+		openRelatedQANs() {
+			Send, {Up}  ; Get back to first row in case they hit enter to submit this.
+			Send, {Tab} ; Reset field if they didn't hit enter.
+			Send, +{Tab}
+			
+			relatedQANsAry := getRelatedQANsAry()
+			; DEBUG.popup("QANs found", relatedQANsAry)
+			
+			urlsAry := buildQANURLsAry(relatedQANsAry)
+			; DEBUG.popup("URLs", urlsAry)
+			
+			numQANs := relatedQANsAry.length()
+			if(numQANs > 10) {
+				MsgBox, 4, Many QANs, We found %numQANs% QANs. Are you sure you want to open them all?
+				IfMsgBox, No
+					return
+			}
+			
+			For i,url in urlsAry
+				if(url)
+					Run, % url
 		}
-		
-		For i,url in urlsAry
-			if(url)
-				Run, % url
-	return
 #If
 
 ; Design open

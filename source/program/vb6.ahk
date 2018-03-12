@@ -98,33 +98,35 @@
 	
 	; Code vs. design swap. Note: only works if mini-window within window is maximized within outer window.
 	Pause::
-		WinGetTitle, title
-		StringTrimRight, title, title, 2
-		parenPos := InStr(title, "(")
-		StringTrimLeft, title, title, parenPos
-		
-		if(title = "Code") {
-			Send, +{F7}
-		} else if(title = "Form" || title = "UserControl") {
-			Send, {F7}
+		toggleVB6CodeDesign() {
+			WinGetTitle, title
+			StringTrimRight, title, title, 2
+			parenPos := InStr(title, "(")
+			StringTrimLeft, title, title, parenPos
+			
+			if(title = "Code") {
+				Send, +{F7}
+			} else if(title = "Form" || title = "UserControl") {
+				Send, {F7}
+			}
 		}
-	return
 	
 	; Add basic error handler stuff.
 	^+e::
-		vbGetComboBoxClasses("", procedureComboClass)
-		ControlGet, currentProcedure, List, Selected, %procedureComboClass%
-		; DEBUG.popup("Current procedure", currentProcedure)
-		if(!currentProcedure)
-			MsgBox, No function name found.
-		
-		; Assuming that we're starting in the middle of an empty function.
-		Send, {Tab}On Error Goto Handler{Enter}
-		Send, {Enter}{Backspace}
-		Send, Exit Sub{Enter}
-		Send, Handler:{Enter}
-		Send, {Tab}Call ErrorHandler("%currentProcedure%")
-	return
+		addVB6ErrorHandler() {
+			vbGetComboBoxClasses("", procedureComboClass)
+			ControlGet, currentProcedure, List, Selected, %procedureComboClass%
+			; DEBUG.popup("Current procedure", currentProcedure)
+			if(!currentProcedure)
+				MsgBox, No function name found.
+			
+			; Assuming that we're starting in the middle of an empty function.
+			Send, {Tab}On Error Goto Handler{Enter}
+			Send, {Enter}{Backspace}
+			Send, Exit Sub{Enter}
+			Send, Handler:{Enter}
+			Send, {Tab}Call ErrorHandler("%currentProcedure%")
+		}
 	
 	{ ; GUI-button-based hotkeys.
 		; Comment/uncomment hotkeys.

@@ -20,14 +20,15 @@ return
 #IfWinActive, ahk_exe explorer.exe
 	; Hide/show hidden files. From http://www.autohotkey.com/forum/post-342375.html#342375
 	#h::
-		RegRead, ValorHidden, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden
-		
-		if(ValorHidden = 2) {
-			RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 1
-		} else {
-			RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 2
+		toggleHiddenFiles() {
+			RegRead, ValorHidden, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden
+			
+			if(ValorHidden = 2) {
+				RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 1
+			} else {
+				RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 2
+			}
+			
+			Send, {F5}
 		}
-		
-		Send, {F5}
-	return
 #IfWinActive

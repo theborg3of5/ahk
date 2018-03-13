@@ -22,7 +22,8 @@
 
 	^!Space::Send, {Volume_Down}{Volume_Up} ; Makes Windows 10 media panel show up
 	#j::
-		activateProgram("Spotify")
+		runProgram("Spotify")
+		WinWaitActive, % getWindowTitleString("Spotify")
 		Send, ^l
 	return
 #IfWinExists

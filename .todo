@@ -8,8 +8,6 @@
 	Check out File.* methods for reading from file (https://autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.24.04)
 	
 # New ideas
-	Add dutch/english translation URLs to universal search
-	Disable the EMC2 ctrl+up/down hotkey in designs (and maybe in general)?
 	Add HDR as a thing we can open with ActionObject?
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
 	Audit all scripts for unused hotkeys

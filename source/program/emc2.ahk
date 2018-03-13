@@ -89,6 +89,11 @@
 	^k::
 		clickUsingMode(515, 226, "Client")
 	return
+	
+	; Disable Ctrl+Up/Down hotkeys, never hit these intentionally.
+	^Down::
+	^Up::
+	return
 #If
 
 ; Log mover window

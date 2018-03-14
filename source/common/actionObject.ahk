@@ -3,10 +3,10 @@
 	The programmatic entry point is ActionObject.do().
 */
 
-global TYPE_Unknown := ""
-global TYPE_EMC2    := "EMC2"
+global TYPE_Unknown    := ""
+global TYPE_EMC2       := "EMC2"
 global TYPE_ServerCode := "SERVERCODE"
-global TYPE_Path    := "PATH"
+global TYPE_Path       := "PATH"
 
 global ACTION_Link := "LINK"
 global ACTION_Run  := "RUN"

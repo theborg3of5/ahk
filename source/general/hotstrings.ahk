@@ -108,6 +108,7 @@
 	{ ; Billing
 		:*:col'n::collection
 		:*:coll'n::collection
+		:*:auth'n::authorization
 	}
 }
 	

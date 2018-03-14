@@ -81,9 +81,6 @@ doSelect(filePath, actionType = "", iconPath = "") {
 }
 
 ; GUI Events
-SelectorEscape() {
-	SelectorClose()
-}
 SelectorClose() {
 	Gui, Destroy
 }
@@ -274,7 +271,7 @@ class Selector {
 		; DEBUG.popup("TableList Settings", tableListSettings)
 		tl := new TableList(this.filePath, tableListSettings)
 		if(filter)
-			list := tl.getFilteredTable(filter["COLUMN"], filter["VALUE"], filter["EXCLUDE_BLANKS"])
+			list := tl.getFilteredTable(filter["COLUMN"], filter["VALUE"])
 		else
 			list := tl.getTable()
 		; DEBUG.popup("Filepath", this.filePath, "Parsed List", list, "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows())

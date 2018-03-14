@@ -12,14 +12,12 @@ class SelectorRow {
 	isDebug := false
 	
 	; Constructor.
-	__New(arr = "", name = "", abbrev = "", action = "", addActionToTitle = false) {
+	__New(arr = "", name = "", abbrev = "", action = "") {
 		if(arr) {
 			this.data := arr
 			; DEBUG.popup("Constructing", "SelectorRow", "Input array", arr, "Internal data", this.data)
 		} else {
 			this.data["NAME"] := name
-			if(addActionToTitle)
-				this.data["NAME"] .= " (" action ")"
 			this.data["ABBREV"] := abbrev
 			this.data["DOACTION"] := action
 		}

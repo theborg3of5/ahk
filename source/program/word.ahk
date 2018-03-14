@@ -1,9 +1,7 @@
 ; Word hotkeys.
 #IfWinActive, ahk_class OpusApp
-	; Save as, ctrl shift s.
-	^+s::
-		Send, !fa
-	return
+	; Save as
+	^+s::Send, {F12}
 	
 	; Find next/previous
 	^g::Send, ^{PgDn}

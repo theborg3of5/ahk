@@ -179,3 +179,24 @@ genericLink(subAction) {
 			linkSelectedText(buildEMC2Link(ini, id))
 		}
 	}
+
+; Turn network paths into their drive-mapped equivalents.
+!+p::
+	sendDriveMappedPath() {
+		path := getFirstLineOfSelectedText()
+		if(!path) ; Fall back to clipboard if nothing selected
+			path := clipboard
+		
+		tl := new TableList(Selector.findTrueFilePath("local\mappedDrives.tl"))
+		table := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
+		
+		For i,row in table {
+			if(stringContains(path, row["PATH"])) {
+				path := StrReplace(path, row["PATH"], row["DRIVE_LETTER"] ":", , 1)
+				Break ; Just match the first one.
+			}
+		}
+		; DEBUG.popup("Updated path",path, "Table",table)
+		
+		sendTextWithClipboard(path)
+	}

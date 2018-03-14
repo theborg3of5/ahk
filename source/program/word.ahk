@@ -9,6 +9,9 @@
 	^g::Send, ^{PgDn}
 	^+g::Send, ^{PgUp}
 	
+	; Apply bullets
+	^.::^+l
+	
 	; Jump to next *** token and select it.
 	F2::
 		Send, ^g         ; Find/replace popup (Go To tab)
@@ -23,6 +26,5 @@
 		; If the find popup is still open (presumably because we hit the "finished searching" popup), close it.
 		if(WinActive("Find and Replace"))
 			Send, {Esc}   ; Close the popup
-		
 	return
 #IfWinActive

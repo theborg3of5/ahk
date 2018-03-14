@@ -107,7 +107,7 @@ class Selector {
 		Gui, %guiId%:Default ; GDB TODO if we want to truly run Selectors in parallel, we'll probably need to add guiId as a property and add it to all the Gui* calls.
 		
 		if(filePath) {
-			this.filePath := this.findTrueFilePath(filePath)
+			this.filePath := findTLFilePath(filePath)
 			this.loadChoicesFromFile(tlSettings, filter)
 		}
 		
@@ -241,26 +241,6 @@ class Selector {
 		return tableListSettings
 	}
 	
-	findTrueFilePath(path) {
-		if(!path)
-			return ""
-		
-		; In the current folder, or full path
-		if(FileExist(path))
-			return path
-		
-		; If there's an Includes folder in the same directory, check in there as well.
-		if(FileExist("Includes\" path))
-			return "Includes\" path
-		
-		; Default folder for selector INIs
-		if(FileExist(MainConfig.getFolder("AHK_ROOT") "\config\" path))
-			return MainConfig.getFolder("AHK_ROOT") "\config\" path
-		
-		this.errPop("File doesn't exist", path)
-		return ""
-	}
-	
 	
 	; Load the choices and other such things from a specially formatted file.
 	loadChoicesFromFile(tableListSettings, filter) {
@@ -362,7 +342,7 @@ class Selector {
 		if(settings["ShowDataInputs"]) ; This one can be set in the file too, so don't clear it if it's not passed.
 			this.guiSettings["ShowDataInputs"] := settings["ShowDataInputs"]
 		
-		this.guiSettings["IconPath"] := this.findTrueFilePath(settings["Icon"])
+		this.guiSettings["IconPath"] := settings["Icon"]
 		
 		if(settings["ExtraDataFields"]) {
 			baseLength := forceNumber(this.dataIndices.maxIndex())

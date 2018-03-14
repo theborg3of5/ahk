@@ -108,13 +108,6 @@ sendFolderPath(folderName = "", subPath = "", trailingSlash = true, isUnixPath =
 	Send, % folderPath
 }
 
-appendCharIfMissing(inputString, charToAppend) {
-	if(SubStr(inputString, 0) != charToAppend)
-		inputString .= charToAppend
-	
-	return inputString
-}
-
 selectFolder(folderName = "") {
 	filter := MainConfig.getMachineTableListFilter()
 	s := new Selector("folders.tl", "", filter)
@@ -147,4 +140,24 @@ searchWithEverything(textToSearch) {
 		runPath .= " -search " textToSearch
 	
 	Run, % runPath
+}
+	
+findTLFilePath(path) {
+	if(!path)
+		return ""
+	
+	; In the current folder, or full path
+	if(FileExist(path))
+		return path
+	
+	; If there's an Includes folder in the same directory, check in there as well.
+	if(FileExist("Includes\" path))
+		return "Includes\" path
+	
+	; Default folder for selector INIs
+	if(FileExist(MainConfig.getFolder("AHK_ROOT") "\config\" path))
+		return MainConfig.getFolder("AHK_ROOT") "\config\" path
+	
+	this.errPop("File doesn't exist", path)
+	return ""
 }

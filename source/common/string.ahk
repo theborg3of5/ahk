@@ -341,3 +341,10 @@ removeStringFromEnd(inputString, endingToRemove) {
 	else
 		return inputString
 }
+
+appendCharIfMissing(inputString, charToAppend) {
+	if(SubStr(inputString, 0) != charToAppend)
+		inputString .= charToAppend
+	
+	return inputString
+}

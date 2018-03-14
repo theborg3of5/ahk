@@ -11,7 +11,6 @@
 	Encapsulate scriptHotkeyType stuff in a function?
 		Would mainly set an (explicitly) global variable
 			Would match the read in this way (global declared in function)
-	Move findTrueFilePath to TableList or make it standalone?
 	Add HDR as a thing we can open with ActionObject?
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
 	Audit all scripts for unused hotkeys

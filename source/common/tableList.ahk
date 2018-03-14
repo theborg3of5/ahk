@@ -143,17 +143,18 @@ class TableList {
 	; == Public ====================
 	; ==============================
 	
-	__New(fileName, settings = "") {
-		this.parseFile(fileName, settings)
+	__New(filePath, settings = "") {
+		this.parseFile(filePath, settings)
 	}
 	
-	parseFile(fileName, settings = "") {
-		if(!fileName || !FileExist(fileName))
+	parseFile(filePath, settings = "") {
+		if(!filePath || !FileExist(filePath))
 			return ""
 		
 		this.init(settings)
 		
-		lines := fileLinesToArray(fileName)
+		filePath := findTLFilePath(filePath)
+		lines := fileLinesToArray(filePath)
 		this.parseList(lines)
 		
 		return this.table

@@ -2,8 +2,12 @@
 #IfWinActive, ahk_class OpusApp
 	; Save as, ctrl shift s.
 	^+s::
-		Send !fa
+		Send, !fa
 	return
+	
+	; Find next/previous
+	^g::Send, ^{PgDn}
+	^+g::Send, ^{PgUp}
 	
 	; Jump to next *** token and select it.
 	F2::

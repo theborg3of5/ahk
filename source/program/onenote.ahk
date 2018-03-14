@@ -144,7 +144,7 @@
 		Send, {Down 5}             ; Select first section from first notebook (bypassing "Recent picks" section)
 		Send, !c                   ; Copy button
 		WinWaitClose, Move or Copy Pages
-		Sleep, 1000                ; Wait a second for the new page to appear
+		Sleep, 1500                ; Wait a while for the new page to appear
 		Send, ^{PgDn}              ; Switch to (presumably) new page
 		Send, !3                   ; Demote Subpage (Make Subpage)
 		

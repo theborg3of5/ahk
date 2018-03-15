@@ -3,7 +3,7 @@
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
-scriptHotkeyType := HOTKEY_TYPE_Standalone
+setCommonHotkeysType(HOTKEY_TYPE_Standalone)
 
 ; Set mouseover text for icon
 Menu, Tray, Tip, 

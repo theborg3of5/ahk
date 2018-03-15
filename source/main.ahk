@@ -5,7 +5,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 DetectHiddenWindows, On
 ; #Warn All
 #Include <includeCommon>
-scriptHotkeyType := HOTKEY_TYPE_Master
+setCommonHotkeysType(HOTKEY_TYPE_Master)
 setUpTrayIcons("shellGreen.ico", "shellRed.ico")
 
 ; Turn off caps lock and scroll lock (mainly so we can use them as hotkeys) and force num lock to stay on.

@@ -4,7 +4,7 @@
 	SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	#SingleInstance force
 	#Include <includeCommon>
-	scriptHotkeyType := HOTKEY_TYPE_Standalone
+	setCommonHotkeysType(HOTKEY_TYPE_Standalone)
 	setUpTrayIcons("icons\testGreen.ico", "icons\testRed.ico")
 }
 

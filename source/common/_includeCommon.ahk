@@ -1,6 +1,7 @@
 #Include %A_LineFile%\..
 
 #Include _constants.ahk  ; Constants must be first so that they're available to all other scripts.
+#Include _setup.ahk
 
 #Include actionObject.ahk
 #Include data.ahk
@@ -20,7 +21,6 @@
 #Include string.ahk
 #Include tableList.ahk
 #Include tableListMod.ahk
-#Include tray.ahk
 #Include VA.ahk
 #Include window.ahk
 #Include XInput.ahk

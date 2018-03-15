@@ -1,4 +1,13 @@
-﻿; Simple wrapper to set up needed state array of icons.
+﻿; type should be one of these:
+; 	HOTKEY_TYPE_Standalone - one-off scripts, not connected to master script.
+; 	HOTKEY_TYPE_Master     - the master script.
+; 	HOTKEY_TYPE_SubMaster  - standalone scripts that the master script starts and that run alongside the master script.
+setCommonHotkeysType(type) {
+	global scriptHotkeyType
+	scriptHotkeyType := type
+}
+
+; Simple wrapper to set up needed state array of icons.
 setUpTrayIcons(normalIcon, suspendedIcon) {
 	states                     := []
 	states["A_IsSuspended", 0] := normalIcon

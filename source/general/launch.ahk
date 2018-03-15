@@ -187,7 +187,7 @@ genericLink(subAction) {
 		if(!path) ; Fall back to clipboard if nothing selected
 			path := clipboard
 		
-		tl := new TableList(Selector.findTrueFilePath("local\mappedDrives.tl"))
+		tl := new TableList(findTLFilePath("local\mappedDrives.tl"))
 		table := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
 		
 		For i,row in table {

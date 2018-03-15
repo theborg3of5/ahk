@@ -99,6 +99,8 @@
 		:*:c'o::check-out
 		:*:qai::QA Instructions
 		:*:acc'n::association
+		:*:inf'n::information
+		:*:info'n::information
 		
 		:*:.iai::...I'll allow it
 		:*:iai::I'll allow it

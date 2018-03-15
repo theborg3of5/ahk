@@ -5,7 +5,7 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include <includeCommon>
-scriptHotkeyType := HOTKEY_TYPE_STANDALONE
+scriptHotkeyType := HOTKEY_TYPE_Standalone
 
 rootPath         := reduceFilepath(A_ScriptDir, 1)
 commonFolder     := rootPath "source\common\"

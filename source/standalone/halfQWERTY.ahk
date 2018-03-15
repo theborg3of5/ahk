@@ -3,7 +3,7 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #SingleInstance force
 #Include <includeCommon>
-scriptHotkeyType := HOTKEY_TYPE_STANDALONE
+scriptHotkeyType := HOTKEY_TYPE_Standalone
 
 mirror_1 = 0
 mirror_2 = 9

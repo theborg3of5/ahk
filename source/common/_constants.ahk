@@ -14,16 +14,13 @@ SM_CYMAXIMIZED := 62 ; Height of a maximized window on the primary monitor. Incl
 ; Delimiters and special characters.
 global QUOTES := """"
 
-; Window sizing/positioning
-global TASKBAR_HEIGHT := 30
-
 ; Different sets of common hotkeys
-global HOTKEY_TYPE_STANDALONE := 0
-global HOTKEY_TYPE_MASTER     := 1
-global HOTKEY_TYPE_SUB_MASTER := 2
+global HOTKEY_TYPE_Standalone := 0
+global HOTKEY_TYPE_Master     := 1
+global HOTKEY_TYPE_SubMaster  := 2
 
 ; Title match modes
-global TITLE_MATCH_MODE_START   := 1
-global TITLE_MATCH_MODE_CONTAIN := 2
-global TITLE_MATCH_MODE_EXACT   := 3
+global TITLE_MATCH_MODE_Start   := 1
+global TITLE_MATCH_MODE_Contain := 2
+global TITLE_MATCH_MODE_Exact   := 3
 

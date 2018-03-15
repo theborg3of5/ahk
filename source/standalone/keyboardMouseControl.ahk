@@ -5,7 +5,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 #SingleInstance force  ; Ensures that if this script is running, running it again replaces the first instance.
 #Include <includeCommon>
-scriptHotkeyType := HOTKEY_TYPE_STANDALONE
+scriptHotkeyType := HOTKEY_TYPE_Standalone
 
 ; Setup.
 keyboardControl := false

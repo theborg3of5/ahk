@@ -6,7 +6,7 @@
 	ExitApp
 return
 
-#If scriptHotkeyType = HOTKEY_TYPE_MASTER
+#If scriptHotkeyType = HOTKEY_TYPE_Master
 	; Suspend hotkey, change tray icon too.
 	!#x::
 		Suspend, Toggle
@@ -32,7 +32,7 @@ return
 #If
 
 ; All standalone - both those that main script runs, and one-off scripts
-#If (scriptHotkeyType = HOTKEY_TYPE_SUB_MASTER) || (scriptHotkeyType = HOTKEY_TYPE_STANDALONE)
+#If (scriptHotkeyType = HOTKEY_TYPE_SubMaster) || (scriptHotkeyType = HOTKEY_TYPE_Standalone)
 	; Suspend hotkey (with pass-thru so it applies to all scripts)
 	~!#x::
 		Suspend, Toggle
@@ -54,7 +54,7 @@ return
 
 
 ; One-off scripts
-#If scriptHotkeyType = HOTKEY_TYPE_STANDALONE
+#If scriptHotkeyType = HOTKEY_TYPE_Standalone
 	; Normal exit
 	!+x::ExitApp
 	

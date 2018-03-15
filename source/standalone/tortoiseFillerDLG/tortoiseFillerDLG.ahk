@@ -3,7 +3,7 @@
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
-scriptHotkeyType := HOTKEY_TYPE_SUB_MASTER
+scriptHotkeyType := HOTKEY_TYPE_SubMaster
 setUpTrayIcons("turtle.ico", "turtleRed.ico")
 
 SetTimer, MainLoop, 5000 ; 5s, timer toggled by commonHotkeys' suspend hotkey.

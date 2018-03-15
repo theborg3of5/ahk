@@ -326,7 +326,7 @@ deleteWord(titleString = "A", winSettings = "") {
 ; standard method works, just return that constant. If it's not standard, just do it and then 
 ; return WIN_ACTION_NONE.
 windowMethodSpecial(winSettings = "", action = "") {
-	global TITLE_MATCH_MODE_CONTAIN
+	global TITLE_MATCH_MODE_Contain
 	; DEBUG.popup("windowMethodSpecial","", "Settings",winSettings, "Action",action)
 	
 	if(!action)
@@ -351,7 +351,7 @@ windowMethodSpecial(winSettings = "", action = "") {
 			titleAry.push("Spotify" spotifyTitleBase)
 			titleAry.push("-" spotifyTitleBase)
 			
-			winId := isWindowInState("exists", titleAry, "", TITLE_MATCH_MODE_CONTAIN, "", "On")
+			winId := isWindowInState("exists", titleAry, "", TITLE_MATCH_MODE_Contain, "", "On")
 			WinClose, ahk_id %winId%
 		}
 	}

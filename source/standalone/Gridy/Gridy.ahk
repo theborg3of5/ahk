@@ -7,7 +7,7 @@
 	SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	#SingleInstance force ; Force just one instance, we don't want muliple of this running around.
 	#Include <includeCommon>
-	scriptHotkeyType := HOTKEY_TYPE_STANDALONE
+	scriptHotkeyType := HOTKEY_TYPE_Standalone
 	setUpTrayIcons("Gridy.ico", "GridySuspend.ico")
 }
 

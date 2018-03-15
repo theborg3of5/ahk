@@ -20,7 +20,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include tableListMod.ahk
 #Include tray.ahk
 #Include window.ahk
-scriptHotkeyType := HOTKEY_TYPE_STANDALONE
+scriptHotkeyType := HOTKEY_TYPE_Standalone
 
 ; Various paths needed throughout.
 ahkRootPath    := reduceFilepath(A_ScriptDir, 1)

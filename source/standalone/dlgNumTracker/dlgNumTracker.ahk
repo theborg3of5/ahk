@@ -3,7 +3,7 @@
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
-scriptHotkeyType := HOTKEY_TYPE_SUB_MASTER
+scriptHotkeyType := HOTKEY_TYPE_SubMaster
 setUpTrayIcons("hash.ico", "redHash.ico")
 
 global currDLGId

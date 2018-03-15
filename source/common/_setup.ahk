@@ -1,7 +1,6 @@
-﻿; type should be one of these:
-; 	HOTKEY_TYPE_Standalone - one-off scripts, not connected to master script.
-; 	HOTKEY_TYPE_Master     - the master script.
-; 	HOTKEY_TYPE_SubMaster  - standalone scripts that the master script starts and that run alongside the master script.
+﻿; Sets a global that's read by _commonHotkeys.ahk to decide what kind of 
+; common hotkeys (pause, close, reload, etc.) the script should get.
+; type - the type of hotkeys, as described by a HOTKEY_TYPE_* constant (located in _constants.ahk)
 setCommonHotkeysType(type) {
 	global scriptHotkeyType
 	scriptHotkeyType := type

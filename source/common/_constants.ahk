@@ -15,9 +15,9 @@ SM_CYMAXIMIZED := 62 ; Height of a maximized window on the primary monitor. Incl
 global QUOTES := """"
 
 ; Different sets of common hotkeys
-global HOTKEY_TYPE_Standalone := 0
-global HOTKEY_TYPE_Master     := 1
-global HOTKEY_TYPE_SubMaster  := 2
+global HOTKEY_TYPE_Standalone := 0 ; One-off scripts, not connected to master script
+global HOTKEY_TYPE_Master     := 1 ; Master script
+global HOTKEY_TYPE_SubMaster  := 2 ; Standalone scripts that the master script starts and that run alongside the master script
 
 ; Title match modes
 global TITLE_MATCH_MODE_Start   := 1

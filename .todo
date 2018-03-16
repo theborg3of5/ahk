@@ -6,6 +6,7 @@
 	Go through warnings that appear when #Warn is enabled in main
 	Take another pass through Selector GUI stuff - seems like there's more options for positioning things now (https://autohotkey.com/docs/commands/Gui.htm#PosSize)
 	Check out File.* methods for reading from file (https://autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.24.04)
+	"idate" hotstring isn't working in Excel cells (though the formula bar is fine).
 	
 # New ideas
 	Add HDR as a thing we can open with ActionObject?

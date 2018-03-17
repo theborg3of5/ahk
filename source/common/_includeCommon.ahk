@@ -4,6 +4,7 @@
 #Include _setup.ahk
 
 #Include actionObject.ahk
+#Include commandFunctions.ahk
 #Include data.ahk
 #Include dateTime.ahk
 #Include debug.ahk

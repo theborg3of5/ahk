@@ -9,6 +9,8 @@
 	"idate" hotstring isn't working in Excel cells (though the formula bar is fine).
 	
 # New ideas
+	Update all scripts to use the functional versions of commands that have output variables (functions in common\commandFunctions.ahk)
+		Make sure to get rid of my own wrappers where possible
 	Add HDR as a thing we can open with ActionObject?
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
 	Audit all scripts for unused hotkeys

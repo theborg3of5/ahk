@@ -12,10 +12,10 @@ SetTitleMatchMode, RegEx
 
 MainLoop:
 	WinWaitActive, ^C:\\EpicSource\\\d\.\d\\DLG-(\w+)[-\\].* - Commit - TortoiseSVN
-	ControlGetText, DLG, Edit2
+	DLG := ControlGetText("Edit2")
 	if(DLG = "") {
-		WinGetActiveTitle, Title
-		RegExMatch(Title, "^C:\\EpicSource\\\d\.\d\\DLG-(\w+)[-\\].* - Commit - TortoiseSVN", DLG)
+		title := WinGetActiveTitle()
+		RegExMatch(title, "^C:\\EpicSource\\\d\.\d\\DLG-(\w+)[-\\].* - Commit - TortoiseSVN", DLG)
 		
 		dlgFirstChar := SubStr(DLG1, 1, 1)
 		if(isAlpha(dlgFirstChar)) {

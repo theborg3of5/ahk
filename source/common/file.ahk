@@ -2,7 +2,7 @@
 saveClipboardToFile(filePath = "") {
 	; If no path was given, prompt the user with a popup.
 	if(!filePath)
-		FileSelectFile, filePath, S, %A_ScriptDir%\clips\*.clip, What file should the clipboard be saved to?, *.clip
+		filePath := FileSelectFile("S", A_ScriptDir "\clips\*.clip", "What file should the clipboard be saved to?", "*.clip")
 	if(!filePath)
 		return
 	
@@ -12,7 +12,7 @@ saveClipboardToFile(filePath = "") {
 sendFileWithClipboard(filePath = "") {
 	; If no path was given, prompt the user with a popup.
 	if(!filePath)
-		FileSelectFile, filePath, S, %A_ScriptDir%\clips\*.clip, What file should be sent?
+		filePath := FileSelectFile("S", A_ScriptDir "\clips\*.clip", "What file should be sent?")
 	if(!filePath)
 		return
 	
@@ -32,11 +32,11 @@ sendFileWithClipboard(filePath = "") {
 readFileToClipboard(filePath = "") {
 	; If no path was given, prompt the user with a popup.
 	if(!filePath)
-		FileSelectFile, filePath, S, , What file should be placed on the clipboard?, *.clip
+		filePath := FileSelectFile("S", , "What file should be placed on the clipboard?", "*.clip")
 	if(!filePath)
 		return
 	
-	FileRead, Clipboard, *c %filePath% ; *c = clipboard-format file
+	clipboard := FileRead("*c " filePath) ; *c = clipboard-format file
 	ClipWait, 5, 1
 }
 

@@ -163,7 +163,7 @@
 	; Insert a contact comment.
 	^+8::
 		insertOneNoteContactComment() {
-			FormatTime, date, , MM/yy
+			date := FormatTime(, "MM/yy")
 			SendRaw, % "*" USER_INITIALS " " date
 		}
 	

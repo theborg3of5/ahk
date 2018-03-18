@@ -12,7 +12,7 @@ sendRawWithTabs(input) {
 		{
 			; DEBUG.popup(currLine, "Before currLine", numTabs, "Number of tabs")
 			numTabs++
-			StringTrimLeft, currLine, currLine, 1
+			currLine := StringTrimLeft(currLine, 1)
 			; DEBUG.popup(currLine, "After currLine", numTabs, "Number of tabs")
 		}
 		
@@ -58,15 +58,13 @@ sendTextWithClipboard(text) {
 	Send, ^v
 	Sleep, 100
 	
-	Clipboard := ClipSaved   ; Restore the original clipboard. Note the use of Clipboard (not ClipboardAll).
-	ClipSaved =   ; Free the memory in case the clipboard was very large.
+	clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
 }
 
 ; Runs a command line program and returns the result.
 runAndReturnOutput(command, outputFile = "cmdOutput.tmp") {
 	RunWait, %comspec% /c %command% > %outputFile%,,UseErrorLevel Hide
-	outputFileContents := ""
-	FileRead, outputFileContents, %outputFile%
+	outputFileContents := FileRead(outputFile)
 	FileDelete, %outputFile%
 	
 	if(outputFileContents = "") {
@@ -82,16 +80,16 @@ getTooltipText() {
 	
 	; Allow partial matching on ahk_class. (tooltips_class32, WindowsForms10.tooltips_class32.app.0.2bf8098_r13_ad1 so far)
 	SetTitleMatchMode, RegEx
-	WinGet, winIDs, LIST, ahk_class tooltips_class32
+	winIDs := WinGet("LIST", "ahk_class tooltips_class32")
 	SetTitleMatchMode, 1
 	
 	Loop, %winIDs% {
 		currID := winIDs%A_Index%
-		ControlGetText, tooltipText, , ahk_id %currID%
+		tooltipText := ControlGetText( , "ahk_id %currID%")
 		if(tooltipText != "")
 			outText .= tooltipText "`n"
 	}
-	StringTrimRight, outText, outText, 1
+	outText := StringTrimRight(outText, 1)
 	
 	return outText
 }
@@ -106,7 +104,7 @@ sendUsingLevel(hotkeyString, level) {
 
 clickUsingMode(x = "", y = "", mouseCoordMode = "") {
 	; Store the old mouse position to move back to once we're finished.
-	MouseGetPos, prevX, prevY
+	MouseGetPos(prevX, prevY)
 	
 	; Plug in the new mouse CoordMode.
 	origCoordMode := A_CoordModeMouse

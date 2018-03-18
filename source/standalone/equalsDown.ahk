@@ -15,7 +15,7 @@ Menu, Tray, Tip,
 )
 
 ^r::
-	InputBox, numToSend, Send Equals+Down Keystrokes, Enter how many times to send Equals+Down:
+	numToSend := InputBox("Send Equals+Down Keystrokes", "Enter how many times to send Equals+Down:")
 	if(!numToSend || ErrorLevel)
 		return
 	

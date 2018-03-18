@@ -11,6 +11,16 @@
 # New ideas
 	Update all scripts to use the functional versions of commands that have output variables (functions in common\commandFunctions.ahk)
 		Make sure to get rid of my own wrappers where possible
+		Places to confirm before using:
+			GuiControlGet (gui > getLabelWidthForText)
+			IniRead (don't we have ini.ahk to try out below?)
+			Run (need to analyze a little more vs. my own wrappers)
+			StringReplace
+			SysGet - (probably) broke alt+drag snapping
+	Search over uses of ErrorLevel and make sure we don't lose uses with new functional command replacements.
+	Expand wrapper selection for things like these:
+		WinGetExe
+			ahkExe := WinGet("ProcessName", titleString)
 	Add HDR as a thing we can open with ActionObject?
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
 	Audit all scripts for unused hotkeys

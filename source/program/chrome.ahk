@@ -10,7 +10,7 @@
 	; Copy title, stripping off the " - Google Chrome" at the end.
 	!c::
 		copyChromeTitle() {
-			WinGetActiveTitle, title
+			title := WinGetActiveTitle()
 			clipboard := removeStringFromEnd(title, " - Google Chrome")
 		}
 #IfWinActive
@@ -20,7 +20,7 @@
 		openEpicStudioRoutineFromCodesearch() {
 			tag := cleanupText(getFirstLineOfSelectedText())
 			
-			WinGetActiveTitle, title
+			title := WinGetActiveTitle()
 			title := removeStringFromEnd(title, " - Google Chrome")
 			titleAry := strSplit(title, "/")
 			routine := titleAry[1]

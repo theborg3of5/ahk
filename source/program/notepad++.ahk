@@ -9,10 +9,4 @@
 	return
 	
 	!+x::return
-	
-	; ; Contact comment.
-	; ^+8::
-		; Send, % "  `;*" 
-		; Send, % initials " " getDateTime("M/yy") " - "
-	; return
 #IfWinActive

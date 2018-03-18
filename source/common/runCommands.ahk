@@ -62,7 +62,7 @@ RunCommand(commandToRun = "", stayOpen = false) {
 		For i,c in commandToRun {
 			cmdString .= c A_Space
 		}
-		StringTrimRight, cmdString, cmdString, 1
+		cmdString := StringTrimRight(cmdString, 1)
 	} else {
 		cmdString := commandToRun
 	}

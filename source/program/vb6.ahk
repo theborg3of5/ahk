@@ -99,10 +99,10 @@
 	; Code vs. design swap. Note: only works if mini-window within window is maximized within outer window.
 	Pause::
 		toggleVB6CodeDesign() {
-			WinGetTitle, title
-			StringTrimRight, title, title, 2
+			title := WinGetTitle("A")
+			title := StringTrimRight(title, 2)
 			parenPos := InStr(title, "(")
-			StringTrimLeft, title, title, parenPos
+			title := StringTrimLeft(title, parenPos)
 			
 			if(title = "Code") {
 				Send, +{F7}
@@ -115,7 +115,7 @@
 	^+e::
 		addVB6ErrorHandler() {
 			vbGetComboBoxClasses("", procedureComboClass)
-			ControlGet, currentProcedure, List, Selected, %procedureComboClass%
+			currentProcedure := ControlGet("List", "Selected", procedureComboClass)
 			; DEBUG.popup("Current procedure", currentProcedure)
 			if(!currentProcedure)
 				MsgBox, No function name found.
@@ -151,10 +151,10 @@
 		global USER_INITIALS
 		
 		; Date
-		FormatTime, date, , MM/yy
+		date := FormatTime(, "MM/yy")
 		
 		; DLG - uses VBG title, usually DLG######
-		ControlGetText, projectName, PROJECT1
+		projectName := ControlGetText("PROJECT1")
 		splitName := StrSplit(projectName, A_Space)
 		dlgName := splitName[splitName.MaxIndex()]
 		dlgId := SubStr(dlgName, 4)
@@ -174,10 +174,10 @@
 	
 	; Obtains the classNNs for the two top comboboxes.
 	vbGetComboBoxClasses(ByRef objectComboClass, ByRef procedureComboClass) {
-		WinGet, List, ControlList, A
+		ctlList := WinGet("ControlList", "A")
 		; DEBUG.popup(List, "Control list in window")
 		
-		Loop, Parse, List, `n  ; Rows are delimited by linefeeds (`n).
+		Loop, Parse, ctlList, `n  ; Rows are delimited by linefeeds (`n).
 		{
 			if(InStr(A_LoopField, "ComboBox")) {
 				ControlGetPos, x, y, w, h, %A_LoopField%, A

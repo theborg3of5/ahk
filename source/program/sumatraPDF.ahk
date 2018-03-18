@@ -6,7 +6,7 @@
 	$`;::sendUnlessControlFocused("{PgDn}", "Edit2")
 	$p::sendUnlessControlFocused("{PgUp}", "Edit2")
 	sendUnlessControlFocused(keysToSend, unlessControl) {
-		ControlGetFocus, currControl
+		currControl := ControlGetFocus("A")
 		if(currControl != unlessControl)
 			Send, % keysToSend
 		else
@@ -23,7 +23,7 @@
 	; Want to close on Esc, but also just unfocus controls at top if focused.
 	Escape::
 		sendEscapeToSumatra() {
-			ControlGetFocus, currControl, A
+			currControl := ControlGetFocus("A")
 			if(currControl = "Edit1")
 				Send, {Tab 2}
 			else if(currControl = "Edit2")

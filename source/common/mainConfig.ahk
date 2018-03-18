@@ -222,7 +222,7 @@ class MainConfig {
 	}
 	
 	windowIsGame(titleString := "A") {
-		WinGet, ahkExe, ProcessName, %titleString%
+		ahkExe := WinGet("ProcessName", titleString)
 		if(!ahkExe)
 			return false
 		

@@ -3,7 +3,7 @@
 inputNumber = %1%                                ; Input from command line
 
 if(!inputNumber)
-	InputBox, inputNumber, Search GAL for Mobile Number, Enter a phone number to search in the Global Address List
+	inputNumber := InputBox("Search GAL for Mobile Number", "Enter a phone number to search in the Global Address List")
 
 if(!inputNumber)
 	return

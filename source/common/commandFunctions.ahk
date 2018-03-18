@@ -111,10 +111,10 @@ FormatTime(YYYYMMDDHH24MISS = "", Format = "") {
 	FormatTime, v, %YYYYMMDDHH24MISS%, %Format%
 	Return, v
 }
-GetKeyState(WhichKey , Mode = "") {
-	GetKeyState, v, %WhichKey%, %Mode%
-	Return, v
-}
+; GetKeyState(WhichKey , Mode = "") { ; *gdb - already a function.
+	; GetKeyState, v, %WhichKey%, %Mode%
+	; Return, v
+; }
 GuiControlGet(Subcommand = "", ControlID = "", Param4 = "") {
 	GuiControlGet, v, %Subcommand%, %ControlID%, %Param4%
 	Return, v

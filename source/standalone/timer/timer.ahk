@@ -39,9 +39,9 @@ h := 0
 m := 0
 s := 0
 
-StringGetPos, cPos, commandTime, `:
-StringGetPos, pPos, commandTime, p
-StringGetPos, aPos, commandTime, a
+cPos := StringGetPos(commandTime, "`:")
+pPos := StringGetPos(commandTime, "p")
+aPos := StringGetPos(commandTime, "a")
 
 ; We've been given a time - do the math to figure out how much time.
 if(cPos > -1 || pPos > -1 || aPos > -1){
@@ -49,20 +49,20 @@ if(cPos > -1 || pPos > -1 || aPos > -1){
 	lastChar := Substr(commandTime, 0)
 	if(lastChar = "m"){
 		am_pm := Substr(commandTime, -1, 1)
-		StringTrimRight, commandTime, commandTime, 2
+		commandTime := StringTrimRight(commandTime, 2)
 	} else if(lastChar = "a" || lastChar = "p") {
 		am_pm := lastChar
-		StringTrimRight, commandTime, commandTime, 1
+		commandTime := StringTrimRight(commandTime, 1)
 	}
 	
 	if(cPos > -1){
 		; Time has a colon. At this time, we only support a single colon, no seconds on destination.
-		StringLeft, hs, commandTime, cPos
-		StringTrimLeft, commandTime, commandTime, cPos + 1
+		hs := StringLeft(commandTime, cPos)
+		commandTime := StringTrimLeft(commandTime, cPos + 1)
 		
 		; Assuming minutes are two digits in length if this is a colon'd time.
-		StringLeft, ms, commandTime, 2
-		StringTrimLeft, commandTime, commandTime, 2
+		ms := StringLeft(commandTime, 2)
+		commandTime := StringTrimLeft(commandTime, 2)
 	} else {
 		; Time is in the form 1p or 1PM for 1:00 PM - the hour should be all that's left.
 		hs := commandTime
@@ -94,20 +94,20 @@ if(cPos > -1 || pPos > -1 || aPos > -1){
 	
 } else {
 	; Hours.
-	StringGetPos, hPos, commandTime, h
-	StringLeft, hs, commandTime, hPos
+	hPos := StringGetPos(commandTime, "h")
+	hs := StringLeft(commandTime, hPos)
 	timeLeft += hs * 60 * 60
-	StringTrimLeft, commandTime, commandTime, hPos + 1
+	commandTime := StringTrimLeft(commandTime, hPos + 1)
 	
 	; Minutes.
-	StringGetPos, mPos, commandTime, m
-	StringLeft, ms, commandTime, mPos
+	mPos := StringGetPos(commandTime, "m")
+	ms := StringLeft(commandTime, mPos)
 	timeLeft += ms * 60
-	StringTrimLeft, commandTime, commandTime, mPos + 1
+	commandTime := StringTrimLeft(commandTime, mPos + 1)
 	
 	; Seconds.
-	StringGetPos, sPos, commandTime, s
-	StringLeft, ss, commandTime, sPos
+	sPos := StringGetPos(commandTime, "s")
+	ss := StringLeft(commandTime, sPos)
 	timeLeft += ss
 }
 
@@ -116,17 +116,17 @@ if(cPos > -1 || pPos > -1 || aPos > -1){
 
 
 ; Set up the GUI.
-SysGet, MonArea, MonitorWorkArea
+MonArea := SysGet("MonitorWorkArea")
 showX := MonAreaRight - guiWidth
 showY := MonAreaBottom - 75
 
 ; Get current window, to bring back to the top once we show this.
-WinGetTitle, prevWin, A
+prevWin := WinGetTitle("A")
 
 ; Flesh out the window.
 Gui, Color, %backgroundColor%
 Gui, +Toolwindow -Resize -SysMenu -Border -Caption +AlwaysOnTop +LastFound
-WinGet, guiID, ID
+guiID := WinGet("ID")
 WinSet, Transparent, %transHidden%
 
 Gui, Font, c%timeColor% s40, Consolas

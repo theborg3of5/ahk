@@ -22,8 +22,8 @@
 
 getSnapperURLFromAddRecordPopup() {
 	commId := getCurrentSnapperEnvironment()
-	ControlGetText, ini,    ThunderRT6TextBox1, Add a Record ahk_exe Snapper.exe
-	ControlGetText, idList, ThunderRT6TextBox2, Add a Record ahk_exe Snapper.exe
+	ini := ControlGetText("ThunderRT6TextBox1", "Add a Record ahk_exe Snapper.exe")
+	idList := ControlGetText("ThunderRT6TextBox2", "Add a Record ahk_exe Snapper.exe")
 	
 	if(!commId || !ini || !idList)
 		return ""

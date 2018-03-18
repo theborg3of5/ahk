@@ -3,7 +3,7 @@
 	^i::
 		insertArbitraryText() {
 			; Block and buffer input until {ENTER} is pressed.
-			Input, textIn, , {Enter}
+			textIn := Input(, "{Enter}")
 			
 			; Get the length of the string we're going to add.
 			inputLength := StrLen(textIn)

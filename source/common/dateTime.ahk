@@ -1,15 +1,11 @@
 ; Date and time utility functions.
-getDateTime(format) {
-	FormatTime, var, %dateTimeVar%, %format%
-	return var
-}
 sendDateTime(format) {
-	Send, % getDateTime(format)
+	Send, % FormatTime(, format)
 }
 
 ; Ask the user for a (shortcut) input to translate.
 queryDate(format = "M/d/yy") {
-	InputBox, userIn, Expand date, , , 200, 100
+	userIn := InputBox("Expand date", , , 200, 100)
 	
 	if(userIn != "")
 		date := parseDateTime(userIn, format, "d")
@@ -17,7 +13,7 @@ queryDate(format = "M/d/yy") {
 	return date
 }
 queryTime(format = "h:mm tt") {
-	InputBox, userIn, Expand time, , , 200, 100
+	userIn := InputBox("Expand time", , , 200, 100)
 	
 	if(userIn != "")
 		time := parseDateTime(userIn, format, "t")
@@ -92,7 +88,7 @@ parseDateTime(input, format = "", dateOrTime = "") { ; dateOrTime = "d" for date
 		DEBUG.popup("Error in parseDateTime", "Couldn't choose between date and time", "Input", date)
 	}
 	
-	FormatTime, outStr, %outDateTime%, %format%
+	outStr := FormatTime(outDateTime, format)
 	
 	; DEBUG.popup("parseDateTime", "pre-calculations", "Input", input, "First char", firstChar, "Operator", operator, "Difference", difference, "Date or time", dateOrTime, "Timestamp now", A_Now, "Output timestamp", outDateTime, "Output string", outStr)
 	

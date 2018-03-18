@@ -188,7 +188,7 @@ openEpicStudioDLG(dlgNum) {
 
 doMForLoop() {
 	prompt := "Enter the variables involved in this format: `n`t<LOOP_ARY_NAME>,<ITERATOR1>[,<ITERATOR2>,<ITERATOR3>...]"
-	InputBox, loopInfo, Generate M for loop, %prompt%,  , 500, 145
+	loopInfo := InputBox("Generate M for loop", prompt,  , 500, 145)
 	
 	splitLoopInfo := StrSplit(loopInfo, ",")
 	
@@ -390,7 +390,7 @@ getCurrentSnapperEnvironment() {
 	if(!WinExist(snapperTitleString))
 		return ""
 	
-	ControlGetText, environmentText, ThunderRT6ComboBox2, %snapperTitleString%
+	environmentText := ControlGetText("ThunderRT6ComboBox2", snapperTitleString)
 	textLen  := strLen(environmentText)
 	startPos := stringContains(environmentText, "[") + 1 ; Don't want the bracket itself
 	commId   := subStr(environmentText, startPos, textLen - startPos) ; Cutting off the last char, which should be a "]" (we don't want it)
@@ -468,7 +468,7 @@ getTrueINI(iniString) {
 
 
 getEMC2Info(ByRef ini = "", ByRef id = "", titleString = "A") {
-	WinGetTitle, title, %titleString%
+	title := WinGetTitle(titleString)
 	title := removeStringFromEnd(title, " - EMC2")
 	
 	; If no info available, finish here.

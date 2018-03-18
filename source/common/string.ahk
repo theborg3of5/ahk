@@ -11,7 +11,7 @@ parsePhone(input) {
 	nums := RegExReplace(input, "[^0-9\+]" , "") ; Strip out spaces and other odd chars.
 	nums := RegExReplace(nums, "\+" , "011") ; + becomes country exit code (USA code here)
 	
-	StringLen, len, nums
+	len := StringLen(nums)
 	; DEBUG.popup(input, "Input", nums, "Nums", len, "Len")
 	
 	if(len = 4)  ; Old extension.
@@ -158,7 +158,7 @@ arrayToString(arr, spacesBetween = true, preString = "", postString = "") {
 	}
 	
 	; Take off the last, extraneous space.
-	StringTrimRight, outStr, outStr, 1
+	outStr := StringTrimRight(outStr, 1)
 	
 	return outStr
 }
@@ -185,24 +185,19 @@ stringContainsAnyOf(haystack, needles) {
 	return firstPos
 }
 
-; Wrapper function for "If var Is Alpha" statements.
+; Wrapper function for whether a string is alphabetic.
 isAlpha(str) {
-	If str Is Alpha
-		return true
-	return false
+	return IfIs(str, "Alpha")
 }
 
-; Wrapper function for "If var Is Number" statements.
-isNum(num) {
-	If num Is Number
-		return true
-	return false
+; Wrapper function for whether a string is numeric.
+isNum(str) {
+	return IfIs(str, "Number")
 }
 
+; Wrapper function for whether a string is alphanumeric.
 isAlphaNum(str) {
-	If str Is AlNum
-		return true
-	return false
+	return IfIs(str, "AlNum")
 }
 
 ; Test for casing in a string.
@@ -210,11 +205,9 @@ isCase(string, case = 0) { ; case = STRING_CASE_MIXED
 	if(case = STRING_CASE_MIXED) {
 		return true
 	} else if(case = STRING_CASE_UPPER) {
-		StringUpper, upper, string
-		return (string = upper)
+		return (string = StringUpper(string))
 	} else if(case = STRING_CASE_LOWER) {
-		StringLower, lower, string
-		return (string = lower)
+		return (string = StringLower(string))
 	}
 	
 	return false
@@ -263,7 +256,7 @@ cleanupText(text, additionalStringsToRemove = "") {
 	For i,s in charCodesToRemove {
 		charsToRemove[i] := ""
 		For j,c in s {
-			Transform, newChar, Chr, %c%
+			newChar := Transform("Chr", c)
 			charsToRemove[i] .= newChar
 		}
 	}

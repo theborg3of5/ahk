@@ -36,7 +36,7 @@ return
 		
 		WinGetClass, currClass, A
 		WinGetTitle, currTitle, A
-		currControl := getFocusedControl()
+		currControl := ControlGetFocus("A")
 		tooltipText := getTooltipText()
 		
 		; DEBUG.popup("Class", currClass, "Title", currTitle, "Control", currControl, "Tooltip text", tooltipText)
@@ -71,7 +71,7 @@ return
 		clipboard := currTitle
 	return
 	F9::
-		clipboard := getFocusedControl()
+		clipboard := ControlGetFocus("A")
 	return
 	
 	!XButton1::

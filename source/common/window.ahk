@@ -60,11 +60,11 @@ buildWindowTitleString(exeName = "", winClass = "", winTitle = "") {
 
 ; Returns true if the current window's title contains any of a given array of strings.
 titleContains(haystack) {
-	WinGetActiveTitle, title
+	title := WinGetActiveTitle()
 	return containsAnyOf(title, haystack) > 0
 }
 exeActive(exeName, partialMatch = false) {
-	WinGet, currEXE, ProcessName, A
+	currEXE := WinGet("ProcessName", "A")
 	if(partialMatch)
 		return stringContains(currExe, exeName)
 	else
@@ -148,12 +148,6 @@ restoreMatchSettings(settings) {
 	DetectHiddenWindows, % settings["DETECT_HIDDEN"]
 }
 
-; Get current control in a functional wrapper.
-getFocusedControl(titleString = "A") {
-	ControlGetFocus, outControl, %titleString%
-	return outControl
-}
-
 ; Focus a window, running the program if it doesn't yet exist.
 activateProgram(progName) {
 	waitForHotkeyRelease()
@@ -177,10 +171,10 @@ runProgram(progName) {
 }
 
 getWindowSettingsAry(titleString = "A") {
-	WinGet,      winExe, ProcessName, %titleString%
-	WinGetClass, winClass, %titleString%
-	WinGetTitle, winTitle, %titleString%
-	WinGetText,  winText, %titleString%
+	winExe   := WinGet("ProcessName", titleString)
+	winClass := WinGetClass(titleString)
+	winTitle := WinGetTitle(titleString)
+	winText  := WinGetText(titleString)
 	return MainConfig.getWindow("", winExe, winClass, winTitle, winText)
 }
 getWindowSetting(settingName, titleString = "A") {
@@ -418,11 +412,11 @@ getWindowOffsets(titleString = "A") {
 		offsetsAry["TOP"]    := offsetOverride
 		offsetsAry["BOTTOM"] := offsetOverride
 	} else { ; Calculate it.
-		SysGet, maximizedWidth,    %SM_CXMAXIMIZED% ; For non-3D windows (which should be most), the width of the border on the left and right.
-		SysGet, maximizedHeight,   %SM_CYMAXIMIZED% ; For non-3D windows (which should be most), the width of the border on the top and bottom.
-		SysGet, borderWidthX,      %SM_CXBORDER%    ; Width of a maximized window on the primary monitor. Includes any weird offsets.
-		SysGet, borderWidthY,      %SM_CYBORDER%    ; Height of a maximized window on the primary monitor. Includes any weird offsets.
-		SysGet, primaryMonitorNum, MonitorPrimary   ; We're assuming the taskbar is in the same place on all monitors, which is fine for my purposes.
+		maximizedWidth    := SysGet(SM_CXMAXIMIZED)   ; For non-3D windows (which should be most), the width of the border on the left and right.
+		maximizedHeight   := SysGet(SM_CYMAXIMIZED)   ; For non-3D windows (which should be most), the width of the border on the top and bottom.
+		borderWidthX      := SysGet(SM_CXBORDER)      ; Width of a maximized window on the primary monitor. Includes any weird offsets.
+		borderWidthY      := SysGet(SM_CYBORDER)      ; Height of a maximized window on the primary monitor. Includes any weird offsets.
+		primaryMonitorNum := SysGet("MonitorPrimary") ; We're assuming the taskbar is in the same place on all monitors, which is fine for my purposes.
 		bounds := getMonitorBounds(primaryMonitorNum)
 		
 		; (Maximized size - monitor working area - both borders) / 2
@@ -453,11 +447,11 @@ getMonitorBounds(monitorNum = "", titleString = "") {
 getMonitorBoundsAry() {
 	monitorsAry := []
 	
-	SysGet, numMonitors, MonitorCount
+	numMonitors := SysGet("MonitorCount")
 	Loop, %numMonitors%
 	{
 		; Dimensions of this monitor go in Mon*
-		SysGet, Mon, MonitorWorkArea, %A_Index%
+		Mon := SysGet("MonitorWorkArea", A_Index)
 		
 		mon           := []
 		mon["LEFT"]   := MonLeft
@@ -494,7 +488,7 @@ moveWindowToMonitor(titleString, destMonitor, monitorsAry = "") {
 	; Move the window to the correct monitor.
 	
 	; If the window is maximized, restore it.
-	WinGet, minMaxState, MinMax, %titleString%
+	minMaxState := WinGet("MinMax", titleString)
 	if(minMaxState = 1)
 		WinRestore, %titleString%
 	
@@ -531,8 +525,7 @@ getWindowMonitor(titleString, monitorsAry = "") {
 	winX += offsetsAry["LEFT"] ; The window is wider/taller than it looks by these offsets.
 	winY += offsetsAry["TOP"]
 	
-	WinGet, minMaxState, MinMax, %titleString%
-	if(minMaxState = 1) ; Window is maximized
+	if(WinGet("MinMax", titleString) = 1) ; Window is maximized
 		winX += 1
 	
 	; Iterate over all monitors until we find a match.
@@ -552,6 +545,6 @@ getWindowMonitor(titleString, monitorsAry = "") {
 }
 
 activateWindowUnderMouse() {
-	MouseGetPos, , , winId
+	MouseGetPos( , , winId)
 	activateWindow("ahk_id " winId)
 }

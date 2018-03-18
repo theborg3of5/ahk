@@ -22,7 +22,7 @@
 			if(ErrorLevel)
 				return
 			
-			ControlGet, currFilter, Line, 1, Edit1, A
+			currFilter := ControlGet("Line", 1, "Edit1", "A")
 			if(currFilter) {
 				ControlFocus, Edit1, A
 				return ; There's already something plugged into the field, so just put the focus there in case they want to change it.
@@ -48,7 +48,7 @@
 		if(!isESDebugging()) {
 			WinWait, Attach to Process, , 5
 			if(!ErrorLevel) {
-				ControlGet, currFilter, Line, 1, Edit1, A
+				currFilter := ControlGet("Line", 1, "Edit1", "A")
 				if(!currFilter) {
 					ControlFocus, WindowsForms10.BUTTON.app.0.141b42a_r12_ad11, A
 					ControlSend, WindowsForms10.BUTTON.app.0.141b42a_r12_ad11, {Space}, A
@@ -75,7 +75,7 @@
 	; Link routine to currently open (in object explorer tab) DLG.
 	^+l::
 		linkRoutineToCurrentDLG() {
-			WinGetText, text
+			text := WinGetText()
 			; DEBUG.popup("Window Text", text)
 			
 			Loop, Parse, text, `n

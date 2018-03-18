@@ -107,25 +107,25 @@ else if A_ThisHotkey = space & /
    MirrorKey = z
 else  ; To avoid runtime errors due to invalid var names, do this part last.
 {
-   StringRight, ThisKey, A_ThisHotkey, 1
+   ThisKey := StringRight(A_ThisHotkey, 1)
    StringTrimRight, MirrorKey, mirror_%ThisKey%, 0  ; Retrieve "array" element.
    if MirrorKey =  ; No mirror, script probably needs adjustment.
       return
 }
 
 Modifiers =
-GetKeyState, state1, LWin
-GetKeyState, state2, RWin
+state1 := GetKeyState("LWin")
+state2 := GetKeyState("RWin")
 state = %state1%%state2%
 if state <> UU  ; At least one Windows key is down.
    Modifiers = %Modifiers%#
-GetKeyState, state1, Control
+state1 := GetKeyState("Control")
 if state1 = D
    Modifiers = %Modifiers%^
-GetKeyState, state1, Alt
+state1 := GetKeyState("Alt")
 if state1 = D
    Modifiers = %Modifiers%!
-GetKeyState, state1, Shift
+state1 := GetKeyState("Shift")
 if state1 = D
    Modifiers = %Modifiers%+
 Send %Modifiers%{%MirrorKey%}

@@ -64,7 +64,7 @@ return
 			if(!WinActive("ahk_class Notepad++"))
 				return
 			
-			WinGetActiveTitle, winTitle
+			winTitle := WinGetActiveTitle()
 			if(stringContains(winTitle, A_ScriptFullPath))
 				Reload
 		}

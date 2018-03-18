@@ -42,19 +42,6 @@ reformatPhone(input) {
 	return "(" SubStr(trimmedNums, 1, 3) ") " SubStr(trimmedNums, 4, 3) "-" SubStr(trimmedNums, 7, 4)
 }
 
-; Gives the height of the given text.
-getTextHeight(text) {
-	StringReplace, text, text, `n, `n, UseErrorLevel
-	lines := ErrorLevel + 1
-	
-	lineHeight := 17 ; play with this value
-	
-	height := lines * lineHeight
-	; DEBUG.popup(lines, "Lines", lineHeight, "Line height", height, "Height")
-	
-	return height
-}
-
 ; Gives the specified number of tabs as a string.
 ; Give spacesPerTab > 0 to use spaces instead of true tabs.
 getTabs(i, spacesPerTab = 0) {
@@ -97,8 +84,7 @@ escapeDoubleQuotes(s, num = 2) {
 		num--
 	}
 	
-	StringReplace, s, s, ", %replString%, All		; For syntax highlighting, an ending quote: "
-	return s
+	return StrReplace(s, """", replString, "All")
 }
 
 wrapInQuotes(inputString) {

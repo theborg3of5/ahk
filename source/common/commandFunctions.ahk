@@ -148,8 +148,8 @@ Random(Min = "", Max = "") {
 	Random, v, %Min%, %Max%
 	Return, v
 }
-RegRead(RootKey, SubKey, ValueName = "") {
-	RegRead, v, %RootKey%, %SubKey%, %ValueName%
+RegRead(KeyName, ValueName = "") { ;*gdb updated to use new syntax (merged RootKey and SubKey into KeyName)
+	RegRead, v, %KeyName%, %ValueName%
 	Return, v
 }
 Run(Target, WorkingDir = "", Mode = "") {
@@ -171,10 +171,10 @@ StatusBarGetText(Part = "", WinTitle = "", WinText = "", ExcludeTitle = "", Excl
 SplitPath(ByRef InputVar, ByRef OutFileName = "", ByRef OutDir = "", ByRef OutExtension = "", ByRef OutNameNoExt = "", ByRef OutDrive = "") {
 	SplitPath, InputVar, OutFileName, OutDir, OutExtension, OutNameNoExt, OutDrive
 }
-StringGetPos(ByRef InputVar, SearchText, Mode = "", Offset = "") {
-	StringGetPos, v, InputVar, %SearchText%, %Mode%, %Offset%
-	Return, v
-}
+; StringGetPos(ByRef InputVar, SearchText, Mode = "", Offset = "") { ; *gdb - already a function (InStr)
+	; StringGetPos, v, InputVar, %SearchText%, %Mode%, %Offset%
+	; Return, v
+; }
 StringLeft(ByRef InputVar, Count) {
 	StringLeft, v, InputVar, %Count%
 	Return, v
@@ -191,10 +191,10 @@ StringMid(ByRef InputVar, StartChar, Count , L = "") {
 	StringMid, v, InputVar, %StartChar%, %Count%, %L%
 	Return, v
 }
-StringReplace(ByRef InputVar, SearchText, ReplaceText = "", All = "") {
-	StringReplace, v, InputVar, %SearchText%, %ReplaceText%, %All%
-	Return, v
-}
+; StringReplace(ByRef InputVar, SearchText, ReplaceText = "", All = "") { ; *gdb - already a function (StrReplace)
+	; StringReplace, v, InputVar, %SearchText%, %ReplaceText%, %All%
+	; Return, v
+; }
 StringRight(ByRef InputVar, Count) {
 	StringRight, v, InputVar, %Count%
 	Return, v

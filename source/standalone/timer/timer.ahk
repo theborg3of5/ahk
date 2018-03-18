@@ -39,9 +39,9 @@ h := 0
 m := 0
 s := 0
 
-cPos := StringGetPos(commandTime, "`:")
-pPos := StringGetPos(commandTime, "p")
-aPos := StringGetPos(commandTime, "a")
+cPos := InStr(commandTime, "`:")
+pPos := InStr(commandTime, "p")
+aPos := InStr(commandTime, "a")
 
 ; We've been given a time - do the math to figure out how much time.
 if(cPos > -1 || pPos > -1 || aPos > -1){
@@ -94,19 +94,19 @@ if(cPos > -1 || pPos > -1 || aPos > -1){
 	
 } else {
 	; Hours.
-	hPos := StringGetPos(commandTime, "h")
+	hPos := InStr(commandTime, "h")
 	hs := StringLeft(commandTime, hPos)
 	timeLeft += hs * 60 * 60
 	commandTime := StringTrimLeft(commandTime, hPos + 1)
 	
 	; Minutes.
-	mPos := StringGetPos(commandTime, "m")
+	mPos := InStr(commandTime, "m")
 	ms := StringLeft(commandTime, mPos)
 	timeLeft += ms * 60
 	commandTime := StringTrimLeft(commandTime, mPos + 1)
 	
 	; Seconds.
-	sPos := StringGetPos(commandTime, "s")
+	sPos := InStr(commandTime, "s")
 	ss := StringLeft(commandTime, sPos)
 	timeLeft += ss
 }

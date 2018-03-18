@@ -285,7 +285,7 @@ class TableList {
 			Loop {
 				if(!stringContains(row, delim delim))
 					Break
-				StringReplace, row, row, %delim%%delim%, %delim%
+				row := StrReplace(row, delim delim, delim)
 			}
 			
 			rowBits := StrSplit(row, delim)

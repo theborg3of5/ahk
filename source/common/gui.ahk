@@ -31,7 +31,7 @@ clearTitleFormat() {
 getLabelWidthForText(name, uniqueId) {
 	static ; Assumes-static mode - means that any variables that are used in here are assumed to be static
 	Gui, Add, Text, vVar%uniqueId%, % name
-	GuiControlGet, out, Pos, Var%uniqueId%
+	out := GuiControlGet("Pos", "Var" uniqueId)
 	GuiControl, Hide, Var%uniqueId%
 	
 	return outW

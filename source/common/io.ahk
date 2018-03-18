@@ -50,11 +50,11 @@ getSelectedText() {
 sendTextWithClipboard(text) {
 	; DEBUG.popup("Text to send with clipboard", text)
 	
-	ClipSaved := ClipboardAll   ; Save the entire clipboard to a variable of your choice.
-	Clipboard := "" ; Clear the clipboard
+	originalClipboard := clipboardAll ; Save the entire clipboard to a variable of your choice.
+	clipboard := ""                   ; Clear the clipboard
 	
-	Clipboard := text
-	Sleep, 100
+	clipboard := text
+	ClipWait, 0.5                     ; Wait for clipboard to contain the data we put in it (minimum time).
 	Send, ^v
 	Sleep, 100
 	

@@ -13,8 +13,8 @@
 		Places to confirm before using:
 			IniRead (don't we have ini.ahk to try out below?)
 			Run (need to analyze a little more vs. my own wrappers)
-			SysGet - (probably) broke alt+drag snapping
-		Others that already have functional replacements built in:
+			SysGet - (probably) broke alt+drag snapping, centering hotkey
+		Others that already haveX functional replacements built in:
 			FileGetAttrib (FileExist)
 			StringLeft (SubStr)
 			StringRight (SubStr)

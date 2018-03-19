@@ -16,8 +16,10 @@
 		Send, !d    ; Find tab
 		Send, !n    ; Focus "Find what" field
 		Send, ***   ; String to search for
+		Send, !m    ; More button (show search options)
 		Send, !:    ; Focus "Search" (direction) dropdown
 		Send, A     ; Search "All"
+		Send, !l    ; Less button (hide search options, so More button is there next time we come through too)
 		Send, !f    ; Find next
 		Send, {Esc} ; Get out of the find popup/navigation pane
 		

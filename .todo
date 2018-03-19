@@ -14,7 +14,6 @@
 		Places to confirm before using:
 			IniRead (don't we have ini.ahk to try out below?)
 			Run (need to analyze a little more vs. my own wrappers)
-	Move my own wrappers into a combined file with commandFunctions?
 	Check out enumerator objects for use instead of constants? (https://autohotkey.com/docs/objects/Enumerator.htm)
 	Add HDR as a thing we can open with ActionObject?
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?

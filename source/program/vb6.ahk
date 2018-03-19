@@ -174,7 +174,7 @@
 	
 	; Obtains the classNNs for the two top comboboxes.
 	vbGetComboBoxClasses(ByRef objectComboClass, ByRef procedureComboClass) {
-		ctlList := WinGet("ControlList", "A")
+		WinGet, ctlList, ControlList, A
 		; DEBUG.popup(List, "Control list in window")
 		
 		Loop, Parse, ctlList, `n  ; Rows are delimited by linefeeds (`n).

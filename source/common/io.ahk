@@ -80,7 +80,7 @@ getTooltipText() {
 	
 	; Allow partial matching on ahk_class. (tooltips_class32, WindowsForms10.tooltips_class32.app.0.2bf8098_r13_ad1 so far)
 	SetTitleMatchMode, RegEx
-	winIDs := WinGet("LIST", "ahk_class tooltips_class32")
+	WinGet, winIDs, LIST, ahk_class tooltips_class32
 	SetTitleMatchMode, 1
 	
 	Loop, %winIDs% {

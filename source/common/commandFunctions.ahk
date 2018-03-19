@@ -6,7 +6,7 @@
 		- Version 1.41 <http://www.autohotkey.net/~polyethene/#functions>
 		- Dedicated to the public domain (CC0 1.0) <http://creativecommons.org/publicdomain/zero/1.0/>
 	
-	From:
+	Originally from:
 		- https://autohotkey.com/docs/Functions.htm#lib
 		- https://github.com/Paris/AutoHotkey-Scripts/blob/master/Functions.ahk
 */
@@ -212,6 +212,8 @@ StringUpper(ByRef InputVar, T = "") {
 	Return, v
 }
 SysGet(Subcommand, Param3 = "") {
+	if(Subcommand = "MonitorWorkArea")
+		MsgBox, This command function (SysGet()) does not support this parameter: %Subcommand%
 	SysGet, v, %Subcommand%, %Param3%
 	Return, v
 }
@@ -220,6 +222,8 @@ Transform(Cmd, Value1, Value2 = "") {
 	Return, v
 }
 WinGet(Cmd = "", WinTitle = "", WinText = "", ExcludeTitle = "", ExcludeText = "") {
+	if(Cmd = "List" || Cmd = "ControlList")
+		MsgBox, This command function (WinGet()) does not support this parameter: %Cmd%
 	WinGet, v, %Cmd%, %WinTitle%, %WinText%, %ExcludeTitle%, %ExcludeText%
 	Return, v
 }

@@ -451,7 +451,7 @@ getMonitorBoundsAry() {
 	Loop, %numMonitors%
 	{
 		; Dimensions of this monitor go in Mon*
-		Mon := SysGet("MonitorWorkArea", A_Index)
+		SysGet, Mon, MonitorWorkArea, %A_Index%
 		
 		mon           := []
 		mon["LEFT"]   := MonLeft

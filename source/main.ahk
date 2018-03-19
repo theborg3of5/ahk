@@ -3,7 +3,8 @@
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 DetectHiddenWindows, On
-; #Warn All
+#Warn All                ; Show warnings
+#Warn UseUnsetLocal, Off ; Except for using a not-yet-set local variable, that's what default values are for.
 #Include <includeCommon>
 setCommonHotkeysType(HOTKEY_TYPE_Master)
 setUpTrayIcons("shellGreen.ico", "shellRed.ico")

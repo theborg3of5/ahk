@@ -11,9 +11,9 @@
 		- https://github.com/Paris/AutoHotkey-Scripts/blob/master/Functions.ahk
 */
 
-Functions() {
-	Return, true
-}
+; Functions() { ; *gdb not needed since I'm not using this as a true library file
+	; Return, true
+; }
 
 IfBetween(ByRef var, LowerBound, UpperBound) {
 	If var between %LowerBound% and %UpperBound%

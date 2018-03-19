@@ -14,9 +14,6 @@
 		Places to confirm before using:
 			IniRead (don't we have ini.ahk to try out below?)
 			Run (need to analyze a little more vs. my own wrappers)
-	Expand wrapper selection for things like these:
-		WinGetExe
-			ahkExe := WinGet("ProcessName", titleString)
 	Move my own wrappers into a combined file with commandFunctions?
 	Check out enumerator objects for use instead of constants? (https://autohotkey.com/docs/objects/Enumerator.htm)
 	Add HDR as a thing we can open with ActionObject?

@@ -12,7 +12,7 @@ sendRawWithTabs(input) {
 		{
 			; DEBUG.popup(currLine, "Before currLine", numTabs, "Number of tabs")
 			numTabs++
-			currLine := StringTrimLeft(currLine, 1)
+			currLine := SubStr(currLine, 2)
 			; DEBUG.popup(currLine, "After currLine", numTabs, "Number of tabs")
 		}
 		
@@ -89,7 +89,7 @@ getTooltipText() {
 		if(tooltipText != "")
 			outText .= tooltipText "`n"
 	}
-	outText := StringTrimRight(outText, 1)
+	outText := SubStr(outText, 1, StrLen(outText) - 1)
 	
 	return outText
 }

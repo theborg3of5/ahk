@@ -107,7 +107,7 @@ else if A_ThisHotkey = space & /
    MirrorKey = z
 else  ; To avoid runtime errors due to invalid var names, do this part last.
 {
-   ThisKey := StringRight(A_ThisHotkey, 1)
+	ThisKey := SubStr(A_ThisHotkey, StrLen(A_ThisHotkey), 1)
    StringTrimRight, MirrorKey, mirror_%ThisKey%, 0  ; Retrieve "array" element.
    if MirrorKey =  ; No mirror, script probably needs adjustment.
       return

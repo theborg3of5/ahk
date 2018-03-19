@@ -14,15 +14,6 @@
 		Places to confirm before using:
 			IniRead (don't we have ini.ahk to try out below?)
 			Run (need to analyze a little more vs. my own wrappers)
-		Others that already haveX functional replacements built in:
-			FileGetAttrib (FileExist)
-			StringLeft (SubStr)
-			StringRight (SubStr)
-			StringLen (StrLen)
-			StringMid (SubStr)
-			StringSplit (StrSplit)
-			StringTrimLeft (SubStr)
-			StringTrimRight (SubStr)
 	Search over uses of ErrorLevel and make sure we don't lose uses with new functional command replacements.
 	Expand wrapper selection for things like these:
 		WinGetExe

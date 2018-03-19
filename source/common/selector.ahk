@@ -592,7 +592,7 @@ class Selector {
 			; Special case: +d{Space}choice is debug action, which will copy/popup the result of the action.
 			} else if(commandChar = this.chars["COMMANDS", "DEBUG"]) {
 				; Peel off the d + space, and run it through this function again.
-				userIn := StringTrimLeft(rest, 2)
+				userIn := SubStr(rest, 3)
 				rowToDo := this.parseChoice(userIn)
 				if(rowToDo)
 					rowToDo.isDebug := true

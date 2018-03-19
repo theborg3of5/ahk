@@ -11,7 +11,7 @@ parsePhone(input) {
 	nums := RegExReplace(input, "[^0-9\+]" , "") ; Strip out spaces and other odd chars.
 	nums := RegExReplace(nums, "\+" , "011") ; + becomes country exit code (USA code here)
 	
-	len := StringLen(nums)
+	len := StrLen(nums)
 	; DEBUG.popup(input, "Input", nums, "Nums", len, "Len")
 	
 	if(len = 4)  ; Old extension.
@@ -144,7 +144,7 @@ arrayToString(arr, spacesBetween = true, preString = "", postString = "") {
 	}
 	
 	; Take off the last, extraneous space.
-	outStr := StringTrimRight(outStr, 1)
+	outStr := SubStr(outStr, 1, StrLen(outStr) - 1)
 	
 	return outStr
 }
@@ -271,7 +271,7 @@ cleanupText(text, additionalStringsToRemove = "") {
 		index := containsAnyOf(text, charsToRemove, CONTAINS_END) ; End of string
 		if(index) {
 			needle := escapeRegExChars(charsToRemove[index])
-			text := RegExReplace(text, needle, "", , 1, strlen(text) - strlen(needle)) ; Get only the last replaceable one.
+			text := RegExReplace(text, needle, "", , 1, StrLen(text) - StrLen(needle)) ; Get only the last replaceable one.
 			isClean := false
 		}
 		
@@ -312,8 +312,8 @@ replaceTag(inputString, tagName, replacement) {
 }
 
 removeStringFromEnd(inputString, endingToRemove) {
-	inputLen  := strLen(inputString)
-	endingLen := strLen(endingToRemove)
+	inputLen  := StrLen(inputString)
+	endingLen := StrLen(endingToRemove)
 	
 	if(subStr(inputString, inputLen - endingLen + 1) = endingToRemove)
 		return subStr(inputString, 1, inputLen - endingLen)

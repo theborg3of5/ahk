@@ -100,9 +100,9 @@
 	Pause::
 		toggleVB6CodeDesign() {
 			title := WinGetTitle("A")
-			title := StringTrimRight(title, 2)
+			title := SubStr(title, 1, StrLen(title) - 2)
 			parenPos := InStr(title, "(")
-			title := StringTrimLeft(title, parenPos)
+			title := SubStr(title, parenPos + 1)
 			
 			if(title = "Code") {
 				Send, +{F7}

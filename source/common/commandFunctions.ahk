@@ -72,10 +72,10 @@ EnvGet(EnvVarName) {
 	EnvGet, v, %EnvVarName%
 	Return, v
 }
-FileGetAttrib(Filename = "") {
-	FileGetAttrib, v, %Filename%
-	Return, v
-}
+; FileGetAttrib(Filename = "") { ; Use FileExist() instead
+	; FileGetAttrib, v, %Filename%
+	; Return, v
+; }
 FileGetShortcut(LinkFile, ByRef OutTarget = "", ByRef OutDir = "", ByRef OutArgs = "", ByRef OutDescription = "", ByRef OutIcon = "", ByRef OutIconNum = "", ByRef OutRunState = "") {
 	FileGetShortcut, %LinkFile%, OutTarget, OutDir, OutArgs, OutDescription, OutIcon, OutIconNum, OutRunState
 }
@@ -175,38 +175,38 @@ SplitPath(ByRef InputVar, ByRef OutFileName = "", ByRef OutDir = "", ByRef OutEx
 	; StringGetPos, v, InputVar, %SearchText%, %Mode%, %Offset%
 	; Return, v
 ; }
-StringLeft(ByRef InputVar, Count) {
-	StringLeft, v, InputVar, %Count%
-	Return, v
-}
-StringLen(ByRef InputVar) {
-	StringLen, v, InputVar
-	Return, v
-}
+; StringLeft(ByRef InputVar, Count) { ; Use SubStr instead
+	; StringLeft, v, InputVar, %Count%
+	; Return, v
+; }
+; StringLen(ByRef InputVar) { ; Use StrLen instead
+	; StringLen, v, InputVar
+	; Return, v
+; }
 StringLower(ByRef InputVar, T = "") {
 	StringLower, v, InputVar, %T%
 	Return, v
 }
-StringMid(ByRef InputVar, StartChar, Count , L = "") {
-	StringMid, v, InputVar, %StartChar%, %Count%, %L%
-	Return, v
-}
+; StringMid(ByRef InputVar, StartChar, Count , L = "") { ; Use SubStr instead
+	; StringMid, v, InputVar, %StartChar%, %Count%, %L%
+	; Return, v
+; }
 ; StringReplace(ByRef InputVar, SearchText, ReplaceText = "", All = "") { ; *gdb - already a function (StrReplace)
 	; StringReplace, v, InputVar, %SearchText%, %ReplaceText%, %All%
 	; Return, v
 ; }
-StringRight(ByRef InputVar, Count) {
-	StringRight, v, InputVar, %Count%
-	Return, v
-}
-StringTrimLeft(ByRef InputVar, Count) {
-	StringTrimLeft, v, InputVar, %Count%
-	Return, v
-}
-StringTrimRight(ByRef InputVar, Count) {
-	StringTrimRight, v, InputVar, %Count%
-	Return, v
-}
+; StringRight(ByRef InputVar, Count) { ; Use SubStr instead
+	; StringRight, v, InputVar, %Count%
+	; Return, v
+; }
+; StringTrimLeft(ByRef InputVar, Count) { ; Use SubStr instead
+	; StringTrimLeft, v, InputVar, %Count%
+	; Return, v
+; }
+; StringTrimRight(ByRef InputVar, Count) { ; Use SubStr instead
+	; StringTrimRight, v, InputVar, %Count%
+	; Return, v
+; }
 StringUpper(ByRef InputVar, T = "") {
 	StringUpper, v, InputVar, %T%
 	Return, v

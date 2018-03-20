@@ -40,7 +40,7 @@
 			CoordMode - set the ones we want to use, explicitly
 		Tray - to make main script (and all standalone scripts) have a consistent tray menu
 			Probably similar to what I did in my own share scripts?
-		
+	Set up remote git server on CowBox, that local config files can live on and be synchronized to?
 	
 # Scripts to Share
 

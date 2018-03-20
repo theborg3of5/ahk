@@ -3,10 +3,11 @@
 	The programmatic entry point is ActionObject.do().
 */
 
-global TYPE_Unknown    := ""
-global TYPE_EMC2       := "EMC2"
-global TYPE_ServerCode := "SERVERCODE"
-global TYPE_Path       := "PATH"
+global TYPE_Unknown           := ""
+global TYPE_EMC2              := "EMC2"
+global TYPE_EpicStudio        := "EPICSTUDIO"
+global TYPE_CodeSearchRoutine := "CODESEARCHROUTINE"
+global TYPE_Path              := "PATH"
 
 global ACTION_Link := "LINK"
 global ACTION_Run  := "RUN"
@@ -154,25 +155,22 @@ class ActionObject {
 					Run, % input
 				}
 				
-			} else if(type = TYPE_ServerCode) {
-				if(subAction = SUBACTION_Edit) {
-					splitServerLocation(input, routine, tag)
-					openEpicStudioRoutine(routine, tag)
-				} else if(subAction = SUBACTION_View || subAction = SUBACTION_Web) {
-					link := this.perform(type, ACTION_Link, subType, subAction, input)
-					if(link)
-						Run, % link
-				}
+			} else if(type = TYPE_EpicStudio) {
+				splitServerLocation(input, routine, tag)
+				openEpicStudioRoutine(routine, tag)
+				
+			} else if(type = TYPE_CodeSearchRoutine) {
+				link := this.perform(type, ACTION_Link, subType, subAction, input)
+				if(link)
+					Run, % link
 			}
 			
 		} else if(action = ACTION_Link) {
 			if(type = TYPE_EMC2) {
 				return buildEMC2Link(subType, input, subAction)
-			} else if(type = TYPE_ServerCode) {
-				; subAction = SUBACTION_Edit doesn't apply here - we can't get a link to EpicStudio.
-				if(subAction = SUBACTION_View || subAction = SUBACTION_Web) {
-					return buildServerCodeLink(input)
-				}
+				
+			} else if(type = TYPE_CodeSearchRoutine) {
+				return buildServerCodeLink(input)
 			}
 			
 		}

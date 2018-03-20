@@ -10,7 +10,7 @@
 		if(currControl != unlessControl)
 			Send, % keysToSend
 		else
-			Send, % A_ThisHotkey
+			Send, % getCleanHotkeyString(A_ThisHotkey)
 	}
 
 	; Show/hide toolbar.

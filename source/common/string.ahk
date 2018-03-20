@@ -298,6 +298,10 @@ appendLine(baseText, textToAdd) {
 	return updatedString
 }
 
+getCleanHotkeyString(hotkeyString) {
+	return cleanupText(hotkeyString, ["$", "*", "<", ">", "~"])
+}
+
 replaceTags(inputString, tagNamesAry) {
 	outputString := inputString
 	

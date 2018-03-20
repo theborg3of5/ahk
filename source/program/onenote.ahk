@@ -33,36 +33,29 @@
 	
 	{ ; Navigation.
 		; Modded ctrl+tab, etc. hotkeys.
-		$XButton1::
-		^Tab::
-			Send, ^{PgDn}
-		return
-		$XButton2::
-		^+Tab::
-			Send, ^{PgUp}
-		return
-		^PgDn::
-			Send, ^{Tab}
-		return
-		^PgUp::
-			Send, ^+{Tab}
-		return
+		XButton1::Send, ^{PgDn}
+		^Tab::    Send, ^{PgDn}
+		XButton2::Send, ^{PgUp}
+		^+Tab::   Send, ^{PgUp}
+		
+		^PgDn::Send, ^{Tab}
+		^PgUp::Send, ^+{Tab}
 		
 		; Expand and collapse outlines.
-		$!Left::
-			Send, !+-
+		!Left::!+-
+		!Right::!+=
+		^t::
+			Send, ^{Home}
+			Send, !+3 ; Only today (level 3)
 		return
-		$!Right::
-			Send, !+=
+		^+t::
+			Send, ^{Home}
+			Send, !+4 ; Items for all sections (level 4)
 		return
 		
 		; Replacement history back/forward.
-		!+Left::
-			Send, !{Left}
-		return
-		!+Right::
-			Send, !{Right}
-		return
+		!+Left:: Send, !{Left}
+		!+Right::Send, !{Right}
 	}
 	
 	{ ; Content/formatting modifiers.
@@ -73,12 +66,8 @@
 		return
 		
 		; Make line movement alt + up/down instead of alt + shift + up/down to match notepad++ and ES.
-		!Up::
-			Send, !+{Up}
-		return
-		!Down::
-			Send, !+{Down}
-		return
+		!Up::  Send, !+{Up}
+		!Down::Send, !+{Down}
 		
 		; 'Normal' text formatting, as ^+n is already being used for new subpage.
 		^!n::
@@ -94,16 +83,12 @@
 	}
 	
 	; Disable ^t hotkey making a new section
-	^t::return
+	; ^t::return ; Used for collapsing/expanding above
 	
 	; Sync This Notebook Now
-	^s::
-		Send, +{F9}
-	return
+	^s::Send, +{F9}
 	; Sync All Notebooks Now
-	^+s::
-		Send, {F9}
-	return
+	^+s::Send, {F9}
 	
 	; Copy link to page.
 	!c::

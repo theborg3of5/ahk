@@ -20,7 +20,6 @@
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
 	Go through pukkandan's startup script (https://github.com/pukkandan/My-Startup-Script) and pull out anything interesting
 		Lib
-			INI - for my own INI reading/writing needs
 			Toast - for displaying info with some hotkeys. Could be good for long-running stuff (like firstSetup)
 		WinSizer - as a replacement/cross-pollination for KDE mover-sizer
 		Tray - to make main script (and all standalone scripts) have a consistent tray menu

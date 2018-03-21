@@ -25,7 +25,6 @@
 		WinSizer - as a replacement/cross-pollination for KDE mover-sizer
 		Directives - could be good to set some default settings for hotstrings and the like
 			Move our directives into a file called directives.ahk?
-			#Hotstring - default hotstring settings (his defaults: * ? B C K0 Z)
 			#LTrim Off - don't left-trim continuation sections (like text that spans lines)
 			#MenuMaskKey - what's this do? (he uses "{Ctrl}")
 			Process, Priority, , R (high process priority)

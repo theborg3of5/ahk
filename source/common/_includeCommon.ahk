@@ -13,6 +13,7 @@
 #Include file.ahk
 #Include gui.ahk
 #Include HTTPRequest.ahk
+#Include iniObject.ahk
 #Include io.ahk
 #Include mainConfig.ahk
 #Include runCommands.ahk

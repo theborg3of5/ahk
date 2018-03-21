@@ -41,7 +41,8 @@ class MainConfig {
 		return settingsAry
 	}
 	loadSettingFromFile(filePath, configName) {
-		IniRead, value, %filePath%, Main, %configName%
+		iniObj := new IniObject(filePath)
+		value := iniObj.get("Main", configName)
 		; DEBUG.popup("Filepath", filePath, "Config name", configName, "Value", value)
 		
 		; Multi-entry value, put into an array.
@@ -127,25 +128,9 @@ class MainConfig {
 		else
 			return this.settings
 	}
-	setSetting(settingName, value, saveToFile = false) {
+	setSetting(settingName, value) {
 		global configFolder
 		this.settings[settingName] := value
-		
-		if(saveToFile) {
-			; If it's an array, turn it into a delimited string to write it to the file.
-			if(isObject(value)) {
-				For i,v in value {
-					if(i > 1)
-						valToWrite .= this.multiDelim
-					
-					valToWrite .= v
-				}
-			} else {
-				valToWrite := value
-			}
-			
-			IniWrite, %valToWrite%, %configFolder%\settings.tl, Main, %settingName%
-		}
 	}
 	
 	getWindow(name = "", exe = "", ahkClass = "", title = "", text = "") {

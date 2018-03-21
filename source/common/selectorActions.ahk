@@ -82,46 +82,6 @@ REG_WRITE(actionRow) {
 	RegWrite, %keyType%, %rootKey%, %regFolder%, %keyName%, %keyValue%
 }
 
-; Change a value in an ini file.
-INI_WRITE(actionRow) {
-	offStrings := ["o", "f", "off", "0"]
-	
-	if(actionRow.data["FILE"]) {
-		file := actionRow.data["FILE"]
-		sect := actionRow.data["SECTION"]
-		key  := actionRow.data["KEY"]
-		val  := actionRow.data["VALUE"]
-		
-	; Special debug case - key from name, value from arbitrary end.
-	} else {
-		file := actionRow.data["KEY"]
-		sect := actionRow.data["VALUE"]
-		key  := actionRow.data["NAME"]
-		val  := !contains(offStrings, actionRow.userInput)
-	}
-	
-	actionRow.debugResult := {"File":file, "Section":sect, "Key":key, "Value":val}
-	if(actionRow.isDebug)
-		return
-	
-	if(!val) ; Came from post-pended arbitrary piece.
-		IniDelete, %file%, %sect%, %key%
-	else
-		IniWrite,  %val%,  %file%, %sect%, %key%
-}
-
-; Updates specific settings out of the main script's configuration file, then reloads it.
-UPDATE_AHK_SETTINGS(actionRow) {
-	global MAIN_CENTRAL_SCRIPT
-	INI_WRITE(actionRow) ; Has its own debug handling.
-	
-	if(actionRow.isDebug)
-		return
-	
-	; Also reload the script to reflect the updated settings.
-	reloadScript(MAIN_CENTRAL_SCRIPT, true)
-}
-
 
 ; == Open specific programs / send built strings ==
 ; Run Hyperspace.

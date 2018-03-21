@@ -7,6 +7,7 @@ global TYPE_Unknown           := ""
 global TYPE_EMC2              := "EMC2"
 global TYPE_EpicStudio        := "EPICSTUDIO"
 global TYPE_CodeSearchRoutine := "CODESEARCHROUTINE"
+global TYPE_Helpdesk          := "HELPDESK"
 global TYPE_Path              := "PATH"
 
 global ACTION_Link := "LINK"
@@ -140,7 +141,7 @@ class ActionObject {
 			return
 		
 		if(action = ACTION_Run) {
-			if(type = TYPE_EMC2) {
+			if(type = TYPE_EMC2 || type = TYPE_CodeSearchRoutine || type = TYPE_Helpdesk) {
 				link := this.perform(type, ACTION_Link, subType, subAction, input)
 				if(link)
 					Run, % link
@@ -158,11 +159,6 @@ class ActionObject {
 			} else if(type = TYPE_EpicStudio) {
 				splitServerLocation(input, routine, tag)
 				openEpicStudioRoutine(routine, tag)
-				
-			} else if(type = TYPE_CodeSearchRoutine) {
-				link := this.perform(type, ACTION_Link, subType, subAction, input)
-				if(link)
-					Run, % link
 			}
 			
 		} else if(action = ACTION_Link) {
@@ -171,6 +167,9 @@ class ActionObject {
 				
 			} else if(type = TYPE_CodeSearchRoutine) {
 				return buildServerCodeLink(input)
+				
+			} else if(type = TYPE_Helpdesk) {
+				return buildHelpdeskLink(input)
 			}
 			
 		}

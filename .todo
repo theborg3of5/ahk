@@ -7,6 +7,9 @@
 	Check out File.* methods for reading from file (https://autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.24.04)
 	"idate" hotstring isn't working in Excel cells (though the formula bar is fine).
 	Rewrite halfQwerty so it works and makes more sense
+	Add HDR as a thing we can open with ActionObject?
+		Selector issue - stuff passed in as defaultOverrides, overrides the choice even when the relevant field is not visible.
+			We should only actually override values (that are populated by the choice) that are visible to the user.
 	
 # New ideas
 	Update all scripts to use the functional versions of commands that have output variables (functions in common\commandFunctions.ahk)
@@ -14,7 +17,6 @@
 			IniRead (don't we have ini.ahk to try out below?)
 			Run (need to analyze a little more vs. my own wrappers)
 	Check out enumerator objects for use instead of constants? (https://autohotkey.com/docs/objects/Enumerator.htm)
-	Add HDR as a thing we can open with ActionObject?
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
 	Audit all scripts for unused hotkeys
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?

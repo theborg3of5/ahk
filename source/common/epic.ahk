@@ -363,6 +363,11 @@ buildServerCodeLink(serverLocation) {
 	return url
 }
 
+buildHelpdeskLink(hdrId) {
+	; global helpdeskLinkBase
+	return replaceTag(helpdeskLinkBase, "ID", hdrId)
+}
+
 ; iteratorsAry is array of variables to loop in nested for loops, in top-down order.
 buildMForLoopString(loopAryName, iteratorsAry) {
 	; DEBUG.popup("Loop array name", loopAryName, "Iterators array", iteratorsAry)

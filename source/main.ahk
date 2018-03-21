@@ -5,7 +5,10 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 DetectHiddenWindows, On
 #Warn All                ; Show warnings
 #Warn UseUnsetLocal, Off ; Except for using a not-yet-set local variable, that's what default values are for.
+#LTrim                   ; Trim whitespace from left of continuation sections (so they can be indented as I wish).
 #Include <includeCommon>
+SetTitleMatchMode, % TITLE_MATCH_MODE_Contain
+
 setCommonHotkeysType(HOTKEY_TYPE_Master)
 setUpTrayIcons("shellGreen.ico", "shellRed.ico")
 

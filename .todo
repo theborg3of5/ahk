@@ -25,8 +25,6 @@
 		WinSizer - as a replacement/cross-pollination for KDE mover-sizer
 		Directives - could be good to set some default settings for hotstrings and the like
 			Move our directives into a file called directives.ahk?
-			#LTrim Off - don't left-trim continuation sections (like text that spans lines)
-			#MenuMaskKey - what's this do? (he uses "{Ctrl}")
 			Process, Priority, , R (high process priority)
 			SetBatchLines, -1 				;Never sleep for best performance
 			SetKeyDelay, 0, 0 				;Smallest possible delay
@@ -34,7 +32,6 @@
 			SetDefaultMouseSpeed, 0 		;Move the mouse instantly
 			SetWinDelay, 0 					;Smallest possible delay
 			SetControlDelay, 0 				;Smallest possible delay
-			;;StringCaseSense,Off			;Strings are not case-sensitive (DEFAULT?)
 			SetTitleMatchMode - set this explicitly at beginning? (to 2 I think, but use constant)
 			CoordMode - set the ones we want to use, explicitly
 		Tray - to make main script (and all standalone scripts) have a consistent tray menu

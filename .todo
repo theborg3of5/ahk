@@ -23,17 +23,6 @@
 			INI - for my own INI reading/writing needs
 			Toast - for displaying info with some hotkeys. Could be good for long-running stuff (like firstSetup)
 		WinSizer - as a replacement/cross-pollination for KDE mover-sizer
-		Directives - could be good to set some default settings for hotstrings and the like
-			Move our directives into a file called directives.ahk?
-			Process, Priority, , R (high process priority)
-			SetBatchLines, -1 				;Never sleep for best performance
-			SetKeyDelay, 0, 0 				;Smallest possible delay
-			SetMouseDelay, 0 				;Smallest possible delay
-			SetDefaultMouseSpeed, 0 		;Move the mouse instantly
-			SetWinDelay, 0 					;Smallest possible delay
-			SetControlDelay, 0 				;Smallest possible delay
-			SetTitleMatchMode - set this explicitly at beginning? (to 2 I think, but use constant)
-			CoordMode - set the ones we want to use, explicitly
 		Tray - to make main script (and all standalone scripts) have a consistent tray menu
 			Probably similar to what I did in my own share scripts?
 	Set up remote git server on CowBox, that local config files can live on and be synchronized to?

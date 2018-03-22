@@ -9,6 +9,8 @@
 	Rewrite halfQwerty so it works and makes more sense
 	
 # New ideas
+	Divide up config\local into instance-specific stuff (settings.ini) and private stuff (everything else).
+		Be very careful with .gitignores and such
 	Reconsider data vs dataFilled stuff in Selector - seems like it could be done better.
 	Update all scripts to use the functional versions of commands that have output variables (functions in common\commandFunctions.ahk)
 		Places to confirm before using:

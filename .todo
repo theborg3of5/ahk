@@ -7,7 +7,6 @@
 	Check out File.* methods for reading from file (https://autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.24.04)
 	"idate" hotstring isn't working in Excel cells (though the formula bar is fine).
 	Rewrite halfQwerty so it works and makes more sense
-	vimKeys are applying to GitHub desktop, make them not.
 	
 # New ideas
 	Reconsider data vs dataFilled stuff in Selector - seems like it could be done better.

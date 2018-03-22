@@ -183,7 +183,7 @@ getExcludedTitles() {
 
 ; Chrome or Firefox.
 browserActive() {
-	return WinActive("ahk_class Chrome_WidgetWin_1") || WinActive("ahk_class MozillaWindowClass")
+	return WinActive(getWindowTitleString("Chrome")) || WinActive("ahk_class MozillaWindowClass")
 }
 
 vimOn() {

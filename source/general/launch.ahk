@@ -180,13 +180,19 @@ genericLink(subAction) {
 		}
 	}
 
-; Turn network paths into their drive-mapped equivalents.
+; Send cleaned-up path:
+; - Turn network paths into their drive-mapped equivalents
+; - Remove file:///, quotes, and other garbage from around the path.
 !+p::
-	sendDriveMappedPath() {
+	sendCleanedUpPath() {
 		path := getFirstLineOfSelectedText()
 		if(!path) ; Fall back to clipboard if nothing selected
 			path := clipboard
 		
+		; Clean out unwanted garbage strings
+		path := cleanupText(path, ["file:///", """"])
+		
+		; Convert paths to use mapped drive letters
 		tl := new TableList(findTLFilePath("local\mappedDrives.tl"))
 		table := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
 		

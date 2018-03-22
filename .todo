@@ -27,6 +27,10 @@
 		Tray - to make main script (and all standalone scripts) have a consistent tray menu
 			Probably similar to what I did in my own share scripts?
 	Set up remote git server on CowBox, that local config files can live on and be synchronized to?
+	Build a way to auto-reformat .tl files?
+		Fix widths so they work nicely
+			Will need to have a tab width parameter/argument somewhere for this (maybe in _constants or config?)
+		Take into account overflow, with next field being empty or placeholder'd
 	
 # Scripts to Share
 

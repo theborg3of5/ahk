@@ -121,7 +121,8 @@
 			messageText    := "Calling: `n`n"
 			if(name)
 				messageText .= name "`n"
-			messageText    .= formattedNum " [" rawNum "] `n`n"
+			messageText    .= formattedNum "`n"
+			messageText    .= "[" rawNum "] `n`n"
 			messageText    .= "Continue?"
 		}
 		

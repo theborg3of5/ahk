@@ -24,3 +24,11 @@ global TITLE_MATCH_MODE_Start   := 1
 global TITLE_MATCH_MODE_Contain := 2
 global TITLE_MATCH_MODE_Exact   := 3
 
+; MsgBox button options
+global MSGBOX_BUTTONS_OK                       := 0
+global MSGBOX_BUTTONS_OK_CANCEL                := 1
+global MSGBOX_BUTTONS_ABORT_RETRY_IGNORE       := 2
+global MSGBOX_BUTTONS_YES_NO_CANCEL            := 3
+global MSGBOX_BUTTONS_YES_NO                   := 4
+global MSGBOX_BUTTONS_RETRY_CANCEL             := 5
+global MSGBOX_BUTTONS_CANCEL_TRYAGAIN_CONTINUE := 6

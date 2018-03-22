@@ -40,13 +40,6 @@
 	::;)_::;)
 	:::)_:::)
 	:::)(:::)
-	::O<o::O,o
-	::o<O::o,O
-	::O<O::O,O
-	:R:^<^::^,^
-	:R:6,6::^,^
-	:R:6,^::^,^
-	:R:^,6::^,^
 	::*shurgs*::*shrugs*
 	::mmgm::mmhm
 	::fwere::fewer
@@ -62,6 +55,7 @@
 	::previosu::previous
 	::dcb::dbc
 	::h?::oh?
+	:*0:ndeed::indeed
 }
 
 { ; Expansions.

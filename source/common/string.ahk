@@ -6,8 +6,20 @@ global STRING_CASE_MIXED := 0
 global STRING_CASE_UPPER := 1
 global STRING_CASE_LOWER := 2
 
+isValidPhoneNumber(formattedNum) {
+	rawNum := parsePhone(formattedNum) ; Returns "" if it's not a valid number
+	if(rawNum = "")
+		return false
+	else
+		return true
+}
+
 ; Phone number parsing function.
 parsePhone(input) {
+	; Special case - hang up
+	if(input = "HANGUP")
+		return input
+	
 	nums := RegExReplace(input, "[^0-9\+]" , "") ; Strip out spaces and other odd chars.
 	nums := RegExReplace(nums, "\+" , "011") ; + becomes country exit code (USA code here)
 	
@@ -33,7 +45,7 @@ parsePhone(input) {
 	if(len = 16) ; International number with 3-digit exit code and 8, should be set.
 		return nums
 	
-	return -1
+	return ""
 }
 
 reformatPhone(input) {

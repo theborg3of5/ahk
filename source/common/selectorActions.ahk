@@ -197,13 +197,13 @@ TIMER(actionRow) {
 ; Call a phone number.
 CALL(actionRow) {
 	num := actionRow.data["NUMBER"]
-	special := actionRow.data["SPECIAL"]
+	name := actionRow.data["NAME"]
 	
-	actionRow.debugResult := {"Number":num, "Special":special}
+	actionRow.debugResult := {"Number":num, "Name":name}
 	if(actionRow.isDebug)
 		return
 	
-	callNumber(num, actionRow.data["NAME"])
+	callNumber(num, name)
 }
 
 ; Resizes the active window to the given dimensions.

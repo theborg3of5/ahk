@@ -86,48 +86,62 @@
 }
 
 { ; Phone-related functions.
-	; Generates a Cisco WebDialer URL to call a number.
-	getDialerURL(num, name = "") {
-		URL := "http://guru/services/Webdialer.asmx/"
-		
-		if(num = "-") {
-			URL .= "HangUpCall?"
-			MsgText = Hanging up current call. `n`nContinue?
-		} else {
-			phoneNum := parsePhone(num)
-			
-			if(phoneNum = -1) {
-				MsgBox, Invalid phone number!
-				return
-			}
-			
-			URL .= "CallNumber?extension=" . phoneNum
-			MsgText := "Calling: `n`n" 
-			if(name)
-				MsgText .= name "`n"
-			MsgText .= num "`n[" phoneNum "] `n`nContinue?"
-		}
-		
-		; Confirm they want to actually call.
-		MsgBox, 4, Dial Number?, %MsgText%
-		IfMsgBox No
-			URL = ""
-		
-		return URL
-	}
-
 	; Dials a given number using the Cisco WebDialer API.
-	callNumber(num, name = "") {
-		URL := getDialerURL(num, name)
-		; DEBUG.popup("callNumber", "start", "Input", num, "Name", name, "URL", URL)
-		
-		; Blank means an error or they said no to calling.
-		if(URL != "") {
-			HTTPRequest(URL, In := "", Out := "")
-			return true
+	callNumber(formattedNum, name = "") {
+		; Get the raw number (with leading digits as needed) to plug into the URL.
+		rawNum := parsePhone(formattedNum)
+		if(!rawNum) {
+			MsgBox, % "Invalid phone number."
+			return
 		}
 		
+		; Confirm the user wants to call.
+		if(!userWantsToCall(formattedNum, rawNum, name))
+			return
+		
+		; Build the URL.
+		url := getDialerURL(rawNum)
+		if(!url)
+			return
+		
+		; Dial with a web request.
+		HTTPRequest(url, In := "", Out := "")
+		; DEBUG.popup("callNumber","Finish", "Input",formattedNum, "Raw number",rawNum, "Name",name, "URL",url)
+	}
+	
+	userWantsToCall(formattedNum, rawNum, name = "") {
+		if(!formattedNum || !rawNum)
+			return false
+		
+		if(formattedNum = "HANGUP") {
+			title          := "Hang up?"
+			messageText    := "Hanging up current call. `n`nContinue?"
+		} else {
+			title          := "Dial number?"
+			messageText    := "Calling: `n`n"
+			if(name)
+				messageText .= name "`n"
+			messageText    .= formattedNum " [" rawNum "] `n`n"
+			messageText    .= "Continue?"
+		}
+		
+		MsgBox, % MSGBOX_BUTTONS_YES_NO, % title, % messageText
+		IfMsgBox Yes
+			return true
 		return false
+	}
+	
+	; Generates a Cisco WebDialer URL to call a number.
+	getDialerURL(rawNum) {
+		if(!rawNum)
+			return ""
+		
+		if(rawNum = "HANGUP")
+			url := replaceTag(ciscoPhoneBase, "COMMAND", "HangUpCall?")
+		else
+			url := replaceTag(ciscoPhoneBase, "COMMAND", "CallNumber?extension=" rawNum)
+		
+		return url
 	}
 }
 

@@ -24,12 +24,19 @@
 	^!#v::activateProgram("VB6")
 	
 	; Selector launchers
-	#p::  doSelect("local\phone.tl")
-	^+!t::doSelect("local\outlookTLG.tl")
-	^+!h::doSelect("local\epicEnvironments.tl", "DO_HYPERSPACE", "C:\Program Files (x86)\Epic\v8.5\Shared Files\EpicD85.exe")
-	^+!i::doSelect("local\epicEnvironments.tl", "SEND_ENVIRONMENT_ID")
-	^+!r::doSelect("local\epicEnvironments.tl", "DO_THUNDER",    "C:\Program Files (x86)\PuTTY\putty.exe")
-	!+v:: doSelect("local\epicEnvironments.tl", "DO_VDI",        "C:\Program Files (x86)\VMware\VMware Horizon View Client\vmware-view.exe")
+	^+!t::doSelect("outlookTLG.tl")
+	^+!h::doSelect("epicEnvironments.tl", "DO_HYPERSPACE", "C:\Program Files (x86)\Epic\v8.5\Shared Files\EpicD85.exe")
+	^+!i::doSelect("epicEnvironments.tl", "SEND_ENVIRONMENT_ID")
+	^+!r::doSelect("epicEnvironments.tl", "DO_THUNDER",    "C:\Program Files (x86)\PuTTY\putty.exe")
+	!+v:: doSelect("epicEnvironments.tl", "DO_VDI",        "C:\Program Files (x86)\VMware\VMware Horizon View Client\vmware-view.exe")
+	#p::
+		phoneSelector() {
+			selectedText := cleanupText(getFirstLineOfSelectedText())
+			if(isValidPhoneNumber(selectedText)) ; If the selected text is a valid number, go ahead and call it (confirmation included in callNumber)
+				callNumber(selectedText)
+			else
+				doSelect("phone.tl")
+		}
 	^!#s::
 		snapperSelector() {
 			selectedText := cleanupText(getFirstLineOfSelectedText())
@@ -40,7 +47,7 @@
 			defaultData["INI"] := ini
 			defaultData["ID"]  := id
 			
-			s := new Selector("local\epicEnvironments.tl")
+			s := new Selector("epicEnvironments.tl")
 			guiSettings                    := []
 			guiSettings["Icon"]            := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
 			guiSettings["ShowDataInputs"]  := 1
@@ -193,7 +200,7 @@ genericLink(subAction) {
 		path := cleanupText(path, ["file:///", """"])
 		
 		; Convert paths to use mapped drive letters
-		tl := new TableList(findTLFilePath("local\mappedDrives.tl"))
+		tl := new TableList(findTLFilePath("mappedDrives.tl"))
 		table := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
 		
 		For i,row in table {

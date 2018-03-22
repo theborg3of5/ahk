@@ -118,13 +118,17 @@ class Selector {
 		this.choices := choices
 	}
 	
-	selectGui(actionType = "", defaultOverrideData = "", guiSettings = "") {
-		; DEBUG.popup("Selector.selectGui", "Start", "ActionType", actionType, "Default override data", defaultOverrideData, "GUI Settings", guiSettings)
+	; defaultData - if the indices for these overrides are also set by the user's overall choice, the override value will 
+	;               only be used if the corresponding additional field is visible. That means if ShowDataInputs isn't set 
+	;               to true (via option in the file or guiSettings), overrides will only affect blank values in the user's 
+	;               choice.
+	selectGui(actionType = "", defaultData = "", guiSettings = "") {
+		; DEBUG.popup("Selector.selectGui", "Start", "ActionType", actionType, "Default override data", defaultData, "GUI Settings", guiSettings)
 		
 		if(actionType)
 			this.actionSettings["ActionType"] := actionType
-		if(defaultOverrideData)
-			data := defaultOverrideData
+		if(defaultData)
+			data := defaultData
 		
 		this.processGuiSettings(guiSettings)
 		
@@ -145,12 +149,7 @@ class Selector {
 			; Blow in any data from the data input boxes.
 			if(dataFilled && !rowToDo)
 				rowToDo := new SelectorRow()
-			if(IsObject(data)) {
-				For label,value in data { ; Loop over the actual data given (as opposed to this.dataIndices) - this allows any data that came in via defaultOverrideData, but is not shown, to come along.
-					if(value)
-						rowToDo.data[label] := value
-				}
-			}
+			this.applyDataOverrides(rowToDo, data)
 			
 			; DEBUG.popup("User Input", userIn, "Row Parse Result", rowToDo, "Action type", this.actionSettings["ActionType"], "Data filled", dataFilled)
 		}
@@ -642,6 +641,29 @@ class Selector {
 		}
 		
 		return ""
+	}
+	
+	applyDataOverrides(ByRef rowToDo, data) {
+		; DEBUG.popup("Selector.applyDataOverrides","Start", "RowToDo",rowToDo, "Data",data)
+		if(!IsObject(data))
+			return
+		
+		For label,value in data {
+			if(!value)
+				Continue
+			if(this.shouldApplyOverrideToRow(rowToDo, data, label))
+				rowToDo.data[label] := value
+		}
+		; DEBUG.popup("Selector.applyDataOverrides","Finish", "RowToDo",rowToDo, "Data",data)
+	}
+	shouldApplyOverrideToRow(rowToDo, data, label) {
+		; DEBUG.popup("Selector.shouldApplyOverrideToRow","Start", "RowToDo",rowToDo, "Data",data, "Label",label)
+		if(contains(this.dataIndices, label)) ; There was a visible field associated with this column, so the data we got from it was either entered or visible to the user.
+			return true
+		else if(!rowToDo.data[label]) ; There was not a visible field, so only use the override if the user's choice has no value for this column.
+			return true
+		
+		return false
 	}
 
 	; Function to do what it is we want done, then exit.

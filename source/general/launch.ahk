@@ -43,16 +43,16 @@
 			splitRecordString(selectedText, ini, id)
 			
 			; Default data from selection.
-			defaultData        := []
-			defaultData["INI"] := ini
-			defaultData["ID"]  := id
+			defaultOverrideData        := []
+			defaultOverrideData["INI"] := ini
+			defaultOverrideData["ID"]  := id
 			
 			s := new Selector("epicEnvironments.tl")
 			guiSettings                    := []
 			guiSettings["Icon"]            := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
 			guiSettings["ShowDataInputs"]  := 1
 			guiSettings["ExtraDataFields"] := ["INI", "ID"]
-			s.selectGui("DO_SNAPPER", defaultData, guiSettings)
+			s.selectGui("DO_SNAPPER", defaultOverrideData, guiSettings)
 		}
 	return
 #If

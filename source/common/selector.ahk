@@ -118,17 +118,17 @@ class Selector {
 		this.choices := choices
 	}
 	
-	; defaultData - if the indices for these overrides are also set by the user's overall choice, the override value will 
-	;               only be used if the corresponding additional field is visible. That means if ShowDataInputs isn't set 
-	;               to true (via option in the file or guiSettings), overrides will only affect blank values in the user's 
-	;               choice.
-	selectGui(actionType = "", defaultData = "", guiSettings = "") {
-		; DEBUG.popup("Selector.selectGui", "Start", "ActionType", actionType, "Default override data", defaultData, "GUI Settings", guiSettings)
+	; defaultOverrideData - if the indices for these overrides are also set by the user's overall choice, the override value will 
+	;                       only be used if the corresponding additional field is visible. That means if ShowDataInputs isn't set 
+	;                       to true (via option in the file or guiSettings), overrides will only affect blank values in the user's 
+	;                       choice.
+	selectGui(actionType = "", defaultOverrideData = "", guiSettings = "") {
+		; DEBUG.popup("Selector.selectGui", "Start", "ActionType", actionType, "Default override data", defaultOverrideData, "GUI Settings", guiSettings)
 		
 		if(actionType)
 			this.actionSettings["ActionType"] := actionType
-		if(defaultData)
-			data := defaultData
+		if(defaultOverrideData)
+			overrideData := defaultOverrideData
 		
 		this.processGuiSettings(guiSettings)
 		
@@ -136,7 +136,7 @@ class Selector {
 		while(rowToDo = "") {
 			
 			; Get the choice.
-			userIn := this.launchSelectorPopup(data, dataFilled)
+			userIn := this.launchSelectorPopup(overrideData, dataFilled)
 			
 			; Blank input, we bail.
 			if(!userIn && !dataFilled)
@@ -149,9 +149,9 @@ class Selector {
 			; Blow in any data from the data input boxes.
 			if(dataFilled && !rowToDo)
 				rowToDo := new SelectorRow()
-			this.applyDataOverrides(rowToDo, data)
+			this.applyDataOverrides(rowToDo, overrideData)
 			
-			; DEBUG.popup("User Input", userIn, "Row Parse Result", rowToDo, "Action type", this.actionSettings["ActionType"], "Data filled", dataFilled)
+			; DEBUG.popup("User Input",userIn, "Row Parse Result",rowToDo, "Data filled",dataFilled)
 		}
 		
 		return this.doAction(rowToDo)
@@ -643,24 +643,24 @@ class Selector {
 		return ""
 	}
 	
-	applyDataOverrides(ByRef rowToDo, data) {
-		; DEBUG.popup("Selector.applyDataOverrides","Start", "RowToDo",rowToDo, "Data",data)
-		if(!IsObject(data))
+	applyDataOverrides(ByRef rowToDo, overrideData) {
+		; DEBUG.popup("Selector.applyDataOverrides","Start", "RowToDo",rowToDo, "overrideData",overrideData)
+		if(!IsObject(overrideData))
 			return
 		
-		For label,value in data {
+		For label,value in overrideData {
 			if(!value)
 				Continue
-			if(this.shouldApplyOverrideToRow(rowToDo, data, label))
-				rowToDo.data[label] := value
+			if(this.shouldApplyOverrideToRow(rowToDo, overrideData, label))
+				rowToDo.overrideData[label] := value
 		}
-		; DEBUG.popup("Selector.applyDataOverrides","Finish", "RowToDo",rowToDo, "Data",data)
+		; DEBUG.popup("Selector.applyDataOverrides","Finish", "RowToDo",rowToDo, "overrideData",overrideData)
 	}
-	shouldApplyOverrideToRow(rowToDo, data, label) {
-		; DEBUG.popup("Selector.shouldApplyOverrideToRow","Start", "RowToDo",rowToDo, "Data",data, "Label",label)
+	shouldApplyOverrideToRow(rowToDo, overrideData, label) {
+		; DEBUG.popup("Selector.shouldApplyOverrideToRow","Start", "RowToDo",rowToDo, "Data",overrideData, "Label",label)
 		if(contains(this.dataIndices, label)) ; There was a visible field associated with this column, so the data we got from it was either entered or visible to the user.
 			return true
-		else if(!rowToDo.data[label]) ; There was not a visible field, so only use the override if the user's choice has no value for this column.
+		else if(!rowToDo.overrideData[label]) ; There was not a visible field, so only use the override if the user's choice has no value for this column.
 			return true
 		
 		return false

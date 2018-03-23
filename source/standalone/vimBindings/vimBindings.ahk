@@ -59,33 +59,6 @@ return
 	~^f::
 		vimOffAuto()
 	return
-#If
-
-; Run as long as we're not on an exclude page.
-#If browserActive() && !titleContains(offTitles)
-	; Unpause for special cases.
-	~$Esc::
-	~$Enter::
-		if(autoPaused)
-			vimOn()
-	return
-#If
-
-; Normal key commands
-; Run if vimkeys are on and we're not on an excluded page.
-#If browserActive() && vimKeysOn && !titleContains(offTitles)
-	; Up/Down/Left/Right.
-	j::Send, {Down}
-	k::Send, {Up}
-	
-	; Page Up/Down/Top/Bottom.
-	`;::Send, {PgDn}
-	p::Send, {PgUp}
-	[::Send, {Home}
-	]::Send, {End}
-	
-	; Bookmarklet hotkeys.
-	RAlt & `;::sendToOmniboxAndGo("d") ; Darken bookmarklet hotkey.
 	
 	; Keys that turn vimkeys off, because you're probably typing something else.
 	~a:: ; Letters
@@ -169,6 +142,33 @@ return
 	~+.::
 		vimOffManual()
 	return
+#If
+
+; Run as long as we're not on an exclude page.
+#If browserActive() && !titleContains(offTitles)
+	; Unpause for special cases.
+	~$Esc::
+	~$Enter::
+		if(autoPaused)
+			vimOn()
+	return
+#If
+
+; Normal key commands
+; Run if vimkeys are on and we're not on an excluded page.
+#If browserActive() && vimKeysOn && !titleContains(offTitles)
+	; Up/Down/Left/Right.
+	j::Send, {Down}
+	k::Send, {Up}
+	
+	; Page Up/Down/Top/Bottom.
+	`;::Send, {PgDn}
+	p::Send, {PgUp}
+	[::Send, {Home}
+	]::Send, {End}
+	
+	; Bookmarklet hotkeys.
+	RAlt & `;::sendToOmniboxAndGo("d") ; Darken bookmarklet hotkey.
 #If
 
 

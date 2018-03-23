@@ -107,16 +107,9 @@
 		::auth'n::authorization
 	}
 }
-	
+
 { ; Date and time.
-	:*0:idate::
-		sendDateTime("M/d/yy")
-		
-		; Excel special.
-		if(WinActive("ahk_class XLMAIN"))
-			Send, {Tab}
-	return
-	
+	:X:idate::sendDateTime("M/d/yy")
 	:X:dashidate::sendDateTime("M-d-yy")
 	:X:uidate::sendDateTime("M_d_yy")
 	:X:didate::sendDateTime("dddd`, M/d")

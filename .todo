@@ -9,6 +9,7 @@
 	
 # New ideas
 	Reconsider data vs dataFilled stuff in Selector - seems like it could be done better.
+		Change ShowDataInputs to be something involving overrides - ShowOverrideFields, maybe?
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
 	Audit all scripts for unused hotkeys
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?

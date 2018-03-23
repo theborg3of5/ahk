@@ -652,7 +652,7 @@ class Selector {
 			if(!value)
 				Continue
 			if(this.shouldApplyOverrideToRow(rowToDo, overrideData, label))
-				rowToDo.overrideData[label] := value
+				rowToDo.data[label] := value
 		}
 		; DEBUG.popup("Selector.applyDataOverrides","Finish", "RowToDo",rowToDo, "overrideData",overrideData)
 	}
@@ -660,7 +660,7 @@ class Selector {
 		; DEBUG.popup("Selector.shouldApplyOverrideToRow","Start", "RowToDo",rowToDo, "Data",overrideData, "Label",label)
 		if(contains(this.dataIndices, label)) ; There was a visible field associated with this column, so the data we got from it was either entered or visible to the user.
 			return true
-		else if(!rowToDo.overrideData[label]) ; There was not a visible field, so only use the override if the user's choice has no value for this column.
+		else if(!rowToDo.data[label]) ; There was not a visible field, so only use the override if the user's choice has no value for this column.
 			return true
 		
 		return false

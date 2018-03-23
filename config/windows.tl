@@ -16,7 +16,11 @@
 	VB6 Object Browser		VB6.exe				-							Object Browser			-						CLOSE
 	
 	; EMC2 popups
-	EMC2 Email box				EpicD82.exe			ThunderRT6FormDC		EMC2 - QA Note E-Mail Notification	-	CLOSE		-			HOME_END		CTRL_SHIFT
+[{EXE}r:EpicD82.exe|{CLASS}r:ThunderRT6FormDC|{ESC}r:CLOSE|{DELETE_WORD}r:CTRL_SHIFT]
+	QAN email notify			-						-							EMC2 - QA Note E-Mail Notification
+	QAN email					-						-							Send E-Mail				-						-			-			HOME_END
+	DLG email					-						-							E-mail Development Log
+[]
 	
 	; EpicStudio popups
 	ES New Object Window		EpicStudio.exe		New Object				-							-						-			-			-				CTRL_SHIFT

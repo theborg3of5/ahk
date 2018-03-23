@@ -10,6 +10,15 @@
 # New ideas
 	Reconsider data vs dataFilled stuff in Selector - seems like it could be done better.
 		Change ShowDataInputs to be something involving overrides - ShowOverrideFields, maybe?
+		Doesn't seem like there's a good reason to have user-modified data persist across loops (not that it can anyways)
+			Make overrideData only an input parameter?
+				Have launchSelectorPopup() return an array of all info
+					Can still read from data overrides, and write to data array - but data array is separate (although probably still a copy so non-shown stuff comes through) and is a sub-part of overall returned array:
+						retAry["CHOICE_INPUT"]  := userIn
+						retAry["OVERRIDE_DATA"] := overrideData
+					getDataFromGui should just return an updated array ("" if array would be empty), not true/false with a byref array
+	Selector - break launchSelectorPopup() down, maybe turn it into a class of sorts?
+		Should take another pass at UI logic with new stuff first, though.
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
 	Audit all scripts for unused hotkeys
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?

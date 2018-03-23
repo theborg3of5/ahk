@@ -351,10 +351,10 @@ class Selector {
 	}
 	
 	; Generate the text for the GUI and display it, returning the user's response.
-	launchSelectorPopup(ByRef data, ByRef dataFilled) {
+	launchSelectorPopup(ByRef overrideData, ByRef dataFilled) {
 		dataFilled := false
-		if(!IsObject(data))
-			data := Object()
+		if(!IsObject(overrideData))
+			overrideData := Object()
 		
 		; Create and begin styling the GUI.
 		originalIconPath := setTrayIcon(this.guiSettings["IconPath"])
@@ -476,8 +476,8 @@ class Selector {
 			
 			xInput := xNameFirstCol
 			For num,label in this.dataIndices {
-				if(data[label]) ; Data given as default
-					tempData := data[label]
+				if(overrideData[label]) ; Data given as default
+					tempData := overrideData[label]
 				else               ; Data label
 					tempData := label
 				
@@ -501,7 +501,7 @@ class Selector {
 		; == GUI waits for user to do something ==
 		
 		
-		dataFilled := this.getDataFromGui(data)
+		dataFilled := this.getDataFromGui(overrideData)
 		
 		setTrayIcon(originalIconPath) ; Restore the original tray icon
 		return GuiInChoice

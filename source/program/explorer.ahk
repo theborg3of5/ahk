@@ -1,6 +1,6 @@
 $#e::
 	if(WinActive("ahk_class CabinetWClass"))
-		Run, ::{20d04fe0-3aea-1069-a2d8-08002b30309d} ; Open the "This PC" special folder
+		Run("::{20d04fe0-3aea-1069-a2d8-08002b30309d}") ; Open the "This PC" special folder
 	else if(!WinExist("ahk_class CabinetWClass"))
 		Send, #e ; Open a new session if nothing exists
 	else

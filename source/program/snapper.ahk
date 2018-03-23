@@ -13,7 +13,7 @@
 			if(url) {
 				Send, !c ; Close add record popup (can't use WinClose as that triggers validation on ID field)
 				WinWaitActive, Snapper
-				Run, % url
+				Run(url)
 			} else {
 				Send, {Enter}
 			}

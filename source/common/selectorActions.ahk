@@ -16,7 +16,7 @@
 	; if(actionRow.isDebug)
 		; return
 	
-	; Run, % finishedResult
+	; Run(finishedResult)
 ; }
 
 
@@ -62,7 +62,7 @@ DO(actionRow) {
 	if(actionRow.isDebug)
 		return
 	
-	Run, % action
+	Run(action)
 }
 
 
@@ -103,7 +103,7 @@ DO_HYPERSPACE(actionRow) {
 	if(actionRow.isDebug)
 		return
 	
-	Run, % runString
+	Run(runString)
 }
 
 ; Send internal ID of an environment.
@@ -132,7 +132,7 @@ DO_THUNDER(actionRow) {
 	if(actionRow.data["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
 		activateProgram("Thunder")
 	else
-		Run, % runString
+		Run(runString)
 }
 
 ; Run a VDI.
@@ -152,7 +152,7 @@ DO_VDI(actionRow) {
 		if(!vdiId) ; Safety check - don't try to launch with no VDI specified (that's what the "LAUNCH" COMM_ID is for).
 			return
 		
-		Run, % runString
+		Run(runString)
 		
 		; Also fake-maximize the window once it shows up.
 		WinWaitActive, ahk_exe vmware-view.exe, , 10, VMware Horizon Client ; Ignore the loading-type popup that happens initially with excluded title.
@@ -177,7 +177,7 @@ DO_SNAPPER(actionRow) {
 	if(actionRow.data["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
 		runProgram("Snapper")
 	else
-		Run, % url
+		Run(url)
 }
 
 ; Open a homebrew timer (script located in the filepath below).
@@ -189,7 +189,7 @@ TIMER(actionRow) {
 	if(actionRow.isDebug)
 		return
 	
-	Run, % runString
+	Run(runString)
 }
 
 

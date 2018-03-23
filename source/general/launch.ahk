@@ -104,7 +104,7 @@
 				searchWithEverything(searchTerm)
 			
 			if(url)
-				Run, % url
+				Run(url)
 		}
 	}
 
@@ -137,7 +137,7 @@ genericLink(subAction) {
 		
 		sitesLen := sites.MaxIndex()
 		Loop, %sitesLen% {
-			Run, % sites[A_Index]
+			Run(sites[A_Index])
 			Sleep, 100
 		}
 		sitesLen--
@@ -147,14 +147,14 @@ genericLink(subAction) {
 		Send, {Shift Up}{Ctrl Up}
 	}
 
-^+!m::Run, % "https://www.messenger.com"
-^+!f::Run, % "http://feedly.com/i/latest"
-^!#m::Run, % "https://mail.google.com/mail/u/0/#inbox"
-!+o:: Run, % "https://www.onenote.com/notebooks?auth=1&nf=1&fromAR=1"
-!+t:: Run, % onenoteOnlinePersonalDoSection
+^+!m::Run("https://www.messenger.com")
+^+!f::Run("http://feedly.com/i/latest")
+^!#m::Run("https://mail.google.com/mail/u/0/#inbox")
+!+o:: Run("https://www.onenote.com/notebooks?auth=1&nf=1&fromAR=1")
+!+t:: Run(onenoteOnlinePersonalDoSection)
 
 #If MainConfig.isMachine(MACHINE_HomeDesktop)
-	^+!r::Run, % "http://www.reddit.com/"
+	^+!r::Run("http://www.reddit.com/")
 #If
 
 ; Folder List - Open

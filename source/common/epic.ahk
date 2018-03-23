@@ -152,7 +152,7 @@ openEpicStudioRoutine(routine, tag = "") {
 		return
 	
 	; Open routine in EpicStudio, wait until it's open
-	Run, % MainConfig.getProgram("EpicStudio", "PATH") " " routine
+	Run(MainConfig.getProgram("EpicStudio", "PATH") " " routine)
 	exeName := MainConfig.getProgram("EpicStudio", "EXE")
 	WinWaitActive, %routine% ahk_exe %exeName%
 	

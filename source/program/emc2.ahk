@@ -80,7 +80,7 @@
 			
 			For i,url in urlsAry
 				if(url)
-					Run, % url
+					Run(url)
 		}
 #If
 

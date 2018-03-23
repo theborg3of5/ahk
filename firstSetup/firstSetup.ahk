@@ -4,6 +4,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #SingleInstance force  ; Ensures that if this script is running, running it again replaces the first instance.
 
 #Include %A_ScriptDir%\..\source\common
+#Include commandFunctions.ahk
 #Include io.ahk
 #Include data.ahk
 #Include debug.ahk
@@ -99,7 +100,7 @@ For i,n in gitNames {
 
 MsgBox, 4, , Run now?
 IfMsgBox Yes
-	Run, %mainAHKPath%, %startupFolder%
+	Run(%mainAHKPath%, %startupFolder%)
 
 ExitApp
 

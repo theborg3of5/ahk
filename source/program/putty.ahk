@@ -178,7 +178,7 @@
 		openCurrentLogFile() {
 			logFilePath := GetPuttyLogFile()
 			if(logFilePath)
-				Run, % logFilePath
+				Run(logFilePath)
 		}
 	
 	; Make page up/down actually move a page up/down (each Shift+Up/Down does a half a page).

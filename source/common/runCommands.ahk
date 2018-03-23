@@ -26,7 +26,7 @@ scriptArgsToVars(varNames, placeholderChar = "") {
 
 ; Opens the given script in Notepad++.
 editScript(script) {
-	Run, % MainConfig.getProgram("Notepad++", "PATH") " " script
+	Run(MainConfig.getProgram("Notepad++", "PATH") " " script)
 }
 
 ; Reloads an AHK script.
@@ -38,7 +38,7 @@ reloadScript(script, prompt) {
 	if(script = MAIN_CENTRAL_SCRIPT) {
 		scriptToRun := MainConfig.getFolder("AHK_ROOT") "\source\main.ahk"
 		folder := MainConfig.getFolder("AHK_ROOT") "\source\"
-		Run, %scriptToRun% /restart, %folder%
+		Run(scriptToRun " /restart", folder)
 	} else {
 		Reload
 	}
@@ -77,7 +77,7 @@ RunCommand(commandToRun = "", stayOpen = false) {
 	runString .= cmdString
 	; DEBUG.popup("Command string", cmdString, "Run string", runString)
 	
-	Run, % runString
+	Run(runString)
 }
 
 ; Run as a non-elevated user (since main script typically needs to run as admin).

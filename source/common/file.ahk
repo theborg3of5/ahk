@@ -77,7 +77,7 @@ openFolder(folderName = "") {
 	; DEBUG.popup("Folder name",folderName, "Path",folderPath)
 	
 	if(folderPath && FileExist(folderPath))
-		Run, % folderPath
+		Run(folderPath)
 }
 
 sendFilePath(folderName = "", subPath = "") {
@@ -130,7 +130,7 @@ searchWithGrepWin(pathToSearch, textToSearch = "") {
 		runPath .= "/searchfor:""" textToSearch """ /execute" ; Run it immediately if we got what to search for
 	
 	; DEBUG.popup("Path to search",pathToSearch, "Converted path",convertedPath, "To search",textToSearch, "Run path",runPath)
-	Run, % runPath
+	Run(runPath)
 }
 
 searchWithEverything(textToSearch) {
@@ -139,7 +139,7 @@ searchWithEverything(textToSearch) {
 	if(textToSearch)
 		runPath .= " -search " textToSearch
 	
-	Run, % runPath
+	Run(runPath)
 }
 	
 findTLFilePath(path) {

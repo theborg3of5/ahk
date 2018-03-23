@@ -10,10 +10,6 @@
 	
 # New ideas
 	Reconsider data vs dataFilled stuff in Selector - seems like it could be done better.
-	Update all scripts to use the functional versions of commands that have output variables (functions in common\commandFunctions.ahk)
-		Places to confirm before using:
-			IniRead (don't we have ini.ahk to try out below?)
-			Run (need to analyze a little more vs. my own wrappers)
 	Check out enumerator objects for use instead of constants? (https://autohotkey.com/docs/objects/Enumerator.htm)
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
 	Audit all scripts for unused hotkeys

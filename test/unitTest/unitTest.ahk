@@ -150,7 +150,7 @@ generateUnitTest(area = "", inFile = "", outFile = "", sourceFile = "") {
 	if(ERRORLEVEL = 1)
 		MsgBox, Failed to write results to file!
 	else
-		Run, % outFile
+		Run(outFile)
 }
 
 doTest(area, subArea, inFile, sourceFile) {

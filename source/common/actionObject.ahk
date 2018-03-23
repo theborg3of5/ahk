@@ -144,16 +144,16 @@ class ActionObject {
 			if(type = TYPE_EMC2 || type = TYPE_CodeSearchRoutine || type = TYPE_Helpdesk) {
 				link := this.perform(type, ACTION_Link, subType, subAction, input)
 				if(link)
-					Run, % link
+					Run(link)
 				
 			} else if(type = TYPE_Path) {
 				if(subType = SUBTYPE_FilePath) {
 					IfExist, %input%
-						Run, % input
+						Run(input)
 					Else
 						this.errPop("File or folder does not exist", input)
 				} else if(subType = SUBTYPE_URL) {
-					Run, % input
+					Run(input)
 				}
 				
 			} else if(type = TYPE_EpicStudio) {

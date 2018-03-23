@@ -158,9 +158,9 @@ findTLFilePath(path) {
 	if(FileExist(MainConfig.getFolder("AHK_CONFIG") "\" path))
 		return MainConfig.getFolder("AHK_CONFIG") "\" path
 	
-	; Local folder (not version-controlled) inside of that
-	if(FileExist(MainConfig.getFolder("AHK_LOCAL_CONFIG") "\" path))
-		return MainConfig.getFolder("AHK_LOCAL_CONFIG") "\" path
+	; Private folder (not version-controlled) inside of that
+	if(FileExist(MainConfig.getFolder("AHK_PRIVATE_CONFIG") "\" path))
+		return MainConfig.getFolder("AHK_PRIVATE_CONFIG") "\" path
 	
 	this.errPop("File doesn't exist", path)
 	return ""

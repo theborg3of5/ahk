@@ -7,8 +7,9 @@ Thumbs.db
 # Do include colorette's exe, though
 !Colorette.exe
 
-# Ignore the config/local folder entirely.
+# Ignore the config/local and config/private folders entirely.
 config/local/
+config/private/
 
 # Test folder, ignore most things, but not subdirectories
 test/*

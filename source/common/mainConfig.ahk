@@ -1,5 +1,5 @@
 ; Optional file of private variables.
-#Include *i %A_LineFile%/../../../config/local/privateVariables.ahk
+#Include *i %A_LineFile%/../../../config/private/privateVariables.ahk
 
 ; Constants for machines.
 global MACHINE_EpicLaptop  := "EPIC_LAPTOP"

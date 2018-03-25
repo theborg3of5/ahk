@@ -36,7 +36,7 @@ tagsToReplace["WHICH_MACHINE"]   := ""
 tagsToReplace["MENU_KEY_ACTION"] := ""
 
 copyPaths := []
-copyPaths["includeCommon.ahk.master"]   := userPath "\Documents\AutoHotkey\Lib\includeCommon.ahk"
+copyPaths["includeCommon.ahk.master"] := userPath "\Documents\AutoHotkey\Lib\includeCommon.ahk"
 copyPaths["commonHotkeys.ahk.master"] := userPath "\Documents\AutoHotkey\Lib\commonHotkeys.ahk"
 copyPaths["settings.ini.master"]      := ahkRootPath "\config\local\settings.ini"
 copyPaths["test.ahk.master"]          := ahkRootPath "\test\test.ahk"

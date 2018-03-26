@@ -32,3 +32,6 @@ global MSGBOX_BUTTONS_YES_NO_CANCEL            := 3
 global MSGBOX_BUTTONS_YES_NO                   := 4
 global MSGBOX_BUTTONS_RETRY_CANCEL             := 5
 global MSGBOX_BUTTONS_CANCEL_TRYAGAIN_CONTINUE := 6
+
+; Control styles
+global WS_EX_CLIENTEDGE := 0x200 ; Border with sunken edge (on by default for many control types)

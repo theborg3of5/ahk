@@ -451,9 +451,9 @@ class Selector {
 			Gui, Add, Text, x%xName%   y%yCurrLine%,                       % name
 			
 			widthName := getLabelWidthForText(name, "name" i)
-			colWidthFromName := widthIndex + padIndexAbbrev + widthAbbrev + padAbbrevName + widthName
+			colWidthFromChoice := widthIndex + padIndexAbbrev + widthAbbrev + padAbbrevName + widthName
 			
-			columnWidths[columnNum] := max(columnWidths[columnNum], colWidthFromTitle, colWidthFromName, this.guiSettings["MinColumnWidth"])
+			columnWidths[columnNum] := max(columnWidths[columnNum], colWidthFromTitle, colWidthFromChoice, this.guiSettings["MinColumnWidth"])
 			
 			yCurrLine += heightLine
 			maxColumnHeight := max(maxColumnHeight, yCurrLine)
@@ -467,7 +467,7 @@ class Selector {
 			widthInputChoice := widthTotal - (marginLeft + marginRight)   ; Main edit control is nearly full width.
 		static GuiInChoice
 		GuiInChoice := "" ; Clear this to prevent bleed-over from previous uses. Must be on a separate line from the static declaration or it only happens once.
-		Gui, Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInputChoice% h%heightInput% -E0x200 +Border
+		Gui, Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInputChoice% h%heightInput% -E%WS_EX_CLIENTEDGE% +Border
 		
 		if(this.guiSettings["ShowDataInputs"]) {
 			numDataInputs := this.dataIndices.length()

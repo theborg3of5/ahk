@@ -3,12 +3,13 @@
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
-	Take another pass through Selector GUI stuff - seems like there's more options for positioning things now (https://autohotkey.com/docs/commands/Gui.htm#PosSize)
-	Check out File.* methods for reading from file (https://autohotkey.com/docs/AHKL_ChangeLog.htm#v1.1.24.04)
+	Take another pass through Selector GUI stuff - seems like there's more options for positioning things now (https://autohotkey.com/docs/commands/Gui.htm#PosSize )
 	Rewrite halfQwerty so it works and makes more sense
 	
 # New ideas
 	Reconsider data vs dataFilled stuff in Selector - seems like it could be done better.
+		overrideData seems like it should be a property of the class.
+			Probably overrideDataFilled, too.
 		Change ShowDataInputs to be something involving overrides - ShowOverrideFields, maybe?
 		Doesn't seem like there's a good reason to have user-modified data persist across loops (not that it can anyways)
 			Make overrideData only an input parameter?

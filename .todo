@@ -3,7 +3,6 @@
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
-	Take another pass through Selector GUI stuff - seems like there's more options for positioning things now (https://autohotkey.com/docs/commands/Gui.htm#PosSize )
 	Rewrite halfQwerty so it works and makes more sense
 	
 # New ideas
@@ -19,7 +18,6 @@
 						retAry["OVERRIDE_DATA"] := overrideData
 					getDataFromGui should just return an updated array ("" if array would be empty), not true/false with a byref array
 	Selector - break launchSelectorPopup() down, maybe turn it into a class of sorts?
-		Should take another pass at UI logic with new stuff first, though.
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
 	Audit all scripts for unused hotkeys
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?

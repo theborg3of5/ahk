@@ -78,7 +78,7 @@ class DEBUG {
 			outString := getTabs(numTabs, DEBUG.spacesPerTab)
 		
 		; Index
-		if(index)
+		if(index != "")
 			outString .= "[" index "] "
 		
 		; Base case - not a complex object, just add our value and be done.

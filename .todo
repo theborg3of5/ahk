@@ -9,6 +9,7 @@
 	Reconsider data vs dataFilled stuff in Selector - seems like it could be done better.
 		overrideData seems like it should be a property of the class.
 			Probably overrideDataFilled, too.
+			Would solve the retAry stuff below.
 		Change ShowDataInputs to be something involving overrides - ShowOverrideFields, maybe?
 		Doesn't seem like there's a good reason to have user-modified data persist across loops (not that it can anyways)
 			Make overrideData only an input parameter?

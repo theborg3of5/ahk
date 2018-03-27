@@ -5,130 +5,129 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include <includeCommon>
 setCommonHotkeysType(HOTKEY_TYPE_Standalone)
 
-mirror_1 = 0
-mirror_2 = 9
-mirror_3 = 8
-mirror_4 = 7
-mirror_5 = 6
-mirror_q = p
-mirror_w = o
-mirror_e = i
-mirror_r = u
-mirror_t = y
-mirror_a = `;
-mirror_s = l
-mirror_d = k
-mirror_f = j
-mirror_g = h
-mirror_z = /
-mirror_x = .
-mirror_c = ,
-mirror_v = m
-mirror_b = n
-mirror_6 = 5
-mirror_7 = 4
-mirror_8 = 3
-mirror_9 = 2
-mirror_0 = 1
-mirror_y = t
-mirror_u = r
-mirror_i = e
-mirror_o = w
-mirror_p = q
-mirror_h = g
-mirror_j = f
-mirror_k = d
-mirror_l = s
-mirror_n = b
-mirror_m = v
-return
+global mirrorKeys := buildMirrorKeys()
 
-
-; This key may help, as the space-on-up may get annoying, especially if you type fast.
-Alt & Space::Suspend
 
 ; These keys are optional, but they may help if you are typing on the left-hand side.
 CapsLock::Send, {BackSpace}
 Space & CapsLock::Send, {Enter}
 
-; If spacebar didn't modify anything, send a real space keystroke upon release.
-space::
-Send {space}
+; If Spacebar didn't modify anything, send a real Space keystroke upon release.
+Space::
+	Send {Space}
 return
 
-space & 1::
-space & 2::
-space & 3::
-space & 4::
-space & 5::
-space & q::
-space & w::
-space & e::
-space & r::
-space & t::
-space & a::
-space & s::
-space & d::
-space & f::
-space & g::
-space & z::
-space & x::
-space & c::
-space & v::
-space & b::
-space & `;::
-space & ,::
-space & .::
-space & /::
-space & 6::
-space & 7::
-space & 8::
-space & 9::
-space & 0::
-space & y::
-space & u::
-space & i::
-space & o::
-space & p::
-space & h::
-space & j::
-space & k::
-space & l::
-space & n::
-space & m::
-; Determine the mirror key, if there is one:
-if A_ThisHotkey = space & `;
-   MirrorKey = a
-else if A_ThisHotkey = space & ,
-   MirrorKey = c
-else if A_ThisHotkey = space & .
-   MirrorKey = x
-else if A_ThisHotkey = space & /
-   MirrorKey = z
-else  ; To avoid runtime errors due to invalid var names, do this part last.
-{
-	ThisKey := SubStr(A_ThisHotkey, StrLen(A_ThisHotkey), 1)
-   StringTrimRight, MirrorKey, mirror_%ThisKey%, 0  ; Retrieve "array" element.
-   if MirrorKey =  ; No mirror, script probably needs adjustment.
-      return
+; Mirror hotkeys
+Space & 1::
+Space & 2::
+Space & 3::
+Space & 4::
+Space & 5::
+Space & 6::
+Space & 7::
+Space & 8::
+Space & 9::
+Space & 0::
+Space & q::
+Space & w::
+Space & e::
+Space & r::
+Space & t::
+Space & y::
+Space & u::
+Space & i::
+Space & o::
+Space & p::
+Space & a::
+Space & s::
+Space & d::
+Space & f::
+Space & g::
+Space & h::
+Space & j::
+Space & k::
+Space & l::
+Space & `;::
+Space & z::
+Space & x::
+Space & c::
+Space & v::
+Space & b::
+Space & n::
+Space & m::
+Space & ,::
+Space & .::
+Space & /::
+	mirroredKey := getMirroredKeyFromHotkey(A_ThisHotkey)
+	; DEBUG.popup("Hotkey",A_ThisHotkey, "Mirrored key",mirroredKey)
+	
+	; {Blind} mode lets us use modifiers with whatever was pressed, too.
+	Send, {Blind}%mirroredKey%
+return
+
+
+buildMirrorKeys() {
+	keysAry := []
+	
+	; Put a "KEY_" in front of each character so that later on when we're retrieving a value, we can force the key to be a string.
+	keysAry["KEY_1"] := "0"
+	keysAry["KEY_2"] := "9"
+	keysAry["KEY_3"] := "8"
+	keysAry["KEY_4"] := "7"
+	keysAry["KEY_5"] := "6"
+	keysAry["KEY_6"] := "5"
+	keysAry["KEY_7"] := "4"
+	keysAry["KEY_8"] := "3"
+	keysAry["KEY_9"] := "2"
+	keysAry["KEY_0"] := "1"
+	
+	keysAry["KEY_q"] := "p"
+	keysAry["KEY_w"] := "o"
+	keysAry["KEY_e"] := "i"
+	keysAry["KEY_r"] := "u"
+	keysAry["KEY_t"] := "y"
+	keysAry["KEY_y"] := "t"
+	keysAry["KEY_u"] := "r"
+	keysAry["KEY_i"] := "e"
+	keysAry["KEY_o"] := "w"
+	keysAry["KEY_p"] := "q"
+	
+	keysAry["KEY_a"] := ";"
+	keysAry["KEY_s"] := "l"
+	keysAry["KEY_d"] := "k"
+	keysAry["KEY_f"] := "j"
+	keysAry["KEY_g"] := "h"
+	keysAry["KEY_h"] := "g"
+	keysAry["KEY_j"] := "f"
+	keysAry["KEY_k"] := "d"
+	keysAry["KEY_l"] := "s"
+	keysAry["KEY_;"] := "a"
+	
+	keysAry["KEY_z"] := "/"
+	keysAry["KEY_x"] := "."
+	keysAry["KEY_c"] := ","
+	keysAry["KEY_v"] := "m"
+	keysAry["KEY_b"] := "n"
+	keysAry["KEY_n"] := "b"
+	keysAry["KEY_m"] := "v"
+	keysAry["KEY_,"] := "c"
+	keysAry["KEY_."] := "x"
+	keysAry["KEY_/"] := "z"
+	
+	return keysAry
 }
 
-Modifiers =
-state1 := GetKeyState("LWin")
-state2 := GetKeyState("RWin")
-state = %state1%%state2%
-if state <> UU  ; At least one Windows key is down.
-   Modifiers = %Modifiers%#
-state1 := GetKeyState("Control")
-if state1 = D
-   Modifiers = %Modifiers%^
-state1 := GetKeyState("Alt")
-if state1 = D
-   Modifiers = %Modifiers%!
-state1 := GetKeyState("Shift")
-if state1 = D
-   Modifiers = %Modifiers%+
-Send %Modifiers%{%MirrorKey%}
-return
+getMirroredKeyFromHotkey(hotkeyString) {
+	if(!hotkeyString)
+		return ""
+	
+	keyToMirror := "KEY_" SubStr(hotkeyString, StrLen(hotkeyString), 1)
+	if(!keyToMirror)
+		return ""
+	
+	; DEBUG.popup("Hotkey",hotkeyString, "Key to mirror",keyToMirror, "Result",mirrorKeys[keyToMirror], "MirrorKeys",mirrorKeys)
+	return mirrorKeys[keyToMirror]
+}
+
 
 #Include <commonHotkeys>

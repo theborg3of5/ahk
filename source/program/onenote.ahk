@@ -85,10 +85,8 @@
 	; Disable ^t hotkey making a new section
 	; ^t::return ; Used for collapsing/expanding above
 	
-	; Sync This Notebook Now
-	^s::Send, +{F9}
-	; Sync All Notebooks Now
-	^+s::Send, {F9}
+	^s::Send, +{F9} ; Sync This Notebook Now
+	^+s::Send, {F9} ; Sync All Notebooks Now
 	
 	; Copy link to page.
 	!c::

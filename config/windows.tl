@@ -10,7 +10,7 @@
 	Pidgin Buddy List			pidgin.exe			-							Buddy List				-						CLOSE		CLOSE
 	Cisco AnyConnect VPN		vpnui.exe			#32770					-							-						CLOSE
 	Explorer						explorer.exe		CabinetWClass			-							-						MIN		OTHER
-	Mattermost					Mattermost.exe		-							-							-						-			CLOSE
+	Mattermost					Mattermost.exe		-							-							-						CLOSE		CLOSE
 	
 	; VB6
 	VB6							VB6.exe				wndclass_desked_gsk	-							-						-			POST_MESSAGE

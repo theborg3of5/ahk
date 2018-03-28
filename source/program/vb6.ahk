@@ -1,11 +1,6 @@
 { ; Main VB window.
 #IfWinActive, ahk_class wndclass_desked_gsk
 	{ ; Normal replacements/shortcuts.
-		; TLG Hotkey.
-		^t::
-			Send, %epicID%
-		return
-		
 		; Back and (sort of) forward like ES.
 		!Left::
 			Send, ^+{F2}

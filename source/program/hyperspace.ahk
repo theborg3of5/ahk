@@ -4,11 +4,6 @@
 	; Make F5 work everywhere by mapping it to shift + F5.
 	$F5::+F5
 	
-	; TLG Hotkey.
-	^t::
-		Send, %epicID%
-	return
-	
 	; Login hotkeys.
 	^+t::
 		Send, %epicID%{Tab}

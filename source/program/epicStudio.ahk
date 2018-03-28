@@ -1,8 +1,5 @@
 ; EpicStudio hotkeys and helpers.
 #IfWinActive, ahk_exe EpicStudio.exe
-	; TLG Hotkey.
-	^t::Send, %epicID%
-
 	; Better access to INTermediate code.
 	!i::ControlSend, , ^+v
 

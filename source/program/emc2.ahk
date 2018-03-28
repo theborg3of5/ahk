@@ -3,11 +3,6 @@
 	; Make F5 work everywhere by mapping it to shift + F5.
 	$F5::+F5
 	
-	; TLG Hotkey.
-	^t::
-		Send, %epicID%
-	return
-	
 	; Make ^h for server object, similar to ^g for client object.
 	^h::
 		Send, ^7

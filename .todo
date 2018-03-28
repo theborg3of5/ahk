@@ -28,6 +28,7 @@
 				Update "Tags that can be used in folders.tl" comment appropriately
 				mainConfig.getFolder > .getPath (.replacePathTags already correct)
 				Update all callers if any tag names changed
+				Make sure to use something besides "ABBREV" (maybe "KEY"?) for this .tl
 	In _includeCommon, bottom auto-execute bit into a function so the variables involved (ahkRootPath, configFolder) aren't global?
 	New selector for editing config files (programs, windows, games, privateInfo, folderTags) that are only used silently?
 	Reconsider data vs dataFilled stuff in Selector - seems like it could be done better.

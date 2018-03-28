@@ -220,7 +220,6 @@ doMForLoop() {
 }
 
 getEpicAppIdFromKey(appKey) {
-	global epicAppKeyToIdAry
 	if(!appKey)
 		return 0
 	return epicAppKeyToIdAry[appKey]

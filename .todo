@@ -3,6 +3,7 @@
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
+	Retire mainConfig's setting array functionality - we don't use it anymore.
 	
 # New ideas
 	New selector for editing config files (programs, windows) that are only used silently?
@@ -39,6 +40,7 @@
 	Debug
 	Selector
 		Settings passed in programmatically
+	MainConfig and windows.tl support for RegEx in titles ({REGEX})
 
 # Unit Tests
 	ActionObject

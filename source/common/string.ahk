@@ -166,6 +166,10 @@ stringContains(haystack, needle, caseSensitive = "") {
 	return InStr(haystack, needle, caseSensitive)
 }
 
+stringStartsWith(haystack, needle) {
+	return RegExMatch(haystack, "^" needle)
+}
+
 ; See if a string contains any of the strings in the array.
 stringContainsAnyOf(haystack, needles) {
 	firstPos := 0

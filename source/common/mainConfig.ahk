@@ -139,16 +139,24 @@ class MainConfig {
 			return ""
 		
 		For i,w in this.windows {
-			; DEBUG.popup("Name",name, "EXE",exe, "Class",ahkClass, "Title",title, "Text",text, "Against settings",w)
-			if(name && w["NAME"] && (name != w["NAME"]) )
+			; DEBUG.popup("Against settings",w, "Name",name, "EXE",exe, "Class",ahkClass, "Title",title, "Text",text)
+			if(name && w["NAME"] && (name != w["NAME"]))
 				Continue
-			if(exe && w["EXE"] && (exe != w["EXE"]) )
+			if(exe && w["EXE"] && (exe != w["EXE"]))
 				Continue
-			if(ahkClass && w["CLASS"] && (ahkClass != w["CLASS"]) )
+			if(ahkClass && w["CLASS"] && (ahkClass != w["CLASS"]))
 				Continue
-			if(title && w["TITLE"] && (title != w["TITLE"]) )
-				Continue
-			if(text && w["TEXT"] && !stringContains(text, w["TEXT"]) )
+			if(title && w["TITLE"]) {
+				if(stringStartsWith(w["TITLE"], "{REGEX}")) {
+					regexNeedle := SubStr(w["TITLE"], StrLen("{REGEX}") + 1)
+					if(!RegExMatch(title, regexNeedle))
+						Continue
+				} else {
+					if(title != w["TITLE"])
+						Continue
+				}
+			}
+			if(text && w["TEXT"] && !stringContains(text, w["TEXT"]))
 				Continue
 			
 			retWindow := w.clone()

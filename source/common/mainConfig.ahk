@@ -16,18 +16,21 @@ global MAIN_CENTRAL_SCRIPT := "MAIN_CENTRAL_SCRIPT"
 class MainConfig {
 	static multiDelim := "|"
 	static defaultSettings := {}
-	static settings := []
-	static windows  := []
-	static folders  := [] ; abbrev => path
-	static programs := []
-	static games    := []
+	static settings      := []
+	static privateValues := [] ; KEY => VALUE
+	static windows       := []
+	static folders       := [] ; abbrev => path ; GDB TODO update this, using KEY => PATH now?
+	static programs      := []
+	static games         := []
 	
+	; init(settingsFile, privateFile, windowsFile, foldersFile, programsFile, gamesFile) {
 	init(settingsFile, windowsFile, foldersFile, programsFile, gamesFile) {
-		this.settings := this.loadSettings(settingsFile)
-		this.windows  := this.loadWindows(windowsFile)
-		this.folders  := this.loadFolders(foldersFile)
-		this.programs := this.loadPrograms(programsFile)
-		this.games    := this.loadGames(gamesFile)
+		this.settings      := this.loadSettings(settingsFile)
+		; this.privateValues := this.loadPrivateValues(privateFile)
+		this.windows       := this.loadWindows(windowsFile)
+		this.folders       := this.loadFolders(foldersFile)
+		this.programs      := this.loadPrograms(programsFile)
+		this.games         := this.loadGames(gamesFile)
 		
 		; DEBUG.popup("MainConfig", "End of init", "Settings", this.settings, "Window settings", this.windows, "Program info", this.programs)
 	}
@@ -55,6 +58,23 @@ class MainConfig {
 		
 		; Empty value, use default.
 		return this.defaultSettings[configName]
+	}
+	
+	loadPrivateValues(filePath) {
+		tl := new TableList(filePath)
+		valuesTable := tl.getTable()
+		
+		; Index private values by key.
+		privateValuesAry := []
+		For i,valueRow in valuesTable {
+			key := valueRow["KEY"]
+			if(!key)
+				Continue
+			
+			privateValuesAry[key] := valueRow["VALUE"]
+		}
+		
+		return privateValuesAry
 	}
 	
 	loadWindows(filePath) {
@@ -135,6 +155,15 @@ class MainConfig {
 		this.settings[settingName] := value
 	}
 	
+	getPrivateValue(key) {
+		if(!key)
+			return ""
+		return this.privateValues[key]
+	}
+	replacePrivateTags(inputString) {
+		return replaceTags(inputString, this.privateValues)
+	}
+	
 	getWindow(name = "", exe = "", ahkClass = "", title = "", text = "") {
 		retWindow := ""
 		if(!name && !exe && !ahkClass && !title && !text)
@@ -170,7 +199,7 @@ class MainConfig {
 		return retWindow
 	}
 	
-	getFolder(abbrev) {
+	getFolder(abbrev) { ; GDB TODO update "abbrev"
 		if(!abbrev)
 			return ""
 		return this.folders[abbrev]

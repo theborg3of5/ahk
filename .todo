@@ -13,9 +13,11 @@
 			Folder selector remains, with specific list that can use path tags (but not private tags directly)
 		To do:
 			Private
-				Read into MainConfig (mainConfig.loadPrivateValues)
-					Make available: mainConfig.getPrivateValue, .replacePrivateTags
+				Update call to mainConfig.init (to include new private file)
+					Could we use file.findTLFilePath()?
+						If we do, maybe we should rename it to findConfigFilePath().
 				Update all places that use private variables
+				Remove line that includes old privateVariables.ahk (in mainConfig)
 			Paths
 				New config\paths.tl file (from bottom half of folders.tl)
 					_includeCommon call > update path

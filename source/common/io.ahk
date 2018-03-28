@@ -185,19 +185,6 @@ doesWindowSupportLinking(name) {
 	
 	return windowNamesAry.HasKey(name)
 }
-getLinkPopupTitleString(windowName) {
-	if(!windowName)
-		return ""
-	
-	linkPopupsAry := []
-	linkPopupsAry["OneNote"]  := "Link ahk_class NUIDialog"
-	linkPopupsAry["Outlook"]  := "ahk_class bosa_sdm_Mso96"
-	linkPopupsAry["Word"]     := "ahk_class bosa_sdm_msword"
-	linkPopupsAry["EMC2 DLG"] := "" ; Fake popup, so we can't wait for it (or sense it at all, really)
-	linkPopupsAry["EMC2 XDS"] := "HyperLink Parameters ahk_class ThunderRT6FormDC"
-	
-	return linkPopupsAry[windowName]
-}
 openLinkPopup(windowName) {
 	if(!windowName)
 		return
@@ -216,6 +203,19 @@ openLinkPopup(windowName) {
 	} else {
 		Sleep, 100
 	}
+}
+getLinkPopupTitleString(windowName) {
+	if(!windowName)
+		return ""
+	
+	linkPopupsAry := []
+	linkPopupsAry["OneNote"]  := "Link ahk_class NUIDialog"
+	linkPopupsAry["Outlook"]  := "ahk_class bosa_sdm_Mso96"
+	linkPopupsAry["Word"]     := "ahk_class bosa_sdm_msword"
+	linkPopupsAry["EMC2 DLG"] := "" ; Fake popup, so we can't wait for it (or sense it at all, really)
+	linkPopupsAry["EMC2 XDS"] := "HyperLink Parameters ahk_class ThunderRT6FormDC"
+	
+	return linkPopupsAry[windowName]
 }
 closeLinkPopup(windowName) {
 	if(!windowName)

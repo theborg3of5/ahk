@@ -85,7 +85,7 @@
 #If
 
 ; Design open
-#If exeActive("EpicD82.exe") && WinActive("XDS ")
+#If WinActive("XDS ahk_exe EpicD82.exe")
 	^k::
 		clickUsingMode(515, 226, "Client")
 	return

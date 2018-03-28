@@ -167,31 +167,62 @@ linkSelectedText(url) {
 	if(!url)
 		return
 	
-	if(WinActive("ahk_exe ONENOTE.EXE")) {
+	windowName := getWindowSetting("NAME") ; Active window's matching name in window settings (windows.tl).
+	if(!doesWindowSupportLinking(windowName))
+		return
+	
+	openLinkPopup(windowName)
+	sendTextWithClipboard(url)
+	closeLinkPopup(windowName)
+}
+doesWindowSupportLinking(name) {
+	windowNamesAry := []
+	windowNamesAry["OneNote"]  := ""
+	windowNamesAry["Outlook"]  := ""
+	windowNamesAry["Word"]     := ""
+	windowNamesAry["EMC2 DLG"] := ""
+	windowNamesAry["EMC2 XDS"] := ""
+	
+	return windowNamesAry.HasKey(name)
+}
+getLinkPopupTitleString(windowName) {
+	if(!windowName)
+		return ""
+	
+	linkPopupsAry := []
+	linkPopupsAry["OneNote"]  := "Link ahk_class NUIDialog"
+	linkPopupsAry["Outlook"]  := "ahk_class bosa_sdm_Mso96"
+	linkPopupsAry["Word"]     := "ahk_class bosa_sdm_msword"
+	linkPopupsAry["EMC2 DLG"] := "" ; Fake popup, so we can't wait for it (or sense it at all, really)
+	linkPopupsAry["EMC2 XDS"] := "HyperLink Parameters ahk_class ThunderRT6FormDC"
+	
+	return linkPopupsAry[windowName]
+}
+openLinkPopup(windowName) {
+	if(!windowName)
+		return
+	
+	if(windowName = "EMC2 XDS")
+		clickUsingMode(515, 226, "Client")
+	else
 		Send, ^k
-		WinWaitActive, Link ahk_class NUIDialog
-		if(!WinActive("Link ahk_class NUIDialog"))
+	
+	; Wait for it to open.
+	popupTitleString := getLinkPopupTitleString(windowName)
+	if(popupTitleString) {
+		WinWaitActive, % popupTitleString
+		if(!WinActive(popupTitleString))
 			return
-		sendTextWithClipboard(url)
-		Send, {Enter}{Right}
-	} else if(WinActive("ahk_exe OUTLOOK.EXE")) {
-		Send, ^k
-		WinWaitActive, ahk_class bosa_sdm_Mso96
-		if(!WinActive("ahk_class bosa_sdm_Mso96"))
-			return
-		sendTextWithClipboard(url)
-		Send, {Enter}
-	} else if(WinActive("ahk_exe WINWORD.EXE")) {
-		Send, ^k
-		WinWaitActive, ahk_class bosa_sdm_msword
-		if(!WinActive("ahk_class bosa_sdm_msword"))
-			return
-		sendTextWithClipboard(url)
-		Send, {Enter}
-	} else if(WinActive("DLG ahk_exe EpicD82.exe ahk_class ThunderRT6MDIForm")) { ; EMC2, specifically DLG activities
-		Send, ^k
-		Sleep, 100 ; It's a fake pop-up so we can't wait for it (or sense it at all, really)
-		sendTextWithClipboard(url)
-		Send, {Enter}
+	} else {
+		Sleep, 100
 	}
+}
+closeLinkPopup(windowName) {
+	if(!windowName)
+		return
+	
+	if(windowName = "OneNote")
+		Send, {Enter}{Right}
+	else
+		Send, {Enter}
 }

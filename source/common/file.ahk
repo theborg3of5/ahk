@@ -84,17 +84,12 @@ sendFilePath(folderName = "", subPath = "") {
 	sendFolderPath(folderName, subPath, false)
 }
 sendUnixFolderPath(folderName = "", subPath = "") {
-	sendFolderPath(folderName, subPath, , true)
+	sendFolderPath(folderName, subPath, , "/")
 }
-sendFolderPath(folderName = "", subPath = "", trailingSlash = true, isUnixPath = false) {
+sendFolderPath(folderName = "", subPath = "", trailingSlash = true, slashChar = "\") {
 	folderPath := selectFolder(folderName)
 	if(!folderPath)
 		return
-	
-	if(isUnixPath)
-		slashChar := "/"
-	else
-		slashChar := "\"
 	
 	; Append a further subPath if they gave that to us
 	if(subPath) {

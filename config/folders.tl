@@ -27,6 +27,9 @@
 	S1 Source					s1									<EPIC_SOURCE_S1>																									EPIC_LAPTOP
 	S2 Source					s2									<EPIC_SOURCE_S2>																									EPIC_LAPTOP
 	
+	# Admin
+	DBC Design					dbcd								<EPIC_DBC_DESIGN>																									EPIC_LAPTOP
+	
 	# For code use
 	*User Root					USER_ROOT						<USER_ROOT>
 	*AHK Root					AHK_ROOT							<AHK_ROOT>
@@ -41,3 +44,4 @@
 	*Epic Net Home				EPIC_NET_HOME					<EPIC_NET_HOME>																									EPIC_LAPTOP
 	*Epic Source S1			EPIC_SOURCE_S1					<EPIC_SOURCE_S1>																									EPIC_LAPTOP
 	*Epic Source S2			EPIC_SOURCE_S2					<EPIC_SOURCE_S2>																									EPIC_LAPTOP
+	*Epic DBC Design			EPIC_DBC_DESIGN				<EPIC_DBC_DESIGN>																									EPIC_LAPTOP

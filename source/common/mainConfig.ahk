@@ -75,6 +75,7 @@ class MainConfig {
 		systemTags["EPIC_SOURCE_S1"]     := epicSourceCurrentS1
 		systemTags["EPIC_SOURCE_S2"]     := epicSourceCurrentS2
 		systemTags["EPIC_USERNAME"]      := epicUsername
+		systemTags["EPIC_DBC_DESIGN"]    := epicDBCDesign
 		
 		tl := new TableList(filePath)
 		folderTable := tl.getFilteredTableUnique("NAME", "MACHINE", MainConfig.getMachine())
@@ -91,6 +92,7 @@ class MainConfig {
 			}
 		}
 		
+		; DEBUG.popup("mainConfig.loadFolders","finish", "Folders",folderPaths)
 		return folderPaths
 	}
 	

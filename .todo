@@ -6,7 +6,6 @@
 	Retire mainConfig's setting array functionality - we don't use it anymore.
 	
 # New ideas
-	New selector for editing config files (programs, windows, games, privateInfo, folderTags) that are only used silently?
 	Reconsider data vs dataFilled stuff in Selector - seems like it could be done better.
 		overrideData seems like it should be a property of the class.
 			Probably overrideDataFilled, too.

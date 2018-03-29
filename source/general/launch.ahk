@@ -63,7 +63,6 @@
 ; Folders
 !+a::openFolder("AHK_ROOT")
 !+m::openFolder("MUSIC")
-!+c::openFolder("AHK_CONFIG")
 !+d::openFolder("DOWNLOADS")
 !+u::openFolder("USER_ROOT")
 
@@ -217,4 +216,13 @@ genericLink(subAction) {
 		; DEBUG.popup("Updated path",path, "Table",table)
 		
 		sendTextWithClipboard(path)
+	}
+
+; Selector to allow easy editing of config TL files that don't show a popup
+!+c::
+	configSelector() {
+		path := doSelect("configs.tl")
+		path := MainConfig.replacePathTags(path)
+		if(path && FileExist(path))
+			Run(path)
 	}

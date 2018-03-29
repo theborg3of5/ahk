@@ -11,8 +11,6 @@ global MAIN_CENTRAL_SCRIPT := "MAIN_CENTRAL_SCRIPT"
 
 ; Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
 class MainConfig {
-	static multiDelim := "|"
-	static defaultSettings := {}
 	static settings := []
 	static windows  := []
 	static paths    := [] ; KEY => PATH
@@ -69,19 +67,7 @@ class MainConfig {
 	}
 	loadSettingFromFile(filePath, configName) {
 		iniObj := new IniObject(filePath)
-		value := iniObj.get("Main", configName)
-		; DEBUG.popup("Filepath", filePath, "Config name", configName, "Value", value)
-		
-		; Multi-entry value, put into an array.
-		if(stringContains(value, this.multiDelim))
-			return StrSplit(value, this.multiDelim)
-		
-		; Single value, use it as-is.
-		else if(value)
-			return value
-		
-		; Empty value, use default.
-		return this.defaultSettings[configName]
+		return iniObj.get("Main", configName)
 	}
 	
 	loadWindows(filePath) {
@@ -115,18 +101,18 @@ class MainConfig {
 	
 	loadPrograms(filePath) {
 		tl := new TableList(filePath)
-		uniquePrograms := tl.getFilteredTableUnique("NAME", "MACHINE", this.getMachine())
-		; DEBUG.popup("MainConfig", "loadPrograms", "Unique table", uniquePrograms)
+		programsTable := tl.getFilteredTableUnique("NAME", "MACHINE", this.getMachine())
+		; DEBUG.popup("MainConfig", "loadPrograms", "Unique table", programsTable)
 		
 		; Index it by name and machine.
 		programsAry := []
-		For i,pAry in uniquePrograms {
-			name := pAry["NAME"] ; Identifying name of this entry (which this.programs will be indexed by)
+		For i,row in programsTable {
+			name := row["NAME"] ; Identifying name of this entry (which this.programs will be indexed by)
 			
 			if(!IsObject(programsAry[name])) ; Initialize the array.
 				programsAry[name] := []
 			
-			programsAry[name] := pAry
+			programsAry[name] := row
 		}
 		; DEBUG.popup("MainConfig", "loadPrograms", "Finished programs", programsAry)
 		
@@ -138,17 +124,25 @@ class MainConfig {
 		return tl.getTable()
 	}
 	
+	; ============ Public functions for accessing info ================
 	
-	
-	; Note that this will return an array of values if that's what's in settings.
 	getSetting(settingName = "") {
-		if(settingName)
-			return this.settings[settingName]
-		else
-			return this.settings
+		if(!settingName)
+			return ""
+		return this.settings[settingName]
 	}
-	setSetting(settingName, value) {
-		this.settings[settingName] := value
+	getMachine() {
+		return this.getSetting("MACHINE")
+	}
+	isMachine(machineName) {
+		return (this.settings["MACHINE"] = machineName)
+	}
+	getMachineTableListFilter() {
+		filter := []
+		filter["COLUMN"] := "MACHINE"
+		filter["VALUE"]  := this.getMachine()
+		
+		return filter
 	}
 	
 	getPrivate(key) {
@@ -194,6 +188,18 @@ class MainConfig {
 		
 		return retWindow
 	}
+	windowIsGame(titleString := "A") {
+		ahkExe := WinGet("ProcessName", titleString)
+		if(!ahkExe)
+			return false
+		
+		For i,game in this.games {
+			if(ahkExe = game["EXE"])
+				return true
+		}
+		
+		return false
+	}
 	
 	getPath(key) {
 		if(!key)
@@ -217,55 +223,5 @@ class MainConfig {
 		} else { ; Just return the whole array.
 			return this.programs[name]
 		}
-	}
-	
-	
-	
-	; === Comparison functions for easy "check if this hotkey should trigger X" type needs ===
-	
-	; Checks for the given value (regardless of whether the desired setting is an array or not).
-	settingIsValue(configName, value) {
-		; DEBUG.popup("Name", configName, "Check value", value, "Name value", this.settings[configName], "All settings", this.settings)
-		
-		; If the setting has multiple values, loop over them and return true if it's in there.
-		if(IsObject(this.settings[configName])) {
-			For i,s in this.settings[configName] {
-				if(s = value)
-					return true
-			}
-		} else {
-			if(this.settings[configName] = value)
-				return true
-		}
-		
-		return false
-	}
-	
-	windowIsGame(titleString := "A") {
-		ahkExe := WinGet("ProcessName", titleString)
-		if(!ahkExe)
-			return false
-		
-		For i,game in this.games {
-			if(ahkExe = game["EXE"])
-				return true
-		}
-		
-		return false
-	}
-	
-	; === Shortcut functions for oft-used settings ===
-	getMachine() {
-		return this.getSetting("MACHINE")
-	}
-	isMachine(machineName) {
-		return this.settingIsValue("MACHINE", machineName)
-	}
-	getMachineTableListFilter() {
-		filter := []
-		filter["COLUMN"] := "MACHINE"
-		filter["VALUE"]  := this.getMachine()
-		
-		return filter
 	}
 }

@@ -3,7 +3,6 @@
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
-	Retire mainConfig's setting array functionality - we don't use it anymore.
 	
 # New ideas
 	Reconsider data vs dataFilled stuff in Selector - seems like it could be done better.

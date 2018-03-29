@@ -6,26 +6,6 @@
 	Retire mainConfig's setting array functionality - we don't use it anymore.
 	
 # New ideas
-	Private/folders cleanup
-		Overall strategy:
-			Read in private info
-			Read in paths, apply private info (replace any tags within paths PATH column)
-			Folder selector remains, with specific list that can use path tags (but not private tags directly)
-		To do:
-			Private (privates.tl)
-				Update all places that use private variables
-				Remove line that includes old privateVariables.ahk (in mainConfig)
-			Paths
-				New config\paths.tl file (from bottom half of folders.tl)
-					_includeCommon call > update path
-				mainConfig.loadFolders > .loadPaths
-					No longer need to loop on abbreviations
-					this.folders > this.paths
-					Apply private values (using mainConfig.replacePrivateTags)
-				Update "Tags that can be used in folders.tl" comment appropriately
-				mainConfig.getFolder > .getPath (.replacePathTags already correct)
-				Update all callers if any tag names changed
-				Make sure to use something besides "ABBREV" (maybe "KEY"?) for this .tl
 	New selector for editing config files (programs, windows, games, privateInfo, folderTags) that are only used silently?
 	Reconsider data vs dataFilled stuff in Selector - seems like it could be done better.
 		overrideData seems like it should be a property of the class.

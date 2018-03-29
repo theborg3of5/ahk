@@ -71,9 +71,9 @@ reduceFilepath(path, levelsDown) {
 	return outPath
 }
 
-; Select a folder based on input (or prompt if no input) and open it.
-openFolder(folderName = "") {
-	folderPath := selectFolder(folderName)
+; Open a folder from config-defined tags.
+openFolder(folderName) {
+	folderPath := MainConfig.getPath(folderName)
 	; DEBUG.popup("Folder name",folderName, "Path",folderPath)
 	
 	if(folderPath && FileExist(folderPath))
@@ -81,13 +81,13 @@ openFolder(folderName = "") {
 }
 
 sendFilePath(folderName = "", subPath = "") {
-	sendFolderPath(folderName, subPath, false)
+	sendFolderPath(folderName, subPath, , false)
 }
 sendUnixFolderPath(folderName = "", subPath = "") {
-	sendFolderPath(folderName, subPath, , "/")
+	sendFolderPath(folderName, subPath, "/")
 }
-sendFolderPath(folderName = "", subPath = "", trailingSlash = true, slashChar = "\") {
-	folderPath := selectFolder(folderName)
+sendFolderPath(folderName = "", subPath = "", slashChar = "\", trailingSlash = true) {
+	folderPath := MainConfig.getPath(folderName)
 	if(!folderPath)
 		return
 	
@@ -112,6 +112,7 @@ selectFolder(folderName = "") {
 	else
 		folderPath := s.selectGui()
 	
+	; DEBUG.popup("Path",folderPath, "Replaced",MainConfig.replacePathTags(folderPath))
 	return MainConfig.replacePathTags(folderPath)
 }
 

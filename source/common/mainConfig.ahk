@@ -1,6 +1,3 @@
-; Optional file of private variables.
-#Include *i %A_LineFile%/../../../config/private/privateVariables.ahk
-
 ; Constants for machines.
 global MACHINE_EpicLaptop  := "EPIC_LAPTOP"
 global MACHINE_HomeAsus    := "HOME_ASUS"
@@ -19,20 +16,17 @@ class MainConfig {
 	static settings := []
 	static windows  := []
 	static paths    := [] ; KEY => PATH
-	static folders  := [] ; abbrev => path ; GDB TODO update this, using KEY => PATH now?
 	static programs := []
 	static games    := []
 	static privates := [] ; KEY => VALUE
 	
-	; init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile) {
-	init(settingsFile, windowsFile, foldersFile, programsFile, gamesFile, privatesFile, pathsFile) {
+	init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile) {
 		; All config files are expected to live in config/ folder under the root of this repo.
 		ahkRootPath := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
 		configFolder := ahkRootPath "\config"
 		
 		settingsPath := configFolder "\" settingsFile
 		windowsPath  := configFolder "\" windowsFile
-		foldersPath  := configFolder "\" foldersFile
 		pathsPath    := configFolder "\" pathsFile
 		programsPath := configFolder "\" programsFile
 		gamesPath    := configFolder "\" gamesFile
@@ -42,7 +36,6 @@ class MainConfig {
 		
 		this.settings := this.loadSettings(settingsPath)
 		this.windows  := this.loadWindows(windowsPath)
-		this.folders  := this.loadFolders(foldersPath)
 		this.paths    := this.loadPaths(pathsPath)
 		this.programs := this.loadPrograms(programsPath)
 		this.games    := this.loadGames(gamesPath)
@@ -94,40 +87,6 @@ class MainConfig {
 	loadWindows(filePath) {
 		tl := new TableList(filePath)
 		return tl.getFilteredTable("MACHINE", MainConfig.getMachine())
-	}
-	
-	loadFolders(filePath) {
-		; Tags that can be used in folders.tl
-		systemTags := []
-		systemTags["AHK_ROOT"]           := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
-		systemTags["USER_ROOT"]          := reduceFilepath(A_Desktop,  1)
-		systemTags["EPIC_PERSONAL"]      := epicPersonal
-		systemTags["EPIC_NFS_3DAY_UNIX"] := epicNFS3DayUnix
-		systemTags["EPIC_NFS_3DAY"]      := epicNFS3Day
-		systemTags["EPIC_NFS_ASK"]       := epicNFSAsk
-		systemTags["EPIC_NET_HOME"]      := epicNetHome
-		systemTags["EPIC_SOURCE_S1"]     := epicSourceCurrentS1
-		systemTags["EPIC_SOURCE_S2"]     := epicSourceCurrentS2
-		systemTags["EPIC_USERNAME"]      := epicUsername
-		systemTags["EPIC_DBC_DESIGN"]    := epicDBCDesign
-		
-		tl := new TableList(filePath)
-		folderTable := tl.getFilteredTableUnique("NAME", "MACHINE", MainConfig.getMachine())
-		
-		; Build abbrev-indexed array of entries.
-		folderPaths := []
-		For i,folder in folderTable {
-			abbrevAry := forceArray(folder["ABBREV"])
-			For j,abbrev in abbrevAry { ; Handle having multiple abbrevs defined (with | syntax)
-				if(!abbrev) ; Ignore folders with no shortcuts, mostly headers and Selector settings.
-					Continue
-				
-				folderPaths[abbrev] := replaceTags(folder["PATH"], systemTags)
-			}
-		}
-		
-		; DEBUG.popup("mainConfig.loadFolders","finish", "Folders",folderPaths)
-		return folderPaths
 	}
 	
 	loadPaths(filePath) {
@@ -241,14 +200,8 @@ class MainConfig {
 			return ""
 		return this.paths[key]
 	}
-	getFolder(abbrev) {
-		if(!abbrev)
-			return ""
-		return this.folders[abbrev]
-	}
 	replacePathTags(inputPath) {
-		; return replaceTags(inputPath, this.paths)
-		return replaceTags(inputPath, this.folders)
+		return replaceTags(inputPath, this.paths)
 	}
 	
 	; Subscripts available (only set if set in file):

@@ -27,5 +27,4 @@
 #Include window.ahk
 #Include XInput.ahk
 
-; MainConfig.init("local\settings.ini", "windows.tl", "paths.tl", "programs.tl", "games.tl", "private\privates.tl")
-MainConfig.init("local\settings.ini", "windows.tl", "folders.tl", "programs.tl", "games.tl", "private\privates.tl", "paths.tl")
+MainConfig.init("local\settings.ini", "windows.tl", "paths.tl", "programs.tl", "games.tl", "private\privates.tl")

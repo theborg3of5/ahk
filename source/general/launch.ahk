@@ -158,7 +158,12 @@ genericLink(subAction) {
 #If
 
 ; Folder List - Open
-^+!w::openFolder()
+^+!w::
+	folderSelector() {
+		folderPath := selectFolder()
+		if(folderPath && FileExist(folderPath))
+			Run(folderPath)
+	}
 
 ; Turn selected text or clipboard into standard string for OneNote use.
 !+n::

@@ -11,16 +11,9 @@
 }
 
 { ; Addresses.
-	:X:waddr::
-		SendRaw, % MainConfig.getPrivate("HOME_ADDRESS")
-	return
-	
-	:X:eaddr::
-		Send, % MainConfig.getPrivate("WORK_ADDRESS")
-	return
-	:*0X:ezip::
-		Send, % MainConfig.getPrivate("WORK_ZIP_CODE")
-	return
+	:X:waddr::SendRaw, % MainConfig.getPrivate("HOME_ADDRESS")
+	:X:eaddr::Send, % MainConfig.getPrivate("WORK_ADDRESS")
+	:*0X:ezip::Send, % MainConfig.getPrivate("WORK_ZIP_CODE")
 }
 
 { ; Logins.
@@ -152,7 +145,7 @@
 		:X:urf::sendFolderPath("USER_ROOT")
 		:X:deskf::sendFolderPath("USER_ROOT", "Desktop")
 		:X:dsf::sendFolderPath("USER_ROOT", "Design")
-		:X:dlf::sendFolderPath("USER_ROOT", "Downloads")
+		:X:dlf::sendFolderPath("DOWNLOADS")
 		:X:devf::sendFolderPath("USER_ROOT", "Dev")
 	}
 

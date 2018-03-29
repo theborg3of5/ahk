@@ -200,7 +200,7 @@ genericLink(subAction) {
 		path := cleanupText(path, ["file:///", """"])
 		
 		; Convert paths to use mapped drive letters
-		tl := new TableList(findTLFilePath("mappedDrives.tl"))
+		tl := new TableList(findConfigFilePath("mappedDrives.tl"))
 		table := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
 		
 		For i,row in table {

@@ -107,7 +107,7 @@ class Selector {
 		Gui, %guiId%:Default ; GDB TODO if we want to truly run Selectors in parallel, we'll probably need to add guiId as a property and add it to all the Gui* calls.
 		
 		if(filePath) {
-			this.filePath := findTLFilePath(filePath)
+			this.filePath := findConfigFilePath(filePath)
 			this.loadChoicesFromFile(tlSettings, filter)
 		}
 		

@@ -34,8 +34,6 @@
 	*User Root					USER_ROOT						<USER_ROOT>
 	*AHK Root					AHK_ROOT							<AHK_ROOT>
 	*AHK Config					AHK_CONFIG						<AHK_ROOT>\config
-	*AHK Local Config			AHK_LOCAL_CONFIG				<AHK_ROOT>\config\local
-	*AHK Private Config		AHK_PRIVATE_CONFIG			<AHK_ROOT>\config\private
 	*AHK Source					AHK_SOURCE						<AHK_ROOT>\source
 	*Epic Personal				EPIC_PERSONAL					<EPIC_PERSONAL>																									EPIC_LAPTOP
 	*Epic NFS 3 Day			EPIC_NFS_3DAY					<EPIC_NFS_3DAY>																									EPIC_LAPTOP

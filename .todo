@@ -12,7 +12,7 @@
 			Read in paths, apply private info (replace any tags within paths PATH column)
 			Folder selector remains, with specific list that can use path tags (but not private tags directly)
 		To do:
-			Private
+			Private (privates.tl)
 				Update call to mainConfig.init (to include new private file)
 					Could we use file.findTLFilePath()?
 						If we do, maybe we should rename it to findConfigFilePath().
@@ -29,7 +29,6 @@
 				mainConfig.getFolder > .getPath (.replacePathTags already correct)
 				Update all callers if any tag names changed
 				Make sure to use something besides "ABBREV" (maybe "KEY"?) for this .tl
-	In _includeCommon, bottom auto-execute bit into a function so the variables involved (ahkRootPath, configFolder) aren't global?
 	New selector for editing config files (programs, windows, games, privateInfo, folderTags) that are only used silently?
 	Reconsider data vs dataFilled stuff in Selector - seems like it could be done better.
 		overrideData seems like it should be a property of the class.

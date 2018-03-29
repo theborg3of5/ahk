@@ -159,7 +159,6 @@
 	{ ; AHK
 		:X:arf::sendFolderPath("AHK_ROOT")
 		:X:aconf::sendFolderPath("AHK_CONFIG")
-		:X:apconf::sendFolderPath("AHK_PRIVATE_CONFIG")
 		:X:atf::sendFolderPath("AHK_ROOT", "test")
 		:X:asf::sendFolderPath("AHK_SOURCE")
 		:X:acf::sendFolderPath("AHK_SOURCE", "common")

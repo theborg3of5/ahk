@@ -137,7 +137,7 @@ searchWithEverything(textToSearch) {
 	Run(runPath)
 }
 	
-findTLFilePath(path) {
+findConfigFilePath(path) {
 	if(!path)
 		return ""
 	
@@ -149,13 +149,14 @@ findTLFilePath(path) {
 	if(FileExist("Includes\" path))
 		return "Includes\" path
 	
-	; Default folder for selector INIs
-	if(FileExist(MainConfig.getFolder("AHK_CONFIG") "\" path))
-		return MainConfig.getFolder("AHK_CONFIG") "\" path
-	
-	; Private folder (not version-controlled) inside of that
-	if(FileExist(MainConfig.getFolder("AHK_PRIVATE_CONFIG") "\" path))
-		return MainConfig.getFolder("AHK_PRIVATE_CONFIG") "\" path
+	; Check the overall config folder.
+	configFolder := MainConfig.getFolder("AHK_CONFIG")
+	if(FileExist(configFolder "\local\" path))   ; Local folder (not version-controlled) inside of config
+		return configFolder "\local\" path
+	if(FileExist(configFolder "\private\" path)) ; Private folder (not version-controlled) inside of config
+		return configFolder "\private\" path
+	if(FileExist(configFolder "\" path))         ; General config folder
+		return configFolder "\" path
 	
 	this.errPop("File doesn't exist", path)
 	return ""

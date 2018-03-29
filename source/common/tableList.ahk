@@ -153,7 +153,7 @@ class TableList {
 		
 		this.init(settings)
 		
-		filePath := findTLFilePath(filePath)
+		filePath := findConfigFilePath(filePath)
 		lines := fileLinesToArray(filePath)
 		this.parseList(lines)
 		

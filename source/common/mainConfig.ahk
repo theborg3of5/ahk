@@ -16,21 +16,35 @@ global MAIN_CENTRAL_SCRIPT := "MAIN_CENTRAL_SCRIPT"
 class MainConfig {
 	static multiDelim := "|"
 	static defaultSettings := {}
-	static settings      := []
-	static privateValues := [] ; KEY => VALUE
-	static windows       := []
-	static folders       := [] ; abbrev => path ; GDB TODO update this, using KEY => PATH now?
-	static programs      := []
-	static games         := []
+	static settings := []
+	static windows  := []
+	static folders  := [] ; abbrev => path ; GDB TODO update this, using KEY => PATH now?
+	static programs := []
+	static games    := []
+	static privates := [] ; KEY => VALUE
 	
-	; init(settingsFile, privateFile, windowsFile, foldersFile, programsFile, gamesFile) {
-	init(settingsFile, windowsFile, foldersFile, programsFile, gamesFile) {
-		this.settings      := this.loadSettings(settingsFile)
-		; this.privateValues := this.loadPrivateValues(privateFile)
-		this.windows       := this.loadWindows(windowsFile)
-		this.folders       := this.loadFolders(foldersFile)
-		this.programs      := this.loadPrograms(programsFile)
-		this.games         := this.loadGames(gamesFile)
+	; init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privateFile) {
+	init(settingsFile, windowsFile, foldersFile, programsFile, gamesFile, privateFile) {
+		; All config files are expected to live in config/ folder under the root of this repo.
+		ahkRootPath := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
+		configFolder := ahkRootPath "\config"
+		
+		settingsPath := configFolder "\" settingsFile
+		windowsPath  := configFolder "\" windowsFile
+		foldersPath  := configFolder "\" foldersFile
+		; pathsPath    := configFolder "\" pathsFile
+		programsPath := configFolder "\" programsFile
+		gamesPath    := configFolder "\" gamesFile
+		privatesPath := configFolder "\" privateFile
+		
+		this.privates := this.loadPrivates(privatePath) ; This should be loaded before everything else, so the tags defined there can be used by other config files as needed.
+		
+		this.settings := this.loadSettings(settingsPath)
+		this.windows  := this.loadWindows(windowsPath)
+		this.folders  := this.loadFolders(foldersPath)
+		; this.paths    := this.loadPaths(pathsPath)
+		this.programs := this.loadPrograms(programsPath)
+		this.games    := this.loadGames(gamesPath)
 		
 		; DEBUG.popup("MainConfig", "End of init", "Settings", this.settings, "Window settings", this.windows, "Program info", this.programs)
 	}
@@ -60,21 +74,21 @@ class MainConfig {
 		return this.defaultSettings[configName]
 	}
 	
-	loadPrivateValues(filePath) {
+	loadPrivates(filePath) {
 		tl := new TableList(filePath)
-		valuesTable := tl.getTable()
+		privatesTable := tl.getTable()
 		
 		; Index private values by key.
-		privateValuesAry := []
-		For i,valueRow in valuesTable {
+		privatesAry := []
+		For i,valueRow in privatesTable {
 			key := valueRow["KEY"]
 			if(!key)
 				Continue
 			
-			privateValuesAry[key] := valueRow["VALUE"]
+			privatesAry[key] := valueRow["VALUE"]
 		}
 		
-		return privateValuesAry
+		return privatesAry
 	}
 	
 	loadWindows(filePath) {
@@ -151,17 +165,16 @@ class MainConfig {
 			return this.settings
 	}
 	setSetting(settingName, value) {
-		global configFolder
 		this.settings[settingName] := value
 	}
 	
-	getPrivateValue(key) {
+	getPrivate(key) {
 		if(!key)
 			return ""
-		return this.privateValues[key]
+		return this.privates[key]
 	}
 	replacePrivateTags(inputString) {
-		return replaceTags(inputString, this.privateValues)
+		return replaceTags(inputString, this.privates)
 	}
 	
 	getWindow(name = "", exe = "", ahkClass = "", title = "", text = "") {

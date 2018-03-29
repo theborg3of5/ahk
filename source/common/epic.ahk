@@ -138,11 +138,11 @@
 			return ""
 		
 		if(rawNum = "HANGUP")
-			url := replaceTag(ciscoPhoneBase, "COMMAND", "HangUpCall?")
+			command := "HangUpCall?"
 		else
-			url := replaceTag(ciscoPhoneBase, "COMMAND", "CallNumber?extension=" rawNum)
+			command := "CallNumber?extension=" rawNum
 		
-		return url
+		return replaceTag(MainConfig.getPrivate("CISCO_PHONE_BASE"), "COMMAND", command)
 	}
 }
 
@@ -222,7 +222,7 @@ doMForLoop() {
 getEpicAppIdFromKey(appKey) {
 	if(!appKey)
 		return 0
-	return epicAppKeyToIdAry[appKey]
+	return MainConfig.getPrivate("CS_APP_ID_" appKey)
 }
 
 buildEMC2Link(ini, id, subAction = "WEB") { ; subAction = SUBACTION_Web
@@ -244,12 +244,12 @@ buildEMC2Link(ini, id, subAction = "WEB") { ; subAction = SUBACTION_Web
 	
 	; Pick one of the types of links - edit in EMC2, web summary or Sherlock.
 	if(subAction = SUBACTION_Edit) {
-		link := emc2LinkBase
+		link := MainConfig.getPrivate("EMC2_LINK_BASE")
 	} else if(subAction = SUBACTION_Web) {
 		if(isSherlockINI(ini))
-			link := sherlockBase
+			link := MainConfig.getPrivate("SHERLOCK_BASE")
 		else
-			link := emc2LinkBaseWeb
+			link := MainConfig.getPrivate("EMC2_LINK_WEB_BASE")
 	}
 	
 	link .= paramString
@@ -281,8 +281,7 @@ isSherlockINI(ini) {
 }
 
 buildHyperspaceRunString(versionMajor, versionMinor, environment) {
-	global epicExeBase
-	runString := epicExeBase
+	runString := MainConfig.getPrivate("HYPERSPACE_BASE")
 	
 	; Handling for 2010 special path.
 	if(versionMajor = 7 && versionMinor = 8)
@@ -298,8 +297,6 @@ buildHyperspaceRunString(versionMajor, versionMinor, environment) {
 }
 
 buildCodeSearchURL(searchType, searchTerm, appKey = "") {
-	global codeSearchBase
-	
 	appId := getEpicAppIdFromKey(appKey)
 	; DEBUG.popup("buildCodeSearchURL", "Start", "Search type", searchType, "Search term", searchTerm, "App key", appKey, "App ID", appId)
 	
@@ -308,22 +305,20 @@ buildCodeSearchURL(searchType, searchTerm, appKey = "") {
 		return ""
 	
 	criteriaString := "a=" searchTerm
-	return replaceTags(codeSearchBase, {"SEARCH_TYPE":searchType, "APP_ID":appId, "CRITERIA":criteriaString})
+	return replaceTags(MainConfig.getPrivate("CS_BASE"), {"SEARCH_TYPE":searchType, "APP_ID":appId, "CRITERIA":criteriaString})
 }
 
 buildGuruURL(searchTerm) {
-	outURL := guruSearchBase
-	
-	return outURL searchTerm
+	return MainConfig.getPrivate("GURU_SEARCH_BASE") searchTerm
 }
 
 buildEpicWikiSearchURL(category, searchTerm) {
-	outURL := epicWikiSearchBase
+	outURL := MainConfig.getPrivate("WIKI_SEARCH_BASE")
 	outURL := replaceTag(outURL, "QUERY", searchTerm)
 	
 	if(category) {
 		category := "'" category "'"
-		outURL .= epicWikiSearchFilters
+		outURL .= MainConfig.getPrivate("WIKI_SEARCH_FILTERS")
 		outURL := replaceTag(outURL, "CATEGORIES", category)
 	}
 	
@@ -347,7 +342,7 @@ buildSnapperURL(environment = "", ini = "", idList = "") { ; idList is a comma-s
 	else
 		idAry := [idList]
 	
-	outURL := snapperURLBase
+	outURL := MainConfig.getPrivate("SNAPPER_URL_BASE")
 	For i,id in idAry {
 		; DEBUG.popup("Index", i, "ID", id)
 		if(!id)
@@ -360,16 +355,13 @@ buildSnapperURL(environment = "", ini = "", idList = "") { ; idList is a comma-s
 }
 
 buildVDIRunString(vdiId) {
-	global epicVDIBase
-	return replaceTag(epicVDIBase, "VDI_ID", vdiId)
+	return replaceTag(MainConfig.getPrivate("VDI_BASE"), "VDI_ID", vdiId)
 }
 
 buildServerCodeLink(serverLocation) {
-	global serverCodeBase
-	
 	splitServerLocation(serverLocation, routine, tag)
 	
-	url := serverCodeBase
+	url := MainConfig.getPrivate("CS_SERVER_CODE_BASE")
 	url := replaceTag(url, "ROUTINE", routine)
 	url := replaceTag(url, "TAG", tag)
 	
@@ -378,8 +370,7 @@ buildServerCodeLink(serverLocation) {
 }
 
 buildHelpdeskLink(hdrId) {
-	; global helpdeskLinkBase
-	return replaceTag(helpdeskLinkBase, "ID", hdrId)
+	return replaceTag(MainConfig.getPrivate("HELPDESK_BASE"), "ID", hdrId)
 }
 
 ; iteratorsAry is array of variables to loop in nested for loops, in top-down order.

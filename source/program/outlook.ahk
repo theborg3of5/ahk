@@ -29,7 +29,7 @@
 #IfWinActive
 
 ; Mail activity.
-#If isEmailFolderActive(EPIC_EMAIL)
+#If isEmailFolderActive(MainConfig.getPrivate("WORK_EMAIL"))
 	; Move selected message(s) to a particular folder, and mark them as read.
 	$^e::
 		Send, ^+1 ; Archive
@@ -43,7 +43,7 @@
 #If
 
 ; Calendar activity.
-#If isCalendarFolderActive(EPIC_EMAIL)
+#If isCalendarFolderActive(MainConfig.getPrivate("WORK_EMAIL"))
 	; Calendar view: 3-day view, week view, and month view.
 	^w::Send, ^!3
 	

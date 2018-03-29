@@ -24,7 +24,7 @@ class MainConfig {
 	static privates := [] ; KEY => VALUE
 	
 	; init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privateFile) {
-	init(settingsFile, windowsFile, foldersFile, programsFile, gamesFile, privateFile) {
+	init(settingsFile, windowsFile, foldersFile, programsFile, gamesFile, privatesFile) {
 		; All config files are expected to live in config/ folder under the root of this repo.
 		ahkRootPath := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
 		configFolder := ahkRootPath "\config"
@@ -35,9 +35,9 @@ class MainConfig {
 		; pathsPath    := configFolder "\" pathsFile
 		programsPath := configFolder "\" programsFile
 		gamesPath    := configFolder "\" gamesFile
-		privatesPath := configFolder "\" privateFile
+		privatesPath := configFolder "\" privatesFile
 		
-		this.privates := this.loadPrivates(privatePath) ; This should be loaded before everything else, so the tags defined there can be used by other config files as needed.
+		this.privates := this.loadPrivates(privatesPath) ; This should be loaded before everything else, so the tags defined there can be used by other config files as needed.
 		
 		this.settings := this.loadSettings(settingsPath)
 		this.windows  := this.loadWindows(windowsPath)
@@ -47,6 +47,22 @@ class MainConfig {
 		this.games    := this.loadGames(gamesPath)
 		
 		; DEBUG.popup("MainConfig", "End of init", "Settings", this.settings, "Window settings", this.windows, "Program info", this.programs)
+	}
+	
+	loadPrivates(filePath) {
+		tl := new TableList(filePath)
+		privatesTable := tl.getTable()
+		
+		; Index private values by key.
+		privatesAry := []
+		For i,valueRow in privatesTable {
+			key := valueRow["KEY"]
+			if(key)
+				privatesAry[key] := valueRow["VALUE"]
+		}
+		
+		; DEBUG.popup("MainConfig.loadPrivates","Finish", "Filepath",filePath, "Table",privatesTable, "Indexed array",privatesAry)
+		return privatesAry
 	}
 	
 	loadSettings(filePath) {
@@ -72,21 +88,6 @@ class MainConfig {
 		
 		; Empty value, use default.
 		return this.defaultSettings[configName]
-	}
-	
-	loadPrivates(filePath) {
-		tl := new TableList(filePath)
-		privatesTable := tl.getTable()
-		
-		; Index private values by key.
-		privatesAry := []
-		For i,valueRow in privatesTable {
-			key := valueRow["KEY"]
-			if(key)
-				privatesAry[key] := valueRow["VALUE"]
-		}
-		
-		return privatesAry
 	}
 	
 	loadWindows(filePath) {

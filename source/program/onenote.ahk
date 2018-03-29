@@ -147,7 +147,7 @@
 	^+8::
 		insertOneNoteContactComment() {
 			date := FormatTime(, "MM/yy")
-			SendRaw, % "*" USER_INITIALS " " date
+			SendRaw, % "*" MainConfig.getPrivate("INITIALS") " " date
 		}
 	
 	; Named functions for which commands are which in the quick access toolbar.

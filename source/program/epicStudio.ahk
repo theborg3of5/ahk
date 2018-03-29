@@ -32,7 +32,7 @@
 			
 			; Focus the filter field and send what we want to send.
 			ControlFocus, Edit1, A
-			Send, % "ws:" epicComputerName
+			Send, % "ws:" MainConfig.getPrivate("WORK_COMPUTER_NAME")
 			Send, {Enter}{Down}
 		}
 	
@@ -51,7 +51,7 @@
 					ControlSend, WindowsForms10.BUTTON.app.0.141b42a_r12_ad11, {Space}, A
 					ControlFocus, Edit1, A
 					
-					Send, % "ws:" epicComputerName
+					Send, % "ws:" MainConfig.getPrivate("WORK_COMPUTER_NAME")
 					Send, {Enter}{Down}
 				}
 			} else {
@@ -63,9 +63,7 @@
 	
 	; Checks if ES is already in debug mode or not.
 	isESDebugging() {
-		global epicReflectionExe, epicHyperspaceExeStart, epicVBExe
-		texts := [epicReflectionExe, epicHyperspaceExeStart, epicVBExe]
-		
+		texts := [MainConfig.getPrivate("ES_PUTTY_EXE"), MainConfig.getPrivate("ES_HYPERSPACE_EXE"), MainConfig.getPrivate("ES_VB6_EXE")]
 		return isWindowInState("active", "", texts, 2, "Slow")
 	}
 	

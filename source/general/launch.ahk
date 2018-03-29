@@ -151,7 +151,7 @@ genericLink(subAction) {
 ^+!f::Run("http://feedly.com/i/latest")
 ^!#m::Run("https://mail.google.com/mail/u/0/#inbox")
 !+o:: Run("https://www.onenote.com/notebooks?auth=1&nf=1&fromAR=1")
-!+t:: Run(onenoteOnlinePersonalDoSection)
+!+t:: Run(MainConfig.getPrivate("ONENOTE_ONLINE_DO_SECTION"))
 
 #If MainConfig.isMachine(MACHINE_HomeDesktop)
 	^+!r::Run("http://www.reddit.com/")

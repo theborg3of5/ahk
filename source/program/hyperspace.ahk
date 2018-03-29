@@ -5,24 +5,24 @@
 	$F5::+F5
 	
 	; Login hotkeys.
-	^+t::
-		Send, %epicID%{Tab}
-		Send, %epicHyperspacePass%{Enter}
-		Send, ={Enter}
-	return
-	^!t::
-		Send, %epicID%{Tab}
-		Send, %epicHyperspacePass%{Enter}
-	return
+	^+t::hyperspaceLogin(MainConfig.getPrivate("WORK_ID"), MainConfig.getPrivate("WORK_PASSWORD"))
+	^!t::hyperspaceLogin(MainConfig.getPrivate("WORK_ID"), MainConfig.getPrivate("WORK_PASSWORD"), false)
+	hyperspaceLogin(username, password, useLastDepartment = true) {
+		Send, %username%{Tab}
+		Send, %password%{Enter}
+		if(useLastDepartment)
+			Send, ={Enter}
+	}
 	
 	{ ; HTML things.
 		; Grab the html, stuff it in a file, and show it in IE for dev tools.
 		^!c::
 			openHyperspaceHTML() {
 				html := getHyperspaceHTML()
-				FileDelete, %localDevHTMLOutputFilePath%
-				FileAppend, %html%, %localDevHTMLOutputFilePath%
-				Run("C:\Program Files\Internet Explorer\iexplore.exe " localDevHTMLOutputFilePath)
+				filePath := MainConfig.getPrivate("LOCAL_HTML_DEBUG_OUTPUT")
+				FileDelete, %filePath%
+				FileAppend, %html%, %filePath%
+				Run("C:\Program Files\Internet Explorer\iexplore.exe " filePath)
 			}
 		return
 	}

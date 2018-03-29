@@ -4,32 +4,32 @@
 
 #If !MainConfig.windowIsGame()
 { ; Emails.
-	:X:emaila::Send,  % USER_EMAIL
-	:X:gemaila::Send, % USER_EMAIL_2
-	:X:eemaila::Send, % EPIC_EMAIL
-	:X:oemaila::Send, % USER_OUTLOOK_EMAIL
+	:X:emaila::Send,  % MainConfig.getPrivate("EMAIL")
+	:X:gemaila::Send, % MainConfig.getPrivate("EMAIL_2")
+	:X:eemaila::Send, % MainConfig.getPrivate("WORK_EMAIL")
+	:X:oemaila::Send, % MainConfig.getPrivate("OUTLOOK_EMAIL")
 }
 
 { ; Addresses.
 	:X:waddr::
-		SendRaw, % madisonAddress
+		SendRaw, % MainConfig.getPrivate("HOME_ADDRESS")
 	return
 	
 	:X:eaddr::
-		Send, % epicAddress
+		Send, % MainConfig.getPrivate("WORK_ADDRESS")
 	return
 	:*0X:ezip::
-		Send, % epicAddressZip
+		Send, % MainConfig.getPrivate("WORK_ZIP_CODE")
 	return
 }
 
 { ; Logins.
-	:X:uname::Send, % USER_USERNAME
+	:X:uname::Send, % MainConfig.getPrivate("USERNAME")
 }
 
 { ; Phone numbers.
-	:X:phoneno::Send, % USER_PHONE_NUM
-	:X:fphoneno::Send, % reformatPhone(USER_PHONE_NUM)
+	:X:phoneno::Send, % MainConfig.getPrivate("PHONE_NUM")
+	:X:fphoneno::Send, % reformatPhone(MainConfig.getPrivate("PHONE_NUM"))
 }
 
 { ; Typo correction.
@@ -178,7 +178,7 @@
 	
 	{ ; Epic - Source
 		:X:esf::sendFolderPath("EPIC_SOURCE_S1")
-		:X:fesf::sendFilePath("EPIC_SOURCE_S1", epicDesktopProject)
+		:X:fesf::sendFilePath("EPIC_SOURCE_S1", MainConfig.getPrivate("EPICDESKTOP_PROJECT"))
 	}
 }
 

@@ -143,8 +143,6 @@
 { ; Functions.
 	; Builds a contact comment with as much info as we can muster.
 	generateContactComment(extraSpace = false) {
-		global USER_INITIALS
-		
 		; Date
 		date := FormatTime(, "MM/yy")
 		
@@ -162,7 +160,7 @@
 		outStr := "' "
 		if(extraSpace)
 			outStr .= " "
-		outStr .= "*" USER_INITIALS " " date " " dlgId " - "
+		outStr .= "*" MainConfig.getPrivate("INITIALS") " " date " " dlgId " - "
 		
 		return outStr
 	}

@@ -13,9 +13,6 @@
 			Folder selector remains, with specific list that can use path tags (but not private tags directly)
 		To do:
 			Private (privates.tl)
-				Update call to mainConfig.init (to include new private file)
-					Could we use file.findTLFilePath()?
-						If we do, maybe we should rename it to findConfigFilePath().
 				Update all places that use private variables
 				Remove line that includes old privateVariables.ahk (in mainConfig)
 			Paths

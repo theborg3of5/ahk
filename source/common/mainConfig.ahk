@@ -82,10 +82,8 @@ class MainConfig {
 		privatesAry := []
 		For i,valueRow in privatesTable {
 			key := valueRow["KEY"]
-			if(!key)
-				Continue
-			
-			privatesAry[key] := valueRow["VALUE"]
+			if(key)
+				privatesAry[key] := valueRow["VALUE"]
 		}
 		
 		return privatesAry

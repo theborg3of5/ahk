@@ -36,8 +36,8 @@ reloadScript(script, prompt) {
 		return
 	
 	if(script = MAIN_CENTRAL_SCRIPT) {
-		scriptToRun := MainConfig.getFolder("AHK_ROOT") "\source\main.ahk"
-		folder := MainConfig.getFolder("AHK_ROOT") "\source\"
+		scriptToRun := MainConfig.getPath("AHK_ROOT") "\source\main.ahk"
+		folder := MainConfig.getPath("AHK_ROOT") "\source\"
 		Run(scriptToRun " /restart", folder)
 	} else {
 		Reload

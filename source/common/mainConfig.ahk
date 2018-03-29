@@ -18,13 +18,14 @@ class MainConfig {
 	static defaultSettings := {}
 	static settings := []
 	static windows  := []
+	static paths    := [] ; KEY => PATH
 	static folders  := [] ; abbrev => path ; GDB TODO update this, using KEY => PATH now?
 	static programs := []
 	static games    := []
 	static privates := [] ; KEY => VALUE
 	
-	; init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privateFile) {
-	init(settingsFile, windowsFile, foldersFile, programsFile, gamesFile, privatesFile) {
+	; init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile) {
+	init(settingsFile, windowsFile, foldersFile, programsFile, gamesFile, privatesFile, pathsFile) {
 		; All config files are expected to live in config/ folder under the root of this repo.
 		ahkRootPath := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
 		configFolder := ahkRootPath "\config"
@@ -32,7 +33,7 @@ class MainConfig {
 		settingsPath := configFolder "\" settingsFile
 		windowsPath  := configFolder "\" windowsFile
 		foldersPath  := configFolder "\" foldersFile
-		; pathsPath    := configFolder "\" pathsFile
+		pathsPath    := configFolder "\" pathsFile
 		programsPath := configFolder "\" programsFile
 		gamesPath    := configFolder "\" gamesFile
 		privatesPath := configFolder "\" privatesFile
@@ -42,7 +43,7 @@ class MainConfig {
 		this.settings := this.loadSettings(settingsPath)
 		this.windows  := this.loadWindows(windowsPath)
 		this.folders  := this.loadFolders(foldersPath)
-		; this.paths    := this.loadPaths(pathsPath)
+		this.paths    := this.loadPaths(pathsPath)
 		this.programs := this.loadPrograms(programsPath)
 		this.games    := this.loadGames(gamesPath)
 		
@@ -129,6 +130,30 @@ class MainConfig {
 		return folderPaths
 	}
 	
+	loadPaths(filePath) {
+		tl := new TableList(filePath)
+		pathsTable := tl.getFilteredTableUnique("NAME", "MACHINE", MainConfig.getMachine())
+		
+		; Index paths by key.
+		pathsAry := []
+		For i,row in pathsTable {
+			key := row["KEY"]
+			if(key)
+				pathsAry[key] := row["PATH"]
+		}
+		
+		; Apply calculated values and private tags.
+		For key,value in pathsAry {
+			value := replaceTag(value, "USER_ROOT", reduceFilepath(A_Desktop,  1))
+			value := replaceTag(value, "AHK_ROOT",  reduceFilepath(A_LineFile, 3)) ; 2 levels out, plus one to get out of file itself.
+			value := replaceTags(value, this.privates)
+			pathsAry[key] := value ; make sure to store it back in the actual array
+		}
+		
+		; DEBUG.popup("mainConfig.loadPaths","Finish", "Paths",pathsAry)
+		return pathsAry
+	}
+	
 	loadPrograms(filePath) {
 		tl := new TableList(filePath)
 		uniquePrograms := tl.getFilteredTableUnique("NAME", "MACHINE", this.getMachine())
@@ -211,12 +236,18 @@ class MainConfig {
 		return retWindow
 	}
 	
-	getFolder(abbrev) { ; GDB TODO update "abbrev"
+	getPath(key) {
+		if(!key)
+			return ""
+		return this.paths[key]
+	}
+	getFolder(abbrev) {
 		if(!abbrev)
 			return ""
 		return this.folders[abbrev]
 	}
 	replacePathTags(inputPath) {
+		; return replaceTags(inputPath, this.paths)
 		return replaceTags(inputPath, this.folders)
 	}
 	

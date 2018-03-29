@@ -152,7 +152,7 @@
 		:X:urf::sendFolderPath("USER_ROOT")
 		:X:deskf::sendFolderPath("USER_ROOT", "Desktop")
 		:X:dsf::sendFolderPath("USER_ROOT", "Design")
-		:X:dlf::sendFolderPath("DOWNLOADS")
+		:X:dlf::sendFolderPath("USER_ROOT", "Downloads")
 		:X:devf::sendFolderPath("USER_ROOT", "Dev")
 	}
 

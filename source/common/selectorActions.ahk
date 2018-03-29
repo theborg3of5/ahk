@@ -183,7 +183,7 @@ DO_SNAPPER(actionRow) {
 ; Open a homebrew timer (script located in the filepath below).
 TIMER(actionRow) {
 	time := actionRow.data["TIME"]
-	runString := MainConfig.getFolder("AHK_ROOT") "\source\standalone\timer\timer.ahk " time
+	runString := MainConfig.getPath("AHK_ROOT") "\source\standalone\timer\timer.ahk " time
 	
 	actionRow.debugResult := runString
 	if(actionRow.isDebug)

@@ -178,7 +178,7 @@ splitRecordString(recordString, ByRef ini = "", ByRef id = "") {
 
 ; Split serverLocation into routine and tag (assume it's just the routine if no ^ included)
 splitServerLocation(serverLocation, ByRef routine = "", ByRef tag = "") {
-	serverLocation := cleanupText(serverLocation)
+	serverLocation := cleanupText(serverLocation, ["$", "(", ")"])
 	locationAry := StrSplit(serverLocation, "^")
 	
 	maxIndex := locationAry.MaxIndex()

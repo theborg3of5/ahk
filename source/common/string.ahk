@@ -254,18 +254,18 @@ cleanupText(text, additionalStringsToRemove = "") {
 	charCodesToRemove[4] := [61607,9] ; Third level bullet (filled square) + tab
 	
 	; Transform the codes above so we can check whether it's in the string.
-	charsToRemove := []
+	stringsToRemove := []
 	For i,s in charCodesToRemove {
-		charsToRemove[i] := ""
+		stringsToRemove[i] := ""
 		For j,c in s {
 			newChar := Transform("Chr", c)
-			charsToRemove[i] .= newChar
+			stringsToRemove[i] .= newChar
 		}
 	}
 	For i,str in additionalStringsToRemove {
-		charsToRemove.push(str)
+		stringsToRemove.push(str)
 	}
-	; DEBUG.popup("Text",text, "Chars to remove",charsToRemove)
+	; DEBUG.popup("Text",text, "Chars to remove",stringsToRemove)
 	
 	while(!isClean) {
 		isClean := true
@@ -278,15 +278,15 @@ cleanupText(text, additionalStringsToRemove = "") {
 		}
 		
 		; Odd character checks.
-		index := containsAnyOf(text, charsToRemove, CONTAINS_BEG) ; Beginning of string
+		index := containsAnyOf(text, stringsToRemove, CONTAINS_BEG) ; Beginning of string
 		if(index) {
-			needle := charsToRemove[index]
+			needle := stringsToRemove[index]
 			text := StrReplace(text, needle, "", , 1) ; Get only the first replaceable one.
 			isClean := false
 		}
-		index := containsAnyOf(text, charsToRemove, CONTAINS_END) ; End of string
+		index := containsAnyOf(text, stringsToRemove, CONTAINS_END) ; End of string
 		if(index) {
-			needle := escapeRegExChars(charsToRemove[index])
+			needle := escapeRegExChars(stringsToRemove[index])
 			text := RegExReplace(text, needle, "", , 1, StrLen(text) - StrLen(needle)) ; Get only the last replaceable one.
 			isClean := false
 		}

@@ -18,7 +18,6 @@
 	Selector - consider rearranging selectGUI flow somewhat
 		defaultOverrideData and overrideData aren't really properties of the class - they're really just part of the selection process - better as local variables if we can structure things the right way
 			Would be nice to determine choice and load that data without having to first store off field values into a member variable (local array is better, I guess?)
-	Selector - change ShowDataInputs to be something involving overrides - ShowOverrideFields, maybe?
 	Selector - break launchSelectorPopup() down, maybe turn it into a class of sorts?
 		Could potentially have SelectorRow objects handle their own label placements?
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?

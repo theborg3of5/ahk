@@ -2,7 +2,7 @@
 
 =Select Machine to set up:
 +DefaultAction=RET_DATA
-+ShowDataInputs=1
++ShowOverrideFields=1
 +MinColumnWidth=1000
 
 (	NAME					ABBREV		WHICH_MACHINE	MENU_KEY_ACTION

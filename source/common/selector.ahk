@@ -19,14 +19,14 @@
 			You can have more than the simple layout of NAME-ABBREV-ACTION by using a model row that begins with this character. This line is tab-separated in the same way as the choices, with each entry being the name for the corresponding column of each choice.
 		
 		) - Model Index
-			This row corresponds to the model row, giving each of the named columns an index, which is the order in which the additional arbitrary fields in the UI (turned on using +ShowDataInputs, see settings below) will be shown. An index of 0 tells the UI not to show the field corresponding to that column at all.
+			This row corresponds to the model row, giving each of the named columns an index, which is the order in which the additional arbitrary fields in the UI (turned on using +ShowOverrideFields, see settings below) will be shown. An index of 0 tells the UI not to show the field corresponding to that column at all.
 		
 		| - New column (in section title row)
 			If this character is put at the beginning of a section title row (with a space on either side, such as "# | Title"), that title will force a new column in the UI.
 		
 		+ - Settings
 			Lines which start with this character denote a setting that changes how the UI acts in some manner. They are always in the form "+Option=x", and include:
-				ShowDataInputs
+				ShowOverrideFields
 					If set to 1, the UI will show an additional input box on the UI for each piece defined by the model row (excluding NAME, ABBREV, and ACTION). Note that these will be shown in the order they are listed by the model row, unless a model index row is present, at which point it respects that.
 				
 				RowsPerColumn
@@ -44,15 +44,15 @@
 	When the user selects their choice, the action passed in at the beginning will be evaluated as a function which receives a loaded SelectorRow object to perform the action on. See SelectorRow class for data structure.
 	
 	Once the UI is shown, the user can enter either the index or abbreviation for the choice that they would like to select. The user can give information to the popup in a variety of ways:
-		Simplest case (+ShowDataInputs != 1, no model or model index rows):
+		Simplest case (+ShowOverrideFields != 1, no model or model index rows):
 			The user will only have a single input box, where they can add their choice and additional input using the arbitrary character (see below)
 			Resulting SelectorRow object will have the name, abbreviation, and action. Arbitrary input is added to the end of the action.
 		
-		Model row, but +ShowDataInputs != 1
+		Model row, but +ShowOverrideFields != 1
 			The user still has a single input box.
 			Resulting SelectorRow will have the various pieces in named subscripts of its data array, where the names are those from the model row. Note that name and abbreviation are still separate from the data array, and arbitrary additions are added to action, whether it is set or not.
 		
-		Model row, with +ShowDataInputs=1 (model index row optional)
+		Model row, with +ShowOverrideFields=1 (model index row optional)
 			The user will see multiple input boxes, in the order listed in the input file, or in the order of the model index row if defined. The user can override the values defined by the selected choice for each of the columns shown before the requested action is performed.
 			Resulting SelectorRow will have the various pieces in named subscripts of its data array, where the names are those from the model row. Note that name and abbreviation are still separate from the data array, and arbitrary additions are ignored entirely (as the user can use the additional inputs instead).
 		
@@ -119,7 +119,7 @@ class Selector {
 	}
 	
 	; defaultOverrideDataAry - If the indices for these overrides are also set by the user's overall choice, the override value will
-	;                          only be used if the corresponding additional field is visible. That means if ShowDataInputs isn't set
+	;                          only be used if the corresponding additional field is visible. That means if ShowOverrideFields isn't set
 	;                          to true (via option in the file or guiSettings), default overrides will only affect blank values in
 	;                          the user's choice.
 	selectGui(actionType = "", defaultOverrideDataAry = "", guiSettings = "") {
@@ -207,12 +207,12 @@ class Selector {
 	getDefaultGuiSettings() {
 		settings := []
 		
-		settings["RowsPerColumn"]   := 99
-		settings["MinColumnWidth"]  := 300
-		settings["WindowTitle"]     := "Please make a choice by either number or abbreviation:"
-		settings["ShowDataInputs"]  := false
-		settings["IconPath"]        := ""
-		settings["ExtraDataFields"] := ""
+		settings["RowsPerColumn"]      := 99
+		settings["MinColumnWidth"]     := 300
+		settings["WindowTitle"]        := "Please make a choice by either number or abbreviation:"
+		settings["ShowOverrideFields"] := false
+		settings["IconPath"]           := ""
+		settings["ExtraDataFields"]    := ""
 		
 		return settings
 	}
@@ -323,8 +323,8 @@ class Selector {
 		name  := settingSplit[1]
 		value := settingSplit[2]
 		
-		if(name = "ShowDataInputs")
-			this.guiSettings["ShowDataInputs"] := (value = "1")
+		if(name = "ShowOverrideFields")
+			this.guiSettings["ShowOverrideFields"] := (value = "1")
 		else if(name = "RowsPerColumn")
 			this.guiSettings["RowsPerColumn"] := value
 		else if(name = "MinColumnWidth")
@@ -336,8 +336,8 @@ class Selector {
 	}
 	
 	processGuiSettings(settings) {
-		if(settings["ShowDataInputs"]) ; This one can be set in the file too, so don't clear it if it's not passed.
-			this.guiSettings["ShowDataInputs"] := settings["ShowDataInputs"]
+		if(settings["ShowOverrideFields"]) ; This one can be set in the file too, so don't clear it if it's not passed.
+			this.guiSettings["ShowOverrideFields"] := settings["ShowOverrideFields"]
 		
 		this.guiSettings["IconPath"] := settings["Icon"]
 		
@@ -458,13 +458,13 @@ class Selector {
 		
 		widthTotal := this.getTotalWidth(columnWidths, padColumn, marginLeft, marginRight)
 		yInput := maxColumnHeight + heightLine ; Extra empty row before inputs.
-		if(this.guiSettings["ShowDataInputs"])
+		if(this.guiSettings["ShowOverrideFields"])
 			widthInputChoice := widthIndex + padIndexAbbrev + widthAbbrev ; Main edit control is same size as index + abbrev columns combined.
 		else
 			widthInputChoice := widthTotal - (marginLeft + marginRight)   ; Main edit control is nearly full width.
 		Gui, Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInputChoice% h%heightInput% -E%WS_EX_CLIENTEDGE% +Border
 		
-		if(this.guiSettings["ShowDataInputs"]) {
+		if(this.guiSettings["ShowOverrideFields"]) {
 			numDataInputs := this.dataIndices.length()
 			leftoverWidth  := widthTotal - xNameFirstCol - marginRight
 			widthInputData := (leftoverWidth - ((numDataInputs - 1) * padInputData)) / numDataInputs
@@ -546,7 +546,7 @@ class Selector {
 	
 	saveOverrideDataFromGui() {
 		; If no fields were visible, don't need to read from them.
-		if(!this.guiSettings["ShowDataInputs"])
+		if(!this.guiSettings["ShowOverrideFields"])
 			return
 		
 		For num,label in this.dataIndices {

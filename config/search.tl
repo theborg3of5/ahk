@@ -2,7 +2,7 @@
 
 =Select type of search to run and input search text:
 +DefaultAction=RET_DATA
-+ShowDataInputs=1
++ShowOverrideFields=1
 
 (		NAME								ABBREV		SUBTYPE															SEARCH_TYPE		APP_KEY		MACHINE	SEARCH_TERM
 )		0									0				0																	0					0				0			1

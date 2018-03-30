@@ -1,5 +1,5 @@
 =Unit test for Selector
-+ShowDataInputs=1
++ShowOverrideFields=1
 +RowsPerColumn=5
 +MinColumnWidth=500
 

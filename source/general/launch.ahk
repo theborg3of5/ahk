@@ -48,9 +48,9 @@
 			defaultOverrideData["ID"]  := id
 			
 			s := new Selector("epicEnvironments.tl")
-			guiSettings                    := []
-			guiSettings["Icon"]            := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
-			guiSettings["ShowDataInputs"]  := 1
+			guiSettings                       := []
+			guiSettings["Icon"]               := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
+			guiSettings["ShowOverrideFields"] := 1
 			guiSettings["ExtraDataFields"] := ["INI", "ID"]
 			s.selectGui("DO_SNAPPER", defaultOverrideData, guiSettings)
 		}

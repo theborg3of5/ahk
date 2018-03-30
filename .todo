@@ -5,19 +5,22 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New ideas
-	Reconsider data vs dataFilled stuff in Selector - seems like it could be done better.
-		overrideData seems like it should be a property of the class.
-			Probably overrideDataFilled, too.
-			Would solve the retAry stuff below.
-		Change ShowDataInputs to be something involving overrides - ShowOverrideFields, maybe?
-		Doesn't seem like there's a good reason to have user-modified data persist across loops (not that it can anyways)
-			Make overrideData only an input parameter?
-				Have launchSelectorPopup() return an array of all info
-					Can still read from data overrides, and write to data array - but data array is separate (although probably still a copy so non-shown stuff comes through) and is a sub-part of overall returned array:
-						retAry["CHOICE_INPUT"]  := userIn
-						retAry["OVERRIDE_DATA"] := overrideData
-					getDataFromGui should just return an updated array ("" if array would be empty), not true/false with a byref array
+	Reconsider using SelectorRow objects as main driver for Selector actions - might be better to make a new class to hold info, and copy data over?
+		Alternatively, just change format of selector action functions, to take:
+			dataAry
+			debugResult
+		Would need to move isDebug from SelectorRow to just Selector in general, which makes enough sense.
+		Might let us get away from the "backwards" filling strategy, where we have to store off the default overrides, then gui overrides, then apply all of that to the SelectorRow
+			Instead, we could just have the one data object (array?), which gets filled in order:
+				Default data (goes into data array, any visible fields get filled out of it)
+				Data from choice (goes into data array, overwriting any conflicting values)
+				Override data from GUI (goes into data array, overwriting any conflicting values)
+	Selector - consider rearranging selectGUI flow somewhat
+		defaultOverrideData and overrideData aren't really properties of the class - they're really just part of the selection process - better as local variables if we can structure things the right way
+			Would be nice to determine choice and load that data without having to first store off field values into a member variable (local array is better, I guess?)
+	Selector - change ShowDataInputs to be something involving overrides - ShowOverrideFields, maybe?
 	Selector - break launchSelectorPopup() down, maybe turn it into a class of sorts?
+		Could potentially have SelectorRow objects handle their own label placements?
 	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
 	Audit all scripts for unused hotkeys
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?

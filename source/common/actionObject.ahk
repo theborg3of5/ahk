@@ -103,11 +103,11 @@ class ActionObject {
 		; DEBUG.popup("ActionObject.process", "Input", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 	}
 	
-	; Prompt the user for any missing info (generally just subType) via a Selector popup.
+	; Prompt the user for any missing info via a Selector popup.
 	selectInfo(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
 		; DEBUG.popup("ActionObject.selectInfo", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
-		; Determine if we need subType or subAction based on what we know so far.
+		; EMC2 objects require a subType (INI) and subAction (view vs edit)
 		if(type = TYPE_EMC2) {
 			needsSubType   := true
 			needsSubAction := true

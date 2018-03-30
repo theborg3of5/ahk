@@ -136,12 +136,12 @@ class Selector {
 		userChoiceString := this.launchSelectorPopup()
 		
 		; Blank input, we bail.
-		if(!userChoiceString && !this.overrideData)
+		if(!userChoiceString && !this.haveOverrideData)
 			return ""
 		
 		if(userChoiceString) ; User put something in the first box, which should come from the choices shown.
 			rowToDo := this.parseChoice(userChoiceString)
-		else if(this.overrideData && !rowToDo) ; If there was no choice (only data input boxes filled), create a place to put the data.
+		else if(this.haveOverrideData && !rowToDo) ; If there was no choice (only data input boxes filled), create a place to put the data.
 			rowToDo := new SelectorRow()
 		
 		; Blow in any data from the data input boxes (and defaults passed in programmatically).
@@ -184,6 +184,7 @@ class Selector {
 	filePath            := ""    ; Where the .tl file lives if we're reading one in.
 	defaultOverrideData := []    ; Info to default into the GUI data fields, and to use for columns without fields (when the choice doesn't specify a value).
 	overrideData        := []    ; GDB TODO
+	haveOverrideData    := false ; GDB TODO
 	hideErrors          := false ; Whether to suppress error popups (used by programmatic selections with no GUI)
 	
 	getSpecialChars() {
@@ -551,8 +552,10 @@ class Selector {
 		
 		For num,label in this.dataIndices {
 			inputVal := GuiIn%num% ; GuiIn* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
-			if(inputVal && (inputVal != label))
+			if(inputVal && (inputVal != label)) {
+				this.haveOverrideData := true
 				this.overrideData[label] := inputVal
+			}
 		}
 		; DEBUG.popup("Got override data from GUI", this.overrideData)
 	}

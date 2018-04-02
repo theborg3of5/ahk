@@ -25,6 +25,10 @@
 		WinWaitActive, Apply Styles
 		Send, Code
 		Send, {Enter}
+		
+		Sleep, 250
+		if(WinExist("Apply Styles ahk_class MsoCommandBar ahk_exe OUTLOOK.EXE"))
+			WinClose
 	return
 #IfWinActive
 

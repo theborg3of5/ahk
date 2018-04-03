@@ -94,6 +94,8 @@ return
 	~`:: ; Symbols
 	~-::
 	~=::
+	~,::
+	~.::
 	~+a:: ; Shift + Letters
 	~+b::
 	~+c::
@@ -133,13 +135,13 @@ return
 	~+`:: ; Shift + Symbols
 	~+-::
 	~+=::
+	~+,::
+	~+.::
 	~+[:: ; Shift + Symbols (where the unshifted version does something)
 	~+]::
 	~+`;::
 	~+'::
 	~+/::
-	~+,::
-	~+.::
 		vimOffManual()
 	return
 #If

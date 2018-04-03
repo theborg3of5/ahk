@@ -162,3 +162,24 @@ findConfigFilePath(path) {
 	this.errPop("File doesn't exist", path)
 	return ""
 }
+
+; Clean out unwanted garbage strings from paths
+cleanupPath(path) {
+	path := StrReplace(path, "%20", A_Space) ; In case it's a URL'd file path
+	return cleanupText(path, ["file:///", """"])
+}
+
+mapPath(path) {	
+	; Convert paths to use mapped drive letters
+	tl := new TableList(findConfigFilePath("mappedDrives.tl"))
+	table := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
+	For i,row in table {
+		if(stringContains(path, row["PATH"])) {
+			path := StrReplace(path, row["PATH"], row["DRIVE_LETTER"] ":", , 1)
+			Break ; Just match the first one.
+		}
+	}
+	
+	; DEBUG.popup("Updated path",path, "Table",table)
+	return path
+}

@@ -58,13 +58,13 @@ class ActionObject {
 		; DEBUG.popup("ActionObject.process", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
 		; Do a little preprocessing to pick out needed info. (All args but input are ByRef)
-		isPathType := isPath(input, pathType)
+		pathType := getPathType(input)
 		isEMC2ObjectType := isEMC2Object(input, ini, id)
-		; DEBUG.popup("ActionObject.process", "Type preprocessing done", "Input", input, "Is path", isPathType, "Path type", pathType, "Is EMC2", isEMC2ObjectType, "INI", ini, "ID", id)
+		; DEBUG.popup("ActionObject.process", "Type preprocessing done", "Input", input, "Path type", pathType, "Is EMC2", isEMC2ObjectType, "INI", ini, "ID", id)
 		
 		; First, if there's no type, try to figure out what it is.
 		if(type = "") {
-			if(isPathType)
+			if(pathType)
 				type := TYPE_Path
 			else if(isEMC2ObjectType)
 				type := TYPE_EMC2
@@ -132,6 +132,9 @@ class ActionObject {
 	postProcess(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
 		if(type = TYPE_EMC2) ; Turn subType (INI) into true INI
 			subType := getTrueINI(subType)
+		
+		if(type = TYPE_Path && subType = SUBTYPE_FilePath)
+			input := cleanupPath(input)
 	}
 	
 	; Do the action.

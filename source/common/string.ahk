@@ -216,25 +216,22 @@ isCase(string, case = 0) { ; case = STRING_CASE_MIXED
 }
 
 ; Test whether something is a filepath or a URL.
-; Also may change the path slightly to make it runnable.
-isPath(ByRef text, ByRef type = "") {
-	colonSlashPos := stringContains(text, "://")
+getPathType(text) {
 	protocols := ["http", "ftp"]
 	
-	if(subStr(text, 1, 8) = "file:///") { ; URL'd filepath.
-		text := subStr(text, 9) ; strip off the file:///
-		text := StrReplace(text, "%20", A_Space)
-		; DEBUG.popup("Updated path", text)
-		type := SUBTYPE_FilePath
-	} else if(subStr(text, 2, 2) = ":\") { ; Windows filepath
-		type := SUBTYPE_FilePath
-	} else if(subStr(text, 1, 2) = "\\") { ; Windows network path
-		type := SUBTYPE_FilePath
-	} else if( colonSlashPos && stringContainsAnyOf(subStr(text, 1, colonSlashPos), protocols) ) { ; URL.
-		type := SUBTYPE_URL
-	}
+	text := cleanupText(text, [""""]) ; Make sure there's no quotes or other oddities surrounding the path
+	colonSlashPos := stringContains(text, "://")
 	
-	; DEBUG.popup("isPath", "Finish", "Type", type)
+	if(subStr(text, 1, 8) = "file:///") ; URL'd filepath.
+		type := SUBTYPE_FilePath
+	else if(subStr(text, 2, 2) = ":\")  ; Windows filepath
+		type := SUBTYPE_FilePath
+	else if(subStr(text, 1, 2) = "\\")  ; Windows network path
+		type := SUBTYPE_FilePath
+	else if(colonSlashPos && stringContainsAnyOf(subStr(text, 1, colonSlashPos), protocols) ) ; URL.
+		type := SUBTYPE_URL
+	
+	; DEBUG.popup("getPathType", "Finish", "Type", type, "Cleaned up text",text)
 	return type
 }
 

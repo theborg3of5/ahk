@@ -162,17 +162,20 @@ getKeyNameFromHotkeyChar(hotkeyChar = "") {
 	return hotkeyChar
 }
 
-; Link the selected text with the given URL.
-linkSelectedText(url) {
-	if(!url)
+; Link the selected text with the given URL/path.
+linkSelectedText(path) {
+	if(!path)
 		return
+	
+	path := cleanupPath(path)
+	path := mapPath(path)
 	
 	windowName := getWindowSetting("NAME") ; Active window's matching name in window settings (windows.tl).
 	if(!doesWindowSupportLinking(windowName))
 		return
 	
 	openLinkPopup(windowName)
-	sendTextWithClipboard(url)
+	sendTextWithClipboard(path)
 	closeLinkPopup(windowName)
 }
 doesWindowSupportLinking(name) {

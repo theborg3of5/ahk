@@ -94,18 +94,52 @@ return
 	~`:: ; Symbols
 	~-::
 	~=::
-	~,::
-	~.::
-	~/::
-	~\::
-	~+j:: ; Shift + keys that do other things (unshifted)
+	~+a:: ; Shift + Letters
+	~+b::
+	~+c::
+	~+d::
+	~+e::
+	~+f::
+	~+g::
+	~+h::
+	~+i::
+	~+j::
 	~+k::
+	~+l::
+	~+m::
+	~+n::
 	~+o::
 	~+p::
+	~+q::
+	~+r::
+	~+s::
+	~+t::
 	~+u::
-	~+[::
+	~+v::
+	~+w::
+	~+x::
+	~+y::
+	~+z::
+	~+0:: ; Shift + Numbers
+	~+1::
+	~+2::
+	~+3::
+	~+4::
+	~+5::
+	~+6::
+	~+7::
+	~+8::
+	~+9::
+	~+`:: ; Shift + Symbols
+	~+-::
+	~+=::
+	~+[:: ; Shift + Symbols (where the unshifted version does something)
 	~+]::
 	~+`;::
+	~+'::
+	~+/::
+	~+,::
+	~+.::
 		vimOffManual()
 	return
 #If

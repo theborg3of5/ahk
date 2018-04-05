@@ -45,12 +45,14 @@
 		!Left::!+-
 		!Right::!+=
 		^t::
-			Send, ^{Home}
-			Send, !+3 ; Only today (level 3)
+			Send, ^{Home} ; Overall Do header so we affect the whole page
+			Send, {Down}  ; Move down to Today header
+			Send, !+4     ; Top level that today's todos are at (so they're all collapsed)
+			Send, !+3     ; Collapse to headers under Today (which collapses headers under Today so only unfinished todos on level 4 are visible)
 		return
 		^+t::
 			Send, ^{Home}
-			Send, !+4 ; Items for all sections (level 4)
+			Send, !+4     ; Items for all sections (level 4)
 		return
 		
 		; Replacement history back/forward.

@@ -77,7 +77,7 @@
 ; Generic search.
 !+f::
 	genericSearch() {
-		text := getFirstLineOfSelectedText()
+		text := cleanupText(getFirstLineOfSelectedText())
 		
 		filter := MainConfig.getMachineTableListFilter()
 		s := new Selector("search.tl", "", filter)

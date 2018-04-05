@@ -5,7 +5,7 @@
 	#SingleInstance force
 	#Include <includeCommon>
 	setCommonHotkeysType(HOTKEY_TYPE_Standalone)
-	setUpTrayIcons("icons\testGreen.ico", "icons\testRed.ico")
+	setUpTrayIcons("testGreen.ico", "testRed.ico")
 }
 
 ; --------------------------------------------------------------------------

@@ -23,7 +23,7 @@
 			Would be nice to determine choice and load that data without having to first store off field values into a member variable (local array is better, I guess?)
 	Selector - break launchSelectorPopup() down, maybe turn it into a class of sorts?
 		Could potentially have SelectorRow objects handle their own label placements?
-	Add some way to show progress for long-running scripts - maybe using a tooltip or something?
+	Add some way to show progress for long-running scripts - maybe using a tooltip, or toast library from below?
 	Audit all scripts for unused hotkeys
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
 	Go through pukkandan's startup script (https://github.com/pukkandan/My-Startup-Script) and pull out anything interesting

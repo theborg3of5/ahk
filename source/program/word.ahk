@@ -31,4 +31,22 @@
 	; Make line movement alt + up/down instead of alt + shift + up/down to match notepad++ and ES.
 	!Up::  Send, !+{Up}
 	!Down::Send, !+{Down}
+	
+	; Expand/collapse headings
+	!Right::
+		Send, {AppsKey}
+		Send, e ; Expand / Collapse
+		Send, e ; Expand Heading
+		Sleep, 100
+		if(WinActive("ahk_class Net UI Tool Window ahk_exe WINWORD.EXE")) ; Right-click menu still open, as header was already expanded
+			Send, {Esc 2}
+	return
+	!Left::
+		Send, {AppsKey}
+		Send, e ; Expand / Collapse
+		Send, c ; Collapse Heading
+		Sleep, 100
+		if(WinActive("ahk_class Net UI Tool Window ahk_exe WINWORD.EXE")) ; Right-click menu still open, as header was already collapsed
+			Send, {Esc 2}
+	return
 #IfWinActive

@@ -35,16 +35,18 @@
 	; Expand/collapse headings
 	!Right::
 		Send, {AppsKey}
-		Send, e ; Expand / Collapse
-		Send, e ; Expand Heading
+		Send, e       ; Expand / Collapse
+		Send, {Right} ; In case menu didn't expand because there was another E menu item
+		Send, e       ; Expand Heading
 		Sleep, 100
 		if(WinActive("ahk_class Net UI Tool Window ahk_exe WINWORD.EXE")) ; Right-click menu still open, as header was already expanded
 			Send, {Esc 2}
 	return
 	!Left::
 		Send, {AppsKey}
-		Send, e ; Expand / Collapse
-		Send, c ; Collapse Heading
+		Send, e       ; Expand / Collapse
+		Send, {Right} ; In case menu didn't expand because there was another E menu item
+		Send, c       ; Collapse Heading
 		Sleep, 100
 		if(WinActive("ahk_class Net UI Tool Window ahk_exe WINWORD.EXE")) ; Right-click menu still open, as header was already collapsed
 			Send, {Esc 2}

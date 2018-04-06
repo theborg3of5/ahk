@@ -44,4 +44,4 @@
 [-4]
 		
 		# Other
-		Everything (file search)	e				-																	EVERYTHING
+		Everything (file search)	e|ev			-																	EVERYTHING

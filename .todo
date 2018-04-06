@@ -5,6 +5,8 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New ideas
+	Make a smaller subset of scripts that can run in VDIs?
+		AHK is already installed (and latest version at that!)
 	Centralize format-as-code hotkey (^+c) like we did for hyperlinking selected text?
 	Reconsider using SelectorRow objects as main driver for Selector actions - might be better to make a new class to hold info, and copy data over?
 		Alternatively, just change format of selector action functions, to take:

@@ -11,8 +11,10 @@ Thumbs.db
 config/local/
 config/private/
 
-# Test folder, ignore most things, but not subdirectories
+# Test folder, ignore most things, but not subdirectories or test icons.
 test/*
+!test/testGreen.ico
+!test/testRed.ico
 !test/*/
 
 # Ignore everything inside share/*/Includes folders, except the specific _NeededIncludes file.

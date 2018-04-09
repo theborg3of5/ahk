@@ -8,7 +8,7 @@ $!q::minimizeWindow()
 return
 
 ; Sets current window to stay on top
-#Space::Winset, Alwaysontop, , A
+#+t::Winset, Alwaysontop, , A
 
 ; Center current window onscreen.
 #+c::centerWindow()

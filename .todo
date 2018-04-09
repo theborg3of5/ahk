@@ -8,6 +8,8 @@
 	Make a smaller subset of scripts that can run in VDIs?
 		AHK is already installed (and latest version at that!)
 	Centralize format-as-code hotkey (^+c) like we did for hyperlinking selected text?
+	New selector for PRJ numbers, and maybe other related things?
+		Could potentially be a special mode for TLG selector, since the info is there currently.
 	Reconsider using SelectorRow objects as main driver for Selector actions - might be better to make a new class to hold info, and copy data over?
 		Alternatively, just change format of selector action functions, to take:
 			dataAry

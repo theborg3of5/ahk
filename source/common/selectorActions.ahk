@@ -229,18 +229,25 @@ RESIZE(actionRow) {
 OUTLOOK_TLG(actionRow) {
 	tlp      := actionRow.data["TLP"]
 	message  := actionRow.data["MSG"]
-	dlg      := actionRow.data["DLG"]
+	prjId    := actionRow.data["PRJ"]
+	dlgId    := actionRow.data["DLG"]
 	customer := actionRow.data["CUST"]
 	
+	; DLG ID overrides PRJ if given, but either way only one comes through into string.
+	if(dlgId)
+		recId := dlgId
+	else
+		recId := "P." prjId
+	
 	; Sanity check - if the message is an EMC2 ID (or P.emc2Id) and the DLG is not, swap them.
-	if(!isEMC2Id(dlg) && (SubStr(dlg, 1, 2) != "P.") ) {
+	if(!isEMC2Id(recId) && (SubStr(recId, 1, 2) != "P.") ) {
 		if(isEMC2Id(message)) {
 			newDLG  := message
-			message := dlg
-			dlg     := newDLG
+			message := recId
+			recId   := newDLG
 		}
 	}
-	textToSend := tlp "/" customer "///" dlg ", " message
+	textToSend := tlp "/" customer "///" recId ", " message
 	
 	actionRow.debugResult := textToSend
 	if(actionRow.isDebug)

@@ -8,8 +8,9 @@
 	Make a smaller subset of scripts that can run in VDIs?
 		AHK is already installed (and latest version at that!)
 	Centralize format-as-code hotkey (^+c) like we did for hyperlinking selected text?
-	New selector for PRJ numbers, and maybe other related things?
-		Could potentially be a special mode for TLG selector, since the info is there currently.
+	Selector - add parmeter or setting for column to return?
+		Could add to doSelect() as well
+		Would simplify at least one case: outlook TLG PRJ sender hotkey
 	Reconsider using SelectorRow objects as main driver for Selector actions - might be better to make a new class to hold info, and copy data over?
 		Alternatively, just change format of selector action functions, to take:
 			dataAry
@@ -20,6 +21,8 @@
 				Default data (goes into data array, any visible fields get filled out of it)
 				Data from choice (goes into data array, overwriting any conflicting values)
 				Override data from GUI (goes into data array, overwriting any conflicting values)
+		Should get rid of RET_OBJ selectorAction then
+			Used only by unit testing script.
 	Selector - consider rearranging selectGUI flow somewhat
 		defaultOverrideData and overrideData aren't really properties of the class - they're really just part of the selection process - better as local variables if we can structure things the right way
 			Would be nice to determine choice and load that data without having to first store off field values into a member variable (local array is better, I guess?)

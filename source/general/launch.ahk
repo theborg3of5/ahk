@@ -50,11 +50,19 @@
 			s := new Selector("epicEnvironments.tl")
 			guiSettings                       := []
 			guiSettings["Icon"]               := MainConfig.getProgram("Snapper", "PATH")
-			guiSettings["ShowOverrideFields"] := 1
+			guiSettings["ShowOverrideFields"] := true
 			guiSettings["ExtraDataFields"] := ["INI", "ID"]
 			s.selectGui("DO_SNAPPER", defaultOverrideData, guiSettings)
 		}
-	return
+	#+p::
+		prjSelector() {
+			s := new Selector("outlookTLG.tl")
+			data := s.selectGui("RET_DATA", "", {"ShowOverrideFields":false})
+			
+			prjId := data["PRJ"]
+			if(prjId)
+				Send, % prjId
+		}
 #If
 
 ; Resize window

@@ -337,7 +337,7 @@ class Selector {
 	}
 	
 	processGuiSettings(settings) {
-		if(settings["ShowOverrideFields"]) ; This one can be set in the file too, so don't clear it if it's not passed.
+		if(settings["ShowOverrideFields"] != "") ; This one can be set in the file too, so don't clear it if it's not passed.
 			this.guiSettings["ShowOverrideFields"] := settings["ShowOverrideFields"]
 		
 		this.guiSettings["IconPath"] := settings["Icon"]

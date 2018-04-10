@@ -8,9 +8,11 @@
 	Make a smaller subset of scripts that can run in VDIs?
 		AHK is already installed (and latest version at that!)
 	Centralize format-as-code hotkey (^+c) like we did for hyperlinking selected text?
-	Selector - add parmeter or setting for column to return?
-		Could add to doSelect() as well
-		Would simplify at least one case: outlook TLG PRJ sender hotkey
+	Potentially paradigm shift for Selector - stop actually doing things, only return data
+		We'd lose unified debug, but we don't really need it anymore if we're only returning
+			Could still have one of the returned indices (maybe "IS_DEBUG"?) give the info back if they did +d
+				Or if that's not really useful, just get rid of it entirely.
+		Move actual selector stuff into select* functions just above the respective things we're actually doing - selectResize, selectCall, selectTimer, etc.
 	Reconsider using SelectorRow objects as main driver for Selector actions - might be better to make a new class to hold info, and copy data over?
 		Alternatively, just change format of selector action functions, to take:
 			dataAry

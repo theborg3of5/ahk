@@ -236,7 +236,7 @@ OUTLOOK_TLG(actionRow) {
 	; DLG ID overrides PRJ if given, but either way only one comes through into string.
 	if(dlgId)
 		recId := dlgId
-	else
+	else if(prjId)
 		recId := "P." prjId
 	
 	; Sanity check - if the message is an EMC2 ID (or P.emc2Id) and the DLG is not, swap them.

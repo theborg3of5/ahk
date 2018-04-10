@@ -16,6 +16,8 @@
 	VMWareView			vmware-view.exe		-							-				-								VMware\VMware Horizon View Client\vmware-view.exe
 	OneNote				ONENOTE.EXE				Framework::CFrame		-				-								Microsoft Office\Office16\ONENOTE.EXE										-										EPIC_LAPTOP
 	OneNote				ONENOTE.EXE				Framework::CFrame		-				-								Microsoft Office\root\Office16\ONENOTE.EXE
+	Putty					putty.exe				-							-				-								PuTTY\putty.exe																	-										EPIC_LAPTOP
+	Hyperspace			EpicD85.exe				-							-				-								Epic\v8.5\Shared Files\EpicD85.exe											-										EPIC_LAPTOP
 []
 
 [{PATH}b:C:\Program Files\]

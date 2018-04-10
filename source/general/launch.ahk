@@ -25,10 +25,10 @@
 	
 	; Selector launchers
 	^+!t::doSelect("outlookTLG.tl")
-	^+!h::doSelect("epicEnvironments.tl", "DO_HYPERSPACE", "C:\Program Files (x86)\Epic\v8.5\Shared Files\EpicD85.exe")
+	^+!h::doSelect("epicEnvironments.tl", "DO_HYPERSPACE",       MainConfig.getProgram("Hyperspace", "PATH"))
 	^+!i::doSelect("epicEnvironments.tl", "SEND_ENVIRONMENT_ID")
-	^+!r::doSelect("epicEnvironments.tl", "DO_THUNDER",    "C:\Program Files (x86)\PuTTY\putty.exe")
-	!+v:: doSelect("epicEnvironments.tl", "DO_VDI",        "C:\Program Files (x86)\VMware\VMware Horizon View Client\vmware-view.exe")
+	^+!r::doSelect("epicEnvironments.tl", "DO_THUNDER",          MainConfig.getProgram("Putty",      "PATH"))
+	!+v:: doSelect("epicEnvironments.tl", "DO_VDI",              MainConfig.getProgram("VMWareView", "PATH"))
 	#p::
 		phoneSelector() {
 			selectedText := cleanupText(getFirstLineOfSelectedText())
@@ -49,7 +49,7 @@
 			
 			s := new Selector("epicEnvironments.tl")
 			guiSettings                       := []
-			guiSettings["Icon"]               := "C:\Program Files (x86)\Epic\Snapper\Snapper.exe"
+			guiSettings["Icon"]               := MainConfig.getProgram("Snapper", "PATH")
 			guiSettings["ShowOverrideFields"] := 1
 			guiSettings["ExtraDataFields"] := ["INI", "ID"]
 			s.selectGui("DO_SNAPPER", defaultOverrideData, guiSettings)

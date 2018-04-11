@@ -438,18 +438,26 @@ class Selector {
 		; Determine the user's choice (if any) and merge that info into the data array.
 		if(GuiInChoice) ; User put something in the first box, which should come from the choices shown.
 			choiceData := this.parseChoice(GuiInChoice)
-		data := mergeArrays(data, choiceData)
+			
+		if(choiceData) {
+			data := mergeArrays(data, choiceData)
+			gotDataFromUser := true
+		}
 		
-		; If no fields were visible, don't need to read from them.
+		; Read override data from any visible fields.
 		if(this.guiSettings["ShowOverrideFields"]) {
 			For num,label in this.dataIndices {
 				inputVal := GuiIn%num% ; GuiIn* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
-				if(inputVal && (inputVal != label))
+				if(inputVal && (inputVal != label)) {
 					data[label] := inputVal
+					gotDataFromUser := true
+				}
 			}
 		}
 		
 		setTrayIcon(originalIconPath) ; Restore the original tray icon
+		if(!gotDataFromUser)
+			return ""
 		return data
 	}
 	

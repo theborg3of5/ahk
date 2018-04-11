@@ -444,6 +444,8 @@ processEMC2ObjectInfo(infoAry) {
 		objInfo := s.selectChoice(ini)
 	else    ; If no INI found at all, ask the user for it
 		objInfo := s.selectGui({"ShowOverrideFields":false})
+	if(!objInfo)
+		return ""
 	ini := objInfo["SUBTYPE"]
 	
 	; ID

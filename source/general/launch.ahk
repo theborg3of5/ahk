@@ -27,76 +27,57 @@
 	^+!t::
 		selectOutlookTLG() {
 			data := doSelect("outlookTLG.tl")
-			tlp      := data["TLP"]
-			message  := data["MSG"]
-			prjId    := data["PRJ"]
-			dlgId    := data["DLG"]
-			customer := data["CUST"]
+			if(!data)
+				return
 			
-			; DLG ID overrides PRJ if given, but either way only one comes through into string.
-			if(dlgId)
-				recId := dlgId
-			else if(prjId)
-				recId := "P." prjId
+			; Record ID comes from either DLG ID, or PRJ (with P.)
+			if(data["DLG"])
+				recId := data["DLG"]
+			else if(data["PRJ"])
+				recId := "P." data["PRJ"]
 			
-			; Sanity check - if the message is an EMC2 ID (or P.emc2Id) and the DLG is not, swap them.
-			if(!isEMC2Id(recId) && (SubStr(recId, 1, 2) != "P.") ) {
-				if(isEMC2Id(message)) {
-					newDLG  := message
-					message := recId
-					recId   := newDLG
-				}
-			}
-			textToSend := tlp "/" customer "///" recId ", " message
-			
+			textToSend := data["TLP"] "/" data["CUST"] "///" recId ", " data["MSG"]
 			SendRaw, % textToSend
 			Send, {Enter}
 		}
 	^+!h::
 		selectHyperspace() {
 			data := doSelect("epicEnvironments.tl", MainConfig.getProgram("Hyperspace", "PATH"))
-			environment  := data["COMM_ID"]
-			versionMajor := data["MAJOR"]
-			versionMinor := data["MINOR"]
+			if(!data)
+				return
 			
-			; Build run path.
-			runString := buildHyperspaceRunString(versionMajor, versionMinor, environment)
-			
-			Run(runString)
+			Run(buildHyperspaceRunString(data["MAJOR"], data["MINOR"], data["COMM_ID"]))
 		}
 	^+!i::
 		selectEnvironmentId() {
 			data := doSelect("epicEnvironments.tl")
-			environmentId := data["ENV_ID"]
-	
-			Send, % environmentId
+			if(!data)
+				return
+			
+			Send, % data["ENV_ID"]
 			Send, {Enter} ; Submit it too.
 		}
 	^+!r::
 		selectThunder() {
 			data := doSelect("epicEnvironments.tl", MainConfig.getProgram("Putty", "PATH"))
+			if(!data)
+				return
+			
 			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
 				activateProgram("Thunder")
-			
-			thunderId := data["THUNDER_ID"]
-			runString := MainConfig.getProgram("Thunder", "PATH") " " thunderId
-			
-			Run(runString)
+			else
+				Run(MainConfig.getProgram("Thunder", "PATH") " " data["THUNDER_ID"])
 		}
 	!+v::
 		selectVDI() {
 			data := doSelect("epicEnvironments.tl", MainConfig.getProgram("VMWareView", "PATH"))
-			vdiId := data["VDI_ID"]
-			
-			runString := buildVDIRunString(vdiId)
+			if(!data)
+				return
 			
 			if(data["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.
 				runProgram("VMWareView")
 			} else {
-				if(!vdiId) ; Safety check - don't try to launch with no VDI specified (that's what the "LAUNCH" COMM_ID is for).
-					return
-				
-				Run(runString)
+				Run(buildVDIRunString(data["VDI_ID"]))
 				
 				; Also fake-maximize the window once it shows up.
 				WinWaitActive, ahk_exe vmware-view.exe, , 10, VMware Horizon Client ; Ignore the loading-type popup that happens initially with excluded title.
@@ -112,45 +93,42 @@
 				callNumber(selectedText)
 			else
 				data := doSelect("phone.tl")
-				num := data["NUMBER"]
-				name := data["NAME"]
+				if(!data)
+					return
 				
-				callNumber(num, name)
+				callNumber(data["NUMBER"], data["NAME"])
 		}
 	^!#s::
 		snapperSelector() {
 			selectedText := cleanupText(getFirstLineOfSelectedText())
 			splitRecordString(selectedText, ini, id)
-			
-			; Default data from selection.
 			defaultOverrideData        := []
 			defaultOverrideData["INI"] := ini
 			defaultOverrideData["ID"]  := id
 			
-			s := new Selector("epicEnvironments.tl")
 			guiSettings                       := []
 			guiSettings["Icon"]               := MainConfig.getProgram("Snapper", "PATH")
 			guiSettings["ShowOverrideFields"] := true
 			guiSettings["ExtraDataFields"] := ["INI", "ID"]
+			
+			s := new Selector("epicEnvironments.tl")
 			data := s.selectGui(defaultOverrideData, guiSettings)
+			if(!data)
+				return
+			
 			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
 				runProgram("Snapper")
-			
-			environment := data["COMM_ID"]
-			ini         := data["INI"]
-			idList      := data["ID"]
-			
-			url := buildSnapperURL(environment, ini, idList)
-			Run(url)
+			else
+				Run(buildSnapperURL(data["COMM_ID"], data["INI"], data["ID"])) ; data["ID"] can contain a comma-delimited list if that's what the user entered
 		}
 	#+p::
 		prjSelector() {
 			s := new Selector("outlookTLG.tl")
 			data := s.selectGui({"ShowOverrideFields":false})
+			if(!data)
+				return
 			
-			prjId := data["PRJ"]
-			if(prjId)
-				Send, % prjId
+			Send, % data["PRJ"]
 		}
 #If
 
@@ -158,17 +136,10 @@
 #+r::
 	selectResize() {
 		data := doSelect("resize.tl")
-		width  := data["WIDTH"]
-		height := data["HEIGHT"]
-		ratioW := data["WRATIO"]
-		ratioH := data["HRATIO"]
+		if(!data)
+			return
 		
-		if(ratioW)
-			width  *= ratioW
-		if(ratioH)
-			height *= ratioH
-		
-		WinMove, A, , , , width, height
+		WinMove, A, , , , data["WIDTH"], data["HEIGHT"]
 	}
 
 ; Folders
@@ -193,24 +164,26 @@
 		filter := MainConfig.getMachineTableListFilter()
 		s := new Selector("search.tl", "", filter)
 		data := s.selectGui({"SEARCH_TERM":text})
+		if(!data)
+			return
 		
 		searchTerm := escapeDoubleQuotes(data["SEARCH_TERM"], 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
-		searchType := data["SEARCH_TYPE"]
 		subTypes   := forceArray(data["SUBTYPE"])
 		
-		url := ""
 		For i,type in subTypes { ; For searching multiple at once.
-			if(searchType = "CODESEARCH")
+			url := ""
+			
+			if(data["SEARCH_TYPE"] = "CODESEARCH")
 				url := buildCodeSearchURL(type, searchTerm, data["APP_KEY"])
-			else if(searchType = "GURU")
+			else if(data["SEARCH_TYPE"] = "GURU")
 				url := buildGuruURL(searchTerm)
-			else if(searchType = "WIKI") ; Epic wiki search.
+			else if(data["SEARCH_TYPE"] = "WIKI") ; Epic wiki search.
 				url := buildEpicWikiSearchURL(subTypes[0], searchTerm)
-			else if(searchType = "WEB")
+			else if(data["SEARCH_TYPE"] = "WEB")
 				url := StrReplace(subTypes[0], "%s", searchTerm)
-			else if(searchType = "GREPWIN")
+			else if(data["SEARCH_TYPE"] = "GREPWIN")
 				searchWithGrepWin(type, searchTerm)
-			else if(searchType = "EVERYTHING")
+			else if(data["SEARCH_TYPE"] = "EVERYTHING")
 				searchWithEverything(searchTerm)
 			
 			if(url)
@@ -239,22 +212,13 @@ genericLink(subAction) {
 ; Sites
 ^+!a::
 	openAllSites() {
-		sites := Object()
-		sites.Push("https://mail.google.com/mail/u/0/#inbox")
-		sites.Push("http://www.facebook.com/")
-		sites.Push("http://www.reddit.com/")
-		sites.Push("http://feedly.com/i/latest")
-		
-		sitesLen := sites.MaxIndex()
-		Loop, %sitesLen% {
-			Run(sites[A_Index])
-			Sleep, 100
-		}
-		sitesLen--
-		
-		Send, {Ctrl Down}{Shift Down}
-		Send, {Tab %sitesLen%}
-		Send, {Shift Up}{Ctrl Up}
+		Run("https://mail.google.com/mail/u/0/#inbox")
+		Sleep, 100
+		Run("http://www.facebook.com/")
+		Sleep, 100
+		Run("http://www.reddit.com/")
+		Sleep, 100
+		Run("http://feedly.com/i/latest")
 	}
 
 ^+!m::Run("https://www.messenger.com")
@@ -331,8 +295,10 @@ genericLink(subAction) {
 !+c::
 	configSelector() {
 		data := doSelect("configs.tl")
-		path := data["PATH"]
-		path := MainConfig.replacePathTags(path)
-		if(path && FileExist(path))
+		if(!data)
+			return
+		
+		path := MainConfig.replacePathTags(data["PATH"])
+		if(FileExist(path))
 			Run(path)
 	}

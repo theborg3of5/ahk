@@ -3,9 +3,10 @@
 	:*:.status::
 		sendChroniclesStatusItemsToIgnore() {
 			data := doSelect("chroniclesStatusItems.tl")
-			itemsList := data["STATUS_ITEMS"]
+			if(!data)
+				return
 			
-			itemsAry  := StrSplit(itemsList, ",")
+			itemsAry  := StrSplit(data["STATUS_ITEMS"], ",")
 			For i,item in itemsAry {
 				if(i > 1)
 					excludeItemsString .= ","

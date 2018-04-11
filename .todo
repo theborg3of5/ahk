@@ -1,10 +1,4 @@
 'Selector'
-	Switch to sending data array to various selectorActions
-		Should just be selectorRow.data
-		Update corresponding selectorActions
-	Get rid of RET_OBJ selectorAction
-		Used only by unit testing script
-			Should we just get rid of that entirely? It's not really helpful, and never run...
 	Switch data-filling strategy
 		selectGui
 			Local data (array) starts here
@@ -72,6 +66,3 @@
 	Selector
 		Settings passed in programmatically
 	MainConfig and windows.tl support for RegEx in titles ({REGEX})
-
-'Unit Tests'
-	ActionObject

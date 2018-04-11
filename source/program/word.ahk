@@ -10,6 +10,12 @@
 	; Apply bullets
 	^.::^+l
 	
+	; Strikethrough
+	^-::
+		Send, !h
+		Send, 4
+	return
+	
 	; Jump to next *** token and select it.
 	F2::
 		Send, ^g    ; Find/replace popup (Go To tab)

@@ -1,19 +1,4 @@
 'Selector'
-	Switch data-filling strategy
-		selectGui
-			Local data (array) starts here
-			Fill data with default data
-			Pass data to launchSelectorPopup()
-				Use data to fill in visible override fields in GUI
-				Once GUI submitted, determine sum of all data
-					Default data (as passed in)
-					Determine choice and add data from that (overwriting)
-					Add data from override fields (overwriting)
-				Return summed data
-			Determine choice, fill into data (overwrite anything already filled)
-			Fill override data into data (overwrite anything already filled)
-			Return data
-		Get rid of class properties for overrideData, defaultData, etc.
 	Stop using selectorActions
 		Switch places that use selectorActions to instead use RET_DATA and do it themselves
 			select* wrappers around what we actually do - selectResize, selectCall, selectTimer, etc.
@@ -34,8 +19,6 @@
 			.show() shows the popup, including waiting on it to be closed
 			.getChoiceQuery(), .getOverrideData()
 		Handle data summing as before, return finished data array
-	Get rid of .errPop?
-		Just quit silently when things fail.
 	
 'Fixes'
 	Update or get rid of timer - formatting, general code cleanup, even functionality?

@@ -121,30 +121,24 @@ class Selector {
 	selectGui(actionType = "", defaultOverrideDataAry = "", guiSettings = "") {
 		; DEBUG.popup("Selector.selectGui", "Start", "ActionType", actionType, "Default override data", defaultOverrideDataAry, "GUI Settings", guiSettings)
 		
+		data := []
+		
 		if(actionType)
 			this.actionSettings["ActionType"] := actionType
 		if(defaultOverrideDataAry)
-			this.defaultOverrideData := defaultOverrideDataAry
+			data := mergeArrays(data, defaultOverrideDataAry)
 		
 		this.processGuiSettings(guiSettings)
 		
 		; Get the choice.
-		userChoiceString := this.launchSelectorPopup()
+		data := this.launchSelectorPopup(data)
 		
 		; Blank input, we bail.
-		if(!userChoiceString && !this.haveOverrideData)
+		if(!data)
 			return ""
 		
-		if(userChoiceString) ; User put something in the first box, which should come from the choices shown.
-			rowToDo := this.parseChoice(userChoiceString)
-		else if(this.haveOverrideData && !rowToDo) ; If there was no choice (only data input boxes filled), create a place to put the data.
-			rowToDo := new SelectorRow()
-		
-		; Blow in any data from the data input boxes (and defaults passed in programmatically).
-		this.applyDataOverrides(rowToDo)
-		
 		; DEBUG.popup("User Input",userChoiceString, "Row Parse Result",rowToDo, "Override data",this.overrideData)
-		return this.doAction(rowToDo)
+		return this.doAction(data)
 	}
 	
 	selectChoice(choice, actionType = "") {
@@ -154,13 +148,11 @@ class Selector {
 		if(actionType)
 			this.actionSettings["ActionType"] := actionType
 		
-		this.hideErrors := true ; GDB TODO call this out in documentation.
-		
-		rowToDo := this.parseChoice(choice)
-		if(!rowToDo)
+		data := this.parseChoice(choice)
+		if(!data)
 			return ""
 		
-		return this.doAction(rowToDo)
+		return this.doAction(data)
 	}
 	
 	
@@ -178,10 +170,6 @@ class Selector {
 	actionSettings      := []    ; Settings related to what we do with the selection
 	
 	filePath            := ""    ; Where the .tl file lives if we're reading one in.
-	defaultOverrideData := []    ; Info to default into the GUI data fields, and to use for columns without fields (when the choice doesn't specify a value).
-	overrideData        := []    ; GDB TODO
-	haveOverrideData    := false ; GDB TODO
-	hideErrors          := false ; Whether to suppress error popups (used by programmatic selections with no GUI)
 	
 	getSpecialChars() {
 		chars := []
@@ -250,7 +238,7 @@ class Selector {
 		; DEBUG.popup("Filepath", this.filePath, "Parsed List", list, "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows())
 		
 		if(!IsObject(tl.getIndexLabels())) {
-			this.errPop("Invalid settings", "No column index labels")
+			DEBUG.popup("Selector.loadChoicesFromFile","Got TableList", "Invalid settings","No column index labels")
 			return
 		}
 		
@@ -345,7 +333,7 @@ class Selector {
 	}
 	
 	; Generate the text for the GUI and display it, returning the user's response.
-	launchSelectorPopup() {
+	launchSelectorPopup(data) {
 		static GuiInChoice
 		GuiInChoice := "" ; Clear this to prevent bleed-over from previous uses. Must be on a separate line from the static declaration or it only happens once.
 		
@@ -467,9 +455,9 @@ class Selector {
 			
 			xInput := xNameFirstCol
 			For num,label in this.dataIndices {
-				if(this.defaultOverrideData[label]) ; Data given as default
-					tempData := this.defaultOverrideData[label]
-				else                                ; Data label (treat like ghost text, filter out later if not modified)
+				if(data[label]) ; Data given as default
+					tempData := data[label]
+				else            ; Data label (treat like ghost text, filter out later if not modified)
 					tempData := label
 				
 				addInputField("GuiIn" num, xInput, yInput, widthInputData, heightInput, tempData)
@@ -488,14 +476,22 @@ class Selector {
 		; Wait for the user to submit the GUI.
 		WinWaitClose, ahk_id %guiHandle%
 		
+		; Determine the user's choice (if any) and merge that info into the data array.
+		if(GuiInChoice) ; User put something in the first box, which should come from the choices shown.
+			choiceData := this.parseChoice(GuiInChoice)
+		data := mergeArrays(data, choiceData)
 		
-		; == GUI waits for user to do something ==
-		
-		
-		this.saveOverrideDataFromGui()
+		; If no fields were visible, don't need to read from them.
+		if(this.guiSettings["ShowOverrideFields"]) {
+			For num,label in this.dataIndices {
+				inputVal := GuiIn%num% ; GuiIn* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
+				if(inputVal && (inputVal != label))
+					data[label] := inputVal
+			}
+		}
 		
 		setTrayIcon(originalIconPath) ; Restore the original tray icon
-		return GuiInChoice
+		return data
 	}
 	
 	createSelectorGui() {
@@ -540,21 +536,6 @@ class Selector {
 		return totalWidth
 	}
 	
-	saveOverrideDataFromGui() {
-		; If no fields were visible, don't need to read from them.
-		if(!this.guiSettings["ShowOverrideFields"])
-			return
-		
-		For num,label in this.dataIndices {
-			inputVal := GuiIn%num% ; GuiIn* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
-			if(inputVal && (inputVal != label)) {
-				this.haveOverrideData := true
-				this.overrideData[label] := inputVal
-			}
-		}
-		; DEBUG.popup("Got override data from GUI", this.overrideData)
-	}
-	
 	; Function to turn the input into something useful.
 	parseChoice(userChoiceString) {
 		commandCharPos := InStr(userChoiceString, this.chars["COMMAND"])
@@ -576,23 +557,16 @@ class Selector {
 				this.actionSettings["ActionType"] := "DO"
 				rowToDo := new SelectorRow()
 				rowToDo.data["DOACTION"] := this.filePath
-			
-			; Otherwise, we don't know what this is.
-			} else if(!isNum(rest)) {
-				this.errPop("Invalid command input option")
 			}
 		
 		; Otherwise, we search through the data structure by both number and shortcut and look for a match.
 		} else {
 			rowToDo := this.searchAllTables(userChoiceString)
-			
-			if(!rowToDo)
-				this.errPop("No matches found!")
 		}
 		
 		; DEBUG.popup("Row to do", rowToDo)
 		
-		return rowToDo
+		return rowToDo.data
 	}
 
 	; Search both given tables, the visible and the invisible.
@@ -623,60 +597,19 @@ class Selector {
 		
 		return ""
 	}
-	
-	applyDataOverrides(ByRef rowToDo) {
-		; DEBUG.popup("Selector.applyDataOverrides","Start", "RowToDo",rowToDo, "overrideData",this.overrideData, "defaultOverrideData",this.defaultOverrideData)
-		
-		; Apply any overrides from the GUI data fields - these were entered by (or at least, defaulted and visible to) the user.
-		For label,value in this.overrideData
-			if(value)
-				rowToDo.data[label] := value
-		
-		; Apply any default overrides that are not already defined.
-		For label,value in this.defaultOverrideData {
-			if(value && !rowToDo.data[label])
-				rowToDo.data[label] := value
-		}
-		
-		; DEBUG.popup("Selector.applyDataOverrides","Finish", "RowToDo",rowToDo, "overrideData",this.overrideData, "defaultOverrideData",this.defaultOverrideData)
-	}
-	shouldApplyOverrideToRow(rowToDo, label) {
-		; DEBUG.popup("Selector.shouldApplyOverrideToRow","Start", "RowToDo",rowToDo, "Label",label)
-		if(contains(this.dataIndices, label)) ; There was a visible field associated with this column, so the data we got from it was either entered or visible to the user.
-			return true
-		else if(!rowToDo.data[label]) ; There was not a visible field, so only use the override if the user's choice has no value for this column.
-			return true
-		
-		return false
-	}
 
 	; Function to do what it is we want done, then exit.
-	doAction(rowToDo) {
+	doAction(data) {
 		; DEBUG.popup("Action type", this.actionSettings["ActionType"], "Row to run", rowToDo)
 		
 		actionType := this.actionSettings["ActionType"]
 		if(actionType = "RET")      ; Special case for simple return action, passing in the column to return.
-			result := RET(rowToDo.data, this.actionSettings["ReturnColumn"])
+			result := RET(data, this.actionSettings["ReturnColumn"])
 		else if(isFunc(actionType)) ; Generic caller for many possible actions.
-			result := %actionType%(rowToDo.data)
-		else                        ; Error catch.
-			this.errPop("Action not defined",actionType)
+			result := %actionType%(data)
 		
 		; DEBUG.popup("Action type",actionType, "Finished row",rowToDo, "Result",result)
 		return result
-	}
-	
-	
-	; Centralized MsgBox clone that respects the silencer flag.
-	errPop(label, var) {
-		if(!this.hideErrors) {
-			if(!label)
-				label := "Error"
-			if(isFunc("DEBUG.popup"))
-				DEBUG.popup(label, var)
-			else
-				MsgBox, % "Label: `n`t" label "`nText: `n`t" var
-		}
 	}
 	
 	; Debug info
@@ -687,7 +620,6 @@ class Selector {
 		debugBuilder.addLine("GUI settings",       this.guiSettings)
 		debugBuilder.addLine("Action settings",    this.actionSettings)
 		debugBuilder.addLine("Filepath",           this.filePath)
-		debugBuilder.addLine("Hide errors",        this.hideErrors)
 		debugBuilder.addLine("Choices",            this.choices)
 		debugBuilder.addLine("Hidden Choices",     this.hiddenChoices)
 		debugBuilder.addLine("Non-Choices",        this.nonChoices)

@@ -1,41 +1,61 @@
-# Fixes
+'Selector'
+	Remove debug (+d) behavior entirely
+		Handling to find +d
+		isDebug handling in Selector
+		isDebug property in SelectorRow
+		Handling in selectorActions
+	Switch to sending data array to various selectorActions
+		Should just be selectorRow.data
+		Update corresponding selectorActions
+	Get rid of RET_OBJ selectorAction
+		Used only by unit testing script
+			Should we just get rid of that entirely? It's not really helpful, and never run...
+	Switch data-filling strategy
+		selectGui
+			Local data (array) starts here
+			Fill data with default data
+			Pass data to launchSelectorPopup()
+				Use data to fill in visible override fields in GUI
+				Once GUI submitted, determine sum of all data
+					Default data (as passed in)
+					Determine choice and add data from that (overwriting)
+					Add data from override fields (overwriting)
+				Return summed data
+			Determine choice, fill into data (overwrite anything already filled)
+			Fill override data into data (overwrite anything already filled)
+			Return data
+		Get rid of class properties for overrideData, defaultData, etc.
+	Stop using selectorActions
+		Switch places that use selectorActions to instead use RET_DATA and do it themselves
+			select* wrappers around what we actually do - selectResize, selectCall, selectTimer, etc.
+	Make Selector always return data, no longer perform any action
+		Move handling for opening .tl files (+e) up out of doAction()
+			Probably just before we return the data
+		Stop calling doAction() and get rid of it
+		Get rid of selectorActions script entirely
+	Rework SelectorRow
+		Remove unused: userInput, isDebug, buildSelectorRow()
+		Reintroduce .name and .abbrev (as properties)
+			In constructor, should come from either parameters (if given) or from "NAME"/"ABBREV" subscripts of data array
+			Have launchSelectorPopup() use .name/.abbrev instead of .data["NAME"]/.data["ABBREV"]
+	Turn launchSelectorPopup() into doSelectGui() instead
+		Takes defaultData input
+		New class for popup
+			Constructor takes needed info, builds the thing with (private) .build()
+			.show() shows the popup, including waiting on it to be closed
+			.getChoiceQuery(), .getOverrideData()
+		Handle data summing as before, return finished data array
+	
+'Fixes'
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
 	
-# New ideas
+'New'
 	Make a smaller subset of scripts that can run in VDIs?
 		AHK is already installed (and latest version at that!)
 	Centralize format-as-code hotkey (^+c) like we did for hyperlinking selected text?
-	New Selector paradigm
-		Selector only returns data array now, no longer actually runs/does things
-			Move logic from selectorActions.ahk out into places they call
-				Create select* functions where it makes sense - selectResize, selectCall, selectTimer, etc.
-		Get rid of debug (+d) behavior entirely
-		Always return array of info from choice
-			Possibly excluding NAME and ABBREV?
-			If we include them, probably should rename - maybe _NAME and _ABBREV?
-		Switch data-filling strategy, no longer "backwards" (store off default overrides, then GUI overrides, then apply all to SelectorRow)
-			Instead, return one data array, filled in order:
-				Default data (goes into data array, any visible fields get filled out of it)
-				Data from choice (goes into data array, overwriting any conflicting values)
-				Override data from GUI (goes into data array, overwriting any conflicting values)
-			Should be able to get rid of defaultOverrideData and overrideData separate things this way
-	Selector cleanup
-		Reduce SelectorRow, possibly axe it entirely?
-			Unused: userInput, isDebug, buildSelectorRow()
-			Possible reason to keep: test.ahk (and .master) use constructor as a nice way to build selector of what debug info to copy
-				Might be better served by an actual TL and/or just building the arrays of choices, though
-			Might also be worth keeping in case GUI rework ends up having them do more GUI-related things
-				Could re-introduce .name/.abbrev (but everything else should live under .data still)
-			If getting rid of SelectorRow, update things like setting the choices to use arrays instead.
-		Get rid of RET_OBJ selectorAction
-			Used only by unit testing script
-				Should we just get rid of that entirely? It's not really helpful, and never run...
-		Break launchSelectorPopup() down, maybe turn it into a class of sorts?
-			Could potentially have SelectorRow objects handle their own label placements?
-				Or at least have properties for width, height, number, etc.
 	Add some way to show progress for long-running scripts - maybe using a tooltip, or toast library from below?
 	Audit all scripts for unused hotkeys
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
@@ -50,13 +70,11 @@
 			Will need to have a tab width parameter/argument somewhere for this (maybe in _constants or config?)
 		Take into account overflow, with next field being empty or placeholder'd
 	
-# Scripts to Share
-
-# Documentation
+'Documentation'
 	Debug
 	Selector
 		Settings passed in programmatically
 	MainConfig and windows.tl support for RegEx in titles ({REGEX})
 
-# Unit Tests
+'Unit Tests'
 	ActionObject

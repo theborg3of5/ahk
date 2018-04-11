@@ -1,5 +1,4 @@
 =Resize active window to size:
-+DefaultAction=RESIZE
 +ShowOverrideFields=1
 +MinColumnWidth=350
 

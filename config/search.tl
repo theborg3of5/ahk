@@ -1,7 +1,6 @@
 @PlaceholderChar=-
 
 =Select type of search to run and input search text:
-+DefaultAction=RET_DATA
 +ShowOverrideFields=1
 
 (		NAME								ABBREV		SUBTYPE															SEARCH_TYPE		APP_KEY		MACHINE	SEARCH_TERM

@@ -1,12 +1,5 @@
 'Selector'
-	Stop using selectorActions
-		Switch places that use selectorActions to instead use RET_DATA and do it themselves
-			select* wrappers around what we actually do - selectResize, selectCall, selectTimer, etc.
-	Make Selector always return data, no longer perform any action
-		Move handling for opening .tl files (+e) up out of doAction()
-			Probably just before we return the data
-		Stop calling doAction() and get rid of it
-		Get rid of selectorActions script entirely
+	Add returnColumn argument to doSelect, for the cases when we just want the one column back
 	Rework SelectorRow
 		Remove unused: userInput, buildSelectorRow()
 		Reintroduce .name and .abbrev (as properties)
@@ -19,8 +12,15 @@
 			.show() shows the popup, including waiting on it to be closed
 			.getChoiceQuery(), .getOverrideData()
 		Handle data summing as before, return finished data array
+	Switch test script over to just using a TL to decide which thing they want
+		Put different pieces in an array, select the index into that array.
+	Make the default 3rd column "VALUE" instead of "DOACTION"
+		Update places that use "DOACTION"
+			At least test.ahk/.master
+	Rework Selector documentation
 	
 'Fixes'
+	Go back and clean up launch.ahk a bunch with all of the additional logic dumped there from the selector rework
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
 		Build in selector for times
 			Can have hard-coded list of choices to pass in

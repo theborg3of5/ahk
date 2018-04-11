@@ -1,7 +1,6 @@
 @PlaceholderChar=-
 
 =Select Machine to set up:
-+DefaultAction=RET_DATA
 +ShowOverrideFields=1
 +MinColumnWidth=1000
 

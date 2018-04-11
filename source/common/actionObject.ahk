@@ -116,7 +116,7 @@ class ActionObject {
 		if(!type || !action || (!subType && needsSubType) || (!subAction && needsSubAction)) {
 			filter := MainConfig.getMachineTableListFilter()
 			s := new Selector("actionObject.tl", "", filter)
-			objInfo := s.selectGui("", {TYPE: type, ACTION: action, SUBTYPE: subType, SUBACTION: subAction, ID: input})
+			objInfo := s.selectGui({TYPE: type, ACTION: action, SUBTYPE: subType, SUBACTION: subAction, ID: input})
 			
 			type      := objInfo["TYPE"]
 			action    := objInfo["ACTION"]

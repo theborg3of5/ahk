@@ -34,12 +34,6 @@
 				
 				MinColumnWidth
 					Set this to any number X to have the UI be X pixels wide at a minimum (per column if multiple columns are shown). The UI might be larger if names are too long to fit.
-				
-				DefaultAction
-					The default action that should be taken when this INI is used. Can be overridden by passing one into .select() directly.
-				
-				DefaultReturnColumn
-					If the action to use is RET, this is the column that will be returned. Defaults to the DOACTION column.
 	
 	When the user selects their choice, the action passed in at the beginning will be evaluated as a function which receives a loaded SelectorRow object to perform the action on. See SelectorRow class for data structure.
 	
@@ -65,7 +59,7 @@
 */
 
 ; Wrapper functions
-doSelect(filePath, actionType = "", iconPath = "") {
+doSelect(filePath, iconPath = "") {
 	s := new Selector(filePath)
 	
 	if(iconPath) {
@@ -73,7 +67,7 @@ doSelect(filePath, actionType = "", iconPath = "") {
 		guiSettings["Icon"] := iconPath
 	}
 	
-	return s.selectGui(actionType, "", guiSettings)
+	return s.selectGui("", "", guiSettings)
 }
 
 ; GUI Events
@@ -85,7 +79,6 @@ SelectorSubmit() {
 	Gui, Destroy
 }
 
-; Selector class which reads in and stores data from a file, and given an index, abbreviation or action, does that action.
 class Selector {
 	
 	; ==============================
@@ -95,7 +88,6 @@ class Selector {
 	__New(filePath = "", tableListSettings = "", filter = "") {
 		this.chars          := this.getSpecialChars()
 		this.guiSettings    := this.getDefaultGuiSettings()
-		this.actionSettings := this.getDefaultActionSettings()
 		
 		tlSettings := mergeArrays(this.getDefaultTableListSettings(), tableListSettings)
 		
@@ -118,41 +110,24 @@ class Selector {
 	;                          only be used if the corresponding additional field is visible. That means if ShowOverrideFields isn't set
 	;                          to true (via option in the file or guiSettings), default overrides will only affect blank values in
 	;                          the user's choice.
-	selectGui(actionType = "", defaultOverrideDataAry = "", guiSettings = "") {
-		; DEBUG.popup("Selector.selectGui", "Start", "ActionType", actionType, "Default override data", defaultOverrideDataAry, "GUI Settings", guiSettings)
-		
+	selectGui(defaultOverrideDataAry = "", guiSettings = "") {
+		; DEBUG.popup("Selector.selectGui", "Start", "Default override data", defaultOverrideDataAry, "GUI Settings", guiSettings)
 		data := []
 		
-		if(actionType)
-			this.actionSettings["ActionType"] := actionType
 		if(defaultOverrideDataAry)
 			data := mergeArrays(data, defaultOverrideDataAry)
 		
 		this.processGuiSettings(guiSettings)
 		
-		; Get the choice.
-		data := this.launchSelectorPopup(data)
-		
-		; Blank input, we bail.
-		if(!data)
-			return ""
-		
-		; DEBUG.popup("User Input",userChoiceString, "Row Parse Result",rowToDo, "Override data",this.overrideData)
-		return this.doAction(data)
+		; DEBUG.popup("User Input",userChoiceString, "data",data)
+		return this.launchSelectorPopup(data)
 	}
 	
-	selectChoice(choice, actionType = "") {
+	selectChoice(choice) {
 		if(!choice)
 			return ""
 		
-		if(actionType)
-			this.actionSettings["ActionType"] := actionType
-		
-		data := this.parseChoice(choice)
-		if(!data)
-			return ""
-		
-		return this.doAction(data)
+		return this.parseChoice(choice)
 	}
 	
 	
@@ -165,10 +140,7 @@ class Selector {
 	hiddenChoices       := []    ; Invisible choices the user can pick from (array of SelectorRow objects).
 	nonChoices          := []    ; Lines that will be displayed as titles, extra newlines, etc, but we won't search through.
 	dataIndices         := []    ; Mapping from data field indices => data labels (column headers)
-	
 	guiSettings         := []    ; Settings related to the GUI popup we show
-	actionSettings      := []    ; Settings related to what we do with the selection
-	
 	filePath            := ""    ; Where the .tl file lives if we're reading one in.
 	
 	getSpecialChars() {
@@ -197,15 +169,6 @@ class Selector {
 		settings["ShowOverrideFields"] := false
 		settings["IconPath"]           := ""
 		settings["ExtraDataFields"]    := ""
-		
-		return settings
-	}
-	
-	getDefaultActionSettings() {
-		settings := []
-		
-		settings["ReturnColumn"] := "DOACTION"
-		settings["ActionType"]   := "RET"
 		
 		return settings
 	}
@@ -313,10 +276,6 @@ class Selector {
 			this.guiSettings["RowsPerColumn"] := value
 		else if(name = "MinColumnWidth")
 			this.guiSettings["MinColumnWidth"] := value
-		else if(name = "DefaultAction")
-			this.actionSettings["ActionType"] := value
-		else if(name = "DefaultReturnColumn")
-			this.actionSettings["ReturnColumn"] := value
 	}
 	
 	processGuiSettings(settings) {
@@ -554,9 +513,8 @@ class Selector {
 			
 			; Special case: +e is the edit action, which will open the current INI file for editing.
 			if(commandChar = this.chars["COMMANDS", "EDIT"]) {
-				this.actionSettings["ActionType"] := "DO"
-				rowToDo := new SelectorRow()
-				rowToDo.data["DOACTION"] := this.filePath
+				Run(this.filePath)
+				return ""
 			}
 		
 		; Otherwise, we search through the data structure by both number and shortcut and look for a match.
@@ -597,20 +555,6 @@ class Selector {
 		
 		return ""
 	}
-
-	; Function to do what it is we want done, then exit.
-	doAction(data) {
-		; DEBUG.popup("Action type", this.actionSettings["ActionType"], "Row to run", rowToDo)
-		
-		actionType := this.actionSettings["ActionType"]
-		if(actionType = "RET")      ; Special case for simple return action, passing in the column to return.
-			result := RET(data, this.actionSettings["ReturnColumn"])
-		else if(isFunc(actionType)) ; Generic caller for many possible actions.
-			result := %actionType%(data)
-		
-		; DEBUG.popup("Action type",actionType, "Finished row",rowToDo, "Result",result)
-		return result
-	}
 	
 	; Debug info
 	debugName := "Selector"
@@ -618,7 +562,6 @@ class Selector {
 		debugBuilder.addLine("Chars",              this.chars)
 		debugBuilder.addLine("Data indices",       this.dataIndices)
 		debugBuilder.addLine("GUI settings",       this.guiSettings)
-		debugBuilder.addLine("Action settings",    this.actionSettings)
 		debugBuilder.addLine("Filepath",           this.filePath)
 		debugBuilder.addLine("Choices",            this.choices)
 		debugBuilder.addLine("Hidden Choices",     this.hiddenChoices)

@@ -1,5 +1,4 @@
 @PlaceholderChar=-
-+DefaultReturnColumn=PATH
 
 (	NAME							ABBREV							PATH																													MACHINE
 	

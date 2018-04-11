@@ -443,7 +443,7 @@ processEMC2ObjectInfo(infoAry) {
 	if(ini) ; Turn any not-really-ini strings (like "Design") into actual INI
 		objInfo := s.selectChoice(ini)
 	else    ; If no INI found at all, ask the user for it
-		objInfo := s.selectGui("", "", {"ShowOverrideFields":false})
+		objInfo := s.selectGui({"ShowOverrideFields":false})
 	ini := objInfo["SUBTYPE"]
 	
 	; ID

@@ -24,18 +24,98 @@
 	^!#v::activateProgram("VB6")
 	
 	; Selector launchers
-	^+!t::doSelect("outlookTLG.tl")
-	^+!h::doSelect("epicEnvironments.tl", "DO_HYPERSPACE",       MainConfig.getProgram("Hyperspace", "PATH"))
-	^+!i::doSelect("epicEnvironments.tl", "SEND_ENVIRONMENT_ID")
-	^+!r::doSelect("epicEnvironments.tl", "DO_THUNDER",          MainConfig.getProgram("Putty",      "PATH"))
-	!+v:: doSelect("epicEnvironments.tl", "DO_VDI",              MainConfig.getProgram("VMWareView", "PATH"))
+	^+!t::
+		selectOutlookTLG() {
+			data := doSelect("outlookTLG.tl")
+			tlp      := data["TLP"]
+			message  := data["MSG"]
+			prjId    := data["PRJ"]
+			dlgId    := data["DLG"]
+			customer := data["CUST"]
+			
+			; DLG ID overrides PRJ if given, but either way only one comes through into string.
+			if(dlgId)
+				recId := dlgId
+			else if(prjId)
+				recId := "P." prjId
+			
+			; Sanity check - if the message is an EMC2 ID (or P.emc2Id) and the DLG is not, swap them.
+			if(!isEMC2Id(recId) && (SubStr(recId, 1, 2) != "P.") ) {
+				if(isEMC2Id(message)) {
+					newDLG  := message
+					message := recId
+					recId   := newDLG
+				}
+			}
+			textToSend := tlp "/" customer "///" recId ", " message
+			
+			SendRaw, % textToSend
+			Send, {Enter}
+		}
+	^+!h::
+		selectHyperspace() {
+			data := doSelect("epicEnvironments.tl", MainConfig.getProgram("Hyperspace", "PATH"))
+			environment  := data["COMM_ID"]
+			versionMajor := data["MAJOR"]
+			versionMinor := data["MINOR"]
+			
+			; Build run path.
+			runString := buildHyperspaceRunString(versionMajor, versionMinor, environment)
+			
+			Run(runString)
+		}
+	^+!i::
+		selectEnvironmentId() {
+			data := doSelect("epicEnvironments.tl")
+			environmentId := data["ENV_ID"]
+	
+			Send, % environmentId
+			Send, {Enter} ; Submit it too.
+		}
+	^+!r::
+		selectThunder() {
+			data := doSelect("epicEnvironments.tl", MainConfig.getProgram("Putty", "PATH"))
+			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
+				activateProgram("Thunder")
+			
+			thunderId := data["THUNDER_ID"]
+			runString := MainConfig.getProgram("Thunder", "PATH") " " thunderId
+			
+			Run(runString)
+		}
+	!+v::
+		selectVDI() {
+			data := doSelect("epicEnvironments.tl", MainConfig.getProgram("VMWareView", "PATH"))
+			vdiId := data["VDI_ID"]
+			
+			runString := buildVDIRunString(vdiId)
+			
+			if(data["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.
+				runProgram("VMWareView")
+			} else {
+				if(!vdiId) ; Safety check - don't try to launch with no VDI specified (that's what the "LAUNCH" COMM_ID is for).
+					return
+				
+				Run(runString)
+				
+				; Also fake-maximize the window once it shows up.
+				WinWaitActive, ahk_exe vmware-view.exe, , 10, VMware Horizon Client ; Ignore the loading-type popup that happens initially with excluded title.
+				if(ErrorLevel) ; Set if we timed out or if somethign else went wrong.
+					return
+				fakeMaximizeWindow()
+			}
+		}
 	#p::
 		phoneSelector() {
 			selectedText := cleanupText(getFirstLineOfSelectedText())
 			if(isValidPhoneNumber(selectedText)) ; If the selected text is a valid number, go ahead and call it (confirmation included in callNumber)
 				callNumber(selectedText)
 			else
-				doSelect("phone.tl")
+				data := doSelect("phone.tl")
+				num := data["NUMBER"]
+				name := data["NAME"]
+				
+				callNumber(num, name)
 		}
 	^!#s::
 		snapperSelector() {
@@ -52,12 +132,21 @@
 			guiSettings["Icon"]               := MainConfig.getProgram("Snapper", "PATH")
 			guiSettings["ShowOverrideFields"] := true
 			guiSettings["ExtraDataFields"] := ["INI", "ID"]
-			s.selectGui("DO_SNAPPER", defaultOverrideData, guiSettings)
+			data := s.selectGui(defaultOverrideData, guiSettings)
+			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
+				runProgram("Snapper")
+			
+			environment := data["COMM_ID"]
+			ini         := data["INI"]
+			idList      := data["ID"]
+			
+			url := buildSnapperURL(environment, ini, idList)
+			Run(url)
 		}
 	#+p::
 		prjSelector() {
 			s := new Selector("outlookTLG.tl")
-			data := s.selectGui("RET_DATA", "", {"ShowOverrideFields":false})
+			data := s.selectGui({"ShowOverrideFields":false})
 			
 			prjId := data["PRJ"]
 			if(prjId)
@@ -66,7 +155,21 @@
 #If
 
 ; Resize window
-#+r::doSelect("resize.tl")
+#+r::
+	selectResize() {
+		data := doSelect("resize.tl")
+		width  := data["WIDTH"]
+		height := data["HEIGHT"]
+		ratioW := data["WRATIO"]
+		ratioH := data["HRATIO"]
+		
+		if(ratioW)
+			width  *= ratioW
+		if(ratioH)
+			height *= ratioH
+		
+		WinMove, A, , , , width, height
+	}
 
 ; Folders
 !+a::openFolder("AHK_ROOT")
@@ -89,7 +192,7 @@
 		
 		filter := MainConfig.getMachineTableListFilter()
 		s := new Selector("search.tl", "", filter)
-		data := s.selectGui("", {"SEARCH_TERM":text})
+		data := s.selectGui({"SEARCH_TERM":text})
 		
 		searchTerm := escapeDoubleQuotes(data["SEARCH_TERM"], 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
 		searchType := data["SEARCH_TYPE"]
@@ -227,7 +330,8 @@ genericLink(subAction) {
 ; Selector to allow easy editing of config TL files that don't show a popup
 !+c::
 	configSelector() {
-		path := doSelect("configs.tl")
+		data := doSelect("configs.tl")
+		path := data["PATH"]
 		path := MainConfig.replacePathTags(path)
 		if(path && FileExist(path))
 			Run(path)

@@ -1,6 +1,3 @@
-+DefaultAction=RET
-+DefaultReturnColumn=PATH
-
 (	NAME					ABBREV	PATH
 
 [{PATH}b:<AHK_CONFIG>\]

@@ -1,7 +1,20 @@
 ﻿#IfWinActive, ahk_exe Snapper.exe
 	; Send string of status items to ignore, based on the given master file.
 	:*:.status::
-		doSelect("chroniclesStatusItems.tl")
+		sendChroniclesStatusItemsToIgnore() {
+			data := doSelect("chroniclesStatusItems.tl")
+			itemsList := data["STATUS_ITEMS"]
+			
+			itemsAry  := StrSplit(itemsList, ",")
+			For i,item in itemsAry {
+				if(i > 1)
+					excludeItemsString .= ","
+				excludeItemsString .= "-" item
+			}
+			
+			Send, % excludeItemsString
+			Send, {Enter}
+		}
 	return
 #IfWinActive
 

@@ -14,7 +14,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include HTTPRequest.ahk
 #Include runCommands.ahk
 #Include selector.ahk
-#Include selectorActions.ahk
 #Include selectorRow.ahk
 #Include string.ahk
 #Include tableList.ahk

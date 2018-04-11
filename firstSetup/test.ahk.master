@@ -32,53 +32,38 @@ return
 	return
 	
 	F1::
-		rows := []
-		
-		WinGetClass, currClass, A
-		WinGetTitle, currTitle, A
-		currControl := ControlGetFocus("A")
-		tooltipText := getTooltipText()
-		
-		; DEBUG.popup("Class", currClass, "Title", currTitle, "Control", currControl, "Tooltip text", tooltipText)
-		
-		rows.Insert(new SelectorRow("", "Class",   "c", currClass,   true))
-		rows.Insert(new SelectorRow("", "Tooltip", "t", tooltipText, true))
-		rows.Insert(new SelectorRow("", "Title",   "i", currTitle,   true))
-		rows.Insert(new SelectorRow("", "Control", "o", currControl, true))
-		
-		s := new Selector()
-		s.setChoices(rows)
-		textToCopy := s.selectGui()
-		
-		if(textToCopy) {
-			clipboard := textToCopy
-			DEBUG.popup("Copied to clipboard", textToCopy)
+		selectWindowInfo() {
+			rows := []
+			
+			WinGetClass, currClass, A
+			WinGetTitle, currTitle, A
+			currControl := ControlGetFocus("A")
+			tooltipText := getTooltipText()
+			
+			; DEBUG.popup("Class", currClass, "Title", currTitle, "Control", currControl, "Tooltip text", tooltipText)
+			
+			rows.Insert(new SelectorRow("", "Class",   "c", currClass,   true))
+			rows.Insert(new SelectorRow("", "Tooltip", "t", tooltipText, true))
+			rows.Insert(new SelectorRow("", "Title",   "i", currTitle,   true))
+			rows.Insert(new SelectorRow("", "Control", "o", currControl, true))
+			
+			s := new Selector()
+			s.setChoices(rows)
+			data := s.selectGui()
+			textToCopy := data["DOACTION"]
+			
+			if(textToCopy) {
+				clipboard := textToCopy
+				DEBUG.popup("Copied to clipboard", textToCopy)
+			}
 		}
-	return
-	
-	F6::
-		WinGetClass, currClass, A
-		WinGetTitle, currTitle, A
-		ControlGetFocus, currControl, A
-		DEBUG.popup(currClass, "Class", currTitle, "Title", currControl, "Control")
-	return
-	F7::
-		WinGetClass, currClass, A
-		clipboard := currClass
-	return
-	F8::
-		WinGetTitle, currTitle, A
-		clipboard := currTitle
-	return
-	F9::
-		clipboard := ControlGetFocus("A")
-	return
 	
 	!XButton1::
 	!XButton2::
-		clipboard := getTooltipText()
-		DEBUG.popup("Tooltip text", clipboard)
-	return
+		copyTooltipText() {
+			clipboard := getTooltipText()
+			DEBUG.popup("Tooltip text", clipboard)
+		}
 }
 
 #Include <commonHotkeys>

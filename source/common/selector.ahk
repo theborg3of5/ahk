@@ -61,10 +61,6 @@
 			These are special changes that can be made to the choice/UI at runtime, when the user is interacting with the UI. They include:
 				e - edit
 					Putting +e in the input will open the input file. If this is something like a txt or ini file, then it should open in a text editor.
-				
-				d - debug
-					This will send the SelectorRow object to the function as usual, but with the isDebug flag set to true. Note that it's up to the called function to check this flag and send back debug info (stored in SelectorRow.debugResult) rather than actually performing the action, so if you add your own, be sure to include this check or else this option won't work. See selectorActions.ahk for more details.
-					Selector will show that result (if given) using DEBUG.popup() (requires debug.ahk).
 	
 */
 
@@ -200,7 +196,6 @@ class Selector {
 		
 		chars["COMMANDS"] := []
 		chars["COMMANDS", "EDIT"]  := "e"
-		chars["COMMANDS", "DEBUG"] := "d"
 		
 		return chars
 	}
@@ -571,7 +566,7 @@ class Selector {
 		if(userChoiceString = "") {
 			return ""
 		
-		; Command choice - edit ini, debug, etc.
+		; Command choice - edit ini, etc.
 		} else if(commandCharPos = 1) {
 			; DEBUG.popup("Got command", rest)
 			commandChar := SubStr(rest, 1, 1)
@@ -581,14 +576,6 @@ class Selector {
 				this.actionSettings["ActionType"] := "DO"
 				rowToDo := new SelectorRow()
 				rowToDo.data["DOACTION"] := this.filePath
-			
-			; Special case: +d{Space}choice is debug action, which will copy/popup the result of the action.
-			} else if(commandChar = this.chars["COMMANDS", "DEBUG"]) {
-				; Peel off the d + space, and run it through this function again.
-				userChoiceString := SubStr(rest, 3)
-				rowToDo := this.parseChoice(userChoiceString)
-				if(rowToDo)
-					rowToDo.isDebug := true
 			
 			; Otherwise, we don't know what this is.
 			} else if(!isNum(rest)) {
@@ -674,14 +661,6 @@ class Selector {
 			result := %actionType%(rowToDo)
 		else                        ; Error catch.
 			this.errPop("Action not defined", actionType)
-		
-		; Debug case - show a popup with row info and copy it to the clipboard, don't do the actual action.
-		if(rowToDo.isDebug) {
-			result := ""
-			if(!IsObject(rowToDo.debugResult))
-				clipboard := rowToDo.debugResult
-			DEBUG.popup("Debugged row", rowToDo)
-		}
 		
 		; DEBUG.popup("Action type",actionType, "Finished row",rowToDo, "Result",result)
 		return result

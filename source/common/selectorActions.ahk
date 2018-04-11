@@ -1,8 +1,5 @@
 ; Central place for functions called from Selector.
 ; All of them should take just one argument, a SelectorRow object (defined in selectorRow.ahk), generally named actionRow.
-; There's also a debug mode that most of these should support:
-;	You can check whether we're in debug mode via the flag actionRow.debugResult (boolean), so you can quit early before actually doing the action.
-;  You can also populate actionRow.debugResult with info about what WOULD have run. Feel free to use objects - the calling code will use DEBUG.popup to display it to the user, which handles objects gracefully.
 
 ; Example function:
 ; EXAMPLE(actionRow) {
@@ -11,10 +8,6 @@
 	
 	; ; Processing as needed
 	; finishedResult := column " " id
-	
-	; actionRow.debugResult := finishedResult
-	; if(actionRow.isDebug)
-		; return
 	
 	; Run(finishedResult)
 ; }
@@ -25,10 +18,6 @@
 RET(actionRow, subToReturn = "DOACTION") {
 	val := actionRow.data[subToReturn]
 	
-	actionRow.debugResult := val
-	if(actionRow.isDebug)
-		return
-	
 	return val
 }
 
@@ -36,19 +25,11 @@ RET(actionRow, subToReturn = "DOACTION") {
 RET_DATA(actionRow) {
 	data := actionRow.data
 	
-	actionRow.debugResult := data
-	if(actionRow.isDebug)
-		return
-	
 	return data
 }
 
 ; Return entire object.
 RET_OBJ(actionRow) {
-	actionRow.debugResult := actionRow
-	if(actionRow.isDebug)
-		return
-	
 	return actionRow
 }
 
@@ -57,10 +38,6 @@ RET_OBJ(actionRow) {
 ; Run the action.
 DO(actionRow) {
 	action := actionRow.data["DOACTION"]
-	
-	actionRow.debugResult := action
-	if(actionRow.isDebug)
-		return
 	
 	Run(action)
 }
@@ -75,10 +52,6 @@ REG_WRITE(actionRow) {
 	rootKey   := actionRow.data["ROOT_KEY"]
 	regFolder := actionRow.data["REG_FOLDER"]
 	
-	actionRow.debugResult := {"Key name":keyName, "Key value":keyValue, "Key Type":keyType, "Root key":rootKey, "Key folder":regFolder}
-	if(actionRow.isDebug)
-		return
-	
 	RegWrite, %keyType%, %rootKey%, %regFolder%, %keyName%, %keyValue%
 }
 
@@ -90,18 +63,8 @@ DO_HYPERSPACE(actionRow) {
 	versionMajor := actionRow.data["MAJOR"]
 	versionMinor := actionRow.data["MINOR"]
 	
-	; Error check.
-	if(!versionMajor || !versionMinor) {
-		DEBUG.popup("DO_HYPERSPACE", "Missing info", "Major version", versionMajor, "Minor version", versionMinor)
-		return
-	}
-	
 	; Build run path.
 	runString := buildHyperspaceRunString(versionMajor, versionMinor, environment)
-	
-	actionRow.debugResult := runString
-	if(actionRow.isDebug)
-		return
 	
 	Run(runString)
 }
@@ -109,10 +72,6 @@ DO_HYPERSPACE(actionRow) {
 ; Send internal ID of an environment.
 SEND_ENVIRONMENT_ID(actionRow) {
 	environmentId := actionRow.data["ENV_ID"]
-	
-	actionRow.debugResult := environmentId
-	if(actionRow.isDebug)
-		return
 	
 	Send, % environmentId
 	Send, {Enter} ; Submit it too.
@@ -124,10 +83,6 @@ DO_THUNDER(actionRow) {
 	thunderId := actionRow.data["THUNDER_ID"]
 	
 	runString := MainConfig.getProgram("Thunder", "PATH") " " thunderId
-	
-	actionRow.debugResult := runString
-	if(actionRow.isDebug)
-		return
 	
 	if(actionRow.data["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
 		activateProgram("Thunder")
@@ -141,10 +96,6 @@ DO_VDI(actionRow) {
 	
 	; Build run path.
 	runString := buildVDIRunString(vdiId)
-	
-	actionRow.debugResult := runString
-	if(actionRow.isDebug)
-		return
 	
 	if(actionRow.data["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.
 		runProgram("VMWareView")
@@ -170,10 +121,6 @@ DO_SNAPPER(actionRow) {
 	
 	url := buildSnapperURL(environment, ini, idList)
 	
-	actionRow.debugResult := url
-	if(actionRow.isDebug)
-		return
-	
 	if(actionRow.data["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
 		runProgram("Snapper")
 	else
@@ -185,10 +132,6 @@ TIMER(actionRow) {
 	time := actionRow.data["TIME"]
 	runString := MainConfig.getPath("AHK_ROOT") "\source\standalone\timer\timer.ahk " time
 	
-	actionRow.debugResult := runString
-	if(actionRow.isDebug)
-		return
-	
 	Run(runString)
 }
 
@@ -198,10 +141,6 @@ TIMER(actionRow) {
 CALL(actionRow) {
 	num := actionRow.data["NUMBER"]
 	name := actionRow.data["NAME"]
-	
-	actionRow.debugResult := {"Number":num, "Name":name}
-	if(actionRow.isDebug)
-		return
 	
 	callNumber(num, name)
 }
@@ -217,10 +156,6 @@ RESIZE(actionRow) {
 		width  *= ratioW
 	if(ratioH)
 		height *= ratioH
-	
-	actionRow.debugResult := {"Width":width, "Height":height}
-	if(actionRow.isDebug)
-		return
 	
 	WinMove, A, , , , width, height
 }
@@ -249,10 +184,6 @@ OUTLOOK_TLG(actionRow) {
 	}
 	textToSend := tlp "/" customer "///" recId ", " message
 	
-	actionRow.debugResult := textToSend
-	if(actionRow.isDebug)
-		return
-	
 	SendRaw, % textToSend
 	Send, {Enter}
 }
@@ -267,10 +198,6 @@ SEND_SNAPPER_EXCLUDE_ITEMS(actionRow) {
 			excludeItemsString .= ","
 		excludeItemsString .= "-" item
 	}
-	
-	actionRow.debugResult := excludeItemsString
-	if(actionRow.isDebug)
-		return
 	
 	Send, % excludeItemsString
 	Send, {Enter}

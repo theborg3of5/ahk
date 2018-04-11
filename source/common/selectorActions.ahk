@@ -1,10 +1,10 @@
 ; Central place for functions called from Selector.
-; All of them should take just one argument, a SelectorRow object (defined in selectorRow.ahk), generally named actionRow.
+; All of them should take just one argument, a SelectorRow object (defined in selectorRow.ahk), generally named data.
 
 ; Example function:
-; EXAMPLE(actionRow) {
-	; column := actionRow.data["COLUMN"]
-	; id     := actionRow.data["ID"]
+; EXAMPLE(data) {
+	; column := data["COLUMN"]
+	; id     := data["ID"]
 	
 	; ; Processing as needed
 	; finishedResult := column " " id
@@ -15,29 +15,21 @@
 
 ; == Return functions (just return the actionRow object or a specific piece of it) ==
 ; Just return the requested subscript (defaults to "DOACTION").
-RET(actionRow, subToReturn = "DOACTION") {
-	val := actionRow.data[subToReturn]
-	
+RET(data, subToReturn = "DOACTION") {
+	val := data[subToReturn]
 	return val
 }
 
 ; Return data array, for when we want more than just one value back.
-RET_DATA(actionRow) {
-	data := actionRow.data
-	
+RET_DATA(data) {
 	return data
-}
-
-; Return entire object.
-RET_OBJ(actionRow) {
-	return actionRow
 }
 
 
 ; == Run functions (simply run DOACTION subscript of the actionRow object) ==
 ; Run the action.
-DO(actionRow) {
-	action := actionRow.data["DOACTION"]
+DO(data) {
+	action := data["DOACTION"]
 	
 	Run(action)
 }
@@ -45,12 +37,12 @@ DO(actionRow) {
 
 ; == File operations ==
 ; Write to the windows registry.
-REG_WRITE(actionRow) {
-	keyName   := actionRow.data["KEY_NAME"]
-	keyValue  := actionRow.data["KEY_VALUE"]
-	keyType   := actionRow.data["KEY_TYPE"]
-	rootKey   := actionRow.data["ROOT_KEY"]
-	regFolder := actionRow.data["REG_FOLDER"]
+REG_WRITE(data) {
+	keyName   := data["KEY_NAME"]
+	keyValue  := data["KEY_VALUE"]
+	keyType   := data["KEY_TYPE"]
+	rootKey   := data["ROOT_KEY"]
+	regFolder := data["REG_FOLDER"]
 	
 	RegWrite, %keyType%, %rootKey%, %regFolder%, %keyName%, %keyValue%
 }
@@ -58,10 +50,10 @@ REG_WRITE(actionRow) {
 
 ; == Open specific programs / send built strings ==
 ; Run Hyperspace.
-DO_HYPERSPACE(actionRow) {
-	environment  := actionRow.data["COMM_ID"]
-	versionMajor := actionRow.data["MAJOR"]
-	versionMinor := actionRow.data["MINOR"]
+DO_HYPERSPACE(data) {
+	environment  := data["COMM_ID"]
+	versionMajor := data["MAJOR"]
+	versionMinor := data["MINOR"]
 	
 	; Build run path.
 	runString := buildHyperspaceRunString(versionMajor, versionMinor, environment)
@@ -70,34 +62,34 @@ DO_HYPERSPACE(actionRow) {
 }
 
 ; Send internal ID of an environment.
-SEND_ENVIRONMENT_ID(actionRow) {
-	environmentId := actionRow.data["ENV_ID"]
+SEND_ENVIRONMENT_ID(data) {
+	environmentId := data["ENV_ID"]
 	
 	Send, % environmentId
 	Send, {Enter} ; Submit it too.
 }
 
 ; Run something through Thunder, generally a text session or Citrix.
-DO_THUNDER(actionRow) {
+DO_THUNDER(data) {
 	runString := ""
-	thunderId := actionRow.data["THUNDER_ID"]
+	thunderId := data["THUNDER_ID"]
 	
 	runString := MainConfig.getProgram("Thunder", "PATH") " " thunderId
 	
-	if(actionRow.data["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
+	if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
 		activateProgram("Thunder")
 	else
 		Run(runString)
 }
 
 ; Run a VDI.
-DO_VDI(actionRow) {
-	vdiId := actionRow.data["VDI_ID"]
+DO_VDI(data) {
+	vdiId := data["VDI_ID"]
 	
 	; Build run path.
 	runString := buildVDIRunString(vdiId)
 	
-	if(actionRow.data["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.
+	if(data["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.
 		runProgram("VMWareView")
 	} else {
 		if(!vdiId) ; Safety check - don't try to launch with no VDI specified (that's what the "LAUNCH" COMM_ID is for).
@@ -114,22 +106,22 @@ DO_VDI(actionRow) {
 }
 
 ; Open an environment in Snapper using a dummy record.
-DO_SNAPPER(actionRow) {
-	environment := actionRow.data["COMM_ID"]
-	ini         := actionRow.data["INI"]
-	idList      := actionRow.data["ID"]
+DO_SNAPPER(data) {
+	environment := data["COMM_ID"]
+	ini         := data["INI"]
+	idList      := data["ID"]
 	
 	url := buildSnapperURL(environment, ini, idList)
 	
-	if(actionRow.data["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
+	if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
 		runProgram("Snapper")
 	else
 		Run(url)
 }
 
 ; Open a homebrew timer (script located in the filepath below).
-TIMER(actionRow) {
-	time := actionRow.data["TIME"]
+TIMER(data) {
+	time := data["TIME"]
 	runString := MainConfig.getPath("AHK_ROOT") "\source\standalone\timer\timer.ahk " time
 	
 	Run(runString)
@@ -138,19 +130,19 @@ TIMER(actionRow) {
 
 ; == Other assorted action functions ==
 ; Call a phone number.
-CALL(actionRow) {
-	num := actionRow.data["NUMBER"]
-	name := actionRow.data["NAME"]
+CALL(data) {
+	num := data["NUMBER"]
+	name := data["NAME"]
 	
 	callNumber(num, name)
 }
 
 ; Resizes the active window to the given dimensions.
-RESIZE(actionRow) {
-	width  := actionRow.data["WIDTH"]
-	height := actionRow.data["HEIGHT"]
-	ratioW := actionRow.data["WRATIO"]
-	ratioH := actionRow.data["HRATIO"]
+RESIZE(data) {
+	width  := data["WIDTH"]
+	height := data["HEIGHT"]
+	ratioW := data["WRATIO"]
+	ratioH := data["HRATIO"]
 	
 	if(ratioW)
 		width  *= ratioW
@@ -161,12 +153,12 @@ RESIZE(actionRow) {
 }
 
 ; Builds a string to add to a calendar event (with the format the outlook/tlg calendar needs to import happily into Delorean), then sends it and an Enter keystroke to save it.
-OUTLOOK_TLG(actionRow) {
-	tlp      := actionRow.data["TLP"]
-	message  := actionRow.data["MSG"]
-	prjId    := actionRow.data["PRJ"]
-	dlgId    := actionRow.data["DLG"]
-	customer := actionRow.data["CUST"]
+OUTLOOK_TLG(data) {
+	tlp      := data["TLP"]
+	message  := data["MSG"]
+	prjId    := data["PRJ"]
+	dlgId    := data["DLG"]
+	customer := data["CUST"]
 	
 	; DLG ID overrides PRJ if given, but either way only one comes through into string.
 	if(dlgId)
@@ -189,8 +181,8 @@ OUTLOOK_TLG(actionRow) {
 }
 
 ; Builds and sends a string to exclude the items specified, for Snapper.
-SEND_SNAPPER_EXCLUDE_ITEMS(actionRow) {
-	itemsList := actionRow.data["STATUS_ITEMS"]
+SEND_SNAPPER_EXCLUDE_ITEMS(data) {
+	itemsList := data["STATUS_ITEMS"]
 	
 	itemsAry  := StrSplit(itemsList, ",")
 	For i,item in itemsAry {

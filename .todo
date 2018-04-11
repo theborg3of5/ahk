@@ -40,6 +40,8 @@
 			.show() shows the popup, including waiting on it to be closed
 			.getChoiceQuery(), .getOverrideData()
 		Handle data summing as before, return finished data array
+	Get rid of .errPop?
+		Just quit silently when things fail.
 	
 'Fixes'
 	Update or get rid of timer - formatting, general code cleanup, even functionality?

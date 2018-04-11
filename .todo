@@ -1,9 +1,4 @@
 'Selector'
-	Remove debug (+d) behavior entirely
-		Handling to find +d
-		isDebug handling in Selector
-		isDebug property in SelectorRow
-		Handling in selectorActions
 	Switch to sending data array to various selectorActions
 		Should just be selectorRow.data
 		Update corresponding selectorActions

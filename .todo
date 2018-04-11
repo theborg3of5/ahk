@@ -8,7 +8,7 @@
 		Stop calling doAction() and get rid of it
 		Get rid of selectorActions script entirely
 	Rework SelectorRow
-		Remove unused: userInput, isDebug, buildSelectorRow()
+		Remove unused: userInput, buildSelectorRow()
 		Reintroduce .name and .abbrev (as properties)
 			In constructor, should come from either parameters (if given) or from "NAME"/"ABBREV" subscripts of data array
 			Have launchSelectorPopup() use .name/.abbrev instead of .data["NAME"]/.data["ABBREV"]

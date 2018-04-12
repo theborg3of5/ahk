@@ -224,8 +224,5 @@ closeLinkPopup(windowName) {
 	if(!windowName)
 		return
 	
-	if(windowName = "OneNote")
-		Send, {Enter}{Right}
-	else
-		Send, {Enter}
+	Send, {Enter}
 }

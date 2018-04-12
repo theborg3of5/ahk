@@ -11,6 +11,9 @@ Widescreen (1440x900)					w					1440		900
 Standard (1280x1024)						sd					1280		1024
 Small (800x600)							sm					800		600
 
+# Portions
+Horizontal half (of FHD)				h					960		1057
+
 # Specific cases
 Fake maximized								fm					1934		1057
 Minimum Hyperspace (2015-)				minOld			800		550

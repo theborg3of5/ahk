@@ -1,7 +1,7 @@
 ; Input change/fixing functions.
 
 ; Release all modifier keys, for cases when some might be "stuck" down.
-#Space::Send, {LWin Up}{RWin Up}{LCtrl Up}{RCtrl Up}{LAlt Up}{RAlt Up}{LShift Up}{RShift Up}
+*#Space::Send, {LWin Up}{RWin Up}{LCtrl Up}{RCtrl Up}{LAlt Up}{RAlt Up}{LShift Up}{RShift Up}
 
 ; Pop up the keys pressed/debug window.
 ^!k::KeyHistory

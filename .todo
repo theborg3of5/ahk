@@ -1,7 +1,26 @@
 'Selector'
 	Parameter changes
 		Replace guiSettings["Icon"] (used only by 3 of the doSelect calls that use epicEnvironments.tl) with guiSettings["WindowTitle"]
-	Switch callers over to Selector.doSelectGuiSimple and .doSelectGuiSimpleColumn as possible
+	Take doSelectGuiSimple* back out
+	New plan:
+		Constructor stays as-is
+			Lowest common denominator
+		setChoices remains as-is
+			Complete edge case, can happen after normal constructor
+		selectGui() parameters change. New parameters:
+			defaultOverrideData
+				defaultOverrideDataAry > lose the Ary bit
+			popupTitle
+			showOverrideFields
+			extraDataFields
+		New setGuiSettings() function
+			All guiSettings:
+				WindowTitle
+				ShowOverrideFields
+				RowsPerColumn
+				MinColumnWidth
+				ExtraDataFields
+	guiSettings in general - just the array, none of the merge stuff (unless what's being set is blank, and value already set)
 	Callers
 		doSelect (no settings except icon param)
 			firstSetup

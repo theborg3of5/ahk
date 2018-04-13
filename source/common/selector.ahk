@@ -69,16 +69,6 @@ doSelect(filePath, iconPath = "") {
 	
 	return s.selectGui("", guiSettings, "")
 }
-	
-; Wrapper functions for the simple case of asking the user to select from a file. All settings are as read from the file.
-doSelectGuiSimple(filePath) {
-	s := New Selector(filePath)
-	return s.selectGui()
-}
-doSelectGuiSimpleColumn(filePath, returnColumn) {
-	s := New Selector(filePath)
-	return s.selectGui("", "", returnColumn)
-}
 
 ; GUI Events
 SelectorClose() {

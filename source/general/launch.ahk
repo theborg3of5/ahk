@@ -84,7 +84,7 @@
 			}
 		}
 	#p::
-		phoneSelector() {
+		selectPhone() {
 			selectedText := cleanupText(getFirstLineOfSelectedText())
 			if(isValidPhoneNumber(selectedText)) ; If the selected text is a valid number, go ahead and call it (confirmation included in callNumber)
 				callNumber(selectedText)
@@ -94,7 +94,7 @@
 					callNumber(data["NUMBER"], data["NAME"])
 		}
 	^!#s::
-		snapperSelector() {
+		selectSnapper() {
 			selectedText := cleanupText(getFirstLineOfSelectedText())
 			splitRecordString(selectedText, ini, id)
 			defaultOverrideData        := []
@@ -102,7 +102,7 @@
 			defaultOverrideData["ID"]  := id
 			
 			guiSettings                       := []
-			guiSettings["Icon"]               := MainConfig.getProgram("Snapper", "PATH")
+			guiSettings["IconPath"]           := MainConfig.getProgram("Snapper", "PATH")
 			guiSettings["ShowOverrideFields"] := true
 			guiSettings["ExtraDataFields"] := ["INI", "ID"]
 			
@@ -117,7 +117,7 @@
 				Run(buildSnapperURL(data["COMM_ID"], data["INI"], data["ID"])) ; data["ID"] can contain a comma-delimited list if that's what the user entered
 		}
 	#+p::
-		prjSelector() {
+		selectPRJ() {
 			s := new Selector("outlookTLG.tl")
 			data := s.selectGui("", {"ShowOverrideFields":false})
 			if(data)
@@ -149,7 +149,7 @@
 
 ; Generic search.
 !+f::
-	searchSelector() {
+	selectSearch() {
 		text := cleanupText(getFirstLineOfSelectedText())
 		
 		filter := MainConfig.getMachineTableListFilter()
@@ -224,7 +224,7 @@ genericLink(subAction) {
 
 ; Folder List - Open
 ^+!w::
-	folderSelector() {
+	doSelectFolder() {
 		folderPath := selectFolder()
 		if(FileExist(folderPath))
 			Run(folderPath)
@@ -284,7 +284,7 @@ genericLink(subAction) {
 
 ; Selector to allow easy editing of config TL files that don't show a popup
 !+c::
-	configSelector() {
+	selectConfig() {
 		data := doSelect("configs.tl")
 		if(!data)
 			return

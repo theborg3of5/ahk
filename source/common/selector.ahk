@@ -64,7 +64,7 @@ doSelect(filePath, iconPath = "") {
 	
 	if(iconPath) {
 		guiSettings := []
-		guiSettings["Icon"] := iconPath
+		guiSettings["IconPath"] := iconPath
 	}
 	
 	return s.selectGui("", guiSettings, "")
@@ -118,6 +118,16 @@ class Selector {
 			data := mergeArrays(data, defaultOverrideDataAry)
 		
 		this.processGuiSettings(guiSettings)
+		
+		if(guiSettings)
+			this.guiSettings := mergeArrays(this.guiSettings, guiSettings)
+		
+		; Handle extra data fields - should be added to dataIndices (so they show up in the popup)
+		if(this.guiSettings["ExtraDataFields"]) {
+			baseLength := forceNumber(this.dataIndices.maxIndex())
+			For i,label in this.guiSettings["ExtraDataFields"]
+				this.dataIndices[baseLength + i] := label
+		}
 		
 		; DEBUG.popup("User Input",userChoiceString, "data",data)
 		data := this.launchSelectorPopup(data)
@@ -284,19 +294,6 @@ class Selector {
 			this.guiSettings["RowsPerColumn"] := value
 		else if(name = "MinColumnWidth")
 			this.guiSettings["MinColumnWidth"] := value
-	}
-	
-	processGuiSettings(settings) {
-		if(settings["ShowOverrideFields"] != "") ; This one can be set in the file too, so don't clear it if it's not passed.
-			this.guiSettings["ShowOverrideFields"] := settings["ShowOverrideFields"]
-		
-		this.guiSettings["IconPath"] := settings["Icon"]
-		
-		if(settings["ExtraDataFields"]) {
-			baseLength := forceNumber(this.dataIndices.maxIndex())
-			For i,label in settings["ExtraDataFields"]
-				this.dataIndices[baseLength + i] := label
-		}
 	}
 	
 	; Generate the text for the GUI and display it, returning the user's response.

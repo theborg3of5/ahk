@@ -1,7 +1,5 @@
 'Selector'
-	Parameter changes
-		Replace guiSettings["Icon"] (used only by 3 of the doSelect calls that use epicEnvironments.tl) with guiSettings["WindowTitle"]
-	Take doSelectGuiSimple* back out
+	Replace guiSettings["Icon"] (used only by 3 of the doSelect calls that use epicEnvironments.tl) with guiSettings["WindowTitle"]
 	New plan:
 		Constructor stays as-is
 			Lowest common denominator
@@ -20,7 +18,6 @@
 				RowsPerColumn
 				MinColumnWidth
 				ExtraDataFields
-	guiSettings in general - just the array, none of the merge stuff (unless what's being set is blank, and value already set)
 	Callers
 		doSelect (no settings except icon param)
 			firstSetup

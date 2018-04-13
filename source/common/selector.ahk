@@ -67,7 +67,7 @@ doSelect(filePath, iconPath = "") {
 		guiSettings["Icon"] := iconPath
 	}
 	
-	return s.selectGui("", guiSettings)
+	return s.selectGui("", guiSettings, "")
 }
 
 ; GUI Events
@@ -85,9 +85,9 @@ class Selector {
 	; == Public ====================
 	; ==============================
 	
-	__New(filePath = "", tableListSettings = "", filter = "") {
-		this.chars          := this.getSpecialChars()
-		this.guiSettings    := this.getDefaultGuiSettings()
+	__New(filePath = "", filter = "", tableListSettings = "") {
+		this.chars       := this.getSpecialChars()
+		this.guiSettings := this.getDefaultGuiSettings()
 		
 		tlSettings := mergeArrays(this.getDefaultTableListSettings(), tableListSettings)
 		
@@ -110,7 +110,7 @@ class Selector {
 	;                          only be used if the corresponding additional field is visible. That means if ShowOverrideFields isn't set
 	;                          to true (via option in the file or guiSettings), default overrides will only affect blank values in
 	;                          the user's choice.
-	selectGui(defaultOverrideDataAry = "", guiSettings = "") {
+	selectGui(defaultOverrideDataAry = "", guiSettings = "", returnColumn = "") {
 		; DEBUG.popup("Selector.selectGui", "Start", "Default override data", defaultOverrideDataAry, "GUI Settings", guiSettings)
 		data := []
 		
@@ -120,14 +120,22 @@ class Selector {
 		this.processGuiSettings(guiSettings)
 		
 		; DEBUG.popup("User Input",userChoiceString, "data",data)
-		return this.launchSelectorPopup(data)
+		data := this.launchSelectorPopup(data)
+		if(returnColumn)
+			return data[returnColumn]
+		else
+			return data
 	}
 	
-	selectChoice(choiceString) {
+	selectChoice(choiceString, returnColumn = "") {
 		if(!choiceString)
 			return ""
 		
-		return this.parseChoice(choiceString)
+		data := this.parseChoice(choiceString)
+		if(returnColumn)
+			return data[returnColumn]
+		else
+			return data
 	}
 	
 	

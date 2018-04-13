@@ -1,7 +1,5 @@
 'Selector'
 	Parameter changes
-		Constructor - move tlSettings to 3rd param (understandable to keep for others, but currently completely unused)
-		Add returnColumn to all
 		Replace guiSettings["Icon"] (used only by 3 of the doSelect calls that use epicEnvironments.tl) with guiSettings["WindowTitle"]
 	Reconsider doSelect
 		Turn into Selector.doSelectGuiSimple or similar - convenience function that creates a Selector and such. Parameters:

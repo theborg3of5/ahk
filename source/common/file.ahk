@@ -105,7 +105,7 @@ sendFolderPath(folderName = "", subPath = "", slashChar = "\", trailingSlash = t
 
 selectFolder(folderName = "") {
 	filter := MainConfig.getMachineTableListFilter()
-	s := new Selector("folders.tl", "", filter)
+	s := new Selector("folders.tl", filter)
 	
 	if(folderName)
 		data := s.selectChoice(folderName)

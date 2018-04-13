@@ -153,7 +153,7 @@
 		text := cleanupText(getFirstLineOfSelectedText())
 		
 		filter := MainConfig.getMachineTableListFilter()
-		s := new Selector("search.tl", "", filter)
+		s := new Selector("search.tl", filter)
 		data := s.selectGui({"SEARCH_TERM":text})
 		if(!data)
 			return

@@ -67,7 +67,7 @@ doSelect(filePath, iconPath = "") {
 		guiSettings["Icon"] := iconPath
 	}
 	
-	return s.selectGui("", "", guiSettings)
+	return s.selectGui("", guiSettings)
 }
 
 ; GUI Events
@@ -123,11 +123,11 @@ class Selector {
 		return this.launchSelectorPopup(data)
 	}
 	
-	selectChoice(choice) {
-		if(!choice)
+	selectChoice(choiceString) {
+		if(!choiceString)
 			return ""
 		
-		return this.parseChoice(choice)
+		return this.parseChoice(choiceString)
 	}
 	
 	

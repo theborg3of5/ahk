@@ -43,19 +43,16 @@
 	^+!h::
 		selectHyperspace() {
 			data := doSelect("epicEnvironments.tl", MainConfig.getProgram("Hyperspace", "PATH"))
-			if(!data)
-				return
-			
-			Run(buildHyperspaceRunString(data["MAJOR"], data["MINOR"], data["COMM_ID"]))
+			if(data)
+				Run(buildHyperspaceRunString(data["MAJOR"], data["MINOR"], data["COMM_ID"]))
 		}
 	^+!i::
 		selectEnvironmentId() {
 			data := doSelect("epicEnvironments.tl")
-			if(!data)
-				return
-			
-			Send, % data["ENV_ID"]
-			Send, {Enter} ; Submit it too.
+			if(data) {
+				Send, % data["ENV_ID"]
+				Send, {Enter} ; Submit it too.
+			}
 		}
 	^+!r::
 		selectThunder() {
@@ -93,10 +90,8 @@
 				callNumber(selectedText)
 			else
 				data := doSelect("phone.tl")
-				if(!data)
-					return
-				
-				callNumber(data["NUMBER"], data["NAME"])
+				if(data)
+					callNumber(data["NUMBER"], data["NAME"])
 		}
 	^!#s::
 		snapperSelector() {
@@ -125,10 +120,8 @@
 		prjSelector() {
 			s := new Selector("outlookTLG.tl")
 			data := s.selectGui("", {"ShowOverrideFields":false})
-			if(!data)
-				return
-			
-			Send, % data["PRJ"]
+			if(data)
+				Send, % data["PRJ"]
 		}
 #If
 
@@ -136,10 +129,8 @@
 #+r::
 	selectResize() {
 		data := doSelect("resize.tl")
-		if(!data)
-			return
-		
-		WinMove, A, , , , data["WIDTH"], data["HEIGHT"]
+		if(data)
+			WinMove, A, , , , data["WIDTH"], data["HEIGHT"]
 	}
 
 ; Folders
@@ -158,7 +149,7 @@
 
 ; Generic search.
 !+f::
-	genericSearch() {
+	searchSelector() {
 		text := cleanupText(getFirstLineOfSelectedText())
 		
 		filter := MainConfig.getMachineTableListFilter()

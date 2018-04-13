@@ -1,4 +1,13 @@
 'Selector'
+	Parameter changes
+		Constructor - move tlSettings to 3rd param (understandable to keep for others, but currently completely unused)
+		Add returnColumn to all
+		Replace guiSettings["Icon"] (used only by 3 of the doSelect calls that use epicEnvironments.tl) with guiSettings["WindowTitle"]
+	Reconsider doSelect
+		Turn into Selector.doSelectGuiSimple or similar - convenience function that creates a Selector and such. Parameters:
+			filePath
+			returnColumn
+		Will end up kicking the three icon users to use .selectGui (with new guiSettings["WindowTitle"] option), but that's fine.
 	Callers
 		doSelect (no settings except icon param)
 			firstSetup
@@ -8,13 +17,13 @@
 			launch > selectOutlookTLG
 				All
 			launch > selectHyperspace
-				All
+				All, icon
 			launch > selectEnvironmentId
 				Single
 			launch > selectThunder
-				All
+				All, icon
 			launch > selectVDI
-				All
+				All, icon
 			launch > phoneSelector
 				All
 			launch > selectResize
@@ -25,7 +34,7 @@
 			epic > processEMC2ObjectInfo
 				Single, guiSettings (ShowOverrideFields)
 			file > selectFolder
-				Single, no settings
+				Single, no settings, filter
 		selectGui
 			test/.master > selectWindowInfo
 				Single, no settings (but setChoices)
@@ -34,23 +43,10 @@
 			launch > prjSelector
 				Single, guiSettings (ShowOverrideFields)
 			launch > genericSearch
-				All, defaultData
-		selectChoice
+				All, defaultData, filter
+		selectChoice (no settings)
 			epic > getTrueINI
 				Single
-	Add returnColumn argument to doSelect, for the cases when we just want the one column back
-		test.ahk/.master - "DOACTION" (eventually "VALUE")
-		Snapper - "STATUS_ITEMS"
-		-epic > getTrueINI - "SUBTYPE"
-		-file.ahk - "PATH"
-		launch >
-			selectEnvironmentId - ENV_ID
-			-prjSelector - PRJ
-			configSelector - PATH
-	New helper function: selectChoice if choice input given, selectGui if not
-		epic > processEMC2ObjectInfo
-		file > selectFolder
-	doSelect > doSelectGui?
 	Rework SelectorRow
 		Remove unused: userInput, buildSelectorRow()
 		Reintroduce .name and .abbrev (as properties)

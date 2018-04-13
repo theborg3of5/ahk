@@ -1,5 +1,56 @@
 'Selector'
+	Callers
+		doSelect (no settings except icon param)
+			firstSetup
+				All
+			snapper > sendChroniclesStatusItemsToIgnore
+				Single
+			launch > selectOutlookTLG
+				All
+			launch > selectHyperspace
+				All
+			launch > selectEnvironmentId
+				Single
+			launch > selectThunder
+				All
+			launch > selectVDI
+				All
+			launch > phoneSelector
+				All
+			launch > selectResize
+				All
+			launch > configSelector
+				Single
+		selectGui+selectChoice
+			epic > processEMC2ObjectInfo
+				Single, guiSettings (ShowOverrideFields)
+			file > selectFolder
+				Single, no settings
+		selectGui
+			test/.master > selectWindowInfo
+				Single, no settings (but setChoices)
+			launch > snapperSelector
+				All, defaultData, guiSettings (Icon, ShowOverrideFields, ExtraDataFields)
+			launch > prjSelector
+				Single, guiSettings (ShowOverrideFields)
+			launch > genericSearch
+				All, defaultData
+		selectChoice
+			epic > getTrueINI
+				Single
 	Add returnColumn argument to doSelect, for the cases when we just want the one column back
+		test.ahk/.master - "DOACTION" (eventually "VALUE")
+		Snapper - "STATUS_ITEMS"
+		-epic > getTrueINI - "SUBTYPE"
+		-file.ahk - "PATH"
+		launch >
+			selectEnvironmentId - ENV_ID
+			-prjSelector - PRJ
+			configSelector - PATH
+	New helper function: selectChoice if choice input given, selectGui if not
+		epic > processEMC2ObjectInfo
+		file > selectFolder
+	doSelect > doSelectGui?
 	Rework SelectorRow
 		Remove unused: userInput, buildSelectorRow()
 		Reintroduce .name and .abbrev (as properties)

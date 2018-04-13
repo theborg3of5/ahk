@@ -124,7 +124,7 @@
 	#+p::
 		prjSelector() {
 			s := new Selector("outlookTLG.tl")
-			data := s.selectGui({"ShowOverrideFields":false})
+			data := s.selectGui("", {"ShowOverrideFields":false})
 			if(!data)
 				return
 			
@@ -235,7 +235,7 @@ genericLink(subAction) {
 ^+!w::
 	folderSelector() {
 		folderPath := selectFolder()
-		if(folderPath && FileExist(folderPath))
+		if(FileExist(folderPath))
 			Run(folderPath)
 	}
 

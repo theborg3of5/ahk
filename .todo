@@ -1,11 +1,7 @@
 'Selector'
 	Parameter changes
 		Replace guiSettings["Icon"] (used only by 3 of the doSelect calls that use epicEnvironments.tl) with guiSettings["WindowTitle"]
-	Reconsider doSelect
-		Turn into Selector.doSelectGuiSimple or similar - convenience function that creates a Selector and such. Parameters:
-			filePath
-			returnColumn
-		Will end up kicking the three icon users to use .selectGui (with new guiSettings["WindowTitle"] option), but that's fine.
+	Switch callers over to Selector.doSelectGuiSimple and .doSelectGuiSimpleColumn as possible
 	Callers
 		doSelect (no settings except icon param)
 			firstSetup

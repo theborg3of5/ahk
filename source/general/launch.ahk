@@ -42,7 +42,7 @@
 		}
 	^+!h::
 		selectHyperspace() {
-			data := doSelect("epicEnvironments.tl", MainConfig.getProgram("Hyperspace", "PATH"))
+			data := doSelect("epicEnvironments.tl", "Launch Hyperspace in Environment")
 			if(data)
 				Run(buildHyperspaceRunString(data["MAJOR"], data["MINOR"], data["COMM_ID"]))
 		}
@@ -56,7 +56,7 @@
 		}
 	^+!r::
 		selectThunder() {
-			data := doSelect("epicEnvironments.tl", MainConfig.getProgram("Putty", "PATH"))
+			data := doSelect("epicEnvironments.tl", "Launch Thunder Environment")
 			if(!data)
 				return
 			
@@ -67,7 +67,7 @@
 		}
 	!+v::
 		selectVDI() {
-			data := doSelect("epicEnvironments.tl", MainConfig.getProgram("VMWareView", "PATH"))
+			data := doSelect("epicEnvironments.tl", "Launch VDI for Environment")
 			if(!data)
 				return
 			
@@ -102,7 +102,7 @@
 			defaultOverrideData["ID"]  := id
 			
 			guiSettings                       := []
-			guiSettings["IconPath"]           := MainConfig.getProgram("Snapper", "PATH")
+			guiSettings["WindowTitle"]        := "Open Record(s) in Snapper in Environment"
 			guiSettings["ShowOverrideFields"] := true
 			guiSettings["ExtraDataFields"] := ["INI", "ID"]
 			

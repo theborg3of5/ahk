@@ -1,5 +1,4 @@
 'Selector'
-	Replace guiSettings["Icon"] (used only by 3 of the doSelect calls that use epicEnvironments.tl) with guiSettings["WindowTitle"]
 	New plan:
 		Constructor stays as-is
 			Lowest common denominator

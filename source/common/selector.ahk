@@ -59,12 +59,12 @@
 */
 
 ; Wrapper functions
-doSelect(filePath, iconPath = "") {
+doSelect(filePath, title = "") {
 	s := new Selector(filePath)
 	
-	if(iconPath) {
+	if(title) {
 		guiSettings := []
-		guiSettings["IconPath"] := iconPath
+		guiSettings["WindowTitle"] := title
 	}
 	
 	return s.selectGui("", guiSettings, "")
@@ -185,7 +185,6 @@ class Selector {
 		settings["MinColumnWidth"]     := 300
 		settings["WindowTitle"]        := "Please make a choice by either number or abbreviation:"
 		settings["ShowOverrideFields"] := false
-		settings["IconPath"]           := ""
 		settings["ExtraDataFields"]    := ""
 		
 		return settings
@@ -302,7 +301,6 @@ class Selector {
 		GuiInChoice := "" ; Clear this to prevent bleed-over from previous uses. Must be on a separate line from the static declaration or it only happens once.
 		
 		; Create and begin styling the GUI.
-		originalIconPath := setTrayIcon(this.guiSettings["IconPath"])
 		guiHandle := this.createSelectorGui()
 		
 		; GUI sizes
@@ -460,7 +458,6 @@ class Selector {
 			}
 		}
 		
-		setTrayIcon(originalIconPath) ; Restore the original tray icon
 		if(!gotDataFromUser)
 			return ""
 		return data

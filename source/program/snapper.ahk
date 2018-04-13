@@ -2,11 +2,12 @@
 	; Send string of status items to ignore, based on the given master file.
 	:*:.status::
 		sendChroniclesStatusItemsToIgnore() {
-			data := doSelect("chroniclesStatusItems.tl")
-			if(!data)
+			s := new Selector("chroniclesStatusItems.tl")
+			itemsList := s.selectGui("STATUS_ITEMS")
+			if(!itemsList)
 				return
 			
-			itemsAry  := StrSplit(data["STATUS_ITEMS"], ",")
+			itemsAry := StrSplit(itemsList, ",")
 			For i,item in itemsAry {
 				if(i > 1)
 					excludeItemsString .= ","

@@ -26,7 +26,8 @@
 	; Selector launchers
 	^+!t::
 		selectOutlookTLG() {
-			data := doSelect("outlookTLG.tl")
+			s := new Selector("outlookTLG.tl")
+			data := s.selectGui()
 			if(!data)
 				return
 			
@@ -42,21 +43,24 @@
 		}
 	^+!h::
 		selectHyperspace() {
-			data := doSelect("epicEnvironments.tl", "Launch Hyperspace in Environment")
+			s := new Selector("epicEnvironments.tl")
+			data := s.selectGui("", "Launch Hyperspace in Environment")
 			if(data)
 				Run(buildHyperspaceRunString(data["MAJOR"], data["MINOR"], data["COMM_ID"]))
 		}
 	^+!i::
 		selectEnvironmentId() {
-			data := doSelect("epicEnvironments.tl")
-			if(data) {
-				Send, % data["ENV_ID"]
+			s := new Selector("epicEnvironments.tl")
+			envId := s.selectGui("ENV_ID")
+			if(envId) {
+				Send, % envId
 				Send, {Enter} ; Submit it too.
 			}
 		}
 	^+!r::
 		selectThunder() {
-			data := doSelect("epicEnvironments.tl", "Launch Thunder Environment")
+			s := new Selector("epicEnvironments.tl")
+			data := s.selectGui("", "Launch Thunder Environment")
 			if(!data)
 				return
 			
@@ -67,7 +71,8 @@
 		}
 	!+v::
 		selectVDI() {
-			data := doSelect("epicEnvironments.tl", "Launch VDI for Environment")
+			s := new Selector("epicEnvironments.tl")
+			data := s.selectGui("", "Launch VDI for Environment")
 			if(!data)
 				return
 			
@@ -89,7 +94,8 @@
 			if(isValidPhoneNumber(selectedText)) ; If the selected text is a valid number, go ahead and call it (confirmation included in callNumber)
 				callNumber(selectedText)
 			else
-				data := doSelect("phone.tl")
+				s := new Selector("phone.tl")
+				data := s.selectGui()
 				if(data)
 					callNumber(data["NUMBER"], data["NAME"])
 		}
@@ -102,12 +108,13 @@
 			defaultOverrideData["ID"]  := id
 			
 			guiSettings                       := []
-			guiSettings["WindowTitle"]        := "Open Record(s) in Snapper in Environment"
+			guiSettings["WindowTitle"]        := ""
 			guiSettings["ShowOverrideFields"] := true
-			guiSettings["ExtraDataFields"] := ["INI", "ID"]
+			guiSettings["ExtraDataFields"] := 
 			
 			s := new Selector("epicEnvironments.tl")
-			data := s.selectGui(defaultOverrideData, guiSettings)
+			s.addExtraDataFields(["INI", "ID"])
+			data := s.selectGui("", "Open Record(s) in Snapper in Environment", true, defaultOverrideData)
 			if(!data)
 				return
 			
@@ -119,16 +126,17 @@
 	#+p::
 		selectPRJ() {
 			s := new Selector("outlookTLG.tl")
-			data := s.selectGui("", {"ShowOverrideFields":false})
-			if(data)
-				Send, % data["PRJ"]
+			prjId := s.selectGui("PRJ", "", false)
+			if(prjId)
+				Send, % prjId
 		}
 #If
 
 ; Resize window
 #+r::
 	selectResize() {
-		data := doSelect("resize.tl")
+		s := new Selector("resize.tl")
+		data := s.selectGui()
 		if(data)
 			WinMove, A, , , , data["WIDTH"], data["HEIGHT"]
 	}
@@ -154,7 +162,7 @@
 		
 		filter := MainConfig.getMachineTableListFilter()
 		s := new Selector("search.tl", filter)
-		data := s.selectGui({"SEARCH_TERM":text})
+		data := s.selectGui("", "", "", {"SEARCH_TERM":text})
 		if(!data)
 			return
 		
@@ -285,11 +293,12 @@ genericLink(subAction) {
 ; Selector to allow easy editing of config TL files that don't show a popup
 !+c::
 	selectConfig() {
-		data := doSelect("configs.tl")
-		if(!data)
+		s := new Selector("configs.tl")
+		path := s.selectGui("PATH")
+		if(!path)
 			return
 		
-		path := MainConfig.replacePathTags(data["PATH"])
+		path := MainConfig.replacePathTags(path)
 		if(FileExist(path))
 			Run(path)
 	}

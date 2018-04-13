@@ -108,12 +108,12 @@ selectFolder(folderName = "") {
 	s := new Selector("folders.tl", filter)
 	
 	if(folderName)
-		data := s.selectChoice(folderName)
+		path := s.selectChoice(folderName, "PATH")
 	else
-		data := s.selectGui()
+		path := s.selectGui("PATH")
 	
-	; DEBUG.popup("Path",folderPath, "Replaced",MainConfig.replacePathTags(folderPath))
-	return MainConfig.replacePathTags(data["PATH"])
+	; DEBUG.popup("Path",path, "Replaced",MainConfig.replacePathTags(path))
+	return MainConfig.replacePathTags(path)
 }
 
 searchWithGrepWin(pathToSearch, textToSearch = "") {

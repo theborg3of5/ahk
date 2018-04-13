@@ -58,18 +58,6 @@
 	
 */
 
-; Wrapper functions
-doSelect(filePath, title = "") {
-	s := new Selector(filePath)
-	
-	if(title) {
-		guiSettings := []
-		guiSettings["WindowTitle"] := title
-	}
-	
-	return s.selectGui("", guiSettings, "")
-}
-
 ; GUI Events
 SelectorClose() {
 	Gui, Destroy
@@ -106,28 +94,36 @@ class Selector {
 		this.choices := choices
 	}
 	
+	setGuiSettings(settings) {
+		this.guiSettings := mergeArrays(this.guiSettings, guiSettings)
+		if(settings["ExtraDataFields"])
+			this.processExtraDataFields(settings["ExtraDataFields"])
+	}
+	
+	; Extra data fields - should be added to dataIndices (so they show up in the popup)
+	; extraDataFields - simple array of column names. Default values (if desired) should be in selectGui > defaultOverrideData.
+	addExtraDataFields(extraDataFields) {
+		this.guiSettings["ExtraDataFields"] := mergeArrays(this.guiSettings["ExtraDataFields"], extraDataFields)
+		this.processExtraDataFields(extraDataFields)
+	}
+	
 	; defaultOverrideDataAry - If the indices for these overrides are also set by the user's overall choice, the override value will
 	;                          only be used if the corresponding additional field is visible. That means if ShowOverrideFields isn't set
 	;                          to true (via option in the file or guiSettings), default overrides will only affect blank values in
 	;                          the user's choice.
-	selectGui(defaultOverrideDataAry = "", guiSettings = "", returnColumn = "") {
-		; DEBUG.popup("Selector.selectGui", "Start", "Default override data", defaultOverrideDataAry, "GUI Settings", guiSettings)
+	selectGui(returnColumn = "", title = "", showOverrideFields = "", defaultOverrideData = "") {
+	; selectGui(defaultOverrideDataAry = "", guiSettings = "", returnColumn = "") {
+		; DEBUG.popup("Selector.selectGui", "Start", "Default override data", defaultOverrideData, "GUI Settings", guiSettings)
 		data := []
+		if(defaultOverrideData)
+			data := mergeArrays(data, defaultOverrideData)
 		
-		if(defaultOverrideDataAry)
-			data := mergeArrays(data, defaultOverrideDataAry)
-		
-		this.processGuiSettings(guiSettings)
-		
-		if(guiSettings)
-			this.guiSettings := mergeArrays(this.guiSettings, guiSettings)
-		
-		; Handle extra data fields - should be added to dataIndices (so they show up in the popup)
-		if(this.guiSettings["ExtraDataFields"]) {
-			baseLength := forceNumber(this.dataIndices.maxIndex())
-			For i,label in this.guiSettings["ExtraDataFields"]
-				this.dataIndices[baseLength + i] := label
-		}
+		if(title)
+			this.guiSettings["WindowTitle"] := title
+		if(showOverrideFields != "") ; Check against blank since this is a boolean value
+			this.guiSettings["ShowOverrideFields"] := showOverrideFields
+		if(extraDataFields)
+			this.addExtraDataFields(extraDataFields)
 		
 		; DEBUG.popup("User Input",userChoiceString, "data",data)
 		data := this.launchSelectorPopup(data)
@@ -202,6 +198,11 @@ class Selector {
 		return tableListSettings
 	}
 	
+	processExtraDataFields(extraDataFields) {
+		baseLength := forceNumber(this.dataIndices.maxIndex())
+		For i,label in extraDataFields
+			this.dataIndices[baseLength + i] := label
+	}
 	
 	; Load the choices and other such things from a specially formatted file.
 	loadChoicesFromFile(tableListSettings, filter) {

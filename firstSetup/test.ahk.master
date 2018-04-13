@@ -49,8 +49,7 @@ return
 			
 			s := new Selector()
 			s.setChoices(rows)
-			data := s.selectGui()
-			textToCopy := data["DOACTION"]
+			textToCopy := s.selectGui("DOACTION")
 			
 			if(textToCopy) {
 				clipboard := textToCopy

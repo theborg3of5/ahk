@@ -47,7 +47,8 @@ gitNames.Push(".gitattributes")
 
 
 ; Prompt the user for which computer this is.
-machineInfo := doSelect(tlSetupPath)
+s := new Selector(tlSetupPath)
+machineInfo := s.selectGui()
 if(!machineInfo) {
 	MsgBox, No machine given, exiting setup...
 	ExitApp

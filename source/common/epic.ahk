@@ -441,12 +441,11 @@ processEMC2ObjectInfo(infoAry) {
 	; INI
 	s := new Selector("actionObject.tl")
 	if(ini) ; Turn any not-really-ini strings (like "Design") into actual INI
-		objInfo := s.selectChoice(ini)
+		ini := s.selectChoice(ini, "SUBTYPE")
 	else    ; If no INI found at all, ask the user for it
-		objInfo := s.selectGui({"ShowOverrideFields":false})
-	if(!objInfo)
+		ini := s.selectGui("SUBTYPE", "", false)
+	if(!ini)
 		return ""
-	ini := objInfo["SUBTYPE"]
 	
 	; ID
 	id := cleanupText(id)
@@ -474,8 +473,7 @@ getTrueINI(iniString) {
 		return ""
 	
 	s := new Selector("actionObject.tl")
-	objInfo := s.selectChoice(iniString)
-	return objInfo["SUBTYPE"]
+	return s.selectChoice(iniString, "SUBTYPE")
 }
 
 

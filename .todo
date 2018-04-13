@@ -1,66 +1,4 @@
 'Selector'
-	New plan:
-		Constructor stays as-is
-			Lowest common denominator
-		setChoices remains as-is
-			Complete edge case, can happen after normal constructor
-		selectGui() parameters change. New parameters:
-			defaultOverrideData
-				defaultOverrideDataAry > lose the Ary bit
-			popupTitle
-			showOverrideFields
-			extraDataFields
-		New setGuiSettings() function
-			All guiSettings:
-				WindowTitle
-				ShowOverrideFields
-				RowsPerColumn
-				MinColumnWidth
-				ExtraDataFields
-	Callers
-		doSelect (no settings except icon param)
-			firstSetup
-				All
-			snapper > sendChroniclesStatusItemsToIgnore
-				Single
-			launch > selectOutlookTLG
-				All
-			launch > selectHyperspace
-				All, icon
-			launch > selectEnvironmentId
-				Single
-			launch > selectThunder
-				All, icon
-			launch > selectVDI
-				All, icon
-			launch > phoneSelector
-				All
-			launch > selectResize
-				All
-			launch > configSelector
-				Single
-		selectGui+selectChoice
-			epic > processEMC2ObjectInfo
-				Single, guiSettings (ShowOverrideFields)
-			file > selectFolder
-				Single, no settings, filter
-		selectGui
-			test/.master > selectWindowInfo
-				Single, no settings (but setChoices)
-			launch > snapperSelector
-				All, defaultData, guiSettings (Icon, ShowOverrideFields, ExtraDataFields)
-			launch > prjSelector
-				Single, guiSettings (ShowOverrideFields)
-			launch > genericSearch
-				All, defaultData, filter
-		selectChoice (no settings)
-			epic > getTrueINI
-				Single
-	Rework SelectorRow
-		Remove unused: userInput, buildSelectorRow()
-		Reintroduce .name and .abbrev (as properties)
-			In constructor, should come from either parameters (if given) or from "NAME"/"ABBREV" subscripts of data array
-			Have launchSelectorPopup() use .name/.abbrev instead of .data["NAME"]/.data["ABBREV"]
 	Turn launchSelectorPopup() into doSelectGui() instead
 		Takes defaultData input
 		New class for popup
@@ -73,7 +11,13 @@
 	Make the default 3rd column "VALUE" instead of "DOACTION"
 		Update places that use "DOACTION"
 			At least test.ahk/.master
+	Match or at least standardize/allow both for this.guiSettings stuff read from file vs. passed in via guiSettings
 	Rework Selector documentation
+	Rework SelectorRow
+		Remove unused: userInput, buildSelectorRow()
+		Reintroduce .name and .abbrev (as properties)
+			In constructor, should come from either parameters (if given) or from "NAME"/"ABBREV" subscripts of data array
+			Have launchSelectorPopup() use .name/.abbrev instead of .data["NAME"]/.data["ABBREV"]
 	
 'Fixes'
 	Take another look at genericSearch(), make sure we really need to do the forceArray() stuff

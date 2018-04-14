@@ -11,6 +11,7 @@
 	Cisco AnyConnect VPN		vpnui.exe			#32770					-							-						CLOSE
 	Explorer						explorer.exe		CabinetWClass			-							-						MIN		OTHER
 	Mattermost					Mattermost.exe		-							-							-						CLOSE		CLOSE
+	Telegram						Telegram.exe		Qt5QWindowIcon			-							-						CLOSE		CLOSE
 	
 	; VB6
 	VB6							VB6.exe				wndclass_desked_gsk	-							-						-			POST_MESSAGE

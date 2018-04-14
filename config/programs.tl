@@ -42,10 +42,16 @@
 	GitHub				GitHubDesktop.exe		-							-				-								C:\Users\gborg\																	-										EPIC_LAPTOP
 []
 
-[{PATH}e:AppData\Roaming\Spotify\Spotify.exe]
+[+1|{PATH}e:AppData\Roaming\]
+	[+2|{PATH}e:Telegram Desktop\Telegram.exe]
+	Telegram				Telegram.exe			Qt5QWindowIcon			-				-								C:\Users\thebo\
+	Telegram				Telegram.exe			Qt5QWindowIcon			-				-								C:\Users\gborg\																	-										EPIC_LAPTOP
+	[-2]
+	[+2|{PATH}e:Spotify\Spotify.exe]
 	Spotify				Spotify.exe				-							-				Chrome Legacy Window		C:\Users\thebo\
 	Spotify				Spotify.exe				-							-				Chrome Legacy Window		C:\Users\gborg\																	-										EPIC_LAPTOP
-[]
+	[-2]
+[-1]
 	
 	FirefoxPortable	firefox.exe				-							-				-								S:\FirefoxPortable\FirefoxPortable.exe										-										HOME_DESKTOP
 	

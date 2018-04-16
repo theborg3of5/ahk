@@ -6,8 +6,6 @@
 			.show() shows the popup, including waiting on it to be closed
 			.getChoiceQuery(), .getOverrideData()
 		Handle data summing as before, return finished data array
-	Switch test script over to just using a TL to decide which thing they want
-		Put different pieces in an array, select the index into that array.
 	Make the default 3rd column "VALUE" instead of "DOACTION"
 		Update places that use "DOACTION"
 			At least test.ahk/.master
@@ -15,6 +13,8 @@
 	Rework Selector documentation
 	Rework SelectorRow
 		Remove unused: userInput, buildSelectorRow()
+		Can we split constructor into two separate things?
+			Array version, individual values + data version
 		Reintroduce .name and .abbrev (as properties)
 			In constructor, should come from either parameters (if given) or from "NAME"/"ABBREV" subscripts of data array
 			Have launchSelectorPopup() use .name/.abbrev instead of .data["NAME"]/.data["ABBREV"]

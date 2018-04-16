@@ -41,7 +41,7 @@ return
 			currControl := ControlGetFocus("A")
 			; DEBUG.popup("Class", currClass, "Title", currTitle, "Control", currControl, "Tooltip text", tooltipText)
 			
-			s := new Selector("windowInfo.tl")
+			s := new Selector("testWindowInfo.tl")
 			key := s.selectGui("KEY")
 			
 			if(key = "CLASS")

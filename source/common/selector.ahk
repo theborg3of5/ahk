@@ -193,7 +193,7 @@ class Selector {
 		tableListSettings["CHARS"] := []
 		tableListSettings["CHARS",  "PASS"]            := [this.chars["WINDOW_TITLE"], this.chars["SECTION_TITLE"], this.chars["SETTING"]]
 		tableListSettings["FORMAT", "SEPARATE_MAP"]    := {this.chars["MODEL_INDEX"]: "DATA_INDEX"} 
-		tableListSettings["FORMAT", "DEFAULT_INDICES"] := ["NAME", "ABBREV", "DOACTION"]
+		tableListSettings["FORMAT", "DEFAULT_INDICES"] := ["NAME", "ABBREV", "VALUE"]
 		
 		return tableListSettings
 	}

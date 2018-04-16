@@ -15,6 +15,7 @@ config/private/
 test/*
 !test/testGreen.ico
 !test/testRed.ico
+!test/testWindowInfo.tl
 !test/*/
 
 # Ignore everything inside share/*/Includes folders, except the specific _NeededIncludes file.

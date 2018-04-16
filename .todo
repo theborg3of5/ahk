@@ -6,7 +6,6 @@
 			.show() shows the popup, including waiting on it to be closed
 			.getChoiceQuery(), .getOverrideData()
 		Handle data summing as before, return finished data array
-	Rework Selector documentation
 	Rework SelectorRow
 		Remove unused: userInput, buildSelectorRow()
 		Can we split constructor into two separate things?
@@ -14,6 +13,7 @@
 		Reintroduce .name and .abbrev (as properties)
 			In constructor, should come from either parameters (if given) or from "NAME"/"ABBREV" subscripts of data array
 			Have launchSelectorPopup() use .name/.abbrev instead of .data["NAME"]/.data["ABBREV"]
+	Rework Selector documentation
 	
 'Fixes'
 	Take another look at genericSearch(), make sure we really need to do the forceArray() stuff

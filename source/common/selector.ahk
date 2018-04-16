@@ -107,12 +107,11 @@ class Selector {
 		this.processExtraDataFields(extraDataFields)
 	}
 	
-	; defaultOverrideDataAry - If the indices for these overrides are also set by the user's overall choice, the override value will
-	;                          only be used if the corresponding additional field is visible. That means if ShowOverrideFields isn't set
-	;                          to true (via option in the file or guiSettings), default overrides will only affect blank values in
-	;                          the user's choice.
+	; defaultOverrideData - If the indices for these overrides are also set by the user's overall choice, the override value will
+	;                       only be used if the corresponding additional field is visible. That means if ShowOverrideFields isn't set
+	;                       to true (via option in the file or guiSettings), default overrides will only affect blank values in
+	;                       the user's choice.
 	selectGui(returnColumn = "", title = "", showOverrideFields = "", defaultOverrideData = "") {
-	; selectGui(defaultOverrideDataAry = "", guiSettings = "", returnColumn = "") {
 		; DEBUG.popup("Selector.selectGui", "Start", "Default override data", defaultOverrideData, "GUI Settings", guiSettings)
 		data := []
 		if(defaultOverrideData)

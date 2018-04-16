@@ -29,6 +29,8 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 'New'
+	Find a better way to keep AHK todo list?
+		This technically works, but it's weird to have to do commits just to record ideas to do.
 	Use toast (or tooltip if that doesn't work out) to show when something was copied to clipboard by a hotkey
 		OneNote page link, Chrome title copy, various Test copies (instead of popup)
 	Make keypresses (maybe just Space?) delay OneNote page copying logic (so I can make it wait until new page appears), 1 second at a time?

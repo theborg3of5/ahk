@@ -52,7 +52,7 @@
 				Settings
 					settings["FORMAT", "SEPARATE_MAP"] := {")": "DATA_INDEX"}
 					Model row
-						(	NAME	ABBREV	DOACTION
+						(	NAME	ABBREV	VALUE
 				Input row
 					)	A	B	C
 				Output array (can get via tl.getSeparateRows("DATA_INDEX"))
@@ -64,14 +64,14 @@
 			Numerically-indexed array that provides what string indices should be used. A model row will override this, and any data that falls outside of the given indices will be numerically indexed.
 			Example
 				Settings
-					settings["FORMAT", "DEFAULT_INDICES"] := ["NAME", "ABBREV", "DOACTION"]
+					settings["FORMAT", "DEFAULT_INDICES"] := ["NAME", "ABBREV", "VALUE"]
 					(No model row)
 				Input row
 					A	B	C	D	E
 				Output array (for the single row, stored in output)
 					["NAME"]			A
 					["ABBREV"]		B
-					["DOACTION"]	C
+					["VALUE"]		C
 					[4]				D
 					[5]				E
 		

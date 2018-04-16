@@ -8,14 +8,14 @@ class SelectorRow {
 	data := []
 	
 	; Constructor.
-	__New(arr = "", name = "", abbrev = "", action = "") {
+	__New(arr = "", name = "", abbrev = "", value = "") {
 		if(arr) {
 			this.data := arr
 			; DEBUG.popup("Constructing", "SelectorRow", "Input array", arr, "Internal data", this.data)
 		} else {
-			this.data["NAME"] := name
+			this.data["NAME"]   := name
 			this.data["ABBREV"] := abbrev
-			this.data["DOACTION"] := action
+			this.data["VALUE"]  := value
 		}
 	}
 	

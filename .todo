@@ -29,6 +29,7 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 'New'
+	Make keypresses (maybe just Space?) delay OneNote page copying logic (so I can make it wait until new page appears), 1 second at a time?
 	Link for Onenote, that if there's an ID in the "Investigation - QAN # [edit]" string, puts in both links (QAN # gets web, edit gets edit)
 	Make a smaller subset of scripts that can run in VDIs?
 		AHK is already installed (and latest version at that!)

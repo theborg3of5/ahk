@@ -36,20 +36,22 @@ return
 			rows := []
 			
 			WinGetClass, currClass, A
+			tooltipText := getTooltipText()
 			WinGetTitle, currTitle, A
 			currControl := ControlGetFocus("A")
-			tooltipText := getTooltipText()
-			
 			; DEBUG.popup("Class", currClass, "Title", currTitle, "Control", currControl, "Tooltip text", tooltipText)
 			
-			rows.Insert(new SelectorRow("", "Class",   "c", currClass,   true))
-			rows.Insert(new SelectorRow("", "Tooltip", "t", tooltipText, true))
-			rows.Insert(new SelectorRow("", "Title",   "i", currTitle,   true))
-			rows.Insert(new SelectorRow("", "Control", "o", currControl, true))
+			s := new Selector("windowInfo.tl")
+			key := s.selectGui("KEY")
 			
-			s := new Selector()
-			s.setChoices(rows)
-			textToCopy := s.selectGui("DOACTION")
+			if(key = "CLASS")
+				textToCopy := currClass
+			else if(key = "TOOLTIP")
+				textToCopy := tooltipText
+			else if(key = "TITLE")
+				textToCopy := currTitle
+			else if(key = "CONTROL")
+				textToCopy := currControl
 			
 			if(textToCopy) {
 				clipboard := textToCopy

@@ -6,7 +6,6 @@
 			.show() shows the popup, including waiting on it to be closed
 			.getChoiceQuery(), .getOverrideData()
 		Handle data summing as before, return finished data array
-	Match or at least standardize/allow both for this.guiSettings stuff read from file vs. passed in via guiSettings
 	Rework Selector documentation
 	Rework SelectorRow
 		Remove unused: userInput, buildSelectorRow()

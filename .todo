@@ -30,6 +30,8 @@
 		Ideas:
 			Third-party, syncing todo app
 			Put it in the private repo (hosted on home server)?
+		Possibly also make syntax highlighting nicer: http://www.gottabegarabi.com/blog/todo-a-simple-todo-list-color-scheme-for-notepad/
+			Would want to figure out how to add collapsing/expanding based on indentation (like Python, which is current thing I use).
 	Use toast (or tooltip if that doesn't work out) to show when something was copied to clipboard by a hotkey
 		OneNote page link, Chrome title copy, various Test copies (instead of popup)
 	Make keypresses (maybe just Space?) delay OneNote page copying logic (so I can make it wait until new page appears), 1 second at a time?

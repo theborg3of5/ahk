@@ -152,7 +152,7 @@ class Selector {
 	choices       := [] ; Visible choices the user can pick from (array of SelectorRow objects).
 	hiddenChoices := [] ; Invisible choices the user can pick from (array of SelectorRow objects).
 	sectionTitles := [] ; Lines that will be displayed as titles (index matches the first choice that should be under this title)
-	dataIndices   := [] ; Mapping from data field indices => data labels (column headers)
+	dataIndices   := [] ; Mapping from data field indices => data labels (column headers) ; GDB TODO rename to overrideDataIndices? Could probably just check if it is an object (or just loop over it regardless) since it's only set when fields are shown.
 	guiSettings   := [] ; Settings related to the GUI popup we show
 	filePath      := "" ; Where the .tl file lives if we're reading one in.
 	
@@ -385,7 +385,7 @@ class Selector {
 			
 			name := c.data["NAME"]
 			if(IsObject(c.data["ABBREV"]))
-				abbrev := c.data["ABBREV"][1]
+				abbrev := c.data["ABBREV", 1]
 			else
 				abbrev := c.data["ABBREV"]
 			

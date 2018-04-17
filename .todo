@@ -14,6 +14,9 @@
 		Reintroduce .name and .abbrev (as properties)
 			In constructor, should come from either parameters (if given) or from "NAME"/"ABBREV" subscripts of data array
 			Have launchSelectorPopup() use .name/.abbrev instead of .data["NAME"]/.data["ABBREV"]
+	Possibly make "ghost text" data labels in fields a different text color?
+		Could change based on event that happens when edit field contents are changed
+	Updates in actionObject before we switch over (since defaultOverrideData passed in that isn't visible won't make it out)
 	Rework Selector documentation
 	
 'Fixes'

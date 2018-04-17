@@ -113,9 +113,15 @@ class ActionObject {
 			needsSubAction := true
 		}
 		
-		if(!type || !action || (!subType && needsSubType) || (!subAction && needsSubAction)) {
+		if(!type || !action || (!subType && needsSubType) || (!subAction && needsSubAction)) { ; GDB TODO get rid of needsSubAction?
 			filter := MainConfig.getMachineTableListFilter()
 			s := new Selector("actionObject.tl", filter)
+			
+			; GDB TODO stop passing in ACTION and SUBACTION - we never set or change them.
+			; Also get rid of columns for them in TL file.
+			; Also don't pass in TYPE, just read it (and only replace our own type if it's blank)
+			; Possibly remove action/subAction parameters from this function too.
+			
 			objInfo := s.selectGui("", "", "", {TYPE: type, ACTION: action, SUBTYPE: subType, SUBACTION: subAction, ID: input})
 			if(!objInfo)
 				return

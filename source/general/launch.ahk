@@ -104,17 +104,13 @@
 		selectSnapper() {
 			selectedText := cleanupText(getFirstLineOfSelectedText())
 			splitRecordString(selectedText, ini, id)
-			defaultOverrideData        := []
-			defaultOverrideData["INI"] := ini
-			defaultOverrideData["ID"]  := id
-			
-			guiSettings                       := []
-			guiSettings["WindowTitle"]        := ""
-			guiSettings["ShowOverrideFields"] := true
-			guiSettings["ExtraDataFields"] := 
 			
 			s := new Selector("epicEnvironments.tl")
 			s.addExtraDataFields(["INI", "ID"])
+			
+			defaultOverrideData        := []
+			defaultOverrideData["INI"] := ini
+			defaultOverrideData["ID"]  := id
 			data := s.selectGui("", "Open Record(s) in Snapper in Environment", true, defaultOverrideData)
 			if(!data)
 				return

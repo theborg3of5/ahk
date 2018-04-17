@@ -464,11 +464,10 @@ class Selector {
 	}
 	
 	createSelectorGui() {
-		Gui, +LabelSelector  ; Allows use of LabelSelector* functions (custom label to override using default GuiClose, GuiSubmit, etc.)
 		Gui, Color, 2A211C
 		Gui, Font, s12 cBDAE9D
 		Gui, +LastFound
-		Gui, Add, Button, Hidden Default +gSelectorSubmit, SubmitSelector ; Hidden OK button for {Enter} submission.
+		Gui, Add, Button, Hidden Default +gSelectorSubmit ; Hidden button for {Enter} submission.
 		return WinExist()
 	}
 	

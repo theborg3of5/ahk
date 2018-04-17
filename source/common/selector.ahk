@@ -199,6 +199,8 @@ class Selector {
 	}
 	
 	processExtraDataFields(extraDataFields) {
+		if(!this.dataIndices)
+			this.dataIndices := []
 		baseLength := forceNumber(this.dataIndices.maxIndex())
 		For i,label in extraDataFields
 			this.dataIndices[baseLength + i] := label

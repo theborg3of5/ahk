@@ -148,13 +148,13 @@ class Selector {
 	; == Private ===================
 	; ==============================
 	
-	chars               := []    ; Special characters (see getSpecialChars)
-	choices             := []    ; Visible choices the user can pick from (array of SelectorRow objects).
-	hiddenChoices       := []    ; Invisible choices the user can pick from (array of SelectorRow objects).
-	nonChoices          := []    ; Lines that will be displayed as titles, extra newlines, etc, but we won't search through.
-	dataIndices         := []    ; Mapping from data field indices => data labels (column headers)
-	guiSettings         := []    ; Settings related to the GUI popup we show
-	filePath            := ""    ; Where the .tl file lives if we're reading one in.
+	chars         := [] ; Special characters (see getSpecialChars)
+	choices       := [] ; Visible choices the user can pick from (array of SelectorRow objects).
+	hiddenChoices := [] ; Invisible choices the user can pick from (array of SelectorRow objects).
+	sectionTitles := [] ; Lines that will be displayed as titles (index matches the first choice that should be under this title)
+	dataIndices   := [] ; Mapping from data field indices => data labels (column headers)
+	guiSettings   := [] ; Settings related to the GUI popup we show
+	filePath      := "" ; Where the .tl file lives if we're reading one in.
 	
 	getSpecialChars() {
 		chars := []
@@ -207,7 +207,7 @@ class Selector {
 	loadChoicesFromFile(tableListSettings, filter) {
 		this.choices       := [] ; Visible choices the user can pick from.
 		this.hiddenChoices := [] ; Invisible choices the user can pick from.
-		this.nonChoices    := [] ; Lines that will be displayed as titles, extra newlines, etc, but have no other significance.
+		this.sectionTitles := [] ; Lines that will be displayed as titles, extra newlines, etc, but have no other significance.
 		
 		; DEBUG.popup("TableList Settings", tableListSettings)
 		tl := new TableList(this.filePath, tableListSettings)
@@ -261,8 +261,8 @@ class Selector {
 					idx := this.choices.MaxIndex()
 				idx++ ; The next actual choice will be the first one under this header, so match that.
 				
-				this.nonChoices[idx] := SubStr(currItem[1], 3) ; If there are multiple headers in a row (for example when choices are filtered out) they should get overwritten in order here (which is correct).
-				; DEBUG.popup("Just added nonchoice:", this.nonChoices[this.nonChoices.MaxIndex()], "At index", idx)
+				this.sectionTitles[idx] := SubStr(currItem[1], 3) ; If there are multiple headers in a row (for example when choices are filtered out) they should get overwritten in order here (which is correct).
+				; DEBUG.popup("Just added nonchoice:", this.sectionTitles[this.sectionTitles.MaxIndex()], "At index", idx)
 				
 			; Invisible, but viable, choice.
 			} else if(firstChar = this.chars["HIDDEN"]) {
@@ -337,7 +337,7 @@ class Selector {
 		
 		For i,c in this.choices {
 			lineNum++
-			title := this.nonChoices[i]
+			title := this.sectionTitles[i]
 			
 			; Add a new column as needed.
 			if(this.needNewColumn(title, lineNum, this.guiSettings["RowsPerColumn"])) {
@@ -569,12 +569,12 @@ class Selector {
 	; Debug info
 	debugName := "Selector"
 	debugToString(debugBuilder) {
-		debugBuilder.addLine("Chars",              this.chars)
-		debugBuilder.addLine("Data indices",       this.dataIndices)
-		debugBuilder.addLine("GUI settings",       this.guiSettings)
-		debugBuilder.addLine("Filepath",           this.filePath)
-		debugBuilder.addLine("Choices",            this.choices)
-		debugBuilder.addLine("Hidden Choices",     this.hiddenChoices)
-		debugBuilder.addLine("Non-Choices",        this.nonChoices)
+		debugBuilder.addLine("Chars",          this.chars)
+		debugBuilder.addLine("Data indices",   this.dataIndices)
+		debugBuilder.addLine("GUI settings",   this.guiSettings)
+		debugBuilder.addLine("Filepath",       this.filePath)
+		debugBuilder.addLine("Choices",        this.choices)
+		debugBuilder.addLine("Hidden Choices", this.hiddenChoices)
+		debugBuilder.addLine("Section titles", this.sectionTitles)
 	}
 }

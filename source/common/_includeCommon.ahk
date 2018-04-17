@@ -18,6 +18,7 @@
 #Include mainConfig.ahk
 #Include runCommands.ahk
 #Include selector.ahk
+#Include selectorGui.ahk
 #Include selectorRow.ahk
 #Include string.ahk
 #Include tableList.ahk

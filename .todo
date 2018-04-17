@@ -5,6 +5,7 @@
 			Constructor takes needed info, builds the thing with (private) .build()
 			.show() shows the popup, including waiting on it to be closed
 			.getChoiceQuery(), .getOverrideData()
+			All Gui stuff (including gui ID) move into that
 		Handle data summing as before, return finished data array
 	Rework SelectorRow
 		Remove unused: userInput, buildSelectorRow()

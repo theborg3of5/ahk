@@ -1,4 +1,7 @@
 'Selector'
+	Get rid of +ShowOverrideFields (from file), rely on whether there's a field index for (firstChar = ")" )
+		Don't fill in this.dataIndices (and don't pass it to SelectorGui) if it's explicitly false.
+		Just check if this.dataIndices (but rename to this.overrideFields) is populated (so just if(this.dataIndices)?)
 	Turn launchSelectorPopup() into doSelectGui() instead
 		Takes defaultData input
 		New class for popup

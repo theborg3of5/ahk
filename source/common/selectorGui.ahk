@@ -16,18 +16,18 @@ class SelectorGui {
 	; == Public ====================
 	; ==============================
 	
-	__New(choices, titles = "", dataIndices = "") {
+	__New(choices, sectionTitles = "", overrideFields = "") {
 		
 		this.guiId := "Selector" getNextGuiId()
 		Gui, %guiId%:Default ; GDB TODO move this default line just before doing GUI things (and use this.guiId)
 		
-		this.dataIndices := dataIndices
+		this.overrideFields := overrideFields
 		
-		this.buildGui(choices, titles) ; GDB TODO: should default data be set in show() instead of being set when we create the controls? If set in show, should it be passed to show() instead of here?
+		this.buildPopup(choices, sectionTitles) ; GDB TODO: should default data be set in show() instead of being set when we create the controls? If set in show, should it be passed to show() instead of here?
 	}
 	
 	; Shows the popup, including waiting on it to be closed
-	show(showOverrideFields = false, defaultOverrideData = "") {
+	show(defaultOverrideData = "") {
 		; GDB TODO put default override data into relevant fields somehow
 		For label,value in defaultOverrideData
 			GuiControl, , % label, % value ; Blank command means replace contents
@@ -54,11 +54,11 @@ class SelectorGui {
 	; ==============================
 	
 	guiId := ""
-	dataIndices := []
-	choiceQuery  := ""
+	overrideFields := []
+	choiceQuery := ""
 	overrideData := ""
 	
-	buildGui(choices, titles = "") {
+	buildPopup(choices, sectionTitles = "") {
 		; GDB TODO: Create popup
 		; GDB TODO: Add choices
 		; GDB TODO: Add fields (choice + overrides)
@@ -182,12 +182,12 @@ class SelectorGui {
 		Gui, Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInputChoice% h%heightInput% -E%WS_EX_CLIENTEDGE% +Border
 		
 		if(this.guiSettings["ShowOverrideFields"]) {
-			numDataInputs := this.dataIndices.length()
+			numDataInputs := this.overrideFields.length()
 			leftoverWidth  := widthTotal - xNameFirstCol - marginRight
 			widthInputData := (leftoverWidth - ((numDataInputs - 1) * padInputData)) / numDataInputs
 			
 			xInput := xNameFirstCol
-			For num,label in this.dataIndices {
+			For num,label in this.overrideFields {
 				if(data[label]) ; Data given as default
 					tempData := data[label]
 				else            ; Data label (treat like ghost text, filter out later if not modified)
@@ -220,7 +220,7 @@ class SelectorGui {
 		
 		; Read override data from any visible fields.
 		if(this.guiSettings["ShowOverrideFields"]) {
-			For num,label in this.dataIndices {
+			For num,label in this.overrideFields {
 				inputVal := GuiIn%num% ; GuiIn* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit. ; GDB TODO reference using label, not num
 				if(inputVal && (inputVal != label)) {
 					data[label] := inputVal

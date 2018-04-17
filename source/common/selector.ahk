@@ -153,6 +153,7 @@ class Selector {
 	hiddenChoices := [] ; Invisible choices the user can pick from (array of SelectorRow objects).
 	sectionTitles := [] ; Lines that will be displayed as titles (index matches the first choice that should be under this title)
 	dataIndices   := [] ; Mapping from data field indices => data labels (column headers) ; GDB TODO rename to overrideDataIndices? Could probably just check if it is an object (or just loop over it regardless) since it's only set when fields are shown.
+								; ^^^ If we do, would need to check this.guiSettings["ShowOverrideFields"] before populating dataIndices in file-reading function.
 	guiSettings   := [] ; Settings related to the GUI popup we show
 	filePath      := "" ; Where the .tl file lives if we're reading one in.
 	
@@ -226,7 +227,7 @@ class Selector {
 		if(IsObject(tl.getSeparateRows())) {
 			this.dataIndices := []
 			For i,fieldIndex in tl.getSeparateRow("DATA_INDEX") {
-				if(fieldIndex > 0) ; Filters out data columns we don't want fields for
+				if(fieldIndex > 0) ; Filter out data columns we don't want fields for (fieldIndex = 0)
 					this.dataIndices[fieldIndex] := tl.getIndexLabel(i) ; Numeric, base-1 field index => column label (also the subscript in data array)
 			}
 		}

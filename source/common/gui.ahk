@@ -49,6 +49,6 @@ addInputField(varName, x, y, width, height, data = "") {
 }
 getInputFieldValue(varName) {
 	global
-	local varName := %varName%
-	return varName
+	local value := %varName%
+	return value
 }

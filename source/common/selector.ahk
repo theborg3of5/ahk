@@ -3,9 +3,6 @@
 	This class will read in a file (using the TableList class) and turn it into a group of choices, which is then displayed to the user in a graphical list. The programmatic entry points are .selectGui() and .selectChoice().
 	
 	Certain characters have special meaning when parsing the lines of a file. They include:
-		= - Window title
-			This character starts a line that will be the title shown on the popup UI as a whole.
-		
 		# - Section title
 			This character starts a line that will be shown as a section label in the UI (to group individual choices).
 		
@@ -162,7 +159,6 @@ class Selector {
 	getSpecialChars() {
 		chars := []
 		
-		chars["WINDOW_TITLE"]  := "="
 		chars["SECTION_TITLE"] := "#"
 		chars["NEW_COLUMN"]    := "|"
 		chars["HIDDEN"]        := "*"
@@ -193,7 +189,7 @@ class Selector {
 		tableListSettings := []
 		
 		tableListSettings["CHARS"] := []
-		tableListSettings["CHARS",  "PASS"]            := [this.chars["WINDOW_TITLE"], this.chars["SECTION_TITLE"], this.chars["SETTING"]]
+		tableListSettings["CHARS",  "PASS"]            := [this.chars["SECTION_TITLE"], this.chars["SETTING"]]
 		tableListSettings["FORMAT", "SEPARATE_MAP"]    := {this.chars["MODEL_INDEX"]: "DATA_INDEX"} 
 		tableListSettings["FORMAT", "DEFAULT_INDICES"] := ["NAME", "ABBREV", "VALUE"]
 		
@@ -247,13 +243,8 @@ class Selector {
 				firstChar := SubStr(currItem[1], 1, 1) ; Only really populated for the non-normal rows.
 			; DEBUG.popup("Curr Row", currRow, "First Char", firstChar)
 			
-			; Popup title.
-			if(firstChar = this.chars["WINDOW_TITLE"]) {
-				; DEBUG.popup("Title char", this.chars["WINDOW_TITLE"], "First char", firstChar, "Row", currRow)
-				this.guiSettings["WindowTitle"] := SubStr(currItem[1], 2)
-			
 			; Options for the selector in general.
-			} else if(firstChar = this.chars["SETTING"]) {
+			if(firstChar = this.chars["SETTING"]) {
 				settingString := SubStr(currRow.data[1], 2) ; Strip off the = at the beginning
 				this.processSettingFromFile(settingString)
 			
@@ -292,6 +283,8 @@ class Selector {
 		name  := settingSplit[1]
 		value := settingSplit[2]
 		
+		if(name = "Title")
+			this.guiSettings["WindowTitle"] := value
 		if(name = "ShowOverrideFields")
 			this.guiSettings["ShowOverrideFields"] := (value = "1")
 		else if(name = "RowsPerColumn")

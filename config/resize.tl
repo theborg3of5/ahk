@@ -1,4 +1,4 @@
-=Resize active window to size:
++Title=Resize active window to size:
 +ShowOverrideFields=1
 +MinColumnWidth=350
 

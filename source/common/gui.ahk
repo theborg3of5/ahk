@@ -38,8 +38,17 @@ getLabelWidthForText(name, uniqueId) {
 }
 
 ; Assumes the default gui name is set to whatever GUI you want to deal with.
+; Value should be gotten using the getInputFieldValue function (below).
+; These two basically let us hide the static/global requirement for variables used for GUI controls - 
+; the given string is the variable name, but as long as it's only referenced via indirection, it won't 
+; be treated as a local variable in other functions.
 addInputField(varName, x, y, width, height, data = "") {
-	global          ; This allows us to get at the variable named in varName later on.
+	global          ; This allows us to get at the variable for the field (varName) later on.
 	%varName% := "" ; Clear the variable so there's no bleed-over from previous uses.
 	Gui, Add, Edit, v%varName% x%x% y%y% w%width% h%height% -E%WS_EX_CLIENTEDGE% +Border, % data
+}
+getInputFieldValue(varName) {
+	global
+	local varName := %varName%
+	return varName
 }

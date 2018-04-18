@@ -157,6 +157,10 @@ class Selector {
 	guiSettings   := [] ; Settings related to the GUI popup we show
 	filePath      := "" ; Where the .tl file lives if we're reading one in.
 	
+	; Names for global variables that we'll use for values of fields. This way they can be declared global and retrieved in the same way, without having to pre-define global variables.
+	choiceFieldName         := "SelectorChoice"
+	overrideFieldNamePrefix := "SelectorOverride"
+	
 	getSpecialChars() {
 		chars := []
 		
@@ -300,9 +304,6 @@ class Selector {
 	
 	; Generate the text for the GUI and display it, returning the user's response.
 	launchSelectorPopup(data) {
-		static GuiInChoice
-		GuiInChoice := "" ; Clear this to prevent bleed-over from previous uses. Must be on a separate line from the static declaration or it only happens once.
-		
 		; Create and begin styling the GUI.
 		guiHandle := this.createSelectorGui()
 		
@@ -411,7 +412,7 @@ class Selector {
 			widthInputChoice := widthIndex + padIndexAbbrev + widthAbbrev ; Main edit control is same size as index + abbrev columns combined.
 		else
 			widthInputChoice := widthTotal - (marginLeft + marginRight)   ; Main edit control is nearly full width.
-		addInputField("GuiInChoice", xInputChoice, yInput, widthInputChoice, heightInput, "")
+		addInputField(this.choiceFieldName, xInputChoice, yInput, widthInputChoice, heightInput, "")
 		
 		if(this.guiSettings["ShowOverrideFields"]) {
 			numDataInputs := this.dataIndices.length()
@@ -425,7 +426,7 @@ class Selector {
 				else            ; Data label (treat like ghost text, filter out later if not modified)
 					tempData := label
 				
-				addInputField("GuiIn" num, xInput, yInput, widthInputData, heightInput, tempData)
+				addInputField(this.overrideFieldNamePrefix num, xInput, yInput, widthInputData, heightInput, tempData)
 				xInput += widthInputData + padInputData
 			}
 		}
@@ -435,15 +436,17 @@ class Selector {
 		Gui, Show, h%heightTotal% w%widthTotal%, % this.guiSettings["WindowTitle"]
 		
 		; Focus the edit control.
-		GuiControl, Focus,     GuiInChoice
-		GuiControl, +0x800000, GuiInChoice
+		GuiControl, Focus,     % this.choiceFieldName
+		GuiControl, +0x800000, % this.choiceFieldName
 		
 		; Wait for the user to submit the GUI.
 		WinWaitClose, ahk_id %guiHandle%
 		
+		choiceInput := getInputFieldValue(this.choiceFieldName)
+		
 		; Determine the user's choice (if any) and merge that info into the data array.
-		if(GuiInChoice) ; User put something in the first box, which should come from the choices shown.
-			choiceData := this.parseChoice(GuiInChoice)
+		if(choiceInput) ; User put something in the first box, which should come from the choices shown.
+			choiceData := this.parseChoice(choiceInput)
 			
 		if(choiceData) {
 			data := mergeArrays(data, choiceData)
@@ -453,7 +456,7 @@ class Selector {
 		; Read override data from any visible fields.
 		if(this.guiSettings["ShowOverrideFields"]) {
 			For num,label in this.dataIndices {
-				inputVal := GuiIn%num% ; GuiIn* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
+				inputVal := getInputFieldValue(this.overrideFieldNamePrefix num) ; SelectorOverride* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
 				if(inputVal && (inputVal != label)) {
 					data[label] := inputVal
 					gotDataFromUser := true

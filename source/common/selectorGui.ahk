@@ -52,23 +52,42 @@ class SelectorGui {
 	; ==============================
 	
 	guiId := ""
+	guiHandle := ""
 	overrideFields := []
 	choiceQuery := ""
 	overrideData := ""
 	
+	; Names for global variables that we'll use for values of fields. This way they can be declared global and retrieved in the same way, without having to pre-define global variables.
+	choiceFieldName         := "SelectorChoice"
+	overrideFieldNamePrefix := "SelectorOverride"
+	
 	buildPopup(choices, sectionTitles = "") {
-		; GDB TODO: Create popup
-		; GDB TODO: Add choices
-		; GDB TODO: Add fields (choice + overrides)
+		this.guiHandle := this.createPopup()
+		this.addChoices(choices, sectionTitles)
+		this.addFields()
+	}
+	
+	createPopup() {
+		Gui, +LastFound +LabelSelectorGui  ; +LabelSelectorGui: Gui* events will call SelectorGui* functions (in particular GuiClose > SelectorGuiClose).
+		Gui, Color, 2A211C
+		Gui, Font, s12 cBDAE9D
+		Gui, Add, Button, Hidden Default +gSelectorGuiSubmit ; Hidden button for {Enter} submission.
+		
+		return WinExist() ; Because of +LastFound above, the new gui is the last found window, so WinExist() finds it.
+	}
+	
+	addChoices(choices, sectionTitles = "") {
+		
+	}
+	
+	addFields() {
+		; this.overrideFields
 	}
 	
 	
 	
 	; Generate the text for the GUI and display it, returning the user's response.
 	launchSelectorPopup(data) {
-		static GuiInChoice
-		GuiInChoice := "" ; Clear this to prevent bleed-over from previous uses. Must be on a separate line from the static declaration or it only happens once.
-		
 		; Create and begin styling the GUI.
 		guiHandle := this.createSelectorGui()
 		
@@ -106,7 +125,7 @@ class SelectorGui {
 		
 		For i,c in this.choices {
 			lineNum++
-			title := this.nonChoices[i]
+			title := this.sectionTitles[i]
 			
 			; Add a new column as needed.
 			if(this.needNewColumn(title, lineNum, this.guiSettings["RowsPerColumn"])) {
@@ -177,7 +196,7 @@ class SelectorGui {
 			widthInputChoice := widthIndex + padIndexAbbrev + widthAbbrev ; Main edit control is same size as index + abbrev columns combined.
 		else
 			widthInputChoice := widthTotal - (marginLeft + marginRight)   ; Main edit control is nearly full width.
-		Gui, Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInputChoice% h%heightInput% -E%WS_EX_CLIENTEDGE% +Border
+		addInputField(this.choiceFieldName, xInputChoice, yInput, widthInputChoice, heightInput, "")
 		
 		if(this.guiSettings["ShowOverrideFields"]) {
 			numDataInputs := this.overrideFields.length()
@@ -191,7 +210,7 @@ class SelectorGui {
 				else            ; Data label (treat like ghost text, filter out later if not modified)
 					tempData := label
 				
-				addInputField("GuiIn" num, xInput, yInput, widthInputData, heightInput, tempData) ; GDB TODO make the variable use the label instead of the num, so we can find it better later.
+				addInputField(this.overrideFieldNamePrefix num, xInput, yInput, widthInputData, heightInput, tempData) ; GDB TODO make the variable use the label instead of the num, so we can find it better later.
 				xInput += widthInputData + padInputData
 			}
 		}
@@ -201,15 +220,17 @@ class SelectorGui {
 		Gui, Show, h%heightTotal% w%widthTotal%, % this.guiSettings["WindowTitle"]
 		
 		; Focus the edit control.
-		GuiControl, Focus,     GuiInChoice
-		GuiControl, +0x800000, GuiInChoice
+		GuiControl, Focus,     % this.choiceFieldName
+		GuiControl, +0x800000, % this.choiceFieldName
 		
 		; Wait for the user to submit the GUI.
 		WinWaitClose, ahk_id %guiHandle%
 		
+		choiceInput := getInputFieldValue(this.choiceFieldName)
+		
 		; Determine the user's choice (if any) and merge that info into the data array.
-		if(GuiInChoice) ; User put something in the first box, which should come from the choices shown.
-			choiceData := this.parseChoice(GuiInChoice)
+		if(choiceInput) ; User put something in the first box, which should come from the choices shown.
+			choiceData := this.parseChoice(choiceInput)
 			
 		if(choiceData) {
 			data := mergeArrays(data, choiceData)
@@ -219,7 +240,7 @@ class SelectorGui {
 		; Read override data from any visible fields.
 		if(this.guiSettings["ShowOverrideFields"]) {
 			For num,label in this.overrideFields {
-				inputVal := GuiIn%num% ; GuiIn* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit. ; GDB TODO reference using label, not num
+				inputVal := getInputFieldValue(this.overrideFieldNamePrefix num) ; SelectorOverride* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
 				if(inputVal && (inputVal != label)) {
 					data[label] := inputVal
 					gotDataFromUser := true
@@ -230,14 +251,6 @@ class SelectorGui {
 		if(!gotDataFromUser)
 			return ""
 		return data
-	}
-	
-	createSelectorGui() {
-		Gui, +LastFound +LabelSelectorGui  ; +LabelSelectorGui: Gui* events will call SelectorGui* functions (in particular GuiClose > SelectorGuiClose).
-		Gui, Color, 2A211C
-		Gui, Font, s12 cBDAE9D ; GDB TODO: add font and color as optional parameters or properties?
-		Gui, Add, Button, Hidden Default +gSelectorGuiSubmit ; Hidden button for {Enter} submission.
-		return WinExist() ; Because of +LastFound above, the new gui is the last found window, so WinExist() finds it.
 	}
 	
 	needNewColumn(ByRef sectionTitle, lineNum, rowsPerColumn) {

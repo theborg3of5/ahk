@@ -82,6 +82,9 @@
 			Send, ^b
 			Send, {Right} ; Put cursor at end of line
 		return
+		
+		; Make ^7 do the same tag as ^6.
+		^7::^6
 	}
 	
 	; Disable ^t hotkey making a new section

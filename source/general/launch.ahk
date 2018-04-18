@@ -20,9 +20,9 @@
 	^+!e::activateProgram("EMC2")
 	^+!s::activateProgram("EpicStudio")
 	^+!u::activateProgram("Thunder")
-	^+!v::activateProgram("VisualStudio")
+	^+!v::activateProgram("VB6")
 	^!#e::activateProgram("Outlook")
-	^!#v::activateProgram("VB6")
+	^!#v::activateProgram("VisualStudio")
 	
 	; Selector launchers
 	^+!t::

@@ -1,5 +1,3 @@
-@PlaceholderChar=-
-
 =Select Machine to set up:
 +ShowOverrideFields=1
 +MinColumnWidth=1000

@@ -34,7 +34,7 @@
 				Override with settings["CHARS", "PASS"].
 			
 		Within a "normal" row (not started with any of the special characters above):
-			<No default> - Placeholder
+			- - Placeholder
 				Having this allows you to have a truly empty value for a column in a given row (useful when optional columns are in the middle).
 				Override with @PlaceholderChar or settings["CHARS", "PLACEHOLDER"].
 			
@@ -264,7 +264,7 @@ class TableList {
 		chars["SETTING"]  := "@"
 		chars["PASS"]     := [] ; This one supports multiple entries
 		
-		chars["PLACEHOLDER"] := "" ; No default
+		chars["PLACEHOLDER"] := "-"
 		chars["MULTIENTRY"]  := "|"
 		
 		chars["MOD","ADD"]    := "+"

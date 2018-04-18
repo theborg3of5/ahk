@@ -1,5 +1,3 @@
-@PlaceholderChar=-
-
 (	NAME							ABBREV							PATH																													MACHINE
 	
 	# General

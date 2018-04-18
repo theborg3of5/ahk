@@ -1,5 +1,3 @@
-@PlaceholderChar=-
-
 =Select type of search to run and input search text:
 +ShowOverrideFields=1
 

@@ -1,5 +1,3 @@
-@PlaceholderChar=-
-
 (	NAME							EXE					CLASS						TITLE						TEXT					ESC		MIN		SELECT_ALL	DELETE_WORD		CLOSE		WINDOW_EDGE_OFFSET_OVERRIDE
 
 	Skype Buddy List			Skype.exe			-							-							-						CLOSE

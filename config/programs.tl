@@ -1,5 +1,3 @@
-@PlaceholderChar=-
-
 (	NAME					EXE						CLASS						TITLE			TEXT							PATH																					ARGS									MACHINE
 
 [{PATH}b:C:\Program Files (x86)\]

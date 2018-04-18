@@ -17,6 +17,9 @@ class SelectorGui {
 	__New(choices, sectionTitles = "", overrideFields = "") {
 		
 		this.guiId := "Selector" getNextGuiId()
+		this.choiceFieldName         := "Choice"   this.guiId
+		this.overrideFieldNamePrefix := "Override" this.guiId
+		
 		Gui, %guiId%:Default ; GDB TODO move this default line just before doing GUI things (and use this.guiId)
 		
 		this.overrideFields := overrideFields
@@ -58,8 +61,9 @@ class SelectorGui {
 	overrideData := ""
 	
 	; Names for global variables that we'll use for values of fields. This way they can be declared global and retrieved in the same way, without having to pre-define global variables.
-	choiceFieldName         := "SelectorChoice"
-	overrideFieldNamePrefix := "SelectorOverride"
+	; These will have the guiId appended to them in __New().
+	choiceFieldName         := ""
+	overrideFieldNamePrefix := ""
 	
 	buildPopup(choices, sectionTitles = "") {
 		this.guiHandle := this.createPopup()

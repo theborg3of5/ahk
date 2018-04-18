@@ -14,7 +14,7 @@ class SelectorGui {
 	; == Public ====================
 	; ==============================
 	
-	__New(choices, sectionTitles = "", overrideFields = "") {
+	__New(choices, sectionTitles = "", overrideFields = "", rowsPerColumn = 0, minColumnWidth = 0) {
 		
 		this.guiId := "Selector" getNextGuiId()
 		this.choiceFieldName         := "Choice"   this.guiId
@@ -28,12 +28,13 @@ class SelectorGui {
 	}
 	
 	; Shows the popup, including waiting on it to be closed
-	show(defaultOverrideData = "") {
+	show(windowTitle = "", defaultOverrideData = "") {
 		; GDB TODO put default override data into relevant fields somehow
 		For label,value in defaultOverrideData
 			GuiControl, , % label, % value ; Blank command means replace contents
 		
 		; Show gui
+		; GDB TODO use windowTitle instead of guiSettings
 		
 		; Wait for gui to close
 		
@@ -59,6 +60,7 @@ class SelectorGui {
 	overrideFields := []
 	choiceQuery := ""
 	overrideData := ""
+	; GDB TODO chars? chars["NEW_COLUMN"] in particular
 	
 	; Names for global variables that we'll use for values of fields. This way they can be declared global and retrieved in the same way, without having to pre-define global variables.
 	; These will have the guiId appended to them in __New().
@@ -166,9 +168,9 @@ class SelectorGui {
 					lineNum++
 				}
 				
-				applyTitleFormat()
+				applyTitleFormat() ; GDB TODO make an addTitleLine function
 				Gui, Add, Text, x%xTitle% y%yCurrLine%, %title%
-				colWidthFromTitle := getLabelWidthForText(title, "title" i) ; This must happen before we revert formatting, so that current styling (mainly bolding) is taken into account.
+				colWidthFromTitle := getLabelWidthForText(title, "title" i) ; This must happen before we revert formatting, so that current styling (mainly bolding) is taken into account. ; GDB TODO move this in with other width-calculating stuff, just wrap it in apply/clearTitleFormat() calls.
 				clearTitleFormat()
 				
 				yCurrLine += heightLine
@@ -181,6 +183,7 @@ class SelectorGui {
 			else
 				abbrev := c.data["ABBREV"]
 			
+			; GDB TODO add an addChoiceLine function (include/deal with needed surrounding logic too)
 			Gui, Add, Text, x%xIndex%  y%yCurrLine% w%widthIndex%   Right, % i ")"
 			Gui, Add, Text, x%xAbbrev% y%yCurrLine% w%widthAbbrev%,        % abbrev ":"
 			Gui, Add, Text, x%xName%   y%yCurrLine%,                       % name
@@ -257,20 +260,24 @@ class SelectorGui {
 		return data
 	}
 	
-	needNewColumn(ByRef sectionTitle, lineNum, rowsPerColumn) {
-		; Special character in sectionTitle forces a new column
+	needNewColumn(ByRef sectionTitle, lineNum) {
+		; Special character in sectionTitle forces a new column ; GDB TODO can we pull this out or something? it's overloading needNewColumn to also change sectionTitle, which I don't like.
+		; 																				GDB TODO maybe make standalone function for whether a title forces a new column (that does this if check by itself), then strip off starting bit in the result?
 		if(SubStr(sectionTitle, 1, 2) = this.chars["NEW_COLUMN"] " ") {
 			sectionTitle := SubStr(sectionTitle, 3) ; Strip special character and space off, they've served their purpose.
 			return true
 		}
 		
+		if(this.rowsPerColumn < 1)
+			return false
+		
 		; Out of space in the column
-		if(lineNum > rowsPerColumn)
+		if(lineNum > this.rowsPerColumn)
 			return true
 		
 		; Technically have one left, but the current one is a title
 		; (which would leave the title by itself at the end of a column)
-		if(sectionTitle && ((lineNum + 1) > rowsPerColumn))
+		if(sectionTitle && ((lineNum + 1) > this.rowsPerColumn))
 			return true
 		
 		return false

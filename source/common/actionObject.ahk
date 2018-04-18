@@ -105,7 +105,7 @@ class ActionObject {
 	
 	; Prompt the user for any missing info via a Selector popup.
 	selectInfo(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
-		; DEBUG.popup("ActionObject.selectInfo", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
+		; DEBUG.popup("ActionObject.selectInfo","Start", "Input",input, "Type",type, "Action",action, "SubType",subType, "SubAction",subAction)
 		
 		; EMC2 objects require a subType (INI) and subAction (view vs edit)
 		if(type = TYPE_EMC2) {
@@ -113,27 +113,23 @@ class ActionObject {
 			needsSubAction := true
 		}
 		
-		if(!type || !action || (!subType && needsSubType) || (!subAction && needsSubAction)) { ; GDB TODO get rid of needsSubAction?
+		if(!type || !action || (!subType && needsSubType) || (!subAction && needsSubAction)) {
 			filter := MainConfig.getMachineTableListFilter()
 			s := new Selector("actionObject.tl", filter)
 			
-			; GDB TODO stop passing in ACTION and SUBACTION - we never set or change them.
-			; Also get rid of columns for them in TL file.
-			; Also don't pass in TYPE, just read it (and only replace our own type if it's blank)
-			; Possibly remove action/subAction parameters from this function too.
-			
-			objInfo := s.selectGui("", "", "", {TYPE: type, ACTION: action, SUBTYPE: subType, SUBACTION: subAction, ID: input})
-			if(!objInfo)
+			data := s.selectGui("", "", "", {SUBTYPE: subType, ID: input})
+			if(!data)
 				return
 			
-			type      := objInfo["TYPE"]
-			action    := objInfo["ACTION"]
-			subType   := objInfo["SUBTYPE"]
-			subAction := objInfo["SUBACTION"]
-			input     := objInfo["ID"]
+			subType := data["SUBTYPE"]
+			input   := data["ID"]
+			
+			; Type can come out, so grab it iff it was set.
+			if(data["TYPE"])
+				type := data["TYPE"]
 		}
 		
-		; DEBUG.popup("ActionObject.selectInfo", "Input", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
+		; DEBUG.popup("ActionObject.selectInfo","Finish", "Input",input, "Type",type, "Action",action, "SubType",subType, "SubAction",subAction)
 	}
 	
 	; Do any post-processing now that we (hopefully) have all the info we need.

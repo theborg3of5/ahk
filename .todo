@@ -38,6 +38,7 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 'New'
+	Make the "-" placeholder the default (just make sure it can be blanked using setting)
 	Find a better way to keep AHK todo list?
 		This technically works, but it's weird to have to do commits just to record ideas to do.
 		Ideas:

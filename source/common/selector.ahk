@@ -411,7 +411,7 @@ class Selector {
 			widthInputChoice := widthIndex + padIndexAbbrev + widthAbbrev ; Main edit control is same size as index + abbrev columns combined.
 		else
 			widthInputChoice := widthTotal - (marginLeft + marginRight)   ; Main edit control is nearly full width.
-		Gui, Add, Edit, vGuiInChoice x%xInputChoice% y%yInput% w%widthInputChoice% h%heightInput% -E%WS_EX_CLIENTEDGE% +Border
+		addInputField("GuiInChoice", xInputChoice, yInput, widthInputChoice, heightInput, "")
 		
 		if(this.guiSettings["ShowOverrideFields"]) {
 			numDataInputs := this.dataIndices.length()

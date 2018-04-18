@@ -131,10 +131,13 @@ class SelectorGui {
 		
 		For i,c in this.choices {
 			lineNum++
-			title := this.sectionTitles[i]
+			sectionTitle := this.sectionTitles[i]
 			
-			; Add a new column as needed.
-			if(this.needNewColumn(title, lineNum, this.guiSettings["RowsPerColumn"])) {
+			if(this.needNewColumn(sectionTitle, lineNum, this.guiSettings["RowsPerColumn"])) {
+				if(this.doesTitleForceNewColumn(sectionTitle))
+					sectionTitle := SubStr(sectionTitle, 3) ; Strip special character and space off, they've served their purpose.
+				
+				; Add a new column as needed. ; GDB TODO turn this into a function to add a new column
 				columnNum++
 				
 				xLastColumnOffset := columnWidths[columnNum - 1] + padColumn
@@ -143,9 +146,9 @@ class SelectorGui {
 				xAbbrev += xLastColumnOffset
 				xName   += xLastColumnOffset
 				
-				if(!title) { ; We're not starting a new title here, so show the previous one, continued.
+				if(!sectionTitle) { ; We're not starting a new title here, so show the previous one, continued.
 					titleInstance++
-					title := currTitle " (" titleInstance ")"
+					sectionTitle := currTitle " (" titleInstance ")"
 					isContinuedTitle := true
 				}
 				
@@ -153,24 +156,24 @@ class SelectorGui {
 				yCurrLine := marginTop
 			}
 			
-			; Title rows.
-			if(title) {
+			; Section title row
+			if(sectionTitle) {
 				if(!isContinuedTitle) {
 					titleInstance := 1
-					currTitle := title
+					currTitle := sectionTitle
 				} else {
 					isContinuedTitle := false
 				}
 				
-				; Extra newline above titles, unless they're on the first line of a column.
+				; Extra newline above section titles, unless they're on the first line of a column.
 				if(lineNum > 1) {
 					yCurrLine += heightLine
 					lineNum++
 				}
 				
 				applyTitleFormat() ; GDB TODO make an addTitleLine function
-				Gui, Add, Text, x%xTitle% y%yCurrLine%, %title%
-				colWidthFromTitle := getLabelWidthForText(title, "title" i) ; This must happen before we revert formatting, so that current styling (mainly bolding) is taken into account. ; GDB TODO move this in with other width-calculating stuff, just wrap it in apply/clearTitleFormat() calls.
+				Gui, Add, Text, x%xTitle% y%yCurrLine%, %sectionTitle%
+				colWidthFromTitle := getLabelWidthForText(sectionTitle, "title" i) ; This must happen before we revert formatting, so that current styling (mainly bolding) is taken into account. ; GDB TODO move this in with other width-calculating stuff, just wrap it in apply/clearTitleFormat() calls.
 				clearTitleFormat()
 				
 				yCurrLine += heightLine
@@ -250,7 +253,7 @@ class SelectorGui {
 				inputVal := getInputFieldValue(this.overrideFieldNamePrefix num) ; SelectorOverride* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
 				if(inputVal && (inputVal != label)) {
 					data[label] := inputVal
-					gotDataFromUser := true
+					gotDataFromUser := true ; GDB TODO should be able to get rid of this now, hopefully?
 				}
 			}
 		}
@@ -260,13 +263,10 @@ class SelectorGui {
 		return data
 	}
 	
-	needNewColumn(ByRef sectionTitle, lineNum) {
-		; Special character in sectionTitle forces a new column ; GDB TODO can we pull this out or something? it's overloading needNewColumn to also change sectionTitle, which I don't like.
-		; 																				GDB TODO maybe make standalone function for whether a title forces a new column (that does this if check by itself), then strip off starting bit in the result?
-		if(SubStr(sectionTitle, 1, 2) = this.chars["NEW_COLUMN"] " ") {
-			sectionTitle := SubStr(sectionTitle, 3) ; Strip special character and space off, they've served their purpose.
+	needNewColumn(sectionTitle, lineNum) {
+		; Section title forces a new column
+		if(this.doesTitleForceNewColumn(sectionTitle))
 			return true
-		}
 		
 		if(this.rowsPerColumn < 1)
 			return false
@@ -281,6 +281,10 @@ class SelectorGui {
 			return true
 		
 		return false
+	}
+	
+	doesTitleForceNewColumn(sectionTitle) {
+		return (SubStr(sectionTitle, 1, 2) = this.chars["NEW_COLUMN"] " ")
 	}
 	
 	getTotalWidth(columnWidths, paddingBetweenColumns, leftMargin, rightMargin) {

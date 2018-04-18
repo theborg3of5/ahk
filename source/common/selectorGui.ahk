@@ -15,6 +15,7 @@ class SelectorGui {
 	; ==============================
 	
 	__New(choices, sectionTitles = "", overrideFields = "", rowsPerColumn = 0, minColumnWidth = 0) {
+		this.chars := this.getSpecialChars()
 		
 		this.guiId := "Selector" getNextGuiId()
 		this.choiceFieldName         := "Choice"   this.guiId
@@ -35,8 +36,18 @@ class SelectorGui {
 		
 		; Show gui
 		; GDB TODO use windowTitle instead of guiSettings
+		; this.showPopup(windowTitle)
+		; Resize the GUI to show the newly added edit control row.
+		
+		Gui, Show, h%heightTotal% w%widthTotal%, % this.guiSettings["WindowTitle"]
+		
+		; Focus the edit control.
+		GuiControl, Focus,     % this.choiceFieldName
+		GuiControl, +0x800000, % this.choiceFieldName
 		
 		; Wait for gui to close
+		WinWaitClose, ahk_id %guiHandle%
+		
 		
 		; Store off data entered by user ; GDB TODO
 		; this.choiceQuery := ""
@@ -55,17 +66,35 @@ class SelectorGui {
 	; == Private ===================
 	; ==============================
 	
-	guiId := ""
-	guiHandle := ""
+	chars := []
+	
+	; Input/output ; GDB TODO organize this section better
 	overrideFields := []
 	choiceQuery := ""
 	overrideData := ""
-	; GDB TODO chars? chars["NEW_COLUMN"] in particular
 	
 	; Names for global variables that we'll use for values of fields. This way they can be declared global and retrieved in the same way, without having to pre-define global variables.
 	; These will have the guiId appended to them in __New().
 	choiceFieldName         := ""
 	overrideFieldNamePrefix := ""
+	
+	; GUI spacing properties
+	margins  := {LEFT:10, RIGHT:10, TOP:10, BOTTOM:10}
+	paddings := {INDEX_ABBREV:5, ABBREV_NAME:10, DATA_FIELDS:5, COLUMNS:30}
+	widths   := {INDEX:25, ABBREV:50} ; Other widths are calculated based on contents and available space
+	heights  := {LINE:25, FIELD:24}
+	
+	; GDB TODO stuff that changes/is different
+	guiId := ""
+	guiHandle := ""
+	
+	
+	
+	getSpecialChars() {
+		chars := []
+		chars["NEW_COLUMN"] := "|" ; GDB TODO make sure to document
+		return chars
+	}
 	
 	buildPopup(choices, sectionTitles = "") {
 		this.guiHandle := this.createPopup()
@@ -84,54 +113,23 @@ class SelectorGui {
 	
 	addChoices(choices, sectionTitles = "") {
 		
-	}
-	
-	addFields() {
-		; this.overrideFields
-	}
-	
-	
-	
-	; Generate the text for the GUI and display it, returning the user's response.
-	launchSelectorPopup(data) {
-		; Create and begin styling the GUI.
-		guiHandle := this.createSelectorGui()
 		
-		; GUI sizes
-		marginLeft   := 10
-		marginRight  := 10
-		marginTop    := 10
-		marginBottom := 10
-		
-		padIndexAbbrev := 5
-		padAbbrevName  := 10
-		padInputData   := 5
-		padColumn      := 5
-		
-		widthIndex  := 25
-		widthAbbrev := 50
-		; (widthName and widthInputChoice/widthInputData exist but are calculated)
-		
-		heightLine  := 25
-		heightInput := 24
-	
 		; Element starting positions (these get updated per column)
-		xTitle       := marginLeft
-		xIndex       := marginLeft
-		xAbbrev      := xIndex  + widthIndex  + padIndexAbbrev
-		xName        := xAbbrev + widthAbbrev + padAbbrevName
-		xInputChoice := marginLeft
+		xTitle       := this.margins["LEFT"]
+		xIndex       := this.margins["LEFT"]
+		xAbbrev      := xIndex  + this.widths["INDEX"]  + this.paddings["INDEX_ABBREV"]
+		xName        := xAbbrev + this.widths["ABBREV"] + this.paddings["ABBREV_NAME"]
 		
-		xNameFirstCol := xName
-		yCurrLine     := marginTop
+		yCurrLine     := this.margins["TOP"]
 		
 		lineNum := 0
 		columnNum := 1
 		columnWidths := []
 		
-		For i,c in this.choices {
+		
+		For i,c in choices {
 			lineNum++
-			sectionTitle := this.sectionTitles[i]
+			sectionTitle := sectionTitles[i]
 			
 			if(this.needNewColumn(sectionTitle, lineNum, this.guiSettings["RowsPerColumn"])) {
 				if(this.doesTitleForceNewColumn(sectionTitle))
@@ -140,7 +138,7 @@ class SelectorGui {
 				; Add a new column as needed. ; GDB TODO turn this into a function to add a new column
 				columnNum++
 				
-				xLastColumnOffset := columnWidths[columnNum - 1] + padColumn
+				xLastColumnOffset := columnWidths[columnNum - 1] + this.paddings["COLUMNS"]
 				xTitle  += xLastColumnOffset
 				xIndex  += xLastColumnOffset
 				xAbbrev += xLastColumnOffset
@@ -153,7 +151,7 @@ class SelectorGui {
 				}
 				
 				lineNum := 1
-				yCurrLine := marginTop
+				yCurrLine := this.margins["TOP"]
 			}
 			
 			; Section title row
@@ -167,7 +165,7 @@ class SelectorGui {
 				
 				; Extra newline above section titles, unless they're on the first line of a column.
 				if(lineNum > 1) {
-					yCurrLine += heightLine
+					yCurrLine += this.heights["LINE"]
 					lineNum++
 				}
 				
@@ -176,7 +174,7 @@ class SelectorGui {
 				colWidthFromTitle := getLabelWidthForText(sectionTitle, "title" i) ; This must happen before we revert formatting, so that current styling (mainly bolding) is taken into account. ; GDB TODO move this in with other width-calculating stuff, just wrap it in apply/clearTitleFormat() calls.
 				clearTitleFormat()
 				
-				yCurrLine += heightLine
+				yCurrLine += this.heights["LINE"]
 				lineNum++
 			}
 			
@@ -187,46 +185,207 @@ class SelectorGui {
 				abbrev := c.data["ABBREV"]
 			
 			; GDB TODO add an addChoiceLine function (include/deal with needed surrounding logic too)
-			Gui, Add, Text, x%xIndex%  y%yCurrLine% w%widthIndex%   Right, % i ")"
-			Gui, Add, Text, x%xAbbrev% y%yCurrLine% w%widthAbbrev%,        % abbrev ":"
-			Gui, Add, Text, x%xName%   y%yCurrLine%,                       % name
+			wIndex  := this.widths["INDEX"]
+			wAbbrev := this.widths["ABBREV"]
+			Gui, Add, Text, x%xIndex%  y%yCurrLine% w%wIndex%   Right, % i ")"
+			Gui, Add, Text, x%xAbbrev% y%yCurrLine% w%wAbbrev%,        % abbrev ":"
+			Gui, Add, Text, x%xName%   y%yCurrLine%,                   % name
 			
 			widthName := getLabelWidthForText(name, "name" i)
-			colWidthFromChoice := widthIndex + padIndexAbbrev + widthAbbrev + padAbbrevName + widthName
+			colWidthFromChoice := this.widths["INDEX"] + this.paddings["INDEX_ABBREV"] + this.widths["ABBREV"] + this.paddings["ABBREV_NAME"] + widthName
 			
 			columnWidths[columnNum] := max(columnWidths[columnNum], colWidthFromTitle, colWidthFromChoice, this.guiSettings["MinColumnWidth"])
 			
-			yCurrLine += heightLine
+			yCurrLine += this.heights["LINE"]
 			maxColumnHeight := max(maxColumnHeight, yCurrLine)
 		}
 		
-		widthTotal := this.getTotalWidth(columnWidths, padColumn, marginLeft, marginRight)
-		yInput := maxColumnHeight + heightLine ; Extra empty row before inputs.
+		widthTotal := this.getTotalWidth(columnWidths, this.paddings["COLUMNS"], this.margins["LEFT"], this.margins["RIGHT"])
+	}
+	
+	
+	
+	getTotalWidth(columnWidths, paddingBetweenColumns, leftMargin, rightMargin) {
+		totalWidth := 0
+		
+		totalWidth += leftMargin
+		Loop, % columnWidths.MaxIndex() {
+			if(A_Index > 1)
+				totalWidth += paddingBetweenColumns
+			totalWidth += columnWidths[A_Index]
+		}
+		totalWidth += rightMargin
+		
+		return totalWidth
+	}
+	
+	
+	
+	
+	
+	addFields() {
+		; this.overrideFields
+		
+		xInputChoice := this.margins["LEFT"]
+		xInputFirstData := this.margins["LEFT"] + this.widths["INDEX"] + this.paddings["INDEX_ABBREV"] + this.widths["ABBREV"] + this.paddings["ABBREV_NAME"] ; Line this up with the first name column
+		
+		yInput := maxColumnHeight + this.heights["LINE"] ; Extra empty row before inputs.
 		if(this.guiSettings["ShowOverrideFields"])
-			widthInputChoice := widthIndex + padIndexAbbrev + widthAbbrev ; Main edit control is same size as index + abbrev columns combined.
+			widthInputChoice := this.widths["INDEX"] + this.paddings["INDEX_ABBREV"] + this.widths["ABBREV"] ; Main edit control is same size as index + abbrev columns combined.
 		else
-			widthInputChoice := widthTotal - (marginLeft + marginRight)   ; Main edit control is nearly full width.
-		addInputField(this.choiceFieldName, xInputChoice, yInput, widthInputChoice, heightInput, "")
+			widthInputChoice := widthTotal - (this.margins["LEFT"] + this.margins["RIGHT"])   ; Main edit control is nearly full width.
+		addInputField(this.choiceFieldName, xInputChoice, yInput, widthInputChoice, this.heights["FIELD"], "")
 		
 		if(this.guiSettings["ShowOverrideFields"]) {
 			numDataInputs := this.overrideFields.length()
-			leftoverWidth  := widthTotal - xNameFirstCol - marginRight
-			widthInputData := (leftoverWidth - ((numDataInputs - 1) * padInputData)) / numDataInputs
+			leftoverWidth  := widthTotal - xInputFirstData - this.margins["RIGHT"]
+			widthInputData := (leftoverWidth - ((numDataInputs - 1) * this.paddings["DATA_FIELDS"])) / numDataInputs
 			
-			xInput := xNameFirstCol
+			xInput := xInputFirstData
 			For num,label in this.overrideFields {
 				if(data[label]) ; Data given as default
 					tempData := data[label]
 				else            ; Data label (treat like ghost text, filter out later if not modified)
 					tempData := label
 				
-				addInputField(this.overrideFieldNamePrefix num, xInput, yInput, widthInputData, heightInput, tempData) ; GDB TODO make the variable use the label instead of the num, so we can find it better later.
-				xInput += widthInputData + padInputData
+				addInputField(this.overrideFieldNamePrefix num, xInput, yInput, widthInputData, this.heights["FIELD"], tempData) ; GDB TODO make the variable use the label instead of the num, so we can find it better later.
+				xInput += widthInputData + this.paddings["DATA_FIELDS"]
 			}
 		}
+	}
+	
+	; Generate the text for the GUI and display it, returning the user's response.
+	launchSelectorPopup(data) {
+		; Element starting positions (these get updated per column)
+		; xTitle       := this.margins["LEFT"]
+		; xIndex       := this.margins["LEFT"]
+		; xAbbrev      := xIndex  + this.widths["INDEX"]  + this.paddings["INDEX_ABBREV"]
+		; xName        := xAbbrev + this.widths["ABBREV"] + this.paddings["ABBREV_NAME"]
+		; yCurrLine     := this.margins["TOP"]
 		
+		; xNameFirstCol := xName
+		
+		; lineNum := 0
+		; columnNum := 1
+		; columnWidths := []
+		
+		
+		
+		; === Choices ===
+		/*
+		For i,c in this.choices {
+			lineNum++
+			sectionTitle := this.sectionTitles[i]
+			
+			if(this.needNewColumn(sectionTitle, lineNum, this.guiSettings["RowsPerColumn"])) {
+				if(this.doesTitleForceNewColumn(sectionTitle))
+					sectionTitle := SubStr(sectionTitle, 3) ; Strip special character and space off, they've served their purpose.
+				
+				; Add a new column as needed. ; GDB TODO turn this into a function to add a new column
+				columnNum++
+				
+				xLastColumnOffset := columnWidths[columnNum - 1] + this.paddings["COLUMNS"]
+				xTitle  += xLastColumnOffset
+				xIndex  += xLastColumnOffset
+				xAbbrev += xLastColumnOffset
+				xName   += xLastColumnOffset
+				
+				if(!sectionTitle) { ; We're not starting a new title here, so show the previous one, continued.
+					titleInstance++
+					sectionTitle := currTitle " (" titleInstance ")"
+					isContinuedTitle := true
+				}
+				
+				lineNum := 1
+				yCurrLine := this.margins["TOP"]
+			}
+			
+			; Section title row
+			if(sectionTitle) {
+				if(!isContinuedTitle) {
+					titleInstance := 1
+					currTitle := sectionTitle
+				} else {
+					isContinuedTitle := false
+				}
+				
+				; Extra newline above section titles, unless they're on the first line of a column.
+				if(lineNum > 1) {
+					yCurrLine += this.heights["LINE"]
+					lineNum++
+				}
+				
+				applyTitleFormat() ; GDB TODO make an addTitleLine function
+				Gui, Add, Text, x%xTitle% y%yCurrLine%, %sectionTitle%
+				colWidthFromTitle := getLabelWidthForText(sectionTitle, "title" i) ; This must happen before we revert formatting, so that current styling (mainly bolding) is taken into account. ; GDB TODO move this in with other width-calculating stuff, just wrap it in apply/clearTitleFormat() calls.
+				clearTitleFormat()
+				
+				yCurrLine += this.heights["LINE"]
+				lineNum++
+			}
+			
+			name := c.data["NAME"]
+			if(IsObject(c.data["ABBREV"]))
+				abbrev := c.data["ABBREV", 1]
+			else
+				abbrev := c.data["ABBREV"]
+			
+			; GDB TODO add an addChoiceLine function (include/deal with needed surrounding logic too)
+			wIndex  := this.widths["INDEX"]
+			wAbbrev := this.widths["ABBREV"]
+			Gui, Add, Text, x%xIndex%  y%yCurrLine% w%wIndex%   Right, % i ")"
+			Gui, Add, Text, x%xAbbrev% y%yCurrLine% w%wAbbrev%,        % abbrev ":"
+			Gui, Add, Text, x%xName%   y%yCurrLine%,                   % name
+			
+			widthName := getLabelWidthForText(name, "name" i)
+			colWidthFromChoice := this.widths["INDEX"] + this.paddings["INDEX_ABBREV"] + this.widths["ABBREV"] + this.paddings["ABBREV_NAME"] + widthName
+			
+			columnWidths[columnNum] := max(columnWidths[columnNum], colWidthFromTitle, colWidthFromChoice, this.guiSettings["MinColumnWidth"])
+			
+			yCurrLine += this.heights["LINE"]
+			maxColumnHeight := max(maxColumnHeight, yCurrLine)
+		}
+		
+		widthTotal := this.getTotalWidth(columnWidths, this.paddings["COLUMNS"], this.margins["LEFT"], this.margins["RIGHT"])
+		*/
+		
+		; === Fields ===
+		/*
+		xInputChoice := this.margins["LEFT"]
+		xInputFirstData := this.margins["LEFT"] + this.widths["INDEX"] + this.paddings["INDEX_ABBREV"] + this.widths["ABBREV"] + this.paddings["ABBREV_NAME"] ; Line this up with the first name column
+		
+		yInput := maxColumnHeight + this.heights["LINE"] ; Extra empty row before inputs.
+		if(this.guiSettings["ShowOverrideFields"])
+			widthInputChoice := this.widths["INDEX"] + this.paddings["INDEX_ABBREV"] + this.widths["ABBREV"] ; Main edit control is same size as index + abbrev columns combined.
+		else
+			widthInputChoice := widthTotal - (this.margins["LEFT"] + this.margins["RIGHT"])   ; Main edit control is nearly full width.
+		addInputField(this.choiceFieldName, xInputChoice, yInput, widthInputChoice, this.heights["FIELD"], "")
+		
+		if(this.guiSettings["ShowOverrideFields"]) {
+			numDataInputs := this.overrideFields.length()
+			leftoverWidth  := widthTotal - xInputFirstData - this.margins["RIGHT"]
+			widthInputData := (leftoverWidth - ((numDataInputs - 1) * this.paddings["DATA_FIELDS"])) / numDataInputs
+			
+			xInput := xInputFirstData
+			For num,label in this.overrideFields {
+				if(data[label]) ; Data given as default
+					tempData := data[label]
+				else            ; Data label (treat like ghost text, filter out later if not modified)
+					tempData := label
+				
+				addInputField(this.overrideFieldNamePrefix num, xInput, yInput, widthInputData, this.heights["FIELD"], tempData) ; GDB TODO make the variable use the label instead of the num, so we can find it better later.
+				xInput += widthInputData + this.paddings["DATA_FIELDS"]
+			}
+		}
+		*/
+		
+		; GDB TODO this below line should takes data from both above functions (choices and fields), and should be a class property that's updated in both accordingly.
+		heightTotal += maxColumnHeight + this.heights["LINE"] + this.heights["FIELD"] + this.margins["BOTTOM"] ; maxColumnHeight includes this.margins["TOP"], this.heights["LINE"] is for extra line between labels and inputs
+		
+		; === Show GUI and wait ===
+		/*
 		; Resize the GUI to show the newly added edit control row.
-		heightTotal += maxColumnHeight + heightLine + heightInput + marginBottom ; maxColumnHeight includes marginTop, heightLine is for extra line between labels and inputs
+		
 		Gui, Show, h%heightTotal% w%widthTotal%, % this.guiSettings["WindowTitle"]
 		
 		; Focus the edit control.
@@ -235,6 +394,10 @@ class SelectorGui {
 		
 		; Wait for the user to submit the GUI.
 		WinWaitClose, ahk_id %guiHandle%
+		*/
+		
+		
+		; === Get values from fields ===
 		
 		choiceInput := getInputFieldValue(this.choiceFieldName)
 		
@@ -268,6 +431,7 @@ class SelectorGui {
 		if(this.doesTitleForceNewColumn(sectionTitle))
 			return true
 		
+		; Otherwise, we're only going to compare to the maximum rows per column (assuming it's >0).
 		if(this.rowsPerColumn < 1)
 			return false
 		
@@ -285,20 +449,6 @@ class SelectorGui {
 	
 	doesTitleForceNewColumn(sectionTitle) {
 		return (SubStr(sectionTitle, 1, 2) = this.chars["NEW_COLUMN"] " ")
-	}
-	
-	getTotalWidth(columnWidths, paddingBetweenColumns, leftMargin, rightMargin) {
-		totalWidth := 0
-		
-		totalWidth += leftMargin
-		Loop, % columnWidths.MaxIndex() {
-			if(A_Index > 1)
-				totalWidth += paddingBetweenColumns
-			totalWidth += columnWidths[A_Index]
-		}
-		totalWidth += rightMargin
-		
-		return totalWidth
 	}
 	
 	

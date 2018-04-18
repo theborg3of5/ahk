@@ -1,14 +1,12 @@
 
-; A_Gui for GUI ID? No, don't need - Gui thread (when event leading to one of these happens) starts out with gui window as last found.
-; GuiEscape instead of Escape handling in windows.tl? No, need Escape handling for other things (like WinSpy), so may as well get it for free here.
-; GUI Events ; GDB TODO see if we can do these better - maybe with functor objects?
-; SelectorGuiClose() {
-	; Gui, Destroy
-; }
-; SelectorGuiSubmit() {
-	; Gui, Submit ; Actually saves edit controls' values to respective GuiIn* variables
-	; Gui, Destroy
-; }
+; GUI Events
+SelectorGuiClose() { ; Called when window is closed
+	Gui, Destroy
+}
+SelectorGuiSubmit() { ; Called when Enter is pressed (which fires the hidden, default button)
+	Gui, Submit ; Actually saves edit controls' values to respective GuiIn* variables
+	Gui, Destroy
+}
 
 class SelectorGui {
 	

@@ -116,6 +116,8 @@ FormatTime(YYYYMMDDHH24MISS = "", Format = "") {
 	; Return, v
 ; }
 GuiControlGet(Subcommand = "", ControlID = "", Param4 = "") {
+	if(Subcommand = "Pos")
+		MsgBox, This command function (GuiControlGet()) does not support this parameter: %Subcommand%
 	GuiControlGet, v, %Subcommand%, %ControlID%, %Param4%
 	Return, v
 }

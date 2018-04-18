@@ -176,7 +176,7 @@ class Selector {
 		settings := []
 		
 		settings["RowsPerColumn"]      := 99
-		settings["MinColumnWidth"]     := 300
+		settings["MinColumnWidth"]     := 0
 		settings["WindowTitle"]        := "Please make a choice by either number or abbreviation:"
 		settings["ShowOverrideFields"] := false
 		settings["ExtraDataFields"]    := ""
@@ -307,7 +307,7 @@ class Selector {
 		padIndexAbbrev := 5
 		padAbbrevName  := 10
 		padInputData   := 5
-		padColumn      := 5
+		padColumn      := 30
 		
 		widthIndex  := 25
 		widthAbbrev := 50
@@ -391,6 +391,7 @@ class Selector {
 			widthName := getLabelWidthForText(name, "name" i)
 			colWidthFromChoice := widthIndex + padIndexAbbrev + widthAbbrev + padAbbrevName + widthName
 			
+			; DEBUG.popup("Column",columnWidths[columnNum], "Title",colWidthFromTitle, "Choice",colWidthFromChoice, "Min",this.guiSettings["MinColumnWidth"])
 			columnWidths[columnNum] := max(columnWidths[columnNum], colWidthFromTitle, colWidthFromChoice, this.guiSettings["MinColumnWidth"])
 			
 			yCurrLine += heightLine

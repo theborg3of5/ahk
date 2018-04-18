@@ -121,8 +121,6 @@ class Selector {
 			this.guiSettings["WindowTitle"] := title
 		if(showOverrideFields != "") ; Check against blank since this is a boolean value
 			this.guiSettings["ShowOverrideFields"] := showOverrideFields
-		if(extraDataFields)
-			this.addExtraDataFields(extraDataFields)
 		
 		; DEBUG.popup("User Input",userChoiceString, "data",data)
 		data := this.launchSelectorPopup(data)

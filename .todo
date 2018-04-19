@@ -36,6 +36,9 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 'New'
+	Make a kind of snippet list for EpicStudio
+		Selector with different kinds of loops (zoID,zoDAT,various index versions, etc.), and override fields for iterator variable, levels down, etc.
+		Similar to for loop hotstring
 	Find a better way to keep AHK todo list?
 		This technically works, but it's weird to have to do commits just to record ideas to do.
 		Ideas:

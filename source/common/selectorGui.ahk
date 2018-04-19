@@ -50,8 +50,7 @@ class SelectorGui {
 		
 		
 		; Store off data entered by user ; GDB TODO
-		; this.choiceQuery := ""
-		; this.overrideData := []
+		this.saveUserInputs()
 	}
 	
 	; Getters for information entered by the user.
@@ -98,8 +97,10 @@ class SelectorGui {
 	
 	buildPopup(choices, sectionTitles = "") {
 		this.guiHandle := this.createPopup()
+		; GDB TODO maybe add margins["TOP"] to totalHeight here
 		this.addChoices(choices, sectionTitles)
 		this.addFields()
+		; GDB TODO maybe add margins["BOTTOM"] to totalHeight here
 	}
 	
 	createPopup() {
@@ -107,6 +108,9 @@ class SelectorGui {
 		Gui, Color, 2A211C
 		Gui, Font, s12 cBDAE9D
 		Gui, Add, Button, Hidden Default +gSelectorGuiSubmit ; Hidden button for {Enter} submission.
+		
+		; GDB TODO zero out/default properties here
+		; heightTotal := 0 ; Should be class property
 		
 		return WinExist() ; Because of +LastFound above, the new gui is the last found window, so WinExist() finds it.
 	}
@@ -197,10 +201,13 @@ class SelectorGui {
 			columnWidths[columnNum] := max(columnWidths[columnNum], colWidthFromTitle, colWidthFromChoice, this.guiSettings["MinColumnWidth"])
 			
 			yCurrLine += this.heights["LINE"]
-			maxColumnHeight := max(maxColumnHeight, yCurrLine)
+			maxColumnHeight := max(maxColumnHeight, yCurrLine - this.margins["TOP"])
 		}
 		
 		widthTotal := this.getTotalWidth(columnWidths, this.paddings["COLUMNS"], this.margins["LEFT"], this.margins["RIGHT"])
+		
+		
+		heightTotal += this.margins["TOP"] + maxColumnHeight ; GDB TODO turn into class property
 	}
 	
 	
@@ -224,8 +231,6 @@ class SelectorGui {
 	
 	
 	addFields() {
-		; this.overrideFields
-		
 		xInputChoice := this.margins["LEFT"]
 		xInputFirstData := this.margins["LEFT"] + this.widths["INDEX"] + this.paddings["INDEX_ABBREV"] + this.widths["ABBREV"] + this.paddings["ABBREV_NAME"] ; Line this up with the first name column
 		
@@ -252,7 +257,24 @@ class SelectorGui {
 				xInput += widthInputData + this.paddings["DATA_FIELDS"]
 			}
 		}
+		
+		
+		heightTotal += this.heights["LINE"] + this.heights["FIELD"] + this.margins["BOTTOM"] ; GDB TODO turn into class property
 	}
+	
+	
+	saveUserInputs() {
+		; Choice field
+		this.choiceQuery := getInputFieldValue(this.choiceFieldName)
+		
+		; Override fields
+		For num,label in this.overrideFields {
+			inputVal := getInputFieldValue(this.overrideFieldNamePrefix num) ; SelectorOverride* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
+			if(inputVal && (inputVal != label))
+				this.overrideData[label] := inputVal
+		}
+	}
+	
 	
 	; Generate the text for the GUI and display it, returning the user's response.
 	launchSelectorPopup(data) {
@@ -379,8 +401,8 @@ class SelectorGui {
 		}
 		*/
 		
-		; GDB TODO this below line should takes data from both above functions (choices and fields), and should be a class property that's updated in both accordingly.
-		heightTotal += maxColumnHeight + this.heights["LINE"] + this.heights["FIELD"] + this.margins["BOTTOM"] ; maxColumnHeight includes this.margins["TOP"], this.heights["LINE"] is for extra line between labels and inputs
+		; ; GDB TODO this below line should takes data from both above functions (choices and fields), and should be a class property that's updated in both accordingly.
+		; heightTotal += maxColumnHeight + this.heights["LINE"] + this.heights["FIELD"] + this.margins["BOTTOM"] ; maxColumnHeight includes this.margins["TOP"], this.heights["LINE"] is for extra line between labels and inputs
 		
 		; === Show GUI and wait ===
 		/*
@@ -398,7 +420,7 @@ class SelectorGui {
 		
 		
 		; === Get values from fields ===
-		
+		/*
 		choiceInput := getInputFieldValue(this.choiceFieldName)
 		
 		; Determine the user's choice (if any) and merge that info into the data array.
@@ -424,6 +446,7 @@ class SelectorGui {
 		if(!gotDataFromUser)
 			return ""
 		return data
+		*/
 	}
 	
 	needNewColumn(sectionTitle, lineNum) {

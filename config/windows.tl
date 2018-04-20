@@ -10,6 +10,7 @@
 	Explorer						explorer.exe		CabinetWClass			-							-						MIN		OTHER
 	Mattermost					Mattermost.exe		-							-							-						CLOSE		CLOSE
 	Telegram						Telegram.exe		Qt5QWindowIcon			-							-						CLOSE		CLOSE		-				-					-			0
+	Spotify						Spotify.exe			-							-							-						CLOSE		CLOSE		-				-					OTHER		0
 	
 	; VB6
 	VB6							VB6.exe				wndclass_desked_gsk	-							-						-			POST_MESSAGE
@@ -50,5 +51,5 @@
 	GitHub						GitHubDesktop.exe
 	Chrome						chrome.exe
 	Steam							Steam.exe
-	Spotify						Spotify.exe			-							-							-						CLOSE		CLOSE		-				-					OTHER
+	WebEx							atmgr.exe
 []

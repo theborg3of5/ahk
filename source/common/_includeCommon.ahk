@@ -11,6 +11,7 @@
 #Include debugBuilder.ahk
 #Include epic.ahk
 #Include file.ahk
+#Include flexTable.ahk
 #Include gui.ahk
 #Include HTTPRequest.ahk
 #Include iniObject.ahk

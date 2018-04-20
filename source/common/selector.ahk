@@ -428,8 +428,7 @@ class Selector {
 		Gui, Show, h%heightTotal% w%widthTotal%, % this.guiSettings["WindowTitle"]
 		
 		; Focus the edit control.
-		GuiControl, Focus,     % this.choiceFieldName
-		GuiControl, +0x800000, % this.choiceFieldName
+		GuiControl, Focus, % this.choiceFieldName
 		
 		; Wait for the user to submit the GUI.
 		WinWaitClose, ahk_id %guiHandle%

@@ -37,6 +37,9 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 'New'
+	Selector of current DLGs?
+		Could move PRJ stuff to this as well.
+		Alternatively, could keep this in the TLG TL too?
 	Make a kind of snippet list for EpicStudio
 		Selector with different kinds of loops (zoID,zoDAT,various index versions, etc.), and override fields for iterator variable, levels down, etc.
 		Similar to for loop hotstring

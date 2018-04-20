@@ -15,21 +15,21 @@ class SelectorGui {
 	; ==============================
 	
 	__New(choices, sectionTitles = "", overrideFields = "", rowsPerColumn = 0, minColumnWidth = 0) {
-		this.chars := this.getSpecialChars()
+		this.overrideFields := overrideFields
 		
+		this.setSpecialChars()
 		this.guiId := "Selector" getNextGuiId()
 		this.choiceFieldName         := "Choice"   this.guiId
 		this.overrideFieldNamePrefix := "Override" this.guiId
+		this.setDefaultGui()
 		
-		Gui, %guiId%:Default ; GDB TODO move this default line just before doing GUI things (and use this.guiId)
-		
-		this.overrideFields := overrideFields
-		
-		this.buildPopup(choices, sectionTitles) ; GDB TODO: should default data be set in show() instead of being set when we create the controls? If set in show, should it be passed to show() instead of here?
+		this.buildPopup(choices, sectionTitles)
 	}
 	
 	; Shows the popup, including waiting on it to be closed
 	show(windowTitle = "", defaultOverrideData = "") {
+		this.setDefaultGui()
+		
 		; GDB TODO put default override data into relevant fields somehow
 		For label,value in defaultOverrideData
 			GuiControl, , % label, % value ; Blank command means replace contents
@@ -48,8 +48,7 @@ class SelectorGui {
 		; Wait for gui to close
 		WinWaitClose, ahk_id %guiHandle%
 		
-		
-		; Store off data entered by user ; GDB TODO
+		; Store off data entered by user
 		this.saveUserInputs()
 	}
 	
@@ -89,18 +88,20 @@ class SelectorGui {
 	
 	
 	
-	getSpecialChars() {
-		chars := []
-		chars["NEW_COLUMN"] := "|" ; GDB TODO make sure to document
-		return chars
+	setSpecialChars() {
+		this.chars := []
+		this.chars["NEW_COLUMN"] := "|"
+	}
+	
+	setDefaultGui() {
+		guiId := this.guiId
+		Gui, %guiId%:Default
 	}
 	
 	buildPopup(choices, sectionTitles = "") {
-		this.guiHandle := this.createPopup()
-		; GDB TODO maybe add margins["TOP"] to totalHeight here
+		this.createPopup()
 		this.addChoices(choices, sectionTitles)
 		this.addFields()
-		; GDB TODO maybe add margins["BOTTOM"] to totalHeight here
 	}
 	
 	createPopup() {
@@ -108,11 +109,9 @@ class SelectorGui {
 		Gui, Color, 2A211C
 		Gui, Font, s12 cBDAE9D
 		Gui, Add, Button, Hidden Default +gSelectorGuiSubmit ; Hidden button for {Enter} submission.
+		this.guiHandle := WinExist() ; Because of +LastFound above, the new gui is the last found window, so WinExist() finds it.
 		
-		; GDB TODO zero out/default properties here
-		; heightTotal := 0 ; Should be class property
-		
-		return WinExist() ; Because of +LastFound above, the new gui is the last found window, so WinExist() finds it.
+		; heightTotal := margins["TOP"] + margins["BOTTOM"] ; GDB TODO Should be class property
 	}
 	
 	addChoices(choices, sectionTitles = "") {

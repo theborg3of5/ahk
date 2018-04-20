@@ -14,6 +14,7 @@
 			.getChoiceQuery(), .getOverrideData()
 			All Gui stuff (including gui ID) move into that
 		Handle data summing as before, return finished data array
+	Consider switching getSpecialChars() stuff in selector to setSpecialChars (with overrides if possible) like selectorGui
 	Rework SelectorRow
 		Remove unused: userInput, buildSelectorRow()
 		Can we split constructor into two separate things?

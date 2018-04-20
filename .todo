@@ -1,4 +1,40 @@
 'Selector'
+	Split the actual GUI building logic for SelectorGui out into yet another class (GuiBuilder)?
+		Maybe only for the choice-adding logic?
+			Fields and such don't really need the same sort of tracking - just a single field or a row of them.
+			Name more like (Gui)TableBuilder?
+				FlexTable (flexible table, can break across into columns)?
+		Would maintain internally:
+			Current column X
+			Current X (at END of last-added element, relative to current column X)
+			Current Y
+			Whether is first line in column (replacement for lineNum)
+			Max X ever (for getTotalWidth)
+			Max Y ever (for getTotalHeight)
+		Public functions:
+			__New(guiId, x, y, lineHeight, columnPadding)
+				Store off starting points and info
+				Initialize current, max values
+			newHeaderRow(text)
+				this.newRow()
+				Apply styling
+				Gui, Add, Text
+				Revert styling
+			newRow()
+				Increment Y by lineHeight
+				Update max Y
+			addCell(text, width)
+				Gui, Add, Text
+				Update current X using cell width (width calculated if not given)
+				Update max X
+			newColumn()
+				Set new column X offset (using current max X value + columnPadding)
+				Update max X
+			getTotalHeight()
+				Returns max Y ever - starting Y
+			getTotalWidth()
+				Returns max X ever - starting X
+		Make sure to call makeGuiTheDefault as needed before doing stuff with this new class.
 	Get rid of guiSettings["ExtraDataFields"] storage - just take it in and add it to dataIndices (dataFields).
 	Get rid of RowsPerColumn - new column stuff should be explicit by TL file.
 	ShowOverrideFields

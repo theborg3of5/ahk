@@ -14,10 +14,11 @@ class SelectorGui {
 	; == Public ====================
 	; ==============================
 	
-	__New(choices, sectionTitles = "", overrideFields = "", rowsPerColumn = 0, minColumnWidth = 0) {
+	__New(choices, sectionTitles = "", overrideFields = "", minColumnWidth = 0) {
 		this.overrideFields := overrideFields
 		
 		this.setSpecialChars()
+		this.setOffsets()
 		this.setGuiId("Selector" getNextGuiId())
 		this.makeGuiTheDefault()
 		
@@ -28,8 +29,8 @@ class SelectorGui {
 	; defaultOverrideData - Array of data label/column => value to put in.
 	show(windowTitle = "", defaultOverrideData = "") {
 		this.makeGuiTheDefault()
-		this.setDefaultOverrides(defaultOverrideData)
 		
+		this.setDefaultOverrides(defaultOverrideData)
 		this.showPopup(windowTitle)
 		
 		this.saveUserInputs()
@@ -56,11 +57,19 @@ class SelectorGui {
 	choiceFieldName := ""
 	overrideFieldNamePrefix := ""
 	
-	; GUI spacing properties
-	margins := {LEFT:10, RIGHT:10, TOP:10, BOTTOM:10}
-	padding := {INDEX_ABBREV:5, ABBREV_NAME:10, DATA_FIELDS:5, COLUMNS:30}
-	widths  := {INDEX:25, ABBREV:50} ; Other widths are calculated based on contents and available space
-	heights := {LINE:25, FIELD:24}
+	; GUI spacing/positioning properties
+	margins :=  {LEFT:10, RIGHT:10, TOP:10, BOTTOM:10}
+	padding :=  {INDEX_ABBREV:5, ABBREV_NAME:10, DATA_FIELDS:5, COLUMNS:30}
+	widths  :=  {INDEX:25, ABBREV:50} ; Other widths are calculated based on contents and available space
+	heights :=  {LINE:25, FIELD:24}
+	xOffsets := {} ; Populated by setOffsets()
+	
+	
+	currColumnX := 0
+	currLineY := 0
+	currColumnNum := 0
+	
+	columnWidths := []
 	
 	; GDB TODO stuff that changes/is different
 	guiId := ""
@@ -81,6 +90,13 @@ class SelectorGui {
 		; Names for global variables that we'll use for values of fields. This way they can be declared global and retrieved in the same way, without having to pre-define global variables.
 		this.choiceFieldName         := "Choice"   id
 		this.overrideFieldNamePrefix := "Override" id
+	}
+	
+	setOffsets() {
+		this.xOffsets["TITLE"]  := this.margins["LEFT"]
+		this.xOffsets["INDEX"]  := this.margins["LEFT"]
+		this.xOffsets["ABBREV"] := this.xOffsets["INDEX"]  + this.widths["INDEX"]  + this.padding["INDEX_ABBREV"]
+		this.xOffsets["NAME"]   := this.xOffsets["ABBREV"] + this.widths["ABBREV"] + this.padding["ABBREV_NAME"]
 	}
 	
 	; Make sure all of the Gui* commands refer to the right one.
@@ -107,28 +123,66 @@ class SelectorGui {
 	
 	addChoices(choices, sectionTitles = "") {
 		
+		; xOffsets["TITLE"]  
+		; xOffsets["INDEX"]  
+		; xOffsets["ABBREV"] 
+		; xOffsets["NAME"]   
+		
+		this.currColumnX   := this.margins["LEFT"]
+		this.currLineY     := this.margins["TOP"]
+		this.currColumnNum := 1
+		
+		lineNum := 0 ; GDB TODO should these be properties too?
+		
+		For i,choice in choices {
+			
+			; Start new column if needed
+			;  - Increment columnNum
+			;  - Update current column x (using this.columnWidths for previous + padding)
+			;  - Reset line number to 1
+			;  - Reset line Y
+			
+			; Add section title row if needed
+			;  - 
+			;  - 
+			;  - 
+			
+			; Add choice row
+			;  - 
+			;  - 
+			;  - 
+			
+			; Update:
+			;  - Max width within current column
+			;  - Max height across all columns
+			;  - Current line y (increment)
+			
+		}
+		
+		
+		
+		
+		
 		
 		; Element starting positions (these get updated per column)
-		xTitle       := this.margins["LEFT"]
-		xIndex       := this.margins["LEFT"]
-		xAbbrev      := xIndex  + this.widths["INDEX"]  + this.padding["INDEX_ABBREV"]
-		xName        := xAbbrev + this.widths["ABBREV"] + this.padding["ABBREV_NAME"]
+		; xTitle       := this.margins["LEFT"]
+		; xIndex       := this.margins["LEFT"]
+		; xAbbrev      := xIndex  + this.widths["INDEX"]  + this.padding["INDEX_ABBREV"]
+		; xName        := xAbbrev + this.widths["ABBREV"] + this.padding["ABBREV_NAME"]
 		
-		yCurrLine     := this.margins["TOP"]
+		; yCurrLine     := this.margins["TOP"]
 		
-		lineNum := 0
-		columnNum := 1
-		columnWidths := []
+		; lineNum := 0
+		; columnNum := 1
+		; columnWidths := []
 		
 		
 		For i,c in choices {
 			lineNum++
 			sectionTitle := sectionTitles[i]
 			
-			if(this.needNewColumn(sectionTitle, lineNum)) {
-				; If the section title just forced a new column, strip the special character and space off so we don't show them.
-				if(this.doesTitleForceNewColumn(sectionTitle))
-					sectionTitle := SubStr(sectionTitle, 3)
+			if(this.doesTitleForceNewColumn(sectionTitle)) {
+				sectionTitle := SubStr(sectionTitle, 3) ; Strip the special character and space off so we don't show them.
 				
 				; Add a new column. ; GDB TODO turn this into a function to add a new column
 				columnNum++
@@ -139,25 +193,12 @@ class SelectorGui {
 				xAbbrev += xLastColumnOffset
 				xName   += xLastColumnOffset
 				
-				if(!sectionTitle) { ; We're not starting a new title here, so show the previous one, continued.
-					titleInstance++
-					sectionTitle := currTitle " (" titleInstance ")"
-					isContinuedTitle := true
-				}
-				
 				lineNum := 1
 				yCurrLine := this.margins["TOP"]
 			}
 			
 			; Section title row
 			if(sectionTitle) {
-				if(!isContinuedTitle) {
-					titleInstance := 1
-					currTitle := sectionTitle
-				} else {
-					isContinuedTitle := false
-				}
-				
 				; Extra newline above section titles, unless they're on the first line of a column.
 				if(lineNum > 1) {
 					yCurrLine += this.heights["LINE"]
@@ -199,32 +240,8 @@ class SelectorGui {
 		}
 		
 		
-		widthTotal := this.getTotalWidth(columnWidths, this.padding["COLUMNS"], this.margins["LEFT"], this.margins["RIGHT"])
-		
-		
 		
 		heightTotal += this.margins["TOP"] + maxColumnHeight ; GDB TODO turn into class property
-	}
-	
-	needNewColumn(sectionTitle, lineNum) {
-		; Section title forces a new column
-		if(this.doesTitleForceNewColumn(sectionTitle))
-			return true
-		
-		; Otherwise, we're only going to compare to the maximum rows per column (assuming it's >0).
-		if(this.rowsPerColumn < 1)
-			return false
-		
-		; Out of space in the column
-		if(lineNum > this.rowsPerColumn)
-			return true
-		
-		; Technically have one left, but the current one is a title
-		; (which would leave the title by itself at the end of a column)
-		if(sectionTitle && ((lineNum + 1) > this.rowsPerColumn))
-			return true
-		
-		return false
 	}
 	
 	doesTitleForceNewColumn(sectionTitle) {

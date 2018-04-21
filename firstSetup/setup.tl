@@ -1,4 +1,4 @@
-+Title=Select Machine to set up:
++WindowTitle=Select Machine to set up:
 +ShowOverrideFields=1
 +MinColumnWidth=1000
 

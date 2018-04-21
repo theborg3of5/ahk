@@ -86,8 +86,11 @@ class Selector {
 		this.choices := choices
 	}
 	
-	updateGuiSettings(settings) {
-		this.guiSettings := mergeArrays(this.guiSettings, guiSettings)
+	setGuiSetting(name, value = "") {
+		if(name = "")
+			return
+		
+		this.guiSettings[name] := value
 	}
 	
 	; Extra data fields - should be added to overrideFields (so they show up in the popup)
@@ -206,7 +209,7 @@ class Selector {
 			}
 		}
 		
-		; DEBUG.popup("Selector.loadChoicesFromFile", "Processed indices", "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows(), "Selector label indices", this.overrideFields)
+		; DEBUG.popup("Selector.loadChoicesFromFile","Processed indices", "Index labels",tl.getIndexLabels(), "Separate rows",tl.getSeparateRows(), "Selector label indices",this.overrideFields)
 		
 		For i,currItem in list {
 			; Parse this size-n array into a new SelectorRow object.
@@ -219,57 +222,47 @@ class Selector {
 			
 			; Options for the selector in general.
 			if(firstChar = this.chars["SETTING"]) {
-				settingString := SubStr(currRow.data[1], 2) ; Strip off the = at the beginning
-				this.processSettingFromFile(settingString)
+				this.processSettingFromFile(currRow.data[1])
 			
 			; Special: add a section title to the list display.
 			} else if(firstChar = this.chars["SECTION_TITLE"]) {
-				; DEBUG.popup("Label char", this.chars["SECTION_TITLE"], "First char", firstChar, "Row", currRow)
-				; Format should be #{Space}Title
+				; Format should be "# Title"
 				idx := 0
 				if(this.choices.MaxIndex())
 					idx := this.choices.MaxIndex()
 				idx++ ; The next actual choice will be the first one under this header, so match that.
 				
 				this.sectionTitles[idx] := SubStr(currItem[1], 3) ; If there are multiple headers in a row (for example when choices are filtered out) they should get overwritten in order here (which is correct).
-				; DEBUG.popup("Just added nonchoice:", this.sectionTitles[this.sectionTitles.MaxIndex()], "At index", idx)
+				; DEBUG.popup("Just added section title:", this.sectionTitles[this.sectionTitles.MaxIndex()], "At index", idx)
 				
 			; Invisible, but viable, choice.
 			} else if(firstChar = this.chars["HIDDEN"]) {
-				; DEBUG.popup("Hidden char", this.chars["HIDDEN"], "First char", firstChar, "Row", currRow)
-				
-				; DEBUG.popup("Hidden choice added", currRow)
 				this.hiddenChoices.push(currRow)
+				; DEBUG.popup("Hidden choice added", currRow)
 			
 			; Otherwise, it's a visible, viable choice!
 			} else {
-				; DEBUG.popup("Choice added", currRow)
 				this.choices.push(currRow)
+				; DEBUG.popup("Choice added", currRow)
 			}
 		}
 	}
 	
 	processSettingFromFile(settingString) {
-		if(!settingString)
+		if(settingString = "")
 			return
 		
-		settingSplit := StrSplit(settingString, "=")
-		name  := settingSplit[1]
-		value := settingSplit[2]
+		settingString := SubStr(settingString, 2) ; Trim off settings character (+)
 		
-		if(name = "Title")
-			this.guiSettings["WindowTitle"] := value
-		if(name = "ShowOverrideFields")
-			this.guiSettings["ShowOverrideFields"] := (value = "1")
-		else if(name = "MinColumnWidth")
-			this.guiSettings["MinColumnWidth"] := value
+		settingSplit := StrSplit(settingString, "=")
+		this.setGuiSetting(settingSplit[1], settingSplit[2]) ; name, value
 	}
 	
 	doSelectGui(defaultData) {
 		if(this.guiSettings["ShowOverrideFields"]) ; Only send overrideFields if we're going to show them.
 			sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this.guiSettings["MinColumnWidth"])
 		else
-			sGui := new SelectorGui(this.choices, this.sectionTitles, "",               this.guiSettings["MinColumnWidth"])
+			sGui := new SelectorGui(this.choices, this.sectionTitles, "",                  this.guiSettings["MinColumnWidth"])
 		
 		sGui.show(this.guiSettings["WindowTitle"], defaultData)
 		data := []
@@ -287,38 +280,30 @@ class Selector {
 	
 	; Function to turn the input into something useful.
 	parseChoice(userChoiceString) {
-		commandCharPos := InStr(userChoiceString, this.chars["COMMAND"])
-		
-		rowToDo := ""
-		rest := SubStr(userChoiceString, 2)
-		
-		; No input in main box, but others possibly filled out
-		if(userChoiceString = "") {
-			return ""
-		
 		; Command choice - edit ini, etc.
-		} else if(commandCharPos = 1) {
-			; DEBUG.popup("Got command", rest)
-			commandChar := SubStr(rest, 1, 1)
+		commandCharPos := InStr(userChoiceString, this.chars["COMMAND"])
+		if(commandCharPos = 1) {
+			commandChar := SubStr(userChoiceString, 2, 1)
 			
 			; Special case: +e is the edit action, which will open the current INI file for editing.
-			if(commandChar = this.chars["COMMANDS", "EDIT"]) {
+			if(commandChar = this.chars["COMMANDS", "EDIT"])
 				Run(this.filePath)
-				return ""
-			}
+			
+			return ""
 		
 		; Otherwise, we search through the data structure by both number and shortcut and look for a match.
 		} else {
 			rowToDo := this.searchAllTables(userChoiceString)
+			; DEBUG.popup("Row to do", rowToDo)
+			return rowToDo.data
 		}
-		
-		; DEBUG.popup("Row to do", rowToDo)
-		
-		return rowToDo.data
 	}
 
 	; Search both given tables, the visible and the invisible.
 	searchAllTables(input) {
+		if(input = "")
+			return ""
+		
 		; Try the visible choices.
 		out := this.searchTable(this.choices, input)
 		if(out)
@@ -349,12 +334,12 @@ class Selector {
 	; Debug info
 	debugName := "Selector"
 	debugToString(debugBuilder) {
-		debugBuilder.addLine("Chars",          this.chars)
-		debugBuilder.addLine("Data indices",   this.overrideFields)
-		debugBuilder.addLine("GUI settings",   this.guiSettings)
-		debugBuilder.addLine("Filepath",       this.filePath)
-		debugBuilder.addLine("Choices",        this.choices)
-		debugBuilder.addLine("Hidden Choices", this.hiddenChoices)
-		debugBuilder.addLine("Section titles", this.sectionTitles)
+		debugBuilder.addLine("Chars",           this.chars)
+		debugBuilder.addLine("Override fields", this.overrideFields)
+		debugBuilder.addLine("GUI settings",    this.guiSettings)
+		debugBuilder.addLine("Filepath",        this.filePath)
+		debugBuilder.addLine("Choices",         this.choices)
+		debugBuilder.addLine("Hidden Choices",  this.hiddenChoices)
+		debugBuilder.addLine("Section titles",  this.sectionTitles)
 	}
 }

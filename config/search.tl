@@ -1,4 +1,4 @@
-+Title=Select type of search to run and input search text:
++WindowTitle=Select type of search to run and input search text:
 +ShowOverrideFields=1
 
 (		NAME								ABBREV		SUBTYPE															SEARCH_TYPE		APP_KEY		MACHINE	SEARCH_TERM

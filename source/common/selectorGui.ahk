@@ -49,13 +49,14 @@ class SelectorGui {
 	; ==============================
 	
 	chars := []
-	
-	; Input/output ; GDB TODO organize properties better
-	overrideFields := []
-	choiceQuery := ""
-	overrideData := ""
-	choiceFieldName := ""
+	guiId     := ""
+	guiHandle := ""
+	choiceFieldName         := ""
 	overrideFieldNamePrefix := ""
+	
+	overrideFields := []
+	choiceQuery    := ""
+	overrideData   := ""
 	
 	; GUI spacing/positioning properties
 	margins :=  {LEFT:10, RIGHT:10, TOP:10, BOTTOM:10}
@@ -63,17 +64,6 @@ class SelectorGui {
 	widths  :=  {INDEX:25, ABBREV:50} ; Other widths are calculated based on contents and available space
 	heights :=  {LINE:25, FIELD:24}
 	xOffsets := {} ; Populated by setOffsets()
-	
-	
-	currColumnX := 0
-	currLineY := 0
-	currColumnNum := 0
-	
-	columnWidths := []
-	
-	; GDB TODO stuff that changes/is different
-	guiId := ""
-	guiHandle := ""
 	
 	totalHeight := 0
 	totalWidth  := 0
@@ -101,13 +91,21 @@ class SelectorGui {
 	
 	; Make sure all of the Gui* commands refer to the right one.
 	makeGuiTheDefault() {
-		Gui, % this.guiId ":Default" ; GDB TODO test to make sure this works (vs: Gui, %guiId%:Default).
+		Gui, % this.guiId ":Default"
 	}
 	
 	buildPopup(choices, sectionTitles = "") {
+		this.totalHeight := 0
+		this.totalWidth  := 0
+		
 		this.createPopup()
+		
 		this.addChoices(choices, sectionTitles)
 		this.addFields()
+		
+		; Add in margins so we have an accurate popup size.
+		this.totalHeight += margins["TOP"]  + margins["BOTTOM"]
+		this.totalWidth  += margins["LEFT"] + margins["RIGHT"]
 	}
 	
 	createPopup() {
@@ -116,175 +114,94 @@ class SelectorGui {
 		Gui, Font, s12 cBDAE9D
 		Gui, Add, Button, Hidden Default +gSelectorGuiSubmit ; Hidden button for {Enter} submission.
 		this.guiHandle := WinExist() ; Because of +LastFound above, the new gui is the last found window, so WinExist() finds it.
-		
-		this.totalHeight := margins["TOP"]  + margins["BOTTOM"]
-		this.totalWidth  := margins["LEFT"] + margins["RIGHT"]
 	}
 	
 	addChoices(choices, sectionTitles = "") {
+		flex := new FlexTable(this.guiId, this.margins["LEFT"], this.margins["TOP"], this.heights["LINE"], this.padding["COLUMNS"])
 		
-		; xOffsets["TITLE"]  
-		; xOffsets["INDEX"]  
-		; xOffsets["ABBREV"] 
-		; xOffsets["NAME"]   
-		
-		this.currColumnX   := this.margins["LEFT"]
-		this.currLineY     := this.margins["TOP"]
-		this.currColumnNum := 1
-		
-		lineNum := 0 ; GDB TODO should these be properties too?
-		
+		isEmptyColumn := true
 		For i,choice in choices {
-			
-			; Start new column if needed
-			;  - Increment columnNum
-			;  - Update current column x (using this.columnWidths for previous + padding)
-			;  - Reset line number to 1
-			;  - Reset line Y
-			
-			; Add section title row if needed
-			;  - 
-			;  - 
-			;  - 
-			
-			; Add choice row
-			;  - 
-			;  - 
-			;  - 
-			
-			; Update:
-			;  - Max width within current column
-			;  - Max height across all columns
-			;  - Current line y (increment)
-			
-		}
-		
-		
-		
-		
-		
-		
-		; Element starting positions (these get updated per column)
-		; xTitle       := this.margins["LEFT"]
-		; xIndex       := this.margins["LEFT"]
-		; xAbbrev      := xIndex  + this.widths["INDEX"]  + this.padding["INDEX_ABBREV"]
-		; xName        := xAbbrev + this.widths["ABBREV"] + this.padding["ABBREV_NAME"]
-		
-		; yCurrLine     := this.margins["TOP"]
-		
-		; lineNum := 0
-		; columnNum := 1
-		; columnWidths := []
-		
-		
-		For i,c in choices {
-			lineNum++
 			sectionTitle := sectionTitles[i]
 			
+			; Add new column if needed
 			if(this.doesTitleForceNewColumn(sectionTitle)) {
 				sectionTitle := SubStr(sectionTitle, 3) ; Strip the special character and space off so we don't show them.
-				
-				; Add a new column. ; GDB TODO turn this into a function to add a new column
-				columnNum++
-				
-				xLastColumnOffset := columnWidths[columnNum - 1] + this.padding["COLUMNS"] ; GDB TODO column start (x value) should be a property.
-				xTitle  += xLastColumnOffset
-				xIndex  += xLastColumnOffset
-				xAbbrev += xLastColumnOffset
-				xName   += xLastColumnOffset
-				
-				lineNum := 1
-				yCurrLine := this.margins["TOP"]
+				flex.addColumn()
+				isEmptyColumn := true
 			}
 			
-			; Section title row
+			; Add header if needed
 			if(sectionTitle) {
-				; Extra newline above section titles, unless they're on the first line of a column.
-				if(lineNum > 1) {
-					yCurrLine += this.heights["LINE"]
-					lineNum++
+				; Extra newline above section titles, unless they're on the first thing in a column (in which case just add the cell).
+				if(!isEmptyColumn) {
+					flex.addRow()
+					flex.addRow()
 				}
 				
-				applyTitleFormat() ; GDB TODO make an addTitleLine function
-				Gui, Add, Text, % "x" xTitle " y" yCurrLine, %sectionTitle%
-				colWidthFromTitle := getLabelWidthForText(sectionTitle, "title" i) ; This must happen before we revert formatting, so that current styling (mainly bolding) is taken into account. ; GDB TODO move this in with other width-calculating stuff, just wrap it in apply/clearTitleFormat() calls.
-				clearTitleFormat()
-				
-				yCurrLine += this.heights["LINE"]
-				lineNum++
+				flex.addHeaderCell(sectionTitle)
+				isEmptyColumn := false
 			}
 			
-			name := c.data["NAME"]
-			if(IsObject(c.data["ABBREV"]))
-				abbrev := c.data["ABBREV", 1]
+			; Add choice
+			name := choice.data["NAME"]
+			if(IsObject(choice.data["ABBREV"]))
+				abbrev := choice.data["ABBREV", 1]
 			else
-				abbrev := c.data["ABBREV"]
+				abbrev := choice.data["ABBREV"]
 			
-			; GDB TODO add an addChoiceLine function (include/deal with needed surrounding logic too)
-			; addChoiceLine(index, abbrev, name, y) ; Overall X should come from current column X (which should be a property)
-			Gui, Add, Text, % "x" xIndex  " y" yCurrLine " w" this.widths["INDEX"]  " Right", % i ")"
-			Gui, Add, Text, % "x" xAbbrev " y" yCurrLine " w" this.widths["ABBREV"]         , % abbrev ":"
-			Gui, Add, Text, % "x" xName   " y" yCurrLine                                    , % name
-			
-			colWidthFromChoice := this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"] + this.padding["ABBREV_NAME"] + getLabelWidthForText(name, "name" i)
-			columnWidths[columnNum] := max(columnWidths[columnNum], colWidthFromTitle, colWidthFromChoice, this.guiSettings["MinColumnWidth"])
-			
-			yCurrLine += this.heights["LINE"]
-			maxColumnHeight := max(maxColumnHeight, yCurrLine - this.margins["TOP"])
+			if(!isEmptyColumn)
+				flex.addRow()
+			flex.addCell(i,      this.widths["INDEX"],  "Right")
+			flex.addCell(abbrev, this.widths["ABBREV"])
+			flex.addCell(name)
+			isEmptyColumn := false
 		}
 		
-		Loop, % columnWidths.MaxIndex() {
-			if(A_Index > 1)
-				this.totalWidth += this.padding["COLUMNS"]
-			this.totalWidth += columnWidths[A_Index]
-		}
-		
-		
-		
-		heightTotal += this.margins["TOP"] + maxColumnHeight ; GDB TODO turn into class property
+		this.totalHeight += flex.getTotalHeight()
+		this.totalWidth  += flex.getTotalWidth()
 	}
 	
 	doesTitleForceNewColumn(sectionTitle) {
 		return (SubStr(sectionTitle, 1, 2) = this.chars["NEW_COLUMN"] " ")
 	}
 	
-	
-	
-	
-	
-	
 	addFields() {
-		xInputChoice := this.margins["LEFT"]
-		xInputFirstData := this.margins["LEFT"] + this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"] + this.padding["ABBREV_NAME"] ; Line this up with the first name column
+		this.addChoiceField()
+		if(this.overrideFields)
+			this.addOverrideFields()
 		
-		yInput := maxColumnHeight + this.heights["LINE"] ; Extra empty row before inputs.
-		if(this.guiSettings["ShowOverrideFields"])
-			widthInputChoice := this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"] ; Main edit control is same size as index + abbrev columns combined.
-		else
-			widthInputChoice := widthTotal - (this.margins["LEFT"] + this.margins["RIGHT"])   ; Main edit control is nearly full width.
-		addInputField(this.choiceFieldName, xInputChoice, yInput, widthInputChoice, this.heights["FIELD"], "")
-		
-		if(this.guiSettings["ShowOverrideFields"]) {
-			numDataInputs := this.overrideFields.length()
-			leftoverWidth  := widthTotal - xInputFirstData - this.margins["RIGHT"]
-			widthInputData := (leftoverWidth - ((numDataInputs - 1) * this.padding["DATA_FIELDS"])) / numDataInputs
-			
-			xInput := xInputFirstData
-			For num,label in this.overrideFields {
-				if(data[label]) ; Data given as default
-					tempData := data[label]
-				else            ; Data label (treat like ghost text, filter out later if not modified)
-					tempData := label
-				
-				addInputField(this.overrideFieldNamePrefix num, xInput, yInput, widthInputData, this.heights["FIELD"], tempData) ; GDB TODO make the variable use the label instead of the num, so we can find it better later.
-				xInput += widthInputData + this.padding["DATA_FIELDS"]
-			}
-		}
-		
-		
-		heightTotal += this.heights["LINE"] + this.heights["FIELD"] + this.margins["BOTTOM"] ; GDB TODO turn into class property
+		this.totalHeight += this.heights["LINE"] + this.heights["FIELD"]
 	}
 	
+	addChoiceField() {
+		yField       := this.totalHeight + this.heights["LINE"]
+		xFieldChoice := this.margins["LEFT"] ; Lines up with first column of indices
+		
+		if(this.overrideFields)
+			wFieldChoice := this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"] ; Main edit control is same size as index + abbrev columns combined.
+		else
+			wFieldChoice := this.totalWidth ; Main edit control is the same width as the choices table (margins haven't been added in yet).
+		
+		addInputField(this.choiceFieldName, xFieldChoice, yField, wFieldChoice, this.heights["FIELD"], "")
+	}
+	
+	addOverrideFields() {
+		yField              := this.totalHeight + this.heights["LINE"]
+		xFieldOverrideBlock := this.margins["LEFT"] + this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"] + this.padding["ABBREV_NAME"] ; Lines up with the first column's names
+		wFieldOverride      := this.calcOverrideFieldWidth(this.totalWidth - xFieldOverrideBlock)
+		
+		xFieldOverride := xFieldOverrideBlock
+		For i,label in this.overrideFields {
+			addInputField(this.overrideFieldNamePrefix label, xFieldOverride, yField, wFieldOverride, this.heights["FIELD"], label) ; Default in the label, like ghost text. May be replaced by setDefaultOverrides() later.
+			xFieldOverride += wFieldOverride + this.padding["DATA_FIELDS"]
+		}
+	}
+	
+	calcOverrideFieldWidth(leftoverWidth) {
+		numDataFields  := this.overrideFields.length()
+		widthForFields := leftoverWidth - ((numDataFields - 1) * this.padding["DATA_FIELDS"])
+		return widthForFields / numDataFields
+	}
 	
 	setDefaultOverrides(defaultOverrideData) {
 		For label,value in defaultOverrideData {
@@ -312,7 +229,7 @@ class SelectorGui {
 		
 		; Override fields
 		For num,label in this.overrideFields {
-			inputVal := getInputFieldValue(this.overrideFieldNamePrefix num) ; SelectorOverride* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
+			inputVal := getInputFieldValue(this.overrideFieldNamePrefix label) ; SelectorOverride* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
 			if(inputVal && (inputVal != label))
 				this.overrideData[label] := inputVal
 		}

@@ -2,7 +2,6 @@
 	ShowOverrideFields
 		Get rid of setting from file - rely on whether there's a ) index row instead
 		Programmatically, should only need a parameter to suppress it, not turn it on
-			Need to make sure that dataIndices gets created when adding additional fields (basically just Snapper case)
 		Remove guiSettings["ShowOverrideFields"] subscript
 			Just check if this.dataIndices (but rename to this.overrideFields) is populated (so just if(this.dataIndices)?) instead
 	Possibly make "ghost text" data labels in fields a different text color?

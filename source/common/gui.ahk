@@ -28,9 +28,9 @@ clearTitleFormat() {
 }
 
 ; Assumes that the formatting that would apply to the text in question is currently in effect.
-getLabelWidthForText(name, uniqueId) {
+getLabelWidthForText(text, uniqueId) {
 	static ; Assumes-static mode - means that any variables that are used in here are assumed to be static
-	Gui, Add, Text, vVar%uniqueId%, % name
+	Gui, Add, Text, vVar%uniqueId%, % text
 	GuiControlGet, out, Pos, Var%uniqueId%
 	GuiControl, Hide, Var%uniqueId% ; GuiControl, Delete not yet implemented, so just hide the temporary control.
 	

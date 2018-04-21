@@ -2,9 +2,6 @@
 #IfWinActive, ahk_exe EpicStudio.exe
 	; Better access to INTermediate code.
 	!i::ControlSend, , ^+v
-
-	; Reopen recently closed file.
-	^+t::Send, !ffr{Enter}
 	
 	; Make copy line location !c.
 	!c::Send, ^!{Numpad9}

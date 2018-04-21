@@ -1,5 +1,6 @@
 'Selector'
 	Get rid of guiSettings["ExtraDataFields"] storage - just take it in and add it to dataIndices (dataFields).
+	Get rid of RowsPerColumn - new column stuff should be explicit by TL file.
 	ShowOverrideFields
 		Get rid of setting from file - rely on whether there's a ) index row instead
 		Programmatically, should only need a parameter to suppress it, not turn it on
@@ -14,6 +15,7 @@
 			.getChoiceQuery(), .getOverrideData()
 			All Gui stuff (including gui ID) move into that
 		Handle data summing as before, return finished data array
+	Consider switching getSpecialChars() stuff in selector to setSpecialChars (with overrides if possible) like selectorGui
 	Rework SelectorRow
 		Remove unused: userInput, buildSelectorRow()
 		Can we split constructor into two separate things?
@@ -36,6 +38,12 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 'New'
+	Selector of current DLGs?
+		Could move PRJ stuff to this as well.
+		Alternatively, could keep this in the TLG TL too?
+	Make a kind of snippet list for EpicStudio
+		Selector with different kinds of loops (zoID,zoDAT,various index versions, etc.), and override fields for iterator variable, levels down, etc.
+		Similar to for loop hotstring
 	Find a better way to keep AHK todo list?
 		This technically works, but it's weird to have to do commits just to record ideas to do.
 		Ideas:

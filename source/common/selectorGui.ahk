@@ -160,6 +160,8 @@ class SelectorGui {
 	}
 	
 	addFields() {
+		Gui, Font, -c ; Revert the color back to system default (so it can match the edit fields, which use the system default background.
+		
 		this.addChoiceField()
 		if(this.overrideFields)
 			this.addOverrideFields()

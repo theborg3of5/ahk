@@ -1,6 +1,4 @@
 'Selector'
-	Tweak text styling for fields - currently light, to match old dark theme
-		Probably make it black now.
 	Get rid of guiSettings["ExtraDataFields"] storage - just take it in and add it to dataIndices (dataFields).
 	ShowOverrideFields
 		Get rid of setting from file - rely on whether there's a ) index row instead

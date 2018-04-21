@@ -90,15 +90,15 @@ class Selector {
 		this.guiSettings := mergeArrays(this.guiSettings, guiSettings)
 	}
 	
-	; Extra data fields - should be added to dataIndices (so they show up in the popup)
+	; Extra data fields - should be added to overrideFields (so they show up in the popup)
 	; extraDataFields - simple array of column names. Default values (if desired) should be in selectGui > defaultOverrideData.
 	addExtraDataFields(extraDataFields) {
-		if(!this.dataIndices)
-			this.dataIndices := []
+		if(!this.overrideFields)
+			this.overrideFields := []
 		
-		baseLength := forceNumber(this.dataIndices.maxIndex())
+		baseLength := forceNumber(this.overrideFields.maxIndex())
 		For i,label in extraDataFields
-			this.dataIndices[baseLength + i] := label
+			this.overrideFields[baseLength + i] := label
 	}
 	
 	
@@ -137,14 +137,13 @@ class Selector {
 	; == Private ===================
 	; ==============================
 	
-	chars         := [] ; Special characters (see getSpecialChars)
-	choices       := [] ; Visible choices the user can pick from (array of SelectorRow objects).
-	hiddenChoices := [] ; Invisible choices the user can pick from (array of SelectorRow objects).
-	sectionTitles := [] ; Lines that will be displayed as titles (index matches the first choice that should be under this title)
-	dataIndices   := [] ; Mapping from data field indices => data labels (column headers) ; GDB TODO rename to overrideDataIndices? Could probably just check if it is an object (or just loop over it regardless) since it's only set when fields are shown.
-								; ^^^ If we do, would need to check this.guiSettings["ShowOverrideFields"] before populating dataIndices in file-reading function.
-	guiSettings   := [] ; Settings related to the GUI popup we show
-	filePath      := "" ; Where the .tl file lives if we're reading one in.
+	chars          := [] ; Special characters (see getSpecialChars)
+	choices        := [] ; Visible choices the user can pick from (array of SelectorRow objects).
+	hiddenChoices  := [] ; Invisible choices the user can pick from (array of SelectorRow objects).
+	sectionTitles  := [] ; Lines that will be displayed as titles (index matches the first choice that should be under this title)
+	overrideFields := [] ; Mapping from override field indices => data labels (column headers)
+	guiSettings    := [] ; Settings related to the GUI popup we show
+	filePath       := "" ; Where the .tl file lives if we're reading one in.
 	
 	; Names for global variables that we'll use for values of fields. This way they can be declared global and retrieved in the same way, without having to pre-define global variables.
 	choiceFieldName         := "SelectorChoice"
@@ -200,14 +199,14 @@ class Selector {
 		
 		; Special model index row that tells us how we should arrange data inputs.
 		if(IsObject(tl.getSeparateRows())) {
-			this.dataIndices := []
+			this.overrideFields := []
 			For i,fieldIndex in tl.getSeparateRow("DATA_INDEX") {
 				if(fieldIndex > 0) ; Filter out data columns we don't want fields for (fieldIndex = 0)
-					this.dataIndices[fieldIndex] := tl.getIndexLabel(i) ; Numeric, base-1 field index => column label (also the subscript in data array)
+					this.overrideFields[fieldIndex] := tl.getIndexLabel(i) ; Numeric, base-1 field index => column label (also the subscript in data array)
 			}
 		}
 		
-		; DEBUG.popup("Selector.loadChoicesFromFile", "Processed indices", "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows(), "Selector label indices", this.dataIndices)
+		; DEBUG.popup("Selector.loadChoicesFromFile", "Processed indices", "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows(), "Selector label indices", this.overrideFields)
 		
 		For i,currItem in list {
 			; Parse this size-n array into a new SelectorRow object.
@@ -268,7 +267,7 @@ class Selector {
 	
 	doSelectGui(defaultData) {
 		if(this.guiSettings["ShowOverrideFields"]) ; Only send overrideFields if we're going to show them.
-			sGui := new SelectorGui(this.choices, this.sectionTitles, this.dataIndices, this.guiSettings["MinColumnWidth"])
+			sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this.guiSettings["MinColumnWidth"])
 		else
 			sGui := new SelectorGui(this.choices, this.sectionTitles, "",               this.guiSettings["MinColumnWidth"])
 		
@@ -351,7 +350,7 @@ class Selector {
 	debugName := "Selector"
 	debugToString(debugBuilder) {
 		debugBuilder.addLine("Chars",          this.chars)
-		debugBuilder.addLine("Data indices",   this.dataIndices)
+		debugBuilder.addLine("Data indices",   this.overrideFields)
 		debugBuilder.addLine("GUI settings",   this.guiSettings)
 		debugBuilder.addLine("Filepath",       this.filePath)
 		debugBuilder.addLine("Choices",        this.choices)

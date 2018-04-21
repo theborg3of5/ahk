@@ -26,9 +26,6 @@
 				ShowOverrideFields
 					If set to 1, the UI will show an additional input box on the UI for each piece defined by the model row (excluding NAME, ABBREV, and ACTION). Note that these will be shown in the order they are listed by the model row, unless a model index row is present, at which point it respects that.
 				
-				RowsPerColumn
-					Set this to any number X to have the UI start a new column when it hits that many rows in the current column. Note that the current section title will carry over with a (2) if it's the first time it's been broken across columns, (3) if it's the second time, etc.
-				
 				MinColumnWidth
 					Set this to any number X to have the UI be X pixels wide at a minimum (per column if multiple columns are shown). The UI might be larger if names are too long to fit.
 	
@@ -171,7 +168,6 @@ class Selector {
 	getDefaultGuiSettings() {
 		settings := []
 		
-		settings["RowsPerColumn"]      := 99
 		settings["MinColumnWidth"]     := 0
 		settings["WindowTitle"]        := "Please make a choice by either number or abbreviation:"
 		settings["ShowOverrideFields"] := false
@@ -283,8 +279,6 @@ class Selector {
 			this.guiSettings["WindowTitle"] := value
 		if(name = "ShowOverrideFields")
 			this.guiSettings["ShowOverrideFields"] := (value = "1")
-		else if(name = "RowsPerColumn")
-			this.guiSettings["RowsPerColumn"] := value
 		else if(name = "MinColumnWidth")
 			this.guiSettings["MinColumnWidth"] := value
 	}

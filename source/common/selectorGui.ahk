@@ -56,14 +56,13 @@ class SelectorGui {
 	
 	overrideFields := []
 	choiceQuery    := ""
-	overrideData   := ""
+	overrideData   := []
 	
 	; GUI spacing/positioning properties
 	margins :=  {LEFT:10, RIGHT:10, TOP:10, BOTTOM:10}
 	padding :=  {INDEX_ABBREV:5, ABBREV_NAME:10, DATA_FIELDS:5, COLUMNS:30}
 	widths  :=  {INDEX:25, ABBREV:50} ; Other widths are calculated based on contents and available space
 	heights :=  {LINE:25, FIELD:24}
-	xOffsets := {} ; Populated by setOffsets()
 	
 	totalHeight := 0
 	totalWidth  := 0
@@ -82,13 +81,6 @@ class SelectorGui {
 		this.overrideFieldNamePrefix := "Override" id
 	}
 	
-	setOffsets() {
-		this.xOffsets["TITLE"]  := this.margins["LEFT"]
-		this.xOffsets["INDEX"]  := this.margins["LEFT"]
-		this.xOffsets["ABBREV"] := this.xOffsets["INDEX"]  + this.widths["INDEX"]  + this.padding["INDEX_ABBREV"]
-		this.xOffsets["NAME"]   := this.xOffsets["ABBREV"] + this.widths["ABBREV"] + this.padding["ABBREV_NAME"]
-	}
-	
 	; Make sure all of the Gui* commands refer to the right one.
 	makeGuiTheDefault() {
 		Gui, % this.guiId ":Default"
@@ -104,8 +96,9 @@ class SelectorGui {
 		this.addFields()
 		
 		; Add in margins so we have an accurate popup size.
-		this.totalHeight += margins["TOP"]  + margins["BOTTOM"]
-		this.totalWidth  += margins["LEFT"] + margins["RIGHT"]
+		this.totalHeight += this.margins["TOP"]  + this.margins["BOTTOM"]
+		this.totalWidth  += this.margins["LEFT"] + this.margins["RIGHT"]
+		; DEBUG.popup("SelectorGui.buildPopup","Finish", "height",this.totalHeight, "width",this.totalWidth)
 	}
 	
 	createPopup() {
@@ -151,14 +144,15 @@ class SelectorGui {
 			
 			if(!isEmptyColumn)
 				flex.addRow()
-			flex.addCell(i,      this.widths["INDEX"],  "Right")
-			flex.addCell(abbrev, this.widths["ABBREV"])
-			flex.addCell(name)
+			flex.addCell(i ")",      0,                            this.widths["INDEX"],  "Right")
+			flex.addCell(abbrev ":", this.padding["INDEX_ABBREV"], this.widths["ABBREV"])
+			flex.addCell(name,       this.padding["ABBREV_NAME"])
 			isEmptyColumn := false
 		}
 		
 		this.totalHeight += flex.getTotalHeight()
 		this.totalWidth  += flex.getTotalWidth()
+		; DEBUG.popup("SelectorGui.addChoices","Finish", "height",this.totalHeight, "width",this.totalWidth)
 	}
 	
 	doesTitleForceNewColumn(sectionTitle) {
@@ -171,10 +165,11 @@ class SelectorGui {
 			this.addOverrideFields()
 		
 		this.totalHeight += this.heights["LINE"] + this.heights["FIELD"]
+		; DEBUG.popup("SelectorGui.addFields","Finish", "height",this.totalHeight, "width",this.totalWidth)
 	}
 	
 	addChoiceField() {
-		yField       := this.totalHeight + this.heights["LINE"]
+		yField       := this.margins["TOP"] + this.totalHeight + this.heights["LINE"]
 		xFieldChoice := this.margins["LEFT"] ; Lines up with first column of indices
 		
 		if(this.overrideFields)
@@ -182,13 +177,15 @@ class SelectorGui {
 		else
 			wFieldChoice := this.totalWidth ; Main edit control is the same width as the choices table (margins haven't been added in yet).
 		
-		addInputField(this.choiceFieldName, xFieldChoice, yField, wFieldChoice, this.heights["FIELD"], "")
+		addInputField(this.choiceFieldName, xFieldChoice, yField, wFieldChoice, this.heights["FIELD"])
 	}
 	
 	addOverrideFields() {
-		yField              := this.totalHeight + this.heights["LINE"]
+		yField              := this.margins["TOP"]  + this.totalHeight     + this.heights["LINE"]
 		xFieldOverrideBlock := this.margins["LEFT"] + this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"] + this.padding["ABBREV_NAME"] ; Lines up with the first column's names
-		wFieldOverride      := this.calcOverrideFieldWidth(this.totalWidth - xFieldOverrideBlock)
+		leftoverWidth       := this.totalWidth - (xFieldOverrideBlock - this.margins["LEFT"]) ; width of choices table - portion that's already accounted for (choice field + padding)
+		wFieldOverride      := this.calcOverrideFieldWidth(leftoverWidth)
+		; DEBUG.popup("SelectorGui.addOverrideFields","Total width calculated", "this.totalWidth",this.totalWidth, "xFieldOverrideBlock",xFieldOverrideBlock, "wFieldOverride",wFieldOverride)
 		
 		xFieldOverride := xFieldOverrideBlock
 		For i,label in this.overrideFields {
@@ -200,6 +197,7 @@ class SelectorGui {
 	calcOverrideFieldWidth(leftoverWidth) {
 		numDataFields  := this.overrideFields.length()
 		widthForFields := leftoverWidth - ((numDataFields - 1) * this.padding["DATA_FIELDS"])
+		; DEBUG.popup("SelectorGui.calcOverrideFieldWidth","Done calculating", "numDataFields",numDataFields, "leftoverWidth",leftoverWidth, "widthForFields",widthForFields)
 		return widthForFields / numDataFields
 	}
 	

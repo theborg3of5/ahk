@@ -18,8 +18,11 @@ class FlexTable {
 		this.columnPadding := columnPadding
 	}
 	
-	addCell(cellText = "", width = "", extraProperties = "") {
+	addCell(cellText = "", leftPadding = "", width = "", extraProperties = "") {
 		this.makeGuiTheDefault()
+		
+		if(leftPadding)
+			this.addToX(leftPadding)
 		
 		propString := "x" this.xCurr " y" this.yCurr
 		if(width != "")
@@ -35,11 +38,11 @@ class FlexTable {
 		this.addToX(width)
 	}
 	
-	addHeaderCell(titleText, width = "", extraProperties = "") {
+	addHeaderCell(titleText, leftPadding = "", width = "", extraProperties = "") {
 		this.makeGuiTheDefault()
 		
 		applyTitleFormat()
-		this.addCell(titleText, width, extraProperties)
+		this.addCell(titleText, leftPadding, width, extraProperties)
 		clearTitleFormat()
 	}
 	

@@ -110,17 +110,13 @@ class Selector {
 	;                       the user's choice.
 	selectGui(returnColumn = "", title = "", showOverrideFields = "", defaultOverrideData = "") {
 		; DEBUG.popup("Selector.selectGui", "Start", "Default override data", defaultOverrideData, "GUI Settings", guiSettings)
-		data := []
-		if(defaultOverrideData)
-			data := mergeArrays(data, defaultOverrideData)
-		
 		if(title)
 			this.guiSettings["WindowTitle"] := title
 		if(showOverrideFields != "") ; Check against blank since this is a boolean value
 			this.guiSettings["ShowOverrideFields"] := showOverrideFields
 		
 		; DEBUG.popup("User Input",userChoiceString, "data",data)
-		data := this.launchSelectorPopup(data)
+		data := this.doSelectGui(defaultOverrideData)
 		if(returnColumn)
 			return data[returnColumn]
 		else
@@ -293,213 +289,24 @@ class Selector {
 			this.guiSettings["MinColumnWidth"] := value
 	}
 	
-	; Generate the text for the GUI and display it, returning the user's response.
-	launchSelectorPopup(data) {
-		; Create and begin styling the GUI.
-		guiHandle := this.createSelectorGui()
-		
-		; GUI sizes
-		marginLeft   := 10
-		marginRight  := 10
-		marginTop    := 10
-		marginBottom := 10
-		
-		padIndexAbbrev := 5
-		padAbbrevName  := 10
-		padInputData   := 5
-		padColumn      := 30
-		
-		widthIndex  := 25
-		widthAbbrev := 50
-		; (widthName and widthInputChoice/widthInputData exist but are calculated)
-		
-		heightLine  := 25
-		heightInput := 24
-	
-		; Element starting positions (these get updated per column)
-		xTitle       := marginLeft
-		xIndex       := marginLeft
-		xAbbrev      := xIndex  + widthIndex  + padIndexAbbrev
-		xName        := xAbbrev + widthAbbrev + padAbbrevName
-		xInputChoice := marginLeft
-		
-		xNameFirstCol := xName
-		yCurrLine     := marginTop
-		
-		lineNum := 0
-		columnNum := 1
-		columnWidths := []
-		
-		For i,c in this.choices {
-			lineNum++
-			title := this.sectionTitles[i]
-			
-			; Add a new column as needed.
-			if(this.needNewColumn(title, lineNum, this.guiSettings["RowsPerColumn"])) {
-				columnNum++
-				
-				xLastColumnOffset := columnWidths[columnNum - 1] + padColumn
-				xTitle  += xLastColumnOffset
-				xIndex  += xLastColumnOffset
-				xAbbrev += xLastColumnOffset
-				xName   += xLastColumnOffset
-				
-				if(!title) { ; We're not starting a new title here, so show the previous one, continued.
-					titleInstance++
-					title := currTitle " (" titleInstance ")"
-					isContinuedTitle := true
-				}
-				
-				lineNum := 1
-				yCurrLine := marginTop
-			}
-			
-			; Title rows.
-			if(title) {
-				if(!isContinuedTitle) {
-					titleInstance := 1
-					currTitle := title
-				} else {
-					isContinuedTitle := false
-				}
-				
-				; Extra newline above titles, unless they're on the first line of a column.
-				if(lineNum > 1) {
-					yCurrLine += heightLine
-					lineNum++
-				}
-				
-				applyTitleFormat()
-				Gui, Add, Text, x%xTitle% y%yCurrLine%, %title%
-				colWidthFromTitle := getLabelWidthForText(title, "title" i) ; This must happen before we revert formatting, so that current styling (mainly bolding) is taken into account.
-				clearTitleFormat()
-				
-				yCurrLine += heightLine
-				lineNum++
-			}
-			
-			name := c.data["NAME"]
-			if(IsObject(c.data["ABBREV"]))
-				abbrev := c.data["ABBREV", 1]
-			else
-				abbrev := c.data["ABBREV"]
-			
-			Gui, Add, Text, x%xIndex%  y%yCurrLine% w%widthIndex%   Right, % i ")"
-			Gui, Add, Text, x%xAbbrev% y%yCurrLine% w%widthAbbrev%,        % abbrev ":"
-			Gui, Add, Text, x%xName%   y%yCurrLine%,                       % name
-			
-			widthName := getLabelWidthForText(name, "name" i)
-			colWidthFromChoice := widthIndex + padIndexAbbrev + widthAbbrev + padAbbrevName + widthName
-			
-			; DEBUG.popup("Column",columnWidths[columnNum], "Title",colWidthFromTitle, "Choice",colWidthFromChoice, "Min",this.guiSettings["MinColumnWidth"])
-			columnWidths[columnNum] := max(columnWidths[columnNum], colWidthFromTitle, colWidthFromChoice, this.guiSettings["MinColumnWidth"])
-			
-			yCurrLine += heightLine
-			maxColumnHeight := max(maxColumnHeight, yCurrLine)
-		}
-		
-		widthTotal := this.getTotalWidth(columnWidths, padColumn, marginLeft, marginRight)
-		yInput := maxColumnHeight + heightLine ; Extra empty row before inputs.
-		if(this.guiSettings["ShowOverrideFields"])
-			widthInputChoice := widthIndex + padIndexAbbrev + widthAbbrev ; Main edit control is same size as index + abbrev columns combined.
+	doSelectGui(defaultData) {
+		if(this.guiSettings["ShowOverrideFields"]) ; Only send overrideFields if we're going to show them.
+			sGui := new SelectorGui(this.choices, this.sectionTitles, this.dataIndices, this.guiSettings["MinColumnWidth"])
 		else
-			widthInputChoice := widthTotal - (marginLeft + marginRight)   ; Main edit control is nearly full width.
-		addInputField(this.choiceFieldName, xInputChoice, yInput, widthInputChoice, heightInput, "")
+			sGui := new SelectorGui(this.choices, this.sectionTitles, "",               this.guiSettings["MinColumnWidth"])
 		
-		if(this.guiSettings["ShowOverrideFields"]) {
-			numDataInputs := this.dataIndices.length()
-			leftoverWidth  := widthTotal - xNameFirstCol - marginRight
-			widthInputData := (leftoverWidth - ((numDataInputs - 1) * padInputData)) / numDataInputs
-			
-			xInput := xNameFirstCol
-			For num,label in this.dataIndices {
-				if(data[label]) ; Data given as default
-					tempData := data[label]
-				else            ; Data label (treat like ghost text, filter out later if not modified)
-					tempData := label
-				
-				addInputField(this.overrideFieldNamePrefix num, xInput, yInput, widthInputData, heightInput, tempData)
-				xInput += widthInputData + padInputData
-			}
-		}
+		sGui.show(this.guiSettings["WindowTitle"], defaultData)
+		data := []
 		
-		; Resize the GUI to show the newly added edit control row.
-		heightTotal += maxColumnHeight + heightLine + heightInput + marginBottom ; maxColumnHeight includes marginTop, heightLine is for extra line between labels and inputs
-		Gui, Show, h%heightTotal% w%widthTotal%, % this.guiSettings["WindowTitle"]
+		; User's choice is main data source
+		choiceData := this.parseChoice(sGui.getChoiceQuery())
+		data := mergeArrays(data, choiceData)
 		
-		; Focus the edit control.
-		GuiControl, Focus, % this.choiceFieldName
+		; Override fields can add to that too.
+		overrideData := sGui.getOverrideData()
+		data := mergeArrays(data, overrideData)
 		
-		; Wait for the user to submit the GUI.
-		WinWaitClose, ahk_id %guiHandle%
-		
-		choiceInput := getInputFieldValue(this.choiceFieldName)
-		
-		; Determine the user's choice (if any) and merge that info into the data array.
-		if(choiceInput) ; User put something in the first box, which should come from the choices shown.
-			choiceData := this.parseChoice(choiceInput)
-			
-		if(choiceData) {
-			data := mergeArrays(data, choiceData)
-			gotDataFromUser := true
-		}
-		
-		; Read override data from any visible fields.
-		if(this.guiSettings["ShowOverrideFields"]) {
-			For num,label in this.dataIndices {
-				inputVal := getInputFieldValue(this.overrideFieldNamePrefix num) ; SelectorOverride* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
-				if(inputVal && (inputVal != label)) {
-					data[label] := inputVal
-					gotDataFromUser := true
-				}
-			}
-		}
-		
-		if(!gotDataFromUser)
-			return ""
 		return data
-	}
-	
-	createSelectorGui() {
-		Gui, +LabelSelector  ; Allows use of LabelSelector* functions (custom label to override using default GuiClose, GuiSubmit, etc.)
-		Gui, Color, 2A211C
-		Gui, Font, s12 cBDAE9D
-		Gui, +LastFound
-		Gui, Add, Button, Hidden Default +gSelectorSubmit ; Hidden button for {Enter} submission.
-		return WinExist()
-	}
-	
-	needNewColumn(ByRef sectionTitle, lineNum, rowsPerColumn) {
-		; Special character in sectionTitle forces a new column
-		if(SubStr(sectionTitle, 1, 2) = this.chars["NEW_COLUMN"] " ") {
-			sectionTitle := SubStr(sectionTitle, 3) ; Strip special character and space off, they've served their purpose.
-			return true
-		}
-		
-		; Out of space in the column
-		if(lineNum > rowsPerColumn)
-			return true
-		
-		; Technically have one left, but the current one is a title
-		; (which would leave the title by itself at the end of a column)
-		if(sectionTitle && ((lineNum + 1) > rowsPerColumn))
-			return true
-		
-		return false
-	}
-	
-	getTotalWidth(columnWidths, paddingBetweenColumns, leftMargin, rightMargin) {
-		totalWidth := 0
-		
-		totalWidth += leftMargin
-		Loop, % columnWidths.MaxIndex() {
-			if(A_Index > 1)
-				totalWidth += paddingBetweenColumns
-			totalWidth += columnWidths[A_Index]
-		}
-		totalWidth += rightMargin
-		
-		return totalWidth
 	}
 	
 	; Function to turn the input into something useful.

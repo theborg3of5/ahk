@@ -46,9 +46,11 @@ addInputField(varName, x, y, width, height, data = "") {
 	global          ; This allows us to get at the variable for the field (varName) later on.
 	%varName% := "" ; Clear the variable so there's no bleed-over from previous uses.
 	Gui, Add, Edit, v%varName% x%x% y%y% w%width% h%height% -E%WS_EX_CLIENTEDGE% +Border, % data
+	; DEBUG.popup("gui.addInputField","Finished creating field", "varName",varName, "data",data)
 }
 getInputFieldValue(varName) {
 	global
 	local value := %varName%
+	; DEBUG.popup("gui.getInputFieldValue","Finished getting value", "varName",varName, "value",value)
 	return value
 }

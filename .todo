@@ -7,14 +7,6 @@
 			Need to make sure that dataIndices gets created when adding additional fields (basically just Snapper case)
 		Remove guiSettings["ShowOverrideFields"] subscript
 			Just check if this.dataIndices (but rename to this.overrideFields) is populated (so just if(this.dataIndices)?) instead
-	Turn launchSelectorPopup() into doSelectGui() instead
-		Takes defaultData input
-		New class for popup
-			Constructor takes needed info, builds the thing with (private) .build()
-			.show() shows the popup, including waiting on it to be closed
-			.getChoiceQuery(), .getOverrideData()
-			All Gui stuff (including gui ID) move into that
-		Handle data summing as before, return finished data array
 	Consider switching getSpecialChars() stuff in selector to setSpecialChars (with overrides if possible) like selectorGui
 	Rework SelectorRow
 		Remove unused: userInput, buildSelectorRow()
@@ -25,7 +17,6 @@
 			Have launchSelectorPopup() use .name/.abbrev instead of .data["NAME"]/.data["ABBREV"]
 	Possibly make "ghost text" data labels in fields a different text color?
 		Could change based on event that happens when edit field contents are changed
-	Updates in actionObject before we switch over (since defaultOverrideData passed in that isn't visible won't make it out)
 	Rework Selector documentation
 	
 'Fixes'

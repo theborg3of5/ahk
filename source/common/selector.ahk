@@ -90,15 +90,17 @@ class Selector {
 	
 	setGuiSettings(settings) {
 		this.guiSettings := mergeArrays(this.guiSettings, guiSettings)
-		if(settings["ExtraDataFields"])
-			this.processExtraDataFields(settings["ExtraDataFields"])
 	}
 	
 	; Extra data fields - should be added to dataIndices (so they show up in the popup)
 	; extraDataFields - simple array of column names. Default values (if desired) should be in selectGui > defaultOverrideData.
 	addExtraDataFields(extraDataFields) {
-		this.guiSettings["ExtraDataFields"] := mergeArrays(this.guiSettings["ExtraDataFields"], extraDataFields)
-		this.processExtraDataFields(extraDataFields)
+		if(!this.dataIndices)
+			this.dataIndices := []
+		
+		baseLength := forceNumber(this.dataIndices.maxIndex())
+		For i,label in extraDataFields
+			this.dataIndices[baseLength + i] := label
 	}
 	
 	; defaultOverrideData - If the indices for these overrides are also set by the user's overall choice, the override value will
@@ -171,7 +173,6 @@ class Selector {
 		settings["MinColumnWidth"]     := 0
 		settings["WindowTitle"]        := "Please make a choice by either number or abbreviation:"
 		settings["ShowOverrideFields"] := false
-		settings["ExtraDataFields"]    := ""
 		
 		return settings
 	}
@@ -186,14 +187,6 @@ class Selector {
 		tableListSettings["FORMAT", "DEFAULT_INDICES"] := ["NAME", "ABBREV", "VALUE"]
 		
 		return tableListSettings
-	}
-	
-	processExtraDataFields(extraDataFields) {
-		if(!this.dataIndices)
-			this.dataIndices := []
-		baseLength := forceNumber(this.dataIndices.maxIndex())
-		For i,label in extraDataFields
-			this.dataIndices[baseLength + i] := label
 	}
 	
 	; Load the choices and other such things from a specially formatted file.

@@ -68,13 +68,10 @@ class Selector {
 	; ==============================
 	
 	__New(filePath = "", filter = "", tableListSettings = "") {
-		this.chars       := this.getSpecialChars()
-		this.guiSettings := this.getDefaultGuiSettings()
+		this.setSpecialChars()
+		this.setDefaultGuiSettings()
 		
 		tlSettings := mergeArrays(this.getDefaultTableListSettings(), tableListSettings)
-		
-		guiId := "Selector" getNextGuiId()
-		Gui, %guiId%:Default ; GDB TODO if we want to truly run Selectors in parallel, we'll probably need to add guiId as a property and add it to all the Gui* calls.
 		
 		if(filePath) {
 			this.filePath := findConfigFilePath(filePath)
@@ -84,11 +81,12 @@ class Selector {
 		; DEBUG.popup("Selector.__New", "Finish", "Filepath", this.filePath, "TableListSettings", this.tableListSettings, "Filter", this.filter, "State", this)
 	}
 	
+	
 	setChoices(choices) {
 		this.choices := choices
 	}
 	
-	setGuiSettings(settings) {
+	updateGuiSettings(settings) {
 		this.guiSettings := mergeArrays(this.guiSettings, guiSettings)
 	}
 	
@@ -102,6 +100,7 @@ class Selector {
 		For i,label in extraDataFields
 			this.dataIndices[baseLength + i] := label
 	}
+	
 	
 	; defaultOverrideData - If the indices for these overrides are also set by the user's overall choice, the override value will
 	;                       only be used if the corresponding additional field is visible. That means if ShowOverrideFields isn't set
@@ -151,30 +150,21 @@ class Selector {
 	choiceFieldName         := "SelectorChoice"
 	overrideFieldNamePrefix := "SelectorOverride"
 	
-	getSpecialChars() {
-		chars := []
+	setSpecialChars() {
+		this.chars["SECTION_TITLE"] := "#"
+		this.chars["HIDDEN"]        := "*"
+		this.chars["MODEL_INDEX"]   := ")"
+		this.chars["SETTING"]       := "+"
+		this.chars["COMMAND"]       := "+"
 		
-		chars["SECTION_TITLE"] := "#"
-		chars["NEW_COLUMN"]    := "|"
-		chars["HIDDEN"]        := "*"
-		chars["MODEL_INDEX"]   := ")"
-		chars["SETTING"]       := "+"
-		chars["COMMAND"]       := "+"
-		
-		chars["COMMANDS"] := []
-		chars["COMMANDS", "EDIT"]  := "e"
-		
-		return chars
+		this.chars["COMMANDS"] := []
+		this.chars["COMMANDS", "EDIT"]  := "e"
 	}
 	
-	getDefaultGuiSettings() {
-		settings := []
-		
-		settings["MinColumnWidth"]     := 0
-		settings["WindowTitle"]        := "Please make a choice by either number or abbreviation:"
-		settings["ShowOverrideFields"] := false
-		
-		return settings
+	setDefaultGuiSettings() {
+		this.guiSettings["MinColumnWidth"]     := 0
+		this.guiSettings["WindowTitle"]        := "Please make a choice by either number or abbreviation:"
+		this.guiSettings["ShowOverrideFields"] := false
 	}
 	
 	; Default settings to use with TableList object when parsing input file.

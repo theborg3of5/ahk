@@ -1,11 +1,12 @@
 'Selector'
+	Possibly make "ghost text" data labels in fields a different text color?
+		Could change based on event that happens when edit field contents are changed
 	ShowOverrideFields
 		Get rid of setting from file - rely on whether there's a ) index row instead
 		Programmatically, should only need a parameter to suppress it, not turn it on
 			Need to make sure that dataIndices gets created when adding additional fields (basically just Snapper case)
 		Remove guiSettings["ShowOverrideFields"] subscript
 			Just check if this.dataIndices (but rename to this.overrideFields) is populated (so just if(this.dataIndices)?) instead
-	Consider switching getSpecialChars() stuff in selector to setSpecialChars (with overrides if possible) like selectorGui
 	Rework SelectorRow
 		Remove unused: userInput, buildSelectorRow()
 		Can we split constructor into two separate things?
@@ -13,8 +14,6 @@
 		Reintroduce .name and .abbrev (as properties)
 			In constructor, should come from either parameters (if given) or from "NAME"/"ABBREV" subscripts of data array
 			Have launchSelectorPopup() use .name/.abbrev instead of .data["NAME"]/.data["ABBREV"]
-	Possibly make "ghost text" data labels in fields a different text color?
-		Could change based on event that happens when edit field contents are changed
 	Rework Selector documentation
 	
 'Fixes'

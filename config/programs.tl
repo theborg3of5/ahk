@@ -4,7 +4,6 @@
 	Chrome				chrome.exe				Chrome_WidgetWin_1	-				-								Google\Chrome\Application\chrome.exe
 	EMC2					EpicD82.exe				-							EMC2			-								Epic\v8.2\EMC2\Shared Files\EpicD82.exe									EMC2Update env=TRACKAPPTCP
 	EpicStudio			EpicStudio.exe			-							EpicStudio	-								EpicStudio\EpicStudio.exe														-										EPIC_LAPTOP
-	Notepad++			notepad++.exe			Notepad++				-				-								Notepad++\notepad++.exe
 	Outlook				OUTLOOK.EXE				rctrl_renwnd32			-				-								Microsoft Office\Office16\OUTLOOK.EXE
 	Thunder				Thunder.exe				-							Thunder		-								Thunder\Thunder.exe
 	VB6					VB6.exe					wndclass_desked_gsk	-				-								Microsoft Visual Studio\VB98\VB6.EXE
@@ -20,7 +19,7 @@
 
 [{PATH}b:C:\Program Files\]
 	Everything			Everything.exe			EVERYTHING				-				-								Everything\Everything.exe
-	Notepad++			notepad++.exe			Notepad++				-				-								Notepad++\notepad++.exe															-										EPIC_LAPTOP
+	Notepad++			notepad++.exe			Notepad++				-				-								Notepad++\notepad++.exe
 	TrueCrypt			TrueCrypt.exe			CustomDlg				-				-								TrueCrypt\TrueCrypt.exe
 	WinSpy				AutoHotkey.exe			AutoHotkeyGUI			-				-								AutoHotkey\WindowSpy.ahk
 	yEd					yEd.exe					-							-				-								yWorks\yEd\yEd.exe

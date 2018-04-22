@@ -4,12 +4,15 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #SingleInstance force  ; Ensures that if this script is running, running it again replaces the first instance.
 
 #Include %A_ScriptDir%\..\source\common
+#Include _constants.ahk
+#Include _setup.ahk
 #Include commandFunctions.ahk
 #Include io.ahk
 #Include data.ahk
 #Include debug.ahk
 #Include epic.ahk
 #Include file.ahk
+#Include flexTable.ahk
 #Include gui.ahk
 #Include HTTPRequest.ahk
 #Include runCommands.ahk
@@ -19,7 +22,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include string.ahk
 #Include tableList.ahk
 #Include tableListMod.ahk
-#Include tray.ahk
 #Include window.ahk
 setCommonHotkeysType(HOTKEY_TYPE_Standalone)
 
@@ -50,7 +52,7 @@ gitNames.Push(".gitattributes")
 ; Prompt the user for which computer this is.
 s := new Selector(tlSetupPath)
 machineInfo := s.selectGui()
-if(!machineInfo) {
+if(machineInfo["WHICH_MACHINE"] = "") {
 	MsgBox, No machine given, exiting setup...
 	ExitApp
 }

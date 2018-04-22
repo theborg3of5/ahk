@@ -90,6 +90,10 @@ class FlexTable {
 	; Starting X for current column
 	xCurrColumn := ""
 	
+	; Gui sizing/spacing properties
+	rowHeight     := ""
+	columnPadding := ""
+	
 	
 	addToX(value) {
 		this.setX(this.xCurr + value)

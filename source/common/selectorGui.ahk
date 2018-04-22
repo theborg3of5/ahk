@@ -106,7 +106,7 @@ class SelectorGui {
 		Gui, % this.guiId ":Default"
 	}
 	
-	buildPopup(choices, sectionTitles = "") {
+	buildPopup(choices, sectionTitles) {
 		this.totalHeight := 0
 		this.totalWidth  := 0
 		
@@ -130,7 +130,7 @@ class SelectorGui {
 		this.guiHandle := WinExist() ; Because of +LastFound above, the new gui is the last found window, so WinExist() finds it.
 	}
 	
-	addChoices(choices, sectionTitles = "") {
+	addChoices(choices, sectionTitles) {
 		flex := new FlexTable(this.guiId, this.margins["LEFT"], this.margins["TOP"], this.heights["LINE"], this.padding["COLUMNS"])
 		
 		isEmptyColumn := true

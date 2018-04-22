@@ -328,14 +328,24 @@ replaceTag(inputString, tagName, replacement) {
 	return StrReplace(inputString, "<" tagName ">", replacement)
 }
 
-removeStringFromEnd(inputString, endingToRemove) {
-	inputLen  := StrLen(inputString)
-	endingLen := StrLen(endingToRemove)
-	
-	if(subStr(inputString, inputLen - endingLen + 1) = endingToRemove)
-		return subStr(inputString, 1, inputLen - endingLen)
-	else
+removeStringFromStart(inputString, startToRemove) {
+	if(!doesStringStartWith(inputString, startToRemove))
 		return inputString
+	
+	returnsubStr(inputString, StrLen(startToRemove) + 1)
+}
+removeStringFromEnd(inputString, endingToRemove) {
+	if(!doesStringEndWith(inputString, endingToRemove))
+		return inputString
+	
+	return subStr(inputString, 1, StrLen(inputString) - StrLen(endingToRemove))
+}
+
+doesStringStartWith(inputString, startString) {
+	return (subStr(inputString, 1, StrLen(startString)) = startString)
+}
+doesStringEndWith(inputString, endString) {
+	return (subStr(inputString, StrLen(inputString) - StrLen(endString) + 1) = endString)
 }
 
 appendCharIfMissing(inputString, charToAppend) {

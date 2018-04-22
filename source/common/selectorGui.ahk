@@ -60,7 +60,7 @@ class SelectorGui {
 	
 	; GUI spacing/positioning properties
 	margins :=  {LEFT:10, RIGHT:10, TOP:10, BOTTOM:10}
-	padding :=  {INDEX_ABBREV:5, ABBREV_NAME:10, DATA_FIELDS:5, COLUMNS:30}
+	padding :=  {INDEX_ABBREV:5, ABBREV_NAME:10, OVERRIDE_FIELDS:5, COLUMNS:30}
 	widths  :=  {INDEX:25, ABBREV:50} ; Other widths are calculated based on contents and available space
 	heights :=  {LINE:25, FIELD:24}
 	
@@ -192,13 +192,13 @@ class SelectorGui {
 		xFieldOverride := xFieldOverrideBlock
 		For i,label in this.overrideFields {
 			addInputField(this.overrideFieldNamePrefix label, xFieldOverride, yField, wFieldOverride, this.heights["FIELD"], label) ; Default in the label, like ghost text. May be replaced by setDefaultOverrides() later.
-			xFieldOverride += wFieldOverride + this.padding["DATA_FIELDS"]
+			xFieldOverride += wFieldOverride + this.padding["OVERRIDE_FIELDS"]
 		}
 	}
 	
 	calcOverrideFieldWidth(leftoverWidth) {
 		numDataFields  := this.overrideFields.length()
-		widthForFields := leftoverWidth - ((numDataFields - 1) * this.padding["DATA_FIELDS"])
+		widthForFields := leftoverWidth - ((numDataFields - 1) * this.padding["OVERRIDE_FIELDS"])
 		; DEBUG.popup("SelectorGui.calcOverrideFieldWidth","Done calculating", "numDataFields",numDataFields, "leftoverWidth",leftoverWidth, "widthForFields",widthForFields)
 		return widthForFields / numDataFields
 	}

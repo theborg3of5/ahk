@@ -5,7 +5,7 @@ class FlexTable {
 	; == Public ====================
 	; ==============================
 	
-	__New(guiId, x = 0, y = 0, rowHeight = 25, columnPadding = 30) {
+	__New(guiId, x = 0, y = 0, rowHeight = 25, columnPadding = 30, minColumnWidth = 0) {
 		this.guiId := guiId
 		
 		this.xMin := x
@@ -14,8 +14,9 @@ class FlexTable {
 		this.setY(y)
 		this.xCurrColumn := x
 		
-		this.rowHeight := rowHeight
-		this.columnPadding := columnPadding
+		this.rowHeight      := rowHeight
+		this.columnPadding  := columnPadding
+		this.minColumnWidth := minColumnWidth
 	}
 	
 	addCell(cellText = "", leftPadding = "", width = "", extraProperties = "") {
@@ -54,6 +55,7 @@ class FlexTable {
 	}
 	
 	addColumn() {
+		this.forceLastColumnToMinWidth()
 		this.xCurrColumn := this.xMax + this.columnPadding
 		this.setX(this.xCurrColumn)
 		this.setY(this.yMin)
@@ -64,6 +66,7 @@ class FlexTable {
 	}
 	
 	getTotalWidth() {
+		this.forceLastColumnToMinWidth()
 		return this.xMax - this.xMin
 	}
 	
@@ -91,9 +94,9 @@ class FlexTable {
 	xCurrColumn := ""
 	
 	; Gui sizing/spacing properties
-	rowHeight     := ""
-	columnPadding := ""
-	
+	rowHeight      := ""
+	columnPadding  := ""
+	minColumnWidth := ""
 	
 	addToX(value) {
 		this.setX(this.xCurr + value)
@@ -121,6 +124,13 @@ class FlexTable {
 	; Make sure all of the Gui* commands refer to the right one.
 	makeGuiTheDefault() {
 		Gui, % this.guiId ":Default" ; GDB TODO test to make sure this works (vs: Gui, %guiId%:Default).
+	}
+	
+	forceLastColumnToMinWidth() {
+		; Make sure we adhere to the minimum column width - move xMax (our right endpoint) out to match it if needed.
+		currColumnWidth := this.xMax - this.xCurrColumn
+		if(currColumnWidth < this.minColumnWidth)
+			this.xMax := this.xCurrColumn + this.minColumnWidth
 	}
 	
 }

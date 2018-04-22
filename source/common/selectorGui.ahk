@@ -35,7 +35,7 @@ class SelectorGui {
 		this.setGuiId("SelectorGui" getNextGuiId())
 		this.makeGuiTheDefault()
 		
-		this.buildPopup(choices, sectionTitles)
+		this.buildPopup(choices, sectionTitles, minColumnWidth)
 	}
 	
 	; Shows the popup, including waiting on it to be closed
@@ -106,13 +106,13 @@ class SelectorGui {
 		Gui, % this.guiId ":Default"
 	}
 	
-	buildPopup(choices, sectionTitles) {
+	buildPopup(choices, sectionTitles, minColumnWidth) {
 		this.totalHeight := 0
 		this.totalWidth  := 0
 		
 		this.createPopup()
 		
-		this.addChoices(choices, sectionTitles)
+		this.addChoices(choices, sectionTitles, minColumnWidth)
 		this.addFields()
 		
 		; Add in margins so we have an accurate popup size.
@@ -130,8 +130,8 @@ class SelectorGui {
 		this.guiHandle := WinExist() ; Because of +LastFound above, the new gui is the last found window, so WinExist() finds it.
 	}
 	
-	addChoices(choices, sectionTitles) {
-		flex := new FlexTable(this.guiId, this.margins["LEFT"], this.margins["TOP"], this.heights["LINE"], this.padding["COLUMNS"])
+	addChoices(choices, sectionTitles, minColumnWidth) {
+		flex := new FlexTable(this.guiId, this.margins["LEFT"], this.margins["TOP"], this.heights["LINE"], this.padding["COLUMNS"], minColumnWidth)
 		
 		isEmptyColumn := true
 		For i,choice in choices {

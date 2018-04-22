@@ -1,5 +1,5 @@
 +WindowTitle=Select Machine to set up:
-+MinColumnWidth=1000
++MinColumnWidth=300
 
 (	NAME					ABBREV		WHICH_MACHINE	MENU_KEY_ACTION
 )	0						0				0					1

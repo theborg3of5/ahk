@@ -8,6 +8,19 @@ SelectorGuiSubmit() { ; Called when Enter is pressed (which fires the hidden, de
 	Gui, Destroy
 }
 
+SelectorGuiOverrideFieldChanged() {
+	fieldName := removeStringFromStart(A_GuiControl, A_Gui SelectorGui.baseFieldVarOverride)
+	value := GuiControlGet("", A_GuiControl)
+	; DEBUG.popup("A_GuiControl",A_GuiControl, "A_Gui",A_Gui, "fieldName",fieldName, "value",value)
+	
+	; Set the overall gui font color, then tell the edit control to conform to it.
+	if(fieldName = value)
+		Gui, Font, % "c" SelectorGui.fieldGhostFontColor
+	else
+		Gui, Font, -c
+	GuiControl, Font, % A_GuiControl
+}
+
 class SelectorGui {
 	
 	; ==============================
@@ -19,7 +32,7 @@ class SelectorGui {
 		
 		this.setSpecialChars()
 		this.setOffsets()
-		this.setGuiId("Selector" getNextGuiId())
+		this.setGuiId("SelectorGui" getNextGuiId())
 		this.makeGuiTheDefault()
 		
 		this.buildPopup(choices, sectionTitles)
@@ -48,11 +61,16 @@ class SelectorGui {
 	; == Private ===================
 	; ==============================
 	
-	chars := []
-	guiId     := ""
-	guiHandle := ""
-	choiceFieldName         := ""
-	overrideFieldNamePrefix := ""
+	static baseFieldVarChoice   := "Choice"
+	static baseFieldVarOverride := "Override"
+	static defaultFontColor     := "BDAE9D"
+	static fieldGhostFontColor  := "BDAE9D"
+	
+	chars                   := []
+	guiId                   := ""
+	guiHandle               := ""
+	fieldVarChoice          := ""
+	fieldVarOverridesPrefix := ""
 	
 	overrideFields := []
 	choiceQuery    := ""
@@ -77,8 +95,10 @@ class SelectorGui {
 		this.guiId := id
 		
 		; Names for global variables that we'll use for values of fields. This way they can be declared global and retrieved in the same way, without having to pre-define global variables.
-		this.choiceFieldName         := "Choice"   id
-		this.overrideFieldNamePrefix := "Override" id
+		this.fieldVars["CHOICE"] := id SelectorGui.baseFieldVars["CHOICE"]
+		
+		this.fieldVarChoice          := id SelectorGui.baseFieldVarChoice
+		this.fieldVarOverridesPrefix := id SelectorGui.baseFieldVarOverride
 	}
 	
 	; Make sure all of the Gui* commands refer to the right one.
@@ -104,7 +124,8 @@ class SelectorGui {
 	createPopup() {
 		Gui, +LastFound +LabelSelectorGui  ; +LabelSelectorGui: Gui* events will call SelectorGui* functions (in particular GuiClose > SelectorGuiClose).
 		Gui, Color, 2A211C
-		Gui, Font, s12 cBDAE9D
+		Gui, Font, s12
+		Gui, Font, % "c" SelectorGui.defaultFontColor
 		Gui, Add, Button, Hidden Default +gSelectorGuiSubmit ; Hidden button for {Enter} submission.
 		this.guiHandle := WinExist() ; Because of +LastFound above, the new gui is the last found window, so WinExist() finds it.
 	}
@@ -161,8 +182,9 @@ class SelectorGui {
 	
 	addFields() {
 		Gui, Font, -c ; Revert the color back to system default (so it can match the edit fields, which use the system default background.
-		
 		this.addChoiceField()
+		
+		Gui, Font, % "c" SelectorGui.fieldGhostFontColor ; These will be default values (values = labels) by default - SelectorGuiOverrideFieldChanged() will change it dynamically based on contents.
 		if(this.overrideFields)
 			this.addOverrideFields()
 		
@@ -179,7 +201,7 @@ class SelectorGui {
 		else
 			wFieldChoice := this.totalWidth ; Main edit control is the same width as the choices table (margins haven't been added in yet).
 		
-		addInputField(this.choiceFieldName, xFieldChoice, yField, wFieldChoice, this.heights["FIELD"])
+		addInputField(this.fieldVarChoice, xFieldChoice, yField, wFieldChoice, this.heights["FIELD"])
 	}
 	
 	addOverrideFields() {
@@ -191,7 +213,7 @@ class SelectorGui {
 		
 		xFieldOverride := xFieldOverrideBlock
 		For i,label in this.overrideFields {
-			addInputField(this.overrideFieldNamePrefix label, xFieldOverride, yField, wFieldOverride, this.heights["FIELD"], label) ; Default in the label, like ghost text. May be replaced by setDefaultOverrides() later.
+			addInputField(this.fieldVarOverridesPrefix label, xFieldOverride, yField, wFieldOverride, this.heights["FIELD"], label, "SelectorGuiOverrideFieldChanged") ; Default in the label, like ghost text. May be replaced by setDefaultOverrides() later. GDB TODO either explain SelectorGuiOverrideFieldChanged more, or take actually adding field out of addInputField (and turn addInputField into just a global getter/setter)
 			xFieldOverride += wFieldOverride + this.padding["OVERRIDE_FIELDS"]
 		}
 	}
@@ -215,7 +237,7 @@ class SelectorGui {
 		Gui, Show, % "h" this.totalHeight " w" this.totalWidth, % windowTitle
 		
 		; Focus the choice field
-		GuiControl, Focus, % this.choiceFieldName
+		GuiControl, Focus, % this.fieldVarChoice
 		
 		; Wait for gui to close
 		WinWaitClose, % "ahk_id " this.guiHandle
@@ -225,11 +247,11 @@ class SelectorGui {
 	
 	saveUserInputs() {
 		; Choice field
-		this.choiceQuery := getInputFieldValue(this.choiceFieldName)
+		this.choiceQuery := getInputFieldValue(this.fieldVarChoice)
 		
 		; Override fields
 		For num,label in this.overrideFields {
-			inputVal := getInputFieldValue(this.overrideFieldNamePrefix label) ; SelectorOverride* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
+			inputVal := getInputFieldValue(this.fieldVarOverridesPrefix label) ; SelectorOverride* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
 			if(inputVal && (inputVal != label))
 				this.overrideData[label] := inputVal
 		}

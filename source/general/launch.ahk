@@ -16,7 +16,7 @@
 ^!#z::activateProgram("FileZilla")
 ^!#/::activateProgram("WinSpy")
 
-#If MainConfig.isMachine(MACHINE_EpicLaptop)
+; #If MainConfig.isMachine(MACHINE_EpicLaptop)
 	^+!e::activateProgram("EMC2")
 	^+!s::activateProgram("EpicStudio")
 	^+!u::activateProgram("Thunder")
@@ -111,7 +111,7 @@
 			defaultOverrideData        := []
 			defaultOverrideData["INI"] := ini
 			defaultOverrideData["ID"]  := id
-			data := s.selectGui("", "Open Record(s) in Snapper in Environment", true, defaultOverrideData)
+			data := s.selectGui("", "Open Record(s) in Snapper in Environment", defaultOverrideData)
 			if(!data)
 				return
 			
@@ -123,7 +123,7 @@
 	#+p::
 		selectPRJ() {
 			s := new Selector("outlookTLG.tl")
-			prjId := s.selectGui("PRJ", "", false)
+			prjId := s.selectGui("PRJ", "", "", true)
 			if(prjId)
 				Send, % prjId
 		}
@@ -159,7 +159,7 @@
 		
 		filter := MainConfig.getMachineTableListFilter()
 		s := new Selector("search.tl", filter)
-		data := s.selectGui("", "", "", {"SEARCH_TERM":text})
+		data := s.selectGui("", "", {"SEARCH_TERM":text})
 		if(!data)
 			return
 		

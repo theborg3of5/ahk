@@ -105,16 +105,12 @@ class Selector {
 	}
 	
 	
-	; defaultOverrideData - If the indices for these overrides are also set by the user's overall choice, the override value will
-	;                       only be used if the corresponding additional field is visible. That means if ShowOverrideFields isn't set
-	;                       to true (via option in the file or guiSettings), default overrides will only affect blank values in
-	;                       the user's choice.
-	selectGui(returnColumn = "", title = "", showOverrideFields = "", defaultOverrideData = "") {
+	selectGui(returnColumn = "", title = "", defaultOverrideData = "", suppressOverrideFields = false) {
 		; DEBUG.popup("Selector.selectGui", "Start", "Default override data", defaultOverrideData, "GUI Settings", guiSettings)
 		if(title)
 			this.guiSettings["WindowTitle"] := title
-		if(showOverrideFields != "") ; Check against blank since this is a boolean value
-			this.guiSettings["ShowOverrideFields"] := showOverrideFields
+		if(suppressOverrideFields)
+			this.overrideFields := "" ; If user explicitly asked us to suppress override fields, get rid of them.
 		
 		; DEBUG.popup("User Input",userChoiceString, "data",data)
 		data := this.doSelectGui(defaultOverrideData)
@@ -164,9 +160,8 @@ class Selector {
 	}
 	
 	setDefaultGuiSettings() {
-		this.guiSettings["MinColumnWidth"]     := 0
-		this.guiSettings["WindowTitle"]        := "Please make a choice by either number or abbreviation:"
-		this.guiSettings["ShowOverrideFields"] := false
+		this.guiSettings["MinColumnWidth"] := 0
+		this.guiSettings["WindowTitle"]    := "Please make a choice by either number or abbreviation:"
 	}
 	
 	; Default settings to use with TableList object when parsing input file.
@@ -201,7 +196,7 @@ class Selector {
 		}
 		
 		; Special model index row that tells us how we should arrange data inputs.
-		if(IsObject(tl.getSeparateRows())) {
+		if(tl.getSeparateRow("DATA_INDEX")) {
 			this.overrideFields := []
 			For i,fieldIndex in tl.getSeparateRow("DATA_INDEX") {
 				if(fieldIndex > 0) ; Filter out data columns we don't want fields for (fieldIndex = 0)
@@ -259,11 +254,7 @@ class Selector {
 	}
 	
 	doSelectGui(defaultData) {
-		if(this.guiSettings["ShowOverrideFields"]) ; Only send overrideFields if we're going to show them.
-			sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this.guiSettings["MinColumnWidth"])
-		else
-			sGui := new SelectorGui(this.choices, this.sectionTitles, "",                  this.guiSettings["MinColumnWidth"])
-		
+		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this.guiSettings["MinColumnWidth"])
 		sGui.show(this.guiSettings["WindowTitle"], defaultData)
 		data := []
 		

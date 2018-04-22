@@ -117,7 +117,7 @@ class ActionObject {
 			filter := MainConfig.getMachineTableListFilter()
 			s := new Selector("actionObject.tl", filter)
 			
-			data := s.selectGui("", "", "", {SUBTYPE: subType, ID: input})
+			data := s.selectGui("", "", {SUBTYPE: subType, ID: input})
 			if(!data)
 				return
 			

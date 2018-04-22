@@ -1,5 +1,4 @@
 +WindowTitle=Resize active window to size:
-+ShowOverrideFields=1
 +MinColumnWidth=350
 
 (	NAME										ABBREV			WIDTH		HEIGHT

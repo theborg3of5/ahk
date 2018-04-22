@@ -1,20 +1,4 @@
 'Selector'
-	ShowOverrideFields
-		Get rid of setting from file - rely on whether there's a ) index row instead
-		Programmatically, should only need a parameter to suppress it, not turn it on
-		Remove guiSettings["ShowOverrideFields"] subscript
-			Just check if this.dataIndices (but rename to this.overrideFields) is populated (so just if(this.dataIndices)?) instead
-		Places that use it:
-			Suppress
-				epic > processEMC2ObjectInfo
-				launch > selectPRJ
-			Show
-				launch > selectSnapper
-					epicEnvironments.tl does not set
-						Everywhere else that uses it would need to suppress
-						OR: remove the ) line (doesn't seem like it would be needed, anyways)
-				All TL files that use +ShowOverrideFields
-			
 	Possibly make "ghost text" data labels in fields a different text color?
 		Could change based on event that happens when edit field contents are changed
 	Rework SelectorRow
@@ -39,6 +23,7 @@
 	Selector of current DLGs?
 		Could move PRJ stuff to this as well.
 		Alternatively, could keep this in the TLG TL too?
+			Could add a filter column (set by mod) for specifics section that has DLGs/PRJs
 	Make a kind of snippet list for EpicStudio
 		Selector with different kinds of loops (zoID,zoDAT,various index versions, etc.), and override fields for iterator variable, levels down, etc.
 		Similar to for loop hotstring

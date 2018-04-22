@@ -1,5 +1,4 @@
 +WindowTitle=Select Machine to set up:
-+ShowOverrideFields=1
 +MinColumnWidth=1000
 
 (	NAME					ABBREV		WHICH_MACHINE	MENU_KEY_ACTION

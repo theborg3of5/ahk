@@ -332,7 +332,7 @@ removeStringFromStart(inputString, startToRemove) {
 	if(!doesStringStartWith(inputString, startToRemove))
 		return inputString
 	
-	returnsubStr(inputString, StrLen(startToRemove) + 1)
+	return subStr(inputString, StrLen(startToRemove) + 1)
 }
 removeStringFromEnd(inputString, endingToRemove) {
 	if(!doesStringEndWith(inputString, endingToRemove))

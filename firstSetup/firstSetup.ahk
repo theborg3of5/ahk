@@ -52,7 +52,7 @@ gitNames.Push(".gitattributes")
 ; Prompt the user for which computer this is.
 s := new Selector(tlSetupPath)
 machineInfo := s.selectGui()
-if(machineInfo["WHICH_MACHINE"] = "") {
+if(!machineInfo) {
 	MsgBox, No machine given, exiting setup...
 	ExitApp
 }
@@ -61,7 +61,7 @@ if(machineInfo["WHICH_MACHINE"] = "") {
 ; Pull the needed values from our selection.
 For tag,v in tagsToReplace {
 	machineValue := machineInfo[tag]
-	if(machineValue)
+	if(machineValue != "")
 		tagsToReplace[tag] := machineValue
 }
 ; DEBUG.popup("Finished tags to replace",tagsToReplace)

@@ -114,7 +114,10 @@ class Selector {
 		
 		; DEBUG.popup("User Input",userChoiceString, "data",data)
 		data := this.doSelectGui(defaultOverrideData)
-		if(returnColumn)
+		
+		if(isEmpty(data))
+			return ""
+		else if(returnColumn)
 			return data[returnColumn]
 		else
 			return data

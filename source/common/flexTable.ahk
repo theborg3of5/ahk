@@ -110,9 +110,8 @@ class FlexTable {
 	}
 	
 	getNextUniqueControlId() {
-		static
-		this.uniqueControlNum++
-		return "FlexTableControl" this.uniqueControlNum
+		FlexTable.uniqueControlNum++
+		return "FlexTableControl" FlexTable.uniqueControlNum
 	}
 	
 	; Make sure all of the Gui* commands refer to the right one.

@@ -101,7 +101,7 @@ For i,n in gitNames {
 
 MsgBox, 4, , Run now?
 IfMsgBox Yes
-	Run(%mainAHKPath%, %startupFolder%)
+	Run(mainAHKPath, startupFolder)
 
 ExitApp
 

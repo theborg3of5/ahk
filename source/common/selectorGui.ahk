@@ -7,7 +7,6 @@ SelectorGuiSubmit() { ; Called when Enter is pressed (which fires the hidden, de
 	Gui, Submit ; Actually saves edit controls' values to respective GuiIn* variables
 	Gui, Destroy
 }
-
 SelectorGuiOverrideFieldChanged() {
 	fieldName := removeStringFromStart(A_GuiControl, A_Gui SelectorGui.baseFieldVarOverride)
 	value := GuiControlGet("", A_GuiControl)
@@ -191,8 +190,6 @@ class SelectorGui {
 		Gui, Font, % "c" SelectorGui.fieldGhostFontColor ; These will be default values (values = labels) by default - SelectorGuiOverrideFieldChanged() will change it dynamically based on contents.
 		if(this.overrideFields)
 			this.addOverrideFields()
-		
-		; DEBUG.popup("SelectorGui.addFields","Finish", "height",this.totalHeight, "width",this.totalWidth)
 	}
 	
 	addChoiceField() {
@@ -209,24 +206,20 @@ class SelectorGui {
 	
 	addOverrideFields() {
 		yField              := this.totalHeight
-		xFieldOverrideBlock := this.margins["LEFT"] + this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"] + this.padding["ABBREV_NAME"] ; Lines up with the first column's names
+		wFieldChoiceBlock   := this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"] + this.padding["ABBREV_NAME"]
+		wFieldOverrideBlock := this.tableWidth - wFieldChoiceBlock
+		wFieldOverride      := this.calcSingleOverrideFieldWidth(wFieldOverrideBlock)
 		
-		wFieldChoiceBlock := xFieldOverrideBlock - this.margins["LEFT"]
-		leftoverWidth     := this.tableWidth - wFieldChoiceBlock
-		wFieldOverride    := this.calcOverrideFieldWidth(leftoverWidth)
-		; DEBUG.popup("SelectorGui.addOverrideFields","Total width calculated", "this.totalWidth",this.totalWidth, "xFieldOverrideBlock",xFieldOverrideBlock, "wFieldOverride",wFieldOverride)
-		
-		xFieldOverride := xFieldOverrideBlock
+		xFieldOverride := this.margins["LEFT"] + wFieldChoiceBlock
 		For i,label in this.overrideFields {
-			addInputField(this.fieldVarOverridesPrefix label, xFieldOverride, yField, wFieldOverride, this.heights["FIELD"], label, "SelectorGuiOverrideFieldChanged") ; Default in the label, like ghost text. May be replaced by setDefaultOverrides() later. GDB TODO either explain SelectorGuiOverrideFieldChanged more, or take actually adding field out of addInputField (and turn addInputField into just a global getter/setter)
+			addInputField(this.fieldVarOverridesPrefix label, xFieldOverride, yField, wFieldOverride, this.heights["FIELD"], label, "SelectorGuiOverrideFieldChanged") ; Default in the label, like ghost text. May be replaced by setDefaultOverrides() later.
 			xFieldOverride += wFieldOverride + this.padding["OVERRIDE_FIELDS"]
 		}
 	}
 	
-	calcOverrideFieldWidth(leftoverWidth) {
+	calcSingleOverrideFieldWidth(blockWidth) {
 		numDataFields  := this.overrideFields.length()
-		widthForFields := leftoverWidth - ((numDataFields - 1) * this.padding["OVERRIDE_FIELDS"])
-		; DEBUG.popup("SelectorGui.calcOverrideFieldWidth","Done calculating", "numDataFields",numDataFields, "leftoverWidth",leftoverWidth, "widthForFields",widthForFields)
+		widthForFields := blockWidth - ((numDataFields - 1) * this.padding["OVERRIDE_FIELDS"])
 		return widthForFields / numDataFields
 	}
 	
@@ -237,7 +230,6 @@ class SelectorGui {
 		}
 	}
 	
-	
 	showPopup(windowTitle) {
 		Gui, Show, % "h" this.totalHeight " w" this.totalWidth, % windowTitle
 		
@@ -247,8 +239,6 @@ class SelectorGui {
 		; Wait for gui to close
 		WinWaitClose, % "ahk_id " this.guiHandle
 	}
-	
-	
 	
 	saveUserInputs() {
 		; Choice field
@@ -261,6 +251,4 @@ class SelectorGui {
 				this.overrideData[label] := inputVal
 		}
 	}
-	
-	
 }

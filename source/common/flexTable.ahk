@@ -6,17 +6,17 @@ class FlexTable {
 	; ==============================
 	
 	__New(guiId, x = 0, y = 0, rowHeight = 25, columnPadding = 30, minColumnWidth = 0) {
-		this.guiId := guiId
+		this.guiId          := guiId
+		this.rowHeight      := rowHeight
+		this.columnPadding  := columnPadding
+		this.minColumnWidth := minColumnWidth
 		
 		this.xMin := x
 		this.yMin := y
 		this.setX(x)
 		this.setY(y)
 		this.xCurrColumn := x
-		
-		this.rowHeight      := rowHeight
-		this.columnPadding  := columnPadding
-		this.minColumnWidth := minColumnWidth
+		this.xMax := minColumnWidth ; Make the minimum column width the starting point for the right edge of the column.
 	}
 	
 	addCell(cellText = "", leftPadding = "", width = "", extraProperties = "") {
@@ -30,7 +30,6 @@ class FlexTable {
 			propString .= " w" width
 		if(extraProperties != "")
 			propString .= " " extraProperties
-		; DEBUG.popup("FlexTable.addCell","Before add text", "cellText",cellText, "width",width, "extraProperties",extraProperties, "propString",propString)
 		
 		Gui, Add, Text, % propString, % cellText
 		
@@ -48,17 +47,19 @@ class FlexTable {
 	}
 	
 	addRow() {
-		; DEBUG.popup("Before add row","", "xCurr",this.xCurr, "yCurr",this.yCurr, "rowHeight",this.rowHeight,"xCurrColumn",this.xCurrColumn)
 		this.addToY(this.rowHeight)
 		this.setX(this.xCurrColumn)
-		; DEBUG.popup("Added row","", "xCurr",this.xCurr, "yCurr",this.yCurr)
 	}
 	
 	addColumn() {
 		this.forceLastColumnToMinWidth()
+		
 		this.xCurrColumn := this.xMax + this.columnPadding
 		this.setX(this.xCurrColumn)
 		this.setY(this.yMin)
+		
+		; Start the right edge of the column at the minimum column width (if anything pushes it over the edge, that will be the new max)
+		this.xMax := this.xCurrColumn + this.minColumnWidth
 	}
 	
 	getTotalHeight() {
@@ -124,13 +125,6 @@ class FlexTable {
 	; Make sure all of the Gui* commands refer to the right one.
 	makeGuiTheDefault() {
 		Gui, % this.guiId ":Default" ; GDB TODO test to make sure this works (vs: Gui, %guiId%:Default).
-	}
-	
-	forceLastColumnToMinWidth() {
-		; Make sure we adhere to the minimum column width - move xMax (our right endpoint) out to match it if needed.
-		currColumnWidth := this.xMax - this.xCurrColumn
-		if(currColumnWidth < this.minColumnWidth)
-			this.xMax := this.xCurrColumn + this.minColumnWidth
 	}
 	
 }

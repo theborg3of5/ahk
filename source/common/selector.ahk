@@ -143,7 +143,7 @@ class Selector {
 	choices        := [] ; Visible choices the user can pick from (array of SelectorRow objects).
 	hiddenChoices  := [] ; Invisible choices the user can pick from (array of SelectorRow objects).
 	sectionTitles  := [] ; Lines that will be displayed as titles (index matches the first choice that should be under this title)
-	overrideFields := [] ; Mapping from override field indices => data labels (column headers)
+	overrideFields := "" ; Mapping from override field indices => data labels (column headers)
 	guiSettings    := [] ; Settings related to the GUI popup we show
 	filePath       := "" ; Where the .tl file lives if we're reading one in.
 	

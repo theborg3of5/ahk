@@ -71,7 +71,7 @@ class SelectorGui {
 	fieldVarChoice          := ""
 	fieldVarOverridesPrefix := ""
 	
-	overrideFields := []
+	overrideFields := ""
 	choiceQuery    := ""
 	overrideData   := []
 	
@@ -199,7 +199,7 @@ class SelectorGui {
 		if(this.overrideFields)
 			wFieldChoice := this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"] ; Main edit control is same size as index + abbrev columns combined.
 		else
-			wFieldChoice := this.totalWidth ; Main edit control is the same width as the choices table (margins haven't been added in yet).
+			wFieldChoice := this.tableWidth ; Main edit control is the same width as the choices table.
 		
 		addInputField(this.fieldVarChoice, xFieldChoice, yField, wFieldChoice, this.heights["FIELD"])
 	}

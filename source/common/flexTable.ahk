@@ -124,7 +124,7 @@ class FlexTable {
 	
 	; Make sure all of the Gui* commands refer to the right one.
 	makeGuiTheDefault() {
-		Gui, % this.guiId ":Default" ; GDB TODO test to make sure this works (vs: Gui, %guiId%:Default).
+		Gui, % this.guiId ":Default"
 	}
 	
 }

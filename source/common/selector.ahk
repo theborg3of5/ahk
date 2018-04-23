@@ -275,8 +275,7 @@ class Selector {
 	; Function to turn the input into something useful.
 	parseChoice(userChoiceString) {
 		; Command choice - edit ini, etc.
-		commandCharPos := InStr(userChoiceString, this.chars["COMMAND"])
-		if(commandCharPos = 1) {
+		if(InStr(userChoiceString, this.chars["COMMAND"])) {
 			commandChar := SubStr(userChoiceString, 2, 1)
 			
 			; Special case: +e is the edit action, which will open the current INI file for editing.

@@ -84,6 +84,8 @@ class SelectorGui {
 	
 	totalHeight := 0
 	totalWidth  := 0
+	tableHeight := 0
+	tableWidth  := 0
 	
 	
 	setSpecialChars() {
@@ -95,8 +97,6 @@ class SelectorGui {
 		this.guiId := id
 		
 		; Names for global variables that we'll use for values of fields. This way they can be declared global and retrieved in the same way, without having to pre-define global variables.
-		this.fieldVars["CHOICE"] := id SelectorGui.baseFieldVars["CHOICE"]
-		
 		this.fieldVarChoice          := id SelectorGui.baseFieldVarChoice
 		this.fieldVarOverridesPrefix := id SelectorGui.baseFieldVarOverride
 	}
@@ -107,25 +107,29 @@ class SelectorGui {
 	}
 	
 	buildPopup(choices, sectionTitles, minColumnWidth) {
-		this.totalHeight := 0
-		this.totalWidth  := 0
+		this.totalHeight := this.margins["TOP"]
+		this.totalWidth  := this.margins["LEFT"]
 		
 		this.createPopup()
 		
 		this.addChoices(choices, sectionTitles, minColumnWidth)
-		this.addFields()
+		this.totalHeight += this.tableHeight
+		this.totalWidth  += this.tableWidth
 		
-		; Add in margins so we have an accurate popup size.
-		this.totalHeight += this.margins["TOP"]  + this.margins["BOTTOM"]
-		this.totalWidth  += this.margins["LEFT"] + this.margins["RIGHT"]
+		this.totalHeight += this.heights["LINE"] ; Add a line between the table and fields.
+		
+		this.addFields()
+		this.totalHeight += this.heights["FIELD"]
+		
+		this.totalHeight += this.margins["BOTTOM"]
+		this.totalWidth  += this.margins["RIGHT"]
 		; DEBUG.popup("SelectorGui.buildPopup","Finish", "height",this.totalHeight, "width",this.totalWidth)
 	}
 	
 	createPopup() {
 		Gui, +LastFound +LabelSelectorGui  ; +LabelSelectorGui: Gui* events will call SelectorGui* functions (in particular GuiClose > SelectorGuiClose).
 		Gui, Color, 2A211C
-		Gui, Font, s12
-		Gui, Font, % "c" SelectorGui.defaultFontColor
+		Gui, Font, % "s12 c" SelectorGui.defaultFontColor
 		Gui, Add, Button, Hidden Default +gSelectorGuiSubmit ; Hidden button for {Enter} submission.
 		this.guiHandle := WinExist() ; Because of +LastFound above, the new gui is the last found window, so WinExist() finds it.
 	}
@@ -138,7 +142,7 @@ class SelectorGui {
 			sectionTitle := sectionTitles[i]
 			
 			; Add new column if needed
-			if(this.doesTitleForceNewColumn(sectionTitle)) {
+			if(SubStr(sectionTitle, 1, 2) = this.chars["NEW_COLUMN"] " ") {
 				sectionTitle := SubStr(sectionTitle, 3) ; Strip the special character and space off so we don't show them.
 				flex.addColumn()
 				isEmptyColumn := true
@@ -157,43 +161,42 @@ class SelectorGui {
 			}
 			
 			; Add choice
-			name := choice.data["NAME"]
-			if(IsObject(choice.data["ABBREV"]))
-				abbrev := choice.data["ABBREV", 1]
-			else
-				abbrev := choice.data["ABBREV"]
-			
 			if(!isEmptyColumn)
 				flex.addRow()
-			flex.addCell(i ")",      0,                            this.widths["INDEX"],  "Right")
-			flex.addCell(abbrev ":", this.padding["INDEX_ABBREV"], this.widths["ABBREV"])
-			flex.addCell(name,       this.padding["ABBREV_NAME"])
+			this.addChoiceToTable(flex, i, choice)
 			isEmptyColumn := false
 		}
 		
-		this.totalHeight += flex.getTotalHeight()
-		this.totalWidth  += flex.getTotalWidth()
+		this.tableHeight := flex.getTotalHeight()
+		this.tableWidth  := flex.getTotalWidth()
 		; DEBUG.popup("SelectorGui.addChoices","Finish", "height",this.totalHeight, "width",this.totalWidth)
 	}
 	
-	doesTitleForceNewColumn(sectionTitle) {
-		return (SubStr(sectionTitle, 1, 2) = this.chars["NEW_COLUMN"] " ")
+	addChoiceToTable(flex, index, choice) {
+		name := choice.data["NAME"]
+		if(IsObject(choice.data["ABBREV"]))
+			abbrev := choice.data["ABBREV", 1]
+		else
+			abbrev := choice.data["ABBREV"]
+		
+		flex.addCell(index  ")", 0,                            this.widths["INDEX"],  "Right")
+		flex.addCell(abbrev ":", this.padding["INDEX_ABBREV"], this.widths["ABBREV"])
+		flex.addCell(name,       this.padding["ABBREV_NAME"])
 	}
 	
 	addFields() {
-		Gui, Font, -c ; Revert the color back to system default (so it can match the edit fields, which use the system default background.
+		Gui, Font, -c ; Revert the color back to system default (so it can match the edit fields, which use the system default background).
 		this.addChoiceField()
 		
 		Gui, Font, % "c" SelectorGui.fieldGhostFontColor ; These will be default values (values = labels) by default - SelectorGuiOverrideFieldChanged() will change it dynamically based on contents.
 		if(this.overrideFields)
 			this.addOverrideFields()
 		
-		this.totalHeight += this.heights["LINE"] + this.heights["FIELD"]
 		; DEBUG.popup("SelectorGui.addFields","Finish", "height",this.totalHeight, "width",this.totalWidth)
 	}
 	
 	addChoiceField() {
-		yField       := this.margins["TOP"] + this.totalHeight + this.heights["LINE"]
+		yField       := this.totalHeight
 		xFieldChoice := this.margins["LEFT"] ; Lines up with first column of indices
 		
 		if(this.overrideFields)
@@ -205,10 +208,12 @@ class SelectorGui {
 	}
 	
 	addOverrideFields() {
-		yField              := this.margins["TOP"]  + this.totalHeight     + this.heights["LINE"]
+		yField              := this.totalHeight
 		xFieldOverrideBlock := this.margins["LEFT"] + this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"] + this.padding["ABBREV_NAME"] ; Lines up with the first column's names
-		leftoverWidth       := this.totalWidth - (xFieldOverrideBlock - this.margins["LEFT"]) ; width of choices table - portion that's already accounted for (choice field + padding)
-		wFieldOverride      := this.calcOverrideFieldWidth(leftoverWidth)
+		
+		wFieldChoiceBlock := xFieldOverrideBlock - this.margins["LEFT"]
+		leftoverWidth     := this.tableWidth - wFieldChoiceBlock
+		wFieldOverride    := this.calcOverrideFieldWidth(leftoverWidth)
 		; DEBUG.popup("SelectorGui.addOverrideFields","Total width calculated", "this.totalWidth",this.totalWidth, "xFieldOverrideBlock",xFieldOverrideBlock, "wFieldOverride",wFieldOverride)
 		
 		xFieldOverride := xFieldOverrideBlock

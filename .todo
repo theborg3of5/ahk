@@ -1,5 +1,4 @@
 'Selector'
-	In SelectorGui, find a better way to pass height/width of FlexTable around (instead of using totalHeight/totalWidth and being very careful when margins are added).
 	Reconsider gui > addInputField() - should we just have global getter/setter functions instead, since that's its main purpose?
 	Rework SelectorRow
 		Remove unused: userInput, buildSelectorRow()

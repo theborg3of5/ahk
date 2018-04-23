@@ -16,7 +16,7 @@
 ^!#z::activateProgram("FileZilla")
 ^!#/::activateProgram("WinSpy")
 
-; #If MainConfig.isMachine(MACHINE_EpicLaptop)
+#If MainConfig.isMachine(MACHINE_EpicLaptop)
 	^+!e::activateProgram("EMC2")
 	^+!s::activateProgram("EpicStudio")
 	^+!u::activateProgram("Thunder")

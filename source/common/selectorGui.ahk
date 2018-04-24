@@ -181,10 +181,7 @@ class SelectorGui {
 	addFields() {
 		this.totalHeight += this.heights["LINE"] ; Add an empty line before the fields.
 		
-		Gui, Font, -c ; Revert the color back to system default (so it can match the edit fields, which use the system default background).
 		this.addChoiceField()
-		
-		Gui, Font, % "c" SelectorGui.fieldGhostFontColor ; These will be default values (values = labels) by default - SelectorGuiOverrideFieldChanged() will change it dynamically based on contents.
 		if(this.overrideFields)
 			this.addOverrideFields()
 		
@@ -192,22 +189,27 @@ class SelectorGui {
 	}
 	
 	addChoiceField() {
-		yField       := this.totalHeight
-		xFieldChoice := this.margins["LEFT"] ; Lines up with first column of indices
+		Gui, Font, -c ; Revert the color back to system default (so it can match the edit fields, which use the system default background).
 		
-		if(this.overrideFields)
-			wFieldChoice := this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"] ; Main edit control is same size as index + abbrev columns combined.
-		else
-			wFieldChoice := this.choicesWidth ; Main edit control is the same width as the choices table.
-		
-		this.addField(this.fieldVarChoice, xFieldChoice, yField, wFieldChoice, this.heights["FIELD"])
+		x := this.margins["LEFT"] ; Lines up with first column's indices
+		y := this.totalHeight
+		w := this.calcChoiceFieldWidth()
+		this.addField(this.fieldVarChoice, x, y, w, this.heights["FIELD"])
 	}
 	
-	addField(varName, x, y, width, height, data = "", subGoto = "") {
+	; Choice edit control spans the first column's index and abbrev if there are override fields, otherwise it matches the total choices table width.
+	calcChoiceFieldWidth() {
+		if(this.overrideFields)
+			return this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"]
+		else
+			return this.choicesWidth
+	}
+	
+	addField(varName, x, y, w, height, data = "", subGoto = "") {
 		setDynamicGlobalVar(varName) ; Declare the variable named in this.fieldVarChoice as a global
 		
 		propString := "v" varName                           ; Variable to save to on Gui, Submit
-		propString .= " x" x " y" y " w" width " h" height  ; Position/size
+		propString .= " x" x " y" y " w" w " h" height  ; Position/size
 		propString .= " -E" WS_EX_CLIENTEDGE " +Border"     ; Styling - no sunken appearance, add a border
 		if(subGoto)
 			propString .= " g" subGoto
@@ -216,21 +218,25 @@ class SelectorGui {
 	}
 	
 	addOverrideFields() {
-		yField              := this.totalHeight
-		wFieldChoiceBlock   := this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"] + this.padding["ABBREV_NAME"]
-		wFieldOverrideBlock := this.choicesWidth - wFieldChoiceBlock
-		wFieldOverride      := this.calcSingleOverrideFieldWidth(wFieldOverrideBlock)
+		Gui, Font, % "c" SelectorGui.fieldGhostFontColor ; Start out gray (default, ghost-texty values) - SelectorGuiOverrideFieldChanged() will change it dynamically based on contents.
 		
-		xFieldOverride := this.margins["LEFT"] + wFieldChoiceBlock
+		xOverridesBlock := this.margins["LEFT"] + this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"] + this.padding["ABBREV_NAME"] ; Lines up with first column's names
+		wOverridesBlock := this.choicesWidth - (xOverridesBlock - this.margins["LEFT"]) ; Fill the rest of the horizontal space under the choices table with the override fields.
+		
+		x := xOverridesBlock
+		y := this.totalHeight
+		w := this.calcSingleOverrideFieldWidth(wOverridesBlock)
+		
 		For i,label in this.overrideFields {
-			this.addField(this.fieldVarOverridesPrefix label, xFieldOverride, yField, wFieldOverride, this.heights["FIELD"], label, "SelectorGuiOverrideFieldChanged") ; Default in the label, like ghost text. May be replaced by setDefaultOverrides() later.
-			xFieldOverride += wFieldOverride + this.padding["OVERRIDE_FIELDS"]
+			varName := this.fieldVarOverridesPrefix label
+			this.addField(varName, x, y, w, this.heights["FIELD"], label, "SelectorGuiOverrideFieldChanged") ; Default in the label, like ghost text. May be replaced by setDefaultOverrides() later.
+			x += w + this.padding["OVERRIDE_FIELDS"]
 		}
 	}
 	
-	calcSingleOverrideFieldWidth(blockWidth) {
+	calcSingleOverrideFieldWidth(overrideBlockWidth) {
 		numDataFields  := this.overrideFields.length()
-		widthForFields := blockWidth - ((numDataFields - 1) * this.padding["OVERRIDE_FIELDS"])
+		widthForFields := overrideBlockWidth - ((numDataFields - 1) * this.padding["OVERRIDE_FIELDS"])
 		return widthForFields / numDataFields
 	}
 	

@@ -1,24 +1,4 @@
-
-; GUI Events
-SelectorGuiClose() { ; Called when window is closed
-	Gui, Destroy
-}
-SelectorGuiSubmit() { ; Called when Enter is pressed (which fires the hidden, default button)
-	Gui, Submit ; Actually saves edit controls' values to respective GuiIn* variables
-	Gui, Destroy
-}
-SelectorGuiOverrideFieldChanged() {
-	fieldName := removeStringFromStart(A_GuiControl, A_Gui SelectorGui.baseFieldVarOverride)
-	value := GuiControlGet("", A_GuiControl)
-	; DEBUG.popup("A_GuiControl",A_GuiControl, "A_Gui",A_Gui, "fieldName",fieldName, "value",value)
 	
-	; Set the overall gui font color, then tell the edit control to conform to it.
-	if(fieldName = value)
-		Gui, Font, % "c" SelectorGui.fieldGhostFontColor
-	else
-		Gui, Font, -c
-	GuiControl, Font, % A_GuiControl
-}
 
 class SelectorGui {
 	
@@ -268,4 +248,31 @@ class SelectorGui {
 				this.overrideData[label] := inputVal
 		}
 	}
+}
+
+; GUI Events
+
+; Called when window is closed
+SelectorGuiClose() {
+	Gui, Destroy
+}
+
+; Called when Enter is pressed (which fires the hidden, default button)
+SelectorGuiSubmit() {
+	Gui, Submit ; Actually saves edit controls' values to respective GuiIn* variables
+	Gui, Destroy
+}
+
+; Called when an override field is changed, changes font color based on whether it was the "default" value (matches label)
+SelectorGuiOverrideFieldChanged() {
+	fieldName := removeStringFromStart(A_GuiControl, A_Gui SelectorGui.baseFieldVarOverride)
+	value := GuiControlGet("", A_GuiControl)
+	; DEBUG.popup("A_GuiControl",A_GuiControl, "A_Gui",A_Gui, "fieldName",fieldName, "value",value)
+	
+	; Set the overall gui font color, then tell the edit control to conform to it.
+	if(fieldName = value)
+		Gui, Font, % "c" SelectorGui.fieldGhostFontColor
+	else
+		Gui, Font, -c
+	GuiControl, Font, % A_GuiControl
 }

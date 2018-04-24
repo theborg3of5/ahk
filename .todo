@@ -1,5 +1,4 @@
 'Selector'
-	Reconsider gui > addInputField() - should we just have global getter/setter functions instead, since that's its main purpose?
 	Rework SelectorRow
 		Remove unused: userInput, buildSelectorRow()
 		Can we split constructor into two separate things?

@@ -37,25 +37,15 @@ getLabelWidthForText(text, uniqueId) {
 	return outW
 }
 
-; Assumes the default gui name is set to whatever GUI you want to deal with.
-; Value should be gotten using the getInputFieldValue function (below).
 ; These two basically let us hide the static/global requirement for variables used for GUI controls - 
 ; the given string is the variable name, but as long as it's only referenced via indirection, it won't 
 ; be treated as a local variable in other functions.
-addInputField(varName, x, y, width, height, data = "", subGoto = "") {
-	global          ; This allows us to get at the variable for the field (varName) later on.
-	%varName% := "" ; Clear the variable so there's no bleed-over from previous uses.
-	
-	local propString := "v" varName " x" x " y" y " w" width " h" height
-	propString .= " -E" WS_EX_CLIENTEDGE " +Border"
-	if(subGoto)
-		propString .= " g" subGoto
-	Gui, Add, Edit, % propString, % data
-	; DEBUG.popup("gui.addInputField","Finished creating field", "varName",varName, "data",data)
+setDynamicGlobalVar(varName, value = "") {
+	global
+	%varName% := value
 }
-getInputFieldValue(varName) {
+getDynamicGlobalVar(varName) {
 	global
 	local value := %varName%
-	; DEBUG.popup("gui.getInputFieldValue","Finished getting value", "varName",varName, "value",value)
 	return value
 }

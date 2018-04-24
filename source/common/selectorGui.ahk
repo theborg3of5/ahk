@@ -201,7 +201,19 @@ class SelectorGui {
 		else
 			wFieldChoice := this.tableWidth ; Main edit control is the same width as the choices table.
 		
-		addInputField(this.fieldVarChoice, xFieldChoice, yField, wFieldChoice, this.heights["FIELD"])
+		this.addField(this.fieldVarChoice, xFieldChoice, yField, wFieldChoice, this.heights["FIELD"])
+	}
+	
+	addField(varName, x, y, width, height, data = "", subGoto = "") {
+		setDynamicGlobalVar(varName) ; Declare the variable named in this.fieldVarChoice as a global
+		
+		propString := "v" varName                           ; Variable to save to on Gui, Submit
+		propString .= " x" x " y" y " w" width " h" height  ; Position/size
+		propString .= " -E" WS_EX_CLIENTEDGE " +Border"     ; Styling - no sunken appearance, add a border
+		if(subGoto)
+			propString .= " g" subGoto
+		
+		Gui, Add, Edit, % propString, % data
 	}
 	
 	addOverrideFields() {
@@ -212,7 +224,7 @@ class SelectorGui {
 		
 		xFieldOverride := this.margins["LEFT"] + wFieldChoiceBlock
 		For i,label in this.overrideFields {
-			addInputField(this.fieldVarOverridesPrefix label, xFieldOverride, yField, wFieldOverride, this.heights["FIELD"], label, "SelectorGuiOverrideFieldChanged") ; Default in the label, like ghost text. May be replaced by setDefaultOverrides() later.
+			this.addField(this.fieldVarOverridesPrefix label, xFieldOverride, yField, wFieldOverride, this.heights["FIELD"], label, "SelectorGuiOverrideFieldChanged") ; Default in the label, like ghost text. May be replaced by setDefaultOverrides() later.
 			xFieldOverride += wFieldOverride + this.padding["OVERRIDE_FIELDS"]
 		}
 	}
@@ -242,11 +254,11 @@ class SelectorGui {
 	
 	saveUserInputs() {
 		; Choice field
-		this.choiceQuery := getInputFieldValue(this.fieldVarChoice)
+		this.choiceQuery := getDynamicGlobalVar(this.fieldVarChoice) ; Declared via setDynamicGlobalVar(), populated by Gui, Submit
 		
 		; Override fields
 		For num,label in this.overrideFields {
-			inputVal := getInputFieldValue(this.fieldVarOverridesPrefix label) ; SelectorOverride* variables are declared via assume-global mode in addInputField(), and populated by Gui, Submit.
+			inputVal := getDynamicGlobalVar(this.fieldVarOverridesPrefix label) ; Declared via setDynamicGlobalVar(), populated by Gui, Submit
 			if(inputVal && (inputVal != label))
 				this.overrideData[label] := inputVal
 		}

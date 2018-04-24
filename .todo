@@ -18,6 +18,17 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 'New'
+	Create function header template
+		Make into a hotstring?
+		Text
+			;---------
+			; DESCRIPTION:		Create a new FlexTable instance.
+			; PARAMETERS:
+			;  prmName (I/O/IO,REQ/OPT,DEFAULT:<value>) - <Parameter Description>
+			; RETURNS:			Reference to new FlexTable object
+			; SIDE EFFECTS:	<Any side effects calling this code will have on global variables, etc.>
+			; NOTES:				<Any general notes about this tag>
+			;---------
 	Selector of current DLGs?
 		Could move PRJ stuff to this as well.
 		Alternatively, could keep this in the TLG TL too?

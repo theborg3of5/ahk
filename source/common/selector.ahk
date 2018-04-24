@@ -202,37 +202,31 @@ class Selector {
 		
 		For i,currItem in list {
 			; Parse this size-n array into a new SelectorChoice object.
-			currRow := new SelectorChoice(currItem)
-			if(currItem["NAME"])
+			currChoice := new SelectorChoice(currItem)
+			if(currItem["NAME"]) ; Choices should have this populated
 				firstChar := SubStr(currItem["NAME"], 1, 1)
 			else
-				firstChar := SubStr(currItem[1], 1, 1) ; Only really populated for the non-normal rows.
-			; DEBUG.popup("Curr Row", currRow, "First Char", firstChar)
+				firstChar := SubStr(currItem[1], 1, 1) ; Only really populated for the non-normal choices.
+			; DEBUG.popup("Curr Choice", currChoice, "First Char", firstChar)
 			
 			; Options for the selector in general.
 			if(firstChar = this.chars["SETTING"]) {
-				this.processSettingFromFile(currRow.data[1])
+				this.processSettingFromFile(currChoice.data[1])
 			
 			; Special: add a section title to the list display.
 			} else if(firstChar = this.chars["SECTION_TITLE"]) {
-				; Format should be "# Title"
-				idx := 0
-				if(this.choices.MaxIndex())
-					idx := this.choices.MaxIndex()
-				idx++ ; The next actual choice will be the first one under this header, so match that.
-				
-				this.sectionTitles[idx] := SubStr(currItem[1], 3) ; If there are multiple headers in a row (for example when choices are filtered out) they should get overwritten in order here (which is correct).
+				idx := forceNumber(this.choices.MaxIndex()) + 1 ; The next actual choice will be the first one under this header, so match that.
+				title := SubStr(currItem[1], 3) ; Format should be "# Title", strip off the "# "
+				this.sectionTitles[idx] := title ; If there are multiple headers in a row (for example when choices are filtered out) they should get overwritten in order here (which is correct).
 				; DEBUG.popup("Just added section title:", this.sectionTitles[this.sectionTitles.MaxIndex()], "At index", idx)
 				
 			; Invisible, but viable, choice.
 			} else if(firstChar = this.chars["HIDDEN"]) {
-				this.hiddenChoices.push(currRow)
-				; DEBUG.popup("Hidden choice added", currRow)
+				this.hiddenChoices.push(new SelectorChoice(currItem))
 			
 			; Otherwise, it's a visible, viable choice!
 			} else {
-				this.choices.push(currRow)
-				; DEBUG.popup("Choice added", currRow)
+				this.choices.push(new SelectorChoice(currItem))
 			}
 		}
 	}
@@ -277,9 +271,7 @@ class Selector {
 		
 		; Otherwise, we search through the data structure by both number and shortcut and look for a match.
 		} else {
-			rowToDo := this.searchAllTables(userChoiceString)
-			; DEBUG.popup("Row to do", rowToDo)
-			return rowToDo.data
+			return this.searchAllTables(userChoiceString)
 		}
 	}
 
@@ -289,27 +281,28 @@ class Selector {
 			return ""
 		
 		; Try the visible choices.
-		out := this.searchTable(this.choices, input)
-		if(out)
-			return out
+		data := this.searchTable(this.choices, input)
+		if(data)
+			return data
 		
 		; Try the invisible choices.
-		out := this.searchTable(this.hiddenChoices, input)
+		data := this.searchTable(this.hiddenChoices, input)
 		
-		return out
+		return data
 	}
 
 	; Function to search our generated table for a given index/shortcut.
 	searchTable(table, input) {
 		For i,t in table {
 			if(input = i) ; They picked the index itself.
-				return t.clone()
+				return t.getData()
 			
 			; Abbreviation could be an array, so account for that.
-			if(!IsObject(t.data["ABBREV"]) && (input = t.data["ABBREV"]))
-				return t.clone()
-			if(IsObject(t.data["ABBREV"]) && contains(t.data["ABBREV"], input))
-				return t.clone()
+			abbrev := t.getAbbrev()
+			if(!IsObject(abbrev) && (input = abbrev))
+				return t.getData()
+			if(IsObject(abbrev) && contains(abbrev, input))
+				return t.getData()
 		}
 		
 		return ""

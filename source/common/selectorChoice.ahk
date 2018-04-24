@@ -1,30 +1,33 @@
-/* Row data structure class for use in Selector.
-	
-	Important pieces that actions will want to interact with:
-		data[]		- Associative array of other data from the choice. Subscripted using the labels set in the input file's model row.
-	
+/* Representation of a single choice within a Selector object.
 */
+
 class SelectorChoice {
-	data := []
+	data := [] ; LABEL => VALUE
 	
-	; Constructor.
-	__New(arr = "", name = "", abbrev = "", value = "") {
-		if(arr) {
-			this.data := arr
-			; DEBUG.popup("Constructing", "SelectorRow", "Input array", arr, "Internal data", this.data)
-		} else {
-			this.data["NAME"]   := name
-			this.data["ABBREV"] := abbrev
-			this.data["VALUE"]  := value
-		}
+	;---------
+	; DESCRIPTION:    Create a new SelectorChoice instance.
+	; PARAMETERS:
+	;  data (I,REQ) - Assocative array of data that the choice contains.
+	;                 Format:
+	;                  data[LABEL] := VALUE
+	;                 Special subscripts:
+	;                  "ABBREV" - Abbreviation of choice, later accessible via .getAbbrev
+	;                  "NAME"   - Name of choice, later accessible via .getName
+	; RETURNS:        Reference to new SelectorChoice object
+	;---------
+	__New(data) {
+		this.data := data
 	}
 	
-	; Deep copy function.
-	clone() {
-		temp := new SelectorChoice()
-		For l,d in this.data
-			temp.data[l] := d
-		return temp
+	; Getter functions
+	getData() {
+		return this.data
+	}
+	getName() {
+		return this.data["NAME"]
+	}
+	getAbbrev() {
+		return this.data["ABBREV"]
 	}
 	
 	; Debug info

@@ -172,10 +172,6 @@ class Selector {
 	
 	; Load the choices and other such things from a specially formatted file.
 	loadChoicesFromFile(tableListSettings, filter) {
-		this.choices       := [] ; Visible choices the user can pick from.
-		this.hiddenChoices := [] ; Invisible choices the user can pick from.
-		this.sectionTitles := [] ; Lines that will be displayed as titles, extra newlines, etc, but have no other significance.
-		
 		; DEBUG.popup("TableList Settings", tableListSettings)
 		tl := new TableList(this.filePath, tableListSettings)
 		if(filter)
@@ -199,6 +195,9 @@ class Selector {
 		}
 		; DEBUG.popup("Selector.loadChoicesFromFile","Processed indices", "Index labels",tl.getIndexLabels(), "Separate rows",tl.getSeparateRows(), "Selector label indices",this.overrideFields)
 		
+		this.choices       := [] ; Visible choices the user can pick from.
+		this.hiddenChoices := [] ; Invisible choices the user can pick from.
+		this.sectionTitles := [] ; Lines that will be displayed as titles, extra newlines, etc, but have no other significance.
 		For i,row in table {
 			if(this.isChoiceRow(row))
 				this.addChoiceRow(row)

@@ -60,7 +60,7 @@ class FlexTable {
 	; ==============================
 	
 	;---------
-	; DESCRIPTION:		Create a new FlexTable instance.
+	; DESCRIPTION:    Create a new FlexTable instance.
 	; PARAMETERS:
 	;  guiId          (I,REQ) - ID of the GUI that we should add text controls to
 	;  x              (I,OPT) - X coordinate (in pixels) where the table should start
@@ -70,7 +70,7 @@ class FlexTable {
 	;                           cell in the previous column, and a new column
 	;  minColumnWidth (I,OPT) - Minimum width that a column must be (regardless of where 
 	;                           its right-most cell ends)
-	; RETURNS:			Reference to new FlexTable object
+	; RETURNS:        Reference to new FlexTable object
 	;---------
 	__New(guiId, x = 0, y = 0, rowHeight = 25, columnPadding = 30, minColumnWidth = 0) {
 		this.guiId          := guiId
@@ -87,14 +87,14 @@ class FlexTable {
 	}
 	
 	;---------
-	; DESCRIPTION:		Add a "cell" to the current row.
+	; DESCRIPTION:    Add a "cell" to the current row.
 	; PARAMETERS:
 	;  cellText        (I,OPT) - Text to show in the cell
 	;  leftPadding     (I,OPT) - How far out from the previous cell (or start of the row/column if it's the 
 	;                            first cell) this one should start.
 	;  width           (I,OPT) - How wide the cell should be. If not given, will calculate the width of the given text and use that.
 	;  extraProperties (I,OPT) - Any extra properties you want to apply to the text control (i.e. "Right" for right-aligned text)
-	; RETURNS:			Reference to new FlexTable object
+	; RETURNS:        Reference to new FlexTable object
 	;---------
 	addCell(cellText = "", leftPadding = "", width = "", extraProperties = "") {
 		this.makeGuiTheDefault()
@@ -115,6 +115,16 @@ class FlexTable {
 		this.addToX(width)
 	}
 	
+	;---------
+	; DESCRIPTION:    Add a specially-formatted (bold + underline) cell to the current row.
+	; PARAMETERS:
+	;  titleText       (I,REQ) - Text to show in the cell
+	;  leftPadding     (I,OPT) - How far out from the previous cell (or start of the row/column if it's the 
+	;                            first cell) this one should start.
+	;  width           (I,OPT) - How wide the cell should be. If not given, will calculate the width of the given text and use that.
+	;  extraProperties (I,OPT) - Any extra properties you want to apply to the text control (i.e. "Right" for right-aligned text)
+	; RETURNS:        Reference to new FlexTable object
+	;---------
 	addHeaderCell(titleText, leftPadding = "", width = "", extraProperties = "") {
 		this.makeGuiTheDefault()
 		
@@ -123,11 +133,23 @@ class FlexTable {
 		clearTitleFormat()
 	}
 	
+	;---------
+	; DESCRIPTION:    Add a "cell" to the current row.
+	; PARAMETERS:
+	;  cellText        (I,OPT) - Text to show in the cell
+	;  leftPadding     (I,OPT) - How far out from the previous cell (or start of the row/column if it's the 
+	;                            first cell) this one should start.
+	;  width           (I,OPT) - How wide the cell should be. If not given, will calculate the width of the given text and use that.
+	;  extraProperties (I,OPT) - Any extra properties you want to apply to the text control (i.e. "Right" for right-aligned text)
+	;---------
 	addRow() {
 		this.addToY(this.rowHeight)
 		this.setX(this.xCurrColumn)
 	}
 	
+	;---------
+	; DESCRIPTION:    Add a new column (that wraps the whole table, not within the table) to the table
+	;---------
 	addColumn() {
 		this.forceLastColumnToMinWidth()
 		
@@ -139,10 +161,18 @@ class FlexTable {
 		this.xMax := this.xCurrColumn + this.minColumnWidth
 	}
 	
+	;---------
+	; DESCRIPTION:    Get the total height of the table
+	; RETURNS:        The total height of the table, from its starting point to the bottom of the lowest row.
+	;---------
 	getTotalHeight() {
 		return this.yMax - this.yMin + this.rowHeight
 	}
 	
+	;---------
+	; DESCRIPTION:		Get the total width of the table
+	; RETURNS:			The total width of the table, from its starting point to the right edge of the last cell.
+	;---------
 	getTotalWidth() {
 		this.forceLastColumnToMinWidth()
 		return this.xMax - this.xMin
@@ -176,6 +206,11 @@ class FlexTable {
 	columnPadding  := ""
 	minColumnWidth := ""
 	
+	;---------
+	; DESCRIPTION:    Add the given value to the current X/y coordinate.
+	; PARAMETERS:
+	;  value (I,REQ) - Number to add
+	;---------
 	addToX(value) {
 		this.setX(this.xCurr + value)
 	}
@@ -183,25 +218,35 @@ class FlexTable {
 		this.setY(this.yCurr + value)
 	}
 	
+	;---------
+	; DESCRIPTION:    Set the current X/Y coordinate to the given value.
+	; PARAMETERS:
+	;  value (I,REQ) - New value
+	; SIDE EFFECTS:   Updates the maximum value for X/Y accordingly
+	;---------
 	setX(value) {
 		this.xCurr := value
 		this.xMax := max(this.xMax, value)
-		; DEBUG.popup("flexTable.setX","Finish", "Current",this.xCurr, "Min",this.xMin, "Max",this.xMax)
 	}
 	setY(value) {
 		this.yCurr := value
 		this.yMax := max(this.yMax, value)
-		; DEBUG.popup("flexTable.setY","Finish", "Current",this.yCurr, "Min",this.yMin, "Max",this.yMax)
 	}
 	
+	;---------
+	; DESCRIPTION:    Get a unique ID to use for determining the width of text within a label.
+	; RETURNS:        "FlexTableControl" + a globally incremented value.
+	;---------
 	getNextUniqueControlId() {
 		FlexTable.uniqueControlNum++
 		return "FlexTableControl" FlexTable.uniqueControlNum
 	}
 	
-	; Make sure all of the Gui* commands refer to the right one.
+	;---------
+	; DESCRIPTION:    Make the gui ID that we were given the default GUI (so 
+	;                 all of the relevant Gui, * commands apply to it)
+	;---------
 	makeGuiTheDefault() {
 		Gui, % this.guiId ":Default"
 	}
-	
 }

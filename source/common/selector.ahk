@@ -29,20 +29,20 @@
 				MinColumnWidth
 					Set this to any number X to have the UI be X pixels wide at a minimum (per column if multiple columns are shown). The UI might be larger if names are too long to fit.
 	
-	When the user selects their choice, the action passed in at the beginning will be evaluated as a function which receives a loaded SelectorRow object to perform the action on. See SelectorRow class for data structure.
+	When the user selects their choice, the action passed in at the beginning will be evaluated as a function which receives a loaded SelectorChoice object to perform the action on. See SelectorChoice class for data structure.
 	
 	Once the UI is shown, the user can enter either the index or abbreviation for the choice that they would like to select. The user can give information to the popup in a variety of ways:
 		Simplest case (+ShowOverrideFields != 1, no model or model index rows):
 			The user will only have a single input box, where they can add their choice and additional input using the arbitrary character (see below)
-			Resulting SelectorRow object will have the name, abbreviation, and action. Arbitrary input is added to the end of the action.
+			Resulting SelectorChoice object will have the name, abbreviation, and action. Arbitrary input is added to the end of the action.
 		
 		Model row, but +ShowOverrideFields != 1
 			The user still has a single input box.
-			Resulting SelectorRow will have the various pieces in named subscripts of its data array, where the names are those from the model row. Note that name and abbreviation are still separate from the data array, and arbitrary additions are added to action, whether it is set or not.
+			Resulting SelectorChoice will have the various pieces in named subscripts of its data array, where the names are those from the model row. Note that name and abbreviation are still separate from the data array, and arbitrary additions are added to action, whether it is set or not.
 		
 		Model row, with +ShowOverrideFields=1 (model index row optional)
 			The user will see multiple input boxes, in the order listed in the input file, or in the order of the model index row if defined. The user can override the values defined by the selected choice for each of the columns shown before the requested action is performed.
-			Resulting SelectorRow will have the various pieces in named subscripts of its data array, where the names are those from the model row. Note that name and abbreviation are still separate from the data array, and arbitrary additions are ignored entirely (as the user can use the additional inputs instead).
+			Resulting SelectorChoice will have the various pieces in named subscripts of its data array, where the names are those from the model row. Note that name and abbreviation are still separate from the data array, and arbitrary additions are ignored entirely (as the user can use the additional inputs instead).
 		
 	The input that the user puts in the first (sometimes only) input box can also include some special characters:
 		+ - Special actions
@@ -131,8 +131,8 @@ class Selector {
 	; ==============================
 	
 	chars          := [] ; Special characters (see getSpecialChars)
-	choices        := [] ; Visible choices the user can pick from (array of SelectorRow objects).
-	hiddenChoices  := [] ; Invisible choices the user can pick from (array of SelectorRow objects).
+	choices        := [] ; Visible choices the user can pick from (array of SelectorChoice objects).
+	hiddenChoices  := [] ; Invisible choices the user can pick from (array of SelectorChoice objects).
 	sectionTitles  := [] ; Lines that will be displayed as titles (index matches the first choice that should be under this title)
 	overrideFields := "" ; Mapping from override field indices => data labels (column headers)
 	guiSettings    := [] ; Settings related to the GUI popup we show
@@ -201,8 +201,8 @@ class Selector {
 		; DEBUG.popup("Selector.loadChoicesFromFile","Processed indices", "Index labels",tl.getIndexLabels(), "Separate rows",tl.getSeparateRows(), "Selector label indices",this.overrideFields)
 		
 		For i,currItem in list {
-			; Parse this size-n array into a new SelectorRow object.
-			currRow := new SelectorRow(currItem)
+			; Parse this size-n array into a new SelectorChoice object.
+			currRow := new SelectorChoice(currItem)
 			if(currItem["NAME"])
 				firstChar := SubStr(currItem["NAME"], 1, 1)
 			else

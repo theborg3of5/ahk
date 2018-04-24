@@ -20,7 +20,7 @@
 #Include runCommands.ahk
 #Include selector.ahk
 #Include selectorGui.ahk
-#Include selectorRow.ahk
+#Include selectorChoice.ahk
 #Include string.ahk
 #Include tableList.ahk
 #Include tableListMod.ahk

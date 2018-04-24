@@ -15,7 +15,7 @@ class SelectorGui {
 	;---------
 	; DESCRIPTION:    Create a new SelectorGui instance.
 	; PARAMETERS:
-	;  choices        (I,REQ) - Array of SelectorRow objects containing the information we need 
+	;  choices        (I,REQ) - Array of SelectorChoice objects containing the information we need 
 	;                           (name and abbreviation) to show a list of choices to the user.
 	;  sectionTitles  (I,OPT) - Array of titles that divide up sections of choices. The index on 
 	;                           a given title should match that of the first choice that should be 

@@ -44,7 +44,7 @@ Notes:
 		#Include data.ahk
 		#Include io.ahk
 		#Include selector.ahk
-		#Include selectorRow.ahk
+		#Include selectorChoice.ahk
 		#Include string.ahk
 		#Include tableList.ahk
 		#Include tableListMod.ahk

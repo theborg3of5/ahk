@@ -3,7 +3,7 @@
 data.ahk
 io.ahk
 selector.ahk
-selectorRow.ahk
+selectorChoice.ahk
 string.ahk
 tableList.ahk
 tableListMod.ahk

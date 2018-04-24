@@ -1,6 +1,6 @@
 'Selector'
-	Rework SelectorRow
-		Remove unused: userInput, buildSelectorRow()
+	Rework SelectorChoice
+		Remove unused: userInput, buildSelectorChoice()
 		Can we split constructor into two separate things?
 			Array version, individual values + data version
 		Reintroduce .name and .abbrev (as properties)

@@ -4,7 +4,7 @@
 		data[]		- Associative array of other data from the choice. Subscripted using the labels set in the input file's model row.
 	
 */
-class SelectorRow {
+class SelectorChoice {
 	data := []
 	
 	; Constructor.
@@ -21,14 +21,14 @@ class SelectorRow {
 	
 	; Deep copy function.
 	clone() {
-		temp := new SelectorRow()
+		temp := new SelectorChoice()
 		For l,d in this.data
 			temp.data[l] := d
 		return temp
 	}
 	
 	; Debug info
-	debugName := "SelectorRow"
+	debugName := "SelectorChoice"
 	debugToString(debugBuilder) {
 		debugBuilder.addLine("Data", this.data)
 	}

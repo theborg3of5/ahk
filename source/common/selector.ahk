@@ -179,10 +179,10 @@ class Selector {
 		; DEBUG.popup("TableList Settings", tableListSettings)
 		tl := new TableList(this.filePath, tableListSettings)
 		if(filter)
-			list := tl.getFilteredTable(filter["COLUMN"], filter["VALUE"])
+			table := tl.getFilteredTable(filter["COLUMN"], filter["VALUE"])
 		else
-			list := tl.getTable()
-		; DEBUG.popup("Filepath", this.filePath, "Parsed List", list, "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows())
+			table := tl.getTable()
+		; DEBUG.popup("Filepath", this.filePath, "Parsed table", table, "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows())
 		
 		if(!IsObject(tl.getIndexLabels())) {
 			DEBUG.popup("Selector.loadChoicesFromFile","Got TableList", "Invalid settings","No column index labels")
@@ -197,48 +197,56 @@ class Selector {
 					this.overrideFields[fieldIndex] := tl.getIndexLabel(i) ; Numeric, base-1 field index => column label (also the subscript in data array)
 			}
 		}
-		
 		; DEBUG.popup("Selector.loadChoicesFromFile","Processed indices", "Index labels",tl.getIndexLabels(), "Separate rows",tl.getSeparateRows(), "Selector label indices",this.overrideFields)
 		
-		For i,currItem in list {
-			; Parse this size-n array into a new SelectorChoice object.
-			currChoice := new SelectorChoice(currItem)
-			if(currItem["NAME"]) ; Choices should have this populated
-				firstChar := SubStr(currItem["NAME"], 1, 1)
+		For i,row in table {
+			if(this.isChoiceRow(row))
+				this.addChoiceRow(row)
 			else
-				firstChar := SubStr(currItem[1], 1, 1) ; Only really populated for the non-normal choices.
-			; DEBUG.popup("Curr Choice", currChoice, "First Char", firstChar)
-			
-			; Options for the selector in general.
-			if(firstChar = this.chars["SETTING"]) {
-				this.processSettingFromFile(currChoice.data[1])
-			
-			; Special: add a section title to the list display.
-			} else if(firstChar = this.chars["SECTION_TITLE"]) {
-				idx := forceNumber(this.choices.MaxIndex()) + 1 ; The next actual choice will be the first one under this header, so match that.
-				title := SubStr(currItem[1], 3) ; Format should be "# Title", strip off the "# "
-				this.sectionTitles[idx] := title ; If there are multiple headers in a row (for example when choices are filtered out) they should get overwritten in order here (which is correct).
-				; DEBUG.popup("Just added section title:", this.sectionTitles[this.sectionTitles.MaxIndex()], "At index", idx)
-				
-			; Invisible, but viable, choice.
-			} else if(firstChar = this.chars["HIDDEN"]) {
-				this.hiddenChoices.push(new SelectorChoice(currItem))
-			
-			; Otherwise, it's a visible, viable choice!
-			} else {
-				this.choices.push(new SelectorChoice(currItem))
-			}
+				this.processSpecialRow(row)
 		}
 	}
 	
-	processSettingFromFile(settingString) {
-		if(settingString = "")
-			return
+	;---------
+	; DESCRIPTION:    Check whether the given row (array) of data should become a 
+	;                 SelectorChoice, or whether it is instead a special row (setting 
+	;                 or section title). Rows that should become choices have a "NAME" 
+	;                 subscript with a value.
+	; PARAMETERS:
+	;  row (I,REQ) - Row of data from a TableList, will be checked 
+	;                for whether it should become a SelectorChoice or not.
+	; RETURNS:        Whether this is a choice-ready row or not.
+	;---------
+	isChoiceRow(row) {
+		return (row["NAME"] != "")
+	}
+	
+	addChoiceRow(row) {
+		choice := new SelectorChoice(row)
+		if(SubStr(row["NAME"], 1, 1) = this.chars["HIDDEN"])
+			this.hiddenChoices.push(choice) ; First char is hidden character (*), don't show it but allow user to choose it via abbrev.
+		else
+			this.choices.push(choice)
+	}
+	
+	processSpecialRow(row) {
+		rowText   := row[1] ; Only one element containing everything
+		firstChar := SubStr(rowText, 1, 1)
+		rowText   := subStr(rowText, 2) ; Go ahead and trim off the special character
 		
-		settingString := SubStr(settingString, 2) ; Trim off settings character (+)
+		; Setting
+		if(firstChar = this.chars["SETTING"]) {
+			if(rowText != "") {
+				settingSplit := StrSplit(settingString, "=")
+				this.setGuiSetting(settingSplit[1], settingSplit[2]) ; name, value
+			}
 		
-		settingSplit := StrSplit(settingString, "=")
-		this.setGuiSetting(settingSplit[1], settingSplit[2]) ; name, value
+		; Section title
+		} else if(firstChar = this.chars["SECTION_TITLE"]) {
+			title := SubStr(rowText, 2) ; Format should be "# Title", strip off the space (# already removed above)
+			idx := forceNumber(this.choices.MaxIndex()) + 1 ; The next actual choice will be the first one under this header, so match that.
+			this.sectionTitles[idx] := title ; If there are multiple headers in a row (for example when choices are filtered out) they should get overwritten in order here (which is correct).
+		}
 	}
 	
 	doSelectGui(defaultData) {

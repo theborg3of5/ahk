@@ -81,10 +81,10 @@ class SelectorGui {
 	widths  :=  {INDEX:25, ABBREV:50} ; Other widths are calculated based on contents and available space
 	heights :=  {LINE:25, FIELD:24}
 	
-	totalHeight := 0
-	totalWidth  := 0
-	tableHeight := 0
-	tableWidth  := 0
+	totalHeight   := 0
+	totalWidth    := 0
+	choicesHeight := 0
+	choicesWidth  := 0
 	
 	
 	setSpecialChars() {
@@ -106,19 +106,12 @@ class SelectorGui {
 	}
 	
 	buildPopup(choices, sectionTitles, minColumnWidth) {
-		this.totalHeight := this.margins["TOP"]
-		this.totalWidth  := this.margins["LEFT"]
+		this.totalHeight += this.margins["TOP"]
+		this.totalWidth  += this.margins["LEFT"]
 		
 		this.createPopup()
-		
 		this.addChoices(choices, sectionTitles, minColumnWidth)
-		this.totalHeight += this.tableHeight
-		this.totalWidth  += this.tableWidth
-		
-		this.totalHeight += this.heights["LINE"] ; Add a line between the table and fields.
-		
 		this.addFields()
-		this.totalHeight += this.heights["FIELD"]
 		
 		this.totalHeight += this.margins["BOTTOM"]
 		this.totalWidth  += this.margins["RIGHT"]
@@ -166,8 +159,10 @@ class SelectorGui {
 			isEmptyColumn := false
 		}
 		
-		this.tableHeight := flex.getTotalHeight()
-		this.tableWidth  := flex.getTotalWidth()
+		this.choicesHeight := flex.getTotalHeight()
+		this.choicesWidth  := flex.getTotalWidth()
+		this.totalHeight   += this.choicesHeight
+		this.totalWidth    += this.choicesWidth
 		; DEBUG.popup("SelectorGui.addChoices","Finish", "height",this.totalHeight, "width",this.totalWidth)
 	}
 	
@@ -184,12 +179,16 @@ class SelectorGui {
 	}
 	
 	addFields() {
+		this.totalHeight += this.heights["LINE"] ; Add an empty line before the fields.
+		
 		Gui, Font, -c ; Revert the color back to system default (so it can match the edit fields, which use the system default background).
 		this.addChoiceField()
 		
 		Gui, Font, % "c" SelectorGui.fieldGhostFontColor ; These will be default values (values = labels) by default - SelectorGuiOverrideFieldChanged() will change it dynamically based on contents.
 		if(this.overrideFields)
 			this.addOverrideFields()
+		
+		this.totalHeight += this.heights["FIELD"]
 	}
 	
 	addChoiceField() {
@@ -199,7 +198,7 @@ class SelectorGui {
 		if(this.overrideFields)
 			wFieldChoice := this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"] ; Main edit control is same size as index + abbrev columns combined.
 		else
-			wFieldChoice := this.tableWidth ; Main edit control is the same width as the choices table.
+			wFieldChoice := this.choicesWidth ; Main edit control is the same width as the choices table.
 		
 		this.addField(this.fieldVarChoice, xFieldChoice, yField, wFieldChoice, this.heights["FIELD"])
 	}
@@ -219,7 +218,7 @@ class SelectorGui {
 	addOverrideFields() {
 		yField              := this.totalHeight
 		wFieldChoiceBlock   := this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"] + this.padding["ABBREV_NAME"]
-		wFieldOverrideBlock := this.tableWidth - wFieldChoiceBlock
+		wFieldOverrideBlock := this.choicesWidth - wFieldChoiceBlock
 		wFieldOverride      := this.calcSingleOverrideFieldWidth(wFieldOverrideBlock)
 		
 		xFieldOverride := this.margins["LEFT"] + wFieldChoiceBlock

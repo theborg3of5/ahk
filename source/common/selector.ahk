@@ -52,15 +52,6 @@
 	
 */
 
-; GUI Events
-SelectorClose() {
-	Gui, Destroy
-}
-SelectorSubmit() {
-	Gui, Submit ; Actually saves edit controls' values to respective GuiIn* variables
-	Gui, Destroy
-}
-
 class Selector {
 	
 	; ==============================

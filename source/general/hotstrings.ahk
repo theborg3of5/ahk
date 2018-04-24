@@ -180,6 +180,22 @@
 		SendRaw, DEBUG.popup(") ; ending quote for syntax highlighting: "
 		Send, {Left} ; Get inside parens
 	return
+	
+	; Function header
+	::`;`;`;::
+		headerText = 
+		(
+		;---------
+		; DESCRIPTION:    
+		; PARAMETERS:
+		;  paramName (I/O/IO,REQ/OPT) - 
+		; RETURNS:        
+		; SIDE EFFECTS:   
+		; NOTES:          
+		;---------
+		)
+		SendRaw, % headerText
+	return
 }
 #IfWinNotActive
 #Hotstring

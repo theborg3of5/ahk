@@ -18,6 +18,9 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 'New'
+	Expand AHK function head hotstring to read and include parameters?
+		Select and copy line below the current one
+		Parse apart the parameters between () and delimited by commas
 	Selector of current DLGs?
 		Could move PRJ stuff to this as well.
 		Alternatively, could keep this in the TLG TL too?

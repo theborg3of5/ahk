@@ -1,4 +1,10 @@
+/* Class for generating and interacting with a Selector popup.
 	
+	Usage:
+		Create a new SelectorGui instance
+		Show popup (.show)
+		Get any needed info back (.getChoiceQuery, .getOverrideData)
+*/
 
 class SelectorGui {
 	
@@ -6,6 +12,20 @@ class SelectorGui {
 	; == Public ====================
 	; ==============================
 	
+	;---------
+	; DESCRIPTION:    Create a new SelectorGui instance.
+	; PARAMETERS:
+	;  choices        (I,REQ) - Array of SelectorRow objects containing the information we need 
+	;                           (name and abbreviation) to show a list of choices to the user.
+	;  sectionTitles  (I,OPT) - Array of titles that divide up sections of choices. The index on 
+	;                           a given title should match that of the first choice that should be 
+	;                           under that header.
+	;  overrideFields (I,OPT) - Array of labels (column headers in the TL file) for the data 
+	;                           that should get override fields.
+	;  minColumnWidth (I,OPT) - Column width will never be smaller than the longest choice, 
+	;                           but will also not get smaller than this value. Defaults to 0.
+	; RETURNS:        Reference to new SelectorGui object
+	;---------
 	__New(choices, sectionTitles = "", overrideFields = "", minColumnWidth = 0) {
 		this.overrideFields := overrideFields
 		

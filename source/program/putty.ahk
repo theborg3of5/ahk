@@ -188,6 +188,8 @@
 	^PgDn::
 		Send, +{PgDn 2}
 	return
+	
+	^!p::attachAllPuttyWindowsToMTPutty()
 #IfWinActive
 
 
@@ -217,4 +219,25 @@ getPuttyLogFile() {
 	
 	Send, !c ; Cancel
 	return logFile
+}
+
+attachAllPuttyWindowsToMTPutty() {
+	activateProgram("MTPutty")
+	titleString := getProgramTitleString("MTPutty")
+	if(!WinActive(titleString))
+		WinActivate, % titleString
+	
+	Sleep, 500
+	Send, ^t
+	
+	WinWaitActive, Attach ahk_class TfrmAttach
+	Send, {Tab 2}{Down} ; Focus list of sessions and select the first one
+	
+	SendMessage, 0x1004, 1, 0, TListView1, A ; gives the no. of rows
+	numRows := ErrorLevel
+	; DEBUG.popup("Number of rows",numRows)
+	
+	numRows-- ; Subtract 1 since the first row is already selected.
+	Send, {Shift Down}{Down %numRows%}{Shift Up} ; Select all orphaned sessions
+	Send, {Enter} ; Accept
 }

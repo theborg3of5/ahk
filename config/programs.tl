@@ -15,6 +15,7 @@
 	OneNote				ONENOTE.EXE				Framework::CFrame		-				-								Microsoft Office\root\Office16\ONENOTE.EXE
 	Putty					putty.exe				-							-				-								PuTTY\putty.exe
 	Hyperspace			EpicD85.exe				-							-				-								Epic\v8.5\Shared Files\EpicD85.exe
+	MTPutty				mtputty.exe				-							-				-								MTPuTTY\mtputty.exe
 []
 
 [{PATH}b:C:\Program Files\]

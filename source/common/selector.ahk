@@ -103,7 +103,6 @@ class Selector {
 		if(suppressOverrideFields)
 			this.overrideFields := "" ; If user explicitly asked us to suppress override fields, get rid of them.
 		
-		; DEBUG.popup("User Input",userChoiceString, "data",data)
 		data := this.doSelectGui(defaultOverrideData)
 		
 		if(isEmpty(data))
@@ -261,6 +260,7 @@ class Selector {
 		overrideData := sGui.getOverrideData()
 		data := mergeArrays(data, overrideData)
 		
+		; DEBUG.popup("Selector.doSelectGui","Finish", "Choice data",choiceData, "Override data",overrideData, "Merged data",data)
 		return data
 	}
 	

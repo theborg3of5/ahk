@@ -13,7 +13,7 @@
 		Translate English > Dutch	ted|edtrans	https://translate.google.com/#en/nl/%s
 []
 
-[SEARCH_TYPE}r:GREPWIN]
+[{SEARCH_TYPE}r:GREPWIN]
 		# GrepWin
 		; (SUBTYPE = folder)
 		AHK Root							ahkr			<AHK_ROOT>

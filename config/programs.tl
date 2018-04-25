@@ -3,18 +3,18 @@
 [{PATH}b:C:\Program Files (x86)\]
 	Chrome				chrome.exe				Chrome_WidgetWin_1	-				-								Google\Chrome\Application\chrome.exe
 	EMC2					EpicD82.exe				-							EMC2			-								Epic\v8.2\EMC2\Shared Files\EpicD82.exe									EMC2Update env=TRACKAPPTCP
-	EpicStudio			EpicStudio.exe			-							EpicStudio	-								EpicStudio\EpicStudio.exe														-										EPIC_LAPTOP
+	EpicStudio			EpicStudio.exe			-							EpicStudio	-								EpicStudio\EpicStudio.exe
 	Outlook				OUTLOOK.EXE				rctrl_renwnd32			-				-								Microsoft Office\Office16\OUTLOOK.EXE
 	Thunder				Thunder.exe				-							Thunder		-								Thunder\Thunder.exe
 	VB6					VB6.exe					wndclass_desked_gsk	-				-								Microsoft Visual Studio\VB98\VB6.EXE
-	VisualStudio		devenv.exe				-							-				-								Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.exe	-										EPIC_LAPTOP
+	VisualStudio		devenv.exe				-							-				-								Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.exe
 	Pidgin				pidgin.exe				-							-				-								Pidgin\pidgin.exe
 	Snapper				Snapper.exe				-							-				-								Epic\Snapper\Snapper.exe
 	VMWareView			vmware-view.exe		-							-				-								VMware\VMware Horizon View Client\vmware-view.exe
 	OneNote				ONENOTE.EXE				Framework::CFrame		-				-								Microsoft Office\Office16\ONENOTE.EXE										-										EPIC_LAPTOP
 	OneNote				ONENOTE.EXE				Framework::CFrame		-				-								Microsoft Office\root\Office16\ONENOTE.EXE
-	Putty					putty.exe				-							-				-								PuTTY\putty.exe																	-										EPIC_LAPTOP
-	Hyperspace			EpicD85.exe				-							-				-								Epic\v8.5\Shared Files\EpicD85.exe											-										EPIC_LAPTOP
+	Putty					putty.exe				-							-				-								PuTTY\putty.exe
+	Hyperspace			EpicD85.exe				-							-				-								Epic\v8.5\Shared Files\EpicD85.exe
 []
 
 [{PATH}b:C:\Program Files\]

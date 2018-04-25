@@ -6,10 +6,10 @@ global WS_DISABLED         = 0x8000000
 global WS_POPUP            = 0x80000000
 
 ; SysGet command numbers, from https://autohotkey.com/docs/commands/SysGet.htm
-SM_CXBORDER    := 5  ; For non-3D windows (which should be most), the width of the border on the left and right.
-SM_CYBORDER    := 6  ; For non-3D windows (which should be most), the width of the border on the top and bottom.
-SM_CXMAXIMIZED := 61 ; Width of a maximized window on the primary monitor. Includes any weird offsets.
-SM_CYMAXIMIZED := 62 ; Height of a maximized window on the primary monitor. Includes any weird offsets.
+global SM_CXBORDER    := 5  ; For non-3D windows (which should be most), the width of the border on the left and right.
+global SM_CYBORDER    := 6  ; For non-3D windows (which should be most), the width of the border on the top and bottom.
+global SM_CXMAXIMIZED := 61 ; Width of a maximized window on the primary monitor. Includes any weird offsets.
+global SM_CYMAXIMIZED := 62 ; Height of a maximized window on the primary monitor. Includes any weird offsets.
 
 ; Delimiters and special characters.
 global QUOTES := """"
@@ -35,3 +35,6 @@ global MSGBOX_BUTTONS_CANCEL_TRYAGAIN_CONTINUE := 6
 
 ; Control styles
 global WS_EX_CLIENTEDGE := 0x200 ; Border with sunken edge (on by default for many control types)
+
+; Messages
+global LVM_GETITEMCOUNT := 0x1004 ; Get the number of items in a ListView control (works for TListView)

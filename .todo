@@ -1,11 +1,4 @@
 'Selector'
-	Rework SelectorChoice
-		Remove unused: userInput, buildSelectorChoice()
-		Can we split constructor into two separate things?
-			Array version, individual values + data version
-		Reintroduce .name and .abbrev (as properties)
-			In constructor, should come from either parameters (if given) or from "NAME"/"ABBREV" subscripts of data array
-			Have launchSelectorPopup() use .name/.abbrev instead of .data["NAME"]/.data["ABBREV"]
 	Rework Selector documentation
 	Re-implement debug, but only for getting result of selection out
 		Also make sure edit option is still passing back blank.

@@ -63,7 +63,8 @@
 	{ ; Content/formatting modifiers.
 		; Deletes a full line.
 		^d::
-			Send, ^a ; Select all - gets entire line, including newline at end.
+			Send, {Home}   ; Make sure the line isn't already selected, otherwise we select the whole parent.
+			Send, ^a       ; Select all - gets entire line, including newline at end.
 			Send, {Delete}
 		return
 		

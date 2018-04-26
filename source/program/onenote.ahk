@@ -102,6 +102,10 @@
 			Send, p
 			Sleep, 500
 			
+			; If the special paste menu item was there (where the only option is "Paste (P)"), the menu is still open (because 2 "p" items) - get to the next one and actually submit it.
+			if(WinActive("ahk_class Net UI Tool Window"))
+				Send, p{Enter}
+			
 			; Trim off the paragraph-specific part.
 			copiedLink := RegExReplace(clipboard, "&object-id.*")
 			

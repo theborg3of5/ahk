@@ -11,6 +11,11 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 'New'
+	Toast
+		Create a new toast class for myself
+		Can base on/be inspired by pukkandan's toast class (https://github.com/pukkandan/My-Startup-Script/blob/master/Lib/Toast.ahk )
+			But much simpler.
+		Use for long-running processes, like firstSetup's file copying stuff.
 	Should we have windows > activateProgram wait for window to be active after running?
 		Possibly activate it itself after a timer if it's not active but exists?
 	Selector of current DLGs?
@@ -37,9 +42,7 @@
 	Add some way to show progress for long-running scripts - maybe using a tooltip, or toast library from below?
 	Audit all scripts for unused hotkeys
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
-	Go through pukkandan's startup script (https://github.com/pukkandan/My-Startup-Script) and pull out anything interesting
-		Lib
-			Toast - for displaying info with some hotkeys. Could be good for long-running stuff (like firstSetup)
+	Go through pukkandan's startup script (https://github.com/pukkandan/My-Startup-Script ) and pull out anything interesting
 		WinSizer - as a replacement/cross-pollination for KDE mover-sizer
 		Tray - to make main script (and all standalone scripts) have a consistent tray menu
 			Probably similar to what I did in my own share scripts?

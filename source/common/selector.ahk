@@ -129,13 +129,14 @@ class Selector {
 	; == Private ===================
 	; ==============================
 	
-	chars          := [] ; Special characters (see getSpecialChars)
-	choices        := [] ; Visible choices the user can pick from (array of SelectorChoice objects).
-	hiddenChoices  := [] ; Invisible choices the user can pick from (array of SelectorChoice objects).
-	sectionTitles  := [] ; Lines that will be displayed as titles (index matches the first choice that should be under this title)
-	overrideFields := "" ; Mapping from override field indices => data labels (column headers)
-	guiSettings    := [] ; Settings related to the GUI popup we show
-	filePath       := "" ; Where the .tl file lives if we're reading one in.
+	chars          := []    ; Special characters (see getSpecialChars)
+	choices        := []    ; Visible choices the user can pick from (array of SelectorChoice objects).
+	hiddenChoices  := []    ; Invisible choices the user can pick from (array of SelectorChoice objects).
+	sectionTitles  := []    ; Lines that will be displayed as titles (index matches the first choice that should be under this title)
+	overrideFields := ""    ; Mapping from override field indices => data labels (column headers)
+	guiSettings    := []    ; Settings related to the GUI popup we show
+	filePath       := ""    ; Where the .tl file lives if we're reading one in.
+	suppressData   := false ; Whether to ignore any override data the user entered.
 	
 	; Names for global variables that we'll use for values of fields. This way they can be declared global and retrieved in the same way, without having to pre-define global variables.
 	choiceFieldName         := "SelectorChoice"
@@ -257,8 +258,10 @@ class Selector {
 		data := mergeArrays(data, choiceData)
 		
 		; Override fields can add to that too.
-		overrideData := sGui.getOverrideData()
-		data := mergeArrays(data, overrideData)
+		if(!this.suppressData) {
+			overrideData := sGui.getOverrideData()
+			data := mergeArrays(data, overrideData)
+		}
 		
 		; DEBUG.popup("Selector.doSelectGui","Finish", "Choice data",choiceData, "Override data",overrideData, "Merged data",data)
 		return data
@@ -270,9 +273,11 @@ class Selector {
 		if(InStr(userChoiceString, this.chars["COMMAND"])) {
 			commandChar := SubStr(userChoiceString, 2, 1)
 			
-			; Special case: +e is the edit action, which will open the current INI file for editing.
-			if(commandChar = this.chars["COMMANDS", "EDIT"])
+			; Edit action - open the current INI file for editing
+			if(commandChar = this.chars["COMMANDS", "EDIT"]) {
+				this.suppressData := true
 				Run(this.filePath)
+			}
 			
 			return ""
 		

@@ -1,7 +1,5 @@
 'Selector'
 	Rework Selector documentation
-	Re-implement debug, but only for getting result of selection out
-		Also make sure edit option is still passing back blank.
 	
 'Fixes'
 	Possible bug: if more hidden choices than choices in Selector, could pick hidden choice by index (that are beyond the length of visible choices)?

@@ -2,7 +2,6 @@
 	Rework Selector documentation
 	
 'Fixes'
-	Possible bug: if more hidden choices than choices in Selector, could pick hidden choice by index (that are beyond the length of visible choices)?
 	Take another look at genericSearch(), make sure we really need to do the forceArray() stuff
 		Probably tweak the loop or pull out a subfunction, too.
 	Go back and clean up launch.ahk a bunch with all of the additional logic dumped there from the selector rework
@@ -12,9 +11,6 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 'New'
-	Add another field to ActionObject selector?
-		SLG - post
-		DLG - view (would end up moving view out of being a subaction, to being a subset of EDIT - which honestly makes some sense)
 	Should we have windows > activateProgram wait for window to be active after running?
 		Possibly activate it itself after a timer if it's not active but exists?
 	Selector of current DLGs?

@@ -298,22 +298,23 @@ class Selector {
 			return data
 		
 		; Try the invisible choices.
-		data := this.searchTable(this.hiddenChoices, input)
+		data := this.searchTable(this.hiddenChoices, input, false)
 		
 		return data
 	}
 
 	; Function to search our generated table for a given index/shortcut.
-	searchTable(table, input) {
+	searchTable(table, input, checkIndex = true) {
 		For i,t in table {
-			if(input = i) ; They picked the index itself.
+			; Index
+			if(checkIndex && (input = i))
 				return t.getData()
 			
 			; Abbreviation could be an array, so account for that.
 			abbrev := t.getAbbrev()
 			if(!IsObject(abbrev) && (input = abbrev))
 				return t.getData()
-			if(IsObject(abbrev) && contains(abbrev, input))
+			else if(IsObject(abbrev) && contains(abbrev, input))
 				return t.getData()
 		}
 		

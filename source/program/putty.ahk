@@ -233,7 +233,7 @@ attachAllPuttyWindowsToMTPutty() {
 	WinWaitActive, Attach ahk_class TfrmAttach
 	Send, {Tab 2}{Down} ; Focus list of sessions and select the first one
 	
-	SendMessage, 0x1004, 1, 0, TListView1, A ; gives the no. of rows
+	SendMessage, % LVM_GETITEMCOUNT, 1, 0, TListView1, A ; gives the no. of rows
 	numRows := ErrorLevel
 	; DEBUG.popup("Number of rows",numRows)
 	

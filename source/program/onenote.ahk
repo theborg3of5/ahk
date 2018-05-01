@@ -63,6 +63,7 @@
 	{ ; Content/formatting modifiers.
 		; Deletes a full line.
 		^d::
+			escapeOneNotePastePopup()
 			Send, {Home}   ; Make sure the line isn't already selected, otherwise we select the whole parent.
 			Send, ^a       ; Select all - gets entire line, including newline at end.
 			Send, {Delete}
@@ -91,8 +92,14 @@
 	; Disable ^t hotkey making a new section
 	; ^t::return ; Used for collapsing/expanding above
 	
-	^s::Send, +{F9} ; Sync This Notebook Now
-	^+s::Send, {F9} ; Sync All Notebooks Now
+	^s::
+		escapeOneNotePastePopup()
+		Send, +{F9} ; Sync This Notebook Now
+	return
+	^+s::
+		escapeOneNotePastePopup()
+		Send, {F9} ; Sync All Notebooks Now
+	return
 	
 	; Copy link to page.
 	!c::
@@ -178,5 +185,13 @@
 	}
 	oneNoteLinkedSpecificsPage() { ; Custom OneTastic macro
 		Send, !8
+	}
+	
+	escapeOneNotePastePopup() {
+		ControlGet, pastePopupHandle, Hwnd, , OOCWindow1, A
+		if(!pastePopupHandle)
+			return
+		
+		Send, {Space}{Backspace}
 	}
 #IfWinActive

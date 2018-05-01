@@ -106,7 +106,7 @@
 			splitRecordString(selectedText, ini, id)
 			
 			s := new Selector("epicEnvironments.tl")
-			s.addExtraDataFields(["INI", "ID"])
+			s.addExtraOverrideFields(["INI", "ID"])
 			
 			defaultOverrideData        := []
 			defaultOverrideData["INI"] := ini

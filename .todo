@@ -53,6 +53,4 @@
 	
 'Documentation'
 	Debug
-	Selector
-		Settings passed in programmatically
 	MainConfig and windows.tl support for RegEx in titles ({REGEX})

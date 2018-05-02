@@ -116,20 +116,46 @@ class Selector {
 	; == Public ====================
 	; ==============================
 	
-	__New(filePath = "", filter = "", tableListSettings = "") {
+	;---------
+	; DESCRIPTION:    Creates a new instance of the Selector class.
+	; PARAMETERS:
+	;  filePath   (I,REQ) - The TableList (.tl) file where the choices that will be selected from will be
+	;                       read from. This file should be readable by the TableList class, see that class
+	;                       for details on file format.
+	;  filter     (I,OPT) - An array of information used to restrict the choices that are read from filePath.
+	;                       Defaults to no filter.
+	;                       	Format:
+	;                       		filter["COLUMN"] - Name of the column to filter on
+	;                       		filter["VALUE"]  - Value to filter to. If a choice has this value (or blank)
+	;                       		                   for the column, it will be included.
+	;  tlSettings (I,OPT) - If you need to override any of the settings used by the TableList class to read
+	;                       the file, you may set them in an array here. See the TableList class for what
+	;                       settings are available. The default settings used by this class can be found in
+	;                       .getDefaultTableListSettings().
+	; RETURNS:        A new Selector object.
+	;---------
+	__New(filePath, filter = "", tlSettings = "") {
 		this.setChars()
 		this.setDefaultGuiSettings()
 		
-		tlSettings := mergeArrays(this.getDefaultTableListSettings(), tableListSettings)
+		tlSettings := mergeArrays(this.getDefaultTableListSettings(), tlSettings)
 		
 		if(filePath) {
 			this.filePath := findConfigFilePath(filePath)
 			this.loadChoicesFromFile(tlSettings, filter)
 		}
 		
-		; DEBUG.popup("Selector.__New", "Finish", "Filepath", this.filePath, "TableListSettings", this.tableListSettings, "Filter", this.filter, "State", this)
+		; DEBUG.popup("Selector.__New", "Finish", "Filepath", this.filePath, "TableListSettings", tlSettings, "Filter", this.filter, "State", this)
 	}
 	
+	;---------
+	; DESCRIPTION:    Override a gui-related setting. The list of these settings and what they do may be found
+	;                 in the class documentation above.
+	; PARAMETERS:
+	;  name  (I,REQ) - Name of the setting to override.
+	;  value (I,OPT) - Value to set the setting to. Defaults to blank.
+	; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui().
+	;---------
 	setGuiSetting(name, value = "") {
 		if(name = "")
 			return
@@ -137,8 +163,16 @@ class Selector {
 		this.guiSettings[name] := value
 	}
 	
-	; Extra data fields - should be added to overrideFields (so they show up in the popup)
-	; extraDataFields - simple array of column names. Default values (if desired) should be in selectGui > defaultOverrideData.
+	;---------
+	; DESCRIPTION:    Add additional override fields to the popup shown to the user, and return whatever data
+	;                 they add (or is defaulted in) in the final return array.
+	; PARAMETERS:
+	;  extraDataFields (I,REQ) - Numerically-indexed array of field names (treated the same as column names from
+	;                            choices) to add.
+	; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui().
+	;                 Default override values for these fields (if desired) can be set using .selectGui()'s
+	;                 defaultOverrideData parameter.
+	;---------
 	addExtraOverrideFields(extraDataFields) {
 		if(!this.overrideFields)
 			this.overrideFields := []

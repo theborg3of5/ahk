@@ -182,6 +182,23 @@ class Selector {
 			this.overrideFields[baseLength + i] := label
 	}
 	
+	;---------
+	; DESCRIPTION:    Show a popup to the user so they can select one of the choices we've prepared and 
+	;                 enter any additional override information.
+	; PARAMETERS:
+	;  returnColumn           (I,OPT) - If this parameter is given, only the data under the column with
+	;                                   this name will be returned.
+	;  title                  (I,OPT) - If you want to override the title set in the TL file (or defaulted
+	;                                   from this class), pass in the desired title here.
+	;  defaultOverrideData    (I,OPT) - If you want to default values into the override fields shown to
+	;                                   the user, pass those values in an array here. Format:
+	;                                   	defaultOverrideData["fieldName"] := value
+	;  suppressOverrideFields (I,OPT) - If the TL file would normally show override fields (by virtue of
+	;                                   having a model index row), you can still hide those fields by setting
+	;                                   this parameter to true.
+	; RETURNS:        An array of data as chosen/overridden by the user. If the returnColumn parameter was
+	;                 specified, only the subscript matching that name will be returned.
+	;---------
 	selectGui(returnColumn = "", title = "", defaultOverrideData = "", suppressOverrideFields = false) {
 		; DEBUG.popup("Selector.selectGui", "Start", "Default override data", defaultOverrideData, "GUI Settings", guiSettings)
 		if(title)
@@ -199,6 +216,16 @@ class Selector {
 			return data
 	}
 	
+	;---------
+	; DESCRIPTION:    Programmatically select a choice from those we've prepared.
+	; PARAMETERS:
+	;  choiceString (I,REQ) - The string to try and match against the given choices. We will match this string
+	;                         against the index or abbreviation of the choice.
+	;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this name will
+	;                         be returned.
+	; RETURNS:        An array of data for the choice matching the given string. If the returnColumn parameter
+	;                 was specified, only the subscript matching that name will be returned.
+	;---------
 	selectChoice(choiceString, returnColumn = "") {
 		if(!choiceString)
 			return ""

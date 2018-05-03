@@ -1,3 +1,104 @@
+/* Class that parses and processes a specially-formatted file.
+	
+	Motivation
+		The goal of the .tl file format is to allow the file to be formatted with tabs so that it looks like a table in plain text, regardless of the size of the contents.
+		
+		For example, say we want to store and reference a list of folder paths. A simple tab-delimited file might look something like this:
+			AHK Config	AHK_CONFIG	C:\ahk\config
+			AHK Source	AHK_SOURCE	C:\ahk\source
+			Downloads	DOWNLOADS	C:\Users\user\Downloads
+			VB6 Compile	VB6_COMPILE	C:\Users\user\Dev\Temp\Compile	EPIC_LAPTOP
+			Music	MUSIC	C:\Users\user\Music	HOME_DESKTOP
+			Music	MUSIC	C:\Users\user\Music	HOME_ASUS
+			Music	MUSIC	D:\Music	EPIC_LAPTOP
+		
+		There's a few non-desirable things here:
+			1. None of the columns align, because the content is different widths
+			2. You can't have comments, to make it more obvious what rows in the file represent
+			3. There's no way to reduce duplication (lots of "C:\Users\" above, and several lines that are nearly identical)
+			4. ***
+		
+		Another option is an INI file, but that has issues of its own:
+			1. The file gets very tall (many lines) very quickly
+			2. There's no good way to see the values for all entities for a specific key
+		
+		So the goal is to have a file format that:
+			1. Can be formatted like a table - this allows us to see the value for each entity (row) for each column
+			2. Can be formatted so that columns are aligned nicely - without this, the table format is useless
+			3. Contains features that allow us to de-duplicate some of the data therein
+		
+	File Format
+		At its simplest, a TL file is a bunch of line which are tab-delimited, but each row can:
+			1. Be indented (tabs and spaces at the beginning of the line) as desired with no effect on data
+			2. Be indented WITHIN the line as desired - effectively, multiple tabs between columns are treated the same as a single tab
+		So for our paths example above, we can now do this (would normally be tabs between terms, but I'm replacing them with spaces in this documentation so your tab width doesn't matter):
+			AHK Config     AHK_CONFIG     C:\ahk\config
+			AHK Source     AHK_SOURCE     C:\ahk\source
+			Downloads      DOWNLOADS      C:\Users\user\Downloads
+			VB6 Compile    VB6_COMPILE    C:\Users\user\Dev\Temp\Compile   EPIC_LAPTOP
+			Music          MUSIC          C:\Users\user\Music              HOME_DESKTOP
+			Music          MUSIC          C:\Users\user\Music              HOME_ASUS
+			Music          MUSIC          D:\Music                         EPIC_LAPTOP
+		
+		We can also use comments, and add a header row (which this class will use as indices in the 2D array you get back:
+			(   NAME           ABBREV         PATH
+			    ; AHK Folders
+			    AHK Config     AHK_CONFIG     C:\ahk\config
+			    AHK Source     AHK_SOURCE     C:\ahk\source
+			    Downloads      DOWNLOADS      C:\Users\user\Downloads
+			    VB6 Compile    VB6_COMPILE    C:\Users\user\Dev\Temp\Compile   EPIC_LAPTOP
+			    ; Music variations per machine
+			    Music          MUSIC          C:\Users\user\Music              HOME_DESKTOP
+			    Music          MUSIC          C:\Users\user\Music              HOME_ASUS
+			    Music          MUSIC          D:\Music                         EPIC_LAPTOP
+		
+	Special Characters
+		The following characters have special meaning when included in the file. All of them can be changed by setting the relevant ["CHARS","<name>"] subscript in the settings array passed to the constructor.
+		GDB TODO - if we make them all capable of being arrays, call that out here.
+		
+		At the start of a row:
+			@ - SETTING
+				Any row that begins with one of these is assumed to be of the form @SettingName=value, where SettingName is one of the following:
+					PlaceholderChar - the placeholder character to use
+				Note that if any of these conflict with the settings passed programmatically, the programmatic settings win.
+			
+			; - IGNORE
+				If any of these characters are at the beginning of a line (ignoring any whitespace before that), the line is ignored and not added to the array of lines.
+			
+			( - MODEL
+				This is the header row mentioned above - if you specify this, the 2D array that you get back will use these column headers as string indices into each "row" array.
+			
+			[ - MODSTART
+				A line which begins with this character will be processed as a mod (see "Mods" below for details).
+				Note that the line should end with a single corresponding character (assumed to be the matching "]", but doesn't really matter)
+			
+			(no default) - PASS
+				Any row that begins with one of these characters will not be broken up into multiple pieces, but will be a single-element array in the final output.
+			
+		Within a "normal" row (not started with any of the special characters above):
+			- - PLACEHOLDER
+				Having this allows you to have a truly empty value for a column in a given row (useful when optional columns are in the middle).
+			
+			| - MULTIENTRY
+				If this is included in a value for a column, the value for that row will be an array of the pipe-delimited values.
+			
+	Mods
+		***
+		
+	Usage
+		***
+		
+	Example Usage
+		File:
+			***
+		
+		Code:
+			***
+			
+		Result:
+			***
+*/
+
 /* Generic, flexible custom class for parsing lists.
 	
 	Throughout this documentation, "tl" will refer to an instance of this class.
@@ -11,35 +112,6 @@
 		Multiple tabs in a row within a row are treated as a single tab.
 	
 	Certain characters have special meaning when parsing the lines of a file. They include:
-		At the start of a row:
-			@ - Setting
-				Any row that begins with one of these is assumed to be of the form @SettingName=value, where SettingName is one of the following:
-					PlaceholderChar - the placeholder character to use
-				Note that if any of these conflict with the settings passed programmatically, the programmatic settings win.
-			
-			; - Ignore[]
-				If any of these characters are at the beginning of a line (ignoring any whitespace before that), the line is ignored and not added 
-				to the array of lines.
-				Override with settings["CHARS", "IGNORE"].
-			
-			( - Model
-				You can have each line use string indices per value by creating a row that begins with this character. You can tab-separate this line to visually line up with your rows.
-				Override with settings["CHARS", "MODEL"].
-		
-			[ - Mod
-				A line which begins with this character will be processed as a mod (see mod section below for details).
-		
-			(no default) - Pass[]
-				Any row that begins with one of these characters will not be broken up into multiple pieces, but will be a single-element array in the final output.
-				Override with settings["CHARS", "PASS"].
-			
-		Within a "normal" row (not started with any of the special characters above):
-			- - Placeholder
-				Having this allows you to have a truly empty value for a column in a given row (useful when optional columns are in the middle).
-				Override with @PlaceholderChar or settings["CHARS", "PLACEHOLDER"].
-			
-			| - Multiple
-				In a row that's being split, if an individual column within the row has this character, then that entry will be an array of the pipe-delimited values.
 		
 	These settings are also available:
 		settings["FORMAT", "SEPARATE_MAP"]
@@ -256,7 +328,6 @@ class TableList {
 	; Special character defaults
 	getDefaultChars() {
 		chars := []
-		chars["WHITESPACE"] := [ A_Space, A_Tab ]
 		
 		chars["MODSTART"] := "["
 		chars["IGNORE"]   := [";"]

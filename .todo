@@ -1,5 +1,7 @@
-'Selector'
-	Update TableList documentation
+'TableList'
+	Update documentation
+	Make all characters into (optionally) arrays
+		Add a helper function that checks either way, can just take the character subscript name
 	
 'Fixes'
 	Take another look at genericSearch(), make sure we really need to do the forceArray() stuff

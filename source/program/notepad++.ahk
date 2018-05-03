@@ -45,7 +45,6 @@
 				( RTrim0
 				;---------
 				; DESCRIPTION:    
-				; PARAMETERS:
 				
 				)
 			
@@ -55,6 +54,8 @@
 				param := param getSpaces(maxParamLength - paramLen)
 				paramsText .= ";  " param " (I/O/IO,REQ/OPT) - `n"
 			}
+			if(paramsText)
+				paramsText := "; PARAMETERS:`n" paramsText
 			
 			endText =
 				( RTrim0

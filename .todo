@@ -1,5 +1,6 @@
 'Selector'
 	Rework Selector documentation
+	Update TableList documentation
 	
 'Fixes'
 	Take another look at genericSearch(), make sure we really need to do the forceArray() stuff

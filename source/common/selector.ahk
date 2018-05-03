@@ -251,10 +251,9 @@ class Selector {
 	filePath       := ""    ; Where the .tl file lives if we're reading one in.
 	suppressData   := false ; Whether to ignore any override data the user entered.
 	
-	; Names for global variables that we'll use for values of fields. This way they can be declared global and retrieved in the same way, without having to pre-define global variables.
-	choiceFieldName         := "SelectorChoice"
-	overrideFieldNamePrefix := "SelectorOverride"
-	
+	;---------
+	; DESCRIPTION:    Populate this.chars with the special characters we use for parsing the file and user input.
+	;---------
 	setChars() {
 		this.chars["SECTION_TITLE"] := "#"
 		this.chars["HIDDEN"]        := "*"
@@ -271,22 +270,35 @@ class Selector {
 		this.guiSettings["WindowTitle"]    := "Please make a choice by either number or abbreviation:"
 	}
 	
-	; Default settings to use with TableList object when parsing input file.
+	;---------
+	; DESCRIPTION:    Get the default settings that we use with TableList to parse the input file.
+	; RETURNS:        Array of TableList settings, see TableList for details.
+	;---------
 	getDefaultTableListSettings() {
-		tableListSettings := []
+		tlSettings := []
 		
-		tableListSettings["CHARS"] := []
-		tableListSettings["CHARS",  "PASS"]            := [this.chars["SECTION_TITLE"], this.chars["SETTING"]]
-		tableListSettings["FORMAT", "SEPARATE_MAP"]    := {this.chars["MODEL_INDEX"]: "DATA_INDEX"} 
-		tableListSettings["FORMAT", "DEFAULT_INDICES"] := ["NAME", "ABBREV", "VALUE"]
+		tlSettings["CHARS"] := []
+		tlSettings["CHARS",  "PASS"]            := [this.chars["SECTION_TITLE"], this.chars["SETTING"]] ; Rows starting with these characters will not be split at all.
+		tlSettings["FORMAT", "SEPARATE_MAP"]    := {this.chars["MODEL_INDEX"]: "DATA_INDEX"} 
+		tlSettings["FORMAT", "DEFAULT_INDICES"] := ["NAME", "ABBREV", "VALUE"]
 		
-		return tableListSettings
+		return tlSettings
 	}
 	
-	; Load the choices and other such things from a specially formatted file.
-	loadChoicesFromFile(tableListSettings, filter) {
-		; DEBUG.popup("TableList Settings", tableListSettings)
-		tl := new TableList(this.filePath, tableListSettings)
+	;---------
+	; DESCRIPTION:    Load the choices and other information from the TL file.
+	; PARAMETERS:
+	;  tlSettings (I,REQ) - The TableList settings array (see TableList for details)
+	;  filter     (I,REQ) - An array of filtering information to limit which choices we keep from the file.
+	;                       	Format:
+	;                       		filter["COLUMN"] - Name of the column to filter on
+	;                       		filter["VALUE"]  - Value to filter to. If a choice has this value (or blank)
+	;                       		                   for the column, it will be included.
+	; SIDE EFFECTS:   Populates various member variables with information from the file.
+	;---------
+	loadChoicesFromFile(tlSettings, filter) {
+		; DEBUG.popup("TableList Settings", tlSettings)
+		tl := new TableList(this.filePath, tlSettings)
 		if(filter)
 			table := tl.getFilteredTable(filter["COLUMN"], filter["VALUE"])
 		else
@@ -315,7 +327,7 @@ class Selector {
 			if(this.isChoiceRow(row))
 				this.addChoiceRow(row)
 			else
-				this.processSpecialRow(row)
+				this.processSpecialLine(row[1]) ; For special rows, everything is contained in the first element (not split at all).
 		}
 	}
 	
@@ -333,6 +345,13 @@ class Selector {
 		return (row["NAME"] != "")
 	}
 	
+	;---------
+	; DESCRIPTION:    Given a row representing a choice, turn it into a SelectorChoice
+	;                 object and add it to the relevant choices array (normal or hidden).
+	; PARAMETERS:
+	;  row (I,REQ) - The row (array) of information about the choice. Should include "NAME"
+	;                and "ABBREV" subscripts, along with any other data you want to include.
+	;---------
 	addChoiceRow(row) {
 		choice := new SelectorChoice(row)
 		if(SubStr(row["NAME"], 1, 1) = this.chars["HIDDEN"])
@@ -341,26 +360,42 @@ class Selector {
 			this.choices.push(choice)
 	}
 	
-	processSpecialRow(row) {
-		rowText   := row[1] ; Only one element containing everything
-		firstChar := SubStr(rowText, 1, 1)
-		rowText   := subStr(rowText, 2) ; Go ahead and trim off the special character
+	;---------
+	; DESCRIPTION:    Properly handle a row from the TableList that is not a choice
+	;                 (setting or section title).
+	; PARAMETERS:
+	;  line (I,REQ) - The line that we want to process, should start with a special
+	;                 character.
+	;---------
+	processSpecialLine(line) {
+		firstChar := SubStr(line, 1, 1)
+		line      := subStr(line, 2) ; Go ahead and trim off the special character
 		
 		; Setting
 		if(firstChar = this.chars["SETTING"]) {
-			if(rowText != "") {
+			if(line != "") {
 				settingSplit := StrSplit(settingString, "=")
 				this.setGuiSetting(settingSplit[1], settingSplit[2]) ; name, value
 			}
 		
 		; Section title
 		} else if(firstChar = this.chars["SECTION_TITLE"]) {
-			title := SubStr(rowText, 2) ; Format should be "# Title", strip off the space (# already removed above)
+			title := SubStr(line, 2) ; Format should be "# Title", strip off the space (# already removed above)
 			idx := forceNumber(this.choices.MaxIndex()) + 1 ; The next actual choice will be the first one under this header, so match that.
 			this.sectionTitles[idx] := title ; If there are multiple headers in a row (for example when choices are filtered out) they should get overwritten in order here (which is correct).
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    Generate and show a popup to the user where they can select a
+	;                 choice and override specific data, then retrieving, processing,
+	;                 and merging that data as appropriate.
+	; PARAMETERS:
+	;  defaultData (I,REQ) - Array of data to default into override fields. Format:
+	;                        	defaultData["fieldName"] := value
+	; RETURNS:        Merged array of data, which includes both the choice and any
+	;                 overrides.
+	;---------
 	doSelectGui(defaultData) {
 		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this.guiSettings["MinColumnWidth"])
 		sGui.show(this.guiSettings["WindowTitle"], defaultData)
@@ -380,7 +415,16 @@ class Selector {
 		return data
 	}
 	
-	; Function to turn the input into something useful.
+	;---------
+	; DESCRIPTION:    Process a user's choice input, handling special commands or finding
+	;                 a choice matching the input. For matching against choices, the string
+	;                 must be either the index of the choice (for visible choices), or the
+	;                 abbreviation (either visible or hidden choices).
+	; PARAMETERS:
+	;  userChoiceString (I,REQ) - The string that the user typed in the choice field.
+	; RETURNS:        If we found a matching choice (and the input wasn't a command), the
+	;                 data array from that choice. Otherwise, "".
+	;---------
 	parseChoice(userChoiceString) {
 		; Command choice - edit ini, etc.
 		if(InStr(userChoiceString, this.chars["COMMAND"])) {
@@ -400,7 +444,13 @@ class Selector {
 		}
 	}
 
-	; Search both given tables, the visible and the invisible.
+	;---------
+	; DESCRIPTION:    Search both visible and hidden choices for a match using either
+	;                 index (visible only) or abbreviation (both).
+	; PARAMETERS:
+	;  input (I,REQ) - The string to match against choices.
+	; RETURNS:        If we find a matching choice, the data array from that choice. Otherwise, "".
+	;---------
 	searchAllTables(input) {
 		if(input = "")
 			return ""
@@ -415,8 +465,15 @@ class Selector {
 		
 		return data
 	}
-
-	; Function to search our generated table for a given index/shortcut.
+	
+	;---------
+	; DESCRIPTION:    Search the given array of choices for a match.
+	; PARAMETERS:
+	;  table      (I,REQ) - Array of choices to search.
+	;  input      (I,REQ) - The string to match against choices.
+	;  checkIndex (I,OPT) - Whether to match against the index or not. Defaults to true.
+	; RETURNS:        If we found a match, the data array from that choice.
+	;---------
 	searchTable(table, input, checkIndex = true) {
 		For i,t in table {
 			; Index

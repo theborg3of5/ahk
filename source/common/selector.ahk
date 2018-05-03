@@ -491,13 +491,15 @@ class Selector {
 		return ""
 	}
 	
-	; Debug info
+	
+	; Debug info (used by the Debug class)
 	debugName := "Selector"
-	debugToString(debugBuilder) { ; GDB TODO update this with new list of properties
+	debugToString(debugBuilder) {
 		debugBuilder.addLine("Chars",           this.chars)
 		debugBuilder.addLine("Override fields", this.overrideFields)
 		debugBuilder.addLine("GUI settings",    this.guiSettings)
 		debugBuilder.addLine("Filepath",        this.filePath)
+		debugBuilder.addLine("Suppress data?",  this.suppressData)
 		debugBuilder.addLine("Choices",         this.choices)
 		debugBuilder.addLine("Hidden Choices",  this.hiddenChoices)
 		debugBuilder.addLine("Section titles",  this.sectionTitles)

@@ -30,7 +30,8 @@ class SelectorChoice {
 		return this.data["ABBREV"]
 	}
 	
-	; Debug info
+	
+	; Debug info (used by the Debug class)
 	debugName := "SelectorChoice"
 	debugToString(debugBuilder) {
 		debugBuilder.addLine("Data", this.data)

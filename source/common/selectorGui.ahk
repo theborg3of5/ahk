@@ -268,6 +268,24 @@ class SelectorGui {
 				this.overrideData[label] := inputVal
 		}
 	}
+	
+	
+	; Debug info (used by the Debug class)
+	debugName := "SelectorGui"
+	debugToString(debugBuilder) {
+		debugBuilder.addLine("Chars",                      this.chars)
+		debugBuilder.addLine("Gui ID",                     this.guiId)
+		debugBuilder.addLine("Gui handle",                 this.guiHandle)
+		debugBuilder.addLine("Choice field var",           this.fieldVarChoice)
+		debugBuilder.addLine("Override fields var prefix", this.fieldVarOverridesPrefix)
+		debugBuilder.addLine("Override fields",            this.overrideFields)
+		debugBuilder.addLine("Choice query",               this.choiceQuery)
+		debugBuilder.addLine("Override data",              this.overrideData)
+		debugBuilder.addLine("Total height",               this.totalHeight)
+		debugBuilder.addLine("Total width",                this.totalWidth)
+		debugBuilder.addLine("Choices table height",       this.choicesHeight)
+		debugBuilder.addLine("Choices table width",        this.choicesWidth)
+	}
 }
 
 ; GUI Events

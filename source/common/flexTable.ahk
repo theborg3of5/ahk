@@ -249,4 +249,19 @@ class FlexTable {
 	makeGuiTheDefault() {
 		Gui, % this.guiId ":Default"
 	}
+	
+	
+	; Debug info (used by the Debug class)
+	debugName := "FlexTable"
+	debugToString(debugBuilder) {
+		debugBuilder.addLine("Gui ID",                this.guiId)
+		debugBuilder.addLine("Unique control number", this.uniqueControlNum)
+		debugBuilder.addLine("Min X",                 this.xMin)
+		debugBuilder.addLine("Min Y",                 this.yMin)
+		debugBuilder.addLine("Max X",                 this.xMax)
+		debugBuilder.addLine("Max Y",                 this.yMax)
+		debugBuilder.addLine("Row height",            this.rowHeight)
+		debugBuilder.addLine("Column padding",        this.columnPadding)
+		debugBuilder.addLine("Min column width",      this.minColumnWidth)
+	}
 }

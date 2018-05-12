@@ -49,6 +49,13 @@
 	Spotify				Spotify.exe				-							-				Chrome Legacy Window		C:\Users\gborg\																	-										EPIC_LAPTOP
 	[-2]
 [-1]
+
+[+1|{PATH}e:AppData\Local\]
+	[+2|{PATH}e:republicanywhere\app-1.5.8\Republic Anywhere.exe]
+	RepublicAnywhere	Republic Anywhere.exe	-						-				-								C:\Users\thebo\
+	RepublicAnywhere	Republic Anywhere.exe	-						-				-								C:\Users\gborg\																	-										EPIC_LAPTOP
+	[-2]
+[-1]
 	
 	FirefoxPortable	firefox.exe				-							-				-								S:\FirefoxPortable\FirefoxPortable.exe										-										HOME_DESKTOP
 	

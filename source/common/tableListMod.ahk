@@ -6,41 +6,53 @@ global MODOP_BEGIN   := "b"
 global MODOP_END     := "e"
 
 class TableListMod {
-	bit       := 1
+	column    := ""
 	operation := ""
 	text      := ""
-	label     := 0
+	label     := ""
 	
-	__New(b, o, t, l) {
-		this.bit       := b
+	;---------
+	; DESCRIPTION:    Create a new TableListMod instance.
+	; PARAMETERS:
+	;  c (I,REQ) - Column that this mod applies to
+	;  o (I,REQ) - Operation to perform, from MODOP_* constants above
+	;  t (I,REQ) - Text that we will perform the action with
+	;  l (I,REQ) - Label associated with this mod
+	; RETURNS:        Reference to new TableListMod object
+	;---------
+	__New(c, o, t, l) {
+		this.column    := c
 		this.operation := o
 		this.text      := t
 		this.label     := l
 	}
 	
-	; Actually do what this mod describes to the given row.
-	executeMod(rowBits, temp = false) {
-		rowBit := rowBits[this.bit]
+	;---------
+	; DESCRIPTION:    Perform the action described in this mod on the given row.
+	; PARAMETERS:
+	;  row (IO,REQ) - Associative array of column names => column values for a single row.
+	;                 Will be updated according to the action described in this mod.
+	;---------
+	executeMod(ByRef row) {
+		columnValue := row[this.column]
 		
 		if(this.operation = MODOP_REPLACE)
-			outBit := this.text
+			newValue := this.text
 		else if(this.operation = MODOP_BEGIN)
-			outBit := this.text rowBit
+			newValue := this.text columnValue
 		else if(this.operation = MODOP_END)
-			outBit := rowBit this.text
+			newValue := columnValue this.text
 		
-		; DEBUG.popup("Row bits", rowBits, "Row bit to modify", rowBit, "Operation", this.operation, "Text", this.text, "Result", outBit, "Begin", MODOP_BEGIN)
+		; DEBUG.popup("Row", row, "Column value to modify", columnValue, "Operation", this.operation, "Text", this.text, "Result", newValue, "Mod",this)
 		
-		; Put the bit back into the full row.
-		rowBits[this.bit] := outBit
-		
-		return rowBits
+		; Put the column back into the full row.
+		row[this.column] := newValue
 	}
 	
 	; Debug info
 	debugName := "TableListMod"
 	debugToString(debugBuilder) {
-		debugBuilder.addLine("Bit",       this.bit)
+		debugBuilder.addLine("Column",    this.column)
 		debugBuilder.addLine("Operation", this.operation)
 		debugBuilder.addLine("Text",      this.text)
 		debugBuilder.addLine("Label",     this.label)

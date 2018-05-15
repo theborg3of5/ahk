@@ -16,7 +16,6 @@
 			1. None of the columns align, because the content is different widths
 			2. You can't have comments, to make it more obvious what rows in the file represent
 			3. There's no way to reduce duplication (lots of "C:\Users\" above, and several lines that are nearly identical)
-			4. ***
 		
 		Another option is an INI file, but that has issues of its own:
 			1. The file gets very tall (many lines) very quickly
@@ -40,81 +39,139 @@
 			Music          MUSIC          C:\Users\user\Music              HOME_ASUS
 			Music          MUSIC          D:\Music                         EPIC_LAPTOP
 		
-		We can also use comments, and add a header row (which this class will use as indices in the 2D array you get back:
-			(   NAME           ABBREV         PATH
-			    ; AHK Folders
-			    AHK Config     AHK_CONFIG     C:\ahk\config
-			    AHK Source     AHK_SOURCE     C:\ahk\source
-			    Downloads      DOWNLOADS      C:\Users\user\Downloads
-			    VB6 Compile    VB6_COMPILE    C:\Users\user\Dev\Temp\Compile   EPIC_LAPTOP
-			    ; Music variations per machine
-			    Music          MUSIC          C:\Users\user\Music              HOME_DESKTOP
-			    Music          MUSIC          C:\Users\user\Music              HOME_ASUS
-			    Music          MUSIC          D:\Music                         EPIC_LAPTOP
+		We can also use comments, and add a header row (which this class will use as indices in the 2D array you get back):
+			(  NAME           ABBREV         PATH                             MACHINE
+			
+			; AHK Folders
+			   AHK Config     AHK_CONFIG     C:\ahk\config
+			   AHK Source     AHK_SOURCE     C:\ahk\source
+			
+			; User Folders
+			   Downloads      DOWNLOADS      C:\Users\user\Downloads
+			   VB6 Compile    VB6_COMPILE    C:\Users\user\Dev\Temp\Compile   EPIC_LAPTOP
+			
+			; Music variations per machine
+			   Music          MUSIC          C:\Users\user\Music              HOME_DESKTOP
+			   Music          MUSIC          C:\Users\user\Music              HOME_ASUS
+			   Music          MUSIC          D:\Music                         EPIC_LAPTOP
 		
-	Special Characters
-		The following characters have special meaning when included in the file. All of them can be changed by setting the relevant ["CHARS","<name>"] subscript in the settings array passed to the constructor.
-		GDB TODO - if we make them all capable of being arrays, call that out here.
+		We can also use the Mods feature (see "Mods" section below) to de-duplicate some info:
+			(  NAME           ABBREV         PATH              MACHINE
+			
+			; AHK Folders
+			[{PATH}b:C:\ahk\]
+			   AHK Config     AHK_CONFIG     config
+			   AHK Source     AHK_SOURCE     source
+			[]
+			
+			; User Folders
+			[{PATH}b:C:\Users\user\]
+			   Downloads      DOWNLOADS      Downloads
+			   VB6 Compile    VB6_COMPILE    Dev\Temp\Compile  EPIC_LAPTOP
+			[]
+			
+			; Music variations per machine
+			[{PATH}e:\Music]
+			   Music          MUSIC          C:\Users\user     HOME_DESKTOP
+			   Music          MUSIC          C:\Users\user     HOME_ASUS
+			   Music          MUSIC          D:                EPIC_LAPTOP
+			[]
 		
-		At the start of a row:
-			@ - SETTING
-				Any row that begins with one of these is assumed to be of the form @SettingName=value, where SettingName is one of the following:
-					PlaceholderChar - the placeholder character to use
-				Note that if any of these conflict with the settings passed programmatically, the programmatic settings win.
-			
-			; - IGNORE
-				If any of these characters are at the beginning of a line (ignoring any whitespace before that), the line is ignored and not added to the array of lines.
-			
-			( - MODEL
-				This is the header row mentioned above - if you specify this, the 2D array that you get back will use these column headers as string indices into each "row" array.
-			
-			[ - MODSTART
-				A line which begins with this character will be processed as a mod (see "Mods" below for details).
-				Note that the line should end with a single corresponding character (assumed to be the matching "]", but doesn't really matter)
-			
-			(no default) - PASS
-				Any row that begins with one of these characters will not be broken up into multiple pieces, but will be a single-element array in the final output.
-			
-		Within a "normal" row (not started with any of the special characters above):
-			- - PLACEHOLDER
-				Having this allows you to have a truly empty value for a column in a given row (useful when optional columns are in the middle).
-			
-			| - MULTIENTRY
-				If this is included in a value for a column, the value for that row will be an array of the pipe-delimited values.
-			
 	Mods
-		***
+		A "Mod" (short for "modification") line allows you to apply the same changes to all following rows (until the mod(s) are cleared). They are formatted as follows:
+			* They should start with the MODSTART ([) character and end with the MODEND (]) character. Like other lines, they can be indented as desired.
+			* A mod line can contain 0 or more mod actions, separated by the MODDELIM (|) character.
 		
-	Usage
-		***
-		
-	Example Usage
-		File:
-			***
-		
-		Code:
-			***
+		Most mod actions just describe how we should change the following rows:
+			r - Replace
+				Replace the column.
+				Example:
+					Mod line
+						[r:z]
+					Normal line
+						AAA
+					Result
+						z
 			
-		Result:
-			***
-*/
-
-/* Generic, flexible custom class for parsing lists.
-	
-	Throughout this documentation, "tl" will refer to an instance of this class.
-	
-	This class will read in a file (using tl.parseFile()) and return a multi-dimensional array:
-		array[i]   = line i from the file
-		array[i,j] = entry j from line i (split up by one or more tabs)
-	
-	Any line may be indented as desired:
-		Spaces and tabs at the beginning of any line are ignored.
-		Multiple tabs in a row within a row are treated as a single tab.
-	
-	Certain characters have special meaning when parsing the lines of a file. They include:
+			b - Begin
+				Prepend to the column (add to the beginning).
+				Example:
+					Mod line
+						[b:z]
+					Normal line
+						AAA
+					Result
+						zAAA
+			
+			e - End
+				Append to the column (add to the end).
+				Example:
+					Mod line
+						[e:z]
+					Normal line
+						AAA
+					Result
+						AAAz
+			
+		Notably, these actions apply to the first column of each row by default. You can specify a different column by adding the name of that column in curly brackets ({}), just before the action.
+		Example:
+			File
+				(  TITLE          ABBREV         PATH
+				
+				[{PATH}b:C:\ahk\]
+				   AHK Config     AHK_CONFIG     config
+				[]
+			Result
+				table[1, "TITLE"]  = AHK Config
+				table[1, "ABBREV"] = AHK_CONFIG
+				table[1, "TITLE"]  = C:\ahk\config  <-- We prepended "C:\ahk\"
+			
+		Some mod actions affect other mod actions instead:
+			(none) - Clear all mods
+				If no actions are specified at all (i.e. a line containing only "[]"), we will clear all previously added mods.
+				
+			+n - Add label (n can be any number)
+				Labels all following mods on the same row with the given number, which can be used to specifically clear them later.
+				Example:
+					Mod line
+						[+5|b:aaa|e:zzz]
+					Result
+						Rows after this mod line will have "aaa" prepended and "zzz" appended to their first column (same as if we'd left out the "+5|").
+				
+			-n - Remove mods with label (n can be any number)
+				Removes all currently active mods with this label. Typically the only thing on its row.
+				Example:
+					Mod line
+						[-5]
+					Result
+			
+			For example, these two files have the same result:
+				File A
+					(     NAME           TYPE     COLOR
+					      Apple          FRUIT    RED
+					      Strawberry     FRUIT    RED
+					      Bell pepper    VEGGIE   RED
+					      Radish         VEGGIE   RED
+					      Cherry         FRUIT    RED
+				File B
+					(     NAME           TYPE     COLOR
+					
+					[{COLOR}r:RED]
+					   [+1|{TYPE}r:FRUIT]
+					      Apple
+					      Strawberry
+					      Cherry
+					   [-1]
+					   [+2|{TYPE}r:VEGGIE]
+					      Bell pepper    VEGGIE
+					      Radish         VEGGIE
+					   [-2]
+					[]
 		
-	These settings are also available:
-		settings["FORMAT", "SEPARATE_MAP"]
+	Settings
+		The following settings also affect how we read and process data:
+		
+		settings["FORMAT", "SEPARATE_MAP"] GDB TODO reconsider this feature and update documentation if it changes.
 			Associative array of CHAR => NAME.
 			Rows that begin with a character that's a key (CHAR) in this array will be:
 				Stored separately, can be retrieved with tl.getSeparateRows(NAME)
@@ -147,67 +204,91 @@
 					[4]				D
 					[5]				E
 		
-	
-	Mods are created by specially-formatted rows in the file that affect any rows that come after them in the file. The format for mod rows is as follows:
-	
-	1. Mod rows should always be wrapped in square brackets (start with [, end with ]).
-	2. Mod rows may have any number of the following mod actions per line, separated by pipes (|):
-			[] - Clear all mods
-				A line with nothing but "[]" on it will clear all current mods added before that point in the file.
+	Special Characters
+		Certain characters can have special meaning when included in the file. Each of the following can be changed by setting the relevant ["CHARS","<name>"] subscript in the settings array passed to the constructor. GDB TODO - if we make them all capable of being arrays, call that out here.
+		
+		Defaults:
+			SETTING      @
+			IGNORE       ;
+			MODEL        (
+			MODSTART     [
+			MODEND       ]
+			PASS         (no default)
+			PLACEHOLDER  -
+			MULTIENTRY   |
+			MODADD       +
+			MODREMOVE    -
+			MODDELIM     |
+		
+		At the start of a row:
+			SETTING - @
+				Any row that begins with one of these is assumed to be of the form @SettingName=value, where SettingName is one of the following:
+					PlaceholderChar - the placeholder character to use
+				Note that if any of these conflict with the settings passed programmatically, the programmatic settings win.
 			
-			r - Replace
-				Replaces the part with the given string.
-				Example
-					Mods
-						[r:zzz]
-					Input
-						AAA
-					Result
-						zzz
+			IGNORE - ;
+				If any of these characters are at the beginning of a line (ignoring any whitespace before that), the line is ignored and not added to the array of lines.
 			
-			b - Begin
-				Adds the given string at the beginning of the part.
-				Example
-					Mods
-						[b:eee]
-					Input
-						AAA
-					Result
-						eeeAAA
+			MODEL - (
+				This is the header row mentioned above - if you specify this, the 2D array that you get back will use these column headers as string indices into each "row" array.
 			
-			e - End
-				Adds the given string at the end of a part.
-				Example
-					Mods
-						[e:eee]
-					Input
-						AAA
-					Result
-						AAAeee
+			MODSTART - [
+				A line which begins with this character will be processed as a mod (see "Mods" section for details).
+				
+			PASS - (no default)
+				Any row that begins with one of these characters will not be broken up into multiple pieces, but will be a single-element array in the final output.
 			
-			+x - Add label (x can be any number)
-				Labels all following mods on the same row with the given numeric label, which can be used to remove them from executing on further lines further on with the - operator.
-				Example: adds action1 and action2 as mods, both with a label of 5.
-					[+5|action1|action2]	
+		Within a "normal" row (not started with any of the special characters above):
+			PLACEHOLDER - - (hyphen)
+				Having this allows you to have a truly empty value for a column in a given row (useful when optional columns are in the middle).
 			
-			-x - Remove mods with label (x can be any number)
-				Removes all currently active mods with this label. Typically the only thing on its row.
-				Example: Removes all mods with the label 5.
-					[-5]
+			MULTIENTRY - |
+				If this is included in a value for a column, the value for that row will be an array of the pipe-delimited values.
+		
+		Within a mod row (after the MODSTART character, see "Mods" section for details):
+			MODADD - +
+				Associate the mods on this line with the numeric label following this character.
+				
+			MODREMOVE - - (hyphen)
+				Remove all mods with the numeric label following this character.
+				
+			MODDELIM - |
+				Multiple mod actions may be included in a mod line by separating them with this character.
+				
+			MODEND - ]
+				Mod lines should end with this character.
+		
+	Example Usage
+		File:
+			(  NAME           ABBREV         PATH
 			
-	3. By default, all mods apply only to the first tab-separated entry in each row. 
-			You can specify which entry in a row a mod should apply to by adding {x} before the mod action, where x can be any number.
-			Example
-				Mods
-					[{3}b:AAA]
-				Input
-					W	X	Y	Z
-				Result
-					W
-					X
-					AAAY
-					Z
-
+			; AHK Folders
+			[{PATH}b:C:\ahk\]
+			   AHK Config     AHK_CONFIG     config
+			   AHK Source     AHK_SOURCE     source
+			[]
+			
+			; User Folders
+			[{PATH}b:C:\Users\user\]
+			   Downloads      DOWNLOADS      Downloads
+			   VB6 Compile    VB6_COMPILE    Dev\Temp\Compile  EPIC_LAPTOP
+			[]
+			
+			; Music variations per machine
+			[{PATH}e:\Music]
+			   Music          MUSIC          C:\Users\user     HOME_DESKTOP
+			   Music          MUSIC          C:\Users\user     HOME_ASUS
+			   Music          MUSIC          D:                EPIC_LAPTOP
+			[]
+		Code:
+			tl := new TableList(filePath)
+			table := tl.getTable()
+		Result:
+			table[1, "NAME"]    = AHK Config
+			table[1, "ABBREV"]  = AHK_CONFIG
+			table[1, "PATH"]    = C:\ahk\config
+			table[1, "MACHINE"] = 
+			... (all rows included)
 */
 
 class TableList {
@@ -330,6 +411,7 @@ class TableList {
 		chars := []
 		
 		chars["MODSTART"] := "["
+		chars["MODEND"]   := "]"
 		chars["IGNORE"]   := [";"]
 		chars["MODEL"]    := "("
 		chars["SETTING"]  := "@"
@@ -338,8 +420,9 @@ class TableList {
 		chars["PLACEHOLDER"] := "-"
 		chars["MULTIENTRY"]  := "|"
 		
-		chars["MOD","ADD"]    := "+"
-		chars["MOD","REMOVE"] := "-"
+		chars["MODADD"]    := "+"
+		chars["MODREMOVE"] := "-"
+		chars["MODDELIM"]  := "|"
 		
 		return chars
 	}
@@ -359,7 +442,7 @@ class TableList {
 				row := StrReplace(row, delim delim, delim)
 			}
 			
-			rowBits := StrSplit(row, delim)
+			splitRow := StrSplit(row, delim)
 			firstChar := SubStr(row, 1, 1)
 			
 			if(contains(this.chars["IGNORE"], firstChar) || firstChar = "") {
@@ -374,11 +457,11 @@ class TableList {
 				currRow.push(row)
 				this.table.push(currRow)
 			} else if(this.separateMap.hasKey(firstChar)) { ; Separate characters mean that we split the row, but always store it numerically and separately from everything else.
-				this.parseSeparateRow(firstChar, rowBits)
+				this.parseSeparateRow(firstChar, splitRow)
 			} else if(firstChar = this.chars["MODEL"]) { ; Model row, causes us to use string subscripts instead of numeric per entry.
-				this.parseModelRow(rowBits)
+				this.parseModelRow(splitRow)
 			} else {
-				this.parseNormalRow(rowBits)
+				this.parseNormalRow(splitRow)
 			}
 			
 		}
@@ -402,7 +485,7 @@ class TableList {
 	updateMods(newRow) {
 		label := 0
 		
-		; Strip off the square brackets.
+		; Strip off the starting/ending mod characters ([ and ] by default). GDB TODO remove if they exist, this.chars["MODSTART"] this.chars["MODEND"]
 		newRow := SubStr(newRow, 2, -1)
 		
 		; If it's just blank, all previous mods are wiped clean.
@@ -411,7 +494,7 @@ class TableList {
 		} else {
 			; Check for a remove row label.
 			; Assuming here that it will be the first and only thing in the mod row.
-			if(SubStr(newRow, 1, 1) = this.chars["MOD","REMOVE"]) {
+			if(SubStr(newRow, 1, 1) = this.chars["MODREMOVE"]) {
 				remLabel := SubStr(newRow, 2)
 				this.killMods(remLabel)
 				label := 0
@@ -420,12 +503,12 @@ class TableList {
 			}
 			
 			; Split new into individual mods.
-			newModsSplit := StrSplit(newRow, "|")
+			newModsSplit := StrSplit(newRow, this.chars["MODDELIM"])
 			For i,currMod in newModsSplit {
 				firstChar := SubStr(currMod, 1, 1)
 				
 				; Check for an add row label.
-				if(i = 1 && firstChar = this.chars["MOD","ADD"]) {
+				if(i = 1 && firstChar = this.chars["MODADD"]) {
 					label := SubStr(currMod, 2)
 				} else {
 					newMod := this.parseModLine(currMod, label)
@@ -471,22 +554,22 @@ class TableList {
 	}
 	
 	; Row that starts with a special char, where we keep the row split but don't apply mods or labels.
-	parseSeparateRow(char, rowBits) {
+	parseSeparateRow(char, splitRow) {
 		if(!IsObject(this.separateRows))
 			this.separateRows := []
 		
-		rowBits.RemoveAt(1) ; Get rid of the separate char bit.
+		splitRow.RemoveAt(1) ; Get rid of the separate char bit.
 		
-		this.separateRows[this.separateMap[char]] := rowBits
+		this.separateRows[this.separateMap[char]] := splitRow
 	}
 	
 	; Function to deal with special model rows.
-	parseModelRow(rowBits) {
+	parseModelRow(splitRow) {
 		this.indexLabels := []
 		
-		rowBits.RemoveAt(1) ; Get rid of the "(" bit.
+		splitRow.RemoveAt(1) ; Get rid of the "(" bit.
 		
-		For i,r in rowBits
+		For i,r in splitRow
 			this.indexLabels[i] := r
 	}
 	
@@ -523,17 +606,17 @@ class TableList {
 	}
 
 	; Apply currently active string modifications to given row.
-	applyMods(rowBits) {
+	applyMods(splitRow) {
 		; If there aren't any mods, just split the row and send it on.
 		if(this.mods.MaxIndex() != "") {
 			; Apply the mods.
 			For i,currMod in this.mods
-				rowBits := currMod.executeMod(rowBits)
+				currMod.executeMod(splitRow)
 			
-			return rowBits
+			return splitRow
 		}
 		
-		return rowBits
+		return splitRow
 	}
 	
 	; If a filter is given, exclude any rows that don't fit.

@@ -1,7 +1,17 @@
 'TableList'
 	Update documentation
+		Confirm that row count starts at 1 and not 0
+	Take a pass through overall code structure and do some cleanup and variable renaming
 	Make all characters into (optionally) arrays
 		Add a helper function that checks either way, can just take the character subscript name
+	Reconsider SEPARATE_MAP stuff
+		Why can't we just return the array indexed by the same string indices as everything else?
+		Seems like the important thing is that the line is separate from the normal rows.
+	getSpecialChars > setSpecialChars, like in selector?
+	Make "MOD*" char names "MOD_*" for readability, or move them all under a "MOD" subscript
+	Consider changing mod format - instead of having column specified via {}, make it like an argument to the action
+		Maybe more like this
+			[r(COLUMN,REPLACESTRING)]
 	
 'Fixes'
 	Take another look at genericSearch(), make sure we really need to do the forceArray() stuff
@@ -13,6 +23,9 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 'New'
+	Reassess the include structures a bit
+		Some of the smaller classes are just split-off bits of others (TableListMod, SelectorChoice, SelectorGui) that scripts should only need if they need the parent class.
+			Have those parent classes include them instead of having _includeCommon do it?
 	Toast
 		Create a new toast class for myself
 		Can base on/be inspired by pukkandan's toast class (https://github.com/pukkandan/My-Startup-Script/blob/master/Lib/Toast.ahk )

@@ -12,6 +12,9 @@
 	Consider changing mod format - instead of having column specified via {}, make it like an argument to the action
 		Maybe more like this
 			[r(COLUMN,REPLACESTRING)]
+	Why do we put the chars["PASS"] lines into an array? Wouldn't it be easier to just have them be a flat value?
+		Maybe we can return them separately, like the SEPARATE_MAP stuff
+			Would need to retain line numbers then, though
 	
 'Fixes'
 	Take another look at genericSearch(), make sure we really need to do the forceArray() stuff

@@ -428,21 +428,20 @@ class TableList {
 	}
 	
 	parseList(lines) {
-		delim := A_Tab
 		currRow := []
 		
 		; Loop through and do work on them.
 		For i,row in lines {
 			row := dropWhitespace(row)
 			
-			; Reduce any sets of multiple delimiters in a row to a single one.
+			; Reduce any sets of multiple tabs in a row to a single one.
 			Loop {
-				if(!stringContains(row, delim delim))
+				if(!stringContains(row, A_Tab A_Tab))
 					Break
-				row := StrReplace(row, delim delim, delim)
+				row := StrReplace(row, A_Tab A_Tab, A_Tab)
 			}
 			
-			splitRow := StrSplit(row, delim)
+			splitRow := StrSplit(row, A_Tab)
 			firstChar := SubStr(row, 1, 1)
 			
 			if(contains(this.chars["IGNORE"], firstChar) || firstChar = "") {

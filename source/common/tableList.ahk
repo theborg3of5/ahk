@@ -490,7 +490,7 @@ class TableList {
 			} else if(contains(this.chars["PASS"], firstChar)) {
 				this.table.push([row]) ; GDB TODO do we really want to put this in an array?
 			} else if(this.keyRowChars.hasKey(firstChar)) { ; Key characters mean that we split the row, but always store it separately from everything else.
-				this.parseKeyRow(firstChar, splitRow)
+				this.parseKeyRow(splitRow, firstChar)
 			} else if(firstChar = this.chars["MODEL"]) { ; Model row, causes us to use string subscripts instead of numeric per entry.
 				this.parseModelRow(splitRow)
 			} else {
@@ -587,7 +587,7 @@ class TableList {
 	}
 	
 	; Row that starts with a special char, where we keep the row split but don't apply mods or labels.
-	parseKeyRow(char, splitRow) {
+	parseKeyRow(splitRow, char) {
 		splitRow.RemoveAt(1) ; Get rid of the separate char bit.
 		
 		this.keyRows[this.keyRowChars[char]] := splitRow

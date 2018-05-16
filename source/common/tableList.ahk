@@ -454,32 +454,62 @@ class TableList {
 				row := StrReplace(row, A_Tab A_Tab, A_Tab)
 			}
 			
-			splitRow := StrSplit(row, A_Tab)
-			firstChar := subStr(row, 1, 1)
-			
-			if(firstChar = this.chars["IGNORE"] || firstChar = "") {
-				; Ignore - it's either empty or a comment row.
-			} else if(firstChar = this.chars["SETTING"]) {
-				this.processSetting(subStr(row, 2)) ; Strip off the @ at the beginning
-				
-			} else if(firstChar = this.chars["MOD", "START"]) {
-				this.updateMods(row)
-			} else if(contains(this.chars["PASS"], firstChar)) {
-				this.table.push(row)
-			} else if(this.keyRowChars.hasKey(firstChar)) { ; Key characters mean that we split the row, but always store it separately from everything else.
-				this.parseKeyRow(splitRow, firstChar)
-			} else if(firstChar = this.chars["MODEL"]) { ; Model row, causes us to use string subscripts instead of numeric per entry.
-				this.parseModelRow(splitRow)
-			} else {
-				this.parseNormalRow(splitRow)
-			}
-			
+			this.processRow(row)
 		}
 		
 		; DEBUG.popup("TableList.parseList","Finish", "State",this)
 	}
 	
-	processSetting(settingString) {
+	processRow(row) {
+		; if(this.isKeyRow(row))
+			; DEBUG.popup("Processing row",row, "Is ignore",this.isIgnoreRow(row), "Is setting",this.isSettingRow(row), "Is mod",this.isModRow(row), "Is pass",this.isPassRow(row), "Is key",this.isKeyRow(row), "Is model",this.isModelRow(row))
+		
+		if(row = "" || this.isIgnoreRow(row))
+			return ; Ignore - it's either empty or an ignore row.
+		
+		else if(this.isSettingRow(row))
+			this.processSetting(row)
+		
+		else if(this.isModRow(row))
+			this.updateMods(row)
+		
+		else if(this.isPassRow(row))
+			this.table.push(row)
+		
+		else if(this.isKeyRow(row)) ; Key characters mean that we split the row, but always store it separately from everything else.
+			this.parseKeyRow(row)
+		
+		else if(this.isModelRow(row)) ; Model row, causes us to use string subscripts instead of numeric per entry.
+			this.parseModelRow(row)
+		
+		else
+			this.parseNormalRow(row)
+	}
+	
+	isIgnoreRow(row) {
+		return doesStringStartWith(row, this.chars["IGNORE"])
+	}
+	isSettingRow(row) {
+		return doesStringStartWith(row, this.chars["SETTING"])
+	}
+	isModRow(row) {
+		return doesStringStartWith(row, this.chars["MOD", "START"])
+	}
+	isPassRow(row) {
+		firstChar := subStr(row, 1, 1)
+		return contains(this.chars["PASS"], firstChar)
+	}
+	isKeyRow(row) {
+		firstChar := subStr(row, 1, 1)
+		return this.keyRowChars.hasKey(firstChar)
+	}
+	isModelRow(row) {
+		return doesStringStartWith(row, this.chars["MODEL"])
+	}
+	
+	
+	processSetting(row) {
+		settingString := subStr(row, 2)
 		if(!settingString)
 			return
 		
@@ -492,20 +522,21 @@ class TableList {
 	}
 
 	; Update the given modifier string given the new one.
-	updateMods(newRow) {
+	updateMods(rowString) {
 		label := 0
 		
-		; Strip off the starting/ending mod characters ([ and ] by default). GDB TODO remove if they exist, this.chars["MOD", "START"] this.chars["MOD", "END"]
-		newRow := subStr(newRow, 2, -1)
+		; Strip off the starting/ending mod characters ([ and ] by default).
+		rowString := removeStringFromStart(rowString, this.chars["MOD", "START"])
+		rowString := removeStringFromEnd(rowString, this.chars["MOD", "END"])
 		
 		; If it's just blank, all previous mods are wiped clean.
-		if(newRow = "") {
+		if(rowString = "") {
 			this.mods := Object()
 		} else {
 			; Check for a remove row label.
 			; Assuming here that it will be the first and only thing in the mod row.
-			if(subStr(newRow, 1, 1) = this.chars["MOD", "REMOVE_LABEL"]) {
-				remLabel := subStr(newRow, 2)
+			if(subStr(rowString, 1, 1) = this.chars["MOD", "REMOVE_LABEL"]) {
+				remLabel := subStr(rowString, 2)
 				this.killMods(remLabel)
 				label := 0
 				
@@ -513,7 +544,7 @@ class TableList {
 			}
 			
 			; Split new into individual mods.
-			newModsSplit := StrSplit(newRow, this.chars["MOD", "DELIM"])
+			newModsSplit := StrSplit(rowString, this.chars["MOD", "DELIM"])
 			For i,currMod in newModsSplit {
 				firstChar := subStr(currMod, 1, 1)
 				
@@ -564,15 +595,19 @@ class TableList {
 	}
 	
 	; Row that starts with a special char, where we keep the row split but don't apply mods or labels.
-	parseKeyRow(splitRow, char) {
-		splitRow.RemoveAt(1) ; Get rid of the separate char bit.
+	parseKeyRow(row) {
+		splitRow := StrSplit(row, A_Tab)
+		firstChar := subStr(row, 1, 1)
+		
+		splitRow.RemoveAt(1) ; Get rid of the separate char bit (")").
 		this.applyIndexLabels(splitRow)
 		
-		this.keyRows[this.keyRowChars[char]] := splitRow
+		this.keyRows[this.keyRowChars[firstChar]] := splitRow
 	}
 	
 	; Function to deal with special model rows.
-	parseModelRow(splitRow) {
+	parseModelRow(row) {
+		splitRow := StrSplit(row, A_Tab)
 		this.indexLabels := []
 		
 		splitRow.RemoveAt(1) ; Get rid of the "(" bit.
@@ -581,7 +616,8 @@ class TableList {
 			this.indexLabels[i] := r
 	}
 	
-	parseNormalRow(rowAry) {
+	parseNormalRow(row) {
+		rowAry := StrSplit(row, A_Tab)
 		this.applyIndexLabels(rowAry)
 		this.applyMods(rowAry)
 		
@@ -646,6 +682,7 @@ class TableList {
 		debugBuilder.addLine("Key row chars", this.keyRowChars)
 		debugBuilder.addLine("Index labels",  this.indexLabels)
 		debugBuilder.addLine("Mods",          this.mods)
+		debugBuilder.addLine("Key rows",      this.keyRows)
 		debugBuilder.addLine("Table",         this.table)
 	}
 }

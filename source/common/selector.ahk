@@ -310,7 +310,7 @@ class Selector {
 			if(this.isChoiceRow(row))
 				this.addChoiceRow(row)
 			else
-				this.processSpecialLine(row[1]) ; For special rows, everything is contained in the first element (not split at all).
+				this.processSpecialLine(row)
 		}
 	}
 	
@@ -337,7 +337,7 @@ class Selector {
 	;---------
 	addChoiceRow(row) {
 		choice := new SelectorChoice(row)
-		if(SubStr(row["NAME"], 1, 1) = this.chars["HIDDEN"])
+		if(subStr(row["NAME"], 1, 1) = this.chars["HIDDEN"])
 			this.hiddenChoices.push(choice) ; First char is hidden character (*), don't show it but allow user to choose it via abbrev.
 		else
 			this.choices.push(choice)
@@ -351,7 +351,7 @@ class Selector {
 	;                 character.
 	;---------
 	processSpecialLine(line) {
-		firstChar := SubStr(line, 1, 1)
+		firstChar := subStr(line, 1, 1)
 		line      := subStr(line, 2) ; Go ahead and trim off the special character
 		
 		; Setting
@@ -363,7 +363,7 @@ class Selector {
 		
 		; Section title
 		} else if(firstChar = this.chars["SECTION_TITLE"]) {
-			title := SubStr(line, 2) ; Format should be "# Title", strip off the space (# already removed above)
+			title := subStr(line, 2) ; Format should be "# Title", strip off the space (# already removed above)
 			idx := forceNumber(this.choices.MaxIndex()) + 1 ; The next actual choice will be the first one under this header, so match that.
 			this.sectionTitles[idx] := title ; If there are multiple headers in a row (for example when choices are filtered out) they should get overwritten in order here (which is correct).
 		}
@@ -411,7 +411,7 @@ class Selector {
 	parseChoice(userChoiceString) {
 		; Command choice - edit ini, etc.
 		if(InStr(userChoiceString, this.chars["COMMAND"])) {
-			commandChar := SubStr(userChoiceString, 2, 1)
+			commandChar := subStr(userChoiceString, 2, 1)
 			
 			; Edit action - open the current INI file for editing
 			if(commandChar = this.chars["COMMANDS", "EDIT"]) {

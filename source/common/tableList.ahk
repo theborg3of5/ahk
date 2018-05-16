@@ -461,17 +461,17 @@ class TableList {
 			}
 			
 			splitRow := StrSplit(row, A_Tab)
-			firstChar := SubStr(row, 1, 1)
+			firstChar := subStr(row, 1, 1)
 			
 			if(firstChar = this.chars["IGNORE"] || firstChar = "") {
 				; Ignore - it's either empty or a comment row.
 			} else if(firstChar = this.chars["SETTING"]) {
-				this.processSetting(SubStr(row, 2)) ; Strip off the @ at the beginning
+				this.processSetting(subStr(row, 2)) ; Strip off the @ at the beginning
 				
 			} else if(firstChar = this.chars["MODSTART"]) {
 				this.updateMods(row)
 			} else if(contains(this.chars["PASS"], firstChar)) {
-				this.table.push([row]) ; GDB TODO do we really want to put this in an array?
+				this.table.push(row)
 			} else if(this.keyRowChars.hasKey(firstChar)) { ; Key characters mean that we split the row, but always store it separately from everything else.
 				this.parseKeyRow(splitRow, firstChar)
 			} else if(firstChar = this.chars["MODEL"]) { ; Model row, causes us to use string subscripts instead of numeric per entry.
@@ -502,7 +502,7 @@ class TableList {
 		label := 0
 		
 		; Strip off the starting/ending mod characters ([ and ] by default). GDB TODO remove if they exist, this.chars["MODSTART"] this.chars["MODEND"]
-		newRow := SubStr(newRow, 2, -1)
+		newRow := subStr(newRow, 2, -1)
 		
 		; If it's just blank, all previous mods are wiped clean.
 		if(newRow = "") {
@@ -510,8 +510,8 @@ class TableList {
 		} else {
 			; Check for a remove row label.
 			; Assuming here that it will be the first and only thing in the mod row.
-			if(SubStr(newRow, 1, 1) = this.chars["MODREMOVE"]) {
-				remLabel := SubStr(newRow, 2)
+			if(subStr(newRow, 1, 1) = this.chars["MODREMOVE"]) {
+				remLabel := subStr(newRow, 2)
 				this.killMods(remLabel)
 				label := 0
 				
@@ -521,11 +521,11 @@ class TableList {
 			; Split new into individual mods.
 			newModsSplit := StrSplit(newRow, this.chars["MODDELIM"])
 			For i,currMod in newModsSplit {
-				firstChar := SubStr(currMod, 1, 1)
+				firstChar := subStr(currMod, 1, 1)
 				
 				; Check for an add row label.
 				if(i = 1 && firstChar = this.chars["MODADD"]) {
-					label := SubStr(currMod, 2)
+					label := subStr(currMod, 2)
 				} else {
 					newMod := this.parseModLine(currMod, label)
 					this.mods.push(newMod)
@@ -539,16 +539,16 @@ class TableList {
 		origModLine := modLine
 		
 		; Check to see whether we have an explicit bit. Syntax: line starts with {bitLabel}
-		firstChar := SubStr(modLine, 1, 1)
+		firstChar := subStr(modLine, 1, 1)
 		if(firstChar = "{") {
 			closeCurlyPos := InStr(modLine, "}")
-			bit := SubStr(modLine, 2, closeCurlyPos - 2)
+			bit := subStr(modLine, 2, closeCurlyPos - 2)
 			
-			modLine := SubStr(modLine, closeCurlyPos + 1)
+			modLine := subStr(modLine, closeCurlyPos + 1)
 		}
 		
-		operation := Substr(modLine, 1, 1)
-		text := SubStr(modLine, 3) ; Ignore mod and colon at start
+		operation := subStr(modLine, 1, 1)
+		text := subStr(modLine, 3) ; Ignore mod and colon at start
 		
 		newMod := new TableListMod(bit, operation, text, label)
 		; DEBUG.popup("New mod", newMod, "Original mod line", origModLine, "Mod line without bit", modLine, "Operation", operation, "Text", text)

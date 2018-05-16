@@ -1,26 +1,7 @@
 'TableList'
 	Update documentation
-	Tweak _New parameters
-		filePath
-		chars (excluding PASS)
-		keyRowChars
-			These will come back split, like normal rows
-			Selector will use:
-				")" => "OVERRIDE_FIELD_INDICES"
-			Result:
-				getKeyRow("OVERRIDE_FIELD_INDICES")
-					[1, 0, 2, 0]
-		passRowChars (char => name to retrieve with)
-			These will come back not split
-			Selector will use:
-				"+" => "SETTINGS"
-				"#" => "SECTION_TITLES"
-			Result:
-				getPassRows("SETTINGS")
-					ary[<line num>] = "+PlaceholderChar=-"
-			Will need to figure out the right line number - should match the normal row right after it.
-				! overwriting will be a problem - want to overwrite for section titles, but not for settings.
-	Take a pass through overall code structure and do some cleanup and variable renaming
+	getSpecialChars > setChars, like in Selector
+		setChars can take override array
 	Make all characters into (optionally) arrays
 		Add a helper function that checks either way, can just take the character subscript name
 	Reconsider SEPARATE_MAP stuff
@@ -30,8 +11,17 @@
 	Why do we put the chars["PASS"] lines into an array? Wouldn't it be easier to just have them be a flat value?
 		Maybe we can return them separately, like the SEPARATE_MAP stuff
 			Would need to retain line numbers then, though
-	getSpecialChars > setSpecialChars, like in selector?
-		Can take override array from inputs
+	Tweak _New parameters
+		filePath
+		chars (including PASS)
+		keyRowChars
+			These will come back split, like normal rows
+			Selector will use:
+				")" => "OVERRIDE_FIELD_INDICES"
+			Result:
+				getKeyRow("OVERRIDE_FIELD_INDICES")
+					{NAME:0, ABBREV:0, VALUE:1, OTHER:2}
+	Take a pass through overall code structure and do some cleanup and variable renaming
 	Make "MOD*" char names "MOD_*" for readability, or move them all under a "MOD" subscript
 	Consider changing mod format - instead of having column specified via {}, make it like an argument to the action
 		Maybe more like this

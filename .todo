@@ -21,6 +21,7 @@
 			DEBUG.popup("keyRows",this.keyRows, "keyRowChars",this.keyRowChars)
 		scriptHotkeyType is blank at startup
 			Should probably have a different "loaded" variable or similar, though.
+				Set in _setup.ahk, like scriptHotkeyType stuff.
 	Reassess the include structures a bit
 		Some of the smaller classes are just split-off bits of others (TableListMod, SelectorChoice, SelectorGui) that scripts should only need if they need the parent class.
 			Have those parent classes include them instead of having _includeCommon do it?

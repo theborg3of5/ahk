@@ -14,17 +14,17 @@ class TableListMod {
 	;---------
 	; DESCRIPTION:    Create a new TableListMod instance.
 	; PARAMETERS:
-	;  c (I,REQ) - Column that this mod applies to
-	;  o (I,REQ) - Operation to perform, from MODOP_* constants above
-	;  t (I,REQ) - Text that we will perform the action with
-	;  l (I,REQ) - Label associated with this mod
+	;  column    (I,REQ) - Column that this mod applies to
+	;  operation (I,REQ) - Operation to perform, from MODOP_* constants above
+	;  text      (I,REQ) - Text that we will perform the action with
+	;  label     (I,REQ) - Label associated with this mod
 	; RETURNS:        Reference to new TableListMod object
 	;---------
-	__New(c, o, t, l) {
-		this.column    := c
-		this.operation := o
-		this.text      := t
-		this.label     := l
+	__New(column, operation, text, label) {
+		this.column    := column
+		this.operation := operation
+		this.text      := text
+		this.label     := label
 	}
 	
 	;---------

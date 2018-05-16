@@ -260,7 +260,7 @@
 		
 	Example Usage
 		File:
-			(  NAME           ABBREV         PATH
+			(  NAME           ABBREV         PATH              MACHINE
 			
 			; AHK Folders
 			[{PATH}b:C:\ahk\]
@@ -280,15 +280,60 @@
 			   Music          MUSIC          C:\Users\user     HOME_ASUS
 			   Music          MUSIC          D:                EPIC_LAPTOP
 			[]
-		Code:
+		
+		Code A:
 			tl := new TableList(filePath)
 			table := tl.getTable()
-		Result:
+		Result A:
 			table[1, "NAME"]    = AHK Config
-			table[1, "ABBREV"]  = AHK_CONFIG
-			table[1, "PATH"]    = C:\ahk\config
-			table[1, "MACHINE"] = 
-			... (all rows included)
+			         "ABBREV"]  = AHK_CONFIG
+			         "PATH"]    = C:\ahk\config
+			         "MACHINE"] = 
+			     [2, "NAME"]    = AHK Source
+			         "ABBREV"]  = AHK_SOURCE
+			         "PATH"]    = C:\ahk\source
+			         "MACHINE"] = 
+			     [3, "NAME"]    = Downloads
+			         "ABBREV"]  = DOWNLOADS
+			         "PATH"]    = C:\Users\user\Downloads
+			         "MACHINE"] = 
+			     [4, "NAME"]    = VB6 Compile
+			         "ABBREV"]  = VB6_COMPILE
+			         "PATH"]    = C:\Users\user\Dev\Temp\Compile
+			         "MACHINE"] = EPIC_LAPTOP
+			     [5, "NAME"]    = Music
+			         "ABBREV"]  = MUSIC
+			         "PATH"]    = C:\Users\user\Music
+			         "MACHINE"] = HOME_DESKTOP
+			     [6, "NAME"]    = Music
+			         "ABBREV"]  = MUSIC
+			         "PATH"]    = C:\Users\user\Music
+			         "MACHINE"] = HOME_ASUS
+			     [7, "NAME"]    = Music
+			         "ABBREV"]  = MUSIC
+			         "PATH"]    = D:\Music
+			         "MACHINE"] = EPIC_LAPTOP
+			
+		Code B:
+			tl := new TableList(filePath)
+			table := tl.getFilteredTable("MACHINE", "HOME_DESKTOP", false) ; false - include blanks
+		Result B (only rows with MACHINE column = HOME_DESKTOP or blank are included):
+			table[1, "NAME"]    = AHK Config
+			         "ABBREV"]  = AHK_CONFIG
+			         "PATH"]    = C:\ahk\config
+			         "MACHINE"] = 
+			     [2, "NAME"]    = AHK Source
+			         "ABBREV"]  = AHK_SOURCE
+			         "PATH"]    = C:\ahk\source
+			         "MACHINE"] = 
+			     [3, "NAME"]    = Downloads
+			         "ABBREV"]  = DOWNLOADS
+			         "PATH"]    = C:\Users\user\Downloads
+			         "MACHINE"] = 
+			     [4, "NAME"]    = Music
+			         "ABBREV"]  = MUSIC
+			         "PATH"]    = C:\Users\user\Music
+			         "MACHINE"] = HOME_DESKTOP
 */
 
 class TableList {

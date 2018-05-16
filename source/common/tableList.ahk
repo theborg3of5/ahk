@@ -205,7 +205,7 @@
 					[5]				E
 		
 	Special Characters
-		Certain characters can have special meaning when included in the file. Each of the following can be changed by setting the relevant ["CHARS","<name>"] subscript in the settings array passed to the constructor. GDB TODO - if we make them all capable of being arrays, call that out here.
+		Certain characters can have special meaning when included in the file. Each of the following can be changed by setting the relevant ["CHARS","<name>"] subscript in the settings array passed to the constructor.
 		
 		Defaults:
 			SETTING      @
@@ -237,6 +237,7 @@
 				
 			PASS - (no default)
 				Any row that begins with one of these characters will not be broken up into multiple pieces, but will be a single-element array in the final output.
+				Note that the ["CHARS", "IGNORE"] subscript the settings array (GDB TODO if split parameters) is an array and can contain multiple characters.
 			
 		Within a "normal" row (not started with any of the special characters above):
 			PLACEHOLDER - - (hyphen)
@@ -447,7 +448,7 @@ class TableList {
 		this.table := []
 		
 		this.chars       := mergeArrays(this.getDefaultChars(), settings["CHARS"])
-		this.separateMap := mergeArrays([],                     settings["FORMAT", "SEPARATE_MAP"])
+		this.separateMap := mergeArrays([],                     settings["FORMAT", "SEPARATE_MAP"]) ; GDB TODO why are we merging with empty arrays here?
 		this.indexLabels := mergeArrays([],                     settings["FORMAT", "DEFAULT_INDICES"])
 	}
 	
@@ -455,16 +456,16 @@ class TableList {
 	getDefaultChars() {
 		chars := []
 		
-		chars["MODSTART"] := "["
-		chars["MODEND"]   := "]"
-		chars["IGNORE"]   := [";"]
-		chars["MODEL"]    := "("
-		chars["SETTING"]  := "@"
-		chars["PASS"]     := [] ; This one supports multiple entries
+		chars["IGNORE"]  := ";"
+		chars["MODEL"]   := "("
+		chars["SETTING"] := "@"
+		chars["PASS"]    := [] ; This one is an array
 		
 		chars["PLACEHOLDER"] := "-"
 		chars["MULTIENTRY"]  := "|"
 		
+		chars["MODSTART"]  := "["
+		chars["MODEND"]    := "]"
 		chars["MODADD"]    := "+"
 		chars["MODREMOVE"] := "-"
 		chars["MODDELIM"]  := "|"
@@ -489,7 +490,7 @@ class TableList {
 			splitRow := StrSplit(row, A_Tab)
 			firstChar := SubStr(row, 1, 1)
 			
-			if(contains(this.chars["IGNORE"], firstChar) || firstChar = "") {
+			if(firstChar = this.chars["IGNORE"] || firstChar = "") {
 				; Ignore - it's either empty or a comment row.
 			} else if(firstChar = this.chars["SETTING"]) {
 				this.processSetting(SubStr(row, 2)) ; Strip off the @ at the beginning
@@ -497,9 +498,7 @@ class TableList {
 			} else if(firstChar = this.chars["MODSTART"]) {
 				this.updateMods(row)
 			} else if(contains(this.chars["PASS"], firstChar)) {
-				currRow := Object()
-				currRow.push(row)
-				this.table.push(currRow)
+				this.table.push([row]) ; GDB TODO do we really want to put this in an array?
 			} else if(this.separateMap.hasKey(firstChar)) { ; Separate characters mean that we split the row, but always store it numerically and separately from everything else.
 				this.parseSeparateRow(firstChar, splitRow)
 			} else if(firstChar = this.chars["MODEL"]) { ; Model row, causes us to use string subscripts instead of numeric per entry.

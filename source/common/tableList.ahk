@@ -596,23 +596,23 @@ class TableList {
 	
 	; Row that starts with a special char, where we keep the row split but don't apply mods or labels.
 	parseKeyRow(row) {
-		splitRow := StrSplit(row, A_Tab)
+		rowAry := StrSplit(row, A_Tab)
 		firstChar := subStr(row, 1, 1)
 		
-		splitRow.RemoveAt(1) ; Get rid of the separate char bit (")").
-		this.applyIndexLabels(splitRow)
+		rowAry.RemoveAt(1) ; Get rid of the separate char bit (")").
+		this.applyIndexLabels(rowAry)
 		
-		this.keyRows[this.keyRowChars[firstChar]] := splitRow
+		this.keyRows[this.keyRowChars[firstChar]] := rowAry
 	}
 	
 	; Function to deal with special model rows.
 	parseModelRow(row) {
-		splitRow := StrSplit(row, A_Tab)
+		rowAry := StrSplit(row, A_Tab)
 		this.indexLabels := []
 		
-		splitRow.RemoveAt(1) ; Get rid of the "(" bit.
+		rowAry.RemoveAt(1) ; Get rid of the "(" bit.
 		
-		For i,r in splitRow
+		For i,r in rowAry
 			this.indexLabels[i] := r
 	}
 	
@@ -650,9 +650,9 @@ class TableList {
 	}
 
 	; Apply currently active string modifications to given row.
-	applyMods(ByRef splitRow) {
+	applyMods(ByRef rowAry) {
 		For i,currMod in this.mods
-			currMod.executeMod(splitRow)
+			currMod.executeMod(rowAry)
 	}
 	
 	; If a filter is given, exclude any rows that don't fit.

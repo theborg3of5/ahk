@@ -607,8 +607,7 @@ class TableList {
 	}
 	
 	parseNormalRow(rowAry) {
-		if(IsObject(this.indexLabels))
-			rowAry := this.applyIndexLabels(rowAry)
+		this.applyIndexLabels(rowAry)
 		
 		currRow := this.applyMods(rowAry)
 		
@@ -625,7 +624,10 @@ class TableList {
 		this.table.push(currRow)
 	}
 	
-	applyIndexLabels(rowAry) {
+	applyIndexLabels(ByRef rowAry) {
+		if(!IsObject(this.indexLabels))
+			return
+		
 		tempAry := []
 		For i,value in rowAry {
 			idxLabel := this.indexLabels[i]
@@ -634,8 +636,7 @@ class TableList {
 			else
 				tempAry[i] := value
 		}
-		
-		return tempAry
+		rowAry := tempAry
 	}
 
 	; Apply currently active string modifications to given row.

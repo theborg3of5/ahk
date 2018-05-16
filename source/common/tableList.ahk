@@ -329,7 +329,8 @@ class TableList {
 		if(!filePath || !FileExist(filePath))
 			return ""
 		
-		this.init(chars, keyRowChars)
+		this.chars       := mergeArrays(this.getDefaultChars(), chars)
+		this.keyRowChars := keyRowChars
 		
 		filePath := findConfigFilePath(filePath)
 		lines := fileLinesToArray(filePath)
@@ -420,11 +421,6 @@ class TableList {
 	table   := []
 	keyRows := []
 	
-	init(chars, keyRowChars) {
-		this.chars       := mergeArrays(this.getDefaultChars(), chars)
-		this.keyRowChars := keyRowChars
-	}
-	
 	; Special character defaults
 	getDefaultChars() {
 		chars := []
@@ -437,11 +433,11 @@ class TableList {
 		chars["PLACEHOLDER"] := "-"
 		chars["MULTIENTRY"]  := "|"
 		
-		chars["MODSTART"]  := "["
-		chars["MODEND"]    := "]"
-		chars["MODADD"]    := "+"
-		chars["MODREMOVE"] := "-"
-		chars["MODDELIM"]  := "|"
+		chars["MOD", "START"]        := "["
+		chars["MOD", "END"]          := "]"
+		chars["MOD", "ADD_LABEL"]    := "+"
+		chars["MOD", "REMOVE_LABEL"] := "-"
+		chars["MOD", "DELIM"]        := "|"
 		
 		return chars
 	}
@@ -468,7 +464,7 @@ class TableList {
 			} else if(firstChar = this.chars["SETTING"]) {
 				this.processSetting(subStr(row, 2)) ; Strip off the @ at the beginning
 				
-			} else if(firstChar = this.chars["MODSTART"]) {
+			} else if(firstChar = this.chars["MOD", "START"]) {
 				this.updateMods(row)
 			} else if(contains(this.chars["PASS"], firstChar)) {
 				this.table.push(row)
@@ -501,7 +497,7 @@ class TableList {
 	updateMods(newRow) {
 		label := 0
 		
-		; Strip off the starting/ending mod characters ([ and ] by default). GDB TODO remove if they exist, this.chars["MODSTART"] this.chars["MODEND"]
+		; Strip off the starting/ending mod characters ([ and ] by default). GDB TODO remove if they exist, this.chars["MOD", "START"] this.chars["MOD", "END"]
 		newRow := subStr(newRow, 2, -1)
 		
 		; If it's just blank, all previous mods are wiped clean.
@@ -510,7 +506,7 @@ class TableList {
 		} else {
 			; Check for a remove row label.
 			; Assuming here that it will be the first and only thing in the mod row.
-			if(subStr(newRow, 1, 1) = this.chars["MODREMOVE"]) {
+			if(subStr(newRow, 1, 1) = this.chars["MOD", "REMOVE_LABEL"]) {
 				remLabel := subStr(newRow, 2)
 				this.killMods(remLabel)
 				label := 0
@@ -519,12 +515,12 @@ class TableList {
 			}
 			
 			; Split new into individual mods.
-			newModsSplit := StrSplit(newRow, this.chars["MODDELIM"])
+			newModsSplit := StrSplit(newRow, this.chars["MOD", "DELIM"])
 			For i,currMod in newModsSplit {
 				firstChar := subStr(currMod, 1, 1)
 				
 				; Check for an add row label.
-				if(i = 1 && firstChar = this.chars["MODADD"]) {
+				if(i = 1 && firstChar = this.chars["MOD", "ADD_LABEL"]) {
 					label := subStr(currMod, 2)
 				} else {
 					newMod := this.parseModLine(currMod, label)

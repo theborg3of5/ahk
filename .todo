@@ -1,7 +1,6 @@
 'TableList'
 	Update documentation
 	Take a pass through overall code structure and do some cleanup and variable renaming
-	Make "MOD*" char names "MOD_*" for readability, or move them all under a "MOD" subscript
 	Consider changing mod format - instead of having column specified via {}, make it like an argument to the action
 		Maybe more like this
 			[r(COLUMN,REPLACESTRING)]

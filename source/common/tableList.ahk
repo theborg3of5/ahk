@@ -366,11 +366,11 @@ class TableList {
 			return ""
 		
 		filteredTable := []
-		For i,currRow in this.table {
-			if(this.shouldExcludeItem(currRow, column, allowedValue, excludeBlanks))
+		For i,rowAry in this.table {
+			if(this.shouldExcludeItem(rowAry, column, allowedValue, excludeBlanks))
 				Continue
 			
-			filteredTable.push(currRow)
+			filteredTable.push(rowAry)
 		}
 		
 		return filteredTable
@@ -387,12 +387,12 @@ class TableList {
 			return ""
 		
 		uniqueAry := [] ; uniqueVal => {"INDEX":indexInTable, "FILTER_VALUE":filterVal}
-		For i,currRow in this.table {
-			if(this.shouldExcludeItem(currRow, filterColumn, allowedValue))
+		For i,rowAry in this.table {
+			if(this.shouldExcludeItem(rowAry, filterColumn, allowedValue))
 				Continue
 			
-			uniqueVal := currRow[uniqueColumn]
-			filterVal := currRow[filterColumn]
+			uniqueVal := rowAry[uniqueColumn]
+			filterVal := rowAry[filterColumn]
 			
 			if(!uniqueAry[uniqueVal]) {
 				uniqueAry[uniqueVal] := []
@@ -443,8 +443,6 @@ class TableList {
 	}
 	
 	parseList(lines) {
-		currRow := []
-		
 		; Loop through and do work on them.
 		For i,row in lines {
 			row := dropWhitespace(row)
@@ -478,7 +476,7 @@ class TableList {
 			
 		}
 		
-		; DEBUG.popup("TableList.parseList", "Finish", "State", this)
+		; DEBUG.popup("TableList.parseList","Finish", "State",this)
 	}
 	
 	processSetting(settingString) {
@@ -583,7 +581,7 @@ class TableList {
 			this.indexLabels[i] := r
 	}
 	
-	parseNormalRow(rowAry) { ; GDB TODO standardize rowAry vs currRow - just use one
+	parseNormalRow(rowAry) {
 		this.applyIndexLabels(rowAry)
 		this.applyMods(rowAry)
 		
@@ -622,11 +620,11 @@ class TableList {
 	}
 	
 	; If a filter is given, exclude any rows that don't fit.
-	shouldExcludeItem(currRow, column, allowedValue = "", excludeBlanks = false) {
+	shouldExcludeItem(rowAry, column, allowedValue = "", excludeBlanks = false) {
 		if(!column)
 			return false
 		
-		valueToCompare := currRow[column]
+		valueToCompare := rowAry[column]
 		
 		if(!excludeBlanks && !valueToCompare)
 			return false

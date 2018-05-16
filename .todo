@@ -15,6 +15,12 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 'New'
+	Look into having version of DEBUG.popup() that doesn't fire at startup
+		global scriptHotkeyType,HOTKEY_TYPE_Master
+		if(scriptHotkeyType = HOTKEY_TYPE_Master)
+			DEBUG.popup("keyRows",this.keyRows, "keyRowChars",this.keyRowChars)
+		scriptHotkeyType is blank at startup
+			Should probably have a different "loaded" variable or similar, though.
 	Reassess the include structures a bit
 		Some of the smaller classes are just split-off bits of others (TableListMod, SelectorChoice, SelectorGui) that scripts should only need if they need the parent class.
 			Have those parent classes include them instead of having _includeCommon do it?

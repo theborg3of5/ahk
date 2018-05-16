@@ -23,7 +23,7 @@ parsePhone(input) {
 	nums := RegExReplace(input, "[^0-9\+]" , "") ; Strip out spaces and other odd chars.
 	nums := RegExReplace(nums, "\+" , "011") ; + becomes country exit code (USA code here)
 	
-	len := StrLen(nums)
+	len := strLen(nums)
 	; DEBUG.popup(input, "Input", nums, "Nums", len, "Len")
 	
 	if(len = 4)  ; Old extension.
@@ -156,7 +156,7 @@ arrayToString(arr, spacesBetween = true, preString = "", postString = "") {
 	}
 	
 	; Take off the last, extraneous space.
-	outStr := SubStr(outStr, 1, StrLen(outStr) - 1)
+	outStr := SubStr(outStr, 1, strLen(outStr) - 1)
 	
 	return outStr
 }
@@ -284,7 +284,7 @@ cleanupText(text, additionalStringsToRemove = "") {
 		index := containsAnyOf(text, stringsToRemove, CONTAINS_END) ; End of string
 		if(index) {
 			needle := escapeRegExChars(stringsToRemove[index])
-			text := RegExReplace(text, needle, "", , 1, StrLen(text) - StrLen(needle)) ; Get only the last replaceable one.
+			text := RegExReplace(text, needle, "", , 1, strLen(text) - strLen(needle)) ; Get only the last replaceable one.
 			isClean := false
 		}
 		
@@ -332,20 +332,20 @@ removeStringFromStart(inputString, startToRemove) {
 	if(!doesStringStartWith(inputString, startToRemove))
 		return inputString
 	
-	return subStr(inputString, StrLen(startToRemove) + 1)
+	return subStr(inputString, strLen(startToRemove) + 1)
 }
 removeStringFromEnd(inputString, endingToRemove) {
 	if(!doesStringEndWith(inputString, endingToRemove))
 		return inputString
 	
-	return subStr(inputString, 1, StrLen(inputString) - StrLen(endingToRemove))
+	return subStr(inputString, 1, strLen(inputString) - strLen(endingToRemove))
 }
 
 doesStringStartWith(inputString, startString) {
-	return (subStr(inputString, 1, StrLen(startString)) = startString)
+	return (subStr(inputString, 1, strLen(startString)) = startString)
 }
 doesStringEndWith(inputString, endString) {
-	return (subStr(inputString, StrLen(inputString) - StrLen(endString) + 1) = endString)
+	return (subStr(inputString, strLen(inputString) - strLen(endString) + 1) = endString)
 }
 
 appendCharIfMissing(inputString, charToAppend) {

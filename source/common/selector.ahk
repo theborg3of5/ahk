@@ -301,7 +301,7 @@ class Selector {
 					this.overrideFields[fieldIndex] := label
 			}
 		}
-		; DEBUG.popup("Selector.loadChoicesFromFile","Processed indices", "Index labels",tl.getIndexLabels(), "Selector label indices",this.overrideFields)
+		; DEBUG.popup("Selector.loadChoicesFromFile","Processed indices", "Index labels",tl.getIndexLabels(), "Field indices",fieldIndices, "Selector label indices",this.overrideFields)
 		
 		this.choices       := [] ; Visible choices the user can pick from.
 		this.hiddenChoices := [] ; Invisible choices the user can pick from.

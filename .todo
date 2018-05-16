@@ -5,6 +5,7 @@
 		Add a helper function that checks either way, can just take the character subscript name
 	Reconsider SEPARATE_MAP stuff
 		Why can't we just return the array indexed by the same string indices as everything else?
+			Currently we just use the numbers to get the string indices from the TableList anyways - why not just have them mapped that way to begin with?
 		Seems like the important thing is that the line is separate from the normal rows.
 	Why do we put the chars["PASS"] lines into an array? Wouldn't it be easier to just have them be a flat value?
 		Maybe we can return them separately, like the SEPARATE_MAP stuff
@@ -14,6 +15,8 @@
 	Consider changing mod format - instead of having column specified via {}, make it like an argument to the action
 		Maybe more like this
 			[r(COLUMN,REPLACESTRING)]
+	Consider removing support for default indices entirely
+		Just make model row required for Selector (add an error check somewhere)
 	
 'Fixes'
 	Take another look at genericSearch(), make sure we really need to do the forceArray() stuff

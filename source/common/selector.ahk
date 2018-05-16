@@ -27,7 +27,7 @@
 				Result:
 					Values in the NAME and ABBREV columns will be displayed for choices as described above, and the return array will have a "PATH" subscript with the corresponding value from the selected choice.
 				
-			) - Model index row
+			) - override field index row
 				These rows assign a numeric index to each column in the model row. This index will be the position the corresponding data override field will have in the popup. An index of 0 tells the UI not to show the field corresponding to that column at all. Note that the existence of this row will cause data override fields to be shown - the fields can be programmatically suppressed using .selectGui()'s suppressOverrideFields parameter. See "Data Override Fields" below for more details.
 				Example:
 					(	NAME		ABBREV		PATH
@@ -85,9 +85,9 @@
 				If this is set, each super-column in the popup will be that number of pixels wide at a minimum (each may be wider if the choices in that column are wider). See the FlexTable class for how super-columns work.
 		
 	Data Override Fields
-		If a model index row is specified in the TL file, the popup shown by .selectGui() will include not only a choice field, but also fields for each column given a non-zero index in the model index row. The fields are shown in the order specified by the row (i.e. 1 is first after the choice field, 2 is second, etc.). That the fields can be programmatically suppressed using .selectGui()'s suppressOverrideFields parameter.
+		If an override field index row is specified in the TL file, the popup shown by .selectGui() will include not only a choice field, but also fields for each column given a non-zero index in the override field index row. The fields are shown in the order specified by the row (i.e. 1 is first after the choice field, 2 is second, etc.). That the fields can be programmatically suppressed using .selectGui()'s suppressOverrideFields parameter.
 		These fields give a user the ability to override data from their selected choice (or submit the popup without a choice, only overrides). If the user changes the value of the field (it defaults to the column label), that value will be used instead of the selected choice's value for that column.
-		Even if there is no model index row in the TL file, the .addExtraOverrideFields() function may be used to add additional fields to the popup. The values from these fields will appear in the return array just like other override fields, under the subscript with their name.
+		Even if there is no override field index row in the TL file, the .addExtraOverrideFields() function may be used to add additional fields to the popup. The values from these fields will appear in the return array just like other override fields, under the subscript with their name.
 		Values may be defaulted into these fields using .selectGui()'s defaultOverrideData parameter.
 	
 	Example Usage (Popup)
@@ -128,24 +128,18 @@ class Selector {
 	;                       		filter["COLUMN"] - Name of the column to filter on
 	;                       		filter["VALUE"]  - Value to filter to. If a choice has this value (or blank)
 	;                       		                   for the column, it will be included.
-	;  tlSettings (I,OPT) - If you need to override any of the settings used by the TableList class to read
-	;                       the file, you may set them in an array here. See the TableList class for what
-	;                       settings are available. The default settings used by this class can be found in
-	;                       .getDefaultTableListSettings().
 	; RETURNS:        A new Selector object.
 	;---------
-	__New(filePath, filter = "", tlSettings = "") {
+	__New(filePath, filter = "") {
 		this.setChars()
 		this.setDefaultGuiSettings()
 		
-		tlSettings := mergeArrays(this.getDefaultTableListSettings(), tlSettings)
-		
 		if(filePath) {
 			this.filePath := findConfigFilePath(filePath)
-			this.loadChoicesFromFile(tlSettings, filter)
+			this.loadChoicesFromFile(filter)
 		}
 		
-		; DEBUG.popup("Selector.__New", "Finish", "Filepath", this.filePath, "TableListSettings", tlSettings, "Filter", this.filter, "State", this)
+		; DEBUG.popup("Selector.__New", "Finish", "Filepath", this.filePath, "Filter", this.filter, "State", this)
 	}
 	
 	;---------
@@ -194,7 +188,7 @@ class Selector {
 	;                                   the user, pass those values in an array here. Format:
 	;                                   	defaultOverrideData["fieldName"] := value
 	;  suppressOverrideFields (I,OPT) - If the TL file would normally show override fields (by virtue of
-	;                                   having a model index row), you can still hide those fields by setting
+	;                                   having an override field index row), you can still hide those fields by setting
 	;                                   this parameter to true.
 	; RETURNS:        An array of data as chosen/overridden by the user. If the returnColumn parameter was
 	;                 specified, only the subscript matching that name will be returned.
@@ -255,11 +249,11 @@ class Selector {
 	; DESCRIPTION:    Populate this.chars with the special characters we use for parsing the file and user input.
 	;---------
 	setChars() {
-		this.chars["SECTION_TITLE"] := "#"
-		this.chars["HIDDEN"]        := "*"
-		this.chars["MODEL_INDEX"]   := ")"
-		this.chars["SETTING"]       := "+"
-		this.chars["COMMAND"]       := "+"
+		this.chars["SECTION_TITLE"]        := "#"
+		this.chars["HIDDEN"]               := "*"
+		this.chars["OVERRIDE_FIELD_INDEX"] := ")"
+		this.chars["SETTING"]              := "+"
+		this.chars["COMMAND"]              := "+"
 		
 		this.chars["COMMANDS"] := []
 		this.chars["COMMANDS", "EDIT"]  := "e"
@@ -271,24 +265,8 @@ class Selector {
 	}
 	
 	;---------
-	; DESCRIPTION:    Get the default settings that we use with TableList to parse the input file.
-	; RETURNS:        Array of TableList settings, see TableList for details.
-	;---------
-	getDefaultTableListSettings() {
-		tlSettings := []
-		
-		tlSettings["CHARS"] := []
-		tlSettings["CHARS",  "PASS"]            := [this.chars["SECTION_TITLE"], this.chars["SETTING"]] ; Rows starting with these characters will not be split at all.
-		tlSettings["FORMAT", "SEPARATE_MAP"]    := {this.chars["MODEL_INDEX"]: "DATA_INDEX"} 
-		tlSettings["FORMAT", "DEFAULT_INDICES"] := ["NAME", "ABBREV", "VALUE"]
-		
-		return tlSettings
-	}
-	
-	;---------
 	; DESCRIPTION:    Load the choices and other information from the TL file.
 	; PARAMETERS:
-	;  tlSettings (I,REQ) - The TableList settings array (see TableList for details)
 	;  filter     (I,REQ) - An array of filtering information to limit which choices we keep from the file.
 	;                       	Format:
 	;                       		filter["COLUMN"] - Name of the column to filter on
@@ -296,31 +274,31 @@ class Selector {
 	;                       		                   for the column, it will be included.
 	; SIDE EFFECTS:   Populates various member variables with information from the file.
 	;---------
-	loadChoicesFromFile(tlSettings, filter) {
+	loadChoicesFromFile(filter) {
 		tlChars := []
 		tlChars["PASS"] := [this.chars["SECTION_TITLE"], this.chars["SETTING"]] ; Rows starting with these characters will not be split at all.
-		keyRowChars := {this.chars["MODEL_INDEX"]: "DATA_INDEX"}
-		
+		keyRowChars := {this.chars["OVERRIDE_FIELD_INDEX"]: "OVERRIDE_INDEX"}
 		; DEBUG.popup("TableList chars",tlChars, "TableList key row chars",keyRowChars)
+		
 		tl := new TableList(this.filePath, tlChars, keyRowChars)
 		if(filter)
 			table := tl.getFilteredTable(filter["COLUMN"], filter["VALUE"])
 		else
 			table := tl.getTable()
-		; DEBUG.popup("Filepath", this.filePath, "Parsed table", table, "Index labels", tl.getIndexLabels())
+		; DEBUG.popup("Filepath",this.filePath, "Parsed table",table, "Index labels",tl.getIndexLabels())
 		
 		if(!IsObject(tl.getIndexLabels())) {
 			DEBUG.popup("Selector.loadChoicesFromFile","Got TableList", "Invalid settings","No column index labels")
 			return
 		}
 		
-		; Special model index row that tells us how we should arrange data inputs.
-		fieldIndices := tl.getKeyRow("DATA_INDEX")
+		; Special override field index row that tells us how we should arrange data inputs.
+		fieldIndices := tl.getKeyRow("OVERRIDE_INDEX")
 		if(fieldIndices) {
 			this.overrideFields := []
-			For i,fieldIndex in fieldIndices {
+			For label,fieldIndex in fieldIndices {
 				if(fieldIndex > 0) ; Filter out data columns we don't want fields for (fieldIndex = 0)
-					this.overrideFields[fieldIndex] := tl.getIndexLabel(i) ; Numeric, base-1 field index => column label (also the subscript in data array)
+					this.overrideFields[fieldIndex] := label
 			}
 		}
 		; DEBUG.popup("Selector.loadChoicesFromFile","Processed indices", "Index labels",tl.getIndexLabels(), "Selector label indices",this.overrideFields)

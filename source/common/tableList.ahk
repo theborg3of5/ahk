@@ -168,44 +168,8 @@
 					   [-2]
 					[]
 		
-	Settings
-		The following settings also affect how we read and process data:
-		
-		settings["FORMAT", "SEPARATE_MAP"] GDB TODO reconsider this feature and update documentation if it changes.
-			Associative array of CHAR => NAME.
-			Rows that begin with a character that's a key (CHAR) in this array will be:
-				Stored separately, can be retrieved with tl.getSeparateRows(NAME)
-				Split like a normal row, but will always be numerically indexed
-					This is true even if there is a model row, or the DEFAULT_INDICES setting is set.
-			Example
-				Settings
-					settings["FORMAT", "SEPARATE_MAP"] := {")": "DATA_INDEX"}
-					Model row
-						(	NAME	ABBREV	VALUE
-				Input row
-					)	A	B	C
-				Output array (can get via tl.getSeparateRows("DATA_INDEX"))
-					[1]	A
-					[2]	B
-					[3]	C
-		
-		settings["FORMAT", "DEFAULT_INDICES"]
-			Numerically-indexed array that provides what string indices should be used. A model row will override this, and any data that falls outside of the given indices will be numerically indexed.
-			Example
-				Settings
-					settings["FORMAT", "DEFAULT_INDICES"] := ["NAME", "ABBREV", "VALUE"]
-					(No model row)
-				Input row
-					A	B	C	D	E
-				Output array (for the single row, stored in output)
-					["NAME"]			A
-					["ABBREV"]		B
-					["VALUE"]		C
-					[4]				D
-					[5]				E
-		
 	Special Characters
-		Certain characters can have special meaning when included in the file. Each of the following can be changed by setting the relevant ["CHARS","<name>"] subscript in the settings array passed to the constructor.
+		Certain characters can have special meaning when included in the file. Each of the following can be changed by setting the relevant subscript in the chars array passed to the constructor.
 		
 		Defaults:
 			SETTING      @
@@ -237,7 +201,7 @@
 				
 			PASS - (no default)
 				Any row that begins with one of these characters will not be broken up into multiple pieces, but will be a single-element array in the final output.
-				Note that the ["CHARS", "IGNORE"] subscript the settings array (GDB TODO if split parameters) is an array and can contain multiple characters.
+				Note that the chars["IGNORE"] subscript is an array and can contain multiple characters.
 			
 		Within a "normal" row (not started with any of the special characters above):
 			PLACEHOLDER - - (hyphen)
@@ -342,6 +306,25 @@ class TableList {
 	; == Public ====================
 	; ==============================
 	
+	;
+	;keyRowChars
+	;settings["FORMAT", "SEPARATE_MAP"]
+			; Associative array of CHAR => NAME.
+			; Rows that begin with a character that's a key (CHAR) in this array will be:
+				; Stored separately, can be retrieved with tl.getSeparateRows(NAME)
+				; Split like a normal row (index based on model row if present)
+			; Example
+				; Settings
+					; settings["FORMAT", "SEPARATE_MAP"] := {")": "OVERRIDE_INDEX"}
+					; Model row
+						; (	NAME	ABBREV	VALUE
+				; Input row
+					; )	A	B	C
+				; Output array (can get via tl.getKeyRow("OVERRIDE_INDEX"))
+					; [NAME]   A
+					; [ABBREV] B
+					; [VALUE]  C
+	;
 	__New(filePath, chars = "", keyRowChars = "") {
 		if(!filePath || !FileExist(filePath))
 			return ""
@@ -589,6 +572,7 @@ class TableList {
 	; Row that starts with a special char, where we keep the row split but don't apply mods or labels.
 	parseKeyRow(splitRow, char) {
 		splitRow.RemoveAt(1) ; Get rid of the separate char bit.
+		this.applyIndexLabels(splitRow)
 		
 		this.keyRows[this.keyRowChars[char]] := splitRow
 	}

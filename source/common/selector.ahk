@@ -311,9 +311,10 @@ class Selector {
 		}
 		
 		; Special model index row that tells us how we should arrange data inputs.
-		if(tl.getSeparateRow("DATA_INDEX")) {
+		fieldIndices := tl.getSeparateRow("DATA_INDEX")
+		if(fieldIndices) {
 			this.overrideFields := []
-			For i,fieldIndex in tl.getSeparateRow("DATA_INDEX") {
+			For i,fieldIndex in fieldIndices {
 				if(fieldIndex > 0) ; Filter out data columns we don't want fields for (fieldIndex = 0)
 					this.overrideFields[fieldIndex] := tl.getIndexLabel(i) ; Numeric, base-1 field index => column label (also the subscript in data array)
 			}

@@ -1,20 +1,19 @@
 'TableList'
 	Update documentation
-		Confirm that row count starts at 1 and not 0
 	Take a pass through overall code structure and do some cleanup and variable renaming
 	Make all characters into (optionally) arrays
 		Add a helper function that checks either way, can just take the character subscript name
 	Reconsider SEPARATE_MAP stuff
 		Why can't we just return the array indexed by the same string indices as everything else?
 		Seems like the important thing is that the line is separate from the normal rows.
+	Why do we put the chars["PASS"] lines into an array? Wouldn't it be easier to just have them be a flat value?
+		Maybe we can return them separately, like the SEPARATE_MAP stuff
+			Would need to retain line numbers then, though
 	getSpecialChars > setSpecialChars, like in selector?
 	Make "MOD*" char names "MOD_*" for readability, or move them all under a "MOD" subscript
 	Consider changing mod format - instead of having column specified via {}, make it like an argument to the action
 		Maybe more like this
 			[r(COLUMN,REPLACESTRING)]
-	Why do we put the chars["PASS"] lines into an array? Wouldn't it be easier to just have them be a flat value?
-		Maybe we can return them separately, like the SEPARATE_MAP stuff
-			Would need to retain line numbers then, though
 	
 'Fixes'
 	Take another look at genericSearch(), make sure we really need to do the forceArray() stuff

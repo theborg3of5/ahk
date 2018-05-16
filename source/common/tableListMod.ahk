@@ -49,7 +49,7 @@ class TableListMod {
 		row[this.column] := newValue
 	}
 	
-	; Debug info
+	; Debug info (used by the Debug class)
 	debugName := "TableListMod"
 	debugToString(debugBuilder) {
 		debugBuilder.addLine("Column",    this.column)

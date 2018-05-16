@@ -420,10 +420,10 @@ class TableList {
 			
 			if(!uniqueAry[uniqueVal]) {
 				uniqueAry[uniqueVal] := []
-				uniqueAry[uniqueVal, "INDEX"]     := i
+				uniqueAry[uniqueVal, "INDEX"]        := i
 				uniqueAry[uniqueVal, "FILTER_VALUE"] := filterVal
 			} else if( (filterVal = allowedValue) && (uniqueAry[uniqueVal, "FILTER_VALUE"] != allowedValue) ) {
-				uniqueAry[uniqueVal, "INDEX"]     := i
+				uniqueAry[uniqueVal, "INDEX"]        := i
 				uniqueAry[uniqueVal, "FILTER_VALUE"] := filterVal
 			}
 		}

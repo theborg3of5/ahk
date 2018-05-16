@@ -410,7 +410,7 @@ class TableList {
 		if(!uniqueColumn || !filterColumn)
 			return ""
 		
-		uniqueAry := [] ; uniqueVal => {"Index": indexInTable, "FilterValue": filterVal}
+		uniqueAry := [] ; uniqueVal => {"INDEX":indexInTable, "FILTER_VALUE":filterVal}
 		For i,currRow in this.table {
 			if(this.shouldExcludeItem(currRow, filterColumn, allowedValue))
 				Continue
@@ -420,17 +420,17 @@ class TableList {
 			
 			if(!uniqueAry[uniqueVal]) {
 				uniqueAry[uniqueVal] := []
-				uniqueAry[uniqueVal,"Index"]     := i
-				uniqueAry[uniqueVal,"FilterVal"] := filterVal
-			} else if( (filterVal = allowedValue) && (uniqueAry[uniqueVal]["FilterVal"] != allowedValue) ) {
-				uniqueAry[uniqueVal,"Index"]     := i
-				uniqueAry[uniqueVal,"FilterVal"] := filterVal
+				uniqueAry[uniqueVal, "INDEX"]     := i
+				uniqueAry[uniqueVal, "FILTER_VALUE"] := filterVal
+			} else if( (filterVal = allowedValue) && (uniqueAry[uniqueVal, "FILTER_VALUE"] != allowedValue) ) {
+				uniqueAry[uniqueVal, "INDEX"]     := i
+				uniqueAry[uniqueVal, "FILTER_VALUE"] := filterVal
 			}
 		}
 		
 		filteredTable := []
 		For i,ary in uniqueAry {
-			index := ary["Index"]
+			index := ary["INDEX"]
 			filteredTable.push(this.table[index])
 		}
 		

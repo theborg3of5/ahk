@@ -11,6 +11,11 @@
 		Maybe we can return them separately, like the SEPARATE_MAP stuff
 			Would need to retain line numbers then, though
 	getSpecialChars > setSpecialChars, like in selector?
+		Make only certain characters configurable?
+			PASS
+			PLACEHOLDER
+		setChars() can take an array that's a different format and copy over subscripts individually, instead of merging arrays?
+			More controlled/safer this way?
 	Make "MOD*" char names "MOD_*" for readability, or move them all under a "MOD" subscript
 	Consider changing mod format - instead of having column specified via {}, make it like an argument to the action
 		Maybe more like this

@@ -342,21 +342,15 @@ class TableList {
 	; == Public ====================
 	; ==============================
 	
-	__New(filePath, settings = "") {
-		this.parseFile(filePath, settings)
-	}
-	
-	parseFile(filePath, settings = "") {
+	__New(filePath, chars = "", keyRowChars = "") {
 		if(!filePath || !FileExist(filePath))
 			return ""
 		
-		this.init(settings)
+		this.init(chars, keyRowChars)
 		
 		filePath := findConfigFilePath(filePath)
 		lines := fileLinesToArray(filePath)
 		this.parseList(lines)
-		
-		return this.table
 	}
 	
 	getTable() {
@@ -366,11 +360,8 @@ class TableList {
 		return this.table[index]
 	}
 	
-	getSeparateRows() {
-		return this.separateRows
-	}
-	getSeparateRow(name) {
-		return this.separateRows[name]
+	getKeyRow(name) {
+		return this.keyRows[name]
 	}
 	
 	getIndexLabels() {
@@ -443,13 +434,12 @@ class TableList {
 	; == Private ===================
 	; ==============================
 	
-	init(settings) {
+	init(chars, keyRowChars) {
 		this.mods  := []
 		this.table := []
 		
-		this.chars       := mergeArrays(this.getDefaultChars(), settings["CHARS"])
-		this.separateMap := mergeArrays([],                     settings["FORMAT", "SEPARATE_MAP"]) ; GDB TODO why are we merging with empty arrays here?
-		this.indexLabels := mergeArrays([],                     settings["FORMAT", "DEFAULT_INDICES"])
+		this.chars       := mergeArrays(this.getDefaultChars(), chars)
+		this.keyRowChars := keyRowChars
 	}
 	
 	; Special character defaults
@@ -499,8 +489,8 @@ class TableList {
 				this.updateMods(row)
 			} else if(contains(this.chars["PASS"], firstChar)) {
 				this.table.push([row]) ; GDB TODO do we really want to put this in an array?
-			} else if(this.separateMap.hasKey(firstChar)) { ; Separate characters mean that we split the row, but always store it numerically and separately from everything else.
-				this.parseSeparateRow(firstChar, splitRow)
+			} else if(this.keyRowChars.hasKey(firstChar)) { ; Key characters mean that we split the row, but always store it separately from everything else.
+				this.parseKeyRow(firstChar, splitRow)
 			} else if(firstChar = this.chars["MODEL"]) { ; Model row, causes us to use string subscripts instead of numeric per entry.
 				this.parseModelRow(splitRow)
 			} else {
@@ -597,13 +587,13 @@ class TableList {
 	}
 	
 	; Row that starts with a special char, where we keep the row split but don't apply mods or labels.
-	parseSeparateRow(char, splitRow) {
-		if(!IsObject(this.separateRows))
-			this.separateRows := []
+	parseKeyRow(char, splitRow) {
+		if(!IsObject(this.keyRows))
+			this.keyRows := []
 		
 		splitRow.RemoveAt(1) ; Get rid of the separate char bit.
 		
-		this.separateRows[this.separateMap[char]] := splitRow
+		this.keyRows[this.keyRowChars[char]] := splitRow
 	}
 	
 	; Function to deal with special model rows.
@@ -685,10 +675,10 @@ class TableList {
 	; Debug info
 	debugName := "TableList"
 	debugToString(debugBuilder) {
-		debugBuilder.addLine("Chars",        this.chars)
-		debugBuilder.addLine("Separate Map", this.separateMap)
-		debugBuilder.addLine("Index labels", this.indexLabels)
-		debugBuilder.addLine("Mods",         this.mods)
-		debugBuilder.addLine("Table",        this.table)
+		debugBuilder.addLine("Chars",         this.chars)
+		debugBuilder.addLine("Key row chars", this.keyRowChars)
+		debugBuilder.addLine("Index labels",  this.indexLabels)
+		debugBuilder.addLine("Mods",          this.mods)
+		debugBuilder.addLine("Table",         this.table)
 	}
 }

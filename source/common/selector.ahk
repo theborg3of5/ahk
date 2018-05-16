@@ -297,13 +297,17 @@ class Selector {
 	; SIDE EFFECTS:   Populates various member variables with information from the file.
 	;---------
 	loadChoicesFromFile(tlSettings, filter) {
-		; DEBUG.popup("TableList Settings", tlSettings)
-		tl := new TableList(this.filePath, tlSettings)
+		tlChars := []
+		tlChars["PASS"] := [this.chars["SECTION_TITLE"], this.chars["SETTING"]] ; Rows starting with these characters will not be split at all.
+		keyRowChars := {this.chars["MODEL_INDEX"]: "DATA_INDEX"}
+		
+		; DEBUG.popup("TableList chars",tlChars, "TableList key row chars",keyRowChars)
+		tl := new TableList(this.filePath, tlChars, keyRowChars)
 		if(filter)
 			table := tl.getFilteredTable(filter["COLUMN"], filter["VALUE"])
 		else
 			table := tl.getTable()
-		; DEBUG.popup("Filepath", this.filePath, "Parsed table", table, "Index labels", tl.getIndexLabels(), "Separate rows", tl.getSeparateRows())
+		; DEBUG.popup("Filepath", this.filePath, "Parsed table", table, "Index labels", tl.getIndexLabels())
 		
 		if(!IsObject(tl.getIndexLabels())) {
 			DEBUG.popup("Selector.loadChoicesFromFile","Got TableList", "Invalid settings","No column index labels")
@@ -311,7 +315,7 @@ class Selector {
 		}
 		
 		; Special model index row that tells us how we should arrange data inputs.
-		fieldIndices := tl.getSeparateRow("DATA_INDEX")
+		fieldIndices := tl.getKeyRow("DATA_INDEX")
 		if(fieldIndices) {
 			this.overrideFields := []
 			For i,fieldIndex in fieldIndices {
@@ -319,7 +323,7 @@ class Selector {
 					this.overrideFields[fieldIndex] := tl.getIndexLabel(i) ; Numeric, base-1 field index => column label (also the subscript in data array)
 			}
 		}
-		; DEBUG.popup("Selector.loadChoicesFromFile","Processed indices", "Index labels",tl.getIndexLabels(), "Separate rows",tl.getSeparateRows(), "Selector label indices",this.overrideFields)
+		; DEBUG.popup("Selector.loadChoicesFromFile","Processed indices", "Index labels",tl.getIndexLabels(), "Selector label indices",this.overrideFields)
 		
 		this.choices       := [] ; Visible choices the user can pick from.
 		this.hiddenChoices := [] ; Invisible choices the user can pick from.

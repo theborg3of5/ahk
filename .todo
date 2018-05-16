@@ -1,7 +1,5 @@
 'TableList'
 	Update documentation
-	getSpecialChars > setChars, like in Selector
-		setChars can take override array
 	Make all characters into (optionally) arrays
 		Add a helper function that checks either way, can just take the character subscript name
 	Reconsider SEPARATE_MAP stuff

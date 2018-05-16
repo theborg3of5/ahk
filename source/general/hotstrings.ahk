@@ -49,6 +49,8 @@
 	::dcb::dbc
 	::h?::oh?
 	:*0:ndeed::indeed
+	::IT"S::IT'S ; "
+	::THAT"S::THAT'S ; "
 }
 
 { ; Expansions.

@@ -433,11 +433,11 @@ class TableList {
 	; ==============================
 	; == Private ===================
 	; ==============================
+	mods    := []
+	table   := []
+	keyRows := []
 	
 	init(chars, keyRowChars) {
-		this.mods  := []
-		this.table := []
-		
 		this.chars       := mergeArrays(this.getDefaultChars(), chars)
 		this.keyRowChars := keyRowChars
 	}
@@ -588,9 +588,6 @@ class TableList {
 	
 	; Row that starts with a special char, where we keep the row split but don't apply mods or labels.
 	parseKeyRow(char, splitRow) {
-		if(!IsObject(this.keyRows))
-			this.keyRows := []
-		
 		splitRow.RemoveAt(1) ; Get rid of the separate char bit.
 		
 		this.keyRows[this.keyRowChars[char]] := splitRow
@@ -606,22 +603,21 @@ class TableList {
 			this.indexLabels[i] := r
 	}
 	
-	parseNormalRow(rowAry) {
+	parseNormalRow(rowAry) { ; GDB TODO standardize rowAry vs currRow - just use one
 		this.applyIndexLabels(rowAry)
-		
-		currRow := this.applyMods(rowAry)
+		this.applyMods(rowAry)
 		
 		; If any of the values were a placeholder, remove them now.
-		For i,value in currRow.clone() ; Clone since we're deleting things.
+		For i,value in rowAry.clone() ; Clone since we're deleting things.
 			if(value = this.chars["PLACEHOLDER"])
-				currRow.Delete(i)
+				rowAry.Delete(i)
 		
 		; Split up any entries that include the multi-entry character (pipe by default).
-		For i,value in currRow
+		For i,value in rowAry
 			if(stringContains(value, this.chars["MULTIENTRY"]))
-				currRow[i] := StrSplit(value, this.chars["MULTIENTRY"])
+				rowAry[i] := StrSplit(value, this.chars["MULTIENTRY"])
 		
-		this.table.push(currRow)
+		this.table.push(rowAry)
 	}
 	
 	applyIndexLabels(ByRef rowAry) {
@@ -640,17 +636,9 @@ class TableList {
 	}
 
 	; Apply currently active string modifications to given row.
-	applyMods(splitRow) {
-		; If there aren't any mods, just split the row and send it on.
-		if(this.mods.MaxIndex() != "") {
-			; Apply the mods.
-			For i,currMod in this.mods
-				currMod.executeMod(splitRow)
-			
-			return splitRow
-		}
-		
-		return splitRow
+	applyMods(ByRef splitRow) {
+		For i,currMod in this.mods
+			currMod.executeMod(splitRow)
 	}
 	
 	; If a filter is given, exclude any rows that don't fit.

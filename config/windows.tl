@@ -38,10 +38,9 @@
 	AHK GUIs						AutoHotkey.exe		AutoHotkeyGUI			-							-						CLOSE		-			-				CTRL_SHIFT
 	
 	; Web popups - close on Escape.
-[{ESC}r:CLOSE]
-	Pushbullet					chrome.exe			-							Pushbullet
-	TickTick						chrome.exe			-							All - TickTick
-	Join							chrome.exe			-							Join
+[{ESC}r:CLOSE|{EXE}r:chrome.exe]
+	TickTick						-						-							All - TickTick
+	Join							-						-							Join
 []
 	
 	; Windows that have odd borders and need different offsets - mainly Office programs.

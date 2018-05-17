@@ -585,22 +585,22 @@ class TableList {
 			return ; Ignore - it's either empty or an ignore row.
 		
 		else if(rowType = TLROWTYPE_NORMAL)
-			this.parseNormalRow(row)
+			this.processNormal(row)
 		
 		else if(rowType = TLROWTYPE_SETTING)
 			this.processSetting(row)
 		
 		else if(rowType = TLROWTYPE_MODEL) ; Model row, causes us to use string subscripts instead of numeric per entry.
-			this.parseModelRow(row)
+			this.processModel(row)
 		
 		else if(rowType = TLROWTYPE_MOD)
-			this.updateMods(row)
+			this.processMod(row)
 		
 		else if(rowType = TLROWTYPE_PASS)
-			this.table.push(row)
+			this.processPass(row)
 		
 		else if(rowType = TLROWTYPE_KEY) ; Key characters mean that we split the row, but always store it separately from everything else.
-			this.parseKeyRow(row)
+			this.processKey(row)
 	}
 	
 	;---------
@@ -636,6 +636,32 @@ class TableList {
 	}
 	
 	;---------
+	; DESCRIPTION:    Parse a normal row - this is one that will be included in the processed table.
+	; PARAMETERS:
+	;  row (I,REQ) - Normal row to process (string).
+	; RETURNS:        
+	; SIDE EFFECTS:   
+	; NOTES:          
+	;---------
+	processNormal(row) {
+		rowAry := StrSplit(row, A_Tab)
+		this.applyIndexLabels(rowAry)
+		this.applyMods(rowAry)
+		
+		; If any of the values were a placeholder, remove them now.
+		For i,value in rowAry.clone() ; Clone since we're deleting things.
+			if(value = this.chars["PLACEHOLDER"])
+				rowAry.Delete(i)
+		
+		; Split up any entries that include the multi-entry character (pipe by default).
+		For i,value in rowAry
+			if(stringContains(value, this.chars["MULTIENTRY"]))
+				rowAry[i] := StrSplit(value, this.chars["MULTIENTRY"])
+		
+		this.table.push(rowAry)
+	}
+	
+	;---------
 	; DESCRIPTION:    Given a row representing a setting, store off the value of that setting
 	;                 for later use.
 	; PARAMETERS:
@@ -655,12 +681,28 @@ class TableList {
 	}
 	
 	;---------
+	; DESCRIPTION:    Parse a model row - this is what determines the string indices that we use for
+	;                 each column in following rows.
+	; PARAMETERS:
+	;  row (I,REQ) - Model row to process (string).
+	;---------
+	processModel(row) {
+		rowAry := StrSplit(row, A_Tab)
+		this.indexLabels := []
+		
+		rowAry.RemoveAt(1) ; Get rid of the "(" bit.
+		
+		For i,r in rowAry
+			this.indexLabels[i] := r
+	}
+	
+	;---------
 	; DESCRIPTION:    Update the active mods based on a given mod row.
 	; PARAMETERS:
 	;  rowString (I,REQ) - Mod row that we're processing (string).
 	; SIDE EFFECTS:   May change the currently active mods
 	;---------
-	updateMods(rowString) {
+	processMod(rowString) {
 		label := 0
 		
 		; Strip off the starting/ending mod characters ([ and ] by default).
@@ -695,6 +737,31 @@ class TableList {
 				}
 			}
 		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Parse a pass row - this will be added to the table as just a string, rather than an array.
+	; PARAMETERS:
+	;  row (I,REQ) - Pass row to process (string).
+	;---------
+	processPass(row) {
+		this.table.push(row)
+	}
+	
+	;---------
+	; DESCRIPTION:    Parse a key row - this is one that we will split and index like a normal row,
+	;                 but will store separately.
+	; PARAMETERS:
+	;  row (I,REQ) - Key row that we're processing (string).
+	;---------
+	processKey(row) {
+		rowAry := StrSplit(row, A_Tab)
+		firstChar := subStr(row, 1, 1)
+		
+		rowAry.RemoveAt(1) ; Get rid of the separate char bit (")").
+		this.applyIndexLabels(rowAry)
+		
+		this.keyRows[this.keyRowChars[firstChar]] := rowAry
 	}
 	
 	;---------
@@ -735,67 +802,6 @@ class TableList {
 			}
 			i++
 		}
-	}
-	
-	;---------
-	; DESCRIPTION:    Parse a key row - this is one that we will split and index like a normal row,
-	;                 but will store separately.
-	; PARAMETERS:
-	;  row (I,REQ) - Key row that we're processing (string).
-	;---------
-	parseKeyRow(row) {
-		rowAry := StrSplit(row, A_Tab)
-		firstChar := subStr(row, 1, 1)
-		
-		rowAry.RemoveAt(1) ; Get rid of the separate char bit (")").
-		this.applyIndexLabels(rowAry)
-		
-		this.keyRows[this.keyRowChars[firstChar]] := rowAry
-	}
-	
-	;---------
-	; DESCRIPTION:    Parse a model row - this is what determines the string indices that we use for
-	;                 each column in following rows.
-	; PARAMETERS:
-	;  row (I,REQ) - Model row to process (string).
-	; RETURNS:        
-	; SIDE EFFECTS:   
-	; NOTES:          
-	;---------
-	parseModelRow(row) {
-		rowAry := StrSplit(row, A_Tab)
-		this.indexLabels := []
-		
-		rowAry.RemoveAt(1) ; Get rid of the "(" bit.
-		
-		For i,r in rowAry
-			this.indexLabels[i] := r
-	}
-	
-	;---------
-	; DESCRIPTION:    Parse a normal row - this is one that will be included in the processed table.
-	; PARAMETERS:
-	;  row (I,REQ) - Normal row to process (string).
-	; RETURNS:        
-	; SIDE EFFECTS:   
-	; NOTES:          
-	;---------
-	parseNormalRow(row) {
-		rowAry := StrSplit(row, A_Tab)
-		this.applyIndexLabels(rowAry)
-		this.applyMods(rowAry)
-		
-		; If any of the values were a placeholder, remove them now.
-		For i,value in rowAry.clone() ; Clone since we're deleting things.
-			if(value = this.chars["PLACEHOLDER"])
-				rowAry.Delete(i)
-		
-		; Split up any entries that include the multi-entry character (pipe by default).
-		For i,value in rowAry
-			if(stringContains(value, this.chars["MULTIENTRY"]))
-				rowAry[i] := StrSplit(value, this.chars["MULTIENTRY"])
-		
-		this.table.push(rowAry)
 	}
 	
 	;---------

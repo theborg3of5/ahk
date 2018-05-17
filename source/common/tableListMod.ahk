@@ -21,10 +21,8 @@ class TableListMod {
 	__New(modActString, label) {
 		; Check to see whether we have an explicit column. Syntax: line starts with {columnLabel}
 		if(doesStringStartWith(modActString, "{")) {
-			modActString := removeStringFromStart(modActString, "{")
-			closeCurlyPos := InStr(modActString, "}")
-			this.column := subStr(modActString, 1, closeCurlyPos - 1)
-			modActString := subStr(modActString, closeCurlyPos + 1)
+			this.column := getStringBetweenChars(modActString, "{", "}")
+			modActString := getStringAfterChar(modActString, "}")
 		}
 		
 		this.operation := subStr(modActString, 1, 1)

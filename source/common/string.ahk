@@ -348,6 +348,20 @@ doesStringEndWith(inputString, endString) {
 	return (subStr(inputString, strLen(inputString) - strLen(endString) + 1) = endString)
 }
 
+; These are very simple - only work on the first instance of the character(s) in question.
+getStringBeforeChar(inputString, endChar) {
+	endCharPos := stringContains(inputString, endChar)
+	return subStr(inputString, 1, endCharPos - 1)
+}
+getStringAfterChar(inputString, startChar) {
+	startCharPos := stringContains(inputString, startChar)
+	return subStr(inputString, startCharPos + 1)
+}
+getStringBetweenChars(inputString, startChar, endChar) {
+	outString := getStringBeforeChar(inputString, endChar)
+	return getStringAfterChar(outString, startChar)
+}
+
 appendCharIfMissing(inputString, charToAppend) {
 	if(SubStr(inputString, 0) != charToAppend)
 		inputString .= charToAppend

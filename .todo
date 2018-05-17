@@ -3,11 +3,6 @@
 	Consider changing mod format - instead of having column specified via {}, make it like an argument to the action
 		Maybe more like this
 			[r(COLUMN,REPLACESTRING)]
-	TableModList constructor
-		Maybe some new string helper functions:
-			Extracting from a character, up to another character?
-			Getting everything up to a char
-			Getting everything after a char
 	.killMods() - reconsider approach that involves changing the iterator variable.
 	
 'Fixes'

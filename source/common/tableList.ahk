@@ -696,13 +696,13 @@ class TableList {
 	;  row (I,REQ) - Settings row that we're processing (string).
 	;---------
 	processSetting(row) {
-		settingString := subStr(row, 2)
-		if(!settingString)
+		row := removeStringFromStart(row, this.chars["SETTING"])
+		if(!row)
 			return
 		
-		settingSplit := StrSplit(settingString, "=")
-		name  := settingSplit[1]
-		value := settingSplit[2]
+		name  := getStringBeforeChar(row, "=")
+		value := getStringAfterChar(row, "=")
+		DEBUG.popup("TableList.processSetting","Pulled out data", "Name",name, "Value",value)
 		
 		if(name = "PlaceholderChar")
 			this.chars["PLACEHOLDER"] := value
@@ -743,8 +743,8 @@ class TableList {
 		} else {
 			; Check for a remove row label.
 			; Assuming here that it will be the first and only thing in the mod row.
-			if(subStr(row, 1, 1) = this.chars["MOD", "REMOVE_LABEL"]) {
-				remLabel := subStr(row, 2)
+			if(doesStringStartWith(row, this.chars["MOD", "REMOVE_LABEL"])) {
+				remLabel := removeStringFromStart(row, this.chars["MOD", "REMOVE_LABEL"])
 				this.killMods(remLabel)
 				label := 0
 				
@@ -754,11 +754,9 @@ class TableList {
 			; Split into individual mods.
 			newModsSplit := StrSplit(row, this.chars["MOD", "DELIM"])
 			For i,currMod in newModsSplit {
-				firstChar := subStr(currMod, 1, 1)
-				
 				; Check for an add row label.
-				if(i = 1 && firstChar = this.chars["MOD", "ADD_LABEL"])
-					label := subStr(currMod, 2)
+				if(i = 1 && doesStringStartWith(currMod, this.chars["MOD", "ADD_LABEL"]))
+					label := removeStringFromStart(currMod, this.chars["MOD", "ADD_LABEL"])
 				else
 					this.mods.push(new TableListMod(currMod, label))
 			}

@@ -223,6 +223,44 @@
 			MODEND - ]
 				Mod lines should end with this character.
 		
+	Other features
+		Key rows
+			The constructor's keyRowChars parameter can be used to separate certain rows from the others based on their starting character, excluding them from the main table. Instead, those rows (which will still be split and indexed based on the model row, if present) are stored off using the key name given as part of the parameter, and are accessible using the .getKeyRow() function.
+			Note that there should be only one row per character/key in this array.
+			Example:
+				File:
+					(  NAME  ABBREV   VALUE
+					)  0     2        1
+					...
+				Code:
+					keyRowChars := {")": "OVERRIDE_INDEX"}
+					tl := new TableList(filePath, "", keyRowChars)
+					table := tl.getTable()
+					overrideIndex := tl.getKeyRow("OVERRIDE_INDEX")
+				Result:
+					table does not include row starting with ")"
+					overrideIndex["ABBREV"] := 2
+					             ["NAME"]   := 0
+					             ["VALUE"]  := 1
+		
+		Filtering
+			A version of the table which does not include all rows can be retrieved with the .getFilteredTable() and .getFilteredTableUnique() functions. For these functions, you can specify the column and value you'd like to filter on, with an option to include/exclude rows with a blank value for that column.
+			Example:
+				File:
+					(  NAME     ABBREV   PATH                                         MACHINE
+					   Spotify  spot     C:\Program Files (x86)\Spotify\Spotify.exe   HOME_DESKTOP
+   					Spotify  spot     C:\Program Files\Spotify\Spotify.exe         EPIC_LAPTOP
+   					Spotify  spot     C:\Spotify\Spotify.exe                       ASUS_LAPTOP
+   					Firefox  fox      C:\Program Files\Firefox\firefox.exe         
+				Code:
+					tl := new TableList(filePath)
+					table := tl.getFilteredTable("MACHINE", "HOME_DESKTOP", true) ; true - exclude blanks
+				Result:
+					table[1, "NAME"]   = Spotify
+					table[1, "ABBREV"] = spot
+					table[1, "PATH"]   = C:\Program Files (x86)\Spotify\Spotify.exe
+					<"Firefox" line excluded because it was blank for this column>
+		
 	Example Usage
 		File:
 			(  NAME           ABBREV         PATH              MACHINE
@@ -302,64 +340,107 @@
 */
 
 class TableList {
+	
 	; ==============================
 	; == Public ====================
 	; ==============================
 	
-	;
-	;keyRowChars
-	;settings["FORMAT", "SEPARATE_MAP"]
-			; Associative array of CHAR => NAME.
-			; Rows that begin with a character that's a key (CHAR) in this array will be:
-				; Stored separately, can be retrieved with tl.getSeparateRows(NAME)
-				; Split like a normal row (index based on model row if present)
-			; Example
-				; Settings
-					; settings["FORMAT", "SEPARATE_MAP"] := {")": "OVERRIDE_INDEX"}
-					; Model row
-						; (	NAME	ABBREV	VALUE
-				; Input row
-					; )	A	B	C
-				; Output array (can get via tl.getKeyRow("OVERRIDE_INDEX"))
-					; [NAME]   A
-					; [ABBREV] B
-					; [VALUE]  C
-	;
+	;---------
+	; DESCRIPTION:    Create a new TableList instance.
+	; PARAMETERS:
+	;  filePath    (I,REQ) - Path to the file to read from. May be a partial path if
+	;                        findConfigFilePath() can find the correct thing.
+	;  chars       (I,OPT) - Array of special characters to override, see class documentation
+	;                        for more info. Format (charName is name of key i.e. "SETTING"):
+	;                        	chars[charName] := char
+	;  keyRowChars (I,OPT) - Array of characters and key names to keep separate, see class
+	;                        documentation for more info. If a row starts with one of the
+	;                        characters included here, that row will not appear in the main
+	;                        table. Instead, it will be available using the .getKeyRow()
+	;                        function. Note that the row is still split and indexed based
+	;                        on the model row (if present). Format (where keyName is the string
+	;                        you'll use with .getKeyRow() to retrieve the row later:
+	;                        	keyRowChars[<char>] := keyName
+	; RETURNS:        Reference to new TableList object
+	;---------
 	__New(filePath, chars = "", keyRowChars = "") {
-		if(!filePath || !FileExist(filePath))
+		if(!filePath)
+			return ""
+		
+		filePath := findConfigFilePath(filePath)
+		if(!FileExist(filePath))
 			return ""
 		
 		this.chars       := mergeArrays(this.getDefaultChars(), chars)
 		this.keyRowChars := keyRowChars
 		
-		filePath := findConfigFilePath(filePath)
 		lines := fileLinesToArray(filePath)
 		this.parseList(lines)
 	}
 	
+	;---------
+	; DESCRIPTION:    Retrieve the processed table from the file you just loaded.
+	; RETURNS:        Processed table. Format:
+	;                 	table[rowNum, column] := value
+	;---------
 	getTable() {
 		return this.table
 	}
+	;---------
+	; DESCRIPTION:    Retrieve a single row from the processed table.
+	; PARAMETERS:
+	;  lineNum (I,REQ) - The line number of the row to retrieve from the table.
+	; RETURNS:        The row array for the row on the requested line, indexed using the model row
+	;                 if present. Format:
+	;                 	row[column] := value
+	;---------
 	getRow(index) {
 		return this.table[index]
 	}
 	
+	;---------
+	; DESCRIPTION:    Retrieve a key row that was excluded from the table, based on the constructor's
+	;                 keyRowChars parameter.
+	; PARAMETERS:
+	;  name (I,REQ) - The key name that was associated with the row that you want.
+	; RETURNS:        The key row that matches the given name. Format:
+	;                 	row[column] := value
+	;---------
 	getKeyRow(name) {
 		return this.keyRows[name]
 	}
 	
+	;---------
+	; DESCRIPTION:    Get the numeric array with the labels used as columns, as defined by the model row.
+	; RETURNS:        Array of column labels. Format (columnNum starts at 1):
+	;                 	indexLabels[columnNum] := columnLabel
+	;---------
 	getIndexLabels() {
 		return this.indexLabels
 	}
+	;---------
+	; DESCRIPTION:    Get the label used as the index for a specific column.
+	; PARAMETERS:
+	;  index (I,REQ) - The numeric index (starting at 1) of the column.
+	; RETURNS:        The label used to index rows in the table for this column.
+	;---------
 	getIndexLabel(index) {
 		return this.indexLabels[index]
 	}
 	
-	; Return a table of all rows that have the allowed value in the filterColumn column.
-	; Will only affect normal rows (i.e. what you get from tl.getTable())
-	; column        - Which column to filter rows by.
-	; allowedValue  - If a row has a value set for the given column, it must be set to this value to be included.
-	; excludeBlanks - By default, rows with a blank value for the filter column will be included. Set this to true to exclude them.
+	;---------
+	; DESCRIPTION:    Retrieve a version of the table that excludes rows that don't match a certain
+	;                 filter.
+	; PARAMETERS:
+	;  column        (I,REQ) - The string index (as defined by the model row) of the column you want
+	;                          to filter on.
+	;  allowedValue  (I,OPT) - Only include rows which have this value in their column (with the
+	;                          exception of rows with a blank value, see excludeBlanks parameter).
+	;  excludeBlanks (I,OPT) - If set to true, columns which have a blank value for the given column
+	;                          will be excluded. Defaults to false (include blanks).
+	; RETURNS:        Processed table, excluding rows that do not fit the filter. Format:
+	;                 	table[rowNum, column] := value
+	;---------
 	getFilteredTable(column, allowedValue = "", excludeBlanks = false) {
 		; DEBUG.popup("column",column, "allowedValue",allowedValue, "excludeBlanks",excludeBlanks)
 		if(!column)
@@ -376,13 +457,24 @@ class TableList {
 		return filteredTable
 	}
 	
-	; Return a table of all rows that have the allowed value in the filterColumn.
-	; However, return only one row per unique value of the uniqueColumn - a row with 
-	; a blank filterColumn value will be dropped if there's another row with the same 
-	; uniqueColumn value, with the correct allowedValue in the filterColumn column. 
-	; If there are multiple rows with the same uniqueColumn, with the same filterColumn
-	; value (either blank or allowedValue), the first one in the file wins.
-	getFilteredTableUnique(uniqueColumn, filterColumn, allowedValue = "") {
+	;---------
+	; DESCRIPTION:    Retrieve a version of the table that excludes rows that don't match
+	;                 a certain filter, and "flattens" the table so that there is only one
+	;                 row per value of the given column.
+	; PARAMETERS:
+	;  uniqueColumn (I,REQ) - The column that we will "flatten" rows based on - there will
+	;                         be only one row per value of this column.
+	;  filterColumn (I,REQ) - The column to filter using - this column determines which row
+	;                         wins if there are multiple with the same unique value.
+	;  allowedValue (I,REQ) - The value that should win - that is, if 2 rows have uniqueColumn=A,
+	;                         the one with filterColumn=allowedValue is the one that will be
+	;                         included in the table. In the event that multiple rows have the same
+	;                         uniqueColumn value and this allowedValue, the first one in the file
+	;                         will win.
+	; RETURNS:        Processed and flattened table. Format:
+	;                 	table[rowNum, column] := value
+	;---------
+	getFilteredTableUnique(uniqueColumn, filterColumn, allowedValue) {
 		if(!uniqueColumn || !filterColumn)
 			return ""
 		

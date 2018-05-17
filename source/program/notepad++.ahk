@@ -30,19 +30,18 @@
 			Send, {Up}
 			
 			; Piece out the parameters
-			openParenPos  := stringContains(firstLine, "(")
-			closeParenPos := stringContains(firstLine, ")")
 			paramsList := getStringBetweenStr(firstLine, "(", ")")
 			paramsAry  := strSplit(paramsList, ",", " `t")
 			
 			; Drop any defaults from the parameters, get max length
 			maxParamLength := 0
 			For i,param in paramsAry {
-				firstSpacePos := stringContains(param, " ")
-				if(firstSpacePos)
-					paramsAry[i] := subStr(param, 1, firstSpacePos - 1)
+				param := removeStringFromStart(param, "ByRef ")
+				param := getStringBeforeStr(param, " :=")
+				param := getStringBeforeStr(param, " =")
 				
-				maxParamLength := max(maxParamLength, strLen(paramsAry[i]))
+				maxParamLength := max(maxParamLength, strLen(param))
+				paramsAry[i] := param
 			}
 			; DEBUG.popup("Line",firstLine, "Params list",paramsList, "Params array",paramsAry, "Max param length",maxParamLength)
 			

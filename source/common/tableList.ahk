@@ -639,9 +639,6 @@ class TableList {
 	; DESCRIPTION:    Parse a normal row - this is one that will be included in the processed table.
 	; PARAMETERS:
 	;  row (I,REQ) - Normal row to process (string).
-	; RETURNS:        
-	; SIDE EFFECTS:   
-	; NOTES:          
 	;---------
 	processNormal(row) {
 		rowAry := StrSplit(row, A_Tab)
@@ -659,6 +656,37 @@ class TableList {
 				rowAry[i] := StrSplit(value, this.chars["MULTIENTRY"])
 		
 		this.table.push(rowAry)
+	}
+	
+	;---------
+	; DESCRIPTION:    Given an array representing a row in the table, switch it from numeric to
+	;                 string indices (if defined by the model row).
+	; PARAMETERS:
+	;  rowAry (IO,REQ) - Numerically-indexed array representing a row in the table.
+	;---------
+	applyIndexLabels(ByRef rowAry) {
+		if(!IsObject(this.indexLabels))
+			return
+		
+		tempAry := []
+		For i,value in rowAry {
+			idxLabel := this.indexLabels[i]
+			if(idxLabel)
+				tempAry[idxLabel] := value
+			else
+				tempAry[i] := value
+		}
+		rowAry := tempAry
+	}
+
+	;---------
+	; DESCRIPTION:    Apply active string mods to the given row array.
+	; PARAMETERS:
+	;  rowAry (IO,REQ) - Array representing a row in the table. 
+	;---------
+	applyMods(ByRef rowAry) {
+		For i,currMod in this.mods
+			currMod.executeMod(rowAry)
 	}
 	
 	;---------
@@ -699,24 +727,24 @@ class TableList {
 	;---------
 	; DESCRIPTION:    Update the active mods based on a given mod row.
 	; PARAMETERS:
-	;  rowString (I,REQ) - Mod row that we're processing (string).
+	;  row (I,REQ) - Mod row that we're processing (string).
 	; SIDE EFFECTS:   May change the currently active mods
 	;---------
-	processMod(rowString) {
+	processMod(row) {
 		label := 0
 		
 		; Strip off the starting/ending mod characters ([ and ] by default).
-		rowString := removeStringFromStart(rowString, this.chars["MOD", "START"])
-		rowString := removeStringFromEnd(rowString, this.chars["MOD", "END"])
+		row := removeStringFromStart(row, this.chars["MOD", "START"])
+		row := removeStringFromEnd(row, this.chars["MOD", "END"])
 		
 		; If it's just blank, all previous mods are wiped clean.
-		if(rowString = "") {
+		if(row = "") {
 			this.mods := Object()
 		} else {
 			; Check for a remove row label.
 			; Assuming here that it will be the first and only thing in the mod row.
-			if(subStr(rowString, 1, 1) = this.chars["MOD", "REMOVE_LABEL"]) {
-				remLabel := subStr(rowString, 2)
+			if(subStr(row, 1, 1) = this.chars["MOD", "REMOVE_LABEL"]) {
+				remLabel := subStr(row, 2)
 				this.killMods(remLabel)
 				label := 0
 				
@@ -724,7 +752,7 @@ class TableList {
 			}
 			
 			; Split into individual mods.
-			newModsSplit := StrSplit(rowString, this.chars["MOD", "DELIM"])
+			newModsSplit := StrSplit(row, this.chars["MOD", "DELIM"])
 			For i,currMod in newModsSplit {
 				firstChar := subStr(currMod, 1, 1)
 				
@@ -737,31 +765,6 @@ class TableList {
 				}
 			}
 		}
-	}
-	
-	;---------
-	; DESCRIPTION:    Parse a pass row - this will be added to the table as just a string, rather than an array.
-	; PARAMETERS:
-	;  row (I,REQ) - Pass row to process (string).
-	;---------
-	processPass(row) {
-		this.table.push(row)
-	}
-	
-	;---------
-	; DESCRIPTION:    Parse a key row - this is one that we will split and index like a normal row,
-	;                 but will store separately.
-	; PARAMETERS:
-	;  row (I,REQ) - Key row that we're processing (string).
-	;---------
-	processKey(row) {
-		rowAry := StrSplit(row, A_Tab)
-		firstChar := subStr(row, 1, 1)
-		
-		rowAry.RemoveAt(1) ; Get rid of the separate char bit (")").
-		this.applyIndexLabels(rowAry)
-		
-		this.keyRows[this.keyRowChars[firstChar]] := rowAry
 	}
 	
 	;---------
@@ -805,34 +808,28 @@ class TableList {
 	}
 	
 	;---------
-	; DESCRIPTION:    Given an array representing a row in the table, switch it from numeric to
-	;                 string indices (if defined by the model row).
+	; DESCRIPTION:    Parse a pass row - this will be added to the table as just a string, rather than an array.
 	; PARAMETERS:
-	;  rowAry (IO,REQ) - Numerically-indexed array representing a row in the table.
+	;  row (I,REQ) - Pass row to process (string).
 	;---------
-	applyIndexLabels(ByRef rowAry) {
-		if(!IsObject(this.indexLabels))
-			return
-		
-		tempAry := []
-		For i,value in rowAry {
-			idxLabel := this.indexLabels[i]
-			if(idxLabel)
-				tempAry[idxLabel] := value
-			else
-				tempAry[i] := value
-		}
-		rowAry := tempAry
+	processPass(row) {
+		this.table.push(row)
 	}
-
+	
 	;---------
-	; DESCRIPTION:    Apply active string mods to the given row array.
+	; DESCRIPTION:    Parse a key row - this is one that we will split and index like a normal row,
+	;                 but will store separately.
 	; PARAMETERS:
-	;  rowAry (IO,REQ) - Array representing a row in the table. 
+	;  row (I,REQ) - Key row that we're processing (string).
 	;---------
-	applyMods(ByRef rowAry) {
-		For i,currMod in this.mods
-			currMod.executeMod(rowAry)
+	processKey(row) {
+		rowAry := StrSplit(row, A_Tab)
+		firstChar := subStr(row, 1, 1)
+		
+		rowAry.RemoveAt(1) ; Get rid of the separate char bit (")").
+		this.applyIndexLabels(rowAry)
+		
+		this.keyRows[this.keyRowChars[firstChar]] := rowAry
 	}
 	
 	;---------

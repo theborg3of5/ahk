@@ -339,6 +339,14 @@
 			         "MACHINE"] = HOME_DESKTOP
 */
 
+global TLROWTYPE_IGNORE  := "IGNORE"
+global TLROWTYPE_SETTING := "SETTING"
+global TLROWTYPE_MOD     := "MOD"
+global TLROWTYPE_PASS    := "PASS"
+global TLROWTYPE_KEY     := "KEY"
+global TLROWTYPE_MODEL   := "MODEL"
+global TLROWTYPE_NORMAL  := "NORMAL"
+
 class TableList {
 	
 	; ==============================
@@ -534,6 +542,11 @@ class TableList {
 		return chars
 	}
 	
+	;---------
+	; DESCRIPTION:    Given an array of lines from a file, parse out the data into internal structures.
+	; PARAMETERS:
+	;  lines (I,REQ) - Numeric array of lines from the file.
+	;---------
 	parseList(lines) {
 		; Loop through and do work on them.
 		For i,row in lines {
@@ -552,53 +565,70 @@ class TableList {
 		; DEBUG.popup("TableList.parseList","Finish", "State",this)
 	}
 	
+	;---------
+	; DESCRIPTION:    Process a single line from the file. We will parse the line, determine which
+	;                 type it is, and store it in the correct place (along with any additional
+	;                 processing).
+	; PARAMETERS:
+	;  row (I,REQ) - Line from the file (string).
+	;---------
 	processRow(row) {
-		; if(this.isKeyRow(row))
-			; DEBUG.popup("Processing row",row, "Is ignore",this.isIgnoreRow(row), "Is setting",this.isSettingRow(row), "Is mod",this.isModRow(row), "Is pass",this.isPassRow(row), "Is key",this.isKeyRow(row), "Is model",this.isModelRow(row))
+		rowType := this.findRowType(row)
+		; DEBUG.popup("Processing row",row, "Row type",rowType)
 		
-		if(row = "" || this.isIgnoreRow(row))
+		if(rowType = TLROWTYPE_IGNORE)
 			return ; Ignore - it's either empty or an ignore row.
 		
-		else if(this.isSettingRow(row))
+		else if(rowType = TLROWTYPE_NORMAL)
+			this.parseNormalRow(row)
+		
+		else if(rowType = TLROWTYPE_SETTING)
 			this.processSetting(row)
 		
-		else if(this.isModRow(row))
-			this.updateMods(row)
-		
-		else if(this.isPassRow(row))
-			this.table.push(row)
-		
-		else if(this.isKeyRow(row)) ; Key characters mean that we split the row, but always store it separately from everything else.
-			this.parseKeyRow(row)
-		
-		else if(this.isModelRow(row)) ; Model row, causes us to use string subscripts instead of numeric per entry.
+		else if(rowType = TLROWTYPE_MODEL) ; Model row, causes us to use string subscripts instead of numeric per entry.
 			this.parseModelRow(row)
 		
-		else
-			this.parseNormalRow(row)
+		else if(rowType = TLROWTYPE_MOD)
+			this.updateMods(row)
+		
+		else if(rowType = TLROWTYPE_PASS)
+			this.table.push(row)
+		
+		else if(rowType = TLROWTYPE_KEY) ; Key characters mean that we split the row, but always store it separately from everything else.
+			this.parseKeyRow(row)
 	}
 	
-	isIgnoreRow(row) {
-		return doesStringStartWith(row, this.chars["IGNORE"])
-	}
-	isSettingRow(row) {
-		return doesStringStartWith(row, this.chars["SETTING"])
-	}
-	isModRow(row) {
-		return doesStringStartWith(row, this.chars["MOD", "START"])
-	}
-	isPassRow(row) {
+	;---------
+	; DESCRIPTION:    Determine which type of row we're trying to process.
+	; PARAMETERS:
+	;  row (I,REQ) - String with the line from the file we're trying to categorize.
+	; RETURNS:        A TLROWTYPE_* constant describing the type of row.
+	;---------
+	findRowType(row) {
+		if(!row)
+			return TLROWTYPE_IGNORE
+		
+		if(doesStringStartWith(row, this.chars["IGNORE"]))
+			return TLROWTYPE_IGNORE
+		
+		if(doesStringStartWith(row, this.chars["SETTING"]))
+			return TLROWTYPE_SETTING
+		
+		if(doesStringStartWith(row, this.chars["MOD", "START"]))
+			return TLROWTYPE_MOD
+		
+		if(doesStringStartWith(row, this.chars["MODEL"]))
+			return TLROWTYPE_MODEL
+		
 		firstChar := subStr(row, 1, 1)
-		return contains(this.chars["PASS"], firstChar)
+		if(contains(this.chars["PASS"], firstChar))
+			return TLROWTYPE_PASS
+		
+		if(this.keyRowChars.hasKey(firstChar))
+			return TLROWTYPE_KEY
+		
+		return TLROWTYPE_NORMAL
 	}
-	isKeyRow(row) {
-		firstChar := subStr(row, 1, 1)
-		return this.keyRowChars.hasKey(firstChar)
-	}
-	isModelRow(row) {
-		return doesStringStartWith(row, this.chars["MODEL"])
-	}
-	
 	
 	processSetting(row) {
 		settingString := subStr(row, 2)

@@ -255,7 +255,7 @@ class Selector {
 		this.chars["SETTING"]              := "+"
 		this.chars["COMMAND"]              := "+"
 		
-		this.chars["COMMANDS"] := []
+		this.chars["COMMANDS"]
 		this.chars["COMMANDS", "EDIT"]  := "e"
 	}
 	

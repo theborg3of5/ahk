@@ -495,7 +495,6 @@ class TableList {
 			filterVal := rowAry[filterColumn]
 			
 			if(!uniqueAry[uniqueVal]) {
-				uniqueAry[uniqueVal] := []
 				uniqueAry[uniqueVal, "INDEX"]        := i
 				uniqueAry[uniqueVal, "FILTER_VALUE"] := filterVal
 			} else if( (filterVal = allowedValue) && (uniqueAry[uniqueVal, "FILTER_VALUE"] != allowedValue) ) {

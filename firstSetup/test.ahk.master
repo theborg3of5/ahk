@@ -33,8 +33,6 @@ return
 	
 	F1::
 		selectWindowInfo() {
-			rows := []
-			
 			WinGetClass, currClass, A
 			tooltipText := getTooltipText()
 			WinGetTitle, currTitle, A

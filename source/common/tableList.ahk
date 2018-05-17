@@ -521,7 +521,12 @@ class TableList {
 	table   := []
 	keyRows := []
 	
-	; Special character defaults
+	;---------
+	; DESCRIPTION:    Get the array of default special characters.
+	; RETURNS:        Array of special characters for use by the class, see header for character
+	;                 meanings. Format:
+	;                 	chars[name] := character
+	;---------
 	getDefaultChars() {
 		chars := []
 		
@@ -630,6 +635,12 @@ class TableList {
 		return TLROWTYPE_NORMAL
 	}
 	
+	;---------
+	; DESCRIPTION:    Given a row representing a setting, store off the value of that setting
+	;                 for later use.
+	; PARAMETERS:
+	;  row (I,REQ) - Settings row that we're processing (string).
+	;---------
 	processSetting(row) {
 		settingString := subStr(row, 2)
 		if(!settingString)
@@ -642,8 +653,13 @@ class TableList {
 		if(name = "PlaceholderChar")
 			this.chars["PLACEHOLDER"] := value
 	}
-
-	; Update the given modifier string given the new one.
+	
+	;---------
+	; DESCRIPTION:    Update the active mods based on a given mod row.
+	; PARAMETERS:
+	;  rowString (I,REQ) - Mod row that we're processing (string).
+	; SIDE EFFECTS:   May change the currently active mods
+	;---------
 	updateMods(rowString) {
 		label := 0
 		
@@ -665,7 +681,7 @@ class TableList {
 				return
 			}
 			
-			; Split new into individual mods.
+			; Split into individual mods.
 			newModsSplit := StrSplit(rowString, this.chars["MOD", "DELIM"])
 			For i,currMod in newModsSplit {
 				firstChar := subStr(currMod, 1, 1)
@@ -674,36 +690,41 @@ class TableList {
 				if(i = 1 && firstChar = this.chars["MOD", "ADD_LABEL"]) {
 					label := subStr(currMod, 2)
 				} else {
-					newMod := this.parseModLine(currMod, label)
+					newMod := this.parseModAction(currMod, label)
 					this.mods.push(newMod)
 				}
 			}
 		}
 	}
-
-	; Takes a modifier string and constructs a mod object. Assumes no [] around it, and no special chars at start.
-	parseModLine(modLine, label = 0) {
-		origModLine := modLine
-		
+	
+	;---------
+	; DESCRIPTION:    Given a string representing a mod action, turn that into a TableListMod object.
+	; PARAMETERS:
+	;  modActString (I,REQ) - String representing a single mod action
+	;  label        (I,OPT) - The label to associate with the mod (for specific removal later)
+	; RETURNS:        A TableListMod object constructed from the given string.
+	;---------
+	parseModAction(modActString, label = 0) {
 		; Check to see whether we have an explicit bit. Syntax: line starts with {bitLabel}
-		firstChar := subStr(modLine, 1, 1)
+		firstChar := subStr(modActString, 1, 1)
 		if(firstChar = "{") {
-			closeCurlyPos := InStr(modLine, "}")
-			bit := subStr(modLine, 2, closeCurlyPos - 2)
+			closeCurlyPos := InStr(modActString, "}")
+			bit := subStr(modActString, 2, closeCurlyPos - 2)
 			
-			modLine := subStr(modLine, closeCurlyPos + 1)
+			modActString := subStr(modActString, closeCurlyPos + 1)
 		}
 		
-		operation := subStr(modLine, 1, 1)
-		text := subStr(modLine, 3) ; Ignore mod and colon at start
+		operation := subStr(modActString, 1, 1)
+		text      := subStr(modActString, 3) ; Ignore mod and colon at start
 		
-		newMod := new TableListMod(bit, operation, text, label)
-		; DEBUG.popup("New mod", newMod, "Original mod line", origModLine, "Mod line without bit", modLine, "Operation", operation, "Text", text)
-		
-		return newMod
+		return new TableListMod(bit, operation, text, label)
 	}
-
-	; Kill mods with the given label.
+	
+	;---------
+	; DESCRIPTION:    Remove any active mods that match the given label.
+	; PARAMETERS:
+	;  killLabel (I,OPT) - Numeric label to remove matching mods. Defaults to 0 (default label for all mods).
+	;---------
 	killMods(killLabel = 0) {
 		i := 1
 		modsLen := this.mods.MaxIndex()
@@ -716,7 +737,12 @@ class TableList {
 		}
 	}
 	
-	; Row that starts with a special char, where we keep the row split but don't apply mods or labels.
+	;---------
+	; DESCRIPTION:    Parse a key row - this is one that we will split and index like a normal row,
+	;                 but will store separately.
+	; PARAMETERS:
+	;  row (I,REQ) - Key row that we're processing (string).
+	;---------
 	parseKeyRow(row) {
 		rowAry := StrSplit(row, A_Tab)
 		firstChar := subStr(row, 1, 1)
@@ -727,7 +753,15 @@ class TableList {
 		this.keyRows[this.keyRowChars[firstChar]] := rowAry
 	}
 	
-	; Function to deal with special model rows.
+	;---------
+	; DESCRIPTION:    Parse a model row - this is what determines the string indices that we use for
+	;                 each column in following rows.
+	; PARAMETERS:
+	;  row (I,REQ) - Model row to process (string).
+	; RETURNS:        
+	; SIDE EFFECTS:   
+	; NOTES:          
+	;---------
 	parseModelRow(row) {
 		rowAry := StrSplit(row, A_Tab)
 		this.indexLabels := []
@@ -738,6 +772,14 @@ class TableList {
 			this.indexLabels[i] := r
 	}
 	
+	;---------
+	; DESCRIPTION:    Parse a normal row - this is one that will be included in the processed table.
+	; PARAMETERS:
+	;  row (I,REQ) - Normal row to process (string).
+	; RETURNS:        
+	; SIDE EFFECTS:   
+	; NOTES:          
+	;---------
 	parseNormalRow(row) {
 		rowAry := StrSplit(row, A_Tab)
 		this.applyIndexLabels(rowAry)
@@ -756,6 +798,12 @@ class TableList {
 		this.table.push(rowAry)
 	}
 	
+	;---------
+	; DESCRIPTION:    Given an array representing a row in the table, switch it from numeric to
+	;                 string indices (if defined by the model row).
+	; PARAMETERS:
+	;  rowAry (IO,REQ) - Numerically-indexed array representing a row in the table.
+	;---------
 	applyIndexLabels(ByRef rowAry) {
 		if(!IsObject(this.indexLabels))
 			return
@@ -771,13 +819,29 @@ class TableList {
 		rowAry := tempAry
 	}
 
-	; Apply currently active string modifications to given row.
+	;---------
+	; DESCRIPTION:    Apply active string mods to the given row array.
+	; PARAMETERS:
+	;  rowAry (IO,REQ) - Array representing a row in the table. 
+	;---------
 	applyMods(ByRef rowAry) {
 		For i,currMod in this.mods
 			currMod.executeMod(rowAry)
 	}
 	
-	; If a filter is given, exclude any rows that don't fit.
+	;---------
+	; DESCRIPTION:    Based on a filter (column and value to restrict to), determine whether the
+	;                 given row array should be excluded.
+	; PARAMETERS:
+	;  rowAry        (I,REQ) - Array representing a row in the table. 
+	;  column        (I,OPT) - The column to filter on - we will check the value of this column
+	;                          (index) in the row array to see if it matches allowedValue.
+	;  allowedValue  (I,OPT) - Only include rows which have this value in their column (with the
+	;                          exception of rows with a blank value, see excludeBlanks parameter).
+	;  excludeBlanks (I,OPT) - If set to true, columns which have a blank value for the given column
+	;                          will be excluded. Defaults to false (include blanks).
+	; RETURNS:        True if we should exclude the row from the filtered table, false otherwise.
+	;---------
 	shouldExcludeItem(rowAry, column, allowedValue = "", excludeBlanks = false) {
 		if(!column)
 			return false

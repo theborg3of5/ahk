@@ -22,6 +22,7 @@
 		scriptHotkeyType is blank at startup
 			Should probably have a different "loaded" variable or similar, though.
 				Set in _setup.ahk, like scriptHotkeyType stuff.
+	Consider adding a toast version of debug popup, that's doesn't steal focus and goes away on its own.
 	Reassess the include structures a bit
 		Some of the smaller classes are just split-off bits of others (TableListMod, SelectorChoice, SelectorGui) that scripts should only need if they need the parent class.
 			Have those parent classes include them instead of having _includeCommon do it?

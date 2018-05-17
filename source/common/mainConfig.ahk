@@ -11,12 +11,10 @@ global MAIN_CENTRAL_SCRIPT := "MAIN_CENTRAL_SCRIPT"
 
 ; Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
 class MainConfig {
-	static settings := []
-	static windows  := []
-	static paths    := [] ; KEY => PATH
-	static programs := []
-	static games    := []
-	static privates := [] ; KEY => VALUE
+	
+	; ==============================
+	; == Public ====================
+	; ==============================
 	
 	init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile) {
 		; All config files are expected to live in config/ folder under the root of this repo.
@@ -38,93 +36,14 @@ class MainConfig {
 		this.programs := this.loadPrograms(programsPath)
 		this.games    := this.loadGames(gamesPath)
 		
+		this.initDone := true
 		; DEBUG.popup("MainConfig", "End of init", "Settings", this.settings, "Window settings", this.windows, "Program info", this.programs)
 	}
 	
-	loadPrivates(filePath) {
-		tl := new TableList(filePath)
-		privatesTable := tl.getTable()
-		
-		; Index private values by key.
-		privatesAry := []
-		For i,valueRow in privatesTable {
-			key := valueRow["KEY"]
-			if(key)
-				privatesAry[key] := valueRow["VALUE"]
-		}
-		
-		; DEBUG.popup("MainConfig.loadPrivates","Finish", "Filepath",filePath, "Table",privatesTable, "Indexed array",privatesAry)
-		return privatesAry
-	}
 	
-	loadSettings(filePath) {
-		settingsAry := []
-		settingsAry["MACHINE"]         := this.loadSettingFromFile(filePath, "MACHINE")         ; Which machine this is, from MACHINE_* constants
-		settingsAry["MENU_KEY_ACTION"] := this.loadSettingFromFile(filePath, "MENU_KEY_ACTION") ; What to do with the menu key, from MENUKEYACTION_* constants
-		
-		; DEBUG.popup("Settings", settingsAry)
-		return settingsAry
+	isInitialized() {
+		return this.initDone
 	}
-	loadSettingFromFile(filePath, configName) {
-		iniObj := new IniObject(filePath)
-		return iniObj.get("Main", configName)
-	}
-	
-	loadWindows(filePath) {
-		tl := new TableList(filePath)
-		return tl.getFilteredTable("MACHINE", MainConfig.getMachine())
-	}
-	
-	loadPaths(filePath) {
-		tl := new TableList(filePath)
-		pathsTable := tl.getFilteredTableUnique("NAME", "MACHINE", MainConfig.getMachine())
-		
-		; Index paths by key.
-		pathsAry := []
-		For i,row in pathsTable {
-			key := row["KEY"]
-			if(key)
-				pathsAry[key] := row["PATH"]
-		}
-		
-		; Apply calculated values and private tags.
-		For key,value in pathsAry {
-			value := replaceTag(value, "USER_ROOT", reduceFilepath(A_Desktop,  1))
-			value := replaceTag(value, "AHK_ROOT",  reduceFilepath(A_LineFile, 3)) ; 2 levels out, plus one to get out of file itself.
-			value := replaceTags(value, this.privates)
-			pathsAry[key] := value ; make sure to store it back in the actual array
-		}
-		
-		; DEBUG.popup("mainConfig.loadPaths","Finish", "Paths",pathsAry)
-		return pathsAry
-	}
-	
-	loadPrograms(filePath) {
-		tl := new TableList(filePath)
-		programsTable := tl.getFilteredTableUnique("NAME", "MACHINE", this.getMachine())
-		; DEBUG.popup("MainConfig", "loadPrograms", "Unique table", programsTable)
-		
-		; Index it by name and machine.
-		programsAry := []
-		For i,row in programsTable {
-			name := row["NAME"] ; Identifying name of this entry (which this.programs will be indexed by)
-			
-			if(!IsObject(programsAry[name])) ; Initialize the array.
-				programsAry[name] := []
-			
-			programsAry[name] := row
-		}
-		; DEBUG.popup("MainConfig", "loadPrograms", "Finished programs", programsAry)
-		
-		return programsAry
-	}
-	
-	loadGames(filePath) {
-		tl := new TableList(filePath)
-		return tl.getTable()
-	}
-	
-	; ============ Public functions for accessing info ================
 	
 	getSetting(settingName = "") {
 		if(!settingName)
@@ -223,5 +142,101 @@ class MainConfig {
 		} else { ; Just return the whole array.
 			return this.programs[name]
 		}
+	}
+	
+	
+	; ==============================
+	; == Private ===================
+	; ==============================
+	
+	static initDone := false
+	static settings := []
+	static windows  := []
+	static paths    := [] ; KEY => PATH
+	static programs := []
+	static games    := []
+	static privates := [] ; KEY => VALUE
+	
+	loadPrivates(filePath) {
+		tl := new TableList(filePath)
+		privatesTable := tl.getTable()
+		
+		; Index private values by key.
+		privatesAry := []
+		For i,valueRow in privatesTable {
+			key := valueRow["KEY"]
+			if(key)
+				privatesAry[key] := valueRow["VALUE"]
+		}
+		
+		; DEBUG.popup("MainConfig.loadPrivates","Finish", "Filepath",filePath, "Table",privatesTable, "Indexed array",privatesAry)
+		return privatesAry
+	}
+	
+	loadSettings(filePath) {
+		settingsAry := []
+		settingsAry["MACHINE"]         := this.loadSettingFromFile(filePath, "MACHINE")         ; Which machine this is, from MACHINE_* constants
+		settingsAry["MENU_KEY_ACTION"] := this.loadSettingFromFile(filePath, "MENU_KEY_ACTION") ; What to do with the menu key, from MENUKEYACTION_* constants
+		
+		; DEBUG.popup("Settings", settingsAry)
+		return settingsAry
+	}
+	loadSettingFromFile(filePath, configName) {
+		iniObj := new IniObject(filePath)
+		return iniObj.get("Main", configName)
+	}
+	
+	loadWindows(filePath) {
+		tl := new TableList(filePath)
+		return tl.getFilteredTable("MACHINE", MainConfig.getMachine())
+	}
+	
+	loadPaths(filePath) {
+		tl := new TableList(filePath)
+		pathsTable := tl.getFilteredTableUnique("NAME", "MACHINE", MainConfig.getMachine())
+		
+		; Index paths by key.
+		pathsAry := []
+		For i,row in pathsTable {
+			key := row["KEY"]
+			if(key)
+				pathsAry[key] := row["PATH"]
+		}
+		
+		; Apply calculated values and private tags.
+		For key,value in pathsAry {
+			value := replaceTag(value, "USER_ROOT", reduceFilepath(A_Desktop,  1))
+			value := replaceTag(value, "AHK_ROOT",  reduceFilepath(A_LineFile, 3)) ; 2 levels out, plus one to get out of file itself.
+			value := replaceTags(value, this.privates)
+			pathsAry[key] := value ; make sure to store it back in the actual array
+		}
+		
+		; DEBUG.popup("mainConfig.loadPaths","Finish", "Paths",pathsAry)
+		return pathsAry
+	}
+	
+	loadPrograms(filePath) {
+		tl := new TableList(filePath)
+		programsTable := tl.getFilteredTableUnique("NAME", "MACHINE", this.getMachine())
+		; DEBUG.popup("MainConfig", "loadPrograms", "Unique table", programsTable)
+		
+		; Index it by name and machine.
+		programsAry := []
+		For i,row in programsTable {
+			name := row["NAME"] ; Identifying name of this entry (which this.programs will be indexed by)
+			
+			if(!IsObject(programsAry[name])) ; Initialize the array.
+				programsAry[name] := []
+			
+			programsAry[name] := row
+		}
+		; DEBUG.popup("MainConfig", "loadPrograms", "Finished programs", programsAry)
+		
+		return programsAry
+	}
+	
+	loadGames(filePath) {
+		tl := new TableList(filePath)
+		return tl.getTable()
 	}
 }

@@ -3,7 +3,6 @@
 	Consider changing mod format - instead of having column specified via {}, make it like an argument to the action
 		Maybe more like this
 			[r(COLUMN,REPLACESTRING)]
-	.killMods() - reconsider approach that involves changing the iterator variable.
 	
 'Fixes'
 	Documentation hotkey (;;;) - bug with ByRef (variable comes out as ByRef)

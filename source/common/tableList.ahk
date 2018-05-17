@@ -769,15 +769,9 @@ class TableList {
 	;  killLabel (I,OPT) - Numeric label to remove matching mods. Defaults to 0 (default label for all mods).
 	;---------
 	killMods(killLabel = 0) {
-		i := 1
-		modsLen := this.mods.MaxIndex()
-		Loop, %modsLen% {
-			if(this.mods[i].label = killLabel) {
-				this.mods.Remove(i)
-				i--
-			}
-			i++
-		}
+		For i,mod in this.mods
+			if(mod.label = killLabel)
+				this.mods.Delete(i)
 	}
 	
 	;---------

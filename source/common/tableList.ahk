@@ -701,7 +701,7 @@ class TableList {
 		
 		name  := getStringBeforeChar(row, "=")
 		value := getStringAfterChar(row, "=")
-		DEBUG.popup("TableList.processSetting","Pulled out data", "Name",name, "Value",value)
+		; DEBUG.popup("TableList.processSetting","Pulled out data", "Name",name, "Value",value)
 		
 		if(name = "PlaceholderChar")
 			this.chars["PLACEHOLDER"] := value

@@ -409,7 +409,7 @@ class Selector {
 	parseChoice(userChoiceString) {
 		; Command choice - edit ini, etc.
 		if(stringStartsWith(userChoiceString, this.chars["COMMAND"])) {
-			commandChar := getStringAfterChar(userChoiceString, this.chars["COMMAND"])
+			commandChar := getStringAfterStr(userChoiceString, this.chars["COMMAND"])
 			
 			; Edit action - open the current INI file for editing
 			if(commandChar = this.chars["COMMANDS", "EDIT"]) {

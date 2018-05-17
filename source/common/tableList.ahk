@@ -699,8 +699,8 @@ class TableList {
 		if(!row)
 			return
 		
-		name  := getStringBeforeChar(row, "=")
-		value := getStringAfterChar(row, "=")
+		name  := getStringBeforeStr(row, "=")
+		value := getStringAfterStr(row, "=")
 		; DEBUG.popup("TableList.processSetting","Pulled out data", "Name",name, "Value",value)
 		
 		if(name = "PlaceholderChar")

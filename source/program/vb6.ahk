@@ -94,7 +94,7 @@
 	; Code vs. design swap. Note: only works if mini-window within window is maximized within outer window.
 	Pause::
 		toggleVB6CodeDesign() {
-			mode := getStringBetweenChars(WinGetTitle("A"), "(", ")")
+			mode := getStringBetweenStr(WinGetTitle("A"), "(", ")")
 			if(mode = "Code") {
 				Send, +{F7}
 			} else if(mode = "Form" || mode = "UserControl") {
@@ -149,7 +149,7 @@
 		dlgId := subStr(dlgName, 4)
 		
 		; Ignore anything after a dash (usually used by me so I can break up projects).
-		dlgId := getStringBeforeChar(dlgId, "-")
+		dlgId := getStringBeforeStr(dlgId, "-")
 		
 		outStr := "' "
 		if(extraSpace)

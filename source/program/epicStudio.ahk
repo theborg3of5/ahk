@@ -73,14 +73,13 @@
 			Loop, Parse, text, `n
 			{
 				if(stringStartsWith(A_LoopField, "DLG ")) {
-					objectName := A_LoopField
-					dlgNum := subStr(objectName, 4)
-					; DEBUG.popup(A_Index, "On line", objectName, "Found object", dlgNum, "With DLG number")
+					dlgNum := getStringAfterStr(A_LoopField, "DLG ")
+					; DEBUG.popup("On line", A_Index, "With DLG number", dlgNum)
 					break
 				}
 			}
 			
-			if(!objectName)
+			if(!dlgNum)
 				return
 			
 			Send, ^l

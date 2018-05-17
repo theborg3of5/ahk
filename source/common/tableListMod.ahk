@@ -21,12 +21,12 @@ class TableListMod {
 	__New(modActString, label) {
 		; Check to see whether we have an explicit column. Syntax: line starts with {columnLabel}
 		if(stringStartsWith(modActString, "{")) {
-			this.column := getStringBetweenChars(modActString, "{", "}")
-			modActString := getStringAfterChar(modActString, "}")
+			this.column := getStringBetweenStr(modActString, "{", "}")
+			modActString := getStringAfterStr(modActString, "}")
 		}
 		
-		this.operation := getStringBeforeChar(modActString, ":")
-		this.text      := getStringAfterChar(modActString, ":")
+		this.operation := getStringBeforeStr(modActString, ":")
+		this.text      := getStringAfterStr(modActString, ":")
 		this.label     := label
 		
 		; DEBUG.popup("New TableListMod","Finished", "State",this)

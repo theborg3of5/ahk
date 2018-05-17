@@ -328,17 +328,23 @@ stringEndsWith(inputString, endString) {
 }
 
 ; These are very simple - only work on the first instance of the character(s) in question.
-getStringBeforeChar(inputString, endChar) {
-	endCharPos := stringContains(inputString, endChar)
-	return subStr(inputString, 1, endCharPos - 1)
+getStringBeforeStr(inputString, endString) {
+	endStringPos := stringContains(inputString, endString)
+	if(!endStringPos)
+		return inputString
+	
+	return subStr(inputString, 1, endStringPos - 1)
 }
-getStringAfterChar(inputString, startChar) {
-	startCharPos := stringContains(inputString, startChar)
-	return subStr(inputString, startCharPos + 1)
+getStringAfterStr(inputString, startString) {
+	startStringPos := stringContains(inputString, startString)
+	if(!startStringPos)
+		return inputString
+	
+	return subStr(inputString, startStringPos + strLen(startString))
 }
-getStringBetweenChars(inputString, startChar, endChar) {
-	outString := getStringBeforeChar(inputString, endChar)
-	return getStringAfterChar(outString, startChar)
+getStringBetweenStr(inputString, startString, endString) {
+	outString := getStringBeforeStr(inputString, endString)
+	return getStringAfterStr(outString, startString)
 }
 
 appendCharIfMissing(inputString, charToAppend) {

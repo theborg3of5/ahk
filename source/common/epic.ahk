@@ -401,7 +401,7 @@ getCurrentSnapperEnvironment() {
 		return ""
 	
 	environmentText := ControlGetText("ThunderRT6ComboBox2", snapperTitleString)
-	commId := getStringBetweenChars(environmentText, "[", "]")
+	commId := getStringBetweenStr(environmentText, "[", "]")
 	
 	return commId
 }
@@ -452,9 +452,7 @@ processEMC2ObjectInfo(infoAry) {
 	title := cleanupText(title, ["-", "/", "\", ":", "DBC", "(Developer has reset your status)", "(Stage 1 QAer is Waiting for Changes)", "(Stage 2 QAer is Waiting for Changes)"]) ; Drop odd characters and non-useful strings
 	if(ini = "SLG") {
 		; "--Assigned to: USER" might be on the end for SLGs - trim it off.
-		assignedPos := stringContains(title, "--Assigned To:")
-		if(assignedPos > 0)
-			title := subStr(title, 1, assignedPos - 1)
+		title := getStringBeforeStr(title, "--Assigned To:")
 	}
 	
 	return {"INI":ini, "ID":id, "TITLE":title}

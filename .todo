@@ -1,9 +1,4 @@
 'TableList'
-	Update getString*Char* functions to allow strings instead of just characters?
-		Would need to take string lengths into account
-		Could use in some places:
-			epicStudio > linkRoutineToCurrentDLG
-			epic > processEMC2ObjectInfo
 	Consider changing mod format - instead of having column specified via {}, make it like an argument to the action
 		Maybe more like this
 			[r(COLUMN,REPLACESTRING)]

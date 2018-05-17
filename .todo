@@ -5,6 +5,7 @@
 			[r(COLUMN,REPLACESTRING)]
 	Should .parseModAction() really be a constructor for TableListMod intead?
 		This is really about the format of the mod string, so it seems so.
+			Could really be the only constructor - no need for other one.
 		Use string helper functions for whether starts with char, and removing beginning char
 		Maybe some new string helper functions:
 			Extracting from a character, up to another character?

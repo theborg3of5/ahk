@@ -3,8 +3,21 @@
 class DEBUG {
 	static spacesPerTab := 4 ; How many spaces are in a tab that we indent things by.
 	
+	; Popup, but show before MainConfig is initialized.
+	popupEarly(params*) {
+		this.popupCore(params*)
+	}
+	
 	; Input in any number of pairs of (label, value), in that order. They will be formatted as described in DEBUG.buildDebugString.
 	popup(params*) {
+		; Only start showing popups once MainConfig is finished loading - popupEarly can be used if you want to show debug messages in these cases.
+		if(!MainConfig.isInitialized())
+			return
+		
+		this.popupCore(params*)
+	}
+	
+	popupCore(params*) {
 		; Single parameter with an (assumed-to-be) associative array.
 		if(params.length() = 1) {
 			outString := this.buildObjectString(params[1])

@@ -1,5 +1,4 @@
 'TableList'
-	Take a pass through overall code structure and do some further cleanup and variable renaming
 	Consider changing mod format - instead of having column specified via {}, make it like an argument to the action
 		Maybe more like this
 			[r(COLUMN,REPLACESTRING)]

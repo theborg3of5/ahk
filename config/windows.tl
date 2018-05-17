@@ -12,6 +12,7 @@
 	Telegram						Telegram.exe		Qt5QWindowIcon			-							-						CLOSE		CLOSE		-				-					-			0
 	Spotify						Spotify.exe			-							-							-						CLOSE		CLOSE		-				-					OTHER		0
 	RepublicAnywhere			Republic Anywhere.exe	-					-							-						CLOSE		CLOSE
+	grepWin						grepWin.exe			-							-							-						CLOSE
 	
 	; VB6
 	VB6							VB6.exe				wndclass_desked_gsk	-							-						-			POST_MESSAGE

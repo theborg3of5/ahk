@@ -35,9 +35,9 @@ class MainConfig {
 		this.paths    := this.loadPaths(pathsPath)
 		this.programs := this.loadPrograms(programsPath)
 		this.games    := this.loadGames(gamesPath)
+		; DEBUG.popupEarly("MainConfig","Loaded all", "Settings",this.settings, "Windows",this.windows, "Paths",this.paths, "Programs",this.programs, "Games",this.games)
 		
 		this.initDone := true
-		; DEBUG.popup("MainConfig", "End of init", "Settings", this.settings, "Window settings", this.windows, "Program info", this.programs)
 	}
 	
 	
@@ -79,7 +79,7 @@ class MainConfig {
 			return ""
 		
 		For i,w in this.windows {
-			; DEBUG.popup("Against settings",w, "Name",name, "EXE",exe, "Class",ahkClass, "Title",title, "Text",text)
+			; DEBUG.popupEarly("Against settings",w, "Name",name, "EXE",exe, "Class",ahkClass, "Title",title, "Text",text)
 			if(name && w["NAME"] && (name != w["NAME"]))
 				Continue
 			if(exe && w["EXE"] && (exe != w["EXE"]))
@@ -103,7 +103,7 @@ class MainConfig {
 			Break
 		}
 		
-		; DEBUG.popup("MainConfig","getWindow", "Found window",retWindow)
+		; DEBUG.popupEarly("MainConfig","getWindow", "Found window",retWindow)
 		
 		return retWindow
 	}
@@ -211,14 +211,14 @@ class MainConfig {
 			pathsAry[key] := value ; make sure to store it back in the actual array
 		}
 		
-		; DEBUG.popup("mainConfig.loadPaths","Finish", "Paths",pathsAry)
+		; DEBUG.popupEarly("mainConfig.loadPaths","Finish", "Paths",pathsAry)
 		return pathsAry
 	}
 	
 	loadPrograms(filePath) {
 		tl := new TableList(filePath)
 		programsTable := tl.getFilteredTableUnique("NAME", "MACHINE", this.getMachine())
-		; DEBUG.popup("MainConfig", "loadPrograms", "Unique table", programsTable)
+		; DEBUG.popupEarly("MainConfig", "loadPrograms", "Unique table", programsTable)
 		
 		; Index it by name and machine.
 		programsAry := []
@@ -230,7 +230,7 @@ class MainConfig {
 			
 			programsAry[name] := row
 		}
-		; DEBUG.popup("MainConfig", "loadPrograms", "Finished programs", programsAry)
+		; DEBUG.popupEarly("MainConfig", "loadPrograms", "Finished programs", programsAry)
 		
 		return programsAry
 	}

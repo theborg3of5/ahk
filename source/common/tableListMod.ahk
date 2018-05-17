@@ -25,8 +25,8 @@ class TableListMod {
 			modActString := getStringAfterChar(modActString, "}")
 		}
 		
-		this.operation := subStr(modActString, 1, 1)
-		this.text      := subStr(modActString, 3) ; Ignore mod and colon at start
+		this.operation := getStringBeforeChar(modActString, ":")
+		this.text      := getStringAfterChar(modActString, ":")
 		this.label     := label
 		
 		; DEBUG.popup("New TableListMod","Finished", "State",this)

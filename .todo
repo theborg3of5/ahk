@@ -3,10 +3,7 @@
 	Consider changing mod format - instead of having column specified via {}, make it like an argument to the action
 		Maybe more like this
 			[r(COLUMN,REPLACESTRING)]
-	Should .parseModAction() really be a constructor for TableListMod intead?
-		This is really about the format of the mod string, so it seems so.
-			Could really be the only constructor - no need for other one.
-		Use string helper functions for whether starts with char, and removing beginning char
+	TableModList constructor
 		Maybe some new string helper functions:
 			Extracting from a character, up to another character?
 			Getting everything up to a char

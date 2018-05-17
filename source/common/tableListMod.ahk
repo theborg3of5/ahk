@@ -14,17 +14,24 @@ class TableListMod {
 	;---------
 	; DESCRIPTION:    Create a new TableListMod instance.
 	; PARAMETERS:
-	;  column    (I,REQ) - Column that this mod applies to
-	;  operation (I,REQ) - Operation to perform, from MODOP_* constants above
-	;  text      (I,REQ) - Text that we will perform the action with
-	;  label     (I,REQ) - Label associated with this mod
+	;  modActString (I,REQ) - String defining the mod.
+	;  label        (I,REQ) - Label associated with this mod
 	; RETURNS:        Reference to new TableListMod object
 	;---------
-	__New(column, operation, text, label) {
-		this.column    := column
-		this.operation := operation
-		this.text      := text
+	__New(modActString, label) {
+		; Check to see whether we have an explicit column. Syntax: line starts with {columnLabel}
+		if(doesStringStartWith(modActString, "{")) {
+			modActString := removeStringFromStart(modActString, "{")
+			closeCurlyPos := InStr(modActString, "}")
+			this.column := subStr(modActString, 1, closeCurlyPos - 1)
+			modActString := subStr(modActString, closeCurlyPos + 1)
+		}
+		
+		this.operation := subStr(modActString, 1, 1)
+		this.text      := subStr(modActString, 3) ; Ignore mod and colon at start
 		this.label     := label
+		
+		; DEBUG.popup("New TableListMod","Finished", "State",this)
 	}
 	
 	;---------

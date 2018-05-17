@@ -757,37 +757,12 @@ class TableList {
 				firstChar := subStr(currMod, 1, 1)
 				
 				; Check for an add row label.
-				if(i = 1 && firstChar = this.chars["MOD", "ADD_LABEL"]) {
+				if(i = 1 && firstChar = this.chars["MOD", "ADD_LABEL"])
 					label := subStr(currMod, 2)
-				} else {
-					newMod := this.parseModAction(currMod, label)
-					this.mods.push(newMod)
-				}
+				else
+					this.mods.push(new TableListMod(currMod, label))
 			}
 		}
-	}
-	
-	;---------
-	; DESCRIPTION:    Given a string representing a mod action, turn that into a TableListMod object.
-	; PARAMETERS:
-	;  modActString (I,REQ) - String representing a single mod action
-	;  label        (I,OPT) - The label to associate with the mod (for specific removal later)
-	; RETURNS:        A TableListMod object constructed from the given string.
-	;---------
-	parseModAction(modActString, label = 0) {
-		; Check to see whether we have an explicit bit. Syntax: line starts with {bitLabel}
-		firstChar := subStr(modActString, 1, 1)
-		if(firstChar = "{") {
-			closeCurlyPos := InStr(modActString, "}")
-			bit := subStr(modActString, 2, closeCurlyPos - 2)
-			
-			modActString := subStr(modActString, closeCurlyPos + 1)
-		}
-		
-		operation := subStr(modActString, 1, 1)
-		text      := subStr(modActString, 3) ; Ignore mod and colon at start
-		
-		return new TableListMod(bit, operation, text, label)
 	}
 	
 	;---------

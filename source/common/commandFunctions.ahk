@@ -177,7 +177,7 @@ SplitPath(ByRef InputVar, ByRef OutFileName = "", ByRef OutDir = "", ByRef OutEx
 	; StringGetPos, v, InputVar, %SearchText%, %Mode%, %Offset%
 	; Return, v
 ; }
-; StringLeft(ByRef InputVar, Count) { ; Use SubStr instead
+; StringLeft(ByRef InputVar, Count) { ; Use subStr instead
 	; StringLeft, v, InputVar, %Count%
 	; Return, v
 ; }
@@ -189,7 +189,7 @@ StringLower(ByRef InputVar, T = "") {
 	StringLower, v, InputVar, %T%
 	Return, v
 }
-; StringMid(ByRef InputVar, StartChar, Count , L = "") { ; Use SubStr instead
+; StringMid(ByRef InputVar, StartChar, Count , L = "") { ; Use subStr instead
 	; StringMid, v, InputVar, %StartChar%, %Count%, %L%
 	; Return, v
 ; }
@@ -197,15 +197,15 @@ StringLower(ByRef InputVar, T = "") {
 	; StringReplace, v, InputVar, %SearchText%, %ReplaceText%, %All%
 	; Return, v
 ; }
-; StringRight(ByRef InputVar, Count) { ; Use SubStr instead
+; StringRight(ByRef InputVar, Count) { ; Use subStr instead
 	; StringRight, v, InputVar, %Count%
 	; Return, v
 ; }
-; StringTrimLeft(ByRef InputVar, Count) { ; Use SubStr instead
+; StringTrimLeft(ByRef InputVar, Count) { ; Use subStr instead
 	; StringTrimLeft, v, InputVar, %Count%
 	; Return, v
 ; }
-; StringTrimRight(ByRef InputVar, Count) { ; Use SubStr instead
+; StringTrimRight(ByRef InputVar, Count) { ; Use subStr instead
 	; StringTrimRight, v, InputVar, %Count%
 	; Return, v
 ; }

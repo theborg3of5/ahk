@@ -17,11 +17,11 @@ MainLoop:
 		title := WinGetActiveTitle()
 		RegExMatch(title, "^C:\\EpicSource\\\d\.\d\\DLG-(\w+)[-\\].* - Commit - TortoiseSVN", DLG)
 		
-		dlgFirstChar := SubStr(DLG1, 1, 1)
+		dlgFirstChar := subStr(DLG1, 1, 1)
 		if(isAlpha(dlgFirstChar)) {
 			StringUpper, dlgFirstChar, dlgFirstChar
 			ControlSend, Edit2, %dlgFirstChar%
-			DLG1 := SubStr(DLG1, 2)
+			DLG1 := subStr(DLG1, 2)
 		}
 		
 		ControlSend, Edit2, %DLG1%

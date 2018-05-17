@@ -62,7 +62,7 @@ RunCommand(commandToRun = "", stayOpen = false) {
 		For i,c in commandToRun {
 			cmdString .= c A_Space
 		}
-		cmdString := SubStr(cmdString, 1, StrLen(cmdString) - 1)
+		cmdString := removeStringFromEnd(cmdString, A_Space)
 	} else {
 		cmdString := commandToRun
 	}

@@ -22,6 +22,6 @@ Send, !i                                         ; Find Now button
 
 reformatPhone(input) {
 	nums := RegExReplace(input, "[^0-9\+]" , "") ; Strip out spaces and other odd chars.
-	trimmedNums := SubStr(nums, -9) ; Last 10 chars only.
-	return "(" SubStr(trimmedNums, 1, 3) ") " SubStr(trimmedNums, 4, 3) "-" SubStr(trimmedNums, 7, 4)
+	trimmedNums := subStr(nums, -9) ; Last 10 chars only.
+	return "(" subStr(trimmedNums, 1, 3) ") " subStr(trimmedNums, 4, 3) "-" subStr(trimmedNums, 7, 4)
 }

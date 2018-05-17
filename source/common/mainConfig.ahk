@@ -88,7 +88,7 @@ class MainConfig {
 				Continue
 			if(title && w["TITLE"]) {
 				if(stringStartsWith(w["TITLE"], "{REGEX}")) {
-					regexNeedle := SubStr(w["TITLE"], StrLen("{REGEX}") + 1)
+					regexNeedle := removeStringFromStart(w["TITLE"], "{REGEX}")
 					if(!RegExMatch(title, regexNeedle))
 						Continue
 				} else {

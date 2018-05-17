@@ -337,7 +337,7 @@ class Selector {
 	;---------
 	addChoiceRow(row) {
 		choice := new SelectorChoice(row)
-		if(subStr(row["NAME"], 1, 1) = this.chars["HIDDEN"])
+		if(stringStartsWith(row["NAME"], this.chars["HIDDEN"]))
 			this.hiddenChoices.push(choice) ; First char is hidden character (*), don't show it but allow user to choose it via abbrev.
 		else
 			this.choices.push(choice)
@@ -351,19 +351,17 @@ class Selector {
 	;                 character.
 	;---------
 	processSpecialLine(line) {
-		firstChar := subStr(line, 1, 1)
-		line      := subStr(line, 2) ; Go ahead and trim off the special character
-		
 		; Setting
-		if(firstChar = this.chars["SETTING"]) {
+		if(stringStartsWith(line, this.chars["SETTING"])) {
+			line := removeStringFromStart(line, this.chars["SETTING"])
 			if(line != "") {
 				settingSplit := StrSplit(settingString, "=")
 				this.setGuiSetting(settingSplit[1], settingSplit[2]) ; name, value
 			}
 		
 		; Section title
-		} else if(firstChar = this.chars["SECTION_TITLE"]) {
-			title := subStr(line, 2) ; Format should be "# Title", strip off the space (# already removed above)
+		} else if(stringStartsWith(line, this.chars["SECTION_TITLE"] " ")) {
+			title := removeStringFromStart(line, this.chars["SECTION_TITLE"] " ")
 			idx := forceNumber(this.choices.MaxIndex()) + 1 ; The next actual choice will be the first one under this header, so match that.
 			this.sectionTitles[idx] := title ; If there are multiple headers in a row (for example when choices are filtered out) they should get overwritten in order here (which is correct).
 		}
@@ -410,8 +408,8 @@ class Selector {
 	;---------
 	parseChoice(userChoiceString) {
 		; Command choice - edit ini, etc.
-		if(InStr(userChoiceString, this.chars["COMMAND"])) {
-			commandChar := subStr(userChoiceString, 2, 1)
+		if(stringStartsWith(userChoiceString, this.chars["COMMAND"])) {
+			commandChar := getStringAfterChar(userChoiceString, this.chars["COMMAND"])
 			
 			; Edit action - open the current INI file for editing
 			if(commandChar = this.chars["COMMANDS", "EDIT"]) {

@@ -50,8 +50,8 @@ parsePhone(input) {
 
 reformatPhone(input) {
 	nums := RegExReplace(input, "[^0-9\+]" , "") ; Strip out spaces and other odd chars.
-	trimmedNums := SubStr(nums, -9) ; Last 10 chars only.
-	return "(" SubStr(trimmedNums, 1, 3) ") " SubStr(trimmedNums, 4, 3) "-" SubStr(trimmedNums, 7, 4)
+	trimmedNums := subStr(nums, -9) ; Last 10 chars only.
+	return "(" subStr(trimmedNums, 1, 3) ") " subStr(trimmedNums, 4, 3) "-" subStr(trimmedNums, 7, 4)
 }
 
 ; Gives the specified number of tabs as a string.
@@ -144,30 +144,9 @@ escapeRegExChars(inputString) {
 	return outputString
 }
 
-; Given an array of strings, put them all together.
-arrayToString(arr, spacesBetween = true, preString = "", postString = "") {
-	outStr := ""
-	
-	For i,a in arr {
-		outStr .= preString a postString
-		
-		if(spacesBetween)
-			outStr .= " "
-	}
-	
-	; Take off the last, extraneous space.
-	outStr := SubStr(outStr, 1, strLen(outStr) - 1)
-	
-	return outStr
-}
-
 ; Wrapper for InStr() that I can remember easier.
 stringContains(haystack, needle, caseSensitive = "") {
 	return InStr(haystack, needle, caseSensitive)
-}
-
-stringStartsWith(haystack, needle) {
-	return RegExMatch(haystack, "^" needle)
 }
 
 ; See if a string contains any of the strings in the array.
@@ -329,22 +308,22 @@ replaceTag(inputString, tagName, replacement) {
 }
 
 removeStringFromStart(inputString, startToRemove) {
-	if(!doesStringStartWith(inputString, startToRemove))
+	if(!stringStartsWith(inputString, startToRemove))
 		return inputString
 	
 	return subStr(inputString, strLen(startToRemove) + 1)
 }
 removeStringFromEnd(inputString, endingToRemove) {
-	if(!doesStringEndWith(inputString, endingToRemove))
+	if(!stringEndsWith(inputString, endingToRemove))
 		return inputString
 	
 	return subStr(inputString, 1, strLen(inputString) - strLen(endingToRemove))
 }
 
-doesStringStartWith(inputString, startString) {
+stringStartsWith(inputString, startString) {
 	return (subStr(inputString, 1, strLen(startString)) = startString)
 }
-doesStringEndWith(inputString, endString) {
+stringEndsWith(inputString, endString) {
 	return (subStr(inputString, strLen(inputString) - strLen(endString) + 1) = endString)
 }
 
@@ -363,7 +342,7 @@ getStringBetweenChars(inputString, startChar, endChar) {
 }
 
 appendCharIfMissing(inputString, charToAppend) {
-	if(SubStr(inputString, 0) != charToAppend)
+	if(subStr(inputString, 0) != charToAppend)
 		inputString .= charToAppend
 	
 	return inputString

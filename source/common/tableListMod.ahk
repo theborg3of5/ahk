@@ -20,7 +20,7 @@ class TableListMod {
 	;---------
 	__New(modActString, label) {
 		; Check to see whether we have an explicit column. Syntax: line starts with {columnLabel}
-		if(doesStringStartWith(modActString, "{")) {
+		if(stringStartsWith(modActString, "{")) {
 			this.column := getStringBetweenChars(modActString, "{", "}")
 			modActString := getStringAfterChar(modActString, "}")
 		}

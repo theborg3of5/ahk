@@ -5,9 +5,9 @@
 	isEMC2Id(num) {
 		dlgLetters := ["i", "m", "y", "t", "q", "cs"]
 		
-		whichLetter := containsAnyOf(num, dlgLetters, CONTAINS_BEG)
-		if(whichLetter) {
-			rest := SubStr(num, StrLen(dlgLetters[whichLetter]) + 1)
+		letterIndex := containsAnyOf(num, dlgLetters, CONTAINS_BEG)
+		if(letterIndex) {
+			rest := removeStringFromStart(num, dlgLetters[letterIndex])
 			if(isNum(rest))
 				return 2
 		}
@@ -401,9 +401,7 @@ getCurrentSnapperEnvironment() {
 		return ""
 	
 	environmentText := ControlGetText("ThunderRT6ComboBox2", snapperTitleString)
-	textLen  := strLen(environmentText)
-	startPos := stringContains(environmentText, "[") + 1 ; Don't want the bracket itself
-	commId   := subStr(environmentText, startPos, textLen - startPos) ; Cutting off the last char, which should be a "]" (we don't want it)
+	commId := getStringBetweenChars(environmentText, "[", "]")
 	
 	return commId
 }
@@ -419,14 +417,14 @@ extractEMC2ObjectInfoRaw(line) {
 	; INI is first characters up to the first delimiter
 	if(isAlpha(subStr(line, 1, 1))) { ; Make sure we're starting with an INI (instead of an ID) by checking whether the first character is a letter (not a number).
 		delimPos := stringContainsAnyOf(line, [" ", "#"])
-		ini  := SubStr(line, 1, delimPos - 1)
-		line := SubStr(line, delimPos + 1) ; +1 to drop delimiter too
+		ini  := subStr(line, 1, delimPos - 1)
+		line := subStr(line, delimPos + 1) ; +1 to drop delimiter too
 	}
 	
 	; ID is remaining up to the next delimiter
 	delimPos := stringContainsAnyOf(line, [":", "-", "]"])
-	id := SubStr(line, 1, delimPos - 1)
-	line := SubStr(line, delimPos + 1) ; +1 to drop delimiter too
+	id := subStr(line, 1, delimPos - 1)
+	line := subStr(line, delimPos + 1) ; +1 to drop delimiter too
 	
 	; Title is everything left
 	title := line
@@ -456,7 +454,7 @@ processEMC2ObjectInfo(infoAry) {
 		; "--Assigned to: USER" might be on the end for SLGs - trim it off.
 		assignedPos := stringContains(title, "--Assigned To:")
 		if(assignedPos > 0)
-			title := SubStr(title, 1, assignedPos - 1)
+			title := subStr(title, 1, assignedPos - 1)
 	}
 	
 	return {"INI":ini, "ID":id, "TITLE":title}

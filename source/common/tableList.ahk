@@ -612,16 +612,16 @@ class TableList {
 		if(!row)
 			return TLROWTYPE_IGNORE
 		
-		if(doesStringStartWith(row, this.chars["IGNORE"]))
+		if(stringStartsWith(row, this.chars["IGNORE"]))
 			return TLROWTYPE_IGNORE
 		
-		if(doesStringStartWith(row, this.chars["SETTING"]))
+		if(stringStartsWith(row, this.chars["SETTING"]))
 			return TLROWTYPE_SETTING
 		
-		if(doesStringStartWith(row, this.chars["MOD", "START"]))
+		if(stringStartsWith(row, this.chars["MOD", "START"]))
 			return TLROWTYPE_MOD
 		
-		if(doesStringStartWith(row, this.chars["MODEL"]))
+		if(stringStartsWith(row, this.chars["MODEL"]))
 			return TLROWTYPE_MODEL
 		
 		firstChar := subStr(row, 1, 1)
@@ -742,7 +742,7 @@ class TableList {
 		} else {
 			; Check for a remove row label.
 			; Assuming here that it will be the first and only thing in the mod row.
-			if(doesStringStartWith(row, this.chars["MOD", "REMOVE_LABEL"])) {
+			if(stringStartsWith(row, this.chars["MOD", "REMOVE_LABEL"])) {
 				remLabel := removeStringFromStart(row, this.chars["MOD", "REMOVE_LABEL"])
 				this.killMods(remLabel)
 				label := 0
@@ -754,7 +754,7 @@ class TableList {
 			newModsSplit := StrSplit(row, this.chars["MOD", "DELIM"])
 			For i,currMod in newModsSplit {
 				; Check for an add row label.
-				if(i = 1 && doesStringStartWith(currMod, this.chars["MOD", "ADD_LABEL"]))
+				if(i = 1 && stringStartsWith(currMod, this.chars["MOD", "ADD_LABEL"]))
 					label := removeStringFromStart(currMod, this.chars["MOD", "ADD_LABEL"])
 				else
 					this.mods.push(new TableListMod(currMod, label))

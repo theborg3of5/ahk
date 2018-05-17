@@ -72,9 +72,9 @@
 			
 			Loop, Parse, text, `n
 			{
-				if(SubStr(A_LoopField, 1, 4) = "DLG ") {
+				if(stringStartsWith(A_LoopField, "DLG ")) {
 					objectName := A_LoopField
-					dlgNum := SubStr(objectName, 4)
+					dlgNum := subStr(objectName, 4)
 					; DEBUG.popup(A_Index, "On line", objectName, "Found object", dlgNum, "With DLG number")
 					break
 				}

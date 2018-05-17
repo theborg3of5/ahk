@@ -121,7 +121,7 @@ getMirroredKeyFromHotkey(hotkeyString) {
 	if(!hotkeyString)
 		return ""
 	
-	keyToMirror := "KEY_" SubStr(hotkeyString, StrLen(hotkeyString), 1)
+	keyToMirror := "KEY_" subStr(hotkeyString, StrLen(hotkeyString), 1)
 	if(!keyToMirror)
 		return ""
 	

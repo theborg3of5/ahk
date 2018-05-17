@@ -134,8 +134,8 @@ class SelectorGui {
 			sectionTitle := sectionTitles[i]
 			
 			; Add new column if needed
-			if(SubStr(sectionTitle, 1, 2) = this.chars["NEW_COLUMN"] " ") {
-				sectionTitle := SubStr(sectionTitle, 3) ; Strip the special character and space off so we don't show them.
+			if(stringStartsWith(sectionTitle, this.chars["NEW_COLUMN"] " ")) {
+				sectionTitle := removeStringFromStart(sectionTitle, this.chars["NEW_COLUMN"] " ")
 				flex.addColumn()
 				isEmptyColumn := true
 			}

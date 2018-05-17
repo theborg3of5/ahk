@@ -23,15 +23,15 @@ queryTime(format = "h:mm tt") {
 
 ; Translate a date/time from the form "w+1" to the given format.
 parseDateTime(input, format = "", dateOrTime = "") { ; dateOrTime = "d" for date, "t" for time
-	firstChar := SubStr(input, 1, 1)
-	operator := SubStr(input, 2, 1)
-	difference := SubStr(input, 3)
+	firstChar := subStr(input, 1, 1)
+	operator := subStr(input, 2, 1)
+	difference := subStr(input, 3)
 	
 	; Two-char thing - "mi" for minute or "mo" for month. Account for it to get the real operator and offset.
 	if(isAlpha(operator)) {
-		secondChar := SubStr(input, 2, 1)
-		operator := SubStr(input, 3, 1)
-		difference := SubStr(input, 4)
+		secondChar := subStr(input, 2, 1)
+		operator := subStr(input, 3, 1)
+		difference := subStr(input, 4)
 	}
 	
 	; Allow "mi" for minute and "mo" for month, to make it easier to tell the difference.
@@ -146,12 +146,12 @@ doDateMath(start, op = "+", diff = 0, unit = "d") { ; unit = "d"
 splitDateTime(timestamp) {
 	d := Object()
 	
-	d["year"] := SubStr(timestamp, 1, 4)
-	d["month"] := SubStr(timestamp, 5, 2)
-	d["day"] := SubStr(timestamp, 7, 2)
-	d["hour"] := SubStr(timestamp, 9, 2)
-	d["minute"] := SubStr(timestamp, 11, 2)
-	d["second"] := SubStr(timestamp, 13, 2)
+	d["year"] := subStr(timestamp, 1, 4)
+	d["month"] := subStr(timestamp, 5, 2)
+	d["day"] := subStr(timestamp, 7, 2)
+	d["hour"] := subStr(timestamp, 9, 2)
+	d["minute"] := subStr(timestamp, 11, 2)
+	d["second"] := subStr(timestamp, 13, 2)
 	
 	; DEBUG.popup("splitDate", "return", "Input", timestamp, "Y", d["year"], "M", d["month"], "D", d["day"], "H", d["hour"], "M", d["minute"], "S", d["second"])
 	return d

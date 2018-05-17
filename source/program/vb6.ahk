@@ -94,14 +94,10 @@
 	; Code vs. design swap. Note: only works if mini-window within window is maximized within outer window.
 	Pause::
 		toggleVB6CodeDesign() {
-			title := WinGetTitle("A")
-			title := SubStr(title, 1, StrLen(title) - 2)
-			parenPos := InStr(title, "(")
-			title := SubStr(title, parenPos + 1)
-			
-			if(title = "Code") {
+			mode := getStringBetweenChars(WinGetTitle("A"), "(", ")")
+			if(mode = "Code") {
 				Send, +{F7}
-			} else if(title = "Form" || title = "UserControl") {
+			} else if(mode = "Form" || mode = "UserControl") {
 				Send, {F7}
 			}
 		}
@@ -150,12 +146,10 @@
 		projectName := ControlGetText("PROJECT1")
 		splitName := StrSplit(projectName, A_Space)
 		dlgName := splitName[splitName.MaxIndex()]
-		dlgId := SubStr(dlgName, 4)
+		dlgId := subStr(dlgName, 4)
 		
 		; Ignore anything after a dash (usually used by me so I can break up projects).
-		dashPosition := stringContains(dlgId, "-")
-		if(dashPosition)
-			dlgId := SubStr(dlgId, 1, dashPosition-1)
+		dlgId := getStringBeforeChar(dlgId, "-")
 		
 		outStr := "' "
 		if(extraSpace)

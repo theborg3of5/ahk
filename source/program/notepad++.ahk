@@ -32,7 +32,7 @@
 			; Piece out the parameters
 			openParenPos  := stringContains(firstLine, "(")
 			closeParenPos := stringContains(firstLine, ")")
-			paramsList := subStr(firstLine, openParenPos + 1, closeParenPos - openParenPos - 1)
+			paramsList := getStringBetweenChars(firstLine, "(", ")")
 			paramsAry  := strSplit(paramsList, ",", " `t")
 			
 			; Drop any defaults from the parameters, get max length

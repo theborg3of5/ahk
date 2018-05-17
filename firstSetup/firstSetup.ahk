@@ -71,11 +71,8 @@ For from,to in copyPaths {
 	
 	; Replace any palceholder tags in the file contents.
 	; DEBUG.popup("From", from, "To", to, "Starting contents", fileContents)
-	For tag,value in tagsToReplace {
-		if(IsObject(value))
-			value := arrayJoin(value)
+	For tag,value in tagsToReplace
 		StringReplace, fileContents, fileContents, <%tag%>, %value%, A
-	}
 	; DEBUG.popup("From",from, "To",to, "Finished contents",fileContents)
 	
 	; Generate the folder path if needed.

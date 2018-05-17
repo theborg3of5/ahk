@@ -8,11 +8,11 @@ sendRawWithTabs(input) {
 		; Get how many tabs we're dealing with while also pulling them off.
 		currLine := A_LoopField
 		numTabs := 0
-		while SubStr(currLine, 1, 1) = A_Tab
+		while stringStartsWith(currLine, A_Tab)
 		{
 			; DEBUG.popup(currLine, "Before currLine", numTabs, "Number of tabs")
 			numTabs++
-			currLine := SubStr(currLine, 2)
+			currLine := removeStringFromStart(currLine, A_Tab)
 			; DEBUG.popup(currLine, "After currLine", numTabs, "Number of tabs")
 		}
 		
@@ -89,7 +89,7 @@ getTooltipText() {
 		if(tooltipText != "")
 			outText .= tooltipText "`n"
 	}
-	outText := SubStr(outText, 1, StrLen(outText) - 1)
+	outText := removeStringFromEnd(outText, "`n")
 	
 	return outText
 }

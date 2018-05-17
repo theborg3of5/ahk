@@ -80,19 +80,15 @@ containsAnyOf(haystack, needles, match = 1) { ; match = CONTAINS_ANY
 	For i, el in needles {
 		
 		if(match = CONTAINS_ANY) {
-			; DEBUG.popup(match, "Match mode", haystack, "Haystack", el, "Needle", stringContains(haystack, el), "Result")
-			
 			if(stringContains(haystack, el))
 				return i
 		
 		} else if(match = CONTAINS_BEG) {
-			chunk := SubStr(haystack, 1, StrLen(el))
-			if(chunk = el)
+			if(stringStartsWith(haystack, el))
 				return i
 		
 		} else if(match = CONTAINS_END) {
-			chunk := SubStr(haystack, (1 - StrLen(el)))
-			if(chunk = el)
+			if(stringEndsWith(haystack, el))
 				return i
 			
 		} else if(match = CONTAINS_EXACT) {
@@ -103,6 +99,8 @@ containsAnyOf(haystack, needles, match = 1) { ; match = CONTAINS_ANY
 			DEBUG.popup(match, "Unsupported match method")
 		}
 	}
+	
+	return ""
 }
 
 ; Table contains function.	
@@ -196,10 +194,13 @@ mergeArrays(default, overrides) {
 arrayJoin(arrayToJoin, delim = "|") {
 	outStr := ""
 	
-	For index,value in arrayToJoin
-		outStr .= delim value
+	For index,value in arrayToJoin {
+		if(outStr)
+			outStr .= delim
+		outStr .= value
+	}
 	
-	return SubStr(outStr, StrLen(delim) + 1) ; Trim off the leading delimiter.
+	return outStr
 }
 
 ; Sets global variables to null.

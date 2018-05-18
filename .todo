@@ -1,4 +1,5 @@
 'TableList'
+	Move documentation for mod format into TableListMod
 	Consider changing mod format - instead of having column specified via {}, make it like an argument to the action
 		Maybe more like this
 			[r(COLUMN,REPLACESTRING)]

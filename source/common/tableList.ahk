@@ -403,6 +403,7 @@ class TableList {
 	;                          to filter on.
 	;  allowedValue  (I,OPT) - Only include rows which have this value in their column (with the
 	;                          exception of rows with a blank value, see includeBlanks parameter).
+	;                          If this is left blank, any value is allowed .
 	;  includeBlanks (I,OPT) - If set to false, columns which have a blank value for the given column
 	;                          will be excluded. Defaults to true (include blanks).
 	; RETURNS:        Processed table, excluding rows that do not fit the filter. Format:
@@ -764,6 +765,7 @@ class TableList {
 	;                          (index) in the row array to see if it matches allowedValue.
 	;  allowedValue  (I,OPT) - Only include rows which have this value in their column (with the
 	;                          exception of rows with a blank value, see includeBlanks parameter).
+	;                          If this is left blank, any value is allowed .
 	;  includeBlanks (I,OPT) - If set to false, columns which have a blank value for the given column
 	;                          will be excluded. Defaults to true (include blanks).
 	; RETURNS:        True if we should exclude the row from the filtered table, false otherwise.
@@ -778,6 +780,9 @@ class TableList {
 		if(!valueToCompare)
 			return includeBlanks
 		
+		; If no allowed value, include everything (aside from blanks, which obey includeBlanks above)
+		if(!allowedValue)
+			return true
 		
 		; If the value isn't blank, compare it to our allowed value.
 		if(IsObject(valueToCompare)) { ; Array case - multiple values in filter column.

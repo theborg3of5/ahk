@@ -1,8 +1,3 @@
-'TableList'
-	Consider changing mod format - instead of having column specified via {}, make it like an argument to the action
-		Maybe more like this
-			[r(COLUMN,REPLACESTRING)]
-	
 'Fixes'
 	Take another look at genericSearch(), make sure we really need to do the forceArray() stuff
 		Probably tweak the loop or pull out a subfunction, too.
@@ -13,7 +8,8 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 'New'
-	Consider adding a toast version of debug popup, that's doesn't steal focus and goes away on its own.
+	Consider changing mod format - instead of having column specified via {}, make it like an argument to the action
+		Maybe more like this: [r(COLUMN,REPLACESTRING)]
 	Reassess the include structures a bit
 		Some of the smaller classes are just split-off bits of others (TableListMod, SelectorChoice, SelectorGui) that scripts should only need if they need the parent class.
 			Have those parent classes include them instead of having _includeCommon do it?
@@ -24,6 +20,7 @@
 		Use for long-running processes, like firstSetup's file copying stuff.
 		Use toast (or tooltip if that doesn't work out) to show when something was copied to clipboard by a hotkey
 			OneNote page link, Chrome title copy, various Test copies (instead of popup)
+		Consider adding a toast version of debug popup, that's doesn't steal focus and goes away on its own.
 	Should we have windows > activateProgram wait for window to be active after running?
 		Possibly activate it itself after a timer if it's not active but exists?
 	Selector of current DLGs?

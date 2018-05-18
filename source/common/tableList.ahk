@@ -402,23 +402,21 @@ class TableList {
 	;  column        (I,REQ) - The string index (as defined by the model row) of the column you want
 	;                          to filter on.
 	;  allowedValue  (I,OPT) - Only include rows which have this value in their column (with the
-	;                          exception of rows with a blank value, see excludeBlanks parameter).
-	;  excludeBlanks (I,OPT) - If set to true, columns which have a blank value for the given column
-	;                          will be excluded. Defaults to false (include blanks).
+	;                          exception of rows with a blank value, see includeBlanks parameter).
+	;  includeBlanks (I,OPT) - If set to false, columns which have a blank value for the given column
+	;                          will be excluded. Defaults to true (include blanks).
 	; RETURNS:        Processed table, excluding rows that do not fit the filter. Format:
 	;                 	table[rowNum, column] := value
 	;---------
-	getFilteredTable(column, allowedValue := "", excludeBlanks := false) {
-		; DEBUG.popup("column",column, "allowedValue",allowedValue, "excludeBlanks",excludeBlanks)
+	getFilteredTable(column, allowedValue := "", includeBlanks := true) {
+		; DEBUG.popup("column",column, "allowedValue",allowedValue, "includeBlanks",includeBlanks)
 		if(!column)
 			return ""
 		
 		filteredTable := []
 		For i,rowAry in this.table {
-			if(this.shouldExcludeItem(rowAry, column, allowedValue, excludeBlanks))
-				Continue
-			
-			filteredTable.push(rowAry)
+			if(this.shouldIncludeRow(rowAry, column, allowedValue, includeBlanks))
+				filteredTable.push(rowAry)
 		}
 		
 		return filteredTable
@@ -442,12 +440,12 @@ class TableList {
 	;                 	table[rowNum, column] := value
 	;---------
 	getFilteredTableUnique(uniqueColumn, filterColumn, allowedValue) {
-		if(!uniqueColumn || !filterColumn)
+		if(!uniqueColumn || !filterColumn || !allowedValue)
 			return ""
 		
 		uniqueAry := [] ; uniqueVal => {"INDEX":indexInTable, "FILTER_VALUE":filterVal}
 		For i,rowAry in this.table {
-			if(this.shouldExcludeItem(rowAry, filterColumn, allowedValue))
+			if(!this.shouldIncludeRow(rowAry, filterColumn, allowedValue))
 				Continue
 			
 			uniqueVal := rowAry[uniqueColumn]
@@ -759,34 +757,39 @@ class TableList {
 	
 	;---------
 	; DESCRIPTION:    Based on a filter (column and value to restrict to), determine whether the
-	;                 given row array should be excluded.
+	;                 given row array should be included.
 	; PARAMETERS:
 	;  rowAry        (I,REQ) - Array representing a row in the table. 
 	;  column        (I,OPT) - The column to filter on - we will check the value of this column
 	;                          (index) in the row array to see if it matches allowedValue.
 	;  allowedValue  (I,OPT) - Only include rows which have this value in their column (with the
-	;                          exception of rows with a blank value, see excludeBlanks parameter).
-	;  excludeBlanks (I,OPT) - If set to true, columns which have a blank value for the given column
-	;                          will be excluded. Defaults to false (include blanks).
+	;                          exception of rows with a blank value, see includeBlanks parameter).
+	;  includeBlanks (I,OPT) - If set to false, columns which have a blank value for the given column
+	;                          will be excluded. Defaults to true (include blanks).
 	; RETURNS:        True if we should exclude the row from the filtered table, false otherwise.
 	;---------
-	shouldExcludeItem(rowAry, column, allowedValue := "", excludeBlanks := false) {
+	shouldIncludeRow(rowAry, column, allowedValue := "", includeBlanks := true) {
 		if(!column)
-			return false
+			return true
 		
 		valueToCompare := rowAry[column]
 		
-		if(!excludeBlanks && !valueToCompare)
-			return false
+		; If the value is blank, include/exclude it based on the includeBlanks parameter.
+		if(!valueToCompare)
+			return includeBlanks
 		
-		if(valueToCompare = allowedValue)
-			return false
 		
-		; Array case - multiple values in filter column.
-		if(IsObject(valueToCompare) && contains(valueToCompare, allowedValue))
-			return false
+		; If the value isn't blank, compare it to our allowed value.
+		if(IsObject(valueToCompare)) { ; Array case - multiple values in filter column.
+			if(contains(valueToCompare, allowedValue))
+				return true
+		} else {
+			if(valueToCompare = allowedValue)
+				return true
+		}
 		
-		return true
+		; DEBUG.popup("Base","include", "row",rowAry, "column",column, "allowedValue",allowedValue, "includeBlanks",includeBlanks)
+		return false
 	}
 	
 	; Debug info

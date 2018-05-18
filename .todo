@@ -60,5 +60,20 @@
 		Behavior is based entirely on data from MainConfig.
 	
 'Documentation'
-	Debug
-	MainConfig and windows.tl support for RegEx in titles ({REGEX})
+	_setup
+	actionObject
+	data
+	dateTime
+	debug
+	debugBuilder
+	epic
+	file
+	gui
+	iniObject
+		Technically from outside source, but so simple...
+	io
+	mainConfig
+		Particularly windows.tl support for RegEx in titles ({REGEX})
+	runCommands
+	string
+	window

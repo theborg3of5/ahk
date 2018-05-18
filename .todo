@@ -8,8 +8,13 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 'New'
-	Consider changing mod format - instead of having column specified via {}, make it like an argument to the action
-		Maybe more like this: [r(COLUMN,REPLACESTRING)]
+	Consider changing TableListMod format
+		Make COLUMN required?
+		Allow r/R/replace/Replace/REPLACE vs only r
+		Don't have the column in {} at the beginning - hard to read. Alternatives:
+			COLUMN.op(TEXT) - Make it the owner of the action
+			op(COLUMN,TEXT) - Make it like an argument to the action
+				Not as clear the distinction between column and text
 	Reassess the include structures a bit
 		Some of the smaller classes are just split-off bits of others (TableListMod, SelectorChoice, SelectorGui) that scripts should only need if they need the parent class.
 			Have those parent classes include them instead of having _includeCommon do it?

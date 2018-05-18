@@ -32,13 +32,7 @@
 			if(!data)
 				return
 			
-			; Record ID comes from either DLG ID, or PRJ (with P.)
-			if(data["DLG"])
-				recId := data["DLG"]
-			else if(data["PRJ"])
-				recId := "P." data["PRJ"]
-			
-			textToSend := data["TLP"] "/" data["CUST"] "///" recId ", " data["MSG"]
+			textToSend := data["TLP"] "/" data["CUST"] "///" data["DLG"] ", " data["MSG"]
 			SendRaw, % textToSend
 			Send, {Enter}
 		}
@@ -121,11 +115,15 @@
 				Run(buildSnapperURL(data["COMM_ID"], data["INI"], data["ID"])) ; data["ID"] can contain a comma-delimited list if that's what the user entered
 		}
 	#+p::
-		selectPRJ() {
-			s := new Selector("outlookTLG.tl")
-			prjId := s.selectGui("PRJ", "", "", true)
-			if(prjId)
-				Send, % prjId
+		selectDLG() {
+			filter := {COLUMN:"DLG", VALUE:"", INCLUDE_BLANKS:false}
+			s := new Selector("outlookTLG.tl", filter)
+			dlgId := s.selectGui("DLG", "", "", true)
+			if(!dlgId)
+				return
+			
+			dlgId := removeStringFromStart(dlgId, "P.")
+			Send, % dlgId
 		}
 #If
 

@@ -79,8 +79,8 @@
 		
 	Mods
 		A "Mod" (short for "modification") line allows you to apply the same changes to all following rows (until the mod(s) are cleared). They are formatted as follows:
-			* They should start with the MODSTART ([) character and end with the MODEND (]) character. Like other lines, they can be indented as desired.
-			* A mod line can contain 0 or more mod actions, separated by the MODDELIM (|) character.
+			* They should start with the MOD,START ([) character and end with the MOD,END (]) character. Like other lines, they can be indented as desired.
+			* A mod line can contain 0 or more mod actions, separated by the MOD,DELIM (|) character.
 		
 		Most mod actions just describe how we should change the following rows:
 			r - Replace
@@ -169,20 +169,20 @@
 					[]
 		
 	Special Characters
-		Certain characters can have special meaning when included in the file. Each of the following can be changed by setting the relevant subscript in the chars array passed to the constructor.
+		Certain characters can have special meaning when included in the file. Each of the following can be changed by setting the relevant subscript in the chars array passed to the constructor (i.e. chars["SETTING"] or chars["MOD","ADD_LABEL"]).
 		
 		Defaults:
-			SETTING      @
-			IGNORE       ;
-			MODEL        (
-			MODSTART     [
-			MODEND       ]
-			PASS         (no default)
-			PLACEHOLDER  -
-			MULTIENTRY   |
-			MODADD       +
-			MODREMOVE    -
-			MODDELIM     |
+			SETTING          @
+			IGNORE           ;
+			MODEL            (
+			MOD,START        [
+			MOD,END          ]
+			PASS             (no default)
+			PLACEHOLDER      -
+			MULTIENTRY       |
+			MOD,ADD_LABEL    +
+			MOD,REMOVE_LABEL -
+			MOD,DELIM        |
 		
 		At the start of a row:
 			SETTING - @
@@ -196,7 +196,7 @@
 			MODEL - (
 				This is the header row mentioned above - if you specify this, the 2D array that you get back will use these column headers as string indices into each "row" array.
 			
-			MODSTART - [
+			MOD,START - [
 				A line which begins with this character will be processed as a mod (see "Mods" section for details).
 				
 			PASS - (no default)
@@ -210,17 +210,17 @@
 			MULTIENTRY - |
 				If this is included in a value for a column, the value for that row will be an array of the pipe-delimited values.
 		
-		Within a mod row (after the MODSTART character, see "Mods" section for details):
-			MODADD - +
+		Within a mod row (after the MOD,START character, see "Mods" section for details):
+			MOD,ADD_LABEL - +
 				Associate the mods on this line with the numeric label following this character.
 				
-			MODREMOVE - - (hyphen)
+			MOD,REMOVE_LABEL - - (hyphen)
 				Remove all mods with the numeric label following this character.
 				
-			MODDELIM - |
+			MOD,DELIM - |
 				Multiple mod actions may be included in a mod line by separating them with this character.
 				
-			MODEND - ]
+			MOD,END - ]
 				Mod lines should end with this character.
 		
 	Other features

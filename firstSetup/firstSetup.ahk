@@ -17,11 +17,8 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include HTTPRequest.ahk
 #Include runCommands.ahk
 #Include selector.ahk
-#Include selectorGui.ahk
-#Include selectorChoice.ahk
 #Include string.ahk
 #Include tableList.ahk
-#Include tableListMod.ahk
 #Include window.ahk
 setCommonHotkeysType(HOTKEY_TYPE_Standalone)
 

@@ -34,6 +34,8 @@ class SelectorChoice {
 	; Debug info (used by the Debug class)
 	debugName := "SelectorChoice"
 	debugToString(debugBuilder) {
-		debugBuilder.addLine("Data", this.data)
+		debugBuilder.addLine("Name",   this.getName())
+		debugBuilder.addLine("Abbrev", this.getAbbrev())
+		debugBuilder.addLine("Data",   this.getData())
 	}
 }

@@ -8,7 +8,6 @@
 #Include data.ahk
 #Include dateTime.ahk
 #Include debug.ahk
-#Include debugBuilder.ahk
 #Include epic.ahk
 #Include file.ahk
 #Include flexTable.ahk
@@ -19,11 +18,8 @@
 #Include mainConfig.ahk
 #Include runCommands.ahk
 #Include selector.ahk
-#Include selectorGui.ahk
-#Include selectorChoice.ahk
 #Include string.ahk
 #Include tableList.ahk
-#Include tableListMod.ahk
 #Include VA.ahk
 #Include window.ahk
 #Include XInput.ahk

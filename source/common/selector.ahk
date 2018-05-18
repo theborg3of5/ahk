@@ -1,3 +1,6 @@
+#Include selectorGui.ahk
+#Include selectorChoice.ahk
+
 /* Class that selects an option from a given set of choices, and returns info about that choice.
 	
 	Choices

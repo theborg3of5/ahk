@@ -1,3 +1,5 @@
+#Include tableListMod.ahk
+
 /* Class that parses and processes a specially-formatted file.
 	
 	Motivation

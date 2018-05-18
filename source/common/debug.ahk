@@ -1,3 +1,5 @@
+#Include debugBuilder.ahk
+
 ; Debugger object and functions.
 
 class DEBUG {

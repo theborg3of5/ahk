@@ -64,16 +64,16 @@ class FlexTable {
 	; DESCRIPTION:    Create a new FlexTable instance.
 	; PARAMETERS:
 	;  guiId          (I,REQ) - ID of the GUI that we should add text controls to
-	;  x              (I,OPT) - X coordinate (in pixels) where the table should start
-	;  y              (I,OPT) - Y coordinate (in pixels) where the table should start
-	;  rowHeight      (I,OPT) - The height that a row should be in the table
-	;  columnPadding  (I,OPT) - How much space should be between the end of the right-most 
-	;                           cell in the previous column, and a new column
+	;  x              (I,OPT) - X coordinate (in pixels) where the table should start. Defaults to 0 (left edge).
+	;  y              (I,OPT) - Y coordinate (in pixels) where the table should start. Defaults to 0 (top edge).
+	;  rowHeight      (I,OPT) - The height (in pixels) that a row should be in the table. Defaults to 25.
+	;  columnPadding  (I,OPT) - How much space (in pixels) should be between the end of the right-most 
+	;                           cell in the previous column, and a new column. Defaults to 30.
 	;  minColumnWidth (I,OPT) - Minimum width that a column must be (regardless of where 
-	;                           its right-most cell ends)
+	;                           its right-most cell ends). Defaults to 0 (width of contents).
 	; RETURNS:        Reference to new FlexTable object
 	;---------
-	__New(guiId, x = 0, y = 0, rowHeight = 25, columnPadding = 30, minColumnWidth = 0) {
+	__New(guiId, x := 0, y := 0, rowHeight := 25, columnPadding := 30, minColumnWidth := 0) {
 		this.guiId          := guiId
 		this.rowHeight      := rowHeight
 		this.columnPadding  := columnPadding
@@ -97,7 +97,7 @@ class FlexTable {
 	;  extraProperties (I,OPT) - Any extra properties you want to apply to the text control (i.e. "Right" for right-aligned text)
 	; RETURNS:        Reference to new FlexTable object
 	;---------
-	addCell(cellText = "", leftPadding = "", width = "", extraProperties = "") {
+	addCell(cellText := "", leftPadding := "", width := "", extraProperties := "") {
 		this.makeGuiTheDefault()
 		
 		if(leftPadding)
@@ -126,7 +126,7 @@ class FlexTable {
 	;  extraProperties (I,OPT) - Any extra properties you want to apply to the text control (i.e. "Right" for right-aligned text)
 	; RETURNS:        Reference to new FlexTable object
 	;---------
-	addHeaderCell(titleText, leftPadding = "", width = "", extraProperties = "") {
+	addHeaderCell(titleText, leftPadding := "", width := "", extraProperties := "") {
 		this.makeGuiTheDefault()
 		
 		applyTitleFormat()

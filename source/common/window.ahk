@@ -16,7 +16,7 @@ global WIN_SELECT_ALL_HOME_END := "HOME_END"
 global WIN_DELETE_CTRL_SHIFT := "CTRL_SHIFT"
 
 ; Convenience function to get the full window title string using the NAME column in programs.tl.
-getProgramTitleString(progName, ByRef progInfo = "") {
+getProgramTitleString(progName, progInfo := "") {
 	if(!progName)
 		return ""
 	if(!progInfo)
@@ -45,7 +45,7 @@ getWindowTitleString(winName) {
 	return titleString
 }
 ; Puts together a string that can be used with the likes of WinActivate, etc.
-buildWindowTitleString(exeName = "", winClass = "", winTitle = "") {
+buildWindowTitleString(exeName := "", winClass := "", winTitle := "") {
 	if(winTitle) ; Title has to go first since it doesn't have an "ahk_" identifier to go with it.
 		outStr .= winTitle
 	
@@ -63,7 +63,7 @@ titleContains(haystack) {
 	title := WinGetActiveTitle()
 	return containsAnyOf(title, haystack) > 0
 }
-exeActive(exeName, partialMatch = false) {
+exeActive(exeName, partialMatch := false) {
 	currEXE := WinGet("ProcessName", "A")
 	if(partialMatch)
 		return stringContains(currExe, exeName)
@@ -72,7 +72,7 @@ exeActive(exeName, partialMatch = false) {
 }
 
 ; See if a window exists or is active with a given TitleMatchMode.
-isWindowInState(states = "", titles = "", texts = "", matchMode = 1, matchSpeed = "Fast", findHidden = "Off") {
+isWindowInState(states := "", titles := "", texts := "", matchMode := 1, matchSpeed := "Fast", findHidden := "Off") {
 	; Make sure these are arrays so we can loop on them below.
 	states := forceArray(states)
 	titles := forceArray(titles)
@@ -102,7 +102,7 @@ isWindowInState(states = "", titles = "", texts = "", matchMode = 1, matchSpeed 
 	
 	return windowMatch
 }
-waitUntilWindowState(state, title = "", text = "", matchMode = 1, matchSpeed = "Fast") {
+waitUntilWindowState(state, title := "", text := "", matchMode := 1, matchSpeed := "Fast") {
 	; Plug in the new match settings.
 	origMatchSettings := setMatchSettings(matchMode, matchSpeed)
 	
@@ -118,7 +118,7 @@ waitUntilWindowState(state, title = "", text = "", matchMode = 1, matchSpeed = "
 }
 
 ; Get/set/restore various matching behavior states all at once.
-setMatchSettings(mode = "", speed = "", detectHidden = "") {
+setMatchSettings(mode := "", speed := "", detectHidden := "") {
 	; Save off the previous settings - nice if we want to restore later.
 	prevSettings := getMatchSettings()
 	
@@ -170,14 +170,14 @@ runProgram(progName) {
 	RunAsUser(progInfo["PATH"], progInfo["ARGS"])
 }
 
-getWindowSettingsAry(titleString = "A") {
+getWindowSettingsAry(titleString := "A") {
 	winExe   := WinGet("ProcessName", titleString)
 	winClass := WinGetClass(titleString)
 	winTitle := WinGetTitle(titleString)
 	winText  := WinGetText(titleString)
 	return MainConfig.getWindow("", winExe, winClass, winTitle, winText)
 }
-getWindowSetting(settingName, titleString = "A") {
+getWindowSetting(settingName, titleString := "A") {
 	if(!settingName)
 		return ""
 	
@@ -185,7 +185,7 @@ getWindowSetting(settingName, titleString = "A") {
 	return winSettings[settingName]
 }
 
-doWindowAction(action, titleString = "A", winSettings = "") {
+doWindowAction(action, titleString := "A", winSettings := "") {
 	if(!action)
 		return
 	
@@ -208,7 +208,7 @@ doWindowAction(action, titleString = "A", winSettings = "") {
 		DEBUG.popup("window.doWindowAction", "Error", "Action not found", action)
 }
 
-processWindow(ByRef titleString = "A", action = "", ByRef winSettings = "") {
+processWindow(ByRef titleString := "A", action := "", ByRef winSettings := "") {
 	if(!titleString)
 		return ""
 	
@@ -240,7 +240,7 @@ processWindow(ByRef titleString = "A", action = "", ByRef winSettings = "") {
 	return method
 }
 
-activateWindow(titleString = "A", winSettings = "") {
+activateWindow(titleString := "A", winSettings := "") {
 	method := processWindow(titleString, WIN_ACTION_ACTIVATE, winSettings)
 	; DEBUG.popup("activateWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 	
@@ -251,7 +251,7 @@ activateWindow(titleString = "A", winSettings = "") {
 		doWindowAction(method, titleString, winSettings)
 	}
 }
-doEscAction(titleString = "A", winSettings = "") {
+doEscAction(titleString := "A", winSettings := "") {
 	method := processWindow(titleString, WIN_ACTION_ESC, winSettings)
 	; DEBUG.popup("doEscAction","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 	
@@ -260,7 +260,7 @@ doEscAction(titleString = "A", winSettings = "") {
 	else
 		doWindowAction(method, titleString, winSettings)
 }
-closeWindow(titleString = "A", winSettings = "") {
+closeWindow(titleString := "A", winSettings := "") {
 	method := processWindow(titleString, WIN_ACTION_CLOSE, winSettings)
 	; DEBUG.popup("closeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 	
@@ -269,7 +269,7 @@ closeWindow(titleString = "A", winSettings = "") {
 	else
 		doWindowAction(method, titleString, winSettings)
 }
-minimizeWindow(titleString = "A", winSettings = "") {
+minimizeWindow(titleString := "A", winSettings := "") {
 	method := processWindow(titleString, WIN_ACTION_MIN, winSettings)
 	; DEBUG.popup("minimizeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 	
@@ -284,7 +284,7 @@ minimizeWindow(titleString = "A", winSettings = "") {
 	}
 }
 ; Select all text in a control, generally via use fo the Ctrl+A hotkey.
-selectAll(titleString = "A", winSettings = "") {
+selectAll(titleString := "A", winSettings := "") {
 	method := processWindow(titleString, WIN_ACTION_SELECT_ALL, winSettings)
 	; DEBUG.popup("selectAll","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 	
@@ -300,7 +300,7 @@ selectAll(titleString = "A", winSettings = "") {
 	}
 }
 ; Delete a word, generally via use of the Ctrl+Backspace hotkey.
-deleteWord(titleString = "A", winSettings = "") {
+deleteWord(titleString := "A", winSettings := "") {
 	method := processWindow(titleString, WIN_ACTION_DELETE_WORD, winSettings)
 	; DEBUG.popup("deleteWord","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 	
@@ -319,7 +319,7 @@ deleteWord(titleString = "A", winSettings = "") {
 ; The return value should be what we should do from here - so if we end up deciding that a 
 ; standard method works, just return that constant. If it's not standard, just do it and then 
 ; return WIN_ACTION_NONE.
-windowMethodSpecial(winSettings = "", action = "") {
+windowMethodSpecial(winSettings := "", action := "") {
 	global TITLE_MATCH_MODE_Contain
 	; DEBUG.popup("windowMethodSpecial","", "Settings",winSettings, "Action",action)
 	
@@ -355,7 +355,7 @@ windowMethodSpecial(winSettings = "", action = "") {
 }
 
 ; Centers a window on the screen.
-centerWindow(titleString = "A") {
+centerWindow(titleString := "A") {
 	; Window size
 	WinGetPos, , , winW, winH, %titleString%
 	offsetsAry := getWindowOffsets(titleString)
@@ -377,7 +377,7 @@ centerWindow(titleString = "A") {
 	WinMove, %titleString%, , x, y
 }
 
-fakeMaximizeWindow(titleString = "A") {
+fakeMaximizeWindow(titleString := "A") {
 	boundsAry  := getMonitorBounds( , titleString)
 	offsetsAry := getWindowOffsets(titleString)
 	
@@ -390,7 +390,7 @@ fakeMaximizeWindow(titleString = "A") {
 }
 
 ; Jacked from http://www.howtogeek.com/howto/28663/create-a-hotkey-to-resize-windows-to-a-specific-size-with-autohotkey/
-resizeWindow(width = "", height = "", titleString = "A") {
+resizeWindow(width := "", height := "", titleString := "A") {
 	WinGetPos, X, Y, W, H, %titleString%
 	if(!width)
 		width  := W
@@ -401,7 +401,7 @@ resizeWindow(width = "", height = "", titleString = "A") {
 }
 
 
-getWindowOffsets(titleString = "A") {
+getWindowOffsets(titleString := "A") {
 	global SM_CXMAXIMIZED, SM_CYMAXIMIZED, SM_CXBORDER, SM_CYBORDER
 	offsetsAry := []
 	
@@ -435,7 +435,7 @@ getWindowOffsets(titleString = "A") {
 	return offsetsAry
 }
 
-getMonitorBounds(monitorNum = "", titleString = "") {
+getMonitorBounds(monitorNum := "", titleString := "") {
 	monitorsAry := getMonitorBoundsAry()
 	
 	if(!monitorNum)
@@ -470,7 +470,7 @@ getMonitorBoundsAry() {
 }
 
 
-moveWindowToMonitor(titleString, destMonitor, monitorsAry = "") {
+moveWindowToMonitor(titleString, destMonitor, monitorsAry := "") {
 	; If monitorsAry isn't given, make our own.
 	if(!IsObject(monitorsAry))
 		monitorsAry := getMonitorBoundsAry()
@@ -511,7 +511,7 @@ moveWindowToMonitor(titleString, destMonitor, monitorsAry = "") {
 
 ; Get the index of the monitor containing the specified x and y co-ordinates.
 ; Adapted from http://www.autohotkey.com/board/topic/69464-how-to-determine-a-window-is-in-which-monitor/
-getWindowMonitor(titleString, monitorsAry = "") {
+getWindowMonitor(titleString, monitorsAry := "") {
 	; If monitorsAry isn't given, make our own...with blackjack and hookers.
 	if(!IsObject(monitorsAry))
 		monitorsAry := getMonitorBoundsAry()

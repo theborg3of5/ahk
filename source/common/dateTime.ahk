@@ -4,7 +4,7 @@ sendDateTime(format) {
 }
 
 ; Ask the user for a (shortcut) input to translate.
-queryDate(format = "M/d/yy") {
+queryDate(format := "M/d/yy") {
 	userIn := InputBox("Expand date", , , 200, 100)
 	
 	if(userIn != "")
@@ -12,7 +12,7 @@ queryDate(format = "M/d/yy") {
 	
 	return date
 }
-queryTime(format = "h:mm tt") {
+queryTime(format := "h:mm tt") {
 	userIn := InputBox("Expand time", , , 200, 100)
 	
 	if(userIn != "")
@@ -22,7 +22,7 @@ queryTime(format = "h:mm tt") {
 }
 
 ; Translate a date/time from the form "w+1" to the given format.
-parseDateTime(input, format = "", dateOrTime = "") { ; dateOrTime = "d" for date, "t" for time
+parseDateTime(input, format := "", dateOrTime := "") { ; dateOrTime = "d" for date, "t" for time
 	firstChar := subStr(input, 1, 1)
 	operator := subStr(input, 2, 1)
 	difference := subStr(input, 3)
@@ -96,7 +96,7 @@ parseDateTime(input, format = "", dateOrTime = "") { ; dateOrTime = "d" for date
 }
 
 ; Do addition/subtraction on dates where the traditional += fails.
-doDateMath(start, op = "+", diff = 0, unit = "d") { ; unit = "d"
+doDateMath(start, op := "+", diff := 0, unit := "d") { ; unit = "d"
 	outDate := start
 	d := splitDateTime(start)
 	

@@ -138,7 +138,7 @@
 
 { ; Functions.
 	; Builds a contact comment with as much info as we can muster.
-	generateContactComment(extraSpace = false) {
+	generateContactComment(extraSpace := false) {
 		; Date
 		date := FormatTime(, "MM/yy")
 		

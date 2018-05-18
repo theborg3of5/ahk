@@ -1,5 +1,5 @@
 ; Grabs the command line arguments (which live in %1%, %2%, etc) passed to the script, and puts them in a numeric array.
-getScriptArgs(placeholderChar = "") {
+getScriptArgs(placeholderChar := "") {
 	local paramsAry = [] ; This is the array that will hold the arguments at the end, which we'll return. Everything else (namely %1%, %2%, etc) are global.
 	
 	Loop, %0% { ; For each command line arg. %0% is the count of them.
@@ -10,7 +10,7 @@ getScriptArgs(placeholderChar = "") {
 	return paramsAry
 }
 
-scriptArgsToVars(varNames, placeholderChar = "") {
+scriptArgsToVars(varNames, placeholderChar := "") {
 	local argNum,name ; All variables in this function are global except these (and the function parameters), so we can interact with command line arguments (%1%, %2%, etc) and set the named variables directly.
 	
 	if(!isObject(varNames))
@@ -54,7 +54,7 @@ RunReturn(command) {
 }
 
 ; Runs a command with cmd.exe.
-RunCommand(commandToRun = "", stayOpen = false) {
+RunCommand(commandToRun := "", stayOpen := false) {
 	runString := "C:\Windows\System32\cmd.exe "
 	
 	; Allow either an array or just a string.
@@ -81,7 +81,7 @@ RunCommand(commandToRun = "", stayOpen = false) {
 }
 
 ; Run as a non-elevated user (since main script typically needs to run as admin).
-RunAsUser(application, args = "") {
+RunAsUser(application, args := "") {
 	ShellRun(application, args)
 }
 

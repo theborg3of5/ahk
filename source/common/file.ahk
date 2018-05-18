@@ -1,5 +1,5 @@
 
-saveClipboardToFile(filePath = "") {
+saveClipboardToFile(filePath := "") {
 	; If no path was given, prompt the user with a popup.
 	if(!filePath)
 		filePath := FileSelectFile("S", A_ScriptDir "\clips\*.clip", "What file should the clipboard be saved to?", "*.clip")
@@ -9,7 +9,7 @@ saveClipboardToFile(filePath = "") {
 	FileAppend, %ClipboardAll%, %filePath%
 }
 
-sendFileWithClipboard(filePath = "") {
+sendFileWithClipboard(filePath := "") {
 	; If no path was given, prompt the user with a popup.
 	if(!filePath)
 		filePath := FileSelectFile("S", A_ScriptDir "\clips\*.clip", "What file should be sent?")
@@ -29,7 +29,7 @@ sendFileWithClipboard(filePath = "") {
 }
 
 ; Read a file (which we assume is in clipboard format, saved from the clipboard) and put it on the clipboard.
-readFileToClipboard(filePath = "") {
+readFileToClipboard(filePath := "") {
 	; If no path was given, prompt the user with a popup.
 	if(!filePath)
 		filePath := FileSelectFile("S", , "What file should be placed on the clipboard?", "*.clip")
@@ -80,13 +80,13 @@ openFolder(folderName) {
 		Run(folderPath)
 }
 
-sendFilePath(folderName = "", subPath = "") {
+sendFilePath(folderName := "", subPath := "") {
 	sendFolderPath(folderName, subPath, , false)
 }
-sendUnixFolderPath(folderName = "", subPath = "") {
+sendUnixFolderPath(folderName := "", subPath := "") {
 	sendFolderPath(folderName, subPath, "/")
 }
-sendFolderPath(folderName = "", subPath = "", slashChar = "\", trailingSlash = true) {
+sendFolderPath(folderName := "", subPath := "", slashChar := "\", trailingSlash := true) {
 	folderPath := MainConfig.getPath(folderName)
 	if(!folderPath)
 		return
@@ -103,7 +103,7 @@ sendFolderPath(folderName = "", subPath = "", slashChar = "\", trailingSlash = t
 	Send, % folderPath
 }
 
-selectFolder(folderName = "") {
+selectFolder(folderName := "") {
 	filter := MainConfig.getMachineTableListFilter()
 	s := new Selector("folders.tl", filter)
 	
@@ -116,7 +116,7 @@ selectFolder(folderName = "") {
 	return MainConfig.replacePathTags(path)
 }
 
-searchWithGrepWin(pathToSearch, textToSearch = "") {
+searchWithGrepWin(pathToSearch, textToSearch := "") {
 	runPath := MainConfig.getProgram("grepWin", "PATH") " /regex:no"
 	
 	convertedPath := MainConfig.replacePathTags(pathToSearch)

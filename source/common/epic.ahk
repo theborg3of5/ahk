@@ -19,7 +19,7 @@
 	}
 
 	; Check if it's a valid EMC2 string.
-	isEMC2Object(text, ByRef ini = "", ByRef id = "") {
+	isEMC2Object(text, ByRef ini := "", ByRef id := "") {
 		splitRecordString(text, ini, id)
 		
 		idLevel := isEMC2Id(id)
@@ -87,7 +87,7 @@
 
 { ; Phone-related functions.
 	; Dials a given number using the Cisco WebDialer API.
-	callNumber(formattedNum, name = "") {
+	callNumber(formattedNum, name := "") {
 		; Get the raw number (with leading digits as needed) to plug into the URL.
 		rawNum := parsePhone(formattedNum)
 		if(!rawNum) {
@@ -109,7 +109,7 @@
 		; DEBUG.popup("callNumber","Finish", "Input",formattedNum, "Raw number",rawNum, "Name",name, "URL",url)
 	}
 	
-	userWantsToCall(formattedNum, rawNum, name = "") {
+	userWantsToCall(formattedNum, rawNum, name := "") {
 		if(!formattedNum || !rawNum)
 			return false
 		
@@ -147,7 +147,7 @@
 }
 
 ; Launches a routine in EpicStudio (and focuses a specific tag if given).
-openEpicStudioRoutine(routine, tag = "") {
+openEpicStudioRoutine(routine, tag := "") {
 	if(!routine)
 		return
 	
@@ -166,7 +166,7 @@ openEpicStudioRoutine(routine, tag = "") {
 }
 
 ; Split "INI ID" string into INI and ID (assume it's just the ID if no space included)
-splitRecordString(recordString, ByRef ini = "", ByRef id = "") {
+splitRecordString(recordString, ByRef ini := "", ByRef id := "") {
 	recordString := cleanupText(recordString)
 	recordPartsAry := StrSplit(recordString, " ")
 	
@@ -177,7 +177,7 @@ splitRecordString(recordString, ByRef ini = "", ByRef id = "") {
 }
 
 ; Split serverLocation into routine and tag (assume it's just the routine if no ^ included)
-splitServerLocation(serverLocation, ByRef routine = "", ByRef tag = "") {
+splitServerLocation(serverLocation, ByRef routine := "", ByRef tag := "") {
 	serverLocation := cleanupText(serverLocation, ["$", "(", ")"])
 	locationAry := StrSplit(serverLocation, "^")
 	
@@ -225,7 +225,7 @@ getEpicAppIdFromKey(appKey) {
 	return MainConfig.getPrivate("CS_APP_ID_" appKey)
 }
 
-buildEMC2Link(ini, id, subAction = "WEB") { ; subAction = SUBACTION_Web
+buildEMC2Link(ini, id, subAction := "WEB") { ; subAction = SUBACTION_Web
 	global SUBACTION_Edit, SUBACTION_View, SUBACTION_Web
 	if(!ini || !id)
 		return ""
@@ -296,7 +296,7 @@ buildHyperspaceRunString(versionMajor, versionMinor, environment) {
 	return runString
 }
 
-buildCodeSearchURL(searchType, searchTerm, appKey = "") {
+buildCodeSearchURL(searchType, searchTerm, appKey := "") {
 	appId := getEpicAppIdFromKey(appKey)
 	; DEBUG.popup("buildCodeSearchURL", "Start", "Search type", searchType, "Search term", searchTerm, "App key", appKey, "App ID", appId)
 	
@@ -326,7 +326,7 @@ buildEpicWikiSearchURL(category, searchTerm) {
 }
 
 ; ini/id defaults are "X" as a dummy - URL will still connect to desired environment (and show an error popup).
-buildSnapperURL(environment = "", ini = "", idList = "") { ; idList is a comma-separated list of IDs
+buildSnapperURL(environment := "", ini := "", idList := "") { ; idList is a comma-separated list of IDs
 	if(!environment)
 		environment := getCurrentSnapperEnvironment() ; Try to default from what Snapper has open right now if no environment given.
 	if(!environment)
@@ -473,7 +473,7 @@ getTrueINI(iniString) {
 }
 
 
-getEMC2Info(ByRef ini = "", ByRef id = "", titleString = "A") {
+getEMC2Info(ByRef ini := "", ByRef id := "", titleString := "A") {
 	title := WinGetTitle(titleString)
 	title := removeStringFromEnd(title, " - EMC2")
 	

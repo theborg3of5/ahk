@@ -34,7 +34,7 @@ class ActionObject {
 		Example: view-only link to DLG 123456:
 			ActionObject.do(123456, TYPE_EMC2, ACTION_Link, "DLG", SUBACTION_View)
 	*/
-	do(input, type = "", action = "", subType = "", subAction = "") {
+	do(input, type := "", action := "", subType := "", subAction := "") {
 		; DEBUG.popup("ActionObject.do", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
 		; Clean up input.

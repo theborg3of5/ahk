@@ -7,7 +7,7 @@
 	; Login hotkeys.
 	^+t::hyperspaceLogin(MainConfig.getPrivate("WORK_ID"), MainConfig.getPrivate("WORK_PASSWORD"))
 	^!t::hyperspaceLogin(MainConfig.getPrivate("WORK_ID"), MainConfig.getPrivate("WORK_PASSWORD"), false)
-	hyperspaceLogin(username, password, useLastDepartment = true) {
+	hyperspaceLogin(username, password, useLastDepartment := true) {
 		Send, %username%{Tab}
 		Send, %password%{Enter}
 		if(useLastDepartment)

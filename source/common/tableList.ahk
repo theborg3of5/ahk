@@ -371,7 +371,7 @@ class TableList {
 	;                        	keyRowChars[<char>] := keyName
 	; RETURNS:        Reference to new TableList object
 	;---------
-	__New(filePath, chars = "", keyRowChars = "") {
+	__New(filePath, chars := "", keyRowChars := "") {
 		if(!filePath)
 			return ""
 		
@@ -449,7 +449,7 @@ class TableList {
 	; RETURNS:        Processed table, excluding rows that do not fit the filter. Format:
 	;                 	table[rowNum, column] := value
 	;---------
-	getFilteredTable(column, allowedValue = "", excludeBlanks = false) {
+	getFilteredTable(column, allowedValue := "", excludeBlanks := false) {
 		; DEBUG.popup("column",column, "allowedValue",allowedValue, "excludeBlanks",excludeBlanks)
 		if(!column)
 			return ""
@@ -767,7 +767,7 @@ class TableList {
 	; PARAMETERS:
 	;  killLabel (I,OPT) - Numeric label to remove matching mods. Defaults to 0 (default label for all mods).
 	;---------
-	killMods(killLabel = 0) {
+	killMods(killLabel := 0) {
 		For i,mod in this.mods
 			if(mod.label = killLabel)
 				this.mods.Delete(i)
@@ -811,7 +811,7 @@ class TableList {
 	;                          will be excluded. Defaults to false (include blanks).
 	; RETURNS:        True if we should exclude the row from the filtered table, false otherwise.
 	;---------
-	shouldExcludeItem(rowAry, column, allowedValue = "", excludeBlanks = false) {
+	shouldExcludeItem(rowAry, column, allowedValue := "", excludeBlanks := false) {
 		if(!column)
 			return false
 		

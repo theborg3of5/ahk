@@ -43,7 +43,7 @@ class DEBUG {
 	; Parameters:
 	;  params  - Array of (label, value) arrays.
 	;  numTabs - Number of tabs to indent label part of each pair by. Values will be indented by numTabs+1.
-	buildDebugPopup(params, numTabs = 0) {
+	buildDebugPopup(params, numTabs := 0) {
 		outString := ""
 		
 		For i,p in params {
@@ -67,7 +67,7 @@ class DEBUG {
 	;  label       - Label to show the value with
 	;  value       - Value to show. If this is an object, we will call into DEBUG.buildObjectString() for a more complete description.
 	;  numTabs     - Number of tabs of indentation to start at. Sub-values (for array indices or custom debug function) will be indented by numTabs+1.
-	buildDebugString(label, value, numTabs = 0) {
+	buildDebugString(label, value, numTabs := 0) {
 		outString := ""
 		outString .= getTabs(numTabs, DEBUG.spacesPerTab) label ": " ; Label
 		outString .= this.buildObjectString(value, numTabs)          ; Value
@@ -86,7 +86,7 @@ class DEBUG {
 	;  newLine  - If true, we will indent this line. Typically used because the value is going on a new line (as opposed to next to the current label).
 	;              NOTE: subitems will be indented by numTabs+1 regardless.
 	;  index    - If set, row will be prefaced with "[index] "
-	buildObjectString(value, numTabs = 0, newLine = false, index = "") {
+	buildObjectString(value, numTabs := 0, newLine := false, index := "") {
 		if(newLine)
 			outString := getTabs(numTabs, DEBUG.spacesPerTab)
 		

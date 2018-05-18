@@ -56,7 +56,7 @@ reformatPhone(input) {
 
 ; Gives the specified number of tabs as a string.
 ; Give spacesPerTab > 0 to use spaces instead of true tabs.
-getTabs(i, spacesPerTab = 0) {
+getTabs(i, spacesPerTab := 0) {
 	outStr := ""
 	tabStr := spacesPerTab > 0 ? getSpaces(spacesPerTab) : "`t"
 	
@@ -87,7 +87,7 @@ getNewLines(i) {
 }
 
 ; Turns all double quotes (") into double double quotes ("") or more, if second argument given.
-escapeDoubleQuotes(s, num = 2) {
+escapeDoubleQuotes(s, num := 2) {
 	global QUOTES
 	
 	replString := ""
@@ -145,7 +145,7 @@ escapeRegExChars(inputString) {
 }
 
 ; Wrapper for InStr() that I can remember easier.
-stringContains(haystack, needle, caseSensitive = "") {
+stringContains(haystack, needle, caseSensitive := "") {
 	return InStr(haystack, needle, caseSensitive)
 }
 
@@ -221,7 +221,7 @@ getFirstLine(inputString) {
 }
 
 ; Cleans a hard-coded list of characters out of a (should be single-line) string, including whitespace.
-cleanupText(text, additionalStringsToRemove = "") {
+cleanupText(text, additionalStringsToRemove := "") {
 	charCodesToRemove := []
 	charCodesToRemove[1] := [13,10]   ; Newline
 	charCodesToRemove[1] := [32]      ; Space

@@ -62,7 +62,7 @@ sendTextWithClipboard(text) {
 }
 
 ; Runs a command line program and returns the result.
-runAndReturnOutput(command, outputFile = "cmdOutput.tmp") {
+runAndReturnOutput(command, outputFile := "cmdOutput.tmp") {
 	RunWait, %comspec% /c %command% > %outputFile%,,UseErrorLevel Hide
 	outputFileContents := FileRead(outputFile)
 	FileDelete, %outputFile%
@@ -102,7 +102,7 @@ sendUsingLevel(hotkeyString, level) {
 	SendLevel, % startSendLevel
 }
 
-clickUsingMode(x = "", y = "", mouseCoordMode = "") {
+clickUsingMode(x := "", y := "", mouseCoordMode := "") {
 	; Store the old mouse position to move back to once we're finished.
 	MouseGetPos(prevX, prevY)
 	
@@ -121,7 +121,7 @@ clickUsingMode(x = "", y = "", mouseCoordMode = "") {
 }
 
 ; Wait for a hotkey to be fully released
-waitForHotkeyRelease(hotkeyString = "") {
+waitForHotkeyRelease(hotkeyString := "") {
 	if(!hotkeyString)
 		hotkeyString := A_ThisHotkey
 	
@@ -134,7 +134,7 @@ waitForHotkeyRelease(hotkeyString = "") {
 }
 
 ; Partial - doesn't cover everything possible. Doesn't cover UP, for example.
-getKeyNameFromHotkeyChar(hotkeyChar = "") {
+getKeyNameFromHotkeyChar(hotkeyChar := "") {
 	if(!hotkeyChar)
 		return ""
 	

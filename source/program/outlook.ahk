@@ -80,7 +80,7 @@ isEmailFolderActive(userEmail) {
 	return isWindowInState("active", titles)
 }
 
-isCalendarFolderActive(userEmail = "") {
+isCalendarFolderActive(userEmail := "") {
 	titles := []
 	titles.push(buildOutlookWindowTitle(userEmail, "Calendar"))
 	titles.push(buildOutlookWindowTitle(userEmail, "TLG"))

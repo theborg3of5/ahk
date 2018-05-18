@@ -38,7 +38,6 @@
 			For i,param in paramsAry {
 				param := removeStringFromStart(param, "ByRef ")
 				param := getStringBeforeStr(param, " :=")
-				param := getStringBeforeStr(param, " =")
 				
 				maxParamLength := max(maxParamLength, strLen(param))
 				paramsAry[i] := param

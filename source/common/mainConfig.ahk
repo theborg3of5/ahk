@@ -45,7 +45,7 @@ class MainConfig {
 		return this.initDone
 	}
 	
-	getSetting(settingName = "") {
+	getSetting(settingName) {
 		if(!settingName)
 			return ""
 		return this.settings[settingName]
@@ -73,7 +73,7 @@ class MainConfig {
 		return replaceTags(inputString, this.privates)
 	}
 	
-	getWindow(name = "", exe = "", ahkClass = "", title = "", text = "") {
+	getWindow(name := "", exe := "", ahkClass := "", title := "", text := "") {
 		retWindow := ""
 		if(!name && !exe && !ahkClass && !title && !text)
 			return ""
@@ -136,7 +136,7 @@ class MainConfig {
 	;	ARGS    - Arguments to run with.
 	;	EXE     - Executable name (+.exe)
 	;	MACHINE - Machine this was specific to, "" if default.
-	getProgram(name, subscript = "") {
+	getProgram(name, subscript := "") {
 		if(subscript) { ; Get the specific subscript.
 			return this.programs[name][subscript]
 		} else { ; Just return the whole array.

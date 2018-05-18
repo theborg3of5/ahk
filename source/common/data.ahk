@@ -61,7 +61,7 @@ insertFront(ByRef arr, new) {
 }
 
 ; Array contains function. Returns index if it exists, assumes a numerical index starting at 1.
-contains(haystack, needle, partialMatch = false) {
+contains(haystack, needle, partialMatch := false) {
 	; DEBUG.popup("Hay", haystack, "Needle", needle)
 	
 	For i, el in haystack {
@@ -75,7 +75,7 @@ contains(haystack, needle, partialMatch = false) {
 }
 
 ; Reverse array contains function - checks if any of array strings are in given string.
-containsAnyOf(haystack, needles, match = 1) { ; match = CONTAINS_ANY
+containsAnyOf(haystack, needles, match := 1) { ; match = CONTAINS_ANY
 	; DEBUG.popup(haystack, "Haystack", needles, "Needles", match, "Match")
 	For i, el in needles {
 		
@@ -191,7 +191,7 @@ mergeArrays(default, overrides) {
 }
 
 ; Counterpart to SplitStr - puts together all parts of an array with the given delimiter (defaults to "|")
-arrayJoin(arrayToJoin, delim = "|") {
+arrayJoin(arrayToJoin, delim := "|") {
 	outStr := ""
 	
 	For index,value in arrayToJoin {

@@ -130,7 +130,7 @@ class Selector {
 	;                       		                   for the column, it will be included.
 	; RETURNS:        A new Selector object.
 	;---------
-	__New(filePath, filter = "") {
+	__New(filePath, filter := "") {
 		this.setChars()
 		this.setDefaultGuiSettings()
 		
@@ -150,7 +150,7 @@ class Selector {
 	;  value (I,OPT) - Value to set the setting to. Defaults to blank.
 	; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui().
 	;---------
-	setGuiSetting(name, value = "") {
+	setGuiSetting(name, value := "") {
 		if(name = "")
 			return
 		
@@ -193,7 +193,7 @@ class Selector {
 	; RETURNS:        An array of data as chosen/overridden by the user. If the returnColumn parameter was
 	;                 specified, only the subscript matching that name will be returned.
 	;---------
-	selectGui(returnColumn = "", title = "", defaultOverrideData = "", suppressOverrideFields = false) {
+	selectGui(returnColumn := "", title := "", defaultOverrideData := "", suppressOverrideFields := false) {
 		; DEBUG.popup("Selector.selectGui", "Start", "Default override data", defaultOverrideData, "GUI Settings", guiSettings)
 		if(title)
 			this.guiSettings["WindowTitle"] := title
@@ -220,7 +220,7 @@ class Selector {
 	; RETURNS:        An array of data for the choice matching the given string. If the returnColumn parameter
 	;                 was specified, only the subscript matching that name will be returned.
 	;---------
-	selectChoice(choiceString, returnColumn = "") {
+	selectChoice(choiceString, returnColumn := "") {
 		if(!choiceString)
 			return ""
 		
@@ -455,7 +455,7 @@ class Selector {
 	;  checkIndex (I,OPT) - Whether to match against the index or not. Defaults to true.
 	; RETURNS:        If we found a match, the data array from that choice.
 	;---------
-	searchTable(table, input, checkIndex = true) {
+	searchTable(table, input, checkIndex := true) {
 		For i,t in table {
 			; Index
 			if(checkIndex && (input = i))

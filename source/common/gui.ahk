@@ -40,7 +40,7 @@ getLabelWidthForText(text, uniqueId) {
 ; These two basically let us hide the static/global requirement for variables used for GUI controls - 
 ; the given string is the variable name, but as long as it's only referenced via indirection, it won't 
 ; be treated as a local variable in other functions.
-setDynamicGlobalVar(varName, value = "") {
+setDynamicGlobalVar(varName, value := "") {
 	global
 	%varName% := value
 }

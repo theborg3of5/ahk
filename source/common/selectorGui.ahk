@@ -26,7 +26,7 @@ class SelectorGui {
 	;                           but will also not get smaller than this value. Defaults to 0.
 	; RETURNS:        Reference to new SelectorGui object
 	;---------
-	__New(choices, sectionTitles = "", overrideFields = "", minColumnWidth = 0) {
+	__New(choices, sectionTitles := "", overrideFields := "", minColumnWidth := 0) {
 		this.overrideFields := overrideFields
 		
 		this.setSpecialChars()
@@ -39,7 +39,7 @@ class SelectorGui {
 	
 	; Shows the popup, including waiting on it to be closed
 	; defaultOverrideData - Array of data label/column => value to put in.
-	show(windowTitle = "", defaultOverrideData = "") {
+	show(windowTitle := "", defaultOverrideData := "") {
 		this.makeGuiTheDefault()
 		
 		this.setDefaultOverrides(defaultOverrideData)
@@ -205,7 +205,7 @@ class SelectorGui {
 			return this.choicesWidth
 	}
 	
-	addField(varName, x, y, w, height, data = "", subGoto = "") {
+	addField(varName, x, y, w, height, data := "", subGoto := "") {
 		setDynamicGlobalVar(varName) ; Declare the variable named in this.fieldVarChoice as a global
 		
 		propString := "v" varName                           ; Variable to save to on Gui, Submit

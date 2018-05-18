@@ -81,52 +81,9 @@
 		A "Mod" (short for "modification") line allows you to apply the same changes to all following rows (until the mod(s) are cleared). They are formatted as follows:
 			* They should start with the MOD,START ([) character and end with the MOD,END (]) character. Like other lines, they can be indented as desired.
 			* A mod line can contain 0 or more mod actions, separated by the MOD,DELIM (|) character.
+			* Additional information about mod actions can be found in the TableListMod class.
 		
-		Most mod actions just describe how we should change the following rows:
-			r - Replace
-				Replace the column.
-				Example:
-					Mod line
-						[r:z]
-					Normal line
-						AAA
-					Result
-						z
-			
-			b - Begin
-				Prepend to the column (add to the beginning).
-				Example:
-					Mod line
-						[b:z]
-					Normal line
-						AAA
-					Result
-						zAAA
-			
-			e - End
-				Append to the column (add to the end).
-				Example:
-					Mod line
-						[e:z]
-					Normal line
-						AAA
-					Result
-						AAAz
-			
-		Notably, these actions apply to the first column of each row by default. You can specify a different column by adding the name of that column in curly brackets ({}), just before the action.
-		Example:
-			File
-				(  TITLE          ABBREV         PATH
-				
-				[{PATH}b:C:\ahk\]
-				   AHK Config     AHK_CONFIG     config
-				[]
-			Result
-				table[1, "TITLE"]  = AHK Config
-				table[1, "ABBREV"] = AHK_CONFIG
-				table[1, "TITLE"]  = C:\ahk\config  <-- We prepended "C:\ahk\"
-			
-		Some mod actions affect other mod actions instead:
+		Some special meta mod actions (not covered by the TableListMod class):
 			(none) - Clear all mods
 				If no actions are specified at all (i.e. a line containing only "[]"), we will clear all previously added mods.
 				

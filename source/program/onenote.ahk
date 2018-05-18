@@ -144,7 +144,17 @@
 		Send, {Down 5}             ; Select first section from first notebook (bypassing "Recent picks" section)
 		Send, !c                   ; Copy button
 		WinWaitClose, Move or Copy Pages
-		Sleep, 1500                ; Wait a while for the new page to appear
+		
+		; Wait for new page to appear.
+		; Give the user a chance to wait a little longer before continuing
+		; (for when OneNote takes a while to actually make the new page).
+		Loop {
+			userInput := Input("T1", "{Esc}{Enter}") ; Wait for 1 second (exit immediately if Escape or Enter is pressed)
+			if(stringContains(userInput, A_Space))   ; If space was pressed, wait another 1 second
+				Continue
+			Break
+		}
+		
 		Send, ^{PgDn}              ; Switch to (presumably) new page
 		Send, !3                   ; Demote Subpage (Make Subpage)
 		

@@ -128,9 +128,13 @@ class Selector {
 	;  filter     (I,OPT) - An array of information used to restrict the choices that are read from filePath.
 	;                       Defaults to no filter.
 	;                       	Format:
-	;                       		filter["COLUMN"] - Name of the column to filter on
-	;                       		filter["VALUE"]  - Value to filter to. If a choice has this value (or blank)
-	;                       		                   for the column, it will be included.
+	;                       		filter["COLUMN"]         - Name of the column to filter on
+	;                       		      ["VALUE"]          - Value to filter to. If non-blank and a choice has
+	;                                                        this value for the column, it will be included.
+	;                                                        If blank, any value will be allowed.
+	;                                   ["INCLUDE_BLANKS"] - If set to true (default), choices with a blank
+	;                                                        value for the given column will be included.
+	;                                                        If set to false, those choices will be excluded.
 	; RETURNS:        A new Selector object.
 	;---------
 	__New(filePath, filter := "") {
@@ -272,9 +276,13 @@ class Selector {
 	; PARAMETERS:
 	;  filter     (I,REQ) - An array of filtering information to limit which choices we keep from the file.
 	;                       	Format:
-	;                       		filter["COLUMN"] - Name of the column to filter on
-	;                       		filter["VALUE"]  - Value to filter to. If a choice has this value (or blank)
-	;                       		                   for the column, it will be included.
+	;                       		filter["COLUMN"]         - Name of the column to filter on
+	;                       		      ["VALUE"]          - Value to filter to. If non-blank and a choice has
+	;                                                        this value for the column, it will be included.
+	;                                                        If blank, any value will be allowed.
+	;                                   ["INCLUDE_BLANKS"] - If set to true (default), choices with a blank
+	;                                                        value for the given column will be included.
+	;                                                        If set to false, those choices will be excluded.
 	; SIDE EFFECTS:   Populates various member variables with information from the file.
 	;---------
 	loadChoicesFromFile(filter) {
@@ -285,7 +293,7 @@ class Selector {
 		
 		tl := new TableList(this.filePath, tlChars, keyRowChars)
 		if(filter)
-			table := tl.getFilteredTable(filter["COLUMN"], filter["VALUE"])
+			table := tl.getFilteredTable(filter["COLUMN"], filter["VALUE"], filter["INCLUDE_BLANKS"])
 		else
 			table := tl.getTable()
 		; DEBUG.popup("Filepath",this.filePath, "Parsed table",table, "Index labels",tl.getIndexLabels())

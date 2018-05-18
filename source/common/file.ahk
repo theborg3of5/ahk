@@ -159,7 +159,6 @@ findConfigFilePath(path) {
 	if(FileExist(configFolder "\" path))         ; General config folder
 		return configFolder "\" path
 	
-	this.errPop("File doesn't exist", path)
 	return ""
 }
 

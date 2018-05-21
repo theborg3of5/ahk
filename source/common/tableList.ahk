@@ -414,6 +414,10 @@ class TableList {
 		if(!column)
 			return ""
 		
+		; includeBlanks should default to true (even if a blank value is passed in)
+		if(includeBlanks = "")
+			includeBlanks := true
+		
 		filteredTable := []
 		For i,rowAry in this.table {
 			if(this.shouldIncludeRow(rowAry, column, allowedValue, includeBlanks))

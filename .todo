@@ -64,7 +64,6 @@
 		Behavior is based entirely on data from MainConfig.
 	
 'Documentation'
-	_setup
 	actionObject
 	data
 	dateTime

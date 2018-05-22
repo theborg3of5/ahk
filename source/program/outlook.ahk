@@ -20,16 +20,16 @@
 	^.::^+l
 	
 	; Format as code (using custom styles)
-	^+c::
-		Send, ^+s
-		WinWaitActive, Apply Styles
-		Send, Code
-		Send, {Enter}
+	; ^+c::
+		; Send, ^+s
+		; WinWaitActive, Apply Styles
+		; Send, Code
+		; Send, {Enter}
 		
-		Sleep, 250
-		if(WinExist("Apply Styles ahk_class MsoCommandBar ahk_exe OUTLOOK.EXE"))
-			WinClose
-	return
+		; Sleep, 250
+		; if(WinExist("Apply Styles ahk_class MsoCommandBar ahk_exe OUTLOOK.EXE"))
+			; WinClose
+	; return
 #IfWinActive
 
 ; Mail activity.

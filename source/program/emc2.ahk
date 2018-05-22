@@ -14,9 +14,9 @@
 	return
 	
 	; Change code formatting hotkey to something more universal.
-	^+c::
-		Send, ^e
-	return
+	; ^+c::
+		; Send, ^e
+	; return
 	
 	{ ; SmartText hotstrings. Added to favorites to deal with duplicate/similar names.
 		; QA Instructions: DBC QA INSTRUCTIONS

@@ -57,4 +57,16 @@
 		if(WinActive("ahk_class Net UI Tool Window ahk_exe WINWORD.EXE")) ; Right-click menu still open, as header was already collapsed
 			Send, {Esc 2}
 	return
+	
+	; Format as code (using custom styles)
+	^+c::
+		Send, ^+s
+		WinWaitActive, Apply Styles
+		Send, Code
+		Send, {Enter}
+		
+		Sleep, 250
+		if(WinExist("Apply Styles ahk_class MsoCommandBar ahk_exe WINWORD.EXE"))
+			WinClose
+	return
 #IfWinActive

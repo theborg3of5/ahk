@@ -46,7 +46,6 @@
 	Link for Onenote, that if there's an ID in the "Investigation - QAN # [edit]" string, puts in both links (QAN # gets web, edit gets edit)
 	Make a smaller subset of scripts that can run in VDIs?
 		AHK is already installed (and latest version at that!)
-	Centralize format-as-code hotkey (^+c) like we did for hyperlinking selected text?
 	Audit all scripts for unused hotkeys
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
 	Go through pukkandan's startup script (https://github.com/pukkandan/My-Startup-Script ) and pull out anything interesting

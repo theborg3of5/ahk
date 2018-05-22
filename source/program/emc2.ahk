@@ -1,5 +1,5 @@
 ; Check for EMC2 title since it overlaps window classes and such with Hyperspace.
-#If exeActive("EpicD82.exe") && isWindowInState("active", " - EMC2", , 2)
+#If exeActive("EpicD84.exe") && isWindowInState("active", " - EMC2", , 2)
 	; Make F5 work everywhere by mapping it to shift + F5.
 	$F5::+F5
 	
@@ -80,7 +80,7 @@
 #If
 
 ; Design open
-#If WinActive("XDS ahk_exe EpicD82.exe")
+#If WinActive("XDS ahk_exe EpicD84.exe")
 	^k::
 		clickUsingMode(515, 226, "Client")
 	return

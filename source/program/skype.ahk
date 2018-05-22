@@ -1,8 +1,5 @@
 ; Buddy list.
 #IfWinActive, ahk_class tSkMainForm
-	; Close the window.
-	^!s::Send !{F4}
-	
 	; Options.
 	!o::Send !to
 #IfWinActive

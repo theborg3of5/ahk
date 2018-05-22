@@ -13,10 +13,10 @@ SetTitleMatchMode, 2 ; Partial title matching.
 
 MainLoop:
 	; Don't do anything if EMC2 isn't open.
-	if(!WinExist(" - EMC2 ahk_exe EpicD82.exe"))
+	if(!WinExist(" - EMC2 ahk_exe EpicD84.exe"))
 		return
 	
-	getEMC2Info(ini, id, " - EMC2 ahk_exe EpicD82.exe")
+	getEMC2Info(ini, id, " - EMC2 ahk_exe EpicD84.exe")
 	if(ini != "DLG")
 		return
 	

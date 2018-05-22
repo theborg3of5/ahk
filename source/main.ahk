@@ -55,6 +55,7 @@ runStandaloneScripts()
 #Include snapper.ahk
 #Include spotify.ahk
 #Include sumatraPDF.ahk
+#Include telegram.ahk
 #Include vb6.ahk
 #Include wilma.ahk
 #Include word.ahk

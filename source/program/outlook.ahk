@@ -2,6 +2,18 @@
 
 ; Program in general.
 #IfWinActive, ahk_class rctrl_renwnd32
+	; Format as code (using custom styles)
+	^+c::
+		Send, ^+s
+		WinWaitActive, Apply Styles
+		Send, Code
+		Send, {Enter}
+		
+		Sleep, 250
+		if(WinExist("Apply Styles ahk_class MsoCommandBar ahk_exe OUTLOOK.EXE"))
+			WinClose
+	return
+	
 	; Shortcut to go to today on the calendar. (In desired, 3-day view.)
 	^t::
 		; Get to calendar if needed.
@@ -18,18 +30,6 @@
 	
 	; Bulleted list.
 	^.::^+l
-	
-	; Format as code (using custom styles)
-	^+c::
-		Send, ^+s
-		WinWaitActive, Apply Styles
-		Send, Code
-		Send, {Enter}
-		
-		Sleep, 250
-		if(WinExist("Apply Styles ahk_class MsoCommandBar ahk_exe OUTLOOK.EXE"))
-			WinClose
-	return
 #IfWinActive
 
 ; Mail activity.

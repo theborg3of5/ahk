@@ -9,11 +9,6 @@
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	
 'New'
-	Decide where to put hotkeys that are common across programs
-		In own section at top, completely separate from other hotkeys?
-		Common hotkeys:
-			^+k: link selected text with clipboard
-			^+c: format as code
 	AHK documentation - add hotkey (ctrl+enter or shift+enter, probably) that adds a newline + comment and however many spaces are needed
 		Could copy existing line, look for first instance of more than once space
 			Indentation should be tabs, only one space before labels

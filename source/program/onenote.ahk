@@ -1,5 +1,11 @@
 ; OneNote hotkeys.
 #IfWinActive, ahk_class Framework::CFrame
+	; Format as code (using custom styles)
+	^+c::
+		oneNoteCustomStyles()
+		Send, {Enter}
+	return
+	
 	{ ; Quick access toolbar commands.
 		; New Subpage
 		$^+n::
@@ -19,11 +25,6 @@
 			MsgBox, 4, Delete page?, Are you sure you want to delete this page?
 			IfMsgBox, Yes
 				oneNoteDeletePage()
-		return
-		; Format as code (using custom styles)
-		^+c::
-			oneNoteCustomStyles()
-			Send, {Enter}
 		return
 		; Create linked Specific page (using OneTastic macro)
 		^l::

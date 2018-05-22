@@ -1,5 +1,10 @@
 ; Check for EMC2 title since it overlaps window classes and such with Hyperspace.
 #If exeActive("EpicD84.exe") && isWindowInState("active", " - EMC2", , 2)
+	; Change code formatting hotkey to something more universal.
+	^+c::
+		Send, ^e
+	return
+	
 	; Make F5 work everywhere by mapping it to shift + F5.
 	$F5::+F5
 	
@@ -11,11 +16,6 @@
 	; Contact comment, EpicStudio-style.
 	^+8::
 		Send, !o
-	return
-	
-	; Change code formatting hotkey to something more universal.
-	^+c::
-		Send, ^e
 	return
 	
 	{ ; SmartText hotstrings. Added to favorites to deal with duplicate/similar names.

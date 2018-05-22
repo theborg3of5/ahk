@@ -61,6 +61,29 @@ sendTextWithClipboard(text) {
 	clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
 }
 
+; Within the currently selected text, select only the first instance of the given needle text.
+selectTextWithinSelection(needle) {
+	needleLen := strLen(needle)
+	if(!needleLen)
+		return
+	
+	selectedText := getSelectedText()
+	if(selectedText = "")
+		return
+	
+	; Determine where in the string our needle is
+	needleStartPos := stringContains(selectedText, needle)
+	if(!needleStartPos)
+		return
+	numRight := needleStartPos - 1
+	
+	Send, {Left} ; Get to start of selection.
+	Send, {Right %numRight%} ; Get to start of needle.
+	Send, {Shift Down}
+	Send, {Right %needleLen%} ; Select to end of needle.
+	Send, {Shift Up}
+}
+
 ; Runs a command line program and returns the result.
 runAndReturnOutput(command, outputFile := "cmdOutput.tmp") {
 	RunWait, %comspec% /c %command% > %outputFile%,,UseErrorLevel Hide

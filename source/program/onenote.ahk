@@ -178,6 +178,35 @@
 			SendRaw, % "*" MainConfig.getPrivate("INITIALS") " " date
 		}
 	
+	!+#n::
+		linkOneNoteSpecificsSectionTitle() {
+			waitForHotkeyRelease()
+			
+			Send, {Home}
+			Send, ^a ; Select all, selects full line
+			lineText := getSelectedText()
+			
+			linkText := getStringAfterStr(lineText, " - ")
+			recordText := getStringBeforeStr(linkText, " [")
+			editText := getStringBetweenStr(linkText, "[", "]")
+			; DEBUG.popup("Line",lineText, "Record text",recordText, "Edit text",editText)
+			
+			if(!isEMC2Object(recordText, ini, id))
+				return
+			
+			selectTextWithinSelection(recordText)
+			webURL := buildEMC2Link(ini, id, "WEB")
+			linkSelectedText(webURL)
+			
+			; Re-select whole line so we can use selectTextWithinSelection()
+			Send, {Home}
+			Send, ^a
+			
+			selectTextWithinSelection(editText)
+			editURL := buildEMC2Link(ini, id, "EDIT")
+			linkSelectedText(editURL)
+		}
+	
 	; Named functions for which commands are which in the quick access toolbar.
 	oneNoteNewSubpage() {
 		Send, !1

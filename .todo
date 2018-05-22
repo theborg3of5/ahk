@@ -56,7 +56,6 @@
 			Put it in the private repo (hosted on home server)?
 		Possibly also make syntax highlighting nicer: http://www.gottabegarabi.com/blog/todo-a-simple-todo-list-color-scheme-for-notepad/
 			Would want to figure out how to add collapsing/expanding based on indentation (like Python, which is current thing I use).
-	Link for Onenote, that if there's an ID in the "Investigation - QAN # [edit]" string, puts in both links (QAN # gets web, edit gets edit)
 	Make a smaller subset of scripts that can run in VDIs?
 		AHK is already installed (and latest version at that!)
 	Audit all scripts for unused hotkeys

@@ -18,7 +18,7 @@
 		return 0
 	}
 
-	; Check if it's a valid EMC2 string.
+	; Check if it's a valid EMC2 object string.
 	isEMC2Object(text, ByRef ini := "", ByRef id := "") {
 		splitRecordString(text, ini, id)
 		

@@ -8,6 +8,16 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 'New'
+	Consider decentralizing ^+k linking hotkey
+		Actions are fairly similar, but titles are different, so maybe it makes more sense to keep in respective program scripts instead.
+	Decide where to put hotkeys that are common across programs
+		In own section at top, completely separate from other hotkeys?
+		Common hotkeys:
+			^+k: link selected text with clipboard
+			^+c: format as code
+	AHK documentation - add hotkey (ctrl+enter or shift+enter, probably) that adds a newline + comment and however many spaces are needed
+		Could copy existing line, look for first instance of more than once space
+			Indentation should be tabs, only one space before labels
 	Consider changing TableListMod format
 		Make COLUMN required?
 		Allow r/R/replace/Replace/REPLACE vs only r

@@ -133,42 +133,43 @@
 	
 	; Make a copy of the current page in the Do section.
 	^+m::
-		; Change the page color before we leave, so it's noticeable if I end up there.
-		Send, !w
-		Send, pc
-		Send, {Enter}
-		
-		Send, ^!m                  ; Move or copy page
-		WinWaitActive, Move or Copy Pages
-		Sleep, 500                 ; Wait a half second for the popup to be input-ready
-		Send, {Down 5}             ; Select first section from first notebook (bypassing "Recent picks" section)
-		Send, !c                   ; Copy button
-		WinWaitClose, Move or Copy Pages
-		
-		; Wait for new page to appear.
-		; Give the user a chance to wait a little longer before continuing
-		; (for when OneNote takes a while to actually make the new page).
-		Loop {
-			userInput := Input("T1", "{Esc}{Enter}") ; Wait for 1 second (exit immediately if Escape or Enter is pressed)
-			if(stringContains(userInput, A_Space))   ; If space was pressed, wait another 1 second
-				Continue
-			Break
+		copyOneNoteDoPage() {
+			; Change the page color before we leave, so it's noticeable if I end up there.
+			Send, !w
+			Send, pc
+			Send, {Enter}
+			
+			Send, ^!m                  ; Move or copy page
+			WinWaitActive, Move or Copy Pages
+			Sleep, 500                 ; Wait a half second for the popup to be input-ready
+			Send, {Down 5}             ; Select first section from first notebook (bypassing "Recent picks" section)
+			Send, !c                   ; Copy button
+			WinWaitClose, Move or Copy Pages
+			
+			; Wait for new page to appear.
+			; Give the user a chance to wait a little longer before continuing
+			; (for when OneNote takes a while to actually make the new page).
+			Loop {
+				userInput := Input("T1", "{Esc}{Enter}") ; Wait for 1 second (exit immediately if Escape or Enter is pressed)
+				if(stringContains(userInput, A_Space))   ; If space was pressed, wait another 1 second
+					Continue
+				Break
+			}
+			
+			Send, ^{PgDn}              ; Switch to (presumably) new page
+			Send, !3                   ; Demote Subpage (Make Subpage)
+			
+			; Make the current page have no background color.
+			Send, !w
+			Send, pc
+			Send, n
+			
+			Send, ^+t                  ; Select title (to replace with new day/date)
+			
+			Sleep, 750                 ; Wait for selection to take
+			sendDateTime("M/d`, dddd") ; Send today's day/date
+			Send, ^+t                  ; Select title again in case you want a different date.
 		}
-		
-		Send, ^{PgDn}              ; Switch to (presumably) new page
-		Send, !3                   ; Demote Subpage (Make Subpage)
-		
-		; Make the current page have no background color.
-		Send, !w
-		Send, pc
-		Send, n
-		
-		Send, ^+t                  ; Select title (to replace with new day/date)
-		
-		Sleep, 750                 ; Wait for selection to take
-		sendDateTime("M/d`, dddd") ; Send today's day/date
-		Send, ^+t                  ; Select title again in case you want a different date.
-	return
 	
 	; Insert a contact comment.
 	^+8::
@@ -197,6 +198,11 @@
 		Send, !8
 	}
 	
+	;---------
+	; DESCRIPTION:    If the paste popup has appeared, get rid of it. Typically this is used for AHK
+	;                 hotkeys that use the Control key, which sometimes causes the paste popup to
+	;                 appear afterwards (if we pasted recently).
+	;---------
 	escapeOneNotePastePopup() {
 		ControlGet, pastePopupHandle, Hwnd, , OOCWindow1, A
 		if(!pastePopupHandle)

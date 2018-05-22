@@ -13,6 +13,7 @@
 	Spotify						Spotify.exe			-							-							-						CLOSE		CLOSE		-				-					OTHER		0
 	RepublicAnywhere			Republic Anywhere.exe	-					-							-						CLOSE		CLOSE
 	grepWin						grepWin.exe			-							-							-						CLOSE
+	GitHub						GitHubDesktop.exe	-							-							-						CLOSE		-			-				-					-			0
 	
 	; VB6
 	VB6							VB6.exe				wndclass_desked_gsk	-							-						-			POST_MESSAGE
@@ -50,7 +51,6 @@
 	Excel							EXCEL.EXE
 	PowerPoint					POWERPNT.EXE
 	OneNote						ONENOTE.EXE
-	GitHub						GitHubDesktop.exe
 	Chrome						chrome.exe
 	Steam							Steam.exe
 	WebEx							atmgr.exe

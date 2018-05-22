@@ -24,7 +24,7 @@
 	EMC2 QAN email notify	-						-							EMC2 - QA Note E-Mail Notification
 	EMC2 QAN email				-						-							Send E-Mail				-						-			-			HOME_END
 	EMC2 DLG email				-						-							E-mail Development Log
-	ECM2 Issue email			-						-							Email Issue
+	EMC2 Issue email			-						-							Email Issue
 []
 	
 	; EMC2 activities/workspaces

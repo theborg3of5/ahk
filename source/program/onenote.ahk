@@ -21,10 +21,10 @@
 				oneNoteDeletePage()
 		return
 		; Format as code (using custom styles)
-		; ^+c::
-			; oneNoteCustomStyles()
-			; Send, {Enter}
-		; return
+		^+c::
+			oneNoteCustomStyles()
+			Send, {Enter}
+		return
 		; Create linked Specific page (using OneTastic macro)
 		^l::
 			oneNoteLinkedSpecificsPage()

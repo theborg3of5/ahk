@@ -9,7 +9,6 @@
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	
 'New'
-	Make CapsLock launch Launchy if it's not running?
 	Decide where to put hotkeys that are common across programs
 		In own section at top, completely separate from other hotkeys?
 		Common hotkeys:

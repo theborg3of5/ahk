@@ -69,7 +69,6 @@
 	
 'Documentation'
 	common
-		actionObject
 		data
 		dateTime
 		debug

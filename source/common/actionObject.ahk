@@ -2,21 +2,46 @@
 	
 	This class is a framework that performs a specific set of actions (run/open, return a link to) in certain ways (subActions - edit, view, web mode) for an identified object. The class will attempt to split the main input parameter (input) to gain all information that it requires to fully identify the object and action, but if any of that information is missing, it will prompt the user for it using the Selector class with a list of types/subTypes (from actionObject.tl).
 	
-	Supported Actions
-		GDB TODO
+	Supported Actions (ACTION_* constants)
+		RUN
+			Run or open the object.
+		LINK
+			Generate and return a link to the object.
 	
-	Supported SubActions
-		GDB TODO
+	Supported SubActions (SUBACTION_* constants)
+		EDIT
+			The action will be done for the object in edit mode. For example, an EMC2 object will be opened in EMC2 (not in view-only mode), or the generated link will open it that way.
+		VIEW
+			The same as EDIT, except that the object will be opened in read-only mode where applicable.
+		WEB
+			The web equivalent of the object will be opened. This applies primarily to EMC2 objects, which have corresponding web views.
 	
-	Supported Types
-		GDB TODO
+	Supported Types (TYPE_* constants)
+		EMC2
+			EMC2 objects - DLGs, QANs, etc. These require a subType (which is the INI of the object).
+		EPICSTUDIO
+			Server routine, to be opened in EpicStudio.
+		CODESEARCHROUTINE
+			Server routine, to open in CodeSearch.
+		HELPDESK
+			Helpdesk request (HDR), web only.
+		PATH
+			A filepath or URL. These require a subType (either FILEPATH or URL), but that subType can usually be determined programmatically.
 	
-	Supported SubTypes
-		GDB TODO
+	Supported SubTypes (SUBTYPE_* constants + others in actionObject.tl)
+		FILEPATH
+			A windows filepath.
+		URL
+			An internet URL.
+		Others from actionObject.tl
+			Other SubTypes are defined in actionObject.tl. These are used primarily for EMC2 objects, and are used by buildEMC2Link() at the end of the day.
 	
 	Example Usage
-		link := ActionObject.do(qanId, TYPE_EMC2, ACTION_Link, "QAN", SUBACTION_Web) ; link is EMC2 link to QAN qanId
-		ActionObject.do(inputText, , ACTION_Run, , SUBACTION_Edit) ; Run (open) the object identified in inputText in edit mode, prompting the user for what type/subtype of object (from TYPE_* and SUBTYPE_* + INIs, respectively).
+		; link is EMC2 link to QAN qanId
+		link := ActionObject.do(qanId, TYPE_EMC2, ACTION_Link, "QAN", SUBACTION_Web)
+		
+		; Run (open) the object identified in inputText in edit mode, prompting the user for what type/subtype of object (from TYPE_* and SUBTYPE_*, respectively).
+		ActionObject.do(inputText, , ACTION_Run, , SUBACTION_Edit)
 */
 
 global TYPE_Unknown           := ""
@@ -87,7 +112,25 @@ class ActionObject {
 	; == Private ===================
 	; ==============================
 	
-	; Based on the parameters given, determines as many missing pieces as we can.
+	;---------
+	; DESCRIPTION:    Go through all given information and determine as many distinct properties
+	;                 about the object and action as we can.
+	; PARAMETERS:
+	;  input     (IO,REQ) - The primary identifying information for the object we want to perform the
+	;                       action on. Can be a partial identifier (ID, URL, filepath) that will be
+	;                       evaluated with a given (or prompted) type/subType, or in some cases a
+	;                       full identifier (for example "QAN 123456" - includes both INI [drives
+	;                       subType and implies type] and ID).
+	;                       If it is a full identifier, it will be split into distinct parts
+	;                       (type/subType in respective parameters, ID will contain only partial
+	;                       identifier).
+	;  type      (IO,REQ) - The general type that goes with input - from TYPE_* constants.
+	;  action    (IO,REQ) - The action to perform with the object, from ACTION_* constants.
+	;  subType   (IO,REQ) - Within the given type, further identifying information, from SUBTYPE_*
+	;                       constants (or other subTypes defined in actionObject.tl).
+	;  subAction (IO,REQ) - Within the given action, further information about what to do, from
+	;                       SUBACTION_* constants.
+	;---------
 	process(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
 		; DEBUG.popup("ActionObject.process", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
@@ -137,7 +180,21 @@ class ActionObject {
 		; DEBUG.popup("ActionObject.process", "Input", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 	}
 	
-	; Prompt the user for any missing info via a Selector popup.
+	;---------
+	; DESCRIPTION:    If any key pieces of information about the object are missing, prompt the user
+	;                 for those missing pieces using a Selector popup.
+	; PARAMETERS:
+	;  input     (IO,REQ) - The primary identifying information for the object we want to perform the
+	;                       action on. Should only be a partial identifier (ID, URL, filepath) by
+	;                       this point.
+	;  type      (IO,REQ) - The general type that goes with input - from TYPE_* constants. If not
+	;                       given, the user will be prompted to choose this.
+	;  action    (IO,REQ) - The action to perform with the object, from ACTION_* constants.
+	;  subType   (IO,REQ) - Within the given type, further identifying information, from SUBTYPE_*
+	;                       constants (or other subTypes defined in actionObject.tl).
+	;  subAction (IO,REQ) - Within the given action, further information about what to do, from
+	;                       SUBACTION_* constants.
+	;---------
 	selectInfo(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
 		; DEBUG.popup("ActionObject.selectInfo","Start", "Input",input, "Type",type, "Action",action, "SubType",subType, "SubAction",subAction)
 		
@@ -166,7 +223,19 @@ class ActionObject {
 		; DEBUG.popup("ActionObject.selectInfo","Finish", "Input",input, "Type",type, "Action",action, "SubType",subType, "SubAction",subAction)
 	}
 	
-	; Do any post-processing now that we (hopefully) have all the info we need.
+	;---------
+	; DESCRIPTION:    Perform any needed post-processing to make sure we have clean data to use for our action.
+	; PARAMETERS:
+	;  input     (IO,REQ) - The primary identifying information for the object we want to perform the
+	;                       action on. Should only be a partial identifier (ID, URL, filepath) by
+	;                       this point.
+	;  type      (IO,REQ) - The general type that goes with input - from TYPE_* constants.
+	;  action    (IO,REQ) - The action to perform with the object, from ACTION_* constants.
+	;  subType   (IO,REQ) - Within the given type, further identifying information, from SUBTYPE_*
+	;                       constants (or other subTypes defined in actionObject.tl).
+	;  subAction (IO,REQ) - Within the given action, further information about what to do, from
+	;                       SUBACTION_* constants.
+	;---------
 	postProcess(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
 		if(type = TYPE_EMC2) ; Turn subType (INI) into true INI
 			subType := getTrueINI(subType)
@@ -175,7 +244,20 @@ class ActionObject {
 			input := cleanupPath(input)
 	}
 	
-	; Do the action.
+	;---------
+	; DESCRIPTION:    Actually perform the action, assuming we have enought information.
+	; PARAMETERS:
+	;  input     (I,REQ) - The primary identifying information for the object we want to perform the
+	;                      action on. Should only be a partial identifier (ID, URL, filepath) by
+	;                      this point.
+	;  type      (I,REQ) - The general type that goes with input - from TYPE_* constants.
+	;  action    (I,REQ) - The action to perform with the object, from ACTION_* constants.
+	;  subType   (I,REQ) - Within the given type, further identifying information, from SUBTYPE_*
+	;                      constants (or other subTypes defined in actionObject.tl).
+	;  subAction (I,REQ) - Within the given action, further information about what to do, from
+	;                      SUBACTION_* constants.
+	; RETURNS:        For ACTION_Link, the link. Otherwise, "".
+	;---------
 	perform(type, action, subType, subAction, input) {
 		; DEBUG.popup("ActionObject.perform", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		if(!type || !action)
@@ -192,7 +274,7 @@ class ActionObject {
 					IfExist, %input%
 						Run(input)
 					Else
-						this.errPop("File or folder does not exist", input)
+						DEBUG.popup("File or folder does not exist", input)
 				} else if(subType = SUBTYPE_URL) {
 					Run(input)
 				}
@@ -213,20 +295,6 @@ class ActionObject {
 				return buildHelpdeskLink(input)
 			}
 			
-		}
-	}
-	
-	errPop(params*) {
-		if(isFunc("DEBUG.popup")) {
-			DEBUG.popup(params*)
-		} else {
-			errMsg := ""
-			For i,p in params {
-				if(mod(i, 2) = 0)
-					Continue
-				errMsg .= p "`n`t" params[i + 1] "`n"
-			}
-			MsgBox, % errMsg
 		}
 	}
 }

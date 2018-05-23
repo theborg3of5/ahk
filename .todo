@@ -51,6 +51,7 @@
 			Would want to figure out how to add collapsing/expanding based on indentation (like Python, which is current thing I use).
 	Make a smaller subset of scripts that can run in VDIs?
 		AHK is already installed (and latest version at that!)
+		Actually, let's just do the full set - nothing will escape, and AHK doesn't seem to interfere in these cases.
 	Audit all scripts for unused hotkeys
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
 	Go through pukkandan's startup script (https://github.com/pukkandan/My-Startup-Script ) and pull out anything interesting

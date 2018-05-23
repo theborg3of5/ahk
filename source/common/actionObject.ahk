@@ -1,6 +1,22 @@
-/* Generic, flexible custom class for running or linking to an object, based on both functionally-passed and prompted-for text.
+/* Class for running or generating a link to an object, based on both functionally-passed and prompted-for information.
 	
-	The programmatic entry point is ActionObject.do().
+	This class is a framework that performs a specific set of actions (run/open, return a link to) in certain ways (subActions - edit, view, web mode) for an identified object. The class will attempt to split the main input parameter (input) to gain all information that it requires to fully identify the object and action, but if any of that information is missing, it will prompt the user for it using the Selector class with a list of types/subTypes (from actionObject.tl).
+	
+	Supported Actions
+		GDB TODO
+	
+	Supported SubActions
+		GDB TODO
+	
+	Supported Types
+		GDB TODO
+	
+	Supported SubTypes
+		GDB TODO
+	
+	Example Usage
+		link := ActionObject.do(qanId, TYPE_EMC2, ACTION_Link, "QAN", SUBACTION_Web) ; link is EMC2 link to QAN qanId
+		ActionObject.do(inputText, , ACTION_Run, , SUBACTION_Edit) ; Run (open) the object identified in inputText in edit mode, prompting the user for what type/subtype of object (from TYPE_* and SUBTYPE_* + INIs, respectively).
 */
 
 global TYPE_Unknown           := ""
@@ -13,6 +29,7 @@ global TYPE_Path              := "PATH"
 global ACTION_Link := "LINK"
 global ACTION_Run  := "RUN"
 
+; Additional subtypes (EMC2 INIs) defined in actionObject.tl.
 global SUBTYPE_FilePath := "FILEPATH"
 global SUBTYPE_URL      := "URL"
 
@@ -21,19 +38,31 @@ global SUBACTION_View := "VIEW"
 global SUBACTION_Web  := "WEB"
 
 
-; Class that centralizes the ability to link to/do a variety of things based on some given text.
 class ActionObject {
-	; input is either full string, or if action/subaction known, just the main piece (sans actions)
-	/* DESCRIPTION:   Main programmatic access point. Calls into helper functions that process given input, prompt for more as needed, then perform the action.
-		PARAMETERS:
-			input     - The identifier for the thing that we're opening or linking to - can be an ID, URL, filepath, etc.
-			type      - From TYPE_* constants above: general type of input.
-			action    - From ACTION_* constants above: what you want to actually do with input.
-			subType   - From SUBTYPE_* constants above: within a given type, further divisions.
-			subAction - From SUBACTION_* constants above: within a given action, further divisions.
-		Example: view-only link to DLG 123456:
-			ActionObject.do(123456, TYPE_EMC2, ACTION_Link, "DLG", SUBACTION_View)
-	*/
+	
+	; ==============================
+	; == Public ====================
+	; ==============================
+	
+	;---------
+	; DESCRIPTION:    Identify the intended object based on the given information, prompting the
+	;                 user for any missing information needed to identify the object, and perform
+	;                 the given action.
+	; PARAMETERS:
+	;  input     (I,REQ) - The primary identifying information for the object we want to perform the
+	;                      action on. Can be a partial identifier (ID, URL, filepath) that will be
+	;                      evaluated with a given (or prompted) type/subType, or in some cases a
+	;                      full identifier (for example "QAN 123456" - includes both INI [drives
+	;                      subType and implies type] and ID).
+	;  type      (I,OPT) - The general type that goes with input - from TYPE_* constants. If not
+	;                      given, the user will be prompted to choose this.
+	;  action    (I,OPT) - The action to perform with the object, from ACTION_* constants.
+	;  subType   (I,OPT) - Within the given type, further identifying information, from SUBTYPE_*
+	;                      constants (or other subTypes defined in actionObject.tl).
+	;  subAction (I,OPT) - Within the given action, further information about what to do, from
+	;                      SUBACTION_* constants.
+	; RETURNS:        For ACTION_Link, the link. Otherwise, "".
+	;---------
 	do(input, type := "", action := "", subType := "", subAction := "") {
 		; DEBUG.popup("ActionObject.do", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
@@ -52,6 +81,11 @@ class ActionObject {
 		; Just do it.
 		return this.perform(type, action, subType, subAction, input)
 	}
+	
+	
+	; ==============================
+	; == Private ===================
+	; ==============================
 	
 	; Based on the parameters given, determines as many missing pieces as we can.
 	process(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {

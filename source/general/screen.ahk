@@ -16,20 +16,20 @@ return
 ; Fake-maximize the window and center it.
 #+m::fakeMaximizeWindow()
 
-; Enable any window mouse is currently over.
-#c::
-	MouseGetPos(, , WinHndl, CtlHndl, 2)
+; ; Enable any window mouse is currently over.
+; #c::
+	; MouseGetPos(, , WinHndl, CtlHndl, 2)
 	
-	winStyle := WinGet("Style", "ahk_id " WinHndl)
-	if (winStyle & WS_DISABLED) {
-		WinSet, Enable,, ahk_id %WinHndl%
-	}
+	; winStyle := WinGet("Style", "ahk_id " WinHndl)
+	; if (winStyle & WS_DISABLED) {
+		; WinSet, Enable,, ahk_id %WinHndl%
+	; }
 	
-	winStyle := WinGet("Style", "ahk_id " CtlHndl)
-	if (winStyle & WS_DISABLED) {
-		WinSet, Enable,, ahk_id %CtlHndl%
-	}
-return
+	; winStyle := WinGet("Style", "ahk_id " CtlHndl)
+	; if (winStyle & WS_DISABLED) {
+		; WinSet, Enable,, ahk_id %CtlHndl%
+	; }
+; return
 
 ; Call the Windows API function "SetSuspendState" to have the system suspend or hibernate.
 ; Parameter #1: Pass 1 instead of 0 to hibernate rather than suspend.

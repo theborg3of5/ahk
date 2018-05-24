@@ -7,4 +7,5 @@
 	Private values		priv		private\privates.tl
 	Mapped drives		md			private\mappedDrives.tl
 	Games					g			games.tl
+	Settings				s			local\settings.ini
 []

@@ -9,6 +9,9 @@
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	
 'New'
+	New hotkey for generating link + adding it to selected text?
+		Matching 'k' hotkeys to the 'l' linking ones, so both edit and web
+		Same restrictions as auto-linking stuff
 	AHK documentation - add hotkey (ctrl+enter or shift+enter, probably) that adds a newline + comment and however many spaces are needed
 		Could copy existing line, look for first instance of more than once space
 			Indentation should be tabs, only one space before labels

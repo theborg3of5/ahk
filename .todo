@@ -23,7 +23,6 @@
 				configs
 				oneNote string
 					Rename this one since we use it elsewhere (in workplan mainly)
-	Move WinActive("ahk_class TscShellContainerClass") calls into a named wrapper function (isRemoteDesktopWindow())
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
 		Build in selector for times
 			Can have hard-coded list of choices to pass in

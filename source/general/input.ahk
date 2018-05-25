@@ -18,7 +18,7 @@ return
 +WheelUp::WheelLeft
 +WheelDown::WheelRight
 
-#If !MainConfig.windowIsGame() && !WinActive("ahk_class TscShellContainerClass")
+#If !MainConfig.windowIsGame() && !MainConfig.windowIsRemoteDesktop()
 	XButton1::
 		activateWindowUnderMouse()
 		

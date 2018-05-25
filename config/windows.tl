@@ -14,6 +14,7 @@
 	RepublicAnywhere			Republic Anywhere.exe	-					-							-						CLOSE		CLOSE
 	grepWin						grepWin.exe			-							-							-						CLOSE
 	GitHub						GitHubDesktop.exe	-							-							-						CLOSE		-			-				-					-			0
+	RemoteDesktop				-						TscShellContainerClass
 	
 	; VB6
 	VB6							VB6.exe				wndclass_desked_gsk	-							-						-			POST_MESSAGE

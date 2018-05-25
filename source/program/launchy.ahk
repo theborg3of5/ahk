@@ -15,7 +15,7 @@
 #If
 
 childInstanceActive() {
-	if(WinActive("ahk_class TscShellContainerClass"))
+	if(MainConfig.windowIsRemoteDesktop())
 		return true
 	if(WinActive("ahk_exe vmware-view.exe"))
 		return true

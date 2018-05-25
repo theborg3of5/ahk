@@ -107,6 +107,10 @@ class MainConfig {
 		
 		return retWindow
 	}
+	windowIsRemoteDesktop(titleString := "A") {
+		ahkClass := getWindowSetting("CLASS", titleString)
+		return WinActive("ahk_class " ahkClass)
+	}
 	windowIsGame(titleString := "A") {
 		ahkExe := WinGet("ProcessName", titleString)
 		if(!ahkExe)

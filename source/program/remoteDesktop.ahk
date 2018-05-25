@@ -4,7 +4,7 @@ $!Esc::
 	SetNumLockState, AlwaysOn
 return
 
-#IfWinActive ahk_class TscShellContainerClass
+#If MainConfig.windowIsRemoteDesktop()
 	; Allow escape from remote desktop with hotkey (for computer you're remoting from).
 	!CapsLock::	; One of a few keys that the host still captures.
 		Suspend, Off
@@ -13,9 +13,10 @@ return
 	return
 #IfWinActive
 
-#If !WinActive("ahk_class TscShellContainerClass") && WinExist("ahk_class TscShellContainerClass")
+#If !MainConfig.windowIsRemoteDesktop() && WinExist(getWindowTitleString("RemoteDesktop"))
 	; Switch back into remote desktop with same hotkey (for computer you're remoting from).
 	!CapsLock::
+		activateWindow(getWindowTitleString("RemoteDesktop"))
 		WinActivate, ahk_class TscShellContainerClass
 	return
 #If 

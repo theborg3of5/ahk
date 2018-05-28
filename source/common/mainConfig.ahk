@@ -104,12 +104,10 @@ class MainConfig {
 		}
 		
 		; DEBUG.popupEarly("MainConfig","getWindow", "Found window",retWindow)
-		
 		return retWindow
 	}
-	windowIsRemoteDesktop(titleString := "A") {
-		ahkClass := getWindowSetting("CLASS", titleString)
-		return WinActive("ahk_class " ahkClass)
+	isRemoteDesktopActive(titleString := "A") {
+		return WinActive(getWindowTitleString("RemoteDesktop"))
 	}
 	windowIsGame(titleString := "A") {
 		ahkExe := WinGet("ProcessName", titleString)

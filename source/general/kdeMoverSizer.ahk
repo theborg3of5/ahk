@@ -1,5 +1,5 @@
 ; So that this doesn't mess with remote desktop.
-#If !MainConfig.windowIsRemoteDesktop() && !MainConfig.windowIsGame()
+#If !MainConfig.isRemoteDesktopActive() && !MainConfig.windowIsGame()
 
 ;	Internationally known as "KDE Mover-Sizer"							Version 1.3
 ;
@@ -305,4 +305,4 @@ GetCurrentScreenBoarders(ByRef CurrentScreenLeft, ByRef CurrentScreenRight, ByRe
 	CurrentScreenBottom := windowMonitorBounds["BOTTOM"] + offsetsAry["BOTTOM"]
 }
 
-#IfWinNotActive
+#If

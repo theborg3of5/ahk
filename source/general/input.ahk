@@ -18,7 +18,7 @@ return
 +WheelUp::WheelLeft
 +WheelDown::WheelRight
 
-#If !MainConfig.windowIsGame() && !MainConfig.windowIsRemoteDesktop()
+#If !MainConfig.windowIsGame() && !MainConfig.isRemoteDesktopActive()
 	XButton1::
 		activateWindowUnderMouse()
 		

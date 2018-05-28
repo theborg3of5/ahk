@@ -15,7 +15,7 @@
 #If
 
 childInstanceActive() {
-	if(MainConfig.windowIsRemoteDesktop())
+	if(MainConfig.isRemoteDesktopActive())
 		return true
 	if(WinActive("ahk_exe vmware-view.exe"))
 		return true

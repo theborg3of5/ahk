@@ -5,17 +5,17 @@
 		Possibly split into more scripts?
 			screen
 				selectResize
-			programs/launchPrograms
+			input
+				EMC2 object string
+			programs
 				runProgram x5
 				activateProgram x16
-			places/locations/launchLocations
+			places
 				openFolder x4
-				doSelectFolder x1
+				doSelectFolder
 				Run sites x7
 				cleaned up path x2
-			input
-				onenote string x1
-			select/launch
+			launch
 				Epic-only select* x8
 				General select* x2
 					selectSearch

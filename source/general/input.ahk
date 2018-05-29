@@ -31,7 +31,6 @@ return
 		; Allow the Ctrl+Shift+Tab to be caught and handled by other hotkeys.
 		sendUsingLevel("^+{Tab}", 1)
 	return
-	
 #If
 
 ^!v::
@@ -40,9 +39,7 @@ return
 return
 
 ; Turn the selected text into a link to the URL on the clipboard.
-^+k::
-	linkSelectedText(clipboard)
-return
+^+k::linkSelectedText(clipboard)
 
 ; Menu key does different things on laptops without a mouse.
 #If MainConfig.getSetting("MENU_KEY_ACTION") = MENUKEYACTION_MiddleClick

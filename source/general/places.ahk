@@ -41,7 +41,7 @@ sendCleanedUpPath(containingFolderOnly := false) {
 		Sleep, 100
 		Run("http://www.facebook.com/")
 		Sleep, 100
-		Run("http://www.reddit.com/")
+		Run("http://old.reddit.com/")
 		Sleep, 100
 		Run("http://feedly.com/i/latest")
 	}

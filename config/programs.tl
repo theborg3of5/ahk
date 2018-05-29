@@ -2,7 +2,7 @@
 
 [{PATH}b:C:\Program Files (x86)\]
 	Chrome				chrome.exe				Chrome_WidgetWin_1	-				-								Google\Chrome\Application\chrome.exe
-	EMC2					EpicD82.exe				-							EMC2			-								Epic\v8.4\EMC2\Shared Files\EpicD84.exe									EMC2Update env=TRACKAPPTCP
+	EMC2					EpicD84.exe				-							EMC2			-								Epic\v8.4\EMC2\Shared Files\EpicD84.exe									EMC2Update env=TRACKAPPTCP
 	EpicStudio			EpicStudio.exe			-							EpicStudio	-								EpicStudio\EpicStudio.exe
 	Outlook				OUTLOOK.EXE				rctrl_renwnd32			-				-								Microsoft Office\Office16\OUTLOOK.EXE
 	Thunder				Thunder.exe				-							Thunder		-								Thunder\Thunder.exe

@@ -3,26 +3,25 @@
 		Probably tweak the loop or pull out a subfunction, too.
 	Go back and clean up launch.ahk a bunch with all of the additional logic dumped there from the selector rework
 		Possibly split into more scripts?
-			Folders
-				doSelectFolder?
-			Sites
-				Combine with folders?
-					"open", "location", "places" or something similar?
-			Program launchers
-				Selector ones too?
-			Other selectors
-				selectDLG
+			screen
 				selectResize
-				selectPhone?
-				selectEnvironmentId
-				selectOutlookTLG
-				search
-				opener
-				linker
-				paths
-				configs
-				oneNote string
-					Rename this one since we use it elsewhere (in workplan mainly)
+			programs/launchPrograms
+				runProgram x5
+				activateProgram x16
+			places/locations/launchLocations
+				openFolder x4
+				doSelectFolder x1
+				Run sites x7
+				cleaned up path x2
+			input
+				onenote string x1
+			select/launch
+				Epic-only select* x8
+				General select* x2
+					selectSearch
+					selectConfig
+						Arguably places as well?
+				genericOpen/genericLink x4
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
 		Build in selector for times
 			Can have hard-coded list of choices to pass in

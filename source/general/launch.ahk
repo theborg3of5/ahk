@@ -20,7 +20,7 @@
 	^+!e::activateProgram("EMC2")
 	^+!s::activateProgram("EpicStudio")
 	^+!u::activateProgram("Thunder")
-	^+!v::activateProgram("VB6")
+	^+!v::     runProgram("VB6")
 	^!#e::activateProgram("Outlook")
 	^!#v::activateProgram("VisualStudio")
 	

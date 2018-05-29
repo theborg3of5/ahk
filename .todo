@@ -6,11 +6,6 @@
 			programs
 				runProgram x5
 				activateProgram x16
-			places
-				openFolder x4
-				doSelectFolder
-				Run sites x7
-				cleaned up path x2
 			launch
 				Epic-only select* x8
 				General select* x2

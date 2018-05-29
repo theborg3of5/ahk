@@ -8,8 +8,6 @@
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	
 'New'
-	Turn TLG outlook format into a private entry with <tags>?
-		<TLP>/<CUSTOMER>///<DLG>, <MSG>
 	New hotkey for generating link + adding it to selected text?
 		Matching 'k' hotkeys to the 'l' linking ones, so both edit and web
 		Same restrictions as auto-linking stuff

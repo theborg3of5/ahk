@@ -75,7 +75,12 @@ genericLink(subAction) {
 			if(!data)
 				return
 			
-			textToSend := data["TLP"] "/" data["CUST"] "///" data["DLG"] ", " data["MSG"]
+			textToSend := MainConfig.getPrivate("OUTLOOK_TLG_BASE")
+			textToSend := replaceTag(textToSend, "TLP",      data["TLP"])
+			textToSend := replaceTag(textToSend, "CUSTOMER", data["CUSTOMER"])
+			textToSend := replaceTag(textToSend, "DLG",      data["DLG"])
+			textToSend := replaceTag(textToSend, "MESSAGE",  data["MESSAGE"])
+			
 			SendRaw, % textToSend
 			Send, {Enter}
 		}

@@ -127,15 +127,6 @@
 		}
 #If
 
-; Resize window
-#+r::
-	selectResize() {
-		s := new Selector("resize.tl")
-		data := s.selectGui()
-		if(data)
-			WinMove, A, , , , data["WIDTH"], data["HEIGHT"]
-	}
-
 ; Folders
 !+a::openFolder("AHK_ROOT")
 !+m::openFolder("MUSIC")
@@ -231,26 +222,6 @@ genericLink(subAction) {
 		folderPath := selectFolder()
 		if(FileExist(folderPath))
 			Run(folderPath)
-	}
-
-; Turn selected text or clipboard into standard string for OneNote use.
-!+n::
-	sendStandardEMC2ObjectString() {
-		line := getFirstLineOfSelectedText()
-		if(!line) ; Fall back to clipboard if nothing selected
-			line := clipboard
-		
-		infoAry := extractEMC2ObjectInfo(line)
-		ini   := infoAry["INI"]
-		id    := infoAry["ID"]
-		title := infoAry["TITLE"]
-		
-		standardString := buildStandardEMC2ObjectString(ini, id, title)
-		sendTextWithClipboard(standardString)
-		
-		; Special case for OneNote: link the INI/ID as well.
-		if(WinActive(getWindowTitleString("OneNote")))
-			oneNoteLinkEMC2ObjectInLine(ini, id)
 	}
 
 ; Send cleaned-up path:

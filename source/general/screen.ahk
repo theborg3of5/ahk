@@ -16,6 +16,15 @@ return
 ; Fake-maximize the window and center it.
 #+m::fakeMaximizeWindow()
 
+; Resize window
+#+r::
+	selectResize() {
+		s := new Selector("resize.tl")
+		data := s.selectGui()
+		if(data)
+			WinMove, A, , , , data["WIDTH"], data["HEIGHT"]
+	}
+
 ; ; Enable any window mouse is currently over.
 ; #c::
 	; MouseGetPos(, , WinHndl, CtlHndl, 2)

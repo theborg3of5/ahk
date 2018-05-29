@@ -3,10 +3,6 @@
 		Probably tweak the loop or pull out a subfunction, too.
 	Go back and clean up launch.ahk a bunch with all of the additional logic dumped there from the selector rework
 		Possibly split into more scripts?
-			screen
-				selectResize
-			input
-				EMC2 object string
 			programs
 				runProgram x5
 				activateProgram x16
@@ -20,7 +16,6 @@
 				General select* x2
 					selectSearch
 					selectConfig
-						Arguably places as well?
 				genericOpen/genericLink x4
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
 		Build in selector for times

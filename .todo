@@ -1,17 +1,6 @@
 'Fixes'
 	Take another look at genericSearch(), make sure we really need to do the forceArray() stuff
 		Probably tweak the loop or pull out a subfunction, too.
-	Go back and clean up launch.ahk a bunch with all of the additional logic dumped there from the selector rework
-		Possibly split into more scripts?
-			programs
-				runProgram x5
-				activateProgram x16
-			launch
-				Epic-only select* x8
-				General select* x2
-					selectSearch
-					selectConfig
-				genericOpen/genericLink x4
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
@@ -19,6 +8,8 @@
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	
 'New'
+	Turn TLG outlook format into a private entry with <tags>?
+		<TLP>/<CUSTOMER>///<DLG>, <MSG>
 	New hotkey for generating link + adding it to selected text?
 		Matching 'k' hotkeys to the 'l' linking ones, so both edit and web
 		Same restrictions as auto-linking stuff

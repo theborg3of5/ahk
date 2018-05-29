@@ -27,6 +27,7 @@ runStandaloneScripts()
 #Include kdeMoverSizer.ahk
 #Include launch.ahk
 #Include places.ahk
+#Include programs.ahk
 #Include screen.ahk
 #Include volume.ahk
 

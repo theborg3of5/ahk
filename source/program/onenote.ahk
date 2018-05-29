@@ -240,4 +240,17 @@
 		
 		Send, {Space}{Backspace}
 	}
+	
+	;---------
+	; DESCRIPTION:    Select the current line and link the given EMC2 object (described by INI/ID).
+	; PARAMETERS:
+	;  ini (I,REQ) - INI of the object to link
+	;  id  (I,REQ) - ID of the object to link
+	;---------
+	oneNoteLinkEMC2ObjectInLine(ini, id) {
+		Send, {Home}{Shift Down}{End}{Shift Up} ; Select whole line, but avoid the extra indentation and newline that comes with ^a.
+		selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
+		linkSelectedText(buildEMC2Link(ini, id))
+		Send, {End}
+	}
 #IfWinActive

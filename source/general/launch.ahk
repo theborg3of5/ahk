@@ -235,7 +235,7 @@ genericLink(subAction) {
 
 ; Turn selected text or clipboard into standard string for OneNote use.
 !+n::
-	sendAndLinkStandardOneNoteString() {
+	sendStandardEMC2ObjectString() {
 		line := getFirstLineOfSelectedText()
 		if(!line) ; Fall back to clipboard if nothing selected
 			line := clipboard
@@ -248,42 +248,29 @@ genericLink(subAction) {
 		standardString := buildStandardEMC2ObjectString(ini, id, title)
 		sendTextWithClipboard(standardString)
 		
-		; Try to link the ini/id as well where applicable.
-		if(WinActive(getWindowTitleString("OneNote"))) {
-			standardStringLen := strLen(standardString)
-			Send, {Left %standardStringLen%} ; Get to start of line
-			
-			iniIdLen := strLen(ini) + 1 + strLen(id)
-			Send, {Shift Down}{Right %iniIdLen%}{Shift Up} ; Select INI/ID
-			
-			linkSelectedText(buildEMC2Link(ini, id))
-		}
+		; Special case for OneNote: link the INI/ID as well.
+		if(WinActive(getWindowTitleString("OneNote")))
+			oneNoteLinkEMC2ObjectInLine(ini, id)
 	}
 
 ; Send cleaned-up path:
 ; - Turn network paths into their drive-mapped equivalents
 ; - Remove file:///, quotes, and other garbage from around the path.
-!+p::
-	sendCleanedUpPath() {
-		path := getFirstLineOfSelectedText()
-		if(!path) ; Fall back to clipboard if nothing selected
-			path := clipboard
-		
-		path := cleanupPath(path)
-		path := mapPath(path)
-		sendTextWithClipboard(path)
-	}
-!+#p::sendCleanedUpPathFolder()
-	sendCleanedUpPathFolder() {
-		path := getFirstLineOfSelectedText()
-		if(!path) ; Fall back to clipboard if nothing selected
-			path := clipboard
-		
-		path := cleanupPath(path)
-		path := mapPath(path)
-		folder := reduceFilepath(path, 1) "\" ; Add trailing slash
-		sendTextWithClipboard(folder)
-	}
+!+p::sendCleanedUpPath()
+!+#p::sendCleanedUpPath(true)
+sendCleanedUpPath(containingFolderOnly := false) {
+	path := getFirstLineOfSelectedText()
+	if(!path) ; Fall back to clipboard if nothing selected
+		path := clipboard
+	
+	path := cleanupPath(path)
+	path := mapPath(path)
+	
+	if(containingFolderOnly)
+		path := reduceFilepath(path, 1) "\" ; Remove last element at end, add trailing slash
+	
+	sendTextWithClipboard(path)
+}
 
 ; Selector to allow easy editing of config TL files that don't show a popup
 !+c::

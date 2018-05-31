@@ -105,11 +105,14 @@
 
 insertSmartText(smartTextName, focusFirstField = true) {
 	Send, ^{F10}
-	WinWait, SmartText Selection
+	WinWaitActive, SmartText Lookup
+	Sleep, 500
 	SendRaw, %smartTextName%
-	Send, {Enter 2}
+	Send, {Enter}
+	Sleep, 500
+	Send, {Enter}
 	
-	WinWaitClose, SmartText Selection
+	WinWaitClose, SmartText Lookup
 	Sleep, 500 ; EMC2 takes a while to get back to ready.
 	if(focusFirstField)
 		Send, {F2}

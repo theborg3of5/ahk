@@ -8,7 +8,7 @@
 		; (SUBTYPE = <URL with %s for query>)
 		Google							g				https://www.google.com/search?q=%s
 		Youtube							yt				https://www.youtube.com/results?search_query=%s
-		AutoHotkey Docs				ahkd			https://cse.google.com/cse?cx=010629462602499112316:ywoq_rufgic&q=menu#gsc.tab=0&gsc.q=%s&gsc.sort=&gsc.page=1&gsc.ref=more%3Adocumentation
+		AutoHotkey Docs				ahkd			https://cse.google.com/cse?cx=010629462602499112316:ywoq_rufgic&q=%s
 		Translate Dutch > English	tde|detrans	https://translate.google.com/#nl/en/%s
 		Translate English > Dutch	ted|edtrans	https://translate.google.com/#en/nl/%s
 []

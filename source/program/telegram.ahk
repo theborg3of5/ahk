@@ -1,6 +1,8 @@
 #If getWindowSetting("NAME") = "Telegram"
 	Up::return
-	`::Esc
+	`::
+		Send, {Esc}
+	return
 	
 	; Focus normal chat.
 	^t::

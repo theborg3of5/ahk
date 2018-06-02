@@ -8,6 +8,7 @@
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	
 'New'
+	Add hotstrings for OneNote at home, for usual saturday/sunday things?
 	Add opening DLG in EpicStudio as an ActionObject action.
 	Make releasing all modifier keys a function
 		Use it in places that always seem to get stuck (Hyperspace login)

@@ -9,6 +9,14 @@
 	
 'New'
 	Add hotstrings for OneNote at home, for usual saturday/sunday things?
+	Add some way to move windows where I want them
+		Hotkey-triggered, for all windows in list?
+		Maybe lean on monitor fixer script from before?
+		Spotify
+			Switch to other monitor, then correct one
+			At home: move to correct height (not cut off)
+		Work
+			KDiff window - maximize on center screen
 	Add opening DLG in EpicStudio as an ActionObject action.
 	Make releasing all modifier keys a function
 		Use it in places that always seem to get stuck (Hyperspace login)

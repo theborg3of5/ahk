@@ -12,11 +12,14 @@
 	Add some way to move windows where I want them
 		Hotkey-triggered, for all windows in list?
 		Maybe lean on monitor fixer script from before?
+		Make sure monitor exists before putting a window there
 		Spotify
 			Switch to other monitor, then correct one
 			At home: move to correct height (not cut off)
 		Work
 			KDiff window - maximize on center screen
+		Telegram - left monitor, top or bottom depending on machine
+		Pidgin window - top-right of left monitor
 	Add opening DLG in EpicStudio as an ActionObject action.
 	Make releasing all modifier keys a function
 		Use it in places that always seem to get stuck (Hyperspace login)

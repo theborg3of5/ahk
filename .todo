@@ -1,4 +1,4 @@
-'Fixes'
+# Fixes
 	Take another look at genericSearch(), make sure we really need to do the forceArray() stuff
 		Probably tweak the loop or pull out a subfunction, too.
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
@@ -7,7 +7,7 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	
-'New'
+# New
 	Add hotstrings for OneNote at home, for usual saturday/sunday things?
 	Add some way to move windows where I want them
 		Hotkey-triggered, for all windows in list?
@@ -64,8 +64,6 @@
 		Ideas:
 			Third-party, syncing todo app
 			Put it in the private repo (hosted on home server)?
-		Possibly also make syntax highlighting nicer: http://www.gottabegarabi.com/blog/todo-a-simple-todo-list-color-scheme-for-notepad/
-			Would want to figure out how to add collapsing/expanding based on indentation (like Python, which is current thing I use).
 	Make a smaller subset of scripts that can run in VDIs?
 		AHK is already installed (and latest version at that!)
 		Actually, let's just do the full set - nothing will escape, and AHK doesn't seem to interfere in these cases.
@@ -86,7 +84,7 @@
 	Consider moving activateProgram/runProgram and related functions into MainConfig?
 		Behavior is based entirely on data from MainConfig.
 	
-'Documentation'
+# Documentation
 	common
 		data
 		dateTime

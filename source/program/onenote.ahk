@@ -90,9 +90,6 @@
 		^7::^6
 	}
 	
-	; Disable ^t hotkey making a new section
-	; ^t::return ; Used for collapsing/expanding above
-	
 	^s::
 		escapeOneNotePastePopup()
 		Send, +{F9} ; Sync This Notebook Now
@@ -208,6 +205,32 @@
 			linkSelectedText(editURL)
 		}
 	
+	:*:.todosat::
+		sendUsualToDoSat() {
+			lines := []
+			lines.push({TEXT:"Pull to-dos from specific sections below"})
+			lines.push({TEXT:"Dishes from week"})
+			lines.push({TEXT:"Laundry"})
+			lines.push({NUM_TABS:1, TEXT:"Wash"})
+			lines.push({NUM_TABS:1, TEXT:"Dry"})
+			sendOneNoteLines(lines)
+		}
+	
+	:*:.todosun::
+		sendUsualToDoSun() {
+			lines := []
+			lines.push({TEXT:"Pull to-dos from specific sections below"})
+			lines.push({TEXT:"Type Ninpo notes"})
+			lines.push({TEXT:"Fold laundry"})
+			lines.push({TEXT:"Roomba"})
+			lines.push({TEXT:"Dishes from weekend"})
+			lines.push({TEXT:"Trash, recycling out"})
+			lines.push({TEXT:"Meal planning"})
+			lines.push({TEXT:"Obtain groceries"})
+			sendOneNoteLines(lines)
+		}
+	
+	
 	; Named functions for which commands are which in the quick access toolbar.
 	oneNoteNewSubpage() {
 		Send, !1
@@ -252,5 +275,56 @@
 		selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
 		linkSelectedText(buildEMC2Link(ini, id))
 		Send, {End}
+	}
+	
+	;---------
+	; DESCRIPTION:    Send the lines contained in a specially-formatted array.
+	; PARAMETERS:
+	;  linesAry (I,REQ) - Array of lines to send, in a format which also tells us indentation:
+	;                     	linesAry[lineNum, "TEXT"]     := Text to send
+	;                     	                , "NUM_TABS"] := Relative indentation level (from the
+	;                     	                                 starting indentation level).
+	; NOTES:          Assumes that you're already on a line with the todo tag (checkbox) in place,
+	;                 which will carry over to all lines we add.
+	;---------
+	sendOneNoteLines(linesAry) {
+		currNumTabs := 0 ; Indentation level, relative to start
+		For i,line in linesAry {
+			if(i > 1)
+				Send, {Enter}
+			
+			setOneNoteAlignment(forceNumber(line["NUM_TABS"]), currNumTabs)
+			
+			sendTextWithClipboard(line["TEXT"])
+		}
+	}
+
+	;---------
+	; DESCRIPTION:    Set the alignment on the current line in OneNote using Tab/Shift+Tab
+	;                 keystrokes, using and updating an indicator of the current indentation
+	;                 level.
+	; PARAMETERS:
+	;  numTabs      (I,REQ) - The number of tabs (relative to the baseline described by currNumTabs)
+	;                         to set the indentation level to.
+	;  currNumTabs (IO,REQ) - The current indentation level (in tabs), relative to the starting
+	;                         indentation level (the level at which this would be zero).
+	;---------
+	setOneNoteAlignment(numTabs, ByRef currNumTabs) {
+		if(currNumTabs = "")
+			currNumTabs := 0
+		
+		; Currently not intended enough
+		if(currNumTabs < numTabs) {
+			neededTabs := numTabs - currNumTabs
+			Send, {Tab %neededTabs%}
+		
+		; Currently too indented
+		} else if(currNumTabs > numTabs) {
+			extraTabs := currNumTabs - numTabs
+			Send, +{Tab %extraTabs%}
+		}
+		
+		; Update current state
+		currNumTabs := numTabs
 	}
 #IfWinActive

@@ -47,6 +47,7 @@
 		Create a new toast class for myself
 		Can base on/be inspired by pukkandan's toast class (https://github.com/pukkandan/My-Startup-Script/blob/master/Lib/Toast.ahk )
 			But much simpler.
+		Also look at Timer for inspiration.
 		Use for long-running processes, like firstSetup's file copying stuff.
 		Use toast (or tooltip if that doesn't work out) to show when something was copied to clipboard by a hotkey
 			OneNote page link, Chrome title copy, various Test copies (instead of popup)
@@ -64,9 +65,8 @@
 		Ideas:
 			Third-party, syncing todo app
 			Put it in the private repo (hosted on home server)?
-	Make a smaller subset of scripts that can run in VDIs?
+	Set up AHK to run in VDIs
 		AHK is already installed (and latest version at that!)
-		Actually, let's just do the full set - nothing will escape, and AHK doesn't seem to interfere in these cases.
 		Will want to use separate "admin" startup script (that runs as admin)
 	Audit all scripts for unused hotkeys
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?

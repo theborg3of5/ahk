@@ -12,6 +12,11 @@
 		isInArray
 	
 # New
+	Make releasing all modifier keys a function
+		Use it in places that always seem to get stuck (Hyperspace login)
+	New hotkey for generating link + adding it to selected text?
+		Matching 'k' hotkeys to the 'l' linking ones, so both edit and web
+		Same restrictions as auto-linking stuff
 	Add some way to move windows where I want them
 		Hotkey-triggered, for all windows in list?
 		Maybe lean on monitor fixer script from before?
@@ -23,12 +28,6 @@
 			KDiff window - maximize on center screen
 		Telegram - left monitor, top or bottom depending on machine
 		Pidgin window - top-right of left monitor
-	Add opening DLG in EpicStudio as an ActionObject action.
-	Make releasing all modifier keys a function
-		Use it in places that always seem to get stuck (Hyperspace login)
-	New hotkey for generating link + adding it to selected text?
-		Matching 'k' hotkeys to the 'l' linking ones, so both edit and web
-		Same restrictions as auto-linking stuff
 	AHK documentation - add hotkey (ctrl+enter or shift+enter, probably) that adds a newline + comment and however many spaces are needed
 		Could copy existing line, look for first instance of more than once space
 			Indentation should be tabs, only one space before labels

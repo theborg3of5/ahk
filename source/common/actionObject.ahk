@@ -54,9 +54,11 @@ global TYPE_Path              := "PATH"
 global ACTION_Link := "LINK"
 global ACTION_Run  := "RUN"
 
-; Additional subtypes (EMC2 INIs) defined in actionObject.tl.
 global SUBTYPE_FilePath := "FILEPATH"
 global SUBTYPE_URL      := "URL"
+global SUBTYPE_Routine  := "ROUTINE"
+global SUBTYPE_DLG      := "DLG"
+; Additional subtypes (EMC2 INIs) can be defined in actionObject.tl.
 
 global SUBACTION_Edit := "EDIT"
 global SUBACTION_View := "VIEW"
@@ -280,8 +282,12 @@ class ActionObject {
 				}
 				
 			} else if(type = TYPE_EpicStudio) {
-				splitServerLocation(input, routine, tag)
-				openEpicStudioRoutine(routine, tag)
+				if(subType = SUBTYPE_Routine) {
+					splitServerLocation(input, routine, tag)
+					openEpicStudioRoutine(routine, tag)
+				} else if(subType = SUBTYPE_DLG) {
+					openEpicStudioDLG(input)
+				}
 			}
 			
 		} else if(action = ACTION_Link) {

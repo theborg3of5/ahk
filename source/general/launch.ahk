@@ -18,6 +18,15 @@ genericLink(subAction) {
 		clipboard := link
 }
 
+; Generic hyperlinker - get link for selection and apply it to the selected text.
+^!#k:: genericHyperlink(SUBACTION_Web)
+^!#+k::genericHyperlink(SUBACTION_Edit)
+genericHyperlink(subAction) {
+	text := getFirstLineOfSelectedText()
+	link := ActionObject.do(text, , ACTION_Link, , subAction)
+	linkSelectedText(link)
+}
+
 ; Generic search.
 !+f::
 	selectSearch() {

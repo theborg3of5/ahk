@@ -12,9 +12,6 @@
 		isInArray
 	
 # New
-	New hotkey for generating link + adding it to selected text?
-		Matching 'k' hotkeys to the 'l' linking ones, so both edit and web
-		Same restrictions as auto-linking stuff
 	Add some way to move windows where I want them
 		Hotkey-triggered, for all windows in list?
 		Maybe lean on monitor fixer script from before?

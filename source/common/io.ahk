@@ -118,6 +118,9 @@ getTooltipText() {
 	return outText
 }
 
+releaseAllModifierKeys() {
+	Send, {LWin Up}{RWin Up}{LCtrl Up}{RCtrl Up}{LAlt Up}{RAlt Up}{LShift Up}{RShift Up}
+}
 
 sendUsingLevel(hotkeyString, level) {
 	startSendLevel := A_SendLevel

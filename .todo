@@ -12,8 +12,6 @@
 		isInArray
 	
 # New
-	Make releasing all modifier keys a function
-		Use it in places that always seem to get stuck (Hyperspace login)
 	New hotkey for generating link + adding it to selected text?
 		Matching 'k' hotkeys to the 'l' linking ones, so both edit and web
 		Same restrictions as auto-linking stuff

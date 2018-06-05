@@ -10,6 +10,7 @@
 	hyperspaceLogin(username, password, useLastDepartment := true) {
 		Send, %username%{Tab}
 		Send, %password%{Enter}
+		releaseAllModifierKeys()
 		if(useLastDepartment)
 			Send, ={Enter}
 	}

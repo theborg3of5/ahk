@@ -13,6 +13,7 @@
 		releaseAllModifierKeys()
 		if(useLastDepartment)
 			Send, ={Enter}
+		Send, {Space}
 	}
 	
 	{ ; HTML things.
@@ -32,7 +33,7 @@
 getHyperspaceHTML() {
 	; Save off the clipboard to restore and wipe it for our own use.
 	ClipSaved := ClipboardAll
-	Clipboard := 
+	Clipboard := ""
 	
 	; Grab the HTML with HTMLGrabber hotkey.
 	SendPlay, , ^+!c
@@ -44,16 +45,4 @@ getHyperspaceHTML() {
 	ClipSaved = ; Free memory
 	
 	return textFound
-}
-
-hyperspaceNotLoadedYet() {
-	if(WinActive("Hyperspace - Test") ; Hyperspace 2012, FNDEX.
-		|| WinActive("Hyperspace - Training") ; PTC Hyperspace Project Dev.
-		|| WinActive("Hyperspace - Foundations Lab QA") ; PTC Hyperspace Project QA.
-		|| WinActive("Development Training Lab - TRNTRACK") ; EMC2 SteamTrainTrack.
-	|| 0) {
-		return true
-	}
-	
-	return false
 }

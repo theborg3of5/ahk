@@ -1,20 +1,20 @@
 (	NAME							EXE					CLASS						TITLE						TEXT					ESC		MIN		SELECT_ALL	DELETE_WORD		CLOSE		WINDOW_EDGE_OFFSET_OVERRIDE
 
-	Skype Buddy List			Skype.exe			-							-							-						CLOSE
-	KDiff							kdiff3.exe			-							-							-						CLOSE
-	Notepad						notepad.exe			-							-							-						CLOSE		-			-				CTRL_SHIFT
-	WinSpy						AU3_Spy.exe			-							-							-						CLOSE
-	Thunder						Thunder.exe			-							-							-						CLOSE
-	Pidgin Buddy List			pidgin.exe			-							Buddy List				-						CLOSE		CLOSE
 	Cisco AnyConnect VPN		vpnui.exe			#32770					-							-						CLOSE
 	Explorer						explorer.exe		CabinetWClass			-							-						MIN		OTHER
-	Mattermost					Mattermost.exe		-							-							-						CLOSE		CLOSE
-	Telegram						Telegram.exe		Qt5QWindowIcon			-							-						CLOSE		CLOSE		-				-					-			0
-	Spotify						Spotify.exe			-							-							-						CLOSE		CLOSE		-				-					OTHER		0
-	RepublicAnywhere			Republic Anywhere.exe	-					-							-						CLOSE		CLOSE
-	grepWin						grepWin.exe			-							-							-						CLOSE
 	GitHub						GitHubDesktop.exe	-							-							-						CLOSE		-			-				-					-			0
+	grepWin						grepWin.exe			-							-							-						CLOSE
+	KDiff							kdiff3.exe			-							-							-						CLOSE
+	Mattermost					Mattermost.exe		-							-							-						CLOSE		CLOSE
+	Notepad						notepad.exe			-							-							-						CLOSE		-			-				CTRL_SHIFT
+	Pidgin Buddy List			pidgin.exe			-							Buddy List				-						CLOSE		CLOSE
 	RemoteDesktop				-						TscShellContainerClass
+	RepublicAnywhere			Republic Anywhere.exe	-					-							-						CLOSE		CLOSE
+	Skype Buddy List			Skype.exe			-							-							-						CLOSE
+	Spotify						Spotify.exe			-							-							-						CLOSE		CLOSE		-				-					OTHER		0
+	Telegram						Telegram.exe		Qt5QWindowIcon			-							-						CLOSE		CLOSE		-				-					-			0
+	Thunder						Thunder.exe			-							-							-						CLOSE
+	WinSpy						AU3_Spy.exe			-							-							-						CLOSE
 	
 	; VB6
 	VB6							VB6.exe				wndclass_desked_gsk	-							-						-			POST_MESSAGE
@@ -23,10 +23,10 @@
 	; EMC2 popups
 [{EXE}r:EpicD82.exe|{CLASS}r:ThunderRT6FormDC]
 [{ESC}r:CLOSE|{DELETE_WORD}r:CTRL_SHIFT]
-	EMC2 QAN email notify	-						-							EMC2 - QA Note E-Mail Notification
-	EMC2 QAN email				-						-							Send E-Mail				-						-			-			HOME_END
 	EMC2 DLG email				-						-							E-mail Development Log
 	EMC2 Issue email			-						-							Email Issue
+	EMC2 QAN email notify	-						-							EMC2 - QA Note E-Mail Notification
+	EMC2 QAN email				-						-							Send E-Mail				-						-			-			HOME_END
 []
 	
 	; EMC2 activities/workspaces
@@ -41,18 +41,18 @@
 	
 	; Web popups - close on Escape.
 [{ESC}r:CLOSE|{EXE}r:chrome.exe]
-	TickTick						-						-							All - TickTick
 	Join							-						-							Join
+	TickTick						-						-							All - TickTick
 []
 	
 	; Windows that have odd borders and need different offsets - mainly Office programs.
 [{WINDOW_EDGE_OFFSET_OVERRIDE}r:0]
-	Outlook						OUTLOOK.EXE
-	Word							WINWORD.EXE
-	Excel							EXCEL.EXE
-	PowerPoint					POWERPNT.EXE
-	OneNote						ONENOTE.EXE
 	Chrome						chrome.exe
+	Excel							EXCEL.EXE
+	OneNote						ONENOTE.EXE
+	Outlook						OUTLOOK.EXE
+	PowerPoint					POWERPNT.EXE
 	Steam							Steam.exe
 	WebEx							atmgr.exe
+	Word							WINWORD.EXE
 []

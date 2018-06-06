@@ -5,7 +5,8 @@
 	#SingleInstance force
 	#Include <includeCommon>
 	setCommonHotkeysType(HOTKEY_TYPE_Standalone)
-	setUpTrayIcons("testGreen.ico", "testRed.ico")
+	setUpTrayIcons("testGreen.ico", "testRed.ico
+	DetectHiddenWindows, On
 }
 
 ; --------------------------------------------------------------------------
@@ -37,7 +38,8 @@ return
 			tooltipText := getTooltipText()
 			WinGetTitle, currTitle, A
 			currControl := ControlGetFocus("A")
-			; DEBUG.popup("Class", currClass, "Title", currTitle, "Control", currControl, "Tooltip text", tooltipText)
+			winId := WinGet("ID")
+			; DEBUG.popup("Class", currClass, "Title", currTitle, "Control", currControl, "Tooltip text", tooltipText, "ID",winId)
 			
 			s := new Selector("testWindowInfo.tl")
 			key := s.selectGui("KEY")
@@ -50,6 +52,8 @@ return
 				textToCopy := currTitle
 			else if(key = "CONTROL")
 				textToCopy := currControl
+			else if(key = "ID")
+				textToCopy := winId
 			
 			if(textToCopy) {
 				clipboard := textToCopy

@@ -20,6 +20,7 @@
 #Include selector.ahk
 #Include string.ahk
 #Include tableList.ahk
+#Include toast.ahk
 #Include VA.ahk
 #Include window.ahk
 #Include XInput.ahk

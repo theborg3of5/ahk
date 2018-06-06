@@ -16,22 +16,24 @@ class Toast {
 	; == Public ====================
 	; ==============================
 	
-	__New(text) {
-		; GDB TODO store off parameters in class variables
-		
-		this.buildGui()
+	__New(toastText) {
+		this.buildGui(toastText)
 	}
 	
-	show() {
-		Gui, Show, W%guiWidth% H75 X%showX% Y%showY%
+	show(x := -1, y := -1) {
+		; Default values (-1) for x and y - bottom-right of monitor
+		if(x = -1)
+			showX := A_ScreenWidth  - this.width
+		if(y = -1)
+			showY := A_ScreenHeight - this.height
 		
-		GUI, %GUI_handle%: Show, % (this.activate?"":"NoActivate ") "autosize x" this.x " y" this.y, % "Toast" this.id
-		
+		Gui, % this.guiId ":Default"
+		Gui, Show, % "NoActivate" " x" showX " y" showY
 	}
 	
 	hide() { ; GDB TODO call out that this also destroys
-		
-      GUI, %GUI_handle%: Destroy
+		Gui, % this.guiId ":Default"
+      Gui, Destroy
 	}
 	
 	
@@ -39,37 +41,45 @@ class Toast {
 	; == Private ===================
 	; ==============================
 	
-	; GDB TODO: font, font size, font color, background color, gui handle/ID, transparency, text, margin?
+	guiId := ""
 	
-	buildGui() {
+	backgroundColor := ""
+	fontColor := ""
+	fontSize := ""
+	fontName := ""
+	marginX := ""
+	marginY := ""
+	opacity := ""
+	width := ""
+	height := ""
+	
+	buildGui(toastText) {
 		; Create Gui
-		Gui, +Toolwindow -Resize -SysMenu -Border -Caption +AlwaysOnTop +LastFound
-		Gui, %GUI_handle%: New, -Caption +ToolWindow +AlwaysOnTop +hwndHWND
-		GUI, %GUI_handle%:+LastFoundExist
-		; GDB TODO save off ID?
-		guiID := WinGet("ID")
-		GUI_handle:="Toast_GUI" this.id
+		Gui, New, +AlwaysOnTop -Caption +Toolwindow -Resize -SysMenu -Border +LastFound +HWNDguiWindowHandle
+		this.guiId := guiWindowHandle
 		
-		; Color
-		Gui, Color, %backgroundColor%
-		Gui, %GUI_handle%: Color, % this.bgColor
+		this.backgroundColor := "000000" ; GDB TODO put these "defaults" somewhere else?
+		this.fontColor := "00FF00"
+		this.fontSize := 40
+		this.fontName := "Consolas"
+		this.marginX := 10
+		this.marginY := 10
+		this.opacity := 230
 		
-		; Margin?
-		Gui, %GUI_handle%:Margin, % this.marginX, % this.marginY
-		
-		; Font
-		Gui, %GUI_handle%: Font, norm s%s% c%c% %o%, %f%
-		Gui, Font, c%timeColor% s40, Consolas
-		
-		; Transparency
-		WinSet, Transparent, %transHidden%
-		WinSet, Transparent, %transShown%, ahk_id %guiID%
-		WinSet, Trans, % this.trans
+		; Set formatting options
+		Gui, Color, % this.backgroundColor
+		Gui, Font, % "c" this.fontColor " s" this.fontSize, % this.fontName
+		Gui, Margin, % this.marginX, % this.marginY
+		WinSet, Transparent, % this.opacity
 		
 		; Add text
-		Gui, Add, Text, x%guiMargin% y10 w%tmpWidth% h50 vTimerText, 00:00:00
-		Gui, %GUI_handle%: Add, Text,, %t%
+		Gui, Add, Text, , % toastText
 		
+		; Resize and store off dimensions
+		Gui, Show, AutoSize Hide
+		WinGetPos, , , w, h
+		this.width := w
+		this.height := h
 	}
 	
 }

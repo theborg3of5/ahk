@@ -12,6 +12,7 @@
 		isInArray
 	
 # New
+	Allow programs.tl and windows.tl to use tags for user path, etc.?
 	Add some way to move windows where I want them
 		Hotkey-triggered, for all windows in list?
 		Maybe lean on monitor fixer script from before?

@@ -57,7 +57,6 @@
 		Use for long-running processes, like firstSetup's file copying stuff.
 		Use toast (or tooltip if that doesn't work out) to show when something was copied to clipboard by a hotkey
 			OneNote page link, Chrome title copy, various Test copies (instead of popup)
-		Consider adding a toast version of debug popup, that's doesn't steal focus and goes away on its own.
 		Use to add visual indicator that we're waiting for x amount of time, and if the user presses the y key, we'll wait some more (update toast message accordingly when we roll around).
 			OneNote now, but maybe more later?
 	Should we have windows > activateProgram wait for window to be active after running?

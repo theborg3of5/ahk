@@ -100,7 +100,9 @@ class SelectorGui {
 		this.fieldVarOverridesPrefix := id SelectorGui.baseFieldVarOverride
 	}
 	
-	; Make sure all of the Gui* commands refer to the right one.
+	;---------
+	; DESCRIPTION:    Make this toast's gui the default for all Gui, * commands.
+	;---------
 	makeGuiTheDefault() {
 		Gui, % this.guiId ":Default"
 	}

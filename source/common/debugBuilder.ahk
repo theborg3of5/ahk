@@ -9,7 +9,7 @@ class DebugBuilder {
 	}
 	
 	addLine(label, value) {
-		newLine := DEBUG.buildDebugString(label, value, this.numTabs)
+		newLine := DEBUG.buildDebugLine(label, value, this.numTabs)
 		this.outString := appendLine(this.outString, newLine)
 	}
 	

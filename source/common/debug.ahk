@@ -7,53 +7,55 @@ class DEBUG {
 	
 	; Popup, but show before MainConfig is initialized.
 	popupEarly(params*) {
-		this.popupCore(params*)
+		MsgBox, % this.buildDebugString(params*)
 	}
 	
-	; Input in any number of pairs of (label, value), in that order. They will be formatted as described in DEBUG.buildDebugString.
+	; Input in any number of pairs of (label, value), in that order. They will be formatted as described in DEBUG.buildDebugLine.
 	popup(params*) {
 		; Only start showing popups once MainConfig is finished loading - popupEarly can be used if you want to show debug messages in these cases.
 		if(!MainConfig.isInitialized())
 			return
 		
-		this.popupCore(params*)
+		MsgBox, % this.buildDebugString(params*)
 	}
 	
-	popupCore(params*) {
-		; Single parameter with an (assumed-to-be) associative array.
-		if(params.length() = 1) {
-			outString := this.buildObjectString(params[1])
-		
-		; Assume we have a list of label,value pairs (2 parameters at a time go together).
-		} else {
-			; Convert params array into array of (label, value) pairs.
-			pairedParams := []
-			i := 1
-			while(i <= params.length()) {
-				; MsgBox, % "Label`n`t" params[i] "`nValue:`n`t" params[i + 1])
-				pairedParams.Push([params[i], params[i + 1]])
-				i += 2
-			}
-			; MsgBox, % pairedParams[1][1] "`n" pairedParams[1][2]
-			outString := this.buildDebugPopup(pairedParams)
-		}
-		
-		MsgBox, % outString
+	toast(params*) {
+		t := new Toast(this.buildDebugString(params*))
+		t.showForTime(5)
 	}
 	
-	; Given any number of pairs of (label, value), build a debug popup.
-	; Parameters:
-	;  params  - Array of (label, value) arrays.
-	;  numTabs - Number of tabs to indent label part of each pair by. Values will be indented by numTabs+1.
-	buildDebugPopup(params, numTabs := 0) {
+	
+	; Given any number of pairs of (label, value), build a full debug string.
+	buildDebugString(params*) {
 		outString := ""
 		
-		For i,p in params {
-			newString := this.buildDebugString(p[1], p[2], numTabs)
+		; Single parameter - treat as an object.
+		if(params.length() = 1)
+			return this.buildObjectString(params[1])
+		
+		; Otherwise, assume we have a list of label,value pairs (2 parameters at a time go together).
+		pairedParams := this.convertParamsToPaired(params)
+		; MsgBox, % pairedParams[1][1] "`n" pairedParams[1][2]
+		
+		For i,p in pairedParams {
+			newString := this.buildDebugLine(p[1], p[2])
 			outString := appendLine(outString, newString)
 		}
 		
 		return outString
+	}
+	
+	; Convert params array into array of (label, value) pairs.
+	convertParamsToPaired(params) {
+		pairedParams := []
+		i := 1
+		while(i <= params.length()) {
+			; MsgBox, % "Label`n`t" params[i] "`nValue:`n`t" params[i + 1])
+			pairedParams.Push([params[i], params[i + 1]])
+			i += 2
+		}
+		
+		return pairedParams
 	}
 	
 	; Puts together a string in the form:
@@ -69,7 +71,7 @@ class DEBUG {
 	;  label       - Label to show the value with
 	;  value       - Value to show. If this is an object, we will call into DEBUG.buildObjectString() for a more complete description.
 	;  numTabs     - Number of tabs of indentation to start at. Sub-values (for array indices or custom debug function) will be indented by numTabs+1.
-	buildDebugString(label, value, numTabs := 0) {
+	buildDebugLine(label, value, numTabs := 0) {
 		outString := ""
 		outString .= getTabs(numTabs, DEBUG.spacesPerTab) label ": " ; Label
 		outString .= this.buildObjectString(value, numTabs)          ; Value

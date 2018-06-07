@@ -20,6 +20,11 @@
 		Send, {Left} ; Get inside parens
 	return
 	
+	::dbto::
+		SendRaw, DEBUG.toast(") ; ending quote for syntax highlighting: "
+		Send, {Left} ; Get inside parens
+	return
+	
 	; Function header
 	::`;`;`;::
 		sendAHKFunctionHeader() {

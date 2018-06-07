@@ -91,7 +91,7 @@ class ActionObject {
 	; RETURNS:        For ACTION_Link, the link. Otherwise, "".
 	;---------
 	do(input, type := "", action := "", subType := "", subAction := "") {
-		; DEBUG.popup("ActionObject.do", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
+		; DEBUG.toast("ActionObject.do", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
 		; Clean up input.
 		input := getFirstLine(input) ; Comes first so that we can clean from end of first line (even if there are multiple).
@@ -134,7 +134,7 @@ class ActionObject {
 	;                       SUBACTION_* constants.
 	;---------
 	process(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
-		; DEBUG.popup("ActionObject.process", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
+		; DEBUG.toast("ActionObject.process", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
 		; Do a little preprocessing to pick out needed info. (All args but input are ByRef)
 		pathType := getPathType(input)

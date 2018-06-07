@@ -54,7 +54,8 @@
 			configs
 			mappedDrives
 	Toast
-		Use for long-running processes, like firstSetup's file copying stuff.
+		Add ability to update text (and auto-resize toast)?
+			Update firstSetup's file copying stuff to use this if we do it.
 		Use toast (or tooltip if that doesn't work out) to show when something was copied to clipboard by a hotkey
 			OneNote page link, Chrome title copy, various Test copies (instead of popup)
 		Use to add visual indicator that we're waiting for x amount of time, and if the user presses the y key, we'll wait some more (update toast message accordingly when we roll around).

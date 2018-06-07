@@ -189,9 +189,6 @@
 			editText := getStringBetweenStr(linkText, "[", "]")
 			; DEBUG.popup("Line",lineText, "Record text",recordText, "Edit text",editText)
 			
-			if(!isEMC2Object(recordText, ini, id))
-				return
-			
 			selectTextWithinSelection(recordText)
 			webURL := buildEMC2Link(ini, id, "WEB")
 			linkSelectedText(webURL)

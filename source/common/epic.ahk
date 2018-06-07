@@ -1,32 +1,6 @@
 ; Epic-specific functions.
 
 { ; Epic Object-related things.
-	; Returns 1 if the given number is an EMC2 ID (pure number, or starting with I, M, Y, T, Q, or CS), 2 if it's definitely a DLG (pretty much only SUs)
-	isEMC2Id(num) {
-		dlgLetters := ["i", "m", "y", "t", "q", "cs"]
-		
-		letterIndex := containsAnyOf(num, dlgLetters, CONTAINS_BEG)
-		if(letterIndex) {
-			rest := removeStringFromStart(num, dlgLetters[letterIndex])
-			if(isNum(rest))
-				return 2
-		}
-		
-		if(isNum(num))
-			return 1
-		
-		return 0
-	}
-
-	; Check if it's a valid EMC2 object string.
-	isEMC2Object(text, ByRef ini := "", ByRef id := "") {
-		splitRecordString(text, ini, id)
-		
-		idLevel := isEMC2Id(id)
-		; DEBUG.popup("Text", text, "Data1", data1, "Data2", data2, "INI", ini, "ID", id, "ID Level", idLevel)
-		
-		return idLevel
-	}
 	
 	getRelatedQANsAry() {
 		if(!isWindowInState("active","DLG  ahk_class ThunderRT6MDIForm ahk_exe EpicD82.exe"))

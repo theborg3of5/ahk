@@ -138,48 +138,29 @@ class ActionObject {
 		
 		; Do a little preprocessing to pick out needed info. (All args but input are ByRef)
 		pathType := getPathType(input)
-		isEMC2ObjectType := isEMC2Object(input, ini, id)
-		; DEBUG.popup("ActionObject.process", "Type preprocessing done", "Input", input, "Path type", pathType, "Is EMC2", isEMC2ObjectType, "INI", ini, "ID", id)
+		; DEBUG.popup("ActionObject.process","Type preprocessing done", "Input",input, "Path type",pathType)
 		
-		; First, if there's no type, try to figure out what it is.
-		if(type = "") {
-			if(pathType)
-				type := TYPE_Path
-			else if(isEMC2ObjectType)
-				type := TYPE_EMC2
-		}
-		; DEBUG.popup("ActionObject.process", "Type", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
-		
-		; Next, determine actions.
-		if(action = "") {
-			if (type = TYPE_Path)
-			|| (type = TYPE_EMC2)
-			{
-				action := ACTION_Run
+		; If it's a path, mark it as such.
+		if(pathType) {
+			type    := TYPE_Path
+			subType := pathType
+			
+		; Try and see if it's something we can split into INI/ID (subType/new input)
+		} else {
+			splitRecordString(input, ini, id)
+			
+			filter := MainConfig.getMachineTableListFilter()
+			s := new Selector("actionObject.tl", filter)
+			
+			data := s.selectChoice(ini)
+			if(data) {
+				type    := data["TYPE"]
+				subType := ini
+				input   := id
 			}
 		}
-		; DEBUG.popup("ActionObject.process", "Action", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
-		; Determine subType as needed.
-		if(subType = "") {
-			if(type = TYPE_EMC2)
-				subType := ini
-			else if(type = TYPE_Path)
-				subType := pathType
-		}
-		; DEBUG.popup("ActionObject.process", "Subtype", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
-		
-		; Determine subAction as needed.
-		if(subAction = "") {
-			if(type = TYPE_EMC2)
-				subAction := SUBACTION_Edit
-		}
-		; DEBUG.popup("ActionObject.process", "Subaction", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
-		
-		; Update input as needed.
-		if(type = TYPE_EMC2)
-			input := id
-		; DEBUG.popup("ActionObject.process", "Input", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
+		DEBUG.toast("ActionObject.process","Finished", "Input",input, "Type",type, "Action",action, "SubType",subType, "SubAction",subAction)
 	}
 	
 	;---------

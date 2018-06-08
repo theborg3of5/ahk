@@ -50,6 +50,7 @@
 			configs
 			mappedDrives
 	Toast
+		Static caller for timer-based toasts?
 		Add ability to update text (and auto-resize toast)?
 			Update firstSetup's file copying stuff to use this if we do it.
 		Use toast (or tooltip if that doesn't work out) to show when something was copied to clipboard by a hotkey

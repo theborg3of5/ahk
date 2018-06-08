@@ -14,8 +14,11 @@ genericOpen(subAction) {
 genericLink(subAction) {
 	text := getFirstLineOfSelectedText()
 	link := ActionObject.do(text, , ACTION_Link, , subAction)
-	if(link)
+	if(link) {
 		clipboard := link
+		t := new Toast("Clipboard set to link: " link)
+		t.showForTime(2)
+	}
 }
 
 ; Generic hyperlinker - get link for selection and apply it to the selected text.

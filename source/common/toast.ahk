@@ -72,13 +72,17 @@ class Toast {
 			showY := A_ScreenHeight - this.height
 		
 		this.makeGuiTheDefault()
-		Gui, Show, % "NoActivate" " x" showX " y" showY
+		Gui, Show, % "Hide x" showX " y" showY
+		
+		fadeGuiIn(this.guiId, this.maxOpacity, , "NoActivate") ; Also actually shows the gui
 	}
 	
 	;---------
 	; DESCRIPTION:    Hide and destroy the GUI for this toast.
 	;---------
 	close() {
+		fadeGuiOut(this.guiId, this.maxOpacity)
+		
 		this.makeGuiTheDefault()
       Gui, Destroy
 	}
@@ -94,7 +98,7 @@ class Toast {
 	fontName        := "Consolas"
 	marginX         := 5
 	marginY         := 0
-	opacity         := 255
+	maxOpacity      := 255
 	
 	guiId  := ""
 	width  := ""
@@ -126,7 +130,6 @@ class Toast {
 		Gui, Color, % this.backgroundColor
 		Gui, Font, % "c" this.fontColor " s" this.fontSize, % this.fontName
 		Gui, Margin, % this.marginX, % this.marginY
-		WinSet, Transparent, % this.opacity
 		
 		; Add text
 		Gui, Add, Text, , % toastText

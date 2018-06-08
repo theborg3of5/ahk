@@ -49,3 +49,22 @@ getDynamicGlobalVar(varName) {
 	local value := %varName%
 	return value
 }
+
+fadeGuiIn(guiId, maxOpacity := 255, numSteps := 10, showProperties := "") {
+	WinSet, Transparent, 0, % titleString ; Start fully transparent
+	Gui, % guiId ":Default"
+	Gui, Show, % showProperties
+	
+	stepSize := maxOpacity / numSteps
+	Loop, %numSteps% {
+		WinSet, Transparent, % (A_Index * stepSize), % "ahk_id " guiId
+		Sleep, 10 ; 10ms between steps - can vary fade speed with number of steps
+	}
+}
+fadeGuiOut(guiId, maxOpacity := 255, numSteps := 10) {
+	stepSize := maxOpacity / numSteps
+	Loop, %numSteps% {
+		WinSet, Transparent, % maxOpacity - (A_Index * stepSize), % "ahk_id " guiId
+		Sleep, 10 ; 10ms between steps - can vary fade speed with number of steps
+	}
+}

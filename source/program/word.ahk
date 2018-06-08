@@ -1,17 +1,5 @@
 ; Word hotkeys.
 #IfWinActive, ahk_class OpusApp
-	; Format as code (using custom styles)
-	; ^+c::
-		; Send, ^+s
-		; WinWaitActive, Apply Styles
-		; Send, Code
-		; Send, {Enter}
-		
-		; Sleep, 250
-		; if(WinExist("Apply Styles ahk_class MsoCommandBar ahk_exe WINWORD.EXE"))
-			; WinClose
-	; return
-	
 	; Save as
 	^+s::Send, {F12}
 	

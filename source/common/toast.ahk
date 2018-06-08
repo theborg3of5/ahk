@@ -24,21 +24,9 @@ class Toast {
 	; ==============================
 	
 	;---------
-	; DESCRIPTION:    Create a new Toast object.
+	; DESCRIPTION:    Static caller to show this toast for a certain number of seconds, then destroy it.
 	; PARAMETERS:
-	;  toastText (I,REQ) - The text to show in the toast.
-	; RETURNS:        A new instance of this class.
-	;---------
-	__New(toastText) {
-		if(!toastText)
-			return
-		
-		this.buildGui(toastText)
-	}
-	
-	;---------
-	; DESCRIPTION:    Show this toast for a certain number of seconds, then destroy it.
-	; PARAMETERS:
+	;  toastText  (I,REQ) - The text to show in the toast.
 	;  numSeconds (I,REQ) - The number of seconds to show the toast for.
 	;  x          (I,OPT) - The x coordinate to show the toast at. Defaults to -1 (against right
 	;                       edge of screen).
@@ -46,14 +34,28 @@ class Toast {
 	;                       edge of screen).
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
-	showForTime(numSeconds, x := -1, y := -1) {
-		if(!numSeconds)
+	showForTime(toastText, numSeconds, x := -1, y := -1) {
+		if(!toastText || !numSeconds)
 			return
 		
-		this.show(x, y)
+		guiId := Toast.buildGui(toastText)
+		Toast.show(x, y, guiId)
 		
-		closeFunc := ObjBindMethod(this, "close") ; Create a BoundFunc object to call from the timer (that will still allow us to use 'this' keyword)
+		closeFunc := ObjBindMethod(Toast, "close", guiId) ; Create a BoundFunc object of the Toast.close function (with guiId passed to it) for when the timer finishes.
 		SetTimer, % closeFunc, % -numSeconds * 1000
+	}
+	
+	;---------
+	; DESCRIPTION:    Create a new Toast object.
+	; PARAMETERS:
+	;  toastText (I,REQ) - The text that will be shown in the toast.
+	; RETURNS:        A new instance of this class.
+	;---------
+	__New(toastText) {
+		if(!toastText)
+			return
+		
+		this.guiId := Toast.buildGui(toastText)
 	}
 	
 	;---------
@@ -63,27 +65,37 @@ class Toast {
 	;              screen).
 	;  y (I,OPT) - The y coordinate to show the toast at. Defaults to -1 (against bottom edge of
 	;              screen).
+	; GDB TODO add guiId parameter here and elsewhere
 	;---------
-	show(x := -1, y := -1) {
+	show(x := -1, y := -1, guiId := "") {
+		if(!guiId)
+			guiId := this.guiId
+		Gui, % guiId ":Default"
+		
+		; Resize to size of contents
+		Gui, Show, AutoSize Hide
+		WinGetPos, , , width, height
+		
 		; Default values (-1) for x and y - bottom-right of monitor
 		if(x = -1)
-			showX := A_ScreenWidth  - this.width
+			showX := A_ScreenWidth  - width
 		if(y = -1)
-			showY := A_ScreenHeight - this.height
+			showY := A_ScreenHeight - height
 		
-		this.makeGuiTheDefault()
 		Gui, Show, % "Hide x" showX " y" showY
 		
-		fadeGuiIn(this.guiId, this.maxOpacity, , "NoActivate") ; Also actually shows the gui
+		fadeGuiIn(guiId, "NoActivate", Toast.maxOpacity) ; Also actually shows the gui
 	}
 	
 	;---------
 	; DESCRIPTION:    Hide and destroy the GUI for this toast.
 	;---------
-	close() {
-		fadeGuiOut(this.guiId, this.maxOpacity)
+	close(guiId := "") {
+		if(!guiId)
+			guiId := this.guiId
+		Gui, % guiId ":Default"
 		
-		this.makeGuiTheDefault()
+		fadeGuiOut(guiId)
       Gui, Destroy
 	}
 	
@@ -92,52 +104,40 @@ class Toast {
 	; == Private ===================
 	; ==============================
 	
-	backgroundColor := "2A211C"
-	fontColor       := "BDAE9D"
-	fontSize        := 20
-	fontName        := "Consolas"
-	marginX         := 5
-	marginY         := 0
-	maxOpacity      := 255
+	static backgroundColor := "2A211C"
+	static fontColor       := "BDAE9D"
+	static fontSize        := 20
+	static fontName        := "Consolas"
+	static marginX         := 5
+	static marginY         := 0
+	static maxOpacity      := 255
 	
-	guiId  := ""
-	width  := ""
-	height := ""
+	guiId := ""
 	
-	;---------
-	; DESCRIPTION:    Make this toast's gui the default for all Gui, * commands.
-	;---------
-	makeGuiTheDefault() {
-		Gui, % this.guiId ":Default"
-	}
 	
 	;---------
 	; DESCRIPTION:    Build the toast gui, applying various formatting and adding the text.
 	; PARAMETERS:
 	;  toastText (I,REQ) - The text to show in the toast.
 	; SIDE EFFECTS:   Saves off a reference to the gui's window handle.
+	; RETURNS:        ID of gui (also the window handle)
 	;---------
 	buildGui(toastText) {
-		; Create Gui and save off handle
-		Gui, New, +HWNDguiWindowHandle
-		this.guiId := guiWindowHandle
+		; Create Gui and save off window handle (which is also guiId)
+		Gui, New, +HWNDguiId
 		
 		; Other gui options
 		Gui, +AlwaysOnTop -Caption +LastFound +Toolwindow
 		Gui, % "+E" WS_EX_CLICKTHROUGH
 		
 		; Set formatting options
-		Gui, Color, % this.backgroundColor
-		Gui, Font, % "c" this.fontColor " s" this.fontSize, % this.fontName
-		Gui, Margin, % this.marginX, % this.marginY
+		Gui, Color, % Toast.backgroundColor
+		Gui, Font, % "c" Toast.fontColor " s" Toast.fontSize, % Toast.fontName
+		Gui, Margin, % Toast.marginX, % Toast.marginY
 		
 		; Add text
 		Gui, Add, Text, , % toastText
 		
-		; Resize to text size and store off dimensions
-		Gui, Show, AutoSize Hide
-		WinGetPos, , , w, h
-		this.width := w
-		this.height := h
+		return guiId
 	}
 }

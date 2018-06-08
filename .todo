@@ -50,9 +50,13 @@
 			configs
 			mappedDrives
 	Toast
-		Static caller for timer-based toasts?
 		Add ability to update text (and auto-resize toast)?
 			Update firstSetup's file copying stuff to use this if we do it.
+			Also, should we get rid of toastText parameter to constructor, then?
+				Just have one on .show instead, + new function to replace/update text?
+			Maybe split fade-out from close/destroy (infinite-time callers will need to call destroy directly)
+				Make close/destroy also fade things out?
+					Only if not already fully transparent
 		Use toast (or tooltip if that doesn't work out) to show when something was copied to clipboard by a hotkey
 			OneNote page link, Chrome title copy, various Test copies (instead of popup)
 		Use to add visual indicator that we're waiting for x amount of time, and if the user presses the y key, we'll wait some more (update toast message accordingly when we roll around).

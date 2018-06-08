@@ -20,8 +20,7 @@ class DEBUG {
 	}
 	
 	toast(params*) {
-		t := new Toast(this.buildDebugString(params*))
-		t.showForTime(5)
+		Toast.showForTime(this.buildDebugString(params*), 5)
 	}
 	
 	

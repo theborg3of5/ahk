@@ -1,6 +1,4 @@
 # Fixes
-	Figure out whether we can have built-in hotkeys for outlook like word
-		Remove word's AHK hotkey in favor of built-in one assigned to style
 	Take another look at genericSearch(), make sure we really need to do the forceArray() stuff
 		Probably tweak the loop or pull out a subfunction, too.
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
@@ -14,6 +12,18 @@
 		isInArray
 	
 # New
+	Toast
+		Add ability to update text (and auto-resize toast)?
+			Update firstSetup's file copying stuff to use this if we do it.
+			Also, should we get rid of toastText parameter to constructor, then?
+				Just have one on .show instead, + new function to replace/update text?
+			Maybe split fade-out from close/destroy (infinite-time callers will need to call destroy directly)
+				Make close/destroy also fade things out?
+					Only if not already fully transparent
+		Use toast (or tooltip if that doesn't work out) to show when something was copied to clipboard by a hotkey
+			OneNote page link, Chrome title copy, various Test copies (instead of popup)
+		Use to add visual indicator that we're waiting for x amount of time, and if the user presses the y key, we'll wait some more (update toast message accordingly when we roll around).
+			OneNote now, but maybe more later?
 	Use Gui, New for selectorGui?
 		Destroys an old one if it exists.
 		Would need to use hwnd as guiId (where hwnd is already the ahk_id thing)
@@ -49,18 +59,6 @@
 			actionObject
 			configs
 			mappedDrives
-	Toast
-		Add ability to update text (and auto-resize toast)?
-			Update firstSetup's file copying stuff to use this if we do it.
-			Also, should we get rid of toastText parameter to constructor, then?
-				Just have one on .show instead, + new function to replace/update text?
-			Maybe split fade-out from close/destroy (infinite-time callers will need to call destroy directly)
-				Make close/destroy also fade things out?
-					Only if not already fully transparent
-		Use toast (or tooltip if that doesn't work out) to show when something was copied to clipboard by a hotkey
-			OneNote page link, Chrome title copy, various Test copies (instead of popup)
-		Use to add visual indicator that we're waiting for x amount of time, and if the user presses the y key, we'll wait some more (update toast message accordingly when we roll around).
-			OneNote now, but maybe more later?
 	Should we have windows > activateProgram wait for window to be active after running?
 		Possibly activate it itself after a timer if it's not active but exists?
 	Make a kind of snippet list for EpicStudio

@@ -12,6 +12,7 @@
 		isInArray
 	
 # New
+	Add ^k (and maybe ^+k) hotkey for selected text to Mattermost, using [text](url) syntax
 	Toast
 		Add ability to update text (and auto-resize toast)?
 			Update firstSetup's file copying stuff to use this if we do it.

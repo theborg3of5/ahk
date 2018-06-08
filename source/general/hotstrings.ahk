@@ -51,6 +51,7 @@
 	:*0:ndeed::indeed
 	::IT"S::IT'S ; "
 	::THAT"S::THAT'S ; "
+	::scheduleable::schedulable
 }
 
 { ; Expansions.

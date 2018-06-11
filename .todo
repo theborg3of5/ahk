@@ -15,7 +15,9 @@
 	Add ^k (and maybe ^+k) hotkey for selected text to Mattermost, using [text](url) syntax
 	Toast
 		Add ability to update text (and auto-resize toast)?
-			Update firstSetup's file copying stuff to use this if we do it.
+			Update these to use it if we do it:
+				firstSetup
+				OneNote page copy
 			Also, should we get rid of toastText parameter to constructor, then?
 				Just have one on .show instead, + new function to replace/update text?
 			Maybe split fade-out from close/destroy (infinite-time callers will need to call destroy directly)

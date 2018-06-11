@@ -148,7 +148,10 @@
 			; Give the user a chance to wait a little longer before continuing
 			; (for when OneNote takes a while to actually make the new page).
 			Loop {
-				userInput := Input("T1", "{Esc}{Enter}") ; Wait for 1 second (exit immediately if Escape or Enter is pressed)
+				t := new Toast("Waiting for 2s, press space to keep waiting")
+				t.show()
+				userInput := Input("T2", "{Esc}{Enter}") ; Wait for 2 seconds (exit immediately if Escape or Enter is pressed)
+				t.close()
 				if(stringContains(userInput, A_Space))   ; If space was pressed, wait another 1 second
 					Continue
 				Break

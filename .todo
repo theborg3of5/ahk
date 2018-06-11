@@ -20,6 +20,8 @@
 				OneNote page copy
 			Also, should we get rid of toastText parameter to constructor, then?
 				Just have one on .show instead, + new function to replace/update text?
+					Or, just have .show() be reusable?
+						Would need to update label text and resize
 			Maybe split fade-out from close/destroy (infinite-time callers will need to call destroy directly)
 				Make close/destroy also fade things out?
 					Only if not already fully transparent

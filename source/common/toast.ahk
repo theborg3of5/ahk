@@ -50,6 +50,8 @@ class Toast {
 	
 	;---------
 	; DESCRIPTION:    Create a new Toast object.
+	; PARAMETERS:
+	;  toastText  (I,REQ) - The text to show in the toast.
 	; RETURNS:        A new instance of this class.
 	;---------
 	__New(toastText := "") {
@@ -64,13 +66,10 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Show this toast indefinitely, until it is closed using .close().
 	; PARAMETERS:
-	;  GDB TODO add toastText param (should be required)
 	;  x     (I,OPT) - The x coordinate to show the toast at. Defaults to -1 (against right edge of
 	;                  screen).
 	;  y     (I,OPT) - The y coordinate to show the toast at. Defaults to -1 (against bottom edge of
 	;                  screen).
-	;  guiId (I,OPT) - Window handle for the toast gui. Only needed in the static case, when being
-	;                  called from .showForTime.
 	;---------
 	show(x := -1, y := -1) {
 		Gui, % this.guiId ":Default"
@@ -79,7 +78,13 @@ class Toast {
 		this.showToast(x, y, this.guiId)
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Change the text for the toast, without hiding it.
+	; PARAMETERS:
+	;  toastText  (I,REQ) - The text to show in the toast.
+	; NOTES:          Will try to maintain the same position (including -1 considerations), but
+	;                 toast size will expand to fit text.
+	;---------
 	setText(toastText) {
 		Gui, % this.guiId ":Default"
 		this.setLabelText(toastText, this.labelVarName)
@@ -117,11 +122,12 @@ class Toast {
 	
 	
 	;---------
-	; DESCRIPTION:    Build the toast gui, applying various formatting and adding the text.
-	; PARAMETERS:
-	;  toastText (I,REQ) - The text to show in the toast. ; GDB TODO clean up parameters on all functions
+	; DESCRIPTION:    Build the toast gui, applying various properties.
 	; SIDE EFFECTS:   Saves off a reference to the gui's window handle.
-	; RETURNS:        ID of gui (same as the gui's window handle)
+	; RETURNS:        Array of ID information, format:
+	;                 	idAry["GUI_ID"]         = Window handle/guiId
+	;                 	     ["LABEL_VAR_NAME"] = Name of the global variable connected to the label
+	;                 	                          containing the toast text.
 	;---------
 	buildGui() {
 		; Create Gui and save off window handle (which is also guiId)
@@ -134,7 +140,7 @@ class Toast {
 		; Set formatting options
 		Gui, Color, % Toast.backgroundColor
 		Gui, Font, % "c" Toast.fontColor " s" Toast.fontSize, % Toast.fontName
-		Gui, Margin, % Toast.marginX, % Toast.marginY ; GDB TODO remove?
+		Gui, Margin, % Toast.marginX, % Toast.marginY
 		
 		; Add label
 		labelVarName := guiId "Text" ; Come up with a unique variable we can use to reference the label (to change its contents if needed).
@@ -144,7 +150,17 @@ class Toast {
 		return {"GUI_ID":guiId, "LABEL_VAR_NAME":labelVarName}
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Move the toast gui to the given coordinates and resize it to its contents.
+	; PARAMETERS:
+	;  x         (I,REQ) - The x coordinate to show the toast at. If set to -1, the gui will be
+	;                      moved against right edge of the screen.
+	;  y         (I,REQ) - The y coordinate to show the toast at. If set to -1, the gui will be
+	;                      moved against bottom edge of the screen.
+	;  showProps (I,OPT) - Any additional properties should be included in Gui, Show calls. For
+	;                      example, passing "Hide" would keep the gui hidden while we resize and
+	;                      move it.
+	;---------
 	move(x, y, showProps = "") {
 		; Resize to size of contents
 		Gui, Show, AutoSize NoActivate %showProps%
@@ -159,7 +175,12 @@ class Toast {
 		Gui, Show, % "x" x " y" y " NoActivate " showProps
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Set the text of the toast label and resize it fit that text.
+	; PARAMETERS:
+	;  toastText    (I,REQ) - The text to show in the toast.
+	;  labelVarName (I,REQ) - The name of the global variable connected to the toast label.
+	;---------
 	setLabelText(toastText, labelVarName) {
 		; Figure out how wide the text control needs to be to fit its contents
 		Toast.widthLabelNum++
@@ -182,7 +203,11 @@ class Toast {
 		fadeGuiIn(guiId, "NoActivate", Toast.maxOpacity) ; Also actually shows the gui
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Fade out and destroy the toast gui.
+	; PARAMETERS:
+	;  guiId (I,REQ) - Gui ID (window handle) of the toast gui.
+	;---------
 	closeToast(guiId) {
 		fadeGuiOut(guiId)
       Gui, Destroy

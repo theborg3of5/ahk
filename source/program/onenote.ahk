@@ -147,15 +147,32 @@
 			; Wait for new page to appear.
 			; Give the user a chance to wait a little longer before continuing
 			; (for when OneNote takes a while to actually make the new page).
+			t := new Toast()
+			t.show()
 			Loop {
-				t := new Toast("Waiting for 2s, press space to keep waiting")
-				t.show()
-				userInput := Input("T2", "{Esc}{Enter}") ; Wait for 2 seconds (exit immediately if Escape or Enter is pressed)
-				t.close()
-				if(stringContains(userInput, A_Space))   ; If space was pressed, wait another 1 second
+				t.setText("Waiting for 2s, press space to keep waiting..." getDots(A_Index - 1))
+				Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
+				endKey := removeStringFromStart(ErrorLevel, "EndKey:")
+				if(endKey = "Space")
 					Continue
+				
+				; Break out immediately if enter/escape were pressed.
+				if(endKey = "Enter" || endKey = "Escape")
+					Break
+				
+				t.setText("Waiting for 1s, press space to keep waiting..." getDots(A_Index - 1))
+				Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
+				endKey := removeStringFromStart(ErrorLevel, "EndKey:")
+				if(endKey = "Space")
+					Continue
+				
 				Break
 			}
+			t.close()
+			
+			; Quit without doing anything else if they hit escape
+			if(endKey = "Escape")
+				return
 			
 			Send, ^{PgDn}              ; Switch to (presumably) new page
 			Send, !3                   ; Demote Subpage (Make Subpage)

@@ -37,7 +37,11 @@ if(!machineInfo)
 	ExitApp
 ; DEBUG.popup("Machine Info Selected", machineInfo)
 
+t := new Toast()
+t.show()
+
 ; Pull the needed values from our selection.
+t.setText("Reading values from selection...")
 For tag,v in tagsToReplace {
 	machineValue := machineInfo[tag]
 	if(machineValue != "")
@@ -46,8 +50,7 @@ For tag,v in tagsToReplace {
 ; DEBUG.popup("Finished tags to replace",tagsToReplace)
 
 ; Loop over files we need to process and put places.
-t := new Toast("Processing files...")
-t.show()
+t.setText("Processing files...")
 For from,to in copyPaths {
 	; Read it in.
 	FileRead, fileContents, %from%
@@ -70,11 +73,9 @@ For from,to in copyPaths {
 	; Put the file where it's supposed to be.
 	FileAppend, %fileContents%, %to%
 }
-t.close()
 
 ; Hide all .git system files and folders, for a cleaner appearance.
-t := new Toast("Hiding .git files and folders...")
-t.show()
+t.setText("Hiding .git files and folders...")
 For i,n in gitNames {
 	Loop, Files, %ahkRootPath%*%n%, RDF
 	{

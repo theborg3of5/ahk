@@ -86,6 +86,15 @@ getNewLines(i) {
 	return outStr
 }
 
+getDots(i) {
+	outStr := ""
+	
+	Loop, %i%
+		outStr .= "."
+	
+	return outStr
+}
+
 ; Turns all double quotes (") into double double quotes ("") or more, if second argument given.
 escapeDoubleQuotes(s, num := 2) {
 	global QUOTES

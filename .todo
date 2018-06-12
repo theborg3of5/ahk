@@ -14,10 +14,6 @@
 # New
 	Add ^k (and maybe ^+k) hotkey for selected text to Mattermost, using [text](url) syntax
 	Toast
-		Add ability to update text (and auto-resize toast)?
-			Update these to use it if we do it:
-				firstSetup
-				OneNote page copy
 		Use toast (or tooltip if that doesn't work out) to show when something was copied to clipboard by a hotkey
 			OneNote page link, Chrome title copy, various Test copies (instead of popup)
 		Use to add visual indicator that we're waiting for x amount of time, and if the user presses the y key, we'll wait some more (update toast message accordingly when we roll around).

@@ -16,7 +16,7 @@ genericLink(subAction) {
 	link := ActionObject.do(text, , ACTION_Link, , subAction)
 	if(link) {
 		clipboard := link
-		Toast.showForTime("Clipboard set to link: " link, 2)
+		Toast.showForTime("Clipboard set to link: " clipboard, 2)
 	}
 }
 

@@ -127,6 +127,8 @@
 			}
 			
 			clipboard := linkToUse
+			if(clipboard)
+				Toast.showForTime("Clipboard set to link: " clipboard, 2)
 		}
 	
 	; Make a copy of the current page in the Do section.

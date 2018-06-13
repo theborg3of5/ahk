@@ -10,6 +10,7 @@
 
 #If !WinExist(getProgramTitleString("Launchy"))
 	CapsLock::
+		Toast.showForTime("Launchy not yet running, launching...", 2)
 		runProgram("Launchy")
 	return
 #If

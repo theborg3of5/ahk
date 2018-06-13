@@ -9,6 +9,7 @@
 	~Media_Prev::
 	~Media_Next::
 	#j::
+		Toast.showForTime("Spotify not yet running, launching...", 2)
 		runProgram("Spotify")
 	return
 #IfWinNotExist

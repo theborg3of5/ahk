@@ -201,28 +201,37 @@ linkSelectedText(path) {
 	if(!doesWindowSupportLinking(windowName))
 		return
 	
-	openLinkPopup(windowName)
+	startLink(windowName)
 	sendTextWithClipboard(path)
-	closeLinkPopup(windowName)
+	finishLink(windowName)
 }
 doesWindowSupportLinking(name) {
 	windowNamesAry := []
-	windowNamesAry["OneNote"]  := ""
-	windowNamesAry["Outlook"]  := ""
-	windowNamesAry["Word"]     := ""
-	windowNamesAry["EMC2 DLG"] := ""
-	windowNamesAry["EMC2 XDS"] := ""
+	windowNamesAry["OneNote"]    := ""
+	windowNamesAry["Outlook"]    := ""
+	windowNamesAry["Word"]       := ""
+	windowNamesAry["EMC2 DLG"]   := ""
+	windowNamesAry["EMC2 XDS"]   := ""
+	windowNamesAry["Mattermost"] := ""
 	
 	return windowNamesAry.HasKey(name)
 }
-openLinkPopup(windowName) {
+startLink(windowName) {
 	if(!windowName)
 		return
 	
-	if(windowName = "EMC2 XDS")
+	if(windowName = "EMC2 XDS") {
 		clickUsingMode(515, 226, "Client")
-	else
+	} else if(windowName = "Mattermost") { ; Goal: [text](url)
+		selectedText := getSelectedText()
+		selectionLen := strLen(selectedText)
+		Send, {Left} ; Get to start of selection
+		Send, [
+		Send, {Right %selectionLen%} ; Get to end of selection
+		Send, ](
+	} else {
 		Send, ^k
+	}
 	
 	; Wait for it to open.
 	popupTitleString := getLinkPopupTitleString(windowName)
@@ -247,9 +256,12 @@ getLinkPopupTitleString(windowName) {
 	
 	return linkPopupsAry[windowName]
 }
-closeLinkPopup(windowName) {
+finishLink(windowName) {
 	if(!windowName)
 		return
 	
-	Send, {Enter}
+	if(windowName = "Mattermost")
+		Send, )
+	else
+		Send, {Enter}
 }

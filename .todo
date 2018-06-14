@@ -12,7 +12,6 @@
 		isInArray
 	
 # New
-	Add ^k (and maybe ^+k) hotkey for selected text to Mattermost, using [text](url) syntax
 	Use Gui, New for selectorGui?
 		Destroys an old one if it exists.
 		Would need to use hwnd as guiId (where hwnd is already the ahk_id thing)

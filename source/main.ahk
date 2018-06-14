@@ -45,6 +45,7 @@ runStandaloneScripts()
 #Include hyperspace.ahk
 #Include kdiff.ahk
 #Include launchy.ahk
+#Include mattermost.ahk
 #Include notepad++.ahk
 #Include onenote.ahk
 #Include outlook.ahk

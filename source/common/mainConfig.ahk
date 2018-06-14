@@ -106,6 +106,9 @@ class MainConfig {
 		; DEBUG.popupEarly("MainConfig","getWindow", "Found window",retWindow)
 		return retWindow
 	}
+	isWindowActive(windowName) {
+		return (windowName = getWindowSetting("NAME"))
+	}
 	isRemoteDesktopActive(titleString := "A") {
 		return WinActive(getWindowTitleString("RemoteDesktop"))
 	}

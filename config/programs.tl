@@ -26,7 +26,7 @@
 		ProcessExplorer	PROCEXP64.exe			PROCEXPL					-				-								Process Explorer\procexp.exe													-										EPIC_LAPTOP
 		ProcessExplorer	PROCEXP64.exe			PROCEXPL					-				-								ProcessExplorer\procexp.exe
 		TrueCrypt			TrueCrypt.exe			CustomDlg				-				-								TrueCrypt\TrueCrypt.exe
-		WinSpy				AutoHotkey.exe			AutoHotkeyGUI			-				-								AutoHotkey\WindowSpy.ahk
+		WinSpy				AutoHotkey.exe			AutoHotkeyGUI			Window Spy	-								AutoHotkey\WindowSpy.ahk
 		yEd					yEd.exe					-							-				-								yWorks\yEd\yEd.exe
 []
 

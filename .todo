@@ -12,6 +12,8 @@
 		isInArray
 	
 # New
+	Make toast about running program (when using activateProgram) more general?
+		Can use name we're given in toast text
 	Use Gui, New for selectorGui?
 		Destroys an old one if it exists.
 		Would need to use hwnd as guiId (where hwnd is already the ahk_id thing)

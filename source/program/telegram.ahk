@@ -8,4 +8,9 @@
 	^t::
 		Send, {Down}{Down}{Enter}
 	return
+	
+	; Avoid ":p" triggering praying emoji by adding a space.
+	:::p::
+		Send, :p{Space}
+	return
 #If

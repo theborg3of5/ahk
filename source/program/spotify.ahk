@@ -4,10 +4,11 @@
 	^!Down::
 	^!Left::
 	^!Right::
-	~Media_Stop::
-	~Media_Play_Pause::
-	~Media_Prev::
-	~Media_Next::
+	Media_Stop::
+	Media_Play_Pause::
+	Media_Prev::
+	Media_Next::
+	^!Space::
 	#j::
 		Toast.showForTime("Spotify not yet running, launching...", 2)
 		runProgram("Spotify")

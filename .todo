@@ -12,8 +12,6 @@
 		isInArray
 	
 # New
-	Make toast about running program (when using activateProgram) more general?
-		Can use name we're given in toast text
 	Use Gui, New for selectorGui?
 		Destroys an old one if it exists.
 		Would need to use hwnd as guiId (where hwnd is already the ahk_id thing)
@@ -66,10 +64,7 @@
 		Will want to use separate "admin" startup script (that runs as admin)
 	Audit all scripts for unused hotkeys
 		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
-	Go through pukkandan's startup script (https://github.com/pukkandan/My-Startup-Script ) and pull out anything interesting
-		WinSizer - as a replacement/cross-pollination for KDE mover-sizer
-		Tray - to make main script (and all standalone scripts) have a consistent tray menu
-			Probably similar to what I did in my own share scripts?
+		Maybe just a standard format for hotkeys that goes at the top of scripts that implement them?
 	Build a way to auto-reformat .tl files?
 		Fix widths so they work nicely
 			Will need to have a tab width parameter/argument somewhere for this (maybe in _constants or config?)

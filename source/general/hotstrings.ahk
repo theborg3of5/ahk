@@ -52,6 +52,7 @@
 	::IT"S::IT'S ; "
 	::THAT"S::THAT'S ; "
 	::scheduleable::schedulable
+	::isntead::instead
 }
 
 { ; Expansions.

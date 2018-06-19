@@ -122,19 +122,19 @@ class Selector {
 	;---------
 	; DESCRIPTION:    Creates a new instance of the Selector class.
 	; PARAMETERS:
-	;  filePath   (I,REQ) - The TableList (.tl) file where the choices that will be selected from will be
-	;                       read from. This file should be readable by the TableList class, see that class
-	;                       for details on file format.
-	;  filter     (I,OPT) - An array of information used to restrict the choices that are read from filePath.
-	;                       Defaults to no filter.
-	;                          Format:
-	;                             filter["COLUMN"]         - Name of the column to filter on
-	;                                   ["VALUE"]          - Value to filter to. If non-blank and a choice has
-	;                                                        this value for the column, it will be included.
-	;                                                        If blank, any value will be allowed.
-	;                                   ["INCLUDE_BLANKS"] - If set to true (default), choices with a blank
-	;                                                        value for the given column will be included.
-	;                                                        If set to false, those choices will be excluded.
+	;  filePath (I,REQ) - The TableList (.tl) file where the choices that will be selected from will be
+	;                     read from. This file should be readable by the TableList class, see that class
+	;                     for details on file format.
+	;  filter   (I,OPT) - An array of information used to restrict the choices that are read from filePath.
+	;                     Defaults to no filter.
+	;                        Format:
+	;                           filter["COLUMN"]         - Name of the column to filter on
+	;                                 ["VALUE"]          - Value to filter to. If non-blank and a choice has
+	;                                                      this value for the column, it will be included.
+	;                                                      If blank, any value will be allowed.
+	;                                 ["INCLUDE_BLANKS"] - If set to true (default), choices with a blank
+	;                                                      value for the given column will be included.
+	;                                                      If set to false, those choices will be excluded.
 	; RETURNS:        A new Selector object.
 	;---------
 	__New(filePath, filter := "") {

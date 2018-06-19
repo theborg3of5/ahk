@@ -159,7 +159,7 @@ stringContains(haystack, needle, caseSensitive := "") {
 }
 
 ; See if a string contains any of the strings in the array.
-stringContainsAnyOf(haystack, needles) {
+stringContainsAnyOf(haystack, needles, ByRef matchedNeedle = "") {
 	firstPos := 0
 	For i,n in needles {
 		currPos := stringContains(haystack, n)
@@ -170,6 +170,7 @@ stringContainsAnyOf(haystack, needles) {
 		
 		; DEBUG.popup("Found needle",n, "At position",currPos)
 		firstPos := currPos
+		matchedNeedle := n
 	}
 	
 	return firstPos

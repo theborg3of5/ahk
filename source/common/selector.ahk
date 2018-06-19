@@ -127,9 +127,9 @@ class Selector {
 	;                       for details on file format.
 	;  filter     (I,OPT) - An array of information used to restrict the choices that are read from filePath.
 	;                       Defaults to no filter.
-	;                       	Format:
-	;                       		filter["COLUMN"]         - Name of the column to filter on
-	;                       		      ["VALUE"]          - Value to filter to. If non-blank and a choice has
+	;                          Format:
+	;                             filter["COLUMN"]         - Name of the column to filter on
+	;                                   ["VALUE"]          - Value to filter to. If non-blank and a choice has
 	;                                                        this value for the column, it will be included.
 	;                                                        If blank, any value will be allowed.
 	;                                   ["INCLUDE_BLANKS"] - If set to true (default), choices with a blank
@@ -193,7 +193,7 @@ class Selector {
 	;                                   from this class), pass in the desired title here.
 	;  defaultOverrideData    (I,OPT) - If you want to default values into the override fields shown to
 	;                                   the user, pass those values in an array here. Format:
-	;                                   	defaultOverrideData["fieldName"] := value
+	;                                      defaultOverrideData["fieldName"] := value
 	;  suppressOverrideFields (I,OPT) - If the TL file would normally show override fields (by virtue of
 	;                                   having an override field index row), you can still hide those fields by setting
 	;                                   this parameter to true.
@@ -275,9 +275,9 @@ class Selector {
 	; DESCRIPTION:    Load the choices and other information from the TL file.
 	; PARAMETERS:
 	;  filter     (I,REQ) - An array of filtering information to limit which choices we keep from the file.
-	;                       	Format:
-	;                       		filter["COLUMN"]         - Name of the column to filter on
-	;                       		      ["VALUE"]          - Value to filter to. If non-blank and a choice has
+	;                          Format:
+	;                             filter["COLUMN"]         - Name of the column to filter on
+	;                                   ["VALUE"]          - Value to filter to. If non-blank and a choice has
 	;                                                        this value for the column, it will be included.
 	;                                                        If blank, any value will be allowed.
 	;                                   ["INCLUDE_BLANKS"] - If set to true (default), choices with a blank
@@ -387,7 +387,7 @@ class Selector {
 	;                 and merging that data as appropriate.
 	; PARAMETERS:
 	;  defaultData (I,REQ) - Array of data to default into override fields. Format:
-	;                        	defaultData["fieldName"] := value
+	;                           defaultData["fieldName"] := value
 	; RETURNS:        Merged array of data, which includes both the choice and any
 	;                 overrides.
 	;---------

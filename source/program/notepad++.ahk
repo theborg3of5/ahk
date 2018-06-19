@@ -101,31 +101,44 @@
 			sendTextWithClipboard(";" getSpaces(numSpaces))
 		}
 	
-	getDocumentationLineIndent(lineStart) {
-		lineStart := cleanupText(lineStart) ; Drop (and ignore) any leading/trailing whitespace and odd characters
-		lineStart := removeStringFromStart(lineStart, "; ") ; Trim off the starting comment char + space
+	;---------
+	; DESCRIPTION:    Figure out where the indentation for a line is positioned (in terms of the
+	;                 number of spaces after the comment character).
+	; PARAMETERS:
+	;  line (I,REQ) - The line that we're trying to determine indentation for.
+	; RETURNS:        The number of spaces after the comment character that the indent is.
+	;---------
+	getDocumentationLineIndent(line) {
+		line := cleanupText(line) ; Drop (and ignore) any leading/trailing whitespace and odd characters
+		line := removeStringFromStart(line, "; ") ; Trim off the starting comment char + space
 		numSpaces := 1 ; Space we just trimmed off
 		
 		keywords := ["DESCRIPTION:", "PARAMETERS:", "RETURNS:", "SIDE EFFECTS:", "NOTES:"]
-		if(stringContainsAnyOf(lineStart, keywords, matchedKeyword)) {
+		if(stringContainsAnyOf(line, keywords, matchedKeyword)) {
 			; Keyword line - add length of keyword + however many spaces are after it.
 			numSpaces += strLen(matchedKeyword)
-			lineStart := removeStringFromStart(lineStart, matchedKeyword)
-			numSpaces += countLeadingSpaces(lineStart)
+			line := removeStringFromStart(line, matchedKeyword)
+			numSpaces += countLeadingSpaces(line)
 		} else {
-			matchedPos := RegExMatch(lineStart, "P)\((I|O|IO),(OPT|REQ)\) - ", matchedTextLen)
+			matchedPos := RegExMatch(line, "P)\((I|O|IO),(OPT|REQ)\) - ", matchedTextLen)
 			if(matchedPos) {
 				; Parameter line - add the position of the "(I,REQ) - "-style description - 1 + its length.
 				numSpaces += (matchedPos - 1) + matchedTextLen
 			} else {
 				; Floating line - just count the spaces.
-				numSpaces += countLeadingSpaces(lineStart)
+				numSpaces += countLeadingSpaces(line)
 			}
 		}
 		
 		return numSpaces
 	}
 	
+	;---------
+	; DESCRIPTION:    Determine how many spaces there are at the beginning of a string.
+	; PARAMETERS:
+	;  line (I,REQ) - The line to count spaces for.
+	; RETURNS:        The number of spaces at the beginning of the line.
+	;---------
 	countLeadingSpaces(line) {
 		numSpaces := 0
 		
@@ -139,5 +152,4 @@
 		
 		return numSpaces
 	}
-	
 #IfWinActive

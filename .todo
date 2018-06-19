@@ -33,9 +33,12 @@
 		Should cut from cursor to end of line to start (so we don't lose that spot)
 		Could copy existing line, look for first instance of more than once space
 			Indentation should be tabs, only one space before labels
-	Consider changing TableListMod format
+	Consider changing TableListMod format (current is {COLUMN}{OPERATION}:{TEXT})
 		Make COLUMN required?
 		Allow r/R/replace/Replace/REPLACE vs only r
+			Replace > replaceWith?
+			Begin > prepend/addToStart?
+			End > append/addToEnd?
 		Don't have the column in {} at the beginning - hard to read. Alternatives:
 			COLUMN.op(TEXT) - Make it the owner of the action
 			op(COLUMN,TEXT) - Make it like an argument to the action

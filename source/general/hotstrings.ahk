@@ -106,22 +106,23 @@
 
 { ; Date and time.
 	:X:idate::sendDateTime("M/d/yy")
+	:X:itime::sendDateTime("h:mm tt")
+	
 	:X:dashidate::sendDateTime("M-d-yy")
-	:X:uidate::sendDateTime("M_d_yy")
 	:X:didate::sendDateTime("dddd`, M/d")
 	:X:iddate::sendDateTime("M/d`, dddd")
 	
-	:X:itime::sendDateTime("h:mm tt")
-	
-	::idatetime::
-	::itimedate::
-		sendDateTime("h:mm tt M/d/yy")
+	::.tscell::
+		sendDateTime("M/d/yy")
+		Send, {Tab}
+		sendDateTime("h:mm tt")
+		Send, {Tab}
 	return
 	
 	; Arbitrary dates/times, translates
 	:X:aidate::queryDateAndSend()
-	:X:aiddate::queryDateAndSend("M/d/yy`, dddd")
-	:X:adidate::queryDateAndSend("dddd`, M/d/yy")
+	:X:aiddate::queryDateAndSend("M/d`, dddd")
+	:X:adidate::queryDateAndSend("dddd`, M/d")
 	queryDateAndSend(format = "M/d/yy") {
 		date := queryDate(format)
 		if(date)

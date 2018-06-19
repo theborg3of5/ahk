@@ -12,11 +12,6 @@
 		isInArray
 	
 # New
-	Use Gui, New for selectorGui?
-		Destroys an old one if it exists.
-		Would need to use hwnd as guiId (where hwnd is already the ahk_id thing)
-		Would let us get rid of getNextGuiId()
-		Can we also use "Gui, Show, AutoSize Hide"?
 	Allow programs.tl and windows.tl to use tags for user path, etc.?
 	Add some way to move windows where I want them
 		Hotkey-triggered, for all windows in list?

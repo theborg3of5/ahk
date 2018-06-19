@@ -27,20 +27,15 @@ class SelectorGui {
 	; RETURNS:        Reference to new SelectorGui object
 	;---------
 	__New(choices, sectionTitles := "", overrideFields := "", minColumnWidth := 0) {
-		this.overrideFields := overrideFields
-		
 		this.setSpecialChars()
-		this.setOffsets()
-		this.setGuiId("SelectorGui" getNextGuiId())
-		this.makeGuiTheDefault()
-		
+		this.overrideFields := overrideFields
 		this.buildPopup(choices, sectionTitles, minColumnWidth)
 	}
 	
 	; Shows the popup, including waiting on it to be closed
 	; defaultOverrideData - Array of data label/column => value to put in.
 	show(windowTitle := "", defaultOverrideData := "") {
-		this.makeGuiTheDefault()
+		Gui, % this.guiId ":Default"
 		
 		this.setDefaultOverrides(defaultOverrideData)
 		this.showPopup(windowTitle)
@@ -60,14 +55,13 @@ class SelectorGui {
 	; == Private ===================
 	; ==============================
 	
-	static baseFieldVarChoice   := "Choice"
-	static baseFieldVarOverride := "Override"
-	static defaultFontColor     := "BDAE9D"
-	static fieldGhostFontColor  := "BDAE9D"
+	static baseFieldVarChoice          := "Choice"
+	static baseFieldVarOverridesPrefix := "Override"
+	static defaultFontColor            := "BDAE9D"
+	static fieldGhostFontColor         := "BDAE9D"
 	
 	chars                   := []
 	guiId                   := ""
-	guiHandle               := ""
 	fieldVarChoice          := ""
 	fieldVarOverridesPrefix := ""
 	
@@ -92,21 +86,6 @@ class SelectorGui {
 		this.chars["NEW_COLUMN"] := "|"
 	}
 	
-	setGuiId(id) {
-		this.guiId := id
-		
-		; Names for global variables that we'll use for values of fields. This way they can be declared global and retrieved in the same way, without having to pre-define global variables.
-		this.fieldVarChoice          := id SelectorGui.baseFieldVarChoice
-		this.fieldVarOverridesPrefix := id SelectorGui.baseFieldVarOverride
-	}
-	
-	;---------
-	; DESCRIPTION:    Make this toast's gui the default for all Gui, * commands.
-	;---------
-	makeGuiTheDefault() {
-		Gui, % this.guiId ":Default"
-	}
-	
 	buildPopup(choices, sectionTitles, minColumnWidth) {
 		this.totalHeight += this.margins["TOP"]
 		this.totalWidth  += this.margins["LEFT"]
@@ -121,11 +100,17 @@ class SelectorGui {
 	}
 	
 	createPopup() {
+		Gui, New, +HWNDguiId
+		this.guiId := guiId ; from +HWND* setting above
+		
+		; Names for global variables that we'll use for values of fields. This way they can be declared global and retrieved in the same way, without having to pre-define global variables.
+		this.fieldVarChoice          := guiId SelectorGui.baseFieldVarChoice
+		this.fieldVarOverridesPrefix := guiId SelectorGui.baseFieldVarOverridesPrefix
+		
 		Gui, +LastFound +LabelSelectorGui  ; +LabelSelectorGui: Gui* events will call SelectorGui* functions (in particular GuiClose > SelectorGuiClose).
 		Gui, Color, 2A211C
 		Gui, Font, % "s12 c" SelectorGui.defaultFontColor
 		Gui, Add, Button, Hidden Default +gSelectorGuiSubmit ; Hidden button for {Enter} submission.
-		this.guiHandle := WinExist() ; Because of +LastFound above, the new gui is the last found window, so WinExist() finds it.
 	}
 	
 	addChoices(choices, sectionTitles, minColumnWidth) {
@@ -256,7 +241,7 @@ class SelectorGui {
 		GuiControl, Focus, % this.fieldVarChoice
 		
 		; Wait for gui to close
-		WinWaitClose, % "ahk_id " this.guiHandle
+		WinWaitClose, % "ahk_id " this.guiId
 	}
 	
 	saveUserInputs() {
@@ -276,8 +261,7 @@ class SelectorGui {
 	debugName := "SelectorGui"
 	debugToString(debugBuilder) {
 		debugBuilder.addLine("Chars",                      this.chars)
-		debugBuilder.addLine("Gui ID",                     this.guiId)
-		debugBuilder.addLine("Gui handle",                 this.guiHandle)
+		debugBuilder.addLine("Gui ID (handle)",            this.guiId)
 		debugBuilder.addLine("Choice field var",           this.fieldVarChoice)
 		debugBuilder.addLine("Override fields var prefix", this.fieldVarOverridesPrefix)
 		debugBuilder.addLine("Override fields",            this.overrideFields)
@@ -305,7 +289,7 @@ SelectorGuiSubmit() {
 
 ; Called when an override field is changed, changes font color based on whether it was the "default" value (matches label)
 SelectorGuiOverrideFieldChanged() {
-	fieldName := removeStringFromStart(A_GuiControl, A_Gui SelectorGui.baseFieldVarOverride)
+	fieldName := removeStringFromStart(A_GuiControl, A_Gui SelectorGui.baseFieldVarOverridesPrefix)
 	value := GuiControlGet("", A_GuiControl)
 	; DEBUG.popup("A_GuiControl",A_GuiControl, "A_Gui",A_Gui, "fieldName",fieldName, "value",value)
 	

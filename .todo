@@ -12,6 +12,7 @@
 		isInArray
 	
 # New
+	Allow .TLs to use tags to reference their own values from columns?
 	Allow programs.tl and windows.tl to use tags for user path, etc.?
 	Add some way to move windows where I want them
 		Hotkey-triggered, for all windows in list?
@@ -41,6 +42,7 @@
 			actionObject
 			configs
 			mappedDrives
+			epicStudioSnippets
 	Should we have windows > activateProgram wait for window to be active after running?
 		Possibly activate it itself after a timer if it's not active but exists?
 	Make a kind of snippet list for EpicStudio

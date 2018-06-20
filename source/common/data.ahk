@@ -190,7 +190,7 @@ mergeArrays(default, overrides) {
 	return retAry
 }
 
-; Counterpart to SplitStr - puts together all parts of an array with the given delimiter (defaults to "|")
+; Counterpart to strSplit() - puts together all parts of an array with the given delimiter (defaults to "|")
 arrayJoin(arrayToJoin, delim := "|") {
 	outStr := ""
 	

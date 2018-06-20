@@ -89,13 +89,110 @@
 		}
 	return
 	
-	:*:.forloop::
-		Send, {Shift Down}{Left}{Shift Up}
-		if(getSelectedText() = ";")
-			Send, {Backspace} ; Start with no semicolon in front.
-		else
-			Send, {End}
-		
-		doMForLoop()
-	return
+	::.snip::
+		insertEpicStudioSnippet() {
+			; First, remove a semicolon if that's all that's on this line.
+			Send, {Shift Down}{Left}{Shift Up}
+			if(getSelectedText() = ";")
+				Send, {Backspace} ; Start with no semicolon in front.
+			else
+				Send, {End}
+			
+			s := new Selector("epicStudioSnippets.tl")
+			data := s.selectGui()
+			
+			loopString := ""
+			numIndents := 0
+			prevIterators := ""
+			if(data["TYPE"] = "LOOP") {
+				iteratorList := data["ITERATOR_LIST"]
+				iteratorAry := strSplit(iteratorList, ",")
+				
+				if(data["SUBTYPE"] = "ARRAY_GLO") {
+					arrayName := data["ARRAY_INI"]
+					baseString := MainConfig.getPrivate("EPICSTUDIO_LOOP_ARRAY_BASE")
+					
+					for i,iterator in iteratorAry {
+						loopString .= replaceTags(baseString, {"ARY_NAME":arrayName, "ITERATOR":iterator, "PREV_ITERATORS":prevIterators}) "`n"
+						
+						prevIterators .= iterator ","
+						numIndents++
+						
+						loopString .= "`t" ; Tab on each new line in EpicStudio
+						loopString .= multiplyString(". ", numIndents)
+					}
+					
+				} else if(data["SUBTYPE"] = "ID") {
+					ini := data["ARRAY_INI"]
+					id  := iteratorAry[1]
+					
+					if(!id)
+						id := stringLower(ini) "Id"
+					
+					loopString := replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_ID_BASE"), {"INI":ini, "ID":id}) "`n`t. "
+					
+				} else if(data["SUBTYPE"] = "DAT") {
+					ini  := data["ARRAY_INI"]
+					id   := iteratorAry[1]
+					dat  := iteratorAry[2]
+					item := data["ITEM"]
+					
+					if(!id) ; GDB TODO replace these using tags in default iterator variables?
+						id := stringLower(ini) "Id"
+					if(!dat)
+						dat := stringLower(ini) "Dat"
+					
+					loopString := replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_DAT_BASE"), {"INI":ini, "ID":id, "DAT":dat, "ITEM":item}) "`n`t. "
+					
+				} else if(data["SUBTYPE"] = "ID_DAT") {
+					ini  := data["ARRAY_INI"]
+					id   := iteratorAry[1]
+					dat  := iteratorAry[2]
+					item := data["ITEM"]
+					
+					if(!id) ; GDB TODO replace these using tags in default iterator variables?
+						id := stringLower(ini) "Id"
+					if(!dat)
+						dat := stringLower(ini) "Dat"
+					
+					loopString := replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_ID_BASE"), {"INI":ini, "ID":id}) "`n`t. "
+					loopString .= replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_DAT_BASE"), {"INI":ini, "ID":id, "DAT":dat, "ITEM":item}) "`n`t. . " ; GDB TODO turn dots into a loop with recursive function or something?
+					
+				} else if(data["SUBTYPE"] = "INI") {
+					ini := iteratorAry[1]
+					
+					if(!ini)
+						ini := "ini"
+					
+					loopString := replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_INI_BASE"), {"INI":ini}) "`n`t. "
+					
+				} else if(data["SUBTYPE"] = "ITEM") {
+					ini  := iteratorAry[1]
+					item := iteratorAry[2]
+					
+					if(!ini)
+						ini := "ini"
+					if(!item)
+						item := "item"
+					
+					loopString := replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_ITEM_BASE"), {"INI":ini, "ITEM":item}) "`n`t. "
+					
+				} else if(data["SUBTYPE"] = "INI_ITEM") {
+					ini  := iteratorAry[1]
+					item := iteratorAry[2]
+					
+					if(!ini)
+						ini := "ini"
+					if(!item)
+						item := "item"
+					
+					loopString := replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_INI_BASE"), {"INI":ini}) "`n`t. "
+					loopString .= replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_ITEM_BASE"), {"INI":ini, "ITEM":item}) "`n`t. . "
+					
+				}
+			}
+			
+			; DEBUG.popup("Data",data, "Loop string",loopString)
+			sendTextWithClipboard(loopString)
+		}
 #IfWinActive

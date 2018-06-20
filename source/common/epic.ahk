@@ -175,24 +175,6 @@ openEpicStudioDLG(dlgNum) {
 	Send, {Enter 2}
 }
 
-doMForLoop() {
-	prompt := "Enter the variables involved in this format: `n`t<LOOP_ARY_NAME>,<ITERATOR1>[,<ITERATOR2>,<ITERATOR3>...]"
-	loopInfo := InputBox("Generate M for loop", prompt,  , 500, 145)
-	
-	splitLoopInfo := StrSplit(loopInfo, ",")
-	
-	iteratorsAry := []
-	for i,data in splitLoopInfo {
-		if(i = 1)
-			loopAryName := data
-		else
-			iteratorsAry.push(data)
-	}
-	
-	loopString := buildMForLoopString(loopAryName, iteratorsAry)
-	sendTextWithClipboard(loopString)
-}
-
 getEpicAppIdFromKey(appKey) {
 	if(!appKey)
 		return 0
@@ -345,28 +327,6 @@ buildServerCodeLink(serverLocation) {
 
 buildHelpdeskLink(hdrId) {
 	return replaceTag(MainConfig.getPrivate("HELPDESK_BASE"), "ID", hdrId)
-}
-
-; iteratorsAry is array of variables to loop in nested for loops, in top-down order.
-buildMForLoopString(loopAryName, iteratorsAry) {
-	; DEBUG.popup("Loop array name", loopAryName, "Iterators array", iteratorsAry)
-	
-	retStr := ""
-	prevIterators := ""
-	numIndents := 0
-	
-	for i,iterator in iteratorsAry {
-		retStr .= "f  s " iterator "=$o(" loopAryName "(" prevIterators iterator ")) q:" iterator "=""""  d `n"
-		prevIterators .= iterator ","
-		numIndents++
-		
-		retStr .= "`t"
-		Loop, % numIndents {
-			retStr .= ". "
-		}
-	}
-	
-	return retStr
 }
 
 getCurrentSnapperEnvironment() {

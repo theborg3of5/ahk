@@ -59,38 +59,31 @@ reformatPhone(input) {
 getTabs(i, spacesPerTab := 0) {
 	outStr := ""
 	tabStr := spacesPerTab > 0 ? getSpaces(spacesPerTab) : "`t"
-	
-	Loop, %i%
-		outStr .= tabStr
-	
-	return outStr
+	return multiplyString(tabStr, i)
 }
 
 ; Gives the specified number of spaces in a string.
 getSpaces(i) {
-	outStr := ""
-	
-	Loop, %i%
-		outStr .= " "
-	
-	return outStr
+	return multiplyString(" ", i)
 }
 
 ; Gives the specified number of newlines as a string.
 getNewLines(i) {
-	outStr := ""
-	
-	Loop, %i%
-		outStr .= "`n"
-	
-	return outStr
+	return multiplyString("`n", i)
 }
 
 getDots(i) {
+	return multiplyString(".", i)
+}
+
+multiplyString(inString, numTimes) {
+	if(inString = "" || numTimes < 1)
+		return ""
+	
 	outStr := ""
 	
-	Loop, %i%
-		outStr .= "."
+	Loop, %numTimes%
+		outStr .= inString
 	
 	return outStr
 }

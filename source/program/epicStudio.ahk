@@ -105,7 +105,7 @@
 			numIndents := 0
 			prevIterators := ""
 			if(data["TYPE"] = "LOOP") {
-				iteratorList := data["ITERATOR_LIST"]
+				iteratorList := data["ITERATORS"]
 				iteratorAry := strSplit(iteratorList, ",")
 				
 				if(data["SUBTYPE"] = "ARRAY_GLO") {

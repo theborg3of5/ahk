@@ -49,7 +49,6 @@
 		Allow tags (<INI>) use for default iterator variables
 		Update to take into account already being inside of a loop
 		Allow SUBTYPE to be a pipe-delimited list of subTypes (so we can combine ID|DAT instead of having a distinct ID_DAT subType)
-		Add min width for window so you can actually read field labels
 		Have additional column that specifies private key for the string base?
 			Better yet, have it be literal, and run it through private tag replacement
 	Find a better way to keep AHK todo list?

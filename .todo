@@ -24,10 +24,6 @@
 			KDiff window - maximize on center screen
 		Telegram - left monitor, top or bottom depending on machine
 		Pidgin window - top-right of left monitor
-	AHK documentation - add hotkey (ctrl+enter or shift+enter, probably) that adds a newline + comment and however many spaces are needed
-		Should cut from cursor to end of line to start (so we don't lose that spot)
-		Could copy existing line, look for first instance of more than once space
-			Indentation should be tabs, only one space before labels
 	Consider changing TableListMod format (current is {COLUMN}{OPERATION}:{TEXT})
 		Make COLUMN required?
 		Allow r/R/replace/Replace/REPLACE vs only r

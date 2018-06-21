@@ -109,8 +109,6 @@
 				snipString := buildMLoop(data, numIndents)
 			}
 			
-			DEBUG.popup("Data",data, "Snippet string",snipString)
-			return
 			sendTextWithClipboard(snipString)
 		}
 	
@@ -144,8 +142,10 @@
 			loopString .= replaceTags(MainConfig.getPrivate("M_LOOP_ARRAY_BASE"), {"ARRAY_NAME":arrayName, "ITERATOR":iterator, "PREV_ITERATORS":prevIterators})
 			
 			prevIterators .= iterator ","
-			loopString .= MNewLineAndIndent(numIndents)
+			loopString .= getMNewLineAndIndent(numIndents)
 		}
+		
+		return loopString
 	}
 	
 	buildMIdLoop(data, ByRef numIndents := 0) {
@@ -154,7 +154,7 @@
 		idVar := stringLower(ini) "Id"
 		loopString := replaceTags(MainConfig.getPrivate("M_LOOP_ID_BASE"), {"INI":ini, "ID_VAR":idVar})
 		
-		loopString .= MNewLineAndIndent(numIndents)
+		loopString .= getMNewLineAndIndent(numIndents)
 		return loopString
 	}
 	
@@ -163,13 +163,13 @@
 		
 		idVar  := stringLower(ini) "Id"
 		datVar := stringLower(ini) "Dat"
-		loopString := replaceTags(MainConfig.getPrivate("M_LOOP_DAT_BASE"), {"INI":ini, "ID_VAR":idVar, "DAT_VAR":datVar})
+		loopString := replaceTags(MainConfig.getPrivate("M_LOOP_DAT_BASE"), {"INI":ini, "ID_VAR":idVar, "DAT_VAR":datVar, "ITEM":""})
 		
-		loopString .= MNewLineAndIndent(numIndents)
+		loopString .= getMNewLineAndIndent(numIndents)
 		return loopString
 	}
 	
-	MNewLineAndIndent(ByRef numIndents := 0) {
+	getMNewLineAndIndent(ByRef numIndents := 0) {
 		numIndents++
 		return "`n`t" multiplyString(". ", numIndents) ; Newline + tab on each new line + indentation
 	}

@@ -98,101 +98,79 @@
 			else
 				Send, {End}
 			
+			; Determine how indented we are to start with
+			numIndents := 0 ; GDB TODO
+			
 			s := new Selector("epicStudioSnippets.tl")
 			data := s.selectGui()
 			
-			loopString := ""
-			numIndents := 0
-			prevIterators := ""
+			type := data["TYPE"]
 			if(data["TYPE"] = "LOOP") {
-				iteratorList := data["ITERATORS"]
-				iteratorAry := strSplit(iteratorList, ",")
-				
-				if(data["SUBTYPE"] = "ARRAY_GLO") {
-					arrayName := data["ARRAY_INI"]
-					baseString := MainConfig.getPrivate("EPICSTUDIO_LOOP_ARRAY_BASE")
-					
-					for i,iterator in iteratorAry {
-						loopString .= replaceTags(baseString, {"ARY_NAME":arrayName, "ITERATOR":iterator, "PREV_ITERATORS":prevIterators}) "`n"
-						
-						prevIterators .= iterator ","
-						numIndents++
-						
-						loopString .= "`t" ; Tab on each new line in EpicStudio
-						loopString .= multiplyString(". ", numIndents)
-					}
-					
-				} else if(data["SUBTYPE"] = "ID") {
-					ini := data["ARRAY_INI"]
-					id  := iteratorAry[1]
-					
-					if(!id)
-						id := stringLower(ini) "Id"
-					
-					loopString := replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_ID_BASE"), {"INI":ini, "ID":id}) "`n`t. "
-					
-				} else if(data["SUBTYPE"] = "DAT") {
-					ini  := data["ARRAY_INI"]
-					id   := iteratorAry[1]
-					dat  := iteratorAry[2]
-					item := data["ITEM"]
-					
-					if(!id) ; GDB TODO replace these using tags in default iterator variables?
-						id := stringLower(ini) "Id"
-					if(!dat)
-						dat := stringLower(ini) "Dat"
-					
-					loopString := replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_DAT_BASE"), {"INI":ini, "ID":id, "DAT":dat, "ITEM":item}) "`n`t. "
-					
-				} else if(data["SUBTYPE"] = "ID_DAT") {
-					ini  := data["ARRAY_INI"]
-					id   := iteratorAry[1]
-					dat  := iteratorAry[2]
-					item := data["ITEM"]
-					
-					if(!id) ; GDB TODO replace these using tags in default iterator variables?
-						id := stringLower(ini) "Id"
-					if(!dat)
-						dat := stringLower(ini) "Dat"
-					
-					loopString := replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_ID_BASE"), {"INI":ini, "ID":id}) "`n`t. "
-					loopString .= replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_DAT_BASE"), {"INI":ini, "ID":id, "DAT":dat, "ITEM":item}) "`n`t. . " ; GDB TODO turn dots into a loop with recursive function or something?
-					
-				} else if(data["SUBTYPE"] = "INI") {
-					ini := iteratorAry[1]
-					
-					if(!ini)
-						ini := "ini"
-					
-					loopString := replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_INI_BASE"), {"INI":ini}) "`n`t. "
-					
-				} else if(data["SUBTYPE"] = "ITEM") {
-					ini  := iteratorAry[1]
-					item := iteratorAry[2]
-					
-					if(!ini)
-						ini := "ini"
-					if(!item)
-						item := "item"
-					
-					loopString := replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_ITEM_BASE"), {"INI":ini, "ITEM":item}) "`n`t. "
-					
-				} else if(data["SUBTYPE"] = "INI_ITEM") {
-					ini  := iteratorAry[1]
-					item := iteratorAry[2]
-					
-					if(!ini)
-						ini := "ini"
-					if(!item)
-						item := "item"
-					
-					loopString := replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_INI_BASE"), {"INI":ini}) "`n`t. "
-					loopString .= replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_ITEM_BASE"), {"INI":ini, "ITEM":item}) "`n`t. . "
-					
-				}
+				snipString := buildEpicStudioLoop(data, numIndents)
 			}
 			
-			; DEBUG.popup("Data",data, "Loop string",loopString)
-			sendTextWithClipboard(loopString)
+			; DEBUG.popup("Data",data, "Snippet string",snipString)
+			sendTextWithClipboard(snipString)
 		}
+	
+	buildEpicStudioLoop(data, numIndents := 0) {
+		snipString := ""
+		
+		subType := data["SUBTYPE"]
+		if(subType = "ARRAY_GLO") {
+			snipString .= buildEpicStudioArrayLoop(data)
+		
+		} else if(subType = "ID") {
+			snipString .= buildEpicStudioIdLoop(data)
+		
+		} else if(subType = "DAT") {
+			snipString .= buildEpicStudioDatLoop(data)
+			
+		} else if(subType = "ID_DAT") {
+			snipString .= buildEpicStudioIdLoop(data, numIndents)
+			snipString .= buildEpicStudioDatLoop(data, numIndents)
+		}
+		
+		return snipString
+	}
+	
+	buildEpicStudioArrayLoop(data, ByRef numIndents := 0) {			
+		arrayName   := data["ARRAY_OR_INI"]
+		iteratorAry := strSplit(data["ITERATORS"], ",")
+		
+		prevIterators := ""
+		for i,iterator in iteratorAry {
+			loopString .= replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_ARRAY_BASE"), {"ARRAY_NAME":arrayName, "ITERATOR":iterator, "PREV_ITERATORS":prevIterators})
+			
+			prevIterators .= iterator ","
+			loopString .= epicStudioNewLineAndIndent(numIndents)
+		}
+	}
+	
+	buildEpicStudioIdLoop(data, ByRef numIndents := 0) {
+		ini := stringUpper(data["ARRAY_OR_INI"])		
+		
+		idVar := stringLower(ini) "Id"
+		loopString := replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_ID_BASE"), {"INI":ini, "ID_VAR":idVar})
+		
+		loopString .= epicStudioNewLineAndIndent(numIndents)
+		return loopString
+	}
+	
+	buildEpicStudioDatLoop(data, ByRef numIndents := 0) {
+		ini := stringUpper(data["ARRAY_OR_INI"])		
+		
+		idVar  := stringLower(ini) "Id"
+		datVar := stringLower(ini) "Dat"
+		loopString := replaceTags(MainConfig.getPrivate("EPICSTUDIO_LOOP_DAT_BASE"), {"INI":ini, "ID_VAR":idVar, "DAT_VAR":datVar})
+		
+		loopString .= epicStudioNewLineAndIndent(numIndents)
+		return loopString
+	}
+	
+	epicStudioNewLineAndIndent(ByRef numIndents := 0) {
+		numIndents++
+		return "`n`t" multiplyString(". ", numIndents) ; Newline + tab on each new line in EpicStudio + indentation
+	}
+	
 #IfWinActive

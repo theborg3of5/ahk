@@ -91,15 +91,23 @@
 	
 	::.snip::
 		insertMSnippet() {
-			; First, remove a semicolon if that's all that's on this line.
-			Send, {Shift Down}{Left}{Shift Up}
-			if(getSelectedText() = ";")
-				Send, {Backspace} ; Start with no semicolon in front.
-			else
-				Send, {End}
+			; Get current line for analysis.
+			Send, {End}{Home 2} ; Get to very start of line (before indentation)
+			Send, {Shift Down}{End}{Shift Up} ; Select entire line (including indentation)
+			line := getSelectedText()
+			Send, {End} ; Get to end of line
 			
-			; Determine how indented we are to start with
-			numIndents := 0 ; GDB TODO
+			line := removeStringFromStart(line, "`t") ; Tab at the start of every line
+			
+			numIndents := 0
+			while(stringStartsWith(line, ". ")) {
+				numIndents++
+				line := removeStringFromStart(line, ". ")
+			}
+			
+			; If it's an empty line with just a semicolon, remove the semicolon.
+			if(line = ";")
+				Send, {Backspace}
 			
 			s := new Selector("MSnippets.tl")
 			data := s.selectGui()
@@ -112,27 +120,46 @@
 			sendTextWithClipboard(snipString)
 		}
 	
+	;---------
+	; DESCRIPTION:    Generate an M for loop with the given data.
+	; PARAMETERS:
+	;  data       (I,REQ) - Array of data needed to generate the loop. Important subscripts:
+	;                          data["SUBTYPE"] - The type of loop this is.
+	;  numIndents (I,OPT) - The starting indentation (so that the line after can be indented 1
+	;                       more). Defaults to 0 (no indentation).
+	; RETURNS:        String of the text for the generated for loop.
+	;---------
 	buildMLoop(data, numIndents := 0) {
-		snipString := ""
+		loopString := ""
 		
 		subType := data["SUBTYPE"]
 		if(subType = "ARRAY_GLO") {
-			snipString .= buildMArrayLoop(data)
+			loopString .= buildMArrayLoop(data, numIndents)
 		
 		} else if(subType = "ID") {
-			snipString .= buildMIdLoop(data)
+			loopString .= buildMIdLoop(data, numIndents)
 		
 		} else if(subType = "DAT") {
-			snipString .= buildMDatLoop(data)
+			loopString .= buildMDatLoop(data, numIndents)
 			
 		} else if(subType = "ID_DAT") {
-			snipString .= buildMIdLoop(data, numIndents)
-			snipString .= buildMDatLoop(data, numIndents)
+			loopString .= buildMIdLoop(data, numIndents)
+			loopString .= buildMDatLoop(data, numIndents)
 		}
 		
-		return snipString
+		return loopString
 	}
 	
+	;---------
+	; DESCRIPTION:    Generate nested M for loops using the given data.
+	; PARAMETERS:
+	;  data        (I,REQ) - Array of data needed to generate the loop. Important subscripts:
+	;                          data["ARRAY_OR_INI"] - The name of the array or global (with @s around it)
+	;                              ["ITERATORS"]    - Comma-delimited list of iterator variables to loop with.
+	;  numIndents (IO,OPT) - The starting indentation for the loop. Will be updated as we add nested
+	;                        loops, final value is 1 more than the last loop.
+	; RETURNS:        String for the generated loop
+	;---------
 	buildMArrayLoop(data, ByRef numIndents := 0) {			
 		arrayName   := data["ARRAY_OR_INI"]
 		iteratorAry := strSplit(data["ITERATORS"], ",")
@@ -142,22 +169,40 @@
 			loopString .= replaceTags(MainConfig.getPrivate("M_LOOP_ARRAY_BASE"), {"ARRAY_NAME":arrayName, "ITERATOR":iterator, "PREV_ITERATORS":prevIterators})
 			
 			prevIterators .= iterator ","
-			loopString .= getMNewLineAndIndent(numIndents)
+			loopString .= getMNewLinePlusIndent(numIndents)
 		}
 		
 		return loopString
 	}
 	
+	;---------
+	; DESCRIPTION:    Generate an M for loop over IDs using the given data.
+	; PARAMETERS:
+	;  data        (I,REQ) - Array of data needed to generate the loop. Important subscripts:
+	;                          data["ARRAY_OR_INI"] - The INI of the records to loop through
+	;  numIndents (IO,OPT) - The starting indentation for the loop. Will be updated as we add nested
+	;                        loops, final value is 1 more than the last loop.
+	; RETURNS:        String for the generated loop
+	;---------
 	buildMIdLoop(data, ByRef numIndents := 0) {
 		ini := stringUpper(data["ARRAY_OR_INI"])		
 		
 		idVar := stringLower(ini) "Id"
 		loopString := replaceTags(MainConfig.getPrivate("M_LOOP_ID_BASE"), {"INI":ini, "ID_VAR":idVar})
 		
-		loopString .= getMNewLineAndIndent(numIndents)
+		loopString .= getMNewLinePlusIndent(numIndents)
 		return loopString
 	}
 	
+	;---------
+	; DESCRIPTION:    Generate an M for loop over DATs using the given data.
+	; PARAMETERS:
+	;  data        (I,REQ) - Array of data needed to generate the loop. Important subscripts:
+	;                          data["ARRAY_OR_INI"] - The INI of the records to loop through
+	;  numIndents (IO,OPT) - The starting indentation for the loop. Will be updated as we add nested
+	;                        loops, final value is 1 more than the last loop.
+	; RETURNS:        String for the generated loop
+	;---------
 	buildMDatLoop(data, ByRef numIndents := 0) {
 		ini := stringUpper(data["ARRAY_OR_INI"])		
 		
@@ -165,13 +210,27 @@
 		datVar := stringLower(ini) "Dat"
 		loopString := replaceTags(MainConfig.getPrivate("M_LOOP_DAT_BASE"), {"INI":ini, "ID_VAR":idVar, "DAT_VAR":datVar, "ITEM":""})
 		
-		loopString .= getMNewLineAndIndent(numIndents)
+		loopString .= getMNewLinePlusIndent(numIndents)
 		return loopString
 	}
 	
-	getMNewLineAndIndent(ByRef numIndents := 0) {
-		numIndents++
-		return "`n`t" multiplyString(". ", numIndents) ; Newline + tab on each new line + indentation
+	;---------
+	; DESCRIPTION:    Generate an M for loop over IDs, then DATs, using the given data.
+	; PARAMETERS:
+	;  data        (I,REQ) - Array of data needed to generate the loop. Important subscripts:
+	;                          data["ARRAY_OR_INI"] - The INI of the records to loop through
+	;  numIndents (IO,OPT) - The starting indentation for the loop. Will be updated as we add nested
+	;                        loops, final value is 1 more than the last loop.
+	; RETURNS:        String for the generated loop
+	;---------
+	getMNewLinePlusIndent(ByRef currNumIndents := 0) {
+		outString := "`n`t" ; New line + tab (at the start of every line)
+		
+		; Increase indentation level and add indentation
+		currNumIndents++
+		outString .= multiplyString(". ", currNumIndents)
+		
+		return outString
 	}
 	
 #IfWinActive

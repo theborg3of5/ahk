@@ -4,7 +4,7 @@
 #IfWinActive, ahk_class rctrl_renwnd32
 	; Format as code (using custom styles)
 	^+c::
-		Send, ^+1 ; Hotkey used in Outlook (won't let me use ^+c directly)
+		Send, ^+!2 ; Hotkey used in Outlook (won't let me use ^+c directly)
 	return
 	
 	; Shortcut to go to today on the calendar. (In desired, 3-day view.)

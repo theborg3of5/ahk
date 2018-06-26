@@ -65,11 +65,11 @@
 	Consider turning the various window actions into a separate class? WinActions, maybe?
 		Could read stuff in itself, MainConfig would call
 			All windows' info stored in static variables (like in MainConfig)
+			If we do this, move window > getWindowTitleString() in too
 	Consider moving some of the program- and window-related functions that basically just return/simply use values from MainConfig, into MainConfig
 		activateProgram
 		runProgram
 		getProgramTitleString
-		getWindowTitleString
 	
 # Documentation
 	common

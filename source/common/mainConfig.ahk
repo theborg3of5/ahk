@@ -212,7 +212,7 @@ class MainConfig {
 		For key,value in pathsAry {
 			value := replaceTag(value, "USER_ROOT", reduceFilepath(A_Desktop,  1))
 			value := replaceTag(value, "AHK_ROOT",  reduceFilepath(A_LineFile, 3)) ; 2 levels out, plus one to get out of file itself.
-			value := replaceTags(value, this.privates)
+			value := this.replacePrivateTags(value)
 			pathsAry[key] := value ; make sure to store it back in the actual array
 		}
 		

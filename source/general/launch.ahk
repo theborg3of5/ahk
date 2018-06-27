@@ -95,6 +95,17 @@ genericHyperlink(subAction) {
 			SendRaw, % textToSend
 			Send, {Enter}
 		}
+	^+!#t::
+		selectDLG() {
+			filter := {COLUMN:"DLG", VALUE:"", INCLUDE_BLANKS:false}
+			s := new Selector("outlookTLG.tl", filter)
+			dlgId := s.selectGui("DLG", "", "", true)
+			if(!dlgId)
+				return
+			
+			dlgId := removeStringFromStart(dlgId, "P.")
+			Send, % dlgId
+		}
 	
 	^+!h::
 		selectHyperspace() {
@@ -178,17 +189,5 @@ genericHyperlink(subAction) {
 				runProgram("Snapper")
 			else
 				Run(buildSnapperURL(data["COMM_ID"], data["INI"], data["ID"])) ; data["ID"] can contain a comma-delimited list if that's what the user entered
-		}
-	
-	#+p::
-		selectDLG() {
-			filter := {COLUMN:"DLG", VALUE:"", INCLUDE_BLANKS:false}
-			s := new Selector("outlookTLG.tl", filter)
-			dlgId := s.selectGui("DLG", "", "", true)
-			if(!dlgId)
-				return
-			
-			dlgId := removeStringFromStart(dlgId, "P.")
-			Send, % dlgId
 		}
 #If

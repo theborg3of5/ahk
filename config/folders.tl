@@ -2,6 +2,7 @@
 	
 	# General
 	Downloads					dl									<DOWNLOADS>
+	Design						des								<USER_ROOT>\Design																								EPIC_LAPTOP
 	Shortcuts					sc									<USER_ROOT>\Shortcuts																							EPIC_LAPTOP
 	Music							mu									<MUSIC>
 	Personal						pers								<EPIC_PERSONAL>																									EPIC_LAPTOP

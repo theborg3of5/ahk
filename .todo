@@ -1,5 +1,4 @@
 # Fixes
-	Add an additional check to linking hotkey - can we double-check that the field in question isn't just "k" before submitting?
 	Take another look at genericSearch(), make sure we really need to do the forceArray() stuff
 		Probably tweak the loop or pull out a subfunction, too.
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
@@ -11,6 +10,7 @@
 		arrayContains vs just contains
 		stringContains
 		isInArray
+	DEBUG.toast() takes many arguments, but only actually shows the first line of them - need to move it upward (and maybe make it taller?)
 	
 # New
 	For TLG selector - allow some lines to be a prefix instead of getting replaced by custom message?

@@ -203,6 +203,8 @@ linkSelectedText(path) {
 	
 	startLink(windowName)
 	sendTextWithClipboard(path)
+	if(!pathIsCorrect(windowName, path)) ; If we somehow didn't put the link in the box correctly, bail out so the user can notice and fix it.
+		return
 	finishLink(windowName)
 }
 doesWindowSupportLinking(name) {
@@ -255,6 +257,16 @@ getLinkPopupTitleString(windowName) {
 	linkPopupsAry["EMC2 XDS"] := "HyperLink Parameters ahk_class ThunderRT6FormDC"
 	
 	return linkPopupsAry[windowName]
+}
+pathIsCorrect(windowName, pathToMatch) {
+	if(!windowName)
+		return false
+	
+	Send, {Home}{Shift Down}{End}{Shift Up}
+	currentPath := getSelectedText()
+	; DEBUG.toast("Current path",currentPath)
+	
+	return (currentPath = pathToMatch)
 }
 finishLink(windowName) {
 	if(!windowName)

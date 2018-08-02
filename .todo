@@ -11,7 +11,6 @@
 		arrayContains vs just contains
 		stringContains
 		isInArray
-	Onenote hotkey currently trims "DBC" off of the end when it shouldn't.
 	
 # New
 	For TLG selector - allow some lines to be a prefix instead of getting replaced by custom message?

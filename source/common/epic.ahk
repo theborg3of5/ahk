@@ -383,7 +383,10 @@ processEMC2ObjectInfo(infoAry) {
 	id := cleanupText(id)
 	
 	; Title
-	title := cleanupText(title, ["-", "/", "\", ":", "DBC", "(Developer has reset your status)", "(Stage 1 QAer is Waiting for Changes)", "(Stage 2 QAer is Waiting for Changes)"]) ; Drop odd characters and non-useful strings
+	stringsToRemove := ["-", "/", "\", ":", "(Developer has reset your status)", "(Stage 1 QAer is Waiting for Changes)", "(Stage 2 QAer is Waiting for Changes)"] ; Odd characters and non-useful strings that should come off
+	title := cleanupText(title, stringsToRemove)
+	title := removeStringFromStart(title, "DBC") ; Drop from start - most of my DLGs are DBC, no reason to include that.
+	title := cleanupText(title, stringsToRemove) ; Remove anything that might have been after the "DBC"
 	if(ini = "SLG") {
 		; "--Assigned to: USER" might be on the end for SLGs - trim it off.
 		title := getStringBeforeStr(title, "--Assigned To:")

@@ -17,13 +17,20 @@ clearTitleFormat() {
 }
 
 ; Assumes that the formatting that would apply to the text in question is currently in effect.
-getLabelWidthForText(text, uniqueId) {
+getLabelSizeForText(text, uniqueId, ByRef width = "", ByRef height = "") {
 	static ; Assumes-static mode - means that any variables that are used in here are assumed to be static
 	Gui, Add, Text, vVar%uniqueId%, % text
 	GuiControlGet, out, Pos, Var%uniqueId%
-	GuiControl, Hide, Var%uniqueId% ; GuiControl, Delete not yet implemented, so just hide the temporary control.
+	width  := outW
+	height := outH
 	
-	return outW
+	GuiControl, Hide, Var%uniqueId% ; GuiControl, Delete not yet implemented, so just hide the temporary control.
+}
+
+; Assumes that the formatting that would apply to the text in question is currently in effect.
+getLabelWidthForText(text, uniqueId) {
+	getLabelSizeForText(text, uniqueId, width)
+	return width
 }
 
 ; These two basically let us hide the static/global requirement for variables used for GUI controls - 

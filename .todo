@@ -10,7 +10,6 @@
 		arrayContains vs just contains
 		stringContains
 		isInArray
-	DEBUG.toast() takes many arguments, but only actually shows the first line of them - need to move it upward (and maybe make it taller?)
 	
 # New
 	For TLG selector - allow some lines to be a prefix instead of getting replaced by custom message?

@@ -184,11 +184,11 @@ class Toast {
 	setLabelText(toastText, labelVarName) {
 		; Figure out how wide the text control needs to be to fit its contents
 		Toast.widthLabelNum++
-		textWidth := getLabelWidthForText(toastText, "WidthLabel" Toast.widthLabelNum)
+		getLabelSizeForText(toastText, "WidthLabel" Toast.widthLabelNum, textWidth, textHeight)
 		
 		; Update the text and width
 		GuiControl,     , % labelVarName, % toastText
-		GuiControl, Move, % labelVarName, % "w" textWidth
+		GuiControl, Move, % labelVarName, % "w" textWidth " h" textHeight
 	}
 	
 	;---------

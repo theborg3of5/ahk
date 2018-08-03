@@ -29,10 +29,17 @@ gitNames.Push(".git")
 gitNames.Push(".gitignore")
 gitNames.Push(".gitattributes")
 
+; Check for command line arguments - which machine to use, and whether to suppress the "run now?" prompt.
+machineChoice := A_Args[1]
+useSlimMode   := A_Args[2]
 
-; Prompt the user for which computer this is.
+; Get info for the machine that we're setting up for (will drive specific values in settings.ini)
 s := new Selector(tlSetupPath)
-machineInfo := s.selectGui()
+if(machineChoice)
+	machineInfo := s.selectChoice(machineChoice)
+else
+	machineInfo := s.selectGui()
+
 if(!machineInfo)
 	ExitApp
 ; DEBUG.popup("Machine Info Selected", machineInfo)
@@ -74,18 +81,27 @@ For from,to in copyPaths {
 	FileAppend, %fileContents%, %to%
 }
 
-; Hide all .git system files and folders, for a cleaner appearance.
-t.setText("Hiding .git files and folders...")
-For i,n in gitNames {
-	Loop, Files, %ahkRootPath%*%n%, RDF
-	{
-		FileSetAttrib, +H, %A_LoopFileFullPath%
+if(!useSlimMode) {
+	; Hide all .git system files and folders, for a cleaner appearance.
+	t.setText("Hiding .git files and folders...")
+	For i,n in gitNames {
+		Loop, Files, %ahkRootPath%*%n%, RDF
+		{
+			FileSetAttrib, +H, %A_LoopFileFullPath%
+		}
 	}
 }
+
 t.close()
 
-MsgBox, 4, , Run now?
-IfMsgBox Yes
+if(useSlimMode) {
+	shouldRun := true
+} else {
+	MsgBox, 4, , Run now?
+	IfMsgBox Yes
+		shouldRun := true
+}
+if(shouldRun)
 	Run(mainAHKPath, startupFolder)
 
 ExitApp

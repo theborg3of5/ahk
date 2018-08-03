@@ -55,7 +55,7 @@ For from,to in copyPaths {
 	; Read it in.
 	FileRead, fileContents, %from%
 	
-	; Replace any palceholder tags in the file contents.
+	; Replace any placeholder tags in the file contents.
 	; DEBUG.popup("From", from, "To", to, "Starting contents", fileContents)
 	For tag,value in tagsToReplace
 		StringReplace, fileContents, fileContents, <%tag%>, %value%, A

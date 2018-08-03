@@ -182,7 +182,7 @@
 			WinMove, ahk_id %KDE_id%, , %KDE_WinX2%, %KDE_WinY2% ; Move the window to the new position.
 
 			;; BEGIN GAVIN CHANGES
-			; Focus findow if CTRL is pressed.
+			; Focus window if CTRL is pressed.
 			GetKeyState, ctrlState, LControl
 			if ctrlState = D
 				WinActivate, ahk_id %KDE_id%

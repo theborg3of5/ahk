@@ -10,6 +10,7 @@
 		arrayContains vs just contains
 		stringContains
 		isInArray
+	Figure out why alt+dragging doesn't work inside VDIs
 	
 # New
 	For TLG selector - allow some lines to be a prefix instead of getting replaced by custom message?

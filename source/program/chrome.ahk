@@ -15,6 +15,11 @@
 			if(clipboard)
 				Toast.showForTime("Clipboard set to title: " clipboard, 2)
 		}
+	
+	~!t::
+		WinWaitActive, % getWindowTitleString("Telegram")
+		telegramFocusNormalChat()
+	return
 #IfWinActive
 	
 #If WinActive("ahk_exe chrome.exe") && MainConfig.isMachine(MACHINE_EpicLaptop)

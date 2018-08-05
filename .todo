@@ -68,6 +68,7 @@
 		Name ideas (*WinActive/*WinExist)
 			named
 			configured/config
+		Already have a MainConfig.isWindowActive()
 	Consider turning the various window actions into a separate class? WinActions, maybe?
 		Could read stuff in itself, MainConfig would call
 			All windows' info stored in static variables (like in MainConfig)

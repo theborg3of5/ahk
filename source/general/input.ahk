@@ -73,6 +73,6 @@ return
 		sendTextWithClipboard(standardString)
 		
 		; Special case for OneNote: link the INI/ID as well.
-		if(WinActive(getWindowTitleString("OneNote")))
+		if(MainConfig.isWindowActive("OneNote"))
 			oneNoteLinkEMC2ObjectInLine(ini, id)
 	}

@@ -10,7 +10,6 @@
 		arrayContains vs just contains
 		stringContains
 		isInArray
-	Add a hotkey or something that turns a comma-delimited list of variables into doubled-up (with first one of each a string) arguments for DEBUG.toast()/.popup()
 	
 # New
 	For TLG selector - allow some lines to be a prefix instead of getting replaced by custom message?

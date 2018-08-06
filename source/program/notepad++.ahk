@@ -11,19 +11,38 @@
 	!+x::return
 	
 	::dbpop::
-		SendRaw, DEBUG.popup(") ; ending quote for syntax highlighting: "
+		SendRaw, DEBUG.popup()
 		Send, {Left} ; Get inside parens
 	return
 	
 	::edbpop::
-		SendRaw, DEBUG.popupEarly(") ; ending quote for syntax highlighting: "
+		SendRaw, DEBUG.popupEarly()
 		Send, {Left} ; Get inside parens
 	return
 	
 	::dbto::
-		SendRaw, DEBUG.toast(") ; ending quote for syntax highlighting: "
+		SendRaw, DEBUG.toast()
 		Send, {Left} ; Get inside parens
 	return
+	
+	::dbparam::
+		notepadPlusPlusDebugParams() {
+			rawParams := clipboard
+			if(!rawParams)
+				return
+			
+			paramsAry := StrSplit(rawParams, ",", A_Space) ; Split on comma and drop leading/trailing spaces
+			; DEBUG.toast("paramsAry",paramsAry)
+			
+			paramsString := ""
+			For i,param in paramsAry {
+				if(i > 1)
+					paramsString .= ", "
+				paramsString .= """" param """" "," param
+			}
+			
+			sendTextWithClipboard(paramsString)
+		}
 	
 	; Function header
 	::`;`;`;::

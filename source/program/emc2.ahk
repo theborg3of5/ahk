@@ -103,6 +103,13 @@
 	return
 #IfWinActive
 
+#If MainConfig.isWindowActive("EMC2 Issue popup")
+	; Change code formatting hotkey to something more universal.
+	^+c::
+		Send, ^e
+	return
+#If
+
 insertSmartText(smartTextName, focusFirstField = true) {
 	Send, ^{F10}
 	WinWaitActive, SmartText Lookup

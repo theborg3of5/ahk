@@ -209,12 +209,13 @@ linkSelectedText(path) {
 }
 doesWindowSupportLinking(name) {
 	windowNamesAry := []
-	windowNamesAry["OneNote"]    := ""
-	windowNamesAry["Outlook"]    := ""
-	windowNamesAry["Word"]       := ""
-	windowNamesAry["EMC2 DLG"]   := ""
-	windowNamesAry["EMC2 XDS"]   := ""
-	windowNamesAry["Mattermost"] := ""
+	windowNamesAry["OneNote"]          := ""
+	windowNamesAry["Outlook"]          := ""
+	windowNamesAry["Word"]             := ""
+	windowNamesAry["EMC2 DLG"]         := ""
+	windowNamesAry["EMC2 XDS"]         := ""
+	windowNamesAry["EMC2 Issue popup"] := ""
+	windowNamesAry["Mattermost"]       := ""
 	
 	return windowNamesAry.HasKey(name)
 }
@@ -250,11 +251,12 @@ getLinkPopupTitleString(windowName) {
 		return ""
 	
 	linkPopupsAry := []
-	linkPopupsAry["OneNote"]  := "Link ahk_class NUIDialog"
-	linkPopupsAry["Outlook"]  := "ahk_class bosa_sdm_Mso96"
-	linkPopupsAry["Word"]     := "ahk_class bosa_sdm_msword"
-	linkPopupsAry["EMC2 DLG"] := "" ; Fake popup, so we can't wait for it (or sense it at all, really)
-	linkPopupsAry["EMC2 XDS"] := "HyperLink Parameters ahk_class ThunderRT6FormDC"
+	linkPopupsAry["OneNote"]          := "Link ahk_class NUIDialog"
+	linkPopupsAry["Outlook"]          := "ahk_class bosa_sdm_Mso96"
+	linkPopupsAry["Word"]             := "ahk_class bosa_sdm_msword"
+	linkPopupsAry["EMC2 DLG"]         := "" ; Fake popup, so we can't wait for it (or sense it at all, really)
+	linkPopupsAry["EMC2 XDS"]         := "HyperLink Parameters ahk_class ThunderRT6FormDC"
+	linkPopupsAry["EMC2 Issue popup"] := "HyperLink Parameters ahk_class ThunderRT6FormDC"
 	
 	return linkPopupsAry[windowName]
 }

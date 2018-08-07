@@ -3,7 +3,7 @@
 { ; Epic Object-related things.
 	
 	getRelatedQANsAry() {
-		if(!isWindowInState("active","DLG  ahk_class ThunderRT6MDIForm ahk_exe EpicD82.exe"))
+		if(!WinActive("DLG  ahk_class ThunderRT6MDIForm ahk_exe EpicD84.exe"))
 			return ""
 		if(!isWindowInState("active"," - EMC2","",2))
 			return ""

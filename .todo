@@ -12,11 +12,7 @@
 		isInArray
 	
 # New
-	For TLG selector - allow some lines to be a prefix instead of getting replaced by custom message?
-		Something special on the choice (another column, maybe)?
-		A special prefix on the message?
-			If this, does it make sense for it to be more general? That is, all override data fields can do this?
-	Allow .TLs to use tags to reference their own values from columns?
+	Allow .TLs to use tags to reference their own values from other columns?
 	Allow programs.tl and windows.tl to use tags for user path, etc.?
 		Would doing this in general eliminate a lot of the need for machine filters?
 			Would eliminate some of the switch-between-paths in windows/programs

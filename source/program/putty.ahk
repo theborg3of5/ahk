@@ -1,3 +1,5 @@
+global lastPuttySearchType, lastPuttySearchText ; For Home+F9 searching repeatedly.
+
 #IfWinActive, ahk_class PuTTY
 	; Insert arbitrary text, inserting needed spaces to overwrite.
 	^i::
@@ -16,6 +18,35 @@
 			; Actually send our input text.
 			SendRaw, % textIn
 		}
+	
+	; Search within record edit screens
+	^F9::recordEditSearch()
+	^g::recordEditSearch(lastPuttySearchType, lastPuttySearchText)
+	recordEditSearch(searchType = "", searchText = "") {
+		; If nothing given, prompt the user for how/what to search.
+		if(searchType = "" || searchText = "") {
+			s := new Selector("puttyRecordEditSearch.tl")
+			data := s.selectGui()
+			searchType := data["SEARCH_TYPE"]
+			searchText := data["SEARCH_TEXT"]
+		}
+		
+		; If still nothing, bail.
+		if(searchType = "" || searchText = "")
+			return
+		
+		; Run the search.
+		Send, {Home}{F9}
+		Send, %searchType%{Enter}
+		SendRaw, % searchText
+		Send, {Enter}
+		
+		; For text searches (where result isn't necessarily unique), store off the latest search for use with ^g later.
+		if(searchType = "T") {
+			lastPuttySearchType := searchType
+			lastPuttySearchText := searchText
+		}
+	}
 	
 	; Normal paste, without all the inserting of spaces.
 	^v::Send, +{Insert}

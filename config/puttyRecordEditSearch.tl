@@ -1,0 +1,6 @@
+(	NAME		ABBREV	SEARCH_TYPE		SEARCH_TEXT
+)	0			0			0					1
+
+	Item		i			I
+	Text		t			T
+	Screen	s			S

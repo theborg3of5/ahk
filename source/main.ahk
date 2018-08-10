@@ -7,6 +7,7 @@ DetectHiddenWindows, On
 #Warn UseUnsetLocal, Off ; Except for using a not-yet-set local variable, that's what default values are for.
 #LTrim                   ; Trim whitespace from left of continuation sections (so they can be indented as I wish).
 #Include <includeCommon>
+#Hotstring *             ; Default option: hotstrings do not require an ending character. Use *0 to turn it off for hotstrings that as needed.
 SetTitleMatchMode, % TITLE_MATCH_MODE_Contain
 
 setCommonHotkeysType(HOTKEY_TYPE_Master)

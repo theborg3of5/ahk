@@ -1,7 +1,5 @@
 ; note to self: this must be in UTF-8 encoding.
 
-#Hotstring * ; Default option: hotstrings do not require an ending character. Use *0 to turn it off for hotstrings that as needed.
-
 #If !MainConfig.windowIsGame()
 { ; Emails.
 	:X:emaila::Send,  % MainConfig.getPrivate("EMAIL")
@@ -180,7 +178,6 @@
 	}
 }
 #IfWinNotActive
-#Hotstring
 
 ; Edits this file.
 ^!h::

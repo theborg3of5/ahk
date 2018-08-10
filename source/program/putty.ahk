@@ -41,11 +41,9 @@ global lastPuttySearchType, lastPuttySearchText ; For Home+F9 searching repeated
 		SendRaw, % searchText
 		Send, {Enter}
 		
-		; For text searches (where result isn't necessarily unique), store off the latest search for use with ^g later.
-		if(searchType = "T") {
-			lastPuttySearchType := searchType
-			lastPuttySearchText := searchText
-		}
+		; Store off the latest search for use with ^g later.
+		lastPuttySearchType := searchType
+		lastPuttySearchText := searchText
 	}
 	
 	; Normal paste, without all the inserting of spaces.

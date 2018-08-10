@@ -2,8 +2,10 @@
 	; Insert arbitrary text, inserting needed spaces to overwrite.
 	^i::
 		insertArbitraryText() {
-			; Block and buffer input until {ENTER} is pressed.
-			textIn := Input(, "{Enter}")
+			; Popup to get the text.
+			textIn := InputBox("Insert text (without overwriting)", , , 500, 100)
+			if(textIn = "")
+				return
 			
 			; Get the length of the string we're going to add.
 			inputLength := StrLen(textIn)
@@ -18,21 +20,8 @@
 	; Normal paste, without all the inserting of spaces.
 	^v::Send, +{Insert}
 	
-	; Disable breaking behavior for ^c, replace with a harder-to-accidentally-press hotkey.
+	; Disable breaking behavior for easy-to-hit-accidentally ^c, PuTTY already has a ^+c hotkey that works too.
 	^c::return
-	^+c::Send, ^c
-	
-	; ; Paste clipboard, insering spaces to overwrite first.
-	; $!v::
-		; ; Get the length of the string we're going to add.
-		; inputLength := StrLen(clipboard)
-		
-		; ; Insert that many spaces.
-		; Send, {Insert %inputLength%}
-		
-		; ; Actually send our input text.
-		; SendRaw, % clipboard
-	; return
 	
 	; Screen wipe
 	^l::
@@ -45,9 +34,30 @@
 		Send, l
 	return
 	
+	; Allow reverse field navigation.
+	+Tab::
+		Send, {Left}
+	return
+	
 	; Open up settings window.
 	!o::
 		openPuttySettingsWindow()
+	return
+	
+	; Open up the current log file.
+	^+o::
+		openCurrentLogFile() {
+			logFilePath := GetPuttyLogFile()
+			if(logFilePath)
+				Run(logFilePath)
+		}
+	
+	; Make page up/down actually move a page up/down (each Shift+Up/Down does a half a page).
+	^PgUp::
+		Send, +{PgUp 2}
+	return
+	^PgDn::
+		Send, +{PgDn 2}
 	return
 	
 	{ ; Various commands.
@@ -144,50 +154,16 @@
 			Send, 1{Enter}
 		return
 		
-		:*:.lock::
+		::.lock::
 			SendRaw, w $$zlock(" ; Extra comment/quote here to fix syntax highlighting. "
 		return
 		
-		:*:.unlock::
+		::.unlock::
 			SendRaw, w $$zunlock(" ; Extra comment/quote here to fix syntax highlighting. "
 		return
 		
-		:C1R*:^XITEMSET::^XSETITEM
+		:C1R:^XITEMSET::^XSETITEM
 	}
-	
-	{ ; Pasting ZR/ZLs.
-		:*:.zrv::
-			SendRaw, `;zcode
-			Send, {Enter}
-			Send, 0{Enter}
-		return
-		:*:.zrr::
-			SendRaw, `;zrun searchCode("","","",$c(16))
-			Send, {Enter}
-			Send, q{Enter}
-		return
-	}
-	
-	; Allow reverse field navigation.
-	+Tab::
-		Send, {Left}
-	return
-	
-	; Open up the current log file.
-	^+o::
-		openCurrentLogFile() {
-			logFilePath := GetPuttyLogFile()
-			if(logFilePath)
-				Run(logFilePath)
-		}
-	
-	; Make page up/down actually move a page up/down (each Shift+Up/Down does a half a page).
-	^PgUp::
-		Send, +{PgUp 2}
-	return
-	^PgDn::
-		Send, +{PgDn 2}
-	return
 #IfWinActive
 
 

@@ -12,6 +12,10 @@
 		isInArray
 	
 # New
+	Figure out some central documentation method
+		Dynamically pull hotkeys for the currently focused program?
+		Hotkey to show window with all currently active hotkeys, divided up into current-program-specific and others
+			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
 	Allow .TLs to use tags to reference their own values from other columns?
 	Allow programs.tl and windows.tl to use tags for user path, etc.?
 		Would doing this in general eliminate a lot of the need for machine filters?
@@ -46,9 +50,6 @@
 			configs
 			mappedDrives
 			epicStudioSnippets
-	Audit all scripts for unused hotkeys
-		Come up with centralized (or something that reads scripts and creates one) documentation of hotkeys?
-		Maybe just a standard format for hotkeys that goes at the top of scripts that implement them?
 	Build a way to auto-reformat .tl files?
 		Fix widths so they work nicely
 			Will need to have a tab width parameter/argument somewhere for this (maybe in _constants or config?)

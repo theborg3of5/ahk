@@ -31,24 +31,6 @@
 			KDiff window - maximize on center screen
 		Telegram - left monitor, top or bottom depending on machine
 		Pidgin window - top-right of left monitor
-	Consider changing TableListMod format (current is {<COLUMN>}<OPERATION>:<TEXT>)
-		Make COLUMN required?
-		Allow r/R/replace/Replace/REPLACE vs only r
-			Replace > replaceWith?
-			Begin > prepend/addToStart?
-			End > append/addToEnd?
-		Don't have the column in {} at the beginning - hard to read. Alternatives:
-			COLUMN.op(TEXT) - Make it the owner of the action
-			op(COLUMN,TEXT) - Make it like an argument to the action
-				Not as clear the distinction between column and text
-		TLs that use mods:
-			search
-			windows
-			programs
-			actionObject
-			configs
-			mappedDrives
-			epicStudioSnippets
 	Build a way to auto-reformat .tl files?
 		Fix widths so they work nicely
 			Will need to have a tab width parameter/argument somewhere for this (maybe in _constants or config?)

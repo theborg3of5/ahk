@@ -1,6 +1,6 @@
 (	NAME					ABBREV	PATH
 
-[{PATH}b:<AHK_CONFIG>\]
+[PATH.addToStart(<AHK_CONFIG>\)]
 	Windows				w|win		windows.tl
 	Programs				prog		programs.tl
 	Paths					path		paths.tl

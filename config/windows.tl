@@ -21,8 +21,8 @@
 	VB6 Object Browser		VB6.exe				-							Object Browser			-						CLOSE
 	
 	; EMC2 popups
-[{EXE}r:EpicD84.exe|{CLASS}r:ThunderRT6FormDC]
-[{ESC}r:CLOSE|{DELETE_WORD}r:CTRL_SHIFT]
+[EXE.replaceWith(EpicD84.exe)|CLASS.replaceWith(ThunderRT6FormDC)]
+[ESC.replaceWith(CLOSE)|DELETE_WORD.replaceWith(CTRL_SHIFT)]
 	EMC2 DLG email				-						-							E-mail Development Log
 	EMC2 Issue email			-						-							Email Issue
 	EMC2 Issue popup			-						-							Magnify
@@ -41,13 +41,13 @@
 	AHK GUIs						AutoHotkey.exe		AutoHotkeyGUI			-							-						CLOSE		-			-				CTRL_SHIFT
 	
 	; Web popups - close on Escape.
-[{ESC}r:CLOSE|{EXE}r:chrome.exe]
+[ESC.replaceWith(CLOSE)|EXE.replaceWith(chrome.exe)]
 	Join							-						-							Join
 	TickTick						-						-							All - TickTick
 []
 	
 	; Windows that have odd borders and need different offsets - mainly Office programs.
-[{WINDOW_EDGE_OFFSET_OVERRIDE}r:0]
+[WINDOW_EDGE_OFFSET_OVERRIDE.replaceWith(0)]
 	Chrome						chrome.exe
 	Excel							EXCEL.EXE
 	OneNote						ONENOTE.EXE

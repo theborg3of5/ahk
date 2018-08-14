@@ -1,10 +1,10 @@
 /* Class which represents a particular change (mod action) that should be made to a "row" array in a TableList.
 	
 	A mod action is defined by a string using a particular syntax:
-		{<columnName>}<operation>:<text>
-			columnName - The name of the column that this mod action should apply to. This portion (including the {}) is optional - if not given the mod will affect the first column in the table.
-			operation  - A letter (that matches one of the MODOP_* constants below) what we want to do (see "Operations" section).
-			text       - The text that is used by the operation (see "Operations" section).
+		COLUMN.OPERATION(TEXT)
+			COLUMN    - The name of the column that this mod action should apply to. This portion (including the {}) is optional - if not given the mod will affect the first column in the table.
+			OPERATION - A string (that matches one of the MODOP_* constants below) what we want to do (see "Operations" section).
+			TEXT      - The text that is used by the operation (see "Operations" section).
 		Example:
 			{PATH}b:C:\users\
 		Result:
@@ -14,7 +14,7 @@
 	
 	Operations
 		The operation of a mod action determines how it changes the chosen column:
-			r - Replace
+			replaceWith
 				Replace the column.
 				Example:
 					Mod line
@@ -24,7 +24,7 @@
 					Result
 						z
 			
-			b - Begin
+			addToStart
 				Prepend to the column (add to the beginning).
 				Example:
 					Mod line
@@ -34,7 +34,7 @@
 					Result
 						zAAA
 			
-			e - End
+			addToEnd
 				Append to the column (add to the end).
 				Example:
 					Mod line
@@ -45,9 +45,9 @@
 						AAAz
 */
 
-global MODOP_REPLACE := "r"
-global MODOP_BEGIN   := "b"
-global MODOP_END     := "e"
+global MODOP_REPLACE   := "replaceWith"
+global MODOP_ADD_START := "addToStart"
+global MODOP_ADD_END   := "addToEnd"
 
 class TableListMod {
 	column    := ""
@@ -59,20 +59,17 @@ class TableListMod {
 	; DESCRIPTION:    Create a new TableListMod instance.
 	; PARAMETERS:
 	;  modActString (I,REQ) - String defining the mod. Format (explained in class documentation):
-	;                         	{<columnName>}<operation>:<text>
+	;                         	COLUMN.OPERATION(TEXT)
 	;  label        (I,REQ) - Label associated with this mod.
 	; RETURNS:        Reference to new TableListMod object
 	;---------
-	__New(modActString, label) {
-		; Check to see whether we have an explicit column. Syntax: line starts with {columnLabel}
-		if(stringStartsWith(modActString, "{")) {
-			this.column := getStringBetweenStr(modActString, "{", "}")
-			modActString := getStringAfterStr(modActString, "}")
-		}
+	__New(modString, label) {
+		this.label := label
 		
-		this.operation := getStringBeforeStr(modActString, ":")
-		this.text      := getStringAfterStr(modActString, ":")
-		this.label     := label
+		; Pull the relevant info out of the string.
+		this.column    := getStringBeforeStr(modString, ".")
+		this.operation := getStringBetweenStr(modString, ".", "(")
+		this.text      := getStringBetweenStr(modString, "(", ")")
 		
 		; DEBUG.popup("New TableListMod","Finished", "State",this)
 	}
@@ -88,9 +85,9 @@ class TableListMod {
 		
 		if(this.operation = MODOP_REPLACE)
 			newValue := this.text
-		else if(this.operation = MODOP_BEGIN)
+		else if(this.operation = MODOP_ADD_START)
 			newValue := this.text columnValue
-		else if(this.operation = MODOP_END)
+		else if(this.operation = MODOP_ADD_END)
 			newValue := columnValue this.text
 		
 		; DEBUG.popup("Row", row, "Column value to modify", columnValue, "Operation", this.operation, "Text", this.text, "Result", newValue, "Mod",this)

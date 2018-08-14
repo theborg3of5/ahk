@@ -3,7 +3,7 @@
 (		NAME								ABBREV		SUBTYPE															SEARCH_TYPE		APP_KEY		MACHINE	SEARCH_TERM
 )		0									0				0																	0					0				0			1
 
-[{SEARCH_TYPE}r:WEB]
+[SEARCH_TYPE.replaceWith(WEB)]
 		# Web
 		; (SUBTYPE = <URL with %s for query>)
 		Google							g				https://www.google.com/search?q=%s
@@ -13,7 +13,7 @@
 		Translate English > Dutch	ted|edtrans	https://translate.google.com/#en/nl/%s
 []
 
-[{SEARCH_TYPE}r:GREPWIN]
+[SEARCH_TYPE.replaceWith(GREPWIN)]
 		# GrepWin
 		; (SUBTYPE = folder)
 		AHK Root							ahkr			<AHK_ROOT>
@@ -23,8 +23,8 @@
 		# Other
 		Everything (file search)	e|ev			-																	EVERYTHING
 
-[+1|{MACHINE}r:EPIC_LAPTOP]
-	[+2|{SEARCH_TYPE}r:CODESEARCH]
+[+1|MACHINE.replaceWith(EPIC_LAPTOP)]
+	[+2|SEARCH_TYPE.replaceWith(CODESEARCH)]
 		# | Codesearch
 		Server							s				Server
 		Client							c				Client

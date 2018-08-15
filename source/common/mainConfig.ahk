@@ -223,9 +223,9 @@ class MainConfig {
 	loadPrograms(filePath) {
 		tl := new TableList(filePath)
 		programsTable := tl.getFilteredTableUnique("NAME", "MACHINE", this.getMachine())
-		; DEBUG.popupEarly("MainConfig", "loadPrograms", "Unique table", programsTable)
+		; DEBUG.popupEarly("MainConfig","loadPrograms", "Unique table",programsTable)
 		
-		; Index it by name and machine.
+		; Index it by name.
 		programsAry := []
 		For i,row in programsTable {
 			name := row["NAME"] ; Identifying name of this entry (which this.programs will be indexed by)
@@ -235,7 +235,7 @@ class MainConfig {
 			
 			programsAry[name] := row
 		}
-		; DEBUG.popupEarly("MainConfig", "loadPrograms", "Finished programs", programsAry)
+		; DEBUG.popupEarly("MainConfig","loadPrograms", "Finished programs",programsAry)
 		
 		return programsAry
 	}

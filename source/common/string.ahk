@@ -146,9 +146,12 @@ escapeRegExChars(inputString) {
 	return outputString
 }
 
-; Wrapper for InStr() that I can remember easier.
-stringContains(haystack, needle, caseSensitive := "") {
-	return InStr(haystack, needle, caseSensitive)
+; Wrapper for InStr() that I can remember easier. Slightly different parameters as well.
+stringContains(haystack, needle, searchFromEnd := false) {
+	if(searchFromEnd)
+		return InStr(haystack, needle, , 0)
+	else
+		return InStr(haystack, needle)
 }
 
 ; See if a string contains any of the strings in the array.
@@ -331,23 +334,26 @@ stringEndsWith(inputString, endString) {
 }
 
 ; These are very simple - only work on the first instance of the character(s) in question.
-getStringBeforeStr(inputString, endString) {
-	endStringPos := stringContains(inputString, endString)
+getStringBeforeStr(inputString, endString, searchFromEnd := false) {
+	endStringPos := stringContains(inputString, endString, searchFromEnd)
 	if(!endStringPos)
 		return inputString
 	
 	return subStr(inputString, 1, endStringPos - 1)
 }
-getStringAfterStr(inputString, startString) {
-	startStringPos := stringContains(inputString, startString)
+getStringAfterStr(inputString, startString, searchFromEnd := false) {
+	startStringPos := stringContains(inputString, startString, searchFromEnd)
 	if(!startStringPos)
 		return inputString
 	
 	return subStr(inputString, startStringPos + strLen(startString))
 }
-getStringBetweenStr(inputString, startString, endString) {
-	outString := getStringBeforeStr(inputString, endString)
+getStringBetweenStr(inputString, startString, endString, beGreedy := false) {
+	outString := getStringBeforeStr(inputString, endString, beGreedy)
 	return getStringAfterStr(outString, startString)
+}
+getStringBetweenStrGreedy(inputString, startString, endString) {
+	return getStringBetweenStr(inputString, startString, endString, true)
 }
 
 appendCharIfMissing(inputString, charToAppend) {

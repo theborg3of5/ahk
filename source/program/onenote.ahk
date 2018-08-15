@@ -47,7 +47,6 @@
 		!Right::!+=
 		^t::
 			Send, ^{Home} ; Overall Do header so we affect the whole page
-			Send, {Down}  ; Move down to Today header
 			Send, !+4     ; Top level that today's todos are at (so they're all collapsed)
 			Send, !+3     ; Collapse to headers under Today (which collapses headers under Today so only unfinished todos on level 4 are visible)
 		return

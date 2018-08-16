@@ -24,6 +24,7 @@
 [EXE.replaceWith(EpicD84.exe)|CLASS.replaceWith(ThunderRT6FormDC)]
 [ESC.replaceWith(CLOSE)|DELETE_WORD.replaceWith(CTRL_SHIFT)]
 	EMC2 DLG email				-						-							E-mail Development Log
+	EMC2 QAN notes				-						-							Note
 	EMC2 Issue email			-						-							Email Issue
 	EMC2 Issue popup			-						-							Magnify
 	EMC2 QAN email notify	-						-							EMC2 - QA Note E-Mail Notification

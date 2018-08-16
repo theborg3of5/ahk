@@ -12,6 +12,10 @@
 		isInArray
 	
 # New
+	Restructure window actions a bit
+		activateWindow currently forces a lookup
+			Makes (original) Telegram activation plan a problem - want to activate as normal (ideally without duplicating the code to do so), THEN do something
+			Would a doActivateWindow make more sense, that just takes the method and performs the action?
 	Figure out some central documentation method
 		Dynamically pull hotkeys for the currently focused program?
 		Hotkey to show window with all currently active hotkeys, divided up into current-program-specific and others

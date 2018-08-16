@@ -103,7 +103,7 @@
 	return
 #IfWinActive
 
-#If MainConfig.isWindowActive("EMC2 Issue popup")
+#If MainConfig.isWindowActive("EMC2 Issue popup") || MainConfig.isWindowActive("EMC2 QAN notes")
 	; Change code formatting hotkey to something more universal.
 	^+c::
 		Send, ^e

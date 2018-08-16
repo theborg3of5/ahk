@@ -270,6 +270,10 @@ pathIsCorrect(windowName, pathToMatch) {
 	if(!windowName)
 		return false
 	
+	; It's all within the one text box (Markup format), so we should be fine.
+	if(windowName = "Mattermost")
+		return true
+	
 	Send, {Home}{Shift Down}{End}{Shift Up}
 	currentPath := getSelectedText()
 	; DEBUG.toast("Current path",currentPath)

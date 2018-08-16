@@ -197,7 +197,7 @@ doWindowAction(action, titleString := "A", winSettings := "") {
 	else if(action = WIN_ACTION_CLOSE)       ; Close the given window
 		closeWindow(titleString, winSettings)
 	else if(action = WIN_ACTION_ESC)         ; React to the escape key (generally to minimize or close the window)
-		doEscAction(titleString, winSettings)
+		escAction(titleString, winSettings)
 	else if(action = WIN_ACTION_MIN)         ; Minimize the given window
 		minimizeWindow(titleString, winSettings)
 	else if(action = WIN_ACTION_SELECT_ALL)  ; Select all
@@ -244,6 +244,42 @@ activateWindow(titleString := "A", winSettings := "") {
 	method := processWindow(titleString, WIN_ACTION_ACTIVATE, winSettings)
 	; DEBUG.popup("activateWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 	
+	doActivateWindow(method, titleString, winSettings)
+}
+escAction(titleString := "A", winSettings := "") {
+	method := processWindow(titleString, WIN_ACTION_ESC, winSettings)
+	; DEBUG.popup("escAction","", "Title string",titleString, "Window settings",winSettings, "Method",method)
+	
+	doEscAction(method, titleString, winSettings)
+}
+closeWindow(titleString := "A", winSettings := "") {
+	method := processWindow(titleString, WIN_ACTION_CLOSE, winSettings)
+	; DEBUG.popup("closeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
+	
+	doCloseWindow(method, titleString, winSettings)
+}
+minimizeWindow(titleString := "A", winSettings := "") {
+	method := processWindow(titleString, WIN_ACTION_MIN, winSettings)
+	; DEBUG.popup("minimizeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
+	
+	doMinimizeWindow(method, titleString, winSettings)
+}
+; Select all text in a control, generally via use fo the Ctrl+A hotkey.
+selectAll(titleString := "A", winSettings := "") {
+	method := processWindow(titleString, WIN_ACTION_SELECT_ALL, winSettings)
+	; DEBUG.popup("selectAll","", "Title string",titleString, "Window settings",winSettings, "Method",method)
+	
+	doSelectAll(method, titleString, winSettings)
+}
+; Delete a word, generally via use of the Ctrl+Backspace hotkey.
+deleteWord(titleString := "A", winSettings := "") {
+	method := processWindow(titleString, WIN_ACTION_DELETE_WORD, winSettings)
+	; DEBUG.popup("deleteWord","", "Title string",titleString, "Window settings",winSettings, "Method",method)
+	
+	doDeleteWord(method, titleString, winSettings)
+}
+
+doActivateWindow(method, titleString := "", winSettings := "") {
 	if(method = WIN_METHOD_DEFAULT) {
 		WinShow,     %titleString%
 		WinActivate, %titleString%
@@ -251,28 +287,19 @@ activateWindow(titleString := "A", winSettings := "") {
 		doWindowAction(method, titleString, winSettings)
 	}
 }
-doEscAction(titleString := "A", winSettings := "") {
-	method := processWindow(titleString, WIN_ACTION_ESC, winSettings)
-	; DEBUG.popup("doEscAction","", "Title string",titleString, "Window settings",winSettings, "Method",method)
-	
+doEscAction(method, titleString := "", winSettings := "") {
 	if(method = WIN_METHOD_DEFAULT) ; Default is to do nothing.
 		return
 	else
 		doWindowAction(method, titleString, winSettings)
 }
-closeWindow(titleString := "A", winSettings := "") {
-	method := processWindow(titleString, WIN_ACTION_CLOSE, winSettings)
-	; DEBUG.popup("closeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
-	
+doCloseWindow(method, titleString := "", winSettings := "") {
 	if(method = WIN_METHOD_DEFAULT)
 		WinClose, %titleString%
 	else
 		doWindowAction(method, titleString, winSettings)
 }
-minimizeWindow(titleString := "A", winSettings := "") {
-	method := processWindow(titleString, WIN_ACTION_MIN, winSettings)
-	; DEBUG.popup("minimizeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
-	
+doMinimizeWindow(method, titleString := "", winSettings := "") {
 	if(method = WIN_METHOD_DEFAULT) {
 		WinMinimize, %titleString%
 	
@@ -283,11 +310,7 @@ minimizeWindow(titleString := "A", winSettings := "") {
 		doWindowAction(method, titleString, winSettings)
 	}
 }
-; Select all text in a control, generally via use fo the Ctrl+A hotkey.
-selectAll(titleString := "A", winSettings := "") {
-	method := processWindow(titleString, WIN_ACTION_SELECT_ALL, winSettings)
-	; DEBUG.popup("selectAll","", "Title string",titleString, "Window settings",winSettings, "Method",method)
-	
+doSelectAll(method, titleString := "", winSettings := "") {
 	if(method = WIN_METHOD_DEFAULT) {
 		Send, ^a
 	
@@ -299,11 +322,7 @@ selectAll(titleString := "A", winSettings := "") {
 		doWindowAction(method, titleString, winSettings)
 	}
 }
-; Delete a word, generally via use of the Ctrl+Backspace hotkey.
-deleteWord(titleString := "A", winSettings := "") {
-	method := processWindow(titleString, WIN_ACTION_DELETE_WORD, winSettings)
-	; DEBUG.popup("deleteWord","", "Title string",titleString, "Window settings",winSettings, "Method",method)
-	
+doDeleteWord(method, titleString := "", winSettings := "") {
 	if(method = WIN_METHOD_DEFAULT) {
 		Send, ^{Backspace}
 		
@@ -315,6 +334,7 @@ deleteWord(titleString := "A", winSettings := "") {
 		doWindowAction(method, titleString, winSettings)
 	}
 }
+
 ; For all special cases for just a single case, so not worth creating a new constant, etc for.
 ; The return value should be what we should do from here - so if we end up deciding that a 
 ; standard method works, just return that constant. If it's not standard, just do it and then 

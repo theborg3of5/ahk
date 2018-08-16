@@ -3,7 +3,7 @@ $!q::minimizeWindow()
 
 ; Escape key will generally minimize or close things.
 ~Escape::
-	escAction()
+	doEscAction()
 	KeyWait, Esc, T1 ; Ensures that we don't have fall-through window closing.
 return
 

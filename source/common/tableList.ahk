@@ -583,7 +583,7 @@ class TableList {
 			return TLROWTYPE_MODEL
 		
 		firstChar := subStr(row, 1, 1)
-		if(contains(this.chars["PASS"], firstChar))
+		if(arrayContains(this.chars["PASS"], firstChar))
 			return TLROWTYPE_PASS
 		
 		if(this.keyRowChars.hasKey(firstChar))
@@ -786,7 +786,7 @@ class TableList {
 		
 		; If the value isn't blank, compare it to our allowed value.
 		if(IsObject(valueToCompare)) { ; Array case - multiple values in filter column.
-			if(contains(valueToCompare, allowedValue))
+			if(arrayContains(valueToCompare, allowedValue))
 				return true
 		} else {
 			if(valueToCompare = allowedValue)

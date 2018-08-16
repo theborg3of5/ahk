@@ -1,8 +1,4 @@
 ; Data-structure-related functions.
-global CONTAINS_ANY   := 1
-global CONTAINS_BEG   := 2
-global CONTAINS_END   := 3
-global CONTAINS_EXACT := 4
 
 
 ; Returns the number of keys in an array.
@@ -60,83 +56,15 @@ insertFront(ByRef arr, new) {
 	return arr2
 }
 
-; Array contains function. Returns index if it exists, assumes a numerical index starting at 1.
-contains(haystack, needle, partialMatch := false) {
+; Array contains function. Returns index if it exists.
+arrayContains(haystack, needle) {
 	; DEBUG.popup("Hay", haystack, "Needle", needle)
 	
-	For i, el in haystack {
-		; DEBUG.popup("Index", i, "Element", "z" el "Z", "Needle", "z" needle "Z", "Partial", partialMatch, "Element contains needle", stringContains(el, needle), "Elements equals needle", (el = needle))
-		
-		if( el = needle || (partialMatch && stringContains(needle, el)) )
+	For i, el in haystack
+		if(el = needle)
 			return i
-	}
 	
 	return ""
-}
-
-; Reverse array contains function - checks if any of array strings are in given string.
-containsAnyOf(haystack, needles, match := 1) { ; match = CONTAINS_ANY
-	; DEBUG.popup(haystack, "Haystack", needles, "Needles", match, "Match")
-	For i, el in needles {
-		
-		if(match = CONTAINS_ANY) {
-			if(stringContains(haystack, el))
-				return i
-		
-		} else if(match = CONTAINS_BEG) {
-			if(stringStartsWith(haystack, el))
-				return i
-		
-		} else if(match = CONTAINS_END) {
-			if(stringEndsWith(haystack, el))
-				return i
-			
-		} else if(match = CONTAINS_EXACT) {
-			if(haystack = el)
-				return i
-			
-		} else {
-			DEBUG.popup(match, "Unsupported match method")
-		}
-	}
-	
-	return ""
-}
-
-; Table contains function.	
-tableContains(table, toFind) {
-	For i,row in table {
-		For j,r in row {
-			; debugPrint(r)
-			if(r = toFind) {
-				return i
-			}
-		}
-	}
-}
-
-; Converts decimal numbers to hex ones.
-decimalToHex(var) {
-	SetFormat, integer, hex
-	var += 0
-	SetFormat, integer, d
-	return var
-}
-
-; Contained, single call for multiple equality tests.
-matches(compareVars*) {
-	varsLen := compareVars.MaxIndex()
-	if(mod(varsLen, 2) = 1)
-		return -1
-	
-	for i,v in compareVars {
-		if(mod(i, 2) = 1) {
-			if(v != compareVars[i+1])
-				return false
-		}
-	}
-	
-	return true
 }
 
 ; Maximum of any number of numeric arguments.
@@ -162,15 +90,6 @@ convertPseudoArrayToObject(arrayName) {
 	}
 	
 	return retObj
-}
-
-reIndexArray(inputAry, indexMap) {
-	tempAry := []
-	
-	For i,a in inputAry
-		tempAry[indexMap[i]] := a
-	
-	return tempAry
 }
 
 ; overrides wins if they both have an index.

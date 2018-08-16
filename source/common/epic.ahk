@@ -350,13 +350,13 @@ extractEMC2ObjectInfoRaw(line) {
 	
 	; INI is first characters up to the first delimiter
 	if(isAlpha(subStr(line, 1, 1))) { ; Make sure we're starting with an INI (instead of an ID) by checking whether the first character is a letter (not a number).
-		delimPos := stringContainsAnyOf(line, [" ", "#"])
+		delimPos := stringMatchesAnyOf(line, [" ", "#"])
 		ini  := subStr(line, 1, delimPos - 1)
 		line := subStr(line, delimPos + 1) ; +1 to drop delimiter too
 	}
 	
 	; ID is remaining up to the next delimiter
-	delimPos := stringContainsAnyOf(line, [":", "-", "]"])
+	delimPos := stringMatchesAnyOf(line, [":", "-", "]"])
 	id := subStr(line, 1, delimPos - 1)
 	line := subStr(line, delimPos + 1) ; +1 to drop delimiter too
 	

@@ -6,6 +6,11 @@ global STRING_CASE_MIXED := 0
 global STRING_CASE_UPPER := 1
 global STRING_CASE_LOWER := 2
 
+global CONTAINS_ANY   := 1
+global CONTAINS_BEG   := 2
+global CONTAINS_END   := 3
+global CONTAINS_EXACT := 4
+
 isValidPhoneNumber(formattedNum) {
 	rawNum := parsePhone(formattedNum) ; Returns "" if it's not a valid number
 	if(rawNum = "")
@@ -24,7 +29,7 @@ parsePhone(input) {
 	nums := RegExReplace(nums, "\+" , "011") ; + becomes country exit code (USA code here)
 	
 	len := strLen(nums)
-	; DEBUG.popup(input, "Input", nums, "Nums", len, "Len")
+	; DEBUG.popup("Input",input, "Nums",nums, "Len",len)
 	
 	if(len = 4)  ; Old extension.
 		return "7" nums
@@ -34,9 +39,9 @@ parsePhone(input) {
 		return nums
 	if(len = 10) ; Normal with area code.
 		return "81" nums
-	if(len = 11) ; Normal with area code plus 1 at beginning.
+	if(len = 11) ; Normal with 1 + area code at beginning.
 		return "8" nums
-	if(len = 12) ; Already has everything needs, in theory.
+	if(len = 12) ; Normal with 8 + 1 + area code at beginning.
 		return nums
 	if(len = 14) ; International number with exit code, just needs 8 to get out.
 		return "8" nums
@@ -57,21 +62,15 @@ reformatPhone(input) {
 ; Gives the specified number of tabs as a string.
 ; Give spacesPerTab > 0 to use spaces instead of true tabs.
 getTabs(i, spacesPerTab := 0) {
-	outStr := ""
 	tabStr := spacesPerTab > 0 ? getSpaces(spacesPerTab) : "`t"
 	return multiplyString(tabStr, i)
 }
-
-; Gives the specified number of spaces in a string.
 getSpaces(i) {
 	return multiplyString(" ", i)
 }
-
-; Gives the specified number of newlines as a string.
 getNewLines(i) {
 	return multiplyString("`n", i)
 }
-
 getDots(i) {
 	return multiplyString(".", i)
 }
@@ -99,25 +98,6 @@ escapeDoubleQuotes(s, num := 2) {
 	}
 	
 	return StrReplace(s, """", replString, "All")
-}
-
-wrapInQuotes(inputString) {
-	global QUOTES
-	
-	return QUOTES escapeDoubleQuotes(inputString) QUOTES
-}
-
-; Wraps each line of the array in quotes, turning any quotes already there into double double quotes.
-quoteWrapArrayDouble(arr) {
-	global QUOTES
-	
-	outArr := []
-	
-	For i,a in arr {
-		outArr.insert(wrapInQuotes(a))
-	}
-	
-	return outArr
 }
 
 ; Doubles every backslash in the given string.
@@ -154,22 +134,61 @@ stringContains(haystack, needle, searchFromEnd := false) {
 		return InStr(haystack, needle)
 }
 
-; See if a string contains any of the strings in the array.
-stringContainsAnyOf(haystack, needles, ByRef matchedNeedle = "") {
-	firstPos := 0
-	For i,n in needles {
-		currPos := stringContains(haystack, n)
-		if(!currPos)
-			Continue
-		if(firstPos && (firstPos < currPos) )
-			Continue
-		
-		; DEBUG.popup("Found needle",n, "At position",currPos)
-		firstPos := currPos
-		matchedNeedle := n
-	}
+stringMatches(haystack, el, method := 1) { ; method := CONTAINS_ANY
+	if(method = CONTAINS_ANY)
+		return stringContains(haystack, el)
 	
-	return firstPos
+	else if(method = CONTAINS_BEG)
+		return stringStartsWith(haystack, el)
+	
+	else if(method = CONTAINS_END)
+		return stringEndsWith(haystack, el)
+	
+	else if(method = CONTAINS_EXACT)
+		return (haystack = el)
+	
+	DEBUG.popup(method, "Unsupported match method")
+	return ""
+}
+
+; Reverse array contains function - checks if any of array strings are in given string, with some special ways of searching (matches start, matches end, exact match, partial match anywhere)
+stringMatchesAnyOf(haystack, needles, method := 1) { ; method = CONTAINS_ANY
+	; DEBUG.popup("Haystack",haystack, "Needles",needles, "Method",method)
+	For i, el in needles
+		if(stringMatches(haystack, el, method))
+			return i
+	
+	return ""
+}
+
+stringStartsWith(inputString, startString) {
+	return (subStr(inputString, 1, strLen(startString)) = startString)
+}
+stringEndsWith(inputString, endString) {
+	return (subStr(inputString, strLen(inputString) - strLen(endString) + 1) = endString)
+}
+
+
+getStringBeforeStr(inputString, endString, searchFromEnd := false) {
+	endStringPos := stringContains(inputString, endString, searchFromEnd)
+	if(!endStringPos)
+		return inputString
+	
+	return subStr(inputString, 1, endStringPos - 1)
+}
+getStringAfterStr(inputString, startString, searchFromEnd := false) {
+	startStringPos := stringContains(inputString, startString, searchFromEnd)
+	if(!startStringPos)
+		return inputString
+	
+	return subStr(inputString, startStringPos + strLen(startString))
+}
+getStringBetweenStr(inputString, startString, endString, beGreedy := false) {
+	outString := getStringBeforeStr(inputString, endString, beGreedy)
+	return getStringAfterStr(outString, startString)
+}
+getStringBetweenStrGreedy(inputString, startString, endString) {
+	return getStringBetweenStr(inputString, startString, endString, true)
 }
 
 ; Wrapper function for whether a string is alphabetic.
@@ -213,7 +232,7 @@ getPathType(text) {
 		type := SUBTYPE_FilePath
 	else if(subStr(text, 1, 2) = "\\")  ; Windows network path
 		type := SUBTYPE_FilePath
-	else if(colonSlashPos && stringContainsAnyOf(subStr(text, 1, colonSlashPos), protocols) ) ; URL.
+	else if(colonSlashPos && stringMatchesAnyOf(subStr(text, 1, colonSlashPos), protocols) ) ; URL.
 		type := SUBTYPE_URL
 	
 	; DEBUG.popup("getPathType", "Finish", "Type", type, "Cleaned up text",text)
@@ -260,13 +279,13 @@ cleanupText(text, additionalStringsToRemove := "") {
 		}
 		
 		; Odd character checks.
-		index := containsAnyOf(text, stringsToRemove, CONTAINS_BEG) ; Beginning of string
+		index := stringMatchesAnyOf(text, stringsToRemove, CONTAINS_BEG) ; Beginning of string
 		if(index) {
 			needle := stringsToRemove[index]
 			text := StrReplace(text, needle, "", , 1) ; Get only the first replaceable one.
 			isClean := false
 		}
-		index := containsAnyOf(text, stringsToRemove, CONTAINS_END) ; End of string
+		index := stringMatchesAnyOf(text, stringsToRemove, CONTAINS_END) ; End of string
 		if(index) {
 			needle := escapeRegExChars(stringsToRemove[index])
 			text := RegExReplace(text, needle, "", , 1, strLen(text) - strLen(needle)) ; Get only the last replaceable one.
@@ -324,36 +343,6 @@ removeStringFromEnd(inputString, endingToRemove) {
 		return inputString
 	
 	return subStr(inputString, 1, strLen(inputString) - strLen(endingToRemove))
-}
-
-stringStartsWith(inputString, startString) {
-	return (subStr(inputString, 1, strLen(startString)) = startString)
-}
-stringEndsWith(inputString, endString) {
-	return (subStr(inputString, strLen(inputString) - strLen(endString) + 1) = endString)
-}
-
-; These are very simple - only work on the first instance of the character(s) in question.
-getStringBeforeStr(inputString, endString, searchFromEnd := false) {
-	endStringPos := stringContains(inputString, endString, searchFromEnd)
-	if(!endStringPos)
-		return inputString
-	
-	return subStr(inputString, 1, endStringPos - 1)
-}
-getStringAfterStr(inputString, startString, searchFromEnd := false) {
-	startStringPos := stringContains(inputString, startString, searchFromEnd)
-	if(!startStringPos)
-		return inputString
-	
-	return subStr(inputString, startStringPos + strLen(startString))
-}
-getStringBetweenStr(inputString, startString, endString, beGreedy := false) {
-	outString := getStringBeforeStr(inputString, endString, beGreedy)
-	return getStringAfterStr(outString, startString)
-}
-getStringBetweenStrGreedy(inputString, startString, endString) {
-	return getStringBetweenStr(inputString, startString, endString, true)
 }
 
 appendCharIfMissing(inputString, charToAppend) {

@@ -479,7 +479,7 @@ class Selector {
 			abbrev := t.getAbbrev()
 			if(!IsObject(abbrev) && (input = abbrev))
 				return t.getData()
-			else if(IsObject(abbrev) && contains(abbrev, input))
+			else if(IsObject(abbrev) && arrayContains(abbrev, input))
 				return t.getData()
 		}
 		

@@ -8,24 +8,6 @@
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	
 # Windows/programs config split
-	Renames in new windows.tl
-		WinSpy > AutoHotkey WinSpy
-		AHK GUIs > AutoHotkey GUIs
-		ES New Object Window > EpicStudio New Object Window
-		ES Tokenize String > EpicStudio Tokenize String
-		Join > Chrome Join
-		TickTick > Chrome TickTick
-		FirefoxPortable > Firefox Portable
-		ProcessExplorer > Process Explorer
-		RemoteDesktop > Remote Desktop
-		RepublicAnywhere > Republic Anywhere
-		Skype Buddy List > Skype
-		VMWareView > VMware Horizon Client
-		VisualStudio > Visual Studio
-	Update to use updated names
-		programs.tl
-		windowsLegacy.tl
-		Code that uses them
 	Add new windows.tl handling
 		Add WINDOW_EDGE_OFFSET_OVERRIDE to new windows.tl
 		Create WindowInfo class;

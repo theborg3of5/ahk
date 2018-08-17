@@ -8,17 +8,16 @@
 	Mattermost					Mattermost.exe		-							-							-						CLOSE		CLOSE
 	Notepad						notepad.exe			-							-							-						CLOSE		-			-				CTRL_SHIFT
 	Pidgin Buddy List			pidgin.exe			-							Buddy List				-						CLOSE		CLOSE
-	RemoteDesktop				-						TscShellContainerClass
-	RepublicAnywhere			Republic Anywhere.exe	-					-							-						CLOSE		CLOSE
-	Skype Buddy List			Skype.exe			-							-							-						CLOSE
+	Remote Desktop				-						TscShellContainerClass
+	Republic Anywhere			Republic Anywhere.exe	-					-							-						CLOSE		CLOSE
+	Skype							Skype.exe			-							-							-						CLOSE
 	Spotify						Spotify.exe			-							-							-						CLOSE		CLOSE		-				-					OTHER		0
 	Telegram						Telegram.exe		Qt5QWindowIcon			-							-						CLOSE		CLOSE		-				-					-			0
 	Thunder						Thunder.exe			-							-							-						CLOSE
-	WinSpy						AU3_Spy.exe			-							-							-						CLOSE
+	AutoHotkey WinSpy			AU3_Spy.exe			-							-							-						CLOSE
 	
 	; VB6
 	VB6							VB6.exe				wndclass_desked_gsk	-							-						-			POST_MESSAGE
-	VB6 Object Browser		VB6.exe				-							Object Browser			-						CLOSE
 	
 	; EMC2 popups
 [EXE.replaceWith(EpicD84.exe)|CLASS.replaceWith(ThunderRT6FormDC)]
@@ -36,15 +35,15 @@
 	EMC2 XDS						EpicD84.exe			ThunderRT6MDIForm		{REGEX}^XDS
 	
 	; EpicStudio popups
-	ES New Object Window		EpicStudio.exe		New Object				-							-						-			-			-				CTRL_SHIFT
-	ES Tokenize String		EpicStudio.exe		Tokenize String		-							-						-			-			-				CTRL_SHIFT
+	EpicStudio New Object Window		EpicStudio.exe		New Object				-							-						-			-			-				CTRL_SHIFT
+	EpicStudio Tokenize String		EpicStudio.exe		Tokenize String		-							-						-			-			-				CTRL_SHIFT
 	
-	AHK GUIs						AutoHotkey.exe		AutoHotkeyGUI			-							-						CLOSE		-			-				CTRL_SHIFT
+	AutoHotkey GUIs						AutoHotkey.exe		AutoHotkeyGUI			-							-						CLOSE		-			-				CTRL_SHIFT
 	
 	; Web popups - close on Escape.
 [ESC.replaceWith(CLOSE)|EXE.replaceWith(chrome.exe)]
-	Join							-						-							Join
-	TickTick						-						-							All - TickTick
+	Chrome Join							-						-							Join
+	Chrome TickTick						-						-							All - TickTick
 []
 	
 	; Windows that have odd borders and need different offsets - mainly Office programs.

@@ -14,8 +14,8 @@
 		Snapper				Snapper.exe				-							-				-								Epic\Snapper\Snapper.exe
 		Thunder				Thunder.exe				-							Thunder		-								Thunder\Thunder.exe
 		VB6					VB6.exe					wndclass_desked_gsk	-				-								Microsoft Visual Studio\VB98\VB6.EXE
-		VisualStudio		devenv.exe				-							-				-								Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.exe
-		VMWareView			vmware-view.exe		-							-				-								VMware\VMware Horizon View Client\vmware-view.exe
+		Visual Studio		devenv.exe				-							-				-								Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.exe
+		VMware Horizon Client	vmware-view.exe		-							-				-								VMware\VMware Horizon View Client\vmware-view.exe
 []
 
 [PATH.addToStart(C:\Program Files\)]
@@ -23,10 +23,10 @@
 		FileZilla			filezilla.exe			-							-				-								FileZilla FTP Client\filezilla.exe											--site="0/CowBox"
 		grepWin				grepWin.exe				-							-				-								grepWin\grepWin.exe
 		Notepad++			notepad++.exe			Notepad++				-				-								Notepad++\notepad++.exe
-		ProcessExplorer	PROCEXP64.exe			PROCEXPL					-				-								Process Explorer\procexp.exe													-										EPIC_LAPTOP
-		ProcessExplorer	PROCEXP64.exe			PROCEXPL					-				-								ProcessExplorer\procexp.exe
+		Process Explorer	PROCEXP64.exe			PROCEXPL					-				-								Process Explorer\procexp.exe													-										EPIC_LAPTOP
+		Process Explorer	PROCEXP64.exe			PROCEXPL					-				-								ProcessExplorer\procexp.exe
 		TrueCrypt			TrueCrypt.exe			CustomDlg				-				-								TrueCrypt\TrueCrypt.exe
-		WinSpy				AutoHotkey.exe			AutoHotkeyGUI			Window Spy	-								AutoHotkey\WindowSpy.ahk
+		AutoHotkey WinSpy	AutoHotkey.exe			AutoHotkeyGUI			Window Spy	-								AutoHotkey\WindowSpy.ahk
 		yEd					yEd.exe					-							-				-								yWorks\yEd\yEd.exe
 []
 
@@ -53,10 +53,10 @@
 
 [+1|PATH.addToEnd(AppData\Local\)]
 	[+2|PATH.addToEnd(republicanywhere\app-1.5.8\Republic Anywhere.exe)]
-		RepublicAnywhere	Republic Anywhere.exe	-						-				-								C:\Users\thebo\
-		RepublicAnywhere	Republic Anywhere.exe	-						-				-								C:\Users\gborg\																	-										EPIC_LAPTOP
+		Republic Anywhere	Republic Anywhere.exe	-						-				-								C:\Users\thebo\
+		Republic Anywhere	Republic Anywhere.exe	-						-				-								C:\Users\gborg\																	-										EPIC_LAPTOP
 	[-2]
 [-1]
 		
-		FirefoxPortable	firefox.exe				-							-				-								S:\FirefoxPortable\FirefoxPortable.exe										-										HOME_DESKTOP
+		Firefox Portable	firefox.exe				-							-				-								S:\FirefoxPortable\FirefoxPortable.exe										-										HOME_DESKTOP
 	

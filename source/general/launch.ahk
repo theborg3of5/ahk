@@ -146,7 +146,7 @@ genericHyperlink(subAction) {
 				return
 			
 			if(data["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.
-				runProgram("VMWareView")
+				runProgram("VMware Horizon Client")
 			} else {
 				Run(buildVDIRunString(data["VDI_ID"]))
 				

@@ -8,12 +8,12 @@
 	Mattermost								CLOSE		CLOSE
 	Notepad									CLOSE		-			-				CTRL_SHIFT
 	Pidgin Buddy List						CLOSE		CLOSE
-	RepublicAnywhere						CLOSE		CLOSE
-	Skype Buddy List						CLOSE
+	Republic Anywhere						CLOSE		CLOSE
+	Skype										CLOSE
 	Spotify									CLOSE		CLOSE		-				-					OTHER
 	Telegram									CLOSE		CLOSE		-				-					-
 	Thunder									CLOSE
-	WinSpy									CLOSE
+	AutoHotkey WinSpy						CLOSE
 	
 	VB6										-			POST_MESSAGE
 	
@@ -31,7 +31,7 @@
 	EpicStudio New Object Window		-			-			-				CTRL_SHIFT
 	EpicStudio Tokenize String			-			-			-				CTRL_SHIFT
 	
-	AHK GUIs									CLOSE		-			-				CTRL_SHIFT
+	AutoHotkey GUIs						CLOSE		-			-				CTRL_SHIFT
 	
 	; Web popups - close on Escape.
 	Chrome Join								CLOSE

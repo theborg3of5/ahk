@@ -13,10 +13,10 @@ return
 	return
 #IfWinActive
 
-#If !MainConfig.isRemoteDesktopActive() && WinExist(getWindowTitleString("RemoteDesktop"))
+#If !MainConfig.isRemoteDesktopActive() && WinExist(getWindowTitleString("Remote Desktop"))
 	; Switch back into remote desktop with same hotkey (for computer you're remoting from).
 	!CapsLock::
-		activateWindow(getWindowTitleString("RemoteDesktop"))
+		activateWindow(getWindowTitleString("Remote Desktop"))
 		WinActivate, ahk_class TscShellContainerClass
 	return
 #If 

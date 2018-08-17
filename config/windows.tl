@@ -1,4 +1,4 @@
-(	NAME									EXE						CLASS						TITLE						TEXT
+(	NAME									EXE						CLASS						TITLE						TEXT					WINDOW_EDGE_OFFSET_OVERRIDE
 
 	; Specific windows within a program (overlap with their less-specific counterparts below).
 	Chrome Join							chrome.exe				-							Join
@@ -17,41 +17,41 @@
 	AutoHotkey WinSpy					AutoHotkey.exe			AutoHotkeyGUI			Window Spy
 	
 	AutoHotkey GUIs					AutoHotkey.exe			AutoHotkeyGUI
-	Chrome								chrome.exe				Chrome_WidgetWin_1
+	Chrome								chrome.exe				Chrome_WidgetWin_1	-							-						0
 	Cisco AnyConnect VPN				vpnui.exe				#32770
 	EMC2									EpicD84.exe				-							EMC2
 	EpicStudio							EpicStudio.exe			-							EpicStudio
 	Everything							Everything.exe			EVERYTHING
-	Excel									EXCEL.EXE
+	Excel									EXCEL.EXE				-							-							-						0
 	Explorer								explorer.exe			CabinetWClass
 	FileZilla							filezilla.exe
 	Firefox Portable					firefox.exe
-	GitHub								GitHubDesktop.exe
+	GitHub								GitHubDesktop.exe		-							-							-						0
 	Hyperspace							EpicD85.exe
 	KDiff									kdiff3.exe
 	Launchy								Launchy.exe
 	Mattermost							Mattermost.exe
 	Notepad								notepad.exe
 	Notepad++							notepad++.exe			Notepad++
-	OneNote								ONENOTE.EXE				Framework::CFrame
-	Outlook								OUTLOOK.EXE				rctrl_renwnd32
+	OneNote								ONENOTE.EXE				Framework::CFrame		-							-						0
+	Outlook								OUTLOOK.EXE				rctrl_renwnd32			-							-						0
 	Pidgin								pidgin.exe
-	PowerPoint							POWERPNT.EXE
+	PowerPoint							POWERPNT.EXE			-							-							-						0
 	Process Explorer					PROCEXP64.exe			PROCEXPL
 	Putty									putty.exe
 	Remote Desktop						-							TscShellContainerClass
 	Republic Anywhere					Republic Anywhere.exe
 	Skype									Skype.exe
 	Snapper								Snapper.exe
-	Spotify								Spotify.exe
-	Steam									Steam.exe
-	Telegram								Telegram.exe			Qt5QWindowIcon
+	Spotify								Spotify.exe				-							-							-						0
+	Steam									Steam.exe				-							-							-						0
+	Telegram								Telegram.exe			Qt5QWindowIcon			-							-						0
 	Thunder								Thunder.exe				-							Thunder
 	TrueCrypt							TrueCrypt.exe			CustomDlg
 	VB6									VB6.exe					wndclass_desked_gsk
 	VMware Horizon Client			vmware-view.exe
 	Visual Studio						devenv.exe
-	WebEx									atmgr.exe
-	Word									WINWORD.EXE
+	WebEx									atmgr.exe				-							-							-						0
+	Word									WINWORD.EXE				-							-							-						0
 	grepWin								grepWin.exe
 	yEd									yEd.exe

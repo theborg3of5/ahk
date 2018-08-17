@@ -23,6 +23,7 @@
 #Include toast.ahk
 #Include VA.ahk
 #Include window.ahk
+#Include windowInfo.ahk
 #Include XInput.ahk
 
 MainConfig.init("local\settings.ini", "windowsLegacy.tl", "paths.tl", "programs.tl", "games.tl", "private\privates.tl")

@@ -8,10 +8,8 @@
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	
 # Windows/programs config split
+	Consider properties instead of getter functions for selector stuff (at least SelectorRow?)
 	Add new windows.tl handling
-		Add WINDOW_EDGE_OFFSET_OVERRIDE to new windows.tl
-		Create WindowInfo class;
-			For single window's information - name, title, class, exe, text
 		Have MainConfig read in new windows.tl (alongside windowsLegacy.tl stuff for now)
 			Read into array of WindowInfo objects
 			New functions to access (mostly duplicates of windowsLegacy.tl stuff)
@@ -91,6 +89,7 @@
 		selectorGui
 		string
 		window
+		windowInfo
 	program
 		emc2
 		epicStudio

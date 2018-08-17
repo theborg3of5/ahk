@@ -14,9 +14,9 @@
 	EpicStudio New Object Window	EpicStudio.exe			New Object
 	EpicStudio Tokenize String		EpicStudio.exe			Tokenize String
 	Pidgin Buddy List					pidgin.exe				-							Buddy List
-	WinSpy								AutoHotkey.exe			AutoHotkeyGUI			Window Spy
+	AutoHotkey WinSpy					AutoHotkey.exe			AutoHotkeyGUI			Window Spy
 	
-	AHK GUIs								AutoHotkey.exe			AutoHotkeyGUI
+	AutoHotkey GUIs					AutoHotkey.exe			AutoHotkeyGUI
 	Chrome								chrome.exe				Chrome_WidgetWin_1
 	Cisco AnyConnect VPN				vpnui.exe				#32770
 	EMC2									EpicD84.exe				-							EMC2
@@ -25,7 +25,7 @@
 	Excel									EXCEL.EXE
 	Explorer								explorer.exe			CabinetWClass
 	FileZilla							filezilla.exe
-	FirefoxPortable					firefox.exe
+	Firefox Portable					firefox.exe
 	GitHub								GitHubDesktop.exe
 	Hyperspace							EpicD85.exe
 	KDiff									kdiff3.exe
@@ -37,11 +37,11 @@
 	Outlook								OUTLOOK.EXE				rctrl_renwnd32
 	Pidgin								pidgin.exe
 	PowerPoint							POWERPNT.EXE
-	ProcessExplorer					PROCEXP64.exe			PROCEXPL
+	Process Explorer					PROCEXP64.exe			PROCEXPL
 	Putty									putty.exe
-	RemoteDesktop						-							TscShellContainerClass
-	RepublicAnywhere					Republic Anywhere.exe
-	Skype Buddy List					Skype.exe
+	Remote Desktop						-							TscShellContainerClass
+	Republic Anywhere					Republic Anywhere.exe
+	Skype									Skype.exe
 	Snapper								Snapper.exe
 	Spotify								Spotify.exe
 	Steam									Steam.exe
@@ -49,8 +49,8 @@
 	Thunder								Thunder.exe				-							Thunder
 	TrueCrypt							TrueCrypt.exe			CustomDlg
 	VB6									VB6.exe					wndclass_desked_gsk
-	VMWareView							vmware-view.exe
-	VisualStudio						devenv.exe
+	VMware Horizon Client			vmware-view.exe
+	Visual Studio						devenv.exe
 	WebEx									atmgr.exe
 	Word									WINWORD.EXE
 	grepWin								grepWin.exe

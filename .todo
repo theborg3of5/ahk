@@ -8,7 +8,6 @@
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	
 # Windows/programs config split
-	Consider properties instead of getter functions for selector stuff (at least SelectorRow?)
 	Add new windows.tl handling
 		Have MainConfig read in new windows.tl (alongside windowsLegacy.tl stuff for now)
 			Read into array of WindowInfo objects
@@ -39,6 +38,7 @@
 			Those now in WindowActions
 	
 # New
+	Consider properties instead of getter functions for selector stuff (at least SelectorRow?)
 	Figure out some central documentation method
 		Dynamically pull hotkeys for the currently focused program?
 		Hotkey to show window with all currently active hotkeys, divided up into current-program-specific and others

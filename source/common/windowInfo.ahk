@@ -54,4 +54,16 @@ class WindowInfo {
 	windowTitle              := ""
 	windowText               := ""
 	windowEdgeOffsetOverride := ""
+	
+	
+	; Debug info (used by the Debug class)
+	debugName := "WindowInfo"
+	debugToString(debugBuilder) {
+		debugBuilder.addLine("Name"           , this.windowName)
+		debugBuilder.addLine("EXE"            , this.windowExe)
+		debugBuilder.addLine("Class"          , this.windowClass)
+		debugBuilder.addLine("Title"          , this.windowTitle)
+		debugBuilder.addLine("Text"           , this.windowText)
+		debugBuilder.addLine("Offset override", this.windowEdgeOffsetOverride)
+	}
 }

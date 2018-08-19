@@ -10,7 +10,6 @@
 # Windows/programs config split
 	Add new windows.tl handling
 		Have MainConfig read in new windows.tl (alongside windowsLegacy.tl stuff for now)
-			Read into array of WindowInfo objects
 			New functions to access (mostly duplicates of windowsLegacy.tl stuff)
 				Maybe have them return WindowInfo objects, though?
 		Recreate window identification/getTitleString functions in MainConfig

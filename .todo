@@ -11,9 +11,16 @@
 	Add new windows.tl handling
 		Have MainConfig read in new windows.tl (alongside windowsLegacy.tl stuff for now)
 			New functions to access (mostly duplicates of windowsLegacy.tl stuff)
-				Maybe have them return WindowInfo objects, though?
 		Recreate window identification/getTitleString functions in MainConfig
 		Update callers to identification/getTitleString functions
+			Make sure to get the *Legacy ones
+		Reconsider how we check whether a named window is active in MainConfig - should we just build a titleString and check that, instead of grabbing and matching the criteria?
+			Already switched MainConfig.isWindowActive, but are there other places we should update too?
+				New strategy
+					If we're checking against a specific named window, turn that info into a titleString and check that way
+					If we're trying to figure out what a window is, use current method (search through WindowInfo objects)
+		Consider indexing windows by name for easy retrieval that way
+			If we do this, still need to keep one indexed by line number, for the deliberately ordered (more-to-less specific) overlapping window definitions
 	Update programs
 		Create ProgramInfo class;
 			Single instance of program's info - name, path, arguments, etc.

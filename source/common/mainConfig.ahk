@@ -80,6 +80,78 @@ class MainConfig {
 		if(!name && !exe && !ahkClass && !title && !text)
 			return ""
 		
+		For i,winInfo in this.windows {
+			; DEBUG.popupEarly("Against WindowInfo",winInfo, "Name",name, "EXE",exe, "Class",ahkClass, "Title",title, "Text",text)
+			if(name && winInfo.name && (name != winInfo.name))
+				Continue
+			if(exe && winInfo.exe && (exe != winInfo.exe))
+				Continue
+			if(ahkClass && winInfo.class && (ahkClass != winInfo.class))
+				Continue
+			if(title && winInfo.title) {
+				if(stringStartsWith(winInfo.title, "{REGEX}")) {
+					regexNeedle := removeStringFromStart(winInfo.title, "{REGEX}")
+					if(!RegExMatch(title, regexNeedle))
+						Continue
+				} else {
+					if(title != winInfo.title)
+						Continue
+				}
+			}
+			if(text && winInfo.text && !stringContains(text, winInfo.text))
+				Continue
+			
+			retWinInfo := winInfo.clone()
+			Break
+		}
+		
+		; DEBUG.popupEarly("MainConfig","getWindow", "Found window",retWinInfo)
+		return retWinInfo
+	}
+	isWindowActive(windowName) {
+		return WinActive(getWindowTitleString(windowName))
+	}
+	windowIsGame(titleString := "A") {
+		ahkExe := WinGet("ProcessName", titleString)
+		if(!ahkExe)
+			return false
+		
+		For i,game in this.games
+			if(ahkExe = game["EXE"])
+				return true
+		
+		return false
+	}
+	
+	getPath(key) {
+		if(!key)
+			return ""
+		return this.paths[key]
+	}
+	replacePathTags(inputPath) {
+		return replaceTags(inputPath, this.paths)
+	}
+	
+	; Subscripts available (only set if set in file):
+	;	NAME    - Program name
+	;	CLASS   - ahk_class (or sometimes title prefaced with "{NAME} ")
+	;	PATH    - Full path to the executable, including the executable.
+	;	ARGS    - Arguments to run with.
+	;	EXE     - Executable name (+.exe)
+	;	MACHINE - Machine this was specific to, "" if default.
+	getProgram(name, subscript := "") {
+		if(subscript) { ; Get the specific subscript.
+			return this.programs[name][subscript]
+		} else { ; Just return the whole array.
+			return this.programs[name]
+		}
+	}
+	
+	getWindowLegacy(name := "", exe := "", ahkClass := "", title := "", text := "") {
+		retWindow := ""
+		if(!name && !exe && !ahkClass && !title && !text)
+			return ""
+		
 		For i,w in this.windowsLegacy {
 			; DEBUG.popupEarly("Against settings",w, "Name",name, "EXE",exe, "Class",ahkClass, "Title",title, "Text",text)
 			if(name && w["NAME"] && (name != w["NAME"]))
@@ -108,10 +180,13 @@ class MainConfig {
 		; DEBUG.popupEarly("MainConfig","getWindow", "Found window",retWindow)
 		return retWindow
 	}
-	isWindowActive(windowName) {
+	isWindowActiveLegacy(windowName) {
 		return (windowName = getWindowSetting("NAME"))
 	}
-	windowIsGame(titleString := "A") {
+	isRemoteDesktopActiveLegacy(titleString := "A") {
+		return WinActive(getWindowTitleString("Remote Desktop"))
+	}
+	windowIsGameLegacy(titleString := "A") {
 		ahkExe := WinGet("ProcessName", titleString)
 		if(!ahkExe)
 			return false
@@ -122,30 +197,6 @@ class MainConfig {
 		}
 		
 		return false
-	}
-	
-	getPath(key) {
-		if(!key)
-			return ""
-		return this.paths[key]
-	}
-	replacePathTags(inputPath) {
-		return replaceTags(inputPath, this.paths)
-	}
-	
-	; Subscripts available (only set if set in file):
-	;	NAME    - Program name
-	;	CLASS   - ahk_class (or sometimes title prefaced with "{NAME} ")
-	;	PATH    - Full path to the executable, including the executable.
-	;	ARGS    - Arguments to run with.
-	;	EXE     - Executable name (+.exe)
-	;	MACHINE - Machine this was specific to, "" if default.
-	getProgram(name, subscript := "") {
-		if(subscript) { ; Get the specific subscript.
-			return this.programs[name][subscript]
-		} else { ; Just return the whole array.
-			return this.programs[name]
-		}
 	}
 	
 	

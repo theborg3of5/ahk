@@ -35,10 +35,10 @@ getWindowTitleString(winName) {
 	if(!winName)
 		return ""
 	
-	winSettings := MainConfig.getWindow(winName)
-	winExe   := winSettings["EXE"]
-	winClass := winSettings["CLASS"]
-	winTitle := winSettings["TITLE"]
+	winInfo  := MainConfig.getWindow(winName)
+	winExe   := winInfo.exe
+	winClass := winInfo.class
+	winTitle := winInfo.title
 	titleString := buildWindowTitleString(winExe, winClass, winTitle)
 	
 	; DEBUG.popup("getWindowTitleString","", "winName",winName, "winExe",winExe, "winClass",winClass, "winTitle",winTitle, "Title string",titleString)
@@ -175,7 +175,7 @@ getWindowSettingsAry(titleString := "A") {
 	winClass := WinGetClass(titleString)
 	winTitle := WinGetTitle(titleString)
 	winText  := WinGetText(titleString)
-	return MainConfig.getWindow("", winExe, winClass, winTitle, winText)
+	return MainConfig.getWindowLegacy("", winExe, winClass, winTitle, winText)
 }
 getWindowSetting(settingName, titleString := "A") {
 	if(!settingName)

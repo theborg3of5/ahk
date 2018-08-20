@@ -14,12 +14,6 @@
 				Maybe have them return WindowInfo objects, though?
 		Recreate window identification/getTitleString functions in MainConfig
 		Update callers to identification/getTitleString functions
-	Add new windowActions.tl handling
-		Create (static) WindowActions class;
-			Read in windowActions.tl
-			Use MainConfig (new windows.tl functions) to identify windows
-			Recreate window action functions in WindowActions
-		Update callers to use WindowActions
 	Update programs
 		Create ProgramInfo class;
 			Single instance of program's info - name, path, arguments, etc.
@@ -27,6 +21,12 @@
 			Ignore ID columns other than the NAMEs, identify programs using new windows.tl functions instead
 		Update callers to program getter/checker functions (as needed)
 		Update programs.tl to use only the names
+	Add new windowActions.tl handling
+		Create (static) WindowActions class;
+			Read in windowActions.tl
+			Use MainConfig (new windows.tl functions) to identify windows
+			Recreate window action functions in WindowActions
+		Update callers to use WindowActions
 	Remove
 		MainConfig reading in windowsLegacy.tl
 			Places using corresponding getter/checker functions
@@ -35,6 +35,10 @@
 		Duplicate functions in window.ahk
 			Those now in MainConfig
 			Those now in WindowActions
+	Document
+		WindowInfo
+		ProgramInfo
+		WindowActions
 	
 # New
 	Consider properties instead of getter functions for selector stuff (at least SelectorRow?)
@@ -88,7 +92,6 @@
 		selectorGui
 		string
 		window
-		windowInfo
 	program
 		emc2
 		epicStudio

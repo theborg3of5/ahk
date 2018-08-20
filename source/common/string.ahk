@@ -100,6 +100,19 @@ escapeDoubleQuotes(s, num := 2) {
 	return StrReplace(s, """", replString, "All")
 }
 
+escapeAmpersands(textToEscape) {
+	escapedString := ""
+	
+	Loop, Parse, textToEscape
+	{
+		escapedString .= A_LoopField
+		if(A_LoopField = "&")
+			escapedString .= "&"
+	}
+	
+	return escapedString
+}
+
 ; Doubles every backslash in the given string.
 doubleBackslashes(in) {
 	out := ""

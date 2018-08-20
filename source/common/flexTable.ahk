@@ -109,7 +109,8 @@ class FlexTable {
 		if(extraProperties != "")
 			propString .= " " extraProperties
 		
-		Gui, Add, Text, % propString, % cellText
+		displayText := escapeAmpersands(cellText) ; Escape any ampersands in the string, as they'll otherwise turn the next character into an underlined hotkey.
+		Gui, Add, Text, % propString, % displayText
 		
 		if(width = "")
 			width := getLabelWidthForText(cellText, this.getNextUniqueControlId())

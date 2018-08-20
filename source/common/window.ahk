@@ -61,7 +61,7 @@ buildWindowTitleString(exeName := "", winClass := "", winTitle := "") {
 ; Returns true if the current window's title contains any of a given array of strings.
 titleContains(haystack) {
 	title := WinGetActiveTitle()
-	return stringMatchesAnyOf(title, haystack) > 0
+	return stringMatchesAnyOf(title, haystack)
 }
 exeActive(exeName, partialMatch := false) {
 	currEXE := WinGet("ProcessName", "A")

@@ -160,16 +160,20 @@ stringMatches(haystack, el, method := 1) { ; method := CONTAINS_ANY
 	else if(method = CONTAINS_EXACT)
 		return (haystack = el)
 	
-	DEBUG.popup(method, "Unsupported match method")
+	DEBUG.popup("Unsupported match method",method)
 	return ""
 }
 
 ; Reverse array contains function - checks if any of array strings are in given string, with some special ways of searching (matches start, matches end, exact match, partial match anywhere)
-stringMatchesAnyOf(haystack, needles, method := 1) { ; method = CONTAINS_ANY
+stringMatchesAnyOf(haystack, needles, method := 1, ByRef matchedIndex := "") { ; method = CONTAINS_ANY
 	; DEBUG.popup("Haystack",haystack, "Needles",needles, "Method",method)
-	For i, el in needles
-		if(stringMatches(haystack, el, method))
-			return i
+	For i, el in needles {
+		matchedPos := stringMatches(haystack, el, method)
+		if(matchedPos) {
+			matchedIndex := i
+			return matchedPos
+		}
+	}
 	
 	return ""
 }
@@ -292,17 +296,15 @@ cleanupText(text, additionalStringsToRemove := "") {
 		}
 		
 		; Odd character checks.
-		index := stringMatchesAnyOf(text, stringsToRemove, CONTAINS_BEG) ; Beginning of string
-		if(index) {
-			needle := stringsToRemove[index]
-			text := StrReplace(text, needle, "", , 1) ; Get only the first replaceable one.
-			isClean := false
-		}
-		index := stringMatchesAnyOf(text, stringsToRemove, CONTAINS_END) ; End of string
-		if(index) {
-			needle := escapeRegExChars(stringsToRemove[index])
-			text := RegExReplace(text, needle, "", , 1, strLen(text) - strLen(needle)) ; Get only the last replaceable one.
-			isClean := false
+		For i,removeString in stringsToRemove {
+			if(stringStartsWith(text, removeString)) {
+				text := removeStringFromStart(text, removeString)
+				isClean := false
+			}
+			if(stringEndsWith(text, removeString)) {
+				text := removeStringFromEnd(text, removeString)
+				isClean := false
+			}
 		}
 		
 		; DEBUG.popup("Is clean", isClean, "Current text", text)

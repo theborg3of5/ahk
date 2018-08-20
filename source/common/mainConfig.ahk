@@ -73,6 +73,16 @@ class MainConfig {
 	}
 	replacePrivateTags(inputString) {
 		return replaceTags(inputString, this.privates)
+	findWindowInfo(titleString := "A") {
+		For i,winInfo in this.windows
+			if(WinExist(titleString) = WinExist(winInfo.titleString))
+				return winInfo.clone()
+		
+		return ""
+	}
+	findWindowName(titleString := "A") {
+		winInfo := this.findWindowInfo(titleString)
+		return winInfo.name
 	}
 	
 	getWindow(name := "", exe := "", ahkClass := "", title := "", text := "") {

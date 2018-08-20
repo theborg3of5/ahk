@@ -197,7 +197,7 @@ linkSelectedText(path) {
 	path := cleanupPath(path)
 	path := mapPath(path)
 	
-	windowName := getWindowSetting("NAME") ; Active window's matching name in window settings (windows.tl).
+	windowName := MainConfig.findWindowName()
 	if(!doesWindowSupportLinking(windowName))
 		return
 	

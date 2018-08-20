@@ -21,6 +21,7 @@ class MainConfig {
 		ahkRootPath := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
 		configFolder := ahkRootPath "\config"
 		
+		; Build full paths to config files
 		settingsPath := configFolder "\" settingsFile
 		windowsPath  := configFolder "\" windowsFile
 		pathsPath    := configFolder "\" pathsFile
@@ -29,8 +30,8 @@ class MainConfig {
 		privatesPath := configFolder "\" privatesFile
 		windowsLegacyPath := configFolder "\" windowsLegacyFile
 		
+		; Read in and process the files.
 		this.privates := this.loadPrivates(privatesPath) ; This should be loaded before everything else, so the tags defined there can be used by other config files as needed.
-		
 		this.settings := this.loadSettings(settingsPath)
 		this.windows  := this.loadWindows(windowsPath)
 		this.paths    := this.loadPaths(pathsPath)
@@ -39,12 +40,24 @@ class MainConfig {
 		this.windowsLegacy := this.loadWindowsLegacy(windowsLegacyPath)
 		; DEBUG.popupEarly("MainConfig","Loaded all", "Settings",this.settings, "Windows",this.windows, "Paths",this.paths, "Programs",this.programs, "Games",this.games)
 		
+		; Create indexed versions of some of our information, for easier access.
+		this.windowsByName := this.getWindowsByName(this.windows)
+		
 		this.initDone := true
 	}
 	
 	
 	isInitialized() {
 		return this.initDone
+	}
+	
+	getPrivate(key) {
+		if(!key)
+			return ""
+		return this.privates[key]
+	}
+	replacePrivateTags(inputString) {
+		return replaceTags(inputString, this.privates)
 	}
 	
 	getSetting(settingName) {
@@ -66,60 +79,50 @@ class MainConfig {
 		return filter
 	}
 	
-	getPrivate(key) {
-		if(!key)
+	getWindowInfo(name) {
+		if(!name)
 			return ""
-		return this.privates[key]
+		
+		return this.windowsByName[name].clone()
 	}
-	replacePrivateTags(inputString) {
-		return replaceTags(inputString, this.privates)
+	getWindowTitleString(name) {
+		if(!name)
+			return ""
+		
+		return this.windowsByName[name].titleString
+	}
+	isWindowActive(windowName) {
+		return WinActive(this.getWindowInfo(windowName).titleString)
+	}
 	findWindowInfo(titleString := "A") {
-		For i,winInfo in this.windows
-			if(WinExist(titleString) = WinExist(winInfo.titleString))
-				return winInfo.clone()
+		exe      := WinGet("ProcessName", titleString)
+		ahkclass := WinGetClass(titleString)
+		title    := WinGetTitle(titleString)
+		
+		For i,winInfo in this.windows {
+			; DEBUG.popup("Against WindowInfo",winInfo, "EXE",exe, "Class",ahkClass, "Title",title)
+			if(exe      && winInfo.exe   && (exe != winInfo.exe))
+				Continue
+			if(ahkClass && winInfo.class && (ahkClass != winInfo.class))
+				Continue
+			if(title    && winInfo.title) {
+				; Allow titles to be compared more flexibly than straight equality.
+				if(winInfo.titleStringMatchModeOverride)
+					stringMatchMode := winInfo.titleStringMatchModeOverride
+				else
+					stringMatchMode := CONTAINS_ANY ; Default if not overridden
+				if(!stringMatches(title, winInfo.title, stringMatchMode))
+					Continue
+			}
+			
+			return winInfo.clone()
+		}
 		
 		return ""
 	}
 	findWindowName(titleString := "A") {
 		winInfo := this.findWindowInfo(titleString)
 		return winInfo.name
-	}
-	
-	getWindow(name := "", exe := "", ahkClass := "", title := "", text := "") {
-		retWindow := ""
-		if(!name && !exe && !ahkClass && !title && !text)
-			return ""
-		
-		For i,winInfo in this.windows {
-			; DEBUG.popupEarly("Against WindowInfo",winInfo, "Name",name, "EXE",exe, "Class",ahkClass, "Title",title, "Text",text)
-			if(name && winInfo.name && (name != winInfo.name))
-				Continue
-			if(exe && winInfo.exe && (exe != winInfo.exe))
-				Continue
-			if(ahkClass && winInfo.class && (ahkClass != winInfo.class))
-				Continue
-			if(title && winInfo.title) {
-				if(stringStartsWith(winInfo.title, "{REGEX}")) {
-					regexNeedle := removeStringFromStart(winInfo.title, "{REGEX}")
-					if(!RegExMatch(title, regexNeedle))
-						Continue
-				} else {
-					if(title != winInfo.title)
-						Continue
-				}
-			}
-			if(text && winInfo.text && !stringContains(text, winInfo.text))
-				Continue
-			
-			retWinInfo := winInfo.clone()
-			Break
-		}
-		
-		; DEBUG.popupEarly("MainConfig","getWindow", "Found window",retWinInfo)
-		return retWinInfo
-	}
-	isWindowActive(windowName) {
-		return WinActive(getWindowTitleString(windowName))
 	}
 	windowIsGame(titleString := "A") {
 		ahkExe := WinGet("ProcessName", titleString)
@@ -157,6 +160,7 @@ class MainConfig {
 		}
 	}
 	
+	
 	getWindowLegacy(name := "", exe := "", ahkClass := "", title := "", text := "") {
 		retWindow := ""
 		if(!name && !exe && !ahkClass && !title && !text)
@@ -190,24 +194,6 @@ class MainConfig {
 		; DEBUG.popupEarly("MainConfig","getWindow", "Found window",retWindow)
 		return retWindow
 	}
-	isWindowActiveLegacy(windowName) {
-		return (windowName = getWindowSetting("NAME"))
-	}
-	isRemoteDesktopActiveLegacy(titleString := "A") {
-		return WinActive(getWindowTitleString("Remote Desktop"))
-	}
-	windowIsGameLegacy(titleString := "A") {
-		ahkExe := WinGet("ProcessName", titleString)
-		if(!ahkExe)
-			return false
-		
-		For i,game in this.games {
-			if(ahkExe = game["EXE"])
-				return true
-		}
-		
-		return false
-	}
 	
 	
 	; ==============================
@@ -221,6 +207,8 @@ class MainConfig {
 	static programs := []
 	static games    := []
 	static privates := [] ; KEY => VALUE
+	
+	static windowsByName := []
 	
 	loadPrivates(filePath) {
 		tl := new TableList(filePath)
@@ -310,6 +298,15 @@ class MainConfig {
 		tl := new TableList(filePath)
 		return tl.getTable()
 	}
+	
+	
+	getWindowsByName(windowsByLineNum) {
+		windowsAry := []
+		For i,winInfo in windowsByLineNum
+			windowsAry[winInfo.name] := winInfo
+		return windowsAry
+	}
+	
 	
 	loadWindowsLegacy(filePath) {
 		tl := new TableList(filePath)

@@ -17,7 +17,7 @@
 		}
 	
 	~!t::
-		WinWaitActive, % getWindowTitleString("Telegram")
+		WinWaitActive, % MainConfig.getWindowTitleString("Telegram")
 		telegramFocusNormalChat()
 	return
 #IfWinActive

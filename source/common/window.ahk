@@ -30,20 +30,6 @@ getProgramTitleString(progName, progInfo := "") {
 	
 	return titleString
 }
-; Convenience function to get the full window title string using the NAME column in windows.tl.
-getWindowTitleString(winName) {
-	if(!winName)
-		return ""
-	
-	winInfo  := MainConfig.getWindow(winName)
-	winExe   := winInfo.exe
-	winClass := winInfo.class
-	winTitle := winInfo.title
-	titleString := buildWindowTitleString(winExe, winClass, winTitle)
-	
-	; DEBUG.popup("getWindowTitleString","", "winName",winName, "winExe",winExe, "winClass",winClass, "winTitle",winTitle, "Title string",titleString)
-	return titleString
-}
 ; Puts together a string that can be used with the likes of WinActivate, etc.
 buildWindowTitleString(exeName := "", winClass := "", winTitle := "") {
 	if(winTitle) ; Title has to go first since it doesn't have an "ahk_" identifier to go with it.
@@ -153,10 +139,10 @@ activateProgram(progName) {
 	waitForHotkeyRelease()
 	
 	progInfo := MainConfig.getProgram(progName)
-	titleString := getProgramTitleString(progName, progInfo)
+	titleString := MainConfig.getWindowTitleString(progName)
 	; DEBUG.popup("window.activateProgram","start", "Program name",progName, "Program info",progInfo, "Title string",titleString)
 	
-	winId := WinExist(titleString, progInfo["TEXT"])
+	winId := WinExist(titleString)
 	if(winId) ; If the program is already running, go ahead and activate it.
 		activateWindow("ahk_id " winId)
 	else ; If it doesn't exist yet, we need to run the executable to make it happen.
@@ -176,13 +162,6 @@ getWindowSettingsAry(titleString := "A") {
 	winTitle := WinGetTitle(titleString)
 	winText  := WinGetText(titleString)
 	return MainConfig.getWindowLegacy("", winExe, winClass, winTitle, winText)
-}
-getWindowSetting(settingName, titleString := "A") {
-	if(!settingName)
-		return ""
-	
-	winSettings := getWindowSettingsAry(titleString)
-	return winSettings[settingName]
 }
 
 doWindowAction(action, titleString := "A", winSettings := "") {
@@ -405,7 +384,7 @@ getWindowOffsets(titleString := "A") {
 	global SM_CXMAXIMIZED, SM_CYMAXIMIZED, SM_CXBORDER, SM_CYBORDER
 	offsetsAry := []
 	
-	offsetOverride := getWindowSetting("WINDOW_EDGE_OFFSET_OVERRIDE", titleString)
+	offsetOverride := MainConfig.findWindowInfo(titleString).edgeOffsetOverride
 	if(offsetOverride != "") { ; Specific window has an override.
 		offsetsAry["LEFT"]   := offsetOverride
 		offsetsAry["RIGHT"]  := offsetOverride

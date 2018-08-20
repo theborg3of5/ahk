@@ -1,5 +1,5 @@
 ; Hotkey catches for if Spotify isn't running.
-#If !WinExist(getWindowTitleString("Spotify"))
+#If !WinExist(MainConfig.getWindowTitleString("Spotify"))
 	^!Up::
 	^!Down::
 	^!Left::
@@ -16,7 +16,7 @@
 #IfWinNotExist
 
 ; If Spotify is indeed running.
-#If WinExist(getWindowTitleString("Spotify"))
+#If WinExist(MainConfig.getWindowTitleString("Spotify"))
 	^!Up::   Send, {Media_Stop}
 	^!Down:: Send, {Media_Play_Pause}
 	^!Left:: Send, {Media_Prev}
@@ -25,7 +25,7 @@
 	^!Space::Send, {Volume_Down}{Volume_Up} ; Makes Windows 10 media panel show up
 	#j::
 		runProgram("Spotify")
-		WinWaitActive, % getWindowTitleString("Spotify")
+		WinWaitActive, % MainConfig.getWindowTitleString("Spotify")
 		Send, ^l
 	return
 #IfWinExists

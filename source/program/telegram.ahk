@@ -1,4 +1,4 @@
-#If getWindowSetting("NAME") = "Telegram"
+#If MainConfig.isWindowActive("Telegram")
 	Up::return
 	`::
 		Send, {Esc}

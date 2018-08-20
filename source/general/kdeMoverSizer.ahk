@@ -1,5 +1,5 @@
 ; So that this doesn't mess with remote desktop.
-#If !MainConfig.isRemoteDesktopActive() && !MainConfig.windowIsGame()
+#If !MainConfig.isWindowActive("Remote Desktop") && !MainConfig.windowIsGame()
 
 ;	Internationally known as "KDE Mover-Sizer"							Version 1.3
 ;

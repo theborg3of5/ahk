@@ -111,9 +111,6 @@ class MainConfig {
 	isWindowActive(windowName) {
 		return (windowName = getWindowSetting("NAME"))
 	}
-	isRemoteDesktopActive(titleString := "A") {
-		return WinActive(getWindowTitleString("Remote Desktop"))
-	}
 	windowIsGame(titleString := "A") {
 		ahkExe := WinGet("ProcessName", titleString)
 		if(!ahkExe)

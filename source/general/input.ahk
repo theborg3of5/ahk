@@ -34,7 +34,7 @@ $^Backspace::deleteWord()
 	SetCapsLockState, On
 return
 
-#If !MainConfig.windowIsGame() && !MainConfig.isRemoteDesktopActive()
+#If !MainConfig.windowIsGame() && !MainConfig.isWindowActive("Remote Desktop")
 	XButton1::
 		activateWindowUnderMouse()
 		

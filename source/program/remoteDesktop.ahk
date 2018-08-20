@@ -4,7 +4,7 @@ $!Esc::
 	SetNumLockState, AlwaysOn
 return
 
-#If MainConfig.isRemoteDesktopActive()
+#If MainConfig.isWindowActive("Remote Desktop")
 	; Allow escape from remote desktop with hotkey (for computer you're remoting from).
 	!CapsLock::	; One of a few keys that the host still captures.
 		Suspend, Off
@@ -13,7 +13,7 @@ return
 	return
 #IfWinActive
 
-#If !MainConfig.isRemoteDesktopActive() && WinExist(getWindowTitleString("Remote Desktop"))
+#If !MainConfig.isWindowActive("Remote Desktop") && WinExist(getWindowTitleString("Remote Desktop"))
 	; Switch back into remote desktop with same hotkey (for computer you're remoting from).
 	!CapsLock::
 		activateWindow(getWindowTitleString("Remote Desktop"))

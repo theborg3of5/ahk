@@ -293,8 +293,10 @@ class MainConfig {
 		
 		; Index it by name.
 		programsAry := []
-		For i,row in programsTable
+		For i,row in programsTable {
+			row["PATH"] := this.replacePathTags(row["PATH"])
 			programsAry[row["NAME"]] := new ProgramInfo(row)
+		}
 		; DEBUG.popupEarly("MainConfig","loadPrograms", "Finished programs",programsAry)
 		
 		return programsAry

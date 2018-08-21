@@ -43,10 +43,6 @@
 		Dynamically pull hotkeys for the currently focused program?
 		Hotkey to show window with all currently active hotkeys, divided up into current-program-specific and others
 			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
-	Allow programs.tl and windows.tl to use tags for user path, etc.?
-		Would doing this in general eliminate a lot of the need for machine filters?
-			Would eliminate some of the switch-between-paths in windows/programs
-			Some, but not all of it - still a need to filter some things (like which folders to show, which mapped drives, etc.)
 	Add some way to move windows where I want them
 		Hotkey-triggered, for all windows in list?
 		Maybe lean on monitor fixer script from before?

@@ -41,7 +41,7 @@ class MainConfig {
 		; DEBUG.popupEarly("MainConfig","Loaded all", "Settings",this.settings, "Windows",this.windows, "Paths",this.paths, "Programs",this.programs, "Games",this.games)
 		
 		; Create indexed versions of some of our information, for easier access.
-		this.windowsByName := this.getWindowsByName(this.windows)
+		this.windowsByName := this.loadWindowsByName(this.windows)
 		
 		this.initDone := true
 	}
@@ -241,10 +241,10 @@ class MainConfig {
 	
 	loadWindows(filePath) {
 		tl := new TableList(filePath)
-		filteredTable := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
+		windowsTable := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
 		
 		windowsAry := []
-		For i,row in filteredTable
+		For i,row in windowsTable
 			windowsAry.push(new WindowInfo(row))
 		
 		return windowsAry
@@ -300,7 +300,7 @@ class MainConfig {
 	}
 	
 	
-	getWindowsByName(windowsByLineNum) {
+	loadWindowsByName(windowsByLineNum) {
 		windowsAry := []
 		For i,winInfo in windowsByLineNum
 			windowsAry[winInfo.name] := winInfo

@@ -35,10 +35,12 @@
 		Notepad						System32\notepad.exe
 []
 
-[PATH.addToEnd(AppData\Local\GitHubDesktop\GitHubDesktop.exe)]
+[+1|PATH.addToEnd(AppData\Local\)]
+	[+2|PATH.addToEnd(GitHubDesktop\GitHubDesktop.exe)]
 		GitHub						C:\Users\thebo\
 		GitHub						C:\Users\gborg\																	-										EPIC_LAPTOP
-[]
+	[-2]
+[-1]
 
 [+1|PATH.addToEnd(AppData\Roaming\)]
 	[+2|PATH.addToEnd(Telegram Desktop\Telegram.exe)]
@@ -48,13 +50,6 @@
 	[+2|PATH.addToEnd(Spotify\Spotify.exe)]
 		Spotify						C:\Users\thebo\
 		Spotify						C:\Users\gborg\																	-										EPIC_LAPTOP
-	[-2]
-[-1]
-
-[+1|PATH.addToEnd(AppData\Local\)]
-	[+2|PATH.addToEnd(republicanywhere\app-1.5.8\Republic Anywhere.exe)]
-		Republic Anywhere			C:\Users\thebo\
-		Republic Anywhere			C:\Users\gborg\																	-										EPIC_LAPTOP
 	[-2]
 [-1]
 		

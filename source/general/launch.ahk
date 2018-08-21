@@ -133,7 +133,7 @@ genericHyperlink(subAction) {
 				return
 			
 			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
-				activateProgram("Thunder")
+				MainConfig.activateProgram("Thunder")
 			else
 				Run(MainConfig.getProgramPath("Thunder") " " data["THUNDER_ID"])
 		}
@@ -146,7 +146,7 @@ genericHyperlink(subAction) {
 				return
 			
 			if(data["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.
-				runProgram("VMware Horizon Client")
+				MainConfig.runProgram("VMware Horizon Client")
 			} else {
 				Run(buildVDIRunString(data["VDI_ID"]))
 				
@@ -186,7 +186,7 @@ genericHyperlink(subAction) {
 				return
 			
 			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
-				runProgram("Snapper")
+				MainConfig.runProgram("Snapper")
 			else
 				Run(buildSnapperURL(data["COMM_ID"], data["INI"], data["ID"])) ; data["ID"] can contain a comma-delimited list if that's what the user entered
 		}

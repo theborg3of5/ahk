@@ -162,7 +162,7 @@ splitServerLocation(serverLocation, ByRef routine := "", ByRef tag := "") {
 }
 
 openEpicStudioDLG(dlgNum) {
-	activateProgram("EpicStudio")
+	MainConfig.activateProgram("EpicStudio")
 	exeName := MainConfig.getWindowInfo("EpicStudio").exe
 	WinWaitActive, ahk_exe %exeName%
 	

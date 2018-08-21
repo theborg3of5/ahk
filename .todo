@@ -8,14 +8,13 @@
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	
 # Windows/programs config split
-	Update programs
-		Update programs.tl to use only the names
 	Add new windowActions.tl handling
 		Check whether new strategy is respected in window actions:
 			If we're checking against a specific named window, turn that info into a titleString and check that way
 			If we're trying to figure out what a window is, use current method (search through WindowInfo objects)
 		Create (static) WindowActions class;
 			Read in windowActions.tl
+				All windows' info stored in static variables (like in MainConfig)?
 			Use MainConfig (new windows.tl functions) to identify windows
 			Recreate window action functions in WindowActions
 			Move action constants in as static variables (can be referenced outside as WindowActions.*)
@@ -63,14 +62,6 @@
 		Fix widths so they work nicely
 			Will need to have a tab width parameter/argument somewhere for this (maybe in _constants or config?)
 		Take into account overflow (across columns), with next field being empty or placeholder'd
-	Consider turning the various window actions into a separate class? WinActions, maybe?
-		Could read stuff in itself, MainConfig would call
-			All windows' info stored in static variables (like in MainConfig)
-			If we do this, move window > getWindowTitleString() in too
-	Consider moving some of the program- and window-related functions that basically just return/simply use values from MainConfig, into MainConfig
-		activateProgram
-		runProgram
-		getProgramTitleString
 	
 # Documentation
 	common

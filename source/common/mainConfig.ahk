@@ -154,6 +154,23 @@ class MainConfig {
 		
 		return this.programs[name].path
 	}
+	activateProgram(name) {
+		waitForHotkeyRelease()
+		
+		winId := WinExist(this.getWindowTitleString(name))
+		if(winId) { ; If the program is already running, go ahead and activate it.
+			activateWindow("ahk_id " winId)
+		} else { ; If it doesn't exist yet, we need to run the executable to make it happen.
+			progInfo := this.getProgramInfo(name)
+			RunAsUser(progInfo.path, progInfo.args)
+		}
+	}
+	runProgram(name) {
+		waitForHotkeyRelease()
+		
+		progInfo := this.getProgramInfo(name)
+		RunAsUser(progInfo.path, progInfo.args)
+	}
 	
 	
 	getWindowLegacy(name := "", exe := "", ahkClass := "", title := "", text := "") {

@@ -11,7 +11,7 @@
 	^!Space::
 	#j::
 		Toast.showForTime("Spotify not yet running, launching...", 2)
-		runProgram("Spotify")
+		MainConfig.runProgram("Spotify")
 	return
 #IfWinNotExist
 
@@ -24,7 +24,7 @@
 
 	^!Space::Send, {Volume_Down}{Volume_Up} ; Makes Windows 10 media panel show up
 	#j::
-		runProgram("Spotify")
+		MainConfig.runProgram("Spotify")
 		WinWaitActive, % MainConfig.getWindowTitleString("Spotify")
 		Send, ^l
 	return

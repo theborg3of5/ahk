@@ -6,6 +6,6 @@ progName = %1% ; Input from command line
 if(!progName)
 	ExitApp
 	
-runProgram(progName)
+MainConfig.runProgram(progName)
 
 ExitApp

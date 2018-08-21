@@ -119,28 +119,6 @@ restoreMatchSettings(settings) {
 	DetectHiddenWindows, % settings["DETECT_HIDDEN"]
 }
 
-; Focus a window, running the program if it doesn't yet exist.
-activateProgram(progName) {
-	waitForHotkeyRelease()
-	
-	titleString := MainConfig.getWindowTitleString(progName)
-	; DEBUG.popup("window.activateProgram","start", "Program name",progName, "Title string",titleString)
-	
-	winId := WinExist(titleString)
-	if(winId) { ; If the program is already running, go ahead and activate it.
-		activateWindow("ahk_id " winId)
-	} else { ; If it doesn't exist yet, we need to run the executable to make it happen.
-		progInfo := MainConfig.getProgramInfo(progName)
-		RunAsUser(progInfo.path, progInfo.args)
-	}
-}
-runProgram(progName) {
-	waitForHotkeyRelease()
-	
-	progInfo := MainConfig.getProgramInfo(progName)
-	RunAsUser(progInfo.path, progInfo.args)
-}
-
 getWindowSettingsAry(titleString := "A") {
 	winExe   := WinGet("ProcessName", titleString)
 	winClass := WinGetClass(titleString)

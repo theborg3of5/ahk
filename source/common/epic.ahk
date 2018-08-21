@@ -127,7 +127,7 @@ openEpicStudioRoutine(routine, tag := "") {
 	
 	; Open routine in EpicStudio, wait until it's open
 	Run(MainConfig.getProgram("EpicStudio", "PATH") " " routine "|93") ; ROUTINE|ENVIRONMENT_ID
-	exeName := MainConfig.getProgram("EpicStudio", "EXE")
+	exeName := MainConfig.getWindowInfo("EpicStudio").exe
 	WinWaitActive, %routine% ahk_exe %exeName%
 	
 	; Focus correct tag if given.
@@ -163,7 +163,7 @@ splitServerLocation(serverLocation, ByRef routine := "", ByRef tag := "") {
 
 openEpicStudioDLG(dlgNum) {
 	activateProgram("EpicStudio")
-	exeName := MainConfig.getProgram("EpicStudio", "EXE")
+	exeName := MainConfig.getWindowInfo("EpicStudio").exe
 	WinWaitActive, ahk_exe %exeName%
 	
 	Send, ^!e

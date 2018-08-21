@@ -1,8 +1,8 @@
 ﻿
 ; Unread facebook group chat windows (don't respond to ^+i correctly).
-#If WinExist("* ahk_exe " MainConfig.getProgram("Pidgin", "EXE"))
+#If WinExist("* ahk_exe " MainConfig.getWindowInfo("Pidgin").exe)
 	^+i::
-		WinActivate, % "* ahk_exe " MainConfig.getProgram("Pidgin", "EXE")
+		WinActivate, % "* ahk_exe " MainConfig.getWindowInfo("Pidgin").exe
 	return
 #If
 

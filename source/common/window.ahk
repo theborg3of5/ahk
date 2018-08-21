@@ -15,21 +15,6 @@ global WIN_SELECT_ALL_HOME_END := "HOME_END"
 
 global WIN_DELETE_CTRL_SHIFT := "CTRL_SHIFT"
 
-; Convenience function to get the full window title string using the NAME column in programs.tl.
-getProgramTitleString(progName, progInfo := "") {
-	if(!progName)
-		return ""
-	if(!progInfo)
-		progInfo := MainConfig.getProgram(progName)
-	
-	winExe   := progInfo["EXE"]
-	winClass := progInfo["CLASS"]
-	winTitle := progInfo["TITLE"]
-	titleString := buildWindowTitleString(winExe, winClass, winTitle)
-	; DEBUG.popup("getProgramTitleString","", "progName",progName, "winExe",winExe, "winClass",winClass, "winTitle",winTitle, "Title string",titleString)
-	
-	return titleString
-}
 ; Puts together a string that can be used with the likes of WinActivate, etc.
 buildWindowTitleString(exeName := "", winClass := "", winTitle := "") {
 	if(winTitle) ; Title has to go first since it doesn't have an "ahk_" identifier to go with it.
@@ -138,22 +123,22 @@ restoreMatchSettings(settings) {
 activateProgram(progName) {
 	waitForHotkeyRelease()
 	
-	progInfo := MainConfig.getProgram(progName)
 	titleString := MainConfig.getWindowTitleString(progName)
-	; DEBUG.popup("window.activateProgram","start", "Program name",progName, "Program info",progInfo, "Title string",titleString)
+	; DEBUG.popup("window.activateProgram","start", "Program name",progName, "Title string",titleString)
 	
 	winId := WinExist(titleString)
-	if(winId) ; If the program is already running, go ahead and activate it.
+	if(winId) { ; If the program is already running, go ahead and activate it.
 		activateWindow("ahk_id " winId)
-	else ; If it doesn't exist yet, we need to run the executable to make it happen.
-		RunAsUser(progInfo["PATH"], progInfo["ARGS"])
+	} else { ; If it doesn't exist yet, we need to run the executable to make it happen.
+		progInfo := MainConfig.getProgramInfo(progName)
+		RunAsUser(progInfo.path, progInfo.args)
+	}
 }
 runProgram(progName) {
 	waitForHotkeyRelease()
 	
-	progInfo := MainConfig.getProgram(progName)
-	
-	RunAsUser(progInfo["PATH"], progInfo["ARGS"])
+	progInfo := MainConfig.getProgramInfo(progName)
+	RunAsUser(progInfo.path, progInfo.args)
 }
 
 getWindowSettingsAry(titleString := "A") {

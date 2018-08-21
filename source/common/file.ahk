@@ -117,7 +117,7 @@ selectFolder(folderName := "") {
 }
 
 searchWithGrepWin(pathToSearch, textToSearch := "") {
-	runPath := MainConfig.getProgram("grepWin", "PATH") " /regex:no"
+	runPath := MainConfig.getProgramPath("grepWin") " /regex:no"
 	
 	convertedPath := MainConfig.replacePathTags(pathToSearch)
 	runPath .= " /searchpath:""" convertedPath " """ ; Extra space after path, otherwise trailing backslash escapes ending double quote
@@ -130,7 +130,7 @@ searchWithGrepWin(pathToSearch, textToSearch := "") {
 }
 
 searchWithEverything(textToSearch) {
-	runPath := MainConfig.getProgram("Everything", "PATH")
+	runPath := MainConfig.getProgramPath("Everything")
 	
 	if(textToSearch)
 		runPath .= " -search " textToSearch

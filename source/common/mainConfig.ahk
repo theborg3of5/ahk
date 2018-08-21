@@ -145,19 +145,14 @@ class MainConfig {
 		return replaceTags(inputPath, this.paths)
 	}
 	
-	; Subscripts available (only set if set in file):
-	;	NAME    - Program name
-	;	CLASS   - ahk_class (or sometimes title prefaced with "{NAME} ")
-	;	PATH    - Full path to the executable, including the executable.
-	;	ARGS    - Arguments to run with.
-	;	EXE     - Executable name (+.exe)
-	;	MACHINE - Machine this was specific to, "" if default.
-	getProgram(name, subscript := "") {
-		if(subscript) { ; Get the specific subscript.
-			return this.programs[name][subscript]
-		} else { ; Just return the whole array.
-			return this.programs[name]
-		}
+	getProgramInfo(name) {
+		return this.programs[name]
+	}
+	getProgramPath(name) {
+		if(!name)
+			return ""
+		
+		return this.programs[name].path
 	}
 	
 	
@@ -281,14 +276,8 @@ class MainConfig {
 		
 		; Index it by name.
 		programsAry := []
-		For i,row in programsTable {
-			name := row["NAME"] ; Identifying name of this entry (which this.programs will be indexed by)
-			
-			if(!IsObject(programsAry[name])) ; Initialize the array.
-				programsAry[name] := []
-			
-			programsAry[name] := row
-		}
+		For i,row in programsTable
+			programsAry[row["NAME"]] := new ProgramInfo(row)
 		; DEBUG.popupEarly("MainConfig","loadPrograms", "Finished programs",programsAry)
 		
 		return programsAry

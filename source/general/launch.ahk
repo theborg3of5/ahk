@@ -135,7 +135,7 @@ genericHyperlink(subAction) {
 			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
 				activateProgram("Thunder")
 			else
-				Run(MainConfig.getProgram("Thunder", "PATH") " " data["THUNDER_ID"])
+				Run(MainConfig.getProgramPath("Thunder") " " data["THUNDER_ID"])
 		}
 	
 	!+v::

@@ -9,11 +9,6 @@
 	
 # Windows/programs config split
 	Update programs
-		Create ProgramInfo class;
-			Single instance of program's info - name, path, arguments, etc.
-		Read info into array of ProgramInfo objects
-			Ignore ID columns other than the NAMEs, identify programs using new windows.tl functions instead
-		Update callers to program getter/checker functions (as needed)
 		Update programs.tl to use only the names
 	Add new windowActions.tl handling
 		Check whether new strategy is respected in window actions:
@@ -43,6 +38,7 @@
 		WindowActions
 	
 # New
+	Switch searchWithEverything() and searchWithGrepWin() to use args in programs.tl, with <tags> in them?
 	Consider properties instead of getter functions for selector stuff (at least SelectorRow?)
 	Figure out some central documentation method
 		Dynamically pull hotkeys for the currently focused program?

@@ -55,7 +55,7 @@
 ; Universal new email.
 #If MainConfig.isMachine(MACHINE_EpicLaptop)
 	^!m::
-		Run(MainConfig.getProgram("Outlook", "PATH") " /c ipm.note")
+		Run(MainConfig.getProgramPath("Outlook") " /c ipm.note")
 	return
 #If
 

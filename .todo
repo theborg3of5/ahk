@@ -9,9 +9,7 @@
 	
 # Windows/programs config split
 	Add new windowActions.tl handling
-		Check whether new strategy is respected in window actions:
-			If we're checking against a specific named window, turn that info into a titleString and check that way
-			If we're trying to figure out what a window is, use current method (search through WindowInfo objects)
+		Clean up windowActions.tl
 		Create (static) WindowActions class;
 			Read in windowActions.tl
 				All windows' info stored in static variables (like in MainConfig)?

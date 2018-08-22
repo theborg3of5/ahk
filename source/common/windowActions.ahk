@@ -11,7 +11,7 @@ class WindowActions {
 	
 	
 	
-
+	
 	activateWindow(titleString := "A", winSettings := "") {
 		method := processWindow(titleString, WIN_ACTION_ACTIVATE, winSettings)
 		; DEBUG.popup("activateWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
@@ -95,6 +95,26 @@ class WindowActions {
 	; == Private ===================
 	; ==============================
 	actions := []
+	
+	; global WIN_ACTION_NONE        := "NONE"
+	; global WIN_ACTION_OTHER       := "OTHER"
+	; global WIN_ACTION_ACTIVATE    := "ACTIVATE"
+	; global WIN_ACTION_CLOSE       := "CLOSE"
+	; global WIN_ACTION_ESC         := "ESC"
+	; global WIN_ACTION_MIN         := "MIN"
+	; global WIN_ACTION_SELECT_ALL  := "SELECT_ALL"
+	; global WIN_ACTION_DELETE_WORD := "DELETE_WORD"
+
+	; global WIN_METHOD_DEFAULT := "DEFAULT"
+
+	; global WIN_MIN_POST_MESSAGE  := "POST_MESSAGE"
+
+	; global WIN_SELECT_ALL_HOME_END := "HOME_END"
+
+	; global WIN_DELETE_CTRL_SHIFT := "CTRL_SHIFT"
+	
+	
+	
 	
 	loadActions(filePath) {
 		tl := new TableList(filePath)

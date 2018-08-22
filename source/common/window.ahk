@@ -169,7 +169,7 @@ processWindow(ByRef titleString := "A", action := "", ByRef winSettings := "") {
 		winTitle := winSettings["TITLE"]
 		winText  := winSettings["TEXT"]
 		
-		titleString := "ahk_id " WinExist(buildWindowTitleString(winExe, winClass, winTitle), winText)
+		; titleString := "ahk_id " WinExist(buildWindowTitleString(winExe, winClass, winTitle), winText)
 	}
 	
 	; Figure out the method (how we're going to perform the action).

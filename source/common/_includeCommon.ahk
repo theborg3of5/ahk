@@ -24,6 +24,7 @@
 #Include toast.ahk
 #Include VA.ahk
 #Include window.ahk
+#Include windowActions.ahk
 #Include windowInfo.ahk
 #Include XInput.ahk
 

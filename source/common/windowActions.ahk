@@ -1,4 +1,22 @@
 
+	
+; global WIN_ACTION_NONE        := "NONE"
+; global WIN_ACTION_OTHER       := "OTHER"
+; global WIN_ACTION_ACTIVATE    := "ACTIVATE"
+; global WIN_ACTION_CLOSE       := "CLOSE"
+; global WIN_ACTION_ESC         := "ESC"
+; global WIN_ACTION_MIN         := "MIN"
+; global WIN_ACTION_SELECT_ALL  := "SELECT_ALL"
+; global WIN_ACTION_DELETE_WORD := "DELETE_WORD"
+
+; global WIN_METHOD_DEFAULT := "DEFAULT"
+
+; global WIN_MIN_POST_MESSAGE  := "POST_MESSAGE"
+
+; global WIN_SELECT_ALL_HOME_END := "HOME_END"
+
+; global WIN_DELETE_CTRL_SHIFT := "CTRL_SHIFT"
+	
 class WindowActions {
 	
 	; ==============================
@@ -9,16 +27,68 @@ class WindowActions {
 		this.actions := this.loadActions(windowActionsPath)
 	}
 	
+	;Want to replace WinActivate, % MainConfig.getWindowTitleString("Remote Desktop")
+	;With            WindowActions.activateWindowWithName("Remote Desktop")
+	activateWindowWithName(name) {
+		if(name = "")
+			return
+		
+		this.doActivateWindow(this.actions[name])
+	}
+	activateWindow(titleString := "A") {
+		name := MainConfig.findWindowName(titleString)
+		if(name = "")
+			return
+		
+		this.doActivateWindow(this.actions[name])
+	}
 	
 	
+	doActivateWindow(actionSettings) {
+		method := actionSettings[WIN_ACTION_ACTIVATE]
+		; GDB TODO: figure out how to structure OTHER (WIN_ACTION_OTHER) stuff - one function or within each do* function?
+		
+		; if(method = WIN_METHOD_DEFAULT) {
+			; WinShow,     %titleString%
+			; WinActivate, %titleString%
+		; } else {
+			; doWindowAction(method, titleString, winSettings)
+		; }
+	}
 	
-	activateWindow(titleString := "A", winSettings := "") {
-		method := processWindow(titleString, WIN_ACTION_ACTIVATE, winSettings)
-		; DEBUG.popup("activateWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
+	
+	; activateWindow(titleString := "A", winSettings := "") {
+		; method := processWindow(titleString, WIN_ACTION_ACTIVATE, winSettings)
+		; ; DEBUG.popup("activateWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
+		
+		; if(method = WIN_METHOD_DEFAULT) {
+			; WinShow,     %titleString%
+			; WinActivate, %titleString%
+		; } else {
+			; doWindowAction(method, titleString, winSettings)
+		; }
+	; }
+	closeWindow(titleString := "A", winSettings := "") {
+		method := processWindow(titleString, WIN_ACTION_CLOSE, winSettings)
+		; DEBUG.popup("closeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
+		
+		if(method = WIN_METHOD_DEFAULT)
+			WinClose, %titleString%
+		else
+			doWindowAction(method, titleString, winSettings)
+	}
+	; Delete a word, generally via use of the Ctrl+Backspace hotkey.
+	deleteWord(titleString := "A", winSettings := "") {
+		method := processWindow(titleString, WIN_ACTION_DELETE_WORD, winSettings)
+		; DEBUG.popup("deleteWord","", "Title string",titleString, "Window settings",winSettings, "Method",method)
 		
 		if(method = WIN_METHOD_DEFAULT) {
-			WinShow,     %titleString%
-			WinActivate, %titleString%
+			Send, ^{Backspace}
+			
+		} else if(method = WIN_DELETE_CTRL_SHIFT) { ; For older places that don't allow it properly.
+			Send, ^+{Left}
+			Send, {Backspace}
+			
 		} else {
 			doWindowAction(method, titleString, winSettings)
 		}
@@ -29,15 +99,6 @@ class WindowActions {
 		
 		if(method = WIN_METHOD_DEFAULT) ; Default is to do nothing.
 			return
-		else
-			doWindowAction(method, titleString, winSettings)
-	}
-	closeWindow(titleString := "A", winSettings := "") {
-		method := processWindow(titleString, WIN_ACTION_CLOSE, winSettings)
-		; DEBUG.popup("closeWindow","", "Title string",titleString, "Window settings",winSettings, "Method",method)
-		
-		if(method = WIN_METHOD_DEFAULT)
-			WinClose, %titleString%
 		else
 			doWindowAction(method, titleString, winSettings)
 	}
@@ -71,22 +132,6 @@ class WindowActions {
 			doWindowAction(method, titleString, winSettings)
 		}
 	}
-	; Delete a word, generally via use of the Ctrl+Backspace hotkey.
-	deleteWord(titleString := "A", winSettings := "") {
-		method := processWindow(titleString, WIN_ACTION_DELETE_WORD, winSettings)
-		; DEBUG.popup("deleteWord","", "Title string",titleString, "Window settings",winSettings, "Method",method)
-		
-		if(method = WIN_METHOD_DEFAULT) {
-			Send, ^{Backspace}
-			
-		} else if(method = WIN_DELETE_CTRL_SHIFT) { ; For older places that don't allow it properly.
-			Send, ^+{Left}
-			Send, {Backspace}
-			
-		} else {
-			doWindowAction(method, titleString, winSettings)
-		}
-	}
 	
 	
 	
@@ -94,31 +139,21 @@ class WindowActions {
 	; ==============================
 	; == Private ===================
 	; ==============================
-	actions := []
-	
-	; global WIN_ACTION_NONE        := "NONE"
-	; global WIN_ACTION_OTHER       := "OTHER"
-	; global WIN_ACTION_ACTIVATE    := "ACTIVATE"
-	; global WIN_ACTION_CLOSE       := "CLOSE"
-	; global WIN_ACTION_ESC         := "ESC"
-	; global WIN_ACTION_MIN         := "MIN"
-	; global WIN_ACTION_SELECT_ALL  := "SELECT_ALL"
-	; global WIN_ACTION_DELETE_WORD := "DELETE_WORD"
-
-	; global WIN_METHOD_DEFAULT := "DEFAULT"
-
-	; global WIN_MIN_POST_MESSAGE  := "POST_MESSAGE"
-
-	; global WIN_SELECT_ALL_HOME_END := "HOME_END"
-
-	; global WIN_DELETE_CTRL_SHIFT := "CTRL_SHIFT"
+	static actions := []
 	
 	
 	
 	
 	loadActions(filePath) {
 		tl := new TableList(filePath)
-		return tl.getTable()
+		actionsTable := tl.getTable()
+		
+		; Index actions by window name
+		actionsAry := []
+		For i,row in actionsTable
+			actionsAry[row["NAME"]] := row
+		
+		return actionsAry
 	}
 	
 	
@@ -166,18 +201,18 @@ class WindowActions {
 			winSettings := getWindowSettingsAry(titleString)
 		; DEBUG.popup("window.processWindow", "Got winSettings", "Window Settings", winSettings)
 		
-		; If there's some text that has to be in the window, turn the titleString 
-		; into one with a unique window ID, so that's taken into account.
-		; Leave active window (A) alone though, since you can't use window text 
-		; with that and it's already a single target by definition.
-		if(winSettings["TEXT"] && titleString != "A") {
-			winExe   := winSettings["EXE"]
-			winClass := winSettings["CLASS"]
-			winTitle := winSettings["TITLE"]
-			winText  := winSettings["TEXT"]
+		; ; If there's some text that has to be in the window, turn the titleString 
+		; ; into one with a unique window ID, so that's taken into account.
+		; ; Leave active window (A) alone though, since you can't use window text 
+		; ; with that and it's already a single target by definition.
+		; if(winSettings["TEXT"] && titleString != "A") {
+			; winExe   := winSettings["EXE"]
+			; winClass := winSettings["CLASS"]
+			; winTitle := winSettings["TITLE"]
+			; winText  := winSettings["TEXT"]
 			
-			titleString := "ahk_id " WinExist(buildWindowTitleString(winExe, winClass, winTitle), winText)
-		}
+			; titleString := "ahk_id " WinExist(buildWindowTitleString(winExe, winClass, winTitle), winText)
+		; }
 		
 		; Figure out the method (how we're going to perform the action).
 		method := winSettings[action]

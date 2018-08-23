@@ -147,7 +147,7 @@ return
 #If
 
 ; Run as long as we're not on an exclude page.
-#If browserActive() && !titleContains(offTitles)
+#If browserActive() && !titleContainsAnyOf(offTitles)
 	; Unpause for special cases.
 	~$Esc::
 	~$Enter::
@@ -158,7 +158,7 @@ return
 
 ; Normal key commands
 ; Run if vimkeys are on and we're not on an excluded page.
-#If browserActive() && vimKeysOn && !titleContains(offTitles)
+#If browserActive() && vimKeysOn && !titleContainsAnyOf(offTitles)
 	; Up/Down/Left/Right.
 	j::Send, {Down}
 	k::Send, {Up}

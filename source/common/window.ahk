@@ -30,16 +30,9 @@ buildWindowTitleString(exeName := "", winClass := "", winTitle := "") {
 }
 
 ; Returns true if the current window's title contains any of a given array of strings.
-titleContains(haystack) {
+titleContainsAnyOf(haystack) {
 	title := WinGetActiveTitle()
 	return stringMatchesAnyOf(title, haystack)
-}
-exeActive(exeName, partialMatch := false) {
-	currEXE := WinGet("ProcessName", "A")
-	if(partialMatch)
-		return stringContains(currExe, exeName)
-	else
-		return (currEXE = exeName)
 }
 
 ; See if a window exists or is active with a given TitleMatchMode.
@@ -77,7 +70,7 @@ waitUntilWindowState(state, title := "", text := "", matchMode := 1, matchSpeed 
 	; Plug in the new match settings.
 	origMatchSettings := setMatchSettings(matchMode, matchSpeed)
 	
-	; DEBUG.popup("Window state to wait on", state, "Window title to match", title, "Window text to match", text, "Title match mode", matchMode, "Title match speed", matchSpeed)
+	; DEBUG.popup("Window state to wait on",state, "Window title to match",title, "Window text to match",text, "Title match mode",matchMode, "Title match speed",matchSpeed)
 	
 	if(state = "active")
 		WinWaitActive, %title%, %text%
@@ -488,5 +481,5 @@ getWindowMonitor(titleString, monitorsAry := "") {
 
 activateWindowUnderMouse() {
 	MouseGetPos( , , winId)
-	activateWindow("ahk_id " winId)
+	WinActivate, % "ahk_id " winId
 }

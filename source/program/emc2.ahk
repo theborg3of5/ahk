@@ -1,5 +1,5 @@
 ; Check for EMC2 title since it overlaps window classes and such with Hyperspace.
-#If exeActive("EpicD84.exe") && isWindowInState("active", " - EMC2", , 2)
+#If MainConfig.isWindowActive("EMC2")
 	; Change code formatting hotkey to something more universal.
 	^+c::
 		Send, ^e
@@ -19,7 +19,6 @@
 	return
 	
 	{ ; SmartText hotstrings. Added to favorites to deal with duplicate/similar names.
-		; QA Instructions: DBC QA INSTRUCTIONS
 		:*:qa.dbc::
 			insertSmartText("DBC QA INSTRUCTIONS")
 		return
@@ -80,7 +79,7 @@
 #If
 
 ; Design open
-#If WinActive("XDS ahk_exe EpicD84.exe")
+#If MainConfig.isWindowActive("EMC2 XDS")
 	^k::
 		clickUsingMode(515, 226, "Client")
 	return

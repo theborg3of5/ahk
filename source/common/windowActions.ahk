@@ -28,33 +28,23 @@ class WindowActions {
 	}
 	
 	;Want to replace WinActivate, % MainConfig.getWindowTitleString("Remote Desktop")
-	;With            WindowActions.activateWindowWithName("Remote Desktop")
-	activateWindowWithName(name) {
-		if(name = "")
+	;With            WindowActions.activateWindowByName("Remote Desktop")
+	activateWindowByName(name) {
+		if(!name)
 			return
 		
-		this.doActivateWindow(this.actions[name])
+		titleString := MainConfig.getWindowTitleString(name)
+		this.doWindowAction(WIN_ACTION_ACTIVATE, titleString, this.actions[name])
 	}
 	activateWindow(titleString := "A") {
-		name := MainConfig.findWindowName(titleString)
-		if(name = "")
+		if(!titleString)
 			return
 		
-		this.doActivateWindow(this.actions[name])
+		name := MainConfig.findWindowName(titleString)
+		this.doWindowAction(WIN_ACTION_ACTIVATE, titleString, this.actions[name])
 	}
 	
 	
-	doActivateWindow(actionSettings) {
-		method := actionSettings[WIN_ACTION_ACTIVATE]
-		; GDB TODO: figure out how to structure OTHER (WIN_ACTION_OTHER) stuff - one function or within each do* function?
-		
-		; if(method = WIN_METHOD_DEFAULT) {
-			; WinShow,     %titleString%
-			; WinActivate, %titleString%
-		; } else {
-			; doWindowAction(method, titleString, winSettings)
-		; }
-	}
 	
 	
 	; activateWindow(titleString := "A", winSettings := "") {
@@ -142,8 +132,6 @@ class WindowActions {
 	static actions := []
 	
 	
-	
-	
 	loadActions(filePath) {
 		tl := new TableList(filePath)
 		actionsTable := tl.getTable()
@@ -155,6 +143,55 @@ class WindowActions {
 		
 		return actionsAry
 	}
+
+	doWindowAction(action, titleString, windowActionSettings) {
+		if(!action || !titleString)
+			return
+		
+		; How we want to perform the action
+		method := windowActionSettings[action]
+		if(method = WIN_ACTION_OTHER) {
+			this.doSpecialWindowMethod(action, titleString, windowActionSettings)
+			return
+		}
+		if(method = "")
+			method := WIN_METHOD_DEFAULT
+		
+		; Do that action.
+		if(action = WIN_ACTION_NONE)             ; Do nothing
+			return
+		else if(action = WIN_ACTION_ACTIVATE)    ; Activate the given window
+			this.doActivateWindow(method, titleString, windowActionSettings)
+		; else if(action = WIN_ACTION_CLOSE)       ; Close the given window
+			; this.closeWindow(titleString, winSettings)
+		; else if(action = WIN_ACTION_ESC)         ; React to the escape key (generally to minimize or close the window)
+			; this.doEscAction(titleString, winSettings)
+		; else if(action = WIN_ACTION_MIN)         ; Minimize the given window
+			; this.minimizeWindow(titleString, winSettings)
+		; else if(action = WIN_ACTION_SELECT_ALL)  ; Select all
+			; this.selectAll(titleString, winSettings)
+		; else if(action = WIN_ACTION_DELETE_WORD) ; Backspace one word
+			; this.deleteWord(titleString, winSettings)
+		else
+			DEBUG.popup("WindowActions.doWindowAction","Error", "Action not found",action)
+	}
+	
+	doSpecialWindowMethod(action, titleString, windowActionSettings) {
+		
+	}
+	
+	
+	doActivateWindow(method, titleString, windowActionSettings) {
+		if(method = WIN_METHOD_DEFAULT) {
+			WinShow,     %titleString%
+			WinActivate, %titleString%
+		} else {
+			this.doWindowAction(method, titleString, windowActionSettings)
+		}
+	}
+	
+	
+	
 	
 	
 	
@@ -167,29 +204,6 @@ class WindowActions {
 		winTitle := WinGetTitle(titleString)
 		winText  := WinGetText(titleString)
 		return MainConfig.getWindowLegacy("", winExe, winClass, winTitle, winText)
-	}
-
-	doWindowAction(action, titleString := "A", winSettings := "") {
-		if(!action)
-			return
-		
-		; Do that action.
-		if(action = WIN_ACTION_NONE)             ; WIN_ACTION_NONE means do nothing.
-			return
-		else if(action = WIN_ACTION_ACTIVATE)    ; Activate the given window
-			activateWindow(titleString, winSettings)
-		else if(action = WIN_ACTION_CLOSE)       ; Close the given window
-			closeWindow(titleString, winSettings)
-		else if(action = WIN_ACTION_ESC)         ; React to the escape key (generally to minimize or close the window)
-			doEscAction(titleString, winSettings)
-		else if(action = WIN_ACTION_MIN)         ; Minimize the given window
-			minimizeWindow(titleString, winSettings)
-		else if(action = WIN_ACTION_SELECT_ALL)  ; Select all
-			selectAll(titleString, winSettings)
-		else if(action = WIN_ACTION_DELETE_WORD) ; Backspace one word
-			deleteWord(titleString, winSettings)
-		else
-			DEBUG.popup("window.doWindowAction", "Error", "Action not found", action)
 	}
 
 	processWindow(ByRef titleString := "A", action := "", ByRef winSettings := "") {

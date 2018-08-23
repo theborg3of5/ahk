@@ -91,8 +91,11 @@ class MainConfig {
 		
 		return this.windowsByName[name].titleString
 	}
-	isWindowActive(windowName) {
-		return WinActive(this.getWindowInfo(windowName).titleString)
+	isWindowActive(name) {
+		return WinActive(this.getWindowInfo(name).titleString)
+	}
+	doesWindowExist(name) {
+		return WinExist(this.getWindowInfo(name).titleString)
 	}
 	findWindowInfo(titleString := "A") {
 		exe      := WinGet("ProcessName", titleString)
@@ -157,9 +160,8 @@ class MainConfig {
 	activateProgram(name) {
 		waitForHotkeyRelease()
 		
-		winId := WinExist(this.getWindowTitleString(name))
-		if(winId) { ; If the program is already running, go ahead and activate it.
-			activateWindow("ahk_id " winId)
+		if(this.doesWindowExist(name)) { ; If the program is already running, go ahead and activate it.
+			WindowActions.activateWindowByName(name)
 		} else { ; If it doesn't exist yet, we need to run the executable to make it happen.
 			progInfo := this.getProgramInfo(name)
 			RunAsUser(progInfo.path, progInfo.args)

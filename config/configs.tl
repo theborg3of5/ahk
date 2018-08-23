@@ -1,8 +1,8 @@
 (	NAME					ABBREV	PATH
 
 [PATH.addToStart(<AHK_CONFIG>\)]
-	Windows				w|win		windowsLegacy.tl
-	Windows New			winNew	windows.tl
+	Windows				w|win		windows.tl
+	Windows Actions	wa|wina	windowActions.tl
 	Programs				prog		programs.tl
 	Paths					path		paths.tl
 	Private values		priv		private\privates.tl

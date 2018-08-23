@@ -16,7 +16,7 @@ class MainConfig {
 	; == Public ====================
 	; ==============================
 	
-	init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile, windowsLegacyFile) {
+	init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile) {
 		; All config files are expected to live in config/ folder under the root of this repo.
 		ahkRootPath := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
 		configFolder := ahkRootPath "\config"
@@ -28,7 +28,6 @@ class MainConfig {
 		programsPath := configFolder "\" programsFile
 		gamesPath    := configFolder "\" gamesFile
 		privatesPath := configFolder "\" privatesFile
-		windowsLegacyPath := configFolder "\" windowsLegacyFile
 		
 		; Read in and process the files.
 		this.privates := this.loadPrivates(privatesPath) ; This should be loaded before everything else, so the tags defined there can be used by other config files as needed.
@@ -37,7 +36,6 @@ class MainConfig {
 		this.paths    := this.loadPaths(pathsPath)
 		this.programs := this.loadPrograms(programsPath)
 		this.games    := this.loadGames(gamesPath)
-		this.windowsLegacy := this.loadWindowsLegacy(windowsLegacyPath)
 		; DEBUG.popupEarly("MainConfig","Loaded all", "Settings",this.settings, "Windows",this.windows, "Paths",this.paths, "Programs",this.programs, "Games",this.games)
 		
 		; Create indexed versions of some of our information, for easier access.
@@ -175,41 +173,6 @@ class MainConfig {
 	}
 	
 	
-	getWindowLegacy(name := "", exe := "", ahkClass := "", title := "", text := "") {
-		retWindow := ""
-		if(!name && !exe && !ahkClass && !title && !text)
-			return ""
-		
-		For i,w in this.windowsLegacy {
-			; DEBUG.popupEarly("Against settings",w, "Name",name, "EXE",exe, "Class",ahkClass, "Title",title, "Text",text)
-			if(name && w["NAME"] && (name != w["NAME"]))
-				Continue
-			if(exe && w["EXE"] && (exe != w["EXE"]))
-				Continue
-			if(ahkClass && w["CLASS"] && (ahkClass != w["CLASS"]))
-				Continue
-			if(title && w["TITLE"]) {
-				if(stringStartsWith(w["TITLE"], "{REGEX}")) {
-					regexNeedle := removeStringFromStart(w["TITLE"], "{REGEX}")
-					if(!RegExMatch(title, regexNeedle))
-						Continue
-				} else {
-					if(title != w["TITLE"])
-						Continue
-				}
-			}
-			if(text && w["TEXT"] && !stringContains(text, w["TEXT"]))
-				Continue
-			
-			retWindow := w.clone()
-			Break
-		}
-		
-		; DEBUG.popupEarly("MainConfig","getWindow", "Found window",retWindow)
-		return retWindow
-	}
-	
-	
 	; ==============================
 	; == Private ===================
 	; ==============================
@@ -315,11 +278,5 @@ class MainConfig {
 		For i,winInfo in windowsByLineNum
 			windowsAry[winInfo.name] := winInfo
 		return windowsAry
-	}
-	
-	
-	loadWindowsLegacy(filePath) {
-		tl := new TableList(filePath)
-		return tl.getFilteredTable("MACHINE", MainConfig.getMachine())
 	}
 }

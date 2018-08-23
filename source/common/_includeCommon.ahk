@@ -28,5 +28,5 @@
 #Include windowInfo.ahk
 #Include XInput.ahk
 
-MainConfig.init("local\settings.ini", "windows.tl", "paths.tl", "programs.tl", "games.tl", "private\privates.tl", "windowsLegacy.tl")
+MainConfig.init("local\settings.ini", "windows.tl", "paths.tl", "programs.tl", "games.tl", "private\privates.tl")
 WindowActions.init("windowActions.tl")

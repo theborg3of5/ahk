@@ -8,12 +8,6 @@
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	
 # Windows/programs config split
-	Remove
-		MainConfig reading in windowsLegacy.tl
-			Places using corresponding getter/checker functions
-			Those functions
-		windowsLegacy.tl
-		MainConfig.getWindowLegacy() - should have been replaced by new methods (by name vs by title string)
 	Document
 		WindowInfo
 		ProgramInfo

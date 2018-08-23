@@ -25,6 +25,7 @@ class WindowActions {
 	init(windowActionsFile) {
 		windowActionsPath := findConfigFilePath(windowActionsFile)
 		this.actions := this.loadActions(windowActionsPath)
+		; DEBUG.popupEarly("WindowActions.init","Finished", "windowActionsFile",windowActionsFile, "windowActionsPath",windowActionsPath, "this.actions",this.actions)
 	}
 	
 	activateWindow(titleString := "A") {
@@ -99,6 +100,7 @@ class WindowActions {
 		if(!titleString)
 			titleString := MainConfig.getWindowTitleString(name)
 		
+		; DEBUG.popup("WindowActions.windowAction","Finished prep", "action",action, "titleString",titleString, "this.actions[name]",this.actions[name])
 		this.doWindowAction(action, titleString, this.actions[name])
 	}
 	

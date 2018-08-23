@@ -1,9 +1,9 @@
 ; Minimizing shortcut.
-$!q::minimizeWindow()
+$!q::WindowActions.minimizeWindow()
 
 ; Escape key will generally minimize or close things.
 ~Escape::
-	doEscAction()
+	WindowActions.escAction()
 	KeyWait, Esc, T1 ; Ensures that we don't have fall-through window closing.
 return
 

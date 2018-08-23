@@ -24,10 +24,10 @@
 *#Space::releaseAllModifierKeys()
 
 ; Select all with exceptions.
-$^a::selectAll()
+$^a::WindowActions.selectAll()
 
 ; Backspace shortcut for those that don't handle it well.
-$^Backspace::deleteWord()
+$^Backspace::WindowActions.deleteWord()
 
 ; Launchy normally uses CapsLock, but (very) occasionally, we need to use it for its intended purpose.
 ^!CapsLock::

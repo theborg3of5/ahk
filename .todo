@@ -46,10 +46,8 @@
 		file
 		gui
 		iniObject
-			Technically from outside source, but so simple...
 		io
 		mainConfig
-			Particularly windows.tl support for RegEx in titles ({REGEX})
 		runCommands
 		selectorGui
 		string

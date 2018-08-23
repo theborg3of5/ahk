@@ -6,11 +6,6 @@
 	
 	; Focus normal chat.
 	^t::telegramFocusNormalChat()
-	
-	; Avoid ":p" triggering praying emoji by adding a space.
-	:::p::
-		Send, :p{Space}
-	return
 #If
 
 telegramFocusNormalChat() {

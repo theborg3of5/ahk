@@ -10,9 +10,6 @@
 # Windows/programs config split
 	Add new windowActions.tl handling
 		Create (static) WindowActions class;
-			Read in windowActions.tl
-				All windows' info stored in static variables (like in MainConfig)?
-			Use MainConfig (new windows.tl functions) to identify windows
 			Recreate window action functions in WindowActions
 			Move action constants in as static variables (can be referenced outside as WindowActions.*)
 				Is this worth it, inside the class?

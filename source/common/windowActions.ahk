@@ -195,36 +195,31 @@ class WindowActions {
 	}
 	
 	doSpecialWindowMethod(action, titleString, windowActionSettings) {
-		; ; DEBUG.popup("windowMethodSpecial","", "Settings",winSettings, "Action",action)
+		if(!action)
+			return ""
 		
-		; if(!action)
-			; return ""
+		name := windowActionSettings["NAME"]
 		
-		; method := WIN_ACTION_NONE ; Start with the assumption that we shouldn't do anything after this - the specific cases will say otherwise if needed.
+		; Windows explorer
+		if(name = "Explorer") {
+			if(action = WIN_ACTION_MIN)
+				Send, !q ; QTTabBar's min to tray hotkey
 		
-		; ; Windows explorer
-		; if(winSettings["NAME"] = "Explorer")
-			; if(action = WIN_ACTION_MIN)
-				; Send, !q ; QTTabBar's min to tray
-		
-		; ; Spotify
-		; if(winSettings["NAME"] = "Spotify") {
-			; if(action = WIN_ACTION_CLOSE) {
-				; ; Spotify has a whole bunch of windows that are difficult to tell apart from 
-				; ; the real thing, so make sure we're closing the right one.
+		; Spotify
+		} else if(name = "Spotify") {
+			if(action = WIN_ACTION_CLOSE) {
+				; Spotify has a whole bunch of windows that are difficult to tell apart from 
+				; the real thing, so make sure we're closing the right one.
 				
-				; ; Title is "Spotify" if not playing anything, and has a hyphen between the title and artist if it is playing something.
-				; spotifyTitleBase := " ahk_exe Spotify.exe"
-				; titleAry := []
-				; titleAry.push("Spotify" spotifyTitleBase)
-				; titleAry.push("-" spotifyTitleBase)
+				; Title is "Spotify" if not playing anything, and has a hyphen between the title and artist if it is playing something.
+				spotifyTitleBase := " ahk_exe Spotify.exe"
+				titleAry := []
+				titleAry.push("Spotify" spotifyTitleBase)
+				titleAry.push("-" spotifyTitleBase)
 				
-				; winId := isWindowInState("exists", titleAry, "", TITLE_MATCH_MODE_Contain, "", "On")
-				; WinClose, ahk_id %winId%
-			; }
-		; }
-		
-		; ; DEBUG.popup("window.windowMethodSpecial","Finished", "Action",action, "Method",method, "Settings",winSettings)
-		; return method
+				winId := isWindowInState("exists", titleAry, "", TITLE_MATCH_MODE_Contain, "", "On")
+				WinClose, ahk_id %winId%
+			}
+		}
 	}
 }

@@ -1,5 +1,5 @@
 
-	
+; Window actions supported by the WindowActions class.
 global WIN_ACTION_NONE        := "NONE"
 global WIN_ACTION_OTHER       := "OTHER"
 global WIN_ACTION_ACTIVATE    := "ACTIVATE"
@@ -9,63 +9,136 @@ global WIN_ACTION_MIN         := "MIN"
 global WIN_ACTION_SELECT_ALL  := "SELECT_ALL"
 global WIN_ACTION_DELETE_WORD := "DELETE_WORD"
 
-global WIN_METHOD_DEFAULT := "DEFAULT"
-
-global WIN_MIN_POST_MESSAGE  := "POST_MESSAGE"
-
-global WIN_SELECT_ALL_HOME_END := "HOME_END"
-
-global WIN_DELETE_CTRL_SHIFT := "CTRL_SHIFT"
+; Specific methods for performing the actions above.
+global WIN_METHOD_DEFAULT         := "DEFAULT"
+global WIN_METHOD_MIN_MESSAGE     := "POST_MESSAGE"
+global WIN_METHOD_SELECT_ALL_HOME := "HOME_END"
+global WIN_METHOD_DELETE_CTRL     := "CTRL_SHIFT"
 	
 class WindowActions {
 	
 	; ==============================
 	; == Public ====================
 	; ==============================
+	
+	;---------
+	; DESCRIPTION:    
+	; PARAMETERS:
+	;  windowActionsFile (I,REQ) - The filename of the .tl file to read in for window
+	;                              actions.
+	;---------
 	init(windowActionsFile) {
 		windowActionsPath := findConfigFilePath(windowActionsFile)
 		this.actions := this.loadActions(windowActionsPath)
 		; DEBUG.popupEarly("WindowActions.init","Finished", "windowActionsFile",windowActionsFile, "windowActionsPath",windowActionsPath, "this.actions",this.actions)
 	}
 	
+	;---------
+	; DESCRIPTION:    Activate and show a window, respecting any custom overrides for the identified
+	;                 window.
+	; PARAMETERS:
+	;  titleString (I,REQ) - A title string identifying the window.
+	;---------
 	activateWindow(titleString := "A") {
 		this.windowAction(WIN_ACTION_ACTIVATE, "", titleString)
 	}
+	;---------
+	; DESCRIPTION:    Activate and show a window, respecting any custom overrides for the identified
+	;                 window.
+	; PARAMETERS:
+	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+	;---------
 	activateWindowByName(name) {
 		this.windowAction(WIN_ACTION_ACTIVATE, name)
 	}
 	
+	;---------
+	; DESCRIPTION:    Close a window, respecting any custom overrides for the identified window.
+	; PARAMETERS:
+	;  titleString (I,REQ) - A title string representing the window.
+	;---------
 	closeWindow(titleString := "A") {
 		this.windowAction(WIN_ACTION_CLOSE, "", titleString)
 	}
+	;---------
+	; DESCRIPTION:    Close a window, respecting any custom overrides for the identified window.
+	; PARAMETERS:
+	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+	;---------
 	closeWindowByName(name) {
 		this.windowAction(WIN_ACTION_CLOSE, name)
 	}
 	
+	;---------
+	; DESCRIPTION:    Delete a single word before the cursor within a particular window, respecting
+	;                 any custom overrides for the identified window.
+	; PARAMETERS:
+	;  titleString (I,REQ) - A title string representing the window.
+	;---------
 	deleteWord(titleString := "A") {
 		this.windowAction(WIN_ACTION_DELETE_WORD, "", titleString)
 	}
+	;---------
+	; DESCRIPTION:    Delete a single word before the cursor within a particular window, respecting
+	;                 any custom overrides for the identified window.
+	; PARAMETERS:
+	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+	;---------
 	deleteWordByName(name) {
 		this.windowAction(WIN_ACTION_DELETE_WORD, name)
 	}
 	
+	;---------
+	; DESCRIPTION:    Respond to the escape key within a particular window, respecting any custom
+	;                 overrides for the identified window.
+	; PARAMETERS:
+	;  titleString (I,REQ) - A title string representing the window.
+	;---------
 	escAction(titleString := "A") {
 		this.windowAction(WIN_ACTION_ESC, "", titleString)
 	}
+	;---------
+	; DESCRIPTION:    Respond to the escape key within a particular window, respecting any custom
+	;                 overrides for the identified window.
+	; PARAMETERS:
+	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+	;---------
 	escActionByName(name) {
 		this.windowAction(WIN_ACTION_ESC, name)
 	}
 	
+	;---------
+	; DESCRIPTION:    Minimize a window, respecting any custom overrides for the identified window.
+	; PARAMETERS:
+	;  titleString (I,REQ) - A title string representing the window.
+	;---------
 	minimizeWindow(titleString := "A") {
 		this.windowAction(WIN_ACTION_MIN, "", titleString)
 	}
+	;---------
+	; DESCRIPTION:    Minimize a window, respecting any custom overrides for the identified window.
+	; PARAMETERS:
+	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+	;---------
 	minimizeWindowByName(name) {
 		this.windowAction(WIN_ACTION_MIN, name)
 	}
 	
+	;---------
+	; DESCRIPTION:    Select all within a particular window, respecting any custom overrides for the
+	;                 identified window.
+	; PARAMETERS:
+	;  titleString (I,REQ) - A title string representing the window.
+	;---------
 	selectAll(titleString := "A") {
 		this.windowAction(WIN_ACTION_SELECT_ALL, "", titleString)
 	}
+	;---------
+	; DESCRIPTION:    Select all within a particular window, respecting any custom overrides for the
+	;                 identified window.
+	; PARAMETERS:
+	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+	;---------
 	selectAllByName(name) {
 		this.windowAction(WIN_ACTION_SELECT_ALL, name)
 	}
@@ -156,7 +229,7 @@ class WindowActions {
 		if(method = WIN_METHOD_DEFAULT) {
 			Send, ^{Backspace}
 			
-		} else if(method = WIN_DELETE_CTRL_SHIFT) { ; For older places that don't allow it properly.
+		} else if(method = WIN_METHOD_DELETE_CTRL) { ; For older places that don't allow it properly.
 			Send, ^+{Left}
 			Send, {Backspace}
 			
@@ -174,7 +247,7 @@ class WindowActions {
 		if(method = WIN_METHOD_DEFAULT) {
 			WinMinimize, %titleString%
 		
-		} else if(method = WIN_MIN_POST_MESSAGE) {
+		} else if(method = WIN_METHOD_MIN_MESSAGE) {
 			PostMessage, 0x112, 0xF020 , , , %titleString%
 		
 		} else {
@@ -185,7 +258,7 @@ class WindowActions {
 		if(method = WIN_METHOD_DEFAULT) {
 			Send, ^a
 		
-		} else if(method = WIN_SELECT_ALL_HOME_END) { ; For older places that don't allow it properly.
+		} else if(method = WIN_METHOD_SELECT_ALL_HOME) { ; For older places that don't allow it properly.
 			Send, ^{Home}
 			Send, ^+{End}
 		

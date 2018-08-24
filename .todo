@@ -7,12 +7,6 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	
-# Windows/programs config split
-	Document
-		WindowInfo
-		ProgramInfo
-		WindowActions
-	
 # New
 	Switch searchWithEverything() and searchWithGrepWin() to use args in programs.tl, with <tags> in them?
 	Consider properties instead of getter functions for selector stuff (at least SelectorRow?)

@@ -147,10 +147,11 @@ class DEBUG {
 		
 		; Otherwise, assume we have a list of label,value pairs (2 parameters at a time go together).
 		pairedParams := this.convertParamsToPaired(params)
-		; MsgBox, % pairedParams[1][1] "`n" pairedParams[1][2]
+		; For i,row in pairedParams
+			; MsgBox, % i "`n" row["LABEL"] "`n" row["VALUE"]
 		
-		For i,p in pairedParams {
-			newString := this.buildDebugLine(p[1], p[2])
+		For i,row in pairedParams {
+			newString := this.buildDebugLine(row["LABEL"], row["VALUE"])
 			outString := appendLine(outString, newString)
 		}
 		
@@ -162,8 +163,8 @@ class DEBUG {
 		pairedParams := []
 		i := 1
 		while(i <= params.length()) {
-			; MsgBox, % "Label`n`t" params[i] "`nValue:`n`t" params[i + 1])
-			pairedParams.Push([params[i], params[i + 1]])
+			; MsgBox, % "Label:`n`t" params[i] "`nValue:`n`t" params[i + 1]
+			pairedParams.Push({"LABEL":params[i], "VALUE":params[i + 1]})
 			i += 2
 		}
 		

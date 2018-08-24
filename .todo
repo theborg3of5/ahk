@@ -32,20 +32,22 @@
 	
 # Documentation
 	common
-		data
-		dateTime
-		debug
-		debugBuilder
-		epic
-		file
-		gui
-		iniObject
-		io
-		mainConfig
-		runCommands
-		selectorGui
-		string
-		window
+		classes
+			debug
+			debugBuilder
+			iniObject
+			mainConfig
+			selectorGui
+		functions
+			data
+			dateTime
+			epic
+			file
+			gui
+			io
+			runCommands
+			string
+			window
 	program
 		emc2
 		epicStudio

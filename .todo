@@ -33,8 +33,6 @@
 # Documentation
 	common
 		classes
-			debug
-			debugBuilder
 			iniObject
 			mainConfig
 			selectorGui

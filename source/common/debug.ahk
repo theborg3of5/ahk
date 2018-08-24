@@ -137,7 +137,15 @@ class DEBUG {
 	; ==============================
 	static spacesPerTab := 4 ; How many spaces are in a tab that we indent things by.
 	
-	; Given any number of pairs of (label, value), build a full debug string.
+	;---------
+	; DESCRIPTION:    Build the debug string for the given value or label-value pairs.
+	; PARAMETERS:
+	;  params (I,REQ) - A variable number of arguments to display in the popup. For 1 argument,
+	;                   we will interpret it as a value (not a label), but for >1 arguments an
+	;                   even number of arguments should be passed in label,value pairs.
+	; RETURNS:        A formatted string representing the labels and values given. See class
+	;                 documentation for format.
+	;---------
 	buildDebugString(params*) {
 		outString := ""
 		
@@ -158,7 +166,17 @@ class DEBUG {
 		return outString
 	}
 	
-	; Convert params array into array of (label, value) pairs.
+	;---------
+	; DESCRIPTION:    Turn an array of parameters (which came from variadic parameters to the
+	;                 calling function) into an array of pairs, where the pairs are size-2
+	;                 arrays.
+	; PARAMETERS:
+	;  params (I,REQ) - Array of parameters, where the odd-numbered indices hold labels for
+	;                   their following even-numbered indices.
+	; RETURNS:        Array of pairs, where each pair is an array of this format:
+	;                    pairedParams[i, "LABEL"] = label (odd index)
+	;                                    "VALUE"] = value (following even index)
+	;---------
 	convertParamsToPaired(params) {
 		pairedParams := []
 		i := 1
@@ -171,39 +189,43 @@ class DEBUG {
 		return pairedParams
 	}
 	
-	; Puts together a string in the form:
-	;  label: value
-	; For arrays, format looks like this:
-	;  label: Array (numIndices)
-	;     [index] value
-	;     [index] value
-	;     ...
-	; Also respects custom debug names and debug functions - see buildObjectString() for details.
-	; 
-	; Parameters:
-	;  label       - Label to show the value with
-	;  value       - Value to show. If this is an object, we will call into DEBUG.buildObjectString() for a more complete description.
-	;  numTabs     - Number of tabs of indentation to start at. Sub-values (for array indices or custom debug function) will be indented by numTabs+1.
 	buildDebugLine(label, value, numTabs := 0) {
+	;---------
+	; DESCRIPTION:    Builds a debug string for a single label-value pair, including any needed
+	;                 indentation and sub-lines.
+	; PARAMETERS:
+	;  label   (I,REQ) - Label to show the value with.
+	;  value   (I,REQ) - Value to show. Will be evaluated according to the logic described in the
+	;                    class documentation.
+	;  numTabs (I,OPT) - Indentation level that this string needs to start at. Sub-levels (array
+	;                    indices, lines set in object's .debugToString) will be indented by
+	;                    numTabs+1. Defaults to 0 (no indentation).
+	; RETURNS:        Formatted string for a single label/value passed in.
+	; NOTES:          May be more than a single line, depending on the value - if it's an array or
+	;                 object we'll show the contents too.
+	;---------
 		outString := ""
 		outString .= getTabs(numTabs, DEBUG.spacesPerTab) label ": " ; Label
 		outString .= this.buildObjectString(value, numTabs)          ; Value
 		return outString
 	}
 	
-	; Puts together a string describing the value given.
-	; 
-	; Relevant special properties of objects:
-	;  value.debugName     - Rather than the generic "Array", text will contain {value.debugName}.
-	;  value.debugToString - If exists for the object, we will call it with the parameter (debugBuilder) rather than looping over the objects subscripts.
-	;									debugBuilder - A DebugBuilder object (see debugBuilder.ahk)
-	; Parameters:
-	;  value    - Object to put together a string about.
-	;  numTabs  - How much to indent the start of the string. Subitems will be indented by numTabs+1.
-	;  newLine  - If true, we will indent this line. Typically used because the value is going on a new line (as opposed to next to the current label).
-	;              NOTE: subitems will be indented by numTabs+1 regardless.
-	;  index    - If set, row will be prefaced with "[index] "
 	buildObjectString(value, numTabs := 0, newLine := false, index := "") {
+	;---------
+	; DESCRIPTION:    
+	; PARAMETERS:
+	;  value   (I,REQ) - Value to show. Will be evaluated according to the logic described in the
+	;                    class documentation.
+	;  numTabs (I,OPT) - Indentation level that this string needs to start at. Sub-levels (array
+	;                    indices, lines set in object's .debugToString) will be indented by
+	;                    numTabs+1. Defaults to 0 (no indentation).
+	;  newLine (I,OPT) - If true, we will indent this line. Typically used because the value is
+	;                    going on a new line (as opposed to next to the current label).
+	;              			NOTE: subitems will be indented by numTabs+1 regardless.
+	;  index   (I,OPT) - If set, row will be prefaced with "[index] "
+	; RETURNS:        Formatted string for the single value (simple, array, or object) given.
+	; NOTES:          May recurse to get at indices/sub-values or custom debug functions.
+	;---------
 		if(newLine)
 			outString := getTabs(numTabs, DEBUG.spacesPerTab)
 		
@@ -232,6 +254,13 @@ class DEBUG {
 		return outString
 	}
 	
+	;---------
+	; DESCRIPTION:    Determine the name we should show for an object (array or class instance)
+	; PARAMETERS:
+	;  value (I,REQ) - Object to determine the name of.
+	; RETURNS:        "{debugName}" for objects that implement .debugName
+	;                 "Array (numIndices)" for arrays and objects that don't implement .debugName
+	;---------
 	getObjectName(value) {
 		; If an object has its own name specified, use it.
 		if(value.debugName)

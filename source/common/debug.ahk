@@ -151,7 +151,7 @@ class DEBUG {
 		
 		; Single parameter - treat as an object.
 		if(params.length() = 1)
-			return this.buildObjectString(params[1])
+			return this.buildValueDebugString(params[1])
 		
 		; Otherwise, assume we have a list of label,value pairs (2 parameters at a time go together).
 		pairedParams := this.convertParamsToPaired(params)
@@ -159,7 +159,7 @@ class DEBUG {
 			; MsgBox, % i "`n" row["LABEL"] "`n" row["VALUE"]
 		
 		For i,row in pairedParams {
-			newString := this.buildDebugLine(row["LABEL"], row["VALUE"])
+			newString := this.buildDebugStringForPair(row["LABEL"], row["VALUE"])
 			outString := appendLine(outString, newString)
 		}
 		
@@ -189,7 +189,6 @@ class DEBUG {
 		return pairedParams
 	}
 	
-	buildDebugLine(label, value, numTabs := 0) {
 	;---------
 	; DESCRIPTION:    Builds a debug string for a single label-value pair, including any needed
 	;                 indentation and sub-lines.
@@ -204,13 +203,13 @@ class DEBUG {
 	; NOTES:          May be more than a single line, depending on the value - if it's an array or
 	;                 object we'll show the contents too.
 	;---------
+	buildDebugStringForPair(label, value, numTabs := 0) {
 		outString := ""
 		outString .= getTabs(numTabs, DEBUG.spacesPerTab) label ": " ; Label
-		outString .= this.buildObjectString(value, numTabs)          ; Value
+		outString .= this.buildValueDebugString(value, numTabs)      ; Value
 		return outString
 	}
 	
-	buildObjectString(value, numTabs := 0, newLine := false, index := "") {
 	;---------
 	; DESCRIPTION:    
 	; PARAMETERS:
@@ -226,6 +225,7 @@ class DEBUG {
 	; RETURNS:        Formatted string for the single value (simple, array, or object) given.
 	; NOTES:          May recurse to get at indices/sub-values or custom debug functions.
 	;---------
+	buildValueDebugString(value, numTabs := 0, newLine := false, index := "") {
 		if(newLine)
 			outString := getTabs(numTabs, DEBUG.spacesPerTab)
 		
@@ -248,7 +248,7 @@ class DEBUG {
 			outString .= "`n" builder.toString()
 		} else {
 			For subIndex,subVal in value
-				outString .= "`n" this.buildObjectString(subVal, numTabs + 1, true, subIndex)
+				outString .= "`n" this.buildValueDebugString(subVal, numTabs + 1, true, subIndex)
 		}
 		
 		return outString

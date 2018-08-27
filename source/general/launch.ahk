@@ -40,24 +40,30 @@ genericHyperlink(subAction) {
 		if(!data)
 			return
 		
-		searchTerm := escapeDoubleQuotes(data["SEARCH_TERM"], 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
+		searchTerm := data["SEARCH_TERM"]
 		subTypes   := forceArray(data["SUBTYPE"])
 		
-		For i,type in subTypes { ; For searching multiple at once.
+		For i,subType in subTypes { ; For searching multiple at once.
 			url := ""
 			
-			if(data["SEARCH_TYPE"] = "CODESEARCH")
-				url := buildCodeSearchURL(type, searchTerm, data["APP_KEY"])
-			else if(data["SEARCH_TYPE"] = "GURU")
-				url := buildGuruURL(searchTerm)
-			else if(data["SEARCH_TYPE"] = "WIKI") ; Epic wiki search.
-				url := buildEpicWikiSearchURL(subTypes[0], searchTerm)
-			else if(data["SEARCH_TYPE"] = "WEB")
+			if(data["SEARCH_TYPE"] = "WEB") {
+				searchTerm := escapeDoubleQuotesWithQuotes(data["SEARCH_TERM"], 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
 				url := StrReplace(subTypes[0], "%s", searchTerm)
-			else if(data["SEARCH_TYPE"] = "GREPWIN")
-				searchWithGrepWin(type, searchTerm)
-			else if(data["SEARCH_TYPE"] = "EVERYTHING")
+			} else if(data["SEARCH_TYPE"] = "CODESEARCH") {
+				searchTerm := escapeDoubleQuotesWithQuotes(data["SEARCH_TERM"], 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
+				url := buildCodeSearchURL(subType, searchTerm, data["APP_KEY"])
+			} else if(data["SEARCH_TYPE"] = "GURU") {
+				searchTerm := escapeDoubleQuotesWithQuotes(data["SEARCH_TERM"], 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
+				url := buildGuruURL(searchTerm)
+			} else if(data["SEARCH_TYPE"] = "WIKI") { ; Epic wiki search.
+				searchTerm := escapeDoubleQuotesWithQuotes(data["SEARCH_TERM"], 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
+				url := buildEpicWikiSearchURL(subTypes[0], searchTerm)
+			
+			} else if(data["SEARCH_TYPE"] = "GREPWIN") {
+				searchWithGrepWin(subType, searchTerm)
+			} else if(data["SEARCH_TYPE"] = "EVERYTHING") {
 				searchWithEverything(searchTerm)
+			}
 			
 			if(url)
 				Run(url)

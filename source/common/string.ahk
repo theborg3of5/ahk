@@ -88,7 +88,7 @@ multiplyString(inString, numTimes) {
 }
 
 ; Turns all double quotes (") into double double quotes ("") or more, if second argument given.
-escapeDoubleQuotes(s, num := 2) {
+escapeDoubleQuotesWithQuotes(s, num := 2) {
 	global QUOTES
 	
 	replString := ""
@@ -99,11 +99,23 @@ escapeDoubleQuotes(s, num := 2) {
 	
 	return StrReplace(s, """", replString, "All")
 }
-
-escapeAmpersands(textToEscape) {
+escapeDoubleQuotesWithBackslash(inputString) {
 	escapedString := ""
 	
-	Loop, Parse, textToEscape
+	Loop, Parse, inputString
+	{
+		if(A_LoopField = """")
+			escapedString .= "\"
+		escapedString .= A_LoopField
+	}
+	
+	return escapedString
+}
+
+escapeAmpersands(inputString) {
+	escapedString := ""
+	
+	Loop, Parse, inputString
 	{
 		escapedString .= A_LoopField
 		if(A_LoopField = "&")

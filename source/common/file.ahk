@@ -116,6 +116,7 @@ selectFolder(folderName := "") {
 	return MainConfig.replacePathTags(path)
 }
 
+; textToSearch should not have its quotes escaped yet (especially not by doubling or tripling them)
 searchWithGrepWin(pathToSearch, textToSearch := "") {
 	runPath := MainConfig.getProgramPath("grepWin") " /regex:no"
 	
@@ -123,7 +124,7 @@ searchWithGrepWin(pathToSearch, textToSearch := "") {
 	runPath .= " /searchpath:""" convertedPath " """ ; Extra space after path, otherwise trailing backslash escapes ending double quote
 	
 	if(textToSearch)
-		runPath .= "/searchfor:""" textToSearch """ /execute" ; Run it immediately if we got what to search for
+		runPath .= " /searchfor:""" escapeDoubleQuotesWithBackslash(textToSearch) """ /execute" ; Run it immediately if we got what to search for
 	
 	; DEBUG.popup("Path to search",pathToSearch, "Converted path",convertedPath, "To search",textToSearch, "Run path",runPath)
 	Run(runPath)

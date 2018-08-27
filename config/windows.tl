@@ -7,6 +7,7 @@
 	EMC2 DLG email						EpicD84.exe				-							E-mail Development Log
 	EMC2 Issue email					EpicD84.exe				-							Email Issue
 	EMC2 Issue popup					EpicD84.exe				-							Magnify
+	EMC2 Open Design					EpicD84.exe				ThunderRT6FormDC		Open/New Design
 	EMC2 QAN email						EpicD84.exe				-							Send E-Mail
 	EMC2 QAN email notify			EpicD84.exe				-							EMC2 - QA Note E-Mail Notification
 	EMC2 QAN notes						EpicD84.exe				-							Note

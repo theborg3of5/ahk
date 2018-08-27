@@ -23,6 +23,7 @@
 	EMC2 QAN notes
 	EMC2 Issue email
 	EMC2 Issue popup
+	EMC2 Open Design
 	EMC2 QAN email notify
 	EMC2 QAN email							-				-					HOME_END
 []

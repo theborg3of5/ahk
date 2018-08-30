@@ -8,6 +8,7 @@
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	
 # New
+	Make auto-linking hotkey copy the link to the clipboard (and show a corresponding toast) if it's not a place we support linking
 	Can we combine some of our various string.escape* functions (and doubleBackslashes too)?
 		Seems like there are two methods - doubling certain chars (escapeDoubleQuotesWithQuotes, escapeAmpersands) and using an escape character (escapeDoubleQuotesWithBackslash, doubleBackslashes, escapeRegExChars)
 			escapeCharUsingRepeat(inputString, charToEscape, repeatCount := 2)

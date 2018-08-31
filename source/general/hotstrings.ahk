@@ -50,6 +50,7 @@
 	::IT"S::IT'S ; "
 	::THAT"S::THAT'S ; "
 	::scheduleable::schedulable
+	::performably::performable
 	::isntead::instead
 }
 

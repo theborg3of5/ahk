@@ -198,6 +198,7 @@ linkSelectedText(path) {
 	path := mapPath(path)
 	
 	windowName := MainConfig.findWindowName()
+	; DEBUG.toast("io.linkSelectedText","Finished gathering info", "windowName",windowName)
 	if(!doesWindowSupportLinking(windowName))
 		return
 	
@@ -215,13 +216,15 @@ linkSelectedText(path) {
 }
 doesWindowSupportLinking(name) {
 	windowNamesAry := []
-	windowNamesAry["OneNote"]          := ""
-	windowNamesAry["Outlook"]          := ""
-	windowNamesAry["Word"]             := ""
-	windowNamesAry["EMC2 DLG"]         := ""
-	windowNamesAry["EMC2 XDS"]         := ""
-	windowNamesAry["EMC2 Issue popup"] := ""
-	windowNamesAry["Mattermost"]       := ""
+	windowNamesAry["OneNote"]                := ""
+	windowNamesAry["Outlook"]                := ""
+	windowNamesAry["Word"]                   := ""
+	windowNamesAry["EMC2 DLG"]               := ""
+	windowNamesAry["EMC2 QAN"]               := ""
+	windowNamesAry["EMC2 QAN change status"] := ""
+	windowNamesAry["EMC2 XDS"]               := ""
+	windowNamesAry["EMC2 Issue popup"]       := ""
+	windowNamesAry["Mattermost"]             := ""
 	
 	return windowNamesAry.HasKey(name)
 }
@@ -229,9 +232,7 @@ startLink(windowName) {
 	if(!windowName)
 		return
 	
-	if(windowName = "EMC2 XDS") {
-		clickUsingMode(515, 226, "Client")
-	} else if(windowName = "Mattermost") { ; Goal: [text](url)
+	if(windowName = "Mattermost") { ; Goal: [text](url)
 		selectedText := getSelectedText()
 		selectionLen := strLen(selectedText)
 		Send, {Left} ; Get to start of selection
@@ -257,12 +258,14 @@ getLinkPopupTitleString(windowName) {
 		return ""
 	
 	linkPopupsAry := []
-	linkPopupsAry["OneNote"]          := "Link ahk_class NUIDialog"
-	linkPopupsAry["Outlook"]          := "ahk_class bosa_sdm_Mso96"
-	linkPopupsAry["Word"]             := "ahk_class bosa_sdm_msword"
-	linkPopupsAry["EMC2 DLG"]         := "" ; Fake popup, so we can't wait for it (or sense it at all, really)
-	linkPopupsAry["EMC2 XDS"]         := "HyperLink Parameters ahk_class ThunderRT6FormDC"
-	linkPopupsAry["EMC2 Issue popup"] := "HyperLink Parameters ahk_class ThunderRT6FormDC"
+	linkPopupsAry["OneNote"]                := "Link ahk_class NUIDialog"
+	linkPopupsAry["Outlook"]                := "ahk_class bosa_sdm_Mso96"
+	linkPopupsAry["Word"]                   := "ahk_class bosa_sdm_msword"
+	linkPopupsAry["EMC2 DLG"]               := "" ; Fake popup, so we can't wait for it (or sense it at all, really)
+	linkPopupsAry["EMC2 QAN"]               := "HyperLink Parameters ahk_class ThunderRT6FormDC"
+	linkPopupsAry["EMC2 QAN change status"] := "HyperLink Parameters ahk_class ThunderRT6FormDC"
+	linkPopupsAry["EMC2 XDS"]               := "HyperLink Parameters ahk_class ThunderRT6FormDC"
+	linkPopupsAry["EMC2 Issue popup"]       := "HyperLink Parameters ahk_class ThunderRT6FormDC"
 	
 	return linkPopupsAry[windowName]
 }

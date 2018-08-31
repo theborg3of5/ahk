@@ -1,21 +1,25 @@
 (	NAME									EXE						CLASS						TITLE						WINDOW_EDGE_OFFSET_OVERRIDE	TITLE_STRING_MATCH_MODE_OVERRIDE
 
 	; Specific windows within a program (overlap with their less-specific counterparts below).
+	AutoHotkey WinSpy					AutoHotkey.exe			AutoHotkeyGUI			Window Spy
 	Chrome Join							chrome.exe				-							Join
 	Chrome TickTick					chrome.exe				-							All - TickTick
-	EMC2 DLG								EpicD84.exe				ThunderRT6MDIForm		DLG						-										CONTAINS_BEG
-	EMC2 DLG email						EpicD84.exe				-							E-mail Development Log
-	EMC2 Issue email					EpicD84.exe				-							Email Issue
-	EMC2 Issue popup					EpicD84.exe				-							Magnify
-	EMC2 Open Design					EpicD84.exe				ThunderRT6FormDC		Open/New Design
-	EMC2 QAN email						EpicD84.exe				-							Send E-Mail
-	EMC2 QAN email notify			EpicD84.exe				-							EMC2 - QA Note E-Mail Notification
-	EMC2 QAN notes						EpicD84.exe				-							Note
-	EMC2 XDS								EpicD84.exe				ThunderRT6MDIForm		XDS						-										CONTAINS_BEG
+[EXE.replaceWith(EpicD84.exe)]
+	EMC2 DLG								-							ThunderRT6MDIForm		DLG						-										CONTAINS_BEG
+	EMC2 DLG email						-							-							E-mail Development Log
+	EMC2 Issue email					-							-							Email Issue
+	EMC2 Issue popup					-							-							Magnify
+	EMC2 Open Design					-							ThunderRT6FormDC		Open/New Design
+	EMC2 QAN								-							ThunderRT6MDIForm		QAN						-										CONTAINS_BEG
+	EMC2 QAN change status			-							ThunderRT6FormDC		Change Note Status
+	EMC2 QAN email						-							-							Send E-Mail
+	EMC2 QAN email notify			-							-							EMC2 - QA Note E-Mail Notification
+	EMC2 QAN notes						-							-							Note
+	EMC2 XDS								-							ThunderRT6MDIForm		XDS						-										CONTAINS_BEG
+[]
 	EpicStudio New Object Window	EpicStudio.exe			New Object
 	EpicStudio Tokenize String		EpicStudio.exe			Tokenize String
 	Pidgin Buddy List					pidgin.exe				-							Buddy List
-	AutoHotkey WinSpy					AutoHotkey.exe			AutoHotkeyGUI			Window Spy
 	
 	AutoHotkey GUIs					AutoHotkey.exe			AutoHotkeyGUI
 	Chrome								chrome.exe				Chrome_WidgetWin_1	-							0

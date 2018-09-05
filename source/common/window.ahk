@@ -106,17 +106,19 @@ centerWindow(titleString := "A") {
 	winH -= (offsetsAry["BOTTOM"] + offsetsAry["TOP"]  )
 	
 	; Make sure that our screen sizes take which monitor we're on into account.
-	currMonbounds := getMonitorBounds("", titleString)
+	currMonitorBounds := getMonitorBounds("", titleString)
+	if(!isObject(currMonitorBounds))
+		currMonitorBounds := getMonitorBounds(SysGet("MonitorPrimary")) ; If we couldn't find monitor bounds, the window is probably off the screen - center it on the primary monitor.
 	
 	; Coordinates relative to screen
-	relX := (currMonbounds["WIDTH"]  - winW) / 2
-	relY := (currMonbounds["HEIGHT"] - winH) / 2
+	relX := (currMonitorBounds["WIDTH"]  - winW) / 2
+	relY := (currMonitorBounds["HEIGHT"] - winH) / 2
 	
 	; True coordinates
-	x := currMonbounds["LEFT"] + relX - offsetsAry["LEFT"]
-	y := currMonbounds["TOP"]  + relY - offsetsAry["TOP"]
+	x := currMonitorBounds["LEFT"] + relX - offsetsAry["LEFT"]
+	y := currMonitorBounds["TOP"]  + relY - offsetsAry["TOP"]
 	
-	; DEBUG.popup("Screen bounds", currMonbounds, "Offsets", offsetsAry, "WinW", winW, "WinH", winH, "Relative X", relX, "Relative Y", relY, "X", x, "Y", y)
+	; DEBUG.popup("Screen bounds",currMonitorBounds, "Offsets",offsetsAry, "WinW",winW, "WinH",winH, "Relative X",relX, "Relative Y",relY, "X",x, "Y",y)
 	WinMove, %titleString%, , x, y
 }
 
@@ -258,7 +260,7 @@ getWindowMonitor(titleString, monitorsAry := "") {
 	; If monitorsAry isn't given, make our own...with blackjack and hookers.
 	if(!IsObject(monitorsAry))
 		monitorsAry := getMonitorBoundsAry()
-	; DEBUG.popup("Monitor list", monitorsAry, "Title string", titleString)
+	; DEBUG.popup("Monitor list",monitorsAry, "Title string",titleString)
 	
 	; Get the X/Y for the given window.
 	WinGetPos, winX, winY, , , %titleString%

@@ -54,16 +54,16 @@ genericHyperlink(subAction) {
 			url := ""
 			
 			if(data["SEARCH_TYPE"] = "WEB") {
-				searchTerm := escapeDoubleQuotesWithQuotes(data["SEARCH_TERM"], 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
+				searchTerm := escapeCharUsingRepeat(data["SEARCH_TERM"], DOUBLE_QUOTE, 2) ; Escape quotes twice - extra to get us past the windows run command stripping them out.
 				url := StrReplace(subTypes[0], "%s", searchTerm)
 			} else if(data["SEARCH_TYPE"] = "CODESEARCH") {
-				searchTerm := escapeDoubleQuotesWithQuotes(data["SEARCH_TERM"], 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
+				searchTerm := escapeCharUsingRepeat(data["SEARCH_TERM"], DOUBLE_QUOTE, 2) ; Escape quotes twice - extra to get us past the windows run command stripping them out.
 				url := buildCodeSearchURL(subType, searchTerm, data["APP_KEY"])
 			} else if(data["SEARCH_TYPE"] = "GURU") {
-				searchTerm := escapeDoubleQuotesWithQuotes(data["SEARCH_TERM"], 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
+				searchTerm := escapeCharUsingRepeat(data["SEARCH_TERM"], DOUBLE_QUOTE, 2) ; Escape quotes twice - extra to get us past the windows run command stripping them out.
 				url := buildGuruURL(searchTerm)
 			} else if(data["SEARCH_TYPE"] = "WIKI") { ; Epic wiki search.
-				searchTerm := escapeDoubleQuotesWithQuotes(data["SEARCH_TERM"], 3) ; 3 quotes per quote - gets us past the windows run command stripping things out.
+				searchTerm := escapeCharUsingRepeat(data["SEARCH_TERM"], DOUBLE_QUOTE, 2) ; Escape quotes twice - extra to get us past the windows run command stripping them out.
 				url := buildEpicWikiSearchURL(subTypes[0], searchTerm)
 			
 			} else if(data["SEARCH_TYPE"] = "GREPWIN") {

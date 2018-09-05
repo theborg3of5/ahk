@@ -14,8 +14,8 @@ global SM_CYBORDER    := 6  ; For non-3D windows (which should be most), the wid
 global SM_CXMAXIMIZED := 61 ; Width of a maximized window on the primary monitor. Includes any weird offsets.
 global SM_CYMAXIMIZED := 62 ; Height of a maximized window on the primary monitor. Includes any weird offsets.
 
-; Delimiters and special characters.
-global QUOTES := """"
+; Delimiters and special characters
+global DOUBLE_QUOTE := """"
 
 ; Different sets of common hotkeys
 global HOTKEY_TYPE_Standalone := 0 ; One-off scripts, not connected to master script

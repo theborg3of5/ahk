@@ -8,11 +8,6 @@
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	
 # New
-	Can we combine some of our various string.escape* functions (and doubleBackslashes too)?
-		Seems like there are two methods - doubling certain chars (escapeDoubleQuotesWithQuotes, escapeAmpersands) and using an escape character (escapeDoubleQuotesWithBackslash, doubleBackslashes, escapeRegExChars)
-			escapeCharUsingRepeat(inputString, charToEscape, repeatCount := 2)
-			escapeCharUsingChar(inputString, charToEscape, escapeChar := "\")
-				escapeCharsUsingChar(inputString, charsToEscape, escapeChar := "\")
 	Consider properties instead of getter functions for selector stuff (at least SelectorRow?)
 	Figure out some central documentation method
 		Dynamically pull hotkeys for the currently focused program?

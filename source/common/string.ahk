@@ -87,68 +87,13 @@ multiplyString(inString, numTimes) {
 	return outStr
 }
 
-; Turns all double quotes (") into double double quotes ("") or more, if second argument given.
-escapeDoubleQuotesWithQuotes(s, num := 2) {
-	global QUOTES
-	
-	replString := ""
-	while(num > 0) {
-		replString .= QUOTES
-		num--
-	}
-	
-	return StrReplace(s, """", replString, "All")
+escapeCharUsingChar(inputString, charToEscape, escapeChar := "\") {
+	replaceString := escapeChar charToEscape
+	return StrReplace(inputString, charToEscape, replaceString, "All")
 }
-escapeDoubleQuotesWithBackslash(inputString) {
-	escapedString := ""
-	
-	Loop, Parse, inputString
-	{
-		if(A_LoopField = """")
-			escapedString .= "\"
-		escapedString .= A_LoopField
-	}
-	
-	return escapedString
-}
-
-escapeAmpersands(inputString) {
-	escapedString := ""
-	
-	Loop, Parse, inputString
-	{
-		escapedString .= A_LoopField
-		if(A_LoopField = "&")
-			escapedString .= "&"
-	}
-	
-	return escapedString
-}
-
-; Doubles every backslash in the given string.
-doubleBackslashes(in) {
-	out := ""
-	
-	Loop, Parse, in
-	{
-		out .= A_LoopField
-		if(A_LoopField = "\")
-			out .= "\"
-	}
-	
-	return out
-}
-
-escapeRegExChars(inputString) {
-	outputString := ""
-	Loop, Parse, inputString
-	{
-		if(stringContains("\.*?+[{|()^$", A_LoopField))
-			outputString .= "\"
-		outputString .= A_LoopField
-	}
-	
-	return outputString
+escapeCharUsingRepeat(inputString, charToEscape, repeatCount := 1) {
+	replaceString := multiplyString(charToEscape, repeatCount + 1) ; Replace with repeatCount+1 instances of character
+	return StrReplace(inputString, charToEscape, replaceString, "All")
 }
 
 ; Wrapper for InStr() that I can remember easier. Slightly different parameters as well.

@@ -124,7 +124,7 @@ searchWithGrepWin(pathToSearch, textToSearch := "") {
 	runPath .= " /searchpath:""" convertedPath " """ ; Extra space after path, otherwise trailing backslash escapes ending double quote
 	
 	if(textToSearch)
-		runPath .= " /searchfor:""" escapeDoubleQuotesWithBackslash(textToSearch) """ /execute" ; Run it immediately if we got what to search for
+		runPath .= " /searchfor:""" escapeCharUsingChar(textToSearch, DOUBLE_QUOTE) """ /execute" ; Run it immediately if we got what to search for
 	
 	; DEBUG.popup("Path to search",pathToSearch, "Converted path",convertedPath, "To search",textToSearch, "Run path",runPath)
 	Run(runPath)

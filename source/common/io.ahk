@@ -190,9 +190,10 @@ getKeyNameFromHotkeyChar(hotkeyChar := "") {
 }
 
 ; Link the selected text with the given URL/path.
+; Returns whether we were successful.
 linkSelectedText(path) {
 	if(!path)
-		return
+		return false
 	
 	path := cleanupPath(path)
 	path := mapPath(path)
@@ -200,7 +201,7 @@ linkSelectedText(path) {
 	windowName := MainConfig.findWindowName()
 	; DEBUG.toast("io.linkSelectedText","Finished gathering info", "windowName",windowName)
 	if(!doesWindowSupportLinking(windowName))
-		return
+		return false
 	
 	startLink(windowName)
 	sendTextWithClipboard(path)
@@ -210,9 +211,10 @@ linkSelectedText(path) {
 		sendTextWithClipboard(path)
 	}
 	if(!pathIsCorrect(windowName, path)) ; If we still failed to put the right thing in the box, bail out so the user can notice and fix it.
-		return
+		return false
 	
 	finishLink(windowName)
+	return true
 }
 doesWindowSupportLinking(name) {
 	windowNamesAry := []

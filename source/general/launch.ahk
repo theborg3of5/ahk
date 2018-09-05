@@ -26,7 +26,14 @@ genericLink(subAction) {
 genericHyperlink(subAction) {
 	text := getFirstLineOfSelectedText()
 	link := ActionObject.do(text, , ACTION_Link, , subAction)
-	linkSelectedText(link)
+	if(!link)
+		return
+	
+	if(!linkSelectedText(link)) {
+		; If we failed to add the link to the selected text, at least put the link on the clipboard and notify the user.
+		clipboard := link
+		Toast.showForTime("Clipboard set to link: " clipboard, 2)
+	}
 }
 
 ; Generic search.

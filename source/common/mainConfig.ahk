@@ -125,17 +125,6 @@ class MainConfig {
 		winInfo := this.findWindowInfo(titleString)
 		return winInfo.name
 	}
-	windowIsGame(titleString := "A") {
-		ahkExe := WinGet("ProcessName", titleString)
-		if(!ahkExe)
-			return false
-		
-		For i,game in this.games
-			if(ahkExe = game["EXE"])
-				return true
-		
-		return false
-	}
 	
 	getPath(key) {
 		if(!key)
@@ -172,6 +161,17 @@ class MainConfig {
 		RunAsUser(progInfo.path, progInfo.args)
 	}
 	
+	windowIsGame(titleString := "A") {
+		ahkExe := WinGet("ProcessName", titleString)
+		if(!ahkExe)
+			return false
+		
+		For i,game in this.games
+			if(ahkExe = game["EXE"])
+				return true
+		
+		return false
+	}
 	
 	; ==============================
 	; == Private ===================

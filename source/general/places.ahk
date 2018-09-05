@@ -51,3 +51,4 @@ sendCleanedUpPath(containingFolderOnly := false) {
 ^!#m::Run("https://mail.google.com/mail/u/0/#inbox")
 !+o:: Run("https://www.onenote.com/notebooks?auth=1&nf=1&fromAR=1")
 !+t:: Run(MainConfig.getPrivate("ONENOTE_ONLINE_DO_SECTION"))
+!+#t::Run(MainConfig.getPrivate("ONENOTE_ONLINE_SHARED_DO_SECTION"))

@@ -31,13 +31,12 @@ class WindowInfo {
 		this.windowClass := windowAry["CLASS"]
 		this.windowTitle := windowAry["TITLE"]
 		
-		titleStringMatchModeOverride  := windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"]
-		this.windowEdgeOffsetOverride := windowAry["WINDOW_EDGE_OFFSET_OVERRIDE"]
-		
-		if(titleStringMatchModeOverride != "")
-			this.windowTitleStringMatchModeOverride := %titleStringMatchModeOverride%
-		if(!this.windowTitleStringMatchModeOverride)
+		if(windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"] = "")
+			this.windowTitleStringMatchModeOverride := windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"]
+		else
 			this.windowTitleStringMatchModeOverride := CONTAINS_ANY ; Default value
+		
+		this.windowEdgeOffsetOverride := windowAry["WINDOW_EDGE_OFFSET_OVERRIDE"]
 	}
 	
 	;---------

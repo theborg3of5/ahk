@@ -17,8 +17,10 @@
 #If
 
 ; Scroll horizontally with Shift held down.
-+WheelUp::WheelLeft
-+WheelDown::WheelRight
+#If !MainConfig.isWindowActive("EpicStudio") ; EpicStudio handles its own horizontal scrolling, and doesn't support WheelLeft/Right.
+	+WheelUp::WheelLeft
+	+WheelDown::WheelRight
+#If
 
 ; Release all modifier keys, for cases when some might be "stuck" down.
 *#Space::releaseAllModifierKeys()

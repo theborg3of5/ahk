@@ -7,7 +7,6 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
-	Considering trimming down the URLs for onenote notebooks to be built using the cid and resid parameters (which should remain private)
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	Can we make Alt+Shift+X hotkey blocking in notepad++ (in main script) contingent on whether the test script is running?
 	Consider properties instead of getter functions for selector stuff (at least SelectorRow?)

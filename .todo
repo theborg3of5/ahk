@@ -10,24 +10,6 @@
 	Considering trimming down the URLs for onenote notebooks to be built using the cid and resid parameters (which should remain private)
 	Should we have various places referencing EMC2/Hyperspace just use MainConfig things like getWindowSetting("NAME") instead of explicit EXEs?
 	Can we make Alt+Shift+X hotkey blocking in notepad++ (in main script) contingent on whether the test script is running?
-	Horizontal scrolling in OneNote (and likely other Office programs)
-		https://autohotkey.com/docs/misc/SendMessageList.htm
-		Working code
-			MouseGetPos, , , winId, controlId, 1
-			WM_HSCROLL := 0x114
-			SB_LINELEFT := 0
-			SendMessage, WM_HSCROLL, SB_LINELEFT, , % controlId, % "ahk_id " winId
-			MouseGetPos, , , winId, controlId, 1
-			WM_HSCROLL := 0x114
-			SB_LINERIGHT := 1
-			SendMessage, WM_HSCROLL, SB_LINERIGHT, , % controlId, % "ahk_id " winId
-		How do we want to make this happen for OneNote vs other places?
-			Can't just do the new way everywhere, doesn't work.
-			Could put into WindowActions (it's how a window deals with something), but the performance of doing that seems atrocious
-				Would be better to determine the window more up front, with a MainConfig.isWindowActive()-style deal instead
-					That would need the info to live in WindowInfo instead, though - and it's not really info about the window.
-			
-				
 	Consider properties instead of getter functions for selector stuff (at least SelectorRow?)
 	Figure out some central documentation method
 		Dynamically pull hotkeys for the currently focused program?

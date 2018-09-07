@@ -1,5 +1,5 @@
 ; OneNote hotkeys.
-#IfWinActive, ahk_class Framework::CFrame
+#If MainConfig.isWindowActive("OneNote")
 	; Format as code (using custom styles)
 	^+c::
 		oneNoteCustomStyles()
@@ -58,6 +58,18 @@
 		; Replacement history back/forward.
 		!+Left:: Send, !{Left}
 		!+Right::Send, !{Right}
+		
+		; Horizontal scrolling.
+		+WheelUp::
+			onenoteScrollLeft() {
+				MouseGetPos, , , winId, controlId, 1
+				SendMessage, WM_HSCROLL, SB_LINELEFT, , % controlId, % "ahk_id " winId
+			}
+		+WheelDown::
+			onenoteScrollRight() {
+				MouseGetPos, , , winId, controlId, 1
+				SendMessage, WM_HSCROLL, SB_LINERIGHT, , % controlId, % "ahk_id " winId
+			}
 	}
 	
 	{ ; Content/formatting modifiers.
@@ -346,4 +358,4 @@
 		; Update current state
 		currNumTabs := numTabs
 	}
-#IfWinActive
+#If

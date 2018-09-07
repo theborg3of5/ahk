@@ -8,11 +8,18 @@ global WS_EX_APPWINDOW     := 0x40000
 global WS_EX_TOOLWINDOW    := 0x80
 global WS_EX_CLICKTHROUGH  := 0x20
 
-; SysGet command numbers, from https://autohotkey.com/docs/commands/SysGet.htm
+; SysGet command numbers (https://autohotkey.com/docs/commands/SysGet.htm)
 global SM_CXBORDER    := 5  ; For non-3D windows (which should be most), the width of the border on the left and right.
 global SM_CYBORDER    := 6  ; For non-3D windows (which should be most), the width of the border on the top and bottom.
 global SM_CXMAXIMIZED := 61 ; Width of a maximized window on the primary monitor. Includes any weird offsets.
 global SM_CYMAXIMIZED := 62 ; Height of a maximized window on the primary monitor. Includes any weird offsets.
+
+; Windows Messages (https://autohotkey.com/docs/misc/SendMessageList.htm)
+global WM_HSCROLL    := 0x114
+
+; Scroll Bar Requests/Messages (https://docs.microsoft.com/en-us/windows/desktop/Controls/about-scroll-bars)
+global SB_LINELEFT  := 0
+global SB_LINERIGHT := 1
 
 ; Delimiters and special characters
 global DOUBLE_QUOTE := """"

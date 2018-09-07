@@ -3,9 +3,7 @@
 { ; Epic Object-related things.
 	
 	getRelatedQANsAry() {
-		if(!WinActive("DLG  ahk_class ThunderRT6MDIForm ahk_exe EpicD84.exe"))
-			return ""
-		if(!isWindowInState("active"," - EMC2","",2))
+		if(!MainConfig.isWindowActive("EMC2 DLG"))
 			return ""
 		
 		; Assuming you're in the first row of the table already.

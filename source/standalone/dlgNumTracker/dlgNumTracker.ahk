@@ -13,10 +13,10 @@ SetTitleMatchMode, 2 ; Partial title matching.
 
 MainLoop:
 	; Don't do anything if EMC2 isn't open.
-	if(!WinExist(" - EMC2 ahk_exe EpicD84.exe"))
+	if(!MainConfig.doesWindowExist("EMC2"))
 		return
 	
-	getEMC2Info(ini, id, " - EMC2 ahk_exe EpicD84.exe")
+	getEMC2Info(ini, id, MainConfig.getWindowTitleString("EMC2"))
 	if(ini != "DLG")
 		return
 	

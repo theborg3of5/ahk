@@ -7,6 +7,7 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	Add some sort of safety to TLG selector - if we're not sending the info to Outlook, put it on the clipboard instead.
 	Can we make Alt+Shift+X hotkey blocking in notepad++ (in main script) contingent on whether the test script is running?
 	Consider properties instead of getter functions for selector stuff (at least SelectorRow?)
 	Figure out some central documentation method

@@ -196,12 +196,11 @@ global lastPuttySearchType, lastPuttySearchText ; For Home+F9 searching repeated
 #IfWinActive
 
 
-; Opens the Change Settings menu for putty. 0x112 is WM_SYSCOMMAND, and
-; 0x50 is IDM_RECONF, the change settings option. It's found in putty's
-; source code in window.c:
+; Opens the Change Settings menu for putty. 0x50 is IDM_RECONF, the change settings option. 
+; It's found in putty's source code in window.c:
 ; https://github.com/codexns/putty/blob/master/windows/window.c
 openPuttySettingsWindow() {
-	PostMessage, 0x112, 0x50, 0
+	PostMessage, WM_SYSCOMMAND, 0x50, 0
 }
 
 ; Modified from http://wiki.epic.com/main/PuTTY#AutoHotKey_for_PuTTY_Macros

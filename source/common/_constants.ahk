@@ -15,6 +15,7 @@ global SM_CXMAXIMIZED := 61 ; Width of a maximized window on the primary monitor
 global SM_CYMAXIMIZED := 62 ; Height of a maximized window on the primary monitor. Includes any weird offsets.
 
 ; Windows Messages (https://autohotkey.com/docs/misc/SendMessageList.htm)
+global WM_SYSCOMMAND := 0x112
 global WM_HSCROLL    := 0x114
 
 ; Scroll Bar Requests/Messages (https://docs.microsoft.com/en-us/windows/desktop/Controls/about-scroll-bars)

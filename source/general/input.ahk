@@ -17,7 +17,7 @@
 #If
 
 ; Scroll horizontally with Shift held down.
-#If !MainConfig.isWindowActive("EpicStudio") ; EpicStudio handles its own horizontal scrolling, and doesn't support WheelLeft/Right.
+#If !(MainConfig.isWindowActive("EpicStudio") || MainConfig.isWindowActive("Chrome")) ; Chrome and EpicStudio handle their own horizontal scrolling, and doesn't support WheelLeft/Right all the time.
 	+WheelUp::WheelLeft
 	+WheelDown::WheelRight
 #If

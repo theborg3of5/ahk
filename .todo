@@ -7,6 +7,7 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	Rename private repo to ahk-private, since we're planning to add another repo (for OneTastic macros)
 	Add some sort of safety to TLG selector - if we're not sending the info to Outlook, put it on the clipboard instead.
 	Can we make Alt+Shift+X hotkey blocking in notepad++ (in main script) contingent on whether the test script is running?
 	Consider properties instead of getter functions for selector stuff (at least SelectorRow?)

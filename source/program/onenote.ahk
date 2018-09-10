@@ -113,6 +113,8 @@
 	; Copy link to page.
 	!c::
 		copyOneNoteLink() {
+			clipboard := "" ; Clear the clipboard so we can tell when we get the new link.
+			
 			; Get the link to the current paragraph.
 			Send, +{F10}
 			Sleep, 100
@@ -122,6 +124,12 @@
 			; If the special paste menu item was there (where the only option is "Paste (P)"), the menu is still open (because 2 "p" items) - get to the next one and actually submit it.
 			if(WinActive("ahk_class Net UI Tool Window"))
 				Send, p{Enter}
+			
+			ClipWait, 2000 ; Wait up to 2s for the link to appear on the clipboard
+			if(ErrorLevel = 1) { ; Timed out, didn't get a link.
+				Toast.showForTime("No link found on clipboard", 2)
+				return
+			}
 			
 			; Trim off the paragraph-specific part.
 			copiedLink := RegExReplace(clipboard, "&object-id.*")
@@ -137,9 +145,11 @@
 				linkToUse := copiedLink
 			}
 			
+			clipboard := "" ; Clear the clipboard first so we can tell when our new link is in place.
 			clipboard := linkToUse
-			if(clipboard)
-				Toast.showForTime("Clipboard set to link: " clipboard, 2)
+			ClipWait, 2000 ; Wait up to 2s for the new link to appear on the clipboard
+			
+			Toast.showForTime("Clipboard set to link: " clipboard, 2) ; Let the user know the new link is in place.
 		}
 	
 	; Make a copy of the current page in the Do section.

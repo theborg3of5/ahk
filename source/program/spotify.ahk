@@ -17,7 +17,7 @@
 
 ; If Spotify is indeed running.
 #If WinExist(MainConfig.getWindowTitleString("Spotify"))
-	^!Up::   Send, {Media_Stop}
+	^!Up::   MainConfig.runProgram("Spotify") ; Spotify doesn't respect stop command, so just use this hotkey to show it instead.
 	^!Down:: Send, {Media_Play_Pause}
 	^!Left:: Send, {Media_Prev}
 	^!Right::Send, {Media_Next}

@@ -7,6 +7,10 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
+		Options:
+			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)
+			New type of codesearch type with separate branch in ActionObject (not ideal)
 	Rename private repo to ahk-private, since we're planning to add another repo (for OneTastic macros)
 	Add some sort of safety to TLG selector - if we're not sending the info to Outlook, put it on the clipboard instead.
 	Can we make Alt+Shift+X hotkey blocking in notepad++ (in main script) contingent on whether the test script is running?

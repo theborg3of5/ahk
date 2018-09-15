@@ -7,9 +7,9 @@ Thumbs.db
 # Do include colorette's exe, though
 !Colorette.exe
 
-# Ignore the config/local and config/private folders entirely.
+# Ignore the config/local and config/ahkPrivate folders entirely.
 config/local/
-config/private/
+config/ahkPrivate/
 
 # Test folder, ignore most things, but not subdirectories or test icons.
 test/*

@@ -5,8 +5,8 @@
 	Windows Actions	wa|wina	windowActions.tl
 	Programs				prog		programs.tl
 	Paths					path		paths.tl
-	Private values		priv		private\privates.tl
-	Mapped drives		md			private\mappedDrives.tl
+	Private values		priv		ahkPrivate\privates.tl
+	Mapped drives		md			ahkPrivate\mappedDrives.tl
 	Games					g			games.tl
 	Settings				s			local\settings.ini
 []

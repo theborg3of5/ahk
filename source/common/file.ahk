@@ -153,11 +153,11 @@ findConfigFilePath(path) {
 	
 	; Check the overall config folder.
 	configFolder := MainConfig.getPath("AHK_CONFIG")
-	if(FileExist(configFolder "\local\" path))   ; Local folder (not version-controlled) inside of config
+	if(FileExist(configFolder "\local\" path))      ; Local folder (not version-controlled) inside of config
 		return configFolder "\local\" path
-	if(FileExist(configFolder "\private\" path)) ; Private folder (not version-controlled) inside of config
-		return configFolder "\private\" path
-	if(FileExist(configFolder "\" path))         ; General config folder
+	if(FileExist(configFolder "\ahkPrivate\" path)) ; Private folder (separately version-controlled) inside of config
+		return configFolder "\ahkPrivate\" path
+	if(FileExist(configFolder "\" path))            ; General config folder
 		return configFolder "\" path
 	
 	return ""

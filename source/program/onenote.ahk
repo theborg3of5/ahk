@@ -250,9 +250,8 @@
 			lines := []
 			lines.push({TEXT:"Pull to-dos from specific sections below"})
 			lines.push({TEXT:"Dishes from week"})
-			lines.push({TEXT:"Laundry"})
-			lines.push({NUM_TABS:1, TEXT:"Wash"})
-			lines.push({NUM_TABS:1, TEXT:"Dry"})
+			lines.push({TEXT:"Wash laundry"})
+			lines.push({TEXT:"Dry laundry"})
 			sendOneNoteLines(lines)
 		}
 	

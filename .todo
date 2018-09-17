@@ -7,6 +7,7 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	Add better error handling for Selector - should fail with an error when there's no filepath up-front, before we try and deal with TableLists.
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
 		Options:
 			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)

@@ -355,8 +355,12 @@ extractEMC2ObjectInfoRaw(line) {
 	
 	; ID is remaining up to the next delimiter
 	delimPos := stringMatchesAnyOf(line, [":", "-", "]"])
-	id := subStr(line, 1, delimPos - 1)
-	line := subStr(line, delimPos + 1) ; +1 to drop delimiter too
+	if(!delimPos) { ; If the string ended before the next delimiter (so no title), make sure to still get the ID.
+		id := subStr(line, 1, strLen(line))
+	} else {
+		id := subStr(line, 1, delimPos - 1)
+		line := subStr(line, delimPos + 1) ; +1 to drop delimiter too
+	}
 	
 	; Title is everything left
 	title := line

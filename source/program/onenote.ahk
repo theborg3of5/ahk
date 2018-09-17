@@ -228,9 +228,13 @@
 			lineText := getSelectedText()
 			
 			linkText := getStringAfterStr(lineText, " - ")
-			recordText := getStringBeforeStr(linkText, " [")
-			editText := getStringBetweenStr(linkText, "[", "]")
-			; DEBUG.popup("Line",lineText, "Record text",recordText, "Edit text",editText)
+			recordText := getStringBeforeStr(linkText, " (")
+			editText := getStringBetweenStr(linkText, "(", ")")
+			
+			infoAry := extractEMC2ObjectInfo(recordText)
+			ini := infoAry["INI"]
+			id  := infoAry["ID"]
+			; DEBUG.popup("Line",lineText, "Record text",recordText, "Edit text",editText, "infoAry",infoAry, "INI",ini, "ID",id)
 			
 			selectTextWithinSelection(recordText)
 			webURL := buildEMC2Link(ini, id, "WEB")

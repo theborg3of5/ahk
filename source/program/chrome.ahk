@@ -11,9 +11,8 @@
 	!c::
 		copyChromeTitle() {
 			title := WinGetActiveTitle()
-			clipboard := removeStringFromEnd(title, " - Google Chrome")
-			if(clipboard)
-				Toast.showForTime("Clipboard set to title: " clipboard, 2)
+			title := removeStringFromEnd(title, " - Google Chrome")
+			setClipboardAndToast(title, "Clipboard set to title")
 		}
 	
 	~!t::

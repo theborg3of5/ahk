@@ -294,3 +294,12 @@ finishLink(windowName) {
 	else
 		Send, {Enter}
 }
+
+setClipboardAndToast(newClipboardValue, message := "Clipboard set to value") {
+	clipboard := "" ; Clear it so we can wait for it to actually be set
+	
+	clipboard := newClipboardValue
+	ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain data.
+	
+	Toast.showForTime(message ":`n" clipboard, 2)
+}

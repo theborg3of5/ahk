@@ -42,7 +42,9 @@ return
 			; DEBUG.popup("Class",currClass, "Title",currTitle, "Control",currControl, "Tooltip text",tooltipText, "ID",winId)
 			
 			s := new Selector("testWindowInfo.tl")
-			key := s.selectGui("KEY")
+			infoAry := s.selectGui()
+			key  := infoAry["KEY"]
+			name := infoAry["NAME"]
 			
 			if(key = "CLASS")
 				textToCopy := currClass
@@ -55,18 +57,16 @@ return
 			else if(key = "ID")
 				textToCopy := winId
 			
-			if(textToCopy) {
-				clipboard := textToCopy
-				Toast.showForTime("Clipboard set to " key ": " clipboard, 2)
-			}
+			if(textToCopy)
+				setClipboardAndToast(textToCopy, "Clipboard set to " StringLower(name))
+			else
+				Toast.showForTime(name " not found", 2)
 		}
 	
 	!XButton1::
 	!XButton2::
-		copyTooltipText() {
-			clipboard := getTooltipText()
-			DEBUG.popup("Tooltip text", clipboard)
-		}
+		setClipboardAndToast(getTooltipText(), "Clipboard set to tooltip")
+	return
 }
 
 #Include <commonHotkeys>

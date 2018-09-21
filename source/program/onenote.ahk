@@ -125,7 +125,7 @@
 			if(WinActive("ahk_class Net UI Tool Window"))
 				Send, p{Enter}
 			
-			ClipWait, 2000 ; Wait up to 2s for the link to appear on the clipboard
+			ClipWait, 2 ; Wait up to 2s for the link to appear on the clipboard
 			if(ErrorLevel = 1) { ; Timed out, didn't get a link.
 				Toast.showForTime("No link found on clipboard", 2)
 				return
@@ -145,11 +145,7 @@
 				linkToUse := copiedLink
 			}
 			
-			clipboard := "" ; Clear the clipboard first so we can tell when our new link is in place.
-			clipboard := linkToUse
-			ClipWait, 2000 ; Wait up to 2s for the new link to appear on the clipboard
-			
-			Toast.showForTime("Clipboard set to link: " clipboard, 2) ; Let the user know the new link is in place.
+			setClipboardAndToast(linkToUse, "Clipboard set to link")
 		}
 	
 	; Make a copy of the current page in the Do section.

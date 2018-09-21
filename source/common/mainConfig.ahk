@@ -108,10 +108,10 @@ class MainConfig {
 				Continue
 			if(title    && winInfo.title) {
 				; Allow titles to be compared more flexibly than straight equality.
-				if(winInfo.titleStringMatchModeOverride)
-					stringMatchMode := winInfo.titleStringMatchModeOverride
-				else
+				stringMatchMode := winInfo.titleStringMatchModeOverride
+				if(!stringMatchMode)
 					stringMatchMode := CONTAINS_ANY ; Default if not overridden
+				
 				if(!stringMatches(title, winInfo.title, stringMatchMode))
 					Continue
 			}

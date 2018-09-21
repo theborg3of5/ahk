@@ -105,8 +105,13 @@ genericHyperlink(subAction) {
 			textToSend := replaceTag(textToSend, "DLG",      data["DLG"])
 			textToSend := replaceTag(textToSend, "MESSAGE",  data["MESSAGE"])
 			
-			SendRaw, % textToSend
-			Send, {Enter}
+			if(MainConfig.isWindowActive("Outlook Calendar TLG")) {
+				SendRaw, % textToSend
+				Send, {Enter}
+			} else {
+				clipboard := textToSend
+				Toast.showForTime("Clipboard set to link: " clipboard, 2)
+			}
 		}
 	^+!#t::
 		selectDLG() {

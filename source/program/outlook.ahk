@@ -30,8 +30,8 @@
 		Send, !h
 		Send, od
 		
-		; Set view as desired.
-		Send, !1 ; 1 day.
+		; Single-day view.
+		Send, !1
 	return
 	
 	; Calendar view: week view.

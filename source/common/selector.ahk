@@ -202,6 +202,12 @@ class Selector {
 	;---------
 	selectGui(returnColumn := "", title := "", defaultOverrideData := "", suppressOverrideFields := false) {
 		; DEBUG.popup("Selector.selectGui", "Start", "Default override data", defaultOverrideData, "GUI Settings", guiSettings)
+		
+		if(!this.choices.length) {
+			DEBUG.popup("Selector.selectGui","No choices loaded")
+			return ""
+		}
+		
 		if(title)
 			this.guiSettings["WindowTitle"] := title
 		if(suppressOverrideFields)
@@ -230,6 +236,11 @@ class Selector {
 	selectChoice(choiceString, returnColumn := "") {
 		if(!choiceString)
 			return ""
+		
+		if(!this.choices.length) {
+			DEBUG.popup("Selector.selectChoice","No choices loaded")
+			return ""
+		}
 		
 		data := this.parseChoice(choiceString)
 		if(returnColumn)

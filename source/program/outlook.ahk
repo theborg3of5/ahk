@@ -1,32 +1,7 @@
 ; Outlook Hotkeys.
 
 ; Program in general.
-#IfWinActive, ahk_class rctrl_renwnd32
-	; Format as code (using custom styles)
-	^+c::
-		Send, ^+!2 ; Hotkey used in Outlook (won't let me use ^+c directly)
-	return
-	
-	; Shortcut to go to today on the calendar. (In desired, 3-day view.)
-	^t::
-		; Get to calendar if needed.
-		Send, ^2
-		Send, {Up}{Down}
-		
-		; Go to today if needed.
-		Send, !h
-		Send, od
-		
-		; Set view as desired.
-		Send, !1 ; 1 day.
-	return
-	
-	; Bulleted list.
-	^.::^+l
-#IfWinActive
-
-; Mail activity.
-#If isEmailFolderActive(MainConfig.getPrivate("WORK_EMAIL"))
+#If MainConfig.isWindowActive("Outlook")
 	; Move selected message(s) to a particular folder, and mark them as read.
 	$^e::
 		Send, ^+1 ; Archive
@@ -37,11 +12,29 @@
 	^+l::
 		Send, ^+3 ; Later use
 	return
+	
+	; Format as code (using custom styles)
+	^+c::
+		Send, ^+!2 ; Hotkey used in Outlook (won't let me use ^+c directly)
+	return
+	
+	; Bulleted list.
+	^.::^+l
 #If
 
 ; Calendar activity.
-#If isCalendarFolderActive(MainConfig.getPrivate("WORK_EMAIL"))
-	; Calendar view: 3-day view, week view, and month view.
+#If MainConfig.isWindowActive("Outlook Calendar Main") || MainConfig.isWindowActive("Outlook Calendar TLG")
+	; Shortcut to go to today on the calendar. (In desired, 3-day view.)
+	^t::
+		; Go to today.
+		Send, !h
+		Send, od
+		
+		; Set view as desired.
+		Send, !1 ; 1 day.
+	return
+	
+	; Calendar view: week view.
 	^w::Send, ^!3
 	
 	; Show a popup for picking an arbitrary calendar to display.
@@ -58,29 +51,3 @@
 		Run(MainConfig.getProgramPath("Outlook") " /c ipm.note")
 	return
 #If
-
-
-
-isEmailFolderActive(userEmail) {
-	titles := []
-	titles.push(buildOutlookWindowTitle(userEmail, "Inbox"))
-	titles.push(buildOutlookWindowTitle(userEmail, "Wait"))
-	titles.push(buildOutlookWindowTitle(userEmail, "Later Use"))
-	titles.push(buildOutlookWindowTitle(userEmail, "Archive"))
-	titles.push(buildOutlookWindowTitle(userEmail, "Sent Items"))
-	titles.push(buildOutlookWindowTitle(userEmail, "Deleted Items"))
-	
-	return isWindowInState("active", titles)
-}
-
-isCalendarFolderActive(userEmail := "") {
-	titles := []
-	titles.push(buildOutlookWindowTitle(userEmail, "Calendar"))
-	titles.push(buildOutlookWindowTitle(userEmail, "TLG"))
-	
-	return isWindowInState("active", titles)
-}
-
-buildOutlookWindowTitle(userEmail, folderName) {
-	return folderName " - " userEmail " - Outlook"
-}

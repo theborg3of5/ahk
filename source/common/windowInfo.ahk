@@ -31,6 +31,12 @@ class WindowInfo {
 		this.windowClass := windowAry["CLASS"]
 		this.windowTitle := windowAry["TITLE"]
 		
+		; Replace any private tags lurking in this info.
+		this.windowName  := MainConfig.replacePrivateTags(this.windowName)
+		this.windowExe   := MainConfig.replacePrivateTags(this.windowExe)
+		this.windowClass := MainConfig.replacePrivateTags(this.windowClass)
+		this.windowTitle := MainConfig.replacePrivateTags(this.windowTitle)
+		
 		if(windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"] = "")
 			this.windowTitleStringMatchModeOverride := windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"]
 		else

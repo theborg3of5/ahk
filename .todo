@@ -7,11 +7,6 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
-	Expand OneNote linking stuff - currently OneTastic macro requires pasting the QAN/DLG/XDS into the right box
-		Can we make it smarter, to find the right things?
-			Would need to support beginning/end for EMC2 records
-		Use AHK to get the right info and put it into the fields for macro popup?
-			Or should we really just have the macro itself handle it?
 	Create a PathInfo (or maybe just Path) object?
 		Could move replacements (of private tags and USER_ROOT/AHK_ROOT tags) into constructor
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)

@@ -203,7 +203,7 @@
 			
 			Send, ^+t                  ; Select title (to replace with new day/date)
 			
-			Sleep, 750                 ; Wait for selection to take
+			Sleep, 1000                ; Wait for selection to take
 			sendDateTime("M/d`, dddd") ; Send today's day/date
 			Send, ^+t                  ; Select title again in case you want a different date.
 		}

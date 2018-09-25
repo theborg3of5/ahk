@@ -12,6 +12,20 @@
 		copyChromeTitle() {
 			title := WinGetActiveTitle()
 			title := removeStringFromEnd(title, " - Google Chrome")
+			
+			if(MainConfig.isMachine(MACHINE_EpicLaptop)) {
+				; Special handling for CodeSearch - just get the routine name, plus the current selection as the tag.
+				if(stringEndsWith(title, " - CodeSearch")) {
+					routine := getStringBeforeStr(title, "/")
+					tag     := cleanupText(getFirstLineOfSelectedText())
+					
+					if(tag != "")
+						title := tag "^" routine
+					else
+						title := routine
+				}
+			}
+			
 			setClipboardAndToast(title, "Clipboard set to title")
 		}
 	

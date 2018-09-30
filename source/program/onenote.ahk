@@ -265,7 +265,7 @@
 			lines.push({TEXT:"Dishes from weekend"})
 			lines.push({TEXT:"Trash, recycling out"})
 			lines.push({TEXT:"Meal planning"})
-			lines.push({TEXT:"Obtain groceries"})
+			lines.push({TEXT:"Order/obtain groceries"})
 			sendOneNoteLines(lines)
 		}
 	

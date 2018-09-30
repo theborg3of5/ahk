@@ -45,14 +45,22 @@
 		; Expand and collapse outlines.
 		!Left::!+-
 		!Right::!+=
+		; Only Today section, sub-items hidden
 		^t::
 			Send, ^{Home} ; Overall Do header so we affect the whole page
 			Send, !+4     ; Top level that today's todos are at (so they're all collapsed)
 			Send, !+3     ; Collapse to headers under Today (which collapses headers under Today so only unfinished todos on level 4 are visible)
 		return
+		; All sections expanded
 		^+t::
 			Send, ^{Home}
 			Send, !+4     ; Items for all sections (level 4)
+		return
+		; Expanded Today section
+		^!t::
+			Send, ^{Home}
+			Send, !+5     ; Sub-items for all sections (level 5)
+			Send, !+3     ; Top level for today's todos
 		return
 		
 		; Replacement history back/forward.

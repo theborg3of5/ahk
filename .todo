@@ -7,6 +7,31 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	Selector: create a way to have parts of override fields append instead of being only overridden
+		Use case: TLG selector (specific DLGs - I want the name, but then to append other stuff)
+		Would it make sense to also include a " - "?
+			Would want it to be configurable somehow
+				Only include if you are doing an append
+			Maybe just include it as part of the name instead?
+		Turning it on
+			Would want it to be choice-level
+		Since there's only once use case, could we instead just do it in TLG's logic?
+			Would need original description available
+				Add as a new (reserved?) subscript to returned data array?
+					Make sure to update documentation if use this method
+				Another argument to selectGui? (selectChoice doesn't need it, because no user overrides)
+					Make choiceData an output parameter for selectGui() and doSelectGui()
+	Selector: combine the )/( rows into one?
+		NAME.FIELDINDEX
+		NAME.fieldIndex(<num>)
+	Add a new argument/field to resize selector that makes the actual window the size given?
+		Actually, shouldn't this already be happening?
+	Consider making selector files have a distinct file extension (instead of always .tl)
+		To make it easier to tell how the file is used
+		New extension options
+			.tls
+			.stl
+			.sel
 	Create a PathInfo (or maybe just Path) object?
 		Could move replacements (of private tags and USER_ROOT/AHK_ROOT tags) into constructor
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)

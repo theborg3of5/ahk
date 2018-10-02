@@ -261,7 +261,7 @@ class Selector {
 	overrideFields := ""    ; Mapping from override field indices => data labels (column headers)
 	guiSettings    := []    ; Settings related to the GUI popup we show
 	filePath       := ""    ; Where the .tl file lives if we're reading one in.
-	suppressData   := false ; Whether to ignore any override data the user entered.
+	suppressData   := false ; Whether to ignore all data from the user (choice and overrides). Typically used when we've done something else (like edit the TL file).
 	
 	;---------
 	; DESCRIPTION:    Populate this.chars with the special characters we use for parsing the file and user input.
@@ -408,7 +408,7 @@ class Selector {
 		
 		; User's choice is main data source
 		choiceData := this.parseChoice(sGui.getChoiceQuery())
-		if(!this.suppressData)
+		if(this.suppressData)
 			return ""
 		
 		; Override fields can add to that too.

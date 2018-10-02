@@ -405,20 +405,17 @@ class Selector {
 	doSelectGui(defaultData) {
 		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this.guiSettings["MinColumnWidth"])
 		sGui.show(this.guiSettings["WindowTitle"], defaultData)
-		data := []
 		
 		; User's choice is main data source
 		choiceData := this.parseChoice(sGui.getChoiceQuery())
-		data := mergeArrays(data, choiceData)
+		if(!this.suppressData)
+			return ""
 		
 		; Override fields can add to that too.
-		if(!this.suppressData) {
-			overrideData := sGui.getOverrideData()
-			data := mergeArrays(data, overrideData)
-		}
+		overrideData := sGui.getOverrideData()
 		
-		; DEBUG.popup("Selector.doSelectGui","Finish", "Choice data",choiceData, "Override data",overrideData, "Merged data",data)
-		return data
+		; DEBUG.popup("Selector.doSelectGui","Finish", "Choice data",choiceData, "Override data",overrideData, "Merged data",mergeArrays(choiceData, overrideData))
+		return mergeArrays(choiceData, overrideData)
 	}
 	
 	;---------

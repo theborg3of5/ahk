@@ -24,7 +24,7 @@
 	Pidgin Buddy List					pidgin.exe					-							Buddy List
 	
 	AutoHotkey GUIs					AutoHotkey.exe				AutoHotkeyGUI
-	Chrome								chrome.exe					Chrome_WidgetWin_1	-												0
+	Chrome								chrome.exe					Chrome_WidgetWin_1	-												
 	Cisco AnyConnect VPN				vpnui.exe					#32770
 	EMC2									EpicD84.exe					-							EMC2
 	EpicStudio							EpicStudio.exe				-							EpicStudio

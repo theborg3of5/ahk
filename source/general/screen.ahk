@@ -22,7 +22,7 @@ return
 		s := new Selector("resize.tl")
 		data := s.selectGui()
 		if(data)
-			WinMove, A, , , , data["WIDTH"], data["HEIGHT"]
+			resizeWindow(data["WIDTH"], data["HEIGHT"])
 	}
 
 ; ; Enable any window mouse is currently over.

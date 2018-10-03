@@ -26,6 +26,8 @@
 		NAME.fieldIndex(<num>)
 	Add a new argument/field to resize selector that makes the actual window the size given?
 		Actually, shouldn't this already be happening?
+			Nope, not being taken into account at all.
+		Can we have resizeWindow() take offsets into account directly, instead of making fakeMaximize and resizeSelector do it themselves?
 	Consider making selector files have a distinct file extension (instead of always .tl)
 		To make it easier to tell how the file is used
 		New extension options

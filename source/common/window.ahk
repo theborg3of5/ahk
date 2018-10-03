@@ -129,7 +129,7 @@ fakeMaximizeWindow(titleString := "A") {
 	newWidth  := boundsAry["WIDTH"] + offsetsAry["LEFT"] + offsetsAry["RIGHT"]
 	newHeight := boundsAry["HEIGHT"] + offsetsAry["TOP"] + offsetsAry["BOTTOM"]
 	
-	; DEBUG.popup("Bounds", boundsAry, "Offsets", offsetsAry, "New width", newWidth, "New height", newHeight)
+	; DEBUG.popup("Bounds",boundsAry, "Offsets",offsetsAry, "New width",newWidth, "New height",newHeight)
 	resizeWindow(newWidth, newHeight, titleString)
 	centerWindow()
 }

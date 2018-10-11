@@ -109,7 +109,7 @@
 			if(line = ";")
 				Send, {Backspace}
 			
-			s := new Selector("MSnippets.tl")
+			s := new Selector("MSnippets.tls")
 			data := s.selectGui()
 			
 			type := data["TYPE"]

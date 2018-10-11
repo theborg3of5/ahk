@@ -37,7 +37,7 @@ genericHyperlink(subAction) {
 		text := cleanupText(getFirstLineOfSelectedText())
 		
 		filter := MainConfig.getMachineTableListFilter()
-		s := new Selector("search.tl", filter)
+		s := new Selector("search.tls", filter)
 		data := s.selectGui("", "", {"SEARCH_TERM":text})
 		if(!data)
 			return
@@ -75,7 +75,7 @@ genericHyperlink(subAction) {
 ; Selector to allow easy editing of config TL files that don't show a popup
 !+c::
 	selectConfig() {
-		s := new Selector("configs.tl")
+		s := new Selector("configs.tls")
 		path := s.selectGui("PATH")
 		if(!path)
 			return
@@ -89,7 +89,7 @@ genericHyperlink(subAction) {
 #If MainConfig.isMachine(MACHINE_EpicLaptop)
 	^+!t::
 		selectOutlookTLG() {
-			s := new Selector("outlookTLG.tl")
+			s := new Selector("outlookTLG.tls")
 			data := s.selectGui()
 			if(!data)
 				return
@@ -110,7 +110,7 @@ genericHyperlink(subAction) {
 	^+!#t::
 		selectDLG() {
 			filter := {COLUMN:"DLG", VALUE:"", INCLUDE_BLANKS:false}
-			s := new Selector("outlookTLG.tl", filter)
+			s := new Selector("outlookTLG.tls", filter)
 			dlgId := s.selectGui("DLG", "", "", true)
 			if(!dlgId)
 				return
@@ -121,7 +121,7 @@ genericHyperlink(subAction) {
 	
 	^+!h::
 		selectHyperspace() {
-			s := new Selector("epicEnvironments.tl")
+			s := new Selector("epicEnvironments.tls")
 			data := s.selectGui("", "Launch Hyperspace in Environment")
 			if(data)
 				Run(buildHyperspaceRunString(data["MAJOR"], data["MINOR"], data["COMM_ID"]))
@@ -129,7 +129,7 @@ genericHyperlink(subAction) {
 	
 	^+!i::
 		selectEnvironmentId() {
-			s := new Selector("epicEnvironments.tl")
+			s := new Selector("epicEnvironments.tls")
 			envId := s.selectGui("ENV_ID")
 			if(envId) {
 				Send, % envId
@@ -139,7 +139,7 @@ genericHyperlink(subAction) {
 	
 	^+!r::
 		selectThunder() {
-			s := new Selector("epicEnvironments.tl")
+			s := new Selector("epicEnvironments.tls")
 			data := s.selectGui("", "Launch Thunder Environment")
 			if(!data)
 				return
@@ -152,7 +152,7 @@ genericHyperlink(subAction) {
 	
 	!+v::
 		selectVDI() {
-			s := new Selector("epicEnvironments.tl")
+			s := new Selector("epicEnvironments.tls")
 			data := s.selectGui("", "Launch VDI for Environment")
 			if(!data)
 				return
@@ -176,7 +176,7 @@ genericHyperlink(subAction) {
 			if(isValidPhoneNumber(selectedText)) ; If the selected text is a valid number, go ahead and call it (confirmation included in callNumber)
 				callNumber(selectedText)
 			else
-				s := new Selector("phone.tl")
+				s := new Selector("phone.tls")
 				data := s.selectGui()
 				if(data)
 					callNumber(data["NUMBER"], data["NAME"])
@@ -187,7 +187,7 @@ genericHyperlink(subAction) {
 			selectedText := cleanupText(getFirstLineOfSelectedText())
 			splitRecordString(selectedText, ini, id)
 			
-			s := new Selector("epicEnvironments.tl")
+			s := new Selector("epicEnvironments.tls")
 			s.addExtraOverrideFields(["INI", "ID"])
 			
 			defaultOverrideData        := []

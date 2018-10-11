@@ -15,7 +15,7 @@ config/ahkPrivate/
 test/*
 !test/testGreen.ico
 !test/testRed.ico
-!test/testWindowInfo.tl
+!test/testWindowInfo.tls
 !test/*/
 
 # Ignore everything inside share/*/Includes folders, except the specific _NeededIncludes file.

@@ -2,7 +2,7 @@
 	; Send string of status items to ignore, based on the given master file.
 	:*:.status::
 		sendChroniclesStatusItemsToIgnore() {
-			s := new Selector("chroniclesStatusItems.tl")
+			s := new Selector("chroniclesStatusItems.tls")
 			itemsList := s.selectGui("STATUS_ITEMS")
 			if(!itemsList)
 				return

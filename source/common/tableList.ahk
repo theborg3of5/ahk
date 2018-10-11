@@ -3,7 +3,7 @@
 /* Class that parses and processes a specially-formatted file.
 	
 	Motivation
-		The goal of the .tl file format is to allow the file to be formatted with tabs so that it looks like a table in plain text, regardless of the size of the contents.
+		The goal of the .tl/.tls file format is to allow the file to be formatted with tabs so that it looks like a table in plain text, regardless of the size of the contents.
 		
 		For example, say we want to store and reference a list of folder paths. A simple tab-delimited file might look something like this:
 			AHK Config	AHK_CONFIG	C:\ahk\config

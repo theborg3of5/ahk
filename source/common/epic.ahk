@@ -373,7 +373,7 @@ processEMC2ObjectInfo(infoAry) {
 	title := infoAry["TITLE"]
 	
 	; INI
-	s := new Selector("actionObject.tl")
+	s := new Selector("actionObject.tls")
 	if(ini) ; Turn any not-really-ini strings (like "Design") into actual INI
 		ini := s.selectChoice(ini, "SUBTYPE")
 	else    ; If no INI found at all, ask the user for it
@@ -407,7 +407,7 @@ getTrueINI(iniString) {
 	if(!iniString)
 		return ""
 	
-	s := new Selector("actionObject.tl")
+	s := new Selector("actionObject.tls")
 	return s.selectChoice(iniString, "SUBTYPE")
 }
 

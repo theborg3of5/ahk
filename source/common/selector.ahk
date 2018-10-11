@@ -4,8 +4,8 @@
 /* Class that selects an option from a given set of choices, and returns info about that choice.
 	
 	Choices
-		Choices are read from a TableList (TL) file. See documentation for the TableList class for general file format, and "File Format" below for additional Selector-specific details.
-		These choices may also be filtered (see the documentation for __New() below) - this allows you to use a single .tl file of information to be used in different ways.
+		Choices are read from a TableList Selector (.tls) file. See documentation for the TableList class for general file format (applies to .tl or tls files), and "File Format" below for additional Selector-specific details.
+		These choices may also be filtered (see the documentation for __New() below) - this allows you to use a single file of information to be used in different ways.
 		
 	Selection
 		This class can be used in one of two ways:
@@ -55,7 +55,7 @@
 			* - Hidden choice
 				Adding this character to an otherwise normal choice row will hide that choice from the gui, but still allow it to be selected using its abbreviation.
 				Example:
-					*Windows		win			windows.tl
+					*Windows		win			windows.tls
 				Result:
 					The "Windows" choice will not be visible, but the user can still select that choice using the "win" abbreviation.
 			
@@ -63,7 +63,7 @@
 			| - Abbreviation delimiter
 				You can give an individual choice multiple abbreviations that can all be used to select the choice, separated by this character. Only the first abbreviation will be displayed.
 				Example:
-					Programs		prog|prg		programs.tl
+					Programs		prog|prg		programs.tls
 				Result:
 					The "Programs" choice will appear in the popup with an abbreviation of "prog", but the "prg" abbreviation may also be used to select that choice.
 				
@@ -98,7 +98,7 @@
 		extraDataFields := ["CONFIG_NAME", "CONFIG_NUM"]           ; Two additional override fields for the popup.
 		defaultOverrideData := {CONFIG_NAME: "Windows"}            ; Default a value of "Windows" into the "CONFIG_NAME" override field
 		
-		s := new Selector("C:\ahk\configs.tl", filter)             ; Read in the "configs.tl" TL file, filtering it
+		s := new Selector("C:\ahk\configs.tls", filter)            ; Read in the "configs.tls" TL file, filtering it
 		s.setGuiSetting("MinColumnWidth", 500)                     ; Set the minimum super-column width to 500 pixels
 		s.addExtraOverrideFields(extraDataFields)                  ; Add the extra override fields
 		data := s.selectGui("", "New title!", defaultOverrideData) ; Show the popup with a title of "New title!" and the default override field values specified above
@@ -109,7 +109,7 @@
 		pathAbbrev := <user input>
 		filter := {COLUMN:"MACHINE", VALUE:HOME_DESKTOP}           ; Only include choices which which have the "MACHINE" column set to "HOME_DESKTOP" (or blank)
 		
-		s := new Selector("C:\ahk\paths.tl", filter)               ; Read in the "paths.tl" TL file, filtering it
+		s := new Selector("C:\ahk\paths.tls", filter)              ; Read in the "paths.tls" TL file, filtering it
 		path := s.selectChoice(pathAbbrev, "PATH")                 ; Return only the "PATH" value, not the whole return array
 */
 
@@ -122,7 +122,7 @@ class Selector {
 	;---------
 	; DESCRIPTION:    Creates a new instance of the Selector class.
 	; PARAMETERS:
-	;  filePath (I,REQ) - The TableList (.tl) file where the choices that will be selected from will be
+	;  filePath (I,REQ) - The TableList (.tls) file where the choices that will be selected from will be
 	;                     read from. This file should be readable by the TableList class, see that class
 	;                     for details on file format.
 	;  filter   (I,OPT) - An array of information used to restrict the choices that are read from filePath.
@@ -260,7 +260,7 @@ class Selector {
 	sectionTitles  := []    ; Lines that will be displayed as titles (index matches the first choice that should be under this title)
 	overrideFields := ""    ; Mapping from override field indices => data labels (column headers)
 	guiSettings    := []    ; Settings related to the GUI popup we show
-	filePath       := ""    ; Where the .tl file lives if we're reading one in.
+	filePath       := ""    ; Where the file lives if we're reading one in.
 	suppressData   := false ; Whether to ignore all data from the user (choice and overrides). Typically used when we've done something else (like edit the TL file).
 	
 	;---------

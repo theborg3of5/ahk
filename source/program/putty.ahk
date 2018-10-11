@@ -25,7 +25,7 @@ global lastPuttySearchType, lastPuttySearchText ; For Home+F9 searching repeated
 	recordEditSearch(searchType = "", searchText = "") {
 		; If nothing given, prompt the user for how/what to search.
 		if(searchType = "" || searchText = "") {
-			s := new Selector("puttyRecordEditSearch.tl")
+			s := new Selector("puttyRecordEditSearch.tls")
 			data := s.selectGui()
 			searchType := data["SEARCH_TYPE"]
 			searchText := data["SEARCH_TEXT"]

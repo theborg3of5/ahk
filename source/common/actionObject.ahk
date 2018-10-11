@@ -1,6 +1,6 @@
 /* Class for running or generating a link to an object, based on both functionally-passed and prompted-for information.
 	
-	This class is a framework that performs a specific set of actions (run/open, return a link to) in certain ways (subActions - edit, view, web mode) for an identified object. The class will attempt to split the main input parameter (input) to gain all information that it requires to fully identify the object and action, but if any of that information is missing, it will prompt the user for it using the Selector class with a list of types/subTypes (from actionObject.tl).
+	This class is a framework that performs a specific set of actions (run/open, return a link to) in certain ways (subActions - edit, view, web mode) for an identified object. The class will attempt to split the main input parameter (input) to gain all information that it requires to fully identify the object and action, but if any of that information is missing, it will prompt the user for it using the Selector class with a list of types/subTypes (from actionObject.tls).
 	
 	Supported Actions (ACTION_* constants)
 		RUN
@@ -28,13 +28,13 @@
 		PATH
 			A filepath or URL. These require a subType (either FILEPATH or URL), but that subType can usually be determined programmatically.
 	
-	Supported SubTypes (SUBTYPE_* constants + others in actionObject.tl)
+	Supported SubTypes (SUBTYPE_* constants + others in actionObject.tls)
 		FILEPATH
 			A windows filepath.
 		URL
 			An internet URL.
-		Others from actionObject.tl
-			Other SubTypes are defined in actionObject.tl. These are used primarily for EMC2 objects, and are used by buildEMC2Link() at the end of the day.
+		Others from actionObject.tls
+			Other SubTypes are defined in actionObject.tls. These are used primarily for EMC2 objects, and are used by buildEMC2Link() at the end of the day.
 	
 	Example Usage
 		; link is EMC2 link to QAN qanId
@@ -58,7 +58,7 @@ global SUBTYPE_FilePath := "FILEPATH"
 global SUBTYPE_URL      := "URL"
 global SUBTYPE_Routine  := "ROUTINE"
 global SUBTYPE_DLG      := "DLG"
-; Additional subtypes (EMC2 INIs) can be defined in actionObject.tl.
+; Additional subtypes (EMC2 INIs) can be defined in actionObject.tls.
 
 global SUBACTION_Edit := "EDIT"
 global SUBACTION_View := "VIEW"
@@ -85,7 +85,7 @@ class ActionObject {
 	;                      given, the user will be prompted to choose this.
 	;  action    (I,OPT) - The action to perform with the object, from ACTION_* constants.
 	;  subType   (I,OPT) - Within the given type, further identifying information, from SUBTYPE_*
-	;                      constants (or other subTypes defined in actionObject.tl).
+	;                      constants (or other subTypes defined in actionObject.tls).
 	;  subAction (I,OPT) - Within the given action, further information about what to do, from
 	;                      SUBACTION_* constants.
 	; RETURNS:        For ACTION_Link, the link. Otherwise, "".
@@ -129,7 +129,7 @@ class ActionObject {
 	;  type      (IO,REQ) - The general type that goes with input - from TYPE_* constants.
 	;  action    (IO,REQ) - The action to perform with the object, from ACTION_* constants.
 	;  subType   (IO,REQ) - Within the given type, further identifying information, from SUBTYPE_*
-	;                       constants (or other subTypes defined in actionObject.tl).
+	;                       constants (or other subTypes defined in actionObject.tls).
 	;  subAction (IO,REQ) - Within the given action, further information about what to do, from
 	;                       SUBACTION_* constants.
 	;---------
@@ -150,7 +150,7 @@ class ActionObject {
 			splitRecordString(input, ini, id)
 			
 			filter := MainConfig.getMachineTableListFilter()
-			s := new Selector("actionObject.tl", filter)
+			s := new Selector("actionObject.tls", filter)
 			
 			data := s.selectChoice(ini)
 			if(data) {
@@ -174,7 +174,7 @@ class ActionObject {
 	;                       given, the user will be prompted to choose this.
 	;  action    (IO,REQ) - The action to perform with the object, from ACTION_* constants.
 	;  subType   (IO,REQ) - Within the given type, further identifying information, from SUBTYPE_*
-	;                       constants (or other subTypes defined in actionObject.tl).
+	;                       constants (or other subTypes defined in actionObject.tls).
 	;  subAction (IO,REQ) - Within the given action, further information about what to do, from
 	;                       SUBACTION_* constants.
 	;---------
@@ -189,7 +189,7 @@ class ActionObject {
 		
 		if(!type || !action || (!subType && needsSubType) || (!subAction && needsSubAction)) {
 			filter := MainConfig.getMachineTableListFilter()
-			s := new Selector("actionObject.tl", filter)
+			s := new Selector("actionObject.tls", filter)
 			
 			data := s.selectGui("", "", {SUBTYPE: subType, ID: input})
 			if(!data)
@@ -215,7 +215,7 @@ class ActionObject {
 	;  type      (IO,REQ) - The general type that goes with input - from TYPE_* constants.
 	;  action    (IO,REQ) - The action to perform with the object, from ACTION_* constants.
 	;  subType   (IO,REQ) - Within the given type, further identifying information, from SUBTYPE_*
-	;                       constants (or other subTypes defined in actionObject.tl).
+	;                       constants (or other subTypes defined in actionObject.tls).
 	;  subAction (IO,REQ) - Within the given action, further information about what to do, from
 	;                       SUBACTION_* constants.
 	;---------
@@ -236,7 +236,7 @@ class ActionObject {
 	;  type      (I,REQ) - The general type that goes with input - from TYPE_* constants.
 	;  action    (I,REQ) - The action to perform with the object, from ACTION_* constants.
 	;  subType   (I,REQ) - Within the given type, further identifying information, from SUBTYPE_*
-	;                      constants (or other subTypes defined in actionObject.tl).
+	;                      constants (or other subTypes defined in actionObject.tls).
 	;  subAction (I,REQ) - Within the given action, further information about what to do, from
 	;                      SUBACTION_* constants.
 	; RETURNS:        For ACTION_Link, the link. Otherwise, "".

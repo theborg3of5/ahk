@@ -21,12 +21,6 @@
 					Make sure to update documentation if use this method
 				Another argument to selectGui? (selectChoice doesn't need it, because no user overrides)
 					Make choiceData an output parameter for selectGui() and doSelectGui()
-	Consider making selector files have a distinct file extension (instead of always .tl)
-		To make it easier to tell how the file is used
-		New extension options
-			.tls
-			.stl
-			.sel
 	Create a PathInfo (or maybe just Path) object?
 		Could move replacements (of private tags and USER_ROOT/AHK_ROOT tags) into constructor
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)

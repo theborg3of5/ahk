@@ -9,7 +9,7 @@ setCommonHotkeysType(HOTKEY_TYPE_Standalone)
 ; Various paths needed throughout.
 ahkRootPath    := reduceFilepath(A_ScriptDir, 1)
 userPath       := reduceFilepath(A_Desktop, 1)
-tlSetupPath    := "setup.tl"
+tlSetupPath    := "setup.tls"
 startupFolder  := ahkRootPath "\source"
 mainAHKPath    := startupFolder "\main.ahk"
 

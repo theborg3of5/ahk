@@ -41,7 +41,7 @@ return
 			winId := WinGet("ID")
 			; DEBUG.popup("Class",currClass, "Title",currTitle, "Control",currControl, "Tooltip text",tooltipText, "ID",winId)
 			
-			s := new Selector("testWindowInfo.tl")
+			s := new Selector("testWindowInfo.tls")
 			infoAry := s.selectGui()
 			key  := infoAry["KEY"]
 			name := infoAry["NAME"]

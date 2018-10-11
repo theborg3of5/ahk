@@ -19,7 +19,7 @@ return
 ; Resize window
 #+r::
 	selectResize() {
-		s := new Selector("resize.tl")
+		s := new Selector("resize.tls")
 		data := s.selectGui()
 		if(data)
 			resizeWindow(data["WIDTH"], data["HEIGHT"])

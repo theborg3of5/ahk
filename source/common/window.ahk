@@ -149,7 +149,7 @@ resizeWindow(width := "", height := "", titleString := "A") {
 	; Resize and center the window
 	WinMove, A, , %origX%, %origY%, %width%, %height%
 	centerWindow()
-	DEBUG.toast("width",width, "height",height, "origWidth",origWidth, "origHeight",origHeight, "offsetsAry",offsetsAry, "titleString",titleString)
+	; DEBUG.toast("width",width, "height",height, "origWidth",origWidth, "origHeight",origHeight, "offsetsAry",offsetsAry, "titleString",titleString)
 }
 
 

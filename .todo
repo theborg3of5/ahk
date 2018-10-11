@@ -21,9 +21,6 @@
 					Make sure to update documentation if use this method
 				Another argument to selectGui? (selectChoice doesn't need it, because no user overrides)
 					Make choiceData an output parameter for selectGui() and doSelectGui()
-	Selector: combine the )/( rows into one?
-		NAME.FIELDINDEX
-		NAME.fieldIndex(<num>)
 	Consider making selector files have a distinct file extension (instead of always .tl)
 		To make it easier to tell how the file is used
 		New extension options

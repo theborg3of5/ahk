@@ -1,5 +1,8 @@
 ; Word hotkeys.
 #IfWinActive, ahk_class OpusApp
+	; Open (dialog, not screen)
+	^o::Send, ^!{F2}
+	
 	; Save as
 	^+s::Send, {F12}
 	

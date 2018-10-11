@@ -123,26 +123,33 @@ centerWindow(titleString := "A") {
 }
 
 fakeMaximizeWindow(titleString := "A") {
-	boundsAry  := getMonitorBounds( , titleString)
-	offsetsAry := getWindowOffsets(titleString)
+	boundsAry := getMonitorBounds( , titleString)
+	width     := boundsAry["WIDTH"]
+	height    := boundsAry["HEIGHT"]
 	
-	newWidth  := boundsAry["WIDTH"] + offsetsAry["LEFT"] + offsetsAry["RIGHT"]
-	newHeight := boundsAry["HEIGHT"] + offsetsAry["TOP"] + offsetsAry["BOTTOM"]
-	
-	; DEBUG.popup("Bounds",boundsAry, "Offsets",offsetsAry, "New width",newWidth, "New height",newHeight)
-	resizeWindow(newWidth, newHeight, titleString)
-	centerWindow()
+	; DEBUG.popup("Bounds",boundsAry, "New width",width, "New height",height)
+	resizeWindow(width, height, titleString)
 }
 
-; Jacked from http://www.howtogeek.com/howto/28663/create-a-hotkey-to-resize-windows-to-a-specific-size-with-autohotkey/
+; Originally from http://www.howtogeek.com/howto/28663/create-a-hotkey-to-resize-windows-to-a-specific-size-with-autohotkey/ ,
+; with my own additions for window edge offsets and centering.
 resizeWindow(width := "", height := "", titleString := "A") {
-	WinGetPos, X, Y, W, H, %titleString%
+	; Get the current window size/position, and default in width/height if not given
+	WinGetPos, origX, origY, origWidth, origHeight, %titleString%
 	if(!width)
-		width  := W
+		width  := origWidth
 	if(!height)
-		height := H
+		height := origHeight
 	
-	WinMove, A, , %X%, %Y%, %width%, %height%
+	; Take window edge offsets into account
+	offsetsAry := getWindowOffsets(titleString)
+	width  += offsetsAry["LEFT"] + offsetsAry["RIGHT"]
+	height += offsetsAry["TOP"]  + offsetsAry["BOTTOM"]
+	
+	; Resize and center the window
+	WinMove, A, , %origX%, %origY%, %width%, %height%
+	centerWindow()
+	DEBUG.toast("width",width, "height",height, "origWidth",origWidth, "origHeight",origHeight, "offsetsAry",offsetsAry, "titleString",titleString)
 }
 
 

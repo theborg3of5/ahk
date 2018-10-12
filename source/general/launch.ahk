@@ -94,11 +94,16 @@ genericHyperlink(subAction) {
 			if(!data)
 				return
 			
+			combinedMessage := data["BASE_MESSAGE"]
+			if(combinedMessage)
+				combinedMessage .= " - " ; Hyphen in between base message and normal message
+			combinedMessage .= data["MESSAGE"]
+			
 			textToSend := MainConfig.getPrivate("OUTLOOK_TLG_BASE")
 			textToSend := replaceTag(textToSend, "TLP",      data["TLP"])
 			textToSend := replaceTag(textToSend, "CUSTOMER", data["CUSTOMER"])
 			textToSend := replaceTag(textToSend, "DLG",      data["DLG"])
-			textToSend := replaceTag(textToSend, "MESSAGE",  data["MESSAGE"])
+			textToSend := replaceTag(textToSend, "MESSAGE",  combinedMessage)
 			
 			if(MainConfig.isWindowActive("Outlook Calendar TLG")) {
 				SendRaw, % textToSend

@@ -7,24 +7,6 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
-	Selector: create a way to have parts of override fields append instead of being only overridden
-		Actually - isn't this kind of the purpose of discrete override fields?
-			Should we just split the description into two fields for TLG:
-				A base - only used for DLGs/projects, doesn't even need to be shown in UI
-				A main - for everything, what the user types
-		Use case: TLG selector (specific DLGs - I want the name, but then to append other stuff)
-		Would it make sense to also include a " - "?
-			Would want it to be configurable somehow
-				Only include if you are doing an append
-			Maybe just include it as part of the name instead?
-		Turning it on
-			Would want it to be choice-level
-		Since there's only once use case, could we instead just do it in TLG's logic?
-			Would need original description available
-				Add as a new (reserved?) subscript to returned data array?
-					Make sure to update documentation if use this method
-				Another argument to selectGui? (selectChoice doesn't need it, because no user overrides)
-					Make choiceData an output parameter for selectGui() and doSelectGui()
 	Create a PathInfo (or maybe just Path) object?
 		Could move replacements (of private tags and USER_ROOT/AHK_ROOT tags) into constructor
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)

@@ -21,6 +21,9 @@ class ProgramInfo {
       this.programName := programAry["NAME"]
       this.programPath := programAry["PATH"]
       this.programArgs := programAry["ARGS"]
+		
+		; Replace any path tags
+		programAry["PATH"] := MainConfig.replacePathTags(programAry["PATH"])
    }
    
 	;---------

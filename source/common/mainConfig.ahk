@@ -240,9 +240,11 @@ class MainConfig {
 		}
 		
 		; Apply calculated values and private tags.
+		userRootPath := reduceFilepath(A_Desktop,  1)
+		ahkRootPath  := reduceFilepath(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
 		For key,value in pathsAry {
-			value := replaceTag(value, "USER_ROOT", reduceFilepath(A_Desktop,  1))
-			value := replaceTag(value, "AHK_ROOT",  reduceFilepath(A_LineFile, 3)) ; 2 levels out, plus one to get out of file itself.
+			value := replaceTag(value, "USER_ROOT", userRootPath)
+			value := replaceTag(value, "AHK_ROOT",  ahkRootPath)
 			value := this.replacePrivateTags(value)
 			pathsAry[key] := value ; make sure to store it back in the actual array
 		}
@@ -258,10 +260,8 @@ class MainConfig {
 		
 		; Index it by name.
 		programsAry := []
-		For i,row in programsTable {
-			row["PATH"] := this.replacePathTags(row["PATH"])
+		For i,row in programsTable
 			programsAry[row["NAME"]] := new ProgramInfo(row)
-		}
 		; DEBUG.popupEarly("MainConfig","loadPrograms", "Finished programs",programsAry)
 		
 		return programsAry

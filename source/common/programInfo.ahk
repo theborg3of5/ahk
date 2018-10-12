@@ -23,7 +23,7 @@ class ProgramInfo {
       this.programArgs := programAry["ARGS"]
 		
 		; Replace any path tags
-		programAry["PATH"] := MainConfig.replacePathTags(programAry["PATH"])
+		this.programPath := MainConfig.replacePathTags(this.programPath)
    }
    
 	;---------

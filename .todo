@@ -8,6 +8,10 @@
 	
 # New
 	Selector: create a way to have parts of override fields append instead of being only overridden
+		Actually - isn't this kind of the purpose of discrete override fields?
+			Should we just split the description into two fields for TLG:
+				A base - only used for DLGs/projects, doesn't even need to be shown in UI
+				A main - for everything, what the user types
 		Use case: TLG selector (specific DLGs - I want the name, but then to append other stuff)
 		Would it make sense to also include a " - "?
 			Would want it to be configurable somehow

@@ -16,8 +16,8 @@
 #Include iniObject.ahk
 #Include io.ahk
 #Include mainConfig.ahk
-#Include runCommands.ahk
 #Include programInfo.ahk
+#Include runCommands.ahk
 #Include selector.ahk
 #Include string.ahk
 #Include tableList.ahk

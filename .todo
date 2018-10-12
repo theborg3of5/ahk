@@ -7,8 +7,6 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
-	Create a PathInfo (or maybe just Path) object?
-		Could move replacements (of private tags and USER_ROOT/AHK_ROOT tags) into constructor
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
 		Options:
 			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)

@@ -129,7 +129,7 @@ class MainConfig {
 	getPath(key) {
 		if(!key)
 			return ""
-		return this.paths[key].path
+		return this.paths[key]
 	}
 	replacePathTags(inputPath) {
 		return replaceTags(inputPath, this.paths)
@@ -234,9 +234,17 @@ class MainConfig {
 		; Index paths by key.
 		pathsAry := []
 		For i,row in pathsTable {
-			info := new PathInfo(row)
-			if(info.key)
-				pathsAry[info.key] := info
+			key := row["KEY"]
+			if(key)
+				pathsAry[key] := row["PATH"]
+		}
+		
+		; Apply calculated values and private tags.
+		For key,value in pathsAry {
+			value := replaceTag(value, "USER_ROOT", reduceFilepath(A_Desktop,  1))
+			value := replaceTag(value, "AHK_ROOT",  reduceFilepath(A_LineFile, 3)) ; 2 levels out, plus one to get out of file itself.
+			value := this.replacePrivateTags(value)
+			pathsAry[key] := value ; make sure to store it back in the actual array
 		}
 		
 		; DEBUG.popupEarly("mainConfig.loadPaths","Finish", "Paths",pathsAry)

@@ -7,6 +7,7 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	Update hover text for various AHK scripts (most are just <filename.ahk> right now)
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
 		Options:
 			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)

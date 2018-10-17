@@ -5,6 +5,7 @@ global WS_POPUP    := 0x80000000
 ; Extended window styles
 global WS_EX_CONTROLPARENT := 0x10000
 global WS_EX_APPWINDOW     := 0x40000
+global WS_EX_WS_EX_TOPMOST := 0x8 ; Always on top
 global WS_EX_TOOLWINDOW    := 0x80
 global WS_EX_CLICKTHROUGH  := 0x20
 

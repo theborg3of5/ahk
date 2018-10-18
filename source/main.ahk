@@ -11,7 +11,7 @@ DetectHiddenWindows, On
 SetTitleMatchMode, % TITLE_MATCH_MODE_Contain
 
 setCommonHotkeysType(HOTKEY_TYPE_Master)
-setUpTrayIcons("shellGreen.ico", "shellRed.ico")
+setUpTrayIcons("shellGreen.ico", "shellRed.ico", "AHK: Main Script")
 
 ; Turn off caps lock and scroll lock (mainly so we can use them as hotkeys) and force num lock to stay on.
 SetCapsLockState,   AlwaysOff

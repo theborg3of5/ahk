@@ -26,12 +26,16 @@ setCommonHotkeysType(type) {
 ;                          is not suspended.
 ;  suspendedIcon (I,REQ) - The full path to the suspended icon - this will be used when the script
 ;                          is suspended.
+;  tooltipText   (I,OPT) - Text to show when the user hovers over the tray icon.
 ;---------
-setUpTrayIcons(normalIcon, suspendedIcon) {
+setUpTrayIcons(normalIcon, suspendedIcon, tooltipText = "") {
 	states                     := []
 	states["A_IsSuspended", 0] := normalIcon
 	states["A_IsSuspended", 1] := suspendedIcon
 	setUpTrayIconStates(states)
+	
+	if(tooltipText)
+		Menu, Tray, Tip, % tooltipText
 }
 
 ;---------

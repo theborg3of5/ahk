@@ -11,6 +11,7 @@ states["A_IsSuspended", 1]                 := "vimSuspend.ico"
 states["A_IsSuspended", 0, "vimKeysOn", 0] := "vimPause.ico"
 states["A_IsSuspended", 0, "vimKeysOn", 1] := "vim.ico"
 setUpTrayIconStates(states)
+Menu, Tray, Tip, % "AHK: Vim Bindings for Chrome/Firefox"
 
 global offTitles := getExcludedTitles()
 global autoPaused := false ; Says whether we just temporarily paused vimKeys automatically (like for ^l)

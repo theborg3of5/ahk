@@ -4,7 +4,8 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 setCommonHotkeysType(HOTKEY_TYPE_SubMaster)
-setUpTrayIcons("hash.ico", "redHash.ico")
+scriptTitle := "AHK: DLG Number Tracker"
+setUpTrayIcons("hash.ico", "redHash.ico", scriptTitle)
 
 global currDLGId
 SetTimer, MainLoop, 10000 ; 10s, timer toggled by commonHotkeys' suspend hotkey.
@@ -21,7 +22,13 @@ MainLoop:
 		return
 	
 	currDLGId := id
-	Menu, Tray, Tip, Press Ctrl + Alt + i to insert DLG number. `nCurrent DLG: %currDLGId%
+	trayMessage =
+	(LTrim
+		%scriptTitle%
+		Press Ctrl + Alt + i to insert DLG number.
+		Current DLG: %currDLGId%
+	)
+	Menu, Tray, Tip, % trayMessage
 return
 
 ^!i::

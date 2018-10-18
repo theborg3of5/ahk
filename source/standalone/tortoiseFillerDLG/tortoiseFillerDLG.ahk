@@ -4,7 +4,7 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 setCommonHotkeysType(HOTKEY_TYPE_SubMaster)
-setUpTrayIcons("turtle.ico", "turtleRed.ico")
+setUpTrayIcons("turtle.ico", "turtleRed.ico", "AHK: TortoiseSVN DLG ID Filler")
 
 SetTimer, MainLoop, 5000 ; 5s, timer toggled by commonHotkeys' suspend hotkey.
 SetTitleMatchMode, RegEx

@@ -4,7 +4,7 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 setCommonHotkeysType(HOTKEY_TYPE_SubMaster)
-setUpTrayIcons("controllerGreen.ico", "controllerRed.ico")
+setUpTrayIcons("controllerGreen.ico", "controllerRed.ico", "AHK: Controller Emulator")
 
 SetTimer, MainLoop, 100 ; 100ms, timer toggled by commonHotkeys' suspend hotkey.
 XInput_Init()

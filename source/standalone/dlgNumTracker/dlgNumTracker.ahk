@@ -22,12 +22,12 @@ MainLoop:
 		return
 	
 	currDLGId := id
-	trayMessage =
+	trayMessage := "
 	(LTrim
-		%scriptTitle%
+		" scriptTitle "
 		Press Ctrl + Alt + i to insert DLG number.
-		Current DLG: %currDLGId%
-	)
+		Current DLG: " currDLGId "
+	)"
 	Menu, Tray, Tip, % trayMessage
 return
 

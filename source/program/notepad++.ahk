@@ -68,12 +68,12 @@
 			}
 			; DEBUG.popup("Line",firstLine, "Params list",paramsList, "Params array",paramsAry, "Max param length",maxParamLength)
 			
-			startText = 
+			startText := "
 				( RTrim0
 				;---------
 				; DESCRIPTION:    
 				
-				)
+				)"
 			
 			paramsText := ""
 			For i,param in paramsAry {
@@ -84,13 +84,13 @@
 			if(paramsText)
 				paramsText := "; PARAMETERS:`n" paramsText
 			
-			endText =
+			endText := "
 				( RTrim0
 				; RETURNS:        
 				; SIDE EFFECTS:   
 				; NOTES:          
 				;---------
-				)
+				)"
 			SendRaw, % startText paramsText endText
 		}
 	

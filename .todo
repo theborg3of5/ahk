@@ -19,7 +19,10 @@
 				Newline separated
 				Override field for additional texts before/after each entry
 					Could be used to output lists of IDs into EpicStudio (surrounding array, maybe dots for indentation, etc.)
-		Example usage: whatever input (onenote table column or row) > comma-separated list usable for Snapper multi-record-launching
+		Example usages:
+			Whatever input (onenote table column or row) > comma-separated list usable for Snapper multi-record-launching
+			Filling in a OneNote table column
+				Maybe usable to effectively move columns this way?
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
 		Options:
 			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)

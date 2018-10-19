@@ -12,6 +12,7 @@
 			Comma-separated
 			Newline-separated
 			Double-newline separated? (row in a onenote table)
+				Could this be treated the same as newline-separated, with a setting to ignore empty values/lines in output?
 		Used by new functions or something
 			Selector to pick type of output
 				Comma-separated

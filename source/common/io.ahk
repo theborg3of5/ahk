@@ -291,6 +291,8 @@ finishLink(windowName) {
 	
 	if(windowName = "Mattermost")
 		Send, )
+	else if(windowName = "EMC2 DLG")
+		Send, !a
 	else
 		Send, {Enter}
 }

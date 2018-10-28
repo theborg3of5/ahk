@@ -260,7 +260,7 @@
 			lines.push({TEXT:"Dishes from week"})
 			lines.push({TEXT:"Wash laundry"})
 			lines.push({TEXT:"Dry laundry"})
-			sendOneNoteLines(lines)
+			sendOneNoteToDoLines(lines)
 		}
 	
 	:*:.todosun::
@@ -274,7 +274,7 @@
 			lines.push({TEXT:"Trash, recycling out"})
 			lines.push({TEXT:"Meal planning"})
 			lines.push({TEXT:"Order/obtain groceries"})
-			sendOneNoteLines(lines)
+			sendOneNoteToDoLines(lines)
 		}
 	
 	
@@ -325,14 +325,23 @@
 	}
 	
 	;---------
+	; DESCRIPTION:    Send the given lines with a to-do tag (bound to Ctrl+1).
+	; PARAMETERS:
+	;  linesAry (I,REQ) - Array of lines to send, see sendOneNoteLines() for the format.
+	;---------
+	sendOneNoteToDoLines(linesAry) {
+		Send, ^0 ; Clear current tag (so we're definitely adding the to-do tag, not checking it off)
+		Send, ^1 ; To-do tag
+		sendOneNoteLines(linesAry)
+	}
+	
+	;---------
 	; DESCRIPTION:    Send the lines contained in a specially-formatted array.
 	; PARAMETERS:
 	;  linesAry (I,REQ) - Array of lines to send, in a format which also tells us indentation:
 	;                     	linesAry[lineNum, "TEXT"]     := Text to send
 	;                     	                , "NUM_TABS"] := Relative indentation level (from the
 	;                     	                                 starting indentation level).
-	; NOTES:          Assumes that you're already on a line with the todo tag (checkbox) in place,
-	;                 which will carry over to all lines we add.
 	;---------
 	sendOneNoteLines(linesAry) {
 		currNumTabs := 0 ; Indentation level, relative to start

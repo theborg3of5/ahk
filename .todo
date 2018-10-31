@@ -8,6 +8,8 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	Consider reading in more .tl/.tls files at startup and caching them
+		Alternatively, cache them after the first use?
 	Add a switch or something to main script, to make media keys, etc. not launch spotify
 		Can we make them actually control YouTube or something in these cases?
 		Probably will want some sort of GUI to turn on/off or choose app (if we make controlling it specific)

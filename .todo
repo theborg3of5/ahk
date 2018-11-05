@@ -6,8 +6,10 @@
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
+	Should TLG ID selector (for DLG/PRJ IDs) be filtering out the section headers?
 	
 # New
+	Create a selector for useful routines - EDTop, ZdTOOLS, etc.
 	Consider reading in more .tl/.tls files at startup and caching them
 		Alternatively, cache them after the first use?
 	Add a switch or something to main script, to make media keys, etc. not launch spotify

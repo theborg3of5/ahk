@@ -95,7 +95,7 @@ genericHyperlink(subAction) {
 				return
 			
 			combinedMessage := data["BASE_MESSAGE"]
-			if(combinedMessage)
+			if(data["BASE_MESSAGE"] && data["MESSAGE"])
 				combinedMessage .= " - " ; Hyphen in between base message and normal message
 			combinedMessage .= data["MESSAGE"]
 			

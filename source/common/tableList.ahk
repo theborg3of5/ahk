@@ -779,7 +779,12 @@ class TableList {
 		if(!column)
 			return true
 		
-		valueToCompare := rowAry[column]
+		; If this is a flat string, it's a special row, that shouldn't be fitlered out
+		; (otherwise it would because it doesn't have columns).
+		if(!IsObject(row))
+			return true
+		
+		valueToCompare := row[column]
 		
 		; If the value is blank, include/exclude it based on the includeBlanks parameter.
 		if(!valueToCompare)

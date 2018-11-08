@@ -6,7 +6,6 @@
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
-	Should TLG ID selector (for DLG/PRJ IDs) be filtering out the section headers?
 	
 # New
 	Consider reading in more .tl/.tls files at startup and caching them

@@ -323,13 +323,14 @@ class Selector {
 		; DEBUG.popup("TableList chars",tlChars, "TableList key row chars",keyRowChars)
 		
 		tl := new TableList(this.filePath, tlChars, keyRowChars)
-		if(filter)
+		if(filter) {
 			if(filter["INCLUDE_BLANKS"] != "") ; Only pass the third parameter (includeBlanks) if we actually have a value for it - otherwise we overwrite the default value with nothing.
 				table := tl.getFilteredTable(filter["COLUMN"], filter["VALUE"], filter["INCLUDE_BLANKS"])
 			else
 				table := tl.getFilteredTable(filter["COLUMN"], filter["VALUE"])
-		else
+		} else {
 			table := tl.getTable()
+		}
 		; DEBUG.popup("Filepath",this.filePath, "Parsed table",table, "Index labels",tl.getIndexLabels())
 		
 		if(!IsObject(tl.getIndexLabels())) {

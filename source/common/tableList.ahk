@@ -415,9 +415,9 @@ class TableList {
 			return ""
 		
 		filteredTable := []
-		For i,rowAry in this.table {
-			if(this.shouldIncludeRow(rowAry, column, allowedValue, includeBlanks))
-				filteredTable.push(rowAry)
+		For i,row in this.table {
+			if(this.shouldIncludeRow(row, column, allowedValue, includeBlanks))
+				filteredTable.push(row)
 		}
 		
 		return filteredTable
@@ -439,34 +439,39 @@ class TableList {
 	;                         will win.
 	; RETURNS:        Processed and flattened table. Format:
 	;                 	table[rowNum, column] := value
+	; NOTES:          Not recommended for use with .tls files that make use of PASS rows
+	;                 (settings or headers) - only the first PASS row will actually make
+	;                 it through (because none of them are arrays, so none of them have a
+	;                 value for the uniqueColumn).
 	;---------
 	getFilteredTableUnique(uniqueColumn, filterColumn, allowedValue) {
 		if(!uniqueColumn || !filterColumn || !allowedValue)
 			return ""
 		
-		uniqueAry := [] ; uniqueVal => {"INDEX":indexInTable, "FILTER_VALUE":filterVal}
-		For i,rowAry in this.table {
-			if(!this.shouldIncludeRow(rowAry, filterColumn, allowedValue))
+		uniqueAry := [] ; uniqueVal => {"ROW_NUM":rowNum, "FILTER_VALUE":filterVal}
+		For rowNum,row in this.table {
+			if(!this.shouldIncludeRow(row, filterColumn, allowedValue))
 				Continue
 			
-			uniqueVal := rowAry[uniqueColumn]
-			filterVal := rowAry[filterColumn]
+			uniqueVal := row[uniqueColumn]
+			filterVal := row[filterColumn]
 			
 			if(!uniqueAry[uniqueVal]) {
-				uniqueAry[uniqueVal, "INDEX"]        := i
+				uniqueAry[uniqueVal, "ROW_NUM"]      := rowNum
 				uniqueAry[uniqueVal, "FILTER_VALUE"] := filterVal
 			} else if( (filterVal = allowedValue) && (uniqueAry[uniqueVal, "FILTER_VALUE"] != allowedValue) ) {
-				uniqueAry[uniqueVal, "INDEX"]        := i
+				uniqueAry[uniqueVal, "ROW_NUM"]      := rowNum
 				uniqueAry[uniqueVal, "FILTER_VALUE"] := filterVal
 			}
 		}
 		
 		filteredTable := []
-		For i,ary in uniqueAry {
-			index := ary["INDEX"]
-			filteredTable.push(this.table[index])
+		For _,ary in uniqueAry {
+			rowNum := ary["ROW_NUM"]
+			filteredTable.push(this.table[rowNum])
 		}
 		
+		; DEBUG.popupEarly(filteredTable)
 		return filteredTable
 	}
 	
@@ -760,7 +765,7 @@ class TableList {
 	; DESCRIPTION:    Based on a filter (column and value to restrict to), determine whether the
 	;                 given row array should be included.
 	; PARAMETERS:
-	;  rowAry        (I,REQ) - Array representing a row in the table. 
+	;  row           (I,REQ) - A row in the table. May be an array or string.
 	;  column        (I,OPT) - The column to filter on - we will check the value of this column
 	;                          (index) in the row array to see if it matches allowedValue.
 	;  allowedValue  (I,OPT) - Only include rows which have this value in their column (with the
@@ -770,7 +775,7 @@ class TableList {
 	;                          will be excluded. Defaults to true (include blanks).
 	; RETURNS:        True if we should exclude the row from the filtered table, false otherwise.
 	;---------
-	shouldIncludeRow(rowAry, column, allowedValue := "", includeBlanks := true) {
+	shouldIncludeRow(row, column, allowedValue := "", includeBlanks := true) {
 		if(!column)
 			return true
 		
@@ -793,7 +798,7 @@ class TableList {
 				return true
 		}
 		
-		; DEBUG.popup("Base","include", "row",rowAry, "column",column, "allowedValue",allowedValue, "includeBlanks",includeBlanks)
+		; DEBUG.popup("Base","include", "row",row, "column",column, "allowedValue",allowedValue, "includeBlanks",includeBlanks)
 		return false
 	}
 	

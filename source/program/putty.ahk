@@ -1,6 +1,6 @@
 global lastPuttySearchType, lastPuttySearchText ; For Home+F9 searching repeatedly.
 
-#IfWinActive, ahk_class PuTTY
+#If MainConfig.isWindowActive("Putty")
 	; Insert arbitrary text, inserting needed spaces to overwrite.
 	^i::
 		insertArbitraryText() {
@@ -98,15 +98,15 @@ global lastPuttySearchType, lastPuttySearchText ; For Home+F9 searching repeated
 		^+e::sendPuttyCommand("VIEW_RECORD")
 		^e:: sendPuttyCommand("CHRONICLES")
 		
-		::.lock::sendPuttyCommand("LOCK")
-		::.unlock::sendPuttyCommand("UNLOCK")
+		:X:.lock::sendPuttyCommand("LOCK")
+		:X:.unlock::sendPuttyCommand("UNLOCK")
 		
 		^+s::
 			sendPuttyCommand("CR")
 			Send, 1{Enter}
 		return
 	}
-#IfWinActive
+#If
 
 
 ; Opens the Change Settings menu for putty. 0x50 is IDM_RECONF, the change settings option. 
@@ -150,6 +150,9 @@ sendPuttyCommand(key := "") {
 	
 	command := replaceTag(command, "INI", ini)
 	command := replaceTag(command, "ID",  id)
+	
+	if(!MainConfig.isWindowActive("Putty"))
+		WindowActions.activateWindowByName("Putty")
 	
 	SendRaw, % command
 	Send, % sendAfter

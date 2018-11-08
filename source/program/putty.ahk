@@ -91,12 +91,12 @@ global lastPuttySearchType, lastPuttySearchText ; For Home+F9 searching repeated
 	
 	{ ; Various commands.
 		^r:: sendPuttyCommand()
-		^z:: sendPuttyCommand("LOOKITT")
+		^e:: sendPuttyCommand("CHRONICLES")
 		^o:: sendPuttyCommand("HS_CONFIG")
 		^h:: sendPuttyCommand("HB")
+		^z:: sendPuttyCommand("LOOKITT")
 		^p:: sendPuttyCommand("PB")
 		^+e::sendPuttyCommand("VIEW_RECORD")
-		^e:: sendPuttyCommand("CHRONICLES")
 		
 		:X:.lock::sendPuttyCommand("LOCK")
 		:X:.unlock::sendPuttyCommand("UNLOCK")

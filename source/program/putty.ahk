@@ -98,16 +98,12 @@ global lastPuttySearchType, lastPuttySearchText ; For Home+F9 searching repeated
 		^+e::sendPuttyCommand("VIEW_RECORD")
 		^e:: sendPuttyCommand("CHRONICLES")
 		
+		::.lock::sendPuttyCommand("LOCK")
+		::.unlock::sendPuttyCommand("UNLOCK")
+		
 		^+s::
 			sendPuttyCommand("CR")
 			Send, 1{Enter}
-		return
-		
-		::.lock::
-			SendRaw, w $$zlock(" ; Extra comment/quote here to fix syntax highlighting. "
-		return
-		::.unlock::
-			SendRaw, w $$zunlock(" ; Extra comment/quote here to fix syntax highlighting. "
 		return
 	}
 #IfWinActive
@@ -146,11 +142,17 @@ sendPuttyCommand(key := "") {
 		dataAry := s.selectChoice(key)
 	else
 		dataAry := s.selectGui()
+	
 	command   := dataAry["COMMAND"]
 	sendAfter := dataAry["SEND_AFTER"]
+	ini       := dataAry["INI"]
+	id        := dataAry["ID"]
 	
 	if(!command)
 		return
+	
+	command := replaceTag(command, "INI", ini)
+	command := replaceTag(command, "ID",  id)
 	
 	SendRaw, % command
 	Send, % sendAfter

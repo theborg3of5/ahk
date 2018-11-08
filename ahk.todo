@@ -9,7 +9,6 @@
 	Should TLG ID selector (for DLG/PRJ IDs) be filtering out the section headers?
 	
 # New
-	Consider making puttyRoutines.tls slightly more flexible (include the "d ^" in the ROUTINE, rename ROUTINE > COMMAND, rename file to puttyCommands.tls?) so it can handle the chronicles shortcut?
 	Consider turning getPuttyRoutine() into a more generic thing - select silently if key given, otherwise pop a GUI to ask
 		Probably best for it to be part of Selector itself?
 		Other places doing the same thing:

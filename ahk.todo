@@ -9,7 +9,6 @@
 	Should TLG ID selector (for DLG/PRJ IDs) be filtering out the section headers?
 	
 # New
-	Update onenote todo page copy to use "week of x" titles when at home (based on machine)
 	Create a selector for useful routines - EDTop, ZdTOOLS, etc.
 	Consider reading in more .tl/.tls files at startup and caching them
 		Alternatively, cache them after the first use?

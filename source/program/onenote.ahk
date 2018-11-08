@@ -230,11 +230,14 @@
 			Send, pc
 			Send, n
 			
-			Send, ^+t                  ; Select title (to replace with new day/date)
-			
-			Sleep, 1000                ; Wait for selection to take
-			sendDateTime("M/d`, dddd") ; Send today's day/date
-			Send, ^+t                  ; Select title again in case you want a different date.
+			; Update title
+			Send, ^+t                                 ; Select title (to replace with new day/date)
+			Sleep, 1000                               ; Wait for selection to take
+			if(MainConfig.isMachine("EPIC_LAPTOP"))
+				sendDateTime("M/d`, dddd")             ; Send today's day/date
+			else if(MainConfig.isMachine("HOME_DESKTOP"))
+				Send, % "Week of " FormatTime(, "M/d") ; Send "Week of <today's date>"
+			Send, ^+t                                 ; Select title again in case you want a different date.
 		}
 	
 	; Insert a contact comment.

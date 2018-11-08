@@ -90,95 +90,19 @@ global lastPuttySearchType, lastPuttySearchText ; For Home+F9 searching repeated
 	return
 	
 	{ ; Various commands.
-		^z::
-			SendRaw, d ^`%ZeW
-			Send, {Enter}
-		return
+		^r:: sendPuttyRoutine()
+		^z:: sendPuttyRoutine("LOOKITT")
+		^o:: sendPuttyRoutine("HS_CONFIG")
+		^h:: sendPuttyRoutine("HB")
+		^p:: sendPuttyRoutine("PB")
+		^+e::sendPuttyRoutine("VIEW_RECORD")
 		
 		^e::
 			Send, e{Space}
 		return
 		
-		; $!e::
-			; SendRaw, d ^EPIC
-			; Send, {Enter}
-		; return
-		
-		!e::
-			SendRaw, d ^HB
-			Send, {Enter}
-			Send, ={Enter}
-			Send, 4{Enter}
-			Send, 1{Enter}
-			Send, 1{Enter}
-		return
-		
-		^+e::
-			SendRaw, d ^EAVIEWID
-			Send, {Enter}
-		return
-		
-		; ^!e::
-			; SendRaw, d ^`%ZeEPIC
-			; Send, {Enter}
-		; return
-			
-		^a::
-			SendRaw, d ^`%ZeADMIN
-			Send, {Enter}
-		return
-		
-		^+d::
-			SendRaw, d ^`%ZdTOOLS
-			Send, {Enter}
-		return
-		
-		^m::
-			SendRaw, d ^EZMENU
-			Send, {Enter}
-		return
-		
-		^o::
-			SendRaw, d ^EDTop
-			Send, {Enter}
-		return
-		
-		^h::
-			SendRaw, d ^HB
-			Send, {Enter}
-		return
-		
-		!h::
-			SendRaw, d ^HB
-			Send, {Enter}
-			Send, ={Enter}
-			Send, 4{Enter}
-			Send, 2{Enter}
-		return
-		
-		^p::
-			SendRaw, d ^PB
-			Send, {Enter}
-		return
-		
-		; Department edit hotkey.
-		!d::
-			SendRaw, d ^EPIC
-			Send, {Enter 2}
-			Send, 1{Enter}
-			Send, 5{Enter}
-		return
-		
-		; HSD edit hotkey.
-		^+h::
-			SendRaw, d ^HB
-			Send, {Enter 2}
-			Send, 4{Enter}
-			Send, 2{Enter}
-		return
-		
 		^+s::
-			SendRaw, d ^KECR
+			SendRaw, % "d ^" getPuttyRoutine("CR")
 			Send, {Enter}
 			Send, 1{Enter}
 		return
@@ -186,12 +110,9 @@ global lastPuttySearchType, lastPuttySearchText ; For Home+F9 searching repeated
 		::.lock::
 			SendRaw, w $$zlock(" ; Extra comment/quote here to fix syntax highlighting. "
 		return
-		
 		::.unlock::
 			SendRaw, w $$zunlock(" ; Extra comment/quote here to fix syntax highlighting. "
 		return
-		
-		:C1R:^XITEMSET::^XSETITEM
 	}
 #IfWinActive
 
@@ -221,4 +142,23 @@ getPuttyLogFile() {
 	
 	Send, !c ; Cancel
 	return logFile
+}
+
+sendPuttyRoutine(key := "") {
+	routine := getPuttyRoutine(key)
+	if(!routine)
+		return
+	
+	SendRaw, % "d ^" routine
+	Send, {Enter}
+}
+
+getPuttyRoutine(key := "") {
+	s := new Selector("puttyRoutines.tls")
+	if(key)
+		routine := s.selectChoice(key, "ROUTINE")
+	else
+		routine := s.selectGui("ROUTINE")
+	
+	return routine
 }

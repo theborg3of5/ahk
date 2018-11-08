@@ -9,7 +9,12 @@
 	Should TLG ID selector (for DLG/PRJ IDs) be filtering out the section headers?
 	
 # New
-	Create a selector for useful routines - EDTop, ZdTOOLS, etc.
+	Consider making puttyRoutines.tls slightly more flexible (include the "d ^" in the ROUTINE, rename ROUTINE > COMMAND, rename file to puttyCommands.tls?) so it can handle the chronicles shortcut?
+	Consider turning getPuttyRoutine() into a more generic thing - select silently if key given, otherwise pop a GUI to ask
+		Other places doing the same thing:
+			file.ahk > selectFolder()
+			firstSetup.ahk
+			epic.ahk > processEMC2ObjectInfo()
 	Consider reading in more .tl/.tls files at startup and caching them
 		Alternatively, cache them after the first use?
 	Add a switch or something to main script, to make media keys, etc. not launch spotify

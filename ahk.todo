@@ -15,6 +15,8 @@
 			file.ahk > selectFolder()
 			firstSetup.ahk
 			epic.ahk > processEMC2ObjectInfo()
+	Consider adding config to Selector/TableList to respect leading/trailing spaces (so only clear tabs)
+		Would make puttyCommands chronicles command cleaner
 	Consider reading in more .tl/.tls files at startup and caching them
 		Alternatively, cache them after the first use?
 	Add a switch or something to main script, to make media keys, etc. not launch spotify

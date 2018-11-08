@@ -96,14 +96,10 @@ global lastPuttySearchType, lastPuttySearchText ; For Home+F9 searching repeated
 		^h:: sendPuttyCommand("HB")
 		^p:: sendPuttyCommand("PB")
 		^+e::sendPuttyCommand("VIEW_RECORD")
-		
-		^e::
-			Send, e{Space}
-		return
+		^e:: sendPuttyCommand("CHRONICLES")
 		
 		^+s::
-			SendRaw, % "d ^" getPuttyCommand("CR")
-			Send, {Enter}
+			sendPuttyCommand("CR")
 			Send, 1{Enter}
 		return
 		
@@ -145,20 +141,17 @@ getPuttyLogFile() {
 }
 
 sendPuttyCommand(key := "") {
-	routine := getPuttyCommand(key)
-	if(!routine)
-		return
-	
-	SendRaw, % "d ^" routine
-	Send, {Enter}
-}
-
-getPuttyCommand(key := "") {
 	s := new Selector("puttyCommands.tls")
 	if(key)
-		routine := s.selectChoice(key, "ROUTINE")
+		dataAry := s.selectChoice(key)
 	else
-		routine := s.selectGui("ROUTINE")
+		dataAry := s.selectGui()
+	command   := dataAry["COMMAND"]
+	sendAfter := dataAry["SEND_AFTER"]
 	
-	return routine
+	if(!command)
+		return
+	
+	SendRaw, % command
+	Send, % sendAfter
 }

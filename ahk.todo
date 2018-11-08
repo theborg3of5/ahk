@@ -9,12 +9,6 @@
 	Should TLG ID selector (for DLG/PRJ IDs) be filtering out the section headers?
 	
 # New
-	Consider turning getPuttyRoutine() into a more generic thing - select silently if key given, otherwise pop a GUI to ask
-		Probably best for it to be part of Selector itself?
-		Other places doing the same thing:
-			file.ahk > selectFolder()
-			firstSetup.ahk
-			epic.ahk > processEMC2ObjectInfo()
 	Consider reading in more .tl/.tls files at startup and caching them
 		Alternatively, cache them after the first use?
 	Add a switch or something to main script, to make media keys, etc. not launch spotify

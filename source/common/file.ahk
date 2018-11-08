@@ -104,13 +104,8 @@ sendFolderPath(folderName := "", subPath := "", slashChar := "\", trailingSlash 
 }
 
 selectFolder(folderName := "") {
-	filter := MainConfig.getMachineTableListFilter()
-	s := new Selector("folders.tls", filter)
-	
-	if(folderName)
-		path := s.selectChoice(folderName, "PATH")
-	else
-		path := s.selectGui("PATH")
+	s := new Selector("folders.tls", MainConfig.getMachineTableListFilter())
+	path := s.select(folderName, "PATH")
 	
 	; DEBUG.popup("Path",path, "Replaced",MainConfig.replacePathTags(path))
 	return MainConfig.replacePathTags(path)

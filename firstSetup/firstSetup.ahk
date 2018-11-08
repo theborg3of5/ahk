@@ -35,10 +35,7 @@ useSlimMode   := A_Args[2]
 
 ; Get info for the machine that we're setting up for (will drive specific values in settings.ini)
 s := new Selector(tlSetupPath)
-if(machineChoice)
-	machineInfo := s.selectChoice(machineChoice)
-else
-	machineInfo := s.selectGui()
+machineInfo := s.select(machineChoice)
 
 if(!machineInfo)
 	ExitApp

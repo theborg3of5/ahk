@@ -138,10 +138,7 @@ getPuttyLogFile() {
 
 sendPuttyCommand(key := "") {
 	s := new Selector("puttyCommands.tls")
-	if(key)
-		dataAry := s.selectChoice(key)
-	else
-		dataAry := s.selectGui()
+	dataAry := s.select(key)
 	
 	command   := dataAry["COMMAND"]
 	sendAfter := dataAry["SEND_AFTER"]

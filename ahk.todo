@@ -12,9 +12,13 @@
 		Alternatively, cache them after the first use?
 	Add a switch or something to main script, to make media keys, etc. not launch spotify
 		Can we make them actually control YouTube or something in these cases?
-		Probably will want some sort of GUI to turn on/off or choose app (if we make controlling it specific)
-		Should this live in the settings.ini file?
-			That way it survives reloads.
+		MainConfig
+			Read in (and presumably cache) mediaPlayers.tls
+				Return values based on it - player name, program name, program path (via programs.tl, for running it when it doesn't exist), maybe various key handlings?
+		media.ahk
+			Handling for hotkeys
+				Either put keys to send in mediaPlayers.tls, or have branching logic when media keys (or their analogues) are pressed
+					If using keys in the file, maybe just not specify keys if the program respects it natively (spotify, maybe foobar)?
 	New ListConverter class/handler?
 		Auto-detect input type, can get out different type
 			Comma-separated

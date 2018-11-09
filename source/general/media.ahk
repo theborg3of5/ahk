@@ -5,3 +5,10 @@
 ; Toggle Mute.
 #Enter::VA_SetMasterMute(!VA_GetMasterMute())
 
+
+
+^Volume_Mute::
+	changeMediaPlayer() {
+		s := new Selector("mediaPlayers.tls")
+		MainConfig.setSetting("MEDIA_PLAYER", s.selectGui("KEY"))
+	}

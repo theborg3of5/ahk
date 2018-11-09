@@ -27,10 +27,10 @@ runStandaloneScripts()
 #Include input.ahk
 #Include kdeMoverSizer.ahk
 #Include launch.ahk
+#Include media.ahk
 #Include places.ahk
 #Include programs.ahk
 #Include screen.ahk
-#Include volume.ahk
 
 #Include %A_ScriptDir%\program\ ; Program-specific hotkeys.
 #Include chrome.ahk

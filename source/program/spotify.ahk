@@ -13,7 +13,7 @@
 		Toast.showForTime("Spotify not yet running, launching...", 2)
 		MainConfig.runProgram("Spotify")
 	return
-#IfWinNotExist
+#If
 
 ; If Spotify is indeed running.
 #If WinExist(MainConfig.getWindowTitleString("Spotify"))
@@ -28,4 +28,4 @@
 		WinWaitActive, % MainConfig.getWindowTitleString("Spotify")
 		Send, ^l
 	return
-#IfWinExists
+#If

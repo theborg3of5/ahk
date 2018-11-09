@@ -80,6 +80,12 @@ class MainConfig {
 		filter["VALUE"]  := this.getMachine()
 		return filter
 	}
+	getMediaPlayer(mediaPlayerName) {
+		return this.settings["MEDIA_PLAYER"]
+	}
+	isMediaPlayer(mediaPlayerName) {
+		return (this.settings["MEDIA_PLAYER"] = mediaPlayerName)
+	}
 	
 	getWindowInfo(name) {
 		if(!name)
@@ -215,7 +221,7 @@ class MainConfig {
 		settingsAry := []
 		settingsAry["MACHINE"]         := this.settingsINIObject.get("Main", "MACHINE")         ; Which machine this is, from MACHINE_* constants
 		settingsAry["MENU_KEY_ACTION"] := this.settingsINIObject.get("Main", "MENU_KEY_ACTION") ; What to do with the menu key, from MENUKEYACTION_* constants
-		settingsAry["MEDIA_PROGRAM"]   := this.settingsINIObject.get("Main", "MEDIA_PROGRAM")   ; What program the media keys should deal with
+		settingsAry["MEDIA_PLAYER"]    := this.settingsINIObject.get("Main", "MEDIA_PLAYER")    ; What program the media keys should deal with
 		
 		; DEBUG.popup("Settings", settingsAry)
 		return settingsAry

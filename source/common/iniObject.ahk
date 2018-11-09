@@ -1,7 +1,7 @@
-; From: https://github.com/pukkandan/My-Startup-Script/blob/master/Lib/ini.ahk
+; Based on https://github.com/pukkandan/My-Startup-Script/blob/master/Lib/ini.ahk
 
 class IniObject {
-	__new(file := "Settings.ini") {
+	__new(file := "settings.ini") {
 		this.file := file
 	}
 	

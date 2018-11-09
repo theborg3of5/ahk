@@ -63,6 +63,11 @@ class MainConfig {
 			return ""
 		return this.settings[settingName]
 	}
+	setSetting(settingName, newValue) {
+		if(!settingName)
+			return
+		this.settingsINIObject.set("Main", settingName, newValue)
+	}
 	getMachine() {
 		return this.getSetting("MACHINE")
 	}
@@ -73,7 +78,6 @@ class MainConfig {
 		filter := []
 		filter["COLUMN"] := "MACHINE"
 		filter["VALUE"]  := this.getMachine()
-		
 		return filter
 	}
 	
@@ -187,6 +191,8 @@ class MainConfig {
 	
 	static windowsByName := []
 	
+	static settingsINIObject
+	
 	loadPrivates(filePath) {
 		tl := new TableList(filePath)
 		privatesTable := tl.getTable()
@@ -204,16 +210,15 @@ class MainConfig {
 	}
 	
 	loadSettings(filePath) {
+		this.settingsINIObject := new IniObject(filePath)
+		
 		settingsAry := []
-		settingsAry["MACHINE"]         := this.loadSettingFromFile(filePath, "MACHINE")         ; Which machine this is, from MACHINE_* constants
-		settingsAry["MENU_KEY_ACTION"] := this.loadSettingFromFile(filePath, "MENU_KEY_ACTION") ; What to do with the menu key, from MENUKEYACTION_* constants
+		settingsAry["MACHINE"]         := this.settingsINIObject.get("Main", "MACHINE")         ; Which machine this is, from MACHINE_* constants
+		settingsAry["MENU_KEY_ACTION"] := this.settingsINIObject.get("Main", "MENU_KEY_ACTION") ; What to do with the menu key, from MENUKEYACTION_* constants
+		settingsAry["MEDIA_PROGRAM"]   := this.settingsINIObject.get("Main", "MEDIA_PROGRAM")   ; What program the media keys should deal with
 		
 		; DEBUG.popup("Settings", settingsAry)
 		return settingsAry
-	}
-	loadSettingFromFile(filePath, configName) {
-		iniObj := new IniObject(filePath)
-		return iniObj.get("Main", configName)
 	}
 	
 	loadWindows(filePath) {

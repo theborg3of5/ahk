@@ -1,0 +1,6 @@
++WindowTitle=Select media program to control with media keys:
+
+(	NAME						ABBREV	KEY
+	Spotify					spot		SPOTIFY
+	Foobar2000				foo		FOOBAR
+	Youtube					you		YOUTUBE

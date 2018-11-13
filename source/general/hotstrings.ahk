@@ -52,6 +52,7 @@
 	::scheduleable::schedulable
 	::performably::performable
 	::isntead::instead
+	::Tapestery::Tapestry
 }
 
 { ; Expansions.

@@ -66,6 +66,8 @@ class MainConfig {
 	setSetting(settingName, newValue) {
 		if(!settingName)
 			return
+		
+		this.settings[settingName] := newValue
 		this.settingsINIObject.set("Main", settingName, newValue)
 	}
 	getMachine() {
@@ -80,11 +82,19 @@ class MainConfig {
 		filter["VALUE"]  := this.getMachine()
 		return filter
 	}
-	getMediaPlayer(mediaPlayerName) {
+	getMediaPlayer() {
 		return this.settings["MEDIA_PLAYER"]
 	}
 	isMediaPlayer(mediaPlayerName) {
 		return (this.settings["MEDIA_PLAYER"] = mediaPlayerName)
+	}
+	doesMediaPlayerExist() {
+		player := this.getMediaPlayer()
+		return this.doesWindowExist(player)
+	}
+	runMediaPlayer() {
+		player := this.getMediaPlayer()
+		this.runProgram(player)
 	}
 	
 	getWindowInfo(name) {

@@ -11,14 +11,9 @@
 	Consider reading in more .tl/.tls files at startup and caching them
 		Alternatively, cache them after the first use?
 	Add a switch or something to main script, to make media keys, etc. not launch spotify
-		Can we make them actually control YouTube or something in these cases?
-		MainConfig
-			Read in (and presumably cache) mediaPlayers.tls
-				Return values based on it - player name, program name, program path (via programs.tl, for running it when it doesn't exist), maybe various key handlings?
 		media.ahk
 			Handling for hotkeys
-				Either put keys to send in mediaPlayers.tls, or have branching logic when media keys (or their analogues) are pressed
-					If using keys in the file, maybe just not specify keys if the program respects it natively (spotify, maybe foobar)?
+				Add branching logic when media keys (or their analogues) are pressed
 	New ListConverter class/handler?
 		Auto-detect input type, can get out different type
 			Comma-separated

@@ -1,6 +1,6 @@
-+WindowTitle=Select media program to control with media keys:
++WindowTitle=Select media player to control with media keys:
 
-(	NAME				ABBREV	PROGRAM_NAME	KEY			PLAY_PAUSE_KEYS		PREV_KEYS		NEXT_KEYS
-	Spotify			spot		Spotify			SPOTIFY		Media_Play_Pause		Media_Prev		Media_Next
-	Foobar2000		foo		Foobar			FOOBAR		Media_Play_Pause		Media_Prev		Media_Next
-	Youtube			you		Chrome			YOUTUBE		*							*					*
+(	NAME				ABBREV		PROGRAM_NAME
+	Spotify			s|spot		Spotify
+	Foobar2000		f|foo			Foobar
+	Youtube			y|you|yt		Chrome

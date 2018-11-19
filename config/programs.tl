@@ -2,7 +2,7 @@
 
 [PATH.addToStart(C:\Program Files (x86)\)]
 	Chrome						Google\Chrome\Application\chrome.exe
-	EMC2							Epic\v8.4\EMC2\Shared Files\EpicD84.exe									EMC2Update env=TRACKAPPTCP
+	EMC2							Epic\v8.5\EMC2\Shared Files\EpicD85.exe									EMC2Update env=TRACKAPPTCP
 	EpicStudio					EpicStudio\EpicStudio.exe
 	Hyperspace					Epic\v8.6\Shared Files\EpicD86.exe
 	Launchy						Launchy\Launchy.exe

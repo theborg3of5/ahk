@@ -8,12 +8,13 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
-	Consider reading in more .tl/.tls files at startup and caching them
-		Alternatively, cache them after the first use?
 	Add a switch or something to main script, to make media keys, etc. not launch spotify
 		media.ahk
 			Handling for hotkeys
 				Add branching logic when media keys (or their analogues) are pressed
+	Consider adding guru search as a linking option - would be great for links to people's guru pages
+	Consider reading in more .tl/.tls files at startup and caching them
+		Alternatively, cache them after the first use?
 	New ListConverter class/handler?
 		Auto-detect input type, can get out different type
 			Comma-separated

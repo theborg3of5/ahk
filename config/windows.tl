@@ -4,7 +4,7 @@
 	AutoHotkey WinSpy					AutoHotkey.exe				AutoHotkeyGUI			Window Spy
 	Chrome Join							chrome.exe					-							Join
 	Chrome TickTick					chrome.exe					-							All - TickTick
-[EXE.replaceWith(EpicD84.exe)]
+[EXE.replaceWith(EpicD85.exe)]
 	EMC2 DLG								-								ThunderRT6MDIForm		DLG											-										CONTAINS_BEG
 	EMC2 DLG email						-								-							E-mail Development Log
 	EMC2 Issue email					-								-							Email Issue
@@ -26,7 +26,7 @@
 	AutoHotkey GUIs					AutoHotkey.exe				AutoHotkeyGUI
 	Chrome								chrome.exe					Chrome_WidgetWin_1	-												
 	Cisco AnyConnect VPN				vpnui.exe					#32770
-	EMC2									EpicD84.exe					-							EMC2
+	EMC2									EpicD85.exe					-							EMC2
 	EpicStudio							EpicStudio.exe				-							EpicStudio
 	Everything							Everything.exe				EVERYTHING
 	Excel									EXCEL.EXE					-							-												0

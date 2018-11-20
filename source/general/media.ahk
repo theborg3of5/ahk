@@ -22,7 +22,6 @@
 	^!Down::
 	^!Left::
 	^!Right::
-	Media_Stop::
 	Media_Play_Pause::
 	Media_Prev::
 	Media_Next::
@@ -30,10 +29,14 @@
 		MainConfig.runMediaPlayer()
 	return
 #If MainConfig.doesMediaPlayerExist()
-	^!Up::   MainConfig.runMediaPlayer()
-	^!Down:: sendMediaKey("Media_Play_Pause")
-	^!Left:: sendMediaKey("Media_Prev")
-	^!Right::sendMediaKey("Media_Next")
+	^!Up::MainConfig.runMediaPlayer()
+	
+	Media_Play_Pause::sendMediaKey("Media_Play_Pause")
+	Media_Prev::      sendMediaKey("Media_Prev")
+	Media_Next::      sendMediaKey("Media_Next")
+	^!Down::          sendMediaKey("Media_Play_Pause")
+	^!Left::          sendMediaKey("Media_Prev")
+	^!Right::         sendMediaKey("Media_Next")
 #If
 
 sendMediaKey(keyName) {

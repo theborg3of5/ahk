@@ -305,3 +305,26 @@ setClipboardAndToast(newClipboardValue, message := "Clipboard set to value") {
 	
 	Toast.showForTime(message ":`n" clipboard, 2)
 }
+
+sendMediaKey(keyName) {
+	if(!keyName)
+		return
+	
+	; Only certain media keys need special handling
+	specialKeysAry := ["Media_Play_Pause", "Media_Prev", "Media_Next"]
+	if(!arrayContains(specialKeysAry, keyName))
+		Send, % "{" keyName "}"
+	
+	; Youtube - special case that won't respond to media keys natively
+	if(MainConfig.isMediaPlayer("Chrome")) {
+		if(keyName = "Media_Play_Pause")
+			Send, ^+{End}
+		else if(keyName = "Media_Prev")
+			Send, ^+{PgUp}
+		else if(keyName = "Media_Next")
+			Send, ^+{PgDn}
+		
+	} else {
+		Send, % "{" keyName "}"
+	}
+}

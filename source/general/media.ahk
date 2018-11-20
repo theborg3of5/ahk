@@ -5,8 +5,7 @@
 ; Toggle Mute.
 #Enter::VA_SetMasterMute(!VA_GetMasterMute())
 
-
-
+; Change the media player that media keys will deal with.
 ^Volume_Mute::
 	changeMediaPlayer() {
 		s := new Selector("mediaPlayers.tls")
@@ -15,8 +14,6 @@
 			MainConfig.setSetting("MEDIA_PLAYER", programName)
 	}
 
-
-	
 #If !MainConfig.doesMediaPlayerExist()
 	^!Up::
 	^!Down::
@@ -38,21 +35,3 @@
 	^!Left::          sendMediaKey("Media_Prev")
 	^!Right::         sendMediaKey("Media_Next")
 #If
-
-sendMediaKey(keyName) {
-	if(!keyName)
-		return
-	
-	; Youtube - special case that won't respond to media keys natively
-	if(MainConfig.isMediaPlayer("Chrome")) {
-		if(keyName = "Media_Play_Pause")
-			Send, ^+{End}
-		else if(keyName = "Media_Prev")
-			Send, ^+{PgUp}
-		else if(keyName = "Media_Next")
-			Send, ^+{PgDn}
-		
-	} else {
-		Send, % "{" keyName "}"
-	}
-}

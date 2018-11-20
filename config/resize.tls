@@ -5,13 +5,10 @@
 )	0											0					1			2
 
 # General sizes
-FHD (1920x1080)							hd					1920		1080
+FHD (1920x1080)							h					1920		1080
 Widescreen (1440x900)					w					1440		900
 Standard (1280x1024)						sd					1280		1024
 Small (800x600)							sm					800		600
-
-# Portions
-Horizontal half (of FHD)				h					960		1050
 
 # Specific cases
 Minimum Hyperspace (2015-)				minOld			800		550

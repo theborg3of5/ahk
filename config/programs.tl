@@ -4,6 +4,7 @@
 	Chrome						Google\Chrome\Application\chrome.exe
 	EMC2							Epic\v8.5\EMC2\Shared Files\EpicD85.exe									EMC2Update env=TRACKAPPTCP
 	EpicStudio					EpicStudio\EpicStudio.exe
+	Foobar						foobar2000\foobar2000.exe
 	Hyperspace					Epic\v8.6\Shared Files\EpicD86.exe
 	Launchy						Launchy\Launchy.exe
 	OneNote						Microsoft Office\Office16\ONENOTE.EXE										-										EPIC_LAPTOP

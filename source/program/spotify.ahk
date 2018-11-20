@@ -1,28 +1,8 @@
-; Hotkey catches for if Spotify isn't running.
-#If !WinExist(MainConfig.getWindowTitleString("Spotify"))
-	^!Up::
-	^!Down::
-	^!Left::
-	^!Right::
-	Media_Stop::
-	Media_Play_Pause::
-	Media_Prev::
-	Media_Next::
-	^!Space::
-	#j::
-		Toast.showForTime("Spotify not yet running, launching...", 2)
-		MainConfig.runProgram("Spotify")
-	return
-#If
-
 ; If Spotify is indeed running.
 #If WinExist(MainConfig.getWindowTitleString("Spotify"))
-	^!Up::   MainConfig.runProgram("Spotify") ; Spotify doesn't respect stop command, so just use this hotkey to show it instead.
-	^!Down:: Send, {Media_Play_Pause}
-	^!Left:: Send, {Media_Prev}
-	^!Right::Send, {Media_Next}
-
-	^!Space::Send, {Volume_Down}{Volume_Up} ; Makes Windows 10 media panel show up
+	^!Space::Send, {Volume_Down}{Volume_Up} ; Makes Windows 10 media panel show up (for what's playing right now)
+	
+	; Global search hotkey
 	#j::
 		MainConfig.runProgram("Spotify")
 		WinWaitActive, % MainConfig.getWindowTitleString("Spotify")

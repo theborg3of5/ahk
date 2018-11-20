@@ -33,6 +33,7 @@
 	Explorer								explorer.exe				CabinetWClass
 	FileZilla							filezilla.exe
 	Firefox Portable					firefox.exe
+	Foobar								foobar2000.exe
 	GitHub								GitHubDesktop.exe			-							-												0
 	Hyperspace							EpicD86.exe
 	KDiff									kdiff3.exe

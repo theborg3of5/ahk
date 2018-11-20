@@ -10,5 +10,40 @@
 ^Volume_Mute::
 	changeMediaPlayer() {
 		s := new Selector("mediaPlayers.tls")
-		MainConfig.setSetting("MEDIA_PLAYER", s.selectGui("KEY"))
+		programName := s.selectGui("PROGRAM_NAME")
+		if(programName)
+			MainConfig.setSetting("MEDIA_PLAYER", programName)
 	}
+
+
+	
+#If !MainConfig.doesMediaPlayerExist()
+	^!Up::
+	^!Down::
+	^!Left::
+	^!Right::
+	Media_Stop::
+	Media_Play_Pause::
+	Media_Prev::
+	Media_Next::
+		Toast.showForTime(MainConfig.getMediaPlayer() " not yet running, launching...", 2)
+		MainConfig.runMediaPlayer()
+	return
+#If MainConfig.doesMediaPlayerExist()
+	^!Up::   MainConfig.runMediaPlayer()
+	^!Down:: sendMediaKey("Media_Play_Pause")
+	^!Left:: sendMediaKey("Media_Prev")
+	^!Right::sendMediaKey("Media_Next")
+#If
+
+sendMediaKey(keyName) {
+	if(!keyName)
+		return
+	
+	if(MainConfig.isMediaPlayer("Chrome")) { ; Youtube - special case that won't respond to media keys natively
+		; GDB TODO
+		
+	} else {
+		Send, % "{" keyName "}"
+	}
+}

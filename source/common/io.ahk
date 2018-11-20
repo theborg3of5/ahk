@@ -318,11 +318,11 @@ sendMediaKey(keyName) {
 	; Youtube - special case that won't respond to media keys natively
 	if(MainConfig.isMediaPlayer("Chrome")) {
 		if(keyName = "Media_Play_Pause")
-			Send, ^+{End}
+			Send, ^.
 		else if(keyName = "Media_Prev")
-			Send, ^+{PgUp}
+			Send, ^+,
 		else if(keyName = "Media_Next")
-			Send, ^+{PgDn}
+			Send, ^+.
 		
 	} else {
 		Send, % "{" keyName "}"

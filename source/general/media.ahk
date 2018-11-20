@@ -43,8 +43,14 @@ sendMediaKey(keyName) {
 	if(!keyName)
 		return
 	
-	if(MainConfig.isMediaPlayer("Chrome")) { ; Youtube - special case that won't respond to media keys natively
-		; GDB TODO
+	; Youtube - special case that won't respond to media keys natively
+	if(MainConfig.isMediaPlayer("Chrome")) {
+		if(keyName = "Media_Play_Pause")
+			Send, ^+{End}
+		else if(keyName = "Media_Prev")
+			Send, ^+{PgUp}
+		else if(keyName = "Media_Next")
+			Send, ^+{PgDn}
 		
 	} else {
 		Send, % "{" keyName "}"

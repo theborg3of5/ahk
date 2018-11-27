@@ -7,55 +7,38 @@
 	!c::Send, ^!{Numpad9}
 	
 	; ; Debug, auto-search for workstation ID.
-	~F5::
-		epicStudioDebug() {
-			if(isESDebugging())
-				return
-			
-			WinWait, Attach to Process, , 5
-			if(ErrorLevel)
-				return
-			
-			currFilter := ControlGet("Line", 1, "Edit1", "A")
-			if(currFilter) {
-				ControlFocus, Edit1, A
-				return ; There's already something plugged into the field, so just put the focus there in case they want to change it.
-			}
-			
-			; Pick the radio button for "Other existing process:" and pick it.
-			otherProcessRadioButtonClass := WindowsForms10.BUTTON.app.0.2bf8098_r9_ad11
-			ControlFocus, %otherProcessRadioButtonClass%, A
-			ControlSend, %otherProcessRadioButtonClass%, {Space}, A
-			
-			; Focus the filter field and send what we want to send.
-			ControlFocus, Edit1, A
-			Send, % "ws:" MainConfig.getPrivate("WORK_COMPUTER_NAME")
-			Send, {Enter}{Down}
-		}
+	~F5::epicStudioDebug("ws:" MainConfig.getPrivate("WORK_COMPUTER_NAME"))
+	F6:: epicStudioDebug("ws:" A_IPAddress1)
 	
 	; Run EpicStudio in debug mode, given a particular string to search for.
-	esRunDebug(searchString) {
+	epicStudioDebug(searchString) {
 		; Always send F5, even in debug mode - continue.
 		Send, {F5}
 		
 		; Don't try and debug again if ES is already doing so.
-		if(!isESDebugging()) {
-			WinWait, Attach to Process, , 5
-			if(!ErrorLevel) {
-				currFilter := ControlGet("Line", 1, "Edit1", "A")
-				if(!currFilter) {
-					ControlFocus, WindowsForms10.BUTTON.app.0.141b42a_r12_ad11, A
-					ControlSend, WindowsForms10.BUTTON.app.0.141b42a_r12_ad11, {Space}, A
-					ControlFocus, Edit1, A
-					
-					Send, % "ws:" MainConfig.getPrivate("WORK_COMPUTER_NAME")
-					Send, {Enter}{Down}
-				}
-			} else {
-				; DEBUG.popup("ES Debug WinWait ErrorLevel", ErrorLevel)
-			}
+		if(isESDebugging())
+			return
 		
+		WinWait, Attach to Process, , 5
+		if(ErrorLevel)
+			return
+		
+		currFilter := ControlGet("Line", 1, "Edit1", "A")
+		currFilter := ControlGet("Line", 1, "Edit1", "A")
+		if(currFilter) {
+			ControlFocus, Edit1, A
+			return ; There's already something plugged into the field, so just put the focus there in case they want to change it.
 		}
+		
+		; Pick the radio button for "Other existing process:" and pick it.
+		otherProcessRadioButtonClass := WindowsForms10.BUTTON.app.0.2bf8098_r9_ad11
+		ControlFocus, %otherProcessRadioButtonClass%, A
+		ControlSend, %otherProcessRadioButtonClass%, {Space}, A
+		
+		; Focus the filter field and send what we want to send.
+		ControlFocus, Edit1, A
+		Send, % searchString
+		Send, {Enter}{Down}
 	}
 	
 	; Checks if ES is already in debug mode or not.

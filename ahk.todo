@@ -8,7 +8,6 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
-	Make parameter order of various search URL building functions more consistent - search term, subtype if needed, etc.
 	Consider reading in more .tl/.tls files at startup and caching them
 		Alternatively, cache them after the first use?
 	New ListConverter class/handler?

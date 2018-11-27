@@ -51,11 +51,11 @@ genericHyperlink(subAction) {
 			if(data["SEARCH_TYPE"] = "WEB")
 				url := StrReplace(subType, "%s", escapeForRunURL(searchTerm))
 			else if(data["SEARCH_TYPE"] = "CODESEARCH")
-				url := buildCodeSearchURL(subType, escapeForRunURL(searchTerm), data["APP_KEY"])
+				url := buildCodeSearchURL(escapeForRunURL(searchTerm), subType, data["APP_KEY"])
 			else if(data["SEARCH_TYPE"] = "GURU")
 				url := buildGuruURL(escapeForRunURL(searchTerm))
 			else if(data["SEARCH_TYPE"] = "WIKI") ; Epic wiki search.
-				url := buildEpicWikiSearchURL(subType, escapeForRunURL(searchTerm))
+				url := buildEpicWikiSearchURL(escapeForRunURL(searchTerm), subType)
 			else if(data["SEARCH_TYPE"] = "GREPWIN")
 				searchWithGrepWin(subType, searchTerm)
 			else if(data["SEARCH_TYPE"] = "EVERYTHING")

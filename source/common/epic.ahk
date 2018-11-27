@@ -250,7 +250,7 @@ buildHyperspaceRunString(versionMajor, versionMinor, environment) {
 	return runString
 }
 
-buildCodeSearchURL(searchType, searchTerm, appKey := "") {
+buildCodeSearchURL(searchTerm, searchType, appKey := "") {
 	appId := getEpicAppIdFromKey(appKey)
 	; DEBUG.popup("buildCodeSearchURL", "Start", "Search type", searchType, "Search term", searchTerm, "App key", appKey, "App ID", appId)
 	
@@ -266,7 +266,7 @@ buildGuruURL(searchTerm) {
 	return MainConfig.getPrivate("GURU_SEARCH_BASE") searchTerm
 }
 
-buildEpicWikiSearchURL(category, searchTerm) {
+buildEpicWikiSearchURL(searchTerm, category := "") {
 	outURL := MainConfig.getPrivate("WIKI_SEARCH_BASE")
 	outURL := replaceTag(outURL, "QUERY", searchTerm)
 	

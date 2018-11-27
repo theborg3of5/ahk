@@ -49,6 +49,7 @@ global TYPE_EMC2              := "EMC2"
 global TYPE_EpicStudio        := "EPICSTUDIO"
 global TYPE_CodeSearchRoutine := "CODESEARCHROUTINE"
 global TYPE_Helpdesk          := "HELPDESK"
+global TYPE_GuruSearch        := "GURU_SEARCH"
 global TYPE_Path              := "PATH"
 
 global ACTION_Link := "LINK"
@@ -247,7 +248,7 @@ class ActionObject {
 			return
 		
 		if(action = ACTION_Run) {
-			if(type = TYPE_EMC2 || type = TYPE_CodeSearchRoutine || type = TYPE_Helpdesk) {
+			if(type = TYPE_EMC2 || type = TYPE_CodeSearchRoutine || type = TYPE_Helpdesk || type = TYPE_GuruSearch) {
 				link := this.perform(type, ACTION_Link, subType, subAction, input)
 				if(link)
 					Run(link)
@@ -280,6 +281,9 @@ class ActionObject {
 				
 			} else if(type = TYPE_Helpdesk) {
 				return buildHelpdeskLink(input)
+				
+			} else if(type = TYPE_GuruSearch) {
+				return buildGuruURL(input)
 			}
 			
 		}

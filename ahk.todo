@@ -9,7 +9,6 @@
 	
 # New
 	Make parameter order of various search URL building functions more consistent - search term, subtype if needed, etc.
-	Consider adding guru search as a linking option - would be great for links to people's guru pages
 	Consider reading in more .tl/.tls files at startup and caching them
 		Alternatively, cache them after the first use?
 	New ListConverter class/handler?

@@ -42,35 +42,33 @@ genericHyperlink(subAction) {
 		if(!data)
 			return
 		
-		searchTerm := data["SEARCH_TERM"]
-		subTypes   := forceArray(data["SUBTYPE"])
+		searchTerm  := data["SEARCH_TERM"]
+		subTypesAry := forceArray(data["SUBTYPE"]) ; Force it to be an array - sometimes it is, sometimes it isn't.
 		
-		For i,subType in subTypes { ; For searching multiple at once.
+		For _,subType in subTypesAry { ; For searching multiple at once.
 			url := ""
 			
-			if(data["SEARCH_TYPE"] = "WEB") {
-				searchTerm := escapeCharUsingRepeat(data["SEARCH_TERM"], DOUBLE_QUOTE, 2) ; Escape quotes twice - extra to get us past the windows run command stripping them out.
-				url := StrReplace(subTypes[0], "%s", searchTerm)
-			} else if(data["SEARCH_TYPE"] = "CODESEARCH") {
-				searchTerm := escapeCharUsingRepeat(data["SEARCH_TERM"], DOUBLE_QUOTE, 2) ; Escape quotes twice - extra to get us past the windows run command stripping them out.
-				url := buildCodeSearchURL(subType, searchTerm, data["APP_KEY"])
-			} else if(data["SEARCH_TYPE"] = "GURU") {
-				searchTerm := escapeCharUsingRepeat(data["SEARCH_TERM"], DOUBLE_QUOTE, 2) ; Escape quotes twice - extra to get us past the windows run command stripping them out.
-				url := buildGuruURL(searchTerm)
-			} else if(data["SEARCH_TYPE"] = "WIKI") { ; Epic wiki search.
-				searchTerm := escapeCharUsingRepeat(data["SEARCH_TERM"], DOUBLE_QUOTE, 2) ; Escape quotes twice - extra to get us past the windows run command stripping them out.
-				url := buildEpicWikiSearchURL(subTypes[0], searchTerm)
-			
-			} else if(data["SEARCH_TYPE"] = "GREPWIN") {
+			if(data["SEARCH_TYPE"] = "WEB")
+				url := StrReplace(subType, "%s", escapeForRunURL(searchTerm))
+			else if(data["SEARCH_TYPE"] = "CODESEARCH")
+				url := buildCodeSearchURL(subType, escapeForRunURL(searchTerm), data["APP_KEY"])
+			else if(data["SEARCH_TYPE"] = "GURU")
+				url := buildGuruURL(escapeForRunURL(searchTerm))
+			else if(data["SEARCH_TYPE"] = "WIKI") ; Epic wiki search.
+				url := buildEpicWikiSearchURL(subType, escapeForRunURL(searchTerm))
+			else if(data["SEARCH_TYPE"] = "GREPWIN")
 				searchWithGrepWin(subType, searchTerm)
-			} else if(data["SEARCH_TYPE"] = "EVERYTHING") {
+			else if(data["SEARCH_TYPE"] = "EVERYTHING")
 				searchWithEverything(searchTerm)
-			}
 			
 			if(url)
 				Run(url)
 		}
 	}
+	
+doSearch() {
+	
+}
 
 ; Selector to allow easy editing of config TL files that don't show a popup
 !+c::

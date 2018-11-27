@@ -96,6 +96,10 @@ escapeCharUsingRepeat(inputString, charToEscape, repeatCount := 1) {
 	return StrReplace(inputString, charToEscape, replaceString, "All")
 }
 
+escapeForRunURL(stringToEscape) {
+	return escapeCharUsingRepeat(stringToEscape, DOUBLE_QUOTE, 2) ; Escape quotes twice - extra to get us past the windows run command stripping them out.
+}
+
 ; Wrapper for InStr() that I can remember easier. Slightly different parameters as well.
 stringContains(haystack, needle, searchFromEnd := false) {
 	if(searchFromEnd)

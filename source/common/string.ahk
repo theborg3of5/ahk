@@ -231,11 +231,12 @@ getFirstLine(inputString) {
 ; Cleans a hard-coded list of characters out of a (should be single-line) string, including whitespace.
 cleanupText(text, additionalStringsToRemove := "") {
 	charCodesToRemove := []
-	charCodesToRemove[1] := [13,10]   ; Newline
-	charCodesToRemove[1] := [32]      ; Space
-	charCodesToRemove[2] := [8226,9]  ; First level bullet (filled circle) + tab
-	charCodesToRemove[3] := [111,9]   ; Second level bullet (empty circle) + tab
-	charCodesToRemove[4] := [61607,9] ; Third level bullet (filled square) + tab
+	charCodesToRemove.push([13])      ; Carriage return (`r)
+	charCodesToRemove.push([10])      ; Newline (`n)
+	charCodesToRemove.push([32])      ; Space
+	charCodesToRemove.push([8226,9])  ; First level bullet (filled circle) + tab
+	charCodesToRemove.push([111,9])   ; Second level bullet (empty circle) + tab
+	charCodesToRemove.push([61607,9]) ; Third level bullet (filled square) + tab
 	
 	; Transform the codes above so we can check whether it's in the string.
 	stringsToRemove := []

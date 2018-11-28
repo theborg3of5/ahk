@@ -15,6 +15,7 @@
 #Include HTTPRequest.ahk
 #Include iniObject.ahk
 #Include io.ahk
+#Include listConverter.ahk
 #Include mainConfig.ahk
 #Include programInfo.ahk
 #Include runCommands.ahk

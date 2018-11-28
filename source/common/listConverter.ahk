@@ -3,7 +3,9 @@
 	***
 */
 
-global LISTFORMAT_Unknown := "UNKNOWN"
+global LISTFORMAT_Ambiguous := "AMBIGUOUS"
+global LISTFORMAT_UnknownSingle := "UNKNOWN_SINGLE"
+
 global LISTFORMAT_Array := "ARRAY"
 global LISTFORMAT_Commas := "COMMA"
 global LISTFORMAT_NewLines := "NEWLINE"
@@ -14,59 +16,100 @@ class ListConverter {
 	; == Public ====================
 	; ==============================
 	
-	__New(listObject := "") {
-		this.setList(listObject)
-	}
-	
-	setList(listObject, format := "") {
-		if(!listObject)
-			return
+	convertList(listObject, toFormat := "", fromFormat := "") {
+		; Initialize the format delimiter array if this is the first time we're using the class.
+		if(!ListConverter.formatDelimsAry)
+			ListConverter.formatDelimsAry := ListConverter.getFormatDelimsAry()
 		
-		this.listAry := this.processListObject(listObject, format)
-	}
-	
-	getList(format) {
-		if(!format)
-			return ""
+		; Determine the format to convert the list into if not given.
+		if(!toFormat) {
+			s := new Selector("listFormats.tls")
+			toFormat := s.selectGui("FORMAT", "Enter OUTPUT format for list")
+		}
 		
-		if(format = LISTFORMAT_Array)
-			return this.listAry
-		;GDB TODO more
-	}
-	
-	convertList(listObject, toFormat, fromFormat := "") {
-		this.setList(listObject, fromFormat)
-		return this.getList(toFormat)
+		; Determine the format of the input list.
+		if(!fromFormat)
+			fromFormat := ListConverter.determineListFormat(listObject)
+		
+		listAry := ListConverter.parseListObject(listObject, fromFormat)
+		outputObject := ListConverter.convertListAryToFormat(listAry, toFormat)
+		; DEBUG.popup("Input format",fromFormat, "Input",listObject, "Parsed",listAry, "Output format",toFormat, "Output",outputObject)
+		
+		return outputObject
 	}
 	
 	; ==============================
 	; == Private ===================
 	; ==============================
 	
-	listAry := []
+	formatDelimsAry := []
 	
-	processListObject(listObject, listFormat := "") {
-		if(!listFormat)
-			listFormat := this.determineListFormat(listObject)
+	getFormatDelimsAry() {
+		ary := []
 		
-		if(listFormat = LISTFORMAT_Array)
-			return listObject
-		if(listFormat = LISTFORMAT_Unknown)
-			return [listObject] ; Just put the single value in an array.
-		; GDB TODO get list into array based on starting format
+		ary[LISTFORMAT_Commas]   := ","
+		ary[LISTFORMAT_NewLines] := "`r`n"
+		
+		return ary
 	}
 	
 	determineListFormat(listObject) {
-		; An object is assumed to be a simple array (same format as we use to store the list internally).
-		if(isObject(listObject))
-			return LISTFORMAT_Array
+		if(isObject(listObject)) ; An object is assumed to be a simple array (same format as we use to store the list internally).
+			listFormat := LISTFORMAT_Array
+		else ; Otherwise, treat it as a string and decide based on the delimiter.
+			listFormat := ListConverter.determineStringListFormat(listObject)
 		
-		; Otherwise, treat it as a string and start looking for delimiters
+		; If we can't tell, ask the user.
+		if(listFormat = LISTFORMAT_Ambiguous) {
+			s := new Selector("listFormats.tls")
+			listFormat := s.selectGui("FORMAT", "Enter INPUT format for list")
+		}
 		
+		return listFormat
+	}
+	
+	determineStringListFormat(listString) {
+		numDelimitersFound := 0
+		For format,delim in ListConverter.formatDelimsAry {
+			if(stringContains(listString, delim)) {
+				; DEBUG.popup("ListConverter.determineStringListFormat","Delimiter loop", "listString",listString, "Matched delimiter",delim)
+				listFormat := format
+				numDelimitersFound += 1
+			}
+		}
 		
+		if(numDelimitersFound > 1) ; If we found more than one delimiter, we can't tell which is the right one to split the list up by.
+			return LISTFORMAT_Ambiguous
+		if(numDelimitersFound = 0) ; If we didn't find any delimiters, it could be any of them, but just a single value - so we know what to do with it.
+			return LISTFORMAT_UnknownSingle
 		
+		return listFormat
+	}
+	
+	parseListObject(listObject, listFormat) {
+		if(!listFormat)
+			return ""
+		if(listFormat = LISTFORMAT_Array)
+			return listObject
+		if(listFormat = LISTFORMAT_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
+			return [listObject]
+		if(listFormat = LISTFORMAT_Commas)
+			return StrSplit(listObject, ",", " `t") ; Drop spaces and tabs from beginning/end of list elements
+		if(listFormat = LISTFORMAT_NewLines)
+			return StrSplit(listObject, "`r`n", " `t") ; Drop spaces and tabs from beginning/end of list elements
 		
-		; If we didn't find any delimiters, it could be any of them, but just a single value - so just treat it as a generic string.
-		return LISTFORMAT_Unknown
+		return ""
+	}
+	
+	convertListAryToFormat(listAry, listFormat) {
+		if(!listAry || !listFormat)
+			return ""
+		
+		if(listFormat = LISTFORMAT_Array)
+			return listAry
+		if(listFormat = LISTFORMAT_Commas)
+			return arrayJoin(listAry, ",")
+		if(listFormat = LISTFORMAT_NewLines)
+			return arrayJoin(listAry, "`r`n")
 	}
 }

@@ -1,0 +1,7 @@
++MinColumnWidth=350
+
+(	NAME						ABBREV	FORMAT
+	
+	Array						a			ARRAY
+	Comma-delimited		c			COMMA
+	Newline-delimited		nl			NEWLINE

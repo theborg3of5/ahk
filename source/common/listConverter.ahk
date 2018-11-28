@@ -89,16 +89,18 @@ class ListConverter {
 	parseListObject(listObject, listFormat) {
 		if(!listFormat)
 			return ""
-		if(listFormat = LISTFORMAT_Array)
-			return listObject
-		if(listFormat = LISTFORMAT_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
-			return [listObject]
-		if(listFormat = LISTFORMAT_Commas)
-			return StrSplit(listObject, ",", " `t") ; Drop spaces and tabs from beginning/end of list elements
-		if(listFormat = LISTFORMAT_NewLines)
-			return StrSplit(listObject, "`r`n", " `t") ; Drop spaces and tabs from beginning/end of list elements
 		
-		return ""
+		if(listFormat = LISTFORMAT_Array)
+			listAry := listObject
+		else if(listFormat = LISTFORMAT_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
+			listAry := [listObject]
+		else if(listFormat = LISTFORMAT_Commas)
+			listAry := StrSplit(listObject, ",", " `t") ; Drop spaces and tabs from beginning/end of list elements
+		else if(listFormat = LISTFORMAT_NewLines)
+			listAry := StrSplit(listObject, "`r`n", " `t") ; Drop spaces and tabs from beginning/end of list elements
+		
+		listAry := arrayDropEmptyValues(listAry) ; Drop empty values from the array.
+		return listAry
 	}
 	
 	convertListAryToFormat(listAry, listFormat) {

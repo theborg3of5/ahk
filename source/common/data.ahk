@@ -79,19 +79,6 @@ max(nums*) {
 	return max
 }
 
-; Change a pesky pseudoarray into the real deal.
-convertPseudoArrayToObject(arrayName) {
-	; DEBUG.popup("Array name", arrayName, "Matched Count", %arrayName%, "First matched entry", %arrayName%1)
-	retObj := []
-	
-	arrayCount := %arrayName%
-	Loop, %arrayCount% {
-		retObj[A_Index] := %arrayName%%A_Index%
-	}
-	
-	return retObj
-}
-
 ; overrides wins if they both have an index.
 mergeArrays(default, overrides) {
 	if(IsObject(default))
@@ -134,4 +121,13 @@ nullGlobals(baseName, startIndex, endIndex) {
 		; DEBUG.popup("Variable", baseName i, "After nullify", %baseName%%i%)
 		i++
 	}
+}
+
+arrayDropEmptyValues(inputAry) {
+	outputAry := []
+	For i,val in inputAry
+		if(val != "")
+			outputAry[i] := val
+	
+	return outputAry
 }

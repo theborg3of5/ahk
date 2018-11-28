@@ -8,13 +8,10 @@
 # New
 	Consider reading in more .tl/.tls files at startup and caching them
 		Alternatively, cache them after the first use?
+	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.
 	New ListConverter class/handler?
-		Delimiters to add
-			Double-newline separated? (row in a onenote table)
-				Could this be treated the same as newline-separated, with a setting to ignore empty values/lines in output?
 		Selector to pick type of output - override field for additional texts before/after each entry?
 			Could be used to output lists of IDs into EpicStudio (surrounding array, maybe dots for indentation, etc.)
-			Also some sort of handling for spaces after delimiters versus not
 		Example usages:
 			Whatever input (onenote table column or row) > comma-separated list usable for Snapper multi-record-launching
 			Filling in a OneNote table column

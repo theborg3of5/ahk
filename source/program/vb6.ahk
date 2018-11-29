@@ -130,8 +130,16 @@
 		
 		; Close code/design window.
 		^w::
-			clickUsingMode(1910, 11, "Client")
-		return
+			closeCurrentFile() {
+				WinGetPos, , , windowWidth, , A
+				offsetsAry := getWindowOffsets(titleString)
+				windowWidth -= (offsetsAry["LEFT"] + offsetsAry["RIGHT"])
+				
+				closeButtonX := windowWidth - 10 ; Close button lives 10px from right edge of window
+				closeButtonY := 10
+				
+				clickUsingMode(closeButtonX, closeButtonY, "Client")
+			}
 	}
 #IfWinActive
 }

@@ -50,3 +50,6 @@ global WS_EX_CLIENTEDGE := 0x200 ; Border with sunken edge (on by default for ma
 
 ; Messages
 global LVM_GETITEMCOUNT := 0x1004 ; Get the number of items in a ListView control (works for TListView)
+
+; Windows Screen constants (from MonitorFromWindow: https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-monitorfromwindow )
+global MONITOR_DEFAULTTONEAREST := 0x00000002

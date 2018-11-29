@@ -164,10 +164,11 @@ getWindowOffsets(titleString := "A") {
 		offsetsAry["TOP"]    := offsetOverride
 		offsetsAry["BOTTOM"] := offsetOverride
 	} else { ; Calculate it.
-		maximizedWidth    := SysGet(SM_CXMAXIMIZED)   ; For non-3D windows (which should be most), the width of the border on the left and right.
-		maximizedHeight   := SysGet(SM_CYMAXIMIZED)   ; For non-3D windows (which should be most), the width of the border on the top and bottom.
-		borderWidthX      := SysGet(SM_CXBORDER)      ; Width of a maximized window on the primary monitor. Includes any weird offsets.
-		borderWidthY      := SysGet(SM_CYBORDER)      ; Height of a maximized window on the primary monitor. Includes any weird offsets.
+		maximizedWidth    := SysGet(SM_CXMAXIMIZED) ; For non-3D windows (which should be most), the width of the border on the left and right.
+		maximizedHeight   := SysGet(SM_CYMAXIMIZED) ; For non-3D windows (which should be most), the width of the border on the top and bottom.
+		borderWidthX      := SysGet(SM_CXBORDER)    ; Width of a maximized window on the primary monitor. Includes any weird offsets.
+		borderWidthY      := SysGet(SM_CYBORDER)    ; Height of a maximized window on the primary monitor. Includes any weird offsets.
+		
 		primaryMonitorNum := SysGet("MonitorPrimary") ; We're assuming the taskbar is in the same place on all monitors, which is fine for my purposes.
 		bounds := getMonitorBounds(primaryMonitorNum)
 		
@@ -187,12 +188,13 @@ getWindowOffsets(titleString := "A") {
 	return offsetsAry
 }
 
-getMonitorBounds(monitorNum := "", titleString := "") {
+getMonitorBounds(monitorNum := "", titleString := "A") {
 	monitorsAry := getMonitorBoundsAry()
 	
 	if(!monitorNum)
 		monitorNum := getWindowMonitor(titleString, monitorsAry)
 	
+	; DEBUG.popup("monitorsAry",monitorsAry, "titleString",titleString, "monitorNum",monitorNum, "monitorsAry[monitorNum]",monitorsAry[monitorNum])
 	return monitorsAry[monitorNum]
 }
 ; Returns an array of monitors with LEFT/RIGHT/TOP/BOTTOM values for their working area (doesn't include taskbar or other toolbars).
@@ -261,39 +263,55 @@ moveWindowToMonitor(titleString, destMonitor, monitorsAry := "") {
 		WinMaximize, %titleString%
 }
 
-; Get the index of the monitor containing the specified x and y co-ordinates.
-; Adapted from http://www.autohotkey.com/board/topic/69464-how-to-determine-a-window-is-in-which-monitor/
-getWindowMonitor(titleString, monitorsAry := "") {
-	; If monitorsAry isn't given, make our own...with blackjack and hookers.
+; Get the index of the monitor nearest the specified window.
+getWindowMonitor(titleString := "A", monitorsAry := "") {
 	if(!IsObject(monitorsAry))
 		monitorsAry := getMonitorBoundsAry()
 	; DEBUG.popup("Monitor list",monitorsAry, "Title string",titleString)
 	
-	; Get the X/Y for the given window.
-	WinGetPos, winX, winY, , , %titleString%
+	windowMonitorWorkBounds := getWindowMonitorWorkBounds(titleString)
 	
-	; Account for any window offsets.
-	offsetsAry := getWindowOffsets(titleString)
-	winX += offsetsAry["LEFT"] ; The window is wider/taller than it looks by these offsets.
-	winY += offsetsAry["TOP"]
-	
-	if(WinGet("MinMax", titleString) = 1) ; Window is maximized
-		winX += 1
-	
-	; Iterate over all monitors until we find a match.
-	For i,mon in monitorsAry {
-		monLeft   := mon["LEFT"]
-		monRight  := mon["RIGHT"]
-		monTop    := mon["TOP"]
-		monBottom := mon["BOTTOM"]
+	For monitorNum,monitor in monitorsAry {
+		monLeft   := monitor["LEFT"]
+		monTop    := monitor["TOP"]
 		
-		; Check if the window is on this monitor.
-		; DEBUG.popup("Monitor", A_Index, "Left", MonLeft, "Right", MonRight, "Top", MonTop, "Bottom", MonBottom, "Window X", winX, "Window Y", winY)
-		if(winX >= MonLeft && winX < MonRight && winY >= MonTop && winY < MonBottom)
-			return A_Index
+		if(monLeft = windowMonitorWorkBounds["LEFT"] && monTop = windowMonitorWorkBounds["TOP"])
+			return monitorNum
 	}
 	
 	return -1
+}
+
+; Get the work bounds for the monitor closest to the specified window.
+; Adapted from https://autohotkey.com/boards/viewtopic.php?p=78862#p78862
+getWindowMonitorWorkBounds(titleString := "A") {
+	winId := WinExist(titleString) ; Window handle
+	
+	; Get the monitor nearest to the window with the MonitorFromWindow function ( https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-monitorfromwindow )
+	monitorHandle := DllCall("MonitorFromWindow", "Ptr", winId, "UInt", MONITOR_DEFAULTTONEAREST)
+	
+	; Initialize MONITORINFO structure ( https://docs.microsoft.com/en-us/windows/desktop/api/winuser/ns-winuser-tagmonitorinfo ) for return value from GetMonitorInfo
+	monitorInfoStructureSize := 40                        ; MONITORINFO [40] = DWORD cbSize [4] + RECT rcMonitor [16] + RECT rcWork [16] + DWORD dwFlags [4]
+	VarSetCapacity(monitorInfo, monitorInfoStructureSize) ; Set the size of the variable holding the MONITORINFO structure
+	NumPut(monitorInfoStructureSize, monitorInfo)         ; Set the cbSize member of the MONITORINFO structure
+	
+	; GetMonitorInfo function ( https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-getmonitorinfoa )
+	DllCall("GetMonitorInfo", "Ptr", monitorHandle, "Ptr", &monitorInfo)
+	
+	; monitorInfo is a MONITORINFO structure (https://docs.microsoft.com/en-us/windows/desktop/api/winuser/ns-winuser-tagmonitorinfo )
+	; RECT [16] = LONG left [4] + LONG top [4] + LONG right [4] + LONG bottom [4]
+	memOffsetLeft   := 20                 ; Start of RECT rcWork (DWORD cbSize [4] + RECT rcMonitor [16])
+	memOffsetTop    := memOffsetLeft  + 4 ; Left  + LONG left  [4]
+	memOffsetRight  := memOffsetTop   + 4 ; Top   + LONG top   [4]
+	memOffsetBottom := memOffsetRight + 4 ; Right + LONG right [4]
+	
+	workBoundsAry := []
+	workBoundsAry["LEFT"]   := NumGet(monitorInfo, memOffsetLeft,   "Int")
+	workBoundsAry["TOP"]    := NumGet(monitorInfo, memOffsetTop,    "Int")
+	workBoundsAry["RIGHT"]  := NumGet(monitorInfo, memOffsetRight,  "Int")
+	workBoundsAry["BOTTOM"] := NumGet(monitorInfo, memOffsetBottom, "Int")
+	
+	return workBoundsAry
 }
 
 activateWindowUnderMouse() {

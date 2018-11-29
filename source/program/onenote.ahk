@@ -28,7 +28,11 @@
 		return
 		; Create linked Specific page (using OneTastic macro)
 		^l::
-			oneNoteLinkedSpecificsPage()
+			oneNoteCreateLinkPageSpecSection()
+		return
+		; Create linked dev Specific page (using OneTastic macro)
+		^+l::
+			oneNoteCreateLinkDevPageSpecSection()
 		return
 	}
 	
@@ -318,8 +322,11 @@
 	oneNoteCustomStyles() {	; Custom styles from OneTastic
 		Send, !7
 	}
-	oneNoteLinkedSpecificsPage() { ; Custom OneTastic macro
+	oneNoteCreateLinkPageSpecSection() { ; Custom OneTastic macro - create linked page in specific(s) section
 		Send, !8
+	}
+	oneNoteCreateLinkDevPageSpecSection() { ; Custom OneTastic macro - create linked dev page in specifics section
+		Send, !9
 	}
 	
 	;---------

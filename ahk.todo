@@ -6,7 +6,6 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
-	Consider adding another ActionObject case that launches a DLG in EpicStudio.
 	Consider reading in more .tl/.tls files at startup and caching them
 		Alternatively, cache them after the first use?
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.

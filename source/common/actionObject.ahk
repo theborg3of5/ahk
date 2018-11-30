@@ -20,7 +20,7 @@
 		EMC2
 			EMC2 objects - DLGs, QANs, etc. These require a subType (which is the INI of the object).
 		EPICSTUDIO
-			Server routine, to be opened in EpicStudio.
+			Open something in EpicStudio - a server routine (and optionally tag) or a DLG.
 		CODESEARCHROUTINE
 			Server routine, to open in CodeSearch.
 		HELPDESK

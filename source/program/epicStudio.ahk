@@ -4,7 +4,7 @@
 	!i::ControlSend, , ^+v
 	
 	; Make copy line location !c.
-	!c::Send, ^!{Numpad9}
+	!c::Send, ^{Numpad9}
 	
 	; ; Debug, auto-search for workstation ID.
 	~F5::epicStudioDebug("ws:" MainConfig.getPrivate("WORK_COMPUTER_NAME"))

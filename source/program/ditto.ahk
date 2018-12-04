@@ -16,16 +16,6 @@
 	return
 #IfWinActive
 
-; Edit the clipboard using Ditto.
-$!v::
-	Send, ^+v
-	WinWaitActive, ahk_class QPasteClass
-	Send, ^n ; New clip
-	WinWaitActive, ahk_class Ditto Edit Wnd
-	Send, ^v ; Start with the current clipboard rather than from scratch.
-	Send, ^a
-return
-
 ; Compare the selected text to the last-copied clip.
 #+d::
 	; Put the selected text on the clipboard.

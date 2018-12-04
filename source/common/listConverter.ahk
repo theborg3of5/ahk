@@ -112,6 +112,6 @@ class ListConverter {
 		if(listFormat = LISTFORMAT_Commas)
 			return arrayJoin(listAry, ",")
 		if(listFormat = LISTFORMAT_NewLines)
-			return arrayJoin(listAry, "`r`n")
+			return arrayJoin(listAry, "`n")
 	}
 }

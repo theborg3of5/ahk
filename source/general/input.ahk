@@ -78,3 +78,8 @@ return
 		if(MainConfig.isWindowActive("OneNote"))
 			oneNoteLinkEMC2ObjectInLine(ini, id)
 	}
+
+; Send the clipboard as a list.
+!v::
+	SendRaw, % ListConverter.convertList(clipboard)
+return

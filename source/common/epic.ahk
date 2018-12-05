@@ -148,7 +148,8 @@ splitRecordString(recordString, ByRef ini := "", ByRef id := "") {
 	id := recordPartsAry[maxIndex] ; Always the last piece (works whether there was an INI before it or not)
 }
 
-; Split serverLocation into routine and tag (assume it's just the routine if no ^ included)
+; Split serverLocation into routine and tag (assume it's just the routine if no ^ included).
+; Note that any offset from a tag will be included in the tag return value (i.e. TAG+3^ROUTINE splits into routine=ROUTINE and tag=TAG+3).
 splitServerLocation(serverLocation, ByRef routine := "", ByRef tag := "") {
 	serverLocation := cleanupText(serverLocation, ["$", "(", ")"])
 	locationAry := StrSplit(serverLocation, "^")
@@ -157,6 +158,13 @@ splitServerLocation(serverLocation, ByRef routine := "", ByRef tag := "") {
 	if(maxIndex > 1)
 		tag := locationAry[1]
 	routine := locationAry[maxIndex] ; Always the last piece (works whether there was a tag before it or not)
+}
+
+; Drop the offset ("+4" in "tag+4^routine") from the given server location (so we'd return "tag^routine").
+dropOffsetFromServerLocation(serverLocation) {
+	splitServerLocation(serverLocation, routine, tag)
+	tag := getStringBeforeStr(tag, "+")
+	return tag "^" routine
 }
 
 openEpicStudioDLG(dlgNum) {

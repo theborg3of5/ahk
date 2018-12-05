@@ -4,7 +4,8 @@
 	!i::ControlSend, , ^+v
 	
 	; Make copy line location !c.
-	!c::Send, ^{Numpad9}
+	!c:: epicStudioCopyCodeLocation()
+	!#c::epicStudioCopyCodeLocation(false)
 	
 	; ; Debug, auto-search for workstation ID.
 	~F5::epicStudioDebug("ws:" MainConfig.getPrivate("WORK_COMPUTER_NAME"))
@@ -102,6 +103,35 @@
 			
 			sendTextWithClipboard(snipString)
 		}
+	
+	
+	;---------
+	; DESCRIPTION:    Put the current location in code (tag^routine) onto the clipboard.
+	; PARAMETERS:
+	;  removeOffset (I,REQ) - If this is true, we will strip the offset ("+4" in "tag+4^routine")
+	;                         off of the tag (so we'd return tag^routine). Defaults to true.
+	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard (or if we
+	;                 failed).
+	;---------
+	epicStudioCopyCodeLocation(removeOffset := true) {
+		clipboard := "" ; Clear the clipboard so we can tell when we have the code location on it
+		Send, ^{Numpad9} ; Hotkey to copy code location to clipboard
+		ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain the code location
+		
+		codeLocation := clipboard
+		if(!codeLocation)
+			Toast.showShort("Failed to get code location")
+		
+		; Initial value copied has the offset (tag+<offsetNum>) included.
+		; Strip it out if we don't need to keep it.
+		if(removeOffset)
+			codeLocation := dropOffsetFromServerLocation(codeLocation)
+		
+		if(codeLocation = clipboard)
+			toastClipboardContents("code location")
+		else
+			setClipboardAndToast(codeLocation, "code location")
+	}
 	
 	;---------
 	; DESCRIPTION:    Generate an M for loop with the given data.

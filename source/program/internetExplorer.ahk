@@ -3,7 +3,8 @@
 	; Get URL, close tab, and open the URL in your default web browser.
 	^+o::
 		moveURLToDefaultBrowser(){
-			Send, ^l ; Focus URL bar, also selects text
+			Send, ^l   ; Focus URL bar, also selects text
+			Sleep, 100 ; Wait for focus to take
 			url := getSelectedText()
 			if(!url) {
 				DEBUG.toast("No URL found in Internet Explorer")

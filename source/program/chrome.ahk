@@ -42,6 +42,20 @@
 		WinWaitActive, % MainConfig.getWindowTitleString("Telegram")
 		telegramFocusNormalChat()
 	return
+	
+	; Open file link
+	^MButton::
+		chromeOpenFileLink() {
+			chromeCopyFileLink()
+			
+			filePath := clipboard
+			if(filePath)
+				Run, % filePath
+			else
+				Toast.showForTime("Failed to get link target", 2)
+		}
+	; Copy file link
+	^RButton::chromeCopyFileLink(true)
 #IfWinActive
 	
 #If WinActive("ahk_exe chrome.exe") && MainConfig.isMachine(MACHINE_EpicLaptop)
@@ -59,3 +73,15 @@
 			openEpicStudioRoutine(routine, tag)
 		}
 #If
+
+chromeCopyFileLink(showToast := false) {
+	clipboard := "" ; Clear the clipboard so we can tell when we have the new link on it
+	
+	Click, Right
+	Sleep, 100  ; Wait for menu to appear
+	Send, e     ; Copy link address
+	ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain the link
+	
+	if(showToast)
+		toastClipboardContents("link target")
+}

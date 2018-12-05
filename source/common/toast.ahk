@@ -26,6 +26,48 @@ class Toast {
 	; ==============================
 	
 	;---------
+	; DESCRIPTION:    Wrapper for Toast.showForTime for a "short" toast (shown for 1 second)
+	; PARAMETERS:
+	;  toastText (I,REQ) - The text to show in the toast.
+	;  x         (I,OPT) - The x coordinate to show the toast at. Defaults to -1 (against right
+	;                      edge of screen).
+	;  y         (I,OPT) - The y coordinate to show the toast at. Defaults to -1 (against bottom
+	;                      edge of screen).
+	; SIDE EFFECTS:   The toast is destroyed when the time expires.
+	;---------
+	showShort(toastText, x := -1, y := -1) {
+		Toast.showForTime(toastText, 1, x, y)
+	}
+	
+	;---------
+	; DESCRIPTION:    Wrapper for Toast.showForTime for a "short" toast (shown for 2 second)
+	; PARAMETERS:
+	;  toastText (I,REQ) - The text to show in the toast.
+	;  x         (I,OPT) - The x coordinate to show the toast at. Defaults to -1 (against right
+	;                      edge of screen).
+	;  y         (I,OPT) - The y coordinate to show the toast at. Defaults to -1 (against bottom
+	;                      edge of screen).
+	; SIDE EFFECTS:   The toast is destroyed when the time expires.
+	;---------
+	showMedium(toastText, x := -1, y := -1) {
+		Toast.showForTime(toastText, 2, x, y)
+	}
+	
+	;---------
+	; DESCRIPTION:    Wrapper for Toast.showForTime for a "long" toast (shown for 5 second)
+	; PARAMETERS:
+	;  toastText (I,REQ) - The text to show in the toast.
+	;  x         (I,OPT) - The x coordinate to show the toast at. Defaults to -1 (against right
+	;                      edge of screen).
+	;  y         (I,OPT) - The y coordinate to show the toast at. Defaults to -1 (against bottom
+	;                      edge of screen).
+	; SIDE EFFECTS:   The toast is destroyed when the time expires.
+	;---------
+	showLong(toastText, x := -1, y := -1) {
+		Toast.showForTime(toastText, 5, x, y)
+	}
+	
+	;---------
 	; DESCRIPTION:    Static caller to show this toast for a certain number of seconds, then destroy it.
 	; PARAMETERS:
 	;  toastText  (I,REQ) - The text to show in the toast.
@@ -114,11 +156,11 @@ class Toast {
 	
 	static widthLabelNum := 0
 	
-	guiId := ""
+	guiId        := ""
 	labelVarName := ""
-	toastText := ""
-	x := ""
-	y := ""
+	toastText    := ""
+	x            := ""
+	y            := ""
 	
 	
 	;---------

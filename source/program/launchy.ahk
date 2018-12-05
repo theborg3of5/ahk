@@ -10,7 +10,7 @@
 
 #If !WinExist(MainConfig.getWindowTitleString("Launchy"))
 	CapsLock::
-		Toast.showForTime("Launchy not yet running, launching...", 2)
+		Toast.showMedium("Launchy not yet running, launching...")
 		MainConfig.runProgram("Launchy")
 	return
 #If

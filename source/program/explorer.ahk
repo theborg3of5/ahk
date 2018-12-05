@@ -24,10 +24,10 @@ return
 			ValorHidden := RegRead("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden")
 			
 			if(ValorHidden = 2) {
-				Toast.showForTime("Showing hidden files...", 2)
+				Toast.showMedium("Showing hidden files...")
 				RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 1
 			} else {
-				Toast.showForTime("Hiding hidden files...", 2)
+				Toast.showMedium("Hiding hidden files...")
 				RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced, Hidden, 2
 			}
 			

@@ -128,7 +128,7 @@ class DEBUG {
 	;                   even number of arguments should be passed in label,value pairs.
 	;---------
 	toast(params*) {
-		Toast.showForTime(this.buildDebugString(params*), 5)
+		Toast.showLong(this.buildDebugString(params*))
 	}
 	
 	

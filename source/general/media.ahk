@@ -22,7 +22,7 @@
 	Media_Play_Pause::
 	Media_Prev::
 	Media_Next::
-		Toast.showForTime(MainConfig.getMediaPlayer() " not yet running, launching...", 2)
+		Toast.showMedium(MainConfig.getMediaPlayer() " not yet running, launching...")
 		MainConfig.runMediaPlayer()
 	return
 #If MainConfig.doesMediaPlayerExist()

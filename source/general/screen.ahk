@@ -16,7 +16,7 @@ return
 		else
 			newState := "On"
 		
-		Toast.showForTime("Window always on top: " newState, 2)
+		Toast.showMedium("Window always on top: " newState)
 		WinSet, AlwaysOnTop, % newState, A
 	}
 

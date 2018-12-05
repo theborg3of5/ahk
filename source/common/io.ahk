@@ -312,9 +312,9 @@ toastClipboardContents(clipLabel := "value", extraPreMessage := "") {
 		extraPreMessage .= "`n"
 	
 	if(clipboard = "")
-		Toast.showForTime(extraPreMessage "Failed to get " clipLabel, 2)
+		Toast.showMedium(extraPreMessage "Failed to get " clipLabel)
 	else
-		Toast.showForTime(extraPreMessage "Clipboard set to " clipLabel ":`n" clipboard, 2)
+		Toast.showMedium(extraPreMessage "Clipboard set to " clipLabel ":`n" clipboard)
 }
 
 sendMediaKey(keyName) {

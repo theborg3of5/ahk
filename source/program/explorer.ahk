@@ -1,6 +1,8 @@
 #IfWinActive, ahk_exe explorer.exe
 	; Focus address bar
-	^l::!d
+	^l::
+		Send, !d
+	return
 	
 	; Open "new tab"
 	^t::

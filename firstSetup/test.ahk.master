@@ -57,15 +57,12 @@ return
 			else if(key = "ID")
 				textToCopy := winId
 			
-			if(textToCopy)
-				setClipboardAndToast(textToCopy, "Clipboard set to " StringLower(name))
-			else
-				Toast.showForTime(name " not found", 2)
+			setClipboardAndToast(textToCopy, StringLower(name))
 		}
 	
 	!XButton1::
 	!XButton2::
-		setClipboardAndToast(getTooltipText(), "Clipboard set to tooltip")
+		setClipboardAndToast(getTooltipText(), "tooltip")
 	return
 }
 

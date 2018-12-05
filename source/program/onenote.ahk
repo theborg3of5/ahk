@@ -178,7 +178,7 @@
 				linkToUse := copiedLink
 			}
 			
-			setClipboardAndToast(linkToUse, "Clipboard set to link")
+			setClipboardAndToast(linkToUse, "link")
 		}
 	
 	; Make a copy of the current page in the Do section.

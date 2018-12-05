@@ -34,9 +34,10 @@
 				}
 			}
 			
-			setClipboardAndToast(title, "Clipboard set to title")
+			setClipboardAndToast(title, "title")
 		}
 	
+	; Send to Telegram (and pick the right chat).
 	~!t::
 		WinWaitActive, % MainConfig.getWindowTitleString("Telegram")
 		telegramFocusNormalChat()

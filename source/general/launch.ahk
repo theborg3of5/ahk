@@ -15,7 +15,7 @@ genericLink(subAction) {
 	text := getFirstLineOfSelectedText()
 	link := ActionObject.do(text, , ACTION_Link, , subAction)
 	if(link)
-		setClipboardAndToast(link, "Clipboard set to link")
+		setClipboardAndToast(link, "link")
 }
 
 ; Generic hyperlinker - get link for selection and apply it to the selected text.
@@ -28,7 +28,7 @@ genericHyperlink(subAction) {
 		return
 	
 	if(!linkSelectedText(link))
-		setClipboardAndToast(link, "Failed to link selected text. Clipboard set to link")
+		setClipboardAndToast(link, "link", "Failed to link selected text.")
 }
 
 ; Generic search.
@@ -107,7 +107,7 @@ doSearch() {
 				SendRaw, % textToSend
 				Send, {Enter}
 			} else {
-				setClipboardAndToast(textToSend, "Outlook TLG calendar not focused. Clipboard set to value")
+				setClipboardAndToast(textToSend, "", "Outlook TLG calendar not focused.")
 			}
 		}
 	^+!#t::

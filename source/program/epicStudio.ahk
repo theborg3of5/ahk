@@ -127,10 +127,7 @@
 		if(removeOffset)
 			codeLocation := dropOffsetFromServerLocation(codeLocation)
 		
-		if(codeLocation = clipboard)
-			toastClipboardContents("code location")
-		else
-			setClipboardAndToast(codeLocation, "code location")
+		setClipboardAndToast(codeLocation, "code location")
 	}
 	
 	;---------

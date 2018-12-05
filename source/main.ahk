@@ -43,6 +43,7 @@ runStandaloneScripts()
 #Include fastStoneImageViewer.ahk
 #Include games.ahk
 #Include hyperspace.ahk
+#Include internetExplorer.ahk
 #Include kdiff.ahk
 #Include launchy.ahk
 #Include mattermost.ahk

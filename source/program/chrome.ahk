@@ -2,9 +2,17 @@
 #IfWinActive, ahk_exe chrome.exe
 	; Options hotkey.
 	!o::
-		Send, !e
+		Send, !e ; Main hamburger menu.
 		Sleep, 100
-		Send, s
+		Send, s  ; Settings
+	return
+	
+	; Extensions hotkey.
+	^+e::
+		Send, !e ; Main hamburger menu.
+		Sleep, 100
+		Send, l  ; More tools
+		Send, e  ; Extensions
 	return
 	
 	; Copy title, stripping off the " - Google Chrome" at the end.

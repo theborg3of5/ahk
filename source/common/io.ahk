@@ -297,24 +297,24 @@ finishLink(windowName) {
 		Send, {Enter}
 }
 
-setClipboardAndToast(newClipboardValue, clipLabel := "value", extraMessage := "") {
+setClipboardAndToast(newClipboardValue, clipLabel := "value", extraPreMessage := "") {
 	clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
 	
 	clipboard := newClipboardValue
 	ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain data.
 	
-	toastClipboardContents(clipLabel, extraMessage)
+	toastClipboardContents(clipLabel, extraPreMessage)
 }
-toastClipboardContents(clipLabel := "value", extraMessage := "") {
+toastClipboardContents(clipLabel := "value", extraPreMessage := "") {
 	if(clipLabel = "")
 		clipLabel := "value"
-	if(extraMessage != "")
-		extraMessage .= "`n"
+	if(extraPreMessage != "")
+		extraPreMessage .= "`n"
 	
 	if(clipboard = "")
-		Toast.showForTime(extraMessage "Failed to get " clipLabel, 2)
+		Toast.showForTime(extraPreMessage "Failed to get " clipLabel, 2)
 	else
-		Toast.showForTime(extraMessage "Clipboard set to " clipLabel ":`n" clipboard, 2)
+		Toast.showForTime(extraPreMessage "Clipboard set to " clipLabel ":`n" clipboard, 2)
 }
 
 sendMediaKey(keyName) {

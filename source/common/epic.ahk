@@ -137,6 +137,21 @@ openEpicStudioRoutine(routine, tag := "") {
 	}
 }
 
+; Opens a DLG in the EpicStudio sidebar.
+openEpicStudioDLG(dlgNum) {
+	MainConfig.activateProgram("EpicStudio")
+	exeName := MainConfig.getWindowInfo("EpicStudio").exe
+	WinWaitActive, ahk_exe %exeName%
+	
+	Send, ^!e
+	WinWaitActive, Open DLG
+	
+	Send, ^a
+	Send, {Delete} ; Make sure the DLG that defaults in it cleared before we add our own.
+	Send, % dlgNum
+	Send, {Enter 2}
+}
+
 ; Split "INI ID" string into INI and ID (assume it's just the ID if no space included)
 splitRecordString(recordString, ByRef ini := "", ByRef id := "") {
 	recordString := cleanupText(recordString)
@@ -165,20 +180,6 @@ dropOffsetFromServerLocation(serverLocation) {
 	splitServerLocation(serverLocation, routine, tag)
 	tag := getStringBeforeStr(tag, "+")
 	return tag "^" routine
-}
-
-openEpicStudioDLG(dlgNum) {
-	MainConfig.activateProgram("EpicStudio")
-	exeName := MainConfig.getWindowInfo("EpicStudio").exe
-	WinWaitActive, ahk_exe %exeName%
-	
-	Send, ^!e
-	WinWaitActive, Open DLG
-	
-	Send, ^a
-	Send, {Delete} ; Make sure the DLG that defaults in it cleared before we add our own.
-	Send, % dlgNum
-	Send, {Enter 2}
 }
 
 getEpicAppIdFromKey(appKey) {

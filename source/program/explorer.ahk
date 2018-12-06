@@ -1,4 +1,4 @@
-#IfWinActive, ahk_exe explorer.exe
+#If MainConfig.isWindowActive("Explorer")
 	; Focus address bar
 	^l::
 		Send, !d
@@ -62,12 +62,12 @@
 			
 			Send, {F5}
 		}
-#IfWinActive
+#If
 
 $#e::
-	if(WinActive("ahk_exe explorer.exe"))
+	if(MainConfig.isWindowActive("Explorer"))
 		Run(FOLDER_UUID_THISPC) ; Open the "This PC" special folder
-	else if(!WinExist("ahk_exe explorer.exe"))
+	else if(!MainConfig.doesWindowExist("Explorer"))
 		Send, #e ; Open a new session if nothing exists
 	else
 		WinActivate ; Show the existing window

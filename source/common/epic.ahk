@@ -140,8 +140,12 @@ openEpicStudioRoutine(routine, tag := "") {
 ; Opens a DLG in the EpicStudio sidebar.
 openEpicStudioDLG(dlgNum) {
 	MainConfig.activateProgram("EpicStudio")
-	exeName := MainConfig.getWindowInfo("EpicStudio").exe
-	WinWaitActive, ahk_exe %exeName%
+	WinWaitActive, % MainConfig.getWindowInfo("EpicStudio").titleString, , 20 ; 20s timeout
+	
+	if(ErrorLevel = 1) {
+		Toast.showMedium("Could not open DLG in EpicStudio: `nTimed out waiting for EpicStudio to open")
+		return
+	}
 	
 	Send, ^!e
 	WinWaitActive, Open DLG

@@ -6,6 +6,7 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	Consider adding a client-file-viewing search to either search selector or actionObject (like codesearch routine)
 	Consider reading in more .tl/.tls files at startup and caching them
 		Alternatively, cache them after the first use?
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.

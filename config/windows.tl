@@ -35,7 +35,7 @@
 	Firefox Portable					firefox.exe
 	Foobar								foobar2000.exe
 	GitHub								GitHubDesktop.exe			-							-												0
-	Hyperspace							EpicD86.exe
+	Hyperspace							EpicD87.exe
 	KDiff									kdiff3.exe
 	Launchy								Launchy.exe
 	Mattermost							Mattermost.exe

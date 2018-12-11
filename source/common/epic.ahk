@@ -3,7 +3,7 @@
 { ; Epic Object-related things.
 	
 	getRelatedQANsAry() {
-		if(!MainConfig.isWindowActive("EMC2 DLG"))
+		if(!MainConfig.isWindowActive("EMC2"))
 			return ""
 		
 		; Assuming you're in the first row of the table already.

@@ -299,6 +299,7 @@
 			lines.push({TEXT:"Fold laundry"})
 			lines.push({TEXT:"Roomba"})
 			lines.push({TEXT:"Dishes from weekend"})
+			lines.push({TEXT:"Dishes from dinner"})
 			lines.push({TEXT:"Trash, recycling out"})
 			lines.push({TEXT:"Meal planning"})
 			lines.push({TEXT:"Order/obtain groceries"})

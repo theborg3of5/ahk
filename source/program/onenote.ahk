@@ -286,7 +286,7 @@
 			lines := []
 			lines.push({TEXT:"Pull to-dos from specific sections below"})
 			lines.push({TEXT:"Dishes from week"})
-			lines.push({TEXT:"Wash laundry"})
+			lines.push({TEXT:"Wash laundry (including Mikal's)"})
 			lines.push({TEXT:"Dry laundry"})
 			sendOneNoteToDoLines(lines)
 		}

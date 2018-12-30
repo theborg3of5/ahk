@@ -10,43 +10,22 @@
 	
 	!+x::return
 	
-	::dbpop::
-		SendRaw, DEBUG.popup()
-		Send, {Left} ; Get inside parens
-	return
-	
-	::edbpop::
-		SendRaw, DEBUG.popupEarly()
-		Send, {Left} ; Get inside parens
-	return
-	
-	::dbto::
-		SendRaw, DEBUG.toast()
-		Send, {Left} ; Get inside parens
-	return
+	:X:dbpop::notepadPPSendDebugCodeString("DEBUG.popup")
+	:X:edbpop::notepadPPSendDebugCodeString("DEBUG.popupEarly")
+	:X:dbto::notepadPPSendDebugCodeString("DEBUG.toast")
 	
 	::dbparam::
-		notepadPlusPlusDebugParams() {
-			rawParams := clipboard
-			if(!rawParams)
+		notepadPPDebugParams() {
+			varList := clipboard
+			if(!varList)
 				return
 			
-			paramsAry := StrSplit(rawParams, ",", A_Space) ; Split on comma and drop leading/trailing spaces
-			; DEBUG.toast("paramsAry",paramsAry)
-			
-			paramsString := ""
-			For i,param in paramsAry {
-				if(i > 1)
-					paramsString .= ", "
-				paramsString .= """" param """" "," param
-			}
-			
-			sendTextWithClipboard(paramsString)
+			sendTextWithClipboard(notepadPPGenerateDebugParams(varList))
 		}
 	
 	; Function header
 	::`;`;`;::
-		sendAHKFunctionHeader() {
+		notepadPPSendAHKFunctionHeader() {
 			; Select the following line after this one to get parameter information
 			Send, {Down}
 			Send, {End}{Shift Down}{Home}{Shift Up}
@@ -95,7 +74,7 @@
 		}
 	
 	^Enter::
-		insertIndentedNewline() {
+		notepadPPInsertIndentedNewline() {
 			; Read in both sides of the current line - the left will help us find where the indent is, the right is what we're moving.
 			Send, {Shift Down}{Home}{Shift Up}
 			lineStart := getSelectedText()
@@ -114,7 +93,7 @@
 			if(stringStartsWith(lineEnd, A_Space))
 				Send, {Delete}
 			
-			numSpaces := getDocumentationLineIndent(lineStart)
+			numSpaces := notepadPPGetDocumentationLineIndent(lineStart)
 			
 			Send, {Enter} ; Start the new line - assuming that Notepad++ will put us at the same indentation level (before the semicolon) as the previous row.
 			sendTextWithClipboard(";" getSpaces(numSpaces))
@@ -127,7 +106,7 @@
 	;  line (I,REQ) - The line that we're trying to determine indentation for.
 	; RETURNS:        The number of spaces after the comment character that the indent is.
 	;---------
-	getDocumentationLineIndent(line) {
+	notepadPPGetDocumentationLineIndent(line) {
 		line := cleanupText(line) ; Drop (and ignore) any leading/trailing whitespace and odd characters
 		line := removeStringFromStart(line, "; ") ; Trim off the starting comment char + space
 		numSpaces := 1 ; Space we just trimmed off
@@ -173,4 +152,49 @@
 		
 		return numSpaces
 	}
+	
+	;---------
+	; DESCRIPTION:    Generate a list of parameters for the DEBUG.popup/DEBUG.toast functions,
+	;                 in "varName",varName pairs.
+	; PARAMETERS:
+	;  varList (I,REQ) - Comma-separated list of parameters to generate the debug parameters for.
+	; RETURNS:        Comma-separated list of parameters, spaced in pairs, of "varName",varName.
+	;                 Example:
+	;                 	Input: var1,var2
+	;                 	Output: "var1",var1, "var2",var2
+	;---------
+	notepadPPGenerateDebugParams(varList) {
+		paramsAry := StrSplit(varList, ",", A_Space) ; Split on comma and drop leading/trailing spaces
+		; DEBUG.toast("paramsAry",paramsAry)
+		
+		paramsString := ""
+		For i,param in paramsAry {
+			if(i > 1)
+				paramsString .= ", "
+			paramsString .= """" param """" "," param
+		}
+		
+		return paramsString
+	}
+	
+	;---------
+	; DESCRIPTION:    Send a debug code string using the given function name, prompting the user for
+	;                 the list of parameters to use (in "varName",varName parameter pairs).
+	; PARAMETERS:
+	;  functionName (I,REQ) - Name of the function to send before the parameters.
+	;---------
+	notepadPPSendDebugCodeString(functionName) {
+		if(functionName = "")
+			return
+		
+		varList := InputBox("Enter variables to send debug string for", , , 500, 100, , , , , clipboard)
+		
+		if(varList = "") {
+			SendRaw, % functionName "()"
+			Send, {Left} ; Get inside parens for user to enter the variables/labels themselves
+		} else {
+			SendRaw, % functionName "(" notepadPPGenerateDebugParams(varList) ")"
+		}
+	}
+	
 #IfWinActive

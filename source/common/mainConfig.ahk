@@ -94,7 +94,10 @@ class MainConfig {
 	}
 	runMediaPlayer() {
 		player := this.getMediaPlayer()
-		this.runProgram(player)
+		if(player) {
+			Toast.showMedium(player " not yet running, launching...")
+			this.runProgram(player)
+		}
 	}
 	
 	getWindowInfo(name) {

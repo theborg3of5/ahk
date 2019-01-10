@@ -15,6 +15,7 @@
 	EMC2 QAN email						-								-							Send E-Mail
 	EMC2 QAN email notify			-								-							EMC2 - QA Note E-Mail Notification
 	EMC2 QAN notes						-								-							Note
+	EMC2 XDS email						-								ThunderRT6FormDC		E-Mail Design
 	EMC2 XDS								-								ThunderRT6MDIForm		XDS											-										CONTAINS_BEG
 []
 	EpicStudio New Object Window	EpicStudio.exe				New Object

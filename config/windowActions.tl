@@ -26,6 +26,7 @@
 	EMC2 Open Design
 	EMC2 QAN email notify
 	EMC2 QAN email							-				-					HOME_END
+	EMC2 XDS email							-				-					HOME_END
 []
 	
 	; EpicStudio popups - handle Ctrl+Backspace.

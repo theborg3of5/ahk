@@ -174,6 +174,9 @@
 		arrayName   := data["ARRAY_OR_INI"]
 		iteratorAry := strSplit(data["ITERATORS"], ",")
 		
+		if(stringStartsWith(arrayName, "@") && !stringEndsWith(arrayName, "@"))
+			arrayName .= "@" ; End global references with the proper @ if they're not already.
+		
 		prevIterators := ""
 		for i,iterator in iteratorAry {
 			loopString .= replaceTags(MainConfig.getPrivate("M_LOOP_ARRAY_BASE"), {"ARRAY_NAME":arrayName, "ITERATOR":iterator, "PREV_ITERATORS":prevIterators})

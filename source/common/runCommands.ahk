@@ -54,7 +54,7 @@ RunReturn(command) {
 }
 
 ; Runs a command with cmd.exe.
-RunCommand(commandToRun := "", stayOpen := false) {
+RunCommand(commandToRun := "", workingDirectory := "", stayOpen := false) {
 	runString := "C:\Windows\System32\cmd.exe "
 	
 	; Allow either an array or just a string.
@@ -77,7 +77,7 @@ RunCommand(commandToRun := "", stayOpen := false) {
 	runString .= cmdString
 	; DEBUG.popup("Command string", cmdString, "Run string", runString)
 	
-	Run(runString)
+	Run(runString, workingDirectory)
 }
 
 ; Run as a non-elevated user (since main script typically needs to run as admin).

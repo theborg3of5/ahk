@@ -1,4 +1,4 @@
-(	NAME							KEY						PATH													MACHINE
+(	NAME								KEY						PATH												MACHINE
 	
 	; General
 	AHK Config						AHK_CONFIG				<AHK_ROOT>\config

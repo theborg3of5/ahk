@@ -263,6 +263,29 @@ buildHyperspaceRunString(versionMajor, versionMinor, environment) {
 	return runString
 }
 
+buildTxDumpRunString(txId, environmentCommId := "") {
+	if(!txId)
+		return ""
+	
+	; Build the full output filepath.
+	environmentName := environmentCommId
+	if(environmentName = "")
+		environmentName := "OTHER"
+	outputPath := MainConfig.getPath("TX_DIFF_OUTPUT") "\" txId "-" environmentName ".txt"
+	
+	; Build the string to run
+	runString := MainConfig.getPrivate("TX_DIFF_DUMP_BASE")
+	runString := replaceTag(runString, "TX_ID",       txId)
+	runString := replaceTag(runString, "OUTPUT_PATH", outputPath)
+	
+	; Add on the environment if it's given - if not, leave off the flag (which will automatically cause the script to show an environment selector instead).
+	if(environmentCommId)
+		runString .= " --env " environmentCommId
+	
+	; DEBUG.popup("buildTxDumpRunString","Finish", "txId",txId, "outputFolder",outputFolder, "environmentCommId",environmentCommId, "runString",runString)
+	return runString
+}
+
 buildCodeSearchURL(searchTerm, searchType, appKey := "") {
 	appId := getEpicAppIdFromKey(appKey)
 	; DEBUG.popup("buildCodeSearchURL", "Start", "Search type", searchType, "Search term", searchTerm, "App key", appKey, "App ID", appId)

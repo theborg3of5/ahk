@@ -151,7 +151,7 @@
 		:X:deskf::sendFolderPath("USER_ROOT", "Desktop")
 		:X:dsf::sendFolderPath("USER_ROOT", "Design")
 		:X:dlf::sendFolderPath("DOWNLOADS")
-		:X:devf::sendFolderPath("USER_ROOT", "Dev")
+		:X:devf::sendFolderPath("USER_DEV")
 	}
 
 	{ ; AHK

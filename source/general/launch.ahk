@@ -65,10 +65,6 @@ genericHyperlink(subAction) {
 				Run(url)
 		}
 	}
-	
-doSearch() {
-	
-}
 
 ; Selector to allow easy editing of config TL files that don't show a popup
 !+c::

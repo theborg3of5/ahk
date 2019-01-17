@@ -10,13 +10,10 @@
 	Consider reading in more .tl/.tls files at startup and caching them
 		Alternatively, cache them after the first use?
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.
-	New ListConverter class/handler?
-		Selector to pick type of output - override field for additional texts before/after each entry?
-			Could be used to output lists of IDs into EpicStudio (surrounding array, maybe dots for indentation, etc.)
-		Example usages:
-			Whatever input (onenote table column or row) > comma-separated list usable for Snapper multi-record-launching
-			Filling in a OneNote table column
-				Maybe usable to effectively move columns this way?
+	Add more ListConverter features
+		More output methods
+			Filling in a OneNote table column (down arrow between?)
+			Filling a list of IDs into EpicStudio (Before/after inputs on Selector popup for code surrounding lines, newlines only applied after that)
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
 		Options:
 			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)

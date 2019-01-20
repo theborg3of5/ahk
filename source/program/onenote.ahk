@@ -295,7 +295,7 @@
 		sendUsualToDoSun() {
 			lines := []
 			lines.push({TEXT:"Pull to-dos from specific sections below"})
-			lines.push({TEXT:"Type Ninpo notes"})
+			lines.push({TEXT:"Review/Type Ninpo notes"})
 			lines.push({TEXT:"Fold laundry"})
 			lines.push({TEXT:"Roomba"})
 			lines.push({TEXT:"Dishes from weekend"})

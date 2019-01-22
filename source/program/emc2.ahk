@@ -54,9 +54,8 @@
 	
 	; Open all related QANs from an object in EMC2.
 	::openall::
-		openRelatedQANs() {
-			Send, {Up}  ; Get back to first row in case they hit enter to submit this.
-			Send, {Tab} ; Reset field if they didn't hit enter.
+		emc2OpenRelatedQANs() {
+			Send, {Tab} ; Reset field since they just typed over it.
 			Send, +{Tab}
 			
 			relatedQANsAry := getRelatedQANsAry()

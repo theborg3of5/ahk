@@ -67,6 +67,9 @@ return
 			line := clipboard
 		
 		infoAry := extractEMC2ObjectInfo(line)
+		if(!infoAry)
+			return
+		
 		ini   := infoAry["INI"]
 		id    := infoAry["ID"]
 		title := infoAry["TITLE"]

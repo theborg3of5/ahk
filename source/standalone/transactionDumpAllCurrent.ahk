@@ -10,6 +10,9 @@ txId = %1%
 if(!txId)
 	txId := InputBox("Dump Data Transaction for All Current Environments", "Enter data transaction ID")
 
+; Clean out any leading/trailing odd characters (generally spaces).
+txId := cleanupText(txId)
+
 ; Get the list of environments from a static file.
 commIdAry := fileLinesToArray(findConfigFilePath("allCurrentEpicEnvironments.txt"))
 ; DEBUG.popup("commIdAry",commIdAry)

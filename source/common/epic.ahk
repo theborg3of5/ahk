@@ -263,14 +263,16 @@ buildHyperspaceRunString(versionMajor, versionMinor, environment) {
 	return runString
 }
 
-buildTxDumpRunString(txId, environmentCommId := "") {
+buildTxDumpRunString(txId, environmentCommId := "", environmentName := "") {
 	if(!txId)
 		return ""
 	
 	; Build the full output filepath.
-	environmentName := environmentCommId
-	if(environmentName = "")
-		environmentName := "OTHER"
+	if(!environmentName)
+		if(environmentCommId)
+			environmentName := environmentCommId
+		else
+			environmentName := "OTHER"
 	outputPath := MainConfig.getPath("TX_DIFF_OUTPUT") "\" txId "-" environmentName ".txt"
 	
 	; Build the string to run

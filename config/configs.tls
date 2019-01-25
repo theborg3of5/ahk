@@ -1,12 +1,13 @@
-(	NAME					ABBREV	PATH
+(	NAME										ABBREV	PATH
 
 [PATH.addToStart(<AHK_CONFIG>\)]
-	Windows				w|win		windows.tl
-	Windows Actions	wa|wina	windowActions.tl
-	Programs				prog		programs.tl
-	Paths					path		paths.tl
-	Private values		priv		ahkPrivate\privates.tl
-	Mapped drives		md			ahkPrivate\mappedDrives.tl
-	Games					g			games.tl
-	Settings				s			local\settings.ini
+	Windows									w|win		windows.tl
+	Windows Actions						wa|wina	windowActions.tl
+	Programs									prog		programs.tl
+	Paths										path		paths.tl
+	Private values							priv		ahkPrivate\privates.tl
+	Mapped drives							md			ahkPrivate\mappedDrives.tl
+	Games										g			games.tl
+	Settings									s			local\settings.ini
+	All current Epic environments		allenv	ahkPrivate\allCurrentEpicEnvironments.txt
 []

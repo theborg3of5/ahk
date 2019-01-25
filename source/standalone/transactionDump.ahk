@@ -20,13 +20,14 @@ data := s.selectGui("", "Dump Data Transaction from Environment to File", defaul
 if(!data)
 	ExitApp
 
-txId   := cleanupText(data["TX_ID"]) ; Clean out any leading/trailing odd characters (generally spaces).
-commId := data["COMM_ID"]
+envName := data["NAME"]
+envId   := data["COMM_ID"]
+txId    := cleanupText(data["TX_ID"]) ; Clean out any leading/trailing odd characters (generally spaces).
 
-if(commId = "LAUNCH") ; Special case - just launching the script without picking an environment
-	commId := ""
+if(envId = "LAUNCH") ; Special case - just launching the script without picking an environment
+	envId := ""
 
-runString := buildTxDumpRunString(txId, commId)
+runString := buildTxDumpRunString(txId, envId, envName)
 if(runString)
 	Run(runString)
 

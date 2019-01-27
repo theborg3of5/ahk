@@ -6,6 +6,7 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	OneNote todo system - make duplication hotkey smarter at home, so it does a "week" one if it's during the week (where I'll only have 1 page for the work week) and a single-day one for each weekend day
 	Consider adding a way for Selector to match on some other column than just NAME and ABBREV
 		Could be used for transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
 		Alternatively, build out environments in MainConfig (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.

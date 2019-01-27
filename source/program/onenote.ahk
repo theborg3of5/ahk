@@ -235,13 +235,10 @@
 			Send, n
 			
 			; Update title
-			Send, ^+t                                 ; Select title (to replace with new day/date)
-			Sleep, 1000                               ; Wait for selection to take
-			if(MainConfig.isMachine("EPIC_LAPTOP"))
-				sendDateTime("M/d`, dddd")             ; Send today's day/date
-			else if(MainConfig.isMachine("HOME_DESKTOP"))
-				Send, % "Week of " FormatTime(, "M/d") ; Send "Week of <today's date>"
-			Send, ^+t                                 ; Select title again in case you want a different date.
+			Send, ^+t                       ; Select title (to replace with new day/date)
+			Sleep, 1000                     ; Wait for selection to take
+			Send, % getOneNoteDoPageTitle() ; Send title
+			Send, ^+t                       ; Select title again in case you want a different date.
 		}
 	
 	; Insert a contact comment.
@@ -354,6 +351,40 @@
 		selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
 		linkSelectedText(buildEMC2Link(ini, id))
 		Send, {End}
+	}
+	
+	;---------
+	; DESCRIPTION:    Figure out and return what title to use for a OneNote Do page.
+	; RETURNS:        The title to use for the new OneNote Do page.
+	;---------
+	getOneNoteDoPageTitle() {
+		startDateTime := A_Now
+		
+		; Do pages at work are always daily
+		if(MainConfig.isMachine("EPIC_LAPTOP"))
+			return FormatTime(startDateTime, "M/d`, dddd")
+		
+		; Otherwise, it varies by day of the week
+		if(MainConfig.isMachine("HOME_DESKTOP")) {
+			dayOfWeek := FormatTime(startDateTime, "Wday") ; Day of the week, 1 (Sunday) to 7 (Saturday)
+			
+			; Weekend pages at home are daily
+			if((dayOfWeek = 1) || (dayOfWeek = 7)) ; Sunday or Saturday
+				return FormatTime(startDateTime, "M/d`, dddd")
+			
+			; Weekdays are weekly
+			; Calculate datetimes for Monday and Friday to use, even if it's not currently Monday.
+			mondayDateTime := startDateTime
+			mondayDateTime += -(dayOfWeek - 2), days ; If it's not Monday, get back to Monday's date.
+			mondayTitle := FormatTime(mondayDateTime, "M/d`, dddd")
+			
+			fridayDateTime := mondayDateTime
+			fridayDateTime += 4, days
+			fridayTitle := FormatTime(fridayDateTime, "M/d`, dddd")
+			
+			; DEBUG.popup("A_Now",A_Now, "startDateTime",startDateTime, "mondayDateTime",mondayDateTime, "mondayTitle",mondayTitle, "fridayDateTime",fridayDateTime, "fridayTitle",fridayTitle)
+			return mondayTitle " - " fridayTitle
+		}
 	}
 	
 	;---------

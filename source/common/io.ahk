@@ -321,10 +321,15 @@ sendMediaKey(keyName) {
 	if(!keyName)
 		return
 	
-	; Only certain media keys need special handling
+	; There's some sort of odd race condition with Spotify that double-sends the play/pause hotkey if Spotify is focused - this prevents it, though I'm not sure why.
+	Sleep, 100
+	
+	; Only certain media keys need special handling, let  others straight through.
 	specialKeysAry := ["Media_Play_Pause", "Media_Prev", "Media_Next"]
-	if(!arrayContains(specialKeysAry, keyName))
+	if(!arrayContains(specialKeysAry, keyName)) {
 		Send, % "{" keyName "}"
+		return
+	}
 	
 	; Youtube - special case that won't respond to media keys natively
 	if(MainConfig.isMediaPlayer("Chrome")) {

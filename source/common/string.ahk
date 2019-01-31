@@ -233,7 +233,8 @@ cleanupText(text, additionalStringsToRemove := "") {
 	charCodesToRemove := []
 	charCodesToRemove.push([13])      ; Carriage return (`r)
 	charCodesToRemove.push([10])      ; Newline (`n)
-	charCodesToRemove.push([32])      ; Space
+	charCodesToRemove.push([32])      ; Space ( )
+	charCodesToRemove.push([46])      ; Period (.)
 	charCodesToRemove.push([8226,9])  ; First level bullet (filled circle) + tab
 	charCodesToRemove.push([111,9])   ; Second level bullet (empty circle) + tab
 	charCodesToRemove.push([61607,9]) ; Third level bullet (filled square) + tab

@@ -7,30 +7,27 @@
 	return
 	
 	{ ; Quick access toolbar commands.
-		; New Subpage
 		$^+n::
 			oneNoteNewSubpage()
 		return
-		; Promote Subpage
 		^+[::
 			oneNotePromoteSubpage()
 		return
-		; Demote Subpage (Make Subpage)
 		^+]::
 			oneNoteDemoteSubpage()
 		return
-		; Delete Page
 		$^+d::
-			; Confirmation to avoid accidental page deletion
-			MsgBox, 4, Delete page?, Are you sure you want to delete this page?
-			IfMsgBox, Yes
-				oneNoteDeletePage()
+			oneNoteDeletePage()
 		return
-		; Create linked Specific page (using OneTastic macro)
+		!m::
+			oneNoteAddMeetingNotes()
+		return
+		^0::
+			oneNoteZoom100Percent()
+		return
 		^l::
 			oneNoteCreateLinkPageSpecSection()
 		return
-		; Create linked dev Specific page (using OneTastic macro)
 		^+l::
 			oneNoteCreateLinkDevPageSpecSection()
 		return
@@ -315,7 +312,16 @@
 		Send, !3
 	}
 	oneNoteDeletePage() {
-		Send, !4
+		; Confirmation to avoid accidental page deletion
+		MsgBox, 4, Delete page?, Are you sure you want to delete this page?
+		IfMsgBox, Yes
+			Send, !4
+	}
+	oneNoteAddMeetingNotes() {
+		Send, !5
+	}
+	oneNoteZoom100Percent() {
+		Send, !6
 	}
 	oneNoteCustomStyles() {	; Custom styles from OneTastic
 		Send, !7

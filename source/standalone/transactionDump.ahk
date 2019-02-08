@@ -6,6 +6,10 @@ SendMode, Input  ; Recommended for new scripts due to its superior speed and rel
 ; Optional input from command line
 txId = %1%
 
+; Default to the referrals data tx if nothing given on command line.
+if(!txId)
+	txId := MainConfig.getPrivate("RFL_TX_ID")
+
 ; Start in the dump script's directory.
 SetWorkingDir, % MainConfig.getPath("TX_DIFF")
 

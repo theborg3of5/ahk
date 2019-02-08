@@ -78,7 +78,6 @@
 		::ep'n::European
 		::uni'::university
 		::sol'n::solution
-		::sync'd::synchronized
 		::pos'n::position
 		::pos'd::positioned
 		::imp't::implement

@@ -6,6 +6,8 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	When there are no headers in a SelectorGui, can we shift the choices over to the left to align with the input field?
+		Noticed this for config selector.
 	Figure out some way to get TLG DLG/PRJ selector stuff onto the clipboard, not only sending
 	Consider adding a way for Selector to match on some other column than just NAME and ABBREV
 		Could be used for transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID

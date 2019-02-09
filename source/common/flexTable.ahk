@@ -209,7 +209,7 @@ class FlexTable {
 	minColumnWidth := ""
 	
 	;---------
-	; DESCRIPTION:    Add the given value to the current X/y coordinate.
+	; DESCRIPTION:    Add the given value to the current X/Y coordinate.
 	; PARAMETERS:
 	;  value (I,REQ) - Number to add
 	;---------

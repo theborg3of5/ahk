@@ -6,8 +6,6 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
-	When there are no headers in a SelectorGui, can we shift the choices over to the left to align with the input field?
-		Noticed this for config selector.
 	Add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments

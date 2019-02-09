@@ -8,6 +8,9 @@
 # New
 	When there are no headers in a SelectorGui, can we shift the choices over to the left to align with the input field?
 		Noticed this for config selector.
+	Add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
+		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
+		Initial submission would involve a selector popup of environments
 	Figure out some way to get TLG DLG/PRJ selector stuff onto the clipboard, not only sending
 	Consider adding a way for Selector to match on some other column than just NAME and ABBREV
 		Could be used for transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID

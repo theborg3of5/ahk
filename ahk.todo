@@ -6,7 +6,6 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
-	Consider adding more functions/types to M snippets, for various index functions (or at least the regular ones)
 	Add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments

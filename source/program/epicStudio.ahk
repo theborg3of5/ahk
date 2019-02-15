@@ -143,6 +143,7 @@
 		loopString := ""
 		
 		subType := data["SUBTYPE"]
+		
 		if(subType = "ARRAY_GLO") {
 			loopString .= buildMArrayLoop(data, numIndents)
 		
@@ -155,6 +156,13 @@
 		} else if(subType = "ID_DAT") {
 			loopString .= buildMIdLoop(data, numIndents)
 			loopString .= buildMDatLoop(data, numIndents)
+			
+		} else if(subType = "INDEX_REG_VALUE") {
+			loopString .= buildMIndexRegularValueLoop(data, numIndents)
+			
+		} else if(subType = "INDEX_REG_ID") {
+			loopString .= buildMIndexRegularIDLoop(data, numIndents)
+			
 		}
 		
 		return loopString
@@ -165,14 +173,14 @@
 	; PARAMETERS:
 	;  data        (I,REQ) - Array of data needed to generate the loop. Important subscripts:
 	;                          data["ARRAY_OR_INI"] - The name of the array or global (with @s around it)
-	;                              ["ITERATORS"]    - Comma-delimited list of iterator variables to loop with.
+	;                              ["VAR_NAMES"]    - Comma-delimited list of iterator variables to loop with.
 	;  numIndents (IO,OPT) - The starting indentation for the loop. Will be updated as we add nested
 	;                        loops, final value is 1 more than the last loop.
 	; RETURNS:        String for the generated loop
 	;---------
-	buildMArrayLoop(data, ByRef numIndents := 0) {			
+	buildMArrayLoop(data, ByRef numIndents := 0) {
 		arrayName   := data["ARRAY_OR_INI"]
-		iteratorAry := strSplit(data["ITERATORS"], ",")
+		iteratorAry := strSplit(data["VAR_NAMES"], ",")
 		
 		if(stringStartsWith(arrayName, "@") && !stringEndsWith(arrayName, "@"))
 			arrayName .= "@" ; End global references with the proper @ if they're not already.
@@ -198,7 +206,7 @@
 	; RETURNS:        String for the generated loop
 	;---------
 	buildMIdLoop(data, ByRef numIndents := 0) {
-		ini := stringUpper(data["ARRAY_OR_INI"])		
+		ini := stringUpper(data["ARRAY_OR_INI"])
 		
 		idVar := stringLower(ini) "Id"
 		loopString := replaceTags(MainConfig.getPrivate("M_LOOP_ID_BASE"), {"INI":ini, "ID_VAR":idVar})
@@ -217,7 +225,7 @@
 	; RETURNS:        String for the generated loop
 	;---------
 	buildMDatLoop(data, ByRef numIndents := 0) {
-		ini := stringUpper(data["ARRAY_OR_INI"])		
+		ini := stringUpper(data["ARRAY_OR_INI"])
 		
 		idVar  := stringLower(ini) "Id"
 		datVar := stringLower(ini) "Dat"
@@ -228,15 +236,54 @@
 	}
 	
 	;---------
-	; DESCRIPTION:    Generate an M for loop over IDs, then DATs, using the given data.
+	; DESCRIPTION:    Generate an M for loop over regular index values for the given data.
 	; PARAMETERS:
 	;  data        (I,REQ) - Array of data needed to generate the loop. Important subscripts:
 	;                          data["ARRAY_OR_INI"] - The INI of the records to loop through
+	;                              ["VAR_NAMES"]    - The name of the iterator variable to use for values
 	;  numIndents (IO,OPT) - The starting indentation for the loop. Will be updated as we add nested
 	;                        loops, final value is 1 more than the last loop.
 	; RETURNS:        String for the generated loop
 	;---------
-	getMNewLinePlusIndent(ByRef currNumIndents := 0) {
+	buildMIndexRegularValueLoop(data, ByRef numIndents := 0) {
+		ini := stringUpper(data["ARRAY_OR_INI"])
+		valueVar := data["VAR_NAMES"]
+		
+		loopString := replaceTags(MainConfig.getPrivate("M_LOOP_INDEX_REGULAR_NEXT_VALUE"), {"INI":ini, "ITEM":"", "VALUE_VAR":valueVar})
+		
+		loopString .= getMNewLinePlusIndent(numIndents)
+		return loopString
+	}
+	
+	;---------
+	; DESCRIPTION:    Generate an M for loop over regular index IDs with a particular value for the
+	;                 given data.
+	; PARAMETERS:
+	;  data        (I,REQ) - Array of data needed to generate the loop. Important subscripts:
+	;                          data["ARRAY_OR_INI"] - The INI of the records to loop through
+	;                              ["VAR_NAMES"]    - The name of the iterator variable to use for values
+	;  numIndents (IO,OPT) - The starting indentation for the loop. Will be updated as we add nested
+	;                        loops, final value is 1 more than the last loop.
+	; RETURNS:        String for the generated loop
+	;---------
+	buildMIndexRegularIDLoop(data, ByRef numIndents := 0) {
+		ini := stringUpper(data["ARRAY_OR_INI"])
+		valueVar := data["VAR_NAMES"]
+		
+		idVar  := stringLower(ini) "Id"
+		loopString := replaceTags(MainConfig.getPrivate("M_LOOP_INDEX_REGULAR_NEXT_ID"), {"INI":ini, "ITEM":"", "VALUE_VAR":valueVar, "ID_VAR":idVar})
+		
+		loopString .= getMNewLinePlusIndent(numIndents)
+		return loopString
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the text for a new line in M code, adding 1 indent more than the current line.
+	; PARAMETERS:
+	;  currNumIndents (IO,REQ) - The number of indents on the current line. Will be incremented by 1.
+	; RETURNS:        The string to start a new line with 1 indent more.
+	;---------
+	getMNewLinePlusIndent(ByRef currNumIndents) {
 		outString := "`n`t" ; New line + tab (at the start of every line)
 		
 		; Increase indentation level and add indentation

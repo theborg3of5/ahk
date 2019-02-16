@@ -3,8 +3,8 @@
 	^b::Send, {F12}
 
 	; Vim-like navigation.
-	$`;::sendUnlessControlFocused("{PgDn}", "Edit2")
-	$p::sendUnlessControlFocused("{PgUp}", "Edit2")
+	$p::sendUnlessControlFocused("{Left}", "Edit2")
+	$`;::sendUnlessControlFocused("{Right}", "Edit2")
 	sendUnlessControlFocused(keysToSend, unlessControl) {
 		currControl := ControlGetFocus("A")
 		if(currControl != unlessControl)

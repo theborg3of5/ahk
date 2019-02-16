@@ -282,6 +282,7 @@
 			lines.push({TEXT:"Dishes from week"})
 			lines.push({TEXT:"Wash laundry"})
 			lines.push({TEXT:"Dry laundry"})
+			lines.push({TEXT:"Clean off desk"})
 			sendOneNoteToDoLines(lines)
 		}
 	

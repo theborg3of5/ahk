@@ -46,23 +46,27 @@
 		; Expand and collapse outlines.
 		!Left::!+-
 		!Right::!+=
-		; Only Today section, sub-items hidden
-		^t::
-			Send, ^{Home} ; Overall Do header so we affect the whole page
-			Send, !+4     ; Top level that today's todos are at (so they're all collapsed)
-			Send, !+3     ; Collapse to headers under Today (which collapses headers under Today so only unfinished todos on level 4 are visible)
-		return
-		; All sections expanded
-		^+t::
-			Send, ^{Home}
-			Send, !+4     ; Items for all sections (level 4)
-		return
-		; Expanded Today section
-		^!t::
-			Send, ^{Home}
-			Send, !+5     ; Sub-items for all sections (level 5)
-			Send, !+3     ; Top level for today's todos
-		return
+		^t::collapseDoPageToItems(true)   ; Today only
+		^+t::collapseDoPageToItems(false) ; All sections, not just today
+		^!t::collapseDoPage(true)         ; Today only
+		collapseDoPageToItems(todayOnly := false) {
+			collapseDoPage(todayOnly, true)
+		}
+		collapseDoPage(todayOnly := false, collapseToItems := false) {
+			Send, ^{Home} ; Get to top-level ("Do") header so we affect the whole page
+			
+			if(collapseToItems)
+				Send, !+4 ; Item level in all sections (level 4)
+			else
+				Send, !+0 ; Show all items on all levels
+			
+			if(todayOnly)
+				Send, !+3 ; Collapse to headers under Today (which collapses headers under Today so only unfinished todos on level 4 are visible)
+			
+			; Get down to first item under Today header
+			Sleep, 100          ; Required or else the down keystroke seems to happen before the !+3 keystrokes
+			SendInput, {Down 2} ; For some reason, sending up/down hotkeys to OneNote requires SendPlay instead of SendEvent (what the main script is forced to).
+		}
 		
 		; Replacement history back/forward.
 		!+Left:: Send, !{Left}
@@ -90,7 +94,7 @@
 			Send, {Delete}
 		return
 		
-		; Make line movement alt + up/down instead of alt + shift + up/down to match notepad++ and ES.
+		; Make line movement alt + up/down instead of alt + shift + up/down to match notepad++ and EpicStudio.
 		!Up::!+Up
 		!Down::!+Down
 		

@@ -26,13 +26,6 @@
 			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)
 			New type of codesearch type with separate branch in ActionObject (not ideal)
 	Can we make Alt+Shift+X hotkey blocking in notepad++ (in main script) contingent on whether the test script is running?
-	Can we make our folder hotstrings more reliable?
-		Send with clipboard?
-		SendMode stuff?
-			Sounds like SendInput/SendPlay should be uninterruptible
-				But the fact that other scripts have a keyboard hook installed (because they're persistent, it looks like?) means we fall back to SendEvent?
-				As such, "SendMode, Input" isn't doing anything for me at all right now.
-			SendPlay seems to often leave behind the first char or two of the typed hotstring instead of getting rid of all of it
 	Consider properties instead of getter functions for selector stuff (at least SelectorRow?)
 	Figure out some central documentation method
 		Dynamically pull hotkeys for the currently focused program?

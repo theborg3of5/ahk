@@ -75,7 +75,7 @@ return
 		title := infoAry["TITLE"]
 		
 		standardString := buildStandardEMC2ObjectString(ini, id, title)
-		sendTextWithClipboard(standardString)
+		Send, % standardString
 		
 		; Special case for OneNote: link the INI/ID as well.
 		if(MainConfig.isWindowActive("OneNote"))

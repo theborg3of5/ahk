@@ -20,7 +20,7 @@
 			if(!varList)
 				return
 			
-			sendTextWithClipboard(notepadPPGenerateDebugParams(varList))
+			Send, % notepadPPGenerateDebugParams(varList)
 		}
 	
 	; Function header
@@ -96,7 +96,7 @@
 			numSpaces := notepadPPGetDocumentationLineIndent(lineStart)
 			
 			Send, {Enter} ; Start the new line - assuming that Notepad++ will put us at the same indentation level (before the semicolon) as the previous row.
-			sendTextWithClipboard(";" getSpaces(numSpaces))
+			Send, % ";" getSpaces(numSpaces)
 		}
 	
 	;---------

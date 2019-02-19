@@ -138,7 +138,7 @@
 }
 
 { ; URLs.
-	:X:lpv::sendTextWithClipboard("chrome-extension://hdokiejnpimakedhajhdlcegeplioahd/vault.html")
+	:X:lpv::Send, % "chrome-extension://hdokiejnpimakedhajhdlcegeplioahd/vault.html"
 }
 
 { ; Folders and paths.

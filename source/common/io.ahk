@@ -204,11 +204,11 @@ linkSelectedText(path) {
 		return false
 	
 	startLink(windowName)
-	sendTextWithClipboard(path)
+	Send, % path
 	
 	if(!pathIsCorrect(windowName, path)) { ; If we somehow didn't put the link in the box correctly, wait a half-second and try again.
 		Sleep, 500
-		sendTextWithClipboard(path)
+		Send, % path
 	}
 	if(!pathIsCorrect(windowName, path)) ; If we still failed to put the right thing in the box, bail out so the user can notice and fix it.
 		return false

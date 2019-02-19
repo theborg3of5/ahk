@@ -101,7 +101,7 @@
 				snipString := buildMLoop(data, numIndents)
 			}
 			
-			sendTextWithClipboard(snipString)
+			sendTextWithClipboard(snipString) ; Better to send with the clipboard, otherwise we have to deal with EpicStudio adding in dot-levels itself.
 		}
 	
 	

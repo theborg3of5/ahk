@@ -425,7 +425,7 @@
 			
 			setOneNoteAlignment(forceNumber(line["NUM_TABS"]), currNumTabs)
 			
-			sendTextWithClipboard(line["TEXT"])
+			Send, % line["TEXT"]
 		}
 	}
 

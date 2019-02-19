@@ -30,7 +30,7 @@ sendCleanedUpPath(containingFolderOnly := false) {
 	if(containingFolderOnly)
 		path := reduceFilepath(path, 1) "\" ; Remove last element at end, add trailing slash
 	
-	sendTextWithClipboard(path)
+	Send, % path
 }
 
 

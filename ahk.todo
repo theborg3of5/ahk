@@ -1,11 +1,11 @@
 # Fixes
-	Figure out what's going on with auto-linking and other hotkeys getting modifier keys stuck down
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	Add an error toast when we fail at hyperlinking in OneNote and leave the linking window open
 	Figure out a better way to deal with NFS 3 day folder not existing when trying to open via folder hotkey
 		Could we auto-create it, maybe?
 			Would want a confirmation before doing so

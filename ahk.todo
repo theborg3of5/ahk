@@ -6,6 +6,10 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	Figure out a better way to deal with NFS 3 day folder not existing when trying to open via folder hotkey
+		Could we auto-create it, maybe?
+			Would want a confirmation before doing so
+			Then auto-open it once created
 	Add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments

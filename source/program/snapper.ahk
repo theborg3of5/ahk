@@ -1,8 +1,9 @@
 ﻿#IfWinActive, ahk_exe Snapper.exe
-	; Send string of status items to ignore, based on the given master file.
-	:*:.status::
-		sendChroniclesStatusItemsToIgnore() {
-			s := new Selector("chroniclesStatusItems.tls")
+	; Send string of items to ignore, based on the given master file.
+	:*:.hide::
+	:*:.ignore::
+		snapperSendItemsToIgnore() {
+			s := new Selector("snapperIgnoreItems.tls")
 			itemsList := s.selectGui("STATUS_ITEMS")
 			if(!itemsList)
 				return
@@ -23,7 +24,7 @@
 ; Add record window
 #IfWinActive, Add a Record ahk_exe Snapper.exe
 	^Enter::
-		addMultipleRecordsToSnapper() {
+		snapperAddMultipleRecords() {
 			url := getSnapperURLFromAddRecordPopup()
 			if(url) {
 				Send, !c ; Close add record popup (can't use WinClose as that triggers validation on ID field)

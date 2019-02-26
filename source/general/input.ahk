@@ -57,7 +57,10 @@ return
 return
 
 ; Turn the selected text into a link to the URL on the clipboard.
-^+k::linkSelectedText(clipboard)
+^+k::
+	if(!linkSelectedText(clipboard))
+		Toast.showMedium("Failed to link selected text.")
+return
 
 ; Turn selected text or clipboard into standard string and send it.
 !+n::

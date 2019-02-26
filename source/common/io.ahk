@@ -206,11 +206,11 @@ linkSelectedText(path) {
 	startLink(windowName)
 	sendTextWithClipboard(path) ; Need to send it raw, but would prefer not to wait for the longer keywaiting.
 	
-	if(!pathIsCorrect(windowName, path)) { ; If we somehow didn't put the link in the box correctly, wait a half-second and try again.
+	if(!pathIsCorrect(windowName, path)) { ; If we somehow didn't put the link in place correctly, wait a half-second and try again.
 		Sleep, 500
 		sendTextWithClipboard(path) ; Need to send it raw, but would prefer not to wait for the longer keywaiting.
 	}
-	if(!pathIsCorrect(windowName, path)) ; If we still failed to put the right thing in the box, bail out so the user can notice and fix it.
+	if(!pathIsCorrect(windowName, path)) ; If we still failed to add the correct URL, bail out and fail.
 		return false
 	
 	finishLink(windowName)

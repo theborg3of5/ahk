@@ -5,7 +5,6 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
-	Add an error toast when we fail at hyperlinking in OneNote and leave the linking window open
 	Figure out a better way to deal with NFS 3 day folder not existing when trying to open via folder hotkey
 		Could we auto-create it, maybe?
 			Would want a confirmation before doing so

@@ -268,7 +268,10 @@
 			
 			selectTextWithinSelection(recordText)
 			webURL := buildEMC2Link(ini, id, "WEB")
-			linkSelectedText(webURL)
+			if(!linkSelectedText(webURL)) {
+				setClipboardAndToast(webURL, "link", "Failed to add EMC2 object web link.")
+				return
+			}
 			
 			; Re-select whole line so we can use selectTextWithinSelection()
 			Send, {Home}
@@ -276,7 +279,8 @@
 			
 			selectTextWithinSelection(editText)
 			editURL := buildEMC2Link(ini, id, "EDIT")
-			linkSelectedText(editURL)
+			if(!linkSelectedText(editURL))
+				setClipboardAndToast(editURL, "link", "Failed to add EMC2 object edit link.")
 		}
 	
 	:*:.todosat::
@@ -360,7 +364,11 @@
 	oneNoteLinkEMC2ObjectInLine(ini, id) {
 		Send, {Home}{Shift Down}{End}{Shift Up} ; Select whole line, but avoid the extra indentation and newline that comes with ^a.
 		selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
-		linkSelectedText(buildEMC2Link(ini, id))
+		url := buildEMC2Link(ini, id)
+		if(!linkSelectedText(url)) {
+			setClipboardAndToast(url, "link", "Failed to link EMC2 object text.")
+			return
+		}
 		Send, {End}
 	}
 	

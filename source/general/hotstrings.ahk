@@ -102,6 +102,10 @@
 		::coll'n::collection
 		::auth'n::authorization
 	}
+	
+	{ ; Epic-specific
+		::InBasket::In Basket
+	}
 }
 
 { ; Date and time.

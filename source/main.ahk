@@ -38,6 +38,7 @@ runStandaloneScripts()
 #Include ditto.ahk
 #Include emc2.ahk
 #Include epicStudio.ahk
+#Include everything.ahk
 #Include excel.ahk
 #Include explorer.ahk
 #Include fastStoneImageViewer.ahk

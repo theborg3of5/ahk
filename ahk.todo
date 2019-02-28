@@ -5,6 +5,10 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	Combine near-duplicate logic from explorer and everything scripts for copying path/containing folder path and showing a toast about it
+	Should #e logic in explorer.ahk live in launch.ahk instead?
+		Maybe split it based on when explorer is active or not?
+		Check what the support for explorer looks like in programs, launching, etc - should cover needs when not active, I'd expect?
 	Figure out a better way to deal with NFS 3 day folder not existing when trying to open via folder hotkey
 		Could we auto-create it, maybe?
 			Would want a confirmation before doing so

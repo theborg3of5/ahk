@@ -44,7 +44,7 @@
 			path := cleanupPath(path)
 			path := mapPath(path)
 			
-			setClipboardAndToast(path, "full folder path")
+			setClipboardAndToast(path, "containing folder path")
 		}
 	
 	; Hide/show hidden files. From http://www.autohotkey.com/forum/post-342375.html#342375

@@ -5,6 +5,7 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	Remove special hyperlinking handling for designs in EMC2 - they support ^k natively now (and in comments, which we're breaking)
 	Combine near-duplicate logic from explorer and everything scripts for copying path/containing folder path and showing a toast about it
 	Should #e logic in explorer.ahk live in launch.ahk instead?
 		Maybe split it based on when explorer is active or not?

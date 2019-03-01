@@ -79,10 +79,6 @@
 
 ; Design open
 #If MainConfig.isWindowActive("EMC2 XDS")
-	^k::
-		clickUsingMode(515, 226, "Client")
-	return
-	
 	; Disable Ctrl+Up/Down hotkeys, never hit these intentionally.
 	^Down::
 	^Up::

@@ -1,4 +1,13 @@
 
+replaceFileWithString(filePath, newContents) {
+	if(!filePath)
+		return
+	
+	FileDelete, % filePath
+	if(newContents)
+		FileAppend, % newContents, % filePath
+}
+
 saveClipboardToFile(filePath := "") {
 	; If no path was given, prompt the user with a popup.
 	if(!filePath)

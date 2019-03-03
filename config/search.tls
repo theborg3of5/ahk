@@ -7,6 +7,7 @@
 		# Web
 		; (SUBTYPE = <URL with %s for query>)
 		Google							g				https://www.google.com/search?q=%s
+		Gmail								gm				https://mail.google.com/mail/u/0/#search/%s
 		Youtube							yt				https://www.youtube.com/results?search_query=%s
 		AutoHotkey Docs				ahkd			https://cse.google.com/cse?cx=010629462602499112316:ywoq_rufgic&q=%s
 		Translate Dutch > English	tde|detrans	https://translate.google.com/#nl/en/%s

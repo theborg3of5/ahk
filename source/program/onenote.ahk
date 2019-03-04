@@ -466,3 +466,26 @@
 		currNumTabs := numTabs
 	}
 #If
+
+#If MainConfig.isWindowActive("OneTastic Macro Editor")
+	; Open XML window
+	^+o::onetasticOpenEditXMLPopup()
+	
+	; Copy current function XML
+	^+x::
+		onetasticOpenEditXMLPopup()
+		
+		clipboard := "" ; Clear the clipboard so we can tell when we have the new XML on it
+		getSelectedText()
+		ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain the XML
+		Toast.showMedium("Copied macro function XML")
+		
+		Send, !o ; Close the popup
+	return
+	
+	onetasticOpenEditXMLPopup() {
+		Send, !u ; Function
+		Send, x  ; Edit XML
+		WinWaitActive, Edit XML
+	}
+#If

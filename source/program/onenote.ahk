@@ -476,9 +476,15 @@
 		onetasticOpenEditXMLPopup()
 		
 		clipboard := "" ; Clear the clipboard so we can tell when we have the new XML on it
-		getSelectedText()
+		Send, ^c
 		ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain the XML
-		Toast.showMedium("Copied macro function XML")
+		
+		if(clipboard != "") {
+			Toast.showMedium("Copied macro function XML")
+		} else {
+			Toast.showMedium("Failed to copy macro function XML")
+			return
+		}
 		
 		Send, !o ; Close the popup
 	return

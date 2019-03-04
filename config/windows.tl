@@ -37,6 +37,7 @@
 	Firefox Portable					firefox.exe
 	Foobar								foobar2000.exe
 	GitHub								GitHubDesktop.exe			-							-												0
+	Greenshot							Greenshot.exe
 	Hyperspace							EpicD87.exe
 	KDiff									kdiff3.exe
 	Launchy								Launchy.exe

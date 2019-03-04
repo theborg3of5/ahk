@@ -468,6 +468,12 @@
 #If
 
 #If MainConfig.isWindowActive("OneTastic Macro Editor")
+	; Open macro info window
+	^i::
+		Send, !f ; File
+		Send, i  ; Edit Macro Info...
+	return
+	
 	; Open XML window
 	^+o::onetasticOpenEditXMLPopup()
 	

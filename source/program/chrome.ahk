@@ -2,6 +2,7 @@
 #IfWinActive, ahk_exe chrome.exe
 	; Options hotkey.
 	!o::
+		waitForHotkeyRelease() ; Presumably needed because the triggering hotkey has alt in it.
 		Send, !e ; Main hamburger menu.
 		Sleep, 100
 		Send, s  ; Settings

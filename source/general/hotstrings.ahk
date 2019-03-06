@@ -53,6 +53,7 @@
 	::performably::performable
 	::isntead::instead
 	::Tapestery::Tapestry
+	::InBasket::In Basket
 }
 
 { ; Expansions.
@@ -103,8 +104,8 @@
 		::auth'n::authorization
 	}
 	
-	{ ; Epic-specific
-		::InBasket::In Basket
+	{ ; Emoji
+		::.shrug::{U+AF}\_({U+30C4})_/{U+AF} ; ¯\_(ツ)_/¯ - 0xAF=¯, 0x30C4=ツ
 	}
 }
 

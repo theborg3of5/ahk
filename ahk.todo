@@ -3,7 +3,6 @@
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
-	Double-down in onenote when collapsing do pages isn't working?
 	
 # New
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.

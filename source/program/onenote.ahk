@@ -64,8 +64,8 @@
 				Send, !+3 ; Collapse to headers under Today (which collapses headers under Today so only unfinished todos on level 4 are visible)
 			
 			; Get down to first item under Today header
-			Sleep, 100          ; Required or else the down keystroke seems to happen before the !+3 keystrokes
-			SendInput, {Down 2} ; For some reason, sending up/down hotkeys to OneNote requires SendPlay instead of SendEvent (what the main script is forced to).
+			Sleep, 100         ; Required or else the down keystroke seems to happen before the !+3 keystrokes
+			SendPlay, {Down 2} ; For some reason, sending up/down hotkeys to OneNote requires SendPlay instead of SendEvent (what the main script is forced to).
 		}
 		
 		; Replacement history back/forward.

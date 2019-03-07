@@ -468,11 +468,17 @@
 #If
 
 #If MainConfig.isWindowActive("OneTastic Macro Editor")
+	; New macro function
+	^n::^NumpadAdd
+	
 	; Open macro info window
 	^i::
 		Send, !f ; File
 		Send, i  ; Edit Macro Info...
 	return
+	
+	; Open function header edit window
+	^e::^F2
 	
 	; Open XML window
 	^+o::onetasticOpenEditXMLPopup()
@@ -494,6 +500,29 @@
 		
 		Send, !o ; Close the popup
 	return
+	
+	; "Import" a full function from clipboard XML
+	^+i::
+		onetasticImportFunction() {
+			functionXML := clipboard
+			
+			if(!functionXML) {
+				Toast.showMedium("Cannot import: clipboard is blank.")
+				return
+			}
+			
+			; First line should be a comment with the exact function signature
+			functionSignature := getStringBetweenStr(functionXML, "<Comment text=""", """ />")
+			Send, ^{NumpadAdd} ; New macro
+			WinWaitActive, Function Signature Editor
+			SendRaw, % functionSignature
+			Send, !o
+			waitUntilWindowState("Active", " - Macro Editor", "", 2) ; Allow matching anywhere
+			
+			onetasticOpenEditXMLPopup()
+			Send, ^v ; Paste full XML into window
+			Send, !o ; OK out of window
+		}
 	
 	onetasticOpenEditXMLPopup() {
 		Send, !u ; Function

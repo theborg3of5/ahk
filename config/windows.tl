@@ -28,6 +28,7 @@
 	AutoHotkey GUIs					AutoHotkey.exe				AutoHotkeyGUI
 	Chrome								chrome.exe					Chrome_WidgetWin_1	-												
 	Cisco AnyConnect VPN				vpnui.exe					#32770
+	Discord								Discord.exe					-							-												0
 	EMC2									EpicD85.exe					-							EMC2
 	EpicStudio							EpicStudio.exe				-							EpicStudio
 	Everything							Everything.exe				EVERYTHING

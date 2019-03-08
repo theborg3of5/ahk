@@ -5,6 +5,16 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	Expand onetastic macro function importing
+		Also double-check added XML?
+			Probably worth pulling paste-and-double-check functionality out into a generic function at that point
+		Handle multiple functions at once
+			From a list somewhere, maybe one of these:
+				Pasted comma-delimited list
+					Could add new ListCoverter input method for chosen XML structure (drop '<Comment text=" ' from start, '" />' from end for each line
+				Original macro's XML?
+					Could be a little dicey to try and parse around XML
+			Would need to read from files directly for function contents
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
 	Combine near-duplicate logic from explorer and everything scripts for copying path/containing folder path and showing a toast about it

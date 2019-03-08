@@ -468,10 +468,22 @@
 #If
 
 #If MainConfig.isWindowActive("OneTastic Macro Editor")
+	; New macro function
+	^n::^NumpadAdd
+	
 	; Open macro info window
 	^i::
 		Send, !f ; File
 		Send, i  ; Edit Macro Info...
+	return
+	
+	; Open function header edit window
+	^e::^F2
+	
+	; Delete current macro
+	^d::
+		Send, !u ; Function
+		Send, d  ; Delete Function
 	return
 	
 	; Open XML window
@@ -494,6 +506,49 @@
 		
 		Send, !o ; Close the popup
 	return
+	
+	; "Import" a full function from clipboard XML
+	^+i::
+		onetasticImportFunction() {
+			functionXML := clipboard
+			
+			if(!functionXML) {
+				Toast.showMedium("Cannot import: clipboard is blank.")
+				return
+			}
+			
+			; First line should be a comment with the exact function signature
+			functionSignature := getStringBetweenStr(functionXML, "<Comment text=""", """ />")
+			
+			; Add function signature 
+			Send, ^{NumpadAdd} ; New macro
+			WinWaitActive, Function Signature Editor
+			sendTextWithClipboard(functionSignature)
+			
+			; Validate we were able to enter the right thing
+			if(!onetasticFunctionSignatureIsCorrect(functionSignature)) {
+				Sleep, 500
+				sendTextWithClipboard(functionSignature) ; If we put in the wrong thing, try once more
+			}
+			if(!onetasticFunctionSignatureIsCorrect(functionSignature)) {
+				Toast.showMedium("Could not import macro function: failed to insert function signature")
+				return
+			}
+			
+			; Accept out of the signature window to finish creating function
+			Send, !o
+			waitUntilWindowState("Active", " - Macro Editor", "", 2) ; Allow matching anywhere
+			
+			onetasticOpenEditXMLPopup()
+			Send, ^v ; Paste full XML into window
+			Send, !o ; OK out of window
+		}
+		
+	onetasticFunctionSignatureIsCorrect(correctSignature) {
+		Send, {Home}{Shift Down}{End}{Shift Up} ; Select all (window doesn't support it natively)
+		actualSignature := getSelectedText()
+		return (actualSignature = correctSignature)
+	}
 	
 	onetasticOpenEditXMLPopup() {
 		Send, !u ; Function

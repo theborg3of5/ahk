@@ -35,14 +35,44 @@ getSelectedText() {
 		return clipboard
 	
 	originalClipboard := clipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
-	clipboard :=                      ; Clear the clipboard so we can tell when something is added by ^c.
-	Send, ^c
-	ClipWait, 0.5                     ; Wait for the clipboard to actually contain data (minimum time).
+	copyWithHotkey("^c")
 	
 	textFound := clipboard
 	clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
 	
 	return textFound
+}
+
+copyWithHotkey(hotkeyKeys) {
+	if(hotkeyKeys = "")
+		return
+	
+	clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
+	Send, % hotkeyKeys
+	ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain the new info.
+}
+copyFilePathWithHotkey(hotkeyKeys) {
+	copyWithHotkey(hotkeyKeys)
+	
+	path := clipboard
+	if(path) {
+		path := cleanupPath(path)
+		path := mapPath(path)
+	}
+	
+	setClipboardAndToast(path, "file path")
+}
+copyFolderPathWithHotkey(hotkeyKeys) {
+	copyWithHotkey(hotkeyKeys)
+	
+	path := clipboard
+	if(path) {
+		path := cleanupPath(path)
+		path := mapPath(path)
+		path := appendCharIfMissing(path, "\") ; Add the trailing backslash since it's a folder
+	}
+	
+	setClipboardAndToast(path, "folder path")
 }
 
 ; Sends the selected text using the clipboard, fixing the clipboard as it finishes.

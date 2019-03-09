@@ -5,6 +5,8 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	Should we split the clipboard-based stuff out of io.ahk and into a new clipboard.ahk?
+	Consider splitting hyperlink-selected-text logic into a separate (probably static) class
 	Expand onetastic macro function importing
 		Also double-check added XML?
 			Probably worth pulling paste-and-double-check functionality out into a generic function at that point
@@ -17,7 +19,6 @@
 			Would need to read from files directly for function contents
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
-	Combine near-duplicate logic from explorer and everything scripts for copying path/containing folder path and showing a toast about it
 	Consider adding functionality to Toast to have it sleep until the toast goes away
 		Possibly just static variables for wait times, that other scripts can grab based on how long they wanted to wait?
 		Better would be to have the toast itself handle the waiting

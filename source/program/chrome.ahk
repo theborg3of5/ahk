@@ -79,8 +79,9 @@ chromeCopyFileLink(showToast := false) {
 	clipboard := "" ; Clear the clipboard so we can tell when we have the new link on it
 	
 	Click, Right
-	Sleep, 100  ; Wait for menu to appear
-	Send, e     ; Copy link address
+	Sleep, 100 ; Wait for menu to appear
+	Send, e    ; Copy link address
+	
 	ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain the link
 	
 	if(showToast)

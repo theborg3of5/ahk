@@ -30,15 +30,14 @@ getFirstLineOfSelectedText() {
 
 ; Grabs the selected text using the clipboard, fixing the clipboard as it finishes.
 getSelectedText() {
-	; Copy selected text to the clipboard.
-	if(WinActive("ahk_class PuTTY")) {
-		; PuTTY auto-copies the selection to the clipboard, and ^c causes an interrupt, so do nothing.
-	} else {
-		originalClipboard := clipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
-		clipboard :=                      ; Clear the clipboard so we can tell when something is added by ^c.
-		Send, ^c
-		ClipWait, 0.5                     ; Wait for the clipboard to actually contain data (minimum time).
-	}
+	; PuTTY auto-copies the selection to the clipboard, and ^c causes an interrupt, so do nothing.
+	if(WinActive("ahk_class PuTTY"))
+		return clipboard
+	
+	originalClipboard := clipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
+	clipboard :=                      ; Clear the clipboard so we can tell when something is added by ^c.
+	Send, ^c
+	ClipWait, 0.5                     ; Wait for the clipboard to actually contain data (minimum time).
 	
 	textFound := clipboard
 	clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).

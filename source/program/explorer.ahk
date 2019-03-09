@@ -10,7 +10,7 @@
 	return
 	
 	; Copy current file path to clipboard
-	!c::copyFolderPathWithHotkey("!c")
+	!c::copyFilePathWithHotkey("!c")
 	; Copy current folder path to clipboard
 	!#c::copyFolderPathWithHotkey("^!c")
 	

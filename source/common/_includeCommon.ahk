@@ -5,6 +5,7 @@
 
 #Include actionObject.ahk
 #Include commandFunctions.ahk
+#Include clipboard.ahk
 #Include data.ahk
 #Include dateTime.ahk
 #Include debug.ahk

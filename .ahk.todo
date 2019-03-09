@@ -5,7 +5,6 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
-	Should we split the clipboard-based stuff out of io.ahk and into a new clipboard.ahk?
 	Consider splitting hyperlink-selected-text logic into a separate (probably static) class
 	Expand onetastic macro function importing
 		Also double-check added XML?
@@ -81,6 +80,7 @@
 			mainConfig
 			selectorGui
 		functions
+			clipboard
 			data
 			dateTime
 			epic

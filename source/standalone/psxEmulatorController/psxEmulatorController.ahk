@@ -3,7 +3,7 @@
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
-setCommonHotkeysType(HOTKEY_TYPE_SubMaster)
+setCommonHotkeysType(HOTKEY_TYPE_Standalone)
 setUpTrayIcons("controllerGreen.ico", "controllerRed.ico", "AHK: Controller Emulator")
 
 SetTimer, MainLoop, 100 ; 100ms, timer toggled by commonHotkeys' suspend hotkey.

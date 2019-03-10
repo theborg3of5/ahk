@@ -5,7 +5,6 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
-	Move controller emulator to a standalone script, don't need regularly enough to make it an auto-start
 	Potential Hyperlinker updates
 		Should we move the windowsAry definition to a .tl file?
 			Could still be read in just the once (into a static variable)

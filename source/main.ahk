@@ -77,6 +77,6 @@ runStandaloneScripts() {
 		Run(standaloneFolder "dlgNumTracker\dlgNumTracker.ahk")
 		Run(standaloneFolder "tortoiseFillerDLG\tortoiseFillerDLG.ahk")
 	} else if(MainConfig.isMachine(MACHINE_HomeDesktop)) {
-		Run(standaloneFolder "psxEmulatorController\psxEmulatorController.ahk")
+		; Run(standaloneFolder "psxEmulatorController\psxEmulatorController.ahk")
 	}
 }

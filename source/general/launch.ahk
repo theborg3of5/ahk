@@ -27,7 +27,7 @@ genericHyperlink(subAction) {
 	if(!link)
 		return
 	
-	if(!linkSelectedText(link))
+	if(!Hyperlinker.linkSelectedText(link))
 		setClipboardAndToast(link, "link", "Failed to link selected text.")
 }
 

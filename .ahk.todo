@@ -5,7 +5,23 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
-	Consider splitting hyperlink-selected-text logic into a separate (probably static) class
+	Potential Hyperlinker updates
+		Should we move the windowsAry definition to a .tl file?
+			Could still be read in just the once (into a static variable)
+			Easier to add/update stuff
+		Actually, could we make the whole thing Selector-based?
+			Columns:
+				Popup window title (as applicable)
+				Methods for linking:
+					Open popup, pop in path, accept
+					Wrapping text in some other text (for MatterMost)
+						MatterMost case could probably be significantly simplified by just getting the selected text, deleting it, then replacing with a fully-build link string
+							So link string with <tags> could be one of the columns in the .tl file
+				Keys to send to accept link window (!a or {Enter})
+				Tagged link string (for MatterMost)
+			As now, existence in the resulting array for a key is indicative of support
+			Verification of added link would be different for tagged link case
+				Could try to select whole thing that SHOULD be there and compare?
 	Expand onetastic macro function importing
 		Also double-check added XML?
 			Probably worth pulling paste-and-double-check functionality out into a generic function at that point
@@ -76,6 +92,7 @@
 # Documentation
 	common
 		classes
+			hyperlinker
 			iniObject
 			listConverter
 			mainConfig

@@ -14,6 +14,7 @@
 #Include flexTable.ahk
 #Include gui.ahk
 #Include HTTPRequest.ahk
+#Include hyperlinker.ahk
 #Include iniObject.ahk
 #Include io.ahk
 #Include listConverter.ahk

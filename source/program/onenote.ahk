@@ -268,7 +268,7 @@
 			
 			selectTextWithinSelection(recordText)
 			webURL := buildEMC2Link(ini, id, "WEB")
-			if(!linkSelectedText(webURL)) {
+			if(!Hyperlinker.linkSelectedText(webURL)) {
 				setClipboardAndToast(webURL, "link", "Failed to add EMC2 object web link.")
 				return
 			}
@@ -279,7 +279,7 @@
 			
 			selectTextWithinSelection(editText)
 			editURL := buildEMC2Link(ini, id, "EDIT")
-			if(!linkSelectedText(editURL))
+			if(!Hyperlinker.linkSelectedText(editURL))
 				setClipboardAndToast(editURL, "link", "Failed to add EMC2 object edit link.")
 		}
 	
@@ -365,7 +365,7 @@
 		Send, {Home}{Shift Down}{End}{Shift Up} ; Select whole line, but avoid the extra indentation and newline that comes with ^a.
 		selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
 		url := buildEMC2Link(ini, id)
-		if(!linkSelectedText(url)) {
+		if(!Hyperlinker.linkSelectedText(url)) {
 			setClipboardAndToast(url, "link", "Failed to link EMC2 object text.")
 			return
 		}

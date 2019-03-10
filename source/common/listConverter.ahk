@@ -3,11 +3,11 @@
 	***
 */
 
-global LISTFORMAT_Ambiguous := "AMBIGUOUS"
+global LISTFORMAT_Ambiguous     := "AMBIGUOUS"
 global LISTFORMAT_UnknownSingle := "UNKNOWN_SINGLE"
 
-global LISTFORMAT_Array := "ARRAY"
-global LISTFORMAT_Commas := "COMMA"
+global LISTFORMAT_Array    := "ARRAY"
+global LISTFORMAT_Commas   := "COMMA"
 global LISTFORMAT_NewLines := "NEWLINE"
 
 class ListConverter {

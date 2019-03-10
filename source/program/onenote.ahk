@@ -250,16 +250,16 @@
 		}
 	
 	!+#n::
-		linkOneNoteSpecificsSectionTitle() {
+		linkOneNoteDevStructureSectionTitle() {
 			waitForHotkeyRelease()
 			
 			Send, {Home}
 			Send, ^a ; Select all, selects full line
 			lineText := getSelectedText()
 			
-			linkText := getStringAfterStr(lineText, " - ")
+			linkText   := getStringAfterStr(lineText, " - ")
 			recordText := getStringBeforeStr(linkText, " (")
-			editText := getStringBetweenStr(linkText, "(", ")")
+			editText   := getStringBetweenStr(linkText, "(", ")")
 			
 			infoAry := extractEMC2ObjectInfo(recordText)
 			ini := infoAry["INI"]

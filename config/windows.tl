@@ -39,7 +39,7 @@
 	Foobar								foobar2000.exe
 	GitHub								GitHubDesktop.exe			-							-												0
 	Greenshot							Greenshot.exe
-	Hyperspace							EpicD87.exe
+	Hyperspace							EpicD88.exe
 	KDiff									kdiff3.exe
 	Launchy								Launchy.exe
 	Mattermost							Mattermost.exe

@@ -38,7 +38,7 @@ class Hyperlinker {
 	; == Private ===================
 	; ==============================
 	
-	static windowsAry := []
+	static windowsAry := ""
 	
 	; Format: windowsAry[windowName] := Identifying title text for linking popup (where we'll enter the path)
 	; windowName is from NAME column of windows.tl config file

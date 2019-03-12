@@ -487,8 +487,12 @@
 
 #If MainConfig.isWindowActive("OneTastic Macro Editor")
 	; Move line up/down
-	!Up::Send, ^{Up}
+	!Up::  Send, ^{Up}
 	!Down::Send, ^{Down}
+	
+	; Collapse/expand
+	!Left:: Send, ^{Left}
+	!Right::Send, ^{Right}
 	
 	; New macro function
 	^n::^NumpadAdd

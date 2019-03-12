@@ -12,9 +12,11 @@
 	# System
 	Startup							start								<USER_ROOT>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
 	Pinned Shortcuts				ps									<USER_ROOT>\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar
-	EpicStudio Config				esc								<USER_ROOT>\AppData\Local\Epic Systems Corporation\EpicStudio										EPIC_LAPTOP
 	
 	# Development
+	OneTastic Macros				ot									<ONETASTIC_MACROS>
+	
+	# Epic
 	Dev								dev								<USER_DEV>																											EPIC_LAPTOP
 	Templates						temp								<USER_DEV>\Templates																								EPIC_LAPTOP
 	Transaction Diff Output		txdiff							<TX_DIFF_OUTPUT>																									EPIC_LAPTOP
@@ -24,6 +26,7 @@
 	NFS Ask							na									<EPIC_NFS_ASK>																										EPIC_LAPTOP
 	S1 Source						s1									<EPIC_SOURCE_S1>																									EPIC_LAPTOP
 	S2 Source						s2									<EPIC_SOURCE_S2>																									EPIC_LAPTOP
+	EpicStudio Config				esc								<USER_ROOT>\AppData\Local\Epic Systems Corporation\EpicStudio										EPIC_LAPTOP
 	
 	# Admin
 	DBC Design						dbcd								<EPIC_DBC_DESIGN>																									EPIC_LAPTOP

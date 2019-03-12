@@ -9,6 +9,9 @@
 	User Dev								USER_DEV								<USER_ROOT>\Dev
 	
 	; Dev
+	OneTastic Macros					ONETASTIC_MACROS					<USER_ROOT>\OneTasticMacros
+	
+	; Epic
 	VB6 Compile							VB6_COMPILE							<USER_ROOT>\Dev\Temp\Compile					EPIC_LAPTOP
 	Transaction Diff					TX_DIFF								C:\Program Files\TransactionDiff				EPIC_LAPTOP
 	Transaction Diff Results		TX_DIFF_OUTPUT						<USER_ROOT>\Dev\TransactionDiffOutput		EPIC_LAPTOP

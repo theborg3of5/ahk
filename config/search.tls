@@ -19,6 +19,7 @@
 		; (SUBTYPE = folder)
 		AHK Root							ahkr			<AHK_ROOT>
 		AHK Source						ahks|ahkf	<AHK_SOURCE>
+		OneTastic Macros				ot				<ONETASTIC_MACROS>
 []
 		
 		# Other

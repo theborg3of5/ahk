@@ -5,6 +5,7 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	Consider splitting OneTastic macro stuff into a new script
 	Potential Hyperlinker updates
 		Should we move the windowsAry definition to a .tl file?
 			Could still be read in just the once (into a static variable)
@@ -114,6 +115,7 @@
 			Reconsider debug functions
 		excel
 		hyperspace
+		onetastic
 		outlook
 		putty
 		snapper

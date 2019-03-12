@@ -182,6 +182,23 @@
 			setClipboardAndToast(linkToUse, "link")
 		}
 	
+	; Remove link
+	^MButton::
+		Click, Right
+		Sleep, 100 ; Wait for menu to appear
+		Send, r    ; Remove link
+		
+		; Go ahead and finish if the right-click menu is gone, we're done.
+		if(!WinActive("ahk_class Net UI Tool Window"))
+			return
+		
+		; If the right click menu is still open (probably because it wasn't a link and therefore
+		; there was no "r" option), give it a tick to close on its own, then close it.
+		Sleep, 100
+		if(WinActive("ahk_class Net UI Tool Window"))
+			Send, {Esc}
+	return
+	
 	; Make a copy of the current page in the Do section.
 	^+m::
 		copyOneNoteDoPage() {
@@ -466,6 +483,7 @@
 		currNumTabs := numTabs
 	}
 #If
+
 
 #If MainConfig.isWindowActive("OneTastic Macro Editor")
 	; New macro function

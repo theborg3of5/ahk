@@ -51,6 +51,7 @@ runStandaloneScripts()
 #Include mattermost.ahk
 #Include notepad++.ahk
 #Include onenote.ahk
+#Include onetastic.ahk
 #Include outlook.ahk
 #Include oxygenXML.ahk
 #Include pidgin.ahk

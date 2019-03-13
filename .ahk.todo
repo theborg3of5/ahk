@@ -6,7 +6,6 @@
 	
 # New
 	Consider an !c copy function hotkey for VB6
-	Consider splitting OneTastic macro stuff into a new script
 	Potential Hyperlinker updates
 		Should we move the windowsAry definition to a .tl file?
 			Could still be read in just the once (into a static variable)

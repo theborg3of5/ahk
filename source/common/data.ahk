@@ -96,6 +96,35 @@ mergeArrays(default, overrides) {
 	return retAry
 }
 
+; Appends the contents of one (numeric) array to the (numeric) other.
+arrayAppend(baseAry, arrayToAppend) {
+	; .length() returns "" if it's not an object and 0 if it's empty
+	isBaseEmpty   := !(baseAry.length() > 0)
+	isAppendEmpty := !(arrayToAppend.length() > 0)
+	
+	if(isBaseEmpty)
+		return arrayToAppend
+	if(isAppendEmpty)
+		return baseAry
+	
+	outAry := baseAry.clone()
+	For _,value in arrayToAppend
+		outAry.push(value)
+	
+	return outAry
+}
+
+arrayDropDuplicates(inputAry) {
+	outAry := []
+	
+	For _,val in inputAry
+		if(!arrayContains(outAry, val))
+			outAry.push(val)
+	
+	return outAry
+}
+
+
 ; Counterpart to strSplit() - puts together all parts of an array with the given delimiter (defaults to "|")
 arrayJoin(arrayToJoin, delim := "|") {
 	outStr := ""
@@ -124,10 +153,11 @@ nullGlobals(baseName, startIndex, endIndex) {
 }
 
 arrayDropEmptyValues(inputAry) {
-	outputAry := []
-	For i,val in inputAry
-		if(val != "")
-			outputAry[i] := val
+	outAry := []
 	
-	return outputAry
+	For _,val in inputAry
+		if(val != "")
+			outAry.push(val)
+	
+	return outAry
 }

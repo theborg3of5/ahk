@@ -484,7 +484,6 @@
 	}
 #If
 
-
 #If MainConfig.isWindowActive("OneTastic Macro Editor")
 	; Move line up/down
 	!Up::  Send, ^{Up}
@@ -570,49 +569,88 @@
 			Send, !o ; OK out of window
 		}
 		
-		oneTasticImportAllMacroFunctions() {
+		
+		oneTasticImportAllMacroDependencies() {
+			macroName := "createPageAndLink_SpecificSection" ; GDB TODO figure out how to pick/figure out macro name (maybe put it in the macro's XML as the first comment?)
+			masterDependenciesAry := onetasticGetAllMacroDependencies(macroName)
+			DEBUG.popup("macroName",macroName, "masterDependenciesAry",masterDependenciesAry)
 			
-			/*
-				Read all function files' XML into an array (all files in Functions\ folder): functionName => XML
-					Loop over all functions and populate a required functions array: functionName => {requiredFunction1, requiredFunction2, ...}
-				Macro -> array of functionNames
-				Function to get in-order array of all required functions
-					Start with empty array
-					Function XML (from array) -> list of required functions FOR this function
-						Add each function, then recurse (depth-first) and append recursive result to array before going to the next function
-							Don't worry about duplicates at this point, we'll filter them out at the end
-				Loop through full array of required functions and import them
-			*/
-			
+		}
+
+		onetasticGetAllMacroDependencies(macroName) {
+			if(macroName = "")
+				return []
 			
 			macrosFolderPath := "C:\Users\gborg\OneTasticMacros"
 			functionsFolderPath := "C:\Users\gborg\OneTasticMacros\Functions"
-			macroName := "addDevStructure_CurrentPage" ; GDB TODO figure out how to pick/figure this out (maybe put it in the macro's XML as the first comment?)
+			
 			
 			origWorkingDir := A_WorkingDir
+			
+			; Read all function files' XML into an array (all files in Functions\ folder): functionName => XML
+				; Loop over all functions and populate a dependencies array: functionName => {requiredFunction1, requiredFunction2, ...}
+			SetWorkingDir, % functionsFolderPath
+			functionsXMLAry := []
+			masterDependenciesAry := []
+			Loop, Files, % "*.xml"
+			{
+				; Skip files that start with . (like template)
+				if(stringStartsWith(A_LoopFileName, "."))
+					Continue
+				
+				functionXML := FileRead(A_LoopFileName)
+				functionName := getFirstStringBetweenStr(functionXML, "<Comment text=""", "(") ; Function signature is in first comment line, i.e. <Comment text="addWideOutlineToPage($page)" />
+				if(!functionName)
+					Continue
+				
+				functionsXMLAry[functionName] := functionXML
+				masterDependenciesAry[functionName] := onetasticGetDependenciesFromXML(functionXML)
+			}
+			; DEBUG.popup("masterDependenciesAry",masterDependenciesAry, "functionsXMLAry",functionsXMLAry)
+			
+			; Macro -> array of functionNames
 			SetWorkingDir, % macrosFolderPath
-			
 			macroXML := FileRead(macroName ".xml")
+			macroDependenciesAry := onetasticGetDependenciesFromXML(macroXML)
+			; DEBUG.popup("macroXML",macroXML, "macroDependenciesAry",macroDependenciesAry)
 			
-			; Find stuff between:
-				; <Comment text="REQUIRED FUNCTIONS">
-				; <Comment text="" /> (empty comment is ending edge)
-			requiredFunctionsStart := "<Comment text=""REQUIRED FUNCTIONS"">" ; <Comment text="REQUIRED FUNCTIONS">
-			requiredFunctionsEnd   := "<Comment text="""" />"                 ; <Comment text="" /> (empty comment is ending edge)
-			requiredFunctionsXML := getFirstStringBetweenStr(macroXML, requiredFunctionsStart, requiredFunctionsEnd)
-			; DEBUG.popup("macroName",macroName, "macroXML",macroXML, "requiredFunctionsStart",requiredFunctionsStart, "requiredFunctionsEnd",requiredFunctionsEnd, "requiredFunctionsXML",requiredFunctionsXML)
+			SetWorkingDir, % origWorkingDir
 			
-			; Drop all of these (RegEx):
-				; <Comment text="|" />|">|</Comment>| 
-				; (Start comment tag, end self-closing comment tag, end non-self-closing comment tag, comment close tag, spaces)
-			bitsToDropRegex := "<Comment text=""|"" />|"">|</Comment>| " ; <Comment text="|" />|">|</Comment>| 
-			requiredFunctions := RegExReplace(requiredFunctionsXML, bitsToDropRegex)
-			; DEBUG.popup("bitsToDropRegex",bitsToDropRegex, "requiredFunctions",requiredFunctions)
+			; Function to get in-order array of all required functions
+				; Start with empty array
+				; Function XML (from array) -> list of required functions FOR this function
+					; Add each function, then recurse (depth-first) and append recursive result to array before going to the next function
+						; Appending - probably a new function in data.ahk
+						; Don't worry about duplicates at this point, we'll filter them out at the end
+			totalDependenciesAry := []
+			For _,functionName in macroDependenciesAry {
+				functionDependenciesAry := onetasticCompileDependenciesForFunction(functionName, functionsXMLAry, masterDependenciesAry)
+				totalDependenciesAry := arrayAppend(totalDependenciesAry, functionDependenciesAry)
+			}
+			; DEBUG.popup("totalDependenciesAry",totalDependenciesAry)
 			
-			; Loop through and build a unique (but still in-order) array of functions to import
-			functionNamesAry   := []
-			importFunctionsAry := []
-			Loop, Parse, requiredFunctions, `r`n ; This technically breaks on every `r OR `n, but this should be fine since we're ignoring empty strings.
+			; Remove duplicates (probably new function in data.ahk)
+			totalDependenciesAry := arrayDropDuplicates(totalDependenciesAry)
+			; DEBUG.popup("totalDependenciesAry deduplicated",totalDependenciesAry)
+			
+			return totalDependenciesAry
+		}
+
+		onetasticGetDependenciesFromXML(xml) {
+			dependenciesStart := "<Comment text=""REQUIRED FUNCTIONS"" />" ; <Comment text="REQUIRED FUNCTIONS" />
+			dependenciesEnd   := "<Comment text="""" />"                   ; <Comment text="" /> (empty comment is ending edge)
+			
+			if(!stringContains(xml, dependenciesStart))
+				return []
+			
+			dependenciesXML := getFirstStringBetweenStr(xml, dependenciesStart, dependenciesEnd)
+			; DEBUG.popup("xml",xml, "dependenciesXML",dependenciesXML)
+			
+			bitsToDropRegex := "<Comment text="" |"" />" ; <Comment text=" |" />
+			dependencies := RegExReplace(dependenciesXML, bitsToDropRegex)
+			
+			dependenciesAry := []
+			Loop, Parse, dependencies, `r`n ; This technically breaks on every `r OR `n, but this should be fine since we're ignoring empty strings.
 			{
 				functionName := A_LoopField
 				
@@ -620,43 +658,28 @@
 				if(functionName = "")
 					Continue
 				
-				; Only add unique function names to the list of functions to import
-				if(functionNamesAry[functionName])
-					Continue
-				
-				functionNamesAry[functionName] := true
-				importFunctionsAry.push(functionName)
+				dependenciesAry.push(functionName)
 			}
-			; DEBUG.popup("requiredFunctions",requiredFunctions, "functionNamesAry",functionNamesAry, "importFunctionsAry",importFunctionsAry)
+			; DEBUG.popup("dependencies",dependencies, "dependenciesAry",dependenciesAry)
 			
-			; Grab the corresponding XML from each functions' corresponding file
-			SetWorkingDir, % functionsFolderPath ; MainConfig.getPath("EPICSTUDIO_GLOBAL_HIGHLIGHTS")
-			functionsXMLAry := []
-			For functionName,_ in importFunctionsAry {
-				functionsXMLAry[functionName] := FileRead(functionName ".xml")
-			}
-			
-			
-			
-			
-			
-			SetWorkingDir, % origWorkingDir
+			return dependenciesAry
 		}
-		oneTasticGetRequiredFunctionsForFunction(functionName) {
-			requiredFunctionsStart := "<Comment text=""REQUIRED FUNCTIONS"" />" ; <Comment text="REQUIRED FUNCTIONS" />
-			requiredFunctionsEnd   := "<Comment text="""" />"                   ; <Comment text="" /> (empty comment is ending edge)
+
+		; Add each function, then recurse (depth-first) and append recursive result to array before going to the next function
+						; Appending - probably a new function in data.ahk
+						; Don't worry about duplicates at this point, we'll filter them out at the end
+		onetasticCompileDependenciesForFunction(functionName, functionsXMLAry, masterDependenciesAry) {
+			outAry := [functionName]
+			if(functionName = "")
+				return outAry
 			
-			; functionXML := FileRead("C:\Users\gborg\OneTasticMacros\Functions\addWideOutlineToPage.xml")
-			functionXML := FileRead("C:\Users\gborg\OneTasticMacros\Functions\createAndLinkPageFromSelection.xml")
-			if(!stringContains(functionXML, requiredFunctionsStart))
-				return
+			For _,dependencyName in masterDependenciesAry[functionName] {
+				subDependenciesAry := onetasticCompileDependenciesForFunction(dependencyName, functionsXMLAry, masterDependenciesAry)
+				outAry := arrayAppend(outAry, subDependenciesAry)
+				; DEBUG.popup("functionName",functionName, "dependencyName",dependencyName, "subDependenciesAry",subDependenciesAry, "outAry",outAry)
+			}
 			
-			requiredFunctionsXML := getFirstStringBetweenStr(functionXML, requiredFunctionsStart, requiredFunctionsEnd)
-			; DEBUG.popup("functionXML",functionXML, "requiredFunctionsXML",requiredFunctionsXML)
-			
-			bitsToDropRegex := "<Comment text="" |"" />" ; <Comment text=" |" />
-			requiredFunctions := RegExReplace(requiredFunctionsXML, bitsToDropRegex)
-			DEBUG.popup("requiredFunctions",requiredFunctions)
+			return outAry
 		}
 		
 	onetasticFunctionSignatureIsCorrect(correctSignature) {

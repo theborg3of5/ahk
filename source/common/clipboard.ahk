@@ -6,7 +6,7 @@ copyWithHotkey(hotkeyKeys) {
 	
 	clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
 	Send, % hotkeyKeys
-	ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain the new info.
+	ClipWait, 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
 }
 copyFilePathWithHotkey(hotkeyKeys) {
 	copyWithHotkey(hotkeyKeys)

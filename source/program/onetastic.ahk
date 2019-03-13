@@ -130,9 +130,9 @@
 			
 			SetWorkingDir, % origWorkingDir
 			
-			; Function to get in-order array of all required functions
+			; Function to get in-order array of all dependencies
 				; Start with empty array
-				; Function XML (from array) -> list of required functions FOR this function
+				; Function XML (from array) -> list of dependencies FOR this function
 					; Add each function, then recurse (depth-first) and append recursive result to array before going to the next function
 						; Appending - probably a new function in data.ahk
 						; Don't worry about duplicates at this point, we'll filter them out at the end
@@ -151,8 +151,8 @@
 		}
 
 		onetasticGetDependenciesFromXML(xml) {
-			dependenciesStart := "<Comment text=""REQUIRED FUNCTIONS"" />" ; <Comment text="REQUIRED FUNCTIONS" />
-			dependenciesEnd   := "<Comment text="""" />"                   ; <Comment text="" /> (empty comment is ending edge)
+			dependenciesStart := "<Comment text=""DEPENDENCIES"" />" ; <Comment text="DEPENDENCIES" />
+			dependenciesEnd   := "<Comment text="""" />"             ; <Comment text="" /> (empty comment is ending edge)
 			
 			if(!stringContains(xml, dependenciesStart))
 				return []

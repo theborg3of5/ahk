@@ -89,6 +89,7 @@
 			masterDependencyXMLsAry := onetasticGetAllMacroDependencyXMLs(macroName)
 			DEBUG.popup("macroName",macroName, "masterDependencyXMLsAry",masterDependencyXMLsAry)
 			
+			; GDB TODO imports
 		}
 
 		onetasticGetAllMacroDependencyXMLs(macroName) {
@@ -170,15 +171,8 @@
 			
 			dependenciesAry := []
 			Loop, Parse, dependencies, `r`n ; This technically breaks on every `r OR `n, but this should be fine since we're ignoring empty strings.
-			{
-				functionName := A_LoopField
-				
-				; Ignore empty lines
-				if(functionName = "")
-					Continue
-				
-				dependenciesAry.push(functionName)
-			}
+				if(A_LoopField != "") ; Ignore empty lines
+					dependenciesAry.push(A_LoopField)
 			; DEBUG.popup("dependencies",dependencies, "dependenciesAry",dependenciesAry)
 			
 			return dependenciesAry

@@ -571,10 +571,23 @@
 		}
 		
 		oneTasticImportAllMacroFunctions() {
-			macrosFolderPath := ""
-			functionsFolderPath := ""
-			macroFilePath := ""
-			macroName := "" ; GDB TODO figure out how to pick/figure this out (maybe put it in the macro's XML as the first comment?)
+			
+			/*
+				Read all function files' XML into an array (all files in Functions\ folder): functionName => XML
+					Loop over all functions and populate a required functions array: functionName => {requiredFunction1, requiredFunction2, ...}
+				Macro -> array of functionNames
+				Function to get in-order array of all required functions
+					Start with empty array
+					Function XML (from array) -> list of required functions FOR this function
+						Add each function, then recurse (depth-first) and append recursive result to array before going to the next function
+							Don't worry about duplicates at this point, we'll filter them out at the end
+				Loop through full array of required functions and import them
+			*/
+			
+			
+			macrosFolderPath := "C:\Users\gborg\OneTasticMacros"
+			functionsFolderPath := "C:\Users\gborg\OneTasticMacros\Functions"
+			macroName := "addDevStructure_CurrentPage" ; GDB TODO figure out how to pick/figure this out (maybe put it in the macro's XML as the first comment?)
 			
 			origWorkingDir := A_WorkingDir
 			SetWorkingDir, % macrosFolderPath
@@ -587,7 +600,7 @@
 			requiredFunctionsStart := "<Comment text=""REQUIRED FUNCTIONS"">" ; <Comment text="REQUIRED FUNCTIONS">
 			requiredFunctionsEnd   := "<Comment text="""" />"                 ; <Comment text="" /> (empty comment is ending edge)
 			requiredFunctionsXML := getFirstStringBetweenStr(macroXML, requiredFunctionsStart, requiredFunctionsEnd)
-			; DEBUG.popup("macroFilePath",macroFilePath, "macroXML",macroXML, "requiredFunctionsStart",requiredFunctionsStart, "requiredFunctionsEnd",requiredFunctionsEnd, "requiredFunctionsXML",requiredFunctionsXML)
+			; DEBUG.popup("macroName",macroName, "macroXML",macroXML, "requiredFunctionsStart",requiredFunctionsStart, "requiredFunctionsEnd",requiredFunctionsEnd, "requiredFunctionsXML",requiredFunctionsXML)
 			
 			; Drop all of these (RegEx):
 				; <Comment text="|" />|">|</Comment>| 
@@ -628,6 +641,22 @@
 			
 			
 			SetWorkingDir, % origWorkingDir
+		}
+		oneTasticGetRequiredFunctionsForFunction(functionName) {
+			requiredFunctionsStart := "<Comment text=""REQUIRED FUNCTIONS"" />" ; <Comment text="REQUIRED FUNCTIONS" />
+			requiredFunctionsEnd   := "<Comment text="""" />"                   ; <Comment text="" /> (empty comment is ending edge)
+			
+			; functionXML := FileRead("C:\Users\gborg\OneTasticMacros\Functions\addWideOutlineToPage.xml")
+			functionXML := FileRead("C:\Users\gborg\OneTasticMacros\Functions\createAndLinkPageFromSelection.xml")
+			if(!stringContains(functionXML, requiredFunctionsStart))
+				return
+			
+			requiredFunctionsXML := getFirstStringBetweenStr(functionXML, requiredFunctionsStart, requiredFunctionsEnd)
+			; DEBUG.popup("functionXML",functionXML, "requiredFunctionsXML",requiredFunctionsXML)
+			
+			bitsToDropRegex := "<Comment text="" |"" />" ; <Comment text=" |" />
+			requiredFunctions := RegExReplace(requiredFunctionsXML, bitsToDropRegex)
+			DEBUG.popup("requiredFunctions",requiredFunctions)
 		}
 		
 	onetasticFunctionSignatureIsCorrect(correctSignature) {

@@ -86,12 +86,12 @@
 		
 		oneTasticImportAllMacroDependencies() {
 			macroName := "createPageAndLink_SpecificSection" ; GDB TODO figure out how to pick/figure out macro name (maybe put it in the macro's XML as the first comment?)
-			masterDependenciesAry := onetasticGetAllMacroDependencies(macroName)
-			DEBUG.popup("macroName",macroName, "masterDependenciesAry",masterDependenciesAry)
+			masterDependencyXMLsAry := onetasticGetAllMacroDependencyXMLs(macroName)
+			DEBUG.popup("macroName",macroName, "masterDependencyXMLsAry",masterDependencyXMLsAry)
 			
 		}
 
-		onetasticGetAllMacroDependencies(macroName) {
+		onetasticGetAllMacroDependencyXMLs(macroName) {
 			if(macroName = "")
 				return []
 			
@@ -147,7 +147,12 @@
 			totalDependenciesAry := arrayDropDuplicates(totalDependenciesAry)
 			; DEBUG.popup("totalDependenciesAry deduplicated",totalDependenciesAry)
 			
-			return totalDependenciesAry
+			; Generate array of XMLs in same order
+			totalDependencyXMLsAry := []
+			For _,dependencyName in totalDependenciesAry
+				totalDependencyXMLsAry.push(functionsXMLAry[dependencyName])
+			
+			return totalDependencyXMLsAry
 		}
 
 		onetasticGetDependenciesFromXML(xml) {

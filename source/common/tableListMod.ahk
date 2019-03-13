@@ -68,8 +68,8 @@ class TableListMod {
 		
 		; Pull the relevant info out of the string.
 		this.column    := getStringBeforeStr(modString, ".")
-		this.operation := getStringBetweenStr(modString, ".", "(")
-		this.text      := getStringBetweenStrGreedy(modString, "(", ")") ; Go to the last close-paren, to allow other close-parens in the string
+		this.operation := getFirstStringBetweenStr(modString, ".", "(")
+		this.text      := getFullStringBetweenStr(modString, "(", ")") ; Go to the last close-paren, to allow other close-parens in the string
 		
 		; DEBUG.popup("New TableListMod","Finished", "State",this)
 	}

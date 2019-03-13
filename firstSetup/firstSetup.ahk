@@ -57,7 +57,7 @@ For tag,v in tagsToReplace {
 t.setText("Processing files...")
 For from,to in copyPaths {
 	; Read it in.
-	FileRead, fileContents, %from%
+	fileContents := FileRead(from)
 	
 	; Replace any placeholder tags in the file contents.
 	; DEBUG.popup("From", from, "To", to, "Starting contents", fileContents)

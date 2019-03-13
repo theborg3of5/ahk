@@ -94,7 +94,7 @@
 	; Code vs. design swap. Note: only works if mini-window within window is maximized within outer window.
 	Pause::
 		toggleVB6CodeDesign() {
-			mode := getStringBetweenStr(WinGetTitle("A"), "(", ")")
+			mode := getFirstStringBetweenStr(WinGetTitle("A"), "(", ")")
 			if(mode = "Code") {
 				Send, +{F7}
 			} else if(mode = "Form" || mode = "UserControl") {

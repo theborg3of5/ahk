@@ -101,8 +101,8 @@ escapeForRunURL(stringToEscape) {
 }
 
 ; Wrapper for InStr() that I can remember easier. Slightly different parameters as well.
-stringContains(haystack, needle, searchFromEnd := false) {
-	if(searchFromEnd)
+stringContains(haystack, needle, fromLastInstance := false) {
+	if(fromLastInstance)
 		return InStr(haystack, needle, , 0)
 	else
 		return InStr(haystack, needle)
@@ -152,26 +152,29 @@ stringEndsWith(inputString, endString) {
 }
 
 
-getStringBeforeStr(inputString, endString, searchFromEnd := false) {
-	endStringPos := stringContains(inputString, endString, searchFromEnd)
+getStringBeforeStr(inputString, endString, fromLastInstance := false) {
+	endStringPos := stringContains(inputString, endString, fromLastInstance)
 	if(!endStringPos)
 		return inputString
 	
 	return subStr(inputString, 1, endStringPos - 1)
 }
-getStringAfterStr(inputString, startString, searchFromEnd := false) {
-	startStringPos := stringContains(inputString, startString, searchFromEnd)
+getStringAfterStr(inputString, startString, fromLastInstance := false) {
+	startStringPos := stringContains(inputString, startString, fromLastInstance)
 	if(!startStringPos)
 		return inputString
 	
 	return subStr(inputString, startStringPos + strLen(startString))
 }
-getStringBetweenStr(inputString, startString, endString, beGreedy := false) {
-	outString := getStringBeforeStr(inputString, endString, beGreedy)
-	return getStringAfterStr(outString, startString)
+getFirstStringBetweenStr(inputString, startString, endString, upToLastEndString := false) {
+	; Trim off everything before (and including) the first instance of the startString
+	outString := getStringAfterStr(inputString, startString)
+	
+	; Trim off everything before (and including) the remaining instance (first or last depending on upToLastEndString) of the endString
+	return getStringBeforeStr(outString, endString, upToLastEndString)
 }
-getStringBetweenStrGreedy(inputString, startString, endString) {
-	return getStringBetweenStr(inputString, startString, endString, true)
+getFullStringBetweenStr(inputString, startString, endString) {
+	return getFirstStringBetweenStr(inputString, startString, endString, true)
 }
 
 ; Wrapper function for whether a string is alphabetic.

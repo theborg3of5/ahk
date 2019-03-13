@@ -276,7 +276,7 @@
 			
 			linkText   := getStringAfterStr(lineText, " - ")
 			recordText := getStringBeforeStr(linkText, " (")
-			editText   := getStringBetweenStr(linkText, "(", ")")
+			editText   := getFirstStringBetweenStr(linkText, "(", ")")
 			
 			infoAry := extractEMC2ObjectInfo(recordText)
 			ini := infoAry["INI"]
@@ -544,7 +544,7 @@
 			}
 			
 			; First line should be a comment with the exact function signature
-			functionSignature := getStringBetweenStr(functionXML, "<Comment text=""", """ />")
+			functionSignature := getFirstStringBetweenStr(functionXML, "<Comment text=""", """ />")
 			
 			; Add function signature 
 			Send, ^{NumpadAdd} ; New macro

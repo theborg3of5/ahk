@@ -33,7 +33,7 @@
 			Send, {Up}
 			
 			; Piece out the parameters
-			paramsList := getStringBetweenStr(firstLine, "(", ")")
+			paramsList := getFirstStringBetweenStr(firstLine, "(", ")")
 			paramsAry  := strSplit(paramsList, ",", " `t")
 			
 			; Drop any defaults from the parameters, get max length

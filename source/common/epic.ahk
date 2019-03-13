@@ -371,7 +371,7 @@ getCurrentSnapperEnvironment() {
 		return ""
 	
 	environmentText := ControlGetText("ThunderRT6ComboBox2", snapperTitleString)
-	commId := getStringBetweenStr(environmentText, "[", "]")
+	commId := getFirstStringBetweenStr(environmentText, "[", "]")
 	
 	return commId
 }

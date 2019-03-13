@@ -570,6 +570,66 @@
 			Send, !o ; OK out of window
 		}
 		
+		oneTasticImportAllMacroFunctions() {
+			macrosFolderPath := ""
+			functionsFolderPath := ""
+			macroFilePath := ""
+			macroName := "" ; GDB TODO figure out how to pick/figure this out (maybe put it in the macro's XML as the first comment?)
+			
+			origWorkingDir := A_WorkingDir
+			SetWorkingDir, % macrosFolderPath
+			
+			macroXML := FileRead(macroName ".xml")
+			
+			; Find stuff between:
+				; <Comment text="REQUIRED FUNCTIONS">
+				; <Comment text="" /> (empty comment is ending edge)
+			requiredFunctionsStart := "<Comment text=""REQUIRED FUNCTIONS"">" ; <Comment text="REQUIRED FUNCTIONS">
+			requiredFunctionsEnd   := "<Comment text="""" />"                 ; <Comment text="" /> (empty comment is ending edge)
+			requiredFunctionsXML := getFirstStringBetweenStr(macroXML, requiredFunctionsStart, requiredFunctionsEnd)
+			; DEBUG.popup("macroFilePath",macroFilePath, "macroXML",macroXML, "requiredFunctionsStart",requiredFunctionsStart, "requiredFunctionsEnd",requiredFunctionsEnd, "requiredFunctionsXML",requiredFunctionsXML)
+			
+			; Drop all of these (RegEx):
+				; <Comment text="|" />|">|</Comment>| 
+				; (Start comment tag, end self-closing comment tag, end non-self-closing comment tag, comment close tag, spaces)
+			bitsToDropRegex := "<Comment text=""|"" />|"">|</Comment>| " ; <Comment text="|" />|">|</Comment>| 
+			requiredFunctions := RegExReplace(requiredFunctionsXML, bitsToDropRegex)
+			; DEBUG.popup("bitsToDropRegex",bitsToDropRegex, "requiredFunctions",requiredFunctions)
+			
+			; Loop through and build a unique (but still in-order) array of functions to import
+			functionNamesAry   := []
+			importFunctionsAry := []
+			Loop, Parse, requiredFunctions, `r`n ; This technically breaks on every `r OR `n, but this should be fine since we're ignoring empty strings.
+			{
+				functionName := A_LoopField
+				
+				; Ignore empty lines
+				if(functionName = "")
+					Continue
+				
+				; Only add unique function names to the list of functions to import
+				if(functionNamesAry[functionName])
+					Continue
+				
+				functionNamesAry[functionName] := true
+				importFunctionsAry.push(functionName)
+			}
+			; DEBUG.popup("requiredFunctions",requiredFunctions, "functionNamesAry",functionNamesAry, "importFunctionsAry",importFunctionsAry)
+			
+			; Grab the corresponding XML from each functions' corresponding file
+			SetWorkingDir, % functionsFolderPath ; MainConfig.getPath("EPICSTUDIO_GLOBAL_HIGHLIGHTS")
+			functionsXMLAry := []
+			For functionName,_ in importFunctionsAry {
+				functionsXMLAry[functionName] := FileRead(functionName ".xml")
+			}
+			
+			
+			
+			
+			
+			SetWorkingDir, % origWorkingDir
+		}
+		
 	onetasticFunctionSignatureIsCorrect(correctSignature) {
 		Send, {Home}{Shift Down}{End}{Shift Up} ; Select all (window doesn't support it natively)
 		actualSignature := getSelectedText()

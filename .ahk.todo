@@ -6,6 +6,10 @@
 	
 # New
 	Consider an !c copy function hotkey for VB6
+	Add a copy-link hotkey for OneNote
+		^RButton like Chrome
+		Clipboard/toast handline, probably like copyFolderPathWithHotkey stuff (or maybe Chrome's similar implementation since multiple keys and waits are involved)
+		Auto-close Link popup if it appears (since menu i option is Link... and shows the Link popup if we clicked on something other than an existing link)
 	Potential Hyperlinker updates
 		Should we move the windowsAry definition to a .tl file?
 			Could still be read in just the once (into a static variable)

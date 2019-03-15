@@ -33,7 +33,6 @@
 			Verification of added link would be different for tagged link case
 				Could try to select whole thing that SHOULD be there and compare?
 	Expand onetastic macro function importing
-			Probably worth pulling paste-and-double-check functionality out into a generic function at that point
 		Handle multiple functions at once
 			From a list somewhere, maybe one of these:
 				Pasted comma-delimited list

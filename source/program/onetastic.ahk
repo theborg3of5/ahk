@@ -65,26 +65,54 @@
 			sendTextWithClipboard(functionSignature)
 			
 			; Validate we were able to enter the right thing
-			if(!onetasticFunctionSignatureIsCorrect(functionSignature)) {
+			if(!onetasticIsFunctionSignatureCorrect(functionSignature)) {
 				Sleep, 500
 				sendTextWithClipboard(functionSignature) ; If we put in the wrong thing, try once more
 			}
-			if(!onetasticFunctionSignatureIsCorrect(functionSignature)) {
-				Toast.showMedium("Could not import macro function: failed to insert function signature")
+			if(!onetasticIsFunctionSignatureCorrect(functionSignature)) {
+				Toast.showMedium("Could not import macro function: failed to paste function signature")
 				return
 			}
 			
 			; Accept out of the signature window to finish creating function
 			Send, !o
-			waitUntilWindowState("Active", " - Macro Editor", "", 2) ; Allow matching anywhere
+			waitUntilWindowState("Active", " - Macro Editor", "", 2) ; matchMode=2 - allow matching anywhere
 			
 			onetasticOpenEditXMLPopup()
-			Send, ^v ; Paste full XML into window
+			sendTextWithClipboard(functionXML)
+			
+			; Double-check that we got the right XML in place
+			if(!onetasticIsFunctionXMLCorrect(functionXML)) {
+				Sleep, 500
+				sendTextWithClipboard(functionXML)
+			}
+			if(!onetasticIsFunctionXMLCorrect(functionXML)) {
+				Toast.showMedium("Could not import macro function: failed to paste function XML")
+				return
+			}
+			
 			Send, !o ; OK out of window
 		}
 		
-		
-		oneTasticImportAllMacroDependencies() {
+	onetasticIsFunctionSignatureCorrect(correctSignature) {
+		selectCurrentLine()
+		actualSignature := getSelectedText()
+		return (actualSignature = correctSignature)
+	}
+	
+	onetasticOpenEditXMLPopup() {
+		Send, !u ; Function
+		Send, x  ; Edit XML
+		WinWaitActive, Edit XML
+	}
+	
+	onetasticIsFunctionXMLCorrect(correctXML) {
+		WindowActions.selectAll()
+		actualXML := getSelectedText()
+		return (actualXML = correctXML)
+	}
+	
+		onetasticImportAllMacroDependencies() {
 			macroName := "createPageAndLink_SpecificSection" ; GDB TODO figure out how to pick/figure out macro name (maybe put it in the macro's XML as the first comment?)
 			masterDependencyXMLsAry := onetasticGetAllMacroDependencyXMLs(macroName)
 			DEBUG.popup("macroName",macroName, "masterDependencyXMLsAry",masterDependencyXMLsAry)
@@ -194,16 +222,4 @@
 			
 			return outAry
 		}
-		
-	onetasticFunctionSignatureIsCorrect(correctSignature) {
-		selectCurrentLine()
-		actualSignature := getSelectedText()
-		return (actualSignature = correctSignature)
-	}
-	
-	onetasticOpenEditXMLPopup() {
-		Send, !u ; Function
-		Send, x  ; Edit XML
-		WinWaitActive, Edit XML
-	}
 #If

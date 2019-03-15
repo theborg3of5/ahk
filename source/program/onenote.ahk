@@ -182,6 +182,24 @@
 			setClipboardAndToast(linkToUse, "link")
 		}
 	
+	; Copy link
+	^RButton::
+		clipboard := "" ; Clear the clipboard so we can tell when we have the new link on it
+		
+		Click, Right
+		Sleep, 100 ; Wait for menu to appear
+		Send, i    ; Copy Link
+		
+		ClipWait, 0.5 ; Wait for half a second for the clipboard to contain the link
+		if(ErrorLevel) { ; Timed out
+			; If we clicked on something other than a link, the i option is Link... which will open the Link popup. Close it if it appeared.
+			if(WinActive("Link ahk_class NUIDialog ahk_exe ONENOTE.EXE"))
+				Send, {Esc}
+		}
+		
+		toastClipboardContents("link target")
+	return
+	
 	; Remove link
 	^MButton::
 		Click, Right

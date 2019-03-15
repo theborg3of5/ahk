@@ -58,15 +58,15 @@ class Hyperlinker {
 		return windowsAry
 	}
 	
-	sendPath(path, windowName) { ; GDB TODO see if we can get rid of the need for windowName here (it's just for MatterMost cop-out of pathIsCorrect check)
+	sendPath(path, windowName) { ; GDB TODO see if we can get rid of the need for windowName here (it's just for MatterMost cop-out of isPastedPathCorrect check)
 		sendTextWithClipboard(path) ; Need to send it raw, but would prefer not to wait for the longer keywaiting.
-		if(Hyperlinker.pathIsCorrect(windowName, path))
+		if(Hyperlinker.isPastedPathCorrect(windowName, path))
 			return true
 		
 		; If we somehow didn't put the link in place correctly, wait a half-second and try again.
 		Sleep, 500
 		sendTextWithClipboard(path) ; Need to send it raw, but would prefer not to wait for the longer keywaiting.
-		return Hyperlinker.pathIsCorrect(windowName, path)
+		return Hyperlinker.isPastedPathCorrect(windowName, path)
 	}
 	
 	doesWindowSupportLinking(name) {
@@ -106,7 +106,7 @@ class Hyperlinker {
 		return Hyperlinker.windowsAry[windowName]
 	}
 	
-	pathIsCorrect(windowName, pathToMatch) {
+	isPastedPathCorrect(windowName, pathToMatch) {
 		if(!windowName)
 			return false
 		

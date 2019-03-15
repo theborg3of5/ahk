@@ -6,6 +6,15 @@
 	
 # New
 	Consider an !c copy function hotkey for VB6
+	Consider a new hotkey that grabs the selected text and dumps it into a new Notepad window (maybe via command line?)
+	Can we make the paste-and-double-check logic more generic?
+		Probably would want to use WindowActions.selectAll(), which would require windowActions.tl entries for anything that doesn't support ^a
+		Assuming it's coming from the clipboard, we might not even need a parameter - it just boils down to "does the original clipboard value match what we pasted"
+		Make sure we preserve the clipboard by using getSelectedText()
+		Places it's used right now:
+			Hyperlinking
+			Onetastic macro function signature
+			Onetastic macro function XML
 	Potential Hyperlinker updates
 		Should we move the windowsAry definition to a .tl file?
 			Could still be read in just the once (into a static variable)
@@ -24,7 +33,6 @@
 			Verification of added link would be different for tagged link case
 				Could try to select whole thing that SHOULD be there and compare?
 	Expand onetastic macro function importing
-		Also double-check added XML?
 			Probably worth pulling paste-and-double-check functionality out into a generic function at that point
 		Handle multiple functions at once
 			From a list somewhere, maybe one of these:

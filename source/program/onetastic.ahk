@@ -43,19 +43,25 @@
 			For _,functionXML in masterDependencyXMLsAry
 				onetasticImportFunction(functionXML)
 		}
-		
+	
 	onetasticIsFunctionSignatureCorrect(correctSignature) {
 		selectCurrentLine()
 		actualSignature := getSelectedText()
 		return (actualSignature = correctSignature)
 	}
 	
+	;---------
+	; DESCRIPTION:    Open the XML popup for the current macro or function.        
+	;---------
 	onetasticOpenEditXMLPopup() {
 		Send, !u ; Function
 		Send, x  ; Edit XML
 		WinWaitActive, Edit XML
 	}
 	
+	;---------
+	; DESCRIPTION:    Copy the XML for the current macro or function.
+	;---------
 	onetasticCopyXML() {
 		onetasticOpenEditXMLPopup()
 		
@@ -79,24 +85,26 @@
 		return (actualXML = correctXML)
 	}
 	
-	onetasticGetAllDependencyXMLs(baseXML) {
-		if(baseXML = "")
+	;---------
+	; DESCRIPTION:    Given the XML of a macro/function, generate an array of the XMLs of all
+	;                 dependencies in a depth-first order.
+	; PARAMETERS:
+	;  startXML (I,REQ) - The XML of the macro or function to start from.
+	; RETURNS:        Array of XML for all dependencies. Format:
+	;                   totalDependenciesAry := [dependency1XML, dependency2XML, ...]
+	;---------
+	onetasticGetAllDependencyXMLs(startXML) {
+		if(startXML = "")
 			return []
 		
-		
-		functionsFolderPath := "C:\Users\gborg\OneTasticMacros\Functions"
-		
-		
+		; Read all functions' XML and corresponding dependencies into function-name-indexed arrays
 		origWorkingDir := A_WorkingDir
-		
-		; Read all function files' XML into an array (all files in Functions\ folder): functionName => XML
-			; Loop over all functions and populate a dependencies array: functionName => {requiredFunction1, requiredFunction2, ...}
-		SetWorkingDir, % functionsFolderPath
-		functionsXMLAry := []
-		masterDependenciesAry := []
+		SetWorkingDir, % MainConfig.getPath("ONETASTIC_FUNCTIONS")
+		functionsXMLAry    := []
+		allDependenciesAry := []
 		Loop, Files, % "*.xml"
 		{
-			; Skip files that start with . (like template)
+			; Skip files that start with . (like function template)
 			if(stringStartsWith(A_LoopFileName, "."))
 				Continue
 			
@@ -105,33 +113,24 @@
 			if(!functionName)
 				Continue
 			
-			functionsXMLAry[functionName] := functionXML
-			masterDependenciesAry[functionName] := onetasticGetDependenciesFromXML(functionXML)
+			functionsXMLAry[functionName]    := functionXML
+			allDependenciesAry[functionName] := onetasticGetDependenciesFromXML(functionXML)
 		}
-		; DEBUG.popup("masterDependenciesAry",masterDependenciesAry, "functionsXMLAry",functionsXMLAry)
-		
-		; Base XML -> array of functionNames
-		baseDependenciesAry := onetasticGetDependenciesFromXML(baseXML)
-		; DEBUG.popup("baseXML",baseXML, "baseDependenciesAry",baseDependenciesAry)
-		
 		SetWorkingDir, % origWorkingDir
+		; DEBUG.popup("allDependenciesAry",allDependenciesAry, "functionsXMLAry",functionsXMLAry)
 		
-		; Function to get in-order array of all dependencies
-			; Start with empty array
-			; Function XML (from array) -> list of dependencies FOR this function
-				; Add each function, then recurse (depth-first) and append recursive result to array before going to the next function
-					; Appending - probably a new function in data.ahk
-					; Don't worry about duplicates at this point, we'll filter them out at the end
+		; Starting XML -> array of initial dependencies
+		startDependenciesAry := onetasticGetDependenciesFromXML(startXML)
+		; DEBUG.popup("startXML",startXML, "startDependenciesAry",startDependenciesAry)
+		
+		; Generate an array of the total dependencies in depth-first order
 		totalDependenciesAry := []
-		For _,functionName in baseDependenciesAry {
-			functionDependenciesAry := onetasticCompileDependenciesForFunction(functionName, functionsXMLAry, masterDependenciesAry)
+		For _,functionName in startDependenciesAry {
+			functionDependenciesAry := onetasticCompileDependenciesForFunction(functionName, functionsXMLAry, allDependenciesAry)
 			totalDependenciesAry := arrayAppend(totalDependenciesAry, functionDependenciesAry)
 		}
-		; DEBUG.popup("totalDependenciesAry",totalDependenciesAry)
-		
-		; Remove duplicates (probably new function in data.ahk)
-		totalDependenciesAry := arrayDropDuplicates(totalDependenciesAry)
-		; DEBUG.popup("totalDependenciesAry deduplicated",totalDependenciesAry)
+		; DEBUG.popup("totalDependenciesAry",totalDependenciesAry, "arrayDropDuplicates(totalDependenciesAry)",arrayDropDuplicates(totalDependenciesAry))
+		totalDependenciesAry := arrayDropDuplicates(totalDependenciesAry) ; Remove duplicates as we can't import functions more than once
 		
 		; Generate array of XMLs in same order
 		totalDependencyXMLsAry := []
@@ -140,7 +139,19 @@
 		
 		return totalDependencyXMLsAry
 	}
-
+	
+	;---------
+	; DESCRIPTION:    Read the given macro/function's XML and extract an array of its dependencies (user-defined functions which it calls) from the comments at the top.
+	; PARAMETERS:
+	;  xml (I,REQ) - XML for the given function. The list of dependencies for the function is expected to be in the following format:
+	;                  <Comment text="DEPENDENCIES" />
+	;                  <Comment text=" _FUNCTION_NAME_1" />
+	;                  <Comment text=" _FUNCTION_NAME_2" />
+	;                  <Comment text="" />
+	;                Note the "DEPENDENCIES" start comment and the empty ending comment, and that functions should have a single space at the start.
+	; RETURNS:        Array of dependency names. Format:
+	;                  dependenciesAry[functionName] := [dependencyName1, dependencyName2, ...]
+	;---------
 	onetasticGetDependenciesFromXML(xml) {
 		dependenciesStart := "<Comment text=""DEPENDENCIES"" />" ; <Comment text="DEPENDENCIES" />
 		dependenciesEnd   := "<Comment text="""" />"             ; <Comment text="" /> (empty comment is ending edge)
@@ -162,17 +173,28 @@
 		
 		return dependenciesAry
 	}
-
-	; Add each function, then recurse (depth-first) and append recursive result to array before going to the next function
-					; Appending - probably a new function in data.ahk
-					; Don't worry about duplicates at this point, we'll filter them out at the end
-	onetasticCompileDependenciesForFunction(functionName, functionsXMLAry, masterDependenciesAry) {
+	
+	;---------
+	; DESCRIPTION:    Recursive function to generate an array of all dependencies for the given
+	;                 function. The array is built in a depth-first manner, recursing through all
+	;                 dependencies of each function.
+	; PARAMETERS:
+	;  functionName       (I,REQ) - Name of the function to generate a total dependency array for.
+	;  functionsXMLAry    (I,REQ) - Array of XML strings for all functions that we might find in our
+	;                               recursive search. Format:
+	;                                functionsXMLAry[functionName] := functionXML
+	;  allDependenciesAry (I,REQ) - Array of dependencies for each function. Format:
+	;                                allDependenciesAry[functionName] := [dependencyName1, dependencyName2, ...]
+	; RETURNS:        Array of all dependencies required by the given function, in depth-first order.
+	; NOTES:          There's no checking for duplicates as we generate the array.
+	;---------
+	onetasticCompileDependenciesForFunction(functionName, functionsXMLAry, allDependenciesAry) {
 		outAry := [functionName]
 		if(functionName = "")
 			return outAry
 		
-		For _,dependencyName in masterDependenciesAry[functionName] {
-			subDependenciesAry := onetasticCompileDependenciesForFunction(dependencyName, functionsXMLAry, masterDependenciesAry)
+		For _,dependencyName in allDependenciesAry[functionName] {
+			subDependenciesAry := onetasticCompileDependenciesForFunction(dependencyName, functionsXMLAry, allDependenciesAry)
 			outAry := arrayAppend(outAry, subDependenciesAry)
 			; DEBUG.popup("functionName",functionName, "dependencyName",dependencyName, "subDependenciesAry",subDependenciesAry, "outAry",outAry)
 		}
@@ -180,9 +202,15 @@
 		return outAry
 	}
 	
+	;---------
+	; DESCRIPTION:    "Import" a single macro function using the given XML code.
+	; PARAMETERS:
+	;  functionXML (I,REQ) - XML for the function. Note that the first line must be a comment with
+	;                        the full function signature in it.
+	;---------
 	onetasticImportFunction(functionXML) {
 		if(!functionXML) {
-			Toast.showMedium("Cannot import: clipboard is blank.")
+			Toast.showMedium("Cannot import: no function XML found")
 			return
 		}
 		

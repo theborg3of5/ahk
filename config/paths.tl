@@ -9,7 +9,8 @@
 	User Dev								USER_DEV								<USER_ROOT>\Dev
 	
 	; Dev
-	OneTastic Macros					ONETASTIC_MACROS					<USER_ROOT>\OneTasticMacros
+	Onetastic Macros					ONETASTIC_MACROS					<USER_ROOT>\OnetasticMacros
+	Onetastic Functions				ONETASTIC_FUNCTIONS				<USER_ROOT>\OnetasticMacros\Functions
 	
 	; Epic
 	VB6 Compile							VB6_COMPILE							<USER_ROOT>\Dev\Temp\Compile					EPIC_LAPTOP

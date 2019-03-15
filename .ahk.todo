@@ -32,22 +32,6 @@
 			As now, existence in the resulting array for a key is indicative of support
 			Verification of added link would be different for tagged link case
 				Could try to select whole thing that SHOULD be there and compare?
-	Expand onetastic macro function importing
-		Handle multiple functions at once
-			From a list somewhere, maybe one of these:
-				Pasted comma-delimited list
-					Could add new ListCoverter input method for chosen XML structure (drop '<Comment text=" ' from start, '" />' from end for each line
-				Original macro's XML?
-					Could be a little dicey to try and parse around XML
-						Find stuff between:
-							<Comment text="REQUIRED FUNCTIONS">
-							<Comment text="" /> (empty comment is ending edge)
-						Drop all of these (RegEx):
-							<Comment text="|" />|">|</Comment>| 
-							(Start comment tag, end self-closing comment tag, end non-self-closing comment tag, comment close tag, spaces)
-						Trim out (or maybe just ignore) extra empty lines
-						Loop through and build a unique (but still in-order) array of functions to import
-			Would need to read from files directly for function contents
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
 	Consider adding functionality to Toast to have it sleep until the toast goes away

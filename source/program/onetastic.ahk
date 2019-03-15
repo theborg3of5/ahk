@@ -29,33 +29,15 @@
 	^+o::onetasticOpenEditXMLPopup()
 	
 	; Copy current function XML
-	^+x::
-		onetasticOpenEditXMLPopup()
-		
-		clipboard := "" ; Clear the clipboard so we can tell when we have the new XML on it
-		Send, ^c
-		ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain the XML
-		
-		if(clipboard != "") {
-			Toast.showMedium("Copied macro function XML")
-		} else {
-			Toast.showMedium("Failed to copy macro function XML")
-			return
-		}
-		
-		Send, !o ; Close the popup
-	return
+	^+x::onetasticCopyXML()
 	
-	; "Import" a full function from clipboard XML
-	!+i::onetasticImportFunction(clipboard)
+	; "Import" all dependencies (recursively) based on the macro/function's listed dependencies
 	^+i::
-		onetasticImportAllMacroDependencies() {
-			macroXML := FileRead("C:\Users\gborg\OneTasticMacros\createPageAndLink_CurrentSection.xml")
-			if(!macroXML) {
-				MsgBox uh oh no XML!
-				return
-			}
-			masterDependencyXMLsAry := onetasticGetAllMacroDependencyXMLs(macroXML)
+		onetasticImportAllDependencies() {
+			; Get XML for the macro/function that's open
+			onetasticCopyXML()
+			
+			masterDependencyXMLsAry := onetasticGetAllDependencyXMLs(clipboard)
 			; DEBUG.popup("masterDependencyXMLsAry",masterDependencyXMLsAry)
 			
 			For _,functionXML in masterDependencyXMLsAry
@@ -74,14 +56,31 @@
 		WinWaitActive, Edit XML
 	}
 	
+	onetasticCopyXML() {
+		onetasticOpenEditXMLPopup()
+		
+		clipboard := "" ; Clear the clipboard so we can tell when we have the new XML on it
+		Send, ^c
+		ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain the XML
+		
+		if(clipboard != "") {
+			Toast.showMedium("Copied XML")
+		} else {
+			Toast.showMedium("Failed to copy XML")
+			return
+		}
+		
+		Send, {Esc} ; Close the popup
+	}
+	
 	onetasticIsFunctionXMLCorrect(correctXML) {
 		WindowActions.selectAll()
 		actualXML := getSelectedText()
 		return (actualXML = correctXML)
 	}
 	
-	onetasticGetAllMacroDependencyXMLs(macroXML) {
-		if(macroXML = "")
+	onetasticGetAllDependencyXMLs(baseXML) {
+		if(baseXML = "")
 			return []
 		
 		
@@ -111,9 +110,9 @@
 		}
 		; DEBUG.popup("masterDependenciesAry",masterDependenciesAry, "functionsXMLAry",functionsXMLAry)
 		
-		; Macro XML -> array of functionNames
-		macroDependenciesAry := onetasticGetDependenciesFromXML(macroXML)
-		; DEBUG.popup("macroXML",macroXML, "macroDependenciesAry",macroDependenciesAry)
+		; Base XML -> array of functionNames
+		baseDependenciesAry := onetasticGetDependenciesFromXML(baseXML)
+		; DEBUG.popup("baseXML",baseXML, "baseDependenciesAry",baseDependenciesAry)
 		
 		SetWorkingDir, % origWorkingDir
 		
@@ -124,7 +123,7 @@
 					; Appending - probably a new function in data.ahk
 					; Don't worry about duplicates at this point, we'll filter them out at the end
 		totalDependenciesAry := []
-		For _,functionName in macroDependenciesAry {
+		For _,functionName in baseDependenciesAry {
 			functionDependenciesAry := onetasticCompileDependenciesForFunction(functionName, functionsXMLAry, masterDependenciesAry)
 			totalDependenciesAry := arrayAppend(totalDependenciesAry, functionDependenciesAry)
 		}
@@ -191,7 +190,7 @@
 		functionSignature := getFirstStringBetweenStr(functionXML, "<Comment text=""", """ />")
 		
 		; Add function signature 
-		Send, ^{NumpadAdd} ; New macro
+		Send, ^{NumpadAdd} ; New function
 		WinWaitActive, Function Signature Editor
 		sendTextWithClipboard(functionSignature)
 		
@@ -201,7 +200,7 @@
 			sendTextWithClipboard(functionSignature) ; If we put in the wrong thing, try once more
 		}
 		if(!onetasticIsFunctionSignatureCorrect(functionSignature)) {
-			Toast.showMedium("Could not import macro function: failed to paste function signature")
+			Toast.showMedium("Could not import function: failed to paste function signature")
 			return
 		}
 		
@@ -218,7 +217,7 @@
 			sendTextWithClipboard(functionXML)
 		}
 		if(!onetasticIsFunctionXMLCorrect(functionXML)) {
-			Toast.showMedium("Could not import macro function: failed to paste function XML")
+			Toast.showMedium("Could not import function: failed to paste function XML")
 			return
 		}
 		

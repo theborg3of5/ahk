@@ -28,7 +28,7 @@
 		notepadPPSendAHKFunctionHeader() {
 			; Select the following line after this one to get parameter information
 			Send, {Down}
-			Send, {End}{Shift Down}{Home}{Shift Up}
+			selectCurrentLine()
 			firstLine := cleanupText(getSelectedText())
 			Send, {Up}
 			

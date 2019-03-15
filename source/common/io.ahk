@@ -1,5 +1,13 @@
 ; Functions related to input/output and user input.
 
+; Select the current line in text fields.
+selectCurrentLine() {
+	; Start with End as in some places, Home can put us in an inconsistent place relative to any
+	; indentation (i.e. hitting home when you're at the start of the line jumps to the start/end
+	; of the indentation).
+	Send, {End}{Shift Down}{Home}{Shift Up}
+}
+
 ; Allows SendRaw'ing of input with tabs to programs which auto-indent text.
 sendRawWithTabs(input) {
 	; Split the input text on newlines, as that's where the tabs will be an issue.

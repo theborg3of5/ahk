@@ -114,7 +114,7 @@ class Hyperlinker {
 		if(windowName = "Mattermost")
 			return true
 		
-		Send, {Home}{Shift Down}{End}{Shift Up} ; Select all (even in places that don't support ^a)
+		selectCurrentLine()
 		currentPath := getSelectedText()
 		; DEBUG.toast("Current path",currentPath)
 		

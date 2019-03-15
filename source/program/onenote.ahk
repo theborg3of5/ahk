@@ -402,7 +402,7 @@
 	;  id  (I,REQ) - ID of the object to link
 	;---------
 	oneNoteLinkEMC2ObjectInLine(ini, id) {
-		Send, {Home}{Shift Down}{End}{Shift Up} ; Select whole line, but avoid the extra indentation and newline that comes with ^a.
+		selectCurrentLine() ; Select whole line, but avoid the extra indentation and newline that comes with ^a.
 		selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
 		url := buildEMC2Link(ini, id)
 		if(!Hyperlinker.linkSelectedText(url)) {

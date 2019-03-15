@@ -171,7 +171,7 @@ Notes:
 		if(CurrentProcedure = "(General)") {
 			ClipSave := clipboard ; Save the current clipboard.
 			
-			Send, {End}{Shift Down}{Home}{Shift Up}
+			selectCurrentLine()
 			Send, ^c
 			
 			Sleep, 100 ; Allow clipboard time to populate.

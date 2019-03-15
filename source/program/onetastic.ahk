@@ -196,7 +196,7 @@
 		}
 		
 	onetasticFunctionSignatureIsCorrect(correctSignature) {
-		Send, {Home}{Shift Down}{End}{Shift Up} ; Select all (window doesn't support it natively)
+		selectCurrentLine()
 		actualSignature := getSelectedText()
 		return (actualSignature = correctSignature)
 	}

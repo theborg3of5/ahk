@@ -74,12 +74,12 @@
 		
 		; Horizontal scrolling.
 		+WheelUp::
-			onenoteScrollLeft() {
+			oneNoteScrollLeft() {
 				MouseGetPos, , , winId, controlId, 1
 				SendMessage, WM_HSCROLL, SB_LINELEFT, , % controlId, % "ahk_id " winId
 			}
 		+WheelDown::
-			onenoteScrollRight() {
+			oneNoteScrollRight() {
 				MouseGetPos, , , winId, controlId, 1
 				SendMessage, WM_HSCROLL, SB_LINERIGHT, , % controlId, % "ahk_id " winId
 			}
@@ -88,9 +88,8 @@
 	{ ; Content/formatting modifiers.
 		; Deletes a full line.
 		^d::
-			escapeOneNotePastePopup()
-			Send, {Home}   ; Make sure the line isn't already selected, otherwise we select the whole parent.
-			Send, ^a       ; Select all - gets entire line, including newline at end.
+			oneNoteEscapePastePopup()
+			oneNoteSelectLine()
 			Send, {Delete}
 		return
 		
@@ -136,17 +135,17 @@
 	}
 	
 	^s::
-		escapeOneNotePastePopup()
+		oneNoteEscapePastePopup()
 		Send, +{F9} ; Sync This Notebook Now
 	return
 	^+s::
-		escapeOneNotePastePopup()
+		oneNoteEscapePastePopup()
 		Send, {F9} ; Sync All Notebooks Now
 	return
 	
 	; Copy link to page.
 	!c::
-		copyOneNoteLink() {
+		oneNoteCopyLink() {
 			clipboard := "" ; Clear the clipboard so we can tell when we get the new link.
 			
 			; Get the link to the current paragraph.
@@ -219,7 +218,7 @@
 	
 	; Make a copy of the current page in the Do section.
 	^+m::
-		copyOneNoteDoPage() {
+		oneNoteCopyDoPage() {
 			; Change the page color before we leave, so it's noticeable if I end up there.
 			Send, !w
 			Send, pc
@@ -271,25 +270,24 @@
 			Send, n
 			
 			; Update title
-			Send, ^+t                       ; Select title (to replace with new day/date)
-			Sleep, 1000                     ; Wait for selection to take
-			Send, % getOneNoteDoPageTitle() ; Send title
-			Send, ^+t                       ; Select title again in case you want a different date.
+			Send, ^+t                            ; Select title (to replace with new day/date)
+			Sleep, 1000                          ; Wait for selection to take
+			Send, % oneNoteGenerateDoPageTitle() ; Send title
+			Send, ^+t                            ; Select title again in case you want a different date.
 		}
 	
 	; Insert a contact comment.
 	^+8::
-		insertOneNoteContactComment() {
+		oneNoteInsertContactComment() {
 			date := FormatTime(, "MM/yy")
 			SendRaw, % "*" MainConfig.getPrivate("INITIALS") " " date
 		}
 	
 	!+#n::
-		linkOneNoteDevStructureSectionTitle() {
+		oneNoteLinkDevStructureSectionTitle() {
 			waitForHotkeyRelease()
 			
-			Send, {Home}
-			Send, ^a ; Select all, selects full line
+			oneNoteSelectLine()
 			lineText := getSelectedText()
 			
 			linkText   := getStringAfterStr(lineText, " - ")
@@ -309,8 +307,7 @@
 			}
 			
 			; Re-select whole line so we can use selectTextWithinSelection()
-			Send, {Home}
-			Send, ^a
+			oneNoteSelectLine()
 			
 			selectTextWithinSelection(editText)
 			editURL := buildEMC2Link(ini, id, "EDIT")
@@ -319,18 +316,18 @@
 		}
 	
 	:*:.todosat::
-		sendUsualToDoSat() {
+		oneNoteSendUsualToDoSat() {
 			lines := []
 			lines.push({TEXT:"Pull to-dos from specific sections below"})
 			lines.push({TEXT:"Dishes from week"})
 			lines.push({TEXT:"Wash laundry"})
 			lines.push({TEXT:"Dry laundry"})
 			lines.push({TEXT:"Clean off desk"})
-			sendOneNoteToDoLines(lines)
+			oneNoteSendToDoLines(lines)
 		}
 	
 	:*:.todosun::
-		sendUsualToDoSun() {
+		oneNoteSendUsualToDoSun() {
 			lines := []
 			lines.push({TEXT:"Pull to-dos from specific sections below"})
 			lines.push({TEXT:"Review/type Ninpo notes"})
@@ -341,7 +338,7 @@
 			lines.push({TEXT:"Trash, recycling out"})
 			lines.push({TEXT:"Meal planning"})
 			lines.push({TEXT:"Order/obtain groceries"})
-			sendOneNoteToDoLines(lines)
+			oneNoteSendToDoLines(lines)
 		}
 	
 	
@@ -378,11 +375,19 @@
 	}
 	
 	;---------
+	; DESCRIPTION:    Select the whole line in OneNote, taking into account that it might already be selected.
+	;---------
+	oneNoteSelectLine() {
+		Send, {Home} ; Make sure the line isn't already selected, otherwise we select the whole parent.
+		Send, ^a     ; Select all - gets entire line, including newline at end.
+	}
+	
+	;---------
 	; DESCRIPTION:    If the paste popup has appeared, get rid of it. Typically this is used for AHK
 	;                 hotkeys that use the Control key, which sometimes causes the paste popup to
 	;                 appear afterwards (if we pasted recently).
 	;---------
-	escapeOneNotePastePopup() {
+	oneNoteEscapePastePopup() {
 		ControlGet, pastePopupHandle, Hwnd, , OOCWindow1, A
 		if(!pastePopupHandle)
 			return
@@ -411,7 +416,7 @@
 	; DESCRIPTION:    Figure out and return what title to use for a OneNote Do page.
 	; RETURNS:        The title to use for the new OneNote Do page.
 	;---------
-	getOneNoteDoPageTitle() {
+	oneNoteGenerateDoPageTitle() {
 		startDateTime := A_Now
 		
 		; Do pages at work are always daily
@@ -444,12 +449,12 @@
 	;---------
 	; DESCRIPTION:    Send the given lines with a to-do tag (bound to Ctrl+1).
 	; PARAMETERS:
-	;  linesAry (I,REQ) - Array of lines to send, see sendOneNoteLines() for the format.
+	;  linesAry (I,REQ) - Array of lines to send, see oneNoteSendLines() for the format.
 	;---------
-	sendOneNoteToDoLines(linesAry) {
+	oneNoteSendToDoLines(linesAry) {
 		Send, ^0 ; Clear current tag (so we're definitely adding the to-do tag, not checking it off)
 		Send, ^1 ; To-do tag
-		sendOneNoteLines(linesAry)
+		oneNoteSendLines(linesAry)
 	}
 	
 	;---------
@@ -460,7 +465,7 @@
 	;                     	                , "NUM_TABS"] := Relative indentation level (from the
 	;                     	                                 starting indentation level).
 	;---------
-	sendOneNoteLines(linesAry) {
+	oneNoteSendLines(linesAry) {
 		currNumTabs := 0 ; Indentation level, relative to start
 		For i,line in linesAry {
 			if(i > 1)

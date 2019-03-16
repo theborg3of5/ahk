@@ -301,6 +301,15 @@ appendLine(baseText, textToAdd) {
 	return updatedString
 }
 
+appendPieceToString(baseText, pieceToAdd, delimiter := ",") {
+	if(pieceToAdd = "")
+		return baseText
+	if(baseText = "")
+		return pieceToAdd
+	
+	return baseText delimiter pieceToAdd
+}
+
 getCleanHotkeyString(hotkeyString) {
 	return cleanupText(hotkeyString, ["$", "*", "<", ">", "~"])
 }

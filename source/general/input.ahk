@@ -86,6 +86,22 @@ return
 	}
 
 ; Send the clipboard as a list.
-!v::
+^#l::
 	SendRaw, % ListConverter.convertList(clipboard)
 return
+
+; Grab the selected text and pop it into a new Notepad window
+!v::
+	putSelectedTextIntoNewNotepadWindow() {
+		selectedText := getSelectedText()
+		if(selectedText = "")
+			return
+		
+		MainConfig.runProgram("Notepad")
+		newNotepadWindowTitleString := "Untitled - Notepad " MainConfig.getWindowTitleString("Notepad")
+		WinWaitActive, % newNotepadWindowTitleString, , 5 ; 5s timeout
+		if(!WinActive(newNotepadWindowTitleString))
+			return
+		
+		sendTextWithClipboard(selectedText)
+	}

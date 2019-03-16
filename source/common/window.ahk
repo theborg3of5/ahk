@@ -2,14 +2,16 @@
 
 ; Puts together a string that can be used with the likes of WinActivate, etc.
 buildWindowTitleString(exeName := "", winClass := "", winTitle := "") {
-	if(winTitle) ; Title has to go first since it doesn't have an "ahk_" identifier to go with it.
-		outStr .= winTitle
+	outStr := ""
+	
+	if(winTitle) 
+		outStr := appendPieceToString(outStr, winTitle, " ") ; Title has to go first since it doesn't have an "ahk_" identifier to go with it.
 	
 	if(exeName)
-		outStr .= " ahk_exe " exeName
+		outStr := appendPieceToString(outStr, "ahk_exe " exeName, " ")
 	
 	if(winClass)
-		outStr .= " ahk_class " winClass
+		outStr := appendPieceToString(outStr, "ahk_class " winClass, " ")
 	
 	return outStr
 }

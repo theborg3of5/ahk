@@ -3,11 +3,11 @@
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
+	Why does !v ListConverter stuff prompt a second time if you submit a blank?
 	
 # New
 	Selector - consider adding a way to have certain columns pull from certain other columns' values (i.e. let name use width/height in resize selector)
 	Consider an !c copy function hotkey for VB6
-	Consider a new hotkey that grabs the selected text and dumps it into a new Notepad window (maybe via command line?)
 	Can we make the paste-and-double-check logic more generic?
 		Probably would want to use WindowActions.selectAll(), which would require windowActions.tl entries for anything that doesn't support ^a
 		Assuming it's coming from the clipboard, we might not even need a parameter - it just boils down to "does the original clipboard value match what we pasted"

@@ -217,7 +217,7 @@
 		; First line should be a comment with the exact function signature
 		functionSignature := getFirstStringBetweenStr(functionXML, "<Comment text=""", """ />")
 		
-		; Add function signature 
+		; Add function signature
 		Send, ^{NumpadAdd} ; New function
 		WinWaitActive, Function Signature Editor
 		sendTextWithClipboard(functionSignature)

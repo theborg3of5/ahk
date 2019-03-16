@@ -15,7 +15,26 @@
 			Hyperlinking
 			Onetastic macro function signature
 			Onetastic macro function XML
+		Logic distills down to this:
+			{
+			sendTextWithClipboard(value)
+			if(isCorrect(value))
+				return true
+			Sleep, 500
+			sendTextWithClipboard(value)
+			return isCorrect(value)
+			}
+			isCorrect(value) {
+				WindowActions.selectAll() OR selectCurrentLine()
+				actual := getSelectedText()
+				return (actual = value)
+			}
+		Seems like we could replace almost all uses of this logic using ControlGetFocus + ControlSetText instead?
+			Even MatterMost could work well with this (assuming it's a proper field we can access)
+				Could potentially just grab the whole field value (keeping track of the selection somehow), work on that, and set the new thing.
+					Maybe replace selection with a token or tag I can replace with the final full link text, before I get the control text?
 	Potential Hyperlinker updates
+		Can we just split MatterMost/EMC2 DLG (non-popup/field cases) to be a separate thing?
 		Should we move the windowsAry definition to a .tl file?
 			Could still be read in just the once (into a static variable)
 			Easier to add/update stuff

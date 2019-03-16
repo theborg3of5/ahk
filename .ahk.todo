@@ -3,7 +3,6 @@
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
-	Why does !v ListConverter stuff prompt a second time if you submit a blank?
 	
 # New
 	Selector - consider adding a way to have certain columns pull from certain other columns' values (i.e. let name use width/height in resize selector)

@@ -86,7 +86,7 @@ return
 	}
 
 ; Send the clipboard as a list.
-^#l::
+^#v::
 	SendRaw, % ListConverter.convertList(clipboard)
 return
 

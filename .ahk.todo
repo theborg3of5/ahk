@@ -5,6 +5,7 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	Selector - consider adding a way to have certain columns pull from certain other columns' values (i.e. let name use width/height in resize selector)
 	Consider an !c copy function hotkey for VB6
 	Consider a new hotkey that grabs the selected text and dumps it into a new Notepad window (maybe via command line?)
 	Can we make the paste-and-double-check logic more generic?

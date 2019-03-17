@@ -178,7 +178,7 @@
 				linkToUse := copiedLink
 			}
 			
-			setClipboardAndToast(linkToUse, "link")
+			setClipboardAndToastValue(linkToUse, "link")
 		}
 	
 	; Copy link
@@ -191,12 +191,12 @@
 		
 		ClipWait, 0.5 ; Wait for half a second for the clipboard to contain the link
 		if(ErrorLevel) { ; Timed out
-			; If we clicked on something other than a link, the i option is Link... which will open the Link popup. Close it if it appeared.
+			; If we clicked on something other than a link, the i option is "Link..." which will open the Link popup. Close it if it appeared.
 			if(WinActive("Link ahk_class NUIDialog ahk_exe ONENOTE.EXE"))
 				Send, {Esc}
 		}
 		
-		toastClipboardContents("link target")
+		toastSetClipboardValue("link target")
 	return
 	
 	; Remove link
@@ -302,7 +302,7 @@
 			selectTextWithinSelection(recordText)
 			webURL := buildEMC2Link(ini, id, "WEB")
 			if(!Hyperlinker.linkSelectedText(webURL)) {
-				setClipboardAndToast(webURL, "link", "Failed to add EMC2 object web link.")
+				setClipboardAndToastValue(webURL, "link", "Failed to add EMC2 object web link.")
 				return
 			}
 			
@@ -312,7 +312,7 @@
 			selectTextWithinSelection(editText)
 			editURL := buildEMC2Link(ini, id, "EDIT")
 			if(!Hyperlinker.linkSelectedText(editURL))
-				setClipboardAndToast(editURL, "link", "Failed to add EMC2 object edit link.")
+				setClipboardAndToastValue(editURL, "link", "Failed to add EMC2 object edit link.")
 		}
 	
 	:*:.todosat::
@@ -406,7 +406,7 @@
 		selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
 		url := buildEMC2Link(ini, id)
 		if(!Hyperlinker.linkSelectedText(url)) {
-			setClipboardAndToast(url, "link", "Failed to link EMC2 object text.")
+			setClipboardAndToastValue(url, "link", "Failed to link EMC2 object text.")
 			return
 		}
 		Send, {End}

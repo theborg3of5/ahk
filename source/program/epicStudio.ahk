@@ -127,7 +127,7 @@
 		if(removeOffset)
 			codeLocation := dropOffsetFromServerLocation(codeLocation)
 		
-		setClipboardAndToast(codeLocation, "code location")
+		setClipboardAndToastValue(codeLocation, "code location")
 	}
 	
 	;---------

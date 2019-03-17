@@ -57,12 +57,12 @@ return
 			else if(key = "ID")
 				textToCopy := winId
 			
-			setClipboardAndToast(textToCopy, StringLower(name))
+			setClipboardAndToastValue(textToCopy, StringLower(name))
 		}
 	
 	!XButton1::
 	!XButton2::
-		setClipboardAndToast(getTooltipText(), "tooltip")
+		setClipboardAndToastValue(getTooltipText(), "tooltip")
 	return
 }
 

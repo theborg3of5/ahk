@@ -33,7 +33,7 @@
 			copyEMC2RecordId() {
 				getEMC2Info(ini, id)
 				if(id)
-					setClipboardAndToast(ini " " id, "EMC2 record INI/ID")
+					setClipboardAndToastValue(ini " " id, "EMC2 record INI/ID")
 			}
 		
 		; Open web version of the current object in EMC2.

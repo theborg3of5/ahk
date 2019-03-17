@@ -35,7 +35,7 @@
 				}
 			}
 			
-			setClipboardAndToast(title, "title")
+			setClipboardAndToastValue(title, "title")
 		}
 	
 	; Send to Telegram (and pick the right chat).
@@ -85,5 +85,5 @@ chromeCopyFileLink(showToast := false) {
 	ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain the link
 	
 	if(showToast)
-		toastClipboardContents("link target")
+		toastSetClipboardValue("link target")
 }

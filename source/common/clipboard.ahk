@@ -17,7 +17,7 @@ copyFilePathWithHotkey(hotkeyKeys) {
 		path := mapPath(path)
 	}
 	
-	setClipboardAndToast(path, "file path")
+	setClipboardAndToastValue(path, "file path")
 }
 copyFolderPathWithHotkey(hotkeyKeys) {
 	copyWithHotkey(hotkeyKeys)
@@ -29,7 +29,7 @@ copyFolderPathWithHotkey(hotkeyKeys) {
 		path := appendCharIfMissing(path, "\") ; Add the trailing backslash since it's a folder
 	}
 	
-	setClipboardAndToast(path, "folder path")
+	setClipboardAndToastValue(path, "folder path")
 }
 
 ; Sends the selected text using the clipboard, fixing the clipboard as it finishes.
@@ -47,22 +47,43 @@ sendTextWithClipboard(text) {
 	clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
 }
 
-setClipboardAndToast(newClipboardValue, clipLabel := "value", extraPreMessage := "") {
+setClipboard(value) {
 	clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
 	
-	clipboard := newClipboardValue
+	clipboard := value
 	ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain data.
-	
-	toastClipboardContents(clipLabel, extraPreMessage)
 }
-toastClipboardContents(clipLabel := "value", extraPreMessage := "") {
+
+setClipboardAndToastState(newClipboardValue, clipLabel := "value", extraPreMessage := "") {
+	setClipboard(newClipboardValue)
+	toastSetClipboardState(clipLabel, extraPreMessage)
+}
+setClipboardAndToastValue(newClipboardValue, clipLabel := "value", extraPreMessage := "") {
+	setClipboard(newClipboardValue)
+	toastSetClipboardValue(clipLabel, extraPreMessage)
+}
+
+toastSetClipboardState(clipLabel := "value", extraPreMessage := "") {
+	toastClipboard(clipLabel, extraPreMessage, false)
+}
+toastSetClipboardValue(clipLabel := "value", extraPreMessage := "") {
+	toastClipboard(clipLabel, extraPreMessage, true)
+}
+
+toastClipboard(clipLabel, extraPreMessage, showClipboardValue) {
 	if(clipLabel = "")
 		clipLabel := "value"
-	if(extraPreMessage != "")
-		extraPreMessage .= "`n"
 	
-	if(clipboard = "")
-		Toast.showMedium(extraPreMessage "Failed to get " clipLabel)
-	else
-		Toast.showMedium(extraPreMessage "Clipboard set to " clipLabel ":`n" clipboard)
+	clipMessage := extraPreMessage
+	if(clipboard = "") {
+		clipMessage := appendPieceToString(clipMessage, "Failed to get " clipLabel, "`n")
+	} else {
+		clipMessage := appendPieceToString(clipMessage, "Clipboard set to " clipLabel, "`n")
+		if(showClipboardValue) {
+			clipMessage .= ":" ; Colon on the end of the label (before the next newline) since we're showing a value
+			clipMessage := appendPieceToString(clipMessage, clipboard, "`n")
+		}
+	}
+	
+	Toast.showMedium(clipMessage)
 }

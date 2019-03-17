@@ -44,12 +44,6 @@
 				onetasticImportFunction(functionXML)
 		}
 	
-	onetasticIsFunctionSignatureCorrect(correctSignature) {
-		selectCurrentLine()
-		actualSignature := getSelectedText()
-		return (actualSignature = correctSignature)
-	}
-	
 	;---------
 	; DESCRIPTION:    Open the XML popup for the current macro or function.        
 	;---------
@@ -69,12 +63,6 @@
 		setClipboardAndToastState(xml, "XML")
 		if(xml)
 			Send, {Esc} ; Close the popup
-	}
-	
-	onetasticIsFunctionXMLCorrect(correctXML) {
-		WindowActions.selectAll()
-		actualXML := getSelectedText()
-		return (actualXML = correctXML)
 	}
 	
 	;---------
@@ -212,35 +200,16 @@
 		; Add function signature
 		Send, ^{NumpadAdd} ; New function
 		WinWaitActive, Function Signature Editor
-		sendTextWithClipboard(functionSignature)
+		ControlSetText, Edit2, % functionSignature, A
+		Send, {Space} ; Parsed value doesn't update unless we actually change something (setting the field doesn't count), so add a space (which is ignored by the parser).
+		Send, !o ; OK out of window
 		
-		; Validate we were able to enter the right thing
-		if(!onetasticIsFunctionSignatureCorrect(functionSignature)) {
-			Sleep, 500
-			sendTextWithClipboard(functionSignature) ; If we put in the wrong thing, try once more
-		}
-		if(!onetasticIsFunctionSignatureCorrect(functionSignature)) {
-			Toast.showMedium("Could not import function: failed to paste function signature")
-			return
-		}
-		
-		; Accept out of the signature window to finish creating function
-		Send, !o
+		; Wait to get back to main macro editor window
 		waitUntilWindowState("Active", " - Macro Editor", "", 2) ; matchMode=2 - allow matching anywhere
 		
 		onetasticOpenEditXMLPopup()
-		sendTextWithClipboard(functionXML)
-		
-		; Double-check that we got the right XML in place
-		if(!onetasticIsFunctionXMLCorrect(functionXML)) {
-			Sleep, 500
-			sendTextWithClipboard(functionXML)
-		}
-		if(!onetasticIsFunctionXMLCorrect(functionXML)) {
-			Toast.showMedium("Could not import function: failed to paste function XML")
-			return
-		}
-		
+		ControlSetText, Edit1, % functionXML, A
+		Send, {Space} ; Parsed value doesn't update unless we actually change something (setting the field doesn't count), so add a space (which is ignored by the parser).
 		Send, !o ; OK out of window
 	}
 #If

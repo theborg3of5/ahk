@@ -7,48 +7,24 @@
 # New
 	Selector - consider adding a way to have certain columns pull from certain other columns' values (i.e. let name use width/height in resize selector)
 	Consider an !c copy function hotkey for VB6
-	Can we make the paste-and-double-check logic more generic?
-		Probably would want to use WindowActions.selectAll(), which would require windowActions.tl entries for anything that doesn't support ^a
-		Assuming it's coming from the clipboard, we might not even need a parameter - it just boils down to "does the original clipboard value match what we pasted"
-		Make sure we preserve the clipboard by using getSelectedText()
-		Places it's used right now:
-			Hyperlinking
-		Logic distills down to this:
-			{
-				sendTextWithClipboard(value)
-				if(isCorrect(value))
-					return true
-				Sleep, 500
-				sendTextWithClipboard(value)
-				return isCorrect(value)
-			}
-			isCorrect(value) {
-				WindowActions.selectAll() OR selectCurrentLine()
-				actual := getSelectedText()
-				return (actual = value)
-			}
-		Seems like we could replace almost all uses of this logic using ControlGetFocus + ControlSetText instead?
-			Exceptions: MatterMost and EMC2 DLG (neither use proper fields, but web stuff)
-				We can set field value direclty for all other Hyperlinker cases + 2 Onetastic cases (confirmed)
-				Both MatterMost and EMC2 DLG support ^a natively (confirmed, though the MatterMost case probably won't matter)
 	Potential Hyperlinker updates
-		Can we just split MatterMost/EMC2 DLG (non-popup/field cases) to be a separate thing?
+		Replace paste-and-double-check logic with ControlSetText for all applicable windows (all but MatterMost and EMC2 DLG, which don't use proper fields)
 		Should we move the windowsAry definition to a .tl file?
 			Could still be read in just the once (into a static variable)
 			Easier to add/update stuff
-		Actually, could we make the whole thing Selector-based?
-			Columns:
-				Popup window title (as applicable)
-				Methods for linking:
-					Open popup, pop in path, accept
-					Wrapping text in some other text (for MatterMost)
-						MatterMost case could probably be significantly simplified by just getting the selected text, deleting it, then replacing with a fully-build link string
-							So link string with <tags> could be one of the columns in the .tl file
-				Keys to send to accept link window (!a or {Enter})
-				Tagged link string (for MatterMost)
-			As now, existence in the resulting array for a key is indicative of support
-			Verification of added link would be different for tagged link case
-				Could try to select whole thing that SHOULD be there and compare?
+			Actually, could we make the whole thing Selector-based?
+				Columns:
+					Popup window title (as applicable)
+					Methods for linking:
+						Open popup, pop in path, accept
+						Wrapping text in some other text (for MatterMost)
+							MatterMost case could probably be significantly simplified by just getting the selected text, deleting it, then replacing with a fully-build link string
+								So link string with <tags> could be one of the columns in the .tl file
+					Keys to send to accept link window (!a or {Enter})
+					Tagged link string (for MatterMost)
+				As now, existence in the resulting array for a key is indicative of support
+				Verification of added link would be different for tagged link case
+					Could try to select whole thing that SHOULD be there and compare?
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
 	Consider adding functionality to Toast to have it sleep until the toast goes away

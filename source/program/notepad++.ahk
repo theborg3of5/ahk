@@ -193,6 +193,8 @@
 			return
 		
 		varList := InputBox("Enter variables to send debug string for", , , 500, 100, , , , , clipboard)
+		if(ErrorLevel) ; Popup was cancelled or timed out
+			return
 		
 		if(varList = "") {
 			SendRaw, % functionName "()"

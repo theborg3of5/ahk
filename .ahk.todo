@@ -30,9 +30,7 @@
 				return (actual = value)
 			}
 		Seems like we could replace almost all uses of this logic using ControlGetFocus + ControlSetText instead?
-			Even MatterMost could work well with this (assuming it's a proper field we can access)
-				Could potentially just grab the whole field value (keeping track of the selection somehow), work on that, and set the new thing.
-					Maybe replace selection with a token or tag I can replace with the final full link text, before I get the control text?
+			Exceptions: MatterMost and EMC2 DLG (neither use proper fields, but web stuff)
 	Potential Hyperlinker updates
 		Can we just split MatterMost/EMC2 DLG (non-popup/field cases) to be a separate thing?
 		Should we move the windowsAry definition to a .tl file?

@@ -64,19 +64,11 @@
 	;---------
 	onetasticCopyXML() {
 		onetasticOpenEditXMLPopup()
+		xml := ControlGetText("Edit1", "A")
 		
-		clipboard := "" ; Clear the clipboard so we can tell when we have the new XML on it
-		Send, ^c
-		ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain the XML
-		
-		if(clipboard != "") {
-			Toast.showMedium("Copied XML")
-		} else {
-			Toast.showMedium("Failed to copy XML")
-			return
-		}
-		
-		Send, {Esc} ; Close the popup
+		setClipboardAndToastState(xml, "XML")
+		if(xml)
+			Send, {Esc} ; Close the popup
 	}
 	
 	onetasticIsFunctionXMLCorrect(correctXML) {

@@ -31,6 +31,8 @@
 			}
 		Seems like we could replace almost all uses of this logic using ControlGetFocus + ControlSetText instead?
 			Exceptions: MatterMost and EMC2 DLG (neither use proper fields, but web stuff)
+				We can set field value direclty for all other Hyperlinker cases + 2 Onetastic cases (confirmed)
+				Both MatterMost and EMC2 DLG support ^a natively (confirmed, though the MatterMost case probably won't matter)
 	Potential Hyperlinker updates
 		Can we just split MatterMost/EMC2 DLG (non-popup/field cases) to be a separate thing?
 		Should we move the windowsAry definition to a .tl file?

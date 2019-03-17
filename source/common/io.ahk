@@ -186,7 +186,7 @@ sendMediaKey(keyName) {
 	; There's some sort of odd race condition with Spotify that double-sends the play/pause hotkey if Spotify is focused - this prevents it, though I'm not sure why.
 	Sleep, 100
 	
-	; Only certain media keys need special handling, let  others straight through.
+	; Only certain media keys need special handling, let others straight through.
 	specialKeysAry := ["Media_Play_Pause", "Media_Prev", "Media_Next"]
 	if(!arrayContains(specialKeysAry, keyName)) {
 		Send, % "{" keyName "}"
@@ -205,4 +205,26 @@ sendMediaKey(keyName) {
 	} else {
 		Send, % "{" keyName "}"
 	}
+}
+
+; Set a web field (that we can't set directly with ControlSetText) using the clipboard, double-checking that it worked.
+; Assumes that the field we want to set is already focused.
+setWebFieldValue(value) {
+	; Send our new value with the clipboard, then confirm it's correct by re-copying the field value (in case it just sent "v")
+	WindowActions.selectAll() ; Select all so we overwrite anything already in the field
+	sendTextWithClipboard(value)
+	if(webFieldMatchesValue(value))
+		return true
+	
+	; If it didn't match, try a second time
+	Sleep, 500
+	WindowActions.selectAll()
+	sendTextWithClipboard(value)
+	return webFieldMatchesValue(value)
+}
+webFieldMatchesValue(value) {
+	WindowActions.selectAll()
+	actualValue := getSelectedText()
+	Send, {Right} ; Release the select all
+	return (actualValue = value)
 }

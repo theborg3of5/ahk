@@ -27,7 +27,7 @@ class Hyperlinker {
 			return false
 		
 		Hyperlinker.startLink(windowName)
-		if(!Hyperlinker.sendPath(path, windowName))
+		if(!Hyperlinker.sendPath(windowName, path))
 			return false
 		Hyperlinker.finishLink(windowName)
 		
@@ -58,7 +58,14 @@ class Hyperlinker {
 		return windowsAry
 	}
 	
-	sendPath(path, windowName) { ; GDB TODO see if we can get rid of the need for windowName here (it's just for MatterMost cop-out of isPastedPathCorrect check)
+	sendPath(windowName, path) {
+		if(windowName = "OneNote") {
+			ControlSetText, % "RICHEDIT60W2", % path, A
+			return true
+		} else if(windowName = "EMC2 DLG") {
+			return setWebFieldValue(path)
+		}
+		
 		sendTextWithClipboard(path) ; Need to send it raw, but would prefer not to wait for the longer keywaiting.
 		if(Hyperlinker.isPastedPathCorrect(windowName, path))
 			return true

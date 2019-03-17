@@ -95,7 +95,9 @@ class MainConfig {
 	runMediaPlayer() {
 		player := this.getMediaPlayer()
 		if(player) {
-			Toast.showMedium(player " not yet running, launching...")
+			; Always use runProgram based on the programs at play, but only show the "not yet running" toast if it really doesn't exist.
+			if(!MainConfig.doesWindowExist(player))
+				Toast.showMedium(player " not yet running, launching...")
 			this.runProgram(player)
 		}
 	}

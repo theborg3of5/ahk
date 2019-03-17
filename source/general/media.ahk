@@ -28,6 +28,7 @@
 	return
 #If MainConfig.doesMediaPlayerExist()
 	^!Up::MainConfig.runMediaPlayer()
+	Media_Stop::MainConfig.runMediaPlayer()
 	
 	Media_Play_Pause::sendMediaKey("Media_Play_Pause")
 	Media_Prev::      sendMediaKey("Media_Prev")

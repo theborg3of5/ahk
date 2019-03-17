@@ -17,12 +17,12 @@
 			Onetastic macro function XML
 		Logic distills down to this:
 			{
-			sendTextWithClipboard(value)
-			if(isCorrect(value))
-				return true
-			Sleep, 500
-			sendTextWithClipboard(value)
-			return isCorrect(value)
+				sendTextWithClipboard(value)
+				if(isCorrect(value))
+					return true
+				Sleep, 500
+				sendTextWithClipboard(value)
+				return isCorrect(value)
 			}
 			isCorrect(value) {
 				WindowActions.selectAll() OR selectCurrentLine()

@@ -5,7 +5,26 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
-	Selector - consider adding a way to have certain columns pull from certain other columns' values (i.e. let name use width/height in resize selector)
+	Reorganize this todo list by topic area
+		Fixes vs New doesn't seem very useful anymore
+			Maybe documentation list at the top?
+	ListConverter
+		More output methods
+			Filling in a OneNote table column (down arrow between?)
+			Filling a list of IDs into EpicStudio (Before/after inputs on Selector popup for code surrounding lines, newlines only applied after that)
+	Selector
+		Selector (or maybe directly in TableList?) - consider adding a way to have certain columns pull from certain other columns' values (i.e. let name use width/height in resize selector)
+		Consider adding a way for Selector to match on some other column than just NAME and ABBREV
+			Could be used for transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
+			Alternatively, build out environments in MainConfig (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.
+		Consider properties instead of getter functions for selector stuff (at least SelectorRow?)
+	TL/TLS files
+		Consider reading in more .tl/.tls files at startup and caching them
+			Alternatively, cache them after the first use?
+		Build a way to auto-reformat .tl files?
+			Fix widths so they work nicely
+				Will need to have a tab width parameter/argument somewhere for this (maybe in _constants or config?)
+			Take into account overflow (across columns), with next field being empty or placeholder'd
 	Consider an !c copy function hotkey for VB6
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
@@ -28,23 +47,13 @@
 	Add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments
-	Consider adding a way for Selector to match on some other column than just NAME and ABBREV
-		Could be used for transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
-		Alternatively, build out environments in MainConfig (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.
 	Consider adding a client-file-viewing search to either search selector or actionObject (like codesearch routine)
-	Consider reading in more .tl/.tls files at startup and caching them
-		Alternatively, cache them after the first use?
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.
-	Add more ListConverter features
-		More output methods
-			Filling in a OneNote table column (down arrow between?)
-			Filling a list of IDs into EpicStudio (Before/after inputs on Selector popup for code surrounding lines, newlines only applied after that)
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
 		Options:
 			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)
 			New type of codesearch type with separate branch in ActionObject (not ideal)
 	Can we make Alt+Shift+X hotkey blocking in notepad++ (in main script) contingent on whether the test script is running?
-	Consider properties instead of getter functions for selector stuff (at least SelectorRow?)
 	Figure out some central documentation method
 		Dynamically pull hotkeys for the currently focused program?
 		Hotkey to show window with all currently active hotkeys, divided up into current-program-specific and others
@@ -61,10 +70,6 @@
 			MatterMost - half of left screen
 		Telegram - left monitor, top or bottom depending on machine
 		Pidgin window - top-right of left monitor
-	Build a way to auto-reformat .tl files?
-		Fix widths so they work nicely
-			Will need to have a tab width parameter/argument somewhere for this (maybe in _constants or config?)
-		Take into account overflow (across columns), with next field being empty or placeholder'd
 	
 # Documentation
 	common

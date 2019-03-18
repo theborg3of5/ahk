@@ -162,7 +162,7 @@ arrayDropEmptyValues(inputAry) {
 	return outAry
 }
 
-; Creates a new 2D array with the values of the old, but those values are indexed by a specific subscript.
+; Creates a new table (2D array) with the values of the old, but the rows are indexed by the value of a specific subscript in each row.
 ; Example:
 ;   Input:
 ;      {
@@ -175,18 +175,40 @@ arrayDropEmptyValues(inputAry) {
 ;      	"BYE"      => {"A" => "BYE",      "B" => "SIR"}
 ;      	"GOOD DAY" => {"A" => "GOOD DAY", "B" => "MADAM"}
 ;      	"HI"       => {"A" => "HI",       "B" => "THERE"}
-reIndexArrayBySubscript(inputAry, subscriptName) {
+reIndexTableBySubscript(inputTable, subscriptName) {
 	if(subscriptName = "")
 		return ""
 	
-	outAry := []
-	For _,row in inputAry {
+	outTable := []
+	For _,row in inputTable {
 		newIndex := row[subscriptName]
-		if(newIndex = "") ; Throw out rows without a value in this subscript
+		if(newIndex = "") ; Throw out rows without a value for our new index.
 			Continue
 		
-		outAry[newIndex] := row.clone()
+		outTable[newIndex] := row.clone()
 	}
 	
-	return outAry
+	return outTable
 }
+
+; Reduce a table to the value of a single column per row, indexed by the value of another column.
+reduceTableToColumn(inputTable, valueColumn, indexColumn := "") {
+	if(!inputTable || !valueColumn)
+		return ""
+	
+	outTable := []
+	For origIndex,row in inputTable {
+		if(indexColumn != "")
+			newIndex := row[indexColumn]
+		else
+			newIndex := origIndex
+		
+		if(newIndex = "") ; Throw out rows without a value for our new index.
+			Continue
+		
+		outTable[newIndex] := row[valueColumn]
+	}
+	
+	return outTable
+}
+

@@ -68,7 +68,7 @@ class Hyperlinker {
 	;---------
 	getWindows() {
 		tl := new TableList(findConfigFilePath("hyperlinkWindows.tl"))
-		return reIndexArrayBySubscript(tl.getTable(), "NAME")
+		return reIndexTableBySubscript(tl.getTable(), "NAME")
 	}
 	
 	;---------

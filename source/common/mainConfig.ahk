@@ -125,7 +125,7 @@ class MainConfig {
 		ahkclass := WinGetClass(titleString)
 		title    := WinGetTitle(titleString)
 		
-		For i,winInfo in this.windows {
+		For _,winInfo in this.windows {
 			; DEBUG.popup("Against WindowInfo",winInfo, "EXE",exe, "Class",ahkClass, "Title",title)
 			if(exe      && winInfo.exe   && (exe != winInfo.exe))
 				Continue
@@ -191,7 +191,7 @@ class MainConfig {
 		if(!ahkExe)
 			return false
 		
-		For i,game in this.games
+		For _,game in this.games
 			if(ahkExe = game["EXE"])
 				return true
 		
@@ -219,12 +219,7 @@ class MainConfig {
 		privatesTable := tl.getTable()
 		
 		; Index private values by key.
-		privatesAry := []
-		For i,valueRow in privatesTable {
-			key := valueRow["KEY"]
-			if(key)
-				privatesAry[key] := valueRow["VALUE"]
-		}
+		privatesAry := reduceTableToColumn(privatesTable, "VALUE", "KEY")
 		
 		; DEBUG.popup("MainConfig.loadPrivates","Finish", "Filepath",filePath, "Table",privatesTable, "Indexed array",privatesAry)
 		return privatesAry
@@ -247,7 +242,7 @@ class MainConfig {
 		windowsTable := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
 		
 		windowsAry := []
-		For i,row in windowsTable
+		For _,row in windowsTable
 			windowsAry.push(new WindowInfo(row))
 		
 		return windowsAry
@@ -258,12 +253,7 @@ class MainConfig {
 		pathsTable := tl.getFilteredTableUnique("NAME", "MACHINE", MainConfig.getMachine())
 		
 		; Index paths by key.
-		pathsAry := []
-		For i,row in pathsTable {
-			key := row["KEY"]
-			if(key)
-				pathsAry[key] := row["PATH"]
-		}
+		pathsAry := reduceTableToColumn(pathsTable, "PATH", "KEY")
 		
 		; Apply calculated values and private tags.
 		userRootPath := reduceFilepath(A_Desktop,  1)
@@ -286,7 +276,7 @@ class MainConfig {
 		
 		; Index it by name.
 		programsAry := []
-		For i,row in programsTable
+		For _,row in programsTable
 			programsAry[row["NAME"]] := new ProgramInfo(row)
 		; DEBUG.popupEarly("MainConfig","loadPrograms", "Finished programs",programsAry)
 		
@@ -301,7 +291,7 @@ class MainConfig {
 	
 	loadWindowsByName(windowsByLineNum) {
 		windowsAry := []
-		For i,winInfo in windowsByLineNum
+		For _,winInfo in windowsByLineNum
 			windowsAry[winInfo.name] := winInfo
 		return windowsAry
 	}

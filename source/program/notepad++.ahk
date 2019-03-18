@@ -8,7 +8,10 @@
 		Send, 1
 	return
 	
-	!+x::return
+	; Block close-document hotkeys that can't be changed/removed.
+	!x::
+	!+x::
+		return
 	
 	:X:dbpop::notepadPPSendDebugCodeString("DEBUG.popup")
 	:X:edbpop::notepadPPSendDebugCodeString("DEBUG.popupEarly")

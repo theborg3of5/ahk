@@ -14,18 +14,20 @@
 		Better would be to have the toast itself handle the waiting
 			Could require an actual object in these cases, seems reasonable to do if needed
 		Use case: compileEpicStudioRegex.ahk showing an FYI toast when it's finished
-	TLG selector is quickly becoming a list of all current DLGs/PRJs - would it make sense to add opening functionality from it (or a new hotkey that uses it to open DLGs/PRJs)?
+	TLG DLG/PRJ selector
+		Figure out some way to get record IDs onto the clipboard, not only sending
+		It's quickly becoming a list of all current DLGs/PRJs - would it make sense to add opening functionality from it (or a new hotkey that uses it to open DLGs/PRJs)?
 	Should #e logic in explorer.ahk live in launch.ahk instead?
 		Maybe split it based on when explorer is active or not?
 		Check what the support for explorer looks like in programs, launching, etc - should cover needs when not active, I'd expect?
 	Figure out a better way to deal with NFS 3 day folder not existing when trying to open via folder hotkey
 		Could we auto-create it, maybe?
 			Would want a confirmation before doing so
+			Only try to auto-create if parent folder exists (vs. network drives not available)
 			Then auto-open it once created
 	Add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments
-	Figure out some way to get TLG DLG/PRJ selector stuff onto the clipboard, not only sending
 	Consider adding a way for Selector to match on some other column than just NAME and ABBREV
 		Could be used for transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
 		Alternatively, build out environments in MainConfig (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.

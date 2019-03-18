@@ -161,3 +161,32 @@ arrayDropEmptyValues(inputAry) {
 	
 	return outAry
 }
+
+; Creates a new 2D array with the values of the old, but those values are indexed by a specific subscript.
+; Example:
+;   Input:
+;      {
+;      	1          => {"A" => "HI",       "B" => "THERE"}
+;      	2          => {"A" => "BYE",      "B" => "SIR"}
+;      	3          => {"A" => "GOOD DAY", "B" => "MADAM"}
+;      }
+;   Output (with a given subscriptName of "A"):
+;      {
+;      	"BYE"      => {"A" => "BYE",      "B" => "SIR"}
+;      	"GOOD DAY" => {"A" => "GOOD DAY", "B" => "MADAM"}
+;      	"HI"       => {"A" => "HI",       "B" => "THERE"}
+reIndexArrayBySubscript(inputAry, subscriptName) {
+	if(subscriptName = "")
+		return ""
+	
+	outAry := []
+	For _,row in inputAry {
+		newIndex := row[subscriptName]
+		if(newIndex = "") ; Throw out rows without a value in this subscript
+			Continue
+		
+		outAry[newIndex] := row.clone()
+	}
+	
+	return outAry
+}

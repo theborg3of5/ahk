@@ -5,6 +5,10 @@
 	Rewrite/clean up coding style for kdeMoverSizer
 	
 # New
+	data.reIndexArrayBySubscript() - should this just be a part of TableList? Maybe another getTable() variation?
+	Consider a function similar to data.reIndexArrayBySubscript() that just uses two values from the rows - one as an index and the other as a value.
+		Should in theory be usable by various things in MainConfig.
+		Might make sense as part of TableList if we move data.reIndexArrayBySubscript() there too.
 	Selector - consider adding a way to have certain columns pull from certain other columns' values (i.e. let name use width/height in resize selector)
 	Consider an !c copy function hotkey for VB6
 	Potential Hyperlinker updates

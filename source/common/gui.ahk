@@ -9,6 +9,13 @@ setTrayIcon(iconPath) {
 	return originalIconPath
 }
 
+showConfirmationPopup(title, message) {
+	MsgBox, 4, % title, % message
+	IfMsgBox, Yes
+		return true
+	return false
+}
+
 applyTitleFormat() {
 	Gui, Font, w600 underline ; Heavier weight (not quite bold), underline.
 }

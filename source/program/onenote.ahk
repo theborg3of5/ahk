@@ -354,8 +354,7 @@
 	}
 	oneNoteDeletePage() {
 		; Confirmation to avoid accidental page deletion
-		MsgBox, 4, Delete page?, Are you sure you want to delete this page?
-		IfMsgBox, Yes
+		if(showConfirmationPopup("Delete page?", "Are you sure you want to delete this page?"))
 			Send, !4
 	}
 	oneNoteAddMeetingNotes() {

@@ -19,30 +19,31 @@
 	; Open function header edit window
 	^e::^F2
 	
-	; Delete current macro
-	^d::
-		Send, !u ; Function
-		Send, d  ; Delete Function
-	return
+	; Delete current function
+	^d::onetasticDeleteCurrentFunction()
 	
 	; Open XML window
 	^+o::onetasticOpenEditXMLPopup()
 	
-	; Copy current function XML
-	^+x::onetasticCopyXML()
+	; Copy/set current function XML
+	^+x::onetasticCopyCurrentXML()
+	^+s::onetasticSetCurrentXML(clipboard)
 	
-	; "Import" all dependencies (recursively) based on the macro/function's listed dependencies
-	^+i::
-		onetasticImportAllDependencies() {
-			; Get XML for the macro/function that's open
-			onetasticCopyXML()
-			
-			masterDependencyXMLsAry := onetasticGetAllDependencyXMLs(clipboard)
-			; DEBUG.popup("masterDependencyXMLsAry",masterDependencyXMLsAry)
-			
-			For _,functionXML in masterDependencyXMLsAry
-				onetasticImportFunction(functionXML)
+	; Update the current macro using the XML on the clipboard.
+	^!i::onetasticRefreshMacroFromXML(clipboard)
+	
+	;---------
+	; DESCRIPTION:    Delete the currently visible function.
+	;---------
+	onetasticDeleteCurrentFunction(autoConfirm := false) {
+		Send, !u ; Function
+		Send, d  ; Delete Function
+		
+		if(autoConfirm) {
+			WinWaitActive, Delete Function ahk_class Onetastic Window
+			Send, y ; Yes
 		}
+	}
 	
 	;---------
 	; DESCRIPTION:    Open the XML popup for the current macro or function.        
@@ -56,13 +57,93 @@
 	;---------
 	; DESCRIPTION:    Copy the XML for the current macro or function.
 	;---------
-	onetasticCopyXML() {
+	onetasticCopyCurrentXML() {
 		onetasticOpenEditXMLPopup()
 		xml := ControlGetText("Edit1", "A")
 		
 		setClipboardAndToastState(xml, "XML")
 		if(xml)
 			Send, {Esc} ; Close the popup
+	}
+	
+	;---------
+	; DESCRIPTION:    Sets the XML for the current function to the given value.
+	; PARAMETERS:
+	;  newXML (I,REQ) - The new XML for the current function.
+	;---------
+	onetasticSetCurrentXML(newXML) {
+		if(newXML = "")
+			return
+		
+		onetasticOpenEditXMLPopup()
+		ControlSetText, Edit1, % newXML, A
+		Send, {Space} ; Parsed value doesn't update unless we actually change something (setting the field doesn't count), so add a space (which is ignored by the parser).
+		Send, !o ; OK out of window
+		
+		; Wait for window to close fully
+		waitUntilWindowState("Active", " - Macro Editor", "", 2) ; matchMode=2 - allow matching anywhere
+	}
+	
+	;---------
+	; DESCRIPTION:    "Refresh" a macro and all of its functions to match the given XML and its
+	;                 recursive dependencies from .xml files.
+	; PARAMETERS:
+	;  macroXML (I,REQ) - New XML for the macro.
+	;---------
+	onetasticRefreshMacroFromXML(macroXML) {
+		if(!macroXML) {
+			Toast.showMedium("Could not import dependencies: no macro XML given.")
+			return
+		}
+		
+		if(!showConfirmationPopup("Update macro from XML", "Are you sure you want to overwrite this macro and its functions?"))
+			return
+		
+		; Update the macro XML
+		Control, Choose, 1, ComboBox1, A ; Switch to Main() - always the first item
+		onetasticSetCurrentXML(macroXML)
+		
+		; Delete all existing functions, we'll be "importing" them from scratch.
+		onetasticDeleteAllUserFunctions()
+		
+		; Import all needed dependencies.
+		masterDependencyXMLsAry := onetasticGetAllDependencyXMLs(macroXML)
+		For _,functionXML in masterDependencyXMLsAry
+			onetasticImportFunction(functionXML)
+	}
+	
+	;---------
+	; DESCRIPTION:    Delete all user-created functions in the macro (everything except Main()).
+	;---------
+	onetasticDeleteAllUserFunctions() {
+		; Find out how many functions there are, then focus the last one (deletion moves to the previous function).
+		functionList := ControlGet("List", "", "ComboBox1", "A")
+		StringReplace, functionList, functionList, `n, `n, UseErrorLevel ; Counting the `ns gives us the number of lines - 1, which is the number of functions excluding Main().
+		functionCount := ErrorLevel
+		Control, Choose, % functionCount + 1, ComboBox1, A ; +1 to account for Main()
+		; DEBUG.toast("functionCount",functionCount, "functionList",functionList)
+		
+		Loop {
+			; Finished when we reach Main().
+			if(onetasticIsMainFunctionOpen())
+				Break
+			
+			; Safety check so we can't infinitely loop.
+			counter++
+			if(counter > functionCount)
+				Break
+			
+			onetasticDeleteCurrentFunction(true)
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Determine whether we're on the Main() function (which is the execution root
+	;                 and cannot be deleted) or not.
+	; RETURNS:        True if the Main() function is the one currently open, False otherwise.
+	;---------
+	onetasticIsMainFunctionOpen() {
+		return (ControlGetText("ComboBox1", "A") = "Main()")
 	}
 	
 	;---------
@@ -117,6 +198,7 @@
 		For _,dependencyName in totalDependenciesAry
 			totalDependencyXMLsAry.push(functionsXMLAry[dependencyName])
 		
+		; DEBUG.toast("masterDependencyXMLsAry",masterDependencyXMLsAry)
 		return totalDependencyXMLsAry
 	}
 	
@@ -207,9 +289,6 @@
 		; Wait to get back to main macro editor window
 		waitUntilWindowState("Active", " - Macro Editor", "", 2) ; matchMode=2 - allow matching anywhere
 		
-		onetasticOpenEditXMLPopup()
-		ControlSetText, Edit1, % functionXML, A
-		Send, {Space} ; Parsed value doesn't update unless we actually change something (setting the field doesn't count), so add a space (which is ignored by the parser).
-		Send, !o ; OK out of window
+		onetasticSetCurrentXML(functionXML)
 	}
 #If

@@ -1,38 +1,9 @@
-# Fixes
-	Update or get rid of timer - formatting, general code cleanup, even functionality?
-		Build in selector for times
-			Can have hard-coded list of choices to pass in
-	Rewrite/clean up coding style for kdeMoverSizer
+# Selector/TableList/TL/TLS files
 	
-# New
-	Reorganize this todo list by topic area
-		Fixes vs New doesn't seem very useful anymore
-			Maybe documentation list at the top?
-	ListConverter
-		More output methods
-			Filling in a OneNote table column (down arrow between?)
-			Filling a list of IDs into EpicStudio (Before/after inputs on Selector popup for code surrounding lines, newlines only applied after that)
-	Selector
-		Selector (or maybe directly in TableList?) - consider adding a way to have certain columns pull from certain other columns' values (i.e. let name use width/height in resize selector)
-		Consider adding a way for Selector to match on some other column than just NAME and ABBREV
-			Could be used for transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
-			Alternatively, build out environments in MainConfig (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.
-		Consider properties instead of getter functions for selector stuff (at least SelectorRow?)
-	TL/TLS files
-		Consider reading in more .tl/.tls files at startup and caching them
-			Alternatively, cache them after the first use?
-		Build a way to auto-reformat .tl files?
-			Fix widths so they work nicely
-				Will need to have a tab width parameter/argument somewhere for this (maybe in _constants or config?)
-			Take into account overflow (across columns), with next field being empty or placeholder'd
+# Small
 	Consider an !c copy function hotkey for VB6
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
-	Consider adding functionality to Toast to have it sleep until the toast goes away
-		Possibly just static variables for wait times, that other scripts can grab based on how long they wanted to wait?
-		Better would be to have the toast itself handle the waiting
-			Could require an actual object in these cases, seems reasonable to do if needed
-		Use case: compileEpicStudioRegex.ahk showing an FYI toast when it's finished
 	TLG DLG/PRJ selector
 		Figure out some way to get record IDs onto the clipboard, not only sending
 		It's quickly becoming a list of all current DLGs/PRJs - would it make sense to add opening functionality from it (or a new hotkey that uses it to open DLGs/PRJs)?
@@ -44,16 +15,42 @@
 			Would want a confirmation before doing so
 			Only try to auto-create if parent folder exists (vs. network drives not available)
 			Then auto-open it once created
+	Can we make Alt+Shift+X hotkey blocking in notepad++ (in main script) contingent on whether the test script is running?
+	SelectorRow (and possibly other Selector stuff) - consider properties instead of getter functions
+	
+# Large
 	Add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments
+	ListConverter - more output methods
+		Filling in a OneNote table column (down arrow between?)
+		Filling a list of IDs into EpicStudio (Before/after inputs on Selector popup for code surrounding lines, newlines only applied after that)
+	Update or get rid of timer - formatting, general code cleanup, even functionality?
+		Build in selector for times
+			Can have hard-coded list of choices to pass in
+	Rewrite/clean up coding style for kdeMoverSizer
+	Selector (or maybe directly in TableList?) - consider adding a way to have certain columns pull from certain other columns' values (i.e. let name use width/height in resize selector)
+	Selector - consider adding a way to match on some other column than just NAME and ABBREV
+		Could be used for transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
+		Alternatively, build out environments in MainConfig (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.
+	Consider reading in more .tl/.tls files at startup and caching them
+		Alternatively, cache them after the first use?
+			Basically static variables, like we're doing in Hyperlinker
+	Build a way to auto-reformat .tl files?
+		Fix widths so they work nicely
+			Will need to have a tab width parameter/argument somewhere for this (maybe in _constants or config?)
+		Take into account overflow (across columns), with next field being empty or placeholder'd
 	Consider adding a client-file-viewing search to either search selector or actionObject (like codesearch routine)
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
 		Options:
 			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)
 			New type of codesearch type with separate branch in ActionObject (not ideal)
-	Can we make Alt+Shift+X hotkey blocking in notepad++ (in main script) contingent on whether the test script is running?
+	Toast - consider adding functionality to have it sleep until the toast goes away
+		Possibly just static variables for wait times, that other scripts can grab based on how long they wanted to wait?
+		Better would be to have the toast itself handle the waiting
+			Could require an actual object in these cases, seems reasonable to do if needed
+		Use case: compileEpicStudioRegex.ahk showing an FYI toast when it's finished
 	Figure out some central documentation method
 		Dynamically pull hotkeys for the currently focused program?
 		Hotkey to show window with all currently active hotkeys, divided up into current-program-specific and others
@@ -104,7 +101,4 @@
 		killUAC
 		psxEmulatorController
 		vimBindings
-	
-# Phase out
-	
 	

@@ -61,25 +61,6 @@ fileLinesToArray(fileName) {
 	return lines
 }
 
-; Reduces a given filepath down by the number of levels given, from right to left.
-; Path will not end with a trailing backslash.
-reduceFilepath(path, levelsDown) {
-	outPath := ""
-	splitPath := StrSplit(path, "\") ; Start with this exact file (file.ahk).
-	pathSize := splitPath.MaxIndex()
-	For i,p in splitPath {
-		if(i = (pathSize - levelsDown + 1))
-			Break
-		
-		if(outPath)
-			outPath .= "\"
-		outPath .= p
-	}
-	; DEBUG.popup("Split Path", splitPath, "Size", pathSize, "Final path", outPath)
-	
-	return outPath
-}
-
 ; Open a folder from config-defined tags.
 openFolder(folderName) {
 	folderPath := MainConfig.getPath(folderName)
@@ -192,8 +173,13 @@ folderExists(folderPath) {
 	return InStr(FileExist(folderPath), "D") ; Exists and is a directory
 }
 
-getParentFolder(path) {
-	path := removeStringFromEnd(path, "\") ; Make sure there's no trailing backslash, SplitPath assumes that involves a blank filename.
-	SplitPath(folderPath, "", parentFolderPath)
-	return parentFolderPath
+getParentFolder(path, levelsUp := 1) {
+	outPath := removeStringFromEnd(path, "\") ; Make sure there's no trailing backslash, SplitPath assumes that involves a blank filename.
+	
+	Loop, % levelsUp {
+		SplitPath(outPath, "", parentPath)
+		outPath := parentPath
+	}
+	
+	return outPath
 }

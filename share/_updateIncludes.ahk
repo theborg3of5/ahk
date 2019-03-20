@@ -7,7 +7,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include <includeCommon>
 setCommonHotkeysType(HOTKEY_TYPE_Standalone)
 
-rootPath         := reduceFilepath(A_ScriptDir, 1)
+rootPath         := getParentFolder(A_ScriptDir)
 commonFolder     := rootPath "source\common\"
 includesFileName := "_NeededIncludes"
 

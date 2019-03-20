@@ -40,7 +40,7 @@ sendCleanedUpPath(containingFolderOnly := false) {
 	path := mapPath(path)
 	
 	if(containingFolderOnly)
-		path := reduceFilepath(path, 1) "\" ; Remove last element at end, add trailing slash
+		path := getParentFolder(path) "\" ; Remove last element at end, add trailing slash
 	
 	Send, % path
 }

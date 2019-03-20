@@ -10,13 +10,25 @@
 ^+!w::
 	doSelectFolder() {
 		folderPath := selectFolder()
-		if(FileExist(folderPath))
+		
+		; If the folder doesn't exist, try to create it (with permission from user)
+		if(!folderExists(folderPath)) {
+			if(!folderExists(getParentFolder(folderPath))) {
+				Toast.showMedium("Could not open chosen folder: neither the folder nor its parent folder exist.")
+				return ; Not going to try creating if not even the parent exists.
+			}
+			
+			if(showConfirmationPopup("Folder does not exist", "Create folder?"))
+				FileCreateDir, % folderPath
+		}
+		
+		if(folderExists(folderPath))
 			Run(folderPath)
 	}
 
 ; Send cleaned-up path:
-; - Turn network paths into their drive-mapped equivalents
 ; - Remove file:///, quotes, and other garbage from around the path.
+; - Turn network paths into their drive-mapped equivalents
 !+p::sendCleanedUpPath()
 !+#p::sendCleanedUpPath(true)
 sendCleanedUpPath(containingFolderOnly := false) {

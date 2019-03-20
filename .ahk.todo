@@ -7,12 +7,9 @@
 	Should #e logic in explorer.ahk live in launch.ahk instead?
 		Maybe split it based on when explorer is active or not?
 		Check what the support for explorer looks like in programs, launching, etc - should cover needs when not active, I'd expect?
-	Figure out a better way to deal with NFS 3 day folder not existing when trying to open via folder hotkey
-		Could we auto-create it, maybe?
-			Would want a confirmation before doing so
-			Only try to auto-create if parent folder exists (vs. network drives not available)
-			Then auto-open it once created
 	SelectorRow (and possibly other Selector stuff) - consider properties instead of getter functions
+	Consider switching reduceFilepath() to use SplitPath() instead of doing the string manipulation directly.
+		We'll have to make sure there's no trailing slash - SplitPath() doesn't handle that well.
 	
 # Large
 	Add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines

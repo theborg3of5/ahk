@@ -85,7 +85,7 @@ openFolder(folderName) {
 	folderPath := MainConfig.getPath(folderName)
 	; DEBUG.popup("Folder name",folderName, "Path",folderPath)
 	
-	if(folderPath && FileExist(folderPath))
+	if(folderExists(folderPath))
 		Run(folderPath)
 }
 
@@ -186,4 +186,14 @@ mapPath(path) {
 	
 	; DEBUG.popup("Updated path",path, "Table",table)
 	return path
+}
+
+folderExists(folderPath) {
+	return InStr(FileExist(folderPath), "D") ; Exists and is a directory
+}
+
+getParentFolder(path) {
+	path := removeStringFromEnd(path, "\") ; Make sure there's no trailing backslash, SplitPath assumes that involves a blank filename.
+	SplitPath(folderPath, "", parentFolderPath)
+	return parentFolderPath
 }

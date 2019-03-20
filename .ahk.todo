@@ -26,7 +26,6 @@
 		Build in selector for times
 			Can have hard-coded list of choices to pass in
 	Rewrite/clean up coding style for kdeMoverSizer
-	Selector (or maybe directly in TableList?) - consider adding a way to have certain columns pull from certain other columns' values (i.e. let name use width/height in resize selector)
 	Selector - consider adding a way to match on some other column than just NAME and ABBREV
 		Could be used for transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
 		Alternatively, build out environments in MainConfig (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.

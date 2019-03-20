@@ -8,8 +8,6 @@
 		Maybe split it based on when explorer is active or not?
 		Check what the support for explorer looks like in programs, launching, etc - should cover needs when not active, I'd expect?
 	SelectorRow (and possibly other Selector stuff) - consider properties instead of getter functions
-	Consider switching reduceFilepath() to use SplitPath() instead of doing the string manipulation directly.
-		We'll have to make sure there's no trailing slash - SplitPath() doesn't handle that well.
 	
 # Large
 	Add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines

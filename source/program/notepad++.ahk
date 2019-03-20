@@ -8,10 +8,8 @@
 		Send, 1
 	return
 	
-	; Block close-document hotkeys that can't be changed/removed.
-	!x::
-	!+x::
-		return
+	; Block close-document hotkey that can't be changed/removed.
+	!x::return
 	
 	:X:dbpop::notepadPPSendDebugCodeString("DEBUG.popup")
 	:X:edbpop::notepadPPSendDebugCodeString("DEBUG.popupEarly")
@@ -206,5 +204,9 @@
 			SendRaw, % functionName "(" notepadPPGenerateDebugParams(varList) ")"
 		}
 	}
-	
 #IfWinActive
+
+; Block the !+x close-tab hotkey, but only if our test script isn't running (because that's its close hotkey).
+#If !WinExist(MainConfig.getPath("AHK_ROOT") "\test\test.ahk ahk_class AutoHotkey ahk_exe AutoHotkey.exe")
+	!+x::return
+#If

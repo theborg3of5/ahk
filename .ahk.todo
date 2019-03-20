@@ -13,7 +13,6 @@
 			Would want a confirmation before doing so
 			Only try to auto-create if parent folder exists (vs. network drives not available)
 			Then auto-open it once created
-	Can we make Alt+Shift+X hotkey blocking in notepad++ (in main script) contingent on whether the test script is running?
 	SelectorRow (and possibly other Selector stuff) - consider properties instead of getter functions
 	
 # Large

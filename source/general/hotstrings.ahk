@@ -156,6 +156,8 @@
 		:X:dsf::sendFolderPath("USER_ROOT", "Design")
 		:X:dlf::sendFolderPath("DOWNLOADS")
 		:X:devf::sendFolderPath("USER_DEV")
+		
+		:X:otmf::sendFolderPath("ONETASTIC_MACROS")
 	}
 
 	{ ; AHK
@@ -183,7 +185,7 @@
 		:X:fesf::sendFilePath("EPIC_SOURCE_S1", MainConfig.getPrivate("EPICDESKTOP_PROJECT"))
 	}
 }
-#IfWinNotActive
+#If
 
 ; Edits this file.
 ^!h::

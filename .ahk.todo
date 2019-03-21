@@ -2,11 +2,7 @@
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
 	Reconsider making a separate "classes" folder in <AHK_ROOT>\source\
-	Consider where properties might make sense for some classes. Places to check:
-		TableListMod
-			.column variable should become .column[] property
-				column used only by TableList.killMods()
-			All other variables should be private (unused elsewhere, but we should add public/private headers)
+	Consider where properties might make sense for some classes. Places to update:
 		MainConfig
 			.getSetting()/.setSetting() > .setting[] (get and set both)
 			.getMachine() > .machine[]

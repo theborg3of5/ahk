@@ -50,10 +50,10 @@ global MODOP_ADD_START := "addToStart"
 global MODOP_ADD_END   := "addToEnd"
 
 class TableListMod {
-	column    := ""
-	operation := ""
-	text      := ""
-	label     := ""
+	
+	; ==============================
+	; == Public ====================
+	; ==============================
 	
 	;---------
 	; DESCRIPTION:    Create a new TableListMod instance.
@@ -64,7 +64,7 @@ class TableListMod {
 	; RETURNS:        Reference to new TableListMod object
 	;---------
 	__New(modString, label) {
-		this.label := label
+		this.labelFromParent := label
 		
 		; Pull the relevant info out of the string.
 		this.column    := getStringBeforeStr(modString, ".")
@@ -96,12 +96,31 @@ class TableListMod {
 		row[this.column] := newValue
 	}
 	
+	;---------
+	; DESCRIPTION:    The label originally given for this mod action.
+	;---------
+	label[] {
+		get {
+			return this.labelFromParent
+		}
+	}
+	
+	
+	; ==============================
+	; == Private ===================
+	; ==============================
+	
+	column          := ""
+	operation       := ""
+	text            := ""
+	labelFromParent := ""
+	
 	; Debug info (used by the Debug class)
 	debugName := "TableListMod"
 	debugToString(debugBuilder) {
 		debugBuilder.addLine("Column",    this.column)
 		debugBuilder.addLine("Operation", this.operation)
 		debugBuilder.addLine("Text",      this.text)
-		debugBuilder.addLine("Label",     this.label)
+		debugBuilder.addLine("Label",     this.labelFromParent)
 	}
 }

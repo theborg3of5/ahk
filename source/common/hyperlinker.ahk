@@ -1,6 +1,4 @@
 /* Class for adding a hyperlink to the currently-selected text.
-	
-	***
 */
 
 global LinkPathMethod_PopupField   := "POPUP_FIELD"

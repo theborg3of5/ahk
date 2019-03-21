@@ -32,6 +32,34 @@ copyFolderPathWithHotkey(hotkeyKeys) {
 	setClipboardAndToastValue(path, "folder path")
 }
 
+;---------
+; DESCRIPTION:    Add something to the clipboard history, restoring the original clipboard value.
+; PARAMETERS:
+;  textToSave (I,REQ) - Text to add to the clipboard history.
+;---------
+addToClipboardHistory(textToSave) {
+	originalClipboard := clipboardAll
+	
+	clipboard := textToSave
+	saveCurrentClipboard()
+	
+	clipboard := originalClipboard
+	saveCurrentClipboard()
+}
+
+;---------
+; DESCRIPTION:    Force the clipboard manager to store the current value, generally useful just
+;                 before you change the clipboard to something else.
+;---------
+saveCurrentClipboard() {
+	; If the ditto function is available that's preferable (no wait time), but fall back if needed.
+	functionName := "dittoSaveCurrentClipboard" ; dittoSaveCurrentClipboard()
+	if(isFunc(functionName))
+		%functionName%()
+	else
+		Sleep, 1000
+}
+
 ; Sends the selected text using the clipboard, fixing the clipboard as it finishes.
 sendTextWithClipboard(text) {
 	; DEBUG.popup("Text to send with clipboard", text)

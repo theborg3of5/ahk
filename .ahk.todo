@@ -2,14 +2,6 @@
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
 	TLG DLG/PRJ selector
-		Figure out some way to get record IDs onto the clipboard, not only sending
-			Could we add it to the clipboard history in Ditto, but restore the current clipboard too?
-			Can add a hotkey in Ditto to save the current clipboard - that seems to work well:
-				tempClip := clipboardAll
-				clipboard := "A"
-				Send, ^+!c
-				clipboard := tempClip
-				Send, ^+!c
 		It's quickly becoming a list of all current DLGs/PRJs - would it make sense to add opening functionality from it (or a new hotkey that uses it to open DLGs/PRJs)?
 	Should #e logic in explorer.ahk live in launch.ahk instead?
 		Maybe split it based on when explorer is active or not?

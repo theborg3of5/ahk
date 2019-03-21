@@ -115,6 +115,7 @@ genericHyperlink(subAction) {
 				return
 			
 			dlgId := removeStringFromStart(dlgId, "P.")
+			addToClipboardHistory(dlgId)
 			Send, % dlgId
 		}
 	

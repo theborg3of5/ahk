@@ -29,13 +29,7 @@
 			
 			Send, {F5}
 		}
+	
+	; If explorer is active, open a new tab (or switch to the "This PC" tab if it exists)
+	#e::Run(FOLDER_UUID_THISPC) ; "This PC" special folder ID
 #If
-
-$#e::
-	if(MainConfig.isWindowActive("Explorer"))
-		Run(FOLDER_UUID_THISPC) ; Open the "This PC" special folder
-	else if(!MainConfig.doesWindowExist("Explorer"))
-		Send, #e ; Open a new session if nothing exists
-	else
-		WinActivate ; Show the existing window
-return

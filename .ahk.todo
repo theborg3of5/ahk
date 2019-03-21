@@ -1,8 +1,6 @@
 # Small
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
-	TLG DLG/PRJ selector
-		It's quickly becoming a list of all current DLGs/PRJs - would it make sense to add opening functionality from it (or a new hotkey that uses it to open DLGs/PRJs)?
 	Should #e logic in explorer.ahk live in launch.ahk instead?
 		Maybe split it based on when explorer is active or not?
 		Check what the support for explorer looks like in programs, launching, etc - should cover needs when not active, I'd expect?

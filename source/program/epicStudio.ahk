@@ -1,5 +1,11 @@
 ; EpicStudio hotkeys and helpers.
 #IfWinActive, ahk_exe EpicStudio.exe
+	; Remap some of the tools to get easier access to those I use often.
+	!1::!3 ; EZParse
+	!2::!5 ; Error List
+	!3::!6 ; Call Hierarchy
+	!4::!8 ; Item expert
+	
 	; Better access to INTermediate code.
 	!i::ControlSend, , ^+v
 	

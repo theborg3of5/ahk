@@ -353,6 +353,7 @@ class TableList {
 	getTable() {
 		return this.table
 	}
+	
 	;---------
 	; DESCRIPTION:    Retrieve a single row from the processed table.
 	; PARAMETERS:
@@ -385,6 +386,7 @@ class TableList {
 	getIndexLabels() {
 		return this.indexLabels
 	}
+	
 	;---------
 	; DESCRIPTION:    Get the label used as the index for a specific column.
 	; PARAMETERS:

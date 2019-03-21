@@ -154,15 +154,9 @@ class SelectorGui {
 	}
 	
 	addChoiceToTable(flex, index, choice) {
-		name := choice.data["NAME"]
-		if(IsObject(choice.data["ABBREV"]))
-			abbrev := choice.data["ABBREV", 1]
-		else
-			abbrev := choice.data["ABBREV"]
-		
-		flex.addCell(index  ")", 0,                            this.widths["INDEX"],  "Right")
-		flex.addCell(abbrev ":", this.padding["INDEX_ABBREV"], this.widths["ABBREV"])
-		flex.addCell(name,       this.padding["ABBREV_NAME"])
+		flex.addCell(index         ")", 0,                            this.widths["INDEX"],  "Right")
+		flex.addCell(choice.abbrev ":", this.padding["INDEX_ABBREV"], this.widths["ABBREV"])
+		flex.addCell(choice.name,       this.padding["ABBREV_NAME"])
 	}
 	
 	addFields() {

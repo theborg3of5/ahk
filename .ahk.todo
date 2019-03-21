@@ -1,7 +1,22 @@
 # Small
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
-	SelectorChoice (and possibly other Selector stuff) - consider properties instead of getter functions
+	Reconsider making a separate "classes" folder in <AHK_ROOT>\source\
+	Consider where properties might make sense for some classes. Places to check:
+		TableListMod
+			.column variable should become .column[] property
+				column used only by TableList.killMods()
+			All other variables should be private (unused elsewhere, but we should add public/private headers)
+		MainConfig
+			.getSetting()/.setSetting() > .setting[] (get and set both)
+			.getMachine() > .machine[]
+			.getMachineTableListFilter() > .machineTLFilter[]
+			.getMediaPlayer() > .mediaPlayer[] (or maybe just retire entirely - only used internally)
+			.getWindowInfo() > .windowInfo[]
+			.getWindowTitleString() > .windowTitleString[] (or just retire and have callers use .windowInfo[<name>].titleString)
+			.getPath() > .path[]
+			.getProgramInfo() > .programInfo[]
+			.getProgramPath() > .programPath[] (or just retire and have callers use .programInfo[<name>].path)
 	
 # Large
 	Get rid of share folder - we don't really share these scripts with others, no reason to worry about maintaining those variations on my own scripts.

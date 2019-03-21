@@ -184,7 +184,7 @@
 		
 	Other features
 		Key rows
-			The constructor's keyRowChars parameter can be used to separate certain rows from the others based on their starting character, excluding them from the main table. Instead, those rows (which will still be split and indexed based on the model row, if present) are stored off using the key name given as part of the parameter, and are accessible using the .getKeyRow() function.
+			The constructor's keyRowChars parameter can be used to separate certain rows from the others based on their starting character, excluding them from the main table. Instead, those rows (which will still be split and indexed based on the model row, if present) are stored off using the key name given as part of the parameter, and are accessible using the .keyRow[<keyName>] property.
 			Note that there should be only one row per character/key in this array.
 			Example:
 				File:
@@ -195,7 +195,7 @@
 					keyRowChars := {")": "OVERRIDE_INDEX"}
 					tl := new TableList(filePath, "", keyRowChars)
 					table := tl.getTable()
-					overrideIndex := tl.getKeyRow("OVERRIDE_INDEX")
+					overrideIndex := tl.keyRow["OVERRIDE_INDEX"]
 				Result:
 					table does not include row starting with ")"
 					overrideIndex["ABBREV"] := 2
@@ -323,10 +323,10 @@ class TableList {
 	;  keyRowChars (I,OPT) - Array of characters and key names to keep separate, see class
 	;                        documentation for more info. If a row starts with one of the
 	;                        characters included here, that row will not appear in the main
-	;                        table. Instead, it will be available using the .getKeyRow()
-	;                        function. Note that the row is still split and indexed based
+	;                        table. Instead, it will be available using the .keyRow[<keyName>]
+	;                        property. Note that the row is still split and indexed based
 	;                        on the model row (if present). Format (where keyName is the string
-	;                        you'll use with .getKeyRow() to retrieve the row later:
+	;                        you'll use with .keyRow[<keyName>] to retrieve the row later:
 	;                        	keyRowChars[<char>] := keyName
 	; RETURNS:        Reference to new TableList object
 	;---------
@@ -352,49 +352,6 @@ class TableList {
 	;---------
 	getTable() {
 		return this.table
-	}
-	
-	;---------
-	; DESCRIPTION:    Retrieve a single row from the processed table.
-	; PARAMETERS:
-	;  lineNum (I,REQ) - The line number of the row to retrieve from the table.
-	; RETURNS:        The row array for the row on the requested line, indexed using the model row
-	;                 if present. Format:
-	;                 	row[column] := value
-	;---------
-	getRow(index) {
-		return this.table[index]
-	}
-	
-	;---------
-	; DESCRIPTION:    Retrieve a key row that was excluded from the table, based on the constructor's
-	;                 keyRowChars parameter.
-	; PARAMETERS:
-	;  name (I,REQ) - The key name that was associated with the row that you want.
-	; RETURNS:        The key row that matches the given name. Format:
-	;                 	row[column] := value
-	;---------
-	getKeyRow(name) {
-		return this.keyRows[name]
-	}
-	
-	;---------
-	; DESCRIPTION:    Get the numeric array with the labels used as columns, as defined by the model row.
-	; RETURNS:        Array of column labels. Format (columnNum starts at 1):
-	;                 	indexLabels[columnNum] := columnLabel
-	;---------
-	getIndexLabels() {
-		return this.indexLabels
-	}
-	
-	;---------
-	; DESCRIPTION:    Get the label used as the index for a specific column.
-	; PARAMETERS:
-	;  index (I,REQ) - The numeric index (starting at 1) of the column.
-	; RETURNS:        The label used to index rows in the table for this column.
-	;---------
-	getIndexLabel(index) {
-		return this.indexLabels[index]
 	}
 	
 	;---------
@@ -477,13 +434,29 @@ class TableList {
 		return filteredTable
 	}
 	
+	;---------
+	; PARAMETERS:
+	;  name (I,REQ) - The key name that was associated with the row that you want.
+	; RETURNS:        The key row (that was excluded from the table, based on the constructor's
+	;                 keyRowChars parameter) that matches the given name. Format:
+	;                 	row[column] := value
+	;---------
+	keyRow[name] {
+		get {
+			return this.keyRows[name]
+		}
+	}
+	
 	
 	; ==============================
 	; == Private ===================
 	; ==============================
-	mods    := []
-	table   := []
-	keyRows := []
+	mods        := []
+	table       := []
+	keyRows     := []
+	indexLabels := []
+	chars       := []
+	keyRowChars := []
 	
 	;---------
 	; DESCRIPTION:    Get the array of default special characters.
@@ -629,7 +602,7 @@ class TableList {
 	;  rowAry (IO,REQ) - Numerically-indexed array representing a row in the table.
 	;---------
 	applyIndexLabels(ByRef rowAry) {
-		if(!IsObject(this.indexLabels))
+		if(isEmpty(this.indexLabels))
 			return
 		
 		tempAry := []
@@ -703,7 +676,7 @@ class TableList {
 		
 		; If it's just blank, all previous mods are wiped clean.
 		if(row = "") {
-			this.mods := Object()
+			this.mods := []
 		} else {
 			; Check for a remove row label.
 			; Assuming here that it will be the first and only thing in the mod row.
@@ -783,7 +756,7 @@ class TableList {
 		
 		; If this is a flat string, it's a special row, that shouldn't be fitlered out
 		; (otherwise it would because it doesn't have columns).
-		if(!IsObject(row))
+		if(!isObject(row))
 			return true
 		
 		valueToCompare := row[column]
@@ -797,7 +770,7 @@ class TableList {
 			return true
 		
 		; If the value isn't blank, compare it to our allowed value.
-		if(IsObject(valueToCompare)) { ; Array case - multiple values in filter column.
+		if(isObject(valueToCompare)) { ; Array case - multiple values in filter column.
 			if(arrayContains(valueToCompare, allowedValue))
 				return true
 		} else {

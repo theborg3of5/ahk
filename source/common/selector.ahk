@@ -331,15 +331,10 @@ class Selector {
 		} else {
 			table := tl.getTable()
 		}
-		; DEBUG.popup("Filepath",this.filePath, "Parsed table",table, "Index labels",tl.getIndexLabels())
-		
-		if(!IsObject(tl.getIndexLabels())) {
-			DEBUG.popup("Selector.loadChoicesFromFile","Got TableList", "Invalid settings","No column index labels")
-			return
-		}
+		; DEBUG.popup("Filepath",this.filePath, "Parsed table",table)
 		
 		; Special override field index row that tells us how we should arrange data inputs.
-		fieldIndices := tl.getKeyRow("OVERRIDE_INDEX")
+		fieldIndices := tl.keyRow["OVERRIDE_INDEX"]
 		if(fieldIndices) {
 			this.overrideFields := []
 			For label,fieldIndex in fieldIndices {
@@ -347,7 +342,7 @@ class Selector {
 					this.overrideFields[fieldIndex] := label
 			}
 		}
-		; DEBUG.popup("Selector.loadChoicesFromFile","Processed indices", "Index labels",tl.getIndexLabels(), "Field indices",fieldIndices, "Selector label indices",this.overrideFields)
+		; DEBUG.popup("Selector.loadChoicesFromFile","Processed indices", "Field indices",fieldIndices, "Selector label indices",this.overrideFields)
 		
 		this.choices       := [] ; Visible choices the user can pick from.
 		this.hiddenChoices := [] ; Invisible choices the user can pick from.
@@ -502,14 +497,11 @@ class Selector {
 		For i,t in table {
 			; Index
 			if(checkIndex && (input = i))
-				return t.getData()
+				return t.dataAry
 			
-			; Abbreviation could be an array, so account for that.
-			abbrev := t.getAbbrev()
-			if(!IsObject(abbrev) && (input = abbrev))
-				return t.getData()
-			else if(IsObject(abbrev) && arrayContains(abbrev, input))
-				return t.getData()
+			; Abbreviation
+			if(t.matchesAbbrev(input))
+				return t.dataAry
 		}
 		
 		return ""

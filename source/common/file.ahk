@@ -94,7 +94,7 @@ sendFolderPath(folderName := "", subPath := "", slashChar := "\", trailingSlash 
 }
 
 selectFolder(folderName := "") {
-	s := new Selector("folders.tls", MainConfig.getMachineTableListFilter())
+	s := new Selector("folders.tls", MainConfig.machineTLFilter)
 	path := s.select(folderName, "PATH")
 	
 	; DEBUG.popup("Path",path, "Replaced",MainConfig.replacePathTags(path))
@@ -103,7 +103,7 @@ selectFolder(folderName := "") {
 
 ; textToSearch should not have its quotes escaped yet (especially not by doubling or tripling them)
 searchWithGrepWin(pathToSearch, textToSearch := "") {
-	runPath := MainConfig.getProgramPath("grepWin") " /regex:no"
+	runPath := MainConfig.programInfo["grepWin"].path " /regex:no"
 	
 	convertedPath := MainConfig.replacePathTags(pathToSearch)
 	runPath .= " /searchpath:""" convertedPath " """ ; Extra space after path, otherwise trailing backslash escapes ending double quote
@@ -116,7 +116,7 @@ searchWithGrepWin(pathToSearch, textToSearch := "") {
 }
 
 searchWithEverything(textToSearch) {
-	runPath := MainConfig.getProgramPath("Everything")
+	runPath := MainConfig.programInfo["Everything"].path
 	
 	if(textToSearch)
 		runPath .= " -search " textToSearch

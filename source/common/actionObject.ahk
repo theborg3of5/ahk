@@ -150,7 +150,7 @@ class ActionObject {
 		} else {
 			splitRecordString(input, ini, id)
 			
-			filter := MainConfig.getMachineTableListFilter()
+			filter := MainConfig.machineTLFilter
 			s := new Selector("actionObject.tls", filter)
 			
 			data := s.selectChoice(ini)
@@ -189,7 +189,7 @@ class ActionObject {
 		}
 		
 		if(!type || !action || (!subType && needsSubType) || (!subAction && needsSubAction)) {
-			filter := MainConfig.getMachineTableListFilter()
+			filter := MainConfig.machineTLFilter
 			s := new Selector("actionObject.tls", filter)
 			
 			data := s.selectGui("", "", {SUBTYPE: subType, ID: input})

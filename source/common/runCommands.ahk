@@ -26,7 +26,7 @@ scriptArgsToVars(varNames, placeholderChar := "") {
 
 ; Opens the given script in Notepad++.
 editScript(script) {
-	Run(MainConfig.getProgramPath("Notepad++") " " script)
+	Run(MainConfig.programInfo["Notepad++"].path " " script)
 }
 
 ; Reloads an AHK script.

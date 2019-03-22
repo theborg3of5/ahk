@@ -38,9 +38,6 @@ class MainConfig {
 		this.games    := this.loadGames(gamesPath)
 		; DEBUG.popupEarly("MainConfig","Loaded all", "Settings",this.settings, "Windows",this.windows, "Paths",this.paths, "Programs",this.programs, "Games",this.games)
 		
-		; Create indexed versions of some of our information, for easier access.
-		this.windowsByName := this.loadWindowsByName(this.windows)
-		
 		this.initDone := true
 	}
 	
@@ -51,11 +48,11 @@ class MainConfig {
 		}
 	}
 	
-	private[tag] {
+	private[key] {
 		get {
-			if(tag = "")
+			if(!key)
 				return ""
-			return this.privates[tag]
+			return this.privates[key]
 		}
 	}
 	replacePrivateTags(inputString) {
@@ -76,11 +73,13 @@ class MainConfig {
 	isMachine(machineName) {
 		return (this.settings["MACHINE"] = machineName)
 	}
-	getMachineTableListFilter() {
-		filter := []
-		filter["COLUMN"] := "MACHINE"
-		filter["VALUE"]  := this.settings["MACHINE"]
-		return filter
+	machineTLFilter[] {
+		get {
+			filter := []
+			filter["COLUMN"] := "MACHINE"
+			filter["VALUE"]  := this.settings["MACHINE"]
+			return filter
+		}
 	}
 	
 	mediaPlayer[] {
@@ -109,7 +108,7 @@ class MainConfig {
 		get {
 			if(!name)
 				return ""
-			return this.windowsByName[name].clone()
+			return this.windows[name].clone()
 		}
 	}
 	isWindowActive(name) {
@@ -160,14 +159,12 @@ class MainConfig {
 		return replaceTags(inputPath, this.paths)
 	}
 	
-	getProgramInfo(name) {
-		return this.programs[name]
-	}
-	getProgramPath(name) {
-		if(!name)
-			return ""
-		
-		return this.programs[name].path
+	programInfo[name] {
+		get {
+			if(!name)
+				return ""
+			return this.programs[name].clone()
+		}
 	}
 	activateProgram(name) {
 		waitForHotkeyRelease()
@@ -175,14 +172,14 @@ class MainConfig {
 		if(this.doesWindowExist(name)) { ; If the program is already running, go ahead and activate it.
 			WindowActions.activateWindowByName(name)
 		} else { ; If it doesn't exist yet, we need to run the executable to make it happen.
-			progInfo := this.getProgramInfo(name)
+			progInfo := this.programInfo[name]
 			RunAsUser(progInfo.path, progInfo.args)
 		}
 	}
 	runProgram(name) {
 		waitForHotkeyRelease()
 		
-		progInfo := this.getProgramInfo(name)
+		progInfo := this.programInfo[name]
 		RunAsUser(progInfo.path, progInfo.args)
 	}
 	
@@ -209,8 +206,6 @@ class MainConfig {
 	static programs := []
 	static games    := []
 	static privates := [] ; KEY => VALUE
-	
-	static windowsByName := []
 	
 	static settingsINIObject
 	
@@ -242,8 +237,12 @@ class MainConfig {
 		windowsTable := tl.getFilteredTable("MACHINE", MainConfig.settings["MACHINE"])
 		
 		windowsAry := []
-		For _,row in windowsTable
-			windowsAry.push(new WindowInfo(row))
+		For _,row in windowsTable {
+			winInfo := new WindowInfo(row)
+			name := winInfo.name
+			if(name)
+				windowsAry[name] := winInfo
+		}
 		
 		return windowsAry
 	}
@@ -286,13 +285,5 @@ class MainConfig {
 	loadGames(filePath) {
 		tl := new TableList(filePath)
 		return tl.getTable()
-	}
-	
-	
-	loadWindowsByName(windowsByLineNum) {
-		windowsAry := []
-		For _,winInfo in windowsByLineNum
-			windowsAry[winInfo.name] := winInfo
-		return windowsAry
 	}
 }

@@ -36,7 +36,7 @@ genericHyperlink(subAction) {
 	selectSearch() {
 		text := cleanupText(getFirstLineOfSelectedText())
 		
-		filter := MainConfig.getMachineTableListFilter()
+		filter := MainConfig.machineTLFilter
 		s := new Selector("search.tls", filter)
 		data := s.selectGui("", "", {"SEARCH_TERM":text})
 		if(!data)
@@ -147,7 +147,7 @@ genericHyperlink(subAction) {
 			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
 				MainConfig.activateProgram("Thunder")
 			else
-				Run(MainConfig.getProgramPath("Thunder") " " data["THUNDER_ID"])
+				Run(MainConfig.programInfo["Thunder"].path " " data["THUNDER_ID"])
 		}
 	
 	!+v::

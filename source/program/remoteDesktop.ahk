@@ -13,7 +13,7 @@ return
 	return
 #IfWinActive
 
-#If !MainConfig.isWindowActive("Remote Desktop") && WinExist(MainConfig.getWindowTitleString("Remote Desktop"))
+#If !MainConfig.isWindowActive("Remote Desktop") && MainConfig.doesWindowExist("Remote Desktop")
 	; Switch back into remote desktop with same hotkey (for computer you're remoting from).
 	!CapsLock::
 		WindowActions.activateWindowByName("Remote Desktop")

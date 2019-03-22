@@ -14,7 +14,7 @@
 */
 
 ; Start in the relevant folder.
-SetWorkingDir, % MainConfig.getPath("EPICSTUDIO_GLOBAL_HIGHLIGHTS")
+SetWorkingDir, % MainConfig.path["EPICSTUDIO_GLOBAL_HIGHLIGHTS"]
 
 ; Loop over all .bits files and compile them into .regex files.
 Loop, Files, % "*.bits"

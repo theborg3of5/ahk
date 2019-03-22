@@ -104,7 +104,7 @@ class DEBUG {
 	;---------
 	popup(params*) {
 		; Only start showing popups once MainConfig is finished loading - popupEarly can be used if you want to show debug messages in these cases.
-		if(!MainConfig.isInitialized())
+		if(!MainConfig.initialized)
 			return
 		
 		MsgBox, % this.buildDebugString(params*)

@@ -17,7 +17,7 @@ MainLoop:
 	if(!MainConfig.doesWindowExist("EMC2"))
 		return
 	
-	getEMC2Info(ini, id, MainConfig.getWindowTitleString("EMC2"))
+	getEMC2Info(ini, id, MainConfig.windowInfo["EMC2"].titleString)
 	if(ini != "DLG")
 		return
 	

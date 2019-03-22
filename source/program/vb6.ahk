@@ -162,7 +162,7 @@
 		outStr := "' "
 		if(extraSpace)
 			outStr .= " "
-		outStr .= "*" MainConfig.getPrivate("INITIALS") " " date " " dlgId " - "
+		outStr .= "*" MainConfig.private["INITIALS"] " " date " " dlgId " - "
 		
 		return outStr
 	}

@@ -8,7 +8,7 @@ txId = %1%
 
 ; Prompt the user for the transaction ID if nothing was passed via command line
 if(!txId)
-	txId := InputBox("Dump Data Transaction for All Current Environments", "Enter data transaction ID", , , , , , , , MainConfig.getPrivate("RFL_TX_ID"))
+	txId := InputBox("Dump Data Transaction for All Current Environments", "Enter data transaction ID", , , , , , , , MainConfig.private["RFL_TX_ID"])
 
 ; Clean out any leading/trailing odd characters (generally spaces).
 txId := cleanupText(txId)
@@ -21,7 +21,7 @@ commIdAry := fileLinesToArray(findConfigFilePath("allCurrentEpicEnvironments.txt
 ; DEBUG.popup("commIdAry",commIdAry)
 
 ; Start in the dump script's directory.
-SetWorkingDir, % MainConfig.getPath("TX_DIFF")
+SetWorkingDir, % MainConfig.path["TX_DIFF"]
 
 For _,commId in commIdAry {
 	runString := buildTxDumpRunString(txId, commId)

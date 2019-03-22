@@ -280,7 +280,7 @@
 	^+8::
 		oneNoteInsertContactComment() {
 			date := FormatTime(, "MM/yy")
-			SendRaw, % "*" MainConfig.getPrivate("INITIALS") " " date
+			SendRaw, % "*" MainConfig.private["INITIALS"] " " date
 		}
 	
 	!+#n::

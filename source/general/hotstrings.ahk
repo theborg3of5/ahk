@@ -2,25 +2,25 @@
 
 #If !MainConfig.windowIsGame()
 { ; Emails.
-	:X:emaila::Send,  % MainConfig.getPrivate("EMAIL")
-	:X:gemaila::Send, % MainConfig.getPrivate("EMAIL_2")
-	:X:eemaila::Send, % MainConfig.getPrivate("WORK_EMAIL")
-	:X:oemaila::Send, % MainConfig.getPrivate("OUTLOOK_EMAIL")
+	:X:emaila::Send,  % MainConfig.private["EMAIL"]
+	:X:gemaila::Send, % MainConfig.private["EMAIL_2"]
+	:X:eemaila::Send, % MainConfig.private["WORK_EMAIL"]
+	:X:oemaila::Send, % MainConfig.private["OUTLOOK_EMAIL"]
 }
 
 { ; Addresses.
-	:X:waddr::SendRaw, % MainConfig.getPrivate("HOME_ADDRESS")
-	:X:eaddr::Send, % MainConfig.getPrivate("WORK_ADDRESS")
-	:*0X:ezip::Send, % MainConfig.getPrivate("WORK_ZIP_CODE")
+	:X:waddr::SendRaw, % MainConfig.private["HOME_ADDRESS"]
+	:X:eaddr::Send, % MainConfig.private["WORK_ADDRESS"]
+	:*0X:ezip::Send, % MainConfig.private["WORK_ZIP_CODE"]
 }
 
 { ; Logins.
-	:X:uname::Send, % MainConfig.getPrivate("USERNAME")
+	:X:uname::Send, % MainConfig.private["USERNAME"]
 }
 
 { ; Phone numbers.
-	:X:phoneno::Send, % MainConfig.getPrivate("PHONE_NUM")
-	:X:fphoneno::Send, % reformatPhone(MainConfig.getPrivate("PHONE_NUM"))
+	:X:phoneno::Send, % MainConfig.private["PHONE_NUM"]
+	:X:fphoneno::Send, % reformatPhone(MainConfig.private["PHONE_NUM"])
 }
 
 { ; Typo correction.
@@ -182,7 +182,7 @@
 	
 	{ ; Epic - Source
 		:X:esf::sendFolderPath("EPIC_SOURCE_S1")
-		:X:fesf::sendFilePath("EPIC_SOURCE_S1", MainConfig.getPrivate("EPICDESKTOP_PROJECT"))
+		:X:fesf::sendFilePath("EPIC_SOURCE_S1", MainConfig.private["EPICDESKTOP_PROJECT"])
 	}
 }
 #If

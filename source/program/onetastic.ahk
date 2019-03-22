@@ -160,7 +160,7 @@
 		
 		; Read all functions' XML and corresponding dependencies into function-name-indexed arrays
 		origWorkingDir := A_WorkingDir
-		SetWorkingDir, % MainConfig.getPath("ONETASTIC_FUNCTIONS")
+		SetWorkingDir, % MainConfig.path["ONETASTIC_FUNCTIONS"]
 		functionsXMLAry    := []
 		allDependenciesAry := []
 		Loop, Files, % "*.xml"

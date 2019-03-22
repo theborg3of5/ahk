@@ -8,10 +8,10 @@ txId = %1%
 
 ; Default to the referrals data tx if nothing given on command line.
 if(!txId)
-	txId := MainConfig.getPrivate("RFL_TX_ID")
+	txId := MainConfig.private["RFL_TX_ID"]
 
 ; Start in the dump script's directory.
-SetWorkingDir, % MainConfig.getPath("TX_DIFF")
+SetWorkingDir, % MainConfig.path["TX_DIFF"]
 
 ; Create a Selector so the user can pick the environment and give us the TX's ID.	
 s := new Selector("epicEnvironments.tls")

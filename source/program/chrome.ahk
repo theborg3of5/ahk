@@ -40,7 +40,7 @@
 	
 	; Send to Telegram (and pick the right chat).
 	~!t::
-		WinWaitActive, % MainConfig.getWindowTitleString("Telegram")
+		WinWaitActive, % MainConfig.windowInfo["Telegram"].titleString
 		telegramFocusNormalChat()
 	return
 	

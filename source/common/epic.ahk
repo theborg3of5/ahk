@@ -114,7 +114,7 @@
 		else
 			command := "CallNumber?extension=" rawNum
 		
-		return replaceTag(MainConfig.getPrivate("CISCO_PHONE_BASE"), "COMMAND", command)
+		return replaceTag(MainConfig.private["CISCO_PHONE_BASE"], "COMMAND", command)
 	}
 }
 
@@ -125,7 +125,7 @@ openEpicStudioRoutine(routine, tag := "") {
 	
 	; Open routine in EpicStudio, wait until it's open
 	Run(MainConfig.getProgramPath("EpicStudio") " " routine "|93") ; ROUTINE|ENVIRONMENT_ID
-	exeName := MainConfig.getWindowInfo("EpicStudio").exe
+	exeName := MainConfig.windowInfo["EpicStudio"].exe
 	WinWaitActive, %routine% ahk_exe %exeName%
 	
 	; Focus correct tag if given.
@@ -140,7 +140,7 @@ openEpicStudioRoutine(routine, tag := "") {
 ; Opens a DLG in the EpicStudio sidebar.
 openEpicStudioDLG(dlgNum) {
 	MainConfig.activateProgram("EpicStudio")
-	WinWaitActive, % MainConfig.getWindowInfo("EpicStudio").titleString, , 20 ; 20s timeout
+	WinWaitActive, % MainConfig.windowInfo["EpicStudio"].titleString, , 20 ; 20s timeout
 	
 	if(ErrorLevel = 1) {
 		Toast.showMedium("Could not open DLG in EpicStudio: `nTimed out waiting for EpicStudio to open")
@@ -189,7 +189,7 @@ dropOffsetFromServerLocation(serverLocation) {
 getEpicAppIdFromKey(appKey) {
 	if(!appKey)
 		return 0
-	return MainConfig.getPrivate("CS_APP_ID_" appKey)
+	return MainConfig.private["CS_APP_ID_" appKey]
 }
 
 buildEMC2Link(ini, id, subAction := "WEB") { ; subAction = SUBACTION_Web
@@ -211,12 +211,12 @@ buildEMC2Link(ini, id, subAction := "WEB") { ; subAction = SUBACTION_Web
 	
 	; Pick one of the types of links - edit in EMC2, web summary or Sherlock.
 	if(subAction = SUBACTION_Edit) {
-		link := MainConfig.getPrivate("EMC2_LINK_BASE")
+		link := MainConfig.private["EMC2_LINK_BASE"]
 	} else if(subAction = SUBACTION_Web) {
 		if(isSherlockINI(ini))
-			link := MainConfig.getPrivate("SHERLOCK_BASE")
+			link := MainConfig.private["SHERLOCK_BASE"]
 		else
-			link := MainConfig.getPrivate("EMC2_LINK_WEB_BASE")
+			link := MainConfig.private["EMC2_LINK_WEB_BASE"]
 	}
 	
 	link .= paramString
@@ -248,7 +248,7 @@ isSherlockINI(ini) {
 }
 
 buildHyperspaceRunString(versionMajor, versionMinor, environment) {
-	runString := MainConfig.getPrivate("HYPERSPACE_BASE")
+	runString := MainConfig.private["HYPERSPACE_BASE"]
 	
 	; Handling for 2010 special path.
 	if(versionMajor = 7 && versionMinor = 8)
@@ -273,10 +273,10 @@ buildTxDumpRunString(txId, environmentCommId := "", environmentName := "") {
 			environmentName := environmentCommId
 		else
 			environmentName := "OTHER"
-	outputPath := MainConfig.getPath("TX_DIFF_OUTPUT") "\" txId "-" environmentName ".txt"
+	outputPath := MainConfig.path["TX_DIFF_OUTPUT"] "\" txId "-" environmentName ".txt"
 	
 	; Build the string to run
-	runString := MainConfig.getPrivate("TX_DIFF_DUMP_BASE")
+	runString := MainConfig.private["TX_DIFF_DUMP_BASE"]
 	runString := replaceTag(runString, "TX_ID",       txId)
 	runString := replaceTag(runString, "OUTPUT_PATH", outputPath)
 	
@@ -297,20 +297,20 @@ buildCodeSearchURL(searchTerm, searchType, appKey := "") {
 		return ""
 	
 	criteriaString := "a=" searchTerm
-	return replaceTags(MainConfig.getPrivate("CS_BASE"), {"SEARCH_TYPE":searchType, "APP_ID":appId, "CRITERIA":criteriaString})
+	return replaceTags(MainConfig.private["CS_BASE"], {"SEARCH_TYPE":searchType, "APP_ID":appId, "CRITERIA":criteriaString})
 }
 
 buildGuruURL(searchTerm) {
-	return MainConfig.getPrivate("GURU_SEARCH_BASE") searchTerm
+	return MainConfig.private["GURU_SEARCH_BASE"] searchTerm
 }
 
 buildEpicWikiSearchURL(searchTerm, category := "") {
-	outURL := MainConfig.getPrivate("WIKI_SEARCH_BASE")
+	outURL := MainConfig.private["WIKI_SEARCH_BASE"]
 	outURL := replaceTag(outURL, "QUERY", searchTerm)
 	
 	if(category) {
 		category := "'" category "'"
-		outURL .= MainConfig.getPrivate("WIKI_SEARCH_FILTERS")
+		outURL .= MainConfig.private["WIKI_SEARCH_FILTERS"]
 		outURL := replaceTag(outURL, "CATEGORIES", category)
 	}
 	
@@ -334,7 +334,7 @@ buildSnapperURL(environment := "", ini := "", idList := "") { ; idList is a comm
 	else
 		idAry := [idList]
 	
-	outURL := MainConfig.getPrivate("SNAPPER_URL_BASE")
+	outURL := MainConfig.private["SNAPPER_URL_BASE"]
 	For i,id in idAry {
 		; DEBUG.popup("Index", i, "ID", id)
 		if(!id)
@@ -347,13 +347,13 @@ buildSnapperURL(environment := "", ini := "", idList := "") { ; idList is a comm
 }
 
 buildVDIRunString(vdiId) {
-	return replaceTag(MainConfig.getPrivate("VDI_BASE"), "VDI_ID", vdiId)
+	return replaceTag(MainConfig.private["VDI_BASE"], "VDI_ID", vdiId)
 }
 
 buildServerCodeLink(serverLocation) {
 	splitServerLocation(serverLocation, routine, tag)
 	
-	url := MainConfig.getPrivate("CS_SERVER_CODE_BASE")
+	url := MainConfig.private["CS_SERVER_CODE_BASE"]
 	url := replaceTag(url, "ROUTINE", routine)
 	url := replaceTag(url, "TAG", tag)
 	
@@ -362,7 +362,7 @@ buildServerCodeLink(serverLocation) {
 }
 
 buildHelpdeskLink(hdrId) {
-	return replaceTag(MainConfig.getPrivate("HELPDESK_BASE"), "ID", hdrId)
+	return replaceTag(MainConfig.private["HELPDESK_BASE"], "ID", hdrId)
 }
 
 getCurrentSnapperEnvironment() {

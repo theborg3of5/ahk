@@ -4,13 +4,7 @@
 	Reconsider making a separate "classes" folder in <AHK_ROOT>\source\
 	Consider where properties might make sense for some classes. Places to update:
 		MainConfig
-			.getSetting()/.setSetting() > .setting[] (get and set both)
-			.getMachine() > .machine[]
 			.getMachineTableListFilter() > .machineTLFilter[]
-			.getMediaPlayer() > .mediaPlayer[] (or maybe just retire entirely - only used internally)
-			.getWindowInfo() > .windowInfo[]
-			.getWindowTitleString() > .windowTitleString[] (or just retire and have callers use .windowInfo[<name>].titleString)
-			.getPath() > .path[]
 			.getProgramInfo() > .programInfo[]
 			.getProgramPath() > .programPath[] (or just retire and have callers use .programInfo[<name>].path)
 	

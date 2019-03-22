@@ -187,7 +187,7 @@ class WindowActions {
 		if(!name)
 			name := MainConfig.findWindowName(titleString)
 		if(!titleString)
-			titleString := MainConfig.getWindowTitleString(name)
+			titleString := MainConfig.windowInfo[name].titleString
 		
 		; DEBUG.popup("WindowActions.windowAction","Finished prep", "action",action, "titleString",titleString, "this.actionOverrides[name]",this.actionOverrides[name])
 		this.doWindowAction(action, titleString, this.actionOverrides[name])

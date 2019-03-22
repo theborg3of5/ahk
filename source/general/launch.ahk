@@ -93,7 +93,7 @@ genericHyperlink(subAction) {
 				combinedMessage .= " - " ; Hyphen in between base message and normal message
 			combinedMessage .= data["MESSAGE"]
 			
-			textToSend := MainConfig.getPrivate("OUTLOOK_TLG_BASE")
+			textToSend := MainConfig.private["OUTLOOK_TLG_BASE"]
 			textToSend := replaceTag(textToSend, "TLP",      data["TLP"])
 			textToSend := replaceTag(textToSend, "CUSTOMER", data["CUSTOMER"])
 			textToSend := replaceTag(textToSend, "DLG",      data["DLG"])

@@ -14,7 +14,7 @@
 	!#c::epicStudioCopyCodeLocation(false)
 	
 	; ; Debug, auto-search for workstation ID.
-	~F5::epicStudioDebug("ws:" MainConfig.getPrivate("WORK_COMPUTER_NAME"))
+	~F5::epicStudioDebug("ws:" MainConfig.private["WORK_COMPUTER_NAME"])
 	F6:: epicStudioDebug("ws:" A_IPAddress1)
 	
 	; Run EpicStudio in debug mode, given a particular string to search for.
@@ -50,7 +50,7 @@
 	
 	; Checks if ES is already in debug mode or not.
 	isESDebugging() {
-		texts := [MainConfig.getPrivate("ES_PUTTY_EXE"), MainConfig.getPrivate("ES_HYPERSPACE_EXE"), MainConfig.getPrivate("ES_VB6_EXE")]
+		texts := [MainConfig.private["ES_PUTTY_EXE"], MainConfig.private["ES_HYPERSPACE_EXE"], MainConfig.private["ES_VB6_EXE"]]
 		return isWindowInState("active", "", texts, 2, "Slow")
 	}
 	
@@ -193,7 +193,7 @@
 		
 		prevIterators := ""
 		for i,iterator in iteratorAry {
-			loopString .= replaceTags(MainConfig.getPrivate("M_LOOP_ARRAY_BASE"), {"ARRAY_NAME":arrayName, "ITERATOR":iterator, "PREV_ITERATORS":prevIterators})
+			loopString .= replaceTags(MainConfig.private["M_LOOP_ARRAY_BASE"], {"ARRAY_NAME":arrayName, "ITERATOR":iterator, "PREV_ITERATORS":prevIterators})
 			
 			prevIterators .= iterator ","
 			loopString .= getMNewLinePlusIndent(numIndents)
@@ -215,7 +215,7 @@
 		ini := stringUpper(data["ARRAY_OR_INI"])
 		
 		idVar := stringLower(ini) "Id"
-		loopString := replaceTags(MainConfig.getPrivate("M_LOOP_ID_BASE"), {"INI":ini, "ID_VAR":idVar})
+		loopString := replaceTags(MainConfig.private["M_LOOP_ID_BASE"], {"INI":ini, "ID_VAR":idVar})
 		
 		loopString .= getMNewLinePlusIndent(numIndents)
 		return loopString
@@ -235,7 +235,7 @@
 		
 		idVar  := stringLower(ini) "Id"
 		datVar := stringLower(ini) "Dat"
-		loopString := replaceTags(MainConfig.getPrivate("M_LOOP_DAT_BASE"), {"INI":ini, "ID_VAR":idVar, "DAT_VAR":datVar, "ITEM":""})
+		loopString := replaceTags(MainConfig.private["M_LOOP_DAT_BASE"], {"INI":ini, "ID_VAR":idVar, "DAT_VAR":datVar, "ITEM":""})
 		
 		loopString .= getMNewLinePlusIndent(numIndents)
 		return loopString
@@ -255,7 +255,7 @@
 		ini := stringUpper(data["ARRAY_OR_INI"])
 		valueVar := data["VAR_NAMES"]
 		
-		loopString := replaceTags(MainConfig.getPrivate("M_LOOP_INDEX_REGULAR_NEXT_VALUE"), {"INI":ini, "ITEM":"", "VALUE_VAR":valueVar})
+		loopString := replaceTags(MainConfig.private["M_LOOP_INDEX_REGULAR_NEXT_VALUE"], {"INI":ini, "ITEM":"", "VALUE_VAR":valueVar})
 		
 		loopString .= getMNewLinePlusIndent(numIndents)
 		return loopString
@@ -277,7 +277,7 @@
 		valueVar := data["VAR_NAMES"]
 		
 		idVar  := stringLower(ini) "Id"
-		loopString := replaceTags(MainConfig.getPrivate("M_LOOP_INDEX_REGULAR_NEXT_ID"), {"INI":ini, "ITEM":"", "VALUE_VAR":valueVar, "ID_VAR":idVar})
+		loopString := replaceTags(MainConfig.private["M_LOOP_INDEX_REGULAR_NEXT_ID"], {"INI":ini, "ITEM":"", "VALUE_VAR":valueVar, "ID_VAR":idVar})
 		
 		loopString .= getMNewLinePlusIndent(numIndents)
 		return loopString

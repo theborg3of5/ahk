@@ -45,33 +45,33 @@ class MainConfig {
 	}
 	
 	
-	isInitialized() {
-		return this.initDone
+	initialized[] {
+		get {
+			return this.initDone
+		}
 	}
 	
-	getPrivate(key) {
-		if(!key)
-			return ""
-		return this.privates[key]
+	private[tag] {
+		get {
+			if(tag = "")
+				return ""
+			return this.privates[tag]
+		}
 	}
 	replacePrivateTags(inputString) {
 		return replaceTags(inputString, this.privates)
 	}
 	
-	getSetting(settingName) {
-		if(!settingName)
-			return ""
-		return this.settings[settingName]
+	menuKeyAction[] {
+		get {
+			return this.settings["MENU_KEY_ACTION"]
+		}
 	}
-	setSetting(settingName, newValue) {
-		if(!settingName)
-			return
-		
-		this.settings[settingName] := newValue
-		this.settingsINIObject.set("Main", settingName, newValue)
-	}
-	getMachine() {
-		return this.getSetting("MACHINE")
+	
+	machine[] {
+		get {
+			return this.settings["MACHINE"]
+		}
 	}
 	isMachine(machineName) {
 		return (this.settings["MACHINE"] = machineName)
@@ -79,21 +79,24 @@ class MainConfig {
 	getMachineTableListFilter() {
 		filter := []
 		filter["COLUMN"] := "MACHINE"
-		filter["VALUE"]  := this.getMachine()
+		filter["VALUE"]  := this.settings["MACHINE"]
 		return filter
 	}
-	getMediaPlayer() {
-		return this.settings["MEDIA_PLAYER"]
+	
+	mediaPlayer[] {
+		get {
+			return this.settings["MEDIA_PLAYER"]
+		}
 	}
 	isMediaPlayer(mediaPlayerName) {
 		return (this.settings["MEDIA_PLAYER"] = mediaPlayerName)
 	}
 	doesMediaPlayerExist() {
-		player := this.getMediaPlayer()
+		player := this.settings["MEDIA_PLAYER"]
 		return this.doesWindowExist(player)
 	}
 	runMediaPlayer() {
-		player := this.getMediaPlayer()
+		player := this.settings["MEDIA_PLAYER"]
 		if(player) {
 			; Always use runProgram based on the programs at play, but only show the "not yet running" toast if it really doesn't exist.
 			if(!MainConfig.doesWindowExist(player))
@@ -102,23 +105,18 @@ class MainConfig {
 		}
 	}
 	
-	getWindowInfo(name) {
-		if(!name)
-			return ""
-		
-		return this.windowsByName[name].clone()
-	}
-	getWindowTitleString(name) {
-		if(!name)
-			return ""
-		
-		return this.windowsByName[name].titleString
+	windowInfo[name] {
+		get {
+			if(!name)
+				return ""
+			return this.windowsByName[name].clone()
+		}
 	}
 	isWindowActive(name) {
-		return WinActive(this.getWindowInfo(name).titleString)
+		return WinActive(this.windowInfo[name].titleString)
 	}
 	doesWindowExist(name) {
-		return WinExist(this.getWindowInfo(name).titleString)
+		return WinExist(this.windowInfo[name].titleString)
 	}
 	findWindowInfo(titleString := "A") {
 		exe      := WinGet("ProcessName", titleString)
@@ -151,10 +149,12 @@ class MainConfig {
 		return winInfo.name
 	}
 	
-	getPath(key) {
-		if(!key)
-			return ""
-		return this.paths[key]
+	path[key] {
+		get {
+			if(!key)
+				return ""
+			return this.paths[key]
+		}
 	}
 	replacePathTags(inputPath) {
 		return replaceTags(inputPath, this.paths)
@@ -239,7 +239,7 @@ class MainConfig {
 	
 	loadWindows(filePath) {
 		tl := new TableList(filePath)
-		windowsTable := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
+		windowsTable := tl.getFilteredTable("MACHINE", MainConfig.settings["MACHINE"])
 		
 		windowsAry := []
 		For _,row in windowsTable
@@ -250,7 +250,7 @@ class MainConfig {
 	
 	loadPaths(filePath) {
 		tl := new TableList(filePath)
-		pathsTable := tl.getFilteredTableUnique("NAME", "MACHINE", MainConfig.getMachine())
+		pathsTable := tl.getFilteredTableUnique("NAME", "MACHINE", MainConfig.settings["MACHINE"])
 		
 		; Index paths by key.
 		pathsAry := reduceTableToColumn(pathsTable, "PATH", "KEY")
@@ -271,7 +271,7 @@ class MainConfig {
 	
 	loadPrograms(filePath) {
 		tl := new TableList(filePath)
-		programsTable := tl.getFilteredTableUnique("NAME", "MACHINE", this.getMachine())
+		programsTable := tl.getFilteredTableUnique("NAME", "MACHINE", this.settings["MACHINE"])
 		; DEBUG.popupEarly("MainConfig","loadPrograms", "Unique table",programsTable)
 		
 		; Index it by name.

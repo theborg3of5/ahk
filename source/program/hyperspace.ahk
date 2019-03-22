@@ -5,8 +5,8 @@
 	$F5::+F5
 	
 	; Login hotkeys.
-	^+t::hyperspaceLogin(MainConfig.getPrivate("WORK_ID"), MainConfig.getPrivate("WORK_PASSWORD"))
-	^!t::hyperspaceLogin(MainConfig.getPrivate("WORK_ID"), MainConfig.getPrivate("WORK_PASSWORD"), false)
+	^+t::hyperspaceLogin(MainConfig.private["WORK_ID"], MainConfig.private["WORK_PASSWORD"])
+	^!t::hyperspaceLogin(MainConfig.private["WORK_ID"], MainConfig.private["WORK_PASSWORD"], false)
 	hyperspaceLogin(username, password, useLastDepartment := true) {
 		Send, %username%{Tab}
 		Send, %password%{Enter}
@@ -21,7 +21,7 @@
 		^!c::
 			openHyperspaceHTML() {
 				html := getHyperspaceHTML()
-				filePath := MainConfig.getPrivate("LOCAL_HTML_DEBUG_OUTPUT")
+				filePath := MainConfig.private["LOCAL_HTML_DEBUG_OUTPUT"]
 				FileDelete, %filePath%
 				FileAppend, %html%, %filePath%
 				Run("C:\Program Files\Internet Explorer\iexplore.exe " filePath)

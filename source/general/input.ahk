@@ -1,9 +1,9 @@
 ; General input hotkeys.
 
 ; Menu key does different things on laptops without a mouse.
-#If MainConfig.getSetting("MENU_KEY_ACTION") = MENUKEYACTION_MiddleClick
+#If MainConfig.menuKeyAction = MENUKEYACTION_MiddleClick
 	AppsKey::MButton
-#If MainConfig.getSetting("MENU_KEY_ACTION") = MENUKEYACTION_WindowsKey
+#If MainConfig.menuKeyAction = MENUKEYACTION_WindowsKey
 	AppsKey::RWin
 #If
 
@@ -98,7 +98,7 @@ return
 			return
 		
 		MainConfig.runProgram("Notepad")
-		newNotepadWindowTitleString := "Untitled - Notepad " MainConfig.getWindowTitleString("Notepad")
+		newNotepadWindowTitleString := "Untitled - Notepad " MainConfig.windowInfo["Notepad"].titleString
 		WinWaitActive, % newNotepadWindowTitleString, , 5 ; 5s timeout
 		if(!WinActive(newNotepadWindowTitleString))
 			return

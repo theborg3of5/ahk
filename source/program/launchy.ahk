@@ -1,14 +1,14 @@
 ﻿; Launchy keyword launcher
 
 ; Protect remote desktop Launchy from host AHK interference.
-#If WinExist(MainConfig.getWindowTitleString("Launchy")) && !childInstanceActive()
+#If MainConfig.doesWindowExist("Launchy") && !childInstanceActive()
 	; Use Caps Lock as the trigger key.
 	CapsLock::
 		SetCapsLockState, AlwaysOff
 		Send, #n
 	return
 
-#If !WinExist(MainConfig.getWindowTitleString("Launchy"))
+#If !MainConfig.doesWindowExist("Launchy")
 	CapsLock::
 		Toast.showMedium("Launchy not yet running, launching...")
 		MainConfig.runProgram("Launchy")

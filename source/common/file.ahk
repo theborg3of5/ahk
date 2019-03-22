@@ -63,7 +63,7 @@ fileLinesToArray(fileName) {
 
 ; Open a folder from config-defined tags.
 openFolder(folderName) {
-	folderPath := MainConfig.getPath(folderName)
+	folderPath := MainConfig.path[folderName]
 	; DEBUG.popup("Folder name",folderName, "Path",folderPath)
 	
 	if(folderExists(folderPath))
@@ -77,7 +77,7 @@ sendUnixFolderPath(folderName := "", subPath := "") {
 	sendFolderPath(folderName, subPath, "/")
 }
 sendFolderPath(folderName := "", subPath := "", slashChar := "\", trailingSlash := true) {
-	folderPath := MainConfig.getPath(folderName)
+	folderPath := MainConfig.path[folderName]
 	if(!folderPath)
 		return
 	
@@ -137,7 +137,7 @@ findConfigFilePath(path) {
 		return "Includes\" path
 	
 	; Check the overall config folder.
-	configFolder := MainConfig.getPath("AHK_CONFIG")
+	configFolder := MainConfig.path["AHK_CONFIG"]
 	if(FileExist(configFolder "\local\" path))      ; Local folder (not version-controlled) inside of config
 		return configFolder "\local\" path
 	if(FileExist(configFolder "\ahkPrivate\" path)) ; Private folder (separately version-controlled) inside of config
@@ -157,7 +157,7 @@ cleanupPath(path) {
 mapPath(path) {	
 	; Convert paths to use mapped drive letters
 	tl := new TableList(findConfigFilePath("mappedDrives.tl"))
-	table := tl.getFilteredTable("MACHINE", MainConfig.getMachine())
+	table := tl.getFilteredTable("MACHINE", MainConfig.machine)
 	For i,row in table {
 		if(stringContains(path, row["PATH"])) {
 			path := StrReplace(path, row["PATH"], row["DRIVE_LETTER"] ":", , 1)

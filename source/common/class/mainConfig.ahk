@@ -18,8 +18,7 @@ class MainConfig {
 	
 	init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile) {
 		; All config files are expected to live in config/ folder under the root of this repo.
-		ahkRootPath := getParentFolder(A_LineFile, 3) ; 2 levels out, plus one to get out of file itself.
-		configFolder := ahkRootPath "\config"
+		configFolder := getParentFolder(A_LineFile, 4) "\config" ; Root path is 3 levels out, plus one to get out of file itself.
 		
 		; Build full paths to config files
 		settingsPath := configFolder "\" settingsFile
@@ -256,7 +255,7 @@ class MainConfig {
 		
 		; Apply calculated values and private tags.
 		userRootPath := getParentFolder(A_Desktop)
-		ahkRootPath  := getParentFolder(A_LineFile, 3) ; This file lives in <AHK_ROOT>\source\common\.
+		ahkRootPath  := getParentFolder(A_LineFile, 4) ; This file lives in <AHK_ROOT>\source\common\class\.
 		For key,value in pathsAry {
 			value := replaceTag(value, "USER_ROOT", userRootPath)
 			value := replaceTag(value, "AHK_ROOT",  ahkRootPath)

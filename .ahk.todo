@@ -1,8 +1,6 @@
 # Small
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
-	Reconsider making a separate "classes" folder in <AHK_ROOT>\source\
-		Actually, maybe make it a sub-folder of <AHK_ROOT>\source\common\?
 	
 # Large
 	Get rid of share folder - we don't really share these scripts with others, no reason to worry about maintaining those variations on my own scripts.

@@ -1,10 +1,36 @@
-SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance force  ; Ensures that if this script is running, running it again replaces the first instance.
+#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
+#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
+SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
+SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
-Menu, Tray, Icon, timer.ico
+setCommonHotkeysType(HOTKEY_TYPE_Standalone)
+setUpTrayIcons("timer.ico", "", "AHK: Timer")
 
+/*
+	Desired functionality:
+		Input
+			Command line: "5h2m33s"-style format
+			If nothing on command line (or we couldn't parse to some time >0), selector of choices
+				Selector of choices - no good reason to hard-code, just make it a .tls file
+					Extra field for just overriding the time with "5h2m33s"-style format
+						Column for that field will be how we specify choices, in same format
+		Show time (then fade out) on startup
+		Show with a hotkey
+			Fade in-out (like toast)
+			Hide after timer (like a toast - in fact, probably using Toast) 
+			Hide immediately on Esc? (only if toast is visible - could be tricky?)
+			Make sure text is larger than toast defaults (and maybe retain the green color scheme and additional transparency?)
+			Allow holding down show hotkey to keep timer visible
+		Pause/resume?
+		Add a label (newline'd above remaining time)
+		Exit on !+x
+			With confirmation (probably a popup instead of hacking around the toast)
+		Play sound, center toast, and stop hiding toast on completion
+	Other stuff to do/check
+		Find attribution for timer icon or replace it, document attribution
+		Find attribution for completion sound (from Windows I think?) or replace it, document attribution
+			Maybe also find a new completion sound?
+*/
 
 freezeDisplay := 0
 reallyExit := 0
@@ -47,23 +73,23 @@ aPos := InStr(commandTime, "a")
 ; We've been given a time - do the math to figure out how much time.
 if(cPos > -1 || pPos > -1 || aPos > -1){
 	; Grab the am/pm off the end if it's there.
-	lastChar := Substr(commandTime, 0)
+	lastChar := substr(commandTime, 0)
 	if(lastChar = "m"){
-		am_pm := Substr(commandTime, -1, 1)
-		commandTime := Substr(commandTime, 1, -2)
+		am_pm := substr(commandTime, -1, 1)
+		commandTime := substr(commandTime, 1, -2)
 	} else if(lastChar = "a" || lastChar = "p") {
 		am_pm := lastChar
-		commandTime := Substr(commandTime, 1, -1)
+		commandTime := substr(commandTime, 1, -1)
 	}
 	
 	if(cPos > -1){
 		; Time has a colon. At this time, we only support a single colon, no seconds on destination.
 		hs := substr(commandTime, 1, cPos)
-		commandTime := Substr(commandTime, 1, -(cPos + 1))
+		commandTime := substr(commandTime, 1, -(cPos + 1))
 		
 		; Assuming minutes are two digits in length if this is a colon'd time.
 		ms := substr(commandTime, 1, 2)
-		commandTime := Substr(commandTime, 1, -2)
+		commandTime := substr(commandTime, 1, -2)
 	} else {
 		; Time is in the form 1p or 1PM for 1:00 PM - the hour should be all that's left.
 		hs := commandTime
@@ -262,7 +288,7 @@ Gui, Show, NoActivate W430 H75 X%showX% Y%showY%
 WinSet, Transparent, %transShown%, ahk_id %guiID%
 
 Loop, 3 {
-	SoundPlay, ..\CommonIncludes\Sounds\timer.wav
+	SoundPlay, timer.wav
 	Sleep, 2500
 }
 
@@ -276,11 +302,7 @@ ExitApp
 ; ------------------------------------------------------------------------------------------ ;
 
 ; Show time left hotkeys.
-~browser_back::
-~browser_forward::
-~^!Space::
-	showHideTimer()
-return
+~^!Space::showHideTimer()
 
 ; Pause/resume hotkey.
 ^browser_forward::
@@ -293,19 +315,14 @@ showHideTimer() {
 	
 	showTimer()
 	
+	; Keep timer visible while hotkeys are still held down
 	while(GetKeyState("browser_back","P") || GetKeyState("browser_forward","P")) {
 		Sleep, 1
 	}
 	
-	if(freezeDisplay = 0) {
+	if(!freezeDisplay)
 		SetTimer, hideTimer, -2000
-		; GoSub, hideTimer
-	}
 }
-
-showHideLabel:
-	showHideTimer()
-return
 
 hideTimer:
 	; global transShown, transHidden, guiID
@@ -344,28 +361,21 @@ showTimer() {
    ; shown = 1
 }
 
-
-
-; Hotkey to die.
-~^+!#r::
-	ExitApp
-return
-
 ;Shift+Alt+X = Exit + warning, in case closing other scripts and this one unintentionally.
-~+!x::
-	if(reallyExit = 0) {
-		GuiControl, Text, TimerText, Close Timer?
-		GuiControl, Move, TimerText, x%guiMargin% y10 w350 h50
+; ~+!x::
+	; if(reallyExit = 0) {
+		; GuiControl, Text, TimerText, Close Timer?
+		; GuiControl, Move, TimerText, x%guiMargin% y10 w350 h50
 	
-		Gui, Show, W370 H75 center
-		WinSet, Transparent, 255, ahk_id %guiID%
+		; Gui, Show, W370 H75 center
+		; WinSet, Transparent, 255, ahk_id %guiID%
 		
-		reallyExit := 1
-		freezeDisplay := 1
-	} else {
-		ExitApp
-	}
-return
+		; reallyExit := 1
+		; freezeDisplay := 1
+	; } else {
+		; ExitApp
+	; }
+; return
 
 #IfWinActive, ahk_class AutoHotkeyGUI
 	Esc::
@@ -373,7 +383,8 @@ return
 		freezeDisplay := 0
 		
 		SetTimer, hideTimer, -2050
-		; Sleep, 2050
-		; GoSub, hidetimer
 	return
 #IfWinActive 
+
+
+#Include <commonHotkeys>

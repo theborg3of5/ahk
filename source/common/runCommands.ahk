@@ -3,25 +3,12 @@ getScriptArgs(placeholderChar := "") {
 	local paramsAry = [] ; This is the array that will hold the arguments at the end, which we'll return. Everything else (namely %1%, %2%, etc) are global.
 	
 	Loop, %0% { ; For each command line arg. %0% is the count of them.
-		if(%A_Index% != placeholderChar) ; If a placeholder character is given, filter out values that match it (that index won't even be set).
-			paramsAry[A_Index] := %A_Index% ; %1% is the value of the first command line arg, etc.
+		if(%A_Index% = placeholderChar) ; If a placeholder character is given, filter out values that match it (that index won't even be set).
+			Continue
+		paramsAry[A_Index] := %A_Index% ; %1% is the value of the first command line arg, etc.
 	}
 	
 	return paramsAry
-}
-
-scriptArgsToVars(varNames, placeholderChar := "") {
-	local argNum,name ; All variables in this function are global except these (and the function parameters), so we can interact with command line arguments (%1%, %2%, etc) and set the named variables directly.
-	
-	if(!isObject(varNames))
-		return
-	
-	For argNum,name in varNames {
-		if(%argNum% = placeholderChar) ; If the argument is just the placeholder character, blank it.
-			%name% := ""
-		else
-			%name% := %argNum% ; Note that we're setting a global variable with this name here.
-	}
 }
 
 ; Opens the given script in Notepad++.

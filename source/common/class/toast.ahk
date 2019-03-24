@@ -158,7 +158,6 @@ class Toast {
 	
 	guiId        := ""
 	labelVarName := ""
-	toastText    := ""
 	x            := ""
 	y            := ""
 	
@@ -253,5 +252,15 @@ class Toast {
 	closeToast(guiId) {
 		fadeGuiOut(guiId)
       Gui, Destroy
+	}
+	
+	
+	; Debug info (used by the Debug class)
+	debugName := "Toast"
+	debugToString(debugBuilder) {
+		debugBuilder.addLine("Gui ID",                this.guiId)
+		debugBuilder.addLine("Var name of the label", this.labelVarName)
+		debugBuilder.addLine("X"                    , this.x)
+		debugBuilder.addLine("Y"                    , this.y)
 	}
 }

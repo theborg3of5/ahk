@@ -32,11 +32,13 @@ class Duration {
 	
 	addTime(value, unitChar := "s") {
 		if(unitChar = DURATIONCHAR_Hour)
-			this.durationTotalSeconds += value * 360 ; Hours   - 60 * 60 seconds
+			this.durationTotalSeconds += value * 3600 ; Hours   - 60 * 60 seconds
 		else if(unitChar = DURATIONCHAR_Minute)
-			this.durationTotalSeconds += value * 60  ; Minutes - 60 seconds
+			this.durationTotalSeconds += value * 60   ; Minutes - 60 seconds
 		else if(unitChar = DURATIONCHAR_Second)
-			this.durationTotalSeconds += value       ; Seconds
+			this.durationTotalSeconds += value        ; Seconds
+		
+		; DEBUG.popup("Duration.addTime","Finish", "value",value, "unitChar",unitChar, "this.durationTotalSeconds",this.durationTotalSeconds)
 	}
 	
 	
@@ -47,21 +49,31 @@ class Duration {
 	
 	hours[] {
 		get {
-			return this.durationTotalSeconds 
+			this.getUnitBreakdown(h)
+			return h
 		}
 	}
 	
 	
 	minutes[] {
 		get {
-			return this.durationMinutes
+			this.getUnitBreakdown("", m)
+			return m
 		}
 	}
 	
 	
 	seconds[] {
 		get {
-			return this.durationSeconds
+			this.getUnitBreakdown("", "", s)
+			return s
+		}
+	}
+	
+	
+	isZero[] {
+		get {
+			return (this.durationTotalSeconds = 0)
 		}
 	}
 	
@@ -110,8 +122,8 @@ class Duration {
 	getUnitBreakdown(ByRef hours = "", ByRef minutes = "", ByRef seconds = "") {
 		remainingSeconds := this.durationTotalSeconds
 		
-		hours := remainingSeconds // 360   ; Hours   - 60 * 60 seconds
-		remainingSeconds -= hours * 360
+		hours := remainingSeconds // 3600  ; Hours   - 60 * 60 seconds
+		remainingSeconds -= hours * 3600
 		
 		minutes := remainingSeconds // 60  ; Minutes - 60 seconds
 		remainingSeconds -= minutes * 60

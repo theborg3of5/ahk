@@ -54,6 +54,7 @@
 # Documentation
 	common
 		classes
+			duration
 			iniObject
 			listConverter
 			mainConfig

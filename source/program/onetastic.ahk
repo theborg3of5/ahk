@@ -32,6 +32,7 @@
 	; Update the current macro using the XML on the clipboard.
 	^!i::onetasticRefreshMacroFromXML(clipboard)
 	
+	
 	;---------
 	; DESCRIPTION:    Delete the currently visible function.
 	;---------
@@ -288,6 +289,9 @@
 		
 		; Wait to get back to main macro editor window
 		waitUntilWindowState("Active", " - Macro Editor", "", 2) ; matchMode=2 - allow matching anywhere
+		
+		; Replace any instances of the special <CURRENT_MACHINE> tag with the AHK value for our current machine.
+		functionXML := replaceTag(functionXML, "CURRENT_MACHINE", MainConfig.machine)
 		
 		onetasticSetCurrentXML(functionXML)
 	}

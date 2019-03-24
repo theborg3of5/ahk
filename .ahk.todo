@@ -3,7 +3,6 @@
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
 	
 # Large
-	Get rid of share folder - we don't really share these scripts with others, no reason to worry about maintaining those variations on my own scripts.
 	Add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments

@@ -2,6 +2,7 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 #SingleInstance force  ; Ensures that if this script is running, running it again replaces the first instance.
+#Include <includeCommon>
 Menu, Tray, Icon, timer.ico
 
 
@@ -49,20 +50,20 @@ if(cPos > -1 || pPos > -1 || aPos > -1){
 	lastChar := Substr(commandTime, 0)
 	if(lastChar = "m"){
 		am_pm := Substr(commandTime, -1, 1)
-		commandTime := StringTrimRight(commandTime, 2)
+		commandTime := Substr(commandTime, 1, -2)
 	} else if(lastChar = "a" || lastChar = "p") {
 		am_pm := lastChar
-		commandTime := StringTrimRight(commandTime, 1)
+		commandTime := Substr(commandTime, 1, -1)
 	}
 	
 	if(cPos > -1){
 		; Time has a colon. At this time, we only support a single colon, no seconds on destination.
-		hs := StringLeft(commandTime, cPos)
-		commandTime := StringTrimLeft(commandTime, cPos + 1)
+		hs := substr(commandTime, 1, cPos)
+		commandTime := Substr(commandTime, 1, -(cPos + 1))
 		
 		; Assuming minutes are two digits in length if this is a colon'd time.
-		ms := StringLeft(commandTime, 2)
-		commandTime := StringTrimLeft(commandTime, 2)
+		ms := substr(commandTime, 1, 2)
+		commandTime := Substr(commandTime, 1, -2)
 	} else {
 		; Time is in the form 1p or 1PM for 1:00 PM - the hour should be all that's left.
 		hs := commandTime
@@ -95,19 +96,19 @@ if(cPos > -1 || pPos > -1 || aPos > -1){
 } else {
 	; Hours.
 	hPos := InStr(commandTime, "h")
-	hs := StringLeft(commandTime, hPos)
+	hs := substr(commandTime, 1, hPos)
 	timeLeft += hs * 60 * 60
-	commandTime := StringTrimLeft(commandTime, hPos + 1)
+	commandTime := Substr(commandTime, 1, -(hPos + 1))
 	
 	; Minutes.
 	mPos := InStr(commandTime, "m")
-	ms := StringLeft(commandTime, mPos)
+	ms := substr(commandTime, 1, mPos)
 	timeLeft += ms * 60
-	commandTime := StringTrimLeft(commandTime, mPos + 1)
+	commandTime := Substr(commandTime, 1, -(mPos + 1))
 	
 	; Seconds.
 	sPos := InStr(commandTime, "s")
-	ss := StringLeft(commandTime, sPos)
+	ss := substr(commandTime, 1, sPos)
 	timeLeft += ss
 }
 
@@ -116,7 +117,8 @@ if(cPos > -1 || pPos > -1 || aPos > -1){
 
 
 ; Set up the GUI.
-MonArea := SysGet("MonitorWorkArea")
+SysGet, MonArea, MonitorWorkArea
+
 showX := MonAreaRight - guiWidth
 showY := MonAreaBottom - 75
 

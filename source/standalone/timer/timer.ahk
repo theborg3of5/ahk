@@ -32,6 +32,29 @@ setUpTrayIcons("timer.ico", "", "AHK: Timer")
 			Maybe also find a new completion sound?
 */
 
+; Input from command line
+durationString = %1%
+if(durationString != "")
+	dur := New Duration(durationString)
+
+; If we didn't get something valid from the command line, give the user a list of options
+if(!dur || dur.isZero) {
+	s := new Selector("timer.tls")
+	dur := New Duration(s.selectGui("DURATION_STRING"))
+}
+
+if(dur.isZero)
+	ExitApp
+
+DEBUG.popup("durationString",durationString, "dur",dur, "dur.hours",dur.hours, "dur.minutes",dur.minutes, "dur.seconds",dur.seconds)
+
+
+
+ExitApp
+
+
+
+
 freezeDisplay := 0
 reallyExit := 0
 flashTimerNextTick := true
@@ -377,14 +400,14 @@ showTimer() {
 	; }
 ; return
 
-#IfWinActive, ahk_class AutoHotkeyGUI
-	Esc::
-		reallyExit := 0
-		freezeDisplay := 0
+; #IfWinActive, ahk_class AutoHotkeyGUI
+	; Esc::
+		; reallyExit := 0
+		; freezeDisplay := 0
 		
-		SetTimer, hideTimer, -2050
-	return
-#IfWinActive 
+		; SetTimer, hideTimer, -2050
+	; return
+; #IfWinActive 
 
 
 #Include <commonHotkeys>

@@ -24,9 +24,27 @@ class Duration {
 			this.supportedUnitsAry := this.buildSupportedUnitsAry()
 		
 		if(durationString != "")
-			this.loadFromDurationString(durationString)
+			this.addTimeFromDurationString(durationString)
 		
 		; DEBUG.popup("durationString",durationString, "this.durationTotalSeconds",this.durationTotalSeconds)
+	}
+	
+	; Supported characters:
+		;   h - hour
+		;   m - minute
+		;   s - second
+	addTimeFromDurationString(durationString) {
+		currentNumber := ""
+		Loop, Parse, durationString
+		{
+			if(this.isUnitChar(A_LoopField)) {
+				this.addTime(currentNumber, A_LoopField)
+				currentNumber := ""
+				Continue
+			}
+			
+			currentNumber .= A_LoopField ; Appending (as a string), not adding (as a number)
+		}
 	}
 	
 	
@@ -93,24 +111,6 @@ class Duration {
 		supportedUnitsAry.push(DURATIONCHAR_Second)
 		
 		return supportedUnitsAry
-	}
-	
-	; Supported characters:
-		;   h - hour
-		;   m - minute
-		;   s - second
-	loadFromDurationString(durationString) {
-		currentNumber := ""
-		Loop, Parse, durationString
-		{
-			if(this.isUnitChar(A_LoopField)) {
-				this.addTime(currentNumber, A_LoopField)
-				currentNumber := ""
-				Continue
-			}
-			
-			currentNumber .= A_LoopField ; Appending (as a string), not adding (as a number)
-		}
 	}
 	
 	

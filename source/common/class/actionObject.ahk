@@ -137,7 +137,7 @@ class ActionObject {
 	process(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
 		; DEBUG.toast("ActionObject.process", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
-		; Do a little preprocessing to pick out needed info. (All args but input are ByRef)
+		; Do a little preprocessing to pick out needed info.
 		pathType := getPathType(input)
 		; DEBUG.popup("ActionObject.process","Type preprocessing done", "Input",input, "Path type",pathType)
 		
@@ -148,16 +148,16 @@ class ActionObject {
 			
 		; Try and see if it's something we can split into INI/ID (subType/new input)
 		} else {
-			splitRecordString(input, ini, id)
+			infoAry := extractEMC2ObjectInfoRaw(input)
+			if(infoAry["TITLE"]) ; If there's a title (something beyond just an INI and an ID), this probably isn't an EMC2 object.
+				return
 			
-			filter := MainConfig.machineTLFilter
-			s := new Selector("actionObject.tls", filter)
-			
-			data := s.selectChoice(ini)
+			s := new Selector("actionObject.tls", MainConfig.machineTLFilter)
+			data := s.selectChoice(infoAry["INI"])
 			if(data) {
 				type    := data["TYPE"]
-				subType := ini
-				input   := id
+				subType := data["SUBTYPE"]
+				input   := infoAry["ID"]
 			}
 		}
 		
@@ -189,8 +189,7 @@ class ActionObject {
 		}
 		
 		if(!type || !action || (!subType && needsSubType) || (!subAction && needsSubAction)) {
-			filter := MainConfig.machineTLFilter
-			s := new Selector("actionObject.tls", filter)
+			s := new Selector("actionObject.tls", MainConfig.machineTLFilter)
 			
 			data := s.selectGui("", "", {SUBTYPE: subType, ID: input})
 			if(!data)
@@ -222,7 +221,7 @@ class ActionObject {
 	;---------
 	postProcess(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
 		if(type = TYPE_EMC2) ; Turn subType (INI) into true INI
-			subType := getTrueINI(subType)
+			subType := getTrueEMC2INI(subType)
 		
 		if(type = TYPE_Path && subType = SUBTYPE_FilePath)
 			input := cleanupPath(input)

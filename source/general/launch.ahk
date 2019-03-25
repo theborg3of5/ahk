@@ -36,8 +36,7 @@ genericHyperlink(subAction) {
 	selectSearch() {
 		text := cleanupText(getFirstLineOfSelectedText())
 		
-		filter := MainConfig.machineTLFilter
-		s := new Selector("search.tls", filter)
+		s := new Selector("search.tls", MainConfig.machineTLFilter)
 		data := s.selectGui("", "", {"SEARCH_TERM":text})
 		if(!data)
 			return
@@ -185,7 +184,9 @@ genericHyperlink(subAction) {
 	^!#s::
 		selectSnapper() {
 			selectedText := cleanupText(getFirstLineOfSelectedText())
-			splitRecordString(selectedText, ini, id)
+			infoAry := extractEMC2ObjectInfoRaw(selectedText)
+			ini := infoAry["INI"]
+			id  := infoAry["ID"]
 			
 			s := new Selector("epicEnvironments.tls")
 			s.addExtraOverrideFields(["INI", "ID"])

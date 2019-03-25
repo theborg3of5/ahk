@@ -392,9 +392,10 @@ extractEMC2ObjectInfoRaw(line) {
 	}
 	
 	; ID is remaining up to the next delimiter
-	delimPos := stringMatchesAnyOf(line, [":", "-", "]"])
+	delimPos := stringMatchesAnyOf(line, [" ", ":", "-", "]"])
 	if(!delimPos) { ; If the string ended before the next delimiter (so no title), make sure to still get the ID.
 		id := subStr(line, 1, strLen(line))
+		line := ""
 	} else {
 		id := subStr(line, 1, delimPos - 1)
 		line := subStr(line, delimPos + 1) ; +1 to drop delimiter too
@@ -437,8 +438,8 @@ buildStandardEMC2ObjectString(ini, id, title) {
 	return ini " " id " - " title
 }
 
-; Turn descriptors that aren't real INIs (like "Design") into the corresponding INI.
-getTrueINI(iniString) {
+; Turn descriptors that aren't real INIs (like "Design") into the corresponding EMC2 INI.
+getTrueEMC2INI(iniString) {
 	if(!iniString)
 		return ""
 	

@@ -6,9 +6,11 @@
 # Small
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
-	Update EMC2 object string handling to handle DLG#123456-style strings
 	
 # Large
+	Take another look at ActionObject's workflow
+		We're doing selector stuff twice - is that really what we want?
+			extractEMC2ObjectInfo(Raw) does it with a prompt, all at once - would that be better?
 	Add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments

@@ -121,6 +121,7 @@ class MainConfig {
 		ahkclass := WinGetClass(titleString)
 		title    := WinGetTitle(titleString)
 		
+		bestMatch := ""
 		For _,winInfo in this.windows {
 			; DEBUG.popup("Against WindowInfo",winInfo, "EXE",exe, "Class",ahkClass, "Title",title)
 			if(exe      && winInfo.exe   && (exe != winInfo.exe))
@@ -137,10 +138,15 @@ class MainConfig {
 					Continue
 			}
 			
-			return winInfo.clone()
+			; If we already found another match, don't replace it unless the new match has a better (lower) priority
+			if((bestMatch != "") && bestMatch.priority < winInfo.priority)
+				Continue
+			
+			; This is the best match we've found so far
+			bestMatch := winInfo
 		}
 		
-		return ""
+		return bestMatch.clone() ; Handles "" fine ("".clone() = "")
 	}
 	findWindowName(titleString := "A") {
 		winInfo := this.findWindowInfo(titleString)

@@ -23,6 +23,9 @@ class WindowInfo {
 	;                                      - If the window has a specific title match mode that
 	;                                        needs to be used when locating it, this will return
 	;                                        that override.
+	;                                  ["PRIORITY"]
+	;                                      - If more than one WindowInfo instance matches a given
+	;                                        window, this can be used to break the tie.
 	; RETURNS:        Reference to a new WindowInfo object
 	;---------
 	__New(windowAry) {
@@ -43,6 +46,7 @@ class WindowInfo {
 			this.windowTitleStringMatchModeOverride := CONTAINS_ANY ; Default value
 		
 		this.windowEdgeOffsetOverride := windowAry["WINDOW_EDGE_OFFSET_OVERRIDE"]
+		this.windowPriority           := windowAry["PRIORITY"]
 	}
 	
 	;---------
@@ -53,6 +57,7 @@ class WindowInfo {
 			return this.windowName
 		}
 	}
+	
 	;---------
 	; DESCRIPTION:    EXE for the program
 	;---------
@@ -61,6 +66,7 @@ class WindowInfo {
 			return this.windowExe
 		}
 	}
+	
 	;---------
 	; DESCRIPTION:    AHK class of the window
 	;---------
@@ -69,6 +75,7 @@ class WindowInfo {
 			return this.windowClass
 		}
 	}
+	
 	;---------
 	; DESCRIPTION:    Title of the window
 	;---------
@@ -87,6 +94,7 @@ class WindowInfo {
 			return this.windowEdgeOffsetOverride
 		}
 	}
+	
 	;---------
 	; DESCRIPTION:    If the window has a specific title match mode that needs to be used when
 	;                 locating it, this will return that override.
@@ -107,6 +115,16 @@ class WindowInfo {
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    Priority of this WindowInfo instance versus others. Can be used to break a tie
+	;                 if multiple instances match a given window.
+	;---------
+	priority[] {
+		get {
+			return this.windowPriority
+		}
+	}
+	
 	
 	; ==============================
 	; == Private ===================
@@ -119,6 +137,7 @@ class WindowInfo {
 	
 	windowTitleStringMatchModeOverride := ""
 	windowEdgeOffsetOverride           := ""
+	windowPriority                     := ""
 	
 	; Debug info (used by the Debug class)
 	debugName := "WindowInfo"

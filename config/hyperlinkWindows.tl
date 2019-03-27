@@ -10,5 +10,6 @@
 	Outlook							POPUP_FIELD					ahk_class bosa_sdm_Mso96		RichEdit20W6
 	Word								POPUP_FIELD					ahk_class bosa_sdm_msword		RichEdit20W6
 	
-	EMC2 DLG							WEB_FIELD					-
+	EMC2 PRJ							WEB_FIELD
+	EMC2 DLG							WEB_FIELD
 	Mattermost						TAGGED_STRING				-										-									[<TEXT>](<PATH>)

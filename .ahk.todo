@@ -4,6 +4,7 @@
 			Can have hard-coded list of choices to pass in
 	
 # Small
+	It looks like I broke Snapper defaulting from selection with recent changes - LPP 32500 yields INI=LPP 3250 and ID=LPP 32500
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
 	Support ranges (x:y) in Snapper record-opening stuff (Snapper launcher + from new record popup)

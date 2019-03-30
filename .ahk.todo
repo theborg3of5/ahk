@@ -7,7 +7,6 @@
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
 	Support ranges (x:y) in Snapper record-opening stuff (Snapper launcher + from new record popup)
-	Win+e when explorer isn't open opens Libraries instead of this PC - but only when opening with AHK. Figure out why.
 	
 # Large
 	Take another look at ActionObject's workflow

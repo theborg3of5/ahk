@@ -32,7 +32,7 @@
 []
 
 [PATH.addToStart(C:\Windows\)]
-	Explorer						explorer.exe
+	Explorer						explorer.exe																		::{20d04fe0-3aea-1069-a2d8-08002b30309d}
 	Notepad						System32\notepad.exe
 []
 

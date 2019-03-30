@@ -24,7 +24,7 @@ class Duration {
 	
 	
 	__New(durationString := "") {
-		if(isEmpty(Duration.supportedUnitsAry))
+		if(!Duration.supportedUnitsAry)
 			Duration.buildUnitArrays()
 		
 		if(durationString != "")
@@ -121,17 +121,19 @@ class Duration {
 	; == Private ===================
 	; ==============================
 	
-	static supportedUnitsAry := []
-	static unitMultiplierAry := []
+	static supportedUnitsAry := ""
+	static unitMultiplierAry := ""
 	durationTotalSeconds := 0
 	
 	buildUnitArrays() {
 		; Supported units, ordered from largest to smallest.
+		Duration.supportedUnitsAry := []
 		Duration.supportedUnitsAry.push(DURATIONCHAR_Hour)
 		Duration.supportedUnitsAry.push(DURATIONCHAR_Minute)
 		Duration.supportedUnitsAry.push(DURATIONCHAR_Second)
 		
 		; Multiplers to turn each unit into seconds.
+		Duration.unitMultiplierAry := []
 		Duration.unitMultiplierAry[DURATIONCHAR_Hour]   := 60 * 60
 		Duration.unitMultiplierAry[DURATIONCHAR_Minute] := 60
 		Duration.unitMultiplierAry[DURATIONCHAR_Second] := 1

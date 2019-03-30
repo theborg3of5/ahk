@@ -31,12 +31,12 @@ class Toast {
 	; == Public (Static) ===========
 	; ==============================
 	
-	static X_ALIGN_LEFT   :=  0 ; Left-aligned (against left edge of screen)
-	static X_ALIGN_RIGHT  := -1 ; Right-aligned (against right edge of screen)
-	static X_ALIGN_CENTER := -2 ; Horizontally centered
-	static Y_ALIGN_TOP    :=  0 ; Top-aligned (against top edge of screen)
-	static Y_ALIGN_BOTTOM := -1 ; Bottom-aligned (against bottom edge of screen)
-	static Y_ALIGN_CENTER := -2 ; Vertically centered
+	static X_ALIGN_LEFT   := -1 ; Left-aligned (against left edge of screen)
+	static X_ALIGN_RIGHT  := -2 ; Right-aligned (against right edge of screen)
+	static X_ALIGN_CENTER := -3 ; Horizontally centered
+	static Y_ALIGN_TOP    := -1 ; Top-aligned (against top edge of screen)
+	static Y_ALIGN_BOTTOM := -2 ; Bottom-aligned (against bottom edge of screen)
+	static Y_ALIGN_CENTER := -3 ; Vertically centered
 	
 	;---------
 	; DESCRIPTION:    Wrapper for Toast.showForSeconds for a "short" toast (shown for 1 second) in
@@ -82,7 +82,7 @@ class Toast {
 	;                       Special values are available in Toast.Y_ALIGN_*.
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
-	showForSeconds(toastText, numSeconds, x := -1, y := -1) { ; x := Toast.X_ALIGN_RIGHT, y := Toast.Y_ALIGN_BOTTOM
+	showForSeconds(toastText, numSeconds, x := -2, y := -2) { ; x := Toast.X_ALIGN_RIGHT, y := Toast.Y_ALIGN_BOTTOM
 		idAry := this.buildGui()
 		guiId        := idAry["GUI_ID"]
 		labelVarName := idAry["LABEL_VAR_NAME"]
@@ -94,6 +94,7 @@ class Toast {
 		SetTimer, % closeFunc, % -numSeconds * 1000
 	}
 	
+	
 	; ==============================
 	; == Public (Persistent) =======
 	; ==============================
@@ -101,11 +102,13 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Create a new Toast object.
 	; PARAMETERS:
-	;  toastText (I,REQ) - The text to show in the toast.
+	;  toastText         (I,REQ) - The text to show in the toast.
+	;  styleOverridesAry (I,OPT) - Any style overrides that you'd like to make. Defaults can be
+	;                              found in .getStyleAry().
 	; RETURNS:        A new instance of this class.
 	;---------
-	__New(toastText := "") {
-		idAry := this.buildGui()
+	__New(toastText := "", styleOverridesAry := "") {
+		idAry := this.buildGui(styleOverridesAry)
 		this.guiId        := idAry["GUI_ID"]
 		this.labelVarName := idAry["LABEL_VAR_NAME"]
 		
@@ -133,7 +136,7 @@ class Toast {
 	;  y (I,OPT) - The y coordinate to show the toast at. Defaults to bottom edge of screen.
 	;              Special values are available in Toast.Y_ALIGN_*.
 	;---------
-	showPersistent(x := -1, y := -1) { ; x := Toast.X_ALIGN_RIGHT, y := Toast.Y_ALIGN_BOTTOM
+	showPersistent(x := -2, y := -2) { ; x := Toast.X_ALIGN_RIGHT, y := Toast.Y_ALIGN_BOTTOM
 		Gui, % this.guiId ":Default"
 		this.x := x
 		this.y := y
@@ -149,7 +152,7 @@ class Toast {
 	;  y          (I,OPT) - The y coordinate to show the toast at. Defaults to bottom edge of screen.
 	;                       Special values are available in Toast.Y_ALIGN_*.
 	;---------
-	showPersistentForSeconds(numSeconds, x := -1, y := -1) { ; x := Toast.X_ALIGN_RIGHT, y := Toast.Y_ALIGN_BOTTOM
+	showPersistentForSeconds(numSeconds, x := -2, y := -2) { ; x := Toast.X_ALIGN_RIGHT, y := Toast.Y_ALIGN_BOTTOM
 		this.x := x
 		this.y := y
 		
@@ -181,16 +184,10 @@ class Toast {
 	; == Private ===================
 	; ==============================
 	
-	static backgroundColor := "2A211C"
-	static fontColor       := "BDAE9D"
-	static fontSize        := 20
-	static fontName        := "Consolas"
-	static marginX         := 5
-	static marginY         := 0
-	static maxOpacity      := 255
-	
+	static maxOpacity    := 255
 	static widthLabelNum := 0
 	
+	stylesAry    := ""
 	guiId        := ""
 	labelVarName := ""
 	x            := ""
@@ -199,13 +196,16 @@ class Toast {
 	
 	;---------
 	; DESCRIPTION:    Build the toast gui, applying various properties.
+	; PARAMETERS:
+	;  styleOverridesAry (I,OPT) - Any style overrides that you'd like to make. Defaults can be
+	;                              found in .getStyleAry().
 	; SIDE EFFECTS:   Saves off a reference to the gui's window handle.
 	; RETURNS:        Array of ID information, format:
 	;                 	idAry["GUI_ID"]         = Window handle/guiId
 	;                 	     ["LABEL_VAR_NAME"] = Name of the global variable connected to the label
 	;                 	                          containing the toast text.
 	;---------
-	buildGui() {
+	buildGui(styleOverridesAry := "") {
 		; Create Gui and save off window handle (which is also guiId)
 		Gui, New, +HWNDguiId
 		
@@ -214,9 +214,10 @@ class Toast {
 		Gui, % "+E" WS_EX_CLICKTHROUGH
 		
 		; Set formatting options
-		Gui, Color, % Toast.backgroundColor
-		Gui, Font, % "c" Toast.fontColor " s" Toast.fontSize, % Toast.fontName
-		Gui, Margin, % Toast.marginX, % Toast.marginY
+		styleAry := Toast.getStyleAry(styleOverridesAry)
+		Gui, Color, % styleAry["BACKGROUND_COLOR"]
+		Gui, Font, % "c" styleAry["FONT_COLOR"] " s" styleAry["FONT_SIZE"], % styleAry["FONT_NAME"]
+		Gui, Margin, % styleAry["MARGIN_X"], % styleAry["MARGIN_Y"]
 		
 		; Add label
 		labelVarName := guiId "Text" ; Come up with a unique variable we can use to reference the label (to change its contents if needed).
@@ -224,6 +225,23 @@ class Toast {
 		Gui, Add, Text, % "v" labelVarName
 		
 		return {"GUI_ID":guiId, "LABEL_VAR_NAME":labelVarName}
+	}
+	
+	getStyleAry(styleOverridesAry := "") {
+		styleAry := []
+		
+		; Default styles
+		styleAry["BACKGROUND_COLOR"] := "2A211C"
+		styleAry["FONT_COLOR"]       := "BDAE9D"
+		styleAry["FONT_SIZE"]        := 20
+		styleAry["FONT_NAME"]        := "Consolas"
+		styleAry["MARGIN_X"]         := 5
+		styleAry["MARGIN_Y"]         := 0
+		
+		; Merge in any overrides
+		styleAry := mergeArrays(styleAry, styleOverridesAry)
+		
+		return styleAry
 	}
 	
 	;---------
@@ -238,8 +256,6 @@ class Toast {
 	;                      move it.
 	;---------
 	move(x, y, showProps = "") {
-		; DEBUG.popup("move", "", "x",x, "y",y, "showProps",showProps)
-		
 		; If x/y not given, default them to right/bottom
 		x := ifBlankDefaultTo(x, Toast.X_ALIGN_RIGHT)
 		y := ifBlankDefaultTo(y, Toast.Y_ALIGN_BOTTOM)
@@ -249,17 +265,22 @@ class Toast {
 		Gui, +LastFound ; Needed for WinGetPos
 		WinGetPos, , , guiWidth, guiHeight
 		
-		; DEBUG.popup("move",3, "x",x, "y",y, "guiWidth",guiWidth, "guiHeight",guiHeight)
+		; Take special alignment values into account
+		boundsAry := getMonitorBounds()
+		if(x = Toast.X_ALIGN_LEFT)
+			x := boundsAry["LEFT"]
+		if(y = Toast.Y_ALIGN_TOP)
+			y := boundsAry["TOP"]
 		
 		if(x = Toast.X_ALIGN_RIGHT)
-			x := A_ScreenWidth  - guiWidth
+			x := boundsAry["WIDTH"]  - guiWidth
 		if(y = Toast.Y_ALIGN_BOTTOM)
-			y := A_ScreenHeight - guiHeight
+			y := boundsAry["HEIGHT"] - guiHeight ; GDB TODO take taskbar at top into account
 		
 		if(x = Toast.X_ALIGN_CENTER)
-			x := (A_ScreenWidth  - guiWidth) / 2
+			x := boundsAry["LEFT"] + (boundsAry["WIDTH"]  - guiWidth)  / 2
 		if(y = Toast.Y_ALIGN_CENTER)
-			y := (A_ScreenHeight - guiHeight) / 2
+			y := boundsAry["TOP"]  + (boundsAry["HEIGHT"] - guiHeight) / 2
 		
 		Gui, Show, % "x" x " y" y " NoActivate " showProps
 	}

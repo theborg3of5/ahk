@@ -1,18 +1,16 @@
 # In Progress
 	Update or get rid of timer - formatting, general code cleanup, even functionality?
-		Build in selector for times
-			Can have hard-coded list of choices to pass in
 	
 # Small
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
 	Support ranges (x:y) in Snapper record-opening stuff (Snapper launcher + from new record popup)
+	
+# Large
 	Consider adding functionality (probably in window.ahk) to get x/y values for left/right/center aligning windows on x/y axes (taking their widths [and probably offsets] into account).
 		Places that could use it:
 			Toast.move()
 			Other stuff in window.ahk (centerWindow, etc.)
-	
-# Large
 	Take another look at ActionObject's workflow
 		We're doing selector stuff twice - is that really what we want?
 			extractEMC2ObjectInfo(Raw) does it with a prompt, all at once - would that be better?

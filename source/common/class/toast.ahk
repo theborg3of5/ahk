@@ -275,7 +275,7 @@ class Toast {
 		if(x = Toast.X_ALIGN_RIGHT)
 			x := boundsAry["WIDTH"]  - guiWidth
 		if(y = Toast.Y_ALIGN_BOTTOM)
-			y := boundsAry["HEIGHT"] - guiHeight ; GDB TODO take taskbar at top into account
+			y := boundsAry["HEIGHT"] - guiHeight
 		
 		if(x = Toast.X_ALIGN_CENTER)
 			x := boundsAry["LEFT"] + (boundsAry["WIDTH"]  - guiWidth)  / 2

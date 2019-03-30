@@ -2,13 +2,13 @@
 	
 	Usage:
 		Create Toast instance
-		Show it (.showForTime or .show)
+		Show it (.showForSeconds or .show)
 		If not showing on a timer, close it when finished (.close)
 	
 	Example:
 		; Show a toast on a 5-second timer
 		t := new Toast("5-second timer toast!")
-		t.showForTime(5)
+		t.showForSeconds(5)
 		; (OR)
 		Toast.showMedium("5-second timer toast!")
 		
@@ -32,45 +32,36 @@ class Toast {
 	; ==============================
 	
 	;---------
-	; DESCRIPTION:    Wrapper for Toast.showForTime for a "short" toast (shown for 1 second)
+	; DESCRIPTION:    Wrapper for Toast.showForSeconds for a "short" toast (shown for 1 second) in
+	;                 the bottom-right corner of the screen.
 	; PARAMETERS:
 	;  toastText (I,REQ) - The text to show in the toast.
-	;  x         (I,OPT) - The x coordinate to show the toast at. Defaults to -1 (against right
-	;                      edge of screen).
-	;  y         (I,OPT) - The y coordinate to show the toast at. Defaults to -1 (against bottom
-	;                      edge of screen).
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
-	showShort(toastText, x := -1, y := -1) {
-		Toast.showForTime(toastText, 1, x, y)
+	showShort(toastText) {
+		Toast.showForSeconds(toastText, 1, -1, -1)
 	}
 	
 	;---------
-	; DESCRIPTION:    Wrapper for Toast.showForTime for a "short" toast (shown for 2 second)
+	; DESCRIPTION:    Wrapper for Toast.showForSeconds for a "medium" toast (shown for 2 seconds) in
+	;                 the bottom-right corner of the screen.
 	; PARAMETERS:
 	;  toastText (I,REQ) - The text to show in the toast.
-	;  x         (I,OPT) - The x coordinate to show the toast at. Defaults to -1 (against right
-	;                      edge of screen).
-	;  y         (I,OPT) - The y coordinate to show the toast at. Defaults to -1 (against bottom
-	;                      edge of screen).
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
-	showMedium(toastText, x := -1, y := -1) {
-		Toast.showForTime(toastText, 2, x, y)
+	showMedium(toastText) {
+		Toast.showForSeconds(toastText, 2, -1, -1)
 	}
 	
 	;---------
-	; DESCRIPTION:    Wrapper for Toast.showForTime for a "long" toast (shown for 5 second)
+	; DESCRIPTION:    Wrapper for Toast.showForSeconds for a "long" toast (shown for 5 seconds) in
+	;                 the bottom-right corner of the screen.
 	; PARAMETERS:
 	;  toastText (I,REQ) - The text to show in the toast.
-	;  x         (I,OPT) - The x coordinate to show the toast at. Defaults to -1 (against right
-	;                      edge of screen).
-	;  y         (I,OPT) - The y coordinate to show the toast at. Defaults to -1 (against bottom
-	;                      edge of screen).
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
-	showLong(toastText, x := -1, y := -1) {
-		Toast.showForTime(toastText, 5, x, y)
+	showLong(toastText) {
+		Toast.showForSeconds(toastText, 5, -1, -1)
 	}
 	
 	;---------
@@ -78,13 +69,15 @@ class Toast {
 	; PARAMETERS:
 	;  toastText  (I,REQ) - The text to show in the toast.
 	;  numSeconds (I,REQ) - The number of seconds to show the toast for.
-	;  x          (I,OPT) - The x coordinate to show the toast at. Defaults to -1 (against right
-	;                       edge of screen).
-	;  y          (I,OPT) - The y coordinate to show the toast at. Defaults to -1 (against bottom
-	;                       edge of screen).
+	;  x     (I,OPT) - The x coordinate to show the toast at.
+	;                  Defaults to -1 (against right edge of screen).
+	;                  Also supports -2 for horizontally centered.
+	;  y     (I,OPT) - The y coordinate to show the toast at. 
+	;                  Defaults to -1 (against bottom edge of screen).
+	;                  Also supports -2 for vertically centered.
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
-	showForTime(toastText, numSeconds, x := -1, y := -1) {
+	showForSeconds(toastText, numSeconds, x := -1, y := -1) {
 		idAry := this.buildGui()
 		guiId        := idAry["GUI_ID"]
 		labelVarName := idAry["LABEL_VAR_NAME"]
@@ -131,10 +124,14 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Show this toast indefinitely, until it is hidden or closed.
 	; PARAMETERS:
-	;  x     (I,OPT) - The x coordinate to show the toast at. Defaults to -1 (against right edge of
-	;                  screen).
-	;  y     (I,OPT) - The y coordinate to show the toast at. Defaults to -1 (against bottom edge of
-	;                  screen).
+	;  x (I,OPT) - The x coordinate to show the toast at.
+	;              Special values:
+	;                -1 - Right-aligned (against right edge of screen)
+	;                -2 - Horizontally centered
+	;  y (I,OPT) - The y coordinate to show the toast at. 
+	;              Special values:
+	;                -1 - Bottom-aligned (against bottom edge of screen)
+	;                -2 - Vertically centered
 	;---------
 	showPersistent(x := -1, y := -1) {
 		Gui, % this.guiId ":Default"
@@ -147,12 +144,19 @@ class Toast {
 	; DESCRIPTION:    Show this toast for a certain number of seconds, then hide it.
 	; PARAMETERS:
 	;  numSeconds (I,REQ) - The number of seconds to show the toast for.
-	;  x          (I,OPT) - The x coordinate to show the toast at. Defaults to -1 (against right
-	;                       edge of screen).
-	;  y          (I,OPT) - The y coordinate to show the toast at. Defaults to -1 (against bottom
-	;                       edge of screen).
+	;  x          (I,OPT) - The x coordinate to show the toast at. Defaults to -1.
+	;                       Special values:
+	;                         -1 - Right-aligned (against right edge of screen)
+	;                         -2 - Horizontally centered
+	;  y          (I,OPT) - The y coordinate to show the toast at. 
+	;                       Special values:
+	;                         -1 - Bottom-aligned (against bottom edge of screen)
+	;                         -2 - Vertically centered
 	;---------
-	showForTimePersistent(numSeconds, x := -1, y := -1) {
+	showPersistentForSeconds(numSeconds, x := -1, y := -1) {
+		this.x := x
+		this.y := y
+		
 		this.showToast(x, y, this.guiId)
 		
 		hideFunc := ObjBindMethod(Toast, "hideToast", this.guiId) ; Create a BoundFunc object of the .closeToast function (with guiId passed to it) for when the timer finishes.
@@ -229,24 +233,38 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Move the toast gui to the given coordinates and resize it to its contents.
 	; PARAMETERS:
-	;  x         (I,REQ) - The x coordinate to show the toast at. If set to -1, the gui will be
-	;                      moved against right edge of the screen.
-	;  y         (I,REQ) - The y coordinate to show the toast at. If set to -1, the gui will be
-	;                      moved against bottom edge of the screen.
+	;  x         (I,OPT) - The x coordinate to show the toast at.
+	;                      Special values:
+	;                        -1 - Right-aligned (against right edge of screen)
+	;                        -2 - Horizontally centered
+	;  y         (I,OPT) - The y coordinate to show the toast at. 
+	;                      Special values:
+	;                        -1 - Bottom-aligned (against bottom edge of screen)
+	;                        -2 - Vertically centered
 	;  showProps (I,OPT) - Any additional properties should be included in Gui, Show calls. For
 	;                      example, passing "Hide" would keep the gui hidden while we resize and
 	;                      move it.
 	;---------
 	move(x, y, showProps = "") {
+		; If x/y not given, default them to -1
+		x := ifBlankDefaultTo(x, -1)
+		y := ifBlankDefaultTo(y, -1)
+		
 		; Resize to size of contents
 		Gui, Show, AutoSize NoActivate %showProps%
-		WinGetPos, , , width, height
+		WinGetPos, , , guiWidth, guiHeight
 		
-		; -1 for x and y mean right/bottom edges
+		; -1 for x/y mean right/bottom edges
 		if(x = -1)
-			x := A_ScreenWidth  - width
+			x := A_ScreenWidth  - guiWidth
 		if(y = -1)
-			y := A_ScreenHeight - height
+			y := A_ScreenHeight - guiHeight
+		
+		; -2 for x/y mean horizontally/vertically centered
+		if(x = -2)
+			x := (A_ScreenWidth  - guiWidth) / 2
+		if(y = -2)
+			y := (A_ScreenHeight - guiHeight) / 2
 		
 		Gui, Show, % "x" x " y" y " NoActivate " showProps
 	}

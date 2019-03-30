@@ -9,6 +9,10 @@
 	You may add/subtract time using the same units with .addTime() and .subTime(), and can get the breakdown of time into hour/minute/second units with the corresponding properties.
 */
 
+; Supported characters:
+	;   h - hour
+	;   m - minute
+	;   s - second
 global DURATIONCHAR_Hour   := "h"
 global DURATIONCHAR_Minute := "m"
 global DURATIONCHAR_Second := "s"
@@ -29,10 +33,6 @@ class Duration {
 		; DEBUG.popup("durationString",durationString, "this.durationTotalSeconds",this.durationTotalSeconds)
 	}
 	
-	; Supported characters:
-		;   h - hour
-		;   m - minute
-		;   s - second
 	addTimeFromDurationString(durationString) {
 		currentNumber := ""
 		Loop, Parse, durationString

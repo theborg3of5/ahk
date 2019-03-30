@@ -318,18 +318,17 @@
 	:*:.todosat::
 		oneNoteSendUsualToDoSat() {
 			lines := []
-			lines.push({TEXT:"Pull to-dos from specific sections below"})
 			lines.push({TEXT:"Dishes from week"})
 			lines.push({TEXT:"Wash laundry"})
 			lines.push({TEXT:"Dry laundry"})
 			lines.push({TEXT:"Clean off desk"})
+			lines.push({TEXT:"Pull to-dos from specific sections below"})
 			oneNoteSendToDoLines(lines)
 		}
 	
 	:*:.todosun::
 		oneNoteSendUsualToDoSun() {
 			lines := []
-			lines.push({TEXT:"Pull to-dos from specific sections below"})
 			lines.push({TEXT:"Review/type Ninpo notes"})
 			lines.push({TEXT:"Fold laundry"})
 			lines.push({TEXT:"Roomba"})
@@ -338,6 +337,7 @@
 			lines.push({TEXT:"Trash, recycling out"})
 			lines.push({TEXT:"Meal planning"})
 			lines.push({TEXT:"Order/obtain groceries"})
+			lines.push({TEXT:"Pull to-dos from specific sections below"})
 			oneNoteSendToDoLines(lines)
 		}
 	

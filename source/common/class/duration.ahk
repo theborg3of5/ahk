@@ -20,13 +20,13 @@ class Duration {
 	
 	
 	__New(durationString := "") {
-		if(isEmpty(this.supportedUnitsAry))
-			this.supportedUnitsAry := this.buildSupportedUnitsAry()
+		if(isEmpty(Duration.supportedUnitsAry))
+			Duration.buildUnitArrays()
 		
 		if(durationString != "")
 			this.addTimeFromDurationString(durationString)
 		
-		; DEBUG.popup("durationString",durationString, "this.durationTotalSeconds",this.durationTotalSeconds)
+		DEBUG.popup("durationString",durationString, "this.durationTotalSeconds",this.durationTotalSeconds)
 	}
 	
 	; Supported characters:
@@ -37,7 +37,7 @@ class Duration {
 		currentNumber := ""
 		Loop, Parse, durationString
 		{
-			if(this.isUnitChar(A_LoopField)) {
+			if(Duration.isUnitChar(A_LoopField)) {
 				this.addTime(currentNumber, A_LoopField)
 				currentNumber := ""
 				Continue
@@ -49,14 +49,12 @@ class Duration {
 	
 	
 	addTime(value, unitChar := "s") {
-		if(unitChar = DURATIONCHAR_Hour)
-			this.durationTotalSeconds += value * 3600 ; Hours   - 60 * 60 seconds
-		else if(unitChar = DURATIONCHAR_Minute)
-			this.durationTotalSeconds += value * 60   ; Minutes - 60 seconds
-		else if(unitChar = DURATIONCHAR_Second)
-			this.durationTotalSeconds += value        ; Seconds
+		if(!this.isUnitChar(unitChar))
+			return
 		
-		; DEBUG.popup("Duration.addTime","Finish", "value",value, "unitChar",unitChar, "this.durationTotalSeconds",this.durationTotalSeconds)
+		this.durationTotalSeconds += value * this.getUnitMultiplier(unitChar)
+		
+		; DEBUG.popup("Duration.addTime","Finish", "value",value, "unitChar",unitChar, "multiplier",this.getUnitMultiplier(unitChar), "Seconds added",value * this.getUnitMultiplier(unitChar), "this.durationTotalSeconds",this.durationTotalSeconds)
 	}
 	
 	
@@ -89,6 +87,29 @@ class Duration {
 	}
 	
 	
+	displayTime[] {
+		get {
+			this.getUnitBreakdown(hours, minutes, seconds)
+			timeString := ""
+			
+			if(hours > 0)
+				timeString .= hours ":"
+			
+			if(minutes > 0) {
+				if((timeString != "") && (minutes < 9))
+					timeString .= 0
+				timeString .= minutes ":"
+			}
+			
+			if((timeString != "") && (seconds < 9))
+				timeString .= 0
+			timeString .= seconds
+			
+			return timeString
+		}
+	}
+	
+	
 	isZero[] {
 		get {
 			return (this.durationTotalSeconds = 0)
@@ -101,33 +122,50 @@ class Duration {
 	; ==============================
 	
 	static supportedUnitsAry := []
+	static unitMultiplierAry := []
 	durationTotalSeconds := 0
 	
-	buildSupportedUnitsAry() {
-		supportedUnitsAry := []
+	buildUnitArrays() {
+		; Supported units, ordered from largest to smallest.
+		Duration.supportedUnitsAry.push(DURATIONCHAR_Hour)
+		Duration.supportedUnitsAry.push(DURATIONCHAR_Minute)
+		Duration.supportedUnitsAry.push(DURATIONCHAR_Second)
 		
-		supportedUnitsAry.push(DURATIONCHAR_Hour)
-		supportedUnitsAry.push(DURATIONCHAR_Minute)
-		supportedUnitsAry.push(DURATIONCHAR_Second)
-		
-		return supportedUnitsAry
+		; Multiplers to turn each unit into seconds.
+		Duration.unitMultiplierAry[DURATIONCHAR_Hour]   := 60 * 60
+		Duration.unitMultiplierAry[DURATIONCHAR_Minute] := 60
+		Duration.unitMultiplierAry[DURATIONCHAR_Second] := 1
 	}
 	
 	
 	isUnitChar(char) {
-		return arrayContains(this.supportedUnitsAry, char)
+		return arrayContains(Duration.supportedUnitsAry, char)
+	}
+	
+	
+	getUnitMultiplier(char) {
+		if(char = "")
+			return 0
+		return Duration.unitMultiplierAry[char]
 	}
 	
 	
 	getUnitBreakdown(ByRef hours = "", ByRef minutes = "", ByRef seconds = "") {
 		remainingSeconds := this.durationTotalSeconds
 		
-		hours := remainingSeconds // 3600  ; Hours   - 60 * 60 seconds
-		remainingSeconds -= hours * 3600
+		For _,unit in Duration.supportedUnitsAry {
+			multiplier := Duration.getUnitMultiplier(unit)
+			quantity := remainingSeconds // multiplier
+			remainingSeconds -= quantity * multiplier
+			
+			if(unit = DURATIONCHAR_Hour)
+				hours := quantity
+			if(unit = DURATIONCHAR_Minute)
+				minutes := quantity
+			if(unit = DURATIONCHAR_Second)
+				seconds := quantity
+		}
 		
-		minutes := remainingSeconds // 60  ; Minutes - 60 seconds
-		remainingSeconds -= minutes * 60
-		
-		seconds := remainingSeconds        ; Seconds
+		; DEBUG.popup("this.durationTotalSeconds",this.durationTotalSeconds, "hours",hours, "minutes",minutes, "seconds",seconds)
 	}
 }

@@ -46,9 +46,21 @@ if(!dur || dur.isZero) {
 if(dur.isZero)
 	ExitApp
 
-DEBUG.popup("durationString",durationString, "dur",dur, "dur.hours",dur.hours, "dur.minutes",dur.minutes, "dur.seconds",dur.seconds)
+DEBUG.popup("durationString",durationString, "dur",dur, "dur.hours",dur.hours, "dur.minutes",dur.minutes, "dur.seconds",dur.seconds, "dur.displayTime",dur.displayTime)
+
+t := new Toast(dur.displayTime)
+t.show()
+
+Loop, 5 {
+	Sleep, 1000
+	dur.subTime(1)
+	t.setText(dur.displayTime)
+}
+; DEBUG.popup("dur.isZero",dur.isZero)
 
 
+
+Sleep, 5000
 
 ExitApp
 

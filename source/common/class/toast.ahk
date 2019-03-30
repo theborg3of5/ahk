@@ -9,20 +9,26 @@
 		; Show a toast on a 5-second timer
 		t := new Toast("5-second timer toast!")
 		t.showForTime(5)
+		; (OR)
+		Toast.showMedium("5-second timer toast!")
 		
 		; Show a toast, then hide it after finishing a longer-running action
 		t := new Toast("Running long action")
-		t.show()
+		t.showPersistent()
 		... ; Long action happens
 		t.setText("Next step")
 		... ; Next step happens
-		t.close()
+		t.hide() ; Toast is hidden but still exists
+		...
+		t.showPersistent() ; Toast becomes visible again
+		...
+		t.close() ; Toast is destroyed
 */
 
 class Toast {
 	
 	; ==============================
-	; == Public ====================
+	; == Public (Static) ===========
 	; ==============================
 	
 	;---------
@@ -90,6 +96,10 @@ class Toast {
 		SetTimer, % closeFunc, % -numSeconds * 1000
 	}
 	
+	; ==============================
+	; == Public (Persistent) =======
+	; ==============================
+	
 	;---------
 	; DESCRIPTION:    Create a new Toast object.
 	; PARAMETERS:
@@ -106,30 +116,6 @@ class Toast {
 	}
 	
 	;---------
-	; DESCRIPTION:    Show this toast indefinitely, until it is hidden or closed.
-	; PARAMETERS:
-	;  x     (I,OPT) - The x coordinate to show the toast at. Defaults to -1 (against right edge of
-	;                  screen).
-	;  y     (I,OPT) - The y coordinate to show the toast at. Defaults to -1 (against bottom edge of
-	;                  screen).
-	;---------
-	show(x := -1, y := -1) {
-		Gui, % this.guiId ":Default"
-		this.x := x
-		this.y := y
-		this.showToast(x, y, this.guiId)
-	}
-	
-	;---------
-	; DESCRIPTION:    Fade the toast out, but don't destroy it (use .close() instead if you're
-	;                 finished with the toast).
-	;---------
-	hide() {
-		Gui, % this.guiId ":Default"
-		this.hideToast(this.guiId)
-	}
-	
-	;---------
 	; DESCRIPTION:    Change the text for the toast, without hiding it.
 	; PARAMETERS:
 	;  toastText  (I,REQ) - The text to show in the toast.
@@ -140,6 +126,46 @@ class Toast {
 		Gui, % this.guiId ":Default"
 		this.setLabelText(toastText, this.labelVarName)
 		this.move(this.x, this.y)
+	}
+	
+	;---------
+	; DESCRIPTION:    Show this toast indefinitely, until it is hidden or closed.
+	; PARAMETERS:
+	;  x     (I,OPT) - The x coordinate to show the toast at. Defaults to -1 (against right edge of
+	;                  screen).
+	;  y     (I,OPT) - The y coordinate to show the toast at. Defaults to -1 (against bottom edge of
+	;                  screen).
+	;---------
+	showPersistent(x := -1, y := -1) {
+		Gui, % this.guiId ":Default"
+		this.x := x
+		this.y := y
+		this.showToast(x, y, this.guiId)
+	}
+	
+	;---------
+	; DESCRIPTION:    Show this toast for a certain number of seconds, then hide it.
+	; PARAMETERS:
+	;  numSeconds (I,REQ) - The number of seconds to show the toast for.
+	;  x          (I,OPT) - The x coordinate to show the toast at. Defaults to -1 (against right
+	;                       edge of screen).
+	;  y          (I,OPT) - The y coordinate to show the toast at. Defaults to -1 (against bottom
+	;                       edge of screen).
+	;---------
+	showForTimePersistent(numSeconds, x := -1, y := -1) {
+		this.showToast(x, y, this.guiId)
+		
+		hideFunc := ObjBindMethod(Toast, "hideToast", this.guiId) ; Create a BoundFunc object of the .closeToast function (with guiId passed to it) for when the timer finishes.
+		SetTimer, % hideFunc, % -numSeconds * 1000
+	}
+	
+	;---------
+	; DESCRIPTION:    Fade the toast out, but don't destroy it (use .close() instead if you're
+	;                 finished with the toast).
+	;---------
+	hide() {
+		Gui, % this.guiId ":Default"
+		this.hideToast(this.guiId)
 	}
 	
 	;---------

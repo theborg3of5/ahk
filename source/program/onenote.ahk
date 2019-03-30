@@ -235,7 +235,7 @@
 			; Give the user a chance to wait a little longer before continuing
 			; (for when OneNote takes a while to actually make the new page).
 			t := new Toast()
-			t.show()
+			t.showPersistent()
 			Loop {
 				t.setText("Waiting for 2s, press space to keep waiting..." getDots(A_Index - 1))
 				Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)

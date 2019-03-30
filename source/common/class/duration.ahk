@@ -26,7 +26,7 @@ class Duration {
 		if(durationString != "")
 			this.addTimeFromDurationString(durationString)
 		
-		DEBUG.popup("durationString",durationString, "this.durationTotalSeconds",this.durationTotalSeconds)
+		; DEBUG.popup("durationString",durationString, "this.durationTotalSeconds",this.durationTotalSeconds)
 	}
 	
 	; Supported characters:

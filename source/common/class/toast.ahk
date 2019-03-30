@@ -106,7 +106,7 @@ class Toast {
 	}
 	
 	;---------
-	; DESCRIPTION:    Show this toast indefinitely, until it is closed using .close().
+	; DESCRIPTION:    Show this toast indefinitely, until it is hidden or closed.
 	; PARAMETERS:
 	;  x     (I,OPT) - The x coordinate to show the toast at. Defaults to -1 (against right edge of
 	;                  screen).
@@ -118,6 +118,15 @@ class Toast {
 		this.x := x
 		this.y := y
 		this.showToast(x, y, this.guiId)
+	}
+	
+	;---------
+	; DESCRIPTION:    Fade the toast out, but don't destroy it (use .close() instead if you're
+	;                 finished with the toast).
+	;---------
+	hide() {
+		Gui, % this.guiId ":Default"
+		this.hideToast(this.guiId)
 	}
 	
 	;---------
@@ -245,12 +254,21 @@ class Toast {
 	}
 	
 	;---------
+	; DESCRIPTION:    Fade out the toast gui, but don't destroy it.
+	; PARAMETERS:
+	;  guiId (I,REQ) - Gui ID (window handle) of the toast gui.
+	;---------
+	hideToast(guiId) {
+		fadeGuiOut(guiId)
+	}
+	
+	;---------
 	; DESCRIPTION:    Fade out and destroy the toast gui.
 	; PARAMETERS:
 	;  guiId (I,REQ) - Gui ID (window handle) of the toast gui.
 	;---------
 	closeToast(guiId) {
-		fadeGuiOut(guiId)
+		this.hideToast(guiId)
       Gui, Destroy
 	}
 }

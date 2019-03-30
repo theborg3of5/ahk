@@ -8,6 +8,22 @@ setUpTrayIcons("timer.ico", "", "AHK: Timer")
 
 /*
 	Desired functionality:
+		Show with a hotkey
+			Fade in-out with Toast functionality
+			Allow holding down show hotkey to keep timer visible
+				Might require some internal state in the Toast to keep track of the last trigger to show it and then hide on a timer
+					How can we get at that info, though?
+		Add a label (newline'd above remaining time)
+		Exit on !+x
+			With confirmation (probably a popup instead of hacking around the toast)
+		Play sound on completion?
+	Other stuff to do/check
+		Find attribution for timer icon or replace it, document attribution
+		Find attribution for completion sound (from Windows I think?) or replace it, document attribution
+			Maybe also find a new completion sound?
+		
+	Done
+		Make sure text is larger than toast defaults (and maybe retain the green color scheme and additional transparency?)
 		Input
 			Command line: "5h2m33s"-style format
 			If nothing on command line (or we couldn't parse to some time >0), selector of choices
@@ -15,21 +31,8 @@ setUpTrayIcons("timer.ico", "", "AHK: Timer")
 					Extra field for just overriding the time with "5h2m33s"-style format
 						Column for that field will be how we specify choices, in same format
 		Show time (then fade out) on startup
-		Show with a hotkey
-			Fade in-out (like toast)
-			Hide after timer (like a toast - in fact, probably using Toast) 
-			Hide immediately on Esc? (only if toast is visible - could be tricky?)
-			Make sure text is larger than toast defaults (and maybe retain the green color scheme and additional transparency?)
-			Allow holding down show hotkey to keep timer visible
-		Pause/resume?
-		Add a label (newline'd above remaining time)
-		Exit on !+x
-			With confirmation (probably a popup instead of hacking around the toast)
-		Play sound, center toast, and stop hiding toast on completion
-	Other stuff to do/check
-		Find attribution for timer icon or replace it, document attribution
-		Find attribution for completion sound (from Windows I think?) or replace it, document attribution
-			Maybe also find a new completion sound?
+		Center toast, and stop hiding toast on completion
+		
 */
 
 global toastObj

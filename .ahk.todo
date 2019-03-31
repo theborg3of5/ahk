@@ -6,6 +6,7 @@
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
 	Support ranges (x:y) in Snapper record-opening stuff (Snapper launcher + from new record popup)
 	putty.getPuttyLogFile() - consider replacing the sleep with a WinWait
+	Have compileEpicStudioRegex.ahk show an FYI toast when it's finished
 	
 # Large
 	Consider adding functionality (probably in window.ahk) to get x/y values for left/right/center aligning windows on x/y axes (taking their widths [and probably offsets] into account).
@@ -38,11 +39,6 @@
 		Options:
 			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)
 			New type of codesearch type with separate branch in ActionObject (not ideal)
-	Toast - consider adding functionality to have it sleep until the toast goes away
-		Possibly just static variables for wait times, that other scripts can grab based on how long they wanted to wait?
-		Better would be to have the toast itself handle the waiting
-			Could require an actual object in these cases, seems reasonable to do if needed
-		Use case: compileEpicStudioRegex.ahk showing an FYI toast when it's finished
 	Figure out some central documentation method
 		Dynamically pull hotkeys for the currently focused program?
 		Hotkey to show window with all currently active hotkeys, divided up into current-program-specific and others

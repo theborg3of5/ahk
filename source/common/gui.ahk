@@ -63,6 +63,7 @@ fadeGuiIn(guiId, maxOpacity := 255, numSteps := 10) {
 	
 	fadeGui(guiId, startOpacity, maxOpacity, numSteps)
 }
+
 fadeGuiOut(guiId, numSteps := 10) {
 	startOpacity := WinGet("Transparent", "ahk_id " guiId)
 	fadeGui(guiId, startOpacity, 0, numSteps)

@@ -275,9 +275,12 @@ class Toast {
 		if(y = "")
 			y := Toast.Y_ALIGN_BOTTOM
 		
-		; Take special alignment values into account
+		; Resize to size of contents
+		Gui, Show, AutoSize NoActivate Hide
 		Gui, +LastFound ; Needed for WinGetPos
 		WinGetPos, , , guiWidth, guiHeight
+		
+		; Take special alignment values into account
 		boundsAry := getMonitorBounds()
 		if(x = Toast.X_ALIGN_LEFT)
 			x := boundsAry["LEFT"]
@@ -305,15 +308,12 @@ class Toast {
 	;---------
 	setLabelText(toastText, labelVarName) {
 		; Figure out how wide the text control needs to be to fit its contents
-		Toast.widthLabelNum++
+		Toast.widthLabelNum++ ; Unique number per calculation
 		getLabelSizeForText(toastText, "WidthLabel" Toast.widthLabelNum, textWidth, textHeight)
 		
 		; Update the text and width
 		GuiControl,     , % labelVarName, % toastText
 		GuiControl, Move, % labelVarName, % "w" textWidth " h" textHeight
-		
-		; Resize to size of contents
-		Gui, Show, AutoSize NoActivate Hide
 	}
 	
 	;---------
@@ -324,7 +324,7 @@ class Toast {
 	;  guiId (I,REQ) - Window handle for the toast gui.
 	;---------
 	showToast(x, y, guiId) {
-		this.move(x, y) ; Don't show the gui until we transition it in below
+		this.move(x, y)
 		fadeGuiIn(guiId)
 	}
 	

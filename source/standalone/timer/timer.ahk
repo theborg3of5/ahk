@@ -47,11 +47,16 @@ if(durationObj.isZero)
 
 ; Set up Toast and show initial time
 toastObj := buildTimerToast(durationObj.displayTime)
-toastObj.showPersistentForSeconds(5, Toast.X_ALIGN_RIGHT, Toast.Y_ALIGN_TOP)
+toastObj.showPersistentForSeconds(3, Toast.X_ALIGN_RIGHT, Toast.Y_ALIGN_TOP)
 
 ; Tick once per second
 SetTimer, timerTick, 1000
 
+return
+
+
+^b::
+	toastObj.showPersistentForSeconds(3)
 return
 
 

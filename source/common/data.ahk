@@ -211,11 +211,3 @@ reduceTableToColumn(inputTable, valueColumn, indexColumn := "") {
 	
 	return outTable
 }
-
-; If the given value is blank, return the default.
-ifBlankDefaultTo(valueToTry, defaultValue) {
-	if(valueToTry != "")
-		return valueToTry
-	
-	return defaultValue
-}

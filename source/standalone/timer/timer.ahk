@@ -8,11 +8,6 @@ setUpTrayIcons("timer.ico", "", "AHK: Timer")
 
 /*
 	Desired functionality:
-		Show with a hotkey
-			Fade in-out with Toast functionality
-			Allow holding down show hotkey to keep timer visible
-				Might require some internal state in the Toast to keep track of the last trigger to show it and then hide on a timer
-					How can we get at that info, though?
 		Add a label (newline'd above remaining time)
 		Exit on !+x
 			With confirmation (probably a popup instead of hacking around the toast)
@@ -32,6 +27,9 @@ setUpTrayIcons("timer.ico", "", "AHK: Timer")
 						Column for that field will be how we specify choices, in same format
 		Show time (then fade out) on startup
 		Center toast, and stop hiding toast on completion
+		Show with a hotkey
+			Fade in-out with Toast functionality
+			Allow holding down show hotkey to keep timer visible
 		
 */
 
@@ -47,16 +45,23 @@ if(durationObj.isZero)
 
 ; Set up Toast and show initial time
 toastObj := buildTimerToast(durationObj.displayTime)
-toastObj.showPersistentForSeconds(3, Toast.X_ALIGN_RIGHT, Toast.Y_ALIGN_TOP)
+toastObj.showPersistent(Toast.X_ALIGN_RIGHT, Toast.Y_ALIGN_TOP)
 
 ; Tick once per second
 SetTimer, timerTick, 1000
 
+; Hide Toast after 3 seconds
+Sleep, 3000
+toastObj.hide()
+
 return
 
-
-^b::
-	toastObj.showPersistentForSeconds(3)
+; Show timer for 3 seconds, then hide it again
+~^!Space::
+	toastObj.showPersistent()
+	waitForHotkeyRelease()
+	Sleep, 3000
+	toastObj.hide()
 return
 
 
@@ -79,7 +84,7 @@ buildTimerToast(displayTime) {
 	styleOverridesAry["BACKGROUND_COLOR"] := "000000" ; Black
 	styleOverridesAry["FONT_COLOR"]       := "00FF00" ; Green
 	styleOverridesAry["FONT_SIZE"]        := 40
-	styleOverridesAry["MARGIN_X"]         := 10
+	styleOverridesAry["MARGIN_X"]         := 15
 	styleOverridesAry["MARGIN_Y"]         := 5
 
 	return new Toast(displayTime, styleOverridesAry)
@@ -380,7 +385,7 @@ ExitApp
 ; ------------------------------------------------------------------------------------------ ;
 
 ; Show time left hotkeys.
-~^!Space::showHideTimer()
+; ~^!Space::showHideTimer()
 
 ; Pause/resume hotkey.
 ^browser_forward::

@@ -194,7 +194,6 @@ class Toast {
 	; == Private ===================
 	; ==============================
 	
-	static maxOpacity    := 255
 	static widthLabelNum := 0
 	
 	stylesAry    := ""
@@ -268,21 +267,17 @@ class Toast {
 	; PARAMETERS:
 	;  x         (I,OPT) - The x coordinate to show the toast at (or special value from Toast.X_ALIGN_*).
 	;  y         (I,OPT) - The y coordinate to show the toast at (or special value from Toast.Y_ALIGN_*).
-	;  showProps (I,OPT) - Any additional properties should be included in Gui, Show calls. For
-	;                      example, passing "Hide" would keep the gui hidden while we resize and
-	;                      move it.
 	;---------
-	move(x, y, showProps = "") {
+	move(x, y) {
 		; If x/y not given, default them to right/bottom
-		x := ifBlankDefaultTo(x, Toast.X_ALIGN_RIGHT)
-		y := ifBlankDefaultTo(y, Toast.Y_ALIGN_BOTTOM)
-		
-		; Resize to size of contents
-		Gui, Show, AutoSize NoActivate %showProps%
-		Gui, +LastFound ; Needed for WinGetPos
-		WinGetPos, , , guiWidth, guiHeight
+		if(x = "")
+			x := Toast.X_ALIGN_RIGHT
+		if(y = "")
+			y := Toast.Y_ALIGN_BOTTOM
 		
 		; Take special alignment values into account
+		Gui, +LastFound ; Needed for WinGetPos
+		WinGetPos, , , guiWidth, guiHeight
 		boundsAry := getMonitorBounds()
 		if(x = Toast.X_ALIGN_LEFT)
 			x := boundsAry["LEFT"]
@@ -299,7 +294,7 @@ class Toast {
 		if(y = Toast.Y_ALIGN_CENTER)
 			y := boundsAry["TOP"]  + (boundsAry["HEIGHT"] - guiHeight) / 2
 		
-		Gui, Show, % "x" x " y" y " NoActivate " showProps
+		Gui, Show, % "x" x " y" y " NoActivate"
 	}
 	
 	;---------
@@ -316,6 +311,9 @@ class Toast {
 		; Update the text and width
 		GuiControl,     , % labelVarName, % toastText
 		GuiControl, Move, % labelVarName, % "w" textWidth " h" textHeight
+		
+		; Resize to size of contents
+		Gui, Show, AutoSize NoActivate Hide
 	}
 	
 	;---------
@@ -326,8 +324,8 @@ class Toast {
 	;  guiId (I,REQ) - Window handle for the toast gui.
 	;---------
 	showToast(x, y, guiId) {
-		this.move(x, y, "Hide") ; Don't show the gui until we transition it in below
-		fadeGuiIn(guiId, "NoActivate", Toast.maxOpacity) ; Also actually shows the gui
+		this.move(x, y) ; Don't show the gui until we transition it in below
+		fadeGuiIn(guiId)
 	}
 	
 	;---------

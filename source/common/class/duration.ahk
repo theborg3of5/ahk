@@ -152,7 +152,7 @@ class Duration {
 	}
 	
 	
-	getUnitBreakdown(ByRef hours = "", ByRef minutes = "", ByRef seconds = "") {
+	getUnitBreakdown(ByRef hours := "", ByRef minutes := "", ByRef seconds := "") {
 		remainingSeconds := this.durationTotalSeconds
 		
 		For _,unit in Duration.supportedUnitsAry {

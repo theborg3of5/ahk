@@ -14,8 +14,17 @@
 ;                 should be active in _commonHotkeys.ahk.
 ;---------
 setCommonHotkeysType(type) {
-	global scriptHotkeyType
 	scriptHotkeyType := type
+}
+
+;---------
+; DESCRIPTION:    Sets the value of the scriptConfirmQuit global variable, which determines whether
+;                 the user will get a prompt upon quitting with the !+x hotkey.
+; PARAMETERS:
+;  toValue (I,OPT) - Value to set.
+;---------
+setScriptConfirmQuit(toValue := true) {
+	scriptConfirmQuit := toValue
 }
 
 ;---------
@@ -46,12 +55,11 @@ setUpTrayIcons(normalIcon, suspendedIcon, tooltipText = "") {
 ;                   we should use for the script. Format:
 ;                   	states["varName", varState] := iconPath
 ;                   See evalStateIcon() for a more in-depth explanation.
-; SIDE EFFECTS:   Set the value of the global stateIcons array, configure the tray icon so that it
+; SIDE EFFECTS:   Set the value of the global scriptStateIcons array, configure the tray icon so that it
 ;                 won't change to the default suspended icon when the script is suspended.
 ;---------
 setUpTrayIconStates(states) {
-	global stateIcons
-	stateIcons := states
+	scriptStateIcons := states
 	
 	Menu, Tray, Icon, , , 1 ; 1 - Keep suspend from changing it to the AHK default.
 	updateTrayIcon()
@@ -59,14 +67,13 @@ setUpTrayIconStates(states) {
 
 ;---------
 ; DESCRIPTION:    Determine the icon that should be used for the script (based on the variables
-;                 defined in the global stateIcons array) and have the script use it.
+;                 defined in the global scriptStateIcons array) and have the script use it.
 ; SIDE EFFECTS:   Potentially update the script's tray icon.
 ;---------
 updateTrayIcon() {
-	global stateIcons
-	; DEBUG.popup("_setup","updateTrayIcon", "Icon states array",stateIcons)
+	; DEBUG.popup("_setup","updateTrayIcon", "Icon states array",scriptStateIcons)
 	
-	newIcon := evalStateIcon(stateIcons)
+	newIcon := evalStateIcon(scriptStateIcons)
 	
 	if(newIcon) {
 		iconPath := A_WorkingDir "\" newIcon

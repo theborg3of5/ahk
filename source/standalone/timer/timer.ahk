@@ -4,12 +4,11 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 setCommonHotkeysType(HOTKEY_TYPE_Standalone)
+setScriptConfirmQuit() ; Confirm before exiting on !+x.
 setUpTrayIcons("timer.ico", "", "AHK: Timer")
 
 /*
 	Desired functionality:
-		Exit on !+x
-			With confirmation (probably a popup instead of hacking around the toast)
 		Play sound on completion?
 	Other stuff to do/check
 		Find attribution for timer icon or replace it, document attribution
@@ -30,6 +29,8 @@ setUpTrayIcons("timer.ico", "", "AHK: Timer")
 			Fade in-out with Toast functionality
 			Allow holding down show hotkey to keep timer visible
 		Add a label (newline'd above remaining time)
+		Exit on !+x
+			With confirmation (probably a popup instead of hacking around the toast)
 		
 */
 

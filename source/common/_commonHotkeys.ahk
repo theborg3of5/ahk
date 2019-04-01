@@ -1,5 +1,7 @@
 ﻿; === Hotkeys that all scripts should use. === ;
 
+global scriptHotkeyType, scriptStateIcons, scriptConfirmQuit
+
 ; Emergency exit
 ~^+!#r::
 	Suspend, Permit
@@ -56,7 +58,13 @@ return
 ; One-off scripts
 #If scriptHotkeyType = HOTKEY_TYPE_Standalone
 	; Normal exit
-	!+x::ExitApp
+	!+x::
+		if(scriptConfirmQuit)
+			if(!showConfirmationPopup("Are you sure you want to exit this script?"))
+				return
+		
+		ExitApp
+	return
 	
 	; Auto-reload script when it's saved.
 	~^s::

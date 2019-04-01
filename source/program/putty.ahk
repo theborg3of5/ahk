@@ -98,9 +98,6 @@ global lastPuttySearchType, lastPuttySearchText ; For Home+F9 searching repeated
 		^p:: sendPuttyCommand("PB")
 		^+e::sendPuttyCommand("VIEW_RECORD")
 		
-		:X:.lock::sendPuttyCommand("LOCK")
-		:X:.unlock::sendPuttyCommand("UNLOCK")
-		
 		^+s::
 			sendPuttyCommand("CR")
 			Send, 1{Enter}
@@ -142,7 +139,7 @@ sendPuttyCommand(key := "") {
 	
 	command   := dataAry["COMMAND"]
 	sendAfter := dataAry["SEND_AFTER"]
-	ini       := dataAry["INI"]
+	ini       := stringUpper(dataAry["INI"])
 	id        := dataAry["ID"]
 	
 	if(!command)

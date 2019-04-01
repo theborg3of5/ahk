@@ -8,7 +8,6 @@ setUpTrayIcons("timer.ico", "", "AHK: Timer")
 
 /*
 	Desired functionality:
-		Add a label (newline'd above remaining time)
 		Exit on !+x
 			With confirmation (probably a popup instead of hacking around the toast)
 		Play sound on completion?
@@ -30,28 +29,38 @@ setUpTrayIcons("timer.ico", "", "AHK: Timer")
 		Show with a hotkey
 			Fade in-out with Toast functionality
 			Allow holding down show hotkey to keep timer visible
+		Add a label (newline'd above remaining time)
 		
 */
 
 global toastObj
 global durationObj
+global timerLabelText
 
-; Figure out timer length
-durationString = %1% ; Input from command line
-durationObj := getDuration(durationString)
+; Get any inputs from command line
+argsAry := getScriptArgs()
+durationString := argsAry[1]
+timerLabelText := argsAry[2]
+
+if(durationString != "")
+	durationObj := New Duration(durationString)
+if(!durationObj || durationObj.isZero)
+	if(!getInfoFromUser(durationObj, timerLabelText))
+		ExitApp
 if(durationObj.isZero)
 	ExitApp
+
 ; DEBUG.popup("durationString",durationString, "durationObj",durationObj, "durationObj.hours",durationObj.hours, "durationObj.minutes",durationObj.minutes, "durationObj.seconds",durationObj.seconds, "durationObj.displayTime",durationObj.displayTime)
 
 ; Set up Toast and show initial time
-toastObj := buildTimerToast(durationObj.displayTime)
+toastObj := buildTimerToast()
 toastObj.showPersistent(Toast.X_ALIGN_RIGHT, Toast.Y_ALIGN_TOP)
 
-; Tick once per second
+; Start ticking once per second
 SetTimer, timerTick, 1000
 
 ; Hide Toast after 3 seconds
-Sleep, 3000
+Sleep, 3000 ; Sleep instead of timers so we can block temp-show hotkey until we're hiding
 toastObj.hide()
 
 return
@@ -64,35 +73,52 @@ return
 	toastObj.hide()
 return
 
-
-getDuration(durationString) {
-	if(durationString != "")
-		dur := New Duration(durationString)
-
-	; If we didn't get something valid from the command line, prompt the user with a list of options
-	if(!dur || dur.isZero) {
-		s := new Selector("timer.tls")
-		dur := New Duration(s.selectGui("DURATION_STRING"))
-	}
+getInfoFromUser(ByRef dur, ByRef labelText) {
+	s := new Selector("timer.tls")
+	infoAry := s.selectGui()
+	if(!infoAry)
+		return false
 	
-	return dur
+	durationString := infoAry["DURATION_STRING"]
+	dur := New Duration(durationString)
+	
+	labelText := infoAry["LABEL"]
+	
+	return true
 }
 
-buildTimerToast(displayTime) {
-	; Style overrides
-	styleOverridesAry := []
-	styleOverridesAry["BACKGROUND_COLOR"] := "000000" ; Black
-	styleOverridesAry["FONT_COLOR"]       := "00FF00" ; Green
-	styleOverridesAry["FONT_SIZE"]        := 40
-	styleOverridesAry["MARGIN_X"]         := 15
-	styleOverridesAry["MARGIN_Y"]         := 5
+buildTimerToast() {
+	displayText  := getTimerDisplayText()
+	overridesAry := getToastStyleOverrides("Right") ; Right-aligned (for displaying time)
+	return new Toast(displayText, overridesAry)
+}
 
-	return new Toast(displayTime, styleOverridesAry)
+getTimerDisplayText() {
+	displayText := ""
+	
+	if(timerLabelText != "")
+		displayText .= timerLabelText ":`n"
+	displayText .= durationObj.displayTime
+	
+	return displayText
+}
+
+getToastStyleOverrides(labelAlignment) {
+	overridesAry := []
+	
+	overridesAry["BACKGROUND_COLOR"] := "000000" ; Black
+	overridesAry["FONT_COLOR"]       := "00FF00" ; Green
+	overridesAry["FONT_SIZE"]        := 40
+	overridesAry["MARGIN_X"]         := 15
+	overridesAry["MARGIN_Y"]         := 5
+	overridesAry["LABEL_STYLES"]     := labelAlignment
+	
+	return overridesAry
 }
 
 timerTick() {
 	durationObj.subTime(1)
-	toastObj.setText(durationObj.displayTime)
+	toastObj.setText(getTimerDisplayText())
 	
 	if(durationObj.isZero)
 		timerFinished()
@@ -100,11 +126,18 @@ timerTick() {
 
 timerFinished() {
 	SetTimer, , Off ; Stop ticking
+	toastObj.close()
 	
-	toastObj.showPersistent(Toast.X_ALIGN_CENTER, Toast.Y_ALIGN_CENTER)
-	toastObj.setText("Timer Finished")
+	; Show a "finished" toast in the middle of the screen.
+	displayText := "Timer Finished"
+	if(timerLabelText != "")
+		displayText .= ":`n" timerLabelText
+	finishedToast := new Toast(displayText, getToastStyleOverrides("Center"))
+	finishedToast.showPersistent(Toast.X_ALIGN_CENTER, Toast.Y_ALIGN_CENTER)
 	
 	Sleep, 5000
+	
+	finishedToast.close()
 	
 	ExitApp
 }

@@ -231,7 +231,7 @@ class Toast {
 		; Add label
 		labelVarName := guiId "Text" ; Come up with a unique variable we can use to reference the label (to change its contents if needed).
 		setDynamicGlobalVar(labelVarName) ; Since the variable must be global, declare it as such.
-		Gui, Add, Text, % "v" labelVarName
+		Gui, Add, Text, % "v" labelVarName " " styleAry["LABEL_STYLES"]
 		
 		return {"GUI_ID":guiId, "LABEL_VAR_NAME":labelVarName}
 	}
@@ -255,6 +255,7 @@ class Toast {
 		styleAry["FONT_NAME"]        := "Consolas"
 		styleAry["MARGIN_X"]         := 5
 		styleAry["MARGIN_Y"]         := 0
+		styleAry["LABEL_STYLES"]     := ""
 		
 		; Merge in any overrides
 		styleAry := mergeArrays(styleAry, styleOverridesAry)

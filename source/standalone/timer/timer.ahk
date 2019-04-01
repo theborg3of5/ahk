@@ -10,6 +10,7 @@ setUpTrayIcons("timer.ico", "", "AHK: Timer")
 /*
 	Desired functionality:
 		Play sound on completion?
+		Document various functions
 	Other stuff to do/check
 		Find attribution for timer icon or replace it, document attribution
 		Find attribution for completion sound (from Windows I think?) or replace it, document attribution

@@ -18,7 +18,7 @@
 				return ; Not going to try creating if not even the parent exists.
 			}
 			
-			if(showConfirmationPopup("Folder does not exist", "Create folder?"))
+			if(showConfirmationPopup("Create folder?", "Folder does not exist"))
 				FileCreateDir, % folderPath
 		}
 		

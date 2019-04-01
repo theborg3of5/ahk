@@ -100,7 +100,7 @@
 			return
 		}
 		
-		if(!showConfirmationPopup("Update macro from XML", "Are you sure you want to overwrite this macro and its functions?"))
+		if(!showConfirmationPopup("Are you sure you want to overwrite this macro and its functions?", "Update macro from XML"))
 			return
 		
 		; Update the macro XML

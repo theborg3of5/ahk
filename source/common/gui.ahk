@@ -9,7 +9,7 @@ setTrayIcon(iconPath) {
 	return originalIconPath
 }
 
-showConfirmationPopup(title, message) {
+showConfirmationPopup(message, title := "") {
 	MsgBox, 4, % title, % message
 	IfMsgBox, Yes
 		return true

@@ -7,6 +7,7 @@
 	Support ranges (x:y) in Snapper record-opening stuff (Snapper launcher + from new record popup)
 	putty.getPuttyLogFile() - consider replacing the sleep with a WinWait
 	Have compileEpicStudioRegex.ahk show an FYI toast when it's finished
+	Update toast so it doesn't follow the active window anymore - just stick to the primary monitor.
 	
 # Large
 	Consider adding functionality (probably in window.ahk) to get x/y values for left/right/center aligning windows on x/y axes (taking their widths [and probably offsets] into account).

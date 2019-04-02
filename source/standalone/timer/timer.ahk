@@ -4,7 +4,7 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 setCommonHotkeysType(HOTKEY_TYPE_Standalone)
-setUpTrayIcons("timer.ico", "", "AHK: Timer")
+setUpTrayIcons("hourglass.ico", "", "AHK: Timer")
 
 /*
 	Desired functionality:

@@ -4,17 +4,13 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 setCommonHotkeysType(HOTKEY_TYPE_Standalone)
-setScriptConfirmQuit() ; Confirm before exiting on !+x.
 setUpTrayIcons("timer.ico", "", "AHK: Timer")
 
 /*
 	Desired functionality:
-		Play sound on completion?
 		Document various functions
 	Other stuff to do/check
 		Find attribution for timer icon or replace it, document attribution
-		Find attribution for completion sound (from Windows I think?) or replace it, document attribution
-			Maybe also find a new completion sound?
 		
 	Done
 		Make sure text is larger than toast defaults (and maybe retain the green color scheme and additional transparency?)
@@ -32,6 +28,7 @@ setUpTrayIcons("timer.ico", "", "AHK: Timer")
 		Add a label (newline'd above remaining time)
 		Exit on !+x
 			With confirmation (probably a popup instead of hacking around the toast)
+		Play sound on completion
 		
 */
 
@@ -60,12 +57,14 @@ toastObj.showPersistent(Toast.X_ALIGN_RIGHT, Toast.Y_ALIGN_TOP)
 
 ; Start ticking once per second
 SetTimer, timerTick, 1000
+setScriptConfirmQuit() ; Confirm before exiting on !+x.
 
 ; Hide Toast after 3 seconds
 Sleep, 3000 ; Sleep instead of timers so we can block temp-show hotkey until we're hiding
 toastObj.hide()
 
 return
+
 
 ; Show timer for 3 seconds, then hide it again
 ~^!Space::
@@ -74,6 +73,7 @@ return
 	Sleep, 3000
 	toastObj.hide()
 return
+
 
 getInfoFromUser(ByRef dur, ByRef labelText) {
 	s := new Selector("timer.tls")
@@ -130,15 +130,24 @@ timerFinished() {
 	SetTimer, , Off ; Stop ticking
 	toastObj.close()
 	
-	; Show a "finished" toast in the middle of the screen.
+	setScriptConfirmQuit(false) ; Stop requiring confirmation to exit
+	
+	; Play a sound to call out that time is up.
+	finishedSoundFile := "C:\Windows\media\Windows Hardware Fail.wav"
+	if(FileExist(finishedSoundFile))
+		SoundPlay, % finishedSoundFile
+		
+	; Show a persistent "finished" toast in the middle of the screen.
 	displayText := "Timer Finished"
 	if(timerLabelText != "")
 		displayText .= ":`n" timerLabelText
 	finishedToast := new Toast(displayText, getToastStyleOverrides("Center"))
 	finishedToast.showPersistent(Toast.X_ALIGN_CENTER, Toast.Y_ALIGN_CENTER)
-	
-	setScriptConfirmQuit(false) ; Stop requiring confirmation to exit
 }
+
+
+#Include <commonHotkeys>
+
 
 
 
@@ -499,6 +508,3 @@ showTimer() {
 		; SetTimer, hideTimer, -2050
 	; return
 ; #IfWinActive 
-
-
-#Include <commonHotkeys>

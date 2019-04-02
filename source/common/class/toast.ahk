@@ -177,6 +177,10 @@ class Toast {
 	;                 finished with the toast).
 	;---------
 	hide() {
+		; If the gui has already been destroyed, we're done here.
+		if(this.isGuiDestroyed)
+			return
+		
 		Gui, % this.guiId ":Default"
 		this.hideToast(this.guiId)
 	}
@@ -185,8 +189,13 @@ class Toast {
 	; DESCRIPTION:    Hide and destroy the GUI for this toast.
 	;---------
 	close() {
+		; If the gui has already been destroyed, we're done here.
+		if(this.isGuiDestroyed)
+			return
+		
 		Gui, % this.guiId ":Default"
 		this.closeToast(this.guiId)
+		this.isGuiDestroyed := true
 	}
 	
 	
@@ -196,12 +205,12 @@ class Toast {
 	
 	static widthLabelNum := 0
 	
-	stylesAry    := ""
-	guiId        := ""
-	labelVarName := ""
-	x            := ""
-	y            := ""
-	
+	stylesAry      := ""
+	guiId          := ""
+	labelVarName   := ""
+	x              := ""
+	y              := ""
+	isGuiDestroyed := false
 	
 	;---------
 	; DESCRIPTION:    Build the toast gui, applying various properties.

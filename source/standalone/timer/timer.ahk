@@ -10,6 +10,7 @@ setUpTrayIcons("timer.ico", "", "AHK: Timer")
 /*
 	Desired functionality:
 		Play sound on completion?
+		Can we not confirm exit once timer is finished?
 		Document various functions
 	Other stuff to do/check
 		Find attribution for timer icon or replace it, document attribution

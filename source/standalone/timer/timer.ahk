@@ -6,32 +6,6 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 setCommonHotkeysType(HOTKEY_TYPE_Standalone)
 setUpTrayIcons("hourglass.ico", "", "AHK: Timer")
 
-/*
-	Desired functionality:
-		Document various functions
-	Other stuff to do/check
-		Find attribution for timer icon or replace it, document attribution
-		
-	Done
-		Make sure text is larger than toast defaults (and maybe retain the green color scheme and additional transparency?)
-		Input
-			Command line: "5h2m33s"-style format
-			If nothing on command line (or we couldn't parse to some time >0), selector of choices
-				Selector of choices - no good reason to hard-code, just make it a .tls file
-					Extra field for just overriding the time with "5h2m33s"-style format
-						Column for that field will be how we specify choices, in same format
-		Show time (then fade out) on startup
-		Center toast, and stop hiding toast on completion
-		Show with a hotkey
-			Fade in-out with Toast functionality
-			Allow holding down show hotkey to keep timer visible
-		Add a label (newline'd above remaining time)
-		Exit on !+x
-			With confirmation (probably a popup instead of hacking around the toast)
-		Play sound on completion
-		
-*/
-
 global toastObj
 global durationObj
 global timerLabelText
@@ -56,7 +30,7 @@ toastObj := buildTimerToast()
 toastObj.showPersistent(Toast.X_ALIGN_RIGHT, Toast.Y_ALIGN_TOP)
 
 ; Start ticking once per second
-SetTimer, timerTick, 1000
+SetTimer, decrementTimer, 1000
 setScriptConfirmQuit() ; Confirm before exiting on !+x.
 
 ; Hide Toast after 3 seconds
@@ -74,7 +48,14 @@ return
 	toastObj.hide()
 return
 
-
+;---------
+; DESCRIPTION:    Prompt the user (with a Selector popup) for the duration (and optionally the label)
+;                 of the timer.
+; PARAMETERS:
+;  dur        (O,REQ) - Duration object with how long the timer should run for.
+;  labelText (IO,OPT) - Label to show with the text. Will only be overwritten if the user enters
+;                       something.
+;---------
 getInfoFromUser(ByRef dur, ByRef labelText) {
 	s := new Selector("timer.tls")
 	infoAry := s.selectGui()
@@ -84,17 +65,27 @@ getInfoFromUser(ByRef dur, ByRef labelText) {
 	durationString := infoAry["DURATION_STRING"]
 	dur := New Duration(durationString)
 	
-	labelText := infoAry["LABEL"]
+	if(infoAry["LABEL"] != "")
+		labelText := infoAry["LABEL"]
 	
 	return true
 }
 
+;---------
+; DESCRIPTION:    Build the toast that will show the time.
+; RETURNS:        New Toast object to show the time in.
+;---------
 buildTimerToast() {
 	displayText  := getTimerDisplayText()
 	overridesAry := getToastStyleOverrides("Right") ; Right-aligned (for displaying time)
 	return new Toast(displayText, overridesAry)
 }
 
+;---------
+; DESCRIPTION:    Get the text to display in the toast display, taking into account any labels and
+;                 the time.
+; RETURNS:        <label if set + newline><time>
+;---------
 getTimerDisplayText() {
 	displayText := ""
 	
@@ -105,6 +96,12 @@ getTimerDisplayText() {
 	return displayText
 }
 
+;---------
+; DESCRIPTION:    Get the style overrides to be used with toast.
+; PARAMETERS:
+;  labelAlignment (I,OPT) - The alignment of the text in the resulting toast. Defaults to left-aligned.
+; RETURNS:        Style overrides array for use with Toast class.
+;---------
 getToastStyleOverrides(labelAlignment) {
 	overridesAry := []
 	
@@ -118,15 +115,23 @@ getToastStyleOverrides(labelAlignment) {
 	return overridesAry
 }
 
-timerTick() {
+;---------
+; DESCRIPTION:    Take 1 second away from the timer and update the toast accordingly.
+; SIDE EFFECTS:   When the timer is finished this will trigger its completion logic.
+;---------
+decrementTimer() {
 	durationObj.subTime(1)
 	toastObj.setText(getTimerDisplayText())
 	
 	if(durationObj.isZero)
-		timerFinished()
+		finishTimer()
 }
 
-timerFinished() {
+;---------
+; DESCRIPTION:    Finish the timer: play a sound and display a centered toast.
+; SIDE EFFECTS:   Destroys timer toast, stops requiring confirmation to exit with !+x hotkey.
+;---------
+finishTimer() {
 	SetTimer, , Off ; Stop ticking
 	toastObj.close()
 	

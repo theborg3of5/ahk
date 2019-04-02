@@ -2,6 +2,7 @@
 
 ; EMC2 link popup and path field are the same across most EMC2 workflows.
 [LINK_POPUP.replaceWith(HyperLink Parameters ahk_class ThunderRT6FormDC)|PATH_FIELD_CONTROL_ID.replaceWith(ThunderRT6TextBox1)]
+	EMC2 Issue popup				POPUP_FIELD
 	EMC2 QAN							POPUP_FIELD
 	EMC2 QAN change status		POPUP_FIELD
 	EMC2 XDS							POPUP_FIELD

@@ -29,7 +29,7 @@ class Hyperlinker {
 		
 		windowName := MainConfig.findWindowName()
 		windowLinkInfoAry := Hyperlinker.getWindowLinkInfo(windowName)
-		; DEBUG.toast("Hyperlinker.linkSelectedText","Finished gathering info", "windowName",windowName, "windowLinkInfoAry",windowLinkInfoAry, "Hyperlinker.windows",Hyperlinker.windows)
+		; DEBUG.popup("Hyperlinker.linkSelectedText","Finished gathering info", "windowName",windowName, "windowLinkInfoAry",windowLinkInfoAry, "Hyperlinker.windows",Hyperlinker.windows)
 		if(!windowLinkInfoAry)
 			return false
 		

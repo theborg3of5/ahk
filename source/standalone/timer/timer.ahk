@@ -13,14 +13,9 @@ global timerLabelText
 ; Get any inputs from command line
 argsAry := getScriptArgs()
 durationString := argsAry[1]
-timerLabelText := argsAry[2]
+labelText      := argsAry[2]
 
-if(durationString != "")
-	durationObj := New Duration(durationString)
-if(!durationObj || durationObj.isZero)
-	if(!getInfoFromUser(durationObj, timerLabelText))
-		ExitApp
-if(durationObj.isZero)
+if(!getTimerInfo(durationString, labelText))
 	ExitApp
 
 ; DEBUG.popup("durationString",durationString, "durationObj",durationObj, "durationObj.hours",durationObj.hours, "durationObj.minutes",durationObj.minutes, "durationObj.seconds",durationObj.seconds, "durationObj.displayTime",durationObj.displayTime)
@@ -49,26 +44,39 @@ return
 return
 
 ;---------
-; DESCRIPTION:    Prompt the user (with a Selector popup) for the duration (and optionally the label)
-;                 of the timer.
+; DESCRIPTION:    Gather the info we need to start the timer.
 ; PARAMETERS:
-;  dur        (O,REQ) - Duration object with how long the timer should run for.
-;  labelText (IO,OPT) - Label to show with the text. Will only be overwritten if the user enters
-;                       something.
+;  durationString (I,REQ) - String valid for creating a new Duration object.
+;  labelText      (I,OPT) - Label to show with the timer.
+; RETURNS:        true if we got the info we needed, false otherwise.
+; SIDE EFFECTS:   Sets globals durationObj and timerLabelText
 ;---------
-getInfoFromUser(ByRef dur, ByRef labelText) {
+getTimerInfo(durationString, labelText) {
+	; First try using the duration string we were given.
+	dur := New Duration(durationString)
+	if(!dur.isZero) {
+		durationObj    := dur
+		timerLabelText := labelText
+		return true
+	}
+	
+	; If that wasn't sucessful, prompt the user (with a Selector popup) for the duration (and optionally the label).
 	s := new Selector("timer.tls")
 	infoAry := s.selectGui()
 	if(!infoAry)
 		return false
-	
 	durationString := infoAry["DURATION_STRING"]
+	labelText      := infoAry["LABEL"]
+	
+	; Try again with user input.
 	dur := New Duration(durationString)
-	
-	if(infoAry["LABEL"] != "")
-		labelText := infoAry["LABEL"]
-	
-	return true
+	if(!dur.isZero) {
+		durationObj    := dur
+		timerLabelText := labelText
+		return true
+	}
+		
+	return false
 }
 
 ;---------

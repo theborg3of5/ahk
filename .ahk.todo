@@ -4,12 +4,18 @@
 	Consider adding position logic to resizing selector - for Telegram/Republic Anywhere "soc" size, onenote to right 3/4 of screen at home, etc.
 		If we do this, we'd probably want to add machine filtering too (since "soc" size goes to top/bottom at home/work)
 	Support ranges (x:y) in Snapper record-opening stuff (Snapper launcher + from new record popup)
-	putty.getPuttyLogFile() - consider replacing the sleep with a WinWait
+	putty.getPuttyLogFile() - consider replacing the sleep with a WinWait(Active)
 	Have compileEpicStudioRegex.ahk show an FYI toast when it's finished
 	Update toast so it doesn't follow the active window anymore - just stick to the primary monitor.
 	
 # Large
+	Consider moving program-specific functions into their own (program-named) classes?
+		Would remove need to prefix all function names with program name
+		Could it make referencing program-specific things from common code easier?
+			We're basically talking about interfaces then, aren't we?
 	Consider adding functionality (probably in window.ahk) to get x/y values for left/right/center aligning windows on x/y axes (taking their widths [and probably offsets] into account).
+		Move X_ALIGN_* and Y_ALIGN_* constants/support into that as well
+		Maybe a corresponding moveWindow()-type function that takes the window's special properties into account?
 		Places that could use it:
 			Toast.move()
 			Other stuff in window.ahk (centerWindow, etc.)
@@ -22,6 +28,8 @@
 	ListConverter - more output methods
 		Filling in a OneNote table column (down arrow between?)
 		Filling a list of IDs into EpicStudio (Before/after inputs on Selector popup for code surrounding lines, newlines only applied after that)
+			Maybe take this a step further and make it specifically filling in an array?
+			Make sure that dot level is taken into account (I think I have functions for that)
 	Rewrite/clean up coding style for kdeMoverSizer
 	Selector - consider adding a way to match on some other column than just NAME and ABBREV
 		Could be used for transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID

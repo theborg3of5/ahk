@@ -180,7 +180,7 @@ getExcludedTitles() {
 	titles.insert(" - Gmail")
 	titles.insert(" - Feedly")
 	titles.insert(" - Reddit")
-	titles.insert("Login") ; Lastpass
+	titles.insert("Google Calendar - ")
 	return titles
 }
 

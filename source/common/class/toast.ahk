@@ -291,7 +291,7 @@ class Toast {
 		WinGetPos, , , guiWidth, guiHeight
 		
 		; Take special alignment values into account
-		boundsAry := getMonitorBounds()
+		boundsAry := getMonitorBounds(SysGet("MonitorPrimary")) ; Always show relative to the primary monitor
 		if(x = Toast.X_ALIGN_LEFT)
 			x := boundsAry["LEFT"]
 		if(y = Toast.Y_ALIGN_TOP)

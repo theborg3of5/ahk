@@ -6,7 +6,6 @@
 	Support ranges (x:y) in Snapper record-opening stuff (Snapper launcher + from new record popup)
 	putty.getPuttyLogFile() - consider replacing the sleep with a WinWait(Active)
 	Have compileEpicStudioRegex.ahk show an FYI toast when it's finished
-	Update toast so it doesn't follow the active window anymore - just stick to the primary monitor.
 	
 # Large
 	Consider moving program-specific functions into their own (program-named) classes?

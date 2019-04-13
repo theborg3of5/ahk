@@ -9,5 +9,5 @@
 #If
 
 telegramFocusNormalChat() {
-	Send, {Down}{Down}{Enter}
+	Send, {Down}{Enter}
 }

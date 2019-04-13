@@ -76,10 +76,10 @@ class Toast {
 	; PARAMETERS:
 	;  toastText  (I,REQ) - The text to show in the toast.
 	;  numSeconds (I,REQ) - The number of seconds to show the toast for.
-	;  x (I,OPT) - The x coordinate to show the toast at (or special value from Toast.X_ALIGN_*).
-	;              Defaults to previous position (if set), then right edge of screen.
-	;  y (I,OPT) - The y coordinate to show the toast at (or special value from Toast.Y_ALIGN_*).
-	;              Defaults to previous position (if set), then bottom edge of screen.
+	;  x          (I,OPT) - The x coordinate to show the toast at (or special value from Toast.X_ALIGN_*).
+	;                       Defaults to previous position (if set), then right edge of screen.
+	;  y          (I,OPT) - The y coordinate to show the toast at (or special value from Toast.Y_ALIGN_*).
+	;                       Defaults to previous position (if set), then bottom edge of screen.
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
 	showForSeconds(toastText, numSeconds, x := -2, y := -2) { ; x := Toast.X_ALIGN_RIGHT, y := Toast.Y_ALIGN_BOTTOM
@@ -275,8 +275,8 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Move the toast gui to the given coordinates and resize it to its contents.
 	; PARAMETERS:
-	;  x         (I,OPT) - The x coordinate to show the toast at (or special value from Toast.X_ALIGN_*).
-	;  y         (I,OPT) - The y coordinate to show the toast at (or special value from Toast.Y_ALIGN_*).
+	;  x (I,OPT) - The x coordinate to show the toast at (or special value from Toast.X_ALIGN_*).
+	;  y (I,OPT) - The y coordinate to show the toast at (or special value from Toast.Y_ALIGN_*).
 	;---------
 	move(x, y) {
 		; If x/y not given, default them to right/bottom
@@ -286,7 +286,7 @@ class Toast {
 			y := Toast.Y_ALIGN_BOTTOM
 		
 		; Resize to size of contents
-		Gui, Show, AutoSize NoActivate Hide
+		Gui, Show, % "AutoSize NoActivate Hide"
 		Gui, +LastFound ; Needed for WinGetPos
 		WinGetPos, , , guiWidth, guiHeight
 		

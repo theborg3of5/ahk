@@ -1,7 +1,6 @@
 # In Progress
 	
 # Small
-	Add machine filtering to resizing logic (so "soc" size can go to top/bottom at home/work)
 	Support ranges (x:y) in Snapper record-opening stuff (Snapper launcher + from new record popup)
 	putty.getPuttyLogFile() - consider replacing the sleep with a WinWait(Active)
 	Have compileEpicStudioRegex.ahk show an FYI toast when it's finished

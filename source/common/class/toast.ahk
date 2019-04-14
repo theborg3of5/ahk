@@ -31,13 +31,6 @@ class Toast {
 	; == Public (Static) ===========
 	; ==============================
 	
-	static X_ALIGN_LEFT   := -1 ; Against left edge of screen
-	static X_ALIGN_RIGHT  := -2 ; Against right edge of screen
-	static X_ALIGN_CENTER := -3 ; Horizontally centered
-	static Y_ALIGN_TOP    := -1 ; Against top edge of screen
-	static Y_ALIGN_BOTTOM := -2 ; Against bottom edge of screen
-	static Y_ALIGN_CENTER := -3 ; Vertically centered
-	
 	;---------
 	; DESCRIPTION:    Wrapper for Toast.showForSeconds for a "short" toast (shown for 1 second) in
 	;                 the bottom-right corner of the screen.
@@ -46,7 +39,7 @@ class Toast {
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
 	showShort(toastText) {
-		Toast.showForSeconds(toastText, 1, Toast.X_ALIGN_RIGHT, Toast.Y_ALIGN_BOTTOM)
+		Toast.showForSeconds(toastText, 1, WINPOS_X_Right, WINPOS_Y_Bottom)
 	}
 	
 	;---------
@@ -57,7 +50,7 @@ class Toast {
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
 	showMedium(toastText) {
-		Toast.showForSeconds(toastText, 2, Toast.X_ALIGN_RIGHT, Toast.Y_ALIGN_BOTTOM)
+		Toast.showForSeconds(toastText, 2, WINPOS_X_Right, WINPOS_Y_Bottom)
 	}
 	
 	;---------
@@ -68,7 +61,7 @@ class Toast {
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
 	showLong(toastText) {
-		Toast.showForSeconds(toastText, 5, Toast.X_ALIGN_RIGHT, Toast.Y_ALIGN_BOTTOM)
+		Toast.showForSeconds(toastText, 5, WINPOS_X_Right, WINPOS_Y_Bottom)
 	}
 	
 	;---------
@@ -76,13 +69,13 @@ class Toast {
 	; PARAMETERS:
 	;  toastText  (I,REQ) - The text to show in the toast.
 	;  numSeconds (I,REQ) - The number of seconds to show the toast for.
-	;  x          (I,OPT) - The x coordinate to show the toast at (or special value from Toast.X_ALIGN_*).
+	;  x          (I,OPT) - The x coordinate to show the toast at (or special value from WINPOS_X_*).
 	;                       Defaults to previous position (if set), then right edge of screen.
-	;  y          (I,OPT) - The y coordinate to show the toast at (or special value from Toast.Y_ALIGN_*).
+	;  y          (I,OPT) - The y coordinate to show the toast at (or special value from WINPOS_Y_*).
 	;                       Defaults to previous position (if set), then bottom edge of screen.
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
-	showForSeconds(toastText, numSeconds, x := -2, y := -2) { ; x := Toast.X_ALIGN_RIGHT, y := Toast.Y_ALIGN_BOTTOM
+	showForSeconds(toastText, numSeconds, x := "RIGHT", y := "BOTTOM") { ; x := WINPOS_X_Right, y := WINPOS_Y_Bottom
 		idAry := this.buildGui()
 		guiId        := idAry["GUI_ID"]
 		labelVarName := idAry["LABEL_VAR_NAME"]
@@ -119,9 +112,9 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Show this toast indefinitely, until it is hidden or closed.
 	; PARAMETERS:
-	;  x (I,OPT) - The x coordinate to show the toast at (or special value from Toast.X_ALIGN_*).
+	;  x (I,OPT) - The x coordinate to show the toast at (or special value from WINPOS_X_*).
 	;              Defaults to previous position (if set), then right edge of screen.
-	;  y (I,OPT) - The y coordinate to show the toast at (or special value from Toast.Y_ALIGN_*).
+	;  y (I,OPT) - The y coordinate to show the toast at (or special value from WINPOS_Y_*).
 	;              Defaults to previous position (if set), then bottom edge of screen.
 	;---------
 	showPersistent(x := "", y := "") {
@@ -135,9 +128,9 @@ class Toast {
 		
 		; Default to bottom-right if nothing given and no previous position.
 		if(this.x = "")
-			this.x := Toast.X_ALIGN_RIGHT
+			this.x := WINPOS_X_Right
 		if(this.y = "")
-			this.y := Toast.Y_ALIGN_BOTTOM
+			this.y := WINPOS_Y_Bottom
 		
 		this.showToast(this.x, this.y, this.guiId)
 	}
@@ -146,9 +139,9 @@ class Toast {
 	; DESCRIPTION:    Show this toast for a certain number of seconds, then hide it.
 	; PARAMETERS:
 	;  numSeconds (I,REQ) - The number of seconds to show the toast for.
-	;  x          (I,OPT) - The x coordinate to show the toast at (or special value from Toast.X_ALIGN_*).
+	;  x          (I,OPT) - The x coordinate to show the toast at (or special value from WINPOS_X_*).
 	;                       Defaults to previous position (if set), then right edge of screen.
-	;  y          (I,OPT) - The y coordinate to show the toast at (or special value from Toast.Y_ALIGN_*).
+	;  y          (I,OPT) - The y coordinate to show the toast at (or special value from WINPOS_Y_*).
 	;                       Defaults to previous position (if set), then bottom edge of screen.
 	;---------
 	showPersistentForSeconds(numSeconds, x := "", y := "") {
@@ -169,7 +162,7 @@ class Toast {
 	setText(toastText) {
 		Gui, % this.guiId ":Default"
 		this.setLabelText(toastText, this.labelVarName)
-		this.move(this.x, this.y)
+		this.move(this.x, this.y, this.guiId)
 	}
 	
 	;---------
@@ -275,39 +268,23 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Move the toast gui to the given coordinates and resize it to its contents.
 	; PARAMETERS:
-	;  x (I,OPT) - The x coordinate to show the toast at (or special value from Toast.X_ALIGN_*).
-	;  y (I,OPT) - The y coordinate to show the toast at (or special value from Toast.Y_ALIGN_*).
+	;  x     (I,REQ) - The x coordinate to show the toast at (or special value from WINPOS_X_*).
+	;  y     (I,REQ) - The y coordinate to show the toast at (or special value from WINPOS_Y_*).
+	;  guiId (I,REQ) - Window handle for the toast gui.
 	;---------
-	move(x, y) {
+	move(x, y, guiId) {
 		; If x/y not given, default them to right/bottom
 		if(x = "")
-			x := Toast.X_ALIGN_RIGHT
+			x := WINPOS_X_Right
 		if(y = "")
-			y := Toast.Y_ALIGN_BOTTOM
+			y := WINPOS_Y_Bottom
 		
 		; Resize to size of contents
 		Gui, Show, % "AutoSize NoActivate Hide"
-		Gui, +LastFound ; Needed for WinGetPos
-		WinGetPos, , , guiWidth, guiHeight
+		Gui, +LastFound ; Needed for WinGetPos in convertRelativeWinPositions() logic
 		
-		; Take special alignment values into account
-		boundsAry := getMonitorBounds(SysGet("MonitorPrimary")) ; Always show relative to the primary monitor
-		if(x = Toast.X_ALIGN_LEFT)
-			x := boundsAry["LEFT"]
-		if(y = Toast.Y_ALIGN_TOP)
-			y := boundsAry["TOP"]
-		
-		if(x = Toast.X_ALIGN_RIGHT)
-			x := boundsAry["LEFT"] + boundsAry["WIDTH"]  - guiWidth
-		if(y = Toast.Y_ALIGN_BOTTOM)
-			y := boundsAry["TOP"]  + boundsAry["HEIGHT"] - guiHeight
-		
-		if(x = Toast.X_ALIGN_CENTER)
-			x := boundsAry["LEFT"] + (boundsAry["WIDTH"]  - guiWidth)  / 2
-		if(y = Toast.Y_ALIGN_CENTER)
-			y := boundsAry["TOP"]  + (boundsAry["HEIGHT"] - guiHeight) / 2
-		
-		Gui, Show, % "x" x " y" y " NoActivate"
+		positions := convertRelativeWinPositions(x, y, titleString)
+		Gui, Show, % "x" positions["X"] " y" positions["Y"] " NoActivate"
 	}
 	
 	;---------
@@ -329,12 +306,12 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Show (fade in) the toast.
 	; PARAMETERS:
-	;  x     (I,OPT) - The x coordinate to show the toast at (or special value from Toast.X_ALIGN_*).
-	;  y     (I,OPT) - The y coordinate to show the toast at (or special value from Toast.Y_ALIGN_*).
+	;  x     (I,OPT) - The x coordinate to show the toast at (or special value from WINPOS_X_*).
+	;  y     (I,OPT) - The y coordinate to show the toast at (or special value from WINPOS_Y_*).
 	;  guiId (I,REQ) - Window handle for the toast gui.
 	;---------
 	showToast(x, y, guiId) {
-		this.move(x, y)
+		this.move(x, y, guiId)
 		fadeGuiIn(guiId)
 	}
 	

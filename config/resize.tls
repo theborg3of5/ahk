@@ -1,8 +1,8 @@
 +WindowTitle=Resize active window to size:
 +MinColumnWidth=350
 
-(	NAME										ABBREV			WIDTH		HEIGHT
-)	0											0					1			2
+(	NAME										ABBREV			WIDTH		HEIGHT		X			Y
+)	0											0					1			2				0			0
 
 # General sizes
 FHD (1920x1080)							h					1920		1080
@@ -11,8 +11,8 @@ Standard (1280x1024)						sd					1280		1024
 Small (800x600)							sm					800		600
 
 # Specifics
-Semi-maximized (fits around time)	smax				1460		1050
-Social (Telegram, Pidgin)				soc				950		750
+Semi-maximized (fits around time)	smax				1460		1050			RIGHT		CENTER
+Social (Telegram, Pidgin)				soc				950		750			RIGHT		TOP
 
 # Development
 Minimum Hyperspace (2015-)				minOld			800		550

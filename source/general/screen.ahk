@@ -31,8 +31,19 @@ return
 	selectResize() {
 		s := new Selector("resize.tls")
 		data := s.selectGui()
-		if(data)
-			resizeWindow(data["WIDTH"], data["HEIGHT"])
+		if(!data)
+			return
+		
+		; Default to centering resized window if nothing specified.
+		x := data["X"]
+		y := data["Y"]
+		if(x = "")
+			x := WINPOS_X_Center
+		if(y = "")
+			y := WINPOS_Y_Center
+		
+		resizeWindow(data["WIDTH"], data["HEIGHT"])
+		moveWindow(x, y)
 	}
 
 ; Call the Windows API function "SetSuspendState" to have the system suspend or hibernate.

@@ -29,6 +29,8 @@
 	EMC2 QAN email							-				-					HOME_END
 	EMC2 XDS email							-				-					HOME_END
 []
+	EMC2 Design submit					-				-					HOME_END			CTRL_SHIFT
+	EMC2 DLG resubmit						-				-					-					CTRL_SHIFT
 	
 	; EpicStudio popups - handle Ctrl+Backspace.
 	EpicStudio New Object Window		-				-					-					CTRL_SHIFT

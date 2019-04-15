@@ -1,4 +1,4 @@
-(		NAME									EXE							CLASS						TITLE											WINDOW_EDGE_OFFSET_OVERRIDE		TITLE_STRING_MATCH_MODE_OVERRIDE		PRIORITY
+(		NAME									EXE							CLASS						TITLE												WINDOW_EDGE_OFFSET_OVERRIDE		TITLE_STRING_MATCH_MODE_OVERRIDE		PRIORITY
 
 ; Specific windows within a program (overlap with their less-specific counterparts below).
 [+1|PRIORITY.replaceWith(0)]
@@ -13,7 +13,9 @@
 			EMC2 QAN								-								-							QAN
 			EMC2 XDS								-								-							XDS
 		[-3]
+			EMC2 Design submit				-								-							Submit Design for Review
 			EMC2 DLG email						-								-							E-mail Development Log
+			EMC2 DLG resubmit					-								-							Resubmit for 
 			EMC2 Issue email					-								-							Email Issue
 			EMC2 Issue popup					-								-							Magnify
 			EMC2 Open Design					-								ThunderRT6FormDC		Open/New Design

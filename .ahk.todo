@@ -5,6 +5,7 @@
 	putty.getPuttyLogFile() - consider replacing the sleep with a WinWait(Active)
 	Have compileEpicStudioRegex.ahk show an FYI toast when it's finished
 	Update error toast for hyperlinking selected text to call out when it's a non-supported window
+	Consider cleaning up naming capitalization, etc. for windows/windowActions around various EMC2 windows
 	
 # Large
 	See how we can make use of EpicStudio's new URL protocol and Smart Copy functionality with ActionObject, copying code locations, etc.

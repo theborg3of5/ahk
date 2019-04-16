@@ -24,6 +24,7 @@
 			EMC2 QAN email notify			-								-							EMC2 - QA Note E-Mail Notification
 			EMC2 QAN notes						-								-							Note
 			EMC2 XDS email						-								ThunderRT6FormDC		E-Mail Design
+			EMC2 XDS approval					-								ThunderRT6FormDC		A Reviewer Approved
 	[-2]
 			EpicStudio New Object Window	EpicStudio.exe				New Object
 			EpicStudio Tokenize String		EpicStudio.exe				Tokenize String

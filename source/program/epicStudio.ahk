@@ -13,6 +13,18 @@
 	!c:: epicStudioCopyCodeLocation()
 	!#c::epicStudioCopyCodeLocation(false)
 	
+	; Delete line hotkey
+	$^d::
+		epicStudioDeleteLinePreservingClipboard() {
+			originalClipboard := clipboardAll ; Save off the entire clipboard
+			clipboard := ""                   ; Clear the clipboard (so we can wait for the new value)
+			
+			Send, ^d ; Delete line hotkey in EpicStudio (also unfortunately overwrites the clipboard with deleted line)
+			ClipWait, 2 ; Wait for 2 seconds for clipboard to be overwritten
+			
+			clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
+		}
+	
 	; ; Debug, auto-search for workstation ID.
 	~F5::epicStudioDebug("ws:" MainConfig.private["WORK_COMPUTER_NAME"])
 	F6:: epicStudioDebug("ws:" A_IPAddress1)

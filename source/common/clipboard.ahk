@@ -64,7 +64,7 @@ saveCurrentClipboard() {
 sendTextWithClipboard(text) {
 	; DEBUG.popup("Text to send with clipboard", text)
 	
-	originalClipboard := clipboardAll ; Save the entire clipboard to a variable of your choice.
+	originalClipboard := clipboardAll ; Save off the entire clipboard.
 	clipboard := ""                   ; Clear the clipboard
 	
 	clipboard := text

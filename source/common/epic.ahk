@@ -193,7 +193,6 @@ getEpicAppIdFromKey(appKey) {
 }
 
 buildEMC2Link(ini, id, subAction := "WEB") { ; subAction = SUBACTION_Web
-	global SUBACTION_Edit, SUBACTION_View, SUBACTION_Web
 	if(!ini || !id)
 		return ""
 	

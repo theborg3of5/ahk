@@ -19,8 +19,10 @@ class Hyperlinker {
 	; RETURNS:        True if successful, False if something went wrong.
 	;---------
 	linkSelectedText(path, ByRef errorMessage = "") {
-		if(!path)
+		if(!path) {
+			errorMessage := "Path to link was blank"
 			return false
+		}
 		
 		path := cleanupPath(path)
 		path := mapPath(path)

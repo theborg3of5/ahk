@@ -301,6 +301,8 @@
 			
 			selectTextWithinSelection(recordText)
 			webURL := buildEMC2Link(ini, id, "WEB")
+			if(!webURL)
+				return
 			if(!Hyperlinker.linkSelectedText(webURL, errorMessage)) {
 				setClipboardAndToastValue(webURL, "link", "Failed to add EMC2 object web link:`n" errorMessage)
 				return
@@ -311,6 +313,8 @@
 			
 			selectTextWithinSelection(editText)
 			editURL := buildEMC2Link(ini, id, "EDIT")
+			if(!editURL)
+				return
 			if(!Hyperlinker.linkSelectedText(editURL, errorMessage))
 				setClipboardAndToastValue(editURL, "link", "Failed to add EMC2 object edit link:`n" errorMessage)
 		}

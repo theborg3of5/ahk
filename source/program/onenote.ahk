@@ -301,8 +301,8 @@
 			
 			selectTextWithinSelection(recordText)
 			webURL := buildEMC2Link(ini, id, "WEB")
-			if(!Hyperlinker.linkSelectedText(webURL)) {
-				setClipboardAndToastValue(webURL, "link", "Failed to add EMC2 object web link.")
+			if(!Hyperlinker.linkSelectedText(webURL, errorMessage)) {
+				setClipboardAndToastValue(webURL, "link", "Failed to add EMC2 object web link:`n" errorMessage)
 				return
 			}
 			
@@ -311,8 +311,8 @@
 			
 			selectTextWithinSelection(editText)
 			editURL := buildEMC2Link(ini, id, "EDIT")
-			if(!Hyperlinker.linkSelectedText(editURL))
-				setClipboardAndToastValue(editURL, "link", "Failed to add EMC2 object edit link.")
+			if(!Hyperlinker.linkSelectedText(editURL, errorMessage))
+				setClipboardAndToastValue(editURL, "link", "Failed to add EMC2 object edit link:`n" errorMessage)
 		}
 	
 	:*:.todosat::
@@ -404,8 +404,8 @@
 		selectCurrentLine() ; Select whole line, but avoid the extra indentation and newline that comes with ^a.
 		selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
 		url := buildEMC2Link(ini, id)
-		if(!Hyperlinker.linkSelectedText(url)) {
-			setClipboardAndToastValue(url, "link", "Failed to link EMC2 object text.")
+		if(!Hyperlinker.linkSelectedText(url, errorMessage)) {
+			setClipboardAndToastValue(url, "link", "Failed to link EMC2 object text:`n" errorMessage)
 			return
 		}
 		Send, {End}

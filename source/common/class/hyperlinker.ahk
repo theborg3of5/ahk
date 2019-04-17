@@ -14,10 +14,11 @@ class Hyperlinker {
 	;---------
 	; DESCRIPTION:    Link the selected text with the given URL/path.
 	; PARAMETERS:
-	;  path (I,REQ) - URL or file path to link to.
+	;  path         (I,REQ) - URL or file path to link to.
+	;  errorMessage (O,OPT) - Error message about what went wrong if we return False.
 	; RETURNS:        True if successful, False if something went wrong.
 	;---------
-	linkSelectedText(path) {
+	linkSelectedText(path, ByRef errorMessage = "") {
 		if(!path)
 			return false
 		
@@ -30,10 +31,13 @@ class Hyperlinker {
 		windowName := MainConfig.findWindowName()
 		windowLinkInfoAry := Hyperlinker.getWindowLinkInfo(windowName)
 		; DEBUG.popup("Hyperlinker.linkSelectedText","Finished gathering info", "windowName",windowName, "windowLinkInfoAry",windowLinkInfoAry, "Hyperlinker.windows",Hyperlinker.windows)
-		if(!windowLinkInfoAry)
-			return false
 		
-		return Hyperlinker.doLink(path, windowLinkInfoAry)
+		if(!windowLinkInfoAry) {
+			errorMessage := "Window not supported: " windowName
+			return false
+		}
+		
+		return Hyperlinker.doLink(path, windowLinkInfoAry, errorMessage)
 	}
 	
 	; ==============================
@@ -106,9 +110,10 @@ class Hyperlinker {
 	;  path              (I,REQ) - URL or file path to link to.
 	;  windowLinkInfoAry (I,REQ) - Array of linking-related info about the window matching the given
 	;                              name. See getWindowLinkInfo() for format.
+	;  errorMessage      (O,OPT) - Error message about what went wrong if we return False.
 	; RETURNS:        True for success, False if something went wrong.
 	;---------
-	doLink(path, windowLinkInfoAry) {
+	doLink(path, windowLinkInfoAry, ByRef errorMessage = "") {
 		; DEBUG.toast("Hyperlinker.doLink","Start", "path",path, "windowLinkInfoAry",windowLinkInfoAry)
 		
 		; Handle linking differently depending on the specified method.
@@ -120,6 +125,7 @@ class Hyperlinker {
 		if(setPathMethod = LinkPathMethod_TaggedString)
 			return Hyperlinker.linkTaggedString(path, windowLinkInfoAry["TAGGED_STRING_BASE"])
 		
+		errorMessage := "Unsupported set path method: " setPathMethod
 		return false
 	}
 	

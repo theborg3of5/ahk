@@ -58,9 +58,10 @@ return
 
 ; Turn the selected text into a link to the URL on the clipboard.
 ^+k::
-	if(!Hyperlinker.linkSelectedText(clipboard))
-		Toast.showMedium("Failed to link selected text.")
-return
+	linkSelectedText() {
+		if(!Hyperlinker.linkSelectedText(clipboard, errorMessage))
+			Toast.showMedium("Failed to link selected text:`n" errorMessage)
+	}
 
 ; Turn selected text or clipboard into standard string and send it.
 !+n::

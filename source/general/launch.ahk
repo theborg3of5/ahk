@@ -27,8 +27,8 @@ genericHyperlink(subAction) {
 	if(!link)
 		return
 	
-	if(!Hyperlinker.linkSelectedText(link))
-		setClipboardAndToastValue(link, "link", "Failed to link selected text.")
+	if(!Hyperlinker.linkSelectedText(link, errorMessage))
+		setClipboardAndToastValue(link, "link", "Failed to link selected text:`n" errorMessage)
 }
 
 ; Generic search.

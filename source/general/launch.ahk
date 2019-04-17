@@ -99,7 +99,7 @@ genericHyperlink(subAction) {
 			textToSend := replaceTag(textToSend, "MESSAGE",  combinedMessage)
 			
 			if(MainConfig.isWindowActive("Outlook Calendar TLG")) {
-				SendRaw, % textToSend
+				sendTextWithClipboard(textToSend) ; Better not to type this out, it tends to trigger other things.
 				Send, {Enter}
 			} else {
 				setClipboardAndToastValue(textToSend, "", "Outlook TLG calendar not focused.")

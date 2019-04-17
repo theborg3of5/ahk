@@ -120,8 +120,8 @@ getPuttyLogFile() {
 	
 	openPuttySettingsWindow()
 	
-	; need to wait a bit for the popup to show up
-	Sleep, 50 ; GDB TODO - replace this with a WinWait?
+	; Wait for the popup to show up
+	WinWaitActive, ahk_class PuTTYConfigBox
 	
 	Send, !g ; Category pane
 	Send, l  ; Logging tree node

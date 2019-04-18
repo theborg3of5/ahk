@@ -82,36 +82,39 @@ setClipboard(value) {
 	ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain data.
 }
 
-setClipboardAndToastState(newClipboardValue, clipLabel := "value", extraPreMessage := "") {
+setClipboardAndToastState(newClipboardValue, clipLabel := "value") {
 	setClipboard(newClipboardValue)
-	toastSetClipboardState(clipLabel, extraPreMessage)
+	toastNewClipboardState(clipLabel)
 }
-setClipboardAndToastValue(newClipboardValue, clipLabel := "value", extraPreMessage := "") {
+setClipboardAndToastValue(newClipboardValue, clipLabel := "value") {
 	setClipboard(newClipboardValue)
-	toastSetClipboardValue(clipLabel, extraPreMessage)
+	toastNewClipboardValue(clipLabel)
 }
-
-toastSetClipboardState(clipLabel := "value", extraPreMessage := "") {
-	toastClipboard(clipLabel, extraPreMessage, false)
-}
-toastSetClipboardValue(clipLabel := "value", extraPreMessage := "") {
-	toastClipboard(clipLabel, extraPreMessage, true)
-}
-
-toastClipboard(clipLabel, extraPreMessage, showClipboardValue) {
+setClipboardAndToastError(newClipboardValue, clipLabel, problemMessage, errorMessage := "") {
 	if(clipLabel = "")
 		clipLabel := "value"
 	
-	clipMessage := extraPreMessage
-	if(clipboard = "") {
-		clipMessage := appendPieceToString(clipMessage, "Failed to get " clipLabel, "`n")
-	} else {
-		clipMessage := appendPieceToString(clipMessage, "Clipboard set to " clipLabel, "`n")
-		if(showClipboardValue) {
-			clipMessage .= ":" ; Colon on the end of the label (before the next newline) since we're showing a value
-			clipMessage := appendPieceToString(clipMessage, clipboard, "`n")
-		}
-	}
+	setClipboard(newClipboardValue)
+	Toast.showError(problemMessage, errorMessage, "Clipboard set to " clipLabel ":`n" clipboard)
+}
+
+toastNewClipboardState(clipLabel := "value") {
+	toastClipboard(clipLabel, false)
+}
+toastNewClipboardValue(clipLabel := "value") {
+	toastClipboard(clipLabel, true)
+}
+
+toastClipboard(clipLabel, showClipboardValue) {
+	if(clipLabel = "")
+		clipLabel := "value"
 	
-	Toast.showMedium(clipMessage)
+	if(clipboard = "") {
+		Toast.showError("Failed to get " clipLabel)
+	} else {
+		clipMessage := "Clipboard set to " clipLabel
+		if(showClipboardValue)
+			clipMessage .= ":`n" clipboard
+		Toast.showMedium(clipMessage)
+	}
 }

@@ -196,7 +196,7 @@
 				Send, {Esc}
 		}
 		
-		toastSetClipboardValue("link target")
+		toastNewClipboardValue("link target")
 	return
 	
 	; Remove link
@@ -304,7 +304,7 @@
 			if(!webURL)
 				return
 			if(!Hyperlinker.linkSelectedText(webURL, errorMessage)) {
-				setClipboardAndToastValue(webURL, "link", "Failed to add EMC2 object web link:`n" errorMessage)
+				setClipboardAndToastError(webURL, "link", "Failed to add EMC2 object web link", errorMessage)
 				return
 			}
 			
@@ -316,7 +316,7 @@
 			if(!editURL)
 				return
 			if(!Hyperlinker.linkSelectedText(editURL, errorMessage))
-				setClipboardAndToastValue(editURL, "link", "Failed to add EMC2 object edit link:`n" errorMessage)
+				setClipboardAndToastError(editURL, "link", "Failed to add EMC2 object edit link", errorMessage)
 		}
 	
 	:*:.todosat::
@@ -409,7 +409,7 @@
 		selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
 		url := buildEMC2Link(ini, id)
 		if(!Hyperlinker.linkSelectedText(url, errorMessage)) {
-			setClipboardAndToastValue(url, "link", "Failed to link EMC2 object text:`n" errorMessage)
+			setClipboardAndToastError(url, "link", "Failed to link EMC2 object text", errorMessage)
 			return
 		}
 		Send, {End}

@@ -27,7 +27,7 @@ genericHyperlink(subAction) {
 		return
 	
 	if(!Hyperlinker.linkSelectedText(link, errorMessage))
-		setClipboardAndToastValue(link, "link", "Failed to link selected text:`n" errorMessage)
+		setClipboardAndToastError(link, "link", "Failed to link selected text", errorMessage)
 }
 
 ; Generic search.
@@ -101,7 +101,7 @@ genericHyperlink(subAction) {
 				sendTextWithClipboard(textToSend) ; Better not to type this out, it tends to trigger other things.
 				Send, {Enter}
 			} else {
-				setClipboardAndToastValue(textToSend, "", "Outlook TLG calendar not focused.")
+				setClipboardAndToastError(textToSend, "", "Outlook TLG calendar not focused.")
 			}
 		}
 	^+!#t::

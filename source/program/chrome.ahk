@@ -85,5 +85,5 @@ chromeCopyFileLink(showToast := false) {
 	ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain the link
 	
 	if(showToast)
-		toastSetClipboardValue("link target")
+		toastNewClipboardValue("link target")
 }

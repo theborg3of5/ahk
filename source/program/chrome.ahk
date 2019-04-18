@@ -53,7 +53,7 @@
 			if(filePath)
 				Run, % filePath
 			else
-				Toast.showMedium("Failed to get link target")
+				Toast.showError("Failed to get link target")
 		}
 	; Copy file link
 	^RButton::chromeCopyFileLink(true)

@@ -138,7 +138,7 @@
 		
 		codeLocation := clipboard
 		if(!codeLocation)
-			Toast.showShort("Failed to get code location")
+			Toast.showError("Failed to get code location")
 		
 		; Initial value copied has the offset (tag+<offsetNum>) included.
 		; Strip it out if we don't need to keep it.

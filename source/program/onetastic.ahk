@@ -96,7 +96,7 @@
 	;---------
 	onetasticRefreshMacroFromXML(macroXML) {
 		if(!macroXML) {
-			Toast.showMedium("Could not import dependencies: no macro XML given.")
+			Toast.showError("Could not import dependencies", "No macro XML given.")
 			return
 		}
 		
@@ -276,7 +276,7 @@
 	;---------
 	onetasticImportFunction(functionXML) {
 		if(!functionXML) {
-			Toast.showMedium("Cannot import: no function XML found")
+			Toast.showError("Cannot import", "No function XML found")
 			return
 		}
 		

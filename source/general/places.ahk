@@ -14,7 +14,7 @@
 		; If the folder doesn't exist, try to create it (with permission from user)
 		if(!folderExists(folderPath)) {
 			if(!folderExists(getParentFolder(folderPath))) {
-				Toast.showMedium("Could not open chosen folder: neither the folder nor its parent folder exist.")
+				Toast.showError("Could not open chosen folder", "Neither the folder nor its parent folder exist.")
 				return ; Not going to try creating if not even the parent exists.
 			}
 			

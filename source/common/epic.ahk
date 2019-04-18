@@ -143,7 +143,7 @@ openEpicStudioDLG(dlgNum) {
 	WinWaitActive, % MainConfig.windowInfo["EpicStudio"].titleString, , 20 ; 20s timeout
 	
 	if(ErrorLevel = 1) {
-		Toast.showMedium("Could not open DLG in EpicStudio: `nTimed out waiting for EpicStudio to open")
+		Toast.showError("Could not open DLG in EpicStudio", "Timed out waiting for EpicStudio to open")
 		return
 	}
 	

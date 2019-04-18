@@ -60,7 +60,7 @@ return
 ^+k::
 	linkSelectedText() {
 		if(!Hyperlinker.linkSelectedText(clipboard, errorMessage))
-			Toast.showMedium("Failed to link selected text:`n" errorMessage)
+			Toast.showError("Failed to link selected text", errorMessage)
 	}
 
 ; Turn selected text or clipboard into standard string and send it.

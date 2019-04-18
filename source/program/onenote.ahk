@@ -160,7 +160,7 @@
 			
 			ClipWait, 2 ; Wait up to 2s for the link to appear on the clipboard
 			if(ErrorLevel = 1) { ; Timed out, didn't get a link.
-				Toast.showMedium("No link found on clipboard")
+				Toast.showError("Page link not added to clipboard")
 				return
 			}
 			

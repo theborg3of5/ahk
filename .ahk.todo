@@ -4,7 +4,6 @@
 	Support ranges (x:y) in Snapper record-opening stuff (Snapper launcher + from new record popup)
 	Have compileEpicStudioRegex.ahk show an FYI toast when it's finished
 	Consider cleaning up naming capitalization, etc. for windows/windowActions around various EMC2 windows
-	Consider adding a Toast.showError() - probably a variation on showMedium that takes a label/value pair (where value is optional) and generates a toast.
 	
 # Large
 	See how we can make use of EpicStudio's new URL protocol and Smart Copy functionality with ActionObject, copying code locations, etc.

@@ -65,18 +65,46 @@ class Toast {
 	}
 	
 	;---------
+	; DESCRIPTION:     Displays an error toast (dark yellow text, slightly larger) for a short
+	;                 duration (2 seconds).
+	; PARAMETERS:
+	;  problemMessage    (I,REQ) - Text about what the problem is (what happened or weren't we able
+	;                              to do?)
+	;  errorMessage      (I,OPT) - Technical error text - what happened code-wise?
+	;  mitigationMessage (I,OPT) - What we did instead - did we add something to the clipboard since
+	;                              we couldn't link it, for example?
+	;---------
+	showError(problemMessage, errorMessage := "", mitigationMessage := "") {
+		toastText := problemMessage
+		toastText := appendPieceToString(toastText, errorMessage, ":`n")
+		toastText := appendPieceToString(toastText, mitigationMessage, "`n`n")
+		
+		overridesAry := []
+		overridesAry["BACKGROUND_COLOR"] := "000000" ; Black
+		overridesAry["FONT_COLOR"]       := "CC9900" ; Dark yellow/gold
+		overridesAry["FONT_SIZE"]        := 22
+		overridesAry["MARGIN_X"]         := 6
+		overridesAry["MARGIN_Y"]         := 1
+		overridesAry["LABEL_STYLES"]     := "Right"
+		
+		Toast.showForSeconds(toastText, 2, WINPOS_X_Right, WINPOS_Y_Bottom, overridesAry)
+	}
+	
+	;---------
 	; DESCRIPTION:    Static caller to show this toast for a certain number of seconds, then destroy it.
 	; PARAMETERS:
-	;  toastText  (I,REQ) - The text to show in the toast.
-	;  numSeconds (I,REQ) - The number of seconds to show the toast for.
-	;  x          (I,OPT) - The x coordinate to show the toast at (or special value from WINPOS_X_*).
-	;                       Defaults to previous position (if set), then right edge of screen.
-	;  y          (I,OPT) - The y coordinate to show the toast at (or special value from WINPOS_Y_*).
-	;                       Defaults to previous position (if set), then bottom edge of screen.
+	;  toastText         (I,REQ) - The text to show in the toast.
+	;  numSeconds        (I,REQ) - The number of seconds to show the toast for.
+	;  x                 (I,OPT) - The x coordinate to show the toast at (or special value from WINPOS_X_*).
+	;                              Defaults to previous position (if set), then right edge of screen.
+	;  y                 (I,OPT) - The y coordinate to show the toast at (or special value from WINPOS_Y_*).
+	;                              Defaults to previous position (if set), then bottom edge of screen.
+	;  styleOverridesAry (I,OPT) - Any style overrides that you'd like to make. Defaults can be
+	;                              found in .getStyleAry().
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
-	showForSeconds(toastText, numSeconds, x := "RIGHT", y := "BOTTOM") { ; x := WINPOS_X_Right, y := WINPOS_Y_Bottom
-		idAry := this.buildGui()
+	showForSeconds(toastText, numSeconds, x := "RIGHT", y := "BOTTOM", styleOverridesAry := "") { ; x := WINPOS_X_Right, y := WINPOS_Y_Bottom
+		idAry := this.buildGui(styleOverridesAry)
 		guiId        := idAry["GUI_ID"]
 		labelVarName := idAry["LABEL_VAR_NAME"]
 		

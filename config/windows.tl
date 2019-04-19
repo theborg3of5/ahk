@@ -16,6 +16,7 @@
 			EMC2 Design submit				-								-							Submit Design for Review
 			EMC2 DLG email						-								-							E-mail Development Log
 			EMC2 DLG resubmit					-								-							Resubmit for 
+			EMC2 DRN Quick Review			-								-							Quick Review - 
 			EMC2 Issue email					-								-							Email Issue
 			EMC2 Issue popup					-								-							Magnify
 			EMC2 Open Design					-								ThunderRT6FormDC		Open/New Design

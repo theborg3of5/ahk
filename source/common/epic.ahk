@@ -323,17 +323,13 @@ buildSnapperURL(environment := "", ini := "", idList := "") { ; idList is a comm
 	if(!environment)
 		return ""
 	
-	if(!ini && !id) { ; These aren't be parameter defaults in case of blank parameters (not simply not passed at all)
+	if(!ini || !idList) { ; These aren't be parameter defaults in case of blank parameters (not simply not passed at all)
 		ini    := "X"
 		idList := "X"
 	}
 	
-	if(stringContains(idList, ","))
-		idAry := StrSplit(idList, ",")
-	else
-		idAry := [idList]
-	
 	outURL := MainConfig.private["SNAPPER_URL_BASE"]
+	idAry := expandList(idList)	
 	For i,id in idAry {
 		; DEBUG.popup("Index", i, "ID", id)
 		if(!id)

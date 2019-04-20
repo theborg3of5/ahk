@@ -1,7 +1,6 @@
 # In Progress
 	
 # Small
-	Support ranges (x:y) in Snapper record-opening stuff (Snapper launcher + from new record popup)
 	Have compileEpicStudioRegex.ahk show an FYI toast when it's finished
 	Consider cleaning up naming capitalization, etc. for windows/windowActions around various EMC2 windows
 	

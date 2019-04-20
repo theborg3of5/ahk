@@ -96,7 +96,7 @@ mergeArrays(default, overrides) {
 	return retAry
 }
 
-; Appends the contents of one (numeric) array to the (numeric) other.
+; Appends the contents of one (numerically-indexed) array to the (numerically-indexed) other.
 arrayAppend(baseAry, arrayToAppend) {
 	; .length() returns "" if it's not an object and 0 if it's empty
 	isBaseEmpty   := !(baseAry.length() > 0)
@@ -210,4 +210,53 @@ reduceTableToColumn(inputTable, valueColumn, indexColumn := "") {
 	}
 	
 	return outTable
+}
+
+; Expand lists that can optionally contain numeric ranges.
+; Note that ranges with non-numeric values will be ignored (not included in the output array).
+; Example:
+;  1,2:3,7,6:4 -> [1, 2, 3, 7, 6, 5, 4]
+expandList(listString) {
+	elementAry := strSplit(listString, ",")
+	outAry := []
+	
+	For _,element in elementAry {
+		if(stringContains(element, ":")) { ; Treat it as a numeric range and expand it
+			rangeAry := expandNumericRange(element) ; If it's not numeric, this will return [] and we'll ignore that element entirely.
+			outAry := arrayAppend(outAry, rangeAry)
+		} else {
+			outAry.push(element)
+		}
+	}
+	
+	return outAry
+}
+
+; Expands numeric ranges (i.e. 1:5 -> [1, 2, 3, 4, 5]).
+expandNumericRange(rangeString) {
+	splitAry := strSplit(rangeString, ":")
+	start := splitAry[1]
+	end   := splitAry[2]
+	
+	; Non-numeric ranges are not allowed.
+	if(!isNum(start) || !isNum(end))
+		return []
+	
+	if(start = end)
+		return [start] ; Single-element range
+	
+	if(start < end)
+		step := 1
+	else
+		step := -1
+	
+	numElements := abs(end - start) + 1
+	rangeAry := []
+	currNum := start
+	Loop, %numElements% {
+		rangeAry.push(currNum)
+		currNum += step
+	}
+	
+	return rangeAry
 }

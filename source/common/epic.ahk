@@ -329,7 +329,11 @@ buildSnapperURL(environment := "", ini := "", idList := "") { ; idList is a comm
 	}
 	
 	outURL := MainConfig.private["SNAPPER_URL_BASE"]
-	idAry := expandList(idList)	
+	idAry := expandList(idList)
+	if(idAry.count() > 10)
+		if(!showConfirmationPopup("You're trying to open more than 10 records in Snapper - are you sure you want to continue?", "Opening many records in Snapper"))
+			return ""
+	
 	For i,id in idAry {
 		; DEBUG.popup("Index", i, "ID", id)
 		if(!id)

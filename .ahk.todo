@@ -5,6 +5,8 @@
 	Consider cleaning up naming capitalization, etc. for windows/windowActions around various EMC2 windows
 	
 # Large
+	Rewrite/clean up coding style for kdeMoverSizer
+		Look at original first - looks like more features have been added: http://corz.org/windows/software/accessories/KDE-resizing-moving-for-Windows.php
 	See how we can make use of EpicStudio's new URL protocol and Smart Copy functionality with ActionObject, copying code locations, etc.
 	Consider moving program-specific functions into their own (program-named) classes?
 		Would remove need to prefix all function names with program name
@@ -21,7 +23,6 @@
 		Filling a list of IDs into EpicStudio (Before/after inputs on Selector popup for code surrounding lines, newlines only applied after that)
 			Maybe take this a step further and make it specifically filling in an array?
 			Make sure that dot level is taken into account (I think I have functions for that)
-	Rewrite/clean up coding style for kdeMoverSizer
 	Selector - consider adding a way to match on some other column than just NAME and ABBREV
 		Could be used for transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
 		Alternatively, build out environments in MainConfig (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.

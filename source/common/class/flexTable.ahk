@@ -113,7 +113,7 @@ class FlexTable {
 		Gui, Add, Text, % propString, % displayText
 		
 		if(width = "")
-			width := getLabelWidthForText(cellText, this.getNextUniqueControlId())
+			width := getLabelWidthForText(cellText, FlexTable.getNextUniqueControlId())
 		this.addToX(width)
 	}
 	

@@ -98,8 +98,7 @@ genericHyperlink(subAction) {
 			textToSend := replaceTag(textToSend, "MESSAGE",  combinedMessage)
 			
 			if(MainConfig.isWindowActive("Outlook Calendar TLG")) {
-				Send, {Space}{Backspace} ; Start an inline event (just pasting will add a new event with no subject and the pasted text as the body).
-				sendTextWithClipboard(textToSend) ; Better not to type this out, it tends to trigger other things.
+				SendRaw, % textToSend
 				Send, {Enter}
 			} else {
 				setClipboardAndToastError(textToSend, "", "Outlook TLG calendar not focused.")

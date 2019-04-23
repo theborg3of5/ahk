@@ -40,7 +40,7 @@ class WindowInfo {
 		this.windowClass := MainConfig.replacePrivateTags(this.windowClass)
 		this.windowTitle := MainConfig.replacePrivateTags(this.windowTitle)
 		
-		if(windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"] = "")
+		if(windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"] != "")
 			this.windowTitleStringMatchModeOverride := windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"]
 		else
 			this.windowTitleStringMatchModeOverride := CONTAINS_ANY ; Default value

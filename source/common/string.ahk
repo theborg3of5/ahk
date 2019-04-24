@@ -2,14 +2,14 @@
 
 ; NOTE: this file needs to be in ANSI encoding, to preserve some odd characters.
 
-global STRING_CASE_MIXED := 0
-global STRING_CASE_UPPER := 1
-global STRING_CASE_LOWER := 2
+global STRING_CASE_MIXED := "MIXED"
+global STRING_CASE_UPPER := "UPPER"
+global STRING_CASE_LOWER := "LOWER"
 
-global CONTAINS_ANY   := 1
-global CONTAINS_BEG   := 2
-global CONTAINS_END   := 3
-global CONTAINS_EXACT := 4
+global CONTAINS_ANY   := "ANY"
+global CONTAINS_START := "START"
+global CONTAINS_END   := "END"
+global CONTAINS_EXACT := "EXACT"
 
 isValidPhoneNumber(formattedNum) {
 	rawNum := parsePhone(formattedNum) ; Returns "" if it's not a valid number
@@ -108,11 +108,11 @@ stringContains(haystack, needle, fromLastInstance := false) {
 		return InStr(haystack, needle)
 }
 
-stringMatches(haystack, el, method := 1) { ; method := CONTAINS_ANY
+stringMatches(haystack, el, method := "ANY") { ; method := CONTAINS_ANY
 	if(method = CONTAINS_ANY)
 		return stringContains(haystack, el)
 	
-	else if(method = CONTAINS_BEG)
+	else if(method = CONTAINS_START)
 		return stringStartsWith(haystack, el)
 	
 	else if(method = CONTAINS_END)
@@ -127,7 +127,7 @@ stringMatches(haystack, el, method := 1) { ; method := CONTAINS_ANY
 
 ; Reverse array contains function - checks if any of array strings are in given string, with some special ways of searching (matches start, matches end, exact match, partial match anywhere)
 ; Returns the position of the earliest match in the string (the first occurrence of any needle)
-stringMatchesAnyOf(haystack, needlesAry, method := 1, ByRef matchedIndex := "") { ; method = CONTAINS_ANY
+stringMatchesAnyOf(haystack, needlesAry, method := "ANY", ByRef matchedIndex := "") { ; method = CONTAINS_ANY
 	earliestMatchedPos := 0
 	
 	For i,needle in needlesAry {
@@ -193,7 +193,7 @@ isAlphaNum(str) {
 }
 
 ; Test for casing in a string.
-isCase(string, case = 0) { ; case = STRING_CASE_MIXED
+isCase(string, case = "MIXED") { ; case = STRING_CASE_MIXED
 	if(case = STRING_CASE_MIXED) {
 		return true
 	} else if(case = STRING_CASE_UPPER) {

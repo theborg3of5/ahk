@@ -7,7 +7,7 @@
 			Chrome TickTick					chrome.exe					-							All - TickTick
 	[+2|EXE.replaceWith(EpicD85.exe)]
 		; Different sections of the main EMC2 window.
-		[+3|CLASS.replaceWith(ThunderRT6MDIForm)|TITLE_STRING_MATCH_MODE_OVERRIDE.replaceWith(2)]
+		[+3|CLASS.replaceWith(ThunderRT6MDIForm)|TITLE_STRING_MATCH_MODE_OVERRIDE.replaceWith(START)]
 			EMC2 DLG								-								-							DLG
 			EMC2 PRJ								-								-							PRJ
 			EMC2 QAN								-								-							QAN
@@ -23,7 +23,7 @@
 			EMC2 QAN change status			-								ThunderRT6FormDC		Change Note Status
 			EMC2 QAN email						-								-							Send E-Mail
 			EMC2 QAN email notify			-								-							EMC2 - QA Note E-Mail Notification
-			EMC2 QAN notes						-								-							Note											-											4
+			EMC2 QAN notes						-								-							Note											-											EXACT
 			EMC2 XDS email						-								ThunderRT6FormDC		E-Mail Design
 			EMC2 XDS approval					-								ThunderRT6FormDC		A Reviewer Approved
 	[-2]
@@ -42,7 +42,7 @@
 			Chrome								chrome.exe					Chrome_WidgetWin_1	-												
 			Cisco AnyConnect VPN				vpnui.exe					#32770
 			Discord								Discord.exe					-							-												0
-			EMC2									EpicD85.exe					-							EMC2											-											2
+			EMC2									EpicD85.exe					-							EMC2											-											START
 			EpicStudio							EpicStudio.exe				-							EpicStudio
 			Everything							Everything.exe				EVERYTHING
 			Excel									EXCEL.EXE					-							-												0

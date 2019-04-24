@@ -33,31 +33,39 @@ return
 	return
 	
 	F1::
-		selectWindowInfo() {
-			WinGetClass, currClass, A
+		toastAllWindowInfo() {
+			winId := WinGet("ID", "A")
+			name := MainConfig.findWindowName()
+			WinGetClass, winClass, A
+			WinGetTitle, title, A
 			tooltipText := getTooltipText()
-			WinGetTitle, currTitle, A
 			currControl := ControlGetFocus("A")
-			winId := WinGet("ID")
-			; DEBUG.popup("Class",currClass, "Title",currTitle, "Control",currControl, "Tooltip text",tooltipText, "ID",winId)
 			
+			DEBUG.toast("ID",winId, "Name",name, "Class",winClass, "Title",title, "Tooltip Text",tooltipText, "Current Control ID",currControl)
+		}
+	
+	F2::
+		selectWindowInfo() {
 			s := new Selector("testWindowInfo.tls")
 			infoAry := s.selectGui()
-			key  := infoAry["KEY"]
-			name := infoAry["NAME"]
+			key      := infoAry["KEY"]
+			keyLabel := infoAry["NAME"]
 			
-			if(key = "CLASS")
-				textToCopy := currClass
-			else if(key = "TOOLTIP")
-				textToCopy := tooltipText
-			else if(key = "TITLE")
-				textToCopy := currTitle
-			else if(key = "CONTROL")
-				textToCopy := currControl
-			else if(key = "ID")
-				textToCopy := winId
+			if(key = "ID") {
+				textToCopy := WinGet("ID", "A")
+			} else if(key = "NAME") {
+				textToCopy := MainConfig.findWindowName()
+			} else if(key = "CLASS") {
+				WinGetClass, textToCopy, A
+			} else if(key = "TITLE") {
+				WinGetTitle, textToCopy, A
+			} else if(key = "TOOLTIP") {
+				textToCopy := getTooltipText()
+			} else if(key = "CONTROL") {
+				textToCopy := ControlGetFocus("A")
+			}
 			
-			setClipboardAndToastValue(textToCopy, StringLower(name))
+			setClipboardAndToastValue(textToCopy, StringLower(keyLabel))
 		}
 	
 	!XButton1::

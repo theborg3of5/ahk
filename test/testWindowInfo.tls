@@ -1,7 +1,8 @@
 (	NAME					ABBREV	KEY
 	
-	Class					c			CLASS
-	Tooltip				tool		TOOLTIP
-	Title					t			TITLE
-	Control				con		CONTROL
 	ID						id			ID
+	Name					n			NAME
+	Class					c			CLASS
+	Title					t			TITLE
+	Tooltip				tool		TOOLTIP
+	Control				con		CONTROL

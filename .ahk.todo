@@ -5,8 +5,6 @@
 	Consider cleaning up naming capitalization, etc. for windows/windowActions around various EMC2 windows
 	Selector: dynamically resize abbreviation column based on widest value?
 		Is that going to get weird with SelectorGui+FlexTable interactions?
-	WindowInfo: support passing CONTAINS_* constants instead of just numeric 1-4
-		Maybe convert CONTAINS_* constants to just be strings with the same (or shortened, like "ANY") value, so we can just check equality that way?
 	
 # Large
 	Rewrite/clean up coding style for kdeMoverSizer

@@ -1,7 +1,7 @@
 (	NAME							PATH																					ARGS									MACHINE
 
 [PATH.addToStart(C:\Program Files (x86)\)]
-	Chrome						Google\Chrome\Application\chrome.exe
+	Chrome						Google\Chrome\Application\chrome.exe										-force-dark-mode
 	EMC2							Epic\v8.5\EMC2\Shared Files\EpicD85.exe									EMC2Update env=TRACKAPPTCP
 	EpicStudio					EpicStudio\EpicStudio.exe
 	Foobar						foobar2000\foobar2000.exe

@@ -4,6 +4,7 @@
 	Have compileEpicStudioRegex.ahk show an FYI toast when it's finished
 	Selector: dynamically resize abbreviation column based on widest value?
 		Is that going to get weird with SelectorGui+FlexTable interactions?
+	Exclude focus-window-before-ctrl+tab logic for extra mouse button logic, if it's the windows toolbar
 	
 # Large
 	Rewrite/clean up coding style for kdeMoverSizer

@@ -1,6 +1,17 @@
 (	NAME										ESC			MIN				SELECT_ALL		DELETE_WORD			CLOSE
 
+	AutoHotkey GUIs						CLOSE			-					-					CTRL_SHIFT
+	AutoHotkey WinSpy						CLOSE
 	Cisco AnyConnect VPN					CLOSE
+	EMC2 DLG Email							CLOSE			-					-					CTRL_SHIFT
+	EMC2 DLG Issue Email					CLOSE			-					-					CTRL_SHIFT
+	EMC2 DLG Resubmit						-				-					-					CTRL_SHIFT
+	EMC2 QAN Email							CLOSE			-					HOME_END			CTRL_SHIFT
+	EMC2 QAN Email Notify				CLOSE			-					-					CTRL_SHIFT
+	EMC2 XDS Approval						-				-					HOME_END			CTRL_SHIFT
+	EMC2 XDS Email							-				-					HOME_END			CTRL_SHIFT
+	EMC2 XDS Open Design					-				-					-					CTRL_SHIFT
+	EMC2 XDS Submit						-				-					HOME_END			CTRL_SHIFT
 	Explorer									MIN			OTHER
 	GitHub									CLOSE
 	grepWin									CLOSE
@@ -14,24 +25,7 @@
 	Spotify									CLOSE			CLOSE				-					-						OTHER
 	Telegram									CLOSE			CLOSE				-					-						-
 	Thunder									CLOSE
-	AutoHotkey WinSpy						CLOSE
-	AutoHotkey GUIs						CLOSE			-					-					CTRL_SHIFT
 	VB6										-				POST_MESSAGE
-	
-	; EMC2 popups - make Escape close them, and handle Ctrl+Backspace.
-[ESC.replaceWith(CLOSE)|DELETE_WORD.replaceWith(CTRL_SHIFT)]
-	EMC2 DLG email
-	EMC2 QAN notes
-	EMC2 Issue email
-	EMC2 Issue popup
-	EMC2 Open Design
-	EMC2 QAN email notify
-	EMC2 QAN email							-				-					HOME_END
-	EMC2 XDS email							-				-					HOME_END
-	EMC2 XDS approval						-				-					HOME_END
-[]
-	EMC2 Design submit					-				-					HOME_END			CTRL_SHIFT
-	EMC2 DLG resubmit						-				-					-					CTRL_SHIFT
 	
 	; EpicStudio popups - handle Ctrl+Backspace.
 	EpicStudio New Object Window		-				-					-					CTRL_SHIFT

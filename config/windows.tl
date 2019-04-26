@@ -13,19 +13,19 @@
 			EMC2 QAN								-								-							QAN
 			EMC2 XDS								-								-							XDS
 		[-3]
-			EMC2 Design submit				-								-							Submit Design for Review
-			EMC2 DLG email						-								-							E-mail Development Log
-			EMC2 DLG resubmit					-								-							Resubmit for 
+			EMC2 DLG Email					-								-							E-mail Development Log
+			EMC2 DLG Issue Email			-								-							Email Issue
+			EMC2 DLG Issue Popup			-								-							Magnify
+			EMC2 DLG Resubmit				-								-							Resubmit for 
 			EMC2 DRN Quick Review			-								-							Quick Review - 
-			EMC2 Issue email					-								-							Email Issue
-			EMC2 Issue popup					-								-							Magnify
-			EMC2 Open Design					-								ThunderRT6FormDC		Open/New Design
-			EMC2 QAN change status			-								ThunderRT6FormDC		Change Note Status
-			EMC2 QAN email						-								-							Send E-Mail
-			EMC2 QAN email notify			-								-							EMC2 - QA Note E-Mail Notification
-			EMC2 QAN notes						-								-							Note											-											EXACT
-			EMC2 XDS email						-								ThunderRT6FormDC		E-Mail Design
-			EMC2 XDS approval					-								ThunderRT6FormDC		A Reviewer Approved
+			EMC2 QAN Change Status		-								ThunderRT6FormDC		Change Note Status
+			EMC2 QAN Email					-								-							Send E-Mail
+			EMC2 QAN Email Notify			-								-							EMC2 - QA Note E-Mail Notification
+			EMC2 QAN Notes					-								-							Note											-											EXACT
+			EMC2 XDS Approval				-								ThunderRT6FormDC		A Reviewer Approved
+			EMC2 XDS Email					-								ThunderRT6FormDC		E-Mail Design
+			EMC2 XDS Open Design			-								ThunderRT6FormDC		Open/New Design
+			EMC2 XDS Submit					-								-							Submit Design for Review
 	[-2]
 			EpicStudio New Object Window	EpicStudio.exe				New Object
 			EpicStudio Tokenize String		EpicStudio.exe				Tokenize String

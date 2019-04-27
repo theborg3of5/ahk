@@ -1,6 +1,6 @@
 (	NAME										ESC			MIN				SELECT_ALL		DELETE_WORD			CLOSE
 
-	AutoHotkey GUIs						CLOSE			-					-					CTRL_SHIFT
+	AutoHotkey								CLOSE			-					-					CTRL_SHIFT
 	AutoHotkey WinSpy						CLOSE
 	Cisco AnyConnect VPN					CLOSE
 	EMC2 DLG Email							CLOSE			-					-					CTRL_SHIFT

@@ -38,7 +38,7 @@
 
 ; Most general form of various windows (specifics above should override).
 [+1|PRIORITY.replaceWith(1)]
-			AutoHotkey GUIs					AutoHotkey.exe				AutoHotkeyGUI			-													0
+			AutoHotkey							AutoHotkey.exe				AutoHotkeyGUI			-													0
 			Chrome								chrome.exe					Chrome_WidgetWin_1	-												
 			Cisco AnyConnect VPN				vpnui.exe					#32770
 			Discord								Discord.exe					-							-													0

@@ -7,7 +7,7 @@
 	Exclude focus-window-before-ctrl+tab logic for extra mouse button logic, if it's the windows toolbar
 	Consider turning window edge offset override into a flag instead of a number
 	Figure out how to identify toasts - they need offset override = 0, but none of the other AHK GUIs do.
-		Is there a window property that's actually involved, that we can read and not have to track the need for an override at all?
+		-Caption seems to be the difference
 	
 # Large
 	Rewrite/clean up coding style for kdeMoverSizer

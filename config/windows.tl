@@ -1,4 +1,4 @@
-(		NAME									EXE							CLASS						TITLE												WINDOW_EDGE_OFFSET_OVERRIDE		TITLE_STRING_MATCH_MODE_OVERRIDE		PRIORITY
+(			NAME									EXE							CLASS						TITLE												WINDOW_EDGE_OFFSET_OVERRIDE		TITLE_STRING_MATCH_MODE_OVERRIDE		PRIORITY
 
 ; Specific windows within a program (overlap with their less-specific counterparts below).
 [+1|PRIORITY.replaceWith(0)]
@@ -13,71 +13,71 @@
 			EMC2 QAN								-								-							QAN
 			EMC2 XDS								-								-							XDS
 		[-3]
-			EMC2 DLG Email					-								-							E-mail Development Log
-			EMC2 DLG Issue Email			-								-							Email Issue
-			EMC2 DLG Issue Popup			-								-							Magnify
-			EMC2 DLG Resubmit				-								-							Resubmit for 
+			EMC2 DLG Email						-								-							E-mail Development Log
+			EMC2 DLG Issue Email				-								-							Email Issue
+			EMC2 DLG Issue Popup				-								-							Magnify
+			EMC2 DLG Resubmit					-								-							Resubmit for 
 			EMC2 DRN Quick Review			-								-							Quick Review - 
-			EMC2 QAN Change Status		-								ThunderRT6FormDC		Change Note Status
-			EMC2 QAN Email					-								-							Send E-Mail
+			EMC2 QAN Change Status			-								ThunderRT6FormDC		Change Note Status
+			EMC2 QAN Email						-								-							Send E-Mail
 			EMC2 QAN Email Notify			-								-							EMC2 - QA Note E-Mail Notification
-			EMC2 QAN Notes					-								-							Note											-											EXACT
-			EMC2 XDS Approval				-								ThunderRT6FormDC		A Reviewer Approved
-			EMC2 XDS Email					-								ThunderRT6FormDC		E-Mail Design
-			EMC2 XDS Open Design			-								ThunderRT6FormDC		Open/New Design
+			EMC2 QAN Notes						-								-							Note												-											EXACT
+			EMC2 XDS Approval					-								ThunderRT6FormDC		A Reviewer Approved
+			EMC2 XDS Email						-								ThunderRT6FormDC		E-Mail Design
+			EMC2 XDS Open Design				-								ThunderRT6FormDC		Open/New Design
 			EMC2 XDS Submit					-								-							Submit Design for Review
 	[-2]
 			EpicStudio New Object Window	EpicStudio.exe				New Object
 			EpicStudio Tokenize String		EpicStudio.exe				Tokenize String
 			OneTastic Macro Editor XML		ONENOTE.EXE					Onetastic Window		Edit XML
 			OneTastic Macro Editor			ONENOTE.EXE					Onetastic Window
-			Outlook Calendar Main			OUTLOOK.EXE					rctrl_renwnd32			Calendar - <WORK_EMAIL> - Outlook	0
-			Outlook Calendar TLG				OUTLOOK.EXE					rctrl_renwnd32			TLG - <WORK_EMAIL> - Outlook			0
+			Outlook Calendar Main			OUTLOOK.EXE					rctrl_renwnd32			Calendar - <WORK_EMAIL> - Outlook		0
+			Outlook Calendar TLG				OUTLOOK.EXE					rctrl_renwnd32			TLG - <WORK_EMAIL> - Outlook				0
 			Pidgin Buddy List					pidgin.exe					-							Buddy List
 [-1]
 
 ; Most general form of various windows (specifics above should override).
 [+1|PRIORITY.replaceWith(1)]
-			AutoHotkey GUIs					AutoHotkey.exe				AutoHotkeyGUI			-												0
+			AutoHotkey GUIs					AutoHotkey.exe				AutoHotkeyGUI			-													0
 			Chrome								chrome.exe					Chrome_WidgetWin_1	-												
 			Cisco AnyConnect VPN				vpnui.exe					#32770
-			Discord								Discord.exe					-							-												0
-			EMC2									EpicD85.exe					-							EMC2											-											START
+			Discord								Discord.exe					-							-													0
+			EMC2									EpicD85.exe					-							EMC2												-											START
 			EpicStudio							EpicStudio.exe				-							EpicStudio
 			Everything							Everything.exe				EVERYTHING
-			Excel									EXCEL.EXE					-							-												0
+			Excel									EXCEL.EXE					-							-													0
 			Explorer								explorer.exe				CabinetWClass
 			FileZilla							filezilla.exe
 			Firefox Portable					firefox.exe
 			Foobar								foobar2000.exe
-			GitHub								GitHubDesktop.exe			-							-												0
+			GitHub								GitHubDesktop.exe			-							-													0
 			Greenshot							Greenshot.exe
+			GrepWin								grepWin.exe
 			Hyperspace							EpicD88.exe
 			KDiff									kdiff3.exe
 			Launchy								Launchy.exe
 			Mattermost							Mattermost.exe
 			Notepad								notepad.exe
 			Notepad++							notepad++.exe				Notepad++
-			OneNote								ONENOTE.EXE					Framework::CFrame		-												0
-			Outlook								OUTLOOK.EXE					rctrl_renwnd32			-												0
+			OneNote								ONENOTE.EXE					Framework::CFrame		-													0
+			Outlook								OUTLOOK.EXE					rctrl_renwnd32			-													0
 			Pidgin								pidgin.exe
-			PowerPoint							POWERPNT.EXE				-							-												0
+			PowerPoint							POWERPNT.EXE				-							-													0
 			Process Explorer					PROCEXP64.exe				PROCEXPL
 			Putty									putty.exe
 			Remote Desktop						-								TscShellContainerClass
 			Republic Anywhere					Republic Anywhere.exe
 			Skype									Skype.exe
 			Snapper								Snapper.exe
-			Spotify								Spotify.exe					-							-												0
-			Steam									Steam.exe					-							-												0
-			Telegram								Telegram.exe				Qt5QWindowIcon			-												0
+			Spotify								Spotify.exe					-							-													0
+			Steam									Steam.exe					-							-													0
+			Telegram								Telegram.exe				Qt5QWindowIcon			-													0
 			Thunder								Thunder.exe					-							Thunder
 			TrueCrypt							TrueCrypt.exe				CustomDlg
 			VB6									VB6.exe						wndclass_desked_gsk
 			VMware Horizon Client			vmware-view.exe
 			Visual Studio						devenv.exe
-			WebEx									atmgr.exe					-							-												0
-			Word									WINWORD.EXE					-							-												0
-			grepWin								grepWin.exe
-			yEd									yEd.exe
+			WebEx									atmgr.exe					-							-													0
+			Word									WINWORD.EXE					-							-													0
+			YEd									yEd.exe
 [-1]

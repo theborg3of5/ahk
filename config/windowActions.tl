@@ -14,7 +14,7 @@
 	EMC2 XDS Submit						-				-					HOME_END			CTRL_SHIFT
 	Explorer									MIN			OTHER
 	GitHub									CLOSE
-	grepWin									CLOSE
+	GrepWin									CLOSE
 	KDiff										CLOSE
 	Mattermost								CLOSE			CLOSE
 	Notepad									CLOSE			-					-					CTRL_SHIFT

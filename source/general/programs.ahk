@@ -10,7 +10,7 @@
 ^+!n::MainConfig.activateProgram("Notepad++")
 ^+!o::MainConfig.activateProgram("OneNote")
 ^+!x::MainConfig.activateProgram("Launchy")
-^+!y::MainConfig.activateProgram("yEd")
+^+!y::MainConfig.activateProgram("YEd")
 ^!#f::MainConfig.runProgram("Firefox Portable")
 ^!#n::MainConfig.runProgram("Notepad")
 ^!#z::MainConfig.activateProgram("FileZilla")

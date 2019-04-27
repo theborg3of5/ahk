@@ -27,8 +27,8 @@
 	Process Explorer			Process Explorer\procexp.exe													-										EPIC_LAPTOP
 	Process Explorer			ProcessExplorer\procexp.exe
 	TrueCrypt					TrueCrypt\TrueCrypt.exe
-	grepWin						grepWin\grepWin.exe
-	yEd							yWorks\yEd\yEd.exe
+	GrepWin						grepWin\grepWin.exe
+	YEd							yWorks\yEd\yEd.exe
 []
 
 [PATH.addToStart(C:\Windows\)]

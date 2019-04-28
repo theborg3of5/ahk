@@ -224,7 +224,8 @@ class Toast {
 	; == Private ===================
 	; ==============================
 	
-	static widthLabelNum := 0
+	static WidthLabelNum := 0
+	static ToastTitle := "[TOAST]"
 	
 	stylesAry      := ""
 	guiId          := ""
@@ -308,11 +309,11 @@ class Toast {
 			y := WINPOS_Y_Bottom
 		
 		; Resize to size of contents
-		Gui, Show, % "AutoSize NoActivate Hide"
+		Gui, Show, % "AutoSize NoActivate Hide", % Toast.ToastTitle
 		Gui, +LastFound ; Needed for WinGetPos in convertRelativeWinPositions() logic
 		
 		positions := convertRelativeWinPositions(x, y, titleString)
-		Gui, Show, % "x" positions["X"] " y" positions["Y"] " NoActivate"
+		Gui, Show, % "x" positions["X"] " y" positions["Y"] " NoActivate", % Toast.ToastTitle
 	}
 	
 	;---------
@@ -323,8 +324,8 @@ class Toast {
 	;---------
 	setLabelText(toastText, labelVarName) {
 		; Figure out how wide the text control needs to be to fit its contents
-		Toast.widthLabelNum++ ; Unique number per calculation
-		getLabelSizeForText(toastText, "WidthLabel" Toast.widthLabelNum, textWidth, textHeight)
+		Toast.WidthLabelNum++ ; Unique number per calculation
+		getLabelSizeForText(toastText, "WidthLabel" Toast.WidthLabelNum, textWidth, textHeight)
 		
 		; Update the text and width
 		GuiControl,     , % labelVarName, % toastText

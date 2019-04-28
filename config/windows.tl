@@ -3,6 +3,7 @@
 ; Specific windows within a program (overlap with their less-specific counterparts below).
 [+1|PRIORITY.replaceWith(0)]
 			AutoHotkey WinSpy					AutoHotkey.exe				AutoHotkeyGUI			Window Spy
+			AutoHotkey Toast					AutoHotkey.exe				AutoHotkeyGUI			[TOAST]											NO_PADDING
 			Chrome Join							chrome.exe					-							Join
 			Chrome TickTick					chrome.exe					-							All - TickTick
 	[+2|EXE.replaceWith(EpicD85.exe)]

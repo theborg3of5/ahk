@@ -1,5 +1,8 @@
 ; Data class to hold identifying information about a specific window.
 
+global WINDOW_EDGE_STYLE_HasPadding := "HAS_PADDING"
+global WINDOW_EDGE_STYLE_NoPadding  := "NO_PADDING"
+
 class WindowInfo {
 	
 	; ==============================
@@ -15,11 +18,13 @@ class WindowInfo {
 	;                                  ["CLASS"] - The AHK class of the window
 	;                                  ["TITLE"] - The title of the window
 	;                      There are also a couple of special overrides available in the array:
-	;                         windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"]
-	;                                      - If the window is onethat handles its edges differently
-	;                                        (mostly Microsoft Office and Chrome), this returns the
-	;                                        edge offset that we should use for it.
-	;                                  ["WINDOW_EDGE_OFFSET_OVERRIDE"]
+	;                         windowAry["EDGE_TYPE"]
+	;                                      - The type of edges the window has (from
+	;                                        WINDOW_EDGE_STYLE_* constants), which determines
+	;                                        whether the window is the size that it appears or if it
+	;                                        has invisible padding around it that needs to be taken
+	;                                        into account when resizing, etc.
+	;                                  ["TITLE_STRING_MATCH_MODE_OVERRIDE"]
 	;                                      - If the window has a specific title match mode that
 	;                                        needs to be used when locating it, this will return
 	;                                        that override.
@@ -45,8 +50,12 @@ class WindowInfo {
 		else
 			this.windowTitleStringMatchModeOverride := CONTAINS_ANY ; Default value
 		
-		this.windowEdgeOffsetOverride := windowAry["WINDOW_EDGE_OFFSET_OVERRIDE"]
-		this.windowPriority           := windowAry["PRIORITY"]
+		if(windowAry["EDGE_TYPE"] != "")
+			this.windowEdgeType := windowAry["EDGE_TYPE"]
+		else
+			this.windowEdgeType := WINDOW_EDGE_STYLE_HasPadding
+		
+		this.windowPriority := windowAry["PRIORITY"]
 	}
 	
 	;---------
@@ -86,12 +95,11 @@ class WindowInfo {
 	}
 	
 	;---------
-	; DESCRIPTION:    If the window is one that handles its edges differently (mostly Microsoft
-	;                 Office and Chrome), this returns the edge offset that we should use for it.
+	; DESCRIPTION:    Edge type of the window (from WINDOW_EDGE_STYLE_* constants)
 	;---------
-	edgeOffsetOverride[] {
+	edgeType[] {
 		get {
-			return this.windowEdgeOffsetOverride
+			return this.windowEdgeType
 		}
 	}
 	
@@ -136,7 +144,7 @@ class WindowInfo {
 	windowText  := ""
 	
 	windowTitleStringMatchModeOverride := ""
-	windowEdgeOffsetOverride           := ""
+	windowEdgeType                     := ""
 	windowPriority                     := ""
 	
 	; Debug info (used by the Debug class)
@@ -146,7 +154,7 @@ class WindowInfo {
 		debugBuilder.addLine("EXE"                             , this.exe)
 		debugBuilder.addLine("Class"                           , this.class)
 		debugBuilder.addLine("Title"                           , this.title)
-		debugBuilder.addLine("Offset override"                 , this.edgeOffsetOverride)
+		debugBuilder.addLine("Edge type"                       , this.edgeType)
 		debugBuilder.addLine("Title string match mode override", this.titleStringMatchModeOverride)
 	}
 }

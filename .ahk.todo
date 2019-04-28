@@ -5,7 +5,6 @@
 	Selector: dynamically resize abbreviation column based on widest value?
 		Is that going to get weird with SelectorGui+FlexTable interactions?
 	Exclude focus-window-before-ctrl+tab logic for extra mouse button logic, if it's the windows toolbar
-	Consider turning window edge offset override into a flag instead of a number
 	Figure out how to identify toasts - they need offset override = 0, but none of the other AHK GUIs do.
 		-Caption seems to be the difference
 	

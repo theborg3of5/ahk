@@ -210,13 +210,12 @@ resizeWindow(width := "", height := "", titleString := "A") {
 getWindowOffsets(titleString := "A") {
 	windowOffsets := []
 	
-	offsetOverride := MainConfig.findWindowInfo(titleString).edgeOffsetOverride
-	if(offsetOverride != "") { ; Specific window has an override.
-		windowOffsets["LEFT"]   := offsetOverride
-		windowOffsets["RIGHT"]  := offsetOverride
-		windowOffsets["TOP"]    := offsetOverride
-		windowOffsets["BOTTOM"] := offsetOverride
-	} else { ; Calculate it.
+	if(MainConfig.findWindowInfo(titleString).edgeType = WINDOW_EDGE_STYLE_NoPadding) { ; Specific window has no padding
+		windowOffsets["LEFT"]   := 0
+		windowOffsets["RIGHT"]  := 0
+		windowOffsets["TOP"]    := 0
+		windowOffsets["BOTTOM"] := 0
+	} else { ; Calculate the default padding.
 		maximizedWidth    := SysGet(SM_CXMAXIMIZED) ; For non-3D windows (which should be most), the width of the border on the left and right.
 		maximizedHeight   := SysGet(SM_CYMAXIMIZED) ; For non-3D windows (which should be most), the width of the border on the top and bottom.
 		borderWidthX      := SysGet(SM_CXBORDER)    ; Width of a maximized window on the primary monitor. Includes any weird offsets.

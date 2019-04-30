@@ -52,6 +52,7 @@
 	::scheduleable::schedulable
 	::performably::performable
 	::isntead::instead
+	::overrideable::overridable
 	::Tapestery::Tapestry
 	::InBasket::In Basket
 }

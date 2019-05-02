@@ -1,5 +1,5 @@
 ﻿; Google Chrome hotkeys.
-#IfWinActive, ahk_exe chrome.exe
+#If MainConfig.isWindowActive("Chrome")
 	; Options hotkey.
 	!o::
 		waitForHotkeyRelease() ; Presumably needed because the triggering hotkey has alt in it.
@@ -50,16 +50,21 @@
 			chromeCopyFileLink()
 			
 			filePath := clipboard
-			if(filePath)
+			if(filePath) {
+				Toast.showShort("Got link target, opening:`n" filePath)
 				Run, % filePath
-			else
+			} else {
 				Toast.showError("Failed to get link target")
+			}
 		}
 	; Copy file link
-	^RButton::chromeCopyFileLink(true)
+	^RButton::
+		chromeCopyFileLink()
+		toastNewClipboardValue("link target")
+	return
 #IfWinActive
 	
-#If WinActive("ahk_exe chrome.exe") && MainConfig.isMachine(MACHINE_EpicLaptop)
+#If MainConfig.isWindowActive("Chrome") && MainConfig.isMachine(MACHINE_EpicLaptop)
 	^+o::
 		openEpicStudioRoutineFromCodesearch() {
 			tag := cleanupText(getFirstLineOfSelectedText())
@@ -75,7 +80,7 @@
 		}
 #If
 
-chromeCopyFileLink(showToast := false) {
+chromeCopyFileLink() {
 	clipboard := "" ; Clear the clipboard so we can tell when we have the new link on it
 	
 	Click, Right
@@ -83,7 +88,4 @@ chromeCopyFileLink(showToast := false) {
 	Send, e    ; Copy link address
 	
 	ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain the link
-	
-	if(showToast)
-		toastNewClipboardValue("link target")
 }

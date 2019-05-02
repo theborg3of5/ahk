@@ -5,7 +5,6 @@
 	Selector: dynamically resize abbreviation column based on widest value?
 		Is that going to get weird with SelectorGui+FlexTable interactions?
 	Exclude focus-window-before-ctrl+tab logic for extra mouse button logic, if it's the windows toolbar
-	Consider a toast when we get a link in Chrome and are opening it
 	Figure out why SelectorGui instances have different padding needs (off by 4px, looks like? Need to confirm) than other non-special windows (less padding).
 	
 # Large

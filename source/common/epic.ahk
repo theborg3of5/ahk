@@ -304,6 +304,23 @@
 	buildHelpdeskLink(hdrId) {
 		return replaceTag(MainConfig.private["HELPDESK_BASE"], "ID", hdrId)
 	}
+	
+	buildEpicStudioRoutineLink(routine, tag, environmentId, diffEnvironmentId := "") {
+		if(routine = "" || tag = "" || environmentId = "")
+			return ""
+		
+		url := MainConfig.private["EPICSTUDIO_URL_BASE_ROUTINE"]
+		
+		url := replaceTag(url, "ROUTINE", routine)
+		url := replaceTag(url, "TAG", tag)
+		
+		environmentParam := environmentId
+		if(diffEnvironmentId != "")
+			environmentParam .= "|" diffEnvironmentId
+		url := replaceTag(url, "ENVIRONMENT", environmentParam)
+		
+		return url
+	}
 }
 
 ; Launches a routine in EpicStudio (and focuses a specific tag if given).

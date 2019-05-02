@@ -9,6 +9,10 @@
 	Look at cleaning up all of the record-splitting and EMC2-object-processing functions in epic.ahk
 		Can getObjectInfoFromEMC2 use extractEMC2ObjectInfoRaw (like selectSnapper does)?
 		Can processEMC2ObjectInfo use getTrueEMC2INI?
+	EpicStudio URL support
+		Opening/diffing routines
+			Clean up and use from ActionObject
+		Opening DLG
 	
 # Large
 	Rewrite/clean up coding style for kdeMoverSizer

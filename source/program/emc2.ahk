@@ -18,6 +18,9 @@
 		Send, !o
 	return
 	
+	; Block ^+t login from Hyperspace - it does very strange zoom-in things and other nonsense.
+	^+t::return
+	
 	{ ; SmartText hotstrings. Added to favorites to deal with duplicate/similar names.
 		:*:qa.dbc::
 			insertSmartText("DBC QA INSTRUCTIONS")

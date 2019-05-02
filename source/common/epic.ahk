@@ -1,7 +1,6 @@
 ; Epic-specific functions.
 
 { ; Epic Object-related things.
-	
 	getRelatedQANsAry() {
 		if(!MainConfig.isWindowActive("EMC2"))
 			return ""
@@ -118,6 +117,195 @@
 	}
 }
 
+{ ; Run path/URL-building functions
+	buildEMC2Link(ini, id, subAction := "WEB") { ; subAction = SUBACTION_Web
+		if(!ini || !id)
+			return ""
+		
+		; View basically goes one way or the other depending on INI:
+		;  * If it can be viewed in EMC2, use EDIT with a special view-only parameter.
+		;  * Otherwise, create a web link instead.
+		if(subAction = SUBACTION_View) {
+			if(canViewINIInEMC2(ini)) {
+				subAction   := SUBACTION_Edit
+				paramString := "&runparams=1"
+			} else {
+				subAction   := SUBACTION_Web
+			}
+		}
+		
+		; Pick one of the types of links - edit in EMC2, web summary or Sherlock.
+		if(subAction = SUBACTION_Edit) {
+			link := MainConfig.private["EMC2_LINK_BASE"]
+		} else if(subAction = SUBACTION_Web) {
+			if(isSherlockINI(ini))
+				link := MainConfig.private["SHERLOCK_BASE"]
+			else
+				link := MainConfig.private["EMC2_LINK_WEB_BASE"]
+		}
+		
+		link .= paramString
+		link := replaceTags(link, {"INI":ini, "ID":id})
+		
+		return link
+	}
+	canViewINIInEMC2(ini) {
+		if(!ini)
+			return false
+		
+		if(ini = "DLG")
+			return true
+		if( (ini = "QAN") || (ini = "ZQN") )
+			return true
+		if(ini = "XDS")
+			return true
+		
+		return false
+	}
+	isSherlockINI(ini) {
+		if(!ini)
+			return false
+		
+		if(ini = "SLG")
+			return true
+		
+		return false
+	}
+	
+	buildHyperspaceRunString(versionMajor, versionMinor, environment) {
+		runString := MainConfig.private["HYPERSPACE_BASE"]
+		
+		; Handling for 2010 special path.
+		if(versionMajor = 7 && versionMinor = 8)
+			runString := replaceTag(runString, "EPICNAME", "EpicSys")
+		else
+			runString := replaceTag(runString, "EPICNAME", "Epic")
+		
+		; Versioning and environment.
+		runString := replaceTags(runString, {"MAJOR":versionMajor, "MINOR":versionMinor, "ENVIRONMENT":environment})
+		
+		; DEBUG.popup("Start string", tempRun, "Finished string", runString, "Major", versionMajor, "Minor", versionMinor, "Environment", environment)
+		return runString
+	}
+
+	buildTxDumpRunString(txId, environmentCommId := "", environmentName := "") {
+		if(!txId)
+			return ""
+		
+		; Build the full output filepath.
+		if(!environmentName)
+			if(environmentCommId)
+				environmentName := environmentCommId
+			else
+				environmentName := "OTHER"
+		outputPath := MainConfig.path["TX_DIFF_OUTPUT"] "\" txId "-" environmentName ".txt"
+		
+		; Build the string to run
+		runString := MainConfig.private["TX_DIFF_DUMP_BASE"]
+		runString := replaceTag(runString, "TX_ID",       txId)
+		runString := replaceTag(runString, "OUTPUT_PATH", outputPath)
+		
+		; Add on the environment if it's given - if not, leave off the flag (which will automatically cause the script to show an environment selector instead).
+		if(environmentCommId)
+			runString .= " --env " environmentCommId
+		
+		; DEBUG.popup("buildTxDumpRunString","Finish", "txId",txId, "outputFolder",outputFolder, "environmentCommId",environmentCommId, "runString",runString)
+		return runString
+	}
+
+	buildCodeSearchURL(searchTerm, searchType, appKey := "") {
+		appId := getEpicAppIdFromKey(appKey)
+		; DEBUG.popup("buildCodeSearchURL", "Start", "Search type", searchType, "Search term", searchTerm, "App key", appKey, "App ID", appId)
+		
+		; Gotta have something to search for (and a type) to run a search.
+		if(!searchTerm || !searchType)
+			return ""
+		
+		criteriaString := "a=" searchTerm
+		return replaceTags(MainConfig.private["CS_BASE"], {"SEARCH_TYPE":searchType, "APP_ID":appId, "CRITERIA":criteriaString})
+	}
+	getEpicAppIdFromKey(appKey) {
+		if(!appKey)
+			return 0
+		return MainConfig.private["CS_APP_ID_" appKey]
+	}
+
+	buildGuruURL(searchTerm) {
+		return MainConfig.private["GURU_SEARCH_BASE"] searchTerm
+	}
+
+	buildEpicWikiSearchURL(searchTerm, category := "") {
+		outURL := MainConfig.private["WIKI_SEARCH_BASE"]
+		outURL := replaceTag(outURL, "QUERY", searchTerm)
+		
+		if(category) {
+			category := "'" category "'"
+			outURL .= MainConfig.private["WIKI_SEARCH_FILTERS"]
+			outURL := replaceTag(outURL, "CATEGORIES", category)
+		}
+		
+		return outURL
+	}
+
+	; ini/id defaults are "X" as a dummy - URL will still connect to desired environment (and show an error popup).
+	buildSnapperURL(environment := "", ini := "", idList := "") { ; idList is a comma-separated list of IDs
+		if(!environment)
+			environment := getCurrentSnapperEnvironment() ; Try to default from what Snapper has open right now if no environment given.
+		if(!environment)
+			return ""
+		
+		if(!ini || !idList) { ; These aren't be parameter defaults in case of blank parameters (not simply not passed at all)
+			ini    := "X"
+			idList := "X"
+		}
+		
+		outURL := MainConfig.private["SNAPPER_URL_BASE"]
+		idAry := expandList(idList)
+		if(idAry.count() > 10)
+			if(!showConfirmationPopup("You're trying to open more than 10 records in Snapper - are you sure you want to continue?", "Opening many records in Snapper"))
+				return ""
+		
+		For i,id in idAry {
+			; DEBUG.popup("Index", i, "ID", id)
+			if(!id)
+				Continue
+			
+			outURL .= ini "." id "." environment "/"
+		}
+		
+		return outURL
+	}
+	getCurrentSnapperEnvironment() {
+		snapperTitleString := "Snapper ahk_exe Snapper.exe"
+		if(!WinExist(snapperTitleString))
+			return ""
+		
+		environmentText := ControlGetText("ThunderRT6ComboBox2", snapperTitleString)
+		commId := getFirstStringBetweenStr(environmentText, "[", "]")
+		
+		return commId
+	}
+
+	buildVDIRunString(vdiId) {
+		return replaceTag(MainConfig.private["VDI_BASE"], "VDI_ID", vdiId)
+	}
+
+	buildServerCodeLink(serverLocation) {
+		splitServerLocation(serverLocation, routine, tag)
+		
+		url := MainConfig.private["CS_SERVER_CODE_BASE"]
+		url := replaceTag(url, "ROUTINE", routine)
+		url := replaceTag(url, "TAG", tag)
+		
+		; DEBUG.popup("epic","buildServerCodeLink", "Server location",serverLocation, "Tag",tag, "Routine",routine, "URL",url)
+		return url
+	}
+
+	buildHelpdeskLink(hdrId) {
+		return replaceTag(MainConfig.private["HELPDESK_BASE"], "ID", hdrId)
+	}
+}
+
 ; Launches a routine in EpicStudio (and focuses a specific tag if given).
 openEpicStudioRoutine(routine, tag := "") {
 	if(!routine)
@@ -186,196 +374,7 @@ dropOffsetFromServerLocation(serverLocation) {
 	return tag "^" routine
 }
 
-getEpicAppIdFromKey(appKey) {
-	if(!appKey)
-		return 0
-	return MainConfig.private["CS_APP_ID_" appKey]
-}
-
-buildEMC2Link(ini, id, subAction := "WEB") { ; subAction = SUBACTION_Web
-	if(!ini || !id)
-		return ""
-	
-	; View basically goes one way or the other depending on INI:
-	;  * If it can be viewed in EMC2, use EDIT with a special view-only parameter.
-	;  * Otherwise, create a web link instead.
-	if(subAction = SUBACTION_View) {
-		if(canViewINIInEMC2(ini)) {
-			subAction   := SUBACTION_Edit
-			paramString := "&runparams=1"
-		} else {
-			subAction   := SUBACTION_Web
-		}
-	}
-	
-	; Pick one of the types of links - edit in EMC2, web summary or Sherlock.
-	if(subAction = SUBACTION_Edit) {
-		link := MainConfig.private["EMC2_LINK_BASE"]
-	} else if(subAction = SUBACTION_Web) {
-		if(isSherlockINI(ini))
-			link := MainConfig.private["SHERLOCK_BASE"]
-		else
-			link := MainConfig.private["EMC2_LINK_WEB_BASE"]
-	}
-	
-	link .= paramString
-	link := replaceTags(link, {"INI":ini, "ID":id})
-	
-	return link
-}
-canViewINIInEMC2(ini) {
-	if(!ini)
-		return false
-	
-	if(ini = "DLG")
-		return true
-	if( (ini = "QAN") || (ini = "ZQN") )
-		return true
-	if(ini = "XDS")
-		return true
-	
-	return false
-}
-isSherlockINI(ini) {
-	if(!ini)
-		return false
-	
-	if(ini = "SLG")
-		return true
-	
-	return false
-}
-
-buildHyperspaceRunString(versionMajor, versionMinor, environment) {
-	runString := MainConfig.private["HYPERSPACE_BASE"]
-	
-	; Handling for 2010 special path.
-	if(versionMajor = 7 && versionMinor = 8)
-		runString := replaceTag(runString, "EPICNAME", "EpicSys")
-	else
-		runString := replaceTag(runString, "EPICNAME", "Epic")
-	
-	; Versioning and environment.
-	runString := replaceTags(runString, {"MAJOR":versionMajor, "MINOR":versionMinor, "ENVIRONMENT":environment})
-	
-	; DEBUG.popup("Start string", tempRun, "Finished string", runString, "Major", versionMajor, "Minor", versionMinor, "Environment", environment)
-	return runString
-}
-
-buildTxDumpRunString(txId, environmentCommId := "", environmentName := "") {
-	if(!txId)
-		return ""
-	
-	; Build the full output filepath.
-	if(!environmentName)
-		if(environmentCommId)
-			environmentName := environmentCommId
-		else
-			environmentName := "OTHER"
-	outputPath := MainConfig.path["TX_DIFF_OUTPUT"] "\" txId "-" environmentName ".txt"
-	
-	; Build the string to run
-	runString := MainConfig.private["TX_DIFF_DUMP_BASE"]
-	runString := replaceTag(runString, "TX_ID",       txId)
-	runString := replaceTag(runString, "OUTPUT_PATH", outputPath)
-	
-	; Add on the environment if it's given - if not, leave off the flag (which will automatically cause the script to show an environment selector instead).
-	if(environmentCommId)
-		runString .= " --env " environmentCommId
-	
-	; DEBUG.popup("buildTxDumpRunString","Finish", "txId",txId, "outputFolder",outputFolder, "environmentCommId",environmentCommId, "runString",runString)
-	return runString
-}
-
-buildCodeSearchURL(searchTerm, searchType, appKey := "") {
-	appId := getEpicAppIdFromKey(appKey)
-	; DEBUG.popup("buildCodeSearchURL", "Start", "Search type", searchType, "Search term", searchTerm, "App key", appKey, "App ID", appId)
-	
-	; Gotta have something to search for (and a type) to run a search.
-	if(!searchTerm || !searchType)
-		return ""
-	
-	criteriaString := "a=" searchTerm
-	return replaceTags(MainConfig.private["CS_BASE"], {"SEARCH_TYPE":searchType, "APP_ID":appId, "CRITERIA":criteriaString})
-}
-
-buildGuruURL(searchTerm) {
-	return MainConfig.private["GURU_SEARCH_BASE"] searchTerm
-}
-
-buildEpicWikiSearchURL(searchTerm, category := "") {
-	outURL := MainConfig.private["WIKI_SEARCH_BASE"]
-	outURL := replaceTag(outURL, "QUERY", searchTerm)
-	
-	if(category) {
-		category := "'" category "'"
-		outURL .= MainConfig.private["WIKI_SEARCH_FILTERS"]
-		outURL := replaceTag(outURL, "CATEGORIES", category)
-	}
-	
-	return outURL
-}
-
-; ini/id defaults are "X" as a dummy - URL will still connect to desired environment (and show an error popup).
-buildSnapperURL(environment := "", ini := "", idList := "") { ; idList is a comma-separated list of IDs
-	if(!environment)
-		environment := getCurrentSnapperEnvironment() ; Try to default from what Snapper has open right now if no environment given.
-	if(!environment)
-		return ""
-	
-	if(!ini || !idList) { ; These aren't be parameter defaults in case of blank parameters (not simply not passed at all)
-		ini    := "X"
-		idList := "X"
-	}
-	
-	outURL := MainConfig.private["SNAPPER_URL_BASE"]
-	idAry := expandList(idList)
-	if(idAry.count() > 10)
-		if(!showConfirmationPopup("You're trying to open more than 10 records in Snapper - are you sure you want to continue?", "Opening many records in Snapper"))
-			return ""
-	
-	For i,id in idAry {
-		; DEBUG.popup("Index", i, "ID", id)
-		if(!id)
-			Continue
-		
-		outURL .= ini "." id "." environment "/"
-	}
-	
-	return outURL
-}
-
-buildVDIRunString(vdiId) {
-	return replaceTag(MainConfig.private["VDI_BASE"], "VDI_ID", vdiId)
-}
-
-buildServerCodeLink(serverLocation) {
-	splitServerLocation(serverLocation, routine, tag)
-	
-	url := MainConfig.private["CS_SERVER_CODE_BASE"]
-	url := replaceTag(url, "ROUTINE", routine)
-	url := replaceTag(url, "TAG", tag)
-	
-	; DEBUG.popup("epic","buildServerCodeLink", "Server location",serverLocation, "Tag",tag, "Routine",routine, "URL",url)
-	return url
-}
-
-buildHelpdeskLink(hdrId) {
-	return replaceTag(MainConfig.private["HELPDESK_BASE"], "ID", hdrId)
-}
-
-getCurrentSnapperEnvironment() {
-	snapperTitleString := "Snapper ahk_exe Snapper.exe"
-	if(!WinExist(snapperTitleString))
-		return ""
-	
-	environmentText := ControlGetText("ThunderRT6ComboBox2", snapperTitleString)
-	commId := getFirstStringBetweenStr(environmentText, "[", "]")
-	
-	return commId
-}
-
-; line - title of EMC2 email, or title from top of web view.
+; line = title of EMC2 email, or title from top of web view.
 extractEMC2ObjectInfo(line) {
 	infoAry := extractEMC2ObjectInfoRaw(line)
 	return processEMC2ObjectInfo(infoAry)
@@ -447,8 +446,8 @@ getTrueEMC2INI(iniString) {
 }
 
 
-getEMC2Info(ByRef ini := "", ByRef id := "", titleString := "A") {
-	title := WinGetTitle(titleString)
+getObjectInfoFromEMC2(ByRef ini := "", ByRef id := "") {
+	title := WinGetTitle(MainConfig.windowInfo["EMC2"].titleString)
 	title := removeStringFromEnd(title, " - EMC2")
 	
 	; If no info available, finish here.
@@ -457,5 +456,5 @@ getEMC2Info(ByRef ini := "", ByRef id := "", titleString := "A") {
 	
 	; Split the input.
 	splitRecordString(title, ini, id)
-	; DEBUG.popup("getEMC2Info","Finish", "INI",ini, "ID",id)
+	; DEBUG.popup("getObjectInfoFromEMC2","Finish", "INI",ini, "ID",id)
 }

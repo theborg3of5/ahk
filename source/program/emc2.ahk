@@ -34,7 +34,7 @@
 		; Get INI/ID
 		!c::
 			copyEMC2RecordId() {
-				getEMC2Info(ini, id)
+				getObjectInfoFromEMC2(ini, id)
 				if(id)
 					setClipboardAndToastValue(ini " " id, "EMC2 record INI/ID")
 			}
@@ -42,14 +42,14 @@
 		; Open web version of the current object in EMC2.
 		!w::
 			openEMC2RecordWeb() {
-				getEMC2Info(ini, id)
+				getObjectInfoFromEMC2(ini, id)
 				ActionObject.do(id, TYPE_EMC2, ACTION_Run, ini, SUBACTION_Web)
 			}
 		
 		; Take DLG # and pop up the DLG in EpicStudio sidebar.
 		^+o::
 			openEMC2EpicStudioDLG() {
-				getEMC2Info(ini, id)
+				getObjectInfoFromEMC2(ini, id)
 				if(ini = "DLG" && id)
 					openEpicStudioDLG(id)
 			}

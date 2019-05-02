@@ -6,6 +6,9 @@
 		Is that going to get weird with SelectorGui+FlexTable interactions?
 	Exclude focus-window-before-ctrl+tab logic for extra mouse button logic, if it's the windows toolbar
 	Figure out why SelectorGui instances have different padding needs (off by 4px, looks like? Need to confirm) than other non-special windows (less padding).
+	Look at cleaning up all of the record-splitting and EMC2-object-processing functions in epic.ahk
+		Can getObjectInfoFromEMC2 use extractEMC2ObjectInfoRaw (like selectSnapper does)?
+		Can processEMC2ObjectInfo use getTrueEMC2INI?
 	
 # Large
 	Rewrite/clean up coding style for kdeMoverSizer

@@ -25,7 +25,7 @@
 ; Release all modifier keys, for cases when some might be "stuck" down.
 *#Space::releaseAllModifierKeys()
 
-; Select all with exceptions.
+; Select all with special per-window handling.
 $^a::WindowActions.selectAll()
 
 ; Backspace shortcut for those that don't handle it well.
@@ -37,18 +37,19 @@ $^Backspace::WindowActions.deleteWord()
 return
 
 #If !MainConfig.windowIsGame() && !MainConfig.isWindowActive("Remote Desktop")
-	XButton1::
-		activateWindowUnderMouse()
+	XButton1::activateWindowUnderMouseAndSendKeys("^{Tab}")
+	XButton2::activateWindowUnderMouseAndSendKeys("^+{Tab}")
+	activateWindowUnderMouseAndSendKeys(keys) {
+		MouseGetPos( , , winId)
+		if(!winId)
+			return
 		
-		; Allow the Ctrl+Tab to be caught and handled by other hotkeys.
-		sendUsingLevel("^{Tab}", 1)
-	return
-	XButton2::
-		activateWindowUnderMouse()
+		if(MainConfig.findWindowName("ahk_id " winId) != "Windows Taskbar") ; Don't try to focus Windows taskbar
+			activateWindowUnderMouse()
 		
-		; Allow the Ctrl+Shift+Tab to be caught and handled by other hotkeys.
-		sendUsingLevel("^+{Tab}", 1)
-	return
+		; Allow the keystrokes to be caught and handled by other hotkeys.
+		sendUsingLevel(keys, 1)
+	}
 #If
 
 ^!v::

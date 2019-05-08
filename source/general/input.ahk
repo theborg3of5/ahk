@@ -103,7 +103,9 @@ return
 		newNotepadWindowTitleString := "Untitled - Notepad " MainConfig.windowInfo["Notepad"].titleString
 		WinWaitActive, % newNotepadWindowTitleString, , 5 ; 5s timeout
 		if(!WinActive(newNotepadWindowTitleString))
+			WinActivate, % newNotepadWindowTitleString ; Try to activate it if it ran but didn't activate for some reason
+		if(!WinActive(newNotepadWindowTitleString))
 			return
 		
-		sendTextWithClipboard(selectedText)
+		ControlSetText, Edit1, % selectedText, A
 	}

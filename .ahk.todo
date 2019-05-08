@@ -12,7 +12,6 @@
 		Opening/diffing routines
 			Clean up and use from ActionObject
 		Opening DLG
-	Consider a safer method for sending selected text to Notepad with !v - either paste-and-check, or maybe just setting the control (Edit1) text directly?
 	
 # Large
 	Rewrite/clean up coding style for kdeMoverSizer

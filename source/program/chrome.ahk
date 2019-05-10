@@ -76,7 +76,13 @@
 			if(!routine)
 				return
 			
-			openEpicStudioRoutine(routine, tag)
+			url := buildEpicStudioRoutineLink(routine, tag)
+			if(!url)
+				return
+			
+			displayCode := appendPieceToString(tag, "^", routine)
+			Toast.showMedium("Opening server code in EpicStudio: " displayCode)
+			Run, % url
 		}
 #If
 

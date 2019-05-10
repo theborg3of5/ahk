@@ -305,9 +305,12 @@
 		return replaceTag(MainConfig.private["HELPDESK_BASE"], "ID", hdrId)
 	}
 	
-	buildEpicStudioRoutineLink(routine, tag, environmentId, diffEnvironmentId := "") {
-		if(routine = "" || tag = "" || environmentId = "")
+	buildEpicStudioRoutineLink(routine, tag, environmentId := "", diffEnvironmentId := "") {
+		if(routine = "" || tag = "")
 			return ""
+		
+		if(environmentId = "")
+			environmentId := MainConfig.private["DBC_DEV_ENV_ID"] ; Default to DBC Dev if environment not given
 		
 		url := MainConfig.private["EPICSTUDIO_URL_BASE_ROUTINE"]
 		

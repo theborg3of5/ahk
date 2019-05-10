@@ -326,25 +326,6 @@
 	}
 }
 
-; Launches a routine in EpicStudio (and focuses a specific tag if given).
-openEpicStudioRoutine(routine, tag := "") {
-	if(!routine)
-		return
-	
-	; Open routine in EpicStudio, wait until it's open
-	Run(MainConfig.programInfo["EpicStudio"].path " " routine "|93") ; ROUTINE|ENVIRONMENT_ID
-	exeName := MainConfig.windowInfo["EpicStudio"].exe
-	WinWaitActive, %routine% ahk_exe %exeName%
-	
-	; Focus correct tag if given.
-	if(tag) {
-		Send, ^+o
-		WinWaitActive, Go To
-		SendRaw, %tag%
-		Send, {Enter}
-	}
-}
-
 ; Opens a DLG in the EpicStudio sidebar.
 openEpicStudioDLG(dlgNum) {
 	MainConfig.activateProgram("EpicStudio")

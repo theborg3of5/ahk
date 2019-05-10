@@ -264,8 +264,9 @@ class ActionObject {
 				
 			} else if(type = TYPE_EpicStudio) {
 				if(subType = SUBTYPE_Routine) {
-					splitServerLocation(input, routine, tag)
-					openEpicStudioRoutine(routine, tag)
+					link := this.perform(type, ACTION_Link, subType, subAction, input)
+					if(link)
+						Run(link)
 				} else if(subType = SUBTYPE_DLG) {
 					openEpicStudioDLG(input)
 				}
@@ -274,6 +275,14 @@ class ActionObject {
 		} else if(action = ACTION_Link) {
 			if(type = TYPE_EMC2) {
 				return buildEMC2Link(subType, input, subAction)
+				
+			} else if(type = TYPE_EpicStudio) {
+				if(subType = SUBTYPE_Routine) {
+					splitServerLocation(input, routine, tag)
+					return buildEpicStudioRoutineLink(routine, tag)
+				} else if(subType = SUBTYPE_DLG) {
+					; openEpicStudioDLG(input)
+				}
 				
 			} else if(type = TYPE_CodeSearchRoutine) {
 				return buildServerCodeLink(input)

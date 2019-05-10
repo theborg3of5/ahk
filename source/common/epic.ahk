@@ -324,25 +324,16 @@
 		
 		return url
 	}
-}
-
-; Opens a DLG in the EpicStudio sidebar.
-openEpicStudioDLG(dlgNum) {
-	MainConfig.activateProgram("EpicStudio")
-	WinWaitActive, % MainConfig.windowInfo["EpicStudio"].titleString, , 20 ; 20s timeout
 	
-	if(ErrorLevel = 1) {
-		Toast.showError("Could not open DLG in EpicStudio", "Timed out waiting for EpicStudio to open")
-		return
+	buildEpicStudioDLGLink(dlgId) {
+		if(dlgId = "")
+			return ""
+		
+		url := MainConfig.private["EPICSTUDIO_URL_BASE_DLG"]
+		url := replaceTag(url, "DLG_ID", dlgId)
+		
+		return url
 	}
-	
-	Send, ^!e
-	WinWaitActive, Open DLG
-	
-	Send, ^a
-	Send, {Delete} ; Make sure the DLG that defaults in it cleared before we add our own.
-	Send, % dlgNum
-	Send, {Enter 2}
 }
 
 ; Split "INI ID" string into INI and ID (assume it's just the ID if no space included)

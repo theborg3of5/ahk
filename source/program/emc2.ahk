@@ -50,8 +50,15 @@
 		^+o::
 			openEMC2EpicStudioDLG() {
 				getObjectInfoFromEMC2(ini, id)
-				if(ini = "DLG" && id)
-					openEpicStudioDLG(id)
+				if(ini != "DLG" || id = "")
+					return
+				
+				url := buildEpicStudioDLGLink(id)
+				if(url = "")
+					return
+				
+				Toast.showMedium("Opening DLG in EpicStudio: " id)
+				Run(url)
 			}
 	}
 	

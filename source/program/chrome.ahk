@@ -52,7 +52,7 @@
 			filePath := clipboard
 			if(filePath) {
 				Toast.showShort("Got link target, opening:`n" filePath)
-				Run, % filePath
+				Run(filePath)
 			} else {
 				Toast.showError("Failed to get link target")
 			}
@@ -82,7 +82,7 @@
 			
 			displayCode := appendPieceToString(tag, "^", routine)
 			Toast.showMedium("Opening server code in EpicStudio: " displayCode)
-			Run, % url
+			Run(url)
 		}
 #If
 

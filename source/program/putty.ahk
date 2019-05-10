@@ -91,6 +91,7 @@ global lastPuttySearchType, lastPuttySearchText ; For Home+F9 searching repeated
 	
 	{ ; Various commands.
 		^r:: sendPuttyCommand()
+		^a:: sendPuttyCommand("BRIDGES")
 		^e:: sendPuttyCommand("CHRONICLES")
 		^o:: sendPuttyCommand("HS_CONFIG")
 		^h:: sendPuttyCommand("HB")

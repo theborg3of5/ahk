@@ -12,6 +12,7 @@
 		Opening/diffing routines
 			Clean up and use from ActionObject
 		Opening DLG
+	EpicStudio Smart Copy - figure out hotkeys and how it fits in with routine-/tag-copy hotkeys
 	
 # Large
 	Rewrite/clean up coding style for kdeMoverSizer

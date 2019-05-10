@@ -76,8 +76,8 @@ class Toast {
 	;---------
 	showError(problemMessage, errorMessage := "", mitigationMessage := "") {
 		toastText := problemMessage
-		toastText := appendPieceToString(toastText, errorMessage, ":`n")
-		toastText := appendPieceToString(toastText, mitigationMessage, "`n`n")
+		toastText := appendPieceToString(toastText, ":`n", errorMessage)
+		toastText := appendPieceToString(toastText, "`n`n", mitigationMessage)
 		
 		overridesAry := []
 		overridesAry["BACKGROUND_COLOR"] := "000000" ; Black

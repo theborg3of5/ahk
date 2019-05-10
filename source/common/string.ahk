@@ -301,7 +301,7 @@ appendLine(baseText, textToAdd) {
 	return updatedString
 }
 
-appendPieceToString(baseText, pieceToAdd, delimiter := ",") {
+appendPieceToString(baseText, delimiter, pieceToAdd) {
 	if(pieceToAdd = "")
 		return baseText
 	if(baseText = "")

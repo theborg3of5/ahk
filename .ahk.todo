@@ -4,11 +4,11 @@
 	Have compileEpicStudioRegex.ahk show an FYI toast when it's finished
 	Selector: dynamically resize abbreviation column based on widest value?
 		Is that going to get weird with SelectorGui+FlexTable interactions?
-	Figure out why SelectorGui instances have different padding needs (off by 4px, looks like? Need to confirm) than other non-special windows (less padding).
 	Look at cleaning up all of the record-splitting and EMC2-object-processing functions in epic.ahk
 		Can getObjectInfoFromEMC2 use extractEMC2ObjectInfoRaw (like selectSnapper does)?
 		Can processEMC2ObjectInfo use getTrueEMC2INI?
 	EpicStudio Smart Copy - figure out hotkeys and how it fits in with routine-/tag-copy hotkeys
+	Consider looking up and caching default offset values for different kinds of windows in MainConfig instead of calculating them on the fly every time
 	
 # Large
 	Rewrite/clean up coding style for kdeMoverSizer

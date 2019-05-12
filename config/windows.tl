@@ -39,7 +39,7 @@
 
 ; Most general form of various windows (specifics above should override).
 [+1|PRIORITY.replaceWith(1)]
-			AutoHotkey							AutoHotkey.exe				AutoHotkeyGUI			-													NO_PADDING
+			AutoHotkey							AutoHotkey.exe				AutoHotkeyGUI			-													
 			Chrome								chrome.exe					Chrome_WidgetWin_1	-
 			Cisco AnyConnect VPN				vpnui.exe					#32770
 			Discord								Discord.exe					-							-													NO_PADDING

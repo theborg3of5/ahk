@@ -260,3 +260,15 @@ expandNumericRange(rangeString) {
 	
 	return rangeAry
 }
+
+; Bit field operations
+bitFieldHasFlag(bitField, flag) {
+	return (bitField & flag) > 0
+}
+bitFieldAddFlag(bitField, flag) {
+	return (bitField | flag)
+}
+bitFieldRemoveFlag(bitField, flag) {
+	return (bitField & ~flag)
+}
+

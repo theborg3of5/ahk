@@ -1,19 +1,23 @@
 ; Window styles
-global WS_DISABLED := 0x8000000
-global WS_POPUP    := 0x80000000
+global WS_CAPTION  := 0xC00000 ; Window has a caption (top bar + borders).
+global WS_SIZEBOX  := 0x40000  ; Window can be resized (aka WS_THICKFRAME).
 
 ; Extended window styles
 global WS_EX_CONTROLPARENT := 0x10000
 global WS_EX_APPWINDOW     := 0x40000
-global WS_EX_WS_EX_TOPMOST := 0x8 ; Always on top
+global WS_EX_WS_EX_TOPMOST := 0x8      ; Always on top
 global WS_EX_TOOLWINDOW    := 0x80
 global WS_EX_CLICKTHROUGH  := 0x20
 
 ; SysGet command numbers (https://autohotkey.com/docs/commands/SysGet.htm)
-global SM_CXBORDER    := 5  ; For non-3D windows (which should be most), the width of the border on the left and right.
-global SM_CYBORDER    := 6  ; For non-3D windows (which should be most), the width of the border on the top and bottom.
-global SM_CXMAXIMIZED := 61 ; Width of a maximized window on the primary monitor. Includes any weird offsets.
-global SM_CYMAXIMIZED := 62 ; Height of a maximized window on the primary monitor. Includes any weird offsets.
+global SM_CXBORDER     := 5  ; For non-3D windows (which should be most), the width of the border on the left and right.
+global SM_CYBORDER     := 6  ; For non-3D windows (which should be most), the width of the border on the top and bottom.
+global SM_CXFIXEDFRAME := 7  ; Width of the horizontal frame for a window with a caption that cannot be resized.
+global SM_CYFIXEDFRAME := 8  ; Width of the vertical frame for a window with a caption that cannot be resized.
+global SM_CXSIZEFRAME  := 32 ; Width of the horizontal frame for a window with a caption that cannot be resized (aka SM_CXFRAME).
+global SM_CYSIZEFRAME  := 33 ; Width of the vertical frame for a window with a caption that cannot be resized (aka SM_CYFRAME).
+global SM_CXMAXIMIZED  := 61 ; Width of a maximized window on the primary monitor. Includes any weird offsets.
+global SM_CYMAXIMIZED  := 62 ; Height of a maximized window on the primary monitor. Includes any weird offsets.
 
 ; Windows Messages (https://autohotkey.com/docs/misc/SendMessageList.htm)
 global WM_SYSCOMMAND := 0x112

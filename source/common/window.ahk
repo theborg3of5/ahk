@@ -211,31 +211,32 @@ getWindowOffsets(titleString := "A") {
 	windowOffsets := []
 	
 	if(MainConfig.findWindowInfo(titleString).edgeType = WINDOW_EDGE_STYLE_NoPadding) { ; Specific window has no padding
-		windowOffsets["LEFT"]   := 0
-		windowOffsets["RIGHT"]  := 0
-		windowOffsets["TOP"]    := 0
-		windowOffsets["BOTTOM"] := 0
-	} else { ; Calculate the default padding.
-		maximizedWidth    := SysGet(SM_CXMAXIMIZED) ; For non-3D windows (which should be most), the width of the border on the left and right.
-		maximizedHeight   := SysGet(SM_CYMAXIMIZED) ; For non-3D windows (which should be most), the width of the border on the top and bottom.
-		borderWidthX      := SysGet(SM_CXBORDER)    ; Width of a maximized window on the primary monitor. Includes any weird offsets.
-		borderWidthY      := SysGet(SM_CYBORDER)    ; Height of a maximized window on the primary monitor. Includes any weird offsets.
+		offsetWidth  := 0
+		offsetHeight := 0
+	} else { ; Calculate the default padding based on the window's style
+		WinGet, winStyle, Style, A
 		
-		primaryMonitorNum := SysGet("MonitorPrimary") ; We're assuming the taskbar is in the same place on all monitors, which is fine for my purposes.
-		bounds := getMonitorBounds(primaryMonitorNum)
+		; Window with no caption style (no titlebar or borders)
+		if(!bitFieldHasFlag(winStyle, WS_CAPTION)) {
+			offsetWidth  := 0
+			offsetHeight := 0
 		
-		; (Maximized size - monitor working area - both borders) / 2
-		offsetWidth  := (maximizedWidth  - bounds["WIDTH"]  - (borderWidthX * 2)) / 2
-		offsetHeight := (maximizedHeight - bounds["HEIGHT"] - (borderWidthY * 2)) / 2
+		; Windows with a caption that are NOT resizeable
+		} else if(!bitFieldHasFlag(winStyle, WS_SIZEBOX)) {
+			offsetWidth  := SysGet(SM_CXFIXEDFRAME) - SysGet(SM_CXBORDER)
+			offsetHeight := SysGet(SM_CYFIXEDFRAME) - SysGet(SM_CYBORDER)
 		
-		windowOffsets["LEFT"]   := offsetWidth
-		windowOffsets["RIGHT"]  := offsetWidth
-		windowOffsets["TOP"]    := offsetHeight
-		windowOffsets["BOTTOM"] := offsetHeight
+		; Windows that have a caption and are resizeable
+		} else {
+			offsetWidth  := SysGet(SM_CXSIZEFRAME) - SysGet(SM_CXBORDER)
+			offsetHeight := SysGet(SM_CYSIZEFRAME) - SysGet(SM_CYBORDER)
+		}
 	}
 	
-	; Assuming the taskbar is on top, otherwise could use something like https://autohotkey.com/board/topic/91513-function-get-the-taskbar-location-win7/ to figure out where it is.
-	windowOffsets["TOP"] := 0 ; Taskbar side never has an offset.
+	windowOffsets["LEFT"]   := offsetWidth
+	windowOffsets["RIGHT"]  := offsetWidth
+	windowOffsets["TOP"]    := 0 ; Assuming the taskbar is on top (no offset), otherwise could use something like https://autohotkey.com/board/topic/91513-function-get-the-taskbar-location-win7/ to figure out where it is.
+	windowOffsets["BOTTOM"] := offsetHeight
 	
 	return windowOffsets
 }

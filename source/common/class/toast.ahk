@@ -91,7 +91,7 @@ class Toast {
 	}
 	
 	;---------
-	; DESCRIPTION:    Static caller to show this toast for a certain number of seconds, then destroy it.
+	; DESCRIPTION:    Static caller to show a toast for a certain number of seconds, then destroy it.
 	; PARAMETERS:
 	;  toastText         (I,REQ) - The text to show in the toast.
 	;  numSeconds        (I,REQ) - The number of seconds to show the toast for.
@@ -104,12 +104,12 @@ class Toast {
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
 	showForSeconds(toastText, numSeconds, x := "RIGHT", y := "BOTTOM", styleOverridesAry := "") { ; x := WINPOS_X_Right, y := WINPOS_Y_Bottom
-		idAry := this.buildGui(styleOverridesAry)
+		idAry := Toast.buildGui(styleOverridesAry)
 		guiId        := idAry["GUI_ID"]
 		labelVarName := idAry["LABEL_VAR_NAME"]
 		
-		this.setLabelText(toastText, labelVarName)
-		this.showToast(x, y, guiId)
+		Toast.setLabelText(toastText, labelVarName)
+		Toast.showToast(x, y, guiId)
 		
 		closeFunc := ObjBindMethod(Toast, "closeToast", guiId) ; Create a BoundFunc object of the .closeToast function (with guiId passed to it) for when the timer finishes.
 		SetTimer, % closeFunc, % -numSeconds * 1000
@@ -134,7 +134,7 @@ class Toast {
 		this.labelVarName := idAry["LABEL_VAR_NAME"]
 		
 		if(toastText)
-			this.setLabelText(toastText, this.labelVarName)
+			Toast.setLabelText(toastText, this.labelVarName)
 	}
 	
 	;---------
@@ -189,8 +189,8 @@ class Toast {
 	;---------
 	setText(toastText) {
 		Gui, % this.guiId ":Default"
-		this.setLabelText(toastText, this.labelVarName)
-		this.move(this.x, this.y, this.guiId)
+		Toast.setLabelText(toastText, this.labelVarName)
+		Toast.move(this.x, this.y, this.guiId)
 	}
 	
 	;---------
@@ -340,7 +340,7 @@ class Toast {
 	;  guiId (I,REQ) - Window handle for the toast gui.
 	;---------
 	showToast(x, y, guiId) {
-		this.move(x, y, guiId)
+		Toast.move(x, y, guiId)
 		fadeGuiIn(guiId)
 	}
 	
@@ -359,7 +359,7 @@ class Toast {
 	;  guiId (I,REQ) - Gui ID (window handle) of the toast gui.
 	;---------
 	closeToast(guiId) {
-		this.hideToast(guiId)
+		Toast.hideToast(guiId)
       Gui, Destroy
 	}
 }

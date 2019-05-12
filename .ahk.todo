@@ -15,7 +15,6 @@
 # Large
 	Rewrite/clean up coding style for kdeMoverSizer
 		Look at original first - looks like more features have been added: http://corz.org/windows/software/accessories/KDE-resizing-moving-for-Windows.php
-	See how we can make use of EpicStudio's new URL protocol and Smart Copy functionality with ActionObject, copying code locations, etc.
 	Consider moving program-specific functions into their own (program-named) classes?
 		Would remove need to prefix all function names with program name
 		Could it make referencing program-specific things from common code easier?

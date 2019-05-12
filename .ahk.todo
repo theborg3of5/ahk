@@ -9,6 +9,8 @@
 		Can processEMC2ObjectInfo use getTrueEMC2INI?
 	EpicStudio Smart Copy - figure out hotkeys and how it fits in with routine-/tag-copy hotkeys
 	Consider looking up and caching default offset values for different kinds of windows in MainConfig instead of calculating them on the fly every time
+	Consider adding some sort of version control for test.ahk - seems like I end up wanting more of the logic from it later after all.
+		A separate repo, maybe? Don't want to clutter up the main AHK repo.
 	
 # Large
 	Rewrite/clean up coding style for kdeMoverSizer

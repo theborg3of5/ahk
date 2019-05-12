@@ -35,13 +35,14 @@ return
 	F1::
 		toastAllWindowInfo() {
 			winId := WinGet("ID", "A")
-			name := MainConfig.findWindowName()
+			winInfo := MainConfig.findWindowInfo()
+			winExe := WinGet("ProcessName", "A")
 			WinGetClass, winClass, A
 			WinGetTitle, title, A
 			tooltipText := getTooltipText()
 			currControl := ControlGetFocus("A")
 			
-			DEBUG.toast("ID",winId, "Name",name, "Class",winClass, "Title",title, "Tooltip Text",tooltipText, "Current Control ID",currControl)
+			DEBUG.toast("ID",winId, "Name",winInfo.name, "EXE",winExe, "Class",winClass, "Title",title, "Tooltip Text",tooltipText, "Current Control ID",currControl, "WinInfo",winInfo)
 		}
 	
 	F2::
@@ -55,6 +56,8 @@ return
 				textToCopy := WinGet("ID", "A")
 			} else if(key = "NAME") {
 				textToCopy := MainConfig.findWindowName()
+			} else if(key = "EXE") {
+				textToCopy := WinGet("ProcessName", "A")
 			} else if(key = "CLASS") {
 				WinGetClass, textToCopy, A
 			} else if(key = "TITLE") {

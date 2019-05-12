@@ -2,6 +2,7 @@
 	
 	ID						id			ID
 	Name					n			NAME
+	EXE					e			EXE
 	Class					c			CLASS
 	Title					t			TITLE
 	Tooltip				tool		TOOLTIP

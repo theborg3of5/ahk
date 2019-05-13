@@ -11,6 +11,7 @@
 	Consider looking up and caching default offset values for different kinds of windows in MainConfig instead of calculating them on the fly every time
 	Consider adding some sort of version control for test.ahk - seems like I end up wanting more of the logic from it later after all.
 		A separate repo, maybe? Don't want to clutter up the main AHK repo.
+	Make media key one-off scripts single-only and replace (so I don't need to see the "do you want to replace?" popup)
 	
 # Large
 	Rewrite/clean up coding style for kdeMoverSizer

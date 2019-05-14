@@ -10,8 +10,8 @@
 	!i::ControlSend, , ^+v
 	
 	; Make copy line location !c.
-	!c:: epicStudioCopyCodeLocation()
-	!#c::epicStudioCopyCodeLocation(false)
+	!c:: epicStudioCopyCleanCodeLocation()
+	!#c::epicStudioCopyLinkedCodeLocation()
 	
 	; Delete line hotkey
 	$^d::
@@ -125,27 +125,52 @@
 	
 	;---------
 	; DESCRIPTION:    Put the current location in code (tag^routine) onto the clipboard.
-	; PARAMETERS:
-	;  removeOffset (I,REQ) - If this is true, we will strip the offset ("+4" in "tag+4^routine")
-	;                         off of the tag (so we'd return tag^routine). Defaults to true.
-	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard (or if we
-	;                 failed).
+	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
 	;---------
-	epicStudioCopyCodeLocation(removeOffset := true) {
+	epicStudioCopyLinkedCodeLocation() {
+		if(!epicStudioCopyCodeLocation())
+			return
+		
+		; Notify the user of the new value.
+		toastNewClipboardValue("linked code location")
+	}
+	
+	;---------
+	; DESCRIPTION:    Put the current location in code (tag^routine) onto the clipboard, stripping
+	;                 off any offset ("+4" in "tag+4^routine") and the RTF link that EpicStudio adds.
+	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
+	;---------
+	epicStudioCopyCleanCodeLocation() {
+		if(!epicStudioCopyCodeLocation())
+			return
+		
+		codeLocation := clipboard
+		
+		; Initial value copied potentially has the offset (tag+<offsetNum>) included, strip it off.
+		codeLocation := dropOffsetFromServerLocation(codeLocation)
+		
+		; Set the clipboard value to our new (plain-text, no link) code location and notify the user.
+		setClipboardAndToastValue(codeLocation, "cleaned code location")
+	}
+	
+	;---------
+	; DESCRIPTION:    Copy the current code location (with offset and RTF link) from EpicStudio to
+	;                 the clipboard.
+	; RETURNS:        True if we got a code location on the clipboard, False otherwise.
+	; SIDE EFFECTS:   Waits for the clipboard to contain the location, and shows an error toast if
+	;                 it doesn't when we time out.
+	;---------
+	epicStudioCopyCodeLocation() {
 		clipboard := "" ; Clear the clipboard so we can tell when we have the code location on it
 		Send, ^{Numpad9} ; Hotkey to copy code location to clipboard
 		ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain the code location
 		
-		codeLocation := clipboard
-		if(!codeLocation)
+		if(clipboard = "") {
 			Toast.showError("Failed to get code location")
+			return false
+		}
 		
-		; Initial value copied has the offset (tag+<offsetNum>) included.
-		; Strip it out if we don't need to keep it.
-		if(removeOffset)
-			codeLocation := dropOffsetFromServerLocation(codeLocation)
-		
-		setClipboardAndToastValue(codeLocation, "code location")
+		return true
 	}
 	
 	;---------

@@ -305,8 +305,8 @@
 		return replaceTag(MainConfig.private["HELPDESK_BASE"], "ID", hdrId)
 	}
 	
-	buildEpicStudioRoutineLink(routine, tag, environmentId := "", diffEnvironmentId := "") {
-		if(routine = "" || tag = "")
+	buildEpicStudioRoutineLink(routine, tag := "", environmentId := "", diffEnvironmentId := "") {
+		if(routine = "")
 			return ""
 		
 		if(environmentId = "")

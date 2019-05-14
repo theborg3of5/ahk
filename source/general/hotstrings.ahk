@@ -153,8 +153,8 @@
 		::xpff::C:\Program Files (x86)\
 		
 		:X:urf::sendFolderPath("USER_ROOT")
-		:X:deskf::sendFolderPath("USER_ROOT", "Desktop")
-		:X:dsf::sendFolderPath("USER_ROOT", "Design")
+		:X:dsf::sendFolderPath("USER_ROOT", "Desktop")
+		:X:desf::sendFolderPath("USER_ROOT", "Design")
 		:X:dlf::sendFolderPath("DOWNLOADS")
 		:X:devf::sendFolderPath("USER_DEV")
 		

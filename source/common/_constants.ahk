@@ -49,6 +49,11 @@ global MSGBOX_BUTTONS_YES_NO                   := 4
 global MSGBOX_BUTTONS_RETRY_CANCEL             := 5
 global MSGBOX_BUTTONS_CANCEL_TRYAGAIN_CONTINUE := 6
 
+; MinMax states for a window (for WinGet's MinMax sub-command)
+global WINMINMAX_MIN   := -1
+global WINMINMAX_MAX   := 1
+global WINMINMAX_OTHER := 0
+
 ; Control styles
 global WS_EX_CLIENTEDGE := 0x200 ; Border with sunken edge (on by default for many control types)
 

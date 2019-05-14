@@ -11,10 +11,18 @@
 	Consider adding some sort of version control for test.ahk - seems like I end up wanting more of the logic from it later after all.
 		A separate repo, maybe? Don't want to clutter up the main AHK repo.
 	Make media key one-off scripts single-only and replace (so I don't need to see the "do you want to replace?" popup)
+	Try using Try/Catch handling around putty "find again" hotkeys: https://www.autohotkey.com/docs/commands/Try.htm
 	
 # Large
 	Rewrite/clean up coding style for kdeMoverSizer
-		Look at original first - looks like more features have been added: http://corz.org/windows/software/accessories/KDE-resizing-moving-for-Windows.php
+	Consider some way to more precisely move the mouse cursor on command
+		A standalone script (like griddy?) or just a hotkey
+		Lock the mouse?
+			Until exit?
+			Until click?
+			Not at all?
+		Arrow keys to move cursor
+		Maybe modifier keys for bigger jumps, jump to other side of screen, etc.
 	Consider moving program-specific functions into their own (program-named) classes?
 		Would remove need to prefix all function names with program name
 		Could it make referencing program-specific things from common code easier?

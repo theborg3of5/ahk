@@ -1,19 +1,5 @@
 /* Do
 		Find/add icons (with red variant for suspended, ideally)
-		Alt+Left Drag to move windows
-			Don't focus
-				Focus on Ctrl tap
-			Snap to monitor edges
-				Disable snapping when Shift modifier held down
-		Alt+Right Drag to resize windows
-			Resize based on quadrant, leave opposite corner untouched
-			Don't focus
-				Focus on Ctrl tap
-			Snap to monitor edges
-				Disable snapping when Shift modifier held down
-		Alt+Middle Click to maximize/restore
-			Don't focus
-				Focus on Ctrl tap
 */
 
 ; Based on/inspired by KDE Mover Sizer: http://corz.org/windows/software/accessories/KDE-resizing-moving-for-Windows.php
@@ -65,7 +51,7 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 				y := startY + distanceY
 				
 				; Snap to edges as needed
-				if(!GetKeyState("LShift", "P"))
+				if(!GetKeyState("LShift", "P")) ; Suppress snapping with left shift
 					snapMovingWindowToMonitorEdges(titleString, x, y, startWidth, startHeight)
 				
 				; Move window to new (visual) position
@@ -113,7 +99,7 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 				}
 				
 				; Snap to edges as needed
-				if(!GetKeyState("LShift", "P"))
+				if(!GetKeyState("LShift", "P")) ; Suppress snapping with left shift
 					snapResizingWindowToMonitorEdges(titleString, x, y, width, height, resizeHorizontal, resizeVertical)
 				
 				; Resize window to new (visual) size

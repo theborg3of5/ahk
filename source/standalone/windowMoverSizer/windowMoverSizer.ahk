@@ -65,7 +65,8 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 				y := startY + distanceY
 				
 				; Snap to edges as needed
-				snapMovingWindowToMonitorEdges(titleString, x, y, startWidth, startHeight)
+				if(!GetKeyState("LShift", "P"))
+					snapMovingWindowToMonitorEdges(titleString, x, y, startWidth, startHeight)
 				
 				; Move window to new (visual) position
 				moveWindowVisual(x, y, , , titleString)
@@ -112,7 +113,8 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 				}
 				
 				; Snap to edges as needed
-				snapResizingWindowToMonitorEdges(titleString, x, y, width, height, resizeHorizontal, resizeVertical)
+				if(!GetKeyState("LShift", "P"))
+					snapResizingWindowToMonitorEdges(titleString, x, y, width, height, resizeHorizontal, resizeVertical)
 				
 				; Resize window to new (visual) size
 				moveWindowVisual(x, y, width, height, titleString)

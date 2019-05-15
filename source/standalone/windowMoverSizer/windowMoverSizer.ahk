@@ -47,7 +47,7 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 			restoreWindowIfMaximized(titleString)
 			
 			; Get initial state - (visual) window position/size and mouse position
-			getWindowVisualPosition(startX, startY, width, height, titleString)
+			getWindowVisualPosition(startX, startY, startWidth, startHeight, titleString)
 			MouseGetPos(mouseStartX, mouseStartY)
 			
 			Loop {
@@ -59,15 +59,16 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 				if(GetKeyState("LControl"))
 					WindowActions.activateWindow(titleString)
 				
-				; Calculate new window position (original position + mouse distance from start) and
-				; snap to edges as needed
-				getTotalMouseDistance(mouseStartX, mouseStartY, distanceX, distanceY)
-				newX := startX + distanceX
-				newY := startY + distanceY
-				snapMovingWindowToMonitorEdges(titleString, newX, newY, width, height)
+				; Calculate new window position
+				getMouseDistanceMoved(mouseStartX, mouseStartY, distanceX, distanceY)
+				x := startX + distanceX
+				y := startY + distanceY
+				
+				; Snap to edges as needed
+				snapMovingWindowToMonitorEdges(titleString, x, y, startWidth, startHeight)
 				
 				; Move window to new (visual) position
-				moveWindowVisual(newX, newY, , , titleString)
+				moveWindowVisual(x, y, , , titleString)
 			}
 		}
 
@@ -81,7 +82,7 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 			getWindowVisualPosition(startX, startY, startWidth, startHeight, titleString)
 			MouseGetPos(mouseStartX, mouseStartY)
 			
-			; Determine which quadrant of the window we're in, so we can tell which 2 edges are anchored
+			; Determine which direction to resize the window in, based on which quadrant of the window we're in
 			getResizeDirections(startX, startY, startWidth, startHeight, mouseStartX, mouseStartY, resizeHorizontal, resizeVertical)
 			
 			Loop {
@@ -93,28 +94,28 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 				if(GetKeyState("LControl"))
 					WindowActions.activateWindow(titleString)
 				
-				; Calculate new window size (original size + mouse distance from start) and
-				; snap to edges as needed
-				getTotalMouseDistance(mouseStartX, mouseStartY, distanceX, distanceY)
+				; Calculate new window position/size
+				getMouseDistanceMoved(mouseStartX, mouseStartY, distanceX, distanceY)
 				if(resizeHorizontal = RESIZE_HORIZ_LEFT) {
-					newX     := startX     + distanceX
-					newWidth := startWidth - distanceX
+					x     := startX     + distanceX   ; Left edge moves with mouse
+					width := startWidth - distanceX   ; Right edge stays still (via width adjustment)
 				} else {
-					newX     := startX
-					newWidth := startWidth + distanceX
+					x     := startX                   ; Left edge stays still
+					width := startWidth + distanceX   ; Right edge moves with mouse (via width adjustment)
 				}
 				if(resizeVertical = RESIZE_VERT_UP) {
-					newY      := startY      + distanceY
-					newHeight := startHeight - distanceY
+					y      := startY      + distanceY ; Top edge moves with mouse
+					height := startHeight - distanceY ; Bottom edge stays still (via height adjustment)
 				} else {
-					newY      := startY
-					newHeight := startHeight + distanceY
+					y      := startY                  ; Top edge stays still
+					height := startHeight + distanceY ; Bottom edge moves with mouse (via height adjustment)
 				}
 				
-				snapResizingWindowToMonitorEdges(titleString, newX, newY, newWidth, newHeight, resizeHorizontal, resizeVertical)
+				; Snap to edges as needed
+				snapResizingWindowToMonitorEdges(titleString, x, y, width, height, resizeHorizontal, resizeVertical)
 				
 				; Resize window to new (visual) size
-				moveWindowVisual(newX, newY, newWidth, newHeight, titleString)
+				moveWindowVisual(x, y, width, height, titleString)
 			}
 		}
 
@@ -145,11 +146,11 @@ restoreWindowIfMaximized(titleString) {
 		WinRestore, % titleString
 }
 
-getTotalMouseDistance(startX, startY, ByRef distanceX, ByRef distanceY) {
-	MouseGetPos(newX, newY)
+getMouseDistanceMoved(startX, startY, ByRef distanceX, ByRef distanceY) {
+	MouseGetPos(x, y)
 	
-	distanceX := newX - startX
-	distanceY := newY - startY
+	distanceX := x - startX
+	distanceY := y - startY
 }
 
 ; x/y/width/height are visual dimensions, so we don't need to worry about window offsets.

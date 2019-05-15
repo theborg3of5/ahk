@@ -12,6 +12,25 @@
 		A separate repo, maybe? Don't want to clutter up the main AHK repo.
 	Make media key one-off scripts single-only and replace (so I don't need to see the "do you want to replace?" popup)
 	Try using Try/Catch handling around putty "find again" hotkeys: https://www.autohotkey.com/docs/commands/Try.htm
+	Try to clean up window.ahk some more - can we rearrange functions to have more discrete purposes and make more sense?
+		Should window moving/sizing be a separate script? windowPosition.ahk, maybe?
+	Can we combine MainConfig.isWindowActive("Remote Desktop"), MainConfig.isWindowActive("VMware Horizon Client"), and MainConfig.windowIsGame() into one unified "these are special windows" check?
+		Might replace .windowIsGame() with whatever it is
+		Current usage:
+			XButtons > ^Tabs
+				windowIsGame
+				Remote Desktop
+				VMWare
+			KDE mover-sizer
+				windowIsGame
+				Remote Desktop
+				VMWare
+			Launchy activation
+				Remote Deskop
+				VMWare
+			hotstrings
+				windowIsGame
+	Add catch and error toast for launching a program that doesn't exist (Launchy in VDIs, for example)
 	
 # Large
 	Rewrite/clean up coding style for kdeMoverSizer

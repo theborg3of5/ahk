@@ -116,7 +116,7 @@ moveWindow(x, y, titleString := "A") {
 	WinMove, %titleString%, , positions["X"], positions["Y"]
 }
 
-	; Given coordinates (if numeric) are assumed to be relative to the relevant monitor (and sans offsets - so for visual size of window)
+; Given coordinates (if numeric) are assumed to be relative to the relevant monitor (and sans offsets - so for visual size of window)
 convertRelativeWinPositions(relX, relY, titleString := "A") {
 	windowOffsets := getWindowOffsets(titleString)
 	windowSizes   := getVisualWindowSize(titleString, windowOffsets)
@@ -190,7 +190,7 @@ fakeMaximizeWindow(titleString := "A") {
 ; with my own additions for window edge offsets and centering.
 resizeWindow(width := "", height := "", titleString := "A") {
 	; Get the current window size/position, to default in width/height if not given
-	windowSizes := getVisualWindowSize(titleString, windowOffsets)
+	windowSizes := getVisualWindowSize(titleString)
 	if(!width)
 		width  := windowSizes["WIDTH"]
 	if(!height)

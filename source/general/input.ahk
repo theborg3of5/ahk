@@ -36,7 +36,7 @@ $^Backspace::WindowActions.deleteWord()
 	SetCapsLockState, On
 return
 
-#If !MainConfig.windowIsGame() && !MainConfig.isWindowActive("Remote Desktop")
+#If !MainConfig.windowIsGame() && !MainConfig.isWindowActive("Remote Desktop") && !MainConfig.isWindowActive("VMware Horizon Client")
 	XButton1::activateWindowUnderMouseAndSendKeys("^{Tab}")
 	XButton2::activateWindowUnderMouseAndSendKeys("^+{Tab}")
 	activateWindowUnderMouseAndSendKeys(keys) {

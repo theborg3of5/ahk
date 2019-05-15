@@ -162,11 +162,11 @@ getWindowVisualPosition(ByRef x := "", ByRef y := "", ByRef width := "", ByRef h
 }
 
 moveWindowVisual(x := "", y := "", width := "", height := "", titleString := "A", windowOffsets := "") { ; GDB TODO reorganize these functions
-	convertVisualPositionToActual(x, y, width, height, titleString)
+	convertVisualWinPositions(x, y, width, height, titleString)
 	WinMove, %titleString%, , x, y, width, height
 }
 
-convertVisualPositionToActual(ByRef x := "", ByRef y := "", ByRef width := "", ByRef height := "", titleString := "A", windowOffsets := "") {
+convertVisualWinPositions(ByRef x := "", ByRef y := "", ByRef width := "", ByRef height := "", titleString := "A", windowOffsets := "") {
 	; Some windows are wider/taller than they look - take that into account.
 	if(!windowOffsets)
 		windowOffsets := getWindowOffsets(titleString)

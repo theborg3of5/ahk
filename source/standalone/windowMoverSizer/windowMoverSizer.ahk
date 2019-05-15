@@ -30,7 +30,11 @@ CoordMode, Mouse, Screen
 
 
 ; Constants
-global SnappingDistance := 10 ; 10px
+global SnappingDistance := 25 ; 25px
+global RESIZE_VERT_UP     := "UP"
+global RESIZE_VERT_DOWN   := "DOWN"
+global RESIZE_HORIZ_LEFT  := "LEFT"
+global RESIZE_HORIZ_RIGHT := "RIGHT"
 
 
 ; Don't do anything while certain windows are active.
@@ -74,11 +78,11 @@ global SnappingDistance := 10 ; 10px
 			restoreWindowIfMaximized(titleString)
 			
 			; Get initial state - (visual) window position/size and mouse position
-			getWindowVisualPosition(x, y, startWidth, startHeight, titleString)
+			getWindowVisualPosition(startX, startY, startWidth, startHeight, titleString)
 			MouseGetPos(mouseStartX, mouseStartY)
 			
 			; Determine which quadrant of the window we're in, so we can tell which 2 edges are anchored
-			; GDB TODO
+			getResizeDirections(startX, startY, startWidth, startHeight, mouseStartX, mouseStartY, resizeHorizontal, resizeVertical)
 			
 			Loop {
 				; Loop exit condition: right-click is released
@@ -89,16 +93,28 @@ global SnappingDistance := 10 ; 10px
 				if(GetKeyState("LControl"))
 					WindowActions.activateWindow(titleString)
 				
-				
 				; Calculate new window size (original size + mouse distance from start) and
 				; snap to edges as needed
 				getTotalMouseDistance(mouseStartX, mouseStartY, distanceX, distanceY)
-				newWidth  := startWidth  + distanceX
-				newHeight := startHeight + distanceY
-				snapResizingWindowToMonitorEdges(titleString, x, y, newWidth, newHeight)
+				if(resizeHorizontal = RESIZE_HORIZ_LEFT) {
+					newX     := startX     + distanceX
+					newWidth := startWidth - distanceX
+				} else {
+					newX     := startX
+					newWidth := startWidth + distanceX
+				}
+				if(resizeVertical = RESIZE_VERT_UP) {
+					newY      := startY      + distanceY
+					newHeight := startHeight - distanceY
+				} else {
+					newY      := startY
+					newHeight := startHeight + distanceY
+				}
+				
+				snapResizingWindowToMonitorEdges(titleString, newX, newY, newWidth, newHeight, resizeHorizontal, resizeVertical)
 				
 				; Resize window to new (visual) size
-				moveWindowVisual(, , newWidth, newHeight, titleString)
+				moveWindowVisual(newX, newY, newWidth, newHeight, titleString)
 			}
 		}
 
@@ -140,7 +156,7 @@ getTotalMouseDistance(startX, startY, ByRef distanceX, ByRef distanceY) {
 snapMovingWindowToMonitorEdges(titleString, ByRef x, ByRef y, width, height) {
 	monitorBounds := getMonitorBounds("", titleString)
 	
-	x := snapMoveX(x, width, monitorBounds)
+	x := snapMoveX(x, width,  monitorBounds)
 	y := snapMoveY(y, height, monitorBounds)
 }
 snapMoveX(x, width, monitorBounds) {
@@ -166,8 +182,63 @@ snapMoveY(y, height, monitorBounds) {
 	return y
 }
 
-snapResizingWindowToMonitorEdges(titleString, x, y, ByRef width, ByRef height) {
+
+
+getResizeDirections(x, y, width, height, mouseX, mouseY, ByRef resizeHorizontal, ByRef resizeVertical) {
+	middleX := x + (width / 2)
+	if(mouseX < middleX)
+		resizeHorizontal := RESIZE_HORIZ_LEFT
+	else
+		resizeHorizontal := RESIZE_HORIZ_RIGHT
 	
+	middleY := y + (height / 2)
+	if(mouseY < middleY)
+		resizeVertical := RESIZE_VERT_UP
+	else
+		resizeVertical := RESIZE_VERT_DOWN
+}
+
+snapResizingWindowToMonitorEdges(titleString, ByRef x, ByRef y, ByRef width, ByRef height, resizeHorizontal, resizeVertical) {
+	monitorBounds := getMonitorBounds("", titleString)
+	
+	snapResizeX(x, width,  monitorBounds, resizeHorizontal)
+	snapResizeY(y, height, monitorBounds, resizeVertical)
+}
+snapResizeX(ByRef x, ByRef width, monitorBounds, resizeHorizontal) {
+	; Snap to left edge of screen
+	if(resizeHorizontal = RESIZE_HORIZ_LEFT) {
+		distance := x - monitorBounds["LEFT"]
+		if(abs(distance) <= SnappingDistance) {
+			x := monitorBounds["LEFT"]
+			width += distance
+		}
+	
+	; Snap to right edge of screen
+	} else if(resizeHorizontal = RESIZE_HORIZ_RIGHT) {
+		distance := monitorBounds["RIGHT"] - (x + width)
+		if(abs(distance) <= SnappingDistance) {
+			; x stays the same
+			width += distance
+		}
+	}
+}
+snapResizeY(ByRef y, ByRef height, monitorBounds, resizeVertical) {
+	; Snap to top edge of screen
+	if(resizeVertical = RESIZE_VERT_UP) {
+		distance := y - monitorBounds["TOP"]
+		if(abs(distance) <= SnappingDistance) {
+			y := monitorBounds["TOP"]
+			height += distance
+		}
+	
+	; Snap to bottom edge of screen
+	} else if(resizeVertical = RESIZE_VERT_DOWN) {
+		distance := monitorBounds["BOTTOM"] - (y + height)
+		if(abs(distance) <= SnappingDistance) {
+			; y stays the same
+			height += distance
+		}
+	}
 }
 
 

@@ -58,6 +58,31 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 				moveWindowVisual(x, y, , , titleString)
 			}
 		}
+		moveWindowUnderMouse2() {
+			dragWindowPrep(winStart, mouseStart)
+			
+			Loop {
+				; Loop exit condition: left-click is released
+				if(!GetKeyState("LButton", "P"))
+					Break
+				
+				; If LControl is pressed while we're moving, activate the window
+				if(GetKeyState("LControl"))
+					WindowActions.activateWindow(winStart.titleString)
+				
+				; Calculate new window position
+				getMouseDistanceMoved2(mouseStart, distanceX, distanceY)
+				x := mouseStart.x + distanceX
+				y := mouseStart.y + distanceY
+				
+				; Snap to edges as needed
+				if(!GetKeyState("LShift", "P")) ; Suppress snapping with left shift
+					snapMovingWindowToMonitorEdges2(winStart, x, y)
+				
+				; Move window to new (visual) position
+				moveWindowVisual(x, y, , , winStart.titleString)
+			}
+		}
 
 	; Alt+Right Drag to resize
 	!RButton::
@@ -122,6 +147,12 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 #If
 
 
+
+dragWindowPrep(ByRef winStart, ByRef mouseStart) {
+	
+}
+
+
 getTitleStringForWindowUnderMouse() {
 	MouseGetPos( , , winId)
 	return "ahk_id " winId
@@ -139,6 +170,12 @@ getMouseDistanceMoved(startX, startY, ByRef distanceX, ByRef distanceY) {
 	
 	distanceX := x - startX
 	distanceY := y - startY
+}
+getMouseDistanceMoved2(mouseStart, ByRef distanceX, ByRef distanceY) {
+	MouseGetPos(x, y)
+	
+	distanceX := x - mouseStart.x
+	distanceY := y - mouseStart.y
 }
 
 ; x/y/width/height are visual dimensions, so we don't need to worry about window offsets.
@@ -160,6 +197,35 @@ snapMoveX(x, width, monitorBounds) {
 	return x
 }
 snapMoveY(y, height, monitorBounds) {
+	; Snap to top edge of screen
+	if(abs(y - monitorBounds["TOP"]) <= SnappingDistance)
+		return monitorBounds["TOP"]
+	
+	; Snap to bottom edge of screen
+	if(abs(y + height - monitorBounds["BOTTOM"]) <= SnappingDistance)
+		return monitorBounds["BOTTOM"] - height
+	
+	return y
+}
+; x/y/width/height are visual dimensions, so we don't need to worry about window offsets.
+snapMovingWindowToMonitorEdges2(winStart, ByRef x, ByRef y) {
+	monitorBounds := getMonitorBounds("", titleString)
+	
+	x := snapMoveX2(x, width,  monitorBounds)
+	y := snapMoveY2(y, height, monitorBounds)
+}
+snapMoveX2(x, width, monitorBounds) {
+	; Snap to left edge of screen
+	if(abs(x - monitorBounds["LEFT"]) <= SnappingDistance)
+		return monitorBounds["LEFT"]
+	
+	; Snap to right edge of screen
+	if(abs(x + width - monitorBounds["RIGHT"]) <= SnappingDistance)
+		return monitorBounds["RIGHT"] - width
+	
+	return x
+}
+snapMoveY2(y, height, monitorBounds) {
 	; Snap to top edge of screen
 	if(abs(y - monitorBounds["TOP"]) <= SnappingDistance)
 		return monitorBounds["TOP"]

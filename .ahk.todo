@@ -14,6 +14,7 @@
 	Try using Try/Catch handling around putty "find again" hotkeys: https://www.autohotkey.com/docs/commands/Try.htm
 	Try to clean up window.ahk some more - can we rearrange functions to have more discrete purposes and make more sense?
 		Should window moving/sizing logic be a separate script? windowPosition.ahk, maybe?
+		Should functions that deal with visual heights/widths/positions be named to include "visual"?
 	Add catch and error toast for launching a program that doesn't exist (Launchy in VDIs, for example)
 	
 # Large

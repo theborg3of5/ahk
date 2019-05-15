@@ -312,8 +312,8 @@ class Toast {
 		Gui, Show, % "AutoSize NoActivate Hide", % Toast.ToastTitle
 		Gui, +LastFound ; Needed for WinGetPos in convertRelativeWinPositions() logic
 		
-		positions := convertRelativeWinPositions(x, y, titleString)
-		Gui, Show, % "x" positions["X"] " y" positions["Y"] " NoActivate", % Toast.ToastTitle
+		convertRelativeWinPositions(x, y, titleString)
+		Gui, Show, % "x" x " y" y " NoActivate", % Toast.ToastTitle
 	}
 	
 	;---------

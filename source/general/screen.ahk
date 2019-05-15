@@ -43,7 +43,7 @@ return
 			y := WINPOS_Y_Center
 		
 		resizeWindow(data["WIDTH"], data["HEIGHT"])
-		moveWindow(x, y)
+		moveWindowToRelativePosition(x, y)
 	}
 
 ; Call the Windows API function "SetSuspendState" to have the system suspend or hibernate.

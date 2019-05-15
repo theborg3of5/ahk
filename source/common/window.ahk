@@ -108,35 +108,33 @@ restoreMatchSettings(settings) {
 
 ; Centers a window on the screen.
 centerWindow(titleString := "A") {
-	moveWindow(WINPOS_X_Center, WINPOS_Y_Center, titleString)
+	moveWindowToRelativePosition(WINPOS_X_Center, WINPOS_Y_Center, titleString)
 }
 
-moveWindow(x, y, titleString := "A") {
-	positions := convertRelativeWinPositions(x, y, titleString)
-	WinMove, %titleString%, , positions["X"], positions["Y"]
+moveWindowToRelativePosition(x, y, titleString := "A") {
+	convertRelativeWinPositions(x, y, titleString)
+	WinMove, %titleString%, , x, y
 }
 
 ; Given coordinates (if numeric) are assumed to be relative to the relevant monitor (and sans offsets - so for visual size of window)
-convertRelativeWinPositions(relX, relY, titleString := "A") {
+convertRelativeWinPositions(ByRef x, ByRef y, titleString := "A") {
 	windowOffsets := getWindowOffsets(titleString)
 	windowSizes   := getVisualWindowSize(titleString, windowOffsets)
 	monitorBounds := getMonitorBounds("", titleString)
-	; DEBUG.popup("relX",relX, "relY",relY, "titleString",titleString, "windowOffsets",windowOffsets, "windowSizes",windowSizes, "monitorBounds",monitorBounds)
+	; DEBUG.popup("x",x, "y",y, "titleString",titleString, "windowOffsets",windowOffsets, "windowSizes",windowSizes, "monitorBounds",monitorBounds)
 	
-	if(!isNum(relX))
-		relX := convertSpecialWinPositionToRelX(relX, windowSizes, monitorBounds)
-	if(!isNum(relY))
-		relY := convertSpecialWinPositionToRelY(relY, windowSizes, monitorBounds)
+	if(!isNum(x))
+		x := convertSpecialWinPositionToRelX(x, windowSizes, monitorBounds)
+	if(!isNum(y))
+		y := convertSpecialWinPositionToRelY(y, windowSizes, monitorBounds)
 	
 	; True coordinates (taking offsets into account)
-	x := monitorBounds["LEFT"] + relX - windowOffsets["LEFT"]
-	y := monitorBounds["TOP"]  + relY - windowOffsets["TOP"]
-	
+	x := monitorBounds["LEFT"] + x - windowOffsets["LEFT"]
+	y := monitorBounds["TOP"]  + y - windowOffsets["TOP"]
 	; DEBUG.popup("x",x, "y",y)
-	return {"X":x, "Y":y}
 }
 
-getVisualWindowSize(titleString := "A", windowOffsets := "") {
+getVisualWindowSize(titleString := "A", windowOffsets := "") { ; GDB TODO replace this with getWindowVisualPosition
 	; Simple window size
 	WinGetPos, , , winWidth, winHeight, %titleString%
 	; DEBUG.popup("titleString",titleString,"winWidth",winWidth, "winHeight",winHeight)
@@ -148,6 +146,40 @@ getVisualWindowSize(titleString := "A", windowOffsets := "") {
 	winHeight -= (windowOffsets["BOTTOM"] + windowOffsets["TOP"]  )
 	
 	return {"WIDTH":winWidth, "HEIGHT":winHeight}
+}
+
+getWindowVisualPosition(ByRef x := "", ByRef y := "", ByRef width := "", ByRef height := "", titleString := "A", windowOffsets := "") {
+	; Simple window size
+	WinGetPos, x, y, width, height, % titleString
+	
+	; Some windows are wider/taller than they look - take that into account.
+	if(!windowOffsets)
+		windowOffsets := getWindowOffsets(titleString)
+	x      += windowOffsets["LEFT"]
+	y      += windowOffsets["TOP"]
+	width  -= (windowOffsets["LEFT"]   + windowOffsets["RIGHT"])
+	height -= (windowOffsets["BOTTOM"] + windowOffsets["TOP"]  )
+}
+
+moveWindowVisual(x := "", y := "", width := "", height := "", titleString := "A", windowOffsets := "") { ; GDB TODO reorganize these functions
+	convertVisualPositionToActual(x, y, width, height, titleString)
+	WinMove, %titleString%, , x, y, width, height
+}
+
+convertVisualPositionToActual(ByRef x := "", ByRef y := "", ByRef width := "", ByRef height := "", titleString := "A", windowOffsets := "") {
+	; Some windows are wider/taller than they look - take that into account.
+	if(!windowOffsets)
+		windowOffsets := getWindowOffsets(titleString)
+	
+	; Only update non-blank values
+	if(x != "")
+		x -= windowOffsets["LEFT"]
+	if(y != "")
+		y -= windowOffsets["TOP"]
+	if(width != "")
+		width  += (windowOffsets["LEFT"]   + windowOffsets["RIGHT"])
+	if(height != "")
+		height += (windowOffsets["BOTTOM"] + windowOffsets["TOP"]  )
 }
 
 convertSpecialWinPositionToRelX(relX, windowSizes, monitorBounds) {
@@ -189,15 +221,16 @@ fakeMaximizeWindow(titleString := "A") {
 ; Originally from http://www.howtogeek.com/howto/28663/create-a-hotkey-to-resize-windows-to-a-specific-size-with-autohotkey/ ,
 ; with my own additions for window edge offsets and centering.
 resizeWindow(width := "", height := "", titleString := "A") {
+	windowOffsets := getWindowOffsets(titleString)
+	
 	; Get the current window size/position, to default in width/height if not given
-	windowSizes := getVisualWindowSize(titleString)
+	windowSizes := getVisualWindowSize(titleString, windowOffsets)
 	if(!width)
 		width  := windowSizes["WIDTH"]
 	if(!height)
 		height := windowSizes["HEIGHT"]
 	
 	; Take window edge offsets into account
-	windowOffsets := getWindowOffsets(titleString)
 	width  += windowOffsets["LEFT"] + windowOffsets["RIGHT"]
 	height += windowOffsets["TOP"]  + windowOffsets["BOTTOM"]
 	

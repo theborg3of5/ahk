@@ -43,8 +43,9 @@ global SnappingDistance := 10 ; 10px
 			
 			restoreWindowIfMaximized(titleString)
 			
-			WinGetPos, winStartX, winStartY, winStartWidth, winStartHeight, % titleString
-			MouseGetPos(mouseXStart, mouseYStart)
+			getWindowVisualPosition(startX, startY, width, height, titleString)
+			MouseGetPos(mouseStartX, mouseStartY)
+			
 			Loop {
 				; Loop exit condition: left-click is released
 				if(!GetKeyState("LButton", "P"))
@@ -54,15 +55,15 @@ global SnappingDistance := 10 ; 10px
 				if(GetKeyState("LControl"))
 					WindowActions.activateWindow(titleString)
 				
-				; Calculate new window position (original position with mouse offset)
-				getMouseOffset(mouseXStart, mouseYStart, offsetX, offsetY)
-				winNewX := winStartX + offsetX
-				winNewY := winStartY + offsetY
-				snapMovingWindowToMonitorEdges(titleString, winNewX, winNewY, winStartWidth, winStartHeight)
+				; Calculate new window position (original position + mouse distance from start)
+				getTotalMouseDistance(mouseStartX, mouseStartY, distanceX, distanceY)
+				newX := startX + distanceX
+				newY := startY + distanceY
+				snapMovingWindowToMonitorEdges(titleString, newX, newY, width, height)
 				
-				; Get current monitor dimensions and snap if we're close enough to any monitor edge
-				
-				; Move window to new position
+				; Move window to new (visual) position
+				; WinMove, % titleString, , % newX, % newY
+				moveWindowVisual(newX, newY, , , titleString)
 			}
 		}
 
@@ -124,20 +125,41 @@ restoreWindowIfMaximized(titleString) {
 		WinRestore, % titleString
 }
 
-getMouseOffset(startX, startY, ByRef offsetX, ByRef offsetY) {
+getTotalMouseDistance(startX, startY, ByRef distanceX, ByRef distanceY) {
 	MouseGetPos(newX, newY)
 	
-	offsetX := startX - newX
-	offsetY := startY - newY
+	distanceX := newX - startX
+	distanceY := newY - startY
 }
 
+; x/y/width/height are visual dimensions, so we don't need to worry about window offsets.
 snapMovingWindowToMonitorEdges(titleString, ByRef x, ByRef y, width, height) {
-	offsetsAry := getWindowOffsets(titleString)
 	monitorBounds := getMonitorBounds("", titleString)
 	
-	; GDB TODO should we add a function to window.ahk that gives the monitor bounds relative to a particular window (taking offsets into account)?
+	x := snapX(x, width, monitorBounds)
+	y := snapY(y, height, monitorBounds)
+}
+snapX(x, width, monitorBounds) {
+	; Snap to left edge of screen
+	if(abs(x - monitorBounds["LEFT"]) <= SnappingDistance)
+		return monitorBounds["LEFT"]
 	
+	; Snap to right edge of screen
+	if(abs(x + width - monitorBounds["RIGHT"]) <= SnappingDistance)
+		return monitorBounds["RIGHT"] - width
 	
+	return x
+}
+snapY(y, height, monitorBounds) {
+	; Snap to top edge of screen
+	if(abs(y - monitorBounds["TOP"]) <= SnappingDistance)
+		return monitorBounds["TOP"]
+	
+	; Snap to bottom edge of screen
+	if(abs(y + height - monitorBounds["BOTTOM"]) <= SnappingDistance)
+		return monitorBounds["BOTTOM"] - height
+	
+	return y
 }
 
 

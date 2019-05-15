@@ -40,9 +40,9 @@ global SnappingDistance := 10 ; 10px
 	!LButton::
 		moveWindowUnderMouse() {
 			titleString := getTitleStringForWindowUnderMouse()
-			
 			restoreWindowIfMaximized(titleString)
 			
+			; Get initial state - (visual) window position/size and mouse position
 			getWindowVisualPosition(startX, startY, width, height, titleString)
 			MouseGetPos(mouseStartX, mouseStartY)
 			
@@ -55,14 +55,14 @@ global SnappingDistance := 10 ; 10px
 				if(GetKeyState("LControl"))
 					WindowActions.activateWindow(titleString)
 				
-				; Calculate new window position (original position + mouse distance from start)
+				; Calculate new window position (original position + mouse distance from start) and
+				; snap to edges as needed
 				getTotalMouseDistance(mouseStartX, mouseStartY, distanceX, distanceY)
 				newX := startX + distanceX
 				newY := startY + distanceY
 				snapMovingWindowToMonitorEdges(titleString, newX, newY, width, height)
 				
 				; Move window to new (visual) position
-				; WinMove, % titleString, , % newX, % newY
 				moveWindowVisual(newX, newY, , , titleString)
 			}
 		}
@@ -71,12 +71,14 @@ global SnappingDistance := 10 ; 10px
 	!RButton::
 		resizeWindowUnderMouse() {
 			titleString := getTitleStringForWindowUnderMouse()
-			
 			restoreWindowIfMaximized(titleString)
 			
-			; Get initial state: mouse position, window position, window size
+			; Get initial state - (visual) window position/size and mouse position
+			getWindowVisualPosition(x, y, startWidth, startHeight, titleString)
+			MouseGetPos(mouseStartX, mouseStartY)
 			
 			; Determine which quadrant of the window we're in, so we can tell which 2 edges are anchored
+			; GDB TODO
 			
 			Loop {
 				; Loop exit condition: right-click is released
@@ -87,14 +89,16 @@ global SnappingDistance := 10 ; 10px
 				if(GetKeyState("LControl"))
 					WindowActions.activateWindow(titleString)
 				
-				; Get current mouse position, figure out the offset between the original and current mouse positions
 				
-				; Calculate new window position/size (original position/size with mouse offset)
-				; Note: X/Y coordinates also change if top-left corner of window moves (so if we're resizing up or left)
+				; Calculate new window size (original size + mouse distance from start) and
+				; snap to edges as needed
+				getTotalMouseDistance(mouseStartX, mouseStartY, distanceX, distanceY)
+				newWidth  := startWidth  + distanceX
+				newHeight := startHeight + distanceY
+				snapResizingWindowToMonitorEdges(titleString, x, y, newWidth, newHeight)
 				
-				; Get current monitor dimensions and snap if edges are close enough to any monitor edge
-				
-				; Resize/Move window to new position
+				; Resize window to new (visual) size
+				moveWindowVisual(, , newWidth, newHeight, titleString)
 			}
 		}
 
@@ -136,10 +140,10 @@ getTotalMouseDistance(startX, startY, ByRef distanceX, ByRef distanceY) {
 snapMovingWindowToMonitorEdges(titleString, ByRef x, ByRef y, width, height) {
 	monitorBounds := getMonitorBounds("", titleString)
 	
-	x := snapX(x, width, monitorBounds)
-	y := snapY(y, height, monitorBounds)
+	x := snapMoveX(x, width, monitorBounds)
+	y := snapMoveY(y, height, monitorBounds)
 }
-snapX(x, width, monitorBounds) {
+snapMoveX(x, width, monitorBounds) {
 	; Snap to left edge of screen
 	if(abs(x - monitorBounds["LEFT"]) <= SnappingDistance)
 		return monitorBounds["LEFT"]
@@ -150,7 +154,7 @@ snapX(x, width, monitorBounds) {
 	
 	return x
 }
-snapY(y, height, monitorBounds) {
+snapMoveY(y, height, monitorBounds) {
 	; Snap to top edge of screen
 	if(abs(y - monitorBounds["TOP"]) <= SnappingDistance)
 		return monitorBounds["TOP"]
@@ -160,6 +164,10 @@ snapY(y, height, monitorBounds) {
 		return monitorBounds["BOTTOM"] - height
 	
 	return y
+}
+
+snapResizingWindowToMonitorEdges(titleString, x, y, ByRef width, ByRef height) {
+	
 }
 
 

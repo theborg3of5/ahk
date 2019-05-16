@@ -71,6 +71,9 @@
 		^+8::
 			SendRaw, % generateContactComment(true)
 		return
+		^!8::
+			SendRaw, % generateContactComment( , true)
+		return
 		
 		; Triple ' hotkey for procedure header, like ES.
 		:*:'''::
@@ -146,7 +149,7 @@
 
 { ; Functions.
 	; Builds a contact comment with as much info as we can muster.
-	generateContactComment(extraSpace := false) {
+	generateContactComment(extraSpace := false, excludeDash := false) {
 		; Date
 		date := FormatTime(, "MM/yy")
 		
@@ -162,7 +165,10 @@
 		outStr := "' "
 		if(extraSpace)
 			outStr .= " "
-		outStr .= "*" MainConfig.private["INITIALS"] " " date " " dlgId " - "
+		outStr .= "*" MainConfig.private["INITIALS"] " " date " " dlgId
+		
+		if(!excludeDash)
+			outStr .= " - "
 		
 		return outStr
 	}

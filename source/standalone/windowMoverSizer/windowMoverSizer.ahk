@@ -1,7 +1,3 @@
-/* Do
-		Find/add icons (with red variant for suspended, ideally)
-*/
-
 ; Based on/inspired by KDE Mover Sizer: http://corz.org/windows/software/accessories/KDE-resizing-moving-for-Windows.php
 
 #NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
@@ -10,6 +6,7 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 setCommonHotkeysType(HOTKEY_TYPE_Standalone)
+setUpTrayIcons("moveSize.ico", "moveSizeRed.ico", "AHK: Move and resize windows")
 
 SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
 CoordMode, Mouse, Screen

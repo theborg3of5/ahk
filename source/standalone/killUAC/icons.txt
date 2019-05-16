@@ -1,2 +1,6 @@
-Shield icons by Turbomilk
-http://turbomilk.com/
+Icons
+
+shieldGreen.ico
+	Icon by Turbomilk (http://turbomilk.com/)
+shieldRed.ico
+	Icon by Turbomilk (http://turbomilk.com/)

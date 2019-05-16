@@ -56,29 +56,29 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 			}
 		}
 		moveWindowUnderMouse2() {
-			dragWindowPrep(winStart, mouseStart)
+			; dragWindowPrep(winStart, mouseStart)
 			
-			Loop {
-				; Loop exit condition: left-click is released
-				if(!GetKeyState("LButton", "P"))
-					Break
+			; Loop {
+				; ; Loop exit condition: left-click is released
+				; if(!GetKeyState("LButton", "P"))
+					; Break
 				
-				; If LControl is pressed while we're moving, activate the window
-				if(GetKeyState("LControl"))
-					WindowActions.activateWindow(winStart.titleString)
+				; ; If LControl is pressed while we're moving, activate the window
+				; if(GetKeyState("LControl"))
+					; WindowActions.activateWindow(winStart.titleString)
 				
-				; Calculate new window position
-				getMouseDistanceMoved2(mouseStart, distanceX, distanceY)
-				x := mouseStart.x + distanceX
-				y := mouseStart.y + distanceY
+				; ; Calculate new window position
+				; getMouseDistanceMoved(mouseStart, distanceX, distanceY)
+				; x := mouseStart.x + distanceX
+				; y := mouseStart.y + distanceY
 				
-				; Snap to edges as needed
-				if(!GetKeyState("LShift", "P")) ; Suppress snapping with left shift
-					snapMovingWindowToMonitorEdges2(winStart, x, y)
+				; ; Snap to edges as needed
+				; if(!GetKeyState("LShift", "P")) ; Suppress snapping with left shift
+					; snapMovingWindowToMonitorEdges(winStart, x, y)
 				
-				; Move window to new (visual) position
-				moveWindowVisual(x, y, , , winStart.titleString)
-			}
+				; ; Move window to new (visual) position
+				; moveWindowVisual(x, y, , , winStart.titleString)
+			; }
 		}
 
 	; Alt+Right Drag to resize
@@ -146,7 +146,8 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 
 
 dragWindowPrep(ByRef winStart, ByRef mouseStart) {
-	
+	; getWindowVisualPosition(startX, startY, startWidth, startHeight, titleString)
+	; MouseGetPos(mouseStartX, mouseStartY)
 }
 
 
@@ -168,12 +169,6 @@ getMouseDistanceMoved(startX, startY, ByRef distanceX, ByRef distanceY) {
 	distanceX := x - startX
 	distanceY := y - startY
 }
-getMouseDistanceMoved2(mouseStart, ByRef distanceX, ByRef distanceY) {
-	MouseGetPos(x, y)
-	
-	distanceX := x - mouseStart.x
-	distanceY := y - mouseStart.y
-}
 
 ; x/y/width/height are visual dimensions, so we don't need to worry about window offsets.
 snapMovingWindowToMonitorEdges(titleString, ByRef x, ByRef y, width, height) {
@@ -194,35 +189,6 @@ snapMoveX(x, width, monitorBounds) {
 	return x
 }
 snapMoveY(y, height, monitorBounds) {
-	; Snap to top edge of screen
-	if(abs(y - monitorBounds["TOP"]) <= SnappingDistance)
-		return monitorBounds["TOP"]
-	
-	; Snap to bottom edge of screen
-	if(abs(y + height - monitorBounds["BOTTOM"]) <= SnappingDistance)
-		return monitorBounds["BOTTOM"] - height
-	
-	return y
-}
-; x/y/width/height are visual dimensions, so we don't need to worry about window offsets.
-snapMovingWindowToMonitorEdges2(winStart, ByRef x, ByRef y) {
-	monitorBounds := getMonitorBounds("", titleString)
-	
-	x := snapMoveX2(x, width,  monitorBounds)
-	y := snapMoveY2(y, height, monitorBounds)
-}
-snapMoveX2(x, width, monitorBounds) {
-	; Snap to left edge of screen
-	if(abs(x - monitorBounds["LEFT"]) <= SnappingDistance)
-		return monitorBounds["LEFT"]
-	
-	; Snap to right edge of screen
-	if(abs(x + width - monitorBounds["RIGHT"]) <= SnappingDistance)
-		return monitorBounds["RIGHT"] - width
-	
-	return x
-}
-snapMoveY2(y, height, monitorBounds) {
 	; Snap to top edge of screen
 	if(abs(y - monitorBounds["TOP"]) <= SnappingDistance)
 		return monitorBounds["TOP"]
@@ -292,6 +258,243 @@ snapResizeY(ByRef y, ByRef height, monitorBounds, resizeVertical) {
 		}
 	}
 }
+
+
+class VisualWindow {
+	
+	; ==============================
+	; == Public ====================
+	; ==============================
+	
+	
+	__New(titleString := "A", snapDistance := 0) {
+		this._titleString := titleString
+		this._snapDistance := snapDistance
+		
+		getWindowVisualPosition(x, y, width, height, titleString)
+		this._leftX   := x
+		this._topY    := y
+		this._width   := width
+		this._height  := height
+		this._rightX  := x + width
+		this._bottomY := y + height
+	}
+	
+	titleString[] {
+		get {
+			return this._titleString
+		}
+	}
+	
+	snapDistance[] {
+		get {
+			return this._snapDistance
+		}
+		set {
+			this._snapDistance := value
+		}
+	}
+	
+	x[] {
+		get {
+			return this._leftX
+		}
+	}
+	
+	y[] {
+		get {
+			return this._topY
+		}
+	}
+	
+	rightX[] {
+		get {
+			return this._rightX
+		}
+	}
+	
+	bottomY[] {
+		get {
+			return this._bottomY
+		}
+	}
+	
+	width[] {
+		get {
+			return this._width
+		}
+	}
+	
+	height[] {
+		get {
+			return this._height
+		}
+	}
+	
+	
+	moveToLeftX(x) {
+		this._moveToLeftX(x)
+		this.snapMoveX()
+	}
+	moveToRightX(x) {
+		this._moveToRightX(x)
+		this.snapMoveX()
+	}
+	moveToTopY(y) {
+		this._moveToTopY(y)
+		this.snapMoveY()
+	}
+	moveToBottomY(y) {
+		this._moveToBottomY(y)
+		this.snapMoveY()
+	}
+	
+	
+	resizeToWidth(width) {
+		this._width  := width
+		this._rightX := this._leftX + width
+	}
+	resizeToHeight(height) {
+		this._height  := height
+		this._bottomY := this._topY + height
+	}
+	
+	
+	resizeLeftToX(x) {
+		this._leftX := x
+		this._width := this._rightX - x
+	}
+	
+	resizeRightToX(x) {
+		this._rightX := x
+		this._width  := x - this._leftX
+	}
+	
+	resizeUpToY(y) {
+		this._topY   := y
+		this._height := this._bottomY - y
+	}
+	
+	resizeDownToY(y) {
+		this._bottomY := y
+		this._height  := y - this._topY
+	}
+	
+	applyPosition() {
+		moveWindowVisual(this._leftX, this._topY, this._width, this._height, this._titleString)
+	}
+	
+	
+	; ==============================
+	; == Private ===================
+	; ==============================
+	_titleString  := ""
+	_snapDistance := 0
+	_leftX        := 0
+	_topY         := 0
+	_rightX       := 0
+	_bottomY      := 0
+	_width        := 0
+	_height       := 0
+	
+	
+	
+	snapMoveX() { ; GDB TODO move to private
+		if(this._snapDistance <= 0)
+			return
+		
+		monitorBounds := getMonitorBounds("", this._titleString)
+		leftDistance  := abs(this._leftX  - monitorBounds["LEFT"])
+		rightDistance := abs(this._rightX - monitorBounds["RIGHT"])
+		
+		; Snap to left or right edge of screen
+		if((leftDistance > 0) && (leftDistance <= this._snapDistance))
+			this._moveToLeftX(monitorBounds["LEFT"])
+		else if((rightDistance > 0) && (rightDistance <= this._snapDistance))
+			this._moveToRightX(monitorBounds["RIGHT"])
+	}
+	
+	snapMoveY() {
+		if(this._snapDistance <= 0)
+			return
+		
+		monitorBounds := getMonitorBounds("", this._titleString)
+		topDistance    := abs(this._topY    - monitorBounds["TOP"])
+		bottomDistance := abs(this._bottomY - monitorBounds["BOTTOM"])
+		
+		; Snap to top or bottom edge of screen
+		if((topDistance > 0) && (topDistance <= this._snapDistance))
+			this._moveToTopY(monitorBounds["TOP"])
+		else if((bottomDistance > 0) && (bottomDistance <= this._snapDistance))
+			this._moveToBottomY(monitorBounds["BOTTOM"])
+	}
+	
+	_moveToLeftX(x) {
+		this._leftX  := x
+		this._rightX := x + width
+	}
+	_moveToRightX(x) {
+		this._leftX  := x - width
+		this._rightX := x
+	}
+	_moveToTopY(y) {
+		this._topY    := y
+		this._bottomY := y + height
+	}
+	_moveToBottomY(y) {
+		this._topY    := y - height
+		this._bottomY := y
+	}
+	
+}
+
+class MousePosition {
+	
+	; ==============================
+	; == Public ====================
+	; ==============================
+	
+	
+	__New() {
+		MouseGetPos(x, y)
+		this._x := x
+		this._y := y
+	}
+	
+	x[] {
+		get {
+			return this._x
+		}
+		set {
+			this._x := value
+		}
+	}
+	
+	y[] {
+		get {
+			return this._y
+		}
+		set {
+			this._y := value
+		}
+	}
+	
+	getCurrentDistanceFromPosition(ByRef distanceX, ByRef distanceY) {
+		MouseGetPos(x, y)
+		
+		distanceX := x - this._x
+		distanceY := y - this._y
+	}
+	
+	
+	; ==============================
+	; == Private ===================
+	; ==============================
+	_x := 0
+	_y := 0
+	
+}
+
 
 
 

@@ -5,7 +5,7 @@
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
-setCommonHotkeysType(HOTKEY_TYPE_Standalone)
+setCommonHotkeysType(HOTKEY_TYPE_SubMaster)
 setUpTrayIcons("moveSize.ico", "moveSizeRed.ico", "AHK: Move and resize windows")
 
 SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
@@ -109,7 +109,7 @@ dragWindowPrep(ByRef window, ByRef mouseStart) {
 	
 	restoreWindowIfMaximized(titleString)
 	
-	window := new VisualWindow(titleString, 25, false) ; 25px snapping distance, don't auto-apply changes
+	window := new VisualWindow(titleString, SnappingDistance, false) ; autoApply=false - Don't auto-apply changes
 	mouseStart := new MousePosition()
 }
 

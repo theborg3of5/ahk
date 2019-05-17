@@ -1,22 +1,22 @@
-﻿#NoEnv                       ; Don't use environment (OS-level) variables.
-#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
-SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
-DetectHiddenWindows, On
-#Warn All                ; Show warnings
-#Warn UseUnsetLocal, Off ; Except for using a not-yet-set local variable, that's what default values are for.
-#LTrim                   ; Trim whitespace from left of continuation sections (so they can be indented as I wish).
+﻿#NoEnv                                        ; Don't use environment (OS-level) variables.
+#SingleInstance, Force                        ; Running this script while it's already running just replaces the existing instance.
+#Warn All                                     ; Show warnings
+#Warn UseUnsetLocal, Off                      ; Except for using a not-yet-set local variable, that's what default values are for.
+#LTrim                                        ; Trim whitespace from left of continuation sections (so they can be indented as I wish).
+#Hotstring *                                  ; Default option: hotstrings do not require an ending character. Use *0 to turn it off for hotstrings that as needed.
 #Include <includeCommon>
-#Hotstring *             ; Default option: hotstrings do not require an ending character. Use *0 to turn it off for hotstrings that as needed.
-SetTitleMatchMode, % TITLE_MATCH_MODE_Contain
+
+SendMode, Input                               ; Recommended for new scripts due to its superior speed and reliability.
+SetWorkingDir, %A_ScriptDir%                  ; Ensures a consistent starting directory.
+DetectHiddenWindows, On                       ; Do search hidden windows
+SetTitleMatchMode, % TITLE_MATCH_MODE_Contain ; Match text anywhere inside window titles
+SetCapsLockState,   AlwaysOff                 ; Turn off Caps Lock so it can be used as a hotkey.
+SetScrollLockState, AlwaysOff                 ; Turn off Scroll Lock so it can be used as a hotkey.
+SetNumLockState,    AlwaysOn                  ; Force NumLock to always stay on.
 
 setCommonHotkeysType(HOTKEY_TYPE_Master)
 setUpTrayIcons("shellGreen.ico", "shellRed.ico", "AHK: Main Script")
 
-; Turn off caps lock and scroll lock (mainly so we can use them as hotkeys) and force num lock to stay on.
-SetCapsLockState,   AlwaysOff
-SetScrollLockState, AlwaysOff
-SetNumLockState,    AlwaysOn
 
 ; Standalone scripts. Must be first to execute so they can spin off and be on their own.
 runStandaloneScripts()
@@ -25,7 +25,7 @@ runStandaloneScripts()
 #Include %A_ScriptDir%\general\ ; General hotkeys.
 #Include hotstrings.ahk ; Must go after startup, but before hotkeys begin.
 #Include input.ahk
-#Include kdeMoverSizer.ahk
+; #Include kdeMoverSizer.ahk
 #Include launch.ahk
 #Include media.ahk
 #Include places.ahk
@@ -77,6 +77,7 @@ runStandaloneScripts() {
 		Run(standaloneFolder "killUAC\killUAC.ahk")
 		Run(standaloneFolder "dlgNumTracker\dlgNumTracker.ahk")
 		Run(standaloneFolder "tortoiseFillerDLG\tortoiseFillerDLG.ahk")
+		Run(standaloneFolder "windowMoverSizer\windowMoverSizer.ahk")
 	} else if(MainConfig.isMachine(MACHINE_HomeDesktop)) {
 		; Run(standaloneFolder "psxEmulatorController\psxEmulatorController.ahk")
 	}

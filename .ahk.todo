@@ -14,13 +14,17 @@
 	Try using Try/Catch handling around putty "find again" hotkeys: https://www.autohotkey.com/docs/commands/Try.htm
 	Add catch and error toast for launching a program that doesn't exist (Launchy in VDIs, for example)
 	Should ACTION_*, etc. constants live inside of ActionObject? Might let us shorten names a little.
+	Rewrite/clean up coding style for kdeMoverSizer
+		Document functions
+		Split out + document VisualWindow
+		Split out + document MousePosition
+		Finish replacing kdeMoverSizer with windowMoverSizer (remove commented-out line from main.ahk, delete script)
 	
 # Large
 	Try to clean up window.ahk some more - can we rearrange functions to have more discrete purposes and make more sense?
 		Should window moving/sizing logic be a separate script? windowPosition.ahk, maybe?
 		Should functions that deal with visual heights/widths/positions be named to include "visual"?
 		Would a class to represent the size of a window (both visual and actual, plus easy access to offset between) make things cleaner?
-	Rewrite/clean up coding style for kdeMoverSizer
 	Consider some way to more precisely move the mouse cursor on command
 		A standalone script (like griddy?) or just a hotkey
 		Lock the mouse?

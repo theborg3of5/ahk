@@ -40,11 +40,12 @@
 			}
 		
 		; Open web version of the current object in EMC2.
-		!w::
-			openEMC2RecordWeb() {
-				getObjectInfoFromEMC2(ini, id)
-				ActionObject.do(id, TYPE_EMC2, ACTION_Run, ini, SUBACTION_Web)
-			}
+		!w::openEMC2Record(SUBACTION_Web)
+		!+w::openEMC2Record(SUBACTION_WebBasic)
+		openEMC2Record(subAction) {
+			getObjectInfoFromEMC2(ini, id)
+			ActionObject.do(id, TYPE_EMC2, ACTION_Run, ini, subAction)
+		}
 		
 		; Take DLG # and pop up the DLG in EpicStudio sidebar.
 		^+o::

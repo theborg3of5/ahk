@@ -140,8 +140,12 @@
 		} else if(subAction = SUBACTION_Web) {
 			if(isSherlockINI(ini))
 				link := MainConfig.private["SHERLOCK_BASE"]
+			else if(isNovaINI(ini))
+				link := MainConfig.private["NOVA_RELEASE_NOTE_BASE"]
 			else
 				link := MainConfig.private["EMC2_LINK_WEB_BASE"]
+		} else if(subAction = SUBACTION_WebBasic) {
+			link := MainConfig.private["EMC2_LINK_WEB_BASE"]
 		}
 		
 		link .= paramString
@@ -150,12 +154,9 @@
 		return link
 	}
 	canViewINIInEMC2(ini) {
-		if(!ini)
-			return false
-		
 		if(ini = "DLG")
 			return true
-		if( (ini = "QAN") || (ini = "ZQN") )
+		if(ini = "QAN" || ini = "ZQN")
 			return true
 		if(ini = "XDS")
 			return true
@@ -163,13 +164,10 @@
 		return false
 	}
 	isSherlockINI(ini) {
-		if(!ini)
-			return false
-		
-		if(ini = "SLG")
-			return true
-		
-		return false
+		return (ini = "SLG")
+	}
+	isNovaINI(ini) {
+		return (ini = "DRN")
 	}
 	
 	buildHyperspaceRunString(versionMajor, versionMinor, environment) {

@@ -12,9 +12,11 @@
 		EDIT
 			The action will be done for the object in edit mode. For example, an EMC2 object will be opened in EMC2 (not in view-only mode), or the generated link will open it that way.
 		VIEW
-			The same as EDIT, except that the object will be opened in read-only mode where applicable.
+			The same as EDIT, except that the object will be opened/linked in read-only mode where applicable.
 		WEB
-			The web equivalent of the object will be opened. This applies primarily to EMC2 objects, which have corresponding web views.
+			The web equivalent of the object will be opened/linked. This applies primarily to EMC2 objects, which have corresponding web views.
+		WEB_BASIC
+			The "basic" web equivalent (instead of anything special like Nova or Sherlock) will be opened/linked. This applies primarily to EMC2 objects, which have corresponding web views.
 	
 	Supported Types (TYPE_* constants)
 		EMC2
@@ -61,9 +63,10 @@ global SUBTYPE_Routine  := "ROUTINE"
 global SUBTYPE_DLG      := "DLG"
 ; Additional subtypes (EMC2 INIs) can be defined in actionObject.tls.
 
-global SUBACTION_Edit := "EDIT"
-global SUBACTION_View := "VIEW"
-global SUBACTION_Web  := "WEB"
+global SUBACTION_Edit     := "EDIT"
+global SUBACTION_View     := "VIEW"
+global SUBACTION_Web      := "WEB"
+global SUBACTION_WebBasic := "WEB_BASIC"
 
 
 class ActionObject {
@@ -247,7 +250,7 @@ class ActionObject {
 			return
 		
 		if(action = ACTION_Run) {
-			if(type = TYPE_EMC2 || type = TYPE_CodeSearchRoutine || type = TYPE_Helpdesk || type = TYPE_GuruSearch) {
+			if(type = TYPE_EMC2 || type = TYPE_EpicStudio || type = TYPE_CodeSearchRoutine || type = TYPE_Helpdesk || type = TYPE_GuruSearch) {
 				link := this.perform(type, ACTION_Link, subType, subAction, input)
 				if(link)
 					Run(link)
@@ -261,11 +264,6 @@ class ActionObject {
 				} else if(subType = SUBTYPE_URL) {
 					Run(input)
 				}
-				
-			} else if(type = TYPE_EpicStudio) {
-				link := this.perform(type, ACTION_Link, subType, subAction, input)
-				if(link)
-					Run(link)
 			}
 			
 		} else if(action = ACTION_Link) {

@@ -26,36 +26,6 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 	; Alt+Left Drag to move
 	!LButton::
 		moveWindowUnderMouse() {
-			titleString := getTitleStringForWindowUnderMouse()
-			restoreWindowIfMaximized(titleString)
-			
-			; Get initial state - (visual) window position/size and mouse position
-			getWindowVisualPosition(startX, startY, startWidth, startHeight, titleString)
-			MouseGetPos(mouseStartX, mouseStartY)
-			
-			Loop {
-				; Loop exit condition: left-click is released
-				if(!GetKeyState("LButton", "P"))
-					Break
-				
-				; If LControl is pressed while we're moving, activate the window
-				if(GetKeyState("LControl"))
-					WindowActions.activateWindow(titleString)
-				
-				; Calculate new window position
-				getMouseDistanceMoved(mouseStartX, mouseStartY, distanceX, distanceY)
-				x := startX + distanceX
-				y := startY + distanceY
-				
-				; Snap to edges as needed
-				if(!GetKeyState("LShift", "P")) ; Suppress snapping with left shift
-					snapMovingWindowToMonitorEdges(titleString, x, y, startWidth, startHeight)
-				
-				; Move window to new (visual) position
-				moveWindowVisual(x, y, , , titleString)
-			}
-		}
-		moveWindowUnderMouse2() {
 			dragWindowPrep(window, mouseStart)
 			
 			Loop {
@@ -67,18 +37,14 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 				if(GetKeyState("LControl"))
 					WindowActions.activateWindow(window.titleString)
 				
-				; Calculate new window position
-				mouseStart.getCurrentDistanceFromPosition(distanceX, distanceY)
+				if(GetKeyState("LShift", "P")) ; Holding down left Shift suppresses snapping
+					window.snapDistance := 0
+				else
+					window.snapDistance := SnappingDistance
+				
+				; Move window to new position
+				mouseStart.getDistanceFromCurrentPosition(distanceX, distanceY)
 				window.moveRelativeToStart(distanceX, distanceY)
-				; window.moveToLeftX(window.leftX + distanceX)
-				; window.moveToTopY( window.topY  + distanceY)
-				
-				; Snap to edges as needed
-				if(!GetKeyState("LShift", "P")) ; Suppress snapping with left shift
-					snapMovingWindowToMonitorEdges(winStart, x, y)
-				
-				; Move window to new (visual) position
-				moveWindowVisual(x, y, , , winStart.titleString)
 			}
 		}
 
@@ -148,12 +114,12 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 
 dragWindowPrep(ByRef window, ByRef mouseStart) {
 	MouseGetPos( , , winId)
-	window := new VisualWindow("ahk_id " winId, 25)
+	titleString := "ahk_id " winId
 	
+	restoreWindowIfMaximized(titleString)
+	
+	window := new VisualWindow(titleString)
 	mouseStart := new MousePosition()
-	
-	; getWindowVisualPosition(startX, startY, startWidth, startHeight, titleString)
-	; MouseGetPos(mouseStartX, mouseStartY)
 }
 
 
@@ -287,8 +253,8 @@ class VisualWindow {
 		
 		this._startLeftX   := this._leftX
 		this._startRightX  := this._rightX
-		this._startBottomY := this._bottomY
 		this._startTopY    := this._topY
+		this._startBottomY := this._bottomY
 		this._startWidth   := this._width
 		this._startHeight  := this._height
 	}
@@ -372,60 +338,71 @@ class VisualWindow {
 	
 	
 	moveToLeftX(x) {
-		this._moveToLeftX(x)
-		this.snapMoveX()
+		this.moveWinToLeftX(x)
+		this.moveSnapX()
+		this.applyPosition()
 	}
 	moveToRightX(x) {
-		this._moveToRightX(x)
-		this.snapMoveX()
+		this.moveWinToRightX(x)
+		this.moveSnapX()
+		this.applyPosition()
 	}
 	moveToTopY(y) {
-		this._moveToTopY(y)
-		this.snapMoveY()
+		this.moveWinToTopY(y)
+		this.moveSnapY()
+		this.applyPosition()
 	}
 	moveToBottomY(y) {
-		this._moveToBottomY(y)
-		this.snapMoveY()
+		this.moveWinToBottomY(y)
+		this.moveSnapY()
+		this.applyPosition()
 	}
 	
 	moveRelativeToStart(distanceX := 0, distanceY := 0) {
-		this.moveToLeftX(this._startLeftX + distanceX)
-		this.moveToTopY( this._startTopY  + distanceY)
+		this.moveWinToLeftX(this._startLeftX + distanceX)
+		this.moveSnapX()
+		
+		this.moveWinToTopY( this._startTopY  + distanceY)
+		this.moveSnapY()
+		
+		this.applyPosition()
 	}
 	
 	
 	resizeToWidth(width) {
 		this._width  := width
 		this._rightX := this._leftX + width
+		this.applyPosition()
 	}
 	resizeToHeight(height) {
 		this._height  := height
 		this._bottomY := this._topY + height
+		this.applyPosition()
 	}
 	
 	
 	resizeLeftToX(x) {
 		this._leftX := x
 		this._width := this._rightX - x
+		this.applyPosition()
 	}
 	
 	resizeRightToX(x) {
 		this._rightX := x
 		this._width  := x - this._leftX
+		this.applyPosition()
 	}
 	
 	resizeUpToY(y) {
 		this._topY   := y
 		this._height := this._bottomY - y
+		this.applyPosition()
 	}
 	
 	resizeDownToY(y) {
 		this._bottomY := y
 		this._height  := y - this._topY
-	}
-	
-	applyPosition() { ; GDB TODO should this happen automatically on moving or resizing?
-		moveWindowVisual(this._leftX, this._topY, this._width, this._height, this._titleString)
+		this.applyPosition()
 	}
 	
 	
@@ -449,7 +426,7 @@ class VisualWindow {
 	
 	
 	
-	snapMoveX() {
+	moveSnapX() {
 		if(this._snapDistance <= 0)
 			return
 		
@@ -459,12 +436,12 @@ class VisualWindow {
 		
 		; Snap to left or right edge of screen
 		if((leftDistance > 0) && (leftDistance <= this._snapDistance))
-			this._moveToLeftX(monitorBounds["LEFT"])
+			this.moveWinToLeftX(monitorBounds["LEFT"])
 		else if((rightDistance > 0) && (rightDistance <= this._snapDistance))
-			this._moveToRightX(monitorBounds["RIGHT"])
+			this.moveWinToRightX(monitorBounds["RIGHT"])
 	}
 	
-	snapMoveY() {
+	moveSnapY() {
 		if(this._snapDistance <= 0)
 			return
 		
@@ -474,26 +451,30 @@ class VisualWindow {
 		
 		; Snap to top or bottom edge of screen
 		if((topDistance > 0) && (topDistance <= this._snapDistance))
-			this._moveToTopY(monitorBounds["TOP"])
+			this.moveWinToTopY(monitorBounds["TOP"])
 		else if((bottomDistance > 0) && (bottomDistance <= this._snapDistance))
-			this._moveToBottomY(monitorBounds["BOTTOM"])
+			this.moveWinToBottomY(monitorBounds["BOTTOM"])
 	}
 	
-	_moveToLeftX(x) {
+	moveWinToLeftX(x) {
 		this._leftX  := x
-		this._rightX := x + width
+		this._rightX := x + this._width
 	}
-	_moveToRightX(x) {
-		this._leftX  := x - width
+	moveWinToRightX(x) {
+		this._leftX  := x - this._width
 		this._rightX := x
 	}
-	_moveToTopY(y) {
+	moveWinToTopY(y) {
 		this._topY    := y
-		this._bottomY := y + height
+		this._bottomY := y + this._height
 	}
-	_moveToBottomY(y) {
-		this._topY    := y - height
+	moveWinToBottomY(y) {
+		this._topY    := y - this._height
 		this._bottomY := y
+	}
+	
+	applyPosition() {
+		moveWindowVisual(this._leftX, this._topY, this._width, this._height, this._titleString)
 	}
 	
 }
@@ -529,7 +510,7 @@ class MousePosition {
 		}
 	}
 	
-	getCurrentDistanceFromPosition(ByRef distanceX, ByRef distanceY) {
+	getDistanceFromCurrentPosition(ByRef distanceX, ByRef distanceY) {
 		MouseGetPos(x, y)
 		
 		distanceX := x - this._x

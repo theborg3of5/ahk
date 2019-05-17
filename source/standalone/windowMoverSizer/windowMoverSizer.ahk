@@ -265,14 +265,12 @@ class VisualWindow {
 	
 	
 	
-	resizeToWidth(width) { ; GDB TODO flesh these out?
-		this._width  := width
-		this._rightX := this._leftX + width
+	resizeToWidth(width) {
+		this.resizeWinToWidth(width)
 		this.applyPosition()
 	}
 	resizeToHeight(height) {
-		this._height  := height
-		this._bottomY := this._topY + height
+		this.resizeWinToHeight(height)
 		this.applyPosition()
 	}
 	
@@ -298,7 +296,7 @@ class VisualWindow {
 		this.applyPosition()
 	}
 	
-	resizeRelativeToStart(distanceX := 0, distanceY := 0, resizeDirectionX := "RIGHT", resizeDirectionY := "DOWN") { ; resizeDirectionX := RESIZE_HORIZ_RIGHT, directionY := RESIZE_VERT_DOWN
+	resizeRelativeToStart(distanceX := 0, distanceY := 0, resizeDirectionX := "", resizeDirectionY := "") {
 		if(resizeDirectionX = RESIZE_HORIZ_LEFT)
 			this.resizeWinLeftToX(this._startLeftX + distanceX)
 		else if(resizeDirectionX = RESIZE_HORIZ_RIGHT)
@@ -381,6 +379,17 @@ class VisualWindow {
 			this.moveWinToTopY(monitorBounds["TOP"])
 		else if((bottomDistance > 0) && (bottomDistance <= this._snapDistance))
 			this.moveWinToBottomY(monitorBounds["BOTTOM"])
+	}
+	
+	
+	
+	resizeWinToWidth(width) {
+		this._width  := width
+		this._rightX := this._leftX + width
+	}
+	resizeWinToHeight(height) {
+		this._height  := height
+		this._bottomY := this._topY + height
 	}
 	
 	

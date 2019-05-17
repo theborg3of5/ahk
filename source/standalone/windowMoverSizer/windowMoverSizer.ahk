@@ -85,7 +85,7 @@ dragWindowPrep(ByRef window, ByRef mouseStart) {
 	
 	restoreWindowIfMaximized(titleString)
 	
-	window := new VisualWindow(titleString)
+	window := new VisualWindow(titleString, 25) ; 25px snapping distance
 	mouseStart := new MousePosition()
 }
 
@@ -107,9 +107,9 @@ handleDragWindowKeys(window) {
 	
 	; Holding down left Shift suppresses snapping
 	if(GetKeyState("LShift"))
-		window.snapDistance := 0
+		window.snapOff()
 	else
-		window.snapDistance := SnappingDistance
+		window.snapOn()
 }
 
 getResizeDirections(window, mouseStart, ByRef resizeHorizontal, ByRef resizeVertical) {
@@ -135,179 +135,111 @@ class VisualWindow {
 	
 	
 	__New(titleString := "A", snapDistance := 0) {
-		this._titleString := titleString
-		this._snapDistance := snapDistance
+		this.titleString := titleString
+		this.snapDistance := snapDistance
+		if(snapDistance > 0)
+			this.isSnapOn := true
 		
 		getWindowVisualPosition(x, y, width, height, titleString)
-		this._leftX   := x
-		this._rightX  := x + width
-		this._topY    := y
-		this._bottomY := y + height
-		this._width   := width
-		this._height  := height
+		this.leftX   := x
+		this.rightX  := x + width
+		this.topY    := y
+		this.bottomY := y + height
+		this.width   := width
+		this.height  := height
 		
-		this._startLeftX   := this._leftX
-		this._startRightX  := this._rightX
-		this._startTopY    := this._topY
-		this._startBottomY := this._bottomY
-		this._startWidth   := this._width
-		this._startHeight  := this._height
+		this.startLeftX   := this.leftX
+		this.startRightX  := this.rightX
+		this.startTopY    := this.topY
+		this.startBottomY := this.bottomY
+		this.startWidth   := this.width
+		this.startHeight  := this.height
 	}
 	
-	titleString[] {
-		get {
-			return this._titleString
-		}
-	}
 	
-	snapDistance[] {
-		get {
-			return this._snapDistance
-		}
-		set {
-			this._snapDistance := value
-		}
+	snapOn() {
+		this.isSnapOn := true
 	}
-	
-	leftX[] {
-		get {
-			return this._leftX
-		}
-	}
-	rightX[] {
-		get {
-			return this._rightX
-		}
-	}
-	topY[] {
-		get {
-			return this._topY
-		}
-	}
-	bottomY[] {
-		get {
-			return this._bottomY
-		}
-	}
-	width[] {
-		get {
-			return this._width
-		}
-	}
-	height[] {
-		get {
-			return this._height
-		}
-	}
-	
-	startLeftX[] {
-		get {
-			return this._startLeftX
-		}
-	}
-	startRightX[] {
-		get {
-			return this._startRightX
-		}
-	}
-	startTopY[] {
-		get {
-			return this._startTopY
-		}
-	}
-	startBottomY[] {
-		get {
-			return this._startBottomY
-		}
-	}
-	startWidth[] {
-		get {
-			return this._startWidth
-		}
-	}
-	startHeight[] {
-		get {
-			return this._startHeight
-		}
+	snapOff() {
+		this.isSnapOn := false
 	}
 	
 	
 	moveToLeftX(x) {
-		this.moveWinToLeftX(x)
-		this.moveSnapX()
+		this.mvToLeftX(x)
+		this.mvSnapX()
 		this.applyPosition()
 	}
 	moveToRightX(x) {
-		this.moveWinToRightX(x)
-		this.moveSnapX()
+		this.mvToRightX(x)
+		this.mvSnapX()
 		this.applyPosition()
 	}
 	moveToTopY(y) {
-		this.moveWinToTopY(y)
-		this.moveSnapY()
+		this.mvToTopY(y)
+		this.mvSnapY()
 		this.applyPosition()
 	}
 	moveToBottomY(y) {
-		this.moveWinToBottomY(y)
-		this.moveSnapY()
+		this.mvToBottomY(y)
+		this.mvSnapY()
 		this.applyPosition()
 	}
 	
 	moveRelativeToStart(distanceX := 0, distanceY := 0) {
-		this.moveWinToLeftX(this._startLeftX + distanceX)
-		this.moveSnapX()
+		this.mvToLeftX(this.startLeftX + distanceX)
+		this.mvSnapX()
 		
-		this.moveWinToTopY( this._startTopY  + distanceY)
-		this.moveSnapY()
+		this.mvToTopY( this.startTopY  + distanceY)
+		this.mvSnapY()
 		
-		this.applyPosition()
-	}
-	
-	
-	
-	resizeToWidth(width) {
-		this.resizeWinToWidth(width)
-		this.applyPosition()
-	}
-	resizeToHeight(height) {
-		this.resizeWinToHeight(height)
 		this.applyPosition()
 	}
 	
 	
 	resizeLeftToX(x) {
-		this.resizeWinLeftToX(x)
-		this.resizeSnapX()
+		this.rsLeftToX(x)
+		this.rsSnapX()
 		this.applyPosition()
 	}
 	resizeRightToX(x) {
-		this.resizeWinRightToX(x)
-		this.resizeSnapX()
+		this.rsRightToX(x)
+		this.rsSnapX()
+		this.applyPosition()
+	}
+	resizeToWidth(width) {
+		this.rsToWidth(width)
+		this.rsSnapX()
 		this.applyPosition()
 	}
 	resizeUpToY(y) {
-		this.resizeWinUpToY(y)
-		this.resizeSnapY()
+		this.rsUpToY(y)
+		this.rsSnapY()
 		this.applyPosition()
 	}
 	resizeDownToY(y) {
-		this.resizeWinDownToY(y)
-		this.resizeSnapY()
+		this.rsDownToY(y)
+		this.rsSnapY()
+		this.applyPosition()
+	}
+	resizeToHeight(height) {
+		this.rsToHeight(height)
+		this.rsSnapY()
 		this.applyPosition()
 	}
 	
 	resizeRelativeToStart(distanceX := 0, distanceY := 0, resizeDirectionX := "", resizeDirectionY := "") {
 		if(resizeDirectionX = RESIZE_HORIZ_LEFT)
-			this.resizeWinLeftToX(this._startLeftX + distanceX)
+			this.rsLeftToX(this.startLeftX + distanceX)
 		else if(resizeDirectionX = RESIZE_HORIZ_RIGHT)
-			this.resizeWinRightToX(this._startRightX + distanceX)
-		this.resizeSnapX(resizeDirectionX)
+			this.rsRightToX(this.startRightX + distanceX)
+		this.rsSnapX(resizeDirectionX)
 		
 		if(resizeDirectionY = RESIZE_VERT_UP)
-			this.resizeWinUpToY(this._startTopY + distanceY)
+			this.rsUpToY(this.startTopY + distanceY)
 		else if(resizeDirectionY = RESIZE_VERT_DOWN)
-			this.resizeWinDownToY(this._startBottomY + distanceY)
-		this.resizeSnapY(resizeDirectionY)
+			this.rsDownToY(this.startBottomY + distanceY)
+		this.rsSnapY(resizeDirectionY)
 		
 		this.applyPosition()
 	}
@@ -316,143 +248,146 @@ class VisualWindow {
 	; ==============================
 	; == Private ===================
 	; ==============================
-	_titleString  := ""
-	_snapDistance := 0
-	_leftX        := 0
-	_rightX       := 0
-	_topY         := 0
-	_bottomY      := 0
-	_width        := 0
-	_height       := 0
-	_startLeftX   := 0
-	_startRightX  := 0
-	_startTopY    := 0
-	_startBottomY := 0
-	_startWidth   := 0
-	_startHeight  := 0
+	titleString  := ""
+	snapDistance := 0
+	isSnapOn     := false
+	
+	leftX        := 0
+	rightX       := 0
+	topY         := 0
+	bottomY      := 0
+	width        := 0
+	height       := 0
+	
+	startLeftX        := 0
+	startRightX       := 0
+	startTopY         := 0
+	startBottomY      := 0
+	startWidth        := 0
+	startHeight       := 0
 	
 	
 	
-	moveWinToLeftX(x) {
-		this._leftX  := x
-		this._rightX := x + this._width
+	mvToLeftX(x) {
+		this.leftX  := x
+		this.rightX := x + this.width
 	}
-	moveWinToRightX(x) {
-		this._leftX  := x - this._width
-		this._rightX := x
+	mvToRightX(x) {
+		this.leftX  := x - this.width
+		this.rightX := x
 	}
-	moveWinToTopY(y) {
-		this._topY    := y
-		this._bottomY := y + this._height
+	mvToTopY(y) {
+		this.topY    := y
+		this.bottomY := y + this.height
 	}
-	moveWinToBottomY(y) {
-		this._topY    := y - this._height
-		this._bottomY := y
+	mvToBottomY(y) {
+		this.topY    := y - this.height
+		this.bottomY := y
 	}
 	
 	
 	
-	moveSnapX() {
-		if(this._snapDistance <= 0)
+	mvSnapX() {
+		if(!this.isSnapOn)
 			return
 		
-		monitorBounds := getMonitorBounds("", this._titleString)
-		leftDistance  := abs(this._leftX  - monitorBounds["LEFT"])
-		rightDistance := abs(this._rightX - monitorBounds["RIGHT"])
+		monitorBounds := getMonitorBounds("", this.titleString)
+		leftDistance  := abs(this.leftX  - monitorBounds["LEFT"])
+		rightDistance := abs(this.rightX - monitorBounds["RIGHT"])
 		
 		; Snap to left or right edge of screen
-		if((leftDistance > 0) && (leftDistance <= this._snapDistance))
-			this.moveWinToLeftX(monitorBounds["LEFT"])
-		else if((rightDistance > 0) && (rightDistance <= this._snapDistance))
-			this.moveWinToRightX(monitorBounds["RIGHT"])
+		if((leftDistance > 0) && (leftDistance <= this.snapDistance))
+			this.mvToLeftX(monitorBounds["LEFT"])
+		else if((rightDistance > 0) && (rightDistance <= this.snapDistance))
+			this.mvToRightX(monitorBounds["RIGHT"])
 	}
-	moveSnapY() {
-		if(this._snapDistance <= 0)
+	mvSnapY() {
+		if(!this.isSnapOn)
 			return
 		
-		monitorBounds := getMonitorBounds("", this._titleString)
-		topDistance    := abs(this._topY    - monitorBounds["TOP"])
-		bottomDistance := abs(this._bottomY - monitorBounds["BOTTOM"])
+		monitorBounds := getMonitorBounds("", this.titleString)
+		topDistance    := abs(this.topY    - monitorBounds["TOP"])
+		bottomDistance := abs(this.bottomY - monitorBounds["BOTTOM"])
 		
 		; Snap to top or bottom edge of screen
-		if((topDistance > 0) && (topDistance <= this._snapDistance))
-			this.moveWinToTopY(monitorBounds["TOP"])
-		else if((bottomDistance > 0) && (bottomDistance <= this._snapDistance))
-			this.moveWinToBottomY(monitorBounds["BOTTOM"])
+		if((topDistance > 0) && (topDistance <= this.snapDistance))
+			this.mvToTopY(monitorBounds["TOP"])
+		else if((bottomDistance > 0) && (bottomDistance <= this.snapDistance))
+			this.mvToBottomY(monitorBounds["BOTTOM"])
 	}
 	
 	
 	
-	resizeWinToWidth(width) {
-		this._width  := width
-		this._rightX := this._leftX + width
+	rsToWidth(width) {
+		this.width  := width
+		this.rightX := this.leftX + width
 	}
-	resizeWinToHeight(height) {
-		this._height  := height
-		this._bottomY := this._topY + height
-	}
-	
-	
-	resizeWinLeftToX(x) {
-		this._leftX := x
-		this._width := this._rightX - x
-	}
-	resizeWinRightToX(x) {
-		this._rightX := x
-		this._width  := x - this._leftX
-	}
-	resizeWinUpToY(y) {
-		this._topY   := y
-		this._height := this._bottomY - y
-	}
-	resizeWinDownToY(y) {
-		this._bottomY := y
-		this._height  := y - this._topY
+	rsToHeight(height) {
+		this.height  := height
+		this.bottomY := this.topY + height
 	}
 	
 	
-	resizeSnapX(resizeDirectionX) {
-		if(this._snapDistance <= 0)
+	rsLeftToX(x) {
+		this.leftX := x
+		this.width := this.rightX - x
+	}
+	rsRightToX(x) {
+		this.rightX := x
+		this.width  := x - this.leftX
+	}
+	rsUpToY(y) {
+		this.topY   := y
+		this.height := this.bottomY - y
+	}
+	rsDownToY(y) {
+		this.bottomY := y
+		this.height  := y - this.topY
+	}
+	
+	
+	rsSnapX(resizeDirectionX) {
+		if(!this.isSnapOn)
 			return
 		
-		monitorBounds := getMonitorBounds("", this._titleString)
-		leftDistance  := abs(this._leftX  - monitorBounds["LEFT"])
-		rightDistance := abs(this._rightX - monitorBounds["RIGHT"])
+		monitorBounds := getMonitorBounds("", this.titleString)
+		leftDistance  := abs(this.leftX  - monitorBounds["LEFT"])
+		rightDistance := abs(this.rightX - monitorBounds["RIGHT"])
 		
 		; Snap to left edge of screen
 		if(resizeDirectionX = RESIZE_HORIZ_LEFT) {
-			if((leftDistance > 0) && (leftDistance <= this._snapDistance))
-				this.resizeWinLeftToX(monitorBounds["LEFT"])
+			if((leftDistance > 0) && (leftDistance <= this.snapDistance))
+				this.rsLeftToX(monitorBounds["LEFT"])
 		
 		; Snap to right edge of screen
 		} else if(resizeDirectionX = RESIZE_HORIZ_RIGHT) {
-			if((rightDistance > 0) && (rightDistance <= this._snapDistance))
-				this.resizeWinRightToX(monitorBounds["RIGHT"])
+			if((rightDistance > 0) && (rightDistance <= this.snapDistance))
+				this.rsRightToX(monitorBounds["RIGHT"])
 		}
 	}
-	resizeSnapY(resizeDirectionY) {
-		if(this._snapDistance <= 0)
+	rsSnapY(resizeDirectionY) {
+		if(!this.isSnapOn)
 			return
 		
-		monitorBounds := getMonitorBounds("", this._titleString)
-		topDistance    := abs(this._topY    - monitorBounds["TOP"])
-		bottomDistance := abs(this._bottomY - monitorBounds["BOTTOM"])
+		monitorBounds := getMonitorBounds("", this.titleString)
+		topDistance    := abs(this.topY    - monitorBounds["TOP"])
+		bottomDistance := abs(this.bottomY - monitorBounds["BOTTOM"])
 		
 		; Snap to top edge of screen
 		if(resizeDirectionY = RESIZE_VERT_UP) {
-			if((topDistance > 0) && (topDistance <= this._snapDistance))
-				this.resizeWinUpToY(monitorBounds["TOP"])
+			if((topDistance > 0) && (topDistance <= this.snapDistance))
+				this.rsUpToY(monitorBounds["TOP"])
 		
 		; Snap to bottom edge of screen
 		} else if(resizeDirectionY = RESIZE_VERT_DOWN) {
-			if((bottomDistance > 0) && (bottomDistance <= this._snapDistance))
-				this.resizeWinDownToY(monitorBounds["BOTTOM"])
+			if((bottomDistance > 0) && (bottomDistance <= this.snapDistance))
+				this.rsDownToY(monitorBounds["BOTTOM"])
 		}
 	}
 	
 	
 	applyPosition() {
-		moveWindowVisual(this._leftX, this._topY, this._width, this._height, this._titleString)
+		moveWindowVisual(this.leftX, this.topY, this.width, this.height, this.titleString)
 	}
 	
 }
@@ -466,41 +401,23 @@ class MousePosition {
 	
 	__New() {
 		MouseGetPos(x, y)
-		this._x := x
-		this._y := y
-	}
-	
-	x[] {
-		get {
-			return this._x
-		}
-		set {
-			this._x := value
-		}
-	}
-	
-	y[] {
-		get {
-			return this._y
-		}
-		set {
-			this._y := value
-		}
+		this.x := x
+		this.y := y
 	}
 	
 	getDistanceFromCurrentPosition(ByRef distanceX, ByRef distanceY) {
 		MouseGetPos(x, y)
 		
-		distanceX := x - this._x
-		distanceY := y - this._y
+		distanceX := x - this.x
+		distanceY := y - this.y
 	}
 	
 	
 	; ==============================
 	; == Private ===================
 	; ==============================
-	_x := 0
-	_y := 0
+	x := 0
+	y := 0
 	
 }
 

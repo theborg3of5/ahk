@@ -28,6 +28,9 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 		moveWindowUnderMouse() {
 			dragWindowPrep(window, mouseStart)
 			
+			startLeftX := window.leftX
+			startTopY  := window.topY
+			
 			Loop {
 				; Loop exit condition: left-click is released
 				if(!GetKeyState("LButton", "P")) ; P for physical because it's this hotkey
@@ -36,9 +39,13 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 				; Additional modifier keys can disable snapping, focus window, etc.
 				handleDragWindowKeys(window)
 				
-				; Move window to new position
+				; Calculate new position
 				mouseStart.getDistanceFromCurrentPosition(distanceX, distanceY)
-				window.moveRelativeToStart(distanceX, distanceY)
+				window.moveToLeftX(startLeftX + distanceX)
+				window.moveToTopY( startTopY  + distanceY)
+				
+				; Move window to new position
+				window.applyWindowPosition()
 			}
 		}
 
@@ -50,6 +57,11 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 			; Determine which directions to resize the window in, based on which quadrant of the window the mouse is over
 			getResizeDirections(window, mouseStart, resizeDirectionX, resizeDirectionY)
 			
+			startLeftX   := window.leftX
+			startRightX  := window.rightX
+			startTopY    := window.topY
+			startBottomY := window.bottomY
+			
 			Loop {
 				; Loop exit condition: left-click is released
 				if(!GetKeyState("RButton", "P")) ; P for physical because it's this hotkey
@@ -58,9 +70,21 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 				; Additional modifier keys can disable snapping, focus window, etc.
 				handleDragWindowKeys(window)
 				
-				; Resize window to new size
+				; Calculate new position/size
 				mouseStart.getDistanceFromCurrentPosition(distanceX, distanceY)
-				window.resizeRelativeToStart(distanceX, distanceY, resizeDirectionX, resizeDirectionY)
+				
+				if(resizeDirectionX = RESIZE_HORIZ_LEFT)
+					window.resizeLeftToX(startLeftX + distanceX)
+				else if(resizeDirectionX = RESIZE_HORIZ_RIGHT)
+					window.resizeRightToX(startRightX + distanceX)
+				
+				if(resizeDirectionY = RESIZE_VERT_UP)
+					window.resizeUpToY(startTopY + distanceY)
+				else if(resizeDirectionY = RESIZE_VERT_DOWN)
+					window.resizeDownToY(startBottomY + distanceY)
+				
+				; Move window to new position/size
+				window.applyWindowPosition()
 			}
 		}
 
@@ -85,7 +109,7 @@ dragWindowPrep(ByRef window, ByRef mouseStart) {
 	
 	restoreWindowIfMaximized(titleString)
 	
-	window := new VisualWindow(titleString, 25) ; 25px snapping distance
+	window := new VisualWindow(titleString, 25, false) ; 25px snapping distance, don't auto-apply changes
 	mouseStart := new MousePosition()
 }
 
@@ -134,11 +158,12 @@ class VisualWindow {
 	; ==============================
 	
 	
-	__New(titleString := "A", snapDistance := 0) {
+	__New(titleString := "A", snapDistance := 0, autoApply := true) {
 		this.titleString := titleString
 		this.snapDistance := snapDistance
 		if(snapDistance > 0)
 			this.isSnapOn := true
+		this.autoApply := autoApply
 		
 		getWindowVisualPosition(x, y, width, height, titleString)
 		this.leftX   := x
@@ -147,15 +172,7 @@ class VisualWindow {
 		this.bottomY := y + height
 		this.width   := width
 		this.height  := height
-		
-		this.startLeftX   := this.leftX
-		this.startRightX  := this.rightX
-		this.startTopY    := this.topY
-		this.startBottomY := this.bottomY
-		this.startWidth   := this.width
-		this.startHeight  := this.height
 	}
-	
 	
 	snapOn() {
 		this.isSnapOn := true
@@ -163,7 +180,6 @@ class VisualWindow {
 	snapOff() {
 		this.isSnapOn := false
 	}
-	
 	
 	moveToLeftX(x) {
 		this.mvToLeftX(x)
@@ -186,62 +202,39 @@ class VisualWindow {
 		this.applyPosition()
 	}
 	
-	moveRelativeToStart(distanceX := 0, distanceY := 0) {
-		this.mvToLeftX(this.startLeftX + distanceX)
-		this.mvSnapX()
-		
-		this.mvToTopY( this.startTopY  + distanceY)
-		this.mvSnapY()
-		
-		this.applyPosition()
-	}
-	
-	
 	resizeLeftToX(x) {
 		this.rsLeftToX(x)
-		this.rsSnapX()
+		this.rsSnapX(RESIZE_HORIZ_LEFT)
 		this.applyPosition()
 	}
 	resizeRightToX(x) {
 		this.rsRightToX(x)
-		this.rsSnapX()
+		this.rsSnapX(RESIZE_HORIZ_RIGHT)
 		this.applyPosition()
 	}
 	resizeToWidth(width) {
 		this.rsToWidth(width)
-		this.rsSnapX()
+		this.rsSnapX(RESIZE_HORIZ_RIGHT)
 		this.applyPosition()
 	}
 	resizeUpToY(y) {
 		this.rsUpToY(y)
-		this.rsSnapY()
+		this.rsSnapY(RESIZE_VERT_UP)
 		this.applyPosition()
 	}
 	resizeDownToY(y) {
 		this.rsDownToY(y)
-		this.rsSnapY()
+		this.rsSnapY(RESIZE_VERT_DOWN)
 		this.applyPosition()
 	}
 	resizeToHeight(height) {
 		this.rsToHeight(height)
-		this.rsSnapY()
+		this.rsSnapY(RESIZE_VERT_DOWN)
 		this.applyPosition()
 	}
 	
-	resizeRelativeToStart(distanceX := 0, distanceY := 0, resizeDirectionX := "", resizeDirectionY := "") {
-		if(resizeDirectionX = RESIZE_HORIZ_LEFT)
-			this.rsLeftToX(this.startLeftX + distanceX)
-		else if(resizeDirectionX = RESIZE_HORIZ_RIGHT)
-			this.rsRightToX(this.startRightX + distanceX)
-		this.rsSnapX(resizeDirectionX)
-		
-		if(resizeDirectionY = RESIZE_VERT_UP)
-			this.rsUpToY(this.startTopY + distanceY)
-		else if(resizeDirectionY = RESIZE_VERT_DOWN)
-			this.rsDownToY(this.startBottomY + distanceY)
-		this.rsSnapY(resizeDirectionY)
-		
-		this.applyPosition()
+	applyWindowPosition() {
+		this.applyPosition(true)
 	}
 	
 	
@@ -251,6 +244,7 @@ class VisualWindow {
 	titleString  := ""
 	snapDistance := 0
 	isSnapOn     := false
+	autoApply    := true
 	
 	leftX        := 0
 	rightX       := 0
@@ -258,14 +252,6 @@ class VisualWindow {
 	bottomY      := 0
 	width        := 0
 	height       := 0
-	
-	startLeftX        := 0
-	startRightX       := 0
-	startTopY         := 0
-	startBottomY      := 0
-	startWidth        := 0
-	startHeight       := 0
-	
 	
 	
 	mvToLeftX(x) {
@@ -284,8 +270,6 @@ class VisualWindow {
 		this.topY    := y - this.height
 		this.bottomY := y
 	}
-	
-	
 	
 	mvSnapX() {
 		if(!this.isSnapOn)
@@ -316,18 +300,6 @@ class VisualWindow {
 			this.mvToBottomY(monitorBounds["BOTTOM"])
 	}
 	
-	
-	
-	rsToWidth(width) {
-		this.width  := width
-		this.rightX := this.leftX + width
-	}
-	rsToHeight(height) {
-		this.height  := height
-		this.bottomY := this.topY + height
-	}
-	
-	
 	rsLeftToX(x) {
 		this.leftX := x
 		this.width := this.rightX - x
@@ -335,6 +307,10 @@ class VisualWindow {
 	rsRightToX(x) {
 		this.rightX := x
 		this.width  := x - this.leftX
+	}
+	rsToWidth(width) {
+		this.width  := width
+		this.rightX := this.leftX + width
 	}
 	rsUpToY(y) {
 		this.topY   := y
@@ -344,7 +320,10 @@ class VisualWindow {
 		this.bottomY := y
 		this.height  := y - this.topY
 	}
-	
+	rsToHeight(height) {
+		this.height  := height
+		this.bottomY := this.topY + height
+	}
 	
 	rsSnapX(resizeDirectionX) {
 		if(!this.isSnapOn)
@@ -385,8 +364,10 @@ class VisualWindow {
 		}
 	}
 	
-	
-	applyPosition() {
+	applyPosition(forceApply := false) {
+		if(!this.autoApply && !forceApply)
+			return
+		
 		moveWindowVisual(this.leftX, this.topY, this.width, this.height, this.titleString)
 	}
 	

@@ -56,29 +56,29 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 			}
 		}
 		moveWindowUnderMouse2() {
-			; dragWindowPrep(winStart, mouseStart)
+			dragWindowPrep(window, mouseStart)
 			
-			; Loop {
-				; ; Loop exit condition: left-click is released
-				; if(!GetKeyState("LButton", "P"))
-					; Break
+			Loop {
+				; Loop exit condition: left-click is released
+				if(!GetKeyState("LButton", "P"))
+					Break
 				
-				; ; If LControl is pressed while we're moving, activate the window
-				; if(GetKeyState("LControl"))
-					; WindowActions.activateWindow(winStart.titleString)
+				; If LControl is pressed while we're moving, activate the window
+				if(GetKeyState("LControl"))
+					WindowActions.activateWindow(window.titleString)
 				
-				; ; Calculate new window position
-				; getMouseDistanceMoved(mouseStart, distanceX, distanceY)
-				; x := mouseStart.x + distanceX
-				; y := mouseStart.y + distanceY
+				; Calculate new window position
+				mouseStart.getCurrentDistanceFromPosition(distanceX, distanceY)
+				window.moveToLeftX(window.leftX + distanceX)
+				window.moveToTopY( window.topY  + distanceY)
 				
-				; ; Snap to edges as needed
-				; if(!GetKeyState("LShift", "P")) ; Suppress snapping with left shift
-					; snapMovingWindowToMonitorEdges(winStart, x, y)
+				; Snap to edges as needed
+				if(!GetKeyState("LShift", "P")) ; Suppress snapping with left shift
+					snapMovingWindowToMonitorEdges(winStart, x, y)
 				
-				; ; Move window to new (visual) position
-				; moveWindowVisual(x, y, , , winStart.titleString)
-			; }
+				; Move window to new (visual) position
+				moveWindowVisual(x, y, , , winStart.titleString)
+			}
 		}
 
 	; Alt+Right Drag to resize
@@ -145,7 +145,12 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 
 
 
-dragWindowPrep(ByRef winStart, ByRef mouseStart) {
+dragWindowPrep(ByRef window, ByRef mouseStart) {
+	MouseGetPos( , , winId)
+	window := new VisualWindow("ahk_id " winId, 25)
+	
+	mouseStart := new MousePosition()
+	
 	; getWindowVisualPosition(startX, startY, startWidth, startHeight, titleString)
 	; MouseGetPos(mouseStartX, mouseStartY)
 }
@@ -295,36 +300,31 @@ class VisualWindow {
 		}
 	}
 	
-	x[] {
+	leftX[] {
 		get {
 			return this._leftX
 		}
 	}
-	
-	y[] {
+	topY[] {
 		get {
 			return this._topY
 		}
 	}
-	
 	rightX[] {
 		get {
 			return this._rightX
 		}
 	}
-	
 	bottomY[] {
 		get {
 			return this._bottomY
 		}
 	}
-	
 	width[] {
 		get {
 			return this._width
 		}
 	}
-	
 	height[] {
 		get {
 			return this._height
@@ -399,7 +399,7 @@ class VisualWindow {
 	
 	
 	
-	snapMoveX() { ; GDB TODO move to private
+	snapMoveX() {
 		if(this._snapDistance <= 0)
 			return
 		

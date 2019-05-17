@@ -69,8 +69,9 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 				
 				; Calculate new window position
 				mouseStart.getCurrentDistanceFromPosition(distanceX, distanceY)
-				window.moveToLeftX(window.leftX + distanceX)
-				window.moveToTopY( window.topY  + distanceY)
+				window.moveRelativeToStart(distanceX, distanceY)
+				; window.moveToLeftX(window.leftX + distanceX)
+				; window.moveToTopY( window.topY  + distanceY)
 				
 				; Snap to edges as needed
 				if(!GetKeyState("LShift", "P")) ; Suppress snapping with left shift
@@ -278,11 +279,18 @@ class VisualWindow {
 		
 		getWindowVisualPosition(x, y, width, height, titleString)
 		this._leftX   := x
+		this._rightX  := x + width
 		this._topY    := y
+		this._bottomY := y + height
 		this._width   := width
 		this._height  := height
-		this._rightX  := x + width
-		this._bottomY := y + height
+		
+		this._startLeftX   := this._leftX
+		this._startRightX  := this._rightX
+		this._startBottomY := this._bottomY
+		this._startTopY    := this._topY
+		this._startWidth   := this._width
+		this._startHeight  := this._height
 	}
 	
 	titleString[] {
@@ -305,14 +313,14 @@ class VisualWindow {
 			return this._leftX
 		}
 	}
-	topY[] {
-		get {
-			return this._topY
-		}
-	}
 	rightX[] {
 		get {
 			return this._rightX
+		}
+	}
+	topY[] {
+		get {
+			return this._topY
 		}
 	}
 	bottomY[] {
@@ -328,6 +336,37 @@ class VisualWindow {
 	height[] {
 		get {
 			return this._height
+		}
+	}
+	
+	startLeftX[] {
+		get {
+			return this._startLeftX
+		}
+	}
+	startRightX[] {
+		get {
+			return this._startRightX
+		}
+	}
+	startTopY[] {
+		get {
+			return this._startTopY
+		}
+	}
+	startBottomY[] {
+		get {
+			return this._startBottomY
+		}
+	}
+	startWidth[] {
+		get {
+			return this._startWidth
+		}
+	}
+	startHeight[] {
+		get {
+			return this._startHeight
 		}
 	}
 	
@@ -347,6 +386,11 @@ class VisualWindow {
 	moveToBottomY(y) {
 		this._moveToBottomY(y)
 		this.snapMoveY()
+	}
+	
+	moveRelativeToStart(distanceX := 0, distanceY := 0) {
+		this.moveToLeftX(this._startLeftX + distanceX)
+		this.moveToTopY( this._startTopY  + distanceY)
 	}
 	
 	
@@ -380,7 +424,7 @@ class VisualWindow {
 		this._height  := y - this._topY
 	}
 	
-	applyPosition() {
+	applyPosition() { ; GDB TODO should this happen automatically on moving or resizing?
 		moveWindowVisual(this._leftX, this._topY, this._width, this._height, this._titleString)
 	}
 	
@@ -391,11 +435,17 @@ class VisualWindow {
 	_titleString  := ""
 	_snapDistance := 0
 	_leftX        := 0
-	_topY         := 0
 	_rightX       := 0
+	_topY         := 0
 	_bottomY      := 0
 	_width        := 0
 	_height       := 0
+	_startLeftX   := 0
+	_startRightX  := 0
+	_startTopY    := 0
+	_startBottomY := 0
+	_startWidth   := 0
+	_startHeight  := 0
 	
 	
 	

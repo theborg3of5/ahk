@@ -15,6 +15,7 @@
 	Add catch and error toast for launching a program that doesn't exist (Launchy in VDIs, for example)
 	Should ACTION_*, etc. constants live inside of ActionObject? Might let us shorten names a little.
 	Rewrite/clean up coding style for kdeMoverSizer
+		Add an offsetsAry member to VisualWindow so it doesn't have to look it up?
 		Document functions
 		Split out + document VisualWindow
 		Split out + document MousePosition

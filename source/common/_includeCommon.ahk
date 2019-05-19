@@ -26,10 +26,12 @@
 	#Include iniObject.ahk
 	#Include listConverter.ahk
 	#Include mainConfig.ahk
+	#Include mousePosition.ahk
 	#Include programInfo.ahk
 	#Include selector.ahk
 	#Include tableList.ahk
 	#Include toast.ahk
+	#Include visualWindow.ahk
 	#Include windowActions.ahk
 	#Include windowInfo.ahk
 

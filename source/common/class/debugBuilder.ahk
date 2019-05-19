@@ -35,7 +35,7 @@ class DebugBuilder {
 	; ==============================
 	
 	;---------
-	; DESCRIPTION:    Create a new TableList instance.
+	; DESCRIPTION:    Create a new DebugBuilder instance.
 	; PARAMETERS:
 	;  numTabs (I,OPT) - How many levels of indentation the string should start at. Added lines will
 	;                    be at this level + 1.

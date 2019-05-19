@@ -14,13 +14,13 @@
 	Try using Try/Catch handling around putty "find again" hotkeys: https://www.autohotkey.com/docs/commands/Try.htm
 	Add catch and error toast for launching a program that doesn't exist (Launchy in VDIs, for example)
 	Should ACTION_*, etc. constants live inside of ActionObject? Might let us shorten names a little.
-	MousePosition
-		Finish documentation
 	VisualWindow
-		Finish documentation
+		Reconsider whether we really need to allow the caller to decide whether to auto-apply
+			Seems like more inclusive functions (top-left move, top-right move, etc.) would be better
 		Add an offsetsAry member to VisualWindow so it doesn't have to look it up?
 		Consider support for relative values for corners/centers, to replace *Relative*Position* functions?
 			In order to replace for Toast, we'll need "give me the actual position/size" functions
+		Finish documentation
 	Rewrite/clean up coding style for kdeMoverSizer
 		Finish replacing kdeMoverSizer with windowMoverSizer (remove commented-out line from main.ahk, delete script)
 	

@@ -18,20 +18,44 @@
 		*
 */
 
+global RESIZE_VERT_UP     := "UP"
+global RESIZE_VERT_DOWN   := "DOWN"
+global RESIZE_HORIZ_LEFT  := "LEFT"
+global RESIZE_HORIZ_RIGHT := "RIGHT"
+
+global WINDOWCORNER_TOPLEFT     := "TOP_LEFT"
+global WINDOWCORNER_TOPRIGHT    := "TOP_RIGHT"
+global WINDOWCORNER_BOTTOMLEFT  := "BOTTOM_LEFT"
+global WINDOWCORNER_BOTTOMRIGHT := "BOTTOM_RIGHT"
+
 class VisualWindow {
 	
 	; ==============================
 	; == Public ====================
 	; ==============================
 	
-	leftX        := 0
-	rightX       := 0
-	topY         := 0
-	bottomY      := 0
-	width        := 0
-	height       := 0
+	leftX   := 0 ; The X coordinate of the visual left edge of the window
+	rightX  := 0 ; The X coordinate of the visual right edge of the window
+	topY    := 0 ; The Y coordinate of the visual top edge of the window
+	bottomY := 0 ; The Y coordinate of the visual bottom edge of the window
+	width   := 0 ; The visual width of the window
+	height  := 0 ; The visual height of the window
 	
 	
+	;---------
+	; DESCRIPTION:    Create a new VisualWindow object to interact with a window as it appears.
+	; PARAMETERS:
+	;  titleString  (I,OPT) - A title string describing the window this object should
+	;                         represent/affect. Defaults to the active window ("A").
+	;  snapDistance (I,OPT) - If the window should snap to the edges of the monitor when moved, set
+	;                         this to the distance (in pixels) at which the window should snap. If
+	;                         this is set to a value > 0, snapping will automatically be turned on.
+	;                         Defaults to 0, which leaves snapping off.
+	;  autoApply    (I,OPT) - By default, calling any of the move*() or resize*() functions will immediately apply those changes to the window. If you wish to make several changes (movements/resizes
+	; RETURNS:        Reference to new VisualWindow instance
+	; SIDE EFFECTS:   
+	; NOTES:          
+	;---------
 	__New(titleString := "A", snapDistance := 0, autoApply := true) {
 		this.titleString := titleString
 		this.snapDistance := snapDistance
@@ -48,26 +72,36 @@ class VisualWindow {
 		this.height  := height
 	}
 	
-	moveToLeftX(x) {
+	moveTopLeftToPos(x, y) {
 		this.mvToLeftX(x)
 		this.mvSnapX()
-		this.applyPosition()
-	}
-	moveToRightX(x) {
-		this.mvToRightX(x)
-		this.mvSnapX()
-		this.applyPosition()
-	}
-	moveToTopY(y) {
 		this.mvToTopY(y)
 		this.mvSnapY()
 		this.applyPosition()
 	}
-	moveToBottomY(y) {
+	moveBottomLeftToPos(x, y) {
+		this.mvToLeftX(x)
+		this.mvSnapX()
 		this.mvToBottomY(y)
 		this.mvSnapY()
 		this.applyPosition()
 	}
+	moveTopRightToPos(x, y) {
+		this.mvToRightX(x)
+		this.mvSnapX()
+		this.mvToTopY(y)
+		this.mvSnapY()
+		this.applyPosition()
+	}
+	moveBottomRightToPos(x, y) {
+		this.mvToRightX(x)
+		this.mvSnapX()
+		this.mvToBottomY(y)
+		this.mvSnapY()
+		this.applyPosition()
+	}
+	
+	
 	
 	resizeLeftToX(x) {
 		this.rsLeftToX(x)

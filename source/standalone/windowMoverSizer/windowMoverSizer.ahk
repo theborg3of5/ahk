@@ -10,15 +10,7 @@ setUpTrayIcons("moveSize.ico", "moveSizeRed.ico", "AHK: Move and resize windows"
 
 SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
 CoordMode, Mouse, Screen
-
-
-; Constants
 global SnappingDistance := 25 ; 25px
-global RESIZE_VERT_UP     := "UP"
-global RESIZE_VERT_DOWN   := "DOWN"
-global RESIZE_HORIZ_LEFT  := "LEFT"
-global RESIZE_HORIZ_RIGHT := "RIGHT"
-
 
 ; Don't do anything while certain windows are active.
 #If !MainConfig.windowIsGame() && !MainConfig.isWindowActive("Remote Desktop") && !MainConfig.isWindowActive("VMware Horizon Client")
@@ -41,8 +33,7 @@ global RESIZE_HORIZ_RIGHT := "RIGHT"
 				
 				; Calculate new position
 				mouseStart.getDistanceFromCurrentPosition(distanceX, distanceY)
-				window.moveToLeftX(startLeftX + distanceX)
-				window.moveToTopY( startTopY  + distanceY)
+				window.moveTopLeftToPos(startLeftX + distanceX, startTopY  + distanceY)
 				
 				; Move window to new position
 				window.applyWindowPosition()

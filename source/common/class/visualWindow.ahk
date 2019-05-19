@@ -11,8 +11,6 @@
 	Additional features
 		Snapping
 			*
-		Not auto-applying
-			*
 		
 	Example Usage
 		*
@@ -41,17 +39,15 @@ class VisualWindow {
 	;                         this to the distance (in pixels) at which the window should snap. If
 	;                         this is set to a value > 0, snapping will automatically be turned on.
 	;                         Defaults to 0, which leaves snapping off.
-	;  autoApply    (I,OPT) - By default, calling any of the move*() or resize*() functions will immediately apply those changes to the window. If you wish to make several changes (movements/resizes
 	; RETURNS:        Reference to new VisualWindow instance
 	; SIDE EFFECTS:   
 	; NOTES:          
 	;---------
-	__New(titleString := "A", snapDistance := 0, autoApply := true) {
+	__New(titleString := "A", snapDistance := 0) {
 		this.titleString := titleString
 		this.snapDistance := snapDistance
 		if(snapDistance > 0)
 			this.isSnapOn := true
-		this.autoApply := autoApply
 		
 		getWindowVisualPosition(x, y, width, height, titleString)
 		this.leftX   := x
@@ -62,27 +58,57 @@ class VisualWindow {
 		this.height  := height
 	}
 	
+	move(x := "", y := "") {
+		if(x != "")
+			this.mvLeftToX(x)
+		if(y != "")
+			this.mvTopToY(y)
+		
+		this.applyPosition()
+	}
+	resize(width := "", height := "") { ; GDB TODO call out that these general functions don't do snapping at all
+		if(width != "")
+			this.rsToWidth(width)
+		if(height != "")
+			this.rsToHeight(height)
+		
+		this.applyPosition()
+	}
+	moveResize(x := "", y := "", width := "", height := "") {
+		if(x != "")
+			this.mvLeftToX(x)
+		if(y != "")
+			this.mvTopToY(y)
+		if(width != "")
+			this.rsToWidth(width)
+		if(height != "")
+			this.rsToHeight(height)
+		
+		this.applyPosition()
+	}
+	
+	
 	moveTopLeftToPos(x, y) {
-		this.mvToLeftX(x)
-		this.mvToTopY(y)
+		this.mvLeftToX(x)
+		this.mvTopToY(y)
 		this.mvSnap()
 		this.applyPosition()
 	}
 	moveBottomLeftToPos(x, y) {
-		this.mvToLeftX(x)
-		this.mvToBottomY(y)
+		this.mvLeftToX(x)
+		this.mvBottomToY(y)
 		this.mvSnap()
 		this.applyPosition()
 	}
 	moveTopRightToPos(x, y) {
-		this.mvToRightX(x)
-		this.mvToTopY(y)
+		this.mvRightToX(x)
+		this.mvTopToY(y)
 		this.mvSnap()
 		this.applyPosition()
 	}
 	moveBottomRightToPos(x, y) {
-		this.mvToRightX(x)
-		this.mvToBottomY(y)
+		this.mvRightToX(x)
+		this.mvBottomToY(y)
 		this.mvSnap()
 		this.applyPosition()
 	}
@@ -113,16 +139,6 @@ class VisualWindow {
 		this.applyPosition()
 	}
 	
-	resize(width := "", height := "") { ; GDB TODO call out that this doesn't do snapping at all
-		if(width != "")
-			this.rsToWidth(width)
-		if(height != "")
-			this.rsToHeight(height)
-		
-		this.applyPosition()
-	}
-	
-	
 	snapOn() {
 		this.isSnapOn := true
 	}
@@ -130,18 +146,12 @@ class VisualWindow {
 		this.isSnapOn := false
 	}
 	
-	applyWindowPosition() {
-		this.applyPosition(true)
-	}
-	
-	
 	; ==============================
 	; == Private ===================
 	; ==============================
 	titleString  := ""
 	snapDistance := 0
 	isSnapOn     := false
-	autoApply    := true
 	
 	; Constants for which direction we're resizing in, for snapping purposes
 	static RESIZE_Y_TOP    := "TOP"
@@ -150,19 +160,19 @@ class VisualWindow {
 	static RESIZE_X_RIGHT  := "RIGHT"
 	
 	
-	mvToLeftX(x) {
+	mvLeftToX(x) {
 		this.leftX  := x
 		this.rightX := x + this.width
 	}
-	mvToRightX(x) {
+	mvRightToX(x) {
 		this.leftX  := x - this.width
 		this.rightX := x
 	}
-	mvToTopY(y) {
+	mvTopToY(y) {
 		this.topY    := y
 		this.bottomY := y + this.height
 	}
-	mvToBottomY(y) {
+	mvBottomToY(y) {
 		this.topY    := y - this.height
 		this.bottomY := y
 	}
@@ -179,15 +189,15 @@ class VisualWindow {
 		
 		; Snap to left or right edge of screen
 		if((leftDistance > 0) && (leftDistance <= this.snapDistance))
-			this.mvToLeftX(monitorBounds["LEFT"])
+			this.mvLeftToX(monitorBounds["LEFT"])
 		else if((rightDistance > 0) && (rightDistance <= this.snapDistance))
-			this.mvToRightX(monitorBounds["RIGHT"])
+			this.mvRightToX(monitorBounds["RIGHT"])
 		
 		; Snap to top or bottom edge of screen
 		if((topDistance > 0) && (topDistance <= this.snapDistance))
-			this.mvToTopY(monitorBounds["TOP"])
+			this.mvTopToY(monitorBounds["TOP"])
 		else if((bottomDistance > 0) && (bottomDistance <= this.snapDistance))
-			this.mvToBottomY(monitorBounds["BOTTOM"])
+			this.mvBottomToY(monitorBounds["BOTTOM"])
 	}
 	
 	rsLeftToX(x) {
@@ -246,10 +256,7 @@ class VisualWindow {
 		}
 	}
 	
-	applyPosition(forceApply := false) {
-		if(!this.autoApply && !forceApply)
-			return
-		
+	applyPosition() {
 		moveWindowVisual(this.leftX, this.topY, this.width, this.height, this.titleString)
 	}
 	

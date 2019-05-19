@@ -48,8 +48,9 @@ class VisualWindow {
 		this.snapDistance := snapDistance
 		if(snapDistance > 0)
 			this.isSnapOn := true
+		this.windowOffsets := getWindowOffsets(titleString)
 		
-		getWindowVisualPosition(x, y, width, height, titleString)
+		getWindowVisualPosition(x, y, width, height, titleString, this.windowOffsets)
 		this.leftX   := x
 		this.rightX  := x + width
 		this.topY    := y
@@ -257,7 +258,7 @@ class VisualWindow {
 	}
 	
 	applyPosition() {
-		moveWindowVisual(this.leftX, this.topY, this.width, this.height, this.titleString)
+		moveWindowVisual(this.leftX, this.topY, this.width, this.height, this.titleString, this.windowOffsets)
 	}
 	
 }

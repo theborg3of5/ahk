@@ -18,16 +18,6 @@
 		*
 */
 
-global RESIZE_VERT_UP     := "UP"
-global RESIZE_VERT_DOWN   := "DOWN"
-global RESIZE_HORIZ_LEFT  := "LEFT"
-global RESIZE_HORIZ_RIGHT := "RIGHT"
-
-global WINDOWCORNER_TOPLEFT     := "TOP_LEFT"
-global WINDOWCORNER_TOPRIGHT    := "TOP_RIGHT"
-global WINDOWCORNER_BOTTOMLEFT  := "BOTTOM_LEFT"
-global WINDOWCORNER_BOTTOMRIGHT := "BOTTOM_RIGHT"
-
 class VisualWindow {
 	
 	; ==============================
@@ -74,65 +64,64 @@ class VisualWindow {
 	
 	moveTopLeftToPos(x, y) {
 		this.mvToLeftX(x)
-		this.mvSnapX()
 		this.mvToTopY(y)
-		this.mvSnapY()
+		this.mvSnap()
 		this.applyPosition()
 	}
 	moveBottomLeftToPos(x, y) {
 		this.mvToLeftX(x)
-		this.mvSnapX()
 		this.mvToBottomY(y)
-		this.mvSnapY()
+		this.mvSnap()
 		this.applyPosition()
 	}
 	moveTopRightToPos(x, y) {
 		this.mvToRightX(x)
-		this.mvSnapX()
 		this.mvToTopY(y)
-		this.mvSnapY()
+		this.mvSnap()
 		this.applyPosition()
 	}
 	moveBottomRightToPos(x, y) {
 		this.mvToRightX(x)
-		this.mvSnapX()
 		this.mvToBottomY(y)
-		this.mvSnapY()
+		this.mvSnap()
 		this.applyPosition()
 	}
 	
 	
-	
-	resizeLeftToX(x) {
+	resizeTopLeftToPos(x, y) {
 		this.rsLeftToX(x)
-		this.rsSnapX(RESIZE_HORIZ_LEFT)
+		this.rsTopToY(y)
+		this.rsSnap(VisualWindow.RESIZE_X_LEFT, VisualWindow.RESIZE_Y_TOP)
 		this.applyPosition()
 	}
-	resizeRightToX(x) {
+	resizeTopRightToPos(x, y) {
 		this.rsRightToX(x)
-		this.rsSnapX(RESIZE_HORIZ_RIGHT)
+		this.rsTopToY(y)
+		this.rsSnap(VisualWindow.RESIZE_X_RIGHT, VisualWindow.RESIZE_Y_TOP)
 		this.applyPosition()
 	}
-	resizeToWidth(width) {
-		this.rsToWidth(width)
-		this.rsSnapX(RESIZE_HORIZ_RIGHT)
+	resizeBottomLeftToPos(x, y) {
+		this.rsLeftToX(x)
+		this.rsBottomToY(y)
+		this.rsSnap(VisualWindow.RESIZE_X_LEFT, VisualWindow.RESIZE_Y_BOTTOM)
 		this.applyPosition()
 	}
-	resizeUpToY(y) {
-		this.rsUpToY(y)
-		this.rsSnapY(RESIZE_VERT_UP)
+	resizeBottomRightToPos(x, y) {
+		this.rsRightToX(x)
+		this.rsBottomToY(y)
+		this.rsSnap(VisualWindow.RESIZE_X_RIGHT, VisualWindow.RESIZE_Y_BOTTOM)
 		this.applyPosition()
 	}
-	resizeDownToY(y) {
-		this.rsDownToY(y)
-		this.rsSnapY(RESIZE_VERT_DOWN)
+	
+	resize(width := "", height := "") { ; GDB TODO call out that this doesn't do snapping at all
+		if(width != "")
+			this.rsToWidth(width)
+		if(height != "")
+			this.rsToHeight(height)
+		
 		this.applyPosition()
 	}
-	resizeToHeight(height) {
-		this.rsToHeight(height)
-		this.rsSnapY(RESIZE_VERT_DOWN)
-		this.applyPosition()
-	}
+	
 	
 	snapOn() {
 		this.isSnapOn := true
@@ -154,6 +143,12 @@ class VisualWindow {
 	isSnapOn     := false
 	autoApply    := true
 	
+	; Constants for which direction we're resizing in, for snapping purposes
+	static RESIZE_Y_TOP    := "TOP"
+	static RESIZE_Y_BOTTOM := "BOTTOM"
+	static RESIZE_X_LEFT   := "LEFT"
+	static RESIZE_X_RIGHT  := "RIGHT"
+	
 	
 	mvToLeftX(x) {
 		this.leftX  := x
@@ -172,27 +167,21 @@ class VisualWindow {
 		this.bottomY := y
 	}
 	
-	mvSnapX() {
+	mvSnap() {
 		if(!this.isSnapOn)
 			return
 		
 		monitorBounds := getMonitorBounds("", this.titleString)
-		leftDistance  := abs(this.leftX  - monitorBounds["LEFT"])
-		rightDistance := abs(this.rightX - monitorBounds["RIGHT"])
+		leftDistance   := abs(this.leftX   - monitorBounds["LEFT"])
+		rightDistance  := abs(this.rightX  - monitorBounds["RIGHT"])
+		topDistance    := abs(this.topY    - monitorBounds["TOP"])
+		bottomDistance := abs(this.bottomY - monitorBounds["BOTTOM"])
 		
 		; Snap to left or right edge of screen
 		if((leftDistance > 0) && (leftDistance <= this.snapDistance))
 			this.mvToLeftX(monitorBounds["LEFT"])
 		else if((rightDistance > 0) && (rightDistance <= this.snapDistance))
 			this.mvToRightX(monitorBounds["RIGHT"])
-	}
-	mvSnapY() {
-		if(!this.isSnapOn)
-			return
-		
-		monitorBounds := getMonitorBounds("", this.titleString)
-		topDistance    := abs(this.topY    - monitorBounds["TOP"])
-		bottomDistance := abs(this.bottomY - monitorBounds["BOTTOM"])
 		
 		; Snap to top or bottom edge of screen
 		if((topDistance > 0) && (topDistance <= this.snapDistance))
@@ -213,11 +202,11 @@ class VisualWindow {
 		this.width  := width
 		this.rightX := this.leftX + width
 	}
-	rsUpToY(y) {
+	rsTopToY(y) {
 		this.topY   := y
 		this.height := this.bottomY - y
 	}
-	rsDownToY(y) {
+	rsBottomToY(y) {
 		this.bottomY := y
 		this.height  := y - this.topY
 	}
@@ -226,42 +215,34 @@ class VisualWindow {
 		this.bottomY := this.topY + height
 	}
 	
-	rsSnapX(resizeDirectionX) {
+	rsSnap(directionX, directionY) {
 		if(!this.isSnapOn)
 			return
 		
 		monitorBounds := getMonitorBounds("", this.titleString)
-		leftDistance  := abs(this.leftX  - monitorBounds["LEFT"])
-		rightDistance := abs(this.rightX - monitorBounds["RIGHT"])
-		
-		; Snap to left edge of screen
-		if(resizeDirectionX = RESIZE_HORIZ_LEFT) {
-			if((leftDistance > 0) && (leftDistance <= this.snapDistance))
-				this.rsLeftToX(monitorBounds["LEFT"])
-		
-		; Snap to right edge of screen
-		} else if(resizeDirectionX = RESIZE_HORIZ_RIGHT) {
-			if((rightDistance > 0) && (rightDistance <= this.snapDistance))
-				this.rsRightToX(monitorBounds["RIGHT"])
-		}
-	}
-	rsSnapY(resizeDirectionY) {
-		if(!this.isSnapOn)
-			return
-		
-		monitorBounds := getMonitorBounds("", this.titleString)
+		leftDistance   := abs(this.leftX   - monitorBounds["LEFT"])
+		rightDistance  := abs(this.rightX  - monitorBounds["RIGHT"])
 		topDistance    := abs(this.topY    - monitorBounds["TOP"])
 		bottomDistance := abs(this.bottomY - monitorBounds["BOTTOM"])
 		
-		; Snap to top edge of screen
-		if(resizeDirectionY = RESIZE_VERT_UP) {
-			if((topDistance > 0) && (topDistance <= this.snapDistance))
-				this.rsUpToY(monitorBounds["TOP"])
+		; Snap to left edge of screen
+		if(directionX = VisualWindow.RESIZE_X_LEFT) {
+			if((leftDistance > 0) && (leftDistance <= this.snapDistance))
+				this.rsLeftToX(monitorBounds["LEFT"])
+		; Snap to right edge of screen
+		} else if(directionX = VisualWindow.RESIZE_X_RIGHT) {
+			if((rightDistance > 0) && (rightDistance <= this.snapDistance))
+				this.rsRightToX(monitorBounds["RIGHT"])
+		}
 		
+		; Snap to top edge of screen
+		if(directionY = VisualWindow.RESIZE_Y_TOP) {
+			if((topDistance > 0) && (topDistance <= this.snapDistance))
+				this.rsTopToY(monitorBounds["TOP"])
 		; Snap to bottom edge of screen
-		} else if(resizeDirectionY = RESIZE_VERT_DOWN) {
+		} else if(directionY = VisualWindow.RESIZE_Y_BOTTOM) {
 			if((bottomDistance > 0) && (bottomDistance <= this.snapDistance))
-				this.rsDownToY(monitorBounds["BOTTOM"])
+				this.rsBottomToY(monitorBounds["BOTTOM"])
 		}
 	}
 	

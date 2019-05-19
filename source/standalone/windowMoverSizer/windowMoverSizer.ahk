@@ -12,6 +12,12 @@ SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwis
 CoordMode, Mouse, Screen
 global SnappingDistance := 25 ; 25px
 
+; Corners of a window, for resizing purposes
+global WINDOWCORNER_TOPLEFT     := "TOP_LEFT"
+global WINDOWCORNER_TOPRIGHT    := "TOP_RIGHT"
+global WINDOWCORNER_BOTTOMLEFT  := "BOTTOM_LEFT"
+global WINDOWCORNER_BOTTOMRIGHT := "BOTTOM_RIGHT"
+
 ; Don't do anything while certain windows are active.
 #If !MainConfig.windowIsGame() && !MainConfig.isWindowActive("Remote Desktop") && !MainConfig.isWindowActive("VMware Horizon Client")
 
@@ -31,12 +37,11 @@ global SnappingDistance := 25 ; 25px
 				; Additional modifier keys can disable snapping, focus window, etc.
 				handleDragWindowKeys(window)
 				
-				; Calculate new position
+				; Calculate new position and move window
 				mouseStart.getDistanceFromCurrentPosition(distanceX, distanceY)
-				window.moveTopLeftToPos(startLeftX + distanceX, startTopY  + distanceY)
-				
-				; Move window to new position
-				window.applyWindowPosition()
+				newX := startLeftX + distanceX
+				newY := startTopY  + distanceY
+				window.moveTopLeftToPos(newX, newY)
 			}
 		}
 
@@ -46,7 +51,8 @@ global SnappingDistance := 25 ; 25px
 			dragWindowPrep(window, mouseStart)
 			
 			; Determine which directions to resize the window in, based on which quadrant of the window the mouse is over
-			getResizeDirections(window, mouseStart, resizeDirectionX, resizeDirectionY)
+			; getResizeDirections(window, mouseStart, resizeDirectionX, resizeDirectionY)
+			resizeCorner := getResizeCorner(window, mouseStart)
 			
 			startLeftX   := window.leftX
 			startRightX  := window.rightX
@@ -61,21 +67,17 @@ global SnappingDistance := 25 ; 25px
 				; Additional modifier keys can disable snapping, focus window, etc.
 				handleDragWindowKeys(window)
 				
-				; Calculate new position/size
+				; Calculate new position/size and move window
 				mouseStart.getDistanceFromCurrentPosition(distanceX, distanceY)
 				
-				if(resizeDirectionX = RESIZE_HORIZ_LEFT)
-					window.resizeLeftToX(startLeftX + distanceX)
-				else if(resizeDirectionX = RESIZE_HORIZ_RIGHT)
-					window.resizeRightToX(startRightX + distanceX)
-				
-				if(resizeDirectionY = RESIZE_VERT_UP)
-					window.resizeUpToY(startTopY + distanceY)
-				else if(resizeDirectionY = RESIZE_VERT_DOWN)
-					window.resizeDownToY(startBottomY + distanceY)
-				
-				; Move window to new position/size
-				window.applyWindowPosition()
+				if(resizeCorner = WINDOWCORNER_TOPLEFT)
+					window.resizeTopLeftToPos(startLeftX + distanceX, startTopY + distanceY)
+				else if(resizeCorner = WINDOWCORNER_TOPRIGHT)
+					window.resizeTopRightToPos(startRightX + distanceX, startTopY + distanceY)
+				else if(resizeCorner = WINDOWCORNER_BOTTOMLEFT)
+					window.resizeBottomLeftToPos(startLeftX + distanceX, startBottomY + distanceY)
+				else if(resizeCorner = WINDOWCORNER_BOTTOMRIGHT)
+					window.resizeBottomRightToPos(startRightX + distanceX, startBottomY + distanceY)
 			}
 		}
 
@@ -100,7 +102,7 @@ dragWindowPrep(ByRef window, ByRef mouseStart) {
 	
 	restoreWindowIfMaximized(titleString)
 	
-	window := new VisualWindow(titleString, SnappingDistance, false) ; autoApply=false - Don't auto-apply changes
+	window := new VisualWindow(titleString, SnappingDistance)
 	mouseStart := new MousePosition()
 }
 
@@ -127,18 +129,20 @@ handleDragWindowKeys(window) {
 		window.snapOn()
 }
 
-getResizeDirections(window, mouseStart, ByRef resizeHorizontal, ByRef resizeVertical) {
-	middleX := window.leftX + (window.width / 2)
-	if(mouseStart.x < middleX)
-		resizeHorizontal := RESIZE_HORIZ_LEFT
-	else
-		resizeHorizontal := RESIZE_HORIZ_RIGHT
+getResizeCorner(window, mouseStart) {
+	x := mouseStart.x
+	y := mouseStart.y
+	middleX := window.leftX + (window.width  / 2)
+	middleY := window.topY  + (window.height / 2)
 	
-	middleY := window.topY + (window.height / 2)
-	if(mouseStart.y < middleY)
-		resizeVertical := RESIZE_VERT_UP
-	else
-		resizeVertical := RESIZE_VERT_DOWN
+	if(x < middleX && y < middleY)
+		return WINDOWCORNER_TOPLEFT
+	if(x < middleX && y >= middleY)
+		return WINDOWCORNER_BOTTOMLEFT
+	if(x >= middleX && y < middleY)
+		return WINDOWCORNER_TOPRIGHT
+	if(x >= middleX && y >= middleY)
+		return WINDOWCORNER_BOTTOMRIGHT
 }
 
 

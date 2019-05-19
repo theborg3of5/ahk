@@ -162,7 +162,7 @@ getWindowVisualPosition(ByRef x := "", ByRef y := "", ByRef width := "", ByRef h
 }
 
 moveWindowVisual(x := "", y := "", width := "", height := "", titleString := "A", windowOffsets := "") { ; GDB TODO reorganize these functions
-	convertVisualWinPositions(x, y, width, height, titleString)
+	convertVisualWinPositions(x, y, width, height, titleString, windowOffsets)
 	WinMove, %titleString%, , x, y, width, height
 }
 

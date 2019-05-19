@@ -25,7 +25,6 @@ runStandaloneScripts()
 #Include %A_ScriptDir%\general\ ; General hotkeys.
 #Include hotstrings.ahk ; Must go after startup, but before hotkeys begin.
 #Include input.ahk
-; #Include kdeMoverSizer.ahk
 #Include launch.ahk
 #Include media.ahk
 #Include places.ahk

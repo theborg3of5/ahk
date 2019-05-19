@@ -18,8 +18,6 @@
 		Consider support for relative values for corners/centers, to replace *Relative*Position* functions?
 			In order to replace for Toast, we'll need "give me the actual position/size" functions
 		Finish documentation
-	Rewrite/clean up coding style for kdeMoverSizer
-		Finish replacing kdeMoverSizer with windowMoverSizer (remove commented-out line from main.ahk, delete script)
 	
 # Large
 	Try to clean up window.ahk some more - can we rearrange functions to have more discrete purposes and make more sense?

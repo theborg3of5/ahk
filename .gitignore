@@ -7,8 +7,11 @@ Thumbs.db
 # Do include colorette's exe, though
 !Colorette.exe
 
-# Ignore the config/local and config/ahkPrivate folders entirely.
+# Ignore folders containing local config info
 config/local/
+
+# Ignore folders containing other repositories
+test/
 config/ahkPrivate/
 
 # Test folder, ignore most things, but not subdirectories or test icons.
@@ -17,10 +20,3 @@ test/*
 !test/testRed.ico
 !test/testWindowInfo.tls
 !test/*/
-
-# Ignore everything inside share/*/Includes folders, except the specific _NeededIncludes file.
-share/**/Includes/*
-!_NeededIncludes
-
-# Always include keep.txt files.
-!keep.txt

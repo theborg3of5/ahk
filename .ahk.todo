@@ -8,8 +8,6 @@
 		Can getObjectInfoFromEMC2 use extractEMC2ObjectInfoRaw (like selectSnapper does)?
 		Can processEMC2ObjectInfo use getTrueEMC2INI?
 	Consider looking up and caching default offset values for different kinds of windows in MainConfig instead of calculating them on the fly every time
-	Consider adding some sort of version control for test.ahk - seems like I end up wanting more of the logic from it later after all.
-		A separate repo, maybe? Don't want to clutter up the main AHK repo.
 	Make media key one-off scripts single-only and replace (so I don't need to see the "do you want to replace?" popup)
 	Try using Try/Catch handling around putty "find again" hotkeys: https://www.autohotkey.com/docs/commands/Try.htm
 	Add catch and error toast for launching a program that doesn't exist (Launchy in VDIs, for example)
@@ -18,6 +16,7 @@
 		Consider support for relative values for corners/centers, to replace *Relative*Position* functions?
 			In order to replace for Toast, we'll need "give me the actual position/size" functions
 		Finish documentation
+	Consider using title string-building function for !+x blocking stuff in notepad++ script
 	
 # Large
 	Try to clean up window.ahk some more - can we rearrange functions to have more discrete purposes and make more sense?
@@ -25,6 +24,8 @@
 		Should functions that deal with visual heights/widths/positions be named to include "visual"?
 		Make use of new VisualWindow class?
 			Could we have it also support the relative values for corners/centers, to get rid of separate need for *Relative*Position* functions?
+	Rewrite colorette so we don't have to deal with the exe?
+		Would let us get rid of the special exe case in .gitignore, too
 	Consider some way to more precisely move the mouse cursor on command
 		A standalone script (like griddy?) or just a hotkey
 		Lock the mouse?

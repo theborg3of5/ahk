@@ -134,13 +134,9 @@
 		; Close code/design window.
 		^w::
 			closeCurrentFile() {
-				WinGetPos, , , windowWidth, , A
-				offsetsAry := getWindowOffsets(titleString)
-				windowWidth -= (offsetsAry["LEFT"] + offsetsAry["RIGHT"])
-				
-				closeButtonX := windowWidth - 10 ; Close button lives 10px from right edge of window
-				closeButtonY := 10
-				
+				window := new VisualWindow("A")
+				closeButtonX := window.rightX - 10 ; Close button lives 10px from right edge of window
+				closeButtonY := window.topY   + 10 ; 10px from the top of the screen
 				clickUsingMode(closeButtonX, closeButtonY, "Client")
 			}
 	}

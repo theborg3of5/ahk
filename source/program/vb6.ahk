@@ -136,8 +136,8 @@
 			closeCurrentFile() {
 				window := new VisualWindow("A")
 				closeButtonX := window.rightX - 10 ; Close button lives 10px from right edge of window
-				closeButtonY := window.topY   + 10 ; 10px from the top of the screen
-				clickUsingMode(closeButtonX, closeButtonY, "Client")
+				closeButtonY := window.topY   + 45 ; 10px from the top of the window
+				clickUsingMode(closeButtonX, closeButtonY, "Screen")
 			}
 	}
 #IfWinActive

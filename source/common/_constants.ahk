@@ -1,6 +1,7 @@
 ; Window styles
-global WS_CAPTION  := 0xC00000 ; Window has a caption (top bar + borders).
-global WS_SIZEBOX  := 0x40000  ; Window can be resized (aka WS_THICKFRAME).
+global WS_CAPTION := 0xC00000   ; Window has a caption (top bar + borders).
+global WS_SIZEBOX := 0x40000    ; Window can be resized (aka WS_THICKFRAME).
+global WS_VISIBLE := 0x10000000 ; Window is visible
 
 ; Extended window styles
 global WS_EX_CONTROLPARENT := 0x10000

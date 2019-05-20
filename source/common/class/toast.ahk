@@ -307,13 +307,24 @@ class Toast {
 			x := WINPOS_X_Right
 		if(y = "")
 			y := WINPOS_Y_Bottom
+		origMatchSettings := setMatchSettings("", "", "On") ; DetectHiddenWindows = On
 		
-		; Resize to size of contents
-		Gui, Show, % "AutoSize NoActivate Hide", % Toast.ToastTitle
-		Gui, +LastFound ; Needed for WinGetPos in convertRelativeWinPositions() logic
+		Gui, +LastFound ; Needed to identify the window on next line
+		titleString := getIdTitleStringForWindow("") ; Blank title string input for last found window
 		
-		convertRelativeWinPositions(x, y, titleString)
-		Gui, Show, % "x" x " y" y " NoActivate", % Toast.ToastTitle
+		isWinHidden := !isWindowVisible(titleString)
+		if(isWinHidden)
+			Gui, Show, AutoSize NoActivate Hide, % Toast.ToastTitle ; Resize to size of contents, but keep toast hidden (and actually show it further down)
+		else
+			Gui, Show, AutoSize NoActivate, % Toast.ToastTitle ; Resize to size of contents
+		
+		window := new VisualWindow(titleString) ; Blank title string for last found window
+		window.move(x, y)
+		
+		if(isWinHidden)
+			Gui, Show, NoActivate, % Toast.ToastTitle
+		
+		restoreMatchSettings(origMatchSettings)
 	}
 	
 	;---------

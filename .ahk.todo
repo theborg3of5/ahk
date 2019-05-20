@@ -13,10 +13,13 @@
 	Add catch and error toast for launching a program that doesn't exist (Launchy in VDIs, for example)
 	Should ACTION_*, etc. constants live inside of ActionObject? Might let us shorten names a little.
 	VisualWindow
-		Consider support for relative values for corners/centers, to replace *Relative*Position* functions?
-			In order to replace for Toast, we'll need "give me the actual position/size" functions
 		Finish documentation
 		Move getWindowVisualPosition, moveWindowVisual, convertVisualWinPositions into VisualWindow
+			Also getWindowOffsets, once VB6 bit is solved (looks like we need access to converted actual coordinates [or rather, turning relative-to-visual-window coords into actual ones])
+	Reconsider setMatchSettings/restoreMatchSettings
+		Hard to tell what different parameters are
+		Would functions/restores for individual settings be better?
+			Alternatively, something that took the name of the thing (presumably as a key into the actual command/A_* variable)?
 	Consider using title string-building function for !+x blocking stuff in notepad++ script
 	
 # Large

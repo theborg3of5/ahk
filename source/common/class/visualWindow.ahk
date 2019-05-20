@@ -40,11 +40,9 @@ class VisualWindow {
 	;                         this is set to a value > 0, snapping will automatically be turned on.
 	;                         Defaults to 0, which leaves snapping off.
 	; RETURNS:        Reference to new VisualWindow instance
-	; SIDE EFFECTS:   
-	; NOTES:          
 	;---------
 	__New(titleString, snapDistance := 0) {
-		this.titleString := titleString
+		this.titleString := getIdTitleStringForWindow(titleString) ; Convert title string to ID in case it was active window ("A") or similar
 		this.snapDistance := snapDistance
 		if(snapDistance > 0)
 			this.isSnapOn := true
@@ -77,7 +75,7 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
-	resizeMove(x := "", y := "", width := "", height := "") {
+	resizeMove(width := "", height := "", x := "", y := "") {
 		; Resizing must happen first so that any special x/y values can be calculated accurately (i.e. center using new width).
 		if(width != "")
 			this.rsToWidth(width)
@@ -299,31 +297,6 @@ class VisualWindow {
 		
 		return y ; Just return the original value if it wasn't special
 	}
-	
-	; convertSpecialWinPositionToRelX(relX, windowSizes, monitorBounds) {
-		; if(relX = WINPOS_X_Left)
-			; return 0
-		
-		; monitorWindowDiff := monitorBounds["WIDTH"] - windowSizes["WIDTH"]
-		; if(relX = WINPOS_X_Right)
-			; return monitorWindowDiff
-		; if(relX = WINPOS_X_Center)
-			; return monitorWindowDiff / 2
-		
-		; return ""
-	; }
-	; convertSpecialWinPositionToRelY(relY, windowSizes, monitorBounds) {
-		; if(relY = WINPOS_Y_Top)
-			; return 0
-		
-		; monitorWindowDiff := monitorBounds["HEIGHT"] - windowSizes["HEIGHT"]
-		; if(relY = WINPOS_Y_Bottom)
-			; return monitorWindowDiff
-		; if(relY = WINPOS_Y_Center)
-			; return monitorWindowDiff / 2
-		
-		; return ""
-	; }
 	
 	applyPosition() {
 		moveWindowVisual(this.leftX, this.topY, this.width, this.height, this.titleString, this.windowOffsets)

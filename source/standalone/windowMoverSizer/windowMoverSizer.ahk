@@ -24,7 +24,8 @@ global WINDOWCORNER_BOTTOMRIGHT := "BOTTOM_RIGHT"
 	; Alt+Left Drag to move
 	!LButton::
 		moveWindowUnderMouse() {
-			dragWindowPrep(window, mouseStart)
+			if(!dragWindowPrep(window, mouseStart))
+				return
 			
 			startLeftX := window.leftX
 			startTopY  := window.topY
@@ -48,7 +49,8 @@ global WINDOWCORNER_BOTTOMRIGHT := "BOTTOM_RIGHT"
 	; Alt+Right Drag to resize
 	!RButton::
 		resizeWindowUnderMouse() {
-			dragWindowPrep(window, mouseStart)
+			if(!dragWindowPrep(window, mouseStart))
+				return
 			
 			; Determine which directions to resize the window in, based on which quadrant of the window the mouse is over
 			; getResizeDirections(window, mouseStart, resizeDirectionX, resizeDirectionY)
@@ -80,7 +82,7 @@ global WINDOWCORNER_BOTTOMRIGHT := "BOTTOM_RIGHT"
 					window.resizeBottomRightToPos(startRightX + distanceX, startBottomY + distanceY)
 			}
 		}
-
+	
 	; Alt+Middle Click to maximize/restore
 	!MButton::
 		maximizeRestoreWindowUnderMouse() {
@@ -99,16 +101,28 @@ global WINDOWCORNER_BOTTOMRIGHT := "BOTTOM_RIGHT"
 
 dragWindowPrep(ByRef window, ByRef mouseStart) {
 	titleString := getTitleStringForWindowUnderMouse()
+	if(isExcludedWindow(titleString))
+		return false
 	
 	restoreWindowIfMaximized(titleString)
 	
 	window := new VisualWindow(titleString, SnappingDistance)
 	mouseStart := new MousePosition()
+	
+	return true
 }
 
 getTitleStringForWindowUnderMouse() {
 	MouseGetPos( , , winId)
 	return "ahk_id " winId
+}
+
+isExcludedWindow(titleString) {
+	windowName := MainConfig.findWindowName(titleString)
+	if(windowName = "Windows Taskbar")
+		return true
+	
+	return false
 }
 
 restoreWindowIfMaximized(titleString) {

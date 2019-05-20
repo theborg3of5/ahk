@@ -14,8 +14,6 @@
 	Should ACTION_*, etc. constants live inside of ActionObject? Might let us shorten names a little.
 	VisualWindow
 		Finish documentation
-		Move getWindowVisualPosition, moveWindowVisual, convertVisualWinPositions into VisualWindow
-			Also getWindowOffsets, once VB6 bit is solved (looks like we need access to converted actual coordinates [or rather, turning relative-to-visual-window coords into actual ones])
 	Reconsider setMatchSettings/restoreMatchSettings
 		Hard to tell what different parameters are
 		Would functions/restores for individual settings be better?

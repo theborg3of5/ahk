@@ -46,15 +46,31 @@ class VisualWindow {
 		this.snapDistance := snapDistance
 		if(snapDistance > 0)
 			this.isSnapOn := true
-		this.windowOffsets := getWindowOffsets(titleString)
+		this.windowOffsets := this.calculateWindowOffsets()
 		
-		getWindowVisualPosition(x, y, width, height, titleString, this.windowOffsets)
+		WinGetPos, x, y, width, height, % this.titleString
+		this.convertActualToVisualPosition(x, y, width, height)
+		
+		; Update various members
 		this.leftX   := x
 		this.rightX  := x + width
 		this.topY    := y
 		this.bottomY := y + height
 		this.width   := width
 		this.height  := height
+	}
+	
+	convertActualToVisualPosition(ByRef x := "", ByRef y := "", ByRef width := "", ByRef height := "") {
+		x      := x      +  this.windowOffsets["LEFT"]
+		y      := y      +  this.windowOffsets["TOP"]
+		width  := width  - (this.windowOffsets["LEFT"]   + this.windowOffsets["RIGHT"])
+		height := height - (this.windowOffsets["BOTTOM"] + this.windowOffsets["TOP"])
+	}
+	getActualPosition(ByRef x := "", ByRef y := "", ByRef width := "", ByRef height := "") {
+		x      := this.leftX  - this.windowOffsets["LEFT"]
+		y      := this.topY   - this.windowOffsets["TOP"]
+		width  := this.width  + this.windowOffsets["LEFT"]   + this.windowOffsets["RIGHT"]
+		height := this.height + this.windowOffsets["BOTTOM"] + this.windowOffsets["TOP"]
 	}
 	
 	move(x := "", y := "") {
@@ -171,6 +187,40 @@ class VisualWindow {
 	static RESIZE_X_LEFT   := "LEFT"
 	static RESIZE_X_RIGHT  := "RIGHT"
 	
+	
+	calculateWindowOffsets() {
+		windowOffsets := []
+		
+		if(MainConfig.findWindowInfo(this.titleString).edgeType = WINDOW_EDGE_STYLE_NoPadding) { ; Specific window has no padding
+			offsetWidth  := 0
+			offsetHeight := 0
+		} else { ; Calculate the default padding based on the window's style
+			WinGet, winStyle, Style, A
+			
+			; Window with no caption style (no titlebar or borders)
+			if(!bitFieldHasFlag(winStyle, WS_CAPTION)) {
+				offsetWidth  := 0
+				offsetHeight := 0
+			
+			; Windows with a caption that are NOT resizeable
+			} else if(!bitFieldHasFlag(winStyle, WS_SIZEBOX)) {
+				offsetWidth  := SysGet(SM_CXFIXEDFRAME) - SysGet(SM_CXBORDER)
+				offsetHeight := SysGet(SM_CYFIXEDFRAME) - SysGet(SM_CYBORDER)
+			
+			; Windows that have a caption and are resizeable
+			} else {
+				offsetWidth  := SysGet(SM_CXSIZEFRAME) - SysGet(SM_CXBORDER)
+				offsetHeight := SysGet(SM_CYSIZEFRAME) - SysGet(SM_CYBORDER)
+			}
+		}
+		
+		windowOffsets["LEFT"]   := offsetWidth
+		windowOffsets["RIGHT"]  := offsetWidth
+		windowOffsets["TOP"]    := 0 ; Assuming the taskbar is on top (no offset), otherwise could use something like https://autohotkey.com/board/topic/91513-function-get-the-taskbar-location-win7/ to figure out where it is.
+		windowOffsets["BOTTOM"] := offsetHeight
+		
+		return windowOffsets
+	}
 	
 	mvLeftToX(x) {
 		this.leftX  := x
@@ -299,7 +349,8 @@ class VisualWindow {
 	}
 	
 	applyPosition() {
-		moveWindowVisual(this.leftX, this.topY, this.width, this.height, this.titleString, this.windowOffsets)
+		this.getActualPosition(x, y, width, height) ; Add offsets back in
+		WinMove, %titleString%, , x, y, width, height
 	}
 	
 }

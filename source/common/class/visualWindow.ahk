@@ -33,8 +33,8 @@ class VisualWindow {
 	;---------
 	; DESCRIPTION:    Create a new VisualWindow object to interact with a window as it appears.
 	; PARAMETERS:
-	;  titleString  (I,OPT) - A title string describing the window this object should
-	;                         represent/affect. Defaults to the active window ("A").
+	;  titleString  (I,REQ) - A title string describing the window this object should
+	;                         represent/affect.
 	;  snapDistance (I,OPT) - If the window should snap to the edges of the monitor when moved, set
 	;                         this to the distance (in pixels) at which the window should snap. If
 	;                         this is set to a value > 0, snapping will automatically be turned on.
@@ -43,7 +43,7 @@ class VisualWindow {
 	; SIDE EFFECTS:   
 	; NOTES:          
 	;---------
-	__New(titleString := "A", snapDistance := 0) {
+	__New(titleString, snapDistance := 0) {
 		this.titleString := titleString
 		this.snapDistance := snapDistance
 		if(snapDistance > 0)
@@ -60,6 +60,8 @@ class VisualWindow {
 	}
 	
 	move(x := "", y := "") {
+		this.convertSpecialWindowCoordinates(x, y)
+		
 		if(x != "")
 			this.mvLeftToX(x)
 		if(y != "")
@@ -75,15 +77,18 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
-	moveResize(x := "", y := "", width := "", height := "") {
-		if(x != "")
-			this.mvLeftToX(x)
-		if(y != "")
-			this.mvTopToY(y)
+	resizeMove(x := "", y := "", width := "", height := "") {
+		; Resizing must happen first so that any special x/y values can be calculated accurately (i.e. center using new width).
 		if(width != "")
 			this.rsToWidth(width)
 		if(height != "")
 			this.rsToHeight(height)
+		
+		this.convertSpecialWindowCoordinates(x, y)
+		if(x != "")
+			this.mvLeftToX(x)
+		if(y != "")
+			this.mvTopToY(y)
 		
 		this.applyPosition()
 	}
@@ -93,24 +98,28 @@ class VisualWindow {
 		this.mvLeftToX(x)
 		this.mvTopToY(y)
 		this.mvSnap()
+		
 		this.applyPosition()
 	}
 	moveBottomLeftToPos(x, y) {
 		this.mvLeftToX(x)
 		this.mvBottomToY(y)
 		this.mvSnap()
+		
 		this.applyPosition()
 	}
 	moveTopRightToPos(x, y) {
 		this.mvRightToX(x)
 		this.mvTopToY(y)
 		this.mvSnap()
+		
 		this.applyPosition()
 	}
 	moveBottomRightToPos(x, y) {
 		this.mvRightToX(x)
 		this.mvBottomToY(y)
 		this.mvSnap()
+		
 		this.applyPosition()
 	}
 	
@@ -119,24 +128,28 @@ class VisualWindow {
 		this.rsLeftToX(x)
 		this.rsTopToY(y)
 		this.rsSnap(VisualWindow.RESIZE_X_LEFT, VisualWindow.RESIZE_Y_TOP)
+		
 		this.applyPosition()
 	}
 	resizeTopRightToPos(x, y) {
 		this.rsRightToX(x)
 		this.rsTopToY(y)
 		this.rsSnap(VisualWindow.RESIZE_X_RIGHT, VisualWindow.RESIZE_Y_TOP)
+		
 		this.applyPosition()
 	}
 	resizeBottomLeftToPos(x, y) {
 		this.rsLeftToX(x)
 		this.rsBottomToY(y)
 		this.rsSnap(VisualWindow.RESIZE_X_LEFT, VisualWindow.RESIZE_Y_BOTTOM)
+		
 		this.applyPosition()
 	}
 	resizeBottomRightToPos(x, y) {
 		this.rsRightToX(x)
 		this.rsBottomToY(y)
 		this.rsSnap(VisualWindow.RESIZE_X_RIGHT, VisualWindow.RESIZE_Y_BOTTOM)
+		
 		this.applyPosition()
 	}
 	
@@ -256,6 +269,61 @@ class VisualWindow {
 				this.rsBottomToY(monitorBounds["BOTTOM"])
 		}
 	}
+	
+	convertSpecialWindowCoordinates(ByRef x, ByRef y) {
+		monitorBounds := getMonitorBounds("", this.titleString)
+		x := this.convertSpecialWindowX(x, monitorBounds)
+		y := this.convertSpecialWindowY(y, monitorBounds)
+	}
+	convertSpecialWindowX(x, monitorBounds) {
+		if(x = WINPOS_X_Left)
+			return monitorBounds["LEFT"]
+		
+		monitorWindowDiff := monitorBounds["WIDTH"] - this.width
+		if(x = WINPOS_X_Right)
+			return monitorBounds["LEFT"] + monitorWindowDiff
+		if(x = WINPOS_X_Center)
+			return monitorBounds["LEFT"] + (monitorWindowDiff / 2)
+		
+		return x ; Just return the original value if it wasn't special
+	}
+	convertSpecialWindowY(y, monitorBounds) {
+		if(y = WINPOS_Y_Top)
+			return monitorBounds["TOP"]
+		
+		monitorWindowDiff := monitorBounds["HEIGHT"] - this.height
+		if(y = WINPOS_Y_Bottom)
+			return monitorBounds["TOP"] + monitorWindowDiff
+		if(y = WINPOS_Y_Center)
+			return monitorBounds["TOP"] + (monitorWindowDiff / 2)
+		
+		return y ; Just return the original value if it wasn't special
+	}
+	
+	; convertSpecialWinPositionToRelX(relX, windowSizes, monitorBounds) {
+		; if(relX = WINPOS_X_Left)
+			; return 0
+		
+		; monitorWindowDiff := monitorBounds["WIDTH"] - windowSizes["WIDTH"]
+		; if(relX = WINPOS_X_Right)
+			; return monitorWindowDiff
+		; if(relX = WINPOS_X_Center)
+			; return monitorWindowDiff / 2
+		
+		; return ""
+	; }
+	; convertSpecialWinPositionToRelY(relY, windowSizes, monitorBounds) {
+		; if(relY = WINPOS_Y_Top)
+			; return 0
+		
+		; monitorWindowDiff := monitorBounds["HEIGHT"] - windowSizes["HEIGHT"]
+		; if(relY = WINPOS_Y_Bottom)
+			; return monitorWindowDiff
+		; if(relY = WINPOS_Y_Center)
+			; return monitorWindowDiff / 2
+		
+		; return ""
+	; }
 	
 	applyPosition() {
 		moveWindowVisual(this.leftX, this.topY, this.width, this.height, this.titleString, this.windowOffsets)

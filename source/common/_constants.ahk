@@ -65,3 +65,11 @@ global MONITOR_DEFAULTTONEAREST := 0x00000002
 
 ; Special folder UUIDs
 global FOLDER_UUID_THISPC := "::{20d04fe0-3aea-1069-a2d8-08002b30309d}"
+
+; Relative window positions (to the monitor)
+global WINPOS_X_Left   := "LEFT"   ; Against left edge of screen
+global WINPOS_X_Right  := "RIGHT"  ; Against right edge of screen
+global WINPOS_X_Center := "CENTER" ; Horizontally centered
+global WINPOS_Y_Top    := "TOP"    ; Against top edge of screen
+global WINPOS_Y_Bottom := "BOTTOM" ; Against bottom edge of screen
+global WINPOS_Y_Center := "CENTER" ; Vertically centered

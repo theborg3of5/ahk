@@ -108,12 +108,8 @@ restoreMatchSettings(settings) {
 
 ; Centers a window on the screen.
 centerWindow(titleString := "A") {
-	moveWindowToRelativePosition(WINPOS_X_Center, WINPOS_Y_Center, titleString)
-}
-
-moveWindowToRelativePosition(x, y, titleString := "A") {
-	convertRelativeWinPositions(x, y, titleString)
-	WinMove, %titleString%, , x, y
+	window := new VisualWindow(titleString)
+	window.move(WINPOS_X_Center, WINPOS_Y_Center)
 }
 
 ; Given coordinates (if numeric) are assumed to be relative to the relevant monitor (and sans offsets - so for visual size of window)
@@ -161,7 +157,7 @@ getWindowVisualPosition(ByRef x := "", ByRef y := "", ByRef width := "", ByRef h
 	height -= (windowOffsets["BOTTOM"] + windowOffsets["TOP"]  )
 }
 
-moveWindowVisual(x := "", y := "", width := "", height := "", titleString := "A", windowOffsets := "") { ; GDB TODO reorganize these functions
+moveWindowVisual(x := "", y := "", width := "", height := "", titleString := "A", windowOffsets := "") {
 	convertVisualWinPositions(x, y, width, height, titleString, windowOffsets)
 	WinMove, %titleString%, , x, y, width, height
 }
@@ -357,13 +353,9 @@ getWindowMonitor(titleString := "A", monitorsAry := "") {
 	
 	windowMonitorWorkBounds := getWindowMonitorWorkBounds(titleString)
 	
-	For monitorNum,monitor in monitorsAry {
-		monLeft   := monitor["LEFT"]
-		monTop    := monitor["TOP"]
-		
-		if(monLeft = windowMonitorWorkBounds["LEFT"] && monTop = windowMonitorWorkBounds["TOP"])
+	For monitorNum,monitor in monitorsAry
+		if(monitor["LEFT"] = windowMonitorWorkBounds["LEFT"] && monitor["TOP"] = windowMonitorWorkBounds["TOP"])
 			return monitorNum
-	}
 	
 	return -1
 }

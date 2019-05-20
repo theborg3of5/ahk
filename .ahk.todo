@@ -16,6 +16,7 @@
 		Consider support for relative values for corners/centers, to replace *Relative*Position* functions?
 			In order to replace for Toast, we'll need "give me the actual position/size" functions
 		Finish documentation
+		Move getWindowVisualPosition, moveWindowVisual, convertVisualWinPositions into VisualWindow
 	Consider using title string-building function for !+x blocking stuff in notepad++ script
 	
 # Large

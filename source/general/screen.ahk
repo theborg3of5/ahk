@@ -42,8 +42,8 @@ return
 		if(y = "")
 			y := WINPOS_Y_Center
 		
-		resizeWindow(data["WIDTH"], data["HEIGHT"])
-		moveWindowToRelativePosition(x, y)
+		window := new VisualWindow("A")
+		window.resizeMove(x, y, data["WIDTH"], data["HEIGHT"])
 	}
 
 ; Call the Windows API function "SetSuspendState" to have the system suspend or hibernate.

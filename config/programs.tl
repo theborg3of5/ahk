@@ -2,7 +2,7 @@
 
 [PATH.addToStart(C:\Program Files (x86)\)]
 	Chrome						Google\Chrome\Application\chrome.exe										-force-dark-mode
-	EMC2							Epic\v8.5\EMC2\Shared Files\EpicD85.exe									EMC2Update env=TRACKAPPTCP
+	EMC2							Epic\v8.7\EMC2\Shared Files\EpicD87.exe									EMC2Update env=TRACKAPPTCP
 	EpicStudio					EpicStudio\EpicStudio.exe
 	Foobar						foobar2000\foobar2000.exe
 	Hyperspace					Epic\v8.8\Shared Files\EpicD88.exe

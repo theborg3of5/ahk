@@ -6,7 +6,7 @@
 			AutoHotkey Toast					AutoHotkey.exe				AutoHotkeyGUI			[TOAST]											NO_PADDING
 			Chrome Join							chrome.exe					-							Join
 			Chrome TickTick					chrome.exe					-							All - TickTick
-	[+2|EXE.replaceWith(EpicD85.exe)]
+	[+2|EXE.replaceWith(EpicD87.exe)]
 		; Different sections of the main EMC2 window.
 		[+3|CLASS.replaceWith(ThunderRT6MDIForm)|TITLE_STRING_MATCH_MODE_OVERRIDE.replaceWith(START)]
 			EMC2 DLG								-								-							DLG
@@ -43,7 +43,7 @@
 			Chrome								chrome.exe					Chrome_WidgetWin_1	-
 			Cisco AnyConnect VPN				vpnui.exe					#32770
 			Discord								Discord.exe					-							-													NO_PADDING
-			EMC2									EpicD85.exe					-							EMC2												-											START
+			EMC2									EpicD87.exe					-							EMC2												-											START
 			EpicStudio							EpicStudio.exe				-							EpicStudio
 			Everything							Everything.exe				EVERYTHING
 			Excel									EXCEL.EXE					-							-													NO_PADDING

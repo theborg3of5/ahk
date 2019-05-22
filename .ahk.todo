@@ -18,7 +18,6 @@
 		Hard to tell what different parameters are
 		Would functions/restores for individual settings be better?
 			Alternatively, something that took the name of the thing (presumably as a key into the actual command/A_* variable)?
-	Consider using title string-building function for !+x blocking stuff in notepad++ script
 	
 # Large
 	Try to clean up window.ahk some more - can we rearrange functions to have more discrete purposes and make more sense?

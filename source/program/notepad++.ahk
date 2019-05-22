@@ -207,6 +207,6 @@
 #IfWinActive
 
 ; Block the !+x close-tab hotkey, but only if our test script isn't running (because that's its close hotkey).
-#If !WinExist(MainConfig.path["AHK_ROOT"] "\test\test.ahk ahk_class AutoHotkey ahk_exe AutoHotkey.exe")
+#If !WinExist(buildWindowTitleString("AutoHotkey.exe", "AutoHotkey", MainConfig.path["AHK_ROOT"] "\test\test.ahk"))
 	!+x::return
 #If

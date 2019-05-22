@@ -177,9 +177,10 @@ class VisualWindow {
 	; ==============================
 	; == Private ===================
 	; ==============================
-	titleString  := ""
-	snapDistance := 0
-	isSnapOn     := false
+	titleString   := ""
+	snapDistance  := 0
+	isSnapOn      := false
+	windowOffsets := ""
 	
 	; Constants for which direction we're resizing in, for snapping purposes
 	static RESIZE_Y_TOP    := "TOP"

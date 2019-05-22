@@ -9,7 +9,6 @@
 		Can processEMC2ObjectInfo use getTrueEMC2INI?
 	Consider looking up and caching default offset values for different kinds of windows in MainConfig instead of calculating them on the fly every time
 	Make media key one-off scripts single-only and replace (so I don't need to see the "do you want to replace?" popup)
-	Try using Try/Catch handling around putty "find again" hotkeys: https://www.autohotkey.com/docs/commands/Try.htm
 	Add catch and error toast for launching a program that doesn't exist (Launchy in VDIs, for example)
 	Should ACTION_*, etc. constants live inside of ActionObject? Might let us shorten names a little.
 	VisualWindow

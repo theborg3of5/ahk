@@ -1,7 +1,8 @@
 ﻿#NoEnv                                        ; Don't use environment (OS-level) variables.
 #SingleInstance, Force                        ; Running this script while it's already running just replaces the existing instance.
-#Warn All                                     ; Show warnings
-#Warn UseUnsetLocal, Off                      ; Except for using a not-yet-set local variable, that's what default values are for.
+#Warn All                                     ; Show warnings, except for:
+#Warn UseUnsetLocal, Off                      ; 	Using local variables before they're set (using default values in a function triggers this)
+#Warn UseUnsetGlobal, Off                     ; 	Using global variables before they're set
 #LTrim                                        ; Trim whitespace from left of continuation sections (so they can be indented as I wish).
 #Hotstring *                                  ; Default option: hotstrings do not require an ending character. Use *0 to turn it off for hotstrings that as needed.
 #Include <includeCommon>

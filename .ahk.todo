@@ -19,6 +19,9 @@
 			Alternatively, something that took the name of the thing (presumably as a key into the actual command/A_* variable)?
 	
 # Large
+	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)
+		Maybe store off both title (maybe trimmed, drop things like " - Wiki" off of the end, etc?) and URL on copy hotkey
+			Used by a generic hotkey that used those two bits of info + hyperlinking class to add a link?
 	Try to clean up window.ahk some more - can we rearrange functions to have more discrete purposes and make more sense?
 		Should window moving/sizing logic be a separate script? windowPosition.ahk, maybe?
 		Should functions that deal with visual heights/widths/positions be named to include "visual"?

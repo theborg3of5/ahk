@@ -1,3 +1,4 @@
+; Functions for identifying and interacting with windows.
 
 global WINPOS_X_Left   := "LEFT"   ; Against left edge of screen
 global WINPOS_X_Right  := "RIGHT"  ; Against right edge of screen
@@ -6,21 +7,25 @@ global WINPOS_Y_Top    := "TOP"    ; Against top edge of screen
 global WINPOS_Y_Bottom := "BOTTOM" ; Against bottom edge of screen
 global WINPOS_Y_Center := "CENTER" ; Vertically centered
 
+{ ; Window identification
+	; Puts together a string that can be used with the likes of WinActivate, etc.
+	buildWindowTitleString(exeName := "", winClass := "", winTitle := "") {
+		outStr := ""
+		
+		if(winTitle) 
+			outStr := appendPieceToString(outStr, " ", winTitle) ; Title has to go first since it doesn't have an "ahk_" identifier to go with it.
+		if(exeName)
+			outStr := appendPieceToString(outStr, " ", "ahk_exe " exeName)
+		if(winClass)
+			outStr := appendPieceToString(outStr, " ", "ahk_class " winClass)
+		
+		return outStr
+	}
 
-; Puts together a string that can be used with the likes of WinActivate, etc.
-buildWindowTitleString(exeName := "", winClass := "", winTitle := "") {
-	outStr := ""
-	
-	if(winTitle) 
-		outStr := appendPieceToString(outStr, " ", winTitle) ; Title has to go first since it doesn't have an "ahk_" identifier to go with it.
-	
-	if(exeName)
-		outStr := appendPieceToString(outStr, " ", "ahk_exe " exeName)
-	
-	if(winClass)
-		outStr := appendPieceToString(outStr, " ", "ahk_class " winClass)
-	
-	return outStr
+	getIdTitleStringForWindow(titleString := "A") {
+		WinGet, winId, ID, % titleString
+		return "ahk_id " winId
+	}
 }
 
 
@@ -233,11 +238,6 @@ activateWindowUnderMouse() {
 	WinActivate, % "ahk_id " winId
 }
 
-
-getIdTitleStringForWindow(titleString := "A") {
-	WinGet, winId, ID, % titleString
-	return "ahk_id " winId
-}
 
 isWindowVisible(titleString := "A") {
 	return bitFieldHasFlag(WinGet("Style", ""), WS_VISIBLE)

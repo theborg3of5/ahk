@@ -18,19 +18,12 @@
 	Should ACTION_*, etc. constants live inside of ActionObject? Might let us shorten names a little.
 	VisualWindow
 		Finish documentation
-	Reconsider setMatchSettings/restoreMatchSettings
-		Hard to tell what different parameters are
-		Would functions/restores for individual settings be better?
-			Alternatively, something that took the name of the thing (presumably as a key into the actual command/A_* variable)?
 	Consider moving WIN_ACTION_ constants into WindowActions class (assuming that's the only thing it's used with)
 	
 # Large
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)
 		Maybe store off both title (maybe trimmed, drop things like " - Wiki" off of the end, etc?) and URL on copy hotkey
 			Used by a generic hotkey that used those two bits of info + hyperlinking class to add a link?
-	Try to clean up window.ahk some more - can we rearrange functions to have more discrete purposes and make more sense?
-		Should window moving/sizing logic be a separate script? windowPosition.ahk, maybe?
-		Should functions that deal with visual heights/widths/positions be named to include "visual"?
 	Rewrite colorette so we don't have to deal with the exe?
 		Would let us get rid of the special exe case in .gitignore, too
 	Consider some way to more precisely move the mouse cursor on command

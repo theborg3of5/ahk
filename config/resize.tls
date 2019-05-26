@@ -1,8 +1,10 @@
 +WindowTitle=Resize active window to size:
 +MinColumnWidth=350
 
-(	NAME										ABBREV			WIDTH		HEIGHT		X			Y				MACHINE
-)	0											0					1			2				0			0
+; X and Y values can be coordinates or constant values from VisualWindow.X_*/VisualWindow.Y_*
+
+(	NAME										ABBREV			WIDTH		HEIGHT		X					Y					MACHINE
+)	0											0					1			2				0					0
 
 # General sizes
 FHD (1920x1080)							h					1920		1080
@@ -11,9 +13,9 @@ Standard (1280x1024)						sd					1280		1024
 Small (800x600)							sm					800		600
 
 # Specifics
-Semi-maximized (fits around time)	smax				1460		1050			RIGHT		CENTER		HOME_DESKTOP
-Social (Telegram, Pidgin)				soc				950		750			RIGHT		TOP			HOME_DESKTOP
-Social (Telegram, Pidgin)				soc				950		750			RIGHT		BOTTOM		EPIC_LAPTOP
+Semi-maximized (fits around time)	smax				1460		1050			RIGHT_EDGE		CENTERED			HOME_DESKTOP
+Social (Telegram, Pidgin)				soc				950		750			RIGHT_EDGE		TOP_EDGE			HOME_DESKTOP
+Social (Telegram, Pidgin)				soc				950		750			RIGHT_EDGE		BOTTOM_EDGE		EPIC_LAPTOP
 
 # Development
 Minimum Hyperspace (2015-)				minOld			800		550

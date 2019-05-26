@@ -22,6 +22,15 @@ class VisualWindow {
 	; == Public ====================
 	; ==============================
 	
+	; Constants for special window positions
+	static X_LEFT_EDGE   := "LEFT_EDGE"   ; Against left edge of screen
+	static X_RIGHT_EDGE  := "RIGHT_EDGE"  ; Against right edge of screen
+	static X_CENTERED    := "CENTERED"    ; Horizontally centered
+	static Y_TOP_EDGE    := "TOP_EDGE"    ; Against top edge of screen
+	static Y_BOTTOM_EDGE := "BOTTOM_EDGE" ; Against bottom edge of screen
+	static Y_CENTERED    := "CENTERED"    ; Vertically centered
+	
+	
 	leftX   := 0 ; The X coordinate of the visual left edge of the window
 	rightX  := 0 ; The X coordinate of the visual right edge of the window
 	topY    := 0 ; The Y coordinate of the visual top edge of the window
@@ -325,25 +334,25 @@ class VisualWindow {
 		y := this.convertSpecialWindowY(y, monitorBounds)
 	}
 	convertSpecialWindowX(x, monitorBounds) {
-		if(x = WINPOS_X_Left)
+		if(x = VisualWindow.X_LEFT_EDGE)
 			return monitorBounds["LEFT"]
 		
 		monitorWindowDiff := monitorBounds["WIDTH"] - this.width
-		if(x = WINPOS_X_Right)
+		if(x = VisualWindow.X_RIGHT_EDGE)
 			return monitorBounds["LEFT"] + monitorWindowDiff
-		if(x = WINPOS_X_Center)
+		if(x = VisualWindow.X_CENTERED)
 			return monitorBounds["LEFT"] + (monitorWindowDiff / 2)
 		
 		return x ; Just return the original value if it wasn't special
 	}
 	convertSpecialWindowY(y, monitorBounds) {
-		if(y = WINPOS_Y_Top)
+		if(y = VisualWindow.Y_TOP_EDGE)
 			return monitorBounds["TOP"]
 		
 		monitorWindowDiff := monitorBounds["HEIGHT"] - this.height
-		if(y = WINPOS_Y_Bottom)
+		if(y = VisualWindow.Y_BOTTOM_EDGE)
 			return monitorBounds["TOP"] + monitorWindowDiff
-		if(y = WINPOS_Y_Center)
+		if(y = VisualWindow.Y_CENTERED)
 			return monitorBounds["TOP"] + (monitorWindowDiff / 2)
 		
 		return y ; Just return the original value if it wasn't special

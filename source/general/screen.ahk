@@ -38,9 +38,9 @@ return
 		x := data["X"]
 		y := data["Y"]
 		if(x = "")
-			x := WINPOS_X_Center
+			x := VisualWindow.X_CENTERED
 		if(y = "")
-			y := WINPOS_Y_Center
+			y := VisualWindow.Y_CENTERED
 		
 		window := new VisualWindow("A")
 		window.resizeMove(data["WIDTH"], data["HEIGHT"], x, y)

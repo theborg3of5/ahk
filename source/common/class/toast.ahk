@@ -39,7 +39,7 @@ class Toast {
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
 	showShort(toastText) {
-		Toast.showForSeconds(toastText, 1, WINPOS_X_Right, WINPOS_Y_Bottom)
+		Toast.showForSeconds(toastText, 1, VisualWindow.X_RIGHT_EDGE, VisualWindow.Y_BOTTOM_EDGE)
 	}
 	
 	;---------
@@ -50,7 +50,7 @@ class Toast {
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
 	showMedium(toastText) {
-		Toast.showForSeconds(toastText, 2, WINPOS_X_Right, WINPOS_Y_Bottom)
+		Toast.showForSeconds(toastText, 2, VisualWindow.X_RIGHT_EDGE, VisualWindow.Y_BOTTOM_EDGE)
 	}
 	
 	;---------
@@ -61,7 +61,7 @@ class Toast {
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
 	showLong(toastText) {
-		Toast.showForSeconds(toastText, 5, WINPOS_X_Right, WINPOS_Y_Bottom)
+		Toast.showForSeconds(toastText, 5, VisualWindow.X_RIGHT_EDGE, VisualWindow.Y_BOTTOM_EDGE)
 	}
 	
 	;---------
@@ -87,7 +87,7 @@ class Toast {
 		overridesAry["MARGIN_Y"]         := 1
 		overridesAry["LABEL_STYLES"]     := "Right"
 		
-		Toast.showForSeconds(toastText, 2, WINPOS_X_Right, WINPOS_Y_Bottom, overridesAry)
+		Toast.showForSeconds(toastText, 2, VisualWindow.X_RIGHT_EDGE, VisualWindow.Y_BOTTOM_EDGE, overridesAry)
 	}
 	
 	;---------
@@ -95,15 +95,15 @@ class Toast {
 	; PARAMETERS:
 	;  toastText         (I,REQ) - The text to show in the toast.
 	;  numSeconds        (I,REQ) - The number of seconds to show the toast for.
-	;  x                 (I,OPT) - The x coordinate to show the toast at (or special value from WINPOS_X_*).
+	;  x                 (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
 	;                              Defaults to previous position (if set), then right edge of screen.
-	;  y                 (I,OPT) - The y coordinate to show the toast at (or special value from WINPOS_Y_*).
+	;  y                 (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
 	;                              Defaults to previous position (if set), then bottom edge of screen.
 	;  styleOverridesAry (I,OPT) - Any style overrides that you'd like to make. Defaults can be
 	;                              found in .getStyleAry().
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
-	showForSeconds(toastText, numSeconds, x := "RIGHT", y := "BOTTOM", styleOverridesAry := "") { ; x := WINPOS_X_Right, y := WINPOS_Y_Bottom
+	showForSeconds(toastText, numSeconds, x := "RIGHT", y := "BOTTOM", styleOverridesAry := "") { ; x := VisualWindow.X_RIGHT_EDGE, y := VisualWindow.Y_BOTTOM_EDGE
 		idAry := Toast.buildGui(styleOverridesAry)
 		guiId        := idAry["GUI_ID"]
 		labelVarName := idAry["LABEL_VAR_NAME"]
@@ -140,9 +140,9 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Show this toast indefinitely, until it is hidden or closed.
 	; PARAMETERS:
-	;  x (I,OPT) - The x coordinate to show the toast at (or special value from WINPOS_X_*).
+	;  x (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
 	;              Defaults to previous position (if set), then right edge of screen.
-	;  y (I,OPT) - The y coordinate to show the toast at (or special value from WINPOS_Y_*).
+	;  y (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
 	;              Defaults to previous position (if set), then bottom edge of screen.
 	;---------
 	showPersistent(x := "", y := "") {
@@ -156,9 +156,9 @@ class Toast {
 		
 		; Default to bottom-right if nothing given and no previous position.
 		if(this.x = "")
-			this.x := WINPOS_X_Right
+			this.x := VisualWindow.X_RIGHT_EDGE
 		if(this.y = "")
-			this.y := WINPOS_Y_Bottom
+			this.y := VisualWindow.Y_BOTTOM_EDGE
 		
 		this.showToast(this.x, this.y, this.guiId)
 	}
@@ -167,9 +167,9 @@ class Toast {
 	; DESCRIPTION:    Show this toast for a certain number of seconds, then hide it.
 	; PARAMETERS:
 	;  numSeconds (I,REQ) - The number of seconds to show the toast for.
-	;  x          (I,OPT) - The x coordinate to show the toast at (or special value from WINPOS_X_*).
+	;  x          (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
 	;                       Defaults to previous position (if set), then right edge of screen.
-	;  y          (I,OPT) - The y coordinate to show the toast at (or special value from WINPOS_Y_*).
+	;  y          (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
 	;                       Defaults to previous position (if set), then bottom edge of screen.
 	;---------
 	showPersistentForSeconds(numSeconds, x := "", y := "") {
@@ -297,16 +297,16 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Move the toast gui to the given coordinates and resize it to its contents.
 	; PARAMETERS:
-	;  x     (I,REQ) - The x coordinate to show the toast at (or special value from WINPOS_X_*).
-	;  y     (I,REQ) - The y coordinate to show the toast at (or special value from WINPOS_Y_*).
+	;  x     (I,REQ) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
+	;  y     (I,REQ) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
 	;  guiId (I,REQ) - Window handle for the toast gui.
 	;---------
 	move(x, y, guiId) {
 		; If x/y not given, default them to right/bottom
 		if(x = "")
-			x := WINPOS_X_Right
+			x := VisualWindow.X_RIGHT_EDGE
 		if(y = "")
-			y := WINPOS_Y_Bottom
+			y := VisualWindow.Y_BOTTOM_EDGE
 		origMatchSettings := setMatchSettings("", "", "On") ; DetectHiddenWindows = On
 		
 		Gui, +LastFound ; Needed to identify the window on next line
@@ -346,8 +346,8 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Show (fade in) the toast.
 	; PARAMETERS:
-	;  x     (I,OPT) - The x coordinate to show the toast at (or special value from WINPOS_X_*).
-	;  y     (I,OPT) - The y coordinate to show the toast at (or special value from WINPOS_Y_*).
+	;  x     (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
+	;  y     (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
 	;  guiId (I,REQ) - Window handle for the toast gui.
 	;---------
 	showToast(x, y, guiId) {

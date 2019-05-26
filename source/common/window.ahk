@@ -1,12 +1,5 @@
 ; Functions for identifying and interacting with windows.
 
-global WINPOS_X_Left   := "LEFT"   ; Against left edge of screen
-global WINPOS_X_Right  := "RIGHT"  ; Against right edge of screen
-global WINPOS_X_Center := "CENTER" ; Horizontally centered
-global WINPOS_Y_Top    := "TOP"    ; Against top edge of screen
-global WINPOS_Y_Bottom := "BOTTOM" ; Against bottom edge of screen
-global WINPOS_Y_Center := "CENTER" ; Vertically centered
-
 { ; Window identification
 	; Puts together a string that can be used with the likes of WinActivate, etc.
 	buildWindowTitleString(exeName := "", winClass := "", winTitle := "") {
@@ -106,13 +99,13 @@ restoreMatchSettings(settings) {
 ; Centers a window on the screen.
 centerWindow(titleString := "A") {
 	window := new VisualWindow(titleString)
-	window.move(WINPOS_X_Center, WINPOS_Y_Center)
+	window.move(VisualWindow.X_CENTERED, VisualWindow.Y_CENTERED)
 }
 
 fakeMaximizeWindow(titleString := "A") {
 	monitorBounds := getMonitorBounds("", titleString)
 	window := new VisualWindow(titleString)
-	window.resizeMove(monitorBounds["WIDTH"], monitorBounds["HEIGHT"], WINPOS_X_Center, WINPOS_Y_Center)
+	window.resizeMove(monitorBounds["WIDTH"], monitorBounds["HEIGHT"], VisualWindow.X_CENTERED, VisualWindow.Y_CENTERED)
 }
 
 getMonitorBounds(monitorNum := "", titleString := "A") {

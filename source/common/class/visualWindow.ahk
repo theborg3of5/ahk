@@ -253,7 +253,7 @@ class VisualWindow {
 		if(!this.isSnapOn)
 			return
 		
-		monitorBounds := getMonitorBounds("", this.titleString)
+		monitorBounds := getWindowMonitorBounds(this.titleString)
 		leftDistance   := abs(this.leftX   - monitorBounds["LEFT"])
 		rightDistance  := abs(this.rightX  - monitorBounds["RIGHT"])
 		topDistance    := abs(this.topY    - monitorBounds["TOP"])
@@ -301,7 +301,7 @@ class VisualWindow {
 		if(!this.isSnapOn)
 			return
 		
-		monitorBounds := getMonitorBounds("", this.titleString)
+		monitorBounds := getWindowMonitorBounds(this.titleString)
 		leftDistance   := abs(this.leftX   - monitorBounds["LEFT"])
 		rightDistance  := abs(this.rightX  - monitorBounds["RIGHT"])
 		topDistance    := abs(this.topY    - monitorBounds["TOP"])
@@ -329,7 +329,7 @@ class VisualWindow {
 	}
 	
 	convertSpecialWindowCoordinates(ByRef x, ByRef y) {
-		monitorBounds := getMonitorBounds("", this.titleString)
+		monitorBounds := getWindowMonitorBounds(this.titleString)
 		x := this.convertSpecialWindowX(x, monitorBounds)
 		y := this.convertSpecialWindowY(y, monitorBounds)
 	}

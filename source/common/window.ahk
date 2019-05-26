@@ -1,89 +1,22 @@
 ; Functions for identifying and interacting with windows.
 
-{ ; Window identification
-	; Puts together a string that can be used with the likes of WinActivate, etc.
-	buildWindowTitleString(exeName := "", winClass := "", winTitle := "") {
-		outStr := ""
-		
-		if(winTitle) 
-			outStr := appendPieceToString(outStr, " ", winTitle) ; Title has to go first since it doesn't have an "ahk_" identifier to go with it.
-		if(exeName)
-			outStr := appendPieceToString(outStr, " ", "ahk_exe " exeName)
-		if(winClass)
-			outStr := appendPieceToString(outStr, " ", "ahk_class " winClass)
-		
-		return outStr
-	}
-
-	getIdTitleStringForWindow(titleString := "A") {
-		WinGet, winId, ID, % titleString
-		return "ahk_id " winId
-	}
+; Puts together a string that can be used with the likes of WinActivate, etc.
+buildWindowTitleString(exeName := "", winClass := "", winTitle := "") {
+	outStr := ""
+	
+	if(winTitle) 
+		outStr := appendPieceToString(outStr, " ", winTitle) ; Title has to go first since it doesn't have an "ahk_" identifier to go with it.
+	if(exeName)
+		outStr := appendPieceToString(outStr, " ", "ahk_exe " exeName)
+	if(winClass)
+		outStr := appendPieceToString(outStr, " ", "ahk_class " winClass)
+	
+	return outStr
 }
 
-{ ; Window matching settings
-	
-}
-
-
-; See if a window exists or is active with a given TitleMatchMode.
-isWindowInState(states := "", titles := "", texts := "", matchMode := 1, matchSpeed := "Fast", findHidden := "Off") {
-	; Make sure these are arrays so we can loop on them below.
-	states := forceArray(states)
-	titles := forceArray(titles)
-	texts  := forceArray(texts)
-	; DEBUG.popup("Window states to check", states, "Window titles to match", titles, "Window texts to match", texts, "Title match mode", matchMode)
-	
-	; Plug in the new match settings.
-	origMatchSettings := setMatchSettings(matchMode, matchSpeed, findHidden)
-	
-	windowMatch := false
-	For _,state in states {
-		For _,title in titles {
-			For _,text in texts {
-				if(state = "active")
-					windowMatch := WinActive(title, text)
-				else if(stringContains(state, "exist")) ; Allow "exist" and "exists" both
-					windowMatch := WinExist(title, text)
-				
-				if(windowMatch)
-					break 3 ; Break out of outermost loop
-			}
-		}
-	}
-	
-	; Restore defaults when done.
-	restoreMatchSettings(origMatchSettings)
-	
-	return windowMatch
-}
-
-; Get/set/restore various matching behavior states all at once.
-setMatchSettings(mode := "", speed := "", detectHidden := "") {
-	; Save off the previous settings - nice if we want to restore later.
-	prevSettings := getMatchSettings()
-	
-	if(mode)
-		SetTitleMatchMode, % mode
-	if(speed)
-		SetTitleMatchMode, % speed
-	if(detectHidden)
-		DetectHiddenWindows, % detectHidden
-	
-	return prevSettings ; Return the previous settings (to be used with restoreMatchSettings() if desired).
-}
-getMatchSettings() {
-	settings := []
-	settings["MODE"]          := A_TitleMatchMode
-	settings["SPEED"]         := A_TitleMatchModeSpeed
-	settings["DETECT_HIDDEN"] := A_DetectHiddenWindows
-	
-	return settings
-}
-restoreMatchSettings(settings) {
-	SetTitleMatchMode,   % settings["MODE"]
-	SetTitleMatchMode,   % settings["SPEED"]
-	DetectHiddenWindows, % settings["DETECT_HIDDEN"]
+getIdTitleStringForWindow(titleString := "A") {
+	WinGet, winId, ID, % titleString
+	return "ahk_id " winId
 }
 
 ; Centers a window on the screen.
@@ -97,6 +30,13 @@ fakeMaximizeWindow(titleString := "A") {
 	window := new VisualWindow(titleString)
 	window.resizeMove(monitorBounds["WIDTH"], monitorBounds["HEIGHT"], VisualWindow.X_CENTERED, VisualWindow.Y_CENTERED)
 }
+
+isWindowVisible(titleString := "A") {
+	return bitFieldHasFlag(WinGet("Style", ""), WS_VISIBLE)
+}
+
+
+
 
 getMonitorBounds(monitorNum := "", titleString := "A") {
 	monitorsAry := getMonitorBoundsAry()
@@ -215,13 +155,3 @@ getWindowMonitorWorkBounds(titleString := "A") {
 	return workBoundsAry
 }
 
-
-activateWindowUnderMouse() {
-	MouseGetPos( , , winId)
-	WinActivate, % "ahk_id " winId
-}
-
-
-isWindowVisible(titleString := "A") {
-	return bitFieldHasFlag(WinGet("Style", ""), WS_VISIBLE)
-}

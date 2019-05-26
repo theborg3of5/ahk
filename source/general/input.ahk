@@ -44,8 +44,9 @@ return
 		if(!winId)
 			return
 		
-		if(MainConfig.findWindowName("ahk_id " winId) != "Windows Taskbar") ; Don't try to focus Windows taskbar
-			activateWindowUnderMouse()
+		idString := "ahk_id " winId
+		if(MainConfig.findWindowName(idString) != "Windows Taskbar") ; Don't try to focus Windows taskbar
+			WinActivate, % idString
 		
 		; Allow the keystrokes to be caught and handled by other hotkeys.
 		sendUsingLevel(keys, 1)

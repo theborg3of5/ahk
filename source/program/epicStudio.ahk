@@ -62,15 +62,28 @@
 	
 	; Checks if ES is already in debug mode or not.
 	isESDebugging() {
-		texts := [MainConfig.private["ES_PUTTY_EXE"], MainConfig.private["ES_HYPERSPACE_EXE"], MainConfig.private["ES_VB6_EXE"]]
-		return isWindowInState("active", "", texts, 2, "Slow")
+		isDebugging := false
+		
+		origMatchMode := setTitleMatchMode(TITLE_MATCH_MODE_Contain)
+		origMatchSpeed := setTitleMatchSpeed("Slow")
+		
+		; Match on text in the window for the main debugging targets
+		winId := WinActive("", MainConfig.private["ES_PUTTY_EXE"])
+		if(winId = "")
+			winId := WinActive("", MainConfig.private["ES_HYPERSPACE_EXE"])
+		if(winId = "")
+			winId := WinActive("", MainConfig.private["ES_VB6_EXE"])
+		
+		setTitleMatchMode(origMatchMode)
+		setTitleMatchSpeed(origMatchSpeed)
+		
+		return isDebugging
 	}
 	
 	; Link routine to currently open (in object explorer tab) DLG.
 	^+l::
 		linkRoutineToCurrentDLG() {
 			text := WinGetText()
-			; DEBUG.popup("Window Text", text)
 			
 			Loop, Parse, text, `n
 			{

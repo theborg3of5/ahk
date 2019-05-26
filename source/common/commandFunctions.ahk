@@ -191,12 +191,12 @@
 }
 
 { ; Setter functions that return the corresponding original value.
-	setTitleMatchMode(new) { ; Only returns the actual mode - if you want the original match mode speed value, use setTitleMatchModeSpeed() instead.
+	setTitleMatchMode(new) { ; Only returns the actual mode - if you want the original match mode speed value, use setTitleMatchSpeed() instead.
 		old := A_TitleMatchMode
 		SetTitleMatchMode, % new
 		return old
 	}
-	setTitleMatchModeSpeed(new) {
+	setTitleMatchSpeed(new) {
 		old := A_TitleMatchModeSpeed
 		SetTitleMatchMode, % new
 		return old

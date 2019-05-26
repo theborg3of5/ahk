@@ -307,7 +307,7 @@ class Toast {
 			x := VisualWindow.X_RIGHT_EDGE
 		if(y = "")
 			y := VisualWindow.Y_BOTTOM_EDGE
-		origMatchSettings := setMatchSettings("", "", "On") ; DetectHiddenWindows = On
+		origDetectSetting := setDetectHiddenWindows("On")
 		
 		Gui, +LastFound ; Needed to identify the window on next line
 		titleString := getIdTitleStringForWindow("") ; Blank title string input for last found window
@@ -324,7 +324,7 @@ class Toast {
 		if(isWinHidden)
 			Gui, Show, NoActivate, % Toast.ToastTitle
 		
-		restoreMatchSettings(origMatchSettings)
+		setDetectHiddenWindows(origDetectSetting)
 	}
 	
 	;---------

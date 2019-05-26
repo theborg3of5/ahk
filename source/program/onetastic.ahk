@@ -303,5 +303,7 @@ onetasticImportFunction(functionXML) {
 ; DESCRIPTION:    Waits until the main macro editor window becomes active.
 ;---------
 onetasticWaitMacroEditorWindowActive() {
-	waitUntilWindowState("Active", " - Macro Editor", "", 2) ; matchMode=2 - allow matching anywhere
+	origMatchMode := setTitleMatchMode(TITLE_MATCH_MODE_Contain)
+	WinWaitActive, % " - Macro Editor"
+	setTitleMatchMode(origMatchMode)
 }

@@ -21,6 +21,10 @@
 	}
 }
 
+{ ; Window matching settings
+	
+}
+
 
 ; See if a window exists or is active with a given TitleMatchMode.
 isWindowInState(states := "", titles := "", texts := "", matchMode := 1, matchSpeed := "Fast", findHidden := "Off") {
@@ -52,20 +56,6 @@ isWindowInState(states := "", titles := "", texts := "", matchMode := 1, matchSp
 	restoreMatchSettings(origMatchSettings)
 	
 	return windowMatch
-}
-waitUntilWindowState(state, title := "", text := "", matchMode := 1, matchSpeed := "Fast") {
-	; Plug in the new match settings.
-	origMatchSettings := setMatchSettings(matchMode, matchSpeed)
-	
-	; DEBUG.popup("Window state to wait on",state, "Window title to match",title, "Window text to match",text, "Title match mode",matchMode, "Title match speed",matchSpeed)
-	
-	if(state = "active")
-		WinWaitActive, %title%, %text%
-	else if(stringContains(state, "exist"))
-		WinWait, %title%, %text%
-	
-	; Restore defaults when done.
-	restoreMatchSettings(origMatchSettings)
 }
 
 ; Get/set/restore various matching behavior states all at once.

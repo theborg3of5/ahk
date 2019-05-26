@@ -22,6 +22,7 @@
 		Hard to tell what different parameters are
 		Would functions/restores for individual settings be better?
 			Alternatively, something that took the name of the thing (presumably as a key into the actual command/A_* variable)?
+	Consider moving WIN_ACTION_ constants into WindowActions class (assuming that's the only thing it's used with)
 	
 # Large
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)

@@ -391,7 +391,7 @@ class WindowActions {
 				titleAry.push("Spotify" spotifyTitleBase)
 				titleAry.push("-" spotifyTitleBase)
 				
-				winId := isWindowInState("exists", titleAry, "", TITLE_MATCH_MODE_Contain, "", "On")
+				winId := isWindowInState("exists", titleAry, "", TITLE_MATCH_MODE_Contain)
 				WinClose, ahk_id %winId%
 			}
 		}

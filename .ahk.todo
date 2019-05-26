@@ -30,8 +30,6 @@
 	Try to clean up window.ahk some more - can we rearrange functions to have more discrete purposes and make more sense?
 		Should window moving/sizing logic be a separate script? windowPosition.ahk, maybe?
 		Should functions that deal with visual heights/widths/positions be named to include "visual"?
-		Make use of new VisualWindow class?
-			Could we have it also support the relative values for corners/centers, to get rid of separate need for *Relative*Position* functions?
 	Rewrite colorette so we don't have to deal with the exe?
 		Would let us get rid of the special exe case in .gitignore, too
 	Consider some way to more precisely move the mouse cursor on command

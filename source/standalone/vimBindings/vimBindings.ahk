@@ -22,20 +22,20 @@ IDLE_TIME := 5 * 60 * 1000 ; 5 minutes
 SetTimer, vimIdle, %IDLE_TIME%
 vimIdle:
 	if(!browserActive())
-		vimOn()
+		turnVimKeysOn()
 return
 
 ; Run on any page in the browser, regardless of state.
 #If browserActive()
 	!m::
-		vimOn()
+		turnVimKeysOn()
 	return
 	
 	F6::
 	F8::
 	F9::
 		Send, ^w
-		vimOn()
+		turnVimKeysOn()
 	return
 	
 	; Special addition for when j/k turned off because special page.
@@ -44,10 +44,10 @@ return
 #If
 
 ; Run as long as vimkeys are on.
-#If browserActive() && vimKeysOn
+#If browserActive() && areVimKeysOn()
 	; Pause/suspend.
 	i::
-		vimOffManual()
+		turnVimOffManual()
 	return
 	
 	; Next/Previous Tab.
@@ -58,7 +58,7 @@ return
 	~^l::
 	~^t::
 	~^f::
-		vimOffAuto()
+		turnVimOffAuto()
 	return
 	
 	; Keys that turn vimkeys off, because you're probably typing something else.
@@ -143,23 +143,23 @@ return
 	~+`;::
 	~+'::
 	~+/::
-		vimOffManual()
+		turnVimOffManual()
 	return
 #If
 
 ; Run as long as we're not on an exclude page.
-#If browserActive() && !titleContainsAnyOf(offTitles)
+#If browserActive() && !isPageWithExcludeTitle()
 	; Unpause for special cases.
 	~$Esc::
 	~$Enter::
 		if(autoPaused)
-			vimOn()
+			turnVimKeysOn()
 	return
 #If
 
 ; Normal key commands
 ; Run if vimkeys are on and we're not on an excluded page.
-#If browserActive() && vimKeysOn && !titleContainsAnyOf(offTitles)
+#If browserActive() && areVimKeysOn() && !isPageWithExcludeTitle()
 	; Up/Down/Left/Right.
 	j::Send, {Down}
 	k::Send, {Up}
@@ -184,27 +184,33 @@ getExcludedTitles() {
 	return titles
 }
 
+
 ; Chrome or Firefox.
 browserActive() {
 	return MainConfig.isWindowActive("Chrome") || WinActive("ahk_class MozillaWindowClass")
 }
-
-vimOn() {
-	setVimState(true)
+areVimKeysOn() {
+	return vimKeysOn
 }
-vimOffManual() {
+isPageWithExcludeTitle() {
+	return stringMatchesAnyOf(WinGetActiveTitle(), offTitles)
+}
+
+turnVimKeysOn() {
+	setVimKeysState(true)
+}
+turnVimOffManual() {
 	global autoPaused
 	autoPaused := false
-	setVimState(false)
+	setVimKeysState(false)
 }
-vimOffAuto() {
+turnVimOffAuto() {
 	global autoPaused
 	autoPaused := true
-	setVimState(false)
+	setVimKeysState(false)
 }
 
-setVimState(toState) {
-	global vimKeysOn
+setVimKeysState(toState) {
 	vimKeysOn := toState
 	updateTrayIcon()
 }

@@ -23,11 +23,6 @@ buildWindowTitleString(exeName := "", winClass := "", winTitle := "") {
 	return outStr
 }
 
-; Returns true if the current window's title contains any of a given array of strings.
-titleContainsAnyOf(haystack) {
-	title := WinGetActiveTitle()
-	return stringMatchesAnyOf(title, haystack)
-}
 
 ; See if a window exists or is active with a given TitleMatchMode.
 isWindowInState(states := "", titles := "", texts := "", matchMode := 1, matchSpeed := "Fast", findHidden := "Off") {

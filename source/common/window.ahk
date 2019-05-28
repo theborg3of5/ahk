@@ -1,6 +1,16 @@
 ; Functions for identifying and interacting with windows.
 
 ; Puts together a string that can be used with the likes of WinActivate, etc.
+
+;---------
+; DESCRIPTION:    Build a title string that can be used to identify a window based on the given
+;                 parts, for use with WinActivate and the like.
+; PARAMETERS:
+;  exeName  (I,OPT) - Executable name, will be paired with ahk_exe
+;  winClass (I,OPT) - Window class, will be paired with ahk_class
+;  winTitle (I,OPT) - Text that's part of the window title
+; RETURNS:        Title string including all of the given criteria
+;---------
 buildWindowTitleString(exeName := "", winClass := "", winTitle := "") {
 	outStr := ""
 	
@@ -14,12 +24,25 @@ buildWindowTitleString(exeName := "", winClass := "", winTitle := "") {
 	return outStr
 }
 
+;---------
+; DESCRIPTION:    For the window identified by the given title string, generate a title string
+;                 that's guaranteed to match only that window (based on its window ID).
+; PARAMETERS:
+;  titleString (I,REQ) - Title string that identifies your chosen window.
+;                        Defaults to the active window ("A").
+; RETURNS:        A title string that uniquely (using ahk_id) identifies only your chosen window.
+;---------
 getIdTitleStringForWindow(titleString := "A") {
 	WinGet, winId, ID, % titleString
 	return "ahk_id " winId
 }
 
-; Centers a window on the screen.
+;---------
+; DESCRIPTION:    Visually center the given window on its current monitor.
+; PARAMETERS:
+;  titleString (I,REQ) - Title string that identifies your chosen window.
+;                        Defaults to the active window ("A").
+;---------
 centerWindow(titleString := "A") {
 	window := new VisualWindow(titleString)
 	window.move(VisualWindow.X_CENTERED, VisualWindow.Y_CENTERED)

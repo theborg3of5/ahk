@@ -42,19 +42,16 @@ class VisualWindow {
 	;---------
 	; DESCRIPTION:    Create a new VisualWindow object to interact with a window as it appears.
 	; PARAMETERS:
-	;  titleString  (I,REQ) - A title string describing the window this object should
-	;                         represent/affect.
+	;  titleString  (I,REQ) - A title string describing the window this object should represent/affect.
 	;  snapDistance (I,OPT) - If the window should snap to the edges of the monitor when moved, set
-	;                         this to the distance (in pixels) at which the window should snap. If
-	;                         this is set to a value > 0, snapping will automatically be turned on.
-	;                         Defaults to 0, which leaves snapping off.
+	;                         this to the distance (in pixels) at which the window should snap. Note
+	;                         that snapping must still separately be turned on (with .snapOn() function).
+	;                         Defaults to 0.
 	; RETURNS:        Reference to new VisualWindow instance
 	;---------
 	__New(titleString, snapDistance := 0) {
 		this.titleString := getIdTitleStringForWindow(titleString) ; Convert title string to ID in case it was active window ("A") or similar
 		this.snapDistance := snapDistance
-		if(snapDistance > 0)
-			this.isSnapOn := true
 		this.windowOffsets := this.calculateWindowOffsets()
 		
 		WinGetPos, x, y, width, height, % this.titleString

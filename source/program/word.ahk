@@ -19,6 +19,11 @@
 		Send, 4
 	return
 	
+	; Add a new comment (default hotkey is used elsewhere)
+	^m::
+		Send, ^!m
+	return
+	
 	; Jump to next *** token and select it.
 	F2::
 		Send, ^g    ; Find/replace popup (Go To tab)

@@ -69,9 +69,9 @@
 		
 		; Match on text in the window for the main debugging targets
 		winId := WinActive("", MainConfig.private["ES_PUTTY_EXE"])
-		if(winId = "")
+		if(!winId)
 			winId := WinActive("", MainConfig.private["ES_HYPERSPACE_EXE"])
-		if(winId = "")
+		if(!winId)
 			winId := WinActive("", MainConfig.private["ES_VB6_EXE"])
 		
 		setTitleMatchMode(origMatchMode)

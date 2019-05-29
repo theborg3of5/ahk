@@ -387,10 +387,10 @@ class WindowActions {
 				; Spotify has a whole bunch of windows that are difficult to tell apart from 
 				; the real thing, so make sure we're closing the right one.
 				winId := WinExist(buildWindowTitleString("Spotify.exe", "", "Spotify")) ; Title is "Spotify" if playing nothing
-				if(winId = "")
+				if(!winId)
 					winId := WinExist(buildWindowTitleString("Spotify.exe", "", "-")) ; Title has a hyphen between the title and artist if it is playing something
 				
-				if(winId != "")
+				if(winId)
 					WinClose, ahk_id %winId%
 				
 				setTitleMatchMode(origMatchMode)

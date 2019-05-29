@@ -3,19 +3,26 @@
 	In Windows 10, windows are not always the size that they appear for AHK - there is sometimes a wider, invisible offset around them between, making them look smaller (and further right/down) than they appear. This class provides a way to move and resize a window as if it was the size which it appears, plus a few additional features to save on the math required to say, align a window's right edge to the side of the monitor.
 	
 	Basic operations
+		Get actual position
+			You can get the actual position of a window after manipulating it with this class using the .getActualPosition() function.
 		Moving
-			*
+			You can place windows at a particular position, either just based on their top-left corner [.move() and .resizeMove(), support special window positions] or based on any corner [.move*ToPos(), support snapping].
 		Resizing
-			*
+			You can resize windows, either from their top-left corner [.resize() and .resizeMove()] or towards any corner [resize*ToPos(), support snapping].
 		
 	Additional features
 		Snapping
-			*
+			This class can "snap" window edges to the edges of your monitor once they get within a certain distance, either moving or resizing the window a little extra (whichever you were doing when the snap happened).
+			Note that this is only supported when you move or resize based on a particular corner [.move*ToPos() or .resize*ToPos()].
+			In order for snapping to work, the snapping distance (the maximum distance between the visual window edge and the monitor edge that we snap at) must be specified with the snapDistance parameter at initialization, and snapping must be explicitly turned on [.snapOn()].
+			Snapping can be turned on and off on the fly as well [.snapOn() and .snapOff()].
 		Special window positions
-			*
+			This class can move windows to several "special" positions relative to the window's monitor, aligning the window to the edges/corners/centers of the monitor. The options (for X and Y each) are left/top, middle, and right/bottom (see X_* and Y_* constants below).
+			Note that this is only supported when you are NOT moving or resizing based on a particular corner [.move() and .resizeMove()].
 		
 	Example Usage
-		*
+		window := new VisualWindow("A") ; Create a new VisualWindow representing the active window ("A")
+		
 */
 
 class VisualWindow {

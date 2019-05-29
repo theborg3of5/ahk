@@ -98,7 +98,16 @@ global WINDOWCORNER_BOTTOMRIGHT := "BOTTOM_RIGHT"
 #If
 
 
-
+;---------
+; DESCRIPTION:    Set up window for being dragged (for either moving or resizing) and gather
+;                 needed information.
+; PARAMETERS:
+;  window     (O,REQ) - VisualWindow object connected to the window under the mouse.
+;  mouseStart (O,REQ) - MousePosition object representing where the mouse is right now (before we
+;                       start dragging).
+; SIDE EFFECTS:   Restores the window if it's maximized, before we take our initial measurements of
+;                 the window.
+;---------
 dragWindowPrep(ByRef window, ByRef mouseStart) {
 	titleString := getTitleStringForWindowUnderMouse()
 	if(isExcludedWindow(titleString))
@@ -113,11 +122,21 @@ dragWindowPrep(ByRef window, ByRef mouseStart) {
 	return true
 }
 
+;---------
+; DESCRIPTION:    Get an ID-based title string to identify the window under the mouse with.
+; RETURNS:        title string (that uses ahk_id) identifying the window under the mouse.
+;---------
 getTitleStringForWindowUnderMouse() {
 	MouseGetPos( , , winId)
 	return "ahk_id " winId
 }
 
+;---------
+; DESCRIPTION:    Check whether the given window is one that we shouldn't try to move or resize.
+; PARAMETERS:
+;  titleString (I,REQ) - Title string identifying the window in question.
+; RETURNS:        true if the window should be excluded, false otherwise.
+;---------
 isExcludedWindow(titleString) {
 	windowName := MainConfig.findWindowName(titleString)
 	if(windowName = "Windows Taskbar")
@@ -126,12 +145,25 @@ isExcludedWindow(titleString) {
 	return false
 }
 
+;---------
+; DESCRIPTION:    If the given window is maximized, restore it.
+; PARAMETERS:
+;  titleString (I,REQ) - Title string identifying the window to check/restore.
+;---------
 restoreWindowIfMaximized(titleString) {
 	minMaxState := WinGet("MinMax", titleString)
 	if(minMaxState = WINMINMAX_MAX) ; Window is maximized
 		WinRestore, % titleString
 }
 
+;---------
+; DESCRIPTION:    Do different things depending on what modifier keys are pressed/being held down.
+;                 Specifically:
+;                    * If left ctrl is pressed, activate the window we're tragging
+;                    * While left shift is held down, disable snapping
+; PARAMETERS:
+;  window (IO,REQ) - VisualWindow object connected to the window that's being moved or resized.
+;---------
 handleDragWindowKeys(window) {
 	; If LControl is pressed while we're moving, activate the window
 	if(GetKeyState("LControl"))
@@ -144,6 +176,16 @@ handleDragWindowKeys(window) {
 		window.snapOn()
 }
 
+;---------
+; DESCRIPTION:    Decide which corner we're resizing towards (that is, which corner moves with the
+;                 mouse) based on which quadrant of the window we're in.
+; PARAMETERS:
+;  window     (I,REQ) - VisualWindow object connected to the window under the mouse.
+;  mouseStart (I,REQ) - MousePosition object representing where the mouse started (before we
+;                       started dragging).
+; RETURNS:        One of the WINDOWCORNER_* constants from this script, representing which corner
+;                 should move with the mouse as we resize.
+;---------
 getResizeCorner(window, mouseStart) {
 	x := mouseStart.x
 	y := mouseStart.y

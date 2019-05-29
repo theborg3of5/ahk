@@ -101,7 +101,6 @@
 			io
 			runCommands
 			string
-			window
 	program
 		emc2
 		epicStudio

@@ -48,18 +48,48 @@ centerWindow(titleString := "A") {
 	window.move(VisualWindow.X_CENTERED, VisualWindow.Y_CENTERED)
 }
 
+;---------
+; DESCRIPTION:    Resize a window to take up the full size of the monitor, without actually
+;                 maximizing that window.
+; PARAMETERS:
+;  titleString (I,REQ) - Title string that identifies your chosen window.
+;                        Defaults to the active window ("A").
+;---------
 fakeMaximizeWindow(titleString := "A") {
-	monitorBounds := getWindowMonitorBounds(titleString)
+	monitorBounds := getWindowMonitorWorkArea(titleString)
 	window := new VisualWindow(titleString)
 	window.resizeMove(monitorBounds["WIDTH"], monitorBounds["HEIGHT"], VisualWindow.X_CENTERED, VisualWindow.Y_CENTERED)
 }
 
+;---------
+; DESCRIPTION:    Determine whether a window is visible, based on its style.
+; PARAMETERS:
+;  titleString (I,REQ) - Title string that identifies your chosen window.
+;                        Defaults to the active window ("A").
+; RETURNS:        True if the window is visible, False otherwise.
+;---------
 isWindowVisible(titleString := "A") {
 	return bitFieldHasFlag(WinGet("Style", ""), WS_VISIBLE)
 }
 
-
-getWindowMonitorBounds(titleString := "A") {
+;---------
+; DESCRIPTION:    Get the dimensions of the work area of the monitor "closest" (according to
+;                 Windows) to the given window.
+; PARAMETERS:
+;  titleString (I,REQ) - Title string that identifies your chosen window.
+;                        Defaults to the active window ("A").
+; RETURNS:        Array of position/size information for the working area of the monitor that the
+;                 window is "closest" to. Format:
+;                    boundsAry["LEFT"]   = x-coordinate of monitor's (working area's) left bound
+;                             ["RIGHT"]  = x-coordinate of monitor's (working area's) right bound
+;                             ["TOP"]    = y-coordinate of monitor's (working area's) top bound
+;                             ["BOTTOM"] = y-coordinate of monitor's (working area's) bottom bound
+;                             ["WIDTH"]  = width of the monitor's work area
+;                             ["HEIGHT"] = height of the monitor's work area
+; NOTES:          This working area excludes things like the taskbar - it's the full space that a
+;                 window can occupy.
+;---------
+getWindowMonitorWorkArea(titleString := "A") {
 	winId := WinExist(titleString) ; Window handle
 	
 	; Get the monitor nearest to the window with the MonitorFromWindow function (https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-monitorfromwindow )

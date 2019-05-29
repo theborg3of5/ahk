@@ -267,10 +267,9 @@ class VisualWindow {
 		return windowOffsets
 	}
 	
-	; ------------
-	; -- Moving --
-	; ------------
-	
+	; -------------------------------------------------
+	; -- Moving window based on certain window edges --
+	; -------------------------------------------------
 	mvLeftToX(x) {
 		this.leftX  := x
 		this.rightX := x + this.width
@@ -288,10 +287,9 @@ class VisualWindow {
 		this.bottomY := y
 	}
 	
-	; --------------
-	; -- Resizing --
-	; --------------
-	
+	; ---------------------------------------------------
+	; -- Resizing window based on certain window edges --
+	; ---------------------------------------------------
 	rsLeftToX(x) {
 		this.leftX := x
 		this.width := this.rightX - x
@@ -299,10 +297,6 @@ class VisualWindow {
 	rsRightToX(x) {
 		this.rightX := x
 		this.width  := x - this.leftX
-	}
-	rsToWidth(width) {
-		this.width  := width
-		this.rightX := this.leftX + width
 	}
 	rsTopToY(y) {
 		this.topY   := y
@@ -312,6 +306,14 @@ class VisualWindow {
 		this.bottomY := y
 		this.height  := y - this.topY
 	}
+	
+	; --------------------------------------------------------------------------------
+	; -- Resizing window with a specific width/height (towards bottom-right corner) --
+	; --------------------------------------------------------------------------------
+	rsToWidth(width) {
+		this.width  := width
+		this.rightX := this.leftX + width
+	}
 	rsToHeight(height) {
 		this.height  := height
 		this.bottomY := this.topY + height
@@ -320,7 +322,6 @@ class VisualWindow {
 	; --------------
 	; -- Snapping --
 	; --------------
-	
 	mvSnap() {
 		if(!this.isSnapOn)
 			return
@@ -377,7 +378,6 @@ class VisualWindow {
 	; ---------------------------------------------------------------------------
 	; -- Special window coordinates (for window placement relative to monitor) --
 	; ---------------------------------------------------------------------------
-	
 	convertSpecialWindowCoordinates(ByRef x, ByRef y) {
 		monitorBounds := getWindowMonitorWorkArea(this.titleString)
 		x := this.convertSpecialWindowX(x, monitorBounds)

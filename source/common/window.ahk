@@ -80,10 +80,10 @@ isWindowVisible(titleString := "A") {
 ;                        Defaults to the active window ("A").
 ; RETURNS:        Array of position/size information for the working area of the monitor that the
 ;                 window is "closest" to. Format:
-;                    boundsAry["LEFT"]   = x-coordinate of monitor's (working area's) left bound
-;                             ["RIGHT"]  = x-coordinate of monitor's (working area's) right bound
-;                             ["TOP"]    = y-coordinate of monitor's (working area's) top bound
-;                             ["BOTTOM"] = y-coordinate of monitor's (working area's) bottom bound
+;                    boundsAry["LEFT"]   = X coordinate of monitor's (working area's) left bound
+;                             ["RIGHT"]  = X coordinate of monitor's (working area's) right bound
+;                             ["TOP"]    = Y coordinate of monitor's (working area's) top bound
+;                             ["BOTTOM"] = Y coordinate of monitor's (working area's) bottom bound
 ;                             ["WIDTH"]  = width of the monitor's work area
 ;                             ["HEIGHT"] = height of the monitor's work area
 ; NOTES:          This working area excludes things like the taskbar - it's the full space that a

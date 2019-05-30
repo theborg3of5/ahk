@@ -1,5 +1,7 @@
 (	NAME										ESC			MIN				SELECT_ALL		DELETE_WORD			CLOSE
 
+; Values for all columns (except NAME) come from WindowActions.MET_* (for how to do the action) or WindowActions.ACT_* (to do some other action, like close on escape key) constants.
+
 	AutoHotkey								CLOSE			-					-					CTRL_SHIFT
 	AutoHotkey WinSpy						CLOSE
 	Cisco AnyConnect VPN					CLOSE

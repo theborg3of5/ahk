@@ -16,7 +16,6 @@
 	Make media key one-off scripts single-only and replace (so I don't need to see the "do you want to replace?" popup)
 	Add catch and error toast for launching a program that doesn't exist (Launchy in VDIs, for example)
 	Should ACTION_*, etc. constants live inside of ActionObject? Might let us shorten names a little.
-	Consider moving WIN_ACTION_ constants into WindowActions class (assuming that's the only thing it's used with)
 	
 # Large
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)

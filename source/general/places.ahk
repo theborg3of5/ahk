@@ -10,6 +10,8 @@
 ^+!w::
 	doSelectFolder() {
 		folderPath := selectFolder()
+		if(folderPath = "")
+			return
 		
 		; If the folder doesn't exist, try to create it (with permission from user)
 		if(!folderExists(folderPath)) {
@@ -21,7 +23,6 @@
 			if(showConfirmationPopup("Create folder?", "Folder does not exist"))
 				FileCreateDir, % folderPath
 		}
-		
 		if(folderExists(folderPath))
 			Run(folderPath)
 	}

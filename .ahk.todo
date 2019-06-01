@@ -7,10 +7,6 @@
 	Look at cleaning up all of the record-splitting and EMC2-object-processing functions in epic.ahk
 		Can getObjectInfoFromEMC2 use extractEMC2ObjectInfoRaw (like selectSnapper does)?
 		Can processEMC2ObjectInfo use getTrueEMC2INI?
-	Consider looking up and caching default offset values for different kinds of windows in MainConfig instead of calculating them on the fly every time
-		Could in theory store them in WindowInfo, have a windowOffset instead of just the override
-			Could calculate the first time requested, cache after that
-			Or just calculate on WindowInfo creation
 	ActionObject - can/should we combine CodeSearch and EpicStudio, where CodeSearch is the web version and EpicStudio is the edit?
 		Main question would be EpicStudio DLG support - do we end up rerouting web EpicStudio DLG links/opens to the EMC2 web summary for DLG?
 	Make media key one-off scripts single-only and replace (so I don't need to see the "do you want to replace?" popup)

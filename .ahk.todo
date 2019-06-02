@@ -29,21 +29,22 @@
 				Do any post-processing/cleanup needed
 				Perform the action based on the determined type
 		Potential new structure
-			Parent (ActionObject) class that constructs with input and optional type/subType
-				Determines the type from input (if possible and not already given)
-					If type OR input is blank, selector popup to determine whichever is needed
+			Parent (ActionObject) class that constructs with value and optional type/subType
+				Determines the type from value (if possible and not already given)
+					If type OR value is blank, selector popup to determine whichever is needed
 						If blank, early quit (without error toast)
 						Can also determine subType, pass that along if populated
 				Constructor does the above determination/popup, then returns an instance of one of the child classes
 					If can't determine type: return "" and handle error toast)
 				Properties for type/subType (mostly for debugging/error display purposes)
 				Functions for specific actions (.run(runType), .getLink(linkType), .linkSelectedText(linkType))
+					Maybe include implementation for common cases (i.e. .run() and .linkSelectedText() should just call into .getLink() and then do their respective things)
 					Maybe "not implemented" error toast (with various info) instead of simply empty?
-			Child classes per type
+			Child classes per type (Action<type>Object - ActionEMC2Object, ActionPathObject, Action)
 				Constructors
 					Call into any needed cleanup/post-processing
 					Determine sub-type if needed
-						Calculations based on input (like path sub-type)
+						Calculations based on value (like path sub-type)
 							Example: getPathType
 						Separate selector if needed (hopefully user should never see 2 selectors, since up-front one mostly includes subType unless it's not needed)
 							Possibly add another column of filters to trim down the choices based on the type (and therefore child class?)

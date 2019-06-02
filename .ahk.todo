@@ -20,17 +20,41 @@
 	Do something to encapsulate search selector - maybe its own class, or merge into ActionObject instad?
 	
 # Large
-	ActionObject cleanup
-		Figure out what's wrong with opening URLs (and probably paths?) from selector popup (they work from selection, just not if added in field)
-		Maybe specific .do functions for actions instead of ACTION_* constants?
-			Should action parameter really be optional? We don't allow user to select it, and it's always passed.
-				If it becomes required, it should start coming before type (and probably swap subtype/subaction order as well)
-				If we do reorder parameters, update constants order to match
-		Could buildEMC2Link move into ActionObject? The only other user is OneNote, seems like we could pipe it through ActionObject.
-		getPathType looks even easier to move into ActionObject.
-		Can/should we combine CodeSearch and EpicStudio, where CodeSearch is the web version and EpicStudio is the edit?
+	ActionObject cleanup/rework
+		Overall goal
+			Generic open/get link(/linkSelectedText?) hotkeys
+				Figure out the type (based on value) if possible (EMC2 objects, full URLs/paths)
+				Prompt user if type (or value) is unknown (only those two should be affected by selector popup)
+					Redo any pre-processing (path sub-type, for example) with new type/value
+				Do any post-processing/cleanup needed
+				Perform the action based on the determined type
+		Potential new structure
+			Parent (ActionObject) class that constructs with input and optional type/subType
+				Determines the type from input (if possible and not already given)
+					If type OR input is blank, selector popup to determine whichever is needed
+						If blank, early quit (without error toast)
+						Can also determine subType, pass that along if populated
+				Constructor does the above determination/popup, then returns an instance of one of the child classes
+					If can't determine type: return "" and handle error toast)
+				Properties for type/subType (mostly for debugging/error display purposes)
+				Functions for specific actions (.run(runType), .getLink(linkType), .linkSelectedText(linkType))
+					Maybe "not implemented" error toast (with various info) instead of simply empty?
+			Child classes per type
+				Constructors
+					Call into any needed cleanup/post-processing
+					Determine sub-type if needed
+						Calculations based on input (like path sub-type)
+							Example: getPathType
+						Separate selector if needed (hopefully user should never see 2 selectors, since up-front one mostly includes subType unless it's not needed)
+							Possibly add another column of filters to trim down the choices based on the type (and therefore child class?)
+								Would require enhancing TableList/Selector to support multiple columns of filtering
+				Override (only) applicable action functions with type-specific logic
+					Error toast for non-supported combinations (within type, action or subAction + subType)
+					Example: buildEMC2Link (would need to update OneNote, which is the other user)
+		Can/should we combine CodeSearch and EpicStudio (maybe into a SERVER_ROUTINE type), where CodeSearch is the web version and EpicStudio is the edit?
 			Main question would be EpicStudio DLG support - do we end up rerouting web EpicStudio DLG links/opens to the EMC2 web summary for DLG?
-		Consider reducing documentation, eliminating duplicate parameter explanations (see .xxx for details)
+				Differentiated by "DLG" subType
+				Alternatively, just don't support that action/subType combination
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)
 		Maybe store off both title (maybe trimmed, drop things like " - Wiki" off of the end, etc?) and URL on copy hotkey
 			Used by a generic hotkey that used those two bits of info + hyperlinking class to add a link?
@@ -49,9 +73,6 @@
 		Would remove need to prefix all function names with program name
 		Could it make referencing program-specific things from common code easier?
 			We're basically talking about interfaces then, aren't we?
-	Take another look at ActionObject's workflow
-		We're doing selector stuff twice - is that really what we want?
-			extractEMC2ObjectInfo(Raw) does it with a prompt, all at once - would that be better?
 	Add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments

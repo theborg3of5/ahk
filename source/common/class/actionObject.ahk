@@ -223,11 +223,15 @@ class ActionObject {
 	;                       SUBACTION_* constants.
 	;---------
 	postProcess(ByRef value, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
+		; DEBUG.popup("ActionObject.postProcess","Start", "value",value, "type",type, "action",action, "subType",subType, "subAction",subAction)
+		
 		if(type = TYPE_EMC2) ; Turn subType (INI) into true INI
 			subType := getTrueEMC2INI(subType)
 		
 		if(type = TYPE_Path && subType = SUBTYPE_FilePath)
 			value := cleanupPath(value)
+		
+		; DEBUG.popup("ActionObject.postProcess","Finish", "value",value, "type",type, "action",action, "subType",subType, "subAction",subAction)
 	}
 	
 	;---------

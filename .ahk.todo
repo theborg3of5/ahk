@@ -37,11 +37,7 @@
 			Parent (ActionObject) class that constructs with value and optional type/subType
 				***Does all of this really make sense as a single class?
 					Should the "base" (template that others extend) class be separate from this?
-					Comparison
-						Base + returning child class, together
-							ActionObject.ACTION_* (instead of ActionObjectBase.ACTION_* or this.ACTION_*)
-						Separate
-							this.ACTION_* (constants in ActionObjectBase)
+					objectType property doesn't really make sense in child classes, and setting it in the "picker" class doesn't set it in the children either.
 				Constructor
 					Determines the type from value (if possible and not already given)
 						If type OR value is blank, selector popup to determine whichever is needed

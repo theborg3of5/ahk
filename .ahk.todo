@@ -21,7 +21,7 @@
 	
 # Large
 	ActionObject cleanup
-		Can we rename ID column to something else like INPUT (to match parameter) or VALUE (and update param to match)?
+		Figure out what's wrong with opening URLs (and probably paths?) from selector popup (they work from selection, just not if added in field)
 		Maybe specific .do functions for actions instead of ACTION_* constants?
 			Should action parameter really be optional? We don't allow user to select it, and it's always passed.
 				If it becomes required, it should start coming before type (and probably swap subtype/subaction order as well)

@@ -1,6 +1,6 @@
 /* Class for running or generating a link to an object, based on both functionally-passed and prompted-for information.
 	
-	This class is a framework that performs a specific set of actions (run/open, return a link to) in certain ways (subActions - edit, view, web mode) for an identified object. The class will attempt to split the main input parameter (input) to gain all information that it requires to fully identify the object and action, but if any of that information is missing, it will prompt the user for it using the Selector class with a list of types/subTypes (from actionObject.tls).
+	This class is a framework that performs a specific set of actions (run/open, return a link to) in certain ways (subActions - edit, view, web mode) for an identified object. The class will attempt to split the main value parameter (value) to gain all information that it requires to fully identify the object and action, but if any of that information is missing, it will prompt the user for it using the Selector class with a list of types/subTypes (from actionObject.tls).
 	
 	Supported Actions (ACTION_* constants)
 		RUN
@@ -80,12 +80,12 @@ class ActionObject {
 	;                 user for any missing information needed to identify the object, and perform
 	;                 the given action.
 	; PARAMETERS:
-	;  input     (I,REQ) - The primary identifying information for the object we want to perform the
+	;  value     (I,REQ) - The primary identifying information for the object we want to perform the
 	;                      action on. Can be a partial identifier (ID, URL, filepath) that will be
 	;                      evaluated with a given (or prompted) type/subType, or in some cases a
 	;                      full identifier (for example "QAN 123456" - includes both INI [drives
 	;                      subType and implies type] and ID).
-	;  type      (I,OPT) - The general type that goes with input - from TYPE_* constants. If not
+	;  type      (I,OPT) - The general type that goes with value - from TYPE_* constants. If not
 	;                      given, the user will be prompted to choose this.
 	;  action    (I,OPT) - The action to perform with the object, from ACTION_* constants.
 	;  subType   (I,OPT) - Within the given type, further identifying information, from SUBTYPE_*
@@ -94,23 +94,23 @@ class ActionObject {
 	;                      SUBACTION_* constants.
 	; RETURNS:        For ACTION_Link, the link. Otherwise, "".
 	;---------
-	do(input, type := "", action := "", subType := "", subAction := "") {
-		; DEBUG.toast("ActionObject.do", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
+	do(value, type := "", action := "", subType := "", subAction := "") {
+		; DEBUG.toast("ActionObject.do", "Start", "value", value, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
-		; Clean up input.
-		input := getFirstLine(input) ; Comes first so that we can clean from end of first line (even if there are multiple).
-		input := cleanupText(input)
+		; Clean up value.
+		value := getFirstLine(value) ; Comes first so that we can clean from end of first line (even if there are multiple).
+		value := cleanupText(value)
 		
 		; Determine what we need to do.
-		this.process(input, type, action, subType, subAction)
+		this.process(value, type, action, subType, subAction)
 		
 		; Expand shortcuts and gather more info as needed.
-		this.selectInfo(input, type, action, subType, subAction)
+		this.selectInfo(value, type, action, subType, subAction)
 		
-		this.postProcess(input, type, action, subType, subAction)
+		this.postProcess(value, type, action, subType, subAction)
 		
 		; Just do it.
-		return this.perform(input, type, action, subType, subAction)
+		return this.perform(value, type, action, subType, subAction)
 	}
 	
 	
@@ -122,7 +122,7 @@ class ActionObject {
 	; DESCRIPTION:    Go through all given information and determine as many distinct properties
 	;                 about the object and action as we can.
 	; PARAMETERS:
-	;  input     (IO,REQ) - The primary identifying information for the object we want to perform the
+	;  value     (IO,REQ) - The primary identifying information for the object we want to perform the
 	;                       action on. Can be a partial identifier (ID, URL, filepath) that will be
 	;                       evaluated with a given (or prompted) type/subType, or in some cases a
 	;                       full identifier (for example "QAN 123456" - includes both INI [drives
@@ -130,28 +130,28 @@ class ActionObject {
 	;                       If it is a full identifier, it will be split into distinct parts
 	;                       (type/subType in respective parameters, ID will contain only partial
 	;                       identifier).
-	;  type      (IO,REQ) - The general type that goes with input - from TYPE_* constants.
+	;  type      (IO,REQ) - The general type that goes with value - from TYPE_* constants.
 	;  action    (IO,REQ) - The action to perform with the object, from ACTION_* constants.
 	;  subType   (IO,REQ) - Within the given type, further identifying information, from SUBTYPE_*
 	;                       constants (or other subTypes defined in actionObject.tls).
 	;  subAction (IO,REQ) - Within the given action, further information about what to do, from
 	;                       SUBACTION_* constants.
 	;---------
-	process(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
-		; DEBUG.toast("ActionObject.process", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
+	process(ByRef value, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
+		; DEBUG.toast("ActionObject.process", "Start", "value", value, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
 		; Do a little preprocessing to pick out needed info.
-		pathType := getPathType(input)
-		; DEBUG.popup("ActionObject.process","Type preprocessing done", "Input",input, "Path type",pathType)
+		pathType := getPathType(value)
+		; DEBUG.popup("ActionObject.process","Type preprocessing done", "value",value, "Path type",pathType)
 		
 		; If it's a path, mark it as such.
 		if(pathType) {
 			type    := TYPE_Path
 			subType := pathType
 			
-		; Try and see if it's something we can split into INI/ID (subType/new input)
+		; Try and see if it's something we can split into INI/ID (subType/new value)
 		} else {
-			infoAry := extractEMC2ObjectInfoRaw(input)
+			infoAry := extractEMC2ObjectInfoRaw(value)
 			if(infoAry["TITLE"]) ; If there's a title (something beyond just an INI and an ID), this probably isn't an EMC2 object.
 				return
 			
@@ -160,21 +160,21 @@ class ActionObject {
 			if(data) {
 				type    := data["TYPE"]
 				subType := data["SUBTYPE"]
-				input   := infoAry["ID"]
+				value   := infoAry["VALUE"]
 			}
 		}
 		
-		; DEBUG.toast("ActionObject.process","Finished", "Input",input, "Type",type, "Action",action, "SubType",subType, "SubAction",subAction)
+		; DEBUG.toast("ActionObject.process","Finished", "value",value, "Type",type, "Action",action, "SubType",subType, "SubAction",subAction)
 	}
 	
 	;---------
 	; DESCRIPTION:    If any key pieces of information about the object are missing, prompt the user
 	;                 for those missing pieces using a Selector popup.
 	; PARAMETERS:
-	;  input     (IO,REQ) - The primary identifying information for the object we want to perform the
+	;  value     (IO,REQ) - The primary identifying information for the object we want to perform the
 	;                       action on. Should only be a partial identifier (ID, URL, filepath) by
 	;                       this point.
-	;  type      (IO,REQ) - The general type that goes with input - from TYPE_* constants. If not
+	;  type      (IO,REQ) - The general type that goes with value - from TYPE_* constants. If not
 	;                       given, the user will be prompted to choose this.
 	;  action    (IO,REQ) - The action to perform with the object, from ACTION_* constants.
 	;  subType   (IO,REQ) - Within the given type, further identifying information, from SUBTYPE_*
@@ -182,8 +182,8 @@ class ActionObject {
 	;  subAction (IO,REQ) - Within the given action, further information about what to do, from
 	;                       SUBACTION_* constants.
 	;---------
-	selectInfo(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
-		; DEBUG.popup("ActionObject.selectInfo","Start", "Input",input, "Type",type, "Action",action, "SubType",subType, "SubAction",subAction)
+	selectInfo(ByRef value, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
+		; DEBUG.popup("ActionObject.selectInfo","Start", "value",value, "Type",type, "Action",action, "SubType",subType, "SubAction",subAction)
 		
 		; EMC2 objects require a subType (INI) and subAction (view vs edit)
 		if(type = TYPE_EMC2) {
@@ -194,49 +194,49 @@ class ActionObject {
 		if(!type || !action || (!subType && needsSubType) || (!subAction && needsSubAction)) {
 			s := new Selector("actionObject.tls", MainConfig.machineTLFilter)
 			
-			data := s.selectGui("", "", {SUBTYPE: subType, ID: input})
+			data := s.selectGui("", "", {SUBTYPE: subType, ID: value})
 			if(!data)
 				return
 			
 			subType := data["SUBTYPE"]
-			input   := data["ID"]
+			value   := data["VALUE"]
 			
 			; Type can come out, so grab it iff it was set.
 			if(data["TYPE"])
 				type := data["TYPE"]
 		}
 		
-		; DEBUG.popup("ActionObject.selectInfo","Finish", "Input",input, "Type",type, "Action",action, "SubType",subType, "SubAction",subAction)
+		; DEBUG.popup("ActionObject.selectInfo","Finish", "value",value, "Type",type, "Action",action, "SubType",subType, "SubAction",subAction)
 	}
 	
 	;---------
 	; DESCRIPTION:    Perform any needed post-processing to make sure we have clean data to use for our action.
 	; PARAMETERS:
-	;  input     (IO,REQ) - The primary identifying information for the object we want to perform the
+	;  value     (IO,REQ) - The primary identifying information for the object we want to perform the
 	;                       action on. Should only be a partial identifier (ID, URL, filepath) by
 	;                       this point.
-	;  type      (IO,REQ) - The general type that goes with input - from TYPE_* constants.
+	;  type      (IO,REQ) - The general type that goes with value - from TYPE_* constants.
 	;  action    (IO,REQ) - The action to perform with the object, from ACTION_* constants.
 	;  subType   (IO,REQ) - Within the given type, further identifying information, from SUBTYPE_*
 	;                       constants (or other subTypes defined in actionObject.tls).
 	;  subAction (IO,REQ) - Within the given action, further information about what to do, from
 	;                       SUBACTION_* constants.
 	;---------
-	postProcess(ByRef input, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
+	postProcess(ByRef value, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
 		if(type = TYPE_EMC2) ; Turn subType (INI) into true INI
 			subType := getTrueEMC2INI(subType)
 		
 		if(type = TYPE_Path && subType = SUBTYPE_FilePath)
-			input := cleanupPath(input)
+			value := cleanupPath(value)
 	}
 	
 	;---------
 	; DESCRIPTION:    Actually perform the action, assuming we have enought information.
 	; PARAMETERS:
-	;  input     (I,REQ) - The primary identifying information for the object we want to perform the
+	;  value     (I,REQ) - The primary identifying information for the object we want to perform the
 	;                      action on. Should only be a partial identifier (ID, URL, filepath) by
 	;                      this point.
-	;  type      (I,REQ) - The general type that goes with input - from TYPE_* constants.
+	;  type      (I,REQ) - The general type that goes with value - from TYPE_* constants.
 	;  action    (I,REQ) - The action to perform with the object, from ACTION_* constants.
 	;  subType   (I,REQ) - Within the given type, further identifying information, from SUBTYPE_*
 	;                      constants (or other subTypes defined in actionObject.tls).
@@ -244,48 +244,48 @@ class ActionObject {
 	;                      SUBACTION_* constants.
 	; RETURNS:        For ACTION_Link, the link. Otherwise, "".
 	;---------
-	perform(input, type, action, subType, subAction) {
-		; DEBUG.popup("ActionObject.perform", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
+	perform(value, type, action, subType, subAction) {
+		; DEBUG.popup("ActionObject.perform", "Start", "value", value, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		if(!type || !action)
 			return
 		
 		if(action = ACTION_Run) {
 			if(type = TYPE_EMC2 || type = TYPE_EpicStudio || type = TYPE_CodeSearchRoutine || type = TYPE_Helpdesk || type = TYPE_GuruSearch) {
-				link := this.perform(input, type, ACTION_Link, subType, subAction)
+				link := this.perform(value, type, ACTION_Link, subType, subAction)
 				if(link)
 					Run(link)
 				
 			} else if(type = TYPE_Path) {
 				if(subType = SUBTYPE_FilePath) {
-					IfExist, %input%
-						Run(input)
+					IfExist, %value%
+						Run(value)
 					Else
-						DEBUG.popup("File or folder does not exist", input)
+						DEBUG.popup("File or folder does not exist", value)
 				} else if(subType = SUBTYPE_URL) {
-					Run(input)
+					Run(value)
 				}
 			}
 			
 		} else if(action = ACTION_Link) {
 			if(type = TYPE_EMC2) {
-				return buildEMC2Link(subType, input, subAction)
+				return buildEMC2Link(subType, value, subAction)
 				
 			} else if(type = TYPE_EpicStudio) {
 				if(subType = SUBTYPE_Routine) {
-					splitServerLocation(input, routine, tag)
+					splitServerLocation(value, routine, tag)
 					return buildEpicStudioRoutineLink(routine, tag)
 				} else if(subType = SUBTYPE_DLG) {
-					return buildEpicStudioDLGLink(input)
+					return buildEpicStudioDLGLink(value)
 				}
 				
 			} else if(type = TYPE_CodeSearchRoutine) {
-				return buildServerCodeLink(input)
+				return buildServerCodeLink(value)
 				
 			} else if(type = TYPE_Helpdesk) {
-				return buildHelpdeskLink(input)
+				return buildHelpdeskLink(value)
 				
 			} else if(type = TYPE_GuruSearch) {
-				return buildGuruURL(input)
+				return buildGuruURL(value)
 			}
 			
 		}

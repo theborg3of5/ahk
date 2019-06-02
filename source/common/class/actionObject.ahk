@@ -110,7 +110,7 @@ class ActionObject {
 		this.postProcess(input, type, action, subType, subAction)
 		
 		; Just do it.
-		return this.perform(type, action, subType, subAction, input)
+		return this.perform(input, type, action, subType, subAction)
 	}
 	
 	
@@ -244,14 +244,14 @@ class ActionObject {
 	;                      SUBACTION_* constants.
 	; RETURNS:        For ACTION_Link, the link. Otherwise, "".
 	;---------
-	perform(type, action, subType, subAction, input) {
+	perform(input, type, action, subType, subAction) {
 		; DEBUG.popup("ActionObject.perform", "Start", "Input", input, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		if(!type || !action)
 			return
 		
 		if(action = ACTION_Run) {
 			if(type = TYPE_EMC2 || type = TYPE_EpicStudio || type = TYPE_CodeSearchRoutine || type = TYPE_Helpdesk || type = TYPE_GuruSearch) {
-				link := this.perform(type, ACTION_Link, subType, subAction, input)
+				link := this.perform(input, type, ACTION_Link, subType, subAction)
 				if(link)
 					Run(link)
 				

@@ -7,12 +7,30 @@
 	Look at cleaning up all of the record-splitting and EMC2-object-processing functions in epic.ahk
 		Can getObjectInfoFromEMC2 use extractEMC2ObjectInfoRaw (like selectSnapper does)?
 		Can processEMC2ObjectInfo use getTrueEMC2INI?
-	ActionObject - can/should we combine CodeSearch and EpicStudio, where CodeSearch is the web version and EpicStudio is the edit?
-		Main question would be EpicStudio DLG support - do we end up rerouting web EpicStudio DLG links/opens to the EMC2 web summary for DLG?
 	Add catch and error toast for launching a program that doesn't exist (Launchy in VDIs, for example)
-	Should ACTION_*, etc. constants live inside of ActionObject? Might let us shorten names a little.
+	Consider moving class-specific constants into their respective classes
+		ActionObject
+		Duration
+		Hyperlinker
+		ListConverter
+		MainConfig
+		TableList
+		TableListMod
+		WindowInfo
+	Do something to encapsulate search selector - maybe its own class, or merge into ActionObject instad?
 	
 # Large
+	ActionObject cleanup
+		Can we rename ID column to something else like INPUT (to match parameter) or VALUE (and update param to match)?
+		Maybe specific .do functions for actions instead of ACTION_* constants?
+			Should action parameter really be optional? We don't allow user to select it, and it's always passed.
+				If it becomes required, it should start coming before type (and probably swap subtype/subaction order as well)
+				If we do reorder parameters, update constants order to match
+		Could buildEMC2Link move into ActionObject? The only other user is OneNote, seems like we could pipe it through ActionObject.
+		getPathType looks even easier to move into ActionObject.
+		Can/should we combine CodeSearch and EpicStudio, where CodeSearch is the web version and EpicStudio is the edit?
+			Main question would be EpicStudio DLG support - do we end up rerouting web EpicStudio DLG links/opens to the EMC2 web summary for DLG?
+		Consider reducing documentation, eliminating duplicate parameter explanations (see .xxx for details)
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)
 		Maybe store off both title (maybe trimmed, drop things like " - Wiki" off of the end, etc?) and URL on copy hotkey
 			Used by a generic hotkey that used those two bits of info + hyperlinking class to add a link?

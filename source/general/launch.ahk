@@ -9,9 +9,9 @@ genericOpen(subAction) {
 }
 
 ; Generic linker - will allow coming from clipboard or selected text, or input entirely. Puts the link on the clipboard.
-^!#l:: genericLink(SUBACTION_Web)
-^!#+l::genericLink(SUBACTION_Edit)
-genericLink(subAction) {
+^!#l:: genericCopyLink(SUBACTION_Web)
+^!#+l::genericCopyLink(SUBACTION_Edit)
+genericCopyLink(subAction) {
 	text := getFirstLineOfSelectedText()
 	link := ActionObject.do(text, , ACTION_Link, , subAction)
 	setClipboardAndToastValue(link, "link")

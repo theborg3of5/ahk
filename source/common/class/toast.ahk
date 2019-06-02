@@ -65,7 +65,7 @@ class Toast {
 	}
 	
 	;---------
-	; DESCRIPTION:     Displays an error toast (dark yellow text, slightly larger) for a short
+	; DESCRIPTION:    Displays an error toast (dark yellow text, slightly larger) for a short
 	;                 duration (2 seconds).
 	; PARAMETERS:
 	;  problemMessage    (I,REQ) - Text about what the problem is (what happened or weren't we able

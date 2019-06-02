@@ -17,10 +17,15 @@
 		TableList
 		TableListMod
 		WindowInfo
-	Do something to encapsulate search selector - maybe its own class, or merge into ActionObject instad?
 	
 # Large
 	ActionObject cleanup/rework
+		Reconsider types
+			Guru search - is it really useful (with people leaving and name searches no longer working)?
+			Can/should we combine CodeSearch and EpicStudio (maybe into a SERVER_ROUTINE type), where CodeSearch is the web version and EpicStudio is the edit?
+				Main question would be EpicStudio DLG support - do we end up rerouting web EpicStudio DLG links/opens to the EMC2 web summary for DLG?
+					Differentiated by "DLG" subType
+					Alternatively, just don't support that action/subType combination
 		Overall goal
 			Generic open/get link(/linkSelectedText?) hotkeys
 				Figure out the type (based on value) if possible (EMC2 objects, full URLs/paths)
@@ -30,12 +35,20 @@
 				Perform the action based on the determined type
 		Potential new structure
 			Parent (ActionObject) class that constructs with value and optional type/subType
-				Determines the type from value (if possible and not already given)
-					If type OR value is blank, selector popup to determine whichever is needed
-						If blank, early quit (without error toast)
-						Can also determine subType, pass that along if populated
-				Constructor does the above determination/popup, then returns an instance of one of the child classes
-					If can't determine type: return "" and handle error toast)
+				***Does all of this really make sense as a single class?
+					Should the "base" (template that others extend) class be separate from this?
+					Comparison
+						Base + returning child class, together
+							ActionObject.ACTION_* (instead of ActionObjectBase.ACTION_* or this.ACTION_*)
+						Separate
+							this.ACTION_* (constants in ActionObjectBase)
+				Constructor
+					Determines the type from value (if possible and not already given)
+						If type OR value is blank, selector popup to determine whichever is needed
+							If blank, early quit (without error toast)
+							Can also determine subType, pass that along if populated
+					Returns an instance of one of the child classes
+						If can't determine type: return "" and handle error toast)
 				Properties for type/subType (mostly for debugging/error display purposes)
 				Functions for specific actions (.run(runType), .getLink(linkType), .linkSelectedText(linkType))
 					Maybe include implementation for common cases (i.e. .run() and .linkSelectedText() should just call into .getLink() and then do their respective things)
@@ -52,10 +65,15 @@
 				Override (only) applicable action functions with type-specific logic
 					Error toast for non-supported combinations (within type, action or subAction + subType)
 					Example: buildEMC2Link (would need to update OneNote, which is the other user)
-		Can/should we combine CodeSearch and EpicStudio (maybe into a SERVER_ROUTINE type), where CodeSearch is the web version and EpicStudio is the edit?
-			Main question would be EpicStudio DLG support - do we end up rerouting web EpicStudio DLG links/opens to the EMC2 web summary for DLG?
-				Differentiated by "DLG" subType
-				Alternatively, just don't support that action/subType combination
+	Do something to encapsulate search selector - maybe its own class, or merge into ActionObject instad?
+	Would epic.*EMC2ObjectInfo functions make sense as a class, that parses stuff out of a string?
+		Would need to update other caller (snapper selector) to extractEMC2ObjectInfoRaw()
+		Could make it a little more multi-purpose that way
+			Split apart bits in constructor (maybe as a static function, even?)
+			Process (clean, replace INI, etc.) in a separate function (or multiple with different levels of stuff)
+				If multiple, could have a .clean(), .replaceINI(), etc that can be called in sequence
+			Could also handle the standard EMC2 object string format for OneNote, etc.
+				Could possibly include linking selected text with that, since class will know its own ini/id/title
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)
 		Maybe store off both title (maybe trimmed, drop things like " - Wiki" off of the end, etc?) and URL on copy hotkey
 			Used by a generic hotkey that used those two bits of info + hyperlinking class to add a link?

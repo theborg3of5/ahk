@@ -25,11 +25,6 @@ class ActionObjectPicker {
 	; static TYPE_GuruSearch        := "GURU_SEARCH"
 	static TYPE_Path              := "PATH"
 	
-	static SUBACTION_Edit     := "EDIT"
-	static SUBACTION_View     := "VIEW"
-	static SUBACTION_Web      := "WEB"
-	static SUBACTION_WebBasic := "WEB_BASIC"
-	
 	
 	
 	__New(value := "", objectType := "", subType := "") {
@@ -90,6 +85,13 @@ class ActionObject2 {
 	; ==============================
 	; == Public ====================
 	; ==============================
+	
+	; GDB TODO document
+	static SUBACTION_Edit     := "EDIT"
+	static SUBACTION_View     := "VIEW"
+	static SUBACTION_Web      := "WEB"
+	static SUBACTION_WebBasic := "WEB_BASIC"
+	
 	
 	run(runType := "") {
 		link := this.getLink(runType)
@@ -164,33 +166,33 @@ class ActionEMC2Object extends ActionObject2 {
 	}
 	
 	; GDB TODO split this into smaller functions - pick link type, get link based on type (maybe separate switch function to get link base)
-	getLink(linkType := "WEB") { ; linkType = ActionObject.SUBACTION_Web
+	getLink(linkType := "WEB") { ; linkType = ActionObject2.SUBACTION_Web
 		if(!this.ini || !this.id)
 			return ""
 		
 		; View basically goes one way or the other depending on INI:
 		;  * If it can be viewed in EMC2, use EDIT with a special view-only parameter.
 		;  * Otherwise, create a web link instead.
-		if(linkType = SUBACTION_View) {
+		if(linkType = ActionObject2.SUBACTION_View) {
 			if(this.canViewINIInEMC2()) {
-				linkType   := SUBACTION_Edit
+				linkType   := ActionObject2.SUBACTION_Edit
 				paramString := "&runparams=1"
 			} else {
-				linkType   := SUBACTION_Web
+				linkType   := ActionObject2.SUBACTION_Web
 			}
 		}
 		
 		; Pick one of the types of links - edit in EMC2 or view in web (summary or Sherlock/Nova).
-		if(linkType = SUBACTION_Edit) {
+		if(linkType = ActionObject2.SUBACTION_Edit) {
 			link := MainConfig.private["EMC2_LINK_BASE"]
-		} else if(linkType = SUBACTION_Web) {
+		} else if(linkType = ActionObject2.SUBACTION_Web) {
 			if(this.isSherlockINI())
 				link := MainConfig.private["SHERLOCK_BASE"]
 			else if(this.isNovaINI())
 				link := MainConfig.private["NOVA_RELEASE_NOTE_BASE"]
 			else
 				link := MainConfig.private["EMC2_LINK_WEB_BASE"]
-		} else if(linkType = SUBACTION_WebBasic) {
+		} else if(linkType = ActionObject2.SUBACTION_WebBasic) {
 			link := MainConfig.private["EMC2_LINK_WEB_BASE"]
 		}
 		

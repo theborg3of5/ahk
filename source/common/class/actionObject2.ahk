@@ -17,7 +17,7 @@ class ActionObjectPicker {
 	; == Public ====================
 	; ==============================
 	
-	; Type constants
+	; Type constants ; GDB TODO should these live in the base class instead, or do they fit best here?
 	static TYPE_EMC2              := "EMC2"
 	; static TYPE_EpicStudio        := "EPICSTUDIO"
 	; static TYPE_CodeSearchRoutine := "CODESEARCHROUTINE"
@@ -100,7 +100,7 @@ class ActionObject2 {
 	}
 	
 	
-	run(runType := "") {
+	open(runType := "") {
 		link := this.getLink(runType)
 		if(link)
 			Run(link)	
@@ -174,9 +174,13 @@ class ActionEMC2Object extends ActionObject2 {
 	}
 	
 	; GDB TODO split this into smaller functions - pick link type, get link based on type (maybe separate switch function to get link base)
-	getLink(linkType := "WEB") { ; linkType = ActionObject2.SUBACTION_Web
+	getLink(linkType := "") {
 		if(!this.ini || !this.id)
 			return ""
+		
+		; Default to web link
+		if(linkType = "")
+			linkType := ActionObject2.SUBACTION_Web
 		
 		; View basically goes one way or the other depending on INI:
 		;  * If it can be viewed in EMC2, use EDIT with a special view-only parameter.

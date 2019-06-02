@@ -93,6 +93,13 @@ class ActionObject2 {
 	static SUBACTION_WebBasic := "WEB_BASIC"
 	
 	
+	
+	__New(value := "", subType := "") {
+		Toast.showError("ActionObject instance created", "ActionObject is a base class only, use a type-specific child class instead.")
+		return ""
+	}
+	
+	
 	run(runType := "") {
 		link := this.getLink(runType)
 		if(link)
@@ -126,8 +133,9 @@ class ActionObject2 {
 	; == Private ===================
 	; ==============================
 	
-	
-	
+	value   := "" ; GDB TODO document
+	subType := ""
+
 }
 
 class ActionEMC2Object extends ActionObject2 {

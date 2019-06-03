@@ -17,6 +17,7 @@
 		TableList
 		TableListMod
 		WindowInfo
+	Add another OneNote hotkey that operates based on tomorrow's date (so I can plan out tomorrow)
 	
 # Large
 	ActionObject cleanup/rework

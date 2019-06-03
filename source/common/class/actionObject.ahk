@@ -203,7 +203,7 @@ class ActionObject {
 			subType := data["SUBTYPE"]
 			value   := data["VALUE"]
 			
-			; Type can come out, so grab it iff it was set.
+			; Type can come out, so grab it if it was set.
 			if(data["TYPE"])
 				type := data["TYPE"]
 		}

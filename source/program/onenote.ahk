@@ -217,64 +217,65 @@
 	return
 	
 	; Make a copy of the current page in the Do section.
-	^+m::
-		oneNoteCopyDoPage() {
-			; Change the page color before we leave, so it's noticeable if I end up there.
-			Send, !w
-			Send, pc
-			Send, {Enter}
+	^+m::oneNoteCopyDoPage()
+	^+#m::oneNoteCopyDoPage(1) ; Tomorrow
+	oneNoteCopyDoPage(daysInFuture := 0) { ; Defaults to 0 days in the future (today)
+		; Change the page color before we leave, so it's noticeable if I end up there.
+		Send, !w
+		Send, pc
+		Send, {Enter}
+		
+		Send, ^!m                  ; Move or copy page
+		WinWaitActive, Move or Copy Pages
+		Sleep, 500                 ; Wait a half second for the popup to be input-ready
+		Send, {Down 5}             ; Select first section from first notebook (bypassing "Recent picks" section)
+		Send, !c                   ; Copy button
+		WinWaitClose, Move or Copy Pages
+		
+		; Wait for new page to appear.
+		; Give the user a chance to wait a little longer before continuing
+		; (for when OneNote takes a while to actually make the new page).
+		t := new Toast()
+		t.showPersistent()
+		Loop {
+			t.setText("Waiting for 2s, press space to keep waiting..." getDots(A_Index - 1))
+			Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
+			endKey := removeStringFromStart(ErrorLevel, "EndKey:")
+			if(endKey = "Space")
+				Continue
 			
-			Send, ^!m                  ; Move or copy page
-			WinWaitActive, Move or Copy Pages
-			Sleep, 500                 ; Wait a half second for the popup to be input-ready
-			Send, {Down 5}             ; Select first section from first notebook (bypassing "Recent picks" section)
-			Send, !c                   ; Copy button
-			WinWaitClose, Move or Copy Pages
-			
-			; Wait for new page to appear.
-			; Give the user a chance to wait a little longer before continuing
-			; (for when OneNote takes a while to actually make the new page).
-			t := new Toast()
-			t.showPersistent()
-			Loop {
-				t.setText("Waiting for 2s, press space to keep waiting..." getDots(A_Index - 1))
-				Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
-				endKey := removeStringFromStart(ErrorLevel, "EndKey:")
-				if(endKey = "Space")
-					Continue
-				
-				; Break out immediately if enter/escape were pressed.
-				if(endKey = "Enter" || endKey = "Escape")
-					Break
-				
-				t.setText("Waiting for 1s, press space to keep waiting..." getDots(A_Index - 1))
-				Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
-				endKey := removeStringFromStart(ErrorLevel, "EndKey:")
-				if(endKey = "Space")
-					Continue
-				
+			; Break out immediately if enter/escape were pressed.
+			if(endKey = "Enter" || endKey = "Escape")
 				Break
-			}
-			t.close()
 			
-			; Quit without doing anything else if they hit escape
-			if(endKey = "Escape")
-				return
+			t.setText("Waiting for 1s, press space to keep waiting..." getDots(A_Index - 1))
+			Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
+			endKey := removeStringFromStart(ErrorLevel, "EndKey:")
+			if(endKey = "Space")
+				Continue
 			
-			Send, ^{PgDn}              ; Switch to (presumably) new page
-			Send, !3                   ; Demote Subpage (Make Subpage)
-			
-			; Make the current page have no background color.
-			Send, !w
-			Send, pc
-			Send, n
-			
-			; Update title
-			Send, ^+t                            ; Select title (to replace with new day/date)
-			Sleep, 1000                          ; Wait for selection to take
-			Send, % oneNoteGenerateDoPageTitle() ; Send title
-			Send, ^+t                            ; Select title again in case you want a different date.
+			Break
 		}
+		t.close()
+		
+		; Quit without doing anything else if they hit escape
+		if(endKey = "Escape")
+			return
+		
+		Send, ^{PgDn}              ; Switch to (presumably) new page
+		Send, !3                   ; Demote Subpage (Make Subpage)
+		
+		; Make the current page have no background color.
+		Send, !w
+		Send, pc
+		Send, n
+		
+		; Update title
+		Send, ^+t                                        ; Select title (to replace with new day/date)
+		Sleep, 1000                                      ; Wait for selection to take
+		Send, % oneNoteGenerateDoPageTitle(daysInFuture) ; Send title
+		Send, ^+t                                        ; Select title again in case you want a different date.
+	}
 	
 	; Insert a contact comment.
 	^+8::
@@ -345,7 +346,6 @@
 			oneNoteSendToDoLines(lines)
 		}
 	
-	
 	; Named functions for which commands are which in the quick access toolbar.
 	oneNoteNewSubpage() {
 		Send, !1
@@ -376,6 +376,7 @@
 	oneNoteCreateLinkDevPageSpecSection() { ; Custom OneTastic macro - create linked dev page in specifics section
 		Send, !9
 	}
+#If
 	
 	;---------
 	; DESCRIPTION:    Select the whole line in OneNote, taking into account that it might already be selected.
@@ -417,10 +418,14 @@
 	
 	;---------
 	; DESCRIPTION:    Figure out and return what title to use for a OneNote Do page.
+	; PARAMETERS:
+	;  daysInFuture (I,OPT) - How many days into the future this title should be (1 for tomorrow, etc.).
+	;                         Defaults to 0 (today).
 	; RETURNS:        The title to use for the new OneNote Do page.
 	;---------
-	oneNoteGenerateDoPageTitle() {
+	oneNoteGenerateDoPageTitle(daysInFuture := 0) {
 		startDateTime := A_Now
+		startDateTime += daysInFuture, Days
 		
 		; Do pages at work are always daily
 		if(MainConfig.isMachine("EPIC_LAPTOP"))
@@ -508,5 +513,4 @@
 		; Update current state
 		currNumTabs := numTabs
 	}
-#If
 

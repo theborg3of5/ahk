@@ -163,14 +163,15 @@ class ActionEMC2Object extends ActionObject2 {
 	}
 	
 	
-	__New(value, subType) {
+	__New(value, subType) { ; GDB TODO do we want/need logic here to try and split ID into INI/ID?
 		this.id  := value
 		this.ini := subType
 		
-		this.selectMissingInfo()
+		; If INI is set, make sure it's the "true" INI (ZQN -> QAN, Design -> XDS, etc.)
+		if(this.ini != "")
+			this.ini := getTrueEMC2INI(this.ini)
 		
-		; Post-processing now that we (hopefully) have all info
-		this.ini := getTrueEMC2INI(this.ini)
+		this.selectMissingInfo()
 	}
 	
 	; GDB TODO split this into smaller functions - pick link type, get link based on type (maybe separate switch function to get link base)
@@ -216,7 +217,7 @@ class ActionEMC2Object extends ActionObject2 {
 	canViewINIInEMC2() {
 		if(this.ini = "DLG")
 			return true
-		if(this.ini = "QAN" || this.ini = "ZQN") ; GDB TODO remove ZQN case once selection/pre-processing is done
+		if(this.ini = "QAN")
 			return true
 		if(this.ini = "XDS")
 			return true
@@ -240,7 +241,13 @@ class ActionEMC2Object extends ActionObject2 {
 		if(this.id != "" && this.ini != "")
 			return
 		
-		; GDB TODO Do selector, set ini and maybe value (but only if values from selector aren't blank)
+		s := new Selector("actionObject.tls", MainConfig.machineTLFilter)
+		data := s.selectGui("", "", {"SUBTYPE": this.ini, "VALUE": this.id})
+		if(!data)
+			return
+		
+		this.ini := data["SUBTYPE"]
+		this.id  := data["VALUE"]
 	}
 	
 	

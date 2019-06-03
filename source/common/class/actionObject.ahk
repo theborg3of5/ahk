@@ -95,7 +95,7 @@ class ActionObject {
 	; RETURNS:        For ACTION_Link, the link. Otherwise, "".
 	;---------
 	do(value, type := "", action := "", subType := "", subAction := "") {
-		; DEBUG.toast("ActionObject.do", "Start", "value", value, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
+		; DEBUG.popup("ActionObject.do", "Start", "value", value, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
 		; Clean up value.
 		value := getFirstLine(value) ; Comes first so that we can clean from end of first line (even if there are multiple).
@@ -138,7 +138,7 @@ class ActionObject {
 	;                       SUBACTION_* constants.
 	;---------
 	process(ByRef value, ByRef type, ByRef action, ByRef subType, ByRef subAction) {
-		; DEBUG.toast("ActionObject.process", "Start", "value", value, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
+		; DEBUG.popup("ActionObject.process", "Start", "value", value, "Type", type, "Action", action, "SubType", subType, "SubAction", subAction)
 		
 		; Do a little preprocessing to pick out needed info.
 		pathType := getPathType(value)
@@ -160,11 +160,13 @@ class ActionObject {
 			if(data) {
 				type    := data["TYPE"]
 				subType := data["SUBTYPE"]
-				value   := infoAry["VALUE"]
+				
+				; ID for record becomes new value (but only if we found a legitimate INI to match it with)
+				value := infoAry["ID"]
 			}
 		}
 		
-		; DEBUG.toast("ActionObject.process","Finished", "value",value, "Type",type, "Action",action, "SubType",subType, "SubAction",subAction)
+		; DEBUG.popup("ActionObject.process","Finished", "value",value, "Type",type, "Action",action, "SubType",subType, "SubAction",subAction)
 	}
 	
 	;---------
@@ -194,7 +196,7 @@ class ActionObject {
 		if(!type || !action || (!subType && needsSubType) || (!subAction && needsSubAction)) {
 			s := new Selector("actionObject.tls", MainConfig.machineTLFilter)
 			
-			data := s.selectGui("", "", {SUBTYPE: subType, ID: value})
+			data := s.selectGui("", "", {"SUBTYPE": subType, "VALUE": value})
 			if(!data)
 				return
 			

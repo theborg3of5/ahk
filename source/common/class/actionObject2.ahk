@@ -11,31 +11,24 @@
 
 
 
-class ActionObjectPicker {
+class ActionObjectRedirector {
 	
 	; ==============================
 	; == Public ====================
 	; ==============================
 	
-	; Type constants ; GDB TODO should these live in the base class instead, or do they fit best here?
-	static TYPE_EMC2              := "EMC2"
-	; static TYPE_EpicStudio        := "EPICSTUDIO"
-	; static TYPE_CodeSearchRoutine := "CODESEARCHROUTINE"
-	static TYPE_Helpdesk          := "HELPDESK"
-	; static TYPE_GuruSearch        := "GURU_SEARCH"
-	static TYPE_Path              := "PATH"
 	
 	
 	
-	__New(value := "", objectType := "", subType := "") {
-		this.value      := value
-		this.objectType := objectType
-		this.subType    := subType
+	__New(value := "", type := "", subType := "") {
+		this.value   := value
+		this.type    := type
+		this.subType := subType
 		
 		this.determineType()
 		this.selectMissingInfo()
 		
-		DEBUG.toast("ActionObject","All info determined", "this",this)
+		DEBUG.toast("ActionObjectRedirector","All info determined", "this",this)
 		return this.getTypeSpecificObject()
 	}
 	
@@ -44,38 +37,75 @@ class ActionObjectPicker {
 	; == Private ===================
 	; ==============================
 	
-	value      := ""
-	objectType := ""
-	subType    := ""
+	value   := ""
+	type    := ""
+	subType := ""
 	
 	determineType() {
 		; Already know the type
-		if(this.objectType != "")
+		if(this.type != "")
 			return
 		
-		; GDB TODO
+		; GDB TODO - tryProcessAsPath
+		
+		if(this.tryProcessAsRecord()) ; EMC2 objects and helpdesk are in "INI ID *" format
+			return
 	}
+	
+	tryProcessAsRecord() {
+		; Try splitting apart string into INI/ID/title
+		recordAry := extractEMC2ObjectInfoRaw(this.value)
+		potentialINI := recordAry["INI"]
+		
+		s := new Selector("actionObject.tls", MainConfig.machineTLFilter)
+		data := s.selectChoice(potentialINI)
+		if(!data)
+			return false
+		
+		type    := data["TYPE"]
+		subType := data["SUBTYPE"]
+		
+		; Only EMC2 objects and helpdesk can be split and handled this way.
+		if((type != ActionBaseObject.TYPE_EMC2) && (type != ActionBaseObject.TYPE_Helpdesk))
+			return false
+		
+		; We successfully identified the type, store off the pieces we know.
+		this.type    := type
+		this.subType := subType
+		this.value   := recordAry["ID"] ; From first split above
+		return true
+	}
+	
+	
 	
 	
 	selectMissingInfo() {
 		; Nothing is missing
-		if(this.value != "" && this.objectType != "")
+		if(this.value != "" && this.type != "")
 			return
 		
-		; GDB TODO do selector, save off value/objectType/subType only if values from selector are non-blank
+		s := new Selector("actionObject.tls", MainConfig.machineTLFilter)
+		data := s.selectGui("", "", {"TYPE":this.type, "SUBTYPE":this.subType, "VALUE":this.value})
+		if(!data)
+			return
+		
+		this.type    := data["TYPE"]
+		this.subType := data["SUBTYPE"]
+		this.value   := data["VALUE"]
 	}
 	
 	
 	getTypeSpecificObject() {
-		if(this.objectType = "") {
-			Toast.showError("Could not determine type", "ActionObject was not given a type and could not determine it based on the provided value")
-			return ""
-		}
+		if(this.type = "")
+			return "" ; No determined type, silent quit, return nothing
 		
-		if(this.objectType = TYPE_EMC2)
+		if(this.type = ActionBaseObject.TYPE_EMC2)
 			return new ActionEMC2Object(this.value, this.subType)
 		
-		Toast.showError("Unrecognized type", "ActionObject doesn't know what to do with this type: " this.objectType)
+		if(this.type = ActionBaseObject.TYPE_Helpdesk)
+			return new ActionHelpdeskObject(this.value)
+		
+		Toast.showError("Unrecognized type", "ActionObjectRedirector doesn't know what to do with this type: " this.type)
 		return ""
 	}
 	
@@ -85,6 +115,14 @@ class ActionBaseObject {
 	; ==============================
 	; == Public ====================
 	; ==============================
+	
+	; Type constants
+	static TYPE_EMC2              := "EMC2"
+	; static TYPE_EpicStudio        := "EPICSTUDIO"
+	; static TYPE_CodeSearchRoutine := "CODESEARCHROUTINE"
+	static TYPE_Helpdesk          := "HELPDESK"
+	; static TYPE_GuruSearch        := "GURU_SEARCH"
+	static TYPE_Path              := "PATH"
 	
 	; GDB TODO document
 	static SUBACTION_Edit     := "EDIT"
@@ -138,13 +176,14 @@ class ActionBaseObject {
 
 }
 
+
+
 class ActionEMC2Object extends ActionBaseObject {
 	; ==============================
 	; == Public ====================
 	; ==============================
 	
-	; These properties are required so that the functions from the parent (which use this.subType
-	; and this.value) will still work correctly.
+	; Named property equivalents for the base generic variables, so base functions still work.
 	ini[] {
 		get {
 			return this.subType
@@ -170,10 +209,10 @@ class ActionEMC2Object extends ActionBaseObject {
 		
 		; If we were given a combined string (i.e. "DLG 123456" or "DLG 123456: HB/PB SOMETHING HAPPENING") split it into its component parts.
 		if(this.ini = "") {
-			infoAry := extractEMC2ObjectInfoRaw(this.id)
-			this.ini   := infoAry["INI"]
-			this.id    := infoAry["ID"]
-			this.title := infoAry["TITLE"]
+			recordAry := extractEMC2ObjectInfoRaw(this.id)
+			this.ini   := recordAry["INI"]
+			this.id    := recordAry["ID"]
+			this.title := recordAry["TITLE"]
 		}
 		
 		; If INI is set, make sure it's the "true" INI (ZQN -> QAN, Design -> XDS, etc.)
@@ -260,9 +299,31 @@ class ActionEMC2Object extends ActionBaseObject {
 		this.ini := data["SUBTYPE"]
 		this.id  := data["VALUE"]
 	}
+}
+
+
+class ActionHelpdeskObject extends ActionBaseObject {
+	; ==============================
+	; == Public ====================
+	; ==============================
 	
+	; Named property equivalents for the base generic variables, so base functions still work.
+	id[] {
+		get {
+			return this.value
+		}
+		set {
+			this.value := value
+		}
+	}
 	
+	__New(value) {
+		this.id := value
+	}
 	
+	getLink() {
+		return replaceTag(MainConfig.private["HELPDESK_BASE"], "ID", this.id)
+	}
 }
 
 

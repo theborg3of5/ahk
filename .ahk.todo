@@ -17,6 +17,11 @@
 		TableList
 		TableListMod
 		WindowInfo
+	Snapper - why do we get same single string in both INI/ID when no spaces? Should be in only ID.
+	Create a new splitRecordString function that combines logic from splitRecordString and extractEMC2ObjectInfoRaw
+		Handle title as 3rd piece
+		Handle more than just " " as a delimiter
+		Maybe trim "R " of of start if it's there, too
 	
 # Large
 	ActionObject cleanup/rework
@@ -61,6 +66,9 @@
 				Override (only) applicable action functions with type-specific logic
 					Error toast for non-supported combinations (within type, action or subAction + subType)
 					Example: buildEMC2Link (would need to update OneNote, which is the other user)
+		Potential additional uses/things to absorb
+			EMC2
+				Building standard string - OneNote could pull out the INI/ID that way so it can link stuff
 	Do something to encapsulate search selector - maybe its own class, or merge into ActionObject instad?
 	Would epic.*EMC2ObjectInfo functions make sense as a class, that parses stuff out of a string?
 		Would need to update other caller (snapper selector) to extractEMC2ObjectInfoRaw()

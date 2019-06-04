@@ -81,7 +81,7 @@ class ActionObjectPicker {
 	
 }
 
-class ActionObject2 {
+class ActionBaseObject {
 	; ==============================
 	; == Public ====================
 	; ==============================
@@ -124,7 +124,7 @@ class ActionObject2 {
 	
 	
 	getLink(linkType := "") {
-		Toast.showError(".getLink() called directly", ".getLink() is not implemented by the parent ActionObject class")
+		Toast.showError(".getLink() called directly", ".getLink() is not implemented by the parent ActionBaseObject class")
 		return ""
 	}
 	
@@ -138,7 +138,7 @@ class ActionObject2 {
 
 }
 
-class ActionEMC2Object extends ActionObject2 {
+class ActionEMC2Object extends ActionBaseObject {
 	; ==============================
 	; == Public ====================
 	; ==============================
@@ -163,9 +163,18 @@ class ActionEMC2Object extends ActionObject2 {
 	}
 	
 	
-	__New(value, subType) { ; GDB TODO do we want/need logic here to try and split ID into INI/ID?
-		this.id  := value
-		this.ini := subType
+	__New(value, subType := "", title := "") {
+		this.id    := value
+		this.ini   := subType
+		this.title := title
+		
+		; If we were given a combined string (i.e. "DLG 123456" or "DLG 123456: HB/PB SOMETHING HAPPENING") split it into its component parts.
+		if(this.ini = "") {
+			infoAry := extractEMC2ObjectInfoRaw(this.id)
+			this.ini   := infoAry["INI"]
+			this.id    := infoAry["ID"]
+			this.title := infoAry["TITLE"]
+		}
 		
 		; If INI is set, make sure it's the "true" INI (ZQN -> QAN, Design -> XDS, etc.)
 		if(this.ini != "")
@@ -181,31 +190,31 @@ class ActionEMC2Object extends ActionObject2 {
 		
 		; Default to web link
 		if(linkType = "")
-			linkType := ActionObject2.SUBACTION_Web
+			linkType := ActionBaseObject.SUBACTION_Web
 		
 		; View basically goes one way or the other depending on INI:
 		;  * If it can be viewed in EMC2, use EDIT with a special view-only parameter.
 		;  * Otherwise, create a web link instead.
-		if(linkType = ActionObject2.SUBACTION_View) {
+		if(linkType = ActionBaseObject.SUBACTION_View) {
 			if(this.canViewINIInEMC2()) {
-				linkType   := ActionObject2.SUBACTION_Edit
+				linkType   := ActionBaseObject.SUBACTION_Edit
 				paramString := "&runparams=1"
 			} else {
-				linkType   := ActionObject2.SUBACTION_Web
+				linkType   := ActionBaseObject.SUBACTION_Web
 			}
 		}
 		
 		; Pick one of the types of links - edit in EMC2 or view in web (summary or Sherlock/Nova).
-		if(linkType = ActionObject2.SUBACTION_Edit) {
+		if(linkType = ActionBaseObject.SUBACTION_Edit) {
 			link := MainConfig.private["EMC2_LINK_BASE"]
-		} else if(linkType = ActionObject2.SUBACTION_Web) {
+		} else if(linkType = ActionBaseObject.SUBACTION_Web) {
 			if(this.isSherlockINI())
 				link := MainConfig.private["SHERLOCK_BASE"]
 			else if(this.isNovaINI())
 				link := MainConfig.private["NOVA_RELEASE_NOTE_BASE"]
 			else
 				link := MainConfig.private["EMC2_LINK_WEB_BASE"]
-		} else if(linkType = ActionObject2.SUBACTION_WebBasic) {
+		} else if(linkType = ActionBaseObject.SUBACTION_WebBasic) {
 			link := MainConfig.private["EMC2_LINK_WEB_BASE"]
 		}
 		
@@ -234,6 +243,8 @@ class ActionEMC2Object extends ActionObject2 {
 	; ==============================
 	; == Private ===================
 	; ==============================
+	
+	title := ""
 	
 	
 	selectMissingInfo() {

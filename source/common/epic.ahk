@@ -334,7 +334,8 @@
 	}
 }
 
-; Split "INI ID" string into INI and ID (assume it's just the ID if no space included)
+; Split "INI ID" string into INI and ID (assume it's just the ID if no space included).
+; Also does cleaning around the string so leading/trailing spaces, bullets, etc. don't make it fail.
 splitRecordString(recordString, ByRef ini := "", ByRef id := "") {
 	recordString := cleanupText(recordString)
 	recordPartsAry := StrSplit(recordString, " ")

@@ -245,7 +245,7 @@ class ActionEMC2Object extends ActionBaseObject {
 		
 		; Pick one of the types of links - edit in EMC2 or view in web (summary or Sherlock/Nova).
 		if(linkType = ActionBaseObject.SUBACTION_Edit) {
-			link := MainConfig.private["EMC2_LINK_BASE"]
+			link := MainConfig.private["EMC2_LINK_EDIT_BASE"]
 		} else if(linkType = ActionBaseObject.SUBACTION_Web) {
 			if(this.isSherlockINI())
 				link := MainConfig.private["SHERLOCK_BASE"]

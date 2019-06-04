@@ -136,7 +136,7 @@
 		
 		; Pick one of the types of links - edit in EMC2, web summary or Sherlock.
 		if(subAction = SUBACTION_Edit) {
-			link := MainConfig.private["EMC2_LINK_BASE"]
+			link := MainConfig.private["EMC2_LINK_EDIT_BASE"]
 		} else if(subAction = SUBACTION_Web) {
 			if(isSherlockINI(ini))
 				link := MainConfig.private["SHERLOCK_BASE"]

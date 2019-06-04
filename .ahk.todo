@@ -68,6 +68,8 @@
 					Example: buildEMC2Link (would need to update OneNote, which is the other user)
 		Potential additional uses/things to absorb
 			EMC2
+				Make use of new class for parsing/cleaning EMC2 object info if we make it (another idea here)
+					getTrueEMC2INI if we become that class instead
 				Building standard string - OneNote could pull out the INI/ID that way so it can link stuff
 			Helpdesk
 				epic.buildHelpdeskLink()
@@ -80,6 +82,7 @@
 				If multiple, could have a .clean(), .replaceINI(), etc that can be called in sequence
 			Could also handle the standard EMC2 object string format for OneNote, etc.
 				Could possibly include linking selected text with that, since class will know its own ini/id/title
+		Would this absorb getTrueEMC2INI?
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)
 		Maybe store off both title (maybe trimmed, drop things like " - Wiki" off of the end, etc?) and URL on copy hotkey
 			Used by a generic hotkey that used those two bits of info + hyperlinking class to add a link?

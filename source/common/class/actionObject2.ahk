@@ -57,6 +57,7 @@ class ActionObjectRedirector {
 		recordAry := extractEMC2ObjectInfoRaw(this.value)
 		potentialINI := recordAry["INI"]
 		
+		; Silent selection from actionObject TLS to see if we match a "record" ("INI ID *" format) type.
 		s := new Selector("actionObject.tls", MainConfig.machineTLFilter)
 		data := s.selectChoice(potentialINI)
 		if(!data)
@@ -126,7 +127,6 @@ class ActionBaseObject {
 	
 	; GDB TODO document
 	static SUBACTION_Edit     := "EDIT"
-	static SUBACTION_View     := "VIEW"
 	static SUBACTION_Web      := "WEB"
 	static SUBACTION_WebBasic := "WEB_BASIC"
 	
@@ -184,14 +184,6 @@ class ActionEMC2Object extends ActionBaseObject {
 	; ==============================
 	
 	; Named property equivalents for the base generic variables, so base functions still work.
-	ini[] {
-		get {
-			return this.subType
-		}
-		set {
-			this.subType := value
-		}
-	}
 	id[] {
 		get {
 			return this.value
@@ -200,14 +192,23 @@ class ActionEMC2Object extends ActionBaseObject {
 			this.value := value
 		}
 	}
+	ini[] {
+		get {
+			return this.subType
+		}
+		set {
+			this.subType := value
+		}
+	}
 	
 	
-	__New(value, subType := "", title := "") {
-		this.id    := value
-		this.ini   := subType
+	__New(id, ini := "", title := "") {
+		this.id    := id
+		this.ini   := ini
 		this.title := title
 		
-		; If we were given a combined string (i.e. "DLG 123456" or "DLG 123456: HB/PB SOMETHING HAPPENING") split it into its component parts.
+		; If we don't know the INI yet, assume the ID is a combined string (i.e. "DLG 123456" or
+		; "DLG 123456: HB/PB WE DID SOME STUFF") and try to split it into its component parts.
 		if(this.ini = "") {
 			recordAry := extractEMC2ObjectInfoRaw(this.id)
 			this.ini   := recordAry["INI"]
@@ -215,14 +216,14 @@ class ActionEMC2Object extends ActionBaseObject {
 			this.title := recordAry["TITLE"]
 		}
 		
-		; If INI is set, make sure it's the "true" INI (ZQN -> QAN, Design -> XDS, etc.)
+		; If INI is set, make sure it's the "true" INI (ZQN -> QAN, Design -> XDS, etc.).
+		; Note that selection handles this if they pick/add values in .selectMissingInfo().
 		if(this.ini != "")
 			this.ini := getTrueEMC2INI(this.ini)
 		
 		this.selectMissingInfo()
 	}
 	
-	; GDB TODO split this into smaller functions - pick link type, get link based on type (maybe separate switch function to get link base)
 	getLink(linkType := "") {
 		if(!this.ini || !this.id)
 			return ""
@@ -230,18 +231,6 @@ class ActionEMC2Object extends ActionBaseObject {
 		; Default to web link
 		if(linkType = "")
 			linkType := ActionBaseObject.SUBACTION_Web
-		
-		; View basically goes one way or the other depending on INI:
-		;  * If it can be viewed in EMC2, use EDIT with a special view-only parameter.
-		;  * Otherwise, create a web link instead.
-		if(linkType = ActionBaseObject.SUBACTION_View) {
-			if(this.canViewINIInEMC2()) {
-				linkType   := ActionBaseObject.SUBACTION_Edit
-				paramString := "&runparams=1"
-			} else {
-				linkType   := ActionBaseObject.SUBACTION_Web
-			}
-		}
 		
 		; Pick one of the types of links - edit in EMC2 or view in web (summary or Sherlock/Nova).
 		if(linkType = ActionBaseObject.SUBACTION_Edit) {
@@ -257,11 +246,17 @@ class ActionEMC2Object extends ActionBaseObject {
 			link := MainConfig.private["EMC2_LINK_WEB_BASE"]
 		}
 		
-		link .= paramString
 		link := replaceTags(link, {"INI":this.ini, "ID":this.id})
 		
 		return link
 	}
+	
+	; ==============================
+	; == Private ===================
+	; ==============================
+	
+	title := ""
+	
 	canViewINIInEMC2() {
 		if(this.ini = "DLG")
 			return true
@@ -278,13 +273,6 @@ class ActionEMC2Object extends ActionBaseObject {
 	isNovaINI() {
 		return (this.ini = "DRN")
 	}
-	
-	; ==============================
-	; == Private ===================
-	; ==============================
-	
-	title := ""
-	
 	
 	selectMissingInfo() {
 		; Nothing is missing
@@ -317,8 +305,7 @@ class ActionHelpdeskObject extends ActionBaseObject {
 		}
 	}
 	
-	__New(value) {
-		this.id := value
+	__New(id) {
 	}
 	
 	getLink() {
@@ -326,6 +313,14 @@ class ActionHelpdeskObject extends ActionBaseObject {
 	}
 }
 
+
+	
+	
+	; ==============================
+	; == Private ===================
+	; ==============================
+	
+}
 
 
 	

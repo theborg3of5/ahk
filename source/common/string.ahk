@@ -218,7 +218,7 @@ getPathType(text) {
 		type := SUBTYPE_FilePath
 	else if(subStr(text, 1, 2) = "\\")  ; Windows network path
 		type := SUBTYPE_FilePath
-	else if(colonSlashPos && stringMatchesAnyOf(subStr(text, 1, colonSlashPos), protocols) ) ; URL.
+	else if(colonSlashPos && stringMatchesAnyOf(subStr(text, 1, colonSlashPos), protocols)) ; URL - https is handled as stringMatchesAnyOf's default match method is ANY (anywhere in string).
 		type := SUBTYPE_URL
 	
 	; DEBUG.popup("getPathType", "Finish", "Type", type, "Cleaned up text",text)

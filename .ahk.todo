@@ -73,6 +73,8 @@
 				Building standard string - OneNote could pull out the INI/ID that way so it can link stuff
 			Helpdesk
 				epic.buildHelpdeskLink()
+			Path
+				string.getPathType()
 	Do something to encapsulate search selector - maybe its own class, or merge into ActionObject instad?
 	Would epic.*EMC2ObjectInfo functions make sense as a class, that parses stuff out of a string?
 		Would need to update other caller (snapper selector) to extractEMC2ObjectInfoRaw()

@@ -3,8 +3,8 @@
 	***
 */
 
-; global SUBTYPE_FilePath := "FILEPATH"
-; global SUBTYPE_URL      := "URL"
+
+
 ; global SUBTYPE_Routine  := "ROUTINE"
 ; global SUBTYPE_DLG      := "DLG"
 ; ; Additional subtypes (EMC2 INIs) can be defined in actionObject.tls.
@@ -46,10 +46,21 @@ class ActionObjectRedirector {
 		if(this.type != "")
 			return
 		
-		; GDB TODO - tryProcessAsPath
+		if(this.tryProcessAsPath()) ; File paths and URLs
+			return
 		
 		if(this.tryProcessAsRecord()) ; EMC2 objects and helpdesk are in "INI ID *" format
 			return
+	}
+	
+	tryProcessAsPath() {
+		pathType := ActionPathObject.determinePathType(this.value)
+		if(pathType = "")
+			return false
+		
+		this.type    := ActionBaseObject.TYPE_Path
+		this.subType := pathType
+		return true
 	}
 	
 	tryProcessAsRecord() {
@@ -105,6 +116,9 @@ class ActionObjectRedirector {
 		
 		if(this.type = ActionBaseObject.TYPE_Helpdesk)
 			return new ActionHelpdeskObject(this.value)
+		
+		if(this.type = ActionBaseObject.TYPE_Path)
+			return new ActionPathObject(this.value, this.subType)
 		
 		Toast.showError("Unrecognized type", "ActionObjectRedirector doesn't know what to do with this type: " this.type)
 		return ""
@@ -306,6 +320,7 @@ class ActionHelpdeskObject extends ActionBaseObject {
 	}
 	
 	__New(id) {
+		this.id := id
 	}
 	
 	getLink() {
@@ -314,6 +329,79 @@ class ActionHelpdeskObject extends ActionBaseObject {
 }
 
 
+class ActionPathObject extends ActionBaseObject {
+	; ==============================
+	; == Public ====================
+	; ==============================
+	
+
+	static SUBTYPE_FilePath := "FILEPATH"
+	static SUBTYPE_URL      := "URL"
+	
+	; Named property equivalents for the base generic variables, so base functions still work.
+	path[] {
+		get {
+			return this.value
+		}
+		set {
+			this.value := value
+		}
+	}
+	pathType[] {
+		get {
+			return this.subType
+		}
+		set {
+			this.subType := value
+		}
+	}
+	
+	
+	__New(path, pathType := "") {
+		this.path     := path
+		this.pathType := pathType
+		
+		; Make sure there's no quotes or other oddities surrounding the path
+		this.path := cleanupText(this.path, [DOUBLE_QUOTE])
+		
+		; Determine path type
+		if(this.pathType = "")
+			this.pathType := this.determinePathType(this.path)
+	}
+	
+	determinePathType(path) {
+		; Full URLs
+		if(stringMatchesAnyOf(path, ["http://", "https://", "ftp://"], CONTAINS_START))
+			return ActionPathObject.SUBTYPE_URL
+		
+		; Filepaths
+		if(stringMatchesAnyOf(path, ["file:///", "\\"], CONTAINS_START)) ; URL-formatted file path, Windows network path
+			return ActionPathObject.SUBTYPE_FilePath
+		if(subStr(text, 2, 2) = ":\")  ; Windows filepath (starts with drive letter + :\)
+			return ActionPathObject.SUBTYPE_FilePath
+		
+		; Partial URLs (www.google.com, similar)
+		if(stringMatchesAnyOf(path, ["www.", "vpn.", "m."], CONTAINS_START))
+			return ActionPathObject.SUBTYPE_URL
+		
+		; Unknown
+		return ""
+	}
+	
+	open() {
+		if(!this.path)
+			return
+		if(subType = ActionPathObject.SUBTYPE_FilePath && !FileExist(this.path)) { ; Don't try to open a non-existent local path
+			DEBUG.popup("Local file or folder does not exist", this.path)
+			return
+		}
+		
+		Run(this.path)
+	}
+	
+	getLink() {
+		return this.path
+	}
 	
 	
 	; ==============================

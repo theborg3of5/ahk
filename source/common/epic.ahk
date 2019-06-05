@@ -317,8 +317,8 @@ extractEMC2ObjectInfoRaw(line) {
 	line := cleanupText(line, ["["]) ; Remove any odd leading/trailing characters (and also remove open brackets)
 	
 	; INI is first characters up to the first delimiter
-	if(isAlpha(subStr(line, 1, 1))) { ; Make sure we're starting with an INI (instead of an ID) by checking whether the first character is a letter (not a number).
-		delimPos := stringMatchesAnyOf(line, [" ", "#"])
+	delimPos := stringMatchesAnyOf(line, [" ", "#"])
+	if(delimPos) {
 		ini  := subStr(line, 1, delimPos - 1)
 		line := subStr(line, delimPos + 1) ; +1 to drop delimiter too
 	}

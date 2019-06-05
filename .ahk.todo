@@ -17,7 +17,6 @@
 		TableList
 		TableListMod
 		WindowInfo
-	Snapper - why do we get same single string in both INI/ID when no spaces? Should be in only ID.
 	Create a new splitRecordString function that combines logic from splitRecordString and extractEMC2ObjectInfoRaw
 		Could potentially be part of the new class idea for EMC2 object string parsing below
 		Handle title as 3rd piece

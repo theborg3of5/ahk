@@ -35,5 +35,13 @@
 	#Include windowActions.ahk
 	#Include windowInfo.ahk
 
+#Include %A_LineFile%\..\class\actionObject
+	#Include actionObjectBase.ahk
+	#Include actionObjectCode.ahk
+	#Include actionObjectEMC2.ahk
+	#Include actionObjectHelpdesk.ahk
+	#Include actionObjectPath.ahk
+	#Include actionObjectRedirector.ahk
+
 MainConfig.init("local\settings.ini", "windows.tl", "paths.tl", "programs.tl", "games.tl", "ahkPrivate\privates.tl")
 WindowActions.init("windowActions.tl")

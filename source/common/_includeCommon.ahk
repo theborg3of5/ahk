@@ -18,7 +18,6 @@
 	#Include XInput.ahk
 
 #Include %A_LineFile%\..\class
-	#Include actionObject.ahk
 	#Include debug.ahk
 	#Include duration.ahk
 	#Include flexTable.ahk

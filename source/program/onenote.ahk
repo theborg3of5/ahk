@@ -396,11 +396,10 @@
 	oneNoteLinkEMC2ObjectInLine(ini, id) {
 		selectCurrentLine() ; Select whole line, but avoid the extra indentation and newline that comes with ^a.
 		selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
-		url := buildEMC2Link(ini, id)
-		if(!Hyperlinker.linkSelectedText(url, errorMessage)) {
-			setClipboardAndToastError(url, "link", "Failed to link EMC2 object text", errorMessage)
-			return
-		}
+		
+		ao := new ActionObjectEMC2(id, ini)
+		ao.linkSelectedText(ActionObjectBase.SUBACTION_Web, , "Failed to link EMC2 object text")
+		
 		Send, {End}
 	}
 	

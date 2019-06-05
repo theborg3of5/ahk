@@ -19,36 +19,29 @@
 		WindowInfo
 	Snapper - why do we get same single string in both INI/ID when no spaces? Should be in only ID.
 	Create a new splitRecordString function that combines logic from splitRecordString and extractEMC2ObjectInfoRaw
+		Could potentially be part of the new class idea for EMC2 object string parsing below
 		Handle title as 3rd piece
 		Handle more than just " " as a delimiter
 		Maybe trim "R " of of start if it's there, too
 	
 # Large
-	ActionObject cleanup/rework
-		Reconsider types
-			Guru search - is it really useful (with people leaving and name searches no longer working)?
-			Can/should we combine CodeSearch and EpicStudio (maybe into a SERVER_ROUTINE type), where CodeSearch is the web version and EpicStudio is the edit?
-				Main question would be EpicStudio DLG support - do we end up rerouting web EpicStudio DLG links/opens to the EMC2 web summary for DLG?
-					Differentiated by "DLG" subType
-					Alternatively, just don't support that action/subType combination
-		Use cases to replace/simplify
-			.copyLink
-			.linkSelectedText
-		Replaced functions
-			EMC2 linking in epic script
-			getPathType
-			buildHelpdeskLink
+	ActionObject rework
+		Remove replaced stuff
+			ActionObject class (and corresponding includes)
 		Potential additional uses/things to absorb
 			Code
-				Various build* functions in epic script - needed anywhere else?
+				Various build* functions in epic script - can we switch the other callers over to use ActionObjectCode instead?
+					buildServerCodeLink
+					buildEpicStudioDLGLink
+						emc2
+					buildEpicStudioRoutineLink
+						chrome
 			EMC2
 				Make use of new class for parsing/cleaning EMC2 object info if we make it (another idea here)
 					getTrueEMC2INI if we become that class instead
 				Building standard string - OneNote could pull out the INI/ID that way so it can link stuff
 			Helpdesk
 				epic.buildHelpdeskLink()
-			Path
-				string.getPathType()
 	Do something to encapsulate search selector - maybe its own class, or merge into ActionObject instad?
 	Would epic.*EMC2ObjectInfo functions make sense as a class, that parses stuff out of a string?
 		Would need to update other caller (snapper selector) to extractEMC2ObjectInfoRaw()

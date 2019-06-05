@@ -119,58 +119,6 @@
 }
 
 { ; Run path/URL-building functions
-	buildEMC2Link(ini, id, subAction := "WEB") { ; subAction = SUBACTION_Web
-		if(!ini || !id)
-			return ""
-		
-		; View basically goes one way or the other depending on INI:
-		;  * If it can be viewed in EMC2, use EDIT with a special view-only parameter.
-		;  * Otherwise, create a web link instead.
-		if(subAction = SUBACTION_View) {
-			if(canViewINIInEMC2(ini)) {
-				subAction   := SUBACTION_Edit
-				paramString := "&runparams=1"
-			} else {
-				subAction   := SUBACTION_Web
-			}
-		}
-		
-		; Pick one of the types of links - edit in EMC2, web summary or Sherlock.
-		if(subAction = SUBACTION_Edit) {
-			link := MainConfig.private["EMC2_LINK_EDIT_BASE"]
-		} else if(subAction = SUBACTION_Web) {
-			if(isSherlockINI(ini))
-				link := MainConfig.private["SHERLOCK_BASE"]
-			else if(isNovaINI(ini))
-				link := MainConfig.private["NOVA_RELEASE_NOTE_BASE"]
-			else
-				link := MainConfig.private["EMC2_LINK_WEB_BASE"]
-		} else if(subAction = SUBACTION_WebBasic) {
-			link := MainConfig.private["EMC2_LINK_WEB_BASE"]
-		}
-		
-		link .= paramString
-		link := replaceTags(link, {"INI":ini, "ID":id})
-		
-		return link
-	}
-	canViewINIInEMC2(ini) {
-		if(ini = "DLG")
-			return true
-		if(ini = "QAN" || ini = "ZQN")
-			return true
-		if(ini = "XDS")
-			return true
-		
-		return false
-	}
-	isSherlockINI(ini) {
-		return (ini = "SLG")
-	}
-	isNovaINI(ini) {
-		return (ini = "DRN")
-	}
-	
 	buildHyperspaceRunString(versionMajor, versionMinor, environment) {
 		runString := MainConfig.private["HYPERSPACE_BASE"]
 		
@@ -298,10 +246,6 @@
 		return url
 	}
 
-	buildHelpdeskLink(hdrId) {
-		return replaceTag(MainConfig.private["HELPDESK_BASE"], "ID", hdrId)
-	}
-	
 	buildEpicStudioRoutineLink(routine, tag := "", environmentId := "", diffEnvironmentId := "") {
 		if(routine = "")
 			return ""

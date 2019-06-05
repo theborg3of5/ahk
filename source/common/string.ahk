@@ -205,26 +205,6 @@ isCase(string, case = "MIXED") { ; case = STRING_CASE_MIXED
 	return false
 }
 
-; Test whether something is a filepath or a URL.
-getPathType(text) {
-	protocols := ["http", "ftp"]
-	
-	text := cleanupText(text, [""""]) ; Make sure there's no quotes or other oddities surrounding the path
-	colonSlashPos := stringContains(text, "://")
-	
-	if(subStr(text, 1, 8) = "file:///") ; URL'd filepath.
-		type := SUBTYPE_FilePath
-	else if(subStr(text, 2, 2) = ":\")  ; Windows filepath
-		type := SUBTYPE_FilePath
-	else if(subStr(text, 1, 2) = "\\")  ; Windows network path
-		type := SUBTYPE_FilePath
-	else if(colonSlashPos && stringMatchesAnyOf(subStr(text, 1, colonSlashPos), protocols)) ; URL - https is handled as stringMatchesAnyOf's default match method is ANY (anywhere in string).
-		type := SUBTYPE_URL
-	
-	; DEBUG.popup("getPathType", "Finish", "Type", type, "Cleaned up text",text)
-	return type
-}
-
 ; Return only the first line of the given string.
 getFirstLine(inputString) {
 	splitAry := StrSplit(inputString, "`n")

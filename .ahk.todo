@@ -32,10 +32,15 @@
 					Differentiated by "DLG" subType
 					Alternatively, just don't support that action/subType combination
 		Use cases to replace/simplify
-			All ActionObject.do() callers
 			.copyLink
 			.linkSelectedText
+		Replaced functions
+			EMC2 linking in epic script
+			getPathType
+			buildHelpdeskLink
 		Potential additional uses/things to absorb
+			Code
+				Various build* functions in epic script - needed anywhere else?
 			EMC2
 				Make use of new class for parsing/cleaning EMC2 object info if we make it (another idea here)
 					getTrueEMC2INI if we become that class instead

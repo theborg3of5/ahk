@@ -290,34 +290,22 @@
 			
 			oneNoteSelectLine()
 			lineText := getSelectedText()
+			if(lineText = "" || lineText = "`r`n") ; Selecting the whole line in OneNote gets us the newline, so treat just a newline as an empty case as well.
+				return
 			
 			linkText   := getStringAfterStr(lineText, " - ")
 			recordText := getStringBeforeStr(linkText, " (")
 			editText   := getFirstStringBetweenStr(linkText, "(", ")")
 			
-			infoAry := extractEMC2ObjectInfo(recordText)
-			ini := infoAry["INI"]
-			id  := infoAry["ID"]
-			; DEBUG.popup("Line",lineText, "Record text",recordText, "Edit text",editText, "infoAry",infoAry, "INI",ini, "ID",id)
+			ao := new ActionObjectEMC2(recordText)
+			; DEBUG.popup("Line",lineText, "Record text",recordText, "Edit text",editText, "ao.ini",ao.ini, "ao.id",ao.id)
 			
 			selectTextWithinSelection(recordText)
-			webURL := buildEMC2Link(ini, id, "WEB")
-			if(!webURL)
-				return
-			if(!Hyperlinker.linkSelectedText(webURL, errorMessage)) {
-				setClipboardAndToastError(webURL, "link", "Failed to add EMC2 object web link", errorMessage)
-				return
-			}
+			ao.linkSelectedText(ActionObjectBase.SUBACTION_Web, , "Failed to add EMC2 object web link")
 			
-			; Re-select whole line so we can use selectTextWithinSelection()
-			oneNoteSelectLine()
-			
+			oneNoteSelectLine() ; Re-select whole line so we can use selectTextWithinSelection() again
 			selectTextWithinSelection(editText)
-			editURL := buildEMC2Link(ini, id, "EDIT")
-			if(!editURL)
-				return
-			if(!Hyperlinker.linkSelectedText(editURL, errorMessage))
-				setClipboardAndToastError(editURL, "link", "Failed to add EMC2 object edit link", errorMessage)
+			ao.linkSelectedText(ActionObjectBase.SUBACTION_Edit, , "Failed to add EMC2 object edit link")
 		}
 	
 	:*:.todosat::

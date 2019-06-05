@@ -36,13 +36,13 @@ class ActionObjectBase {
 		setClipboardAndToastValue(link, "link")
 	}
 	
-	linkSelectedText(linkType := "") {
+	linkSelectedText(linkType := "", clipLabel := "link", problemMessage := "Failed to link selected text") {
 		link := this.getLink(linkType)
 		if(!link)
 			return
 		
 		if(!Hyperlinker.linkSelectedText(link, errorMessage))
-			setClipboardAndToastError(link, "link", "Failed to link selected text", errorMessage)
+			setClipboardAndToastError(link, clipLabel, problemMessage, errorMessage)
 	}
 	
 	getLink(linkType := "") {

@@ -47,7 +47,8 @@
 		
 		urlsAry := []
 		For i,qan in relatedQANsAry {
-			link := ActionObject.do(qan, TYPE_EMC2, ACTION_Link, "QAN", SUBACTION_Web)
+			ao := new ActionObjectEMC2(qan, "QAN")
+			link := ao.getLink(ActionObjectBase.SUBACTION_Web)
 			if(link)
 				urlsAry.push(link)
 		}

@@ -1,33 +1,27 @@
 ; Launch miscellaneous actions.
 
 ; Generic opener - opens a variety of different things based on the selected/clipboard text.
-^!#o:: genericOpen(SUBACTION_Web)
-^!#+o::genericOpen(SUBACTION_Edit)
+^!#o:: genericOpen(ActionObjectBase.SUBACTION_Web)
+^!#+o::genericOpen(ActionObjectBase.SUBACTION_Edit)
 genericOpen(subAction) {
-	text := getFirstLineOfSelectedText()
-	ActionObject.do(text, , ACTION_Run, , subAction)
+	ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
+	ao.open(subAction)
 }
 
 ; Generic linker - will allow coming from clipboard or selected text, or input entirely. Puts the link on the clipboard.
-^!#l:: genericCopyLink(SUBACTION_Web)
-^!#+l::genericCopyLink(SUBACTION_Edit)
+^!#l:: genericCopyLink(ActionObjectBase.SUBACTION_Web)
+^!#+l::genericCopyLink(ActionObjectBase.SUBACTION_Edit)
 genericCopyLink(subAction) {
-	text := getFirstLineOfSelectedText()
-	link := ActionObject.do(text, , ACTION_Link, , subAction)
-	setClipboardAndToastValue(link, "link")
+	ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
+	ao.copyLink(subAction)
 }
 
 ; Generic hyperlinker - get link for selection and apply it to the selected text.
-^!#k:: genericHyperlinkSelectedText(SUBACTION_Web)
-^!#+k::genericHyperlinkSelectedText(SUBACTION_Edit)
+^!#k:: genericHyperlinkSelectedText(ActionObjectBase.SUBACTION_Web)
+^!#+k::genericHyperlinkSelectedText(ActionObjectBase.SUBACTION_Edit)
 genericHyperlinkSelectedText(subAction) {
-	text := getFirstLineOfSelectedText()
-	link := ActionObject.do(text, , ACTION_Link, , subAction)
-	if(!link)
-		return
-	
-	if(!Hyperlinker.linkSelectedText(link, errorMessage))
-		setClipboardAndToastError(link, "link", "Failed to link selected text", errorMessage)
+	ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
+	ao.linkSelectedText(subAction)
 }
 
 ; Generic search.

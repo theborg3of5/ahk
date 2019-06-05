@@ -23,12 +23,13 @@ class ActionObjectRedirector {
 		this.type    := type
 		this.subType := subType
 		
+		this.value := getFirstLine(this.value) ; Comes first so that we can clean from end of first line (even if there are multiple).
 		this.value := cleanupText(this.value) ; Remove leading/trailing spaces and odd characters from value
 		
 		this.determineType()
 		this.selectMissingInfo()
 		
-		DEBUG.toast("ActionObjectRedirector","All info determined", "this",this)
+		; DEBUG.toast("ActionObjectRedirector","All info determined", "this",this)
 		return this.getTypeSpecificObject()
 	}
 	
@@ -54,18 +55,18 @@ class ActionObjectRedirector {
 	}
 	
 	tryProcessAsPath() {
-		pathType := ActionPathObject.determinePathType(this.value)
+		pathType := ActionObjectPath.determinePathType(this.value)
 		if(pathType = "")
 			return false
 		
-		this.type    := ActionBaseObject.TYPE_Path
+		this.type    := ActionObjectBase.TYPE_Path
 		this.subType := pathType
 		return true
 	}
 	
 	tryProcessAsRecord() {
 		; Try splitting apart string into INI/ID/title
-		recordAry := extractEMC2ObjectInfoRaw(this.value)
+		recordAry := extractEMC2ObjectInfoRaw(this.value) ; GDB TODO can we combine this with the logic from the actual class somehow, like we did with determinePathType()?
 		potentialINI := recordAry["INI"]
 		
 		; Silent selection from actionObject TLS to see if we match a "record" ("INI ID *" format) type.
@@ -78,7 +79,7 @@ class ActionObjectRedirector {
 		subType := data["SUBTYPE"]
 		
 		; Only EMC2 objects and helpdesk can be split and handled this way.
-		if((type != ActionBaseObject.TYPE_EMC2) && (type != ActionBaseObject.TYPE_Helpdesk))
+		if((type != ActionObjectBase.TYPE_EMC2) && (type != ActionObjectBase.TYPE_Helpdesk))
 			return false
 		
 		; We successfully identified the type, store off the pieces we know.
@@ -111,17 +112,17 @@ class ActionObjectRedirector {
 		if(this.type = "")
 			return "" ; No determined type, silent quit, return nothing
 		
-		if(this.type = ActionBaseObject.TYPE_EMC2)
-			return new ActionEMC2Object(this.value, this.subType)
+		if(this.type = ActionObjectBase.TYPE_EMC2)
+			return new ActionObjectEMC2(this.value, this.subType)
 		
-		if(this.type = ActionBaseObject.TYPE_Helpdesk)
-			return new ActionHelpdeskObject(this.value)
+		if(this.type = ActionObjectBase.TYPE_Helpdesk)
+			return new ActionObjectHelpdesk(this.value)
 		
-		if(this.type = ActionBaseObject.TYPE_Path)
-			return new ActionPathObject(this.value, this.subType)
+		if(this.type = ActionObjectBase.TYPE_Path)
+			return new ActionObjectPath(this.value, this.subType)
 		
-		if(this.type = ActionBaseObject.TYPE_Code)
-			return new ActionCodeObject(this.value, this.subType)
+		if(this.type = ActionObjectBase.TYPE_Code)
+			return new ActionObjectCode(this.value, this.subType)
 		
 		Toast.showError("Unrecognized type", "ActionObjectRedirector doesn't know what to do with this type: " this.type)
 		return ""
@@ -129,7 +130,7 @@ class ActionObjectRedirector {
 	
 }
 
-class ActionBaseObject {
+class ActionObjectBase {
 	; ==============================
 	; == Public ====================
 	; ==============================
@@ -177,7 +178,7 @@ class ActionBaseObject {
 	
 	
 	getLink(linkType := "") {
-		Toast.showError(".getLink() called directly", ".getLink() is not implemented by the parent ActionBaseObject class")
+		Toast.showError(".getLink() called directly", ".getLink() is not implemented by the parent ActionObjectBase class")
 		return ""
 	}
 	
@@ -193,7 +194,7 @@ class ActionBaseObject {
 
 
 
-class ActionEMC2Object extends ActionBaseObject {
+class ActionObjectEMC2 extends ActionObjectBase {
 	; ==============================
 	; == Public ====================
 	; ==============================
@@ -245,19 +246,19 @@ class ActionEMC2Object extends ActionBaseObject {
 		
 		; Default to web link
 		if(linkType = "")
-			linkType := ActionBaseObject.SUBACTION_Web
+			linkType := ActionObjectBase.SUBACTION_Web
 		
 		; Pick one of the types of links - edit in EMC2 or view in web (summary or Sherlock/Nova).
-		if(linkType = ActionBaseObject.SUBACTION_Edit) {
+		if(linkType = ActionObjectBase.SUBACTION_Edit) {
 			link := MainConfig.private["EMC2_LINK_EDIT_BASE"]
-		} else if(linkType = ActionBaseObject.SUBACTION_Web) {
+		} else if(linkType = ActionObjectBase.SUBACTION_Web) {
 			if(this.isSherlockINI())
 				link := MainConfig.private["SHERLOCK_BASE"]
 			else if(this.isNovaINI())
 				link := MainConfig.private["NOVA_RELEASE_NOTE_BASE"]
 			else
 				link := MainConfig.private["EMC2_LINK_WEB_BASE"]
-		} else if(linkType = ActionBaseObject.SUBACTION_WebBasic) {
+		} else if(linkType = ActionObjectBase.SUBACTION_WebBasic) {
 			link := MainConfig.private["EMC2_LINK_WEB_BASE"]
 		}
 		
@@ -305,7 +306,7 @@ class ActionEMC2Object extends ActionBaseObject {
 }
 
 
-class ActionHelpdeskObject extends ActionBaseObject {
+class ActionObjectHelpdesk extends ActionObjectBase {
 	; ==============================
 	; == Public ====================
 	; ==============================
@@ -330,7 +331,7 @@ class ActionHelpdeskObject extends ActionBaseObject {
 }
 
 
-class ActionPathObject extends ActionBaseObject {
+class ActionObjectPath extends ActionObjectBase {
 	; ==============================
 	; == Public ====================
 	; ==============================
@@ -372,17 +373,17 @@ class ActionPathObject extends ActionBaseObject {
 	determinePathType(path) {
 		; Full URLs
 		if(stringMatchesAnyOf(path, ["http://", "https://", "ftp://"], CONTAINS_START))
-			return ActionPathObject.PATHTYPE_URL
+			return ActionObjectPath.PATHTYPE_URL
 		
 		; Filepaths
 		if(stringMatchesAnyOf(path, ["file:///", "\\"], CONTAINS_START)) ; URL-formatted file path, Windows network path
-			return ActionPathObject.PATHTYPE_FilePath
+			return ActionObjectPath.PATHTYPE_FilePath
 		if(subStr(text, 2, 2) = ":\")  ; Windows filepath (starts with drive letter + :\)
-			return ActionPathObject.PATHTYPE_FilePath
+			return ActionObjectPath.PATHTYPE_FilePath
 		
 		; Partial URLs (www.google.com, similar)
 		if(stringMatchesAnyOf(path, ["www.", "vpn.", "m."], CONTAINS_START))
-			return ActionPathObject.PATHTYPE_URL
+			return ActionObjectPath.PATHTYPE_URL
 		
 		; Unknown
 		return ""
@@ -391,7 +392,7 @@ class ActionPathObject extends ActionBaseObject {
 	open() {
 		if(!this.path)
 			return
-		if(subType = ActionPathObject.PATHTYPE_FilePath && !FileExist(this.path)) { ; Don't try to open a non-existent local path
+		if(subType = ActionObjectPath.PATHTYPE_FilePath && !FileExist(this.path)) { ; Don't try to open a non-existent local path
 			DEBUG.popup("Local file or folder does not exist", this.path)
 			return
 		}
@@ -411,7 +412,7 @@ class ActionPathObject extends ActionBaseObject {
 }
 
 
-class ActionCodeObject extends ActionBaseObject {
+class ActionObjectCode extends ActionObjectBase {
 	; ==============================
 	; == Public ====================
 	; ==============================
@@ -440,19 +441,19 @@ class ActionCodeObject extends ActionBaseObject {
 	}
 	
 	getLink(linkType := "") {
-		if(this.codeType = ActionCodeObject.CODETYPE_Routine) {
+		if(this.codeType = ActionObjectCode.CODETYPE_Routine) {
 			splitServerLocation(this.value, routine, tag)
 			
-			if(linkType = ActionBaseObject.SUBACTION_Edit)
+			if(linkType = ActionObjectBase.SUBACTION_Edit)
 				return buildEpicStudioRoutineLink(routine, tag)
-			if(linkType = ActionBaseObject.SUBACTION_Web)
+			if(linkType = ActionObjectBase.SUBACTION_Web)
 				return buildServerCodeLink(routine, tag)
 		}
 		
-		if(this.codeType = ActionCodeObject.CODETYPE_DLG) {
-			if(linkType = ActionBaseObject.SUBACTION_Edit)
+		if(this.codeType = ActionObjectCode.CODETYPE_DLG) {
+			if(linkType = ActionObjectBase.SUBACTION_Edit)
 				return buildEpicStudioDLGLink(this.value)
-			if(linkType = ActionBaseObject.SUBACTION_Web)
+			if(linkType = ActionObjectBase.SUBACTION_Web)
 				return "" ; Not supported
 		}
 		
@@ -467,11 +468,11 @@ class ActionCodeObject extends ActionBaseObject {
 	determineCodeType() {
 		; Full server tag^routine
 		if(stringContains(this.value, "^"))
-			return ActionCodeObject.CODETYPE_Routine
+			return ActionObjectCode.CODETYPE_Routine
 		
 		; DLG IDs are (usually) entirely numeric, where routines are not.
 		if(isNum(this.value))
-			return ActionCodeObject.CODETYPE_DLG
+			return ActionObjectCode.CODETYPE_DLG
 		
 		return ""
 	}

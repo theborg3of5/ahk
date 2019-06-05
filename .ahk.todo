@@ -31,41 +31,10 @@
 				Main question would be EpicStudio DLG support - do we end up rerouting web EpicStudio DLG links/opens to the EMC2 web summary for DLG?
 					Differentiated by "DLG" subType
 					Alternatively, just don't support that action/subType combination
-		Overall goal
-			Generic open/get link(/linkSelectedText?) hotkeys
-				Figure out the type (based on value) if possible (EMC2 objects, full URLs/paths)
-				Prompt user if type (or value) is unknown (only those two should be affected by selector popup)
-					Redo any pre-processing (path sub-type, for example) with new type/value
-				Do any post-processing/cleanup needed
-				Perform the action based on the determined type
-		Potential new structure
-			Parent (ActionObject) class that constructs with value and optional type/subType
-				***Does all of this really make sense as a single class?
-					Should the "base" (template that others extend) class be separate from this?
-					objectType property doesn't really make sense in child classes, and setting it in the "picker" class doesn't set it in the children either.
-				Constructor
-					Determines the type from value (if possible and not already given)
-						If type OR value is blank, selector popup to determine whichever is needed
-							If blank, early quit (without error toast)
-							Can also determine subType, pass that along if populated
-					Returns an instance of one of the child classes
-						If can't determine type: return "" and handle error toast)
-				Properties for type/subType (mostly for debugging/error display purposes)
-				Functions for specific actions (.run(runType), .getLink(linkType), .linkSelectedText(linkType))
-					Maybe include implementation for common cases (i.e. .run() and .linkSelectedText() should just call into .getLink() and then do their respective things)
-					Maybe "not implemented" error toast (with various info) instead of simply empty?
-			Child classes per type (Action<type>Object - ActionEMC2Object, ActionPathObject, Action)
-				Constructors
-					Call into any needed cleanup/post-processing
-					Determine sub-type if needed
-						Calculations based on value (like path sub-type)
-							Example: getPathType
-						Separate selector if needed (hopefully user should never see 2 selectors, since up-front one mostly includes subType unless it's not needed)
-							Possibly add another column of filters to trim down the choices based on the type (and therefore child class?)
-								Would require enhancing TableList/Selector to support multiple columns of filtering
-				Override (only) applicable action functions with type-specific logic
-					Error toast for non-supported combinations (within type, action or subAction + subType)
-					Example: buildEMC2Link (would need to update OneNote, which is the other user)
+		Use cases to replace/simplify
+			All ActionObject.do() callers
+			.copyLink
+			.linkSelectedText
 		Potential additional uses/things to absorb
 			EMC2
 				Make use of new class for parsing/cleaning EMC2 object info if we make it (another idea here)
@@ -112,8 +81,10 @@
 			Maybe take this a step further and make it specifically filling in an array?
 			Make sure that dot level is taken into account (I think I have functions for that)
 	Selector - consider adding a way to match on some other column than just NAME and ABBREV
-		Could be used for transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
-		Alternatively, build out environments in MainConfig (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.
+		Use cases
+			Transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
+				Alternatively, build out environments in MainConfig (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.
+			ActionObject* classes that do re-selection, could filter on action to only pick between meaningful options
 	Consider reading in more .tl/.tls files at startup and caching them
 		Alternatively, cache them after the first use?
 			Basically static variables, like we're doing in Hyperlinker

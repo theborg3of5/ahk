@@ -5,8 +5,6 @@
 
 
 
-; global SUBTYPE_Routine  := "ROUTINE"
-; global SUBTYPE_DLG      := "DLG"
 ; ; Additional subtypes (EMC2 INIs) can be defined in actionObject.tls.
 
 
@@ -24,6 +22,8 @@ class ActionObjectRedirector {
 		this.value   := value
 		this.type    := type
 		this.subType := subType
+		
+		this.value := cleanupText(this.value) ; Remove leading/trailing spaces and odd characters from value
 		
 		this.determineType()
 		this.selectMissingInfo()
@@ -69,7 +69,7 @@ class ActionObjectRedirector {
 		potentialINI := recordAry["INI"]
 		
 		; Silent selection from actionObject TLS to see if we match a "record" ("INI ID *" format) type.
-		s := new Selector("actionObject.tls", MainConfig.machineTLFilter)
+		s := new Selector("actionObject2.tls", MainConfig.machineTLFilter)
 		data := s.selectChoice(potentialINI)
 		if(!data)
 			return false
@@ -96,7 +96,7 @@ class ActionObjectRedirector {
 		if(this.value != "" && this.type != "")
 			return
 		
-		s := new Selector("actionObject.tls", MainConfig.machineTLFilter)
+		s := new Selector("actionObject2.tls", MainConfig.machineTLFilter)
 		data := s.selectGui("", "", {"TYPE":this.type, "SUBTYPE":this.subType, "VALUE":this.value})
 		if(!data)
 			return
@@ -120,6 +120,9 @@ class ActionObjectRedirector {
 		if(this.type = ActionBaseObject.TYPE_Path)
 			return new ActionPathObject(this.value, this.subType)
 		
+		if(this.type = ActionBaseObject.TYPE_Code)
+			return new ActionCodeObject(this.value, this.subType)
+		
 		Toast.showError("Unrecognized type", "ActionObjectRedirector doesn't know what to do with this type: " this.type)
 		return ""
 	}
@@ -132,12 +135,10 @@ class ActionBaseObject {
 	; ==============================
 	
 	; Type constants
-	static TYPE_EMC2              := "EMC2"
-	; static TYPE_EpicStudio        := "EPICSTUDIO"
-	; static TYPE_CodeSearchRoutine := "CODESEARCHROUTINE"
-	static TYPE_Helpdesk          := "HELPDESK"
-	; static TYPE_GuruSearch        := "GURU_SEARCH"
-	static TYPE_Path              := "PATH"
+	static TYPE_EMC2     := "EMC2"
+	static TYPE_Code     := "CODE" ; EpicStudio for edit, CodeSearch for web
+	static TYPE_Helpdesk := "HELPDESK"
+	static TYPE_Path     := "PATH"
 	
 	; GDB TODO document
 	static SUBACTION_Edit     := "EDIT"
@@ -293,7 +294,7 @@ class ActionEMC2Object extends ActionBaseObject {
 		if(this.id != "" && this.ini != "")
 			return
 		
-		s := new Selector("actionObject.tls", MainConfig.machineTLFilter)
+		s := new Selector("actionObject2.tls", MainConfig.machineTLFilter)
 		data := s.selectGui("", "", {"SUBTYPE": this.ini, "VALUE": this.id})
 		if(!data)
 			return
@@ -334,9 +335,8 @@ class ActionPathObject extends ActionBaseObject {
 	; == Public ====================
 	; ==============================
 	
-
-	static SUBTYPE_FilePath := "FILEPATH"
-	static SUBTYPE_URL      := "URL"
+	static PATHTYPE_FilePath := "FILEPATH"
+	static PATHTYPE_URL      := "URL"
 	
 	; Named property equivalents for the base generic variables, so base functions still work.
 	path[] {
@@ -372,17 +372,17 @@ class ActionPathObject extends ActionBaseObject {
 	determinePathType(path) {
 		; Full URLs
 		if(stringMatchesAnyOf(path, ["http://", "https://", "ftp://"], CONTAINS_START))
-			return ActionPathObject.SUBTYPE_URL
+			return ActionPathObject.PATHTYPE_URL
 		
 		; Filepaths
 		if(stringMatchesAnyOf(path, ["file:///", "\\"], CONTAINS_START)) ; URL-formatted file path, Windows network path
-			return ActionPathObject.SUBTYPE_FilePath
+			return ActionPathObject.PATHTYPE_FilePath
 		if(subStr(text, 2, 2) = ":\")  ; Windows filepath (starts with drive letter + :\)
-			return ActionPathObject.SUBTYPE_FilePath
+			return ActionPathObject.PATHTYPE_FilePath
 		
 		; Partial URLs (www.google.com, similar)
 		if(stringMatchesAnyOf(path, ["www.", "vpn.", "m."], CONTAINS_START))
-			return ActionPathObject.SUBTYPE_URL
+			return ActionPathObject.PATHTYPE_URL
 		
 		; Unknown
 		return ""
@@ -391,7 +391,7 @@ class ActionPathObject extends ActionBaseObject {
 	open() {
 		if(!this.path)
 			return
-		if(subType = ActionPathObject.SUBTYPE_FilePath && !FileExist(this.path)) { ; Don't try to open a non-existent local path
+		if(subType = ActionPathObject.PATHTYPE_FilePath && !FileExist(this.path)) { ; Don't try to open a non-existent local path
 			DEBUG.popup("Local file or folder does not exist", this.path)
 			return
 		}
@@ -407,6 +407,89 @@ class ActionPathObject extends ActionBaseObject {
 	; ==============================
 	; == Private ===================
 	; ==============================
+	
+}
+
+
+class ActionCodeObject extends ActionBaseObject {
+	; ==============================
+	; == Public ====================
+	; ==============================
+	
+	static CODETYPE_Routine := "ROUTINE"
+	static CODETYPE_DLG     := "DLG"
+	
+	; Named property equivalents for the base generic variables, so base functions still work.
+	codeType[] {
+		get {
+			return this.subType
+		}
+		set {
+			this.subType := value
+		}
+	}
+	
+	__New(value, codeType := "") {
+		this.value    := value
+		this.codeType := codeType
+		
+		if(this.codeType = "")
+			this.codeType := this.determineCodeType()
+		
+		this.selectMissingInfo()
+	}
+	
+	getLink(linkType := "") {
+		if(this.codeType = ActionCodeObject.CODETYPE_Routine) {
+			splitServerLocation(this.value, routine, tag)
+			
+			if(linkType = ActionBaseObject.SUBACTION_Edit)
+				return buildEpicStudioRoutineLink(routine, tag)
+			if(linkType = ActionBaseObject.SUBACTION_Web)
+				return buildServerCodeLink(routine, tag)
+		}
+		
+		if(this.codeType = ActionCodeObject.CODETYPE_DLG) {
+			if(linkType = ActionBaseObject.SUBACTION_Edit)
+				return buildEpicStudioDLGLink(this.value)
+			if(linkType = ActionBaseObject.SUBACTION_Web)
+				return "" ; Not supported
+		}
+		
+		return ""
+	}
+	
+	
+	; ==============================
+	; == Private ===================
+	; ==============================
+	
+	determineCodeType() {
+		; Full server tag^routine
+		if(stringContains(this.value, "^"))
+			return ActionCodeObject.CODETYPE_Routine
+		
+		; DLG IDs are (usually) entirely numeric, where routines are not.
+		if(isNum(this.value))
+			return ActionCodeObject.CODETYPE_DLG
+		
+		return ""
+	}
+	
+	selectMissingInfo() {
+		; Nothing is missing
+		if(this.value != "" && this.codeType != "")
+			return
+		
+		s := new Selector("actionObject2.tls", MainConfig.machineTLFilter)
+		data := s.selectGui("", "", {"SUBTYPE": this.codeType, "VALUE": this.value})
+		if(!data)
+			return
+		
+		this.codeType := data["SUBTYPE"]
+		this.value    := data["VALUE"]
+	}
+	
 	
 }
 

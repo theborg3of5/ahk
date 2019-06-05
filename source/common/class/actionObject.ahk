@@ -285,7 +285,8 @@ class ActionObject {
 				}
 				
 			} else if(type = TYPE_CodeSearchRoutine) {
-				return buildServerCodeLink(value)
+				splitServerLocation(value, routine, tag)
+				return buildServerCodeLink(routine, tag)
 				
 			} else if(type = TYPE_Helpdesk) {
 				return buildHelpdeskLink(value)

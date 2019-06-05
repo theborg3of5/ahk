@@ -288,14 +288,12 @@
 		return replaceTag(MainConfig.private["VDI_BASE"], "VDI_ID", vdiId)
 	}
 
-	buildServerCodeLink(serverLocation) {
-		splitServerLocation(serverLocation, routine, tag)
-		
+	buildServerCodeLink(routine, tag := "") {
 		url := MainConfig.private["CS_SERVER_CODE_BASE"]
 		url := replaceTag(url, "ROUTINE", routine)
-		url := replaceTag(url, "TAG", tag)
+		url := replaceTag(url, "TAG",     tag)
 		
-		; DEBUG.popup("epic","buildServerCodeLink", "Server location",serverLocation, "Tag",tag, "Routine",routine, "URL",url)
+		; DEBUG.popup("epic","buildServerCodeLink", "Tag",tag, "Routine",routine, "URL",url)
 		return url
 	}
 

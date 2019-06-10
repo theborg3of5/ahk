@@ -54,7 +54,7 @@
 			GitHub								GitHubDesktop.exe			-							-													NO_PADDING
 			Greenshot							Greenshot.exe
 			GrepWin								grepWin.exe
-			Hyperspace							EpicD88.exe
+			Hyperspace							EpicD89.exe
 			KDiff									kdiff3.exe
 			Launchy								Launchy.exe
 			Mattermost							Mattermost.exe

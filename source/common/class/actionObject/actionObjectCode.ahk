@@ -75,7 +75,7 @@ class ActionObjectCode extends ActionObjectBase {
 		if(this.value != "" && this.codeType != "")
 			return
 		
-		s := new Selector("actionObject2.tls", MainConfig.machineTLFilter)
+		s := new Selector("actionObject.tls", MainConfig.machineTLFilter)
 		data := s.selectGui("", "", {"SUBTYPE": this.codeType, "VALUE": this.value})
 		if(!data)
 			return

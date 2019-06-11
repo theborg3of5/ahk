@@ -67,7 +67,7 @@ class ActionObjectRedirector {
 		potentialINI := recordAry["INI"]
 		
 		; Silent selection from actionObject TLS to see if we match a "record" ("INI ID *" format) type.
-		s := new Selector("actionObject2.tls", MainConfig.machineTLFilter)
+		s := new Selector("actionObject.tls", MainConfig.machineTLFilter)
 		data := s.selectChoice(potentialINI)
 		if(!data)
 			return false
@@ -91,7 +91,7 @@ class ActionObjectRedirector {
 		if(this.value != "" && this.type != "")
 			return
 		
-		s := new Selector("actionObject2.tls", MainConfig.machineTLFilter)
+		s := new Selector("actionObject.tls", MainConfig.machineTLFilter)
 		data := s.selectGui("", "", {"TYPE":this.type, "SUBTYPE":this.subType, "VALUE":this.value})
 		if(!data)
 			return

@@ -22,6 +22,8 @@
 		Handle title as 3rd piece
 		Handle more than just " " as a delimiter
 		Maybe trim "R " of of start if it's there, too
+	Double-check linking selected text - is the error toast working correctly?
+	Figure out what's going wrong with copy-do-page hotkey on home desktop
 	
 # Large
 	ActionObject rework

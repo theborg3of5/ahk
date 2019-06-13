@@ -1,7 +1,6 @@
 # In Progress
 	
 # Small
-	Have compileEpicStudioRegex.ahk show an FYI toast when it's finished
 	Selector: dynamically resize abbreviation column based on widest value?
 		Is that going to get weird with SelectorGui+FlexTable interactions?
 	Look at cleaning up all of the record-splitting and EMC2-object-processing functions in epic.ahk

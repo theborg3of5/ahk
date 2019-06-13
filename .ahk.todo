@@ -25,7 +25,6 @@
 # Large
 	ActionObject rework
 		Document new classes
-			ActionObjectBase
 			ActionObjectCode
 			ActionObjectEMC2
 			ActionObjectHelpdesk

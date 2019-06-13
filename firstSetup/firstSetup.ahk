@@ -103,4 +103,4 @@ if(shouldRun)
 ExitApp
 
 ; Universal suspend, reload, and exit hotkeys.
-#Include _commonHotkeys.ahk
+#Include %A_ScriptDir%\..\source\common\_commonHotkeys.ahk

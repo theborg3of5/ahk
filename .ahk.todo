@@ -8,7 +8,6 @@
 		Can processEMC2ObjectInfo use getTrueEMC2INI?
 	Add catch and error toast for launching a program that doesn't exist (Launchy in VDIs, for example)
 	Consider moving class-specific constants into their respective classes
-		ActionObject
 		Duration
 		Hyperlinker
 		ListConverter
@@ -26,6 +25,12 @@
 	
 # Large
 	ActionObject rework
+		Document new classes
+			ActionObjectRedirector
+			ActionObjectBase
+			ActionObjectEMC2
+			ActionObjectHelpdesk
+			ActionObjectPath
 		Potential additional uses/things to absorb
 			Code
 				Various build* functions in epic script - can we switch the other callers over to use ActionObjectCode instead?

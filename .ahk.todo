@@ -24,10 +24,6 @@
 	
 # Large
 	ActionObject rework
-		Document new classes
-			ActionObjectEMC2
-			ActionObjectHelpdesk
-			ActionObjectPath
 		Potential additional uses/things to absorb
 			Code
 				Various build* functions in epic script - can we switch the other callers over to use ActionObjectCode instead?

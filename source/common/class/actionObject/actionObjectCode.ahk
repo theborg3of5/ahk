@@ -31,7 +31,7 @@ class ActionObjectCode extends ActionObjectBase {
 	; PARAMETERS:
 	;  code     (I,REQ) - Value representing the code
 	;  codeType (I,OPT) - Type of code, from CODETYPE_* constants. If not given, we'll figure it out
-	;                     based on the path format or by prompting the user.
+	;                     based on the code format or by prompting the user.
 	;---------
 	__New(code, codeType := "") {
 		this.code     := code

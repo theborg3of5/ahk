@@ -17,11 +17,21 @@ class ActionObjectHelpdesk extends ActionObjectBase {
 	
 	id := "" ; ID of the helpdesk request
 	
-	
+	;---------
+	; DESCRIPTION:    Create a new reference to a helpdesk request.
+	; PARAMETERS:
+	;  id (I,REQ) - ID of the request.
+	;---------
 	__New(id) {
 		this.id := id
 	}
 	
+	;---------
+	; DESCRIPTION:    Get a link to the helpdesk request.
+	; RETURNS:        Link to the helpdesk request.
+	; NOTES:          Web and edit functions do the same thing here - there is no difference between
+	;                 the two.
+	;---------
 	getLinkWeb() {
 		return replaceTags(MainConfig.private["EMC2_LINK_EDIT_BASE"], {"INI":this.ini, "ID":this.id})
 	}

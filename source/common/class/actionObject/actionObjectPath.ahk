@@ -18,13 +18,19 @@ class ActionObjectPath extends ActionObjectBase {
 	; == Public ====================
 	; ==============================
 	
-	static PATHTYPE_FilePath := "FILEPATH"
+	static PATHTYPE_FilePath := "FILEPATH" ; Local file path
 	static PATHTYPE_URL      := "URL"
 	
 	path     := "" ; The path itself.
 	pathType := "" ; Type of path, from PATHTYPE_* constants.
 	
-	
+	;---------
+	; DESCRIPTION:    Create a new reference to a path.
+	; PARAMETERS:
+	;  path     (I,REQ) - The actual path
+	;  pathType (I,OPT) - Type of path, from PATHTYPE_* constants. If not given, we'll figure it out
+	;                     based on the path format or by prompting the user.
+	;---------
 	__New(path, pathType := "") {
 		this.path     := path
 		this.pathType := pathType
@@ -37,6 +43,12 @@ class ActionObjectPath extends ActionObjectBase {
 			this.pathType := this.determinePathType(this.path)
 	}
 	
+	;---------
+	; DESCRIPTION:    Determine the type of the given path.
+	; PARAMETERS:
+	;  path (I,REQ) - The path itself.
+	; RETURNS:        The type of path, from PATHTYPE_* constants.
+	;---------
 	determinePathType(path) {
 		; Full URLs
 		if(stringMatchesAnyOf(path, ["http://", "https://", "ftp://"], CONTAINS_START))
@@ -56,6 +68,11 @@ class ActionObjectPath extends ActionObjectBase {
 		return ""
 	}
 	
+	;---------
+	; DESCRIPTION:    Open the path, doing a safety check for existence if it's a local file path.
+	; NOTES:          Web and edit functions do the same thing here - there is no difference between
+	;                 the two.
+	;---------
 	openWeb() {
 		this.openEdit() ; Opening web and edit are the same
 	}
@@ -70,7 +87,16 @@ class ActionObjectPath extends ActionObjectBase {
 		Run(this.path)
 	}
 	
+	;---------
+	; DESCRIPTION:    Get a link to the path (that is, the path itself).
+	; RETURNS:        The path
+	; NOTES:          Web and edit functions do the same thing here - there is no difference between
+	;                 the two.
+	;---------
 	getLinkWeb() {
 		return this.path
+	}
+	getLinkEdit() {
+		return this.getLinkWeb()
 	}
 }

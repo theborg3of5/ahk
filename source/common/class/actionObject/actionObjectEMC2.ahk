@@ -50,32 +50,27 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		this.selectMissingInfo()
 	}
 	
-	getLink(linkType := "") {
-		if(!this.ini || !this.id)
-			return ""
-		
-		; Default to web link
-		if(linkType = "")
-			linkType := ActionObjectBase.SUBACTION_Web
-		
-		; Pick one of the types of links - edit in EMC2 or view in web (summary or Sherlock/Nova).
-		if(linkType = ActionObjectBase.SUBACTION_Edit) {
-			link := MainConfig.private["EMC2_LINK_EDIT_BASE"]
-		} else if(linkType = ActionObjectBase.SUBACTION_Web) {
-			if(this.isSherlockINI())
-				link := MainConfig.private["SHERLOCK_BASE"]
-			else if(this.isNovaINI())
-				link := MainConfig.private["NOVA_RELEASE_NOTE_BASE"]
-			else
-				link := MainConfig.private["EMC2_LINK_WEB_BASE"]
-		} else if(linkType = ActionObjectBase.SUBACTION_WebBasic) {
-			link := MainConfig.private["EMC2_LINK_WEB_BASE"]
-		}
-		
-		link := replaceTags(link, {"INI":this.ini, "ID":this.id})
-		
-		return link
+	openWebBasic() {
+		link := replaceTags(MainConfig.private["EMC2_LINK_WEB_BASE"], {"INI":this.ini, "ID":this.id})
+		if(link)
+			Run(link)
 	}
+	
+	getLinkWeb() {
+		if(this.isSherlockINI())
+			link := MainConfig.private["SHERLOCK_BASE"]
+		else if(this.isNovaINI())
+			link := MainConfig.private["NOVA_RELEASE_NOTE_BASE"]
+		else
+			link := MainConfig.private["EMC2_LINK_WEB_BASE"]
+		
+		return replaceTags(link, {"INI":this.ini, "ID":this.id})
+	}
+	getLinkEdit() {
+		return replaceTags(MainConfig.private["EMC2_LINK_EDIT_BASE"], {"INI":this.ini, "ID":this.id})
+	}
+	
+	
 	
 	; ==============================
 	; == Private ===================

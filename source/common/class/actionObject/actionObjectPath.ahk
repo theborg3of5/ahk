@@ -62,7 +62,10 @@ class ActionObjectPath extends ActionObjectBase {
 		return ""
 	}
 	
-	open() {
+	openWeb() {
+		this.openEdit() ; Opening web and edit are the same
+	}
+	openEdit() {
 		if(!this.path)
 			return
 		if(subType = ActionObjectPath.PATHTYPE_FilePath && !FileExist(this.path)) { ; Don't try to open a non-existent local path
@@ -73,7 +76,23 @@ class ActionObjectPath extends ActionObjectBase {
 		Run(this.path)
 	}
 	
-	getLink() {
+	
+	getLinkWeb() {
 		return this.path
 	}
+	
+	; open() {
+		; if(!this.path)
+			; return
+		; if(subType = ActionObjectPath.PATHTYPE_FilePath && !FileExist(this.path)) { ; Don't try to open a non-existent local path
+			; DEBUG.popup("Local file or folder does not exist", this.path)
+			; return
+		; }
+		
+		; Run(this.path)
+	; }
+	
+	; getLink() {
+		; return this.path
+	; }
 }

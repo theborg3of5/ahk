@@ -23,30 +23,37 @@
 	
 	{ ; SmartText hotstrings. Added to favorites to deal with duplicate/similar names.
 		:*:qa.dbc::
-			insertSmartText("DBC QA INSTRUCTIONS")
+			emc2InsertSmartText("DBC QA INSTRUCTIONS")
 		return
 		:*:qa.new::
-			insertSmartText("QA INSTRUCTIONS - NEW CHANGES")
+			emc2InsertSmartText("QA INSTRUCTIONS - NEW CHANGES")
 		return
 	}
 	
 	{ ; Link and record number things.
 		; Get INI/ID
 		!c::
-			copyEMC2RecordId() {
+			emc2OpenRecordId() {
 				getObjectInfoFromEMC2(ini, id)
 				if(id)
 					setClipboardAndToastValue(ini " " id, "EMC2 record INI/ID")
 			}
 		
-		; Open web version of the current object in EMC2.
-		!w::openEMC2Record(ActionObjectBase.SUBACTION_Web)
-		!+w::openEMC2Record(ActionObjectBase.SUBACTION_WebBasic)
-		openEMC2Record(subAction) {
-			getObjectInfoFromEMC2(ini, id)
-			ao := new ActionObjectEMC2(id, ini)
-			ao.open(subAction)
-		}
+		; Open web version of the current object.
+		!w::
+			emc2OpenRecordWeb() {
+				getObjectInfoFromEMC2(ini, id)
+				ao := new ActionObjectEMC2(id, ini)
+				ao.openWeb()
+			}
+		
+		; Open "basic" web version (always EMC2 summary, even for Sherlock/Nova records) of the current object.
+		!+w::
+			emc2OpenRecordWebBasic() {
+				getObjectInfoFromEMC2(ini, id)
+				ao := new ActionObjectEMC2(id, ini)
+				ao.openWebBasic()
+			}
 		
 		; Take DLG # and pop up the DLG in EpicStudio sidebar.
 		^+o::
@@ -116,7 +123,7 @@
 	return
 #If
 
-insertSmartText(smartTextName, focusFirstField = true) {
+emc2InsertSmartText(smartTextName, focusFirstField = true) {
 	Send, ^{F10}
 	WinWaitActive, SmartText Lookup
 	Sleep, 500

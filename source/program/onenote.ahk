@@ -301,11 +301,11 @@
 			; DEBUG.popup("Line",lineText, "Record text",recordText, "Edit text",editText, "ao.ini",ao.ini, "ao.id",ao.id)
 			
 			selectTextWithinSelection(recordText)
-			ao.linkSelectedText(ActionObjectBase.SUBACTION_Web, , "Failed to add EMC2 object web link")
+			ao.linkSelectedTextWeb("Failed to add EMC2 object web link")
 			
 			oneNoteSelectLine() ; Re-select whole line so we can use selectTextWithinSelection() again
 			selectTextWithinSelection(editText)
-			ao.linkSelectedText(ActionObjectBase.SUBACTION_Edit, , "Failed to add EMC2 object edit link")
+			ao.linkSelectedTextEdit("Failed to add EMC2 object edit link")
 		}
 	
 	:*:.todosat::
@@ -398,7 +398,7 @@
 		selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
 		
 		ao := new ActionObjectEMC2(id, ini)
-		ao.linkSelectedText(ActionObjectBase.SUBACTION_Web, , "Failed to link EMC2 object text")
+		ao.linkSelectedTextWeb("Failed to link EMC2 object text")
 		
 		Send, {End}
 	}

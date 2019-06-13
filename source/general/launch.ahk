@@ -1,28 +1,40 @@
 ; Launch miscellaneous actions.
 
-; Generic opener - opens a variety of different things based on the selected/clipboard text.
-^!#o:: genericOpen(ActionObjectBase.SUBACTION_Web)
-^!#+o::genericOpen(ActionObjectBase.SUBACTION_Edit)
-genericOpen(subAction) {
-	ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
-	ao.open(subAction)
-}
+; Generic open - open a variety of different things based on the selected text.
+^!#o::
+	genericOpenWeb() {
+		ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
+		ao.openWeb()
+	}
+^!#+o::
+	genericOpenEdit() {
+		ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
+		ao.openEdit()
+	}
 
-; Generic linker - will allow coming from clipboard or selected text, or input entirely. Puts the link on the clipboard.
-^!#l:: genericCopyLink(ActionObjectBase.SUBACTION_Web)
-^!#+l::genericCopyLink(ActionObjectBase.SUBACTION_Edit)
-genericCopyLink(subAction) {
-	ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
-	ao.copyLink(subAction)
-}
+; Generic copy link - copy links to a variety of different things based on the selected text.
+^!#l::
+	genericCopyLinkWeb() {
+		ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
+		ao.copyLinkWeb()
+	}
+^!#+l::
+	genericCopyLinkEdit() {
+		ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
+		ao.copyLinkEdit()
+	}
 
-; Generic hyperlinker - get link for selection and apply it to the selected text.
-^!#k:: genericHyperlinkSelectedText(ActionObjectBase.SUBACTION_Web)
-^!#+k::genericHyperlinkSelectedText(ActionObjectBase.SUBACTION_Edit)
-genericHyperlinkSelectedText(subAction) {
-	ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
-	ao.linkSelectedText(subAction)
-}
+; Generic hyperlinker - get link based on the selected text and then apply it to that same text.
+^!#k::
+	genericHyperlinkSelectedTextWeb() {
+		ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
+		ao.linkSelectedTextWeb()
+	}
+^!#+k::
+	genericHyperlinkSelectedTextEdit() {
+		ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
+		ao.linkSelectedTextEdit()
+	}
 
 ; Generic search.
 !+f::

@@ -24,7 +24,10 @@ class ActionObjectHelpdesk extends ActionObjectBase {
 		this.id := id
 	}
 	
-	getLink() {
-		return replaceTag(MainConfig.private["HELPDESK_BASE"], "ID", this.id)
+	getLinkWeb() {
+		return replaceTags(MainConfig.private["EMC2_LINK_EDIT_BASE"], {"INI":this.ini, "ID":this.id})
+	}
+	getLinkEdit() {
+		return this.getLinkWeb()
 	}
 }

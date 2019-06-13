@@ -33,22 +33,25 @@ class ActionObjectCode extends ActionObjectBase {
 		this.selectMissingInfo()
 	}
 	
-	getLink(linkType := "") {
+	getLinkWeb() {
 		if(this.codeType = ActionObjectCode.CODETYPE_Routine) {
 			splitServerLocation(this.value, routine, tag)
-			
-			if(linkType = ActionObjectBase.SUBACTION_Edit)
-				return buildEpicStudioRoutineLink(routine, tag)
-			if(linkType = ActionObjectBase.SUBACTION_Web)
-				return buildServerCodeLink(routine, tag)
+			return buildServerCodeLink(routine, tag)
 		}
 		
-		if(this.codeType = ActionObjectCode.CODETYPE_DLG) {
-			if(linkType = ActionObjectBase.SUBACTION_Edit)
-				return buildEpicStudioDLGLink(this.value)
-			if(linkType = ActionObjectBase.SUBACTION_Web)
-				return "" ; Not supported
+		if(this.codeType = ActionObjectCode.CODETYPE_DLG)
+			return "" ; Not supported
+		
+		return ""
+	}
+	getLinkEdit() {
+		if(this.codeType = ActionObjectCode.CODETYPE_Routine) {
+			splitServerLocation(this.value, routine, tag)
+			return buildEpicStudioRoutineLink(routine, tag)
 		}
+		
+		if(this.codeType = ActionObjectCode.CODETYPE_DLG)
+			return buildEpicStudioDLGLink(this.value)
 		
 		return ""
 	}

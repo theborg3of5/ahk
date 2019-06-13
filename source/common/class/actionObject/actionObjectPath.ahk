@@ -54,7 +54,7 @@ class ActionObjectPath extends ActionObjectBase {
 	openEdit() {
 		if(!this.path)
 			return
-		if(subType = ActionObjectPath.PATHTYPE_FilePath && !FileExist(this.path)) { ; Don't try to open a non-existent local path
+		if(this.pathType = ActionObjectPath.PATHTYPE_FilePath && !FileExist(this.path)) { ; Don't try to open a non-existent local path
 			DEBUG.popup("Local file or folder does not exist", this.path)
 			return
 		}

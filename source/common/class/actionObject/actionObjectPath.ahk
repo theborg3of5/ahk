@@ -51,7 +51,7 @@ class ActionObjectPath extends ActionObjectBase {
 		; Filepaths
 		if(stringMatchesAnyOf(path, ["file:///", "\\"], CONTAINS_START)) ; URL-formatted file path, Windows network path
 			return ActionObjectPath.PATHTYPE_FilePath
-		if(subStr(text, 2, 2) = ":\")  ; Windows filepath (starts with drive letter + :\)
+		if(subStr(path, 2, 2) = ":\")  ; Windows filepath (starts with drive letter + :\)
 			return ActionObjectPath.PATHTYPE_FilePath
 		
 		; Partial URLs (www.google.com, similar)

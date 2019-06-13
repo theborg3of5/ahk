@@ -25,9 +25,10 @@
 	
 # Large
 	ActionObject rework
+		Should we move from .SUBACTION_* constants, to corresponding individual functions?
 		Document new classes
-			ActionObjectRedirector
 			ActionObjectBase
+			ActionObjectCode
 			ActionObjectEMC2
 			ActionObjectHelpdesk
 			ActionObjectPath

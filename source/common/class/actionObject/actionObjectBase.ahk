@@ -1,6 +1,8 @@
-/* Class for ***
+/* Base class for type-specific ActionObject child classes.
 	
-	***
+	This is intended to serve as a skeleton for those specific child classes. Each child class should:
+		Override the .getLink() function below, and others as needed (for example, .open() could also use an existence check for paths)
+		*Make use of the ActionObjectBase.SUBACTION_* constants as needed
 */
 
 class ActionObjectBase {
@@ -8,13 +10,7 @@ class ActionObjectBase {
 	; == Public ====================
 	; ==============================
 	
-	; Type constants
-	static TYPE_EMC2     := "EMC2"
-	static TYPE_Code     := "CODE" ; EpicStudio for edit, CodeSearch for web
-	static TYPE_Helpdesk := "HELPDESK"
-	static TYPE_Path     := "PATH"
-	
-	; GDB TODO document
+	; GDB TODO replace with more specific open/copy/linkSelectedText/getLink functions instead?
 	static SUBACTION_Edit     := "EDIT"
 	static SUBACTION_Web      := "WEB"
 	static SUBACTION_WebBasic := "WEB_BASIC"

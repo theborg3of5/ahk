@@ -1,8 +1,16 @@
 #Include %A_LineFile%\..\actionObjectBase.ahk
 
-/* Class for ***
+/* Class for performing actions on a path.
 	
-	***
+	Note that several other operations are also available from the base class (.copyLink*(), .linkSelectedText*()).
+	
+	Example Usage
+		ao := new ActionObjectPath("F:\personal\eyobuddy") ; Local path or URL, user will be prompted for which it is
+		MsgBox, ao.getLinkWeb()  ; Returns path (equivalent to .getLinkEdit())
+		ao.openWeb()             ; Open path (equivalent to .openEdit())
+		
+		ao := new ActionObjectPath("google.com", ActionObjectPath.PATHTYPE_URL) ; Specify path type if known to avoid prompting
+		ao.openEdit() ; Run URL
 */
 
 class ActionObjectPath extends ActionObjectBase {

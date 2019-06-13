@@ -1,8 +1,13 @@
 #Include %A_LineFile%\..\actionObjectBase.ahk
 
-/* Class for ***
+/* Class for performing actions on a helpdesk request.
 	
-	***
+	Note that several other operations are also available from the base class (.copyLink*(), .linkSelectedText*()).
+	
+	Example Usage
+		ao := new ActionObjectHelpdesk(123456) ; HDR ID
+		MsgBox, ao.getLinkWeb()  ; Link to helpdesk request (equivalent to .getLinkEdit())
+		ao.openWeb()             ; Open web portal to request (equivalent to .openEdit())
 */
 
 class ActionObjectHelpdesk extends ActionObjectBase {

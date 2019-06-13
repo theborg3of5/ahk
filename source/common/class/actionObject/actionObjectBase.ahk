@@ -91,13 +91,4 @@ class ActionObjectBase {
 		Toast.showError("ActionObjectBase.getLinkEdit() called directly", ".getLinkEdit() is not implemented by this child ActionObject* class")
 		return ""
 	}
-	
-	
-	; ==============================
-	; == Private ===================
-	; ==============================
-	
-	value   := "" ; Value (the unique bit of info to act upon, like a path or identifier)
-	subType := "" ; Determined sub-type, an additional categorization within a particular ActionObject* class.
-	
 }

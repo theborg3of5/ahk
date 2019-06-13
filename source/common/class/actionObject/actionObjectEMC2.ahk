@@ -10,23 +10,9 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	; == Public ====================
 	; ==============================
 	
-	; Named property equivalents for the base generic variables, so base functions still work.
-	id[] {
-		get {
-			return this.value
-		}
-		set {
-			this.value := value
-		}
-	}
-	ini[] {
-		get {
-			return this.subType
-		}
-		set {
-			this.subType := value
-		}
-	}
+	id  := "" ; ID of the object
+	ini := "" ; INI for the object, from EMC2 subtypes in actionObject.tl
+	
 	
 	__New(id, ini := "", title := "") {
 		this.id    := id

@@ -10,21 +10,15 @@ class ActionObjectCode extends ActionObjectBase {
 	; == Public ====================
 	; ==============================
 	
-	static CODETYPE_Routine := "ROUTINE"
-	static CODETYPE_DLG     := "DLG"
+	static CODETYPE_Routine := "ROUTINE" ; Server code location, including tag if applicable
+	static CODETYPE_DLG     := "DLG"     ; DLG, for opening in EpicStudio
 	
-	; Named property equivalents for the base generic variables, so base functions still work.
-	codeType[] {
-		get {
-			return this.subType
-		}
-		set {
-			this.subType := value
-		}
-	}
+	codeType := "" ; Type of code object (from CODETYPE_* constants)
+	code     := "" ; Reference to code object
 	
-	__New(value, codeType := "") {
-		this.value    := value
+	
+	__New(code, codeType := "") {
+		this.code     := code
 		this.codeType := codeType
 		
 		if(this.codeType = "")
@@ -35,7 +29,7 @@ class ActionObjectCode extends ActionObjectBase {
 	
 	getLinkWeb() {
 		if(this.codeType = ActionObjectCode.CODETYPE_Routine) {
-			splitServerLocation(this.value, routine, tag)
+			splitServerLocation(this.code, routine, tag)
 			return buildServerCodeLink(routine, tag)
 		}
 		
@@ -46,12 +40,12 @@ class ActionObjectCode extends ActionObjectBase {
 	}
 	getLinkEdit() {
 		if(this.codeType = ActionObjectCode.CODETYPE_Routine) {
-			splitServerLocation(this.value, routine, tag)
+			splitServerLocation(this.code, routine, tag)
 			return buildEpicStudioRoutineLink(routine, tag)
 		}
 		
 		if(this.codeType = ActionObjectCode.CODETYPE_DLG)
-			return buildEpicStudioDLGLink(this.value)
+			return buildEpicStudioDLGLink(this.code)
 		
 		return ""
 	}
@@ -63,11 +57,11 @@ class ActionObjectCode extends ActionObjectBase {
 	
 	determineCodeType() {
 		; Full server tag^routine
-		if(stringContains(this.value, "^"))
+		if(stringContains(this.code, "^"))
 			return ActionObjectCode.CODETYPE_Routine
 		
 		; DLG IDs are (usually) entirely numeric, where routines are not.
-		if(isNum(this.value))
+		if(isNum(this.code))
 			return ActionObjectCode.CODETYPE_DLG
 		
 		return ""
@@ -75,15 +69,15 @@ class ActionObjectCode extends ActionObjectBase {
 	
 	selectMissingInfo() {
 		; Nothing is missing
-		if(this.value != "" && this.codeType != "")
+		if(this.code != "" && this.codeType != "")
 			return
 		
 		s := new Selector("actionObject.tls", MainConfig.machineTLFilter)
-		data := s.selectGui("", "", {"SUBTYPE": this.codeType, "VALUE": this.value})
+		data := s.selectGui("", "", {"SUBTYPE": this.codeType, "VALUE": this.code})
 		if(!data)
 			return
 		
 		this.codeType := data["SUBTYPE"]
-		this.value    := data["VALUE"]
+		this.code     := data["VALUE"]
 	}
 }

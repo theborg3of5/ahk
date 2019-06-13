@@ -10,15 +10,8 @@ class ActionObjectHelpdesk extends ActionObjectBase {
 	; == Public ====================
 	; ==============================
 	
-	; Named property equivalents for the base generic variables, so base functions still work.
-	id[] {
-		get {
-			return this.value
-		}
-		set {
-			this.value := value
-		}
-	}
+	id := "" ; ID of the helpdesk request
+	
 	
 	__New(id) {
 		this.id := id

@@ -13,23 +13,9 @@ class ActionObjectPath extends ActionObjectBase {
 	static PATHTYPE_FilePath := "FILEPATH"
 	static PATHTYPE_URL      := "URL"
 	
-	; Named property equivalents for the base generic variables, so base functions still work.
-	path[] {
-		get {
-			return this.value
-		}
-		set {
-			this.value := value
-		}
-	}
-	pathType[] {
-		get {
-			return this.subType
-		}
-		set {
-			this.subType := value
-		}
-	}
+	path     := "" ; The path itself.
+	pathType := "" ; Type of path, from PATHTYPE_* constants.
+	
 	
 	__New(path, pathType := "") {
 		this.path     := path
@@ -76,23 +62,7 @@ class ActionObjectPath extends ActionObjectBase {
 		Run(this.path)
 	}
 	
-	
 	getLinkWeb() {
 		return this.path
 	}
-	
-	; open() {
-		; if(!this.path)
-			; return
-		; if(subType = ActionObjectPath.PATHTYPE_FilePath && !FileExist(this.path)) { ; Don't try to open a non-existent local path
-			; DEBUG.popup("Local file or folder does not exist", this.path)
-			; return
-		; }
-		
-		; Run(this.path)
-	; }
-	
-	; getLink() {
-		; return this.path
-	; }
 }

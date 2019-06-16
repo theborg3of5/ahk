@@ -3,9 +3,6 @@
 # Small
 	Selector: dynamically resize abbreviation column based on widest value?
 		Is that going to get weird with SelectorGui+FlexTable interactions?
-	Look at cleaning up all of the record-splitting and EMC2-object-processing functions in epic.ahk
-		Can getObjectInfoFromEMC2 use extractEMC2ObjectInfoRaw (like selectSnapper does)?
-		Can processEMC2ObjectInfo use getTrueEMC2INI?
 	Add catch and error toast for launching a program that doesn't exist (Launchy in VDIs, for example)
 	Consider moving class-specific constants into their respective classes
 		Duration
@@ -15,6 +12,9 @@
 		TableList
 		TableListMod
 		WindowInfo
+	Look at cleaning up all of the record-splitting and EMC2-object-processing functions in epic.ahk
+		Can getObjectInfoFromEMC2 use extractEMC2ObjectInfoRaw (like selectSnapper does)?
+		Can processEMC2ObjectInfo use getTrueEMC2INI?
 	Create a new splitRecordString function that combines logic from splitRecordString and extractEMC2ObjectInfoRaw
 		Could potentially be part of the new class idea for EMC2 object string parsing below
 		Handle title as 3rd piece

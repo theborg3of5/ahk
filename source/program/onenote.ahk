@@ -14,7 +14,7 @@
 			oneNotePromoteSubpage()
 		return
 		^+]::
-			oneNoteDemoteSubpage()
+			oneNoteMakeSubpage()
 		return
 		$^+d::
 			oneNoteDeletePage()
@@ -23,7 +23,7 @@
 			oneNoteAddMeetingNotes()
 		return
 		^0::
-			oneNoteZoom100Percent()
+			oneNoteSetZoomTo100Percent()
 		return
 		^l::
 			oneNoteCreateLinkPageSpecSection()
@@ -262,8 +262,8 @@
 		if(endKey = "Escape")
 			return
 		
-		Send, ^{PgDn}              ; Switch to (presumably) new page
-		Send, !3                   ; Demote Subpage (Make Subpage)
+		Send, ^{PgDn} ; Switch to (presumably) new page
+		oneNoteMakeSubpage()
 		
 		; Make the current page have no background color.
 		Send, !w
@@ -341,7 +341,7 @@
 	oneNotePromoteSubpage() {
 		Send, !2
 	}
-	oneNoteDemoteSubpage() {
+	oneNoteMakeSubpage() {
 		Send, !3
 	}
 	oneNoteDeletePage() {
@@ -352,7 +352,7 @@
 	oneNoteAddMeetingNotes() {
 		Send, !5
 	}
-	oneNoteZoom100Percent() {
+	oneNoteSetZoomTo100Percent() {
 		Send, !6
 	}
 	oneNoteCustomStyles() {	; Custom styles from OneTastic

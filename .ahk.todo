@@ -12,14 +12,6 @@
 		TableList
 		TableListMod
 		WindowInfo
-	Look at cleaning up all of the record-splitting and EMC2-object-processing functions in epic.ahk
-		Can getObjectInfoFromEMC2 use extractEMC2ObjectInfoRaw (like selectSnapper does)?
-		Can processEMC2ObjectInfo use getTrueEMC2INI?
-	Create a new splitRecordString function that combines logic from splitRecordString and extractEMC2ObjectInfoRaw
-		Could potentially be part of the new class idea for EMC2 object string parsing below
-		Handle title as 3rd piece
-		Handle more than just " " as a delimiter
-		Maybe trim "R " of of start if it's there, too
 	Figure out what's going wrong with copy-do-page hotkey on home desktop
 	
 # Large
@@ -39,15 +31,47 @@
 			Helpdesk
 				epic.buildHelpdeskLink()
 	Do something to encapsulate search selector - maybe its own class, or merge into ActionObject instad?
-	Would epic.*EMC2ObjectInfo functions make sense as a class, that parses stuff out of a string?
-		Would need to update other caller (snapper selector) to extractEMC2ObjectInfoRaw()
-		Could make it a little more multi-purpose that way
-			Split apart bits in constructor (maybe as a static function, even?)
-			Process (clean, replace INI, etc.) in a separate function (or multiple with different levels of stuff)
-				If multiple, could have a .clean(), .replaceINI(), etc that can be called in sequence
-			Could also handle the standard EMC2 object string format for OneNote, etc.
-				Could possibly include linking selected text with that, since class will know its own ini/id/title
-		Would this absorb getTrueEMC2INI?
+	Look at cleaning up all of the record-splitting and EMC2-object-processing functions in epic.ahk
+		Can getObjectInfoFromEMC2 use extractEMC2ObjectInfoRaw (like selectSnapper does)?
+		Can processEMC2ObjectInfo use getTrueEMC2INI?
+		Create a new splitRecordString function that combines logic from splitRecordString and extractEMC2ObjectInfoRaw
+			Callers to getObjectInfoFromEMC2() (which is the only caller to splitRecordString())
+				Various in EMC2 (mostly opening current record elsewhere)
+					EMC2
+				dlgNumTracker
+					EMC2
+			Callers to extractEMC2ObjectInfo()
+				input > sendStandardEMC2ObjectString()
+					EMC2
+			Callers to extractEMC2ObjectInfoRaw()
+				launch > selectSnapper()
+					Generic record
+				actionObjectRedirector > tryProcessAsRecord()
+					EMC2 or HDR
+				actionObjectEMC2 > __New()
+					EMC2
+			Could potentially be part of the new class idea for EMC2 object string parsing below
+			Handle title as 3rd piece
+			Handle more than just " " as a delimiter
+			Maybe trim "R " of of start if it's there, too
+		Should this be a new class for Epic objects in general? "EpicRecord", perhaps?
+			Can initialize from various inputs
+				Programmatic string (possibly used by constructor if a string given there)
+				Clipboard
+				EMC2 title (which uses clipboard method)
+				In general, initialization should include:
+					Breaking apart bits
+					Cleaning out leftovers (like processEMC2ObjectInfo() does now)
+			Properties for INI/ID/title
+			Can output in various formats
+				Standard EMC2 object string
+					Include INI verification/replacement
+						Could this absorb/replace getTrueEMC2INI()?
+							Currently only used by processEMC2ObjectInfo() and ActionObjectEMC2.__New(), most likely possible
+					Including special handling for OneNote linking?
+						Maybe just make this more generic, method/parameter for linking the record INI/ID
+				"R " INI " " ID
+					Maybe with title as well if we have it, "<title> [R INI ID]"?
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)
 		Maybe store off both title (maybe trimmed, drop things like " - Wiki" off of the end, etc?) and URL on copy hotkey
 			Used by a generic hotkey that used those two bits of info + hyperlinking class to add a link?

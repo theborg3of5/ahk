@@ -65,7 +65,7 @@ return
 			Toast.showError("Failed to link selected text", errorMessage)
 	}
 
-; Turn selected text or clipboard into standard string and send it.
+; Turn clipboard into standard string and send it.
 !+n::
 	sendStandardEMC2ObjectString() {
 		infoAry := extractEMC2ObjectInfo(clipboard)

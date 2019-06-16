@@ -68,11 +68,7 @@ return
 ; Turn selected text or clipboard into standard string and send it.
 !+n::
 	sendStandardEMC2ObjectString() {
-		line := getFirstLineOfSelectedText()
-		if(!line) ; Fall back to clipboard if nothing selected
-			line := clipboard
-		
-		infoAry := extractEMC2ObjectInfo(line)
+		infoAry := extractEMC2ObjectInfo(clipboard)
 		if(!infoAry)
 			return
 		

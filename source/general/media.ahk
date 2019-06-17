@@ -11,7 +11,7 @@
 		s := new Selector("mediaPlayers.tls")
 		programName := s.selectGui("PROGRAM_NAME")
 		if(programName) {
-			MainConfig.setSetting("MEDIA_PLAYER", programName)
+			MainConfig.mediaPlayer := programName
 			Toast.showMedium("Media player set to: " programName)
 		}
 	}

@@ -85,6 +85,10 @@ class MainConfig {
 		get {
 			return this.settings["MEDIA_PLAYER"]
 		}
+		set {
+			this.settings["MEDIA_PLAYER"] := value
+			this.settingsINIObject.set("Main", "MEDIA_PLAYER", value)
+		}
 	}
 	isMediaPlayer(mediaPlayerName) {
 		return (this.settings["MEDIA_PLAYER"] = mediaPlayerName)

@@ -298,19 +298,19 @@
 			         "MACHINE"] = HOME_DESKTOP
 */
 
-global TLROWTYPE_IGNORE  := "IGNORE"
-global TLROWTYPE_SETTING := "SETTING"
-global TLROWTYPE_MOD     := "MOD"
-global TLROWTYPE_PASS    := "PASS"
-global TLROWTYPE_KEY     := "KEY"
-global TLROWTYPE_MODEL   := "MODEL"
-global TLROWTYPE_NORMAL  := "NORMAL"
-
 class TableList {
 	
 	; ==============================
 	; == Public ====================
 	; ==============================
+	
+	static RowType_Ignore  := "IGNORE"
+	static RowType_Setting := "SETTING"
+	static RowType_Mod     := "MOD"
+	static RowType_Pass    := "PASS"
+	static RowType_Key     := "KEY"
+	static RowType_Model   := "MODEL"
+	static RowType_Normal  := "NORMAL"
 	
 	;---------
 	; DESCRIPTION:    Create a new TableList instance.
@@ -518,25 +518,25 @@ class TableList {
 		rowType := this.findRowType(row)
 		; DEBUG.popup("Processing row",row, "Row type",rowType)
 		
-		if(rowType = TLROWTYPE_IGNORE)
+		if(rowType = TableList.RowType_Ignore)
 			return ; Ignore - it's either empty or an ignore row.
 		
-		else if(rowType = TLROWTYPE_NORMAL)
+		else if(rowType = TableList.RowType_Normal)
 			this.processNormal(row)
 		
-		else if(rowType = TLROWTYPE_SETTING)
+		else if(rowType = TableList.RowType_Setting)
 			this.processSetting(row)
 		
-		else if(rowType = TLROWTYPE_MODEL) ; Model row, causes us to use string subscripts instead of numeric per entry.
+		else if(rowType = TableList.RowType_Model) ; Model row, causes us to use string subscripts instead of numeric per entry.
 			this.processModel(row)
 		
-		else if(rowType = TLROWTYPE_MOD)
+		else if(rowType = TableList.RowType_Mod)
 			this.processMod(row)
 		
-		else if(rowType = TLROWTYPE_PASS)
+		else if(rowType = TableList.RowType_Pass)
 			this.processPass(row)
 		
-		else if(rowType = TLROWTYPE_KEY) ; Key characters mean that we split the row, but always store it separately from everything else.
+		else if(rowType = TableList.RowType_Key) ; Key characters mean that we split the row, but always store it separately from everything else.
 			this.processKey(row)
 	}
 	
@@ -544,32 +544,32 @@ class TableList {
 	; DESCRIPTION:    Determine which type of row we're trying to process.
 	; PARAMETERS:
 	;  row (I,REQ) - String with the line from the file we're trying to categorize.
-	; RETURNS:        A TLROWTYPE_* constant describing the type of row.
+	; RETURNS:        A TableList.RowType_* constant describing the type of row.
 	;---------
 	findRowType(row) {
 		if(!row)
-			return TLROWTYPE_IGNORE
+			return TableList.RowType_Ignore
 		
 		if(stringStartsWith(row, this.chars["IGNORE"]))
-			return TLROWTYPE_IGNORE
+			return TableList.RowType_Ignore
 		
 		if(stringStartsWith(row, this.chars["SETTING"]))
-			return TLROWTYPE_SETTING
+			return TableList.RowType_Setting
 		
 		if(stringStartsWith(row, this.chars["MOD", "START"]))
-			return TLROWTYPE_MOD
+			return TableList.RowType_Mod
 		
 		if(stringStartsWith(row, this.chars["MODEL"]))
-			return TLROWTYPE_MODEL
+			return TableList.RowType_Model
 		
 		firstChar := subStr(row, 1, 1)
 		if(arrayContains(this.chars["PASS"], firstChar))
-			return TLROWTYPE_PASS
+			return TableList.RowType_Pass
 		
 		if(this.keyRowChars.hasKey(firstChar))
-			return TLROWTYPE_KEY
+			return TableList.RowType_Key
 		
-		return TLROWTYPE_NORMAL
+		return TableList.RowType_Normal
 	}
 	
 	;---------

@@ -3,7 +3,7 @@
 	A mod action is defined by a string using a particular syntax:
 		COLUMN.OPERATION(TEXT)
 			COLUMN    - The name of the column that this mod action should apply to. This portion (including the {}) is optional - if not given the mod will affect the first column in the table.
-			OPERATION - A string (that matches one of the MODOP_* constants below) what we want to do (see "Operations" section).
+			OPERATION - A string (that matches one of the TableListMod.Operation_* constants below) what we want to do (see "Operations" section).
 			TEXT      - The text that is used by the operation (see "Operations" section).
 		Example:
 			{PATH}b:C:\users\
@@ -45,15 +45,16 @@
 						AAAz
 */
 
-global MODOP_REPLACE   := "replaceWith"
-global MODOP_ADD_START := "addToStart"
-global MODOP_ADD_END   := "addToEnd"
-
 class TableListMod {
 	
 	; ==============================
 	; == Public ====================
 	; ==============================
+
+	; Operation identifiers
+	static Operation_Replace    := "replaceWith"
+	static Operation_AddToStart := "addToStart"
+	static Operation_AddToEnd   := "addToEnd"
 	
 	;---------
 	; DESCRIPTION:    Create a new TableListMod instance.
@@ -83,11 +84,11 @@ class TableListMod {
 	executeMod(ByRef row) {
 		columnValue := row[this.column]
 		
-		if(this.operation = MODOP_REPLACE)
+		if(this.operation = TableListMod.Operation_Replace)
 			newValue := this.text
-		else if(this.operation = MODOP_ADD_START)
+		else if(this.operation = TableListMod.Operation_AddToStart)
 			newValue := this.text columnValue
-		else if(this.operation = MODOP_ADD_END)
+		else if(this.operation = TableListMod.Operation_AddToEnd)
 			newValue := columnValue this.text
 		
 		; DEBUG.popup("Row", row, "Column value to modify", columnValue, "Operation", this.operation, "Text", this.text, "Result", newValue, "Mod",this)

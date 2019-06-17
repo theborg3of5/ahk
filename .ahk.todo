@@ -5,13 +5,7 @@
 		Is that going to get weird with SelectorGui+FlexTable interactions?
 	Add catch and error toast for launching a program that doesn't exist (Launchy in VDIs, for example)
 	Consider moving class-specific constants into their respective classes
-		Duration
-		Hyperlinker
-		ListConverter
 		MainConfig
-		TableList
-		TableListMod
-		WindowInfo
 	Figure out what's going wrong with copy-do-page hotkey on home desktop
 	
 # Large

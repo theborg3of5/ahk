@@ -236,7 +236,7 @@ class VisualWindow {
 	calculateWindowOffsets() {
 		windowOffsets := []
 		
-		if(MainConfig.findWindowInfo(this.titleString).edgeType = WINDOW_EDGE_STYLE_NoPadding) { ; Specific window has no padding
+		if(MainConfig.findWindowInfo(this.titleString).edgeType = WindowInfo.EdgeStyle_NoPadding) { ; Specific window has no padding
 			offsetWidth  := 0
 			offsetHeight := 0
 		} else { ; Calculate the default padding based on the window's style

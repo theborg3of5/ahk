@@ -3,18 +3,16 @@
 	***
 */
 
-global LISTFORMAT_Ambiguous     := "AMBIGUOUS"
-global LISTFORMAT_UnknownSingle := "UNKNOWN_SINGLE"
-
-global LISTFORMAT_Array    := "ARRAY"
-global LISTFORMAT_Commas   := "COMMA"
-global LISTFORMAT_NewLines := "NEWLINE"
-
 class ListConverter {
 	
 	; ==============================
 	; == Public ====================
 	; ==============================
+
+	; Formats for reading/writing lists.
+	static Format_Array    := "ARRAY"
+	static Format_Commas   := "COMMA"
+	static Format_NewLines := "NEWLINE"
 	
 	convertList(listObject, toFormat := "", fromFormat := "") {
 		; Initialize the format delimiter array if this is the first time we're using the class.
@@ -44,23 +42,27 @@ class ListConverter {
 	
 	formatDelimsAry := []
 	
+	; Special, internal-only list formats
+	static Format_Ambiguous     := "AMBIGUOUS"      ; Can't tell what the format is, so we'll have to ask the user.
+	static Format_UnknownSingle := "UNKNOWN_SINGLE" ; We don't know what the format is, but it looks like a single item only.
+	
 	getFormatDelimsAry() {
 		ary := []
 		
-		ary[LISTFORMAT_Commas]   := ","
-		ary[LISTFORMAT_NewLines] := "`r`n"
+		ary[ListConverter.Format_Commas]   := ","
+		ary[ListConverter.Format_NewLines] := "`r`n"
 		
 		return ary
 	}
 	
 	determineListFormat(listObject) {
 		if(isObject(listObject)) ; An object is assumed to be a simple array (same format as we use to store the list internally).
-			listFormat := LISTFORMAT_Array
+			listFormat := ListConverter.Format_Array
 		else ; Otherwise, treat it as a string and decide based on the delimiter.
 			listFormat := ListConverter.determineStringListFormat(listObject)
 		
 		; If we can't tell, ask the user.
-		if(listFormat = LISTFORMAT_Ambiguous) {
+		if(listFormat = ListConverter.Format_Ambiguous) {
 			s := new Selector("listFormats.tls")
 			listFormat := s.selectGui("FORMAT", "Enter INPUT format for list")
 		}
@@ -79,9 +81,9 @@ class ListConverter {
 		}
 		
 		if(numDelimitersFound > 1) ; If we found more than one delimiter, we can't tell which is the right one to split the list up by.
-			return LISTFORMAT_Ambiguous
+			return ListConverter.Format_Ambiguous
 		if(numDelimitersFound = 0) ; If we didn't find any delimiters, it could be any of them, but just a single value - so we know what to do with it.
-			return LISTFORMAT_UnknownSingle
+			return ListConverter.Format_UnknownSingle
 		
 		return listFormat
 	}
@@ -90,13 +92,13 @@ class ListConverter {
 		if(!listFormat)
 			return ""
 		
-		if(listFormat = LISTFORMAT_Array)
+		if(listFormat = ListConverter.Format_Array)
 			listAry := listObject
-		else if(listFormat = LISTFORMAT_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
+		else if(listFormat = ListConverter.Format_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
 			listAry := [listObject]
-		else if(listFormat = LISTFORMAT_Commas)
+		else if(listFormat = ListConverter.Format_Commas)
 			listAry := StrSplit(listObject, ",", " `t") ; Drop spaces and tabs from beginning/end of list elements
-		else if(listFormat = LISTFORMAT_NewLines)
+		else if(listFormat = ListConverter.Format_NewLines)
 			listAry := StrSplit(listObject, "`r`n", " `t") ; Drop spaces and tabs from beginning/end of list elements
 		
 		listAry := arrayDropEmptyValues(listAry) ; Drop empty values from the array.
@@ -107,11 +109,11 @@ class ListConverter {
 		if(!listAry || !listFormat)
 			return ""
 		
-		if(listFormat = LISTFORMAT_Array)
+		if(listFormat = ListConverter.Format_Array)
 			return listAry
-		if(listFormat = LISTFORMAT_Commas)
+		if(listFormat = ListConverter.Format_Commas)
 			return arrayJoin(listAry, ",")
-		if(listFormat = LISTFORMAT_NewLines)
+		if(listFormat = ListConverter.Format_NewLines)
 			return arrayJoin(listAry, "`n")
 	}
 }

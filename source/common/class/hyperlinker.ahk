@@ -1,15 +1,16 @@
 /* Class for adding a hyperlink to the currently-selected text.
 */
 
-global LinkPathMethod_PopupField   := "POPUP_FIELD"
-global LinkPathMethod_WebField     := "WEB_FIELD"
-global LinkPathMethod_TaggedString := "TAGGED_STRING"
-
 class Hyperlinker {
 	
 	; ==============================
 	; == Public ====================
 	; ==============================
+
+	; Methods for setting link information for the selected text.
+	static Method_PopupField   := "POPUP_FIELD"
+	static Method_WebField     := "WEB_FIELD"
+	static Method_TaggedString := "TAGGED_STRING"
 	
 	;---------
 	; DESCRIPTION:    Link the selected text with the given URL/path.
@@ -55,15 +56,15 @@ class Hyperlinker {
 	;                                                           matches NAME column in windows.tl (also
 	;                                                           the <name> top-level subscript)
 	;                               ["SET_PATH_METHOD"]       = Method that should be used to add the link,
-	;                                                           from the LinkPathMethod_* constants at the
+	;                                                           from the Hyperlinker.Method_* constants at the
 	;                                                           top of this file.
-	;                               ["LINK_POPUP"]            = If the method is LinkPathMethod_PopupField,
+	;                               ["LINK_POPUP"]            = If the method is Hyperlinker.Method_PopupField,
 	;                                                           this is the title string for the linking
 	;                                                           popup where we'll enter the path.
-	;                               ["PATH_FIELD_CONTROL_ID"] = If the method is LinkPathMethod_PopupField,
+	;                               ["PATH_FIELD_CONTROL_ID"] = If the method is Hyperlinker.Method_PopupField,
 	;                                                           this is the control ID for the field where
 	;                                                           the path goes.
-	;                               ["TAGGED_STRING_BASE"]    = If the method is LinkPathMethod_TaggedString,
+	;                               ["TAGGED_STRING_BASE"]    = If the method is Hyperlinker.Method_TaggedString,
 	;                                                           this is the "base" string that describes the
 	;                                                           format of the final linked string (that
 	;                                                           includes both the selected text and the path).
@@ -84,15 +85,15 @@ class Hyperlinker {
 	;                                                   matches NAME column in windows.tl (also the
 	;                                                   <name> top-level subscript)
 	;                       ["SET_PATH_METHOD"]       = Method that should be used to add the link,
-	;                                                   from the LinkPathMethod_* constants at the
+	;                                                   from the Hyperlinker.Method_* constants at the
 	;                                                   top of this file.
-	;                       ["LINK_POPUP"]            = If the method is LinkPathMethod_PopupField,
+	;                       ["LINK_POPUP"]            = If the method is Hyperlinker.Method_PopupField,
 	;                                                   this is the title string for the linking
 	;                                                   popup where we'll enter the path.
-	;                       ["PATH_FIELD_CONTROL_ID"] = If the method is LinkPathMethod_PopupField,
+	;                       ["PATH_FIELD_CONTROL_ID"] = If the method is Hyperlinker.Method_PopupField,
 	;                                                   this is the control ID for the field where
 	;                                                   the path goes.
-	;                       ["TAGGED_STRING_BASE"]    = If the method is LinkPathMethod_TaggedString,
+	;                       ["TAGGED_STRING_BASE"]    = If the method is Hyperlinker.Method_TaggedString,
 	;                                                   this is the "base" string that describes the
 	;                                                   format of the final linked string (that
 	;                                                   includes both the selected text and the path).
@@ -120,11 +121,11 @@ class Hyperlinker {
 		
 		; Handle linking differently depending on the specified method.
 		setPathMethod := windowLinkInfoAry["SET_PATH_METHOD"]
-		if(setPathMethod = LinkPathMethod_PopupField)
+		if(setPathMethod = Hyperlinker.Method_PopupField)
 			return Hyperlinker.linkPopupField(path, windowLinkInfoAry["LINK_POPUP"], windowLinkInfoAry["PATH_FIELD_CONTROL_ID"])
-		if(setPathMethod = LinkPathMethod_WebField)
+		if(setPathMethod = Hyperlinker.Method_WebField)
 			return Hyperlinker.linkWebField(path)
-		if(setPathMethod = LinkPathMethod_TaggedString)
+		if(setPathMethod = Hyperlinker.Method_TaggedString)
 			return Hyperlinker.linkTaggedString(path, windowLinkInfoAry["TAGGED_STRING_BASE"])
 		
 		errorMessage := "Unsupported set path method: " setPathMethod

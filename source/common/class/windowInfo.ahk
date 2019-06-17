@@ -1,13 +1,14 @@
 ; Data class to hold identifying information about a specific window.
 
-global WINDOW_EDGE_STYLE_HasPadding := "HAS_PADDING"
-global WINDOW_EDGE_STYLE_NoPadding  := "NO_PADDING"
-
 class WindowInfo {
 	
 	; ==============================
 	; == Public ====================
 	; ==============================
+	
+	; Constants for the type of edge a window has (see VisualWindow class for what this means/how it's used).
+	static EdgeStyle_HasPadding := "HAS_PADDING" ; The window has the standard padding around the edges.
+	static EdgeStyle_NoPadding  := "NO_PADDING"  ; The window has no padding around the edges.
 	
 	;---------
 	; DESCRIPTION:    Creates a new instance of WindowInfo.
@@ -20,7 +21,7 @@ class WindowInfo {
 	;                      There are also a couple of special overrides available in the array:
 	;                         windowAry["EDGE_TYPE"]
 	;                                      - The type of edges the window has (from
-	;                                        WINDOW_EDGE_STYLE_* constants), which determines
+	;                                        WindowInfo.EdgeStyle_* constants), which determines
 	;                                        whether the window is the size that it appears or if it
 	;                                        has invisible padding around it that needs to be taken
 	;                                        into account when resizing, etc.
@@ -53,7 +54,7 @@ class WindowInfo {
 		if(windowAry["EDGE_TYPE"] != "")
 			this.windowEdgeType := windowAry["EDGE_TYPE"]
 		else
-			this.windowEdgeType := WINDOW_EDGE_STYLE_HasPadding
+			this.windowEdgeType := WindowInfo.EdgeStyle_HasPadding
 		
 		this.windowPriority := windowAry["PRIORITY"]
 	}
@@ -95,7 +96,7 @@ class WindowInfo {
 	}
 	
 	;---------
-	; DESCRIPTION:    Edge type of the window (from WINDOW_EDGE_STYLE_* constants)
+	; DESCRIPTION:    Edge type of the window (from WindowInfo.EdgeStyle_* constants)
 	;---------
 	edgeType[] {
 		get {

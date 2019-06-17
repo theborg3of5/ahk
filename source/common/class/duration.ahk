@@ -9,18 +9,15 @@
 	You may add/subtract time using the same units with .addTime() and .subTime(), and can get the breakdown of time into hour/minute/second units with the corresponding properties.
 */
 
-; Supported characters:
-	;   h - hour
-	;   m - minute
-	;   s - second
-global DURATIONCHAR_Hour   := "h"
-global DURATIONCHAR_Minute := "m"
-global DURATIONCHAR_Second := "s"
-
 class Duration {
 	; ==============================
 	; == Public ====================
 	; ==============================
+	
+	; Supported characters:
+	static Char_Hour   := "h" ; Hours
+	static Char_Minute := "m" ; Minutes
+	static Char_Second := "s" ; Seconds
 	
 	
 	__New(durationString := "") {
@@ -128,15 +125,15 @@ class Duration {
 	buildUnitArrays() {
 		; Supported units, ordered from largest to smallest.
 		Duration.supportedUnitsAry := []
-		Duration.supportedUnitsAry.push(DURATIONCHAR_Hour)
-		Duration.supportedUnitsAry.push(DURATIONCHAR_Minute)
-		Duration.supportedUnitsAry.push(DURATIONCHAR_Second)
+		Duration.supportedUnitsAry.push(Duration.Char_Hour)
+		Duration.supportedUnitsAry.push(Duration.Char_Minute)
+		Duration.supportedUnitsAry.push(Duration.Char_Second)
 		
 		; Multiplers to turn each unit into seconds.
 		Duration.unitMultiplierAry := []
-		Duration.unitMultiplierAry[DURATIONCHAR_Hour]   := 60 * 60
-		Duration.unitMultiplierAry[DURATIONCHAR_Minute] := 60
-		Duration.unitMultiplierAry[DURATIONCHAR_Second] := 1
+		Duration.unitMultiplierAry[Duration.Char_Hour]   := 60 * 60
+		Duration.unitMultiplierAry[Duration.Char_Minute] := 60
+		Duration.unitMultiplierAry[Duration.Char_Second] := 1
 	}
 	
 	
@@ -160,11 +157,11 @@ class Duration {
 			quantity := remainingSeconds // multiplier
 			remainingSeconds -= quantity * multiplier
 			
-			if(unit = DURATIONCHAR_Hour)
+			if(unit = Duration.Char_Hour)
 				hours := quantity
-			if(unit = DURATIONCHAR_Minute)
+			if(unit = Duration.Char_Minute)
 				minutes := quantity
-			if(unit = DURATIONCHAR_Second)
+			if(unit = Duration.Char_Second)
 				seconds := quantity
 		}
 		

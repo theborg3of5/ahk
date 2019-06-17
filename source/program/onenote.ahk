@@ -415,11 +415,11 @@
 		startDateTime += daysInFuture, Days
 		
 		; Do pages at work are always daily
-		if(MainConfig.isMachine("EPIC_LAPTOP"))
+		if(MainConfig.isMachine(MACHINE_EpicLaptop))
 			return FormatTime(startDateTime, "M/d`, dddd")
 		
 		; Otherwise, it varies by day of the week
-		if(MainConfig.isMachine("HOME_DESKTOP")) {
+		if(MainConfig.isMachine(MACHINE_HomeDesktop) || MainConfig.isMachine(MACHINE_HomeAsus)) {
 			dayOfWeek := FormatTime(startDateTime, "Wday") ; Day of the week, 1 (Sunday) to 7 (Saturday)
 			
 			; Weekend pages at home are daily

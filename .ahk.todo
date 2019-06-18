@@ -2,13 +2,10 @@
 	
 # Small
 	Selector: dynamically resize abbreviation column based on widest value?
+		To allow longer abbreviations
 		Is that going to get weird with SelectorGui+FlexTable interactions?
-	Add catch and error toast for launching a program that doesn't exist (Launchy in VDIs, for example)
 	Figure out what's going wrong with copy-do-page hotkey on home desktop
 	Consider adding a parameter for additional arguments to MainConfig.runProgram()
-		Might let us get rid of ARGS column entirely, only remaining ones would be:
-			EMC2 - programs.ahk hotkey
-			Explorer - programs.ahk hotkey
 		Could use it instead of getting the path in these places:
 			launch.selectThunder()
 			file.searchWithGrepWin()

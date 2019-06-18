@@ -13,14 +13,11 @@ class ProgramInfo {
    ;                          programAry["NAME"] - Name of the program. Should match a single row
    ;                                               in windows.tl for identification purposes.
    ;                                    ["PATH"] - The full filepath to launch the program.
-   ;                                    ["ARGS"] - Any arguments that should be included when you
-   ;                                               launch the program.
    ; RETURNS:        Reference to a new ProgramInfo object
    ;---------
    __New(programAry) {
       this.programName := programAry["NAME"]
       this.programPath := programAry["PATH"]
-      this.programArgs := programAry["ARGS"]
 		
 		; Replace any path tags
 		this.programPath := MainConfig.replacePathTags(this.programPath)
@@ -42,14 +39,6 @@ class ProgramInfo {
          return this.programPath
       }
    }
-	;---------
-	; DESCRIPTION:    Any arguments that should be included when you launch the program
-	;---------
-   args[] {
-      get {
-         return this.programArgs
-      }
-   }
    
    
    ; ==============================
@@ -57,13 +46,11 @@ class ProgramInfo {
    ; ==============================
    programName    := ""
    programPath    := ""
-   programArgs    := ""
    
    ; Debug info (used by the Debug class)
    debugName := "ProgramInfo"
    debugToString(debugBuilder) {
       debugBuilder.addLine("Name"   , this.name)
       debugBuilder.addLine("Path"   , this.path)
-      debugBuilder.addLine("Args"   , this.args)
    }
 }

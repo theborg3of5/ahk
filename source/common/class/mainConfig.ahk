@@ -118,7 +118,7 @@ class MainConfig {
 		player := this.settings["MEDIA_PLAYER"]
 		if(player) {
 			; Always use runProgram based on the programs at play, but only show the "not yet running" toast if it really doesn't exist.
-			if(!MainConfig.doesWindowExist(player))
+			if(!this.doesWindowExist(player))
 				Toast.showMedium(player " not yet running, launching...")
 			this.runProgram(player)
 		}
@@ -192,21 +192,24 @@ class MainConfig {
 			return this.programs[name].clone()
 		}
 	}
-	activateProgram(name) {
+	activateProgram(name, runArgs := "") { ; runArgs are only used if the program's window doesn't already exist (and we're therefore running it).
 		waitForHotkeyRelease()
 		
-		if(this.doesWindowExist(name)) { ; If the program is already running, go ahead and activate it.
+		if(this.doesWindowExist(name)) ; If the program is already running, go ahead and activate it.
 			WindowActions.activateWindowByName(name)
-		} else { ; If it doesn't exist yet, we need to run the executable to make it happen.
-			progInfo := this.programInfo[name]
-			runAsUser(progInfo.path, progInfo.args)
-		}
+		else ; If it doesn't exist yet, we need to run the executable to make it happen.
+			this.runProgram(name, runArgs)
 	}
-	runProgram(name) {
+	runProgram(name, args := "") {
 		waitForHotkeyRelease()
 		
-		progInfo := this.programInfo[name]
-		runAsUser(progInfo.path, progInfo.args)
+		path := this.programInfo[name].path
+		if(!FileExist(path)) {
+			Toast.showError("Could not run program: " name, "Path does not exist: " path)
+			return
+		}
+		
+		runAsUser(path, args)
 	}
 	
 	windowIsGame(titleString := "A") {
@@ -260,7 +263,7 @@ class MainConfig {
 	
 	loadWindows(filePath) {
 		tl := new TableList(filePath)
-		windowsTable := tl.getFilteredTable("MACHINE", MainConfig.settings["MACHINE"])
+		windowsTable := tl.getFilteredTable("MACHINE", this.settings["MACHINE"])
 		
 		windowsAry := []
 		For _,row in windowsTable {
@@ -275,7 +278,7 @@ class MainConfig {
 	
 	loadPaths(filePath) {
 		tl := new TableList(filePath)
-		pathsTable := tl.getFilteredTableUnique("NAME", "MACHINE", MainConfig.settings["MACHINE"])
+		pathsTable := tl.getFilteredTableUnique("NAME", "MACHINE", this.settings["MACHINE"])
 		
 		; Index paths by key.
 		pathsAry := reduceTableToColumn(pathsTable, "PATH", "KEY")

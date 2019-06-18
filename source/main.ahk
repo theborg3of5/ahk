@@ -77,11 +77,11 @@ runStandaloneScripts() {
 	standaloneFolder := A_ScriptDir "\standalone\"
 	Run(standaloneFolder "vimBindings\vimBindings.ahk")
 	Run(standaloneFolder "windowMoverSizer\windowMoverSizer.ahk")
-	if(MainConfig.isMachine(MACHINE_EpicLaptop)) { ; Not needed except on Epic machine.
+	if(MainConfig.machineIsEpicLaptop) { ; Not needed except on Epic machine.
 		Run(standaloneFolder "killUAC\killUAC.ahk")
 		Run(standaloneFolder "dlgNumTracker\dlgNumTracker.ahk")
 		Run(standaloneFolder "tortoiseFillerDLG\tortoiseFillerDLG.ahk")
-	} else if(MainConfig.isMachine(MACHINE_HomeDesktop)) {
+	} else if(MainConfig.machineIsHomeDesktop) {
 		; Run(standaloneFolder "psxEmulatorController\psxEmulatorController.ahk")
 	}
 }

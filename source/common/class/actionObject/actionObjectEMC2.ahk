@@ -113,7 +113,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		if(this.id != "" && this.ini != "")
 			return
 		
-		s := new Selector("actionObject.tls", MainConfig.machineTLFilter)
+		s := new Selector("actionObject.tls", MainConfig.machineSelectorFilter)
 		data := s.selectGui("", "", {"SUBTYPE": this.ini, "VALUE": this.id})
 		if(!data)
 			return

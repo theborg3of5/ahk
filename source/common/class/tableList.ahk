@@ -11,7 +11,7 @@
 			Downloads	DOWNLOADS	C:\Users\user\Downloads
 			VB6 Compile	VB6_COMPILE	C:\Users\user\Dev\Temp\Compile	EPIC_LAPTOP
 			Music	MUSIC	C:\Users\user\Music	HOME_DESKTOP
-			Music	MUSIC	C:\Users\user\Music	HOME_ASUS
+			Music	MUSIC	C:\Users\user\Music	HOME_LAPTOP
 			Music	MUSIC	D:\Music	EPIC_LAPTOP
 		
 		There's a few non-desirable things here:
@@ -38,7 +38,7 @@
 			Downloads      DOWNLOADS      C:\Users\user\Downloads
 			VB6 Compile    VB6_COMPILE    C:\Users\user\Dev\Temp\Compile   EPIC_LAPTOP
 			Music          MUSIC          C:\Users\user\Music              HOME_DESKTOP
-			Music          MUSIC          C:\Users\user\Music              HOME_ASUS
+			Music          MUSIC          C:\Users\user\Music              HOME_LAPTOP
 			Music          MUSIC          D:\Music                         EPIC_LAPTOP
 		
 		We can also use comments, and add a header row (which this class will use as indices in the 2D array you get back):
@@ -54,7 +54,7 @@
 			
 			; Music variations per machine
 			   Music          MUSIC          C:\Users\user\Music              HOME_DESKTOP
-			   Music          MUSIC          C:\Users\user\Music              HOME_ASUS
+			   Music          MUSIC          C:\Users\user\Music              HOME_LAPTOP
 			   Music          MUSIC          D:\Music                         EPIC_LAPTOP
 		
 		We can also use the Mods feature (see "Mods" section below) to de-duplicate some info:
@@ -75,7 +75,7 @@
 			; Music variations per machine
 			[{PATH}e:\Music]
 			   Music          MUSIC          C:\Users\user     HOME_DESKTOP
-			   Music          MUSIC          C:\Users\user     HOME_ASUS
+			   Music          MUSIC          C:\Users\user     HOME_LAPTOP
 			   Music          MUSIC          D:                EPIC_LAPTOP
 			[]
 		
@@ -239,7 +239,7 @@
 			; Music variations per machine
 			[{PATH}e:\Music]
 			   Music          MUSIC          C:\Users\user     HOME_DESKTOP
-			   Music          MUSIC          C:\Users\user     HOME_ASUS
+			   Music          MUSIC          C:\Users\user     HOME_LAPTOP
 			   Music          MUSIC          D:                EPIC_LAPTOP
 			[]
 		
@@ -270,7 +270,7 @@
 			     [6, "NAME"]    = Music
 			         "ABBREV"]  = MUSIC
 			         "PATH"]    = C:\Users\user\Music
-			         "MACHINE"] = HOME_ASUS
+			         "MACHINE"] = HOME_LAPTOP
 			     [7, "NAME"]    = Music
 			         "ABBREV"]  = MUSIC
 			         "PATH"]    = D:\Music

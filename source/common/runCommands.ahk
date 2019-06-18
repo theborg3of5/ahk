@@ -16,21 +16,6 @@ editScript(script) {
 	Run(MainConfig.programInfo["Notepad++"].path " " script)
 }
 
-; Reloads an AHK script.
-reloadScript(script, prompt) {
-	MsgBox, 4, , Reload now?
-	IfMsgBox No
-		return
-	
-	if(script = MAIN_CENTRAL_SCRIPT) {
-		scriptToRun := MainConfig.path["AHK_SOURCE"] "\main.ahk"
-		folder := MainConfig.path["AHK_SOURCE"] "\"
-		Run(scriptToRun " /restart", folder)
-	} else {
-		Reload
-	}
-}
-
 ; Runs something and returns the result from standard out.
 RunReturn(command) {
 	fullCommand := comspec . " /c """ . command . """"

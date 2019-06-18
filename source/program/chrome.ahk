@@ -22,7 +22,7 @@
 			title := WinGetActiveTitle()
 			title := removeStringFromEnd(title, " - Google Chrome")
 			
-			if(MainConfig.isMachine(MACHINE_EpicLaptop)) {
+			if(MainConfig.machineIsEpicLaptop) {
 				; Special handling for CodeSearch - just get the routine name, plus the current selection as the tag.
 				if(stringEndsWith(title, " - CodeSearch")) {
 					routine := getStringBeforeStr(title, "/")
@@ -64,7 +64,7 @@
 	return
 #IfWinActive
 	
-#If MainConfig.isWindowActive("Chrome") && MainConfig.isMachine(MACHINE_EpicLaptop)
+#If MainConfig.isWindowActive("Chrome") && MainConfig.machineIsEpicLaptop
 	^+o::
 		openEpicStudioRoutineFromCodesearch() {
 			tag := cleanupText(getFirstLineOfSelectedText())

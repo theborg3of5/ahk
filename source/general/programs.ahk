@@ -16,7 +16,7 @@
 ^!#z::MainConfig.activateProgram("FileZilla")
 ^!#/::MainConfig.activateProgram("AutoHotkey WinSpy")
 
-#If MainConfig.isMachine(MACHINE_EpicLaptop)
+#If MainConfig.machineIsEpicLaptop
 	^+!e::MainConfig.activateProgram("EMC2")
 	^+!s::MainConfig.activateProgram("EpicStudio")
 	^+!u::MainConfig.activateProgram("Thunder")

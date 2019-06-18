@@ -94,7 +94,7 @@ sendFolderPath(folderName := "", subPath := "", slashChar := "\", trailingSlash 
 }
 
 selectFolder(folderName := "") {
-	s := new Selector("folders.tls", MainConfig.machineTLFilter)
+	s := new Selector("folders.tls", MainConfig.machineSelectorFilter)
 	path := s.select(folderName, "PATH")
 	
 	; DEBUG.popup("Path",path, "Replaced",MainConfig.replacePathTags(path))

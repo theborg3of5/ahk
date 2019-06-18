@@ -41,7 +41,7 @@
 	selectSearch() {
 		text := cleanupText(getFirstLineOfSelectedText())
 		
-		s := new Selector("search.tls", MainConfig.machineTLFilter)
+		s := new Selector("search.tls", MainConfig.machineSelectorFilter)
 		data := s.selectGui("", "", {"SEARCH_TERM":text})
 		if(!data)
 			return
@@ -84,7 +84,7 @@
 	}
 
 ; Epic-specific actions
-#If MainConfig.isMachine(MACHINE_EpicLaptop)
+#If MainConfig.machineIsEpicLaptop
 	^+!t::
 		selectOutlookTLG() {
 			s := new Selector("outlookTLG.tls")

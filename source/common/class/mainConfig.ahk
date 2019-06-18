@@ -1,20 +1,20 @@
-; Constants for machines.
-global MACHINE_EpicLaptop  := "EPIC_LAPTOP"
-global MACHINE_HomeAsus    := "HOME_ASUS"
-global MACHINE_HomeDesktop := "HOME_DESKTOP"
+/* Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
+*/
 
-; Constants for what the menu key should do.
-global MENUKEYACTION_MiddleClick := "MIDDLE_CLICK"
-global MENUKEYACTION_WindowsKey  := "WINDOWS_KEY"
-
-global MAIN_CENTRAL_SCRIPT := "MAIN_CENTRAL_SCRIPT"
-
-; Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
 class MainConfig {
 	
 	; ==============================
 	; == Public ====================
 	; ==============================
+	
+	; Constants for specific machines (matched to settings.ini).
+	static Machine_EpicLaptop  := "EPIC_LAPTOP"
+	static Machine_HomeLaptop  := "HOME_LAPTOP"
+	static Machine_HomeDesktop := "HOME_DESKTOP"
+
+	; Constants for what the menu key should do (matched to settings.ini).
+	static MenuKeyAction_MiddleClick := "MIDDLE_CLICK"
+	static MenuKeyAction_WindowsKey  := "WINDOWS_KEY"
 	
 	init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile) {
 		; All config files are expected to live in config/ folder under the root of this repo.
@@ -58,9 +58,14 @@ class MainConfig {
 		return replaceTags(inputString, this.privates)
 	}
 	
-	menuKeyAction[] {
+	menuKeyIsMiddleClick[] {
 		get {
-			return this.settings["MENU_KEY_ACTION"]
+			return (this.settings["MENU_KEY_ACTION"] = MainConfig.MenuKeyAction_MiddleClick)
+		}
+	}
+	menuKeyIsWindowsKey[] {
+		get {
+			return (this.settings["MENU_KEY_ACTION"] = MainConfig.MenuKeyAction_WindowsKey)
 		}
 	}
 	
@@ -69,10 +74,22 @@ class MainConfig {
 			return this.settings["MACHINE"]
 		}
 	}
-	isMachine(machineName) {
-		return (this.settings["MACHINE"] = machineName)
+	machineIsEpicLaptop[] {
+		get {
+			return (this.settings["MACHINE"] = MainConfig.Machine_EpicLaptop)
+		}
 	}
-	machineTLFilter[] {
+	machineIsHomeDesktop[] {
+		get {
+			return (this.settings["MACHINE"] = MainConfig.Machine_HomeDesktop)
+		}
+	}
+	machineIsHomeLaptop[] {
+		get {
+			return (this.settings["MACHINE"] = MainConfig.Machine_HomeLaptop)
+		}
+	}
+	machineSelectorFilter[] {
 		get {
 			filter := []
 			filter["COLUMN"] := "MACHINE"
@@ -233,8 +250,8 @@ class MainConfig {
 		this.settingsINIObject := new IniObject(filePath)
 		
 		settingsAry := []
-		settingsAry["MACHINE"]         := this.settingsINIObject.get("Main", "MACHINE")         ; Which machine this is, from MACHINE_* constants
-		settingsAry["MENU_KEY_ACTION"] := this.settingsINIObject.get("Main", "MENU_KEY_ACTION") ; What to do with the menu key, from MENUKEYACTION_* constants
+		settingsAry["MACHINE"]         := this.settingsINIObject.get("Main", "MACHINE")         ; Which machine this is, from MainConfig.Machine_* constants
+		settingsAry["MENU_KEY_ACTION"] := this.settingsINIObject.get("Main", "MENU_KEY_ACTION") ; What to do with the menu key, from MainConfig.MenuKeyAction_* constants
 		settingsAry["MEDIA_PLAYER"]    := this.settingsINIObject.get("Main", "MEDIA_PLAYER")    ; What program the media keys should deal with
 		
 		; DEBUG.popup("Settings", settingsAry)

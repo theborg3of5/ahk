@@ -1,17 +1,17 @@
 ; General input hotkeys.
 
 ; Menu key does different things on laptops without a mouse.
-#If MainConfig.menuKeyAction = MENUKEYACTION_MiddleClick
+#If MainConfig.menuKeyIsMiddleClick
 	AppsKey::MButton
-#If MainConfig.menuKeyAction = MENUKEYACTION_WindowsKey
+#If MainConfig.menuKeyIsWindowsKey
 	AppsKey::RWin
 #If
 
-#If MainConfig.isMachine(MACHINE_HomeDesktop)
+#If MainConfig.machineIsHomeDesktop
 	$Volume_Mute::DllCall("LockWorkStation")	; Lock workstation.
 #If
 
-#If MainConfig.isMachine(MACHINE_EpicLaptop)
+#If MainConfig.machineIsEpicLaptop
 	Browser_Back::LButton
 	Browser_Forward::RButton
 #If

@@ -4,7 +4,7 @@
 	AHK Config							AHK_CONFIG							<AHK_ROOT>\config
 	AHK Source							AHK_SOURCE							<AHK_ROOT>\source
 	Downloads							DOWNLOADS							<USER_ROOT>\Downloads
-	Music									MUSIC									<USER_ROOT>\Music									HOME_DESKTOP|HOME_ASUS
+	Music									MUSIC									<USER_ROOT>\Music									HOME_DESKTOP|HOME_LAPTOP
 	Music									MUSIC									D:\Music												EPIC_LAPTOP
 	User Dev								USER_DEV								<USER_ROOT>\Dev
 	

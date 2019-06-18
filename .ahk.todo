@@ -15,6 +15,7 @@
 				Building standard string - OneNote could pull out the INI/ID that way so it can link stuff
 			Helpdesk
 				epic.buildHelpdeskLink()
+		Reconsider combination of EpicStudio (routine and DLG) with CodeSearch - would those two be better off separate, where the edit/web action that doesn't make sense can still work?
 	Do something to encapsulate search selector - maybe its own class, or merge into ActionObject instad?
 	Look at cleaning up all of the record-splitting and EMC2-object-processing functions in epic.ahk
 		Can getObjectInfoFromEMC2 use extractEMC2ObjectInfoRaw (like selectSnapper does)?

@@ -48,7 +48,6 @@
 			Everything							Everything.exe				EVERYTHING
 			Excel									EXCEL.EXE					-							-													NO_PADDING
 			Explorer								explorer.exe				CabinetWClass
-			FileZilla							filezilla.exe
 			Firefox Portable					firefox.exe
 			Foobar								foobar2000.exe
 			GitHub								GitHubDesktop.exe			-							-													NO_PADDING

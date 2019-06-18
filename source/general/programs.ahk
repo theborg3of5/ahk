@@ -13,7 +13,6 @@
 ^+!y::MainConfig.activateProgram("YEd")
 ^!#f::MainConfig.runProgram("Firefox Portable")
 ^!#n::MainConfig.runProgram("Notepad")
-^!#z::MainConfig.activateProgram("FileZilla")
 ^!#/::MainConfig.activateProgram("AutoHotkey WinSpy")
 
 #If MainConfig.machineIsEpicLaptop

@@ -1,7 +1,7 @@
 (	NAME							PATH																					ARGS									MACHINE
 
 [PATH.addToStart(C:\Program Files (x86)\)]
-	Chrome						Google\Chrome\Application\chrome.exe										-force-dark-mode
+	Chrome						Google\Chrome\Application\chrome.exe
 	EMC2							Epic\v8.7\EMC2\Shared Files\EpicD87.exe									EMC2Update env=TRACKAPPTCP
 	EpicStudio					EpicStudio\EpicStudio.exe
 	Foobar						foobar2000\foobar2000.exe
@@ -22,7 +22,6 @@
 [PATH.addToStart(C:\Program Files\)]
 	AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk
 	Everything					Everything\Everything.exe
-	FileZilla					FileZilla FTP Client\filezilla.exe											--site="0/CowBox"
 	Notepad++					Notepad++\notepad++.exe
 	Process Explorer			Process Explorer\procexp.exe													-										EPIC_LAPTOP
 	Process Explorer			ProcessExplorer\procexp.exe

@@ -199,14 +199,14 @@ class MainConfig {
 			WindowActions.activateWindowByName(name)
 		} else { ; If it doesn't exist yet, we need to run the executable to make it happen.
 			progInfo := this.programInfo[name]
-			RunAsUser(progInfo.path, progInfo.args)
+			runAsUser(progInfo.path, progInfo.args)
 		}
 	}
 	runProgram(name) {
 		waitForHotkeyRelease()
 		
 		progInfo := this.programInfo[name]
-		RunAsUser(progInfo.path, progInfo.args)
+		runAsUser(progInfo.path, progInfo.args)
 	}
 	
 	windowIsGame(titleString := "A") {

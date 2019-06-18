@@ -5,6 +5,12 @@
 		Is that going to get weird with SelectorGui+FlexTable interactions?
 	Add catch and error toast for launching a program that doesn't exist (Launchy in VDIs, for example)
 	Figure out what's going wrong with copy-do-page hotkey on home desktop
+	Consider adding a parameter for additional arguments to MainConfig.runProgram()
+		Could use it instead of getting the path in these places:
+			launch.selectThunder()
+			file.searchWithGrepWin()
+			file.searchWithEverything()
+			outlook new message hotkey
 	
 # Large
 	ActionObject rework

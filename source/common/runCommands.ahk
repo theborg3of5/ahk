@@ -17,7 +17,7 @@ editScript(script) {
 }
 
 ; Runs something and returns the result from standard out.
-RunReturn(command) {
+runReturn(command) {
 	fullCommand := comspec . " /c """ . command . """"
 	shell := comobjcreate("wscript.shell")
 	exec := (shell.exec(fullCommand))
@@ -26,7 +26,7 @@ RunReturn(command) {
 }
 
 ; Runs a command with cmd.exe.
-RunCommand(commandToRun := "", workingDirectory := "", stayOpen := false) {
+runCommand(commandToRun := "", workingDirectory := "", stayOpen := false) {
 	runString := "C:\Windows\System32\cmd.exe "
 	
 	; Allow either an array or just a string.
@@ -53,8 +53,11 @@ RunCommand(commandToRun := "", workingDirectory := "", stayOpen := false) {
 }
 
 ; Run as a non-elevated user (since main script typically needs to run as admin).
-RunAsUser(application, args := "") {
-	ShellRun(application, args)
+runAsUser(path, args := "") {
+	if(FileExist(path))
+		ShellRun(path, args)
+	else
+		Toast.showError("Could not run path", path " does not exist")
 }
 
 /*

@@ -1,6 +1,6 @@
 ﻿; Disconnect hotkey (for computer that's being remoted into).
 $!Esc::
-	RunCommand("tsdiscon")
+	runCommand("tsdiscon")
 	SetNumLockState, AlwaysOn
 return
 

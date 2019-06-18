@@ -11,7 +11,6 @@
 		Potential additional uses/things to absorb
 			Code
 				Various build* functions in epic script - can we switch the other callers over to use ActionObjectCode instead?
-					buildServerCodeLink
 					buildEpicStudioDLGLink
 						emc2
 					buildEpicStudioRoutineLink

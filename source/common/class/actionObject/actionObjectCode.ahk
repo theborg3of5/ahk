@@ -52,7 +52,10 @@ class ActionObjectCode extends ActionObjectBase {
 	getLinkWeb() {
 		if(this.codeType = ActionObjectCode.CODETYPE_Routine) {
 			splitServerLocation(this.code, routine, tag)
-			return buildServerCodeLink(routine, tag)
+			url := MainConfig.private["CS_SERVER_CODE_BASE"]
+			url := replaceTag(url, "ROUTINE", routine)
+			url := replaceTag(url, "TAG",     tag)
+			return url
 		}
 		
 		if(this.codeType = ActionObjectCode.CODETYPE_DLG)

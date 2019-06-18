@@ -237,15 +237,6 @@
 		return replaceTag(MainConfig.private["VDI_BASE"], "VDI_ID", vdiId)
 	}
 
-	buildServerCodeLink(routine, tag := "") {
-		url := MainConfig.private["CS_SERVER_CODE_BASE"]
-		url := replaceTag(url, "ROUTINE", routine)
-		url := replaceTag(url, "TAG",     tag)
-		
-		; DEBUG.popup("epic","buildServerCodeLink", "Tag",tag, "Routine",routine, "URL",url)
-		return url
-	}
-
 	buildEpicStudioRoutineLink(routine, tag := "", environmentId := "", diffEnvironmentId := "") {
 		if(routine = "")
 			return ""

@@ -20,17 +20,17 @@ class ActionObjectCode extends ActionObjectBase {
 	; == Public ====================
 	; ==============================
 	
-	static CODETYPE_Routine := "ROUTINE" ; Server code location, including tag if applicable
-	static CODETYPE_DLG     := "DLG"     ; DLG, for opening in EpicStudio
+	static CodeType_Routine := "ROUTINE" ; Server code location, including tag if applicable
+	static CodeType_DLG     := "DLG"     ; DLG, for opening in EpicStudio
 	
-	codeType := "" ; Type of code object (from CODETYPE_* constants)
+	codeType := "" ; Type of code object (from CodeType_* constants)
 	code     := "" ; Reference to code object
 	
 	;---------
 	; DESCRIPTION:    Create a new reference to a server code object.
 	; PARAMETERS:
 	;  code     (I,REQ) - Value representing the code
-	;  codeType (I,OPT) - Type of code, from CODETYPE_* constants. If not given, we'll figure it out
+	;  codeType (I,OPT) - Type of code, from CodeType_* constants. If not given, we'll figure it out
 	;                     based on the code format or by prompting the user.
 	;---------
 	__New(code, codeType := "") {
@@ -46,11 +46,11 @@ class ActionObjectCode extends ActionObjectBase {
 	;---------
 	; DESCRIPTION:    Get a link to the web (CodeSearch) or edit (EpicStudio) version of the code
 	;                 location or DLG.
-	; RETURNS:        Link to CodeSearch for the code location.
+	; RETURNS:        Link to CodeSearch/EpicStudio for the code location.
 	; NOTES:          DLGs are only supported by .getLinkEdit()
 	;---------
 	getLinkWeb() {
-		if(this.codeType = ActionObjectCode.CODETYPE_Routine) {
+		if(this.codeType = ActionObjectCode.CodeType_Routine) {
 			splitServerLocation(this.code, routine, tag)
 			url := MainConfig.private["CS_SERVER_CODE_BASE"]
 			url := replaceTag(url, "ROUTINE", routine)
@@ -58,19 +58,29 @@ class ActionObjectCode extends ActionObjectBase {
 			return url
 		}
 		
-		if(this.codeType = ActionObjectCode.CODETYPE_DLG)
+		if(this.codeType = ActionObjectCode.CodeType_DLG)
 			return "" ; Not supported
 		
 		return ""
 	}
 	getLinkEdit() {
-		if(this.codeType = ActionObjectCode.CODETYPE_Routine) {
+		if(this.codeType = ActionObjectCode.CodeType_Routine) {
 			splitServerLocation(this.code, routine, tag)
-			return buildEpicStudioRoutineLink(routine, tag)
+			environmentId := MainConfig.private["DBC_DEV_ENV_ID"] ; Always use DBC Dev environment
+			
+			url := MainConfig.private["EPICSTUDIO_URL_BASE_ROUTINE"]
+			url := replaceTag(url, "ROUTINE",     routine)
+			url := replaceTag(url, "TAG",         tag)
+			url := replaceTag(url, "ENVIRONMENT", environmentId)
+			
+			return url
 		}
 		
-		if(this.codeType = ActionObjectCode.CODETYPE_DLG)
-			return buildEpicStudioDLGLink(this.code)
+		if(this.codeType = ActionObjectCode.CodeType_DLG) {
+			url := MainConfig.private["EPICSTUDIO_URL_BASE_DLG"]
+			url := replaceTag(url, "DLG_ID", this.code)
+			return url
+		}
 		
 		return ""
 	}
@@ -82,16 +92,16 @@ class ActionObjectCode extends ActionObjectBase {
 	
 	;---------
 	; DESCRIPTION:    Try to figure out what kind of code object we've been given based on its format.
-	; RETURNS:        Code type from CODETYPE_* constants
+	; RETURNS:        Code type from CodeType_* constants
 	;---------
 	determineCodeType() {
 		; Full server tag^routine
 		if(stringContains(this.code, "^"))
-			return ActionObjectCode.CODETYPE_Routine
+			return ActionObjectCode.CodeType_Routine
 		
 		; DLG IDs are (usually) entirely numeric, where routines are not.
 		if(isNum(this.code))
-			return ActionObjectCode.CODETYPE_DLG
+			return ActionObjectCode.CodeType_DLG
 		
 		return ""
 	}

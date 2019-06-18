@@ -9,7 +9,7 @@
 		MsgBox, ao.getLinkWeb()  ; Returns path (equivalent to .getLinkEdit())
 		ao.openWeb()             ; Open path (equivalent to .openEdit())
 		
-		ao := new ActionObjectPath("google.com", ActionObjectPath.PATHTYPE_URL) ; Specify path type if known to avoid prompting
+		ao := new ActionObjectPath("google.com", ActionObjectPath.PathType_URL) ; Specify path type if known to avoid prompting
 		ao.openEdit() ; Run URL
 */
 
@@ -18,17 +18,17 @@ class ActionObjectPath extends ActionObjectBase {
 	; == Public ====================
 	; ==============================
 	
-	static PATHTYPE_FilePath := "FILEPATH" ; Local file path
-	static PATHTYPE_URL      := "URL"
+	static PathType_FilePath := "FILEPATH" ; Local file path
+	static PathType_URL      := "URL"
 	
 	path     := "" ; The path itself.
-	pathType := "" ; Type of path, from PATHTYPE_* constants.
+	pathType := "" ; Type of path, from PathType_* constants.
 	
 	;---------
 	; DESCRIPTION:    Create a new reference to a path.
 	; PARAMETERS:
 	;  path     (I,REQ) - The actual path
-	;  pathType (I,OPT) - Type of path, from PATHTYPE_* constants. If not given, we'll figure it out
+	;  pathType (I,OPT) - Type of path, from PathType_* constants. If not given, we'll figure it out
 	;                     based on the path format or by prompting the user.
 	;---------
 	__New(path, pathType := "") {
@@ -47,22 +47,22 @@ class ActionObjectPath extends ActionObjectBase {
 	; DESCRIPTION:    Determine the type of the given path.
 	; PARAMETERS:
 	;  path (I,REQ) - The path itself.
-	; RETURNS:        The type of path, from PATHTYPE_* constants.
+	; RETURNS:        The type of path, from PathType_* constants.
 	;---------
 	determinePathType(path) {
 		; Full URLs
 		if(stringMatchesAnyOf(path, ["http://", "https://", "ftp://"], CONTAINS_START))
-			return ActionObjectPath.PATHTYPE_URL
+			return ActionObjectPath.PathType_URL
 		
 		; Filepaths
 		if(stringMatchesAnyOf(path, ["file:///", "\\"], CONTAINS_START)) ; URL-formatted file path, Windows network path
-			return ActionObjectPath.PATHTYPE_FilePath
+			return ActionObjectPath.PathType_FilePath
 		if(subStr(path, 2, 2) = ":\")  ; Windows filepath (starts with drive letter + :\)
-			return ActionObjectPath.PATHTYPE_FilePath
+			return ActionObjectPath.PathType_FilePath
 		
 		; Partial URLs (www.google.com, similar)
 		if(stringMatchesAnyOf(path, ["www.", "vpn.", "m."], CONTAINS_START))
-			return ActionObjectPath.PATHTYPE_URL
+			return ActionObjectPath.PathType_URL
 		
 		; Unknown
 		return ""
@@ -79,7 +79,7 @@ class ActionObjectPath extends ActionObjectBase {
 	openEdit() {
 		if(!this.path)
 			return
-		if(this.pathType = ActionObjectPath.PATHTYPE_FilePath && !FileExist(this.path)) { ; Don't try to open a non-existent local path
+		if(this.pathType = ActionObjectPath.PathType_FilePath && !FileExist(this.path)) { ; Don't try to open a non-existent local path
 			DEBUG.popup("Local file or folder does not exist", this.path)
 			return
 		}

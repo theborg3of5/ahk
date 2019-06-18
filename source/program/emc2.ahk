@@ -62,12 +62,10 @@
 				if(ini != "DLG" || id = "")
 					return
 				
-				url := buildEpicStudioDLGLink(id)
-				if(url = "")
-					return
-				
 				Toast.showMedium("Opening DLG in EpicStudio: " id)
-				Run(url)
+				
+				ao := new ActionObjectCode(id, ActionObjectCode.CodeType_DLG)
+				ao.openEdit()
 			}
 	}
 	

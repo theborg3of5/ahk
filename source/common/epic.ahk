@@ -236,36 +236,6 @@
 	buildVDIRunString(vdiId) {
 		return replaceTag(MainConfig.private["VDI_BASE"], "VDI_ID", vdiId)
 	}
-
-	buildEpicStudioRoutineLink(routine, tag := "", environmentId := "", diffEnvironmentId := "") {
-		if(routine = "")
-			return ""
-		
-		if(environmentId = "")
-			environmentId := MainConfig.private["DBC_DEV_ENV_ID"] ; Default to DBC Dev if environment not given
-		
-		url := MainConfig.private["EPICSTUDIO_URL_BASE_ROUTINE"]
-		
-		url := replaceTag(url, "ROUTINE", routine)
-		url := replaceTag(url, "TAG", tag)
-		
-		environmentParam := environmentId
-		if(diffEnvironmentId != "")
-			environmentParam .= "|" diffEnvironmentId
-		url := replaceTag(url, "ENVIRONMENT", environmentParam)
-		
-		return url
-	}
-	
-	buildEpicStudioDLGLink(dlgId) {
-		if(dlgId = "")
-			return ""
-		
-		url := MainConfig.private["EPICSTUDIO_URL_BASE_DLG"]
-		url := replaceTag(url, "DLG_ID", dlgId)
-		
-		return url
-	}
 }
 
 ; Split "INI ID" string into INI and ID (assume it's just the ID if no space included).

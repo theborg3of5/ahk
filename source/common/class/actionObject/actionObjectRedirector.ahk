@@ -48,14 +48,14 @@ class ActionObjectRedirector {
 	; ==============================
 	
 	value   := "" ; Value (the unique bit of info to act upon, like a path or identifier)
-	type    := "" ; Determined type of ActionObject, from .TYPE_* constants
+	type    := "" ; Determined type of ActionObject, from .Type_* constants
 	subType := "" ; Determined sub-type, an additional categorization within a particular ActionObject* class.
 	
 	; Type constants
-	static TYPE_EMC2     := "EMC2"
-	static TYPE_Code     := "CODE" ; EpicStudio for edit, CodeSearch for web
-	static TYPE_Helpdesk := "HELPDESK"
-	static TYPE_Path     := "PATH"
+	static Type_EMC2     := "EMC2"
+	static Type_Code     := "CODE" ; EpicStudio for edit, CodeSearch for web
+	static Type_Helpdesk := "HELPDESK"
+	static Type_Path     := "PATH"
 	
 	;---------
 	; DESCRIPTION:    Try to determine the type of ActionObject that we'll need based on the input value.
@@ -78,7 +78,7 @@ class ActionObjectRedirector {
 		if(pathType = "")
 			return false
 		
-		this.type    := this.TYPE_Path
+		this.type    := this.Type_Path
 		this.subType := pathType
 		return true
 	}
@@ -104,7 +104,7 @@ class ActionObjectRedirector {
 		subType := data["SUBTYPE"]
 		
 		; Only EMC2 objects and helpdesk can be split and handled this way.
-		if((type != this.TYPE_EMC2) && (type != this.TYPE_Helpdesk))
+		if((type != this.Type_EMC2) && (type != this.Type_Helpdesk))
 			return false
 		
 		; We successfully identified the type, store off the pieces we know.
@@ -141,16 +141,16 @@ class ActionObjectRedirector {
 		if(this.type = "")
 			return "" ; No determined type, silent quit, return nothing
 		
-		if(this.type = this.TYPE_Code)
+		if(this.type = this.Type_Code)
 			return new ActionObjectCode(this.value, this.subType)
 		
-		if(this.type = this.TYPE_EMC2)
+		if(this.type = this.Type_EMC2)
 			return new ActionObjectEMC2(this.value, this.subType)
 		
-		if(this.type = this.TYPE_Helpdesk)
+		if(this.type = this.Type_Helpdesk)
 			return new ActionObjectHelpdesk(this.value)
 		
-		if(this.type = this.TYPE_Path)
+		if(this.type = this.Type_Path)
 			return new ActionObjectPath(this.value, this.subType)
 		
 		Toast.showError("Unrecognized type", "ActionObjectRedirector doesn't know what to do with this type: " this.type)

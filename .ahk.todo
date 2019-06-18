@@ -9,12 +9,6 @@
 # Large
 	ActionObject rework
 		Potential additional uses/things to absorb
-			Code
-				Various build* functions in epic script - can we switch the other callers over to use ActionObjectCode instead?
-					buildEpicStudioDLGLink
-						emc2
-					buildEpicStudioRoutineLink
-						chrome
 			EMC2
 				Make use of new class for parsing/cleaning EMC2 object info if we make it (another idea here)
 					getTrueEMC2INI if we become that class instead

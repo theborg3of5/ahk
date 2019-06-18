@@ -103,25 +103,17 @@ selectFolder(folderName := "") {
 
 ; textToSearch should not have its quotes escaped yet (especially not by doubling or tripling them)
 searchWithGrepWin(pathToSearch, textToSearch := "") {
-	runPath := MainConfig.programInfo["GrepWin"].path " /regex:no"
+	args := "/regex:no"
+	args .= " /searchpath:" DOUBLE_QUOTE MainConfig.replacePathTags(pathToSearch) " "    DOUBLE_QUOTE ; Extra space after path, otherwise trailing backslash escapes ending double quote
+	args .= " /searchfor:"  DOUBLE_QUOTE escapeCharUsingChar(textToSearch, DOUBLE_QUOTE) DOUBLE_QUOTE ; Escape any quotes in the search string
+	args .= " /execute" ; Run it immediately if we got what to search for
 	
-	convertedPath := MainConfig.replacePathTags(pathToSearch)
-	runPath .= " /searchpath:""" convertedPath " """ ; Extra space after path, otherwise trailing backslash escapes ending double quote
-	
-	if(textToSearch)
-		runPath .= " /searchfor:""" escapeCharUsingChar(textToSearch, DOUBLE_QUOTE) """ /execute" ; Run it immediately if we got what to search for
-	
-	; DEBUG.popup("Path to search",pathToSearch, "Converted path",convertedPath, "To search",textToSearch, "Run path",runPath)
-	Run(runPath)
+	; DEBUG.popup("Path to search",pathToSearch, "To search",textToSearch, "Args",args)
+	MainConfig.runProgram("GrepWin", args)
 }
 
 searchWithEverything(textToSearch) {
-	runPath := MainConfig.programInfo["Everything"].path
-	
-	if(textToSearch)
-		runPath .= " -search " textToSearch
-	
-	Run(runPath)
+	MainConfig.runProgram("Everything", "-search " textToSearch)
 }
 	
 findConfigFilePath(path) {

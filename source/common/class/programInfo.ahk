@@ -44,8 +44,8 @@ class ProgramInfo {
    ; ==============================
    ; == Private ===================
    ; ==============================
-   programName    := ""
-   programPath    := ""
+   programName := ""
+   programPath := ""
    
    ; Debug info (used by the Debug class)
    debugName := "ProgramInfo"

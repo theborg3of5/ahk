@@ -13,7 +13,7 @@ getScriptArgs(placeholderChar := "") {
 
 ; Opens the given script in Notepad++.
 editScript(script) {
-	Run(MainConfig.programInfo["Notepad++"].path " " script)
+	MainConfig.runProgram("Notepad++", script)
 }
 
 ; Runs something and returns the result from standard out.

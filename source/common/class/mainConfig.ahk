@@ -185,13 +185,6 @@ class MainConfig {
 		return replaceTags(inputPath, this.paths)
 	}
 	
-	programInfo[name] {
-		get {
-			if(!name)
-				return ""
-			return this.programs[name].clone()
-		}
-	}
 	activateProgram(name, runArgs := "") { ; runArgs are only used if the program's window doesn't already exist (and we're therefore running it).
 		waitForHotkeyRelease()
 		
@@ -203,7 +196,7 @@ class MainConfig {
 	runProgram(name, args := "") {
 		waitForHotkeyRelease()
 		
-		path := this.programInfo[name].path
+		path := this.programs[name].path
 		if(!FileExist(path)) {
 			Toast.showError("Could not run program: " name, "Path does not exist: " path)
 			return

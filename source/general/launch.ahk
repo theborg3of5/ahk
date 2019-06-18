@@ -151,7 +151,7 @@
 			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
 				MainConfig.activateProgram("Thunder")
 			else
-				Run(MainConfig.programInfo["Thunder"].path " " data["THUNDER_ID"])
+				MainConfig.runProgram("Thunder", data["THUNDER_ID"])
 		}
 	
 	!+v::

@@ -29,13 +29,16 @@ class ActionObjectHelpdesk extends ActionObjectBase {
 	;---------
 	; DESCRIPTION:    Get a link to the helpdesk request.
 	; RETURNS:        Link to the helpdesk request.
-	; NOTES:          Web and edit functions do the same thing here - there is no difference between
-	;                 the two.
+	; NOTES:          There's no web vs. edit version for this, so here's a generic tag that the
+	;                 others redirect to.
 	;---------
-	getLinkWeb() {
+	getLink() {
 		return replaceTags(MainConfig.private["EMC2_LINK_EDIT_BASE"], {"INI":this.ini, "ID":this.id})
 	}
+	getLinkWeb() {
+		return this.getLink()
+	}
 	getLinkEdit() {
-		return this.getLinkWeb()
+		return this.getLink()
 	}
 }

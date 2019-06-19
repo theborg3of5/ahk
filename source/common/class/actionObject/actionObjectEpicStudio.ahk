@@ -45,8 +45,10 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 	; DESCRIPTION:    Get a link to the object (server code location or DLG) referenced by
 	;                 descriptor in EpicStudio.
 	; RETURNS:        Link to EpicStudio for the code location/DLG.
+	; NOTES:          There's no web vs. edit version for this, so here's a generic tag that the
+	;                 others redirect to.
 	;---------
-	getLinkWeb() {
+	getLink() {
 		if(this.descriptorType = ActionObjectEpicStudio.DescriptorType_Routine) {
 			splitServerLocation(this.descriptor, routine, tag)
 			environmentId := MainConfig.private["DBC_DEV_ENV_ID"] ; Always use DBC Dev environment
@@ -67,8 +69,11 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 		
 		return ""
 	}
+	getLinkWeb() {
+		return this.getLink()
+	}
 	getLinkEdit() {
-		return this.getLinkWeb()
+		return this.getLink()
 	}
 	
 	

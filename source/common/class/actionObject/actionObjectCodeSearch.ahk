@@ -30,8 +30,10 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 	;---------
 	; DESCRIPTION:    Get a link in CodeSearch to the code location.
 	; RETURNS:        Link to CodeSearch for the code location.
+	; NOTES:          There's no web vs. edit version for this, so here's a generic tag that the
+	;                 others redirect to.
 	;---------
-	getLinkWeb() {
+	getLink() {
 		splitServerLocation(this.location, routine, tag)
 		
 		url := MainConfig.private["CS_SERVER_CODE_BASE"]
@@ -40,8 +42,11 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 		
 		return url
 	}
+	getLinkWeb() {
+		return this.getLink()
+	}
 	getLinkEdit() {
-		return this.getLinkWeb()
+		return this.getLink()
 	}
 	
 	

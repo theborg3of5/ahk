@@ -36,8 +36,9 @@
 
 #Include %A_LineFile%\..\class\actionObject
 	#Include actionObjectBase.ahk
-	#Include actionObjectCode.ahk
+	#Include actionObjectCodeSearch.ahk
 	#Include actionObjectEMC2.ahk
+	#Include actionObjectEpicStudio.ahk
 	#Include actionObjectHelpdesk.ahk
 	#Include actionObjectPath.ahk
 	#Include actionObjectRedirector.ahk

@@ -79,7 +79,7 @@
 			displayCode := appendPieceToString(tag, "^", routine)
 			Toast.showMedium("Opening server code in EpicStudio: " displayCode)
 			
-			ao := new ActionObjectCode(tag "^" routine, ActionObjectCode.CodeType_Routine)
+			ao := new ActionObjectEpicStudio(tag "^" routine, ActionObjectEpicStudio.DescriptorType_Routine)
 			ao.openEdit()
 		}
 #If

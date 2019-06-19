@@ -15,9 +15,7 @@
 				Building standard string - OneNote could pull out the INI/ID that way so it can link stuff
 			Helpdesk
 				epic.buildHelpdeskLink()
-		Reconsider combination of EpicStudio (routine and DLG) with CodeSearch - would those two be better off separate, where the edit/web action that doesn't make sense can still work?
-			New plan: split into ActionObjectEpicStudio and ActionObjectCodeSearch, neither of which cares about edit vs web.
-		For cases that don't care about edit vs web actions, should I just have a generic .open, .run, etc.
+		For cases that don't care about edit vs web actions, should I just have a generic .open, .run, etc.?
 			Actually, can we just introduce those generics at the base level and have them default to the web version? (or rather, have the generic .getLink default to the web version, and all of the others just call their subordinate generics)
 	Do something to encapsulate search selector - maybe its own class, or merge into ActionObject instad?
 	Look at cleaning up all of the record-splitting and EMC2-object-processing functions in epic.ahk

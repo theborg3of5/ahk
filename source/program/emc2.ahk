@@ -64,7 +64,7 @@
 				
 				Toast.showMedium("Opening DLG in EpicStudio: " id)
 				
-				ao := new ActionObjectCode(id, ActionObjectCode.CodeType_DLG)
+				ao := new ActionObjectEpicStudio(id, ActionObjectEpicStudio.DescriptorType_DLG)
 				ao.openEdit()
 			}
 	}

@@ -1,6 +1,7 @@
 #Include %A_LineFile%\..\actionObjectBase.ahk
-#Include %A_LineFile%\..\actionObjectCode.ahk
+#Include %A_LineFile%\..\actionObjectCodeSearch.ahk
 #Include %A_LineFile%\..\actionObjectEMC2.ahk
+#Include %A_LineFile%\..\actionObjectEpicStudio.ahk
 #Include %A_LineFile%\..\actionObjectHelpdesk.ahk
 #Include %A_LineFile%\..\actionObjectPath.ahk
 
@@ -52,10 +53,11 @@ class ActionObjectRedirector {
 	subType := "" ; Determined sub-type, an additional categorization within a particular ActionObject* class.
 	
 	; Type constants
-	static Type_EMC2     := "EMC2"
-	static Type_Code     := "CODE" ; EpicStudio for edit, CodeSearch for web
-	static Type_Helpdesk := "HELPDESK"
-	static Type_Path     := "PATH"
+	static Type_CodeSearch := "CODESEARCH"
+	static Type_EpicStudio := "EPICSTUDIO"
+	static Type_EMC2       := "EMC2"
+	static Type_Helpdesk   := "HELPDESK"
+	static Type_Path       := "PATH"
 	
 	;---------
 	; DESCRIPTION:    Try to determine the type of ActionObject that we'll need based on the input value.
@@ -141,8 +143,11 @@ class ActionObjectRedirector {
 		if(this.type = "")
 			return "" ; No determined type, silent quit, return nothing
 		
-		if(this.type = this.Type_Code)
-			return new ActionObjectCode(this.value, this.subType)
+		if(this.type = this.Type_CodeSearch)
+			return new ActionObjectCodeSearch(this.value)
+		
+		if(this.type = this.Type_EpicStudio)
+			return new ActionObjectEpicStudio(this.value, this.subType)
 		
 		if(this.type = this.Type_EMC2)
 			return new ActionObjectEMC2(this.value, this.subType)

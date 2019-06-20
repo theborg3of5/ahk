@@ -33,7 +33,7 @@ class ActionObjectHelpdesk extends ActionObjectBase {
 	;                 others redirect to.
 	;---------
 	getLink() {
-		return replaceTags(MainConfig.private["EMC2_LINK_EDIT_BASE"], {"INI":this.ini, "ID":this.id})
+		return replaceTag(MainConfig.private["HELPDESK_BASE"], "ID", this.id)
 	}
 	getLinkWeb() {
 		return this.getLink()

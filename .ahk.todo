@@ -7,15 +7,8 @@
 	Figure out what's going wrong with copy-do-page hotkey on home desktop
 	
 # Large
-	ActionObject rework
-		Potential additional uses/things to absorb
-			EMC2
-				Make use of new class for parsing/cleaning EMC2 object info if we make it (another idea here)
-					getTrueEMC2INI if we become that class instead
-				Building standard string - OneNote could pull out the INI/ID that way so it can link stuff
-			Helpdesk
-				epic.buildHelpdeskLink()
 	Do something to encapsulate search selector - maybe its own class, or merge into ActionObject instad?
+		Maybe move the hotkey and its various functions into a separate (general) script?
 	Look at cleaning up all of the record-splitting and EMC2-object-processing functions in epic.ahk
 		Can getObjectInfoFromEMC2 use extractEMC2ObjectInfoRaw (like selectSnapper does)?
 		Can processEMC2ObjectInfo use getTrueEMC2INI?
@@ -57,6 +50,9 @@
 						Maybe just make this more generic, method/parameter for linking the record INI/ID
 				"R " INI " " ID
 					Maybe with title as well if we have it, "<title> [R INI ID]"?
+		Other places to use it
+			ActionObjectEMC2
+			Special OneNote case for standard EMC2 string (mostly selecting the right text and pulling the relevant info out of the class, I think?)
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)
 		Maybe store off both title (maybe trimmed, drop things like " - Wiki" off of the end, etc?) and URL on copy hotkey
 			Used by a generic hotkey that used those two bits of info + hyperlinking class to add a link?

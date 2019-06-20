@@ -160,40 +160,6 @@
 		return runString
 	}
 
-	buildCodeSearchURL(searchTerm, searchType, appKey := "") {
-		appId := getEpicAppIdFromKey(appKey)
-		; DEBUG.popup("buildCodeSearchURL", "Start", "Search type", searchType, "Search term", searchTerm, "App key", appKey, "App ID", appId)
-		
-		; Gotta have something to search for (and a type) to run a search.
-		if(!searchTerm || !searchType)
-			return ""
-		
-		criteriaString := "a=" searchTerm
-		return replaceTags(MainConfig.private["CS_BASE"], {"SEARCH_TYPE":searchType, "APP_ID":appId, "CRITERIA":criteriaString})
-	}
-	getEpicAppIdFromKey(appKey) {
-		if(!appKey)
-			return 0
-		return MainConfig.private["CS_APP_ID_" appKey]
-	}
-
-	buildGuruURL(searchTerm) {
-		return MainConfig.private["GURU_SEARCH_BASE"] searchTerm
-	}
-
-	buildEpicWikiSearchURL(searchTerm, category := "") {
-		outURL := MainConfig.private["WIKI_SEARCH_BASE"]
-		outURL := replaceTag(outURL, "QUERY", searchTerm)
-		
-		if(category) {
-			category := "'" category "'"
-			outURL .= MainConfig.private["WIKI_SEARCH_FILTERS"]
-			outURL := replaceTag(outURL, "CATEGORIES", category)
-		}
-		
-		return outURL
-	}
-
 	; ini/id defaults are "X" as a dummy - URL will still connect to desired environment (and show an error popup).
 	buildSnapperURL(environment := "", ini := "", idList := "") { ; idList is a comma-separated list of IDs
 		if(!environment)

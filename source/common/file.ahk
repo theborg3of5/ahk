@@ -100,21 +100,6 @@ selectFolder(folderName := "") {
 	; DEBUG.popup("Path",path, "Replaced",MainConfig.replacePathTags(path))
 	return MainConfig.replacePathTags(path)
 }
-
-; textToSearch should not have its quotes escaped yet (especially not by doubling or tripling them)
-searchWithGrepWin(pathToSearch, textToSearch := "") {
-	args := "/regex:no"
-	args .= " /searchpath:" DOUBLE_QUOTE MainConfig.replacePathTags(pathToSearch) " "    DOUBLE_QUOTE ; Extra space after path, otherwise trailing backslash escapes ending double quote
-	args .= " /searchfor:"  DOUBLE_QUOTE escapeCharUsingChar(textToSearch, DOUBLE_QUOTE) DOUBLE_QUOTE ; Escape any quotes in the search string
-	args .= " /execute" ; Run it immediately if we got what to search for
-	
-	; DEBUG.popup("Path to search",pathToSearch, "To search",textToSearch, "Args",args)
-	MainConfig.runProgram("GrepWin", args)
-}
-
-searchWithEverything(textToSearch) {
-	MainConfig.runProgram("Everything", "-search " textToSearch)
-}
 	
 findConfigFilePath(path) {
 	if(!path)

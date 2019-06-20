@@ -7,8 +7,6 @@
 	Figure out what's going wrong with copy-do-page hotkey on home desktop
 	
 # Large
-	Do something to encapsulate search selector - maybe its own class, or merge into ActionObject instad?
-		Maybe move the hotkey and its various functions into a separate (general) script?
 	Look at cleaning up all of the record-splitting and EMC2-object-processing functions in epic.ahk
 		Can getObjectInfoFromEMC2 use extractEMC2ObjectInfoRaw (like selectSnapper does)?
 		Can processEMC2ObjectInfo use getTrueEMC2INI?

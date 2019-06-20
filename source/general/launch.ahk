@@ -36,40 +36,6 @@
 		ao.linkSelectedTextEdit()
 	}
 
-; Generic search.
-!+f::
-	selectSearch() {
-		text := cleanupText(getFirstLineOfSelectedText())
-		
-		s := new Selector("search.tls", MainConfig.machineSelectorFilter)
-		data := s.selectGui("", "", {"SEARCH_TERM":text})
-		if(!data)
-			return
-		
-		searchTerm  := data["SEARCH_TERM"]
-		subTypesAry := forceArray(data["SUBTYPE"]) ; Force it to be an array - sometimes it is, sometimes it isn't.
-		
-		For _,subType in subTypesAry { ; For searching multiple at once.
-			url := ""
-			
-			if(data["SEARCH_TYPE"] = "WEB")
-				url := StrReplace(subType, "%s", escapeForRunURL(searchTerm))
-			else if(data["SEARCH_TYPE"] = "CODESEARCH")
-				url := buildCodeSearchURL(escapeForRunURL(searchTerm), subType, data["APP_KEY"])
-			else if(data["SEARCH_TYPE"] = "GURU")
-				url := buildGuruURL(escapeForRunURL(searchTerm))
-			else if(data["SEARCH_TYPE"] = "WIKI") ; Epic wiki search.
-				url := buildEpicWikiSearchURL(escapeForRunURL(searchTerm), subType)
-			else if(data["SEARCH_TYPE"] = "GREPWIN")
-				searchWithGrepWin(subType, searchTerm)
-			else if(data["SEARCH_TYPE"] = "EVERYTHING")
-				searchWithEverything(searchTerm)
-			
-			if(url)
-				Run(url)
-		}
-	}
-
 ; Selector to allow easy editing of config TL files that don't show a popup
 !+c::
 	selectConfig() {

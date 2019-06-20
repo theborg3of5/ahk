@@ -33,6 +33,7 @@ runStandaloneScripts()
 #Include media.ahk
 #Include places.ahk
 #Include programs.ahk
+#Include search.ahk
 #Include screen.ahk
 
 #Include %A_ScriptDir%\program\ ; Program-specific hotkeys.

@@ -26,28 +26,9 @@
 					EMC2 or HDR
 				actionObjectEMC2 > __New()
 					EMC2
-			Could potentially be part of the new class idea for EMC2 object string parsing below
 			Handle title as 3rd piece
 			Handle more than just " " as a delimiter
-			Maybe trim "R " of of start if it's there, too
-		Should this be a new class for Epic objects in general? "EpicRecord", perhaps?
-			Can initialize from various inputs
-				Programmatic string (possibly used by constructor if a string given there)
-				Clipboard
-				EMC2 title (which uses clipboard method)
-				In general, initialization should include:
-					Breaking apart bits
-					Cleaning out leftovers (like processEMC2ObjectInfo() does now)
-			Properties for INI/ID/title
-			Can output in various formats
-				Standard EMC2 object string
-					Include INI verification/replacement
-						Could this absorb/replace getTrueEMC2INI()?
-							Currently only used by processEMC2ObjectInfo() and ActionObjectEMC2.__New(), most likely possible
-					Including special handling for OneNote linking?
-						Maybe just make this more generic, method/parameter for linking the record INI/ID
-				"R " INI " " ID
-					Maybe with title as well if we have it, "<title> [R INI ID]"?
+			Maybe trim "R " off of start if it's there, too
 		Other places to use it
 			ActionObjectEMC2
 			Special OneNote case for standard EMC2 string (mostly selecting the right text and pulling the relevant info out of the class, I think?)

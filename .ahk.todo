@@ -11,27 +11,6 @@
 		Can getObjectInfoFromEMC2 use extractEMC2ObjectInfoRaw (like selectSnapper does)?
 		Can processEMC2ObjectInfo use getTrueEMC2INI?
 		Create a new splitRecordString function that combines logic from splitRecordString and extractEMC2ObjectInfoRaw
-			Callers to getObjectInfoFromEMC2() (which is the only caller to splitRecordString())
-				Various in EMC2 (mostly opening current record elsewhere)
-					EMC2
-				dlgNumTracker
-					EMC2
-			Callers to extractEMC2ObjectInfo()
-				input > sendStandardEMC2ObjectString()
-					EMC2
-			Callers to extractEMC2ObjectInfoRaw()
-				launch > selectSnapper()
-					Generic record
-				actionObjectRedirector > tryProcessAsRecord()
-					EMC2 or HDR
-				actionObjectEMC2 > __New()
-					EMC2
-			Handle title as 3rd piece
-			Handle more than just " " as a delimiter
-			Maybe trim "R " off of start if it's there, too
-		Other places to use it
-			ActionObjectEMC2
-			Special OneNote case for standard EMC2 string (mostly selecting the right text and pulling the relevant info out of the class, I think?)
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)
 		Maybe store off both title (maybe trimmed, drop things like " - Wiki" off of the end, etc?) and URL on copy hotkey
 			Used by a generic hotkey that used those two bits of info + hyperlinking class to add a link?

@@ -148,15 +148,15 @@ class EpicRecord {
 		if(this.ini != "" && this.id != "") ; Nothing required is missing.
 			return true
 		
-		s := new Selector("actionObject.tls", {"COLUMN":"TYPE", "VALUE":ActionObjectRedirector.Type_EMC2})
-		data := s.selectGui("", "Enter INI and ID", {"SUBTYPE":this.ini, "VALUE":this.id})
+		s := new Selector("epicRecord.tls")
+		data := s.selectGui("", "", {"INI":this.ini, "ID":this.id})
 		if(!data)
 			return false
-		if(data["SUBTYPE"] = "" || data["VALUE"] = "") ; Didn't get everything we needed.
+		if(data["INI"] = "" || data["ID"] = "") ; Didn't get everything we needed.
 			return false
 		
-		this.ini := data["SUBTYPE"]
-		this.id  := data["VALUE"]
+		this.ini := data["INI"]
+		this.id  := data["ID"]
 		return true
 	}
 	

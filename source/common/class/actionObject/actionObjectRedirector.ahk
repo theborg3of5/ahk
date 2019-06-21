@@ -85,13 +85,11 @@ class ActionObjectRedirector {
 	; SIDE EFFECTS:   Sets .type, .subType, and .value if the value is an EMC2 object.
 	;---------
 	tryProcessAsEMC2(record) {
-		; Silent selection from actionObject TLS to see if we match a "record" ("INI ID *" format) type.
+		; Silent selection from actionObject TLS to see if we match an EMC2-type INI.
 		s := new Selector("actionObject.tls", MainConfig.machineSelectorFilter)
 		data := s.selectChoice(record.ini)
 		if(!data)
 			return false
-		
-		; If it's not EMC2, give up.
 		if(data["TYPE"] != this.Type_EMC2)
 			return false
 		

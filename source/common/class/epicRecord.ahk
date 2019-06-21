@@ -16,8 +16,6 @@
 			Callers to extractEMC2ObjectInfoRaw()
 				launch > selectSnapper()
 					Generic record
-				actionObjectRedirector > tryProcessAsRecord()
-					EMC2 or HDR
 				actionObjectEMC2 > __New()
 					EMC2
 			ActionObjectEMC2

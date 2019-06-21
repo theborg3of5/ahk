@@ -64,10 +64,53 @@ class ActionObjectRedirector {
 	; SIDE EFFECTS:   tryProcessAs* functions may set .value, .type, and .subType.
 	;---------
 	determineType() {
-		if(this.tryProcessAsRecord()) ; EMC2 objects and helpdesk are in "INI ID *" format
-			return
 		if(this.tryProcessAsPath()) ; File paths and URLs
+		; Try parsing as an Epic Record for use in EMC2/HDR checks
+		record := new EpicRecord(this.value)
+		if(record.id != "") {
+			if(this.tryProcessAsEMC2(record))
+		
+		if(this.tryProcessAsPath())
 			return
+	}
+	
+	;---------
+	; DESCRIPTION:    Try to determine whether the value is a path.
+	; DESCRIPTION:    Try to determine whether the value is an EMC2 object.
+	; PARAMETERS:
+	;  record (I,REQ) - EpicRecord instance that's parsed the input into ini/id/title.
+	; RETURNS:        True if the value was determined to be an EMC2 object, False otherwise.
+	; SIDE EFFECTS:   Sets .type, .subType, and .value if the value is an EMC2 object.
+	;---------
+	tryProcessAsPath() {
+	tryProcessAsEMC2(record) {
+		; Silent selection from actionObject TLS to see if we match a "record" ("INI ID *" format) type.
+		s := new Selector("actionObject.tls", MainConfig.machineSelectorFilter)
+		data := s.selectChoice(record.ini)
+		if(!data)
+			return false
+		
+		; If it's not EMC2, give up.
+		if(data["TYPE"] != this.Type_EMC2)
+			return false
+		
+		; We successfully identified the type, store off the pieces we know.
+		return true
+	}
+	
+	;---------
+	; PARAMETERS:
+	;  record (I,REQ) - EpicRecord instance that's parsed the input into ini/id/title.
+	; RETURNS:        True if the value was determined to be a helpdesk object, False otherwise.
+	; SIDE EFFECTS:   Sets .type and .value if the value is a helpdesk object.
+	;---------
+		recordAry := extractEMC2ObjectInfoRaw(this.value) ; GDB TODO can we combine this with the logic from the actual class somehow, like we did with determinePathType()?
+		if(!data)
+		if(record.ini != "HDR" || !isNum(record.id))
+			return false
+		
+		this.type  := this.Type_Helpdesk
+		this.value := record.id
 	}
 	
 	;---------
@@ -75,43 +118,9 @@ class ActionObjectRedirector {
 	; RETURNS:        True if the value was determined to be a path, False otherwise.
 	; SIDE EFFECTS:   Sets .type and .subType if the value was a path.
 	;---------
-	tryProcessAsPath() {
-		pathType := ActionObjectPath.determinePathType(this.value)
 		if(pathType = "")
 			return false
 		
-		this.type    := this.Type_Path
-		this.subType := pathType
-		return true
-	}
-	
-	;---------
-	; DESCRIPTION:    Try to determine whether the value is a "record" object (EMC2 or helpdesk,
-	;                 "INI ID" format).
-	; RETURNS:        True if the value was determined to be a "record" object, False otherwise.
-	; SIDE EFFECTS:   Sets .type, .subType, and .value if the value was a path.
-	;---------
-	tryProcessAsRecord() {
-		; Try splitting apart string into INI/ID/title
-		recordAry := extractEMC2ObjectInfoRaw(this.value) ; GDB TODO can we combine this with the logic from the actual class somehow, like we did with determinePathType()?
-		potentialINI := recordAry["INI"]
-		
-		; Silent selection from actionObject TLS to see if we match a "record" ("INI ID *" format) type.
-		s := new Selector("actionObject.tls", MainConfig.machineSelectorFilter)
-		data := s.selectChoice(potentialINI)
-		if(!data)
-			return false
-		
-		type    := data["TYPE"]
-		subType := data["SUBTYPE"]
-		
-		; Only EMC2 objects and helpdesk can be split and handled this way.
-		if((type != this.Type_EMC2) && (type != this.Type_Helpdesk))
-			return false
-		
-		; We successfully identified the type, store off the pieces we know.
-		this.type    := type
-		this.subType := subType
 		this.value   := recordAry["ID"] ; From first split above
 		return true
 	}

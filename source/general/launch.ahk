@@ -155,16 +155,14 @@
 	^!#s::
 		selectSnapper() {
 			selectedText := cleanupText(getFirstLineOfSelectedText())
-			infoAry := extractEMC2ObjectInfoRaw(selectedText)
-			ini := infoAry["INI"]
-			id  := infoAry["ID"]
+			record := new EpicRecord(selectedText)
 			
 			s := new Selector("epicEnvironments.tls")
 			s.addExtraOverrideFields(["INI", "ID"])
 			
 			defaultOverrideData        := []
-			defaultOverrideData["INI"] := ini
-			defaultOverrideData["ID"]  := id
+			defaultOverrideData["INI"] := record.ini
+			defaultOverrideData["ID"]  := record.id
 			data := s.selectGui("", "Open Record(s) in Snapper in Environment", defaultOverrideData)
 			if(!data)
 				return

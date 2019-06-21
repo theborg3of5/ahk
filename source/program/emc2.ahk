@@ -34,37 +34,42 @@
 		; Get INI/ID
 		!c::
 			emc2OpenRecordId() {
-				getObjectInfoFromEMC2(ini, id)
-				if(id)
-					setClipboardAndToastValue(ini " " id, "EMC2 record INI/ID")
+				record := new EpicRecord()
+				record.initFromEMC2Title()
+				
+				if(record.id)
+					setClipboardAndToastValue(record.ini " " record.id, "EMC2 record INI/ID")
 			}
 		
 		; Open web version of the current object.
 		!w::
 			emc2OpenRecordWeb() {
-				getObjectInfoFromEMC2(ini, id)
-				ao := new ActionObjectEMC2(id, ini)
+				record := new EpicRecord()
+				record.initFromEMC2Title()
+				ao := new ActionObjectEMC2(record.id, record.ini)
 				ao.openWeb()
 			}
 		
 		; Open "basic" web version (always EMC2 summary, even for Sherlock/Nova records) of the current object.
 		!+w::
 			emc2OpenRecordWebBasic() {
-				getObjectInfoFromEMC2(ini, id)
-				ao := new ActionObjectEMC2(id, ini)
+				record := new EpicRecord()
+				record.initFromEMC2Title()
+				ao := new ActionObjectEMC2(record.id, record.ini)
 				ao.openWebBasic()
 			}
 		
 		; Take DLG # and pop up the DLG in EpicStudio sidebar.
 		^+o::
 			openEMC2EpicStudioDLG() {
-				getObjectInfoFromEMC2(ini, id)
-				if(ini != "DLG" || id = "")
+				record := new EpicRecord()
+				record.initFromEMC2Title()
+				if(record.ini != "DLG" || record.id = "")
 					return
 				
-				Toast.showMedium("Opening DLG in EpicStudio: " id)
+				Toast.showMedium("Opening DLG in EpicStudio: " record.id)
 				
-				ao := new ActionObjectEpicStudio(id, ActionObjectEpicStudio.DescriptorType_DLG)
+				ao := new ActionObjectEpicStudio(record.id, ActionObjectEpicStudio.DescriptorType_DLG)
 				ao.openEdit()
 			}
 	}

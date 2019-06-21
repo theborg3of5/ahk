@@ -64,25 +64,26 @@ class ActionObjectRedirector {
 	; SIDE EFFECTS:   tryProcessAs* functions may set .value, .type, and .subType.
 	;---------
 	determineType() {
-		if(this.tryProcessAsPath()) ; File paths and URLs
 		; Try parsing as an Epic Record for use in EMC2/HDR checks
 		record := new EpicRecord(this.value)
 		if(record.id != "") {
 			if(this.tryProcessAsEMC2(record))
+				return
+			if(this.tryProcessAsHelpdesk(record))
+				return
+		}
 		
 		if(this.tryProcessAsPath())
 			return
 	}
 	
 	;---------
-	; DESCRIPTION:    Try to determine whether the value is a path.
 	; DESCRIPTION:    Try to determine whether the value is an EMC2 object.
 	; PARAMETERS:
 	;  record (I,REQ) - EpicRecord instance that's parsed the input into ini/id/title.
 	; RETURNS:        True if the value was determined to be an EMC2 object, False otherwise.
 	; SIDE EFFECTS:   Sets .type, .subType, and .value if the value is an EMC2 object.
 	;---------
-	tryProcessAsPath() {
 	tryProcessAsEMC2(record) {
 		; Silent selection from actionObject TLS to see if we match a "record" ("INI ID *" format) type.
 		s := new Selector("actionObject.tls", MainConfig.machineSelectorFilter)
@@ -95,17 +96,20 @@ class ActionObjectRedirector {
 			return false
 		
 		; We successfully identified the type, store off the pieces we know.
+		this.type    := data["TYPE"]
+		this.subType := data["SUBTYPE"]
+		this.value   := record.id ; From initial parsing of value above
 		return true
 	}
 	
 	;---------
+	; DESCRIPTION:    Try to determine whether the value is a helpdesk object.
 	; PARAMETERS:
 	;  record (I,REQ) - EpicRecord instance that's parsed the input into ini/id/title.
 	; RETURNS:        True if the value was determined to be a helpdesk object, False otherwise.
 	; SIDE EFFECTS:   Sets .type and .value if the value is a helpdesk object.
 	;---------
-		recordAry := extractEMC2ObjectInfoRaw(this.value) ; GDB TODO can we combine this with the logic from the actual class somehow, like we did with determinePathType()?
-		if(!data)
+	tryProcessAsHelpdesk(record) {
 		if(record.ini != "HDR" || !isNum(record.id))
 			return false
 		
@@ -118,10 +122,13 @@ class ActionObjectRedirector {
 	; RETURNS:        True if the value was determined to be a path, False otherwise.
 	; SIDE EFFECTS:   Sets .type and .subType if the value was a path.
 	;---------
+	tryProcessAsPath() {
+		pathType := ActionObjectPath.determinePathType(this.value)
 		if(pathType = "")
 			return false
 		
-		this.value   := recordAry["ID"] ; From first split above
+		this.type    := this.Type_Path
+		this.subType := pathType
 		return true
 	}
 	

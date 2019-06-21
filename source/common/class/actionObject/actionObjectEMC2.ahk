@@ -42,10 +42,10 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		; If we don't know the INI yet, assume the ID is a combined string (i.e. "DLG 123456" or
 		; "DLG 123456: HB/PB WE DID SOME STUFF") and try to split it into its component parts.
 		if(this.ini = "") {
-			recordAry := extractEMC2ObjectInfoRaw(this.id)
-			this.ini   := recordAry["INI"]
-			this.id    := recordAry["ID"]
-			this.title := recordAry["TITLE"]
+			record := new EpicRecord(this.id)
+			this.ini   := record.ini
+			this.id    := record.id
+			this.title := record.title
 		}
 		
 		; If INI is set, make sure it's the "true" INI (ZQN -> QAN, Design -> XDS, etc.).

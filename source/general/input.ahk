@@ -61,6 +61,7 @@ return
 ; Turn the selected text into a link to the URL on the clipboard.
 ^+k::
 	linkSelectedText() {
+		waitForHotkeyRelease()
 		if(!Hyperlinker.linkSelectedText(clipboard, errorMessage))
 			Toast.showError("Failed to link selected text", errorMessage)
 	}
@@ -68,16 +69,8 @@ return
 ; Turn clipboard into standard string and send it.
 !+n::
 	sendStandardEMC2ObjectString() {
-		infoAry := extractEMC2ObjectInfo(clipboard)
-		if(!infoAry)
-			return
-		
-		ini   := infoAry["INI"]
-		id    := infoAry["ID"]
-		title := infoAry["TITLE"]
-		
-		standardString := buildStandardEMC2ObjectString(ini, id, title)
-		sendTextWithClipboard(standardString) ; Can contain hotkey chars
+		record := new EpicRecord(clipboard)
+		sendTextWithClipboard(record.standardEMC2String) ; Can contain hotkey chars
 		
 		; Special case for OneNote: link the INI/ID as well.
 		if(MainConfig.isWindowActive("OneNote"))

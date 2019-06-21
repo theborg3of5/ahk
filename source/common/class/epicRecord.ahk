@@ -4,21 +4,14 @@
 		***
 	
 	GDB TODO
+		Should EMC2-specific stuff move to actionObjectEMC2 instead?
+			standardEMC2String
+			Silent selection of "true" EMC2 INI (in processBits())
+			Removing EMC2 object-specific title bits (in processBits())
 		Filter actionObject selector down to EMC2-Type choices (for both silent and gui selections)
 		Use this in places:
-			Callers to getObjectInfoFromEMC2() (which is the only caller to splitRecordString())
-				Various in EMC2 (mostly opening current record elsewhere)
-					EMC2
-			Callers to extractEMC2ObjectInfo()
-				input > sendStandardEMC2ObjectString()
-					EMC2
-					Remember special case for OneNote
-			Callers to extractEMC2ObjectInfoRaw()
-				launch > selectSnapper()
-					Generic record
+			Callers to getTrueEMC2INI()
 				actionObjectEMC2 > __New()
-					EMC2
-			ActionObjectEMC2
 		Remove unused functions from epic.ahk
 */
 

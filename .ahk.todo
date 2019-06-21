@@ -5,10 +5,10 @@
 		To allow longer abbreviations
 		Is that going to get weird with SelectorGui+FlexTable interactions?
 	Figure out what's going wrong with copy-do-page hotkey on home desktop
+	EpicRecord.selectMissingInfo()
+		Should we have a separate TLS for this? Right now it shows EMC2 INIs, but we could also add common others (UCL, HTR, EPT, etc.)
 	
 # Large
-	Look at cleaning up all of the record-splitting and EMC2-object-processing functions in epic.ahk
-		Finish documenting EpicRecord
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)
 		Maybe store off both title (maybe trimmed, drop things like " - Wiki" off of the end, etc?) and URL on copy hotkey
 			Used by a generic hotkey that used those two bits of info + hyperlinking class to add a link?

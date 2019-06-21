@@ -4,25 +4,26 @@
 		***
 	
 	GDB TODO
-		Can initialize from various inputs
-			Programmatic string (possibly used by constructor if a string given there)
-			EMC2 title (which uses clipboard method)
-			In general, initialization should include:
-				Breaking apart bits
-				Cleaning out leftovers (like processEMC2ObjectInfo() does now)
-		Properties for INI/ID/title
-		Can output in various formats
-			Standard EMC2 object string
-				Include INI verification/replacement
-					Could this absorb/replace getTrueEMC2INI()?
-						Currently only used by processEMC2ObjectInfo() and ActionObjectEMC2.__New(), most likely possible
-				Including special handling for OneNote linking?
-					Maybe just make this more generic, method/parameter for linking the record INI/ID
-			"R " INI " " ID
-				Maybe with title as well if we have it, "<title> [R INI ID]"?
-		Should we handle recordString and recordStringWithTitle formats as inputs?
-			Could probably identify based on "[R " and "]" both existing
-			What about stuff with just [INI ID] in it?
+		Filter actionObject selector down to EMC2-Type choices (for both silent and gui selections)
+		Use this in places:
+			Callers to getObjectInfoFromEMC2() (which is the only caller to splitRecordString())
+				Various in EMC2 (mostly opening current record elsewhere)
+					EMC2
+				dlgNumTracker
+					EMC2
+			Callers to extractEMC2ObjectInfo()
+				input > sendStandardEMC2ObjectString()
+					EMC2
+					Remember special case for OneNote
+			Callers to extractEMC2ObjectInfoRaw()
+				launch > selectSnapper()
+					Generic record
+				actionObjectRedirector > tryProcessAsRecord()
+					EMC2 or HDR
+				actionObjectEMC2 > __New()
+					EMC2
+			ActionObjectEMC2
+		Remove unused functions from epic.ahk
 */
 
 class EpicRecord {
@@ -39,16 +40,16 @@ class EpicRecord {
 	; Constructed strings representing the record.
 	recordString { ; R INI ID
 		get {
-			return "R " this.ini " " this.id
-		}
-	}
-	recordStringWithTitle { ; TITLE [R INI ID]
-		get {
-			return this.title " [" this.recordString "]"
+			this.selectMissingInfo()
+			if(this.title != "")
+				return this.title " [R " this.ini " " this.id "]"
+			else
+				return "R " this.ini " " this.id
 		}
 	}
 	standardEMC2String { ; INI ID - TITLE
 		get {
+			this.selectMissingInfo()
 			return this.ini " " this.id " - " this.title
 		}
 	}
@@ -60,13 +61,10 @@ class EpicRecord {
 	}
 	
 	initFromRecordString(recordString) {
-		recordString := cleanupText(recordString, ["R "]) ; Clean any funky characters off of string edges, plus the record prefix if it's there.
 		if(recordString = "")
 			return
 		
-		DEBUG.popup("recordString",recordString)
-		
-		
+		this.processRecordString(recordString)
 	}
 	
 	initFromEMC2Title() {
@@ -87,119 +85,94 @@ class EpicRecord {
 	; ==============================
 	
 	
-}
-
-
-
-
-
-
-; Split "INI ID" string into INI and ID (assume it's just the ID if no space included).
-; Also does cleaning around the string so leading/trailing spaces, bullets, etc. don't make it fail.
-splitRecordString2(recordString, ByRef ini := "", ByRef id := "") {
-	recordString := cleanupText(recordString)
-	recordPartsAry := StrSplit(recordString, " ")
-	
-	maxIndex := recordPartsAry.MaxIndex()
-	if(maxIndex > 1)
-		ini := recordPartsAry[1]
-	id := recordPartsAry[maxIndex] ; Always the last piece (works whether there was an INI before it or not)
-}
-
-
-
-
-; line = title of EMC2 email, or title from top of web view.
-extractEMC2ObjectInfo2(line) {
-	infoAry := extractEMC2ObjectInfoRaw(line)
-	return processEMC2ObjectInfo(infoAry)
-}
-extractEMC2ObjectInfoRaw2(line) {
-	line := cleanupText(line, ["["]) ; Remove any odd leading/trailing characters (and also remove open brackets)
-	
-	; INI is first characters up to the first delimiter
-	delimPos := stringMatchesAnyOf(line, [" ", "#"])
-	if(delimPos) {
-		ini  := subStr(line, 1, delimPos - 1)
-		line := subStr(line, delimPos + 1) ; +1 to drop delimiter too
+	processRecordString(recordString) {
+		recordString := cleanupText(recordString) ; Clean any funky characters off of string edges
+		if(recordString = "")
+			return
+		
+		this.extractBitsFromString(recordString)
+		this.processBits()
+		DEBUG.popup("recordString",recordString, "this",this)
 	}
 	
-	; ID is remaining up to the next delimiter
-	delimPos := stringMatchesAnyOf(line, [" ", ":", "-", "]"])
-	if(!delimPos) { ; If the string ended before the next delimiter (so no title), make sure to still get the ID.
-		id := subStr(line, 1, strLen(line))
-		line := ""
-	} else {
-		id := subStr(line, 1, delimPos - 1)
-		line := subStr(line, delimPos + 1) ; +1 to drop delimiter too
+	extractBitsFromString(recordString) {
+		; 1) Title [R INI ID]
+		if(stringContains(recordString, "[R ") && stringContains(recordString, "]")) {
+			; Title is everything up to the opening square bracket
+			this.title := getStringBeforeStr(recordString, "[R ")
+			
+			; In the square brackets should be "R INI ID"
+			iniId := getFirstStringBetweenStr(recordString, "[R ", "]")
+			this.ini := getStringBeforeStr(iniId, " ")
+			this.id  := getStringAfterStr(iniId, " ")
+			
+			return
+		}
+		
+		; 2) #ID - Title
+		if(stringStartsWith(recordString, "#")) {
+			this.id := getFirstStringBetweenStr(recordString, "#", " - ")
+			this.title := getStringAfterStr(recordString, " - ")
+			
+			return
+		}
+		
+		; 3) {R } + INI ID + {space} + {: or -} + {title}
+		recordString := removeStringFromStart(recordString, "R ") ; Trim off "R " at start if it's there.
+		this.ini := getStringBeforeStr(recordString, " ")
+		if(stringMatchesAnyOf(recordString, [":", "-"], , matchedDelim)) {
+			; ID is everything up to the first delimiter
+			this.id := getFirstStringBetweenStr(recordString, " ", matchedDelim)
+			; Title is everything after
+			this.title := getStringAfterStr(recordString, matchedDelim)
+		} else {
+			; ID is the rest of the string
+			this.id := getStringAfterStr(recordString, " ")
+		}
 	}
 	
-	; Title is everything left
-	title := line
-	
-	return {"INI":ini, "ID":id, "TITLE":title}
-}
-processEMC2ObjectInfo2(infoAry) {
-	ini   := infoAry["INI"]
-	id    := infoAry["ID"]
-	title := infoAry["TITLE"]
-	
-	; INI
-	s := new Selector("actionObject.tls")
-	ini := s.select(ini, "SUBTYPE") ; Turn any not-really-ini strings (like "Design") into actual INI (and ask user if we don't have one)
-	if(!ini)
-		return ""
-	
-	; ID
-	id := cleanupText(id)
-	
-	; Title
-	stringsToRemove := ["-", "/", "\", ":", ",", "(Developer has reset your status)", "(Stage 1 QAer is Waiting for Changes)", "(Stage 2 QAer is Waiting for Changes)", "(A Reviewer Approved)"] ; Odd characters and non-useful strings that should come off
-	title := cleanupText(title, stringsToRemove)
-	
-	if(ini = "DLG") {
-		title := removeStringFromStart(title, "DBC") ; Drop from start - most of my DLGs are DBC, no reason to include that.
-		title := cleanupText(title, stringsToRemove) ; Remove anything that might have been after the "DBC"
+	processBits() {
+		; INI - clean up, and try to turn it into the "real" EMC2 one if it's one of those.
+		this.ini := cleanupText(this.ini)
+		if(this.ini != "") {
+			s := new Selector("actionObject.tls")
+			tempIni := s.selectChoice(this.ini, "SUBTYPE")
+			if(tempIni) {
+				this.ini := tempIni
+				isEMC2Ini := true
+			}
+		}
+		
+		; ID - clean up.
+		this.id := cleanupText(this.id)
+		
+		; Title - clean up, drop anything extra that we don't need.
+		removeAry := ["-", "/", "\", ":", ","]
+		if(isEMC2Ini) {
+			removeAry.push("DBC") ; Don't need "DBC" on the start of every EMC2 title.
+			
+			; INI-specific strings to remove
+			if(this.ini = "DLG")
+				removeAry := arrayAppend(removeAry, ["(Developer has reset your status)", "(Stage 1 QAer is Waiting for Changes)", "(Stage 2 QAer is Waiting for Changes)"])
+			if(this.ini = "XDS")
+				removeAry := arrayAppend(removeAry, ["(A Reviewer Approved)"])
+			if(this.ini = "SLG")
+				removeAry := arrayAppend(removeAry, ["--Assigned To:"])
+		}
+		this.title := cleanupText(this.title, removeAry)
 	}
-	if(ini = "SLG") {
-		; "--Assigned to: USER" might be on the end for SLGs - trim it off.
-		title := getStringBeforeStr(title, "--Assigned To:")
+	
+	selectMissingInfo() {
+		if(this.ini != "" && this.id != "") ; Nothing required is missing.
+			return
+		
+		s := new Selector("actionObject.tls")
+		data := s.selectGui("", "Enter INI and ID", {"SUBTYPE":this.ini, "VALUE":this.id})
+		if(!data)
+			return
+		
+		this.ini := data["SUBTYPE"]
+		this.id  := data["VALUE"]
 	}
 	
-	return {"INI":ini, "ID":id, "TITLE":title}
 }
-
-; Returns standard string for OneNote use.
-buildStandardEMC2ObjectString2(ini, id, title) {
-	return ini " " id " - " title
-}
-
-; Turn descriptors that aren't real INIs (like "Design") into the corresponding EMC2 INI.
-getTrueEMC2INI2(iniString) {
-	if(!iniString)
-		return ""
-	
-	s := new Selector("actionObject.tls")
-	return s.selectChoice(iniString, "SUBTYPE")
-}
-
-
-getObjectInfoFromEMC22(ByRef ini := "", ByRef id := "") {
-	title := WinGetTitle(MainConfig.windowInfo["EMC2"].titleString)
-	title := removeStringFromEnd(title, " - EMC2")
-	
-	; If no info available, finish here.
-	if((title = "") or (title = "EMC2"))
-		return
-	
-	; Split the input.
-	splitRecordString(title, ini, id)
-	; DEBUG.popup("getObjectInfoFromEMC2","Finish", "INI",ini, "ID",id)
-}
-
-
-
-
-
-
-

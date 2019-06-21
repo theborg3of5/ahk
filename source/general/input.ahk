@@ -69,12 +69,12 @@ return
 ; Turn clipboard into standard string and send it.
 !+n::
 	sendStandardEMC2ObjectString() {
-		record := new EpicRecord(clipboard)
-		sendTextWithClipboard(record.standardEMC2String) ; Can contain hotkey chars
+		ao := new ActionObjectEMC2(clipboard)
+		sendTextWithClipboard(ao.standardEMC2String) ; Can contain hotkey chars
 		
 		; Special case for OneNote: link the INI/ID as well.
 		if(MainConfig.isWindowActive("OneNote"))
-			oneNoteLinkEMC2ObjectInLine(ini, id)
+			oneNoteLinkEMC2ObjectInLine(ao.ini, ao.id)
 	}
 
 ; Send the clipboard as a list.

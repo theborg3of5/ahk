@@ -26,6 +26,16 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	ini   := "" ; INI for the object, from EMC2 subtypes in actionObject.tl
 	title := "" ; Title for the EMC2 object
 	
+	; The "standard" (to me) EMC2 object string.
+	standardEMC2String { ; INI ID - TITLE
+		get {
+			if(!this.selectMissingInfo())
+				return ""
+			return this.ini " " this.id " - " this.title
+		}
+	}
+	
+	
 	;---------
 	; DESCRIPTION:    Create a new reference to an EMC2 object.
 	; PARAMETERS:
@@ -41,19 +51,39 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		
 		; If we don't know the INI yet, assume the ID is a combined string (i.e. "DLG 123456" or
 		; "DLG 123456: HB/PB WE DID SOME STUFF") and try to split it into its component parts.
-		if(this.ini = "") {
+		if(this.id != "" && this.ini = "") {
 			record := new EpicRecord(this.id)
 			this.ini   := record.ini
 			this.id    := record.id
 			this.title := record.title
 		}
 		
-		; If INI is set, make sure it's the "true" INI (ZQN -> QAN, Design -> XDS, etc.).
-		; Note that selection handles this if they pick/add values in .selectMissingInfo().
-		if(this.ini != "")
-			this.ini := getTrueEMC2INI(this.ini)
+		if(!this.selectMissingInfo())
+			return
 		
-		this.selectMissingInfo()
+		this.postProcess()
+	}
+	
+	;---------
+	; DESCRIPTION:    Do some additional processing on the different bits of info about the object.
+	; SIDE EFFECTS:   Can update this.ini and this.title.
+	;---------
+	postProcess() {
+		; INI - make sure the INI is the "real" EMC2 one.
+		s := new Selector("actionObject.tls", {"COLUMN":"TYPE", "VALUE":ActionObjectRedirector.Type_EMC2})
+		this.ini := s.selectChoice(this.ini, "SUBTYPE")
+		
+		; Title - clean up, drop anything extra that we don't need.
+		removeAry := ["-", "/", "\", ":", ",", "DBC"] ; Don't need "DBC" on the start of every EMC2 title.
+		; INI-specific strings to remove
+		if(this.ini = "DLG")
+			removeAry := arrayAppend(removeAry, ["(Developer has reset your status)", "(Stage 1 QAer is Waiting for Changes)", "(Stage 2 QAer is Waiting for Changes)"])
+		if(this.ini = "XDS")
+			removeAry := arrayAppend(removeAry, ["(A Reviewer Approved)"])
+		if(this.ini = "SLG")
+			removeAry := arrayAppend(removeAry, ["--Assigned To:"])
+		
+		this.title := cleanupText(this.title, removeAry)
 	}
 	
 	;---------
@@ -107,18 +137,21 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	; DESCRIPTION:    Prompt the user for any missing-but-required info that we couldn't figure out
 	;                 on our own.
 	; SIDE EFFECTS:   Sets .ini and .id based on the user's inputs.
+	; RETURNS:        True if all required info was received, False otherwise.
 	;---------
 	selectMissingInfo() {
-		; Nothing is missing
-		if(this.id != "" && this.ini != "")
-			return
+		if(this.ini != "" && this.id != "") ; Nothing required is missing.
+			return true
 		
 		s := new Selector("actionObject.tls", {"COLUMN":"TYPE", "VALUE":ActionObjectRedirector.Type_EMC2})
-		data := s.selectGui("", "", {"SUBTYPE": this.ini, "VALUE": this.id})
+		data := s.selectGui("", "Enter INI and ID", {"SUBTYPE":this.ini, "VALUE":this.id})
 		if(!data)
-			return
+			return false
+		if(data["SUBTYPE"] = "" || data["VALUE"] = "") ; Didn't get everything we needed.
+			return false
 		
 		this.ini := data["SUBTYPE"]
 		this.id  := data["VALUE"]
+		return true
 	}
 }

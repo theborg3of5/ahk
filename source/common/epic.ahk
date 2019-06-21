@@ -222,12 +222,3 @@ dropOffsetFromServerLocation(serverLocation) {
 	tag := getStringBeforeStr(tag, "+")
 	return tag "^" routine
 }
-
-; Turn descriptors that aren't real INIs (like "Design") into the corresponding EMC2 INI.
-getTrueEMC2INI(iniString) {
-	if(!iniString)
-		return ""
-	
-	s := new Selector("actionObject.tls")
-	return s.selectChoice(iniString, "SUBTYPE")
-}

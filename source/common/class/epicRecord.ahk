@@ -3,15 +3,6 @@
 	Example Usage
 		***
 	
-	GDB TODO
-		Should EMC2-specific stuff move to actionObjectEMC2 instead?
-			standardEMC2String
-			Silent selection of "true" EMC2 INI (in processBits())
-			Removing EMC2 object-specific title bits (in processBits())
-		Use this in places:
-			Callers to getTrueEMC2INI()
-				actionObjectEMC2 > __New()
-		Remove unused functions from epic.ahk
 */
 
 class EpicRecord {
@@ -25,22 +16,15 @@ class EpicRecord {
 	id    := ""
 	title := ""
 	
-	; Constructed strings representing the record.
-	recordString { ; R INI ID
+	; Constructed string representing the record.
+	recordString {
 		get {
 			if(!this.selectMissingInfo())
 				return ""
 			if(this.title != "")
-				return this.title " [R " this.ini " " this.id "]"
+				return this.title " [R " this.ini " " this.id "]" ; "TITLE [R INI ID]"
 			else
-				return "R " this.ini " " this.id
-		}
-	}
-	standardEMC2String { ; INI ID - TITLE
-		get {
-			if(!this.selectMissingInfo())
-				return ""
-			return this.ini " " this.id " - " this.title
+				return "R " this.ini " " this.id                  ; "R INI ID"
 		}
 	}
 	
@@ -81,7 +65,6 @@ class EpicRecord {
 			return
 		
 		this.extractBitsFromString(recordString)
-		this.processBits()
 		; DEBUG.popup("recordString",recordString, "this",this)
 	}
 	
@@ -96,60 +79,30 @@ class EpicRecord {
 			this.ini := getStringBeforeStr(iniId, " ")
 			this.id  := getStringAfterStr(iniId, " ")
 			
-			return
-		}
-		
 		; 2) #ID - Title
-		if(stringStartsWith(recordString, "#")) {
+		} else if(stringStartsWith(recordString, "#")) {
 			this.id := getFirstStringBetweenStr(recordString, "#", " - ")
 			this.title := getStringAfterStr(recordString, " - ")
 			
-			return
-		}
-		
 		; 3) {R } + INI ID + {space} + {: or -} + {title}
-		recordString := removeStringFromStart(recordString, "R ") ; Trim off "R " at start if it's there.
-		this.ini := getStringBeforeStr(recordString, " ")
-		if(stringMatchesAnyOf(recordString, [":", "-"], , matchedDelim)) {
-			; ID is everything up to the first delimiter
-			this.id := getFirstStringBetweenStr(recordString, " ", matchedDelim)
-			; Title is everything after
-			this.title := getStringAfterStr(recordString, matchedDelim)
 		} else {
-			; ID is the rest of the string
-			this.id := getStringAfterStr(recordString, " ")
-		}
-	}
-	
-	processBits() {
-		; INI - clean up, and try to turn it into the "real" EMC2 one if it's one of those.
-		this.ini := cleanupText(this.ini)
-		if(this.ini != "") {
-			s := new Selector("actionObject.tls", {"COLUMN":"TYPE", "VALUE":ActionObjectRedirector.Type_EMC2})
-			tempIni := s.selectChoice(this.ini, "SUBTYPE")
-			if(tempIni) {
-				this.ini := tempIni
-				isEMC2Ini := true
+			recordString := removeStringFromStart(recordString, "R ") ; Trim off "R " at start if it's there.
+			this.ini := getStringBeforeStr(recordString, " ")
+			if(stringMatchesAnyOf(recordString, [":", "-"], , matchedDelim)) {
+				; ID is everything up to the first delimiter
+				this.id := getFirstStringBetweenStr(recordString, " ", matchedDelim)
+				; Title is everything after
+				this.title := getStringAfterStr(recordString, matchedDelim)
+			} else {
+				; ID is the rest of the string
+				this.id := getStringAfterStr(recordString, " ")
 			}
 		}
 		
-		; ID - clean up.
-		this.id := cleanupText(this.id)
-		
-		; Title - clean up, drop anything extra that we don't need.
-		removeAry := ["-", "/", "\", ":", ","]
-		if(isEMC2Ini) {
-			removeAry.push("DBC") ; Don't need "DBC" on the start of every EMC2 title.
-			
-			; INI-specific strings to remove
-			if(this.ini = "DLG")
-				removeAry := arrayAppend(removeAry, ["(Developer has reset your status)", "(Stage 1 QAer is Waiting for Changes)", "(Stage 2 QAer is Waiting for Changes)"])
-			if(this.ini = "XDS")
-				removeAry := arrayAppend(removeAry, ["(A Reviewer Approved)"])
-			if(this.ini = "SLG")
-				removeAry := arrayAppend(removeAry, ["--Assigned To:"])
-		}
-		this.title := cleanupText(this.title, removeAry)
+		; Make sure everything is free of extra whitespace
+		this.ini   := dropWhitespace(this.ini)
+		this.id    := dropWhitespace(this.id)
+		this.title := dropWhitespace(this.title)
 	}
 	
 	selectMissingInfo() {

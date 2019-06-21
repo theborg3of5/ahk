@@ -8,9 +8,7 @@
 	
 # Large
 	Look at cleaning up all of the record-splitting and EMC2-object-processing functions in epic.ahk
-		Can getObjectInfoFromEMC2 use extractEMC2ObjectInfoRaw (like selectSnapper does)?
-		Can processEMC2ObjectInfo use getTrueEMC2INI?
-		Create a new splitRecordString function that combines logic from splitRecordString and extractEMC2ObjectInfoRaw
+		Finish documenting EpicRecord
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)
 		Maybe store off both title (maybe trimmed, drop things like " - Wiki" off of the end, etc?) and URL on copy hotkey
 			Used by a generic hotkey that used those two bits of info + hyperlinking class to add a link?

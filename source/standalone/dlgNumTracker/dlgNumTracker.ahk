@@ -17,11 +17,12 @@ MainLoop:
 	if(!MainConfig.doesWindowExist("EMC2"))
 		return
 	
-	getObjectInfoFromEMC2(ini, id)
-	if(ini != "DLG")
+	record := new EpicRecord()
+	record.initFromEMC2Title()
+	if(record.ini != "DLG")
 		return
+	currDLGId := record.id
 	
-	currDLGId := id
 	trayMessage := "
 	(LTrim
 		" scriptTitle "

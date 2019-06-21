@@ -9,8 +9,6 @@
 			Callers to getObjectInfoFromEMC2() (which is the only caller to splitRecordString())
 				Various in EMC2 (mostly opening current record elsewhere)
 					EMC2
-				dlgNumTracker
-					EMC2
 			Callers to extractEMC2ObjectInfo()
 				input > sendStandardEMC2ObjectString()
 					EMC2
@@ -92,7 +90,7 @@ class EpicRecord {
 		
 		this.extractBitsFromString(recordString)
 		this.processBits()
-		DEBUG.popup("recordString",recordString, "this",this)
+		; DEBUG.popup("recordString",recordString, "this",this)
 	}
 	
 	extractBitsFromString(recordString) {

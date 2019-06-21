@@ -20,6 +20,7 @@
 #Include %A_LineFile%\..\class
 	#Include debug.ahk
 	#Include duration.ahk
+	#Include epicRecord.ahk
 	#Include flexTable.ahk
 	#Include hyperlinker.ahk
 	#Include iniObject.ahk

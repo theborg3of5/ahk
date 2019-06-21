@@ -8,7 +8,6 @@
 			standardEMC2String
 			Silent selection of "true" EMC2 INI (in processBits())
 			Removing EMC2 object-specific title bits (in processBits())
-		Filter actionObject selector down to EMC2-Type choices (for both silent and gui selections)
 		Use this in places:
 			Callers to getTrueEMC2INI()
 				actionObjectEMC2 > __New()
@@ -29,7 +28,8 @@ class EpicRecord {
 	; Constructed strings representing the record.
 	recordString { ; R INI ID
 		get {
-			this.selectMissingInfo()
+			if(!this.selectMissingInfo())
+				return ""
 			if(this.title != "")
 				return this.title " [R " this.ini " " this.id "]"
 			else
@@ -38,7 +38,8 @@ class EpicRecord {
 	}
 	standardEMC2String { ; INI ID - TITLE
 		get {
-			this.selectMissingInfo()
+			if(!this.selectMissingInfo())
+				return ""
 			return this.ini " " this.id " - " this.title
 		}
 	}
@@ -124,7 +125,7 @@ class EpicRecord {
 		; INI - clean up, and try to turn it into the "real" EMC2 one if it's one of those.
 		this.ini := cleanupText(this.ini)
 		if(this.ini != "") {
-			s := new Selector("actionObject.tls")
+			s := new Selector("actionObject.tls", {"COLUMN":"TYPE", "VALUE":ActionObjectRedirector.Type_EMC2})
 			tempIni := s.selectChoice(this.ini, "SUBTYPE")
 			if(tempIni) {
 				this.ini := tempIni
@@ -153,15 +154,18 @@ class EpicRecord {
 	
 	selectMissingInfo() {
 		if(this.ini != "" && this.id != "") ; Nothing required is missing.
-			return
+			return true
 		
-		s := new Selector("actionObject.tls")
+		s := new Selector("actionObject.tls", {"COLUMN":"TYPE", "VALUE":ActionObjectRedirector.Type_EMC2})
 		data := s.selectGui("", "Enter INI and ID", {"SUBTYPE":this.ini, "VALUE":this.id})
 		if(!data)
-			return
+			return false
+		if(data["SUBTYPE"] = "" || data["VALUE"] = "") ; Didn't get everything we needed.
+			return false
 		
 		this.ini := data["SUBTYPE"]
 		this.id  := data["VALUE"]
+		return true
 	}
 	
 }

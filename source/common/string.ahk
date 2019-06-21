@@ -127,7 +127,7 @@ stringMatches(haystack, el, method := "ANY") { ; method := CONTAINS_ANY
 
 ; Reverse array contains function - checks if any of array strings are in given string, with some special ways of searching (matches start, matches end, exact match, partial match anywhere)
 ; Returns the position of the earliest match in the string (the first occurrence of any needle)
-stringMatchesAnyOf(haystack, needlesAry, method := "ANY", ByRef matchedIndex := "") { ; method = CONTAINS_ANY
+stringMatchesAnyOf(haystack, needlesAry, method := "ANY", ByRef matchedNeedle := "") { ; method = CONTAINS_ANY
 	earliestMatchedPos := 0
 	
 	For i,needle in needlesAry {
@@ -135,7 +135,7 @@ stringMatchesAnyOf(haystack, needlesAry, method := "ANY", ByRef matchedIndex := 
 		if(matchedPos) {
 			if(!earliestMatchedPos || (matchedPos < earliestMatchedPos)) {
 				earliestMatchedPos := matchedPos
-				matchedIndex := i
+				matchedNeedle := needle
 			}
 		}
 	}

@@ -118,9 +118,8 @@
 		numSpaces := 1 ; Space we just trimmed off
 		
 		keywords := ["DESCRIPTION:", "PARAMETERS:", "RETURNS:", "SIDE EFFECTS:", "NOTES:"]
-		matchedPos := stringMatchesAnyOf(line, keywords, CONTAINS_ANY, matchedIndex)
+		matchedPos := stringMatchesAnyOf(line, keywords, CONTAINS_ANY, matchedKeyword)
 		if(matchedPos) {
-			matchedKeyword := keywords[matchedIndex]
 			; Keyword line - add length of keyword + however many spaces are after it.
 			numSpaces += strLen(matchedKeyword)
 			line := removeStringFromStart(line, matchedKeyword)

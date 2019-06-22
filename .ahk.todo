@@ -4,7 +4,6 @@
 	Selector: dynamically resize abbreviation column based on widest value?
 		To allow longer abbreviations
 		Is that going to get weird with SelectorGui+FlexTable interactions?
-	Figure out what's going wrong with copy-do-page hotkey on home desktop
 	
 # Large
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)

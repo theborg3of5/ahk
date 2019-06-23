@@ -14,8 +14,8 @@ SetTitleMatchMode, % TITLE_MATCH_MODE_Contain ; Match text anywhere inside windo
 SetCapsLockState,   AlwaysOff                 ; Turn off Caps Lock so it can be used as a hotkey.
 SetScrollLockState, AlwaysOff                 ; Turn off Scroll Lock so it can be used as a hotkey.
 SetNumLockState,    AlwaysOn                  ; Force NumLock to always stay on.
-SetDefaultMouseSpeed, 0 ; Fasted mouse speed for mouse commands (MouseMove in particular)
-SetMouseDelay, 0 ; Smallest possible delay after mouse movements/clicks
+SetDefaultMouseSpeed, 0                       ; Fasted mouse speed for mouse commands (MouseMove in particular)
+SetMouseDelay, 0                              ; Smallest possible delay after mouse movements/clicks
 
 
 setCommonHotkeysType(HOTKEY_TYPE_Master)

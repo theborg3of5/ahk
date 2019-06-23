@@ -22,7 +22,7 @@ global moveY := 0
 global keyHeld := false
 
 ; Don't allow the mouse to move while this is running (automatically releases on exit).
-BlockInput, MouseMove
+; BlockInput, MouseMove
 
 SetTimer, MainLoop, 50 ; GDB TODO ms, timer toggled by commonHotkeys' suspend hotkey.
 MainLoop:
@@ -78,12 +78,12 @@ MainLoop:
 		; ; downHotkey := false
 	; }
 	
-	
-	if(keyHeld && GetKeyState("Right", "P"))
-		moveX += 1
-	if(keyHeld && GetKeyState("Down", "P"))
-		moveY += 1
-	
+	; Move continuously based on currently-down keys, but only if at least one key is being held down.
+	; This is to allow a single keystroke to move the cursor only one tick in that direction.
+	if(rightHeld && GetKeyState("Right", "P"))
+		moveX := 1
+	if(downHeld && GetKeyState("Down", "P"))
+		moveY := 1
 	
 	; if(!rightHotkey && GetKeyState("Right", "P"))
 		; moveX += 1
@@ -92,9 +92,32 @@ MainLoop:
 	
 	; DEBUG.popup("moveX",moveX, "moveY",moveY)
 	if(moveX != 0 || moveY != 0) {
+		if(movingLock) {
+			Loop {
+				if(!movingLock) { ; loop
+					movingLock := "loop" counter
+					Break
+				} else {
+					x := "loop"
+				}
+			}
+		} else {
+			movingLock := "loop" counter
+		}
+		
+		counter++
+		
+		tempX := moveX
+		tempY := moveY
+		
 		MouseMove, moveX, moveY, , R
+		
+		if(tempX != moveX || tempY != moveY)
+			MsgBox ope
+		
 		moveX := 0
 		moveY := 0
+		movingLock := false
 	}
 	
 	
@@ -129,10 +152,24 @@ Right::
 	; KeyWait, Right
 	
 	if(!rightRunOnce) {
-		moveX += 1
+		if(movingLock) {
+			Loop {
+				if(!movingLock) { ; right
+					movingLock := "right"
+					Break
+				} else {
+					x := "right"
+				}
+			}
+		} else {
+			movingLock := "right"
+		}
+		
+		moveX := 1
+		movingLock := false
 		rightRunOnce := true
 	} else {
-		keyHeld := true
+		rightHeld := true
 	}
 return
 Right Up::
@@ -140,6 +177,8 @@ Right Up::
 	; rightHotkey := false
 	
 	rightRunOnce := false
+	rightHeld := false
+	; DEBUG.toast("rightrelease",rightrelease)
 return
 
 Up::
@@ -152,17 +191,32 @@ Down::
 	; moveY += 1
 	; downHotkey := true
 	; KeyWait, Down
-	
 	if(!downRunOnce) {
-		moveY += 1
+		if(movingLock) {
+			Loop {
+				if(!movingLock) { ; down
+					movingLock := "down"
+					Break
+				} else {
+					x := "down"
+				}
+			}
+		} else {
+			movingLock := "down"
+		}
+		
+		moveY := 1
+		movingLock := false
 		downRunOnce := true
 	} else {
-		keyHeld := true
+		downHeld := true
 	}
 return
 Down Up::
 	; downHotkey := false
 	downRunOnce := false
+	downHeld := false
+	; DEBUG.toast("downrelease",downrelease)
 return
 
 ; Left::

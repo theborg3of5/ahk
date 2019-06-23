@@ -17,31 +17,52 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 setCommonHotkeysType(HOTKEY_TYPE_Standalone)
 ; setUpTrayIcons("controllerGreen.ico", "controllerRed.ico", "AHK: Controller Emulator")
 
+; 200 hotkeys allowed per 2 seconds (to allow long holds for moving mouse further)
+#MaxHotkeysPerInterval, 200
+#HotkeyInterval, 2000
+
 global moveX := 0
 global moveY := 0
-global keyRunOnce := []
-global keyHeld    := []
+global keyRunOnce := {"Left":false, "Right":false, "Up":false, "Down":false}
+global keyHeld    := {"Left":false, "Right":false, "Up":false, "Down":false}
+global keyCounts  := {"Left":0,     "Right":0,     "Up":0,     "Down":0}
 
 ; Don't allow the mouse to move while this is running (automatically releases on exit).
 ; BlockInput, MouseMove
 
 SetTimer, MainLoop, 10 ; GDB TODO ms, timer toggled by commonHotkeys' suspend hotkey.
 MainLoop:
+	For keyName,_ in keyCounts {
+		if(!keyHeld[keyName]) ; Only add to counts here if the key is being held down (so first just adds 1, not potentially multiple depending on the timer)
+			Continue
+		if(!GetKeyState(keyName, "P")) ; Check physical state - logical state is cleared by triggering hotkeys
+			Continue
+		
+		keyCounts[keyName] += 1
+	}
 	
+	; if(keyHeld["Right"] && GetKeyState("Right", "P"))
+		; moveX += 1
+	; if(keyHeld["Down"] && GetKeyState("Down", "P"))
+		; moveY += 1
 	
-	if(keyHeld["Right"] && GetKeyState("Right", "P"))
-		moveX += 1
-	if(keyHeld["Down"] && GetKeyState("Down", "P"))
-		moveY += 1
+	; Store off and clear key counts to make sure we're tracking any further updates that happen while we're handling the actual move
+	tempCounts := keyCounts.clone()
+	For keyName,_ in keyCounts
+		keyCounts[keyName] := 0
 	
-	; Store off and clear X/Y values so we can track any updates that happen while we're actually moving the mouse
-	tempX := moveX
-	moveX := 0
-	tempY := moveY
-	moveY := 0
+	; Calculate actual x/y movement
+	moveX := tempCounts["Right"] - tempCounts["Left"]
+	moveY := tempCounts["Down"] - tempCounts["Up"]
 	
-	if(tempX != 0 || tempY != 0)
-		MouseMove, tempX, tempY, 0, R ; Speed of 0 moves mouse instantly, moving relative to current position
+	; ; Store off and clear X/Y values so we can track any updates that happen while we're actually moving the mouse
+	; tempX := moveX
+	; moveX := 0
+	; tempY := moveY
+	; moveY := 0
+	
+	if(moveX != 0 || moveY != 0)
+		MouseMove, moveX, moveY, 0, R ; Speed of 0 moves mouse instantly, moving relative to current position
 return
 
 ; Up::
@@ -67,7 +88,8 @@ arrowPressed(keyName) {
 		return
 	}
 	
-	addMoveForKey(keyName)
+	keyCounts[keyName] += 1
+	; addMoveForKey(keyName)
 	
 	keyRunOnce[keyName] := true
 }

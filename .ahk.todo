@@ -6,19 +6,13 @@
 		Is that going to get weird with SelectorGui+FlexTable interactions?
 	
 # Large
+	New standalone script to more precisely move the mouse (preciseMouse.ahk)
+		Get rid of Griddy, which serves a slightly related purpose but I never use
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)
 		Maybe store off both title (maybe trimmed, drop things like " - Wiki" off of the end, etc?) and URL on copy hotkey
 			Used by a generic hotkey that used those two bits of info + hyperlinking class to add a link?
 	Rewrite colorette so we don't have to deal with the exe?
 		Would let us get rid of the special exe case in .gitignore, too
-	Consider some way to more precisely move the mouse cursor on command
-		A standalone script (like griddy?) or just a hotkey
-		Lock the mouse?
-			Until exit?
-			Until click?
-			Not at all?
-		Arrow keys to move cursor
-		Maybe modifier keys for bigger jumps, jump to other side of screen, etc.
 	Consider moving program-specific functions into their own (program-named) classes?
 		Possible first candidate: VB6 (most of the functions don't have a prefix anyway)
 		Would remove need to prefix all function names with program name

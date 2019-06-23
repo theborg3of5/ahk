@@ -1,12 +1,5 @@
 /* GDB TODO
-	Lock the mouse?
-		Until exit?
-		Until click?
-		Not at all?
-	Arrow keys to move cursor
 	Maybe modifier keys for bigger jumps, jump to other side of screen, etc.
-	Holding some key (like spacebar?) could allow mouse movement until it's released?
-		BlockInput, MouseMoveOff
 */
 
 #NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
@@ -21,16 +14,11 @@ setCommonHotkeysType(HOTKEY_TYPE_Standalone)
 #MaxHotkeysPerInterval, 200
 #HotkeyInterval, 2000
 
-global moveX := 0
-global moveY := 0
 global keyRunOnce := {"Left":false, "Right":false, "Up":false, "Down":false}
 global keyHeld    := {"Left":false, "Right":false, "Up":false, "Down":false}
 global keyCounts  := {"Left":0,     "Right":0,     "Up":0,     "Down":0}
 
-; Don't allow the mouse to move while this is running (automatically releases on exit).
-; BlockInput, MouseMove
-
-SetTimer, MainLoop, 10 ; GDB TODO ms, timer toggled by commonHotkeys' suspend hotkey.
+SetTimer, MainLoop, 10 ; 10 ms, timer toggled by commonHotkeys' suspend hotkey.
 MainLoop:
 	For keyName,_ in keyCounts {
 		if(!keyHeld[keyName]) ; Only add to counts here if the key is being held down (so first just adds 1, not potentially multiple depending on the timer)
@@ -38,13 +26,8 @@ MainLoop:
 		if(!GetKeyState(keyName, "P")) ; Check physical state - logical state is cleared by triggering hotkeys
 			Continue
 		
-		keyCounts[keyName] += 1
+		addToKeyCount(keyName)
 	}
-	
-	; if(keyHeld["Right"] && GetKeyState("Right", "P"))
-		; moveX += 1
-	; if(keyHeld["Down"] && GetKeyState("Down", "P"))
-		; moveY += 1
 	
 	; Store off and clear key counts to make sure we're tracking any further updates that happen while we're handling the actual move
 	tempCounts := keyCounts.clone()
@@ -55,31 +38,19 @@ MainLoop:
 	moveX := tempCounts["Right"] - tempCounts["Left"]
 	moveY := tempCounts["Down"] - tempCounts["Up"]
 	
-	; ; Store off and clear X/Y values so we can track any updates that happen while we're actually moving the mouse
-	; tempX := moveX
-	; moveX := 0
-	; tempY := moveY
-	; moveY := 0
-	
 	if(moveX != 0 || moveY != 0)
 		MouseMove, moveX, moveY, 0, R ; Speed of 0 moves mouse instantly, moving relative to current position
 return
 
-; Up::
-; Down::
-; Left::
-; Right::
-	; return
+*Left:: arrowPressed("Left")
+*Right::arrowPressed("Right")
+*Up::   arrowPressed("Up")
+*Down:: arrowPressed("Down")
 
-Left::arrowPressed("Left")
-Right::arrowPressed("Right")
-Up::arrowPressed("Up")
-Down::arrowPressed("Down")
-
-Left Up::arrowReleased("Left")
+Left Up:: arrowReleased("Left")
 Right Up::arrowReleased("Right")
-Up Up::arrowReleased("Up")
-Down Up::arrowReleased("Down")
+Up Up::   arrowReleased("Up")
+Down Up:: arrowReleased("Down")
 
 
 arrowPressed(keyName) {
@@ -88,21 +59,12 @@ arrowPressed(keyName) {
 		return
 	}
 	
-	keyCounts[keyName] += 1
-	; addMoveForKey(keyName)
-	
+	addToKeyCount(keyName)
 	keyRunOnce[keyName] := true
 }
 
-addMoveForKey(keyName) {
-	if(keyName = "Left")
-		moveX -= 1
-	else if(keyName = "Right")
-		moveX += 1
-	else if(keyName = "Up")
-		moveY -= 1
-	else if(keyName = "Down")
-		moveY += 1
+addToKeyCount(keyName) {
+	keyCounts[keyName] := 1
 }
 
 arrowReleased(keyName) {

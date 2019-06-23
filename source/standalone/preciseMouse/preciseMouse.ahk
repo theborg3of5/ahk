@@ -21,6 +21,10 @@ global moveX := 0
 global moveY := 0
 global keyHeld := false
 
+
+global keyRunOnce := []
+global keyHeld    := []
+
 ; Don't allow the mouse to move while this is running (automatically releases on exit).
 ; BlockInput, MouseMove
 
@@ -80,49 +84,65 @@ MainLoop:
 	
 	; Move continuously based on currently-down keys, but only if at least one key is being held down.
 	; This is to allow a single keystroke to move the cursor only one tick in that direction.
-	if(rightHeld && GetKeyState("Right", "P"))
-		moveX := 1
-	if(downHeld && GetKeyState("Down", "P"))
-		moveY := 1
+	; if(rightHeld && GetKeyState("Right", "P"))
+		; moveX += 1
+	; if(downHeld && GetKeyState("Down", "P"))
+		; moveY += 1
+	
+	if(keyHeld["Right"] && GetKeyState("Right", "P"))
+		moveX += 1
+	if(keyHeld["Down"] && GetKeyState("Down", "P"))
+		moveY += 1
 	
 	; if(!rightHotkey && GetKeyState("Right", "P"))
 		; moveX += 1
 	; if(!downHotkey && GetKeyState("Down", "P"))
 		; moveY += 1
 	
+	; moveX += keyMoveX
+	; keyMoveX := 0
+	; moveY += keyMoveY
+	; keyMoveY := 0
+	
+	; Store off and clear X/Y values so we can track any updates that happen while we're actually moving the mouse
+	tempX := moveX
+	moveX := 0
+	tempY := moveY
+	moveY := 0
+	
 	; DEBUG.popup("moveX",moveX, "moveY",moveY)
-	if(moveX != 0 || moveY != 0) {
-		if(movingLock) {
-			Loop {
-				if(!movingLock) { ; loop
-					movingLock := "loop" counter
-					Break
-				} else {
-					x := "loop"
-				}
-			}
-		} else {
-			movingLock := "loop" counter
-		}
+	if(tempX != 0 || tempY != 0) {
+		; if(movingLock) {
+			; Loop {
+				; if(!movingLock) { ; loop
+					; movingLock := "loop" counter
+					; Break
+				; } else {
+					; x := "loop"
+				; }
+			; }
+		; } else {
+			; movingLock := "loop" counter
+		; }
 		
-		counter++
+		; counter++
 		
-		tempX := moveX
-		tempY := moveY
+		; tempX := moveX
+		; tempY := moveY
 		
-		MouseMove, moveX, moveY, , R
+		MouseMove, tempX, tempY, 0, R ; Speed of 0 moves mouse instantly, moving relative to current position
 		
-		if(tempX != moveX || tempY != moveY)
-			MsgBox ope
+		; if(tempX != moveX || tempY != moveY)
+			; MsgBox ope
 		
-		moveX := 0
-		moveY := 0
-		movingLock := false
+		; moveX := 0
+		; moveY := 0
+		; movingLock := false
 	}
 	
 	
-	if(!GetKeyState("Left", "P") && !GetKeyState("Right", "P") && !GetKeyState("Up", "P") && !GetKeyState("Down", "P"))
-		keyHeld := false
+	; if(!GetKeyState("Left", "P") && !GetKeyState("Right", "P") && !GetKeyState("Up", "P") && !GetKeyState("Down", "P"))
+		; keyHeld := false
 return
 
 ; Up::
@@ -131,133 +151,85 @@ return
 ; Right::
 	; return
 
-Left::
-	; moveMouse(-1, 0)
-	moveX -= 1
-return
+Left::arrowPressed("Left")
+Right::arrowPressed("Right")
+Up::arrowPressed("Up")
+Down::arrowPressed("Down")
 
-Right::
-	; moveMouse(1, 0)
-	
-	; while(GetKeyState("Right", "P"))
-		; moveX += 1
-	
-	; if(blockRight)
+Left Up::arrowReleased("Left")
+Right Up::arrowReleased("Right")
+Up Up::arrowReleased("Up")
+Down Up::arrowReleased("Down")
+
+; Right::
+	; if(rightRunOnce) {
+		; rightHeld := true
 		; return
-	; moveX += 1
-	; blockRight := true
-	
-	; moveX += 1
-	; rightHotkey := true
-	; KeyWait, Right
-	
-	if(!rightRunOnce) {
-		if(movingLock) {
-			Loop {
-				if(!movingLock) { ; right
-					movingLock := "right"
-					Break
-				} else {
-					x := "right"
-				}
-			}
-		} else {
-			movingLock := "right"
-		}
+	; }
 		
-		moveX := 1
-		movingLock := false
-		rightRunOnce := true
-	} else {
-		rightHeld := true
-	}
-return
-Right Up::
-	; blockRight := false
-	; rightHotkey := false
-	
-	rightRunOnce := false
-	rightHeld := false
-	; DEBUG.toast("rightrelease",rightrelease)
-return
+	; moveX += 1
+	; rightRunOnce := true
+; return
+; Right Up::
+	; rightRunOnce := false
+	; rightHeld := false
+; return
 
-Up::
-	; moveMouse(0, -1)
-	moveY -= 1
-return
-Down::
-	; moveMouse(0, 1)
+; Up::
+	; moveY -= 1
+; return
+; Down::
+	; if(downRunOnce) {
+		; downHeld := true
+		; return
+	; }
 	
 	; moveY += 1
-	; downHotkey := true
-	; KeyWait, Down
-	if(!downRunOnce) {
-		if(movingLock) {
-			Loop {
-				if(!movingLock) { ; down
-					movingLock := "down"
-					Break
-				} else {
-					x := "down"
-				}
-			}
-		} else {
-			movingLock := "down"
-		}
-		
-		moveY := 1
-		movingLock := false
-		downRunOnce := true
-	} else {
-		downHeld := true
-	}
-return
-Down Up::
-	; downHotkey := false
-	downRunOnce := false
-	downHeld := false
-	; DEBUG.toast("downrelease",downrelease)
-return
-
-; Left::
-; Right::
-; Up::
+	; downRunOnce := true
+; return
+; Down Up::
+	; downRunOnce := false
+	; downHeld := false
+; return
 ; Down::
-	; ; updateMouse()
-	; return
+	; if(keyRunOnce["Down"]) {
+		; keyHeld["Down"] := true
+		; return
+	; }
+	
+	; moveY += 1
+	; keyRunOnce["Down"] := true
+; return
+; Down Up::
+	; keyRunOnce["Down"] := false
+	; keyHeld["Down"] := false
+; return
 
-updateMouse() {
+arrowPressed(keyName) {
+	if(keyRunOnce[keyName]) {
+		keyHeld[keyName] := true
+		return
+	}
 	
-	; DEBUG.popup("moveX",moveX, "moveY",moveY)
+	addMoveForKey(keyName)
 	
-	; DEBUG.popup("GetKeyState(""Left"")",GetKeyState("Left"))
-	
-	; if(A_ThisHotkey = "Left" || GetKeyState("Left", "P"))
-		; moveX -= 1
-	; if(A_ThisHotkey = "Right" || GetKeyState("Right", "P"))
-		; moveX += 1
-	; if(A_ThisHotkey = "Up" || GetKeyState("Up", "P"))
-		; moveY -= 1
-	; if(A_ThisHotkey = "Down" || GetKeyState("Down", "P"))
-		; moveY += 1
-	
-	; ; Check physical key state so that we catch when it's triggered by that hotkey, and check all so that we can do multiple together.
-	; if(GetKeyState("Left", "P"))
-		; moveX -= 1
-	; if(GetKeyState("Right", "P"))
-		; moveX += 1
-	; if(GetKeyState("Up", "P"))
-		; moveY -= 1
-	; if(GetKeyState("Down", "P"))
-		; moveY += 1
-	
-	
-	; DEBUG.popup("moveX",moveX, "moveY",moveY)
+	keyRunOnce[keyName] := true
 }
 
+addMoveForKey(keyName) {
+	if(keyName = "Left")
+		moveX -= 1
+	else if(keyName = "Right")
+		moveX += 1
+	else if(keyName = "Up")
+		moveY -= 1
+	else if(keyName = "Down")
+		moveY += 1
+}
 
-moveMouse(x, y) {
-	MouseMove, x, y, , R
+arrowReleased(keyName) {
+	keyRunOnce[keyName] := false
+	keyHeld[keyName]    := false
 }
 
 

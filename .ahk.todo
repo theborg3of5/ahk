@@ -6,7 +6,6 @@
 		Is that going to get weird with SelectorGui+FlexTable interactions?
 	
 # Large
-	New standalone script to more precisely move the mouse (preciseMouse.ahk)
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)
 		Maybe store off both title (maybe trimmed, drop things like " - Wiki" off of the end, etc?) and URL on copy hotkey
 			Used by a generic hotkey that used those two bits of info + hyperlinking class to add a link?

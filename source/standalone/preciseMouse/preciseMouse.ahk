@@ -27,21 +27,62 @@ SetTimer, MainLoop, 10 ; GDB TODO ms, timer toggled by commonHotkeys' suspend ho
 MainLoop:
 	; moveX := 0
 	; moveY := 0
-	; if(GetKeyState("Left"))
+	; if(GetKeyState("Left", "P"))
 		; moveX -= 1
-	; if(GetKeyState("Right"))
+	; if(GetKeyState("Right", "P"))
 		; moveX += 1
-	; if(GetKeyState("Up"))
+	; if(GetKeyState("Up", "P"))
 		; moveY -= 1
-	; if(GetKeyState("Down"))
+	; if(GetKeyState("Down", "P"))
 		; moveY += 1
 	
+	; ; Check physical key state so that we catch when it's triggered by that hotkey, and check all so that we can do multiple together.
+	; if(A_ThisHotkey != "Left" && GetKeyState("Left", "P"))
+		; moveX -= 1
+	; if(A_ThisHotkey != "Right" && GetKeyState("Right", "P"))
+		; moveX += 1
+	; if(A_ThisHotkey != "Up" && GetKeyState("Up", "P"))
+		; moveY -= 1
+	; if(A_ThisHotkey != "Down" && GetKeyState("Down", "P"))
+		; moveY += 1
+	
+	
+	
+	
+	if(!rightHotkey && GetKeyState("Right", "P"))
+		moveX += 1
+	if(!downHotkey && GetKeyState("Down", "P"))
+		moveY += 1
+	
+	if(rightHotkey) {
+		count := 25
+		while(rightHotkey) {
+			Sleep, 10
+			count--
+			if(count <= 0)
+				rightHotkey := false
+		}
+		; Sleep, 500
+		; rightHotkey := false
+	}
+	if(downHotkey) {
+		count := 25
+		while(downHotkey) {
+			Sleep, 10
+			count--
+			if(count <= 0)
+				downHotkey := false
+		}
+		; Sleep, 500
+		; downHotkey := false
+	}
+	
 	; DEBUG.popup("moveX",moveX, "moveY",moveY)
-	; if(moveX != 0 || moveY != 0) {
-		; MouseMove, moveX, moveY, , R
-		; moveX := 0
-		; moveY := 0
-	; }
+	if(moveX != 0 || moveY != 0) {
+		MouseMove, moveX, moveY, , R
+		moveX := 0
+		moveY := 0
+	}
 	
 return
 
@@ -51,29 +92,52 @@ return
 ; Right::
 	; return
 
-; Left::
-	; ; moveMouse(-1, 0)
-	; moveX -= 1
-; return
-; Right::
-	; ; moveMouse(1, 0)
-	; moveX += 1
-; return
-; Up::
-	; ; moveMouse(0, -1)
-	; moveY -= 1
-; return
-; Down::
-	; ; moveMouse(0, 1)
-	; moveY += 1
-; return
-
 Left::
+	; moveMouse(-1, 0)
+	moveX -= 1
+return
+
 Right::
+	; moveMouse(1, 0)
+	
+	moveX += 1
+	rightHotkey := true
+	KeyWait, Right
+	
+	; while(GetKeyState("Right", "P"))
+		; moveX += 1
+	
+	; if(blockRight)
+		; return
+	; moveX += 1
+	; blockRight := true
+return
+Right Up::
+	; blockRight := false
+	rightHotkey := false
+return
+
 Up::
+	; moveMouse(0, -1)
+	moveY -= 1
+return
 Down::
-	updateMouse()
-	return
+	; moveMouse(0, 1)
+	
+	moveY += 1
+	downHotkey := true
+	KeyWait, Down
+return
+Down Up::
+	downHotkey := false
+return
+
+; Left::
+; Right::
+; Up::
+; Down::
+	; ; updateMouse()
+	; return
 
 updateMouse() {
 	
@@ -90,21 +154,16 @@ updateMouse() {
 	; if(A_ThisHotkey = "Down" || GetKeyState("Down", "P"))
 		; moveY += 1
 	
+	; ; Check physical key state so that we catch when it's triggered by that hotkey, and check all so that we can do multiple together.
+	; if(GetKeyState("Left", "P"))
+		; moveX -= 1
+	; if(GetKeyState("Right", "P"))
+		; moveX += 1
+	; if(GetKeyState("Up", "P"))
+		; moveY -= 1
+	; if(GetKeyState("Down", "P"))
+		; moveY += 1
 	
-	if(GetKeyState("Left", "P"))
-		moveX -= 1
-	if(GetKeyState("Right", "P"))
-		moveX += 1
-	if(GetKeyState("Up", "P"))
-		moveY -= 1
-	if(GetKeyState("Down", "P"))
-		moveY += 1
-	
-	if(moveX != 0 || moveY != 0) {
-		MouseMove, moveX, moveY, , R
-		moveX := 0
-		moveY := 0
-	}
 	
 	; DEBUG.popup("moveX",moveX, "moveY",moveY)
 }

@@ -1,7 +1,3 @@
-/* GDB TODO
-	Maybe modifier keys for bigger jumps, jump to other side of screen, etc.
-*/
-
 #NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
 #SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
@@ -38,6 +34,7 @@ MainLoop:
 	moveX := tempCounts["Right"] - tempCounts["Left"]
 	moveY := tempCounts["Down"] - tempCounts["Up"]
 	
+	; Move the mouse
 	if(moveX != 0 || moveY != 0)
 		MouseMove, moveX, moveY, 0, R ; Speed of 0 moves mouse instantly, moving relative to current position
 return
@@ -52,6 +49,8 @@ Right Up::arrowReleased("Right")
 Up Up::   arrowReleased("Up")
 Down Up:: arrowReleased("Down")
 
+Space::  LButton
+NumPad0::LButton
 
 arrowPressed(keyName) {
 	if(keyRunOnce[keyName]) {
@@ -64,7 +63,15 @@ arrowPressed(keyName) {
 }
 
 addToKeyCount(keyName) {
-	keyCounts[keyName] := 1
+	addAmount := 5 ; Basic, no modifier keys pressed
+	
+	; Ctrl/Shift modifiers change mouse move speed
+	if(GetKeyState("LCtrl",  "P")) ; Check physical state for these keys, in case logical state was cleared by triggering hotkeys
+		addAmount *= 5 ; 5x faster
+	if(GetKeyState("LShift", "P"))
+		addAmount /= 5 ; 5x slower
+	
+	keyCounts[keyName] := addAmount
 }
 
 arrowReleased(keyName) {

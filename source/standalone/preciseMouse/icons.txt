@@ -1,0 +1,8 @@
+Icons
+
+mouseGreen.ico
+	Based on icon by WPZOOM (https://www.wpzoom.com/)
+mouseRed.ico
+	Based on icon by WPZOOM (https://www.wpzoom.com/)
+
+

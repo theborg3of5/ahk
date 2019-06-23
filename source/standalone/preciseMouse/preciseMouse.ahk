@@ -4,7 +4,7 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 setCommonHotkeysType(HOTKEY_TYPE_Standalone)
-; setUpTrayIcons("controllerGreen.ico", "controllerRed.ico", "AHK: Controller Emulator")
+setUpTrayIcons("mouseGreen.ico", "mouseRed.ico", "AHK: Precise Mouse Movement")
 
 ; 200 hotkeys allowed per 2 seconds (to allow long holds for moving mouse further)
 #MaxHotkeysPerInterval, 200

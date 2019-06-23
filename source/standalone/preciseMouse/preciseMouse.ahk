@@ -19,11 +19,12 @@ setCommonHotkeysType(HOTKEY_TYPE_Standalone)
 
 global moveX := 0
 global moveY := 0
+global keyHeld := false
 
 ; Don't allow the mouse to move while this is running (automatically releases on exit).
 BlockInput, MouseMove
 
-SetTimer, MainLoop, 10 ; GDB TODO ms, timer toggled by commonHotkeys' suspend hotkey.
+SetTimer, MainLoop, 50 ; GDB TODO ms, timer toggled by commonHotkeys' suspend hotkey.
 MainLoop:
 	; moveX := 0
 	; moveY := 0
@@ -49,33 +50,45 @@ MainLoop:
 	
 	
 	
-	if(!rightHotkey && GetKeyState("Right", "P"))
+	; if(!rightHotkey && GetKeyState("Right", "P"))
+		; moveX += 1
+	; if(!downHotkey && GetKeyState("Down", "P"))
+		; moveY += 1
+	
+	; if(rightHotkey) {
+		; count := 25
+		; while(rightHotkey) {
+			; Sleep, 10
+			; count--
+			; if(count <= 0)
+				; rightHotkey := false
+		; }
+		; ; Sleep, 500
+		; ; rightHotkey := false
+	; }
+	; if(downHotkey) {
+		; count := 25
+		; while(downHotkey) {
+			; Sleep, 10
+			; count--
+			; if(count <= 0)
+				; downHotkey := false
+		; }
+		; ; Sleep, 500
+		; ; downHotkey := false
+	; }
+	
+	
+	if(keyHeld && GetKeyState("Right", "P"))
 		moveX += 1
-	if(!downHotkey && GetKeyState("Down", "P"))
+	if(keyHeld && GetKeyState("Down", "P"))
 		moveY += 1
 	
-	if(rightHotkey) {
-		count := 25
-		while(rightHotkey) {
-			Sleep, 10
-			count--
-			if(count <= 0)
-				rightHotkey := false
-		}
-		; Sleep, 500
-		; rightHotkey := false
-	}
-	if(downHotkey) {
-		count := 25
-		while(downHotkey) {
-			Sleep, 10
-			count--
-			if(count <= 0)
-				downHotkey := false
-		}
-		; Sleep, 500
-		; downHotkey := false
-	}
+	
+	; if(!rightHotkey && GetKeyState("Right", "P"))
+		; moveX += 1
+	; if(!downHotkey && GetKeyState("Down", "P"))
+		; moveY += 1
 	
 	; DEBUG.popup("moveX",moveX, "moveY",moveY)
 	if(moveX != 0 || moveY != 0) {
@@ -84,6 +97,9 @@ MainLoop:
 		moveY := 0
 	}
 	
+	
+	if(!GetKeyState("Left", "P") && !GetKeyState("Right", "P") && !GetKeyState("Up", "P") && !GetKeyState("Down", "P"))
+		keyHeld := false
 return
 
 ; Up::
@@ -100,10 +116,6 @@ return
 Right::
 	; moveMouse(1, 0)
 	
-	moveX += 1
-	rightHotkey := true
-	KeyWait, Right
-	
 	; while(GetKeyState("Right", "P"))
 		; moveX += 1
 	
@@ -111,10 +123,23 @@ Right::
 		; return
 	; moveX += 1
 	; blockRight := true
+	
+	; moveX += 1
+	; rightHotkey := true
+	; KeyWait, Right
+	
+	if(!rightRunOnce) {
+		moveX += 1
+		rightRunOnce := true
+	} else {
+		keyHeld := true
+	}
 return
 Right Up::
 	; blockRight := false
-	rightHotkey := false
+	; rightHotkey := false
+	
+	rightRunOnce := false
 return
 
 Up::
@@ -124,12 +149,20 @@ return
 Down::
 	; moveMouse(0, 1)
 	
-	moveY += 1
-	downHotkey := true
-	KeyWait, Down
+	; moveY += 1
+	; downHotkey := true
+	; KeyWait, Down
+	
+	if(!downRunOnce) {
+		moveY += 1
+		downRunOnce := true
+	} else {
+		keyHeld := true
+	}
 return
 Down Up::
-	downHotkey := false
+	; downHotkey := false
+	downRunOnce := false
 return
 
 ; Left::

@@ -4,12 +4,6 @@
 	Selector: dynamically resize abbreviation column based on widest value?
 		To allow longer abbreviations
 		Is that going to get weird with SelectorGui+FlexTable interactions?
-	Create a new script in the test folder for testing icons
-		Cycle through all .ico files in the same directory?
-			Maybe in a sub-directory instead?
-				Then we can add anything in the directory to the .gitignore
-					OR: we can just choose whether to commit it, for works in progress
-		Some other way to pick different icons? Ctrl + number keys, maybe?
 	
 # Large
 	Toast: could we avoid flickering between .showPersistent() and .setText()?

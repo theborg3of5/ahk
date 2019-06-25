@@ -39,7 +39,7 @@ class Toast {
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
 	showShort(toastText) {
-		Toast.showForSeconds(toastText, 1, VisualWindow.X_RIGHT_EDGE, VisualWindow.Y_BOTTOM_EDGE)
+		Toast.showForSeconds(toastText, 1, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
 	}
 	
 	;---------
@@ -50,7 +50,7 @@ class Toast {
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
 	showMedium(toastText) {
-		Toast.showForSeconds(toastText, 2, VisualWindow.X_RIGHT_EDGE, VisualWindow.Y_BOTTOM_EDGE)
+		Toast.showForSeconds(toastText, 2, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
 	}
 	
 	;---------
@@ -61,7 +61,7 @@ class Toast {
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
 	showLong(toastText) {
-		Toast.showForSeconds(toastText, 5, VisualWindow.X_RIGHT_EDGE, VisualWindow.Y_BOTTOM_EDGE)
+		Toast.showForSeconds(toastText, 5, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
 	}
 	
 	;---------
@@ -87,7 +87,7 @@ class Toast {
 		overridesAry["MARGIN_Y"]         := 1
 		overridesAry["LABEL_STYLES"]     := "Right"
 		
-		Toast.showForSeconds(toastText, 2, VisualWindow.X_RIGHT_EDGE, VisualWindow.Y_BOTTOM_EDGE, overridesAry)
+		Toast.showForSeconds(toastText, 2, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge, overridesAry)
 	}
 	
 	;---------
@@ -103,7 +103,7 @@ class Toast {
 	;                              found in .getStyleAry().
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
-	showForSeconds(toastText, numSeconds, x := "RIGHT", y := "BOTTOM", styleOverridesAry := "") { ; x := VisualWindow.X_RIGHT_EDGE, y := VisualWindow.Y_BOTTOM_EDGE
+	showForSeconds(toastText, numSeconds, x := "RIGHT_EDGE", y := "BOTTOM_EDGE", styleOverridesAry := "") { ; x := VisualWindow.X_RightEdge, y := VisualWindow.Y_BottomEdge
 		idAry := Toast.buildGui(styleOverridesAry)
 		guiId        := idAry["GUI_ID"]
 		labelVarName := idAry["LABEL_VAR_NAME"]
@@ -123,7 +123,7 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Create a new Toast object.
 	; PARAMETERS:
-	;  toastText         (I,REQ) - The text to show in the toast.
+	;  toastText         (I,OPT) - The text to show in the toast.
 	;  styleOverridesAry (I,OPT) - Any style overrides that you'd like to make. Defaults can be
 	;                              found in .getStyleAry().
 	; RETURNS:        A new instance of this class.
@@ -156,9 +156,9 @@ class Toast {
 		
 		; Default to bottom-right if nothing given and no previous position.
 		if(this.x = "")
-			this.x := VisualWindow.X_RIGHT_EDGE
+			this.x := VisualWindow.X_RightEdge
 		if(this.y = "")
-			this.y := VisualWindow.Y_BOTTOM_EDGE
+			this.y := VisualWindow.Y_BottomEdge
 		
 		this.showToast(this.x, this.y, this.guiId)
 	}
@@ -304,9 +304,9 @@ class Toast {
 	move(x, y, guiId) {
 		; If x/y not given, default them to right/bottom
 		if(x = "")
-			x := VisualWindow.X_RIGHT_EDGE
+			x := VisualWindow.X_RightEdge
 		if(y = "")
-			y := VisualWindow.Y_BOTTOM_EDGE
+			y := VisualWindow.Y_BottomEdge
 		origDetectSetting := setDetectHiddenWindows("On")
 		
 		Gui, +LastFound ; Needed to identify the window on next line
@@ -338,7 +338,7 @@ class Toast {
 		Toast.WidthLabelNum++ ; Unique number per calculation
 		getLabelSizeForText(toastText, "WidthLabel" Toast.WidthLabelNum, textWidth, textHeight)
 		
-		; Update the text and width
+		; Update the text and width/height
 		GuiControl,     , % labelVarName, % toastText
 		GuiControl, Move, % labelVarName, % "w" textWidth " h" textHeight
 	}

@@ -45,7 +45,7 @@ getIdTitleStringForWindow(titleString := "A") {
 ;---------
 centerWindow(titleString := "A") {
 	window := new VisualWindow(titleString)
-	window.move(VisualWindow.X_CENTERED, VisualWindow.Y_CENTERED)
+	window.move(VisualWindow.X_Centered, VisualWindow.Y_Centered)
 }
 
 ;---------
@@ -58,7 +58,7 @@ centerWindow(titleString := "A") {
 fakeMaximizeWindow(titleString := "A") {
 	monitorBounds := getWindowMonitorWorkArea(titleString)
 	window := new VisualWindow(titleString)
-	window.resizeMove(monitorBounds["WIDTH"], monitorBounds["HEIGHT"], VisualWindow.X_CENTERED, VisualWindow.Y_CENTERED)
+	window.resizeMove(monitorBounds["WIDTH"], monitorBounds["HEIGHT"], VisualWindow.X_Centered, VisualWindow.Y_Centered)
 }
 
 ;---------

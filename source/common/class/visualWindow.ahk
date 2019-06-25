@@ -40,12 +40,12 @@ class VisualWindow {
 	; --------------------------------------------
 	; -- Constants for special window positions --
 	; --------------------------------------------
-	static X_LEFT_EDGE   := "LEFT_EDGE"   ; Against left edge of screen
-	static X_RIGHT_EDGE  := "RIGHT_EDGE"  ; Against right edge of screen
-	static X_CENTERED    := "CENTERED"    ; Horizontally centered
-	static Y_TOP_EDGE    := "TOP_EDGE"    ; Against top edge of screen
-	static Y_BOTTOM_EDGE := "BOTTOM_EDGE" ; Against bottom edge of screen
-	static Y_CENTERED    := "CENTERED"    ; Vertically centered
+	static X_LeftEdge   := "LEFT_EDGE"   ; Against left edge of screen
+	static X_RightEdge  := "RIGHT_EDGE"  ; Against right edge of screen
+	static X_Centered    := "CENTERED"    ; Horizontally centered
+	static Y_TopEdge    := "TOP_EDGE"    ; Against top edge of screen
+	static Y_BottomEdge := "BOTTOM_EDGE" ; Against bottom edge of screen
+	static Y_Centered    := "CENTERED"    ; Vertically centered
 	
 	;---------
 	; DESCRIPTION:    Create a new VisualWindow object to interact with a window as it appears.
@@ -384,25 +384,25 @@ class VisualWindow {
 		y := this.convertSpecialWindowY(y, monitorBounds)
 	}
 	convertSpecialWindowX(x, monitorBounds) {
-		if(x = VisualWindow.X_LEFT_EDGE)
+		if(x = VisualWindow.X_LeftEdge)
 			return monitorBounds["LEFT"]
 		
 		monitorWindowDiff := monitorBounds["WIDTH"] - this.width
-		if(x = VisualWindow.X_RIGHT_EDGE)
+		if(x = VisualWindow.X_RightEdge)
 			return monitorBounds["LEFT"] + monitorWindowDiff
-		if(x = VisualWindow.X_CENTERED)
+		if(x = VisualWindow.X_Centered)
 			return monitorBounds["LEFT"] + (monitorWindowDiff / 2)
 		
 		return x ; Just return the original value if it wasn't special
 	}
 	convertSpecialWindowY(y, monitorBounds) {
-		if(y = VisualWindow.Y_TOP_EDGE)
+		if(y = VisualWindow.Y_TopEdge)
 			return monitorBounds["TOP"]
 		
 		monitorWindowDiff := monitorBounds["HEIGHT"] - this.height
-		if(y = VisualWindow.Y_BOTTOM_EDGE)
+		if(y = VisualWindow.Y_BottomEdge)
 			return monitorBounds["TOP"] + monitorWindowDiff
-		if(y = VisualWindow.Y_CENTERED)
+		if(y = VisualWindow.Y_Centered)
 			return monitorBounds["TOP"] + (monitorWindowDiff / 2)
 		
 		return y ; Just return the original value if it wasn't special

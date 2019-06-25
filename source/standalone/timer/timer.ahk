@@ -22,7 +22,7 @@ if(!getTimerInfo(durationString, labelText))
 
 ; Set up Toast and show initial time
 toastObj := buildTimerToast()
-toastObj.showPersistent(VisualWindow.X_RIGHT_EDGE, VisualWindow.Y_TOP_EDGE)
+toastObj.showPersistent(VisualWindow.X_RightEdge, VisualWindow.Y_TopEdge)
 
 ; Start ticking once per second
 SetTimer, decrementTimer, 1000
@@ -155,7 +155,7 @@ finishTimer() {
 	if(timerLabelText != "")
 		displayText .= ":`n" timerLabelText
 	finishedToast := new Toast(displayText, getToastStyleOverrides("Center"))
-	finishedToast.showPersistent(VisualWindow.X_CENTERED, VisualWindow.Y_CENTERED)
+	finishedToast.showPersistent(VisualWindow.X_Centered, VisualWindow.Y_Centered)
 }
 
 

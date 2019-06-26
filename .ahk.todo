@@ -6,6 +6,11 @@
 		Is that going to get weird with SelectorGui+FlexTable interactions?
 	
 # Large
+	Consider moving program-specific functions into their own (program-named) classes?
+		Possible first candidate: VB6 (most of the functions don't have a prefix anyway)
+		Would remove need to prefix all function names with program name
+		Could it make referencing program-specific things from common code easier?
+			We're basically talking about interfaces then, aren't we?
 	Toast: could we avoid flickering between .showPersistent() and .setText()?
 		Maybe some way to set position without showing?
 		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?
@@ -23,11 +28,6 @@
 			Used by a generic hotkey that used those two bits of info + hyperlinking class to add a link?
 	Rewrite colorette so we don't have to deal with the exe?
 		Would let us get rid of the special exe case in .gitignore, too
-	Consider moving program-specific functions into their own (program-named) classes?
-		Possible first candidate: VB6 (most of the functions don't have a prefix anyway)
-		Would remove need to prefix all function names with program name
-		Could it make referencing program-specific things from common code easier?
-			We're basically talking about interfaces then, aren't we?
 	Add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments

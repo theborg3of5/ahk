@@ -7,7 +7,6 @@
 	
 # Large
 	Consider moving program-specific functions into their own (program-named) classes?
-		Possible first candidate: VB6 (most of the functions don't have a prefix anyway)
 		Would remove need to prefix all function names with program name
 		Could it make referencing program-specific things from common code easier?
 			We're basically talking about interfaces then, aren't we?

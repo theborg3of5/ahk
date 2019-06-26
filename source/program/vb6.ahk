@@ -1,12 +1,20 @@
 ; Hotkeys for VB6 IDE.
 
-#IfWinActive, ahk_class wndclass_desked_gsk
-	; Back and (sort of) forward like ES.
+#If MainConfig.isWindowActive("VB6")
+	; Back and (sort of - actually jump to definition) forward in history.
 	!Left:: Send, ^+{F2}
 	!Right::Send,  +{F2}
 	
+	; Find next/previous.
 	 ^g::Send,  {F3}
 	^+g::Send, +{F3}
+	
+	; Comment/uncomment
+	 ^`;::clickUsingMode(126, 37, "Client")
+	^+`;::clickUsingMode(150, 39, "Client")
+	
+	; Close current 'window' within VB.
+	^w::VB6.closeCurrentFile()
 	
 	; Redo, not yank.
 	 ^y::
@@ -36,20 +44,18 @@
 		Send, {Up 2}{Enter}
 	return
 	
-	; References window.
+	; Components, References windows.
+	$^r::Send, ^t
 	^+r::
 		Send, !p
 		Sleep, 100
 		Send, n
 	return
 	
-	; Components window.
-	$^r::Send, ^t
-	
-	; Contact comment hotkeys.
-	 ^8::SendRaw, % generateContactComment()
-	^+8::SendRaw, % generateContactComment(true)
-	^!8::SendRaw, % generateContactComment(    , true)
+	; Add contact comments
+	 ^8::VB6.addContactComment()
+	^+8::VB6.addContactCommentForHeader()
+	^!8::VB6.addContactCommentNoDash()
 	
 	; Triple ' hotkey for procedure header, like ES.
 	:*:'''::
@@ -60,108 +66,136 @@
 	return
 	
 	; Comment and indentation for new lines.
-	 ^Enter::addNewCommentLineWithIndent()   ; Normal line
-	^+Enter::addNewCommentLineWithIndent(15) ; Function headers (lines up with edge of description, etc.)
+	 ^Enter::VB6.addNewCommentLineWithIndent()   ; Normal line
+	^+Enter::VB6.addNewCommentLineWithIndent(15) ; Function headers (lines up with edge of description, etc.)
 	
-	; Code vs. design swap. Note: only works if mini-window within window is maximized within outer window.
-	Pause::
-		toggleVB6CodeDesign() {
-			mode := getFirstStringBetweenStr(WinGetTitle("A"), "(", ")")
-			if(mode = "Code") {
-				Send, +{F7}
-			} else if(mode = "Form" || mode = "UserControl") {
-				Send, {F7}
-			}
-		}
+	; Code vs. design swap.
+	Pause::VB6.toggleCodeAndDesign()
 	
 	; Add basic error handler stuff.
-	^+e::
-		addVB6ErrorHandler() {
-			vbGetComboBoxClasses("", procedureComboClass)
-			currentProcedure := ControlGet("List", "Selected", procedureComboClass)
-			; DEBUG.popup("Current procedure", currentProcedure)
-			if(!currentProcedure)
-				MsgBox, No function name found.
-			
-			; Assuming that we're starting in the middle of an empty function.
-			Send, {Tab}On Error Goto Handler{Enter}
-			Send, {Enter}{Backspace}
-			Send, Exit Sub{Enter}
-			Send, Handler:{Enter}
-			Send, {Tab}Call ErrorHandler("%currentProcedure%")
-		}
-	
-	; Comment/uncomment
-	 ^`;::clickUsingMode(126, 37, "Client")
-	^+`;::clickUsingMode(150, 39, "Client")
-	
-	; Close current 'window' within VB.
-	^w::
-		closeCurrentFile() {
-			window := new VisualWindow("A")
-			closeButtonX := window.rightX - 10 ; Close button lives 10px from right edge of window
-			closeButtonY := window.topY   + 45 ; 10px from the top of the window
-			clickUsingMode(closeButtonX, closeButtonY, "Screen")
-		}
-#IfWinActive
+	^+e::VB6.addErrorHandlerForCurrentFunction()
+#If
 
-; Builds a contact comment with as much info as we can muster.
-generateContactComment(extraSpace := false, excludeDash := false) {
-	; Date
-	date := FormatTime(, "MM/yy")
+; VB6-specific actions. Everything should be called statically.
+class VB6 {
+	static objectComboBoxClassNN    := "ComboBox1" ; Object dropdown in top-left
+	static procedureComboBoxClassNN := "ComboBox2" ; Procedure dropdown in top-right
 	
-	; DLG - uses VBG title, usually "Project Group - DLG######" or "Project - DLG######"
-	projectName := ControlGetText("PROJECT1")
-	dlgName := cleanupText(projectName, ["Project", "Group", "-"])
-	if(!stringStartsWith(dlgName, "DLG")) {
-		Toast.showError("Failed to find DLG ID", "DLG name is not DLG######: " dlgName)
-		return
+	;---------
+	; DESCRIPTION:    Add different variations on a contact comment at the current cursor position.
+	;                 These are specific wrappers that send different versions of a contact comment
+	;                 from .generateContactCommentText().
+	;---------
+	addContactComment() {                                     ; Basic:
+		SendRaw, % VB6.generateContactCommentText()            ; ' *<initials> <DLG ID> - 
 	}
-	dlgId := removeStringFromStart(dlgName, "DLG")
-	
-	; Ignore anything after a dash (usually used by me so I can break up projects).
-	dlgId := getStringBeforeStr(dlgId, "-")
-	
-	outStr := "' "
-	if(extraSpace)
-		outStr .= " "
-	outStr .= "*" MainConfig.private["INITIALS"] " " date " " dlgId
-	
-	if(!excludeDash)
-		outStr .= " - "
-	
-	return outStr
-}
-
-; Obtains the classNNs for the two top comboboxes.
-vbGetComboBoxClasses(ByRef objectComboClass, ByRef procedureComboClass) {
-	WinGet, ctlList, ControlList, A
-	; DEBUG.popup(List, "Control list in window")
-	
-	Loop, Parse, ctlList, `n  ; Rows are delimited by linefeeds (`n).
-	{
-		if(InStr(A_LoopField, "ComboBox")) {
-			ControlGetPos, x, y, w, h, %A_LoopField%, A
-			; DEBUG.popup(A_LoopField, "Class name", A_Index, "On row", x, "X", y, "Y")
-			
-			; When two in a row have the same y value, they're what we're looking for.
-			if(y = yPast) {
-				; DEBUG.popup(x, "Got two! `nX", y, "Y", yPast, "Y past")
-				procedureComboClass := A_LoopField
-				
-				break
-			}
-			
-			yPast := y
-			objectComboClass := A_LoopField
-		}
+	addContactCommentForHeader() {                            ; Extra space before *<initials>:
+		SendRaw, % VB6.generateContactCommentText(true)        ; '  *<initials> <DLG ID> - 
+	}
+	addContactCommentNoDash() {                               ; No dash at end:
+		SendRaw, % VB6.generateContactCommentText(false, true) ; ' *<initials> <DLG ID>
 	}
 	
-	; DEBUG.popup("Object", objectComboClass, "Procedure", procedureComboClass)
+	;---------
+	; DESCRIPTION:    Builds the string for a contact comment in the current project.
+	; PARAMETERS:
+	;  extraSpace  (I,OPT) - Set to true to add an extra space after the comment character, before the *<initials>.
+	;  excludeDash (I,OPT) - Set to true to not add <space>-<space> to the end of the string.
+	; RETURNS:        Contact comment string. Basic format (note space at end):
+	;                    ' *<initials> <DLG ID> - 
+	;---------
+	generateContactCommentText(extraSpace := false, excludeDash := false) {
+		; Date and DLG ID
+		date := FormatTime(, "MM/yy")
+		dlgId := VB6.getDLGIdFromProject()
+		if(dlgId = "")
+			return
+		
+		outStr := "' "
+		if(extraSpace)
+			outStr .= " "
+		outStr .= "*" MainConfig.private["INITIALS"] " " date " " dlgId
+		
+		if(!excludeDash)
+			outStr .= " - "
+		
+		return outStr
+	}
+	
+	;---------
+	; DESCRIPTION:    Find and return the current project's DLG ID (if one exists).
+	; RETURNS:        DLG ID if one was found, "" otherwise
+	;---------
+	getDLGIdFromProject() {
+		; Use the project/project group title, usually "Project Group - DLG######" or "Project - DLG######"
+		projectName := ControlGetText("PROJECT1")
+		dlgName := cleanupText(projectName, ["Project", "Group", "-"])
+		if(!stringStartsWith(dlgName, "DLG")) {
+			Toast.showError("Failed to find DLG ID", "DLG name is not DLG######: " dlgName)
+			return ""
+		}
+		dlgId := removeStringFromStart(dlgName, "DLG")
+		
+		; Ignore anything after a dash (usually added by me to break up projects that are too large to load together).
+		dlgId := getStringBeforeStr(dlgId, "-")
+		
+		return dlgId
+	}
+	
+	;---------
+	; DESCRIPTION:    Add a new line starting at the current position, starting the new line with a
+	;                 comment character and the given amount of indentation.
+	; PARAMETERS:
+	;  numSpaces (I,OPT) - Number of spaces to indent by. Defaults to 1.
+	;---------
+	addNewCommentLineWithIndent(numSpaces := 1) {
+		Send, {Enter}
+		Send, '
+		Send, {Space %numSpaces%}
+	}
+	
+	;---------
+	; DESCRIPTION:    Add error handler logic for current function.
+	;---------
+	addErrorHandlerForCurrentFunction() {
+		currentObject    := ControlGet("List", "Selected", VB6.objectComboBoxClassNN)
+		currentProcedure := ControlGet("List", "Selected", VB6.procedureComboBoxClassNN)
+		if(currentObject != "(General)")
+			functionName := currentObject "_" currentProcedure
+		else
+			functionName := currentProcedure
+		; DEBUG.popup("currentObject",currentObject, "currentProcedure",currentProcedure, "functionName",functionName)
+		
+		Send, On Error Goto Handler{Enter} ; For top of function
+		Send, {Enter}{Backspace} ; This and below for bottom of function
+		Send, Exit Sub{Enter}
+		Send, Handler:{Enter}
+		Send, % "{Tab}Call ErrorHandler(""" functionName """)"
+	}
+	
+	;---------
+	; DESCRIPTION:    Toggle between the code and design views for the current object.
+	; NOTES:          This only works if "window" within VB6 is "maximized".
+	;---------
+	toggleCodeAndDesign() {
+		mode := getFirstStringBetweenStr(WinGetTitle("A"), "(", ")")
+		if(mode = "Code") {
+			Send, +{F7}
+		} else if(mode = "Form" || mode = "UserControl") {
+			Send, {F7}
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Close the current file.        
+	;---------
+	closeCurrentFile() {
+		window := new VisualWindow("A")
+		closeButtonX := window.rightX - 10 ; Close button lives 10px from right edge of window
+		closeButtonY := window.topY   + 45 ; 10px from the top of the window
+		clickUsingMode(closeButtonX, closeButtonY, "Screen")
+	}
 }
 
-addNewCommentLineWithIndent(numSpaces := 1) {
-	Send, {Enter}
-	Send, '
-	Send, {Space %numSpaces%}
-}
+
+

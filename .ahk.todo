@@ -9,14 +9,11 @@
 	Program scripts cleanup
 		Use MainConfig.isWindowActive("") whereever possible
 		Consider getting rid of scripts for retired programs (or ones where we don't really need the hotkeys anymore)
-		Consider renaming scripts to be more specific (explorer > microsoftExplorer, for example)
-			Could we match these to the names in windows/programs TLSs?
 		Conditionally load some scripts based on machine (epicStudio, emc2, fastStoneImageViewer, etc.)
 		Consider moving any functions into a (static?) program-specific class.
 			Would remove need to prefix all function names with program name
 			Possibly easier to reference program-specific logic from outside of the script (or at least formalize that link a little better).
 		Programs remaining:
-			chrome
 			ciscoAnyConnect
 			ditto
 			emc2

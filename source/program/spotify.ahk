@@ -1,4 +1,4 @@
-; If Spotify is indeed running.
+; If Spotify is running.
 #If MainConfig.doesWindowExist("Spotify")
 	^!Space::
 		Send, {Volume_Down}{Volume_Up} ; Makes Windows 10 media panel show up (for what's playing right now)

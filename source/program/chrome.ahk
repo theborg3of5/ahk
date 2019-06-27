@@ -35,6 +35,11 @@
 #If
 
 class Chrome {
+	
+	; ==============================
+	; == Public ====================
+	; ==============================
+	
 	;---------
 	; DESCRIPTION:    Put the title of the current tab on the clipboard, with some special exceptions.
 	; NOTES:          For CodeSearch, we copy the current routine (and the tag, from the selected
@@ -80,18 +85,6 @@ class Chrome {
 		ao := new ActionObjectEpicStudio(tag "^" routine, ActionObjectEpicStudio.DescriptorType_Routine)
 		ao.openEdit()
 	}
-	
-	;---------
-	; DESCRIPTION:    Determine whether the current page is CodeSearch, based on its title.
-	;---------
-	isCurrentPageCodeSearch() {
-		; Only have CodeSearch on Epic machine
-		if(!MainConfig.machineIsEpicLaptop)
-			return false
-		
-		title := removeStringFromEnd(WinGetActiveTitle(), " - Google Chrome")
-		return stringEndsWith(title, " - CodeSearch")
-	}
 
 	;---------
 	; DESCRIPTION:    Open the file-type link under the mouse.
@@ -114,6 +107,23 @@ class Chrome {
 	copyLinkTarget() {
 		Chrome.getLinkTargetOnClipboard()
 		toastNewClipboardValue("link target")
+	}
+	
+	
+	; ==============================
+	; == Private ===================
+	; ==============================
+	
+	;---------
+	; DESCRIPTION:    Determine whether the current page is CodeSearch, based on its title.
+	;---------
+	isCurrentPageCodeSearch() {
+		; Only have CodeSearch on Epic machine
+		if(!MainConfig.machineIsEpicLaptop)
+			return false
+		
+		title := removeStringFromEnd(WinGetActiveTitle(), " - Google Chrome")
+		return stringEndsWith(title, " - CodeSearch")
 	}
 	
 	;---------

@@ -78,6 +78,10 @@
 
 ; VB6-specific actions. Everything should be called statically.
 class VB6 {
+	
+	; ==============================
+	; == Public ====================
+	; ==============================
 	static objectComboBoxClassNN    := "ComboBox1" ; Object dropdown in top-left
 	static procedureComboBoxClassNN := "ComboBox2" ; Procedure dropdown in top-right
 	
@@ -94,52 +98,6 @@ class VB6 {
 	}
 	addContactCommentNoDash() {                               ; No dash at end:
 		SendRaw, % VB6.generateContactCommentText(false, true) ; ' *<initials> <DLG ID>
-	}
-	
-	;---------
-	; DESCRIPTION:    Builds the string for a contact comment in the current project.
-	; PARAMETERS:
-	;  extraSpace  (I,OPT) - Set to true to add an extra space after the comment character, before the *<initials>.
-	;  excludeDash (I,OPT) - Set to true to not add <space>-<space> to the end of the string.
-	; RETURNS:        Contact comment string. Basic format (note space at end):
-	;                    ' *<initials> <DLG ID> - 
-	;---------
-	generateContactCommentText(extraSpace := false, excludeDash := false) {
-		; Date and DLG ID
-		date := FormatTime(, "MM/yy")
-		dlgId := VB6.getDLGIdFromProject()
-		if(dlgId = "")
-			return
-		
-		outStr := "' "
-		if(extraSpace)
-			outStr .= " "
-		outStr .= "*" MainConfig.private["INITIALS"] " " date " " dlgId
-		
-		if(!excludeDash)
-			outStr .= " - "
-		
-		return outStr
-	}
-	
-	;---------
-	; DESCRIPTION:    Find and return the current project's DLG ID (if one exists).
-	; RETURNS:        DLG ID if one was found, "" otherwise
-	;---------
-	getDLGIdFromProject() {
-		; Use the project/project group title, usually "Project Group - DLG######" or "Project - DLG######"
-		projectName := ControlGetText("PROJECT1")
-		dlgName := cleanupText(projectName, ["Project", "Group", "-"])
-		if(!stringStartsWith(dlgName, "DLG")) {
-			Toast.showError("Failed to find DLG ID", "DLG name is not DLG######: " dlgName)
-			return ""
-		}
-		dlgId := removeStringFromStart(dlgName, "DLG")
-		
-		; Ignore anything after a dash (usually added by me to break up projects that are too large to load together).
-		dlgId := getStringBeforeStr(dlgId, "-")
-		
-		return dlgId
 	}
 	
 	;---------
@@ -194,6 +152,57 @@ class VB6 {
 		closeButtonX := window.rightX - 10 ; Close button lives 10px from right edge of window
 		closeButtonY := window.topY   + 45 ; 10px from the top of the window
 		clickUsingMode(closeButtonX, closeButtonY, "Screen")
+	}
+	
+	
+	; ==============================
+	; == Private ===================
+	; ==============================
+	
+	;---------
+	; DESCRIPTION:    Builds the string for a contact comment in the current project.
+	; PARAMETERS:
+	;  extraSpace  (I,OPT) - Set to true to add an extra space after the comment character, before the *<initials>.
+	;  excludeDash (I,OPT) - Set to true to not add <space>-<space> to the end of the string.
+	; RETURNS:        Contact comment string. Basic format (note space at end):
+	;                    ' *<initials> <DLG ID> - 
+	;---------
+	generateContactCommentText(extraSpace := false, excludeDash := false) {
+		; Date and DLG ID
+		date := FormatTime(, "MM/yy")
+		dlgId := VB6.getDLGIdFromProject()
+		if(dlgId = "")
+			return
+		
+		outStr := "' "
+		if(extraSpace)
+			outStr .= " "
+		outStr .= "*" MainConfig.private["INITIALS"] " " date " " dlgId
+		
+		if(!excludeDash)
+			outStr .= " - "
+		
+		return outStr
+	}
+	
+	;---------
+	; DESCRIPTION:    Find and return the current project's DLG ID (if one exists).
+	; RETURNS:        DLG ID if one was found, "" otherwise
+	;---------
+	getDLGIdFromProject() {
+		; Use the project/project group title, usually "Project Group - DLG######" or "Project - DLG######"
+		projectName := ControlGetText("PROJECT1")
+		dlgName := cleanupText(projectName, ["Project", "Group", "-"])
+		if(!stringStartsWith(dlgName, "DLG")) {
+			Toast.showError("Failed to find DLG ID", "DLG name is not DLG######: " dlgName)
+			return ""
+		}
+		dlgId := removeStringFromStart(dlgName, "DLG")
+		
+		; Ignore anything after a dash (usually added by me to break up projects that are too large to load together).
+		dlgId := getStringBeforeStr(dlgId, "-")
+		
+		return dlgId
 	}
 }
 

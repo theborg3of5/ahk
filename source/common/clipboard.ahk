@@ -52,11 +52,9 @@ addToClipboardHistory(textToSave) {
 ;                 before you change the clipboard to something else.
 ;---------
 saveCurrentClipboard() {
-	; If the ditto function is available that's preferable (no wait time), but fall back if needed.
-	functionName := "dittoSaveCurrentClipboard" ; dittoSaveCurrentClipboard()
-	if(isFunc(functionName))
-		%functionName%()
-	else
+	if(Ditto) ; If the Ditto class exists we can use it to save to the clipboard with Ditto with no wait time.
+		Ditto.saveCurrentClipboard()
+	else ; Otherwise, just wait a second for it to register normally.
 		Sleep, 1000
 }
 

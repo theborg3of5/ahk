@@ -1,14 +1,4 @@
-﻿#IfWinActive, ahk_exe Ditto.exe ahk_class Ditto Edit Wnd
-	; Better hotkey to save clip and put it on the clipboard.
-	^s::
-	Enter::
-	NumPadEnter::
-		Send, +{Escape}
-		WinWaitActive, Copy Properties
-		Send, {Enter}
-	return
-#IfWinActive
-
+﻿
 ; Compare the selected text to the last-copied clip.
 #+d::
 	; Put the selected text on the clipboard.
@@ -26,10 +16,24 @@
 	Send, ^{F2}
 return
 
-;---------
-; DESCRIPTION:    Force Ditto to save the current clipboard state as a clip. Useful when you want to
-;                 add something to the clipboard history, but restore the current clipboard as well.        
-;---------
-dittoSaveCurrentClipboard() {
-	Send, ^+!c
+; Clip edit window
+#IfWinActive, ahk_exe Ditto.exe ahk_class Ditto Edit Wnd
+	; Better hotkey to save clip and put it on the clipboard.
+	^s::
+	Enter::
+	NumPadEnter::
+		Send, +{Escape}
+		WinWaitActive, Copy Properties
+		Send, {Enter}
+	return
+#IfWinActive
+
+class Ditto {
+	;---------
+	; DESCRIPTION:    Force Ditto to save the current clipboard state as a clip. Useful when you want to
+	;                 add something to the clipboard history, but restore the current clipboard as well.        
+	;---------
+	saveCurrentClipboard() {
+		Send, ^+!c
+	}
 }

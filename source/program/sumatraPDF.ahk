@@ -1,37 +1,7 @@
 ﻿#IfWinActive, ahk_exe SumatraPDF.exe
 	; Bookmarks panel.
 	^b::Send, {F12}
-
-	; Vim-like navigation.
-	$p::sendUnlessControlFocused("{Left}", "Edit2")
-	$`;::sendUnlessControlFocused("{Right}", "Edit2")
-	sendUnlessControlFocused(keysToSend, unlessControl) {
-		currControl := ControlGetFocus("A")
-		if(currControl != unlessControl)
-			Send, % keysToSend
-		else
-			Send, % getCleanHotkeyString(A_ThisHotkey)
-	}
-
-	; Show/hide toolbar.
-	^/::
-		Send, !v
-		Sleep, 100
-		Send, t
-	return
-
-	; Want to close on Esc, but also just unfocus controls at top if focused.
-	Escape::
-		sendEscapeToSumatra() {
-			currControl := ControlGetFocus("A")
-			if(currControl = "Edit1")
-				Send, {Tab 2}
-			else if(currControl = "Edit2")
-				Send, {Tab}
-			else
-				WinClose
-		}
-
+	
 	; Kill unconventional hotkey to quit.
 	^q::return
 	
@@ -41,4 +11,12 @@
 	
 	; Save as is Ctrl+S
 	^+s::Send, ^s
+	
+	; Want to close on Esc, but also just unfocus search box if that's focused.
+	Escape::
+		if(ControlGetFocus("A") = "Edit2")
+			Send, {Tab}
+		else
+			WinClose
+	return
 #IfWinActive

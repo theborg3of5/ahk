@@ -22,7 +22,7 @@
 	; Send to Telegram (and pick the correct chat).
 	~!t::
 		WinWaitActive, % MainConfig.windowInfo["Telegram"].titleString
-		telegramFocusNormalChat()
+		Telegram.focusNormalChat()
 	return
 	
 	; Handling for file links

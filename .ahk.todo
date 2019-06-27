@@ -9,11 +9,6 @@
 	Program scripts cleanup
 		Use MainConfig.isWindowActive("") wherever possible
 			Also look at specific windows, though - if we don't need them for WindowActions purposes, they should live in the program-specific class instead
-		Consider getting rid of scripts for retired programs (or ones where we don't really need the hotkeys anymore), fix them if we keep them
-			games
-			oxygenXML
-			powerpoint
-			skype
 		Conditionally load some scripts based on machine (epicStudio, emc2, fastStoneImageViewer, etc.)
 		Consider moving any functions into a (static?) program-specific class.
 			Would remove need to prefix all function names with program name

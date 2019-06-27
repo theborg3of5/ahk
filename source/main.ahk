@@ -46,7 +46,6 @@ runStandaloneScripts()
 #Include excel.ahk
 #Include explorer.ahk
 #Include fastStoneImageViewer.ahk
-#Include games.ahk
 #Include greenshot.ahk
 #Include hyperspace.ahk
 #Include internetExplorer.ahk
@@ -57,12 +56,9 @@ runStandaloneScripts()
 #Include onenote.ahk
 #Include onetastic.ahk
 #Include outlook.ahk
-#Include oxygenXML.ahk
 #Include pidgin.ahk
-#Include powerpoint.ahk
 #Include putty.ahk
 #Include remoteDesktop.ahk
-#Include skype.ahk
 #Include snapper.ahk
 #Include spotify.ahk
 #Include sumatraPDF.ahk

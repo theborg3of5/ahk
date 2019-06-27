@@ -24,7 +24,6 @@
 			onetastic
 			pidgin
 			putty
-			snapper
 	Toast: could we avoid flickering between .showPersistent() and .setText()?
 		Maybe some way to set position without showing?
 		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?

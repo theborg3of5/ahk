@@ -160,45 +160,6 @@
 		return runString
 	}
 
-	; ini/id defaults are "X" as a dummy - URL will still connect to desired environment (and show an error popup).
-	buildSnapperURL(environment := "", ini := "", idList := "") { ; idList is a comma-separated list of IDs
-		if(!environment)
-			environment := getCurrentSnapperEnvironment() ; Try to default from what Snapper has open right now if no environment given.
-		if(!environment)
-			return ""
-		
-		if(!ini || !idList) { ; These aren't be parameter defaults in case of blank parameters (not simply not passed at all)
-			ini    := "X"
-			idList := "X"
-		}
-		
-		outURL := MainConfig.private["SNAPPER_URL_BASE"]
-		idAry := expandList(idList)
-		if(idAry.count() > 10)
-			if(!showConfirmationPopup("You're trying to open more than 10 records in Snapper - are you sure you want to continue?", "Opening many records in Snapper"))
-				return ""
-		
-		For i,id in idAry {
-			; DEBUG.popup("Index", i, "ID", id)
-			if(!id)
-				Continue
-			
-			outURL .= ini "." id "." environment "/"
-		}
-		
-		return outURL
-	}
-	getCurrentSnapperEnvironment() {
-		snapperTitleString := "Snapper ahk_exe Snapper.exe"
-		if(!WinExist(snapperTitleString))
-			return ""
-		
-		environmentText := ControlGetText("ThunderRT6ComboBox2", snapperTitleString)
-		commId := getFirstStringBetweenStr(environmentText, "[", "]")
-		
-		return commId
-	}
-
 	buildVDIRunString(vdiId) {
 		return replaceTag(MainConfig.private["VDI_BASE"], "VDI_ID", vdiId)
 	}

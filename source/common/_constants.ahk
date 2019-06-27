@@ -63,6 +63,3 @@ global LVM_GETITEMCOUNT := 0x1004 ; Get the number of items in a ListView contro
 
 ; Windows Screen constants (from MonitorFromWindow: https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-monitorfromwindow )
 global MONITOR_DEFAULTTONEAREST := 0x00000002
-
-; Special folder UUIDs
-global FOLDER_UUID_THISPC := "::{20d04fe0-3aea-1069-a2d8-08002b30309d}"

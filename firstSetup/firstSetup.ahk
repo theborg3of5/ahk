@@ -17,6 +17,7 @@ tagsToReplace := []
 tagsToReplace["ROOT"]            := ahkRootPath
 tagsToReplace["WHICH_MACHINE"]   := ""
 tagsToReplace["MENU_KEY_ACTION"] := ""
+tagsToReplace["MEDIA_PLAYER"]    := ""
 
 copyPaths := []
 copyPaths["includeCommon.ahk.master"] := userPath "\Documents\AutoHotkey\Lib\includeCommon.ahk"
@@ -54,34 +55,34 @@ For tag,v in tagsToReplace {
 
 ; Loop over files we need to process and put places.
 t.setText("Processing files...")
-For from,to in copyPaths {
+For fromPath,toPath in copyPaths {
 	; Read it in.
-	fileContents := FileRead(from)
+	fileContents := FileRead(fromPath)
 	
 	; Replace any placeholder tags in the file contents.
-	; DEBUG.popup("From", from, "To", to, "Starting contents", fileContents)
-	For tag,value in tagsToReplace
+	; DEBUG.popup("fromPath", fromPath, "toPath", toPath, "Starting contents", fileContents)
+	for tag,value in tagsToReplace
 		StringReplace, fileContents, fileContents, <%tag%>, %value%, A
-	; DEBUG.popup("From",from, "To",to, "Finished contents",fileContents)
+	; DEBUG.popup("fromPath",fromPath, "toPath",toPath, "Finished contents",fileContents)
 	
 	; Generate the folder path if needed.
-	containingFolder := getParentFolder(to)
+	containingFolder := getParentFolder(toPath)
 	if(!FileExist(containingFolder))
 		FileCreateDir, %containingFolder%
 	
 	; Delete the file if it already exists.
-	if(FileExist(to))
-		FileDelete, %to%
+	if(FileExist(toPath))
+		FileDelete, %toPath%
 	
 	; Put the file where it's supposed to be.
-	FileAppend, %fileContents%, %to%
+	FileAppend, %fileContents%, %toPath%
 }
 
 if(!useSlimMode) {
 	; Hide all .git system files and folders, for a cleaner appearance.
 	t.setText("Hiding .git files and folders...")
-	For i,n in gitNames {
-		Loop, Files, %ahkRootPath%*%n%, RDF
+	For _,n in gitNames {
+		Loop, Files, %ahkRootPath%\*%n%, RDF
 		{
 			FileSetAttrib, +H, %A_LoopFileFullPath%
 		}

@@ -1,5 +1,5 @@
 ; Word hotkeys.
-#IfWinActive, ahk_class OpusApp
+#If MainConfig.isWindowActive("Word")
 	; Open (dialog, not screen)
 	^o::Send, ^!{F2}
 	
@@ -65,4 +65,4 @@
 		if(WinActive("ahk_class Net UI Tool Window ahk_exe WINWORD.EXE")) ; Right-click menu still open, as header was already collapsed
 			Send, {Esc 2}
 	return
-#IfWinActive
+#If

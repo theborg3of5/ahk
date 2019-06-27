@@ -1,4 +1,4 @@
-﻿#IfWinActive, ahk_class SUMATRA_PDF_FRAME
+﻿#IfWinActive, ahk_exe SumatraPDF.exe
 	; Bookmarks panel.
 	^b::Send, {F12}
 

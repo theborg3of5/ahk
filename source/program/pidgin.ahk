@@ -1,12 +1,12 @@
 ﻿
 ; Unread facebook group chat windows (don't respond to ^+i correctly).
-#If WinExist("* ahk_exe " MainConfig.windowInfo["Pidgin"].exe)
+#If WinExist("* " MainConfig.windowInfo["Pidgin"].titleString)
 	^+i::
 		WinActivate, % "* ahk_exe " MainConfig.windowInfo["Pidgin"].exe
 	return
 #If
 
-#IfWinActive, Buddy List
+#If MainConfig.isWindowActive("Pidgin Buddy List")
 	; Hide buddy list when active.
 	^!d::
 		Send, !{F4}
@@ -16,4 +16,4 @@
 	$^!s::
 		ControlSend, gdkWindowChild14, ^!s, Buddy List
 	return
-#IfWinActive
+#If

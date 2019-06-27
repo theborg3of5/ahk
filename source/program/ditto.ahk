@@ -1,11 +1,4 @@
-﻿#IfWinActive, ahk_class QPasteClass
-	; Easy access to options dialog.
-	!o::
-		Send, {AppsKey}o
-	return
-#IfWinActive
-
-#IfWinActive, ahk_class Ditto Edit Wnd
+﻿#IfWinActive, ahk_exe Ditto.exe ahk_class Ditto Edit Wnd
 	; Better hotkey to save clip and put it on the clipboard.
 	^s::
 	Enter::

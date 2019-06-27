@@ -1,4 +1,4 @@
-#IfWinActive, ahk_exe kdiff3.exe
+#If MainConfig.isWindowActive("KDiff")
 	; Show/hide whitespace differences.
 	^i::
 		Send, !i
@@ -21,4 +21,4 @@
 		Send, {Up 3}
 		Send, {Enter}
 	return
-#IfWinActive
+#If

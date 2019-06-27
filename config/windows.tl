@@ -81,5 +81,5 @@
 			WebEx									atmgr.exe					-							-													NO_PADDING
 			Windows Taskbar					explorer.exe				Shell_TrayWnd
 			Word									WINWORD.EXE					-							-													NO_PADDING
-			YEd									yEd.exe
+			yEd									yEd.exe
 [-1]

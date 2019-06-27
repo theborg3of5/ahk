@@ -10,7 +10,7 @@
 ^+!n::MainConfig.activateProgram("Notepad++")
 ^+!o::MainConfig.activateProgram("OneNote")
 ^+!x::MainConfig.activateProgram("Launchy")
-^+!y::MainConfig.activateProgram("YEd")
+^+!y::MainConfig.activateProgram("yEd")
 ^!#f::MainConfig.runProgram("Firefox Portable")
 ^!#n::MainConfig.runProgram("Notepad")
 ^!#/::MainConfig.activateProgram("AutoHotkey WinSpy")

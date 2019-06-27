@@ -1,4 +1,4 @@
-#IfWinActive, ahk_class Notepad++
+#If MainConfig.isWindowActive("Notepad++")
 	; New document.
 	^t::^n
 	
@@ -104,6 +104,7 @@
 	!c::copyFilePathWithHotkey("!c")
 	; Copy current folder path to clipboard
 	!#c::copyFolderPathWithHotkey("^!c")
+#If
 	
 	;---------
 	; DESCRIPTION:    Figure out where the indentation for a line is positioned (in terms of the
@@ -203,7 +204,6 @@
 			SendRaw, % functionName "(" notepadPPGenerateDebugParams(varList) ")"
 		}
 	}
-#IfWinActive
 
 ; Block the !+x close-tab hotkey, but only if our test script isn't running (because that's its close hotkey).
 #If !WinExist(buildWindowTitleString("AutoHotkey.exe", "AutoHotkey", MainConfig.path["AHK_ROOT"] "\test\test.ahk"))

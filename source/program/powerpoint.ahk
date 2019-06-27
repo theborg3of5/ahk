@@ -1,5 +1,5 @@
 ; Powerpoint hotkeys.
-#IfWinActive, ahk_class PPTFrameClass
+#If MainConfig.isWindowActive("PowerPoint")
 	MButton & RButton::Send !sc
 
 	; Reading mode - like slideshow, but doesn't fullscreen!
@@ -12,7 +12,7 @@
 			Click, Right
 		}
 	return
-#IfWinActive
+#If
 
 
 ; Powerpoint Slideshow hotkeys.

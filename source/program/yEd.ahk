@@ -1,5 +1,4 @@
-#IfWinActive, ahk_exe yEd.exe
-	
+#If MainConfig.isWindowActive("yEd")
 	; Use numpad symbols as normal, don't zoom using those.
 	NumpadAdd::Send, +=
 	NumpadSub::Send, -
@@ -29,5 +28,4 @@
 		Sleep, 100
 		Send, n
 	return
-	
-#IfWinActive
+#If

@@ -1,4 +1,4 @@
-﻿#IfWinActive, ahk_exe Snapper.exe
+﻿#If MainConfig.isWindowActive("Snapper")
 	; Send string of items to ignore, based on the given master file.
 	:*:.hide::
 	:*:.ignore::
@@ -19,10 +19,10 @@
 			Send, {Enter}
 		}
 	return
-#IfWinActive
+#If
 
 ; Add record window
-#IfWinActive, Add a Record ahk_exe Snapper.exe
+#If WinActive("Add a Record " MainConfig.windowInfo["Snapper"].titleString)
 	^Enter::
 		snapperAddMultipleRecords() {
 			url := getSnapperURLFromAddRecordPopup()
@@ -34,7 +34,7 @@
 				Send, {Enter}
 			}
 		}
-#IfWinActive
+#If
 
 getSnapperURLFromAddRecordPopup() {
 	commId := getCurrentSnapperEnvironment()

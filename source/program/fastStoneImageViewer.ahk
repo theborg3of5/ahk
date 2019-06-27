@@ -1,4 +1,4 @@
-﻿#IfWinActive, ahk_class TFullScreenWindow
+﻿#IfWinActive, ahk_exe FSViewer.exe
 	j::Right
 	k::Left
 	F9::Escape

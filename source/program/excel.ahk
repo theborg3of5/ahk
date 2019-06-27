@@ -1,5 +1,5 @@
 ; Excel hotkeys.
-#IfWinActive, ahk_class XLMAIN
+#If MainConfig.isWindowActive("Excel")
 	; Auto-fix column width 
 	^+w::
 		autoFixColumnWidth()
@@ -73,4 +73,4 @@
 		Send, !wfr		; Freeze top row
 	}
 	
-#IfWinActive
+#If

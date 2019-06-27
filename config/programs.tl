@@ -27,7 +27,7 @@
 	Process Explorer			ProcessExplorer\procexp.exe
 	TrueCrypt					TrueCrypt\TrueCrypt.exe
 	GrepWin						grepWin\grepWin.exe
-	YEd							yWorks\yEd\yEd.exe
+	yEd							yWorks\yEd\yEd.exe
 []
 
 [PATH.addToStart(C:\Windows\)]

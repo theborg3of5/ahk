@@ -15,10 +15,12 @@
 			Possibly easier to reference program-specific logic from outside of the script (or at least formalize that link a little better).
 		Programs remaining:
 			emc2
+				Possibly absorb URL-building logic?
+					Doesn't that break the ability of standalone scripts to use it?
 			epicStudio
+				Possibly absorb URL-building logic?
+					Doesn't that break the ability of standalone scripts to use it?
 			hyperspace
-			internetExplorer
-			mattermost
 			notepad++
 			onenote
 			onetastic

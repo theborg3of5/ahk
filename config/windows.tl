@@ -55,6 +55,7 @@
 			Greenshot Image Editor			Greenshot.exe				WindowsForms10.Window.8.app.0.2780b98_r6_ad1
 			GrepWin								grepWin.exe
 			Hyperspace							EpicD89.exe
+			Internet Explorer					IEXPLORE.EXE
 			KDiff									kdiff3.exe
 			Launchy								Launchy.exe
 			Mattermost							Mattermost.exe

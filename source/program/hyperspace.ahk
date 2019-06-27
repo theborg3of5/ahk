@@ -24,7 +24,7 @@
 				filePath := MainConfig.private["LOCAL_HTML_DEBUG_OUTPUT"]
 				FileDelete, %filePath%
 				FileAppend, %html%, %filePath%
-				Run("C:\Program Files\Internet Explorer\iexplore.exe " filePath)
+				MainConfig.runProgram("Internet Explorer", filePath)
 			}
 		return
 	}

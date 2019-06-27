@@ -1,17 +1,23 @@
 ﻿; Google Chrome hotkeys.
-#IfWinActive, ahk_exe iexplore.exe
+#If MainConfig.isWindowActive("Internet Explorer")
 	; Get URL, close tab, and open the URL in your default web browser.
-	^+o::
-		moveURLToDefaultBrowser(){
-			Send, ^l   ; Focus URL bar, also selects text
-			Sleep, 100 ; Wait for focus to take
-			url := getSelectedText()
-			if(!url) {
-				DEBUG.toast("No URL found in Internet Explorer")
-				return
-			}
-			
-			Send, ^w   ; Close the tab
-			Run, % url ; Open in default browser
+	^+o::InternetExplorer.moveURLToDefaultBrowser()
+#If
+
+class InternetExplorer {
+	
+	; ==============================
+	; == Public ====================
+	; ==============================
+	
+	moveURLToDefaultBrowser(){
+		url := ControlGetText("Edit1", "A") ; Get URL from URL bar control
+		if(!url) {
+			DEBUG.toast("No URL found in Internet Explorer")
+			return
 		}
-#IfWinActive
+		
+		WinClose   ; Close the window
+		Run, % url ; Open in default browser
+	}
+}

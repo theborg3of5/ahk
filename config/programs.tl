@@ -22,6 +22,7 @@
 [PATH.addToStart(C:\Program Files\)]
 	AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk
 	Everything					Everything\Everything.exe
+	Internet Explorer			Internet Explorer\iexplore.exe
 	Notepad++					Notepad++\notepad++.exe
 	Process Explorer			Process Explorer\procexp.exe													EPIC_LAPTOP
 	Process Explorer			ProcessExplorer\procexp.exe

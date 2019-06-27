@@ -31,6 +31,7 @@
 		^+l::
 			oneNoteCreateLinkDevPageSpecSection()
 		return
+		^+i::oneNoteAddSubLinesToSelectedLines()
 	}
 	
 	{ ; Navigation.
@@ -363,6 +364,9 @@
 	}
 	oneNoteCreateLinkDevPageSpecSection() { ; Custom OneTastic macro - create linked dev page in specifics section
 		Send, !9
+	}
+	oneNoteAddSubLinesToSelectedLines() { ; Custom OneTastic macro - add sub-lines to selected lines
+		Send, !0
 	}
 #If
 	

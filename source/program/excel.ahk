@@ -1,31 +1,20 @@
 ; Excel hotkeys.
 #If MainConfig.isWindowActive("Excel")
-	; Auto-fix column width 
-	^+w::
-		autoFixColumnWidth()
-	return
-	
-	^+b::
-		boldFreezeHeaderRow()
-	return
-	
 	; Save as
-	^+s::
-		Send, {F12}
-	return
-
+	^+s::Send, {F12}
+	
 	; Insert/delete row
 	^=::
-		Send, ^+= 		; Insert row
-		Send, !r 		; Shift down entire row
+		Send, ^+= 		; Insert popup
+		Send, !r 		; Entire row
 		Send, {Enter} 	; Accept popup
 	return
 	$^-::
-		Send, ^- 		; Delete row
-		Send, !r 		; Shift down entire row
+		Send, ^- 		; Delete popup
+		Send, !r 		; Entire row
 		Send, {Enter} 	; Accept popup
 	return
-
+	
 	; Next/previous worksheet
 	^Tab::
 	XButton1::
@@ -36,41 +25,40 @@
 		Send, ^{PgUp}
 	return
 	
-	; Autosum
-	^!s::
-		Sleep, 200
-		Send, !hus
-	return
-	
 	; Unfreeze everything (when something frozen)
-	^+f::
-		Send, !wff
-	return
+	^+f::Send, !wff ; View tab > Freeze Panes > Unfreeze Panes
+	
+	; Fix column widths
+	^+w::Excel.autoFixColumnWidth()
+	
+	; Bold and freeze the first row (assumed to be a header)
+	^+b::Excel.boldFreezeHeaderRow()
 	
 	; Filter and format table nicely.
 	!b::
-		Send, ^a	      ; Select
-		Send, ^a			; All
-		
-		Send, !at      ; Filter
-		
-		boldFreezeHeaderRow()
-		autoFixColumnWidth()
+		Send, ^a^a ; Select All (twice to get everything)
+		Send, !at  ; Data tab > Filter
+		Excel.boldFreezeHeaderRow()
+		Excel.autoFixColumnWidth()
 	return
-	
+#If
+
+class Excel {
+	;---------
+	; DESCRIPTION:    AutoFit the column widths for the entire sheet.
+	;---------
 	autoFixColumnWidth() {
-		Send, ^a
-		Send, ^a
-		Send, !h
-		Send, o
-		Send, i
+		Send, ^a^a ; Select All (twice to get everything)
+		Send, !hoi ; Home tab > Format > AutoFit Column Width
 	}
 	
+	;---------
+	; DESCRIPTION:    Bold the header row and freeze it.
+	;---------
 	boldFreezeHeaderRow() {
 		Send, ^{Home}  ; Get back to top-left cell
-		Send, +{Space} ; Select whole row
-		Send, ^b       ; Bold it
-		Send, !wfr		; Freeze top row
+		Send, +{Space} ; Select full row
+		Send, ^b       ; Bold
+		Send, !wfr		; View tab > Freeze Panes > Freeze Top Row
 	}
-	
-#If
+}

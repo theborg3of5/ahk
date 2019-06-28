@@ -16,15 +16,6 @@
 			Individual parameters will need to be their own individual chunks, with a tag in the main thing to replace
 	
 # Large
-	Program scripts cleanup
-		Use MainConfig.isWindowActive("") wherever possible
-			Also look at specific windows, though - if we don't need them for WindowActions purposes, they should live in the program-specific class instead
-		Conditionally load some scripts based on machine (epicStudio, emc2, fastStoneImageViewer, etc.)
-		Consider moving any functions into a (static?) program-specific class.
-			Would remove need to prefix all function names with program name
-			Possibly easier to reference program-specific logic from outside of the script (or at least formalize that link a little better).
-		Programs remaining:
-			onetastic
 	Toast: could we avoid flickering between .showPersistent() and .setText()?
 		Maybe some way to set position without showing?
 		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?

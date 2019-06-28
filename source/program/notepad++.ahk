@@ -1,111 +1,152 @@
 #If MainConfig.isWindowActive("Notepad++")
-	; New document.
-	^t::^n
+	!x::return ; Block close-document hotkey that can't be changed/removed.
+	^+t::Send, !f1 ; Re-open last closed document.
 	
-	; Re-open last closed document.
-	^+t::
-		Send, !f
-		Send, 1
-	return
-	
-	; Block close-document hotkey that can't be changed/removed.
-	!x::return
-	
-	:X:dbpop::notepadPPSendDebugCodeString("DEBUG.popup")
-	:X:edbpop::notepadPPSendDebugCodeString("DEBUG.popupEarly")
-	:X:dbto::notepadPPSendDebugCodeString("DEBUG.toast")
-	
-	::dbparam::
-		notepadPPDebugParams() {
-			varList := clipboard
-			if(!varList)
-				return
-			
-			Send, % notepadPPGenerateDebugParams(varList)
-		}
-	
-	; Function header
-	::`;`;`;::
-		notepadPPSendAHKFunctionHeader() {
-			; Select the following line after this one to get parameter information
-			Send, {Down}
-			selectCurrentLine()
-			firstLine := cleanupText(getSelectedText())
-			Send, {Up}
-			
-			; Piece out the parameters
-			paramsList := getFirstStringBetweenStr(firstLine, "(", ")")
-			paramsAry  := strSplit(paramsList, ",", " `t")
-			
-			; Drop any defaults from the parameters, get max length
-			maxParamLength := 0
-			For i,param in paramsAry {
-				param := removeStringFromStart(param, "ByRef ")
-				param := getStringBeforeStr(param, " :=")
-				
-				maxParamLength := max(maxParamLength, strLen(param))
-				paramsAry[i] := param
-			}
-			; DEBUG.popup("Line",firstLine, "Params list",paramsList, "Params array",paramsAry, "Max param length",maxParamLength)
-			
-			startText := "
-				( RTrim0
-				;---------
-				; DESCRIPTION:    
-				
-				)"
-			
-			paramsText := ""
-			For i,param in paramsAry {
-				paramLen := strLen(param)
-				param := param getSpaces(maxParamLength - paramLen)
-				paramsText .= ";  " param " (I/O/IO,REQ/OPT) - `n"
-			}
-			if(paramsText)
-				paramsText := "; PARAMETERS:`n" paramsText
-			
-			endText := "
-				( RTrim0
-				; RETURNS:        
-				; SIDE EFFECTS:   
-				; NOTES:          
-				;---------
-				)"
-			SendRaw, % startText paramsText endText
-		}
-	
-	^Enter::
-		notepadPPInsertIndentedNewline() {
-			; Read in both sides of the current line - the left will help us find where the indent is, the right is what we're moving.
-			Send, {Shift Down}{Home}{Shift Up}
-			lineStart := getSelectedText()
-			Send, {Shift Down}{End}{Shift Up}
-			lineEnd := getSelectedText()
-			
-			; Put the cursor back where it was, where we want to insert the newline.
-			if(lineEnd = "")
-				Send, {End}
-			else
-				Send, {Left}
-			
-			; If we would have a widowed (on the end of the old line) or orphaned (at the start of the new line) space, remove it.
-			if(stringEndsWith(lineStart, A_Space))
-				Send, {Backspace}
-			if(stringStartsWith(lineEnd, A_Space))
-				Send, {Delete}
-			
-			numSpaces := notepadPPGetDocumentationLineIndent(lineStart)
-			
-			Send, {Enter} ; Start the new line - assuming that Notepad++ will put us at the same indentation level (before the semicolon) as the previous row.
-			Send, % ";" getSpaces(numSpaces)
-		}
-	
-	; Copy current file path to clipboard
+	; Copy current file/folder to clipboard.
 	!c::copyFilePathWithHotkey("!c")
-	; Copy current folder path to clipboard
 	!#c::copyFolderPathWithHotkey("^!c")
+	
+	^Enter::NotepadPlusPlus.insertIndentedNewline() ; Add an indented newline
+	
+	; Insert various AHK dev/debug strings
+	:X:`;`;`;::NotepadPlusPlus.sendAHKFunctionHeader()                 ; Function header
+	:X:dbpop::NotepadPlusPlus.sendDebugCodeString("DEBUG.popup")       ; Debug popup
+	:X:dbto::NotepadPlusPlus.sendDebugCodeString("DEBUG.toast")        ; Debug toast
+	:X:edbpop::NotepadPlusPlus.sendDebugCodeString("DEBUG.popupEarly") ; Debug popup that appears at startup
+	::dbparam::NotepadPlusPlus.insertDebugParams()                     ; Debug parameters
+#If
+
+; Only if my AHK test script is not running
+#If !WinExist(buildWindowTitleString("AutoHotkey.exe", "AutoHotkey", MainConfig.path["AHK_ROOT"] "\test\test.ahk"))
+	!+x::return ; Block the !+x close-tab hotkey (but allow it to go through for the test script to catch itself if it's running).
 #If
 	
+class NotepadPlusPlus {
+
+; ==============================
+; == Public ====================
+; ==============================
+	;---------
+	; DESCRIPTION:    Insert a newline at the cursor, indented to the same level as the current line.
+	;                 Also takes AHK headers into account, indenting to the proper level if you're
+	;                 within one.
+	;---------
+	insertIndentedNewline() {
+		; Read in both sides of the current line - the left will help us find where the indent is, the right is what we're moving.
+		Send, {Shift Down}{Home}{Shift Up}
+		lineStart := getSelectedText()
+		Send, {Shift Down}{End}{Shift Up}
+		lineEnd := getSelectedText()
+		
+		; Put the cursor back where it was, where we want to insert the newline.
+		if(lineEnd = "")
+			Send, {End}
+		else
+			Send, {Left}
+		
+		; If we would have a widowed (on the end of the old line) or orphaned (at the start of the new line) space, remove it.
+		if(stringEndsWith(lineStart, A_Space))
+			Send, {Backspace}
+		if(stringStartsWith(lineEnd, A_Space))
+			Send, {Delete}
+		
+		numSpaces := NotepadPlusPlus.getDocumentationLineIndent(lineStart)
+		
+		Send, {Enter} ; Start the new line - assuming that Notepad++ will put us at the same indentation level (before the semicolon) as the previous row.
+		Send, % ";" getSpaces(numSpaces)
+	}
+	
+	;---------
+	; DESCRIPTION:    Send a debug code string using the given function name, prompting the user for
+	;                 the list of parameters to use (in "varName",varName parameter pairs).
+	; PARAMETERS:
+	;  functionName (I,REQ) - Name of the function to send before the parameters.
+	;---------
+	sendDebugCodeString(functionName) {
+		if(functionName = "")
+			return
+		
+		varList := InputBox("Enter variables to send debug string for", , , 500, 100, , , , , clipboard)
+		if(ErrorLevel) ; Popup was cancelled or timed out
+			return
+		
+		if(varList = "") {
+			SendRaw, % functionName "()"
+			Send, {Left} ; Get inside parens for user to enter the variables/labels themselves
+		} else {
+			SendRaw, % functionName "(" NotepadPlusPlus.generateDebugParams(varList) ")"
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Generate and insert debug parameters, prompting the user for which variables
+	;                 to include.
+	;---------
+	insertDebugParams() {
+		varList := clipboard
+		if(!varList)
+			return
+		
+		Send, % NotepadPlusPlus.generateDebugParams(varList)
+	}
+	
+	;---------
+	; DESCRIPTION:    Insert an AHK function header based on the function defined on the line below
+	;                 the cursor.
+	; SIDE EFFECTS:   Selects the line below in order to process the parameters.
+	;---------
+	sendAHKFunctionHeader() {
+		; Select the following line after this one to get parameter information
+		Send, {Down}
+		selectCurrentLine()
+		firstLine := cleanupText(getSelectedText())
+		Send, {Up}
+		
+		; Piece out the parameters
+		paramsList := getFirstStringBetweenStr(firstLine, "(", ")")
+		paramsAry  := strSplit(paramsList, ",", " `t")
+		
+		; Drop any defaults from the parameters, get max length
+		maxParamLength := 0
+		For i,param in paramsAry {
+			param := removeStringFromStart(param, "ByRef ")
+			param := getStringBeforeStr(param, " :=")
+			
+			maxParamLength := max(maxParamLength, strLen(param))
+			paramsAry[i] := param
+		}
+		; DEBUG.popup("Line",firstLine, "Params list",paramsList, "Params array",paramsAry, "Max param length",maxParamLength)
+		
+		startText := "
+			( RTrim0
+			;---------
+			; DESCRIPTION:    
+			
+			)"
+		
+		paramsText := ""
+		For i,param in paramsAry {
+			paramLen := strLen(param)
+			param := param getSpaces(maxParamLength - paramLen)
+			paramsText .= ";  " param " (I/O/IO,REQ/OPT) - `n"
+		}
+		if(paramsText)
+			paramsText := "; PARAMETERS:`n" paramsText
+		
+		endText := "
+			( RTrim0
+			; RETURNS:        
+			; SIDE EFFECTS:   
+			; NOTES:          
+			;---------
+			)"
+		SendRaw, % startText paramsText endText
+	}
+	
+	
+; ==============================
+; == Private ===================
+; ==============================
 	;---------
 	; DESCRIPTION:    Figure out where the indentation for a line is positioned (in terms of the
 	;                 number of spaces after the comment character).
@@ -113,7 +154,7 @@
 	;  line (I,REQ) - The line that we're trying to determine indentation for.
 	; RETURNS:        The number of spaces after the comment character that the indent is.
 	;---------
-	notepadPPGetDocumentationLineIndent(line) {
+	getDocumentationLineIndent(line) {
 		line := cleanupText(line) ; Drop (and ignore) any leading/trailing whitespace and odd characters
 		line := removeStringFromStart(line, "; ") ; Trim off the starting comment char + space
 		numSpaces := 1 ; Space we just trimmed off
@@ -140,26 +181,6 @@
 	}
 	
 	;---------
-	; DESCRIPTION:    Determine how many spaces there are at the beginning of a string.
-	; PARAMETERS:
-	;  line (I,REQ) - The line to count spaces for.
-	; RETURNS:        The number of spaces at the beginning of the line.
-	;---------
-	countLeadingSpaces(line) {
-		numSpaces := 0
-		
-		Loop, Parse, line
-		{
-			if(A_LoopField = A_Space)
-				numSpaces++
-			else
-				Break
-		}
-		
-		return numSpaces
-	}
-	
-	;---------
 	; DESCRIPTION:    Generate a list of parameters for the DEBUG.popup/DEBUG.toast functions,
 	;                 in "varName",varName pairs.
 	; PARAMETERS:
@@ -169,7 +190,7 @@
 	;                 	Input: var1,var2
 	;                 	Output: "var1",var1, "var2",var2
 	;---------
-	notepadPPGenerateDebugParams(varList) {
+	generateDebugParams(varList) {
 		paramsAry := StrSplit(varList, ",", A_Space) ; Split on comma and drop leading/trailing spaces
 		; DEBUG.toast("paramsAry",paramsAry)
 		
@@ -182,30 +203,4 @@
 		
 		return paramsString
 	}
-	
-	;---------
-	; DESCRIPTION:    Send a debug code string using the given function name, prompting the user for
-	;                 the list of parameters to use (in "varName",varName parameter pairs).
-	; PARAMETERS:
-	;  functionName (I,REQ) - Name of the function to send before the parameters.
-	;---------
-	notepadPPSendDebugCodeString(functionName) {
-		if(functionName = "")
-			return
-		
-		varList := InputBox("Enter variables to send debug string for", , , 500, 100, , , , , clipboard)
-		if(ErrorLevel) ; Popup was cancelled or timed out
-			return
-		
-		if(varList = "") {
-			SendRaw, % functionName "()"
-			Send, {Left} ; Get inside parens for user to enter the variables/labels themselves
-		} else {
-			SendRaw, % functionName "(" notepadPPGenerateDebugParams(varList) ")"
-		}
-	}
-
-; Block the !+x close-tab hotkey, but only if our test script isn't running (because that's its close hotkey).
-#If !WinExist(buildWindowTitleString("AutoHotkey.exe", "AutoHotkey", MainConfig.path["AHK_ROOT"] "\test\test.ahk"))
-	!+x::return
-#If
+}

@@ -86,6 +86,26 @@ multiplyString(inString, numTimes) {
 	
 	return outStr
 }
+	
+;---------
+; DESCRIPTION:    Determine how many spaces there are at the beginning of a string.
+; PARAMETERS:
+;  line (I,REQ) - The line to count spaces for.
+; RETURNS:        The number of spaces at the beginning of the line.
+;---------
+countLeadingSpaces(line) {
+	numSpaces := 0
+	
+	Loop, Parse, line
+	{
+		if(A_LoopField = A_Space)
+			numSpaces++
+		else
+			Break
+	}
+	
+	return numSpaces
+}
 
 escapeCharUsingChar(inputString, charToEscape, escapeChar := "\") {
 	replaceString := escapeChar charToEscape

@@ -10,6 +10,11 @@
 	Should EpicStudio "snippets" code live in a separate class?
 	Should EpicStudio.linkRoutineToCurrentDLG() use the DLG open in EMC2 instead of EpicStudio, since we're not doing new DLG tabs much anymore?
 	Consider reworking EpicStudio debug stuff
+	Notepad++ function headers - can we just make a single block (with tags?) instead of splitting it all up?
+		Parameters could be a little tricky - need to not include that whole section if there aren't any
+			Maybe 2 separate versions, then?
+			Individual parameters will need to be their own individual chunks, with a tag in the main thing to replace
+	OneNote quick access hotkeys - should I just have an array of {<nice command name>: quick access number}?
 	
 # Large
 	Program scripts cleanup
@@ -20,7 +25,6 @@
 			Would remove need to prefix all function names with program name
 			Possibly easier to reference program-specific logic from outside of the script (or at least formalize that link a little better).
 		Programs remaining:
-			notepad++
 			onenote
 			onetastic
 	Toast: could we avoid flickering between .showPersistent() and .setText()?

@@ -278,7 +278,7 @@ class OneNote {
 	; SIDE EFFECTS:   Puts the cursor at the beginning of the first line under the "Today" header.
 	;---------
 	todoPageCollapseToItems(todayOnly) {
-		OneNote.doPageCollapse(todayOnly, true)
+		OneNote.todoPageCollapse(todayOnly, true)
 	}
 	
 	;---------

@@ -103,7 +103,7 @@ class MainConfig {
 		}
 		set {
 			this.settings["MEDIA_PLAYER"] := value
-			this.settingsINIObject.set("Main", "MEDIA_PLAYER", value)
+			IniWrite, % value, % this.settingsINIPath, % "Main", % "MEDIA_PLAYER"
 		}
 	}
 	isMediaPlayer(mediaPlayerName) {
@@ -228,7 +228,7 @@ class MainConfig {
 	static games    := []
 	static privates := [] ; KEY => VALUE
 	
-	static settingsINIObject
+	static settingsINIPath
 	
 	loadPrivates(filePath) {
 		tl := new TableList(filePath)
@@ -242,12 +242,12 @@ class MainConfig {
 	}
 	
 	loadSettings(filePath) {
-		this.settingsINIObject := new IniObject(filePath)
+		this.settingsINIPath := filePath
 		
 		settingsAry := []
-		settingsAry["MACHINE"]         := this.settingsINIObject.get("Main", "MACHINE")         ; Which machine this is, from MainConfig.Machine_* constants
-		settingsAry["MENU_KEY_ACTION"] := this.settingsINIObject.get("Main", "MENU_KEY_ACTION") ; What to do with the menu key, from MainConfig.MenuKeyAction_* constants
-		settingsAry["MEDIA_PLAYER"]    := this.settingsINIObject.get("Main", "MEDIA_PLAYER")    ; What program the media keys should deal with
+		settingsAry["MACHINE"]         := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from MainConfig.Machine_* constants
+		settingsAry["MENU_KEY_ACTION"] := IniRead(this.settingsINIPath, "Main", "MENU_KEY_ACTION") ; What to do with the menu key, from MainConfig.MenuKeyAction_* constants
+		settingsAry["MEDIA_PLAYER"]    := IniRead(this.settingsINIPath, "Main", "MEDIA_PLAYER")    ; What program the media keys should deal with
 		
 		; DEBUG.popup("Settings", settingsAry)
 		return settingsAry

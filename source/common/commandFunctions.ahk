@@ -103,6 +103,10 @@
 	ImageSearch(ByRef OutputVarX, ByRef OutputVarY, X1, Y1, X2, Y2, ImageFile) {
 		ImageSearch, OutputVarX, OutputVarY, %X1%, %Y1%, %X2%, %Y2%, %ImageFile%
 	}
+	IniRead(filePath, section, key) { ; *gdb - added, but doesn't support everything, only my use cases for now.
+		IniRead, v, % filePath, % section, % key
+		return v
+	}
 	Input(Options = "", EndKeys = "", MatchList = "") {
 		Input, v, %Options%, %EndKeys%, %MatchList%
 		Return, v

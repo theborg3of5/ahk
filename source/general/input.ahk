@@ -74,7 +74,7 @@ return
 		
 		; Special case for OneNote: link the INI/ID as well.
 		if(MainConfig.isWindowActive("OneNote"))
-			oneNoteLinkEMC2ObjectInLine(ao.ini, ao.id)
+			OneNote.linkEMC2ObjectInLine(ao.ini, ao.id)
 	}
 
 ; Send the clipboard as a list.

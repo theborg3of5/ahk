@@ -1,29 +1,90 @@
-global lastPuttySearchType, lastPuttySearchText ; For Home+F9 searching repeatedly.
-
 #If MainConfig.isWindowActive("Putty")
+	^c::return ; Disable breaking behavior for easy-to-hit-accidentally ^c, PuTTY already has a ^+c hotkey that works too.
+	^v::Send, +{Insert} ; Normal paste, without all the inserting of spaces.
+	+Tab::Send, {Left} ; Allow reverse field navigation.
+	
 	; Insert arbitrary text, inserting needed spaces to overwrite.
-	^i::
-		insertArbitraryText() {
-			; Popup to get the text.
-			textIn := InputBox("Insert text (without overwriting)", , , 500, 100)
-			if(textIn = "")
-				return
-			
-			; Get the length of the string we're going to add.
-			inputLength := StrLen(textIn)
-			
-			; Insert that many spaces.
-			Send, {Insert %inputLength%}
-			
-			; Actually send our input text.
-			SendRaw, % textIn
-		}
+	^i::Putty.insertArbitraryText()
+	
+	; Screen wipe
+	^l::
+		Send, !{Space}
+		Send, t
+		Send, {Enter}
+	return
+	; Screen wipe and clear scrollback
+	^+l::
+		Send, !{Space}
+		Send, l
+	return
 	
 	; Search within record edit screens
-	^F9::recordEditSearch()
-	^g::recordEditSearch(lastPuttySearchType, lastPuttySearchText)
-	recordEditSearch(searchType = "", searchText = "") {
-		; If nothing given, prompt the user for how/what to search.
+	^F9::Putty.recordEditSearch()
+	^g::Putty.recordEditSearch(lastPuttySearchType, lastPuttySearchText)
+	
+	; Open up settings window.
+	!o::Putty.openSettingsWindow()
+	
+	; Open up the current log file.
+	^+o::Putty.openCurrentLogFile()
+	
+	; Send specific commands
+	^r:: Putty.sendCommand()
+	^a:: Putty.sendCommand("BRIDGES")
+	^e:: Putty.sendCommand("CHRONICLES")
+	^+s::Putty.sendCommand("CR_STATUS")
+	^o:: Putty.sendCommand("HS_CONFIG")
+	^h:: Putty.sendCommand("HB")
+	^z:: Putty.sendCommand("LOOKITT")
+	^p:: Putty.sendCommand("PB")
+	^+e::Putty.sendCommand("VIEW_RECORD")
+#If
+
+class Putty {
+
+; ==============================
+; == Public ====================
+; ==============================
+	static ChangeSettingsOption := 0x50 ; IDM_RECONF, found in Putty's source code in window.c: https://github.com/codexns/putty/blob/master/windows/window.c
+	
+	; For Home+F9 searching repeatedly.
+	static lastSearchType := ""
+	static lastSearchText := ""
+	
+	;---------
+	; DESCRIPTION:    Prompt for some text, then insert it (without overwriting) by inserting spaces.
+	;---------
+	insertArbitraryText() {
+		; Popup to get the text.
+		textIn := InputBox("Insert text (without overwriting)", , , 500, 100)
+		if(textIn = "")
+			return
+		
+		; Get the length of the string we're going to add.
+		inputLength := StrLen(textIn)
+		
+		; Insert that many spaces.
+		Send, {Insert %inputLength%}
+		
+		; Actually send our input text.
+		SendRaw, % textIn
+	}
+	
+	;---------
+	; DESCRIPTION:    Search within record edit screens with Home+F9 functionality.
+	; PARAMETERS:
+	;  usePrevious (I,OPT) - Set to true to use the last search type/text instead of prompting the
+	;                        user. This is ignored if there was no last search type/text.
+	; SIDE EFFECTS:   Sets Putty.lastSearch* to whatever is chosen here for re-use later.
+	;---------
+	recordEditSearch(usePrevious := false) {
+		; Start with the last search type/text if requested.
+		if(usePrevious) {
+			searchType := Putty.lastSearchType
+			searchText := Putty.lastSearchText
+		}
+	
+		; If no previous values (or not using them), prompt the user for how/what to search.
 		if(searchType = "" || searchText = "") {
 			s := new Selector("puttyRecordEditSearch.tls")
 			data := s.selectGui()
@@ -42,116 +103,79 @@ global lastPuttySearchType, lastPuttySearchText ; For Home+F9 searching repeated
 		Send, {Enter}
 		
 		; Store off the latest search for use with ^g later.
-		lastPuttySearchType := searchType
-		lastPuttySearchText := searchText
+		Putty.lastSearchType := searchType
+		Putty.lastSearchText := searchText
+	}
+
+	;---------
+	; DESCRIPTION:    Open the Change Settings menu
+	;---------
+	openSettingsWindow() {
+		PostMessage, WM_SYSCOMMAND, Putty.ChangeSettingsOption, 0
 	}
 	
-	; Normal paste, without all the inserting of spaces.
-	^v::Send, +{Insert}
+	;---------
+	; DESCRIPTION:    Open the current log file
+	;---------
+	openCurrentLogFile() {
+		logFilePath := Putty.getLogFilePath()
+		if(logFilePath)
+			Run(logFilePath)
+	}
 	
-	; Disable breaking behavior for easy-to-hit-accidentally ^c, PuTTY already has a ^+c hotkey that works too.
-	^c::return
-	
-	; Screen wipe
-	^l::
-		Send, !{Space}
-		Send, t
-		Send, {Enter}
-	return
-	^+l::
-		Send, !{Space}
-		Send, l
-	return
-	
-	; Allow reverse field navigation.
-	+Tab::
-		Send, {Left}
-	return
-	
-	; Open up settings window.
-	!o::
-		openPuttySettingsWindow()
-	return
-	
-	; Open up the current log file.
-	^+o::
-		openCurrentLogFile() {
-			logFilePath := GetPuttyLogFile()
-			if(logFilePath)
-				Run(logFilePath)
-		}
-	
-	; Make page up/down actually move a page up/down (each Shift+Up/Down does a half a page).
-	^PgUp::
-		Send, +{PgUp 2}
-	return
-	^PgDn::
-		Send, +{PgDn 2}
-	return
-	
-	{ ; Various commands.
-		^r:: sendPuttyCommand()
-		^a:: sendPuttyCommand("BRIDGES")
-		^e:: sendPuttyCommand("CHRONICLES")
-		^o:: sendPuttyCommand("HS_CONFIG")
-		^h:: sendPuttyCommand("HB")
-		^z:: sendPuttyCommand("LOOKITT")
-		^p:: sendPuttyCommand("PB")
-		^+e::sendPuttyCommand("VIEW_RECORD")
+	;---------
+	; DESCRIPTION:    Send a specific command to Putty.
+	; PARAMETERS:
+	;  key (I,OPT) - A key (from puttyCommands.tls) for which command to send. If left blank, we
+	;                will prompt the user for which command to send with a Selector popup.
+	;---------
+	sendCommand(key := "") {
+		s := new Selector("puttyCommands.tls")
+		dataAry := s.select(key)
 		
-		^+s::
-			sendPuttyCommand("CR")
-			Send, 1{Enter}
-		return
+		command   := dataAry["COMMAND"]
+		sendAfter := dataAry["SEND_AFTER"]
+		ini       := stringUpper(dataAry["INI"])
+		id        := dataAry["ID"]
+		
+		if(!command)
+			return
+		
+		command := replaceTag(command, "INI", ini)
+		command := replaceTag(command, "ID",  id)
+		
+		if(!MainConfig.isWindowActive("Putty"))
+			WindowActions.activateWindowByName("Putty")
+		
+		SendRaw, % command
+		Send, % sendAfter
 	}
-#If
-
-
-; Opens the Change Settings menu for putty. 0x50 is IDM_RECONF, the change settings option. 
-; It's found in putty's source code in window.c:
-; https://github.com/codexns/putty/blob/master/windows/window.c
-openPuttySettingsWindow() {
-	PostMessage, WM_SYSCOMMAND, 0x50, 0
-}
-
-; Modified from http://wiki.epic.com/main/PuTTY#AutoHotKey_for_PuTTY_Macros
-getPuttyLogFile() {
-	if(!WinActive("ahk_class PuTTY"))
-		return ""
 	
-	openPuttySettingsWindow()
 	
-	; Wait for the popup to show up
-	WinWaitActive, ahk_class PuTTYConfigBox
-	
-	Send, !g ; Category pane
-	Send, l  ; Logging tree node
-	Send, !f ; Log file name field
-	
-	logFile := getSelectedText()
-	
-	Send, !c ; Cancel
-	return logFile
-}
-
-sendPuttyCommand(key := "") {
-	s := new Selector("puttyCommands.tls")
-	dataAry := s.select(key)
-	
-	command   := dataAry["COMMAND"]
-	sendAfter := dataAry["SEND_AFTER"]
-	ini       := stringUpper(dataAry["INI"])
-	id        := dataAry["ID"]
-	
-	if(!command)
-		return
-	
-	command := replaceTag(command, "INI", ini)
-	command := replaceTag(command, "ID",  id)
-	
-	if(!MainConfig.isWindowActive("Putty"))
-		WindowActions.activateWindowByName("Putty")
-	
-	SendRaw, % command
-	Send, % sendAfter
+; ==============================
+; == Private ===================
+; ==============================
+	;---------
+	; DESCRIPTION:    Get the log file for the current Putty session via the settings window.
+	; RETURNS:        The path to the log file
+	; SIDE EFFECTS:   Temporarily opens the settings window, then closes it.
+	;---------
+	getLogFilePath() {
+		if(!WinActive("ahk_class PuTTY"))
+			return ""
+		
+		Putty.openSettingsWindow()
+		
+		; Wait for the popup to show up
+		WinWaitActive, ahk_class PuTTYConfigBox
+		
+		Send, !g ; Category pane
+		Send, l  ; Logging tree node
+		Send, !f ; Log file name field
+		
+		logFile := getSelectedText()
+		
+		Send, !c ; Cancel
+		return logFile
+	}
 }

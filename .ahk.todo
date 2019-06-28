@@ -9,6 +9,7 @@
 		Can search for ClipboardAll to find use cases
 	Should EpicStudio "snippets" code live in a separate class?
 	Should EpicStudio.linkRoutineToCurrentDLG() use the DLG open in EMC2 instead of EpicStudio, since we're not doing new DLG tabs much anymore?
+	Consider reworking EpicStudio debug stuff
 	
 # Large
 	Program scripts cleanup
@@ -22,7 +23,6 @@
 			notepad++
 			onenote
 			onetastic
-			putty
 	Toast: could we avoid flickering between .showPersistent() and .setText()?
 		Maybe some way to set position without showing?
 		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?
@@ -100,11 +100,6 @@
 			io
 			runCommands
 			string
-	program
-		epicStudio
-			Reconsider debug functions
-		hyperspace
-		putty
 	standalone
 		halfQWERTY
 		killUAC

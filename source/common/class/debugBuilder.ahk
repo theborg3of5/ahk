@@ -29,11 +29,10 @@
 */
 
 class DebugBuilder {
-	
-	; ==============================
-	; == Public ====================
-	; ==============================
-	
+
+; ==============================
+; == Public ====================
+; ==============================
 	;---------
 	; DESCRIPTION:    Create a new DebugBuilder instance.
 	; PARAMETERS:
@@ -69,9 +68,9 @@ class DebugBuilder {
 	}
 	
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
+; ==============================
+; == Private ===================
+; ==============================
 	numTabs   := 0  ; How indented our base level of text should be.
 	outString := "" ; Built-up string to eventually return.
 	

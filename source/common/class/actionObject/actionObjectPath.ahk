@@ -14,10 +14,10 @@
 */
 
 class ActionObjectPath extends ActionObjectBase {
-	; ==============================
-	; == Public ====================
-	; ==============================
-	
+
+; ==============================
+; == Public ====================
+; ==============================
 	static PathType_FilePath := "FILEPATH" ; Local file path
 	static PathType_URL      := "URL"
 	

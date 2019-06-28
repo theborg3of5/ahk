@@ -4,11 +4,10 @@
 */
 
 class ListConverter {
-	
-	; ==============================
-	; == Public ====================
-	; ==============================
 
+; ==============================
+; == Public ====================
+; ==============================
 	; Formats for reading/writing lists.
 	static Format_Array    := "ARRAY"
 	static Format_Commas   := "COMMA"
@@ -36,10 +35,10 @@ class ListConverter {
 		return outputObject
 	}
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
 	
+; ==============================
+; == Private ===================
+; ==============================
 	formatDelimsAry := []
 	
 	; Special, internal-only list formats

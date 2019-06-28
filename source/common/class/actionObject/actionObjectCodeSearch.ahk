@@ -11,10 +11,10 @@
 */
 
 class ActionObjectCodeSearch extends ActionObjectBase {
-	; ==============================
-	; == Public ====================
-	; ==============================
-	
+
+; ==============================
+; == Public ====================
+; ==============================
 	location := "" ; Code location to work with
 	
 	;---------
@@ -50,10 +50,9 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 	}
 	
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
-	
+; ==============================
+; == Private ===================
+; ==============================
 	;---------
 	; DESCRIPTION:    Prompt the user for the code location if it's missing.
 	; SIDE EFFECTS:   Sets .location based on user inputs.

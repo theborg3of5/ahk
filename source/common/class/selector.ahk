@@ -114,11 +114,10 @@
 */
 
 class Selector {
-	
-	; ==============================
-	; == Public ====================
-	; ==============================
-	
+
+; ==============================
+; == Public ====================
+; ==============================
 	;---------
 	; DESCRIPTION:    Creates a new instance of the Selector class.
 	; PARAMETERS:
@@ -270,10 +269,9 @@ class Selector {
 	}
 	
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
-	
+; ==============================
+; == Private ===================
+; ==============================
 	chars          := []    ; Special characters (see getSpecialChars)
 	choices        := []    ; Visible choices the user can pick from (array of SelectorChoice objects).
 	hiddenChoices  := []    ; Invisible choices the user can pick from (array of SelectorChoice objects).

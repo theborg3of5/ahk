@@ -26,11 +26,10 @@
 */
 
 class Toast {
-	
-	; ==============================
-	; == Public (Static) ===========
-	; ==============================
-	
+
+; ==============================
+; == Public (Static) ===========
+; ==============================
 	;---------
 	; DESCRIPTION:    Wrapper for Toast.showForSeconds for a "short" toast (shown for 1 second) in
 	;                 the bottom-right corner of the screen.
@@ -114,12 +113,10 @@ class Toast {
 		closeFunc := ObjBindMethod(Toast, "closeToast", guiId) ; Create a BoundFunc object of the .closeToast function (with guiId passed to it) for when the timer finishes.
 		SetTimer, % closeFunc, % -numSeconds * 1000
 	}
-	
-	
-	; ==============================
-	; == Public (Persistent) =======
-	; ==============================
-	
+
+; ==============================
+; == Public (Persistent) =======
+; ==============================
 	;---------
 	; DESCRIPTION:    Create a new Toast object.
 	; PARAMETERS:
@@ -220,10 +217,9 @@ class Toast {
 	}
 	
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
-	
+; ==============================
+; == Private ===================
+; ==============================
 	static WidthLabelNum := 0
 	static ToastTitle := "[TOAST]"
 	

@@ -2,11 +2,10 @@
 */
 
 class MainConfig {
-	
-	; ==============================
-	; == Public ====================
-	; ==============================
-	
+
+; ==============================
+; == Public ====================
+; ==============================
 	; Constants for specific machines (matched to settings.ini).
 	static Machine_EpicLaptop  := "EPIC_LAPTOP"
 	static Machine_HomeLaptop  := "HOME_LAPTOP"
@@ -217,10 +216,10 @@ class MainConfig {
 		return false
 	}
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
 	
+; ==============================
+; == Private ===================
+; ==============================
 	static initDone := false
 	static settings := []
 	static windows  := []

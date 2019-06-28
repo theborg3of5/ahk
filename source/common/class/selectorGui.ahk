@@ -7,11 +7,10 @@
 */
 
 class SelectorGui {
-	
-	; ==============================
-	; == Public ====================
-	; ==============================
-	
+
+; ==============================
+; == Public ====================
+; ==============================
 	;---------
 	; DESCRIPTION:    Create a new SelectorGui instance.
 	; PARAMETERS:
@@ -51,10 +50,10 @@ class SelectorGui {
 		return this.overrideData
 	}
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
 	
+; ==============================
+; == Private ===================
+; ==============================
 	static baseFieldVarChoice          := "Choice"
 	static baseFieldVarOverridesPrefix := "Override"
 	static defaultFontColor            := "BDAE9D"

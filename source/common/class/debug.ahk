@@ -83,11 +83,10 @@
 */
 
 class DEBUG {
-	
-	; ==============================
-	; == Public ====================
-	; ==============================
-	
+
+; ==============================
+; == Public ====================
+; ==============================
 	;---------
 	; DESCRIPTION:    Display a popup of information about the information provided. See class
 	;                 documentation for information about how we handle labels, values, arrays,
@@ -132,9 +131,9 @@ class DEBUG {
 	}
 	
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
+; ==============================
+; == Private ===================
+; ==============================
 	static spacesPerTab := 4 ; How many spaces are in a tab that we indent things by.
 	
 	;---------

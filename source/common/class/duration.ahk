@@ -10,10 +10,10 @@
 */
 
 class Duration {
-	; ==============================
-	; == Public ====================
-	; ==============================
-	
+
+; ==============================
+; == Public ====================
+; ==============================
 	; Supported characters:
 	static Char_Hour   := "h" ; Hours
 	static Char_Minute := "m" ; Minutes
@@ -114,10 +114,9 @@ class Duration {
 	}
 	
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
-	
+; ==============================
+; == Private ===================
+; ==============================
 	static supportedUnitsAry := ""
 	static unitMultiplierAry := ""
 	durationTotalSeconds := 0

@@ -1,11 +1,10 @@
 ; Data class to hold information about a specific program.
 
 class ProgramInfo {
-   
-   ; ==============================
-   ; == Public ====================
-   ; ==============================
-   
+
+; ==============================
+; == Public ====================
+; ==============================
    ;---------
    ; DESCRIPTION:    Creates a new instance of ProgramInfo.
    ; PARAMETERS:
@@ -39,11 +38,11 @@ class ProgramInfo {
          return this.programPath
       }
    }
-   
-   
-   ; ==============================
-   ; == Private ===================
-   ; ==============================
+	
+	
+; ==============================
+; == Private ===================
+; ==============================
    programName := ""
    programPath := ""
    

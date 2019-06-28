@@ -55,11 +55,10 @@
 */
 
 class FlexTable {
-	
-	; ==============================
-	; == Public ====================
-	; ==============================
-	
+
+; ==============================
+; == Public ====================
+; ==============================
 	;---------
 	; DESCRIPTION:    Create a new FlexTable instance.
 	; PARAMETERS:
@@ -181,10 +180,9 @@ class FlexTable {
 	}
 	
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
-	
+; ==============================
+; == Private ===================
+; ==============================
 	guiId := ""
 	static uniqueControlNum := 0 ; Used to get a unique name for each control we have to figure out the width of.
 	

@@ -2,11 +2,10 @@
 */
 
 class Hyperlinker {
-	
-	; ==============================
-	; == Public ====================
-	; ==============================
 
+; ==============================
+; == Public ====================
+; ==============================
 	; Methods for setting link information for the selected text.
 	static Method_PopupField   := "POPUP_FIELD"
 	static Method_WebField     := "WEB_FIELD"
@@ -43,10 +42,10 @@ class Hyperlinker {
 		return Hyperlinker.doLink(path, windowLinkInfoAry, errorMessage)
 	}
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
 	
+; ==============================
+; == Private ===================
+; ==============================
 	static windows := ""
 	
 	;---------

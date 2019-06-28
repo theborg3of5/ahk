@@ -1,41 +1,145 @@
 ; EpicStudio hotkeys and helpers.
-#IfWinActive, ahk_exe EpicStudio.exe
+#If MainConfig.isWindowActive("EpicStudio")
 	; Remap some of the tools to get easier access to those I use often.
 	!1::!3 ; EZParse
 	!2::!5 ; Error List
 	!3::!6 ; Call Hierarchy
 	!4::!8 ; Item expert
 	
-	; Better access to INTermediate code.
-	!i::ControlSend, , ^+v
-	
-	; Make copy line location !c.
-	!c:: epicStudioCopyCleanCodeLocation()
-	!#c::epicStudioCopyLinkedCodeLocation()
-	
 	; Delete line hotkey
-	$^d::
-		epicStudioDeleteLinePreservingClipboard() {
-			originalClipboard := clipboardAll ; Save off the entire clipboard
-			clipboard := ""                   ; Clear the clipboard (so we can wait for the new value)
-			
-			Send, ^d ; Delete line hotkey in EpicStudio (also unfortunately overwrites the clipboard with deleted line)
-			ClipWait, 2 ; Wait for 2 seconds for clipboard to be overwritten
-			
-			clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
+	$^d::EpicStudio.deleteLinePreservingClipboard()
+	
+	; Copy current code location
+	!c:: EpicStudio.copyCleanCodeLocation()  ; Cleaned, just the actual location
+	!#c::EpicStudio.copyLinkedCodeLocation() ; RTF location with link.
+	
+	; Link routine to currently open (in object explorer tab) DLG.
+	^+l::EpicStudio.linkRoutineToCurrentDLG()
+	
+	; Generate and insert snippet
+	::.snip::EpicStudio.insertMSnippet()
+	
+	; Debug, auto-search for workstation ID.
+	~F5::EpicStudio.runDebug("ws:" MainConfig.private["WORK_COMPUTER_NAME"])
+	F6:: EpicStudio.runDebug("ws:" A_IPAddress1)
+#If
+
+class EpicStudio {
+
+; ==============================
+; == Public ====================
+; ==============================
+	;---------
+	; DESCRIPTION:    Delete the current line in EpicStudio, but preserve the clipboard (delete line
+	;                 hotkey puts the line on the clipboard)
+	;---------
+	deleteLinePreservingClipboard() {
+		originalClipboard := clipboardAll ; Save off the entire clipboard
+		clipboard := ""                   ; Clear the clipboard (so we can wait for the new value)
+		
+		Send, ^d ; Delete line hotkey in EpicStudio (also unfortunately overwrites the clipboard with deleted line)
+		ClipWait, 2 ; Wait for 2 seconds for clipboard to be overwritten
+		
+		clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
+	}
+	
+	;---------
+	; DESCRIPTION:    Put the current location in code (tag^routine) onto the clipboard, stripping
+	;                 off any offset ("+4" in "tag+4^routine") and the RTF link that EpicStudio adds.
+	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
+	;---------
+	copyCleanCodeLocation() {
+		if(!EpicStudio.copyCodeLocation())
+			return
+		
+		codeLocation := clipboard
+		
+		; Initial value copied potentially has the offset (tag+<offsetNum>) included, strip it off.
+		codeLocation := dropOffsetFromServerLocation(codeLocation)
+		
+		; Set the clipboard value to our new (plain-text, no link) code location and notify the user.
+		setClipboardAndToastValue(codeLocation, "cleaned code location")
+	}
+	
+	;---------
+	; DESCRIPTION:    Put the current location in code (tag^routine) onto the clipboard.
+	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
+	;---------
+	copyLinkedCodeLocation() {
+		if(!EpicStudio.copyCodeLocation())
+			return
+		
+		; Notify the user of the new value.
+		toastNewClipboardValue("linked code location")
+	}
+	
+	;---------
+	; DESCRIPTION:    Link the current routine to the DLG open in its own tab.
+	;---------
+	linkRoutineToCurrentDLG() {
+		text := WinGetText()
+		
+		Loop, Parse, text, `n
+		{
+			if(stringStartsWith(A_LoopField, "DLG ")) {
+				dlgNum := getStringAfterStr(A_LoopField, "DLG ")
+				; DEBUG.popup("On line", A_Index, "With DLG number", dlgNum)
+				break
+			}
 		}
+		
+		if(!dlgNum)
+			return
+		
+		Send, ^l
+		WinWaitActive, Link DLG, , 5
+		Send, % dlgNum
+		Send, {Enter}
+	}
 	
-	; ; Debug, auto-search for workstation ID.
-	~F5::epicStudioDebug("ws:" MainConfig.private["WORK_COMPUTER_NAME"])
-	F6:: epicStudioDebug("ws:" A_IPAddress1)
+	;---------
+	; DESCRIPTION:    Generate and insert an M snippet.
+	;---------
+	insertMSnippet() {
+		; Get current line for analysis.
+		Send, {End}{Home 2} ; Get to very start of line (before indentation)
+		Send, {Shift Down}{End}{Shift Up} ; Select entire line (including indentation)
+		line := getSelectedText()
+		Send, {End} ; Get to end of line
+		
+		line := removeStringFromStart(line, "`t") ; Tab at the start of every line
+		
+		numIndents := 0
+		while(stringStartsWith(line, ". ")) {
+			numIndents++
+			line := removeStringFromStart(line, ". ")
+		}
+		
+		; If it's an empty line with just a semicolon, remove the semicolon.
+		if(line = ";")
+			Send, {Backspace}
+		
+		s := new Selector("MSnippets.tls")
+		data := s.selectGui()
+		
+		type := data["TYPE"]
+		if(data["TYPE"] = "LOOP")
+			snipString := EpicStudio.buildMLoop(data, numIndents)
+		
+		sendTextWithClipboard(snipString) ; Better to send with the clipboard, otherwise we have to deal with EpicStudio adding in dot-levels itself.
+	}
 	
-	; Run EpicStudio in debug mode, given a particular string to search for.
-	epicStudioDebug(searchString) {
+	;---------
+	; DESCRIPTION:    Run EpicStudio in debug mode, or continue debugging if we're already in it.
+	; PARAMETERS:
+	;  searchString (I,REQ) - String to automatically search for in the attach process popup
+	;---------
+	runDebug(searchString) {
 		; Always send F5, even in debug mode - continue.
 		Send, {F5}
 		
 		; Don't try and debug again if ES is already doing so.
-		if(isESDebugging())
+		if(EpicStudio.isDebugging())
 			return
 		
 		WinWait, Attach to Process, , 5
@@ -60,11 +164,18 @@
 		Send, {Enter}{Down}
 	}
 	
-	; Checks if ES is already in debug mode or not.
-	isESDebugging() {
+	
+; ==============================
+; == Private ===================
+; ==============================
+	;---------
+	; DESCRIPTION:    Determine whether EpicStudio is in debug mode right now.
+	; RETURNS:        true if EpicStudio is in debug mode, false otherwise.
+	;---------
+	isDebugging() {
 		isDebugging := false
 		
-		origMatchMode := setTitleMatchMode(TITLE_MATCH_MODE_Contain)
+		origMatchMode  := setTitleMatchMode(TITLE_MATCH_MODE_Contain)
 		origMatchSpeed := setTitleMatchSpeed("Slow")
 		
 		; Match on text in the window for the main debugging targets
@@ -80,92 +191,6 @@
 		return isDebugging
 	}
 	
-	; Link routine to currently open (in object explorer tab) DLG.
-	^+l::
-		linkRoutineToCurrentDLG() {
-			text := WinGetText()
-			
-			Loop, Parse, text, `n
-			{
-				if(stringStartsWith(A_LoopField, "DLG ")) {
-					dlgNum := getStringAfterStr(A_LoopField, "DLG ")
-					; DEBUG.popup("On line", A_Index, "With DLG number", dlgNum)
-					break
-				}
-			}
-			
-			if(!dlgNum)
-				return
-			
-			Send, ^l
-			WinWaitActive, Link DLG, , 5
-			Send, % dlgNum
-			Send, {Enter}
-		}
-	return
-	
-	::.snip::
-		insertMSnippet() {
-			; Get current line for analysis.
-			Send, {End}{Home 2} ; Get to very start of line (before indentation)
-			Send, {Shift Down}{End}{Shift Up} ; Select entire line (including indentation)
-			line := getSelectedText()
-			Send, {End} ; Get to end of line
-			
-			line := removeStringFromStart(line, "`t") ; Tab at the start of every line
-			
-			numIndents := 0
-			while(stringStartsWith(line, ". ")) {
-				numIndents++
-				line := removeStringFromStart(line, ". ")
-			}
-			
-			; If it's an empty line with just a semicolon, remove the semicolon.
-			if(line = ";")
-				Send, {Backspace}
-			
-			s := new Selector("MSnippets.tls")
-			data := s.selectGui()
-			
-			type := data["TYPE"]
-			if(data["TYPE"] = "LOOP") {
-				snipString := buildMLoop(data, numIndents)
-			}
-			
-			sendTextWithClipboard(snipString) ; Better to send with the clipboard, otherwise we have to deal with EpicStudio adding in dot-levels itself.
-		}
-	
-	
-	;---------
-	; DESCRIPTION:    Put the current location in code (tag^routine) onto the clipboard.
-	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
-	;---------
-	epicStudioCopyLinkedCodeLocation() {
-		if(!epicStudioCopyCodeLocation())
-			return
-		
-		; Notify the user of the new value.
-		toastNewClipboardValue("linked code location")
-	}
-	
-	;---------
-	; DESCRIPTION:    Put the current location in code (tag^routine) onto the clipboard, stripping
-	;                 off any offset ("+4" in "tag+4^routine") and the RTF link that EpicStudio adds.
-	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
-	;---------
-	epicStudioCopyCleanCodeLocation() {
-		if(!epicStudioCopyCodeLocation())
-			return
-		
-		codeLocation := clipboard
-		
-		; Initial value copied potentially has the offset (tag+<offsetNum>) included, strip it off.
-		codeLocation := dropOffsetFromServerLocation(codeLocation)
-		
-		; Set the clipboard value to our new (plain-text, no link) code location and notify the user.
-		setClipboardAndToastValue(codeLocation, "cleaned code location")
-	}
-	
 	;---------
 	; DESCRIPTION:    Copy the current code location (with offset and RTF link) from EpicStudio to
 	;                 the clipboard.
@@ -173,7 +198,7 @@
 	; SIDE EFFECTS:   Waits for the clipboard to contain the location, and shows an error toast if
 	;                 it doesn't when we time out.
 	;---------
-	epicStudioCopyCodeLocation() {
+	copyCodeLocation() {
 		clipboard := "" ; Clear the clipboard so we can tell when we have the code location on it
 		Send, ^{Numpad9} ; Hotkey to copy code location to clipboard
 		ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain the code location
@@ -201,23 +226,23 @@
 		subType := data["SUBTYPE"]
 		
 		if(subType = "ARRAY_GLO") {
-			loopString .= buildMArrayLoop(data, numIndents)
+			loopString .= EpicStudio.buildMArrayLoop(data, numIndents)
 		
 		} else if(subType = "ID") {
-			loopString .= buildMIdLoop(data, numIndents)
+			loopString .= EpicStudio.buildMIdLoop(data, numIndents)
 		
 		} else if(subType = "DAT") {
-			loopString .= buildMDatLoop(data, numIndents)
+			loopString .= EpicStudio.buildMDatLoop(data, numIndents)
 			
 		} else if(subType = "ID_DAT") {
-			loopString .= buildMIdLoop(data, numIndents)
-			loopString .= buildMDatLoop(data, numIndents)
+			loopString .= EpicStudio.buildMIdLoop(data, numIndents)
+			loopString .= EpicStudio.buildMDatLoop(data, numIndents)
 			
 		} else if(subType = "INDEX_REG_VALUE") {
-			loopString .= buildMIndexRegularValueLoop(data, numIndents)
+			loopString .= EpicStudio.buildMIndexRegularValueLoop(data, numIndents)
 			
 		} else if(subType = "INDEX_REG_ID") {
-			loopString .= buildMIndexRegularIDLoop(data, numIndents)
+			loopString .= EpicStudio.buildMIndexRegularIDLoop(data, numIndents)
 			
 		}
 		
@@ -246,7 +271,7 @@
 			loopString .= replaceTags(MainConfig.private["M_LOOP_ARRAY_BASE"], {"ARRAY_NAME":arrayName, "ITERATOR":iterator, "PREV_ITERATORS":prevIterators})
 			
 			prevIterators .= iterator ","
-			loopString .= getMNewLinePlusIndent(numIndents)
+			loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
 		}
 		
 		return loopString
@@ -267,7 +292,7 @@
 		idVar := stringLower(ini) "Id"
 		loopString := replaceTags(MainConfig.private["M_LOOP_ID_BASE"], {"INI":ini, "ID_VAR":idVar})
 		
-		loopString .= getMNewLinePlusIndent(numIndents)
+		loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
 		return loopString
 	}
 	
@@ -287,7 +312,7 @@
 		datVar := stringLower(ini) "Dat"
 		loopString := replaceTags(MainConfig.private["M_LOOP_DAT_BASE"], {"INI":ini, "ID_VAR":idVar, "DAT_VAR":datVar, "ITEM":""})
 		
-		loopString .= getMNewLinePlusIndent(numIndents)
+		loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
 		return loopString
 	}
 	
@@ -307,7 +332,7 @@
 		
 		loopString := replaceTags(MainConfig.private["M_LOOP_INDEX_REGULAR_NEXT_VALUE"], {"INI":ini, "ITEM":"", "VALUE_VAR":valueVar})
 		
-		loopString .= getMNewLinePlusIndent(numIndents)
+		loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
 		return loopString
 	}
 	
@@ -329,7 +354,7 @@
 		idVar  := stringLower(ini) "Id"
 		loopString := replaceTags(MainConfig.private["M_LOOP_INDEX_REGULAR_NEXT_ID"], {"INI":ini, "ITEM":"", "VALUE_VAR":valueVar, "ID_VAR":idVar})
 		
-		loopString .= getMNewLinePlusIndent(numIndents)
+		loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
 		return loopString
 	}
 	
@@ -348,5 +373,4 @@
 		
 		return outString
 	}
-	
-#IfWinActive
+}

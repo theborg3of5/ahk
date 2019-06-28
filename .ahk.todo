@@ -6,7 +6,9 @@
 		Is that going to get weird with SelectorGui+FlexTable interactions?
 	Should we pull some of the clipboard logic out into a function?
 		A "start" (save clipboard value, wipe it, maybe wait for it to clear?) and a "finish" ([maybe wait for and return clipboard value?], restore clipboard value)
+		Can search for ClipboardAll to find use cases
 	Should EpicStudio "snippets" code live in a separate class?
+	Should EpicStudio.linkRoutineToCurrentDLG() use the DLG open in EMC2 instead of EpicStudio, since we're not doing new DLG tabs much anymore?
 	
 # Large
 	Program scripts cleanup
@@ -17,7 +19,6 @@
 			Would remove need to prefix all function names with program name
 			Possibly easier to reference program-specific logic from outside of the script (or at least formalize that link a little better).
 		Programs remaining:
-			epicStudio
 			hyperspace
 			notepad++
 			onenote

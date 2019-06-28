@@ -19,7 +19,6 @@
 			Would remove need to prefix all function names with program name
 			Possibly easier to reference program-specific logic from outside of the script (or at least formalize that link a little better).
 		Programs remaining:
-			hyperspace
 			notepad++
 			onenote
 			onetastic

@@ -38,7 +38,7 @@
 [-1]
 
 ; Most general form of various windows (specifics above should override).
-[+1|PRIORITY.replaceWith(1)]
+[PRIORITY.replaceWith(1)]
 			AutoHotkey							AutoHotkey.exe				AutoHotkeyGUI			-													
 			Chrome								chrome.exe					Chrome_WidgetWin_1	-
 			Cisco AnyConnect VPN				vpnui.exe					#32770
@@ -83,4 +83,4 @@
 			Windows Taskbar					explorer.exe				Shell_TrayWnd
 			Word									WINWORD.EXE					-							-													NO_PADDING
 			yEd									yEd.exe
-[-1]
+[]

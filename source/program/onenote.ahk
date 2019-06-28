@@ -1,139 +1,56 @@
 ; OneNote hotkeys.
 #If MainConfig.isWindowActive("OneNote")
-	; Format as code (using custom styles)
-	^+c::
-		oneNoteCustomStyles()
-		Send, {Enter}
+	; Make ctrl+tab (and XButtons) switch pages, not sections
+	^Tab:: Send, ^{PgDn}
+	^+Tab::Send, ^{PgUp}
+	XButton1::Send, ^{PgDn}
+	XButton2::Send, ^{PgUp}
+	; Make ctrl+page down/up switch sections
+	^PgDn::Send, ^{Tab}
+	^PgUp::Send, ^+{Tab}
+	
+	; Expand and collapse outlines
+	!Left::!+-
+	!Right::!+=
+	; Alternate history back/forward
+	!+Left:: Send, !{Left}
+	!+Right::Send, !{Right}
+	
+	; Make line movement alt + up/down instead of alt + shift + up/down to match notepad++ and EpicStudio.
+	!Up::!+Up
+	!Down::!+Down
+	
+	; Horizontal scrolling.
+	+WheelUp::
+		oneNoteScrollLeft() {
+			MouseGetPos, , , winId, controlId, 1
+			SendMessage, WM_HSCROLL, SB_LINELEFT, , % controlId, % "ahk_id " winId
+		}
+	+WheelDown::
+		oneNoteScrollRight() {
+			MouseGetPos, , , winId, controlId, 1
+			SendMessage, WM_HSCROLL, SB_LINERIGHT, , % controlId, % "ahk_id " winId
+		}
+	
+	; Deletes a full line.
+	^d::
+		oneNoteEscapePastePopup()
+		oneNoteSelectLine()
+		Send, {Delete}
 	return
 	
-	{ ; Quick access toolbar commands.
-		$^+n::
-			oneNoteNewSubpage()
-		return
-		^+[::
-			oneNotePromoteSubpage()
-		return
-		^+]::
-			oneNoteMakeSubpage()
-		return
-		$^+d::
-			oneNoteDeletePage()
-		return
-		!m::
-			oneNoteAddMeetingNotes()
-		return
-		^0::
-			oneNoteSetZoomTo100Percent()
-		return
-		^l::
-			oneNoteCreateLinkPageSpecSection()
-		return
-		^+l::
-			oneNoteCreateLinkDevPageSpecSection()
-		return
-		^+i::oneNoteAddSubLinesToSelectedLines()
-	}
+	; 'Normal' text formatting, as ^+n is already being used for new subpage.
+	^!n::Send, ^+n
 	
-	{ ; Navigation.
-		; Modded ctrl+tab, etc. hotkeys.
-		XButton1::Send, ^{PgDn}
-		^Tab::    Send, ^{PgDn}
-		XButton2::Send, ^{PgUp}
-		^+Tab::   Send, ^{PgUp}
-		
-		^PgDn::Send, ^{Tab}
-		^PgUp::Send, ^+{Tab}
-		
-		; Expand and collapse outlines.
-		!Left::!+-
-		!Right::!+=
-		^t::collapseDoPageToItems(true)   ; Today only
-		^+t::collapseDoPageToItems(false) ; All sections, not just today
-		^!t::collapseDoPage(true)         ; Today only
-		collapseDoPageToItems(todayOnly := false) {
-			collapseDoPage(todayOnly, true)
-		}
-		collapseDoPage(todayOnly := false, collapseToItems := false) {
-			Send, ^{Home} ; Get to top-level ("Do") header so we affect the whole page
-			
-			if(collapseToItems)
-				Send, !+4 ; Item level in all sections (level 4)
-			else
-				Send, !+0 ; Show all items on all levels
-			
-			if(todayOnly)
-				Send, !+3 ; Collapse to headers under Today (which collapses headers under Today so only unfinished todos on level 4 are visible)
-			
-			; Get down to first item under Today header
-			Sleep, 100 ; Required or else the down keystroke seems to happen before the !+3 keystrokes
-			Send, {End}{Right}{End}{Right} ; End of "Do" line, right to "Today" line, end of "Today" line, right to first item line. For some reason OneNote won't take {Down} keystrokes reliably, but this seems to work instead.
-		}
-		
-		; Replacement history back/forward.
-		!+Left:: Send, !{Left}
-		!+Right::Send, !{Right}
-		
-		; Horizontal scrolling.
-		+WheelUp::
-			oneNoteScrollLeft() {
-				MouseGetPos, , , winId, controlId, 1
-				SendMessage, WM_HSCROLL, SB_LINELEFT, , % controlId, % "ahk_id " winId
-			}
-		+WheelDown::
-			oneNoteScrollRight() {
-				MouseGetPos, , , winId, controlId, 1
-				SendMessage, WM_HSCROLL, SB_LINERIGHT, , % controlId, % "ahk_id " winId
-			}
-	}
+	; Bold an entire line.
+	^+b::
+		Send, ^a ; Select all (gets whole line/paragraph)
+		Send, ^b
+		Send, {Right} ; Put cursor at end of line
+	return
 	
-	{ ; Content/formatting modifiers.
-		; Deletes a full line.
-		^d::
-			oneNoteEscapePastePopup()
-			oneNoteSelectLine()
-			Send, {Delete}
-		return
-		
-		; Make line movement alt + up/down instead of alt + shift + up/down to match notepad++ and EpicStudio.
-		!Up::!+Up
-		!Down::!+Down
-		
-		; 'Normal' text formatting, as ^+n is already being used for new subpage.
-		^!n::
-			Send, ^+n
-		return
-		
-		; Bold an entire line.
-		^+b::
-			Send, ^a ; Select all (gets whole line/paragraph)
-			Send, ^b
-			Send, {Right} ; Put cursor at end of line
-		return
-		
-		; Make ^7 do the same tag as ^6.
-		^7::^6
-		
-		; Clean up a table from an EMC2 web page
-		^+f::
-			; Unhide table borders
-			Send, {AppsKey} ; Open right-click menu
-			Send, a         ; Table menu
-			Send, h         ; (Un)hide borders
-			Send, {Enter}   ; Multiple with h, so enter to submit it
-			
-			; Normalize text, indent table (table stays selected through all of these)
-			Send, ^{a 4}    ; Select the whole table
-			Send, ^+n       ; Normal text (get rid of underlines, text colors, etc.)
-			Send, {Tab}     ; Indent the table once
-			
-			; Remove shading
-			Send, {AppsKey} ; Open right-click menu
-			Send, a         ; Table menu
-			Send, {Up 5}    ; Shading option
-			Send, {Right}   ; Open
-			Send, n         ; No color
-		return
-	}
+	; Make ^7 do the same tag as ^6.
+	^7::^6
 	
 	^s::
 		oneNoteEscapePastePopup()
@@ -143,6 +60,64 @@
 		oneNoteEscapePastePopup()
 		Send, {F9} ; Sync All Notebooks Now
 	return
+	
+	; Insert a contact comment.
+	^+8::
+		oneNoteInsertContactComment() {
+			date := FormatTime(, "MM/yy")
+			SendRaw, % "*" MainConfig.private["INITIALS"] " " date
+		}
+	
+	; Format as code (using custom styles)
+	^+c::
+		applyCodeStyle() {
+			oneNoteCustomStyles()
+			Send, {Enter}
+		}
+	
+	$^+n::oneNoteNewSubpage()
+	^+[:: oneNotePromoteSubpage()
+	^+]:: oneNoteMakeSubpage()
+	$^+d::oneNoteDeletePage()
+	!m::  oneNoteAddMeetingNotes()
+	^0::  oneNoteSetZoomTo100Percent()
+	^l::  oneNoteCreateLinkPageSpecSection()
+	^+l:: oneNoteCreateLinkDevPageSpecSection()
+	^+i:: oneNoteAddSubLinesToSelectedLines()
+	
+	; Named functions for which commands are which in the quick access toolbar.
+	oneNoteNewSubpage() {
+		Send, !1
+	}
+	oneNotePromoteSubpage() {
+		Send, !2
+	}
+	oneNoteMakeSubpage() {
+		Send, !3
+	}
+	oneNoteDeletePage() {
+		; Confirmation to avoid accidental page deletion
+		if(showConfirmationPopup("Are you sure you want to delete this page?", "Delete page?"))
+			Send, !4
+	}
+	oneNoteAddMeetingNotes() {
+		Send, !5
+	}
+	oneNoteSetZoomTo100Percent() {
+		Send, !6
+	}
+	oneNoteCustomStyles() {	; Custom styles from OneTastic
+		Send, !7
+	}
+	oneNoteCreateLinkPageSpecSection() { ; Custom OneTastic macro - create linked page in specific(s) section
+		Send, !8
+	}
+	oneNoteCreateLinkDevPageSpecSection() { ; Custom OneTastic macro - create linked dev page in specifics section
+		Send, !9
+	}
+	oneNoteAddSubLinesToSelectedLines() { ; Custom OneTastic macro - add sub-lines to selected lines
+		Send, !0
+	}
 	
 	; Copy link to page.
 	!c::
@@ -184,38 +159,84 @@
 	
 	; Copy link
 	^RButton::
-		clipboard := "" ; Clear the clipboard so we can tell when we have the new link on it
-		
-		Click, Right
-		Sleep, 100 ; Wait for menu to appear
-		Send, i    ; Copy Link
-		
-		ClipWait, 0.5 ; Wait for half a second for the clipboard to contain the link
-		if(ErrorLevel) { ; Timed out
-			; If we clicked on something other than a link, the i option is "Link..." which will open the Link popup. Close it if it appeared.
-			if(WinActive("Link ahk_class NUIDialog ahk_exe ONENOTE.EXE"))
-				Send, {Esc}
+		copyLinkUnderMouse() {
+			clipboard := "" ; Clear the clipboard so we can tell when we have the new link on it
+			
+			Click, Right
+			Sleep, 100 ; Wait for menu to appear
+			Send, i    ; Copy Link
+			
+			ClipWait, 0.5 ; Wait for half a second for the clipboard to contain the link
+			if(ErrorLevel) { ; Timed out
+				; If we clicked on something other than a link, the i option is "Link..." which will open the Link popup. Close it if it appeared.
+				if(WinActive("Link ahk_class NUIDialog ahk_exe ONENOTE.EXE"))
+					Send, {Esc}
+			}
+			
+			toastNewClipboardValue("link target")
 		}
-		
-		toastNewClipboardValue("link target")
-	return
 	
 	; Remove link
 	^MButton::
-		Click, Right
-		Sleep, 100 ; Wait for menu to appear
-		Send, r    ; Remove link
+		removeLinkUnderMouse() {
+			Click, Right
+			Sleep, 100 ; Wait for menu to appear
+			Send, r    ; Remove link
+			
+			; Go ahead and finish if the right-click menu is gone, we're done.
+			if(!WinActive("ahk_class Net UI Tool Window"))
+				return
+			
+			; If the right click menu is still open (probably because it wasn't a link and therefore
+			; there was no "r" option), give it a tick to close on its own, then close it.
+			Sleep, 100
+			if(WinActive("ahk_class Net UI Tool Window"))
+				Send, {Esc}
+		}
+	
+	; Clean up a table from an EMC2 web page
+	^+f::
+		cleanUpEMC2SummaryTableFormatting() {
+			; Unhide table borders
+			Send, {AppsKey} ; Open right-click menu
+			Send, a         ; Table menu
+			Send, h         ; (Un)hide borders
+			Send, {Enter}   ; Multiple with h, so enter to submit it
+			
+			; Normalize text, indent table (table stays selected through all of these)
+			Send, ^{a 4}    ; Select the whole table
+			Send, ^+n       ; Normal text (get rid of underlines, text colors, etc.)
+			Send, {Tab}     ; Indent the table once
+			
+			; Remove shading
+			Send, {AppsKey} ; Open right-click menu
+			Send, a         ; Table menu
+			Send, {Up 5}    ; Shading option
+			Send, {Right}   ; Open
+			Send, n         ; No color
+		}
+	
+	^t::collapseDoPageToItems(true)   ; Today only
+	^+t::collapseDoPageToItems(false) ; All sections, not just today
+	^!t::collapseDoPage(true)         ; Today only
+	collapseDoPageToItems(todayOnly := false) {
+		collapseDoPage(todayOnly, true)
+	}
+	collapseDoPage(todayOnly := false, collapseToItems := false) {
+		Send, ^{Home} ; Get to top-level ("Do") header so we affect the whole page
 		
-		; Go ahead and finish if the right-click menu is gone, we're done.
-		if(!WinActive("ahk_class Net UI Tool Window"))
-			return
+		if(collapseToItems)
+			Send, !+4 ; Item level in all sections (level 4)
+		else
+			Send, !+0 ; Show all items on all levels
 		
-		; If the right click menu is still open (probably because it wasn't a link and therefore
-		; there was no "r" option), give it a tick to close on its own, then close it.
-		Sleep, 100
-		if(WinActive("ahk_class Net UI Tool Window"))
-			Send, {Esc}
-	return
+		if(todayOnly)
+			Send, !+3 ; Collapse to headers under Today (which collapses headers under Today so only unfinished todos on level 4 are visible)
+		
+		; Get down to first item under Today header
+		Sleep, 100 ; Required or else the down keystroke seems to happen before the !+3 keystrokes
+		Send, {End}{Right}{End}{Right} ; End of "Do" line, right to "Today" line, end of "Today" line, right to first item line. For some reason OneNote won't take {Down} keystrokes reliably, but this seems to work instead.
+	}
 	
 	; Make a copy of the current page in the Do section.
 	^+m::oneNoteCopyDoPage()
@@ -278,13 +299,6 @@
 		Send, ^+t                                        ; Select title again in case you want a different date.
 	}
 	
-	; Insert a contact comment.
-	^+8::
-		oneNoteInsertContactComment() {
-			date := FormatTime(, "MM/yy")
-			SendRaw, % "*" MainConfig.private["INITIALS"] " " date
-		}
-	
 	!+#n::
 		oneNoteLinkDevStructureSectionTitle() {
 			waitForHotkeyRelease()
@@ -334,42 +348,13 @@
 			lines.push({TEXT:"Pull to-dos from specific sections below"})
 			oneNoteSendToDoLines(lines)
 		}
-	
-	; Named functions for which commands are which in the quick access toolbar.
-	oneNoteNewSubpage() {
-		Send, !1
-	}
-	oneNotePromoteSubpage() {
-		Send, !2
-	}
-	oneNoteMakeSubpage() {
-		Send, !3
-	}
-	oneNoteDeletePage() {
-		; Confirmation to avoid accidental page deletion
-		if(showConfirmationPopup("Are you sure you want to delete this page?", "Delete page?"))
-			Send, !4
-	}
-	oneNoteAddMeetingNotes() {
-		Send, !5
-	}
-	oneNoteSetZoomTo100Percent() {
-		Send, !6
-	}
-	oneNoteCustomStyles() {	; Custom styles from OneTastic
-		Send, !7
-	}
-	oneNoteCreateLinkPageSpecSection() { ; Custom OneTastic macro - create linked page in specific(s) section
-		Send, !8
-	}
-	oneNoteCreateLinkDevPageSpecSection() { ; Custom OneTastic macro - create linked dev page in specifics section
-		Send, !9
-	}
-	oneNoteAddSubLinesToSelectedLines() { ; Custom OneTastic macro - add sub-lines to selected lines
-		Send, !0
-	}
 #If
 	
+; class OneNote {
+
+; ==============================
+; == Public ====================
+; ==============================
 	;---------
 	; DESCRIPTION:    Select the whole line in OneNote, taking into account that it might already be selected.
 	;---------
@@ -504,4 +489,9 @@
 		; Update current state
 		currNumTabs := numTabs
 	}
-
+	
+	
+; ==============================
+; == Private ===================
+; ==============================
+; }

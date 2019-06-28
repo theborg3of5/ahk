@@ -15,6 +15,8 @@
 			Maybe 2 separate versions, then?
 			Individual parameters will need to be their own individual chunks, with a tag in the main thing to replace
 	OneNote quick access hotkeys - should I just have an array of {<nice command name>: quick access number}?
+	Create a function version of MouseGetPos( , , winId) to get the window ID under the mouse
+		Will let us one-line some hotkeys in OneNote, and make things slightly clearer elsewhere.
 	
 # Large
 	Program scripts cleanup

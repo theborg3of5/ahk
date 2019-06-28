@@ -1,19 +1,4 @@
-﻿
-; Unread facebook group chat windows (don't respond to ^+i correctly).
-#If WinExist("* " MainConfig.windowInfo["Pidgin"].titleString)
-	^+i::
-		WinActivate, % "* ahk_exe " MainConfig.windowInfo["Pidgin"].exe
-	return
-#If
-
-#If MainConfig.isWindowActive("Pidgin Buddy List")
-	; Hide buddy list when active.
-	^!d::
-		Send, !{F4}
-	return
-
-	; Hide/show status bar.
-	$^!s::
-		ControlSend, gdkWindowChild14, ^!s, Buddy List
-	return
-#If
+﻿; Unread facebook group chat windows (don't respond to ^+i correctly).
+#IfWinExist, * ahk_exe pidgin.exe
+	^+i::WinActivate, * ahk_exe pidgin.exe ; Focus them.
+#IfWinExist

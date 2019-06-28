@@ -63,7 +63,6 @@
 			Notepad++							notepad++.exe				Notepad++
 			OneNote								ONENOTE.EXE					Framework::CFrame		-													NO_PADDING
 			Outlook								OUTLOOK.EXE					rctrl_renwnd32			-													NO_PADDING
-			Pidgin								pidgin.exe
 			PowerPoint							POWERPNT.EXE				-							-													NO_PADDING
 			Process Explorer					PROCEXP64.exe				PROCEXPL
 			Putty									putty.exe

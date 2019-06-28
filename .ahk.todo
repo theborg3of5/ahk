@@ -22,7 +22,6 @@
 			notepad++
 			onenote
 			onetastic
-			pidgin
 			putty
 	Toast: could we avoid flickering between .showPersistent() and .setText()?
 		Maybe some way to set position without showing?

@@ -10,7 +10,6 @@
 	OneNote						Microsoft Office\Office16\ONENOTE.EXE										EPIC_LAPTOP
 	OneNote						Microsoft Office\root\Office16\ONENOTE.EXE
 	Outlook						Microsoft Office\Office16\OUTLOOK.EXE
-	Pidgin						Pidgin\pidgin.exe
 	Putty							PuTTY\putty.exe
 	Snapper						Epic\Snapper\Snapper.exe
 	Thunder						Thunder\Thunder.exe

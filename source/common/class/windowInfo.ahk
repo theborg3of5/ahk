@@ -1,11 +1,10 @@
 ; Data class to hold identifying information about a specific window.
 
 class WindowInfo {
-	
-	; ==============================
-	; == Public ====================
-	; ==============================
-	
+
+; ==============================
+; == Public ====================
+; ==============================
 	; Constants for the type of edge a window has (see VisualWindow class for what this means/how it's used).
 	static EdgeStyle_HasPadding := "HAS_PADDING" ; The window has the standard padding around the edges.
 	static EdgeStyle_NoPadding  := "NO_PADDING"  ; The window has no padding around the edges.
@@ -135,9 +134,9 @@ class WindowInfo {
 	}
 	
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
+; ==============================
+; == Private ===================
+; ==============================
 	windowName  := ""
 	windowExe   := ""
 	windowClass := ""

@@ -26,10 +26,10 @@
 */
 
 class VisualWindow {
-	
-	; ==============================
-	; == Public ====================
-	; ==============================
+
+; ==============================
+; == Public ====================
+; ==============================
 	leftX   := 0 ; The X coordinate of the visual left edge of the window
 	rightX  := 0 ; The X coordinate of the visual right edge of the window
 	topY    := 0 ; The Y coordinate of the visual top edge of the window
@@ -203,9 +203,9 @@ class VisualWindow {
 	}
 	
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
+; ==============================
+; == Private ===================
+; ==============================
 	titleString   := ""
 	snapDistance  := 0
 	isSnapOn      := false

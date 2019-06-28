@@ -1,11 +1,10 @@
 ; Class to handle performing some window actions, supporting overrides for some windows/programs.
 
 class WindowActions {
-	
-	; ==============================
-	; == Public ====================
-	; ==============================
-	
+
+; ==============================
+; == Public ====================
+; ==============================
 	;---------
 	; DESCRIPTION:    
 	; PARAMETERS:
@@ -129,9 +128,9 @@ class WindowActions {
 	}
 	
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
+; ==============================
+; == Private ===================
+; ==============================
 	static actions := []
 	
 	; Constants for supported window actions

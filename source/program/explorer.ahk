@@ -17,10 +17,10 @@
 #If
 
 class Explorer {
-	
-	; ==============================
-	; == Public ====================
-	; ==============================
+
+; ==============================
+; == Public ====================
+; ==============================
 	static ThisPCFolderUUID := "::{20d04fe0-3aea-1069-a2d8-08002b30309d}"
 	
 	;---------
@@ -44,9 +44,9 @@ class Explorer {
 	}
 	
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
+; ==============================
+; == Private ===================
+; ==============================
 	static ShowHiddenRegKeyName := "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 	static ShowHiddenRegValueName := "Hidden"
 	

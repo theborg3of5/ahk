@@ -35,11 +35,10 @@
 #If
 
 class Chrome {
-	
-	; ==============================
-	; == Public ====================
-	; ==============================
-	
+
+; ==============================
+; == Public ====================
+; ==============================
 	;---------
 	; DESCRIPTION:    Put the title of the current tab on the clipboard, with some special exceptions.
 	; NOTES:          For CodeSearch, we copy the current routine (and the tag, from the selected
@@ -110,10 +109,9 @@ class Chrome {
 	}
 	
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
-	
+; ==============================
+; == Private ===================
+; ==============================
 	;---------
 	; DESCRIPTION:    Determine whether the current page is CodeSearch, based on its title.
 	;---------

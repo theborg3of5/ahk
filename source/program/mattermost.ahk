@@ -3,11 +3,10 @@
 #If
 
 class Mattermost {
-	
-	; ==============================
-	; == Public ====================
-	; ==============================
-	
+
+; ==============================
+; == Public ====================
+; ==============================
 	;---------
 	; DESCRIPTION:    Inserts the link on the clipboard as a link, with the selected text if there
 	;                 is any (otherwise cursor will end in link text area).

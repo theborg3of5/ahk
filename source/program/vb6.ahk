@@ -78,10 +78,10 @@
 
 ; VB6-specific actions. Everything should be called statically.
 class VB6 {
-	
-	; ==============================
-	; == Public ====================
-	; ==============================
+
+; ==============================
+; == Public ====================
+; ==============================
 	static objectComboBoxClassNN    := "ComboBox1" ; Object dropdown in top-left
 	static procedureComboBoxClassNN := "ComboBox2" ; Procedure dropdown in top-right
 	
@@ -155,10 +155,9 @@ class VB6 {
 	}
 	
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
-	
+; ==============================
+; == Private ===================
+; ==============================
 	;---------
 	; DESCRIPTION:    Builds the string for a contact comment in the current project.
 	; PARAMETERS:

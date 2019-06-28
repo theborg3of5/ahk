@@ -13,11 +13,10 @@
 #If
 
 class Snapper {
-	
-	; ==============================
-	; == Public ====================
-	; ==============================
-	
+
+; ==============================
+; == Public ====================
+; ==============================
 	;---------
 	; DESCRIPTION:    Send the text needed to ignore items that I've deemed unimportant (according
 	;                 to snapperIgnoreItems.tls) to Snapper and apply.
@@ -95,10 +94,9 @@ class Snapper {
 	}
 	
 	
-	; ==============================
-	; == Private ===================
-	; ==============================
-	
+; ==============================
+; == Private ===================
+; ==============================
 	;---------
 	; DESCRIPTION:    Extract info from the main Snapper window and the Add Records popup to build a
 	;                 URL to launch multiple records. The records are those listed (comma separated

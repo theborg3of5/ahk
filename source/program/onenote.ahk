@@ -63,13 +63,13 @@
 	^MButton::OneNote.removeLinkUnderMouse()
 	
 	; Todo page handling
-	^t::         OneNote.todoPageCollapseToItems(true)  ; Today only, item-level
-	^+t::        OneNote.todoPageCollapseToItems(false) ; All sections, item-level
-	^!t::        OneNote.todoPageCollapse(true)         ; Today only, fully expanded
-	^+m::        OneNote.todoPageCopy()                 ; New page for today
-	^+#m::       OneNote.todoPageCopy(1)                ; New page for tomorrow
-	:*:.todosat::OneNote.todoAddUsualSat()              ; Add usual todos for Saturday
-	:*:.todosun::OneNote.todoAddUsualSun()              ; Add usual todos for Sunday
+	^t::          OneNote.todoPageCollapseToItems(true)  ; Today only, item-level
+	^+t::         OneNote.todoPageCollapseToItems(false) ; All sections, item-level
+	^!t::         OneNote.todoPageCollapse(true)         ; Today only, fully expanded
+	^+m::         OneNote.todoPageCopy()                 ; New page for today
+	^+#m::        OneNote.todoPageCopy(1)                ; New page for tomorrow
+	:*X:.todosat::OneNote.todoAddUsualSat()              ; Add usual todos for Saturday
+	:*X:.todosun::OneNote.todoAddUsualSun()              ; Add usual todos for Sunday
 
 	; Clean up a table from an emc2summary page
 	^+f::OneNote.cleanUpEMC2SummaryTableFormatting()

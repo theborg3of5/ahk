@@ -37,7 +37,7 @@ class EpicStudio {
 		originalClipboard := clipboardAll ; Save off the entire clipboard
 		clipboard := ""                   ; Clear the clipboard (so we can wait for the new value)
 		
-		Send, ^d ; Delete line hotkey in EpicStudio (also unfortunately overwrites the clipboard with deleted line)
+		Send, ^d    ; Delete line hotkey in EpicStudio (also unfortunately overwrites the clipboard with deleted line)
 		ClipWait, 2 ; Wait for 2 seconds for clipboard to be overwritten
 		
 		clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
@@ -199,16 +199,11 @@ class EpicStudio {
 	;                 it doesn't when we time out.
 	;---------
 	copyCodeLocation() {
-		clipboard := "" ; Clear the clipboard so we can tell when we have the code location on it
-		Send, ^{Numpad9} ; Hotkey to copy code location to clipboard
-		ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain the code location
+		if(copyWithHotkey("^{Numpad9}")) ; Hotkey to copy code location to clipboard
+			return true
 		
-		if(clipboard = "") {
-			Toast.showError("Failed to get code location")
-			return false
-		}
-		
-		return true
+		Toast.showError("Failed to get code location")
+		return false
 	}
 	
 	;---------

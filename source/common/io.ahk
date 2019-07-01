@@ -51,6 +51,19 @@ getSelectedText() {
 	return textFound
 }
 
+getWithClipboardUsingFunction(boundFunc) { ; boundFunc is a BoundFunc object created with Func.Bind() or ObjBindMethod().
+	if(!boundFunc)
+		return
+	
+	originalClipboard := clipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
+	copyWithFunction(boundFunc)
+	
+	textFound := clipboard
+	clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
+	
+	return textFound
+}
+
 ; Within the currently selected text, select only the first instance of the given needle text.
 selectTextWithinSelection(needle) {
 	needleLen := strLen(needle)

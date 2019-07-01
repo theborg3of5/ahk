@@ -83,6 +83,8 @@ class OneNote {
 ; ==============================
 ; == Public ====================
 ; ==============================
+	static RightClickMenuTitleString := "ahk_class Net UI Tool Window"
+	
 	;---------
 	; DESCRIPTION:    Scroll left/right in the OneNote window (assuming it's under the mouse)
 	;---------
@@ -170,26 +172,14 @@ class OneNote {
 	; DESCRIPTION:    Put a link to the current page on the clipboard.
 	;---------
 	copyLinkToCurrentPage() {
-		clipboard := "" ; Clear the clipboard so we can tell when we get the new link.
-		
-		; Get the link to the current paragraph.
-		Send, +{F10}
-		Sleep, 100
-		Send, p
-		Sleep, 500
-		
-		; If the special paste menu item was there (where the only option is "Paste (P)"), the menu is still open (because 2 "p" items) - get to the next one and actually submit it.
-		if(WinActive("ahk_class Net UI Tool Window"))
-			Send, p{Enter}
-		
-		ClipWait, 2 ; Wait up to 2s for the link to appear on the clipboard
-		if(ErrorLevel = 1) { ; Timed out, didn't get a link.
-			Toast.showError("Page link not added to clipboard")
+		copiedLink := OneNote.getLinkToCurrentParagraph()
+		if(copiedLink = "") {
+			Toast.showError("Could not get paragraph link on clipboard")
 			return
 		}
 		
 		; Trim off the paragraph-specific part.
-		copiedLink := RegExReplace(clipboard, "&object-id.*")
+		copiedLink := RegExReplace(copiedLink, "&object-id.*")
 		
 		; If there are two links involved (seems to happen with free version of OneNote), keep only the "onenote:" one (second line).
 		if(stringContains(copiedLink, "`n")) {
@@ -209,14 +199,8 @@ class OneNote {
 	; DESCRIPTION:    Copy the link for the text that's under the mouse (if any) to the clipboard.
 	;---------
 	copyLinkUnderMouse() {
-		clipboard := "" ; Clear the clipboard so we can tell when we have the new link on it
-		
-		Click, Right
-		Sleep, 100 ; Wait for menu to appear
-		Send, i    ; Copy Link
-		
-		ClipWait, 0.5 ; Wait for half a second for the clipboard to contain the link
-		if(ErrorLevel) { ; Timed out
+		copyLinkFunction := ObjBindMethod(OneNote, "_copyLinkUnderMouse")
+		if(!copyWithFunction(copyLinkFunction)) {
 			; If we clicked on something other than a link, the i option is "Link..." which will open the Link popup. Close it if it appeared.
 			if(WinActive("Link ahk_class NUIDialog ahk_exe ONENOTE.EXE"))
 				Send, {Esc}
@@ -234,13 +218,13 @@ class OneNote {
 		Send, r    ; Remove link
 		
 		; Go ahead and finish if the right-click menu is gone, we're done.
-		if(!WinActive("ahk_class Net UI Tool Window"))
+		if(!WinActive(OneNote.RightClickMenuTitleString))
 			return
 		
 		; If the right click menu is still open (probably because it wasn't a link and therefore
 		; there was no "r" option), give it a tick to close on its own, then close it.
 		Sleep, 100
-		if(WinActive("ahk_class Net UI Tool Window"))
+		if(WinActive(OneNote.RightClickMenuTitleString))
 			Send, {Esc}
 	}
 	
@@ -447,6 +431,39 @@ class OneNote {
 ; ==============================
 ; == Private ===================
 ; ==============================
+	;---------
+	; DESCRIPTION:    Get the link to the current paragraph to the clipboard.
+	; RETURNS:        The link to the current paragraph.
+	;---------
+	getLinkToCurrentParagraph() {
+		copyFunction := ObjBindMethod(OneNote, "_copyLinkToCurrentParagraph")
+		return getWithClipboardUsingFunction(copyFunction)
+	}
+	
+	;---------
+	; DESCRIPTION:    Copy a link to the current paragraph to the clipboard.
+	;---------
+	_copyLinkToCurrentParagraph() {
+		Send, +{F10}
+		WinWaitActive, % OneNote.RightClickMenuTitleString
+		Send, p
+		WinWaitNotActive, % OneNote.RightClickMenuTitleString, , 0.5
+		
+		; Special handling: if we didn't get anything, it might be because the special paste menu item was there (where the only option is "Paste (P)").
+		; If that's the case, try getting to the second "p" option and submit it.
+		if(WinActive(OneNote.RightClickMenuTitleString))
+			Send, p{Enter}
+	}
+	
+	;---------
+	; DESCRIPTION:    Copy the link target under the mouse to the clipboard.
+	;---------
+	_copyLinkUnderMouse() {
+		Click, Right
+		WinWaitActive, % OneNote.RightClickMenuTitleString
+		Send, i ; Copy Link
+	}
+	
 	;---------
 	; DESCRIPTION:    Figure out and return what title to use for a OneNote Do page.
 	; PARAMETERS:

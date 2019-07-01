@@ -4,9 +4,6 @@
 	Selector: dynamically resize abbreviation column based on widest value?
 		To allow longer abbreviations
 		Is that going to get weird with SelectorGui+FlexTable interactions?
-	Should we pull some of the clipboard logic out into a function?
-		A "start" (save clipboard value, wipe it, maybe wait for it to clear?) and a "finish" ([maybe wait for and return clipboard value?], restore clipboard value)
-		Can search for ClipboardAll to find use cases
 	Should EpicStudio "snippets" code live in a separate class?
 	Should EpicStudio.linkRoutineToCurrentDLG() use the DLG open in EMC2 instead of EpicStudio, since we're not doing new DLG tabs much anymore?
 	Consider reworking EpicStudio debug stuff

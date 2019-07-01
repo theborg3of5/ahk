@@ -78,19 +78,15 @@ class Hyperspace {
 	; RETURNS:        The HTML from the current display in Hyperspace.
 	;---------
 	getCurrentDisplayHTML() {
-		; Save off the clipboard to restore and wipe it for our own use.
-		ClipSaved := ClipboardAll
-		Clipboard := ""
-		
+		copyHTMLFunction := ObjBindMethod(Hyperspace, "_copyDisplayHTML")
+		return getWithClipboardUsingFunction(copyHTMLFunction)
+	}
+	
+	;---------
+	; DESCRIPTION:    Copy the current display's HTML to the clipboard.
+	;---------
+	_copyDisplayHTML() {
 		; Grab the HTML with HTMLGrabber hotkey.
 		SendPlay, , ^+!c
-		Sleep, 100
-		
-		; Get it off of the clipboard and restore the clipboard.
-		textFound := clipboard
-		Clipboard := ClipSaved
-		ClipSaved = ; Free memory
-		
-		return textFound
 	}
 }

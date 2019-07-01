@@ -6,6 +6,7 @@
 		Is that going to get weird with SelectorGui+FlexTable interactions?
 	Should EpicStudio "snippets" code live in a separate class?
 	Consider reworking EpicStudio debug stuff
+	New script to update copy of AHK folder in epic personal folder?
 	Notepad++ function headers - can we just make a single block (with tags?) instead of splitting it all up?
 		Parameters could be a little tricky - need to not include that whole section if there aren't any
 			Maybe 2 separate versions, then?

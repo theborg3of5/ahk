@@ -13,7 +13,7 @@
 	!c:: EpicStudio.copyCleanCodeLocation()  ; Cleaned, just the actual location
 	!#c::EpicStudio.copyLinkedCodeLocation() ; RTF location with link.
 	
-	; Link routine to currently open (in object explorer tab) DLG.
+	; Link routine to currently open DLG in EMC2.
 	^+l::EpicStudio.linkRoutineToCurrentDLG()
 	
 	; Generate and insert snippet
@@ -74,27 +74,18 @@ class EpicStudio {
 	}
 	
 	;---------
-	; DESCRIPTION:    Link the current routine to the DLG open in its own tab.
+	; DESCRIPTION:    Link the current routine to the DLG currently open in EMC2.
 	;---------
 	linkRoutineToCurrentDLG() {
-		text := WinGetText()
-		
-		Loop, Parse, text, `n
-		{
-			if(stringStartsWith(A_LoopField, "DLG ")) {
-				dlgNum := getStringAfterStr(A_LoopField, "DLG ")
-				; DEBUG.popup("On line", A_Index, "With DLG number", dlgNum)
-				break
-			}
-		}
-		
-		if(!dlgNum)
+		record := new EpicRecord()
+		record.initFromEMC2Title()
+		if(record.ini != "DLG" || record.id = "")
 			return
 		
 		Send, ^l
 		WinWaitActive, Link DLG, , 5
-		Send, % dlgNum
-		Send, {Enter}
+		Send, % record.id
+		Send, {Enter 2}
 	}
 	
 	;---------

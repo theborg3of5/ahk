@@ -1,5 +1,4 @@
-; Hyperspace hotkeys.
-
+; Hyperspace main window
 #If Hyperspace.isAnyVersionActive()
 	$F5::+F5 ; Make F5 work everywhere by mapping it to shift + F5.
 	
@@ -8,6 +7,11 @@
 	^!t::Hyperspace.login(MainConfig.private["WORK_ID"], MainConfig.private["WORK_PASSWORD"], false) ; Don't use last department (=)
 	
 	^!c::Hyperspace.openCurrentDisplayHTML() ; Open the current display's HTML in IE.
+#If
+
+; HSWeb debugging - Hyperspace main window or IE
+#If Hyperspace.isAnyVersionActive() || WinActive("Hyperspace – ahk_exe IEXPLORE.EXE")
+	^!d::Send, % MainConfig.private["EPIC_HSWEB_CONSOLE_HOTKEY"]
 #If
 
 class Hyperspace {

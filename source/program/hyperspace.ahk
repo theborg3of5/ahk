@@ -14,6 +14,14 @@
 	^!d::Send, % MainConfig.private["EPIC_HSWEB_CONSOLE_HOTKEY"]
 #If
 
+; HSWeb Debug Console
+#If WinActive(MainConfig.private["EPIC_HSWEB_CONSOLE_TITLESTRING"])
+	::.trace::
+		Send, % MainConfig.private["EPIC_HSWEB_FORCE_TRACE_COMMAND"]
+		Send, {Left 2} ; Get inside parens and quotes
+	return
+#If
+
 class Hyperspace {
 
 ; ==============================

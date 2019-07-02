@@ -8,12 +8,12 @@ sourceRoot      := MainConfig.path["AHK_ROOT"]
 destinationRoot := MainConfig.path["EPIC_PERSONAL_AHK"]
 
 confirmationMessage := "
-( LTrim
-	Are you sure you want to replace the contents of this folder?
-	
-	Source: " sourceRoot "
-	Destination: " destinationRoot "
-)"
+	( LTrim
+		Are you sure you want to replace the contents of this folder?
+		
+		Source: " sourceRoot "
+		Destination: " destinationRoot "
+	)"
 if(!showConfirmationPopup(confirmationMessage, "Delete and replace"))
 	ExitApp
 

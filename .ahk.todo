@@ -5,7 +5,6 @@
 		To allow longer abbreviations
 		Is that going to get weird with SelectorGui+FlexTable interactions?
 	Should EpicStudio "snippets" code live in a separate class?
-	Consider reworking EpicStudio debug stuff
 	
 # Large
 	Toast: could we avoid flickering between .showPersistent() and .setText()?

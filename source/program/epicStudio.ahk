@@ -138,14 +138,13 @@ class EpicStudio {
 			return
 		
 		currFilter := ControlGet("Line", 1, "Edit1", "A")
-		currFilter := ControlGet("Line", 1, "Edit1", "A")
 		if(currFilter) {
 			ControlFocus, Edit1, A
 			return ; There's already something plugged into the field, so just put the focus there in case they want to change it.
 		}
 		
 		; Pick the radio button for "Other existing process:" and pick it.
-		otherProcessRadioButtonClass := WindowsForms10.BUTTON.app.0.2bf8098_r9_ad11
+		otherProcessRadioButtonClass := "WindowsForms10.BUTTON.app.0.2bf8098_r9_ad11"
 		ControlFocus, %otherProcessRadioButtonClass%, A
 		ControlSend, %otherProcessRadioButtonClass%, {Space}, A
 		

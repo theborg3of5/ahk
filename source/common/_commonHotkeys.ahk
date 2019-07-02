@@ -43,7 +43,7 @@ return
 		; Timers
 		setTimerRunning("MainLoop", !A_IsSuspended)
 	return
-	setTimerRunning(timerLabel, shouldRun = 1) {
+	setTimerRunning(timerLabel, shouldRun := 1) {
 		if(!timerLabel || !IsLabel(timerLabel))
 			return
 		

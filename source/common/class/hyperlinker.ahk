@@ -18,7 +18,7 @@ class Hyperlinker {
 	;  errorMessage (O,OPT) - Error message about what went wrong if we return False.
 	; RETURNS:        True if successful, False if something went wrong.
 	;---------
-	linkSelectedText(path, ByRef errorMessage = "") {
+	linkSelectedText(path, ByRef errorMessage := "") {
 		if(!path) {
 			errorMessage := "Path to link was blank"
 			return false
@@ -115,7 +115,7 @@ class Hyperlinker {
 	;  errorMessage      (O,OPT) - Error message about what went wrong if we return False.
 	; RETURNS:        True for success, False if something went wrong.
 	;---------
-	doLink(path, windowLinkInfoAry, ByRef errorMessage = "") {
+	doLink(path, windowLinkInfoAry, ByRef errorMessage := "") {
 		; DEBUG.toast("Hyperlinker.doLink","Start", "path",path, "windowLinkInfoAry",windowLinkInfoAry)
 		
 		; Handle linking differently depending on the specified method.

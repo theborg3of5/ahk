@@ -37,7 +37,7 @@ setScriptConfirmQuit(toValue := true) {
 ;                          is suspended.
 ;  tooltipText   (I,OPT) - Text to show when the user hovers over the tray icon.
 ;---------
-setUpTrayIcons(normalIcon, suspendedIcon, tooltipText = "") {
+setUpTrayIcons(normalIcon, suspendedIcon, tooltipText := "") {
 	states                     := []
 	states["A_IsSuspended", 0] := normalIcon
 	states["A_IsSuspended", 1] := suspendedIcon

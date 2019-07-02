@@ -213,7 +213,7 @@ isAlphaNum(str) {
 }
 
 ; Test for casing in a string.
-isCase(string, case = "MIXED") { ; case = STRING_CASE_MIXED
+isCase(string, case := "MIXED") { ; case = STRING_CASE_MIXED
 	if(case = STRING_CASE_MIXED) {
 		return true
 	} else if(case = STRING_CASE_UPPER) {

@@ -129,7 +129,7 @@
 	:X:aidate::queryDateAndSend()
 	:X:aiddate::queryDateAndSend("M/d`, dddd")
 	:X:adidate::queryDateAndSend("dddd`, M/d")
-	queryDateAndSend(format = "M/d/yy") {
+	queryDateAndSend(format := "M/d/yy") {
 		date := queryDate(format)
 		if(date)
 			SendRaw, % date

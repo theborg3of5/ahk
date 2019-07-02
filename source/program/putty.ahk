@@ -20,7 +20,7 @@
 	
 	; Search within record edit screens
 	^F9::Putty.recordEditSearch()
-	^g::Putty.recordEditSearch(lastPuttySearchType, lastPuttySearchText)
+	^g::Putty.recordEditSearch(true)
 	
 	; Open up settings window.
 	!o::Putty.openSettingsWindow()

@@ -6,10 +6,6 @@
 		Is that going to get weird with SelectorGui+FlexTable interactions?
 	Should EpicStudio "snippets" code live in a separate class?
 	Consider reworking EpicStudio debug stuff
-	Notepad++ function headers - can we just make a single block (with tags?) instead of splitting it all up?
-		Parameters could be a little tricky - need to not include that whole section if there aren't any
-			Maybe 2 separate versions, then?
-			Individual parameters will need to be their own individual chunks, with a tag in the main thing to replace
 	
 # Large
 	Toast: could we avoid flickering between .showPersistent() and .setText()?
@@ -50,6 +46,7 @@
 		Take into account overflow (across columns), with next field being empty or placeholder'd
 	Consider adding a client-file-viewing search to either search selector or actionObject (like codesearch routine)
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.
+		Maybe string, too - could build in tag replacement, contains, etc.
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
 		Options:
 			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)

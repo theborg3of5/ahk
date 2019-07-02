@@ -99,54 +99,74 @@ class NotepadPlusPlus {
 		; Select the following line after this one to get parameter information
 		Send, {Down}
 		selectCurrentLine()
-		firstLine := cleanupText(getSelectedText())
+		functionDefLine := cleanupText(getSelectedText())
 		Send, {Up}
 		
-		; Piece out the parameters
-		paramsList := getFirstStringBetweenStr(firstLine, "(", ")")
-		paramsAry  := strSplit(paramsList, ",", " `t")
+		; Check for parameters
+		paramsList := getFirstStringBetweenStr(functionDefLine, "(", ")")
+		if(paramsList = "") {
+			; No parameters, just send the basic base
+			SendRaw, % NotepadPlusPlus.ahkHeaderBase
+			return
+		}
 		
-		; Drop any defaults from the parameters, get max length
+		; Build array of parameter names, cleaning off ByRef and defaults
+		paramsAry := []
 		maxParamLength := 0
-		For i,param in paramsAry {
+		For _,param in strSplit(paramsList, ",", " `t") {
 			param := removeStringFromStart(param, "ByRef ")
 			param := getStringBeforeStr(param, " :=")
 			
+			paramsAry.push(param)
 			maxParamLength := max(maxParamLength, strLen(param))
-			paramsAry[i] := param
 		}
-		; DEBUG.popup("Line",firstLine, "Params list",paramsList, "Params array",paramsAry, "Max param length",maxParamLength)
 		
-		startText := "
-			( RTrim0
-			;---------
-			; DESCRIPTION:    
-			
-			)"
-		
-		paramsText := ""
-		For i,param in paramsAry {
-			paramLen := strLen(param)
-			param := param getSpaces(maxParamLength - paramLen)
-			paramsText .= ";  " param " (I/O/IO,REQ/OPT) - `n"
+		; Build a line for each parameter, padding things out to make them even
+		paramLines := []
+		For _,paramName in paramsAry {
+			line := NotepadPlusPlus.ahkParamBase
+			line := replaceTag(line, "NAME",    paramName)
+			line := replaceTag(line, "PADDING", getSpaces(maxParamLength - strLen(paramName)))
+			paramLines.push(line)
 		}
-		if(paramsText)
-			paramsText := "; PARAMETERS:`n" paramsText
 		
-		endText := "
-			( RTrim0
-			; RETURNS:        
-			; SIDE EFFECTS:   
-			; NOTES:          
-			;---------
-			)"
-		SendRaw, % startText paramsText endText
+		header := NotepadPlusPlus.ahkHeaderBaseWithParams
+		header := replaceTag(header, "PARAMETERS", arrayJoin(paramLines, "`n"))
+		SendRaw, % header
 	}
 	
 	
 ; ==============================
 ; == Private ===================
 ; ==============================
+	; AHK headers bases
+	static ahkHeaderBase := "
+		( RTrim0
+		;---------
+		; DESCRIPTION:    
+		; RETURNS:        
+		; SIDE EFFECTS:   
+		; NOTES:          
+		;---------
+		)"
+	
+	static ahkHeaderBaseWithParams := "
+		( RTrim0
+		;---------
+		; DESCRIPTION:    
+		; PARAMETERS:
+		<PARAMETERS>
+		; RETURNS:        
+		; SIDE EFFECTS:   
+		; NOTES:          
+		;---------
+		)"
+	
+	static ahkParamBase := "
+		( RTrim0
+		;  <NAME><PADDING> (I/O/IO,REQ/OPT) - 
+		)"
+	
 	;---------
 	; DESCRIPTION:    Figure out where the indentation for a line is positioned (in terms of the
 	;                 number of spaces after the comment character).

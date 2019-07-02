@@ -21,6 +21,7 @@
 	; Calculated pass-throughs
 	User Root							USER_ROOT							<USER_ROOT>
 	AHK Root								AHK_ROOT								<AHK_ROOT>
+	Epic Personal AHK					EPIC_PERSONAL_AHK					<EPIC_PERSONAL>\ahk								EPIC_LAPTOP
 	
 	; Private pass-throughs
 	Epic Personal						EPIC_PERSONAL						<EPIC_PERSONAL>									EPIC_LAPTOP

@@ -46,7 +46,7 @@ t.showPersistent()
 
 ; Pull the needed values from our selection.
 t.setText("Reading values from selection...")
-For tag,v in tagsToReplace {
+For tag,_ in tagsToReplace {
 	machineValue := machineInfo[tag]
 	if(machineValue != "")
 		tagsToReplace[tag] := machineValue
@@ -81,8 +81,8 @@ For fromPath,toPath in copyPaths {
 if(!useSlimMode) {
 	; Hide all .git system files and folders, for a cleaner appearance.
 	t.setText("Hiding .git files and folders...")
-	For _,n in gitNames {
-		Loop, Files, %ahkRootPath%\*%n%, RDF
+	For _,name in gitNames {
+		Loop, Files, %ahkRootPath%\*%name%, RDF
 		{
 			FileSetAttrib, +H, %A_LoopFileFullPath%
 		}

@@ -1,28 +1,13 @@
-# In Progress
-	
-# Small
-	Selector: dynamically resize abbreviation column based on widest value?
-		To allow longer abbreviations
-		Is that going to get weird with SelectorGui+FlexTable interactions?
-	
-# Large
-	Toast: could we avoid flickering between .showPersistent() and .setText()?
-		Maybe some way to set position without showing?
-		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?
-	Figure out how to deal with Toast/VisualWindow issue where upper-right toasts jump to the next monitor over
-		Happens if they're anchored to right edge and then their text gets longer by enough.
-		Looks like the issue is that we make the toast bigger enough that Windows decides it's on the next monitor
-			We create a new VisualWindow each time we want to move the Toast
-				Maybe we should have a persistent one instead?
-			The actual resizing (via Gui, Show with AutoSize) happens in Toast.move()
-				What if we create the VisualWindow earlier (before the AutoSize) and somehow use that to save off or anchor the Toast to the current monitor?
-		When we fix this, we can update:
-			iconTester.ahk - don't need a toast message up front, can be blank to start and we can just call switchToIconWithNum(0) instead of getting the text
+# New Ideas
+	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.
+		Maybe string, too - could build in tag replacement, contains, etc.
+	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
+		Options:
+			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)
+			New type of codesearch type with separate branch in ActionObject (not ideal)
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)
 		Maybe store off both title (maybe trimmed, drop things like " - Wiki" off of the end, etc?) and URL on copy hotkey
 			Used by a generic hotkey that used those two bits of info + hyperlinking class to add a link?
-	Rewrite colorette so we don't have to deal with the exe?
-		Would let us get rid of the special exe case in .gitignore, too
 	Add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments
@@ -31,28 +16,7 @@
 		Filling a list of IDs into EpicStudio (Before/after inputs on Selector popup for code surrounding lines, newlines only applied after that)
 			Maybe take this a step further and make it specifically filling in an array?
 			Make sure that dot level is taken into account (I think I have functions for that)
-	Selector - consider adding a way to match on some other column than just NAME and ABBREV
-		Use cases
-			Transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
-				Alternatively, build out environments in MainConfig (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.
-	Consider reading in more .tl/.tls files at startup and caching them
-		Alternatively, cache them after the first use?
-			Basically static variables, like we're doing in Hyperlinker
-	Build a way to auto-reformat .tl files?
-		Fix widths so they work nicely
-			Will need to have a tab width parameter/argument somewhere for this (maybe in _constants or config?)
-		Take into account overflow (across columns), with next field being empty or placeholder'd
 	Consider adding a client-file-viewing search to either search selector or actionObject (like codesearch routine)
-	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.
-		Maybe string, too - could build in tag replacement, contains, etc.
-	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
-		Options:
-			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)
-			New type of codesearch type with separate branch in ActionObject (not ideal)
-	Figure out some central documentation method
-		Dynamically pull hotkeys for the currently focused program?
-		Hotkey to show window with all currently active hotkeys, divided up into current-program-specific and others
-			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
 	Add some way to move windows where I want them
 		Hotkey-triggered, for all windows in list?
 		Maybe lean on monitor fixer script from before?
@@ -66,7 +30,45 @@
 		Telegram - left monitor, top or bottom depending on machine
 		Pidgin window - top-right of left monitor
 	
+# Rewrites/Cleanup
+	Rewrite colorette so we don't have to deal with the exe?
+		Would let us get rid of the special exe case in .gitignore, too
+	
+# Selector/TableList
+	Selector: dynamically resize abbreviation column based on widest value?
+		To allow longer abbreviations
+		Is that going to get weird with SelectorGui+FlexTable interactions?
+	Selector - consider adding a way to match on some other column than just NAME and ABBREV
+		Use cases
+			Transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
+				Alternatively, build out environments in MainConfig (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.
+	Build a way to auto-reformat .tl files?
+		Fix widths so they work nicely
+			Will need to have a tab width parameter/argument somewhere for this (maybe in _constants or config?)
+		Take into account overflow (across columns), with next field being empty or placeholder'd
+	Consider reading in more .tl/.tls files at startup and caching them
+		Alternatively, cache them after the first use?
+			Basically static variables, like we're doing in Hyperlinker
+	
+# Toast
+	Toast: could we avoid flickering between .showPersistent() and .setText()?
+		Maybe some way to set position without showing?
+		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?
+	Figure out how to deal with Toast/VisualWindow issue where upper-right toasts jump to the next monitor over
+		Happens if they're anchored to right edge and then their text gets longer by enough.
+		Looks like the issue is that we make the toast bigger enough that Windows decides it's on the next monitor
+			We create a new VisualWindow each time we want to move the Toast
+				Maybe we should have a persistent one instead?
+			The actual resizing (via Gui, Show with AutoSize) happens in Toast.move()
+				What if we create the VisualWindow earlier (before the AutoSize) and somehow use that to save off or anchor the Toast to the current monitor?
+		When we fix this, we can update:
+			iconTester.ahk - don't need a toast message up front, can be blank to start and we can just call switchToIconWithNum(0) instead of getting the text
+	
 # Documentation
+	Figure out some central documentation method
+		Dynamically pull hotkeys for the currently focused program?
+		Hotkey to show window with all currently active hotkeys, divided up into current-program-specific and others
+			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
 	common
 		classes
 			duration

@@ -6,13 +6,13 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 setCommonHotkeysType(HOTKEY_TYPE_Standalone)
 
 ; Set mouseover text for icon
-Menu, Tray, Tip, 
-(LTrim
-	Equals+Down Sender
-	Ctrl+R to prompt for how many Equals+Down keystrokes to send.
-	
-	Emergency Exit: Ctrl+Shift+Alt+Win+R
-)
+Menu, Tray, Tip, % "
+	( LTrim
+		Equals+Down Sender
+		Ctrl+R to prompt for how many Equals+Down keystrokes to send.
+		
+		Emergency Exit: Ctrl+Shift+Alt+Win+R
+	)"
 
 ^r::
 	numToSend := InputBox("Send Equals+Down Keystrokes", "Enter how many times to send Equals+Down:")

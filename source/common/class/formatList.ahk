@@ -74,34 +74,11 @@ class FormatList {
 	static Format_Ambiguous     := "AMBIGUOUS"      ; Can't tell what the format is, so we'll have to ask the user.
 	static Format_UnknownSingle := "UNKNOWN_SINGLE" ; We don't know what the format is, but it looks like a single item only.
 	
-	buildFormatArray() {
+	buildFormatArray() { ; GDB TODO get rid of this function if we don't do something with the delimiters
 		; FormatList.FormatDelimsAry := [] ; GDB TODO consider getting rid of this one - why not just have specific cases?
 		; FormatList.FormatDelimsAry[FormatList.Format_Commas]   := ","
 		; FormatList.FormatDelimsAry[FormatList.Format_NewLines] := "`r`n"
 		
-		; FormatList.GettableFormats := []
-		; FormatList.GettableFormats[Format_Array] := ""
-		; FormatList.GettableFormats[Format_Commas] := ""
-		; FormatList.GettableFormats[Format_NewLines] := ""
-		
-		; FormatList.SendableFormats := []
-		; FormatList.SendableFormats[Format_Commas] := ""
-		; FormatList.SendableFormats[Format_NewLines] := ""
-		; FormatList.SendableFormats[Format_OneNoteColumn] := ""
-		
-		ary := []
-		
-		ary[FormatList.Format_Commas]   := ","
-		ary[FormatList.Format_NewLines] := "`r`n"
-		
-		return ary
-	}
-	
-	isFormatGettable(format) {
-		return FormatList.formatsAry[format, "GETTABLE"]
-	}
-	isFormatSendable(format) {
-		return FormatList.formatsAry[format, "SENDABLE"]
 	}
 	
 	parseListObject(listObject, format) {

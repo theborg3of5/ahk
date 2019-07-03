@@ -12,10 +12,6 @@
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments
 	ListConverter - more output methods
-		Filling in a OneNote table column (down arrow between?)
-		Filling a list of IDs into EpicStudio (Before/after inputs on Selector popup for code surrounding lines, newlines only applied after that)
-			Maybe take this a step further and make it specifically filling in an array?
-			Make sure that dot level is taken into account (I think I have functions for that)
 	Consider adding a client-file-viewing search to either search selector or actionObject (like codesearch routine)
 	Add some way to move windows where I want them
 		Hotkey-triggered, for all windows in list?
@@ -72,7 +68,6 @@
 	common
 		classes
 			duration
-			iniObject
 			listConverter
 			mainConfig
 			selectorGui

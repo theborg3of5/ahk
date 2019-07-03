@@ -1,6 +1,24 @@
 /* Class for converting lists of things from one format into another.
 	
 	***
+	
+	GDB TODO
+		Turn this into a non-static class
+			Possible new names
+				FormatList
+				FormattedList
+				FormattableList
+				ConvertibleList
+			Properties for getting list in different formats
+			Property for calculated (and possibly prompted?) format of list?
+			Public functions for:
+				Sending list in different formats
+				Sending list in format chosen by user (prompt)
+		More output methods
+			Filling in a OneNote table column (down arrow between?)
+			Filling a list of IDs into EpicStudio (Before/after inputs on Selector popup for code surrounding lines, newlines only applied after that)
+				Maybe take this a step further and make it specifically filling in an array?
+				Make sure that dot level is taken into account (I think I have functions for that)
 */
 
 class ListConverter {
@@ -18,17 +36,15 @@ class ListConverter {
 		if(!ListConverter.formatDelimsAry)
 			ListConverter.formatDelimsAry := ListConverter.getFormatDelimsAry()
 		
+		; Convert input list into an array for processing.
+		listAry := ListConverter.parseListObject(listObject, fromFormat)
+		
 		; Determine the format to convert the list into if not given.
 		if(!toFormat) {
 			s := new Selector("listFormats.tls")
 			toFormat := s.selectGui("FORMAT", "Enter OUTPUT format for list")
 		}
 		
-		; Determine the format of the input list.
-		if(!fromFormat)
-			fromFormat := ListConverter.determineListFormat(listObject)
-		
-		listAry := ListConverter.parseListObject(listObject, fromFormat)
 		outputObject := ListConverter.convertListAryToFormat(listAry, toFormat)
 		; DEBUG.popup("Input format",fromFormat, "Input",listObject, "Parsed",listAry, "Output format",toFormat, "Output",outputObject)
 		
@@ -39,7 +55,7 @@ class ListConverter {
 ; ==============================
 ; == Private ===================
 ; ==============================
-	formatDelimsAry := []
+	static formatDelimsAry := []
 	
 	; Special, internal-only list formats
 	static Format_Ambiguous     := "AMBIGUOUS"      ; Can't tell what the format is, so we'll have to ask the user.
@@ -52,6 +68,25 @@ class ListConverter {
 		ary[ListConverter.Format_NewLines] := "`r`n"
 		
 		return ary
+	}
+	
+	parseListObject(listObject, listFormat) {
+		if(!listFormat)
+			listFormat := ListConverter.determineListFormat(listObject)
+		if(!listFormat)
+			return ""
+		
+		if(listFormat = ListConverter.Format_Array)
+			listAry := listObject
+		else if(listFormat = ListConverter.Format_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
+			listAry := [listObject]
+		else if(listFormat = ListConverter.Format_Commas)
+			listAry := StrSplit(listObject, ",", " `t") ; Drop spaces and tabs from beginning/end of list elements
+		else if(listFormat = ListConverter.Format_NewLines)
+			listAry := StrSplit(listObject, "`r`n", " `t") ; Drop spaces and tabs from beginning/end of list elements
+		
+		listAry := arrayDropEmptyValues(listAry) ; Drop empty values from the array.
+		return listAry
 	}
 	
 	determineListFormat(listObject) {
@@ -85,23 +120,6 @@ class ListConverter {
 			return ListConverter.Format_UnknownSingle
 		
 		return listFormat
-	}
-	
-	parseListObject(listObject, listFormat) {
-		if(!listFormat)
-			return ""
-		
-		if(listFormat = ListConverter.Format_Array)
-			listAry := listObject
-		else if(listFormat = ListConverter.Format_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
-			listAry := [listObject]
-		else if(listFormat = ListConverter.Format_Commas)
-			listAry := StrSplit(listObject, ",", " `t") ; Drop spaces and tabs from beginning/end of list elements
-		else if(listFormat = ListConverter.Format_NewLines)
-			listAry := StrSplit(listObject, "`r`n", " `t") ; Drop spaces and tabs from beginning/end of list elements
-		
-		listAry := arrayDropEmptyValues(listAry) ; Drop empty values from the array.
-		return listAry
 	}
 	
 	convertListAryToFormat(listAry, listFormat) {

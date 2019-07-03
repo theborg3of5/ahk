@@ -21,9 +21,10 @@ class FormatList {
 ; == Public ====================
 ; ==============================
 	; Formats for reading/writing lists.
-	static Format_Array    := "ARRAY"
-	static Format_Commas   := "COMMA"
-	static Format_NewLines := "NEWLINE"
+	static Format_Array         := "ARRAY"
+	static Format_Commas        := "COMMA"
+	static Format_NewLines      := "NEWLINE"
+	static Format_OneNoteColumn := "ONENOTE_COLUMN"
 	
 	originalFormat := ""
 	
@@ -125,6 +126,10 @@ class FormatList {
 			foundFormat := FormatList.Format_NewLines
 			distinctDelimsCount++
 		}
+		if(stringContains(listString, "`r`n`r`n")) {
+			foundFormat := FormatList.Format_OneNoteColumn
+			distinctDelimsCount++
+		}
 		
 		if(distinctDelimsCount = 0) ; If we didn't find any delimiters, it could be any of them, but just a single value - so we know what to do with it.
 			return FormatList.Format_UnknownSingle
@@ -146,6 +151,8 @@ class FormatList {
 			listAry := StrSplit(listObject, ",", " `t") ; Drop spaces and tabs from beginning/end of list elements
 		if(format = FormatList.Format_NewLines)
 			listAry := StrSplit(listObject, "`r`n", " `t") ; Drop spaces and tabs from beginning/end of list elements
+		if(format = FormatList.Format_OneNoteColumn) ; Cells are separated by double newlines
+			listAry := StrSplit(listObject, "`r`n`r`n", " `t") ; Drop spaces and tabs from beginning/end of list elements
 		
 		; Drop empty values from the array.
 		return arrayDropEmptyValues(listAry)
@@ -173,5 +180,11 @@ class FormatList {
 			SendRaw, arrayJoin(this.listAry, ",")
 		if(format = FormatList.Format_NewLines)
 			SendRaw, arrayJoin(this.listAry, "`n")
+		if(format = FormatList.Format_OneNoteColumn)
+			For i,item in this.listAry {
+				SendRaw, item
+				if(i < this.listAry.length())
+					Send, {Down}
+			}
 	}
 }

@@ -78,7 +78,11 @@ return
 	}
 
 ; Send the clipboard as a list.
-; ^#v::SendRaw, % ListConverter.convertAndSendList(clipboard)
+^#v::
+	sendClipboardAsFormatList() {
+		fl := new FormatList(clipboard)
+		SendRaw, % fl.getList()
+	}
 
 ; Grab the selected text and pop it into a new Notepad window
 !v::

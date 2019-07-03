@@ -4,11 +4,10 @@
 	
 	GDB TODO
 		Turn this into a non-static class
-			Properties for getting list in different formats
+			Properties for getting list in different formats?
 			Public functions for:
 				Sending list in different formats
 				Sending list in format chosen by user (prompt)
-		Fix usage in input.ahk
 		More output methods
 			Filling in a OneNote table column (down arrow between?)
 			Filling a list of IDs into EpicStudio (Before/after inputs on Selector popup for code surrounding lines, newlines only applied after that)
@@ -37,7 +36,7 @@ class FormatList {
 		if(!this.parseListObject(listObject, inFormat))
 			return ""
 		
-		DEBUG.popup("listObject",listObject, "this.formatsAry",this.formatsAry, "this.listAry",this.listAry)
+		; DEBUG.popup("listObject",listObject, "this.formatsAry",this.formatsAry, "this.listAry",this.listAry)
 	}
 	
 	; GDB TODO add error toasts/early quits for formats that are allowed to be sent vs. returned
@@ -48,7 +47,7 @@ class FormatList {
 			format := s.selectGui("FORMAT", "Enter OUTPUT format for list")
 		}
 		
-		return this.convertListAryToFormat(listAry, toFormat)
+		return this.getListInFormat(format)
 	}
 	
 	; GDB TODO should we just do individual functions per format instead?
@@ -119,7 +118,7 @@ class FormatList {
 		; Turn the list into an array.
 		this.listAry := this.transformToAry(listObject, format)
 		
-		DEBUG.popup("listObject",listObject, "format",format, "this.listAry",this.listAry)
+		; DEBUG.popup("listObject",listObject, "format",format, "this.listAry",this.listAry)
 		return true
 	}
 	
@@ -138,7 +137,7 @@ class FormatList {
 		return listFormat
 	}
 	
-	determineStringListFormat(listString) {
+	determineStringListFormat(listString) { ; GDB TODO should this be combined into determineListFormat? Maybe move the selector bit up into parseListObject() too?
 		distinctDelimsCount := 0
 		
 		if(stringContains(listString, ",")) { ; GDB TODO reconsider looping approach
@@ -175,25 +174,27 @@ class FormatList {
 		return arrayDropEmptyValues(listAry)
 	}
 	
-	convertListAryToFormat(listAry, listFormat) {
-		if(!listAry || !listFormat)
+	getListInFormat(format) {
+		if(!this.listAry || !format)
 			return ""
 		
-		if(listFormat = FormatList.Format_Array)
-			return listAry
-		if(listFormat = FormatList.Format_Commas)
-			return arrayJoin(listAry, ",")
-		if(listFormat = FormatList.Format_NewLines)
-			return arrayJoin(listAry, "`n")
+		if(format = FormatList.Format_Array)
+			return this.listAry
+		if(format = FormatList.Format_Commas)
+			return arrayJoin(this.listAry, ",")
+		if(format = FormatList.Format_NewLines)
+			return arrayJoin(this.listAry, "`n")
+		
+		return ""
 	}
 	
-	sendListAryInFormat(listAry, listFormat) {
-		if(!listAry || !listFormat)
+	sendListAryInFormat(listAry, format) {
+		if(!this.listAry || !format)
 			return ""
 		
-		if(listFormat = FormatList.Format_Commas)
-			SendRaw, arrayJoin(listAry, ",")
-		if(listFormat = FormatList.Format_NewLines)
-			SendRaw, arrayJoin(listAry, "`n")
+		if(format = FormatList.Format_Commas)
+			SendRaw, arrayJoin(this.listAry, ",")
+		if(format = FormatList.Format_NewLines)
+			SendRaw, arrayJoin(this.listAry, "`n")
 	}
 }

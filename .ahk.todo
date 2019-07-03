@@ -59,6 +59,8 @@
 				What if we create the VisualWindow earlier (before the AutoSize) and somehow use that to save off or anchor the Toast to the current monitor?
 		When we fix this, we can update:
 			iconTester.ahk - don't need a toast message up front, can be blank to start and we can just call switchToIconWithNum(0) instead of getting the text
+	Do we want to add negative x/y values to mean how far off of the right/bottom to be?
+		Would let us say, implement timer to be like the Windows media tile
 	
 # Documentation
 	Figure out some central documentation method

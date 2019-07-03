@@ -22,8 +22,8 @@
 	#Include duration.ahk
 	#Include epicRecord.ahk
 	#Include flexTable.ahk
+	#Include formatList.ahk
 	#Include hyperlinker.ahk
-	#Include listConverter.ahk
 	#Include mainConfig.ahk
 	#Include mousePosition.ahk
 	#Include programInfo.ahk

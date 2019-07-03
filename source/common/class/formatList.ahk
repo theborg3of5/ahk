@@ -5,7 +5,6 @@
 	GDB TODO
 		Turn this into a non-static class
 			Properties for getting list in different formats
-			Property for calculated (and possibly prompted?) format of list?
 			Public functions for:
 				Sending list in different formats
 				Sending list in format chosen by user (prompt)
@@ -27,37 +26,70 @@ class FormatList {
 	static Format_Commas   := "COMMA"
 	static Format_NewLines := "NEWLINE"
 	
-	convertList(listObject, toFormat := "", fromFormat := "") {
+	originalFormat := ""
+	
+	__New(listObject, inFormat := "") {
 		; Initialize the format delimiter array if this is the first time we're using the class.
-		if(!FormatList.formatDelimsAry)
-			FormatList.formatDelimsAry := FormatList.getFormatDelimsAry()
+		if(!FormatList.formatsAry)
+			FormatList.formatsAry := FormatList.buildFormatArray()
 		
 		; Convert input list into an array for processing.
-		listAry := FormatList.parseListObject(listObject, fromFormat)
+		if(!this.parseListObject(listObject, inFormat))
+			return ""
 		
+		DEBUG.popup("listObject",listObject, "this.formatsAry",this.formatsAry, "this.listAry",this.listAry)
+	}
+	
+	; GDB TODO add error toasts/early quits for formats that are allowed to be sent vs. returned
+	getList(format := "") { ; Leave format blank to prompt user
 		; Determine the format to convert the list into if not given.
-		if(!toFormat) {
+		if(!format) {
 			s := new Selector("listFormats.tls")
-			toFormat := s.selectGui("FORMAT", "Enter OUTPUT format for list")
+			format := s.selectGui("FORMAT", "Enter OUTPUT format for list")
 		}
 		
-		outputObject := FormatList.convertListAryToFormat(listAry, toFormat)
-		; DEBUG.popup("Input format",fromFormat, "Input",listObject, "Parsed",listAry, "Output format",toFormat, "Output",outputObject)
+		return this.convertListAryToFormat(listAry, toFormat)
+	}
+	
+	; GDB TODO should we just do individual functions per format instead?
+	sendList(format := "") { ; Leave format blank to prompt user
+		; Determine the format to convert the list into if not given.
+		if(!format) {
+			s := new Selector("listFormats.tls")
+			format := s.selectGui("FORMAT", "Enter OUTPUT format for list")
+		}
 		
-		return outputObject
 	}
 	
 	
 ; ==============================
 ; == Private ===================
 ; ==============================
-	static formatDelimsAry := []
+	; static FormatDelimsAry := []
+	
+	static formatsAry := ""
+	
+	listAry := ""
 	
 	; Special, internal-only list formats
 	static Format_Ambiguous     := "AMBIGUOUS"      ; Can't tell what the format is, so we'll have to ask the user.
 	static Format_UnknownSingle := "UNKNOWN_SINGLE" ; We don't know what the format is, but it looks like a single item only.
 	
-	getFormatDelimsAry() {
+	buildFormatArray() {
+		; FormatList.FormatDelimsAry := [] ; GDB TODO consider getting rid of this one - why not just have specific cases?
+		; FormatList.FormatDelimsAry[FormatList.Format_Commas]   := ","
+		; FormatList.FormatDelimsAry[FormatList.Format_NewLines] := "`r`n"
+		
+		; FormatList.GettableFormats := []
+		; FormatList.GettableFormats[Format_Array] := ""
+		; FormatList.GettableFormats[Format_Commas] := ""
+		; FormatList.GettableFormats[Format_NewLines] := ""
+		
+		; FormatList.SendableFormats := []
+		; FormatList.SendableFormats[Format_Commas] := ""
+		; FormatList.SendableFormats[Format_NewLines] := ""
+		; FormatList.SendableFormats[Format_OneNoteColumn] := ""
+		
 		ary := []
 		
 		ary[FormatList.Format_Commas]   := ","
@@ -66,23 +98,29 @@ class FormatList {
 		return ary
 	}
 	
-	parseListObject(listObject, listFormat) {
-		if(!listFormat)
-			listFormat := FormatList.determineListFormat(listObject)
-		if(!listFormat)
-			return ""
+	isFormatGettable(format) {
+		return FormatList.formatsAry[format, "GETTABLE"]
+	}
+	isFormatSendable(format) {
+		return FormatList.formatsAry[format, "SENDABLE"]
+	}
+	
+	parseListObject(listObject, format) {
+		; If the incoming format wasn't given, try to figure it out.
+		if(!format)
+			format := this.determineListFormat(listObject)
 		
-		if(listFormat = FormatList.Format_Array)
-			listAry := listObject
-		else if(listFormat = FormatList.Format_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
-			listAry := [listObject]
-		else if(listFormat = FormatList.Format_Commas)
-			listAry := StrSplit(listObject, ",", " `t") ; Drop spaces and tabs from beginning/end of list elements
-		else if(listFormat = FormatList.Format_NewLines)
-			listAry := StrSplit(listObject, "`r`n", " `t") ; Drop spaces and tabs from beginning/end of list elements
+		; Fail out if we couldn't figure out the format.
+		if(!format) {
+			; GDB TODO error toast, no format given or determineable.
+			return false
+		}
 		
-		listAry := arrayDropEmptyValues(listAry) ; Drop empty values from the array.
-		return listAry
+		; Turn the list into an array.
+		this.listAry := this.transformToAry(listObject, format)
+		
+		DEBUG.popup("listObject",listObject, "format",format, "this.listAry",this.listAry)
+		return true
 	}
 	
 	determineListFormat(listObject) {
@@ -101,21 +139,40 @@ class FormatList {
 	}
 	
 	determineStringListFormat(listString) {
-		numDelimitersFound := 0
-		For format,delim in FormatList.formatDelimsAry {
-			if(stringContains(listString, delim)) {
-				; DEBUG.popup("FormatList.determineStringListFormat","Delimiter loop", "listString",listString, "Matched delimiter",delim)
-				listFormat := format
-				numDelimitersFound += 1
-			}
+		distinctDelimsCount := 0
+		
+		if(stringContains(listString, ",")) { ; GDB TODO reconsider looping approach
+			foundFormat := FormatList.Format_Commas
+			distinctDelimsCount++
+		}
+		if(stringContains(listString, "`r`n")) {
+			foundFormat := FormatList.Format_NewLines
+			distinctDelimsCount++
 		}
 		
-		if(numDelimitersFound > 1) ; If we found more than one delimiter, we can't tell which is the right one to split the list up by.
-			return FormatList.Format_Ambiguous
-		if(numDelimitersFound = 0) ; If we didn't find any delimiters, it could be any of them, but just a single value - so we know what to do with it.
+		if(distinctDelimsCount = 0) ; If we didn't find any delimiters, it could be any of them, but just a single value - so we know what to do with it.
 			return FormatList.Format_UnknownSingle
+		if(distinctDelimsCount = 1)
+			return foundFormat
+		if(distinctDelimsCount > 1) ; If we found more than one delimiter, we can't tell which is the right one to split the list up by.
+			return FormatList.Format_Ambiguous
 		
-		return listFormat
+		return ""
+	}
+	
+	; Turn the list into an array based on its format.
+	transformToAry(listObject, format) {
+		if(format = FormatList.Format_Array)
+			listAry := listObject
+		if(format = FormatList.Format_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
+			listAry := [listObject]
+		if(format = FormatList.Format_Commas)
+			listAry := StrSplit(listObject, ",", " `t") ; Drop spaces and tabs from beginning/end of list elements
+		if(format = FormatList.Format_NewLines)
+			listAry := StrSplit(listObject, "`r`n", " `t") ; Drop spaces and tabs from beginning/end of list elements
+		
+		; Drop empty values from the array.
+		return arrayDropEmptyValues(listAry)
 	}
 	
 	convertListAryToFormat(listAry, listFormat) {
@@ -128,5 +185,15 @@ class FormatList {
 			return arrayJoin(listAry, ",")
 		if(listFormat = FormatList.Format_NewLines)
 			return arrayJoin(listAry, "`n")
+	}
+	
+	sendListAryInFormat(listAry, listFormat) {
+		if(!listAry || !listFormat)
+			return ""
+		
+		if(listFormat = FormatList.Format_Commas)
+			SendRaw, arrayJoin(listAry, ",")
+		if(listFormat = FormatList.Format_NewLines)
+			SendRaw, arrayJoin(listAry, "`n")
 	}
 }

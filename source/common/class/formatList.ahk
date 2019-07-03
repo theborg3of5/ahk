@@ -8,6 +8,9 @@
 			Public functions for:
 				Sending list in different formats
 				Sending list in format chosen by user (prompt)
+		Try again to centralize delimiters, at least?
+			Maybe separate input vs output delimiters?
+			Maybe lack of a delimiter is a special case where we break into a switch statement?
 		More output methods
 			Filling in a OneNote table column (down arrow between?)
 			Filling a list of IDs into EpicStudio (Before/after inputs on Selector popup for code surrounding lines, newlines only applied after that)
@@ -42,23 +45,24 @@ class FormatList {
 	
 	; GDB TODO add error toasts/early quits for formats that are allowed to be sent vs. returned
 	getList(format := "") { ; Leave format blank to prompt user
-		; Determine the format to convert the list into if not given.
-		if(!format) {
-			s := new Selector("listFormats.tls")
-			format := s.selectGui("FORMAT", "Enter OUTPUT format for list")
-		}
+		if(!format)
+			format := this.determineOutputFormat()
 		
 		return this.getListInFormat(format)
 	}
 	
 	; GDB TODO should we just do individual functions per format instead?
 	sendList(format := "") { ; Leave format blank to prompt user
-		; Determine the format to convert the list into if not given.
-		if(!format) {
-			s := new Selector("listFormats.tls")
-			format := s.selectGui("FORMAT", "Enter OUTPUT format for list")
-		}
+		if(!format)
+			format := this.determineOutputFormat()
 		
+		this.sendListInFormat(format)
+	}
+	
+	; Determine the format to convert the list into if not given.
+	determineOutputFormat() {
+		s := new Selector("listFormats.tls")
+		return s.selectGui("FORMAT", "Enter OUTPUT format for list")
 	}
 	
 	
@@ -118,7 +122,7 @@ class FormatList {
 	determineStringListFormat(listString) { ; GDB TODO should this be combined into determineListFormat? Maybe move the selector bit up into parseListObject() too?
 		distinctDelimsCount := 0
 		
-		if(stringContains(listString, ",")) { ; GDB TODO reconsider looping approach
+		if(stringContains(listString, ",")) { ; GDB TODO reconsider looping approach?
 			foundFormat := FormatList.Format_Commas
 			distinctDelimsCount++
 		}
@@ -172,19 +176,25 @@ class FormatList {
 		return ""
 	}
 	
-	sendListAryInFormat(listAry, format) {
+	sendListInFormat(format) {
 		if(!this.listAry || !format)
-			return ""
+			return
 		
-		if(format = FormatList.Format_Commas)
-			SendRaw, arrayJoin(this.listAry, ",")
-		if(format = FormatList.Format_NewLines)
-			SendRaw, arrayJoin(this.listAry, "`n")
-		if(format = FormatList.Format_OneNoteColumn)
+		; Stuff that doesn't involve extra keys - just Send what comes out of .getListInFormat().
+		if(format = FormatList.Format_Commas || format = FormatList.Format_NewLines) {
+			SendRaw, % this.getListInFormat(format)
+			return
+		}
+		
+		; OneNote columns - send a down arrow keystroke between items.
+		if(format = FormatList.Format_OneNoteColumn) {
 			For i,item in this.listAry {
-				SendRaw, item
-				if(i < this.listAry.length())
-					Send, {Down}
+				SendRaw, % item
+				if(i < this.listAry.length()) ; GDB TODO figure out a way to make down stuff more reliable, figure out why stuff is sometimes capitalized weirdly (extra newlines being sent, seems like? shouldn't those be empty lines that are dropped?)
+					SendPlay, {Down} ; SendPlay is required because OneNote doesn't reliably take {Down} keystrokes otherwise.
+					Sleep, 100 ; Required because otherwise the down keystrokes can get out of sync with the items.
 			}
+			return
+		}
 	}
 }

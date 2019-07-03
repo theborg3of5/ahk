@@ -81,7 +81,7 @@ return
 ^#v::
 	sendClipboardAsFormatList() {
 		fl := new FormatList(clipboard)
-		SendRaw, % fl.getList()
+		fl.sendList()
 	}
 
 ; Grab the selected text and pop it into a new Notepad window

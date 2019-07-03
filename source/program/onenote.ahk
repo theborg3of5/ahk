@@ -249,7 +249,6 @@ class OneNote {
 			Send, !+3 ; Collapse to headers under Today (which collapses headers under Today so only unfinished todos on level 4 are visible)
 		
 		; Get down to first item under Today header
-		Sleep, 100 ; Required or else the down keystroke seems to happen before the !+3 keystrokes
 		Send, {End}{Right}{End}{Right} ; End of "Do" line, right to "Today" line, end of "Today" line, right to first item line. For some reason OneNote won't take {Down} keystrokes reliably, but this seems to work instead.
 	}
 	

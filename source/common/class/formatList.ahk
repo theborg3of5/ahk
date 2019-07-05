@@ -152,13 +152,12 @@ class FormatList {
 		if(format = FormatList.Format_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
 			listAry := [listObject]
 		if(format = FormatList.Format_Commas)
-			listAry := StrSplit(listObject, ",", " `t") ; Drop spaces and tabs from beginning/end of list elements
+			listAry := StrSplit(listObject, ",", " `t") ; Drop leading/trailing spaces, tabs
 		if(format = FormatList.Format_NewLines)
-			listAry := StrSplit(listObject, "`r`n", " `t") ; Drop spaces and tabs from beginning/end of list elements
+			listAry := StrSplit(listObject, "`r`n", " `t") ; Drop leading/trailing spaces, tabs
 		if(format = FormatList.Format_OneNoteColumn) ; Cells are separated by double newlines
-			listAry := StrSplit(listObject, "`r`n`r`n", " `t") ; Drop spaces and tabs from beginning/end of list elements
+			listAry := StrSplit(listObject, "`r`n`r`n", " `t`r`n") ; Drop leading/trailing spaces, tabs, newlines
 		
-		; Drop empty values from the array.
 		return arrayDropEmptyValues(listAry)
 	}
 	
@@ -190,9 +189,10 @@ class FormatList {
 		if(format = FormatList.Format_OneNoteColumn) {
 			For i,item in this.listAry {
 				SendRaw, % item
-				if(i < this.listAry.length()) ; GDB TODO figure out a way to make down stuff more reliable, figure out why stuff is sometimes capitalized weirdly (extra newlines being sent, seems like? shouldn't those be empty lines that are dropped?)
+				if(i < this.listAry.length()) {
 					SendPlay, {Down} ; SendPlay is required because OneNote doesn't reliably take {Down} keystrokes otherwise.
 					Sleep, 100 ; Required because otherwise the down keystrokes can get out of sync with the items.
+				}
 			}
 			return
 		}

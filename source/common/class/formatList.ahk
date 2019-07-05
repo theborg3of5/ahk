@@ -4,13 +4,6 @@
 		fl := new FormatList(clipboard)
 		listAry := fl.getList(FormatList.Format_Array) ; Get the list as an array
 		fl.sendList() ; Prompt the user for the format to send in
-	
-	GDB TODO
-		More output methods
-			Filling a list of IDs into EpicStudio (Before/after inputs on Selector popup for code surrounding lines, newlines only applied after that)
-				Should this really just be part of the M snippets stuff, and just have it make use of .getList(FormatList.Format_Array)?
-				Maybe take this a step further and make it specifically filling in an array?
-				Make sure that dot level is taken into account (I think I have functions for that)
 */
 
 class FormatList {

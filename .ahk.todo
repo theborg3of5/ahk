@@ -11,7 +11,11 @@
 	Add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments
-	ListConverter - more output methods
+	EpicStudio - add a way to fill in a list of IDs
+		Before/after inputs on Selector popup for code surrounding lines?
+		Make use of FormatList, fl.getList(FormatList.Format_Array)
+		Maybe take this a step further and make it specifically filling in an array?
+		Make sure that dot level is taken into account (I think I have functions for that)
 	Consider adding a client-file-viewing search to either search selector or actionObject (like codesearch routine)
 	Add some way to move windows where I want them
 		Hotkey-triggered, for all windows in list?

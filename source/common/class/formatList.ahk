@@ -1,6 +1,9 @@
 /* Class to represent a list of strings, that can be parsed and output in a variety of different formats.
 	
-	***
+	Example usage
+		fl := new FormatList(clipboard)
+		listAry := fl.getList(FormatList.Format_Array) ; Get the list as an array
+		fl.sendList() ; Prompt the user for the format to send in
 	
 	GDB TODO
 		More output methods
@@ -21,8 +24,14 @@ class FormatList {
 	static Format_NewLines      := "NEWLINE"
 	static Format_OneNoteColumn := "ONENOTE_COLUMN"
 	
-	originalFormat := ""
-	
+	;---------
+	; DESCRIPTION:    Create a new FormatList object.
+	; PARAMETERS:
+	;  listObject (I,REQ) - Object representing the list, may be an array or delimited string.
+	;  inFormat   (I,OPT) - Format that the list is in (from FormatList.Format_* constants). If not
+	;                       given, we will try to determine it ourselves and prompt the user if we
+	;                       can't figure it out.
+	;---------
 	__New(listObject, inFormat := "") {
 		; Convert input list into an array for processing.
 		if(!this.parseListObject(listObject, inFormat))
@@ -31,6 +40,12 @@ class FormatList {
 		; DEBUG.popup("listObject",listObject, "this.delimsAry",this.delimsAry, "this.listAry",this.listAry)
 	}
 	
+	;---------
+	; DESCRIPTION:    Get the list in a certain format, programmatically.
+	; PARAMETERS:
+	;  format (I,OPT) - Format to get the list in. If not given, we'll prompt the user for it.
+	; RETURNS:        The list, in the chosen format.
+	;---------
 	getList(format := "") {
 		if(!format)
 			format := this.promptForFormat("Enter OUTPUT format for list")
@@ -44,11 +59,16 @@ class FormatList {
 		return formattedList
 	}
 	
+	;---------
+	; DESCRIPTION:    Send the list to the current window, in a certain format.
+	; PARAMETERS:
+	;  format (I,OPT) - Format to send the list in. If not given, we'll prompt the user for it.
+	;---------
 	sendList(format := "") {
 		if(!format)
 			format := this.promptForFormat("Enter OUTPUT format for list")
 		if(!format)
-			return ""
+			return
 		
 		if(!this.sendListInFormat(format))
 			Toast.showError("Could not send list", "Format is not sendable: " format)
@@ -64,6 +84,17 @@ class FormatList {
 	static Format_Ambiguous     := "AMBIGUOUS"      ; Can't tell what the format is, so we'll have to ask the user.
 	static Format_UnknownSingle := "UNKNOWN_SINGLE" ; We don't know what the format is, but it looks like a single item only.
 	
+	;---------
+	; DESCRIPTION:    Read in the provided list object and store it in an internal (array) format.
+	; PARAMETERS:
+	;  listObject (I,REQ) - The list to determine the format of.
+	;  format     (I,OPT) - Format that the list is in (from FormatList.Format_* constants). If not
+	;                       given, we will try to determine it ourselves and prompt the user if we
+	;                       can't figure it out.
+	; RETURNS:        true if we were successful, false if we couldn't determine the format (and
+	;                 the user didn't help).
+	; SIDE EFFECTS:   Populates .listAry with the array representation of the list
+	;---------
 	parseListObject(listObject, format) {
 		; If the incoming format wasn't given, try to figure it out.
 		if(!format)
@@ -74,11 +105,17 @@ class FormatList {
 			return false
 		
 		; Turn the list into an array.
-		this.listAry := this.transformToAry(listObject, format)
-		
+		this.listAry := this.convertListToArray(listObject, format)
 		return true
 	}
 	
+	;---------
+	; DESCRIPTION:    Figure out what format the provided list is in, including prompting the user
+	;                 if we can't figure it out on our own.
+	; PARAMETERS:
+	;  listObject (I,REQ) - The list to determine the format of.
+	; RETURNS:        The determined format, from FormatList.Format_*
+	;---------
 	determineListFormat(listObject) {
 		; Try to figure it out based on the list object itself.
 		if(isObject(listObject)) ; All objects are assumed to be arrays
@@ -93,6 +130,13 @@ class FormatList {
 		return format
 	}
 	
+	;---------
+	; DESCRIPTION:    Try to determine the format of a list (assumed to be a string) based on what
+	;                 delimiters it contains.
+	; PARAMETERS:
+	;  listString (I,REQ) - The string list to check.
+	; RETURNS:        The determined format, from FormatList.Format_*
+	;---------
 	determineFormatByDelimiters(listString) {
 		distinctDelimsCount := 0
 		if(stringContains(listString, ",")) {
@@ -118,14 +162,25 @@ class FormatList {
 		return ""
 	}
 	
-	; Determine the format to convert the list into if not given.
+	;---------
+	; DESCRIPTION:    Prompt the user for an input or output format for the list.
+	; PARAMETERS:
+	;  title (I,REQ) - The title to prompt the user with.
+	; RETURNS:        The chosen format, should match a value from FormatList.Format_*
+	;---------
 	promptForFormat(title) {
 		s := new Selector("listFormats.tls")
 		return s.selectGui("FORMAT", title)
 	}
 	
-	; Turn the list into an array based on its format.
-	transformToAry(listObject, format) {
+	;---------
+	; DESCRIPTION:    Turn the list into our internal representation (an array) based on its format.
+	; PARAMETERS:
+	;  listObject (I,REQ) - The list to convert.
+	;  format     (I,REQ) - The format the list is in.
+	; RETURNS:        The array representation of the list
+	;---------
+	convertListToArray(listObject, format) {
 		if(format = FormatList.Format_Array)
 			listAry := listObject
 		if(format = FormatList.Format_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
@@ -140,6 +195,12 @@ class FormatList {
 		return arrayDropEmptyValues(listAry)
 	}
 	
+	;---------
+	; DESCRIPTION:    Return the list in the given format.
+	; PARAMETERS:
+	;  format (I,REQ) - The format (from FormatList.Format_*) to return the list in.
+	; RETURNS:        The formatted list.
+	;---------
 	getListInFormat(format) {
 		if(!this.listAry || !format)
 			return ""
@@ -154,6 +215,12 @@ class FormatList {
 		return ""
 	}
 	
+	;---------
+	; DESCRIPTION:    Send the list to the current window in a particular format.
+	; PARAMETERS:
+	;  format (I,REQ) - The format to use (FormatList.Format_*).
+	; RETURNS:        true if successful, false if something went wrong (like an unsupported format).
+	;---------
 	sendListInFormat(format) {
 		if(!this.listAry || !format)
 			return true

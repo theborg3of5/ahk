@@ -2,6 +2,7 @@
 
 (	NAME						ABBREV	FORMAT
 	
+	Array						a			ARRAY
 	Comma-delimited		c			COMMA
 	Newline-delimited		nl			NEWLINE
-	OneNote Column			onc		ONENOTE_COLUMN
+	OneNote Column			o			ONENOTE_COLUMN

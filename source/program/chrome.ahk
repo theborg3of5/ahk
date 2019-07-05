@@ -30,7 +30,7 @@
 	^MButton::Chrome.openLinkTarget() ; Open
 #IfWinActive
 	
-#If MainConfig.isWindowActive("Chrome") && MainConfig.machineIsEpicLaptop
+#If MainConfig.isWindowActive("Chrome")
 	^+o::Chrome.openCodeSearchServerCodeInEpicStudio()
 #If
 

@@ -14,6 +14,7 @@ class FormatList {
 	; Formats for reading/writing lists.
 	static Format_Array         := "ARRAY"
 	static Format_Commas        := "COMMA"
+	static Format_CommasSpaced  := "COMMA_SPACED"
 	static Format_NewLines      := "NEWLINE"
 	static Format_OneNoteColumn := "ONENOTE_COLUMN"
 	
@@ -133,7 +134,7 @@ class FormatList {
 	determineFormatByDelimiters(listString) {
 		distinctDelimsCount := 0
 		if(stringContains(listString, ",")) {
-			foundFormat := FormatList.Format_Commas
+			foundFormat := FormatList.Format_Commas ; Also covers Format_CommasSpaced, see .convertListToArray().
 			distinctDelimsCount++
 		}
 		if(stringContains(listString, "`r`n")) {
@@ -178,7 +179,7 @@ class FormatList {
 			listAry := listObject
 		if(format = FormatList.Format_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
 			listAry := [listObject]
-		if(format = FormatList.Format_Commas)
+		if(format = FormatList.Format_Commas) ; Also covers Format_CommasSpaced, we just treat the extra space as whitespace to clean out.
 			listAry := StrSplit(listObject, ",", " `t") ; Drop leading/trailing spaces, tabs
 		if(format = FormatList.Format_NewLines)
 			listAry := StrSplit(listObject, "`r`n", " `t") ; Drop leading/trailing spaces, tabs
@@ -202,6 +203,8 @@ class FormatList {
 			return this.listAry
 		if(format = FormatList.Format_Commas)
 			return arrayJoin(this.listAry, ",")
+		if(format = FormatList.Format_CommasSpaced)
+			return arrayJoin(this.listAry, ", ")
 		if(format = FormatList.Format_NewLines)
 			return arrayJoin(this.listAry, "`n")
 		
@@ -219,7 +222,7 @@ class FormatList {
 			return true
 		
 		; Stuff that doesn't involve extra keys - just Send what comes out of .getListInFormat().
-		if(format = FormatList.Format_Commas || format = FormatList.Format_NewLines) {
+		if(format = FormatList.Format_Commas || format = FormatList.Format_CommasSpaced || format = FormatList.Format_NewLines) {
 			SendRaw, % this.getListInFormat(format)
 			return true
 		}

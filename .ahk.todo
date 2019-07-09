@@ -1,5 +1,4 @@
 # New Ideas
-	FormatList - add comma-separated (output, maybe input?) format that includes spaces after commas
 	Consider no longer running UAC-killing script in VDIs
 		Would require some way to differentiate between work laptop machine and VDIs (currently they use the same)
 			I don't really want to add an extra machine for all of the places that filter/branch based on machine

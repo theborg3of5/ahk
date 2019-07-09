@@ -1,11 +1,35 @@
 # New Ideas
-	Consider no longer running UAC-killing script in VDIs
-		Would require some way to differentiate between work laptop machine and VDIs (currently they use the same)
-			I don't really want to add an extra machine for all of the places that filter/branch based on machine
-			Should we introduce a concept of machine type/area, for work vs home?
-				Could have hard-coded "types" per machine, or it could live in settings.ini instead
-	Add support for minimizing Explorer windows the "normal" way in VDIs
-		Either using machine filter stuff on windows, or by just checking after trying to minimize, and doing it the normal way if it didn't work.
+	Consider adding a new level to MACHINE stuff - instead of sprinkling individual machines through the code, have two machine "types" (work and home) that are used in most cases
+		Could have hard-coded "types" per machine, or it could live in settings.ini instead
+		Current uses of machine stuff:
+			Config files using MACHINE as a filter:
+				search - hide work-specific search methods (type)
+				resize - hide work-specific sizes (type) + switch positions for different machines (type or machine?)
+				programs - switch program paths (machine)
+				paths - hide work-specific paths (type) + switch paths for Music folder (machine, but no longer used anymore - should kill)
+				folders.tls - hide work-specific folders (type)
+				mappedDrives - hide work-specific mappings (type)
+				actionObject - hide work-specific actions/subTypes (type)
+			Code that uses MACHINE:
+				mainConfig - reading in and providing access (direct, selector filter, individual checks)
+			Callers to MainConfig.machine*
+				.machine
+					onetastic - to replace CURRENT_MACHINE tags in macros
+				.machineSelectorFilter - callers to config files above
+				.machineIs*
+					input - mute and browswer back/forward hotkey switches (machine, but maybe should be settings instead?)
+					launch - avoid work-specific actions (type, but some will be machine because VDIs)
+					programs - avoid work-specific hotkeys (machine, as most aren't installed in VDIs)
+					main - which additional scripts to run (currently type, want to make machine for VDIs)
+					chrome - part of "is page codesearch" check (type)
+					onenote - switch todo page title method (type)
+					outlook - new mail hotkey (type)
+			Others:
+				setup.tls - Specifies the machine for firstSetup
+				settings.ini - Where machine comes from
+		Use cases:
+			No longer running UAC-killing script in VDIs
+			Add support for minimizing Explorer windows the "normal" way in VDIs
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.
 		Maybe string, too - could build in tag replacement, contains, etc.
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)

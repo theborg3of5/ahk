@@ -4,6 +4,8 @@
 			I don't really want to add an extra machine for all of the places that filter/branch based on machine
 			Should we introduce a concept of machine type/area, for work vs home?
 				Could have hard-coded "types" per machine, or it could live in settings.ini instead
+	Add support for minimizing Explorer windows the "normal" way in VDIs
+		Either using machine filter stuff on windows, or by just checking after trying to minimize, and doing it the normal way if it didn't work.
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.
 		Maybe string, too - could build in tag replacement, contains, etc.
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)

@@ -13,7 +13,7 @@
 	Consider some way to use the title + URL of current tab in Chrome, and add a link to OneNote (or maybe other places as well?)
 		Maybe store off both title (maybe trimmed, drop things like " - Wiki" off of the end, etc?) and URL on copy hotkey
 			Used by a generic hotkey that used those two bits of info + hyperlinking class to add a link?
-	Add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
+	EpicStudio - add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments
 	EpicStudio - add a way to fill in a list of IDs
@@ -40,10 +40,10 @@
 		Would let us get rid of the special exe case in .gitignore, too
 	
 # Selector/TableList
-	Selector: dynamically resize abbreviation column based on widest value?
+	Dynamically resize abbreviation column based on widest value?
 		To allow longer abbreviations
 		Is that going to get weird with SelectorGui+FlexTable interactions?
-	Selector - consider adding a way to match on some other column than just NAME and ABBREV
+	Consider adding a way to match on some other column than just NAME and ABBREV
 		Use cases
 			Transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
 				Alternatively, build out environments in MainConfig (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.
@@ -56,7 +56,7 @@
 			Basically static variables, like we're doing in Hyperlinker
 	
 # Toast
-	Toast: could we avoid flickering between .showPersistent() and .setText()?
+	Could we avoid flickering between .showPersistent() and .setText()?
 		Maybe some way to set position without showing?
 		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?
 	Figure out how to deal with Toast/VisualWindow issue where upper-right toasts jump to the next monitor over

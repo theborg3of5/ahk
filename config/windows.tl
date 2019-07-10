@@ -52,7 +52,7 @@
 			Foobar								foobar2000.exe
 			GitHub								GitHubDesktop.exe			-							-													NO_PADDING
 			Greenshot Capture					Greenshot.exe				-							Greenshot capture form
-			Greenshot Image Editor			Greenshot.exe				WindowsForms10.Window.8.app.0.2780b98_r6_ad1
+			Greenshot Image Editor			Greenshot.exe				-							Greenshot image editor
 			GrepWin								grepWin.exe
 			Hyperspace							EpicD89.exe
 			Internet Explorer					IEXPLORE.EXE

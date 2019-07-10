@@ -30,6 +30,7 @@
 		Use cases:
 			No longer running UAC-killing script in VDIs
 			Add support for minimizing Explorer windows the "normal" way in VDIs
+	FormatList - consider adding support for ranges (maybe colons or hyphens?)
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.
 		Maybe string, too - could build in tag replacement, contains, etc.
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)

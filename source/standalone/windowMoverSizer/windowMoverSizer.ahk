@@ -141,6 +141,8 @@ isExcludedWindow(titleString) {
 	windowName := MainConfig.findWindowName(titleString)
 	if(windowName = "Windows Taskbar")
 		return true
+	if(windowName = "Windows Taskbar Secondary")
+		return true
 	
 	return false
 }

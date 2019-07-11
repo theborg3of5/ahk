@@ -45,7 +45,8 @@ return
 			return
 		
 		idString := "ahk_id " winId
-		if(MainConfig.findWindowName(idString) != "Windows Taskbar") ; Don't try to focus Windows taskbar
+		windowName := MainConfig.findWindowName(idString)
+		if(windowName != "Windows Taskbar" && windowName != "Windows Taskbar Secondary") ; Don't try to focus Windows taskbar
 			WinActivate, % idString
 		
 		; Allow the keystrokes to be caught and handled by other hotkeys.

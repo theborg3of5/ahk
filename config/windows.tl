@@ -80,6 +80,7 @@
 			Visual Studio						devenv.exe
 			WebEx									atmgr.exe					-							-													NO_PADDING
 			Windows Taskbar					explorer.exe				Shell_TrayWnd
+			Windows Taskbar Secondary		explorer.exe				Shell_SecondaryTrayWnd
 			Word									WINWORD.EXE					-							-													NO_PADDING
 			yEd									yEd.exe
 []

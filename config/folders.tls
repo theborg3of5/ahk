@@ -20,7 +20,7 @@
 [MACHINE.replaceWith(EPIC_LAPTOP)]
 	# Epic
 	Dev								dev								<USER_DEV>
-	Templates						temp								<USER_DEV>\Templates
+	Templates						tp									<USER_DEV>\Templates
 	Transaction Diff Output		txdiff							<TX_DIFF_OUTPUT>
 	Compile							comp								<VB6_COMPILE>
 	Net Home							nh									<EPIC_NET_HOME>

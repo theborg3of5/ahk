@@ -237,6 +237,11 @@ class MainConfig {
 		; Index private values by key.
 		privatesAry := reduceTableToColumn(privatesTable, "VALUE", "KEY")
 		
+		; Replace any system path tags in private items.
+		systemPathTags := this.getSystemPathTags()
+		For key,value in privatesAry
+			privatesAry[key] := replaceTags(value, systemPathTags)
+		
 		; DEBUG.popup("MainConfig.loadPrivates","Finish", "Filepath",filePath, "Table",privatesTable, "Indexed array",privatesAry)
 		return privatesAry
 	}

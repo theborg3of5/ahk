@@ -2,7 +2,6 @@
 
 ; Specific folders
 !+a::openFolder("AHK_ROOT")
-!+m::openFolder("MUSIC")
 !+d::openFolder("DOWNLOADS")
 !+u::openFolder("USER_ROOT")
 

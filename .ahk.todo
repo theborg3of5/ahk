@@ -1,4 +1,5 @@
 # New Ideas
+	Should hotstrings file really just live in other scripts?
 	Add a folder for HSWeb trace file path
 		Lives in %TEMP% > YYYY-MM-DD folder
 			Should we have a way to read windows system variables (like %TEMP%) in by replacing tags?
@@ -12,7 +13,7 @@
 				search - hide work-specific search methods (type)
 				resize - hide work-specific sizes (type) + switch positions for different machines (type or machine?)
 				programs - switch program paths (machine)
-				paths - hide work-specific paths (type) + switch paths for Music folder (machine, but no longer used anymore - should kill)
+				paths - hide work-specific paths (type)
 				folders.tls - hide work-specific folders (type)
 				mappedDrives - hide work-specific mappings (type)
 				actionObject - hide work-specific actions/subTypes (type)

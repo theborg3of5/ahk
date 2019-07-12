@@ -280,9 +280,11 @@ class MainConfig {
 		
 		; Replace calculated and private path tags.
 		For key,path in pathsAry {
-			; Special case: for tags which are exclusively pass-throughs (blank path), just use the matching tag's value.
+			; Special case: for tags which are exclusively pass-throughs (blank path), just use the matching tag's value (from either path or private).
 			if(path = "")
 				path := pathTagsAry[key]
+			if(path = "")
+				path := this.private[key]
 			
 			path := replaceTags(path, pathTagsAry)
 			path := this.replacePrivateTags(path)

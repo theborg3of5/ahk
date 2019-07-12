@@ -314,10 +314,10 @@ getCleanHotkeyString(hotkeyString) {
 	return cleanupText(hotkeyString, ["$", "*", "<", ">", "~"])
 }
 
-replaceTags(inputString, tagNamesAry) {
+replaceTags(inputString, tagsAry) {
 	outputString := inputString
 	
-	For tagName, replacement in tagNamesAry
+	For tagName, replacement in tagsAry
 		outputString := replaceTag(outputString, tagName, replacement)
 	
 	return outputString

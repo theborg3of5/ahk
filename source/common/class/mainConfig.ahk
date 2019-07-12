@@ -275,18 +275,49 @@ class MainConfig {
 		; Index paths by key.
 		pathsAry := reduceTableToColumn(pathsTable, "PATH", "KEY")
 		
-		; Apply calculated values and private tags.
-		userRootPath := getParentFolder(A_Desktop)
-		ahkRootPath  := getParentFolder(A_LineFile, 4) ; This file lives in <AHK_ROOT>\source\common\class\.
-		For key,value in pathsAry {
-			value := replaceTag(value, "USER_ROOT", userRootPath)
-			value := replaceTag(value, "AHK_ROOT",  ahkRootPath)
-			value := this.replacePrivateTags(value)
-			pathsAry[key] := value ; make sure to store it back in the actual array
+		; Grab and calculate special paths from the system/relative to this script.
+		pathTagsAry := mergeArrays(this.getSystemPathTags(), this.getCalculatedPathTags())
+		
+		; Replace calculated and private path tags.
+		For key,path in pathsAry {
+			; Special case: for tags which are exclusively pass-throughs (blank path), just use the matching tag's value.
+			if(path = "")
+				path := pathTagsAry[key]
+			
+			path := replaceTags(path, pathTagsAry)
+			path := this.replacePrivateTags(path)
+			pathsAry[key] := path ; make sure to store it back in the actual array
 		}
 		
 		; DEBUG.popupEarly("mainConfig.loadPaths","Finish", "Paths",pathsAry)
 		return pathsAry
+	}
+	
+	getSystemPathTags() {
+		tagsAry := []
+		
+		tagsAry["PROGRAM_DATA"]     := A_AppDataCommon                        ; C:\ProgramData
+		tagsAry["USER_ROOT"]        := EnvGet("HOMEDRIVE") EnvGet("HOMEPATH") ; C:\Users\<UserName>
+		tagsAry["APPDATA_LOCAL"]    := EnvGet("LOCALAPPDATA")                 ; C:\Users\<UserName>\AppData\Local
+		tagsAry["TEMP"]             := A_Temp                                 ; C:\Users\<UserName>\AppData\Local\Temp
+		tagsAry["APPDATA"]          := A_AppData                              ; C:\Users\<UserName>\AppData\Roaming
+		tagsAry["START_MENU"]       := A_StartMenu                            ; C:\Users\<UserName>\AppData\Roaming\Microsoft\Windows\Start Menu
+		tagsAry["STARTUP"]          := A_Startup                              ; C:\Users\<UserName>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+		tagsAry["DESKTOP"]          := A_Desktop                              ; C:\Users\<UserName>\Desktop
+		tagsAry["PROGRAM_FILES"]    := A_ProgramFiles                         ; C:\Program Files
+		tagsAry["PROGRAM_FILES_86"] := EnvGet("ProgramFiles(x86)")            ; C:\Program Files (x86)
+		tagsAry["WINDOWS"]          := A_WinDir                               ; C:\Windows
+		tagsAry["CMD"]              := A_ComSpec                              ; C:\Windows\system32\cmd.exe
+		
+		return tagsAry
+	}
+	
+	getCalculatedPathTags() {
+		tagsAry := []
+		
+		tagsAry["AHK_ROOT"] := getParentFolder(A_LineFile, 4) ; Top-level ahk folder, this file lives in <AHK_ROOT>\source\common\class\
+		
+		return tagsAry
 	}
 	
 	loadPrograms(filePath) {

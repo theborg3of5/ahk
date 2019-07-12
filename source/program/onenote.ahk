@@ -24,6 +24,7 @@
 	+WheelUp::  OneNote.scrollLeft()
 	+WheelDown::OneNote.scrollRight()
 	
+	^+0::Send, ^0 ; Since we're using ^0 to set zoom to 100% below, add a replacement hotkey for clearing all tags.
 	^!n::Send, ^+n ; 'Normal' text formatting, as ^+n is already being used for new subpage.
 	^7::^6 ; Make ^7 do the same tag (Done green check) as ^6.
 	^+8::SendRaw, % "*" MainConfig.private["INITIALS"] " " FormatTime(, "MM/yy") ; Insert contact comment

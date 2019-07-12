@@ -27,28 +27,22 @@ runReturn(command) {
 
 ; Runs a command with cmd.exe.
 runCommand(commandToRun := "", workingDirectory := "", stayOpen := false) {
-	runString := "C:\Windows\System32\cmd.exe "
-	
 	; Allow either an array or just a string.
+	cmdString := ""
 	if(commandToRun.MaxIndex()) {
-		For i,c in commandToRun {
-			cmdString .= c A_Space
-		}
-		cmdString := removeStringFromEnd(cmdString, A_Space)
+		For _,command in commandToRun
+			cmdString := appendPieceToString(cmdString, A_Space, command)
 	} else {
 		cmdString := commandToRun
 	}
 	
 	; Set /C or /K (command and close, or command and stay up) based on input.
 	if(!cmdString || stayOpen)
-		runString .= "/K "
+		runString := MainConfig.path["CMD"] " /K " cmdString
 	else
-		runString .= "/C "
+		runString := MainConfig.path["CMD"] " /C " cmdString
 	
-	; Add the command to the run string.
-	runString .= cmdString
 	; DEBUG.popup("Command string", cmdString, "Run string", runString)
-	
 	Run(runString, workingDirectory)
 }
 

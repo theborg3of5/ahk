@@ -3,36 +3,36 @@
 (	NAME									KEY									PATH													MACHINE
 	
 	; Pass-throughs - paths which are retrieved/calculated in MainConfig.loadPaths(). These can also be used in this file.
-	User Root							USER_ROOT
+	AHK Root								AHK_ROOT
+	AppData (Roaming)					USER_APPDATA
+	AppData Local						USER_APPDATA_LOCAL
+	Command prompt path				CMD
+	Desktop								USER_DESKTOP
 	Program Data						PROGRAM_DATA
-	AppData Local						APPDATA_LOCAL
-	Temp									TEMP
-	AppData (Remote)					APPDATA
-	Start Menu							START_MENU
-	Startup								STARTUP
-	Desktop								DESKTOP
 	Program Files						PROGRAM_FILES
 	Program Files (x86)				PROGRAM_FILES_86
+	Start Menu							USER_START_MENU
+	Startup								USER_STARTUP
+	Temp									USER_TEMP
+	User Root							USER_ROOT
 	Windows (System Root)			WINDOWS
-	Command prompt path				CMD
-	AHK Root								AHK_ROOT
 	
 [MACHINE.replaceWith(EPIC_LAPTOP)]
 	; Private pass-throughs - private tags to replace in folder paths
-	Epic Personal						EPIC_PERSONAL
+	Epic DBC Design					EPIC_DBC_DESIGN
+	Epic Net Home						EPIC_NET_HOME
 	Epic NFS 3 Day						EPIC_NFS_3DAY
 	Epic NFS 3 Day (Unix)			EPIC_NFS_3DAY_UNIX
 	Epic NFS Ask						EPIC_NFS_ASK
-	Epic Net Home						EPIC_NET_HOME
+	Epic Personal						EPIC_PERSONAL
 	Epic Source S1						EPIC_SOURCE_S1
 	Epic Source S2						EPIC_SOURCE_S2
-	Epic DBC Design					EPIC_DBC_DESIGN
 []
 	
 	; General
 	AHK Config							AHK_CONFIG							<AHK_ROOT>\config
 	AHK Source							AHK_SOURCE							<AHK_ROOT>\source
-	Downloads							DOWNLOADS							<USER_ROOT>\Downloads
+	Downloads							USER_DOWNLOADS						<USER_ROOT>\Downloads
 	User Dev								USER_DEV								<USER_ROOT>\Dev
 	
 	; Dev

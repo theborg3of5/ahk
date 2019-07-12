@@ -8,7 +8,7 @@ setCommonHotkeysType(HOTKEY_TYPE_Standalone)
 
 ; Various paths needed throughout.
 ahkRootPath    := getParentFolder(A_ScriptDir)
-userPath       := getParentFolder(A_Desktop)
+userPath       := EnvGet("HOMEDRIVE") EnvGet("HOMEPATH")
 tlSetupPath    := "setup.tls"
 startupFolder  := ahkRootPath "\source"
 mainAHKPath    := startupFolder "\main.ahk"

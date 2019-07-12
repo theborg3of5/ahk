@@ -11,8 +11,8 @@
 []
 	
 	# System
-	Startup							start								<USER_ROOT>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
-	Pinned Shortcuts				ps									<USER_ROOT>\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar
+	Startup							start								<USER_STARTUP>
+	Pinned Shortcuts				ps									<USER_APPDATA>\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar
 	
 	# Development
 	Onetastic Macros				ot									<ONETASTIC_MACROS>
@@ -28,7 +28,7 @@
 	NFS Ask							na									<EPIC_NFS_ASK>
 	S1 Source						s1									<EPIC_SOURCE_S1>
 	S2 Source						s2									<EPIC_SOURCE_S2>
-	EpicStudio Config				esc								<USER_ROOT>\AppData\Local\Epic Systems Corporation\EpicStudio
+	EpicStudio Config				esc								<USER_APPDATA_LOCAL>\Epic Systems Corporation\EpicStudio
 	
 	# Admin
 	DBC Design						dbcd								<EPIC_DBC_DESIGN>

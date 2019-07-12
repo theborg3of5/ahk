@@ -146,7 +146,7 @@ finishTimer() {
 	setScriptConfirmQuit(false) ; Stop requiring confirmation to exit
 	
 	; Play a sound to call out that time is up.
-	finishedSoundFile := "C:\Windows\media\Windows Hardware Fail.wav"
+	finishedSoundFile := MainConfig.replacePathTags("<WINDOWS>\media\Windows Hardware Fail.wav")
 	if(FileExist(finishedSoundFile))
 		SoundPlay, % finishedSoundFile
 		

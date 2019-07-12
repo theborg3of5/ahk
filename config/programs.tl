@@ -1,6 +1,6 @@
 (	NAME							PATH																					MACHINE
 
-[PATH.addToStart(C:\Program Files (x86)\)]
+[PATH.addToStart(<PROGRAM_FILES_86>\)]
 	Chrome						Google\Chrome\Application\chrome.exe
 	EMC2							Epic\v8.7\EMC2\Shared Files\EpicD87.exe
 	EpicStudio					EpicStudio\EpicStudio.exe
@@ -18,7 +18,7 @@
 	Visual Studio				Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.exe
 []
 
-[PATH.addToStart(C:\Program Files\)]
+[PATH.addToStart(<PROGRAM_FILES>\)]
 	AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk
 	Everything					Everything\Everything.exe
 	Internet Explorer			Internet Explorer\iexplore.exe
@@ -30,15 +30,12 @@
 	yEd							yWorks\yEd\yEd.exe
 []
 
-[PATH.addToStart(C:\Windows\)]
+[PATH.addToStart(<WINDOWS>\)]
 	Explorer						explorer.exe
 	Notepad						System32\notepad.exe
 []
 
-[PATH.addToStart(<USER_ROOT>\AppData\)]
-	GitHub						Local\GitHubDesktop\GitHubDesktop.exe
-	Spotify						Roaming\Spotify\Spotify.exe
-	Telegram						Roaming\Telegram Desktop\Telegram.exe
-[]
-
+	GitHub						<USER_APPDATA_LOCAL>\GitHubDesktop\GitHubDesktop.exe
+	Spotify						<USER_APPDATA>\Spotify\Spotify.exe
+	Telegram						<USER_APPDATA>\Telegram Desktop\Telegram.exe
 	Firefox Portable			S:\FirefoxPortable\FirefoxPortable.exe										HOME_DESKTOP

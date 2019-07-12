@@ -237,11 +237,6 @@ class MainConfig {
 		; Index private values by key.
 		privatesAry := reduceTableToColumn(privatesTable, "VALUE", "KEY")
 		
-		; Replace any system path tags in private items.
-		systemPathTags := this.getSystemPathTags()
-		For key,value in privatesAry
-			privatesAry[key] := replaceTags(value, systemPathTags)
-		
 		; DEBUG.popup("MainConfig.loadPrivates","Finish", "Filepath",filePath, "Table",privatesTable, "Indexed array",privatesAry)
 		return privatesAry
 	}
@@ -291,6 +286,7 @@ class MainConfig {
 			
 			path := replaceTags(path, pathTagsAry)
 			path := this.replacePrivateTags(path)
+			
 			pathsAry[key] := path ; make sure to store it back in the actual array
 		}
 		
@@ -301,18 +297,18 @@ class MainConfig {
 	getSystemPathTags() {
 		tagsAry := []
 		
-		tagsAry["PROGRAM_DATA"]     := A_AppDataCommon                        ; C:\ProgramData
-		tagsAry["USER_ROOT"]        := EnvGet("HOMEDRIVE") EnvGet("HOMEPATH") ; C:\Users\<UserName>
-		tagsAry["APPDATA_LOCAL"]    := EnvGet("LOCALAPPDATA")                 ; C:\Users\<UserName>\AppData\Local
-		tagsAry["TEMP"]             := A_Temp                                 ; C:\Users\<UserName>\AppData\Local\Temp
-		tagsAry["APPDATA"]          := A_AppData                              ; C:\Users\<UserName>\AppData\Roaming
-		tagsAry["START_MENU"]       := A_StartMenu                            ; C:\Users\<UserName>\AppData\Roaming\Microsoft\Windows\Start Menu
-		tagsAry["STARTUP"]          := A_Startup                              ; C:\Users\<UserName>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
-		tagsAry["DESKTOP"]          := A_Desktop                              ; C:\Users\<UserName>\Desktop
-		tagsAry["PROGRAM_FILES"]    := A_ProgramFiles                         ; C:\Program Files
-		tagsAry["PROGRAM_FILES_86"] := EnvGet("ProgramFiles(x86)")            ; C:\Program Files (x86)
-		tagsAry["WINDOWS"]          := A_WinDir                               ; C:\Windows
-		tagsAry["CMD"]              := A_ComSpec                              ; C:\Windows\system32\cmd.exe
+		tagsAry["PROGRAM_DATA"]       := A_AppDataCommon                        ; C:\ProgramData
+		tagsAry["USER_ROOT"]          := EnvGet("HOMEDRIVE") EnvGet("HOMEPATH") ; C:\Users\<UserName>
+		tagsAry["USER_APPDATA_LOCAL"] := EnvGet("LOCALAPPDATA")                 ; C:\Users\<UserName>\AppData\Local
+		tagsAry["USER_TEMP"]          := A_Temp                                 ; C:\Users\<UserName>\AppData\Local\Temp
+		tagsAry["USER_APPDATA"]       := A_AppData                              ; C:\Users\<UserName>\AppData\Roaming
+		tagsAry["USER_START_MENU"]    := A_StartMenu                            ; C:\Users\<UserName>\AppData\Roaming\Microsoft\Windows\Start Menu
+		tagsAry["USER_STARTUP"]       := A_Startup                              ; C:\Users\<UserName>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+		tagsAry["USER_DESKTOP"]       := A_Desktop                              ; C:\Users\<UserName>\Desktop
+		tagsAry["PROGRAM_FILES"]      := A_ProgramFiles                         ; C:\Program Files
+		tagsAry["PROGRAM_FILES_86"]   := EnvGet("ProgramFiles(x86)")            ; C:\Program Files (x86)
+		tagsAry["WINDOWS"]            := A_WinDir                               ; C:\Windows
+		tagsAry["CMD"]                := A_ComSpec                              ; C:\Windows\system32\cmd.exe
 		
 		return tagsAry
 	}

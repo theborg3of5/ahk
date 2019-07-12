@@ -2,7 +2,7 @@
 
 ; Specific folders
 !+a::openFolder("AHK_ROOT")
-!+d::openFolder("DOWNLOADS")
+!+d::openFolder("USER_DOWNLOADS")
 !+u::openFolder("USER_ROOT")
 
 ; Open folder from list

@@ -149,13 +149,13 @@
 
 { ; Folders and paths.
 	{ ; General
-		::pff::C:\Program Files\
-		::xpff::C:\Program Files (x86)\
+		:X:pff::sendFolderPath("PROGRAM_FILES")
+		:X:xpff::sendFolderPath("PROGRAM_FILES_86")
 		
 		:X:urf::sendFolderPath("USER_ROOT")
-		:X:dsf::sendFolderPath("USER_ROOT", "Desktop")
+		:X:dsf::sendFolderPath("USER_DESKTOP")
 		:X:desf::sendFolderPath("USER_ROOT", "Design")
-		:X:dlf::sendFolderPath("DOWNLOADS")
+		:X:dlf::sendFolderPath("USER_DOWNLOADS")
 		:X:devf::sendFolderPath("USER_DEV")
 		
 		:X:otmf::sendFolderPath("ONETASTIC_MACROS")

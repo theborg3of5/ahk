@@ -1,35 +1,36 @@
-(	NAME								ABBREV							PATH																													MACHINE
+(	NAME								ABBREV			PATH																													MACHINE
 	
 	# General
-	Downloads						dl									<DOWNLOADS>
+	Downloads						dl					<DOWNLOADS>
 [MACHINE.replaceWith(EPIC_LAPTOP)]
-	Design							des								<USER_ROOT>\Design																								EPIC_LAPTOP
-	Shortcuts						sc									<USER_ROOT>\Shortcuts																							EPIC_LAPTOP
-	Personal							pers								<EPIC_PERSONAL>																									EPIC_LAPTOP
-	Public							pub								<EPIC_PERSONAL>\Public																							EPIC_LAPTOP
-	QuickRef							qr									<USER_ROOT>\QuickRef																								EPIC_LAPTOP
+	Design							des				<USER_ROOT>\Design																								EPIC_LAPTOP
+	Shortcuts						sc					<USER_ROOT>\Shortcuts																							EPIC_LAPTOP
+	Personal							pers				<EPIC_PERSONAL>																									EPIC_LAPTOP
+	Public							pub				<EPIC_PERSONAL>\Public																							EPIC_LAPTOP
+	QuickRef							qr					<USER_ROOT>\QuickRef																								EPIC_LAPTOP
 []
 	
 	# System
-	Startup							start								<USER_STARTUP>
-	Pinned Shortcuts				ps									<USER_APPDATA>\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar
+	Startup							start				<USER_STARTUP>
+	Pinned Shortcuts				ps					<USER_APPDATA>\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar
 	
 	# Development
-	Onetastic Macros				ot									<ONETASTIC_MACROS>
+	Onetastic Macros				ot					<ONETASTIC_MACROS>
 	
 [MACHINE.replaceWith(EPIC_LAPTOP)]
 	# Epic
-	Dev								dev								<USER_DEV>
-	Templates						tp									<USER_DEV>\Templates
-	Transaction Diff Output		txdiff							<TX_DIFF_OUTPUT>
-	Compile							comp								<VB6_COMPILE>
-	Net Home							nh									<EPIC_NET_HOME>
-	NFS 3 Day						n3									<EPIC_NFS_3DAY>
-	NFS Ask							na									<EPIC_NFS_ASK>
-	S1 Source						s1									<EPIC_SOURCE_S1>
-	S2 Source						s2									<EPIC_SOURCE_S2>
-	EpicStudio Config				esc								<USER_APPDATA_LOCAL>\Epic Systems Corporation\EpicStudio
+	Dev								dev				<USER_DEV>
+	Templates						tp					<USER_DEV>\Templates
+	Transaction Diff Output		txdiff			<TX_DIFF_OUTPUT>
+	Compile							comp				<VB6_COMPILE>
+	Net Home							nh					<EPIC_NET_HOME>
+	NFS 3 Day						n3					<EPIC_NFS_3DAY>
+	NFS Ask							na					<EPIC_NFS_ASK>
+	S1 Source						s1					<EPIC_SOURCE_S1>
+	S2 Source						s2					<EPIC_SOURCE_S2>
+	EpicStudio Config				esc				<USER_APPDATA_LOCAL>\Epic Systems Corporation\EpicStudio
+	HSWeb TraceX Files			trace				<USER_TEMP>\<yyyy>-<MM>-<dd>
 	
 	# Admin
-	DBC Design						dbcd								<EPIC_DBC_DESIGN>
+	DBC Design						dbcd				<EPIC_DBC_DESIGN>
 []

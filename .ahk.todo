@@ -1,7 +1,5 @@
 # New Ideas
 	Should hotstrings file really just live in other scripts?
-	Add a folder for HSWeb trace file path
-		Lives in %TEMP% > YYYY-MM-DD folder
 	Consider adding a new level to MACHINE stuff - instead of sprinkling individual machines through the code, have two machine "types" (work and home) that are used in most cases
 		Could have hard-coded "types" per machine, or it could live in settings.ini instead
 		Current uses of machine stuff:

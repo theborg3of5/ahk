@@ -157,3 +157,16 @@ splitDateTime(timestamp) {
 	return d
 }
 
+replaceDateTimeTags(inString, dateTime := "") { ; dateTime defaults to A_Now (based on FormatTime's behavior)
+	outString := inString
+	
+	; All formats supported by FormatTime
+	formatsAry := ["d","dd","ddd","dddd","M","MM","MMM","MMMM","y","yy","yyyy","gg","h","hh","H","HH","m","mm","s","ss","t","tt","","Time","ShortDate","LongDate","YearMonth","YDay","YDay0","WDay","YWeek"]
+	
+	For _,format in formatsAry {
+		dateTimeBit := FormatTime(dateTime, format)
+		outString := replaceTag(outString, format, dateTimeBit)
+	}
+	
+	return outString
+}

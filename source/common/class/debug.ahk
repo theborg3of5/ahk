@@ -110,8 +110,8 @@ class DEBUG {
 	}
 	
 	;---------
-	; DESCRIPTION:    Wrapper for .popup that will run before MainConfig is initialized. See
-	;                 .popup for details and parameters.
+	; DESCRIPTION:    Same as .popup(), but will run before MainConfig is initialized. See
+	;                 .popup() for details and parameters.
 	;---------
 	popupEarly(params*) {
 		MsgBox, % this.buildDebugString(params*)

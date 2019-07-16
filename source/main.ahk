@@ -17,7 +17,6 @@ SetNumLockState,    AlwaysOn                  ; Force NumLock to always stay on.
 SetDefaultMouseSpeed, 0                       ; Fasted mouse speed for mouse commands (MouseMove in particular)
 SetMouseDelay, 0                              ; Smallest possible delay after mouse movements/clicks
 
-
 setCommonHotkeysType(HOTKEY_TYPE_Master)
 setUpTrayIcons("shellGreen.ico", "shellRed.ico", "AHK: Main Script")
 

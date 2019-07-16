@@ -49,7 +49,7 @@ class ProgramInfo {
    ; Debug info (used by the Debug class)
    debugName := "ProgramInfo"
    debugToString(debugBuilder) {
-      debugBuilder.addLine("Name"   , this.name)
-      debugBuilder.addLine("Path"   , this.path)
+      debugBuilder.addLine("Name", this.name)
+      debugBuilder.addLine("Path", this.path)
    }
 }

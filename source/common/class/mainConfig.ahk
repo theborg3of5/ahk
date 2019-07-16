@@ -34,7 +34,11 @@ class MainConfig {
 		this.paths    := this.loadPaths(pathsPath)
 		this.programs := this.loadPrograms(programsPath)
 		this.games    := this.loadGames(gamesPath)
-		; DEBUG.popupEarly("MainConfig","Loaded all", "Settings",this.settings, "Windows",this.windows, "Paths",this.paths, "Programs",this.programs, "Games",this.games)
+		; DEBUG.popupEarly("MainConfig","Loaded all", "Settings",this.settings)
+		; DEBUG.popupEarly("MainConfig","Loaded all", "Windows",this.windows)
+		; DEBUG.popupEarly("MainConfig","Loaded all", "Paths",this.paths)
+		; DEBUG.popupEarly("MainConfig","Loaded all", "Programs",this.programs)
+		; DEBUG.popupEarly("MainConfig","Loaded all", "Games",this.games)
 		
 		this.initDone := true
 	}

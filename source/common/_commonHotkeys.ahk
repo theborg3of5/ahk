@@ -37,21 +37,34 @@ return
 #If (scriptHotkeyType = HOTKEY_TYPE_SubMaster) || (scriptHotkeyType = HOTKEY_TYPE_Standalone)
 	; Suspend hotkey (with pass-thru so it applies to all scripts)
 	~!#x::
+		Suspend, Permit ; Make sure this can run while we're suspended (so we can unsuspend)
+		
+		; Pre-suspend hook (implemented by calling script)
+		if(!A_IsSuspended) { ; Not suspended, so about to be
+			beforeSuspendFunction := "beforeSuspend"
+			if(isFunc(beforeSuspendFunction))
+				%beforeSuspendFunction%()
+		}
+		
 		Suspend, Toggle
 		updateTrayIcon()
 		
 		; Timers
-		setTimerRunning("MainLoop", !A_IsSuspended)
-	return
-	setTimerRunning(timerLabel, shouldRun := 1) {
-		if(!timerLabel || !IsLabel(timerLabel))
-			return
+		mainLoopLabel := "MainLoop"
+		if(IsLabel(mainLoopLabel)) {
+			if(A_IsSuspended)
+				SetTimer, % mainLoopLabel, Off
+			else
+				SetTimer, % mainLoopLabel, On
+		}
 		
-		if(shouldRun)
-			SetTimer, %timerLabel%, On
-		else
-			SetTimer, %timerLabel%, Off
-	}
+		; Post-unsuspend hook (implemented by calling script)
+		if(!A_IsSuspended) { ; Just unsuspended
+			afterUnsuspendFunction := "afterUnsuspend"
+			if(isFunc(afterUnsuspendFunction))
+				%afterUnsuspendFunction%()
+		}
+	return
 #If
 
 

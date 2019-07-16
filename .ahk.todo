@@ -1,4 +1,9 @@
 # New Ideas
+	Common hotkeys: can we use new preSuspend/postUnsuspend hooks to consolidate suspend logic somewhat?
+		Still have to have separate actual hotkeys (need the pass-through for non-main scripts, and no pass-through for main script), but could at least call into a single function, maybe?
+	Timer: if it's not going to pause on suspend, should we suppress suspending entirely?
+		Option 1: make its single hotkey still work on suspend
+		Option 2: make suspend hotkey optional with some global variable (like setScriptConfirmQuit() in use now)
 	Should hotstrings file really just live in other scripts?
 	Consider adding a new level to MACHINE stuff - instead of sprinkling individual machines through the code, have two machine "types" (work and home) that are used in most cases
 		Could have hard-coded "types" per machine, or it could live in settings.ini instead

@@ -81,3 +81,16 @@ runStandaloneScripts() {
 		; Run(standaloneFolder "psxEmulatorController\psxEmulatorController.ahk")
 	}
 }
+
+; Before/after suspend hooks to allow * Lock keys to be hotkeys or ignored while script is active,
+; but back to normal when script is suspended.
+beforeSuspend() {
+	SetCapsLockState,   Off
+	SetScrollLockState, Off
+	SetNumLockState,    On
+}
+afterUnsuspend() {
+	SetCapsLockState,   AlwaysOff
+	SetScrollLockState, AlwaysOff
+	SetNumLockState,    AlwaysOn
+}

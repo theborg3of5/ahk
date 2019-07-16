@@ -8,65 +8,61 @@ global scriptHotkeyType, scriptStateIcons, scriptConfirmQuit
 	ExitApp
 return
 
+; Suspend + update tray icon, pause special timers, call pre-suspend/post-unsuspend hooks
 #If scriptHotkeyType = HOTKEY_TYPE_Master
-	; Suspend hotkey, change tray icon too.
 	!#x::
-		Suspend, Toggle
-		updateTrayIcon()
-		
-		; Allow caps lock/scroll lock to be used normally while the script is suspended.
-		if(A_IsSuspended) {
-			SetCapsLockState,   Off
-			SetScrollLockState, Off
-			SetNumLockState,    On
-		} else {
-			SetCapsLockState,   AlwaysOff
-			SetScrollLockState, AlwaysOff
-			SetNumLockState,    AlwaysOn
-		}
+		Suspend, Permit
+		suspendScript()
 	return
+#If (scriptHotkeyType = HOTKEY_TYPE_SubMaster) || (scriptHotkeyType = HOTKEY_TYPE_Standalone)
+	~!#x:: ; Pass-through needed on this one so that all non-master scripts can get it (and then master catches it last).
+		Suspend, Permit
+		suspendScript()
+	return
+#If
 
-	; Hotkey for reloading entire script.
+;---------
+; DESCRIPTION:    Suspend the script, updating the tray icon, pausing a timer with a special name
+;                 and calling pre-suspend/post-unsuspend hooks.
+; NOTES:          - Any timers for the label called "MainLoop" will be disabled on suspend and re-enabled on unsuspend.
+;                 - If a function named "beforeSuspend" exists, we will call it before we suspend the script.
+;                 - If a function named "afterUnsuspend" exists, we will call it after we unsuspend the script.
+;---------
+suspendScript() {
+	; Pre-suspend hook (implemented by calling script)
+	if(!A_IsSuspended) { ; Not suspended, so about to be
+		beforeSuspendFunction := "beforeSuspend"
+		if(isFunc(beforeSuspendFunction))
+			%beforeSuspendFunction%()
+	}
+	
+	Suspend, Toggle
+	updateTrayIcon()
+	
+	; Timers
+	mainLoopLabel := "MainLoop"
+	if(IsLabel(mainLoopLabel)) {
+		if(A_IsSuspended)
+			SetTimer, % mainLoopLabel, Off
+		else
+			SetTimer, % mainLoopLabel, On
+	}
+	
+	; Post-unsuspend hook (implemented by calling script)
+	if(!A_IsSuspended) { ; Just unsuspended
+		afterUnsuspendFunction := "afterUnsuspend"
+		if(isFunc(afterUnsuspendFunction))
+			%afterUnsuspendFunction%()
+	}
+}
+
+; Reload
+#If scriptHotkeyType = HOTKEY_TYPE_Master ; Master only, it replaces the sub scripts by running them again.
 	!+r::
 		Suspend, Permit
 		Reload
 	return
 #If
-
-; All standalone - both those that main script runs, and one-off scripts
-#If (scriptHotkeyType = HOTKEY_TYPE_SubMaster) || (scriptHotkeyType = HOTKEY_TYPE_Standalone)
-	; Suspend hotkey (with pass-thru so it applies to all scripts)
-	~!#x::
-		Suspend, Permit ; Make sure this can run while we're suspended (so we can unsuspend)
-		
-		; Pre-suspend hook (implemented by calling script)
-		if(!A_IsSuspended) { ; Not suspended, so about to be
-			beforeSuspendFunction := "beforeSuspend"
-			if(isFunc(beforeSuspendFunction))
-				%beforeSuspendFunction%()
-		}
-		
-		Suspend, Toggle
-		updateTrayIcon()
-		
-		; Timers
-		mainLoopLabel := "MainLoop"
-		if(IsLabel(mainLoopLabel)) {
-			if(A_IsSuspended)
-				SetTimer, % mainLoopLabel, Off
-			else
-				SetTimer, % mainLoopLabel, On
-		}
-		
-		; Post-unsuspend hook (implemented by calling script)
-		if(!A_IsSuspended) { ; Just unsuspended
-			afterUnsuspendFunction := "afterUnsuspend"
-			if(isFunc(afterUnsuspendFunction))
-				%afterUnsuspendFunction%()
-		}
-	return
-#If
-
 
 ; One-off scripts
 #If scriptHotkeyType = HOTKEY_TYPE_Standalone

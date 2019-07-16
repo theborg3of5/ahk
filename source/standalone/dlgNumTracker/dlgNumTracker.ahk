@@ -8,7 +8,7 @@ scriptTitle := "AHK: DLG Number Tracker"
 setUpTrayIcons("hash.ico", "redHash.ico", scriptTitle)
 
 global currDLGId
-SetTimer, MainLoop, 10000 ; 10s, timer toggled by commonHotkeys' suspend hotkey.
+SetTimer, MainLoop, 5000 ; 5s, timer toggled by commonHotkeys' suspend hotkey.
 SetTitleMatchMode, 2 ; Partial title matching.
 
 

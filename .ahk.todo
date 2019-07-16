@@ -1,5 +1,4 @@
 # New Ideas
-	TortoiseSVN DLG filler - can we fill in the field directly instead of sending it via typing/pasting?
 	Should hotstrings file really just live in other scripts?
 	Consider adding a new level to MACHINE stuff - instead of sprinkling individual machines through the code, have two machine "types" (work and home) that are used in most cases
 		Could have hard-coded "types" per machine, or it could live in settings.ini instead

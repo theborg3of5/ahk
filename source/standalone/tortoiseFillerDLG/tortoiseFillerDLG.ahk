@@ -6,27 +6,44 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 setCommonHotkeysType(HOTKEY_TYPE_SubMaster)
 setUpTrayIcons("turtle.ico", "turtleRed.ico", "AHK: TortoiseSVN DLG ID Filler")
 
-SetTimer, MainLoop, 5000 ; 5s, timer toggled by commonHotkeys' suspend hotkey.
 SetTitleMatchMode, RegEx
+global tortoiseTitleRegEx := "O)^C:\\EpicSource\\\d\.\d\\DLG-(\w+)[-\\].* - Commit - TortoiseSVN" ; O option to get match object instead of pseudo-array
+global dlgFieldId     := "Edit2"
+global messageFieldId := "Scintilla1"
 
+SetTimer, MainLoop, -100 ; Run once, timer toggled by commonHotkeys' suspend hotkey.
 
 MainLoop:
-	WinWaitActive, ^C:\\EpicSource\\\d\.\d\\DLG-(\w+)[-\\].* - Commit - TortoiseSVN
-	DLG := ControlGetText("Edit2")
-	if(DLG = "") {
-		title := WinGetActiveTitle()
-		RegExMatch(title, "^C:\\EpicSource\\\d\.\d\\DLG-(\w+)[-\\].* - Commit - TortoiseSVN", DLG)
-		
-		dlgFirstChar := subStr(DLG1, 1, 1)
-		if(isAlpha(dlgFirstChar)) {
-			StringUpper, dlgFirstChar, dlgFirstChar
-			ControlSend, Edit2, %dlgFirstChar%
-			DLG1 := subStr(DLG1, 2)
-		}
-		
-		ControlSend, Edit2, %DLG1%
-		Send, {Tab 2}
-	}
+	WinWaitActive, % tortoiseTitleRegEx
+	if(A_IsSuspended)
+		return
+	
+	addDLGToCommitWindow()
+	
+	WinWaitNotActive, % tortoiseTitleRegEx ; Don't do it again until we leave and return to the window.
+	if(A_IsSuspended)
+		return
+	
+	SetTimer, MainLoop, -100 ; Run again
 return
+
+addDLGToCommitWindow() {
+	if(ControlGetText(dlgFieldId) != "") ; If there's already something in the field, leave it be.
+		return
+		
+	RegExMatch(WinGetActiveTitle(), tortoiseTitleRegEx, matchObj)
+	rawDLGId := matchObj.value(1) ; First subpattern should be DLG ID that we're interested in.
+	if(rawDLGId = "")
+		return
+	
+	; Capitalize any letters in the DLG ID
+	dlgId := ""
+	Loop, Parse, rawDLGId
+		dlgId .= StringUpper(A_LoopField)
+	; DEBUG.popup("rawDLGId",rawDLGId, "dlgId",dlgId)
+	
+	ControlSetText, % dlgFieldId, % dlgId, A ; Plug in the DLG ID
+	ControlFocus, % messageFieldId, A ; Focus the message field
+}
 
 #Include <commonHotkeys>

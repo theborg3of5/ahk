@@ -10,7 +10,7 @@
 #If
 
 ; HSWeb debugging - Hyperspace main window or IE
-#If Hyperspace.isAnyVersionActive() || WinActive("Hyperspace ahk_exe IEXPLORE.EXE")
+#If Hyperspace.isAnyVersionActive() || WinActive("Hyperspace ahk_exe IEXPLORE.EXE") || WinActive("Hyperspace ahk_exe chrome.exe")
 	^!d::Send, % MainConfig.private["EPIC_HSWEB_CONSOLE_HOTKEY"]
 #If
 

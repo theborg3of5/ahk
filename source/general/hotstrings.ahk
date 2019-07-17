@@ -94,6 +94,8 @@
 		::inf'n::information
 		::info'n::information
 		
+		:?:sync'ly::synchronously
+		
 		::.iai::...I'll allow it
 		::iai::I'll allow it
 		::asig::and so it goes, and so it goes, and you're the only one who knows...

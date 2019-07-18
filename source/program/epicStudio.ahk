@@ -6,8 +6,9 @@
 	!3::!6 ; Call Hierarchy
 	!4::!8 ; Item expert
 	
-	; Delete line hotkey
+	; Line operations
 	$^d::EpicStudio.deleteLinePreservingClipboard()
+	^l::EpicStudio.duplicateLine()
 	
 	; Copy current code location
 	!c:: EpicStudio.copyCleanCodeLocation()  ; Cleaned, just the actual location
@@ -41,6 +42,15 @@ class EpicStudio {
 		ClipWait, 2 ; Wait for 2 seconds for clipboard to be overwritten
 		
 		clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
+	}
+	
+	
+	duplicateLine() {
+		Send, {End}   ; If anything is selected, deselect it
+		Send, ^c      ; Copy the whole line (since nothing is selected), including the newline at the end
+		Send, {Home}  ; Get to start of line so the newline comes before the existing line
+		Send, ^v      ; Paste the duplicate line
+		
 	}
 	
 	;---------

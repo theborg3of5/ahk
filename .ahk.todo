@@ -1,4 +1,6 @@
 # New Ideas
+	Consider some sort of environment-selector-driven way (standalone script, probably?) to write the registry key that makes local HS point to my local webserver
+		https://wiki.epic.com/main/Foundations/Training/WTC/Reference/Hyperspace_Web_Programming/Working_with_Hyperspace/Hosting_Web_Activities
 	Timer: if it's not going to pause on suspend, should we suppress suspending entirely?
 		Option 1: make its single hotkey still work on suspend
 		Option 2: make suspend hotkey optional with some global variable (like setScriptConfirmQuit() in use now)

@@ -63,6 +63,7 @@ runStandaloneScripts()
 #Include sumatraPDF.ahk
 #Include telegram.ahk
 #Include vb6.ahk
+#Include visualStudio.ahk
 #Include wilma.ahk
 #Include word.ahk
 #Include yEd.ahk

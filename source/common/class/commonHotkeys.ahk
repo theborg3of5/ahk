@@ -76,23 +76,23 @@ class CommonHotkeys {
 		; doEmergencyExit  := ObjBindMethod(CommonHotkeys, "doEmergencyExit")
 		; doToggleSuspend  := ObjBindMethod(CommonHotkeys, "doToggleSuspend")
 		
-		; Things that should work even when the script is suspended (using CommonHotkeys_* functions outside of the class, as we can't make a BoundFunc object run while suspended)
+		; Emergency exit
 		Hotkey, ~^+!#r, CommonHotkeys_doEmergencyExit
+		
+		; Suspend
 		if(CommonHotkeys.IsMaster)
 			Hotkey, !#x, CommonHotkeys_doToggleSuspend ; Master script catches it to prevent it falling through
 		else if(CommonHotkeys.IsSub || CommonHotkeys.IsStandalone)
 			Hotkey, ~!#x, CommonHotkeys_doToggleSuspend ; Other scripts let it fall through so all other scripts can react
 		
-		; Hotkeys that only run when we're not suspended (so we can use BoundFunc objects to reference functions inside this class).
-		doExit   := ObjBindMethod(CommonHotkeys, "doExit")
-		doReload := ObjBindMethod(CommonHotkeys, "doReload")
-		; areEditingScript := ObjBindMethod(CommonHotkeys, "areEditingScript")
+		; Reload
 		if(CommonHotkeys.IsMaster)
-			Hotkey, !+r, % doReload ; Master only, it replaces the sub scripts by running them again.
+			Hotkey, !+r, CommonHotkeys_doReload ; Master only, it replaces the sub scripts by running them again.
 		if(CommonHotkeys.IsStandalone) {
-			Hotkey, !+x, % doExit
+			Hotkey, !+x, CommonHotkeys_doExit
+			; areEditingScript := ObjBindMethod(CommonHotkeys, "areEditingScript")
 			; Hotkey, If, CommonHotkeys.areEditingScript
-			; Hotkey, ~^s, % doReload()
+			; Hotkey, ~^s, CommonHotkeys_doReload
 			; Hotkey, If ; Clear condition
 		}
 	}
@@ -167,13 +167,13 @@ CommonHotkeys_doEmergencyExit() {
 	Suspend, Permit
 	CommonHotkeys.doEmergencyExit()
 }
+CommonHotkeys_doExit() {
+	CommonHotkeys.doExit()
+}
+CommonHotkeys_doReload() {
+	CommonHotkeys.doReload()
+}
 CommonHotkeys_doToggleSuspend() {
 	Suspend, Permit
 	CommonHotkeys.doToggleSuspend()
 }
-; CommonHotkeys_doExit() {
-	; CommonHotkeys.doExit()
-; }
-; CommonHotkeys_doReload() {
-	; CommonHotkeys.doReload()
-; }

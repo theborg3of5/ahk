@@ -30,6 +30,10 @@ class EpicStudio {
 ; ==============================
 ; == Public ====================
 ; ==============================
+	; Debug window controls
+	static Debug_OtherProcessButton := "WindowsForms10.BUTTON.app.0.141b42a_r9_ad11" ; "Other Process" radio button
+	static Debug_OtherProcessField  := "Edit1" ; "Other Process" search field
+	
 	;---------
 	; DESCRIPTION:    Delete the current line in EpicStudio, but preserve the clipboard (delete line
 	;                 hotkey puts the line on the clipboard)
@@ -136,9 +140,6 @@ class EpicStudio {
 	;  searchString (I,REQ) - String to automatically search for in the attach process popup
 	;---------
 	runDebug(searchString) {
-		; Always send F5, even in debug mode - continue.
-		Send, {F5}
-		
 		; Don't try and debug again if ES is already doing so.
 		if(EpicStudio.isDebugging())
 			return
@@ -147,19 +148,18 @@ class EpicStudio {
 		if(ErrorLevel)
 			return
 		
-		currFilter := ControlGet("Line", 1, "Edit1", "A")
+		currFilter := ControlGet("Line", 1, EpicStudio.Debug_OtherProcessField, "A")
 		if(currFilter) {
-			ControlFocus, Edit1, A
+			ControlFocus, % EpicStudio.Debug_OtherProcessField, A
 			return ; There's already something plugged into the field, so just put the focus there in case they want to change it.
 		}
 		
-		; Pick the radio button for "Other existing process:" and pick it.
-		otherProcessRadioButtonClass := "WindowsForms10.BUTTON.app.0.2bf8098_r9_ad11"
-		ControlFocus, %otherProcessRadioButtonClass%, A
-		ControlSend, %otherProcessRadioButtonClass%, {Space}, A
+		; Pick the radio button for "Other existing process:".
+		ControlFocus, % EpicStudio.Debug_OtherProcessButton, A
+		ControlSend, % EpicStudio.Debug_OtherProcessButton, {Space}, A
 		
 		; Focus the filter field and send what we want to send.
-		ControlFocus, Edit1, A
+		ControlFocus, % EpicStudio.Debug_OtherProcessField, A
 		Send, % searchString
 		Send, {Enter}{Down}
 	}

@@ -1,9 +1,23 @@
 # New Ideas
 	Consider some sort of environment-selector-driven way (standalone script, probably?) to write the registry key that makes local HS point to my local webserver
 		https://wiki.epic.com/main/Foundations/Training/WTC/Reference/Hyperspace_Web_Programming/Working_with_Hyperspace/Hosting_Web_Activities
-	Timer: if it's not going to pause on suspend, should we suppress suspending entirely?
-		Option 1: make its single hotkey still work on suspend
-		Option 2: make suspend hotkey optional with some global variable (like setScriptConfirmQuit() in use now)
+		Also some way to clear it - special "environment" choice?
+	New class to encapsulate common hotkeys stuff (including suspended icon switching)
+		Common hotkeys
+			Should we just apply these dynamically, with Hotkey command?
+		Script types
+			Corresponding constants
+			Maybe only let this be set via constructor, only a getter for the property?
+		Whether to confirm before exiting
+		New: toggle for whether to have suspend hotkey
+		Icon state handling
+			Actually, maybe split this into yet another separate class?
+				Setup in header could include:
+					trayInfo := new ScriptTrayInfo(hoverText, icon, suspendedIcon) ; For vimBindings, omit icon/suspendedIcon and call tray.setIconStates(states) [or similar name] instead
+					global commonKeys := new CommonHotkeys(scriptType, tray) ; Applies hotkeys, points them to code which includes tray.updateTrayIcon()
+					commonKeys.confirmExit := true ; Togglable on the fly, will add/remove !+x hotkey when it changes
+					commonKeys.noSuspendHotkey := true ; To suppress suspend hotkey
+		Use case: make suspend hotkey optional for timer, since it doesn't really respect it anyway
 	Consider adding a new level to MACHINE stuff - instead of sprinkling individual machines through the code, have two machine "types" (work and home) that are used in most cases
 		Could have hard-coded "types" per machine, or it could live in settings.ini instead
 			If we go with something independent - could name it something like "context" - work vs. home

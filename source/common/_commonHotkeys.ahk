@@ -1,6 +1,9 @@
 ﻿; === Hotkeys that all scripts should use. === ;
 
-global scriptHotkeyType, scriptStateIcons, scriptConfirmQuit
+; Globals used here are defined in _setup.ahk:
+;   scriptHotkeyType
+;   scriptStateIcons
+;   scriptConfirmQuit
 
 ; Emergency exit
 ~^+!#r::

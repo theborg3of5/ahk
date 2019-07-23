@@ -1,8 +1,6 @@
 ﻿; Functions related to setting up a script.
 
-; Sets a global that's read by _commonHotkeys.ahk to decide what kind of 
-; common hotkeys (pause, close, reload, etc.) the script should get.
-; type - the type of hotkeys, as described by a HOTKEY_TYPE_* constant (located in _constants.ahk)
+global scriptHotkeyType, scriptStateIcons, scriptConfirmQuit
 
 ;---------
 ; DESCRIPTION:    Defines which kind of script this is, in terms of which common hotkeys it should
@@ -74,12 +72,14 @@ updateTrayIcon() {
 	; DEBUG.popup("_setup","updateTrayIcon", "Icon states array",scriptStateIcons)
 	
 	newIcon := evalStateIcon(scriptStateIcons)
+	if(!newIcon)
+		return
+		
+	iconPath := A_WorkingDir "\" newIcon
+	if(!FileExist(iconPath))
+		return
 	
-	if(newIcon) {
-		iconPath := A_WorkingDir "\" newIcon
-		if(iconPath && FileExist(iconPath))
-			Menu, Tray, Icon, % iconPath
-	}
+	Menu, Tray, Icon, % iconPath
 }
 
 ;---------

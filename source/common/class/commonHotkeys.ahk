@@ -1,4 +1,7 @@
-/* Class for keeping track of certain information about a script
+/* Class for applying certain common hotkeys to a script, based on the type of script and certain flags.
+	
+	Example usage:
+		CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone, trayInfo) ; trayInfo is the instance of ScriptTrayInfo defined on some line above this.
 */
 
 class CommonHotkeys {
@@ -11,6 +14,14 @@ class CommonHotkeys {
 	static ScriptType_SubMaster  := 2 ; Standalone scripts that the master script starts and that run alongside the master script
 	static ScriptType_Standalone := 3 ; One-off scripts, not connected to master script
 	
+	;---------
+	; DESCRIPTION:    Set up the common hotkeys.
+	; PARAMETERS:
+	;  scriptType (I,REQ) - The "type" of script, from CommonHotkeys.ScriptType_*. This determines
+	;                       which "set" of hotkeys are applied.
+	;  trayInfo   (I,OPT) - The script's ScriptTrayInfo instance, used to swich out icons when using
+	;                       the suspend hotkey (!#x).
+	;---------
 	Init(scriptType, trayInfo := "") {
 		CommonHotkeys._scriptType := scriptType
 		CommonHotkeys._trayInfo   := trayInfo
@@ -18,7 +29,10 @@ class CommonHotkeys {
 		CommonHotkeys.applyHotkeys()
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Determines whether we will prompt the user to confirm exiting with the common
+	;                 exit hotkey (!+x).
+	;---------
 	ConfirmExit {
 		get {
 			return CommonHotkeys._confirmExit
@@ -27,6 +41,10 @@ class CommonHotkeys {
 			CommonHotkeys._confirmExit := value
 		}
 	}
+	;---------
+	; DESCRIPTION:    Determines whether the script respects the common suspend hotkey (!#x) or not.
+	; SIDE EFFECTS:   Will actually turn the hotkey on or off depending on the value.
+	;---------
 	NoSuspend {
 		get {
 			return CommonHotkeys._noSuspend
@@ -43,7 +61,11 @@ class CommonHotkeys {
 		}
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Wrappers for checking which "type" the script is. These correspond to
+	;                 CommonHotkeys.ScriptType_*.
+	; RETURNS:        true if the script matches the type in question, false otherwise.
+	;---------
 	IsMaster {
 		get {
 			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Master)
@@ -69,7 +91,9 @@ class CommonHotkeys {
 	static _confirmExit := false ; Whether to confirm before exiting
 	static _noSuspend   := false ; Whether the suspend hotkey is suppressed
 	
-	
+	;---------
+	; DESCRIPTION:    Apply the basic "set" of hotkeys matching the script's type.
+	;---------
 	applyHotkeys() {
 		; Exit
 		Hotkey, ~^+!#r, CommonHotkeys_doEmergencyExit
@@ -101,14 +125,25 @@ class CommonHotkeys {
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    Helper function used to "block" a hotkey from falling through. Generally used
+	;                 by the master script to prevent certain hotkeys used by standalone scripts
+	;                 from falling through, if there are no standalone scripts running.
+	;---------
 	doBlock() {
 		return
 	}
 	
+	;---------
+	; DESCRIPTION:    Exit the script immediately, doing no additional checks.
+	;---------
 	doEmergencyExit() {
 		ExitApp
 	}
 	
+	;---------
+	; DESCRIPTION:    Exit the script, confirming with the user if the ConfirmExit flag is set to true.
+	;---------
 	doExit() {
 		; Confirm exiting if that's turned on.
 		if(CommonHotkeys._confirmExit) {
@@ -119,10 +154,12 @@ class CommonHotkeys {
 		ExitApp
 	}
 	
+	;---------
+	; DESCRIPTION:    Reload the script.
+	;---------
 	doReload() {
 		Reload
 	}
-	
 	
 	;---------
 	; DESCRIPTION:    Suspend the script, updating the tray icon, pausing a timer with a special name
@@ -159,6 +196,11 @@ class CommonHotkeys {
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    Check whether we're currently editing the current script in Notepad++.
+	; RETURNS:        true if the script is currently open in an active Notepad++ window,
+	;                 false otherwise.
+	;---------
 	areEditingThisScript() {
 		if(!WinActive("ahk_class Notepad++"))
 			return false
@@ -166,6 +208,10 @@ class CommonHotkeys {
 		return stringContains(WinGetActiveTitle(), A_ScriptFullPath)
 	}
 	
+	;---------
+	; DESCRIPTION:    Check whether there are any standalone (or test) scripts running.
+	; RETURNS:        true if there are no standalone/test scripts running, false if there are.
+	;---------
 	noStandaloneScriptsRunning() {
 		origDetectSetting := setDetectHiddenWindows("On")
 		
@@ -176,11 +222,15 @@ class CommonHotkeys {
 		; DEBUG.popup("standaloneWinId",standaloneWinId, "testWinId",testWinId, "(standaloneWinId || testWinId)",(standaloneWinId || testWinId))
 		return !(standaloneWinId || testWinId)
 	}
-	
-	
-	
 }
 
+;---------
+; DESCRIPTION:    Wrappers for CommonHotkeys.* functions that we can point hotkeys to directly.
+; NOTES:          We can technically point to the CommonHotkeys.* functions directly using
+;                 ObjBindMethod(), but that doesn't work with Suspend, Permit (to allow the hotkey
+;                 to work when the script is suspended). Some of these require that functionality,
+;                 so they're all out here for consistency's sake.
+;---------
 CommonHotkeys_doEmergencyExit() {
 	Suspend, Permit
 	CommonHotkeys.doEmergencyExit()

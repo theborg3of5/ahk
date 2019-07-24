@@ -21,7 +21,14 @@ SetDefaultMouseSpeed, 0                       ; Fasted mouse speed for mouse com
 SetMouseDelay, 0                              ; Smallest possible delay after mouse movements/clicks
 
 ; Sub scripts. Must be first to execute so they can spin off and be on their own.
-runSubScripts()
+subFolder := A_ScriptDir "\sub\"
+Run(subFolder "vimBindings\vimBindings.ahk")
+Run(subFolder "windowMoverSizer\windowMoverSizer.ahk")
+if(MainConfig.machineIsEpicLaptop) { ; Not needed except on Epic machine.
+	Run(subFolder "killUAC\killUAC.ahk")
+	Run(subFolder "dlgNumTracker\dlgNumTracker.ahk")
+	Run(subFolder "tortoiseFillerDLG\tortoiseFillerDLG.ahk")
+}
 
 ; === Include other scripts ===
 #Include %A_ScriptDir%\general\ ; General hotkeys.
@@ -67,18 +74,7 @@ runSubScripts()
 #Include word.ahk
 #Include yEd.ahk
 
-runSubScripts() {
-	subFolder := A_ScriptDir "\sub\"
-	Run(subFolder "vimBindings\vimBindings.ahk")
-	Run(subFolder "windowMoverSizer\windowMoverSizer.ahk")
-	if(MainConfig.machineIsEpicLaptop) { ; Not needed except on Epic machine.
-		Run(subFolder "killUAC\killUAC.ahk")
-		Run(subFolder "dlgNumTracker\dlgNumTracker.ahk")
-		Run(subFolder "tortoiseFillerDLG\tortoiseFillerDLG.ahk")
-	}
-}
-
-; Before/after suspend hooks to allow * Lock keys to be hotkeys or ignored while script is active,
+; Before/after suspend hooks to allow *Lock keys to be hotkeys or ignored while script is active,
 ; but back to normal when script is suspended.
 beforeSuspend() {
 	SetCapsLockState,   Off

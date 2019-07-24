@@ -18,6 +18,7 @@
 	#Include XInput.ahk
 
 #Include %A_LineFile%\..\class
+	#Include commonHotkeys.ahk
 	#Include debug.ahk
 	#Include duration.ahk
 	#Include epicRecord.ahk
@@ -27,6 +28,7 @@
 	#Include mainConfig.ahk
 	#Include mousePosition.ahk
 	#Include programInfo.ahk
+	#Include scriptTrayInfo.ahk
 	#Include selector.ahk
 	#Include tableList.ahk
 	#Include toast.ahk

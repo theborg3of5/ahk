@@ -24,9 +24,9 @@ class ScriptTrayInfo {
 			Menu, Tray, Icon, , , 1
 		
 		; Build states array from given icons
-		this.iconStatesAry := []
-		this.iconStatesAry["A_IsSuspended", 0] := normalIcon
-		this.iconStatesAry["A_IsSuspended", 1] := suspendedIcon
+		this._iconStates := []
+		this._iconStates["A_IsSuspended", 0] := normalIcon
+		this._iconStates["A_IsSuspended", 1] := suspendedIcon
 		
 		this.updateTrayIcon()
 	}
@@ -43,7 +43,7 @@ class ScriptTrayInfo {
 	;                 won't change to the default suspended icon when the script is suspended.
 	;---------
 	setIconStates(statesAry) {
-		this.iconStatesAry := statesAry
+		this._iconStates := statesAry
 		
 		this.updateTrayIcon()
 	}
@@ -54,9 +54,9 @@ class ScriptTrayInfo {
 	; SIDE EFFECTS:   Potentially update the script's tray icon.
 	;---------
 	updateTrayIcon() {
-		; DEBUG.popup("_setup","updateTrayIcon", "Icon states array",this.iconStatesAry)
+		; DEBUG.popup("_setup","updateTrayIcon", "Icon states array",this._iconStates)
 		
-		newIcon := this.getIconForCurrentState(this.iconStatesAry)
+		newIcon := this.getIconForCurrentState(this._iconStates)
 		if(!newIcon)
 			return
 			
@@ -71,7 +71,7 @@ class ScriptTrayInfo {
 ; ==============================
 ; == Private ===================
 ; ==============================
-	iconStatesAry := []
+	_iconStates := []
 
 	;---------
 	; DESCRIPTION:    Drill down into the given array and determine (based on the states of the
@@ -105,7 +105,7 @@ class ScriptTrayInfo {
 			return this.getIconForCurrentState(states[%varName%])
 		}
 		
-		; Shouldn't happen if the this.iconStatesAry array is comprehensive.
+		; Shouldn't happen if the this._iconStates array is comprehensive.
 		return "" ; If we get to a state where there's no matching icon, just return "".
 	}
 }

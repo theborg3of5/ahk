@@ -3,7 +3,7 @@
 #PgDn::Send {Volume_Down 5}
 
 ; Toggle Mute.
-#Enter::VA_SetMasterMute(!VA_GetMasterMute())
+#Enter::SoundSet, +1, , mute
 
 ; Change the media player that media keys will deal with.
 ^Volume_Mute::

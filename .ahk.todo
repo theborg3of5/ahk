@@ -1,9 +1,8 @@
 # New Ideas
-	Do we really need the VA library for volume stuff, or can we just use the SoundSet command?
-		https://www.autohotkey.com/docs/commands/SoundSet.htm
+	Remove VA library once I'm sure new mute logic works correctly at home, too
 	Consider some sort of environment-selector-driven way (standalone script, probably?) to write the registry key that makes local HS point to my local webserver
 		https://wiki.epic.com/main/Foundations/Training/WTC/Reference/Hyperspace_Web_Programming/Working_with_Hyperspace/Hosting_Web_Activities
-		Also some way to clear it - special "environment" choice?
+		Also some way to clear it - extra command line parameter, or maybe just a separate script?
 	Should we unify the "main" versus "master" terminology?
 		"Master" is probably preferable - so master.ahk, masterConfig.ahk, MasterConfig.*, etc.
 		Possibly rename "_SubMaster" constant to just use "Sub" like the folder, too?

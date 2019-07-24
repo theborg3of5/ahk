@@ -1,4 +1,6 @@
 # New Ideas
+	Do we really need the VA library for volume stuff, or can we just use the SoundSet command?
+		https://www.autohotkey.com/docs/commands/SoundSet.htm
 	Consider some sort of environment-selector-driven way (standalone script, probably?) to write the registry key that makes local HS point to my local webserver
 		https://wiki.epic.com/main/Foundations/Training/WTC/Reference/Hyperspace_Web_Programming/Working_with_Hyperspace/Hosting_Web_Activities
 		Also some way to clear it - special "environment" choice?

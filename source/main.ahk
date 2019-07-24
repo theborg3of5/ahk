@@ -20,9 +20,8 @@ SetMouseDelay, 0                              ; Smallest possible delay after mo
 setCommonHotkeysType(HOTKEY_TYPE_Master)
 setUpTrayIcons("shellGreen.ico", "shellRed.ico", "AHK: Main Script")
 
-
-; Standalone scripts. Must be first to execute so they can spin off and be on their own.
-runStandaloneScripts()
+; Sub scripts. Must be first to execute so they can spin off and be on their own.
+runSubScripts()
 
 ; === Include other scripts ===
 #Include %A_ScriptDir%\general\ ; General hotkeys.
@@ -68,18 +67,16 @@ runStandaloneScripts()
 #Include word.ahk
 #Include yEd.ahk
 
-#Include <commonHotkeys> ; Common hotkeys - should last so it overrides anything else.
+; #Include <commonHotkeys> ; Common hotkeys - should last so it overrides anything else.
 
-runStandaloneScripts() {
-	standaloneFolder := A_ScriptDir "\standalone\"
-	Run(standaloneFolder "vimBindings\vimBindings.ahk")
-	Run(standaloneFolder "windowMoverSizer\windowMoverSizer.ahk")
+runSubScripts() {
+	subFolder := A_ScriptDir "\sub\"
+	Run(subFolder "vimBindings\vimBindings.ahk")
+	Run(subFolder "windowMoverSizer\windowMoverSizer.ahk")
 	if(MainConfig.machineIsEpicLaptop) { ; Not needed except on Epic machine.
-		Run(standaloneFolder "killUAC\killUAC.ahk")
-		Run(standaloneFolder "dlgNumTracker\dlgNumTracker.ahk")
-		Run(standaloneFolder "tortoiseFillerDLG\tortoiseFillerDLG.ahk")
-	} else if(MainConfig.machineIsHomeDesktop) {
-		; Run(standaloneFolder "psxEmulatorController\psxEmulatorController.ahk")
+		Run(subFolder "killUAC\killUAC.ahk")
+		Run(subFolder "dlgNumTracker\dlgNumTracker.ahk")
+		Run(subFolder "tortoiseFillerDLG\tortoiseFillerDLG.ahk")
 	}
 }
 

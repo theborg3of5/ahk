@@ -4,9 +4,10 @@
 #SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
+
 #Include <includeCommon>
-setCommonHotkeysType(HOTKEY_TYPE_SubMaster)
-setUpTrayIcons("moveSize.ico", "moveSizeRed.ico", "AHK: Move and resize windows")
+trayInfo := new ScriptTrayInfo("AHK: Move and resize windows", "moveSize.ico", "moveSizeRed.ico")
+CommonHotkeys.Init(CommonHotkeys.ScriptType_SubMaster, trayInfo)
 
 SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
 CoordMode, Mouse, Screen
@@ -203,6 +204,3 @@ getResizeCorner(window, mouseStart) {
 	if(x >= middleX && y >= middleY)
 		return WINDOWCORNER_BOTTOMRIGHT
 }
-
-
-#Include <commonHotkeys>

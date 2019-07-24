@@ -2,8 +2,9 @@
 #SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
+
 #Include <includeCommon>
-setCommonHotkeysType(HOTKEY_TYPE_Standalone)
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
 ; Set mouseover text for icon
 Menu, Tray, Tip, % "
@@ -45,5 +46,3 @@ Menu, Tray, Tip, % "
 		Send, ={Down}
 	}
 return
-
-#Include <commonHotkeys>

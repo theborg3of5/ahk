@@ -2,10 +2,10 @@
 #SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
+
 #Include <includeCommon>
-setCommonHotkeysType(HOTKEY_TYPE_SubMaster)
-scriptTitle := "AHK: DLG Number Tracker"
-setUpTrayIcons("hash.ico", "redHash.ico", scriptTitle)
+trayInfo := new ScriptTrayInfo("AHK: DLG Number Tracker", "hash.ico", "redHash.ico")
+CommonHotkeys.Init(CommonHotkeys.ScriptType_SubMaster, trayInfo)
 
 global currDLGId
 SetTimer, MainLoop, 5000 ; 5s, timer toggled by commonHotkeys' suspend hotkey.
@@ -35,5 +35,3 @@ return
 ^!i::
 	Send, % currDLGId
 return
-
-#Include <commonHotkeys>

@@ -2,9 +2,10 @@
 #SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
+
 #Include <includeCommon>
-setCommonHotkeysType(HOTKEY_TYPE_SubMaster)
-setUpTrayIcons("turtle.ico", "turtleRed.ico", "AHK: TortoiseSVN DLG ID Filler")
+trayInfo := new ScriptTrayInfo("AHK: TortoiseSVN DLG ID Filler", "turtle.ico", "turtleRed.ico")
+CommonHotkeys.Init(CommonHotkeys.ScriptType_SubMaster, trayInfo)
 
 SetTitleMatchMode, RegEx
 global tortoiseTitleRegEx := "O)^C:\\EpicSource\\\d\.\d\\DLG-(\w+)[-\\].* - Commit - TortoiseSVN" ; O option to get match object instead of pseudo-array
@@ -45,5 +46,3 @@ addDLGToCommitWindow() {
 	ControlSetText, % dlgFieldId, % dlgId, A ; Plug in the DLG ID
 	ControlFocus, % messageFieldId, A ; Focus the message field
 }
-
-#Include <commonHotkeys>

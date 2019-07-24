@@ -2,9 +2,10 @@
 #SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
-setCommonHotkeysType(HOTKEY_TYPE_Standalone)
+
 #Include <includeCommon>
-setUpTrayIcons("controllerGreen.ico", "controllerRed.ico", "AHK: Controller Emulator")
+trayInfo := new ScriptTrayInfo("AHK: Controller Emulator", "controllerGreen.ico", "controllerRed.ico")
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone, trayInfo)
 
 SetTimer, MainLoop, 100 ; 100ms, timer toggled by commonHotkeys' suspend hotkey.
 XInput_Init()
@@ -44,5 +45,3 @@ sendEmulatorKey(key) {
 	SendInput, {%key% Up}
 	Sleep, 100
 }
-
-#Include <commonHotkeys>

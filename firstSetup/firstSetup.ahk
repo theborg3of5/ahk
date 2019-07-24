@@ -1,10 +1,10 @@
-SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance force  ; Ensures that if this script is running, running it again replaces the first instance.
+#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
+#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
+SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
+SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include %A_ScriptDir%\..\source\common\_includeCommon.ahk
-setCommonHotkeysType(HOTKEY_TYPE_Standalone)
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
 ; Various paths needed throughout.
 ahkRootPath    := getParentFolder(A_ScriptDir)
@@ -21,7 +21,6 @@ tagsToReplace["MEDIA_PLAYER"]    := ""
 
 copyPaths := []
 copyPaths["includeCommon.ahk.master"] := userPath "\Documents\AutoHotkey\Lib\includeCommon.ahk"
-copyPaths["commonHotkeys.ahk.master"] := userPath "\Documents\AutoHotkey\Lib\commonHotkeys.ahk"
 copyPaths["settings.ini.master"]      := ahkRootPath "\config\local\settings.ini"
 
 gitNames := []
@@ -102,6 +101,3 @@ if(shouldRun)
 	Run(mainAHKPath, startupFolder)
 
 ExitApp
-
-; Universal suspend, reload, and exit hotkeys.
-#Include %A_ScriptDir%\..\source\common\_commonHotkeys.ahk

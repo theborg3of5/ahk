@@ -1,8 +1,9 @@
 #NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
 #SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
+
 #Include <includeCommon>
-setCommonHotkeysType(HOTKEY_TYPE_Standalone)
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
 sourceRoot      := MainConfig.path["AHK_ROOT"]
 destinationRoot := MainConfig.path["EPIC_PERSONAL_AHK"]
@@ -48,5 +49,3 @@ Sleep, 2000
 t.close()
 
 ExitApp
-
-#Include <commonHotkeys>

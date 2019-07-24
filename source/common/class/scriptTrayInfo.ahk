@@ -45,6 +45,8 @@ class ScriptTrayInfo {
 	setIconStates(statesAry) {
 		this._iconStates := statesAry
 		
+		Menu, Tray, Icon, , , 1 ; Assume that there will always be a path in here to a suspended icon we should use.
+		
 		this.updateTrayIcon()
 	}
 
@@ -54,9 +56,8 @@ class ScriptTrayInfo {
 	; SIDE EFFECTS:   Potentially update the script's tray icon.
 	;---------
 	updateTrayIcon() {
-		; DEBUG.popup("_setup","updateTrayIcon", "Icon states array",this._iconStates)
-		
 		newIcon := this.getIconForCurrentState(this._iconStates)
+		; DEBUG.popup("ScriptTrayInfo.updateTrayIcon","Start", "this._iconStates",this._iconStates, "newIcon",newIcon)
 		if(!newIcon)
 			return
 			

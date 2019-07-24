@@ -2,9 +2,10 @@
 #SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
+
 #Include <includeCommon>
-setCommonHotkeysType(HOTKEY_TYPE_Standalone)
-setUpTrayIcons("mouseGreen.ico", "mouseRed.ico", "AHK: Precise Mouse Movement")
+trayInfo := new ScriptTrayInfo("AHK: Precise Mouse Movement", "mouseGreen.ico", "mouseRed.ico")
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone, trayInfo)
 
 ; 200 hotkeys allowed per 2 seconds (to allow long holds for moving mouse further)
 #MaxHotkeysPerInterval, 200
@@ -101,6 +102,3 @@ arrowReleased(keyName) {
 	keyRunOnce[keyName] := false
 	keyHeld[keyName]    := false
 }
-
-
-#Include <commonHotkeys>

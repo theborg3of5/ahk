@@ -2,16 +2,17 @@
 #SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
+
 #Include <includeCommon>
-setCommonHotkeysType(HOTKEY_TYPE_SubMaster)
+global trayInfo := new ScriptTrayInfo("AHK: Vim Bindings for Chrome/Firefox")
+CommonHotkeys.Init(CommonHotkeys.ScriptType_SubMaster, trayInfo)
 
 global vimKeysOn := 1
-states                                     := []
+states := []
 states["A_IsSuspended", 1]                 := "vimSuspend.ico"
 states["A_IsSuspended", 0, "vimKeysOn", 0] := "vimPause.ico"
 states["A_IsSuspended", 0, "vimKeysOn", 1] := "vim.ico"
-setUpTrayIconStates(states)
-Menu, Tray, Tip, % "AHK: Vim Bindings for Chrome/Firefox"
+trayInfo.setIconStates(states)
 
 global offTitles := getExcludedTitles()
 global autoPaused := false ; Says whether we just temporarily paused vimKeys automatically (like for ^l)
@@ -212,7 +213,7 @@ turnVimOffAuto() {
 
 setVimKeysState(toState) {
 	vimKeysOn := toState
-	updateTrayIcon()
+	trayInfo.updateTrayIcon()
 }
 
 sendToOmniboxAndGo(url) {
@@ -221,5 +222,3 @@ sendToOmniboxAndGo(url) {
 	SendRaw, %url%
 	Send, {Enter}
 }
-
-#Include <commonHotkeys>

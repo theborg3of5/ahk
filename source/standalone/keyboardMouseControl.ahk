@@ -1,11 +1,12 @@
 ; Allow keyboard control of mouse.
 
-SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance force  ; Ensures that if this script is running, running it again replaces the first instance.
+#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
+#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
+SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
+SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
+
 #Include <includeCommon>
-setCommonHotkeysType(HOTKEY_TYPE_Standalone)
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
 ; Setup.
 keyboardControl := false
@@ -42,5 +43,3 @@ keyboardControl := false
 		Send, {Click Up}
 	return
 #If
-
-#Include <commonHotkeys>

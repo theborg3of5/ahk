@@ -5,7 +5,10 @@
 #Warn UseUnsetGlobal, Off                     ; 	Using global variables before they're set
 #LTrim                                        ; Trim whitespace from left of continuation sections (so they can be indented as I wish).
 #Hotstring *                                  ; Default option: hotstrings do not require an ending character. Use *0 to turn it off for hotstrings that as needed.
+
 #Include <includeCommon>
+trayInfo := new ScriptTrayInfo("AHK: Main Script", "shellGreen.ico", "shellRed.ico")
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Master, trayInfo)
 
 SendMode, Input                               ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir%                  ; Ensures a consistent starting directory.
@@ -16,9 +19,6 @@ SetScrollLockState, AlwaysOff                 ; Turn off Scroll Lock so it can b
 SetNumLockState,    AlwaysOn                  ; Force NumLock to always stay on.
 SetDefaultMouseSpeed, 0                       ; Fasted mouse speed for mouse commands (MouseMove in particular)
 SetMouseDelay, 0                              ; Smallest possible delay after mouse movements/clicks
-
-trayInfo := new ScriptTrayInfo("AHK: Main Script", "shellGreen.ico", "shellRed.ico")
-CommonHotkeys.Init(CommonHotkeys.ScriptType_Master, trayInfo) ; Applies hotkeys, points them to code which includes tray.updateTrayIcon()
 
 ; Sub scripts. Must be first to execute so they can spin off and be on their own.
 runSubScripts()

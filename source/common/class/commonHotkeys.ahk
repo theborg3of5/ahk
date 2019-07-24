@@ -75,8 +75,14 @@ class CommonHotkeys {
 		Hotkey, ~^+!#r, CommonHotkeys_doEmergencyExit
 		if(CommonHotkeys.IsStandalone)
 			Hotkey, !+x, CommonHotkeys_doExit
+		if(CommonHotkeys.IsMaster) {
+			; Block close hotkey (as it does bad things in some places) if there are no standalone scripts running
+			noStandaloneScriptsRunning := ObjBindMethod(CommonHotkeys, "noStandaloneScriptsRunning")
+			Hotkey, If, % noStandaloneScriptsRunning
+			Hotkey, !+x, CommonHotkeys_doBlock ; Catch exit hotkey in master so it doesn't bleed through when there are no standalone scripts
+			Hotkey, If ; Clear condition
+		}
 		
-		; Suspend
 		; Suspend (on by default, can be disabled/re-enabled with CommonHotkeys.NoSuspend)
 		if(CommonHotkeys.IsMaster)
 			Hotkey, !#x, CommonHotkeys_doToggleSuspend ; Master script catches it to prevent it falling through
@@ -93,6 +99,10 @@ class CommonHotkeys {
 			Hotkey, ~^s, CommonHotkeys_doReload
 			Hotkey, If ; Clear condition
 		}
+	}
+	
+	doBlock() {
+		return
 	}
 	
 	doEmergencyExit() {
@@ -156,7 +166,16 @@ class CommonHotkeys {
 		return stringContains(WinGetActiveTitle(), A_ScriptFullPath)
 	}
 	
-	
+	noStandaloneScriptsRunning() {
+		origDetectSetting := setDetectHiddenWindows("On")
+		
+		standaloneWinId := WinExist(buildWindowTitleString("AutoHotkey.exe", "AutoHotkey", MainConfig.path["AHK_ROOT"] "\source\standalone\"))
+		testWinId       := WinExist(buildWindowTitleString("AutoHotkey.exe", "AutoHotkey", MainConfig.path["AHK_ROOT"] "\test\test.ahk"))
+		
+		setDetectHiddenWindows(origDetectSetting)
+		; DEBUG.popup("standaloneWinId",standaloneWinId, "testWinId",testWinId, "(standaloneWinId || testWinId)",(standaloneWinId || testWinId))
+		return !(standaloneWinId || testWinId)
+	}
 	
 	
 	
@@ -165,6 +184,9 @@ class CommonHotkeys {
 CommonHotkeys_doEmergencyExit() {
 	Suspend, Permit
 	CommonHotkeys.doEmergencyExit()
+}
+CommonHotkeys_doBlock() {
+	CommonHotkeys.doBlock()
 }
 CommonHotkeys_doExit() {
 	CommonHotkeys.doExit()

@@ -17,8 +17,8 @@ SetNumLockState,    AlwaysOn                  ; Force NumLock to always stay on.
 SetDefaultMouseSpeed, 0                       ; Fasted mouse speed for mouse commands (MouseMove in particular)
 SetMouseDelay, 0                              ; Smallest possible delay after mouse movements/clicks
 
-setCommonHotkeysType(HOTKEY_TYPE_Master)
-setUpTrayIcons("shellGreen.ico", "shellRed.ico", "AHK: Main Script")
+trayInfo := new ScriptTrayInfo("AHK: Main Script", "shellGreen.ico", "shellRed.ico")
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Master, trayInfo) ; Applies hotkeys, points them to code which includes tray.updateTrayIcon()
 
 ; Sub scripts. Must be first to execute so they can spin off and be on their own.
 runSubScripts()
@@ -66,8 +66,6 @@ runSubScripts()
 #Include wilma.ahk
 #Include word.ahk
 #Include yEd.ahk
-
-; #Include <commonHotkeys> ; Common hotkeys - should last so it overrides anything else.
 
 runSubScripts() {
 	subFolder := A_ScriptDir "\sub\"

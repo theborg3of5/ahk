@@ -15,11 +15,6 @@
 	:X:edbpop::NotepadPlusPlus.sendDebugCodeString("DEBUG.popupEarly") ; Debug popup that appears at startup
 	::dbparam::NotepadPlusPlus.insertDebugParams()                     ; Debug parameters
 #If
-
-; Only if my AHK test script is not running
-#If !WinExist(buildWindowTitleString("AutoHotkey.exe", "AutoHotkey", MainConfig.path["AHK_ROOT"] "\test\test.ahk"))
-	!+x::return ; Block the !+x close-tab hotkey (but allow it to go through for the test script to catch itself if it's running).
-#If
 	
 class NotepadPlusPlus {
 

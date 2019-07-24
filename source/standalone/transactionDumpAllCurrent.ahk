@@ -1,6 +1,7 @@
-#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-SendMode, Input  ; Recommended for new scripts due to its superior speed and reliability.
-#SingleInstance Off
+#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
+#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
+SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
+
 #Include <includeCommon>
 
 ; Optional input from command line

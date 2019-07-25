@@ -36,7 +36,7 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 		this.descriptorType := descriptorType
 		
 		if(this.descriptorType = "")
-			this.descriptorType := this.determinedescriptorType()
+			this.descriptorType := this.determineDescriptorType()
 		
 		this.selectMissingInfo()
 	}
@@ -84,7 +84,7 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 	; DESCRIPTION:    Try to figure out what kind of descriptor we've been given based on its format.
 	; RETURNS:        Descriptor type from DescriptorType_* constants
 	;---------
-	determinedescriptorType() {
+	determineDescriptorType() {
 		; Full server tag^routine
 		if(stringContains(this.descriptor, "^"))
 			return ActionObjectEpicStudio.DescriptorType_Routine

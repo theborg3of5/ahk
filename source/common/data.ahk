@@ -272,3 +272,15 @@ bitFieldRemoveFlag(bitField, flag) {
 	return (bitField & ~flag)
 }
 
+numToInteger(num) {
+	return Format("{1:i}", num)
+}
+
+numToHex(num) {
+	return Format("{1:x}", num)
+}
+
+hexToInteger(num) {
+	num := "0x" num
+	return numToInteger(num)
+}

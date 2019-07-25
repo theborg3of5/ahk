@@ -117,7 +117,8 @@ escapeCharUsingRepeat(inputString, charToEscape, repeatCount := 1) {
 }
 
 escapeForRunURL(stringToEscape) {
-	return escapeCharUsingRepeat(stringToEscape, DOUBLE_QUOTE, 2) ; Escape quotes twice - extra to get us past the windows run command stripping them out.
+	encodedString := encodeForURL(stringToEscape)
+	return escapeCharUsingRepeat(encodedString, DOUBLE_QUOTE, 2) ; Escape quotes twice - extra to get us past the windows run command stripping them out.
 }
 
 ; Wrapper for InStr() that I can remember easier. Slightly different parameters as well.
@@ -345,4 +346,37 @@ appendCharIfMissing(inputString, charToAppend) {
 		inputString .= charToAppend
 	
 	return inputString
+}
+
+encodeForURL(textToEncode) {
+	currentText := textToEncode
+	
+	; Temporarily trim off any http/https/etc. (will add back on at end)
+	if(RegExMatch(currentText, "^\w+:/{0,2}", prefix))
+		currentText := removeStringFromStart(currentText, prefix)
+	
+	; First replace any percents with the equivalent (since doing it later would also pick up anything else we've converted)
+	needle := "%"
+	replaceWith := "%" numToHex(Asc("%"))
+	StringReplace, currentText, currentText, % needle, % replaceWith, All
+	
+	; Replace any other iffy characters with their encoded equivalents
+	while(RegExMatch(currentText, "i)[^\w\.~%]", charToReplace)) {
+		replaceWith := "%" numToHex(Asc(charToReplace))
+		StringReplace, currentText, currentText, % charToReplace, % replaceWith, All
+	}
+	
+	return prefix currentText
+}
+
+decodeFromURL(textToDecode) {
+	outString := textToDecode
+	
+	while(RegExMatch(outString, "i)(?<=%)[\da-f]{1,2}", charCodeInHex)) {
+		needle := "%" charCodeInHex
+		replaceWith := Chr(hexToInteger(charCodeInHex))
+		StringReplace, outString, outString, % needle, % replaceWith, All
+	}
+	
+	return outString
 }

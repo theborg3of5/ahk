@@ -24,10 +24,11 @@ SetMouseDelay, 0                              ; Smallest possible delay after mo
 subFolder := A_ScriptDir "\sub\"
 Run(subFolder "vimBindings\vimBindings.ahk")
 Run(subFolder "windowMoverSizer\windowMoverSizer.ahk")
-if(MainConfig.machineIsEpicLaptop) { ; Not needed except on Epic machine.
-	Run(subFolder "killUAC\killUAC.ahk")
+if(MainConfig.contextIsWork) { ; Work-specific subs
 	Run(subFolder "dlgNumTracker\dlgNumTracker.ahk")
 	Run(subFolder "tortoiseFillerDLG\tortoiseFillerDLG.ahk")
+	if(MainConfig.machineIsEpicLaptop)
+		Run(subFolder "killUAC\killUAC.ahk")
 }
 
 ; === Include other scripts ===

@@ -13,12 +13,6 @@ tlSetupPath    := "setup.tls"
 startupFolder  := ahkRootPath "\source"
 mainAHKPath    := startupFolder "\main.ahk"
 
-tagsToReplace := []
-tagsToReplace["ROOT"]            := ahkRootPath
-tagsToReplace["WHICH_MACHINE"]   := ""
-tagsToReplace["MENU_KEY_ACTION"] := ""
-tagsToReplace["MEDIA_PLAYER"]    := ""
-
 copyPaths := []
 copyPaths["includeCommon.ahk.master"] := userPath "\Documents\AutoHotkey\Lib\includeCommon.ahk"
 copyPaths["settings.ini.master"]      := ahkRootPath "\config\local\settings.ini"
@@ -45,11 +39,12 @@ t.showPersistent()
 
 ; Pull the needed values from our selection.
 t.setText("Reading values from selection...")
-For tag,_ in tagsToReplace {
-	machineValue := machineInfo[tag]
-	if(machineValue != "")
-		tagsToReplace[tag] := machineValue
-}
+tagsToReplace := []
+tagsToReplace["ROOT"]            := ahkRootPath
+tagsToReplace["MACHINE"]         := machineInfo["MACHINE"]
+tagsToReplace["CONTEXT"]         := machineInfo["CONTEXT"]
+tagsToReplace["MENU_KEY_ACTION"] := machineInfo["MENU_KEY_ACTION"]
+tagsToReplace["MEDIA_PLAYER"]    := machineInfo["MEDIA_PLAYER"]
 ; DEBUG.popup("Finished tags to replace",tagsToReplace)
 
 ; Loop over files we need to process and put places.

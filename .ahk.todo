@@ -32,8 +32,6 @@
 				settings.ini - Where machine comes from
 		Current usage breakdown by what makes sense:
 			Machine
-				programs - switch program paths
-				.machineIs* > outlook - new mail hotkey
 				.machineIs* > main - which additional scripts to run
 				.machineIs* > launch - avoid work-specific actions (outlook, phone)
 				.machineIs* > programs - avoid work-specific hotkeys (outlook, spotify, everything, telegram, github, launchy, yed, firefox portable)

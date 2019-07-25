@@ -8,8 +8,13 @@ class MainConfig {
 ; ==============================
 	; Constants for specific machines (matched to settings.ini).
 	static Machine_EpicLaptop  := "EPIC_LAPTOP"
+	static Machine_EpicVDI     := "EPIC_VDI"
 	static Machine_HomeLaptop  := "HOME_LAPTOP"
 	static Machine_HomeDesktop := "HOME_DESKTOP"
+	
+	; Constants for contexts
+	static Context_Work := "WORK"
+	static Context_Home := "HOME"
 
 	; Constants for what the menu key should do (matched to settings.ini).
 	static MenuKeyAction_MiddleClick := "MIDDLE_CLICK"
@@ -44,7 +49,7 @@ class MainConfig {
 	}
 	
 	
-	initialized[] {
+	initialized {
 		get {
 			return this.initDone
 		}
@@ -61,38 +66,43 @@ class MainConfig {
 		return replaceTags(inputString, this.privates)
 	}
 	
-	menuKeyIsMiddleClick[] {
+	menuKeyIsMiddleClick {
 		get {
 			return (this.settings["MENU_KEY_ACTION"] = MainConfig.MenuKeyAction_MiddleClick)
 		}
 	}
-	menuKeyIsWindowsKey[] {
+	menuKeyIsWindowsKey {
 		get {
 			return (this.settings["MENU_KEY_ACTION"] = MainConfig.MenuKeyAction_WindowsKey)
 		}
 	}
 	
-	machine[] {
+	machine {
 		get {
 			return this.settings["MACHINE"]
 		}
 	}
-	machineIsEpicLaptop[] {
+	machineIsEpicLaptop {
 		get {
 			return (this.settings["MACHINE"] = MainConfig.Machine_EpicLaptop)
 		}
 	}
-	machineIsHomeDesktop[] {
+	machineIsEpicVDI {
+		get {
+			return (this.settings["MACHINE"] = MainConfig.Machine_EpicVDI)
+		}
+	}
+	machineIsHomeDesktop {
 		get {
 			return (this.settings["MACHINE"] = MainConfig.Machine_HomeDesktop)
 		}
 	}
-	machineIsHomeLaptop[] {
+	machineIsHomeLaptop {
 		get {
 			return (this.settings["MACHINE"] = MainConfig.Machine_HomeLaptop)
 		}
 	}
-	machineSelectorFilter[] {
+	machineSelectorFilter {
 		get {
 			filter := []
 			filter["COLUMN"] := "MACHINE"
@@ -101,7 +111,23 @@ class MainConfig {
 		}
 	}
 	
-	mediaPlayer[] {
+	context {
+		get {
+			return this.settings["CONTEXT"]
+		}
+	}
+	contextIsWork {
+		get {
+			return (this.settings["CONTEXT"] = MainConfig.Context_Work)
+		}
+	}
+	contextIsHome {
+		get {
+			return (this.settings["CONTEXT"] = MainConfig.Context_Home)
+		}
+	}
+	
+	mediaPlayer {
 		get {
 			return this.settings["MEDIA_PLAYER"]
 		}
@@ -250,6 +276,7 @@ class MainConfig {
 		
 		settingsAry := []
 		settingsAry["MACHINE"]         := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from MainConfig.Machine_* constants
+		settingsAry["CONTEXT"]         := IniRead(this.settingsINIPath, "Main", "CONTEXT")         ; Which context this is, from MainConfig.Context_* constants
 		settingsAry["MENU_KEY_ACTION"] := IniRead(this.settingsINIPath, "Main", "MENU_KEY_ACTION") ; What to do with the menu key, from MainConfig.MenuKeyAction_* constants
 		settingsAry["MEDIA_PLAYER"]    := IniRead(this.settingsINIPath, "Main", "MEDIA_PLAYER")    ; What program the media keys should deal with
 		

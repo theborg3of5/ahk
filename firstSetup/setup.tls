@@ -1,9 +1,10 @@
 +WindowTitle=Select Machine to set up:
 +MinColumnWidth=300
 
-(	NAME					ABBREV		WHICH_MACHINE	MENU_KEY_ACTION	MEDIA_PLAYER
-)	0						0				0					1						0
-
-	Home Desktop		desk			HOME_DESKTOP	-						Spotify
-	Home Laptop			laptop		HOME_LAPTOP		WINDOWS_KEY			Spotify
-	Epic Laptop			epic			EPIC_LAPTOP		WINDOWS_KEY			Spotify
+(	NAME					ABBREV						MACHINE				CONTEXT		MENU_KEY_ACTION	MEDIA_PLAYER
+)	0						0								0						0				1						0
+	
+	Home Desktop		desk|HOME_DESKTOP			HOME_DESKTOP		HOME			-						Spotify
+	Home Laptop			lap|HOME_LAPTOP			HOME_LAPTOP			HOME			WINDOWS_KEY			-
+	Epic Laptop			epic|EPIC_LAPTOP			EPIC_LAPTOP			WORK			WINDOWS_KEY			Spotify
+	Epic VDI				vdi|EPIC_VDI				EPIC_VDI				WORK			WINDOWS_KEY			-

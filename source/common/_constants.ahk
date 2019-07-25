@@ -31,11 +31,6 @@ global SB_LINERIGHT := 1
 ; Delimiters and special characters
 global DOUBLE_QUOTE := """"
 
-; Different sets of common hotkeys
-global HOTKEY_TYPE_Standalone := 0 ; One-off scripts, not connected to master script
-global HOTKEY_TYPE_Master     := 1 ; Master script
-global HOTKEY_TYPE_SubMaster  := 2 ; Standalone scripts that the master script starts and that run alongside the master script
-
 ; Title match modes
 global TITLE_MATCH_MODE_Start   := 1
 global TITLE_MATCH_MODE_Contain := 2

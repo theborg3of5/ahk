@@ -5,7 +5,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
 trayInfo := new ScriptTrayInfo("AHK: DLG Number Tracker", "hash.ico", "redHash.ico")
-CommonHotkeys.Init(CommonHotkeys.ScriptType_SubMaster, trayInfo)
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub, trayInfo)
 
 global currDLGId
 SetTimer, MainLoop, 5000 ; 5s, timer toggled by commonHotkeys' suspend hotkey.

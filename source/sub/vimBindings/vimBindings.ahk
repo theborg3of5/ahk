@@ -5,7 +5,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
 global trayInfo := new ScriptTrayInfo("AHK: Vim Bindings for Chrome/Firefox")
-CommonHotkeys.Init(CommonHotkeys.ScriptType_SubMaster, trayInfo)
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub, trayInfo)
 
 global vimKeysOn := 1
 states := []

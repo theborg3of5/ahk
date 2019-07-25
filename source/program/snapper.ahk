@@ -1,6 +1,6 @@
 ﻿; Main Snapper window
 #If MainConfig.isWindowActive("Snapper")
-	; Send string of items to ignore, based on the given master file.
+	; Send string of items to ignore, based on the given INI.
 	:*:.hide::
 	:*:.ignore::
 		Snapper.sendItemsToIgnore()

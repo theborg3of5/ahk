@@ -10,9 +10,9 @@ class CommonHotkeys {
 ; == Public ====================
 ; ==============================
 	; Different "types" of scripts, which get different sets of hotkeys
-	static ScriptType_Master     := 1 ; Master script
-	static ScriptType_SubMaster  := 2 ; Standalone scripts that the master script starts and that run alongside the master script
-	static ScriptType_Standalone := 3 ; One-off scripts, not connected to master script
+	static ScriptType_Main       := 1 ; Main script
+	static ScriptType_Sub        := 2 ; Standalone scripts that the main script starts and that run alongside the main script
+	static ScriptType_Standalone := 3 ; One-off scripts, not connected to main script
 	
 	;---------
 	; DESCRIPTION:    Set up the common hotkeys.
@@ -66,14 +66,14 @@ class CommonHotkeys {
 	;                 CommonHotkeys.ScriptType_*.
 	; RETURNS:        true if the script matches the type in question, false otherwise.
 	;---------
-	IsMaster {
+	IsMain {
 		get {
-			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Master)
+			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Main)
 		}
 	}
 	IsSub {
 		get {
-			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_SubMaster)
+			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Sub)
 		}
 	}
 	IsStandalone {
@@ -99,23 +99,23 @@ class CommonHotkeys {
 		Hotkey, ~^+!#r, CommonHotkeys_doEmergencyExit
 		if(CommonHotkeys.IsStandalone)
 			Hotkey, !+x, CommonHotkeys_doExit
-		if(CommonHotkeys.IsMaster) {
+		if(CommonHotkeys.IsMain) {
 			; Block close hotkey (as it does bad things in some places) if there are no standalone scripts running
 			noStandaloneScriptsRunning := ObjBindMethod(CommonHotkeys, "noStandaloneScriptsRunning")
 			Hotkey, If, % noStandaloneScriptsRunning
-			Hotkey, !+x, CommonHotkeys_doBlock ; Catch exit hotkey in master so it doesn't bleed through when there are no standalone scripts
+			Hotkey, !+x, CommonHotkeys_doBlock ; Catch exit hotkey in main so it doesn't bleed through when there are no standalone scripts
 			Hotkey, If ; Clear condition
 		}
 		
 		; Suspend (on by default, can be disabled/re-enabled with CommonHotkeys.NoSuspend)
-		if(CommonHotkeys.IsMaster)
-			Hotkey, !#x, CommonHotkeys_doToggleSuspend ; Master script catches it to prevent it falling through
+		if(CommonHotkeys.IsMain)
+			Hotkey, !#x, CommonHotkeys_doToggleSuspend ; Main script catches it to prevent it falling through
 		if(CommonHotkeys.IsSub || CommonHotkeys.IsStandalone)
 			Hotkey, ~!#x, CommonHotkeys_doToggleSuspend ; Other scripts let it fall through so all other scripts can react
 		
 		; Reload
-		if(CommonHotkeys.IsMaster)
-			Hotkey, !+r, CommonHotkeys_doReload ; Master only, it replaces the sub scripts by running them again.
+		if(CommonHotkeys.IsMain)
+			Hotkey, !+r, CommonHotkeys_doReload ; Main only, it replaces the sub scripts by running them again.
 		if(CommonHotkeys.IsStandalone) {
 			; Reload on save if editing the script in question
 			areEditingThisScript := ObjBindMethod(CommonHotkeys, "areEditingThisScript")
@@ -127,7 +127,7 @@ class CommonHotkeys {
 	
 	;---------
 	; DESCRIPTION:    Helper function used to "block" a hotkey from falling through. Generally used
-	;                 by the master script to prevent certain hotkeys used by standalone scripts
+	;                 by the main script to prevent certain hotkeys used by standalone scripts
 	;                 from falling through, if there are no standalone scripts running.
 	;---------
 	doBlock() {

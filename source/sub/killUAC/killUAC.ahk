@@ -5,7 +5,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
 trayInfo := new ScriptTrayInfo("AHK: Kill UAC", "shieldGreen.ico", "shieldRed.ico")
-CommonHotkeys.Init(CommonHotkeys.ScriptType_SubMaster, trayInfo)
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub, trayInfo)
 
 disableUserAccountControl() ; Do it once immediately.
 SetTimer, MainLoop, 1800000 ; 30m, timer toggled by commonHotkeys' suspend hotkey.

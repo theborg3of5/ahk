@@ -1,8 +1,5 @@
 # New Ideas
 	Remove VA library once I'm sure new mute logic works correctly at home, too
-	Should we unify the "main" versus "master" terminology?
-		"Master" is probably preferable - so master.ahk, masterConfig.ahk, MasterConfig.*, etc.
-		Possibly rename "_SubMaster" constant to just use "Sub" like the folder, too?
 	Consider adding a new level to MACHINE stuff - instead of sprinkling individual machines through the code, have two machine "types" (work and home) that are used in most cases
 		Could have hard-coded "types" per machine, or it could live in settings.ini instead
 			If we go with something independent - could name it something like "context" - work vs. home

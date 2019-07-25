@@ -5,7 +5,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
 trayInfo := new ScriptTrayInfo("AHK: TortoiseSVN DLG ID Filler", "turtle.ico", "turtleRed.ico")
-CommonHotkeys.Init(CommonHotkeys.ScriptType_SubMaster, trayInfo)
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub, trayInfo)
 
 SetTitleMatchMode, RegEx
 global tortoiseTitleRegEx := "O)^C:\\EpicSource\\\d\.\d\\DLG-(\w+)[-\\].* - Commit - TortoiseSVN" ; O option to get match object instead of pseudo-array

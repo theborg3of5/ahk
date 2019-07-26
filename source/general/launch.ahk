@@ -49,33 +49,8 @@
 			Run(path)
 	}
 
-; Epic-specific actions
-#If MainConfig.machineIsEpicLaptop
-	^+!t::
-		selectOutlookTLG() {
-			s := new Selector("outlookTLG.tls")
-			data := s.selectGui()
-			if(!data)
-				return
-			
-			combinedMessage := data["BASE_MESSAGE"]
-			if(data["BASE_MESSAGE"] && data["MESSAGE"])
-				combinedMessage .= " - " ; Hyphen in between base message and normal message
-			combinedMessage .= data["MESSAGE"]
-			
-			textToSend := MainConfig.private["OUTLOOK_TLG_BASE"]
-			textToSend := replaceTag(textToSend, "TLP",      data["TLP"])
-			textToSend := replaceTag(textToSend, "CUSTOMER", data["CUSTOMER"])
-			textToSend := replaceTag(textToSend, "DLG",      data["DLG"])
-			textToSend := replaceTag(textToSend, "MESSAGE",  combinedMessage)
-			
-			if(MainConfig.isWindowActive("Outlook Calendar TLG")) {
-				SendRaw, % textToSend
-				Send, {Enter}
-			} else {
-				setClipboardAndToastError(textToSend, "", "Outlook TLG calendar not focused.")
-			}
-		}
+
+#If MainConfig.contextIsWork
 	^+!#t::
 		selectDLG() {
 			filter := {COLUMN:"DLG", VALUE:"", INCLUDE_BLANKS:false}
@@ -104,6 +79,56 @@
 			if(envId) {
 				Send, % envId
 				Send, {Enter} ; Submit it too.
+			}
+		}
+	
+	^!#s::
+		selectSnapper() {
+			selectedText := cleanupText(getFirstLineOfSelectedText())
+			record := new EpicRecord(selectedText)
+			
+			s := new Selector("epicEnvironments.tls")
+			s.addExtraOverrideFields(["INI", "ID"])
+			
+			defaultOverrideData        := []
+			defaultOverrideData["INI"] := record.ini
+			defaultOverrideData["ID"]  := record.id
+			data := s.selectGui("", "Open Record(s) in Snapper in Environment", defaultOverrideData)
+			if(!data)
+				return
+			
+			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
+				MainConfig.runProgram("Snapper")
+			else
+				Run(Snapper.buildURL(data["COMM_ID"], data["INI"], data["ID"])) ; data["ID"] can contain a comma-delimited list if that's what the user entered
+		}
+#If
+
+
+#If MainConfig.machineIsEpicLaptop
+	^+!t::
+		selectOutlookTLG() {
+			s := new Selector("outlookTLG.tls")
+			data := s.selectGui()
+			if(!data)
+				return
+			
+			combinedMessage := data["BASE_MESSAGE"]
+			if(data["BASE_MESSAGE"] && data["MESSAGE"])
+				combinedMessage .= " - " ; Hyphen in between base message and normal message
+			combinedMessage .= data["MESSAGE"]
+			
+			textToSend := MainConfig.private["OUTLOOK_TLG_BASE"]
+			textToSend := replaceTag(textToSend, "TLP",      data["TLP"])
+			textToSend := replaceTag(textToSend, "CUSTOMER", data["CUSTOMER"])
+			textToSend := replaceTag(textToSend, "DLG",      data["DLG"])
+			textToSend := replaceTag(textToSend, "MESSAGE",  combinedMessage)
+			
+			if(MainConfig.isWindowActive("Outlook Calendar TLG")) {
+				SendRaw, % textToSend
+				Send, {Enter}
+			} else {
+				setClipboardAndToastError(textToSend, "", "Outlook TLG calendar not focused.")
 			}
 		}
 	
@@ -150,26 +175,5 @@
 				data := s.selectGui()
 				if(data)
 					callNumber(data["NUMBER"], data["NAME"])
-		}
-	
-	^!#s::
-		selectSnapper() {
-			selectedText := cleanupText(getFirstLineOfSelectedText())
-			record := new EpicRecord(selectedText)
-			
-			s := new Selector("epicEnvironments.tls")
-			s.addExtraOverrideFields(["INI", "ID"])
-			
-			defaultOverrideData        := []
-			defaultOverrideData["INI"] := record.ini
-			defaultOverrideData["ID"]  := record.id
-			data := s.selectGui("", "Open Record(s) in Snapper in Environment", defaultOverrideData)
-			if(!data)
-				return
-			
-			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
-				MainConfig.runProgram("Snapper")
-			else
-				Run(Snapper.buildURL(data["COMM_ID"], data["INI"], data["ID"])) ; data["ID"] can contain a comma-delimited list if that's what the user entered
 		}
 #If

@@ -22,7 +22,7 @@
 			EMC2 QAN Change Status			-								ThunderRT6FormDC		Change Note Status
 			EMC2 QAN Email						-								-							Send E-Mail
 			EMC2 QAN Email Notify			-								-							EMC2 - QA Note E-Mail Notification
-			EMC2 QAN Notes						-								-							Note												-											EXACT
+			EMC2 QAN Notes						-								-							Note												-					EXACT
 			EMC2 XDS Approval					-								ThunderRT6FormDC		A Reviewer Approved
 			EMC2 XDS Email						-								ThunderRT6FormDC		E-Mail Design
 			EMC2 XDS Open Design				-								ThunderRT6FormDC		Open/New Design
@@ -43,7 +43,7 @@
 			Chrome								chrome.exe					Chrome_WidgetWin_1	-
 			Cisco AnyConnect VPN				vpnui.exe					#32770
 			Discord								Discord.exe					-							-													NO_PADDING
-			EMC2									EpicD87.exe					-							EMC2												-											START
+			EMC2									EpicD87.exe					-							EMC2												-					START
 			EpicStudio							EpicStudio.exe				-							EpicStudio
 			Everything							Everything.exe				EVERYTHING
 			Excel									EXCEL.EXE					-							-													NO_PADDING

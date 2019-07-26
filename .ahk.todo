@@ -31,10 +31,6 @@
 				setup.tls - Specifies the machine for firstSetup
 				settings.ini - Where machine comes from
 		Current usage breakdown by what makes sense:
-			Machine
-				.machineIs* > main - which additional scripts to run
-				.machineIs* > launch - avoid work-specific actions (outlook, phone)
-				.machineIs* > programs - avoid work-specific hotkeys (outlook, spotify, everything, telegram, github, launchy, yed, firefox portable)
 			Context
 				search - hide work-specific search methods
 				resize - hide work-specific sizes + switch positions

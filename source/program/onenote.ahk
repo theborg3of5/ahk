@@ -476,11 +476,11 @@ class OneNote {
 		startDateTime += daysInFuture, Days
 		
 		; Do pages at work are always daily
-		if(MainConfig.machineIsEpicLaptop)
+		if(MainConfig.contextIsWork)
 			return FormatTime(startDateTime, "M/d`, dddd")
 		
 		; Otherwise, it varies by day of the week
-		if(MainConfig.machineIsHomeDesktop || MainConfig.machineIsHomeLaptop) {
+		if(MainConfig.contextIsHome) {
 			dayOfWeek := FormatTime(startDateTime, "Wday") ; Day of the week, 1 (Sunday) to 7 (Saturday)
 			
 			; Weekend pages at home are daily

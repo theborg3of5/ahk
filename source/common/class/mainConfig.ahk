@@ -16,10 +16,6 @@ class MainConfig {
 	static Context_Work := "WORK"
 	static Context_Home := "HOME"
 
-	; Constants for what the menu key should do (matched to settings.ini).
-	static MenuKeyAction_MiddleClick := "MIDDLE_CLICK"
-	static MenuKeyAction_WindowsKey  := "WINDOWS_KEY"
-	
 	init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile) {
 		; All config files are expected to live in config/ folder under the root of this repo.
 		configFolder := getParentFolder(A_LineFile, 4) "\config" ; Root path is 3 levels out, plus one to get out of file itself.
@@ -66,16 +62,6 @@ class MainConfig {
 		return replaceTags(inputString, this.privates)
 	}
 	
-	menuKeyIsMiddleClick {
-		get {
-			return (this.settings["MENU_KEY_ACTION"] = MainConfig.MenuKeyAction_MiddleClick)
-		}
-	}
-	menuKeyIsWindowsKey {
-		get {
-			return (this.settings["MENU_KEY_ACTION"] = MainConfig.MenuKeyAction_WindowsKey)
-		}
-	}
 	
 	machine {
 		get {
@@ -124,6 +110,14 @@ class MainConfig {
 	contextIsHome {
 		get {
 			return (this.settings["CONTEXT"] = MainConfig.Context_Home)
+		}
+	}
+	contextSelectorFilter {
+		get {
+			filter := []
+			filter["COLUMN"] := "CONTEXT"
+			filter["VALUE"]  := this.settings["CONTEXT"]
+			return filter
 		}
 	}
 	
@@ -277,7 +271,6 @@ class MainConfig {
 		settingsAry := []
 		settingsAry["MACHINE"]         := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from MainConfig.Machine_* constants
 		settingsAry["CONTEXT"]         := IniRead(this.settingsINIPath, "Main", "CONTEXT")         ; Which context this is, from MainConfig.Context_* constants
-		settingsAry["MENU_KEY_ACTION"] := IniRead(this.settingsINIPath, "Main", "MENU_KEY_ACTION") ; What to do with the menu key, from MainConfig.MenuKeyAction_* constants
 		settingsAry["MEDIA_PLAYER"]    := IniRead(this.settingsINIPath, "Main", "MEDIA_PLAYER")    ; What program the media keys should deal with
 		
 		; DEBUG.popup("Settings", settingsAry)
@@ -286,7 +279,7 @@ class MainConfig {
 	
 	loadWindows(filePath) {
 		tl := new TableList(filePath)
-		windowsTable := tl.getFilteredTable("MACHINE", this.settings["MACHINE"])
+		windowsTable := tl.getTable()
 		
 		windowsAry := []
 		For _,row in windowsTable {
@@ -301,7 +294,7 @@ class MainConfig {
 	
 	loadPaths(filePath) {
 		tl := new TableList(filePath)
-		pathsTable := tl.getFilteredTableUnique("NAME", "MACHINE", this.settings["MACHINE"])
+		pathsTable := tl.getFilteredTableUnique("NAME", "CONTEXT", this.context)
 		
 		; Index paths by key.
 		pathsAry := reduceTableToColumn(pathsTable, "PATH", "KEY")
@@ -356,7 +349,7 @@ class MainConfig {
 	
 	loadPrograms(filePath) {
 		tl := new TableList(filePath)
-		programsTable := tl.getFilteredTableUnique("NAME", "MACHINE", this.settings["MACHINE"])
+		programsTable := tl.getFilteredTableUnique("NAME", "MACHINE", this.machine)
 		; DEBUG.popupEarly("MainConfig","loadPrograms", "Unique table",programsTable)
 		
 		; Index it by name.

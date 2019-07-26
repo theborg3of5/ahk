@@ -4,7 +4,7 @@
 ; X and Y values can be coordinates or constant values from VisualWindow.X_*/VisualWindow.Y_*
 ; From AHK Active Window Info, these numbers should match the top set of w/h, not the client ones.
 
-(	NAME										ABBREV			WIDTH		HEIGHT		X					Y					MACHINE
+(	NAME										ABBREV			WIDTH		HEIGHT		X					Y					CONTEXT
 )	0											0					1			2				0					0
 
 	# General sizes
@@ -14,12 +14,12 @@
 	Small (800x600)							sm					800		600
 
 	# Specifics
-	Semi-maximized (fits around time)	smax				1460		1050			RIGHT_EDGE		CENTERED			HOME_DESKTOP
-	Social (Telegram, Pidgin)				soc				950		750			RIGHT_EDGE		TOP_EDGE			HOME_DESKTOP
-	Social (Telegram, Pidgin)				soc				950		750			RIGHT_EDGE		BOTTOM_EDGE		EPIC_LAPTOP
+	Semi-maximized (fits around time)	smax				1460		1050		RIGHT_EDGE		CENTERED			HOME
+	Social (Telegram, Pidgin)				soc				950		750		RIGHT_EDGE		TOP_EDGE			HOME
+	Social (Telegram, Pidgin)				soc				950		750		RIGHT_EDGE		BOTTOM_EDGE		WORK
 
 	# Development
-[MACHINE.replaceWith(EPIC_LAPTOP)]
+[CONTEXT.replaceWith(WORK)]
 	Minimum Hyperspace (2015-)				minOld			800		550
 	Minimum Hyperspace (2017+)				min				1280		768
 	PuTTY on laptop screen					pl					1084		1050

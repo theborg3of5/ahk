@@ -117,7 +117,7 @@ class Chrome {
 	;---------
 	isCurrentPageCodeSearch() {
 		; Only have CodeSearch on Epic machine
-		if(!MainConfig.machineIsEpicLaptop)
+		if(!MainConfig.contextIsWork)
 			return false
 		
 		title := removeStringFromEnd(WinGetActiveTitle(), " - Google Chrome")

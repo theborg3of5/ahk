@@ -29,7 +29,7 @@ return
 ; Resize window
 #+r::
 	selectResize() {
-		s := new Selector("resize.tls", MainConfig.machineSelectorFilter)
+		s := new Selector("resize.tls", MainConfig.contextSelectorFilter)
 		data := s.selectGui()
 		if(!data)
 			return

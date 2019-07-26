@@ -1,13 +1,13 @@
-(	NAME								ABBREV			PATH																													MACHINE
+(	NAME								ABBREV			PATH																													CONTEXT
 	
 	# General
 	Downloads						dl					<DOWNLOADS>
-[MACHINE.replaceWith(EPIC_LAPTOP)]
-	Design							des				<USER_ROOT>\Design																								EPIC_LAPTOP
-	Shortcuts						sc					<USER_ROOT>\Shortcuts																							EPIC_LAPTOP
-	Personal							pers				<EPIC_PERSONAL>																									EPIC_LAPTOP
-	Public							pub				<EPIC_PERSONAL>\Public																							EPIC_LAPTOP
-	QuickRef							qr					<USER_ROOT>\QuickRef																								EPIC_LAPTOP
+[CONTEXT.replaceWith(WORK)]
+	Design							des				<USER_ROOT>\Design
+	Shortcuts						sc					<USER_ROOT>\Shortcuts
+	Personal							pers				<EPIC_PERSONAL>
+	Public							pub				<EPIC_PERSONAL>\Public
+	QuickRef							qr					<USER_ROOT>\QuickRef
 []
 	
 	# System
@@ -17,7 +17,7 @@
 	# Development
 	Onetastic Macros				ot					<ONETASTIC_MACROS>
 	
-[MACHINE.replaceWith(EPIC_LAPTOP)]
+[CONTEXT.replaceWith(WORK)]
 	# Epic
 	Dev								dev				<USER_DEV>
 	Templates						tp					<USER_DEV>\Templates

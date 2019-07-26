@@ -1,7 +1,7 @@
 +WindowTitle=Select type of search to run and input search text:
 
-(		NAME								ABBREV		SUBTYPE															SEARCH_TYPE		APP_KEY		MACHINE	SEARCH_TERM
-)		0									0				0																	0					0				0			1
+(		NAME								ABBREV		SUBTYPE															SEARCH_TYPE		APP_KEY		CONTEXT		SEARCH_TERM
+)		0									0				0																	0					0				0				1
 
 [SEARCH_TYPE.replaceWith(WEB)]
 		# Web
@@ -26,7 +26,7 @@
 		# Other
 		Everything (file search)	e|ev			-																	EVERYTHING
 
-[+1|MACHINE.replaceWith(EPIC_LAPTOP)]
+[+1|CONTEXT.replaceWith(WORK)]
 	[+2|SEARCH_TYPE.replaceWith(CODESEARCH)]
 		# | Codesearch
 		Server							s				Server

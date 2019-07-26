@@ -1,6 +1,6 @@
 ; These are all of the path tags that will be replaced when using MainConfig.replacePathTags().
 
-(	NAME									KEY									PATH													MACHINE
+(	NAME									KEY									PATH														CONTEXT
 	
 	; Pass-throughs - paths which are retrieved/calculated in MainConfig.loadPaths(). These can also be used in this file.
 	AHK Root								AHK_ROOT
@@ -17,7 +17,7 @@
 	User Root							USER_ROOT
 	Windows (System Root)			WINDOWS
 	
-[MACHINE.replaceWith(EPIC_LAPTOP)]
+[CONTEXT.replaceWith(WORK)]
 	; Private pass-throughs - private tags to replace in folder paths
 	Epic DBC Design					EPIC_DBC_DESIGN
 	Epic Net Home						EPIC_NET_HOME
@@ -39,7 +39,7 @@
 	Onetastic Macros					ONETASTIC_MACROS					<USER_ROOT>\OnetasticMacros
 	Onetastic Functions				ONETASTIC_FUNCTIONS				<USER_ROOT>\OnetasticMacros\Functions
 	
-[MACHINE.replaceWith(EPIC_LAPTOP)]
+[CONTEXT.replaceWith(WORK)]
 	; Epic
 	VB6 Compile							VB6_COMPILE							<USER_ROOT>\Dev\Temp\Compile
 	Transaction Diff					TX_DIFF								C:\Program Files\TransactionDiff

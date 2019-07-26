@@ -1,58 +1,9 @@
 # New Ideas
 	Remove VA library once I'm sure new mute logic works correctly at home, too
 	Add process explorer (with updated machine-level path in config) to VDIs
-	Consider adding a new level to MACHINE stuff - instead of sprinkling individual machines through the code, have two machine "types" (work and home) that are used in most cases
-		Could have hard-coded "types" per machine, or it could live in settings.ini instead
-			If we go with something independent - could name it something like "context" - work vs. home
-		Current uses of machine stuff:
-			Config files using MACHINE as a filter:
-				search - hide work-specific search methods (type)
-				resize - hide work-specific sizes (type) + switch positions for different machines (type or machine?)
-				programs - switch program paths (machine)
-				paths - hide work-specific paths (type)
-				folders - hide work-specific folders (type)
-				mappedDrives - hide work-specific mappings (type)
-				actionObject - hide work-specific actions/subTypes (type)
-			Code that uses MACHINE:
-				mainConfig - reading in and providing access (direct, selector filter, individual checks)
-			Callers to MainConfig.machine*
-				.machine
-					onetastic - to replace CURRENT_MACHINE tags in macros
-				.machineSelectorFilter - callers to config files above
-				.machineIs*
-					input - mute and browser back/forward hotkey switches (machine, but maybe should be settings instead?)
-					launch - avoid work-specific actions (type, but some will be machine because VDIs)
-					programs - avoid work-specific hotkeys (machine, as most aren't installed in VDIs)
-					main - which additional scripts to run (currently type, want to make machine for VDIs)
-					chrome - part of "is page codesearch" check (type)
-					onenote - switch todo page title method (type)
-					outlook - new mail hotkey (type)
-			Others:
-				setup.tls - Specifies the machine for firstSetup
-				settings.ini - Where machine comes from
-		Current usage breakdown by what makes sense:
-			Context
-				search - hide work-specific search methods
-				resize - hide work-specific sizes + switch positions
-				paths - hide work-specific paths
-				folders - hide work-specific folders
-				mappedDrives - hide work-specific mappings
-				actionObject - hide work-specific actions/subTypes
-				.machine > onetastic - to replace CURRENT_MACHINE tags in macros (onenote page widths + specific[s] section)
-				.machineIs* > chrome - part of "is page codesearch" check
-				.machineIs* > onenote - switch todo page title method
-				.machineIs* > input - mute and browser back/forward hotkey switches
-				.machineIs* > launch - avoid work-specific actions (rest)
-				.machineIs* > programs - avoid work-specific hotkeys (rest)
-			Both (specify/access values)
-				setup.tls - Specifies the machine for firstSetup
-				settings.ini - Where machine comes from
-				mainConfig - reading in and providing access (direct, selector filter, individual checks)
-					.machineSelectorFilter - callers to config files above
+	Consider adding a new level to MACHINE stuff - instead of sprinkling individual machines through the code, have two machine "contexts" (work and home) that are used in most cases
 		Use cases:
-			No longer running UAC-killing script in VDIs
 			Add support for minimizing Explorer windows the "normal" way in VDIs
-			Should MENU_KEY_ACTION just be based on machine instead?
 	FormatList - consider adding support for ranges (maybe colons or hyphens?)
 		Both input and output?
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.

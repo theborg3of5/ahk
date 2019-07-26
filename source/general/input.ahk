@@ -1,17 +1,10 @@
 ; General input hotkeys.
 
-; Menu key does different things on laptops without a mouse.
-#If MainConfig.menuKeyIsMiddleClick
-	AppsKey::MButton
-#If MainConfig.menuKeyIsWindowsKey
-	AppsKey::RWin
-#If
-
 #If MainConfig.machineIsHomeDesktop
-	$Volume_Mute::DllCall("LockWorkStation")	; Lock workstation.
-#If
-
-#If MainConfig.machineIsEpicLaptop
+	$Volume_Mute::DllCall("LockWorkStation")	; Lock computer.
+#If MainConfig.machineIsHomeLaptop || MainConfig.machineIsEpicLaptop || MainConfig.machineIsEpicVDI
+	AppsKey::RWin ; No right windows key on these machines, so use the AppsKey (right-click key) instead.
+#If MainConfig.machineIsEpicLaptop || MainConfig.machineIsEpicVDI
 	Browser_Back::LButton
 	Browser_Forward::RButton
 #If

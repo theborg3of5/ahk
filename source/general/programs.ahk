@@ -19,9 +19,6 @@
 ; Some programs are only available on specific machines
 #If MainConfig.machineIsHomeDesktop
 	^!#f::MainConfig.runProgram("Firefox Portable")
-#If MainConfig.machineIsEpicLaptop
-	^+!u::MainConfig.activateProgram("Thunder")
-	^!#e::MainConfig.activateProgram("Outlook")
 #If MainConfig.machineIsHomeDesktop || MainConfig.machineIsEpicLaptop
 	#s::  MainConfig.runProgram("Spotify") ; Can't unminimize from tray with any reasonable logic, so re-run to do so.
 	#f::  MainConfig.activateProgram("Everything")
@@ -29,4 +26,7 @@
 	!+g:: MainConfig.activateProgram("GitHub")
 	^+!o::MainConfig.activateProgram("OneNote")
 	^+!x::MainConfig.activateProgram("Launchy")
+#If MainConfig.machineIsEpicLaptop
+	^+!u::MainConfig.activateProgram("Thunder")
+	^!#e::MainConfig.activateProgram("Outlook")
 #If

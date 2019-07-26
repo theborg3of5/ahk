@@ -41,9 +41,8 @@ t.showPersistent()
 t.setText("Reading values from selection...")
 tagsToReplace := []
 tagsToReplace["ROOT"]            := ahkRootPath
-tagsToReplace["MACHINE"]         := machineInfo["MACHINE"]
 tagsToReplace["CONTEXT"]         := machineInfo["CONTEXT"]
-tagsToReplace["MENU_KEY_ACTION"] := machineInfo["MENU_KEY_ACTION"]
+tagsToReplace["MACHINE"]         := machineInfo["MACHINE"]
 tagsToReplace["MEDIA_PLAYER"]    := machineInfo["MEDIA_PLAYER"]
 ; DEBUG.popup("Finished tags to replace",tagsToReplace)
 

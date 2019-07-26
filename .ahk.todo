@@ -1,4 +1,5 @@
 # New Ideas
+	Add copy-path toast support for VS
 	FormatList - consider adding support for ranges (maybe colons or hyphens?)
 		Both input and output?
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.

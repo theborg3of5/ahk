@@ -1,6 +1,6 @@
-(	NAME										ESC			MIN				SELECT_ALL		DELETE_WORD			CLOSE
+(	NAME										ESC			MIN				SELECT_ALL		DELETE_WORD			CLOSE		MACHINE
 
-; Values for all columns (except NAME) come from WindowActions.MET_* (for how to do the action) or WindowActions.ACT_* (to do some other action, like close on escape key) constants.
+; Values for all columns (except NAME) come from WindowActions.Method_* (for how to do the action) or WindowActions.Action_* (to do some other action, like close on escape key) constants.
 
 	AutoHotkey								CLOSE			-					-					CTRL_SHIFT
 	AutoHotkey WinSpy						CLOSE
@@ -15,6 +15,7 @@
 	EMC2 XDS Open Design					-				-					-					CTRL_SHIFT
 	EMC2 XDS Submit						-				-					HOME_END			CTRL_SHIFT
 	Explorer									MIN			OTHER
+	Explorer									MIN			-					-					-						-			EPIC_VDI
 	GitHub									CLOSE
 	GrepWin									CLOSE
 	KDiff										CLOSE

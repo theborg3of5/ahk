@@ -70,29 +70,29 @@ class MainConfig {
 	}
 	machineIsEpicLaptop {
 		get {
-			return (this.settings["MACHINE"] = MainConfig.Machine_EpicLaptop)
+			return (this.machine = MainConfig.Machine_EpicLaptop)
 		}
 	}
 	machineIsEpicVDI {
 		get {
-			return (this.settings["MACHINE"] = MainConfig.Machine_EpicVDI)
+			return (this.machine = MainConfig.Machine_EpicVDI)
 		}
 	}
 	machineIsHomeDesktop {
 		get {
-			return (this.settings["MACHINE"] = MainConfig.Machine_HomeDesktop)
+			return (this.machine = MainConfig.Machine_HomeDesktop)
 		}
 	}
 	machineIsHomeLaptop {
 		get {
-			return (this.settings["MACHINE"] = MainConfig.Machine_HomeLaptop)
+			return (this.machine = MainConfig.Machine_HomeLaptop)
 		}
 	}
 	machineSelectorFilter {
 		get {
 			filter := []
 			filter["COLUMN"] := "MACHINE"
-			filter["VALUE"]  := this.settings["MACHINE"]
+			filter["VALUE"]  := this.machine
 			return filter
 		}
 	}
@@ -104,19 +104,19 @@ class MainConfig {
 	}
 	contextIsWork {
 		get {
-			return (this.settings["CONTEXT"] = MainConfig.Context_Work)
+			return (this.context = MainConfig.Context_Work)
 		}
 	}
 	contextIsHome {
 		get {
-			return (this.settings["CONTEXT"] = MainConfig.Context_Home)
+			return (this.context = MainConfig.Context_Home)
 		}
 	}
 	contextSelectorFilter {
 		get {
 			filter := []
 			filter["COLUMN"] := "CONTEXT"
-			filter["VALUE"]  := this.settings["CONTEXT"]
+			filter["VALUE"]  := this.context
 			return filter
 		}
 	}

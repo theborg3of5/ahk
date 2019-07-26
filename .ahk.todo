@@ -1,5 +1,4 @@
 # New Ideas
-	Add process explorer (with updated machine-level path in config) to VDIs
 	FormatList - consider adding support for ranges (maybe colons or hyphens?)
 		Both input and output?
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.

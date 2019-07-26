@@ -23,8 +23,6 @@
 	Everything					Everything\Everything.exe
 	Internet Explorer			Internet Explorer\iexplore.exe
 	Notepad++					Notepad++\notepad++.exe
-	Process Explorer			Process Explorer\procexp.exe													EPIC_LAPTOP
-	Process Explorer			ProcessExplorer\procexp.exe
 	TrueCrypt					TrueCrypt\TrueCrypt.exe
 	GrepWin						grepWin\grepWin.exe
 	yEd							yWorks\yEd\yEd.exe
@@ -34,6 +32,10 @@
 	Explorer						explorer.exe
 	Notepad						System32\notepad.exe
 []
+
+	Process Explorer			<PROGRAM_FILES>\Process Explorer\procexp.exe								EPIC_LAPTOP
+	Process Explorer			<EPIC_PERSONAL>\Programs\Process Explorer\procexp.exe					EPIC_VDI
+	Process Explorer			<PROGRAM_FILES>\ProcessExplorer\procexp.exe
 
 	GitHub						<USER_APPDATA_LOCAL>\GitHubDesktop\GitHubDesktop.exe
 	Spotify						<USER_APPDATA>\Spotify\Spotify.exe

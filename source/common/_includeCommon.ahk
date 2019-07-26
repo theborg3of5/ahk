@@ -12,7 +12,6 @@
 	#Include io.ahk
 	#Include runCommands.ahk
 	#Include string.ahk
-	#Include VA.ahk
 	#Include window.ahk
 	#Include XInput.ahk
 

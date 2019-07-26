@@ -1,5 +1,4 @@
 # New Ideas
-	Remove VA library once I'm sure new mute logic works correctly at home, too
 	Add process explorer (with updated machine-level path in config) to VDIs
 	FormatList - consider adding support for ranges (maybe colons or hyphens?)
 		Both input and output?

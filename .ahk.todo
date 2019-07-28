@@ -1,4 +1,9 @@
 # New Ideas
+	New .todo-style hotstring for OneNote that changes based on the day
+		Can sense Saturday/Sunday
+		Today+1 variant, like todo page copy hotkeys?
+		Could also work in date-based (or x weekday of month) items, like my occasional cleanings (bathrooms in particular)
+			In this case, would we want a "this week's weekdays" variant as well, like we automatically sense for todo page copying?
 	Add copy-path toast support for VS
 	FormatList - consider adding support for ranges (maybe colons or hyphens?)
 		Both input and output?

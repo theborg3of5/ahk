@@ -36,7 +36,6 @@
 # Rewrites/Cleanup
 	Rewrite colorette so we don't have to deal with the exe?
 		Would let us get rid of the special exe case in .gitignore, too
-	Clean up psxEmulatorController to be a proper standalone script instead of a sub script
 	
 # Selector/TableList
 	Dynamically resize abbreviation column based on widest value?

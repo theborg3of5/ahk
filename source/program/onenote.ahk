@@ -355,6 +355,7 @@ class OneNote {
 		items.push("Dishes from weekend")
 		items.push("Dishes from dinner")
 		items.push("Trash, recycling out")
+		items.push("Play with cats (and walk Dart)")
 		items.push("Meal planning")
 		items.push("Order/obtain groceries")
 		items.push("Pull to-dos from specific sections below")

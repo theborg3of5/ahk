@@ -13,7 +13,7 @@
 	^+!s::MainConfig.activateProgram("EpicStudio")
 	^+!v::MainConfig.runProgram("VB6")
 	^+!y::MainConfig.activateProgram("yEd")
-	^!#v::MainConfig.activateProgram("Visual Studio")
+	^!#v::MainConfig.runProgram("Visual Studio")
 #If
 
 ; Some programs are only available on specific machines

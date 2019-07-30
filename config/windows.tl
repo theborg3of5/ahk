@@ -77,7 +77,7 @@
 			TrueCrypt							TrueCrypt.exe				CustomDlg
 			VB6									VB6.exe						wndclass_desked_gsk
 			VMware Horizon Client			vmware-view.exe
-			Visual Studio						devenv.exe					-							Microsoft Visual Studio
+			Visual Studio						devenv.exe					-							(Administrator)
 			WebEx									atmgr.exe					-							-													NO_PADDING
 			Windows Taskbar					explorer.exe				Shell_TrayWnd
 			Windows Taskbar Secondary		explorer.exe				Shell_SecondaryTrayWnd

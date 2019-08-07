@@ -64,13 +64,13 @@
 	^MButton::OneNote.removeLinkUnderMouse()
 	
 	; Todo page handling
-	^t::          OneNoteTodo.collapsePageToItems(true)  ; Today only, item-level
-	^+t::         OneNoteTodo.collapsePageToItems(false) ; All sections, item-level
-	^!t::         OneNoteTodo.collapsePage(true)         ; Today only, fully expanded
-	^+m::         OneNoteTodo.copyPage()                 ; New page for today
-	^+#m::        OneNoteTodo.copyPage(1)                ; New page for tomorrow
-	:*X:.todosat::OneNoteTodo.addUsualSat()              ; Add usual todos for Saturday
-	:*X:.todosun::OneNoteTodo.addUsualSun()              ; Add usual todos for Sunday
+	^t::       OneNoteTodoPage.collapseToItems(true)      ; Today only, item-level
+	^+t::      OneNoteTodoPage.collapseToItems(false)     ; All sections, item-level
+	^!t::      OneNoteTodoPage.collapse(true)             ; Today only, fully expanded
+	^+m::      OneNoteTodoPage.copyForToday()             ; New page for today
+	^+#m::     OneNoteTodoPage.copyForTomorrow()          ; New page for tomorrow
+	:*X:.todo::OneNoteTodoPage.addRecurringForToday()     ; Add recurring todos for today
+	:*X:.ttodo::OneNoteTodoPage.addRecurringForTomorrow() ; Add recurring todos for tomorrow
 
 	; Clean up a table from an emc2summary page
 	^+f::OneNote.cleanUpEMC2SummaryTableFormatting()
@@ -333,7 +333,7 @@ class OneNote {
 	}
 }
 
-class OneNoteTodo {
+class OneNoteTodoPage {
 
 ; ==============================
 ; == Public ====================
@@ -347,7 +347,7 @@ class OneNoteTodo {
 	;                            levels of headers). If false, everything will be fully expanded.
 	; SIDE EFFECTS:   Puts the cursor at the beginning of the first line under the "Today" header.
 	;---------
-	collapsePage(todayOnly, collapseToItems := false) {
+	collapse(todayOnly, collapseToItems := false) {
 		Send, ^{Home} ; Get to top-level ("Do") header so we affect the whole page
 		
 		if(collapseToItems)
@@ -370,19 +370,76 @@ class OneNoteTodo {
 	;                      false: show items under all sections.
 	; SIDE EFFECTS:   Puts the cursor at the beginning of the first line under the "Today" header.
 	;---------
-	collapsePageToItems(todayOnly) {
-		OneNoteTodo.collapsePage(todayOnly, true)
+	collapseToItems(todayOnly) {
+		OneNoteTodoPage.collapse(todayOnly, true)
+	}
+	
+	
+	copyForToday() {
+		OneNoteTodoPage.copy(A_Now)
+	}
+	
+	
+	copyForTomorrow() {
+		instant := A_Now
+		instant += 1, Days
+		OneNoteTodoPage.copy(instant)
+	}
+	
+	
+	addRecurringForToday() {
+		OneNoteTodoPage.sendRecurringTodos(A_Now)
+	}
+	
+	
+	addRecurringForTomorrow() {
+		instant := A_Now
+		instant += 1, Days
+		OneNoteTodoPage.sendRecurringTodos(instant)
 	}
 	
 	;---------
-	; DESCRIPTION:    Make a copy of the current "Do" todo page and update it for today or a day in
-	;                 the future.
+	; DESCRIPTION:    Add the "usual" todos that are needed for every Saturday.
+	;---------
+	addUsualSat() {
+		items := []
+		items.push("Dishes from week")
+		items.push("Wash laundry")
+		items.push("Dry laundry")
+		items.push("Clean off desk")
+		items.push("Pull to-dos from specific sections below")
+		OneNoteTodoPage.sendItems(items)
+	}
+	
+	;---------
+	; DESCRIPTION:    Add the "usual" todos that are needed for every Saturday.
+	;---------
+	addUsualSun() {
+		items := []
+		items.push("Review/type Ninpo notes")
+		items.push("Fold laundry")
+		items.push("Roomba")
+		items.push("Dishes from weekend")
+		items.push("Dishes from dinner")
+		items.push("Trash, recycling out")
+		items.push("Play with cats (and walk Dart)")
+		items.push("Meal planning")
+		items.push("Order/obtain groceries")
+		items.push("Pull to-dos from specific sections below")
+		OneNoteTodoPage.sendItems(items)
+	}
+	
+	
+; ==============================
+; == Private ===================
+; ==============================
+	;---------
+	; DESCRIPTION:    Make a copy of the current "Do" todo page and update it for the given instant.
 	; PARAMETERS:
-	;  daysInFuture (I,OPT) - The number of days in the future for the date in the title of the new
-	;                         page. If not set, we will use today's date (0 days in the future).
+	;  instant (I,REQ) - The instant to update the new page to match.
 	; SIDE EFFECTS:   Sets a background color on the old page to help distinguish.
 	;---------
-	copyPage(daysInFuture := 0) { ; Defaults to 0 days in the future (today)
+	copy(instant) {
 		; Change the page color before we leave, so it's noticeable if I end up there.
 		Send, !w
 		Send, pc
@@ -434,73 +491,36 @@ class OneNoteTodo {
 		Send, n
 		
 		; Update title
-		Send, ^+t                                           ; Select title (to replace with new day/date)
-		Sleep, 1000                                         ; Wait for selection to take
-		Send, % OneNoteTodo.generatePageTitle(daysInFuture) ; Send title
-		Send, ^+t                                           ; Select title again in case you want a different date.
+		Send, ^+t                                      ; Select title (to replace with new day/date)
+		Sleep, 1000                                    ; Wait for selection to take
+		Send, % OneNoteTodoPage.generateTitle(instant) ; Send title
+		Send, ^+t                                      ; Select title again in case you want a different date.
 	}
 	
-	;---------
-	; DESCRIPTION:    Add the "usual" todos that are needed for every Saturday.
-	;---------
-	addUsualSat() {
-		items := []
-		items.push("Dishes from week")
-		items.push("Wash laundry")
-		items.push("Dry laundry")
-		items.push("Clean off desk")
-		items.push("Pull to-dos from specific sections below")
-		OneNoteTodo.sendItems(items)
-	}
-	
-	;---------
-	; DESCRIPTION:    Add the "usual" todos that are needed for every Saturday.
-	;---------
-	addUsualSun() {
-		items := []
-		items.push("Review/type Ninpo notes")
-		items.push("Fold laundry")
-		items.push("Roomba")
-		items.push("Dishes from weekend")
-		items.push("Dishes from dinner")
-		items.push("Trash, recycling out")
-		items.push("Play with cats (and walk Dart)")
-		items.push("Meal planning")
-		items.push("Order/obtain groceries")
-		items.push("Pull to-dos from specific sections below")
-		OneNoteTodo.sendItems(items)
-	}
-	
-	
-; ==============================
-; == Private ===================
-; ==============================
 	;---------
 	; DESCRIPTION:    Figure out and return what title to use for a OneNote Do page.
 	; PARAMETERS:
-	;  daysInFuture (I,OPT) - How many days into the future this title should be (1 for tomorrow, etc.).
-	;                         Defaults to 0 (today).
-	; RETURNS:        The title to use for the new OneNote Do page.
+	;  instant (I,REQ) - Instant to update title to match.
+	; RETURNS:        The title to use for the new OneNote Do page. If it's a weekend or we're not
+	;                 in a home context, it will simply be the formatted date. If we're in a home
+	;                 context and it's a weekday, it will be a date range from Monday to Friday.
 	;---------
-	generatePageTitle(daysInFuture := 0) {
-		startDateTime := A_Now
-		startDateTime += daysInFuture, Days
-		
+	generateTitle(instant) {
 		; Do pages at work are always daily
 		if(MainConfig.contextIsWork)
-			return FormatTime(startDateTime, "M/d`, dddd")
+			return FormatTime(instant, "M/d`, dddd")
 		
 		; Otherwise, it varies by day of the week
 		if(MainConfig.contextIsHome) {
-			dayOfWeek := FormatTime(startDateTime, "Wday") ; Day of the week, 1 (Sunday) to 7 (Saturday)
+			dayOfWeek := FormatTime(instant, "Wday") ; Day of the week, 1 (Sunday) to 7 (Saturday)
 			
 			; Weekend pages at home are daily
 			if((dayOfWeek = 1) || (dayOfWeek = 7)) ; Sunday or Saturday
-				return FormatTime(startDateTime, "M/d`, dddd")
+				return FormatTime(instant, "M/d`, dddd")
 			
 			; Weekdays are weekly
 			; Calculate datetimes for Monday and Friday to use, even if it's not currently Monday.
-			mondayDateTime := startDateTime
+			mondayDateTime := instant
 			mondayDateTime += -(dayOfWeek - 2), days ; If it's not Monday, get back to Monday's date.
 			mondayTitle := FormatTime(mondayDateTime, "M/d`, dddd")
 			
@@ -508,9 +528,32 @@ class OneNoteTodo {
 			fridayDateTime += 4, days
 			fridayTitle := FormatTime(fridayDateTime, "M/d`, dddd")
 			
-			; DEBUG.popup("A_Now",A_Now, "startDateTime",startDateTime, "mondayDateTime",mondayDateTime, "mondayTitle",mondayTitle, "fridayDateTime",fridayDateTime, "fridayTitle",fridayTitle)
+			; DEBUG.popup("A_Now",A_Now, "instant",instant, "mondayDateTime",mondayDateTime, "mondayTitle",mondayTitle, "fridayDateTime",fridayDateTime, "fridayTitle",fridayTitle)
 			return mondayTitle " - " fridayTitle
 		}
+	}
+	
+	
+	sendRecurringTodos(instant) {
+		; Get array of instants to check.
+		instantsAry := OneNoteTodoPage.getInstantsToCheck(instant)
+		
+		; Read in table of todos to find which apply
+		tl := new TableList("oneNoteRecurringTodos.tl")
+		matchingTodos := []
+		For _,todoAry in tl.getTable() {
+			todo := new OneNoteRecurringTodo(todoAry)
+			For _,instant in instantsAry {
+				if(!todo.matchesInstant(instant))
+					Continue
+				
+				; DEBUG.popup("matched","todo", "todo",todo)
+				matchingTodos.push(todo.title)
+			}
+		}
+		
+		; DEBUG.popup("matchingTodos",matchingTodos)
+		OneNoteTodoPage.sendItems(matchingTodos)
 	}
 	
 	;---------
@@ -527,6 +570,32 @@ class OneNoteTodo {
 				Send, {Enter}
 			
 			Send, % item
+		}
+	}
+	
+	
+	getInstantsToCheck(instant) {
+		; Do pages at work are always daily
+		if(MainConfig.contextIsWork)
+			return [instant]
+		
+		; Otherwise, it varies by day of the week
+		if(MainConfig.contextIsHome) {
+			dayOfWeek := FormatTime(instant, "Wday") ; Day of the week, 1 (Sunday) to 7 (Saturday)
+			
+			; Weekend pages at home are daily
+			if((dayOfWeek = 1) || (dayOfWeek = 7)) ; Sunday or Saturday
+				return [instant]
+			
+			; Weekdays are weekly from Monday to Friday
+			instant += -(dayOfWeek - 2), Days
+			instantsAry := [instant] ; Instant for Monday
+			Loop, 4 {
+				instant += 1, Days
+				instantsAry.push(instant)
+			}
+			
+			return instantsAry
 		}
 	}
 }

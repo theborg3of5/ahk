@@ -37,19 +37,3 @@
 	Review Google Play subscriptions							-			SAT				1							MAR
 	Update Windows recovery drive + archive				-			SAT				1							JUN
 	Physically clean out desktops								-			SAT				2							JUL
-
-	Every Wed														-			WED
-	First Wed of the month										-			WED				1
-	First Wed of August											-			WED				1							AUG
-	August 7															7			-					-							AUG
-	7th of every month											7
-	; Always
-	
-	Every Thurs														-			THU
-	Second Thurs of the month									-			THU				2
-	Second Thurs of August										-			THU				2							AUG
-	August 8															8			-					-							AUG
-	8th of every month											8
-
-	Last day of month												LAST
-	Last day of August											LAST		-					-							AUG

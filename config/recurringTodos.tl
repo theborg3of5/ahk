@@ -1,7 +1,7 @@
-(	TITLE																DATE_OR_DAY		WEEK_OF_MONTH		MONTH
+(	TITLE																DATE		DAY_ABBREV		NUM_DAY_OF_MONTH		MONTH_ABBREV
 
 ; Saturday dailies
-[DATE_OR_DAY.replaceWith(SAT)]
+[DAY_ABBREV.replaceWith(SAT)]
 	Dishes from week
 	Wash laundry
 	Dry laundry
@@ -10,7 +10,7 @@
 []
 
 ; Sunday dailies
-[DATE_OR_DAY.replaceWith(SUN)]
+[DAY_ABBREV.replaceWith(SUN)]
 	Review/type Ninpo notes
 	Fold laundry
 	Roomba
@@ -28,12 +28,28 @@
 	Put away local backup drives								2
 	Book OTF															21
 	Plug in local backup drives								LAST
-	Check FatMax charge											SUN				1
-	Periodic cleaning (small trash cans, kitchen)		SUN				2
+	Check FatMax charge											-			SUN				1
+	Periodic cleaning (small trash cans, kitchen)		-			SUN				2
 
 ; Yearlies
-	Check various airline rewards points					SAT				1						JAN
-	Check various hotel rewards points						SAT				1						FEB
-	Review Google Play subscriptions							SAT				1						MAR
-	Update Windows recovery drive + archive				SAT				1						JUN
-	Physically clean out desktops								SAT				2						JUL
+	Check various airline rewards points					-			SAT				1							JAN
+	Check various hotel rewards points						-			SAT				1							FEB
+	Review Google Play subscriptions							-			SAT				1							MAR
+	Update Windows recovery drive + archive				-			SAT				1							JUN
+	Physically clean out desktops								-			SAT				2							JUL
+
+	Every Wed														-			WED
+	First Wed of the month										-			WED				1
+	First Wed of August											-			WED				1							AUG
+	August 7															7			-					-							AUG
+	7th of every month											7
+	; Always
+	
+	Every Thurs														-			THU
+	Second Thurs of the month									-			THU				2
+	Second Thurs of August										-			THU				2							AUG
+	August 8															8			-					-							AUG
+	8th of every month											8
+
+	Last day of month												LAST
+	Last day of August											LAST		-					-							AUG

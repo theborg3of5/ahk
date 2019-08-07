@@ -2,6 +2,8 @@
 	^c::return ; Disable breaking behavior for easy-to-hit-accidentally ^c, PuTTY already has a ^+c hotkey that works too.
 	^v::Send, +{Insert} ; Normal paste, without all the inserting of spaces.
 	+Tab::Send, {Left} ; Allow reverse field navigation.
+	PgUp::+PgUp
+	PgDn::+PgDn
 	
 	; Insert arbitrary text, inserting needed spaces to overwrite.
 	^i::Putty.insertArbitraryText()

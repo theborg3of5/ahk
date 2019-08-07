@@ -530,3 +530,96 @@ class OneNoteTodo {
 		}
 	}
 }
+
+
+class OneNoteRecurringTodo { ; GDB TODO call out that this comes from a row out of a TableList from oneNoteRecurringTodos.tl
+
+; ==============================
+; == Public ====================
+; ==============================
+	__New(todoAry) {
+		this.title         := todoAry["TITLE"]
+		this.date          := todoAry["DATE"]
+		this.dayAbbrev     := todoAry["DAY_ABBREV"]
+		this.monthAbbrev   := todoAry["MONTH_ABBREV"]
+		this.numDayOfMonth := todoAry["NUM_DAY_OF_MONTH"]
+	}
+	
+	matchesInstant(instant) {
+		if(!this.instantMatchesDate(instant))
+			return false
+		if(!this.instantMatchesDayAbbrev(instant))
+			return false
+		if(!this.instantMatchesMonthAbbrev(instant))
+			return false
+		if(!this.instantMatchesNumDayOfMonth(instant))
+			return false
+		
+		return true
+	}
+	
+	
+; ==============================
+; == Private ===================
+; ==============================
+	title := ""
+	date := ""
+	dayAbbrev := ""
+	monthAbbrev := ""
+	numDayOfMonth := "" ; For the day of the week, which number that is within the month (i.e. 2 for 2nd Wednesday in the month).
+	
+	
+	
+	instantMatchesDate(instant) {
+		if(this.date = "")
+			return true
+		
+		instDate := FormatTime(instant, "d") ; Date, no leading 0
+		if(this.date = instDate)
+			return true
+		
+		; Special case for last day of the month
+		if(this.date = "LAST") {
+			monthNum := FormatTime(instant, "M") ; Month number, no leading 0
+			year     := FormatTime(instant, "yyyy")
+			if(instDate = getLastDateOfMonth(monthNum, year))
+				return true
+		}
+		
+		return false
+	}
+	
+	instantMatchesDayAbbrev(instant) {
+		if(this.dayAbbrev = "")
+			return true
+			
+		instDayAbbrev := StringUpper(FormatTime(instant, "ddd")) ; Day of week abbreviation, all caps
+		if(this.dayAbbrev = instDayAbbrev)
+			return true
+		
+		return false
+	}
+
+	instantMatchesMonthAbbrev(instant) {
+		if(this.monthAbbrev = "")
+			return true
+		
+		instMonthAbbrev := StringUpper(FormatTime(instant, "MMM")) ; Month abbreviation
+		if(this.monthAbbrev = instMonthAbbrev)
+			return true
+		
+		return false
+	}
+
+	instantMatchesNumDayOfMonth(instant) { ; For the day of the week, which number that is within the month (i.e. 2 for 2nd Wednesday in the month).
+		if(this.numDayOfMonth = "")
+			return true
+		
+		instDate := FormatTime(instant, "d") ; Date, no leading 0
+		instNumDayOfMonth := ((instDate - 1) // 7) + 1 ; -1 to get to 0-base (otherwise day 6 and 7 are in different week numbers), +1 to get back after
+		if(this.numDayOfMonth = instNumDayOfMonth)
+			return true
+		
+		return false
+	}
+}

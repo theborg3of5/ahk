@@ -64,13 +64,13 @@
 	^MButton::OneNote.removeLinkUnderMouse()
 	
 	; Todo page handling
-	^t::          OneNote.todoPageCollapseToItems(true)  ; Today only, item-level
-	^+t::         OneNote.todoPageCollapseToItems(false) ; All sections, item-level
-	^!t::         OneNote.todoPageCollapse(true)         ; Today only, fully expanded
-	^+m::         OneNote.todoPageCopy()                 ; New page for today
-	^+#m::        OneNote.todoPageCopy(1)                ; New page for tomorrow
-	:*X:.todosat::OneNote.todoAddUsualSat()              ; Add usual todos for Saturday
-	:*X:.todosun::OneNote.todoAddUsualSun()              ; Add usual todos for Sunday
+	^t::          OneNoteTodo.collapsePageToItems(true)  ; Today only, item-level
+	^+t::         OneNoteTodo.collapsePageToItems(false) ; All sections, item-level
+	^!t::         OneNoteTodo.collapsePage(true)         ; Today only, fully expanded
+	^+m::         OneNoteTodo.copyPage()                 ; New page for today
+	^+#m::        OneNoteTodo.copyPage(1)                ; New page for tomorrow
+	:*X:.todosat::OneNoteTodo.addUsualSat()              ; Add usual todos for Saturday
+	:*X:.todosun::OneNoteTodo.addUsualSun()              ; Add usual todos for Sunday
 
 	; Clean up a table from an emc2summary page
 	^+f::OneNote.cleanUpEMC2SummaryTableFormatting()
@@ -230,139 +230,6 @@ class OneNote {
 	}
 	
 	;---------
-	; DESCRIPTION:    For a "Do" todo page in OneNote, collapse it based on the given specifications.
-	; PARAMETERS:
-	;  todayOnly       (I,REQ) -  true: collapse everything that's not under the level-2 "Today" header.
-	;                            false: show items under all sections.
-	;  collapseToItems (I,OPT) - Set to true to collapse everything to the "item" level (under the 3
-	;                            levels of headers). If false, everything will be fully expanded.
-	; SIDE EFFECTS:   Puts the cursor at the beginning of the first line under the "Today" header.
-	;---------
-	todoPageCollapse(todayOnly, collapseToItems := false) {
-		Send, ^{Home} ; Get to top-level ("Do") header so we affect the whole page
-		
-		if(collapseToItems)
-			Send, !+4 ; Item level in all sections (level 4)
-		else
-			Send, !+0 ; Show all items on all levels
-		
-		if(todayOnly)
-			Send, !+3 ; Collapse to headers under Today (which collapses headers under Today so only unfinished todos on level 4 are visible)
-		
-		; Get down to first item under Today header
-		Send, {End}{Right}{End}{Right} ; End of "Do" line, right to "Today" line, end of "Today" line, right to first item line. For some reason OneNote won't take {Down} keystrokes reliably, but this seems to work instead.
-	}
-	
-	;---------
-	; DESCRIPTION:    For a "Do" todo page in OneNote, collapse it to the "Item" level (under the 3
-	;                 levels of headers)
-	; PARAMETERS:
-	;  todayOnly (I,REQ) - true: collapse everything that's not under the level-2 "Today" header.
-	;                      false: show items under all sections.
-	; SIDE EFFECTS:   Puts the cursor at the beginning of the first line under the "Today" header.
-	;---------
-	todoPageCollapseToItems(todayOnly) {
-		OneNote.todoPageCollapse(todayOnly, true)
-	}
-	
-	;---------
-	; DESCRIPTION:    Make a copy of the current "Do" todo page and update it for today or a day in
-	;                 the future.
-	; PARAMETERS:
-	;  daysInFuture (I,OPT) - The number of days in the future for the date in the title of the new
-	;                         page. If not set, we will use today's date (0 days in the future).
-	; SIDE EFFECTS:   Sets a background color on the old page to help distinguish.
-	;---------
-	todoPageCopy(daysInFuture := 0) { ; Defaults to 0 days in the future (today)
-		; Change the page color before we leave, so it's noticeable if I end up there.
-		Send, !w
-		Send, pc
-		Send, {Enter}
-		
-		Send, ^!m                  ; Move or copy page
-		WinWaitActive, Move or Copy Pages
-		Sleep, 500                 ; Wait a half second for the popup to be input-ready
-		Send, {Down 5}             ; Select first section from first notebook (bypassing "Recent picks" section)
-		Send, !c                   ; Copy button
-		WinWaitClose, Move or Copy Pages
-		
-		; Wait for new page to appear.
-		; Give the user a chance to wait a little longer before continuing
-		; (for when OneNote takes a while to actually make the new page).
-		t := new Toast()
-		t.showPersistent()
-		Loop {
-			t.setText("Waiting for 2s, press space to keep waiting..." getDots(A_Index - 1))
-			Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
-			endKey := removeStringFromStart(ErrorLevel, "EndKey:")
-			if(endKey = "Space")
-				Continue
-			
-			; Break out immediately if enter/escape were pressed.
-			if(endKey = "Enter" || endKey = "Escape")
-				Break
-			
-			t.setText("Waiting for 1s, press space to keep waiting..." getDots(A_Index - 1))
-			Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
-			endKey := removeStringFromStart(ErrorLevel, "EndKey:")
-			if(endKey = "Space")
-				Continue
-			
-			Break
-		}
-		t.close()
-		
-		; Quit without doing anything else if they hit escape
-		if(endKey = "Escape")
-			return
-		
-		Send, ^{PgDn} ; Switch to (presumably) new page
-		OneNote.makeSubpage()
-		
-		; Make the current page have no background color.
-		Send, !w
-		Send, pc
-		Send, n
-		
-		; Update title
-		Send, ^+t                                           ; Select title (to replace with new day/date)
-		Sleep, 1000                                         ; Wait for selection to take
-		Send, % OneNote.todoPageGenerateTitle(daysInFuture) ; Send title
-		Send, ^+t                                           ; Select title again in case you want a different date.
-	}
-	
-	;---------
-	; DESCRIPTION:    Add the "usual" todos that are needed for every Saturday.
-	;---------
-	todoAddUsualSat() {
-		items := []
-		items.push("Dishes from week")
-		items.push("Wash laundry")
-		items.push("Dry laundry")
-		items.push("Clean off desk")
-		items.push("Pull to-dos from specific sections below")
-		OneNote.todoAddItems(items)
-	}
-	
-	;---------
-	; DESCRIPTION:    Add the "usual" todos that are needed for every Saturday.
-	;---------
-	todoAddUsualSun() {
-		items := []
-		items.push("Review/type Ninpo notes")
-		items.push("Fold laundry")
-		items.push("Roomba")
-		items.push("Dishes from weekend")
-		items.push("Dishes from dinner")
-		items.push("Trash, recycling out")
-		items.push("Play with cats (and walk Dart)")
-		items.push("Meal planning")
-		items.push("Order/obtain groceries")
-		items.push("Pull to-dos from specific sections below")
-		OneNote.todoAddItems(items)
-	}
-	
-	;---------
 	; DESCRIPTION:    When an objects table is copied over from an emc2summary page, it has a lot of formatting quirks we don't want - this removes them.
 	;---------
 	cleanUpEMC2SummaryTableFormatting() {
@@ -464,7 +331,150 @@ class OneNote {
 		WinWaitActive, % OneNote.RightClickMenuTitleString
 		Send, i ; Copy Link
 	}
+}
+
+class OneNoteTodo {
+
+; ==============================
+; == Public ====================
+; ==============================
+	;---------
+	; DESCRIPTION:    For a "Do" todo page in OneNote, collapse it based on the given specifications.
+	; PARAMETERS:
+	;  todayOnly       (I,REQ) -  true: collapse everything that's not under the level-2 "Today" header.
+	;                            false: show items under all sections.
+	;  collapseToItems (I,OPT) - Set to true to collapse everything to the "item" level (under the 3
+	;                            levels of headers). If false, everything will be fully expanded.
+	; SIDE EFFECTS:   Puts the cursor at the beginning of the first line under the "Today" header.
+	;---------
+	collapsePage(todayOnly, collapseToItems := false) {
+		Send, ^{Home} ; Get to top-level ("Do") header so we affect the whole page
+		
+		if(collapseToItems)
+			Send, !+4 ; Item level in all sections (level 4)
+		else
+			Send, !+0 ; Show all items on all levels
+		
+		if(todayOnly)
+			Send, !+3 ; Collapse to headers under Today (which collapses headers under Today so only unfinished todos on level 4 are visible)
+		
+		; Get down to first item under Today header
+		Send, {End}{Right}{End}{Right} ; End of "Do" line, right to "Today" line, end of "Today" line, right to first item line. For some reason OneNote won't take {Down} keystrokes reliably, but this seems to work instead.
+	}
 	
+	;---------
+	; DESCRIPTION:    For a "Do" todo page in OneNote, collapse it to the "Item" level (under the 3
+	;                 levels of headers)
+	; PARAMETERS:
+	;  todayOnly (I,REQ) - true: collapse everything that's not under the level-2 "Today" header.
+	;                      false: show items under all sections.
+	; SIDE EFFECTS:   Puts the cursor at the beginning of the first line under the "Today" header.
+	;---------
+	collapsePageToItems(todayOnly) {
+		OneNoteTodo.collapsePage(todayOnly, true)
+	}
+	
+	;---------
+	; DESCRIPTION:    Make a copy of the current "Do" todo page and update it for today or a day in
+	;                 the future.
+	; PARAMETERS:
+	;  daysInFuture (I,OPT) - The number of days in the future for the date in the title of the new
+	;                         page. If not set, we will use today's date (0 days in the future).
+	; SIDE EFFECTS:   Sets a background color on the old page to help distinguish.
+	;---------
+	copyPage(daysInFuture := 0) { ; Defaults to 0 days in the future (today)
+		; Change the page color before we leave, so it's noticeable if I end up there.
+		Send, !w
+		Send, pc
+		Send, {Enter}
+		
+		Send, ^!m                  ; Move or copy page
+		WinWaitActive, Move or Copy Pages
+		Sleep, 500                 ; Wait a half second for the popup to be input-ready
+		Send, {Down 5}             ; Select first section from first notebook (bypassing "Recent picks" section)
+		Send, !c                   ; Copy button
+		WinWaitClose, Move or Copy Pages
+		
+		; Wait for new page to appear.
+		; Give the user a chance to wait a little longer before continuing
+		; (for when OneNote takes a while to actually make the new page).
+		t := new Toast()
+		t.showPersistent()
+		Loop {
+			t.setText("Waiting for 2s, press space to keep waiting..." getDots(A_Index - 1))
+			Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
+			endKey := removeStringFromStart(ErrorLevel, "EndKey:")
+			if(endKey = "Space")
+				Continue
+			
+			; Break out immediately if enter/escape were pressed.
+			if(endKey = "Enter" || endKey = "Escape")
+				Break
+			
+			t.setText("Waiting for 1s, press space to keep waiting..." getDots(A_Index - 1))
+			Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
+			endKey := removeStringFromStart(ErrorLevel, "EndKey:")
+			if(endKey = "Space")
+				Continue
+			
+			Break
+		}
+		t.close()
+		
+		; Quit without doing anything else if they hit escape
+		if(endKey = "Escape")
+			return
+		
+		Send, ^{PgDn} ; Switch to (presumably) new page
+		OneNote.makeSubpage()
+		
+		; Make the current page have no background color.
+		Send, !w
+		Send, pc
+		Send, n
+		
+		; Update title
+		Send, ^+t                                           ; Select title (to replace with new day/date)
+		Sleep, 1000                                         ; Wait for selection to take
+		Send, % OneNoteTodo.generatePageTitle(daysInFuture) ; Send title
+		Send, ^+t                                           ; Select title again in case you want a different date.
+	}
+	
+	;---------
+	; DESCRIPTION:    Add the "usual" todos that are needed for every Saturday.
+	;---------
+	addUsualSat() {
+		items := []
+		items.push("Dishes from week")
+		items.push("Wash laundry")
+		items.push("Dry laundry")
+		items.push("Clean off desk")
+		items.push("Pull to-dos from specific sections below")
+		OneNoteTodo.sendItems(items)
+	}
+	
+	;---------
+	; DESCRIPTION:    Add the "usual" todos that are needed for every Saturday.
+	;---------
+	addUsualSun() {
+		items := []
+		items.push("Review/type Ninpo notes")
+		items.push("Fold laundry")
+		items.push("Roomba")
+		items.push("Dishes from weekend")
+		items.push("Dishes from dinner")
+		items.push("Trash, recycling out")
+		items.push("Play with cats (and walk Dart)")
+		items.push("Meal planning")
+		items.push("Order/obtain groceries")
+		items.push("Pull to-dos from specific sections below")
+		OneNoteTodo.sendItems(items)
+	}
+	
+	
+; ==============================
+; == Private ===================
+; ==============================
 	;---------
 	; DESCRIPTION:    Figure out and return what title to use for a OneNote Do page.
 	; PARAMETERS:
@@ -472,7 +482,7 @@ class OneNote {
 	;                         Defaults to 0 (today).
 	; RETURNS:        The title to use for the new OneNote Do page.
 	;---------
-	todoPageGenerateTitle(daysInFuture := 0) {
+	generatePageTitle(daysInFuture := 0) {
 		startDateTime := A_Now
 		startDateTime += daysInFuture, Days
 		
@@ -508,7 +518,7 @@ class OneNote {
 	; PARAMETERS:
 	;  items (I,REQ) - Simple array of todo items to send.
 	;---------
-	todoAddItems(items) {
+	sendItems(items) {
 		Send, ^0 ; Clear current tag (so we're definitely adding the to-do tag, not checking it off)
 		Send, ^1 ; To-do tag
 		

@@ -1,5 +1,9 @@
 # New Ideas
 	Set up Teams with linking support (both inline ^+k and hyperlinking class)
+	Could we do something more consistent for some of the social windows (Telegram, Teams, etc.), where we can somehow just send an escape keystroke instead of closing?
+		Consistent hotkey (backtick, perhaps)?
+		Add a double-escape window action for closing (for use in these cases), instead of just closing on first Escape (probably a pass-through hotkey with ~)
+	Clean out MatterMost stuff since that's going away
 	Update dbpop/dbto hotstring to handle a special way to insert labels at the top of a popup/toast
 		Possible syntax: +message
 			Example: +Matched todo,todo

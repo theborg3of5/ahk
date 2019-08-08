@@ -2,6 +2,7 @@
 	New .todo-style hotstring for OneNote that changes based on the day
 		Finish documenting new functions and classes
 		Consider adding recurring todos in copy-page logic
+	Set up Teams with linking support (both inline ^+k and hyperlinking class)
 	FormatList - consider adding support for ranges (maybe colons or hyphens?)
 		Both input and output?
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.

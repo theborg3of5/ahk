@@ -64,9 +64,9 @@
 	^MButton::OneNote.removeLinkUnderMouse()
 	
 	; Todo page handling
-	^t::       OneNoteTodoPage.collapseToItems(true)      ; Today only, item-level
-	^+t::      OneNoteTodoPage.collapseToItems(false)     ; All sections, item-level
-	^!t::      OneNoteTodoPage.collapse(true)             ; Today only, fully expanded
+	^t::       OneNoteTodoPage.collapseToTodayItems()     ; Today only, item-level
+	^+t::      OneNoteTodoPage.collapseToAllItems()       ; All sections, item-level
+	^!t::      OneNoteTodoPage.collapseToTodayAll()       ; Today only, fully expanded
 	^+m::      OneNoteTodoPage.copyForToday()             ; New page for today
 	^+#m::     OneNoteTodoPage.copyForTomorrow()          ; New page for tomorrow
 	:*X:.todo::OneNoteTodoPage.addRecurringForToday()     ; Add recurring todos for today
@@ -333,46 +333,26 @@ class OneNote {
 	}
 }
 
-/* A helper class for all of the logic that goes into my OneNote organizational system. */
+/*
+	A helper class for all of the logic that goes into my OneNote organizational system.
+*/
 class OneNoteTodoPage {
 
 ; ==============================
 ; == Public ====================
 ; ==============================
 	;---------
-	; DESCRIPTION:    For a "Do" todo page in OneNote, collapse it based on the given specifications.
-	; PARAMETERS:
-	;  todayOnly       (I,REQ) -  true: collapse everything that's not under the level-2 "Today" header.
-	;                            false: show items under all sections.
-	;  collapseToItems (I,OPT) - Set to true to collapse everything to the "item" level (under the 3
-	;                            levels of headers). If false, everything will be fully expanded.
+	; DESCRIPTION:    Collapse the todo page to different levels.
 	; SIDE EFFECTS:   Puts the cursor at the beginning of the first line under the "Today" header.
 	;---------
-	collapse(todayOnly, collapseToItems := false) {
-		Send, ^{Home} ; Get to top-level ("Do") header so we affect the whole page
-		
-		if(collapseToItems)
-			Send, !+4 ; Item level in all sections (level 4)
-		else
-			Send, !+0 ; Show all items on all levels
-		
-		if(todayOnly)
-			Send, !+3 ; Collapse to headers under Today (which collapses headers under Today so only unfinished todos on level 4 are visible)
-		
-		; Get down to first item under Today header
-		Send, {End}{Right}{End}{Right} ; End of "Do" line, right to "Today" line, end of "Today" line, right to first item line. For some reason OneNote won't take {Down} keystrokes reliably, but this seems to work instead.
+	collapseToTodayItems() {
+		OneNoteTodoPage.collapse(true)
 	}
-	
-	;---------
-	; DESCRIPTION:    For a "Do" todo page in OneNote, collapse it to the "Item" level (under the 3
-	;                 levels of headers)
-	; PARAMETERS:
-	;  todayOnly (I,REQ) - true: collapse everything that's not under the level-2 "Today" header.
-	;                      false: show items under all sections.
-	; SIDE EFFECTS:   Puts the cursor at the beginning of the first line under the "Today" header.
-	;---------
-	collapseToItems(todayOnly) {
-		OneNoteTodoPage.collapse(todayOnly, true)
+	collapseToAllItems() {
+		OneNoteTodoPage.collapse(false)
+	}
+	collapseToTodayAll() {
+		OneNoteTodoPage.collapse(true, true)
 	}
 	
 	;---------
@@ -413,6 +393,31 @@ class OneNoteTodoPage {
 ; ==============================
 ; == Private ===================
 ; ==============================
+	;---------
+	; DESCRIPTION:    For a "Do" todo page in OneNote, collapse it based on the given specifications.
+	; PARAMETERS:
+	;  todayOnly (I,REQ) - true: collapse everything that's not under the level-2 "Today" header.
+	;                      false: show items under all sections.
+	;  expandAll (I,OPT) - Set to true to expand everything (while still respecting todayOnly setting).
+	;                      Default is to collapse everything to the "item" level (under the 3 levels
+	;                      of headers).
+	; SIDE EFFECTS:   Puts the cursor at the beginning of the first line under the "Today" header.
+	;---------
+	collapse(todayOnly, expandAll := false) {
+		Send, ^{Home} ; Get to top-level ("Do") header so we affect the whole page
+		
+		if(expandAll)
+			Send, !+0 ; Show all items on all levels
+		else
+			Send, !+4 ; Item level in all sections (level 4)
+		
+		if(todayOnly)
+			Send, !+3 ; Collapse to headers under Today (which collapses headers under Today so only todos on level 4 are visible)
+		
+		; Get down to first item under Today header
+		Send, {End}{Right}{End}{Right} ; End of "Do" line, right to "Today" line, end of "Today" line, right to first item line. For some reason OneNote won't take {Down} keystrokes reliably, but this seems to work instead.
+	}
+	
 	;---------
 	; DESCRIPTION:    Make a copy of the current "Do" todo page and update it for the given instant.
 	; PARAMETERS:
@@ -474,7 +479,12 @@ class OneNoteTodoPage {
 		Send, ^+t                                      ; Select title (to replace with new day/date)
 		Sleep, 1000                                    ; Wait for selection to take
 		Send, % OneNoteTodoPage.generateTitle(instant) ; Send title
-		Send, ^+t                                      ; Select title again in case you want a different date.
+		
+		OneNoteTodoPage.collapseToTodayItems() ; Also puts us on the first line
+		
+		; Insert any applicable recurring todos
+		Send, {Enter}{Left} ; New line, left to new blank line
+		OneNoteTodoPage.sendRecurringTodos(instant)
 	}
 	
 	;---------
@@ -596,7 +606,9 @@ class OneNoteTodoPage {
 }
 
 
-/* This class represents a single recurring todo item, along with the timeframe filtering info that goes with it. */
+/* 
+	This class represents a single recurring todo item, along with the timeframe filtering info that goes with it.
+*/
 class OneNoteRecurringTodo {
 
 ; ==============================

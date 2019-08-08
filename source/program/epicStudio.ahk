@@ -18,7 +18,7 @@
 	^+l::EpicStudio.linkRoutineToCurrentDLG()
 	
 	; Generate and insert snippet
-	::.snip::EpicStudio.insertMSnippet()
+	:X:.snip::EpicStudio.insertMSnippet()
 	
 	; Debug, auto-search for workstation ID.
 	~F5::EpicStudio.runDebug("ws:" MainConfig.private["WORK_COMPUTER_NAME"])

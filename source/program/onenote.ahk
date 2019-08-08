@@ -333,6 +333,7 @@ class OneNote {
 	}
 }
 
+/* A helper class for all of the logic that goes into my OneNote organizational system. */
 class OneNoteTodoPage {
 
 ; ==============================
@@ -374,59 +375,38 @@ class OneNoteTodoPage {
 		OneNoteTodoPage.collapse(todayOnly, true)
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Make a copy of the current todo page and update it to be for today.
+	;---------
 	copyForToday() {
 		OneNoteTodoPage.copy(A_Now)
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Make a copy of the current todo page and update it to be for tomorrow.
+	;---------
 	copyForTomorrow() {
 		instant := A_Now
 		instant += 1, Days
 		OneNoteTodoPage.copy(instant)
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Add the recurring todo items (from oneNoteRecurringTodos.tl) that match
+	;                 today's date.
+	;---------
 	addRecurringForToday() {
 		OneNoteTodoPage.sendRecurringTodos(A_Now)
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Add the recurring todo items (from oneNoteRecurringTodos.tl) that match
+	;                 tomorrow's date.
+	;---------
 	addRecurringForTomorrow() {
 		instant := A_Now
 		instant += 1, Days
 		OneNoteTodoPage.sendRecurringTodos(instant)
-	}
-	
-	;---------
-	; DESCRIPTION:    Add the "usual" todos that are needed for every Saturday.
-	;---------
-	addUsualSat() {
-		items := []
-		items.push("Dishes from week")
-		items.push("Wash laundry")
-		items.push("Dry laundry")
-		items.push("Clean off desk")
-		items.push("Pull to-dos from specific sections below")
-		OneNoteTodoPage.sendItems(items)
-	}
-	
-	;---------
-	; DESCRIPTION:    Add the "usual" todos that are needed for every Saturday.
-	;---------
-	addUsualSun() {
-		items := []
-		items.push("Review/type Ninpo notes")
-		items.push("Fold laundry")
-		items.push("Roomba")
-		items.push("Dishes from weekend")
-		items.push("Dishes from dinner")
-		items.push("Trash, recycling out")
-		items.push("Play with cats (and walk Dart)")
-		items.push("Meal planning")
-		items.push("Order/obtain groceries")
-		items.push("Pull to-dos from specific sections below")
-		OneNoteTodoPage.sendItems(items)
 	}
 	
 	
@@ -533,7 +513,14 @@ class OneNoteTodoPage {
 		}
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Insert the todos for the date of the provided timestamp.
+	; PARAMETERS:
+	;  instant (I,REQ) - The instant to insert recurring todos for.
+	; NOTES:          The inserted todos may not only be for the day of the provided instant - in
+	;                 certain contexts, we will also check the surrounding weekdays (see
+	;                 .getInstantsToCheck for details).
+	;---------
 	sendRecurringTodos(instant) {
 		; Get array of instants to check.
 		instantsAry := OneNoteTodoPage.getInstantsToCheck(instant)
@@ -547,7 +534,7 @@ class OneNoteTodoPage {
 				if(!todo.matchesInstant(instant))
 					Continue
 				
-				; DEBUG.popup("matched","todo", "todo",todo)
+				; DEBUG.popup("Matched todo","", "todo",todo)
 				matchingTodos.push(todo.title)
 			}
 		}
@@ -557,23 +544,14 @@ class OneNoteTodoPage {
 	}
 	
 	;---------
-	; DESCRIPTION:    Send the given items with a to-do tag (bound to Ctrl+1).
+	; DESCRIPTION:    Determine which days we should find recurring todo items for, based on the
+	;                 context (work or home) and whether it's a weekday or weekend.
 	; PARAMETERS:
-	;  items (I,REQ) - Simple array of todo items to send.
+	;  instant (I,REQ) - The instant to evaluate
+	; RETURNS:        If (and only if) it's a weekday and we're in a home context, we'll return an
+	;                 array for all weekdays in the current week (from Monday to Friday). Otherwise,
+	;                 we'll return an array with just the provided instant in it.
 	;---------
-	sendItems(items) {
-		Send, ^0 ; Clear current tag (so we're definitely adding the to-do tag, not checking it off)
-		Send, ^1 ; To-do tag
-		
-		For i,item in items {
-			if(i > 1)
-				Send, {Enter}
-			
-			Send, % item
-		}
-	}
-	
-	
 	getInstantsToCheck(instant) {
 		; Do pages at work are always daily
 		if(MainConfig.contextIsWork)
@@ -598,14 +576,49 @@ class OneNoteTodoPage {
 			return instantsAry
 		}
 	}
+	
+	;---------
+	; DESCRIPTION:    Send the given items with a to-do tag (bound to Ctrl+1).
+	; PARAMETERS:
+	;  items (I,REQ) - Simple array of todo items to send.
+	;---------
+	sendItems(items) {
+		Send, ^0 ; Clear current tag (so we're definitely adding the to-do tag, not checking it off)
+		Send, ^1 ; To-do tag
+		
+		For i,item in items {
+			if(i > 1)
+				Send, {Enter}
+			
+			Send, % item
+		}
+	}
 }
 
 
-class OneNoteRecurringTodo { ; GDB TODO call out that this comes from a row out of a TableList from oneNoteRecurringTodos.tl
+/* This class represents a single recurring todo item, along with the timeframe filtering info that goes with it. */
+class OneNoteRecurringTodo {
 
 ; ==============================
 ; == Public ====================
 ; ==============================
+	;---------
+	; DESCRIPTION:    Create a new recurring todo object.
+	; PARAMETERS:
+	;  todoAry (I,REQ) - An array with info about the object. Format:
+	;                       Required subscripts:
+	;                          ["TITLE"] - Title of the todo item. This is the only required subscript.
+	;                       Filters: these are optional, and if left blank, that part of the date
+	;                       will not be considered when evaluating this todo for matches.
+	;                          ["DATE"]             - The numeric date (or "LAST" for the last day
+	;                                                 of the month) that the todo should be included on.
+	;                          ["DAY_ABBREV"]       - The all-caps abbreviation for the day of the
+	;                                                 week that this todo should match.
+	;                          ["MONTH_ABBREV"]     - The all-caps abbreviation for the month that
+	;                                                 this todo should match.
+	;                          ["NUM_DAY_OF_MONTH"] - The number day of the month (i.e. DAY_ABBREV=WED
+	;                                                 and NUM_DAY_OF_MONTH=2 for 2nd Wednesday of the month).
+	;---------
 	__New(todoAry) {
 		this.title         := todoAry["TITLE"]
 		this.date          := todoAry["DATE"]
@@ -614,7 +627,16 @@ class OneNoteRecurringTodo { ; GDB TODO call out that this comes from a row out 
 		this.numDayOfMonth := todoAry["NUM_DAY_OF_MONTH"]
 	}
 	
+	;---------
+	; DESCRIPTION:    Check whether this todo matches the provided instant, based on its filters.
+	; PARAMETERS:
+	;  instant (I,REQ) - Instant to check for a match against this todo's filters.
+	; RETURNS:        true if it matches, false otherwise.
+	;---------
 	matchesInstant(instant) {
+		if(instant = "")
+			return false
+		
 		if(!this.instantMatchesDate(instant))
 			return false
 		if(!this.instantMatchesDayAbbrev(instant))
@@ -631,14 +653,21 @@ class OneNoteRecurringTodo { ; GDB TODO call out that this comes from a row out 
 ; ==============================
 ; == Private ===================
 ; ==============================
-	title := ""
-	date := ""
-	dayAbbrev := ""
-	monthAbbrev := ""
+	title         := "" ; Title for the todo item
+	date          := "" ; Numeric date or "LAST"
+	dayAbbrev     := "" ; All-caps abbreviation for the day of the week
+	monthAbbrev   := "" ; All-caps abbreviation for the month
 	numDayOfMonth := "" ; For the day of the week, which number that is within the month (i.e. 2 for 2nd Wednesday in the month).
 	
 	
-	
+	;---------
+	; DESCRIPTION:    Check whether the provided instant matches the date/day/month/numDayOfMonth
+	;                 filters for this todo item.
+	; PARAMETERS:
+	;  instant (I,REQ) - Instant to check.
+	; RETURNS:        true if it matches the respective filter (or that filter isn't set), false
+	;                 otherwise.
+	;---------
 	instantMatchesDate(instant) {
 		if(this.date = "")
 			return true
@@ -657,7 +686,6 @@ class OneNoteRecurringTodo { ; GDB TODO call out that this comes from a row out 
 		
 		return false
 	}
-	
 	instantMatchesDayAbbrev(instant) {
 		if(this.dayAbbrev = "")
 			return true
@@ -668,7 +696,6 @@ class OneNoteRecurringTodo { ; GDB TODO call out that this comes from a row out 
 		
 		return false
 	}
-
 	instantMatchesMonthAbbrev(instant) {
 		if(this.monthAbbrev = "")
 			return true
@@ -679,8 +706,7 @@ class OneNoteRecurringTodo { ; GDB TODO call out that this comes from a row out 
 		
 		return false
 	}
-
-	instantMatchesNumDayOfMonth(instant) { ; For the day of the week, which number that is within the month (i.e. 2 for 2nd Wednesday in the month).
+	instantMatchesNumDayOfMonth(instant) {
 		if(this.numDayOfMonth = "")
 			return true
 		

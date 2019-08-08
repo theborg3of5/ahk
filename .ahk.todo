@@ -1,6 +1,5 @@
 # New Ideas
 	New .todo-style hotstring for OneNote that changes based on the day
-		Finish documenting new functions and classes
 		Consider adding recurring todos in copy-page logic
 	Set up Teams with linking support (both inline ^+k and hyperlinking class)
 	Update dbpop/dbto hotstring to handle a special way to insert labels at the top of a popup/toast

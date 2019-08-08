@@ -20,6 +20,7 @@
 	GrepWin									CLOSE
 	KDiff										CLOSE
 	Mattermost								CLOSE			CLOSE
+	Teams										CLOSE			CLOSE
 	Notepad									CLOSE			-					-					CTRL_SHIFT
 	OneTastic Macro Editor XML			-				-					HOME_END
 	Pidgin Buddy List						CLOSE			CLOSE

@@ -3,6 +3,11 @@
 		Finish documenting new functions and classes
 		Consider adding recurring todos in copy-page logic
 	Set up Teams with linking support (both inline ^+k and hyperlinking class)
+	Update dbpop/dbto hotstring to handle a special way to insert labels at the top of a popup/toast
+		Possible syntax: +message
+			Example: +Matched todo,todo
+				Output:
+					DEBUG.popup("Matched todo","", "todo",todo)
 	FormatList - consider adding support for ranges (maybe colons or hyphens?)
 		Both input and output?
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.

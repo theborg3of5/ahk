@@ -11,6 +11,10 @@ class Hyperlinker {
 	static Method_WebField     := "WEB_FIELD"
 	static Method_TaggedString := "TAGGED_STRING"
 	
+	; Methods for closing the linking popup (when applicable)
+	static CloseMethod_Enter := "ENTER"
+	static CloseMethod_Alt_A := "ALT_A"
+	
 	;---------
 	; DESCRIPTION:    Link the selected text with the given URL/path.
 	; PARAMETERS:
@@ -57,6 +61,9 @@ class Hyperlinker {
 	;                               ["SET_PATH_METHOD"]       = Method that should be used to add the link,
 	;                                                           from the Hyperlinker.Method_* constants at the
 	;                                                           top of this file.
+	;                               ["CLOSE_METHOD"]          = Method that should be used to close the linking
+	;                                                           popup (if applicable), from the Hyperlinker.CloseMethod_*
+	;                                                           constants at the top of this file.
 	;                               ["LINK_POPUP"]            = If the method is Hyperlinker.Method_PopupField,
 	;                                                           this is the title string for the linking
 	;                                                           popup where we'll enter the path.
@@ -86,6 +93,9 @@ class Hyperlinker {
 	;                       ["SET_PATH_METHOD"]       = Method that should be used to add the link,
 	;                                                   from the Hyperlinker.Method_* constants at the
 	;                                                   top of this file.
+	;                       ["CLOSE_METHOD"]          = Method that should be used to close the linking
+	;                                                   popup (if applicable), from the Hyperlinker.CloseMethod_*
+	;                                                   constants at the top of this file.
 	;                       ["LINK_POPUP"]            = If the method is Hyperlinker.Method_PopupField,
 	;                                                   this is the title string for the linking
 	;                                                   popup where we'll enter the path.
@@ -121,9 +131,9 @@ class Hyperlinker {
 		; Handle linking differently depending on the specified method.
 		setPathMethod := windowLinkInfoAry["SET_PATH_METHOD"]
 		if(setPathMethod = Hyperlinker.Method_PopupField)
-			return Hyperlinker.linkPopupField(path, windowLinkInfoAry["LINK_POPUP"], windowLinkInfoAry["PATH_FIELD_CONTROL_ID"])
+			return Hyperlinker.linkPopupField(path, windowLinkInfoAry["LINK_POPUP"], windowLinkInfoAry["PATH_FIELD_CONTROL_ID"], windowLinkInfoAry["CLOSE_METHOD"])
 		if(setPathMethod = Hyperlinker.Method_WebField)
-			return Hyperlinker.linkWebField(path)
+			return Hyperlinker.linkWebField(path, windowLinkInfoAry["CLOSE_METHOD"])
 		if(setPathMethod = Hyperlinker.Method_TaggedString)
 			return Hyperlinker.linkTaggedString(path, windowLinkInfoAry["TAGGED_STRING_BASE"])
 		
@@ -142,8 +152,8 @@ class Hyperlinker {
 	; SIDE EFFECTS:   
 	; NOTES:          
 	;---------
-	linkPopupField(path, linkPopupTitleString, fieldControlId) {
-		if(!linkPopupTitleString || !fieldControlId)
+	linkPopupField(path, linkPopupTitleString, fieldControlId, closeMethod) {
+		if(!linkPopupTitleString || !fieldControlId || !closeMethod)
 			return false
 		
 		; Launch linking popup and wait for it to open.
@@ -154,7 +164,9 @@ class Hyperlinker {
 		
 		; Set the value of the path field and accept the popup.
 		ControlSetText, % fieldControlId, % path, A
-		Send, {Enter}
+		
+		; Close the popup
+		Hyperlinker.closeWithMethod(closeMethod)
 		
 		return true
 	}
@@ -165,14 +177,20 @@ class Hyperlinker {
 	;  path (I,REQ) - URL or file path to link to.
 	; RETURNS:        True for success, False if something went wrong.
 	;---------
-	linkWebField(path) {
+	linkWebField(path, closeMethod) {
+		if(!closeMethod)
+			return false
+		
 		; Launch linking "popup" and wait for it to open (it's a web-based popup, no real window or fields).
 		Send, ^k
 		Sleep, 100
 		
 		; Set the value of the field and accept the "popup".
 		setWebFieldValue(path)
-		Send, !a
+		
+		; Close the popup
+		Sleep, 500 ; Wait an extra half a second for web popups, as some of them have to validate before we can accept.
+		Hyperlinker.closeWithMethod(closeMethod)
 		
 		return true
 	}
@@ -206,5 +224,12 @@ class Hyperlinker {
 		sendTextWithClipboard(linkedText)
 		
 		return true
+	}
+	
+	closeWithMethod(closeMethod) {
+		if(closeMethod = Hyperlinker.CloseMethod_Enter)
+			Send, {Enter}
+		if(closeMethod = Hyperlinker.CloseMethod_Alt_A)
+			Send, !a
 	}
 }

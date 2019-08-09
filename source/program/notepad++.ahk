@@ -13,7 +13,7 @@
 	:X:dbpop::NotepadPlusPlus.sendDebugCodeString("DEBUG.popup")       ; Debug popup
 	:X:dbto::NotepadPlusPlus.sendDebugCodeString("DEBUG.toast")        ; Debug toast
 	:X:edbpop::NotepadPlusPlus.sendDebugCodeString("DEBUG.popupEarly") ; Debug popup that appears at startup
-	::dbparam::NotepadPlusPlus.insertDebugParams()                     ; Debug parameters
+	:X:dbparam::NotepadPlusPlus.insertDebugParams()                    ; Debug parameters
 #If
 	
 class NotepadPlusPlus {

@@ -58,7 +58,7 @@
 	^!8::VB6.addContactCommentNoDash()
 	
 	; Triple ' hotkey for procedure header, like ES.
-	:*:'''::
+	::'''::
 		Send, !a
 		Sleep, 100
 		Send, {Up}{Enter}

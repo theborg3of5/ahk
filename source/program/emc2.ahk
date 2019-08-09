@@ -17,10 +17,10 @@
 	^+o::EMC2.openCurrentDLGInEpicStudio() ; Take DLG # and pop up the DLG in EpicStudio sidebar.
 	
 	; SmartText hotstrings. Added to favorites to deal with duplicate/similar names.
-	:*:qa.dbc::EMC2.insertSmartText("DBC QA INSTRUCTIONS")
-	:*:qa.new::EMC2.insertSmartText("QA INSTRUCTIONS - NEW CHANGES")
+	:X:qa.dbc::EMC2.insertSmartText("DBC QA INSTRUCTIONS")
+	:X:qa.new::EMC2.insertSmartText("QA INSTRUCTIONS - NEW CHANGES")
 	
-	::openall::EMC2.openRelatedQANsFromTable() ; Open all related QANs from an object in EMC2.
+	:X:openall::EMC2.openRelatedQANsFromTable() ; Open all related QANs from an object in EMC2.
 #If
 
 ; Design open

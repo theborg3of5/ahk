@@ -1,4 +1,9 @@
 # New Ideas
+	Fix onenote todo page copy so it doesn't add a blank line when there are no recurring todos to add.
+		Additional parameter to send, maybe? (since it will know whether there are todos to add or not)
+	Better hotkey for EMC2 locking/unlocking DLGs? ^l, perhaps?
+		Could we also make it work for other INIs that have a view-only button?
+			Could tell the INI by the title
 	Could we do something more consistent for some of the social windows (Telegram, Teams, etc.), where we can somehow just send an escape keystroke instead of closing?
 		Consistent hotkey (backtick, perhaps)?
 		Add a double-escape window action for closing (for use in these cases), instead of just closing on first Escape (probably a pass-through hotkey with ~)

@@ -1,6 +1,4 @@
 # New Ideas
-	Should we create a new (_)init.ahk script for the initialization triggers, instead of putting it directly in _includeCommon?
-		Would be a good place to trigger extensions to base objects (like adding .join() to arrays or .length() to strings)
 	Better hotkey for EMC2 locking/unlocking DLGs? ^l, perhaps?
 		Could we also make it work for other INIs that have a view-only button?
 			Could tell the INI by the title

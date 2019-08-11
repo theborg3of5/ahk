@@ -1,5 +1,7 @@
 #Include %A_LineFile%\..
+	; Auto-execute scripts
 	#Include _constants.ahk  ; Constants must be first so that they're available to all other scripts.
+	#Include _base.ahk
 	
 	#Include clipboard.ahk
 	#Include commandFunctions.ahk

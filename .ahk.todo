@@ -1,6 +1,4 @@
 # New Ideas
-	Fix onenote todo page copy so it doesn't add a blank line when there are no recurring todos to add.
-		Additional parameter to send, maybe? (since it will know whether there are todos to add or not)
 	Better hotkey for EMC2 locking/unlocking DLGs? ^l, perhaps?
 		Could we also make it work for other INIs that have a view-only button?
 			Could tell the INI by the title

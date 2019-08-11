@@ -331,6 +331,15 @@ class OneNote {
 		WinWaitActive, % OneNote.RightClickMenuTitleString
 		Send, i ; Copy Link
 	}
+	
+	;---------
+	; DESCRIPTION:    Insert a blank line on the current line and put the cursor on it.
+	;---------
+	insertBlankLine() {
+		Send, {Home}  ; Get to start of line
+		Send, {Enter} ; New line
+		Send, {Left}  ; Get back up to new blank line
+	}
 }
 
 /*
@@ -480,10 +489,9 @@ class OneNoteTodoPage {
 		Sleep, 1000                                    ; Wait for selection to take
 		Send, % OneNoteTodoPage.generateTitle(instant) ; Send title
 		
-		OneNoteTodoPage.collapseToTodayItems() ; Also puts us on the first line
+		OneNoteTodoPage.collapseToTodayItems() ; Also puts us on the first line of today's todos
 		
 		; Insert any applicable recurring todos
-		Send, {Enter}{Left} ; New line, left to new blank line
 		OneNoteTodoPage.sendRecurringTodos(instant)
 	}
 	
@@ -527,6 +535,7 @@ class OneNoteTodoPage {
 	; DESCRIPTION:    Insert the todos for the date of the provided timestamp.
 	; PARAMETERS:
 	;  instant (I,REQ) - The instant to insert recurring todos for.
+	; SIDE EFFECTS:   Inserts a new line for the todos if you're on a non-blank line to start.
 	; NOTES:          The inserted todos may not only be for the day of the provided instant - in
 	;                 certain contexts, we will also check the surrounding weekdays (see
 	;                 .getInstantsToCheck for details).
@@ -548,6 +557,16 @@ class OneNoteTodoPage {
 				matchingTodos.push(todo.title)
 			}
 		}
+		
+		; Bail if there's nothing to insert.
+		if(isEmpty(matchingTodos))
+			return
+			
+		; Check whether we're already on a blank line or not.
+		Send, {Home} ; Start of line
+		Send, {Shift Down}{End}{Shift Up} ; Select to end of line
+		if(getFirstLineOfSelectedText() != "")
+			OneNote.insertBlankLine()
 		
 		; DEBUG.popup("matchingTodos",matchingTodos)
 		OneNoteTodoPage.sendItems(matchingTodos)

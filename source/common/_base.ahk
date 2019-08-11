@@ -6,19 +6,7 @@ baseObj.length := Func("StrLen") ; <string>.length()
 
 ; Arrays (based on https://autohotkey.com/board/topic/83081-ahk-l-customizing-object-and-array/ )
 ; Define the base class.
-class ArrayBase { ; new base class for Array
-	join(delim := ",") {
-		outString := ""
-		
-		For _,value in this {
-			if(outString)
-				outString .= delim
-			outString .= value
-		}
-		
-		return outString
-	}
-}
+#Include %A_LineFile%\..\class\base\arrayBase.ahk
 
 ; Redefine Array() to use our new ArrayBase base class
 Array(params*) {

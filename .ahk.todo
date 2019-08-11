@@ -17,9 +17,18 @@
 	FormatList - consider adding support for ranges (maybe colons or hyphens?)
 		Both input and output?
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.
-		Maybe string, too - could build in tag replacement, contains, etc.
-			For non-objects (which includes strings): https://www.autohotkey.com/docs/Objects.htm#Pseudo_Properties
-		Arrays: https://autohotkey.com/board/topic/83081-ahk-l-customizing-object-and-array/
+		References:
+			Non-objects (which includes strings): https://www.autohotkey.com/docs/Objects.htm#Pseudo_Properties
+			Arrays: https://autohotkey.com/board/topic/83081-ahk-l-customizing-object-and-array/
+		Array ideas:
+			Lots of array* stuff from data.ahk
+		String ideas:
+			Tag replacement
+			Contains
+			Other stuff from string.ahk?
+		Split string stuff out into a separate script, too?
+		Test dropDuplicates() and get rid of arrayDropDuplicates before moving on
+		Document everything
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
 		Options:
 			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)

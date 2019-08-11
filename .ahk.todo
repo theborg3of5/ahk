@@ -1,4 +1,6 @@
 # New Ideas
+	Should we create a new (_)init.ahk script for the initialization triggers, instead of putting it directly in _includeCommon?
+		Would be a good place to trigger extensions to base objects (like adding .join() to arrays or .length() to strings)
 	Better hotkey for EMC2 locking/unlocking DLGs? ^l, perhaps?
 		Could we also make it work for other INIs that have a view-only button?
 			Could tell the INI by the title
@@ -18,6 +20,8 @@
 		Both input and output?
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.
 		Maybe string, too - could build in tag replacement, contains, etc.
+			For non-objects (which includes strings): https://www.autohotkey.com/docs/Objects.htm#Pseudo_Properties
+		Arrays: https://autohotkey.com/board/topic/83081-ahk-l-customizing-object-and-array/
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
 		Options:
 			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)

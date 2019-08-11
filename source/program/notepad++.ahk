@@ -126,7 +126,7 @@ class NotepadPlusPlus {
 		}
 		
 		header := NotepadPlusPlus.ahkHeaderBaseWithParams
-		header := replaceTag(header, "PARAMETERS", arrayJoin(paramLines, "`n"))
+		header := replaceTag(header, "PARAMETERS", paramLines.join("`n"))
 		SendRaw, % header
 	}
 	

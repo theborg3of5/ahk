@@ -202,11 +202,11 @@ class FormatList {
 		if(format = FormatList.Format_Array)
 			return this.listAry
 		if(format = FormatList.Format_Commas)
-			return arrayJoin(this.listAry, ",")
+			return this.listAry.join(",")
 		if(format = FormatList.Format_CommasSpaced)
-			return arrayJoin(this.listAry, ", ")
+			return this.listAry.join(", ")
 		if(format = FormatList.Format_NewLines)
-			return arrayJoin(this.listAry, "`n")
+			return this.listAry.join("`n")
 		
 		return ""
 	}

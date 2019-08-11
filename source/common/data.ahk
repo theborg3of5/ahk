@@ -125,19 +125,6 @@ arrayDropDuplicates(inputAry) {
 }
 
 
-; Counterpart to strSplit() - puts together all parts of an array with the given delimiter (defaults to "|")
-arrayJoin(arrayToJoin, delim := "|") {
-	outStr := ""
-	
-	For index,value in arrayToJoin {
-		if(outStr)
-			outStr .= delim
-		outStr .= value
-	}
-	
-	return outStr
-}
-
 ; Sets global variables to null.
 nullGlobals(baseName, startIndex, endIndex) {
 	global

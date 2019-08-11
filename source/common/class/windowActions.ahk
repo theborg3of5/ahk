@@ -131,8 +131,6 @@ class WindowActions {
 ; ==============================
 ; == Private ===================
 ; ==============================
-	static actions := []
-	
 	; Constants for supported window actions
 	static Action_None       := "NONE"
 	static Action_Other      := "OTHER"

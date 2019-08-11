@@ -42,10 +42,10 @@ class VisualWindow {
 	; --------------------------------------------
 	static X_LeftEdge   := "LEFT_EDGE"   ; Against left edge of screen
 	static X_RightEdge  := "RIGHT_EDGE"  ; Against right edge of screen
-	static X_Centered    := "CENTERED"    ; Horizontally centered
+	static X_Centered   := "CENTERED"    ; Horizontally centered
 	static Y_TopEdge    := "TOP_EDGE"    ; Against top edge of screen
 	static Y_BottomEdge := "BOTTOM_EDGE" ; Against bottom edge of screen
-	static Y_Centered    := "CENTERED"    ; Vertically centered
+	static Y_Centered   := "CENTERED"    ; Vertically centered
 	
 	;---------
 	; DESCRIPTION:    Create a new VisualWindow object to interact with a window as it appears.

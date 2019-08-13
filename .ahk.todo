@@ -1,14 +1,5 @@
 # New Ideas
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.
-		References:
-			Non-objects (which includes strings): https://www.autohotkey.com/docs/Objects.htm#Pseudo_Properties
-			Arrays: https://autohotkey.com/board/topic/83081-ahk-l-customizing-object-and-array/
-		Array ideas:
-			Lots of array* stuff from data.ahk
-		String ideas:
-			Tag replacement
-			Contains
-			Other stuff from string.ahk?
 		Document everything
 	Better hotkey for EMC2 locking/unlocking DLGs? ^l, perhaps?
 		Could we also make it work for other INIs that have a view-only button?

@@ -6,6 +6,18 @@
 		MsgBox, % ary.join() ; Popup with "a,b" in it
 */
 
+/*
+	Functions to consider moving here
+		isEmpty
+		insertFront
+		arrayContains
+		arrayAppend
+		arrayDropEmptyValues
+	Functions to replace and remove
+		getArraySize	=>	.count (built-in)
+		
+*/
+
 class ArrayBase {
 	contains(value) {
 		; GDB TODO

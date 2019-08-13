@@ -8,6 +8,30 @@
 
 /*
 	Do
+		Functions to consider moving here
+			stringMatches
+			stringMatchesAnyOf
+			stringStartsWith
+			stringEndsWith
+			getStringBeforeStr
+			getStringAfterStr
+			getFirstStringBetweenStr
+			getFullStringBetweenStr
+			isAlpha
+			isNum
+			isAlphaNum
+			isCase
+			getFirstLine
+			cleanupText
+			dropWhitespace
+			appendPieceToString
+			replaceTags
+			replaceTag
+			removeStringFromStart
+			removeStringFromEnd
+			prependCharIfMissing
+			appendCharIfMissing
+			prePadStringToLength
 		Functions to replace and remove
 			stringContains	=>	.contains
 */

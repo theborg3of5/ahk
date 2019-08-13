@@ -27,7 +27,6 @@
 			Contains
 			Other stuff from string.ahk?
 		Split string stuff out into a separate script, too?
-		Test dropDuplicates() and get rid of arrayDropDuplicates before moving on
 		Document everything
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
 		Options:

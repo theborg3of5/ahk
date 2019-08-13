@@ -114,17 +114,6 @@ arrayAppend(baseAry, arrayToAppend) {
 	return outAry
 }
 
-arrayDropDuplicates(inputAry) {
-	outAry := []
-	
-	For _,val in inputAry
-		if(!arrayContains(outAry, val))
-			outAry.push(val)
-	
-	return outAry
-}
-
-
 ; Sets global variables to null.
 nullGlobals(baseName, startIndex, endIndex) {
 	global

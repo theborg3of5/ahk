@@ -203,8 +203,9 @@ class OneTastic {
 			functionDependenciesAry := OneTastic.compileDependenciesForFunction(functionName, functionsXMLAry, allDependenciesAry)
 			totalDependenciesAry := arrayAppend(totalDependenciesAry, functionDependenciesAry)
 		}
-		; DEBUG.popup("totalDependenciesAry",totalDependenciesAry, "arrayDropDuplicates(totalDependenciesAry)",arrayDropDuplicates(totalDependenciesAry))
-		totalDependenciesAry := arrayDropDuplicates(totalDependenciesAry) ; Remove duplicates as we can't import functions more than once
+		; DEBUG.popup("totalDependenciesAry",totalDependenciesAry)
+		totalDependenciesAry.removeDuplicates() ; Remove duplicates as we can't import functions more than once
+		; DEBUG.popup("Removed duplicates","", "totalDependenciesAry",totalDependenciesAry)
 		
 		; Generate array of XMLs in same order
 		totalDependencyXMLsAry := []

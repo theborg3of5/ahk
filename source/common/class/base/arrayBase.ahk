@@ -11,7 +11,7 @@ class ArrayBase {
 		; GDB TODO
 	}
 	
-	dropDuplicates() {
+	removeDuplicates() {
 		tempAry := []
 		
 		; Move everything over to a temporary array

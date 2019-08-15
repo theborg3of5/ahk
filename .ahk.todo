@@ -1,7 +1,6 @@
 # New Ideas
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.
 		Document everything
-	Snapper selector is defaulting selected text into both INI and ID fields again, fix it
 	Better hotkey for EMC2 locking/unlocking DLGs? ^l, perhaps?
 		Could we also make it work for other INIs that have a view-only button?
 			Could tell the INI by the title

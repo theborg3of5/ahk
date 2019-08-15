@@ -9,6 +9,7 @@
 		R INI ID
 		R INI ID: TITLE
 		R INI ID - TITLE
+		ID
 	
 	Example Usage
 		; Parse a string into a record
@@ -114,7 +115,11 @@ class EpicRecord {
 			this.id := getFirstStringBetweenStr(recordString, "#", " - ")
 			this.title := getStringAfterStr(recordString, " - ")
 			
-		; 3) {R } + INI ID + {space} + {: or -} + {title}
+		; 3) ID (no spaces)
+		} else if(!stringContains(recordString, " ")) {
+			this.id := recordString
+			
+		; 4) {R } + INI ID + {space} + {: or -} + {title}
 		} else {
 			recordString := removeStringFromStart(recordString, "R ") ; Trim off "R " at start if it's there.
 			this.ini := getStringBeforeStr(recordString, " ")

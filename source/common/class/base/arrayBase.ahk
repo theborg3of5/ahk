@@ -8,19 +8,21 @@
 
 /*
 	Functions to consider moving here
-		isEmpty
 		insertFront
-		arrayContains
 		arrayAppend
 		arrayDropEmptyValues
 	Functions to replace and remove
 		getArraySize	=>	.count (built-in)
+		arrayContains	=>	.contains
 		
 */
 
 class ArrayBase {
-	contains(value) {
-		; GDB TODO
+	contains(needle) { ; Returns index of FIRST instance found
+		For index,element in this
+			if(element = needle)
+				return index
+		return ""
 	}
 	
 	removeDuplicates() {

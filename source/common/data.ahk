@@ -66,24 +66,6 @@ mergeArrays(default, overrides) {
 	return retAry
 }
 
-; Appends the contents of one (numerically-indexed) array to the (numerically-indexed) other.
-arrayAppend(baseAry, arrayToAppend) {
-	; .length() returns "" if it's not an object and 0 if it's empty
-	isBaseEmpty   := !(baseAry.length() > 0)
-	isAppendEmpty := !(arrayToAppend.length() > 0)
-	
-	if(isBaseEmpty)
-		return arrayToAppend
-	if(isAppendEmpty)
-		return baseAry
-	
-	outAry := baseAry.clone()
-	For _,value in arrayToAppend
-		outAry.push(value)
-	
-	return outAry
-}
-
 ; Sets global variables to null.
 nullGlobals(baseName, startIndex, endIndex) {
 	global
@@ -169,7 +151,7 @@ expandList(listString) {
 	For _,element in elementAry {
 		if(stringContains(element, ":")) { ; Treat it as a numeric range and expand it
 			rangeAry := expandNumericRange(element) ; If it's not numeric, this will return [] and we'll ignore that element entirely.
-			outAry := arrayAppend(outAry, rangeAry)
+			outAry.appendArray(rangeAry)
 		} else {
 			outAry.push(element)
 		}

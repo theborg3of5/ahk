@@ -201,7 +201,7 @@ class OneTastic {
 		totalDependenciesAry := []
 		For _,functionName in startDependenciesAry {
 			functionDependenciesAry := OneTastic.compileDependenciesForFunction(functionName, functionsXMLAry, allDependenciesAry)
-			totalDependenciesAry := arrayAppend(totalDependenciesAry, functionDependenciesAry)
+			totalDependenciesAry.appendArray(functionDependenciesAry)
 		}
 		; DEBUG.popup("totalDependenciesAry",totalDependenciesAry)
 		totalDependenciesAry.removeDuplicates() ; Remove duplicates as we can't import functions more than once
@@ -271,7 +271,7 @@ class OneTastic {
 		
 		For _,dependencyName in allDependenciesAry[functionName] {
 			subDependenciesAry := OneTastic.compileDependenciesForFunction(dependencyName, functionsXMLAry, allDependenciesAry)
-			outAry := arrayAppend(outAry, subDependenciesAry)
+			outAry.appendArray(subDependenciesAry)
 			; DEBUG.popup("functionName",functionName, "dependencyName",dependencyName, "subDependenciesAry",subDependenciesAry, "outAry",outAry)
 		}
 		

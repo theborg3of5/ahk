@@ -11,7 +11,6 @@
 /*
 	Functions to replace and remove
 		arrayContains			=>	.contains
-		arrayAppend				=>	.appendArray
 		arrayDropEmptyValues	=>	.removeEmpties()
 */
 

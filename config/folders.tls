@@ -1,7 +1,7 @@
 (	NAME								ABBREV			PATH																													CONTEXT
 	
 	# General
-	Downloads						dl					<DOWNLOADS>
+	Downloads						dl					<USER_DOWNLOADS>
 [CONTEXT.replaceWith(WORK)]
 	Design							des				<USER_ROOT>\Design
 	Shortcuts						sc					<USER_ROOT>\Shortcuts

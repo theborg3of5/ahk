@@ -265,7 +265,9 @@ class DEBUG {
 		if(value.debugName)
 			return "{" value.debugName "}"
 			
-		; For other objects, just use a generic "Array" label and add the number of elements.
-		return "Array (" getArraySize(value) ")"
+		; For other objects, just use a generic "Array"/"Object" label and add the number of elements.
+		if(value.isArray)
+			return "Array (" value.count() ")"
+		return "Object (" value.count() ")"
 	}
 }

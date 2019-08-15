@@ -1,21 +1,5 @@
 ; Data-structure-related functions.
 
-
-; Returns the number of keys in an array.
-;  Returns 0 for null or non-objects
-;  Returns count of both numeric and string indices.
-getArraySize(ary) {
-	if(!ary | !isObject(ary))
-		return 0
-	
-	; Catches both string (associative arrays) and integer keys.
-	size := 0
-	For i,v in ary
-		size++
-	
-	return size
-}
-
 isEmpty(obj) {
 	if(!isObject(obj))
 		return true

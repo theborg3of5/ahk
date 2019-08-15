@@ -10,7 +10,6 @@
 
 /*
 	Functions to replace and remove
-		getArraySize			=>	.count (built-in)
 		arrayContains			=>	.contains
 		arrayAppend				=>	.appendArray
 		arrayDropEmptyValues	=>	.removeEmpties()

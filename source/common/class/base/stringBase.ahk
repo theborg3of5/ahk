@@ -33,7 +33,8 @@
 			appendCharIfMissing
 			prePadStringToLength
 		Functions to replace and remove
-			stringContains	=>	.contains
+			stringContains					=>	.contains
+			StrSplit							=>	.split
 */
 
 class StringBase {
@@ -46,5 +47,10 @@ class StringBase {
 			return InStr(this, needle, , 0)
 		else
 			return InStr(this, needle)
+	}
+	
+	split(delimiters := "", surroundingCharsToDrop := "") { ; Like StrSplit(), but returns an actual array (not an object)
+		obj := StrSplit(this, delimiters, surroundingCharsToDrop)
+		return convertObjectToArray(obj)
 	}
 }

@@ -11,7 +11,6 @@
 /*
 	Functions to replace and remove
 		arrayContains			=>	.contains
-		arrayDropEmptyValues	=>	.removeEmpties()
 */
 
 class ArrayBase {

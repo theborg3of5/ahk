@@ -180,13 +180,14 @@ class FormatList {
 		if(format = FormatList.Format_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
 			listAry := [listObject]
 		if(format = FormatList.Format_Commas) ; Also covers Format_CommasSpaced, we just treat the extra space as whitespace to clean out.
-			listAry := StrSplit(listObject, ",", " `t") ; Drop leading/trailing spaces, tabs
+			listAry := listObject.split(",", " `t") ; Drop leading/trailing spaces, tabs
 		if(format = FormatList.Format_NewLines)
-			listAry := StrSplit(listObject, "`r`n", " `t") ; Drop leading/trailing spaces, tabs
+			listAry := listObject.split("`r`n", " `t") ; Drop leading/trailing spaces, tabs
 		if(format = FormatList.Format_OneNoteColumn) ; Cells are separated by double newlines
-			listAry := StrSplit(listObject, "`r`n`r`n", " `t`r`n") ; Drop leading/trailing spaces, tabs, newlines
+			listAry := listObject.split("`r`n`r`n", " `t`r`n") ; Drop leading/trailing spaces, tabs, newlines
 		
-		return arrayDropEmptyValues(listAry)
+		listAry.removeEmpties()
+		return listAry
 	}
 	
 	;---------

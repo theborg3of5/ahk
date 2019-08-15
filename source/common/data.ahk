@@ -80,14 +80,12 @@ nullGlobals(baseName, startIndex, endIndex) {
 	}
 }
 
-arrayDropEmptyValues(inputAry) {
-	outAry := []
+convertObjectToArray(obj) {
+	newArray := []
+	For _,value in obj
+		newArray.push(value)
 	
-	For _,val in inputAry
-		if(val != "")
-			outAry.push(val)
-	
-	return outAry
+	return newArray
 }
 
 ; Creates a new table (2D array) with the values of the old, but the rows are indexed by the value of a specific subscript in each row.

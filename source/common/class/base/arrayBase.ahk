@@ -9,8 +9,19 @@
 */
 
 class ArrayBase {
-	static isArray := true
+
+; ==============================
+; == Public ====================
+; ==============================
+	static isArray := true ; Flag for when we need to tell the difference between an array and an object.
 	
+	;---------
+	; DESCRIPTION:    Check whether this array contains a particular value.
+	; PARAMETERS:
+	;  needle (I,REQ) - The value to search the array for.
+	; RETURNS:        The first index where we found the value in question.
+	;                 "" if we didn't find it at all.
+	;---------
 	contains(needle) { ; Returns index of FIRST instance found
 		For index,element in this
 			if(element = needle)
@@ -18,10 +29,18 @@ class ArrayBase {
 		return ""
 	}
 	
+	;---------
+	; DESCRIPTION:    Append the values from the given array to the end of this array.
+	; PARAMETERS:
+	;  arrayToAppend (I,REQ) - The array of values to add.
+	;---------
 	appendArray(arrayToAppend) {
 		this.push(arrayToAppend*)
 	}
 	
+	;---------
+	; DESCRIPTION:    Removes any duplicate entries from the array, leaving the first instance alone.
+	;---------
 	removeDuplicates() {
 		; Move everything over to a temporary array
 		tempAry := []
@@ -36,6 +55,9 @@ class ArrayBase {
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    Removes any empty ("") entries from the array.
+	;---------
 	removeEmpties() {
 		; Move everything over to a temporary array
 		tempAry := []
@@ -50,6 +72,12 @@ class ArrayBase {
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    Combine all array values into a single string.
+	; PARAMETERS:
+	;  delim (I,OPT) - Delimiter to include between array entries. Defaults to a comma (,).
+	; RETURNS:        Combined string
+	;---------
 	join(delim := ",") {
 		outString := ""
 		
@@ -62,6 +90,9 @@ class ArrayBase {
 		return outString
 	}
 	
+	;---------
+	; DESCRIPTION:    Remove all entries from this array.
+	;---------
 	clear() {
 		this.removeAt(this.minIndex(), this.length())
 	}

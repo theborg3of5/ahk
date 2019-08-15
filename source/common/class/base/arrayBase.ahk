@@ -8,11 +8,6 @@
 		str := ary.join() ; str = "a,b"
 */
 
-/*
-	Functions to replace and remove
-		arrayContains			=>	.contains
-*/
-
 class ArrayBase {
 	static isArray := true
 	

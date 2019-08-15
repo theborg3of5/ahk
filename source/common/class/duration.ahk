@@ -137,7 +137,7 @@ class Duration {
 	
 	
 	isUnitChar(char) {
-		return arrayContains(Duration.supportedUnitsAry, char)
+		return Duration.supportedUnitsAry.contains(char)
 	}
 	
 	

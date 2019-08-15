@@ -562,7 +562,7 @@ class TableList {
 			return TableList.RowType_Model
 		
 		firstChar := subStr(row, 1, 1)
-		if(arrayContains(this.chars["PASS"], firstChar))
+		if(this.chars["PASS"].contains(firstChar))
 			return TableList.RowType_Pass
 		
 		if(this.keyRowChars.hasKey(firstChar))
@@ -577,7 +577,7 @@ class TableList {
 	;  row (I,REQ) - Normal row to process (string).
 	;---------
 	processNormal(row) {
-		rowAry := StrSplit(row, A_Tab)
+		rowAry := row.split(A_Tab)
 		this.applyIndexLabels(rowAry)
 		this.applyMods(rowAry)
 		
@@ -589,7 +589,7 @@ class TableList {
 		; Split up any entries that include the multi-entry character (pipe by default).
 		For i,value in rowAry
 			if(stringContains(value, this.chars["MULTIENTRY"]))
-				rowAry[i] := StrSplit(value, this.chars["MULTIENTRY"])
+				rowAry[i] := value.split(this.chars["MULTIENTRY"])
 		
 		this.table.push(rowAry)
 	}
@@ -770,7 +770,7 @@ class TableList {
 		
 		; If the value isn't blank, compare it to our allowed value.
 		if(isObject(valueToCompare)) { ; Array case - multiple values in filter column.
-			if(arrayContains(valueToCompare, allowedValue))
+			if(valueToCompare.contains(allowedValue))
 				return true
 		} else {
 			if(valueToCompare = allowedValue)

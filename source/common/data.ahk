@@ -26,17 +26,6 @@ forceNumber(data) {
 	return 0
 }
 
-; Array contains function. Returns index if it exists.
-arrayContains(haystack, needle) {
-	; DEBUG.popup("Hay", haystack, "Needle", needle)
-	
-	For i, el in haystack
-		if(el = needle)
-			return i
-	
-	return ""
-}
-
 ; Maximum of any number of numeric arguments.
 max(nums*) {
 	; DEBUG.popup("Max", "Start", "Nums", nums)

@@ -201,7 +201,7 @@ sendMediaKey(keyName) {
 	
 	; Only certain media keys need special handling, let others straight through.
 	specialKeysAry := ["Media_Play_Pause", "Media_Prev", "Media_Next"]
-	if(!arrayContains(specialKeysAry, keyName)) {
+	if(!specialKeysAry.contains(keyName)) {
 		Send, % "{" keyName "}"
 		return
 	}

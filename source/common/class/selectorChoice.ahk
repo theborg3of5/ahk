@@ -34,7 +34,7 @@ class SelectorChoice {
 		
 		abbrev := this.dataAry["ABBREV"]
 		if(isObject(abbrev))
-			return arrayContains(abbrev, stringToTest)
+			return abbrev.contains(stringToTest)
 		else
 			return (stringToTest = abbrev)
 	}

@@ -1,6 +1,8 @@
 # New Ideas
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.
 		Document everything
+	Consider adding an ObjectBase class to implement things like .contains() so we don't have to worry if something is an array or not.
+		Consider most other functions in ArrayBase, too.
 	Can data.ahk > isEmpty() be simplified to use this from arrayAppend()?
 		!(baseAry.length() > 0)
 	Review usage of [] vs {} for associative arrays

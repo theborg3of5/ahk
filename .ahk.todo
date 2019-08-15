@@ -1,6 +1,11 @@
 # New Ideas
 	Consider augmenting/overloading the generic array class/object thing - to add stuff like join, dropping empty values, etc.
 		Document everything
+	Can data.ahk > isEmpty() be simplified to use this from arrayAppend()?
+		!(baseAry.length() > 0)
+	Review usage of [] vs {} for associative arrays
+		Probably better to always use {} for associative, for future compatibility with AHKv2
+			Clearer this way, too.
 	Better hotkey for EMC2 locking/unlocking DLGs? ^l, perhaps?
 		Could we also make it work for other INIs that have a view-only button?
 			Could tell the INI by the title

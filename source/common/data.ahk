@@ -42,20 +42,6 @@ forceNumber(data) {
 	return 0
 }
 
-; Inserts an item at the beginning of an array.
-insertFront(ByRef arr, new) {
-	arr2 := Object()
-	arr2.Insert(new)
-	; DEBUG.popup(arr2, "Array 2")
-	
-	arrLen := arr.MaxIndex()
-	Loop, %arrLen% {
-		arr2.Insert(arr[A_Index])
-	}
-	
-	return arr2
-}
-
 ; Array contains function. Returns index if it exists.
 arrayContains(haystack, needle) {
 	; DEBUG.popup("Hay", haystack, "Needle", needle)

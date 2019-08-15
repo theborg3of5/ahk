@@ -1,20 +1,19 @@
 /*
 	Base class to override Array's default base with, so we can add these functions directly to arrays.
 	
+	NOTE: the functions here are only guaranteed to work on numeric arrays (though they technically exist on associative arrays initially created with []).
+	
 	Example usage:
 		ary := ["a", "b"]
-		MsgBox, % ary.join() ; Popup with "a,b" in it
+		str := ary.join() ; str = "a,b"
 */
 
 /*
-	Functions to consider moving here
-		insertFront
-		arrayAppend
-		arrayDropEmptyValues
 	Functions to replace and remove
-		getArraySize	=>	.count (built-in)
-		arrayContains	=>	.contains
-		
+		getArraySize			=>	.count (built-in)
+		arrayContains			=>	.contains
+		arrayAppend				=>	.appendArray
+		arrayDropEmptyValues	=>	.removeEmpties()
 */
 
 class ArrayBase {
@@ -25,18 +24,31 @@ class ArrayBase {
 		return ""
 	}
 	
+	appendArray(arrayToAppend) {
+		this.push(arrayToAppend*)
+	}
+	
 	removeDuplicates() {
-		tempAry := []
-		
 		; Move everything over to a temporary array
-		For _,val in this
-			tempAry.push(val)
-		this.removeAt(this.minIndex(), this.length()) ; GDB TODO turn this into a clear() function
+		tempAry := this.clone()
+		this.clear()
 		
 		; Add only unique values back in
-		For _,val in tempAry {
-			if(!arrayContains(this, val)) ; GDB TODO replace this with .contains()
-				this.push(val)
+		For _,value in tempAry {
+			if(!this.contains(value))
+				this.push(value)
+		}
+	}
+	
+	removeEmpties() {
+		; Move everything over to a temporary array
+		tempAry := this.clone()
+		this.clear()
+		
+		; Add only non-empty values back in
+		For _,value in tempAry {
+			if(value != "")
+				this.push(value)
 		}
 	}
 	
@@ -50,5 +62,9 @@ class ArrayBase {
 		}
 		
 		return outString
+	}
+	
+	clear() {
+		this.removeAt(this.minIndex(), this.length())
 	}
 }

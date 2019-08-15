@@ -17,6 +17,8 @@
 */
 
 class ArrayBase {
+	static isArray := true
+	
 	contains(needle) { ; Returns index of FIRST instance found
 		For index,element in this
 			if(element = needle)
@@ -30,7 +32,9 @@ class ArrayBase {
 	
 	removeDuplicates() {
 		; Move everything over to a temporary array
-		tempAry := this.clone()
+		tempAry := []
+		For _,value in this
+			tempAry.push(value)
 		this.clear()
 		
 		; Add only unique values back in
@@ -42,7 +46,9 @@ class ArrayBase {
 	
 	removeEmpties() {
 		; Move everything over to a temporary array
-		tempAry := this.clone()
+		tempAry := []
+		For _,value in this
+			tempAry.push(value)
 		this.clear()
 		
 		; Add only non-empty values back in

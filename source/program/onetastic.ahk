@@ -116,8 +116,8 @@ class OneTastic {
 		OneTastic.deleteAllUserFunctions()
 		
 		; Import all needed dependencies.
-		masterDependencyXMLsAry := OneTastic.getAllDependencyXMLs(macroXML)
-		For _,functionXML in masterDependencyXMLsAry
+		dependencyXMLsAry := OneTastic.getAllDependencyXMLs(macroXML)
+		For _,functionXML in dependencyXMLsAry
 			OneTastic.importFunction(functionXML)
 	}
 	
@@ -208,12 +208,12 @@ class OneTastic {
 		; DEBUG.popup("Removed duplicates","", "totalDependenciesAry",totalDependenciesAry)
 		
 		; Generate array of XMLs in same order
-		totalDependencyXMLsAry := []
+		dependencyXMLsAry := []
 		For _,dependencyName in totalDependenciesAry
-			totalDependencyXMLsAry.push(functionsXMLAry[dependencyName])
+			dependencyXMLsAry.push(functionsXMLAry[dependencyName])
 		
-		; DEBUG.toast("masterDependencyXMLsAry",masterDependencyXMLsAry)
-		return totalDependencyXMLsAry
+		; DEBUG.toast("dependencyXMLsAry",dependencyXMLsAry)
+		return dependencyXMLsAry
 	}
 
 	;---------

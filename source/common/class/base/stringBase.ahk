@@ -11,13 +11,10 @@
 		Functions to consider moving here
 			stringMatches
 			stringMatchesAnyOf
-			stringStartsWith
-			stringEndsWith
 			getStringBeforeStr
 			getStringAfterStr
 			getFirstStringBetweenStr
 			getFullStringBetweenStr
-			isCase
 			getFirstLine
 			cleanupText
 			dropWhitespace
@@ -32,6 +29,8 @@
 		Functions to replace and remove
 			stringContains					=>	.contains
 			StrSplit							=>	.split
+			stringStartsWith				=>	.startsWith
+			stringEndsWith					=>	.endsWith
 */
 
 class StringBase {
@@ -64,6 +63,13 @@ class StringBase {
 			return InStr(this, needle, , 0)
 		else
 			return InStr(this, needle)
+	}
+	
+	startsWith(startString) {
+		return (subStr(this, 1, strLen(startString)) = startString)
+	}
+	endsWith(endString) {
+		return (subStr(this, strLen(this) - strLen(endString) + 1) = endString)
 	}
 	
 	split(delimiters := "", surroundingCharsToDrop := "") { ; Like StrSplit(), but returns an actual array (not an object)

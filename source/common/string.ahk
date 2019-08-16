@@ -198,19 +198,6 @@ getFullStringBetweenStr(inputString, startString, endString) {
 	return getFirstStringBetweenStr(inputString, startString, endString, true)
 }
 
-; Test for casing in a string.
-isCase(string, case := "MIXED") { ; case = STRING_CASE_MIXED
-	if(case = STRING_CASE_MIXED) {
-		return true
-	} else if(case = STRING_CASE_UPPER) {
-		return (string = StringUpper(string))
-	} else if(case = STRING_CASE_LOWER) {
-		return (string = StringLower(string))
-	}
-	
-	return false
-}
-
 ; Return only the first line of the given string.
 getFirstLine(inputString) {
 	splitAry := StrSplit(inputString, "`n")

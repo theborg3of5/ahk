@@ -21,7 +21,7 @@ Menu, Tray, Tip, % "
 		return
 	
 	; Sanity checks
-	if(!isNum(numToSend)) {
+	if(!numToSend.isNum()) {
 		MsgBox, Error: given value was not a number.
 		return
 	}

@@ -28,7 +28,7 @@ parseDateTime(input, format := "", dateOrTime := "") { ; dateOrTime = "d" for da
 	difference := subStr(input, 3)
 	
 	; Two-char thing - "mi" for minute or "mo" for month. Account for it to get the real operator and offset.
-	if(isAlpha(operator)) {
+	if(operator.isAlpha()) {
 		secondChar := subStr(input, 2, 1)
 		operator := subStr(input, 3, 1)
 		difference := subStr(input, 4)

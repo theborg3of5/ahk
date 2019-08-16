@@ -17,9 +17,6 @@
 			getStringAfterStr
 			getFirstStringBetweenStr
 			getFullStringBetweenStr
-			isAlpha
-			isNum
-			isAlphaNum
 			isCase
 			getFirstLine
 			cleanupText
@@ -45,6 +42,21 @@ class StringBase {
 	
 	length() {
 		return StrLen(this)
+	}
+	
+	; Wrapper function for whether a string is alphabetic.
+	isAlpha() {
+		return IfIs(this, "Alpha")
+	}
+
+	; Wrapper function for whether a string is numeric.
+	isNum() {
+		return IfIs(this, "Number")
+	}
+
+	; Wrapper function for whether a string is alphanumeric.
+	isAlphaNum() {
+		return IfIs(this, "AlNum")
 	}
 	
 	contains(needle, fromLastInstance := false) {

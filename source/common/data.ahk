@@ -21,7 +21,7 @@ forceArray(obj) {
 }
 
 forceNumber(data) {
-	if(isNum(data))
+	if(data.isNum())
 		return data
 	return 0
 }
@@ -154,7 +154,7 @@ expandNumericRange(rangeString) {
 	end   := splitAry[2]
 	
 	; Non-numeric ranges are not allowed.
-	if(!isNum(start) || !isNum(end))
+	if(!start.isNum() || !end.isNum())
 		return []
 	
 	if(start = end)

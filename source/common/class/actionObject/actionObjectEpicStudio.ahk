@@ -90,7 +90,7 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 			return ActionObjectEpicStudio.DescriptorType_Routine
 		
 		; DLG IDs are (usually) entirely numeric, where routines are not.
-		if(isNum(this.descriptor))
+		if(this.descriptor.isNum())
 			return ActionObjectEpicStudio.DescriptorType_DLG
 		
 		return ""

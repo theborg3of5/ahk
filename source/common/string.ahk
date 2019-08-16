@@ -198,21 +198,6 @@ getFullStringBetweenStr(inputString, startString, endString) {
 	return getFirstStringBetweenStr(inputString, startString, endString, true)
 }
 
-; Wrapper function for whether a string is alphabetic.
-isAlpha(str) {
-	return IfIs(str, "Alpha")
-}
-
-; Wrapper function for whether a string is numeric.
-isNum(str) {
-	return IfIs(str, "Number")
-}
-
-; Wrapper function for whether a string is alphanumeric.
-isAlphaNum(str) {
-	return IfIs(str, "AlNum")
-}
-
 ; Test for casing in a string.
 isCase(string, case := "MIXED") { ; case = STRING_CASE_MIXED
 	if(case = STRING_CASE_MIXED) {

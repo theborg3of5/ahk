@@ -104,7 +104,7 @@ class ActionObjectRedirector {
 	; SIDE EFFECTS:   Sets .type and .value if the value is a helpdesk object.
 	;---------
 	tryProcessAsHelpdesk(record) {
-		if(record.ini != "HDR" || !isNum(record.id))
+		if(record.ini != "HDR" || !record.id.isNum())
 			return false
 		
 		this.type  := this.Type_Helpdesk

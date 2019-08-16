@@ -11,10 +11,6 @@
 		Functions to consider moving here
 			stringMatches
 			stringMatchesAnyOf
-			getStringBeforeStr
-			getStringAfterStr
-			getFirstStringBetweenStr
-			getFullStringBetweenStr
 			getFirstLine
 			cleanupText
 			dropWhitespace
@@ -27,10 +23,15 @@
 			appendCharIfMissing
 			prePadStringToLength
 		Functions to replace and remove
+			StrLen							=>	.length
 			stringContains					=>	.contains
 			StrSplit							=>	.split
 			stringStartsWith				=>	.startsWith
 			stringEndsWith					=>	.endsWith
+			getStringBeforeStr			=>	.getBeforeString
+			getStringAfterStr				=> .getAfterString
+			getFirstStringBetweenStr	=> .getFirstBetweenStrings
+			getFullStringBetweenStr		=> .getAllBetweenStrings
 */
 
 class StringBase {
@@ -58,22 +59,67 @@ class StringBase {
 		return IfIs(this, "AlNum")
 	}
 	
-	contains(needle, fromLastInstance := false) {
-		if(fromLastInstance)
+	contains(needle, searchFromEnd := false) {
+		if(searchFromEnd)
 			return InStr(this, needle, , 0)
 		else
 			return InStr(this, needle)
 	}
 	
+	sub(startPos, length := "") {
+		if(length = "")
+			return subStr(this, startPos)
+		else
+			return subStr(this, startPos, length)
+	}
+	slice(startPos, stopAtPos) {
+		return this.sub(startPos, stopAtPos - startPos)
+	}
+	
 	startsWith(startString) {
-		return (subStr(this, 1, strLen(startString)) = startString)
+		return (this.sub(1, startString.length()) = startString)
 	}
 	endsWith(endString) {
-		return (subStr(this, strLen(this) - strLen(endString) + 1) = endString)
+		return (this.sub(this.length() - endString.length() + 1) = endString)
+	}
+	
+	getBeforeString(endString, searchFromEnd := false) {
+		endStringPos := this.contains(endString, searchFromEnd)
+		if(!endStringPos)
+			return this
+		
+		return this.sub(1, endStringPos - 1)
+	}
+	getAfterString(startString, searchFromEnd := false) {
+		startStringPos := this.contains(startString, searchFromEnd)
+		if(!startStringPos)
+			return this
+		
+		return this.sub(startStringPos + startString.length())
+	}
+	
+	getFirstBetweenStrings(startString, endString, upToLastEndString := false) {
+		return getFirstStringBetweenStr(this, startString, endString, false)
+	}
+	getAllBetweenStrings(startString, endString) {
+		return getFirstStringBetweenStr(this, startString, endString, true)
 	}
 	
 	split(delimiters := "", surroundingCharsToDrop := "") { ; Like StrSplit(), but returns an actual array (not an object)
 		obj := StrSplit(this, delimiters, surroundingCharsToDrop)
 		return convertObjectToArray(obj)
+	}
+	
+	
+; ==============================
+; == Private ===================
+; ==============================
+	
+	getBetweenStrings(startString, endString, upToLastEndString) {
+		; Trim off everything before (and including) the first instance of the startString
+		outString := this.getBeforeString(startString)
+		
+		; Trim off everything before (and including) the remaining instance (first or last depending on upToLastEndString) of the endString
+		return outString.getBeforeString(endString, upToLastEndString)
 	}
 }

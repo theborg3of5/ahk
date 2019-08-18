@@ -14,10 +14,7 @@
 		Functions to consider moving here
 			stringMatches
 			stringMatchesAnyOf
-			getFirstLine
 			cleanupText
-			replaceTags
-			replaceTag
 			removeStringFromStart
 			removeStringFromEnd
 			prependCharIfMissing
@@ -35,6 +32,9 @@
 			getFullStringBetweenStr		=> .getAllBetweenStrings
 			dropWhitespace					=>	.withoutWhitespace (returns)
 			appendPieceToString			=>	.appendPiece (returns, parameter order different)
+			getFirstLine					=>	.firstLine
+			replaceTags						=> .replaceTags
+			replaceTag						=> .replaceTag
 */
 
 class StringBase {
@@ -108,6 +108,10 @@ class StringBase {
 		return getFirstStringBetweenStr(this, startString, endString, true)
 	}
 	
+	firstLine() {
+		return this.getBeforeString("`n")
+	}
+	
 	withoutWhitespace() {
 		newText = %this% ; Note using = not :=, to drop whitespace.
 		return newText
@@ -120,6 +124,19 @@ class StringBase {
 			return pieceToAdd
 		
 		return this delimiter pieceToAdd
+	}
+	
+	replaceTags(tagsAry) {
+		outputString := this
+		
+		For tagName, replacement in tagsAry
+			outputString := replaceTag(outputString, tagName, replacement)
+		
+		return outputString
+	}
+
+	replaceTag(tagName, replacement) {
+		return StrReplace(this, "<" tagName ">", replacement)
 	}
 	
 	split(delimiters := "", surroundingCharsToDrop := "") { ; Like StrSplit(), but returns an actual array (not an object)

@@ -1,6 +1,9 @@
 /*
 	Base class for strings to extend (technically for their base to extend), so we can add these functions directly to strings.
 	
+	Note: this does not allow you to manipulate the string itself - all functions return the result of the operation.
+		For example: withoutWhitespace() returns the new string, so you must use str := str.withoutWhitespace().
+	
 	Example usage:
 		str := "abcd"
 		result := str.contains("b") ; result = 2
@@ -13,7 +16,6 @@
 			stringMatchesAnyOf
 			getFirstLine
 			cleanupText
-			dropWhitespace
 			appendPieceToString
 			replaceTags
 			replaceTag
@@ -32,6 +34,7 @@
 			getStringAfterStr				=> .getAfterString
 			getFirstStringBetweenStr	=> .getFirstBetweenStrings
 			getFullStringBetweenStr		=> .getAllBetweenStrings
+			dropWhitespace					=>	.withoutWhitespace (note returns)
 */
 
 class StringBase {
@@ -103,6 +106,11 @@ class StringBase {
 	}
 	getAllBetweenStrings(startString, endString) {
 		return getFirstStringBetweenStr(this, startString, endString, true)
+	}
+	
+	withoutWhitespace() {
+		newText = %this% ; Note using = not :=, to drop whitespace.
+		return newText
 	}
 	
 	split(delimiters := "", surroundingCharsToDrop := "") { ; Like StrSplit(), but returns an actual array (not an object)

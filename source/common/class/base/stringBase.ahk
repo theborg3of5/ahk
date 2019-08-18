@@ -15,7 +15,6 @@
 			stringMatches
 			stringMatchesAnyOf
 			cleanupText
-			prePadStringToLength
 		Functions to replace and remove
 			StrLen							=> .length
 			stringContains					=> .contains
@@ -35,6 +34,7 @@
 			removeStringFromEnd			=> .removeFromEnd
 			prependCharIfMissing			=> .prependIfMissing
 			appendCharIfMissing			=> .appendIfMissing
+			prePadStringToLength			=> .prePadToLength
 */
 
 class StringBase {
@@ -132,6 +132,15 @@ class StringBase {
 			return this strToAppend
 		
 		return this
+	}
+	
+	prePadToLength(numChars, withChar := " ") {
+		outString := this
+		
+		while(outString.length() < numChars)
+			outString := withChar outString
+		
+		return outString
 	}
 	
 	firstLine() {

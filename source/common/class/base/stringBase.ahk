@@ -13,7 +13,10 @@
 	Do
 		Functions to consider moving here
 			stringMatches
+				Ditch in favor of individual functions - .startsWith, .endsWith, .contains, equality check
+				Move CONTAINS_* constants into only class that actually uses them (after we switch to single functions for the rest) - MainConfig (for window title matching)
 			stringMatchesAnyOf
+				Ditch in favor of new .containsAnyOf and .startsWithAnyOf() functions
 			cleanupText
 		Functions to replace and remove
 			StrLen							=> .length

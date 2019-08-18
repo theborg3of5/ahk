@@ -2,7 +2,7 @@
 	Base class for strings to extend (technically for their base to extend), so we can add these functions directly to strings.
 	
 	Note: this does not allow you to manipulate the string itself - all functions return the result of the operation.
-		For example: withoutWhitespace() returns the new string, so you must use str := str.withoutWhitespace().
+		For example: appendPiece() returns the new string, so you must capture the return value instead of just calling it (i.e. str := str.appendPiece() instead of just str.appendPiece())
 	
 	Example usage:
 		str := "abcd"
@@ -16,7 +16,6 @@
 			stringMatchesAnyOf
 			getFirstLine
 			cleanupText
-			appendPieceToString
 			replaceTags
 			replaceTag
 			removeStringFromStart
@@ -34,7 +33,8 @@
 			getStringAfterStr				=> .getAfterString
 			getFirstStringBetweenStr	=> .getFirstBetweenStrings
 			getFullStringBetweenStr		=> .getAllBetweenStrings
-			dropWhitespace					=>	.withoutWhitespace (note returns)
+			dropWhitespace					=>	.withoutWhitespace (returns)
+			appendPieceToString			=>	.appendPiece (returns, parameter order different)
 */
 
 class StringBase {
@@ -111,6 +111,15 @@ class StringBase {
 	withoutWhitespace() {
 		newText = %this% ; Note using = not :=, to drop whitespace.
 		return newText
+	}
+	
+	appendPiece(pieceToAdd, delimiter := ",") {
+		if(pieceToAdd = "")
+			return this
+		if(this = "")
+			return pieceToAdd
+		
+		return this delimiter pieceToAdd
 	}
 	
 	split(delimiters := "", surroundingCharsToDrop := "") { ; Like StrSplit(), but returns an actual array (not an object)

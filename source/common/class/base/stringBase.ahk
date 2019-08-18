@@ -15,8 +15,6 @@
 			stringMatches
 			stringMatchesAnyOf
 			cleanupText
-			prependCharIfMissing
-			appendCharIfMissing
 			prePadStringToLength
 		Functions to replace and remove
 			StrLen							=> .length
@@ -35,6 +33,8 @@
 			replaceTag						=> .replaceTag
 			removeStringFromStart		=> .removeFromStart
 			removeStringFromEnd			=> .removeFromEnd
+			prependCharIfMissing			=> .prependIfMissing
+			appendCharIfMissing			=> .appendIfMissing
 */
 
 class StringBase {
@@ -119,6 +119,19 @@ class StringBase {
 			return this
 		
 		return this.sub(1, this.length() - endingToRemove.length())
+	}
+	
+	prependIfMissing(strToPrepend) {
+		if(this.sub(1, strToPrepend.length()) != strToPrepend)
+			return strToPrepend this
+		
+		return this
+	}
+	appendIfMissing(strToAppend) {
+		if(this.sub(- (strToAppend.length() - 1) ) != strToAppend)
+			return this strToAppend
+		
+		return this
 	}
 	
 	firstLine() {

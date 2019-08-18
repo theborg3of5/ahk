@@ -15,26 +15,26 @@
 			stringMatches
 			stringMatchesAnyOf
 			cleanupText
-			removeStringFromStart
-			removeStringFromEnd
 			prependCharIfMissing
 			appendCharIfMissing
 			prePadStringToLength
 		Functions to replace and remove
-			StrLen							=>	.length
-			stringContains					=>	.contains
-			StrSplit							=>	.split
-			stringStartsWith				=>	.startsWith
-			stringEndsWith					=>	.endsWith
-			getStringBeforeStr			=>	.getBeforeString
+			StrLen							=> .length
+			stringContains					=> .contains
+			StrSplit							=> .split
+			stringStartsWith				=> .startsWith
+			stringEndsWith					=> .endsWith
+			getStringBeforeStr			=> .getBeforeString
 			getStringAfterStr				=> .getAfterString
 			getFirstStringBetweenStr	=> .getFirstBetweenStrings
 			getFullStringBetweenStr		=> .getAllBetweenStrings
-			dropWhitespace					=>	.withoutWhitespace (returns)
-			appendPieceToString			=>	.appendPiece (returns, parameter order different)
-			getFirstLine					=>	.firstLine
+			dropWhitespace					=> .withoutWhitespace (returns)
+			appendPieceToString			=> .appendPiece (returns, parameter order different)
+			getFirstLine					=> .firstLine
 			replaceTags						=> .replaceTags
 			replaceTag						=> .replaceTag
+			removeStringFromStart		=> .removeFromStart
+			removeStringFromEnd			=> .removeFromEnd
 */
 
 class StringBase {
@@ -106,6 +106,19 @@ class StringBase {
 	}
 	getAllBetweenStrings(startString, endString) {
 		return getFirstStringBetweenStr(this, startString, endString, true)
+	}
+	
+	removeFromStart(startToRemove) {
+		if(!this.startsWith(startToRemove))
+			return this
+		
+		return this.sub(startToRemove.length() + 1)
+	}
+	removeFromEnd(endingToRemove) {
+		if(!this.endsWith(endingToRemove))
+			return this
+		
+		return this.sub(1, this.length() - endingToRemove.length())
 	}
 	
 	firstLine() {

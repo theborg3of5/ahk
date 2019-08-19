@@ -11,12 +11,6 @@
 
 /*
 	Do
-		Functions to consider moving here
-			stringMatches
-				Ditch in favor of individual functions - .startsWith, .endsWith, .contains, equality check
-				Move CONTAINS_* constants into only class that actually uses them (after we switch to single functions for the rest) - MainConfig (for window title matching)
-			stringMatchesAnyOf
-				Ditch in favor of new .containsAnyOf and .startsWithAnyOf() functions
 			cleanupText
 		Functions to replace and remove
 			StrLen							=> .length
@@ -38,6 +32,9 @@
 			prependCharIfMissing			=> .prependIfMissing
 			appendCharIfMissing			=> .appendIfMissing
 			prePadStringToLength			=> .prePadToLength
+			stringMatches					=> .startsWith/.endsWith/.contains/=
+				Move CONTAINS_* constants into only class that actually uses them (after we switch to single functions for the rest) - MainConfig (for window title matching)
+			stringMatchesAnyOf			=> .containsAnyOf/.startsWithAnyOf
 */
 
 class StringBase {
@@ -72,6 +69,25 @@ class StringBase {
 			return InStr(this, needle)
 	}
 	
+	; Reverse array contains function - checks if any of array strings are in given string.
+	; Returns the position of the earliest match in the string (the first occurrence of any needle)
+	containsAnyOf(needlesAry, ByRef matchedNeedle := "") {
+		earliestMatchedPos := 0
+		
+		For i,needle in needlesAry {
+			matchedPos := this.contains(needle)
+			if(matchedPos) {
+				if(!earliestMatchedPos || (matchedPos < earliestMatchedPos)) {
+					earliestMatchedPos := matchedPos
+					matchedNeedle := needle
+				}
+			}
+		}
+		
+		; DEBUG.popup("StringBase.containsAnyOf","Finish", "this",this, "needlesAry",needlesAry, "matchedIndex",matchedIndex, "earliestMatchedPos",earliestMatchedPos)
+		return earliestMatchedPos
+	}
+	
 	sub(startPos, length := "") {
 		if(length = "")
 			return subStr(this, startPos)
@@ -87,6 +103,15 @@ class StringBase {
 	}
 	endsWith(endString) {
 		return (this.sub(this.length() - endString.length() + 1) = endString)
+	}
+	
+	startsWithAnyOf(needlesAry) {
+		For i,needle in needlesAry {
+			if(this.startsWith(needle))
+				return true
+		}
+		
+		return false
 	}
 	
 	getBeforeString(endString, searchFromEnd := false) {

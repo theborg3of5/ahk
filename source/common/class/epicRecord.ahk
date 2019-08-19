@@ -101,7 +101,7 @@ class EpicRecord {
 			return
 		
 		; 1) Title [R INI ID]
-		if(stringContains(recordString, "[R ") && stringContains(recordString, "]")) {
+		if(recordString.contains("[R ") && recordString.contains("]")) {
 			; Title is everything up to the opening square bracket
 			this.title := getStringBeforeStr(recordString, "[R ")
 			
@@ -116,7 +116,7 @@ class EpicRecord {
 			this.title := getStringAfterStr(recordString, " - ")
 			
 		; 3) ID (no spaces)
-		} else if(!stringContains(recordString, " ")) {
+		} else if(!recordString.contains(" ")) {
 			this.id := recordString
 			
 		; 4) {R } + INI ID + {space} + {: or -} + {title}

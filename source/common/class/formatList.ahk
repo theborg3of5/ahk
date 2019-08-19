@@ -133,15 +133,15 @@ class FormatList {
 	;---------
 	determineFormatByDelimiters(listString) {
 		distinctDelimsCount := 0
-		if(stringContains(listString, ",")) {
+		if(listString.contains(",")) {
 			foundFormat := FormatList.Format_Commas ; Also covers Format_CommasSpaced, see .convertListToArray().
 			distinctDelimsCount++
 		}
-		if(stringContains(listString, "`r`n")) {
+		if(listString.contains("`r`n")) {
 			foundFormat := FormatList.Format_NewLines
 			distinctDelimsCount++
 		}
-		if(stringContains(listString, "`r`n`r`n")) {
+		if(listString.contains("`r`n`r`n")) {
 			foundFormat := FormatList.Format_OneNoteColumn
 			distinctDelimsCount++
 		}

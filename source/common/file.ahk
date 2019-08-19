@@ -95,7 +95,7 @@ mapPath(path) {
 	tl := new TableList(findConfigFilePath("mappedDrives.tl"))
 	table := tl.getFilteredTable("CONTEXT", MainConfig.context)
 	For i,row in table {
-		if(stringContains(path, row["PATH"])) {
+		if(path.contains(row["PATH"])) {
 			path := StrReplace(path, row["PATH"], row["DRIVE_LETTER"] ":", , 1)
 			Break ; Just match the first one.
 		}

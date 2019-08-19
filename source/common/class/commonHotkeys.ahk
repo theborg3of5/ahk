@@ -205,7 +205,7 @@ class CommonHotkeys {
 		if(!WinActive("ahk_class Notepad++"))
 			return false
 		
-		return stringContains(WinGetActiveTitle(), A_ScriptFullPath)
+		return WinGetActiveTitle().contains(A_ScriptFullPath)
 	}
 	
 	;---------

@@ -495,7 +495,7 @@ class TableList {
 			
 			; Reduce any sets of multiple tabs in a row to a single one.
 			Loop {
-				if(!stringContains(row, A_Tab A_Tab))
+				if(!row.contains(A_Tab A_Tab))
 					Break
 				row := StrReplace(row, A_Tab A_Tab, A_Tab)
 			}
@@ -588,7 +588,7 @@ class TableList {
 		
 		; Split up any entries that include the multi-entry character (pipe by default).
 		For i,value in rowAry
-			if(stringContains(value, this.chars["MULTIENTRY"]))
+			if(value.contains(this.chars["MULTIENTRY"]))
 				rowAry[i] := value.split(this.chars["MULTIENTRY"])
 		
 		this.table.push(rowAry)

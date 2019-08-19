@@ -136,7 +136,7 @@ expandList(listString) {
 	outAry := []
 	
 	For _,element in elementAry {
-		if(stringContains(element, ":")) { ; Treat it as a numeric range and expand it
+		if(element.contains(":")) { ; Treat it as a numeric range and expand it
 			rangeAry := expandNumericRange(element) ; If it's not numeric, this will return [] and we'll ignore that element entirely.
 			outAry.appendArray(rangeAry)
 		} else {

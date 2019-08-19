@@ -94,6 +94,8 @@ class ArrayBase {
 	; DESCRIPTION:    Remove all entries from this array.
 	;---------
 	clear() {
+		if(this.length() = 0)
+			return
 		this.removeAt(this.minIndex(), this.length())
 	}
 }

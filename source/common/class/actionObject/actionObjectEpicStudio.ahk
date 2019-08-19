@@ -86,7 +86,7 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 	;---------
 	determineDescriptorType() {
 		; Full server tag^routine
-		if(stringContains(this.descriptor, "^"))
+		if(this.descriptor.contains("^"))
 			return ActionObjectEpicStudio.DescriptorType_Routine
 		
 		; DLG IDs are (usually) entirely numeric, where routines are not.

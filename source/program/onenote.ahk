@@ -183,10 +183,10 @@ class OneNote {
 		copiedLink := RegExReplace(copiedLink, "&object-id.*")
 		
 		; If there are two links involved (seems to happen with free version of OneNote), keep only the "onenote:" one (second line).
-		if(stringContains(copiedLink, "`n")) {
+		if(copiedLink.contains("`n")) {
 			linkAry := StrSplit(copiedLink, "`n")
 			For i,link in linkAry {
-				if(stringContains(link, "onenote:"))
+				if(link.contains("onenote:"))
 					linkToUse := link
 			}
 		} else {

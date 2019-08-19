@@ -74,7 +74,7 @@ selectTextWithinSelection(needle) {
 		return
 	
 	; Determine where in the string our needle is
-	needleStartPos := stringContains(selectedText, needle)
+	needleStartPos := selectedText.contains(needle)
 	if(!needleStartPos)
 		return
 	numRight := needleStartPos - 1

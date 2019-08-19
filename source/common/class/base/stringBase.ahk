@@ -12,7 +12,6 @@
 /*
 	Do
 		Functions to replace and remove
-			stringContains					=> .contains
 			StrSplit							=> .split
 			stringStartsWith				=> .startsWith
 			stringEndsWith					=> .endsWith
@@ -34,6 +33,8 @@
 				Move CONTAINS_* constants into only class that actually uses them (after we switch to single functions for the rest) - MainConfig (for window title matching)
 			stringMatchesAnyOf			=> .containsAnyOf/.startsWithAnyOf
 			cleanupText						=> .cleaned
+		Functions to remove (already replaced)
+			stringContains
 */
 
 class StringBase {

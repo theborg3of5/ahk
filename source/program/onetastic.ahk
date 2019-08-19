@@ -232,7 +232,7 @@ class OneTastic {
 		dependenciesStart := "<Comment text=""DEPENDENCIES"" />" ; <Comment text="DEPENDENCIES" />
 		dependenciesEnd   := "<Comment text="""" />"             ; <Comment text="" /> (empty comment is ending edge)
 		
-		if(!stringContains(xml, dependenciesStart))
+		if(!xml.contains(dependenciesStart))
 			return []
 		
 		dependenciesXML := getFirstStringBetweenStr(xml, dependenciesStart, dependenciesEnd)

@@ -66,8 +66,7 @@ getWithClipboardUsingFunction(boundFunc) { ; boundFunc is a BoundFunc object cre
 
 ; Within the currently selected text, select only the first instance of the given needle text.
 selectTextWithinSelection(needle) {
-	needleLen := strLen(needle)
-	if(!needleLen)
+	if(needle = "")
 		return
 	
 	selectedText := getSelectedText()
@@ -84,6 +83,7 @@ selectTextWithinSelection(needle) {
 	Send, {Left} ; Get to start of selection.
 	Send, {Right %numRight%} ; Get to start of needle.
 	Send, {Shift Down}
+	needleLen := needle.length()
 	Send, {Right %needleLen%} ; Select to end of needle.
 	Send, {Shift Up}
 }

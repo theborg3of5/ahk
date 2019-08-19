@@ -12,7 +12,6 @@
 /*
 	Do
 		Functions to replace and remove
-			StrLen							=> .length
 			stringContains					=> .contains
 			StrSplit							=> .split
 			stringStartsWith				=> .startsWith

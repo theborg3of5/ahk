@@ -61,7 +61,7 @@ class Putty {
 			return
 		
 		; Get the length of the string we're going to add.
-		inputLength := StrLen(textIn)
+		inputLength := textIn.length()
 		
 		; Insert that many spaces.
 		Send, {Insert %inputLength%}

@@ -28,7 +28,7 @@ parsePhone(input) {
 	nums := RegExReplace(input, "[^0-9\+]" , "") ; Strip out spaces and other odd chars.
 	nums := RegExReplace(nums, "\+" , "011") ; + becomes country exit code (USA code here)
 	
-	len := strLen(nums)
+	len := nums.length()
 	; DEBUG.popup("Input",input, "Nums",nums, "Len",len)
 	
 	if(len = 4)  ; Old extension.

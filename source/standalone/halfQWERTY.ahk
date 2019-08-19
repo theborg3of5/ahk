@@ -122,7 +122,7 @@ getMirroredKeyFromHotkey(hotkeyString) {
 	if(!hotkeyString)
 		return ""
 	
-	keyToMirror := "KEY_" subStr(hotkeyString, StrLen(hotkeyString), 1)
+	keyToMirror := "KEY_" hotkeyString.sub(0)
 	if(!keyToMirror)
 		return ""
 	

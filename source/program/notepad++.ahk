@@ -113,7 +113,7 @@ class NotepadPlusPlus {
 			param := getStringBeforeStr(param, " :=")
 			
 			paramsAry.push(param)
-			maxParamLength := max(maxParamLength, strLen(param))
+			maxParamLength := max(maxParamLength, param.length())
 		}
 		
 		; Build a line for each parameter, padding things out to make them even
@@ -121,7 +121,7 @@ class NotepadPlusPlus {
 		For _,paramName in paramsAry {
 			line := NotepadPlusPlus.ahkParamBase
 			line := replaceTag(line, "NAME",    paramName)
-			line := replaceTag(line, "PADDING", getSpaces(maxParamLength - strLen(paramName)))
+			line := replaceTag(line, "PADDING", getSpaces(maxParamLength - paramName.length()))
 			paramLines.push(line)
 		}
 		
@@ -178,7 +178,7 @@ class NotepadPlusPlus {
 		matchedPos := stringMatchesAnyOf(line, keywords, CONTAINS_ANY, matchedKeyword)
 		if(matchedPos) {
 			; Keyword line - add length of keyword + however many spaces are after it.
-			numSpaces += strLen(matchedKeyword)
+			numSpaces += matchedKeyword.length()
 			line := removeStringFromStart(line, matchedKeyword)
 			numSpaces += countLeadingSpaces(line)
 		} else {

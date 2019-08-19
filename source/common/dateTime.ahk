@@ -128,7 +128,7 @@ doDateMath(start, op := "+", diff := 0, unit := "d") { ; unit = "d"
 		else
 			correctLen := 2
 		
-		currLen := StrLen(x)
+		currLen := x.length()
 		; DEBUG.popup("Index", i, "Correct length", correctLen, "Current length", currLen)
 		while(currLen < correctLen) {
 			d[i] := "0" x

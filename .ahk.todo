@@ -3,6 +3,7 @@
 		Document everything
 	Consider adding an ObjectBase class to implement things like .contains() so we don't have to worry if something is an array or not.
 		Consider most other functions in ArrayBase, too.
+	Clean up dateTime.doDateMath() - could use functions for padding, and clean up variable names (particularly iterators)
 	Can data.ahk > isEmpty() be simplified to use this from arrayAppend()?
 		!(baseAry.length() > 0)
 	Review usage of [] vs {} for associative arrays

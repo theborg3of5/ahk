@@ -184,7 +184,7 @@ class OneNote {
 		
 		; If there are two links involved (seems to happen with free version of OneNote), keep only the "onenote:" one (second line).
 		if(copiedLink.contains("`n")) {
-			linkAry := StrSplit(copiedLink, "`n")
+			linkAry := copiedLink.split("`n")
 			For i,link in linkAry {
 				if(link.contains("onenote:"))
 					linkToUse := link

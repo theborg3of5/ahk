@@ -132,7 +132,7 @@ reduceTableToColumn(inputTable, valueColumn, indexColumn := "") {
 ; Example:
 ;  1,2:3,7,6:4 -> [1, 2, 3, 7, 6, 5, 4]
 expandList(listString) {
-	elementAry := strSplit(listString, ",")
+	elementAry := listString.split(",")
 	outAry := []
 	
 	For _,element in elementAry {
@@ -149,7 +149,7 @@ expandList(listString) {
 
 ; Expands numeric ranges (i.e. 1:5 -> [1, 2, 3, 4, 5]).
 expandNumericRange(rangeString) {
-	splitAry := strSplit(rangeString, ":")
+	splitAry := rangeString.split(":")
 	start := splitAry[1]
 	end   := splitAry[2]
 	

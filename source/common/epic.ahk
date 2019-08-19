@@ -169,7 +169,7 @@
 ; Note that any offset from a tag will be included in the tag return value (i.e. TAG+3^ROUTINE splits into routine=ROUTINE and tag=TAG+3).
 splitServerLocation(serverLocation, ByRef routine := "", ByRef tag := "") {
 	serverLocation := cleanupText(serverLocation, ["$", "(", ")"])
-	locationAry := StrSplit(serverLocation, "^")
+	locationAry := serverLocation.split("^")
 	
 	maxIndex := locationAry.MaxIndex()
 	if(maxIndex > 1)

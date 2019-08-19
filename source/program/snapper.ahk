@@ -27,7 +27,7 @@ class Snapper {
 		if(!itemsList)
 			return
 		
-		itemsAry := StrSplit(itemsList, ",")
+		itemsAry := itemsList.split(",")
 		For i,item in itemsAry {
 			if(i > 1)
 				excludeItemsString .= ","

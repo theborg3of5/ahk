@@ -10,9 +10,9 @@ inputKey = %1% ; Input from command line
 if(!inputKey)
 	ExitApp
 
-inputKeyAry := StrSplit(inputKey, ",")
+inputKeyAry := inputKey.split(",")
 
-For i,inputKey in inputKeyAry
+For _,inputKey in inputKeyAry
 	sendMediaKey(inputKey)
 
 ExitApp

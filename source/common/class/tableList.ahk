@@ -651,7 +651,7 @@ class TableList {
 	;  row (I,REQ) - Model row to process (string).
 	;---------
 	processModel(row) {
-		rowAry := StrSplit(row, A_Tab)
+		rowAry := row.split(A_Tab)
 		this.indexLabels := []
 		
 		rowAry.RemoveAt(1) ; Get rid of the "(" bit.
@@ -688,7 +688,7 @@ class TableList {
 			}
 			
 			; Split into individual mods.
-			newModsSplit := StrSplit(row, this.chars["MOD", "DELIM"])
+			newModsSplit := row.split(this.chars["MOD", "DELIM"])
 			For i,currMod in newModsSplit {
 				; Check for an add row label.
 				if(i = 1 && stringStartsWith(currMod, this.chars["MOD", "ADD_LABEL"]))
@@ -726,7 +726,7 @@ class TableList {
 	;  row (I,REQ) - Key row that we're processing (string).
 	;---------
 	processKey(row) {
-		rowAry := StrSplit(row, A_Tab)
+		rowAry := row.split(A_Tab)
 		firstChar := subStr(row, 1, 1)
 		
 		rowAry.RemoveAt(1) ; Get rid of the separate char bit (")").

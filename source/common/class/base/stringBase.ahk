@@ -12,7 +12,6 @@
 /*
 	Do
 		Functions to replace and remove
-			StrSplit							=> .split
 			stringStartsWith				=> .startsWith
 			stringEndsWith					=> .endsWith
 			getStringBeforeStr			=> .getBeforeString

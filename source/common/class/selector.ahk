@@ -394,7 +394,7 @@ class Selector {
 		if(stringStartsWith(line, this.chars["SETTING"])) {
 			line := removeStringFromStart(line, this.chars["SETTING"])
 			if(line != "") {
-				settingSplit := StrSplit(line, "=")
+				settingSplit := line.split("=")
 				this.setGuiSetting(settingSplit[1], settingSplit[2]) ; name, value
 			}
 		

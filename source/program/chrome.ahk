@@ -73,7 +73,7 @@ class Chrome {
 		
 		title := WinGetActiveTitle()
 		title := removeStringFromEnd(title, " - Google Chrome")
-		titleAry := strSplit(title, "/")
+		titleAry := title.split("/")
 		routine := titleAry[1]
 		if(!routine)
 			return

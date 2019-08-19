@@ -57,7 +57,7 @@ class NotepadPlusPlus {
 	; PARAMETERS:
 	;  functionName (I,REQ) - Name of the function to send before the parameters.
 	;---------
-	sendDebugCodeString(functionName) {
+	sendDebugCodeString(functionName,eh) {
 		if(functionName = "")
 			return
 		
@@ -108,7 +108,7 @@ class NotepadPlusPlus {
 		; Build array of parameter names, cleaning off ByRef and defaults
 		paramsAry := []
 		maxParamLength := 0
-		For _,param in strSplit(paramsList, ",", " `t") {
+		For _,param in paramsList.split(",", " `t") {
 			param := removeStringFromStart(param, "ByRef ")
 			param := getStringBeforeStr(param, " :=")
 			
@@ -206,7 +206,7 @@ class NotepadPlusPlus {
 	;                 	Output: "var1",var1, "var2",var2
 	;---------
 	generateDebugParams(varList) {
-		paramsAry := StrSplit(varList, ",", A_Space) ; Split on comma and drop leading/trailing spaces
+		paramsAry := varList.split(",", A_Space) ; Split on comma and drop leading/trailing spaces
 		; DEBUG.toast("paramsAry",paramsAry)
 		
 		paramsString := ""

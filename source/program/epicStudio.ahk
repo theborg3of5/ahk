@@ -256,7 +256,7 @@ class EpicStudio {
 	;---------
 	buildMArrayLoop(data, ByRef numIndents := 0) {
 		arrayName   := data["ARRAY_OR_INI"]
-		iteratorAry := strSplit(data["VAR_NAMES"], ",")
+		iteratorAry := data["VAR_NAMES"].split(",")
 		
 		if(stringStartsWith(arrayName, "@") && !stringEndsWith(arrayName, "@"))
 			arrayName .= "@" ; End global references with the proper @ if they're not already.

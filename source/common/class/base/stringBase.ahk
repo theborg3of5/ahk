@@ -11,7 +11,6 @@
 
 /*
 	Do
-			cleanupText
 		Functions to replace and remove
 			StrLen							=> .length
 			stringContains					=> .contains
@@ -35,6 +34,7 @@
 			stringMatches					=> .startsWith/.endsWith/.contains/=
 				Move CONTAINS_* constants into only class that actually uses them (after we switch to single functions for the rest) - MainConfig (for window title matching)
 			stringMatchesAnyOf			=> .containsAnyOf/.startsWithAnyOf
+			cleanupText						=> .cleaned
 */
 
 class StringBase {
@@ -163,12 +163,12 @@ class StringBase {
 	}
 	
 	prePadToLength(numChars, withChar := " ") {
-		outString := this
+		outStr := this
 		
-		while(outString.length() < numChars)
-			outString := withChar outString
+		while(outStr.length() < numChars)
+			outStr := withChar outStr
 		
-		return outString
+		return outStr
 	}
 	
 	firstLine() {
@@ -178,6 +178,59 @@ class StringBase {
 	withoutWhitespace() {
 		newText = %this% ; Note using = not :=, to drop whitespace.
 		return newText
+	}
+	
+	; Cleans a hard-coded list of characters out of a (should be single-line) string, including whitespace.
+	cleaned(additionalStringsToRemove := "") {
+		outStr := this
+		
+		charCodesToRemove := []
+		charCodesToRemove.push([13])      ; Carriage return (`r)
+		charCodesToRemove.push([10])      ; Newline (`n)
+		charCodesToRemove.push([32])      ; Space ( )
+		charCodesToRemove.push([46])      ; Period (.)
+		charCodesToRemove.push([8226,9])  ; First level bullet (filled circle) + tab
+		charCodesToRemove.push([111,9])   ; Second level bullet (empty circle) + tab
+		charCodesToRemove.push([61607,9]) ; Third level bullet (filled square) + tab
+		
+		; Transform the codes above so we can check whether it's in the string.
+		stringsToRemove := []
+		For i,s in charCodesToRemove {
+			stringsToRemove[i] := ""
+			For j,c in s {
+				newChar := Transform("Chr", c)
+				stringsToRemove[i] .= newChar
+			}
+		}
+		For i,str in additionalStringsToRemove {
+			stringsToRemove.push(str)
+		}
+		; DEBUG.popup("outStr",outStr, "Chars to remove",stringsToRemove)
+		
+		while(!isClean) {
+			isClean := true
+			
+			; Leading/trailing whitespace
+			noWhitespace := outStr.withoutWhitespace()
+			if(noWhitespace != outStr) {
+				outStr := noWhitespace
+				isClean := false
+			}
+			
+			; Remove specific strings from start/end
+			For _,removeString in stringsToRemove {
+				if(outStr.startsWith(removeString)) {
+					outStr := outStr.removeFromStart(removeString)
+					isClean := false
+				}
+				if(outStr.endsWith(removeString)) {
+					outStr := outStr.removeFromEnd(removeString)
+					isClean := false
+				}
+			}
+		}
+		
+		return outStr
 	}
 	
 	appendPiece(pieceToAdd, delimiter := ",") {
@@ -214,9 +267,9 @@ class StringBase {
 	
 	getBetweenStrings(startString, endString, upToLastEndString) {
 		; Trim off everything before (and including) the first instance of the startString
-		outString := this.getBeforeString(startString)
+		outStr := this.getBeforeString(startString)
 		
 		; Trim off everything before (and including) the remaining instance (first or last depending on upToLastEndString) of the endString
-		return outString.getBeforeString(endString, upToLastEndString)
+		return outStr.getBeforeString(endString, upToLastEndString)
 	}
 }

@@ -121,7 +121,7 @@ class Chrome {
 			return false
 		
 		title := removeStringFromEnd(WinGetActiveTitle(), " - Google Chrome")
-		return stringEndsWith(title, " - CodeSearch")
+		return title.endsWith(" - CodeSearch")
 	}
 	
 	;---------

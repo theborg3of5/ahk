@@ -115,7 +115,7 @@ class EpicStudio {
 		line := removeStringFromStart(line, "`t") ; Tab at the start of every line
 		
 		numIndents := 0
-		while(stringStartsWith(line, ". ")) {
+		while(line.startsWith(". ")) {
 			numIndents++
 			line := removeStringFromStart(line, ". ")
 		}
@@ -258,7 +258,7 @@ class EpicStudio {
 		arrayName   := data["ARRAY_OR_INI"]
 		iteratorAry := data["VAR_NAMES"].split(",")
 		
-		if(stringStartsWith(arrayName, "@") && !stringEndsWith(arrayName, "@"))
+		if(arrayName.startsWith("@") && !arrayName.endsWith("@"))
 			arrayName .= "@" ; End global references with the proper @ if they're not already.
 		
 		prevIterators := ""

@@ -179,7 +179,7 @@ class OneTastic {
 		Loop, Files, % "*.xml"
 		{
 			; Skip files that start with . (like function template)
-			if(stringStartsWith(A_LoopFileName, "."))
+			if(A_LoopFileName.startsWith("."))
 				Continue
 			
 			functionXML := FileRead(A_LoopFileName)

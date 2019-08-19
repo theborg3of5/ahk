@@ -120,7 +120,7 @@ class SelectorGui {
 			sectionTitle := sectionTitles[i]
 			
 			; Add new column if needed
-			if(stringStartsWith(sectionTitle, this.chars["NEW_COLUMN"] " ")) {
+			if(sectionTitle.startsWith(this.chars["NEW_COLUMN"] " ")) {
 				sectionTitle := removeStringFromStart(sectionTitle, this.chars["NEW_COLUMN"] " ")
 				flex.addColumn()
 				isEmptyColumn := true

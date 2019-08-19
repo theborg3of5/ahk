@@ -6,11 +6,6 @@ global STRING_CASE_MIXED := "MIXED"
 global STRING_CASE_UPPER := "UPPER"
 global STRING_CASE_LOWER := "LOWER"
 
-global CONTAINS_ANY   := "ANY"
-global CONTAINS_START := "START"
-global CONTAINS_END   := "END"
-global CONTAINS_EXACT := "EXACT"
-
 isValidPhoneNumber(formattedNum) {
 	rawNum := parsePhone(formattedNum) ; Returns "" if it's not a valid number
 	if(rawNum = "")
@@ -127,42 +122,6 @@ stringContains(haystack, needle, fromLastInstance := false) {
 		return InStr(haystack, needle, , 0)
 	else
 		return InStr(haystack, needle)
-}
-
-stringMatches(haystack, el, method := "ANY") { ; method := CONTAINS_ANY
-	if(method = CONTAINS_ANY)
-		return stringContains(haystack, el)
-	
-	else if(method = CONTAINS_START)
-		return stringStartsWith(haystack, el)
-	
-	else if(method = CONTAINS_END)
-		return stringEndsWith(haystack, el)
-	
-	else if(method = CONTAINS_EXACT)
-		return (haystack = el)
-	
-	DEBUG.popup("Unsupported match method",method)
-	return ""
-}
-
-; Reverse array contains function - checks if any of array strings are in given string, with some special ways of searching (matches start, matches end, exact match, partial match anywhere)
-; Returns the position of the earliest match in the string (the first occurrence of any needle)
-stringMatchesAnyOf(haystack, needlesAry, method := "ANY", ByRef matchedNeedle := "") { ; method = CONTAINS_ANY
-	earliestMatchedPos := 0
-	
-	For i,needle in needlesAry {
-		matchedPos := stringMatches(haystack, needle, method)
-		if(matchedPos) {
-			if(!earliestMatchedPos || (matchedPos < earliestMatchedPos)) {
-				earliestMatchedPos := matchedPos
-				matchedNeedle := needle
-			}
-		}
-	}
-	
-	; DEBUG.popup("stringMatchesAnyOf","Finish", "haystack",haystack, "needlesAry",needlesAry, "method",method, "matchedIndex",matchedIndex, "earliestMatchedPos",earliestMatchedPos)
-	return earliestMatchedPos
 }
 
 stringStartsWith(inputString, startString) {

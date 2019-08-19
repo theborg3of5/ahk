@@ -40,9 +40,9 @@ class NotepadPlusPlus {
 			Send, {Left}
 		
 		; If we would have a widowed (on the end of the old line) or orphaned (at the start of the new line) space, remove it.
-		if(stringEndsWith(lineStart, A_Space))
+		if(lineStart.endsWith(A_Space))
 			Send, {Backspace}
-		if(stringStartsWith(lineEnd, A_Space))
+		if(lineEnd.startsWith(A_Space))
 			Send, {Delete}
 		
 		numSpaces := NotepadPlusPlus.getDocumentationLineIndent(lineStart)
@@ -175,7 +175,7 @@ class NotepadPlusPlus {
 		numSpaces := 1 ; Space we just trimmed off
 		
 		keywords := ["DESCRIPTION:", "PARAMETERS:", "RETURNS:", "SIDE EFFECTS:", "NOTES:"]
-		matchedPos := stringMatchesAnyOf(line, keywords, CONTAINS_ANY, matchedKeyword)
+		matchedPos := line.containsAnyOf(keywords, matchedKeyword)
 		if(matchedPos) {
 			; Keyword line - add length of keyword + however many spaces are after it.
 			numSpaces += matchedKeyword.length()

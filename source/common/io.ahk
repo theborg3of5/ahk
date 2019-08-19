@@ -8,29 +8,6 @@ selectCurrentLine() {
 	Send, {End}{Shift Down}{Home}{Shift Up}
 }
 
-; Allows SendRaw'ing of input with tabs to programs which auto-indent text.
-sendRawWithTabs(input) {
-	; Split the input text on newlines, as that's where the tabs will be an issue.
-	Loop, Parse, input, `n, `r  ; Specifying `n prior to `r allows both Windows and Unix files to be parsed.
-	{
-		; Get how many tabs we're dealing with while also pulling them off.
-		currLine := A_LoopField
-		numTabs := 0
-		while stringStartsWith(currLine, A_Tab)
-		{
-			; DEBUG.popup(currLine, "Before currLine", numTabs, "Number of tabs")
-			numTabs++
-			currLine := removeStringFromStart(currLine, A_Tab)
-			; DEBUG.popup(currLine, "After currLine", numTabs, "Number of tabs")
-		}
-		
-		Send, {Tab %numTabs%}
-		SendRaw, %currLine%
-		Send, {Enter}
-		Send, +{Tab %numTabs%}
-	}
-}
-
 getFirstLineOfSelectedText() {
 	text := getSelectedText()
 	return getFirstLine(text)

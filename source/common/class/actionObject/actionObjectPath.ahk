@@ -51,17 +51,17 @@ class ActionObjectPath extends ActionObjectBase {
 	;---------
 	determinePathType(path) {
 		; Full URLs
-		if(stringMatchesAnyOf(path, ["http://", "https://", "ftp://"], CONTAINS_START))
+		if(path.startsWithAnyOf(["http://", "https://"]))
 			return ActionObjectPath.PathType_URL
 		
 		; Filepaths
-		if(stringMatchesAnyOf(path, ["file:///", "\\"], CONTAINS_START)) ; URL-formatted file path, Windows network path
+		if(path.startsWithAnyOf(["file:///", "\\"])) ; URL-formatted file path, Windows network path
 			return ActionObjectPath.PathType_FilePath
 		if(subStr(path, 2, 2) = ":\")  ; Windows filepath (starts with drive letter + :\)
 			return ActionObjectPath.PathType_FilePath
 		
 		; Partial URLs (www.google.com, similar)
-		if(stringMatchesAnyOf(path, ["www.", "vpn.", "m."], CONTAINS_START))
+		if(path.startsWithAnyOf(["www.", "vpn.", "m."]))
 			return ActionObjectPath.PathType_URL
 		
 		; Unknown

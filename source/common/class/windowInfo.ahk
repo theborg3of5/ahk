@@ -48,7 +48,7 @@ class WindowInfo {
 		if(windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"] != "")
 			this.windowTitleStringMatchModeOverride := windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"]
 		else
-			this.windowTitleStringMatchModeOverride := CONTAINS_ANY ; Default value
+			this.windowTitleStringMatchModeOverride := MainConfig.TitleContains_Any ; Default value
 		
 		if(windowAry["EDGE_TYPE"] != "")
 			this.windowEdgeType := windowAry["EDGE_TYPE"]

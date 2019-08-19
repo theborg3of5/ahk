@@ -111,7 +111,7 @@ class EpicRecord {
 			this.id  := getStringAfterStr(iniId, " ")
 			
 		; 2) #ID - Title
-		} else if(stringStartsWith(recordString, "#")) {
+		} else if(recordString.startsWith("#")) {
 			this.id := getFirstStringBetweenStr(recordString, "#", " - ")
 			this.title := getStringAfterStr(recordString, " - ")
 			
@@ -123,7 +123,7 @@ class EpicRecord {
 		} else {
 			recordString := removeStringFromStart(recordString, "R ") ; Trim off "R " at start if it's there.
 			this.ini := getStringBeforeStr(recordString, " ")
-			if(stringMatchesAnyOf(recordString, [":", "-"], , matchedDelim)) {
+			if(recordString.containsAnyOf([":", "-"], matchedDelim)) {
 				; ID is everything up to the first delimiter
 				this.id := getFirstStringBetweenStr(recordString, " ", matchedDelim)
 				; Title is everything after

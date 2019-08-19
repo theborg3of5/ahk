@@ -194,7 +194,7 @@ areVimKeysOn() {
 	return vimKeysOn
 }
 isPageWithExcludeTitle() {
-	return stringMatchesAnyOf(WinGetActiveTitle(), offTitles)
+	return WinGetActiveTitle().contains(offTitles)
 }
 
 turnVimKeysOn() {

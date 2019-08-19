@@ -12,8 +12,7 @@
 /*
 	Do
 		Functions to replace and remove
-			stringStartsWith				=> .startsWith
-			stringEndsWith					=> .endsWith
+			subStr							=> .sub
 			getStringBeforeStr			=> .getBeforeString
 			getStringAfterStr				=> .getAfterString
 			getFirstStringBetweenStr	=> .getFirstBetweenStrings
@@ -28,12 +27,11 @@
 			prependCharIfMissing			=> .prependIfMissing
 			appendCharIfMissing			=> .appendIfMissing
 			prePadStringToLength			=> .prePadToLength
-			stringMatches					=> .startsWith/.endsWith/.contains/=
-				Move CONTAINS_* constants into only class that actually uses them (after we switch to single functions for the rest) - MainConfig (for window title matching)
-			stringMatchesAnyOf			=> .containsAnyOf/.startsWithAnyOf
 			cleanupText						=> .cleaned
 		Functions to remove (already replaced)
 			stringContains
+			stringStartsWith
+			stringEndsWith
 */
 
 class StringBase {

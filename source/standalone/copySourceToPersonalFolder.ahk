@@ -33,7 +33,7 @@ SetWorkingDir, % sourceRoot ; Set working directory and use a relative file patt
 Loop, Files, *, FDR ; All files and folder, recursing into folders
 {
 	; Don't copy over git-related files/folders.
-	if(stringMatchesAnyOf(A_LoopFilePath, gitNames)) ; Check for names in full path so we catch files under ignored folders
+	if(A_LoopFilePath.containsAnyOf(gitNames)) ; Check for names in full path so we catch files under ignored folders
 		Continue
 	
 	; Create folders and copy over files

@@ -15,7 +15,13 @@ class MainConfig {
 	; Constants for contexts
 	static Context_Work := "WORK"
 	static Context_Home := "HOME"
-
+	
+	; Title string matching modes
+	static TitleContains_Any   := "ANY"
+	static TitleContains_Start := "START"
+	static TitleContains_End   := "END"
+	static TitleContains_Exact := "EXACT"
+	
 	init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile) {
 		; All config files are expected to live in config/ folder under the root of this repo.
 		configFolder := getParentFolder(A_LineFile, 4) "\config" ; Root path is 3 levels out, plus one to get out of file itself.
@@ -176,9 +182,9 @@ class MainConfig {
 				; Allow titles to be compared more flexibly than straight equality.
 				stringMatchMode := winInfo.titleStringMatchModeOverride
 				if(!stringMatchMode)
-					stringMatchMode := CONTAINS_ANY ; Default if not overridden
+					stringMatchMode := MainConfig.TitleContains_Any ; Default if not overridden
 				
-				if(!stringMatches(title, winInfo.title, stringMatchMode))
+				if(!this.matchesWithMethod(title, winInfo.title, stringMatchMode))
 					Continue
 			}
 			
@@ -364,5 +370,22 @@ class MainConfig {
 	loadGames(filePath) {
 		tl := new TableList(filePath)
 		return tl.getTable()
+	}
+	
+	matchesWithMethod(haystack, needle, method := "ANY") { ; method := MainConfig.TitleContains_Any
+		if(method = MainConfig.TitleContains_Any)
+			return haystack.contains(needle)
+		
+		else if(method = MainConfig.TitleContains_Start)
+			return haystack.startsWith(needle)
+		
+		else if(method = MainConfig.TitleContains_End)
+			return haystack.endsWith(needle)
+		
+		else if(method = MainConfig.TitleContains_Exact)
+			return (haystack = needle)
+		
+		DEBUG.popup("Unsupported match method",method)
+		return ""
 	}
 }

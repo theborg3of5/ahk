@@ -376,7 +376,7 @@ class Selector {
 	;---------
 	addChoiceRow(row) {
 		choice := new SelectorChoice(row)
-		if(stringStartsWith(row["NAME"], this.chars["HIDDEN"]))
+		if(row["NAME"].startsWith(this.chars["HIDDEN"]))
 			this.hiddenChoices.push(choice) ; First char is hidden character (*), don't show it but allow user to choose it via abbrev.
 		else
 			this.choices.push(choice)
@@ -391,7 +391,7 @@ class Selector {
 	;---------
 	processSpecialLine(line) {
 		; Setting
-		if(stringStartsWith(line, this.chars["SETTING"])) {
+		if(line.startsWith(this.chars["SETTING"])) {
 			line := removeStringFromStart(line, this.chars["SETTING"])
 			if(line != "") {
 				settingSplit := line.split("=")
@@ -399,7 +399,7 @@ class Selector {
 			}
 		
 		; Section title
-		} else if(stringStartsWith(line, this.chars["SECTION_TITLE"] " ")) {
+		} else if(line.startsWith(this.chars["SECTION_TITLE"] " ")) {
 			title := removeStringFromStart(line, this.chars["SECTION_TITLE"] " ")
 			idx := forceNumber(this.choices.MaxIndex()) + 1 ; The next actual choice will be the first one under this header, so match that.
 			this.sectionTitles[idx] := title ; If there are multiple headers in a row (for example when choices are filtered out) they should get overwritten in order here (which is correct).
@@ -444,7 +444,7 @@ class Selector {
 	;---------
 	parseChoice(userChoiceString) {
 		; Command choice - edit ini, etc.
-		if(stringStartsWith(userChoiceString, this.chars["COMMAND"])) {
+		if(userChoiceString.startsWith(this.chars["COMMAND"])) {
 			commandChar := getStringAfterStr(userChoiceString, this.chars["COMMAND"])
 			
 			; Edit action - open the current INI file for editing

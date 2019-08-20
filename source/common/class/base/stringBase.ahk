@@ -100,13 +100,25 @@ class StringBase {
 		return earliestMatchedPos
 	}
 	
-	startsWith(startString) {
-		return (this.sub(1, startString.length()) = startString)
+	;---------
+	; DESCRIPTION:    Check whether this string starts/ends with the provided string.
+	; PARAMETERS:
+	;  checkString (I,REQ) - The string to check whether this string starts/ends with.
+	; RETURNS:        True if it does, False otherwise.
+	;---------
+	startsWith(checkString) {
+		return (this.sub(1, checkString.length()) = checkString)
 	}
-	endsWith(endString) {
-		return (this.sub(this.length() - endString.length() + 1) = endString)
+	endsWith(checkString) {
+		return (this.sub(this.length() - checkString.length() + 1) = checkString)
 	}
 	
+	;---------
+	; DESCRIPTION:    Wrapper for .startsWith() that takes an array of strings to check.
+	; PARAMETERS:
+	;  needlesAry (I,REQ) - Array of strings to check.
+	; RETURNS:        True if this string starts with any of the provided check strings, False otherwise.
+	;---------
 	startsWithAnyOf(needlesAry) {
 		For i,needle in needlesAry {
 			if(this.startsWith(needle))
@@ -116,90 +128,191 @@ class StringBase {
 		return false
 	}
 	
+	;---------
+	; DESCRIPTION:    Wrapper for SubStr() - returns a chunk of this string.
+	; PARAMETERS:
+	;  startPos (I,REQ) - Position to start at (first character is position 1). Can be negative to count from end of string.
+	;  length   (I,OPT) - Number of characters to include. If left blank, we'll return the entire rest of the string.
+	; RETURNS:        The chunk of this string specified.
+	;---------
 	sub(startPos, length := "") {
 		if(length = "")
-			return subStr(this, startPos)
+			return SubStr(this, startPos)
 		else
-			return subStr(this, startPos, length)
+			return SubStr(this, startPos, length)
 	}
+	
+	;---------
+	; DESCRIPTION:    Return a chunk of this string, given starting and ending positions.
+	; PARAMETERS:
+	;  startPos  (I,REQ) - Starting position
+	;  stopAtPos (I,REQ) - Ending position - return up to here, non-inclusive.
+	; RETURNS:        Chunk of this string specified.
+	;---------
 	slice(startPos, stopAtPos) {
 		return this.sub(startPos, stopAtPos - startPos)
 	}
 	
-	beforeString(endString, searchFromEnd := false) {
-		endStringPos := this.contains(endString, searchFromEnd)
-		if(!endStringPos)
+	;---------
+	; DESCRIPTION:    Get the portion of this string before/after the given string.
+	; PARAMETERS:
+	;  checkString   (I,REQ) - The string to return before/after. Will not be included in the result (unless there are multiple)
+	;  searchFromEnd (I,OPT) - Set to True to start searching from the end of the string instead of the start.
+	; RETURNS:        The requested portion of this string.
+	;---------
+	beforeString(checkString, searchFromEnd := false) {
+		checkStringPos := this.contains(checkString, searchFromEnd)
+		if(!checkStringPos)
 			return this
 		
-		return this.sub(1, endStringPos - 1)
+		return this.sub(1, checkStringPos - 1)
 	}
-	afterString(startString, searchFromEnd := false) {
-		startStringPos := this.contains(startString, searchFromEnd)
-		if(!startStringPos)
+	afterString(checkString, searchFromEnd := false) {
+		checkStringPos := this.contains(checkString, searchFromEnd)
+		if(!checkStringPos)
 			return this
 		
-		return this.sub(startStringPos + startString.length())
+		return this.sub(checkStringPos + checkString.length())
 	}
 	
+	;---------
+	; DESCRIPTION:    Get the portion of the string that is between the two provided strings. This
+	;                 is the non-greedy function - it will go from the first instance of startString
+	;                 to the first instance of endString.
+	; PARAMETERS:
+	;  startString (I,REQ) - String to start matching at
+	;  endString   (I,REQ) - String to finish matching at
+	; RETURNS:        Requested chunk of this string.
+	;---------
 	firstBetweenStrings(startString, endString) {
 		return this.getBetweenStrings(startString, endString, false)
 	}
+	
+	;---------
+	; DESCRIPTION:    Get the portion of the string that is between the two provided strings. This
+	;                 is the greedy function - it will go from the first instance of startString
+	;                 to the LAST instance of endString.
+	; PARAMETERS:
+	;  startString (I,REQ) - String to start matching at
+	;  endString   (I,REQ) - String to finish matching at
+	; RETURNS:        Requested chunk of this string.
+	;---------
 	allBetweenStrings(startString, endString) {
 		return this.getBetweenStrings(startString, endString, true)
 	}
 	
-	removeFromStart(startToRemove) {
-		if(!this.startsWith(startToRemove))
+	;---------
+	; DESCRIPTION:    Remove a string (if it exists) from the start/end of this string.
+	; PARAMETERS:
+	;  toRemove (I,REQ) - The string to remove from the start or end of this string.
+	; RETURNS:        The updated string, after removing toRemove.
+	;---------
+	removeFromStart(toRemove) {
+		if(!this.startsWith(toRemove))
 			return this
 		
-		return this.sub(startToRemove.length() + 1)
+		return this.sub(toRemove.length() + 1)
 	}
-	removeFromEnd(endingToRemove) {
-		if(!this.endsWith(endingToRemove))
+	removeFromEnd(toRemove) {
+		if(!this.endsWith(toRemove))
 			return this
 		
-		return this.sub(1, this.length() - endingToRemove.length())
+		return this.sub(1, this.length() - toRemove.length())
 	}
 	
-	prependIfMissing(strToPrepend) {
-		if(this.sub(1, strToPrepend.length()) != strToPrepend)
-			return strToPrepend this
+	;---------
+	; DESCRIPTION:    Add a string to the beginning/end of this string, but only if that string is
+	;                 not already in place.
+	; PARAMETERS:
+	;  strToAdd (I,REQ) - String to add at the beginning/end.
+	; RETURNS:        Updated string.
+	;---------
+	prependIfMissing(strToAdd) {
+		if(this.sub(1, strToAdd.length()) != strToAdd)
+			return strToAdd this
 		
 		return this
 	}
-	appendIfMissing(strToAppend) {
-		if(this.sub(- (strToAppend.length() - 1) ) != strToAppend)
-			return this strToAppend
+	appendIfMissing(strToAdd) {
+		if(this.sub(- (strToAdd.length() - 1) ) != strToAdd)
+			return this strToAdd
 		
 		return this
 	}
 	
+	;---------
+	; DESCRIPTION:    Get the first line of this string.
+	; RETURNS:        The first line of this string (everything up to the first newline)
+	;---------
 	firstLine() {
 		return this.beforeString("`n")
 	}
 	
+	;---------
+	; DESCRIPTION:    Get the string, with no leading/trailing whitespace.
+	; RETURNS:        The string without whitespace.
+	;---------
 	withoutWhitespace() {
 		newText = %this% ; Note using = not :=, to drop whitespace.
 		return newText
 	}
 	
+	;---------
+	; DESCRIPTION:    Wrappers for StrReplace - replace all (or one) instance(s) of the provided
+	;                 string, with the replacement text.
+	; PARAMETERS:
+	;  needle      (I,REQ) - String to replace
+	;  replaceWith (I,REQ) - String to replace with
+	; RETURNS:        The updated string
+	; NOTES:          If you just want to remove all instances of a string, use .remove() instead.
+	;---------
 	replace(needle, replaceWith) {
 		return StrReplace(this, needle, replaceWith) ; Replace all
 	}
 	replaceOne(needle, replaceWith) {
 		return StrReplace(this, needle, replaceWith, "", 1) ; Replace 1
 	}
+	
+	;---------
+	; DESCRIPTION:    Remove all instances of the provided string from this string.
+	; PARAMETERS:
+	;  needle (I,REQ) - Text to remove all instances of.
+	; RETURNS:        The updated string
+	;---------
+	remove(needle) {
+		return this.replace(needle, "")
+	}
+	
+	;---------
+	; DESCRIPTION:    Wrapper for RegExReplace - replace all matches for the provided RegEx, with
+	;                 the provided replacement text.
+	; PARAMETERS:
+	;  needleRegEx (I,REQ) - RegEx to match on.
+	;  replaceWith (I,REQ) - Text to replace matches with.
+	; RETURNS:        The updated string
+	; NOTES:          If you just want to remove all matches, use .removeRegEx() intead.
+	;---------
 	replaceRegEx(needleRegEx, replaceWith) {
 		return RegExReplace(this, needleRegEx, replaceWith) ; Replace all
 	}
 	
-	remove() {
-		return this.replace(needle, "")
-	}
+	;---------
+	; DESCRIPTION:    Remove all matches for the provided RegEx from this string.
+	; PARAMETERS:
+	;  needleRegEx (I,REQ) - RegEx to match on.
+	; RETURNS:        The updated string
+	;---------
 	removeRegEx(needleRegEx) {
 		return this.replaceRegEx(needleRegEx, "")
 	}
 	
+	;---------
+	; DESCRIPTION:    Append a piece to this string with a delimiter, but only add a delimiter if it's needed.
+	; PARAMETERS:
+	;  pieceToAdd (I,REQ) - Piece to add to the string
+	;  delimiter  (I,OPT) - Delimiter to add before the new piece (if applicable). Defaults to a comma (,).
+	; RETURNS:        The updated string.
+	;---------
 	appendPiece(pieceToAdd, delimiter := ",") {
 		if(pieceToAdd = "")
 			return this
@@ -209,6 +322,24 @@ class StringBase {
 		return this delimiter pieceToAdd
 	}
 	
+	;---------
+	; DESCRIPTION:    Replace a tag ("<TAG_NAME>") in this string with the provided replacement.
+	; PARAMETERS:
+	;  tagName     (I,REQ) - The name of the tag to replace (no angle brackets)
+	;  replacement (I,REQ) - The text to replace all instances of the tag with.
+	; RETURNS:        The updated string.
+	;---------
+	replaceTag(tagName, replacement) {
+		return this.replace("<" tagName ">", replacement)
+	}
+	
+	;---------
+	; DESCRIPTION:    Replace multiple tags with corresponding replacement texts (see .replaceTag()).
+	; PARAMETERS:
+	;  tagsAry (I,REQ) - Array of tag names and replacements. Format:
+	;                       tagsAry["TAG_NAME"] := REPLACEMENT_TEXT
+	; RETURNS:        The updated string.
+	;---------
 	replaceTags(tagsAry) {
 		outputString := this
 		
@@ -217,12 +348,17 @@ class StringBase {
 		
 		return outputString
 	}
-
-	replaceTag(tagName, replacement) {
-		return StrReplace(this, "<" tagName ">", replacement)
-	}
 	
-	; Cleans a hard-coded list of characters out of a (should be single-line) string, including whitespace.
+	;---------
+	; DESCRIPTION:    Remove certain characters (and optionally, additional passed-in strings) from
+	;                 the start and end of this string.
+	; PARAMETERS:
+	;  additionalStringsToRemove (I,OPT) - Pass in an array of strings to have them also removed
+	;                                      from the start and end of this string.
+	; RETURNS:        The updated string
+	; NOTES:          Order doesn't matter - we keep cleaning until we don't find any of the
+	;                 provided strings at the start or end of the output.
+	;---------
 	clean(additionalStringsToRemove := "") {
 		outStr := this
 		

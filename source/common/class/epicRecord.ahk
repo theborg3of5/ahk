@@ -135,9 +135,9 @@ class EpicRecord {
 		}
 		
 		; Make sure everything is free of extra whitespace
-		this.ini   := dropWhitespace(this.ini)
-		this.id    := dropWhitespace(this.id)
-		this.title := dropWhitespace(this.title)
+		this.ini   := this.ini.withoutWhitespace()
+		this.id    := this.id.withoutWhitespace()
+		this.title := this.title.withoutWhitespace()
 		
 		; DEBUG.popup("recordString",recordString, "this",this)
 	}

@@ -137,12 +137,6 @@ getFirstLine(inputString) {
 	return splitAry[1]
 }
 
-; Drop any leading/trailing whitespace.
-dropWhitespace(text) {
-	newText = %text% ; Note using = not :=, to drop whitespace.
-	return newText
-}
-
 appendLine(baseText, textToAdd) {
 	updatedString := ""
 	updatedString := baseText

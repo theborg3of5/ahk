@@ -12,7 +12,6 @@
 /*
 	Do
 		Functions to replace and remove
-			dropWhitespace					=> .withoutWhitespace (returns)
 			appendPieceToString			=> .appendPiece (returns, parameter order different)
 			getFirstLine					=> .firstLine
 			replaceTags						=> .replaceTags

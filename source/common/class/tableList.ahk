@@ -491,7 +491,7 @@ class TableList {
 	parseList(lines) {
 		; Loop through and do work on them.
 		For i,row in lines {
-			row := dropWhitespace(row)
+			row := row.withoutWhitespace()
 			
 			; Reduce any sets of multiple tabs in a row to a single one.
 			Loop {

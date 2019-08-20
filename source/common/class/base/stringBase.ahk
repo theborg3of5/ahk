@@ -15,37 +15,75 @@ class StringBase {
 ; == Public ====================
 ; ==============================
 	
+	;---------
+	; DESCRIPTION:    Wrapper for StrLen().
+	; RETURNS:        Length of string
+	;---------
 	length() {
 		return StrLen(this)
 	}
 	
-	; Wrapper function for whether a string is alphabetic.
+	;---------
+	; DESCRIPTION:    Wrapper functions for whether a string is alphabetic, numeric, or alphanumeric.
+	; RETURNS:        True if the string is, False otherwise.
+	;---------
 	isAlpha() {
 		return IfIs(this, "Alpha")
 	}
-
-	; Wrapper function for whether a string is numeric.
 	isNum() {
 		return IfIs(this, "Number")
 	}
-
-	; Wrapper function for whether a string is alphanumeric.
 	isAlphaNum() {
 		return IfIs(this, "AlNum")
 	}
 	
+	;---------
+	; DESCRIPTION:    Wrapper for InStr() - check if a string contains a search string.
+	; PARAMETERS:
+	;  needle        (I,REQ) - String to search for
+	;  searchFromEnd (I,OPT) - Whether to reverse search (start from end and return the position of the last match)
+	; RETURNS:        The position of the match we found (first or last, depending on searchFromEnd parameter)
+	;                 0 if nothing found
+	;---------
 	contains(needle, searchFromEnd := false) {
 		if(searchFromEnd)
 			return InStr(this, needle, , 0)
 		else
 			return InStr(this, needle)
 	}
+	;---------
+	; DESCRIPTION:    Wrapper for RegExMatch() - check if a string contains a search regex.
+	; PARAMETERS:
+	;  needleRegEx (I,REQ) - RegEx to search for
+	;  outputVar   (O,OPT) - Output variable - can be the matched string, position+length, or a
+	;                        match object (depending on the mode specified in needleRegEx, see
+	;                        RegExMatch() for details).
+	; RETURNS:        The position of the first match, 0 if nothing found.
+	; SIDE EFFECTS:   
+	; NOTES:          
+	;---------
 	containsRegEx(needleRegEx, ByRef outputVar := "") {
 		return RegExMatch(this, needleRegEx, outputVar)
 	}
 	
-	; Reverse array contains function - checks if any of array strings are in given string.
-	; Returns the position of the earliest match in the string (the first occurrence of any needle)
+	;---------
+	; DESCRIPTION:    Count how many times a search string occurs in this string.
+	; PARAMETERS:
+	;  needle (I,REQ) - The search string
+	; RETURNS:        How many times the search string appears.
+	;---------
+	countMatches(needle) {
+		StrReplace(this, needle, , matchCount, -1)
+		return matchCount
+	}
+	
+	;---------
+	; DESCRIPTION:    Wrapper for .contains() which takes an array of search strings.
+	; PARAMETERS:
+	;  needlesAry    (I,REQ) - The array of strings to search for
+	;  matchedNeedle (O,OPT) - The needle that we matched
+	; RETURNS:        The position of the first occurrence of any needle.
+	;---------
 	containsAnyOf(needlesAry, ByRef matchedNeedle := "") {
 		earliestMatchedPos := 0
 		
@@ -59,18 +97,7 @@ class StringBase {
 			}
 		}
 		
-		; DEBUG.popup("StringBase.containsAnyOf","Finish", "this",this, "needlesAry",needlesAry, "matchedIndex",matchedIndex, "earliestMatchedPos",earliestMatchedPos)
 		return earliestMatchedPos
-	}
-	
-	sub(startPos, length := "") {
-		if(length = "")
-			return subStr(this, startPos)
-		else
-			return subStr(this, startPos, length)
-	}
-	slice(startPos, stopAtPos) {
-		return this.sub(startPos, stopAtPos - startPos)
 	}
 	
 	startsWith(startString) {
@@ -87,6 +114,16 @@ class StringBase {
 		}
 		
 		return false
+	}
+	
+	sub(startPos, length := "") {
+		if(length = "")
+			return subStr(this, startPos)
+		else
+			return subStr(this, startPos, length)
+	}
+	slice(startPos, stopAtPos) {
+		return this.sub(startPos, stopAtPos - startPos)
 	}
 	
 	beforeString(endString, searchFromEnd := false) {
@@ -163,9 +200,26 @@ class StringBase {
 		return this.replaceRegEx(needleRegEx, "")
 	}
 	
-	countMatches(needle) {
-		StrReplace(this, needle, , matchCount, -1)
-		return matchCount
+	appendPiece(pieceToAdd, delimiter := ",") {
+		if(pieceToAdd = "")
+			return this
+		if(this = "")
+			return pieceToAdd
+		
+		return this delimiter pieceToAdd
+	}
+	
+	replaceTags(tagsAry) {
+		outputString := this
+		
+		For tagName, replacement in tagsAry
+			outputString := outputString.replaceTag(tagName, replacement)
+		
+		return outputString
+	}
+
+	replaceTag(tagName, replacement) {
+		return StrReplace(this, "<" tagName ">", replacement)
 	}
 	
 	; Cleans a hard-coded list of characters out of a (should be single-line) string, including whitespace.
@@ -221,28 +275,13 @@ class StringBase {
 		return outStr
 	}
 	
-	appendPiece(pieceToAdd, delimiter := ",") {
-		if(pieceToAdd = "")
-			return this
-		if(this = "")
-			return pieceToAdd
-		
-		return this delimiter pieceToAdd
-	}
-	
-	replaceTags(tagsAry) {
-		outputString := this
-		
-		For tagName, replacement in tagsAry
-			outputString := outputString.replaceTag(tagName, replacement)
-		
-		return outputString
-	}
-
-	replaceTag(tagName, replacement) {
-		return StrReplace(this, "<" tagName ">", replacement)
-	}
-	
+	;---------
+	; DESCRIPTION:    A wrapper for StrSplit() that returns an actual array (not an object).
+	; PARAMETERS:
+	;  delimiters             (I,OPT) - Delimiter(s) to split on
+	;  surroundingCharsToDrop (I,OPT) - Characters to drop from around each piece
+	; RETURNS:        Array of split-up string
+	;---------
 	split(delimiters := "", surroundingCharsToDrop := "") { ; Like StrSplit(), but returns an actual array (not an object)
 		obj := StrSplit(this, delimiters, surroundingCharsToDrop)
 		return convertObjectToArray(obj)
@@ -253,6 +292,15 @@ class StringBase {
 ; == Private ===================
 ; ==============================
 	
+	;---------
+	; DESCRIPTION:    Get the portion of this string that is between the provided strings.
+	; PARAMETERS:
+	;  startString       (I,REQ) - String to start at
+	;  endString         (I,REQ) - String to finish at
+	;  upToLastEndString (I,REQ) - False to stop at the first endString, True to be greedy and get
+	;                              everything up to the last instance of endString.
+	; RETURNS:        The string between the provided strings.
+	;---------
 	getBetweenStrings(startString, endString, upToLastEndString) {
 		; Trim off everything before (and including) the first instance of the startString
 		outStr := this.afterString(startString)

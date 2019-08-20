@@ -4,12 +4,13 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
-trayInfo := new ScriptTrayInfo("AHK: DLG Number Tracker", "hash.ico", "redHash.ico")
+scriptTitle := "AHK: DLG Number Tracker"
+trayInfo := new ScriptTrayInfo(scriptTitle, "hash.ico", "redHash.ico")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub, trayInfo)
 
 global currDLGId
 SetTimer, MainLoop, 5000 ; 5s, timer toggled by commonHotkeys' suspend hotkey.
-SetTitleMatchMode, 2 ; Partial title matching.
+SetTitleMatchMode, % TITLE_MATCH_MODE_Contain
 
 
 MainLoop:

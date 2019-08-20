@@ -12,6 +12,7 @@
 /*
 	Do
 		Functions to replace
+			RegExMatch		=>	.matchRegEx
 */
 
 class StringBase {

@@ -35,6 +35,7 @@ global DOUBLE_QUOTE := """"
 global TITLE_MATCH_MODE_Start   := 1
 global TITLE_MATCH_MODE_Contain := 2
 global TITLE_MATCH_MODE_Exact   := 3
+global TITLE_MATCH_MODE_RegEx   := "RegEx"
 
 ; MsgBox button options
 global MSGBOX_BUTTONS_OK                       := 0

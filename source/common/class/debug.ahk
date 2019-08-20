@@ -159,7 +159,7 @@ class DEBUG {
 		
 		For i,row in pairedParams {
 			newString := this.buildDebugStringForPair(row["LABEL"], row["VALUE"])
-			outString := appendLine(outString, newString)
+			outString := outString.appendPiece(newString, "`n")
 		}
 		
 		return outString

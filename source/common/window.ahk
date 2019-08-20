@@ -15,11 +15,11 @@ buildWindowTitleString(exeName := "", winClass := "", winTitle := "") {
 	outStr := ""
 	
 	if(winTitle) 
-		outStr := appendPieceToString(outStr, " ", winTitle) ; Title has to go first since it doesn't have an "ahk_" identifier to go with it.
+		outStr := outStr.appendPiece(winTitle, " ") ; Title has to go first since it doesn't have an "ahk_" identifier to go with it.
 	if(exeName)
-		outStr := appendPieceToString(outStr, " ", "ahk_exe " exeName)
+		outStr := outStr.appendPiece("ahk_exe " exeName, " ")
 	if(winClass)
-		outStr := appendPieceToString(outStr, " ", "ahk_class " winClass)
+		outStr := outStr.appendPiece("ahk_class " winClass, " ")
 	
 	return outStr
 }

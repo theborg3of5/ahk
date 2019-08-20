@@ -122,26 +122,6 @@ getFirstLine(inputString) {
 	return splitAry[1]
 }
 
-appendLine(baseText, textToAdd) {
-	updatedString := ""
-	updatedString := baseText
-	
-	if(updatedString != "")
-		updatedString .= "`n"
-	updatedString .= textToAdd
-	
-	return updatedString
-}
-
-appendPieceToString(baseText, delimiter, pieceToAdd) {
-	if(pieceToAdd = "")
-		return baseText
-	if(baseText = "")
-		return pieceToAdd
-	
-	return baseText delimiter pieceToAdd
-}
-
 getCleanHotkeyString(hotkeyString) {
 	return hotkeyString.clean(["$", "*", "<", ">", "~"])
 }

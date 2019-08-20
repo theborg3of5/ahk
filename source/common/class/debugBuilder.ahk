@@ -56,7 +56,7 @@ class DebugBuilder {
 	;---------
 	addLine(label, value) {
 		newLine := DEBUG.buildDebugStringForPair(label, value, this.numTabs)
-		this.outString := appendLine(this.outString, newLine)
+		this.outString := this.outString.appendPiece(newLine, "`n")
 	}
 	
 	;---------

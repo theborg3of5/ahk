@@ -31,7 +31,7 @@ runCommand(commandToRun := "", workingDirectory := "", stayOpen := false) {
 	cmdString := ""
 	if(commandToRun.MaxIndex()) {
 		For _,command in commandToRun
-			cmdString := appendPieceToString(cmdString, A_Space, command)
+			cmdString := cmdString.appendPiece(command, " ")
 	} else {
 		cmdString := commandToRun
 	}

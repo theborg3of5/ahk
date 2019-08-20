@@ -31,8 +31,8 @@ return
 addDLGToCommitWindow() {
 	if(ControlGetText(dlgFieldId) != "") ; If there's already something in the field, leave it be.
 		return
-		
-	RegExMatch(WinGetActiveTitle(), tortoiseTitleRegEx, matchObj)
+	
+	WinGetActiveTitle().containsRegEx(tortoiseTitleRegEx, matchObj)
 	rawDLGId := matchObj.value(1) ; First subpattern should be DLG ID that we're interested in.
 	if(rawDLGId = "")
 		return

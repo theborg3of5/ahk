@@ -183,7 +183,7 @@ class NotepadPlusPlus {
 			line := line.removeFromStart(matchedKeyword)
 			numSpaces += countLeadingSpaces(line)
 		} else {
-			matchedPos := RegExMatch(line, "P)\((I|O|IO),(OPT|REQ)\) - ", matchedTextLen)
+			matchedPos := line.containsRegEx("P)\((I|O|IO),(OPT|REQ)\) - ", matchedTextLen)
 			if(matchedPos) {
 				; Parameter line - add the position of the "(I,REQ) - "-style description - 1 + its length.
 				numSpaces += (matchedPos - 1) + matchedTextLen

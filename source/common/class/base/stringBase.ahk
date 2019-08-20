@@ -9,12 +9,6 @@
 		result := str.contains("b") ; result = 2
 */
 
-/*
-	Do
-		Functions to replace
-			RegExMatch		=>	.matchRegEx
-*/
-
 class StringBase {
 
 ; ==============================
@@ -45,6 +39,9 @@ class StringBase {
 			return InStr(this, needle, , 0)
 		else
 			return InStr(this, needle)
+	}
+	containsRegEx(needleRegEx, ByRef outputVar := "") {
+		return RegExMatch(this, needleRegEx, outputVar)
 	}
 	
 	; Reverse array contains function - checks if any of array strings are in given string.

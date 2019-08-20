@@ -124,7 +124,7 @@ encodeForURL(textToEncode) {
 	currentText := textToEncode
 	
 	; Temporarily trim off any http/https/etc. (will add back on at end)
-	if(RegExMatch(currentText, "^\w+:/{0,2}", prefix))
+	if(currentText.containsRegEx("^\w+:/{0,2}", prefix))
 		currentText := currentText.removeFromStart(prefix)
 	
 	; First replace any percents with the equivalent (since doing it later would also pick up anything else we've converted)
@@ -133,7 +133,7 @@ encodeForURL(textToEncode) {
 	currentText := currentText.replace(needle, replaceWith)
 	
 	; Replace any other iffy characters with their encoded equivalents
-	while(RegExMatch(currentText, "i)[^\w\.~%]", charToReplace)) {
+	while(currentText.containsRegEx("i)[^\w\.~%]", charToReplace)) {
 		replaceWith := "%" numToHex(Asc(charToReplace))
 		currentText := currentText.replace(charToReplace, replaceWith)
 	}
@@ -144,7 +144,7 @@ encodeForURL(textToEncode) {
 decodeFromURL(textToDecode) {
 	outString := textToDecode
 	
-	while(RegExMatch(outString, "i)(?<=%)[\da-f]{1,2}", charCodeInHex)) {
+	while(outString.containsRegEx("i)(?<=%)[\da-f]{1,2}", charCodeInHex)) {
 		needle := "%" charCodeInHex
 		replaceWith := Chr(hexToInteger(charCodeInHex))
 		outString := outString.replace(needle, replaceWith)

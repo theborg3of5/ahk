@@ -16,13 +16,14 @@
 			getStringAfterStr				=> .getAfterString
 			getFirstStringBetweenStr	=> .getFirstBetweenStrings
 			getFullStringBetweenStr		=> .getAllBetweenStrings
+			removeStringFromStart		=> .removeFromStart
+			removeStringFromEnd			=> .removeFromEnd
+			
 			dropWhitespace					=> .withoutWhitespace (returns)
 			appendPieceToString			=> .appendPiece (returns, parameter order different)
 			getFirstLine					=> .firstLine
 			replaceTags						=> .replaceTags
 			replaceTag						=> .replaceTag
-			removeStringFromStart		=> .removeFromStart
-			removeStringFromEnd			=> .removeFromEnd
 			prependCharIfMissing			=> .prependIfMissing
 			appendCharIfMissing			=> .appendIfMissing
 			prePadStringToLength			=> .prePadToLength
@@ -125,11 +126,11 @@ class StringBase {
 		return this.sub(startStringPos + startString.length())
 	}
 	
-	getFirstBetweenStrings(startString, endString, upToLastEndString := false) {
-		return getFirstStringBetweenStr(this, startString, endString, false)
+	getFirstBetweenStrings(startString, endString) {
+		return this.getBetweenStrings(startString, endString, false)
 	}
 	getAllBetweenStrings(startString, endString) {
-		return getFirstStringBetweenStr(this, startString, endString, true)
+		return this.getBetweenStrings(startString, endString, true)
 	}
 	
 	removeFromStart(startToRemove) {

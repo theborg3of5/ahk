@@ -120,13 +120,13 @@ class NotepadPlusPlus {
 		paramLines := []
 		For _,paramName in paramsAry {
 			line := NotepadPlusPlus.ahkParamBase
-			line := replaceTag(line, "NAME",    paramName)
-			line := replaceTag(line, "PADDING", getSpaces(maxParamLength - paramName.length()))
+			line := line.replaceTag("NAME",    paramName)
+			line := line.replaceTag("PADDING", getSpaces(maxParamLength - paramName.length()))
 			paramLines.push(line)
 		}
 		
 		header := NotepadPlusPlus.ahkHeaderBaseWithParams
-		header := replaceTag(header, "PARAMETERS", paramLines.join("`n"))
+		header := header.replaceTag("PARAMETERS", paramLines.join("`n"))
 		SendRaw, % header
 	}
 	

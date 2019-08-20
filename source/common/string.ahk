@@ -120,10 +120,6 @@ getCleanHotkeyString(hotkeyString) {
 	return hotkeyString.clean(["$", "*", "<", ">", "~"])
 }
 
-replaceTag(inputString, tagName, replacement) {
-	return StrReplace(inputString, "<" tagName ">", replacement)
-}
-
 encodeForURL(textToEncode) {
 	currentText := textToEncode
 	

@@ -53,9 +53,9 @@ buildCodeSearchURL(searchTerm, searchType, appKey := "") {
 	searchTerm := escapeForRunURL(searchTerm)
 	
 	url := MainConfig.private["CS_BASE"]
-	url := replaceTag(url, "SEARCH_TYPE", searchType)
-	url := replaceTag(url, "APP_ID",      getEpicAppIdFromKey(appKey))
-	url := replaceTag(url, "CRITERIA",    "a=" searchTerm)
+	url := url.replaceTag("SEARCH_TYPE", searchType)
+	url := url.replaceTag("APP_ID",      getEpicAppIdFromKey(appKey))
+	url := url.replaceTag("CRITERIA",    "a=" searchTerm)
 	
 	return url
 }
@@ -94,11 +94,11 @@ buildEpicWikiSearchURL(searchTerm, category := "") {
 	searchTerm := escapeForRunURL(searchTerm)
 	
 	url := MainConfig.private["WIKI_SEARCH_BASE"]
-	url := replaceTag(url, "QUERY", searchTerm)
+	url := url.replaceTag("QUERY", searchTerm)
 	
 	if(category) {
 		filters := MainConfig.private["WIKI_SEARCH_FILTERS"]
-		filters := replaceTag(filters, "CATEGORIES", "'" category "'")
+		filters := filters.replaceTag("CATEGORIES", "'" category "'")
 		url .= filters
 	}
 	

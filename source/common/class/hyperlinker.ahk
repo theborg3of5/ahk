@@ -216,9 +216,7 @@ class Hyperlinker {
 		Send, {Backspace}
 		
 		; Build the full link string using the original text and path.
-		linkedText := taggedStringBase
-		linkedText := replaceTag(linkedText, "TEXT", textToLink)
-		linkedText := replaceTag(linkedText, "PATH", path)
+		linkedText := taggedStringBase.replaceTags({"TEXT":textToLink, "PATH":path})
 		
 		; Send the link string to the field (no accept, that's it).
 		sendTextWithClipboard(linkedText)

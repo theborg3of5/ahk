@@ -35,15 +35,10 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 	;---------
 	getLink() {
 		splitServerLocation(this.location, routine, tag)
-		
 		routine := encodeForURL(routine)
 		tag     := encodeForURL(tag)
 		
-		url := MainConfig.private["CS_SERVER_CODE_BASE"]
-		url := replaceTag(url, "ROUTINE", routine)
-		url := replaceTag(url, "TAG",     tag)
-		
-		return url
+		return MainConfig.private["CS_SERVER_CODE_BASE"].replaceTags({"ROUTINE":routine, "TAG":tag})
 	}
 	getLinkWeb() {
 		return this.getLink()

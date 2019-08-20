@@ -12,7 +12,6 @@
 /*
 	Do
 		Functions to replace and remove
-			replaceTag						=> .replaceTag
 		Functions to remove (already replaced)
 */
 
@@ -216,7 +215,7 @@ class StringBase {
 		outputString := this
 		
 		For tagName, replacement in tagsAry
-			outputString := replaceTag(outputString, tagName, replacement)
+			outputString := outputString.replaceTag(tagName, replacement)
 		
 		return outputString
 	}

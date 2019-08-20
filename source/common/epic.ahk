@@ -114,7 +114,7 @@
 		else
 			command := "CallNumber?extension=" rawNum
 		
-		return replaceTag(MainConfig.private["CISCO_PHONE_BASE"], "COMMAND", command)
+		return MainConfig.private["CISCO_PHONE_BASE"].replaceTag("COMMAND", command)
 	}
 }
 
@@ -124,9 +124,9 @@
 		
 		; Handling for 2010 special path.
 		if(versionMajor = 7 && versionMinor = 8)
-			runString := replaceTag(runString, "EPICNAME", "EpicSys")
+			runString := runString.replaceTag("EPICNAME", "EpicSys")
 		else
-			runString := replaceTag(runString, "EPICNAME", "Epic")
+			runString := runString.replaceTag("EPICNAME", "Epic")
 		
 		; Versioning and environment.
 		runString := runString.replaceTags({"MAJOR":versionMajor, "MINOR":versionMinor, "ENVIRONMENT":environment})
@@ -149,8 +149,8 @@
 		
 		; Build the string to run
 		runString := MainConfig.private["TX_DIFF_DUMP_BASE"]
-		runString := replaceTag(runString, "TX_ID",       txId)
-		runString := replaceTag(runString, "OUTPUT_PATH", outputPath)
+		runString := runString.replaceTag("TX_ID",       txId)
+		runString := runString.replaceTag("OUTPUT_PATH", outputPath)
 		
 		; Add on the environment if it's given - if not, leave off the flag (which will automatically cause the script to show an environment selector instead).
 		if(environmentCommId)
@@ -161,7 +161,7 @@
 	}
 
 	buildVDIRunString(vdiId) {
-		return replaceTag(MainConfig.private["VDI_BASE"], "VDI_ID", vdiId)
+		return MainConfig.private["VDI_BASE"].replaceTag("VDI_ID", vdiId)
 	}
 }
 

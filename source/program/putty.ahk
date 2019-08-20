@@ -137,12 +137,10 @@ class Putty {
 		sendAfter := dataAry["SEND_AFTER"]
 		ini       := stringUpper(dataAry["INI"])
 		id        := dataAry["ID"]
-		
 		if(!command)
 			return
 		
-		command := replaceTag(command, "INI", ini)
-		command := replaceTag(command, "ID",  id)
+		command := command.replaceTags({"INI":ini, "ID":id})
 		
 		if(!MainConfig.isWindowActive("Putty"))
 			WindowActions.activateWindowByName("Putty")

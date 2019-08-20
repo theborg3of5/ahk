@@ -161,7 +161,7 @@ replaceDateTimeTags(inString, dateTime := "") { ; dateTime defaults to A_Now (ba
 	
 	For _,format in formatsAry {
 		dateTimeBit := FormatTime(dateTime, format)
-		outString := replaceTag(outString, format, dateTimeBit)
+		outString := outString.replaceTag(format, dateTimeBit)
 	}
 	
 	return outString

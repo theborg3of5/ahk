@@ -304,7 +304,7 @@ class OneTastic {
 		OneTastic.waitMacroEditorWindowActive()
 		
 		; Replace any instances of the special <CURRENT_MACHINE> tag with the AHK value for our current machine.
-		functionXML := replaceTag(functionXML, "CURRENT_MACHINE", MainConfig.machine)
+		functionXML := functionXML.replaceTag("CURRENT_MACHINE", MainConfig.machine)
 		
 		OneTastic.setCurrentXML(functionXML)
 	}

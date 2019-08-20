@@ -54,16 +54,16 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 			environmentId := MainConfig.private["DBC_DEV_ENV_ID"] ; Always use DBC Dev environment
 			
 			url := MainConfig.private["EPICSTUDIO_URL_BASE_ROUTINE"]
-			url := replaceTag(url, "ROUTINE",     routine)
-			url := replaceTag(url, "TAG",         tag)
-			url := replaceTag(url, "ENVIRONMENT", environmentId)
+			url := url.replaceTag("ROUTINE",     routine)
+			url := url.replaceTag("TAG",         tag)
+			url := url.replaceTag("ENVIRONMENT", environmentId)
 			
 			return url
 		}
 		
 		if(this.descriptorType = ActionObjectEpicStudio.DescriptorType_DLG) {
 			url := MainConfig.private["EPICSTUDIO_URL_BASE_DLG"]
-			url := replaceTag(url, "DLG_ID", this.descriptor)
+			url := url.replaceTag("DLG_ID", this.descriptor)
 			return url
 		}
 		

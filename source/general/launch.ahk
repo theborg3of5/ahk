@@ -119,10 +119,10 @@
 			combinedMessage .= data["MESSAGE"]
 			
 			textToSend := MainConfig.private["OUTLOOK_TLG_BASE"]
-			textToSend := replaceTag(textToSend, "TLP",      data["TLP"])
-			textToSend := replaceTag(textToSend, "CUSTOMER", data["CUSTOMER"])
-			textToSend := replaceTag(textToSend, "DLG",      data["DLG"])
-			textToSend := replaceTag(textToSend, "MESSAGE",  combinedMessage)
+			textToSend := textToSend.replaceTag("TLP",      data["TLP"])
+			textToSend := textToSend.replaceTag("CUSTOMER", data["CUSTOMER"])
+			textToSend := textToSend.replaceTag("DLG",      data["DLG"])
+			textToSend := textToSend.replaceTag("MESSAGE",  combinedMessage)
 			
 			if(MainConfig.isWindowActive("Outlook Calendar TLG")) {
 				SendRaw, % textToSend

@@ -14,7 +14,6 @@
 		Functions to replace and remove
 			replaceTags						=> .replaceTags
 			replaceTag						=> .replaceTag
-			prePadStringToLength			=> .prePadToLength
 		Functions to remove (already replaced)
 */
 
@@ -141,15 +140,6 @@ class StringBase {
 			return this strToAppend
 		
 		return this
-	}
-	
-	prePadToLength(numChars, withChar := " ") {
-		outStr := this
-		
-		while(outStr.length() < numChars)
-			outStr := withChar outStr
-		
-		return outStr
 	}
 	
 	firstLine() {

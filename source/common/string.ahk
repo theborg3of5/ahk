@@ -165,12 +165,3 @@ decodeFromURL(textToDecode) {
 	
 	return outString
 }
-
-prePadStringToLength(stringToPad, numChars, withChar := " ") {
-	outString := stringToPad
-	
-	while(strLen(outString) < numChars)
-		outString := withChar outString
-	
-	return outString
-}

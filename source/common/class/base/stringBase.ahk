@@ -20,7 +20,6 @@
 			prependCharIfMissing			=> .prependIfMissing
 			appendCharIfMissing			=> .appendIfMissing
 			prePadStringToLength			=> .prePadToLength
-			cleanupText						=> .cleaned
 		Functions to remove (already replaced)
 			stringContains
 			stringStartsWith
@@ -173,7 +172,7 @@ class StringBase {
 	}
 	
 	; Cleans a hard-coded list of characters out of a (should be single-line) string, including whitespace.
-	cleaned(additionalStringsToRemove := "") {
+	clean(additionalStringsToRemove := "") {
 		outStr := this
 		
 		charCodesToRemove := []

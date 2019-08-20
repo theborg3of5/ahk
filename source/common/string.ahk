@@ -137,59 +137,6 @@ getFirstLine(inputString) {
 	return splitAry[1]
 }
 
-; Cleans a hard-coded list of characters out of a (should be single-line) string, including whitespace.
-cleanupText(text, additionalStringsToRemove := "") {
-	charCodesToRemove := []
-	charCodesToRemove.push([13])      ; Carriage return (`r)
-	charCodesToRemove.push([10])      ; Newline (`n)
-	charCodesToRemove.push([32])      ; Space ( )
-	charCodesToRemove.push([46])      ; Period (.)
-	charCodesToRemove.push([8226,9])  ; First level bullet (filled circle) + tab
-	charCodesToRemove.push([111,9])   ; Second level bullet (empty circle) + tab
-	charCodesToRemove.push([61607,9]) ; Third level bullet (filled square) + tab
-	
-	; Transform the codes above so we can check whether it's in the string.
-	stringsToRemove := []
-	For i,s in charCodesToRemove {
-		stringsToRemove[i] := ""
-		For j,c in s {
-			newChar := Transform("Chr", c)
-			stringsToRemove[i] .= newChar
-		}
-	}
-	For i,str in additionalStringsToRemove {
-		stringsToRemove.push(str)
-	}
-	; DEBUG.popup("Text",text, "Chars to remove",stringsToRemove)
-	
-	while(!isClean) {
-		isClean := true
-		
-		; Leading/trailing whitespace
-		temp := dropWhitespace(text)
-		if(temp != text) {
-			text := temp
-			isClean := false
-		}
-		
-		; Odd character checks.
-		For i,removeString in stringsToRemove {
-			if(stringStartsWith(text, removeString)) {
-				text := removeStringFromStart(text, removeString)
-				isClean := false
-			}
-			if(stringEndsWith(text, removeString)) {
-				text := removeStringFromEnd(text, removeString)
-				isClean := false
-			}
-		}
-		
-		; DEBUG.popup("Is clean", isClean, "Current text", text)
-	}
-	
-	return text
-}
-
 ; Drop any leading/trailing whitespace.
 dropWhitespace(text) {
 	newText = %text% ; Note using = not :=, to drop whitespace.

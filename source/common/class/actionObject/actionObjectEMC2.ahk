@@ -91,7 +91,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 			removeAry.appendArray(["--Assigned To:"])
 		}
 		
-		this.title := cleanupText(this.title, removeAry)
+		this.title := this.title.clean(removeAry)
 	}
 	
 	;---------

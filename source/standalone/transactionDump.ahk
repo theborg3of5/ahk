@@ -27,7 +27,7 @@ if(!data)
 
 envName := data["NAME"]
 envId   := data["COMM_ID"]
-txId    := cleanupText(data["TX_ID"]) ; Clean out any leading/trailing odd characters (generally spaces).
+txId    := data["TX_ID"].clean() ; Clean out any leading/trailing odd characters (generally spaces).
 
 if(envId = "LAUNCH") ; Special case - just launching the script without picking an environment
 	envId := ""

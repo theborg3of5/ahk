@@ -84,7 +84,7 @@
 	
 	^!#s::
 		selectSnapper() {
-			selectedText := cleanupText(getFirstLineOfSelectedText())
+			selectedText := getFirstLineOfSelectedText().clean()
 			record := new EpicRecord(selectedText)
 			
 			s := new Selector("epicEnvironments.tls")
@@ -167,7 +167,7 @@
 	
 	#p::
 		selectPhone() {
-			selectedText := cleanupText(getFirstLineOfSelectedText())
+			selectedText := getFirstLineOfSelectedText().clean()
 			if(isValidPhoneNumber(selectedText)) ; If the selected text is a valid number, go ahead and call it (confirmation included in callNumber)
 				callNumber(selectedText)
 			else

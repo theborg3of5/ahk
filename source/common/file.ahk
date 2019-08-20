@@ -87,7 +87,7 @@ findConfigFilePath(path) {
 ; Clean out unwanted garbage strings from paths
 cleanupPath(path) {
 	path := StrReplace(path, "%20", A_Space) ; In case it's a URL'd file path
-	return cleanupText(path, ["file:///", """"])
+	return path.clean(["file:///", """"])
 }
 
 mapPath(path) {	

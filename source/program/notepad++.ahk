@@ -94,7 +94,7 @@ class NotepadPlusPlus {
 		; Select the following line after this one to get parameter information
 		Send, {Down}
 		selectCurrentLine()
-		functionDefLine := cleanupText(getSelectedText())
+		functionDefLine := getSelectedText().clean()
 		Send, {Up}
 		
 		; Check for parameters
@@ -170,7 +170,7 @@ class NotepadPlusPlus {
 	; RETURNS:        The number of spaces after the comment character that the indent is.
 	;---------
 	getDocumentationLineIndent(line) {
-		line := cleanupText(line) ; Drop (and ignore) any leading/trailing whitespace and odd characters
+		line := line.clean() ; Drop (and ignore) any leading/trailing whitespace and odd characters
 		line := line.removeFromStart("; ") ; Trim off the starting comment char + space
 		numSpaces := 1 ; Space we just trimmed off
 		

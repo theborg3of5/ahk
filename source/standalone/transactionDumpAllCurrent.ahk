@@ -12,7 +12,7 @@ if(!txId)
 	txId := InputBox("Dump Data Transaction for All Current Environments", "Enter data transaction ID", , , , , , , , MainConfig.private["RFL_TX_ID"])
 
 ; Clean out any leading/trailing odd characters (generally spaces).
-txId := cleanupText(txId)
+txId := txId.clean()
 
 if(!txId)
 	ExitApp

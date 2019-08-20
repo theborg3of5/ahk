@@ -131,11 +131,10 @@ class OneTastic {
 	deleteAllUserFunctions() {
 		; Find out how many functions there are, then focus the last one (deletion moves to the previous function).
 		functionList := ControlGet("List", "", "ComboBox1", "A")
-		StringReplace, functionList, functionList, `n, `n, UseErrorLevel ; Counting the `ns gives us the number of lines - 1, which is the number of functions excluding Main().
-		functionCount := ErrorLevel
-		Control, Choose, % functionCount + 1, ComboBox1, A ; +1 to account for Main()
+		functionCount := functionList.countMatches("`n") ; Counting the `ns gives us the number of lines - 1, which is the number of functions excluding Main().
 		; DEBUG.toast("functionCount",functionCount, "functionList",functionList)
 		
+		Control, Choose, % functionCount + 1, ComboBox1, A ; +1 to account for Main()
 		Loop {
 			; Finished when we reach Main().
 			if(OneTastic.isMainFunctionOpen())

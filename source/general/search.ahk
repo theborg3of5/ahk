@@ -19,7 +19,7 @@
 			url := ""
 			
 			if(data["SEARCH_TYPE"] = "WEB")
-				url := StrReplace(subType, "%s", escapeForRunURL(searchTerm))
+				url := subType.replace("%s", escapeForRunURL(searchTerm))
 			else if(data["SEARCH_TYPE"] = "CODESEARCH")
 				url := buildCodeSearchURL(searchTerm, subType, data["APP_KEY"])
 			else if(data["SEARCH_TYPE"] = "GURU")

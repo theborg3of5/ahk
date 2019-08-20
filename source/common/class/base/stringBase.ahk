@@ -12,8 +12,6 @@
 /*
 	Do
 		Functions to replace
-			StringReplace/StrReplace	=> .replace/.remove/.countMatches
-			RegExMatch						=> .matchRegEx
 */
 
 class StringBase {
@@ -150,14 +148,26 @@ class StringBase {
 		return newText
 	}
 	
-	replaceRegEx(needleRegEx, replaceWith := "") {
-		return RegExReplace(this, needleRegEx, replaceWith)
+	replace(needle, replaceWith) {
+		return StrReplace(this, needle, replaceWith) ; Replace all
+	}
+	replaceOne(needle, replaceWith) {
+		return StrReplace(this, needle, replaceWith, "", 1) ; Replace 1
+	}
 	replaceRegEx(needleRegEx, replaceWith) {
 		return RegExReplace(this, needleRegEx, replaceWith) ; Replace all
 	}
 	
+	remove() {
+		return this.replace(needle, "")
+	}
 	removeRegEx(needleRegEx) {
 		return this.replaceRegEx(needleRegEx, "")
+	}
+	
+	countMatches(needle) {
+		StrReplace(this, needle, , matchCount, -1)
+		return matchCount
 	}
 	
 	; Cleans a hard-coded list of characters out of a (should be single-line) string, including whitespace.

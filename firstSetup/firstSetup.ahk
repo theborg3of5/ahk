@@ -54,8 +54,7 @@ For fromPath,toPath in copyPaths {
 	
 	; Replace any placeholder tags in the file contents.
 	; DEBUG.popup("fromPath", fromPath, "toPath", toPath, "Starting contents", fileContents)
-	For tag,value in tagsToReplace
-		StringReplace, fileContents, fileContents, <%tag%>, %value%, A
+	fileContents := fileContents.replaceTags(tagsToReplace)
 	; DEBUG.popup("fromPath",fromPath, "toPath",toPath, "Finished contents",fileContents)
 	
 	; Generate the folder path if needed.

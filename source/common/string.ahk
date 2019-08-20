@@ -104,11 +104,11 @@ countLeadingSpaces(line) {
 
 escapeCharUsingChar(inputString, charToEscape, escapeChar := "\") {
 	replaceString := escapeChar charToEscape
-	return StrReplace(inputString, charToEscape, replaceString, "All")
+	return inputString.replace(charToEscape, replaceString)
 }
 escapeCharUsingRepeat(inputString, charToEscape, repeatCount := 1) {
 	replaceString := multiplyString(charToEscape, repeatCount + 1) ; Replace with repeatCount+1 instances of character
-	return StrReplace(inputString, charToEscape, replaceString, "All")
+	return inputString.replace(charToEscape, replaceString)
 }
 
 escapeForRunURL(stringToEscape) {
@@ -130,12 +130,12 @@ encodeForURL(textToEncode) {
 	; First replace any percents with the equivalent (since doing it later would also pick up anything else we've converted)
 	needle := "%"
 	replaceWith := "%" numToHex(Asc("%"))
-	StringReplace, currentText, currentText, % needle, % replaceWith, All
+	currentText := currentText.replace(needle, replaceWith)
 	
 	; Replace any other iffy characters with their encoded equivalents
 	while(RegExMatch(currentText, "i)[^\w\.~%]", charToReplace)) {
 		replaceWith := "%" numToHex(Asc(charToReplace))
-		StringReplace, currentText, currentText, % charToReplace, % replaceWith, All
+		currentText := currentText.replace(charToReplace, replaceWith)
 	}
 	
 	return prefix currentText
@@ -147,7 +147,7 @@ decodeFromURL(textToDecode) {
 	while(RegExMatch(outString, "i)(?<=%)[\da-f]{1,2}", charCodeInHex)) {
 		needle := "%" charCodeInHex
 		replaceWith := Chr(hexToInteger(charCodeInHex))
-		StringReplace, outString, outString, % needle, % replaceWith, All
+		outString := outString.replace(needle, replaceWith)
 	}
 	
 	return outString

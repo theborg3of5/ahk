@@ -497,7 +497,7 @@ class TableList {
 			Loop {
 				if(!row.contains(A_Tab A_Tab))
 					Break
-				row := StrReplace(row, A_Tab A_Tab, A_Tab)
+				row := row.replace(A_Tab A_Tab, A_Tab)
 			}
 			
 			this.processRow(row)

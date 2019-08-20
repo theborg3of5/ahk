@@ -86,7 +86,7 @@ findConfigFilePath(path) {
 
 ; Clean out unwanted garbage strings from paths
 cleanupPath(path) {
-	path := StrReplace(path, "%20", A_Space) ; In case it's a URL'd file path
+	path := path.replace("%20", A_Space) ; In case it's a URL'd file path
 	return path.clean(["file:///", """"])
 }
 
@@ -96,7 +96,7 @@ mapPath(path) {
 	table := tl.getFilteredTable("CONTEXT", MainConfig.context)
 	For i,row in table {
 		if(path.contains(row["PATH"])) {
-			path := StrReplace(path, row["PATH"], row["DRIVE_LETTER"] ":", , 1)
+			path := path.replaceOne(row["PATH"], row["DRIVE_LETTER"] ":")
 			Break ; Just match the first one.
 		}
 	}

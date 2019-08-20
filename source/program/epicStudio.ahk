@@ -263,7 +263,7 @@ class EpicStudio {
 		
 		prevIterators := ""
 		for i,iterator in iteratorAry {
-			loopString .= replaceTags(MainConfig.private["M_LOOP_ARRAY_BASE"], {"ARRAY_NAME":arrayName, "ITERATOR":iterator, "PREV_ITERATORS":prevIterators})
+			loopString .= MainConfig.private["M_LOOP_ARRAY_BASE"].replaceTags({"ARRAY_NAME":arrayName, "ITERATOR":iterator, "PREV_ITERATORS":prevIterators})
 			
 			prevIterators .= iterator ","
 			loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
@@ -285,7 +285,7 @@ class EpicStudio {
 		ini := stringUpper(data["ARRAY_OR_INI"])
 		
 		idVar := stringLower(ini) "Id"
-		loopString := replaceTags(MainConfig.private["M_LOOP_ID_BASE"], {"INI":ini, "ID_VAR":idVar})
+		loopString := MainConfig.private["M_LOOP_ID_BASE"].replaceTags({"INI":ini, "ID_VAR":idVar})
 		
 		loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
 		return loopString
@@ -305,7 +305,7 @@ class EpicStudio {
 		
 		idVar  := stringLower(ini) "Id"
 		datVar := stringLower(ini) "Dat"
-		loopString := replaceTags(MainConfig.private["M_LOOP_DAT_BASE"], {"INI":ini, "ID_VAR":idVar, "DAT_VAR":datVar, "ITEM":""})
+		loopString := MainConfig.private["M_LOOP_DAT_BASE"].replaceTags({"INI":ini, "ID_VAR":idVar, "DAT_VAR":datVar, "ITEM":""})
 		
 		loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
 		return loopString
@@ -325,7 +325,7 @@ class EpicStudio {
 		ini := stringUpper(data["ARRAY_OR_INI"])
 		valueVar := data["VAR_NAMES"]
 		
-		loopString := replaceTags(MainConfig.private["M_LOOP_INDEX_REGULAR_NEXT_VALUE"], {"INI":ini, "ITEM":"", "VALUE_VAR":valueVar})
+		loopString := MainConfig.private["M_LOOP_INDEX_REGULAR_NEXT_VALUE"].replaceTags({"INI":ini, "ITEM":"", "VALUE_VAR":valueVar})
 		
 		loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
 		return loopString
@@ -347,7 +347,7 @@ class EpicStudio {
 		valueVar := data["VAR_NAMES"]
 		
 		idVar  := stringLower(ini) "Id"
-		loopString := replaceTags(MainConfig.private["M_LOOP_INDEX_REGULAR_NEXT_ID"], {"INI":ini, "ITEM":"", "VALUE_VAR":valueVar, "ID_VAR":idVar})
+		loopString := MainConfig.private["M_LOOP_INDEX_REGULAR_NEXT_ID"].replaceTags({"INI":ini, "ITEM":"", "VALUE_VAR":valueVar, "ID_VAR":idVar})
 		
 		loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
 		return loopString

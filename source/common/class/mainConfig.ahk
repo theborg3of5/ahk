@@ -65,7 +65,7 @@ class MainConfig {
 		}
 	}
 	replacePrivateTags(inputString) {
-		return replaceTags(inputString, this.privates)
+		return inputString.replaceTags(this.privates)
 	}
 	
 	
@@ -211,7 +211,7 @@ class MainConfig {
 		}
 	}
 	replacePathTags(inputPath) {
-		return replaceTags(inputPath, this.paths)
+		return inputPath.replaceTags(this.paths)
 	}
 	
 	activateProgram(name, runArgs := "") { ; runArgs are only used if the program's window doesn't already exist (and we're therefore running it).
@@ -316,7 +316,7 @@ class MainConfig {
 			if(path = "")
 				path := this.private[key]
 			
-			path := replaceTags(path, pathTagsAry)
+			path := path.replaceTags(pathTagsAry)
 			path := this.replacePrivateTags(path)
 			
 			pathsAry[key] := path ; make sure to store it back in the actual array

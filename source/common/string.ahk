@@ -120,15 +120,6 @@ getCleanHotkeyString(hotkeyString) {
 	return hotkeyString.clean(["$", "*", "<", ">", "~"])
 }
 
-replaceTags(inputString, tagsAry) {
-	outputString := inputString
-	
-	For tagName, replacement in tagsAry
-		outputString := replaceTag(outputString, tagName, replacement)
-	
-	return outputString
-}
-
 replaceTag(inputString, tagName, replacement) {
 	return StrReplace(inputString, "<" tagName ">", replacement)
 }

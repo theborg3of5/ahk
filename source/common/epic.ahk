@@ -129,7 +129,7 @@
 			runString := replaceTag(runString, "EPICNAME", "Epic")
 		
 		; Versioning and environment.
-		runString := replaceTags(runString, {"MAJOR":versionMajor, "MINOR":versionMinor, "ENVIRONMENT":environment})
+		runString := runString.replaceTags({"MAJOR":versionMajor, "MINOR":versionMinor, "ENVIRONMENT":environment})
 		
 		; DEBUG.popup("Start string", tempRun, "Finished string", runString, "Major", versionMajor, "Minor", versionMinor, "Environment", environment)
 		return runString

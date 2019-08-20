@@ -99,7 +99,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;                 Nova/Sherlock INIs.
 	;---------
 	openWebBasic() {
-		link := replaceTags(MainConfig.private["EMC2_LINK_WEB_BASE"], {"INI":this.ini, "ID":this.id})
+		link := MainConfig.private["EMC2_LINK_WEB_BASE"].replaceTags({"INI":this.ini, "ID":this.id})
 		if(link)
 			Run(link)
 	}
@@ -118,10 +118,10 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		else
 			link := MainConfig.private["EMC2_LINK_WEB_BASE"]
 		
-		return replaceTags(link, {"INI":this.ini, "ID":this.id})
+		return link.replaceTags({"INI":this.ini, "ID":this.id})
 	}
 	getLinkEdit() {
-		return replaceTags(MainConfig.private["EMC2_LINK_EDIT_BASE"], {"INI":this.ini, "ID":this.id})
+		return MainConfig.private["EMC2_LINK_EDIT_BASE"].replaceTags({"INI":this.ini, "ID":this.id})
 	}
 	
 	

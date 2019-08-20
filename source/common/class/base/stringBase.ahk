@@ -12,7 +12,6 @@
 /*
 	Do
 		Functions to replace and remove
-			replaceTags						=> .replaceTags
 			replaceTag						=> .replaceTag
 		Functions to remove (already replaced)
 */

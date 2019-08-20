@@ -116,12 +116,6 @@ escapeForRunURL(stringToEscape) {
 	return escapeCharUsingRepeat(encodedString, DOUBLE_QUOTE, 2) ; Escape quotes twice - extra to get us past the windows run command stripping them out.
 }
 
-; Return only the first line of the given string.
-getFirstLine(inputString) {
-	splitAry := StrSplit(inputString, "`n")
-	return splitAry[1]
-}
-
 getCleanHotkeyString(hotkeyString) {
 	return hotkeyString.clean(["$", "*", "<", ">", "~"])
 }

@@ -10,7 +10,7 @@ selectCurrentLine() {
 
 getFirstLineOfSelectedText() {
 	text := getSelectedText()
-	return getFirstLine(text)
+	return text.firstLine()
 }
 
 ; Grabs the selected text using the clipboard, fixing the clipboard as it finishes.

@@ -32,8 +32,7 @@ class ActionObjectRedirector {
 	;---------
 	__New(value := "") {
 		this.value := value
-		this.value := getFirstLine(this.value) ; Comes first so that we can clean from end of first line (even if there are multiple).
-		this.value := this.value.clean() ; Remove leading/trailing spaces and odd characters from value
+		this.value := this.value.firstLine().clean() ; Only first line, remove leading/trailing spaces and odd characters from value
 		
 		this.determineType()
 		this.selectMissingInfo()

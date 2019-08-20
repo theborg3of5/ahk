@@ -12,7 +12,6 @@
 /*
 	Do
 		Functions to replace and remove
-			getFirstLine					=> .firstLine
 			replaceTags						=> .replaceTags
 			replaceTag						=> .replaceTag
 			prePadStringToLength			=> .prePadToLength

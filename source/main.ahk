@@ -57,7 +57,6 @@ if(MainConfig.contextIsWork) { ; Work-specific subs
 #Include internetExplorer.ahk
 #Include kdiff.ahk
 #Include launchy.ahk
-#Include mattermost.ahk
 #Include notepad++.ahk
 #Include onenote.ahk
 #Include onetastic.ahk

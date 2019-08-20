@@ -239,7 +239,7 @@ class OneTastic {
 		; DEBUG.popup("xml",xml, "dependenciesXML",dependenciesXML)
 		
 		bitsToDropRegex := "<Comment text="" |"" />" ; <Comment text=" |" />
-		dependencies := RegExReplace(dependenciesXML, bitsToDropRegex)
+		dependencies := dependenciesXML.replaceRegEx(bitsToDropRegex)
 		
 		dependenciesAry := []
 		Loop, Parse, dependencies, `r`n ; This technically breaks on every `r OR `n, but this should be fine since we're ignoring empty strings.

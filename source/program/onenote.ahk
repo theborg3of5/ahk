@@ -180,7 +180,7 @@ class OneNote {
 		}
 		
 		; Trim off the paragraph-specific part.
-		copiedLink := RegExReplace(copiedLink, "&object-id.*")
+		copiedLink := copiedLink.replaceRegEx("&object-id.*")
 		
 		; If there are two links involved (seems to happen with free version of OneNote), keep only the "onenote:" one (second line).
 		if(copiedLink.contains("`n")) {

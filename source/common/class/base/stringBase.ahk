@@ -12,7 +12,6 @@
 /*
 	Do
 		Functions to replace and remove
-		Functions to remove (already replaced)
 */
 
 class StringBase {
@@ -147,6 +146,10 @@ class StringBase {
 	withoutWhitespace() {
 		newText = %this% ; Note using = not :=, to drop whitespace.
 		return newText
+	}
+	
+	replaceRegEx(needleRegEx, replaceWith := "") {
+		return RegExReplace(this, needleRegEx, replaceWith)
 	}
 	
 	; Cleans a hard-coded list of characters out of a (should be single-line) string, including whitespace.

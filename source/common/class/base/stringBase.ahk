@@ -18,11 +18,6 @@
 			replaceTag						=> .replaceTag
 			prePadStringToLength			=> .prePadToLength
 		Functions to remove (already replaced)
-			stringContains
-			stringStartsWith
-			stringEndsWith
-			removeStringFromStart
-			removeStringFromEnd
 */
 
 class StringBase {

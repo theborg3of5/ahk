@@ -116,21 +116,6 @@ escapeForRunURL(stringToEscape) {
 	return escapeCharUsingRepeat(encodedString, DOUBLE_QUOTE, 2) ; Escape quotes twice - extra to get us past the windows run command stripping them out.
 }
 
-; Wrapper for InStr() that I can remember easier. Slightly different parameters as well.
-stringContains(haystack, needle, fromLastInstance := false) {
-	if(fromLastInstance)
-		return InStr(haystack, needle, , 0)
-	else
-		return InStr(haystack, needle)
-}
-
-stringStartsWith(inputString, startString) {
-	return (subStr(inputString, 1, strLen(startString)) = startString)
-}
-stringEndsWith(inputString, endString) {
-	return (subStr(inputString, strLen(inputString) - strLen(endString) + 1) = endString)
-}
-
 ; Return only the first line of the given string.
 getFirstLine(inputString) {
 	splitAry := StrSplit(inputString, "`n")
@@ -172,19 +157,6 @@ replaceTags(inputString, tagsAry) {
 
 replaceTag(inputString, tagName, replacement) {
 	return StrReplace(inputString, "<" tagName ">", replacement)
-}
-
-removeStringFromStart(inputString, startToRemove) {
-	if(!stringStartsWith(inputString, startToRemove))
-		return inputString
-	
-	return subStr(inputString, strLen(startToRemove) + 1)
-}
-removeStringFromEnd(inputString, endingToRemove) {
-	if(!stringEndsWith(inputString, endingToRemove))
-		return inputString
-	
-	return subStr(inputString, 1, strLen(inputString) - strLen(endingToRemove))
 }
 
 encodeForURL(textToEncode) {

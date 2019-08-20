@@ -12,10 +12,10 @@
 /*
 	Do
 		Functions to replace and remove
-			getStringBeforeStr			=> .getBeforeString
-			getStringAfterStr				=> .getAfterString
-			getFirstStringBetweenStr	=> .getFirstBetweenStrings
-			getFullStringBetweenStr		=> .getAllBetweenStrings
+			getStringBeforeStr			=> .beforeString
+			getStringAfterStr				=> .afterString
+			getFirstStringBetweenStr	=> .firstBetweenStrings
+			getFullStringBetweenStr		=> .allBetweenStrings
 			removeStringFromStart		=> .removeFromStart
 			removeStringFromEnd			=> .removeFromEnd
 			
@@ -111,14 +111,14 @@ class StringBase {
 		return false
 	}
 	
-	getBeforeString(endString, searchFromEnd := false) {
+	beforeString(endString, searchFromEnd := false) {
 		endStringPos := this.contains(endString, searchFromEnd)
 		if(!endStringPos)
 			return this
 		
 		return this.sub(1, endStringPos - 1)
 	}
-	getAfterString(startString, searchFromEnd := false) {
+	afterString(startString, searchFromEnd := false) {
 		startStringPos := this.contains(startString, searchFromEnd)
 		if(!startStringPos)
 			return this
@@ -126,10 +126,10 @@ class StringBase {
 		return this.sub(startStringPos + startString.length())
 	}
 	
-	getFirstBetweenStrings(startString, endString) {
+	firstBetweenStrings(startString, endString) {
 		return this.getBetweenStrings(startString, endString, false)
 	}
-	getAllBetweenStrings(startString, endString) {
+	allBetweenStrings(startString, endString) {
 		return this.getBetweenStrings(startString, endString, true)
 	}
 	
@@ -169,7 +169,7 @@ class StringBase {
 	}
 	
 	firstLine() {
-		return this.getBeforeString("`n")
+		return this.beforeString("`n")
 	}
 	
 	withoutWhitespace() {
@@ -264,9 +264,9 @@ class StringBase {
 	
 	getBetweenStrings(startString, endString, upToLastEndString) {
 		; Trim off everything before (and including) the first instance of the startString
-		outStr := this.getBeforeString(startString)
+		outStr := this.beforeString(startString)
 		
 		; Trim off everything before (and including) the remaining instance (first or last depending on upToLastEndString) of the endString
-		return outStr.getBeforeString(endString, upToLastEndString)
+		return outStr.beforeString(endString, upToLastEndString)
 	}
 }

@@ -178,11 +178,11 @@ class DEBUG {
 	;---------
 	convertParamsToPaired(params) {
 		pairedParams := []
-		i := 1
-		while(i <= params.length()) {
-			; MsgBox, % "Label:`n`t" params[i] "`nValue:`n`t" params[i + 1]
-			pairedParams.Push({"LABEL":params[i], "VALUE":params[i + 1]})
-			i += 2
+		
+		Loop, % params.MaxIndex() // 2 {
+			key   := params[A_Index * 2 - 1]
+			value := params[A_Index * 2]
+			pairedParams.Push({"LABEL":key, "VALUE":value})
 		}
 		
 		return pairedParams

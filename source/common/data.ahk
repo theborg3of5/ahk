@@ -1,13 +1,7 @@
 ; Data-structure-related functions.
 
 isEmpty(obj) {
-	if(!isObject(obj))
-		return true
-	
-	For i,v in obj
-		return false ; We found something, not empty.
-	
-	return true
+	return !obj.count() ; Either count() is defined (empty object/array) and returns 0, or it's not (and we get "").
 }
 
 ; If the given object is already an array, return it. Otherwise, return an array with the given object as its only element (index 0).

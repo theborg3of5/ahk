@@ -22,7 +22,7 @@ class ArrayBase {
 	; RETURNS:        The first index where we found the value in question.
 	;                 "" if we didn't find it at all.
 	;---------
-	contains(needle) { ; Returns index of FIRST instance found
+	contains(needle) {
 		For index,element in this
 			if(element = needle)
 				return index

@@ -39,7 +39,7 @@ copyFolderPathWithHotkey(hotkeyKeys) {
 	if(path) {
 		path := cleanupPath(path)
 		path := mapPath(path)
-		path := appendCharIfMissing(path, "\") ; Add the trailing backslash since it's a folder
+		path := path.appendIfMissing("\") ; Add the trailing backslash since it's a folder
 	}
 	
 	setClipboardAndToastValue(path, "folder path")

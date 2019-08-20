@@ -187,19 +187,6 @@ removeStringFromEnd(inputString, endingToRemove) {
 	return subStr(inputString, 1, strLen(inputString) - strLen(endingToRemove))
 }
 
-prependCharIfMissing(inputString, charToPrepend) {
-	if(subStr(inputString, 1, 1) != charToPrepend)
-		inputString := charToPrepend inputString
-	
-	return inputString
-}
-appendCharIfMissing(inputString, charToAppend) {
-	if(subStr(inputString, 0) != charToAppend)
-		inputString .= charToAppend
-	
-	return inputString
-}
-
 encodeForURL(textToEncode) {
 	currentText := textToEncode
 	

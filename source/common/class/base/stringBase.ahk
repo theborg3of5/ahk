@@ -16,8 +16,6 @@
 			getFirstLine					=> .firstLine
 			replaceTags						=> .replaceTags
 			replaceTag						=> .replaceTag
-			prependCharIfMissing			=> .prependIfMissing
-			appendCharIfMissing			=> .appendIfMissing
 			prePadStringToLength			=> .prePadToLength
 		Functions to remove (already replaced)
 			stringContains

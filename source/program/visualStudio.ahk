@@ -23,14 +23,14 @@ class VisualStudio {
 	; DESCRIPTION:    Copy current file's containing folder to clipboard and let user know with a toast.
 	;---------
 	copyContainingFolderPath() {
-		copyWithHotkey("^+c") ; Copy path
+		copyWithHotkey("^+c") ; Copy current FILE path
 		
 		path := clipboard
 		if(path) {
 			path := cleanupPath(path)
 			path := mapPath(path)
-			parentFolder := getParentFolder(path)
-			parentFolder := appendCharIfMissing(parentFolder, "\") ; Add the trailing backslash since it's a folder
+			parentFolder := getParentFolder(path) ; Actually get the folder instead of the file
+			parentFolder := parentFolder.appendIfMissing("\") ; Add the trailing backslash since it's a folder
 		}
 		
 		setClipboardAndToastValue(parentFolder, "folder path")

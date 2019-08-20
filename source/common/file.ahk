@@ -42,12 +42,12 @@ sendFolderPath(folderName := "", subPath := "", slashChar := "\", trailingSlash 
 	
 	; Append a further subPath if they gave that to us
 	if(subPath) {
-		folderPath := appendCharIfMissing(folderPath, slashChar)
+		folderPath := folderPath.appendIfMissing(slashChar)
 		folderPath .= subPath
 	}
 	
 	if(trailingSlash)
-		folderPath := appendCharIfMissing(folderPath, slashChar)
+		folderPath := folderPath.appendIfMissing(slashChar)
 	
 	Send, % folderPath
 }

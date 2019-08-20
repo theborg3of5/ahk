@@ -23,15 +23,15 @@ queryTime(format := "h:mm tt") {
 
 ; Translate a date/time from the form "w+1" to the given format.
 parseDateTime(input, format := "", dateOrTime := "") { ; dateOrTime = "d" for date, "t" for time
-	firstChar := subStr(input, 1, 1)
-	operator := subStr(input, 2, 1)
-	difference := subStr(input, 3)
+	firstChar := input.sub(1, 1)
+	operator := input.sub(2, 1)
+	difference := input.sub(3)
 	
 	; Two-char thing - "mi" for minute or "mo" for month. Account for it to get the real operator and offset.
 	if(operator.isAlpha()) {
-		secondChar := subStr(input, 2, 1)
-		operator := subStr(input, 3, 1)
-		difference := subStr(input, 4)
+		secondChar := input.sub(2, 1)
+		operator := input.sub(3, 1)
+		difference := input.sub(4)
 	}
 	
 	; Allow "mi" for minute and "mo" for month, to make it easier to tell the difference.
@@ -88,11 +88,7 @@ parseDateTime(input, format := "", dateOrTime := "") { ; dateOrTime = "d" for da
 		DEBUG.popup("Error in parseDateTime", "Couldn't choose between date and time", "Input", date)
 	}
 	
-	outStr := FormatTime(outDateTime, format)
-	
-	; DEBUG.popup("parseDateTime", "pre-calculations", "Input", input, "First char", firstChar, "Operator", operator, "Difference", difference, "Date or time", dateOrTime, "Timestamp now", A_Now, "Output timestamp", outDateTime, "Output string", outStr)
-	
-	return outStr
+	return FormatTime(outDateTime, format)
 }
 
 ; Do addition/subtraction on dates where the traditional += fails.
@@ -144,17 +140,17 @@ doDateMath(start, op := "+", diff := 0, unit := "d") { ; unit = "d"
 
 ; Break apart the given YYYYMMDDHH24MISS timestamp into its respective parts.
 splitDateTime(timestamp) {
-	d := Object()
+	dateTimeAry := Object()
 	
-	d["year"] := subStr(timestamp, 1, 4)
-	d["month"] := subStr(timestamp, 5, 2)
-	d["day"] := subStr(timestamp, 7, 2)
-	d["hour"] := subStr(timestamp, 9, 2)
-	d["minute"] := subStr(timestamp, 11, 2)
-	d["second"] := subStr(timestamp, 13, 2)
+	dateTimeAry["year"]   := timestamp.sub(1,  4)
+	dateTimeAry["month"]  := timestamp.sub(5,  2)
+	dateTimeAry["day"]    := timestamp.sub(7,  2)
+	dateTimeAry["hour"]   := timestamp.sub(9,  2)
+	dateTimeAry["minute"] := timestamp.sub(11, 2)
+	dateTimeAry["second"] := timestamp.sub(13, 2)
 	
-	; DEBUG.popup("splitDate", "return", "Input", timestamp, "Y", d["year"], "M", d["month"], "D", d["day"], "H", d["hour"], "M", d["minute"], "S", d["second"])
-	return d
+	; DEBUG.popup("timestamp",timestamp, "dateTimeAry",dateTimeAry)
+	return dateTimeAry
 }
 
 replaceDateTimeTags(inString, dateTime := "") { ; dateTime defaults to A_Now (based on FormatTime's behavior)

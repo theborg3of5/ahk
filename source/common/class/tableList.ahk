@@ -561,7 +561,7 @@ class TableList {
 		if(row.startsWith(this.chars["MODEL"]))
 			return TableList.RowType_Model
 		
-		firstChar := subStr(row, 1, 1)
+		firstChar := row.sub(1, 1)
 		if(this.chars["PASS"].contains(firstChar))
 			return TableList.RowType_Pass
 		
@@ -727,7 +727,7 @@ class TableList {
 	;---------
 	processKey(row) {
 		rowAry := row.split(A_Tab)
-		firstChar := subStr(row, 1, 1)
+		firstChar := row.sub(1, 1)
 		
 		rowAry.RemoveAt(1) ; Get rid of the separate char bit (")").
 		this.applyIndexLabels(rowAry)

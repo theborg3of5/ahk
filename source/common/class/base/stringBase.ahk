@@ -12,7 +12,6 @@
 /*
 	Do
 		Functions to replace and remove
-			subStr							=> .sub
 			getStringBeforeStr			=> .getBeforeString
 			getStringAfterStr				=> .getAfterString
 			getFirstStringBetweenStr	=> .getFirstBetweenStrings

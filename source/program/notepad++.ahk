@@ -57,7 +57,7 @@ class NotepadPlusPlus {
 	; PARAMETERS:
 	;  functionName (I,REQ) - Name of the function to send before the parameters.
 	;---------
-	sendDebugCodeString(functionName,eh) {
+	sendDebugCodeString(functionName) {
 		if(functionName = "")
 			return
 		

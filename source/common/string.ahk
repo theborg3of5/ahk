@@ -50,8 +50,8 @@ parsePhone(input) {
 
 reformatPhone(input) {
 	nums := RegExReplace(input, "[^0-9\+]" , "") ; Strip out spaces and other odd chars.
-	trimmedNums := subStr(nums, -9) ; Last 10 chars only.
-	return "(" subStr(trimmedNums, 1, 3) ") " subStr(trimmedNums, 4, 3) "-" subStr(trimmedNums, 7, 4)
+	trimmedNums := nums.sub(-9) ; Last 10 chars only.
+	return "(" trimmedNums.sub(1, 3) ") " trimmedNums.sub(4, 3) "-" trimmedNums.sub(7, 4)
 }
 
 ; Gives the specified number of tabs as a string.

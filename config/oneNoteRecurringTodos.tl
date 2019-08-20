@@ -30,6 +30,7 @@
 	Plug in local backup drives								LAST
 	Check FatMax charge											-			SUN				1
 	Periodic cleaning (small trash cans, kitchen)		-			SUN				2
+	Weigh cats														-			WED				2
 
 ; Yearlies
 	Check various airline rewards points					-			SAT				1							JAN

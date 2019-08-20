@@ -20,7 +20,7 @@ parsePhone(input) {
 	if(input = "HANGUP")
 		return input
 	
-	nums := input.replaceRegEx("[^0-9\+]" , "") ; Strip out spaces and other odd chars.
+	nums := input.removeRegEx("[^0-9\+]") ; Strip out spaces and other odd chars.
 	nums := nums.replaceRegEx("\+" , "011") ; + becomes country exit code (USA code here)
 	
 	len := nums.length()
@@ -49,7 +49,7 @@ parsePhone(input) {
 }
 
 reformatPhone(input) {
-	nums := input.replaceRegEx("[^0-9\+]" , "") ; Strip out spaces and other odd chars.
+	nums := input.removeRegEx("[^0-9\+]") ; Strip out spaces and other odd chars.
 	trimmedNums := nums.sub(-9) ; Last 10 chars only.
 	return "(" trimmedNums.sub(1, 3) ") " trimmedNums.sub(4, 3) "-" trimmedNums.sub(7, 4)
 }

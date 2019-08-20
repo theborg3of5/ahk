@@ -26,10 +26,10 @@ Loop, Files, % "*.bits"
 	fileString := FileRead(A_LoopFileName)
 	
 	; Compile the bits into one pipe-delimited regex string (and filter out header/explanation strings)
-	fileString    := fileString "`r`n"                                ; Add a newline to the end so our pattern (which ends with and replaces the newline at the end of non-regex lines) can catch the last line
-	regexLines    := fileString.replaceRegEx("m)^('|\t).+(\r\n)+\t*") ; Replace everything that starts with a single quote (header lines) or with a double tab (explanation lines) + the newline after it + any tabs
-	combinedRegex := regexLines.replaceRegEx("m)\r\n\(", "|(")        ; Replace remaining newlines (the one between regex lines) with pipes
-	finalString   := combinedRegex.replaceRegEx("m)(\r\n)*")          ; Remove any extra newlines (the one added when we read in the file and anything else)
+	fileString    := fileString "`r`n"                               ; Add a newline to the end so our pattern (which ends with and replaces the newline at the end of non-regex lines) can catch the last line
+	regexLines    := fileString.removeRegEx("m)^('|\t).+(\r\n)+\t*") ; Replace everything that starts with a single quote (header lines) or with a double tab (explanation lines) + the newline after it + any tabs
+	combinedRegex := regexLines.replaceRegEx("m)\r\n\(", "|(")       ; Replace remaining newlines (the one between regex lines) with pipes
+	finalString   := combinedRegex.removeRegEx("m)(\r\n)*")          ; Remove any extra newlines (the one added when we read in the file and anything else)
 	
 	; Generate the name of the compiled regex file from the base name of the original
 	SplitPath(A_LoopFileName, "", "", "", baseName)

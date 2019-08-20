@@ -12,13 +12,6 @@
 /*
 	Do
 		Functions to replace and remove
-			getStringBeforeStr			=> .beforeString
-			getStringAfterStr				=> .afterString
-			getFirstStringBetweenStr	=> .firstBetweenStrings
-			getFullStringBetweenStr		=> .allBetweenStrings
-			removeStringFromStart		=> .removeFromStart
-			removeStringFromEnd			=> .removeFromEnd
-			
 			dropWhitespace					=> .withoutWhitespace (returns)
 			appendPieceToString			=> .appendPiece (returns, parameter order different)
 			getFirstLine					=> .firstLine
@@ -32,6 +25,8 @@
 			stringContains
 			stringStartsWith
 			stringEndsWith
+			removeStringFromStart
+			removeStringFromEnd
 */
 
 class StringBase {

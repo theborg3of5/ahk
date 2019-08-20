@@ -67,9 +67,9 @@ class TableListMod {
 		this.labelFromParent := label
 		
 		; Pull the relevant info out of the string.
-		this.column    := getStringBeforeStr(modString, ".")
-		this.operation := getFirstStringBetweenStr(modString, ".", "(")
-		this.text      := getFullStringBetweenStr(modString, "(", ")") ; Go to the last close-paren, to allow other close-parens in the string
+		this.column    := modString.beforeString(".")
+		this.operation := modString.firstBetweenStrings(".", "(")
+		this.text      := modString.allBetweenStrings("(", ")") ; Go to the last close-paren, to allow other close-parens in the string
 		
 		; DEBUG.popup("New TableListMod","Finished", "State",this)
 	}

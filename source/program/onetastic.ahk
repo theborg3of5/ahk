@@ -183,7 +183,7 @@ class OneTastic {
 				Continue
 			
 			functionXML := FileRead(A_LoopFileName)
-			functionName := getFirstStringBetweenStr(functionXML, "<Comment text=""", "(") ; Function signature is in first comment line, i.e. <Comment text="addWideOutlineToPage($page)" />
+			functionName := functionXML.firstBetweenStrings("<Comment text=""", "(") ; Function signature is in first comment line, i.e. <Comment text="addWideOutlineToPage($page)" />
 			if(!functionName)
 				Continue
 			
@@ -235,7 +235,7 @@ class OneTastic {
 		if(!xml.contains(dependenciesStart))
 			return []
 		
-		dependenciesXML := getFirstStringBetweenStr(xml, dependenciesStart, dependenciesEnd)
+		dependenciesXML := xml.firstBetweenStrings(dependenciesStart, dependenciesEnd)
 		; DEBUG.popup("xml",xml, "dependenciesXML",dependenciesXML)
 		
 		bitsToDropRegex := "<Comment text="" |"" />" ; <Comment text=" |" />
@@ -291,7 +291,7 @@ class OneTastic {
 		}
 		
 		; First line should be a comment with the exact function signature
-		functionSignature := getFirstStringBetweenStr(functionXML, "<Comment text=""", """ />")
+		functionSignature := functionXML.firstBetweenStrings("<Comment text=""", """ />")
 		
 		; Add function signature
 		Send, ^{NumpadAdd} ; New function

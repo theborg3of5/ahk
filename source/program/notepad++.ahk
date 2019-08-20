@@ -98,7 +98,7 @@ class NotepadPlusPlus {
 		Send, {Up}
 		
 		; Check for parameters
-		paramsList := getFirstStringBetweenStr(functionDefLine, "(", ")")
+		paramsList := functionDefLine.firstBetweenStrings("(", ")")
 		if(paramsList = "") {
 			; No parameters, just send the basic base
 			SendRaw, % NotepadPlusPlus.ahkHeaderBase
@@ -109,8 +109,8 @@ class NotepadPlusPlus {
 		paramsAry := []
 		maxParamLength := 0
 		For _,param in paramsList.split(",", " `t") {
-			param := removeStringFromStart(param, "ByRef ")
-			param := getStringBeforeStr(param, " :=")
+			param := param.removeFromStart("ByRef ")
+			param := param.beforeString(" :=")
 			
 			paramsAry.push(param)
 			maxParamLength := max(maxParamLength, param.length())
@@ -171,7 +171,7 @@ class NotepadPlusPlus {
 	;---------
 	getDocumentationLineIndent(line) {
 		line := cleanupText(line) ; Drop (and ignore) any leading/trailing whitespace and odd characters
-		line := removeStringFromStart(line, "; ") ; Trim off the starting comment char + space
+		line := line.removeFromStart("; ") ; Trim off the starting comment char + space
 		numSpaces := 1 ; Space we just trimmed off
 		
 		keywords := ["DESCRIPTION:", "PARAMETERS:", "RETURNS:", "SIDE EFFECTS:", "NOTES:"]
@@ -179,7 +179,7 @@ class NotepadPlusPlus {
 		if(matchedPos) {
 			; Keyword line - add length of keyword + however many spaces are after it.
 			numSpaces += matchedKeyword.length()
-			line := removeStringFromStart(line, matchedKeyword)
+			line := line.removeFromStart(matchedKeyword)
 			numSpaces += countLeadingSpaces(line)
 		} else {
 			matchedPos := RegExMatch(line, "P)\((I|O|IO),(OPT|REQ)\) - ", matchedTextLen)

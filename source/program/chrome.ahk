@@ -45,12 +45,12 @@ class Chrome {
 	;                 text) instead of the actual title.
 	;---------
 	copyTitle() {
-		title := removeStringFromEnd(WinGetActiveTitle(), " - Google Chrome")
+		title := WinGetActiveTitle().removeFromEnd(" - Google Chrome")
 		
 		if(Chrome.isCurrentPageCodeSearch()) {
 			; Special handling for CodeSearch - just get the routine name, plus the current selection as the tag.
-			routine := getStringBeforeStr(title, "/")
 			tag     := cleanupText(getFirstLineOfSelectedText())
+			routine := title.beforeString("/")
 			
 			if(tag != "")
 				title := tag "^" routine
@@ -72,7 +72,7 @@ class Chrome {
 		tag := cleanupText(getFirstLineOfSelectedText())
 		
 		title := WinGetActiveTitle()
-		title := removeStringFromEnd(title, " - Google Chrome")
+		title := title.removeFromEnd(" - Google Chrome")
 		titleAry := title.split("/")
 		routine := titleAry[1]
 		if(!routine)
@@ -120,7 +120,7 @@ class Chrome {
 		if(!MainConfig.contextIsWork)
 			return false
 		
-		title := removeStringFromEnd(WinGetActiveTitle(), " - Google Chrome")
+		title := WinGetActiveTitle().removeFromEnd(" - Google Chrome")
 		return title.endsWith(" - CodeSearch")
 	}
 	

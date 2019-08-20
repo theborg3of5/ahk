@@ -121,7 +121,7 @@ class SelectorGui {
 			
 			; Add new column if needed
 			if(sectionTitle.startsWith(this.chars["NEW_COLUMN"] " ")) {
-				sectionTitle := removeStringFromStart(sectionTitle, this.chars["NEW_COLUMN"] " ")
+				sectionTitle := sectionTitle.removeFromStart(this.chars["NEW_COLUMN"] " ")
 				flex.addColumn()
 				isEmptyColumn := true
 			}
@@ -282,7 +282,7 @@ SelectorGuiSubmit() {
 
 ; Called when an override field is changed, changes font color based on whether it was the "default" value (matches label)
 SelectorGuiOverrideFieldChanged() {
-	fieldName := removeStringFromStart(A_GuiControl, A_Gui SelectorGui.baseFieldVarOverridesPrefix)
+	fieldName := A_GuiControl.removeFromStart(A_Gui SelectorGui.baseFieldVarOverridesPrefix)
 	value := GuiControlGet("", A_GuiControl)
 	; DEBUG.popup("A_GuiControl",A_GuiControl, "A_Gui",A_Gui, "fieldName",fieldName, "value",value)
 	

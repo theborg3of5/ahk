@@ -392,7 +392,7 @@ class Selector {
 	processSpecialLine(line) {
 		; Setting
 		if(line.startsWith(this.chars["SETTING"])) {
-			line := removeStringFromStart(line, this.chars["SETTING"])
+			line := line.removeFromStart(this.chars["SETTING"])
 			if(line != "") {
 				settingSplit := line.split("=")
 				this.setGuiSetting(settingSplit[1], settingSplit[2]) ; name, value
@@ -400,7 +400,7 @@ class Selector {
 		
 		; Section title
 		} else if(line.startsWith(this.chars["SECTION_TITLE"] " ")) {
-			title := removeStringFromStart(line, this.chars["SECTION_TITLE"] " ")
+			title := line.removeFromStart(this.chars["SECTION_TITLE"] " ")
 			idx := forceNumber(this.choices.MaxIndex()) + 1 ; The next actual choice will be the first one under this header, so match that.
 			this.sectionTitles[idx] := title ; If there are multiple headers in a row (for example when choices are filtered out) they should get overwritten in order here (which is correct).
 		}
@@ -445,7 +445,7 @@ class Selector {
 	parseChoice(userChoiceString) {
 		; Command choice - edit ini, etc.
 		if(userChoiceString.startsWith(this.chars["COMMAND"])) {
-			commandChar := getStringAfterStr(userChoiceString, this.chars["COMMAND"])
+			commandChar := userChoiceString.afterString(this.chars["COMMAND"])
 			
 			; Edit action - open the current INI file for editing
 			if(commandChar = this.chars["COMMANDS", "EDIT"]) {

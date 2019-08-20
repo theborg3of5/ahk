@@ -180,6 +180,6 @@ splitServerLocation(serverLocation, ByRef routine := "", ByRef tag := "") {
 ; Drop the offset ("+4" in "tag+4^routine") from the given server location (so we'd return "tag^routine").
 dropOffsetFromServerLocation(serverLocation) {
 	splitServerLocation(serverLocation, routine, tag)
-	tag := getStringBeforeStr(tag, "+")
+	tag := tag.beforeString("+")
 	return tag "^" routine
 }

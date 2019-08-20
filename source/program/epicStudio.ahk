@@ -112,12 +112,12 @@ class EpicStudio {
 		line := getSelectedText()
 		Send, {End} ; Get to end of line
 		
-		line := removeStringFromStart(line, "`t") ; Tab at the start of every line
+		line := line.removeFromStart("`t") ; Tab at the start of every line
 		
 		numIndents := 0
 		while(line.startsWith(". ")) {
 			numIndents++
-			line := removeStringFromStart(line, ". ")
+			line := line.removeFromStart(". ")
 		}
 		
 		; If it's an empty line with just a semicolon, remove the semicolon.

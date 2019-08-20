@@ -632,12 +632,12 @@ class TableList {
 	;  row (I,REQ) - Settings row that we're processing (string).
 	;---------
 	processSetting(row) {
-		row := removeStringFromStart(row, this.chars["SETTING"])
+		row := row.removeFromStart(this.chars["SETTING"])
 		if(!row)
 			return
 		
-		name  := getStringBeforeStr(row, "=")
-		value := getStringAfterStr(row, "=")
+		name  := row.beforeString("=")
+		value := row.afterString("=")
 		; DEBUG.popup("TableList.processSetting","Pulled out data", "Name",name, "Value",value)
 		
 		if(name = "PlaceholderChar")
@@ -670,8 +670,8 @@ class TableList {
 		label := 0
 		
 		; Strip off the starting/ending mod characters ([ and ] by default).
-		row := removeStringFromStart(row, this.chars["MOD", "START"])
-		row := removeStringFromEnd(row, this.chars["MOD", "END"])
+		row := row.removeFromStart(this.chars["MOD", "START"])
+		row := row.removeFromEnd(this.chars["MOD", "END"])
 		
 		; If it's just blank, all previous mods are wiped clean.
 		if(row = "") {
@@ -680,7 +680,7 @@ class TableList {
 			; Check for a remove row label.
 			; Assuming here that it will be the first and only thing in the mod row.
 			if(row.startsWith(this.chars["MOD", "REMOVE_LABEL"])) {
-				remLabel := removeStringFromStart(row, this.chars["MOD", "REMOVE_LABEL"])
+				remLabel := row.removeFromStart(this.chars["MOD", "REMOVE_LABEL"])
 				this.killMods(remLabel)
 				label := 0
 				
@@ -692,7 +692,7 @@ class TableList {
 			For i,currMod in newModsSplit {
 				; Check for an add row label.
 				if(i = 1 && currMod.startsWith(this.chars["MOD", "ADD_LABEL"]))
-					label := removeStringFromStart(currMod, this.chars["MOD", "ADD_LABEL"])
+					label := currMod.removeFromStart(this.chars["MOD", "ADD_LABEL"])
 				else
 					this.mods.push(new TableListMod(currMod, label))
 			}

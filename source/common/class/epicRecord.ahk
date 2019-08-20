@@ -75,7 +75,7 @@ class EpicRecord {
 	;---------
 	initFromEMC2Title() {
 		title := WinGetTitle(MainConfig.windowInfo["EMC2"].titleString)
-		title := removeStringFromEnd(title, " - EMC2")
+		title := title.removeFromEnd(" - EMC2")
 		
 		; If no info available, bail.
 		if(title = "EMC2")
@@ -103,17 +103,17 @@ class EpicRecord {
 		; 1) Title [R INI ID]
 		if(recordString.contains("[R ") && recordString.contains("]")) {
 			; Title is everything up to the opening square bracket
-			this.title := getStringBeforeStr(recordString, "[R ")
+			this.title := recordString.beforeString("[R ")
 			
 			; In the square brackets should be "R INI ID"
-			iniId := getFirstStringBetweenStr(recordString, "[R ", "]")
-			this.ini := getStringBeforeStr(iniId, " ")
-			this.id  := getStringAfterStr(iniId, " ")
+			iniId := recordString.firstBetweenStrings("[R ", "]")
+			this.ini := iniId.beforeString(" ")
+			this.id  := iniId.afterString(" ")
 			
 		; 2) #ID - Title
 		} else if(recordString.startsWith("#")) {
-			this.id := getFirstStringBetweenStr(recordString, "#", " - ")
-			this.title := getStringAfterStr(recordString, " - ")
+			this.id := recordString.firstBetweenStrings("#", " - ")
+			this.title := recordString.afterString(" - ")
 			
 		; 3) ID (no spaces)
 		} else if(!recordString.contains(" ")) {
@@ -121,16 +121,16 @@ class EpicRecord {
 			
 		; 4) {R } + INI ID + {space} + {: or -} + {title}
 		} else {
-			recordString := removeStringFromStart(recordString, "R ") ; Trim off "R " at start if it's there.
-			this.ini := getStringBeforeStr(recordString, " ")
+			recordString := recordString.removeFromStart("R ") ; Trim off "R " at start if it's there.
+			this.ini := recordString.beforeString(" ")
 			if(recordString.containsAnyOf([":", "-"], matchedDelim)) {
 				; ID is everything up to the first delimiter
-				this.id := getFirstStringBetweenStr(recordString, " ", matchedDelim)
+				this.id := recordString.firstBetweenStrings(" ", matchedDelim)
 				; Title is everything after
-				this.title := getStringAfterStr(recordString, matchedDelim)
+				this.title := recordString.afterString(matchedDelim)
 			} else {
 				; ID is the rest of the string
-				this.id := getStringAfterStr(recordString, " ")
+				this.id := recordString.afterString(" ")
 			}
 		}
 		

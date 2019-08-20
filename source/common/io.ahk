@@ -89,11 +89,10 @@ getTooltipText() {
 	
 	Loop, %winIDs% {
 		currID := winIDs%A_Index%
-		tooltipText := ControlGetText( , "ahk_id %currID%")
+		tooltipText := ControlGetText( , "ahk_id " currID)
 		if(tooltipText != "")
-			outText .= tooltipText "`n"
+			outText := outText.appendPiece(tooltipText, "`n")
 	}
-	outText := removeStringFromEnd(outText, "`n")
 	
 	return outText
 }

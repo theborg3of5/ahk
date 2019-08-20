@@ -264,9 +264,9 @@ class OneNote {
 		if(lineText = "" || lineText = "`r`n") ; Selecting the whole line in OneNote gets us the newline, so treat just a newline as an empty case as well.
 			return
 		
-		linkText   := getStringAfterStr(lineText, " - ")
-		recordText := getStringBeforeStr(linkText, " (")
-		editText   := getFirstStringBetweenStr(linkText, "(", ")")
+		linkText   := lineText.afterString(" - ")
+		recordText := linkText.beforeString(" (")
+		editText   := linkText.firstBetweenStrings("(", ")")
 		
 		ao := new ActionObjectEMC2(recordText)
 		; DEBUG.popup("Line",lineText, "Record text",recordText, "Edit text",editText, "ao.ini",ao.ini, "ao.id",ao.id)
@@ -454,7 +454,7 @@ class OneNoteTodoPage {
 		Loop {
 			t.setText("Waiting for 2s, press space to keep waiting..." getDots(A_Index - 1))
 			Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
-			endKey := removeStringFromStart(ErrorLevel, "EndKey:")
+			endKey := ErrorLevel.removeFromStart("EndKey:")
 			if(endKey = "Space")
 				Continue
 			
@@ -464,7 +464,7 @@ class OneNoteTodoPage {
 			
 			t.setText("Waiting for 1s, press space to keep waiting..." getDots(A_Index - 1))
 			Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
-			endKey := removeStringFromStart(ErrorLevel, "EndKey:")
+			endKey := ErrorLevel.removeFromStart("EndKey:")
 			if(endKey = "Space")
 				Continue
 			

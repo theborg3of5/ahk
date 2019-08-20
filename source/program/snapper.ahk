@@ -128,7 +128,7 @@ class Snapper {
 			return ""
 		
 		environmentText := ControlGetText("ThunderRT6ComboBox2", titleString)
-		commId := getFirstStringBetweenStr(environmentText, "[", "]")
+		commId := environmentText.firstBetweenStrings("[", "]")
 		
 		return commId
 	}

@@ -59,7 +59,7 @@
 			if(!dlgId)
 				return
 			
-			dlgId := removeStringFromStart(dlgId, "P.")
+			dlgId := dlgId.removeFromStart("P.")
 			addToClipboardHistory(dlgId)
 			Send, % dlgId
 		}

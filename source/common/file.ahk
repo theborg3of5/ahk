@@ -110,7 +110,7 @@ folderExists(folderPath) {
 }
 
 getParentFolder(path, levelsUp := 1) {
-	outPath := removeStringFromEnd(path, "\") ; Make sure there's no trailing backslash, SplitPath assumes that involves a blank filename.
+	outPath := path.removeFromEnd("\") ; Make sure there's no trailing backslash, SplitPath assumes that involves a blank filename.
 	
 	Loop, % levelsUp {
 		SplitPath(outPath, "", parentPath)

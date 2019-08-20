@@ -136,7 +136,7 @@ class VB6 {
 	; NOTES:          This only works if "window" within VB6 is "maximized".
 	;---------
 	toggleCodeAndDesign() {
-		mode := getFirstStringBetweenStr(WinGetTitle("A"), "(", ")")
+		mode := WinGetTitle("A").firstBetweenStrings("(", ")")
 		if(mode = "Code") {
 			Send, +{F7}
 		} else if(mode = "Form" || mode = "UserControl") {
@@ -196,10 +196,10 @@ class VB6 {
 			Toast.showError("Failed to find DLG ID", "DLG name is not DLG######: " dlgName)
 			return ""
 		}
-		dlgId := removeStringFromStart(dlgName, "DLG")
+		dlgId := dlgName.removeFromStart("DLG")
 		
 		; Ignore anything after a dash (usually added by me to break up projects that are too large to load together).
-		dlgId := getStringBeforeStr(dlgId, "-")
+		dlgId := dlgId.beforeString("-")
 		
 		return dlgId
 	}

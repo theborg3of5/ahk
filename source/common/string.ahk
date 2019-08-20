@@ -131,32 +131,6 @@ stringEndsWith(inputString, endString) {
 	return (subStr(inputString, strLen(inputString) - strLen(endString) + 1) = endString)
 }
 
-
-getStringBeforeStr(inputString, endString, fromLastInstance := false) {
-	endStringPos := stringContains(inputString, endString, fromLastInstance)
-	if(!endStringPos)
-		return inputString
-	
-	return subStr(inputString, 1, endStringPos - 1)
-}
-getStringAfterStr(inputString, startString, fromLastInstance := false) {
-	startStringPos := stringContains(inputString, startString, fromLastInstance)
-	if(!startStringPos)
-		return inputString
-	
-	return subStr(inputString, startStringPos + strLen(startString))
-}
-getFirstStringBetweenStr(inputString, startString, endString, upToLastEndString := false) {
-	; Trim off everything before (and including) the first instance of the startString
-	outString := getStringAfterStr(inputString, startString)
-	
-	; Trim off everything before (and including) the remaining instance (first or last depending on upToLastEndString) of the endString
-	return getStringBeforeStr(outString, endString, upToLastEndString)
-}
-getFullStringBetweenStr(inputString, startString, endString) {
-	return getFirstStringBetweenStr(inputString, startString, endString, true)
-}
-
 ; Return only the first line of the given string.
 getFirstLine(inputString) {
 	splitAry := StrSplit(inputString, "`n")
@@ -243,7 +217,7 @@ appendPieceToString(baseText, delimiter, pieceToAdd) {
 }
 
 getCleanHotkeyString(hotkeyString) {
-	return cleanupText(hotkeyString, ["$", "*", "<", ">", "~"])
+	return hotkeyString.clean(["$", "*", "<", ">", "~"])
 }
 
 replaceTags(inputString, tagsAry) {
@@ -290,7 +264,7 @@ encodeForURL(textToEncode) {
 	
 	; Temporarily trim off any http/https/etc. (will add back on at end)
 	if(RegExMatch(currentText, "^\w+:/{0,2}", prefix))
-		currentText := removeStringFromStart(currentText, prefix)
+		currentText := currentText.removeFromStart(prefix)
 	
 	; First replace any percents with the equivalent (since doing it later would also pick up anything else we've converted)
 	needle := "%"

@@ -264,7 +264,7 @@ class StringBase {
 	
 	getBetweenStrings(startString, endString, upToLastEndString) {
 		; Trim off everything before (and including) the first instance of the startString
-		outStr := this.beforeString(startString)
+		outStr := this.afterString(startString)
 		
 		; Trim off everything before (and including) the remaining instance (first or last depending on upToLastEndString) of the endString
 		return outStr.beforeString(endString, upToLastEndString)

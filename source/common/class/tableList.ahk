@@ -359,22 +359,22 @@ class TableList {
 	; PARAMETERS:
 	;  column        (I,REQ) - The string index (as defined by the model row) of the column you want
 	;                          to filter on.
-	;  allowedValue  (I,OPT) - Only include rows which have this value in their column (with the
+	;  value         (I,OPT) - Only include rows which have this value in their column (with the
 	;                          exception of rows with a blank value, see includeBlanks parameter).
-	;                          If this is left blank, any value is allowed .
+	;                          If this is left blank, any value is allowed.
 	;  includeBlanks (I,OPT) - If set to false, columns which have a blank value for the given column
 	;                          will be excluded. Defaults to true (include blanks).
 	; RETURNS:        Processed table, excluding rows that do not fit the filter. Format:
 	;                 	table[rowNum, column] := value
 	;---------
-	getFilteredTable(column, allowedValue := "", includeBlanks := true) {
-		; DEBUG.popup("column",column, "allowedValue",allowedValue, "includeBlanks",includeBlanks)
+	getFilteredTable(column, value := "", includeBlanks := true) {
+		; DEBUG.popup("column",column, "value",value, "includeBlanks",includeBlanks)
 		if(!column)
 			return ""
 		
 		filteredTable := []
 		For i,row in this.table {
-			if(this.shouldIncludeRow(row, column, allowedValue, includeBlanks))
+			if(this.rowPassesFilter(row, column, value, includeBlanks))
 				filteredTable.push(row)
 		}
 		
@@ -382,18 +382,18 @@ class TableList {
 	}
 	
 	;---------
-	; DESCRIPTION:    Retrieve a version of the table that excludes rows that don't match
-	;                 a certain filter, and "flattens" the table so that there is only one
-	;                 row per value of the given column.
+	; DESCRIPTION:    Retrieve a version of the table that excludes rows that explicitly don't
+	;                 match (blanks will be included) a certain filter, and "flattens" the table
+	;                 so that there is only one row per value of the given column.
 	; PARAMETERS:
 	;  uniqueColumn (I,REQ) - The column that we will "flatten" rows based on - there will
 	;                         be only one row per value of this column.
 	;  filterColumn (I,REQ) - The column to filter using - this column determines which row
 	;                         wins if there are multiple with the same unique value.
-	;  allowedValue (I,REQ) - The value that should win - that is, if 2 rows have uniqueColumn=A,
-	;                         the one with filterColumn=allowedValue is the one that will be
+	;  filterValue  (I,REQ) - The value that should win - that is, if 2 rows have uniqueColumn=A,
+	;                         the one with filterColumn=filterValue is the one that will be
 	;                         included in the table. In the event that multiple rows have the same
-	;                         uniqueColumn value and this allowedValue, the first one in the file
+	;                         uniqueColumn value and this filterValue, the first one in the file
 	;                         will win.
 	; RETURNS:        Processed and flattened table. Format:
 	;                 	table[rowNum, column] := value
@@ -402,32 +402,33 @@ class TableList {
 	;                 it through (because none of them are arrays, so none of them have a
 	;                 value for the uniqueColumn).
 	;---------
-	getFilteredTableUnique(uniqueColumn, filterColumn, allowedValue) {
-		if(!uniqueColumn || !filterColumn || !allowedValue)
+	getFilteredTableUnique(uniqueColumn, filterColumn, filterValue) {
+		if(!uniqueColumn || !filterColumn || !filterValue)
 			return ""
 		
-		uniqueRowRefs := {} ; {uniqueValue: {"ROW_NUM":rowNum, "FILTER_VALUE":filterVal}}
-		For rowNum,row in this.table {
-			if(!this.shouldIncludeRow(row, filterColumn, allowedValue))
+		; Filter out non-matching rows and index by unique value
+		rowsMatchingFilter  := {} ; {uniqueValue: row}
+		rowsWithBlankFilter := {} ; {uniqueValue: row}
+		For _,row in this.table {
+			if(!this.rowPassesFilter(row, filterColumn, filterValue))
 				Continue
 			
-			uniqueVal := row[uniqueColumn]
-			filterVal := row[filterColumn]
+			rowUniqueVal := row[uniqueColumn]
+			rowFilterVal := row[filterColumn]
 			
-			if(!uniqueRowRefs[uniqueVal]) { ; GDB TODO pull out if + else logic into a function, only do these set statements once
-				uniqueRowRefs[uniqueVal, "ROW_NUM"]      := rowNum
-				uniqueRowRefs[uniqueVal, "FILTER_VALUE"] := filterVal
-			} else if( (filterVal = allowedValue) && (uniqueRowRefs[uniqueVal, "FILTER_VALUE"] != allowedValue) ) {
-				uniqueRowRefs[uniqueVal, "ROW_NUM"]      := rowNum
-				uniqueRowRefs[uniqueVal, "FILTER_VALUE"] := filterVal
+			if(rowFilterVal = "") {
+				if(rowsWithBlankFilter[rowUniqueVal] = "") ; First row per unique value wins
+					rowsWithBlankFilter[rowUniqueVal] := row
+			} else if(rowFilterVal = filterValue) {
+				if(rowsMatchingFilter[rowUniqueVal] = "") ; First row per unique value wins
+					rowsMatchingFilter[rowUniqueVal] := row
 			}
 		}
+		uniqueRows := mergeArrays(rowsWithBlankFilter, rowsMatchingFilter) ; Exact matches win (override)
 		
 		filteredTable := []
-		For _,ref in uniqueRowRefs {
-			rowNum := ref["ROW_NUM"]
-			filteredTable.push(this.table[rowNum])
-		}
+		For _,row in uniqueRows
+			filteredTable.push(row)
 		
 		; DEBUG.popupEarly(filteredTable)
 		return filteredTable
@@ -737,23 +738,23 @@ class TableList {
 	
 	;---------
 	; DESCRIPTION:    Based on a filter (column and value to restrict to), determine whether the
-	;                 given row array should be included.
+	;                 given row array passes that filter.
 	; PARAMETERS:
 	;  row           (I,REQ) - A row in the table. May be an array or string.
 	;  column        (I,OPT) - The column to filter on - we will check the value of this column
-	;                          (index) in the row array to see if it matches allowedValue.
-	;  allowedValue  (I,OPT) - Only include rows which have this value in their column (with the
+	;                          (index) in the row array to see if it matches filterValue.
+	;  value  (I,OPT) - Only include rows which have this value in their column (with the
 	;                          exception of rows with a blank value, see includeBlanks parameter).
-	;                          If this is left blank, any value is allowed .
+	;                          If this is left blank, any value is allowed.
 	;  includeBlanks (I,OPT) - If set to false, columns which have a blank value for the given column
 	;                          will be excluded. Defaults to true (include blanks).
 	; RETURNS:        True if we should exclude the row from the filtered table, false otherwise.
 	;---------
-	shouldIncludeRow(row, column, allowedValue := "", includeBlanks := true) {
+	rowPassesFilter(row, column, value := "", includeBlanks := true) {
 		if(!column)
 			return true
 		
-		; If this is a flat string, it's a special row, that shouldn't be fitlered out
+		; If this is a flat string, it's a special row, that shouldn't be filtered out
 		; (otherwise it would because it doesn't have columns).
 		if(!isObject(row))
 			return true
@@ -764,20 +765,20 @@ class TableList {
 		if(!valueToCompare)
 			return includeBlanks
 		
-		; If no allowed value, include everything (aside from blanks, which obey includeBlanks above)
-		if(!allowedValue)
+		; If no filter value, include everything (aside from blanks, which obey includeBlanks above)
+		if(!value)
 			return true
 		
-		; If the value isn't blank, compare it to our allowed value.
-		if(isObject(valueToCompare)) { ; Array case - multiple values in filter column.
-			if(valueToCompare.contains(allowedValue))
+		; If the value isn't blank, compare it to our filter value.
+		if(isObject(valueToCompare)) { ; Array/object case - multiple values in filter column.
+			if(valueToCompare.contains(value))
 				return true
 		} else {
-			if(valueToCompare = allowedValue)
+			if(valueToCompare = value)
 				return true
 		}
 		
-		; DEBUG.popup("Base","include", "row",row, "column",column, "allowedValue",allowedValue, "includeBlanks",includeBlanks)
+		; DEBUG.popup("Base","include", "row",row, "column",column, "value",value, "includeBlanks",includeBlanks)
 		return false
 	}
 	

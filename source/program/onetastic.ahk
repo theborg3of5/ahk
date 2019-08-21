@@ -194,10 +194,6 @@ class OneTastic {
 		return totalXMLsAry
 	}
 	
-	
-	; Read all functions' XML and corresponding dependencies into function-name-indexed associative arrays
-	
-	
 	;---------
 	; DESCRIPTION:    Read all functions' XML and dependencies from files into an associative array.
 	; RETURNS:        Array of function data. Format:

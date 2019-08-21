@@ -92,11 +92,11 @@ parseDateTime(input, format := "", dateOrTime := "") { ; dateOrTime = "d" for da
 }
 
 ; Do addition/subtraction on dates where the traditional += fails.
-doDateMath(start, op := "+", diff := 0, unit := "d") { ; unit = "d"
+doDateMath(start, operator := "+", diff := 0, unit := "d") { ; unit = "d"
 	outDate := start
-	d := splitDateTime(start)
+	dateObj := splitDateTime(start)
 	
-	if(op = "-")
+	if(operator = "-")
 		diff := -diff
 	
 	; Treat weeks as 7 days - this is universal.
@@ -105,20 +105,19 @@ doDateMath(start, op := "+", diff := 0, unit := "d") { ; unit = "d"
 		unit := "d"
 	}
 	
-	
 	if(unit = "d") {
 		outDate += diff, days ; Days we can do the easy way, with EnvAdd/+=.
-		d := splitDateTime(outDate)
+		dateObj := splitDateTime(outDate)
 	} else if(unit = "m") { ; Months vary in size, so just modify their part of the timestamp.
-		d["month"] += diff
-		d["year"] += d["month"] // 12
-		d["month"] := mod(d["month"], 12)
+		dateObj["month"] += diff
+		dateObj["year"] += dateObj["month"] // 12
+		dateObj["month"] := mod(dateObj["month"], 12)
 	} else if(unit = "y") {
-		d["year"] += diff
+		dateObj["year"] += diff
 	}
 	
 	; Pad out any lengths that went down to the wrong number of digits.
-	For i,x in d {
+	For i,x in dateObj {
 		if(i = "year")
 			correctLen := 4
 		else
@@ -127,13 +126,13 @@ doDateMath(start, op := "+", diff := 0, unit := "d") { ; unit = "d"
 		currLen := x.length()
 		; DEBUG.popup("Index", i, "Correct length", correctLen, "Current length", currLen)
 		while(currLen < correctLen) {
-			d[i] := "0" x
+			dateObj[i] := "0" x
 			currLen++
 		}
 	}
 	
-	outDate := d["year"] d["month"] d["day"] d["hour"] d["minute"] d["second"]
-	; DEBUG.popup("doDateMath", "return", "Start", start, "Y", d["year"], "M", d["month"], "D", d["day"], "H", d["hour"], "M", d["minute"], "S", d["second"], "Diff", diff, "Unit", unit, "Output", outDate)
+	outDate := dateObj["year"] dateObj["month"] dateObj["day"] dateObj["hour"] dateObj["minute"] dateObj["second"]
+	; DEBUG.popup("doDateMath","return", "Start",start, "Y",dateObj["year"], "M",dateObj["month"], "D",dateObj["day"], "H",dateObj["hour"], "M",dateObj["minute"], "S",dateObj["second"], "Diff",diff, "Unit",unit, "Output",outDate)
 	
 	return outDate
 }

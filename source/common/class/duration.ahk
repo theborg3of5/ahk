@@ -91,16 +91,9 @@ class Duration {
 			
 			if(hours > 0)
 				timeString .= hours ":"
-			
-			if(minutes > 0) {
-				if((timeString != "") && (minutes < 9))
-					timeString .= 0
-				timeString .= minutes ":"
-			}
-			
-			if((timeString != "") && (seconds < 9))
-				timeString .= 0
-			timeString .= seconds
+			if(minutes > 0)
+				timeString .= minutes.prepadToLength(2, "0") ":"
+			timeString .= seconds.prepadToLength(2, "0")
 			
 			return timeString
 		}

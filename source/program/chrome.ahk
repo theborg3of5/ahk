@@ -70,16 +70,18 @@ class Chrome {
 	;---------
 	getTitle() {
 		title := WinGetActiveTitle().removeFromEnd(" - Google Chrome")
+		title := title.removeFromEnd(" - Wiki")
 		
 		if(Chrome.isCurrentPageCodeSearch()) {
-			; Special handling for CodeSearch - just get the routine name, plus the current selection as the tag.
-			routine := title.beforeString("/")
-			tag     := getSelectedText().firstLine().clean()
+			; Special handling for CodeSearch - just get the file name, plus the current selection as the function.
+			file := title.beforeString("/")
+			function := getSelectedText().firstLine().clean()
 			
-			if(tag != "")
-				title := tag "^" routine
-			else
-				title := routine
+			; Client files should always have an extension
+			if(file.contains("."))
+				title := file.appendPiece(function, " > ")
+			else ; Server routines
+				title := function.appendPiece(file, "^")
 		}
 		
 		return title

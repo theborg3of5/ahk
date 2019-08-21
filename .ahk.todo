@@ -19,9 +19,6 @@
 		Options:
 			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)
 			New type of codesearch type with separate branch in ActionObject (not ideal)
-	Chrome title copy - add more functionality?
-		Client CodeSearch - file.cls > functionName() instead of functionName^file.cls
-		Trim other stuff off of the title, like "- Wiki"
 	EpicStudio - add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments

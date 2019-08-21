@@ -18,6 +18,7 @@
 	
 	; Copy title, stripping off the " - Google Chrome" at the end.
 	!c::Chrome.copyTitle()
+	!#c::Chrome.copyTitleAndURL()
 	
 	; Send to Telegram (and pick the correct chat).
 	~!t::
@@ -41,10 +42,33 @@ class Chrome {
 ; ==============================
 	;---------
 	; DESCRIPTION:    Put the title of the current tab on the clipboard, with some special exceptions.
+	;---------
+	copyTitle() {
+		setClipboardAndToastValue(Chrome.getTitle(), "title")
+	}
+	
+	;---------
+	; DESCRIPTION:    Copy the title and URL of the current tab on the clipboard, with some special
+	;                 exceptions (see .getTitle() for details).
+	;---------
+	copyTitleAndURL() {
+		title := Chrome.getTitle()
+		
+		Send, ^l     ; Focus address bar
+		Sleep, 100   ; Wait for address bar to get focused
+		url := getSelectedText()
+		Send, {F6 4} ; Focus the web page again
+		
+		setClipboardAndToastValue(title "`n" url, "title and URL")
+	}
+	
+	;---------
+	; DESCRIPTION:    Copy the title and strip " - Google Chrome" off the end.
+	; RETURNS:        Title of the window, cleaned and processed.
 	; NOTES:          For CodeSearch, we copy the current routine (and the tag, from the selected
 	;                 text) instead of the actual title.
 	;---------
-	copyTitle() {
+	getTitle() {
 		title := WinGetActiveTitle().removeFromEnd(" - Google Chrome")
 		
 		if(Chrome.isCurrentPageCodeSearch()) {
@@ -58,7 +82,7 @@ class Chrome {
 				title := routine
 		}
 		
-		setClipboardAndToastValue(title, "title")
+		return title
 	}
 	
 	;---------

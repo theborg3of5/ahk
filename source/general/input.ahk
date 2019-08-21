@@ -59,6 +59,22 @@ return
 		if(!Hyperlinker.linkSelectedText(clipboard, errorMessage))
 			Toast.showError("Failed to link selected text", errorMessage)
 	}
+	
+; Send a (newline-separated) text/URL combo from the clipboard as a link.
+^+#k::
+	sendLinkedTextFromClipboard() {
+		waitForHotkeyRelease()
+		text := clipboard.beforeString("`n")
+		url  := clipboard.afterString("`n")
+		
+		; Send and select the text
+		sendTextWithClipboard(text)
+		textLen := text.length()
+		Send, {Shift Down}{Left %textLen%}{Shift Up}
+		
+		if(!Hyperlinker.linkSelectedText(url, errorMessage))
+			Toast.showError("Failed to link text", errorMessage)
+	}
 
 ; Turn clipboard into standard string and send it.
 !+n::

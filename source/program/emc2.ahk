@@ -5,10 +5,11 @@
 
 ; Main EMC2 window
 #If MainConfig.isWindowActive("EMC2")
-	^h::Send, ^7  ; Make ^h for server object, similar to ^g for client object.
-	^+8::Send, !o ; Contact comment, EpicStudio-style.
-	$F5::+F5      ; Make F5 work everywhere by mapping it to shift + F5.
-	^+t::return   ; Block ^+t login from Hyperspace - it does very strange zoom-in things and other nonsense.
+	^h::Send, ^7     ; Make ^h for server object, similar to ^g for client object.
+	^+8::Send, !o    ; Contact comment, EpicStudio-style.
+	$F5::+F5         ; Make F5 work everywhere by mapping it to shift + F5.
+	^l::Send, !+{F5} ; Toggle lock in web activities
+	^+t::return      ; Block ^+t login from Hyperspace - it does very strange zoom-in things and other nonsense.
 	
 	; Link and record number things based on the current record.
 	!c:: EMC2.copyCurrentRecord()          ; Get INI/ID

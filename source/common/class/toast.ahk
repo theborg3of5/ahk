@@ -285,7 +285,7 @@ class Toast {
 		styles["LABEL_STYLES"]     := ""
 		
 		; Merge in any overrides
-		styles := mergeArrays(styles, styleOverrides)
+		styles := mergeObjects(styles, styleOverrides)
 		
 		return styles
 	}

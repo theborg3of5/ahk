@@ -337,7 +337,7 @@ class TableList {
 		if(!FileExist(filePath))
 			return ""
 		
-		this.chars       := mergeArrays(this.getDefaultChars(), chars)
+		this.chars       := mergeObjects(this.getDefaultChars(), chars)
 		this.keyRowChars := keyRowChars
 		
 		lines := fileLinesToArray(filePath)
@@ -424,7 +424,7 @@ class TableList {
 					rowsMatchingFilter[rowUniqueVal] := row
 			}
 		}
-		uniqueRows := mergeArrays(rowsWithBlankFilter, rowsMatchingFilter) ; Exact matches win (override)
+		uniqueRows := mergeObjects(rowsWithBlankFilter, rowsMatchingFilter) ; Exact matches win (override)
 		
 		filteredTable := []
 		For _,row in uniqueRows

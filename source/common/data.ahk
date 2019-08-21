@@ -33,15 +33,15 @@ max(nums*) {
 }
 
 ; overrides wins if they both have an index.
-mergeArrays(default, overrides) {
-	if(IsObject(default))
-		retAry := default.clone()
+mergeObjects(baseObject, overrides) {
+	if(IsObject(baseObject))
+		retAry := baseObject.clone()
 	else
 		retAry := {}
 	
 	For index,value in overrides {
 		if(IsObject(value))
-			retAry[index] := mergeArrays(default[index], value)
+			retAry[index] := mergeObjects(baseObject[index], value)
 		else
 			retAry[index] := value
 	}

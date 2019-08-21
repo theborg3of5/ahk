@@ -305,18 +305,18 @@ class MainConfig {
 		; Index paths by key.
 		pathsAry := reduceTableToColumn(pathsTable, "PATH", "KEY")
 		
-		; Grab and calculate special paths from the system/relative to this script.
-		pathTagsAry := mergeArrays(this.getSystemPathTags(), this.getCalculatedPathTags())
+		; Grab special path tags from the system to replace in the ones we just read in.
+		systemPathTags := this.getSystemPathTags()
 		
 		; Replace calculated and private path tags.
 		For key,path in pathsAry {
 			; Special case: for tags which are exclusively pass-throughs (blank path), just use the matching tag's value (from either path or private).
 			if(path = "")
-				path := pathTagsAry[key]
+				path := systemPathTags[key]
 			if(path = "")
 				path := this.private[key]
 			
-			path := path.replaceTags(pathTagsAry)
+			path := path.replaceTags(systemPathTags)
 			path := this.replacePrivateTags(path)
 			
 			pathsAry[key] := path ; make sure to store it back in the actual array
@@ -342,13 +342,7 @@ class MainConfig {
 		tags["WINDOWS"]            := A_WinDir                               ; C:\Windows
 		tags["CMD"]                := A_ComSpec                              ; C:\Windows\system32\cmd.exe
 		
-		return tags
-	}
-	
-	getCalculatedPathTags() {
-		tags := {}
-		
-		tags["AHK_ROOT"] := getParentFolder(A_LineFile, 4) ; Top-level ahk folder, this file lives in <AHK_ROOT>\source\common\class\
+		tags["AHK_ROOT"]           := getParentFolder(A_LineFile, 4)         ; Top-level ahk folder, this file lives in <AHK_ROOT>\source\common\class\
 		
 		return tags
 	}

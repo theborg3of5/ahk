@@ -10,7 +10,7 @@ forceArray(obj) {
 		return obj
 	
 	newArray := []
-	newArray[0] := obj
+	newArray.push(obj)
 	return newArray
 }
 
@@ -39,11 +39,11 @@ mergeArrays(default, overrides) {
 	else
 		retAry := []
 	
-	For i,v in overrides {
-		if(IsObject(v))
-			retAry[i] := mergeArrays(default[i], v)
+	For index,value in overrides {
+		if(IsObject(value))
+			retAry[index] := mergeArrays(default[index], value)
 		else
-			retAry[i] := v
+			retAry[index] := value
 	}
 	
 	return retAry

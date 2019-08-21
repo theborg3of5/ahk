@@ -96,7 +96,7 @@ class EpicRecord {
 	; SIDE EFFECTS:   Sets .ini, .id, and .title.
 	;---------
 	processRecordString(recordString) {
-		recordString := recordString.clean() ; Clean any funky characters off of string edges
+		recordString := recordString.firstLine().clean() ; Make sure it's only 1 line, clean any funky characters off of string edges
 		if(recordString = "")
 			return
 		

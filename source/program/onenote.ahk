@@ -565,7 +565,7 @@ class OneNoteTodoPage {
 		; Check whether we're already on a blank line or not.
 		Send, {Home} ; Start of line
 		Send, {Shift Down}{End}{Shift Up} ; Select to end of line
-		if(getFirstLineOfSelectedText() != "")
+		if(getSelectedText().firstLine() != "")
 			OneNote.insertBlankLine()
 		
 		; DEBUG.popup("matchingTodos",matchingTodos)

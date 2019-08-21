@@ -33,7 +33,7 @@
 !+p::sendCleanedUpPath()
 !+#p::sendCleanedUpPath(true)
 sendCleanedUpPath(containingFolderOnly := false) {
-	path := getFirstLineOfSelectedText()
+	path := getSelectedText().firstLine()
 	if(!path) ; Fall back to clipboard if nothing selected
 		path := clipboard
 	

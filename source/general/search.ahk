@@ -3,7 +3,7 @@
 ; Generic search for selected text.
 !+f::
 	selectSearch() {
-		text := getFirstLineOfSelectedText().clean()
+		text := getSelectedText().firstLine().clean()
 		
 		s := new Selector("search.tls", MainConfig.contextSelectorFilter)
 		data := s.selectGui("", "", {"SEARCH_TERM":text})

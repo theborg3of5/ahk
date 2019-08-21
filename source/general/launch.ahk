@@ -3,36 +3,36 @@
 ; Generic open - open a variety of different things based on the selected text.
 ^!#o::
 	genericOpenWeb() {
-		ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
+		ao := new ActionObjectRedirector(getSelectedText())
 		ao.openWeb()
 	}
 ^!#+o::
 	genericOpenEdit() {
-		ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
+		ao := new ActionObjectRedirector(getSelectedText())
 		ao.openEdit()
 	}
 
 ; Generic copy link - copy links to a variety of different things based on the selected text.
 ^!#l::
 	genericCopyLinkWeb() {
-		ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
+		ao := new ActionObjectRedirector(getSelectedText())
 		ao.copyLinkWeb()
 	}
 ^!#+l::
 	genericCopyLinkEdit() {
-		ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
+		ao := new ActionObjectRedirector(getSelectedText())
 		ao.copyLinkEdit()
 	}
 
 ; Generic hyperlinker - get link based on the selected text and then apply it to that same text.
 ^!#k::
 	genericHyperlinkSelectedTextWeb() {
-		ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
+		ao := new ActionObjectRedirector(getSelectedText())
 		ao.linkSelectedTextWeb()
 	}
 ^!#+k::
 	genericHyperlinkSelectedTextEdit() {
-		ao := new ActionObjectRedirector(getFirstLineOfSelectedText())
+		ao := new ActionObjectRedirector(getSelectedText())
 		ao.linkSelectedTextEdit()
 	}
 
@@ -84,8 +84,7 @@
 	
 	^!#s::
 		selectSnapper() {
-			selectedText := getFirstLineOfSelectedText().clean()
-			record := new EpicRecord(selectedText)
+			record := new EpicRecord(getSelectedText())
 			
 			s := new Selector("epicEnvironments.tls")
 			s.addExtraOverrideFields(["INI", "ID"])
@@ -167,7 +166,7 @@
 	
 	#p::
 		selectPhone() {
-			selectedText := getFirstLineOfSelectedText().clean()
+			selectedText := getSelectedText().firstLine().clean()
 			if(isValidPhoneNumber(selectedText)) ; If the selected text is a valid number, go ahead and call it (confirmation included in callNumber)
 				callNumber(selectedText)
 			else

@@ -8,11 +8,6 @@ selectCurrentLine() {
 	Send, {End}{Shift Down}{Home}{Shift Up}
 }
 
-getFirstLineOfSelectedText() {
-	text := getSelectedText()
-	return text.firstLine()
-}
-
 ; Grabs the selected text using the clipboard, fixing the clipboard as it finishes.
 getSelectedText() {
 	; PuTTY auto-copies the selection to the clipboard, and ^c causes an interrupt, so do nothing.

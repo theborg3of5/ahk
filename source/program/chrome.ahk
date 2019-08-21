@@ -50,7 +50,7 @@ class Chrome {
 		if(Chrome.isCurrentPageCodeSearch()) {
 			; Special handling for CodeSearch - just get the routine name, plus the current selection as the tag.
 			routine := title.beforeString("/")
-			tag     := getFirstLineOfSelectedText().clean()
+			tag     := getSelectedText().firstLine().clean()
 			
 			if(tag != "")
 				title := tag "^" routine
@@ -69,7 +69,7 @@ class Chrome {
 		if(!Chrome.isCurrentPageCodeSearch())
 			return
 		
-		tag := getFirstLineOfSelectedText().clean()
+		tag := getSelectedText().firstLine().clean()
 		
 		title := WinGetActiveTitle()
 		title := title.removeFromEnd(" - Google Chrome")

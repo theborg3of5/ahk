@@ -78,14 +78,14 @@ isWindowVisible(titleString := "A") {
 ; PARAMETERS:
 ;  titleString (I,REQ) - Title string that identifies your chosen window.
 ;                        Defaults to the active window ("A").
-; RETURNS:        Array of position/size information for the working area of the monitor that the
-;                 window is "closest" to. Format:
-;                    boundsAry["LEFT"]   = X coordinate of monitor's (working area's) left bound
-;                             ["RIGHT"]  = X coordinate of monitor's (working area's) right bound
-;                             ["TOP"]    = Y coordinate of monitor's (working area's) top bound
-;                             ["BOTTOM"] = Y coordinate of monitor's (working area's) bottom bound
-;                             ["WIDTH"]  = width of the monitor's work area
-;                             ["HEIGHT"] = height of the monitor's work area
+; RETURNS:        Associative array of position/size information for the working area of the
+;                 monitor that the window is "closest" to. Format:
+;                    bounds["LEFT"]   = X coordinate of monitor's (working area's) left bound
+;                          ["RIGHT"]  = X coordinate of monitor's (working area's) right bound
+;                          ["TOP"]    = Y coordinate of monitor's (working area's) top bound
+;                          ["BOTTOM"] = Y coordinate of monitor's (working area's) bottom bound
+;                          ["WIDTH"]  = width of the monitor's work area
+;                          ["HEIGHT"] = height of the monitor's work area
 ; NOTES:          This working area excludes things like the taskbar - it's the full space that a
 ;                 window can occupy.
 ;---------
@@ -110,13 +110,13 @@ getWindowMonitorWorkArea(titleString := "A") {
 	memOffsetRight  := memOffsetTop   + 4 ; Top   + LONG top   [4]
 	memOffsetBottom := memOffsetRight + 4 ; Right + LONG right [4]
 	
-	boundsAry := []
-	boundsAry["LEFT"]   := NumGet(monitorInfo, memOffsetLeft,   "Int")
-	boundsAry["TOP"]    := NumGet(monitorInfo, memOffsetTop,    "Int")
-	boundsAry["RIGHT"]  := NumGet(monitorInfo, memOffsetRight,  "Int")
-	boundsAry["BOTTOM"] := NumGet(monitorInfo, memOffsetBottom, "Int")
-	boundsAry["WIDTH"]  := boundsAry["RIGHT"]  - boundsAry["LEFT"]
-	boundsAry["HEIGHT"] := boundsAry["BOTTOM"] - boundsAry["TOP"]
+	bounds := {}
+	bounds["LEFT"]   := NumGet(monitorInfo, memOffsetLeft,   "Int")
+	bounds["TOP"]    := NumGet(monitorInfo, memOffsetTop,    "Int")
+	bounds["RIGHT"]  := NumGet(monitorInfo, memOffsetRight,  "Int")
+	bounds["BOTTOM"] := NumGet(monitorInfo, memOffsetBottom, "Int")
+	bounds["WIDTH"]  := bounds["RIGHT"]  - bounds["LEFT"]
+	bounds["HEIGHT"] := bounds["BOTTOM"] - bounds["TOP"]
 	
-	return boundsAry
+	return bounds
 }

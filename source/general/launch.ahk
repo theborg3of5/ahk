@@ -90,7 +90,7 @@
 			s := new Selector("epicEnvironments.tls")
 			s.addExtraOverrideFields(["INI", "ID"])
 			
-			defaultOverrideData        := []
+			defaultOverrideData        := {}
 			defaultOverrideData["INI"] := record.ini
 			defaultOverrideData["ID"]  := record.id
 			data := s.selectGui("", "Open Record(s) in Snapper in Environment", defaultOverrideData)

@@ -88,9 +88,9 @@ getTimerInfo(durationString, labelText) {
 ; RETURNS:        New Toast object to show the time in.
 ;---------
 buildTimerToast() {
-	displayText  := getTimerDisplayText()
-	overridesAry := getToastStyleOverrides("Right") ; Right-aligned (for displaying time)
-	return new Toast(displayText, overridesAry)
+	displayText := getTimerDisplayText()
+	overrides := getToastStyleOverrides("Right") ; Right-aligned (for displaying time)
+	return new Toast(displayText, overrides)
 }
 
 ;---------
@@ -112,19 +112,19 @@ getTimerDisplayText() {
 ; DESCRIPTION:    Get the style overrides to be used with toast.
 ; PARAMETERS:
 ;  labelAlignment (I,OPT) - The alignment of the text in the resulting toast. Defaults to left-aligned.
-; RETURNS:        Style overrides array for use with Toast class.
+; RETURNS:        Style overrides for use with Toast class.
 ;---------
 getToastStyleOverrides(labelAlignment) {
-	overridesAry := []
+	overrides := {}
 	
-	overridesAry["BACKGROUND_COLOR"] := "000000" ; Black
-	overridesAry["FONT_COLOR"]       := "00FF00" ; Green
-	overridesAry["FONT_SIZE"]        := 40
-	overridesAry["MARGIN_X"]         := 15
-	overridesAry["MARGIN_Y"]         := 5
-	overridesAry["LABEL_STYLES"]     := labelAlignment
+	overrides["BACKGROUND_COLOR"] := "000000" ; Black
+	overrides["FONT_COLOR"]       := "00FF00" ; Green
+	overrides["FONT_SIZE"]        := 40
+	overrides["MARGIN_X"]         := 15
+	overrides["MARGIN_Y"]         := 5
+	overrides["LABEL_STYLES"]     := labelAlignment
 	
-	return overridesAry
+	return overrides
 }
 
 ;---------

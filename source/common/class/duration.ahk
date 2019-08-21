@@ -111,7 +111,7 @@ class Duration {
 ; == Private ===================
 ; ==============================
 	static supportedUnitsAry := ""
-	static unitMultiplierAry := ""
+	static unitMultipliers   := ""
 	durationTotalSeconds := 0
 	
 	buildUnitArrays() {
@@ -122,10 +122,10 @@ class Duration {
 		Duration.supportedUnitsAry.push(Duration.Char_Second)
 		
 		; Multiplers to turn each unit into seconds.
-		Duration.unitMultiplierAry := []
-		Duration.unitMultiplierAry[Duration.Char_Hour]   := 60 * 60
-		Duration.unitMultiplierAry[Duration.Char_Minute] := 60
-		Duration.unitMultiplierAry[Duration.Char_Second] := 1
+		Duration.unitMultipliers := {}
+		Duration.unitMultipliers[Duration.Char_Hour]   := 60 * 60
+		Duration.unitMultipliers[Duration.Char_Minute] := 60
+		Duration.unitMultipliers[Duration.Char_Second] := 1
 	}
 	
 	
@@ -137,7 +137,7 @@ class Duration {
 	getUnitMultiplier(char) {
 		if(char = "")
 			return 0
-		return Duration.unitMultiplierAry[char]
+		return Duration.unitMultipliers[char]
 	}
 	
 	

@@ -175,9 +175,9 @@ class Selector {
 	;---------
 	addExtraOverrideFields(extraDataFields) {
 		if(!this.overrideFields)
-			this.overrideFields := []
+			this.overrideFields := {}
 		
-		baseLength := forceNumber(this.overrideFields.maxIndex())
+		baseLength := this.overrideFields.count()
 		For i,label in extraDataFields
 			this.overrideFields[baseLength + i] := label
 	}
@@ -272,12 +272,12 @@ class Selector {
 ; ==============================
 ; == Private ===================
 ; ==============================
-	chars          := []    ; Special characters (see getSpecialChars)
-	choices        := []    ; Visible choices the user can pick from (array of SelectorChoice objects).
-	hiddenChoices  := []    ; Invisible choices the user can pick from (array of SelectorChoice objects).
-	sectionTitles  := []    ; Lines that will be displayed as titles (index matches the first choice that should be under this title)
-	overrideFields := ""    ; Mapping from override field indices => data labels (column headers)
-	guiSettings    := []    ; Settings related to the GUI popup we show
+	chars          := {}    ; {name: character} - Special characters (see setChars)
+	choices        := []    ; Array of visible choices the user can pick from (array of SelectorChoice objects).
+	hiddenChoices  := []    ; Array of invisible choices the user can pick from (array of SelectorChoice objects).
+	sectionTitles  := {}    ; {choiceIndex: title} - Lines that will be displayed as titles (index matches the first choice that should be under this title)
+	overrideFields := ""    ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers)
+	guiSettings    := {}    ; {settingName: value} - Settings related to the GUI popup we show
 	filePath       := ""    ; Where the file lives if we're reading one in.
 	suppressData   := false ; Whether to ignore all data from the user (choice and overrides). Typically used when we've done something else (like edit the TL file).
 	
@@ -315,7 +315,7 @@ class Selector {
 	; SIDE EFFECTS:   Populates various member variables with information from the file.
 	;---------
 	loadChoicesFromFile(filter) {
-		tlChars := []
+		tlChars := {}
 		tlChars["PASS"] := [this.chars["SECTION_TITLE"], this.chars["SETTING"]] ; Rows starting with these characters will not be split at all.
 		keyRowChars := {this.chars["OVERRIDE_FIELD_INDEX"]: "OVERRIDE_INDEX"}
 		; DEBUG.popup("TableList chars",tlChars, "TableList key row chars",keyRowChars)
@@ -334,7 +334,7 @@ class Selector {
 		; Special override field index row that tells us how we should arrange data inputs.
 		fieldIndices := tl.keyRow["OVERRIDE_INDEX"]
 		if(fieldIndices) {
-			this.overrideFields := []
+			this.overrideFields := {}
 			For label,fieldIndex in fieldIndices {
 				if(fieldIndex > 0) ; Filter out data columns we don't want fields for (fieldIndex = 0)
 					this.overrideFields[fieldIndex] := label
@@ -344,7 +344,7 @@ class Selector {
 		
 		this.choices       := [] ; Visible choices the user can pick from.
 		this.hiddenChoices := [] ; Invisible choices the user can pick from.
-		this.sectionTitles := [] ; Lines that will be displayed as titles, extra newlines, etc, but have no other significance.
+		this.sectionTitles := {} ; Lines that will be displayed as titles, extra newlines, etc, but have no other significance.
 		For i,row in table {
 			if(this.isChoiceRow(row))
 				this.addChoiceRow(row)
@@ -495,11 +495,11 @@ class Selector {
 		For i,t in table {
 			; Index
 			if(checkIndex && (input = i))
-				return t.dataAry
+				return t.data
 			
 			; Abbreviation
 			if(t.matchesAbbrev(input))
-				return t.dataAry
+				return t.data
 		}
 		
 		return ""

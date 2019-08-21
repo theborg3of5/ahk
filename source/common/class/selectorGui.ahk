@@ -59,14 +59,14 @@ class SelectorGui {
 	static defaultFontColor            := "BDAE9D"
 	static fieldGhostFontColor         := "BDAE9D"
 	
-	chars                   := []
+	chars                   := {} ; {key: character}
 	guiId                   := ""
 	fieldVarChoice          := ""
 	fieldVarOverridesPrefix := ""
 	
 	overrideFields := ""
 	choiceQuery    := ""
-	overrideData   := []
+	overrideData   := {} ; {label: inputValue}
 	
 	; GUI spacing/positioning properties
 	margins :=  {LEFT:10, RIGHT:10, TOP:10, BOTTOM:10}
@@ -81,7 +81,6 @@ class SelectorGui {
 	
 	
 	setSpecialChars() {
-		this.chars := []
 		this.chars["NEW_COLUMN"] := "|"
 	}
 	

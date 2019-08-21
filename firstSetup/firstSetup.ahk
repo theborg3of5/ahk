@@ -13,7 +13,7 @@ tlSetupPath    := "setup.tls"
 startupFolder  := ahkRootPath "\source"
 mainAHKPath    := startupFolder "\main.ahk"
 
-copyPaths := []
+copyPaths := {}
 copyPaths["includeCommon.ahk.master"] := userPath "\Documents\AutoHotkey\Lib\includeCommon.ahk"
 copyPaths["settings.ini.master"]      := ahkRootPath "\config\local\settings.ini"
 
@@ -39,7 +39,7 @@ t.showPersistent()
 
 ; Pull the needed values from our selection.
 t.setText("Reading values from selection...")
-tagsToReplace := []
+tagsToReplace := {}
 tagsToReplace["ROOT"]            := ahkRootPath
 tagsToReplace["CONTEXT"]         := machineInfo["CONTEXT"]
 tagsToReplace["MACHINE"]         := machineInfo["MACHINE"]

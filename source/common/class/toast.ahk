@@ -78,32 +78,32 @@ class Toast {
 		toastText := toastText.appendPiece(errorMessage,      ":`n")
 		toastText := toastText.appendPiece(mitigationMessage, "`n`n")
 		
-		overridesAry := []
-		overridesAry["BACKGROUND_COLOR"] := "000000" ; Black
-		overridesAry["FONT_COLOR"]       := "CC9900" ; Dark yellow/gold
-		overridesAry["FONT_SIZE"]        := 22
-		overridesAry["MARGIN_X"]         := 6
-		overridesAry["MARGIN_Y"]         := 1
-		overridesAry["LABEL_STYLES"]     := "Right"
+		overrides := {}
+		overrides["BACKGROUND_COLOR"] := "000000" ; Black
+		overrides["FONT_COLOR"]       := "CC9900" ; Dark yellow/gold
+		overrides["FONT_SIZE"]        := 22
+		overrides["MARGIN_X"]         := 6
+		overrides["MARGIN_Y"]         := 1
+		overrides["LABEL_STYLES"]     := "Right"
 		
-		Toast.showForSeconds(toastText, 2, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge, overridesAry)
+		Toast.showForSeconds(toastText, 2, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge, overrides)
 	}
 	
 	;---------
 	; DESCRIPTION:    Static caller to show a toast for a certain number of seconds, then destroy it.
 	; PARAMETERS:
-	;  toastText         (I,REQ) - The text to show in the toast.
-	;  numSeconds        (I,REQ) - The number of seconds to show the toast for.
-	;  x                 (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
-	;                              Defaults to previous position (if set), then right edge of screen.
-	;  y                 (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
-	;                              Defaults to previous position (if set), then bottom edge of screen.
-	;  styleOverridesAry (I,OPT) - Any style overrides that you'd like to make. Defaults can be
-	;                              found in .getStyleAry().
+	;  toastText      (I,REQ) - The text to show in the toast.
+	;  numSeconds     (I,REQ) - The number of seconds to show the toast for.
+	;  x              (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
+	;                           Defaults to previous position (if set), then right edge of screen.
+	;  y              (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
+	;                           Defaults to previous position (if set), then bottom edge of screen.
+	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be
+	;                           found in .getStyles().
 	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
-	showForSeconds(toastText, numSeconds, x := "RIGHT_EDGE", y := "BOTTOM_EDGE", styleOverridesAry := "") { ; x := VisualWindow.X_RightEdge, y := VisualWindow.Y_BottomEdge
-		idAry := Toast.buildGui(styleOverridesAry)
+	showForSeconds(toastText, numSeconds, x := "RIGHT_EDGE", y := "BOTTOM_EDGE", styleOverrides := "") { ; x := VisualWindow.X_RightEdge, y := VisualWindow.Y_BottomEdge
+		idAry := Toast.buildGui(styleOverrides)
 		guiId        := idAry["GUI_ID"]
 		labelVarName := idAry["LABEL_VAR_NAME"]
 		
@@ -120,13 +120,13 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Create a new Toast object.
 	; PARAMETERS:
-	;  toastText         (I,OPT) - The text to show in the toast.
-	;  styleOverridesAry (I,OPT) - Any style overrides that you'd like to make. Defaults can be
-	;                              found in .getStyleAry().
+	;  toastText      (I,OPT) - The text to show in the toast.
+	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be
+	;                           found in .getStyles().
 	; RETURNS:        A new instance of this class.
 	;---------
-	__New(toastText := "", styleOverridesAry := "") {
-		idAry := this.buildGui(styleOverridesAry)
+	__New(toastText := "", styleOverrides := "") {
+		idAry := this.buildGui(styleOverrides)
 		this.guiId        := idAry["GUI_ID"]
 		this.labelVarName := idAry["LABEL_VAR_NAME"]
 		
@@ -223,7 +223,7 @@ class Toast {
 	static WidthLabelNum := 0
 	static ToastTitle := "[TOAST]"
 	
-	stylesAry      := ""
+	styles         := ""
 	guiId          := ""
 	labelVarName   := ""
 	x              := ""
@@ -233,15 +233,15 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Build the toast gui, applying various properties.
 	; PARAMETERS:
-	;  styleOverridesAry (I,OPT) - Any style overrides that you'd like to make. Defaults can be
-	;                              found in .getStyleAry().
+	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be
+	;                           found in .getStyles().
 	; SIDE EFFECTS:   Saves off a reference to the gui's window handle.
 	; RETURNS:        Array of ID information, format:
 	;                 	idAry["GUI_ID"]         = Window handle/guiId
 	;                 	     ["LABEL_VAR_NAME"] = Name of the global variable connected to the label
 	;                 	                          containing the toast text.
 	;---------
-	buildGui(styleOverridesAry := "") {
+	buildGui(styleOverrides := "") {
 		; Create Gui and save off window handle (which is also guiId)
 		Gui, New, +HWNDguiId
 		
@@ -250,15 +250,15 @@ class Toast {
 		Gui, % "+E" WS_EX_CLICKTHROUGH
 		
 		; Set formatting options
-		styleAry := Toast.getStyleAry(styleOverridesAry)
-		Gui, Color, % styleAry["BACKGROUND_COLOR"]
-		Gui, Font, % "c" styleAry["FONT_COLOR"] " s" styleAry["FONT_SIZE"], % styleAry["FONT_NAME"]
-		Gui, Margin, % styleAry["MARGIN_X"], % styleAry["MARGIN_Y"]
+		styles := Toast.getStyles(styleOverrides)
+		Gui, Color, % styles["BACKGROUND_COLOR"]
+		Gui, Font, % "c" styles["FONT_COLOR"] " s" styles["FONT_SIZE"], % styles["FONT_NAME"]
+		Gui, Margin, % styles["MARGIN_X"], % styles["MARGIN_Y"]
 		
 		; Add label
 		labelVarName := guiId "Text" ; Come up with a unique variable we can use to reference the label (to change its contents if needed).
 		setDynamicGlobalVar(labelVarName) ; Since the variable must be global, declare it as such.
-		Gui, Add, Text, % "v" labelVarName " " styleAry["LABEL_STYLES"]
+		Gui, Add, Text, % "v" labelVarName " " styles["LABEL_STYLES"]
 		
 		return {"GUI_ID":guiId, "LABEL_VAR_NAME":labelVarName}
 	}
@@ -267,27 +267,27 @@ class Toast {
 	; DESCRIPTION:    Determine the styles to use for the toast gui, based on hard-coded defaults
 	;                 and any given overrides.
 	; PARAMETERS:
-	;  styleOverridesAry (I,OPT) - Array of style overrides, see default styles below for supported
-	;                              subscripts. Format:
-	;                                styleOverridesAry(<property>) := <value>
+	;  styleOverrides (I,OPT) - Array of style overrides, see default styles below for supported
+	;                           subscripts. Format:
+	;                              styleOverrides(<property>) := <value>
 	; RETURNS:        Combined array of styles to use for the toast gui.
 	;---------
-	getStyleAry(styleOverridesAry := "") {
-		styleAry := []
+	getStyles(styleOverrides := "") {
+		styles := {}
 		
 		; Default styles
-		styleAry["BACKGROUND_COLOR"] := "2A211C"
-		styleAry["FONT_COLOR"]       := "BDAE9D"
-		styleAry["FONT_SIZE"]        := 20
-		styleAry["FONT_NAME"]        := "Consolas"
-		styleAry["MARGIN_X"]         := 5
-		styleAry["MARGIN_Y"]         := 0
-		styleAry["LABEL_STYLES"]     := ""
+		styles["BACKGROUND_COLOR"] := "2A211C"
+		styles["FONT_COLOR"]       := "BDAE9D"
+		styles["FONT_SIZE"]        := 20
+		styles["FONT_NAME"]        := "Consolas"
+		styles["MARGIN_X"]         := 5
+		styles["MARGIN_Y"]         := 0
+		styles["LABEL_STYLES"]     := ""
 		
 		; Merge in any overrides
-		styleAry := mergeArrays(styleAry, styleOverridesAry)
+		styles := mergeArrays(styles, styleOverrides)
 		
-		return styleAry
+		return styles
 	}
 	
 	;---------

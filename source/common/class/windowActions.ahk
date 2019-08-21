@@ -131,6 +131,8 @@ class WindowActions {
 ; ==============================
 ; == Private ===================
 ; ==============================
+	actionOverrides := "" ; {windowName: {action: method}}
+	
 	; Constants for supported window actions
 	static Action_None       := "NONE"
 	static Action_Other      := "OTHER"
@@ -159,11 +161,11 @@ class WindowActions {
 		actionsTable := tl.getFilteredTableUnique("NAME", "MACHINE", MainConfig.machine)
 		
 		; Index actions by window name
-		actionsAry := []
+		actions := {}
 		For i,row in actionsTable
-			actionsAry[row["NAME"]] := row
+			actions[row["NAME"]] := row
 		
-		return actionsAry
+		return actions
 	}
 	
 	;---------

@@ -9,16 +9,16 @@ class SelectorChoice {
 	;---------
 	; DESCRIPTION:    Create a new SelectorChoice instance.
 	; PARAMETERS:
-	;  data (I,REQ) - Assocative array of data that the choice contains.
+	;  dataIn (I,REQ) - Assocative array of data that the choice contains.
 	;                 Format:
-	;                  data[LABEL] := VALUE
+	;                  dataIn[LABEL] := VALUE
 	;                 Special subscripts:
 	;                  "ABBREV" - Abbreviation of choice, first one (the display one) later accessible via .abbrev
 	;                  "NAME"   - Name of choice, later accessible via .name
 	; RETURNS:        Reference to new SelectorChoice object
 	;---------
-	__New(data) {
-		this.dataAry := data
+	__New(dataIn) {
+		this.data := dataIn
 	}
 	
 	;---------
@@ -32,7 +32,7 @@ class SelectorChoice {
 		if(stringToTest = "")
 			return false
 		
-		abbrev := this.dataAry["ABBREV"]
+		abbrev := this.data["ABBREV"]
 		if(isObject(abbrev))
 			return abbrev.contains(stringToTest)
 		else
@@ -40,25 +40,11 @@ class SelectorChoice {
 	}
 	
 	;---------
-	; DESCRIPTION:    The full data array for this choice.
+	; DESCRIPTION:    The full data object for this choice.
 	;---------
-	dataArray[] {
+	dataObject[] {
 		get {
-			return this.dataAry
-		}
-	}
-	
-	;---------
-	; DESCRIPTION:    The value of the given subscript of the data array.
-	; PARAMETERS:
-	;  index (I,REQ) - The index of the value in the data array to retrieve.
-	;---------
-	data[index] {
-		get {
-			if(index = "")
-				return ""
-			
-			return this.dataAry
+			return this.data
 		}
 	}
 	
@@ -67,7 +53,7 @@ class SelectorChoice {
 	;---------
 	name[] {
 		get {
-			return this.dataAry["NAME"]
+			return this.data["NAME"]
 		}
 	}
 	
@@ -77,7 +63,7 @@ class SelectorChoice {
 	;---------
 	abbrev[] {
 		get {
-			abbrev := this.dataAry["ABBREV"]
+			abbrev := this.data["ABBREV"]
 			if(isObject(abbrev))
 				return abbrev[1]
 			else
@@ -89,11 +75,11 @@ class SelectorChoice {
 ; ==============================
 ; == Private ===================
 ; ==============================
-	dataAry := [] ; LABEL => VALUE
+	data := {} ; {label: value}
 	
 	; Debug info (used by the Debug class)
 	debugName := "SelectorChoice"
 	debugToString(debugBuilder) {
-		debugBuilder.addLine("Data", this.dataAry)
+		debugBuilder.addLine("Data", this.data)
 	}
 }

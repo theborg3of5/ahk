@@ -37,7 +37,7 @@ mergeArrays(default, overrides) {
 	if(IsObject(default))
 		retAry := default.clone()
 	else
-		retAry := []
+		retAry := {}
 	
 	For index,value in overrides {
 		if(IsObject(value))

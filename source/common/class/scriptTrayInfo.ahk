@@ -26,7 +26,7 @@ class ScriptTrayInfo {
 			Menu, Tray, Icon, , , 1
 		
 		; Build states array from given icons
-		this._iconStates := []
+		this._iconStates := {}
 		this._iconStates["A_IsSuspended", 0] := normalIcon
 		this._iconStates["A_IsSuspended", 1] := suspendedIcon
 		
@@ -37,15 +37,15 @@ class ScriptTrayInfo {
 	; DESCRIPTION:    Directly set the array used to determine which tray icon to use based on
 	;                 different global variable states.
 	; PARAMETERS:
-	;  states (I,REQ) - A tree-like array that maps the states of different variables to the icons that
-	;                   we should use for the script. Format:
+	;  states (I,REQ) - A tree-like associative array that maps the states of different variables to
+	;                   the icons that we should use for the script. Format:
 	;                   	states["varName", varState] := iconPath
 	;                   See getIconForCurrentState() for a more in-depth explanation.
 	;---------
-	setIconStates(statesAry) {
+	setIconStates(states) {
 		Menu, Tray, Icon, , , 1 ; Assume that there will always be a path in here to a suspended icon we should use.
 		
-		this._iconStates := statesAry
+		this._iconStates := states
 		this.updateTrayIcon()
 	}
 
@@ -70,7 +70,7 @@ class ScriptTrayInfo {
 ; ==============================
 ; == Private ===================
 ; ==============================
-	_iconStates := [] ; Array representing which icon to use in different situations - see .getIconForCurrentState() for explanation.
+	_iconStates := {} ; Associative array representing which icon to use in different situations - see .getIconForCurrentState() for explanation.
 
 	;---------
 	; DESCRIPTION:    Recursively drill down into the given array and determine (based on the states

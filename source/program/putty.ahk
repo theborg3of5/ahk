@@ -131,12 +131,12 @@ class Putty {
 	;---------
 	sendCommand(key := "") {
 		s := new Selector("puttyCommands.tls")
-		dataAry := s.select(key)
+		data := s.select(key)
 		
-		command   := dataAry["COMMAND"]
-		sendAfter := dataAry["SEND_AFTER"]
-		ini       := stringUpper(dataAry["INI"])
-		id        := dataAry["ID"]
+		command   := data["COMMAND"]
+		sendAfter := data["SEND_AFTER"]
+		ini       := stringUpper(data["INI"])
+		id        := data["ID"]
 		if(!command)
 			return
 		

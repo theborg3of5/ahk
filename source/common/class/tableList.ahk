@@ -316,7 +316,7 @@ class TableList {
 	; PARAMETERS:
 	;  filePath    (I,REQ) - Path to the file to read from. May be a partial path if
 	;                        findConfigFilePath() can find the correct thing.
-	;  chars       (I,OPT) - Array of special characters to override, see class documentation
+	;  chars       (I,OPT) - Associative array of special characters to override, see class documentation
 	;                        for more info. Format (charName is name of key i.e. "SETTING"):
 	;                        	chars[charName] := char
 	;  keyRowChars (I,OPT) - Array of characters and key names to keep separate, see class
@@ -406,7 +406,7 @@ class TableList {
 		if(!uniqueColumn || !filterColumn || !allowedValue)
 			return ""
 		
-		uniqueAry := [] ; uniqueVal => {"ROW_NUM":rowNum, "FILTER_VALUE":filterVal}
+		uniqueRowRefs := {} ; {uniqueValue: {"ROW_NUM":rowNum, "FILTER_VALUE":filterVal}}
 		For rowNum,row in this.table {
 			if(!this.shouldIncludeRow(row, filterColumn, allowedValue))
 				Continue
@@ -414,18 +414,18 @@ class TableList {
 			uniqueVal := row[uniqueColumn]
 			filterVal := row[filterColumn]
 			
-			if(!uniqueAry[uniqueVal]) {
-				uniqueAry[uniqueVal, "ROW_NUM"]      := rowNum
-				uniqueAry[uniqueVal, "FILTER_VALUE"] := filterVal
-			} else if( (filterVal = allowedValue) && (uniqueAry[uniqueVal, "FILTER_VALUE"] != allowedValue) ) {
-				uniqueAry[uniqueVal, "ROW_NUM"]      := rowNum
-				uniqueAry[uniqueVal, "FILTER_VALUE"] := filterVal
+			if(!uniqueRowRefs[uniqueVal]) { ; GDB TODO pull out if + else logic into a function, only do these set statements once
+				uniqueRowRefs[uniqueVal, "ROW_NUM"]      := rowNum
+				uniqueRowRefs[uniqueVal, "FILTER_VALUE"] := filterVal
+			} else if( (filterVal = allowedValue) && (uniqueRowRefs[uniqueVal, "FILTER_VALUE"] != allowedValue) ) {
+				uniqueRowRefs[uniqueVal, "ROW_NUM"]      := rowNum
+				uniqueRowRefs[uniqueVal, "FILTER_VALUE"] := filterVal
 			}
 		}
 		
 		filteredTable := []
-		For _,ary in uniqueAry {
-			rowNum := ary["ROW_NUM"]
+		For _,ref in uniqueRowRefs {
+			rowNum := ref["ROW_NUM"]
 			filteredTable.push(this.table[rowNum])
 		}
 		
@@ -452,10 +452,10 @@ class TableList {
 ; ==============================
 	mods        := []
 	table       := []
-	keyRows     := []
+	keyRows     := {} ; {keyRowLabel: rowObj}
 	indexLabels := []
-	chars       := []
-	keyRowChars := []
+	chars       := {} ; {key: character}
+	keyRowChars := {} ; {character: label}
 	
 	;---------
 	; DESCRIPTION:    Get the array of default special characters.
@@ -464,7 +464,7 @@ class TableList {
 	;                 	chars[name] := character
 	;---------
 	getDefaultChars() {
-		chars := []
+		chars := {}
 		
 		chars["IGNORE"]  := ";"
 		chars["MODEL"]   := "("
@@ -604,15 +604,15 @@ class TableList {
 		if(isEmpty(this.indexLabels))
 			return
 		
-		tempAry := []
+		rowObj := {}
 		For i,value in rowAry {
 			idxLabel := this.indexLabels[i]
 			if(idxLabel)
-				tempAry[idxLabel] := value
+				rowObj[idxLabel] := value
 			else
-				tempAry[i] := value
+				rowObj[i] := value
 		}
-		rowAry := tempAry
+		rowAry := rowObj
 	}
 
 	;---------
@@ -652,12 +652,12 @@ class TableList {
 	;---------
 	processModel(row) {
 		rowAry := row.split(A_Tab)
-		this.indexLabels := []
+		this.indexLabels := [] ; GDB TODO not currently an array, but could be
 		
 		rowAry.RemoveAt(1) ; Get rid of the "(" bit.
 		
-		For i,r in rowAry
-			this.indexLabels[i] := r
+		For index,label in rowAry
+			this.indexLabels[index] := label
 	}
 	
 	;---------
@@ -726,8 +726,8 @@ class TableList {
 	;  row (I,REQ) - Key row that we're processing (string).
 	;---------
 	processKey(row) {
-		rowAry := row.split(A_Tab)
 		firstChar := row.sub(1, 1)
+		rowAry := row.split(A_Tab)
 		
 		rowAry.RemoveAt(1) ; Get rid of the separate char bit (")").
 		this.applyIndexLabels(rowAry)

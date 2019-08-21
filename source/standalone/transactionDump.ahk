@@ -18,7 +18,7 @@ SetWorkingDir, % MainConfig.path["TX_DIFF"]
 s := new Selector("epicEnvironments.tls")
 s.addExtraOverrideFields(["TX_ID"])
 
-defaultOverrideData := []
+defaultOverrideData := {}
 defaultOverrideData["TX_ID"] := txId ; Default in the tx name from the command line
 
 data := s.selectGui("", "Dump Data Transaction from Environment to File", defaultOverrideData)

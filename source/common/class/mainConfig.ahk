@@ -96,7 +96,7 @@ class MainConfig {
 	}
 	machineSelectorFilter {
 		get {
-			filter := []
+			filter := {}
 			filter["COLUMN"] := "MACHINE"
 			filter["VALUE"]  := this.machine
 			return filter
@@ -120,7 +120,7 @@ class MainConfig {
 	}
 	contextSelectorFilter {
 		get {
-			filter := []
+			filter := {}
 			filter["COLUMN"] := "CONTEXT"
 			filter["VALUE"]  := this.context
 			return filter
@@ -251,14 +251,14 @@ class MainConfig {
 ; == Private ===================
 ; ==============================
 	static initDone := false
-	static settings := []
-	static windows  := []
-	static paths    := [] ; KEY => PATH
-	static programs := []
-	static games    := []
-	static privates := [] ; KEY => VALUE
+	static settingsINIPath := ""
+	static settings := {} ; {NAME: VALUE}
+	static windows  := {} ; {NAME: WindowInfo}
+	static paths    := {} ; {KEY: PATH}
+	static programs := {} ; {NAME: ProgramInfo}
+	static games    := [] ; [{NAME:name, EXE:exe}]
+	static privates := {} ; {KEY: VALUE}
 	
-	static settingsINIPath
 	
 	loadPrivates(filePath) {
 		tl := new TableList(filePath)
@@ -274,28 +274,28 @@ class MainConfig {
 	loadSettings(filePath) {
 		this.settingsINIPath := filePath
 		
-		settingsAry := []
-		settingsAry["MACHINE"]         := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from MainConfig.Machine_* constants
-		settingsAry["CONTEXT"]         := IniRead(this.settingsINIPath, "Main", "CONTEXT")         ; Which context this is, from MainConfig.Context_* constants
-		settingsAry["MEDIA_PLAYER"]    := IniRead(this.settingsINIPath, "Main", "MEDIA_PLAYER")    ; What program the media keys should deal with
+		settings := {}
+		settings["MACHINE"]         := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from MainConfig.Machine_* constants
+		settings["CONTEXT"]         := IniRead(this.settingsINIPath, "Main", "CONTEXT")         ; Which context this is, from MainConfig.Context_* constants
+		settings["MEDIA_PLAYER"]    := IniRead(this.settingsINIPath, "Main", "MEDIA_PLAYER")    ; What program the media keys should deal with
 		
-		; DEBUG.popup("Settings", settingsAry)
-		return settingsAry
+		; DEBUG.popup("Settings", settings)
+		return settings
 	}
 	
 	loadWindows(filePath) {
 		tl := new TableList(filePath)
 		windowsTable := tl.getTable()
 		
-		windowsAry := []
+		windows := {}
 		For _,row in windowsTable {
 			winInfo := new WindowInfo(row)
 			name := winInfo.name
 			if(name)
-				windowsAry[name] := winInfo
+				windows[name] := winInfo
 		}
 		
-		return windowsAry
+		return windows
 	}
 	
 	loadPaths(filePath) {
@@ -327,30 +327,30 @@ class MainConfig {
 	}
 	
 	getSystemPathTags() {
-		tagsAry := []
+		tags := {}
 		
-		tagsAry["PROGRAM_DATA"]       := A_AppDataCommon                        ; C:\ProgramData
-		tagsAry["USER_ROOT"]          := EnvGet("HOMEDRIVE") EnvGet("HOMEPATH") ; C:\Users\<UserName>
-		tagsAry["USER_APPDATA_LOCAL"] := EnvGet("LOCALAPPDATA")                 ; C:\Users\<UserName>\AppData\Local
-		tagsAry["USER_TEMP"]          := A_Temp                                 ; C:\Users\<UserName>\AppData\Local\Temp
-		tagsAry["USER_APPDATA"]       := A_AppData                              ; C:\Users\<UserName>\AppData\Roaming
-		tagsAry["USER_START_MENU"]    := A_StartMenu                            ; C:\Users\<UserName>\AppData\Roaming\Microsoft\Windows\Start Menu
-		tagsAry["USER_STARTUP"]       := A_Startup                              ; C:\Users\<UserName>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
-		tagsAry["USER_DESKTOP"]       := A_Desktop                              ; C:\Users\<UserName>\Desktop
-		tagsAry["PROGRAM_FILES"]      := A_ProgramFiles                         ; C:\Program Files
-		tagsAry["PROGRAM_FILES_86"]   := EnvGet("ProgramFiles(x86)")            ; C:\Program Files (x86)
-		tagsAry["WINDOWS"]            := A_WinDir                               ; C:\Windows
-		tagsAry["CMD"]                := A_ComSpec                              ; C:\Windows\system32\cmd.exe
+		tags["PROGRAM_DATA"]       := A_AppDataCommon                        ; C:\ProgramData
+		tags["USER_ROOT"]          := EnvGet("HOMEDRIVE") EnvGet("HOMEPATH") ; C:\Users\<UserName>
+		tags["USER_APPDATA_LOCAL"] := EnvGet("LOCALAPPDATA")                 ; C:\Users\<UserName>\AppData\Local
+		tags["USER_TEMP"]          := A_Temp                                 ; C:\Users\<UserName>\AppData\Local\Temp
+		tags["USER_APPDATA"]       := A_AppData                              ; C:\Users\<UserName>\AppData\Roaming
+		tags["USER_START_MENU"]    := A_StartMenu                            ; C:\Users\<UserName>\AppData\Roaming\Microsoft\Windows\Start Menu
+		tags["USER_STARTUP"]       := A_Startup                              ; C:\Users\<UserName>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+		tags["USER_DESKTOP"]       := A_Desktop                              ; C:\Users\<UserName>\Desktop
+		tags["PROGRAM_FILES"]      := A_ProgramFiles                         ; C:\Program Files
+		tags["PROGRAM_FILES_86"]   := EnvGet("ProgramFiles(x86)")            ; C:\Program Files (x86)
+		tags["WINDOWS"]            := A_WinDir                               ; C:\Windows
+		tags["CMD"]                := A_ComSpec                              ; C:\Windows\system32\cmd.exe
 		
-		return tagsAry
+		return tags
 	}
 	
 	getCalculatedPathTags() {
-		tagsAry := []
+		tags := {}
 		
-		tagsAry["AHK_ROOT"] := getParentFolder(A_LineFile, 4) ; Top-level ahk folder, this file lives in <AHK_ROOT>\source\common\class\
+		tags["AHK_ROOT"] := getParentFolder(A_LineFile, 4) ; Top-level ahk folder, this file lives in <AHK_ROOT>\source\common\class\
 		
-		return tagsAry
+		return tags
 	}
 	
 	loadPrograms(filePath) {
@@ -359,12 +359,12 @@ class MainConfig {
 		; DEBUG.popupEarly("MainConfig","loadPrograms", "Unique table",programsTable)
 		
 		; Index it by name.
-		programsAry := []
+		programs := {}
 		For _,row in programsTable
-			programsAry[row["NAME"]] := new ProgramInfo(row)
-		; DEBUG.popupEarly("MainConfig","loadPrograms", "Finished programs",programsAry)
+			programs[row["NAME"]] := new ProgramInfo(row)
+		; DEBUG.popupEarly("MainConfig","loadPrograms", "Finished programs",programs)
 		
-		return programsAry
+		return programs
 	}
 	
 	loadGames(filePath) {

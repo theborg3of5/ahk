@@ -8,7 +8,7 @@ global trayInfo := new ScriptTrayInfo("AHK: Vim Bindings for Chrome/Firefox")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub, trayInfo)
 
 global vimKeysOn := 1
-states := []
+states := {}
 states["A_IsSuspended", 1]                 := "vimSuspend.ico"
 states["A_IsSuspended", 0, "vimKeysOn", 0] := "vimPause.ico"
 states["A_IsSuspended", 0, "vimKeysOn", 1] := "vim.ico"
@@ -177,12 +177,12 @@ return
 
 
 getExcludedTitles() {
-	titles := Object()
-	titles.insert(" - Gmail")
-	titles.insert(" - Feedly")
-	titles.insert(" - Reddit")
-	titles.insert("Google Calendar - ")
-	return titles
+	titlesAry := []
+	titlesAry.push(" - Gmail")
+	titlesAry.push(" - Feedly")
+	titlesAry.push(" - Reddit")
+	titlesAry.push("Google Calendar - ")
+	return titlesAry
 }
 
 

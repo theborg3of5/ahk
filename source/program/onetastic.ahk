@@ -170,47 +170,62 @@ class OneTastic {
 		if(startXML = "")
 			return []
 		
-		; Read all functions' XML and corresponding dependencies into function-name-indexed associative arrays ; GDB TODO pull this chunk out into a function
-		origWorkingDir := A_WorkingDir ; GDB TODO make a set with output of original function for working dir
-		SetWorkingDir, % MainConfig.path["ONETASTIC_FUNCTIONS"]
-		functionXMLs := {} ; {functionName: xml}
-		functionDependencies := {} ; {functionName: [dependencyName]}
-		Loop, Files, % "*.xml"
-		{
-			; Skip files that start with . (like function template)
-			if(A_LoopFileName.startsWith("."))
-				Continue
-			
-			functionXML := FileRead(A_LoopFileName)
-			functionName := functionXML.firstBetweenStrings("<Comment text=""", "(") ; Function signature is in first comment line, i.e. <Comment text="addWideOutlineToPage($page)" />
-			if(!functionName)
-				Continue
-			
-			functionXMLs[functionName]    := functionXML
-			functionDependencies[functionName] := OneTastic.getDependenciesFromXML(functionXML)
-		}
-		SetWorkingDir, % origWorkingDir
-		; DEBUG.popup("functionDependencies",functionDependencies, "functionXMLs",functionXMLs)
+		; Read in info about all functions
+		allFunctionData := OneTastic.getFunctionDataFromFiles()
 		
-		; Starting XML -> array of initial dependencies
+		; Start with dependencies directly listed in start XML
 		startDependenciesAry := OneTastic.getDependenciesFromXML(startXML)
 		; DEBUG.popup("startXML",startXML, "startDependenciesAry",startDependenciesAry)
 		
 		; Generate an array of the total dependencies in depth-first order
 		totalDependenciesAry := []
 		For _,functionName in startDependenciesAry {
-			functionDependenciesAry := OneTastic.compileDependenciesForFunction(functionName, functionXMLs, functionDependencies)
+			functionDependenciesAry := OneTastic.compileDependenciesForFunction(functionName, allFunctionData["DEPENDENCIES"])
 			totalDependenciesAry.appendArray(functionDependenciesAry)
 		}
 		totalDependenciesAry.removeDuplicates() ; Remove duplicates as we can't import functions more than once
 		
 		; Generate final array of XMLs in same order
-		dependencyXMLsAry := []
+		totalXMLsAry := []
 		For _,dependencyName in totalDependenciesAry
-			dependencyXMLsAry.push(functionXMLs[dependencyName])
+			totalXMLsAry.push(allFunctionData["XML", dependencyName])
 		
-		; DEBUG.toast("dependencyXMLsAry",dependencyXMLsAry)
-		return dependencyXMLsAry
+		; DEBUG.toast("totalXMLsAry",totalXMLsAry)
+		return totalXMLsAry
+	}
+	
+	
+	; Read all functions' XML and corresponding dependencies into function-name-indexed associative arrays
+	
+	
+	;---------
+	; DESCRIPTION:    Read all functions' XML and dependencies from files into an associative array.
+	; RETURNS:        Array of function data. Format:
+	;                    data["DEPENDENCIES", functionName] := [dependencyFunctionName1, ...]
+	;                    data["XML",          functionName] := function XML
+	;---------
+	getFunctionDataFromFiles() {
+		allFunctionData := {} ; {"DEPENDENCIES":{functionName: [dependencyNames]}, "XML":{functionName: xml}}
+		
+		origWorkingDir := setWorkingDirectory(MainConfig.path["ONETASTIC_FUNCTIONS"])
+		Loop, Files, % "*.xml"
+		{
+			; Skip files that start with . (like function template)
+			if(A_LoopFileName.startsWith("."))
+				Continue
+			
+			xml := FileRead(A_LoopFileName)
+			name := xml.firstBetweenStrings("<Comment text=""", "(") ; Function signature is in first comment line, i.e. <Comment text="addWideOutlineToPage($page)" />
+			if(!name)
+				Continue
+			
+			allFunctionData["DEPENDENCIES", name] := OneTastic.getDependenciesFromXML(xml)
+			allFunctionData["XML",          name] := xml
+		}
+		setWorkingDirectory(origWorkingDir)
+		
+		; DEBUG.popup("allFunctionData",allFunctionData)
+		return allFunctionData
 	}
 
 	;---------
@@ -251,22 +266,19 @@ class OneTastic {
 	;                 function. The array is built in a depth-first manner, recursing through all
 	;                 dependencies of each function.
 	; PARAMETERS:
-	;  functionName         (I,REQ) - Name of the function to generate a total dependency array for.
-	;  functionXMLs         (I,REQ) - Associative array of XML strings for all functions that we might
-	;                                 find in our recursive search. Format:
-	;                                    functionXMLs[functionName] := functionXML
-	;  functionDependencies (I,REQ) - Associative array of dependencies for each function. Format:
-	;                                 functionDependencies[functionName] := [dependencyName1, dependencyName2, ...]
+	;  functionName            (I,REQ) - Name of the function to generate a total dependency array for.
+	;  allFunctionDependencies (I,REQ) - Associative array of dependencies for each function. Format:
+	;                                       allFunctionDependencies[functionName] := [dependencyName1, dependencyName2, ...]
 	; RETURNS:        Array of all dependencies required by the given function, in depth-first order.
 	; NOTES:          There's no checking for duplicates as we generate the array.
 	;---------
-	compileDependenciesForFunction(functionName, functionXMLs, functionDependencies) {
+	compileDependenciesForFunction(functionName, allFunctionDependencies) {
 		outAry := [functionName]
 		if(functionName = "")
 			return outAry
 		
-		For _,dependencyName in functionDependencies[functionName] {
-			subDependenciesAry := OneTastic.compileDependenciesForFunction(dependencyName, functionXMLs, functionDependencies)
+		For _,dependencyName in allFunctionDependencies[functionName] {
+			subDependenciesAry := OneTastic.compileDependenciesForFunction(dependencyName, allFunctionDependencies)
 			outAry.appendArray(subDependenciesAry)
 			; DEBUG.popup("functionName",functionName, "dependencyName",dependencyName, "subDependenciesAry",subDependenciesAry, "outAry",outAry)
 		}

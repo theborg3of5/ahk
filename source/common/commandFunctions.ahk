@@ -210,5 +210,10 @@
 		DetectHiddenWindows, % new
 		return old
 	}
+	setWorkingDirectory(new) {
+		old := A_WorkingDir
+		SetWorkingDir, % new
+		return old
+	}
 }
 

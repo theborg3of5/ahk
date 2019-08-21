@@ -653,12 +653,8 @@ class TableList {
 	;---------
 	processModel(row) {
 		rowAry := row.split(A_Tab)
-		this.indexLabels := [] ; GDB TODO not currently an array, but could be
-		
-		rowAry.RemoveAt(1) ; Get rid of the "(" bit.
-		
-		For index,label in rowAry
-			this.indexLabels[index] := label
+		rowAry.RemoveAt(1) ; Get rid of the "(" bit and shift elements to fill.
+		this.indexLabels := rowAry
 	}
 	
 	;---------

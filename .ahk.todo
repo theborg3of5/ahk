@@ -1,7 +1,6 @@
 # New Ideas
 	mergeArrays() should probably be renamed/clarified - just intended for associative arrays (objects, basically)
 		Consider making it variadic, too
-	TableList.processModel() - can't we just use delete/removeAt (whichever shifts stuff) and not have to manually copy over indices?
 	Consider a new function that does getFirstLineOfSelectedText().clean(), since we seem to do that quite often.
 	Clean up dateTime.doDateMath() - could use functions for padding, and clean up variable names (particularly iterators)
 	Review usage of [] vs {} for associative arrays

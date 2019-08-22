@@ -6,8 +6,6 @@
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
 		Could take into account whether there would be only 1 small word moved down
 		Could handle multiple line breaks
-	FormatList - consider adding support for ranges (maybe colons or hyphens?)
-		Both input and output?
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
 		Options:
 			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)

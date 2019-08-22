@@ -187,6 +187,12 @@ class FormatList {
 			listAry := listObject.split("`r`n`r`n", " `t`r`n") ; Drop leading/trailing spaces, tabs, newlines
 		
 		listAry.removeEmpties()
+		
+		tempAry := []
+		For _,item in listAry.clone()
+			tempAry.appendArray(expandList(item))
+		listAry := tempAry
+		
 		return listAry
 	}
 	

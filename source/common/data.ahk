@@ -149,7 +149,7 @@ expandNumericRange(rangeString) {
 	
 	; Non-numeric ranges are not allowed.
 	if(!start.isNum() || !end.isNum())
-		return []
+		return [rangeString]
 	
 	if(start = end)
 		return [start] ; Single-element range

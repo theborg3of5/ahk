@@ -92,7 +92,7 @@ parseDateTime(input, format := "", dateOrTime := "") { ; dateOrTime = "d" for da
 }
 
 ; Do addition/subtraction on dates where the traditional += fails.
-doDateMath(start, operator := "+", diff := 0, unit := "d") { ; unit = "d"
+doDateMath(start, operator := "+", diff := 0, unit := "d") {
 	outDate := start
 	dateObj := splitDateTime(start)
 	
@@ -117,19 +117,8 @@ doDateMath(start, operator := "+", diff := 0, unit := "d") { ; unit = "d"
 	}
 	
 	; Pad out any lengths that went down to the wrong number of digits.
-	For i,x in dateObj {
-		if(i = "year")
-			correctLen := 4
-		else
-			correctLen := 2
-		
-		currLen := x.length()
-		; DEBUG.popup("Index", i, "Correct length", correctLen, "Current length", currLen)
-		while(currLen < correctLen) {
-			dateObj[i] := "0" x
-			currLen++
-		}
-	}
+	For unit,amount in dateObj
+		dateObj[unit] := amount.prePadToLength(2, "0") ; Technically year could be 4, but we're never going to deal with dates prior to the year 1000.
 	
 	outDate := dateObj["year"] dateObj["month"] dateObj["day"] dateObj["hour"] dateObj["minute"] dateObj["second"]
 	; DEBUG.popup("doDateMath","return", "Start",start, "Y",dateObj["year"], "M",dateObj["month"], "D",dateObj["day"], "H",dateObj["hour"], "M",dateObj["minute"], "S",dateObj["second"], "Diff",diff, "Unit",unit, "Output",outDate)

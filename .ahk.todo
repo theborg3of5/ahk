@@ -1,5 +1,4 @@
 # New Ideas
-	Clean up dateTime.doDateMath() - could use functions for padding, and clean up variable names (particularly iterators)
 	Make EMC2 locking toggle hotkey work for other INIs that support view-only too?
 		Could tell the INI by the title
 	Could we do something more consistent for some of the social windows (Telegram, Teams, etc.), where we can somehow just send an escape keystroke instead of closing?

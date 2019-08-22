@@ -124,13 +124,13 @@ reduceTableToColumn(inputTable, valueColumn, indexColumn := "") {
 ; Expand lists that can optionally contain numeric ranges.
 ; Note that ranges with non-numeric values will be ignored (not included in the output array).
 ; Example:
-;  1,2:3,7,6:4 -> [1, 2, 3, 7, 6, 5, 4]
+;  1,2:3,7,6-4 -> [1, 2, 3, 7, 6, 5, 4]
 expandList(listString) {
 	elementAry := listString.split(",")
 	outAry := []
 	
 	For _,element in elementAry {
-		if(element.contains(":")) { ; Treat it as a numeric range and expand it
+		if(element.contains(":") || element.contains("-")) { ; Treat it as a numeric range and expand it
 			rangeAry := expandNumericRange(element) ; If it's not numeric, this will return [] and we'll ignore that element entirely.
 			outAry.appendArray(rangeAry)
 		} else {
@@ -141,9 +141,9 @@ expandList(listString) {
 	return outAry
 }
 
-; Expands numeric ranges (i.e. 1:5 -> [1, 2, 3, 4, 5]).
+; Expands numeric ranges (i.e. 1:5 or 1-5 -> [1, 2, 3, 4, 5]).
 expandNumericRange(rangeString) {
-	splitAry := rangeString.split(":")
+	splitAry := rangeString.split([":", "-"])
 	start := splitAry[1]
 	end   := splitAry[2]
 	

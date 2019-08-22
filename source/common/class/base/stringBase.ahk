@@ -430,7 +430,7 @@ class StringBase {
 	;---------
 	; DESCRIPTION:    A wrapper for StrSplit() that returns an actual array (not an object).
 	; PARAMETERS:
-	;  delimiters             (I,OPT) - Delimiter(s) to split on
+	;  delimiters             (I,OPT) - Delimiter (or array of delimiters) to split on
 	;  surroundingCharsToDrop (I,OPT) - Characters to drop from around each piece
 	; RETURNS:        Array of split-up string
 	;---------

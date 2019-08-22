@@ -8,7 +8,6 @@
 	^h::Send, ^7     ; Make ^h for server object, similar to ^g for client object.
 	^+8::Send, !o    ; Contact comment, EpicStudio-style.
 	$F5::+F5         ; Make F5 work everywhere by mapping it to shift + F5.
-	^l::Send, !+{F5} ; Toggle lock in web activities
 	^+t::return      ; Block ^+t login from Hyperspace - it does very strange zoom-in things and other nonsense.
 	
 	; Link and record number things based on the current record.
@@ -29,6 +28,13 @@
 	; Disable Ctrl+Up/Down hotkeys, never hit these intentionally.
 	^Down::return
 	^Up::  return
+#If
+
+; Lock/unlock hotkeys by INI
+#If MainConfig.isWindowActive("EMC2 QAN") || MainConfig.isWindowActive("EMC2 XDS")
+	^l::Send, !l
+#If MainConfig.isWindowActive("EMC2 DLG")
+	^l::Send, !+{F5}
 #If
 
 

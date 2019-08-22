@@ -24,6 +24,7 @@
 	Epic NFS 3 Day						EPIC_NFS_3DAY
 	Epic NFS 3 Day (Unix)			EPIC_NFS_3DAY_UNIX
 	Epic NFS Ask						EPIC_NFS_ASK
+	Epic Temp Daily					EPIC_TEMP_DAILY
 	Epic Personal						EPIC_PERSONAL
 	Epic Source S1						EPIC_SOURCE_S1
 	Epic Source S2						EPIC_SOURCE_S2

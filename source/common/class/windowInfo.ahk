@@ -31,7 +31,6 @@ class WindowInfo {
 	;                                  ["PRIORITY"]
 	;                                      - If more than one WindowInfo instance matches a given
 	;                                        window, this can be used to break the tie.
-	; RETURNS:        Reference to a new WindowInfo object
 	;---------
 	__New(windowAry) {
 		this.windowName  := windowAry["NAME"]

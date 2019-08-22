@@ -16,7 +16,6 @@ class MousePosition {
 	
 	;---------
 	; DESCRIPTION:    Create a new MousePosition object which stores off the current mouse position.
-	; RETURNS:        Reference to new MousePosition instance
 	;---------
 	__New() {
 		MouseGetPos(x, y)

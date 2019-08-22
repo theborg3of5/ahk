@@ -30,6 +30,7 @@ class ProgramInfo {
          return this.programName
       }
    }
+	
 	;---------
 	; DESCRIPTION:    Full filepath to launch the program
 	;---------

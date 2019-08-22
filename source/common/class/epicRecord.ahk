@@ -32,7 +32,11 @@ class EpicRecord {
 	id    := ""
 	title := ""
 	
-	; Constructed string representing the record.
+	;---------
+	; DESCRIPTION:    Constructed string representing the record:
+	;                   If we have a title: TITLE [R INI ID]
+	;                   If we don't have a title: R INI ID
+	;---------
 	recordString {
 		get {
 			if(!this.selectMissingInfo())

@@ -12,6 +12,24 @@ class ObjectBase {
 ; == Public ====================
 ; ==============================
 	;---------
+	; DESCRIPTION:    Temporary override for built-in .count() function, until everywhere I use AHK
+	;                 is updated to at least 1.1.29.00.
+	; RETURNS:        Number of key/element pairs in the object
+	;---------
+	count() {
+		functionName := "ObjCount"
+		if(IsFunc(functionName))
+			return %functionName%(this)
+		
+		; The below is to support prior to AHK v1.1.29.00 (where ObjCount()/.count() did not yet exist).
+		keyCount := 0
+		For _,_ in this
+			keyCount++
+		
+		return keyCount
+	}
+	
+	;---------
 	; DESCRIPTION:    Check whether this object contains a particular value.
 	; PARAMETERS:
 	;  needle (I,REQ) - The value to search the object for.

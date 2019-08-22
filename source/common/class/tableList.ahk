@@ -73,7 +73,6 @@
 			[]
 			
 			; Music variations per machine
-			[{PATH}e:\Music]
 			[PATH.addToEnd(\Music)]
 			   Music          MUSIC          C:\Users\user     HOME_DESKTOP
 			   Music          MUSIC          C:\Users\user     HOME_LAPTOP

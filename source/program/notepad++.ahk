@@ -207,15 +207,18 @@ class NotepadPlusPlus {
 	;                 	Output: "var1",var1, "var2",var2
 	;---------
 	generateDebugParams(varList) {
-		paramsAry := varList.split(",", A_Space) ; Split on comma and drop leading/trailing spaces
-		; DEBUG.toast("paramsAry",paramsAry)
-		
 		paramsString := ""
-		For i,param in paramsAry {
-			if(i > 1)
-				paramsString .= ", "
-			paramsString .= """" param """" "," param
+		paramsAry := varList.split(",", A_Space) ; Split on comma and drop leading/trailing spaces
+		
+		; Special case: if first param starts with +, it's a top-level message that should be shown with no corresponding data.
+		if(paramsAry[1].startsWith("+")) {
+			label := paramsAry[1].afterString("+")
+			paramsString .= DOUBLE_QUOTE label DOUBLE_QUOTE ","
+			paramsAry.RemoveAt(1)
 		}
+		
+		For i,param in paramsAry
+			paramsString := paramsString.appendPiece(DOUBLE_QUOTE param DOUBLE_QUOTE "," param, ", ")
 		
 		return paramsString
 	}

@@ -217,8 +217,10 @@ class NotepadPlusPlus {
 			paramsAry.RemoveAt(1)
 		}
 		
-		For i,param in paramsAry
-			paramsString := paramsString.appendPiece(DOUBLE_QUOTE param DOUBLE_QUOTE "," param, ", ")
+		For i,param in paramsAry {
+			label := DOUBLE_QUOTE escapeCharUsingRepeat(param, DOUBLE_QUOTE) DOUBLE_QUOTE
+			paramsString := paramsString.appendPiece(label "," param, ", ")
+		}
 		
 		return paramsString
 	}

@@ -61,19 +61,20 @@
 			(  NAME           ABBREV         PATH              MACHINE
 			
 			; AHK Folders
-			[{PATH}b:C:\ahk\]
+			[PATH.addToStart(C:\ahk\)]
 			   AHK Config     AHK_CONFIG     config
 			   AHK Source     AHK_SOURCE     source
 			[]
 			
 			; User Folders
-			[{PATH}b:C:\Users\user\]
+			[PATH.addToStart(C:\Users\user\)]
 			   Downloads      DOWNLOADS      Downloads
 			   VB6 Compile    VB6_COMPILE    Dev\Temp\Compile  EPIC_LAPTOP
 			[]
 			
 			; Music variations per machine
 			[{PATH}e:\Music]
+			[PATH.addToEnd(\Music)]
 			   Music          MUSIC          C:\Users\user     HOME_DESKTOP
 			   Music          MUSIC          C:\Users\user     HOME_LAPTOP
 			   Music          MUSIC          D:                EPIC_LAPTOP
@@ -93,9 +94,9 @@
 				Labels all following mods on the same row with the given number, which can be used to specifically clear them later.
 				Example:
 					Mod line
-						[+5|b:aaa|e:zzz]
+						[+5|COL.addToStart(aaa)|COL.addToEnd(zzz)]
 					Result
-						Rows after this mod line will have "aaa" prepended and "zzz" appended to their first column (same as if we'd left out the "+5|").
+						Rows after this mod line will have "aaa" prepended and "zzz" appended to their COL column (same as if we'd left out the "+5|").
 				
 			-n - Remove mods with label (n can be any number)
 				Removes all currently active mods with this label. Typically the only thing on its row.
@@ -115,13 +116,13 @@
 				File B
 					(     NAME           TYPE     COLOR
 					
-					[{COLOR}r:RED]
-					   [+1|{TYPE}r:FRUIT]
+					[COLOR.replaceWith(RED)]
+					   [+1|TYPE.replaceWith(FRUIT)]
 					      Apple
 					      Strawberry
 					      Cherry
 					   [-1]
-					   [+2|{TYPE}r:VEGGIE]
+					   [+2|TYPE.replaceWith(VEGGIE)]
 					      Bell pepper    VEGGIE
 					      Radish         VEGGIE
 					   [-2]
@@ -225,19 +226,19 @@
 			(  NAME           ABBREV         PATH              MACHINE
 			
 			; AHK Folders
-			[{PATH}b:C:\ahk\]
+			[PATH.addToStart(C:\ahk\)]
 			   AHK Config     AHK_CONFIG     config
 			   AHK Source     AHK_SOURCE     source
 			[]
 			
 			; User Folders
-			[{PATH}b:C:\Users\user\]
+			[PATH.addToStart(C:\Users\user\)]
 			   Downloads      DOWNLOADS      Downloads
 			   VB6 Compile    VB6_COMPILE    Dev\Temp\Compile  EPIC_LAPTOP
 			[]
 			
 			; Music variations per machine
-			[{PATH}e:\Music]
+			[PATH.addToEnd(\Music)]
 			   Music          MUSIC          C:\Users\user     HOME_DESKTOP
 			   Music          MUSIC          C:\Users\user     HOME_LAPTOP
 			   Music          MUSIC          D:                EPIC_LAPTOP

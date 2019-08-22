@@ -2,11 +2,11 @@
 	
 	A mod action is defined by a string using a particular syntax:
 		COLUMN.OPERATION(TEXT)
-			COLUMN    - The name of the column that this mod action should apply to. This portion (including the {}) is optional - if not given the mod will affect the first column in the table.
+			COLUMN    - The name of the column that this mod action should apply to.
 			OPERATION - A string (that matches one of the TableListMod.Operation_* constants below) what we want to do (see "Operations" section).
 			TEXT      - The text that is used by the operation (see "Operations" section).
 		Example:
-			{PATH}b:C:\users\
+			PATH.addToStart(C:\users\)
 		Result:
 			All following rows will have the string "C:\users\" added to the beginning of their "PATH" column.
 	
@@ -18,8 +18,8 @@
 				Replace the column.
 				Example:
 					Mod line
-						[r:z]
-					Normal line
+						[COL.replaceWith(z)]
+					Normal line (COL column)
 						AAA
 					Result
 						z
@@ -28,8 +28,8 @@
 				Prepend to the column (add to the beginning).
 				Example:
 					Mod line
-						[b:z]
-					Normal line
+						[COL.addToStart(z)]
+					Normal line (COL column)
 						AAA
 					Result
 						zAAA
@@ -38,8 +38,8 @@
 				Append to the column (add to the end).
 				Example:
 					Mod line
-						[e:z]
-					Normal line
+						[COL.addToEnd(z)]
+					Normal line (COL column)
 						AAA
 					Result
 						AAAz

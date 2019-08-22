@@ -79,7 +79,6 @@
 			listConverter
 			mainConfig
 			selectorGui
-			tableListMod (mod syntax is out of date in header)
 		functions
 			clipboard
 			data

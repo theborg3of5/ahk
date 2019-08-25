@@ -24,13 +24,13 @@
 []
 
 ; Monthlies
-	Schedule haircut												1
 	Put away local backup drives								2
 	Book OTF															21
 	Plug in local backup drives								LAST
 	Check FatMax charge											-			SUN				1
-	Periodic cleaning (small trash cans, kitchen)		-			SUN				2
 	Weigh cats														-			WED				2
+	Schedule haircut												-			SAT				2
+	Periodic cleaning (small trash cans, kitchen)		-			SUN				2
 
 ; Yearlies
 	Check various airline rewards points					-			SAT				1							JAN

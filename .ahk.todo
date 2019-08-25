@@ -1,4 +1,5 @@
 # New Ideas
+	Add hotkey to launch test.ahk (so it doesn't need to be always open, only .todo)
 	Make dbpop handle commas within quotes/parens?
 	Could we do something more consistent for some of the social windows (Telegram, Teams, etc.), where we can somehow just send an escape keystroke instead of closing?
 		Consistent hotkey (backtick, perhaps)?

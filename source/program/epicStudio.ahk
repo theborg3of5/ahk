@@ -18,7 +18,7 @@
 	^+l::EpicStudio.linkRoutineToCurrentDLG()
 	
 	; Generate and insert snippet
-	:X:.snip::EpicStudio.insertMSnippet()
+	:X:.snip::MSnippets.insertMSnippet()
 	
 	; Debug, auto-search for workstation ID.
 	~F5::EpicStudio.runDebug("ws:" MainConfig.private["WORK_COMPUTER_NAME"])
@@ -103,38 +103,6 @@ class EpicStudio {
 	}
 	
 	;---------
-	; DESCRIPTION:    Generate and insert an M snippet.
-	;---------
-	insertMSnippet() {
-		; Get current line for analysis.
-		Send, {End}{Home 2} ; Get to very start of line (before indentation)
-		Send, {Shift Down}{End}{Shift Up} ; Select entire line (including indentation)
-		line := getSelectedText()
-		Send, {End} ; Get to end of line
-		
-		line := line.removeFromStart("`t") ; Tab at the start of every line
-		
-		numIndents := 0
-		while(line.startsWith(". ")) {
-			numIndents++
-			line := line.removeFromStart(". ")
-		}
-		
-		; If it's an empty line with just a semicolon, remove the semicolon.
-		if(line = ";")
-			Send, {Backspace}
-		
-		s := new Selector("MSnippets.tls")
-		data := s.selectGui()
-		
-		type := data["TYPE"]
-		if(data["TYPE"] = "LOOP")
-			snipString := EpicStudio.buildMLoop(data, numIndents)
-		
-		sendTextWithClipboard(snipString) ; Better to send with the clipboard, otherwise we have to deal with EpicStudio adding in dot-levels itself.
-	}
-	
-	;---------
 	; DESCRIPTION:    Run EpicStudio in debug mode, or continue debugging if we're already in it.
 	; PARAMETERS:
 	;  searchString (I,REQ) - String to automatically search for in the attach process popup
@@ -205,39 +173,82 @@ class EpicStudio {
 		Toast.showError("Failed to get code location")
 		return false
 	}
+}
+
+/*
+	Static class for inserting snippets of M code into EpicStudio.
+*/
+class MSnippets {
+
+; ==============================
+; == Public ====================
+; ==============================
+	;---------
+	; DESCRIPTION:    Generate and insert an M snippet.
+	;---------
+	insertMSnippet() {
+		; Get current line for analysis.
+		Send, {End}{Home 2}               ; Get to very start of line (before indentation)
+		Send, {Shift Down}{End}{Shift Up} ; Select entire line (including indentation)
+		line := getSelectedText()
+		Send, {End}                       ; Get to end of line
+		
+		line := line.removeFromStart("`t") ; Tab at the start of every line
+		
+		numIndents := 0
+		while(line.startsWith(". ")) {
+			numIndents++
+			line := line.removeFromStart(". ")
+		}
+		
+		; If it's an empty line with just a semicolon, remove the semicolon.
+		if(line = ";")
+			Send, {Backspace}
+		
+		s := new Selector("MSnippets.tls")
+		data := s.selectGui()
+		
+		if(data["TYPE"] = "LOOP")
+			snipString := MSnippets.buildMLoop(data, numIndents)
+		else if(data["TYPE"] = "LIST")
+			snipString := MSnippets.buildList(data, numIndents)
+		
+		sendTextWithClipboard(snipString) ; Better to send with the clipboard, otherwise we have to deal with EpicStudio adding in dot-levels itself.
+	}
 	
+	
+; ==============================
+; == Private ===================
+; ==============================
 	;---------
 	; DESCRIPTION:    Generate an M for loop with the given data.
 	; PARAMETERS:
 	;  data       (I,REQ) - Array of data needed to generate the loop. Important subscripts:
-	;                          data["SUBTYPE"] - The type of loop this is.
-	;  numIndents (I,OPT) - The starting indentation (so that the line after can be indented 1
-	;                       more). Defaults to 0 (no indentation).
-	; RETURNS:        String of the text for the generated for loop.
+	;                          ["SUBTYPE"] - The type of loop this is.
+	;  numIndents (I,REQ) - The starting indentation (so that the line after can be indented 1 more).
+	; RETURNS:        String containing the generated for loop.
 	;---------
-	buildMLoop(data, numIndents := 0) {
+	buildMLoop(data, numIndents) {
 		loopString := ""
 		
-		subType := data["SUBTYPE"]
+		if(data["SUBTYPE"] = "ARRAY_GLO") {
+			loopString .= MSnippets.buildMArrayLoop(data, numIndents)
 		
-		if(subType = "ARRAY_GLO") {
-			loopString .= EpicStudio.buildMArrayLoop(data, numIndents)
+		} else if(data["SUBTYPE"] = "ID") {
+			loopString .= MSnippets.buildMIdLoop(data, numIndents)
 		
-		} else if(subType = "ID") {
-			loopString .= EpicStudio.buildMIdLoop(data, numIndents)
-		
-		} else if(subType = "DAT") {
-			loopString .= EpicStudio.buildMDatLoop(data, numIndents)
+		} else if(data["SUBTYPE"] = "DAT") {
+			loopString .= MSnippets.buildMDatLoop(data, numIndents)
 			
-		} else if(subType = "ID_DAT") {
-			loopString .= EpicStudio.buildMIdLoop(data, numIndents)
-			loopString .= EpicStudio.buildMDatLoop(data, numIndents)
+		} else if(data["SUBTYPE"] = "ID_DAT") {
+			loopString .= MSnippets.buildMIdLoop(data, numIndents)
+			loopString .= MSnippets.buildMDatLoop(data, numIndents)
 			
-		} else if(subType = "INDEX_REG_VALUE") {
-			loopString .= EpicStudio.buildMIndexRegularValueLoop(data, numIndents)
+		} else if(data["SUBTYPE"] = "INDEX_REG_VALUE") {
+			loopString .= MSnippets.buildMIndexRegularValueLoop(data, numIndents)
 			
-		} else if(subType = "INDEX_REG_ID") {
-			loopString .= EpicStudio.buildMIndexRegularIDLoop(data, numIndents)
+		} else if(data["SUBTYPE"] = "INDEX_REG_ID") {
+			loopString .= MSnippets.buildMIndexRegularIDLoop(data, numIndents)
 			
 		}
 		
@@ -245,18 +256,32 @@ class EpicStudio {
 	}
 	
 	;---------
+	; DESCRIPTION:    Generate code to populate an array in M with the given values.
+	; PARAMETERS:
+	;  data       (I,REQ) - Array of data needed to generate the list. Important subscripts:
+	;                         ["ARRAY_OR_INI"]   - The name of the array to populate
+	;                         ["VARS_OR_VALUES"] - The list of values to add to the array
+	;  numIndents (I,REQ) - The starting indentation for the list.
+	; RETURNS:        String containing the generated code.
+	;---------
+	buildList(data, numIndents) {
+		if(data["SUBTYPE"] = "INDEX")
+			return MSnippets.buildMListIndex(data, numIndents)
+	}
+	
+	;---------
 	; DESCRIPTION:    Generate nested M for loops using the given data.
 	; PARAMETERS:
 	;  data        (I,REQ) - Array of data needed to generate the loop. Important subscripts:
-	;                          data["ARRAY_OR_INI"] - The name of the array or global (with @s around it)
-	;                              ["VAR_NAMES"]    - Comma-delimited list of iterator variables to loop with.
-	;  numIndents (IO,OPT) - The starting indentation for the loop. Will be updated as we add nested
+	;                          ["ARRAY_OR_INI"]   - The name of the array or global (with @s around it)
+	;                          ["VARS_OR_VALUES"] - Comma-delimited list of iterator variables to loop with.
+	;  numIndents (IO,REQ) - The starting indentation for the loop. Will be updated as we add nested
 	;                        loops, final value is 1 more than the last loop.
 	; RETURNS:        String for the generated loop
 	;---------
-	buildMArrayLoop(data, ByRef numIndents := 0) {
+	buildMArrayLoop(data, ByRef numIndents) {
 		arrayName   := data["ARRAY_OR_INI"]
-		iteratorAry := data["VAR_NAMES"].split(",")
+		iteratorAry := data["VARS_OR_VALUES"].split(",")
 		
 		if(arrayName.startsWith("@") && !arrayName.endsWith("@"))
 			arrayName .= "@" ; End global references with the proper @ if they're not already.
@@ -266,7 +291,8 @@ class EpicStudio {
 			loopString .= MainConfig.private["M_LOOP_ARRAY_BASE"].replaceTags({"ARRAY_NAME":arrayName, "ITERATOR":iterator, "PREV_ITERATORS":prevIterators})
 			
 			prevIterators .= iterator ","
-			loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
+			numIndents++
+			loopString .= MSnippets.getMNewLinePlusIndent(numIndents)
 		}
 		
 		return loopString
@@ -276,18 +302,19 @@ class EpicStudio {
 	; DESCRIPTION:    Generate an M for loop over IDs using the given data.
 	; PARAMETERS:
 	;  data        (I,REQ) - Array of data needed to generate the loop. Important subscripts:
-	;                          data["ARRAY_OR_INI"] - The INI of the records to loop through
-	;  numIndents (IO,OPT) - The starting indentation for the loop. Will be updated as we add nested
+	;                          ["ARRAY_OR_INI"] - The INI of the records to loop through
+	;  numIndents (IO,REQ) - The starting indentation for the loop. Will be updated as we add nested
 	;                        loops, final value is 1 more than the last loop.
 	; RETURNS:        String for the generated loop
 	;---------
-	buildMIdLoop(data, ByRef numIndents := 0) {
+	buildMIdLoop(data, ByRef numIndents) {
 		ini := stringUpper(data["ARRAY_OR_INI"])
 		
 		idVar := stringLower(ini) "Id"
 		loopString := MainConfig.private["M_LOOP_ID_BASE"].replaceTags({"INI":ini, "ID_VAR":idVar})
 		
-		loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
+		numIndents++
+		loopString .= MSnippets.getMNewLinePlusIndent(numIndents)
 		return loopString
 	}
 	
@@ -295,19 +322,20 @@ class EpicStudio {
 	; DESCRIPTION:    Generate an M for loop over DATs using the given data.
 	; PARAMETERS:
 	;  data        (I,REQ) - Array of data needed to generate the loop. Important subscripts:
-	;                          data["ARRAY_OR_INI"] - The INI of the records to loop through
-	;  numIndents (IO,OPT) - The starting indentation for the loop. Will be updated as we add nested
+	;                          ["ARRAY_OR_INI"] - The INI of the records to loop through
+	;  numIndents (IO,REQ) - The starting indentation for the loop. Will be updated as we add nested
 	;                        loops, final value is 1 more than the last loop.
 	; RETURNS:        String for the generated loop
 	;---------
-	buildMDatLoop(data, ByRef numIndents := 0) {
+	buildMDatLoop(data, ByRef numIndents) {
 		ini := stringUpper(data["ARRAY_OR_INI"])
 		
 		idVar  := stringLower(ini) "Id"
 		datVar := stringLower(ini) "Dat"
 		loopString := MainConfig.private["M_LOOP_DAT_BASE"].replaceTags({"INI":ini, "ID_VAR":idVar, "DAT_VAR":datVar, "ITEM":""})
 		
-		loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
+		numIndents++
+		loopString .= MSnippets.getMNewLinePlusIndent(numIndents)
 		return loopString
 	}
 	
@@ -315,19 +343,20 @@ class EpicStudio {
 	; DESCRIPTION:    Generate an M for loop over regular index values for the given data.
 	; PARAMETERS:
 	;  data        (I,REQ) - Array of data needed to generate the loop. Important subscripts:
-	;                          data["ARRAY_OR_INI"] - The INI of the records to loop through
-	;                              ["VAR_NAMES"]    - The name of the iterator variable to use for values
-	;  numIndents (IO,OPT) - The starting indentation for the loop. Will be updated as we add nested
+	;                          ["ARRAY_OR_INI"]   - The INI of the records to loop through
+	;                          ["VARS_OR_VALUES"] - The name of the iterator variable to use for values
+	;  numIndents (IO,REQ) - The starting indentation for the loop. Will be updated as we add nested
 	;                        loops, final value is 1 more than the last loop.
 	; RETURNS:        String for the generated loop
 	;---------
-	buildMIndexRegularValueLoop(data, ByRef numIndents := 0) {
+	buildMIndexRegularValueLoop(data, ByRef numIndents) {
 		ini := stringUpper(data["ARRAY_OR_INI"])
-		valueVar := data["VAR_NAMES"]
+		valueVar := data["VARS_OR_VALUES"]
 		
 		loopString := MainConfig.private["M_LOOP_INDEX_REGULAR_NEXT_VALUE"].replaceTags({"INI":ini, "ITEM":"", "VALUE_VAR":valueVar})
 		
-		loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
+		numIndents++
+		loopString .= MSnippets.getMNewLinePlusIndent(numIndents)
 		return loopString
 	}
 	
@@ -336,34 +365,62 @@ class EpicStudio {
 	;                 given data.
 	; PARAMETERS:
 	;  data        (I,REQ) - Array of data needed to generate the loop. Important subscripts:
-	;                          data["ARRAY_OR_INI"] - The INI of the records to loop through
-	;                              ["VAR_NAMES"]    - The name of the iterator variable to use for values
-	;  numIndents (IO,OPT) - The starting indentation for the loop. Will be updated as we add nested
+	;                          ["ARRAY_OR_INI"]   - The INI of the records to loop through
+	;                          ["VARS_OR_VALUES"] - The name of the iterator variable to use for values
+	;  numIndents (IO,REQ) - The starting indentation for the loop. Will be updated as we add nested
 	;                        loops, final value is 1 more than the last loop.
 	; RETURNS:        String for the generated loop
 	;---------
-	buildMIndexRegularIDLoop(data, ByRef numIndents := 0) {
+	buildMIndexRegularIDLoop(data, ByRef numIndents) {
 		ini := stringUpper(data["ARRAY_OR_INI"])
-		valueVar := data["VAR_NAMES"]
+		valueVar := data["VARS_OR_VALUES"]
 		
 		idVar  := stringLower(ini) "Id"
 		loopString := MainConfig.private["M_LOOP_INDEX_REGULAR_NEXT_ID"].replaceTags({"INI":ini, "ITEM":"", "VALUE_VAR":valueVar, "ID_VAR":idVar})
 		
-		loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
+		numIndents++
+		loopString .= MSnippets.getMNewLinePlusIndent(numIndents)
 		return loopString
 	}
 	
 	;---------
-	; DESCRIPTION:    Get the text for a new line in M code, adding 1 indent more than the current line.
+	; DESCRIPTION:    Generate an indexed [ary(value)=""] array in M code.
 	; PARAMETERS:
-	;  currNumIndents (IO,REQ) - The number of indents on the current line. Will be incremented by 1.
+	;  data       (I,REQ) - Array of data needed to generate the list. Important subscripts:
+	;                         ["ARRAY_OR_INI"]   - The name of the array to populate
+	;                         ["VARS_OR_VALUES"] - The list of values to add to the array
+	;  numIndents (I,REQ) - The starting indentation for the list.
+	; RETURNS:        String for generated array
+	;---------
+	buildMListIndex(data, numIndents) {
+		arrayName := data["ARRAY_OR_INI"]
+		valueList := data["VARS_OR_VALUES"]
+		
+		fl := new FormatList(valueList)
+		listAry := fl.getList(FormatList.Format_Array)
+		
+		newLine := MSnippets.getMNewLinePlusIndent(numIndents)
+		lineBase := MainConfig.private["M_LIST_ARRAY_INDEX"]
+		
+		listString := ""
+		For _,value in listAry {
+			line := lineBase.replaceTags({"ARRAY_NAME":arrayName, "VALUE":value})
+			listString := listString.appendPiece(line, newLine)
+		}
+		
+		return listString
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the text for a new line in M code.
+	; PARAMETERS:
+	;  currNumIndents (I,REQ) - The number of indents on the current line.
 	; RETURNS:        The string to start a new line with 1 indent more.
 	;---------
-	getMNewLinePlusIndent(ByRef currNumIndents) {
+	getMNewLinePlusIndent(currNumIndents) {
 		outString := "`n`t" ; New line + tab (at the start of every line)
 		
-		; Increase indentation level and add indentation
-		currNumIndents++
+		; Add indentation
 		outString .= multiplyString(". ", currNumIndents)
 		
 		return outString

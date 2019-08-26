@@ -50,11 +50,12 @@ class EpicStudio {
 	
 	
 	duplicateLine() {
-		Send, {End}   ; If anything is selected, deselect it
-		Send, ^c      ; Copy the whole line (since nothing is selected), including the newline at the end
-		Send, {Home}  ; Get to start of line so the newline comes before the existing line
-		Send, ^v      ; Paste the duplicate line
-		
+		Send, {End}                        ; Start from end of line
+		Send, {Shift Down}{Home}{Shift Up} ; Select whole line (excluding leading indentation/tab/etc.)
+		line := getSelectedText()          ; Get selected text
+		Send, {End}                        ; Get back to end of line
+		Send, {Enter}                      ; Start new line with same indentation
+		sendTextWithClipboard(line)        ; Send duplicate line
 	}
 	
 	;---------

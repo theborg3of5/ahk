@@ -78,10 +78,13 @@ class Chrome {
 			function := getSelectedText().firstLine().clean()
 			
 			; Client files should always have an extension
-			if(file.contains("."))
-				title := file.appendPiece(function, " > ")
-			else ; Server routines
+			if(file.contains(".")) {
+				title := file
+				if(function != "")
+					title .= " > " function "()"
+			} else { ; Server routines
 				title := function.appendPiece(file, "^")
+			}
 		}
 		
 		return title

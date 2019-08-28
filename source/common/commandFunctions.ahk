@@ -118,8 +118,8 @@
 	MouseGetPos(ByRef OutputVarX = "", ByRef OutputVarY = "", ByRef OutputVarWin = "", ByRef OutputVarControl = "", Mode = "") {
 		MouseGetPos, OutputVarX, OutputVarY, OutputVarWin, OutputVarControl, %Mode%
 	}
-	PixelGetColor(X, Y, RGB = "") {
-		PixelGetColor, v, %X%, %Y%, %RGB%
+	PixelGetColor(X, Y, Mode = "") {
+		PixelGetColor, v, %X%, %Y%, %Mode%
 		Return, v
 	}
 	PixelSearch(ByRef OutputVarX, ByRef OutputVarY, X1, Y1, X2, Y2, ColorID, Variation = "", Mode = "") {

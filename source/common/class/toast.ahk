@@ -246,7 +246,7 @@ class Toast {
 		Gui, New, +HWNDguiId
 		
 		; Other gui options
-		Gui, +AlwaysOnTop -Caption +LastFound +Toolwindow
+		Gui, +AlwaysOnTop -Caption +LastFound +ToolWindow
 		Gui, % "+E" WS_EX_CLICKTHROUGH
 		
 		; Set formatting options

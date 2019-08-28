@@ -25,13 +25,18 @@ CoordMode, Pixel, Screen
 buildGui()
 
 
-Loop, 5 {
+Loop {
 	updateGui()
 	Sleep, 1000
 }
 
 Gui, Destroy
 
+RButton::
+	
+	
+	ExitApp
+return
 
 buildGui() {
 	; Create gui

@@ -1,0 +1,6 @@
+Icons
+
+color.ico
+	Icon by Yusuke Kamiyamane (http://p.yusukekamiyamane.com/)
+colorRed.ico
+	Based on Icon by Yusuke Kamiyamane (http://p.yusukekamiyamane.com/)

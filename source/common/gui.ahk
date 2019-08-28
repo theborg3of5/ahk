@@ -80,3 +80,22 @@ fadeGui(guiId, startOpacity, finalOpacity, numSteps := 10) {
 		Sleep, 10 ; 10ms between steps - can vary fade speed with number of steps
 	}
 }
+
+invertColor(color) {
+	; Get RGB bits as integers
+	r := hexToInteger(color.sub(1, 2))
+	g := hexToInteger(color.sub(3, 2))
+	b := hexToInteger(color.sub(5))
+	
+	; Reverse integers
+	newR := 255 - r
+	newG := 255 - g
+	newB := 255 - b
+	
+	; Convert back to hex and recombine
+	finalR := numToHex(newR).prePadToLength(2, "0")
+	finalG := numToHex(newG).prePadToLength(2, "0")
+	finalB := numToHex(newB).prePadToLength(2, "0")
+	
+	return StringUpper(finalR finalG finalB)
+}

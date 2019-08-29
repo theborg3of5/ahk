@@ -19,13 +19,16 @@ global FONT_SIZE   := 14 ; Points
 global FONT_HEIGHT := 24 ; Pixels, including padding
 global ColorText ; reference variable for label
 
+SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
+
 ; Make mouse and pixel coordinate modes the same so they match
 CoordMode, Mouse, Screen
 CoordMode, Pixel, Screen
 
 buildGui()
+counter := 0
 Loop
-	updateGui()
+	updateGui(counter)
 ExitApp
 
 
@@ -52,7 +55,7 @@ buildGui() {
 }
 
 
-updateGui() {
+updateGui(ByRef counter) {
 	; Get color under mouse
 	MouseGetPos(mouseX, mouseY)
 	foundColor := getRGBUnderMouse(mouseX, mouseY)
@@ -67,7 +70,7 @@ updateGui() {
 	Gui, Font, % "c" invertColor(foundColor)
 	GuiControl, Font, ColorText
 	
-	moveGui(mouseX, mouseY)
+	moveGui(mouseX, mouseY, counter)
 }
 
 getRGBUnderMouse(mouseX := "", mouseY := "") {
@@ -80,7 +83,7 @@ getRGBUnderMouse(mouseX := "", mouseY := "") {
 	return color
 }
 
-moveGui(mouseX, mouseY) {
+moveGui(mouseX, mouseY, ByRef counter) {
 	; Gui lives a little above and to the right of the cursor by default
 	guiX := mouseX + MOUSE_GUI_PADDING
 	guiY := mouseY - MOUSE_GUI_PADDING - GUI_HEIGHT
@@ -97,7 +100,12 @@ moveGui(mouseX, mouseY) {
 	if(distanceY < 0)
 		guiY := mouseY + MOUSE_GUI_PADDING ; Below cursor
 	
-	Gui, Show, % "NoActivate x" guiX " y" guiY " w" GUI_WIDTH " h" GUI_HEIGHT
+	if(counter < 1) {
+		Gui, Show, % "NoActivate x" guiX " y" guiY " w" GUI_WIDTH " h" GUI_HEIGHT
+		counter++
+	} else {
+		WinMove, % GUI_TITLE, , % guiX, % guiY
+	}
 }
 
 captureColor() {

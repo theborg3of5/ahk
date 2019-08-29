@@ -173,6 +173,7 @@
 		:X:apf::sendFolderPath("AHK_SOURCE", "program")
 		:X:agf::sendFolderPath("AHK_SOURCE", "general")
 		:X:astf::sendFolderPath("AHK_SOURCE", "standalone")
+		:X:asuf::sendFolderPath("AHK_SOURCE", "sub")
 	}
 
 	{ ; Epic - General

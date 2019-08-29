@@ -1,4 +1,9 @@
-﻿#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
+﻿/*
+	Do
+		Consider a magnified display of pixel and surrounding few, instead (or in addition to?) the color in question
+*/
+
+#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
 #SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
@@ -23,10 +28,36 @@ global ColorText ; reference variable for label
 CoordMode, Mouse, Screen
 CoordMode, Pixel, Screen
 
+Gui, 2:-Caption +ToolWindow +AlwaysOnTop +Border ; No title bar/menu, don't include in taskbar, always on top, show a border
+Gui, 2:Font, s20
+Gui, 2:Margin, 0, 0
+
+charWidth := 10
+
+x := 0
+y := -9
+
+Loop, 25 {
+	Loop, 25 {
+		Gui, 2:Add, Text, % "x" x " y" y " BackgroundTrans", ▘
+		x += charWidth
+	}
+	
+	x := 0
+	y += charWidth
+}
+
+x := 0
+y := 1
+Gui, 2:Add, Text, % "x" x " y" y " BackgroundTrans", ▘
+
+Gui, 2:Show, w250 h250, % GUI_TITLE
+
 buildGui()
 Loop
 	updateGui()
 ExitApp
+
 
 
 ; Copy color, display result, and exit.

@@ -14,7 +14,7 @@ global GUI_HEIGHT        := 50
 global MOUSE_GUI_PADDING := 10
 
 ; Label settings
-global FONT_NAME := "Consolas"
+global FONT_NAME   := "Consolas"
 global FONT_SIZE   := 14 ; Points
 global FONT_HEIGHT := 24 ; Pixels, including padding
 global ColorText ; reference variable for label
@@ -24,25 +24,21 @@ CoordMode, Mouse, Screen
 CoordMode, Pixel, Screen
 
 buildGui()
-Loop {
+Loop
 	updateGui()
-	Sleep, 1000
-}
 ExitApp
 
 
 ; Copy color, display result, and exit.
 RButton::
-	foundColor := getRGBUnderMouse()
-	setClipboardAndToastValue(foundColor, "RGB code")
-	Sleep, 2000
-	
+	Gui, Hide
+	captureColor()
 	ExitApp
 return
 
 
 buildGui() {
-	; Create gui
+	; Set overall gui properties
 	Gui, -Caption +ToolWindow +AlwaysOnTop +Border ; No title bar/menu, don't include in taskbar, always on top, show a border
 	Gui, Show, % "w" GUI_WIDTH " h" GUI_HEIGHT " Hide", % GUI_TITLE ; Set size (but don't show yet)
 	Gui, Font, % " s" FONT_SIZE, % FONT_NAME
@@ -102,4 +98,10 @@ moveGui(mouseX, mouseY) {
 		guiY := mouseY + MOUSE_GUI_PADDING ; Below cursor
 	
 	Gui, Show, % "NoActivate x" guiX " y" guiY " w" GUI_WIDTH " h" GUI_HEIGHT
+}
+
+captureColor() {
+	foundColor := getRGBUnderMouse()
+	setClipboardAndToastValue(foundColor, "RGB color code")
+	Sleep, 2000
 }

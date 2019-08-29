@@ -24,32 +24,56 @@ global FONT_SIZE   := 14 ; Points
 global FONT_HEIGHT := 24 ; Pixels, including padding
 global ColorText ; reference variable for label
 
+global MAGNIFIER_RADIUS := 5
+global MAGNIFIER_GRID_SIZE := 2 * MAGNIFIER_RADIUS + 1
+
 ; Make mouse and pixel coordinate modes the same so they match
 CoordMode, Mouse, Screen
 CoordMode, Pixel, Screen
 
 Gui, 2:-Caption +ToolWindow +AlwaysOnTop +Border ; No title bar/menu, don't include in taskbar, always on top, show a border
-Gui, 2:Font, s20
+Gui, 2:Font, s16, Consolas
 Gui, 2:Margin, 0, 0
 
-charWidth := 10
+charWidth := 6
 
-x := 0
-y := -9
+startX := 0
+startY := -charWidth - 1
 
-Loop, 25 {
-	Loop, 25 {
-		Gui, 2:Add, Text, % "x" x " y" y " BackgroundTrans", ▘
+gridRadius := 1 ; 5
+gridSize := gridRadius*2 + 1
+
+y := startY
+Loop, % MAGNIFIER_GRID_SIZE {
+	xCoord := A_Index.prePadToLength(2, "0")
+	
+	x := startX
+	
+	if(mod(A_Index, 2))
+		rowColor := "00FF00"
+	else
+		rowColor := "FF0000"
+	
+	Loop, % MAGNIFIER_GRID_SIZE {
+		yCoord := A_Index.prePadToLength(2, "0")
+		
+		if(mod(A_Index, 2))
+			color := "0000FF"
+		else
+			color := rowColor
+		Gui, 2:Font, c%color%
+		; DEBUG.popup("color",color, "rowColor",rowColor, "mod(A_Index,2)", mod(A_Index, 2))
+		
+		Gui, 2:Add, Text, % "x" x " y" y " BackgroundTrans vColorSquare" xCoord yCoord, ▘ ; Top-left square (unicode block character U+2598)
 		x += charWidth
 	}
 	
-	x := 0
 	y += charWidth
 }
 
-x := 0
-y := 1
-Gui, 2:Add, Text, % "x" x " y" y " BackgroundTrans", ▘
+; x := 0
+; y := 1
+; Gui, 2:Add, Text, % "x" x " y" y " BackgroundTrans", ▘
 
 Gui, 2:Show, w250 h250, % GUI_TITLE
 
@@ -97,6 +121,16 @@ updateGui() {
 	; Text color is the inverse of the background color
 	Gui, Font, % "c" invertColor(foundColor)
 	GuiControl, Font, ColorText
+	
+	Loop, % MAGNIFIER_GRID_SIZE {
+		xCoord := A_Index.prePadToLength(2, "0")
+		Loop, % MAGNIFIER_GRID_SIZE {
+			yCoord := A_Index.prePadToLength(2, "0")
+			; DEBUG.popup("Updating",, "x",x, "y",y, "Var","ColorSquare" x y)
+			Gui, 2:Font, % "c" foundColor
+			GuiControl, 2:Font, ColorSquare%xCoord%%yCoord%
+		}
+	}
 	
 	moveGui(mouseX, mouseY)
 }

@@ -48,6 +48,15 @@
 			Basically static variables, like we're doing in Hyperlinker
 	
 # Toast
+	Add some way to auto-sleep until the toast hides itself
+		At the least, have constants for short/medium/long lengths of time so they can be sync'd
+			Do those also need to take into account the fade in/out times, though?
+				May be too negligible to matter
+		Use case: when scripts are displaying a result before they exit:
+			copySourceToPersonalFolder
+			iconTester
+			firstSetup (could add, would look nicer for VDI case)
+			colorPicker (trickier - not calling toast directly, but via clipboard set/toast stuff)
 	Could we avoid flickering between .showPersistent() and .setText()?
 		Maybe some way to set position without showing?
 		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?

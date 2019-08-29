@@ -24,20 +24,22 @@ CoordMode, Mouse, Screen
 CoordMode, Pixel, Screen
 
 buildGui()
-
-
 Loop {
 	updateGui()
 	Sleep, 1000
 }
+ExitApp
 
-Gui, Destroy
 
+; Copy color, display result, and exit.
 RButton::
-	
+	foundColor := getRGBUnderMouse()
+	setClipboardAndToastValue(foundColor, "RGB code")
+	Sleep, 2000
 	
 	ExitApp
 return
+
 
 buildGui() {
 	; Create gui
@@ -57,19 +59,29 @@ buildGui() {
 updateGui() {
 	; Get color under mouse
 	MouseGetPos(mouseX, mouseY)
-	colorToUse := PixelGetColor(mouseX, mouseY, "RGB").removeFromStart("0x")
+	foundColor := getRGBUnderMouse(mouseX, mouseY)
 	
 	; Background is the current color
-	Gui, Color, % colorToUse
+	Gui, Color, % foundColor
 	
 	; Text shows the current color
-	GuiControl, , ColorText, % colorToUse
+	GuiControl, , ColorText, % foundColor
 	
 	; Text color is the inverse of the background color
-	Gui, Font, % "c" invertColor(colorToUse)
+	Gui, Font, % "c" invertColor(foundColor)
 	GuiControl, Font, ColorText
 	
 	moveGui(mouseX, mouseY)
+}
+
+getRGBUnderMouse(mouseX := "", mouseY := "") {
+	if(mouseX = "" || mouseY = "")
+		MouseGetPos(mouseX, mouseY)
+	
+	rawColor := PixelGetColor(mouseX, mouseY, "RGB")
+	color := rawColor.removeFromStart("0x")
+	
+	return color
 }
 
 moveGui(mouseX, mouseY) {
@@ -77,12 +89,14 @@ moveGui(mouseX, mouseY) {
 	guiX := mouseX + MOUSE_GUI_PADDING
 	guiY := mouseY - MOUSE_GUI_PADDING - GUI_HEIGHT
 	
-	; Adjust if we're past the right or top edges of the monitor
 	bounds := getWindowMonitorWorkArea(GUI_TITLE)
+	
+	; Check if we're past the right edge of the monitor
 	distanceX := bounds["RIGHT"] - (guiX + GUI_WIDTH) ; From right edge of gui to right edge of monitor
 	if(distanceX < 0)
 		guiX := mouseX - MOUSE_GUI_PADDING - GUI_WIDTH ; Left side of cursor
 	
+	; Check if we're past the top edge of the monitor
 	distanceY := guiY - bounds["TOP"] ; From top edge of gui to top edge of monitor
 	if(distanceY < 0)
 		guiY := mouseY + MOUSE_GUI_PADDING ; Below cursor

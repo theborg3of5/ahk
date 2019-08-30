@@ -1,6 +1,8 @@
 ; Visual Studio hotkeys.
 #If MainConfig.isWindowActive("Visual Studio")
 	Pause::+Pause ; For CodeMaid switch between related files
+	
+	^+t::Send, !fj1 ; Open last-closed project
 
 	; Copy current file/folder paths to clipboard
 	!c::VisualStudio.copyFilePath()              ; Current file

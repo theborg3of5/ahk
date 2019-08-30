@@ -1,4 +1,5 @@
 ﻿/*
+	Reference/inspired by: https://www.autohotkey.com/boards/viewtopic.php?t=45606
 	Do
 		Consider a magnified display of pixel and surrounding few, instead (or in addition to?) the color in question
 */

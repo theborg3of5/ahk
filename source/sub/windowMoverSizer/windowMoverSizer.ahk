@@ -10,7 +10,7 @@ trayInfo := new ScriptTrayInfo("AHK: Move and resize windows", "moveSize.ico", "
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub, trayInfo)
 
 SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
-CoordMode, Mouse, Screen
+setCoordMode("Mouse", "Screen")
 global SnappingDistance := 25 ; 25px
 
 ; Corners of a window, for resizing purposes

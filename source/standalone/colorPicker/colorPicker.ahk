@@ -28,8 +28,8 @@ global MAGNIFIER_RADIUS := 5
 global MAGNIFIER_GRID_SIZE := 2 * MAGNIFIER_RADIUS + 1
 
 ; Make mouse and pixel coordinate modes the same so they match
-CoordMode, Mouse, Screen
-CoordMode, Pixel, Screen
+setCoordMode("Mouse", "Screen")
+setCoordMode("Pixel", "Screen")
 
 buildGui()
 Loop

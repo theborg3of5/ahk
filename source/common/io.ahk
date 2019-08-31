@@ -107,15 +107,9 @@ clickUsingMode(x := "", y := "", mouseCoordMode := "") {
 	; Store the old mouse position to move back to once we're finished.
 	MouseGetPos(prevX, prevY)
 	
-	; Plug in the new mouse CoordMode.
-	origCoordMode := A_CoordModeMouse
-	CoordMode, Mouse, % mouseCoordMode
-	
-	; DEBUG.popup("io", "clickUsingMode", "X", x, "Y", y, "CoordMode", mouseCoordMode)
+	origMouseCoordMode := setCoordMode("Mouse", mouseCoordMode)
 	Click, %x%, %y%
-	
-	; Restore default mouse CoordMode.
-	CoordMode, Mouse, % origCoordMode
+	setCoordMode("Mouse", origMouseCoordMode)
 	
 	; Move the mouse back to its former position.
 	MouseMove, prevX, prevY

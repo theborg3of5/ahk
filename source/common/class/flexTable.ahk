@@ -112,7 +112,7 @@ class FlexTable {
 		Gui, Add, Text, % propString, % displayText
 		
 		if(width = "")
-			width := getLabelWidthForText(cellText, FlexTable.getNextUniqueControlId())
+			width := getLabelWidthForText(cellText)
 		this.addToX(width)
 	}
 	
@@ -184,7 +184,6 @@ class FlexTable {
 ; == Private ===================
 ; ==============================
 	guiId := ""
-	static uniqueControlNum := 0 ; Used to get a unique name for each control we have to figure out the width of.
 	
 	; Top-left corner of table
 	xMin := ""
@@ -234,15 +233,6 @@ class FlexTable {
 	}
 	
 	;---------
-	; DESCRIPTION:    Get a unique ID to use for determining the width of text within a label.
-	; RETURNS:        "FlexTableControl" + a globally incremented value.
-	;---------
-	getNextUniqueControlId() {
-		FlexTable.uniqueControlNum++
-		return "FlexTableControl" FlexTable.uniqueControlNum
-	}
-	
-	;---------
 	; DESCRIPTION:    Make the gui ID that we were given the default GUI (so 
 	;                 all of the relevant Gui, * commands apply to it)
 	;---------
@@ -255,7 +245,6 @@ class FlexTable {
 	debugName := "FlexTable"
 	debugToString(debugBuilder) {
 		debugBuilder.addLine("Gui ID",                this.guiId)
-		debugBuilder.addLine("Unique control number", this.uniqueControlNum)
 		debugBuilder.addLine("Min X",                 this.xMin)
 		debugBuilder.addLine("Min Y",                 this.yMin)
 		debugBuilder.addLine("Max X",                 this.xMax)

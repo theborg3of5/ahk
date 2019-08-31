@@ -220,7 +220,6 @@ class Toast {
 ; ==============================
 ; == Private ===================
 ; ==============================
-	static WidthLabelNum := 0
 	static ToastTitle := "[TOAST]"
 	
 	styles         := ""
@@ -330,9 +329,8 @@ class Toast {
 	;  labelVarName (I,REQ) - The name of the global variable connected to the toast label.
 	;---------
 	setLabelText(toastText, labelVarName) {
-		; Figure out how wide the text control needs to be to fit its contents
-		Toast.WidthLabelNum++ ; Unique number per calculation
-		getLabelSizeForText(toastText, "WidthLabel" Toast.WidthLabelNum, textWidth, textHeight)
+		; Figure out how big the text control needs to be to fit its contents
+		getLabelSizeForText(toastText, textWidth, textHeight)
 		
 		; Update the text and width/height
 		GuiControl,     , % labelVarName, % toastText

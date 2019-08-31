@@ -24,21 +24,26 @@ clearTitleFormat() {
 }
 
 ; Assumes that the formatting that would apply to the text in question is currently in effect.
-getLabelSizeForText(text, uniqueId, ByRef width := "", ByRef height := "") {
+getLabelSizeForText(text, ByRef width := "", ByRef height := "") {
 	static ; Assumes-static mode - means that any variables that are used in here are assumed to be static
-	varName := "Var" uniqueId
+	
+	global SizeMeasuringLabelUniqueId
+	SizeMeasuringLabelUniqueId++
+	
+	varName := "Var" SizeMeasuringLabelUniqueId
 	
 	Gui, Add, Text, % "v" varName, % text
+	
 	GuiControlGet, out, Pos, % varName
 	width  := outW
 	height := outH
 	
-	GuiControl, Hide, Var%uniqueId% ; GuiControl, Delete not yet implemented, so just hide the temporary control.
+	GuiControl, Hide, % varName ; GuiControl, Delete not yet implemented, so just hide the temporary control.
 }
 
 ; Assumes that the formatting that would apply to the text in question is currently in effect.
-getLabelWidthForText(text, uniqueId) {
-	getLabelSizeForText(text, uniqueId, width)
+getLabelWidthForText(text) {
+	getLabelSizeForText(text, width)
 	return width
 }
 

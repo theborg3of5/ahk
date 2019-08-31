@@ -119,3 +119,79 @@ getWindowMonitorWorkArea(titleString := "A") {
 	
 	return bounds
 }
+
+;---------
+; DESCRIPTION:    Find the monitor that the mouse is on and return its bounds.
+; RETURNS:        The bounds of the monitor that the mouse is on.
+; NOTES:          If the mouse is on the border between monitors, we will return the bottom-right most monitor.
+;---------
+getMouseMonitorBounds() {
+	origMouseCoordMode := setCoordMode("Mouse", "Screen")
+	MouseGetPos(mouseX, mouseY)
+	setCoordMode("Mouse", origMouseCoordMode)
+	
+	partialMatches := []
+	
+	; Initial search - mouse must be within a monitor (not directly on an edge)
+	Loop, % SysGet("MonitorCount") {
+		bounds := SysGet("Monitor", A_Index)
+		; DEBUG.popup("Testing",, "mouseX",mouseX, "mouseY",mouseY, "bounds",bounds)
+		
+		if(mouseX < bounds["LEFT"])
+			Continue
+		if(mouseX > bounds["RIGHT"])
+			Continue
+		if(mouseY < bounds["TOP"])
+			Continue
+		if(mouseY > bounds["BOTTOM"])
+			Continue
+		
+		; Along a monitor edge - could be shared with another monitor, so don't quit yet.
+		if(mouseX = bounds["LEFT"] || mouseX = bounds["RIGHT"] || mouseY = bounds["TOP"] || mouseY = bounds["BOTTOM"]) {
+			; DEBUG.popup("Partial match",, "mouseX",mouseX, "mouseY",mouseY, "bounds",bounds)
+			partialMatches.push(bounds)
+			Continue
+		}
+		
+		foundBounds := bounds
+		Break
+	}
+	
+	; If we found an exact match, we're finished.
+	if(foundBounds)
+		return foundBounds
+	
+	; DEBUG.popup("No exact match",, "mouseX",mouseX, "mouseY",mouseY, "partialMatches",partialMatches)
+	
+	; If we only matched a single monitor partially, we're just along one of the outer edges of that monitor.
+	if(partialMatches.count() = 1)
+		return partialMatches[1]
+	
+	; If there were multiple, pick the lower-right-most monitor.
+	foundBounds := ""
+	For _,bounds in partialMatches {
+		if(isSecondMonitorMoreLowerRight(foundBounds, bounds))
+			foundBounds := bounds
+	}
+	
+	return foundBounds
+}
+;---------
+; DESCRIPTION:    Determine which of the two bounds objects is the further lower and right.
+; PARAMETERS:
+;  firstBounds  (I,REQ) - The first bounds object. Important subscripts are "RIGHT" and "BOTTOM".
+;  secondBounds (I,REQ) - The second bounds object. Important subscripts are "RIGHT" and "BOTTOM".
+; RETURNS:        true if the second bounds object is further right or bottom, false otherwise.
+;---------
+isSecondMonitorMoreLowerRight(firstBounds, secondBounds) {
+	if(firstBounds = "")
+		return true
+	
+	if(secondBounds["RIGHT"] > firstBounds["RIGHT"])
+		return true
+	
+	if(secondBounds["BOTTOM"] > firstBounds["BOTTOM"])
+		return true
+	
+	return false
+}

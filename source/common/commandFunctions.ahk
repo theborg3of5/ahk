@@ -185,7 +185,7 @@
 { ; Commands that can return pseudo-arrays - return proper arrays or objects in those cases instead.
 	SysGet(Subcommand, Param3 := "") {
 		if(Subcommand = "Monitor" || Subcommand = "MonitorWorkArea") {
-			SysGet, bounds, % Subcommand, % monitorNum
+			SysGet, bounds, % Subcommand, % Param3
 			return {"Left":boundsLeft, "Right":boundsRight, "Top":boundsTop, "Bottom":boundsBottom}
 		}
 		

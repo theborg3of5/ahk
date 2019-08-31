@@ -63,6 +63,18 @@ nullGlobals(baseName, startIndex, endIndex) {
 	}
 }
 
+; Only supports pseudo-arrays where the count is in the base variable (i.e. Var = 5, Var1-Var5 are the data elements).
+; Note: you need to declare the pseudo-array's root as a global before calling this, otherwise we can't access the data there.
+convertPseudoArrayToArray(pseudoArrayName) {
+	resultAry := []
+	Loop, % %pseudoArrayName% {
+		itemName := pseudoArrayName A_Index
+		resultAry.push(%itemName%)
+	}
+	
+	return resultAry
+}
+
 convertObjectToArray(obj) {
 	newArray := []
 	For _,value in obj

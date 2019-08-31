@@ -26,8 +26,10 @@ clearTitleFormat() {
 ; Assumes that the formatting that would apply to the text in question is currently in effect.
 getLabelSizeForText(text, uniqueId, ByRef width := "", ByRef height := "") {
 	static ; Assumes-static mode - means that any variables that are used in here are assumed to be static
-	Gui, Add, Text, vVar%uniqueId%, % text
-	GuiControlGet, out, Pos, Var%uniqueId%
+	varName := "Var" uniqueId
+	
+	Gui, Add, Text, % "v" varName, % text
+	GuiControlGet, out, Pos, % varName
 	width  := outW
 	height := outH
 	

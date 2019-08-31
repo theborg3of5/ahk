@@ -96,7 +96,7 @@
 	}
 	GuiControlGet(Subcommand = "", ControlID = "", Param4 = "") {
 		if(Subcommand = "Pos")
-			MsgBox, This command function (GuiControlGet()) does not support this parameter: %Subcommand%
+			MsgBox, % "This command function (GuiControlGet()) does not support this parameter: Pos `nThis cannot be functionalized for some reason."
 		GuiControlGet, v, %Subcommand%, %ControlID%, %Param4%
 		Return, v
 	}
@@ -160,20 +160,8 @@
 		StringUpper, v, InputVar, %T%
 		Return, v
 	}
-	SysGet(Subcommand, Param3 = "") {
-		if(Subcommand = "MonitorWorkArea")
-			MsgBox, This command function (SysGet()) does not support this parameter: %Subcommand%
-		SysGet, v, %Subcommand%, %Param3%
-		Return, v
-	}
 	Transform(Cmd, Value1, Value2 = "") {
 		Transform, v, %Cmd%, %Value1%, %Value2%
-		Return, v
-	}
-	WinGet(Cmd = "", WinTitle = "", WinText = "", ExcludeTitle = "", ExcludeText = "") {
-		if(Cmd = "List" || Cmd = "ControlList")
-			MsgBox, This command function (WinGet()) does not support this parameter: %Cmd%
-		WinGet, v, %Cmd%, %WinTitle%, %WinText%, %ExcludeTitle%, %ExcludeText%
 		Return, v
 	}
 	WinGetActiveTitle() {
@@ -190,6 +178,28 @@
 	}
 	WinGetTitle(WinTitle = "", WinText = "", ExcludeTitle = "", ExcludeText = "") {
 		WinGetTitle, v, %WinTitle%, %WinText%, %ExcludeTitle%, %ExcludeText%
+		Return, v
+	}
+}
+
+{ ; Commands that can return pseudo-arrays - return proper arrays or objects in those cases instead.
+	SysGet(Subcommand, Param3 := "") {
+		if(Subcommand = "Monitor" || Subcommand = "MonitorWorkArea") {
+			SysGet, bounds, % Subcommand, % monitorNum
+			return {"Left":boundsLeft, "Right":boundsRight, "Top":boundsTop, "Bottom":boundsBottom}
+		}
+		
+		SysGet, v, %Subcommand%, %Param3%
+		Return, v
+	}
+	WinGet(Cmd := "", WinTitle := "", WinText := "", ExcludeTitle := "", ExcludeText := "") {
+		if(Cmd = "List" || Cmd = "ControlList") {
+			global winGetValue
+			WinGet, winGetValue, %Cmd%, %WinTitle%, %WinText%, %ExcludeTitle%, %ExcludeText%
+			return convertPseudoArrayToArray("winGetValue")
+		}
+		
+		WinGet, v, %Cmd%, %WinTitle%, %WinText%, %ExcludeTitle%, %ExcludeText%
 		Return, v
 	}
 }

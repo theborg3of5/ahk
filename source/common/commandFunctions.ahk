@@ -94,12 +94,6 @@
 		FormatTime, v, %YYYYMMDDHH24MISS%, %Format%
 		Return, v
 	}
-	GuiControlGet(Subcommand = "", ControlID = "", Param4 = "") {
-		if(Subcommand = "Pos")
-			MsgBox, % "This command function (GuiControlGet()) does not support this parameter: Pos `nThis cannot be functionalized for some reason."
-		GuiControlGet, v, %Subcommand%, %ControlID%, %Param4%
-		Return, v
-	}
 	ImageSearch(ByRef OutputVarX, ByRef OutputVarY, X1, Y1, X2, Y2, ImageFile) {
 		ImageSearch, OutputVarX, OutputVarY, %X1%, %Y1%, %X2%, %Y2%, %ImageFile%
 	}
@@ -183,6 +177,15 @@
 }
 
 { ; Commands that can return pseudo-arrays - return proper arrays or objects in those cases instead.
+	GuiControlGet(Subcommand = "", ControlID = "", Param4 = "") {
+		if(Subcommand = "Pos") {
+			GuiControlGet, Position, %Subcommand%, %ControlID%, %Param4%
+			return {"X":PositionX, "Y":PositionY, "W":PositionW, "H":PositionH}
+		}
+		
+		GuiControlGet, v, %Subcommand%, %ControlID%, %Param4%
+		Return, v
+	}
 	SysGet(Subcommand, Param3 := "") {
 		if(Subcommand = "Monitor" || Subcommand = "MonitorWorkArea") {
 			SysGet, bounds, % Subcommand, % Param3

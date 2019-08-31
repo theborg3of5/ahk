@@ -25,18 +25,15 @@ clearTitleFormat() {
 
 ; Assumes that the formatting that would apply to the text in question is currently in effect.
 getLabelSizeForText(text, ByRef width := "", ByRef height := "") {
-	static ; Assumes-static mode - means that any variables that are used in here are assumed to be static
+	global ; Needed for the dynamic variable used to reference the text control
 	
-	global SizeMeasuringLabelUniqueId
 	SizeMeasuringLabelUniqueId++
-	
-	varName := "Var" SizeMeasuringLabelUniqueId
+	local varName := "Var" SizeMeasuringLabelUniqueId
 	
 	Gui, Add, Text, % "v" varName, % text
-	
-	GuiControlGet, out, Pos, % varName
-	width  := outW
-	height := outH
+	controlSize := GuiControlGet("Pos", varName)
+	width  := controlSize["W"]
+	height := controlSize["H"]
 	
 	GuiControl, Hide, % varName ; GuiControl, Delete not yet implemented, so just hide the temporary control.
 }

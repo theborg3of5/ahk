@@ -1,9 +1,4 @@
-﻿/*
-	Do
-		Handle monitor edges better with multiple monitors - make sure the gui is always on the same monitor as the mouse
-*/
-
-#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
+﻿#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
 #SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
@@ -94,7 +89,7 @@ moveGui(mouseX, mouseY) {
 	guiX := mouseX + MOUSE_GUI_PADDING
 	guiY := mouseY - MOUSE_GUI_PADDING - GUI_HEIGHT
 	
-	bounds := getWindowMonitorWorkArea(GUI_TITLE)
+	bounds := getMouseMonitorBounds()
 	
 	; Check if we're past the right edge of the monitor
 	distanceX := bounds["RIGHT"] - (guiX + GUI_WIDTH) ; From right edge of gui to right edge of monitor

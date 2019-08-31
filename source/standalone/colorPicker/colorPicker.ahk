@@ -13,6 +13,8 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 trayInfo := new ScriptTrayInfo("AHK: Color Picker", "color.ico", "colorRed.ico")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone, trayInfo)
 
+#include C:\Users\thebo\ahk\test\fastPixelGetColor.ahk
+
 ; Gui settings
 global GUI_TITLE         := "AHK_ColorPicker"
 global GUI_WIDTH         := 100
@@ -31,6 +33,8 @@ global MAGNIFIER_GRID_SIZE := 2 * MAGNIFIER_RADIUS + 1
 ; Make mouse and pixel coordinate modes the same so they match
 CoordMode, Mouse, Screen
 CoordMode, Pixel, Screen
+
+; SetBatchLines, -1
 
 Gui, 2:-Caption +ToolWindow +AlwaysOnTop +Border ; No title bar/menu, don't include in taskbar, always on top, show a border
 Gui, 2:Font, s16, Consolas
@@ -124,6 +128,8 @@ updateGui() {
 	Gui, Font, % "c" invertColor(foundColor)
 	GuiControl, Font, ColorText
 	
+	updateFastPixelGetColor() ; grab the screen into memory
+	
 	magnifiedColor := []
 	Loop, % MAGNIFIER_GRID_SIZE {
 		relativeY := (A_Index - MAGNIFIER_RADIUS - 1) ; -1 gets us to 0 when we match the mouse, negative because that's how y values work on screen
@@ -138,7 +144,16 @@ updateGui() {
 			
 			if(!IsObject(magnifiedColor[relativeX]))
 				magnifiedColor[relativeX] := []
-			magnifiedColor[relativeX, relativeY] := getRGBUnderMouse(mouseX + relativeX, mouseY + relativeY)
+			
+			; magnifiedColor[relativeX, relativeY] := getRGBUnderMouse(mouseX + relativeX, mouseY + relativeY)
+			
+			fastColor := fastPixelGetColor(mouseX + relativeX, mouseY + relativeY)
+			fastBGR := StringUpper(numToHex(fastColor))
+			fastRGB := fastBGR.sub(5) fastBGR.sub(3, 2) fastBGR.sub(1, 2)
+			; DEBUG.popup("fastBGR",fastBGR, "fastRGB",fastRGB)
+			
+			magnifiedColor[relativeX, relativeY] := fastRGB
+			
 			; DEBUG.popup("Updating color",, "xCoord",xCoord, "yCoord",yCoord, "magnifiedColor",magnifiedColor)
 			; Gui, 2:Font, % "c" magnifiedColor
 			; GuiControl, 2:Font, ColorSquare%xCoord%%yCoord%

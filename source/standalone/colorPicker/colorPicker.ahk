@@ -1,5 +1,6 @@
 ﻿/*
-	Reference/inspired by: https://www.autohotkey.com/boards/viewtopic.php?t=45606
+	Do
+		Handle monitor edges better with multiple monitors - make sure the gui is always on the same monitor as the mouse
 */
 
 #NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.

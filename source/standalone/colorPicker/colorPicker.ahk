@@ -41,14 +41,10 @@ charWidth := 6
 startX := 0
 startY := -charWidth - 1
 
-gridRadius := 1 ; 5
-gridSize := gridRadius*2 + 1
-
 y := startY
 Loop, % MAGNIFIER_GRID_SIZE {
-	xCoord := A_Index.prePadToLength(2, "0")
-	
 	x := startX
+	yCoord := A_Index.prePadToLength(2, "0")
 	
 	if(mod(A_Index, 2))
 		rowColor := "00FF00"
@@ -56,7 +52,7 @@ Loop, % MAGNIFIER_GRID_SIZE {
 		rowColor := "FF0000"
 	
 	Loop, % MAGNIFIER_GRID_SIZE {
-		yCoord := A_Index.prePadToLength(2, "0")
+		xCoord := A_Index.prePadToLength(2, "0")
 		
 		if(mod(A_Index, 2))
 			color := "0000FF"
@@ -64,6 +60,8 @@ Loop, % MAGNIFIER_GRID_SIZE {
 			color := rowColor
 		Gui, 2:Font, c%color%
 		; DEBUG.popup("color",color, "rowColor",rowColor, "mod(A_Index,2)", mod(A_Index, 2))
+		
+		; DEBUG.popup("Creating grid",, "xCoord",xCoord, "yCoord",yCoord)
 		
 		Gui, 2:Add, Text, % "x" x " y" y " BackgroundTrans vColorSquare" xCoord yCoord, ▘ ; Top-left square (unicode block character U+2598)
 		x += charWidth
@@ -76,7 +74,10 @@ Loop, % MAGNIFIER_GRID_SIZE {
 ; y := 1
 ; Gui, 2:Add, Text, % "x" x " y" y " BackgroundTrans", ▘
 
-Gui, 2:Show, w250 h250, % GUI_TITLE
+width  := charWidth * MAGNIFIER_GRID_SIZE
+height := charWidth * MAGNIFIER_GRID_SIZE
+
+Gui, 2:Show, % "w" width " h" height, % GUI_TITLE
 
 buildGui()
 Loop
@@ -123,12 +124,46 @@ updateGui() {
 	Gui, Font, % "c" invertColor(foundColor)
 	GuiControl, Font, ColorText
 	
+	magnifiedColor := []
 	Loop, % MAGNIFIER_GRID_SIZE {
-		xCoord := A_Index.prePadToLength(2, "0")
+		relativeY := (A_Index - MAGNIFIER_RADIUS - 1) ; -1 gets us to 0 when we match the mouse, negative because that's how y values work on screen
+		; DEBUG.popup("xCoord",xCoord, "relativeX",relativeX, "yCoord",yCoord, "relativeY",relativeY)
+		
+		; yCoord := A_Index.prePadToLength(2, "0")
+		
 		Loop, % MAGNIFIER_GRID_SIZE {
-			yCoord := A_Index.prePadToLength(2, "0")
-			; DEBUG.popup("Updating",, "x",x, "y",y, "Var","ColorSquare" x y)
-			Gui, 2:Font, % "c" foundColor
+			relativeX := A_Index - MAGNIFIER_RADIUS - 1 ; -1 gets us to 0 when we match the mouse
+			; DEBUG.popup("A_Index",A_Index, "relativeX",relativeX)
+			; xCoord := A_Index.prePadToLength(2, "0")
+			
+			if(!IsObject(magnifiedColor[relativeX]))
+				magnifiedColor[relativeX] := []
+			magnifiedColor[relativeX, relativeY] := getRGBUnderMouse(mouseX + relativeX, mouseY + relativeY)
+			; DEBUG.popup("Updating color",, "xCoord",xCoord, "yCoord",yCoord, "magnifiedColor",magnifiedColor)
+			; Gui, 2:Font, % "c" magnifiedColor
+			; GuiControl, 2:Font, ColorSquare%xCoord%%yCoord%
+		}
+	}
+	
+	; DEBUG.popup("magnifiedColor",magnifiedColor)
+	
+	Loop, % MAGNIFIER_GRID_SIZE {
+		relativeY := (A_Index - MAGNIFIER_RADIUS - 1) ; -1 gets us to 0 when we match the mouse, negative because that's how y values work on screen
+		; DEBUG.popup("xCoord",xCoord, "relativeX",relativeX, "yCoord",yCoord, "relativeY",relativeY)
+		
+		yCoord := A_Index.prePadToLength(2, "0")
+		
+		Loop, % MAGNIFIER_GRID_SIZE {
+			relativeX := A_Index - MAGNIFIER_RADIUS - 1 ; -1 gets us to 0 when we match the mouse
+			; DEBUG.popup("A_Index",A_Index, "relativeX",relativeX)
+			xCoord := A_Index.prePadToLength(2, "0")
+			
+			; magnifiedColor := getRGBUnderMouse(mouseX + relativeX, mouseY + relativeY)
+			; DEBUG.popup("Updating color",, "xCoord",xCoord, "yCoord",yCoord, "magnifiedColor",magnifiedColor)
+			
+			; DEBUG.popup("Updating color",, "relativeX",relativeX, "relativeY",relativeY, "magnifiedColor[relativeX,relativeY]",magnifiedColor[relativeX, relativeY])
+			
+			Gui, 2:Font, % "c" magnifiedColor[relativeX, relativeY]
 			GuiControl, 2:Font, ColorSquare%xCoord%%yCoord%
 		}
 	}

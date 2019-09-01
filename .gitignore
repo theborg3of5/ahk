@@ -4,9 +4,6 @@ Thumbs.db
 *.tmp
 *.exe
 
-# Do include colorette's exe, though
-!Colorette.exe
-
 # Ignore folders containing local config info
 config/local/
 

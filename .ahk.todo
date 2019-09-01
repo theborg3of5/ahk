@@ -27,10 +27,6 @@
 		Telegram - left monitor, top or bottom depending on machine
 		Pidgin window - top-right of left monitor
 	
-# Rewrites/Cleanup
-	Rewrite colorette so we don't have to deal with the exe?
-		Would let us get rid of the special exe case in .gitignore, too
-	
 # Selector/TableList
 	Dynamically resize abbreviation column based on widest value?
 		To allow longer abbreviations

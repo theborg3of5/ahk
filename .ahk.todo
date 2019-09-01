@@ -1,4 +1,14 @@
 # New Ideas
+	Standardize how we format & structure classes
+		Capitalization (public vs private)
+		Startup/default values
+			Selector > chars, guiSettings
+			SelectorGui > chars
+			Hyperlinker > windows
+			TableList > chars
+			Toast > styles
+			WindowActions > actionOverrides
+		Square brackets on properties (that don't take parameters)
 	Make dbpop handle commas within quotes/parens?
 	Could we do something more consistent for some of the social windows (Telegram, Teams, etc.), where we can somehow just send an escape keystroke instead of closing?
 		Consistent hotkey (backtick, perhaps)?

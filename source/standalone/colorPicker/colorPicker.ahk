@@ -36,7 +36,11 @@ ExitApp
 ; Copy color, display result, and exit.
 RButton::
 	Gui, Hide
-	captureColor()
+	
+	foundColor := getRGBUnderMouse()
+	setClipboardAndToastValue(foundColor, "RGB color code")
+	Sleep, 2000
+	
 	ExitApp
 return
 
@@ -49,8 +53,8 @@ buildGui() {
 
 	; Add label
 	textHeight := FONT_HEIGHT
-	textWidth  := GUI_WIDTH ; Same width so we can center horizontally
-	textX      := 0
+	textWidth  := GUI_WIDTH ; Full width so we can center horizontally
+	textX      := 0 ; Left side so we cover the width fully
 	textY      := (GUI_HEIGHT - textHeight) / 2 ; Vertically centered
 	Gui, Add, Text, % "vColorText Center x" textX " y" textY " w" textWidth " h" textHeight ; ColorText is global variable to reference this control by
 }
@@ -64,7 +68,7 @@ updateGui() {
 	; Background is the current color
 	Gui, Color, % foundColor
 	
-	; Text shows the current color
+	; Text value is the current color
 	GuiControl, , ColorText, % foundColor
 	
 	; Text color is the inverse of the background color
@@ -102,10 +106,4 @@ moveGui(mouseX, mouseY) {
 		guiY := mouseY + MOUSE_GUI_PADDING ; Below cursor
 	
 	Gui, Show, % "NoActivate x" guiX " y" guiY " w" GUI_WIDTH " h" GUI_HEIGHT
-}
-
-captureColor() {
-	foundColor := getRGBUnderMouse()
-	setClipboardAndToastValue(foundColor, "RGB color code")
-	Sleep, 2000
 }

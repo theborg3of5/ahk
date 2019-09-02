@@ -168,7 +168,7 @@ getLastDateOfMonth(monthNum = "", year = "") {
 	else
 		nextMonthNum := monthNum + 1
 	
-	dateString := year nextMonthNum.prependIfMissing("0") ; First day of following month in YYYYMM format
+	dateString := year nextMonthNum.prePadToLength(2, "0") ; First day of following month in YYYYMM format
 	dateString += -1, Days ; Go back a day to get to the last day of the given month
 	
 	return FormatTime(dateString, "dd") ; Date with leading 0 (matches A_DD)

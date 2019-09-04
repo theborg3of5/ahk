@@ -1,4 +1,17 @@
 # New Ideas
+	Hyperlinker - consider getting to end of linked text once linked (right arrow once).
+	Figure out what to do about cleanupPath() dropping (valid) quotes from the end of URLs
+		Separate cleaning for URLs?
+			How to sense? Using ActionObjectPath?
+		Should we integrate this into ActionObjectPath instead? Is that overkill?
+	Escape & characters in toasts so they don't become underlines
+	Consider changing the approach for hyperlinker a bit
+		Have OneNote, others that need special handling do it themselves somehow
+		Ideas:
+			Passing in a BoundFunc
+			Just having a function with the right name
+				Would require a mapping from window name to class where function lives
+			Have programs that need special handling call into the logic themselves and handle special logic
 	Standardize how we format & structure classes
 		Capitalization (public vs private)
 		Startup/default values

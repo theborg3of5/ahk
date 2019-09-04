@@ -1,5 +1,4 @@
 # New Ideas
-	Hyperlinker - consider getting to end of linked text once linked (right arrow once).
 	Figure out what to do about cleanupPath() dropping (valid) quotes from the end of URLs
 		Separate cleaning for URLs?
 			How to sense? Using ActionObjectPath?

@@ -172,6 +172,9 @@ class Hyperlinker {
 		; Close the popup
 		Hyperlinker.closeWithMethod(closeMethod)
 		
+		; Deselect the now-linked text
+		Send, {Right}
+		
 		return true
 	}
 	
@@ -195,6 +198,9 @@ class Hyperlinker {
 		; Close the popup
 		Sleep, 500 ; Wait an extra half a second for web popups, as some of them have to validate before we can accept.
 		Hyperlinker.closeWithMethod(closeMethod)
+		
+		; Deselect the now-linked text
+		Send, {Right}
 		
 		return true
 	}

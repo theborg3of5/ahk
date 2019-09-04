@@ -329,6 +329,8 @@ class Toast {
 	;  labelVarName (I,REQ) - The name of the global variable connected to the toast label.
 	;---------
 	setLabelText(toastText, labelVarName) {
+		toastText := escapeCharUsingRepeat(toastText, "&")
+		
 		; Figure out how big the text control needs to be to fit its contents
 		getLabelSizeForText(toastText, textWidth, textHeight)
 		

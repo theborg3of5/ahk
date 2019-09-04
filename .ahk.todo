@@ -3,7 +3,6 @@
 		Separate cleaning for URLs?
 			How to sense? Using ActionObjectPath?
 		Should we integrate this into ActionObjectPath instead? Is that overkill?
-	Escape & characters in toasts so they don't become underlines
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:

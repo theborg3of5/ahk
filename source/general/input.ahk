@@ -79,6 +79,7 @@ return
 ; Turn clipboard into standard string and send it.
 !+n::
 	sendStandardEMC2ObjectString() {
+		waitForHotkeyRelease()
 		ao := new ActionObjectEMC2(clipboard)
 		sendTextWithClipboard(ao.standardEMC2String) ; Can contain hotkey chars
 		

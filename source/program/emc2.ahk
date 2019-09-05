@@ -18,6 +18,7 @@
 	
 	; SmartText hotstrings. Added to favorites to deal with duplicate/similar names.
 	:X:qa.dbc::EMC2.insertSmartText("DBC QA INSTRUCTIONS")
+	:X:qa.sdbc::EMC2.insertSmartText("DBC SIMPLE AND STRAIGHTFORWARD QA INSTRUCTIONS")
 	:X:qa.new::EMC2.insertSmartText("QA INSTRUCTIONS - NEW CHANGES")
 	
 	:X:openall::EMC2.openRelatedQANsFromTable() ; Open all related QANs from an object in EMC2.

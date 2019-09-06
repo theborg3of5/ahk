@@ -26,7 +26,6 @@
 	EpicStudio Config				esc				<USER_APPDATA_LOCAL>\Epic Systems Corporation\EpicStudio
 	HSWeb TraceX Files			trace				<USER_TEMP>\<yyyy>-<MM>-<dd>
 	S1 Source						s1					<EPIC_SOURCE_S1>
-	S2 Source						s2					<EPIC_SOURCE_S2>
 	
 	# Epic Server
 	Net Home							nh					<EPIC_NET_HOME>

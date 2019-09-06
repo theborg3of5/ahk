@@ -27,7 +27,6 @@
 	Epic Temp Daily					EPIC_TEMP_DAILY
 	Epic Personal						EPIC_PERSONAL
 	Epic Source S1						EPIC_SOURCE_S1
-	Epic Source S2						EPIC_SOURCE_S2
 	Epic VDI Settings					EPIC_VDI_SETTINGS
 []
 	

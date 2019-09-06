@@ -110,8 +110,7 @@ class Chrome {
 		displayCode := tag.appendPiece(routine, "^")
 		Toast.showMedium("Opening server code in EpicStudio: " displayCode)
 		
-		ao := new ActionObjectEpicStudio(tag "^" routine, ActionObjectEpicStudio.DescriptorType_Routine)
-		ao.openEdit()
+		new ActionObjectEpicStudio(tag "^" routine, ActionObjectEpicStudio.DescriptorType_Routine).openEdit()
 	}
 
 	;---------

@@ -81,8 +81,7 @@ class EMC2 {
 	openCurrentRecordWeb() {
 		record := new EpicRecord()
 		record.initFromEMC2Title()
-		ao := new ActionObjectEMC2(record.id, record.ini)
-		ao.openWeb()
+		new ActionObjectEMC2(record.id, record.ini).openWeb()
 	}
 	
 	;---------
@@ -92,8 +91,7 @@ class EMC2 {
 	openCurrentRecordWebBasic() {
 		record := new EpicRecord()
 		record.initFromEMC2Title()
-		ao := new ActionObjectEMC2(record.id, record.ini)
-		ao.openWebBasic()
+		new ActionObjectEMC2(record.id, record.ini).openWebBasic()
 	}
 	
 	;---------
@@ -107,8 +105,7 @@ class EMC2 {
 		
 		Toast.showMedium("Opening DLG in EpicStudio: " record.id)
 		
-		ao := new ActionObjectEpicStudio(record.id, ActionObjectEpicStudio.DescriptorType_DLG)
-		ao.openEdit()
+		new ActionObjectEpicStudio(record.id, ActionObjectEpicStudio.DescriptorType_DLG).openEdit()
 	}
 	
 	;---------

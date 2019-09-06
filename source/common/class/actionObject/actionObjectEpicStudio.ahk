@@ -11,6 +11,8 @@
 		
 		ao := new ActionObjectEpicStudio(123456) ; DLG ID
 		ao.openEdit() ; Open DLG in EpicStudio
+		; OR, the same thing, chained:
+		new ActionObjectEpicStudio(123456).openEdit()
 */
 
 class ActionObjectEpicStudio extends ActionObjectBase {

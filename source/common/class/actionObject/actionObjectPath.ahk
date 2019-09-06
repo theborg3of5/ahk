@@ -11,6 +11,8 @@
 		
 		ao := new ActionObjectPath("google.com", ActionObjectPath.PathType_URL) ; Specify path type if known to avoid prompting
 		ao.openEdit() ; Run URL
+		; OR, the same thing, chained:
+		new ActionObjectPath("google.com", ActionObjectPath.PathType_URL).openEdit()
 */
 
 class ActionObjectPath extends ActionObjectBase {

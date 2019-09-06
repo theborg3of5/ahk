@@ -47,8 +47,7 @@
 		
 		urlsAry := []
 		For _,qan in relatedQANsAry {
-			ao := new ActionObjectEMC2(qan, "QAN")
-			link := ao.getLinkWeb()
+			link := new ActionObjectEMC2(qan, "QAN").getLinkWeb()
 			if(link)
 				urlsAry.push(link)
 		}

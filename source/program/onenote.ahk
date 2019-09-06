@@ -289,8 +289,7 @@ class OneNote {
 		selectCurrentLine() ; Select whole line, but avoid the extra indentation and newline that comes with ^a.
 		selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
 		
-		ao := new ActionObjectEMC2(id, ini)
-		ao.linkSelectedTextWeb("Failed to link EMC2 object text")
+		new ActionObjectEMC2(id, ini).linkSelectedTextWeb("Failed to link EMC2 object text")
 		
 		Send, {End}
 	}

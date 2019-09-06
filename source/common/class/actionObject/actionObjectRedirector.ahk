@@ -11,6 +11,8 @@
 		; Determine type based on input
 		ao := new ActionObjectRedirector("DLG 123456") ; This will be an EMC2-type object, so ao is an ActionObjectEMC2 instance
 		ao.openWeb() ; Open the web version of the object
+		; OR, the same thing, chained:
+		new ActionObjectRedirector("DLG 123456").openWeb()
 		
 		; Will prompt user for both type and value with Selector popup because neither given
 		ao := new ActionObjectRedirector()

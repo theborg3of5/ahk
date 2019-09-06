@@ -15,6 +15,8 @@
 		
 		ao := new ActionObjectEMC2(123456) ; ID without an INI, user will be prompted for the INI
 		ao.openEdit() ; Open object in EMC2
+		; OR, the same thing, chained:
+		new ActionObjectEMC2(123456).openEdit()
 */
 
 class ActionObjectEMC2 extends ActionObjectBase {

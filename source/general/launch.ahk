@@ -1,40 +1,16 @@
 ; Launch miscellaneous actions.
 
 ; Generic open - open a variety of different things based on the selected text.
-^!#o::
-	genericOpenWeb() {
-		ao := new ActionObjectRedirector(getSelectedText())
-		ao.openWeb()
-	}
-^!#+o::
-	genericOpenEdit() {
-		ao := new ActionObjectRedirector(getSelectedText())
-		ao.openEdit()
-	}
+^!#o:: new ActionObjectRedirector(getSelectedText()).openWeb()
+^!#+o::new ActionObjectRedirector(getSelectedText()).openEdit()
 
 ; Generic copy link - copy links to a variety of different things based on the selected text.
-^!#l::
-	genericCopyLinkWeb() {
-		ao := new ActionObjectRedirector(getSelectedText())
-		ao.copyLinkWeb()
-	}
-^!#+l::
-	genericCopyLinkEdit() {
-		ao := new ActionObjectRedirector(getSelectedText())
-		ao.copyLinkEdit()
-	}
+^!#l:: new ActionObjectRedirector(getSelectedText()).copyLinkWeb()
+^!#+l::new ActionObjectRedirector(getSelectedText()).copyLinkEdit()
 
 ; Generic hyperlinker - get link based on the selected text and then apply it to that same text.
-^!#k::
-	genericHyperlinkSelectedTextWeb() {
-		ao := new ActionObjectRedirector(getSelectedText())
-		ao.linkSelectedTextWeb()
-	}
-^!#+k::
-	genericHyperlinkSelectedTextEdit() {
-		ao := new ActionObjectRedirector(getSelectedText())
-		ao.linkSelectedTextEdit()
-	}
+^!#k:: new ActionObjectRedirector(getSelectedText()).linkSelectedTextWeb()
+^!#+k::new ActionObjectRedirector(getSelectedText()).linkSelectedTextEdit()
 
 ; Selector to allow easy editing of config TL files that don't show a popup
 !+c::

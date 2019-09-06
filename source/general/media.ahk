@@ -8,8 +8,7 @@
 ; Change the media player that media keys will deal with.
 ^Volume_Mute::
 	changeMediaPlayer() {
-		s := new Selector("mediaPlayers.tls")
-		programName := s.selectGui("PROGRAM_NAME")
+		programName := new Selector("mediaPlayers.tls").selectGui("PROGRAM_NAME")
 		if(programName) {
 			MainConfig.mediaPlayer := programName
 			Toast.showMedium("Media player set to: " programName)

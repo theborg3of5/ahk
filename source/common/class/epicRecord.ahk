@@ -155,8 +155,7 @@ class EpicRecord {
 		if(this.ini != "" && this.id != "") ; Nothing required is missing.
 			return true
 		
-		s := new Selector("epicRecord.tls")
-		data := s.selectGui("", "", {"INI":this.ini, "ID":this.id})
+		data := new Selector("epicRecord.tls").selectGui("", "", {"INI":this.ini, "ID":this.id})
 		if(!data)
 			return false
 		if(data["INI"] = "" || data["ID"] = "") ; Didn't get everything we needed.

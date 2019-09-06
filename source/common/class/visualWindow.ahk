@@ -22,7 +22,7 @@
 		
 	Example Usage
 		window := new VisualWindow("A") ; Create a new VisualWindow representing the active window ("A")
-		
+		window.move(VisualWindow.X_Centered, VisualWindow.Y_Centered) ; Center window
 */
 
 class VisualWindow {

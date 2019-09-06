@@ -206,8 +206,7 @@ class MSnippets {
 		if(line = ";")
 			Send, {Backspace}
 		
-		s := new Selector("MSnippets.tls")
-		data := s.selectGui()
+		data := new Selector("MSnippets.tls").selectGui()
 		
 		if(data["TYPE"] = "LOOP")
 			snipString := MSnippets.buildMLoop(data, numIndents)
@@ -397,8 +396,7 @@ class MSnippets {
 		arrayName := data["ARRAY_OR_INI"]
 		valueList := data["VARS_OR_VALUES"]
 		
-		fl := new FormatList(valueList)
-		listAry := fl.getList(FormatList.Format_Array)
+		listAry := new FormatList(valueList).getList(FormatList.Format_Array)
 		
 		newLine := MSnippets.getMNewLinePlusIndent(numIndents)
 		lineBase := MainConfig.private["M_LIST_ARRAY_INDEX"]

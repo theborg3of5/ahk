@@ -22,8 +22,7 @@ class Snapper {
 	;                 to snapperIgnoreItems.tls) to Snapper and apply.
 	;---------
 	sendItemsToIgnore() {
-		s := new Selector("snapperIgnoreItems.tls")
-		itemsList := s.selectGui("STATUS_ITEMS")
+		itemsList := new Selector("snapperIgnoreItems.tls").selectGui("STATUS_ITEMS")
 		if(!itemsList)
 			return
 		

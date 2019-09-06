@@ -3,6 +3,10 @@
 		Separate cleaning for URLs?
 			How to sense? Using ActionObjectPath?
 		Should we integrate this into ActionObjectPath instead? Is that overkill?
+	With new discovery about chaining constructors to single call afterwards (i.e. 'data := new Selector("filepath").selectGui()'), do we still need the static side of Toast?
+		Would it be cleaner to just have callers use 'new Toast().*' instead?
+	Consider renaming MainConfig to just Config to be shorter
+		Maybe also shorten some of the constantly-used properties, like the selector filters
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:

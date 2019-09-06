@@ -544,9 +544,9 @@ class OneNoteTodoPage {
 		instantsAry := OneNoteTodoPage.getInstantsToCheck(instant)
 		
 		; Read in table of todos to find which apply
-		tl := new TableList("oneNoteRecurringTodos.tl")
+		table := new TableList("oneNoteRecurringTodos.tl").getTable()
 		matchingTodos := []
-		For _,todoAry in tl.getTable() {
+		For _,todoAry in table {
 			todo := new OneNoteRecurringTodo(todoAry)
 			For _,instant in instantsAry {
 				if(!todo.matchesInstant(instant))

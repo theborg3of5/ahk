@@ -86,8 +86,7 @@ class Putty {
 	
 		; If no previous values (or not using them), prompt the user for how/what to search.
 		if(searchType = "" || searchText = "") {
-			s := new Selector("puttyRecordEditSearch.tls")
-			data := s.selectGui()
+			data := new Selector("puttyRecordEditSearch.tls").selectGui()
 			searchType := data["SEARCH_TYPE"]
 			searchText := data["SEARCH_TEXT"]
 		}
@@ -130,8 +129,7 @@ class Putty {
 	;                will prompt the user for which command to send with a Selector popup.
 	;---------
 	sendCommand(key := "") {
-		s := new Selector("puttyCommands.tls")
-		data := s.select(key)
+		data := new Selector("puttyCommands.tls").select(key)
 		
 		command   := data["COMMAND"]
 		sendAfter := data["SEND_AFTER"]

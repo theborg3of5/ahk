@@ -42,8 +42,7 @@ return
 		if(y = "")
 			y := VisualWindow.Y_Centered
 		
-		window := new VisualWindow("A")
-		window.resizeMove(data["WIDTH"], data["HEIGHT"], x, y)
+		new VisualWindow("A").resizeMove(data["WIDTH"], data["HEIGHT"], x, y)
 	}
 
 ; Call the Windows API function "SetSuspendState" to have the system suspend or hibernate.

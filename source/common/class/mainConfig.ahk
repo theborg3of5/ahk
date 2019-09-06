@@ -261,8 +261,7 @@ class MainConfig {
 	
 	
 	loadPrivates(filePath) {
-		tl := new TableList(filePath)
-		privatesTable := tl.getTable()
+		privatesTable := new TableList(filePath).getTable()
 		
 		; Index private values by key.
 		privatesAry := reduceTableToColumn(privatesTable, "VALUE", "KEY")
@@ -284,8 +283,7 @@ class MainConfig {
 	}
 	
 	loadWindows(filePath) {
-		tl := new TableList(filePath)
-		windowsTable := tl.getTable()
+		windowsTable := new TableList(filePath).getTable()
 		
 		windows := {}
 		For _,row in windowsTable {
@@ -299,8 +297,7 @@ class MainConfig {
 	}
 	
 	loadPaths(filePath) {
-		tl := new TableList(filePath)
-		pathsTable := tl.getFilteredTableUnique("NAME", "CONTEXT", this.context)
+		pathsTable := new TableList(filePath).getFilteredTableUnique("NAME", "CONTEXT", this.context)
 		
 		; Index paths by key.
 		pathsAry := reduceTableToColumn(pathsTable, "PATH", "KEY")
@@ -348,8 +345,7 @@ class MainConfig {
 	}
 	
 	loadPrograms(filePath) {
-		tl := new TableList(filePath)
-		programsTable := tl.getFilteredTableUnique("NAME", "MACHINE", this.machine)
+		programsTable := new TableList(filePath).getFilteredTableUnique("NAME", "MACHINE", this.machine)
 		; DEBUG.popupEarly("MainConfig","loadPrograms", "Unique table",programsTable)
 		
 		; Index it by name.
@@ -362,8 +358,7 @@ class MainConfig {
 	}
 	
 	loadGames(filePath) {
-		tl := new TableList(filePath)
-		return tl.getTable()
+		return new TableList(filePath).getTable()
 	}
 	
 	matchesWithMethod(haystack, needle, method := "ANY") { ; method := MainConfig.TitleContains_Any

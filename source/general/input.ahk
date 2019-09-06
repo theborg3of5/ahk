@@ -89,11 +89,7 @@ return
 	}
 
 ; Send the clipboard as a list.
-^#v::
-	sendClipboardAsFormatList() {
-		fl := new FormatList(clipboard)
-		fl.sendList()
-	}
+^#v::new FormatList(clipboard).sendList()
 
 ; Grab the selected text and pop it into a new Notepad window
 !v::

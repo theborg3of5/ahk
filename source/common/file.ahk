@@ -92,8 +92,7 @@ cleanupPath(path) {
 
 mapPath(path) {	
 	; Convert paths to use mapped drive letters
-	tl := new TableList(findConfigFilePath("mappedDrives.tl"))
-	table := tl.getFilteredTable("CONTEXT", MainConfig.context)
+	table := new TableList("mappedDrives.tl").getFilteredTable("CONTEXT", MainConfig.context)
 	For i,row in table {
 		if(path.contains(row["PATH"])) {
 			path := path.replaceOne(row["PATH"], row["DRIVE_LETTER"] ":")

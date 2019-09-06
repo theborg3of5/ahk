@@ -157,8 +157,7 @@ class WindowActions {
 	;                 windows.
 	;---------
 	loadActions(filePath) {
-		tl := new TableList(filePath)
-		actionsTable := tl.getFilteredTableUnique("NAME", "MACHINE", MainConfig.machine)
+		actionsTable := new TableList(filePath).getFilteredTableUnique("NAME", "MACHINE", MainConfig.machine)
 		
 		; Index actions by window name
 		actions := {}

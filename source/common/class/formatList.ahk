@@ -163,8 +163,7 @@ class FormatList {
 	; RETURNS:        The chosen format, should match a value from FormatList.Format_*
 	;---------
 	promptForFormat(title) {
-		s := new Selector("listFormats.tls")
-		return s.selectGui("FORMAT", title)
+		return new Selector("listFormats.tls").selectGui("FORMAT", title)
 	}
 	
 	;---------

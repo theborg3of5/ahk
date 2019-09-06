@@ -15,8 +15,7 @@
 ; Selector to allow easy editing of config TL files that don't show a popup
 !+c::
 	selectConfig() {
-		s := new Selector("configs.tls")
-		path := s.selectGui("PATH")
+		path := new Selector("configs.tls").selectGui("PATH")
 		if(!path)
 			return
 		
@@ -30,8 +29,7 @@
 	^+!#t::
 		selectDLG() {
 			filter := {COLUMN:"DLG", VALUE:"", INCLUDE_BLANKS:false}
-			s := new Selector("outlookTLG.tls", filter)
-			dlgId := s.selectGui("DLG", "", "", true)
+			dlgId := new Selector("outlookTLG.tls", filter).selectGui("DLG", "", "", true)
 			if(!dlgId)
 				return
 			
@@ -42,16 +40,14 @@
 	
 	^+!h::
 		selectHyperspace() {
-			s := new Selector("epicEnvironments.tls")
-			data := s.selectGui("", "Launch Hyperspace in Environment")
+			data := new Selector("epicEnvironments.tls").selectGui("", "Launch Hyperspace in Environment")
 			if(data)
 				Run(buildHyperspaceRunString(data["MAJOR"], data["MINOR"], data["COMM_ID"]))
 		}
 	
 	^+!i::
 		selectEnvironmentId() {
-			s := new Selector("epicEnvironments.tls")
-			envId := s.selectGui("ENV_ID")
+			envId := new Selector("epicEnvironments.tls").selectGui("ENV_ID")
 			if(envId) {
 				Send, % envId
 				Send, {Enter} ; Submit it too.
@@ -83,8 +79,7 @@
 #If MainConfig.machineIsEpicLaptop
 	^+!t::
 		selectOutlookTLG() {
-			s := new Selector("outlookTLG.tls")
-			data := s.selectGui()
+			data := new Selector("outlookTLG.tls").selectGui()
 			if(!data)
 				return
 			
@@ -109,8 +104,7 @@
 	
 	^+!r::
 		selectThunder() {
-			s := new Selector("epicEnvironments.tls")
-			data := s.selectGui("", "Launch Thunder Environment")
+			data := new Selector("epicEnvironments.tls").selectGui("", "Launch Thunder Environment")
 			if(!data)
 				return
 			
@@ -122,8 +116,7 @@
 	
 	!+v::
 		selectVDI() {
-			s := new Selector("epicEnvironments.tls")
-			data := s.selectGui("", "Launch VDI for Environment")
+			data := new Selector("epicEnvironments.tls").selectGui("", "Launch VDI for Environment")
 			if(!data)
 				return
 			
@@ -146,8 +139,7 @@
 			if(isValidPhoneNumber(selectedText)) ; If the selected text is a valid number, go ahead and call it (confirmation included in callNumber)
 				callNumber(selectedText)
 			else
-				s := new Selector("phone.tls")
-				data := s.selectGui()
+				data := new Selector("phone.tls").selectGui()
 				if(data)
 					callNumber(data["NUMBER"], data["NAME"])
 		}

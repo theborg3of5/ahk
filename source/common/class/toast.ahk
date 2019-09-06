@@ -9,7 +9,7 @@
 		; Show a toast on a 5-second timer
 		t := new Toast("5-second timer toast!")
 		t.showForSeconds(5)
-		; (OR)
+		; OR, statically:
 		Toast.showMedium("5-second timer toast!")
 		
 		; Show a toast, then hide it after finishing a longer-running action
@@ -313,8 +313,7 @@ class Toast {
 		else
 			Gui, Show, AutoSize NoActivate, % Toast.ToastTitle ; Resize to size of contents
 		
-		window := new VisualWindow(titleString) ; Blank title string for last found window
-		window.move(x, y)
+		window := new VisualWindow(titleString).move(x, y) ; Blank title string for last found window
 		
 		if(isWinHidden)
 			Gui, Show, NoActivate, % Toast.ToastTitle

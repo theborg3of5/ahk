@@ -353,6 +353,77 @@ class TableList {
 		return this.table
 	}
 	
+	
+	filterOnContext() {
+		newTable := []
+		For _,row in this.table {
+			if(this.rowPassesFilter(row, "CONTEXT", MainConfig.context))
+				newTable.push(row)
+		}
+		
+		this.table := newTable
+		return this
+	}
+	
+	collapseByColumn(column, preferValue) {
+		if(!column)
+			return this
+		
+		uniqueRows := {} ; {uniqueValue: row}
+		For _,row in this.table {
+			rowValue := row[column]
+			
+			; if(uniqueRows[rowValue] ; GDB TODO next here - figure out what to do about blank values in the column
+			
+			
+		}
+		
+		newTable := []
+		For _,row in uniqueRows
+			newTable.push(row)
+		
+		this.table := newTable
+		return this
+		
+		
+		; ; Filter out non-matching rows and index by unique value
+		; rowsMatchingFilter  := {} ; {uniqueValue: row}
+		; rowsWithBlankFilter := {} ; {uniqueValue: row}
+		; For _,row in this.table {
+			; if(!this.rowPassesFilter(row, filterColumn, filterValue))
+				; Continue
+			
+			; rowUniqueVal := row[uniqueColumn]
+			; rowFilterVal := row[filterColumn]
+			
+			; if(rowFilterVal = "") {
+				; if(rowsWithBlankFilter[rowUniqueVal] = "") ; First row per unique value wins
+					; rowsWithBlankFilter[rowUniqueVal] := row
+			; } else if(rowFilterVal = filterValue) {
+				; if(rowsMatchingFilter[rowUniqueVal] = "") ; First row per unique value wins
+					; rowsMatchingFilter[rowUniqueVal] := row
+			; }
+		; }
+		; uniqueRows := mergeObjects(rowsWithBlankFilter, rowsMatchingFilter) ; Exact matches win (override)
+		
+		; filteredTable := []
+		; For _,row in uniqueRows
+			; filteredTable.push(row)
+		
+		; ; DEBUG.popupEarly(filteredTable)
+		; return filteredTable
+		
+		
+		
+		
+		
+		
+	}
+	
+	removeEmptyForColumn(column) {
+		
+	}
+	
 	;---------
 	; DESCRIPTION:    Retrieve a version of the table that excludes rows that don't match a certain
 	;                 filter.
@@ -373,7 +444,7 @@ class TableList {
 			return ""
 		
 		filteredTable := []
-		For i,row in this.table {
+		For _,row in this.table {
 			if(this.rowPassesFilter(row, column, value, includeBlanks))
 				filteredTable.push(row)
 		}
@@ -739,7 +810,7 @@ class TableList {
 	;  row           (I,REQ) - A row in the table. May be an array or string.
 	;  column        (I,OPT) - The column to filter on - we will check the value of this column
 	;                          (index) in the row array to see if it matches filterValue.
-	;  value  (I,OPT) - Only include rows which have this value in their column (with the
+	;  value         (I,OPT) - Only include rows which have this value in their column (with the
 	;                          exception of rows with a blank value, see includeBlanks parameter).
 	;                          If this is left blank, any value is allowed.
 	;  includeBlanks (I,OPT) - If set to false, columns which have a blank value for the given column

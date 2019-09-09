@@ -8,6 +8,9 @@
 		Would it be cleaner to just have callers use 'new Toast().*' instead?
 	Consider renaming MainConfig to just Config to be shorter
 		Maybe also shorten some of the constantly-used properties, like the selector filters
+			Alternatively, should the machine/context filters just be integrated into TableList itself?
+				Could have specific functions - either to apply the filter in-place (and get the table after), or to get the accordingly filtered table.
+					Could chain functions if they return this
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:

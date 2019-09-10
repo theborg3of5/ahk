@@ -8,9 +8,15 @@
 		Would it be cleaner to just have callers use 'new Toast().*' instead?
 	Consider renaming MainConfig to just Config to be shorter
 		Maybe also shorten some of the constantly-used properties, like the selector filters
-			Alternatively, should the machine/context filters just be integrated into TableList itself?
-				Could have specific functions - either to apply the filter in-place (and get the table after), or to get the accordingly filtered table.
-					Could chain functions if they return this
+			Or, integrate filters into TableList itself?
+	TableList rework
+		Specific functions for machine/context filters from MainConfig - chainable ones
+		Turn filtering into an in-place operation?
+		Add getter functions for re-indexed cases:
+			reduceTableToColumn - return only one column's values, {index: columnValue}
+			reIndexTableBySubscript - return based on an existing column
+				Conceptually this is quite similar to getFilteredTableUnique() - could do an in-place filter, then index by a column's value
+					Can add extra params for tiebreakers (programs, etc. where one value should win)
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:

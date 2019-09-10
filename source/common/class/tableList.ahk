@@ -375,29 +375,51 @@ class TableList {
 		return this
 	}
 	
-	getUniqueByColumn(uniqueColumn, tiebreakerColumn := "") {
-		if(!uniqueColumn)
-			return this
+	getColumnByColumn(valueColumn, indexColumn, tiebreakerColumn := "") {
+		if(!column || !indexColumn)
+			return ""
 		
-		uniqueRows := {} ; {uniqueValue: row}
+		rows := {}
 		For _,row in this.table {
-			rowUnique := row[uniqueColumn]
-			if(rowUnique = "") ; Ignore rows with no value in column
+			indexValue := row[indexColumn]
+			if(indexValue = "") ; Rows with a blank index value are dropped
 				Continue
 			
-			if(uniqueRows[rowUnique] = "") {
-				uniqueRows[rowUnique] := row
+			; First row we find wins.
+			if(rows[indexValue] != "")
 				Continue
-			}
 			
-			if(tiebreakerColumn != "" && row[tiebreakerColumn] != "" && uniqueRows[rowUnique, tiebreakerColumn] = "") { ; GDB TODO break this up better
-				uniqueRows[rowUnique] := row
-				Continue
-			}
-			
+			rows[indexValue] := row[valueColumn]
 		}
 		
-		return uniqueRows
+		return rows
+	}
+	
+	getRowsByColumn(indexColumn, tiebreakerColumn := "") {
+		if(!indexColumn)
+			return ""
+		
+		rows := {} ; {uniqueValue: row}
+		For _,row in this.table {
+			rowIndex := row[indexColumn]
+			if(rowIndex = "") ; Ignore rows with no value in column
+				Continue
+			
+			if(rows[rowIndex] = "") {
+				rows[rowIndex] := row
+				Continue
+			}
+			
+			; A new row can only oust an existing one if it "wins" in the tiebreaker column
+			if(tiebreakerColumn = "") {
+				if(rows[rowIndex, tiebreakerColumn] = "" && row[tiebreakerColumn] != "") { ; New row wins if it has a value in the tiebreaker column, and the existing row doesn't.
+					rows[rowIndex] := row
+					Continue
+				}
+			}
+		}
+		
+		return rows
 	}
 	
 	removeEmptyForColumn(column) {

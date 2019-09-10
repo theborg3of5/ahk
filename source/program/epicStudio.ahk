@@ -97,7 +97,7 @@ class EpicStudio {
 		if(record.ini != "DLG" || record.id = "")
 			return
 		
-		Send, ^l
+		Send, ^!l
 		WinWaitActive, Link DLG, , 5
 		Send, % record.id
 		Send, {Enter 2}

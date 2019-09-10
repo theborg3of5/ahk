@@ -354,7 +354,7 @@ class TableList {
 	}
 	
 	
-	filterOnContext() {
+	filterByContext() {
 		newTable := []
 		For _,row in this.table {
 			if(this.rowPassesFilter(row, "CONTEXT", MainConfig.context))
@@ -364,8 +364,18 @@ class TableList {
 		this.table := newTable
 		return this
 	}
+	filterByMachine() {
+		newTable := []
+		For _,row in this.table {
+			if(this.rowPassesFilter(row, "MACHINE", MainConfig.machine))
+				newTable.push(row)
+		}
+		
+		this.table := newTable
+		return this
+	}
 	
-	getUniqueByColumn(uniqueColumn, tiebreakerColumn := "", tiebreakerValue := "") {
+	getUniqueByColumn(uniqueColumn, tiebreakerColumn := "") {
 		if(!uniqueColumn)
 			return this
 		
@@ -380,7 +390,7 @@ class TableList {
 				Continue
 			}
 			
-			if(tiebreakerColumn != "" && row[tiebreakerColumn] = tiebreakerValue && uniqueRows[rowUnique, tiebreakerColumn] = "") { ; GDB TODO break this up better
+			if(tiebreakerColumn != "" && row[tiebreakerColumn] != "" && uniqueRows[rowUnique, tiebreakerColumn] = "") { ; GDB TODO break this up better
 				uniqueRows[rowUnique] := row
 				Continue
 			}
@@ -388,47 +398,6 @@ class TableList {
 		}
 		
 		return uniqueRows
-		
-		; newTable := []
-		; For _,row in uniqueRows
-			; newTable.push(row)
-		
-		; this.table := newTable
-		; return this
-		
-		
-		; ; Filter out non-matching rows and index by unique value
-		; rowsMatchingFilter  := {} ; {uniqueValue: row}
-		; rowsWithBlankFilter := {} ; {uniqueValue: row}
-		; For _,row in this.table {
-			; if(!this.rowPassesFilter(row, filterColumn, filterValue))
-				; Continue
-			
-			; rowUniqueVal := row[uniqueColumn]
-			; rowFilterVal := row[filterColumn]
-			
-			; if(rowFilterVal = "") {
-				; if(rowsWithBlankFilter[rowUniqueVal] = "") ; First row per unique value wins
-					; rowsWithBlankFilter[rowUniqueVal] := row
-			; } else if(rowFilterVal = filterValue) {
-				; if(rowsMatchingFilter[rowUniqueVal] = "") ; First row per unique value wins
-					; rowsMatchingFilter[rowUniqueVal] := row
-			; }
-		; }
-		; uniqueRows := mergeObjects(rowsWithBlankFilter, rowsMatchingFilter) ; Exact matches win (override)
-		
-		; filteredTable := []
-		; For _,row in uniqueRows
-			; filteredTable.push(row)
-		
-		; ; DEBUG.popupEarly(filteredTable)
-		; return filteredTable
-		
-		
-		
-		
-		
-		
 	}
 	
 	removeEmptyForColumn(column) {

@@ -365,25 +365,36 @@ class TableList {
 		return this
 	}
 	
-	collapseByColumn(column, preferValue) {
-		if(!column)
+	getUniqueByColumn(uniqueColumn, tiebreakerColumn := "", tiebreakerValue := "") {
+		if(!uniqueColumn)
 			return this
 		
 		uniqueRows := {} ; {uniqueValue: row}
 		For _,row in this.table {
-			rowValue := row[column]
+			rowUnique := row[uniqueColumn]
+			if(rowUnique = "") ; Ignore rows with no value in column
+				Continue
 			
-			; if(uniqueRows[rowValue] ; GDB TODO next here - figure out what to do about blank values in the column
+			if(uniqueRows[rowUnique] = "") {
+				uniqueRows[rowUnique] := row
+				Continue
+			}
 			
+			if(tiebreakerColumn != "" && row[tiebreakerColumn] = tiebreakerValue && uniqueRows[rowUnique, tiebreakerColumn] = "") { ; GDB TODO break this up better
+				uniqueRows[rowUnique] := row
+				Continue
+			}
 			
 		}
 		
-		newTable := []
-		For _,row in uniqueRows
-			newTable.push(row)
+		return uniqueRows
 		
-		this.table := newTable
-		return this
+		; newTable := []
+		; For _,row in uniqueRows
+			; newTable.push(row)
+		
+		; this.table := newTable
+		; return this
 		
 		
 		; ; Filter out non-matching rows and index by unique value

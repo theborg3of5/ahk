@@ -357,7 +357,7 @@ class TableList {
 	filterByContext() {
 		newTable := []
 		For _,row in this.table {
-			if(this.rowPassesFilter(row, "CONTEXT", MainConfig.context))
+			if(this.rowPassesFilter(row, "CONTEXT", MainConfig.context)) ; GDB TODO do we really want/need this function anymore? Can it be simplified?
 				newTable.push(row)
 		}
 		

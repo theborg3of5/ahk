@@ -582,11 +582,9 @@ class OneNoteTodoPage {
 	;                 we'll return an array with just the provided instant in it.
 	;---------
 	getInstantsToCheck(instant) {
-		; Do pages at work are always daily
-		if(MainConfig.contextIsWork)
-			return [instant]
+		; Doesn't apply at work - no recurring todos
 		
-		; Otherwise, it varies by day of the week
+		; At home, it varies by day of the week
 		if(MainConfig.contextIsHome) {
 			dayOfWeek := FormatTime(instant, "Wday") ; Day of the week, 1 (Sunday) to 7 (Saturday)
 			

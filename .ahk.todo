@@ -1,4 +1,6 @@
 # New Ideas
+	Bug: sending cleaned-up path strips out + characters from path
+		Example: C:\Users\gborg\Dev\Notepad++Sessions
 	Figure out what to do about cleanupPath() dropping (valid) quotes from the end of URLs
 		Separate cleaning for URLs?
 			How to sense? Using ActionObjectPath?
@@ -12,11 +14,16 @@
 	TableList rework
 		Specific functions for machine/context filters from MainConfig - chainable ones
 		Turn filtering into an in-place operation?
+			filterOutEmptyForColumn() to cover one case where we don't want to include blanks (DLG TLG Selector)
 		Add getter functions for re-indexed cases:
 			reduceTableToColumn - return only one column's values, {index: columnValue}
 			reIndexTableBySubscript - return based on an existing column
 				Conceptually this is quite similar to getFilteredTableUnique() - could do an in-place filter, then index by a column's value
 					Can add extra params for tiebreakers (programs, etc. where one value should win)
+		Handling for callers through Selector
+			Can we move away from the filter parameter, to in-place functions?
+				That would probably require moving the transition from TableList to SelectorChoices into the select logic, instead of in the initial read-in (so keep a reference to the TableList, filter that based on callers, then on selection actually turn that into choices).
+			For empty case (DLG TLG Selector), could still use something like filter["INCLUDE_BLANKS"], but make it a positive choice instead of setting that to false - filter["NO_BLANKS"] := true
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:

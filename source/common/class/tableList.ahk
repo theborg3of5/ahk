@@ -375,6 +375,20 @@ class TableList {
 		return this
 	}
 	
+	filterOutEmptyForColumn(column) {
+		if(!column)
+			return this
+		
+		newTable := []
+		For _,row in this.table {
+			if(row[column] != "")
+				newTable.push(row)
+		}
+		
+		this.table := newTable
+		return this
+	}
+	
 	getColumnByColumn(valueColumn, indexColumn, tiebreakerColumn := "") {
 		if(!column || !indexColumn)
 			return ""
@@ -420,10 +434,6 @@ class TableList {
 		}
 		
 		return rows
-	}
-	
-	removeEmptyForColumn(column) {
-		
 	}
 	
 	;---------

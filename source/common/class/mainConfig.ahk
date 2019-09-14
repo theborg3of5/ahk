@@ -34,9 +34,13 @@ class MainConfig {
 		gamesPath    := configFolder "\" gamesFile
 		privatesPath := configFolder "\" privatesFile
 		
-		; Read in and process the files.
-		this.privates := this.loadPrivates(privatesPath) ; This should be loaded before everything else, so the tags defined there can be used by other config files as needed.
+		; Read in settings and add automatic context/machine filters to TableList.
 		this.settings := this.loadSettings(settingsPath)
+		TableList.addAutomaticFilter("CONTEXT", this.context)
+		TableList.addAutomaticFilter("MACHINE", this.machine)
+		
+		; Read in and process the other files.
+		this.privates := this.loadPrivates(privatesPath) ; This should be loaded before most other things, as they can use the resulting tags.
 		this.windows  := this.loadWindows(windowsPath)
 		this.paths    := this.loadPaths(pathsPath)
 		this.programs := this.loadPrograms(programsPath)
@@ -271,9 +275,9 @@ class MainConfig {
 		this.settingsINIPath := filePath
 		
 		settings := {}
-		settings["MACHINE"]         := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from MainConfig.Machine_* constants
-		settings["CONTEXT"]         := IniRead(this.settingsINIPath, "Main", "CONTEXT")         ; Which context this is, from MainConfig.Context_* constants
-		settings["MEDIA_PLAYER"]    := IniRead(this.settingsINIPath, "Main", "MEDIA_PLAYER")    ; What program the media keys should deal with
+		settings["MACHINE"]      := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from MainConfig.Machine_* constants
+		settings["CONTEXT"]      := IniRead(this.settingsINIPath, "Main", "CONTEXT")         ; Which context this is, from MainConfig.Context_* constants
+		settings["MEDIA_PLAYER"] := IniRead(this.settingsINIPath, "Main", "MEDIA_PLAYER")    ; What program the media keys should deal with
 		
 		; DEBUG.popup("Settings", settings)
 		return settings
@@ -294,7 +298,7 @@ class MainConfig {
 	}
 	
 	loadPaths(filePath) {
-		pathsAry := new TableList(filePath).filterByContext().getColumnByColumn("PATH", "KEY")
+		pathsAry := new TableList(filePath).getColumnByColumn("PATH", "KEY")
 		
 		; Grab special path tags from the system to replace in the ones we just read in.
 		systemPathTags := this.getSystemPathTags()
@@ -339,10 +343,10 @@ class MainConfig {
 	}
 	
 	loadPrograms(filePath) {
-		programsTable := new TableList(filePath).getFilteredTableUnique("NAME", "MACHINE", this.machine)
+		programsTable := new TableList(filePath).getTable()
 		; DEBUG.popupEarly("MainConfig","loadPrograms", "Unique table",programsTable)
 		
-		; Index it by name.
+		; Turn each row into a ProgramInfo object and index them by name.
 		programs := {}
 		For _,row in programsTable
 			programs[row["NAME"]] := new ProgramInfo(row)

@@ -121,9 +121,8 @@ class Selector {
 	;---------
 	; DESCRIPTION:    Creates a new instance of the Selector class.
 	; PARAMETERS:
-	;  filePath (I,REQ) - The TableList (.tls) file where the choices that will be selected from will be
-	;                     read from. This file should be readable by the TableList class, see that class
-	;                     for details on file format.
+	;  filePath (I,REQ) - The Selector file (.tls) where the choices that will be selected from will be
+	;                     read from. See above for format.
 	;  filter   (I,OPT) - An array of information used to restrict the choices that are read from filePath.
 	;                     Defaults to no filter.
 	;                        Format:

@@ -389,7 +389,7 @@ class TableList {
 		return this
 	}
 	
-	getColumnByColumn(valueColumn, indexColumn, tiebreakerColumn := "") {
+	getColumnByColumn(valueColumn, indexColumn, tiebreakerColumn := "") { ; GDB TODO either implement tiebreakerColumn or get rid of it
 		if(!column || !indexColumn)
 			return ""
 		

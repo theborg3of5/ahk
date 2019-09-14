@@ -76,7 +76,7 @@
 		
 	Gui Settings
 		Some settings related to the popup may be customized using one of the following methods:
-			1. Specified in the TL file (using the + character, see "Settings" character above)
+			1. Specified in the TLS file (using the + character, see "Settings" character above)
 			2. Programmatically, using the .setGuiSetting() function
 		Note that these settings only have an effect on the popup shown by .selectGui().
 		
@@ -88,9 +88,9 @@
 				If this is set, each super-column in the popup will be that number of pixels wide at a minimum (each may be wider if the choices in that column are wider). See the FlexTable class for how super-columns work.
 		
 	Data Override Fields
-		If an override field index row is specified in the TL file, the popup shown by .selectGui() will include not only a choice field, but also fields for each column given a non-zero index in the override field index row. The fields are shown in the order specified by the row (i.e. 1 is first after the choice field, 2 is second, etc.). That the fields can be programmatically suppressed using .selectGui()'s suppressOverrideFields parameter.
+		If an override field index row is specified in the TLS file, the popup shown by .selectGui() will include not only a choice field, but also fields for each column given a non-zero index in the override field index row. The fields are shown in the order specified by the row (i.e. 1 is first after the choice field, 2 is second, etc.). That the fields can be programmatically suppressed using .selectGui()'s suppressOverrideFields parameter.
 		These fields give a user the ability to override data from their selected choice (or submit the popup without a choice, only overrides). If the user changes the value of the field (it defaults to the column label), that value will be used instead of the selected choice's value for that column.
-		Even if there is no override field index row in the TL file, the .addExtraOverrideFields() function may be used to add additional fields to the popup. The values from these fields will appear in the return array just like other override fields, under the subscript with their name.
+		Even if there is no override field index row in the TLS file, the .addExtraOverrideFields() function may be used to add additional fields to the popup. The values from these fields will appear in the return array just like other override fields, under the subscript with their name.
 		Values may be defaulted into these fields using .selectGui()'s defaultOverrideData parameter.
 	
 	Example Usage (Popup)
@@ -98,7 +98,7 @@
 		extraDataFields := ["CONFIG_NAME", "CONFIG_NUM"]           ; Two additional override fields for the popup.
 		defaultOverrideData := {CONFIG_NAME: "Windows"}            ; Default a value of "Windows" into the "CONFIG_NAME" override field
 		
-		s := new Selector("C:\ahk\configs.tls", filter)            ; Read in the "configs.tls" TL file, filtering it
+		s := new Selector("C:\ahk\configs.tls", filter)            ; Read in the "configs.tls" TLS file, filtering it
 		s.setGuiSetting("MinColumnWidth", 500)                     ; Set the minimum super-column width to 500 pixels
 		s.addExtraOverrideFields(extraDataFields)                  ; Add the extra override fields
 		data := s.selectGui("", "New title!", defaultOverrideData) ; Show the popup with a title of "New title!" and the default override field values specified above
@@ -109,7 +109,7 @@
 		pathAbbrev := <user input>
 		filter := {COLUMN:"MACHINE", VALUE:HOME_DESKTOP}           ; Only include choices which which have the "MACHINE" column set to "HOME_DESKTOP" (or blank)
 		
-		s := new Selector("C:\ahk\paths.tls", filter)              ; Read in the "paths.tls" TL file, filtering it
+		s := new Selector("C:\ahk\paths.tls", filter)              ; Read in the "paths.tls" TLS file, filtering it
 		path := s.selectChoice(pathAbbrev, "PATH")                 ; Return only the "PATH" value, not the whole return array
 */
 
@@ -187,12 +187,12 @@ class Selector {
 	; PARAMETERS:
 	;  returnColumn           (I,OPT) - If this parameter is given, only the data under the column with
 	;                                   this name will be returned.
-	;  title                  (I,OPT) - If you want to override the title set in the TL file (or defaulted
+	;  title                  (I,OPT) - If you want to override the title set in the TLS file (or defaulted
 	;                                   from this class), pass in the desired title here.
 	;  defaultOverrideData    (I,OPT) - If you want to default values into the override fields shown to
 	;                                   the user, pass those values in an array here. Format:
 	;                                      defaultOverrideData["fieldName"] := value
-	;  suppressOverrideFields (I,OPT) - If the TL file would normally show override fields (by virtue of
+	;  suppressOverrideFields (I,OPT) - If the TLS file would normally show override fields (by virtue of
 	;                                   having an override field index row), you can still hide those
 	;                                   fields by setting this parameter to true.
 	; RETURNS:        An array of data as chosen/overridden by the user. If the returnColumn parameter was
@@ -278,7 +278,7 @@ class Selector {
 	overrideFields := ""    ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers)
 	guiSettings    := {}    ; {settingName: value} - Settings related to the GUI popup we show
 	filePath       := ""    ; Where the file lives if we're reading one in.
-	suppressData   := false ; Whether to ignore all data from the user (choice and overrides). Typically used when we've done something else (like edit the TL file).
+	suppressData   := false ; Whether to ignore all data from the user (choice and overrides). Typically used when we've done something else (like edit the TLS file).
 	
 	;---------
 	; DESCRIPTION:    Populate this.chars with the special characters we use for parsing the file and user input.
@@ -300,7 +300,7 @@ class Selector {
 	}
 	
 	;---------
-	; DESCRIPTION:    Load the choices and other information from the TL file.
+	; DESCRIPTION:    Load the choices and other information from the TLS file.
 	; PARAMETERS:
 	;  filter     (I,REQ) - An array of filtering information to limit which choices we keep from the file.
 	;                          Format:
@@ -410,14 +410,14 @@ class Selector {
 	;                 choice and override specific data, then retrieving, processing,
 	;                 and merging that data as appropriate.
 	; PARAMETERS:
-	;  defaultData (I,REQ) - Array of data to default into override fields. Format:
-	;                           defaultData["fieldName"] := value
+	;  defaultOverrideData (I,REQ) - Array of data to default into override fields. Format:
+	;                                   defaultOverrideData["fieldName"] := value
 	; RETURNS:        Merged array of data, which includes both the choice and any
 	;                 overrides.
 	;---------
-	doSelectGui(defaultData) {
+	doSelectGui(defaultOverrideData) {
 		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this.guiSettings["MinColumnWidth"])
-		sGui.show(this.guiSettings["WindowTitle"], defaultData)
+		sGui.show(this.guiSettings["WindowTitle"], defaultOverrideData)
 		
 		; User's choice is main data source
 		choiceData := this.parseChoice(sGui.getChoiceQuery())

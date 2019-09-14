@@ -261,10 +261,7 @@ class MainConfig {
 	
 	
 	loadPrivates(filePath) {
-		privatesTable := new TableList(filePath).getTable()
-		
-		; Index private values by key.
-		privatesAry := reduceTableToColumn(privatesTable, "VALUE", "KEY")
+		privatesAry := new TableList(filePath).getColumnByColumn("VALUE", "KEY")
 		
 		; DEBUG.popup("MainConfig.loadPrivates","Finish", "Filepath",filePath, "Table",privatesTable, "Indexed array",privatesAry)
 		return privatesAry
@@ -297,10 +294,7 @@ class MainConfig {
 	}
 	
 	loadPaths(filePath) {
-		pathsTable := new TableList(filePath).getFilteredTableUnique("NAME", "CONTEXT", this.context)
-		
-		; Index paths by key.
-		pathsAry := reduceTableToColumn(pathsTable, "PATH", "KEY")
+		pathsAry := new TableList(filePath).filterByContext().getColumnByColumn("PATH", "KEY")
 		
 		; Grab special path tags from the system to replace in the ones we just read in.
 		systemPathTags := this.getSystemPathTags()

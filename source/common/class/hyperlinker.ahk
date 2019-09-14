@@ -82,8 +82,7 @@ class Hyperlinker {
 	;                                                           for those respective bits of data.
 	;---------
 	getWindows() {
-		windowsTable := new TableList("hyperlinkWindows.tl").getTable()
-		return reIndexTableBySubscript(windowsTable, "NAME")
+		return new TableList("hyperlinkWindows.tl").getRowsByColumn("NAME")
 	}
 	
 	;---------

@@ -18,13 +18,6 @@
 					Could make it something configurable, that's set up - static array of column/value pairs to auto-filter on
 		Turn filtering into an in-place operation?
 			filterOutEmptyForColumn() to cover one case where we don't want to include blanks (DLG TLG Selector)
-		Add getter functions for re-indexed cases:
-			reduceTableToColumn - return only one column's values, {index: columnValue}
-				New function: getColumnByColumn
-			reIndexTableBySubscript - return based on an existing column
-				Conceptually this is quite similar to getFilteredTableUnique() - could do an in-place filter, then index by a column's value
-					Can add extra params for tiebreakers (programs, etc. where one value should win)
-				New function: getRowsByColumn
 		Handling for callers through Selector
 			Keep parameter approach
 				For empty case (DLG TLG Selector), could still use something like filter["INCLUDE_BLANKS"], but make it a positive choice instead of setting that to false - filter["NO_BLANKS"] := true

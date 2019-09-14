@@ -355,19 +355,19 @@ class TableList {
 	
 	
 	filterByContext() {
-		newTable := []
-		For _,row in this.table {
-			if(this.rowPassesFilter(row, "CONTEXT", MainConfig.context)) ; GDB TODO do we really want/need this function anymore? Can it be simplified?
-				newTable.push(row)
-		}
-		
-		this.table := newTable
-		return this
+		return this.filterByColumn("CONTEXT", MainConfig.context)
 	}
 	filterByMachine() {
+		return this.filterByColumn("MACHINE", MainConfig.machine)
+	}
+	
+	filterByColumn(filterColumn, filterValue) { ; Blank values always pass filter - callers can use filterOutEmptyForColumn() to get rid of those.
+		if(filterColumn = "" || filterValue = "")
+			return this
+		
 		newTable := []
 		For _,row in this.table {
-			if(this.rowPassesFilter(row, "MACHINE", MainConfig.machine))
+			if(this.rowPassesFilter2(row, filterColumn, filterValue))
 				newTable.push(row)
 		}
 		
@@ -375,8 +375,22 @@ class TableList {
 		return this
 	}
 	
+	rowPassesFilter2(row, filterColumn, filterValue) { ; GDB TODO rename and replace existing rowPassesFilter()
+		valueToCompare := row[filterColumn]
+		
+		; Blank values always pass
+		if(valueToCompare = "")
+			return true
+		
+		; Check the value
+		if(isObject(valueToCompare))
+			return valueToCompare.contains(value)
+		else
+			return (valueToCompare = filterValue)
+	}
+	
 	filterOutEmptyForColumn(column) {
-		if(!column)
+		if(column = "")
 			return this
 		
 		newTable := []
@@ -390,50 +404,43 @@ class TableList {
 	}
 	
 	getColumnByColumn(valueColumn, indexColumn, tiebreakerColumn := "") { ; GDB TODO either implement tiebreakerColumn or get rid of it
-		if(!column || !indexColumn)
+		if(valueColumn = "" || indexColumn = "")
 			return ""
 		
-		rows := {}
-		For _,row in this.table {
-			indexValue := row[indexColumn]
-			if(indexValue = "") ; Rows with a blank index value are dropped
-				Continue
-			
-			; First row we find wins.
-			if(rows[indexValue] != "")
-				Continue
-			
-			rows[indexValue] := row[valueColumn]
-		}
+		rowsByColumn := this.getRowsByColumn(indexColumn, tiebreakerColumn)
 		
-		return rows
+		outputValues := {} ; {index: value}
+		For index,row in rowsByColumn
+			outputValues[index] := row[valueColumn]
+		
+		return outputValues
 	}
 	
 	getRowsByColumn(indexColumn, tiebreakerColumn := "") {
-		if(!indexColumn)
+		if(indexColumn = "")
 			return ""
 		
-		rows := {} ; {uniqueValue: row}
+		outputRows := {} ; {index: row}
 		For _,row in this.table {
 			rowIndex := row[indexColumn]
-			if(rowIndex = "") ; Ignore rows with no value in column
+			if(rowIndex = "") ; Rows with a blank index value are ignored
 				Continue
 			
-			if(rows[rowIndex] = "") {
-				rows[rowIndex] := row
+			; First row per index is always kept (but could get replaced)
+			if(outputRows[rowIndex] = "") {
+				outputRows[rowIndex] := row
 				Continue
 			}
 			
-			; A new row can only oust an existing one if it "wins" in the tiebreaker column
-			if(tiebreakerColumn = "") {
-				if(rows[rowIndex, tiebreakerColumn] = "" && row[tiebreakerColumn] != "") { ; New row wins if it has a value in the tiebreaker column, and the existing row doesn't.
-					rows[rowIndex] := row
-					Continue
-				}
+			; A new row can only replace an existing row if it "wins" in the tiebreaker column,
+			; by having a value when the existing row doesn't.
+			if(tiebreakerColumn != "") {
+				if(outputRows[rowIndex, tiebreakerColumn] = "" && row[tiebreakerColumn] != "") 
+					outputRows[rowIndex] := row
 			}
 		}
 		
-		return rows
+		return outputRows
 	}
 	
 	;---------

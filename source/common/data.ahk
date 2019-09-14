@@ -83,56 +83,6 @@ convertObjectToArray(obj) {
 	return newArray
 }
 
-; Creates a new table (2D array) with the values of the old, but the rows are indexed by the value of a specific subscript in each row.
-; Example:
-;   Input:
-;      {
-;      	1          => {"A" => "HI",       "B" => "THERE"}
-;      	2          => {"A" => "BYE",      "B" => "SIR"}
-;      	3          => {"A" => "GOOD DAY", "B" => "MADAM"}
-;      }
-;   Output (with a given subscriptName of "A"):
-;      {
-;      	"BYE"      => {"A" => "BYE",      "B" => "SIR"}
-;      	"GOOD DAY" => {"A" => "GOOD DAY", "B" => "MADAM"}
-;      	"HI"       => {"A" => "HI",       "B" => "THERE"}
-reIndexTableBySubscript(inputTable, subscriptName) {
-	if(subscriptName = "")
-		return ""
-	
-	outTable := []
-	For _,row in inputTable {
-		newIndex := row[subscriptName]
-		if(newIndex = "") ; Throw out rows without a value for our new index.
-			Continue
-		
-		outTable[newIndex] := row.clone()
-	}
-	
-	return outTable
-}
-
-; Reduce a table to the value of a single column per row, indexed by the value of another column.
-reduceTableToColumn(inputTable, valueColumn, indexColumn := "") {
-	if(!inputTable || !valueColumn)
-		return ""
-	
-	outTable := []
-	For origIndex,row in inputTable {
-		if(indexColumn != "")
-			newIndex := row[indexColumn]
-		else
-			newIndex := origIndex
-		
-		if(newIndex = "") ; Throw out rows without a value for our new index.
-			Continue
-		
-		outTable[newIndex] := row[valueColumn]
-	}
-	
-	return outTable
-}
-
 ; Expand lists that can optionally contain numeric ranges.
 ; Note that ranges with non-numeric values will be ignored (not included in the output array).
 ; Example:

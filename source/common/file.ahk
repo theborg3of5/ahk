@@ -53,8 +53,7 @@ sendFolderPath(folderName := "", subPath := "", slashChar := "\", trailingSlash 
 }
 
 selectFolder(folderName := "") {
-	s := new Selector("folders.tls", MainConfig.contextSelectorFilter)
-	path := s.select(folderName, "PATH")
+	path := new Selector("folders.tls").select(folderName, "PATH")
 	
 	; DEBUG.popup("Path",path, "Replaced",MainConfig.replacePathTags(path))
 	return MainConfig.replacePathTags(path)
@@ -92,7 +91,7 @@ cleanupPath(path) {
 
 mapPath(path) {	
 	; Convert paths to use mapped drive letters
-	table := new TableList("mappedDrives.tl").getFilteredTable("CONTEXT", MainConfig.context)
+	table := new TableList("mappedDrives.tl").getTable()
 	For i,row in table {
 		if(path.contains(row["PATH"])) {
 			path := path.replaceOne(row["PATH"], row["DRIVE_LETTER"] ":")

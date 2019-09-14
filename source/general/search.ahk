@@ -5,8 +5,7 @@
 	selectSearch() {
 		text := getSelectedText().firstLine().clean()
 		
-		s := new Selector("search.tls", MainConfig.contextSelectorFilter)
-		data := s.selectGui("", "", {"SEARCH_TERM":text})
+		data := new Selector("search.tls").selectGui("", "", {"SEARCH_TERM":text})
 		if(!data)
 			return
 		

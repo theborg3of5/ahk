@@ -98,14 +98,6 @@ class MainConfig {
 			return (this.machine = MainConfig.Machine_HomeLaptop)
 		}
 	}
-	machineSelectorFilter {
-		get {
-			filter := {}
-			filter["COLUMN"] := "MACHINE"
-			filter["VALUE"]  := this.machine
-			return filter
-		}
-	}
 	
 	context {
 		get {
@@ -120,14 +112,6 @@ class MainConfig {
 	contextIsHome {
 		get {
 			return (this.context = MainConfig.Context_Home)
-		}
-	}
-	contextSelectorFilter {
-		get {
-			filter := {}
-			filter["COLUMN"] := "CONTEXT"
-			filter["VALUE"]  := this.context
-			return filter
 		}
 	}
 	

@@ -105,8 +105,7 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 		if(this.descriptor != "" && this.descriptorType != "")
 			return
 		
-		s := new Selector("actionObject.tls", MainConfig.contextSelectorFilter)
-		data := s.selectGui("", "", {"SUBTYPE": this.descriptorType, "VALUE": this.descriptor})
+		data := new Selector("actionObject.tls").selectGui("", "", {"VALUE": this.descriptor})
 		if(!data)
 			return
 		

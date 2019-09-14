@@ -134,8 +134,7 @@ class ActionObjectRedirector {
 		if(this.value != "" && this.type != "")
 			return
 		
-		s := new Selector("actionObject.tls", MainConfig.contextSelectorFilter)
-		data := s.selectGui("", "", {"TYPE":this.type, "SUBTYPE":this.subType, "VALUE":this.value})
+		data := new Selector("actionObject.tls").selectGui("", "", {"VALUE":this.value})
 		if(!data)
 			return
 		

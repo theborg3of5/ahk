@@ -157,14 +157,7 @@ class WindowActions {
 	;                 windows.
 	;---------
 	loadActions(filePath) {
-		actionsTable := new TableList(filePath).getFilteredTableUnique("NAME", "MACHINE", MainConfig.machine)
-		
-		; Index actions by window name
-		actions := {}
-		For i,row in actionsTable
-			actions[row["NAME"]] := row
-		
-		return actions
+		return new TableList(filepath).getRowsByColumn("NAME")
 	}
 	
 	;---------

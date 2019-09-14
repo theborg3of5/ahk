@@ -60,8 +60,7 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 		if(this.location != "")
 			return
 		
-		s := new Selector("actionObject.tls", MainConfig.contextSelectorFilter)
-		data := s.selectGui("", "", {"VALUE": this.location})
+		data := new Selector("actionObject.tls").selectGui("", "", {"VALUE": this.location})
 		if(!data)
 			return
 		

@@ -342,6 +342,10 @@ class TableList {
 		
 		lines := fileLinesToArray(filePath)
 		this.parseList(lines)
+		
+		; Apply any automatic filters.
+		For _,filter in TableList.autoFilters
+			this.filterByColumn(filter["COLUMN"], filter["VALUE"])
 	}
 	
 	;---------
@@ -353,13 +357,6 @@ class TableList {
 		return this.table
 	}
 	
-	
-	filterByContext() {
-		return this.filterByColumn("CONTEXT", MainConfig.context)
-	}
-	filterByMachine() {
-		return this.filterByColumn("MACHINE", MainConfig.machine)
-	}
 	
 	filterByColumn(filterColumn, filterValue) { ; Blank values always pass filter - callers can use filterOutEmptyForColumn() to get rid of those.
 		if(filterColumn = "" || filterValue = "")
@@ -538,9 +535,20 @@ class TableList {
 	}
 	
 	
+	
+; STATIC === ; GDB TODO make this into a proper section header
+
+	addAutomaticFilter(filterColumn, filterValue) {
+		filter := {"COLUMN":filterColumn, "VALUE":filterValue}
+		TableList.autoFilters.push(filter)
+	}
+	
+	
 ; ==============================
 ; == Private ===================
 ; ==============================
+	static autoFilters := [] ; Array of {"COLUMN":filterColumn, "VALUE":filterValue} objects
+	
 	mods        := []
 	table       := []
 	keyRows     := {} ; {keyRowLabel: rowObj}

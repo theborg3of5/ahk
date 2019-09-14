@@ -1,3 +1,6 @@
+; ==============================
+; == Includes ==================
+; ==============================
 #Include %A_LineFile%\..
 	; Auto-execute scripts
 	#Include _constants.ahk  ; Constants must be first so that they're available to all other scripts.
@@ -45,5 +48,9 @@
 	#Include actionObjectPath.ahk
 	#Include actionObjectRedirector.ahk
 
+
+; ==============================
+; == Startup ===================
+; ==============================
 MainConfig.init("local\settings.ini", "windows.tl", "paths.tl", "programs.tl", "games.tl", "ahkPrivate\privates.tl")
 WindowActions.init("windowActions.tl")

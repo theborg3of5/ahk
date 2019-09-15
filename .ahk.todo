@@ -13,25 +13,13 @@
 	With new discovery about chaining constructors to single call afterwards (i.e. 'data := new Selector("filepath").selectGui()'), do we still need the static side of Toast?
 		Would it be cleaner to just have callers use 'new Toast().*' instead?
 	Consider renaming MainConfig to just Config to be shorter
-		Maybe also shorten some of the constantly-used properties, like the selector filters
-			Or, integrate filters into TableList itself?
-	TableList filtering rework
-		Turn filtering into an in-place operation?
-			filterOutEmptyForColumn() to cover one case where we don't want to include blanks (DLG TLG Selector)
-		Handling for callers through Selector
-			Keep parameter approach
-				For empty case (DLG TLG Selector), could still use something like filter["INCLUDE_BLANKS"], but make it a positive choice instead of setting that to false - filter["NO_BLANKS"] := true
-			Alternative: move to in-place functions instead
-				That would probably require moving the transition from TableList to SelectorChoices into the select logic, instead of in the initial read-in (so keep a reference to the TableList, filter that based on callers, then on selection actually turn that into choices).
-					So: read in from filePath initially, then have public member for the TableList so the caller can call filtering functions on it directly
-		Update filtering section of TableList header documentation
 	Selector/TableList interaction rework
 		TableList
 			Remove settings? Only one option (PlaceholderChar), and it's no longer used.
 				Alternatively, turn it into something special where we have an extra array of settings that callers can get ahold of
 				Consider keeping the @ if we transition Selector settings over to be handled here
 			Consider making model row mandatory - everything we have uses it, and it's kind of a central feature of TableList (indexing everything based on it)
-			Update header documentation - mandatory header row, settings, any additional things like that
+			Update header documentation - filtering, mandatory header row, settings, any additional things like that
 		Selector
 			I don't like how we handle settings/section headers as "pass" rows anymore - could we do that better?
 				What if we did something else mapping, like we do for ) char and key rows?

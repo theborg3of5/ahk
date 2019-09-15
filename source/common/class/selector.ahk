@@ -141,7 +141,7 @@ class Selector {
 		
 		if(filePath) {
 			this.filePath := findConfigFilePath(filePath)
-			this.loadChoicesFromFile(filter)
+			this.getDataFromFile(filter)
 		}
 		
 		; DEBUG.popup("Selector.__New", "Finish", "Filepath", this.filePath, "Filter", this.filter, "State", this)
@@ -200,11 +200,8 @@ class Selector {
 	;---------
 	selectGui(returnColumn := "", title := "", defaultOverrideData := "", suppressOverrideFields := false) {
 		; DEBUG.popup("Selector.selectGui", "Start", "Default override data", defaultOverrideData, "GUI Settings", guiSettings)
-		
-		if(!this.choices.length()) {
-			DEBUG.popup("Selector.selectGui","No choices loaded")
+		if(!this.loadFromData())
 			return ""
-		}
 		
 		if(title)
 			this.guiSettings["WindowTitle"] := title
@@ -235,10 +232,8 @@ class Selector {
 		if(!choiceString)
 			return ""
 		
-		if(!this.choices.length()) {
-			DEBUG.popup("Selector.selectChoice","No choices loaded")
+		if(!this.loadFromData())
 			return ""
-		}
 		
 		data := this.parseChoice(choiceString)
 		if(returnColumn)
@@ -279,6 +274,7 @@ class Selector {
 	guiSettings    := {}    ; {settingName: value} - Settings related to the GUI popup we show
 	filePath       := ""    ; Where the file lives if we're reading one in.
 	suppressData   := false ; Whether to ignore all data from the user (choice and overrides). Typically used when we've done something else (like edit the TLS file).
+	_dataTL        := ""    ; TableList instance read from file, which we'll extract choice and other info from.
 	
 	;---------
 	; DESCRIPTION:    Populate this.chars with the special characters we use for parsing the file and user input.
@@ -300,7 +296,7 @@ class Selector {
 	}
 	
 	;---------
-	; DESCRIPTION:    Load the choices and other information from the TLS file.
+	; DESCRIPTION:    Load the choices and other information from the TLS file into a TableList instance.
 	; PARAMETERS:
 	;  filter     (I,REQ) - An array of filtering information to limit which choices we keep from the file.
 	;                          Format:
@@ -313,25 +309,30 @@ class Selector {
 	;                                                        If set to false, those choices will be excluded.
 	; SIDE EFFECTS:   Populates various member variables with information from the file.
 	;---------
-	loadChoicesFromFile(filter) {
+	getDataFromFile(filter) {
 		tlChars := {}
 		tlChars["PASS"] := [this.chars["SECTION_TITLE"], this.chars["SETTING"]] ; Rows starting with these characters will not be split at all.
 		keyRowChars := {this.chars["OVERRIDE_FIELD_INDEX"]: "OVERRIDE_INDEX"}
 		; DEBUG.popup("TableList chars",tlChars, "TableList key row chars",keyRowChars)
 		
-		tl := new TableList(this.filePath, tlChars, keyRowChars)
-		if(filter) {
-			if(filter["INCLUDE_BLANKS"] != "") ; Only pass the third parameter (includeBlanks) if we actually have a value for it - otherwise we overwrite the default value with nothing.
-				table := tl.getFilteredTable(filter["COLUMN"], filter["VALUE"], filter["INCLUDE_BLANKS"])
+		this._dataTL := new TableList(this.filePath, tlChars, keyRowChars)
+		this.tempFilter := filter ; GDB TODO get rid of this
+	}
+		
+		
+	loadFromData() {	
+		if(this.tempFilter) {
+			if(this.tempFilter["INCLUDE_BLANKS"] != "") ; Only pass the third parameter (includeBlanks) if we actually have a value for it - otherwise we overwrite the default value with nothing.
+				table := this._dataTL.getFilteredTable(this.tempFilter["COLUMN"], this.tempFilter["VALUE"], this.tempFilter["INCLUDE_BLANKS"])
 			else
-				table := tl.getFilteredTable(filter["COLUMN"], filter["VALUE"])
+				table := this._dataTL.getFilteredTable(this.tempFilter["COLUMN"], this.tempFilter["VALUE"])
 		} else {
-			table := tl.getTable()
+			table := this._dataTL.getTable()
 		}
 		; DEBUG.popup("Filepath",this.filePath, "Parsed table",table)
 		
 		; Special override field index row that tells us how we should arrange data inputs.
-		fieldIndices := tl.keyRow["OVERRIDE_INDEX"]
+		fieldIndices := this._dataTL.keyRow["OVERRIDE_INDEX"]
 		if(fieldIndices) {
 			this.overrideFields := {}
 			For label,fieldIndex in fieldIndices {
@@ -339,7 +340,7 @@ class Selector {
 					this.overrideFields[fieldIndex] := label
 			}
 		}
-		; DEBUG.popup("Selector.loadChoicesFromFile","Processed indices", "Field indices",fieldIndices, "Selector label indices",this.overrideFields)
+		; DEBUG.popup("Selector.loadFromData","Processed indices", "Field indices",fieldIndices, "Selector label indices",this.overrideFields)
 		
 		this.choices       := [] ; Visible choices the user can pick from.
 		this.hiddenChoices := [] ; Invisible choices the user can pick from.
@@ -350,6 +351,15 @@ class Selector {
 			else
 				this.processSpecialLine(row)
 		}
+		
+		; Show a warning and fail if we didn't actually manage to load any choices.
+		if(!this.choices.length()) {
+			DEBUG.toast("Selector.loadFromData","No choices loaded")
+			Toast.showError("Selector: no choices available", "No choices were found in the TableList instance")
+			return false
+		}
+		
+		return true
 	}
 	
 	;---------

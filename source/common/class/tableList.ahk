@@ -131,29 +131,29 @@
 		Certain characters can have special meaning when included in the file. Each of the following can be changed by setting the relevant subscript in the chars array passed to the constructor (i.e. chars["SETTING"] or chars["MOD","ADD_LABEL"]).
 		
 		Defaults:
-			SETTING          @
 			IGNORE           ;
 			MODEL            (
-			MOD,START        [
-			MOD,END          ]
+			SETTING          @
 			PASS             (no default)
 			PLACEHOLDER      -
 			MULTIENTRY       |
+			MOD,START        [
+			MOD,END          ]
 			MOD,ADD_LABEL    +
 			MOD,REMOVE_LABEL -
 			MOD,DELIM        |
 		
 		At the start of a row:
-			SETTING - @
-				Any row that begins with one of these is assumed to be of the form @SettingName=value, where SettingName is one of the following:
-					PlaceholderChar - the placeholder character to use
-				Note that if any of these conflict with the settings passed programmatically, the programmatic settings win.
-			
 			IGNORE - ;
 				If any of these characters are at the beginning of a line (ignoring any whitespace before that), the line is ignored and not added to the array of lines.
 			
 			MODEL - (
 				This is the header row mentioned above - the 2D array that you get back will use these column headers as string indices into each "row" array.
+			
+			SETTING - @
+				Any row that begins with one of these is assumed to be of the form @SettingName=value, where SettingName is one of the following:
+					PlaceholderChar - the placeholder character to use
+				Note that if any of these conflict with the settings passed programmatically, the programmatic settings win.
 			
 			MOD,START - [
 				A line which begins with this character will be processed as a mod (see "Mods" section for details).
@@ -356,26 +356,12 @@ class TableList {
 		
 		newTable := []
 		For _,row in this.table {
-			if(this.rowPassesFilter2(row, filterColumn, filterValue))
+			if(this.rowPassesFilter(row, filterColumn, filterValue))
 				newTable.push(row)
 		}
 		
 		this.table := newTable
 		return this
-	}
-	
-	rowPassesFilter2(row, filterColumn, filterValue) { ; GDB TODO rename and replace existing rowPassesFilter()
-		valueToCompare := row[filterColumn]
-		
-		; Blank values always pass
-		if(valueToCompare = "")
-			return true
-		
-		; Check the value
-		if(isObject(valueToCompare))
-			return valueToCompare.contains(value)
-		else
-			return (valueToCompare = filterValue)
 	}
 	
 	filterOutEmptyForColumn(column) {
@@ -436,87 +422,6 @@ class TableList {
 	}
 	
 	;---------
-	; DESCRIPTION:    Retrieve a version of the table that excludes rows that don't match a certain
-	;                 filter.
-	; PARAMETERS:
-	;  column        (I,REQ) - The string index (as defined by the model row) of the column you want
-	;                          to filter on.
-	;  value         (I,OPT) - Only include rows which have this value in their column (with the
-	;                          exception of rows with a blank value, see includeBlanks parameter).
-	;                          If this is left blank, any value is allowed.
-	;  includeBlanks (I,OPT) - If set to false, columns which have a blank value for the given column
-	;                          will be excluded. Defaults to true (include blanks).
-	; RETURNS:        Processed table, excluding rows that do not fit the filter. Format:
-	;                 	table[rowNum, column] := value
-	;---------
-	getFilteredTable(column, value := "", includeBlanks := true) {
-		; DEBUG.popup("column",column, "value",value, "includeBlanks",includeBlanks)
-		if(!column)
-			return ""
-		
-		filteredTable := []
-		For _,row in this.table {
-			if(this.rowPassesFilter(row, column, value, includeBlanks))
-				filteredTable.push(row)
-		}
-		
-		return filteredTable
-	}
-	
-	;---------
-	; DESCRIPTION:    Retrieve a version of the table that excludes rows that explicitly don't
-	;                 match (blanks will be included) a certain filter, and "flattens" the table
-	;                 so that there is only one row per value of the given column.
-	; PARAMETERS:
-	;  uniqueColumn (I,REQ) - The column that we will "flatten" rows based on - there will
-	;                         be only one row per value of this column.
-	;  filterColumn (I,REQ) - The column to filter using - this column determines which row
-	;                         wins if there are multiple with the same unique value.
-	;  filterValue  (I,REQ) - The value that should win - that is, if 2 rows have uniqueColumn=A,
-	;                         the one with filterColumn=filterValue is the one that will be
-	;                         included in the table. In the event that multiple rows have the same
-	;                         uniqueColumn value and this filterValue, the first one in the file
-	;                         will win.
-	; RETURNS:        Processed and flattened table. Format:
-	;                 	table[rowNum, column] := value
-	; NOTES:          Not recommended for use with .tls files that make use of PASS rows
-	;                 (settings or headers) - only the first PASS row will actually make
-	;                 it through (because none of them are arrays, so none of them have a
-	;                 value for the uniqueColumn).
-	;---------
-	getFilteredTableUnique(uniqueColumn, filterColumn, filterValue) {
-		if(!uniqueColumn || !filterColumn || !filterValue)
-			return ""
-		
-		; Filter out non-matching rows and index by unique value
-		rowsMatchingFilter  := {} ; {uniqueValue: row}
-		rowsWithBlankFilter := {} ; {uniqueValue: row}
-		For _,row in this.table {
-			if(!this.rowPassesFilter(row, filterColumn, filterValue))
-				Continue
-			
-			rowUniqueVal := row[uniqueColumn]
-			rowFilterVal := row[filterColumn]
-			
-			if(rowFilterVal = "") {
-				if(rowsWithBlankFilter[rowUniqueVal] = "") ; First row per unique value wins
-					rowsWithBlankFilter[rowUniqueVal] := row
-			} else if(rowFilterVal = filterValue) {
-				if(rowsMatchingFilter[rowUniqueVal] = "") ; First row per unique value wins
-					rowsMatchingFilter[rowUniqueVal] := row
-			}
-		}
-		uniqueRows := mergeObjects(rowsWithBlankFilter, rowsMatchingFilter) ; Exact matches win (override)
-		
-		filteredTable := []
-		For _,row in uniqueRows
-			filteredTable.push(row)
-		
-		; DEBUG.popupEarly(filteredTable)
-		return filteredTable
-	}
-	
-	;---------
 	; PARAMETERS:
 	;  name (I,REQ) - The key name that was associated with the row that you want.
 	; RETURNS:        The key row (that was excluded from the table, based on the constructor's
@@ -546,7 +451,6 @@ class TableList {
 	
 	mods        := []
 	table       := []
-	keyRows     := {} ; {keyRowLabel: rowObj}
 	indexLabels := []
 	chars       := {} ; {key: character}
 	keyRowChars := {} ; {character: label}
@@ -563,7 +467,7 @@ class TableList {
 		chars["IGNORE"]  := ";"
 		chars["MODEL"]   := "("
 		chars["SETTING"] := "@"
-		chars["PASS"]    := [] ; This one is an array
+		chars["PASS"]    := [] ; This one is an array ; GDB TODO get rid of this
 		
 		chars["PLACEHOLDER"] := "-"
 		chars["MULTIENTRY"]  := "|"
@@ -617,20 +521,117 @@ class TableList {
 		if(row.startsWith(this.chars["SETTING"]))
 			this.processSetting(row)
 		
-		else if(row.startsWith(this.chars["MOD", "START"]))
-			this.processMod(row)
-		
 		else if(row.startsWith(this.chars["MODEL"])) ; Model row, causes us to use string subscripts instead of numeric per entry.
 			this.processModel(row)
 		
-		else if(this.chars["PASS"].contains(firstChar))
-			this.processPass(row)
 		
 		else if(this.keyRowChars.hasKey(firstChar)) ; Key characters mean that we split the row, but always store it separately from everything else.
 			this.processKey(row)
 		
+		else if(row.startsWith(this.chars["MOD", "START"]))
+			this.processMod(row)
+		
+		else if(this.chars["PASS"].contains(firstChar))
+			this.processPass(row)
+		
 		else
 			this.processNormal(row)
+	}
+	
+	;---------
+	; DESCRIPTION:    Given a row representing a setting, store off the value of that setting
+	;                 for later use.
+	; PARAMETERS:
+	;  row (I,REQ) - Settings row that we're processing (string).
+	;---------
+	processSetting(row) {
+		row := row.removeFromStart(this.chars["SETTING"])
+		if(!row)
+			return
+		
+		name  := row.beforeString("=")
+		value := row.afterString("=")
+		; DEBUG.popup("TableList.processSetting","Pulled out data", "Name",name, "Value",value)
+		
+		if(name = "PlaceholderChar")
+			this.chars["PLACEHOLDER"] := value
+	}
+	
+	;---------
+	; DESCRIPTION:    Parse a model row - this is what determines the string indices that we use for
+	;                 each column in following rows.
+	; PARAMETERS:
+	;  row (I,REQ) - Model row to process (string).
+	;---------
+	processModel(row) {
+		rowAry := row.split(A_Tab)
+		rowAry.RemoveAt(1) ; Get rid of the "(" bit and shift elements to fill.
+		this.indexLabels := rowAry
+	}
+	
+	
+	;---------
+	; DESCRIPTION:    Parse a key row - this is one that we will split and index like a normal row,
+	;                 but will store separately.
+	; PARAMETERS:
+	;  row (I,REQ) - Key row that we're processing (string).
+	;---------
+	processKey(row) {
+		firstChar := row.sub(1, 1)
+		rowAry := row.split(A_Tab)
+		
+		rowAry.RemoveAt(1) ; Get rid of the separate char bit (")").
+		this.applyIndexLabels(rowAry)
+		
+		this.keyRows[this.keyRowChars[firstChar]] := rowAry
+	}
+	
+	;---------
+	; DESCRIPTION:    Update the active mods based on a given mod row.
+	; PARAMETERS:
+	;  row (I,REQ) - Mod row that we're processing (string).
+	; SIDE EFFECTS:   May change the currently active mods
+	;---------
+	processMod(row) {
+		label := 0
+		
+		; Strip off the starting/ending mod characters ([ and ] by default).
+		row := row.removeFromStart(this.chars["MOD", "START"])
+		row := row.removeFromEnd(this.chars["MOD", "END"])
+		
+		; If it's just blank, all previous mods are wiped clean.
+		if(row = "") {
+			this.mods := []
+		} else {
+			; Check for a remove row label.
+			; Assuming here that it will be the first and only thing in the mod row.
+			if(row.startsWith(this.chars["MOD", "REMOVE_LABEL"])) {
+				remLabel := row.removeFromStart(this.chars["MOD", "REMOVE_LABEL"])
+				this.killMods(remLabel)
+				label := 0
+				
+				return
+			}
+			
+			; Split into individual mods.
+			newModsSplit := row.split(this.chars["MOD", "DELIM"])
+			For i,currMod in newModsSplit {
+				; Check for an add row label.
+				if(i = 1 && currMod.startsWith(this.chars["MOD", "ADD_LABEL"]))
+					label := currMod.removeFromStart(this.chars["MOD", "ADD_LABEL"])
+				else
+					this.mods.push(new TableListMod(currMod, label))
+			}
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Parse a pass row - this will be added to the table as just a string, rather than an array.
+	; PARAMETERS:
+	;  row (I,REQ) - Pass row to process (string).
+	;---------
+	processPass(row) {
+		this.table.push(row)
 	}
 	
 	;---------
@@ -688,76 +689,6 @@ class TableList {
 	}
 	
 	;---------
-	; DESCRIPTION:    Given a row representing a setting, store off the value of that setting
-	;                 for later use.
-	; PARAMETERS:
-	;  row (I,REQ) - Settings row that we're processing (string).
-	;---------
-	processSetting(row) {
-		row := row.removeFromStart(this.chars["SETTING"])
-		if(!row)
-			return
-		
-		name  := row.beforeString("=")
-		value := row.afterString("=")
-		; DEBUG.popup("TableList.processSetting","Pulled out data", "Name",name, "Value",value)
-		
-		if(name = "PlaceholderChar")
-			this.chars["PLACEHOLDER"] := value
-	}
-	
-	;---------
-	; DESCRIPTION:    Parse a model row - this is what determines the string indices that we use for
-	;                 each column in following rows.
-	; PARAMETERS:
-	;  row (I,REQ) - Model row to process (string).
-	;---------
-	processModel(row) {
-		rowAry := row.split(A_Tab)
-		rowAry.RemoveAt(1) ; Get rid of the "(" bit and shift elements to fill.
-		this.indexLabels := rowAry
-	}
-	
-	;---------
-	; DESCRIPTION:    Update the active mods based on a given mod row.
-	; PARAMETERS:
-	;  row (I,REQ) - Mod row that we're processing (string).
-	; SIDE EFFECTS:   May change the currently active mods
-	;---------
-	processMod(row) {
-		label := 0
-		
-		; Strip off the starting/ending mod characters ([ and ] by default).
-		row := row.removeFromStart(this.chars["MOD", "START"])
-		row := row.removeFromEnd(this.chars["MOD", "END"])
-		
-		; If it's just blank, all previous mods are wiped clean.
-		if(row = "") {
-			this.mods := []
-		} else {
-			; Check for a remove row label.
-			; Assuming here that it will be the first and only thing in the mod row.
-			if(row.startsWith(this.chars["MOD", "REMOVE_LABEL"])) {
-				remLabel := row.removeFromStart(this.chars["MOD", "REMOVE_LABEL"])
-				this.killMods(remLabel)
-				label := 0
-				
-				return
-			}
-			
-			; Split into individual mods.
-			newModsSplit := row.split(this.chars["MOD", "DELIM"])
-			For i,currMod in newModsSplit {
-				; Check for an add row label.
-				if(i = 1 && currMod.startsWith(this.chars["MOD", "ADD_LABEL"]))
-					label := currMod.removeFromStart(this.chars["MOD", "ADD_LABEL"])
-				else
-					this.mods.push(new TableListMod(currMod, label))
-			}
-		}
-	}
-	
-	;---------
 	; DESCRIPTION:    Remove any active mods that match the given label.
 	; PARAMETERS:
 	;  killLabel (I,OPT) - Numeric label to remove matching mods. Defaults to 0 (default label for all mods).
@@ -769,74 +700,28 @@ class TableList {
 	}
 	
 	;---------
-	; DESCRIPTION:    Parse a pass row - this will be added to the table as just a string, rather than an array.
-	; PARAMETERS:
-	;  row (I,REQ) - Pass row to process (string).
-	;---------
-	processPass(row) {
-		this.table.push(row)
-	}
-	
-	;---------
-	; DESCRIPTION:    Parse a key row - this is one that we will split and index like a normal row,
-	;                 but will store separately.
-	; PARAMETERS:
-	;  row (I,REQ) - Key row that we're processing (string).
-	;---------
-	processKey(row) {
-		firstChar := row.sub(1, 1)
-		rowAry := row.split(A_Tab)
-		
-		rowAry.RemoveAt(1) ; Get rid of the separate char bit (")").
-		this.applyIndexLabels(rowAry)
-		
-		this.keyRows[this.keyRowChars[firstChar]] := rowAry
-	}
-	
-	;---------
 	; DESCRIPTION:    Based on a filter (column and value to restrict to), determine whether the
 	;                 given row array passes that filter.
 	; PARAMETERS:
 	;  row           (I,REQ) - A row in the table. May be an array or string.
 	;  column        (I,OPT) - The column to filter on - we will check the value of this column
 	;                          (index) in the row array to see if it matches filterValue.
-	;  value         (I,OPT) - Only include rows which have this value in their column (with the
-	;                          exception of rows with a blank value, see includeBlanks parameter).
-	;                          If this is left blank, any value is allowed.
-	;  includeBlanks (I,OPT) - If set to false, columns which have a blank value for the given column
-	;                          will be excluded. Defaults to true (include blanks).
+	;  value         (I,OPT) - Only include rows which have this value (or blank) in their filter
+	;                          column pass.
 	; RETURNS:        True if we should exclude the row from the filtered table, false otherwise.
 	;---------
-	rowPassesFilter(row, column, value := "", includeBlanks := true) {
-		if(!column)
+	rowPassesFilter(row, filterColumn, filterValue) { ; GDB TODO document
+		valueToCompare := row[filterColumn]
+		
+		; Blank values always pass
+		if(valueToCompare = "")
 			return true
 		
-		; If this is a flat string, it's a special row, that shouldn't be filtered out
-		; (otherwise it would because it doesn't have columns).
-		if(!isObject(row))
-			return true
-		
-		valueToCompare := row[column]
-		
-		; If the value is blank, include/exclude it based on the includeBlanks parameter.
-		if(!valueToCompare)
-			return includeBlanks
-		
-		; If no filter value, include everything (aside from blanks, which obey includeBlanks above)
-		if(!value)
-			return true
-		
-		; If the value isn't blank, compare it to our filter value.
-		if(isObject(valueToCompare)) { ; Array/object case - multiple values in filter column.
-			if(valueToCompare.contains(value))
-				return true
-		} else {
-			if(valueToCompare = value)
-				return true
-		}
-		
-		; DEBUG.popup("Base","include", "row",row, "column",column, "value",value, "includeBlanks",includeBlanks)
-		return false
+		; Check the value
+		if(isObject(valueToCompare))
+			return valueToCompare.contains(value)
+		else
+			return (valueToCompare = filterValue)
 	}
 	
 	; Debug info

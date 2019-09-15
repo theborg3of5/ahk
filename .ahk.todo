@@ -18,13 +18,15 @@
 			Remove settings? Only one option (PlaceholderChar), and it's no longer used.
 				Alternatively, turn it into something special where we have an extra array of settings that callers can get ahold of
 				Consider keeping the @ if we transition Selector settings over to be handled here
-			Consider making model row mandatory - everything we have uses it, and it's kind of a central feature of TableList (indexing everything based on it)
+			Get rid of ability to customize characters (so ditch the parameter in the constructor)
+				Make the chars flat, named constants instead of an array
 			Update header documentation - filtering, mandatory header row, settings, any additional things like that
 		Selector
 			I don't like how we handle settings/section headers as "pass" rows anymore - could we do that better?
 				What if we did something else mapping, like we do for ) char and key rows?
 					Seems like it would work fine for settings - just give an array back of those lines (unsplit)
 				For section headers, main thing is that we need to retain their line numbers, so they go with the relevant section
+			Make the chars flat, named constants instead of an array
 			Update header documentation for new filtering approach
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow

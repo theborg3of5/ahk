@@ -130,7 +130,6 @@ class Selector {
 	; RETURNS:        A new Selector object.
 	;---------
 	__New(filePath) {
-		this.setChars()
 		this.setDefaultGuiSettings()
 		
 		if(filePath) {
@@ -260,7 +259,11 @@ class Selector {
 ; ==============================
 ; == Private ===================
 ; ==============================
-	chars          := {}    ; {name: character} - Special characters (see setChars)
+	
+	static Char_OverrideFieldIndex := ")"
+	static Char_CommandStart       := "+"
+	static Char_Command_Edit       := "e"
+	
 	choices        := []    ; Array of visible choices the user can pick from (array of SelectorChoice objects).
 	sectionTitles  := {}    ; {choiceIndex: title} - Lines that will be displayed as titles (index matches the first choice that should be under this title)
 	overrideFields := ""    ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers)
@@ -270,18 +273,8 @@ class Selector {
 	_dataTL        := ""    ; TableList instance read from file, which we'll extract choice and other info from.
 	
 	;---------
-	; DESCRIPTION:    Populate this.chars with the special characters we use for parsing the file and user input.
+	; DESCRIPTION:    Populate this.guiSettings with our defaults for various gui settings.
 	;---------
-	setChars() {
-		this.chars["SECTION_TITLE"]        := "#"
-		this.chars["OVERRIDE_FIELD_INDEX"] := ")"
-		this.chars["SETTING"]              := "+"
-		this.chars["COMMAND"]              := "+"
-		
-		this.chars["COMMANDS"]
-		this.chars["COMMANDS", "EDIT"]  := "e"
-	}
-	
 	setDefaultGuiSettings() {
 		this.guiSettings["MinColumnWidth"] := 0
 		this.guiSettings["WindowTitle"]    := "Please make a choice by either number or abbreviation:"
@@ -291,7 +284,7 @@ class Selector {
 	; DESCRIPTION:    Load the choices and other information from the TLS file into a TableList instance.
 	;---------
 	getDataFromFile() {
-		this._dataTL := new TableList(this.filePath, {this.chars["OVERRIDE_FIELD_INDEX"]: "OVERRIDE_INDEX"})
+		this._dataTL := new TableList(this.filePath, {this.Char_OverrideFieldIndex: "OVERRIDE_INDEX"})
 	}
 	
 	;---------
@@ -367,11 +360,11 @@ class Selector {
 	;---------
 	parseChoice(userChoiceString) {
 		; Command choice - edit ini, etc.
-		if(userChoiceString.startsWith(this.chars["COMMAND"])) {
-			commandChar := userChoiceString.afterString(this.chars["COMMAND"])
+		if(userChoiceString.startsWith(this.Char_CommandStart)) {
+			commandChar := userChoiceString.afterString(this.Char_CommandStart)
 			
 			; Edit action - open the current INI file for editing
-			if(commandChar = this.chars["COMMANDS", "EDIT"]) {
+			if(commandChar = this.Char_Command_Edit) {
 				this.suppressData := true
 				Run(this.filePath)
 			}

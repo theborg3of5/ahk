@@ -321,7 +321,6 @@ class TableList {
 		if(!FileExist(filePath))
 			return ""
 		
-		this.chars       := this.getChars()
 		this.keyRowChars := keyRowChars
 		
 		lines := fileLinesToArray(filePath)
@@ -507,41 +506,26 @@ class TableList {
 ; ==============================
 	static autoFilters := [] ; Array of {"COLUMN":filterColumn, "VALUE":filterValue} objects
 	
+	; Special characters
+	static Char_Ignore  := ";"
+	static Char_Model   := "("
+	static Char_Setting := "@"
+	static Char_Header  := "# " ; Must include the space
+	static Char_Placeholder := "-"
+	static Char_MultiEntry  := "|"
+	static Char_Mod_Start       := "["
+	static Char_Mod_End         := "]"
+	static Char_Mod_AddLabel    := "+"
+	static Char_Mod_RemoveLabel := "-"
+	
 	mods        := []
 	table       := []
 	indexLabels := []
-	chars       := {} ; {key: character}
 	keyRowChars := {} ; {character: label}
 	
 	_keyRows    := {} ; {keyRowLabel: rowObj}
 	_settings   := {} ; {settingName: settingValue}
 	_headers    := {} ; {firstRowNumberInHeader: headerText}
-	
-	;---------
-	; DESCRIPTION:    Get the array of special characters.
-	; RETURNS:        Array of special characters for use by the class, see header for character
-	;                 meanings. Format:
-	;                 	chars[name] := character
-	;---------
-	getChars() {
-		chars := {}
-		
-		chars["IGNORE"]  := ";"
-		chars["MODEL"]   := "("
-		chars["SETTING"] := "@"
-		chars["HEADER"] := "# " ; Must include the space
-		
-		chars["PLACEHOLDER"] := "-"
-		chars["MULTIENTRY"]  := "|"
-		
-		chars["MOD", "START"]        := "["
-		chars["MOD", "END"]          := "]"
-		chars["MOD", "ADD_LABEL"]    := "+"
-		chars["MOD", "REMOVE_LABEL"] := "-"
-		chars["MOD", "DELIM"]        := "|"
-		
-		return chars
-	}
 	
 	;---------
 	; DESCRIPTION:    Given an array of lines from a file, parse out the data into internal structures.
@@ -576,23 +560,23 @@ class TableList {
 	processRow(row) {
 		if(!row)
 			return
-		if(row.startsWith(this.chars["IGNORE"]))
+		if(row.startsWith(this.Char_Ignore))
 			return
 		
 		firstChar := row.sub(1, 1)
-		if(row.startsWith(this.chars["SETTING"]))
+		if(row.startsWith(this.Char_Setting))
 			this.processSetting(row)
 		
-		else if(row.startsWith(this.chars["MODEL"])) ; Model row, causes us to use string subscripts instead of numeric per entry.
+		else if(row.startsWith(this.Char_Model)) ; Model row, causes us to use string subscripts instead of numeric per entry.
 			this.processModel(row)
 		
-		else if(row.startsWith(this.chars["HEADER"]))
+		else if(row.startsWith(this.Char_Header))
 			this.processHeader(row)
 		
 		else if(this.keyRowChars.hasKey(firstChar)) ; Key characters mean that we split the row, but always store it separately from everything else.
 			this.processKey(row)
 		
-		else if(row.startsWith(this.chars["MOD", "START"]))
+		else if(row.startsWith(this.Char_Mod_Start))
 			this.processMod(row)
 		
 		else
@@ -606,7 +590,7 @@ class TableList {
 	;  row (I,REQ) - Settings row that we're processing (string).
 	;---------
 	processSetting(row) {
-		row := row.removeFromStart(this.chars["SETTING"])
+		row := row.removeFromStart(this.Char_Setting)
 		if(!row)
 			return
 		
@@ -635,7 +619,7 @@ class TableList {
 	;  row (I,REQ) - Header row that we're processing (string).
 	;---------
 	processHeader(row) {
-		headerText := row.removeFromStart(this.chars["HEADER"])
+		headerText := row.removeFromStart(this.Char_Header)
 		firstRowNumber := forceNumber(this.table.MaxIndex()) + 1 ; First row that will be under this section header (the next one added)
 		this._headers[firstRowNumber] := headerText
 	}
@@ -666,8 +650,8 @@ class TableList {
 		label := 0
 		
 		; Strip off the starting/ending mod characters ([ and ] by default).
-		row := row.removeFromStart(this.chars["MOD", "START"])
-		row := row.removeFromEnd(this.chars["MOD", "END"])
+		row := row.removeFromStart(this.Char_Mod_Start)
+		row := row.removeFromEnd(this.Char_Mod_End)
 		
 		; If it's just blank, all previous mods are wiped clean.
 		if(row = "") {
@@ -675,8 +659,8 @@ class TableList {
 		} else {
 			; Check for a remove row label.
 			; Assuming here that it will be the first and only thing in the mod row.
-			if(row.startsWith(this.chars["MOD", "REMOVE_LABEL"])) {
-				remLabel := row.removeFromStart(this.chars["MOD", "REMOVE_LABEL"])
+			if(row.startsWith(this.Char_Mod_RemoveLabel)) {
+				remLabel := row.removeFromStart(this.Char_Mod_RemoveLabel)
 				this.killMods(remLabel)
 				label := 0
 				
@@ -684,11 +668,11 @@ class TableList {
 			}
 			
 			; Split into individual mods.
-			newModsSplit := row.split(this.chars["MOD", "DELIM"])
+			newModsSplit := row.split(this.Char_MultiEntry)
 			For i,currMod in newModsSplit {
 				; Check for an add row label.
-				if(i = 1 && currMod.startsWith(this.chars["MOD", "ADD_LABEL"]))
-					label := currMod.removeFromStart(this.chars["MOD", "ADD_LABEL"])
+				if(i = 1 && currMod.startsWith(this.Char_Mod_AddLabel))
+					label := currMod.removeFromStart(this.Char_Mod_AddLabel)
 				else
 					this.mods.push(new TableListMod(currMod, label))
 			}
@@ -707,13 +691,13 @@ class TableList {
 		
 		; If any of the values were a placeholder, remove them now.
 		For i,value in rowAry.clone() ; Clone since we're deleting things.
-			if(value = this.chars["PLACEHOLDER"])
+			if(value = this.Char_Placeholder)
 				rowAry.Delete(i)
 		
 		; Split up any entries that include the multi-entry character (pipe by default).
 		For i,value in rowAry
-			if(value.contains(this.chars["MULTIENTRY"]))
-				rowAry[i] := value.split(this.chars["MULTIENTRY"])
+			if(value.contains(this.Char_MultiEntry))
+				rowAry[i] := value.split(this.Char_MultiEntry)
 		
 		this.table.push(rowAry)
 	}

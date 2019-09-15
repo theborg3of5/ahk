@@ -41,7 +41,7 @@
 			Music          MUSIC          C:\Users\user\Music              HOME_LAPTOP
 			Music          MUSIC          D:\Music                         EPIC_LAPTOP
 		
-		We can also use comments, and add a header row (which this class will use as indices in the 2D array you get back):
+		We can also use comments, and add a key row (which this class will use as indices in the 2D array you get back):
 			(  NAME           ABBREV         PATH                             MACHINE
 			
 			; AHK Folders
@@ -81,14 +81,14 @@
 		
 	Mods
 		A "Mod" (short for "modification") line allows you to apply the same changes to all following rows (until the mod(s) are cleared). They are formatted as follows:
-			* They should start with the MOD,START ([) character and end with the MOD,END (]) character. Like other lines, they can be indented as desired.
-			* A mod line can contain 0 or more mod actions, separated by the MOD,DELIM (|) character.
+			* They should start with the mod start ([) character and end with the mod end (]) character. Like other lines, they can be indented as desired.
+			* A mod line can contain 0 or more mod actions, separated by the multi-entry (|) character.
 			* Additional information about mod actions can be found in the TableListMod class.
 		
 		Some special meta mod actions (not covered by the TableListMod class):
 			(none) - Clear all mods
 				If no actions are specified at all (i.e. a line containing only "[]"), we will clear all previously added mods.
-				
+			
 			+n - Add label (n can be any number)
 				Labels all following mods on the same row with the given number, which can be used to specifically clear them later.
 				Example:
@@ -96,13 +96,14 @@
 						[+5|COL.addToStart(aaa)|COL.addToEnd(zzz)]
 					Result
 						Rows after this mod line will have "aaa" prepended and "zzz" appended to their COL column (same as if we'd left out the "+5|").
-				
+			
 			-n - Remove mods with label (n can be any number)
 				Removes all currently active mods with this label. Typically the only thing on its row.
 				Example:
 					Mod line
 						[-5]
 					Result
+						If there was a mod with a label of 5, it will not apply to any rows after this line.
 			
 			For example, these two files have the same result:
 				File A
@@ -128,53 +129,37 @@
 					[]
 		
 	Special Characters
-		Certain characters can have special meaning when included in the file. Each of the following can be changed by setting the relevant subscript in the chars array passed to the constructor (i.e. chars["SETTING"] or chars["MOD","ADD_LABEL"]).
-		
-		Defaults:
-			IGNORE           ;
-			MODEL            (
-			SETTING          @
-			PLACEHOLDER      -
-			MULTIENTRY       |
-			MOD,START        [
-			MOD,END          ]
-			MOD,ADD_LABEL    +
-			MOD,REMOVE_LABEL -
-			MOD,DELIM        |
-		
 		At the start of a row:
-			IGNORE - ;
-				If any of these characters are at the beginning of a line (ignoring any whitespace before that), the line is ignored and not added to the array of lines.
+			Ignore - ;
+				If the line starts with this character (ignoring any whitespace before that), the line is ignored and not added to the table.
 			
-			MODEL - (
-				This is the header row mentioned above - the 2D array that you get back will use these column headers as string indices into each "row" array.
+			Model - (
+				This is the key row mentioned above - the 2D array that you get back will use these column headers as string indices into each "row" array.
 			
-			SETTING - @
-				Any row that begins with one of these is assumed to be of the form @SettingName=value, where SettingName is one of the following:
-					PlaceholderChar - the placeholder character to use
-				Note that if any of these conflict with the settings passed programmatically, the programmatic settings win.
+			Setting - @
+				Any row that begins with this is assumed to be of the form @SettingName=value. Settings can be accessed using the .settings property.
 			
-			MOD,START - [
+			Header - # (with a space after)
+				Any row starting with this will be added to the .headers property instead of the main table, with its index being that of the next row added to the table.
+			
+			Mod start - [
 				A line which begins with this character will be processed as a mod (see "Mods" section for details).
 				
 		Within a "normal" row (not started with any of the special characters above):
-			PLACEHOLDER - - (hyphen)
+			Placeholder - - (hyphen)
 				Having this allows you to have a truly empty value for a column in a given row (useful when optional columns are in the middle).
 			
-			MULTIENTRY - |
+			Multi-entry - |
 				If this is included in a value for a column, the value for that row will be an array of the pipe-delimited values.
 		
 		Within a mod row (after the MOD,START character, see "Mods" section for details):
-			MOD,ADD_LABEL - +
+			Mod add label - +
 				Associate the mods on this line with the numeric label following this character.
 				
-			MOD,REMOVE_LABEL - - (hyphen)
+			Mod remove label - - (hyphen)
 				Remove all mods with the numeric label following this character.
 				
-			MOD,DELIM - |
-				Multiple mod actions may be included in a mod line by separating them with this character.
-				
-			MOD,END - ]
+			Mod end - ]
 				Mod lines should end with this character.
 		
 	Other features
@@ -198,7 +183,8 @@
 					             ["VALUE"]  := 1
 		
 		Filtering
-			A version of the table which does not include all rows can be retrieved with the .getFilteredTable() and .getFilteredTableUnique() functions. For these functions, you can specify the column and value you'd like to filter on, with an option to include/exclude rows with a blank value for that column.
+			The table can be filtered in-place with .filterByColumn and .filterOutEmptyForColumn. Notably, .filterByColumn never filters out rows with a blank value for the provided column - .filterOutEmptyForColumn can be used to get rid of those if needed.
+				
 			Example:
 				File:
 					(  NAME     ABBREV   PATH                                         MACHINE
@@ -207,90 +193,14 @@
    					Spotify  spot     C:\Spotify\Spotify.exe                       ASUS_LAPTOP
    					Firefox  fox      C:\Program Files\Firefox\firefox.exe         
 				Code:
-					tl := new TableList(filePath)
-					table := tl.getFilteredTable("MACHINE", "HOME_DESKTOP", true) ; true - exclude blanks
+					tl := new TableList(filePath).filterByColumn("MACHINE", "HOME_DESKTOP")
+					tl.filterOutEmptyForColumn("MACHINE")
+					table := tl.getTable()
 				Result:
 					table[1, "NAME"]   = Spotify
 					table[1, "ABBREV"] = spot
 					table[1, "PATH"]   = C:\Program Files (x86)\Spotify\Spotify.exe
 					<"Firefox" line excluded because it was blank for this column>
-		
-	Example Usage
-		File:
-			(  NAME           ABBREV         PATH              MACHINE
-			
-			; AHK Folders
-			[PATH.addToStart(C:\ahk\)]
-			   AHK Config     AHK_CONFIG     config
-			   AHK Source     AHK_SOURCE     source
-			[]
-			
-			; User Folders
-			[PATH.addToStart(C:\Users\user\)]
-			   Downloads      DOWNLOADS      Downloads
-			   VB6 Compile    VB6_COMPILE    Dev\Temp\Compile  EPIC_LAPTOP
-			[]
-			
-			; Music variations per machine
-			[PATH.addToEnd(\Music)]
-			   Music          MUSIC          C:\Users\user     HOME_DESKTOP
-			   Music          MUSIC          C:\Users\user     HOME_LAPTOP
-			   Music          MUSIC          D:                EPIC_LAPTOP
-			[]
-		
-		Code A:
-			tl := new TableList(filePath)
-			table := tl.getTable()
-		Result A:
-			table[1, "NAME"]    = AHK Config
-			         "ABBREV"]  = AHK_CONFIG
-			         "PATH"]    = C:\ahk\config
-			         "MACHINE"] = 
-			     [2, "NAME"]    = AHK Source
-			         "ABBREV"]  = AHK_SOURCE
-			         "PATH"]    = C:\ahk\source
-			         "MACHINE"] = 
-			     [3, "NAME"]    = Downloads
-			         "ABBREV"]  = DOWNLOADS
-			         "PATH"]    = C:\Users\user\Downloads
-			         "MACHINE"] = 
-			     [4, "NAME"]    = VB6 Compile
-			         "ABBREV"]  = VB6_COMPILE
-			         "PATH"]    = C:\Users\user\Dev\Temp\Compile
-			         "MACHINE"] = EPIC_LAPTOP
-			     [5, "NAME"]    = Music
-			         "ABBREV"]  = MUSIC
-			         "PATH"]    = C:\Users\user\Music
-			         "MACHINE"] = HOME_DESKTOP
-			     [6, "NAME"]    = Music
-			         "ABBREV"]  = MUSIC
-			         "PATH"]    = C:\Users\user\Music
-			         "MACHINE"] = HOME_LAPTOP
-			     [7, "NAME"]    = Music
-			         "ABBREV"]  = MUSIC
-			         "PATH"]    = D:\Music
-			         "MACHINE"] = EPIC_LAPTOP
-			
-		Code B:
-			tl := new TableList(filePath)
-			table := tl.getFilteredTable("MACHINE", "HOME_DESKTOP", false) ; false - include blanks
-		Result B (only rows with MACHINE column = HOME_DESKTOP or blank are included):
-			table[1, "NAME"]    = AHK Config
-			         "ABBREV"]  = AHK_CONFIG
-			         "PATH"]    = C:\ahk\config
-			         "MACHINE"] = 
-			     [2, "NAME"]    = AHK Source
-			         "ABBREV"]  = AHK_SOURCE
-			         "PATH"]    = C:\ahk\source
-			         "MACHINE"] = 
-			     [3, "NAME"]    = Downloads
-			         "ABBREV"]  = DOWNLOADS
-			         "PATH"]    = C:\Users\user\Downloads
-			         "MACHINE"] = 
-			     [4, "NAME"]    = Music
-			         "ABBREV"]  = MUSIC
-			         "PATH"]    = C:\Users\user\Music
-			         "MACHINE"] = HOME_DESKTOP
 */
 
 class TableList {

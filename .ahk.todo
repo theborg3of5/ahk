@@ -14,11 +14,6 @@
 	With new discovery about chaining constructors to single call afterwards (i.e. 'data := new Selector("filepath").selectGui()'), do we still need the static side of Toast?
 		Would it be cleaner to just have callers use 'new Toast().*' instead?
 	Consider renaming MainConfig to just Config to be shorter
-	Selector/TableList interaction rework
-		TableList
-			Update header documentation - filtering, mandatory header row, settings, any additional things like that
-		Selector
-			Update header documentation for new filtering approach
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:

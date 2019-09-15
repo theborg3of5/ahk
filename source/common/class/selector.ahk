@@ -5,7 +5,7 @@
 	
 	Choices
 		Choices are read from a TableList Selector (.tls) file. See documentation for the TableList class for general file format (applies to .tl or tls files), and "File Format" below for additional Selector-specific details.
-		These choices may also be filtered (see the documentation for __New() below) - this allows you to use a single file of information to be used in different ways.
+		These choices may also be filtered (see the documentation for .dataTL below) - this allows you to use a single file of information to be used in different ways.
 		
 	Selection
 		This class can be used in one of two ways:
@@ -38,14 +38,14 @@
 				Result:
 					A "PATH" field will appear next to the choice field.
 				
-			+ - Gui setting
-				All gui settings (see "Gui Settings" below for a list) may be preset in the file using a line that starts with the + character, with an = between the name of the setting and the value. This is not to be confused with the TableList class's setting character (@).
+			@ - Gui setting
+				All gui settings (see "Gui Settings" below for a list) may be preset in the file using a line that starts with the @ character, with an = between the name of the setting and the value.
 				Example:
-					+WindowTitle=This is the new title!
+					@WindowTitle=This is the new title!
 				Result:
 					The popup's title will be "This is the new title!"
 				
-			# - Section title
+			#  - Section title
 				Starting a row with this character (plus a space) will start a new "section" in the popup, with an extra newline followed by the rest of the row's text as a title (bolded/underlined). Note that if no choices appear after one of these rows (which can happen when filtering choices), only the most recent section title row will apply. Additionally, you can force a new super-column in the popup using a pipe (|) character - see "New column" character below.
 				Example:
 					# Stuff
@@ -69,7 +69,7 @@
 		
 	Gui Settings
 		Some settings related to the popup may be customized using one of the following methods:
-			1. Specified in the TLS file (using the + character, see "Settings" character above)
+			1. Specified in the TLS file (using the @ character, see "Settings" character above)
 			2. Programmatically, using the .setGuiSetting() function
 		Note that these settings only have an effect on the popup shown by .selectGui().
 		
@@ -87,23 +87,23 @@
 		Values may be defaulted into these fields using .selectGui()'s defaultOverrideData parameter.
 	
 	Example Usage (Popup)
-		filter := {COLUMN:"MACHINE", VALUE:HOME_DESKTOP}           ; Only include choices which which have the "MACHINE" column set to "HOME_DESKTOP" (or blank)
 		extraDataFields := ["CONFIG_NAME", "CONFIG_NUM"]           ; Two additional override fields for the popup.
 		defaultOverrideData := {CONFIG_NAME: "Windows"}            ; Default a value of "Windows" into the "CONFIG_NAME" override field
 		
-		s := new Selector("C:\ahk\configs.tls", filter)            ; Read in the "configs.tls" TLS file, filtering it
+		s := new Selector("C:\ahk\configs.tls")                    ; Read in the "configs.tls" TLS file
+		s.dataTL.filterByColumn("MACHINE", "HOME_DESKTOP")         ; Only include choices which which have the "MACHINE" column set to "HOME_DESKTOP" (or blank)
 		s.setGuiSetting("MinColumnWidth", 500)                     ; Set the minimum super-column width to 500 pixels
 		s.addExtraOverrideFields(extraDataFields)                  ; Add the extra override fields
+		
 		data := s.selectGui("", "New title!", defaultOverrideData) ; Show the popup with a title of "New title!" and the default override field values specified above
 		MsgBox, % "Chosen config name: " data["CONFIG_NAME"]
 		MsgBox, % "Chosen config num: "  data["CONFIG_NUM"]
 		
 	Example Usage (Silent)
 		pathAbbrev := <user input>
-		filter := {COLUMN:"MACHINE", VALUE:HOME_DESKTOP}           ; Only include choices which which have the "MACHINE" column set to "HOME_DESKTOP" (or blank)
 		
-		s := new Selector("C:\ahk\paths.tls", filter)              ; Read in the "paths.tls" TLS file, filtering it
-		path := s.selectChoice(pathAbbrev, "PATH")                 ; Return only the "PATH" value, not the whole return array
+		s := new Selector("C:\ahk\paths.tls")      ; Read in the "paths.tls" TLS file
+		path := s.selectChoice(pathAbbrev, "PATH") ; Return only the "PATH" value, not the whole return array
 */
 
 class Selector {
@@ -114,7 +114,8 @@ class Selector {
 	
 	;---------
 	; DESCRIPTION:    The TableList instance that holds all data read from the file, available so
-	;                 that callers can apply filtering if needed.
+	;                 that callers can apply filtering if needed. See TableList for available
+	;                 filtering functions.
 	;---------
 	dataTL[] {
 		get {
@@ -305,7 +306,7 @@ class Selector {
 		if(fieldIndices) {
 			this.overrideFields := {}
 			For label,fieldIndex in fieldIndices {
-				if(fieldIndex > 0) ; Filter out data columns we don't want fields for (fieldIndex = 0)
+				if(fieldIndex > 0) ; Ignore data columns we don't want fields for (fieldIndex = 0)
 					this.overrideFields[fieldIndex] := label
 			}
 		}

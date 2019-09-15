@@ -70,7 +70,9 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;---------
 	postProcess() {
 		; INI - make sure the INI is the "real" EMC2 one.
-		s := new Selector("actionObject.tls", {"COLUMN":"TYPE", "VALUE":ActionObjectRedirector.Type_EMC2})
+		; s := new Selector("actionObject.tls", {"COLUMN":"TYPE", "VALUE":ActionObjectRedirector.Type_EMC2})
+		s := new Selector("actionObject.tls")
+		s.dataTL.filterByColumn("TYPE", ActionObjectRedirector.Type_EMC2)
 		this.ini := s.selectChoice(this.ini, "SUBTYPE")
 		
 		; Title - clean up, drop anything extra that we don't need.

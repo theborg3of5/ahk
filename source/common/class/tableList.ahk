@@ -392,6 +392,9 @@ class TableList {
 		
 		newTable := []
 		For _,row in this.table {
+			if(!isObject(row)) ; GDB TODO temporary - don't lose settings and section headers for Selector (they're not objects since they're PASS rows that aren't split)
+				newTable.push(row)
+			
 			if(row[column] != "")
 				newTable.push(row)
 		}

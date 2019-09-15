@@ -118,6 +118,17 @@ class Selector {
 ; ==============================
 ; == Public ====================
 ; ==============================
+	
+	;---------
+	; DESCRIPTION:    The TableList instance that holds all data read from the file, available so
+	;                 that callers can apply filtering if needed.
+	;---------
+	dataTL[] {
+		get {
+			return this._dataTL
+		}
+	}
+	
 	;---------
 	; DESCRIPTION:    Creates a new instance of the Selector class.
 	; PARAMETERS:

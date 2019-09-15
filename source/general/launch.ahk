@@ -28,8 +28,9 @@
 #If MainConfig.contextIsWork
 	^+!#t::
 		selectDLG() {
-			filter := {COLUMN:"DLG", VALUE:"", INCLUDE_BLANKS:false}
-			dlgId := new Selector("outlookTLG.tls", filter).selectGui("DLG", "", "", true)
+			s := new Selector("outlookTLG.tls")
+			s.dataTL.filterOutEmptyForColumn("DLG")
+			dlgId := s.selectGui("DLG", "", "", true)
 			if(!dlgId)
 				return
 			

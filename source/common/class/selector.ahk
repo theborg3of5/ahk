@@ -52,13 +52,6 @@
 				Result:
 					The popup will contain a (bolded/underlined) header of "Stuff".
 				
-			* - Hidden choice
-				Adding this character to an otherwise normal choice row will hide that choice from the gui, but still allow it to be selected using its abbreviation.
-				Example:
-					*Windows		win			windows.tls
-				Result:
-					The "Windows" choice will not be visible, but the user can still select that choice using the "win" abbreviation.
-			
 		Certain characters can be included within a row to additional effect:
 			| - Abbreviation delimiter
 				You can give an individual choice multiple abbreviations that can all be used to select the choice, separated by this character. Only the first abbreviation will be displayed.
@@ -269,7 +262,6 @@ class Selector {
 ; ==============================
 	chars          := {}    ; {name: character} - Special characters (see setChars)
 	choices        := []    ; Array of visible choices the user can pick from (array of SelectorChoice objects).
-	hiddenChoices  := []    ; Array of invisible choices the user can pick from (array of SelectorChoice objects).
 	sectionTitles  := {}    ; {choiceIndex: title} - Lines that will be displayed as titles (index matches the first choice that should be under this title)
 	overrideFields := ""    ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers)
 	guiSettings    := {}    ; {settingName: value} - Settings related to the GUI popup we show
@@ -282,7 +274,6 @@ class Selector {
 	;---------
 	setChars() {
 		this.chars["SECTION_TITLE"]        := "#"
-		this.chars["HIDDEN"]               := "*"
 		this.chars["OVERRIDE_FIELD_INDEX"] := ")"
 		this.chars["SETTING"]              := "+"
 		this.chars["COMMAND"]              := "+"
@@ -325,7 +316,6 @@ class Selector {
 		table := this._dataTL.getTable()
 		
 		this.choices       := [] ; Visible choices the user can pick from.
-		this.hiddenChoices := [] ; Invisible choices the user can pick from.
 		this.sectionTitles := {} ; Lines that will be displayed as titles, extra newlines, etc, but have no other significance.
 		For i,row in table {
 			if(this.isChoiceRow(row))
@@ -360,17 +350,13 @@ class Selector {
 	
 	;---------
 	; DESCRIPTION:    Given a row representing a choice, turn it into a SelectorChoice
-	;                 object and add it to the relevant choices array (normal or hidden).
+	;                 object and add it to the choices array.
 	; PARAMETERS:
 	;  row (I,REQ) - The row (array) of information about the choice. Should include "NAME"
 	;                and "ABBREV" subscripts, along with any other data you want to include.
 	;---------
 	addChoiceRow(row) {
-		choice := new SelectorChoice(row)
-		if(row["NAME"].startsWith(this.chars["HIDDEN"]))
-			this.hiddenChoices.push(choice) ; First char is hidden character (*), don't show it but allow user to choose it via abbrev.
-		else
-			this.choices.push(choice)
+		this.choices.push(new SelectorChoice(row))
 	}
 	
 	;---------
@@ -427,7 +413,7 @@ class Selector {
 	; DESCRIPTION:    Process a user's choice input, handling special commands or finding
 	;                 a choice matching the input. For matching against choices, the string
 	;                 must be either the index of the choice (for visible choices), or the
-	;                 abbreviation (either visible or hidden choices).
+	;                 abbreviation.
 	; PARAMETERS:
 	;  userChoiceString (I,REQ) - The string that the user typed in the choice field.
 	; RETURNS:        If we found a matching choice (and the input wasn't a command), the
@@ -448,44 +434,21 @@ class Selector {
 		
 		; Otherwise, we search through the data structure by both number and shortcut and look for a match.
 		} else {
-			return this.searchAllTables(userChoiceString)
+			return this.searchChoices(userChoiceString)
 		}
-	}
-
-	;---------
-	; DESCRIPTION:    Search both visible and hidden choices for a match using either
-	;                 index (visible only) or abbreviation (both).
-	; PARAMETERS:
-	;  input (I,REQ) - The string to match against choices.
-	; RETURNS:        If we find a matching choice, the data array from that choice. Otherwise, "".
-	;---------
-	searchAllTables(input) {
-		if(input = "")
-			return ""
-		
-		; Try the visible choices.
-		data := this.searchTable(this.choices, input)
-		if(data)
-			return data
-		
-		; Try the invisible choices.
-		data := this.searchTable(this.hiddenChoices, input, false)
-		
-		return data
 	}
 	
 	;---------
-	; DESCRIPTION:    Search the given array of choices for a match.
+	; DESCRIPTION:    Search loaded choices for a match.
 	; PARAMETERS:
-	;  table      (I,REQ) - Array of choices to search.
-	;  input      (I,REQ) - The string to match against choices.
-	;  checkIndex (I,OPT) - Whether to match against the index or not. Defaults to true.
+	;  input (I,REQ) - The string to match against choices.
 	; RETURNS:        If we found a match, the data array from that choice.
+	;                 If not, "".
 	;---------
-	searchTable(table, input, checkIndex := true) {
-		For i,t in table {
+	searchChoices(input) {
+		For i,t in this.choices {
 			; Index
-			if(checkIndex && (input = i))
+			if(input = i)
 				return t.data
 			
 			; Abbreviation
@@ -506,7 +469,6 @@ class Selector {
 		debugBuilder.addLine("Filepath",        this.filePath)
 		debugBuilder.addLine("Suppress data?",  this.suppressData)
 		debugBuilder.addLine("Choices",         this.choices)
-		debugBuilder.addLine("Hidden Choices",  this.hiddenChoices)
 		debugBuilder.addLine("Section titles",  this.sectionTitles)
 	}
 }

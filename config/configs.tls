@@ -1,3 +1,5 @@
++WindowTitle=Pick a config file to open:
+
 (	NAME										ABBREV	PATH
 
 [PATH.addToStart(<AHK_CONFIG>\)]

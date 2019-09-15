@@ -153,7 +153,7 @@
 				If any of these characters are at the beginning of a line (ignoring any whitespace before that), the line is ignored and not added to the array of lines.
 			
 			MODEL - (
-				This is the header row mentioned above - if you specify this, the 2D array that you get back will use these column headers as string indices into each "row" array.
+				This is the header row mentioned above - the 2D array that you get back will use these column headers as string indices into each "row" array.
 			
 			MOD,START - [
 				A line which begins with this character will be processed as a mod (see "Mods" section for details).
@@ -184,7 +184,7 @@
 		
 	Other features
 		Key rows
-			The constructor's keyRowChars parameter can be used to separate certain rows from the others based on their starting character, excluding them from the main table. Instead, those rows (which will still be split and indexed based on the model row, if present) are stored off using the key name given as part of the parameter, and are accessible using the .keyRow[<keyName>] property.
+			The constructor's keyRowChars parameter can be used to separate certain rows from the others based on their starting character, excluding them from the main table. Instead, those rows (which will still be split and indexed based on the model row) are stored off using the key name given as part of the parameter, and are accessible using the .keyRow[<keyName>] property.
 			Note that there should be only one row per character/key in this array.
 			Example:
 				File:
@@ -303,14 +303,6 @@ class TableList {
 ; ==============================
 ; == Public ====================
 ; ==============================
-	static RowType_Ignore  := "IGNORE"
-	static RowType_Setting := "SETTING"
-	static RowType_Mod     := "MOD"
-	static RowType_Pass    := "PASS"
-	static RowType_Key     := "KEY"
-	static RowType_Model   := "MODEL"
-	static RowType_Normal  := "NORMAL"
-	
 	;---------
 	; DESCRIPTION:    Create a new TableList instance.
 	; PARAMETERS:
@@ -320,12 +312,12 @@ class TableList {
 	;                        for more info. Format (charName is name of key i.e. "SETTING"):
 	;                        	chars[charName] := char
 	;  keyRowChars (I,OPT) - Array of characters and key names to keep separate, see class
-	;                        documentation for more info. If a row starts with one of the
-	;                        characters included here, that row will not appear in the main
-	;                        table. Instead, it will be available using the .keyRow[<keyName>]
-	;                        property. Note that the row is still split and indexed based
-	;                        on the model row (if present). Format (where keyName is the string
-	;                        you'll use with .keyRow[<keyName>] to retrieve the row later:
+	;                        documentation for more info. If a row starts with one of the characters
+	;                        included here, that row will not appear in the main table. Instead, it
+	;                        will be available using the .keyRow[<keyName>] property. Note that the
+	;                        row is still split and indexed based on the model row. Format (where
+	;                        keyName is the string you'll use with .keyRow[<keyName>] to retrieve
+	;                        the row later:
 	;                        	keyRowChars[<char>] := keyName
 	; RETURNS:        Reference to new TableList object
 	;---------
@@ -616,61 +608,29 @@ class TableList {
 	;  row (I,REQ) - Line from the file (string).
 	;---------
 	processRow(row) {
-		rowType := this.findRowType(row)
-		; DEBUG.popup("Processing row",row, "Row type",rowType)
-		
-		if(rowType = TableList.RowType_Ignore)
-			return ; Ignore - it's either empty or an ignore row.
-		
-		else if(rowType = TableList.RowType_Normal)
-			this.processNormal(row)
-		
-		else if(rowType = TableList.RowType_Setting)
-			this.processSetting(row)
-		
-		else if(rowType = TableList.RowType_Model) ; Model row, causes us to use string subscripts instead of numeric per entry.
-			this.processModel(row)
-		
-		else if(rowType = TableList.RowType_Mod)
-			this.processMod(row)
-		
-		else if(rowType = TableList.RowType_Pass)
-			this.processPass(row)
-		
-		else if(rowType = TableList.RowType_Key) ; Key characters mean that we split the row, but always store it separately from everything else.
-			this.processKey(row)
-	}
-	
-	;---------
-	; DESCRIPTION:    Determine which type of row we're trying to process.
-	; PARAMETERS:
-	;  row (I,REQ) - String with the line from the file we're trying to categorize.
-	; RETURNS:        A TableList.RowType_* constant describing the type of row.
-	;---------
-	findRowType(row) {
 		if(!row)
-			return TableList.RowType_Ignore
-		
+			return
 		if(row.startsWith(this.chars["IGNORE"]))
-			return TableList.RowType_Ignore
-		
-		if(row.startsWith(this.chars["SETTING"]))
-			return TableList.RowType_Setting
-		
-		if(row.startsWith(this.chars["MOD", "START"]))
-			return TableList.RowType_Mod
-		
-		if(row.startsWith(this.chars["MODEL"]))
-			return TableList.RowType_Model
+			return
 		
 		firstChar := row.sub(1, 1)
-		if(this.chars["PASS"].contains(firstChar))
-			return TableList.RowType_Pass
+		if(row.startsWith(this.chars["SETTING"]))
+			this.processSetting(row)
 		
-		if(this.keyRowChars.hasKey(firstChar))
-			return TableList.RowType_Key
+		else if(row.startsWith(this.chars["MOD", "START"]))
+			this.processMod(row)
 		
-		return TableList.RowType_Normal
+		else if(row.startsWith(this.chars["MODEL"])) ; Model row, causes us to use string subscripts instead of numeric per entry.
+			this.processModel(row)
+		
+		else if(this.chars["PASS"].contains(firstChar))
+			this.processPass(row)
+		
+		else if(this.keyRowChars.hasKey(firstChar)) ; Key characters mean that we split the row, but always store it separately from everything else.
+			this.processKey(row)
+		
+		else
+			this.processNormal(row)
 	}
 	
 	;---------

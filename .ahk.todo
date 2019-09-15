@@ -1,6 +1,7 @@
 # New Ideas
 	Bug: sending cleaned-up path strips out + characters from path
 		Example: C:\Users\gborg\Dev\Notepad++Sessions
+	Bug: quoted strings end up searching nothing in grepwin from search selector
 	Consider renaming "Epic" machines to use "Work" instead
 		Make sure to update VDI startup script to use new constant name
 	Update Notepad++ AHK documentation stuff to handle properties (with or without [])
@@ -15,11 +16,7 @@
 	Consider renaming MainConfig to just Config to be shorter
 	Selector/TableList interaction rework
 		TableList
-			Remove settings? Only one option (PlaceholderChar), and it's no longer used.
-				Alternatively, turn it into something special where we have an extra array of settings that callers can get ahold of
-				Consider keeping the @ if we transition Selector settings over to be handled here
-			Get rid of ability to customize characters (so ditch the parameter in the constructor)
-				Make the chars flat, named constants instead of an array
+			Make the chars flat, named constants instead of an array
 			Update header documentation - filtering, mandatory header row, settings, any additional things like that
 		Selector
 			I don't like how we handle settings/section headers as "pass" rows anymore - could we do that better?

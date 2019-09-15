@@ -1,5 +1,5 @@
-+WindowTitle=Resize active window to size:
-+MinColumnWidth=350
+@WindowTitle=Resize active window to size:
+@MinColumnWidth=350
 
 ; X and Y values can be coordinates or constant values from VisualWindow.X_*/VisualWindow.Y_*
 ; From AHK Active Window Info, these numbers should match the top set of w/h, not the client ones.

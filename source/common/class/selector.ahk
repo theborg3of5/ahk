@@ -289,22 +289,26 @@ class Selector {
 	
 	;---------
 	; DESCRIPTION:    Load the choices and other information from the TLS file into a TableList instance.
-	; SIDE EFFECTS:   Populates various member variables with information from the file.
 	;---------
 	getDataFromFile() {
-		tlChars := {}
-		tlChars["PASS"] := [this.chars["SECTION_TITLE"], this.chars["SETTING"]] ; Rows starting with these characters will not be split at all.
-		keyRowChars := {this.chars["OVERRIDE_FIELD_INDEX"]: "OVERRIDE_INDEX"}
-		; DEBUG.popup("TableList chars",tlChars, "TableList key row chars",keyRowChars)
-		
-		this._dataTL := new TableList(this.filePath, tlChars, keyRowChars)
+		this._dataTL := new TableList(this.filePath, {this.chars["OVERRIDE_FIELD_INDEX"]: "OVERRIDE_INDEX"})
 	}
-		
-		
+	
+	;---------
+	; DESCRIPTION:    Load info from our data TableList instance into the various members used to
+	;                 actually launch a selector.
+	; RETURNS:        true if all went well, false if there was an error and we should abort.
+	; SIDE EFFECTS:   Shows an error toast if something went wrong.
+	;---------
 	loadFromData() {
+		tl := this._dataTL
+		
+		this.sectionTitles := tl.headers
+		For name,value in tl.settings
+			this.setGuiSetting(name, value)
 		
 		; Special override field index row that tells us how we should arrange data inputs.
-		fieldIndices := this._dataTL.keyRow["OVERRIDE_INDEX"]
+		fieldIndices := tl.keyRow["OVERRIDE_INDEX"]
 		if(fieldIndices) {
 			this.overrideFields := {}
 			For label,fieldIndex in fieldIndices {
@@ -313,74 +317,16 @@ class Selector {
 			}
 		}
 		
-		table := this._dataTL.getTable()
-		
-		this.choices       := [] ; Visible choices the user can pick from.
-		this.sectionTitles := {} ; Lines that will be displayed as titles, extra newlines, etc, but have no other significance.
-		For i,row in table {
-			if(this.isChoiceRow(row))
-				this.addChoiceRow(row)
-			else
-				this.processSpecialLine(row)
-		}
+		For _,row in tl.getTable()
+			this.choices.push(new SelectorChoice(row))
 		
 		; Show a warning and fail if we didn't actually manage to load any choices.
 		if(!this.choices.length()) {
-			DEBUG.toast("Selector.loadFromData","No choices loaded")
 			Toast.showError("Selector: no choices available", "No choices were found in the TableList instance")
 			return false
 		}
 		
 		return true
-	}
-	
-	;---------
-	; DESCRIPTION:    Check whether the given row (array) of data should become a 
-	;                 SelectorChoice, or whether it is instead a special row (setting 
-	;                 or section title). Rows that should become choices have a "NAME" 
-	;                 subscript with a value.
-	; PARAMETERS:
-	;  row (I,REQ) - Row of data from a TableList, will be checked 
-	;                for whether it should become a SelectorChoice or not.
-	; RETURNS:        Whether this is a choice-ready row or not.
-	;---------
-	isChoiceRow(row) {
-		return (row["NAME"] != "")
-	}
-	
-	;---------
-	; DESCRIPTION:    Given a row representing a choice, turn it into a SelectorChoice
-	;                 object and add it to the choices array.
-	; PARAMETERS:
-	;  row (I,REQ) - The row (array) of information about the choice. Should include "NAME"
-	;                and "ABBREV" subscripts, along with any other data you want to include.
-	;---------
-	addChoiceRow(row) {
-		this.choices.push(new SelectorChoice(row))
-	}
-	
-	;---------
-	; DESCRIPTION:    Properly handle a row from the TableList that is not a choice
-	;                 (setting or section title).
-	; PARAMETERS:
-	;  line (I,REQ) - The line that we want to process, should start with a special
-	;                 character.
-	;---------
-	processSpecialLine(line) {
-		; Setting
-		if(line.startsWith(this.chars["SETTING"])) {
-			line := line.removeFromStart(this.chars["SETTING"])
-			if(line != "") {
-				settingSplit := line.split("=")
-				this.setGuiSetting(settingSplit[1], settingSplit[2]) ; name, value
-			}
-		
-		; Section title
-		} else if(line.startsWith(this.chars["SECTION_TITLE"] " ")) {
-			title := line.removeFromStart(this.chars["SECTION_TITLE"] " ")
-			idx := forceNumber(this.choices.MaxIndex()) + 1 ; The next actual choice will be the first one under this header, so match that.
-			this.sectionTitles[idx] := title ; If there are multiple headers in a row (for example when choices are filtered out) they should get overwritten in order here (which is correct).
-		}
 	}
 	
 	;---------

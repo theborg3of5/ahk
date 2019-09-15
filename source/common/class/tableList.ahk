@@ -134,7 +134,6 @@
 			IGNORE           ;
 			MODEL            (
 			SETTING          @
-			PASS             (no default)
 			PLACEHOLDER      -
 			MULTIENTRY       |
 			MOD,START        [
@@ -158,10 +157,6 @@
 			MOD,START - [
 				A line which begins with this character will be processed as a mod (see "Mods" section for details).
 				
-			PASS - (no default)
-				Any row that begins with one of these characters will not be broken up into multiple pieces, but will be a single-element array in the final output.
-				Note that the chars["IGNORE"] subscript is an array and can contain multiple characters.
-			
 		Within a "normal" row (not started with any of the special characters above):
 			PLACEHOLDER - - (hyphen)
 				Having this allows you to have a truly empty value for a column in a given row (useful when optional columns are in the middle).
@@ -308,9 +303,6 @@ class TableList {
 	; PARAMETERS:
 	;  filePath    (I,REQ) - Path to the file to read from. May be a partial path if
 	;                        findConfigFilePath() can find the correct thing.
-	;  chars       (I,OPT) - Associative array of special characters to override, see class documentation
-	;                        for more info. Format (charName is name of key i.e. "SETTING"):
-	;                        	chars[charName] := char
 	;  keyRowChars (I,OPT) - Array of characters and key names to keep separate, see class
 	;                        documentation for more info. If a row starts with one of the characters
 	;                        included here, that row will not appear in the main table. Instead, it
@@ -321,7 +313,7 @@ class TableList {
 	;                        	keyRowChars[<char>] := keyName
 	; RETURNS:        Reference to new TableList object
 	;---------
-	__New(filePath, chars := "", keyRowChars := "") {
+	__New(filePath, keyRowChars := "") {
 		if(!filePath)
 			return ""
 		
@@ -329,7 +321,7 @@ class TableList {
 		if(!FileExist(filePath))
 			return ""
 		
-		this.chars       := mergeObjects(this.getDefaultChars(), chars)
+		this.chars       := this.getChars()
 		this.keyRowChars := keyRowChars
 		
 		lines := fileLinesToArray(filePath)
@@ -349,7 +341,14 @@ class TableList {
 		return this.table
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Remove all rows that fail the provided filter.
+	; PARAMETERS:
+	;  filterColumn (I,REQ) - The column to check
+	;  filterValue  (I,REQ) - The value to check. In order to pass the filter (so to NOT be removed),
+	;                         a row must either have this value, or a blank value, for the filterColumn.
+	; RETURNS:        This object (for chaining)
+	;---------
 	filterByColumn(filterColumn, filterValue) { ; Blank values always pass filter - callers can use filterOutEmptyForColumn() to get rid of those.
 		if(filterColumn = "" || filterValue = "")
 			return this
@@ -364,15 +363,18 @@ class TableList {
 		return this
 	}
 	
+	;---------
+	; DESCRIPTION:    Remove all rows from the table that have a blank value in the provided column.
+	; PARAMETERS:
+	;  column (I,REQ) - The column to remove rows based on.
+	; RETURNS:        This object (for chaining)
+	;---------
 	filterOutEmptyForColumn(column) {
 		if(column = "")
 			return this
 		
 		newTable := []
 		For _,row in this.table {
-			if(!isObject(row)) ; GDB TODO temporary - don't lose settings and section headers for Selector (they're not objects since they're PASS rows that aren't split)
-				newTable.push(row)
-			
 			if(row[column] != "")
 				newTable.push(row)
 		}
@@ -381,7 +383,21 @@ class TableList {
 		return this
 	}
 	
-	getColumnByColumn(valueColumn, indexColumn, tiebreakerColumn := "") { ; GDB TODO either implement tiebreakerColumn or get rid of it
+	;---------
+	; DESCRIPTION:    Get one column of values from the table, indexed by another column.
+	; PARAMETERS:
+	;  valueColumn      (I,REQ) - The column to get values from
+	;  indexColumn      (I,REQ) - The column to index by
+	;  tiebreakerColumn (I,OPT) - If multiple rows have the same value in indexColumn, this column
+	;                             will be used to break a tie. If a row has a blank value in this
+	;                             column, it will lose to a row that has a value in this column.
+	; RETURNS:        Indexed array of values. Format:
+	;                   outputValues[indexColumnValue] := valueColumnValue
+	; NOTES:          Since the value in the index column is the new subscript, it's possible there
+	;                 will be some overlap. In the event that we have multiple rows with the same
+	;                 value, the first one wins, except for the tiebreaker case (see tiebreakerColumn)
+	;---------
+	getColumnByColumn(valueColumn, indexColumn, tiebreakerColumn := "") {
 		if(valueColumn = "" || indexColumn = "")
 			return ""
 		
@@ -394,6 +410,19 @@ class TableList {
 		return outputValues
 	}
 	
+	;---------
+	; DESCRIPTION:    Get the rows in the table, indexed by a particular column.
+	; PARAMETERS:
+	;  indexColumn      (I,REQ) - The column to index rows by.
+	;  tiebreakerColumn (I,OPT) - If multiple rows have the same value in indexColumn, this column
+	;                             will be used to break a tie. If a row has a blank value in this
+	;                             column, it will lose to a row that has a value in this column.
+	; RETURNS:        Indexed array of rows. Format:
+	;                   outputRows[indexColumnValue] := row
+	; NOTES:          Since the value in the index column is the new subscript, it's possible there
+	;                 will be some overlap. In the event that we have multiple rows with the same
+	;                 value, the first one wins, except for the tiebreaker case (see tiebreakerColumn)
+	;---------
 	getRowsByColumn(indexColumn, tiebreakerColumn := "") {
 		if(indexColumn = "")
 			return ""
@@ -422,22 +451,51 @@ class TableList {
 	}
 	
 	;---------
+	; DESCRIPTION:    The key row (that was excluded from the table, based on the constructor's
+	;                 keyRowChars parameter) that matches the given name. Format:
+	;                   row[column] := value
 	; PARAMETERS:
 	;  name (I,REQ) - The key name that was associated with the row that you want.
-	; RETURNS:        The key row (that was excluded from the table, based on the constructor's
-	;                 keyRowChars parameter) that matches the given name. Format:
-	;                 	row[column] := value
 	;---------
 	keyRow[name] {
 		get {
-			return this.keyRows[name]
+			return this._keyRows[name]
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    The settings extracted from the file. Format:
+	;                   settings[name] := value
+	;---------
+	settings {
+		get {
+			return this._settings
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    The section headers extracted from the file. Format, where rowNum matches the
+	;                 row number of the first row in this section:
+	;                   headers[rowNum] := value
+	;---------
+	headers {
+		get {
+			return this._headers
 		}
 	}
 	
 	
+; ==============================
+; == Public (Static) ===========
+; ==============================
 	
-; STATIC === ; GDB TODO make this into a proper section header
-
+	;---------
+	; DESCRIPTION:    Add a filter that will apply to all TableList instances in this script, automatically.
+	; PARAMETERS:
+	;  filterColumn (I,REQ) - The column to filter on. We'll look at the value of each row in this column.
+	;  filterValue  (I,REQ) - The value to filter on. Rows with this value (or blank) in the filter
+	;                         column will pass and not be filtered out.
+	;---------
 	addAutomaticFilter(filterColumn, filterValue) {
 		filter := {"COLUMN":filterColumn, "VALUE":filterValue}
 		TableList.autoFilters.push(filter)
@@ -455,19 +513,23 @@ class TableList {
 	chars       := {} ; {key: character}
 	keyRowChars := {} ; {character: label}
 	
+	_keyRows    := {} ; {keyRowLabel: rowObj}
+	_settings   := {} ; {settingName: settingValue}
+	_headers    := {} ; {firstRowNumberInHeader: headerText}
+	
 	;---------
-	; DESCRIPTION:    Get the array of default special characters.
+	; DESCRIPTION:    Get the array of special characters.
 	; RETURNS:        Array of special characters for use by the class, see header for character
 	;                 meanings. Format:
 	;                 	chars[name] := character
 	;---------
-	getDefaultChars() {
+	getChars() {
 		chars := {}
 		
 		chars["IGNORE"]  := ";"
 		chars["MODEL"]   := "("
 		chars["SETTING"] := "@"
-		chars["PASS"]    := [] ; This one is an array ; GDB TODO get rid of this
+		chars["HEADER"] := "# " ; Must include the space
 		
 		chars["PLACEHOLDER"] := "-"
 		chars["MULTIENTRY"]  := "|"
@@ -524,15 +586,14 @@ class TableList {
 		else if(row.startsWith(this.chars["MODEL"])) ; Model row, causes us to use string subscripts instead of numeric per entry.
 			this.processModel(row)
 		
+		else if(row.startsWith(this.chars["HEADER"]))
+			this.processHeader(row)
 		
 		else if(this.keyRowChars.hasKey(firstChar)) ; Key characters mean that we split the row, but always store it separately from everything else.
 			this.processKey(row)
 		
 		else if(row.startsWith(this.chars["MOD", "START"]))
 			this.processMod(row)
-		
-		else if(this.chars["PASS"].contains(firstChar))
-			this.processPass(row)
 		
 		else
 			this.processNormal(row)
@@ -553,8 +614,7 @@ class TableList {
 		value := row.afterString("=")
 		; DEBUG.popup("TableList.processSetting","Pulled out data", "Name",name, "Value",value)
 		
-		if(name = "PlaceholderChar")
-			this.chars["PLACEHOLDER"] := value
+		this._settings[name] := value
 	}
 	
 	;---------
@@ -569,6 +629,16 @@ class TableList {
 		this.indexLabels := rowAry
 	}
 	
+	;---------
+	; DESCRIPTION:    Saves off the setting in the provided settings row.
+	; PARAMETERS:
+	;  row (I,REQ) - Header row that we're processing (string).
+	;---------
+	processHeader(row) {
+		headerText := row.removeFromStart(this.chars["HEADER"])
+		firstRowNumber := forceNumber(this.table.MaxIndex()) + 1 ; First row that will be under this section header (the next one added)
+		this._headers[firstRowNumber] := headerText
+	}
 	
 	;---------
 	; DESCRIPTION:    Parse a key row - this is one that we will split and index like a normal row,
@@ -583,7 +653,7 @@ class TableList {
 		rowAry.RemoveAt(1) ; Get rid of the separate char bit (")").
 		this.applyIndexLabels(rowAry)
 		
-		this.keyRows[this.keyRowChars[firstChar]] := rowAry
+		this._keyRows[this.keyRowChars[firstChar]] := rowAry
 	}
 	
 	;---------
@@ -623,15 +693,6 @@ class TableList {
 					this.mods.push(new TableListMod(currMod, label))
 			}
 		}
-	}
-	
-	;---------
-	; DESCRIPTION:    Parse a pass row - this will be added to the table as just a string, rather than an array.
-	; PARAMETERS:
-	;  row (I,REQ) - Pass row to process (string).
-	;---------
-	processPass(row) {
-		this.table.push(row)
 	}
 	
 	;---------
@@ -710,7 +771,7 @@ class TableList {
 	;                          column pass.
 	; RETURNS:        True if we should exclude the row from the filtered table, false otherwise.
 	;---------
-	rowPassesFilter(row, filterColumn, filterValue) { ; GDB TODO document
+	rowPassesFilter(row, filterColumn, filterValue) {
 		valueToCompare := row[filterColumn]
 		
 		; Blank values always pass
@@ -731,7 +792,9 @@ class TableList {
 		debugBuilder.addLine("Key row chars", this.keyRowChars)
 		debugBuilder.addLine("Index labels",  this.indexLabels)
 		debugBuilder.addLine("Mods",          this.mods)
-		debugBuilder.addLine("Key rows",      this.keyRows)
+		debugBuilder.addLine("Key rows",      this._keyRows)
+		debugBuilder.addLine("Settings",      this._settings)
+		debugBuilder.addLine("Headers",       this._headers)
 		debugBuilder.addLine("Table",         this.table)
 	}
 }

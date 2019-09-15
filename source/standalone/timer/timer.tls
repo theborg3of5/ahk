@@ -1,4 +1,4 @@
-+WindowTitle=Timer duration
+@WindowTitle=Timer duration
 (	NAME				ABBREV		DURATION_STRING		LABEL
 )	0					0				1							2
 	

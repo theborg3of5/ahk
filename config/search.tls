@@ -1,4 +1,4 @@
-+WindowTitle=Select type of search to run and input search text:
+@WindowTitle=Select type of search
 
 (		NAME								ABBREV		SUBTYPE															SEARCH_TYPE		APP_KEY		CONTEXT		SEARCH_TERM
 )		0									0				0																	0					0				0				1

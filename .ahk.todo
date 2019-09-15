@@ -4,6 +4,8 @@
 	Bug: quoted strings end up searching nothing in grepwin from search selector
 	Consider renaming "Epic" machines to use "Work" instead
 		Make sure to update VDI startup script to use new constant name
+	TableList mods - consider making it a replacement by default (only 1 active mod), only stack with labels
+		Use case: onenote todos, dailies section could be more compact
 	Update Notepad++ AHK documentation stuff to handle properties (with or without [])
 		Properties with parameters, too - maybe just treat [] the same as ()?
 	Figure out what to do about cleanupPath() dropping (valid) quotes from the end of URLs

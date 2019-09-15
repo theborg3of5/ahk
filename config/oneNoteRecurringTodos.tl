@@ -1,6 +1,9 @@
 (	TITLE																DATE		DAY_ABBREV		NUM_DAY_OF_MONTH		MONTH_ABBREV
 
-; Saturday dailies
+; Dailies
+[DAY_ABBREV.replaceWith(THURS)]
+	Transcribe kids' class notes
+[]
 [DAY_ABBREV.replaceWith(SAT)]
 	Dishes from week
 	Wash laundry
@@ -8,8 +11,6 @@
 	Clean off desk
 	Pull to-dos from specific sections below
 []
-
-; Sunday dailies
 [DAY_ABBREV.replaceWith(SUN)]
 	Review/type Ninpo notes
 	Fold laundry
@@ -31,6 +32,7 @@
 	Weigh cats														-			WED				2
 	Schedule haircut												-			SAT				2
 	Periodic cleaning (small trash cans, kitchen)		-			SUN				2
+	Transcribe instructor meeting notes						-			SUN				1
 
 ; Yearlies
 	Check various airline rewards points					-			SAT				1							JAN

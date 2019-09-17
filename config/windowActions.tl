@@ -15,7 +15,7 @@
 	EMC2 XDS Open Design					-				-					-					CTRL_SHIFT
 	EMC2 XDS Submit						-				-					HOME_END			CTRL_SHIFT
 	Explorer									MIN			OTHER
-	Explorer									MIN			-					-					-						-			EPIC_VDI
+	Explorer									MIN			-					-					-						-			WORK_VDI
 	GitHub									CLOSE
 	GrepWin									CLOSE
 	KDiff										CLOSE

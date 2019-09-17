@@ -18,7 +18,7 @@
 	Onetastic Macros				ot					<ONETASTIC_MACROS>
 	
 [CONTEXT.replaceWith(WORK)]
-	# Epic Local
+	# Work Local
 	Dev								dev				<USER_DEV>
 	Templates						tp					<USER_DEV>\Templates
 	Transaction Diff Output		txdiff			<TX_DIFF_OUTPUT>
@@ -27,7 +27,7 @@
 	HSWeb TraceX Files			trace				<USER_TEMP>\<yyyy>-<MM>-<dd>
 	S1 Source						s1					<EPIC_SOURCE_S1>
 	
-	# Epic Server
+	# Work Server
 	Net Home							nh					<EPIC_NET_HOME>
 	NFS 3 Day						n3					<EPIC_NFS_3DAY>
 	NFS Ask							na					<EPIC_NFS_ASK>

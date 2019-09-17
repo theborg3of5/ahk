@@ -46,6 +46,6 @@
 #If
 
 ; Universal new email.
-#If MainConfig.machineIsEpicLaptop
+#If MainConfig.machineIsWorkLaptop
 	^!m::MainConfig.runProgram("Outlook", "/c ipm.note")
 #If

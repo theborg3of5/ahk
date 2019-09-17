@@ -27,7 +27,7 @@ Run(subFolder "windowMoverSizer\windowMoverSizer.ahk")
 if(MainConfig.contextIsWork) { ; Work-specific subs
 	Run(subFolder "dlgNumTracker\dlgNumTracker.ahk")
 	Run(subFolder "tortoiseFillerDLG\tortoiseFillerDLG.ahk")
-	if(MainConfig.machineIsEpicLaptop)
+	if(MainConfig.machineIsWorkLaptop)
 		Run(subFolder "killUAC\killUAC.ahk")
 }
 

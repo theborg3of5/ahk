@@ -144,7 +144,7 @@ class Chrome {
 	; DESCRIPTION:    Determine whether the current page is CodeSearch, based on its title.
 	;---------
 	isCurrentPageCodeSearch() {
-		; Only have CodeSearch on Epic machine
+		; Only have CodeSearch at work
 		if(!MainConfig.contextIsWork)
 			return false
 		

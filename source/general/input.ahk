@@ -2,9 +2,9 @@
 
 #If MainConfig.machineIsHomeDesktop
 	$Volume_Mute::DllCall("LockWorkStation")	; Lock computer.
-#If MainConfig.machineIsHomeLaptop || MainConfig.machineIsEpicLaptop || MainConfig.machineIsEpicVDI
+#If MainConfig.machineIsHomeLaptop || MainConfig.machineIsWorkLaptop || MainConfig.machineIsWorkVDI
 	AppsKey::RWin ; No right windows key on these machines, so use the AppsKey (right-click key) instead.
-#If MainConfig.machineIsEpicLaptop || MainConfig.machineIsEpicVDI
+#If MainConfig.machineIsWorkLaptop || MainConfig.machineIsWorkVDI
 	Browser_Back::LButton
 	Browser_Forward::RButton
 #If

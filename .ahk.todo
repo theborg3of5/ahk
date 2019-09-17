@@ -1,6 +1,4 @@
 # New Ideas
-	Consider renaming "Epic" machines to use "Work" instead
-		Make sure to update VDI startup script to use new constant name
 	TableList mods - consider making it a replacement by default (only 1 active mod), only stack with labels
 		Use case: onenote todos, dailies section could be more compact
 	Update Notepad++ AHK documentation stuff to handle properties (with or without [])

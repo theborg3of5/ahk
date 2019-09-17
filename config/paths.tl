@@ -41,7 +41,7 @@
 	Onetastic Functions				ONETASTIC_FUNCTIONS				<USER_ROOT>\OnetasticMacros\Functions
 	
 [CONTEXT.replaceWith(WORK)]
-	; Epic
+	; Work
 	VB6 Compile							VB6_COMPILE							<USER_ROOT>\Dev\Temp\Compile
 	Transaction Diff					TX_DIFF								C:\Program Files\TransactionDiff
 	Transaction Diff Results		TX_DIFF_OUTPUT						<USER_ROOT>\Dev\TransactionDiffOutput

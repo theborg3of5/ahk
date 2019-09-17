@@ -77,7 +77,7 @@
 #If
 
 
-#If MainConfig.machineIsEpicLaptop
+#If MainConfig.machineIsWorkLaptop
 	^+!t::
 		selectOutlookTLG() {
 			data := new Selector("outlookTLG.tls").selectGui()

@@ -7,8 +7,8 @@ class MainConfig {
 ; == Public ====================
 ; ==============================
 	; Constants for specific machines (matched to settings.ini).
-	static Machine_EpicLaptop  := "EPIC_LAPTOP"
-	static Machine_EpicVDI     := "EPIC_VDI"
+	static Machine_WorkLaptop  := "WORK_LAPTOP"
+	static Machine_WorkVDI     := "WORK_VDI"
 	static Machine_HomeLaptop  := "HOME_LAPTOP"
 	static Machine_HomeDesktop := "HOME_DESKTOP"
 	
@@ -78,14 +78,14 @@ class MainConfig {
 			return this.settings["MACHINE"]
 		}
 	}
-	machineIsEpicLaptop {
+	machineIsWorkLaptop {
 		get {
-			return (this.machine = MainConfig.Machine_EpicLaptop)
+			return (this.machine = MainConfig.Machine_WorkLaptop)
 		}
 	}
-	machineIsEpicVDI {
+	machineIsWorkVDI {
 		get {
-			return (this.machine = MainConfig.Machine_EpicVDI)
+			return (this.machine = MainConfig.Machine_WorkVDI)
 		}
 	}
 	machineIsHomeDesktop {

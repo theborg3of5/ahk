@@ -33,17 +33,14 @@
 !+p::sendCleanedUpPath()
 !+#p::sendCleanedUpPath(true)
 sendCleanedUpPath(containingFolderOnly := false) {
-	path := getSelectedText().firstLine()
-	if(!path) ; Fall back to clipboard if nothing selected
-		path := clipboard
-	
+	path := clipboard
 	path := cleanupPath(path)
 	path := mapPath(path)
 	
 	if(containingFolderOnly)
 		path := getParentFolder(path) "\" ; Remove last element at end, add trailing slash
 	
-	Send, % path
+	SendRaw, % path
 }
 
 

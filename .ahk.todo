@@ -1,6 +1,4 @@
 # New Ideas
-	Bug: sending cleaned-up path strips out + characters from path
-		Example: C:\Users\gborg\Dev\Notepad++Sessions
 	Bug: quoted strings end up searching nothing in grepwin from search selector
 	Consider renaming "Epic" machines to use "Work" instead
 		Make sure to update VDI startup script to use new constant name

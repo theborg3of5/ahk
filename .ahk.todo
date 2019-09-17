@@ -1,5 +1,4 @@
 # New Ideas
-	Bug: quoted strings end up searching nothing in grepwin from search selector
 	Consider renaming "Epic" machines to use "Work" instead
 		Make sure to update VDI startup script to use new constant name
 	TableList mods - consider making it a replacement by default (only 1 active mod), only stack with labels

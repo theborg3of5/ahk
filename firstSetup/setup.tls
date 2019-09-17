@@ -1,9 +1,9 @@
 @WindowTitle=Select Machine to set up:
 @MinColumnWidth=300
 
-(	NAME					ABBREV						CONTEXT		MACHINE				MEDIA_PLAYER
+(	NAME					ABBREV						NEW_CONTEXT		NEW_MACHINE			MEDIA_PLAYER
 	
-	Home Desktop		desk|HOME_DESKTOP			HOME			HOME_DESKTOP		Spotify
-	Home Laptop			hlap|HOME_LAPTOP			HOME			HOME_LAPTOP			-
-	Epic Laptop			lap|WORK_LAPTOP			WORK			WORK_LAPTOP			Spotify
-	Epic VDI				vdi|WORK_VDI				WORK			WORK_VDI				-
+	Home Desktop		desk|HOME_DESKTOP			HOME				HOME_DESKTOP		Spotify
+	Home Laptop			hlap|HOME_LAPTOP			HOME				HOME_LAPTOP			-
+	Work Laptop			lap|WORK_LAPTOP			WORK				WORK_LAPTOP			Spotify
+	Work VDI				vdi|WORK_VDI				WORK				WORK_VDI				-

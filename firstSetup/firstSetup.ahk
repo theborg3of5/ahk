@@ -28,7 +28,6 @@ useSlimMode   := A_Args[2]
 
 ; Get info for the machine that we're setting up for (will drive specific values in settings.ini)
 machineInfo := new Selector(tlSetupPath).select(machineChoice)
-
 if(!machineInfo)
 	ExitApp
 ; DEBUG.popup("Machine Info Selected", machineInfo)
@@ -40,8 +39,8 @@ t.showPersistent()
 t.setText("Reading values from selection...")
 tagsToReplace := {}
 tagsToReplace["ROOT"]            := ahkRootPath
-tagsToReplace["CONTEXT"]         := machineInfo["CONTEXT"]
-tagsToReplace["MACHINE"]         := machineInfo["MACHINE"]
+tagsToReplace["CONTEXT"]         := machineInfo["NEW_CONTEXT"]
+tagsToReplace["MACHINE"]         := machineInfo["NEW_MACHINE"]
 tagsToReplace["MEDIA_PLAYER"]    := machineInfo["MEDIA_PLAYER"]
 ; DEBUG.popup("Finished tags to replace",tagsToReplace)
 

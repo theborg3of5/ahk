@@ -13,6 +13,7 @@
 	 ^`;::clickUsingMode(126, 37, "Client")
 	^+`;::clickUsingMode(150, 39, "Client")
 	
+	; Delete current line
 	^d::VB6.deleteCurrentLine()
 	
 	; Close current 'window' within VB.
@@ -121,9 +122,9 @@ class VB6 {
 		if(!VB6.isInCodeMode()) ; Don't do anything if we're not editing code.
 			return
 		
-		Send, {End}{Home 2}                      ; Start of current line (Home twice to also get indentation)
-		Send, {Shift Down}{End}{Right}{Shift Up} ; Select entire line plus the following newline
-		Send, {Delete}                           ; Delete it
+		Send, {End}{Right}               ; Start of next line, before its indentation
+		Send, {Shift Down}{Up}{Shift Up} ; Select entire original line, including newline
+		Send, {Delete}                   ; Delete the selection
 	}
 	
 	;---------

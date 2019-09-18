@@ -13,6 +13,8 @@
 	 ^`;::clickUsingMode(126, 37, "Client")
 	^+`;::clickUsingMode(150, 39, "Client")
 	
+	^d::VB6.deleteCurrentLine()
+	
 	; Close current 'window' within VB.
 	^w::VB6.closeCurrentFile()
 	
@@ -113,6 +115,18 @@ class VB6 {
 	}
 	
 	;---------
+	; DESCRIPTION:    Delete the current line in VB.
+	;---------
+	deleteCurrentLine() {
+		if(!VB6.isInCodeMode()) ; Don't do anything if we're not editing code.
+			return
+		
+		Send, {End}{Home 2}                      ; Start of current line (Home twice to also get indentation)
+		Send, {Shift Down}{End}{Right}{Shift Up} ; Select entire line plus the following newline
+		Send, {Delete}                           ; Delete it
+	}
+	
+	;---------
 	; DESCRIPTION:    Add error handler logic for current function.
 	;---------
 	addErrorHandlerForCurrentFunction() {
@@ -136,10 +150,9 @@ class VB6 {
 	; NOTES:          This only works if "window" within VB6 is "maximized".
 	;---------
 	toggleCodeAndDesign() {
-		mode := WinGetTitle("A").firstBetweenStrings("(", ")")
-		if(mode = "Code") {
+		if(VB6.isInCodeMode()) {
 			Send, +{F7}
-		} else if(mode = "Form" || mode = "UserControl") {
+		} else {
 			Send, {F7}
 		}
 	}
@@ -158,6 +171,15 @@ class VB6 {
 ; ==============================
 ; == Private ===================
 ; ==============================
+	
+	;---------
+	; DESCRIPTION:    Check whether the current window within VB is in "code" mode (as opposed to a design view).
+	; RETURNS:        True if we're in code mode, False otherwise.
+	;---------
+	isInCodeMode() {
+		return (WinGetTitle("A").firstBetweenStrings("(", ")") = "Code")
+	}
+	
 	;---------
 	; DESCRIPTION:    Builds the string for a contact comment in the current project.
 	; PARAMETERS:

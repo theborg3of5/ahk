@@ -125,6 +125,7 @@ class VB6 {
 		Send, {End}{Right}               ; Start of next line, before its indentation
 		Send, {Shift Down}{Up}{Shift Up} ; Select entire original line, including newline
 		Send, {Delete}                   ; Delete the selection
+		Send, {Home}                     ; Get to the start of the line, after indentation
 	}
 	
 	;---------

@@ -93,6 +93,7 @@
 		::acc'n::association
 		::inf'n::information
 		::info'n::information
+		::ass'n::association
 		
 		:?:sync'ly::synchronously
 		

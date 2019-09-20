@@ -1,4 +1,4 @@
-#If MainConfig.isWindowActive("yEd")
+#If Config.isWindowActive("yEd")
 	; Use numpad symbols as normal, don't zoom using those.
 	NumpadAdd::Send, +=
 	NumpadSub::Send, -

@@ -78,7 +78,7 @@ class EpicRecord {
 	; NOTES:          This will only get the INI and ID, never the title.
 	;---------
 	initFromEMC2Title() {
-		title := WinGetTitle(MainConfig.windowInfo["EMC2"].titleString)
+		title := WinGetTitle(Config.windowInfo["EMC2"].titleString)
 		title := title.removeFromEnd(" - EMC2")
 		
 		; If no info available, bail.

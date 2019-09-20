@@ -1,5 +1,5 @@
 ; EpicStudio hotkeys and helpers.
-#If MainConfig.isWindowActive("EpicStudio")
+#If Config.isWindowActive("EpicStudio")
 	; Remap some of the tools to get easier access to those I use often.
 	!1::!3 ; EZParse
 	!2::!5 ; Error List
@@ -21,7 +21,7 @@
 	:X:.snip::MSnippets.insertMSnippet()
 	
 	; Debug, auto-search for workstation ID.
-	~F5::EpicStudio.runDebug("ws:" MainConfig.private["WORK_COMPUTER_NAME"])
+	~F5::EpicStudio.runDebug("ws:" Config.private["WORK_COMPUTER_NAME"])
 	F6:: EpicStudio.runDebug("ws:" A_IPAddress1)
 #If
 
@@ -148,11 +148,11 @@ class EpicStudio {
 		origMatchSpeed := setTitleMatchSpeed("Slow")
 		
 		; Match on text in the window for the main debugging targets
-		winId := WinActive("", MainConfig.private["ES_PUTTY_EXE"])
+		winId := WinActive("", Config.private["ES_PUTTY_EXE"])
 		if(!winId)
-			winId := WinActive("", MainConfig.private["ES_HYPERSPACE_EXE"])
+			winId := WinActive("", Config.private["ES_HYPERSPACE_EXE"])
 		if(!winId)
-			winId := WinActive("", MainConfig.private["ES_VB6_EXE"])
+			winId := WinActive("", Config.private["ES_VB6_EXE"])
 		
 		setTitleMatchMode(origMatchMode)
 		setTitleMatchSpeed(origMatchSpeed)
@@ -288,7 +288,7 @@ class MSnippets {
 		
 		prevIterators := ""
 		for i,iterator in iteratorAry {
-			loopString .= MainConfig.private["M_LOOP_ARRAY_BASE"].replaceTags({"ARRAY_NAME":arrayName, "ITERATOR":iterator, "PREV_ITERATORS":prevIterators})
+			loopString .= Config.private["M_LOOP_ARRAY_BASE"].replaceTags({"ARRAY_NAME":arrayName, "ITERATOR":iterator, "PREV_ITERATORS":prevIterators})
 			
 			prevIterators .= iterator ","
 			numIndents++
@@ -311,7 +311,7 @@ class MSnippets {
 		ini := stringUpper(data["ARRAY_OR_INI"])
 		
 		idVar := stringLower(ini) "Id"
-		loopString := MainConfig.private["M_LOOP_ID_BASE"].replaceTags({"INI":ini, "ID_VAR":idVar})
+		loopString := Config.private["M_LOOP_ID_BASE"].replaceTags({"INI":ini, "ID_VAR":idVar})
 		
 		numIndents++
 		loopString .= MSnippets.getMNewLinePlusIndent(numIndents)
@@ -332,7 +332,7 @@ class MSnippets {
 		
 		idVar  := stringLower(ini) "Id"
 		datVar := stringLower(ini) "Dat"
-		loopString := MainConfig.private["M_LOOP_DAT_BASE"].replaceTags({"INI":ini, "ID_VAR":idVar, "DAT_VAR":datVar, "ITEM":""})
+		loopString := Config.private["M_LOOP_DAT_BASE"].replaceTags({"INI":ini, "ID_VAR":idVar, "DAT_VAR":datVar, "ITEM":""})
 		
 		numIndents++
 		loopString .= MSnippets.getMNewLinePlusIndent(numIndents)
@@ -353,7 +353,7 @@ class MSnippets {
 		ini := stringUpper(data["ARRAY_OR_INI"])
 		valueVar := data["VARS_OR_VALUES"]
 		
-		loopString := MainConfig.private["M_LOOP_INDEX_REGULAR_NEXT_VALUE"].replaceTags({"INI":ini, "ITEM":"", "VALUE_VAR":valueVar})
+		loopString := Config.private["M_LOOP_INDEX_REGULAR_NEXT_VALUE"].replaceTags({"INI":ini, "ITEM":"", "VALUE_VAR":valueVar})
 		
 		numIndents++
 		loopString .= MSnippets.getMNewLinePlusIndent(numIndents)
@@ -376,7 +376,7 @@ class MSnippets {
 		valueVar := data["VARS_OR_VALUES"]
 		
 		idVar  := stringLower(ini) "Id"
-		loopString := MainConfig.private["M_LOOP_INDEX_REGULAR_NEXT_ID"].replaceTags({"INI":ini, "ITEM":"", "VALUE_VAR":valueVar, "ID_VAR":idVar})
+		loopString := Config.private["M_LOOP_INDEX_REGULAR_NEXT_ID"].replaceTags({"INI":ini, "ITEM":"", "VALUE_VAR":valueVar, "ID_VAR":idVar})
 		
 		numIndents++
 		loopString .= MSnippets.getMNewLinePlusIndent(numIndents)
@@ -399,7 +399,7 @@ class MSnippets {
 		listAry := new FormatList(valueList).getList(FormatList.Format_Array)
 		
 		newLine := MSnippets.getMNewLinePlusIndent(numIndents)
-		lineBase := MainConfig.private["M_LIST_ARRAY_INDEX"]
+		lineBase := Config.private["M_LIST_ARRAY_INDEX"]
 		
 		listString := ""
 		For _,value in listAry {

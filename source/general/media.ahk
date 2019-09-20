@@ -10,12 +10,12 @@
 	changeMediaPlayer() {
 		programName := new Selector("mediaPlayers.tls").selectGui("PROGRAM_NAME")
 		if(programName) {
-			MainConfig.mediaPlayer := programName
+			Config.mediaPlayer := programName
 			Toast.showMedium("Media player set to: " programName)
 		}
 	}
 
-#If !MainConfig.doesMediaPlayerExist()
+#If !Config.doesMediaPlayerExist()
 	^!Up::
 	^!Down::
 	^!Left::
@@ -24,12 +24,12 @@
 	Media_Play_Pause::
 	Media_Prev::
 	Media_Next::
-		MainConfig.runMediaPlayer()
+		Config.runMediaPlayer()
 	return
-#If MainConfig.doesMediaPlayerExist()
+#If Config.doesMediaPlayerExist()
 	^!Up::
 	Media_Stop::
-		MainConfig.runMediaPlayer()
+		Config.runMediaPlayer()
 	return
 	
 	Media_Play_Pause::sendMediaKey("Media_Play_Pause")

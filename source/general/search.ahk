@@ -51,7 +51,7 @@ buildCodeSearchURL(searchTerm, searchType, appKey := "") {
 	
 	searchTerm := escapeForRunURL(searchTerm)
 	
-	url := MainConfig.private["CS_BASE"]
+	url := Config.private["CS_BASE"]
 	url := url.replaceTag("SEARCH_TYPE", searchType)
 	url := url.replaceTag("APP_ID",      getEpicAppIdFromKey(appKey))
 	url := url.replaceTag("CRITERIA",    "a=" searchTerm)
@@ -68,7 +68,7 @@ buildCodeSearchURL(searchTerm, searchType, appKey := "") {
 getEpicAppIdFromKey(appKey) {
 	if(appKey = "")
 		return 0
-	return MainConfig.private["CS_APP_ID_" appKey]
+	return Config.private["CS_APP_ID_" appKey]
 }
 
 ;---------
@@ -79,7 +79,7 @@ getEpicAppIdFromKey(appKey) {
 ;---------
 buildGuruSearchURL(searchTerm) {
 	searchTerm := escapeForRunURL(searchTerm)
-	return MainConfig.private["GURU_SEARCH_BASE"] searchTerm
+	return Config.private["GURU_SEARCH_BASE"] searchTerm
 }
 
 ;---------
@@ -92,11 +92,11 @@ buildGuruSearchURL(searchTerm) {
 buildEpicWikiSearchURL(searchTerm, category := "") {
 	searchTerm := escapeForRunURL(searchTerm)
 	
-	url := MainConfig.private["WIKI_SEARCH_BASE"]
+	url := Config.private["WIKI_SEARCH_BASE"]
 	url := url.replaceTag("QUERY", searchTerm)
 	
 	if(category) {
-		filters := MainConfig.private["WIKI_SEARCH_FILTERS"]
+		filters := Config.private["WIKI_SEARCH_FILTERS"]
 		filters := filters.replaceTag("CATEGORIES", "'" category "'")
 		url .= filters
 	}
@@ -112,12 +112,12 @@ buildEpicWikiSearchURL(searchTerm, category := "") {
 ;---------
 searchWithGrepWin(searchTerm, pathToSearch) {
 	args := "/regex:no"
-	args .= " /searchpath:" DOUBLE_QUOTE MainConfig.replacePathTags(pathToSearch) " "    DOUBLE_QUOTE ; Extra space after path, otherwise trailing backslash escapes ending double quote
+	args .= " /searchpath:" DOUBLE_QUOTE Config.replacePathTags(pathToSearch) " "    DOUBLE_QUOTE ; Extra space after path, otherwise trailing backslash escapes ending double quote
 	args .= " /searchfor:"  DOUBLE_QUOTE escapeCharUsingChar(searchTerm, DOUBLE_QUOTE) DOUBLE_QUOTE ; Escape any quotes in the search string
 	args .= " /execute" ; Run it immediately if we got what to search for
 	
 	; DEBUG.popup("Path to search",pathToSearch, "To search",searchTerm, "Args",args)
-	MainConfig.runProgram("GrepWin", args)
+	Config.runProgram("GrepWin", args)
 }
 
 ;---------
@@ -126,5 +126,5 @@ searchWithGrepWin(searchTerm, pathToSearch) {
 ;  searchTerm (I,REQ) - Text to search for.
 ;---------
 searchWithEverything(searchTerm) {
-	MainConfig.runProgram("Everything", "-search " searchTerm)
+	Config.runProgram("Everything", "-search " searchTerm)
 }

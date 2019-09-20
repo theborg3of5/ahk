@@ -1,5 +1,5 @@
 ; OneNote hotkeys.
-#If MainConfig.isWindowActive("OneNote")
+#If Config.isWindowActive("OneNote")
 	; Make ctrl+tab (and XButtons) switch pages, not sections
 	^Tab:: Send, ^{PgDn}
 	^+Tab::Send, ^{PgUp}
@@ -27,7 +27,7 @@
 	^+0::Send, ^0 ; Since we're using ^0 to set zoom to 100% below, add a replacement hotkey for clearing all tags.
 	^!n::Send, ^+n ; 'Normal' text formatting, as ^+n is already being used for new subpage.
 	^7::Send, ^6 ; Make ^7 do the same tag (Done green check) as ^6.
-	^+8::SendRaw, % "*" MainConfig.private["INITIALS"] " " FormatTime(, "MM/yy") ; Insert contact comment
+	^+8::SendRaw, % "*" Config.private["INITIALS"] " " FormatTime(, "MM/yy") ; Insert contact comment
 	^!4::Send, ^!5 ; Use Header 5 instead of Header 4 - Header 4 is just an italicized Header 3, which isn't distinct enough for me.
 	
 	; Delete the entire current line
@@ -505,11 +505,11 @@ class OneNoteTodoPage {
 	;---------
 	generateTitle(instant) {
 		; Do pages at work are always daily
-		if(MainConfig.contextIsWork)
+		if(Config.contextIsWork)
 			return FormatTime(instant, "M/d`, dddd")
 		
 		; Otherwise, it varies by day of the week
-		if(MainConfig.contextIsHome) {
+		if(Config.contextIsHome) {
 			dayOfWeek := FormatTime(instant, "Wday") ; Day of the week, 1 (Sunday) to 7 (Saturday)
 			
 			; Weekend pages at home are daily
@@ -585,7 +585,7 @@ class OneNoteTodoPage {
 		; Doesn't apply at work - no recurring todos
 		
 		; At home, it varies by day of the week
-		if(MainConfig.contextIsHome) {
+		if(Config.contextIsHome) {
 			dayOfWeek := FormatTime(instant, "Wday") ; Day of the week, 1 (Sunday) to 7 (Saturday)
 			
 			; Weekend pages at home are daily

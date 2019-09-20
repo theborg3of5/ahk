@@ -1,4 +1,4 @@
-#If MainConfig.isWindowActive("Explorer")
+#If Config.isWindowActive("Explorer")
 	; Focus address bar
 	^l::Send, !d
 		

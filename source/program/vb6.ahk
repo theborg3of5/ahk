@@ -1,6 +1,6 @@
 ; Hotkeys for VB6 IDE.
 
-#If MainConfig.isWindowActive("VB6")
+#If Config.isWindowActive("VB6")
 	; Back and (sort of - actually jump to definition) forward in history.
 	!Left:: Send, ^+{F2}
 	!Right::Send,  +{F2}
@@ -200,7 +200,7 @@ class VB6 {
 		outStr := "' "
 		if(extraSpace)
 			outStr .= " "
-		outStr .= "*" MainConfig.private["INITIALS"] " " date " " dlgId
+		outStr .= "*" Config.private["INITIALS"] " " date " " dlgId
 		
 		if(!excludeDash)
 			outStr .= " - "

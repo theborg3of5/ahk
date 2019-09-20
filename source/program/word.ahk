@@ -1,5 +1,5 @@
 ; Word hotkeys.
-#If MainConfig.isWindowActive("Word")
+#If Config.isWindowActive("Word")
 	; Open (dialog, not screen)
 	^o::Send, ^!{F2}
 	

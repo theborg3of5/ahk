@@ -10,7 +10,6 @@
 		Another option: a new Path class, that ActionObjectPath just uses?
 	With new discovery about chaining constructors to single call afterwards (i.e. 'data := new Selector("filepath").selectGui()'), do we still need the static side of Toast?
 		Would it be cleaner to just have callers use 'new Toast().*' instead?
-	Consider renaming MainConfig to just Config to be shorter
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:
@@ -63,7 +62,7 @@
 	Consider adding a way to match on some other column than just NAME and ABBREV
 		Use cases
 			Transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
-				Alternatively, build out environments in MainConfig (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.
+				Alternatively, build out environments in Config (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.
 	Build a way to auto-reformat .tl files?
 		Fix widths so they work nicely
 			Will need to have a tab width parameter/argument somewhere for this (maybe in _constants or config?)
@@ -104,8 +103,8 @@
 			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
 	common
 		classes
+			config
 			listConverter
-			mainConfig
 			selectorGui
 		functions
 			clipboard

@@ -1,5 +1,5 @@
 ﻿; Google Chrome hotkeys.
-#If MainConfig.isWindowActive("Chrome")
+#If Config.isWindowActive("Chrome")
 	; Options hotkey.
 	!o::
 		waitForHotkeyRelease() ; Presumably needed because the triggering hotkey has alt in it.
@@ -22,7 +22,7 @@
 	
 	; Send to Telegram (and pick the correct chat).
 	~!t::
-		WinWaitActive, % MainConfig.windowInfo["Telegram"].titleString
+		WinWaitActive, % Config.windowInfo["Telegram"].titleString
 		Telegram.focusNormalChat()
 	return
 	
@@ -31,7 +31,7 @@
 	^MButton::Chrome.openLinkTarget() ; Open
 #IfWinActive
 	
-#If MainConfig.isWindowActive("Chrome")
+#If Config.isWindowActive("Chrome")
 	^+o::Chrome.openCodeSearchServerCodeInEpicStudio()
 #If
 
@@ -145,7 +145,7 @@ class Chrome {
 	;---------
 	isCurrentPageCodeSearch() {
 		; Only have CodeSearch at work
-		if(!MainConfig.contextIsWork)
+		if(!Config.contextIsWork)
 			return false
 		
 		title := WinGetActiveTitle().removeFromEnd(" - Google Chrome")

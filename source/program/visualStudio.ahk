@@ -1,5 +1,5 @@
 ; Visual Studio hotkeys.
-#If MainConfig.isWindowActive("Visual Studio")
+#If Config.isWindowActive("Visual Studio")
 	Pause::+Pause ; For CodeMaid switch between related files
 	
 	^+t::Send, !fj1 ; Open last-closed project

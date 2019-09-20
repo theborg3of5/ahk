@@ -1,7 +1,7 @@
 /* Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
 */
 
-class MainConfig {
+class Config {
 
 ; ==============================
 ; == Public ====================
@@ -45,11 +45,11 @@ class MainConfig {
 		this.paths    := this.loadPaths(pathsPath)
 		this.programs := this.loadPrograms(programsPath)
 		this.games    := this.loadGames(gamesPath)
-		; DEBUG.popupEarly("MainConfig","Loaded all", "Settings",this.settings)
-		; DEBUG.popupEarly("MainConfig","Loaded all", "Windows",this.windows)
-		; DEBUG.popupEarly("MainConfig","Loaded all", "Paths",this.paths)
-		; DEBUG.popupEarly("MainConfig","Loaded all", "Programs",this.programs)
-		; DEBUG.popupEarly("MainConfig","Loaded all", "Games",this.games)
+		; DEBUG.popupEarly("Config","Loaded all", "Settings",this.settings)
+		; DEBUG.popupEarly("Config","Loaded all", "Windows",this.windows)
+		; DEBUG.popupEarly("Config","Loaded all", "Paths",this.paths)
+		; DEBUG.popupEarly("Config","Loaded all", "Programs",this.programs)
+		; DEBUG.popupEarly("Config","Loaded all", "Games",this.games)
 		
 		this.initDone := true
 	}
@@ -80,22 +80,22 @@ class MainConfig {
 	}
 	machineIsWorkLaptop {
 		get {
-			return (this.machine = MainConfig.Machine_WorkLaptop)
+			return (this.machine = Config.Machine_WorkLaptop)
 		}
 	}
 	machineIsWorkVDI {
 		get {
-			return (this.machine = MainConfig.Machine_WorkVDI)
+			return (this.machine = Config.Machine_WorkVDI)
 		}
 	}
 	machineIsHomeDesktop {
 		get {
-			return (this.machine = MainConfig.Machine_HomeDesktop)
+			return (this.machine = Config.Machine_HomeDesktop)
 		}
 	}
 	machineIsHomeLaptop {
 		get {
-			return (this.machine = MainConfig.Machine_HomeLaptop)
+			return (this.machine = Config.Machine_HomeLaptop)
 		}
 	}
 	
@@ -106,12 +106,12 @@ class MainConfig {
 	}
 	contextIsWork {
 		get {
-			return (this.context = MainConfig.Context_Work)
+			return (this.context = Config.Context_Work)
 		}
 	}
 	contextIsHome {
 		get {
-			return (this.context = MainConfig.Context_Home)
+			return (this.context = Config.Context_Home)
 		}
 	}
 	
@@ -170,7 +170,7 @@ class MainConfig {
 				; Allow titles to be compared more flexibly than straight equality.
 				stringMatchMode := winInfo.titleStringMatchModeOverride
 				if(!stringMatchMode)
-					stringMatchMode := MainConfig.TitleContains_Any ; Default if not overridden
+					stringMatchMode := Config.TitleContains_Any ; Default if not overridden
 				
 				if(!this.matchesWithMethod(title, winInfo.title, stringMatchMode))
 					Continue
@@ -251,7 +251,7 @@ class MainConfig {
 	loadPrivates(filePath) {
 		privatesAry := new TableList(filePath).getColumnByColumn("VALUE", "KEY")
 		
-		; DEBUG.popup("MainConfig.loadPrivates","Finish", "Filepath",filePath, "Table",privatesTable, "Indexed array",privatesAry)
+		; DEBUG.popup("Config.loadPrivates","Finish", "Filepath",filePath, "Table",privatesTable, "Indexed array",privatesAry)
 		return privatesAry
 	}
 	
@@ -259,8 +259,8 @@ class MainConfig {
 		this.settingsINIPath := filePath
 		
 		settings := {}
-		settings["MACHINE"]      := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from MainConfig.Machine_* constants
-		settings["CONTEXT"]      := IniRead(this.settingsINIPath, "Main", "CONTEXT")         ; Which context this is, from MainConfig.Context_* constants
+		settings["MACHINE"]      := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from Config.Machine_* constants
+		settings["CONTEXT"]      := IniRead(this.settingsINIPath, "Main", "CONTEXT")         ; Which context this is, from Config.Context_* constants
 		settings["MEDIA_PLAYER"] := IniRead(this.settingsINIPath, "Main", "MEDIA_PLAYER")    ; What program the media keys should deal with
 		
 		; DEBUG.popup("Settings", settings)
@@ -301,7 +301,7 @@ class MainConfig {
 			pathsAry[key] := path ; make sure to store it back in the actual array
 		}
 		
-		; DEBUG.popupEarly("mainConfig.loadPaths","Finish", "Paths",pathsAry)
+		; DEBUG.popupEarly("Config.loadPaths","Finish", "Paths",pathsAry)
 		return pathsAry
 	}
 	
@@ -328,13 +328,13 @@ class MainConfig {
 	
 	loadPrograms(filePath) {
 		programsTable := new TableList(filePath).getTable()
-		; DEBUG.popupEarly("MainConfig","loadPrograms", "Unique table",programsTable)
+		; DEBUG.popupEarly("Config","loadPrograms", "Unique table",programsTable)
 		
 		; Turn each row into a ProgramInfo object and index them by name.
 		programs := {}
 		For _,row in programsTable
 			programs[row["NAME"]] := new ProgramInfo(row)
-		; DEBUG.popupEarly("MainConfig","loadPrograms", "Finished programs",programs)
+		; DEBUG.popupEarly("Config","loadPrograms", "Finished programs",programs)
 		
 		return programs
 	}
@@ -343,17 +343,17 @@ class MainConfig {
 		return new TableList(filePath).getTable()
 	}
 	
-	matchesWithMethod(haystack, needle, method := "ANY") { ; method := MainConfig.TitleContains_Any
-		if(method = MainConfig.TitleContains_Any)
+	matchesWithMethod(haystack, needle, method := "ANY") { ; method := Config.TitleContains_Any
+		if(method = Config.TitleContains_Any)
 			return haystack.contains(needle)
 		
-		else if(method = MainConfig.TitleContains_Start)
+		else if(method = Config.TitleContains_Start)
 			return haystack.startsWith(needle)
 		
-		else if(method = MainConfig.TitleContains_End)
+		else if(method = Config.TitleContains_End)
 			return haystack.endsWith(needle)
 		
-		else if(method = MainConfig.TitleContains_Exact)
+		else if(method = Config.TitleContains_Exact)
 			return (haystack = needle)
 		
 		DEBUG.popup("Unsupported match method",method)

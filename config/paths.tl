@@ -1,8 +1,8 @@
-; These are all of the path tags that will be replaced when using MainConfig.replacePathTags().
+; These are all of the path tags that will be replaced when using Config.replacePathTags().
 
 (	NAME									KEY									PATH														CONTEXT
 	
-	; Pass-throughs - paths which are retrieved/calculated in MainConfig.loadPaths(). These can also be used in this file.
+	; Pass-throughs - paths which are retrieved/calculated in Config.loadPaths(). These can also be used in this file.
 	AHK Root								AHK_ROOT
 	AppData (Roaming)					USER_APPDATA
 	AppData Local						USER_APPDATA_LOCAL

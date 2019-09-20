@@ -1,5 +1,5 @@
 ﻿; Main Snapper window
-#If MainConfig.isWindowActive("Snapper")
+#If Config.isWindowActive("Snapper")
 	; Send string of items to ignore, based on the given INI.
 	::.hide::
 	::.ignore::
@@ -8,7 +8,7 @@
 #If
 
 ; Add record window
-#If WinActive("Add a Record " MainConfig.windowInfo["Snapper"].titleString)
+#If WinActive("Add a Record " Config.windowInfo["Snapper"].titleString)
 	^Enter::Snapper.addMultipleRecordsFromAddPopup()
 #If
 
@@ -76,7 +76,7 @@ class Snapper {
 			idList := "X"
 		}
 		
-		outURL := MainConfig.private["SNAPPER_URL_BASE"]
+		outURL := Config.private["SNAPPER_URL_BASE"]
 		idAry := expandList(idList)
 		if(idAry.count() > 10)
 			if(!showConfirmationPopup("You're trying to open more than 10 records in Snapper - are you sure you want to continue?", "Opening many records in Snapper"))
@@ -105,7 +105,7 @@ class Snapper {
 	getURLFromAddRecordPopup() {
 		commId := Snapper.getCurrentEnvironment()
 		
-		titleString := "Add a Record " MainConfig.windowInfo["Snapper"].titleString ; Add record popup
+		titleString := "Add a Record " Config.windowInfo["Snapper"].titleString ; Add record popup
 		ini    := ControlGetText("ThunderRT6TextBox1", titleString)
 		idList := ControlGetText("ThunderRT6TextBox2", titleString)
 		
@@ -122,7 +122,7 @@ class Snapper {
 	;---------
 	getCurrentEnvironment() {
 		; Main Snapper window titleString
-		titleString := "Snapper " MainConfig.windowInfo["Snapper"].titleString
+		titleString := "Snapper " Config.windowInfo["Snapper"].titleString
 		if(!WinExist(titleString))
 			return ""
 		

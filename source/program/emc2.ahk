@@ -1,10 +1,10 @@
 ; Change code formatting hotkey to something more universal in various windows.
-#If MainConfig.isWindowActive("EMC2") || MainConfig.isWindowActive("EMC2 DLG/XDS Issue Popup") || MainConfig.isWindowActive("EMC2 QAN Notes") || MainConfig.isWindowActive("EMC2 DRN Quick Review")
+#If Config.isWindowActive("EMC2") || Config.isWindowActive("EMC2 DLG/XDS Issue Popup") || Config.isWindowActive("EMC2 QAN Notes") || Config.isWindowActive("EMC2 DRN Quick Review")
 	^+c::Send, ^e
 #If
 
 ; Main EMC2 window
-#If MainConfig.isWindowActive("EMC2")
+#If Config.isWindowActive("EMC2")
 	^h::Send, ^7     ; Make ^h for server object, similar to ^g for client object.
 	^+8::Send, !o    ; Contact comment, EpicStudio-style.
 	$F5::+F5         ; Make F5 work everywhere by mapping it to shift + F5.
@@ -25,16 +25,16 @@
 #If
 
 ; Design open
-#If MainConfig.isWindowActive("EMC2 XDS")
+#If Config.isWindowActive("EMC2 XDS")
 	; Disable Ctrl+Up/Down hotkeys, never hit these intentionally.
 	^Down::return
 	^Up::  return
 #If
 
 ; Lock/unlock hotkeys by INI
-#If MainConfig.isWindowActive("EMC2 QAN") || MainConfig.isWindowActive("EMC2 XDS")
+#If Config.isWindowActive("EMC2 QAN") || Config.isWindowActive("EMC2 XDS")
 	^l::Send, !l
-#If MainConfig.isWindowActive("EMC2 DLG")
+#If Config.isWindowActive("EMC2 DLG")
 	^l::Send, !+{F5}
 #If
 

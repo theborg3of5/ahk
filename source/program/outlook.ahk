@@ -1,7 +1,7 @@
 ; Outlook Hotkeys.
 
 ; Program in general.
-#If MainConfig.isWindowActive("Outlook")
+#If Config.isWindowActive("Outlook")
 	; Move selected message(s) to a particular folder, and mark them as read.
 	$^e::
 		Send, ^+1 ; Archive
@@ -23,7 +23,7 @@
 #If
 
 ; Calendar activity.
-#If MainConfig.isWindowActive("Outlook Calendar Main") || MainConfig.isWindowActive("Outlook Calendar TLG")
+#If Config.isWindowActive("Outlook Calendar Main") || Config.isWindowActive("Outlook Calendar TLG")
 	; Shortcut to go to today on the calendar. (In desired, 3-day view.)
 	^t::
 		; Go to today.
@@ -46,6 +46,6 @@
 #If
 
 ; Universal new email.
-#If MainConfig.machineIsWorkLaptop
-	^!m::MainConfig.runProgram("Outlook", "/c ipm.note")
+#If Config.machineIsWorkLaptop
+	^!m::Config.runProgram("Outlook", "/c ipm.note")
 #If

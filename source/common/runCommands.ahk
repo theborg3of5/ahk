@@ -13,7 +13,7 @@ getScriptArgs(placeholderChar := "") {
 
 ; Opens the given script in Notepad++.
 editScript(script) {
-	MainConfig.runProgram("Notepad++", script)
+	Config.runProgram("Notepad++", script)
 }
 
 ; Runs something and returns the result from standard out.
@@ -38,9 +38,9 @@ runCommand(commandToRun := "", workingDirectory := "", stayOpen := false) {
 	
 	; Set /C or /K (command and close, or command and stay up) based on input.
 	if(!cmdString || stayOpen)
-		runString := MainConfig.path["CMD"] " /K " cmdString
+		runString := Config.path["CMD"] " /K " cmdString
 	else
-		runString := MainConfig.path["CMD"] " /C " cmdString
+		runString := Config.path["CMD"] " /C " cmdString
 	
 	; DEBUG.popup("Command string", cmdString, "Run string", runString)
 	Run(runString, workingDirectory)

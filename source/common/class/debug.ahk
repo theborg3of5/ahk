@@ -95,22 +95,22 @@ class DEBUG {
 	;  params (I,REQ) - A variable number of arguments to display in the popup. For 1 argument,
 	;                   we will interpret it as a value (not a label), but for >1 arguments an
 	;                   even number of arguments should be passed in label,value pairs.
-	; NOTES:          This function won't do anything before MainConfig has initialized; this
+	; NOTES:          This function won't do anything before Config has initialized; this
 	;                 is to prevent massive numbers of popups when debugging a function that it
 	;                 uses (from each of the different standlone scripts that run). If you need
 	;                 to show a popup before that point, you can use the .popupEarly() function
 	;                 instead.
 	;---------
 	popup(params*) {
-		; Only start showing popups once MainConfig is finished loading - popupEarly can be used if you want to show debug messages in these cases.
-		if(!MainConfig.initialized)
+		; Only start showing popups once Config is finished loading - popupEarly can be used if you want to show debug messages in these cases.
+		if(!Config.initialized)
 			return
 		
 		MsgBox, % this.buildDebugString(params*)
 	}
 	
 	;---------
-	; DESCRIPTION:    Same as .popup(), but will run before MainConfig is initialized. See
+	; DESCRIPTION:    Same as .popup(), but will run before Config is initialized. See
 	;                 .popup() for details and parameters.
 	;---------
 	popupEarly(params*) {

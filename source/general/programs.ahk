@@ -1,32 +1,32 @@
 ; Hotkeys to run/activate various programs.
 
-#e::  MainConfig.activateProgram("Explorer", Explorer.ThisPCFolderUUID) ; Start up at "This PC" folder if we have to run it.
-!`::  MainConfig.activateProgram("Process Explorer")
-^+!g::MainConfig.activateProgram("Chrome")
-^+!n::MainConfig.activateProgram("Notepad++")
-^!#n::MainConfig.runProgram("Notepad")
-^!#/::MainConfig.activateProgram("AutoHotkey WinSpy")
+#e::  Config.activateProgram("Explorer", Explorer.ThisPCFolderUUID) ; Start up at "This PC" folder if we have to run it.
+!`::  Config.activateProgram("Process Explorer")
+^+!g::Config.activateProgram("Chrome")
+^+!n::Config.activateProgram("Notepad++")
+^!#n::Config.runProgram("Notepad")
+^!#/::Config.activateProgram("AutoHotkey WinSpy")
 
 ; Some programs are work-specific
-#If MainConfig.contextIsWork
-	^+!e::MainConfig.activateProgram("EMC2", "EMC2Update env=TRACKAPPTCP") ; EMC2 needs these parameters to start up correctly.
-	^+!s::MainConfig.activateProgram("EpicStudio")
-	^+!v::MainConfig.runProgram("VB6")
-	^+!y::MainConfig.activateProgram("yEd")
-	^!#v::MainConfig.runProgram("Visual Studio")
+#If Config.contextIsWork
+	^+!e::Config.activateProgram("EMC2", "EMC2Update env=TRACKAPPTCP") ; EMC2 needs these parameters to start up correctly.
+	^+!s::Config.activateProgram("EpicStudio")
+	^+!v::Config.runProgram("VB6")
+	^+!y::Config.activateProgram("yEd")
+	^!#v::Config.runProgram("Visual Studio")
 #If
 
 ; Some programs are only available on specific machines
-#If MainConfig.machineIsHomeDesktop
-	^!#f::MainConfig.runProgram("Firefox Portable")
-#If MainConfig.machineIsHomeDesktop || MainConfig.machineIsWorkLaptop
-	#s::  MainConfig.runProgram("Spotify") ; Can't unminimize from tray with any reasonable logic, so re-run to do so.
-	#f::  MainConfig.activateProgram("Everything")
-	#t::  MainConfig.runProgram("Telegram")
-	!+g:: MainConfig.activateProgram("GitHub")
-	^+!o::MainConfig.activateProgram("OneNote")
-	^+!x::MainConfig.activateProgram("Launchy")
-#If MainConfig.machineIsWorkLaptop
-	^+!u::MainConfig.activateProgram("Thunder")
-	^!#e::MainConfig.activateProgram("Outlook")
+#If Config.machineIsHomeDesktop
+	^!#f::Config.runProgram("Firefox Portable")
+#If Config.machineIsHomeDesktop || Config.machineIsWorkLaptop
+	#s::  Config.runProgram("Spotify") ; Can't unminimize from tray with any reasonable logic, so re-run to do so.
+	#f::  Config.activateProgram("Everything")
+	#t::  Config.runProgram("Telegram")
+	!+g:: Config.activateProgram("GitHub")
+	^+!o::Config.activateProgram("OneNote")
+	^+!x::Config.activateProgram("Launchy")
+#If Config.machineIsWorkLaptop
+	^+!u::Config.activateProgram("Thunder")
+	^!#e::Config.activateProgram("Outlook")
 #If

@@ -1,4 +1,4 @@
-#If MainConfig.isWindowActive("OneTastic Macro Editor")
+#If Config.isWindowActive("OneTastic Macro Editor")
 	; Insert statement hotkeys
 	^`;::!6 ; Insert comment 
 	
@@ -203,7 +203,7 @@ class OneTastic {
 	getFunctionDataFromFiles() {
 		allFunctionData := {} ; {"DEPENDENCIES":{functionName: [dependencyNames]}, "XML":{functionName: xml}}
 		
-		origWorkingDir := setWorkingDirectory(MainConfig.path["ONETASTIC_FUNCTIONS"])
+		origWorkingDir := setWorkingDirectory(Config.path["ONETASTIC_FUNCTIONS"])
 		Loop, Files, % "*.xml"
 		{
 			; Skip files that start with . (like function template)
@@ -308,7 +308,7 @@ class OneTastic {
 		OneTastic.waitMacroEditorWindowActive()
 		
 		; Replace any instances of the special <CURRENT_MACHINE> tag with the AHK value for our current machine.
-		functionXML := functionXML.replaceTag("CURRENT_MACHINE", MainConfig.machine)
+		functionXML := functionXML.replaceTag("CURRENT_MACHINE", Config.machine)
 		
 		OneTastic.setCurrentXML(functionXML)
 	}

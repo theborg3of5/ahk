@@ -22,7 +22,7 @@ fileLinesToArray(fileName) {
 
 ; Open a folder from config-defined tags.
 openFolder(folderName) {
-	folderPath := MainConfig.path[folderName]
+	folderPath := Config.path[folderName]
 	; DEBUG.popup("Folder name",folderName, "Path",folderPath)
 	
 	if(folderExists(folderPath))
@@ -36,7 +36,7 @@ sendUnixFolderPath(folderName := "", subPath := "") {
 	sendFolderPath(folderName, subPath, "/")
 }
 sendFolderPath(folderName := "", subPath := "", slashChar := "\", trailingSlash := true) {
-	folderPath := MainConfig.path[folderName]
+	folderPath := Config.path[folderName]
 	if(!folderPath)
 		return
 	
@@ -55,8 +55,8 @@ sendFolderPath(folderName := "", subPath := "", slashChar := "\", trailingSlash 
 selectFolder(folderName := "") {
 	path := new Selector("folders.tls").select(folderName, "PATH")
 	
-	; DEBUG.popup("Path",path, "Replaced",MainConfig.replacePathTags(path))
-	return MainConfig.replacePathTags(path)
+	; DEBUG.popup("Path",path, "Replaced",Config.replacePathTags(path))
+	return Config.replacePathTags(path)
 }
 	
 findConfigFilePath(path) {
@@ -72,7 +72,7 @@ findConfigFilePath(path) {
 		return "Includes\" path
 	
 	; Check the overall config folder.
-	configFolder := MainConfig.path["AHK_CONFIG"]
+	configFolder := Config.path["AHK_CONFIG"]
 	if(FileExist(configFolder "\local\" path))      ; Local folder (not version-controlled) inside of config
 		return configFolder "\local\" path
 	if(FileExist(configFolder "\ahkPrivate\" path)) ; Private folder (separately version-controlled) inside of config

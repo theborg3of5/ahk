@@ -1,4 +1,4 @@
-#If MainConfig.isWindowActive("KDiff")
+#If Config.isWindowActive("KDiff")
 	; Show/hide whitespace differences.
 	^i::
 		Send, !i

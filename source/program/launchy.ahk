@@ -1,16 +1,16 @@
 ﻿; Launchy keyword launcher
 
 ; Protect remote desktop Launchy from host AHK interference.
-#If MainConfig.doesWindowExist("Launchy") && !MainConfig.isWindowActive("Remote Desktop") && !MainConfig.isWindowActive("VMware Horizon Client")
+#If Config.doesWindowExist("Launchy") && !Config.isWindowActive("Remote Desktop") && !Config.isWindowActive("VMware Horizon Client")
 	; Use Caps Lock as the trigger key.
 	CapsLock::
 		SetCapsLockState, AlwaysOff
 		Send, #n
 	return
 
-#If !MainConfig.doesWindowExist("Launchy")
+#If !Config.doesWindowExist("Launchy")
 	CapsLock::
 		Toast.showMedium("Launchy not yet running, launching...")
-		MainConfig.runProgram("Launchy")
+		Config.runProgram("Launchy")
 	return
 #If

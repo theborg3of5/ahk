@@ -10,6 +10,6 @@ progName = %1% ; Input from command line
 if(!progName)
 	ExitApp
 	
-MainConfig.activateProgram(progName)
+Config.activateProgram(progName)
 
 ExitApp

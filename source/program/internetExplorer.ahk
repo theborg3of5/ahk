@@ -1,5 +1,5 @@
 ﻿; Google Chrome hotkeys.
-#If MainConfig.isWindowActive("Internet Explorer")
+#If Config.isWindowActive("Internet Explorer")
 	; Get URL, close tab, and open the URL in your default web browser.
 	^+o::InternetExplorer.moveURLToDefaultBrowser()
 #If

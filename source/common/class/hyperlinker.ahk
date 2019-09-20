@@ -34,7 +34,7 @@ class Hyperlinker {
 		if(!isObject(Hyperlinker.windows))
 			Hyperlinker.windows := Hyperlinker.getWindows()
 		
-		windowName := MainConfig.findWindowName()
+		windowName := Config.findWindowName()
 		windowLinkInfoAry := Hyperlinker.getWindowLinkInfo(windowName)
 		; DEBUG.popup("Hyperlinker.linkSelectedText","Finished gathering info", "windowName",windowName, "windowLinkInfoAry",windowLinkInfoAry, "Hyperlinker.windows",Hyperlinker.windows)
 		

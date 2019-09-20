@@ -39,15 +39,15 @@ class WindowInfo {
 		this.windowTitle := windowAry["TITLE"]
 		
 		; Replace any private tags lurking in this info.
-		this.windowName  := MainConfig.replacePrivateTags(this.windowName)
-		this.windowExe   := MainConfig.replacePrivateTags(this.windowExe)
-		this.windowClass := MainConfig.replacePrivateTags(this.windowClass)
-		this.windowTitle := MainConfig.replacePrivateTags(this.windowTitle)
+		this.windowName  := Config.replacePrivateTags(this.windowName)
+		this.windowExe   := Config.replacePrivateTags(this.windowExe)
+		this.windowClass := Config.replacePrivateTags(this.windowClass)
+		this.windowTitle := Config.replacePrivateTags(this.windowTitle)
 		
 		if(windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"] != "")
 			this.windowTitleStringMatchModeOverride := windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"]
 		else
-			this.windowTitleStringMatchModeOverride := MainConfig.TitleContains_Any ; Default value
+			this.windowTitleStringMatchModeOverride := Config.TitleContains_Any ; Default value
 		
 		if(windowAry["EDGE_TYPE"] != "")
 			this.windowEdgeType := windowAry["EDGE_TYPE"]

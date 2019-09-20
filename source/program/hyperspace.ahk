@@ -3,21 +3,21 @@
 	$F5::+F5 ; Make F5 work everywhere by mapping it to shift + F5.
 	
 	; Login hotkeys.
-	^+t::Hyperspace.login(MainConfig.private["WORK_ID"], MainConfig.private["WORK_PASSWORD"])
-	^!t::Hyperspace.login(MainConfig.private["WORK_ID"], MainConfig.private["WORK_PASSWORD"], false) ; Don't use last department (=)
+	^+t::Hyperspace.login(Config.private["WORK_ID"], Config.private["WORK_PASSWORD"])
+	^!t::Hyperspace.login(Config.private["WORK_ID"], Config.private["WORK_PASSWORD"], false) ; Don't use last department (=)
 	
 	^!c::Hyperspace.openCurrentDisplayHTML() ; Open the current display's HTML in IE.
 #If
 
 ; HSWeb debugging - Hyperspace main window or IE
 #If Hyperspace.isAnyVersionActive() || WinActive("Hyperspace ahk_exe IEXPLORE.EXE") || WinActive("Hyperspace ahk_exe chrome.exe")
-	^!d::Send, % MainConfig.private["EPIC_HSWEB_CONSOLE_HOTKEY"]
+	^!d::Send, % Config.private["EPIC_HSWEB_CONSOLE_HOTKEY"]
 #If
 
 ; HSWeb Debug Console
-#If WinActive(MainConfig.private["EPIC_HSWEB_CONSOLE_TITLESTRING"])
+#If WinActive(Config.private["EPIC_HSWEB_CONSOLE_TITLESTRING"])
 	::.trace::
-		Send, % MainConfig.private["EPIC_HSWEB_FORCE_TRACE_COMMAND"]
+		Send, % Config.private["EPIC_HSWEB_FORCE_TRACE_COMMAND"]
 		Send, {Left 2} ; Get inside parens and quotes
 	return
 #If
@@ -30,11 +30,11 @@ class Hyperspace {
 	;---------
 	; DESCRIPTION:    Determine whether any version of Hyperspace is active.
 	; RETURNS:        true if a Hyperspace is active, False otherwise.
-	; NOTES:          We can't use the MainConfig.isWindowActive() here because the EXE is version-
+	; NOTES:          We can't use the Config.isWindowActive() here because the EXE is version-
 	;                 specific and we want to support any version.
 	;---------
 	isAnyVersionActive() {
-		if(MainConfig.isWindowActive("EMC2")) ; Don't count EMC2 towards this.
+		if(Config.isWindowActive("EMC2")) ; Don't count EMC2 towards this.
 			return false
 		
 		if(WinActive("ahk_class ThunderRT6FormDC"))
@@ -75,10 +75,10 @@ class Hyperspace {
 	;---------
 	openCurrentDisplayHTML() {
 		html := Hyperspace.getCurrentDisplayHTML()
-		filePath := MainConfig.private["LOCAL_HTML_DEBUG_OUTPUT"]
+		filePath := Config.private["LOCAL_HTML_DEBUG_OUTPUT"]
 		FileDelete, %filePath%
 		FileAppend, %html%, %filePath%
-		MainConfig.runProgram("Internet Explorer", filePath)
+		Config.runProgram("Internet Explorer", filePath)
 	}
 	
 	

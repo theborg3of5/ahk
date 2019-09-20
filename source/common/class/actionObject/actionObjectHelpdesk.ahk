@@ -33,7 +33,7 @@ class ActionObjectHelpdesk extends ActionObjectBase {
 	;                 others redirect to.
 	;---------
 	getLink() {
-		return MainConfig.private["HELPDESK_BASE"].replaceTag("ID", this.id)
+		return Config.private["HELPDESK_BASE"].replaceTag("ID", this.id)
 	}
 	getLinkWeb() {
 		return this.getLink()

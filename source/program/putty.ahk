@@ -1,4 +1,4 @@
-#If MainConfig.isWindowActive("Putty")
+#If Config.isWindowActive("Putty")
 	^c::return ; Disable breaking behavior for easy-to-hit-accidentally ^c, PuTTY already has a ^+c hotkey that works too.
 	^v::Send, +{Insert} ; Normal paste, without all the inserting of spaces.
 	+Tab::Send, {Left} ; Allow reverse field navigation.
@@ -140,7 +140,7 @@ class Putty {
 		
 		command := command.replaceTags({"INI":ini, "ID":id})
 		
-		if(!MainConfig.isWindowActive("Putty"))
+		if(!Config.isWindowActive("Putty"))
 			WindowActions.activateWindowByName("Putty")
 		
 		SendRaw, % command

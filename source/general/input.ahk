@@ -1,16 +1,16 @@
 ; General input hotkeys.
 
-#If MainConfig.machineIsHomeDesktop
+#If Config.machineIsHomeDesktop
 	$Volume_Mute::DllCall("LockWorkStation")	; Lock computer.
-#If MainConfig.machineIsHomeLaptop || MainConfig.machineIsWorkLaptop || MainConfig.machineIsWorkVDI
+#If Config.machineIsHomeLaptop || Config.machineIsWorkLaptop || Config.machineIsWorkVDI
 	AppsKey::RWin ; No right windows key on these machines, so use the AppsKey (right-click key) instead.
-#If MainConfig.machineIsWorkLaptop || MainConfig.machineIsWorkVDI
+#If Config.machineIsWorkLaptop || Config.machineIsWorkVDI
 	Browser_Back::LButton
 	Browser_Forward::RButton
 #If
 
 ; Scroll horizontally with Shift held down.
-#If !(MainConfig.isWindowActive("EpicStudio") || MainConfig.isWindowActive("Chrome")) ; Chrome and EpicStudio handle their own horizontal scrolling, and doesn't support WheelLeft/Right all the time.
+#If !(Config.isWindowActive("EpicStudio") || Config.isWindowActive("Chrome")) ; Chrome and EpicStudio handle their own horizontal scrolling, and doesn't support WheelLeft/Right all the time.
 	+WheelUp::WheelLeft
 	+WheelDown::WheelRight
 #If
@@ -29,7 +29,7 @@ $^Backspace::WindowActions.deleteWord()
 	SetCapsLockState, On
 return
 
-#If !MainConfig.windowIsGame() && !MainConfig.isWindowActive("Remote Desktop") && !MainConfig.isWindowActive("VMware Horizon Client")
+#If !Config.windowIsGame() && !Config.isWindowActive("Remote Desktop") && !Config.isWindowActive("VMware Horizon Client")
 	XButton1::activateWindowUnderMouseAndSendKeys("^{Tab}")
 	XButton2::activateWindowUnderMouseAndSendKeys("^+{Tab}")
 	activateWindowUnderMouseAndSendKeys(keys) {
@@ -38,7 +38,7 @@ return
 			return
 		
 		idString := "ahk_id " winId
-		windowName := MainConfig.findWindowName(idString)
+		windowName := Config.findWindowName(idString)
 		if(windowName != "Windows Taskbar" && windowName != "Windows Taskbar Secondary") ; Don't try to focus Windows taskbar
 			WinActivate, % idString
 		
@@ -84,7 +84,7 @@ return
 		sendTextWithClipboard(ao.standardEMC2String) ; Can contain hotkey chars
 		
 		; Special case for OneNote: link the INI/ID as well.
-		if(MainConfig.isWindowActive("OneNote"))
+		if(Config.isWindowActive("OneNote"))
 			OneNote.linkEMC2ObjectInLine(ao.ini, ao.id)
 	}
 
@@ -98,8 +98,8 @@ return
 		if(selectedText = "")
 			return
 		
-		MainConfig.runProgram("Notepad")
-		newNotepadWindowTitleString := "Untitled - Notepad " MainConfig.windowInfo["Notepad"].titleString
+		Config.runProgram("Notepad")
+		newNotepadWindowTitleString := "Untitled - Notepad " Config.windowInfo["Notepad"].titleString
 		WinWaitActive, % newNotepadWindowTitleString, , 5 ; 5s timeout
 		if(!WinActive(newNotepadWindowTitleString))
 			WinActivate, % newNotepadWindowTitleString ; Try to activate it if it ran but didn't activate for some reason

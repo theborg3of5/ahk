@@ -1,4 +1,4 @@
-#If MainConfig.isWindowActive("Notepad++")
+#If Config.isWindowActive("Notepad++")
 	!x::return ; Block close-document hotkey that can't be changed/removed.
 	^+t::Send, !f1 ; Re-open last closed document.
 	

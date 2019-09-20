@@ -151,7 +151,7 @@ finishTimer() {
 	CommonHotkeys.ConfirmExit := false
 	
 	; Play a sound to call out that time is up.
-	finishedSoundFile := MainConfig.replacePathTags("<WINDOWS>\media\Windows Hardware Fail.wav")
+	finishedSoundFile := Config.replacePathTags("<WINDOWS>\media\Windows Hardware Fail.wav")
 	if(FileExist(finishedSoundFile))
 		SoundPlay, % finishedSoundFile
 		

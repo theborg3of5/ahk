@@ -20,7 +20,7 @@ global WINDOWCORNER_BOTTOMLEFT  := "BOTTOM_LEFT"
 global WINDOWCORNER_BOTTOMRIGHT := "BOTTOM_RIGHT"
 
 ; Don't do anything while certain windows are active.
-#If !MainConfig.windowIsGame() && !MainConfig.isWindowActive("Remote Desktop") && !MainConfig.isWindowActive("VMware Horizon Client")
+#If !Config.windowIsGame() && !Config.isWindowActive("Remote Desktop") && !Config.isWindowActive("VMware Horizon Client")
 
 	; Alt+Left Drag to move
 	!LButton::
@@ -139,7 +139,7 @@ getTitleStringForWindowUnderMouse() {
 ; RETURNS:        true if the window should be excluded, false otherwise.
 ;---------
 isExcludedWindow(titleString) {
-	windowName := MainConfig.findWindowName(titleString)
+	windowName := Config.findWindowName(titleString)
 	if(windowName = "Windows Taskbar")
 		return true
 	if(windowName = "Windows Taskbar Secondary")

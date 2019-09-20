@@ -5,8 +5,8 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 #Include <includeCommon>
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
-sourceRoot      := MainConfig.path["AHK_ROOT"]
-destinationRoot := MainConfig.path["EPIC_PERSONAL_AHK"]
+sourceRoot      := Config.path["AHK_ROOT"]
+destinationRoot := Config.path["EPIC_PERSONAL_AHK"]
 
 confirmationMessage := "
 	( LTrim

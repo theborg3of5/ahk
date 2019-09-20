@@ -24,10 +24,10 @@ SetMouseDelay, 0                              ; Smallest possible delay after mo
 subFolder := A_ScriptDir "\sub\"
 Run(subFolder "vimBindings\vimBindings.ahk")
 Run(subFolder "windowMoverSizer\windowMoverSizer.ahk")
-if(MainConfig.contextIsWork) { ; Work-specific subs
+if(Config.contextIsWork) { ; Work-specific subs
 	Run(subFolder "dlgNumTracker\dlgNumTracker.ahk")
 	Run(subFolder "tortoiseFillerDLG\tortoiseFillerDLG.ahk")
-	if(MainConfig.machineIsWorkLaptop)
+	if(Config.machineIsWorkLaptop)
 		Run(subFolder "killUAC\killUAC.ahk")
 }
 

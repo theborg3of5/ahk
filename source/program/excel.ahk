@@ -1,5 +1,5 @@
 ; Excel hotkeys.
-#If MainConfig.isWindowActive("Excel")
+#If Config.isWindowActive("Excel")
 	; Save as
 	^+s::Send, {F12}
 	

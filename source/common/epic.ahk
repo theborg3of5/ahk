@@ -2,7 +2,7 @@
 
 { ; Epic Object-related things.
 	getRelatedQANsAry() {
-		if(!MainConfig.isWindowActive("EMC2"))
+		if(!Config.isWindowActive("EMC2"))
 			return ""
 		
 		; Assuming you're in the first row of the table already.
@@ -113,13 +113,13 @@
 		else
 			command := "CallNumber?extension=" rawNum
 		
-		return MainConfig.private["CISCO_PHONE_BASE"].replaceTag("COMMAND", command)
+		return Config.private["CISCO_PHONE_BASE"].replaceTag("COMMAND", command)
 	}
 }
 
 { ; Run path/URL-building functions
 	buildHyperspaceRunString(versionMajor, versionMinor, environment) {
-		runString := MainConfig.private["HYPERSPACE_BASE"]
+		runString := Config.private["HYPERSPACE_BASE"]
 		
 		; Handling for 2010 special path.
 		if(versionMajor = 7 && versionMinor = 8)
@@ -144,10 +144,10 @@
 				environmentName := environmentCommId
 			else
 				environmentName := "OTHER"
-		outputPath := MainConfig.path["TX_DIFF_OUTPUT"] "\" txId "-" environmentName ".txt"
+		outputPath := Config.path["TX_DIFF_OUTPUT"] "\" txId "-" environmentName ".txt"
 		
 		; Build the string to run
-		runString := MainConfig.private["TX_DIFF_DUMP_BASE"]
+		runString := Config.private["TX_DIFF_DUMP_BASE"]
 		runString := runString.replaceTag("TX_ID",       txId)
 		runString := runString.replaceTag("OUTPUT_PATH", outputPath)
 		
@@ -160,7 +160,7 @@
 	}
 
 	buildVDIRunString(vdiId) {
-		return MainConfig.private["VDI_BASE"].replaceTag("VDI_ID", vdiId)
+		return Config.private["VDI_BASE"].replaceTag("VDI_ID", vdiId)
 	}
 }
 

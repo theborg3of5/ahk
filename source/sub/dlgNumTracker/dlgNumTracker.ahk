@@ -15,7 +15,7 @@ SetTitleMatchMode, % TITLE_MATCH_MODE_Contain
 
 MainLoop:
 	; Don't do anything if EMC2 isn't open.
-	if(!MainConfig.doesWindowExist("EMC2"))
+	if(!Config.doesWindowExist("EMC2"))
 		return
 	
 	record := new EpicRecord()

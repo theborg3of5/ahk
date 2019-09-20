@@ -1,26 +1,26 @@
 ; note to self: this must be in UTF-8 encoding.
 
-#If !MainConfig.windowIsGame()
+#If !Config.windowIsGame()
 { ; Emails.
-	:X:emaila::Send,  % MainConfig.private["EMAIL"]
-	:X:gemaila::Send, % MainConfig.private["EMAIL_2"]
-	:X:eemaila::Send, % MainConfig.private["WORK_EMAIL"]
-	:X:oemaila::Send, % MainConfig.private["OUTLOOK_EMAIL"]
+	:X:emaila::Send,  % Config.private["EMAIL"]
+	:X:gemaila::Send, % Config.private["EMAIL_2"]
+	:X:eemaila::Send, % Config.private["WORK_EMAIL"]
+	:X:oemaila::Send, % Config.private["OUTLOOK_EMAIL"]
 }
 
 { ; Addresses.
-	:X:waddr::SendRaw, % MainConfig.private["HOME_ADDRESS"]
-	:X:eaddr::Send, % MainConfig.private["WORK_ADDRESS"]
-	:*0X:ezip::Send, % MainConfig.private["WORK_ZIP_CODE"]
+	:X:waddr::SendRaw, % Config.private["HOME_ADDRESS"]
+	:X:eaddr::Send, % Config.private["WORK_ADDRESS"]
+	:*0X:ezip::Send, % Config.private["WORK_ZIP_CODE"]
 }
 
 { ; Logins.
-	:X:uname::Send, % MainConfig.private["USERNAME"]
+	:X:uname::Send, % Config.private["USERNAME"]
 }
 
 { ; Phone numbers.
-	:X:phoneno::Send, % MainConfig.private["PHONE_NUM"]
-	:X:fphoneno::Send, % reformatPhone(MainConfig.private["PHONE_NUM"])
+	:X:phoneno::Send, % Config.private["PHONE_NUM"]
+	:X:fphoneno::Send, % reformatPhone(Config.private["PHONE_NUM"])
 }
 
 { ; Typo correction.
@@ -188,7 +188,7 @@
 	
 	{ ; Epic - Source
 		:X:esf::sendFolderPath("EPIC_SOURCE_S1")
-		:X:fesf::sendFilePath("EPIC_SOURCE_S1", MainConfig.private["EPICDESKTOP_PROJECT"])
+		:X:fesf::sendFilePath("EPIC_SOURCE_S1", Config.private["EPICDESKTOP_PROJECT"])
 	}
 }
 #If

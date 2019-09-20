@@ -19,13 +19,13 @@
 		if(!path)
 			return
 		
-		path := MainConfig.replacePathTags(path)
+		path := Config.replacePathTags(path)
 		if(FileExist(path))
 			Run(path)
 	}
 
 
-#If MainConfig.contextIsWork
+#If Config.contextIsWork
 	^+!#t::
 		selectDLG() {
 			s := new Selector("outlookTLG.tls")
@@ -70,14 +70,14 @@
 				return
 			
 			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
-				MainConfig.runProgram("Snapper")
+				Config.runProgram("Snapper")
 			else
 				Run(Snapper.buildURL(data["COMM_ID"], data["INI"], data["ID"])) ; data["ID"] can contain a comma-delimited list if that's what the user entered
 		}
 #If
 
 
-#If MainConfig.machineIsWorkLaptop
+#If Config.machineIsWorkLaptop
 	^+!t::
 		selectOutlookTLG() {
 			data := new Selector("outlookTLG.tls").selectGui()
@@ -89,13 +89,13 @@
 				combinedMessage .= " - " ; Hyphen in between base message and normal message
 			combinedMessage .= data["MESSAGE"]
 			
-			textToSend := MainConfig.private["OUTLOOK_TLG_BASE"]
+			textToSend := Config.private["OUTLOOK_TLG_BASE"]
 			textToSend := textToSend.replaceTag("TLP",      data["TLP"])
 			textToSend := textToSend.replaceTag("CUSTOMER", data["CUSTOMER"])
 			textToSend := textToSend.replaceTag("DLG",      data["DLG"])
 			textToSend := textToSend.replaceTag("MESSAGE",  combinedMessage)
 			
-			if(MainConfig.isWindowActive("Outlook Calendar TLG")) {
+			if(Config.isWindowActive("Outlook Calendar TLG")) {
 				SendRaw, % textToSend
 				Send, {Enter}
 			} else {
@@ -110,9 +110,9 @@
 				return
 			
 			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
-				MainConfig.activateProgram("Thunder")
+				Config.activateProgram("Thunder")
 			else
-				MainConfig.runProgram("Thunder", data["THUNDER_ID"])
+				Config.runProgram("Thunder", data["THUNDER_ID"])
 		}
 	
 	!+v::
@@ -122,7 +122,7 @@
 				return
 			
 			if(data["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.
-				MainConfig.runProgram("VMware Horizon Client")
+				Config.runProgram("VMware Horizon Client")
 			} else {
 				Run(buildVDIRunString(data["VDI_ID"]))
 				

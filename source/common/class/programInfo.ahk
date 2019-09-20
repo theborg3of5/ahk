@@ -19,7 +19,7 @@ class ProgramInfo {
       this.programPath := programAry["PATH"]
 		
 		; Replace any path tags
-		this.programPath := MainConfig.replacePathTags(this.programPath)
+		this.programPath := Config.replacePathTags(this.programPath)
    }
    
 	;---------

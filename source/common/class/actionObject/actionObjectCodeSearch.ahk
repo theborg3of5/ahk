@@ -38,7 +38,7 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 		routine := encodeForURL(routine)
 		tag     := encodeForURL(tag)
 		
-		return MainConfig.private["CS_SERVER_CODE_BASE"].replaceTags({"ROUTINE":routine, "TAG":tag})
+		return Config.private["CS_SERVER_CODE_BASE"].replaceTags({"ROUTINE":routine, "TAG":tag})
 	}
 	getLinkWeb() {
 		return this.getLink()

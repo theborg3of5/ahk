@@ -66,7 +66,7 @@ sendCleanedUpPath(containingFolderOnly := false) {
 generateOneNoteOnlineURLForPrivateNotebook(notebookTagName) {
 	baseURL         := "https://onedrive.live.com/edit.aspx?cid=<ONENOTE_ONLINE_CID>&resid=<ONENOTE_ONLINE_CID>!<NOTEBOOK_TAG>&app=OneNote"
 	specificBaseURL := baseURL.replaceTag("NOTEBOOK_TAG", "<" notebookTagName ">") ; Plug in the specific private tag that we were given, so that when we replace private tags we'll get everything at once.
-	finalURL        := MainConfig.replacePrivateTags(specificBaseURL)
+	finalURL        := Config.replacePrivateTags(specificBaseURL)
 	
 	; DEBUG.popup("Base URL",baseURL, "Specific base URL",specificBaseURL, "Final URL",finalURL)
 	return finalURL

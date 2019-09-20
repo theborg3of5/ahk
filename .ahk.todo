@@ -20,10 +20,8 @@
 	Standardize how we format & structure classes
 		Capitalization (public vs private)
 		Startup/default values
-			Selector > chars, guiSettings
-			SelectorGui > chars
+			Selector > guiSettings
 			Hyperlinker > windows
-			TableList > chars
 			Toast > styles
 			WindowActions > actionOverrides
 		Square brackets on properties (that don't take parameters)
@@ -38,7 +36,7 @@
 		Options:
 			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)
 			New type of codesearch type with separate branch in ActionObject (not ideal)
-	EpicStudio - add a diffing hotkey (simple ^d maybe?) that makes it easier to do the same diff to a bunch of different routines
+	EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments
 	Consider adding a client-file-viewing search to either search selector or actionObject (like codesearch routine)

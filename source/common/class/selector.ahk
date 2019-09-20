@@ -403,7 +403,6 @@ class Selector {
 	; Debug info (used by the Debug class)
 	debugName := "Selector"
 	debugToString(debugBuilder) {
-		debugBuilder.addLine("Chars",           this.chars)
 		debugBuilder.addLine("Override fields", this.overrideFields)
 		debugBuilder.addLine("GUI settings",    this.guiSettings)
 		debugBuilder.addLine("Filepath",        this.filePath)

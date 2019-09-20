@@ -26,7 +26,6 @@ class SelectorGui {
 	; RETURNS:        Reference to new SelectorGui object
 	;---------
 	__New(choices, sectionTitles := "", overrideFields := "", minColumnWidth := 0) {
-		this.setSpecialChars()
 		this.overrideFields := overrideFields
 		this.buildPopup(choices, sectionTitles, minColumnWidth)
 	}
@@ -54,6 +53,9 @@ class SelectorGui {
 ; ==============================
 ; == Private ===================
 ; ==============================
+	; Special characters
+	static Char_NewColumn := "|"
+	
 	static baseFieldVarChoice          := "Choice"
 	static baseFieldVarOverridesPrefix := "Override"
 	static defaultFontColor            := "BDAE9D"
@@ -79,10 +81,6 @@ class SelectorGui {
 	choicesHeight := 0
 	choicesWidth  := 0
 	
-	
-	setSpecialChars() {
-		this.chars["NEW_COLUMN"] := "|"
-	}
 	
 	buildPopup(choices, sectionTitles, minColumnWidth) {
 		this.totalHeight += this.margins["TOP"]
@@ -119,8 +117,8 @@ class SelectorGui {
 			sectionTitle := sectionTitles[i]
 			
 			; Add new column if needed
-			if(sectionTitle.startsWith(this.chars["NEW_COLUMN"] " ")) {
-				sectionTitle := sectionTitle.removeFromStart(this.chars["NEW_COLUMN"] " ")
+			if(sectionTitle.startsWith(this.Char_NewColumn " ")) {
+				sectionTitle := sectionTitle.removeFromStart(this.Char_NewColumn " ")
 				flex.addColumn()
 				isEmptyColumn := true
 			}

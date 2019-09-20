@@ -21,6 +21,7 @@
 	#Include XInput.ahk
 
 #Include %A_LineFile%\..\class
+	#Include config.ahk
 	#Include commonHotkeys.ahk
 	#Include debug.ahk
 	#Include duration.ahk
@@ -28,7 +29,6 @@
 	#Include flexTable.ahk
 	#Include formatList.ahk
 	#Include hyperlinker.ahk
-	#Include mainConfig.ahk
 	#Include mousePosition.ahk
 	#Include programInfo.ahk
 	#Include scriptTrayInfo.ahk

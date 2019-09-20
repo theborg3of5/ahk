@@ -29,12 +29,12 @@
 [+1|CONTEXT.replaceWith(WORK)]
 	[+2|SEARCH_TYPE.replaceWith(CODESEARCH)]
 		# | Codesearch
-		Server							s				Server
-		Client							c				Client
-		Server + Client				sc|cs			Server|Client
-		Records							r				Records
-		Other								o|p			ProgPoint
-		All								a				Server|Client|Records|ProgPoint
+		Server							s				routine
+		Client							c				client
+		Server + Client				sc|cs			routine|client
+		Records							r				records
+		Other								o|p			other
+		All								a				routine|client|records|other
 		
 		# Codesearch Specifics
 		Server DBC						sd				Server															-					DBC

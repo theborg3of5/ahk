@@ -12,15 +12,15 @@
 	Pull to-dos from specific sections below
 []
 [DAY_ABBREV.replaceWith(SUN)]
-	Review/type Ninpo notes
 	Fold laundry
 	Roomba
 	Dishes from weekend
-	Dishes from dinner
 	Trash, recycling out
-	Play with cats (and walk Dart)
 	Meal planning
+	Play with cats (and walk Dart)
+	Dishes from dinner
 	Order/obtain groceries
+	Review/type Ninpo notes
 	Pull to-dos from specific sections below
 []
 

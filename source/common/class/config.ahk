@@ -327,13 +327,13 @@ class Config {
 	}
 	
 	loadPrograms(filePath) {
-		programsTable := new TableList(filePath).getTable()
+		programsTable := new TableList(filePath).getRowsByColumn("NAME", "MACHINE")
 		; DEBUG.popupEarly("Config","loadPrograms", "Unique table",programsTable)
 		
-		; Turn each row into a ProgramInfo object and index them by name.
+		; Turn each row into a ProgramInfo object.
 		programs := {}
-		For _,row in programsTable
-			programs[row["NAME"]] := new ProgramInfo(row)
+		For name,row in programsTable
+			programs[name] := new ProgramInfo(row)
 		; DEBUG.popupEarly("Config","loadPrograms", "Finished programs",programs)
 		
 		return programs

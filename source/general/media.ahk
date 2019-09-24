@@ -3,7 +3,15 @@
 #PgDn::Send {Volume_Down 5}
 
 ; Toggle Mute.
-#Enter::SoundSet, +1, , mute
+#Enter::
+	toggleMute() {
+		SoundSet, +1, , MUTE
+		if(SoundGet("", "MUTE") = "On")
+			muteMessage := "Volume muted"
+		else
+			muteMessage := "Volume unmuted"
+		new Toast().showMedium(muteMessage)
+	}
 
 ; Change the media player that media keys will deal with.
 ^Volume_Mute::

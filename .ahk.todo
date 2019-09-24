@@ -1,5 +1,4 @@
 # New Ideas
-	Add toast for volume mute/unmute
 	TableList mods - consider making it a replacement by default (only 1 active mod), only stack with labels
 		Use case: onenote todos, dailies section could be more compact
 	Update Notepad++ AHK documentation stuff to handle properties (with or without [])
@@ -11,7 +10,9 @@
 		Another option: a new Path class, that ActionObjectPath just uses?
 	With new discovery about chaining constructors to single call afterwards (i.e. 'data := new Selector("filepath").selectGui()'), do we still need the static side of Toast?
 		Would it be cleaner to just have callers use 'new Toast().*' instead?
-		Could compensate on the length by dropping the "show" from the start of showShort/showMed/showError
+			Ideally, new Toast(text).* would be even better - clear what the toast is, then how long we're showing it for
+		Places using newToast().*
+			media.toggleMute()
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:

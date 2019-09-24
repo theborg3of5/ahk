@@ -18,7 +18,7 @@
 	
 	; Copy title, stripping off the " - Google Chrome" at the end.
 	!c::Chrome.copyTitle()
-	!#c::Chrome.copyTitleAndURL()
+	!#c::Chrome.copyTitleLink()
 	
 	; Send to Telegram (and pick the correct chat).
 	~!t::
@@ -51,7 +51,7 @@ class Chrome {
 	; DESCRIPTION:    Copy the title and URL of the current tab on the clipboard, with some special
 	;                 exceptions (see .getTitle() for details).
 	;---------
-	copyTitleAndURL() {
+	copyTitleLink() {
 		title := Chrome.getTitle()
 		
 		Send, ^l     ; Focus address bar

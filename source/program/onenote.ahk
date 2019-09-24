@@ -60,7 +60,8 @@
 	^+i:: OneNote.addSubLinesToSelectedLines()
 	
 	; Link handling
-	!c::OneNote.copyLinkToCurrentPage()
+	!c::      OneNote.copyLinkToCurrentPage()
+	!#c::     OneNote.copyTitleLinkToCurrentPage()
 	^RButton::OneNote.copyLinkUnderMouse()
 	^MButton::OneNote.removeLinkUnderMouse()
 	
@@ -174,27 +175,17 @@ class OneNote {
 	; DESCRIPTION:    Put a link to the current page on the clipboard.
 	;---------
 	copyLinkToCurrentPage() {
-		copiedLink := OneNote.getLinkToCurrentParagraph()
-		if(copiedLink = "") {
-			Toast.showError("Could not get paragraph link on clipboard")
-			return
-		}
+		setClipboardAndToastValue(OneNote.getLinkToCurrentPage(), "link")
+	}
+	
+	;---------
+	; DESCRIPTION:    Copy the current page's title and link to the clipboard.
+	;---------
+	copyTitleLinkToCurrentPage() {
+		link := OneNote.getLinkToCurrentPage()
+		title := OneNote.getPageTitle()
 		
-		; Trim off the paragraph-specific part.
-		copiedLink := copiedLink.removeRegEx("&object-id.*")
-		
-		; If there are two links involved (seems to happen with free version of OneNote), keep only the "onenote:" one (second line).
-		if(copiedLink.contains("`n")) {
-			linkAry := copiedLink.split("`n")
-			For i,link in linkAry {
-				if(link.contains("onenote:"))
-					linkToUse := link
-			}
-		} else {
-			linkToUse := copiedLink
-		}
-		
-		setClipboardAndToastValue(linkToUse, "link")
+		setClipboardAndToastValue(title "`n" link, "page title + link")
 	}
 	
 	;---------
@@ -299,6 +290,45 @@ class OneNote {
 ; ==============================
 ; == Private ===================
 ; ==============================
+	;---------
+	; DESCRIPTION:    Get a link to the current page
+	; RETURNS:        The simple link to the current page, via OneNote (not online link).
+	;---------
+	getLinkToCurrentPage() {
+		copiedLink := OneNote.getLinkToCurrentParagraph()
+		if(copiedLink = "") {
+			Toast.showError("Could not get paragraph link on clipboard")
+			return
+		}
+		
+		; Trim off the paragraph-specific part.
+		copiedLink := copiedLink.removeRegEx("&object-id.*")
+		
+		; If there are two links involved (seems to happen with free version of OneNote), keep only the "onenote:" one (second line).
+		if(copiedLink.contains("`n")) {
+			linkAry := copiedLink.split("`n")
+			For i,link in linkAry {
+				if(link.contains("onenote:"))
+					linkToUse := link
+			}
+		} else {
+			linkToUse := copiedLink
+		}
+		
+		return linkToUse
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the title of the current page.
+	; RETURNS:        The title of the current page.
+	;---------
+	getPageTitle() {
+		Send, ^+a                        ; Select page tab
+		pageContent := getSelectedText() ; Copy entire page contents
+		Send, {Escape}                   ; Get back to the editing area
+		return pageContent.firstLine()   ; Title is the first line of the content
+	}
+	
 	;---------
 	; DESCRIPTION:    Get the link to the current paragraph to the clipboard.
 	; RETURNS:        The link to the current paragraph.

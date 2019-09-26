@@ -10,7 +10,7 @@
 			muteMessage := "Volume muted"
 		else
 			muteMessage := "Volume unmuted"
-		new Toast().showMedium(muteMessage)
+		new Toast(muteMessage).showMedium()
 	}
 
 ; Change the media player that media keys will deal with.
@@ -19,7 +19,7 @@
 		programName := new Selector("mediaPlayers.tls").selectGui("PROGRAM_NAME")
 		if(programName) {
 			Config.mediaPlayer := programName
-			Toast.showMedium("Media player set to: " programName)
+			new Toast("Media player set to: " programName).showMedium()
 		}
 	}
 

@@ -103,7 +103,7 @@ class EMC2 {
 		if(record.ini != "DLG" || record.id = "")
 			return
 		
-		Toast.showMedium("Opening DLG in EpicStudio: " record.id)
+		new Toast("Opening DLG in EpicStudio: " record.id).showMedium()
 		
 		new ActionObjectEpicStudio(record.id, ActionObjectEpicStudio.DescriptorType_DLG).openEdit()
 	}

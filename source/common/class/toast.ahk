@@ -3,24 +3,25 @@
 	Usage:
 		Create Toast instance
 		Show it (.showForSeconds or .show)
-		If not showing on a timer, close it when finished (.close)
+		Hide it if needed (.hide)
+		If it's persistent, close it when finished (.close)
 	
 	Example:
 		; Show a toast on a 5-second timer
 		t := new Toast("5-second timer toast!")
 		t.showForSeconds(5)
-		; OR, statically:
-		Toast.showMedium("5-second timer toast!")
+		; OR:
+		new Toast("5-second timer toast!").showLong()
 		
 		; Show a toast, then hide it after finishing a longer-running action
-		t := new Toast("Running long action")
+		t := new Toast("Running long action").makePersistent() ; Make it persistent so showing it on a timer doesn't destroy it
 		t.show()
 		... ; Long action happens
 		t.setText("Next step")
 		... ; Next step happens
 		t.hide() ; Toast is hidden but still exists
 		...
-		t.show() ; Toast becomes visible again
+		t.showForSeconds(3) ; Toast becomes visible again for 3 seconds, then it's hidden automatically
 		...
 		t.close() ; Toast is destroyed
 */
@@ -46,39 +47,28 @@ class Toast {
 	}
 	
 	;---------
+	; DESCRIPTION:    Mark the toast as persistent
+	; RETURNS:        this
+	; NOTES:          This means that the toast will be hidden (rather than destroyed) when we
+	;                 finish showing it on a timer.
+	;---------
+	makePersistent() {
+		this.isPersistent := true
+		return this
+	}
+	
+	;---------
+	;---------
 	; DESCRIPTION:    Wrapper for .showForSeconds for a "short" toast (shown for 1 second) in
 	;                 the bottom-right corner of the screen.
-	; PARAMETERS:
-	;  toastText (I,REQ) - The text to show in the toast.
-	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
-	showShort(toastText := "") { ; GDB TODO get rid of toastText parameter and corresponding logic once we get all callers transitioned over
-		if(toastText != "")
-			new Toast(toastText).showForSeconds(1, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
-		else
-			this.showForSeconds(1, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
+	showShort() {
+		this.showForSeconds(1, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
 	}
 	
 	;---------
 	; DESCRIPTION:    Wrapper for .showForSeconds for a "medium" toast (shown for 2 seconds) in
 	;                 the bottom-right corner of the screen.
-	; PARAMETERS:
-	;  toastText (I,REQ) - The text to show in the toast.
-	; SIDE EFFECTS:   The toast is destroyed when the time expires.
-	;---------
-	showMedium(toastText := "") {
-		if(toastText != "")
-			new Toast(toastText).showForSeconds(2, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
-		else
-			this.showForSeconds(2, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
-	}
-	
-	;---------
-	; DESCRIPTION:    Wrapper for .showForSeconds for a "long" toast (shown for 5 seconds) in
-	;                 the bottom-right corner of the screen.
-	; PARAMETERS:
-	;  toastText (I,REQ) - The text to show in the toast.
-	; SIDE EFFECTS:   The toast is destroyed when the time expires.
 	;---------
 	showLong(toastText := "") {
 		if(toastText != "")
@@ -89,13 +79,11 @@ class Toast {
 	
 	;---------
 	; DESCRIPTION:    Mark the toast as persistent
-	; RETURNS:        This toast object
-	; NOTES:          This means that the toast will be hidden (rather than destroyed) when we
-	;                 finish showing it on a timer.
+	; DESCRIPTION:    Wrapper for .showForSeconds for a "long" toast (shown for 5 seconds) in
+	;                 the bottom-right corner of the screen.
 	;---------
-	makePersistent() {
-		this.isPersistent := true
-		return this ; Allows callers to chain (i.e. t := new Toast("text").makePersistent())
+	showLong() {
+		this.showForSeconds(5, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
 	}
 	
 	; GDB TODO - public member/property that determines whether we should pause while the toast is visible (we could use sleep or a timer based on it)
@@ -140,8 +128,6 @@ class Toast {
 	showForSeconds(numSeconds, x := "", y := "") {
 		this.show(x, y)
 		
-		finishFunc := ObjBindMethod(this, "finishShow")
-		SetTimer, % finishFunc, % -numSeconds * 1000
 	}
 	
 	;---------
@@ -299,7 +285,7 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Set the text of the toast label and resize it fit that text.
 	; PARAMETERS:
-	;  toastText    (I,REQ) - The text to show in the toast.
+	;  toastText (I,REQ) - The text to show in the toast.
 	;---------
 	setLabelText(toastText) {
 		toastText := escapeCharUsingRepeat(toastText, "&")

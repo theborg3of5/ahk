@@ -10,7 +10,7 @@
 
 #If !Config.doesWindowExist("Launchy")
 	CapsLock::
-		Toast.showMedium("Launchy not yet running, launching...")
+		new Toast("Launchy not yet running, launching...").showMedium()
 		Config.runProgram("Launchy")
 	return
 #If

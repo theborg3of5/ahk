@@ -108,7 +108,7 @@ class Chrome {
 			return
 		
 		displayCode := tag.appendPiece(routine, "^")
-		Toast.showMedium("Opening server code in EpicStudio: " displayCode)
+		new Toast("Opening server code in EpicStudio: " displayCode).showMedium()
 		
 		new ActionObjectEpicStudio(tag "^" routine, ActionObjectEpicStudio.DescriptorType_Routine).openEdit()
 	}
@@ -121,7 +121,7 @@ class Chrome {
 		
 		filePath := clipboard
 		if(filePath) {
-			Toast.showShort("Got link target, opening:`n" filePath)
+			new Toast("Got link target, opening:`n" filePath).showShort()
 			Run(filePath)
 		} else {
 			Toast.showError("Failed to get link target")

@@ -136,7 +136,7 @@ class Config {
 		if(player) {
 			; Always use runProgram based on the programs at play, but only show the "not yet running" toast if it really doesn't exist.
 			if(!this.doesWindowExist(player))
-				Toast.showMedium(player " not yet running, launching...")
+				new Toast(player " not yet running, launching...").showMedium()
 			this.runProgram(player)
 		}
 	}

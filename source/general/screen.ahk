@@ -16,8 +16,8 @@ return
 		else
 			newState := "On"
 		
-		Toast.showMedium("Window always on top: " newState)
 		WinSet, AlwaysOnTop, % newState, A
+		new Toast("Window always on top: " newState).showMedium()
 	}
 
 ; Center current window onscreen.

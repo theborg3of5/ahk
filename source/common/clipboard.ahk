@@ -84,7 +84,7 @@ toastClipboard(clipLabel, showClipboardValue) {
 		clipMessage := "Clipboard set to " clipLabel
 		if(showClipboardValue)
 			clipMessage .= ":`n" clipboard
-		Toast.showMedium(clipMessage)
+		new Toast(clipMessage).showMedium()
 	}
 }
 

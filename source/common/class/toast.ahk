@@ -70,15 +70,11 @@ class Toast {
 	; DESCRIPTION:    Wrapper for .showForSeconds for a "medium" toast (shown for 2 seconds) in
 	;                 the bottom-right corner of the screen.
 	;---------
-	showLong(toastText := "") {
-		if(toastText != "")
-			new Toast(toastText).showForSeconds(5, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
-		else
-			this.showForSeconds(5, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
+	showMedium() {
+		this.showForSeconds(2, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
 	}
 	
 	;---------
-	; DESCRIPTION:    Mark the toast as persistent
 	; DESCRIPTION:    Wrapper for .showForSeconds for a "long" toast (shown for 5 seconds) in
 	;                 the bottom-right corner of the screen.
 	;---------

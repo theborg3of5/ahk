@@ -32,6 +32,14 @@ max(nums*) {
 	return max
 }
 
+; First non-blank value of the arguments
+firstNonBlankValue(params*) {
+	For _,param in params {
+		if(param != "")
+			return param
+	}
+}
+
 ; overrides wins if they both have an index.
 mergeObjects(baseObject, overrides) {
 	if(IsObject(baseObject))

@@ -39,12 +39,10 @@ class Toast {
 	; RETURNS:        A new instance of this class.
 	;---------
 	__New(toastText := "", styleOverrides := "") {
-		idAry := this.buildGui(styleOverrides)
-		this.guiId        := idAry["GUI_ID"]
-		this.labelVarName := idAry["LABEL_VAR_NAME"]
+		this.buildGui(styleOverrides)
 		
 		if(toastText)
-			this.setLabelText(toastText, this.labelVarName)
+			this.setLabelText(toastText)
 	}
 	
 	;---------
@@ -104,8 +102,8 @@ class Toast {
 	; Do like makePersistent - function that allows chaining
 	
 	;---------
-	; DESCRIPTION:    Displays an error toast (dark yellow text, slightly larger) for a short
-	;                 duration (2 seconds).
+	; DESCRIPTION:    Displays an error toast (dark yellow text, slightly larger, buttom-right) for
+	;                 a medium duration (2 seconds).
 	; PARAMETERS:
 	;  problemMessage    (I,REQ) - Text about what the problem is (what happened or weren't we able
 	;                              to do?)
@@ -126,7 +124,7 @@ class Toast {
 		overrides["MARGIN_Y"]         := 1
 		overrides["LABEL_STYLES"]     := "Right"
 		
-		new Toast(toastText, overrides).showForSeconds(2, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
+		new Toast(toastText, overrides).showMedium()
 	}
 	
 	;---------
@@ -155,19 +153,8 @@ class Toast {
 	;              Defaults to previous position (if set), then bottom edge of screen.
 	;---------
 	show(x := "", y := "") {
-		; Use optional x/y if given.
-		if(x != "")
-			this.x := x
-		if(y != "")
-			this.y := y
-		
-		; Default to bottom-right if nothing given and no previous position.
-		if(this.x = "")
-			this.x := VisualWindow.X_RightEdge
-		if(this.y = "")
-			this.y := VisualWindow.Y_BottomEdge
-		
-		this.showToast(this.x, this.y, this.guiId)
+		this.move(x, y)
+		fadeGuiIn(this.guiId)
 	}
 	
 	;---------
@@ -177,8 +164,8 @@ class Toast {
 	; NOTES:          Will try to maintain the same position, but toast size will expand to fit text.
 	;---------
 	setText(toastText) {
-		this.setLabelText(toastText, this.labelVarName)
-		this.move(this.x, this.y, this.guiId)
+		this.setLabelText(toastText)
+		this.move()
 	}
 	
 	;---------
@@ -222,15 +209,12 @@ class Toast {
 	; PARAMETERS:
 	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be
 	;                           found in .getStyles().
-	; SIDE EFFECTS:   Saves off a reference to the gui's window handle.
-	; RETURNS:        Array of ID information, format:
-	;                 	idAry["GUI_ID"]         = Window handle/guiId
-	;                 	     ["LABEL_VAR_NAME"] = Name of the global variable connected to the label
-	;                 	                          containing the toast text.
+	; SIDE EFFECTS:   Updates members for window handle and label global variable name.
 	;---------
 	buildGui(styleOverrides := "") {
-		; Create Gui and save off window handle (which is also guiId)
-		Gui, New, +HWNDguiId
+		; Create Gui and save off window handle (which is also winId)
+		Gui, New, +HWNDwinId
+		this.guiId := winId
 		
 		; Other gui options
 		Gui, +AlwaysOnTop -Caption +LastFound +ToolWindow
@@ -243,11 +227,9 @@ class Toast {
 		Gui, Margin, % styles["MARGIN_X"], % styles["MARGIN_Y"]
 		
 		; Add label
-		labelVarName := guiId "Text" ; Come up with a unique variable we can use to reference the label (to change its contents if needed).
-		setDynamicGlobalVar(labelVarName) ; Since the variable must be global, declare it as such.
-		Gui, Add, Text, % "v" labelVarName " " styles["LABEL_STYLES"]
-		
-		return {"GUI_ID":guiId, "LABEL_VAR_NAME":labelVarName} ; GDB TODO just set member variables instead of returning an array
+		this.labelVarName := this.guiId "Text" ; Come up with a unique variable we can use to reference the label (to change its contents if needed).
+		setDynamicGlobalVar(this.labelVarName) ; Since the variable must be global, declare it as such.
+		Gui, Add, Text, % "v" this.labelVarName " " styles["LABEL_STYLES"]
 	}
 	
 	;---------
@@ -280,17 +262,17 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Move the toast gui to the given coordinates and resize it to its contents.
 	; PARAMETERS:
-	;  x     (I,REQ) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
-	;  y     (I,REQ) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
-	;  guiId (I,REQ) - Window handle for the toast gui.
+	;  x (I,REQ) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
+	;              Defaults to right edge.
+	;  y (I,REQ) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
+	;              Defaults to bottom edge.
 	;---------
-	move(x, y, guiId) {
-		; If x/y not given, default them to right/bottom
-		if(x = "")
-			x := VisualWindow.X_RightEdge
-		if(y = "")
-			y := VisualWindow.Y_BottomEdge
+	move(x := "", y := "") {
 		origDetectSetting := setDetectHiddenWindows("On")
+		
+		; Default to current position, then bottom-right corner
+		x := firstNonBlankValue(x, this.x, VisualWindow.X_RightEdge)
+		y := firstNonBlankValue(y, this.y, VisualWindow.Y_BottomEdge)
 		
 		Gui, % this.guiId ":Default"
 		Gui, +LastFound ; Needed to identify the window on next line
@@ -307,6 +289,10 @@ class Toast {
 		if(isWinHidden)
 			Gui, Show, NoActivate, % Toast.ToastTitle
 		
+		; Store off new position
+		this.x := x
+		this.y := y
+		
 		setDetectHiddenWindows(origDetectSetting)
 	}
 	
@@ -314,29 +300,16 @@ class Toast {
 	; DESCRIPTION:    Set the text of the toast label and resize it fit that text.
 	; PARAMETERS:
 	;  toastText    (I,REQ) - The text to show in the toast.
-	;  labelVarName (I,REQ) - The name of the global variable connected to the toast label.
 	;---------
-	setLabelText(toastText, labelVarName) { ; GDB TODO replace labelVarName parameter with this.labelVarName
+	setLabelText(toastText) {
 		toastText := escapeCharUsingRepeat(toastText, "&")
 		
 		; Figure out how big the text control needs to be to fit its contents
 		getLabelSizeForText(toastText, textWidth, textHeight)
 		
 		; Update the text and width/height
-		GuiControl,     , % labelVarName, % toastText
-		GuiControl, Move, % labelVarName, % "w" textWidth " h" textHeight
-	}
-	
-	;---------
-	; DESCRIPTION:    Show (fade in) the toast.
-	; PARAMETERS:
-	;  x     (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
-	;  y     (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
-	;  guiId (I,REQ) - Window handle for the toast gui.
-	;---------
-	showToast(x, y, guiId) {
-		this.move(x, y, guiId)
-		fadeGuiIn(guiId)
+		GuiControl,     , % this.labelVarName, % toastText
+		GuiControl, Move, % this.labelVarName, % "w" textWidth " h" textHeight
 	}
 	
 	;---------

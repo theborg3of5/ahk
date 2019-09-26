@@ -28,94 +28,7 @@
 class Toast {
 
 ; ==============================
-; == Public (Static) ===========
-; ==============================
-	;---------
-	; DESCRIPTION:    Wrapper for Toast.showForSeconds for a "short" toast (shown for 1 second) in
-	;                 the bottom-right corner of the screen.
-	; PARAMETERS:
-	;  toastText (I,REQ) - The text to show in the toast.
-	; SIDE EFFECTS:   The toast is destroyed when the time expires.
-	;---------
-	showShort(toastText) {
-		Toast.showForSeconds(toastText, 1, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
-	}
-	
-	;---------
-	; DESCRIPTION:    Wrapper for Toast.showForSeconds for a "medium" toast (shown for 2 seconds) in
-	;                 the bottom-right corner of the screen.
-	; PARAMETERS:
-	;  toastText (I,REQ) - The text to show in the toast.
-	; SIDE EFFECTS:   The toast is destroyed when the time expires.
-	;---------
-	showMedium(toastText) {
-		Toast.showForSeconds(toastText, 2, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
-	}
-	
-	;---------
-	; DESCRIPTION:    Wrapper for Toast.showForSeconds for a "long" toast (shown for 5 seconds) in
-	;                 the bottom-right corner of the screen.
-	; PARAMETERS:
-	;  toastText (I,REQ) - The text to show in the toast.
-	; SIDE EFFECTS:   The toast is destroyed when the time expires.
-	;---------
-	showLong(toastText) {
-		Toast.showForSeconds(toastText, 5, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
-	}
-	
-	;---------
-	; DESCRIPTION:    Displays an error toast (dark yellow text, slightly larger) for a short
-	;                 duration (2 seconds).
-	; PARAMETERS:
-	;  problemMessage    (I,REQ) - Text about what the problem is (what happened or weren't we able
-	;                              to do?)
-	;  errorMessage      (I,OPT) - Technical error text - what happened code-wise?
-	;  mitigationMessage (I,OPT) - What we did instead - did we add something to the clipboard since
-	;                              we couldn't link it, for example?
-	;---------
-	showError(problemMessage, errorMessage := "", mitigationMessage := "") {
-		toastText := problemMessage
-		toastText := toastText.appendPiece(errorMessage,      ":`n")
-		toastText := toastText.appendPiece(mitigationMessage, "`n`n")
-		
-		overrides := {}
-		overrides["BACKGROUND_COLOR"] := "000000" ; Black
-		overrides["FONT_COLOR"]       := "CC9900" ; Dark yellow/gold
-		overrides["FONT_SIZE"]        := 22
-		overrides["MARGIN_X"]         := 6
-		overrides["MARGIN_Y"]         := 1
-		overrides["LABEL_STYLES"]     := "Right"
-		
-		Toast.showForSeconds(toastText, 2, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge, overrides)
-	}
-	
-	;---------
-	; DESCRIPTION:    Static caller to show a toast for a certain number of seconds, then destroy it.
-	; PARAMETERS:
-	;  toastText      (I,REQ) - The text to show in the toast.
-	;  numSeconds     (I,REQ) - The number of seconds to show the toast for.
-	;  x              (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
-	;                           Defaults to previous position (if set), then right edge of screen.
-	;  y              (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
-	;                           Defaults to previous position (if set), then bottom edge of screen.
-	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be
-	;                           found in .getStyles().
-	; SIDE EFFECTS:   The toast is destroyed when the time expires.
-	;---------
-	showForSeconds(toastText, numSeconds, x := "RIGHT_EDGE", y := "BOTTOM_EDGE", styleOverrides := "") { ; x := VisualWindow.X_RightEdge, y := VisualWindow.Y_BottomEdge
-		idAry := Toast.buildGui(styleOverrides)
-		guiId        := idAry["GUI_ID"]
-		labelVarName := idAry["LABEL_VAR_NAME"]
-		
-		Toast.setLabelText(toastText, labelVarName)
-		Toast.showToast(x, y, guiId)
-		
-		closeFunc := ObjBindMethod(Toast, "closeToast", guiId) ; Create a BoundFunc object of the .closeToast function (with guiId passed to it) for when the timer finishes.
-		SetTimer, % closeFunc, % -numSeconds * 1000
-	}
-
-; ==============================
-; == Public (Persistent) =======
+; == Public ====================
 ; ==============================
 	;---------
 	; DESCRIPTION:    Create a new Toast object.
@@ -135,6 +48,100 @@ class Toast {
 	}
 	
 	;---------
+	; DESCRIPTION:    Wrapper for Toast.showForSeconds for a "short" toast (shown for 1 second) in
+	;                 the bottom-right corner of the screen.
+	; PARAMETERS:
+	;  toastText (I,REQ) - The text to show in the toast.
+	; SIDE EFFECTS:   The toast is destroyed when the time expires.
+	;---------
+	showShort(toastText := "") { ; GDB TODO get rid of toastText parameter and corresponding logic once we get all callers transitioned over
+		if(toastText != "")
+			new Toast(toastText).showForSeconds(1, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
+		else
+			this.showForSeconds(1, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
+	}
+	
+	;---------
+	; DESCRIPTION:    Wrapper for Toast.showForSeconds for a "medium" toast (shown for 2 seconds) in
+	;                 the bottom-right corner of the screen.
+	; PARAMETERS:
+	;  toastText (I,REQ) - The text to show in the toast.
+	; SIDE EFFECTS:   The toast is destroyed when the time expires.
+	;---------
+	showMedium(toastText := "") {
+		if(toastText != "")
+			new Toast(toastText).showForSeconds(2, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
+		else
+			this.showForSeconds(2, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
+	}
+	
+	;---------
+	; DESCRIPTION:    Wrapper for Toast.showForSeconds for a "long" toast (shown for 5 seconds) in
+	;                 the bottom-right corner of the screen.
+	; PARAMETERS:
+	;  toastText (I,REQ) - The text to show in the toast.
+	; SIDE EFFECTS:   The toast is destroyed when the time expires.
+	;---------
+	showLong(toastText := "") {
+		if(toastText != "")
+			new Toast(toastText).showForSeconds(5, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
+		else
+			this.showForSeconds(5, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
+	}
+	
+	; GDB TODO
+	makePersistent() {
+		this.isPersistent := true
+		return this ; Allows callers to chain (i.e. t := new Toast("text").makePersistent())
+	}
+	
+	; GDB TODO - public member/property that determines whether we should pause while the toast is visible (we could use sleep or a timer based on it)
+	; Do like makePersistent - function that allows chaining
+	
+	;---------
+	; DESCRIPTION:    Displays an error toast (dark yellow text, slightly larger) for a short
+	;                 duration (2 seconds).
+	; PARAMETERS:
+	;  problemMessage    (I,REQ) - Text about what the problem is (what happened or weren't we able
+	;                              to do?)
+	;  errorMessage      (I,OPT) - Technical error text - what happened code-wise?
+	;  mitigationMessage (I,OPT) - What we did instead - did we add something to the clipboard since
+	;                              we couldn't link it, for example?
+	;---------
+	showError(problemMessage, errorMessage := "", mitigationMessage := "") { ; GDB TODO figure out what to do about this case - maybe a new child class? The combination logic + style overrides could be functions there.
+		toastText := problemMessage
+		toastText := toastText.appendPiece(errorMessage,      ":`n")
+		toastText := toastText.appendPiece(mitigationMessage, "`n`n")
+		
+		overrides := {}
+		overrides["BACKGROUND_COLOR"] := "000000" ; Black
+		overrides["FONT_COLOR"]       := "CC9900" ; Dark yellow/gold
+		overrides["FONT_SIZE"]        := 22
+		overrides["MARGIN_X"]         := 6
+		overrides["MARGIN_Y"]         := 1
+		overrides["LABEL_STYLES"]     := "Right"
+		
+		new Toast(toastText, overrides).showForSeconds(2, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
+	}
+	
+	;---------
+	; DESCRIPTION:    Show the toast for a certain number of seconds, then hide or destroy it (based
+	;                 on whether it's marked as persistent).
+	; PARAMETERS:
+	;  numSeconds (I,REQ) - The number of seconds to show the toast for.
+	;  x          (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
+	;                       Defaults to previous position (if set), then right edge of screen.
+	;  y          (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
+	;                       Defaults to previous position (if set), then bottom edge of screen.
+	;---------
+	showForSeconds(numSeconds, x := "", y := "") {
+		this.showPersistent(x, y)
+		
+		finishFunc := ObjBindMethod(this, "finishShow")
+		SetTimer, % finishFunc, % -numSeconds * 1000
+	}
+	
+	;---------
 	; DESCRIPTION:    Show this toast indefinitely, until it is hidden or closed.
 	; PARAMETERS:
 	;  x (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
@@ -142,7 +149,7 @@ class Toast {
 	;  y (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
 	;              Defaults to previous position (if set), then bottom edge of screen.
 	;---------
-	showPersistent(x := "", y := "") {
+	show(x := "", y := "") {
 		Gui, % this.guiId ":Default"
 		
 		; Use optional x/y if given.
@@ -161,31 +168,13 @@ class Toast {
 	}
 	
 	;---------
-	; DESCRIPTION:    Show this toast for a certain number of seconds, then hide it.
-	; PARAMETERS:
-	;  numSeconds (I,REQ) - The number of seconds to show the toast for.
-	;  x          (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
-	;                       Defaults to previous position (if set), then right edge of screen.
-	;  y          (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
-	;                       Defaults to previous position (if set), then bottom edge of screen.
-	;---------
-	showPersistentForSeconds(numSeconds, x := "", y := "") {
-		Gui, % this.guiId ":Default"
-		
-		this.showPersistent(x, y)
-		
-		hideFunc := ObjBindMethod(Toast, "hideToast", this.guiId) ; Create a BoundFunc object of the .closeToast function (with guiId passed to it) for when the timer finishes.
-		SetTimer, % hideFunc, % -numSeconds * 1000
-	}
-	
-	;---------
-	; DESCRIPTION:    Change the text for the toast, without hiding it.
+	; DESCRIPTION:    Change the text for the toast.
 	; PARAMETERS:
 	;  toastText (I,REQ) - The text to show in the toast.
 	; NOTES:          Will try to maintain the same position, but toast size will expand to fit text.
 	;---------
 	setText(toastText) {
-		Gui, % this.guiId ":Default"
+		Gui, % this.guiId ":Default" ; GDB TODO revisit which places have to do this - maybe it makes more sense to just do it around actual Gui calls?
 		Toast.setLabelText(toastText, this.labelVarName)
 		Toast.move(this.x, this.y, this.guiId)
 	}
@@ -195,25 +184,20 @@ class Toast {
 	;                 finished with the toast).
 	;---------
 	hide() {
-		; If the gui has already been destroyed, we're done here.
-		if(this.isGuiDestroyed)
+		if(this.isGuiDestroyed) ; Safety check: if the gui has already been destroyed, we're done here.
 			return
 		
-		Gui, % this.guiId ":Default"
-		this.hideToast(this.guiId)
+		this.doHide()
 	}
 	
 	;---------
 	; DESCRIPTION:    Hide and destroy the GUI for this toast.
 	;---------
 	close() {
-		; If the gui has already been destroyed, we're done here.
-		if(this.isGuiDestroyed)
+		if(this.isGuiDestroyed) ; Safety check: if the gui has already been destroyed, we're done here.
 			return
 		
-		Gui, % this.guiId ":Default"
-		this.closeToast(this.guiId)
-		this.isGuiDestroyed := true
+		this.doClose()
 	}
 	
 	
@@ -228,6 +212,7 @@ class Toast {
 	x              := ""
 	y              := ""
 	isGuiDestroyed := false
+	isPersistent   := false ; Whether this is persistent or just single-use.
 	
 	;---------
 	; DESCRIPTION:    Build the toast gui, applying various properties.
@@ -259,7 +244,7 @@ class Toast {
 		setDynamicGlobalVar(labelVarName) ; Since the variable must be global, declare it as such.
 		Gui, Add, Text, % "v" labelVarName " " styles["LABEL_STYLES"]
 		
-		return {"GUI_ID":guiId, "LABEL_VAR_NAME":labelVarName}
+		return {"GUI_ID":guiId, "LABEL_VAR_NAME":labelVarName} ; GDB TODO just set member variables instead of returning an array
 	}
 	
 	;---------
@@ -327,7 +312,7 @@ class Toast {
 	;  toastText    (I,REQ) - The text to show in the toast.
 	;  labelVarName (I,REQ) - The name of the global variable connected to the toast label.
 	;---------
-	setLabelText(toastText, labelVarName) {
+	setLabelText(toastText, labelVarName) { ; GDB TODO replace labelVarName parameter with this.labelVarName
 		toastText := escapeCharUsingRepeat(toastText, "&")
 		
 		; Figure out how big the text control needs to be to fit its contents
@@ -351,21 +336,31 @@ class Toast {
 	}
 	
 	;---------
-	; DESCRIPTION:    Fade out the toast gui, but don't destroy it.
-	; PARAMETERS:
-	;  guiId (I,REQ) - Gui ID (window handle) of the toast gui.
+	; DESCRIPTION:    Fade out the toast gui.
 	;---------
-	hideToast(guiId) {
-		fadeGuiOut(guiId)
+	doHide() {
+		fadeGuiOut(this.guiId)
 	}
 	
 	;---------
 	; DESCRIPTION:    Fade out and destroy the toast gui.
-	; PARAMETERS:
-	;  guiId (I,REQ) - Gui ID (window handle) of the toast gui.
 	;---------
-	closeToast(guiId) {
-		Toast.hideToast(guiId)
-      Gui, Destroy
+	doClose() {
+		this.doHide()
+		Gui, % this.guiId ":Destroy"
+		this.isGuiDestroyed := true
+	}
+	
+	;---------
+	; DESCRIPTION:    Fade out the toast, and if it's not persistent, destroy it.
+	;---------
+	finishShow() {
+		if(this.isGuiDestroyed) ; Safety check: if the gui has already been destroyed, we're done here.
+			return
+		
+		if(this.isPersistent)
+			this.doHide()
+		else
+			this.doClose()
 	}
 }

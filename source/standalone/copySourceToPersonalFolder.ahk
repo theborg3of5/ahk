@@ -20,7 +20,7 @@ if(!showConfirmationPopup(confirmationMessage, "Delete and replace"))
 
 ; Delete existing contents of destination folder
 t := new Toast("Removing existing folders and files from destination...")
-t.showPersistent()
+t.show()
 Loop, Files, %destinationRoot%\*, F ; Files
 	FileDelete, % A_LoopFilePath
 Loop, Files, %destinationRoot%\*, D ; Directories

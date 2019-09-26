@@ -1,4 +1,6 @@
 # New Ideas
+	Add the ability to set a custom message to go with CommonHotkeys.ConfirmExit
+		Possibly wrap it in a function that optionally takes the message too?
 	TableList mods - consider making it a replacement by default (only 1 active mod), only stack with labels
 		Use case: onenote todos, dailies section could be more compact
 	Update Notepad++ AHK documentation stuff to handle properties (with or without [])
@@ -82,6 +84,7 @@
 			iconTester
 			firstSetup (could add, would look nicer for VDI case)
 			colorPicker (trickier - not calling toast directly, but via clipboard set/toast stuff)
+			timer (initial showForSeconds)
 	Could we avoid flickering between .showPersistent() and .setText()?
 		Maybe some way to set position without showing?
 		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?

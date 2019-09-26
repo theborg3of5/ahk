@@ -33,7 +33,7 @@ if(!machineInfo)
 ; DEBUG.popup("Machine Info Selected", machineInfo)
 
 t := new Toast()
-t.showPersistent()
+t.show()
 
 ; Pull the needed values from our selection.
 t.setText("Reading values from selection...")

@@ -24,7 +24,7 @@ if(!getTimerInfo(durationString, labelText))
 
 ; Set up Toast and show initial time
 toastObj := buildTimerToast()
-toastObj.showPersistent(VisualWindow.X_RightEdge, VisualWindow.Y_TopEdge)
+toastObj.showForSeconds(3, VisualWindow.X_RightEdge, VisualWindow.Y_TopEdge)
 
 ; Start ticking once per second
 SetTimer, decrementTimer, 1000
@@ -32,18 +32,17 @@ SetTimer, decrementTimer, 1000
 ; Confirm before exiting with common close hotkey (!+x)
 CommonHotkeys.ConfirmExit := true
 
-; Hide Toast after 3 seconds
-Sleep, 3000 ; Sleep instead of timers so we can block temp-show hotkey until we're hiding
-toastObj.hide()
+; Block until toast hides (3 seconds), so temp-show hotkey can't fire until it's hidden
+Sleep, 3000
 
 return
 
 
 ; Show timer for 3 seconds, then hide it again
 ~^!Space::
-	toastObj.showPersistent()
+	toastObj.show()
 	waitForHotkeyRelease()
-	Sleep, 3000
+	Sleep, 3000 ; Use sleep instead of toastObj.showForSeconds() so toast doesn't hide until the hotkey is released.
 	toastObj.hide()
 return
 
@@ -90,7 +89,7 @@ getTimerInfo(durationString, labelText) {
 buildTimerToast() {
 	displayText := getTimerDisplayText()
 	overrides := getToastStyleOverrides("Right") ; Right-aligned (for displaying time)
-	return new Toast(displayText, overrides)
+	return new Toast(displayText, overrides).makePersistent()
 }
 
 ;---------
@@ -160,5 +159,5 @@ finishTimer() {
 	if(timerLabelText != "")
 		displayText .= ":`n" timerLabelText
 	finishedToast := new Toast(displayText, getToastStyleOverrides("Center"))
-	finishedToast.showPersistent(VisualWindow.X_Centered, VisualWindow.Y_Centered)
+	finishedToast.show(VisualWindow.X_Centered, VisualWindow.Y_Centered)
 }

@@ -297,7 +297,7 @@ class OneNote {
 	getLinkToCurrentPage() {
 		copiedLink := OneNote.getLinkToCurrentParagraph()
 		if(copiedLink = "") {
-			Toast.showError("Could not get paragraph link on clipboard")
+			new ErrorToast("Could not get paragraph link on clipboard").showMedium()
 			return
 		}
 		

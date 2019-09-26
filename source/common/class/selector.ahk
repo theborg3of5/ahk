@@ -316,7 +316,7 @@ class Selector {
 		
 		; Show a warning and fail if we didn't actually manage to load any choices.
 		if(!this.choices.length()) {
-			Toast.showError("Selector: no choices available", "No choices were found in the TableList instance")
+			new ErrorToast("Selector: no choices available", "No choices were found in the TableList instance").showMedium()
 			return false
 		}
 		

@@ -170,7 +170,7 @@ class ActionObjectRedirector {
 		if(this.type = this.Type_Path)
 			return new ActionObjectPath(this.value, this.subType)
 		
-		Toast.showError("Unrecognized type", "ActionObjectRedirector doesn't know what to do with this type: " this.type)
+		new ErrorToast("Unrecognized type", "ActionObjectRedirector doesn't know what to do with this type: " this.type).showMedium()
 		return ""
 	}
 }

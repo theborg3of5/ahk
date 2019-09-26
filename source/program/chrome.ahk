@@ -124,7 +124,7 @@ class Chrome {
 			new Toast("Got link target, opening:`n" filePath).showShort()
 			Run(filePath)
 		} else {
-			Toast.showError("Failed to get link target")
+			new ErrorToast("Failed to get link target").showMedium()
 		}
 	}
 	

@@ -57,7 +57,7 @@ return
 	linkSelectedText() {
 		waitForHotkeyRelease()
 		if(!Hyperlinker.linkSelectedText(clipboard, errorMessage))
-			Toast.showError("Failed to link selected text", errorMessage)
+			new ErrorToast("Failed to link selected text", errorMessage).showMedium()
 	}
 	
 ; Send a (newline-separated) text/URL combo from the clipboard as a link.
@@ -73,7 +73,7 @@ return
 		Send, {Shift Down}{Left %textLen%}{Shift Up}
 		
 		if(!Hyperlinker.linkSelectedText(url, errorMessage))
-			Toast.showError("Failed to link text", errorMessage)
+			new ErrorToast("Failed to link text", errorMessage).showMedium()
 	}
 
 ; Turn clipboard into standard string and send it.

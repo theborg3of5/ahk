@@ -215,7 +215,7 @@ class Config {
 		
 		path := this.programs[name].path
 		if(!FileExist(path)) {
-			Toast.showError("Could not run program: " name, "Path does not exist: " path)
+			new ErrorToast("Could not run program: " name, "Path does not exist: " path).showMedium()
 			return
 		}
 		

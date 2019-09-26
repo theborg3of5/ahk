@@ -100,34 +100,6 @@ class Toast {
 	}
 	
 	;---------
-	; DESCRIPTION:    Displays an error toast (dark yellow text, slightly larger, buttom-right) for
-	;                 a medium duration (2 seconds).
-	; PARAMETERS:
-	;  problemMessage    (I,REQ) - Text about what the problem is (what happened or weren't we able
-	;                              to do?)
-	;  errorMessage      (I,OPT) - Technical error text - what happened code-wise?
-	;  mitigationMessage (I,OPT) - What we did instead - did we add something to the clipboard since
-	;                              we couldn't link it, for example?
-	;---------
-	showError(problemMessage, errorMessage := "", mitigationMessage := "") { ; GDB TODO figure out what to do about this case - maybe a new child class? The combination logic + style overrides could be functions there.
-		toastText := problemMessage
-		toastText := toastText.appendPiece(errorMessage,      ":`n")
-		toastText := toastText.appendPiece(mitigationMessage, "`n`n")
-		
-		overrides := {}
-		overrides["BACKGROUND_COLOR"] := "000000" ; Black
-		overrides["FONT_COLOR"]       := "CC9900" ; Dark yellow/gold
-		overrides["FONT_SIZE"]        := 22
-		overrides["MARGIN_X"]         := 6
-		overrides["MARGIN_Y"]         := 1
-		overrides["LABEL_STYLES"]     := "Right"
-		
-		return new Toast(toastText, overrides).showMedium()
-		
-		; GDB TODO have this return this object
-	}
-	
-	;---------
 	; DESCRIPTION:    Show the toast for a certain number of seconds, then hide or destroy it (based
 	;                 on whether it's marked as persistent).
 	; PARAMETERS:

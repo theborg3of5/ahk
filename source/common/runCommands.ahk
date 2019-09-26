@@ -49,7 +49,7 @@ runCommand(commandToRun := "", workingDirectory := "", stayOpen := false) {
 ; Run as a non-elevated user (since main script typically needs to run as admin).
 runAsUser(path, args := "") {
 	if(!FileExist(path)) {
-		Toast.showError("Could not run path", "Does not exist: " path)
+		new ErrorToast("Could not run path", "Does not exist: " path).showMedium()
 		return
 	}
 	

@@ -58,7 +58,7 @@ setClipboardAndToastError(newClipboardValue, clipLabel, problemMessage, errorMes
 		clipLabel := "value"
 	
 	setClipboard(newClipboardValue)
-	Toast.showError(problemMessage, errorMessage, "Clipboard set to " clipLabel ":`n" clipboard)
+	new ErrorToast(problemMessage, errorMessage, "Clipboard set to " clipLabel ":`n" clipboard).showMedium()
 }
 setClipboard(value) {
 	clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
@@ -79,7 +79,7 @@ toastClipboard(clipLabel, showClipboardValue) {
 		clipLabel := "value"
 	
 	if(clipboard = "") {
-		Toast.showError("Failed to get " clipLabel)
+		new ErrorToast("Failed to get " clipLabel).showMedium()
 	} else {
 		clipMessage := "Clipboard set to " clipLabel
 		if(showClipboardValue)

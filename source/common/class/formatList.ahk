@@ -48,7 +48,7 @@ class FormatList {
 		
 		formattedList := this.getListInFormat(format)
 		if(formattedList = "")
-			Toast.showError("Could not get list", "Format is not gettable: " format)
+			new ErrorToast("Could not get list", "Format is not gettable: " format).showMedium()
 		
 		return formattedList
 	}
@@ -65,7 +65,7 @@ class FormatList {
 			return
 		
 		if(!this.sendListInFormat(format))
-			Toast.showError("Could not send list", "Format is not sendable: " format)
+			new ErrorToast("Could not send list", "Format is not sendable: " format).showMedium()
 	}
 	
 	

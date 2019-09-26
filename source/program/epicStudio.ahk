@@ -171,7 +171,7 @@ class EpicStudio {
 		if(copyWithHotkey("^{Numpad9}")) ; Hotkey to copy code location to clipboard
 			return true
 		
-		Toast.showError("Failed to get code location")
+		new ErrorToast("Failed to get code location").showMedium()
 		return false
 	}
 }

@@ -19,7 +19,7 @@ class ActionObjectBase {
 	; NOTES:          Should be overridden by child class.
 	;---------
 	__New(value) {
-		Toast.showError("ActionObject instance created", "ActionObject is a base class only, use a type-specific child class instead.")
+		new ErrorToast("ActionObject instance created", "ActionObject is a base class only, use a type-specific child class instead.").showMedium()
 		return ""
 	}
 	
@@ -71,7 +71,7 @@ class ActionObjectBase {
 	; NOTES:          Should be overridden by child class.
 	;---------
 	getLink() {
-		Toast.showError("ActionObjectBase.getLink() called directly", ".getLink() is not implemented by this child ActionObject* class")
+		new ErrorToast("ActionObjectBase.getLink() called directly", ".getLink() is not implemented by this child ActionObject* class").showMedium()
 		return ""
 	}
 	;---------
@@ -80,7 +80,7 @@ class ActionObjectBase {
 	; NOTES:          Should be overridden by child class.
 	;---------
 	getLinkWeb() {
-		Toast.showError("ActionObjectBase.getLinkWeb() called directly", ".getLinkWeb() is not implemented by this child ActionObject* class")
+		new ErrorToast("ActionObjectBase.getLinkWeb() called directly", ".getLinkWeb() is not implemented by this child ActionObject* class").showMedium()
 		return ""
 	}
 	;---------
@@ -89,7 +89,7 @@ class ActionObjectBase {
 	; NOTES:          Should be overridden by child class.
 	;---------
 	getLinkEdit() {
-		Toast.showError("ActionObjectBase.getLinkEdit() called directly", ".getLinkEdit() is not implemented by this child ActionObject* class")
+		new ErrorToast("ActionObjectBase.getLinkEdit() called directly", ".getLinkEdit() is not implemented by this child ActionObject* class").showMedium()
 		return ""
 	}
 	
@@ -137,7 +137,7 @@ class ActionObjectBase {
 	;---------
 	doGetLink(callerName) {
 		displayName := "." callerName "()"
-		Toast.showError("ActionObjectBase" displayName " called directly", displayName " is not implemented by this child ActionObject* class")
+		new ErrorToast("ActionObjectBase" displayName " called directly", displayName " is not implemented by this child ActionObject* class").showMedium()
 		return ""
 	}
 }

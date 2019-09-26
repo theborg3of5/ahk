@@ -14,13 +14,13 @@
 		
 		; Show a toast, then hide it after finishing a longer-running action
 		t := new Toast("Running long action")
-		t.showPersistent()
+		t.show()
 		... ; Long action happens
 		t.setText("Next step")
 		... ; Next step happens
 		t.hide() ; Toast is hidden but still exists
 		...
-		t.showPersistent() ; Toast becomes visible again
+		t.show() ; Toast becomes visible again
 		...
 		t.close() ; Toast is destroyed
 */
@@ -135,7 +135,7 @@ class Toast {
 	;                       Defaults to previous position (if set), then bottom edge of screen.
 	;---------
 	showForSeconds(numSeconds, x := "", y := "") {
-		this.showPersistent(x, y)
+		this.show(x, y)
 		
 		finishFunc := ObjBindMethod(this, "finishShow")
 		SetTimer, % finishFunc, % -numSeconds * 1000
@@ -187,7 +187,7 @@ class Toast {
 		if(this.isGuiDestroyed) ; Safety check: if the gui has already been destroyed, we're done here.
 			return
 		
-		this.doHide()
+		fadeGuiOut(this.guiId)
 	}
 	
 	;---------
@@ -197,9 +197,10 @@ class Toast {
 		if(this.isGuiDestroyed) ; Safety check: if the gui has already been destroyed, we're done here.
 			return
 		
-		this.doClose()
+		this.hide()
+		Gui, % this.guiId ":Destroy"
+		this.isGuiDestroyed := true
 	}
-	
 	
 ; ==============================
 ; == Private ===================
@@ -336,31 +337,12 @@ class Toast {
 	}
 	
 	;---------
-	; DESCRIPTION:    Fade out the toast gui.
-	;---------
-	doHide() {
-		fadeGuiOut(this.guiId)
-	}
-	
-	;---------
-	; DESCRIPTION:    Fade out and destroy the toast gui.
-	;---------
-	doClose() {
-		this.doHide()
-		Gui, % this.guiId ":Destroy"
-		this.isGuiDestroyed := true
-	}
-	
-	;---------
 	; DESCRIPTION:    Fade out the toast, and if it's not persistent, destroy it.
 	;---------
 	finishShow() {
-		if(this.isGuiDestroyed) ; Safety check: if the gui has already been destroyed, we're done here.
-			return
-		
 		if(this.isPersistent)
-			this.doHide()
+			this.hide()
 		else
-			this.doClose()
+			this.close()
 	}
 }

@@ -23,7 +23,7 @@ clearTitleFormat() {
 	Gui, Font, norm
 }
 
-; Assumes that the formatting that would apply to the text in question is currently in effect.
+; Assumes that the formatting and default gui that would apply to the text in question is currently in effect.
 getLabelSizeForText(text, ByRef width := "", ByRef height := "") {
 	global ; Needed for the dynamic variable used to reference the text control
 	
@@ -38,7 +38,7 @@ getLabelSizeForText(text, ByRef width := "", ByRef height := "") {
 	GuiControl, Hide, % varName ; GuiControl, Delete not yet implemented, so just hide the temporary control.
 }
 
-; Assumes that the formatting that would apply to the text in question is currently in effect.
+; Assumes that the formatting and default gui that would apply to the text in question is currently in effect.
 getLabelWidthForText(text) {
 	getLabelSizeForText(text, width)
 	return width

@@ -77,9 +77,6 @@
 # Toast
 	Can we find some way for colorPicker to use blocking option?
 		Problem: the toast is buried in clipboard stuff
-	Add some way to auto-sleep until the toast hides itself
-		Use case: when scripts are displaying a result before they exit:
-			timer (initial showForSeconds)
 	Could we avoid flickering between .showPersistent() and .setText()?
 		Maybe some way to set position without showing?
 		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?

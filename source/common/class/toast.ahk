@@ -318,6 +318,7 @@ class Toast {
 	;---------
 	setLabelText(toastText) {
 		toastText := escapeCharUsingRepeat(toastText, "&")
+		Gui, % this.guiId ":Default"
 		
 		; Figure out how big the text control needs to be to fit its contents
 		getLabelSizeForText(toastText, textWidth, textHeight)

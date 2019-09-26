@@ -24,7 +24,8 @@ if(!getTimerInfo(durationString, labelText))
 
 ; Set up Toast and show initial time
 toastObj := buildTimerToast()
-toastObj.showForSeconds(3, VisualWindow.X_RightEdge, VisualWindow.Y_TopEdge)
+toastObj.show(VisualWindow.X_RightEdge, VisualWindow.Y_TopEdge)
+
 
 ; Start ticking once per second
 SetTimer, decrementTimer, 1000
@@ -33,8 +34,7 @@ SetTimer, decrementTimer, 1000
 CommonHotkeys.ConfirmExit := true
 
 ; Block until toast hides (3 seconds), so temp-show hotkey can't fire until it's hidden
-Sleep, 3000
-
+toastObj.blockingOn().showForSeconds(3).blockingOff()
 return
 
 
@@ -89,7 +89,7 @@ getTimerInfo(durationString, labelText) {
 buildTimerToast() {
 	displayText := getTimerDisplayText()
 	overrides := getToastStyleOverrides("Right") ; Right-aligned (for displaying time)
-	return new Toast(displayText, overrides).makePersistent()
+	return new Toast(displayText, overrides).persistentOn()
 }
 
 ;---------

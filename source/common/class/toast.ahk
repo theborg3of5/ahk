@@ -44,11 +44,11 @@ class Toast {
 		this.labelVarName := idAry["LABEL_VAR_NAME"]
 		
 		if(toastText)
-			Toast.setLabelText(toastText, this.labelVarName)
+			this.setLabelText(toastText, this.labelVarName)
 	}
 	
 	;---------
-	; DESCRIPTION:    Wrapper for Toast.showForSeconds for a "short" toast (shown for 1 second) in
+	; DESCRIPTION:    Wrapper for .showForSeconds for a "short" toast (shown for 1 second) in
 	;                 the bottom-right corner of the screen.
 	; PARAMETERS:
 	;  toastText (I,REQ) - The text to show in the toast.
@@ -62,7 +62,7 @@ class Toast {
 	}
 	
 	;---------
-	; DESCRIPTION:    Wrapper for Toast.showForSeconds for a "medium" toast (shown for 2 seconds) in
+	; DESCRIPTION:    Wrapper for .showForSeconds for a "medium" toast (shown for 2 seconds) in
 	;                 the bottom-right corner of the screen.
 	; PARAMETERS:
 	;  toastText (I,REQ) - The text to show in the toast.
@@ -76,7 +76,7 @@ class Toast {
 	}
 	
 	;---------
-	; DESCRIPTION:    Wrapper for Toast.showForSeconds for a "long" toast (shown for 5 seconds) in
+	; DESCRIPTION:    Wrapper for .showForSeconds for a "long" toast (shown for 5 seconds) in
 	;                 the bottom-right corner of the screen.
 	; PARAMETERS:
 	;  toastText (I,REQ) - The text to show in the toast.
@@ -89,7 +89,12 @@ class Toast {
 			this.showForSeconds(5, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
 	}
 	
-	; GDB TODO
+	;---------
+	; DESCRIPTION:    Mark the toast as persistent
+	; RETURNS:        This toast object
+	; NOTES:          This means that the toast will be hidden (rather than destroyed) when we
+	;                 finish showing it on a timer.
+	;---------
 	makePersistent() {
 		this.isPersistent := true
 		return this ; Allows callers to chain (i.e. t := new Toast("text").makePersistent())
@@ -150,8 +155,6 @@ class Toast {
 	;              Defaults to previous position (if set), then bottom edge of screen.
 	;---------
 	show(x := "", y := "") {
-		Gui, % this.guiId ":Default"
-		
 		; Use optional x/y if given.
 		if(x != "")
 			this.x := x
@@ -174,9 +177,8 @@ class Toast {
 	; NOTES:          Will try to maintain the same position, but toast size will expand to fit text.
 	;---------
 	setText(toastText) {
-		Gui, % this.guiId ":Default" ; GDB TODO revisit which places have to do this - maybe it makes more sense to just do it around actual Gui calls?
-		Toast.setLabelText(toastText, this.labelVarName)
-		Toast.move(this.x, this.y, this.guiId)
+		this.setLabelText(toastText, this.labelVarName)
+		this.move(this.x, this.y, this.guiId)
 	}
 	
 	;---------
@@ -212,7 +214,7 @@ class Toast {
 	labelVarName   := ""
 	x              := ""
 	y              := ""
-	isGuiDestroyed := false
+	isGuiDestroyed := false ; To make sure we're not trying to hide/close an already-destroyed toast.
 	isPersistent   := false ; Whether this is persistent or just single-use.
 	
 	;---------
@@ -235,7 +237,7 @@ class Toast {
 		Gui, % "+E" WS_EX_CLICKTHROUGH
 		
 		; Set formatting options
-		styles := Toast.getStyles(styleOverrides)
+		styles := this.getStyles(styleOverrides)
 		Gui, Color, % styles["BACKGROUND_COLOR"]
 		Gui, Font, % "c" styles["FONT_COLOR"] " s" styles["FONT_SIZE"], % styles["FONT_NAME"]
 		Gui, Margin, % styles["MARGIN_X"], % styles["MARGIN_Y"]
@@ -290,6 +292,7 @@ class Toast {
 			y := VisualWindow.Y_BottomEdge
 		origDetectSetting := setDetectHiddenWindows("On")
 		
+		Gui, % this.guiId ":Default"
 		Gui, +LastFound ; Needed to identify the window on next line
 		titleString := getIdTitleStringForWindow("") ; Blank title string input for last found window
 		
@@ -332,7 +335,7 @@ class Toast {
 	;  guiId (I,REQ) - Window handle for the toast gui.
 	;---------
 	showToast(x, y, guiId) {
-		Toast.move(x, y, guiId)
+		this.move(x, y, guiId)
 		fadeGuiIn(guiId)
 	}
 	

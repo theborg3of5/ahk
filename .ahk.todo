@@ -1,8 +1,8 @@
 # New Ideas
 	Add the ability to set a custom message to go with CommonHotkeys.ConfirmExit
 		Possibly wrap it in a function that optionally takes the message too?
-	TableList mods - consider making it a replacement by default (only 1 active mod), only stack with labels
-		Use case: onenote todos, dailies section could be more compact
+		Use cases:
+			Timer quit message
 	Update Notepad++ AHK documentation stuff to handle properties (with or without [])
 		Properties with parameters, too - maybe just treat [] the same as ()?
 	Figure out what to do about cleanupPath() dropping (valid) quotes from the end of URLs
@@ -10,11 +10,6 @@
 			How to sense? Using ActionObjectPath?
 		Should we integrate this into ActionObjectPath instead? Is that overkill?
 		Another option: a new Path class, that ActionObjectPath just uses?
-	With new discovery about chaining constructors to single call afterwards (i.e. 'data := new Selector("filepath").selectGui()'), do we still need the static side of Toast?
-		Would it be cleaner to just have callers use 'new Toast().*' instead?
-			Ideally, new Toast(text).* would be even better - clear what the toast is, then how long we're showing it for
-		Places using newToast().*
-			media.toggleMute()
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:
@@ -58,14 +53,9 @@
 		Telegram - left monitor, top or bottom depending on machine
 		Pidgin window - top-right of left monitor
 	
-# Selector/TableList
-	Dynamically resize abbreviation column based on widest value?
-		To allow longer abbreviations
-		Is that going to get weird with SelectorGui+FlexTable interactions?
-	Consider adding a way to match on some other column than just NAME and ABBREV
-		Use cases
-			Transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
-				Alternatively, build out environments in Config (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.
+# TableList
+	TableList mods - consider making it a replacement by default (only 1 active mod), only stack with labels
+		Use case: onenote todos, dailies section could be more compact
 	Build a way to auto-reformat .tl files?
 		Fix widths so they work nicely
 			Will need to have a tab width parameter/argument somewhere for this (maybe in _constants or config?)
@@ -73,6 +63,15 @@
 	Consider reading in more .tl/.tls files at startup and caching them
 		Alternatively, cache them after the first use?
 			Basically static variables, like we're doing in Hyperlinker
+	
+# Selector
+	Dynamically resize abbreviation column based on widest value?
+		To allow longer abbreviations
+		Is that going to get weird with SelectorGui+FlexTable interactions?
+	Consider adding a way to match on some other column than just NAME and ABBREV
+		Use cases
+			Transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
+				Alternatively, build out environments in Config (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.
 	
 # Toast
 	Can we find some way for colorPicker to use blocking option?

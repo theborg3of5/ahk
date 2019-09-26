@@ -37,13 +37,9 @@ class Toast {
 	;  toastText      (I,OPT) - The text to show in the toast.
 	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be
 	;                           found in .getStyles().
-	; RETURNS:        A new instance of this class.
 	;---------
 	__New(toastText := "", styleOverrides := "") {
-		this.buildGui(styleOverrides)
-		
-		if(toastText)
-			this.setLabelText(toastText)
+		this.init(toastText, styleOverrides)
 	}
 	
 	;---------
@@ -79,6 +75,7 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Wrapper for .showForSeconds for a "short" toast (shown for 1 second) in
 	;                 the bottom-right corner of the screen.
+	; RETURNS:        this
 	;---------
 	showShort() {
 		this.showForSeconds(1, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
@@ -87,6 +84,7 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Wrapper for .showForSeconds for a "medium" toast (shown for 2 seconds) in
 	;                 the bottom-right corner of the screen.
+	; RETURNS:        this
 	;---------
 	showMedium() {
 		this.showForSeconds(2, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
@@ -95,6 +93,7 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Wrapper for .showForSeconds for a "long" toast (shown for 5 seconds) in
 	;                 the bottom-right corner of the screen.
+	; RETURNS:        this
 	;---------
 	showLong() {
 		this.showForSeconds(5, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
@@ -123,7 +122,7 @@ class Toast {
 		overrides["MARGIN_Y"]         := 1
 		overrides["LABEL_STYLES"]     := "Right"
 		
-		new Toast(toastText, overrides).showMedium()
+		return new Toast(toastText, overrides).showMedium()
 		
 		; GDB TODO have this return this object
 	}
@@ -218,6 +217,20 @@ class Toast {
 	isGuiDestroyed := false ; To make sure we're not trying to hide/close an already-destroyed toast.
 	isPersistent   := false ; Whether this is persistent or just single-use.
 	isBlocking     := false ; Whether showing on a timer should block the caller until it hides.
+	
+	;---------
+	; DESCRIPTION:    Set up the Toast - build the gui, set the text (if given).
+	; PARAMETERS:
+	;  toastText      (I,OPT) - The text to show in the toast.
+	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be
+	;                           found in .getStyles().
+	;---------
+	init(toastText := "", styleOverrides := "") {
+		this.buildGui(styleOverrides)
+		
+		if(toastText)
+			this.setLabelText(toastText)
+	}
 	
 	;---------
 	; DESCRIPTION:    Build the toast gui, applying various properties.

@@ -14,7 +14,7 @@
 		new Toast("5-second timer toast!").showLong()
 		
 		; Show a toast, then hide it after finishing a longer-running action
-		t := new Toast("Running long action").makePersistent() ; Make it persistent so showing it on a timer doesn't destroy it
+		t := new Toast("Running long action").persistentOn() ; Make it persistent so showing it on a timer doesn't destroy it
 		t.show()
 		... ; Long action happens
 		t.setText("Next step")
@@ -47,17 +47,35 @@ class Toast {
 	}
 	
 	;---------
-	; DESCRIPTION:    Mark the toast as persistent
+	; DESCRIPTION:    Turn persistence on/off
 	; RETURNS:        this
-	; NOTES:          This means that the toast will be hidden (rather than destroyed) when we
+	; NOTES:          Persistence means that the toast will be hidden (rather than destroyed) when we
 	;                 finish showing it on a timer.
 	;---------
-	makePersistent() {
+	persistentOn() {
 		this.isPersistent := true
+		return this
+	}
+	persistentOff() {
+		this.isPersistent := false
 		return this
 	}
 	
 	;---------
+	; DESCRIPTION:    Turn blocking on/off
+	; RETURNS:        this
+	; NOTES:          Blocking means that we'll sleep the calling script while the toast is showing
+	;                 on a timer, rather than setting a timer and allowing execution to continue.
+	;---------
+	blockingOn() {
+		this.isBlocking := true
+		return this
+	}
+	blockingOff() {
+		this.isBlocking := false
+		return this
+	}
+	
 	;---------
 	; DESCRIPTION:    Wrapper for .showForSeconds for a "short" toast (shown for 1 second) in
 	;                 the bottom-right corner of the screen.
@@ -81,9 +99,6 @@ class Toast {
 	showLong() {
 		this.showForSeconds(5, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
 	}
-	
-	; GDB TODO - public member/property that determines whether we should pause while the toast is visible (we could use sleep or a timer based on it)
-	; Do like makePersistent - function that allows chaining
 	
 	;---------
 	; DESCRIPTION:    Displays an error toast (dark yellow text, slightly larger, buttom-right) for
@@ -109,6 +124,8 @@ class Toast {
 		overrides["LABEL_STYLES"]     := "Right"
 		
 		new Toast(toastText, overrides).showMedium()
+		
+		; GDB TODO have this return this object
 	}
 	
 	;---------
@@ -120,10 +137,21 @@ class Toast {
 	;                       Defaults to previous position (if set), then right edge of screen.
 	;  y          (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
 	;                       Defaults to previous position (if set), then bottom edge of screen.
+	; RETURNS:        this
 	;---------
 	showForSeconds(numSeconds, x := "", y := "") {
 		this.show(x, y)
 		
+		numMS := numSeconds * 1000
+		if(this.isBlocking) {
+			Sleep, % numMS
+			this.finishShow()
+		} else {
+			finishFunc := ObjBindMethod(this, "finishShow")
+			SetTimer, % finishFunc, % -numMS
+		}
+		
+		return this
 	}
 	
 	;---------
@@ -133,21 +161,25 @@ class Toast {
 	;              Defaults to previous position (if set), then right edge of screen.
 	;  y (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
 	;              Defaults to previous position (if set), then bottom edge of screen.
+	; RETURNS:        this
 	;---------
 	show(x := "", y := "") {
 		this.move(x, y)
 		fadeGuiIn(this.guiId)
+		return this
 	}
 	
 	;---------
 	; DESCRIPTION:    Change the text for the toast.
 	; PARAMETERS:
 	;  toastText (I,REQ) - The text to show in the toast.
+	; RETURNS:        this
 	; NOTES:          Will try to maintain the same position, but toast size will expand to fit text.
 	;---------
 	setText(toastText) {
 		this.setLabelText(toastText)
 		this.move()
+		return this
 	}
 	
 	;---------
@@ -185,6 +217,7 @@ class Toast {
 	y              := ""
 	isGuiDestroyed := false ; To make sure we're not trying to hide/close an already-destroyed toast.
 	isPersistent   := false ; Whether this is persistent or just single-use.
+	isBlocking     := false ; Whether showing on a timer should block the caller until it hides.
 	
 	;---------
 	; DESCRIPTION:    Build the toast gui, applying various properties.

@@ -44,8 +44,6 @@ Loop, Files, *, FDR ; All files and folder, recursing into folders
 		FileCopy, % A_LoopFilePath, % destinationPath
 }
 
-t.setText("Done!")
-Sleep, 2000
-t.close()
+t.setText("Done!").blockingOn().showMedium() ; Destroys toast since it's not persistent
 
 ExitApp

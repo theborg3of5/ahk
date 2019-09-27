@@ -22,9 +22,6 @@
 			WindowActions > actionOverrides
 		Include square brackets on properties (that don't take parameters)?
 	Make dbpop handle commas within quotes/parens?
-	Could we do something more consistent for some of the social windows (Telegram, Teams, etc.), where we can somehow just send an escape keystroke instead of closing?
-		Consistent hotkey (backtick, perhaps)?
-		Add a double-escape window action for closing (for use in these cases), instead of just closing on first Escape (probably a pass-through hotkey with ~)
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
 		Could take into account whether there would be only 1 small word moved down
 		Could handle multiple line breaks

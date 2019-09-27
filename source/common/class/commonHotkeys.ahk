@@ -30,35 +30,34 @@ class CommonHotkeys {
 	}
 	
 	;---------
-	; DESCRIPTION:    Determines whether we will prompt the user to confirm exiting with the common
-	;                 exit hotkey (!+x).
+	; DESCRIPTION:    Turn on/off whether to prompt the user to confirm when exiting with the common exit hotkey (!+x).
 	;---------
-	ConfirmExit {
-		get {
-			return CommonHotkeys._confirmExit
-		}
-		set {
-			CommonHotkeys._confirmExit := value
-		}
+	ConfirmExitOn(message := "") {
+		CommonHotkeys._confirmExit := true
+		if(message != "")
+			CommonHotkeys._confirmExitMessage := message
 	}
+	ConfirmExitOff() {
+		CommonHotkeys._confirmExit := false
+	}
+	
 	;---------
-	; DESCRIPTION:    Determines whether the script respects the common suspend hotkey (!#x) or not.
-	; SIDE EFFECTS:   Will actually turn the hotkey on or off depending on the value.
+	; DESCRIPTION:    Turn on/off whether to ignore the common suspend hotkey (!#x) or not.
+	; SIDE EFFECTS:   Will actually turn the hotkey on or off.
 	;---------
-	NoSuspend {
-		get {
-			return CommonHotkeys._noSuspend
-		}
-		set {
-			if(CommonHotkeys._noSuspend = value)
-				return ; No change
-			
-			CommonHotkeys._noSuspend := value
-			if(value)
-				Hotkey, !#x, Off
-			else
-				Hotkey, !#x, On
-		}
+	NoSuspendOn() {
+		if(CommonHotkeys._noSuspend)
+			return
+		
+		CommonHotkeys._noSuspend := true
+		Hotkey, !#x, Off
+	}
+	NoSuspendOff() {
+		if(!CommonHotkeys._noSuspend)
+			return
+		
+		CommonHotkeys._noSuspend := false
+		Hotkey, !#x, On
 	}
 	
 	;---------
@@ -86,10 +85,11 @@ class CommonHotkeys {
 ; ==============================
 ; == Private ===================
 ; ==============================
-	static _scriptType  := "" ; Type of script, from CommonHotkeys.ScriptType_* constants
-	static _trayInfo    := "" ; Reference to the script's ScriptTrayInfo object
-	static _confirmExit := false ; Whether to confirm before exiting
-	static _noSuspend   := false ; Whether the suspend hotkey is suppressed
+	static _scriptType         := "" ; Type of script, from CommonHotkeys.ScriptType_* constants
+	static _trayInfo           := "" ; Reference to the script's ScriptTrayInfo object
+	static _confirmExit        := false ; Whether to confirm before exiting
+	static _confirmExitMessage := "Are you sure you want to exit this script?" ; Message to show when confirming an exit based on _confirmExit
+	static _noSuspend          := false ; Whether the suspend hotkey is suppressed
 	
 	;---------
 	; DESCRIPTION:    Apply the basic "set" of hotkeys matching the script's type.
@@ -118,8 +118,8 @@ class CommonHotkeys {
 			Hotkey, !+r, CommonHotkeys_doReload ; Main only, it replaces the sub scripts by running them again.
 		if(CommonHotkeys.IsStandalone) {
 			; Reload on save if editing the script in question
-			areEditingThisScript := ObjBindMethod(CommonHotkeys, "areEditingThisScript")
-			Hotkey, If, % areEditingThisScript
+			isEditingThisScript := ObjBindMethod(CommonHotkeys, "isEditingThisScript")
+			Hotkey, If, % isEditingThisScript
 			Hotkey, ~^s, CommonHotkeys_doReload
 			Hotkey, If ; Clear condition
 		}
@@ -147,7 +147,7 @@ class CommonHotkeys {
 	doExit() {
 		; Confirm exiting if that's turned on.
 		if(CommonHotkeys._confirmExit) {
-			if(!showConfirmationPopup("Are you sure you want to exit this script?"))
+			if(!showConfirmationPopup(CommonHotkeys._confirmExitMessage))
 				return
 		}
 		
@@ -201,7 +201,7 @@ class CommonHotkeys {
 	; RETURNS:        true if the script is currently open in an active Notepad++ window,
 	;                 false otherwise.
 	;---------
-	areEditingThisScript() {
+	isEditingThisScript() {
 		if(!WinActive("ahk_class Notepad++"))
 			return false
 		

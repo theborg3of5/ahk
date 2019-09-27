@@ -1,8 +1,4 @@
 # New Ideas
-	Add the ability to set a custom message to go with CommonHotkeys.ConfirmExit
-		Possibly wrap it in a function that optionally takes the message too?
-		Use cases:
-			Timer quit message
 	Update Notepad++ AHK documentation stuff to handle properties (with or without [])
 		Properties with parameters, too - maybe just treat [] the same as ()?
 	Figure out what to do about cleanupPath() dropping (valid) quotes from the end of URLs

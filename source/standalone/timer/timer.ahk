@@ -6,7 +6,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 trayInfo := new ScriptTrayInfo("AHK: Timer", "hourglass.ico")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone, trayInfo)
-CommonHotkeys.NoSuspend := true
+CommonHotkeys.NoSuspendOn()
 
 global toastObj
 global durationObj
@@ -31,7 +31,7 @@ toastObj.show(VisualWindow.X_RightEdge, VisualWindow.Y_TopEdge)
 SetTimer, decrementTimer, 1000
 
 ; Confirm before exiting with common close hotkey (!+x)
-CommonHotkeys.ConfirmExit := true
+CommonHotkeys.ConfirmExitOn("Stop the timer and exit?")
 
 ; Block until toast hides (3 seconds), so temp-show hotkey can't fire until it's hidden
 toastObj.blockingOn().showForSeconds(3).blockingOff()
@@ -147,7 +147,7 @@ finishTimer() {
 	toastObj.close()
 	
 	; Stop requiring confirmation to exit
-	CommonHotkeys.ConfirmExit := false
+	CommonHotkeys.ConfirmExitOff()
 	
 	; Play a sound to call out that time is up.
 	finishedSoundFile := Config.replacePathTags("<WINDOWS>\media\Windows Hardware Fail.wav")

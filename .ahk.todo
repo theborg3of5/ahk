@@ -14,13 +14,13 @@
 				Would require a mapping from window name to class where function lives
 			Have programs that need special handling call into the logic themselves and handle special logic
 	Standardize how we format & structure classes
-		Capitalization (public vs private)
+		Capitalization (Public vs _private members, Public vs private functions)
 		Startup/default values
 			Selector > guiSettings
 			Hyperlinker > windows
 			Toast > styles
 			WindowActions > actionOverrides
-		Square brackets on properties (that don't take parameters)
+		Include square brackets on properties (that don't take parameters)?
 	Make dbpop handle commas within quotes/parens?
 	Could we do something more consistent for some of the social windows (Telegram, Teams, etc.), where we can somehow just send an escape keystroke instead of closing?
 		Consistent hotkey (backtick, perhaps)?
@@ -56,9 +56,6 @@
 		Fix widths so they work nicely
 			Will need to have a tab width parameter/argument somewhere for this (maybe in _constants or config?)
 		Take into account overflow (across columns), with next field being empty or placeholder'd
-	Consider reading in more .tl/.tls files at startup and caching them
-		Alternatively, cache them after the first use?
-			Basically static variables, like we're doing in Hyperlinker
 	
 # Selector
 	Dynamically resize abbreviation column based on widest value?

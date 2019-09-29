@@ -52,5 +52,5 @@
 ; ==============================
 ; == Startup ===================
 ; ==============================
-Config.init("local\settings.ini", "windows.tl", "paths.tl", "programs.tl", "games.tl", "ahkPrivate\privates.tl")
+Config.init("settings.ini", "windows.tl", "paths.tl", "programs.tl", "games.tl", "privates.tl")
 WindowActions.init("windowActions.tl")

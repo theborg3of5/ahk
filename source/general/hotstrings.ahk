@@ -55,6 +55,7 @@
 	::overrideable::overridable
 	::Tapestery::Tapestry
 	::InBasket::In Basket
+	::flase::false
 }
 
 { ; Expansions.

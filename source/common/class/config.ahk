@@ -26,15 +26,14 @@ class Config {
 	;---------
 	; DESCRIPTION:    Initialize this static config class.
 	; PARAMETERS:
-	;  settingsFile (I,REQ) - 
-	;  windowsFile  (I,REQ) - 
-	;  pathsFile    (I,REQ) - 
-	;  programsFile (I,REQ) - 
-	;  gamesFile    (I,REQ) - 
-	;  privatesFile (I,REQ) - 
-	; RETURNS:        
-	; SIDE EFFECTS:   
-	; NOTES:          
+	;  settingsFile (I,REQ) - Name or path of the settings INI file.
+	;  windowsFile  (I,REQ) - Name or path of the windows TL file.
+	;  pathsFile    (I,REQ) - Name or path of the paths TL file.
+	;  programsFile (I,REQ) - Name or path of the programs TL file.
+	;  gamesFile    (I,REQ) - Name or path of the games TL file.
+	;  privatesFile (I,REQ) - Name or path of the privates TL file.
+	; NOTES:          All names must be found in the config folder in the root of this repository,
+	;                 as found by file.ahk > findConfigFilePath().
 	;---------
 	init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile) {
 		; All config files are expected to live in config/ folder under the root of this repo.
@@ -68,13 +67,21 @@ class Config {
 		this.initDone := true
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Whether this class has been initialized. Used to not show debug popups when
+	;                 it's not initialized, to cut down on popups on restart in high-traffic areas.
+	;---------
 	initialized {
 		get {
 			return this.initDone
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    The private information from the privates file from initialization.
+	; PARAMETERS:
+	;  key(I,REQ) - The key to the bit of private info you want.
+	;---------
 	private[key] {
 		get {
 			if(!key)
@@ -82,16 +89,28 @@ class Config {
 			return this.privates[key]
 		}
 	}
+	;---------
+	; DESCRIPTION:    Replace any tags matching private keys, with those corresponding private values.
+	; PARAMETERS:
+	;  inputString (I,REQ) - The string to search and replace within.
+	; RETURNS:        The updated string
+	;---------
 	replacePrivateTags(inputString) {
 		return inputString.replaceTags(this.privates)
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Which machine we're configured to act as, from the Machine_* constants in this class.
+	;---------
 	machine {
 		get {
 			return this.settings["MACHINE"]
 		}
 	}
+	;---------
+	; DESCRIPTION:    Convenience functions for checking whether we're currently a certain machine.
+	; RETURNS:        true if we are the machine in question, false otherwise.
+	;---------
 	machineIsWorkLaptop {
 		get {
 			return (this.machine = Config.Machine_WorkLaptop)
@@ -113,11 +132,18 @@ class Config {
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    Which context we're configured to act as, from the Context_* constants in this class.
+	;---------
 	context {
 		get {
 			return this.settings["CONTEXT"]
 		}
 	}
+	;---------
+	; DESCRIPTION:    Convenience functions for checking whether we're currently in a certain context
+	; RETURNS:        true if we are in the context in question, false otherwise.
+	;---------
 	contextIsWork {
 		get {
 			return (this.context = Config.Context_Work)
@@ -129,6 +155,9 @@ class Config {
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    The name of the media player to use (from the NAME column in mediaPlayers.tls).
+	;---------
 	mediaPlayer {
 		get {
 			return this.settings["MEDIA_PLAYER"]
@@ -138,13 +167,26 @@ class Config {
 			IniWrite, % value, % this.settingsINIPath, % "Main", % "MEDIA_PLAYER"
 		}
 	}
+	;---------
+	; DESCRIPTION:    Whether the named media player is what we're configured to use.
+	; PARAMETERS:
+	;  mediaPlayerName (I/O/IO,REQ/OPT) - 
+	; RETURNS:        true if we're configured to use the media player, false otherwise.
+	;---------
 	isMediaPlayer(mediaPlayerName) {
 		return (this.settings["MEDIA_PLAYER"] = mediaPlayerName)
 	}
+	;---------
+	; DESCRIPTION:    Check whether a window for the current media player exists.
+	; RETURNS:        true if it does exist, false otherwise.
+	;---------
 	doesMediaPlayerExist() {
 		player := this.settings["MEDIA_PLAYER"]
 		return this.doesWindowExist(player)
 	}
+	;---------
+	; DESCRIPTION:    Run the currently configured media player.
+	;---------
 	runMediaPlayer() {
 		player := this.settings["MEDIA_PLAYER"]
 		if(player) {
@@ -155,6 +197,11 @@ class Config {
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    Return the WindowInfo instance corresponding to the provided name.
+	; PARAMETERS:
+	;  name (I,REQ) - The name of the window to retrieve info for.
+	;---------
 	windowInfo[name] {
 		get {
 			if(!name)
@@ -162,12 +209,30 @@ class Config {
 			return this.windows[name].clone()
 		}
 	}
+	;---------
+	; DESCRIPTION:    Check whether the named window is currently active.
+	; PARAMETERS:
+	;  name (I,REQ) - Name of the window to check for.
+	; RETURNS:        true if it's active, false otherwise.
+	;---------
 	isWindowActive(name) {
 		return WinActive(this.windowInfo[name].titleString)
 	}
+	;---------
+	; DESCRIPTION:    Check whether the named window currently exists.
+	; PARAMETERS:
+	;  name (I,REQ) - Name of the window to check for.
+	; RETURNS:        true if it exists, false otherwise.
+	;---------
 	doesWindowExist(name) {
 		return WinExist(this.windowInfo[name].titleString)
 	}
+	;---------
+	; DESCRIPTION:    Find the WindowInfo instance that matches the specified window.
+	; PARAMETERS:
+	;  titleString (I,OPT) - Title string that identifies the window in question. Defaults to the active window.
+	; RETURNS:        The WindowInfo instance matching the specified window.
+	;---------
 	findWindowInfo(titleString := "A") {
 		exe      := WinGet("ProcessName", titleString)
 		ahkclass := WinGetClass(titleString)
@@ -200,11 +265,22 @@ class Config {
 		
 		return bestMatch.clone() ; Handles "" fine ("".clone() = "")
 	}
+	;---------
+	; DESCRIPTION:    Find the name of the specified window, if a WindowInfo instance exists.
+	; PARAMETERS:
+	;  titleString (I,OPT) - Title string that identifies the window in question. Defaults to the active window.
+	; RETURNS:        The NAME for the matched WindowInfo instance.
+	;---------
 	findWindowName(titleString := "A") {
 		winInfo := this.findWindowInfo(titleString)
 		return winInfo.name
 	}
 	
+	;---------
+	; DESCRIPTION:    A particular path from this class.
+	; PARAMETERS:
+	;  key (I,REQ) - The key for the path you want.
+	;---------
 	path[key] {
 		get {
 			if(!key)
@@ -212,10 +288,22 @@ class Config {
 			return this.paths[key]
 		}
 	}
+	;---------
+	; DESCRIPTION:    Replace any tags matching path keys, with those corresponding paths.
+	; PARAMETERS:
+	;  inputString (I,REQ) - The string to search and replace within.
+	; RETURNS:        The updated string
+	;---------
 	replacePathTags(inputPath) {
 		return inputPath.replaceTags(this.paths)
 	}
 	
+	;---------
+	; DESCRIPTION:    Activate the window matching the specified name, running it if it doesn't yet exist.
+	; PARAMETERS:
+	;  name    (I,REQ) - The name of the window to activate.
+	;  runArgs (I,OPT) - If the window doesn't currently exist, we'll run the corresponding program with these parameters.
+	;---------
 	activateProgram(name, runArgs := "") { ; runArgs are only used if the program's window doesn't already exist (and we're therefore running it).
 		waitForHotkeyRelease()
 		
@@ -224,6 +312,12 @@ class Config {
 		else ; If it doesn't exist yet, we need to run the executable to make it happen.
 			this.runProgram(name, runArgs)
 	}
+	;---------
+	; DESCRIPTION:    Run the program matching the specified name.
+	; PARAMETERS:
+	;  name (I,REQ) - The name of the program to run.
+	;  args (I,OPT) - The arguments to run the program with.
+	;---------
 	runProgram(name, args := "") {
 		waitForHotkeyRelease()
 		
@@ -236,6 +330,12 @@ class Config {
 		runAsUser(path, args)
 	}
 	
+	;---------
+	; DESCRIPTION:    Check whether the specified window is a game (as identified in the games file passed in).
+	; PARAMETERS:
+	;  titleString (I,OPT) - Title string that identifies the window in question. Defaults to the active window.
+	; RETURNS:        true if the specified window is a game, false otherwise.
+	;---------
 	windowIsGame(titleString := "A") {
 		ahkExe := WinGet("ProcessName", titleString)
 		if(!ahkExe)
@@ -262,7 +362,12 @@ class Config {
 	static games    := [] ; [{NAME:name, EXE:exe}]
 	static privates := {} ; {KEY: VALUE}
 	
-	
+	;---------
+	; DESCRIPTION:    Read in and store the contents of the privates file.
+	; PARAMETERS:
+	;  filePath (I,REQ) - Path to the file to read in.
+	; RETURNS:        The compiled array of private bits.
+	;---------
 	loadPrivates(filePath) {
 		privatesAry := new TableList(filePath).getColumnByColumn("VALUE", "KEY")
 		
@@ -270,6 +375,12 @@ class Config {
 		return privatesAry
 	}
 	
+	;---------
+	; DESCRIPTION:    Read in and store the contents of the settings file.
+	; PARAMETERS:
+	;  filePath (I,REQ) - Path to the file to read in.
+	; RETURNS:        The compiled array of settings.
+	;---------
 	loadSettings(filePath) {
 		this.settingsINIPath := filePath
 		
@@ -282,6 +393,12 @@ class Config {
 		return settings
 	}
 	
+	;---------
+	; DESCRIPTION:    Read in and store the contents of the windows file.
+	; PARAMETERS:
+	;  filePath (I,REQ) - Path to the file to read in.
+	; RETURNS:        The compiled array of WindowInfo instances.
+	;---------
 	loadWindows(filePath) {
 		windowsTable := new TableList(filePath).getTable()
 		
@@ -296,6 +413,12 @@ class Config {
 		return windows
 	}
 	
+	;---------
+	; DESCRIPTION:    Read in and store the contents of the paths file.
+	; PARAMETERS:
+	;  filePath (I,REQ) - Path to the file to read in.
+	; RETURNS:        The compiled array of paths.
+	;---------
 	loadPaths(filePath) {
 		pathsAry := new TableList(filePath).getColumnByColumn("PATH", "KEY")
 		
@@ -319,7 +442,11 @@ class Config {
 		; DEBUG.popupEarly("Config.loadPaths","Finish", "Paths",pathsAry)
 		return pathsAry
 	}
-	
+	;---------
+	; DESCRIPTION:    Build a hard-coded array of KEY => PATH pairs that can be used to replace
+	;                 strings (and will also be applied to other paths as we read them in).
+	; RETURNS:        Array of path tags, {KEY => PATH}
+	;---------
 	getSystemPathTags() {
 		tags := {}
 		
@@ -341,6 +468,12 @@ class Config {
 		return tags
 	}
 	
+	;---------
+	; DESCRIPTION:    Read in and store the contents of the programs file.
+	; PARAMETERS:
+	;  filePath (I,REQ) - Path to the file to read in.
+	; RETURNS:        The compiled array of ProgramInfo instances.
+	;---------
 	loadPrograms(filePath) {
 		programsTable := new TableList(filePath).getRowsByColumn("NAME", "MACHINE")
 		; DEBUG.popupEarly("Config","loadPrograms", "Unique table",programsTable)
@@ -354,10 +487,25 @@ class Config {
 		return programs
 	}
 	
+	;---------
+	; DESCRIPTION:    Read in and store the contents of the games file.
+	; PARAMETERS:
+	;  filePath (I,REQ) - Path to the file to read in.
+	; RETURNS:        The compiled array of games arrays.
+	;---------
 	loadGames(filePath) {
 		return new TableList(filePath).getTable()
 	}
 	
+	;---------
+	; DESCRIPTION:    Check whether the provided string contains a search string, with a specified match method.
+	; PARAMETERS:
+	;  haystack (I,REQ) - The string to search within.
+	;  needle   (I,REQ) - The string to search for.
+	;  method   (I,OPT) - The method to use when searching, from TitleContains_* constants in this class.
+	; RETURNS:        For TitleContains_Any, the position where we found the match. For everything
+	;                 else, true/false for whether we found a match.
+	;---------
 	matchesWithMethod(haystack, needle, method := "ANY") { ; method := Config.TitleContains_Any
 		if(method = Config.TitleContains_Any)
 			return haystack.contains(needle)

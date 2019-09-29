@@ -6,9 +6,10 @@
 
 class CommonHotkeys {
 
-; ==============================
-; == Public ====================
-; ==============================
+; ====================================================================================================
+; ============================================== PUBLIC ==============================================
+; ====================================================================================================
+	
 	; Different "types" of scripts, which get different sets of hotkeys
 	static ScriptType_Main       := 1 ; Main script
 	static ScriptType_Sub        := 2 ; Standalone scripts that the main script starts and that run alongside the main script
@@ -82,9 +83,10 @@ class CommonHotkeys {
 	}
 	
 	
-; ==============================
-; == Private ===================
-; ==============================
+; ====================================================================================================
+; ============================================== PRIVATE =============================================
+; ====================================================================================================
+	
 	static _scriptType         := "" ; Type of script, from CommonHotkeys.ScriptType_* constants
 	static _trayInfo           := "" ; Reference to the script's ScriptTrayInfo object
 	static _confirmExit        := false ; Whether to confirm before exiting

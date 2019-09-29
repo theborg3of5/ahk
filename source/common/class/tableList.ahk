@@ -204,10 +204,11 @@
 */
 
 class TableList {
-
-; ==============================
-; == Public ====================
-; ==============================
+	
+; ====================================================================================================
+; ============================================== PUBLIC ==============================================
+; ====================================================================================================
+	
 	;---------
 	; DESCRIPTION:    Create a new TableList instance.
 	; PARAMETERS:
@@ -239,6 +240,18 @@ class TableList {
 		; Apply any automatic filters.
 		For _,filter in TableList.autoFilters
 			this.filterByColumn(filter["COLUMN"], filter["VALUE"])
+	}
+	
+	;---------
+	; DESCRIPTION:    Add a filter that will apply to all TableList instances in this script, automatically.
+	; PARAMETERS:
+	;  filterColumn (I,REQ) - The column to filter on. We'll look at the value of each row in this column.
+	;  filterValue  (I,REQ) - The value to filter on. Rows with this value (or blank) in the filter
+	;                         column will pass and not be filtered out.
+	;---------
+	addAutomaticFilter(filterColumn, filterValue) {
+		filter := {"COLUMN":filterColumn, "VALUE":filterValue}
+		TableList.autoFilters.push(filter)
 	}
 	
 	;---------
@@ -394,26 +407,10 @@ class TableList {
 	}
 	
 	
-; ==============================
-; == Public (Static) ===========
-; ==============================
+; ====================================================================================================
+; ============================================== PRIVATE =============================================
+; ====================================================================================================
 	
-	;---------
-	; DESCRIPTION:    Add a filter that will apply to all TableList instances in this script, automatically.
-	; PARAMETERS:
-	;  filterColumn (I,REQ) - The column to filter on. We'll look at the value of each row in this column.
-	;  filterValue  (I,REQ) - The value to filter on. Rows with this value (or blank) in the filter
-	;                         column will pass and not be filtered out.
-	;---------
-	addAutomaticFilter(filterColumn, filterValue) {
-		filter := {"COLUMN":filterColumn, "VALUE":filterValue}
-		TableList.autoFilters.push(filter)
-	}
-	
-	
-; ==============================
-; == Private ===================
-; ==============================
 	static autoFilters := [] ; Array of {"COLUMN":filterColumn, "VALUE":filterValue} objects
 	
 	; Special characters

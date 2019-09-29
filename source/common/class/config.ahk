@@ -3,9 +3,10 @@
 
 class Config {
 
-; ==============================
-; == Public ====================
-; ==============================
+; ====================================================================================================
+; ============================================== PUBLIC ==============================================
+; ====================================================================================================
+	
 	; Constants for specific machines (matched to settings.ini).
 	static Machine_WorkLaptop  := "WORK_LAPTOP"
 	static Machine_WorkVDI     := "WORK_VDI"
@@ -22,6 +23,19 @@ class Config {
 	static TitleContains_End   := "END"
 	static TitleContains_Exact := "EXACT"
 	
+	;---------
+	; DESCRIPTION:    Initialize this static config class.
+	; PARAMETERS:
+	;  settingsFile (I,REQ) - 
+	;  windowsFile  (I,REQ) - 
+	;  pathsFile    (I,REQ) - 
+	;  programsFile (I,REQ) - 
+	;  gamesFile    (I,REQ) - 
+	;  privatesFile (I,REQ) - 
+	; RETURNS:        
+	; SIDE EFFECTS:   
+	; NOTES:          
+	;---------
 	init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile) {
 		; All config files are expected to live in config/ folder under the root of this repo.
 		configFolder := getParentFolder(A_LineFile, 4) "\config" ; Root path is 3 levels out, plus one to get out of file itself.
@@ -235,9 +249,10 @@ class Config {
 	}
 	
 	
-; ==============================
-; == Private ===================
-; ==============================
+; ====================================================================================================
+; ============================================== PRIVATE =============================================
+; ====================================================================================================
+	
 	static initDone := false
 	static settingsINIPath := ""
 	static settings := {} ; {NAME: VALUE}

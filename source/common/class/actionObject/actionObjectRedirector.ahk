@@ -19,9 +19,10 @@
 
 class ActionObjectRedirector {
 
-; ==============================
-; == Public ====================
-; ==============================
+; ====================================================================================================
+; ============================================== PUBLIC ==============================================
+; ====================================================================================================
+	
 	;---------
 	; DESCRIPTION:    Determine the type of ActionObject class to use based on the type/value
 	;                 and return a new instance of that class.
@@ -42,9 +43,10 @@ class ActionObjectRedirector {
 	}
 	
 	
-; ==============================
-; == Private ===================
-; ==============================
+; ====================================================================================================
+; ============================================== PRIVATE =============================================
+; ====================================================================================================
+	
 	value   := "" ; Value (the unique bit of info to act upon, like a path or identifier)
 	type    := "" ; Determined type of ActionObject, from .Type_* constants
 	subType := "" ; Determined sub-type, an additional categorization within a particular ActionObject* class.

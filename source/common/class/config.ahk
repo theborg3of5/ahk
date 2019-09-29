@@ -32,8 +32,7 @@ class Config {
 	;  programsFile (I,REQ) - Name or path of the programs TL file.
 	;  gamesFile    (I,REQ) - Name or path of the games TL file.
 	;  privatesFile (I,REQ) - Name or path of the privates TL file.
-	; NOTES:          All names must be found in the config folder in the root of this repository,
-	;                 as found by file.ahk > findConfigFilePath().
+	; NOTES:          All names/paths must be found in the \config folder in the root of this repository.
 	;---------
 	init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile) {
 		; All config files are expected to live in config/ folder under the root of this repo.

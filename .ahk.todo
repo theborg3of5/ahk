@@ -1,6 +1,8 @@
 # New Ideas
 	Update Notepad++ AHK documentation stuff to handle properties (with or without [])
 		Properties with parameters, too - maybe just treat [] the same as ()?
+	Make Ctrl+Enter hotkey in Notepad++ also add in bullets (* or -) if they started the previous row (ignoring whitespace and comment char, but not other stuff like (I,REQ))
+	Reconsider structure of clipboard toasting stuff - could it be cleaner? Are some of the wrapper functions overkill?
 	Figure out what to do about cleanupPath() dropping (valid) quotes from the end of URLs
 		Separate cleaning for URLs?
 			How to sense? Using ActionObjectPath?
@@ -89,7 +91,6 @@
 			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
 	common
 		functions
-			clipboard
 			data
 			dateTime
 			epic

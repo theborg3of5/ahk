@@ -1,5 +1,12 @@
 ; Clipboard-related functions.
 
+;---------
+; DESCRIPTION:    Wrapper for different copy hotkeys, that ensures we actually copy something (and
+;                 wait long enough for it to actually be on the clipboard).
+; PARAMETERS:
+;  hotkeyKeys (I,REQ) - The keys to send in order to copy something to the clipboard.
+; RETURNS:        true if we successfully copied something, false otherwise.
+;---------
 copyWithHotkey(hotkeyKeys) {
 	if(hotkeyKeys = "")
 		return
@@ -10,6 +17,13 @@ copyWithHotkey(hotkeyKeys) {
 	
 	return (ErrorLevel != 1)
 }
+;---------
+; DESCRIPTION:    Copy something using the provided functor object, but make sure that we actually
+;                 get something on the clipboard.
+; PARAMETERS:
+;  boundFunc (I,REQ) - Functor object to run in order to copy something to the clipboard.
+; RETURNS:        true if we successfully copied something, false otherwise.
+;---------
 copyWithFunction(boundFunc) {
 	if(!boundFunc)
 		return
@@ -21,6 +35,14 @@ copyWithFunction(boundFunc) {
 	return (ErrorLevel != 1)
 }
 
+;---------
+; DESCRIPTION:    Copy a file or folder path with the provided hotkeys, making sure that:
+;                  * We wait long enough for the file/folder to get onto the clipboard
+;                  * The path has been cleaned up and mapped
+; PARAMETERS:
+;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file/folder to the clipboard.
+; NOTES:          For folders, we'll also append a trailing backslash if one is missing.
+;---------
 copyFilePathWithHotkey(hotkeyKeys) {
 	copyWithHotkey(hotkeyKeys)
 	
@@ -45,14 +67,35 @@ copyFolderPathWithHotkey(hotkeyKeys) {
 	setClipboardAndToastValue(path, "folder path")
 }
 
+;---------
+; DESCRIPTION:    Set the clipboard to the given value and show a toast about it.
+; PARAMETERS:
+;  newClipboardValue (I,REQ) - The value to put on the clipboard.
+;  clipLabel         (I,OPT) - The label to show in the toast, clipboard set to <clipLabel> or similar (see Clip.toastClipboard)
+;---------
 setClipboardAndToastState(newClipboardValue, clipLabel := "value") {
 	Clip.setClipboard(newClipboardValue)
 	toastNewClipboardState(clipLabel)
 }
+;---------
+; DESCRIPTION:    Set the clipboard to the given value and show a toast about it which includes the value.
+; PARAMETERS:
+;  newClipboardValue (I,REQ) - The value to put on the clipboard.
+;  clipLabel         (I,OPT) - The label to show in the toast, clipboard set to <clipLabel> or similar (see Clip.toastClipboard)
+;---------
 setClipboardAndToastValue(newClipboardValue, clipLabel := "value") {
 	Clip.setClipboard(newClipboardValue)
 	toastNewClipboardValue(clipLabel)
 }
+
+;---------
+; DESCRIPTION:    Set the clipboard to the given value and show an error toast about it.
+; PARAMETERS:
+;  newClipboardValue (I,REQ) - The value to put on the clipboard.
+;  clipLabel         (I,REQ) - The label to show in the toast, clipboard set to <clipLabel> or similar (see Clip.toastClipboard)
+;  problemMessage    (I,REQ) - The problem that occurred.
+;  errorMessage      (I,OPT) - What went wrong on a technical level.
+;---------
 setClipboardAndToastError(newClipboardValue, clipLabel, problemMessage, errorMessage := "") {
 	if(clipLabel = "")
 		clipLabel := "value"
@@ -61,9 +104,20 @@ setClipboardAndToastError(newClipboardValue, clipLabel, problemMessage, errorMes
 	new ErrorToast(problemMessage, errorMessage, "Clipboard set to " clipLabel ":`n" clipboard).showMedium()
 }
 
+;---------
+; DESCRIPTION:    Show a toast about the clipboard's current state (basically whether it's set or not).
+; PARAMETERS:
+;  clipLabel (I,REQ) - The label to show in the toast, clipboard set to <clipLabel> or similar (see Clip.toastClipboard)
+;---------
 toastNewClipboardState(clipLabel := "value") {
 	Clip.toastClipboard(clipLabel, false)
 }
+;---------
+; DESCRIPTION:    Show a toast about the clipboard's current state (basically whether it's set or not),
+;                 also including the actual value.
+; PARAMETERS:
+;  clipLabel (I,REQ) - The label to show in the toast, clipboard set to <clipLabel> or similar (see Clip.toastClipboard)
+;---------
 toastNewClipboardValue(clipLabel := "value") {
 	Clip.toastClipboard(clipLabel, true)
 }
@@ -113,6 +167,7 @@ sendTextWithClipboard(text) {
 	clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
 }
 
+
 ; Clipboard-related helper functions.
 class Clip {
 
@@ -133,7 +188,7 @@ class Clip {
 	}
 	
 	;---------
-	; DESCRIPTION:    Show a toast for the current clipboard value.
+	; DESCRIPTION:    Show a toast for the current clipboard value, basically whether it's set or not.
 	; PARAMETERS:
 	;  clipLabel          (I,OPT) - The label to show - "Clipboard set to <clipLabel>"
 	;  showClipboardValue (I,REQ) - Set to true to also include the actual value in the toast, after a

@@ -275,13 +275,26 @@ class TableList {
 		if(filterColumn = "" || filterValue = "")
 			return this
 		
-		newTable := []
-		For _,row in this.table {
-			if(this.rowPassesFilter(row, filterColumn, filterValue))
-				newTable.push(row)
+		newTable   := []
+		newHeaders := {} ; {firstRowNumberUnderHeader: headerText}
+		For oldIndex,row in this.table {
+			; If there's a header for this row, keep track of it until we can add it to an unfiltered
+			; row (or another header overwrites it because it has no unfiltered rows)
+			headerText := this._headers[oldIndex]
+			if(headerText != "")
+				currHeader := headerText
+			
+			if(this.rowPassesFilter(row, filterColumn, filterValue)) {
+				newIndex := newTable.push(row)
+				if(currHeader != "") {
+					newHeaders[newIndex] := currHeader
+					currHeader := "" ; We've saved the header, done.
+				}
+			}
 		}
 		
-		this.table := newTable
+		this.table    := newTable
+		this._headers := newHeaders
 		return this
 	}
 	
@@ -295,13 +308,26 @@ class TableList {
 		if(column = "")
 			return this
 		
-		newTable := []
-		For _,row in this.table {
-			if(row[column] != "")
-				newTable.push(row)
+		newTable   := []
+		newHeaders := {} ; {firstRowNumberUnderHeader: headerText}
+		For oldIndex,row in this.table {
+			; If there's a header for this row, keep track of it until we can add it to an unfiltered
+			; row (or another header overwrites it because it has no unfiltered rows)
+			headerText := this._headers[oldIndex]
+			if(headerText != "")
+				currHeader := headerText
+			
+			if(row[column] != "") {
+				newIndex := newTable.push(row)
+				if(currHeader != "") {
+					newHeaders[newIndex] := currHeader
+					currHeader := "" ; We've saved the header, done.
+				}
+			}
 		}
 		
-		this.table := newTable
+		this.table    := newTable
+		this._headers := newHeaders
 		return this
 	}
 	
@@ -432,7 +458,7 @@ class TableList {
 	
 	_keyRows    := {} ; {keyRowLabel: rowObj}
 	_settings   := {} ; {settingName: settingValue}
-	_headers    := {} ; {firstRowNumberInHeader: headerText}
+	_headers    := {} ; {firstRowNumberUnderHeader: headerText}
 	
 	;---------
 	; DESCRIPTION:    Given an array of lines from a file, parse out the data into internal structures.

@@ -48,7 +48,6 @@
 		Probably do it in open(), where we also check whether a local path exists
 	
 # TableList
-	Bug: headers with no entries aren't getting ignored properly (example: EpicStudio-filtered ActionObject selector shows EMC2 header)
 	TableList mods - consider making it a replacement by default (only 1 active mod), only stack with labels
 		Use case: onenote todos, dailies section could be more compact
 	Build a way to auto-reformat .tl files?

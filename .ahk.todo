@@ -88,9 +88,6 @@
 		Hotkey to show window with all currently active hotkeys, divided up into current-program-specific and others
 			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
 	common
-		classes
-			listConverter
-			selectorGui
 		functions
 			clipboard
 			data
@@ -101,10 +98,4 @@
 			io
 			runCommands
 			string
-	sub
-		killUAC
-		vimBindings
-	standalone
-		halfQWERTY
-		psxEmulatorController
 	

@@ -114,7 +114,7 @@ sendTextWithClipboard(text) {
 }
 
 ; Clipboard-related helper functions.
-class Clip { ; Would ideally be named Clipboard, but that's reserved.
+class Clip {
 
 ; ====================================================================================================
 ; ============================================== PRIVATE =============================================

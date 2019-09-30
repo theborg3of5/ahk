@@ -39,7 +39,8 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 		if(this.descriptorType = "")
 			this.descriptorType := this.determineDescriptorType()
 		
-		this.selectMissingInfo()
+		if(!this.selectMissingInfo())
+			return ""
 	}
 	
 	;---------
@@ -105,13 +106,18 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 	selectMissingInfo() {
 		; Nothing is missing
 		if(this.descriptor != "" && this.descriptorType != "")
-			return
+			return true
 		
-		data := new Selector("actionObject.tls").selectGui("", "", {"VALUE": this.descriptor})
+		s := new Selector("actionObject.tls")
+		s.dataTL.filterByColumn("TYPE", ActionObjectRedirector.Type_EpicStudio)
+		data := s.selectGui("", "", {"VALUE":this.descriptor})
 		if(!data)
-			return
+			return false
+		if(data["SUBTYPE"] = "" || data["VALUE"] = "") ; Didn't get everything we needed.
+			return false
 		
 		this.descriptorType := data["SUBTYPE"]
 		this.descriptor     := data["VALUE"]
+		return true
 	}
 }

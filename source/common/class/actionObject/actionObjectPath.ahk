@@ -39,9 +39,11 @@ class ActionObjectPath extends ActionObjectBase {
 		; Make sure there's no quotes or other oddities surrounding the path
 		this.path := this.path.clean([DOUBLE_QUOTE])
 		
-		; Determine path type
 		if(this.pathType = "")
 			this.pathType := this.determinePathType(this.path)
+		
+		if(!this.selectMissingInfo())
+			return
 	}
 	
 	;---------
@@ -105,5 +107,32 @@ class ActionObjectPath extends ActionObjectBase {
 	}
 	getLinkEdit() {
 		return this.getLink()
+	}
+	
+	
+; ====================================================================================================
+; ============================================== PUBLIC ==============================================
+; ====================================================================================================
+	
+	;---------
+	; DESCRIPTION:    Prompt the user for the path type or path if either are missing.
+	; SIDE EFFECTS:   Sets .pathType/.path based on user inputs.
+	;---------
+	selectMissingInfo() {
+		; Nothing is missing
+		if(this.path != "" && this.pathType != "")
+			return true
+		
+		s := new Selector("actionObject.tls")
+		s.dataTL.filterByColumn("TYPE", ActionObjectRedirector.Type_Path)
+		data := s.selectGui("", "", {"VALUE":this.path})
+		if(!data)
+			return false
+		if(data["SUBTYPE"] = "" || data["VALUE"] = "") ; Didn't get everything we needed.
+			return false
+		
+		this.pathType := data["SUBTYPE"]
+		this.path     := data["VALUE"]
+		return true
 	}
 }

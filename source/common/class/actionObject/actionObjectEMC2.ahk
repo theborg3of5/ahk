@@ -60,7 +60,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		}
 		
 		if(!this.selectMissingInfo())
-			return
+			return ""
 		
 		this.postProcess()
 	}
@@ -71,7 +71,6 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;---------
 	postProcess() {
 		; INI - make sure the INI is the "real" EMC2 one.
-		; s := new Selector("actionObject.tls", {"COLUMN":"TYPE", "VALUE":ActionObjectRedirector.Type_EMC2})
 		s := new Selector("actionObject.tls")
 		s.dataTL.filterByColumn("TYPE", ActionObjectRedirector.Type_EMC2)
 		this.ini := s.selectChoice(this.ini, "SUBTYPE")
@@ -153,8 +152,9 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		if(this.ini != "" && this.id != "") ; Nothing required is missing.
 			return true
 		
-		s := new Selector("actionObject.tls", {"COLUMN":"TYPE", "VALUE":ActionObjectRedirector.Type_EMC2})
-		data := s.selectGui("", "Enter INI and ID", {"SUBTYPE":this.ini, "VALUE":this.id})
+		s := new Selector("actionObject.tls")
+		s.dataTL.filterByColumn("TYPE", ActionObjectRedirector.Type_EMC2)
+		data := s.selectGui("", "Enter INI and ID", {"VALUE":this.id})
 		if(!data)
 			return false
 		if(data["SUBTYPE"] = "" || data["VALUE"] = "") ; Didn't get everything we needed.

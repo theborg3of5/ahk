@@ -32,7 +32,6 @@
 	EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments
-	Consider adding a client-file-viewing search to either search selector or actionObject (like codesearch routine)
 	Add some way to move windows where I want them
 		Hotkey-triggered, for all windows in list?
 		Maybe lean on monitor fixer script from before?

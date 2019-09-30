@@ -46,46 +46,26 @@ copyFolderPathWithHotkey(hotkeyKeys) {
 }
 
 setClipboardAndToastState(newClipboardValue, clipLabel := "value") {
-	setClipboard(newClipboardValue)
+	Clip.setClipboard(newClipboardValue)
 	toastNewClipboardState(clipLabel)
 }
 setClipboardAndToastValue(newClipboardValue, clipLabel := "value") {
-	setClipboard(newClipboardValue)
+	Clip.setClipboard(newClipboardValue)
 	toastNewClipboardValue(clipLabel)
 }
 setClipboardAndToastError(newClipboardValue, clipLabel, problemMessage, errorMessage := "") {
 	if(clipLabel = "")
 		clipLabel := "value"
 	
-	setClipboard(newClipboardValue)
+	Clip.setClipboard(newClipboardValue)
 	new ErrorToast(problemMessage, errorMessage, "Clipboard set to " clipLabel ":`n" clipboard).showMedium()
-}
-setClipboard(value) {
-	clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
-	
-	clipboard := value
-	ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain data.
 }
 
 toastNewClipboardState(clipLabel := "value") {
-	toastClipboard(clipLabel, false)
+	Clip.toastClipboard(clipLabel, false)
 }
 toastNewClipboardValue(clipLabel := "value") {
-	toastClipboard(clipLabel, true)
-}
-
-toastClipboard(clipLabel, showClipboardValue) {
-	if(clipLabel = "")
-		clipLabel := "value"
-	
-	if(clipboard = "") {
-		new ErrorToast("Failed to get " clipLabel).showMedium()
-	} else {
-		clipMessage := "Clipboard set to " clipLabel
-		if(showClipboardValue)
-			clipMessage .= ":`n" clipboard
-		new Toast(clipMessage).showMedium()
-	}
+	Clip.toastClipboard(clipLabel, true)
 }
 
 ;---------
@@ -114,7 +94,11 @@ saveCurrentClipboard() {
 		Sleep, 1000
 }
 
-; Sends the selected text using the clipboard, fixing the clipboard as it finishes.
+;---------
+; DESCRIPTION:    Send the provided text using the clipboard, restoring the clipboard afterwards.
+; PARAMETERS:
+;  text (I,REQ) - The text to send.
+;---------
 sendTextWithClipboard(text) {
 	; DEBUG.popup("Text to send with clipboard", text)
 	
@@ -127,4 +111,45 @@ sendTextWithClipboard(text) {
 	Sleep, 100
 	
 	clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
+}
+
+; Clipboard-related helper functions.
+class Clip { ; Would ideally be named Clipboard, but that's reserved.
+
+; ====================================================================================================
+; ============================================== PRIVATE =============================================
+; ====================================================================================================
+	
+	;---------
+	; DESCRIPTION:    Set the clipboard to the given value, and wait to make sure it applies before returning.
+	; PARAMETERS:
+	;  value (I,REQ) - Value to set.
+	;---------
+	setClipboard(value) {
+		clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
+		
+		clipboard := value
+		ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain data.
+	}
+	
+	;---------
+	; DESCRIPTION:    Show a toast for the current clipboard value.
+	; PARAMETERS:
+	;  clipLabel          (I,OPT) - The label to show - "Clipboard set to <clipLabel>"
+	;  showClipboardValue (I,REQ) - Set to true to also include the actual value in the toast, after a
+	;                               colon and newline.
+	;---------
+	toastClipboard(clipLabel, showClipboardValue) {
+		if(clipLabel = "")
+			clipLabel := "value"
+		
+		if(clipboard = "") {
+			new ErrorToast("Failed to get " clipLabel).showMedium()
+		} else {
+			clipMessage := "Clipboard set to " clipLabel
+			if(showClipboardValue)
+				clipMessage .= ":`n" clipboard
+			new Toast(clipMessage).showMedium()
+		}
+	}
 }

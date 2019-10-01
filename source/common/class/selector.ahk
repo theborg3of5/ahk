@@ -179,6 +179,12 @@ class Selector {
 		return this
 	}
 	
+	
+	SetDefaultOverrides(defaultOverrides) { ; Format: {columnLabel: value}
+		this._defaultOverrides := defaultOverrides
+		return this
+	}
+	
 	OverrideFieldsOff() {
 		this._noOverrideFields := true
 		return this
@@ -211,7 +217,9 @@ class Selector {
 		if(this._noOverrideFields)
 			this.overrideFields := "" ; If user explicitly asked us to suppress override fields, get rid of them.
 		
-		data := this.doSelectGui(defaultOverrideData)
+		if(this._defaultOverrides = "") ; GDB TODO temp until we finish switching over callers
+			this._defaultOverrides := defaultOverrideData
+		data := this.doSelectGui(this._defaultOverrides)
 		
 		if(isNullOrEmpty(data))
 			return ""
@@ -281,6 +289,7 @@ class Selector {
 	filePath          := ""    ; Where the file lives if we're reading one in.
 	suppressData      := false ; Whether to ignore all data from the user (choice and overrides). Typically used when we've done something else (like edit the TLS file).
 	_dataTL           := ""    ; TableList instance read from file, which we'll extract choice and other info from.
+	_defaultOverrides := ""    ; {columnLabel: value} - Default values to show in override fields, by column name
 	_noOverrideFields := false ; Whether to suppress override fields, even if they're in the .tls file.
 	
 	;---------

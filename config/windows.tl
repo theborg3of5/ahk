@@ -19,6 +19,7 @@
 			EMC2 DLG/XDS Issue Popup		-								-							Magnify
 			EMC2 DLG Resubmit					-								-							Resubmit for 
 			EMC2 DRN Quick Review			-								-							Quick Review - 
+			EMC2 PRJ Readiness Notes		-								ThunderRT6FormDC		Readiness Notes
 			EMC2 QAN Change Status			-								ThunderRT6FormDC		Change Note Status
 			EMC2 QAN Email						-								-							Send E-Mail
 			EMC2 QAN Email Notify			-								-							EMC2 - QA Note E-Mail Notification

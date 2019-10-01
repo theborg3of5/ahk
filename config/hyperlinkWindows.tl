@@ -11,6 +11,7 @@
 	Outlook							POPUP_FIELD					ENTER					ahk_class bosa_sdm_Mso96		RichEdit20W6
 	Word								POPUP_FIELD					ENTER					ahk_class bosa_sdm_msword		RichEdit20W6
 	
+	EMC2 PRJ Readiness Notes	WEB_FIELD					ALT_A
 	EMC2 PRJ							WEB_FIELD					ALT_A
 	EMC2 DLG							WEB_FIELD					ALT_A
 	Teams								WEB_FIELD					ENTER

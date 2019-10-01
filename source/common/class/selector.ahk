@@ -179,6 +179,11 @@ class Selector {
 		return this
 	}
 	
+	OverrideFieldsOff() {
+		this._noOverrideFields := true
+		return this
+	}
+	
 	;---------
 	; DESCRIPTION:    Show a popup to the user so they can select one of the choices we've prepared and 
 	;                 enter any additional override information.
@@ -196,14 +201,14 @@ class Selector {
 	; RETURNS:        An array of data as chosen/overridden by the user. If the returnColumn parameter was
 	;                 specified, only the subscript matching that name will be returned.
 	;---------
-	selectGui(returnColumn := "", title := "", defaultOverrideData := "", suppressOverrideFields := false) {
+	selectGui(returnColumn := "", title := "", defaultOverrideData := "") {
 		; DEBUG.popup("Selector.selectGui", "Start", "Default override data", defaultOverrideData, "GUI Settings", guiSettings)
 		if(!this.loadFromData())
 			return ""
 		
 		if(title)
 			this.guiSettings["WindowTitle"] := title
-		if(suppressOverrideFields)
+		if(this._noOverrideFields)
 			this.overrideFields := "" ; If user explicitly asked us to suppress override fields, get rid of them.
 		
 		data := this.doSelectGui(defaultOverrideData)
@@ -269,13 +274,14 @@ class Selector {
 	static Char_CommandStart       := "+"
 	static Char_Command_Edit       := "e"
 	
-	choices        := []    ; Array of visible choices the user can pick from (array of SelectorChoice objects).
-	sectionTitles  := {}    ; {choiceIndex: title} - Lines that will be displayed as titles (index matches the first choice that should be under this title)
-	overrideFields := ""    ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers)
-	guiSettings    := {}    ; {settingName: value} - Settings related to the GUI popup we show
-	filePath       := ""    ; Where the file lives if we're reading one in.
-	suppressData   := false ; Whether to ignore all data from the user (choice and overrides). Typically used when we've done something else (like edit the TLS file).
-	_dataTL        := ""    ; TableList instance read from file, which we'll extract choice and other info from.
+	choices           := []    ; Array of visible choices the user can pick from (array of SelectorChoice objects).
+	sectionTitles     := {}    ; {choiceIndex: title} - Lines that will be displayed as titles (index matches the first choice that should be under this title)
+	overrideFields    := ""    ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers)
+	guiSettings       := {}    ; {settingName: value} - Settings related to the GUI popup we show
+	filePath          := ""    ; Where the file lives if we're reading one in.
+	suppressData      := false ; Whether to ignore all data from the user (choice and overrides). Typically used when we've done something else (like edit the TLS file).
+	_dataTL           := ""    ; TableList instance read from file, which we'll extract choice and other info from.
+	_noOverrideFields := false ; Whether to suppress override fields, even if they're in the .tls file.
 	
 	;---------
 	; DESCRIPTION:    Populate this.guiSettings with our defaults for various gui settings.

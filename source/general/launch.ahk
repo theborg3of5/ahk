@@ -28,9 +28,9 @@
 #If Config.contextIsWork
 	^+!#t::
 		selectDLG() {
-			s := new Selector("outlookTLG.tls")
+			s := new Selector("outlookTLG.tls").OverrideFieldsOff()
 			s.dataTL.filterOutEmptyForColumn("DLG")
-			dlgId := s.selectGui("DLG", "", "", true)
+			dlgId := s.selectGui("DLG")
 			if(!dlgId)
 				return
 			

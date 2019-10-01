@@ -642,7 +642,7 @@ class TableList {
 	;  rowAry (IO,REQ) - Numerically-indexed array representing a row in the table.
 	;---------
 	applyIndexLabels(ByRef rowAry) {
-		if(isEmpty(this.indexLabels))
+		if(isNullOrEmpty(this.indexLabels))
 			return
 		
 		rowObj := {}

@@ -146,14 +146,16 @@ class Selector {
 	;                 in the class documentation above.
 	; PARAMETERS:
 	;  name  (I,REQ) - Name of the setting to override.
-	;  value (I,OPT) - Value to set the setting to. Defaults to blank.
+	;  value (I,REQ) - Value to set the setting to.
 	; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui().
 	;---------
-	setGuiSetting(name, value := "") {
+	setGuiSetting(name, value) {
 		if(name = "")
 			return
 		
 		this.guiSettings[name] := value
+		
+		return this
 	}
 	
 	;---------
@@ -173,6 +175,8 @@ class Selector {
 		baseLength := this.overrideFields.count()
 		For i,label in extraDataFields
 			this.overrideFields[baseLength + i] := label
+		
+		return this
 	}
 	
 	;---------
@@ -204,7 +208,7 @@ class Selector {
 		
 		data := this.doSelectGui(defaultOverrideData)
 		
-		if(isEmpty(data))
+		if(isNullOrEmpty(data))
 			return ""
 		else if(returnColumn)
 			return data[returnColumn]

@@ -1,6 +1,12 @@
 ; Data-structure-related functions.
 
-isEmpty(obj) {
+;---------
+; DESCRIPTION:    Determine whether the provided object/array is empty, also checking if it's null.
+; PARAMETERS:
+;  obj (I,REQ) - The object/array to check.
+; RETURNS:        true if the provided object is null (including "") or empty (no values inside), false otherwise.
+;---------
+isNullOrEmpty(obj) {
 	return !obj.count() ; Either count() is defined (empty object/array) and returns 0, or it's not (and we get "").
 }
 

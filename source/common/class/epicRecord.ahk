@@ -157,7 +157,8 @@ class EpicRecord {
 		if(this.ini != "" && this.id != "") ; Nothing required is missing.
 			return true
 		
-		data := new Selector("epicRecord.tls").selectGui("", "", {"INI":this.ini, "ID":this.id})
+		s := new Selector("epicRecord.tls").SetDefaultOverrides({"INI":this.ini, "ID":this.id})
+		data := s.selectGui()
 		if(!data)
 			return false
 		if(data["INI"] = "" || data["ID"] = "") ; Didn't get everything we needed.

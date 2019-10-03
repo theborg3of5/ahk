@@ -5,7 +5,8 @@
 	selectSearch() {
 		text := getSelectedText().firstLine().clean()
 		
-		data := new Selector("search.tls").selectGui("", "", {"SEARCH_TERM":text})
+		s := new Selector("search.tls").SetDefaultOverrides({"SEARCH_TERM":text})
+		data := s.selectGui()
 		if(!data)
 			return
 		

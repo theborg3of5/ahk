@@ -139,7 +139,8 @@ class ActionObjectRedirector {
 		if(this.value != "" && this.type != "")
 			return
 		
-		data := new Selector("actionObject.tls").selectGui("", "", {"VALUE":this.value})
+		s := new Selector("actionObject.tls").SetDefaultOverrides({"VALUE":this.value})
+		data := s.selectGui()
 		if(!data)
 			return
 		

@@ -108,9 +108,9 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 		if(this.descriptor != "" && this.descriptorType != "")
 			return true
 		
-		s := new Selector("actionObject.tls")
+		s := new Selector("actionObject.tls").SetDefaultOverrides({"VALUE":this.descriptor})
 		s.dataTL.filterByColumn("TYPE", ActionObjectRedirector.Type_EpicStudio)
-		data := s.selectGui("", "", {"VALUE":this.descriptor})
+		data := s.selectGui()
 		if(!data)
 			return false
 		if(data["SUBTYPE"] = "" || data["VALUE"] = "") ; Didn't get everything we needed.

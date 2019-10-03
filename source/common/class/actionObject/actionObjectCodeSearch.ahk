@@ -97,9 +97,9 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 		if(this.location != "" && this.locationType != "")
 			return true
 		
-		s := new Selector("actionObject.tls")
+		s := new Selector("actionObject.tls").SetDefaultOverrides({"VALUE":this.location})
 		s.dataTL.filterByColumn("TYPE", ActionObjectRedirector.Type_CodeSearch)
-		data := s.selectGui("", "", {"VALUE":this.location})
+		data := s.selectGui()
 		if(!data)
 			return false
 		if(data["SUBTYPE"] = "" || data["VALUE"] = "") ; Didn't get everything we needed.

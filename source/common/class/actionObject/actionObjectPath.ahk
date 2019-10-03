@@ -123,9 +123,9 @@ class ActionObjectPath extends ActionObjectBase {
 		if(this.path != "" && this.pathType != "")
 			return true
 		
-		s := new Selector("actionObject.tls")
+		s := new Selector("actionObject.tls").SetDefaultOverrides({"VALUE":this.path})
 		s.dataTL.filterByColumn("TYPE", ActionObjectRedirector.Type_Path)
-		data := s.selectGui("", "", {"VALUE":this.path})
+		data := s.selectGui()
 		if(!data)
 			return false
 		if(data["SUBTYPE"] = "" || data["VALUE"] = "") ; Didn't get everything we needed.

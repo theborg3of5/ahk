@@ -152,9 +152,9 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		if(this.ini != "" && this.id != "") ; Nothing required is missing.
 			return true
 		
-		s := new Selector("actionObject.tls")
+		s := new Selector("actionObject.tls").SetDefaultOverrides({"VALUE":this.id})
 		s.dataTL.filterByColumn("TYPE", ActionObjectRedirector.Type_EMC2)
-		data := s.selectGui("", "Enter INI and ID", {"VALUE":this.id})
+		data := s.selectGui("", "Enter INI and ID")
 		if(!data)
 			return false
 		if(data["SUBTYPE"] = "" || data["VALUE"] = "") ; Didn't get everything we needed.

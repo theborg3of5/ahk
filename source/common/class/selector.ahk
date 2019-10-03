@@ -31,7 +31,7 @@
 					Values in the NAME and ABBREV columns will be displayed for choices as described above, and the return array will have a "PATH" subscript with the corresponding value from the selected choice.
 				
 			) - override field index row
-				These rows assign a numeric index to each column in the model row. This index will be the position the corresponding data override field will have in the popup. An index of 0 tells the UI not to show the field corresponding to that column at all. Note that the existence of this row will cause data override fields to be shown - the fields can be programmatically suppressed using .selectGui()'s suppressOverrideFields parameter. See "Data Override Fields" below for more details.
+				These rows assign a numeric index to each column in the model row. This index will be the position the corresponding data override field will have in the popup. An index of 0 tells the UI not to show the field corresponding to that column at all. Note that the existence of this row will cause data override fields to be shown - the fields can be programmatically suppressed using the .OverrideFieldsOff() function. See "Data Override Fields" below for more details.
 				Example:
 					(	NAME		ABBREV		PATH
 					)	0			0				1
@@ -81,19 +81,17 @@
 				If this is set, each super-column in the popup will be that number of pixels wide at a minimum (each may be wider if the choices in that column are wider). See the FlexTable class for how super-columns work.
 		
 	Data Override Fields
-		If an override field index row is specified in the TLS file, the popup shown by .selectGui() will include not only a choice field, but also fields for each column given a non-zero index in the override field index row. The fields are shown in the order specified by the row (i.e. 1 is first after the choice field, 2 is second, etc.). That the fields can be programmatically suppressed using .selectGui()'s suppressOverrideFields parameter.
+		If an override field index row is specified in the TLS file, the popup shown by .selectGui() will include not only a choice field, but also fields for each column given a non-zero index in the override field index row. The fields are shown in the order specified by the row (i.e. 1 is first after the choice field, 2 is second, etc.). That the fields can be programmatically suppressed using the .OverrideFieldsOff() function.
 		These fields give a user the ability to override data from their selected choice (or submit the popup without a choice, only overrides). If the user changes the value of the field (it defaults to the column label), that value will be used instead of the selected choice's value for that column.
 		Even if there is no override field index row in the TLS file, the .AddOverrideFields() function may be used to add additional fields to the popup. The values from these fields will appear in the return array just like other override fields, under the subscript with their name.
-		Values may be defaulted into these fields using .selectGui()'s defaultOverrideData parameter.
+		Values may be defaulted into these fields using the .SetDefaultOverrides() function.
 	
 	Example Usage (Popup)
-		fieldsToAdd := ["CONFIG_NAME", "CONFIG_NUM"]               ; Two additional override fields for the popup.
-		defaultOverrideData := {CONFIG_NAME: "Windows"}            ; Default a value of "Windows" into the "CONFIG_NAME" override field
-		
 		s := new Selector("C:\ahk\configs.tls")                    ; Read in the "configs.tls" TLS file
 		s.dataTL.filterByColumn("MACHINE", "HOME_DESKTOP")         ; Only include choices which which have the "MACHINE" column set to "HOME_DESKTOP" (or blank)
 		s.SetGuiSetting("MinColumnWidth", 500)                     ; Set the minimum super-column width to 500 pixels
-		s.AddOverrideFields(fieldsToAdd)                           ; Add the extra override fields
+		s.AddOverrideFields(["CONFIG_NAME", "CONFIG_NUM"])         ; Two additional override fields for the popup.
+		s.SetDefaultOverrides({CONFIG_NAME: "Windows"})            ; Default a value of "Windows" into the "CONFIG_NAME" override field
 		
 		data := s.selectGui("", "New title!")                      ; Show the popup with a title of "New title!"
 		MsgBox, % "Chosen config name: " data["CONFIG_NAME"]
@@ -162,11 +160,9 @@ class Selector {
 	; DESCRIPTION:    Add additional override fields to the popup shown to the user, and return whatever data
 	;                 they add (or is defaulted in) in the final return array.
 	; PARAMETERS:
-	;  fieldsToAdd (I,REQ) - Numerically-indexed array of field names (treated the same as column names from
-	;                            choices) to add.
+	;  fieldsToAdd (I,REQ) - Numerically-indexed array of field names (treated the same as column names from choices) to add.
 	; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui().
-	;                 Default override values for these fields (if desired) can be set using .selectGui()'s ; GDB TODO
-	;                 defaultOverrideData parameter.
+	;                 Default override values for these fields (if desired) can be set using the .SetDefaultOverrides() function.
 	;---------
 	AddOverrideFields(fieldsToAdd) {
 		if(!this.overrideFields)
@@ -198,17 +194,11 @@ class Selector {
 	;                                   this name will be returned.
 	;  title                  (I,OPT) - If you want to override the title set in the TLS file (or defaulted
 	;                                   from this class), pass in the desired title here.
-	;  defaultOverrideData    (I,OPT) - If you want to default values into the override fields shown to
-	;                                   the user, pass those values in an array here. Format:
-	;                                      defaultOverrideData["fieldName"] := value ; GDB TODO
-	;  suppressOverrideFields (I,OPT) - If the TLS file would normally show override fields (by virtue of
-	;                                   having an override field index row), you can still hide those
-	;                                   fields by setting this parameter to true.
 	; RETURNS:        An array of data as chosen/overridden by the user. If the returnColumn parameter was
 	;                 specified, only the subscript matching that name will be returned.
 	;---------
-	selectGui(returnColumn := "", title := "", defaultOverrideData := "") {
-		; DEBUG.popup("Selector.selectGui", "Start", "Default override data", defaultOverrideData, "GUI Settings", guiSettings)
+	selectGui(returnColumn := "", title := "") {
+		; DEBUG.popup("Selector.selectGui","Start", "GUI Settings",guiSettings)
 		if(!this.loadFromData())
 			return ""
 		
@@ -217,9 +207,7 @@ class Selector {
 		if(this._noOverrideFields)
 			this.overrideFields := "" ; If user explicitly asked us to suppress override fields, get rid of them.
 		
-		if(this._defaultOverrides = "") ; GDB TODO temp until we finish switching over callers
-			this._defaultOverrides := defaultOverrideData
-		data := this.doSelectGui(this._defaultOverrides)
+		data := this.doSelectGui()
 		
 		if(isNullOrEmpty(data))
 			return ""
@@ -346,15 +334,12 @@ class Selector {
 	; DESCRIPTION:    Generate and show a popup to the user where they can select a
 	;                 choice and override specific data, then retrieving, processing,
 	;                 and merging that data as appropriate.
-	; PARAMETERS:
-	;  defaultOverrideData (I,REQ) - Array of data to default into override fields. Format:
-	;                                   defaultOverrideData["fieldName"] := value
 	; RETURNS:        Merged array of data, which includes both the choice and any
 	;                 overrides.
 	;---------
-	doSelectGui(defaultOverrideData) {
+	doSelectGui() {
 		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this.guiSettings["MinColumnWidth"])
-		sGui.show(this.guiSettings["WindowTitle"], defaultOverrideData)
+		sGui.show(this.guiSettings["WindowTitle"], this._defaultOverrides)
 		
 		; User's choice is main data source
 		choiceData := this.parseChoice(sGui.getChoiceQuery())

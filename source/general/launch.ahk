@@ -60,11 +60,7 @@
 			record := new EpicRecord(getSelectedText())
 			
 			s := new Selector("epicEnvironments.tls")
-			s.addExtraOverrideFields(["INI", "ID"])
-			
-			defaultOverrideData        := {}
-			defaultOverrideData["INI"] := record.ini
-			defaultOverrideData["ID"]  := record.id
+			s.AddOverrideFields(["INI", "ID"]).SetDefaultOverrides({"INI":record.ini, "ID":record.id}) ; Add fields for INI/ID and default in values if we figured them out
 			data := s.selectGui("", "Open Record(s) in Snapper in Environment", defaultOverrideData)
 			if(!data)
 				return

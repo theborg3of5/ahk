@@ -70,7 +70,7 @@
 	Gui Settings
 		Some settings related to the popup may be customized using one of the following methods:
 			1. Specified in the TLS file (using the @ character, see "Settings" character above)
-			2. Programmatically, using the .setGuiSetting() function
+			2. Programmatically, using the .SetGuiSetting() function
 		Note that these settings only have an effect on the popup shown by .selectGui().
 		
 		Available settings:
@@ -83,19 +83,19 @@
 	Data Override Fields
 		If an override field index row is specified in the TLS file, the popup shown by .selectGui() will include not only a choice field, but also fields for each column given a non-zero index in the override field index row. The fields are shown in the order specified by the row (i.e. 1 is first after the choice field, 2 is second, etc.). That the fields can be programmatically suppressed using .selectGui()'s suppressOverrideFields parameter.
 		These fields give a user the ability to override data from their selected choice (or submit the popup without a choice, only overrides). If the user changes the value of the field (it defaults to the column label), that value will be used instead of the selected choice's value for that column.
-		Even if there is no override field index row in the TLS file, the .addExtraOverrideFields() function may be used to add additional fields to the popup. The values from these fields will appear in the return array just like other override fields, under the subscript with their name.
+		Even if there is no override field index row in the TLS file, the .AddOverrideFields() function may be used to add additional fields to the popup. The values from these fields will appear in the return array just like other override fields, under the subscript with their name.
 		Values may be defaulted into these fields using .selectGui()'s defaultOverrideData parameter.
 	
 	Example Usage (Popup)
-		extraDataFields := ["CONFIG_NAME", "CONFIG_NUM"]           ; Two additional override fields for the popup.
+		fieldsToAdd := ["CONFIG_NAME", "CONFIG_NUM"]               ; Two additional override fields for the popup.
 		defaultOverrideData := {CONFIG_NAME: "Windows"}            ; Default a value of "Windows" into the "CONFIG_NAME" override field
 		
 		s := new Selector("C:\ahk\configs.tls")                    ; Read in the "configs.tls" TLS file
 		s.dataTL.filterByColumn("MACHINE", "HOME_DESKTOP")         ; Only include choices which which have the "MACHINE" column set to "HOME_DESKTOP" (or blank)
-		s.setGuiSetting("MinColumnWidth", 500)                     ; Set the minimum super-column width to 500 pixels
-		s.addExtraOverrideFields(extraDataFields)                  ; Add the extra override fields
+		s.SetGuiSetting("MinColumnWidth", 500)                     ; Set the minimum super-column width to 500 pixels
+		s.AddOverrideFields(fieldsToAdd)                           ; Add the extra override fields
 		
-		data := s.selectGui("", "New title!", defaultOverrideData) ; Show the popup with a title of "New title!" and the default override field values specified above
+		data := s.selectGui("", "New title!")                      ; Show the popup with a title of "New title!"
 		MsgBox, % "Chosen config name: " data["CONFIG_NAME"]
 		MsgBox, % "Chosen config num: "  data["CONFIG_NUM"]
 		
@@ -149,7 +149,7 @@ class Selector {
 	;  value (I,REQ) - Value to set the setting to.
 	; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui().
 	;---------
-	setGuiSetting(name, value) {
+	SetGuiSetting(name, value) {
 		if(name = "")
 			return
 		
@@ -162,18 +162,18 @@ class Selector {
 	; DESCRIPTION:    Add additional override fields to the popup shown to the user, and return whatever data
 	;                 they add (or is defaulted in) in the final return array.
 	; PARAMETERS:
-	;  extraDataFields (I,REQ) - Numerically-indexed array of field names (treated the same as column names from
+	;  fieldsToAdd (I,REQ) - Numerically-indexed array of field names (treated the same as column names from
 	;                            choices) to add.
 	; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui().
-	;                 Default override values for these fields (if desired) can be set using .selectGui()'s
+	;                 Default override values for these fields (if desired) can be set using .selectGui()'s ; GDB TODO
 	;                 defaultOverrideData parameter.
 	;---------
-	addExtraOverrideFields(extraDataFields) {
+	AddOverrideFields(fieldsToAdd) {
 		if(!this.overrideFields)
 			this.overrideFields := {}
 		
 		baseLength := this.overrideFields.count()
-		For i,label in extraDataFields
+		For i,label in fieldsToAdd
 			this.overrideFields[baseLength + i] := label
 		
 		return this
@@ -200,7 +200,7 @@ class Selector {
 	;                                   from this class), pass in the desired title here.
 	;  defaultOverrideData    (I,OPT) - If you want to default values into the override fields shown to
 	;                                   the user, pass those values in an array here. Format:
-	;                                      defaultOverrideData["fieldName"] := value
+	;                                      defaultOverrideData["fieldName"] := value ; GDB TODO
 	;  suppressOverrideFields (I,OPT) - If the TLS file would normally show override fields (by virtue of
 	;                                   having an override field index row), you can still hide those
 	;                                   fields by setting this parameter to true.
@@ -318,7 +318,7 @@ class Selector {
 		
 		this.sectionTitles := tl.headers
 		For name,value in tl.settings
-			this.setGuiSetting(name, value)
+			this.SetGuiSetting(name, value)
 		
 		; Special override field index row that tells us how we should arrange data inputs.
 		fieldIndices := tl.keyRow["OVERRIDE_INDEX"]

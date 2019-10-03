@@ -14,14 +14,10 @@ if(!txId)
 ; Start in the dump script's directory.
 SetWorkingDir, % Config.path["TX_DIFF"]
 
-; Create a Selector so the user can pick the environment and give us the TX's ID.	
+; Create a Selector so the user can pick the environment and give us the TX's ID.
 s := new Selector("epicEnvironments.tls")
-s.addExtraOverrideFields(["TX_ID"])
-
-defaultOverrideData := {}
-defaultOverrideData["TX_ID"] := txId ; Default in the tx name from the command line
-
-data := s.selectGui("", "Dump Data Transaction from Environment to File", defaultOverrideData)
+s.AddOverrideFields(["TX_ID"]).SetDefaultOverrides({"TX_ID":txId}) ; Add a field for the TX's ID and default it in if it was given already.
+data := s.selectGui("", "Dump Data Transaction from Environment to File")
 if(!data)
 	ExitApp
 

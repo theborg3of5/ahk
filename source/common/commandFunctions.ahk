@@ -244,5 +244,10 @@
 		
 		return old
 	}
+	setSendLevel(new) {
+		old := A_SendLevel
+		SendLevel, % new
+		return old
+	}
 }
 

@@ -97,10 +97,9 @@ releaseAllModifierKeys() {
 }
 
 sendUsingLevel(hotkeyString, level) {
-	startSendLevel := A_SendLevel
-	SendLevel, %level%
+	startSendLevel := setSendLevel(level)
 	Send, %hotkeyString%
-	SendLevel, % startSendLevel
+	setSendLevel(startSendLevel)
 }
 
 clickUsingMode(x := "", y := "", mouseCoordMode := "") {

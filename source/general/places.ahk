@@ -57,7 +57,7 @@ sendCleanedUpPath(containingFolderOnly := false) {
 	}
 
 ^+!m::Run("https://www.messenger.com")
-^+!f::Run("http://feedly.com/i/latest")
+$^+!f::Run("http://feedly.com/i/latest")
 ^!#m::Run("https://mail.google.com/mail/u/0/#inbox")
 !+o:: Run("https://www.onenote.com/notebooks?auth=1&nf=1&fromAR=1")
 !+t:: Run(generateOneNoteOnlineURLForPrivateNotebook("ONENOTE_ONLINE_NOTEBOOK_ID_DO"))

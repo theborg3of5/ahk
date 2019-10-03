@@ -58,6 +58,8 @@
 		Take into account overflow (across columns), with next field being empty or placeholder'd
 	
 # Selector
+	Consider switching title parameter for .selectGui() to a chainable function
+		Regex for all places using the title parameter: \.selectGui\(.+,.+\)
 	Dynamically resize abbreviation column based on widest value?
 		To allow longer abbreviations
 		Is that going to get weird with SelectorGui+FlexTable interactions?

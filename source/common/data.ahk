@@ -10,7 +10,12 @@ isNullOrEmpty(obj) {
 	return !obj.count() ; Either count() is defined (empty object/array) and returns 0, or it's not (and we get "").
 }
 
-; If the given object is already an array, return it. Otherwise, return an array with the given object as its only element (index 0).
+;---------
+; DESCRIPTION:    If the given object is already an array (or object) return it, otherwise turn it into one.
+; PARAMETERS:
+;  obj (I,REQ) - The object to force to be an array.
+; RETURNS:        An array (the obj parameter if it was one, or a new array with obj as the first and only value in it)
+;---------
 forceArray(obj) {
 	if(IsObject(obj))
 		return obj
@@ -20,17 +25,31 @@ forceArray(obj) {
 	return newArray
 }
 
+;---------
+; DESCRIPTION:    Force the given data to be a number.
+; PARAMETERS:
+;  data (I,REQ) - Data to force into a number.
+; RETURNS:        If it's already numeric, the number. Otherwise, 0.
+;---------
 forceNumber(data) {
 	if(data.isNum())
 		return data
 	return 0
 }
 
-; Maximum of any number of numeric arguments.
+;---------
+; DESCRIPTION:    Find the numberic maximum of the given numbers.
+; PARAMETERS:
+;  nums* (I,REQ) - Variadic parameter - as many numbers as desired.
+; RETURNS:        The numeric maximum of all given numbers.
+;---------
 max(nums*) {
 	; DEBUG.popup("Max", "Start", "Nums", nums)
 	max := nums[1]
 	For i,n in nums {
+		if(!n.isNum()) ; Ignore non-numeric values
+			Continue
+		
 		if((max = "") || (max < n))
 			max := n
 	}

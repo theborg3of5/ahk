@@ -115,17 +115,17 @@
 }
 
 { ; Date and time.
-	:X:idate::sendCurrentDate("M/d/yy")
-	:X:itime::sendCurrentTime("h:mm tt")
+	:X:idate::Send, % FormatTime(A_Now, "M/d/yy")
+	:X:itime::Send, % FormatTime(A_Now, "h:mm tt")
 	
-	:X:dashidate::sendCurrentDate("M-d-yy")
-	:X:didate::sendCurrentDate("dddd`, M/d")
-	:X:iddate::sendCurrentDate("M/d`, dddd")
+	:X:dashidate::Send, % FormatTime(A_Now, "M-d-yy")
+	:X:didate::Send, % FormatTime(A_Now, "dddd`, M/d")
+	:X:iddate::Send, % FormatTime(A_Now, "M/d`, dddd")
 	
 	::.tscell::
-		sendCurrentDate("M/d/yy")
+		Send, % FormatTime(A_Now, "M/d/yy")
 		Send, {Tab}
-		sendCurrentTime("h:mm tt")
+		Send, % FormatTime(A_Now, "h:mm tt")
 		Send, {Tab}
 	return
 	

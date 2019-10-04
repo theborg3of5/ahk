@@ -1,18 +1,6 @@
 ; Date and time utility functions.
 
 ;---------
-; DESCRIPTION:    Send the current date/time in the given format.
-; PARAMETERS:
-;  format (I,REQ) - The date/time format to send, a la FormatTime().
-;---------
-sendCurrentDate(format := "M/d/yy") {
-	Send, % FormatTime(A_Now, format)
-}
-sendCurrentTime(format := "h:mm tt") {
-	Send, % FormatTime(A_Now, format)
-}
-
-;---------
 ; DESCRIPTION:    Send a date in a particular format, relative to today.
 ; PARAMETERS:
 ;  format     (I,OPT) - The format to send the date in, a la FormatTime(). Defaults to

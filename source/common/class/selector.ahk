@@ -88,12 +88,13 @@
 	
 	Example Usage (Popup)
 		s := new Selector("C:\ahk\configs.tls")                    ; Read in the "configs.tls" TLS file
+		s.SetTitle("New title!")                                   ; Set the popup's title to "New title!"
 		s.dataTL.filterByColumn("MACHINE", "HOME_DESKTOP")         ; Only include choices which which have the "MACHINE" column set to "HOME_DESKTOP" (or blank)
 		s.SetGuiSetting("MinColumnWidth", 500)                     ; Set the minimum super-column width to 500 pixels
 		s.AddOverrideFields(["CONFIG_NAME", "CONFIG_NUM"])         ; Two additional override fields for the popup.
 		s.SetDefaultOverrides({CONFIG_NAME: "Windows"})            ; Default a value of "Windows" into the "CONFIG_NAME" override field
 		
-		data := s.selectGui("", "New title!")                      ; Show the popup with a title of "New title!"
+		data := s.selectGui()                                      ; Show the popup and retrieve the entire data array
 		MsgBox, % "Chosen config name: " data["CONFIG_NAME"]
 		MsgBox, % "Chosen config num: "  data["CONFIG_NUM"]
 		
@@ -133,7 +134,7 @@ class Selector {
 		
 		if(filePath) {
 			this.filePath := findConfigFilePath(filePath)
-			this.getDataFromFile()
+			this.loadFromFile()
 		}
 		
 		; DEBUG.popup("Selector.__New", "Finish", "Filepath", this.filePath, "State", this)
@@ -175,37 +176,52 @@ class Selector {
 		return this
 	}
 	
-	
-	SetDefaultOverrides(defaultOverrides) { ; Format: {columnLabel: value}
+	;---------
+	; DESCRIPTION:    Set the default values for the override fields in the popup.
+	; PARAMETERS:
+	;  defaultOverrides (I,REQ) - Associative array fo default overrides, format:
+	;                              {columnLabel: value}
+	; RETURNS:        this
+	;---------
+	SetDefaultOverrides(defaultOverrides) {
 		this._defaultOverrides := defaultOverrides
 		return this
 	}
 	
+	;---------
+	; DESCRIPTION:    Turn off the override fields in the popup.
+	; RETURNS:        this
+	;---------
 	OverrideFieldsOff() {
-		this._noOverrideFields := true
+		this.overrideFields := "" ; Get rid of override fields entirely.
 		return this
 	}
 	
 	;---------
-	; DESCRIPTION:    Show a popup to the user so they can select one of the choices we've prepared and 
-	;                 enter any additional override information.
+	; DESCRIPTION:    Set the popup's title.
 	; PARAMETERS:
-	;  returnColumn           (I,OPT) - If this parameter is given, only the data under the column with
-	;                                   this name will be returned.
-	;  title                  (I,OPT) - If you want to override the title set in the TLS file (or defaulted
-	;                                   from this class), pass in the desired title here.
-	; RETURNS:        An array of data as chosen/overridden by the user. If the returnColumn parameter was
-	;                 specified, only the subscript matching that name will be returned.
+	;  title (I,REQ) - The title to use.
+	; RETURNS:        this
 	;---------
-	selectGui(returnColumn := "", title := "") {
+	SetTitle(title) {
+		this.guiSettings["WindowTitle"] := title
+		return this
+	}
+	
+	;---------
+	; DESCRIPTION:    Show a popup to the user so they can select one of the choices we've prepared
+	;                 and enter any additional override information.
+	; PARAMETERS:
+	;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this
+	;                         name will be returned.
+	; RETURNS:        An array of data as chosen/overridden by the user. If the returnColumn
+	;                 parameter was specified, only the subscript matching that name will be
+	;                 returned.
+	;---------
+	selectGui(returnColumn := "") {
 		; DEBUG.popup("Selector.selectGui","Start", "GUI Settings",guiSettings)
-		if(!this.loadFromData())
+		if(!this.loadChoicesFromData())
 			return ""
-		
-		if(title)
-			this.guiSettings["WindowTitle"] := title
-		if(this._noOverrideFields)
-			this.overrideFields := "" ; If user explicitly asked us to suppress override fields, get rid of them.
 		
 		data := this.doSelectGui()
 		
@@ -231,7 +247,7 @@ class Selector {
 		if(!choiceString)
 			return ""
 		
-		if(!this.loadFromData())
+		if(!this.loadChoicesFromData())
 			return ""
 		
 		data := this.parseChoice(choiceString)
@@ -278,7 +294,6 @@ class Selector {
 	suppressData      := false ; Whether to ignore all data from the user (choice and overrides). Typically used when we've done something else (like edit the TLS file).
 	_dataTL           := ""    ; TableList instance read from file, which we'll extract choice and other info from.
 	_defaultOverrides := ""    ; {columnLabel: value} - Default values to show in override fields, by column name
-	_noOverrideFields := false ; Whether to suppress override fields, even if they're in the .tls file.
 	
 	;---------
 	; DESCRIPTION:    Populate this.guiSettings with our defaults for various gui settings.
@@ -289,20 +304,14 @@ class Selector {
 	}
 	
 	;---------
-	; DESCRIPTION:    Load the choices and other information from the TLS file into a TableList instance.
+	; DESCRIPTION:    Read everything from the TLS file into a TableList instance and load most of
+	;                 it into this class.
+	; NOTES:          This reads the choices into the TableList instance, but it does not load them
+	;                 into this class until we're actually doing selection (as before then the
+	;                 caller can still modify them by filtering the TableList via .dataTL).
 	;---------
-	getDataFromFile() {
-		this._dataTL := new TableList(this.filePath, {this.Char_OverrideFieldIndex: "OVERRIDE_INDEX"})
-	}
-	
-	;---------
-	; DESCRIPTION:    Load info from our data TableList instance into the various members used to
-	;                 actually launch a selector.
-	; RETURNS:        true if all went well, false if there was an error and we should abort.
-	; SIDE EFFECTS:   Shows an error toast if something went wrong.
-	;---------
-	loadFromData() {
-		tl := this._dataTL
+	loadFromFile() {
+		tl := new TableList(this.filePath, {this.Char_OverrideFieldIndex: "OVERRIDE_INDEX"})
 		
 		this.sectionTitles := tl.headers
 		For name,value in tl.settings
@@ -318,7 +327,17 @@ class Selector {
 			}
 		}
 		
-		For _,row in tl.getTable()
+		this._dataTL := tl
+	}
+	
+	;---------
+	; DESCRIPTION:    Load the choices from our data TableList instance.
+	; RETURNS:        true if all went well, false if there was an error and we should abort.
+	; SIDE EFFECTS:   Shows an error toast if something went wrong.
+	;---------
+	loadChoicesFromData() {
+		; Load the choices
+		For _,row in this._dataTL.getTable()
 			this.choices.push(new SelectorChoice(row))
 		
 		; Show a warning and fail if we didn't actually manage to load any choices.

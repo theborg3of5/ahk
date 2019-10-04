@@ -25,6 +25,7 @@
 		Include square brackets on properties (that don't take parameters)?
 	Make dbpop handle commas within quotes/parens?
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
+		Possibly reconsider the 100-char limit - wouldn't wider make more sense?
 		Could take into account whether there would be only 1 small word moved down
 		Could handle multiple line breaks
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
@@ -58,8 +59,6 @@
 		Take into account overflow (across columns), with next field being empty or placeholder'd
 	
 # Selector
-	Consider switching title parameter for .selectGui() to a chainable function
-		Regex for all places using the title parameter: \.selectGui\(.+,.+\)
 	Dynamically resize abbreviation column based on widest value?
 		To allow longer abbreviations
 		Is that going to get weird with SelectorGui+FlexTable interactions?

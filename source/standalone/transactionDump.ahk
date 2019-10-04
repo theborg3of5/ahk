@@ -15,9 +15,9 @@ if(!txId)
 SetWorkingDir, % Config.path["TX_DIFF"]
 
 ; Create a Selector so the user can pick the environment and give us the TX's ID.
-s := new Selector("epicEnvironments.tls")
+s := new Selector("epicEnvironments.tls").SetTitle("Dump Data Transaction from Environment to File")
 s.AddOverrideFields(["TX_ID"]).SetDefaultOverrides({"TX_ID":txId}) ; Add a field for the TX's ID and default it in if it was given already.
-data := s.selectGui("", "Dump Data Transaction from Environment to File")
+data := s.selectGui()
 if(!data)
 	ExitApp
 
@@ -25,6 +25,8 @@ envName := data["NAME"]
 envId   := data["COMM_ID"]
 txId    := data["TX_ID"].clean() ; Clean out any leading/trailing odd characters (generally spaces).
 
+if(envId = "")
+	ExitApp
 if(envId = "LAUNCH") ; Special case - just launching the script without picking an environment
 	envId := ""
 

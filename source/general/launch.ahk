@@ -41,7 +41,7 @@
 	
 	^+!h::
 		selectHyperspace() {
-			data := new Selector("epicEnvironments.tls").selectGui("", "Launch Hyperspace in Environment")
+			data := new Selector("epicEnvironments.tls").SetTitle("Launch Hyperspace in Environment").selectGui()
 			if(data)
 				Run(buildHyperspaceRunString(data["MAJOR"], data["MINOR"], data["COMM_ID"]))
 		}
@@ -59,9 +59,9 @@
 		selectSnapper() {
 			record := new EpicRecord(getSelectedText())
 			
-			s := new Selector("epicEnvironments.tls")
+			s := new Selector("epicEnvironments.tls").SetTitle("Open Record(s) in Snapper in Environment")
 			s.AddOverrideFields(["INI", "ID"]).SetDefaultOverrides({"INI":record.ini, "ID":record.id}) ; Add fields for INI/ID and default in values if we figured them out
-			data := s.selectGui("", "Open Record(s) in Snapper in Environment")
+			data := s.selectGui()
 			if(!data)
 				return
 			
@@ -101,7 +101,7 @@
 	
 	^+!r::
 		selectThunder() {
-			data := new Selector("epicEnvironments.tls").selectGui("", "Launch Thunder Environment")
+			data := new Selector("epicEnvironments.tls").SetTitle("Launch Thunder Environment").selectGui()
 			if(!data)
 				return
 			
@@ -113,7 +113,7 @@
 	
 	!+v::
 		selectVDI() {
-			data := new Selector("epicEnvironments.tls").selectGui("", "Launch VDI for Environment")
+			data := new Selector("epicEnvironments.tls").SetTitle("Launch VDI for Environment").selectGui()
 			if(!data)
 				return
 			

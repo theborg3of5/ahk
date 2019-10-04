@@ -6,20 +6,19 @@
 ;  format (I,REQ) - The date/time format to send, a la FormatTime().
 ;---------
 sendCurrentDate(format := "M/d/yy") {
-	sendDate(A_Now, format)
+	Send, % FormatTime(A_Now, format)
 }
 sendCurrentTime(format := "h:mm tt") {
-	sendTime(A_Now, format)
+	Send, % FormatTime(A_Now, format)
 }
 
 ;---------
-; DESCRIPTION:    Send a date in a particular format.
+; DESCRIPTION:    Send a date in a particular format, relative to today.
 ; PARAMETERS:
-;  dateToSend (I,OPT) - The date to send. If not given, we'll prompt the user for a relative date.
-;  format     (I,REQ) - The format to send the date in, a la FormatTime(). Defaults to
+;  format     (I,OPT) - The format to send the date in, a la FormatTime(). Defaults to
 ;                       <month w/out leading 0>/<day with leading 0>/<2-digit year>.
 ;---------
-sendDate(dateToSend := "", format := "M/d/yy") {
+sendRelativeDate(format := "M/d/yy") {
 	; If no date is passed, prompt the user for a relative one.
 	if(dateToSend = "") {
 		userDate := InputBox("Enter relative date to send", , , 300, 100)
@@ -31,13 +30,12 @@ sendDate(dateToSend := "", format := "M/d/yy") {
 	Send, % FormatTime(dateToSend, format)
 }
 ;---------
-; DESCRIPTION:    Send a time in a particular format.
+; DESCRIPTION:    Send a time in a particular format, relative to today.
 ; PARAMETERS:
-;  timeToSend (I,OPT) - The time to send. If not given, we'll prompt the user for a relative time.
-;  format     (I,REQ) - The format to send the date in, a la FormatTime(). Defaults to
+;  format     (I,OPT) - The format to send the date in, a la FormatTime(). Defaults to
 ;                       <hour w/out leading 0>:<minute with leading 0> <AM/PM>.
 ;---------
-sendTime(timeToSend := "", format := "h:mm tt") {
+sendRelativeTime(format := "h:mm tt") {
 	; If no time is passed, prompt the user for a relative one.
 	if(timeToSend = "") {
 		userTime := InputBox("Enter relative time to send", , , 300, 100)

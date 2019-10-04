@@ -130,10 +130,10 @@
 	return
 	
 	; Arbitrary dates/times, translates
-	:X:aidate::sendDate()
-	:X:aiddate::sendDate(, "M/d`, dddd")
-	:X:adidate::sendDate(, "dddd`, M/d")
-	:X:aitime::sendTime()
+	:X:aidate::sendRelativeDate()
+	:X:aiddate::sendRelativeDate("M/d`, dddd")
+	:X:adidate::sendRelativeDate("dddd`, M/d")
+	:X:aitime::sendRelativeTime()
 }
 
 { ; URLs.

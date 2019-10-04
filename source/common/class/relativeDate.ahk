@@ -90,8 +90,6 @@ class RelativeDate {
 		if(operator = "-")
 			shiftAmount := -shiftAmount
 		
-		DEBUG.popup("unit",unit, "shiftAmount",shiftAmount)
-		
 		; Do the shift based on the unit.
 		if(unit = "d" || unit = "t") ; Relative days can also be written as "t" for today.
 			this.shiftDay(shiftAmount)
@@ -108,7 +106,7 @@ class RelativeDate {
 		this.updatePartsFromInstant()
 	}
 	shiftWeek(numWeeks) {
-		this.shiftDays(numWeeks * 7)
+		this.shiftDay(numWeeks * 7)
 	}
 	shiftMonth(numMonths) {
 		; Update the month

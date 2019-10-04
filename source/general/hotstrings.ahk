@@ -115,36 +115,25 @@
 }
 
 { ; Date and time.
-	:X:idate::sendDateTime("M/d/yy")
-	:X:itime::sendDateTime("h:mm tt")
+	:X:idate::sendCurrentDate("M/d/yy")
+	:X:itime::sendCurrentTime("h:mm tt")
 	
-	:X:dashidate::sendDateTime("M-d-yy")
-	:X:didate::sendDateTime("dddd`, M/d")
-	:X:iddate::sendDateTime("M/d`, dddd")
+	:X:dashidate::sendCurrentDate("M-d-yy")
+	:X:didate::sendCurrentDate("dddd`, M/d")
+	:X:iddate::sendCurrentDate("M/d`, dddd")
 	
 	::.tscell::
-		sendDateTime("M/d/yy")
+		sendCurrentDate("M/d/yy")
 		Send, {Tab}
-		sendDateTime("h:mm tt")
+		sendCurrentTime("h:mm tt")
 		Send, {Tab}
 	return
 	
 	; Arbitrary dates/times, translates
-	:X:aidate::queryDateAndSend()
-	:X:aiddate::queryDateAndSend("M/d`, dddd")
-	:X:adidate::queryDateAndSend("dddd`, M/d")
-	queryDateAndSend(format := "M/d/yy") {
-		date := queryDate(format)
-		if(date)
-			SendRaw, % date
-	}
-	
-	::aitime::
-		queryTimeAndSend() {
-			time := queryTime()
-			if(time)
-				SendRaw, % time
-		}
+	:X:aidate::sendDate()
+	:X:aiddate::sendDate(, "M/d`, dddd")
+	:X:adidate::sendDate(, "dddd`, M/d")
+	:X:aitime::sendTime()
 }
 
 { ; URLs.

@@ -57,7 +57,12 @@ max(nums*) {
 	return max
 }
 
-; First non-blank value of the arguments
+;---------
+; DESCRIPTION:    Find the first non-blank value from those given.
+; PARAMETERS:
+;  params* (I,REQ) - Variadic parameter - as many values as desired.
+; RETURNS:        The first non-blank value.
+;---------
 firstNonBlankValue(params*) {
 	For _,param in params {
 		if(param != "")
@@ -65,7 +70,13 @@ firstNonBlankValue(params*) {
 	}
 }
 
-; overrides wins if they both have an index.
+;---------
+; DESCRIPTION:    Recursively merge two objects together into a new object containing the data from both.
+; PARAMETERS:
+;  baseObject (I,REQ) - The first object to merge.
+;  overrides  (I,REQ) - The second object to merge. If both objects have the same property/index,
+;                       this object's value will be included.
+;---------
 mergeObjects(baseObject, overrides) {
 	if(IsObject(baseObject))
 		retAry := baseObject.clone()
@@ -82,22 +93,15 @@ mergeObjects(baseObject, overrides) {
 	return retAry
 }
 
-; Sets global variables to null.
-nullGlobals(baseName, startIndex, endIndex) {
-	global
-	local i
-	
-	i := startIndex
-	While i <= endIndex {
-		; DEBUG.popup("Variable", baseName i, "Before nullify", %baseName%%i%)
-		%baseName%%i% := ""
-		; DEBUG.popup("Variable", baseName i, "After nullify", %baseName%%i%)
-		i++
-	}
-}
-
-; Only supports pseudo-arrays where the count is in the base variable (i.e. Var = 5, Var1-Var5 are the data elements).
-; Note: you need to declare the pseudo-array's root as a global before calling this, otherwise we can't access the data there.
+;---------
+; DESCRIPTION:    Convert a pseudo-array into an actual array.
+; PARAMETERS:
+;  pseudoArrayName (I,REQ) - The name of the pseudo-array. This must be declared as a global prior
+;                            to calling this function.
+; RETURNS:        The resulting array
+; NOTES:          This only supports pseudo-arrays where the count is in the base variable
+;                 (i.e. Var = 5, Var1 is the first element, etc.)
+;---------
 convertPseudoArrayToArray(pseudoArrayName) {
 	resultAry := []
 	Loop, % %pseudoArrayName% {
@@ -108,6 +112,13 @@ convertPseudoArrayToArray(pseudoArrayName) {
 	return resultAry
 }
 
+;---------
+; DESCRIPTION:    Convert an object to an array.
+; PARAMETERS:
+;  obj (I,REQ) - The object to convert
+; RETURNS:        The resulting array
+; NOTES:          The indices are added in the same order as a For/in loop.
+;---------
 convertObjectToArray(obj) {
 	newArray := []
 	For _,value in obj
@@ -116,10 +127,15 @@ convertObjectToArray(obj) {
 	return newArray
 }
 
-; Expand lists that can optionally contain numeric ranges.
-; Note that ranges with non-numeric values will be ignored (not included in the output array).
-; Example:
-;  1,2:3,7,6-4 -> [1, 2, 3, 7, 6, 5, 4]
+;---------
+; DESCRIPTION:    Expand lists that can optionally contain numeric ranges (delimited by either
+;                 colons or hyphens). For example:
+;                  1,2:3,7,6-4 => [1, 2, 3, 7, 6, 5, 4]
+; PARAMETERS:
+;  listString (I,REQ) - The list to expand.
+; RETURNS:        The resulting array of expanded values.
+; NOTES:          Ranges with non-numeric values will be ignored (not included in the output array).
+;---------
 expandList(listString) {
 	elementAry := listString.split(",")
 	outAry := []
@@ -136,7 +152,13 @@ expandList(listString) {
 	return outAry
 }
 
-; Expands numeric ranges (i.e. 1:5 or 1-5 -> [1, 2, 3, 4, 5]).
+;---------
+; DESCRIPTION:    Expand a numeric range that's delimited by either a colon or a hyphen. For example:
+;                  1:5 or 1-5 => [1, 2, 3, 4, 5]
+; PARAMETERS:
+;  rangeString (I,REQ) - The range to expand
+; RETURNS:        The resulting array of numbers.
+;---------
 expandNumericRange(rangeString) {
 	splitAry := rangeString.split([":", "-"])
 	start := splitAry[1]
@@ -165,7 +187,13 @@ expandNumericRange(rangeString) {
 	return rangeAry
 }
 
-; Bit field operations
+;---------
+; DESCRIPTION:    Check for, add, and remove flags from a bitfield.
+; PARAMETERS:
+;  bitField (I,REQ) - The bitfield to check or modify.
+;  flag     (I,REQ) - The flag to check/add/remove.
+; RETURNS:        The resulting bitfield.
+;---------
 bitFieldHasFlag(bitField, flag) {
 	return (bitField & flag) > 0
 }
@@ -176,15 +204,26 @@ bitFieldRemoveFlag(bitField, flag) {
 	return (bitField & ~flag)
 }
 
+;---------
+; DESCRIPTION:    Convert the provided number into an integer/hex code.
+; PARAMETERS:
+;  num (I,REQ) - The number to convert
+; RETURNS:        The number as an integer/in hex.
+;---------
 numToInteger(num) {
 	return Format("{1:i}", num)
 }
-
 numToHex(num) {
 	return Format("{1:x}", num)
 }
 
-hexToInteger(num) {
-	num := "0x" num
-	return numToInteger(num)
+;---------
+; DESCRIPTION:    Convert a hex number to an integer.
+; PARAMETERS:
+;  hexNum (I,REQ) - The hex number to convert
+; RETURNS:        The hex number as an integer.
+;---------
+hexToInteger(hexNum) {
+	hexNum := "0x" hexNum
+	return numToInteger(hexNum)
 }

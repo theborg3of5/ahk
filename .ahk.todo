@@ -92,7 +92,6 @@
 			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
 	common
 		functions
-			data
 			dateTime
 			epic
 			file

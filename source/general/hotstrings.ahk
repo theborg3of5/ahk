@@ -130,10 +130,10 @@
 	return
 	
 	; Arbitrary dates/times, translates
-	:X:aidate::sendRelativeDate()
+	:X:aidate::new RelativeDate().SendInFormat("M/d/yy")
 	:X:aiddate::sendRelativeDate("M/d`, dddd")
 	:X:adidate::sendRelativeDate("dddd`, M/d")
-	:X:aitime::sendRelativeTime()
+	:X:aitime::new RelativeTime().SendInFormat("h:mm tt")
 }
 
 { ; URLs.

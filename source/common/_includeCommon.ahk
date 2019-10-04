@@ -31,6 +31,8 @@
 	#Include hyperlinker.ahk
 	#Include mousePosition.ahk
 	#Include programInfo.ahk
+	#Include relativeDate.ahk
+	#Include relativeTime.ahk
 	#Include scriptTrayInfo.ahk
 	#Include selector.ahk
 	#Include tableList.ahk

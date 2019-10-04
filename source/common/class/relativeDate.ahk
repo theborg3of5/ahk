@@ -1,3 +1,5 @@
+#Include relativeDateTimeBase.ahk
+
 /* Calculates and sends a date relative to the class's instantiation.
 	
 	Relative date string format
@@ -21,20 +23,20 @@
 		rd.SendInFormat("M/d/yy")     ; Send the calculated date in a specific format
 */
 
-class RelativeDate {
+class RelativeDate extends RelativeDateTimeBase {
 
 ; ====================================================================================================
 ; ============================================== PUBLIC ==============================================
 ; ====================================================================================================
 	
-	;---------
-	; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
-	;---------
-	Instant {
-		get {
-			return this._instant
-		}
-	}
+	; ;---------
+	; ; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
+	; ;---------
+	; Instant {
+		; get {
+			; return this._instant
+		; }
+	; }
 	
 	;---------
 	; DESCRIPTION:    Create a new representation of a date relative to right now.
@@ -43,7 +45,8 @@ class RelativeDate {
 	;                         we'll prompt the user for it.
 	;---------
 	__New(relativeDate := "") {
-		this.loadCurrentDate()
+		; this.loadCurrentDate()
+		this.loadCurrentDateTime()
 		
 		; If no date is passed, prompt the user for a relative one.
 		if(relativeDate = "")
@@ -51,46 +54,58 @@ class RelativeDate {
 		if(relativeDate = "")
 			return ""
 		
-		this.shiftByRelativeDate(relativeDate)
+		; this.shiftByRelativeDate(relativeDate)
+		this.shiftByRelativeString(relativeDate)
 	}
 	
-	;---------
-	; DESCRIPTION:    Send the relative date in a particular format.
-	; PARAMETERS:
-	;  format (I,REQ) - The format to send the date in, a la FormatTime().
-	;---------
-	SendInFormat(format) {
-		Send, % FormatTime(this._instant, format)
-	}
+	; ;---------
+	; ; DESCRIPTION:    Send the relative date in a particular format.
+	; ; PARAMETERS:
+	; ;  format (I,REQ) - The format to send the date in, a la FormatTime().
+	; ;---------
+	; SendInFormat(format) {
+		; Send, % FormatTime(this._instant, format)
+	; }
 
 	
 ; ====================================================================================================
 ; ============================================== PRIVATE =============================================
 ; ====================================================================================================
 	
-	_instant := "" ; The actual timestamp that we calculate based on the relative date string.
-	_year := ""
-	_month := ""
-	_day := ""
+	; _instant := "" ; The actual timestamp that we calculate based on the relative date string.
+	; _year := ""
+	; _month := ""
+	; _day := ""
 	
 	
-	loadCurrentDate() {
-		this._year    := A_YYYY
-		this._month   := A_MM
-		this._day     := A_DD
-		this.updateInstantFromParts()
-	}
+	; loadCurrentDate() {
+		; this._year    := A_YYYY
+		; this._month   := A_MM
+		; this._day     := A_DD
+		; this.updateInstantFromParts()
+	; }
 	
-	shiftByRelativeDate(relativeDate) {
-		unit        := relativeDate.sub(1, 1)
-		operator    := relativeDate.sub(2, 1)
-		shiftAmount := relativeDate.sub(3)
+	; shiftByRelativeDate(relativeDate) {
+		; unit        := relativeDate.sub(1, 1)
+		; operator    := relativeDate.sub(2, 1)
+		; shiftAmount := relativeDate.sub(3)
 		
-		; Make shiftAmount match unit (because we have to use EnvAdd/+= for date/time math)
-		if(operator = "-")
-			shiftAmount := -shiftAmount
+		; ; Make shiftAmount match unit (because we have to use EnvAdd/+= for date/time math)
+		; if(operator = "-")
+			; shiftAmount := -shiftAmount
 		
-		; Do the shift based on the unit.
+		; ; Do the shift based on the unit.
+		; if(unit = "d" || unit = "t") ; Relative days can also be written as "t" for today.
+			; this.shiftDay(shiftAmount)
+		; if(unit = "w")
+			; this.shiftWeek(shiftAmount)
+		; if(unit = "m")
+			; this.shiftMonth(shiftAmount)
+		; if(unit = "y")
+			; this.shiftYear(shiftAmount)
+	; }
+	
+	doShift(shiftAmount, unit) {
 		if(unit = "d" || unit = "t") ; Relative days can also be written as "t" for today.
 			this.shiftDay(shiftAmount)
 		if(unit = "w")
@@ -102,11 +117,15 @@ class RelativeDate {
 	}
 	
 	shiftDay(numDays) {
-		this._instant += numDays, Days ; EnvAdd (+=) takes care of updating months/years if needed
+		inst := this._instant
+		inst += numDays, Days ; GDB TODO figure out why this is needed
+		this._instant := inst
+		; this._instant += numDays, Days ; EnvAdd (+=) takes care of updating months/years if needed
+		
 		this.updatePartsFromInstant()
 	}
 	shiftWeek(numWeeks) {
-		this.shiftDay(numWeeks * 7)
+		this.shiftDay(numWeeks * 7) ; There's always 7 days in a week, so just add it that way
 	}
 	shiftMonth(numMonths) {
 		; Update the month
@@ -124,17 +143,17 @@ class RelativeDate {
 		this.updateInstantFromParts()
 	}
 	
-	updatePartsFromInstant() {
-		this._year  := this._instant.sub(1, 4)
-		this._month := this._instant.sub(5, 2)
-		this._day   := this._instant.sub(7, 2)
-	}
+	; updatePartsFromInstant() {
+		; this._year  := this._instant.sub(1, 4)
+		; this._month := this._instant.sub(5, 2)
+		; this._day   := this._instant.sub(7, 2)
+	; }
 	
-	updateInstantFromParts() {
-		year  := this._year.prePadToLength(4, "0")
-		month := this._month.prePadToLength(2, "0")
-		day   := this._day.prePadToLength(2, "0")
+	; updateInstantFromParts() {
+		; year  :=  this._year.prePadToLength(4, "0")
+		; month := this._month.prePadToLength(2, "0")
+		; day   :=   this._day.prePadToLength(2, "0")
 		
-		this._instant := year month day
-	}
+		; this._instant := year month day
+	; }
 }

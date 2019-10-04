@@ -20,7 +20,7 @@ class ActionObjectBase {
 	; NOTES:          Should be overridden by child class.
 	;---------
 	__New(value) {
-		new ErrorToast("ActionObject instance created", "ActionObject is a base class only, use a type-specific child class instead.").showMedium()
+		new ErrorToast("ActionObject instance created", "ActionObjectBase is a base class only, use a type-specific child class instead.").showMedium()
 		return ""
 	}
 	

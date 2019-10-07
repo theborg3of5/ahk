@@ -39,16 +39,14 @@ findConfigFilePath(path) {
 	return ""
 }
 
-; Clean out unwanted garbage strings from paths
+; Clean out unwanted garbage strings from paths and map them to any map drives.
 cleanupPath(path) {
 	path := path.replace("%20", A_Space) ; In case it's a URL'd file path
-	return path.clean(["file:///", """"])
-}
-
-mapPath(path) {	
+	path := path.clean(["file:///", """"])
+	
 	; Convert paths to use mapped drive letters
 	table := new TableList("mappedDrives.tl").getTable()
-	For i,row in table {
+	For _,row in table {
 		if(path.contains(row["PATH"])) {
 			path := path.replaceOne(row["PATH"], row["DRIVE_LETTER"] ":")
 			Break ; Just match the first one.

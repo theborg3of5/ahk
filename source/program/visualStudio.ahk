@@ -31,7 +31,6 @@ class VisualStudio {
 		path := clipboard
 		if(path) {
 			path := cleanupPath(path)
-			path := mapPath(path)
 			parentFolder := getParentFolder(path) ; Actually get the folder instead of the file
 			parentFolder := parentFolder.appendIfMissing("\") ; Add the trailing backslash since it's a folder
 		}

@@ -30,7 +30,6 @@ class Hyperlinker {
 		}
 		
 		path := cleanupPath(path)
-		path := mapPath(path)
 		
 		if(!isObject(Hyperlinker.windows))
 			Hyperlinker.windows := Hyperlinker.getWindows()

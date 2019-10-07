@@ -35,9 +35,7 @@
 !+p::sendCleanedUpPath()
 !+#p::sendCleanedUpPath(true)
 sendCleanedUpPath(containingFolderOnly := false) {
-	path := clipboard
-	path := cleanupPath(path)
-	path := mapPath(path)
+	path := cleanupPath(clipboard)
 	
 	if(containingFolderOnly)
 		path := getParentFolder(path) "\" ; Remove last element at end, add trailing slash

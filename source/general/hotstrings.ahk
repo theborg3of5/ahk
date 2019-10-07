@@ -141,44 +141,54 @@
 
 { ; Folders and paths.
 	{ ; General
-		:X:pff::FileUtils.sendFolderPath("PROGRAM_FILES")
-		:X:xpff::FileUtils.sendFolderPath("PROGRAM_FILES_86")
+		:X:pff::sendFolderPath("PROGRAM_FILES")
+		:X:xpff::sendFolderPath("PROGRAM_FILES_86")
 		
-		:X:urf::FileUtils.sendFolderPath("USER_ROOT")
-		:X:dsf::FileUtils.sendFolderPath("USER_DESKTOP")
-		:X:desf::FileUtils.sendFolderPath("USER_ROOT", "Design")
-		:X:dlf::FileUtils.sendFolderPath("USER_DOWNLOADS")
-		:X:devf::FileUtils.sendFolderPath("USER_DEV")
+		:X:urf::sendFolderPath("USER_ROOT")
+		:X:dsf::sendFolderPath("USER_DESKTOP")
+		:X:desf::sendFolderPath("USER_ROOT", "Design")
+		:X:dlf::sendFolderPath("USER_DOWNLOADS")
+		:X:devf::sendFolderPath("USER_DEV")
 		
-		:X:otmf::FileUtils.sendFolderPath("ONETASTIC_MACROS")
+		:X:otmf::sendFolderPath("ONETASTIC_MACROS")
 	}
 
 	{ ; AHK
-		:X:arf::FileUtils.sendFolderPath("AHK_ROOT")
-		:X:aconf::FileUtils.sendFolderPath("AHK_CONFIG")
-		:X:atf::FileUtils.sendFolderPath("AHK_ROOT", "test")
-		:X:asf::FileUtils.sendFolderPath("AHK_SOURCE")
-		:X:acf::FileUtils.sendFolderPath("AHK_SOURCE", "common")
-		:X:accf::FileUtils.sendFolderPath("AHK_SOURCE", "common\class")
-		:X:acbf::FileUtils.sendFolderPath("AHK_SOURCE", "common\class\base")
-		:X:apf::FileUtils.sendFolderPath("AHK_SOURCE", "program")
-		:X:agf::FileUtils.sendFolderPath("AHK_SOURCE", "general")
-		:X:astf::FileUtils.sendFolderPath("AHK_SOURCE", "standalone")
-		:X:asuf::FileUtils.sendFolderPath("AHK_SOURCE", "sub")
+		:X:arf::sendFolderPath("AHK_ROOT")
+		:X:aconf::sendFolderPath("AHK_CONFIG")
+		:X:atf::sendFolderPath("AHK_ROOT", "test")
+		:X:asf::sendFolderPath("AHK_SOURCE")
+		:X:acf::sendFolderPath("AHK_SOURCE", "common")
+		:X:accf::sendFolderPath("AHK_SOURCE", "common\class")
+		:X:acbf::sendFolderPath("AHK_SOURCE", "common\class\base")
+		:X:apf::sendFolderPath("AHK_SOURCE", "program")
+		:X:agf::sendFolderPath("AHK_SOURCE", "general")
+		:X:astf::sendFolderPath("AHK_SOURCE", "standalone")
+		:X:asuf::sendFolderPath("AHK_SOURCE", "sub")
 	}
 
 	{ ; Epic - General
-		:X:epf::FileUtils.sendFolderPath("EPIC_PERSONAL")
-		:X:ssf::FileUtils.sendFolderPath("USER_ROOT", "Screenshots")
-		:X:enfsf::FileUtils.sendFolderPath("EPIC_NFS_3DAY")
-		:X:eunfsf::FileUtils.sendUnixFolderPath("EPIC_NFS_3DAY_UNIX")
+		:X:epf::sendFolderPath("EPIC_PERSONAL")
+		:X:ssf::sendFolderPath("USER_ROOT", "Screenshots")
+		:X:enfsf::sendFolderPath("EPIC_NFS_3DAY")
+		:X:eunfsf::sendUnixFolderPath("EPIC_NFS_3DAY_UNIX")
 		
-		:X:ecompf::FileUtils.sendFolderPath("VB6_COMPILE")
+		:X:ecompf::sendFolderPath("VB6_COMPILE")
 	}
 	
 	{ ; Epic - Source
-		:X:esf::FileUtils.sendFolderPath("EPIC_SOURCE_S1")
-		:X:fesf::FileUtils.sendFilePath("EPIC_SOURCE_S1", Config.private["EPICDESKTOP_PROJECT"])
+		:X:esf::sendFolderPath("EPIC_SOURCE_S1")
+		:X:fesf::sendFilePath("EPIC_SOURCE_S1", Config.private["EPICDESKTOP_PROJECT"])
+	}
+	
+	sendFilePath(folderName, subPath := "") {
+		FileUtils.sendPath(folderName, subPath)
+	}
+	sendFolderPath(folderName, subPath := "") {
+		FileUtils.sendPath(folderName, subPath, "\", true)
+	}
+	sendUnixFolderPath(folderName, subPath := "") {
+		FileUtils.sendPath(folderName, subPath, "/", true)
 	}
 }
 #If

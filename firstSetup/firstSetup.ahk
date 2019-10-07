@@ -7,7 +7,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
 ; Various paths needed throughout.
-ahkRootPath    := getParentFolder(A_ScriptDir)
+ahkRootPath    := FileUtils.getParentFolder(A_ScriptDir)
 userPath       := EnvGet("HOMEDRIVE") EnvGet("HOMEPATH")
 tlSetupPath    := "setup.tls"
 startupFolder  := ahkRootPath "\source"
@@ -56,7 +56,7 @@ For fromPath,toPath in copyPaths {
 	; DEBUG.popup("fromPath",fromPath, "toPath",toPath, "Finished contents",fileContents)
 	
 	; Generate the folder path if needed.
-	containingFolder := getParentFolder(toPath)
+	containingFolder := FileUtils.getParentFolder(toPath)
 	if(!FileExist(containingFolder))
 		FileCreateDir, %containingFolder%
 	

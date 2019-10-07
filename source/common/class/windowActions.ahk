@@ -13,7 +13,7 @@ class WindowActions {
 	;                              actions.
 	;---------
 	init(windowActionsFile) {
-		windowActionsPath := findConfigFilePath(windowActionsFile)
+		windowActionsPath := FileUtils.findConfigFilePath(windowActionsFile)
 		this.actionOverrides := this.loadActions(windowActionsPath)
 		; DEBUG.popupEarly("WindowActions.init","Finished", "windowActionsFile",windowActionsFile, "windowActionsPath",windowActionsPath, "this.actionOverrides",this.actionOverrides)
 	}

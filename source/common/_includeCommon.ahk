@@ -21,6 +21,7 @@
 	#Include XInput.ahk
 
 #Include %A_LineFile%\..\class
+	#Include actionObjectRedirector.ahk
 	#Include config.ahk
 	#Include commonHotkeys.ahk
 	#Include debug.ahk
@@ -40,14 +41,6 @@
 	#Include visualWindow.ahk
 	#Include windowActions.ahk
 	#Include windowInfo.ahk
-
-#Include %A_LineFile%\..\class\actionObject
-	#Include actionObjectCodeSearch.ahk
-	#Include actionObjectEMC2.ahk
-	#Include actionObjectEpicStudio.ahk
-	#Include actionObjectHelpdesk.ahk
-	#Include actionObjectPath.ahk
-	#Include actionObjectRedirector.ahk
 
 ; ====================================================================================================
 ; ============================================== STARTUP =============================================

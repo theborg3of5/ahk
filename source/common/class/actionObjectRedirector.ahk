@@ -1,9 +1,8 @@
-#Include %A_LineFile%\..\..\base\actionObjectBase.ahk
-#Include %A_LineFile%\..\actionObjectCodeSearch.ahk
-#Include %A_LineFile%\..\actionObjectEMC2.ahk
-#Include %A_LineFile%\..\actionObjectEpicStudio.ahk
-#Include %A_LineFile%\..\actionObjectHelpdesk.ahk
-#Include %A_LineFile%\..\actionObjectPath.ahk
+#Include actionObject\actionObjectCodeSearch.ahk
+#Include actionObject\actionObjectEMC2.ahk
+#Include actionObject\actionObjectEpicStudio.ahk
+#Include actionObject\actionObjectHelpdesk.ahk
+#Include actionObject\actionObjectPath.ahk
 
 /* Class that figures out what kind of ActionObject* class is needed based on the input (and prompting the user) and returns it.
 	

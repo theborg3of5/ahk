@@ -7,8 +7,10 @@
 
 ; Open folder from list
 ^+!w::
-	doSelectFolder() {
-		folderPath := selectFolder()
+	selectFolder() {
+		folderPath := new Selector("folders.tls").select(folderName, "PATH")
+		folderPath := Config.replacePathTags(folderPath)
+		
 		if(folderPath = "")
 			return
 		folderPath := replaceDateTimeTags(folderPath) ; For any date/time-based folder paths, use the current date/time.

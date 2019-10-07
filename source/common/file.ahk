@@ -1,3 +1,4 @@
+; File and folder utility functions.
 
 replaceFileWithString(filePath, newContents) {
 	if(!filePath)
@@ -28,36 +29,6 @@ openFolder(folderName) {
 	if(folderExists(folderPath))
 		Run(folderPath)
 }
-
-sendFilePath(folderName := "", subPath := "") {
-	sendFolderPath(folderName, subPath, , false)
-}
-sendUnixFolderPath(folderName := "", subPath := "") {
-	sendFolderPath(folderName, subPath, "/")
-}
-sendFolderPath(folderName := "", subPath := "", slashChar := "\", trailingSlash := true) {
-	folderPath := Config.path[folderName]
-	if(!folderPath)
-		return
-	
-	; Append a further subPath if they gave that to us
-	if(subPath) {
-		folderPath := folderPath.appendIfMissing(slashChar)
-		folderPath .= subPath
-	}
-	
-	if(trailingSlash)
-		folderPath := folderPath.appendIfMissing(slashChar)
-	
-	Send, % folderPath
-}
-
-selectFolder(folderName := "") {
-	path := new Selector("folders.tls").select(folderName, "PATH")
-	
-	; DEBUG.popup("Path",path, "Replaced",Config.replacePathTags(path))
-	return Config.replacePathTags(path)
-}
 	
 findConfigFilePath(path) {
 	if(!path)
@@ -81,6 +52,17 @@ findConfigFilePath(path) {
 		return configFolder "\" path
 	
 	return ""
+}
+
+getParentFolder(path, levelsUp := 1) {
+	outPath := path.removeFromEnd("\") ; Make sure there's no trailing backslash, SplitPath assumes that involves a blank filename.
+	
+	Loop, % levelsUp {
+		SplitPath(outPath, "", parentPath)
+		outPath := parentPath
+	}
+	
+	return outPath
 }
 
 ; Clean out unwanted garbage strings from paths
@@ -107,13 +89,65 @@ folderExists(folderPath) {
 	return InStr(FileExist(folderPath), "D") ; Exists and is a directory
 }
 
-getParentFolder(path, levelsUp := 1) {
-	outPath := path.removeFromEnd("\") ; Make sure there's no trailing backslash, SplitPath assumes that involves a blank filename.
+
+class FileUtils {
+
+; ====================================================================================================
+; ============================================== PUBLIC ==============================================
+; ====================================================================================================
 	
-	Loop, % levelsUp {
-		SplitPath(outPath, "", parentPath)
-		outPath := parentPath
+	;---------
+	; DESCRIPTION:    Send a file or folder path in a particular format.
+	; PARAMETERS:
+	;  folderName (I,REQ) - The name of the folder in Config's paths or privates.
+	;  subPath    (I,OPT) - The additional path to add to the end
+	; NOTES:          The folder options here always include a trailing slash.
+	;---------
+	sendFilePath(folderName, subPath := "") {
+		FileUtils.sendPath(folderName, subPath)
+	}
+	sendFolderPath(folderName, subPath := "") {
+		FileUtils.sendPath(folderName, subPath, "/", true)
+	}
+	sendUnixFolderPath(folderName, subPath := "") {
+		FileUtils.sendPath(folderName, subPath, "/", true)
 	}
 	
-	return outPath
+; ====================================================================================================
+; ============================================== PRIVATE =============================================
+; ====================================================================================================
+	
+	;---------
+	; DESCRIPTION:    Send a file or folder path in a particular format.
+	; PARAMETERS:
+	;  folderName       (I,REQ) - The name of the file/folder in Config's paths or privates.
+	;  subPath          (I,OPT) - The additional path to add to the end.
+	;  slashChar        (I,OPT) - The slash (forward or back) character to use in between the path
+	;                             and additional subPath, and at the end if addTrailingSlash = true.
+	;  addTrailingSlash (I,OPT) - Set to true to add a trailing slash to the end of the path.
+	; RETURNS:        
+	; SIDE EFFECTS:   
+	; NOTES:          
+	;---------
+	sendPath(folderName, subPath := "", slashChar := "\", addTrailingSlash := false) {
+		if(folderName = "")
+			return
+		
+		folderPath := Config.path[folderName]
+		if(!folderPath)
+			return
+		
+		; Append a further subPath if they gave that to us
+		if(subPath) {
+			folderPath := folderPath.appendIfMissing(slashChar)
+			folderPath .= subPath
+		}
+		
+		if(addTrailingSlash)
+			folderPath := folderPath.appendIfMissing(slashChar)
+		
+		Send, % folderPath
+	}
+	
 }
+

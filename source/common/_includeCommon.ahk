@@ -42,7 +42,6 @@
 	#Include windowInfo.ahk
 
 #Include %A_LineFile%\..\class\actionObject
-	#Include actionObjectBase.ahk
 	#Include actionObjectCodeSearch.ahk
 	#Include actionObjectEMC2.ahk
 	#Include actionObjectEpicStudio.ahk

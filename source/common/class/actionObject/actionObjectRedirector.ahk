@@ -1,4 +1,4 @@
-#Include %A_LineFile%\..\actionObjectBase.ahk
+#Include %A_LineFile%\..\..\base\actionObjectBase.ahk
 #Include %A_LineFile%\..\actionObjectCodeSearch.ahk
 #Include %A_LineFile%\..\actionObjectEMC2.ahk
 #Include %A_LineFile%\..\actionObjectEpicStudio.ahk

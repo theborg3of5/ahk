@@ -11,7 +11,7 @@
 	#Include data.ahk
 	#Include dateTime.ahk
 	#Include epic.ahk
-	#Include file.ahk
+	#Include fileUtils.ahk
 	#Include gui.ahk
 	#Include HTTPRequest.ahk
 	#Include io.ahk

@@ -59,6 +59,10 @@
 		EnvGet, v, %EnvVarName%
 		Return, v
 	}
+	EnvAdd(varName, amountToAdd, unit := "") {
+		EnvAdd, varName, % amountToAdd, % unit
+		return varName
+	}
 	FileGetShortcut(LinkFile, ByRef OutTarget = "", ByRef OutDir = "", ByRef OutArgs = "", ByRef OutDescription = "", ByRef OutIcon = "", ByRef OutIconNum = "", ByRef OutRunState = "") {
 		FileGetShortcut, %LinkFile%, OutTarget, OutDir, OutArgs, OutDescription, OutIcon, OutIconNum, OutRunState
 	}

@@ -117,11 +117,7 @@ class RelativeDate extends RelativeDateTimeBase {
 	}
 	
 	shiftDay(numDays) {
-		inst := this._instant
-		inst += numDays, Days ; GDB TODO figure out why this is needed
-		this._instant := inst
-		; this._instant += numDays, Days ; EnvAdd (+=) takes care of updating months/years if needed
-		
+		this._instant := EnvAdd(this._instant, numDays, "Days") ; Use EnvAdd to add days (can't use += format because it doesn't support this.*-style variable names).
 		this.updatePartsFromInstant()
 	}
 	shiftWeek(numWeeks) {

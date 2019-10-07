@@ -3,10 +3,6 @@
 		In general for the language
 		Could we add our own library of functions?
 		Could we add our own classes and such?
-	Consider a DateTimeObj class to encapsulate all of the date-sending and relative-date-calculation stuff in dateTime.
-		Maybe it should be specific to RELATIVE dates/times, since that's most of the work - RelativeDateTime, perhaps?
-		Alternatively, separate DateObj and TimeObj classes?
-			No, just separate methods inside would make the most sense - lots of it is dealing with timestamps, which contain both.
 	Update Notepad++ AHK documentation stuff to handle properties (with or without [])
 		Properties with parameters, too - maybe just treat [] the same as ()?
 	Make Ctrl+Enter hotkey in Notepad++ also add in bullets (* or -) if they started the previous row (ignoring whitespace and comment char, but not other stuff like (I,REQ))

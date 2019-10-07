@@ -1,7 +1,6 @@
-/* GDB TODO
+/* Base class for relative date/time classes.
 	
-	Example Usage
-		GDB TODO
+	Should not be used directly, only extended.
 */
 
 class RelativeDateTimeBase {
@@ -42,14 +41,18 @@ class RelativeDateTimeBase {
 ; ====================================================================================================
 	
 	_instant := "" ; The actual timestamp that we calculate based on the relative date/time string.
-	_year := ""
-	_month := ""
-	_day := ""
-	_hour := ""
-	_minute := ""
-	_second := ""
 	
+	; The current value for different time units.
+	_year    := ""
+	_month   := ""
+	_day     := ""
+	_hour    := ""
+	_minute  := ""
+	_second  := ""
 	
+	;---------
+	; DESCRIPTION:    Load the current date and time into class members.
+	;---------
 	loadCurrentDateTime() {
 		this._instant := A_Now
 		
@@ -61,6 +64,15 @@ class RelativeDateTimeBase {
 		this._second := A_Sec
 	}
 	
+	;---------
+	; DESCRIPTION:    Split up the relative date/time string and call into the child class to
+	;                 perform the shift.
+	; PARAMETERS:
+	;  relativeString (I,REQ) - The relative date/time string, in format:
+	;                            <unitLetter><operator><shiftAmount>
+	;                           Where unitLetter is the letter fo the unit, operator is + or -, and
+	;                           shiftAmount is how many to add/subtract.
+	;---------
 	shiftByRelativeString(relativeString) {
 		unit        := relativeString.sub(1, 1)
 		operator    := relativeString.sub(2, 1)
@@ -73,6 +85,9 @@ class RelativeDateTimeBase {
 		this.doShift(shiftAmount, unit)
 	}
 	
+	;---------
+	; DESCRIPTION:    Update the individual member variables for different units based on the instant.
+	;---------
 	updatePartsFromInstant() {
 		this._year   := this._instant.sub(1,  4)
 		this._month  := this._instant.sub(5,  2)
@@ -82,14 +97,25 @@ class RelativeDateTimeBase {
 		this._second := this._instant.sub(13, 2)
 	}
 	
+	;---------
+	; DESCRIPTION:    Update the instant based on the individual member variables for different units.
+	;---------
 	updateInstantFromParts() {
-		year   :=  this._year.prePadToLength(4, "0")
-		month  := this._month.prePadToLength(2, "0")
-		day    :=   this._day.prePadToLength(2, "0")
-		hour   :=  this._hour.prePadToLength(2, "0")
-		minute :=  this._hour.prePadToLength(2, "0")
-		second :=  this._hour.prePadToLength(2, "0")
+		year   :=   this._year.prePadToLength(4, "0")
+		month  :=  this._month.prePadToLength(2, "0")
+		day    :=    this._day.prePadToLength(2, "0")
+		hour   :=   this._hour.prePadToLength(2, "0")
+		minute := this._minute.prePadToLength(2, "0")
+		second := this._second.prePadToLength(2, "0")
 		
 		this._instant := year month day hour minute second
+	}
+	
+	;---------
+	; DESCRIPTION:    Perform the date or time shift.
+	; NOTES:          Just shows an error - should be overridden by the child class.
+	;---------
+	doShift(shiftAmount, unit) {
+		new ErrorToast("RelativeDateTimeBase.doShift called", "The child class should override doShift().").showMedium()
 	}
 }

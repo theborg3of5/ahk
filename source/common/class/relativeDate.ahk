@@ -29,15 +29,6 @@ class RelativeDate extends RelativeDateTimeBase {
 ; ============================================== PUBLIC ==============================================
 ; ====================================================================================================
 	
-	; ;---------
-	; ; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
-	; ;---------
-	; Instant {
-		; get {
-			; return this._instant
-		; }
-	; }
-	
 	;---------
 	; DESCRIPTION:    Create a new representation of a date relative to right now.
 	; PARAMETERS:
@@ -45,66 +36,28 @@ class RelativeDate extends RelativeDateTimeBase {
 	;                         we'll prompt the user for it.
 	;---------
 	__New(relativeDate := "") {
-		; this.loadCurrentDate()
 		this.loadCurrentDateTime()
 		
-		; If no date is passed, prompt the user for a relative one.
+		; If no relative date string is passed, prompt the user for a relative one.
 		if(relativeDate = "")
 			relativeDate := InputBox("Enter relative date string", , , 300, 100)
 		if(relativeDate = "")
 			return ""
 		
-		; this.shiftByRelativeDate(relativeDate)
 		this.shiftByRelativeString(relativeDate)
 	}
-	
-	; ;---------
-	; ; DESCRIPTION:    Send the relative date in a particular format.
-	; ; PARAMETERS:
-	; ;  format (I,REQ) - The format to send the date in, a la FormatTime().
-	; ;---------
-	; SendInFormat(format) {
-		; Send, % FormatTime(this._instant, format)
-	; }
 
 	
 ; ====================================================================================================
 ; ============================================== PRIVATE =============================================
 ; ====================================================================================================
 	
-	; _instant := "" ; The actual timestamp that we calculate based on the relative date string.
-	; _year := ""
-	; _month := ""
-	; _day := ""
-	
-	
-	; loadCurrentDate() {
-		; this._year    := A_YYYY
-		; this._month   := A_MM
-		; this._day     := A_DD
-		; this.updateInstantFromParts()
-	; }
-	
-	; shiftByRelativeDate(relativeDate) {
-		; unit        := relativeDate.sub(1, 1)
-		; operator    := relativeDate.sub(2, 1)
-		; shiftAmount := relativeDate.sub(3)
-		
-		; ; Make shiftAmount match unit (because we have to use EnvAdd/+= for date/time math)
-		; if(operator = "-")
-			; shiftAmount := -shiftAmount
-		
-		; ; Do the shift based on the unit.
-		; if(unit = "d" || unit = "t") ; Relative days can also be written as "t" for today.
-			; this.shiftDay(shiftAmount)
-		; if(unit = "w")
-			; this.shiftWeek(shiftAmount)
-		; if(unit = "m")
-			; this.shiftMonth(shiftAmount)
-		; if(unit = "y")
-			; this.shiftYear(shiftAmount)
-	; }
-	
+	;---------
+	; DESCRIPTION:    Handle the actual date shift relative to today.
+	; PARAMETERS:
+	;  shiftAmount (I,REQ) - The amount to shift
+	;  unit        (I,REQ) - The unit to shift in
+	;---------
 	doShift(shiftAmount, unit) {
 		if(unit = "d" || unit = "t") ; Relative days can also be written as "t" for today.
 			this.shiftDay(shiftAmount)
@@ -116,16 +69,21 @@ class RelativeDate extends RelativeDateTimeBase {
 			this.shiftYear(shiftAmount)
 	}
 	
-	shiftDay(numDays) {
-		this._instant := EnvAdd(this._instant, numDays, "Days") ; Use EnvAdd to add days (can't use += format because it doesn't support this.*-style variable names).
+	;---------
+	; DESCRIPTION:    Shift the date by the given number of days/weeks/months/years.
+	; PARAMETERS:
+	;  numToShift (I,REQ) - The number of days/weeks/months/years to shift by.
+	;---------
+	shiftDay(numToShift) {
+		this._instant := EnvAdd(this._instant, numToShift, "Days") ; Use EnvAdd to add days (can't use += format because it doesn't support this.*-style variable names).
 		this.updatePartsFromInstant()
 	}
-	shiftWeek(numWeeks) {
-		this.shiftDay(numWeeks * 7) ; There's always 7 days in a week, so just add it that way
+	shiftWeek(numToShift) {
+		this.shiftDay(numToShift * 7) ; There's always 7 days in a week, so just add it that way
 	}
-	shiftMonth(numMonths) {
+	shiftMonth(numToShift) {
 		; Update the month
-		this._month += numMonths
+		this._month += numToShift
 		
 		; If the month gets out of bounds, shift the year accordingly
 		if(this._month < 1 || this._month > 12) {
@@ -134,22 +92,8 @@ class RelativeDate extends RelativeDateTimeBase {
 		}
 		this.updateInstantFromParts()
 	}
-	shiftYear(numYears) {
-		this._year += numYears
+	shiftYear(numToShift) {
+		this._year += numToShift
 		this.updateInstantFromParts()
 	}
-	
-	; updatePartsFromInstant() {
-		; this._year  := this._instant.sub(1, 4)
-		; this._month := this._instant.sub(5, 2)
-		; this._day   := this._instant.sub(7, 2)
-	; }
-	
-	; updateInstantFromParts() {
-		; year  :=  this._year.prePadToLength(4, "0")
-		; month := this._month.prePadToLength(2, "0")
-		; day   :=   this._day.prePadToLength(2, "0")
-		
-		; this._instant := year month day
-	; }
 }

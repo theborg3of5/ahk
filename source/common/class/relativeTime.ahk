@@ -22,20 +22,11 @@
 		rt.SendInFormat("hh:mm:ss")   ; Send the calculated date in a specific format
 */
 
-class RelativeTime {
+class RelativeTime extends RelativeDateTimeBase {
 
 ; ====================================================================================================
 ; ============================================== PUBLIC ==============================================
 ; ====================================================================================================
-	
-	;---------
-	; DESCRIPTION:    The calculated instant, based on the relative time string passed to the constructor.
-	;---------
-	Instant {
-		get {
-			return this._instant
-		}
-	}
 	
 	;---------
 	; DESCRIPTION:    Create a new representation of a time relative to right now.
@@ -44,22 +35,15 @@ class RelativeTime {
 	;                         we'll prompt the user for it.
 	;---------
 	__New(relativeTime := "") {
-		; If no time is passed, prompt the user for a relative one.
+		this.loadCurrentDateTime()
+		
+		; If no relative time string is passed, prompt the user for a relative one.
 		if(relativeTime = "")
 			relativeTime := InputBox("Enter relative time string", , , 300, 100)
 		if(relativeTime = "")
 			return ""
 		
-		this._instant := this.parseRelativeTime(relativeTime)
-	}
-	
-	;---------
-	; DESCRIPTION:    Send the relative time in a particular format.
-	; PARAMETERS:
-	;  format (I,REQ) - The format to send the date in, a la FormatTime().
-	;---------
-	SendInFormat(format) {
-		Send, % FormatTime(this._instant, format)
+		this.shiftByRelativeString(relativeTime)
 	}
 
 	
@@ -67,33 +51,18 @@ class RelativeTime {
 ; ============================================== PRIVATE =============================================
 ; ====================================================================================================
 	
-	_instant := "" ; The actual timestamp that we calculate based on the relative time string.
-	
 	;---------
-	; DESCRIPTION:    Turn the relative time string into a timestamp, relative to right now.
+	; DESCRIPTION:    Handle the actual time shift relative to now.
 	; PARAMETERS:
-	;  relativeTime (I,REQ) - The relative time string. Format is <Unit><Operator><ShiftAmount>, e.g.
-	;                         h+5 for 5 hours from now, and m-3 (or n-3) for 3 minutes ago. See
-	;                         class documentation for supported units, operators, etc.
-	; RETURNS:        The instant matching the relative time.
+	;  shiftAmount (I,REQ) - The amount to shift
+	;  unit        (I,REQ) - The unit to shift in
 	;---------
-	parseRelativeTime(relativeTime) {
-		unit        := relativeTime.sub(1, 1)
-		operator    := relativeTime.sub(2, 1)
-		shiftAmount := relativeTime.sub(3)
-		
-		; Relative minutes can actually be written as a "n" for now - switch it out if that's the case here.
-		if(unit = "n")
+	doShift(shiftAmount, unit) {
+		if(unit = "n") ; Relative minutes can also be written as "n" for now.
 			unit := "m"
 		
-		; Make shiftAmount match unit (because we have to use EnvAdd/+= for date/time math)
-		if(operator = "-")
-			shiftAmount := -shiftAmount
-		
-		; Do the shift
-		outDateTime := A_Now
-		outDateTime += shiftAmount, %unit%
-		
-		return outDateTime
+		; All of the time units (hours, minutes, seconds) are supported by EnvAdd(), so just use that.
+		this._instant := EnvAdd(this._instant, shiftAmount, unit) ; Can't use += format because it doesn't support this.*-style variable names.
+		this.updatePartsFromInstant()
 	}
 }

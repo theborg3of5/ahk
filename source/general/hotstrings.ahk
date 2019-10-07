@@ -131,8 +131,8 @@
 	
 	; Arbitrary dates/times, translates
 	:X:aidate::new RelativeDate().SendInFormat("M/d/yy")
-	:X:aiddate::sendRelativeDate("M/d`, dddd")
-	:X:adidate::sendRelativeDate("dddd`, M/d")
+	:X:aiddate::new RelativeDate().SendInFormat("M/d`, dddd")
+	:X:adidate::new RelativeDate().SendInFormat("dddd`, M/d")
 	:X:aitime::new RelativeTime().SendInFormat("h:mm tt")
 }
 

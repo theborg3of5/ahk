@@ -1,33 +1,18 @@
 ; File and folder utility functions.
 
-replaceFileWithString(filePath, newContents) {
-	if(!filePath)
-		return
-	
-	FileDelete, % filePath
-	if(newContents)
-		FileAppend, % newContents, % filePath
+folderExists(folderPath) {
+	return InStr(FileExist(folderPath), "D") ; Exists and is a directory
 }
 
-; Read in a file and return it as an array.
-fileLinesToArray(fileName) {
-	lines := Object()
+getParentFolder(path, levelsUp := 1) {
+	outPath := path.removeFromEnd("\") ; Make sure there's no trailing backslash, SplitPath assumes that involves a blank filename.
 	
-	Loop Read, %fileName% 
-	{
-		lines[A_Index] := A_LoopReadLine
+	Loop, % levelsUp {
+		SplitPath(outPath, "", parentPath)
+		outPath := parentPath
 	}
 	
-	return lines
-}
-
-; Open a folder from config-defined tags.
-openFolder(folderName) {
-	folderPath := Config.path[folderName]
-	; DEBUG.popup("Folder name",folderName, "Path",folderPath)
-	
-	if(folderExists(folderPath))
-		Run(folderPath)
+	return outPath
 }
 	
 findConfigFilePath(path) {
@@ -54,17 +39,6 @@ findConfigFilePath(path) {
 	return ""
 }
 
-getParentFolder(path, levelsUp := 1) {
-	outPath := path.removeFromEnd("\") ; Make sure there's no trailing backslash, SplitPath assumes that involves a blank filename.
-	
-	Loop, % levelsUp {
-		SplitPath(outPath, "", parentPath)
-		outPath := parentPath
-	}
-	
-	return outPath
-}
-
 ; Clean out unwanted garbage strings from paths
 cleanupPath(path) {
 	path := path.replace("%20", A_Space) ; In case it's a URL'd file path
@@ -85,8 +59,34 @@ mapPath(path) {
 	return path
 }
 
-folderExists(folderPath) {
-	return InStr(FileExist(folderPath), "D") ; Exists and is a directory
+; Open a folder from config-defined tags.
+openFolder(folderName) {
+	folderPath := Config.path[folderName]
+	; DEBUG.popup("Folder name",folderName, "Path",folderPath)
+	
+	if(folderExists(folderPath))
+		Run(folderPath)
+}
+
+; Read in a file and return it as an array.
+fileLinesToArray(fileName) {
+	lines := Object()
+	
+	Loop Read, %fileName% 
+	{
+		lines[A_Index] := A_LoopReadLine
+	}
+	
+	return lines
+}
+
+replaceFileWithString(filePath, newContents) {
+	if(!filePath)
+		return
+	
+	FileDelete, % filePath
+	if(newContents)
+		FileAppend, % newContents, % filePath
 }
 
 

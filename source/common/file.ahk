@@ -57,15 +57,6 @@ cleanupPath(path) {
 	return path
 }
 
-; Open a folder from config-defined tags.
-openFolder(folderName) {
-	folderPath := Config.path[folderName]
-	; DEBUG.popup("Folder name",folderName, "Path",folderPath)
-	
-	if(folderExists(folderPath))
-		Run(folderPath)
-}
-
 ; Read in a file and return it as an array.
 fileLinesToArray(fileName) {
 	lines := Object()
@@ -105,7 +96,7 @@ class FileUtils {
 		FileUtils.sendPath(folderName, subPath)
 	}
 	sendFolderPath(folderName, subPath := "") {
-		FileUtils.sendPath(folderName, subPath, "/", true)
+		FileUtils.sendPath(folderName, subPath, "\", true)
 	}
 	sendUnixFolderPath(folderName, subPath := "") {
 		FileUtils.sendPath(folderName, subPath, "/", true)

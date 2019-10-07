@@ -4,6 +4,11 @@
 !+a::openFolder("AHK_ROOT")
 !+d::openFolder("USER_DOWNLOADS")
 !+u::openFolder("USER_ROOT")
+openFolder(folderName) {
+	folderPath := Config.path[folderName]
+	if(folderExists(folderPath))
+		Run(folderPath)
+}
 
 ; Open folder from list
 ^+!w::
@@ -29,9 +34,7 @@
 			Run(folderPath)
 	}
 
-; Send cleaned-up path:
-; - Remove file:///, quotes, and other garbage from around the path.
-; - Turn network paths into their drive-mapped equivalents
+; Send cleaned-up path (remove odd garbage from around path, switch to mapped network drives)
 !+p::sendCleanedUpPath()
 !+#p::sendCleanedUpPath(true)
 sendCleanedUpPath(containingFolderOnly := false) {
@@ -44,9 +47,12 @@ sendCleanedUpPath(containingFolderOnly := false) {
 }
 
 
-; Sites
+; Websites
+^+!m:: Run("https://www.messenger.com")
+$^+!f::Run("http://feedly.com/i/latest")
+^!#m:: Run("https://mail.google.com/mail/u/0/#inbox")
 ^+!a::
-	openAllSites() {
+	openUsualSites() {
 		Run("https://mail.google.com/mail/u/0/#inbox")
 		Sleep, 100
 		Run("http://www.facebook.com/")
@@ -56,18 +62,7 @@ sendCleanedUpPath(containingFolderOnly := false) {
 		Run("http://feedly.com/i/latest")
 	}
 
-^+!m::Run("https://www.messenger.com")
-$^+!f::Run("http://feedly.com/i/latest")
-^!#m::Run("https://mail.google.com/mail/u/0/#inbox")
+; OneNote Online
 !+o:: Run("https://www.onenote.com/notebooks?auth=1&nf=1&fromAR=1")
-!+t:: Run(generateOneNoteOnlineURLForPrivateNotebook("ONENOTE_ONLINE_NOTEBOOK_ID_DO"))
-!+#t::Run(generateOneNoteOnlineURLForPrivateNotebook("ONENOTE_ONLINE_NOTEBOOK_ID_SHARED"))
-
-generateOneNoteOnlineURLForPrivateNotebook(notebookTagName) {
-	baseURL         := "https://onedrive.live.com/edit.aspx?cid=<ONENOTE_ONLINE_CID>&resid=<ONENOTE_ONLINE_CID>!<NOTEBOOK_TAG>&app=OneNote"
-	specificBaseURL := baseURL.replaceTag("NOTEBOOK_TAG", "<" notebookTagName ">") ; Plug in the specific private tag that we were given, so that when we replace private tags we'll get everything at once.
-	finalURL        := Config.replacePrivateTags(specificBaseURL)
-	
-	; DEBUG.popup("Base URL",baseURL, "Specific base URL",specificBaseURL, "Final URL",finalURL)
-	return finalURL
-}
+!+t:: Run(Config.private["ONENOTE_ONLINE_NOTEBOOK_DO"])
+!+#t::Run(Config.private["ONENOTE_ONLINE_NOTEBOOK_LIFE"])

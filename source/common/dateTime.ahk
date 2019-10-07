@@ -1,20 +1,34 @@
 ; Date and time utility functions.
 
-replaceDateTimeTags(inString, dateTime := "") { ; dateTime defaults to A_Now (based on FormatTime's behavior)
+;---------
+; DESCRIPTION:    Replace tags matching different formats supported by FormatTime.
+; PARAMETERS:
+;  inString (I,REQ) - The string to replace tags in
+;  dateTime (I,OPT) - The date/time to use when replacing tags
+; RETURNS:        The updated string
+;---------
+replaceDateTimeTags(inString, instant := "") { ; instant defaults to A_Now (based on FormatTime's behavior)
 	outString := inString
 	
 	; All formats supported by FormatTime
 	formatsAry := ["d","dd","ddd","dddd","M","MM","MMM","MMMM","y","yy","yyyy","gg","h","hh","H","HH","m","mm","s","ss","t","tt","","Time","ShortDate","LongDate","YearMonth","YDay","YDay0","WDay","YWeek"]
 	
 	For _,format in formatsAry {
-		dateTimeBit := FormatTime(dateTime, format)
+		dateTimeBit := FormatTime(instant, format)
 		outString := outString.replaceTag(format, dateTimeBit)
 	}
 	
 	return outString
 }
 
-getLastDateOfMonth(monthNum = "", year = "") {
+;---------
+; DESCRIPTION:    Figure out the last date in the provided month/year.
+; PARAMETERS:
+;  monthNum (I,OPT) - The month number to check
+;  year     (I,OPT) - The year to check
+; RETURNS:        The last date (with leading 0) in the given month.
+;---------
+getLastDateOfMonth(monthNum := "", year := "") {
 	; Default in today's month/year if either is not given
 	if(monthNum = "")
 		monthNum := A_MM ; Current month number (with leading 0, though that doesn't matter)

@@ -93,7 +93,11 @@ getTooltipText() {
 }
 
 releaseAllModifierKeys() {
-	Send, {LWin Up}{RWin Up}{LCtrl Up}{RCtrl Up}{LAlt Up}{RAlt Up}{LShift Up}{RShift Up}
+	modifierKeys := ["LWin", "RWin", "LCtrl", "RCtrl", "LAlt", "RAlt", "LShift", "RShift"]
+	For _,modifier in modifierKeys {
+		if(GetKeyState(modifier))
+			Send, {%modifier% Up}
+	}
 }
 
 sendUsingLevel(hotkeyString, level) {

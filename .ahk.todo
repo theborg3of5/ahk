@@ -6,13 +6,69 @@
 			Rename common to be something about utilities, or whatever naming scheme we end up using?
 				Helper
 				Utilities/Utils
-		Possible new source structure:
-			\base\
-			\class\
-			\program\
-			\standalone\
-			\sub\
-			\utils\
+	Possible new source structure:
+		\base\
+				actionObjectBase
+				arrayBase
+				objectBase
+				relativeDateTimeBase
+				stringBase
+		\class\
+			*	_classTemplate.txt			rename to add _
+			*	actionObjectCodeSearch		move out of subfolder
+			*	actionObjectEMC2				move out of subfolder
+			*	actionObjectEpicStudio		move out of subfolder
+			*	actionObjectHelpdesk			move out of subfolder
+			*	actionObjectPath				move out of subfolder
+				actionObjectRedirector
+				commonHotkeys
+				config
+				debug
+				debugBuilder
+				duration
+				epicRecord
+				errorToast
+				flexTable
+				formatList
+				hyperlinker
+				mousePosition
+				programInfo
+				relativeDate
+				relativeTime
+				scriptTrayInfo
+				selector
+				selectorChoice
+				selectorGui
+				tableList
+				tableListMod
+				toast
+				visualWindow
+				windowActions
+				windowInfo
+		\include\ - or something else?
+			*	constants						rename to remove _ (assuming it'll be in a separate folder like this)
+			*	includeCommon					rename to remove _ (assuming it'll be in a separate folder like this)
+			*	replaceStandardBases			rename
+		\lib\ - or maybe \utils\ instead?
+			*	clip								rename back to something with "clipboard"? (rename class inside, too)
+				commandFunctions
+			*	data								rename?
+			*	dateTime							rename?
+			*	epic								rename?
+			*	fileUtils						rename? (including class inside) 
+			*	gui								rename?
+			*	HTTPRequest						rename?
+			*	io									rename?
+			*	runCommands						rename?
+			*	string							rename?
+			*	window							rename?
+			*	XInput							rename?
+		\program\
+				<Existing scripts, no change>
+		\standalone\
+				<Existing scripts, no change>
+		\sub\
+				<Existing scripts, no change>
 	Look into auto-completion in Notepad++ for AHK
 		In general for the language
 		Could we add our own library of functions?

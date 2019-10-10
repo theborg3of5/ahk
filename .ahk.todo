@@ -1,4 +1,7 @@
 # New Ideas
+	Get rid of _constants.ahk - instead, put the constants into the relevant lib/utils classes (window, string, gui)
+		Will need to create a new "messages" script/class to put Windows message constants into
+	Get rid of _base.ahk - put logic directly into _includeCommon.ahk instead.
 	Consider moving all \common\ scripts' functions into classes for those scripts
 		Like we did for fileUtils.ahk (previously just file.ahk)
 		Consider renaming things more, too
@@ -7,12 +10,7 @@
 	Consider changing source structure around common stuff:
 		New source structure (changes only):
 			\common\ - contains everything that all scripts can pull in with an <includeCommon> lib include
-					constants						rename to remove _ (assuming it'll be in a separate folder like this)
-															Should we turn this into a class and move it into \class\? Then it doesn't have to be first/separate anymore, since static class members are fine in that regard (tested).
-																That would also leave includeCommon as the only script at this level
-															Better yet, should this just be split up into the relevant lib/utils classes? window, string
 					includeCommon					rename to remove _ (assuming it'll be in a separate folder like this)
-						_base							move logic into includeCommon - that'll be the new startup script
 				\class\.
 					actionObjectCodeSearch		move out of subfolder
 					actionObjectEMC2				move out of subfolder

@@ -14,6 +14,8 @@
 		Properties with parameters, too - maybe just treat [] the same as ()?
 	Make Ctrl+Enter hotkey in Notepad++ also add in bullets (* or -) if they started the previous row (ignoring whitespace and comment char, but not other stuff like (I,REQ))
 	Reconsider structure of clipboard toasting stuff - could it be cleaner? Are some of the wrapper functions overkill?
+		Do we really need the blank stuff built in?
+			Should the callers really be dealing with that instead?
 	Figure out what to do about FileUtils.cleanupPath() dropping (valid) quotes from the end of URLs
 		Separate cleaning for URLs?
 			How to sense? Using ActionObjectPath?

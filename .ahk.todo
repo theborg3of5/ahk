@@ -10,6 +10,7 @@
 					constants						rename to remove _ (assuming it'll be in a separate folder like this)
 															Should we turn this into a class and move it into \class\? Then it doesn't have to be first/separate anymore, since static class members are fine in that regard (tested).
 																That would also leave includeCommon as the only script at this level
+															Better yet, should this just be split up into the relevant lib/utils classes? window, string
 					includeCommon					rename to remove _ (assuming it'll be in a separate folder like this)
 						_base							move logic into includeCommon - that'll be the new startup script
 				\class\.

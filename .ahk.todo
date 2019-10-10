@@ -17,7 +17,6 @@
 					objectBase						move
 					stringBase						move
 				\class\
-					.template.txt					rename
 					actionObjectCodeSearch		move out of subfolder
 					actionObjectEMC2				move out of subfolder
 					actionObjectEpicStudio		move out of subfolder

@@ -12,11 +12,7 @@
 																That would also leave includeCommon as the only script at this level
 					includeCommon					rename to remove _ (assuming it'll be in a separate folder like this)
 						_base							move logic into includeCommon - that'll be the new startup script
-				\coreBase\
-					arrayBase						move
-					objectBase						move
-					stringBase						move
-				\class\
+				\class\.
 					actionObjectCodeSearch		move out of subfolder
 					actionObjectEMC2				move out of subfolder
 					actionObjectEpicStudio		move out of subfolder

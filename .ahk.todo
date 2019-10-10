@@ -1,74 +1,47 @@
 # New Ideas
 	Consider moving all \common\ scripts' functions into classes for those scripts
 		Like we did for fileUtils.ahk (previously just file.ahk)
-		If we do this, consider rearranging source folder structure
-			Move class/base folders up outside of common?
-			Rename common to be something about utilities, or whatever naming scheme we end up using?
-				Helper
-				Utilities/Utils
-	Possible new source structure:
-		\base\
-				actionObjectBase
-				arrayBase
-				objectBase
-				relativeDateTimeBase
-				stringBase
-		\class\
-			*	_classTemplate.txt			rename to add _
-			*	actionObjectCodeSearch		move out of subfolder
-			*	actionObjectEMC2				move out of subfolder
-			*	actionObjectEpicStudio		move out of subfolder
-			*	actionObjectHelpdesk			move out of subfolder
-			*	actionObjectPath				move out of subfolder
-				actionObjectRedirector
-				commonHotkeys
-				config
-				debug
-				debugBuilder
-				duration
-				epicRecord
-				errorToast
-				flexTable
-				formatList
-				hyperlinker
-				mousePosition
-				programInfo
-				relativeDate
-				relativeTime
-				scriptTrayInfo
-				selector
-				selectorChoice
-				selectorGui
-				tableList
-				tableListMod
-				toast
-				visualWindow
-				windowActions
-				windowInfo
-		\include\ - or something else?
-			*	constants						rename to remove _ (assuming it'll be in a separate folder like this)
-			*	includeCommon					rename to remove _ (assuming it'll be in a separate folder like this)
-			*	replaceStandardBases			rename
-		\lib\ - or maybe \utils\ instead?
-			*	clip								rename back to something with "clipboard"? (rename class inside, too)
-				commandFunctions
-			*	data								rename?
-			*	dateTime							rename?
-			*	epic								rename?
-			*	fileUtils						rename? (including class inside) 
-			*	gui								rename?
-			*	HTTPRequest						rename?
-			*	io									rename?
-			*	runCommands						rename?
-			*	string							rename?
-			*	window							rename?
-			*	XInput							rename?
-		\program\
-				<Existing scripts, no change>
-		\standalone\
-				<Existing scripts, no change>
-		\sub\
-				<Existing scripts, no change>
+		Consider renaming things more, too
+			Keep filenames matching class names where applicable
+			Use something consistent, probably that matches the folder name - "libClipboard"/"clipboardLib", etc.
+	Consider changing source structure around common stuff:
+		New source structure (changes only):
+			\common\ - contains everything that all scripts can pull in with an <includeCommon> lib include
+					constants						rename to remove _ (assuming it'll be in a separate folder like this)
+															Should we turn this into a class and move it into \class\? Then it doesn't have to be first/separate anymore, since static class members are fine in that regard (tested).
+																That would also leave includeCommon as the only script at this level
+					includeCommon					rename to remove _ (assuming it'll be in a separate folder like this)
+						_base							move logic into includeCommon - that'll be the new startup script
+				\coreBase\
+					arrayBase						move
+					objectBase						move
+					stringBase						move
+				\class\
+					.template.txt					rename
+					actionObjectCodeSearch		move out of subfolder
+					actionObjectEMC2				move out of subfolder
+					actionObjectEpicStudio		move out of subfolder
+					actionObjectHelpdesk			move out of subfolder
+					actionObjectPath				move out of subfolder
+				\lib\
+					clip								move
+					commandFunctions				move
+					data								move
+					dateTime							move
+					epic								move
+					fileUtils						move 
+					gui								move
+					HTTPRequest						move
+					io									move
+					runCommands						move
+					string							move
+					window							move
+					XInput							move
+		Will also need to update anything that references the existing folder structure directly
+			hotstrings
+			commonHotkeys
+			commonIncludes (AHK lib as well as main include/setup script)
+			<search for others>
 	Look into auto-completion in Notepad++ for AHK
 		In general for the language
 		Could we add our own library of functions?

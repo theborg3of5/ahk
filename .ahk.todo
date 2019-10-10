@@ -6,6 +6,13 @@
 			Rename common to be something about utilities, or whatever naming scheme we end up using?
 				Helper
 				Utilities/Utils
+		Possible new source structure:
+			\base\
+			\class\
+			\program\
+			\standalone\
+			\sub\
+			\utils\
 	Look into auto-completion in Notepad++ for AHK
 		In general for the language
 		Could we add our own library of functions?

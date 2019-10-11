@@ -10,7 +10,8 @@ setTrayIcon(iconPath) {
 }
 
 showConfirmationPopup(message, title := "") {
-	MsgBox, 4, % title, % message
+	MsgBoxButtons_YesNo := 4
+	MsgBox, % MsgBoxButtons_YesNo, % title, % message
 	IfMsgBox, Yes
 		return true
 	return false

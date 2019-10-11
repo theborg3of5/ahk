@@ -1,6 +1,9 @@
 # New Ideas
 	Get rid of _constants.ahk - instead, put the constants into the relevant lib/utils classes (window, string, gui)
 		Will need to create a new "messages" script/class to put Windows message constants into
+	Non-breaking spaces ( ) make EpicRecord parsing fail (and probably other stuff too)
+		Can we account for this somehow?
+			A "contains space" or "replace abnormal spaces" function, maybe?
 	Get rid of _base.ahk - put logic directly into _includeCommon.ahk instead.
 	Consider moving all \common\ scripts' functions into classes for those scripts
 		Like we did for fileUtils.ahk (previously just file.ahk)

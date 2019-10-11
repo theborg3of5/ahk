@@ -97,10 +97,7 @@
 			messageText    .= "Continue?"
 		}
 		
-		MsgBox, % MSGBOX_BUTTONS_YES_NO, % title, % messageText
-		IfMsgBox Yes
-			return true
-		return false
+		return showConfirmationPopup(messageText, title)
 	}
 	
 	; Generates a Cisco WebDialer URL to call a number.

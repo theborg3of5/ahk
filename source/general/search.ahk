@@ -112,9 +112,14 @@ buildEpicWikiSearchURL(searchTerm, category := "") {
 ;  pathToSearch (I,REQ) - Where to search files for the given term.
 ;---------
 searchWithGrepWin(searchTerm, pathToSearch) {
+	QUOTE := """" ; Double-quote character
+	
+	pathToSearch := Config.replacePathTags(pathToSearch) ; Escape any quotes in the search string
+	searchTerm := escapeCharUsingChar(searchTerm, QUOTE)
+	
 	args := "/regex:no"
-	args .= " /searchpath:" DOUBLE_QUOTE Config.replacePathTags(pathToSearch) " "    DOUBLE_QUOTE ; Extra space after path, otherwise trailing backslash escapes ending double quote
-	args .= " /searchfor:"  DOUBLE_QUOTE escapeCharUsingChar(searchTerm, DOUBLE_QUOTE) DOUBLE_QUOTE ; Escape any quotes in the search string
+	args .= " /searchpath:" QUOTE pathToSearch " " QUOTE ; Extra space after path, otherwise trailing backslash escapes ending double quote
+	args .= " /searchfor:"  QUOTE searchTerm QUOTE
 	args .= " /execute" ; Run it immediately if we got what to search for
 	
 	; DEBUG.popup("Path to search",pathToSearch, "To search",searchTerm, "Args",args)

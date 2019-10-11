@@ -45,7 +45,7 @@ class Hyperlinker {
 		
 		; Special handling
 		if(windowName = "OneNote") ; OneNote can't handle double quotes in URLs for some reason, so encode them.
-			path := path.replace(DOUBLE_QUOTE, "%22")
+			path := path.replace("""", "%22")
 		
 		return Hyperlinker.doLink(path, windowLinkInfoAry, errorMessage)
 	}

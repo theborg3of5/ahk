@@ -113,7 +113,7 @@ escapeCharUsingRepeat(inputString, charToEscape, repeatCount := 1) {
 
 escapeForRunURL(stringToEscape) {
 	encodedString := encodeForURL(stringToEscape)
-	return escapeCharUsingRepeat(encodedString, DOUBLE_QUOTE, 2) ; Escape quotes twice - extra to get us past the windows run command stripping them out.
+	return escapeCharUsingRepeat(encodedString, """", 2) ; Escape double-quotes twice - extra to get us past the windows run command stripping them out.
 }
 
 getCleanHotkeyString(hotkeyString) {

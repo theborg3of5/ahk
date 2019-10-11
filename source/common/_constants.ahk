@@ -36,6 +36,3 @@
 	global TITLE_MATCH_MODE_Contain := 2
 	global TITLE_MATCH_MODE_Exact   := 3
 	global TITLE_MATCH_MODE_RegEx   := "RegEx"
-	
-; String-related
-	global DOUBLE_QUOTE := """"

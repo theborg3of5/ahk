@@ -37,7 +37,7 @@ class ActionObjectPath extends ActionObjectBase {
 		this.pathType := pathType
 		
 		; Make sure there's no quotes or other oddities surrounding the path
-		this.path := this.path.clean([DOUBLE_QUOTE])
+		this.path := this.path.clean([""""]) ; Single double-quote character
 		
 		if(this.pathType = "")
 			this.pathType := this.determinePathType(this.path)

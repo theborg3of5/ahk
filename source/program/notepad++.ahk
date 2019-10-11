@@ -212,16 +212,17 @@ class NotepadPlusPlus {
 	generateDebugParams(varList) {
 		paramsString := ""
 		paramsAry := varList.split(",", A_Space) ; Split on comma and drop leading/trailing spaces
+		QUOTE := """" ; Double-quote character
 		
 		; Special case: if first param starts with +, it's a top-level message that should be shown with no corresponding data.
 		if(paramsAry[1].startsWith("+")) {
 			label := paramsAry[1].afterString("+")
-			paramsString .= DOUBLE_QUOTE label DOUBLE_QUOTE ","
+			paramsString .= QUOTE label QUOTE ","
 			paramsAry.RemoveAt(1)
 		}
 		
 		For i,param in paramsAry {
-			label := DOUBLE_QUOTE escapeCharUsingRepeat(param, DOUBLE_QUOTE) DOUBLE_QUOTE
+			label := QUOTE escapeCharUsingRepeat(param, QUOTE) QUOTE
 			paramsString := paramsString.appendPiece(label "," param, ", ")
 		}
 		

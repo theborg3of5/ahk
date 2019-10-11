@@ -71,6 +71,28 @@ isWindowVisible(titleString := "A") {
 }
 
 ;---------
+; DESCRIPTION:    Determine whether a window is maximized.
+; PARAMETERS:
+;  titleString (I,REQ) - Title string that identifies your chosen window.
+;                        Defaults to the active window ("A").
+; RETURNS:        true if the window is maximized, false otherwise.
+;---------
+isWindowMaximized(titleString := "A") {
+	return (WinGet("MinMax", titleString) = 1)
+}
+
+;---------
+; DESCRIPTION:    Determine whether a window is minimized.
+; PARAMETERS:
+;  titleString (I,REQ) - Title string that identifies your chosen window.
+;                        Defaults to the active window ("A").
+; RETURNS:        true if the window is minimized, false otherwise.
+;---------
+isWindowMinimized(titleString := "A") {
+	return (WinGet("MinMax", titleString) = -1)
+}
+
+;---------
 ; DESCRIPTION:    Get the dimensions of the work area of the monitor "closest" (according to
 ;                 Windows) to the given window.
 ; PARAMETERS:

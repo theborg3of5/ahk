@@ -89,10 +89,9 @@ global WINDOWCORNER_BOTTOMRIGHT := "BOTTOM_RIGHT"
 		maximizeRestoreWindowUnderMouse() {
 			titleString := getTitleStringForWindowUnderMouse()
 			
-			minMaxState := WinGet("MinMax", titleString)
-			if(minMaxState = WINMINMAX_MAX) ; Window is maximized
+			if(isWindowMaximized(titleString))
 				WinRestore, % titleString
-			else if(minMaxState = WINMINMAX_OTHER) ; Window is restored (not minimized or maximized)
+			else if(!isWindowMinimized(titleString)) ; Window is not maximized or minimized
 				WinMaximize, % titleString
 		}
 	
@@ -114,7 +113,8 @@ dragWindowPrep(ByRef window, ByRef mouseStart) {
 	if(isExcludedWindow(titleString))
 		return false
 	
-	restoreWindowIfMaximized(titleString)
+	if(isWindowMaximized(titleString))
+		WinRestore, % titleString
 	
 	window := new VisualWindow(titleString, SnappingDistance)
 	window.snapOn() ; Turn on snapping
@@ -146,17 +146,6 @@ isExcludedWindow(titleString) {
 		return true
 	
 	return false
-}
-
-;---------
-; DESCRIPTION:    If the given window is maximized, restore it.
-; PARAMETERS:
-;  titleString (I,REQ) - Title string identifying the window to check/restore.
-;---------
-restoreWindowIfMaximized(titleString) {
-	minMaxState := WinGet("MinMax", titleString)
-	if(minMaxState = WINMINMAX_MAX) ; Window is maximized
-		WinRestore, % titleString
 }
 
 ;---------

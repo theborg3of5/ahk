@@ -37,10 +37,5 @@
 	global TITLE_MATCH_MODE_Exact   := 3
 	global TITLE_MATCH_MODE_RegEx   := "RegEx"
 	
-	; MinMax states for a window (for WinGet's MinMax sub-command)
-	global WINMINMAX_MIN   := -1
-	global WINMINMAX_MAX   := 1
-	global WINMINMAX_OTHER := 0
-
 ; String-related
 	global DOUBLE_QUOTE := """"

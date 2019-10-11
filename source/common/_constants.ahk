@@ -6,8 +6,8 @@
 	
 	; Extended window styles
 	global WS_EX_WS_EX_TOPMOST := 0x8   ; Always on top
-	global WS_EX_CLICKTHROUGH  := 0x20
-	global WS_EX_CLIENTEDGE    := 0x200 ; Control: border with sunken edge (on by default for many control types)
+	global WS_EX_CLICKTHROUGH  := 0x20  ; Clicking on the window actually clicks on whatever is below it.
+	global WS_EX_CLIENTEDGE    := 0x200 ; Controls: border with sunken edge (on by default for many control types)
 	
 	; SysGet command numbers (https://autohotkey.com/docs/commands/SysGet.htm)
 	global SM_CXBORDER     := 5  ; For non-3D windows (which should be most), the width of the border on the left and right.
@@ -29,10 +29,3 @@
 	
 	; Windows Screen constants (from MonitorFromWindow: https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-monitorfromwindow )
 	global MONITOR_DEFAULTTONEAREST := 0x00000002
-	
-; Window-related
-	; Title match modes
-	global TITLE_MATCH_MODE_Start   := 1
-	global TITLE_MATCH_MODE_Contain := 2
-	global TITLE_MATCH_MODE_Exact   := 3
-	global TITLE_MATCH_MODE_RegEx   := "RegEx"

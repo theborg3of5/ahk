@@ -10,15 +10,15 @@
 trayInfo := new ScriptTrayInfo("AHK: Main Script", "shellGreen.ico", "shellRed.ico")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Main, trayInfo)
 
-SendMode, Input                               ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir, %A_ScriptDir%                  ; Ensures a consistent starting directory.
-DetectHiddenWindows, On                       ; Do search hidden windows
-SetTitleMatchMode, % TITLE_MATCH_MODE_Contain ; Match text anywhere inside window titles
-SetCapsLockState,   AlwaysOff                 ; Turn off Caps Lock so it can be used as a hotkey.
-SetScrollLockState, AlwaysOff                 ; Turn off Scroll Lock so it can be used as a hotkey.
-SetNumLockState,    AlwaysOn                  ; Force NumLock to always stay on.
-SetDefaultMouseSpeed, 0                       ; Fasted mouse speed for mouse commands (MouseMove in particular)
-SetMouseDelay, 0                              ; Smallest possible delay after mouse movements/clicks
+SendMode, Input                              ; Recommended for new scripts due to its superior speed and reliability.
+SetWorkingDir, %A_ScriptDir%                 ; Ensures a consistent starting directory.
+DetectHiddenWindows, On                      ; Do search hidden windows
+SetTitleMatchMode, % TitleMatchMode.Contains ; Match text anywhere inside window titles
+SetCapsLockState,   AlwaysOff                ; Turn off Caps Lock so it can be used as a hotkey.
+SetScrollLockState, AlwaysOff                ; Turn off Scroll Lock so it can be used as a hotkey.
+SetNumLockState,    AlwaysOn                 ; Force NumLock to always stay on.
+SetDefaultMouseSpeed, 0                      ; Fasted mouse speed for mouse commands (MouseMove in particular)
+SetMouseDelay, 0                             ; Smallest possible delay after mouse movements/clicks
 
 ; Sub scripts. Must be first to execute so they can spin off and be on their own.
 subFolder := A_ScriptDir "\sub\"

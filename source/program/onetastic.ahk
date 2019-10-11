@@ -319,7 +319,7 @@ class OneTastic {
 	; DESCRIPTION:    Waits until the main macro editor window becomes active.
 	;---------
 	waitMacroEditorWindowActive() {
-		origMatchMode := setTitleMatchMode(TITLE_MATCH_MODE_Contain)
+		origMatchMode := setTitleMatchMode(TitleMatchMode.Contains)
 		WinWaitActive, % " - Macro Editor"
 		setTitleMatchMode(origMatchMode)
 	}

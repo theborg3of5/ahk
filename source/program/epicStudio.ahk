@@ -146,7 +146,7 @@ class EpicStudio {
 	isDebugging() {
 		isDebugging := false
 		
-		origMatchMode  := setTitleMatchMode(TITLE_MATCH_MODE_Contain)
+		origMatchMode  := setTitleMatchMode(TitleMatchMode.Contains)
 		origMatchSpeed := setTitleMatchSpeed("Slow")
 		
 		; Match on text in the window for the main debugging targets

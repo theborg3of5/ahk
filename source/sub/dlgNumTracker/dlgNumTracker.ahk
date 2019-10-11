@@ -10,7 +10,7 @@ CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub, trayInfo)
 
 global currDLGId
 SetTimer, MainLoop, 5000 ; 5s, timer toggled by commonHotkeys' suspend hotkey.
-setTitleMatchMode(TITLE_MATCH_MODE_Contain)
+setTitleMatchMode(TitleMatchMode.Contains)
 
 
 MainLoop:

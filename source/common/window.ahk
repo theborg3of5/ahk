@@ -225,7 +225,7 @@ class WindowLib {
 	; RETURNS:        true/false, whether the window is visible.
 	;---------
 	isVisible(titleString := "A") {
-		return this.hasStyle(MicrosoftLib.WS_VISIBLE, titleString)
+		return this.hasStyle(MicrosoftLib.Style_Visible, titleString)
 	}
 	
 	;---------
@@ -236,7 +236,7 @@ class WindowLib {
 	; RETURNS:        true/false, whether the window is always on top.
 	;---------
 	isAlwaysOnTop(titleString := "A") {
-		return this.hasExStyle(MicrosoftLib.WS_EX_TOPMOST, titleString)
+		return this.hasExStyle(MicrosoftLib.ExStyle_AlwaysOnTop, titleString)
 	}
 	
 	;---------
@@ -247,7 +247,7 @@ class WindowLib {
 	; RETURNS:        true/false, whether the window has the caption style.
 	;---------
 	hasCaption(titleString := "A") { ; Window with no caption style (no titlebar or borders)
-		return this.hasStyle(MicrosoftLib.WS_CAPTION, titleString)
+		return this.hasStyle(MicrosoftLib.Style_Caption, titleString)
 	}
 	
 	;---------
@@ -258,7 +258,7 @@ class WindowLib {
 	; RETURNS:        true/false, whether the window is resizable.
 	;---------
 	isSizable(titleString := "A") {
-		return this.hasStyle(MicrosoftLib.WS_SIZEBOX, titleString)
+		return this.hasStyle(MicrosoftLib.Style_Sizable, titleString)
 	}
 	
 	;---------

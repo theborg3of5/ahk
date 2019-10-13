@@ -1,7 +1,4 @@
-/* GDB TODO
-	
-	Example Usage
-		GDB TODO
+/* A library of Microsoft-level constants and system values (cached at startup).
 */
 
 class MicrosoftLib {
@@ -11,14 +8,14 @@ class MicrosoftLib {
 ; ====================================================================================================
 	
 	; Window styles ( https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric )
-	static WS_CAPTION := 0xC00000   ; Window has a caption (top bar + borders).
-	static WS_SIZEBOX := 0x40000    ; Window can be sized (aka WS_THICKFRAME).
-	static WS_VISIBLE := 0x10000000 ; Window is visible
+	static Style_Caption := 0xC00000   ; WS_CAPTION - Window has a caption (top bar + borders).
+	static Style_Sizable := 0x40000    ; WS_SIZEBOX - Window can be sized (aka WS_THICKFRAME).
+	static Style_Visible := 0x10000000 ; WS_VISIBLE - Window is visible
 	
 	; Extended window styles
-	static WS_EX_TOPMOST      := 0x8   ; Always on top
-	static WS_EX_CLICKTHROUGH := 0x20  ; Clicking on the window actually clicks on whatever is below it.
-	static WS_EX_CLIENTEDGE   := 0x200 ; Controls: border with sunken edge (on by default for many control types)
+	static ExStyle_AlwaysOnTop  := 0x8   ; WS_EX_TOPMOST - Always on top
+	static ExStyle_ClickThrough := 0x20  ; WS_EX_CLICKTHROUGH - Clicking on the window actually clicks on whatever is below it.
+	static ExStyle_SunkenBorder := 0x200 ; WS_EX_CLIENTEDGE - Controls: border with sunken edge (on by default for many control types)
 	
 	; System-level window measurements ( https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics )
 	static BorderX                 := SysGet(5 ) ; SM_CXBORDER     - For non-3D windows (which should be most), the thickness of the left/right borders.

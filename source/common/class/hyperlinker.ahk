@@ -29,7 +29,7 @@ class Hyperlinker {
 			return false
 		}
 		
-		path := FileUtils.cleanupPath(path)
+		path := FileLib.cleanupPath(path)
 		
 		if(!isObject(Hyperlinker.windows))
 			Hyperlinker.windows := Hyperlinker.getWindows()

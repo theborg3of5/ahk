@@ -4,7 +4,7 @@
 			A "contains space" or "replace abnormal spaces" function, maybe?
 				Could make it a separate step in string.cleanup()
 	Consider moving all \common\ scripts' functions into classes for those scripts
-		Like we did for fileUtils.ahk (previously just file.ahk)
+		Like we did for fileLib.ahk (previously just file.ahk)
 		Consider renaming things more, too
 			Keep filenames matching class names where applicable
 			Use something consistent, probably that matches the folder name - "libClipboard"/"clipboardLib", etc.
@@ -24,7 +24,6 @@
 					data								move
 					dateTime							move
 					epic								move
-					fileUtils						move 
 					gui								move
 					HTTPRequest						move
 					io									move
@@ -47,7 +46,7 @@
 	Reconsider structure of clipboard toasting stuff - could it be cleaner? Are some of the wrapper functions overkill?
 		Do we really need the blank stuff built in?
 			Should the callers really be dealing with that instead?
-	Figure out what to do about FileUtils.cleanupPath() dropping (valid) quotes from the end of URLs
+	Figure out what to do about FileLib.cleanupPath() dropping (valid) quotes from the end of URLs
 		Separate cleaning for URLs?
 			How to sense? Using ActionObjectPath?
 		Should we integrate this into ActionObjectPath instead? Is that overkill?

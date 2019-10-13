@@ -36,7 +36,7 @@ class Config {
 	;---------
 	init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile) {
 		; All config files are expected to live in config/ folder under the root of this repo.
-		configFolder := FileUtils.getParentFolder(A_LineFile, 4) "\config" ; Root path is 3 levels out, plus one to get out of file itself.
+		configFolder := FileLib.getParentFolder(A_LineFile, 4) "\config" ; Root path is 3 levels out, plus one to get out of file itself.
 		
 		; Build full paths to config files
 		settingsPath := configFolder "\" settingsFile
@@ -462,7 +462,7 @@ class Config {
 		tags["WINDOWS"]            := A_WinDir                               ; C:\Windows
 		tags["CMD"]                := A_ComSpec                              ; C:\Windows\system32\cmd.exe
 		
-		tags["AHK_ROOT"]           := FileUtils.getParentFolder(A_LineFile, 4) ; Top-level ahk folder, this file lives in <AHK_ROOT>\source\common\class\
+		tags["AHK_ROOT"]           := FileLib.getParentFolder(A_LineFile, 4) ; Top-level ahk folder, this file lives in <AHK_ROOT>\source\common\class\
 		
 		return tags
 	}

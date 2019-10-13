@@ -182,13 +182,13 @@
 	}
 	
 	sendFilePath(folderName, subPath := "") {
-		FileUtils.sendPath(folderName, subPath)
+		FileLib.sendPath(folderName, subPath)
 	}
 	sendFolderPath(folderName, subPath := "") {
-		FileUtils.sendPath(folderName, subPath, "\", true)
+		FileLib.sendPath(folderName, subPath, "\", true)
 	}
 	sendUnixFolderPath(folderName, subPath := "") {
-		FileUtils.sendPath(folderName, subPath, "/", true)
+		FileLib.sendPath(folderName, subPath, "/", true)
 	}
 }
 #If

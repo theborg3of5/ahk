@@ -44,7 +44,6 @@ Object(params*) {
 	#Include data.ahk
 	#Include dateTime.ahk
 	#Include epic.ahk
-	#Include fileUtils.ahk
 	#Include gui.ahk
 	#Include HTTPRequest.ahk
 	#Include io.ahk
@@ -54,6 +53,7 @@ Object(params*) {
 	#Include XInput.ahk
 
 #Include %A_LineFile%\..\lib
+	#Include fileLib.ahk
 	#Include microsoftLib.ahk
 
 #Include %A_LineFile%\..\class

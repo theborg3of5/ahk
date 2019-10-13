@@ -18,8 +18,8 @@ if(!txId)
 	ExitApp
 
 ; Get the list of environments from a static file.
-configPath := FileUtils.findConfigFilePath("allCurrentEpicEnvironments.txt")
-commIdAry := FileUtils.fileLinesToArray(configPath)
+configPath := FileLib.findConfigFilePath("allCurrentEpicEnvironments.txt")
+commIdAry := FileLib.fileLinesToArray(configPath)
 ; DEBUG.popup("commIdAry",commIdAry)
 
 ; Start in the dump script's directory.

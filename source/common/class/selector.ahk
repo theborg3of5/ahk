@@ -133,7 +133,7 @@ class Selector {
 		this.setDefaultGuiSettings()
 		
 		if(filePath) {
-			this.filePath := FileUtils.findConfigFilePath(filePath)
+			this.filePath := FileLib.findConfigFilePath(filePath)
 			this.loadFromFile()
 		}
 		

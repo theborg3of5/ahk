@@ -35,7 +35,7 @@ Loop, Files, % "*.bits"
 	SplitPath(A_LoopFileName, "", "", "", baseName)
 	
 	; Overwrite the file if it exists
-	FileUtils.replaceFileWithString(baseName ".regex", finalString)
+	FileLib.replaceFileWithString(baseName ".regex", finalString)
 }
 
 new Toast("Compiled all .bits files into .regex files").showMedium()

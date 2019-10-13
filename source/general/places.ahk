@@ -6,7 +6,7 @@
 !+u::openFolder("USER_ROOT")
 openFolder(folderName) {
 	folderPath := Config.path[folderName]
-	if(FileUtils.folderExists(folderPath))
+	if(FileLib.folderExists(folderPath))
 		Run(folderPath)
 }
 
@@ -21,8 +21,8 @@ openFolder(folderName) {
 		folderPath := replaceDateTimeTags(folderPath) ; For any date/time-based folder paths, use the current date/time.
 		
 		; If the folder doesn't exist, try to create it (with permission from user)
-		if(!FileUtils.folderExists(folderPath)) {
-			if(!FileUtils.folderExists(FileUtils.getParentFolder(folderPath))) {
+		if(!FileLib.folderExists(folderPath)) {
+			if(!FileLib.folderExists(FileLib.getParentFolder(folderPath))) {
 				new ErrorToast("Could not open chosen folder", "Neither the folder nor its parent folder exist.").showMedium()
 				return ; Not going to try creating if not even the parent exists.
 			}
@@ -30,7 +30,7 @@ openFolder(folderName) {
 			if(showConfirmationPopup("This folder does not exist:`n" folderPath "`n`nCreate it?", "Folder does not exist"))
 				FileCreateDir, % folderPath
 		}
-		if(FileUtils.folderExists(folderPath))
+		if(FileLib.folderExists(folderPath))
 			Run(folderPath)
 	}
 
@@ -38,10 +38,10 @@ openFolder(folderName) {
 !+p::sendCleanedUpPath()
 !+#p::sendCleanedUpPath(true)
 sendCleanedUpPath(containingFolderOnly := false) {
-	path := FileUtils.cleanupPath(clipboard)
+	path := FileLib.cleanupPath(clipboard)
 	
 	if(containingFolderOnly)
-		path := FileUtils.getParentFolder(path) "\" ; Remove last element at end, add trailing slash
+		path := FileLib.getParentFolder(path) "\" ; Remove last element at end, add trailing slash
 	
 	SendRaw, % path
 }

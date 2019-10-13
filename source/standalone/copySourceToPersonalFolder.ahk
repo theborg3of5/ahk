@@ -38,7 +38,7 @@ Loop, Files, *, FDR ; All files and folder, recursing into folders
 	
 	; Create folders and copy over files
 	destinationPath := destinationRoot "\" A_LoopFilePath
-	if(FileUtils.folderExists(A_LoopFilePath))
+	if(FileLib.folderExists(A_LoopFilePath))
 		FileCreateDir, % destinationPath
 	else
 		FileCopy, % A_LoopFilePath, % destinationPath

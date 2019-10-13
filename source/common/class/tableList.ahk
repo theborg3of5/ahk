@@ -213,7 +213,7 @@ class TableList {
 	; DESCRIPTION:    Create a new TableList instance.
 	; PARAMETERS:
 	;  filePath    (I,REQ) - Path to the file to read from. May be a partial path if
-	;                        FileUtils.findConfigFilePath() can find the correct thing.
+	;                        FileLib.findConfigFilePath() can find the correct thing.
 	;  keyRowChars (I,OPT) - Array of characters and key names to keep separate, see class
 	;                        documentation for more info. If a row starts with one of the characters
 	;                        included here, that row will not appear in the main table. Instead, it
@@ -228,13 +228,13 @@ class TableList {
 		if(!filePath)
 			return ""
 		
-		filePath := FileUtils.findConfigFilePath(filePath)
+		filePath := FileLib.findConfigFilePath(filePath)
 		if(!FileExist(filePath))
 			return ""
 		
 		this.keyRowChars := keyRowChars
 		
-		lines := FileUtils.fileLinesToArray(filePath)
+		lines := FileLib.fileLinesToArray(filePath)
 		this.parseList(lines)
 		
 		; Apply any automatic filters.

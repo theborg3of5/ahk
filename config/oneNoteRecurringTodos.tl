@@ -33,6 +33,8 @@
 	Schedule haircut												-			SAT				2
 	Periodic cleaning (small trash cans, kitchen)		-			SUN				2
 	Transcribe instructor meeting notes						-			SUN				1
+	Call Azzam grandparents										-			SAT				2
+	Call Borg grandparents										-			SAT				4
 
 ; Yearlies
 	Check various airline rewards points					-			SAT				1							JAN

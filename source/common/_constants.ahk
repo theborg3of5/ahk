@@ -1,12 +1,4 @@
 ; (MS) Windows-related
-	; Window styles ( https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric )
-	global WS_CAPTION := 0xC00000   ; Window has a caption (top bar + borders).
-	global WS_SIZEBOX := 0x40000    ; Window can be resized (aka WS_THICKFRAME).
-	
-	; Extended window styles
-	global WS_EX_CLICKTHROUGH := 0x20  ; Clicking on the window actually clicks on whatever is below it.
-	global WS_EX_CLIENTEDGE   := 0x200 ; Controls: border with sunken edge (on by default for many control types)
-	
 	; SysGet command numbers ( https://autohotkey.com/docs/commands/SysGet.htm )
 	global SM_CXBORDER     := 5  ; For non-3D windows (which should be most), the width of the border on the left and right.
 	global SM_CYBORDER     := 6  ; For non-3D windows (which should be most), the width of the border on the top and bottom.

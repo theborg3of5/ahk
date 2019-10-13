@@ -242,19 +242,17 @@ class VisualWindow {
 			offsetWidth  := 0
 			offsetHeight := 0
 		} else { ; Calculate the default padding based on the window's style
-			WinGet, winStyle, Style, A
-			
 			; Window with no caption style (no titlebar or borders)
-			if(!bitFieldHasFlag(winStyle, WS_CAPTION)) {
+			if(!WindowLib.hasCaption(this.titleString)) {
 				offsetWidth  := 0
 				offsetHeight := 0
 			
-			; Windows with a caption that are NOT resizeable
-			} else if(!bitFieldHasFlag(winStyle, WS_SIZEBOX)) {
+			; Windows with a caption that are NOT resizable
+			} else if(!WindowLib.isSizable(this.titleString)) {
 				offsetWidth  := SysGet(SM_CXFIXEDFRAME) - SysGet(SM_CXBORDER)
 				offsetHeight := SysGet(SM_CYFIXEDFRAME) - SysGet(SM_CYBORDER)
 			
-			; Windows that have a caption and are resizeable
+			; Windows that have a caption and are resizable
 			} else {
 				offsetWidth  := SysGet(SM_CXSIZEFRAME) - SysGet(SM_CXBORDER)
 				offsetHeight := SysGet(SM_CYSIZEFRAME) - SysGet(SM_CYBORDER)

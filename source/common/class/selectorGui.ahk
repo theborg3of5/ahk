@@ -296,9 +296,9 @@ class SelectorGui {
 	addField(varName, x, y, width, height, data := "", subGoto := "") {
 		setDynamicGlobalVar(varName) ; Declare the provided unique variable name as a global
 		
-		propString := "v" varName                           ; Variable to save to on Gui, Submit
-		propString .= " x" x " y" y " w" width " h" height  ; Position/size
-		propString .= " -E" WS_EX_CLIENTEDGE " +Border"     ; Styling - no sunken appearance, add a border
+		propString := "v" varName                                    ; Variable to save to on Gui, Submit
+		propString .= " x" x " y" y " w" width " h" height           ; Position/size
+		propString .= " -E" MicrosoftLib.WS_EX_CLIENTEDGE " +Border" ; Styling - no sunken appearance, add a border
 		if(subGoto)
 			propString .= " g" subGoto
 		

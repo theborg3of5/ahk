@@ -220,17 +220,45 @@ class WindowLib {
 	;---------
 	; DESCRIPTION:    Determine whether a window is visible, based on its style.
 	; PARAMETERS:
-	;  titleString (I,REQ) - Title string that identifies your chosen window.
+	;  titleString (I,OPT) - Title string that identifies your chosen window.
 	;                        Defaults to the active window ("A").
-	; RETURNS:        True if the window is visible, False otherwise.
+	; RETURNS:        true/false, whether the window is visible.
 	;---------
 	isVisible(titleString := "A") {
 		return this.hasStyle(MicrosoftLib.WS_VISIBLE, titleString)
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Determine whether a window is set to be always on top.
+	; PARAMETERS:
+	;  titleString (I,OPT) - Title string that identifies your chosen window.
+	;                        Defaults to the active window ("A").
+	; RETURNS:        true/false, whether the window is always on top.
+	;---------
 	isAlwaysOnTop(titleString := "A") {
 		return this.hasExStyle(MicrosoftLib.WS_EX_TOPMOST, titleString)
+	}
+	
+	;---------
+	; DESCRIPTION:    Determine whether a window has the "caption" style (with a title bar and borders).
+	; PARAMETERS:
+	;  titleString (I,OPT) - Title string that identifies your chosen window.
+	;                        Defaults to the active window ("A").
+	; RETURNS:        true/false, whether the window has the caption style.
+	;---------
+	hasCaption(titleString := "A") { ; Window with no caption style (no titlebar or borders)
+		return this.hasStyle(MicrosoftLib.WS_CAPTION, titleString)
+	}
+	
+	;---------
+	; DESCRIPTION:    Determine whether a window is resizable.
+	; PARAMETERS:
+	;  titleString (I,OPT) - Title string that identifies your chosen window.
+	;                        Defaults to the active window ("A").
+	; RETURNS:        true/false, whether the window is resizable.
+	;---------
+	isSizable(titleString := "A") {
+		return this.hasStyle(MicrosoftLib.WS_SIZEBOX, titleString)
 	}
 	
 	;---------

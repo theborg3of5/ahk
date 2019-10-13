@@ -220,7 +220,7 @@ class Toast {
 		
 		; Other gui options
 		Gui, +AlwaysOnTop -Caption +LastFound +ToolWindow
-		Gui, % "+E" WS_EX_CLICKTHROUGH
+		Gui, % "+E" MicrosoftLib.WS_EX_CLICKTHROUGH ; Can't be focused with a click (you "click through" to window underneath)
 		
 		; Set formatting options
 		styles := this.getStyles(styleOverrides)

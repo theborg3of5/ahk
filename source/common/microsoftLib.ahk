@@ -12,7 +12,7 @@ class MicrosoftLib {
 	
 	; Window styles ( https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric )
 	static WS_CAPTION := 0xC00000   ; Window has a caption (top bar + borders).
-	static WS_SIZEBOX := 0x40000    ; Window can be resized (aka WS_THICKFRAME).
+	static WS_SIZEBOX := 0x40000    ; Window can be sized (aka WS_THICKFRAME).
 	static WS_VISIBLE := 0x10000000 ; Window is visible
 	
 	; Extended window styles

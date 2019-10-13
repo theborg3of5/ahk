@@ -25,8 +25,8 @@
 		Send, ^{PgUp}
 	return
 	
-	; Unfreeze everything (when something frozen)
-	^+f::Send, !wff ; View tab > Freeze Panes > Unfreeze Panes
+	; Fill down
+	^+f::Send, !hfid ; Home tab > Fill > Down
 	
 	; Fix column widths
 	^+w::Excel.autoFixColumnWidth()

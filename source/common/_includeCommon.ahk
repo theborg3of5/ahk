@@ -47,26 +47,12 @@ Object(params*) {
 	#Include string.ahk
 	#Include window.ahk
 
-#Include %A_LineFile%\..\lib
-	#Include commandFunctions.ahk
-	#Include HTTPRequest.ahk
-	#Include XInput.ahk
-	
-	#Include dateTimeLib.ahk
-	#Include fileLib.ahk
-	#Include microsoftLib.ahk
-	#Include runLib.ahk
-
 #Include %A_LineFile%\..\class
-	#Include actionObjectRedirector.ahk
-	#Include config.ahk
-	#Include commonHotkeys.ahk
-	#Include debug.ahk
+	#Include debugBuilder.ahk
 	#Include duration.ahk
 	#Include epicRecord.ahk
 	#Include flexTable.ahk
 	#Include formatList.ahk
-	#Include hyperlinker.ahk
 	#Include mousePosition.ahk
 	#Include programInfo.ahk
 	#Include relativeDate.ahk
@@ -76,8 +62,27 @@ Object(params*) {
 	#Include tableList.ahk
 	#Include toast.ahk
 	#Include visualWindow.ahk
-	#Include windowActions.ahk
 	#Include windowInfo.ahk
+
+#Include %A_LineFile%\..\external
+	#Include commandFunctions.ahk
+	#Include HTTPRequest.ahk
+	#Include XInput.ahk
+	
+#Include %A_LineFile%\..\lib
+	#Include dateTimeLib.ahk
+	#Include fileLib.ahk
+	#Include microsoftLib.ahk
+	#Include runLib.ahk
+
+#Include %A_LineFile%\..\static
+	#Include actionObjectRedirector.ahk
+	#Include config.ahk
+	#Include commonHotkeys.ahk
+	#Include debug.ahk
+	#Include hyperlinker.ahk
+	#Include windowActions.ahk
+	
 
 ; ====================================================================================================
 ; ============================================== STARTUP =============================================

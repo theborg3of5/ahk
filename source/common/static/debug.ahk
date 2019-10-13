@@ -1,5 +1,3 @@
-#Include debugBuilder.ahk
-
 /* Static class to show debug information about whatever it's given.
 	
 	Motivation

@@ -1,24 +1,25 @@
 # New Ideas
 	Consider turning ScriptTrayInfo into a static class
 		Just have an Init() functions instead of doing new ScriptTrayInfo()
+		Move it into the \common\static\ folder if we do
+	Decide which approach to take for static classes that need to read something in once - require a .Init() call, or just do it the first time it's needed?
+		Examples
+			Hyperlinker - on-demand (only 1 public method)
+			WindowActions - .init (many public methods)
+			Config - .init
+		Leaning towards requiring a central init (presumably in _includeCommon where several live already)
+	Do we really need the XInput library in \common\?
+		Can't we just put it in the same directory as psxEmulator and include it there if needed?
 	Non-breaking spaces ( ) make EpicRecord parsing fail (and probably other stuff too)
 		Can we account for this somehow?
 			A "contains space" or "replace abnormal spaces" function, maybe?
 				Could make it a separate step in string.cleanup()
-	Consider moving all \common\ scripts' functions into classes for those scripts
-		Like we did for fileLib.ahk (previously just file.ahk)
-		Consider renaming things more, too
-			Keep filenames matching class names where applicable
-			Use something consistent, probably that matches the folder name - "libClipboard"/"clipboardLib", etc.
-	Consider changing source structure around common stuff:
-		Should \lib\ be split further?
-			\external\ - External libraries (HTTPRequest, XInput, commandFunctions)
-			\lib\ - Library classes
-			\static\ - Core static classes (ActionObjectRedirector, CommonHotkeys, Debug, Hyperlinker, WindowActions, ScriptTrayInfo?)
+	Rearrange \common\ source structure a bit
 		New source structure (changes only):
 			\common\ - contains everything that all scripts can pull in with an <includeCommon> lib include
 					includeCommon					rename to remove _ (assuming it'll be in a separate folder like this)
-				\lib\
+															Should it be renamed to something different that includes "startup" or "init"?
+				\lib\ - library classes
 					clip								turn into class, rename, move
 					data								turn into class, rename, move
 					epic								turn into class, rename, move

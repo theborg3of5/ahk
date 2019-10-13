@@ -111,7 +111,7 @@ class Putty {
 	; DESCRIPTION:    Open the Change Settings menu
 	;---------
 	openSettingsWindow() {
-		PostMessage, WM_SYSCOMMAND, Putty.ChangeSettingsOption, 0
+		PostMessage, MicrosoftLib.Message_WindowMenu, Putty.ChangeSettingsOption, 0
 	}
 	
 	;---------

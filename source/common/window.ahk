@@ -102,6 +102,7 @@ getWindowMonitorWorkArea(titleString := "A") {
 	winId := WinExist(titleString) ; Window handle
 	
 	; Get the monitor nearest to the window with the MonitorFromWindow function (https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-monitorfromwindow )
+	MONITOR_DEFAULTTONEAREST := 0x00000002 ; Get the monitor "closest" to the window
 	monitorHandle := DllCall("MonitorFromWindow", "Ptr", winId, "UInt", MONITOR_DEFAULTTONEAREST)
 	
 	; Initialize MONITORINFO structure (https://docs.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-monitorinfo ) for return value from GetMonitorInfo

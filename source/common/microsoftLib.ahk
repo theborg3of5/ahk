@@ -1,4 +1,4 @@
-/* A library of Microsoft-level constants and system values (cached at startup).
+/* A static library of Microsoft-level constants and system values.
 */
 
 class MicrosoftLib {
@@ -27,21 +27,11 @@ class MicrosoftLib {
 	static MaximizedWindowHeight   := SysGet(61) ; SM_CXMAXIMIZED  - Total width of a maximized window on the primary monitor. Includes any weird offsets.
 	static MaximizedWindowWidth    := SysGet(62) ; SM_CYMAXIMIZED  - Total height of a maximized window on the primary monitor. Includes any weird offsets.
 	
-	
-	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
-	
 	; Windows Messages ( https://autohotkey.com/docs/misc/SendMessageList.htm )
-	static WM_SYSCOMMAND := 0x112
-	static WM_HSCROLL    := 0x114
+	static Message_WindowMenu  := 0x112 ; WM_SYSCOMMAND - Doing something from the "Window" menu, or clicking one of the max/min/restore/close buttons
+	static Message_HorizScroll := 0x114 ; WM_HSCROLL    - Scroll event in the window's horizontal scroll bar
 	
 	; Scroll Bar Requests/Messages ( https://docs.microsoft.com/en-us/windows/desktop/Controls/about-scroll-bars )
-	static SB_LINELEFT  := 0
-	static SB_LINERIGHT := 1
-	
-	; Windows Screen constants (from MonitorFromWindow: https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-monitorfromwindow )
-	static MONITOR_DEFAULTTONEAREST := 0x00000002
-	
+	static ScrollBar_Left  := 0 ; SB_LINELEFT  - Scroll 1 unit to the left
+	static ScrollBar_Right := 1 ; SB_LINERIGHT - Scroll 1 unit to the right
 }

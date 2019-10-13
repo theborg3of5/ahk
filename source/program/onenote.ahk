@@ -94,11 +94,11 @@ class OneNote {
 	;---------
 	scrollLeft() {
 		MouseGetPos, , , winId, controlId, 1
-		SendMessage, WM_HSCROLL, SB_LINELEFT, , % controlId, % "ahk_id " winId
+		SendMessage, MicrosoftLib.Message_HorizScroll, MicrosoftLib.ScrollBar_Left, , % controlId, % "ahk_id " winId
 	}
 	scrollRight() {
 		MouseGetPos, , , winId, controlId, 1
-		SendMessage, WM_HSCROLL, SB_LINERIGHT, , % controlId, % "ahk_id " winId
+		SendMessage, MicrosoftLib.Message_HorizScroll, MicrosoftLib.ScrollBar_Right, , % controlId, % "ahk_id " winId
 	}
 	
 	;---------

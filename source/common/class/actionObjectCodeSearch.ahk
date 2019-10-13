@@ -1,4 +1,4 @@
-#Include %A_LineFile%\..\..\base\actionObjectBase.ahk
+#Include %A_LineFile%\..\base\actionObjectBase.ahk
 
 /* Class for performing actions based on a code location in CodeSearch.
 	

@@ -12,12 +12,6 @@
 		New source structure (changes only):
 			\common\ - contains everything that all scripts can pull in with an <includeCommon> lib include
 					includeCommon					rename to remove _ (assuming it'll be in a separate folder like this)
-				\class\.
-					actionObjectCodeSearch		move out of subfolder
-					actionObjectEMC2				move out of subfolder
-					actionObjectEpicStudio		move out of subfolder
-					actionObjectHelpdesk			move out of subfolder
-					actionObjectPath				move out of subfolder
 				\lib\
 					clip								move
 					data								move

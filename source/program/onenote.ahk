@@ -745,7 +745,7 @@ class OneNoteRecurringTodo {
 		if(this.date = "LAST") {
 			monthNum := FormatTime(instant, "M") ; Month number, no leading 0
 			year     := FormatTime(instant, "yyyy")
-			if(instDate = getLastDateOfMonth(monthNum, year))
+			if(instDate = DateTimeLib.getLastDateOfMonth(monthNum, year))
 				return true
 		}
 		

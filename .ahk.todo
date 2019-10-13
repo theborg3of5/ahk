@@ -20,17 +20,13 @@
 					actionObjectPath				move out of subfolder
 				\lib\
 					clip								move
-					commandFunctions				move
 					data								move
-					dateTime							move
 					epic								move
 					gui								move
-					HTTPRequest						move
 					io									move
 					runCommands						move
 					string							move
 					window							move
-					XInput							move
 		Will also need to update anything that references the existing folder structure directly
 			hotstrings
 			commonHotkeys

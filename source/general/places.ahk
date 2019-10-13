@@ -18,7 +18,7 @@ openFolder(folderName) {
 		
 		if(folderPath = "")
 			return
-		folderPath := replaceDateTimeTags(folderPath) ; For any date/time-based folder paths, use the current date/time.
+		folderPath := DateTimeLib.replaceTags(folderPath) ; For any date/time-based folder paths, use the current date/time.
 		
 		; If the folder doesn't exist, try to create it (with permission from user)
 		if(!FileLib.folderExists(folderPath)) {

@@ -41,7 +41,6 @@ Object(params*) {
 #Include %A_LineFile%\..
 	#Include clip.ahk
 	#Include data.ahk
-	#Include dateTime.ahk
 	#Include epic.ahk
 	#Include gui.ahk
 	#Include io.ahk
@@ -51,10 +50,12 @@ Object(params*) {
 
 #Include %A_LineFile%\..\lib
 	#Include commandFunctions.ahk
-	#Include fileLib.ahk
 	#Include HTTPRequest.ahk
-	#Include microsoftLib.ahk
 	#Include XInput.ahk
+	
+	#Include dateTimeLib.ahk
+	#Include fileLib.ahk
+	#Include microsoftLib.ahk
 
 #Include %A_LineFile%\..\class
 	#Include actionObjectRedirector.ahk

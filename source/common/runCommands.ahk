@@ -18,7 +18,7 @@ editScript(script) {
 
 ; Runs something and returns the result from standard out.
 runReturn(command) {
-	fullCommand := comspec . " /c """ . command . """"
+	fullCommand := A_ComSpec . " /c """ . command . """"
 	shell := comobjcreate("wscript.shell")
 	exec := (shell.exec(fullCommand))
 	stdout := exec.stdout.readall()
@@ -38,9 +38,9 @@ runCommand(commandToRun := "", workingDirectory := "", stayOpen := false) {
 	
 	; Set /C or /K (command and close, or command and stay up) based on input.
 	if(!cmdString || stayOpen)
-		runString := Config.path["CMD"] " /K " cmdString
+		runString := A_ComSpec " /K " cmdString
 	else
-		runString := Config.path["CMD"] " /C " cmdString
+		runString := A_ComSpec " /C " cmdString
 	
 	; DEBUG.popup("Command string", cmdString, "Run string", runString)
 	Run(runString, workingDirectory)

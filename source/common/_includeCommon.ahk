@@ -40,21 +40,21 @@ Object(params*) {
 ; ====================================================================================================
 #Include %A_LineFile%\..
 	#Include clip.ahk
-	#Include commandFunctions.ahk
 	#Include data.ahk
 	#Include dateTime.ahk
 	#Include epic.ahk
 	#Include gui.ahk
-	#Include HTTPRequest.ahk
 	#Include io.ahk
 	#Include runCommands.ahk
 	#Include string.ahk
 	#Include window.ahk
-	#Include XInput.ahk
 
 #Include %A_LineFile%\..\lib
+	#Include commandFunctions.ahk
 	#Include fileLib.ahk
+	#Include HTTPRequest.ahk
 	#Include microsoftLib.ahk
+	#Include XInput.ahk
 
 #Include %A_LineFile%\..\class
 	#Include actionObjectRedirector.ahk

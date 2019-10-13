@@ -1,11 +1,5 @@
 ; String manipulation functions.
 
-; NOTE: this file needs to be in ANSI encoding, to preserve some odd characters.
-
-global STRING_CASE_MIXED := "MIXED"
-global STRING_CASE_UPPER := "UPPER"
-global STRING_CASE_LOWER := "LOWER"
-
 isValidPhoneNumber(formattedNum) {
 	rawNum := parsePhone(formattedNum) ; Returns "" if it's not a valid number
 	if(rawNum = "")

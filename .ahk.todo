@@ -2,7 +2,7 @@
 	Non-breaking spaces ( ) make EpicRecord parsing fail (and probably other stuff too)
 		Can we account for this somehow?
 			A "contains space" or "replace abnormal spaces" function, maybe?
-	Get rid of _base.ahk - put logic directly into _includeCommon.ahk instead.
+				Could make it a separate step in string.cleanup()
 	Consider moving all \common\ scripts' functions into classes for those scripts
 		Like we did for fileUtils.ahk (previously just file.ahk)
 		Consider renaming things more, too

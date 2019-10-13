@@ -28,7 +28,7 @@ buildWindowTitleString(exeName := "", winClass := "", winTitle := "") {
 ; DESCRIPTION:    For the window identified by the given title string, generate a title string
 ;                 that's guaranteed to match only that window (based on its window ID).
 ; PARAMETERS:
-;  titleString (I,REQ) - Title string that identifies your chosen window.
+;  titleString (I,OPT) - Title string that identifies your chosen window.
 ;                        Defaults to the active window ("A").
 ; RETURNS:        A title string that uniquely (using ahk_id) identifies only your chosen window.
 ;---------
@@ -40,7 +40,7 @@ getIdTitleStringForWindow(titleString := "A") {
 ;---------
 ; DESCRIPTION:    Visually center the given window on its current monitor.
 ; PARAMETERS:
-;  titleString (I,REQ) - Title string that identifies your chosen window.
+;  titleString (I,OPT) - Title string that identifies your chosen window.
 ;                        Defaults to the active window ("A").
 ;---------
 centerWindow(titleString := "A") {
@@ -51,7 +51,7 @@ centerWindow(titleString := "A") {
 ; DESCRIPTION:    Resize a window to take up the full size of the monitor, without actually
 ;                 maximizing that window.
 ; PARAMETERS:
-;  titleString (I,REQ) - Title string that identifies your chosen window.
+;  titleString (I,OPT) - Title string that identifies your chosen window.
 ;                        Defaults to the active window ("A").
 ;---------
 fakeMaximizeWindow(titleString := "A") {
@@ -73,7 +73,7 @@ isWindowVisible(titleString := "A") {
 ;---------
 ; DESCRIPTION:    Determine whether a window is maximized.
 ; PARAMETERS:
-;  titleString (I,REQ) - Title string that identifies your chosen window.
+;  titleString (I,OPT) - Title string that identifies your chosen window.
 ;                        Defaults to the active window ("A").
 ; RETURNS:        true if the window is maximized, false otherwise.
 ;---------
@@ -84,7 +84,7 @@ isWindowMaximized(titleString := "A") {
 ;---------
 ; DESCRIPTION:    Determine whether a window is minimized.
 ; PARAMETERS:
-;  titleString (I,REQ) - Title string that identifies your chosen window.
+;  titleString (I,OPT) - Title string that identifies your chosen window.
 ;                        Defaults to the active window ("A").
 ; RETURNS:        true if the window is minimized, false otherwise.
 ;---------
@@ -96,7 +96,7 @@ isWindowMinimized(titleString := "A") {
 ; DESCRIPTION:    Get the dimensions of the work area of the monitor "closest" (according to
 ;                 Windows) to the given window.
 ; PARAMETERS:
-;  titleString (I,REQ) - Title string that identifies your chosen window.
+;  titleString (I,OPT) - Title string that identifies your chosen window.
 ;                        Defaults to the active window ("A").
 ; RETURNS:        Associative array of position/size information for the working area of the
 ;                 monitor that the window is "closest" to. Format:

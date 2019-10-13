@@ -2,10 +2,8 @@
 	; Window styles ( https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric )
 	global WS_CAPTION := 0xC00000   ; Window has a caption (top bar + borders).
 	global WS_SIZEBOX := 0x40000    ; Window can be resized (aka WS_THICKFRAME).
-	global WS_VISIBLE := 0x10000000 ; Window is visible
 	
 	; Extended window styles
-	global WS_EX_WS_EX_TOPMOST := 0x8   ; Always on top
 	global WS_EX_CLICKTHROUGH := 0x20  ; Clicking on the window actually clicks on whatever is below it.
 	global WS_EX_CLIENTEDGE   := 0x200 ; Controls: border with sunken edge (on by default for many control types)
 	

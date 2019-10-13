@@ -60,17 +60,6 @@ fakeMaximizeWindow(titleString := "A") {
 }
 
 ;---------
-; DESCRIPTION:    Determine whether a window is visible, based on its style.
-; PARAMETERS:
-;  titleString (I,REQ) - Title string that identifies your chosen window.
-;                        Defaults to the active window ("A").
-; RETURNS:        True if the window is visible, False otherwise.
-;---------
-isWindowVisible(titleString := "A") {
-	return bitFieldHasFlag(WinGet("Style", ""), WS_VISIBLE)
-}
-
-;---------
 ; DESCRIPTION:    Determine whether a window is maximized.
 ; PARAMETERS:
 ;  titleString (I,OPT) - Title string that identifies your chosen window.
@@ -214,4 +203,55 @@ isSecondMonitorMoreLowerRight(firstBounds, secondBounds) {
 		return true
 	
 	return false
+}
+
+/* GDB TODO
+	
+	Example Usage
+		GDB TODO
+*/
+
+class WindowLib {
+
+; ====================================================================================================
+; ============================================== PUBLIC ==============================================
+; ====================================================================================================
+	
+	;---------
+	; DESCRIPTION:    Determine whether a window is visible, based on its style.
+	; PARAMETERS:
+	;  titleString (I,REQ) - Title string that identifies your chosen window.
+	;                        Defaults to the active window ("A").
+	; RETURNS:        True if the window is visible, False otherwise.
+	;---------
+	isVisible(titleString := "A") {
+		return this.hasStyle(MicrosoftLib.WS_VISIBLE, titleString)
+	}
+	
+	
+	isAlwaysOnTop(titleString := "A") {
+		return this.hasExStyle(MicrosoftLib.WS_EX_TOPMOST, titleString)
+	}
+	
+	;---------
+	; DESCRIPTION:    Check whether a window has a particular style or extended style
+	; PARAMETERS:
+	;  style       (I,REQ) - The style/extended style to check for.
+	;  titleString (I,OPT) - Title string that identifies your chosen window.
+	;                        Defaults to the active window ("A").
+	; RETURNS:        true if the window has the given style/extended style, false otherwise.
+	;---------
+	hasStyle(style, titleString := "A") {
+		return bitFieldHasFlag(WinGet("Style", titleString), style)
+	}
+	hasExStyle(style, titleString := "A") {
+		return bitFieldHasFlag(WinGet("ExStyle", titleString), style)
+	}
+	
+	
+; ====================================================================================================
+; ============================================== PRIVATE =============================================
+; ====================================================================================================
+	
+	
 }

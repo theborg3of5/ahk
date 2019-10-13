@@ -10,14 +10,11 @@ return
 ; Sets current window to stay on top
 #+t::
 	toggleAlwaysOnTop() {
-		WinGet, extendedStyle, ExStyle, A
-		if(extendedStyle & WS_EX_WS_EX_TOPMOST) ; Window is currently always on top
-			newState := "Off"
+		WinSet, AlwaysOnTop, Toggle, A
+		if(MicrosoftLib.isWindowAlwaysOnTop())
+			new Toast("Window set to always on top").showMedium()
 		else
-			newState := "On"
-		
-		WinSet, AlwaysOnTop, % newState, A
-		new Toast("Window always on top: " newState).showMedium()
+			new Toast("Window set to NOT always on top").showMedium()
 	}
 
 ; Center current window onscreen.

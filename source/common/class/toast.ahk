@@ -280,7 +280,7 @@ class Toast {
 		Gui, +LastFound ; Needed to identify the window on next line
 		titleString := getIdTitleStringForWindow("") ; Blank title string input for last found window
 		
-		isWinHidden := !isWindowVisible(titleString)
+		isWinHidden := !WindowLib.isVisible(titleString)
 		if(isWinHidden)
 			Gui, Show, AutoSize NoActivate Hide, % Toast.ToastTitle ; Resize to size of contents, but keep toast hidden (and actually show it further down)
 		else

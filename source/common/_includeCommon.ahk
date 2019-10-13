@@ -15,6 +15,7 @@
 	#Include gui.ahk
 	#Include HTTPRequest.ahk
 	#Include io.ahk
+	#Include microsoftLib.ahk
 	#Include runCommands.ahk
 	#Include string.ahk
 	#Include window.ahk

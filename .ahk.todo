@@ -1,4 +1,6 @@
 # New Ideas
+	Consider turning ScriptTrayInfo into a static class
+		Just have an Init() functions instead of doing new ScriptTrayInfo()
 	Non-breaking spaces ( ) make EpicRecord parsing fail (and probably other stuff too)
 		Can we account for this somehow?
 			A "contains space" or "replace abnormal spaces" function, maybe?
@@ -9,17 +11,21 @@
 			Keep filenames matching class names where applicable
 			Use something consistent, probably that matches the folder name - "libClipboard"/"clipboardLib", etc.
 	Consider changing source structure around common stuff:
+		Should \lib\ be split further?
+			\external\ - External libraries (HTTPRequest, XInput, commandFunctions)
+			\lib\ - Library classes
+			\static\ - Core static classes (ActionObjectRedirector, CommonHotkeys, Debug, Hyperlinker, WindowActions, ScriptTrayInfo?)
 		New source structure (changes only):
 			\common\ - contains everything that all scripts can pull in with an <includeCommon> lib include
 					includeCommon					rename to remove _ (assuming it'll be in a separate folder like this)
 				\lib\
-					clip								move
-					data								move
-					epic								move
-					gui								move
-					io									move
-					string							move
-					window							move
+					clip								turn into class, rename, move
+					data								turn into class, rename, move
+					epic								turn into class, rename, move
+					gui								turn into class, rename, move
+					io									turn into class, rename, move
+					string							turn into class, rename, move
+					window							turn into class, rename, move
 		Will also need to update anything that references the existing folder structure directly
 			hotstrings
 			commonHotkeys

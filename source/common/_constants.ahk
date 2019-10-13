@@ -1,1 +1,0 @@
-; (MS) Windows-related

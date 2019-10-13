@@ -326,7 +326,7 @@ class Config {
 			return
 		}
 		
-		runAsUser(path, args)
+		RunLib.runAsUser(path, args)
 	}
 	
 	;---------

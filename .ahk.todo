@@ -24,7 +24,6 @@
 					epic								move
 					gui								move
 					io									move
-					runCommands						move
 					string							move
 					window							move
 		Will also need to update anything that references the existing folder structure directly

@@ -44,7 +44,6 @@ Object(params*) {
 	#Include epic.ahk
 	#Include gui.ahk
 	#Include io.ahk
-	#Include runCommands.ahk
 	#Include string.ahk
 	#Include window.ahk
 
@@ -56,6 +55,7 @@ Object(params*) {
 	#Include dateTimeLib.ahk
 	#Include fileLib.ahk
 	#Include microsoftLib.ahk
+	#Include runLib.ahk
 
 #Include %A_LineFile%\..\class
 	#Include actionObjectRedirector.ahk

@@ -13,7 +13,7 @@ global durationObj
 global timerLabelText
 
 ; Get any inputs from command line
-argsAry := getScriptArgs()
+argsAry := RunLib.getScriptArgs()
 durationString := argsAry[1]
 labelText      := argsAry[2]
 

@@ -195,5 +195,5 @@
 
 ; Edits this file.
 ^!h::
-	editScript(A_LineFile)
+	RunLib.editScript(A_LineFile)
 return

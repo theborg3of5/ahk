@@ -249,13 +249,13 @@ class VisualWindow {
 			
 			; Windows with a caption that are NOT resizable
 			} else if(!WindowLib.isSizable(this.titleString)) {
-				offsetWidth  := SysGet(SM_CXFIXEDFRAME) - SysGet(SM_CXBORDER)
-				offsetHeight := SysGet(SM_CYFIXEDFRAME) - SysGet(SM_CYBORDER)
+				offsetWidth  := MicrosoftLib.FrameX_CaptionNoSizable- MicrosoftLib.BorderX
+				offsetHeight := MicrosoftLib.FrameY_CaptionNoSizable- MicrosoftLib.BorderY
 			
 			; Windows that have a caption and are resizable
 			} else {
-				offsetWidth  := SysGet(SM_CXSIZEFRAME) - SysGet(SM_CXBORDER)
-				offsetHeight := SysGet(SM_CYSIZEFRAME) - SysGet(SM_CYBORDER)
+				offsetWidth  := MicrosoftLib.FrameX_CaptionSizable- MicrosoftLib.BorderX
+				offsetHeight := MicrosoftLib.FrameY_CaptionSizable- MicrosoftLib.BorderY
 			}
 		}
 	

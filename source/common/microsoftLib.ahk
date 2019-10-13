@@ -20,21 +20,21 @@ class MicrosoftLib {
 	static WS_EX_CLICKTHROUGH := 0x20  ; Clicking on the window actually clicks on whatever is below it.
 	static WS_EX_CLIENTEDGE   := 0x200 ; Controls: border with sunken edge (on by default for many control types)
 	
+	; System-level window measurements ( https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics )
+	static BorderX                 := SysGet(5 ) ; SM_CXBORDER     - For non-3D windows (which should be most), the thickness of the left/right borders.
+	static BorderY                 := SysGet(6 ) ; SM_CYBORDER     - For non-3D windows (which should be most), the thickness of the top/bottom borders.
+	static FrameX_CaptionNoSizable := SysGet(7 ) ; SM_CXFIXEDFRAME - Thickness of the left/right borders for windows with a caption that are NOT sizable.
+	static FrameY_CaptionNoSizable := SysGet(8 ) ; SM_CYFIXEDFRAME - Thickness of the top/bottom borders for windows with a caption that are NOT sizable.
+	static FrameX_CaptionSizable   := SysGet(32) ; SM_CXSIZEFRAME  - Thickness of the left/right borders for windows with a caption that are sizable (aka SM_CXFRAME).
+	static FrameY_CaptionSizable   := SysGet(33) ; SM_CYSIZEFRAME  - Thickness of the top/bottom borders for windows with a caption that are sizable (aka SM_CYFRAME).
+	static MaximizedWindowHeight   := SysGet(61) ; SM_CXMAXIMIZED  - Total width of a maximized window on the primary monitor. Includes any weird offsets.
+	static MaximizedWindowWidth    := SysGet(62) ; SM_CYMAXIMIZED  - Total height of a maximized window on the primary monitor. Includes any weird offsets.
 	
 	
 	
 ; ====================================================================================================
 ; ============================================== PRIVATE =============================================
 ; ====================================================================================================
-	; SysGet command numbers ( https://autohotkey.com/docs/commands/SysGet.htm )
-	static SM_CXBORDER     := 5  ; For non-3D windows (which should be most), the width of the border on the left and right.
-	static SM_CYBORDER     := 6  ; For non-3D windows (which should be most), the width of the border on the top and bottom.
-	static SM_CXFIXEDFRAME := 7  ; Width of the horizontal frame for a window with a caption that cannot be resized.
-	static SM_CYFIXEDFRAME := 8  ; Width of the vertical frame for a window with a caption that cannot be resized.
-	static SM_CXSIZEFRAME  := 32 ; Width of the horizontal frame for a window with a caption that cannot be resized (aka SM_CXFRAME).
-	static SM_CYSIZEFRAME  := 33 ; Width of the vertical frame for a window with a caption that cannot be resized (aka SM_CYFRAME).
-	static SM_CXMAXIMIZED  := 61 ; Width of a maximized window on the primary monitor. Includes any weird offsets.
-	static SM_CYMAXIMIZED  := 62 ; Height of a maximized window on the primary monitor. Includes any weird offsets.
 	
 	; Windows Messages ( https://autohotkey.com/docs/misc/SendMessageList.htm )
 	static WM_SYSCOMMAND := 0x112

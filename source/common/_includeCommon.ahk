@@ -51,6 +51,7 @@ Object(params*) {
 	#Include debugBuilder.ahk
 	#Include duration.ahk
 	#Include epicRecord.ahk
+	#Include errorToast.ahk
 	#Include flexTable.ahk
 	#Include formatList.ahk
 	#Include mousePosition.ahk

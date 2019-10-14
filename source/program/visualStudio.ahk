@@ -5,7 +5,7 @@
 	^+t::Send, !fj1 ; Open last-closed project
 
 	; Copy current file/folder paths to clipboard
-	!c::VisualStudio.copyFilePath()              ; Current file
+	 !c::VisualStudio.copyFilePath()             ; Current file
 	!#c::VisualStudio.copyContainingFolderPath() ; Current file's folder
 #If
 

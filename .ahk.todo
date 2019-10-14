@@ -15,6 +15,7 @@
 			A "contains space" or "replace abnormal spaces" function, maybe?
 				Could make it a separate step in string.cleanup()
 	Rearrange \common\ source structure a bit
+		Lowercase DEBUG => Debug?
 		New source structure (changes only):
 			\common\ - contains everything that all scripts can pull in with an <includeCommon> lib include
 					includeCommon					rename to remove _ (assuming it'll be in a separate folder like this)
@@ -88,6 +89,19 @@
 		Pidgin window - top-right of left monitor
 	Possibly have ActionObjectPath append a www. or http(s):// to the start of URLs before trying to launch them?
 		Probably do it in open(), where we also check whether a local path exists
+	
+# Version Restrictions
+	VDI current AHK version: 1.1.28.00
+	1.1.29.00
+		.Count()
+			Remove special handling in array/object base classes
+	1.1.31.00
+		Switch()
+	1.1.31.01
+		Execute hotstrings can support spaces
+			notepadPlusPlus
+			emc2
+			hotstrings
 	
 # TableList
 	TableList mods - consider making it a replacement by default (only 1 active mod), only stack with labels

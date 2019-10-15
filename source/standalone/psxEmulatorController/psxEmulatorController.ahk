@@ -4,6 +4,7 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
+#Include XInput.ahk
 trayInfo := new ScriptTrayInfo("AHK: Controller Emulator", "controllerGreen.ico", "controllerRed.ico")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone, trayInfo)
 

@@ -68,7 +68,6 @@ Object(params*) {
 #Include %A_LineFile%\..\external
 	#Include commandFunctions.ahk
 	#Include HTTPRequest.ahk
-	#Include XInput.ahk
 	
 #Include %A_LineFile%\..\lib
 	#Include dateTimeLib.ahk

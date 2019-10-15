@@ -8,8 +8,6 @@
 			WindowActions - .init (many public methods)
 			Config - .init
 		Leaning towards requiring a central init (presumably in _includeCommon where several live already)
-	Do we really need the XInput library in \common\?
-		Can't we just put it in the same directory as psxEmulator and include it there if needed?
 	Non-breaking spaces ( ) make EpicRecord parsing fail (and probably other stuff too)
 		Can we account for this somehow?
 			A "contains space" or "replace abnormal spaces" function, maybe?

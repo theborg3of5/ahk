@@ -89,9 +89,9 @@ global WINDOWCORNER_BOTTOMRIGHT := "BOTTOM_RIGHT"
 		maximizeRestoreWindowUnderMouse() {
 			titleString := getTitleStringForWindowUnderMouse()
 			
-			if(isWindowMaximized(titleString))
+			if(WindowLib.isMaximized(titleString))
 				WinRestore, % titleString
-			else if(!isWindowMinimized(titleString)) ; Window is not maximized or minimized
+			else if(!WindowLib.isMinimized(titleString)) ; Window is not maximized or minimized
 				WinMaximize, % titleString
 		}
 	
@@ -113,7 +113,7 @@ dragWindowPrep(ByRef window, ByRef mouseStart) {
 	if(isExcludedWindow(titleString))
 		return false
 	
-	if(isWindowMaximized(titleString))
+	if(WindowLib.isMaximized(titleString))
 		WinRestore, % titleString
 	
 	window := new VisualWindow(titleString, SnappingDistance)

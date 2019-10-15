@@ -119,7 +119,7 @@ class WindowInfo {
 	;---------
 	titleString[] {
 		get {
-			return buildWindowTitleString(this.exe, this.class, this.title)
+			return WindowLib.buildTitleString(this.exe, this.class, this.title)
 		}
 	}
 	

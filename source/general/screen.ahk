@@ -18,10 +18,10 @@ return
 	}
 
 ; Center current window onscreen.
-#+c::centerWindow()
+#+c::WindowLib.center()
 
 ; Fake-maximize the window and center it.
-#+m::fakeMaximizeWindow()
+#+m::WindowLib.fakeMaximize()
 
 ; Resize window
 #+r::

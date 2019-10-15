@@ -278,7 +278,7 @@ class Toast {
 		
 		Gui, % this.guiId ":Default"
 		Gui, +LastFound ; Needed to identify the window on next line
-		titleString := getIdTitleStringForWindow("") ; Blank title string input for last found window
+		titleString := WindowLib.getIdTitleString("") ; Blank title string input for last found window
 		
 		isWinHidden := !WindowLib.isVisible(titleString)
 		if(isWinHidden)

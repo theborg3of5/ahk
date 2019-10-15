@@ -93,7 +93,7 @@ moveGui(mouseX, mouseY) {
 	guiX := mouseX + MOUSE_GUI_PADDING
 	guiY := mouseY - MOUSE_GUI_PADDING - GUI_HEIGHT
 	
-	bounds := getMouseMonitorBounds()
+	bounds := WindowLib.getMouseMonitorBounds()
 	
 	; Check if we're past the right edge of the monitor
 	distanceX := bounds["RIGHT"] - (guiX + GUI_WIDTH) ; From right edge of gui to right edge of monitor

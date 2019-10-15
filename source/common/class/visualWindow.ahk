@@ -59,7 +59,7 @@ class VisualWindow {
 	; RETURNS:        Reference to new VisualWindow instance
 	;---------
 	__New(titleString, snapDistance := 0) {
-		this.titleString := getIdTitleStringForWindow(titleString) ; Convert title string to ID in case it was active window ("A") or similar
+		this.titleString := WindowLib.getIdTitleString(titleString) ; Convert title string to ID in case it was active window ("A") or similar
 		this.snapDistance := snapDistance
 		this.windowOffsets := this.calculateWindowOffsets()
 		
@@ -326,7 +326,7 @@ class VisualWindow {
 		if(!this.isSnapOn)
 			return
 		
-		monitorBounds := getWindowMonitorWorkArea(this.titleString)
+		monitorBounds := WindowLib.getMonitorWorkArea(this.titleString)
 		leftDistance   := abs(this.leftX   - monitorBounds["LEFT"])
 		rightDistance  := abs(this.rightX  - monitorBounds["RIGHT"])
 		topDistance    := abs(this.topY    - monitorBounds["TOP"])
@@ -348,7 +348,7 @@ class VisualWindow {
 		if(!this.isSnapOn)
 			return
 		
-		monitorBounds := getWindowMonitorWorkArea(this.titleString)
+		monitorBounds := WindowLib.getMonitorWorkArea(this.titleString)
 		leftDistance   := abs(this.leftX   - monitorBounds["LEFT"])
 		rightDistance  := abs(this.rightX  - monitorBounds["RIGHT"])
 		topDistance    := abs(this.topY    - monitorBounds["TOP"])
@@ -379,7 +379,7 @@ class VisualWindow {
 	; -- Special window coordinates (for window placement relative to monitor) --
 	; ---------------------------------------------------------------------------
 	convertSpecialWindowCoordinates(ByRef x, ByRef y) {
-		monitorBounds := getWindowMonitorWorkArea(this.titleString)
+		monitorBounds := WindowLib.getMonitorWorkArea(this.titleString)
 		x := this.convertSpecialWindowX(x, monitorBounds)
 		y := this.convertSpecialWindowY(y, monitorBounds)
 	}

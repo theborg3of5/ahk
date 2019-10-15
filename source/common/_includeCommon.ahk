@@ -45,7 +45,6 @@ Object(params*) {
 	#Include gui.ahk
 	#Include io.ahk
 	#Include string.ahk
-	#Include window.ahk
 
 #Include %A_LineFile%\..\class
 	#Include debugBuilder.ahk
@@ -73,6 +72,7 @@ Object(params*) {
 	#Include fileLib.ahk
 	#Include microsoftLib.ahk
 	#Include runLib.ahk
+	#Include windowLib.ahk
 
 #Include %A_LineFile%\..\static
 	#Include actionObjectRedirector.ahk

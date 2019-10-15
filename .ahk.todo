@@ -21,7 +21,6 @@
 					gui								turn into class, rename, move
 					io									turn into class, rename, move
 					string							turn into class, rename, move
-					window							turn into class, rename, move
 		Will also need to update anything that references the existing folder structure directly
 			hotstrings
 			commonHotkeys

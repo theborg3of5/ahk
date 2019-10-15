@@ -1,4 +1,4 @@
-#Include base\relativeDateTimeBase.ahk
+#Include ..\base\actionObjectBase.ahk
 
 /* Calculates and sends a date relative to the class's instantiation.
 	

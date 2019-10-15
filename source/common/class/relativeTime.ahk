@@ -1,4 +1,4 @@
-#Include base\relativeDateTimeBase.ahk
+#Include ..\base\relativeDateTimeBase.ahk
 
 /* Calculates and sends a time relative to the class's instantiation (or the user submitting their relative time string, if one not provided to the constructor).
 	

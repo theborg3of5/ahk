@@ -120,15 +120,19 @@
 	}
 
 	{ ; AHK
-		:X:arf::sendFolderPath("AHK_ROOT")
-		:X:aconf::sendFolderPath("AHK_CONFIG")
-		:X:atf::sendFolderPath("AHK_ROOT", "test")
-		:X:asf::sendFolderPath("AHK_SOURCE")
-		:X:acf::sendFolderPath("AHK_SOURCE", "common")
+		:X:arf::sendFolderPath(  "AHK_ROOT")
+		:X:aconf::sendFolderPath("AHK_ROOT", "config")
+		:X:atf::sendFolderPath(  "AHK_ROOT", "test")
+		
+		:X:asf::sendFolderPath( "AHK_SOURCE")
+		:X:acf::sendFolderPath( "AHK_SOURCE", "common")
 		:X:accf::sendFolderPath("AHK_SOURCE", "common\class")
-		:X:acbf::sendFolderPath("AHK_SOURCE", "common\class\base")
-		:X:apf::sendFolderPath("AHK_SOURCE", "program")
-		:X:agf::sendFolderPath("AHK_SOURCE", "general")
+		:X:abf::sendFolderPath( "AHK_SOURCE", "common\base")
+		:X:alf::sendFolderPath( "AHK_SOURCE", "common\lib")
+		:X:acsf::sendFolderPath("AHK_SOURCE", "common\static")
+		
+		:X:apf::sendFolderPath( "AHK_SOURCE", "program")
+		:X:agf::sendFolderPath( "AHK_SOURCE", "general")
 		:X:astf::sendFolderPath("AHK_SOURCE", "standalone")
 		:X:asuf::sendFolderPath("AHK_SOURCE", "sub")
 	}

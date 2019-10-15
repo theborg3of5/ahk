@@ -1,4 +1,4 @@
-#Include %A_LineFile%\..\base\actionObjectBase.ahk
+#Include ..\base\actionObjectBase.ahk
 
 /* Class for performing actions on a path.
 	

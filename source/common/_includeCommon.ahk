@@ -1,10 +1,10 @@
 ; ====================================================================================================
 ; ===================================== STANDARD BASE REPLACEMENT ====================================
 ; ====================================================================================================
-#Include %A_LineFile%\..\class\base
-	#Include %A_LineFile%\..\class\base\stringBase.ahk
-	#Include %A_LineFile%\..\class\base\arrayBase.ahk
-	#Include %A_LineFile%\..\class\base\objectBase.ahk
+#Include %A_LineFile%\..\base
+	#Include stringBase.ahk
+	#Include arrayBase.ahk
+	#Include objectBase.ahk
 
 ; Strings (technically all non-objects, since they all share a base class - see https://www.autohotkey.com/docs/Objects.htm#Pseudo_Properties )
 "".base.base := StringBase ; Can't replace the base itself, but can give the base a new base instead.
@@ -71,6 +71,7 @@ Object(params*) {
 	#Include dateTimeLib.ahk
 	#Include fileLib.ahk
 	#Include microsoftLib.ahk
+	#Include phoneLib.ahk
 	#Include runLib.ahk
 	#Include windowLib.ahk
 

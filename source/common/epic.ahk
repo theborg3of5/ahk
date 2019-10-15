@@ -118,12 +118,6 @@
 	buildHyperspaceRunString(versionMajor, versionMinor, environment) {
 		runString := Config.private["HYPERSPACE_BASE"]
 		
-		; Handling for 2010 special path.
-		if(versionMajor = 7 && versionMinor = 8)
-			runString := runString.replaceTag("EPICNAME", "EpicSys")
-		else
-			runString := runString.replaceTag("EPICNAME", "Epic")
-		
 		; Versioning and environment.
 		runString := runString.replaceTags({"MAJOR":versionMajor, "MINOR":versionMinor, "ENVIRONMENT":environment})
 		

@@ -1,5 +1,5 @@
 # New Ideas
-	Consider turning ScriptTrayInfo into a static class
+	Consider turning ScriptTrayInfo into a static class.
 		Just have an Init() functions instead of doing new ScriptTrayInfo()
 		Move it into the \common\static\ folder if we do
 	Decide which approach to take for static classes that need to read something in once - require a .Init() call, or just do it the first time it's needed?

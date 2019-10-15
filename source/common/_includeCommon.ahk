@@ -41,7 +41,6 @@ Object(params*) {
 #Include %A_LineFile%\..
 	#Include clip.ahk
 	#Include data.ahk
-	#Include epic.ahk
 	#Include gui.ahk
 	#Include io.ahk
 	#Include string.ahk
@@ -69,6 +68,7 @@ Object(params*) {
 	
 #Include %A_LineFile%\..\lib
 	#Include dateTimeLib.ahk
+	#Include epicLib.ahk
 	#Include fileLib.ahk
 	#Include microsoftLib.ahk
 	#Include phoneLib.ahk

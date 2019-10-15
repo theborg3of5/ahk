@@ -43,7 +43,7 @@
 		selectHyperspace() {
 			data := new Selector("epicEnvironments.tls").SetTitle("Launch Hyperspace in Environment").selectGui()
 			if(data)
-				Run(buildHyperspaceRunString(data["MAJOR"], data["MINOR"], data["COMM_ID"]))
+				EpicLib.runHyperspace(data["MAJOR"], data["MINOR"], data["COMM_ID"])
 		}
 	
 	^+!i::
@@ -120,7 +120,7 @@
 			if(data["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.
 				Config.runProgram("VMware Horizon Client")
 			} else {
-				Run(buildVDIRunString(data["VDI_ID"]))
+				EpicLib.runVDI(data["VDI_ID"])
 				
 				; Also fake-maximize the window once it shows up.
 				WinWaitActive, ahk_exe vmware-view.exe, , 10, VMware Horizon Client ; Ignore the loading-type popup that happens initially with excluded title.

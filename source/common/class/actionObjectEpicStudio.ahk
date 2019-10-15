@@ -52,7 +52,7 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 	;---------
 	getLink() {
 		if(this.descriptorType = ActionObjectEpicStudio.DescriptorType_Routine) {
-			splitServerLocation(this.descriptor, routine, tag)
+			EpicLib.splitServerLocation(this.descriptor, routine, tag)
 			environmentId := Config.private["DBC_DEV_ENV_ID"] ; Always use DBC Dev environment
 			
 			url := Config.private["EPICSTUDIO_URL_BASE_ROUTINE"]

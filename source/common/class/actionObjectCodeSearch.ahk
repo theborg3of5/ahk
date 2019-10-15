@@ -48,7 +48,7 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 	;---------
 	getLink() {
 		if(this.locationType = ActionObjectCodeSearch.LocationType_Server) {
-			splitServerLocation(this.location, routine, tag)
+			EpicLib.splitServerLocation(this.location, routine, tag)
 			routine := encodeForURL(routine)
 			tag     := encodeForURL(tag)
 			

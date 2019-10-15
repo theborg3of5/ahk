@@ -71,7 +71,7 @@ class EpicStudio {
 		codeLocation := clipboard
 		
 		; Initial value copied potentially has the offset (tag+<offsetNum>) included, strip it off.
-		codeLocation := dropOffsetFromServerLocation(codeLocation)
+		codeLocation := EpicLib.dropOffsetFromServerLocation(codeLocation)
 		
 		; Set the clipboard value to our new (plain-text, no link) code location and notify the user.
 		setClipboardAndToastValue(codeLocation, "cleaned code location")

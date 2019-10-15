@@ -15,7 +15,7 @@
 			A "contains space" or "replace abnormal spaces" function, maybe?
 				Could make it a separate step in string.cleanup()
 	Rearrange \common\ source structure a bit
-		New source structure (changes only):
+		New source structure (remaining changes only):
 			\common\ - contains everything that all scripts can pull in with an <includeCommon> lib include
 					includeCommon					rename to remove _ (assuming it'll be in a separate folder like this)
 															Should it be renamed to something different that includes "startup" or "init"?
@@ -24,7 +24,6 @@
 				\lib\ - library classes
 					clip								turn into class, rename, move
 					data								turn into class, rename, move
-					epic								turn into class, rename, move
 					gui								turn into class, rename, move
 					io									turn into class, rename, move
 					string							turn into class, rename, move

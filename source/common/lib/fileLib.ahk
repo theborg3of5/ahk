@@ -116,10 +116,6 @@ class FileLib {
 			FileAppend, % newContents, % filePath
 	}
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
-	
 	;---------
 	; DESCRIPTION:    Send a file or folder path in a particular format.
 	; PARAMETERS:
@@ -128,9 +124,6 @@ class FileLib {
 	;  slashChar        (I,OPT) - The slash (forward or back) character to use in between the path
 	;                             and additional subPath, and at the end if addTrailingSlash = true.
 	;  addTrailingSlash (I,OPT) - Set to true to add a trailing slash to the end of the path.
-	; RETURNS:        
-	; SIDE EFFECTS:   
-	; NOTES:          
 	;---------
 	sendPath(folderName, subPath := "", slashChar := "\", addTrailingSlash := false) {
 		if(folderName = "")
@@ -151,6 +144,5 @@ class FileLib {
 		
 		Send, % folderPath
 	}
-	
 }
 

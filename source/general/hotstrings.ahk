@@ -152,7 +152,7 @@
 return
 
 
-; Helper functions
+; Helper functions for sending file/folder paths in the desired format.
 sendFilePath(folderName, subPath := "") {
 	FileLib.sendPath(folderName, subPath)
 }

@@ -14,8 +14,8 @@ startupFolder  := ahkRootPath "\source"
 mainAHKPath    := startupFolder "\main.ahk"
 
 copyPaths := {}
-copyPaths["includeCommon.ahk.master"] := userPath "\Documents\AutoHotkey\Lib\includeCommon.ahk"
-copyPaths["settings.ini.master"]      := ahkRootPath "\config\local\settings.ini"
+copyPaths["..\template\includeCommon.ahk"] := userPath "\Documents\AutoHotkey\Lib\includeCommon.ahk"
+copyPaths["..\template\settings.ini"]      := ahkRootPath "\config\local\settings.ini"
 
 gitNames := []
 gitNames.Push(".git")
@@ -38,10 +38,10 @@ t.show()
 ; Pull the needed values from our selection.
 t.setText("Reading values from selection...")
 tagsToReplace := {}
-tagsToReplace["ROOT"]            := ahkRootPath
-tagsToReplace["CONTEXT"]         := machineInfo["NEW_CONTEXT"]
-tagsToReplace["MACHINE"]         := machineInfo["NEW_MACHINE"]
-tagsToReplace["MEDIA_PLAYER"]    := machineInfo["MEDIA_PLAYER"]
+tagsToReplace["AHK_ROOT"]     := ahkRootPath
+tagsToReplace["CONTEXT"]      := machineInfo["NEW_CONTEXT"]
+tagsToReplace["MACHINE"]      := machineInfo["NEW_MACHINE"]
+tagsToReplace["MEDIA_PLAYER"] := machineInfo["MEDIA_PLAYER"]
 ; Debug.popup("Finished tags to replace",tagsToReplace)
 
 ; Loop over files we need to process and put places.

@@ -1,6 +1,7 @@
 # New Ideas
 	Should we add a edit script selector like we have for config files?
 		For often-modified scripts
+			config
 			commandFunctions
 			hotstrings (maybe get rid of dedicated hotkey?)
 	Decide which approach to take for static classes that need to read something in once - require a .Init() call, or just do it the first time it's needed?
@@ -96,6 +97,7 @@
 			Remove special handling in array/object base classes
 	1.1.31.00
 		Switch()
+			PhoneLib.reduceToDigits()
 	1.1.31.01
 		Execute hotstrings can support spaces
 			notepadPlusPlus

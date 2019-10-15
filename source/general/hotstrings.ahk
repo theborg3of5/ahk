@@ -20,7 +20,7 @@
 
 { ; Phone numbers.
 	:X:phoneno::Send, % Config.private["PHONE_NUM"]
-	:X:fphoneno::Send, % reformatPhone(Config.private["PHONE_NUM"])
+	:X:fphoneno::Send, % PhoneLib.formatNumber(Config.private["PHONE_NUM"])
 }
 
 { ; Typo correction.

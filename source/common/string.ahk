@@ -1,53 +1,5 @@
 ; String manipulation functions.
 
-isValidPhoneNumber(formattedNum) {
-	rawNum := parsePhone(formattedNum) ; Returns "" if it's not a valid number
-	if(rawNum = "")
-		return false
-	else
-		return true
-}
-
-; Phone number parsing function.
-parsePhone(input) {
-	; Special case - hang up
-	if(input = "HANGUP")
-		return input
-	
-	nums := input.removeRegEx("[^0-9\+]") ; Strip out spaces and other odd chars.
-	nums := nums.replaceRegEx("\+" , "011") ; + becomes country exit code (USA code here)
-	
-	len := nums.length()
-	; Debug.popup("Input",input, "Nums",nums, "Len",len)
-	
-	if(len = 4)  ; Old extension.
-		return "7" nums
-	if(len = 5)  ; Extension.
-		return nums
-	if(len = 7)  ; Normal
-		return nums
-	if(len = 10) ; Normal with area code.
-		return "81" nums
-	if(len = 11) ; Normal with 1 + area code at beginning.
-		return "8" nums
-	if(len = 12) ; Normal with 8 + 1 + area code at beginning.
-		return nums
-	if(len = 14) ; International number with exit code, just needs 8 to get out.
-		return "8" nums
-	if(len = 15) ; International number with 2-digit exit code and 8, should be set.
-		return nums
-	if(len = 16) ; International number with 3-digit exit code and 8, should be set.
-		return nums
-	
-	return ""
-}
-
-reformatPhone(input) {
-	nums := input.removeRegEx("[^0-9\+]") ; Strip out spaces and other odd chars.
-	trimmedNums := nums.sub(-9) ; Last 10 chars only.
-	return "(" trimmedNums.sub(1, 3) ") " trimmedNums.sub(4, 3) "-" trimmedNums.sub(7, 4)
-}
-
 ; Gives the specified number of tabs as a string.
 ; Give spacesPerTab > 0 to use spaces instead of true tabs.
 getTabs(i, spacesPerTab := 0) {

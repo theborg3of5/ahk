@@ -133,11 +133,13 @@
 	#p::
 		selectPhone() {
 			selectedText := getSelectedText().firstLine().clean()
-			if(isValidPhoneNumber(selectedText)) ; If the selected text is a valid number, go ahead and call it (confirmation included in callNumber)
-				callNumber(selectedText)
-			else
+			
+			if(PhoneLib.isValidNumber(selectedText)) {
+				PhoneLib.call(selectedText)
+			} else {
 				data := new Selector("phone.tls").selectGui()
 				if(data)
-					callNumber(data["NUMBER"], data["NAME"])
+					PhoneLib.call(data["NUMBER"], data["NAME"])
+			}
 		}
 #If

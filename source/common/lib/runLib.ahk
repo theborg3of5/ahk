@@ -49,7 +49,7 @@ class RunLib {
 		else
 			runString := A_ComSpec " /C " commandToRun
 		
-		; DEBUG.popup("Command string", commandToRun, "Run string", runString)
+		; Debug.popup("Command string", commandToRun, "Run string", runString)
 		Run(runString, workingDirectory)
 	}
 

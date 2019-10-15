@@ -56,7 +56,7 @@ class DebugBuilder {
 	;                 initial line will be indented 1 level deeper.
 	;---------
 	addLine(label, value) {
-		newLine := DEBUG.buildDebugStringForPair(label, value, this.numTabs)
+		newLine := Debug.buildDebugStringForPair(label, value, this.numTabs)
 		this.outString := this.outString.appendPiece(newLine, "`n")
 	}
 	

@@ -118,10 +118,10 @@ class EMC2 {
 		Send, +{Tab}
 		
 		relatedQANsAry := getRelatedQANsAry()
-		; DEBUG.popup("QANs found", relatedQANsAry)
+		; Debug.popup("QANs found", relatedQANsAry)
 		
 		urlsAry := buildQANURLsAry(relatedQANsAry)
-		; DEBUG.popup("URLs", urlsAry)
+		; Debug.popup("URLs", urlsAry)
 		
 		numQANs := relatedQANsAry.length()
 		if(numQANs > 10) {

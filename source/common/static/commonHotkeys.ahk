@@ -217,7 +217,7 @@ class CommonHotkeys {
 		testWinId       := WinExist(buildWindowTitleString("AutoHotkey.exe", "AutoHotkey", Config.path["AHK_ROOT"] "\test\"))
 		
 		setDetectHiddenWindows(origDetectSetting)
-		; DEBUG.popup("standaloneWinId",standaloneWinId, "testWinId",testWinId, "(standaloneWinId || testWinId)",(standaloneWinId || testWinId))
+		; Debug.popup("standaloneWinId",standaloneWinId, "testWinId",testWinId, "(standaloneWinId || testWinId)",(standaloneWinId || testWinId))
 		return !(standaloneWinId || testWinId)
 	}
 }

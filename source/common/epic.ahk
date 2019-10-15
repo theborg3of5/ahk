@@ -77,7 +77,7 @@
 		
 		; Dial with a web request.
 		HTTPRequest(url, In := "", Out := "")
-		; DEBUG.popup("callNumber","Finish", "Input",formattedNum, "Raw number",rawNum, "Name",name, "URL",url)
+		; Debug.popup("callNumber","Finish", "Input",formattedNum, "Raw number",rawNum, "Name",name, "URL",url)
 	}
 	
 	userWantsToCall(formattedNum, rawNum, name := "") {
@@ -121,7 +121,7 @@
 		; Versioning and environment.
 		runString := runString.replaceTags({"MAJOR":versionMajor, "MINOR":versionMinor, "ENVIRONMENT":environment})
 		
-		; DEBUG.popup("Start string", tempRun, "Finished string", runString, "Major", versionMajor, "Minor", versionMinor, "Environment", environment)
+		; Debug.popup("Start string", tempRun, "Finished string", runString, "Major", versionMajor, "Minor", versionMinor, "Environment", environment)
 		return runString
 	}
 
@@ -146,7 +146,7 @@
 		if(environmentCommId)
 			runString .= " --env " environmentCommId
 		
-		; DEBUG.popup("buildTxDumpRunString","Finish", "txId",txId, "outputFolder",outputFolder, "environmentCommId",environmentCommId, "runString",runString)
+		; Debug.popup("buildTxDumpRunString","Finish", "txId",txId, "outputFolder",outputFolder, "environmentCommId",environmentCommId, "runString",runString)
 		return runString
 	}
 

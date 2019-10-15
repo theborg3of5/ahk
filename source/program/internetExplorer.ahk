@@ -13,7 +13,7 @@ class InternetExplorer {
 	moveURLToDefaultBrowser(){
 		url := ControlGetText("Edit1", "A") ; Get URL from URL bar control
 		if(!url) {
-			DEBUG.toast("No URL found in Internet Explorer")
+			Debug.toast("No URL found in Internet Explorer")
 			return
 		}
 		

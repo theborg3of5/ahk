@@ -480,7 +480,7 @@ class TableList {
 			this.processRow(row)
 		}
 		
-		; DEBUG.popup("TableList.parseList","Finish", "State",this)
+		; Debug.popup("TableList.parseList","Finish", "State",this)
 	}
 	
 	;---------
@@ -529,7 +529,7 @@ class TableList {
 		
 		name  := row.beforeString("=")
 		value := row.afterString("=")
-		; DEBUG.popup("TableList.processSetting","Pulled out data", "Name",name, "Value",value)
+		; Debug.popup("TableList.processSetting","Pulled out data", "Name",name, "Value",value)
 		
 		this._settings[name] := value
 	}

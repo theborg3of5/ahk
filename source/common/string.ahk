@@ -18,7 +18,7 @@ parsePhone(input) {
 	nums := nums.replaceRegEx("\+" , "011") ; + becomes country exit code (USA code here)
 	
 	len := nums.length()
-	; DEBUG.popup("Input",input, "Nums",nums, "Len",len)
+	; Debug.popup("Input",input, "Nums",nums, "Len",len)
 	
 	if(len = 4)  ; Old extension.
 		return "7" nums

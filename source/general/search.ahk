@@ -122,7 +122,7 @@ searchWithGrepWin(searchTerm, pathToSearch) {
 	args .= " /searchfor:"  QUOTE searchTerm QUOTE
 	args .= " /execute" ; Run it immediately if we got what to search for
 	
-	; DEBUG.popup("Path to search",pathToSearch, "To search",searchTerm, "Args",args)
+	; Debug.popup("Path to search",pathToSearch, "To search",searchTerm, "Args",args)
 	Config.runProgram("GrepWin", args)
 }
 

@@ -36,7 +36,7 @@ class Hyperlinker {
 		
 		windowName := Config.findWindowName()
 		windowLinkInfoAry := Hyperlinker.getWindowLinkInfo(windowName)
-		; DEBUG.popup("Hyperlinker.linkSelectedText","Finished gathering info", "windowName",windowName, "windowLinkInfoAry",windowLinkInfoAry, "Hyperlinker.windows",Hyperlinker.windows)
+		; Debug.popup("Hyperlinker.linkSelectedText","Finished gathering info", "windowName",windowName, "windowLinkInfoAry",windowLinkInfoAry, "Hyperlinker.windows",Hyperlinker.windows)
 		
 		if(!windowLinkInfoAry) {
 			errorMessage := "Window not supported: " windowName
@@ -130,7 +130,7 @@ class Hyperlinker {
 	; RETURNS:        True for success, False if something went wrong.
 	;---------
 	doLink(path, windowLinkInfoAry, ByRef errorMessage := "") {
-		; DEBUG.toast("Hyperlinker.doLink","Start", "path",path, "windowLinkInfoAry",windowLinkInfoAry)
+		; Debug.toast("Hyperlinker.doLink","Start", "path",path, "windowLinkInfoAry",windowLinkInfoAry)
 		
 		; Handle linking differently depending on the specified method.
 		setPathMethod := windowLinkInfoAry["SET_PATH_METHOD"]

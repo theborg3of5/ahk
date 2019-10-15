@@ -145,7 +145,7 @@ getMouseMonitorBounds() {
 	; Initial search - mouse must be within a monitor (not directly on an edge)
 	Loop, % SysGet("MonitorCount") {
 		bounds := SysGet("Monitor", A_Index)
-		; DEBUG.popup("Testing",, "mouseX",mouseX, "mouseY",mouseY, "bounds",bounds)
+		; Debug.popup("Testing",, "mouseX",mouseX, "mouseY",mouseY, "bounds",bounds)
 		
 		if(mouseX < bounds["LEFT"])
 			Continue
@@ -158,7 +158,7 @@ getMouseMonitorBounds() {
 		
 		; Along a monitor edge - could be shared with another monitor, so don't quit yet.
 		if(mouseX = bounds["LEFT"] || mouseX = bounds["RIGHT"] || mouseY = bounds["TOP"] || mouseY = bounds["BOTTOM"]) {
-			; DEBUG.popup("Partial match",, "mouseX",mouseX, "mouseY",mouseY, "bounds",bounds)
+			; Debug.popup("Partial match",, "mouseX",mouseX, "mouseY",mouseY, "bounds",bounds)
 			partialMatches.push(bounds)
 			Continue
 		}
@@ -171,7 +171,7 @@ getMouseMonitorBounds() {
 	if(foundBounds)
 		return foundBounds
 	
-	; DEBUG.popup("No exact match",, "mouseX",mouseX, "mouseY",mouseY, "partialMatches",partialMatches)
+	; Debug.popup("No exact match",, "mouseX",mouseX, "mouseY",mouseY, "partialMatches",partialMatches)
 	
 	; If we only matched a single monitor partially, we're just along one of the outer edges of that monitor.
 	if(partialMatches.count() = 1)

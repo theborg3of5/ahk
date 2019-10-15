@@ -51,7 +51,7 @@ selectTextWithinSelection(needle) {
 		return
 	numRight := needleStartPos - 1
 	
-	; DEBUG.popup("io.selectTextWithinSelection","Finished processing", "Selection",selectedText, "Needle",needle, "Needle start position",needleStartPos, "Number of times to go right",numRight)
+	; Debug.popup("io.selectTextWithinSelection","Finished processing", "Selection",selectedText, "Needle",needle, "Needle start position",needleStartPos, "Number of times to go right",numRight)
 	Send, {Left} ; Get to start of selection.
 	Send, {Right %numRight%} ; Get to start of needle.
 	Send, {Shift Down}

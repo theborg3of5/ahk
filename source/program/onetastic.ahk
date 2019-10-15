@@ -134,7 +134,7 @@ class OneTastic {
 		; Find out how many functions there are, then focus the last one (deletion moves to the previous function).
 		functionList := ControlGet("List", "", "ComboBox1", "A")
 		functionCount := functionList.countMatches("`n") ; Counting the `ns gives us the number of lines - 1, which is the number of functions excluding Main().
-		; DEBUG.toast("functionCount",functionCount, "functionList",functionList)
+		; Debug.toast("functionCount",functionCount, "functionList",functionList)
 		
 		Control, Choose, % functionCount + 1, ComboBox1, A ; +1 to account for Main()
 		Loop {
@@ -177,7 +177,7 @@ class OneTastic {
 		
 		; Start with dependencies directly listed in start XML
 		startDependenciesAry := OneTastic.getDependenciesFromXML(startXML)
-		; DEBUG.popup("startXML",startXML, "startDependenciesAry",startDependenciesAry)
+		; Debug.popup("startXML",startXML, "startDependenciesAry",startDependenciesAry)
 		
 		; Generate an array of the total dependencies in depth-first order
 		totalDependenciesAry := []
@@ -192,7 +192,7 @@ class OneTastic {
 		For _,dependencyName in totalDependenciesAry
 			totalXMLsAry.push(allFunctionData["XML", dependencyName])
 		
-		; DEBUG.toast("totalXMLsAry",totalXMLsAry)
+		; Debug.toast("totalXMLsAry",totalXMLsAry)
 		return totalXMLsAry
 	}
 	
@@ -222,7 +222,7 @@ class OneTastic {
 		}
 		setWorkingDirectory(origWorkingDir)
 		
-		; DEBUG.popup("allFunctionData",allFunctionData)
+		; Debug.popup("allFunctionData",allFunctionData)
 		return allFunctionData
 	}
 
@@ -245,7 +245,7 @@ class OneTastic {
 			return []
 		
 		dependencyListXML := xml.firstBetweenStrings(dependenciesStart, dependenciesEnd)
-		; DEBUG.popup("xml",xml, "dependencyListXML",dependencyListXML)
+		; Debug.popup("xml",xml, "dependencyListXML",dependencyListXML)
 		
 		bitsToDropRegex := "<Comment text="" |"" />" ; <Comment text=" |" />
 		dependencyList := dependencyListXML.removeRegEx(bitsToDropRegex)
@@ -254,7 +254,7 @@ class OneTastic {
 		Loop, Parse, dependencyList, `r`n ; This technically breaks on every `r OR `n, but this should be fine since we're ignoring empty strings.
 			if(A_LoopField != "") ; Ignore empty lines
 				dependenciesAry.push(A_LoopField)
-		; DEBUG.popup("dependencyList",dependencyList, "dependenciesAry",dependenciesAry)
+		; Debug.popup("dependencyList",dependencyList, "dependenciesAry",dependenciesAry)
 		
 		return dependenciesAry
 	}
@@ -278,7 +278,7 @@ class OneTastic {
 		For _,dependencyName in allFunctionDependencies[functionName] {
 			subDependenciesAry := OneTastic.compileDependenciesForFunction(dependencyName, allFunctionDependencies)
 			outAry.appendArray(subDependenciesAry)
-			; DEBUG.popup("functionName",functionName, "dependencyName",dependencyName, "subDependenciesAry",subDependenciesAry, "outAry",outAry)
+			; Debug.popup("functionName",functionName, "dependencyName",dependencyName, "subDependenciesAry",subDependenciesAry, "outAry",outAry)
 		}
 		
 		return outAry

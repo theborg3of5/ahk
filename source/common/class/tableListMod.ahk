@@ -72,7 +72,7 @@ class TableListMod {
 		this.operation := modString.firstBetweenStrings(".", "(")
 		this.text      := modString.allBetweenStrings("(", ")") ; Go to the last close-paren, to allow other close-parens in the string
 		
-		; DEBUG.popup("New TableListMod","Finished", "State",this)
+		; Debug.popup("New TableListMod","Finished", "State",this)
 	}
 	
 	;---------
@@ -91,7 +91,7 @@ class TableListMod {
 		else if(this.operation = TableListMod.Operation_AddToEnd)
 			newValue := columnValue this.text
 		
-		; DEBUG.popup("Row", row, "Column value to modify", columnValue, "Operation", this.operation, "Text", this.text, "Result", newValue, "Mod",this)
+		; Debug.popup("Row", row, "Column value to modify", columnValue, "Operation", this.operation, "Text", this.text, "Result", newValue, "Mod",this)
 		
 		; Put the column back into the full row.
 		row[this.column] := newValue

@@ -40,7 +40,7 @@ return
 
 ; Emulator checks for key being down, not an actual keypress, so this is needed.
 sendEmulatorKey(key) {
-	; DEBUG.popup("Sending key", key)
+	; Debug.popup("Sending key", key)
 	SendInput, {%key% Down}
 	Sleep, 50
 	SendInput, {%key% Up}

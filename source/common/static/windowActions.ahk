@@ -15,7 +15,7 @@ class WindowActions {
 	init(windowActionsFile) {
 		windowActionsPath := FileLib.findConfigFilePath(windowActionsFile)
 		this.actionOverrides := this.loadActions(windowActionsPath)
-		; DEBUG.popupEarly("WindowActions.init","Finished", "windowActionsFile",windowActionsFile, "windowActionsPath",windowActionsPath, "this.actionOverrides",this.actionOverrides)
+		; Debug.popupEarly("WindowActions.init","Finished", "windowActionsFile",windowActionsFile, "windowActionsPath",windowActionsPath, "this.actionOverrides",this.actionOverrides)
 	}
 	
 	;---------
@@ -182,7 +182,7 @@ class WindowActions {
 		if(!titleString)
 			titleString := Config.windowInfo[name].titleString
 		
-		; DEBUG.popup("WindowActions.windowAction","Finished prep", "action",action, "titleString",titleString, "this.actionOverrides[name]",this.actionOverrides[name])
+		; Debug.popup("WindowActions.windowAction","Finished prep", "action",action, "titleString",titleString, "this.actionOverrides[name]",this.actionOverrides[name])
 		this.doWindowAction(action, titleString, this.actionOverrides[name])
 	}
 	
@@ -224,7 +224,7 @@ class WindowActions {
 		else if(action = WindowActions.Action_SelectAll)  ; Select all
 			this.doSelectAll(method, titleString, windowActionSettings)
 		else
-			DEBUG.popup("WindowActions.doWindowAction","Error", "Action not found",action)
+			Debug.popup("WindowActions.doWindowAction","Error", "Action not found",action)
 	}
 	
 	;---------

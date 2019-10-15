@@ -20,7 +20,7 @@ labelText      := argsAry[2]
 if(!getTimerInfo(durationString, labelText))
 	ExitApp
 
-; DEBUG.popup("durationString",durationString, "durationObj",durationObj, "durationObj.hours",durationObj.hours, "durationObj.minutes",durationObj.minutes, "durationObj.seconds",durationObj.seconds, "durationObj.displayTime",durationObj.displayTime)
+; Debug.popup("durationString",durationString, "durationObj",durationObj, "durationObj.hours",durationObj.hours, "durationObj.minutes",durationObj.minutes, "durationObj.seconds",durationObj.seconds, "durationObj.displayTime",durationObj.displayTime)
 
 ; Set up Toast and show initial time
 toastObj := buildTimerToast()

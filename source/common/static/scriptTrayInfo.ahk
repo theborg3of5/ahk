@@ -56,7 +56,7 @@ class ScriptTrayInfo {
 	;---------
 	updateTrayIcon() {
 		newIcon := this.getIconForCurrentState(this._iconStates)
-		; DEBUG.popup("ScriptTrayInfo.updateTrayIcon","Start", "this._iconStates",this._iconStates, "newIcon",newIcon)
+		; Debug.popup("ScriptTrayInfo.updateTrayIcon","Start", "this._iconStates",this._iconStates, "newIcon",newIcon)
 		if(!newIcon)
 			return
 			
@@ -100,7 +100,7 @@ class ScriptTrayInfo {
 		
 		; Doesn't really need to be a loop, but this lets us get the index (which is the variable name in question) and corresponding pieces easier.
 		For varName,states in stateIcons {
-			; DEBUG.popup("varName",varName, "states",states, "%varName%",%varName%, "states[%varName%]",states[%varName%])
+			; Debug.popup("varName",varName, "states",states, "%varName%",%varName%, "states[%varName%]",states[%varName%])
 			return this.getIconForCurrentState(states[%varName%])
 		}
 		

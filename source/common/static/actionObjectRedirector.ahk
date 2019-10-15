@@ -37,7 +37,7 @@ class ActionObjectRedirector {
 		this.determineType()
 		this.selectMissingInfo()
 		
-		; DEBUG.toast("ActionObjectRedirector","All info determined", "this",this)
+		; Debug.toast("ActionObjectRedirector","All info determined", "this",this)
 		return this.getTypeSpecificObject()
 	}
 	

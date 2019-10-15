@@ -137,7 +137,7 @@ class Selector {
 			this.loadFromFile()
 		}
 		
-		; DEBUG.popup("Selector.__New", "Finish", "Filepath", this.filePath, "State", this)
+		; Debug.popup("Selector.__New", "Finish", "Filepath", this.filePath, "State", this)
 	}
 	
 	;---------
@@ -219,7 +219,7 @@ class Selector {
 	;                 returned.
 	;---------
 	selectGui(returnColumn := "") {
-		; DEBUG.popup("Selector.selectGui","Start", "GUI Settings",guiSettings)
+		; Debug.popup("Selector.selectGui","Start", "GUI Settings",guiSettings)
 		if(!this.loadChoicesFromData())
 			return ""
 		
@@ -368,7 +368,7 @@ class Selector {
 		; Override fields can add to that too.
 		overrideData := sGui.getOverrideData()
 		
-		; DEBUG.popup("Selector.doSelectGui","Finish", "Choice data",choiceData, "Override data",overrideData, "Merged data",mergeObjects(choiceData, overrideData))
+		; Debug.popup("Selector.doSelectGui","Finish", "Choice data",choiceData, "Override data",overrideData, "Merged data",mergeObjects(choiceData, overrideData))
 		return mergeObjects(choiceData, overrideData)
 	}
 	

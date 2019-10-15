@@ -145,7 +145,7 @@ class EpicRecord {
 		this.id    := this.id.withoutWhitespace()
 		this.title := this.title.withoutWhitespace()
 		
-		; DEBUG.popup("recordString",recordString, "this",this)
+		; Debug.popup("recordString",recordString, "this",this)
 	}
 	
 	;---------

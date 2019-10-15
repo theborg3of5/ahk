@@ -262,7 +262,7 @@ class OneNote {
 		editText   := linkText.firstBetweenStrings("(", ")")
 		
 		ao := new ActionObjectEMC2(recordText)
-		; DEBUG.popup("Line",lineText, "Record text",recordText, "Edit text",editText, "ao.ini",ao.ini, "ao.id",ao.id)
+		; Debug.popup("Line",lineText, "Record text",recordText, "Edit text",editText, "ao.ini",ao.ini, "ao.id",ao.id)
 		
 		selectTextWithinSelection(recordText)
 		ao.linkSelectedTextWeb("Failed to add EMC2 object web link")
@@ -560,7 +560,7 @@ class OneNoteTodoPage {
 			fridayDateTime += 4, days
 			fridayTitle := FormatTime(fridayDateTime, "M/d`, dddd")
 			
-			; DEBUG.popup("A_Now",A_Now, "instant",instant, "mondayDateTime",mondayDateTime, "mondayTitle",mondayTitle, "fridayDateTime",fridayDateTime, "fridayTitle",fridayTitle)
+			; Debug.popup("A_Now",A_Now, "instant",instant, "mondayDateTime",mondayDateTime, "mondayTitle",mondayTitle, "fridayDateTime",fridayDateTime, "fridayTitle",fridayTitle)
 			return mondayTitle " - " fridayTitle
 		}
 	}
@@ -587,7 +587,7 @@ class OneNoteTodoPage {
 				if(!todo.matchesInstant(instant))
 					Continue
 				
-				; DEBUG.popup("Matched todo","", "todo",todo)
+				; Debug.popup("Matched todo","", "todo",todo)
 				matchingTodos.push(todo.title)
 			}
 		}
@@ -602,7 +602,7 @@ class OneNoteTodoPage {
 		if(getSelectedText().firstLine() != "")
 			OneNote.insertBlankLine()
 		
-		; DEBUG.popup("matchingTodos",matchingTodos)
+		; Debug.popup("matchingTodos",matchingTodos)
 		OneNoteTodoPage.sendItems(matchingTodos)
 	}
 	

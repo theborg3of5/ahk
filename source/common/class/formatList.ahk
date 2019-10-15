@@ -32,7 +32,7 @@ class FormatList {
 		if(!this.parseListObject(listObject, inFormat))
 			return ""
 		
-		; DEBUG.popup("listObject",listObject, "this.delimsAry",this.delimsAry, "this.listAry",this.listAry)
+		; Debug.popup("listObject",listObject, "this.delimsAry",this.delimsAry, "this.listAry",this.listAry)
 	}
 	
 	;---------

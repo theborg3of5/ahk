@@ -7,7 +7,7 @@
 			* Supports more specific information from objects/classes which implement a couple of extra properties (see "Special Properties and Functions" below)
 		
 	Argument Interpretation
-		Both public entry points, (DEBUG.popup, DEBUG.toast) take variadic arguments - that is, you can give them however many arguments you want. They will interpret those arguments as follows:
+		Both public entry points, (Debug.popup, Debug.toast) take variadic arguments - that is, you can give them however many arguments you want. They will interpret those arguments as follows:
 			1 argument: This is a value that will get evaluated and displayed
 			>1 arguments: The arguments are assumed to be grouped in pairs - that is, parameter 1 is a label for parameter 2, 3 is a label for 4, etc.
 		
@@ -21,7 +21,7 @@
 		Objects: If an object has implemented the .debugName variable and .debugToString function, it will be displayed as described in the "Special Properties and Functions" section below. If not, it will be treated the same as an array (where we show the subscripts [variables] underneath an "Array (numVariables)" line.
 		
 	Special Properties and Functions
-		If a class has the following properties and functions, DEBUG.popup/.toast will display information about an instance of that class differently.
+		If a class has the following properties and functions, Debug.popup/.toast will display information about an instance of that class differently.
 		
 		.debugName
 			If this is populated, then its top value will be "{debugName}" (with brackets) instead of the usual "Array (count)".
@@ -53,7 +53,7 @@
 		}
 		objectInstance := new ObjectWithDebug()
 		
-		DEBUG.popup("A",value, "B",numericArray, "C",assocArray, "D",objectInstance)
+		Debug.popup("A",value, "B",numericArray, "C",assocArray, "D",objectInstance)
 			; Shows a popup with this text:
 			;	A: 1
 			;	B: Array (2)
@@ -66,7 +66,7 @@
 			;		 Descriptive name of property 1: A
 			;		 Descriptive name of property 2: B
 			
-		DEBUG.toast("A",value, "B",numericArray, "C",assocArray, "D",objectInstance)
+		Debug.toast("A",value, "B",numericArray, "C",assocArray, "D",objectInstance)
 			; Shows a brief toast (non-focusable, semi-transparent gui) in the bottom-right with this text:
 			;	A: 1
 			;	B: Array (2)
@@ -80,7 +80,7 @@
 			;		 Descriptive name of property 2: B
 */
 
-class DEBUG {
+class Debug {
 
 ; ====================================================================================================
 ; ============================================== PUBLIC ==============================================
@@ -204,7 +204,7 @@ class DEBUG {
 	;---------
 	buildDebugStringForPair(label, value, numTabs := 0) {
 		outString := ""
-		outString .= getTabs(numTabs, DEBUG.spacesPerTab) label ": " ; Label
+		outString .= getTabs(numTabs, Debug.spacesPerTab) label ": " ; Label
 		outString .= this.buildValueDebugString(value, numTabs)      ; Value
 		return outString
 	}
@@ -226,7 +226,7 @@ class DEBUG {
 	;---------
 	buildValueDebugString(value, numTabs := 0, newLine := false, index := "") {
 		if(newLine)
-			outString := getTabs(numTabs, DEBUG.spacesPerTab)
+			outString := getTabs(numTabs, Debug.spacesPerTab)
 		
 		; Index
 		if(index != "")

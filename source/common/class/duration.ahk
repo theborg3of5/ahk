@@ -90,7 +90,7 @@ class Duration {
 		if(durationString != "")
 			this.addTimeFromDurationString(durationString)
 		
-		; DEBUG.popup("durationString",durationString, "this.durationTotalSeconds",this.durationTotalSeconds)
+		; Debug.popup("durationString",durationString, "this.durationTotalSeconds",this.durationTotalSeconds)
 	}
 	
 	;---------
@@ -126,7 +126,7 @@ class Duration {
 		
 		this.durationTotalSeconds += value * this.getUnitMultiplier(unitChar)
 		
-		; DEBUG.popup("Duration.addTime","Finish", "value",value, "unitChar",unitChar, "multiplier",this.getUnitMultiplier(unitChar), "Seconds added",value * this.getUnitMultiplier(unitChar), "this.durationTotalSeconds",this.durationTotalSeconds)
+		; Debug.popup("Duration.addTime","Finish", "value",value, "unitChar",unitChar, "multiplier",this.getUnitMultiplier(unitChar), "Seconds added",value * this.getUnitMultiplier(unitChar), "this.durationTotalSeconds",this.durationTotalSeconds)
 	}
 	subTime(value, unitChar := "s") {
 		this.addTime(-value, unitChar)
@@ -203,6 +203,6 @@ class Duration {
 				seconds := quantity
 		}
 		
-		; DEBUG.popup("this.durationTotalSeconds",this.durationTotalSeconds, "hours",hours, "minutes",minutes, "seconds",seconds)
+		; Debug.popup("this.durationTotalSeconds",this.durationTotalSeconds, "hours",hours, "minutes",minutes, "seconds",seconds)
 	}
 }

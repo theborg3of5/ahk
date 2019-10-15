@@ -60,7 +60,7 @@ Space & ,::
 Space & .::
 Space & /::
 	mirroredKey := getMirroredKeyFromHotkey(A_ThisHotkey)
-	; DEBUG.popup("Hotkey",A_ThisHotkey, "Mirrored key",mirroredKey)
+	; Debug.popup("Hotkey",A_ThisHotkey, "Mirrored key",mirroredKey)
 	
 	; {Blind} mode lets us use modifiers with whatever was pressed, too.
 	Send, {Blind}%mirroredKey%
@@ -126,6 +126,6 @@ getMirroredKeyFromHotkey(hotkeyString) {
 	if(!keyToMirror)
 		return ""
 	
-	; DEBUG.popup("Hotkey",hotkeyString, "Key to mirror",keyToMirror, "Result",mirrorKeys[keyToMirror], "MirrorKeys",mirrorKeys)
+	; Debug.popup("Hotkey",hotkeyString, "Key to mirror",keyToMirror, "Result",mirrorKeys[keyToMirror], "MirrorKeys",mirrorKeys)
 	return mirrorKeys[keyToMirror]
 }

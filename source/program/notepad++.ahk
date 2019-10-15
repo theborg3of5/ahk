@@ -11,9 +11,9 @@
 	
 	; Insert various AHK dev/debug strings
 	:X:`;`;`;::NotepadPlusPlus.sendAHKFunctionHeader()                 ; Function header
-	:X:dbpop::NotepadPlusPlus.sendDebugCodeString("DEBUG.popup")       ; Debug popup
-	:X:dbto::NotepadPlusPlus.sendDebugCodeString("DEBUG.toast")        ; Debug toast
-	:X:edbpop::NotepadPlusPlus.sendDebugCodeString("DEBUG.popupEarly") ; Debug popup that appears at startup
+	:X:dbpop::NotepadPlusPlus.sendDebugCodeString("Debug.popup")       ; Debug popup
+	:X:dbto::NotepadPlusPlus.sendDebugCodeString("Debug.toast")        ; Debug toast
+	:X:edbpop::NotepadPlusPlus.sendDebugCodeString("Debug.popupEarly") ; Debug popup that appears at startup
 	:X:dbparam::NotepadPlusPlus.insertDebugParams()                    ; Debug parameters
 	:X:dbm::SendRaw, % "MsgBox, % "
 #If
@@ -200,7 +200,7 @@ class NotepadPlusPlus {
 	}
 	
 	;---------
-	; DESCRIPTION:    Generate a list of parameters for the DEBUG.popup/DEBUG.toast functions,
+	; DESCRIPTION:    Generate a list of parameters for the Debug.popup/Debug.toast functions,
 	;                 in "varName",varName pairs.
 	; PARAMETERS:
 	;  varList (I,REQ) - Comma-separated list of parameters to generate the debug parameters for.

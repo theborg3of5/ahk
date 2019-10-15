@@ -30,7 +30,7 @@ useSlimMode   := A_Args[2]
 machineInfo := new Selector(tlSetupPath).select(machineChoice)
 if(!machineInfo)
 	ExitApp
-; DEBUG.popup("Machine Info Selected", machineInfo)
+; Debug.popup("Machine Info Selected", machineInfo)
 
 t := new Toast()
 t.show()
@@ -42,7 +42,7 @@ tagsToReplace["ROOT"]            := ahkRootPath
 tagsToReplace["CONTEXT"]         := machineInfo["NEW_CONTEXT"]
 tagsToReplace["MACHINE"]         := machineInfo["NEW_MACHINE"]
 tagsToReplace["MEDIA_PLAYER"]    := machineInfo["MEDIA_PLAYER"]
-; DEBUG.popup("Finished tags to replace",tagsToReplace)
+; Debug.popup("Finished tags to replace",tagsToReplace)
 
 ; Loop over files we need to process and put places.
 t.setText("Processing files...")
@@ -51,9 +51,9 @@ For fromPath,toPath in copyPaths {
 	fileContents := FileRead(fromPath)
 	
 	; Replace any placeholder tags in the file contents.
-	; DEBUG.popup("fromPath", fromPath, "toPath", toPath, "Starting contents", fileContents)
+	; Debug.popup("fromPath", fromPath, "toPath", toPath, "Starting contents", fileContents)
 	fileContents := fileContents.replaceTags(tagsToReplace)
-	; DEBUG.popup("fromPath",fromPath, "toPath",toPath, "Finished contents",fileContents)
+	; Debug.popup("fromPath",fromPath, "toPath",toPath, "Finished contents",fileContents)
 	
 	; Generate the folder path if needed.
 	containingFolder := FileLib.getParentFolder(toPath)

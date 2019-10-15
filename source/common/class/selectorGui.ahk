@@ -122,7 +122,7 @@ class SelectorGui {
 		
 		this.totalHeight += this.margins["BOTTOM"]
 		this.totalWidth  += this.margins["RIGHT"]
-		; DEBUG.popup("SelectorGui.buildPopup","Finish", "height",this.totalHeight, "width",this.totalWidth)
+		; Debug.popup("SelectorGui.buildPopup","Finish", "height",this.totalHeight, "width",this.totalWidth)
 	}
 	
 	;---------
@@ -190,7 +190,7 @@ class SelectorGui {
 		; Add the resulting height/width onto our total gui height/width
 		this.totalHeight += flex.getTotalHeight()
 		this.totalWidth  += flex.getTotalWidth()
-		; DEBUG.popup("SelectorGui.addChoices","Finish", "height",this.totalHeight, "width",this.totalWidth)
+		; Debug.popup("SelectorGui.addChoices","Finish", "height",this.totalHeight, "width",this.totalWidth)
 	}
 	
 	;---------
@@ -380,7 +380,7 @@ SelectorGuiSubmit() {
 SelectorGuiOverrideFieldChanged() {
 	fieldName := A_GuiControl.removeFromStart(A_Gui SelectorGui.baseFieldVarOverridesPrefix)
 	value := GuiControlGet("", A_GuiControl)
-	; DEBUG.popup("A_GuiControl",A_GuiControl, "A_Gui",A_Gui, "fieldName",fieldName, "value",value)
+	; Debug.popup("A_GuiControl",A_GuiControl, "A_Gui",A_Gui, "fieldName",fieldName, "value",value)
 	
 	; Set the overall gui font color - ghost if it's the default, black (default color) otherwise
 	if(fieldName = value)

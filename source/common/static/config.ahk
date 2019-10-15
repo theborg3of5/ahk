@@ -57,11 +57,11 @@ class Config {
 		this.paths    := this.loadPaths(pathsPath)
 		this.programs := this.loadPrograms(programsPath)
 		this.games    := this.loadGames(gamesPath)
-		; DEBUG.popupEarly("Config","Loaded all", "Settings",this.settings)
-		; DEBUG.popupEarly("Config","Loaded all", "Windows",this.windows)
-		; DEBUG.popupEarly("Config","Loaded all", "Paths",this.paths)
-		; DEBUG.popupEarly("Config","Loaded all", "Programs",this.programs)
-		; DEBUG.popupEarly("Config","Loaded all", "Games",this.games)
+		; Debug.popupEarly("Config","Loaded all", "Settings",this.settings)
+		; Debug.popupEarly("Config","Loaded all", "Windows",this.windows)
+		; Debug.popupEarly("Config","Loaded all", "Paths",this.paths)
+		; Debug.popupEarly("Config","Loaded all", "Programs",this.programs)
+		; Debug.popupEarly("Config","Loaded all", "Games",this.games)
 		
 		this.initDone := true
 	}
@@ -239,7 +239,7 @@ class Config {
 		
 		bestMatch := ""
 		For _,winInfo in this.windows {
-			; DEBUG.popup("Against WindowInfo",winInfo, "EXE",exe, "Class",ahkClass, "Title",title)
+			; Debug.popup("Against WindowInfo",winInfo, "EXE",exe, "Class",ahkClass, "Title",title)
 			if(exe      && winInfo.exe   && (exe != winInfo.exe))
 				Continue
 			if(ahkClass && winInfo.class && (ahkClass != winInfo.class))
@@ -370,7 +370,7 @@ class Config {
 	loadPrivates(filePath) {
 		privatesAry := new TableList(filePath).getColumnByColumn("VALUE", "KEY")
 		
-		; DEBUG.popup("Config.loadPrivates","Finish", "Filepath",filePath, "Table",privatesTable, "Indexed array",privatesAry)
+		; Debug.popup("Config.loadPrivates","Finish", "Filepath",filePath, "Table",privatesTable, "Indexed array",privatesAry)
 		return privatesAry
 	}
 	
@@ -388,7 +388,7 @@ class Config {
 		settings["CONTEXT"]      := IniRead(this.settingsINIPath, "Main", "CONTEXT")         ; Which context this is, from Config.Context_* constants
 		settings["MEDIA_PLAYER"] := IniRead(this.settingsINIPath, "Main", "MEDIA_PLAYER")    ; What program the media keys should deal with
 		
-		; DEBUG.popup("Settings", settings)
+		; Debug.popup("Settings", settings)
 		return settings
 	}
 	
@@ -438,7 +438,7 @@ class Config {
 			pathsAry[key] := path ; make sure to store it back in the actual array
 		}
 		
-		; DEBUG.popupEarly("Config.loadPaths","Finish", "Paths",pathsAry)
+		; Debug.popupEarly("Config.loadPaths","Finish", "Paths",pathsAry)
 		return pathsAry
 	}
 	;---------
@@ -475,13 +475,13 @@ class Config {
 	;---------
 	loadPrograms(filePath) {
 		programsTable := new TableList(filePath).getRowsByColumn("NAME", "MACHINE")
-		; DEBUG.popupEarly("Config","loadPrograms", "Unique table",programsTable)
+		; Debug.popupEarly("Config","loadPrograms", "Unique table",programsTable)
 		
 		; Turn each row into a ProgramInfo object.
 		programs := {}
 		For name,row in programsTable
 			programs[name] := new ProgramInfo(row)
-		; DEBUG.popupEarly("Config","loadPrograms", "Finished programs",programs)
+		; Debug.popupEarly("Config","loadPrograms", "Finished programs",programs)
 		
 		return programs
 	}
@@ -518,7 +518,7 @@ class Config {
 		else if(method = Config.TitleContains_Exact)
 			return (haystack = needle)
 		
-		DEBUG.popup("Unsupported match method",method)
+		Debug.popup("Unsupported match method",method)
 		return ""
 	}
 }

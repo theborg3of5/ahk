@@ -139,7 +139,7 @@ class VB6 {
 			functionName := currentObject "_" currentProcedure
 		else
 			functionName := currentProcedure
-		; DEBUG.popup("currentObject",currentObject, "currentProcedure",currentProcedure, "functionName",functionName)
+		; Debug.popup("currentObject",currentObject, "currentProcedure",currentProcedure, "functionName",functionName)
 		
 		Send, On Error Goto Handler{Enter} ; For top of function
 		Send, {Enter}{Backspace} ; This and below for bottom of function

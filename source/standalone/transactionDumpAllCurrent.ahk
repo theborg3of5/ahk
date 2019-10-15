@@ -20,7 +20,7 @@ if(!txId)
 ; Get the list of environments from a static file.
 configPath := FileLib.findConfigFilePath("allCurrentEpicEnvironments.txt")
 commIdAry := FileLib.fileLinesToArray(configPath)
-; DEBUG.popup("commIdAry",commIdAry)
+; Debug.popup("commIdAry",commIdAry)
 
 ; Start in the dump script's directory.
 SetWorkingDir, % Config.path["TX_DIFF"]

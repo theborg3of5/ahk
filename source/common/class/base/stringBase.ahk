@@ -399,7 +399,7 @@ class StringBase {
 		For i,str in additionalStringsToRemove {
 			stringsToRemove.push(str)
 		}
-		; DEBUG.popup("outStr",outStr, "Chars to remove",stringsToRemove)
+		; Debug.popup("outStr",outStr, "Chars to remove",stringsToRemove)
 		
 		while(!isClean) {
 			isClean := true

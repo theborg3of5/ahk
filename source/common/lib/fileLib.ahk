@@ -52,7 +52,7 @@ class FileLib {
 			}
 		}
 		
-		; DEBUG.popup("Updated path",path, "Table",table)
+		; Debug.popup("Updated path",path, "Table",table)
 		return path
 	}
 	

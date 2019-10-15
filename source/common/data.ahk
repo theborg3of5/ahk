@@ -44,7 +44,7 @@ forceNumber(data) {
 ; RETURNS:        The numeric maximum of all given numbers.
 ;---------
 max(nums*) {
-	; DEBUG.popup("Max", "Start", "Nums", nums)
+	; Debug.popup("Max", "Start", "Nums", nums)
 	max := nums[1]
 	For i,n in nums {
 		if(!n.isNum()) ; Ignore non-numeric values

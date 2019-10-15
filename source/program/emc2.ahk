@@ -117,10 +117,15 @@ class EMC2 {
 		Send, {Tab} ; Reset field since they just typed over it.
 		Send, +{Tab}
 		
-		relatedQANsAry := getRelatedQANsAry()
+		relatedQANsAry := EMC2.getRelatedQANsAry()
 		; Debug.popup("QANs found", relatedQANsAry)
 		
-		urlsAry := buildQANURLsAry(relatedQANsAry)
+		urlsAry := []
+		For _,qan in relatedQANsAry {
+			link := new ActionObjectEMC2(qan, "QAN").getLinkWeb()
+			if(link)
+				urlsAry.push(link)
+		}
 		; Debug.popup("URLs", urlsAry)
 		
 		numQANs := relatedQANsAry.length()
@@ -133,5 +138,57 @@ class EMC2 {
 		For i,url in urlsAry
 			if(url)
 				Run(url)
+	}
+	
+	
+; ====================================================================================================
+; ============================================== PRIVATE =============================================
+; ====================================================================================================
+	
+	;---------
+	; DESCRIPTION:    Get an array of QAN IDs from the related QANs table on an EMC2 object.
+	; RETURNS:        Array of QAN IDs.
+	; SIDE EFFECTS:   
+	; NOTES:          This assumes that you're already in the first row of the related QANs table.
+	;---------
+	getRelatedQANsAry() {
+		if(!Config.isWindowActive("EMC2"))
+			return ""
+		
+		outAry := []
+		Loop {
+			; Select just the QAN ID
+			Send, {End}
+			Send, {Left}
+			Send, {Ctrl Down}{Shift Down}
+			Send, {Left}
+			Send, {Ctrl Up}
+			Send, {Right}
+			Send, {Shift Up}
+			
+			qanId := getSelectedText()
+			if(!qanId)
+				Break
+			
+			; Get to next column for version
+			Send, {Tab}
+			version := getSelectedText()
+			
+			; Avoid duplicate entries (for multiple versions
+			if(qanId != prevId)
+				outAry.push(qanId)
+			
+			; Loop quit condition - same QAN again (table ends on last filled row), also same version
+			if( (qanId = prevId) && (version = prevVersion) )
+				Break
+			prevId      := qanId
+			prevVersion := version
+			
+			; Get back to the first column and go down a row.
+			Send, +{Tab}
+			Send, {Down}
+		}
+		
+		return outAry
 	}
 }

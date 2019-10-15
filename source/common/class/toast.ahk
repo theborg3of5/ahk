@@ -137,7 +137,7 @@ class Toast {
 	;---------
 	show(x := "", y := "") {
 		this.move(x, y)
-		fadeGuiIn(this.guiId)
+		this.fadeToastToOpacity(255)
 		return this
 	}
 	
@@ -161,8 +161,7 @@ class Toast {
 	hide() {
 		if(this.isGuiDestroyed) ; Safety check: if the gui has already been destroyed, we're done here.
 			return
-		
-		fadeGuiOut(this.guiId)
+		this.fadeToastToOpacity(0)
 	}
 	
 	;---------
@@ -323,5 +322,25 @@ class Toast {
 			this.hide()
 		else
 			this.close()
+	}
+	
+	;---------
+	; DESCRIPTION:    Fade the toast to the given opacity.
+	; PARAMETERS:
+	;  opacity (I,REQ) - The opacity to end up at.
+	;---------
+	fadeToastToOpacity(opacity) {
+		Gui, % this.guiId ":Default"
+		
+		startOpacity := WinGet("Transparent", "ahk_id " this.guiId)
+		if(startOpacity = "")
+			startOpacity := 0 ; If no transparency value set yet, we're fading in, so just use 0.
+		
+		numSteps := 10
+		stepSize := (opacity - startOpacity) / numSteps
+		Loop, %numSteps% {
+			WinSet, Transparent, % startOpacity + (A_Index * stepSize), % "ahk_id " this.guiId
+			Sleep, 10 ; 10ms between steps - can vary fade speed with number of steps
+		}
 	}
 }

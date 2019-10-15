@@ -1,4 +1,8 @@
 # New Ideas
+	Should we add a edit script selector like we have for config files?
+		For often-modified scripts
+			commandFunctions
+			hotstrings (maybe get rid of dedicated hotkey?)
 	Decide which approach to take for static classes that need to read something in once - require a .Init() call, or just do it the first time it's needed?
 		Examples
 			Hyperlinker - on-demand (only 1 public method)
@@ -14,6 +18,8 @@
 			\common\ - contains everything that all scripts can pull in with an <includeCommon> lib include
 					includeCommon					rename to remove _ (assuming it'll be in a separate folder like this)
 															Should it be renamed to something different that includes "startup" or "init"?
+															Partly to differentiate it from the includeCommon script that points to this one
+															Maybe just "common"?
 				\lib\ - library classes
 					clip								turn into class, rename, move
 					data								turn into class, rename, move

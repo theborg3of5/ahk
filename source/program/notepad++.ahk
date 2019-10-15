@@ -16,6 +16,8 @@
 	:X:edbpop::NotepadPlusPlus.sendDebugCodeString("Debug.popupEarly") ; Debug popup that appears at startup
 	:X:dbparam::NotepadPlusPlus.insertDebugParams()                    ; Debug parameters
 	:X:dbm::SendRaw, % "MsgBox, % "
+	
+	:X:.ahkclass::NotepadPlusPlus.sendAHKClassTemplate()
 #If
 	
 class NotepadPlusPlus {
@@ -131,6 +133,19 @@ class NotepadPlusPlus {
 		header := NotepadPlusPlus.ahkHeaderBaseWithParams
 		header := header.replaceTag("PARAMETERS", paramLines.join("`n"))
 		SendRaw, % header
+	}
+	
+	;---------
+	; DESCRIPTION:    Insert a template of an AHK class (read from a template file) at the cursor.
+	;---------
+	sendAHKClassTemplate() {
+		templateString := FileRead(Config.path["AHK_TEMPLATE"] "\class.ahk")
+		if(!templateString) {
+			new ErrorToast("Could not insert AHK class template", "Could not read template file").showMedium()
+			return
+		}
+		
+		sendTextWithClipboard(templateString)
 	}
 	
 	

@@ -1,29 +1,22 @@
 ; note to self: this must be in UTF-8 encoding.
 
 #If !Config.windowIsGame()
-{ ; Emails.
+{ ; Personal info
 	:X:emaila::Send,  % Config.private["EMAIL"]
 	:X:gemaila::Send, % Config.private["EMAIL_2"]
 	:X:eemaila::Send, % Config.private["WORK_EMAIL"]
 	:X:oemaila::Send, % Config.private["OUTLOOK_EMAIL"]
-}
-
-{ ; Addresses.
+	
+	:X:phoneno::Send, % Config.private["PHONE_NUM"]
+	:X:fphoneno::Send, % PhoneLib.formatNumber(Config.private["PHONE_NUM"])
 	:X:waddr::SendRaw, % Config.private["HOME_ADDRESS"]
 	:X:eaddr::Send, % Config.private["WORK_ADDRESS"]
 	:*0X:ezip::Send, % Config.private["WORK_ZIP_CODE"]
-}
-
-{ ; Logins.
+	
 	:X:uname::Send, % Config.private["USERNAME"]
 }
 
-{ ; Phone numbers.
-	:X:phoneno::Send, % Config.private["PHONE_NUM"]
-	:X:fphoneno::Send, % PhoneLib.formatNumber(Config.private["PHONE_NUM"])
-}
-
-{ ; Typo correction.
+{ ; Typo correction
 	:*0:,3::<3
 	::<#::<3
 	::<43::<3
@@ -57,7 +50,7 @@
 	::flase::false
 }
 
-{ ; Expansions.
+{ ; Expansions
 	::f'n::function
 	::def'n::definition
 	::int'l::international
@@ -79,7 +72,7 @@
 	::.shrug::{U+AF}\_({U+30C4})_/{U+AF} ; ¯\_(ツ)_/¯ - 0xAF=¯, 0x30C4=ツ
 }
 
-{ ; Date and time.
+{ ; Date and time
 	:X:idate::Send, % FormatTime(A_Now, "M/d/yy")
 	:X:itime::Send, % FormatTime(A_Now, "h:mm tt")
 	
@@ -101,69 +94,71 @@
 	:X:aitime::new RelativeTime().SendInFormat("h:mm tt")
 }
 
-{ ; URLs.
+{ ; Folders and paths
+	; General
+	:X:pff::sendFolderPath("PROGRAM_FILES")
+	:X:xpff::sendFolderPath("PROGRAM_FILES_86")
+	
+	:X:urf::sendFolderPath("USER_ROOT")
+	:X:dsf::sendFolderPath("USER_DESKTOP")
+	:X:desf::sendFolderPath("USER_ROOT", "Design")
+	:X:dlf::sendFolderPath("USER_DOWNLOADS")
+	:X:devf::sendFolderPath("USER_DEV")
+	
+	:X:otmf::sendFolderPath("ONETASTIC_MACROS")
+	
+	
+	; AHK
+	:X:arf::sendFolderPath(   "AHK_ROOT")
+	:X:aconf::sendFolderPath( "AHK_ROOT", "config")
+	:X:atempf::sendFolderPath("AHK_ROOT", "template")
+	:X:atf::sendFolderPath(   "AHK_ROOT", "test")
+	:X:asf::sendFolderPath( "AHK_SOURCE")
+	:X:apf::sendFolderPath( "AHK_SOURCE", "program")
+	:X:agf::sendFolderPath( "AHK_SOURCE", "general")
+	:X:astf::sendFolderPath("AHK_SOURCE", "standalone")
+	:X:asuf::sendFolderPath("AHK_SOURCE", "sub")
+	:X:acf::sendFolderPath( "AHK_SOURCE", "common")
+	:X:accf::sendFolderPath("AHK_SOURCE", "common\class")
+	:X:abf::sendFolderPath( "AHK_SOURCE", "common\base")
+	:X:alf::sendFolderPath( "AHK_SOURCE", "common\lib")
+	:X:acsf::sendFolderPath("AHK_SOURCE", "common\static")
+	
+	; Epic - General
+	:X:epf::sendFolderPath("EPIC_PERSONAL")
+	:X:ssf::sendFolderPath("USER_ROOT", "Screenshots")
+	:X:enfsf::sendFolderPath("EPIC_NFS_3DAY")
+	:X:eunfsf::sendUnixFolderPath("EPIC_NFS_3DAY_UNIX")
+	
+	:X:ecompf::sendFolderPath("VB6_COMPILE")
+	
+	
+	; Epic - Source
+	:X:esf::sendFolderPath("EPIC_SOURCE_S1")
+	:X:fesf::sendFilePath("EPIC_SOURCE_S1", Config.private["EPICDESKTOP_PROJECT"])
+	
+	
+	; URLs
 	:X:lpv::Send, % "chrome-extension://hdokiejnpimakedhajhdlcegeplioahd/vault.html"
-}
-
-{ ; Folders and paths.
-	{ ; General
-		:X:pff::sendFolderPath("PROGRAM_FILES")
-		:X:xpff::sendFolderPath("PROGRAM_FILES_86")
-		
-		:X:urf::sendFolderPath("USER_ROOT")
-		:X:dsf::sendFolderPath("USER_DESKTOP")
-		:X:desf::sendFolderPath("USER_ROOT", "Design")
-		:X:dlf::sendFolderPath("USER_DOWNLOADS")
-		:X:devf::sendFolderPath("USER_DEV")
-		
-		:X:otmf::sendFolderPath("ONETASTIC_MACROS")
-	}
-
-	{ ; AHK
-		:X:arf::sendFolderPath(  "AHK_ROOT")
-		:X:aconf::sendFolderPath("AHK_ROOT", "config")
-		:X:atf::sendFolderPath(  "AHK_ROOT", "test")
-		
-		:X:asf::sendFolderPath( "AHK_SOURCE")
-		:X:acf::sendFolderPath( "AHK_SOURCE", "common")
-		:X:accf::sendFolderPath("AHK_SOURCE", "common\class")
-		:X:abf::sendFolderPath( "AHK_SOURCE", "common\base")
-		:X:alf::sendFolderPath( "AHK_SOURCE", "common\lib")
-		:X:acsf::sendFolderPath("AHK_SOURCE", "common\static")
-		
-		:X:apf::sendFolderPath( "AHK_SOURCE", "program")
-		:X:agf::sendFolderPath( "AHK_SOURCE", "general")
-		:X:astf::sendFolderPath("AHK_SOURCE", "standalone")
-		:X:asuf::sendFolderPath("AHK_SOURCE", "sub")
-	}
-
-	{ ; Epic - General
-		:X:epf::sendFolderPath("EPIC_PERSONAL")
-		:X:ssf::sendFolderPath("USER_ROOT", "Screenshots")
-		:X:enfsf::sendFolderPath("EPIC_NFS_3DAY")
-		:X:eunfsf::sendUnixFolderPath("EPIC_NFS_3DAY_UNIX")
-		
-		:X:ecompf::sendFolderPath("VB6_COMPILE")
-	}
 	
-	{ ; Epic - Source
-		:X:esf::sendFolderPath("EPIC_SOURCE_S1")
-		:X:fesf::sendFilePath("EPIC_SOURCE_S1", Config.private["EPICDESKTOP_PROJECT"])
-	}
 	
-	sendFilePath(folderName, subPath := "") {
-		FileLib.sendPath(folderName, subPath)
-	}
-	sendFolderPath(folderName, subPath := "") {
-		FileLib.sendPath(folderName, subPath, "\", true)
-	}
-	sendUnixFolderPath(folderName, subPath := "") {
-		FileLib.sendPath(folderName, subPath, "/", true)
-	}
 }
 #If
 
-; Edits this file.
+
+; Edit this file
 ^!h::
 	RunLib.editScript(A_LineFile)
 return
+
+
+; Helper functions
+sendFilePath(folderName, subPath := "") {
+	FileLib.sendPath(folderName, subPath)
+}
+sendFolderPath(folderName, subPath := "") {
+	FileLib.sendPath(folderName, subPath, "\", true)
+}
+sendUnixFolderPath(folderName, subPath := "") {
+	FileLib.sendPath(folderName, subPath, "/", true)
+}

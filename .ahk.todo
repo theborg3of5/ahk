@@ -1,4 +1,5 @@
 # New Ideas
+	Do we really need the helper functions in hotstrings, vs. just using the things they call directly?
 	Should we add a edit script selector like we have for config files?
 		For often-modified scripts
 			config

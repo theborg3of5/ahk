@@ -58,7 +58,6 @@ Object(params*) {
 	#Include programInfo.ahk
 	#Include relativeDate.ahk
 	#Include relativeTime.ahk
-	#Include scriptTrayInfo.ahk
 	#Include selector.ahk
 	#Include tableList.ahk
 	#Include toast.ahk
@@ -81,6 +80,7 @@ Object(params*) {
 	#Include commonHotkeys.ahk
 	#Include debug.ahk
 	#Include hyperlinker.ahk
+	#Include scriptTrayInfo.ahk
 	#Include windowActions.ahk
 	
 

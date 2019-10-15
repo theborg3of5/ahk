@@ -4,8 +4,8 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
-trayInfo := new ScriptTrayInfo("AHK: Precise Mouse Movement", "mouseGreen.ico", "mouseRed.ico")
-CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone, trayInfo)
+ScriptTrayInfo.Init("AHK: Precise Mouse Movement", "mouseGreen.ico", "mouseRed.ico")
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
 ; 200 hotkeys allowed per 2 seconds (to allow long holds for moving mouse further)
 #MaxHotkeysPerInterval, 200

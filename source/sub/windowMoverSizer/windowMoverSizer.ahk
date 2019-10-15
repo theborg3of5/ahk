@@ -6,8 +6,8 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
-trayInfo := new ScriptTrayInfo("AHK: Move and resize windows", "moveSize.ico", "moveSizeRed.ico")
-CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub, trayInfo)
+ScriptTrayInfo.Init("AHK: Move and resize windows", "moveSize.ico", "moveSizeRed.ico")
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub)
 
 SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwise alt+drag stuff looks super choppy
 setCoordMode("Mouse", "Screen")

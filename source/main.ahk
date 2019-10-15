@@ -7,8 +7,8 @@
 #Hotstring *                                  ; Default option: hotstrings do not require an ending character. Use *0 to turn it off for hotstrings that as needed.
 
 #Include <includeCommon>
-trayInfo := new ScriptTrayInfo("AHK: Main Script", "shellGreen.ico", "shellRed.ico")
-CommonHotkeys.Init(CommonHotkeys.ScriptType_Main, trayInfo)
+ScriptTrayInfo.Init("AHK: Main Script", "shellGreen.ico", "shellRed.ico")
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Main)
 
 SendMode, Input                              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir%                 ; Ensures a consistent starting directory.

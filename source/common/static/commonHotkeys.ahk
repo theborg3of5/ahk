@@ -1,7 +1,7 @@
 /* Class for applying certain common hotkeys to a script, based on the type of script and certain flags.
 	
 	Example usage:
-		CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone, trayInfo) ; trayInfo is the instance of ScriptTrayInfo defined on some line above this.
+		CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 */
 
 class CommonHotkeys {
@@ -20,12 +20,9 @@ class CommonHotkeys {
 	; PARAMETERS:
 	;  scriptType (I,REQ) - The "type" of script, from CommonHotkeys.ScriptType_*. This determines
 	;                       which "set" of hotkeys are applied.
-	;  trayInfo   (I,OPT) - The script's ScriptTrayInfo instance, used to swich out icons when using
-	;                       the suspend hotkey (!#x).
 	;---------
-	Init(scriptType, trayInfo := "") {
+	Init(scriptType) {
 		CommonHotkeys._scriptType := scriptType
-		CommonHotkeys._trayInfo   := trayInfo
 		
 		CommonHotkeys.applyHotkeys()
 	}
@@ -88,7 +85,6 @@ class CommonHotkeys {
 ; ====================================================================================================
 	
 	static _scriptType         := "" ; Type of script, from CommonHotkeys.ScriptType_* constants
-	static _trayInfo           := "" ; Reference to the script's ScriptTrayInfo object
 	static _confirmExit        := false ; Whether to confirm before exiting
 	static _confirmExitMessage := "Are you sure you want to exit this script?" ; Message to show when confirming an exit based on _confirmExit
 	static _noSuspend          := false ; Whether the suspend hotkey is suppressed
@@ -179,7 +175,7 @@ class CommonHotkeys {
 		}
 		
 		Suspend, Toggle
-		CommonHotkeys._trayInfo.updateTrayIcon()
+		ScriptTrayInfo.updateTrayIcon()
 		
 		; Timers
 		mainLoopLabel := "MainLoop"

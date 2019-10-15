@@ -1,7 +1,7 @@
 /* Class for keeping track of (and updating) tray-related information about a script, including the tray icon.
 	
 	Example usage:
-		trayInfo := new ScriptTrayInfo("AHK: Precise Mouse Movement", "mouseGreen.ico", "mouseRed.ico")
+		ScriptTrayInfo.Init("AHK: Precise Mouse Movement", "mouseGreen.ico", "mouseRed.ico")
 */
 
 class ScriptTrayInfo {
@@ -19,7 +19,7 @@ class ScriptTrayInfo {
 	;  suspendedIcon (I,OPT) - The full path to the suspended icon - this will be used when the script
 	;                          is suspended using the common !#x hotkey (see CommonHotkeys).
 	;---------
-	__New(tooltipText, normalIcon := "", suspendedIcon := "") {
+	Init(tooltipText, normalIcon := "", suspendedIcon := "") {
 		Menu, Tray, Tip, % tooltipText
 		
 		; Keep suspend from changing it to the AHK default, so we can use our custom suspendedIcon instead.
@@ -72,7 +72,7 @@ class ScriptTrayInfo {
 ; ============================================== PRIVATE =============================================
 ; ====================================================================================================
 	
-	_iconStates := {} ; Associative array representing which icon to use in different situations - see .getIconForCurrentState() for explanation.
+	static _iconStates := {} ; Associative array representing which icon to use in different situations - see .getIconForCurrentState() for explanation.
 
 	;---------
 	; DESCRIPTION:    Recursively drill down into the given array and determine (based on the states

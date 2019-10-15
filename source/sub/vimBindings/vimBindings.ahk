@@ -4,15 +4,15 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
-global trayInfo := new ScriptTrayInfo("AHK: Vim Bindings for Chrome/Firefox")
-CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub, trayInfo)
+ScriptTrayInfo.Init("AHK: Vim Bindings for Chrome/Firefox")
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub)
 
 global vimKeysOn := 1
 states := {}
 states["A_IsSuspended", 1]                 := "vimSuspend.ico"
 states["A_IsSuspended", 0, "vimKeysOn", 0] := "vimPause.ico"
 states["A_IsSuspended", 0, "vimKeysOn", 1] := "vim.ico"
-trayInfo.setIconStates(states)
+ScriptTrayInfo.setIconStates(states)
 
 global offTitles := getExcludedTitles()
 global autoPaused := false ; Says whether we just temporarily paused vimKeys automatically (like for ^l)
@@ -213,7 +213,7 @@ turnVimOffAuto() {
 
 setVimKeysState(toState) {
 	vimKeysOn := toState
-	trayInfo.updateTrayIcon()
+	ScriptTrayInfo.updateTrayIcon()
 }
 
 sendToOmniboxAndGo(url) {

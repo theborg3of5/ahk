@@ -4,8 +4,8 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
-trayInfo := new ScriptTrayInfo("AHK: Timer", "hourglass.ico")
-CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone, trayInfo)
+ScriptTrayInfo.Init("AHK: Timer", "hourglass.ico")
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 CommonHotkeys.NoSuspendOn()
 
 global toastObj

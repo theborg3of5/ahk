@@ -10,32 +10,7 @@
 		; Debug.popup("Start string", tempRun, "Finished string", runString, "Major", versionMajor, "Minor", versionMinor, "Environment", environment)
 		return runString
 	}
-
-	buildTxDumpRunString(txId, environmentCommId := "", environmentName := "") {
-		if(!txId)
-			return ""
-		
-		; Build the full output filepath.
-		if(!environmentName)
-			if(environmentCommId)
-				environmentName := environmentCommId
-			else
-				environmentName := "OTHER"
-		outputPath := Config.path["TX_DIFF_OUTPUT"] "\" txId "-" environmentName ".txt"
-		
-		; Build the string to run
-		runString := Config.private["TX_DIFF_DUMP_BASE"]
-		runString := runString.replaceTag("TX_ID",       txId)
-		runString := runString.replaceTag("OUTPUT_PATH", outputPath)
-		
-		; Add on the environment if it's given - if not, leave off the flag (which will automatically cause the script to show an environment selector instead).
-		if(environmentCommId)
-			runString .= " --env " environmentCommId
-		
-		; Debug.popup("buildTxDumpRunString","Finish", "txId",txId, "outputFolder",outputFolder, "environmentCommId",environmentCommId, "runString",runString)
-		return runString
-	}
-
+	
 	buildVDIRunString(vdiId) {
 		return Config.private["VDI_BASE"].replaceTag("VDI_ID", vdiId)
 	}

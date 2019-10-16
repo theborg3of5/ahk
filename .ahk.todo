@@ -25,7 +25,6 @@
 				\lib\ - library classes
 					clip								turn into class, rename, move
 					data								turn into class, rename, move
-					gui								turn into class, rename, move
 					io									turn into class, rename, move
 					string							turn into class, rename, move
 		Will also need to update anything that references the existing folder structure directly

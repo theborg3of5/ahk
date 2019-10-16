@@ -42,8 +42,9 @@ return
 		if(windowName != "Windows Taskbar" && windowName != "Windows Taskbar Secondary") ; Don't try to focus Windows taskbar
 			WinActivate, % idString
 		
-		; Allow the keystrokes to be caught and handled by other hotkeys.
-		sendUsingLevel(keys, 1)
+		startSendLevel := setSendLevel(1) ; Allow the keystrokes to be caught and handled by other hotkeys.
+		Send, %keys%
+		setSendLevel(startSendLevel)
 	}
 #If
 

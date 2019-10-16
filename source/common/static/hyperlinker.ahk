@@ -193,7 +193,7 @@ class Hyperlinker {
 		Sleep, 100
 		
 		; Set the value of the field and accept the "popup".
-		setWebFieldValue(path)
+		Hyperlinker.setWebFieldValue(path)
 		
 		; Close the popup
 		Sleep, 500 ; Wait an extra half a second for web popups, as some of them have to validate before we can accept.
@@ -203,6 +203,40 @@ class Hyperlinker {
 		Send, {Right}
 		
 		return true
+	}
+	
+	;---------
+	; DESCRIPTION:    Set the currently focused web field to the given value using the clipboard,
+	;                 double-checking that it worked.
+	; PARAMETERS:
+	;  value (I,REQ) - The value to set.
+	; RETURNS:        true/false - whether we successfully set the value to what we want.
+	;---------
+	setWebFieldValue(value) {
+		; Send our new value with the clipboard, then confirm it's correct by re-copying the field value (in case it just sent "v")
+		WindowActions.selectAll() ; Select all so we overwrite anything already in the field
+		sendTextWithClipboard(value)
+		if(Hyperlinker.webFieldMatchesValue(value))
+			return true
+		
+		; If it didn't match, try a second time
+		Sleep, 500
+		WindowActions.selectAll()
+		sendTextWithClipboard(value)
+		return Hyperlinker.webFieldMatchesValue(value)
+	}
+	
+	;---------
+	; DESCRIPTION:    Check whether the currently focused web field matches the given value.
+	; PARAMETERS:
+	;  value (I,REQ) - The value that the field should match.
+	; RETURNS:        true/false - whether it matches.
+	;---------
+	webFieldMatchesValue(value) {
+		WindowActions.selectAll()
+		actualValue := getSelectedText()
+		Send, {Right} ; Release the select all
+		return (actualValue = value)
 	}
 	
 	;---------
@@ -234,6 +268,11 @@ class Hyperlinker {
 		return true
 	}
 	
+	;---------
+	; DESCRIPTION:    Close the popup with the given method.
+	; PARAMETERS:
+	;  closeMethod (I,REQ) - The close method, from CloseMethod_* constants.
+	;---------
 	closeWithMethod(closeMethod) {
 		if(closeMethod = Hyperlinker.CloseMethod_Enter)
 			Send, {Enter}

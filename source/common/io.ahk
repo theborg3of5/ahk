@@ -23,19 +23,6 @@ getSelectedText() {
 	return textFound
 }
 
-getWithClipboardUsingFunction(boundFunc) { ; boundFunc is a BoundFunc object created with Func.Bind() or ObjBindMethod().
-	if(!boundFunc)
-		return
-	
-	originalClipboard := clipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
-	copyWithFunction(boundFunc)
-	
-	textFound := clipboard
-	clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
-	
-	return textFound
-}
-
 ; Within the currently selected text, select only the first instance of the given needle text.
 selectTextWithinSelection(needle) {
 	if(needle = "")
@@ -49,10 +36,10 @@ selectTextWithinSelection(needle) {
 	needleStartPos := selectedText.contains(needle)
 	if(!needleStartPos)
 		return
-	numRight := needleStartPos - 1
 	
 	; Debug.popup("io.selectTextWithinSelection","Finished processing", "Selection",selectedText, "Needle",needle, "Needle start position",needleStartPos, "Number of times to go right",numRight)
 	Send, {Left} ; Get to start of selection.
+	numRight := needleStartPos - 1
 	Send, {Right %numRight%} ; Get to start of needle.
 	Send, {Shift Down}
 	needleLen := needle.length()
@@ -60,37 +47,13 @@ selectTextWithinSelection(needle) {
 	Send, {Shift Up}
 }
 
-; Runs a command line program and returns the result.
-runAndReturnOutput(command, outputFile := "cmdOutput.tmp") {
-	RunWait, %comspec% /c %command% > %outputFile%,,UseErrorLevel Hide
-	outputFileContents := FileRead(outputFile)
-	FileDelete, %outputFile%
-	
-	if(outputFileContents = "") {
-		return 0
-	} else {
-		return outputFileContents
-	}
-}
 
-; Grab the tooltip(s) shown onscreen. Based on http://www.autohotkey.com/board/topic/53672-get-the-text-content-of-a-tool-tip-window/?p=336440
-getTooltipText() {
-	outText := ""
-	
-	; Allow partial matching on ahk_class. (tooltips_class32, WindowsForms10.tooltips_class32.app.0.2bf8098_r13_ad1 so far)
-	origMatchMode  := setTitleMatchMode(TitleMatchMode.RegEx)
-	WinGet, winIDs, LIST, ahk_class tooltips_class32
-	setTitleMatchMode(origMatchMode)
-	
-	Loop, %winIDs% {
-		currID := winIDs%A_Index%
-		tooltipText := ControlGetText( , "ahk_id " currID)
-		if(tooltipText != "")
-			outText := outText.appendPiece(tooltipText, "`n")
-	}
-	
-	return outText
-}
+
+
+
+
+
+
 
 releaseAllModifierKeys() {
 	modifierKeys := ["LWin", "RWin", "LCtrl", "RCtrl", "LAlt", "RAlt", "LShift", "RShift"]
@@ -98,24 +61,6 @@ releaseAllModifierKeys() {
 		if(GetKeyState(modifier))
 			Send, {%modifier% Up}
 	}
-}
-
-sendUsingLevel(hotkeyString, level) {
-	startSendLevel := setSendLevel(level)
-	Send, %hotkeyString%
-	setSendLevel(startSendLevel)
-}
-
-clickUsingMode(x := "", y := "", mouseCoordMode := "") {
-	; Store the old mouse position to move back to once we're finished.
-	MouseGetPos(prevX, prevY)
-	
-	origMouseCoordMode := setCoordMode("Mouse", mouseCoordMode)
-	Click, %x%, %y%
-	setCoordMode("Mouse", origMouseCoordMode)
-	
-	; Move the mouse back to its former position.
-	MouseMove, prevX, prevY
 }
 
 ; Wait for a hotkey to be fully released
@@ -160,6 +105,16 @@ getKeyNameFromHotkeyChar(hotkeyChar := "") {
 	return hotkeyChar
 }
 
+
+
+
+
+
+
+
+
+
+
 sendMediaKey(keyName) {
 	if(!keyName)
 		return
@@ -186,26 +141,4 @@ sendMediaKey(keyName) {
 	} else {
 		Send, % "{" keyName "}"
 	}
-}
-
-; Set a web field (that we can't set directly with ControlSetText) using the clipboard, double-checking that it worked.
-; Assumes that the field we want to set is already focused.
-setWebFieldValue(value) {
-	; Send our new value with the clipboard, then confirm it's correct by re-copying the field value (in case it just sent "v")
-	WindowActions.selectAll() ; Select all so we overwrite anything already in the field
-	sendTextWithClipboard(value)
-	if(webFieldMatchesValue(value))
-		return true
-	
-	; If it didn't match, try a second time
-	Sleep, 500
-	WindowActions.selectAll()
-	sendTextWithClipboard(value)
-	return webFieldMatchesValue(value)
-}
-webFieldMatchesValue(value) {
-	WindowActions.selectAll()
-	actualValue := getSelectedText()
-	Send, {Right} ; Release the select all
-	return (actualValue = value)
 }

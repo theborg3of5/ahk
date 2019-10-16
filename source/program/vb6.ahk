@@ -10,8 +10,8 @@
 	^+g::Send, +{F3}
 	
 	; Comment/uncomment
-	 ^`;::clickUsingMode(126, 37, "Client")
-	^+`;::clickUsingMode(150, 39, "Client")
+	 ^`;::VB6.clickUsingMode(126, 37, "Client")
+	^+`;::VB6.clickUsingMode(150, 39, "Client")
 	
 	; Delete current line
 	^d::VB6.deleteCurrentLine()
@@ -167,7 +167,7 @@ class VB6 {
 		window := new VisualWindow("A")
 		closeButtonX := window.rightX - 10 ; Close button lives 10px from right edge of window
 		closeButtonY := window.topY   + 45 ; 10px from the top of the window
-		clickUsingMode(closeButtonX, closeButtonY, "Screen")
+		VB6.clickUsingMode(closeButtonX, closeButtonY, "Screen")
 	}
 	
 	
@@ -227,6 +227,25 @@ class VB6 {
 		dlgId := dlgId.beforeString("-")
 		
 		return dlgId
+	}
+	
+	;---------
+	; DESCRIPTION:    Click at the given coordinates, then move the mouse back to where it was before.
+	; PARAMETERS:
+	;  x              (I,REQ) - X coordinate to click at.
+	;  y              (I,REQ) - Y coordinate to click at.
+	;  mouseCoordMode (I,REQ) - The CoordMode to click with - Screen, Client, etc.
+	;---------
+	clickUsingMode(x, y, mouseCoordMode) {
+		; Store the old mouse position to move back to once we're finished.
+		MouseGetPos(prevX, prevY)
+		
+		origMouseCoordMode := setCoordMode("Mouse", mouseCoordMode)
+		Click, %x%, %y%
+		setCoordMode("Mouse", origMouseCoordMode)
+		
+		; Move the mouse back to its former position.
+		MouseMove, prevX, prevY
 	}
 }
 

@@ -65,6 +65,26 @@ copyFolderPathWithHotkey(hotkeyKeys) {
 }
 
 ;---------
+; DESCRIPTION:    Get some content using a BoundFunc object which copies something to the clipboard.
+; PARAMETERS:
+;  boundFunc (I,REQ) - A BoundFunc object created with Func.Bind() or ObjBindMethod(), which will
+;                      copy the desired content to the clipboard.
+; RETURNS:        The copied content.
+;---------
+getWithClipboardUsingFunction(boundFunc) { ; boundFunc is a BoundFunc object created with Func.Bind() or ObjBindMethod().
+	if(!boundFunc)
+		return
+	
+	originalClipboard := clipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
+	copyWithFunction(boundFunc)
+	
+	textFound := clipboard
+	clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
+	
+	return textFound
+}
+
+;---------
 ; DESCRIPTION:    Set the clipboard to the given value and show a toast about it.
 ; PARAMETERS:
 ;  newClipboardValue (I,REQ) - The value to put on the clipboard.

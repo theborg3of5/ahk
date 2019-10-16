@@ -26,6 +26,9 @@
 					clip								turn into class, rename, move
 					data								turn into class, rename, move
 					io									turn into class, rename, move
+															Should this be renamed or split/merged?
+																clipboard has similar stuff (we split it off from io not long ago)
+																fileLib and runLib are arguably input/output stuff as well
 		Will also need to update anything that references the existing folder structure directly
 			hotstrings
 			commonHotkeys

@@ -88,20 +88,20 @@ getWithClipboardUsingFunction(boundFunc) { ; boundFunc is a BoundFunc object cre
 ; DESCRIPTION:    Set the clipboard to the given value and show a toast about it.
 ; PARAMETERS:
 ;  newClipboardValue (I,REQ) - The value to put on the clipboard.
-;  clipLabel         (I,OPT) - The label to show in the toast, clipboard set to <clipLabel> or similar (see Clip.toastClipboard)
+;  clipLabel         (I,OPT) - The label to show in the toast, clipboard set to <clipLabel> or similar (see ClipboardLib.toastClipboard)
 ;---------
 setClipboardAndToastState(newClipboardValue, clipLabel := "value") {
-	Clip.setClipboard(newClipboardValue)
+	ClipboardLib.setClipboard(newClipboardValue)
 	toastNewClipboardState(clipLabel)
 }
 ;---------
 ; DESCRIPTION:    Set the clipboard to the given value and show a toast about it which includes the value.
 ; PARAMETERS:
 ;  newClipboardValue (I,REQ) - The value to put on the clipboard.
-;  clipLabel         (I,OPT) - The label to show in the toast, clipboard set to <clipLabel> or similar (see Clip.toastClipboard)
+;  clipLabel         (I,OPT) - The label to show in the toast, clipboard set to <clipLabel> or similar (see ClipboardLib.toastClipboard)
 ;---------
 setClipboardAndToastValue(newClipboardValue, clipLabel := "value") {
-	Clip.setClipboard(newClipboardValue)
+	ClipboardLib.setClipboard(newClipboardValue)
 	toastNewClipboardValue(clipLabel)
 }
 
@@ -109,7 +109,7 @@ setClipboardAndToastValue(newClipboardValue, clipLabel := "value") {
 ; DESCRIPTION:    Set the clipboard to the given value and show an error toast about it.
 ; PARAMETERS:
 ;  newClipboardValue (I,REQ) - The value to put on the clipboard.
-;  clipLabel         (I,REQ) - The label to show in the toast, clipboard set to <clipLabel> or similar (see Clip.toastClipboard)
+;  clipLabel         (I,REQ) - The label to show in the toast, clipboard set to <clipLabel> or similar (see ClipboardLib.toastClipboard)
 ;  problemMessage    (I,REQ) - The problem that occurred.
 ;  errorMessage      (I,OPT) - What went wrong on a technical level.
 ;---------
@@ -117,26 +117,26 @@ setClipboardAndToastError(newClipboardValue, clipLabel, problemMessage, errorMes
 	if(clipLabel = "")
 		clipLabel := "value"
 	
-	Clip.setClipboard(newClipboardValue)
+	ClipboardLib.setClipboard(newClipboardValue)
 	new ErrorToast(problemMessage, errorMessage, "Clipboard set to " clipLabel ":`n" clipboard).showMedium()
 }
 
 ;---------
 ; DESCRIPTION:    Show a toast about the clipboard's current state (basically whether it's set or not).
 ; PARAMETERS:
-;  clipLabel (I,REQ) - The label to show in the toast, clipboard set to <clipLabel> or similar (see Clip.toastClipboard)
+;  clipLabel (I,REQ) - The label to show in the toast, clipboard set to <clipLabel> or similar (see ClipboardLib.toastClipboard)
 ;---------
 toastNewClipboardState(clipLabel := "value") {
-	Clip.toastClipboard(clipLabel, false)
+	ClipboardLib.toastClipboard(clipLabel, false)
 }
 ;---------
 ; DESCRIPTION:    Show a toast about the clipboard's current state (basically whether it's set or not),
 ;                 also including the actual value.
 ; PARAMETERS:
-;  clipLabel (I,REQ) - The label to show in the toast, clipboard set to <clipLabel> or similar (see Clip.toastClipboard)
+;  clipLabel (I,REQ) - The label to show in the toast, clipboard set to <clipLabel> or similar (see ClipboardLib.toastClipboard)
 ;---------
 toastNewClipboardValue(clipLabel := "value") {
-	Clip.toastClipboard(clipLabel, true)
+	ClipboardLib.toastClipboard(clipLabel, true)
 }
 
 ;---------
@@ -186,7 +186,7 @@ sendTextWithClipboard(text) {
 
 
 ; Clipboard-related helper functions.
-class Clip {
+class ClipboardLib {
 
 ; ====================================================================================================
 ; ============================================== PRIVATE =============================================

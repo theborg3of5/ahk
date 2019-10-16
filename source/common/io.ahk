@@ -1,12 +1,6 @@
 ; Functions related to input/output and user input.
 
-; Select the current line in text fields.
-selectCurrentLine() {
-	; Start with End as in some places, Home can put us in an inconsistent place relative to any
-	; indentation (i.e. hitting home when you're at the start of the line jumps to the start/end
-	; of the indentation).
-	Send, {End}{Shift Down}{Home}{Shift Up}
-}
+
 
 ; Grabs the selected text using the clipboard, fixing the clipboard as it finishes.
 getSelectedText() {
@@ -21,6 +15,16 @@ getSelectedText() {
 	clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
 	
 	return textFound
+}
+
+
+
+; Select the current line in text fields.
+selectCurrentLine() {
+	; Start with End as in some places, Home can put us in an inconsistent place relative to any
+	; indentation (i.e. hitting home when you're at the start of the line jumps to the start/end
+	; of the indentation).
+	Send, {End}{Shift Down}{Home}{Shift Up}
 }
 
 ; Within the currently selected text, select only the first instance of the given needle text.

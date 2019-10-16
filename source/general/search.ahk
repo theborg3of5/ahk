@@ -14,7 +14,7 @@
 		if(searchTerm = "")
 			return
 		
-		subTypesAry := forceArray(data["SUBTYPE"]) ; Force it to be an array so we can always loop over it.
+		subTypesAry := DataLib.forceArray(data["SUBTYPE"]) ; Force it to be an array so we can always loop over it.
 		For _,subType in subTypesAry { ; For searching multiple at once.
 			if(data["SEARCH_TYPE"] = "WEB")
 				searchWithURL(subType, searchTerm)

@@ -227,11 +227,11 @@ class FlexTable {
 	;---------
 	setX(value) {
 		this.xCurr := value
-		this.xMax := max(this.xMax, value)
+		this.xMax := DataLib.max(this.xMax, value)
 	}
 	setY(value) {
 		this.yCurr := value
-		this.yMax := max(this.yMax, value)
+		this.yMax := DataLib.max(this.yMax, value)
 	}
 	
 	;---------

@@ -255,7 +255,7 @@ class Toast {
 		styles["LABEL_STYLES"]     := ""
 		
 		; Merge in any overrides
-		styles := mergeObjects(styles, styleOverrides)
+		styles := DataLib.mergeObjects(styles, styleOverrides)
 		
 		return styles
 	}
@@ -272,8 +272,8 @@ class Toast {
 		origDetectSetting := setDetectHiddenWindows("On")
 		
 		; Default to current position, then bottom-right corner
-		x := firstNonBlankValue(x, this.x, VisualWindow.X_RightEdge)
-		y := firstNonBlankValue(y, this.y, VisualWindow.Y_BottomEdge)
+		x := DataLib.firstNonBlankValue(x, this.x, VisualWindow.X_RightEdge)
+		y := DataLib.firstNonBlankValue(y, this.y, VisualWindow.Y_BottomEdge)
 		
 		Gui, % this.guiId ":Default"
 		Gui, +LastFound ; Needed to identify the window on next line

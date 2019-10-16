@@ -553,7 +553,7 @@ class TableList {
 	;---------
 	processHeader(row) {
 		headerText := row.removeFromStart(this.Char_Header)
-		firstRowNumber := forceNumber(this.table.MaxIndex()) + 1 ; First row that will be under this section header (the next one added)
+		firstRowNumber := DataLib.forceNumber(this.table.MaxIndex()) + 1 ; First row that will be under this section header (the next one added)
 		this._headers[firstRowNumber] := headerText
 	}
 	
@@ -642,7 +642,7 @@ class TableList {
 	;  rowAry (IO,REQ) - Numerically-indexed array representing a row in the table.
 	;---------
 	applyIndexLabels(ByRef rowAry) {
-		if(isNullOrEmpty(this.indexLabels))
+		if(DataLib.isNullOrEmpty(this.indexLabels))
 			return
 		
 		rowObj := {}

@@ -191,7 +191,7 @@ class FormatList {
 		
 		tempAry := []
 		For _,item in listAry.clone()
-			tempAry.appendArray(expandList(item))
+			tempAry.appendArray(DataLib.expandList(item))
 		listAry := tempAry
 		
 		return listAry

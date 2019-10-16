@@ -90,12 +90,12 @@ class StringLib {
 		
 		; First replace any percents with the equivalent (since doing it later would also pick up anything else we've converted)
 		needle := "%"
-		replaceWith := "%" numToHex(Asc("%"))
+		replaceWith := "%" DataLib.numToHex(Asc("%"))
 		currentText := currentText.replace(needle, replaceWith)
 		
 		; Replace any other iffy characters with their encoded equivalents
 		while(currentText.containsRegEx("i)[^\w\.~%]", charToReplace)) {
-			replaceWith := "%" numToHex(Asc(charToReplace))
+			replaceWith := "%" DataLib.numToHex(Asc(charToReplace))
 			currentText := currentText.replace(charToReplace, replaceWith)
 		}
 		
@@ -113,7 +113,7 @@ class StringLib {
 		
 		while(outString.containsRegEx("i)(?<=%)[\da-f]{1,2}", charCodeInHex)) {
 			needle := "%" charCodeInHex
-			replaceWith := Chr(hexToInteger(charCodeInHex))
+			replaceWith := Chr(DataLib.hexToInteger(charCodeInHex))
 			outString := outString.replace(needle, replaceWith)
 		}
 		

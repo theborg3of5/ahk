@@ -203,7 +203,7 @@
 		if(Cmd = "List" || Cmd = "ControlList") {
 			global winGetValue
 			WinGet, winGetValue, %Cmd%, %WinTitle%, %WinText%, %ExcludeTitle%, %ExcludeText%
-			return convertPseudoArrayToArray("winGetValue")
+			return DataLib.convertPseudoArrayToArray("winGetValue")
 		}
 		
 		WinGet, v, %Cmd%, %WinTitle%, %WinText%, %ExcludeTitle%, %ExcludeText%

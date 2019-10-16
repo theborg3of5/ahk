@@ -436,7 +436,7 @@ class StringBase {
 	;---------
 	split(delimiters := "", surroundingCharsToDrop := "") { ; Like StrSplit(), but returns an actual array (not an object)
 		obj := StrSplit(this, delimiters, surroundingCharsToDrop)
-		return convertObjectToArray(obj)
+		return DataLib.convertObjectToArray(obj)
 	}
 	
 	

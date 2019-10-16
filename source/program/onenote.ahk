@@ -593,7 +593,7 @@ class OneNoteTodoPage {
 		}
 		
 		; Bail if there's nothing to insert.
-		if(isNullOrEmpty(matchingTodos))
+		if(DataLib.isNullOrEmpty(matchingTodos))
 			return
 			
 		; Check whether we're already on a blank line or not.

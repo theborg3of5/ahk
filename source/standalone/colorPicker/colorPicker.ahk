@@ -90,9 +90,9 @@ getRGBUnderMouse(mouseX := "", mouseY := "") {
 
 invertColor(color) {
 	; Get RGB bits as integers
-	r := hexToInteger(color.sub(1, 2))
-	g := hexToInteger(color.sub(3, 2))
-	b := hexToInteger(color.sub(5))
+	r := DataLib.hexToInteger(color.sub(1, 2))
+	g := DataLib.hexToInteger(color.sub(3, 2))
+	b := DataLib.hexToInteger(color.sub(5))
 	
 	; Reverse integers
 	newR := 255 - r
@@ -100,9 +100,9 @@ invertColor(color) {
 	newB := 255 - b
 	
 	; Convert back to hex and recombine
-	finalR := numToHex(newR).prePadToLength(2, "0")
-	finalG := numToHex(newG).prePadToLength(2, "0")
-	finalB := numToHex(newB).prePadToLength(2, "0")
+	finalR := DataLib.numToHex(newR).prePadToLength(2, "0")
+	finalG := DataLib.numToHex(newG).prePadToLength(2, "0")
+	finalB := DataLib.numToHex(newB).prePadToLength(2, "0")
 	
 	return StringUpper(finalR finalG finalB)
 }

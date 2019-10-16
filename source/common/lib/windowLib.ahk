@@ -82,10 +82,10 @@ class WindowLib {
 	; RETURNS:        true if the window has the given style/extended style, false otherwise.
 	;---------
 	hasStyle(style, titleString := "A") {
-		return bitFieldHasFlag(WinGet("Style", titleString), style)
+		return DataLib.bitFieldHasFlag(WinGet("Style", titleString), style)
 	}
 	hasExStyle(style, titleString := "A") {
-		return bitFieldHasFlag(WinGet("ExStyle", titleString), style)
+		return DataLib.bitFieldHasFlag(WinGet("ExStyle", titleString), style)
 	}
 	
 	;---------

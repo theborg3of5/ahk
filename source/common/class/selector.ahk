@@ -225,7 +225,7 @@ class Selector {
 		
 		data := this.doSelectGui()
 		
-		if(isNullOrEmpty(data))
+		if(DataLib.isNullOrEmpty(data))
 			return ""
 		else if(returnColumn)
 			return data[returnColumn]
@@ -368,8 +368,8 @@ class Selector {
 		; Override fields can add to that too.
 		overrideData := sGui.getOverrideData()
 		
-		; Debug.popup("Selector.doSelectGui","Finish", "Choice data",choiceData, "Override data",overrideData, "Merged data",mergeObjects(choiceData, overrideData))
-		return mergeObjects(choiceData, overrideData)
+		; Debug.popup("Selector.doSelectGui","Finish", "Choice data",choiceData, "Override data",overrideData, "Merged data",DataLib.mergeObjects(choiceData, overrideData))
+		return DataLib.mergeObjects(choiceData, overrideData)
 	}
 	
 	;---------

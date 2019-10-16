@@ -118,7 +118,7 @@ class NotepadPlusPlus {
 			param := param.beforeString(" :=")
 			
 			paramsAry.push(param)
-			maxParamLength := max(maxParamLength, param.length())
+			maxParamLength := DataLib.max(maxParamLength, param.length())
 		}
 		
 		; Build a line for each parameter, padding things out to make them even

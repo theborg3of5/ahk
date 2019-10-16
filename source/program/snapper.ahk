@@ -78,7 +78,7 @@ class Snapper {
 		}
 		
 		outURL := Config.private["SNAPPER_URL_BASE"]
-		idAry := expandList(idList)
+		idAry := DataLib.expandList(idList)
 		if(idAry.count() > 10)
 			if(!GuiLib.showConfirmationPopup("You're trying to open more than 10 records in Snapper - are you sure you want to continue?", "Opening many records in Snapper"))
 				return ""

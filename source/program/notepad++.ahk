@@ -53,7 +53,7 @@ class NotepadPlusPlus {
 		numSpaces := NotepadPlusPlus.getDocumentationLineIndent(lineStart)
 		
 		Send, {Enter} ; Start the new line - assuming that Notepad++ will put us at the same indentation level (before the semicolon) as the previous row.
-		Send, % ";" getSpaces(numSpaces)
+		Send, % ";" StringLib.getSpaces(numSpaces)
 	}
 	
 	;---------
@@ -126,7 +126,7 @@ class NotepadPlusPlus {
 		For _,paramName in paramsAry {
 			line := NotepadPlusPlus.ahkParamBase
 			line := line.replaceTag("NAME",    paramName)
-			line := line.replaceTag("PADDING", getSpaces(maxParamLength - paramName.length()))
+			line := line.replaceTag("PADDING", StringLib.getSpaces(maxParamLength - paramName.length()))
 			paramLines.push(line)
 		}
 		
@@ -199,7 +199,7 @@ class NotepadPlusPlus {
 			; Keyword line - add length of keyword + however many spaces are after it.
 			numSpaces += matchedKeyword.length()
 			line := line.removeFromStart(matchedKeyword)
-			numSpaces += countLeadingSpaces(line)
+			numSpaces += StringLib.countLeadingSpaces(line)
 		} else {
 			matchedPos := line.containsRegEx("P)\((I|O|IO),(OPT|REQ)\) - ", matchedTextLen)
 			if(matchedPos) {
@@ -207,7 +207,7 @@ class NotepadPlusPlus {
 				numSpaces += (matchedPos - 1) + matchedTextLen
 			} else {
 				; Floating line - just count the spaces.
-				numSpaces += countLeadingSpaces(line)
+				numSpaces += StringLib.countLeadingSpaces(line)
 			}
 		}
 		
@@ -237,8 +237,9 @@ class NotepadPlusPlus {
 		}
 		
 		For i,param in paramsAry {
-			label := QUOTE escapeCharUsingRepeat(param, QUOTE) QUOTE
-			paramsString := paramsString.appendPiece(label "," param, ", ")
+			param := StringLib.escapeCharUsingChar(param, QUOTE, QUOTE)
+			paramPair := label "," QUOTE param QUOTE
+			paramsString := paramsString.appendPiece(paramPair, ", ")
 		}
 		
 		return paramsString

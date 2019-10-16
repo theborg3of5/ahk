@@ -303,7 +303,7 @@ class Toast {
 	;  toastText (I,REQ) - The text to show in the toast.
 	;---------
 	setLabelText(toastText) {
-		toastText := escapeCharUsingRepeat(toastText, "&")
+		toastText := StringLib.escapeCharUsingChar(toastText, "&", "&")
 		Gui, % this.guiId ":Default"
 		
 		; Figure out how big the text control needs to be to fit its contents

@@ -134,7 +134,7 @@ class Debug {
 ; ============================================== PRIVATE =============================================
 ; ====================================================================================================
 	
-	static spacesPerTab := 4 ; How many spaces are in a tab that we indent things by.
+	static singleIndent := "    " ; 4 spaces are used for each level of indentation.
 	
 	;---------
 	; DESCRIPTION:    Build the debug string for the given value or label-value pairs.
@@ -204,7 +204,7 @@ class Debug {
 	;---------
 	buildDebugStringForPair(label, value, numTabs := 0) {
 		outString := ""
-		outString .= getTabs(numTabs, Debug.spacesPerTab) label ": " ; Label
+		outString .= this.getIndent(numTabs) label ": " ; Label
 		outString .= this.buildValueDebugString(value, numTabs)      ; Value
 		return outString
 	}
@@ -226,7 +226,7 @@ class Debug {
 	;---------
 	buildValueDebugString(value, numTabs := 0, newLine := false, index := "") {
 		if(newLine)
-			outString := getTabs(numTabs, Debug.spacesPerTab)
+			outString := this.getIndent(numTabs)
 		
 		; Index
 		if(index != "")
@@ -251,6 +251,16 @@ class Debug {
 		}
 		
 		return outString
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the given number of indentations as spaces.
+	; PARAMETERS:
+	;  numIndents (I,REQ) - The number of indentations.
+	; RETURNS:        As many spaces are needed to indent to the given level.
+	;---------
+	getIndent(numIndents) {
+		return StringLib.duplicate(Debug.singleIndent, numIndents)
 	}
 	
 	;---------

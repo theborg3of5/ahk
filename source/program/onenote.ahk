@@ -486,7 +486,7 @@ class OneNoteTodoPage {
 		t := new Toast()
 		t.show()
 		Loop {
-			t.setText("Waiting for 2s, press space to keep waiting..." getDots(A_Index - 1))
+			t.setText("Waiting for 2s, press space to keep waiting..." StringLib.getDots(A_Index - 1))
 			Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
 			endKey := ErrorLevel.removeFromStart("EndKey:")
 			if(endKey = "Space")
@@ -496,7 +496,7 @@ class OneNoteTodoPage {
 			if(endKey = "Enter" || endKey = "Escape")
 				Break
 			
-			t.setText("Waiting for 1s, press space to keep waiting..." getDots(A_Index - 1))
+			t.setText("Waiting for 1s, press space to keep waiting..." StringLib.getDots(A_Index - 1))
 			Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
 			endKey := ErrorLevel.removeFromStart("EndKey:")
 			if(endKey = "Space")

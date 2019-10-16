@@ -109,7 +109,7 @@ class FlexTable {
 		if(extraProperties != "")
 			propString .= " " extraProperties
 		
-		displayText := escapeCharUsingRepeat(cellText, "&") ; Escape any ampersands in the string, as they'll otherwise turn the next character into an underlined hotkey.
+		displayText := StringLib.escapeCharUsingChar(cellText, "&", "&") ; Escape any ampersands in the string, as they'll otherwise turn the next character into an underlined hotkey.
 		Gui, Add, Text, % propString, % displayText
 		
 		if(width = "")

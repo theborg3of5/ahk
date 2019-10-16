@@ -49,8 +49,8 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 	getLink() {
 		if(this.locationType = ActionObjectCodeSearch.LocationType_Server) {
 			EpicLib.splitServerLocation(this.location, routine, tag)
-			routine := encodeForURL(routine)
-			tag     := encodeForURL(tag)
+			routine := StringLib.encodeForURL(routine)
+			tag     := StringLib.encodeForURL(tag)
 			
 			return Config.private["CS_SERVER_CODE_BASE"].replaceTags({"ROUTINE":routine, "TAG":tag})
 		}

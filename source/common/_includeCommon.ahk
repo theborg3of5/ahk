@@ -42,7 +42,6 @@ Object(params*) {
 	#Include clip.ahk
 	#Include data.ahk
 	#Include io.ahk
-	#Include string.ahk
 
 #Include %A_LineFile%\..\class
 	#Include debugBuilder.ahk
@@ -73,6 +72,7 @@ Object(params*) {
 	#Include microsoftLib.ahk
 	#Include phoneLib.ahk
 	#Include runLib.ahk
+	#Include stringLib.ahk
 	#Include windowLib.ahk
 
 #Include %A_LineFile%\..\static

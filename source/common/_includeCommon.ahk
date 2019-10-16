@@ -40,7 +40,6 @@ Object(params*) {
 ; ====================================================================================================
 #Include %A_LineFile%\..
 	#Include clip.ahk
-	#Include data.ahk
 	#Include io.ahk
 
 #Include %A_LineFile%\..\class
@@ -65,6 +64,7 @@ Object(params*) {
 	#Include HTTPRequest.ahk
 	
 #Include %A_LineFile%\..\lib
+	#Include dataLib.ahk
 	#Include dateTimeLib.ahk
 	#Include epicLib.ahk
 	#Include fileLib.ahk

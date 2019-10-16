@@ -28,7 +28,6 @@
 															Maybe just "common"?
 				\lib\ - library classes
 					clip								turn into class, rename, move
-					data								turn into class, rename, move
 					io									turn into class, rename, move
 															Should this be renamed or split/merged?
 																Areas

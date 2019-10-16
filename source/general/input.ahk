@@ -25,19 +25,14 @@ $^a::WindowActions.selectAll()
 $^Backspace::WindowActions.deleteWord()
 
 ; Launchy normally uses CapsLock, but (very) occasionally, we need to use it for its intended purpose.
-^!CapsLock::
-	SetCapsLockState, On
-return
+^!CapsLock::SetCapsLockState, On
 
+; Use the extra mouse buttons to switch tabs in various programs
 #If !Config.windowIsGame() && !Config.isWindowActive("Remote Desktop") && !Config.isWindowActive("VMware Horizon Client")
 	XButton1::activateWindowUnderMouseAndSendKeys("^{Tab}")
 	XButton2::activateWindowUnderMouseAndSendKeys("^+{Tab}")
 	activateWindowUnderMouseAndSendKeys(keys) {
-		MouseGetPos( , , winId)
-		if(!winId)
-			return
-		
-		idString := "ahk_id " winId
+		idString := WindowLib.getIdTitleStringUnderMouse()
 		windowName := Config.findWindowName(idString)
 		if(windowName != "Windows Taskbar" && windowName != "Windows Taskbar Secondary") ; Don't try to focus Windows taskbar
 			WinActivate, % idString

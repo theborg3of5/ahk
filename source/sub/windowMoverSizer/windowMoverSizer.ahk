@@ -87,7 +87,7 @@ global WINDOWCORNER_BOTTOMRIGHT := "BOTTOM_RIGHT"
 	; Alt+Middle Click to maximize/restore
 	!MButton::
 		maximizeRestoreWindowUnderMouse() {
-			titleString := getTitleStringForWindowUnderMouse()
+			titleString := WindowLib.getIdTitleStringUnderMouse()
 			
 			if(WindowLib.isMaximized(titleString))
 				WinRestore, % titleString
@@ -109,7 +109,7 @@ global WINDOWCORNER_BOTTOMRIGHT := "BOTTOM_RIGHT"
 ;                 the window.
 ;---------
 dragWindowPrep(ByRef window, ByRef mouseStart) {
-	titleString := getTitleStringForWindowUnderMouse()
+	titleString := WindowLib.getIdTitleStringUnderMouse()
 	if(isExcludedWindow(titleString))
 		return false
 	
@@ -121,15 +121,6 @@ dragWindowPrep(ByRef window, ByRef mouseStart) {
 	mouseStart := new MousePosition()
 	
 	return true
-}
-
-;---------
-; DESCRIPTION:    Get an ID-based title string to identify the window under the mouse with.
-; RETURNS:        title string (that uses ahk_id) identifying the window under the mouse.
-;---------
-getTitleStringForWindowUnderMouse() {
-	MouseGetPos( , , winId)
-	return "ahk_id " winId
 }
 
 ;---------

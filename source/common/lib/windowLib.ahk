@@ -111,6 +111,15 @@ class WindowLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Get an ID-based title string to identify the window under the mouse with.
+	; RETURNS:        title string (that uses ahk_id) identifying the window under the mouse.
+	;---------
+	getIdTitleStringUnderMouse() {
+		MouseGetPos( , , winId)
+		return "ahk_id " winId
+	}
+	
+	;---------
 	; DESCRIPTION:    For the window identified by the given title string, generate a title string
 	;                 that's guaranteed to match only that window (based on its window ID).
 	; PARAMETERS:

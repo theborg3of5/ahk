@@ -4,17 +4,7 @@
 
 ; Grabs the selected text using the clipboard, fixing the clipboard as it finishes.
 getSelectedText() {
-	; PuTTY auto-copies the selection to the clipboard, and ^c causes an interrupt, so do nothing.
-	if(WinActive("ahk_class PuTTY"))
-		return clipboard
-	
-	originalClipboard := clipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
-	copyWithHotkey("^c")
-	
-	textFound := clipboard
-	clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
-	
-	return textFound
+	return ClipboardLib.getSelectedTextWithClipboard()
 }
 
 

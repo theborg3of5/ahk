@@ -204,6 +204,21 @@ class ClipboardLib {
 		ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain data.
 	}
 	
+	; Grabs the selected text using the clipboard, fixing the clipboard as it finishes.
+	getSelectedTextWithClipboard() {
+		; PuTTY auto-copies the selection to the clipboard, and ^c causes an interrupt, so do nothing.
+		if(WinActive("ahk_class PuTTY"))
+			return clipboard
+		
+		originalClipboard := clipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
+		copyWithHotkey("^c")
+		
+		textFound := clipboard
+		clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
+		
+		return textFound
+	}
+	
 	;---------
 	; DESCRIPTION:    Show a toast for the current clipboard value, basically whether it's set or not.
 	; PARAMETERS:

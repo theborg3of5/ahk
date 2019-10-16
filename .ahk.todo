@@ -1,4 +1,8 @@
 # New Ideas
+	Should we split the screen script into system (lock/suspend) and window scripts?
+	Should we rename the input script? It's really only "input" in the sense that it's a bunch of hotkeys that I type to trigger.
+		misc, maybe?
+		Should the latter half (with all of the hyperlinking, standard EMC2 object string, etc. bits) be split off or moved elsewhere?
 	Should we add a edit script selector like we have for config files?
 		For often-modified scripts
 			config
@@ -27,8 +31,10 @@
 					data								turn into class, rename, move
 					io									turn into class, rename, move
 															Should this be renamed or split/merged?
+																Areas
+																	Selection (getting/changing selection)
+																	Hotkeys (sending, releasing, waiting on)
 																clipboard has similar stuff (we split it off from io not long ago)
-																fileLib and runLib are arguably input/output stuff as well
 		Will also need to update anything that references the existing folder structure directly
 			hotstrings
 			commonHotkeys

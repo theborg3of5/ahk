@@ -147,10 +147,7 @@
 
 
 ; Edit this file
-^!h::
-	RunLib.editScript(A_LineFile)
-return
-
+^!h::Config.runProgram("Notepad++", A_LineFile)
 
 ; Helper functions for sending file/folder paths in the desired format.
 sendFilePath(folderName, subPath := "") {

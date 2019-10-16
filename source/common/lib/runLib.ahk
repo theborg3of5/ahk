@@ -6,34 +6,6 @@ class RunLib {
 ; ====================================================================================================
 ; ============================================== PUBLIC ==============================================
 ; ====================================================================================================
-	
-	;---------
-	; DESCRIPTION:    Turn the command line arguments passed to the script (%1%, %2%, etc.) into an array.
-	; PARAMETERS:
-	;  placeholderChar (I,OPT) - If a parameter could be excluded by passing a placeholder character,
-	;                            that character. If not passed, every parameter will be included.
-	; RETURNS:        An array of the parameters passed in.
-	;---------
-	getScriptArgs(placeholderChar := "") {
-		local paramsAry = [] ; This is the array that will hold the arguments at the end, which we'll return. Everything else (namely %1%, %2%, etc) are global.
-		
-		Loop, %0% { ; For each command line arg. %0% is the count of them.
-			if(%A_Index% = placeholderChar) ; If a placeholder character is given, filter out values that match it (that index won't even be set).
-				Continue
-			paramsAry[A_Index] := %A_Index% ; %1% is the value of the first command line arg, etc.
-		}
-		
-		return paramsAry
-	}
-
-	;---------
-	; DESCRIPTION:    Open the given script in Notepad++.
-	; PARAMETERS:
-	;  script (I,REQ) - Full path to the script to edit.
-	;---------
-	editScript(script) {
-		Config.runProgram("Notepad++", script)
-	}
 
 	;---------
 	; DESCRIPTION:    Run a command with cmd.exe.

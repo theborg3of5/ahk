@@ -13,9 +13,8 @@ global durationObj
 global timerLabelText
 
 ; Get any inputs from command line
-argsAry := RunLib.getScriptArgs()
-durationString := argsAry[1]
-labelText      := argsAry[2]
+durationString = %1%
+labelText      = %2%
 
 if(!getTimerInfo(durationString, labelText))
 	ExitApp

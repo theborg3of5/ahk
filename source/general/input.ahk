@@ -1,5 +1,6 @@
 ; General input hotkeys.
 
+; Different hotkeys based on machine
 #If Config.machineIsHomeDesktop
 	$Volume_Mute::DllCall("LockWorkStation")	; Lock computer.
 #If Config.machineIsHomeLaptop || Config.machineIsWorkLaptop || Config.machineIsWorkVDI

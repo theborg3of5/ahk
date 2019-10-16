@@ -237,8 +237,8 @@ class NotepadPlusPlus {
 		}
 		
 		For i,param in paramsAry {
-			param := StringLib.escapeCharUsingChar(param, QUOTE, QUOTE)
-			paramPair := label "," QUOTE param QUOTE
+			label := StringLib.escapeCharUsingChar(param, QUOTE, QUOTE)
+			paramPair := QUOTE label QUOTE "," param
 			paramsString := paramsString.appendPiece(paramPair, ", ")
 		}
 		

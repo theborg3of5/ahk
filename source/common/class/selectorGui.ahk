@@ -294,7 +294,7 @@ class SelectorGui {
 	;                    are made to the field).
 	;---------
 	addField(varName, x, y, width, height, data := "", subGoto := "") {
-		setDynamicGlobalVar(varName) ; Declare the provided unique variable name as a global
+		GuiLib.createDynamicGlobal(varName) ; Declare the provided unique variable name as a global so we can use it for the control
 		
 		propString := "v" varName                                        ; Variable to save to on Gui, Submit
 		propString .= " x" x " y" y " w" width " h" height               ; Position/size
@@ -339,11 +339,11 @@ class SelectorGui {
 	;---------
 	saveUserInputs() {
 		; Choice field
-		this.choiceQuery := getDynamicGlobalVar(this.fieldVarChoice) ; Declared via setDynamicGlobalVar(), populated by Gui, Submit
+		this.choiceQuery := GuiLib.getDynamicGlobal(this.fieldVarChoice) ; Global value set by Gui, Submit
 		
 		; Override fields
 		For num,label in this.overrideFields {
-			inputVal := getDynamicGlobalVar(this.fieldVarOverridesPrefix label) ; Declared via setDynamicGlobalVar(), populated by Gui, Submit
+			inputVal := GuiLib.getDynamicGlobal(this.fieldVarOverridesPrefix label) ; Global value set by Gui, Submit
 			if(inputVal && (inputVal != label))
 				this.overrideData[label] := inputVal
 		}

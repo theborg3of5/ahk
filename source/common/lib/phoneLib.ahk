@@ -133,7 +133,7 @@ class PhoneLib {
 			messageText    .= "Continue?"
 		}
 		
-		return showConfirmationPopup(messageText, title)
+		return GuiLib.showConfirmationPopup(messageText, title)
 	}
 	
 	;---------

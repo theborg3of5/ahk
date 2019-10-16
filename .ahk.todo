@@ -4,6 +4,7 @@
 			config
 			commandFunctions
 			hotstrings (maybe get rid of dedicated hotkey?)
+	Have AHK function header start recognizing optional variables based on a := "" on the end of them?
 	Decide which approach to take for static classes that need to read something in once - require a .Init() call, or just do it the first time it's needed?
 		Examples
 			Hyperlinker - on-demand (only 1 public method)

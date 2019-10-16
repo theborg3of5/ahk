@@ -145,7 +145,7 @@ class CommonHotkeys {
 	doExit() {
 		; Confirm exiting if that's turned on.
 		if(CommonHotkeys._confirmExit) {
-			if(!showConfirmationPopup(CommonHotkeys._confirmExitMessage))
+			if(!GuiLib.showConfirmationPopup(CommonHotkeys._confirmExitMessage))
 				return
 		}
 		

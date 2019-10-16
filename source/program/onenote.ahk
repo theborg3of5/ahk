@@ -160,7 +160,7 @@ class OneNote {
 	;---------
 	deletePageWithConfirm() {
 		; Confirmation to avoid accidental page deletion
-		if(showConfirmationPopup("Are you sure you want to delete this page?", "Delete page?"))
+		if(GuiLib.showConfirmationPopup("Are you sure you want to delete this page?", "Delete page?"))
 			OneNote.deletePage()
 	}
 	

@@ -27,7 +27,7 @@ openFolder(folderName) {
 				return ; Not going to try creating if not even the parent exists.
 			}
 			
-			if(showConfirmationPopup("This folder does not exist:`n" folderPath "`n`nCreate it?", "Folder does not exist"))
+			if(GuiLib.showConfirmationPopup("This folder does not exist:`n" folderPath "`n`nCreate it?", "Folder does not exist"))
 				FileCreateDir, % folderPath
 		}
 		if(FileLib.folderExists(folderPath))

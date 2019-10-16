@@ -113,7 +113,7 @@ class FlexTable {
 		Gui, Add, Text, % propString, % displayText
 		
 		if(width = "")
-			getLabelSizeForText(cellText, width)
+			GuiLib.getLabelSizeForText(cellText, width)
 		this.addToX(width)
 	}
 	
@@ -130,9 +130,9 @@ class FlexTable {
 	addHeaderCell(titleText, leftPadding := "", width := "", extraProperties := "") {
 		this.makeGuiTheDefault()
 		
-		applyTitleFormat()
+		GuiLib.applyTitleFormat()
 		this.addCell(titleText, leftPadding, width, extraProperties)
-		clearTitleFormat()
+		GuiLib.clearTitleFormat()
 	}
 	
 	;---------

@@ -106,7 +106,7 @@ class OneTastic {
 			return
 		}
 		
-		if(!showConfirmationPopup("Are you sure you want to overwrite this macro and its functions?", "Update macro from XML"))
+		if(!GuiLib.showConfirmationPopup("Are you sure you want to overwrite this macro and its functions?", "Update macro from XML"))
 			return
 		
 		; Update the macro XML

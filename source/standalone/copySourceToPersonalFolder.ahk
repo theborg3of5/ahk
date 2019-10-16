@@ -15,7 +15,7 @@ confirmationMessage := "
 		Source: " sourceRoot "
 		Destination: " destinationRoot "
 	)"
-if(!showConfirmationPopup(confirmationMessage, "Delete and replace"))
+if(!GuiLib.showConfirmationPopup(confirmationMessage, "Delete and replace"))
 	ExitApp
 
 ; Delete existing contents of destination folder

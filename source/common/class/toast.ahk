@@ -229,7 +229,7 @@ class Toast {
 		
 		; Add label
 		this.labelVarName := this.guiId "Text" ; Come up with a unique variable we can use to reference the label (to change its contents if needed).
-		setDynamicGlobalVar(this.labelVarName) ; Since the variable must be global, declare it as such.
+		GuiLib.createDynamicGlobal(this.labelVarName) ; Declare the provided unique variable name as a global so we can use it for the control
 		Gui, Add, Text, % "v" this.labelVarName " " styles["LABEL_STYLES"]
 	}
 	
@@ -307,7 +307,7 @@ class Toast {
 		Gui, % this.guiId ":Default"
 		
 		; Figure out how big the text control needs to be to fit its contents
-		getLabelSizeForText(toastText, textWidth, textHeight)
+		GuiLib.getLabelSizeForText(toastText, textWidth, textHeight)
 		
 		; Update the text and width/height
 		GuiControl,     , % this.labelVarName, % toastText

@@ -11,9 +11,6 @@ txId = %1%
 if(!txId)
 	txId := Config.private["RFL_TX_ID"]
 
-; Start in the dump script's directory.
-SetWorkingDir, % Config.path["TX_DIFF"]
-
 ; Create a Selector so the user can pick the environment and give us the TX's ID.
 s := new Selector("epicEnvironments.tls").SetTitle("Dump Data Transaction from Environment to File")
 s.AddOverrideFields(["TX_ID"]).SetDefaultOverrides({"TX_ID":txId}) ; Add a field for the TX's ID and default it in if it was given already.
@@ -32,7 +29,7 @@ if(envId = "LAUNCH") ; Special case - just launching the script without picking 
 
 runString := buildTxDumpRunString(txId, envId, envName)
 if(runString)
-	Run(runString)
+	RunLib.runCommand(runString, Config.path["TX_DIFF"], true)
 
 ExitApp
 

@@ -166,13 +166,13 @@ class EMC2 {
 			Send, {Right}
 			Send, {Shift Up}
 			
-			qanId := getSelectedText()
+			qanId := SelectLib.getText()
 			if(!qanId)
 				Break
 			
 			; Get to next column for version
 			Send, {Tab}
-			version := getSelectedText()
+			version := SelectLib.getText()
 			
 			; Avoid duplicate entries (for multiple versions
 			if(qanId != prevId)

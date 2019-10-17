@@ -15,7 +15,7 @@
 	
 	; Split diff
 	^q::
-		waitForHotkeyRelease()
+		HotkeyLib.waitForRelease()
 		Send, {Alt}
 		Send, {Left 4}{Down}
 		Send, {Up 3}

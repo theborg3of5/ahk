@@ -304,7 +304,7 @@ class Config {
 	;  runArgs (I,OPT) - If the window doesn't currently exist, we'll run the corresponding program with these parameters.
 	;---------
 	activateProgram(name, runArgs := "") { ; runArgs are only used if the program's window doesn't already exist (and we're therefore running it).
-		waitForHotkeyRelease()
+		HotkeyLib.waitForRelease()
 		
 		if(this.doesWindowExist(name)) ; If the program is already running, go ahead and activate it.
 			WindowActions.activateWindowByName(name)
@@ -318,7 +318,7 @@ class Config {
 	;  args (I,OPT) - The arguments to run the program with.
 	;---------
 	runProgram(name, args := "") {
-		waitForHotkeyRelease()
+		HotkeyLib.waitForRelease()
 		
 		path := this.programs[name].path
 		if(!FileExist(path)) {

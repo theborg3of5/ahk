@@ -40,7 +40,6 @@ Object(params*) {
 ; ====================================================================================================
 #Include %A_LineFile%\..
 	#Include clip.ahk
-	#Include io.ahk
 
 #Include %A_LineFile%\..\class
 	#Include debugBuilder.ahk
@@ -69,9 +68,11 @@ Object(params*) {
 	#Include epicLib.ahk
 	#Include fileLib.ahk
 	#Include guiLib.ahk
+	#Include hotkeyLib.ahk
 	#Include microsoftLib.ahk
 	#Include phoneLib.ahk
 	#Include runLib.ahk
+	#Include selectLib.ahk
 	#Include stringLib.ahk
 	#Include windowLib.ahk
 

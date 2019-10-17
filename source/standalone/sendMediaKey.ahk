@@ -14,6 +14,6 @@ if(!inputKey)
 inputKeyAry := inputKey.split(",")
 
 For _,inputKey in inputKeyAry
-	sendMediaKey(inputKey)
+	HotkeyLib.sendMediaKey(inputKey)
 
 ExitApp

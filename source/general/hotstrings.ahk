@@ -117,12 +117,12 @@
 	:X:apf::sendFolderPath( "AHK_SOURCE", "program")
 	:X:agf::sendFolderPath( "AHK_SOURCE", "general")
 	:X:astf::sendFolderPath("AHK_SOURCE", "standalone")
-	:X:asuf::sendFolderPath("AHK_SOURCE", "sub")
+	:X:asubf::sendFolderPath("AHK_SOURCE", "sub")
 	:X:acf::sendFolderPath( "AHK_SOURCE", "common")
 	:X:accf::sendFolderPath("AHK_SOURCE", "common\class")
 	:X:abf::sendFolderPath( "AHK_SOURCE", "common\base")
 	:X:alf::sendFolderPath( "AHK_SOURCE", "common\lib")
-	:X:acsf::sendFolderPath("AHK_SOURCE", "common\static")
+	:X:assf::sendFolderPath("AHK_SOURCE", "common\static")
 	
 	; Epic - General
 	:X:epf::sendFolderPath("EPIC_PERSONAL")

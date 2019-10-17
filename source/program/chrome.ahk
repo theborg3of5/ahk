@@ -2,7 +2,7 @@
 #If Config.isWindowActive("Chrome")
 	; Options hotkey.
 	!o::
-		waitForHotkeyRelease() ; Presumably needed because the triggering hotkey has alt in it.
+		HotkeyLib.waitForRelease() ; Presumably needed because the triggering hotkey has alt in it.
 		Send, !e ; Main hamburger menu.
 		Sleep, 100
 		Send, s  ; Settings
@@ -57,7 +57,7 @@ class Chrome {
 		
 		Send, ^l     ; Focus address bar
 		Sleep, 100   ; Wait for address bar to get focused
-		url := getSelectedText()
+		url := SelectLib.getText()
 		Send, {F6 4} ; Focus the web page again
 		
 		setClipboardAndToastValue(title "`n" url, "title and URL")
@@ -76,7 +76,7 @@ class Chrome {
 		if(Chrome.isCurrentPageCodeSearch()) {
 			; Special handling for CodeSearch - just get the file name, plus the current selection as the function.
 			file := title.beforeString("/")
-			function := getSelectedText().firstLine().clean()
+			function := SelectLib.getCleanFirstLine()
 			
 			; Client files should always have an extension
 			if(file.contains(".")) {
@@ -99,7 +99,7 @@ class Chrome {
 		if(!Chrome.isCurrentPageCodeSearch())
 			return
 		
-		tag := getSelectedText().firstLine().clean()
+		tag := SelectLib.getCleanFirstLine()
 		
 		title := WinGetActiveTitle()
 		title := title.removeFromEnd(" - Google Chrome")

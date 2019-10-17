@@ -40,7 +40,7 @@ return
 ; Show timer for 3 seconds, then hide it again
 ~^!Space::
 	toastObj.show()
-	waitForHotkeyRelease()
+	HotkeyLib.waitForRelease()
 	Sleep, 3000 ; Use sleep instead of toastObj.showForSeconds() so toast doesn't hide until the hotkey is released.
 	toastObj.hide()
 return

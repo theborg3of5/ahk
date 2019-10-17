@@ -1,4 +1,5 @@
 # New Ideas
+	Do we really want to keep sendMediaKey() around anymore? Chrome has built-in media key stuff now, right?
 	Should we split the screen script into system (lock/suspend) and window scripts?
 	Should we rename the input script? It's really only "input" in the sense that it's a bunch of hotkeys that I type to trigger.
 		misc, maybe?
@@ -28,12 +29,6 @@
 															Maybe just "common"?
 				\lib\ - library classes
 					clip								turn into class, rename, move
-					io									turn into class, rename, move
-															Should this be renamed or split/merged?
-																Areas
-																	Selection (getting/changing selection)
-																	Hotkeys (sending, releasing, waiting on)
-																clipboard has similar stuff (we split it off from io not long ago)
 		Will also need to update anything that references the existing folder structure directly
 			hotstrings
 			commonHotkeys

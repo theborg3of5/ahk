@@ -250,10 +250,10 @@ class OneNote {
 	;                 for an edit link. Add links to both the INI/ID (web) and the edit spot.
 	;---------
 	linkDevStructureSectionTitle() {
-		waitForHotkeyRelease()
+		HotkeyLib.waitForRelease()
 		
 		OneNote.selectLine()
-		lineText := getSelectedText()
+		lineText := SelectLib.getText()
 		if(lineText = "" || lineText = "`r`n") ; Selecting the whole line in OneNote gets us the newline, so treat just a newline as an empty case as well.
 			return
 		
@@ -264,11 +264,11 @@ class OneNote {
 		ao := new ActionObjectEMC2(recordText)
 		; Debug.popup("Line",lineText, "Record text",recordText, "Edit text",editText, "ao.ini",ao.ini, "ao.id",ao.id)
 		
-		selectTextWithinSelection(recordText)
+		SelectLib.selectTextWithinSelection(recordText)
 		ao.linkSelectedTextWeb("Failed to add EMC2 object web link")
 		
-		OneNote.selectLine() ; Re-select whole line so we can use selectTextWithinSelection() again
-		selectTextWithinSelection(editText)
+		OneNote.selectLine() ; Re-select whole line so we can use SelectLib.selectTextWithinSelection() again
+		SelectLib.selectTextWithinSelection(editText)
 		ao.linkSelectedTextEdit("Failed to add EMC2 object edit link")
 	}
 	
@@ -279,8 +279,8 @@ class OneNote {
 	;  id  (I,REQ) - ID of the object to link
 	;---------
 	linkEMC2ObjectInLine(ini, id) {
-		selectCurrentLine() ; Select whole line, but avoid the extra indentation and newline that comes with ^a.
-		selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
+		SelectLib.selectCurrentLine() ; Select whole line, but avoid the extra indentation and newline that comes with ^a.
+		SelectLib.selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
 		
 		new ActionObjectEMC2(id, ini).linkSelectedTextWeb("Failed to link EMC2 object text")
 		
@@ -325,10 +325,10 @@ class OneNote {
 	; RETURNS:        The title of the current page.
 	;---------
 	getPageTitle() {
-		Send, ^+a                        ; Select page tab
-		pageContent := getSelectedText() ; Copy entire page contents
-		Send, {Escape}                   ; Get back to the editing area
-		return pageContent.firstLine()   ; Title is the first line of the content
+		Send, ^+a                             ; Select page tab
+		pageContent := SelectLib.getText() ; Copy entire page contents
+		Send, {Escape}                        ; Get back to the editing area
+		return pageContent.firstLine()        ; Title is the first line of the content
 	}
 	
 	;---------
@@ -599,7 +599,7 @@ class OneNoteTodoPage {
 		; Check whether we're already on a blank line or not.
 		Send, {Home} ; Start of line
 		Send, {Shift Down}{End}{Shift Up} ; Select to end of line
-		if(getSelectedText().firstLine() != "")
+		if(SelectLib.getFirstLine() != "")
 			OneNote.insertBlankLine()
 		
 		; Debug.popup("matchingTodos",matchingTodos)

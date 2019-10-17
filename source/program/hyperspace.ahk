@@ -60,7 +60,7 @@ class Hyperspace {
 	login(username, password, useLastDepartment := true) {
 		Send, %username%{Tab}
 		Send, %password%{Enter}
-		releaseAllModifierKeys()
+		HotkeyLib.releaseAllModifiers()
 		
 		if(!useLastDepartment)
 			return

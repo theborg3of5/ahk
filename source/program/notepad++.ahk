@@ -34,9 +34,9 @@ class NotepadPlusPlus {
 	insertIndentedNewline() {
 		; Read in both sides of the current line - the left will help us find where the indent is, the right is what we're moving.
 		Send, {Shift Down}{Home}{Shift Up}
-		lineStart := getSelectedText()
+		lineStart := SelectLib.getText()
 		Send, {Shift Down}{End}{Shift Up}
-		lineEnd := getSelectedText()
+		lineEnd := SelectLib.getText()
 		
 		; Put the cursor back where it was, where we want to insert the newline.
 		if(lineEnd = "")
@@ -98,8 +98,8 @@ class NotepadPlusPlus {
 	sendAHKFunctionHeader() {
 		; Select the following line after this one to get parameter information
 		Send, {Down}
-		selectCurrentLine()
-		functionDefLine := getSelectedText().clean()
+		SelectLib.selectCurrentLine()
+		functionDefLine := SelectLib.getText().clean()
 		Send, {Up}
 		
 		; Check for parameters

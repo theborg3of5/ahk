@@ -40,10 +40,10 @@
 		Config.runMediaPlayer()
 	return
 	
-	Media_Play_Pause::sendMediaKey("Media_Play_Pause")
-	Media_Prev::      sendMediaKey("Media_Prev")
-	Media_Next::      sendMediaKey("Media_Next")
-	^!Down::          sendMediaKey("Media_Play_Pause")
-	^!Left::          sendMediaKey("Media_Prev")
-	^!Right::         sendMediaKey("Media_Next")
+	Media_Play_Pause::HotkeyLib.sendMediaKey("Media_Play_Pause")
+	Media_Prev::      HotkeyLib.sendMediaKey("Media_Prev")
+	Media_Next::      HotkeyLib.sendMediaKey("Media_Next")
+	^!Down::          HotkeyLib.sendMediaKey("Media_Play_Pause")
+	^!Left::          HotkeyLib.sendMediaKey("Media_Prev")
+	^!Right::         HotkeyLib.sendMediaKey("Media_Next")
 #If

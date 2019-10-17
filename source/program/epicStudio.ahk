@@ -53,7 +53,7 @@ class EpicStudio {
 	duplicateLine() {
 		Send, {End}                        ; Start from end of line
 		Send, {Shift Down}{Home}{Shift Up} ; Select whole line (excluding leading indentation/tab/etc.)
-		line := getSelectedText()          ; Get selected text
+		line := SelectLib.getText()     ; Get selected text
 		Send, {End}                        ; Get back to end of line
 		Send, {Enter}                      ; Start new line with same indentation
 		sendTextWithClipboard(line)        ; Send duplicate line
@@ -194,7 +194,7 @@ class MSnippets {
 		; Get current line for analysis.
 		Send, {End}{Home 2}               ; Get to very start of line (before indentation)
 		Send, {Shift Down}{End}{Shift Up} ; Select entire line (including indentation)
-		line := getSelectedText()
+		line := SelectLib.getText()
 		Send, {End}                       ; Get to end of line
 		
 		line := line.removeFromStart("`t") ; Tab at the start of every line

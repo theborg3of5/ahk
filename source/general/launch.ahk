@@ -1,16 +1,16 @@
 ; Launch miscellaneous actions.
 
 ; Generic open - open a variety of different things based on the selected text.
-^!#o:: new ActionObjectRedirector(getSelectedText()).openWeb()
-^!#+o::new ActionObjectRedirector(getSelectedText()).openEdit()
+^!#o:: new ActionObjectRedirector(SelectLib.getText()).openWeb()
+^!#+o::new ActionObjectRedirector(SelectLib.getText()).openEdit()
 
 ; Generic copy link - copy links to a variety of different things based on the selected text.
-^!#l:: new ActionObjectRedirector(getSelectedText()).copyLinkWeb()
-^!#+l::new ActionObjectRedirector(getSelectedText()).copyLinkEdit()
+^!#l:: new ActionObjectRedirector(SelectLib.getText()).copyLinkWeb()
+^!#+l::new ActionObjectRedirector(SelectLib.getText()).copyLinkEdit()
 
 ; Generic hyperlinker - get link based on the selected text and then apply it to that same text.
-^!#k:: new ActionObjectRedirector(getSelectedText()).linkSelectedTextWeb()
-^!#+k::new ActionObjectRedirector(getSelectedText()).linkSelectedTextEdit()
+^!#k:: new ActionObjectRedirector(SelectLib.getText()).linkSelectedTextWeb()
+^!#+k::new ActionObjectRedirector(SelectLib.getText()).linkSelectedTextEdit()
 
 ; Selector to allow easy editing of config TL files that don't show a popup
 !+c::
@@ -57,7 +57,7 @@
 	
 	^!#s::
 		selectSnapper() {
-			record := new EpicRecord(getSelectedText())
+			record := new EpicRecord(SelectLib.getText())
 			
 			s := new Selector("epicEnvironments.tls").SetTitle("Open Record(s) in Snapper in Environment")
 			s.AddOverrideFields(["INI", "ID"]).SetDefaultOverrides({"INI":record.ini, "ID":record.id}) ; Add fields for INI/ID and default in values if we figured them out
@@ -132,7 +132,7 @@
 	
 	#p::
 		selectPhone() {
-			selectedText := getSelectedText().firstLine().clean()
+			selectedText := SelectLib.getCleanFirstLine()
 			
 			if(PhoneLib.isValidNumber(selectedText)) {
 				PhoneLib.call(selectedText)

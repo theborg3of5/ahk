@@ -234,7 +234,7 @@ class Hyperlinker {
 	;---------
 	webFieldMatchesValue(value) {
 		WindowActions.selectAll()
-		actualValue := getSelectedText()
+		actualValue := SelectLib.getText()
 		Send, {Right} ; Release the select all
 		return (actualValue = value)
 	}
@@ -256,7 +256,7 @@ class Hyperlinker {
 		
 		; Grab the text that we're going to add a link to, then delete it - we're going to replace it
 		; with the full link including both the text and the path.
-		textToLink := getSelectedText()
+		textToLink := SelectLib.getText()
 		Send, {Backspace}
 		
 		; Build the full link string using the original text and path.

@@ -171,7 +171,7 @@ class Putty {
 		Send, l  ; Logging tree node
 		Send, !f ; Log file name field
 		
-		logFile := getSelectedText()
+		logFile := SelectLib.getText()
 		
 		Send, !c ; Cancel
 		return logFile

@@ -3,7 +3,7 @@
 ; Generic search for selected text.
 !+f::
 	selectSearch() {
-		text := getSelectedText().firstLine().clean()
+		text := SelectLib.getCleanFirstLine()
 		
 		s := new Selector("search.tls").SetDefaultOverrides({"SEARCH_TERM":text})
 		data := s.selectGui()

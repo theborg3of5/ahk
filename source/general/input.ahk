@@ -17,7 +17,7 @@
 #If
 
 ; Release all modifier keys, for cases when some might be "stuck" down.
-*#Space::releaseAllModifierKeys()
+*#Space::HotkeyLib.releaseAllModifiers()
 
 ; Select all with special per-window handling.
 $^a::WindowActions.selectAll()
@@ -45,14 +45,14 @@ $^Backspace::WindowActions.deleteWord()
 #If
 
 ^!v::
-	waitForHotkeyRelease()
+	HotkeyLib.waitForRelease()
 	Send, {Text}%clipboard%
 return
 
 ; Turn the selected text into a link to the URL on the clipboard.
 ^+k::
 	linkSelectedText() {
-		waitForHotkeyRelease()
+		HotkeyLib.waitForRelease()
 		if(!Hyperlinker.linkSelectedText(clipboard, errorMessage))
 			new ErrorToast("Failed to link selected text", errorMessage).showMedium()
 	}
@@ -60,7 +60,7 @@ return
 ; Send a (newline-separated) text/URL combo from the clipboard as a link.
 ^+#k::
 	sendLinkedTextFromClipboard() {
-		waitForHotkeyRelease()
+		HotkeyLib.waitForRelease()
 		text := clipboard.beforeString("`n")
 		url  := clipboard.afterString("`n")
 		
@@ -76,7 +76,7 @@ return
 ; Turn clipboard into standard string and send it.
 !+n::
 	sendStandardEMC2ObjectString() {
-		waitForHotkeyRelease()
+		HotkeyLib.waitForRelease()
 		ao := new ActionObjectEMC2(clipboard)
 		sendTextWithClipboard(ao.standardEMC2String) ; Can contain hotkey chars
 		
@@ -91,7 +91,7 @@ return
 ; Grab the selected text and pop it into a new Notepad window
 !v::
 	putSelectedTextIntoNewNotepadWindow() {
-		selectedText := getSelectedText()
+		selectedText := SelectLib.getText()
 		if(selectedText = "")
 			return
 		

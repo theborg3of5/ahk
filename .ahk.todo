@@ -6,6 +6,8 @@
 		Should the latter half (with all of the hyperlinking, standard EMC2 object string, etc. bits) be split off or moved elsewhere?
 	Should we add a edit script selector like we have for config files?
 		For often-modified scripts
+			main (would let us get rid of dedicated asf hotstring for source)
+			commonIncludes (no need for acf hotkey then)
 			config
 			commandFunctions
 			hotstrings (maybe get rid of dedicated hotkey?)
@@ -31,7 +33,6 @@
 					clip								turn into class, rename, move
 		Will also need to update anything that references the existing folder structure directly
 			hotstrings
-			commonHotkeys
 			commonIncludes (AHK lib as well as main include/setup script)
 			<search for others>
 	Look into auto-completion in Notepad++ for AHK

@@ -1,4 +1,12 @@
 # New Ideas
+	Clipboard library/script cleanup
+		Reconsider structure of clipboard toasting stuff - could it be cleaner? Are some of the wrapper functions overkill?
+			Do we really need the blank stuff built in?
+				Should the callers really be dealing with that instead?
+			At least setClipboardAndToast* functions don't seem like they need to exist - the callers can just use the two lines of code directly instead.
+		Can we standardize operations a bit more?
+			Waiting (and how much)
+			Setting (directly, getting original first, etc.) - can the .set() function act like our commandFunction setter+getters?
 	Should we just update copyFolderPathWithHotkey() to always use the same copy-filepath hotkey, and trim things down itself?
 	Have more callers respect return value of copyWithHotkey
 		Example that does: EpicStudio.copyCodeLocation()
@@ -45,9 +53,6 @@
 	Update Notepad++ AHK documentation stuff to handle properties (with or without [])
 		Properties with parameters, too - maybe just treat [] the same as ()?
 	Make Ctrl+Enter hotkey in Notepad++ also add in bullets (* or -) if they started the previous row (ignoring whitespace and comment char, but not other stuff like (I,REQ))
-	Reconsider structure of clipboard toasting stuff - could it be cleaner? Are some of the wrapper functions overkill?
-		Do we really need the blank stuff built in?
-			Should the callers really be dealing with that instead?
 	Figure out what to do about FileLib.cleanupPath() dropping (valid) quotes from the end of URLs
 		Separate cleaning for URLs?
 			How to sense? Using ActionObjectPath?

@@ -11,7 +11,7 @@ copyWithHotkey(hotkeyKeys) {
 	if(hotkeyKeys = "")
 		return
 	
-	clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
+	Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
 	Send, % hotkeyKeys
 	ClipWait, 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
 	
@@ -28,7 +28,7 @@ copyWithFunction(boundFunc) {
 	if(!boundFunc)
 		return
 	
-	clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
+	Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
 	%boundFunc%()
 	ClipWait, 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
 	
@@ -46,7 +46,7 @@ copyWithFunction(boundFunc) {
 copyFilePathWithHotkey(hotkeyKeys) {
 	copyWithHotkey(hotkeyKeys)
 	
-	path := clipboard
+	path := Clipboard
 	if(path)
 		path := FileLib.cleanupPath(path)
 	
@@ -55,7 +55,7 @@ copyFilePathWithHotkey(hotkeyKeys) {
 copyFolderPathWithHotkey(hotkeyKeys) {
 	copyWithHotkey(hotkeyKeys)
 	
-	path := clipboard
+	path := Clipboard
 	if(path) {
 		path := FileLib.cleanupPath(path)
 		path := path.appendIfMissing("\") ; Add the trailing backslash since it's a folder
@@ -75,11 +75,11 @@ getWithClipboardUsingFunction(boundFunc) { ; boundFunc is a BoundFunc object cre
 	if(!boundFunc)
 		return
 	
-	originalClipboard := clipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
+	originalClipboard := ClipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
 	copyWithFunction(boundFunc)
 	
-	textFound := clipboard
-	clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
+	textFound := Clipboard
+	Clipboard := originalClipboard    ; Restore the original clipboard. Note we're using Clipboard (not ClipboardAll).
 	
 	return textFound
 }
@@ -145,12 +145,12 @@ toastNewClipboardValue(clipLabel := "value") {
 ;  textToSave (I,REQ) - Text to add to the clipboard history.
 ;---------
 addToClipboardHistory(textToSave) {
-	originalClipboard := clipboardAll
+	originalClipboard := ClipboardAll
 	
-	clipboard := textToSave
+	Clipboard := textToSave
 	ClipboardLib.saveToManager()
 	
-	clipboard := originalClipboard
+	Clipboard := originalClipboard
 	ClipboardLib.saveToManager()
 }
 
@@ -162,15 +162,15 @@ addToClipboardHistory(textToSave) {
 sendTextWithClipboard(text) {
 	; Debug.popup("Text to send with clipboard", text)
 	
-	originalClipboard := clipboardAll ; Save off the entire clipboard.
-	clipboard := ""                   ; Clear the clipboard
+	originalClipboard := ClipboardAll ; Save off the entire clipboard.
+	Clipboard := ""                   ; Clear the clipboard
 	
-	clipboard := text
+	Clipboard := text
 	ClipWait, 0.5                     ; Wait for clipboard to contain the data we put in it (minimum time).
 	Send, ^v
 	Sleep, 100
 	
-	clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
+	Clipboard := originalClipboard    ; Restore the original clipboard. Note we're using Clipboard (not ClipboardAll).
 }
 
 
@@ -190,13 +190,13 @@ class ClipboardLib {
 	getSelectedText() {
 		; PuTTY auto-copies the selection to the clipboard, and ^c causes an interrupt, so do nothing.
 		if(WinActive("ahk_class PuTTY"))
-			return clipboard
+			return Clipboard
 		
-		originalClipboard := clipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
+		originalClipboard := ClipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
 		copyWithHotkey("^c")
 		
-		textFound := clipboard
-		clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
+		textFound := Clipboard
+		Clipboard := originalClipboard    ; Restore the original clipboard. Note we're using Clipboard (not ClipboardAll).
 		
 		return textFound
 	}
@@ -211,10 +211,13 @@ class ClipboardLib {
 	;  value (I,REQ) - Value to set.
 	;---------
 	set(value) {
-		clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
+		origClipboard := ClipboardAll
+		Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
 		
-		clipboard := value
+		Clipboard := value
 		ClipWait, 2 ; Wait for up to 2 seconds for the clipboard to contain data.
+		
+		return origClipboard
 	}
 	
 	;---------
@@ -239,12 +242,12 @@ class ClipboardLib {
 		if(clipLabel = "")
 			clipLabel := "value"
 		
-		if(clipboard = "") {
+		if(Clipboard = "") {
 			new ErrorToast("Failed to get " clipLabel).showMedium()
 		} else {
 			clipMessage := "Clipboard set to " clipLabel
 			if(showClipboardValue)
-				clipMessage .= ":`n" clipboard
+				clipMessage .= ":`n" Clipboard
 			new Toast(clipMessage).showMedium()
 		}
 	}

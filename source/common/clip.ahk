@@ -91,7 +91,7 @@ getWithClipboardUsingFunction(boundFunc) { ; boundFunc is a BoundFunc object cre
 ;  clipLabel         (I,OPT) - The label to show in the toast, clipboard set to <clipLabel> or similar (see ClipboardLib.toastClipboard)
 ;---------
 setClipboardAndToastState(newClipboardValue, clipLabel := "value") {
-	ClipboardLib.setClipboard(newClipboardValue)
+	ClipboardLib.set(newClipboardValue)
 	toastNewClipboardState(clipLabel)
 }
 ;---------
@@ -101,7 +101,7 @@ setClipboardAndToastState(newClipboardValue, clipLabel := "value") {
 ;  clipLabel         (I,OPT) - The label to show in the toast, clipboard set to <clipLabel> or similar (see ClipboardLib.toastClipboard)
 ;---------
 setClipboardAndToastValue(newClipboardValue, clipLabel := "value") {
-	ClipboardLib.setClipboard(newClipboardValue)
+	ClipboardLib.set(newClipboardValue)
 	toastNewClipboardValue(clipLabel)
 }
 
@@ -117,7 +117,7 @@ setClipboardAndToastError(newClipboardValue, clipLabel, problemMessage, errorMes
 	if(clipLabel = "")
 		clipLabel := "value"
 	
-	ClipboardLib.setClipboard(newClipboardValue)
+	ClipboardLib.set(newClipboardValue)
 	new ErrorToast(problemMessage, errorMessage, "Clipboard set to " clipLabel ":`n" clipboard).showMedium()
 }
 
@@ -148,21 +148,10 @@ addToClipboardHistory(textToSave) {
 	originalClipboard := clipboardAll
 	
 	clipboard := textToSave
-	saveCurrentClipboard()
+	ClipboardLib.saveToManager()
 	
 	clipboard := originalClipboard
-	saveCurrentClipboard()
-}
-
-;---------
-; DESCRIPTION:    Force the clipboard manager to store the current value, generally useful just
-;                 before you change the clipboard to something else.
-;---------
-saveCurrentClipboard() {
-	if(Ditto) ; If the Ditto class exists we can use it to save to the clipboard with Ditto with no wait time.
-		Ditto.saveCurrentClipboard()
-	else ; Otherwise, just wait a second for it to register normally.
-		Sleep, 1000
+	ClipboardLib.saveToManager()
 }
 
 ;---------
@@ -185,27 +174,20 @@ sendTextWithClipboard(text) {
 }
 
 
-; Clipboard-related helper functions.
+/* Clipboard-related helper functions.
+*/
 class ClipboardLib {
 
 ; ====================================================================================================
-; ============================================== PRIVATE =============================================
+; ============================================== PUBLIC ==============================================
 ; ====================================================================================================
 	
 	;---------
-	; DESCRIPTION:    Set the clipboard to the given value, and wait to make sure it applies before returning.
-	; PARAMETERS:
-	;  value (I,REQ) - Value to set.
+	; DESCRIPTION:    Get the currently-selected text using the clipboard. Restores the clipboard
+	;                 after we're done as well.
+	; RETURNS:        The selected text
 	;---------
-	setClipboard(value) {
-		clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
-		
-		clipboard := value
-		ClipWait, 2 ; Wait for 2 seconds for the clipboard to contain data.
-	}
-	
-	; Grabs the selected text using the clipboard, fixing the clipboard as it finishes.
-	getSelectedTextWithClipboard() {
+	getSelectedText() {
 		; PuTTY auto-copies the selection to the clipboard, and ^c causes an interrupt, so do nothing.
 		if(WinActive("ahk_class PuTTY"))
 			return clipboard
@@ -217,6 +199,33 @@ class ClipboardLib {
 		clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
 		
 		return textFound
+	}
+
+; ====================================================================================================
+; ============================================== PRIVATE =============================================
+; ====================================================================================================
+	
+	;---------
+	; DESCRIPTION:    Set the clipboard to the given value, and wait to make sure it applies before returning.
+	; PARAMETERS:
+	;  value (I,REQ) - Value to set.
+	;---------
+	set(value) {
+		clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
+		
+		clipboard := value
+		ClipWait, 2 ; Wait for up to 2 seconds for the clipboard to contain data.
+	}
+	
+	;---------
+	; DESCRIPTION:    Force the clipboard manager to store the current value, generally useful just
+	;                 before you change the clipboard to something else.
+	;---------
+	saveToManager() {
+		if(Ditto) ; If the Ditto class exists we can use it to save to the clipboard with Ditto with no wait time.
+			Ditto.saveCurrentClipboard()
+		else ; Otherwise, just wait a second for it to register normally.
+			Sleep, 1000
 	}
 	
 	;---------

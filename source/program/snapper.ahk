@@ -1,10 +1,7 @@
 ﻿; Main Snapper window
 #If Config.isWindowActive("Snapper")
 	; Send string of items to ignore, based on the given INI.
-	::.hide::
-	::.ignore::
-		Snapper.sendItemsToIgnore()
-	return
+	^h::Snapper.sendItemsToIgnore()
 #If
 
 ; Add record window
@@ -23,7 +20,13 @@ class Snapper {
 	;                 to snapperIgnoreItems.tls) to Snapper and apply.
 	;---------
 	sendItemsToIgnore() {
-		itemsList := new Selector("snapperIgnoreItems.tls").selectGui("STATUS_ITEMS")
+		; First, try to get the INI of the record ourselves.
+		ControlFocus, % Snapper._recordListClassNN, A ; Focus the record list so we can copy from it to get the INI.
+		recordText := SelectLib.getText()
+		ini := recordText.sub(1, 3)
+		ControlFocus, % Snapper._itemFilterClassNN, A ; Put focus back on the item filter field
+		
+		itemsList := new Selector("snapperIgnoreItems.tls").select(ini, "STATUS_ITEMS")
 		if(!itemsList)
 			return
 		
@@ -97,6 +100,9 @@ class Snapper {
 ; ====================================================================================================
 ; ============================================== PRIVATE =============================================
 ; ====================================================================================================
+	
+	static _recordListClassNN := "ListView20WndClass1" ; The control which holds the list of records.
+	static _itemFilterClassNN := "ThunderRT6TextBox2"  ; The "Filter Items" field.
 	
 	;---------
 	; DESCRIPTION:    Extract info from the main Snapper window and the Add Records popup to build a

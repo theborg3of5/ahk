@@ -7,9 +7,9 @@
 		Can we standardize operations a bit more?
 			Waiting (and how much)
 			Setting (directly, getting original first, etc.) - can the .set() function act like our commandFunction setter+getters?
-	Should we just update copyFolderPathWithHotkey() to always use the same copy-filepath hotkey, and trim things down itself?
-	Have more callers respect return value of copyWithHotkey
-		Example that does: EpicStudio.copyCodeLocation()
+		Should we just update copyFolderPathWithHotkey() to always use the same copy-filepath hotkey, and trim things down itself?
+		Have more callers respect return value of copyWithHotkey
+			Example that does: EpicStudio.copyCodeLocation()
 	Do we really want to keep sendMediaKey() around anymore? Chrome has built-in media key stuff now, right?
 	Should we split the screen script into system (lock/suspend) and window scripts?
 	Should we rename the input script? It's really only "input" in the sense that it's a bunch of hotkeys that I type to trigger.
@@ -22,7 +22,6 @@
 			config
 			commandFunctions
 			hotstrings (maybe get rid of dedicated hotkey?)
-	Have AHK function header start recognizing optional variables based on a := "" on the end of them?
 	Decide which approach to take for static classes that need to read something in once - require a .Init() call, or just do it the first time it's needed?
 		Examples
 			Hyperlinker - on-demand (only 1 public method)
@@ -50,9 +49,13 @@
 		In general for the language
 		Could we add our own library of functions?
 		Could we add our own classes and such?
-	Update Notepad++ AHK documentation stuff to handle properties (with or without [])
-		Properties with parameters, too - maybe just treat [] the same as ()?
-	Make Ctrl+Enter hotkey in Notepad++ also add in bullets (* or -) if they started the previous row (ignoring whitespace and comment char, but not other stuff like (I,REQ))
+	Notepad++ AHK documentation
+		Have AHK function header start recognizing optional variables based on a := "" on the end of them?
+			Or any :=, for that matter?
+				Could automatically add a "defaults to" bit to the documentation
+		Update Notepad++ AHK documentation stuff to handle properties (with or without [])
+			Properties with parameters, too - maybe just treat [] the same as ()?
+		Make Ctrl+Enter hotkey in Notepad++ also add in bullets (* or -) if they started the previous row (ignoring whitespace and comment char, but not other stuff like (I,REQ))
 	Figure out what to do about FileLib.cleanupPath() dropping (valid) quotes from the end of URLs
 		Separate cleaning for URLs?
 			How to sense? Using ActionObjectPath?

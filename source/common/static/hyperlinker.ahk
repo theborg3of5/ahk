@@ -215,14 +215,14 @@ class Hyperlinker {
 	setWebFieldValue(value) {
 		; Send our new value with the clipboard, then confirm it's correct by re-copying the field value (in case it just sent "v")
 		WindowActions.selectAll() ; Select all so we overwrite anything already in the field
-		sendTextWithClipboard(value)
+		ClipboardLib.send(value)
 		if(Hyperlinker.webFieldMatchesValue(value))
 			return true
 		
 		; If it didn't match, try a second time
 		Sleep, 500
 		WindowActions.selectAll()
-		sendTextWithClipboard(value)
+		ClipboardLib.send(value)
 		return Hyperlinker.webFieldMatchesValue(value)
 	}
 	
@@ -263,7 +263,7 @@ class Hyperlinker {
 		linkedText := taggedStringBase.replaceTags({"TEXT":textToLink, "PATH":path})
 		
 		; Send the link string to the field (no accept, that's it).
-		sendTextWithClipboard(linkedText)
+		ClipboardLib.send(linkedText)
 		
 		return true
 	}

@@ -145,7 +145,7 @@ class NotepadPlusPlus {
 			return
 		}
 		
-		sendTextWithClipboard(templateString)
+		ClipboardLib.send(templateString)
 	}
 	
 	

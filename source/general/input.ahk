@@ -65,7 +65,7 @@ return
 		url  := clipboard.afterString("`n")
 		
 		; Send and select the text
-		sendTextWithClipboard(text)
+		ClipboardLib.send(text)
 		textLen := text.length()
 		Send, {Shift Down}{Left %textLen%}{Shift Up}
 		
@@ -78,7 +78,7 @@ return
 	sendStandardEMC2ObjectString() {
 		HotkeyLib.waitForRelease()
 		ao := new ActionObjectEMC2(clipboard)
-		sendTextWithClipboard(ao.standardEMC2String) ; Can contain hotkey chars
+		ClipboardLib.send(ao.standardEMC2String) ; Can contain hotkey chars
 		
 		; Special case for OneNote: link the INI/ID as well.
 		if(Config.isWindowActive("OneNote"))

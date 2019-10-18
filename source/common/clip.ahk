@@ -154,25 +154,6 @@ addToClipboardHistory(textToSave) {
 	ClipboardLib.saveToManager()
 }
 
-;---------
-; DESCRIPTION:    Send the provided text using the clipboard, restoring the clipboard afterwards.
-; PARAMETERS:
-;  text (I,REQ) - The text to send.
-;---------
-sendTextWithClipboard(text) {
-	; Debug.popup("Text to send with clipboard", text)
-	
-	originalClipboard := ClipboardAll ; Save off the entire clipboard.
-	Clipboard := ""                   ; Clear the clipboard
-	
-	Clipboard := text
-	ClipWait, 0.5                     ; Wait for clipboard to contain the data we put in it (minimum time).
-	Send, ^v
-	Sleep, 100
-	
-	Clipboard := originalClipboard    ; Restore the original clipboard. Note we're using Clipboard (not ClipboardAll).
-}
-
 
 /* Clipboard-related helper functions.
 */
@@ -209,15 +190,30 @@ class ClipboardLib {
 	; DESCRIPTION:    Set the clipboard to the given value, and wait to make sure it applies before returning.
 	; PARAMETERS:
 	;  value (I,REQ) - Value to set.
+	; RETURNS:        The original value of the clipboard.
 	;---------
 	set(value) {
-		origClipboard := ClipboardAll
-		Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
+		origClipboard := ClipboardAll ; Save off everything (images, formatting), not just the text (that's all that's in Clipboard)
 		
-		Clipboard := value
-		ClipWait, 2 ; Wait for up to 2 seconds for the clipboard to contain data.
+		Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
+		if(value != "") { ; Don't need to do anything else if we just wanted to blank it out
+			Clipboard := value
+			ClipWait, 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
+		}
 		
 		return origClipboard
+	}
+	
+	;---------
+	; DESCRIPTION:    Send the provided text using the clipboard, restoring the clipboard afterwards.
+	; PARAMETERS:
+	;  value (I,REQ) - The text to send.
+	;---------
+	send(value) {
+		origClipboard := ClipboardLib.set(value)
+		Send, ^v   ; Paste the new value.
+		Sleep, 100 ; Needed to make sure clipboard isn't overwritten before we paste it.
+		ClipboardLib.set(origClipboard)
 	}
 	
 	;---------

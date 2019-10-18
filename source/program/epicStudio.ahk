@@ -53,10 +53,10 @@ class EpicStudio {
 	duplicateLine() {
 		Send, {End}                        ; Start from end of line
 		Send, {Shift Down}{Home}{Shift Up} ; Select whole line (excluding leading indentation/tab/etc.)
-		line := SelectLib.getText()     ; Get selected text
+		line := SelectLib.getText()        ; Get selected text
 		Send, {End}                        ; Get back to end of line
 		Send, {Enter}                      ; Start new line with same indentation
-		sendTextWithClipboard(line)        ; Send duplicate line
+		ClipboardLib.send(line)            ; Send duplicate line
 	}
 	
 	;---------
@@ -216,7 +216,7 @@ class MSnippets {
 		else if(data["TYPE"] = "LIST")
 			snipString := MSnippets.buildList(data, numIndents)
 		
-		sendTextWithClipboard(snipString) ; Better to send with the clipboard, otherwise we have to deal with EpicStudio adding in dot-levels itself.
+		ClipboardLib.send(snipString) ; Better to send with the clipboard, otherwise we have to deal with EpicStudio adding in dot-levels itself.
 	}
 	
 	

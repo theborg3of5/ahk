@@ -8,13 +8,20 @@ class DataLib {
 ; ====================================================================================================
 	
 	;---------
-	; DESCRIPTION:    Determine whether the provided object/array is empty, also checking if it's null.
+	; DESCRIPTION:    Determine whether the provided object is empty, also checking if it's null.
 	; PARAMETERS:
 	;  obj (I,REQ) - The object/array to check.
 	; RETURNS:        true if the provided object is null (including "") or empty (no values inside), false otherwise.
 	;---------
 	isNullOrEmpty(obj) {
-		return !obj.count() ; Either count() is defined (empty object/array) and returns 0, or it's not (and we get "").
+		; All objects/arrays should have a count() function we can check.
+		if(IsFunc(obj.count))
+			return (obj.count() = 0)
+		
+		; Handling for strings
+		return (obj = "")
+		
+		; return !obj.count() ; Either count() is defined (empty object/array) and returns 0, or it's not (and we get "").
 	}
 	
 	;---------

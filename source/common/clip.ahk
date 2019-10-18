@@ -145,12 +145,10 @@ toastNewClipboardValue(clipLabel := "value") {
 ;  textToSave (I,REQ) - Text to add to the clipboard history.
 ;---------
 addToClipboardHistory(textToSave) {
-	originalClipboard := ClipboardAll
-	
-	Clipboard := textToSave
+	ClipboardLib.set(textToSave, origClipboard)
 	ClipboardLib.saveToManager()
 	
-	Clipboard := originalClipboard
+	ClipboardLib.set(origClipboard)
 	ClipboardLib.saveToManager()
 }
 
@@ -173,11 +171,11 @@ class ClipboardLib {
 		if(WinActive("ahk_class PuTTY"))
 			return Clipboard
 		
-		originalClipboard := ClipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
+		origClipboard := ClipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
 		copyWithHotkey("^c")
 		
 		textFound := Clipboard
-		Clipboard := originalClipboard    ; Restore the original clipboard. Note we're using Clipboard (not ClipboardAll).
+		ClipboardLib.set(origClipboard) ; Restore the original clipboard.
 		
 		return textFound
 	}
@@ -189,19 +187,21 @@ class ClipboardLib {
 	;---------
 	; DESCRIPTION:    Set the clipboard to the given value, and wait to make sure it applies before returning.
 	; PARAMETERS:
-	;  value (I,REQ) - Value to set.
-	; RETURNS:        The original value of the clipboard.
+	;  value         (I,REQ) - Value to set.
+	;  origClipboard (O,OPT) - The original value of ClipboardAll (which is binary and contains
+	;                          everything, not just the text on the clipboard). This can be used to
+	;                          restore the clipboard later if needed.
 	;---------
-	set(value) {
+	set(value, ByRef origClipboard := "") {
+		; This must be a ByRef return parameter instead of returning directly, as it's a binary
+		; variable, which can't be returned directly (see https://www.autohotkey.com/boards/viewtopic.php?t=62209 ).
 		origClipboard := ClipboardAll ; Save off everything (images, formatting), not just the text (that's all that's in Clipboard)
 		
 		Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
-		if(value != "") { ; Don't need to do anything else if we just wanted to blank it out
+		if(!DataLib.isNullOrEmpty(value)) { ; Must use isNullOrEmpty as value could be binary
 			Clipboard := value
-			ClipWait, 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
+			ClipWait, 2 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
 		}
-		
-		return origClipboard
 	}
 	
 	;---------
@@ -210,7 +210,7 @@ class ClipboardLib {
 	;  value (I,REQ) - The text to send.
 	;---------
 	send(value) {
-		origClipboard := ClipboardLib.set(value)
+		ClipboardLib.set(value, origClipboard)
 		Send, ^v   ; Paste the new value.
 		Sleep, 100 ; Needed to make sure clipboard isn't overwritten before we paste it.
 		ClipboardLib.set(origClipboard)

@@ -1,41 +1,6 @@
 ; Clipboard-related functions.
 
 ;---------
-; DESCRIPTION:    Wrapper for different copy hotkeys, that ensures we actually copy something (and
-;                 wait long enough for it to actually be on the clipboard).
-; PARAMETERS:
-;  hotkeyKeys (I,REQ) - The keys to send in order to copy something to the clipboard.
-; RETURNS:        true if we successfully copied something, false otherwise.
-;---------
-copyWithHotkey(hotkeyKeys) {
-	if(hotkeyKeys = "")
-		return
-	
-	Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
-	Send, % hotkeyKeys
-	ClipWait, 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
-	
-	return (ErrorLevel != 1)
-}
-;---------
-; DESCRIPTION:    Copy something using the provided functor object, but make sure that we actually
-;                 get something on the clipboard.
-; PARAMETERS:
-;  boundFunc (I,REQ) - Functor object to run in order to copy something to the clipboard.
-; RETURNS:        true if we successfully copied something, false otherwise.
-;---------
-copyWithFunction(boundFunc) {
-	if(!boundFunc)
-		return
-	
-	Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
-	%boundFunc%()
-	ClipWait, 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
-	
-	return (ErrorLevel != 1)
-}
-
-;---------
 ; DESCRIPTION:    Copy a file or folder path with the provided hotkeys, making sure that:
 ;                  * We wait long enough for the file/folder to get onto the clipboard
 ;                  * The path has been cleaned up and mapped
@@ -44,7 +9,7 @@ copyWithFunction(boundFunc) {
 ; NOTES:          For folders, we'll also append a trailing backslash if one is missing.
 ;---------
 copyFilePathWithHotkey(hotkeyKeys) {
-	copyWithHotkey(hotkeyKeys)
+	ClipboardLib.copyWithHotkey(hotkeyKeys)
 	
 	path := Clipboard
 	if(path)
@@ -53,7 +18,7 @@ copyFilePathWithHotkey(hotkeyKeys) {
 	setClipboardAndToastValue(path, "file path")
 }
 copyFolderPathWithHotkey(hotkeyKeys) {
-	copyWithHotkey(hotkeyKeys)
+	ClipboardLib.copyWithHotkey(hotkeyKeys)
 	
 	path := Clipboard
 	if(path) {
@@ -62,26 +27,6 @@ copyFolderPathWithHotkey(hotkeyKeys) {
 	}
 	
 	setClipboardAndToastValue(path, "folder path")
-}
-
-;---------
-; DESCRIPTION:    Get some content using a BoundFunc object which copies something to the clipboard.
-; PARAMETERS:
-;  boundFunc (I,REQ) - A BoundFunc object created with Func.Bind() or ObjBindMethod(), which will
-;                      copy the desired content to the clipboard.
-; RETURNS:        The copied content.
-;---------
-getWithClipboardUsingFunction(boundFunc) { ; boundFunc is a BoundFunc object created with Func.Bind() or ObjBindMethod().
-	if(!boundFunc)
-		return
-	
-	originalClipboard := ClipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
-	copyWithFunction(boundFunc)
-	
-	textFound := Clipboard
-	Clipboard := originalClipboard    ; Restore the original clipboard. Note we're using Clipboard (not ClipboardAll).
-	
-	return textFound
 }
 
 ;---------
@@ -149,6 +94,83 @@ class ClipboardLib {
 ; ====================================================================================================
 	
 	;---------
+	; DESCRIPTION:    Copy something to the clipboard using the given hotkey, waiting for it to
+	;                 take and returning whether we actually got something.
+	; PARAMETERS:
+	;  hotkeyKeys (I,REQ) - The keys to send in order to copy something to the clipboard.
+	; RETURNS:        true if we successfully copied something, false otherwise.
+	;---------
+	copyWithHotkey(hotkeyKeys) {
+		if(hotkeyKeys = "")
+			return
+		
+		Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
+		Send, % hotkeyKeys
+		ClipWait, 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
+		
+		return (ErrorLevel != 1)
+	}
+	;---------
+	; DESCRIPTION:    Get some text by copying it to the clipboard using the given hotkey.
+	; PARAMETERS:
+	;  hotkeyKeys (I,REQ) - The keys to send in order to copy something to the clipboard.
+	; RETURNS:        The copied text.
+	;---------
+	getWithHotkey(hotkeyKeys) {
+		if(hotkeyKeys = "")
+			return
+		
+		; PuTTY auto-copies the selection to the clipboard, and ^c causes an interrupt, so do nothing.
+		if(Config.isWindowActive("Putty"))
+			return Clipboard
+		
+		origClipboard := ClipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
+		ClipboardLib.copyWithHotkey(hotkeyKeys)
+		
+		textFound := Clipboard
+		ClipboardLib.set(origClipboard) ; Restore the original clipboard.
+		
+		return textFound
+	}
+	
+	;---------
+	; DESCRIPTION:    Copy something using the provided functor object, but make sure that we actually
+	;                 get something on the clipboard.
+	; PARAMETERS:
+	;  boundFunc (I,REQ) - Functor object to run in order to copy something to the clipboard.
+	; RETURNS:        true if we successfully copied something, false otherwise.
+	;---------
+	copyWithFunction(boundFunc) {
+		if(!boundFunc)
+			return
+		
+		Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
+		%boundFunc%()
+		ClipWait, 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
+		
+		return (ErrorLevel != 1)
+	}
+	;---------
+	; DESCRIPTION:    Get some content using a BoundFunc object which copies something to the clipboard.
+	; PARAMETERS:
+	;  boundFunc (I,REQ) - A BoundFunc object created with Func.Bind() or ObjBindMethod(), which will
+	;                      copy the desired content to the clipboard.
+	; RETURNS:        The copied content.
+	;---------
+	getWithFunction(boundFunc) { ; boundFunc is a BoundFunc object created with Func.Bind() or ObjBindMethod().
+		if(!boundFunc)
+			return
+		
+		originalClipboard := ClipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
+		ClipboardLib.copyWithFunction(boundFunc)
+		
+		textFound := Clipboard
+		Clipboard := originalClipboard    ; Restore the original clipboard. Note we're using Clipboard (not ClipboardAll).
+		
+		return textFound
+	}
+	
+	;---------
 	; DESCRIPTION:    Set the clipboard to the given value, and wait to make sure it applies before returning.
 	; PARAMETERS:
 	;  value         (I,REQ) - Value to set.
@@ -164,7 +186,7 @@ class ClipboardLib {
 		Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
 		if(!DataLib.isNullOrEmpty(value)) { ; Must use isNullOrEmpty as value could be binary
 			Clipboard := value
-			ClipWait, 2 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
+			ClipWait, 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
 		}
 	}
 	
@@ -178,25 +200,6 @@ class ClipboardLib {
 		Send, ^v   ; Paste the new value.
 		Sleep, 100 ; Needed to make sure clipboard isn't overwritten before we paste it.
 		ClipboardLib.set(origClipboard)
-	}
-	
-	;---------
-	; DESCRIPTION:    Get the currently-selected text using the clipboard. Restores the clipboard
-	;                 after we're done as well.
-	; RETURNS:        The selected text
-	;---------
-	getSelectedText() {
-		; PuTTY auto-copies the selection to the clipboard, and ^c causes an interrupt, so do nothing.
-		if(WinActive("ahk_class PuTTY"))
-			return Clipboard
-		
-		origClipboard := ClipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
-		copyWithHotkey("^c")
-		
-		textFound := Clipboard
-		ClipboardLib.set(origClipboard) ; Restore the original clipboard.
-		
-		return textFound
 	}
 	
 	;---------

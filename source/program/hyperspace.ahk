@@ -93,7 +93,7 @@ class Hyperspace {
 	;---------
 	getCurrentDisplayHTML() {
 		copyHTMLFunction := ObjBindMethod(Hyperspace, "_copyDisplayHTML")
-		return getWithClipboardUsingFunction(copyHTMLFunction)
+		return ClipboardLib.getWithFunction(copyHTMLFunction)
 	}
 	
 	;---------

@@ -26,7 +26,7 @@ class VisualStudio {
 	; DESCRIPTION:    Copy current file's containing folder to clipboard and let user know with a toast.
 	;---------
 	copyContainingFolderPath() {
-		copyWithHotkey("^+c") ; Copy current FILE path
+		ClipboardLib.copyWithHotkey("^+c") ; Copy current FILE path
 		
 		path := clipboard
 		if(path) {

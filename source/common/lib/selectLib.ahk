@@ -12,7 +12,7 @@ class SelectLib {
 	; RETURNS:        The selected text.
 	;---------
 	getText() {
-		return ClipboardLib.getSelectedText()
+		return ClipboardLib.getWithHotkey("^c")
 	}
 	
 	;---------
@@ -20,7 +20,7 @@ class SelectLib {
 	; RETURNS:        The portion of the selected text before the first newline.
 	;---------
 	getFirstLine() {
-		return ClipboardLib.getSelectedText().firstLine()
+		return ClipboardLib.getWithHotkey("^c").firstLine()
 	}
 	
 	;---------
@@ -28,7 +28,7 @@ class SelectLib {
 	; RETURNS:        The cleaned first line of the selected text.
 	;---------
 	getCleanFirstLine() {
-		return ClipboardLib.getSelectedText().firstLine().clean()
+		return ClipboardLib.getWithHotkey("^c").firstLine().clean()
 	}
 	
 	;---------

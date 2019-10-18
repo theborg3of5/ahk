@@ -170,7 +170,7 @@ class EpicStudio {
 	;                 it doesn't when we time out.
 	;---------
 	copyCodeLocation() {
-		if(copyWithHotkey("^{Numpad9}")) ; Hotkey to copy code location to clipboard
+		if(ClipboardLib.copyWithHotkey("^{Numpad9}")) ; Hotkey to copy code location to clipboard
 			return true
 		
 		new ErrorToast("Failed to get code location").showMedium()

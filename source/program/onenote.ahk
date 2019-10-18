@@ -194,7 +194,7 @@ class OneNote {
 	;---------
 	copyLinkUnderMouse() {
 		copyLinkFunction := ObjBindMethod(OneNote, "_copyLinkUnderMouse")
-		if(!copyWithFunction(copyLinkFunction)) {
+		if(!ClipboardLib.copyWithFunction(copyLinkFunction)) {
 			; If we clicked on something other than a link, the i option is "Link..." which will open the Link popup. Close it if it appeared.
 			if(WinActive("Link ahk_class NUIDialog ahk_exe ONENOTE.EXE"))
 				Send, {Esc}
@@ -337,7 +337,7 @@ class OneNote {
 	;---------
 	getLinkToCurrentParagraph() {
 		copyFunction := ObjBindMethod(OneNote, "_copyLinkToCurrentParagraph")
-		return getWithClipboardUsingFunction(copyFunction)
+		return ClipboardLib.getWithFunction(copyFunction)
 	}
 	
 	;---------

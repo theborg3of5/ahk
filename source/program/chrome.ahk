@@ -118,7 +118,7 @@ class Chrome {
 	; DESCRIPTION:    Open the file-type link under the mouse.
 	;---------
 	openLinkTarget() {
-		copyWithFunction(ObjBindMethod(Chrome, "_getLinkTargetOnClipboard"))
+		ClipboardLib.copyWithFunction(ObjBindMethod(Chrome, "_getLinkTargetOnClipboard"))
 		
 		filePath := clipboard
 		if(filePath) {
@@ -133,7 +133,7 @@ class Chrome {
 	; DESCRIPTION:    Copy the file-type link under the mouse, also showing the user a toast about it.
 	;---------
 	copyLinkTarget() {
-		copyWithFunction(ObjBindMethod(Chrome, "_getLinkTargetOnClipboard"))
+		ClipboardLib.copyWithFunction(ObjBindMethod(Chrome, "_getLinkTargetOnClipboard"))
 		toastNewClipboardValue("link target")
 	}
 	

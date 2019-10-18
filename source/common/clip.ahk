@@ -139,19 +139,6 @@ toastNewClipboardValue(clipLabel := "value") {
 	ClipboardLib.toastClipboard(clipLabel, true)
 }
 
-;---------
-; DESCRIPTION:    Add something to the clipboard history, restoring the original clipboard value.
-; PARAMETERS:
-;  textToSave (I,REQ) - Text to add to the clipboard history.
-;---------
-addToClipboardHistory(textToSave) {
-	ClipboardLib.set(textToSave, origClipboard)
-	ClipboardLib.saveToManager()
-	
-	ClipboardLib.set(origClipboard)
-	ClipboardLib.saveToManager()
-}
-
 
 /* Clipboard-related helper functions.
 */
@@ -159,29 +146,6 @@ class ClipboardLib {
 
 ; ====================================================================================================
 ; ============================================== PUBLIC ==============================================
-; ====================================================================================================
-	
-	;---------
-	; DESCRIPTION:    Get the currently-selected text using the clipboard. Restores the clipboard
-	;                 after we're done as well.
-	; RETURNS:        The selected text
-	;---------
-	getSelectedText() {
-		; PuTTY auto-copies the selection to the clipboard, and ^c causes an interrupt, so do nothing.
-		if(WinActive("ahk_class PuTTY"))
-			return Clipboard
-		
-		origClipboard := ClipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
-		copyWithHotkey("^c")
-		
-		textFound := Clipboard
-		ClipboardLib.set(origClipboard) ; Restore the original clipboard.
-		
-		return textFound
-	}
-
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
 ; ====================================================================================================
 	
 	;---------
@@ -215,6 +179,42 @@ class ClipboardLib {
 		Sleep, 100 ; Needed to make sure clipboard isn't overwritten before we paste it.
 		ClipboardLib.set(origClipboard)
 	}
+	
+	;---------
+	; DESCRIPTION:    Get the currently-selected text using the clipboard. Restores the clipboard
+	;                 after we're done as well.
+	; RETURNS:        The selected text
+	;---------
+	getSelectedText() {
+		; PuTTY auto-copies the selection to the clipboard, and ^c causes an interrupt, so do nothing.
+		if(WinActive("ahk_class PuTTY"))
+			return Clipboard
+		
+		origClipboard := ClipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
+		copyWithHotkey("^c")
+		
+		textFound := Clipboard
+		ClipboardLib.set(origClipboard) ; Restore the original clipboard.
+		
+		return textFound
+	}
+	
+	;---------
+	; DESCRIPTION:    Add something to the clipboard history, restoring the original clipboard value.
+	; PARAMETERS:
+	;  textToSave (I,REQ) - Text to add to the clipboard history.
+	;---------
+	addToHistory(textToSave) {
+		ClipboardLib.set(textToSave, origClipboard)
+		ClipboardLib.saveToManager()
+		
+		ClipboardLib.set(origClipboard)
+		ClipboardLib.saveToManager()
+	}
+	
+; ====================================================================================================
+; ============================================== PRIVATE =============================================
+; ====================================================================================================
 	
 	;---------
 	; DESCRIPTION:    Force the clipboard manager to store the current value, generally useful just

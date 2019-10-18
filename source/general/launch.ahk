@@ -35,7 +35,7 @@
 				return
 			
 			dlgId := dlgId.removeFromStart("P.")
-			addToClipboardHistory(dlgId)
+			ClipboardLib.addToHistory(dlgId)
 			Send, % dlgId
 		}
 	

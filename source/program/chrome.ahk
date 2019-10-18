@@ -45,7 +45,7 @@ class Chrome {
 	; DESCRIPTION:    Put the title of the current tab on the clipboard, with some special exceptions.
 	;---------
 	copyTitle() {
-		setClipboardAndToastValue(Chrome.getTitle(), "title")
+		ClipboardLib.setAndToast(Chrome.getTitle(), "title")
 	}
 	
 	;---------
@@ -60,7 +60,7 @@ class Chrome {
 		url := SelectLib.getText()
 		Send, {F6 4} ; Focus the web page again
 		
-		setClipboardAndToastValue(title "`n" url, "title and URL")
+		ClipboardLib.setAndToast(title "`n" url, "title and URL")
 	}
 	
 	;---------
@@ -118,9 +118,7 @@ class Chrome {
 	; DESCRIPTION:    Open the file-type link under the mouse.
 	;---------
 	openLinkTarget() {
-		ClipboardLib.copyWithFunction(ObjBindMethod(Chrome, "_getLinkTargetOnClipboard"))
-		
-		filePath := clipboard
+		filePath := ClipboardLib.getWithFunction(ObjBindMethod(Chrome, "_getLinkTargetOnClipboard"))
 		if(filePath) {
 			new Toast("Got link target, opening:`n" filePath).showShort()
 			Run(filePath)
@@ -134,7 +132,7 @@ class Chrome {
 	;---------
 	copyLinkTarget() {
 		ClipboardLib.copyWithFunction(ObjBindMethod(Chrome, "_getLinkTargetOnClipboard"))
-		toastNewClipboardValue("link target")
+		ClipboardLib.toastNewValue("link target")
 	}
 	
 	

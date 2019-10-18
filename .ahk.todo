@@ -1,14 +1,15 @@
 # New Ideas
 	Clipboard library/script cleanup
 		Reconsider structure of clipboard toasting stuff - could it be cleaner? Are some of the wrapper functions overkill?
-			Do we really need the blank stuff built in?
-				Should the callers really be dealing with that instead?
-			At least setClipboardAndToast* functions don't seem like they need to exist - the callers can just use the two lines of code directly instead.
+			Make the clipLabel required - only one place doesn't pass it (TLG, and it only calls setClipboardAndToastError), and it would clean things up some.
+			Get rid of the *state branch of clipboard toasting - there's only one caller (OneTastic, when copying XML) and it could just do it manually instead.
 		Can we standardize operations a bit more?
 			Waiting (and how much)
 			Setting (directly, getting original first, etc.) - can the .set() function act like our commandFunction setter+getters?
 		Have more callers respect return value of copyWithHotkey
 			Example that does: EpicStudio.copyCodeLocation()
+		Can we find some way for colorPicker to use toast blocking option?
+			Problem: the toast is buried in clipboard stuff
 	Do we really want to keep sendMediaKey() around anymore? Chrome has built-in media key stuff now, right?
 	Should we split the screen script into system (lock/suspend) and window scripts?
 	Should we rename the input script? It's really only "input" in the sense that it's a bunch of hotkeys that I type to trigger.
@@ -134,8 +135,6 @@
 				Alternatively, build out environments in Config (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.
 	
 # Toast
-	Can we find some way for colorPicker to use blocking option?
-		Problem: the toast is buried in clipboard stuff
 	Could we avoid flickering between .showPersistent() and .setText()?
 		Maybe some way to set position without showing?
 		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?

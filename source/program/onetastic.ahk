@@ -71,7 +71,12 @@ class OneTastic {
 		OneTastic.openEditXMLPopup()
 		xml := ControlGetText("Edit1", "A")
 		
-		setClipboardAndToastState(xml, "XML")
+		ClipboardLib.set(xml) ; Can't use ClipboardLib.setAndToast() because we don't want to show all of the XML
+		if(Clipboard = "")
+			new ErrorToast("Failed to get XML").showMedium()
+		else
+			new Toast("Clipboard set to new XML").showMedium()
+		
 		if(xml)
 			Send, {Esc} ; Close the popup
 	}

@@ -73,7 +73,7 @@ class EMC2 {
 		record := new EpicRecord()
 		record.initFromEMC2Title()
 		if(record.id)
-			setClipboardAndToastValue(record.ini " " record.id, "EMC2 record INI/ID")
+			ClipboardLib.setAndToast(record.ini " " record.id, "EMC2 record INI/ID")
 	}
 	
 	;---------

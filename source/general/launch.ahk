@@ -95,7 +95,7 @@
 				SendRaw, % textToSend
 				Send, {Enter}
 			} else {
-				setClipboardAndToastError(textToSend, "", "Outlook TLG calendar not focused.")
+				ClipboardLib.setAndToastError(textToSend, "event string", "Outlook TLG calendar not focused.")
 			}
 		}
 	

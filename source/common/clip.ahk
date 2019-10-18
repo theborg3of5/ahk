@@ -1,62 +1,3 @@
-; Clipboard-related functions.
-
-
-;---------
-; DESCRIPTION:    Set the clipboard to the given value and show a toast about it.
-; PARAMETERS:
-;  newClipboardValue (I,REQ) - The value to put on the clipboard.
-;  clipLabel         (I,OPT) - The label to show in the toast, clipboard set to <clipLabel> or similar (see ClipboardLib.toastClipboard)
-;---------
-setClipboardAndToastState(newClipboardValue, clipLabel := "value") {
-	ClipboardLib.set(newClipboardValue)
-	toastNewClipboardState(clipLabel)
-}
-;---------
-; DESCRIPTION:    Set the clipboard to the given value and show a toast about it which includes the value.
-; PARAMETERS:
-;  newClipboardValue (I,REQ) - The value to put on the clipboard.
-;  clipLabel         (I,OPT) - The label to show in the toast, clipboard set to <clipLabel> or similar (see ClipboardLib.toastClipboard)
-;---------
-setClipboardAndToastValue(newClipboardValue, clipLabel := "value") {
-	ClipboardLib.set(newClipboardValue)
-	toastNewClipboardValue(clipLabel)
-}
-
-;---------
-; DESCRIPTION:    Set the clipboard to the given value and show an error toast about it.
-; PARAMETERS:
-;  newClipboardValue (I,REQ) - The value to put on the clipboard.
-;  clipLabel         (I,REQ) - The label to show in the toast, clipboard set to <clipLabel> or similar (see ClipboardLib.toastClipboard)
-;  problemMessage    (I,REQ) - The problem that occurred.
-;  errorMessage      (I,OPT) - What went wrong on a technical level.
-;---------
-setClipboardAndToastError(newClipboardValue, clipLabel, problemMessage, errorMessage := "") {
-	if(clipLabel = "")
-		clipLabel := "value"
-	
-	ClipboardLib.set(newClipboardValue)
-	new ErrorToast(problemMessage, errorMessage, "Clipboard set to " clipLabel ":`n" clipboard).showMedium()
-}
-
-;---------
-; DESCRIPTION:    Show a toast about the clipboard's current state (basically whether it's set or not).
-; PARAMETERS:
-;  clipLabel (I,REQ) - The label to show in the toast, clipboard set to <clipLabel> or similar (see ClipboardLib.toastClipboard)
-;---------
-toastNewClipboardState(clipLabel := "value") {
-	ClipboardLib.toastClipboard(clipLabel, false)
-}
-;---------
-; DESCRIPTION:    Show a toast about the clipboard's current state (basically whether it's set or not),
-;                 also including the actual value.
-; PARAMETERS:
-;  clipLabel (I,REQ) - The label to show in the toast, clipboard set to <clipLabel> or similar (see ClipboardLib.toastClipboard)
-;---------
-toastNewClipboardValue(clipLabel := "value") {
-	ClipboardLib.toastClipboard(clipLabel, true)
-}
-
-
 /* Clipboard-related helper functions.
 */
 class ClipboardLib {
@@ -156,7 +97,7 @@ class ClipboardLib {
 		if(path)
 			path := FileLib.cleanupPath(path)
 		
-		setClipboardAndToastValue(path, "file path")
+		ClipboardLib.setAndToast(path, "file path")
 	}
 	;---------
 	; DESCRIPTION:    Copy a folder path with the provided hotkeys, making sure that:
@@ -176,7 +117,7 @@ class ClipboardLib {
 			parentFolder := parentFolder.appendIfMissing("\") ; Add the trailing backslash since it's a folder
 		}
 		
-		setClipboardAndToastValue(parentFolder, "folder path")
+		ClipboardLib.setAndToast(parentFolder, "folder path")
 	}
 	
 	;---------
@@ -197,6 +138,43 @@ class ClipboardLib {
 			Clipboard := value
 			ClipWait, 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
 		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Set the clipboard to the given value and show a toast about it which includes the value.
+	; PARAMETERS:
+	;  newValue  (I,REQ) - The value to put on the clipboard.
+	;  clipLabel (I,REQ) - The label to show in the toast for the thing on the clipboard.
+	;---------
+	setAndToast(newValue, clipLabel) {
+		ClipboardLib.set(newValue)
+		ClipboardLib.toastNewValue(clipLabel)
+	}
+	
+	;---------
+	; DESCRIPTION:    Set the clipboard to the given value and show an error toast about it.
+	; PARAMETERS:
+	;  newValue       (I,REQ) - The value to put on the clipboard.
+	;  clipLabel      (I,REQ) - The label to show in the toast for the thing on the clipboard.
+	;  problemMessage (I,REQ) - The problem that occurred.
+	;  errorMessage   (I,OPT) - What went wrong on a technical level.
+	;---------
+	setAndToastError(newValue, clipLabel, problemMessage, errorMessage := "") {
+		ClipboardLib.set(newValue)
+		new ErrorToast(problemMessage, errorMessage, "Clipboard set to " clipLabel ":`n" Clipboard).showMedium()
+	}
+	
+	;---------
+	; DESCRIPTION:    Show a toast about the clipboard's current state (basically whether it's set or not),
+	;                 also including the actual value.
+	; PARAMETERS:
+	;  clipLabel (I,REQ) - The label to show in the toast for the thing on the clipboard.
+	;---------
+	toastNewValue(clipLabel) {
+		if(Clipboard = "")
+			new ErrorToast("Failed to get " clipLabel).showMedium()
+		else
+			new Toast("Clipboard set to " clipLabel ":`n" Clipboard).showMedium()
 	}
 	
 	;---------
@@ -237,26 +215,5 @@ class ClipboardLib {
 			Ditto.saveCurrentClipboard()
 		else ; Otherwise, just wait a second for it to register normally.
 			Sleep, 1000
-	}
-	
-	;---------
-	; DESCRIPTION:    Show a toast for the current clipboard value, basically whether it's set or not.
-	; PARAMETERS:
-	;  clipLabel          (I,OPT) - The label to show - "Clipboard set to <clipLabel>"
-	;  showClipboardValue (I,REQ) - Set to true to also include the actual value in the toast, after a
-	;                               colon and newline.
-	;---------
-	toastClipboard(clipLabel, showClipboardValue) {
-		if(clipLabel = "")
-			clipLabel := "value"
-		
-		if(Clipboard = "") {
-			new ErrorToast("Failed to get " clipLabel).showMedium()
-		} else {
-			clipMessage := "Clipboard set to " clipLabel
-			if(showClipboardValue)
-				clipMessage .= ":`n" Clipboard
-			new Toast(clipMessage).showMedium()
-		}
 	}
 }

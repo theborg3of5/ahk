@@ -113,7 +113,7 @@ class ActionObjectBase {
 	;  link (I,REQ) - Link to copy.
 	;---------
 	doCopyLink(link) {
-		setClipboardAndToastValue(link, "link")
+		ClipboardLib.setAndToast(link, "link")
 	}
 	
 	;---------
@@ -128,7 +128,7 @@ class ActionObjectBase {
 			return
 		
 		if(!Hyperlinker.linkSelectedText(link, errorMessage))
-			setClipboardAndToastError(link, "link", problemMessage, errorMessage)
+			ClipboardLib.setAndToastError(link, "link", problemMessage, errorMessage)
 	}
 	
 	;---------

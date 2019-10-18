@@ -74,7 +74,7 @@ class EpicStudio {
 		codeLocation := EpicLib.dropOffsetFromServerLocation(codeLocation)
 		
 		; Set the clipboard value to our new (plain-text, no link) code location and notify the user.
-		setClipboardAndToastValue(codeLocation, "cleaned code location")
+		ClipboardLib.setAndToast(codeLocation, "cleaned code location")
 	}
 	
 	;---------
@@ -86,7 +86,7 @@ class EpicStudio {
 			return
 		
 		; Notify the user of the new value.
-		toastNewClipboardValue("linked code location")
+		ClipboardLib.toastNewValue("linked code location")
 	}
 	
 	;---------

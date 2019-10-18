@@ -38,7 +38,7 @@ RButton::
 	Gui, Hide
 	
 	foundColor := getRGBUnderMouse()
-	setClipboardAndToastValue(foundColor, "RGB color code")
+	ClipboardLib.setAndToast(foundColor, "RGB color code")
 	Sleep, 2000
 	
 	ExitApp

@@ -176,7 +176,7 @@ class OneNote {
 	; DESCRIPTION:    Put a link to the current page on the clipboard.
 	;---------
 	copyLinkToCurrentPage() {
-		setClipboardAndToastValue(OneNote.getLinkToCurrentPage(), "link")
+		ClipboardLib.setAndToast(OneNote.getLinkToCurrentPage(), "link")
 	}
 	
 	;---------
@@ -186,7 +186,7 @@ class OneNote {
 		link := OneNote.getLinkToCurrentPage()
 		title := OneNote.getPageTitle()
 		
-		setClipboardAndToastValue(title "`n" link, "page title + link")
+		ClipboardLib.setAndToast(title "`n" link, "page title + link")
 	}
 	
 	;---------
@@ -200,7 +200,7 @@ class OneNote {
 				Send, {Esc}
 		}
 		
-		toastNewClipboardValue("link target")
+		ClipboardLib.toastNewValue("link target")
 	}
 	
 	;---------

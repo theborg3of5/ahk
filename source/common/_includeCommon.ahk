@@ -38,9 +38,6 @@ Object(params*) {
 ; ====================================================================================================
 ; ============================================= INCLUDES =============================================
 ; ====================================================================================================
-#Include %A_LineFile%\..
-	#Include clip.ahk
-
 #Include %A_LineFile%\..\class
 	#Include debugBuilder.ahk
 	#Include duration.ahk
@@ -63,6 +60,7 @@ Object(params*) {
 	#Include HTTPRequest.ahk
 	
 #Include %A_LineFile%\..\lib
+	#Include clipboardLib.ahk
 	#Include dataLib.ahk
 	#Include dateTimeLib.ahk
 	#Include epicLib.ahk

@@ -39,8 +39,6 @@
 															Should it be renamed to something different that includes "startup" or "init"?
 															Partly to differentiate it from the includeCommon script that points to this one
 															Maybe just "common"?
-				\lib\ - library classes
-					clip								turn into class, rename, move
 		Will also need to update anything that references the existing folder structure directly
 			hotstrings
 			commonIncludes (AHK lib as well as main include/setup script)

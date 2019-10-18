@@ -1,48 +1,30 @@
 # New Ideas
-	Clipboard library/script cleanup
-		Reconsider structure of clipboard toasting stuff - could it be cleaner? Are some of the wrapper functions overkill?
-			Make the clipLabel required - only one place doesn't pass it (TLG, and it only calls setClipboardAndToastError), and it would clean things up some.
-			Get rid of the *state branch of clipboard toasting - there's only one caller (OneTastic, when copying XML) and it could just do it manually instead.
-		Can we standardize operations a bit more?
-			Waiting (and how much)
-			Setting (directly, getting original first, etc.) - can the .set() function act like our commandFunction setter+getters?
-		Have more callers respect return value of copyWithHotkey
-			Example that does: EpicStudio.copyCodeLocation()
-		Can we find some way for colorPicker to use toast blocking option?
-			Problem: the toast is buried in clipboard stuff
+	Update colorPicker to use toast blocking option
+		Problem: the toast is buried in clipboard stuff
+			Solution: don't use set-and-toast, do it yourself (like OneTastic had to)
 	Do we really want to keep sendMediaKey() around anymore? Chrome has built-in media key stuff now, right?
-	Should we split the screen script into system (lock/suspend) and window scripts?
-	Should we rename the input script? It's really only "input" in the sense that it's a bunch of hotkeys that I type to trigger.
-		misc, maybe?
-		Should the latter half (with all of the hyperlinking, standard EMC2 object string, etc. bits) be split off or moved elsewhere?
-	Should we add a edit script selector like we have for config files?
-		For often-modified scripts
-			main (would let us get rid of dedicated asf hotstring for source)
-			commonIncludes (no need for acf hotkey then)
-			config
-			commandFunctions
-			hotstrings (maybe get rid of dedicated hotkey?)
 	Decide which approach to take for static classes that need to read something in once - require a .Init() call, or just do it the first time it's needed?
 		Examples
 			Hyperlinker - on-demand (only 1 public method)
 			WindowActions - .init (many public methods)
 			Config - .init
 		Leaning towards requiring a central init (presumably in _includeCommon where several live already)
+	Hotkey script splitting
+		Should we split the screen script into system (lock/suspend) and window scripts?
+		Should we rename the input script? It's really only "input" in the sense that it's a bunch of hotkeys that I type to trigger.
+			misc, maybe?
+			Should the latter half (with all of the hyperlinking, standard EMC2 object string, etc. bits) be split off or moved elsewhere?
+	Should we add a edit script selector like we have for config files?
+		For often-modified scripts
+			main (would let us get rid of dedicated asf hotstring for source)
+			common (no need for acf hotkey then)
+			config
+			commandFunctions
+			hotstrings (maybe get rid of dedicated hotkey?)
 	Non-breaking spaces ( ) make EpicRecord parsing fail (and probably other stuff too)
 		Can we account for this somehow?
 			A "contains space" or "replace abnormal spaces" function, maybe?
 				Could make it a separate step in string.cleanup()
-	Rearrange \common\ source structure a bit
-		New source structure (remaining changes only):
-			\common\ - contains everything that all scripts can pull in with an <includeCommon> lib include
-					includeCommon					rename to remove _ (assuming it'll be in a separate folder like this)
-															Should it be renamed to something different that includes "startup" or "init"?
-															Partly to differentiate it from the includeCommon script that points to this one
-															Maybe just "common"?
-		Will also need to update anything that references the existing folder structure directly
-			hotstrings
-			commonIncludes (AHK lib as well as main include/setup script)
-			<search for others>
 	Look into auto-completion in Notepad++ for AHK
 		In general for the language
 		Could we add our own library of functions?

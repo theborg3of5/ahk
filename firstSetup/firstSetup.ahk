@@ -3,7 +3,7 @@
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
-#Include %A_ScriptDir%\..\source\common\_includeCommon.ahk
+#Include %A_ScriptDir%\..\source\common\common.ahk
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
 ; Various paths needed throughout.

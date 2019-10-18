@@ -5,36 +5,6 @@
 	^+t::Send, !fj1 ; Open last-closed project
 
 	; Copy current file/folder paths to clipboard
-	 !c::VisualStudio.copyFilePath()             ; Current file
-	!#c::VisualStudio.copyContainingFolderPath() ; Current file's folder
+	!c::ClipboardLib.copyFilePathWithHotkey("^+c")    ; Current file
+	!#c::ClipboardLib.copyFolderPathWithHotkey("^+c") ; Current file's folder
 #If
-
-class VisualStudio {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
-	
-	;---------
-	; DESCRIPTION:    Copy current file path to clipboard and let user know with a toast.
-	;---------
-	copyFilePath() {
-		copyFilePathWithHotkey("^+c")
-	}
-	
-	;---------
-	; DESCRIPTION:    Copy current file's containing folder to clipboard and let user know with a toast.
-	;---------
-	copyContainingFolderPath() {
-		ClipboardLib.copyWithHotkey("^+c") ; Copy current FILE path
-		
-		path := clipboard
-		if(path) {
-			path := FileLib.cleanupPath(path)
-			parentFolder := FileLib.getParentFolder(path) ; Actually get the folder instead of the file
-			parentFolder := parentFolder.appendIfMissing("\") ; Add the trailing backslash since it's a folder
-		}
-		
-		setClipboardAndToastValue(parentFolder, "folder path")
-	}
-}

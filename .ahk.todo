@@ -7,7 +7,6 @@
 		Can we standardize operations a bit more?
 			Waiting (and how much)
 			Setting (directly, getting original first, etc.) - can the .set() function act like our commandFunction setter+getters?
-		Should we just update copyFolderPathWithHotkey() to always use the same copy-filepath hotkey, and trim things down itself?
 		Have more callers respect return value of copyWithHotkey
 			Example that does: EpicStudio.copyCodeLocation()
 	Do we really want to keep sendMediaKey() around anymore? Chrome has built-in media key stuff now, right?

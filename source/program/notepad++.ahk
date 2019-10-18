@@ -4,8 +4,8 @@
 	!f::Send, ^+!f ; Use !f hotkey for highlighting with the first style (ControlSend so we don't trigger other hotkeys)
 	
 	; Copy current file/folder to clipboard.
-	!c::copyFilePathWithHotkey("!c")
-	!#c::copyFolderPathWithHotkey("^!c")
+	!c::ClipboardLib.copyFilePathWithHotkey("!c")
+	!#c::ClipboardLib.copyFolderPathWithHotkey("!c")
 	
 	^Enter::NotepadPlusPlus.insertIndentedNewline() ; Add an indented newline
 	

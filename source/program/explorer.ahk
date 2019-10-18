@@ -9,8 +9,8 @@
 	return
 	
 	; Copy current folder/file paths to clipboard
-	!c::copyFilePathWithHotkey("!c")     ; Current file
-	!#c::copyFolderPathWithHotkey("^!c") ; Current folder
+	!c::ClipboardLib.copyFilePathWithHotkey("!c")    ; Current file
+	!#c::ClipboardLib.copyFolderPathWithHotkey("!c") ; Current folder
 	
 	; Hide/show hidden files
 	#h::Explorer.toggleHiddenFiles()

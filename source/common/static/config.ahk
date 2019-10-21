@@ -28,7 +28,7 @@ class Config {
 	;---------
 	Init() {
 		; All config files are expected to live in config/ folder under the root of this repo.
-		this._rootPath := FileLib.getParentFolder(A_LineFile, 4) "\" ; Root path is 3 levels out, plus one to get out of file itself.
+		this._rootPath := FileLib.getParentFolder(A_LineFile, 4) ; Root path is 3 levels out, plus one to get out of file itself.
 		
 		; Read in settings and add automatic context/machine filters to TableList.
 		this.loadSettings()
@@ -351,7 +351,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the privates file.
 	;---------
 	loadPrivates() {
-		filePath := this._rootPath "config\ahkPrivate\privates.tl"
+		filePath := this._rootPath "\config\ahkPrivate\privates.tl"
 		this.privates := new TableList(filePath).getColumnByColumn("VALUE", "KEY")
 	}
 	
@@ -359,7 +359,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the settings file.
 	;---------
 	loadSettings() {
-		this.settingsINIPath := this._rootPath "config\local\settings.ini"
+		this.settingsINIPath := this._rootPath "\config\local\settings.ini"
 		
 		settings := {}
 		settings["MACHINE"]      := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from Config.Machine_* constants
@@ -373,7 +373,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the windows file.
 	;---------
 	loadWindows() {
-		filePath := this._rootPath "config\windows.tl"
+		filePath := this._rootPath "\config\windows.tl"
 		windowsTable := new TableList(filePath).getTable()
 		
 		windows := {}
@@ -391,7 +391,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the paths file.
 	;---------
 	loadPaths() {
-		filePath := this._rootPath "config\paths.tl"
+		filePath := this._rootPath "\config\paths.tl"
 		pathsAry := new TableList(filePath).getColumnByColumn("PATH", "KEY")
 		
 		; Grab special path tags from the system to replace in the ones we just read in.
@@ -443,7 +443,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the programs file.
 	;---------
 	loadPrograms() {
-		filePath := this._rootPath "config\programs.tl"
+		filePath := this._rootPath "\config\programs.tl"
 		programsTable := new TableList(filePath).getRowsByColumn("NAME", "MACHINE")
 		
 		; Turn each row into a ProgramInfo object.
@@ -458,7 +458,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the games file.
 	;---------
 	loadGames() {
-		filePath := this._rootPath "config\games.tl"
+		filePath := this._rootPath "\config\games.tl"
 		this.games := new TableList(filePath).getTable()
 	}
 	

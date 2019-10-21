@@ -40,7 +40,8 @@ if(Config.contextIsWork) { ; Work-specific subs
 #Include places.ahk
 #Include programs.ahk
 #Include search.ahk
-#Include screen.ahk
+#Include system.ahk
+#Include window.ahk
 
 #Include %A_ScriptDir%\program\ ; Program-specific hotkeys.
 #Include chrome.ahk

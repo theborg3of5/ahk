@@ -1,8 +1,6 @@
 # New Ideas
-	Update colorPicker to use toast blocking option
-		Problem: the toast is buried in clipboard stuff
-			Solution: don't use set-and-toast, do it yourself (like OneTastic had to)
 	Do we really want to keep sendMediaKey() around anymore? Chrome has built-in media key stuff now, right?
+		Should we just rethink media player handling in general?
 	Decide which approach to take for static classes that need to read something in once - require a .Init() call, or just do it the first time it's needed?
 		Examples
 			Hyperlinker - on-demand (only 1 public method)

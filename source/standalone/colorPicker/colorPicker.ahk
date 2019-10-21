@@ -38,9 +38,13 @@ RButton::
 	Gui, Hide
 	
 	foundColor := getRGBUnderMouse()
-	ClipboardLib.setAndToast(foundColor, "RGB color code")
-	Sleep, 2000
+	if(foundColor = "") {
+		new ErrorToast("Failed to get RGB color code").blockingOn().showMedium()
+		ExitApp
+	}
 	
+	ClipboardLib.set(foundColor)
+	new Toast("Clipboard set to " "RGB color code" ":`n" foundColor).blockingOn().showMedium()
 	ExitApp
 return
 

@@ -24,45 +24,30 @@ class Config {
 	static TitleContains_Exact := "EXACT"
 	
 	;---------
-	; DESCRIPTION:    Initialize this static config class.
-	; PARAMETERS:
-	;  settingsFile (I,REQ) - Name or path of the settings INI file.
-	;  windowsFile  (I,REQ) - Name or path of the windows TL file.
-	;  pathsFile    (I,REQ) - Name or path of the paths TL file.
-	;  programsFile (I,REQ) - Name or path of the programs TL file.
-	;  gamesFile    (I,REQ) - Name or path of the games TL file.
-	;  privatesFile (I,REQ) - Name or path of the privates TL file.
-	; NOTES:          All names/paths must be found in the \config folder in the root of this repository.
+	; DESCRIPTION:    Initialize this static config class. Loads information from various config files (see individual this.load* functions).
 	;---------
-	Init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile) {
+	Init() {
 		; All config files are expected to live in config/ folder under the root of this repo.
-		configFolder := FileLib.getParentFolder(A_LineFile, 4) "\config" ; Root path is 3 levels out, plus one to get out of file itself.
-		
-		; Build full paths to config files
-		settingsPath := configFolder "\" settingsFile
-		windowsPath  := configFolder "\" windowsFile
-		pathsPath    := configFolder "\" pathsFile
-		programsPath := configFolder "\" programsFile
-		gamesPath    := configFolder "\" gamesFile
-		privatesPath := configFolder "\" privatesFile
+		this._rootPath := FileLib.getParentFolder(A_LineFile, 4) "\" ; Root path is 3 levels out, plus one to get out of file itself.
 		
 		; Read in settings and add automatic context/machine filters to TableList.
-		this.settings := this.loadSettings(settingsPath)
+		this.loadSettings()
 		TableList.addAutomaticFilter("CONTEXT", this.context)
 		TableList.addAutomaticFilter("MACHINE", this.machine)
 		
 		; Read in and process the other files.
-		this.privates := this.loadPrivates(privatesPath) ; This should be loaded before most other things, as they can use the resulting tags.
-		this.windows  := this.loadWindows(windowsPath)
-		this.paths    := this.loadPaths(pathsPath)
-		this.programs := this.loadPrograms(programsPath)
-		this.games    := this.loadGames(gamesPath)
+		this.loadPrivates() ; This should be loaded before most other things, as they can use the resulting tags.
+		this.loadWindows()
+		this.loadPaths()
+		this.loadPrograms()
+		this.loadGames()
+		
 		; Debug.popupEarly("Config","Loaded all", "Settings",this.settings)
+		; Debug.popupEarly("Config","Loaded all", "Privates",this.privates)
 		; Debug.popupEarly("Config","Loaded all", "Windows",this.windows)
 		; Debug.popupEarly("Config","Loaded all", "Paths",this.paths)
 		; Debug.popupEarly("Config","Loaded all", "Programs",this.programs)
 		; Debug.popupEarly("Config","Loaded all", "Games",this.games)
-		
 		this.initDone := true
 	}
 	
@@ -352,53 +337,43 @@ class Config {
 ; ============================================== PRIVATE =============================================
 ; ====================================================================================================
 	
-	static initDone := false
-	static settingsINIPath := ""
-	static settings := {} ; {NAME: VALUE}
-	static windows  := {} ; {NAME: WindowInfo}
-	static paths    := {} ; {KEY: PATH}
-	static programs := {} ; {NAME: ProgramInfo}
-	static games    := [] ; [{NAME:name, EXE:exe}]
-	static privates := {} ; {KEY: VALUE}
+	static initDone        := false ; True once we're done initializing for the first time.
+	static _rootPath       := ""    ; The root of this set of scripts.
+	static settingsINIPath := ""    ; The full path to the settings INI, so we can write to it if things change.
+	static settings        := {}    ; {NAME: VALUE}
+	static windows         := {}    ; {NAME: WindowInfo}
+	static paths           := {}    ; {KEY: PATH}
+	static programs        := {}    ; {NAME: ProgramInfo}
+	static games           := []    ; [{NAME:name, EXE:exe}]
+	static privates        := {}    ; {KEY: VALUE}
 	
 	;---------
 	; DESCRIPTION:    Read in and store the contents of the privates file.
-	; PARAMETERS:
-	;  filePath (I,REQ) - Path to the file to read in.
-	; RETURNS:        The compiled array of private bits.
 	;---------
-	loadPrivates(filePath) {
-		privatesAry := new TableList(filePath).getColumnByColumn("VALUE", "KEY")
-		
-		; Debug.popup("Config.loadPrivates","Finish", "Filepath",filePath, "Table",privatesTable, "Indexed array",privatesAry)
-		return privatesAry
+	loadPrivates() {
+		filePath := this._rootPath "config\ahkPrivate\privates.tl"
+		this.privates := new TableList(filePath).getColumnByColumn("VALUE", "KEY")
 	}
 	
 	;---------
 	; DESCRIPTION:    Read in and store the contents of the settings file.
-	; PARAMETERS:
-	;  filePath (I,REQ) - Path to the file to read in.
-	; RETURNS:        The compiled array of settings.
 	;---------
-	loadSettings(filePath) {
-		this.settingsINIPath := filePath
+	loadSettings() {
+		this.settingsINIPath := this._rootPath "config\local\settings.ini"
 		
 		settings := {}
 		settings["MACHINE"]      := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from Config.Machine_* constants
 		settings["CONTEXT"]      := IniRead(this.settingsINIPath, "Main", "CONTEXT")         ; Which context this is, from Config.Context_* constants
 		settings["MEDIA_PLAYER"] := IniRead(this.settingsINIPath, "Main", "MEDIA_PLAYER")    ; What program the media keys should deal with
 		
-		; Debug.popup("Settings", settings)
-		return settings
+		this.settings := settings
 	}
 	
 	;---------
 	; DESCRIPTION:    Read in and store the contents of the windows file.
-	; PARAMETERS:
-	;  filePath (I,REQ) - Path to the file to read in.
-	; RETURNS:        The compiled array of WindowInfo instances.
 	;---------
-	loadWindows(filePath) {
+	loadWindows() {
+		filePath := this._rootPath "config\windows.tl"
 		windowsTable := new TableList(filePath).getTable()
 		
 		windows := {}
@@ -409,16 +384,14 @@ class Config {
 				windows[name] := winInfo
 		}
 		
-		return windows
+		this.windows := windows
 	}
 	
 	;---------
 	; DESCRIPTION:    Read in and store the contents of the paths file.
-	; PARAMETERS:
-	;  filePath (I,REQ) - Path to the file to read in.
-	; RETURNS:        The compiled array of paths.
 	;---------
-	loadPaths(filePath) {
+	loadPaths() {
+		filePath := this._rootPath "config\paths.tl"
 		pathsAry := new TableList(filePath).getColumnByColumn("PATH", "KEY")
 		
 		; Grab special path tags from the system to replace in the ones we just read in.
@@ -438,8 +411,7 @@ class Config {
 			pathsAry[key] := path ; make sure to store it back in the actual array
 		}
 		
-		; Debug.popupEarly("Config.loadPaths","Finish", "Paths",pathsAry)
-		return pathsAry
+		this.paths := pathsAry
 	}
 	;---------
 	; DESCRIPTION:    Build a hard-coded array of KEY => PATH pairs that can be used to replace
@@ -462,38 +434,32 @@ class Config {
 		tags["WINDOWS"]            := A_WinDir                               ; C:\Windows
 		tags["CMD"]                := A_ComSpec                              ; C:\Windows\system32\cmd.exe
 		
-		tags["AHK_ROOT"]           := FileLib.getParentFolder(A_LineFile, 4) ; Top-level ahk folder, this file lives in <AHK_ROOT>\source\common\class\
+		tags["AHK_ROOT"]           := this._rootPath
 		
 		return tags
 	}
 	
 	;---------
 	; DESCRIPTION:    Read in and store the contents of the programs file.
-	; PARAMETERS:
-	;  filePath (I,REQ) - Path to the file to read in.
-	; RETURNS:        The compiled array of ProgramInfo instances.
 	;---------
-	loadPrograms(filePath) {
+	loadPrograms() {
+		filePath := this._rootPath "config\programs.tl"
 		programsTable := new TableList(filePath).getRowsByColumn("NAME", "MACHINE")
-		; Debug.popupEarly("Config","loadPrograms", "Unique table",programsTable)
 		
 		; Turn each row into a ProgramInfo object.
 		programs := {}
 		For name,row in programsTable
 			programs[name] := new ProgramInfo(row)
-		; Debug.popupEarly("Config","loadPrograms", "Finished programs",programs)
 		
-		return programs
+		this.programs := programs
 	}
 	
 	;---------
 	; DESCRIPTION:    Read in and store the contents of the games file.
-	; PARAMETERS:
-	;  filePath (I,REQ) - Path to the file to read in.
-	; RETURNS:        The compiled array of games arrays.
 	;---------
-	loadGames(filePath) {
-		return new TableList(filePath).getTable()
+	loadGames() {
+		filePath := this._rootPath "config\games.tl"
+		this.games := new TableList(filePath).getTable()
 	}
 	
 	;---------

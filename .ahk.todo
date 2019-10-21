@@ -1,12 +1,6 @@
 # New Ideas
 	Do we really want to keep sendMediaKey() around anymore? Chrome has built-in media key stuff now, right?
 		Should we just rethink media player handling in general?
-	Static classes cleanup
-		Have everything that needs a one-time load, own its own config paths instead of passing them in on Init()
-			Example: Hyperlinker
-			Offenders:
-				Config
-				WindowActions
 	Hotkey script splitting
 		Should we split the screen script into system (lock/suspend) and window scripts?
 		Should we rename the input script? It's really only "input" in the sense that it's a bunch of hotkeys that I type to trigger.

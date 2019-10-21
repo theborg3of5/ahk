@@ -34,7 +34,7 @@ class Config {
 	;  privatesFile (I,REQ) - Name or path of the privates TL file.
 	; NOTES:          All names/paths must be found in the \config folder in the root of this repository.
 	;---------
-	init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile) {
+	Init(settingsFile, windowsFile, pathsFile, programsFile, gamesFile, privatesFile) {
 		; All config files are expected to live in config/ folder under the root of this repo.
 		configFolder := FileLib.getParentFolder(A_LineFile, 4) "\config" ; Root path is 3 levels out, plus one to get out of file itself.
 		

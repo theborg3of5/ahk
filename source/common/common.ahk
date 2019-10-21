@@ -87,5 +87,6 @@ Object(params*) {
 ; ====================================================================================================
 ; =============================================== INIT ===============================================
 ; ====================================================================================================
-Config.init("local\settings.ini", "windows.tl", "paths.tl", "programs.tl", "games.tl", "ahkPrivate\privates.tl")
-WindowActions.init("windowActions.tl")
+Config.Init("local\settings.ini", "windows.tl", "paths.tl", "programs.tl", "games.tl", "ahkPrivate\privates.tl")
+WindowActions.Init("windowActions.tl")
+Hyperlinker.Init()

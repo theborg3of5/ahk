@@ -12,7 +12,7 @@ class WindowActions {
 	;  windowActionsFile (I,REQ) - The filename of the .tl file to read in for window
 	;                              actions.
 	;---------
-	init(windowActionsFile) {
+	Init(windowActionsFile) {
 		windowActionsPath := FileLib.findConfigFilePath(windowActionsFile)
 		this.actionOverrides := this.loadActions(windowActionsPath)
 		; Debug.popupEarly("WindowActions.init","Finished", "windowActionsFile",windowActionsFile, "windowActionsPath",windowActionsPath, "this.actionOverrides",this.actionOverrides)

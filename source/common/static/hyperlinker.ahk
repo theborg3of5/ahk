@@ -17,6 +17,14 @@ class Hyperlinker {
 	static CloseMethod_Alt_A := "ALT_A"
 	
 	;---------
+	; DESCRIPTION:    Initialize this class with the windows that support hyperlinking and their methods.
+	;---------
+	Init() {
+		this._windows := new TableList("hyperlinkWindows.tl").getRowsByColumn("NAME")
+		; Debug.popup("Hyperlinker.Init",, "this._windows",this._windows)
+	}
+	
+	;---------
 	; DESCRIPTION:    Link the selected text with the given URL/path.
 	; PARAMETERS:
 	;  path         (I,REQ) - URL or file path to link to.
@@ -30,13 +38,9 @@ class Hyperlinker {
 		}
 		
 		path := FileLib.cleanupPath(path)
-		
-		if(!isObject(Hyperlinker.windows))
-			Hyperlinker.windows := Hyperlinker.getWindows()
-		
 		windowName := Config.findWindowName()
 		windowLinkInfoAry := Hyperlinker.getWindowLinkInfo(windowName)
-		; Debug.popup("Hyperlinker.linkSelectedText","Finished gathering info", "windowName",windowName, "windowLinkInfoAry",windowLinkInfoAry, "Hyperlinker.windows",Hyperlinker.windows)
+		; Debug.popup("Hyperlinker.linkSelectedText","Finished gathering info", "windowName",windowName, "windowLinkInfoAry",windowLinkInfoAry, "Hyperlinker._windows",Hyperlinker._windows)
 		
 		if(!windowLinkInfoAry) {
 			errorMessage := "Window not supported: " windowName
@@ -54,37 +58,33 @@ class Hyperlinker {
 ; ====================================================================================================
 ; ============================================== PRIVATE =============================================
 ; ====================================================================================================
-	
-	static windows := ""
-	
+
 	;---------
-	; DESCRIPTION:    Read the link windows config file into an indexed-by-name array of windows' info.
-	; RETURNS:        Array of arrays of window info. Format:
-	;                    ary[<name>]["NAME"]                  = Name of the window we're starting from,
-	;                                                           matches NAME column in windows.tl (also
-	;                                                           the <name> top-level subscript)
-	;                               ["SET_PATH_METHOD"]       = Method that should be used to add the link,
-	;                                                           from the Hyperlinker.Method_* constants at the
-	;                                                           top of this file.
-	;                               ["CLOSE_METHOD"]          = Method that should be used to close the linking
-	;                                                           popup (if applicable), from the Hyperlinker.CloseMethod_*
-	;                                                           constants at the top of this file.
-	;                               ["LINK_POPUP"]            = If the method is Hyperlinker.Method_PopupField,
-	;                                                           this is the title string for the linking
-	;                                                           popup where we'll enter the path.
-	;                               ["PATH_FIELD_CONTROL_ID"] = If the method is Hyperlinker.Method_PopupField,
-	;                                                           this is the control ID for the field where
-	;                                                           the path goes.
-	;                               ["TAGGED_STRING_BASE"]    = If the method is Hyperlinker.Method_TaggedString,
-	;                                                           this is the "base" string that describes the
-	;                                                           format of the final linked string (that
-	;                                                           includes both the selected text and the path).
-	;                                                           It should include both <TEXT> and <PATH> tags
-	;                                                           for those respective bits of data.
+	; DESCRIPTION:    Associative array of windows information.
+	; FORMAT:         First-level subscript is name. Second-level subscripts (i.e. _windows[<name>, "NAME"]):
+	;                  ["NAME"]                  = Name of the window we're starting from,
+	;                                              matches NAME column in windows.tl (also
+	;                                              the <name> top-level subscript)
+	;                  ["SET_PATH_METHOD"]       = Method that should be used to add the link,
+	;                                              from the Hyperlinker.Method_* constants at the
+	;                                              top of this file.
+	;                  ["CLOSE_METHOD"]          = Method that should be used to close the linking
+	;                                              popup (if applicable), from the Hyperlinker.CloseMethod_*
+	;                                              constants at the top of this file.
+	;                  ["LINK_POPUP"]            = If the method is Hyperlinker.Method_PopupField,
+	;                                              this is the title string for the linking
+	;                                              popup where we'll enter the path.
+	;                  ["PATH_FIELD_CONTROL_ID"] = If the method is Hyperlinker.Method_PopupField,
+	;                                              this is the control ID for the field where
+	;                                              the path goes.
+	;                  ["TAGGED_STRING_BASE"]    = If the method is Hyperlinker.Method_TaggedString,
+	;                                              this is the "base" string that describes the
+	;                                              format of the final linked string (that
+	;                                              includes both the selected text and the path).
+	;                                              It should include both <TEXT> and <PATH> tags
+	;                                              for those respective bits of data.
 	;---------
-	getWindows() {
-		return new TableList("hyperlinkWindows.tl").getRowsByColumn("NAME")
-	}
+	static _windows := ""
 	
 	;---------
 	; DESCRIPTION:    Grab the array of linking window info for the given starting window name.
@@ -116,7 +116,7 @@ class Hyperlinker {
 	getWindowLinkInfo(windowName) {
 		if(!windowName)
 			return ""
-		return Hyperlinker.windows[windowName]
+		return Hyperlinker._windows[windowName]
 	}
 	
 	;---------

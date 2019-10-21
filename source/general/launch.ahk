@@ -12,6 +12,22 @@
 ^!#k:: new ActionObjectRedirector(SelectLib.getText()).linkSelectedTextWeb()
 ^!#+k::new ActionObjectRedirector(SelectLib.getText()).linkSelectedTextEdit()
 
+; Easy editing for often-accessed scripts
+!+e::
+	selectEditScript() {
+		path := new Selector("editScripts.tls").selectGui("PATH")
+		if(!path)
+			return
+		
+		path := Config.replacePathTags(path)
+		if(!FileExist(path)) {
+			new ErrorText("Script does not exist: " path).showMedium()
+			return
+		}
+		
+		Config.runProgram("Notepad++", path)
+	}
+
 ; Selector to allow easy editing of config TL files that don't show a popup
 !+c::
 	selectConfig() {

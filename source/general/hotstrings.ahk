@@ -113,16 +113,14 @@
 	:X:aconf::sendFolderPath( "AHK_ROOT", "config")
 	:X:atempf::sendFolderPath("AHK_ROOT", "template")
 	:X:atf::sendFolderPath(   "AHK_ROOT", "test")
-	:X:asf::sendFolderPath(   "AHK_SOURCE")
-	:X:apf::sendFolderPath(   "AHK_SOURCE", "program")
-	:X:agf::sendFolderPath(   "AHK_SOURCE", "general")
-	:X:astf::sendFolderPath(  "AHK_SOURCE", "standalone")
-	:X:asubf::sendFolderPath( "AHK_SOURCE", "sub")
-	:X:acf::sendFolderPath(   "AHK_SOURCE", "common")
-	:X:accf::sendFolderPath(  "AHK_SOURCE", "common\class")
-	:X:abf::sendFolderPath(   "AHK_SOURCE", "common\base")
-	:X:alf::sendFolderPath(   "AHK_SOURCE", "common\lib")
-	:X:assf::sendFolderPath(  "AHK_SOURCE", "common\static")
+	:X:apf::sendFolderPath(  "AHK_SOURCE", "program")
+	:X:agf::sendFolderPath(  "AHK_SOURCE", "general")
+	:X:astf::sendFolderPath( "AHK_SOURCE", "standalone")
+	:X:asubf::sendFolderPath("AHK_SOURCE", "sub")
+	:X:acf::sendFolderPath(  "AHK_SOURCE", "common\class")
+	:X:abf::sendFolderPath(  "AHK_SOURCE", "common\base")
+	:X:alf::sendFolderPath(  "AHK_SOURCE", "common\lib")
+	:X:asf::sendFolderPath(  "AHK_SOURCE", "common\static")
 	
 	; Epic - General
 	:X:epf::sendFolderPath("EPIC_PERSONAL")
@@ -145,9 +143,6 @@
 }
 #If
 
-
-; Edit this file
-^!h::Config.runProgram("Notepad++", A_LineFile)
 
 ; Helper functions for sending file/folder paths in the desired format.
 sendFilePath(folderName, subPath := "") {

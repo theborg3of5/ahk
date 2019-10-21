@@ -33,14 +33,14 @@ if(Config.contextIsWork) { ; Work-specific subs
 
 ; === Include other scripts ===
 #Include %A_ScriptDir%\general\ ; General hotkeys.
+#Include hotkeys.ahk
 #Include hotstrings.ahk ; Must go after startup, but before hotkeys begin.
-#Include input.ahk
 #Include launch.ahk
 #Include media.ahk
 #Include places.ahk
 #Include programs.ahk
 #Include search.ahk
-#Include system.ahk
+#Include text.ahk
 #Include window.ahk
 
 #Include %A_ScriptDir%\program\ ; Program-specific hotkeys.

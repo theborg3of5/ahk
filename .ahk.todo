@@ -1,10 +1,6 @@
 # New Ideas
 	Do we really want to keep sendMediaKey() around anymore? Chrome has built-in media key stuff now, right?
 		Should we just rethink media player handling in general?
-	Hotkey script splitting
-		Should we rename the input script? It's really only "input" in the sense that it's a bunch of hotkeys that I type to trigger.
-			misc, maybe?
-			Should the latter half (with all of the hyperlinking, standard EMC2 object string, etc. bits) be split off or moved elsewhere?
 	Non-breaking spaces ( ) make EpicRecord parsing fail (and probably other stuff too)
 		Can we account for this somehow?
 			A "contains space" or "replace abnormal spaces" function, maybe?

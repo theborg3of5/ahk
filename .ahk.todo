@@ -78,6 +78,8 @@
 		Take into account overflow (across columns), with next field being empty or placeholder'd
 	
 # Selector
+	Add some setting to have the popup appear when we pass in a bad value?
+		Use case: Snapper, when we're on an INI we don't have items for.
 	Dynamically resize abbreviation column based on widest value?
 		To allow longer abbreviations
 		Is that going to get weird with SelectorGui+FlexTable interactions?

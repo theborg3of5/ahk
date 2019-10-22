@@ -115,19 +115,40 @@ class NotepadPlusPlus {
 		paramsAry := []
 		maxParamLength := 0
 		For _,param in paramsList.split(",", " `t") {
-			param := param.removeFromStart("ByRef ")
-			param := param.beforeString(" :=")
+			; Input/output can be partially deduced by whether it's ByRef
+			if(param.startsWith("ByRef ")) {
+				inOut := "I/O" ; Could be either
+				param := param.removeFromStart("ByRef ")
+			} else {
+				inOut := "I" ; Can only be input
+			}
 			
-			paramsAry.push(param)
+			; Required/optional can be deduced by whether there's a default specified
+			if(param.contains(" := ")) {
+				requirement := "OPT" ; Optional if there's a default
+				param := param.beforeString(" :=")
+			} else {
+				requirement := "REQ" ; Required if no default
+			}
+			
+			paramsAry.push({"NAME":param, "IN_OUT":inOut, "REQUIREMENT":requirement})
+			
+			; Also track the max length of any parameter name so we can space things out appropriately.
 			maxParamLength := DataLib.max(maxParamLength, param.length())
 		}
 		
 		; Build a line for each parameter, padding things out to make them even
 		paramLines := []
-		For _,paramName in paramsAry {
+		For _,paramObj in paramsAry {
 			line := NotepadPlusPlus.ahkParamBase
-			line := line.replaceTag("NAME",    paramName)
-			line := line.replaceTag("PADDING", StringLib.getSpaces(maxParamLength - paramName.length()))
+			
+			padding := StringLib.getSpaces(maxParamLength - paramObj["NAME"].length())
+			
+			line := line.replaceTag("NAME",        paramObj["NAME"])
+			line := line.replaceTag("IN_OUT",      paramObj["IN_OUT"])
+			line := line.replaceTag("REQUIREMENT", paramObj["REQUIREMENT"])
+			line := line.replaceTag("PADDING",     padding)
+			
 			paramLines.push(line)
 		}
 		
@@ -179,7 +200,7 @@ class NotepadPlusPlus {
 	
 	static ahkParamBase := "
 		( RTrim0
-		;  <NAME><PADDING> (I/O/IO,REQ/OPT) - 
+		;  <NAME><PADDING> (<IN_OUT>,<REQUIREMENT>) - 
 		)"
 	
 	;---------

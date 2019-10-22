@@ -4,9 +4,6 @@
 		Could we add our own library of functions?
 		Could we add our own classes and such?
 	Notepad++ AHK documentation
-		Have AHK function header start recognizing optional variables based on a := "" on the end of them?
-			Or any :=, for that matter?
-				Could automatically add a "defaults to" bit to the documentation
 		Update Notepad++ AHK documentation stuff to handle properties (with or without [])
 			Properties with parameters, too - maybe just treat [] the same as ()?
 		Make Ctrl+Enter hotkey in Notepad++ also add in bullets (* or -) if they started the previous row (ignoring whitespace and comment char, but not other stuff like (I,REQ))

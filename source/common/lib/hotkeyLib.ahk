@@ -36,39 +36,6 @@ class HotkeyLib {
 		}
 	}
 	
-	;---------
-	; DESCRIPTION:    Send the given media key, with special exceptions for different media players.
-	; PARAMETERS:
-	;  keyName (I,REQ) - The name of the key in question.
-	;---------
-	sendMediaKey(keyName) {
-		if(!keyName)
-			return
-		
-		; There's some sort of odd race condition with Spotify that double-sends the play/pause hotkey if Spotify is focused - this prevents it, though I'm not sure why.
-		Sleep, 100
-		
-		; Only certain media keys need special handling, let others straight through.
-		specialKeysAry := ["Media_Play_Pause", "Media_Prev", "Media_Next"]
-		if(!specialKeysAry.contains(keyName)) {
-			Send, % "{" keyName "}"
-			return
-		}
-		
-		; Youtube - special case that won't respond to media keys natively
-		if(Config.isMediaPlayer("Chrome")) {
-			if(keyName = "Media_Play_Pause")
-				Send, ^.
-			else if(keyName = "Media_Prev")
-				Send, ^+,
-			else if(keyName = "Media_Next")
-				Send, ^+.
-			
-		} else {
-			Send, % "{" keyName "}"
-		}
-	}
-	
 	
 ; ====================================================================================================
 ; ============================================== PRIVATE =============================================

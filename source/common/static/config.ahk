@@ -154,25 +154,25 @@ class Config {
 	;---------
 	; DESCRIPTION:    Whether the named media player is what we're configured to use.
 	; PARAMETERS:
-	;  mediaPlayerName (I/O/IO,REQ/OPT) - 
+	;  mediaPlayerName (I,REQ) - The name of the media player to check.
 	; RETURNS:        true if we're configured to use the media player, false otherwise.
 	;---------
 	isMediaPlayer(mediaPlayerName) {
-		return (this.settings["MEDIA_PLAYER"] = mediaPlayerName)
+		return (this.mediaPlayer = mediaPlayerName)
 	}
 	;---------
 	; DESCRIPTION:    Check whether a window for the current media player exists.
 	; RETURNS:        true if it does exist, false otherwise.
 	;---------
 	doesMediaPlayerExist() {
-		player := this.settings["MEDIA_PLAYER"]
+		player := this.mediaPlayer
 		return this.doesWindowExist(player)
 	}
 	;---------
 	; DESCRIPTION:    Run the currently configured media player.
 	;---------
 	runMediaPlayer() {
-		player := this.settings["MEDIA_PLAYER"]
+		player := this.mediaPlayer
 		if(player) {
 			; Always use runProgram based on the programs at play, but only show the "not yet running" toast if it really doesn't exist.
 			if(!this.doesWindowExist(player))

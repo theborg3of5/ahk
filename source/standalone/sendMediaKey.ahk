@@ -7,13 +7,11 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
 
-inputKey = %1% ; Input from command line
-if(!inputKey)
+inputKeys = %1% ; Input from command line
+if(!inputKeys)
 	ExitApp
 
-inputKeyAry := inputKey.split(",")
-
-For _,inputKey in inputKeyAry
-	HotkeyLib.sendMediaKey(inputKey)
+For _,key in inputKeys.split(",")
+	Send, {%key%}
 
 ExitApp

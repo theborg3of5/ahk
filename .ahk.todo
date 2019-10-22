@@ -1,6 +1,4 @@
 # New Ideas
-	Do we really want to keep sendMediaKey() around anymore? Chrome has built-in media key stuff now, right?
-		Should we just rethink media player handling in general?
 	Non-breaking spaces ( ) make EpicRecord parsing fail (and probably other stuff too)
 		Can we account for this somehow?
 			A "contains space" or "replace abnormal spaces" function, maybe?

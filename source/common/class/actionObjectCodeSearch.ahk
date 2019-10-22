@@ -21,8 +21,8 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 	static LocationType_Server := "SERVER" ; Server code location, including tag if applicable
 	static LocationType_Client := "CLIENT" ; Client filename
 	
-	locationType := "" ; Which type of code, server or client (from LocationType_* constants)
 	location     := "" ; Code location to work with
+	locationType := "" ; Which type of code, server or client (from LocationType_* constants)
 	
 	;---------
 	; DESCRIPTION:    Create a new reference to a CodeSearch object.

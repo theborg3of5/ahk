@@ -157,7 +157,7 @@ class ActionObjectRedirector {
 			return "" ; No determined type, silent quit, return nothing
 		
 		if(this.type = this.Type_CodeSearch)
-			return new ActionObjectCodeSearch(this.value)
+			return new ActionObjectCodeSearch(this.value, this.subType)
 		
 		if(this.type = this.Type_EpicStudio)
 			return new ActionObjectEpicStudio(this.value, this.subType)

@@ -22,8 +22,8 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 	static DescriptorType_Routine := "ROUTINE" ; Server code location, including tag if applicable
 	static DescriptorType_DLG     := "DLG"     ; DLG, for opening in EpicStudio
 	
-	descriptorType := "" ; Type of object (from DescriptorType_* constants)
 	descriptor     := "" ; Reference to object
+	descriptorType := "" ; Type of object (from DescriptorType_* constants)
 	
 	;---------
 	; DESCRIPTION:    Create a new reference to a server code object.

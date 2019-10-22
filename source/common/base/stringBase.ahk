@@ -367,7 +367,8 @@ class StringBase {
 	
 	;---------
 	; DESCRIPTION:    Remove certain characters (and optionally, additional passed-in strings) from
-	;                 the start and end of this string.
+	;                 the start and end of this string, and replace certain odd characters with
+	;                 better equivalents.
 	; PARAMETERS:
 	;  additionalStringsToRemove (I,OPT) - Pass in an array of strings to have them also removed
 	;                                      from the start and end of this string.
@@ -378,28 +379,17 @@ class StringBase {
 	clean(additionalStringsToRemove := "") {
 		outStr := this
 		
-		charCodesToRemove := []
-		charCodesToRemove.push([13])      ; Carriage return (`r)
-		charCodesToRemove.push([10])      ; Newline (`n)
-		charCodesToRemove.push([32])      ; Space ( )
-		charCodesToRemove.push([46])      ; Period (.)
-		charCodesToRemove.push([8226,9])  ; First level bullet (filled circle) + tab
-		charCodesToRemove.push([111,9])   ; Second level bullet (empty circle) + tab
-		charCodesToRemove.push([61607,9]) ; Third level bullet (filled square) + tab
+		stringsToTrim := []
+		stringsToTrim.push(Chr(10))    ; Newline (`n)
+		stringsToTrim.push(Chr(13))    ; Carriage return (`r)
+		stringsToTrim.push(Chr(46))    ; Period (.)
+		stringsToTrim.push(Chr(160))   ; Non-breaking space/nbsp ( )
+		stringsToTrim.push(Chr(8226))  ; First level bullet (filled circle)
+		stringsToTrim.push(Chr(111))   ; Second level bullet (empty circle)
+		stringsToTrim.push(Chr(61607)) ; Third level bullet (filled square)
 		
-		; Transform the codes above so we can check whether it's in the string.
-		stringsToRemove := []
-		For i,s in charCodesToRemove {
-			stringsToRemove[i] := ""
-			For j,c in s {
-				newChar := Transform("Chr", c)
-				stringsToRemove[i] .= newChar
-			}
-		}
-		For i,str in additionalStringsToRemove {
-			stringsToRemove.push(str)
-		}
-		; Debug.popup("outStr",outStr, "Chars to remove",stringsToRemove)
+		For _,string in additionalstringsToTrim
+			stringsToTrim.push(string)
 		
 		while(!isClean) {
 			isClean := true
@@ -412,7 +402,7 @@ class StringBase {
 			}
 			
 			; Remove specific strings from start/end
-			For _,removeString in stringsToRemove {
+			For _,removeString in stringsToTrim {
 				if(outStr.startsWith(removeString)) {
 					outStr := outStr.removeFromStart(removeString)
 					isClean := false
@@ -423,6 +413,13 @@ class StringBase {
 				}
 			}
 		}
+		
+		; Replace odd characters
+		stringsToReplace := {}
+		stringsToReplace[Chr(160)] := A_Space ; Non-breaking space/nbsp => Normal space
+		
+		For toReplace,replaceWith in stringsToReplace
+			outStr := outStr.replace(toReplace, replaceWith)
 		
 		return outStr
 	}

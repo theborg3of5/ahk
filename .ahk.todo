@@ -1,8 +1,4 @@
 # New Ideas
-	Non-breaking spaces ( ) make EpicRecord parsing fail (and probably other stuff too)
-		Can we account for this somehow?
-			A "contains space" or "replace abnormal spaces" function, maybe?
-				Could make it a separate step in string.cleanup()
 	Look into auto-completion in Notepad++ for AHK
 		In general for the language
 		Could we add our own library of functions?

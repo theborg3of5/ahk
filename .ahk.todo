@@ -1,4 +1,5 @@
 # New Ideas
+	ActionObjectRedirector > ActionObjectCodeSearch - are we passing the subType in from the user's choice? We're getting prompted a second time.
 	Do we really want to keep sendMediaKey() around anymore? Chrome has built-in media key stuff now, right?
 		Should we just rethink media player handling in general?
 	Non-breaking spaces ( ) make EpicRecord parsing fail (and probably other stuff too)

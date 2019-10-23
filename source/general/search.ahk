@@ -52,15 +52,17 @@ searchWithURL(searchBaseURL, searchTerm) {
 ;                       within that app's code. Defaults to all apps (no filter).
 ;---------
 searchCodeSearch(searchTerm, searchType, appKey := "") {
-	if(!searchType) ; Gotta know w here to search.
+	if(!searchType) ; Gotta know where to search.
 		return ""
 	
 	searchTerm := escapeForRunURL(searchTerm)
+	if(appKey = "DBC") ; Only set this whole term if we have a key.
+		appCriteria := "&apps=" Config.private["CS_APP_ID_DBC"]
 	
 	url := Config.private["CS_BASE"]
-	url := url.replaceTag("SEARCH_TYPE", searchType)
-	url := url.replaceTag("APP_ID",      getEpicAppIdFromKey(appKey))
-	url := url.replaceTag("CRITERIA",    "a=" searchTerm)
+	url := url.replaceTag("SEARCH_TYPE",  searchType)
+	url := url.replaceTag("APP_CRITERIA", appCriteria)
+	url := url.replaceTag("SEARCH_TERMS", "&a=" searchTerm)
 	
 	Run(url)
 }

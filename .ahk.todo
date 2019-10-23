@@ -1,7 +1,5 @@
 # New Ideas
 	Search scripts updates
-		CodeSearch search - can we exclude the apps criteria when there's nothing included?
-			Maybe the tag is the whole criteria (including &) instead of just the one bit?
 		Consider encapsulating all of the search script's functions into a class of some sort
 			Static, probably?
 			Probably get selectSearch() as well - makes sense if we're pulling in constants for the search types.

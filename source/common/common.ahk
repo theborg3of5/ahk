@@ -70,6 +70,7 @@ Object(params*) {
 	#Include microsoftLib.ahk
 	#Include phoneLib.ahk
 	#Include runLib.ahk
+	#Include searchLib.ahk
 	#Include selectLib.ahk
 	#Include stringLib.ahk
 	#Include windowLib.ahk

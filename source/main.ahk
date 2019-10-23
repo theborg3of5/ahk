@@ -39,7 +39,6 @@ if(Config.contextIsWork) { ; Work-specific subs
 #Include media.ahk
 #Include places.ahk
 #Include programs.ahk
-#Include search.ahk
 #Include text.ahk
 #Include window.ahk
 

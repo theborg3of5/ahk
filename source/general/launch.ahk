@@ -1,5 +1,8 @@
 ; Launch miscellaneous actions.
 
+; Generic search for selected text.
+!+f::SearchLib.selectedTextPrompt()
+
 ; Generic open - open a variety of different things based on the selected text.
 ^!#o:: new ActionObjectRedirector(SelectLib.getText()).openWeb()
 ^!#+o::new ActionObjectRedirector(SelectLib.getText()).openEdit()

@@ -1,8 +1,4 @@
 # New Ideas
-	Search scripts updates
-		Consider encapsulating all of the search script's functions into a class of some sort
-			Static, probably?
-			Probably get selectSearch() as well - makes sense if we're pulling in constants for the search types.
 	Look into auto-completion in Notepad++ for AHK
 		In general for the language
 		Could we add our own library of functions?

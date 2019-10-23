@@ -248,8 +248,10 @@ class NotepadPlusPlus {
 	;---------
 	generateDebugParams(varList) {
 		paramsString := ""
-		paramsAry := varList.split(",", A_Space) ; Split on comma and drop leading/trailing spaces
 		QUOTE := """" ; Double-quote character
+		
+		; Split list into array
+		paramsAry := NotepadPlusPlus.splitVarList(varList)
 		
 		; Special case: if first param starts with +, it's a top-level message that should be shown with no corresponding data.
 		if(paramsAry[1].startsWith("+")) {
@@ -265,5 +267,46 @@ class NotepadPlusPlus {
 		}
 		
 		return paramsString
+	}
+	
+	;---------
+	; DESCRIPTION:    Manually split up the variable list by comma, so we can keep commas
+	;                 parens/quotes intact instead of splitting on them. This also drops any
+	;                 leading/trailing whitespace from each variable name.
+	; PARAMETERS:
+	;  varList (I,REQ) - Comma-separated list of parameters to generate the debug parameters for.
+	; RETURNS:        Array of variable names, split on commas.
+	;---------
+	splitVarList(varList) {
+		QUOTE := """" ; Double-quote character
+		paramsAry := []
+		
+		currentName := ""
+		openParens := 0
+		openQuotes := 0
+		Loop, Parse, varList
+		{
+			char := A_LoopField
+			
+			; Track open parens/quotes.
+			if(char = "(")
+				openParens++
+			if(char = ")")
+				openParens--
+			if(char = QUOTE)
+				openQuotes := mod(openQuotes + 1, 2) ; Quotes close other quotes, so just swap between open and closed
+			
+			; Split on commas, but only if there are no open parens or quotes.
+			if(char = "," && openParens = 0 && openQuotes = 0) {
+				paramsAry.push(currentName.withoutWhitespace())
+				currentName := ""
+				Continue
+			}
+			
+			currentName .= char
+		}
+		paramsAry.push(currentName.withoutWhitespace())
+		
+		return paramsAry
 	}
 }

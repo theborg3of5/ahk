@@ -27,7 +27,6 @@
 			Toast > styles
 			WindowActions > actionOverrides
 		Include square brackets on properties (that don't take parameters)?
-	Make dbpop handle commas within quotes/parens?
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
 		Possibly reconsider the 100-char limit - wouldn't wider make more sense?
 		Could take into account whether there would be only 1 small word moved down

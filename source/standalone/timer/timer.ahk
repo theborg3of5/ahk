@@ -29,7 +29,7 @@ toastObj.show(VisualWindow.X_RightEdge, VisualWindow.Y_TopEdge)
 ; Start ticking once per second
 SetTimer, decrementTimer, 1000
 
-; Confirm before exiting with common close hotkey (+!x)
+; Confirm before exiting with common close hotkey (!+x)
 CommonHotkeys.ConfirmExitOn("Stop the timer and exit?")
 
 ; Block until toast hides (3 seconds), so temp-show hotkey can't fire until it's hidden
@@ -139,7 +139,7 @@ decrementTimer() {
 
 ;---------
 ; DESCRIPTION:    Finish the timer: play a sound and display a centered toast.
-; SIDE EFFECTS:   Destroys timer toast, stops requiring confirmation to exit with +!x hotkey.
+; SIDE EFFECTS:   Destroys timer toast, stops requiring confirmation to exit with !+x hotkey.
 ;---------
 finishTimer() {
 	SetTimer, , Off ; Stop ticking

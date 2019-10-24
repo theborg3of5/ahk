@@ -15,7 +15,7 @@
 	
 	; Format as code (using custom styles)
 	^+c::
-		Send, ^+!2 ; Hotkey used in Outlook (won't let me use ^+c directly)
+		Send, ^!+2 ; Hotkey used in Outlook (won't let me use ^+c directly)
 	return
 	
 	; Bulleted list.

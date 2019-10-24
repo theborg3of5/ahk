@@ -1,7 +1,7 @@
 #If Config.isWindowActive("Notepad++")
 	!x::return ; Block close-document hotkey that can't be changed/removed.
 	^+t::Send, !f1 ; Re-open last closed document.
-	!f::Send, ^+!f ; Use !f hotkey for highlighting with the first style (ControlSend so we don't trigger other hotkeys)
+	!f::Send, ^!+f ; Use !f hotkey for highlighting with the first style (ControlSend so we don't trigger other hotkeys)
 	F6::Send, ^w ; Close with F6 hotkey, like we do for browsers.
 	
 	; Copy current file/folder to clipboard.

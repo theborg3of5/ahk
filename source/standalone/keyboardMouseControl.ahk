@@ -12,13 +12,13 @@ CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 keyboardControl := false
 
 #If !keyboardControl
-	^+!Space::
+	^!+Space::
 		keyboardControl := true
 	return
 #If
 
 #If keyboardControl
-	^+!Space::
+	^!+Space::
 		keyboardControl := false
 	return
 	

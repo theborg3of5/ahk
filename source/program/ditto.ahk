@@ -39,6 +39,6 @@ class Ditto {
 	;                 add something to the clipboard history, but restore the current clipboard as well.        
 	;---------
 	saveCurrentClipboard() {
-		Send, ^+!c
+		Send, ^!+c
 	}
 }

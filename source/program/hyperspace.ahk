@@ -101,6 +101,6 @@ class Hyperspace {
 	;---------
 	_copyDisplayHTML() {
 		; Grab the HTML with HTMLGrabber hotkey.
-		SendPlay, , ^+!c
+		SendPlay, , ^!+c
 	}
 }

@@ -45,7 +45,6 @@
 
 
 #If Config.contextIsWork
-	$^+#LAlt::return
 	$^+!#t::
 		selectDLG() {
 			s := new Selector("outlookTLG.tls").OverrideFieldsOff()

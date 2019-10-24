@@ -13,7 +13,7 @@
 
 ; Generic hyperlinker - get link based on the selected text and then apply it to that same text.
 ^!k:: new ActionObjectRedirector(SelectLib.getText()).linkSelectedTextWeb()
-^!#k::  ActionObjectRedirector(SelectLib.getText()).linkSelectedTextEdit()
+^!#k::new ActionObjectRedirector(SelectLib.getText()).linkSelectedTextEdit()
 
 ; Easy editing for often-accessed scripts
 !+e::

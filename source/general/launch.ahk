@@ -1,22 +1,22 @@
 ; Launch miscellaneous actions.
 
 ; Generic search for selected text.
-!+f::SearchLib.selectedTextPrompt()
++!f::SearchLib.selectedTextPrompt()
 
 ; Generic open - open a variety of different things based on the selected text.
 ^!#o:: new ActionObjectRedirector(SelectLib.getText()).openWeb()
-^!#+o::new ActionObjectRedirector(SelectLib.getText()).openEdit()
+^+!#o::new ActionObjectRedirector(SelectLib.getText()).openEdit()
 
 ; Generic copy link - copy links to a variety of different things based on the selected text.
 ^!#l:: new ActionObjectRedirector(SelectLib.getText()).copyLinkWeb()
-^!#+l::new ActionObjectRedirector(SelectLib.getText()).copyLinkEdit()
+^+!#l::new ActionObjectRedirector(SelectLib.getText()).copyLinkEdit()
 
 ; Generic hyperlinker - get link based on the selected text and then apply it to that same text.
 ^!#k:: new ActionObjectRedirector(SelectLib.getText()).linkSelectedTextWeb()
-^!#+k::new ActionObjectRedirector(SelectLib.getText()).linkSelectedTextEdit()
+^+!#k::new ActionObjectRedirector(SelectLib.getText()).linkSelectedTextEdit()
 
 ; Easy editing for often-accessed scripts
-!+e::
++!e::
 	selectEditScript() {
 		path := new Selector("editScripts.tls").selectGui("PATH")
 		if(!path)
@@ -32,7 +32,7 @@
 	}
 
 ; Selector to allow easy editing of config TL files that don't show a popup
-!+c::
++!c::
 	selectConfig() {
 		path := new Selector("configs.tls").selectGui("PATH")
 		if(!path)
@@ -45,7 +45,8 @@
 
 
 #If Config.contextIsWork
-	^+!#t::
+	$^+#LAlt::return
+	$^+!#t::
 		selectDLG() {
 			s := new Selector("outlookTLG.tls").OverrideFieldsOff()
 			s.dataTL.filterOutEmptyForColumn("DLG")
@@ -130,7 +131,7 @@
 				Config.runProgram("Thunder", data["THUNDER_ID"])
 		}
 	
-	!+v::
+	+!v::
 		selectVDI() {
 			data := new Selector("epicEnvironments.tls").SetTitle("Launch VDI for Environment").selectGui()
 			if(!data)

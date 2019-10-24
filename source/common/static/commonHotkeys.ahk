@@ -28,7 +28,7 @@ class CommonHotkeys {
 	}
 	
 	;---------
-	; DESCRIPTION:    Turn on/off whether to prompt the user to confirm when exiting with the common exit hotkey (!+x).
+	; DESCRIPTION:    Turn on/off whether to prompt the user to confirm when exiting with the common exit hotkey (+!x).
 	;---------
 	ConfirmExitOn(message := "") {
 		CommonHotkeys._confirmExit := true
@@ -96,12 +96,12 @@ class CommonHotkeys {
 		; Exit
 		Hotkey, ~^+!#r, CommonHotkeys_doEmergencyExit
 		if(CommonHotkeys.IsStandalone)
-			Hotkey, !+x, CommonHotkeys_doExit
+			Hotkey, +!x, CommonHotkeys_doExit
 		if(CommonHotkeys.IsMain) {
 			; Block close hotkey (as it does bad things in some places) if there are no standalone scripts running
 			noStandaloneScriptsRunning := ObjBindMethod(CommonHotkeys, "noStandaloneScriptsRunning")
 			Hotkey, If, % noStandaloneScriptsRunning
-			Hotkey, !+x, CommonHotkeys_doBlock ; Catch exit hotkey in main so it doesn't bleed through when there are no standalone scripts
+			Hotkey, +!x, CommonHotkeys_doBlock ; Catch exit hotkey in main so it doesn't bleed through when there are no standalone scripts
 			Hotkey, If ; Clear condition
 		}
 		
@@ -113,7 +113,7 @@ class CommonHotkeys {
 		
 		; Reload
 		if(CommonHotkeys.IsMain)
-			Hotkey, !+r, CommonHotkeys_doReload ; Main only, it replaces the sub scripts by running them again.
+			Hotkey, +!r, CommonHotkeys_doReload ; Main only, it replaces the sub scripts by running them again.
 		if(CommonHotkeys.IsStandalone) {
 			; Reload on save if editing the script in question
 			isEditingThisScript := ObjBindMethod(CommonHotkeys, "isEditingThisScript")

@@ -1,9 +1,9 @@
 ; Hotkeys for opening different locations, both local (folders) and remote (URLs).
 
 ; Specific folders
-!+a::openFolder("AHK_ROOT")
-!+d::openFolder("USER_DOWNLOADS")
-!+u::openFolder("USER_ROOT")
++!a::openFolder("AHK_ROOT")
++!d::openFolder("USER_DOWNLOADS")
++!u::openFolder("USER_ROOT")
 openFolder(folderName) {
 	folderPath := Config.path[folderName]
 	if(FileLib.folderExists(folderPath))
@@ -35,8 +35,8 @@ openFolder(folderName) {
 	}
 
 ; Send cleaned-up path (remove odd garbage from around path, switch to mapped network drives)
-!+p::sendCleanedUpPath()
-!+#p::sendCleanedUpPath(true)
++!p::sendCleanedUpPath()
++!#p::sendCleanedUpPath(true)
 sendCleanedUpPath(containingFolderOnly := false) {
 	path := FileLib.cleanupPath(clipboard)
 	
@@ -49,7 +49,7 @@ sendCleanedUpPath(containingFolderOnly := false) {
 
 ; Websites
 ^+!m:: Run("https://www.messenger.com")
-$^+!f::Run("http://feedly.com/i/latest")
+$^+!f::Run("http://feedly.com/i/latest") ; $ as Notepad++ highlight-all hotkey sends these keys
 ^!#m:: Run("https://mail.google.com/mail/u/0/#inbox")
 ^+!a::
 	openUsualSites() {
@@ -63,6 +63,6 @@ $^+!f::Run("http://feedly.com/i/latest")
 	}
 
 ; OneNote Online
-!+o:: Run("https://www.onenote.com/notebooks?auth=1&nf=1&fromAR=1")
-!+t:: Run(Config.private["ONENOTE_ONLINE_NOTEBOOK_DO"])
-!+#t::Run(Config.private["ONENOTE_ONLINE_NOTEBOOK_LIFE"])
++!o:: Run("https://www.onenote.com/notebooks?auth=1&nf=1&fromAR=1")
++!t:: Run(Config.private["ONENOTE_ONLINE_NOTEBOOK_DO"])
++!#t::Run(Config.private["ONENOTE_ONLINE_NOTEBOOK_LIFE"])

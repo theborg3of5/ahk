@@ -45,4 +45,4 @@
 ^+!#s::DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0)
 
 ; Lock the computer. Good for when remote desktop'd in.
-#+l::DllCall("LockWorkStation")
++#l::DllCall("LockWorkStation")

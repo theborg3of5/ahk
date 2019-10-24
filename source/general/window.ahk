@@ -8,7 +8,7 @@ $!q::WindowActions.minimizeWindow()
 return
 
 ; Sets current window to stay on top
-#+t::
++#t::
 	toggleAlwaysOnTop() {
 		WinSet, AlwaysOnTop, Toggle, A
 		if(WindowLib.isAlwaysOnTop())
@@ -18,13 +18,13 @@ return
 	}
 
 ; Center current window onscreen.
-#+c::WindowLib.center()
++#c::WindowLib.center()
 
 ; Fake-maximize the window and center it.
-#+m::WindowLib.fakeMaximize()
++#m::WindowLib.fakeMaximize()
 
 ; Resize window
-#+r::
++#r::
 	selectResize() {
 		data := new Selector("resize.tls").selectGui()
 		if(!data)

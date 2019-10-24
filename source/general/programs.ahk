@@ -23,7 +23,7 @@
 	#s::  Config.runProgram("Spotify") ; Can't unminimize from tray with any reasonable logic, so re-run to do so.
 	#f::  Config.activateProgram("Everything")
 	#t::  Config.runProgram("Telegram")
-	!+g:: Config.activateProgram("GitHub")
+	+!g:: Config.activateProgram("GitHub")
 	^+!o::Config.activateProgram("OneNote")
 	^+!x::Config.activateProgram("Launchy")
 #If Config.machineIsWorkLaptop

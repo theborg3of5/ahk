@@ -10,15 +10,15 @@
 	^PgUp::Send, ^+{Tab}
 	
 	; Expand and collapse outlines
-	!Left:: !+-
-	!Right::!+=
+	!Left:: +!-
+	!Right::+!=
 	; Alternate history back/forward
-	!+Left:: Send, !{Left}
-	!+Right::Send, !{Right}
+	+!Left:: Send, !{Left}
+	+!Right::Send, !{Right}
 	
 	; Make line movement alt + up/down instead of alt + shift + up/down to match notepad++ and EpicStudio.
-	!Up::  !+Up
-	!Down::!+Down
+	!Up::  +!Up
+	!Down::+!Down
 	
 	; Horizontal scrolling.
 	+WheelUp::  OneNote.scrollLeft()
@@ -78,7 +78,7 @@
 	^+f::OneNote.cleanUpEMC2SummaryTableFormatting()
 	
 	; Update links for a dev structure section header
-	!+#n::OneNote.linkDevStructureSectionTitle()
+	+!#n::OneNote.linkDevStructureSectionTitle()
 #If
 	
 class OneNote {
@@ -450,12 +450,12 @@ class OneNoteTodoPage {
 		Send, ^{Home} ; Get to top-level ("Do") header so we affect the whole page
 		
 		if(expandAll)
-			Send, !+0 ; Show all items on all levels
+			Send, +!0 ; Show all items on all levels
 		else
-			Send, !+4 ; Item level in all sections (level 4)
+			Send, +!4 ; Item level in all sections (level 4)
 		
 		if(todayOnly)
-			Send, !+3 ; Collapse to headers under Today (which collapses headers under Today so only todos on level 4 are visible)
+			Send, +!3 ; Collapse to headers under Today (which collapses headers under Today so only todos on level 4 are visible)
 		
 		; Get down to first item under Today header
 		Send, {End}{Right}{End}{Right} ; End of "Do" line, right to "Today" line, end of "Today" line, right to first item line. For some reason OneNote won't take {Down} keystrokes reliably, but this seems to work instead.

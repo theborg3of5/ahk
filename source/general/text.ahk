@@ -36,7 +36,7 @@ return
 	}
 
 ; Turn clipboard into standard string and send it.
-!+n::
++!n::
 	sendStandardEMC2ObjectString() {
 		HotkeyLib.waitForRelease()
 		ao := new ActionObjectEMC2(Clipboard)

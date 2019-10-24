@@ -1,6 +1,6 @@
 ﻿
 ; Compare the selected text to the last-copied clip.
-#+d::
++#d::
 	; Put the selected text on the clipboard.
 	Send, ^c
 	

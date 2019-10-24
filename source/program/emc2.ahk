@@ -13,7 +13,7 @@
 	; Link and record number things based on the current record.
 	!c:: EMC2.copyCurrentRecord()          ; Get INI/ID
 	!w:: EMC2.openCurrentRecordWeb()       ; Open web version of the current object.
-	!+w::EMC2.openCurrentRecordWebBasic()  ; Open "basic" web version (always EMC2 summary, even for Sherlock/Nova records) of the current object.
+	+!w::EMC2.openCurrentRecordWebBasic()  ; Open "basic" web version (always EMC2 summary, even for Sherlock/Nova records) of the current object.
 	^+o::EMC2.openCurrentDLGInEpicStudio() ; Take DLG # and pop up the DLG in EpicStudio sidebar.
 	
 	; SmartText hotstrings. Added to favorites to deal with duplicate/similar names.
@@ -35,7 +35,7 @@
 #If Config.isWindowActive("EMC2 QAN") || Config.isWindowActive("EMC2 XDS")
 	^l::Send, !l
 #If Config.isWindowActive("EMC2 DLG")
-	^l::Send, !+{F5}
+	^l::Send, +!{F5}
 #If
 
 

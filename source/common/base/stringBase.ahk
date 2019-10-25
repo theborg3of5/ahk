@@ -388,7 +388,7 @@ class StringBase {
 		stringsToTrim.push(Chr(111))   ; Second level bullet (empty circle)
 		stringsToTrim.push(Chr(61607)) ; Third level bullet (filled square)
 		
-		For _,string in additionalstringsToTrim
+		For _,string in additionalStringsToRemove
 			stringsToTrim.push(string)
 		
 		while(!isClean) {

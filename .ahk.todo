@@ -1,6 +1,4 @@
 # New Ideas
-	Standard EMC2 object string - removing "DBC /" from start isn't working right?
-		Logic is in ActionObjectEMC2.postProcess
 	Look into auto-completion in Notepad++ for AHK
 		In general for the language
 		Could we add our own library of functions?

@@ -6,21 +6,15 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
 
-filePathIn  := "reformatTL.tl"
-filePathOut := "reformatTLOut.tl"
-
 global SpacesPerTab := 3
 
-; filesString := ""
 root := Config.path["AHK_ROOT"]
 Loop, Files, %root%\*.tl*, RF
 {
-	; filesString .= A_LoopFileFullPath "`n"
 	reformatFile(A_LoopFileFullPath)
 }
 
-; MsgBox, % filesString
-
+new Toast("Reformatted all TL and TLS files in AHK root directory").blockingOn().showMedium()
 
 ExitApp
 

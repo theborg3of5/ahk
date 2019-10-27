@@ -18,8 +18,8 @@
 	Social (Telegram, Pidgin)				soc				950		750		RIGHT_EDGE		TOP_EDGE			HOME
 	Social (Telegram, Pidgin)				soc				950		750		RIGHT_EDGE		BOTTOM_EDGE		WORK
 
-	# Development
 [CONTEXT.replaceWith(WORK)]
+	# Development
 	Minimum Hyperspace (2015-)				minOld			800		550
 	Minimum Hyperspace (2017+)				min				1280		768
 	PuTTY on laptop screen					pl					1084		1050

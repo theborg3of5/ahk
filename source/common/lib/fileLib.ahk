@@ -94,7 +94,7 @@ class FileLib {
 	;---------
 	fileLinesToArray(fileName) {
 		lines := Object()
-		Loop Read, %fileName% 
+		Loop, Read, %fileName%
 		{
 			lines[A_Index] := A_LoopReadLine
 		}

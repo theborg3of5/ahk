@@ -41,15 +41,16 @@ class StringLib {
 	}
 	
 	;---------
-	; DESCRIPTION:    Get the specified number of spaces/dots.
+	; DESCRIPTION:    Get the specified number of spaces/tabs/dots.
 	; PARAMETERS:
 	;  numToGet (I,REQ) - How many of the relevant character to return.
 	; RETURNS:        As many spaces/dots as requested.
-	; SIDE EFFECTS:   
-	; NOTES:          
 	;---------
 	getSpaces(numToGet) {
-		return StringLib.duplicate(" ", numToGet)
+		return StringLib.duplicate(A_Space, numToGet)
+	}
+	getTabs(numToGet) {
+		return StringLib.duplicate(A_Tab, numToGet)
 	}
 	getDots(numToGet) {
 		return StringLib.duplicate(".", numToGet)

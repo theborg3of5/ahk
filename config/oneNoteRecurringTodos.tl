@@ -1,6 +1,6 @@
 (	TITLE																DATE		DAY_ABBREV		NUM_DAY_OF_MONTH		MONTH_ABBREV
 
-; Dailies
+# Dailies
 [DAY_ABBREV.replaceWith(THURS)]
 	Transcribe kids' class notes
 []
@@ -24,7 +24,7 @@
 	Pull to-dos from specific sections below
 []
 
-; Monthlies
+# Monthlies
 	Put away local backup drives								2
 	Book OTF															21
 	Plug in local backup drives								LAST
@@ -36,7 +36,7 @@
 	Call Azzam grandparents										-			SAT				2
 	Call Borg grandparents										-			SAT				4
 
-; Yearlies
+# Yearlies
 	Check various airline rewards points					-			SAT				1							JAN
 	Check various hotel rewards points						-			SAT				1							FEB
 	Review Google Play subscriptions							-			SAT				1							MAR

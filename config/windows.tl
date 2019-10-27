@@ -6,6 +6,8 @@
 			AutoHotkey Toast					AutoHotkey.exe				AutoHotkeyGUI			[TOAST]											NO_PADDING
 			Chrome Join							chrome.exe					-							Join
 			Chrome TickTick					chrome.exe					-							All - TickTick
+	
+	; EMC2 windows
 	[+2|EXE.replaceWith(EpicD87.exe)]
 		; Different sections of the main EMC2 window.
 		[+3|CLASS.replaceWith(ThunderRT6MDIForm)|TITLE_STRING_MATCH_MODE_OVERRIDE.replaceWith(START)]
@@ -29,6 +31,7 @@
 			EMC2 XDS Open Design				-								ThunderRT6FormDC		Open/New Design
 			EMC2 XDS Submit					-								-							Submit Design for Review
 	[-2]
+	
 			EpicStudio New Object Window	EpicStudio.exe				New Object
 			EpicStudio Tokenize String		EpicStudio.exe				Tokenize String
 			OneTastic Macro Editor XML		ONENOTE.EXE					Onetastic Window		Edit XML

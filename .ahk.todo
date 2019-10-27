@@ -1,4 +1,15 @@
 # New Ideas
+	Consider a .max() function on number base
+		This is actually StringBase, though - how can we deal with that?
+			Rename it to something more neutral?
+				BasicBase?
+			Can we attach both somehow?
+		Use cases:
+			Anywhere we track the max of something
+			reformatTL
+	Consider a string method that specifically drops trailing whitespace, but not leading
+		Use cases:
+			reformatTL
 	Look into auto-completion in Notepad++ for AHK
 		In general for the language
 		Could we add our own library of functions?

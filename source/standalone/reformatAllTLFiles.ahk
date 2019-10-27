@@ -1,4 +1,5 @@
-; Activate (or run if not already open) a specific program, to be executed by external program (like Microsoft keyboard special keys).
+; Reformat all TL and TLS files in the AHK root folder and below, to my personally preferred standard.
+
 #NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
 #SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
@@ -21,31 +22,88 @@ ExitApp
 
 
 reformatFile(filePath) {
-	rowsAry := FileLib.fileLinesToArray(filePath)
+	rows := FileLib.fileLinesToArray(filePath)
 	
-	; Figure out our overall dimensions - column widths and indentation level for "normal" rows.
-	columnWidthsAry := []
-	normalIndentLevel := 0
-	numOpenMods := 0
-	For _,row in rowsAry {
-		row := row.withoutWhitespace()
+	newRows := reformatRows(rows)
+	fileContents := newRows.join("`r`n") "`r`n" ; Extra newline on the end
+	
+	FileLib.replaceFileWithString(filePath, fileContents)
+}
+
+reformatRows(rows) {
+	getDimensions(rows, normalIndentLevel, columnWidthsAry)
+	
+	modIndentLevel := 0
+	newRows := []
+	For _,rowText in rows {
+		row := rowText.withoutWhitespace()
 		
-		; Ignore certain rows for width-calculation purposes
-		if(row.startsWith(";") || row.startsWith("@") || row.startsWith("# "))
+		; Comment rows are left exactly as-is (including indentation).
+		if(row.startsWith(";")) {
+			newRows.push(rowText) ; rowText, not row - preserve original indentation.
 			Continue
-		
-		; Model rows and key rows - push everything out to at least 1 tab.
-		if(row.startsWith("(") || row.startsWith(")")) {
-			normalIndentLevel := DataLib.max(normalIndentLevel, 1)
-			
-			; Remove the extra prefix so we can split correctly below.
-			row := row.removeFromStart("(")
-			row := row.removeFromStart(")")
-			row := row.withoutWhitespace()
 		}
 		
-		; Mod rows shift the level based on the max mods open (1 mod open = 1 additional indent),
-		; but don't affect column widths.
+		; Setting and header rows are never split, and get no indentation.
+		if(row.startsWith("@") || row.startsWith("# ")) {
+			newRows.push(row)
+			Continue
+		}
+		
+		; Blank rows indent to match mods.
+		if(row = "") {
+			newRows.push(StringLib.getTabs(modIndentLevel) row)
+			Continue
+		}
+		
+		; Mod rows indent based on how many mods are open.
+		if(row.startsWith("[")) {
+			modContents := row.removeFromStart("[").removeFromEnd("]")
+			
+			; Clear all mods - zero out indent.
+			if(modContents = "") {
+				newRows.push(row) ; No indentation for this row, either.
+				modIndentLevel := 0
+				Continue
+			}
+			
+			; Removing a mod - decrease indent.
+			if(modContents.startsWith("-")) {
+				modIndentLevel-- ; Decrease this first so this row goes a level back.
+				newRows.push(StringLib.getTabs(modIndentLevel) row)
+				Continue
+			}
+			
+			; Adding a mod - increase indent.
+			newRows.push(StringLib.getTabs(modIndentLevel) row)
+			modIndentLevel++
+			Continue
+		}
+		
+		prefix := stripOffModelKeyPrefix(row) ; Model/key rows have a special prefix that comes before starting indentation.
+		indent := StringLib.getTabs(normalIndentLevel)
+		row    := fixColumnWidths(row, columnWidthsAry)
+		
+		newRows.push(prefix indent row)
+	}
+	
+	return newRows
+}
+
+; Figure out our overall dimensions - column widths and indentation level for "normal" rows.
+getDimensions(rows, ByRef normalIndentLevel, ByRef columnWidthsAry) {
+	normalIndentLevel := 0
+	columnWidthsAry   := []
+	
+	numOpenMods := 0
+	For _,row in rows {
+		row := row.withoutWhitespace()
+		
+		; Some rows don't affect widths or indentation
+		if(row.startsWith(";") || row.startsWith("@") || row.startsWith("# ")) ; GDB TODO swap out literal characters with TableList constants, make those contants public if needed
+			Continue
+		
+		; Mod rows shift the level based on the max mods open (1 mod open = 1 additional indent), but don't affect column widths.
 		if(row.startsWith("[")) {
 			modContents := row.removeFromStart("[").removeFromEnd("]")
 			if(modContents = "") ; Clearing all mods
@@ -59,95 +117,50 @@ reformatFile(filePath) {
 			Continue
 		}
 		
+		; Model/key rows - make sure "normal" indentation is at least 1 so we can separate the first column from the prefix.
+		if(stripOffModelKeyPrefix(row) != "")
+			normalIndentLevel := DataLib.max(normalIndentLevel, 1)
+		
 		; Track size of each column (in tabs).
 		For columnIndex,value in splitRow(row) {
 			width := Ceil(value.length() / SPACES_PER_TAB) + MIN_COLUMN_PADDING ; Ceiling means we'll get at least 1 FULL tab of padding
 			columnWidthsAry[columnIndex] := DataLib.max(columnWidthsAry[columnIndex], width)
 		}
 	}
-	
-	; Rewrite each row with enough tabs to space things correctly
-	normalIndent := StringLib.getTabs(normalIndentLevel)
-	modIndentLevel := 0
-	newRowsAry := []
-	For _,rowText in rowsAry {
-		row := rowText.withoutWhitespace()
-		
-		; Comment rows are left exactly as-is (including indentation).
-		if(row.startsWith(";")) {
-			newRowsAry.push(rowText) ; rowText, not row - to preserve original indentation.
-			Continue
-		}
-		
-		; Setting and header rows never get any indentation.
-		if(row.startsWith("@") || row.startsWith("# ")) {
-			newRowsAry.push(row)
-			Continue
-		}
-		
-		; Blank rows go at the current mod indent level.
-		if(row = "") {
-			newRowsAry.push(StringLib.getTabs(modIndentLevel) row)
-			Continue
-		}
-		
-		; Mod rows are special - they indent based on how many mods are open.
-		if(row.startsWith("[")) {
-			modContents := row.removeFromStart("[").removeFromEnd("]")
-			
-			; Clear all mods - clear indent.
-			if(modContents = "") {
-				newRowsAry.push(row) ; No indentation for this row, either.
-				modIndentLevel := 0
-				Continue
-			}
-			
-			; Removing a mod - decrease indent.
-			if(modContents.startsWith("-")) {
-				modIndentLevel-- ; Decrease this first so this row goes a level back.
-				newRowsAry.push(StringLib.getTabs(modIndentLevel) row)
-				Continue
-			}
-			
-			; Adding a mod - increase indent.
-			newRowsAry.push(StringLib.getTabs(modIndentLevel) row)
-			modIndentLevel++
-			Continue
-		}
-		
-		; Model/key row chars are special "prefixes" that come before starting indentation
-		prefix := ""
-		if(row.startsWith("(")) {
-			prefix := "("
-			row := row.removeFromStart("(").withoutWhitespace()
-		}
-		if(row.startsWith(")")) {
-			prefix := ")"
-			row := row.removeFromStart(")").withoutWhitespace()
-		}
-		
-		newRow := ""
-		For columnIndex,value in splitRow(row) {
-			columnWidth := columnWidthsAry[columnIndex]
-			valueWidth := Floor(value.length() / SPACES_PER_TAB) ; Width in tabs
-			newRow .= value StringLib.getTabs(columnWidth - valueWidth)
-		}
-		
-		newRow := newRow.withoutWhitespace() ; Trim off any extra indentation we don't need at the end of each row
-		newRowsAry.push(prefix normalIndent newRow)
-	}
-
-	FileLib.replaceFileWithString(filePath, newRowsAry.join("`r`n") "`r`n")
 }
 
 splitRow(row) {
-	; Reduce any sets of multiple tabs in a row to a single one.
+	; Reduce any sets of multiple tabs in a row to a single one, so we don't end up with any extra blank column values.
 	Loop {
 		if(!row.contains(A_Tab A_Tab))
 			Break
 		row := row.replace(A_Tab A_Tab, A_Tab)
 	}
 	
-	; Track size of each column (in tabs).
 	return row.split(A_Tab)
+}
+
+stripOffModelKeyPrefix(ByRef row) {
+	if(row.startsWith("("))
+		prefix := "("
+	else if(row.startsWith(")"))
+		prefix := ")"
+	
+	; Remove the prefix and any extra whitespace from the row so it can be split normally.
+	if(prefix != "")
+		row := row.removeFromStart(prefix).withoutWhitespace()
+	
+	return prefix
+}
+
+fixColumnWidths(row, columnWidthsAry) {
+	newRow := ""
+	
+	For columnIndex,value in splitRow(row) {
+		columnWidth := columnWidthsAry[columnIndex]
+		valueWidth := Floor(value.length() / SPACES_PER_TAB) ; Width in tabs
+		newRow .= value StringLib.getTabs(columnWidth - valueWidth)
+	}
+	
+	return newRow.withoutWhitespace() ; Trim off any extra indentation we don't need at the end of the row
 }

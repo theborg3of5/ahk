@@ -1,9 +1,7 @@
 # New Ideas
-	Consider a .max() function on number base
-		This is actually StringBase, though - how can we deal with that?
-			Rename it to something more neutral?
-				BasicBase?
-			Can we attach both somehow?
+	Consider a function that updates a max value with less text
+		updateMax(maxValue, possiblyBiggerValue)
+		Probably in DataLib?
 		Use cases:
 			Anywhere we track the max of something
 			reformatTL

@@ -23,42 +23,29 @@ ExitApp
 reformatFile(filePath) {
 	rowsAry := FileLib.fileLinesToArray(filePath)
 	
-	; Figure out the width of each column
+	; Figure out our overall dimensions - column widths and indentation level for "normal" rows.
 	columnWidthsAry := []
-	For _,row in rowsAry {
-		row := row.withoutWhitespace()
-		
-		; Ignore certain rows for width-calculation purposes
-		if(row.startsWith("[") || row.startsWith(";") || row.startsWith("@") || row.startsWith("# "))
-			Continue
-		
-		; Model rows and key rows have an extra bit (and possibly whitespace) at the start
-		if(row.startsWith("(") || row.startsWith(")")) {
-			row := row.removeFromStart("(")
-			row := row.removeFromStart(")")
-			row := row.withoutWhitespace()
-		}
-		
-		; Track size of each column (in tabs).
-		For columnIndex,value in splitRow(row) {
-			width := Ceil(value.length() / SPACES_PER_TAB) + MIN_COLUMN_PADDING ; Ceiling means we'll get at least 1 FULL tab of padding
-			columnWidthsAry[columnIndex] := DataLib.max(columnWidthsAry[columnIndex], width)
-		}
-	}
-
-	; Figure out the starting indent level for "normal" rows - affected by model/key rows and mod rows.
 	normalIndentLevel := 0
 	numOpenMods := 0
 	For _,row in rowsAry {
 		row := row.withoutWhitespace()
 		
-		; Model/key rows cause us to push everything out to one tab.
+		; Ignore certain rows for width-calculation purposes
+		if(row.startsWith(";") || row.startsWith("@") || row.startsWith("# "))
+			Continue
+		
+		; Model rows and key rows - push everything out to at least 1 tab.
 		if(row.startsWith("(") || row.startsWith(")")) {
 			normalIndentLevel := DataLib.max(normalIndentLevel, 1)
-			Continue
+			
+			; Remove the extra prefix so we can split correctly below.
+			row := row.removeFromStart("(")
+			row := row.removeFromStart(")")
+			row := row.withoutWhitespace()
 		}
 		
-		; Mod rows shift the level based on the max mods open (1 mod open = 1 additional indent).
+		; Mod rows shift the level based on the max mods open (1 mod open = 1 additional indent),
+		; but don't affect column widths.
 		if(row.startsWith("[")) {
 			modContents := row.removeFromStart("[").removeFromEnd("]")
 			if(modContents = "") ; Clearing all mods
@@ -68,13 +55,17 @@ reformatFile(filePath) {
 			else
 				numOpenMods++
 			
-			; Debug.popup("row",row, "modContents",modContents, "numOpenMods",numOpenMods)
-			
 			normalIndentLevel := DataLib.max(normalIndentLevel, numOpenMods)
 			Continue
 		}
+		
+		; Track size of each column (in tabs).
+		For columnIndex,value in splitRow(row) {
+			width := Ceil(value.length() / SPACES_PER_TAB) + MIN_COLUMN_PADDING ; Ceiling means we'll get at least 1 FULL tab of padding
+			columnWidthsAry[columnIndex] := DataLib.max(columnWidthsAry[columnIndex], width)
+		}
 	}
-
+	
 	; Rewrite each row with enough tabs to space things correctly
 	normalIndent := StringLib.getTabs(normalIndentLevel)
 	modIndentLevel := 0

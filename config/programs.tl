@@ -1,4 +1,4 @@
-(	NAME							PATH																					MACHINE
+(	NAME							PATH																						MACHINE
 
 [PATH.addToStart(<PROGRAM_FILES_86>\)]
 	Chrome						Google\Chrome\Application\chrome.exe
@@ -6,7 +6,7 @@
 	EpicStudio					EpicStudio\EpicStudio.exe
 	Foobar						foobar2000\foobar2000.exe
 	Launchy						Launchy\Launchy.exe
-	OneNote						Microsoft Office\Office16\ONENOTE.EXE										WORK_LAPTOP
+	OneNote						Microsoft Office\Office16\ONENOTE.EXE											WORK_LAPTOP
 	OneNote						Microsoft Office\root\Office16\ONENOTE.EXE
 	Outlook						Microsoft Office\Office16\OUTLOOK.EXE
 	Putty							PuTTY\putty.exe
@@ -32,11 +32,11 @@
 	Notepad						System32\notepad.exe
 []
 
-	Process Explorer			<PROGRAM_FILES>\Process Explorer\procexp.exe								WORK_LAPTOP
-	Process Explorer			<EPIC_PERSONAL>\Programs\Process Explorer\procexp.exe					WORK_VDI
+	Process Explorer			<PROGRAM_FILES>\Process Explorer\procexp.exe									WORK_LAPTOP
+	Process Explorer			<EPIC_PERSONAL>\Programs\Process Explorer\procexp.exe						WORK_VDI
 	Process Explorer			<PROGRAM_FILES>\ProcessExplorer\procexp.exe
 
 	GitHub						<USER_APPDATA_LOCAL>\GitHubDesktop\GitHubDesktop.exe
 	Spotify						<USER_APPDATA>\Spotify\Spotify.exe
 	Telegram						<USER_APPDATA>\Telegram Desktop\Telegram.exe
-	Firefox Portable			S:\FirefoxPortable\FirefoxPortable.exe										HOME_DESKTOP
+	Firefox Portable			S:\FirefoxPortable\FirefoxPortable.exe											HOME_DESKTOP

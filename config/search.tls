@@ -1,46 +1,46 @@
 @WindowTitle=Select type of search
 
-(		NAME								ABBREV		SUBTYPE															SEARCH_TYPE		APP_KEY		CONTEXT		SEARCH_TERM
-)		0									0				0																	0					0				0				1
+(		NAME									ABBREV			SUBTYPE																						SEARCH_TYPE		APP_KEY		CONTEXT		SEARCH_TERM
+)		0										0					0																								0					0				0				1
 
 # Web
 ; (SUBTYPE = <URL with %s for query>)
 [SEARCH_TYPE.replaceWith(WEB)]
-		Google							g				https://www.google.com/search?q=%s
-		Gmail								gm				https://mail.google.com/mail/u/0/#search/%s
-		Youtube							yt				https://www.youtube.com/results?search_query=%s
-		Steam								st				https://store.steampowered.com/search/?term=%s
-		AutoHotkey Docs				ahkd			https://cse.google.com/cse?cx=010629462602499112316:ywoq_rufgic&q=%s
-		Translate Dutch > English	tde|detrans	https://translate.google.com/#nl/en/%s
-		Translate English > Dutch	ted|edtrans	https://translate.google.com/#en/nl/%s
+		Google								g					https://www.google.com/search?q=%s
+		Gmail									gm					https://mail.google.com/mail/u/0/#search/%s
+		Youtube								yt					https://www.youtube.com/results?search_query=%s
+		Steam									st					https://store.steampowered.com/search/?term=%s
+		AutoHotkey Docs					ahkd				https://cse.google.com/cse?cx=010629462602499112316:ywoq_rufgic&q=%s
+		Translate Dutch > English		tde|detrans		https://translate.google.com/#nl/en/%s
+		Translate English > Dutch		ted|edtrans		https://translate.google.com/#en/nl/%s
 []
 
 # GrepWin
 ; (SUBTYPE = folder)
 [SEARCH_TYPE.replaceWith(GREPWIN)]
-		AHK Root							ahkr			<AHK_ROOT>
-		AHK Source						ahks|ahkf	<AHK_SOURCE>
-		OneTastic Macros				ot				<ONETASTIC_MACROS>
+		AHK Root								ahkr				<AHK_ROOT>
+		AHK Source							ahks|ahkf		<AHK_SOURCE>
+		OneTastic Macros					ot					<ONETASTIC_MACROS>
 []
-		
-		# Other
-		Everything (file search)	e|ev			-																	EVERYTHING
+
+# Other
+		Everything (file search)		e|ev				-																								EVERYTHING
 
 [+1|CONTEXT.replaceWith(WORK)]
 	[+2|SEARCH_TYPE.replaceWith(CODESEARCH)]
-		# | Codesearch
-		Server							s				routine
-		Client							c				client
-		Server + Client				sc|cs			routine|client
-		Records							r				records
-		Other								o|p			other
-		All								a				routine|client|records|other
+# | Codesearch
+		Server								s					routine
+		Client								c					client
+		Server + Client					sc|cs				routine|client
+		Records								r					records
+		Other									o|p				other
+		All									a					routine|client|records|other
 		
-		# Codesearch Specifics
-		Server DBC						sd				Server															-					DBC
+# Codesearch Specifics
+		Server DBC							sd					Server																						-					DBC
 	[-2]
-		
-		# Other
-		Guru								gu				-																	GURU
-		DBC Wiki							d|dbc			DBC																WIKI
+	
+# Other
+		Guru									gu					-																								GURU
+		DBC Wiki								d|dbc				DBC																							WIKI
 [-1]

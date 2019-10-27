@@ -1,7 +1,7 @@
 @MinColumnWidth=350
 
 (	NAME									ABBREV	FORMAT
-	
+
 	Array									a			ARRAY
 	Comma-delimited					c			COMMA
 	Comma-delimited with spaces	cs			COMMA_SPACED

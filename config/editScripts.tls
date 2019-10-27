@@ -1,10 +1,10 @@
 @WindowTitle=Pick a script to edit:
 
-(	NAME										ABBREV	PATH
+(	NAME						ABBREV	PATH
 
-	Main										m			<AHK_SOURCE>\main.ahk
-	Common									com		<AHK_SOURCE>\common\common.ahk
-	Config									conf		<AHK_SOURCE>\common\static\config.ahk
-	Command Functions						cf			<AHK_SOURCE>\common\external\commandFunctions.ahk
-	Hotstrings								h			<AHK_SOURCE>\general\hotstrings.ahk
-	Test										t			<AHK_ROOT>\test\test.ahk
+	Main						m			<AHK_SOURCE>\main.ahk
+	Common					com		<AHK_SOURCE>\common\common.ahk
+	Config					conf		<AHK_SOURCE>\common\static\config.ahk
+	Command Functions		cf			<AHK_SOURCE>\common\external\commandFunctions.ahk
+	Hotstrings				h			<AHK_SOURCE>\general\hotstrings.ahk
+	Test						t			<AHK_ROOT>\test\test.ahk

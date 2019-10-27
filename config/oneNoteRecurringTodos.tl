@@ -1,4 +1,4 @@
-(	TITLE																DATE		DAY_ABBREV		NUM_DAY_OF_MONTH		MONTH_ABBREV
+(	TITLE															DATE		DAY_ABBREV		NUM_DAY_OF_MONTH		MONTH_ABBREV
 
 # Dailies
 [DAY_ABBREV.replaceWith(THURS)]
@@ -25,20 +25,20 @@
 []
 
 # Monthlies
-	Put away local backup drives								2
-	Book OTF															21
-	Plug in local backup drives								LAST
-	Check FatMax charge											-			SUN				1
-	Weigh cats														-			WED				2
-	Schedule haircut												-			SAT				2
-	Periodic cleaning (small trash cans, kitchen)		-			SUN				2
-	Transcribe instructor meeting notes						-			SUN				1
-	Call Azzam grandparents										-			SAT				2
-	Call Borg grandparents										-			SAT				4
+	Put away local backup drives							2
+	Book OTF														21
+	Plug in local backup drives							LAST
+	Check FatMax charge										-			SUN				1
+	Weigh cats													-			WED				2
+	Schedule haircut											-			SAT				2
+	Periodic cleaning (small trash cans, kitchen)	-			SUN				2
+	Transcribe instructor meeting notes					-			SUN				1
+	Call Azzam grandparents									-			SAT				2
+	Call Borg grandparents									-			SAT				4
 
 # Yearlies
-	Check various airline rewards points					-			SAT				1							JAN
-	Check various hotel rewards points						-			SAT				1							FEB
-	Review Google Play subscriptions							-			SAT				1							MAR
-	Update Windows recovery drive + archive				-			SAT				1							JUN
-	Physically clean out desktops								-			SAT				2							JUL
+	Check various airline rewards points				-			SAT				1							JAN
+	Check various hotel rewards points					-			SAT				1							FEB
+	Review Google Play subscriptions						-			SAT				1							MAR
+	Update Windows recovery drive + archive			-			SAT				1							JUN
+	Physically clean out desktops							-			SAT				2							JUL

@@ -111,6 +111,8 @@ class Selector {
 ; ============================================== PUBLIC ==============================================
 ; ====================================================================================================
 	
+	static Char_OverrideFieldIndex := ")"
+	
 	;---------
 	; DESCRIPTION:    The TableList instance that holds all data read from the file, available so
 	;                 that callers can apply filtering if needed. See TableList for available
@@ -282,7 +284,6 @@ class Selector {
 ; ============================================== PRIVATE =============================================
 ; ====================================================================================================
 	
-	static Char_OverrideFieldIndex := ")"
 	static Char_CommandStart       := "+"
 	static Char_Command_Edit       := "e"
 	

@@ -209,6 +209,18 @@ class TableList {
 ; ============================================== PUBLIC ==============================================
 ; ====================================================================================================
 	
+	; Special characters
+	static Char_Ignore      := ";"
+	static Char_Model       := "("
+	static Char_Setting     := "@"
+	static Char_Header      := "# " ; Must include the space
+	static Char_Placeholder := "-"
+	static Char_MultiEntry  := "|"
+	static Char_Mod_Start       := "["
+	static Char_Mod_End         := "]"
+	static Char_Mod_AddLabel    := "+"
+	static Char_Mod_RemoveLabel := "-"
+	
 	;---------
 	; DESCRIPTION:    Create a new TableList instance.
 	; PARAMETERS:
@@ -438,18 +450,6 @@ class TableList {
 ; ====================================================================================================
 	
 	static autoFilters := [] ; Array of {"COLUMN":filterColumn, "VALUE":filterValue} objects
-	
-	; Special characters
-	static Char_Ignore  := ";"
-	static Char_Model   := "("
-	static Char_Setting := "@"
-	static Char_Header  := "# " ; Must include the space
-	static Char_Placeholder := "-"
-	static Char_MultiEntry  := "|"
-	static Char_Mod_Start       := "["
-	static Char_Mod_End         := "]"
-	static Char_Mod_AddLabel    := "+"
-	static Char_Mod_RemoveLabel := "-"
 	
 	mods        := []
 	table       := []

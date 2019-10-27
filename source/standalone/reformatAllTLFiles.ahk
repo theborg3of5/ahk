@@ -39,13 +39,13 @@ reformatRows(rows) {
 		row := rowText.withoutWhitespace()
 		
 		; Comment rows are left exactly as-is (including indentation).
-		if(row.startsWith(";")) {
+		if(row.startsWith(TableList.Char_Ignore)) {
 			newRows.push(rowText) ; rowText, not row - preserve original indentation.
 			Continue
 		}
 		
 		; Setting and header rows are never split, and get no indentation.
-		if(row.startsWith("@") || row.startsWith("# ")) {
+		if(row.startsWith(TableList.Char_Setting) || row.startsWith(TableList.Char_Header)) {
 			newRows.push(row)
 			Continue
 		}
@@ -57,8 +57,8 @@ reformatRows(rows) {
 		}
 		
 		; Mod rows indent based on how many mods are open.
-		if(row.startsWith("[")) {
-			modContents := row.removeFromStart("[").removeFromEnd("]")
+		if(row.startsWith(TableList.Char_Mod_Start)) {
+			modContents := row.removeFromStart(TableList.Char_Mod_Start).removeFromEnd(TableList.Char_Mod_End)
 			
 			; Clear all mods - zero out indent.
 			if(modContents = "") {
@@ -68,7 +68,7 @@ reformatRows(rows) {
 			}
 			
 			; Removing a mod - decrease indent.
-			if(modContents.startsWith("-")) {
+			if(modContents.startsWith(TableList.Char_Mod_RemoveLabel)) {
 				modIndentLevel-- ; Decrease this first so this row goes a level back.
 				newRows.push(StringLib.getTabs(modIndentLevel) row)
 				Continue
@@ -100,15 +100,15 @@ getDimensions(rows, ByRef normalIndentLevel, ByRef columnWidthsAry) {
 		row := row.withoutWhitespace()
 		
 		; Some rows don't affect widths or indentation
-		if(row.startsWith(";") || row.startsWith("@") || row.startsWith("# ")) ; GDB TODO swap out literal characters with TableList constants, make those contants public if needed
+		if(row.startsWith(TableList.Char_Ignore) || row.startsWith(TableList.Char_Setting) || row.startsWith(TableList.Char_Header))
 			Continue
 		
 		; Mod rows shift the level based on the max mods open (1 mod open = 1 additional indent), but don't affect column widths.
-		if(row.startsWith("[")) {
-			modContents := row.removeFromStart("[").removeFromEnd("]")
+		if(row.startsWith(TableList.Char_Mod_Start)) {
+			modContents := row.removeFromStart(TableList.Char_Mod_Start).removeFromEnd(TableList.Char_Mod_End)
 			if(modContents = "") ; Clearing all mods
 				numOpenMods := 0
-			else if(modContents.startsWith("-")) ; Closing one specific mod
+			else if(modContents.startsWith(TableList.Char_Mod_RemoveLabel)) ; Closing one specific mod
 				numOpenMods--
 			else
 				numOpenMods++
@@ -141,10 +141,10 @@ splitRow(row) {
 }
 
 stripOffModelKeyPrefix(ByRef row) {
-	if(row.startsWith("("))
-		prefix := "("
-	else if(row.startsWith(")"))
-		prefix := ")"
+	if(row.startsWith(TableList.Char_Model))
+		prefix := TableList.Char_Model
+	else if(row.startsWith(Selector.Char_OverrideFieldIndex))
+		prefix := Selector.Char_OverrideFieldIndex
 	
 	; Remove the prefix and any extra whitespace from the row so it can be split normally.
 	if(prefix != "")

@@ -10,6 +10,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 global SPACES_PER_TAB := 3
 global MIN_COLUMN_PADDING := 1 ; At least 1 tab between columns
 
+; Loop over .tl and .tls files in the AHK root directory.
 root := Config.path["AHK_ROOT"]
 Loop, Files, %root%\*.tl*, RF
 {
@@ -123,7 +124,7 @@ getDimensions(rows, ByRef normalIndentLevel, ByRef columnWidthsAry) {
 		
 		; Track size of each column (in tabs).
 		For columnIndex,value in splitRow(row) {
-			width := Ceil(value.length() / SPACES_PER_TAB) + MIN_COLUMN_PADDING ; Ceiling means we'll get at least 1 FULL tab of padding
+			width := Ceil(value.length() / SPACES_PER_TAB) + MIN_COLUMN_PADDING ; Width in tabs - ceiling means we'll get at least 1 FULL tab of padding
 			columnWidthsAry[columnIndex] := DataLib.max(columnWidthsAry[columnIndex], width)
 		}
 	}

@@ -5,9 +5,6 @@
 		Use cases:
 			Anywhere we track the max of something
 			reformatTL
-	Consider a string method that specifically drops trailing whitespace, but not leading
-		Use cases:
-			reformatTL
 	Look into auto-completion in Notepad++ for AHK
 		In general for the language
 		Could we add our own library of functions?
@@ -80,10 +77,6 @@
 # TableList
 	TableList mods - consider making it a replacement by default (only 1 active mod), only stack with labels
 		Use case: onenote todos, dailies section could be more compact
-	Build a way to auto-reformat .tl files?
-		Fix widths so they work nicely
-			Will need to have a tab width parameter/argument somewhere for this (maybe in _constants or config?)
-		Take into account overflow (across columns), with next field being empty or placeholder'd
 	
 # Selector
 	Add some setting to have the popup appear when we pass in a bad value?

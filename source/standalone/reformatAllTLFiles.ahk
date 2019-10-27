@@ -6,7 +6,8 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
 
-global SpacesPerTab := 3
+global SPACES_PER_TAB := 3
+global MIN_COLUMN_PADDING := 1 ; At least 1 tab between columns
 
 root := Config.path["AHK_ROOT"]
 Loop, Files, %root%\*.tl*, RF
@@ -38,18 +39,10 @@ reformatFile(filePath) {
 			row := row.withoutWhitespace()
 		}
 		
-		; Reduce any sets of multiple tabs in a row to a single one.
-		Loop {
-			if(!row.contains(A_Tab A_Tab))
-				Break
-			row := row.replace(A_Tab A_Tab, A_Tab)
-		}
-		
 		; Track size of each column (in tabs).
-		For columnIndex,value in row.split(A_Tab) {
-			width := 1 + Ceil(value.length() / SpacesPerTab) ; Always at least 1 tab, plus the number of tabs needed to completely cover the longest value.
+		For columnIndex,value in splitRow(row) {
+			width := Ceil(value.length() / SPACES_PER_TAB) + MIN_COLUMN_PADDING ; Ceiling means we'll get at least 1 FULL tab of padding
 			columnWidthsAry[columnIndex] := DataLib.max(columnWidthsAry[columnIndex], width)
-			; Debug.popup("columnIndex",columnIndex, "value",value, "width",width)
 		}
 	}
 
@@ -82,8 +75,6 @@ reformatFile(filePath) {
 		}
 	}
 
-	; Debug.popup("rowsAry",rowsAry, "columnWidthsAry",columnWidthsAry, "normalIndentLevel",normalIndentLevel)
-
 	; Rewrite each row with enough tabs to space things correctly
 	normalIndent := StringLib.getTabs(normalIndentLevel)
 	modIndentLevel := 0
@@ -109,13 +100,13 @@ reformatFile(filePath) {
 			Continue
 		}
 		
-		; Mod rows are different - they increase or decrease the normal indent for following rows.
+		; Mod rows are special - they indent based on how many mods are open.
 		if(row.startsWith("[")) {
 			modContents := row.removeFromStart("[").removeFromEnd("]")
 			
 			; Clear all mods - clear indent.
 			if(modContents = "") {
-				newRowsAry.push(row)
+				newRowsAry.push(row) ; No indentation for this row, either.
 				modIndentLevel := 0
 				Continue
 			}
@@ -144,20 +135,11 @@ reformatFile(filePath) {
 			row := row.removeFromStart(")").withoutWhitespace()
 		}
 		
-		; Reduce any sets of multiple tabs in a row to a single one to start, then split it.
-		Loop {
-			if(!row.contains(A_Tab A_Tab))
-				Break
-			row := row.replace(A_Tab A_Tab, A_Tab)
-		}
-		
 		newRow := ""
-		For columnIndex,value in row.split(A_Tab) {
+		For columnIndex,value in splitRow(row) {
 			columnWidth := columnWidthsAry[columnIndex]
-			valueWidth := Floor(value.length() / SpacesPerTab) ; Width in tabs
+			valueWidth := Floor(value.length() / SPACES_PER_TAB) ; Width in tabs
 			newRow .= value StringLib.getTabs(columnWidth - valueWidth)
-			
-			; Debug.popup("value",value, "columnWidth",columnWidth, "valueWidth",valueWidth)
 		}
 		
 		newRow := newRow.withoutWhitespace() ; Trim off any extra indentation we don't need at the end of each row
@@ -167,4 +149,14 @@ reformatFile(filePath) {
 	FileLib.replaceFileWithString(filePath, newRowsAry.join("`r`n") "`r`n")
 }
 
-ExitApp
+splitRow(row) {
+	; Reduce any sets of multiple tabs in a row to a single one.
+	Loop {
+		if(!row.contains(A_Tab A_Tab))
+			Break
+		row := row.replace(A_Tab A_Tab, A_Tab)
+	}
+	
+	; Track size of each column (in tabs).
+	return row.split(A_Tab)
+}

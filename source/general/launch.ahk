@@ -4,16 +4,16 @@
 !+f::SearchLib.selectedTextPrompt()
 
 ; Generic open - open a variety of different things based on the selected text.
-^!o:: new ActionObjectRedirector(SelectLib.getText()).openWeb()
-^!#o::new ActionObjectRedirector(SelectLib.getText()).openEdit()
+^!#o::new ActionObjectRedirector(SelectLib.getText()).openWeb()
+^!o:: new ActionObjectRedirector(SelectLib.getText()).openEdit()
 
 ; Generic copy link - copy links to a variety of different things based on the selected text.
-^!l:: new ActionObjectRedirector(SelectLib.getText()).copyLinkWeb()
-^!#l::new ActionObjectRedirector(SelectLib.getText()).copyLinkEdit()
+^!#l::new ActionObjectRedirector(SelectLib.getText()).copyLinkWeb()
+^!l:: new ActionObjectRedirector(SelectLib.getText()).copyLinkEdit()
 
 ; Generic hyperlinker - get link based on the selected text and then apply it to that same text.
-^!k:: new ActionObjectRedirector(SelectLib.getText()).linkSelectedTextWeb()
-^!#k::new ActionObjectRedirector(SelectLib.getText()).linkSelectedTextEdit()
+^!#k::new ActionObjectRedirector(SelectLib.getText()).linkSelectedTextWeb()
+^!k:: new ActionObjectRedirector(SelectLib.getText()).linkSelectedTextEdit()
 
 ; Easy editing for often-accessed scripts
 !+e::

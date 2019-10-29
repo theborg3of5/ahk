@@ -1,4 +1,5 @@
 # New Ideas
+	Selector headers aren't working right with filters again - see DLG-filtered TLG selector.
 	Consider a function that updates a max value with less text
 		updateMax(maxValue, possiblyBiggerValue)
 		Probably in DataLib?

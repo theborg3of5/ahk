@@ -134,7 +134,7 @@ class NotepadPlusPlus {
 			paramsAry.push({"NAME":param, "IN_OUT":inOut, "REQUIREMENT":requirement})
 			
 			; Also track the max length of any parameter name so we can space things out appropriately.
-			maxParamLength := DataLib.max(maxParamLength, param.length())
+			DataLib.updateMax(maxParamLength, param.length())
 		}
 		
 		; Build a line for each parameter, padding things out to make them even

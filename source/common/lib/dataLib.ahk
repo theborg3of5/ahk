@@ -85,6 +85,16 @@ class DataLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Wrapper for max() that updates the first parameter directly.
+	; PARAMETERS:
+	;  maxValue (IO,REQ) - The current maximum value. Will be updated if newValue is bigger.
+	;  newValue  (I,REQ) - The new value to compare to the current maximum.
+	;---------
+	updateMax(ByRef maxValue, newValue) {
+		maxValue := DataLib.max(maxValue, newValue)
+	}
+	
+	;---------
 	; DESCRIPTION:    Convert the provided number into an integer/hex code.
 	; PARAMETERS:
 	;  num (I,REQ) - The number to convert

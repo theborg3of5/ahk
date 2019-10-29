@@ -10,6 +10,9 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 global SPACES_PER_TAB := 3
 global MIN_COLUMN_PADDING := 1 ; At least 1 tab between columns
 
+if(!GuiLib.showConfirmationPopup("Reformat all TL/TLS files in AHK root directory?"))
+	ExitApp
+
 ; Loop over .tl and .tls files in the AHK root directory.
 root := Config.path["AHK_ROOT"]
 Loop, Files, %root%\*.tl*, RF
@@ -17,7 +20,7 @@ Loop, Files, %root%\*.tl*, RF
 	reformatFile(A_LoopFileFullPath)
 }
 
-new Toast("Reformatted all TL and TLS files in AHK root directory").blockingOn().showMedium()
+new Toast("Reformatted all TL/TLS files in AHK root directory").blockingOn().showMedium()
 
 ExitApp
 
@@ -114,13 +117,13 @@ getDimensions(rows, ByRef normalIndentLevel, ByRef columnWidthsAry) {
 			else
 				numOpenMods++
 			
-			normalIndentLevel := DataLib.max(normalIndentLevel, numOpenMods)
+			DataLib.updateMax(normalIndentLevel, numOpenMods)
 			Continue
 		}
 		
 		; Model/key rows - make sure "normal" indentation is at least 1 so we can separate the first column from the prefix.
 		if(stripOffModelKeyPrefix(row) != "")
-			normalIndentLevel := DataLib.max(normalIndentLevel, 1)
+			DataLib.updateMax(normalIndentLevel, 1)
 		
 		; Track size of each column (in tabs).
 		For columnIndex,value in splitRow(row) {

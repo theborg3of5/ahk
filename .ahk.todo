@@ -1,10 +1,4 @@
 # New Ideas
-	Consider a function that updates a max value with less text
-		updateMax(maxValue, possiblyBiggerValue)
-		Probably in DataLib?
-		Use cases:
-			Anywhere we track the max of something
-			reformatTL
 	Look into auto-completion in Notepad++ for AHK
 		In general for the language
 		Could we add our own library of functions?

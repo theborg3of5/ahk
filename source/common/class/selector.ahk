@@ -314,7 +314,6 @@ class Selector {
 	loadFromFile() {
 		tl := new TableList(this.filePath, {this.Char_OverrideFieldIndex: "OVERRIDE_INDEX"})
 		
-		this.sectionTitles := tl.headers
 		For name,value in tl.settings
 			this.SetGuiSetting(name, value)
 		
@@ -337,6 +336,9 @@ class Selector {
 	; SIDE EFFECTS:   Shows an error toast if something went wrong.
 	;---------
 	loadChoicesFromData() {
+		; Load the section headers
+		this.sectionTitles := this._dataTL.headers
+		
 		; Load the choices
 		For _,row in this._dataTL.getTable()
 			this.choices.push(new SelectorChoice(row))

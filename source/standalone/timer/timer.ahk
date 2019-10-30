@@ -120,7 +120,7 @@ getToastStyleOverrides(labelAlignment) {
 	overrides["FONT_SIZE"]        := 40
 	overrides["MARGIN_X"]         := 15
 	overrides["MARGIN_Y"]         := 5
-	overrides["LABEL_STYLES"]     := labelAlignment
+	overrides["TEXT_ALIGN"]       := labelAlignment
 	
 	return overrides
 }

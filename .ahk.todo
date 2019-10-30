@@ -1,4 +1,9 @@
 # New Ideas
+	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
+		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
+		Use cases:
+			Debug toast
+			Debug popup (would need to set font if so)
 	Look into auto-completion in Notepad++ for AHK
 		In general for the language
 		Could we add our own library of functions?
@@ -22,8 +27,9 @@
 	Standardize how we format & structure classes
 		Capitalization (Public vs _private members, Public vs private functions)
 		Startup/default values
-			Hyperlinker > windows
+			ErrorToast > getStyleOverrides
 			Toast > styles
+			Hyperlinker > windows
 			WindowActions > actionOverrides
 		Include square brackets on properties (that don't take parameters)?
 	Hotkey for automatically breaking up documentation lines to 100 chars wide

@@ -230,7 +230,7 @@ class Toast {
 		; Add label
 		this.labelVarName := this.guiId "Text" ; Come up with a unique variable we can use to reference the label (to change its contents if needed).
 		GuiLib.createDynamicGlobal(this.labelVarName) ; Declare the provided unique variable name as a global so we can use it for the control
-		Gui, Add, Text, % "v" this.labelVarName " " styles["LABEL_STYLES"]
+		Gui, Add, Text, % "v" this.labelVarName " " styles["TEXT_ALIGN"]
 	}
 	
 	;---------
@@ -252,7 +252,7 @@ class Toast {
 		styles["FONT_NAME"]        := "Consolas"
 		styles["MARGIN_X"]         := 5
 		styles["MARGIN_Y"]         := 0
-		styles["LABEL_STYLES"]     := ""
+		styles["TEXT_ALIGN"]       := "Left"
 		
 		; Merge in any overrides
 		styles := DataLib.mergeObjects(styles, styleOverrides)

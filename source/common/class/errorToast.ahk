@@ -67,7 +67,7 @@ class ErrorToast extends Toast {
 		overrides["FONT_SIZE"]        := 22
 		overrides["MARGIN_X"]         := 6
 		overrides["MARGIN_Y"]         := 1
-		overrides["LABEL_STYLES"]     := "Right"
+		overrides["TEXT_ALIGN"]       := "Right"
 		
 		return overrides
 	}

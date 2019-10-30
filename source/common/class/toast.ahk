@@ -246,8 +246,8 @@ class Toast {
 		styles := {}
 		
 		; Default styles
-		styles["BACKGROUND_COLOR"] := "2A211C"
-		styles["FONT_COLOR"]       := "BDAE9D"
+		styles["BACKGROUND_COLOR"] := "2A211C" ; Dark gray
+		styles["FONT_COLOR"]       := "BDAE9D" ; Light gray
 		styles["FONT_SIZE"]        := 20
 		styles["FONT_NAME"]        := "Consolas"
 		styles["MARGIN_X"]         := 5

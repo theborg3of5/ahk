@@ -26,11 +26,6 @@
 			Have programs that need special handling call into the logic themselves and handle special logic
 	Standardize how we format & structure classes
 		Capitalization (Public vs _private members, Public vs private functions)
-		Startup/default values
-			ErrorToast > getStyleOverrides
-			Toast > styles
-			Hyperlinker > windows
-			WindowActions > actionOverrides
 		Include square brackets on properties (that don't take parameters)?
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
 		Possibly reconsider the 100-char limit - wouldn't wider make more sense?

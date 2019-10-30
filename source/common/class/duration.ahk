@@ -84,9 +84,6 @@ class Duration {
 	;                           to no time (0 seconds).
 	;---------
 	__New(durationString := "") {
-		if(!Duration.supportedUnitsAry)
-			Duration.buildUnitArrays()
-		
 		if(durationString != "")
 			this.addTimeFromDurationString(durationString)
 		
@@ -124,9 +121,9 @@ class Duration {
 		if(!this.isUnitChar(unitChar))
 			return
 		
-		this.durationTotalSeconds += value * this.getUnitMultiplier(unitChar)
+		this.durationTotalSeconds += value * this._units[unitChar]
 		
-		; Debug.popup("Duration.addTime","Finish", "value",value, "unitChar",unitChar, "multiplier",this.getUnitMultiplier(unitChar), "Seconds added",value * this.getUnitMultiplier(unitChar), "this.durationTotalSeconds",this.durationTotalSeconds)
+		; Debug.popup("Duration.addTime","Finish", "value",value, "unitChar",unitChar, "multiplier",this._units[unitChar], "Seconds added",value * this.getUnitMultiplier(unitChar), "this.durationTotalSeconds",this.durationTotalSeconds)
 	}
 	subTime(value, unitChar := "s") {
 		this.addTime(-value, unitChar)
@@ -137,26 +134,11 @@ class Duration {
 ; ============================================== PRIVATE =============================================
 ; ====================================================================================================
 	
-	static supportedUnitsAry := "" ; [unit1, unit2] - Units which are supported
-	static unitMultipliers   := "" ; {char: multiplier} - Mapping from unit characters to how many seconds each represents.
 	durationTotalSeconds := 0 ; The internal representation of all time (including hours, minutes, seconds)
 	
-	;---------
-	; DESCRIPTION:    Populate the unit arrays/objects for which units we support and how they map to seconds.
-	;---------
-	buildUnitArrays() {
-		; Supported units, ordered from largest to smallest.
-		Duration.supportedUnitsAry := []
-		Duration.supportedUnitsAry.push(Duration.Char_Hour)
-		Duration.supportedUnitsAry.push(Duration.Char_Minute)
-		Duration.supportedUnitsAry.push(Duration.Char_Second)
-		
-		; Multiplers to turn each unit into seconds.
-		Duration.unitMultipliers := {} ; {char: multiplier}
-		Duration.unitMultipliers[Duration.Char_Hour]   := 60 * 60
-		Duration.unitMultipliers[Duration.Char_Minute] := 60
-		Duration.unitMultipliers[Duration.Char_Second] := 1
-	}
+	; All supported units, from largest to smallest.
+	static _units := {Duration.Char_Hour:3600, Duration.Char_Minute:60, Duration.Char_Second:1} ; {unitChar: multiplierToSeconds}
+	
 	
 	;---------
 	; DESCRIPTION:    Check whether the provided unit character is supported.
@@ -165,7 +147,7 @@ class Duration {
 	; RETURNS:        True if it's supported, False otherwise.
 	;---------
 	isUnitChar(char) {
-		return Duration.supportedUnitsAry.contains(char)
+		return Duration._units.HasKey(char)
 	}
 	
 	;---------
@@ -177,7 +159,7 @@ class Duration {
 	getUnitMultiplier(char) {
 		if(char = "")
 			return 0
-		return Duration.unitMultipliers[char]
+		return Duration._units[char]
 	}
 	
 	;---------
@@ -190,8 +172,7 @@ class Duration {
 	getUnitBreakdown(ByRef hours := "", ByRef minutes := "", ByRef seconds := "") {
 		remainingSeconds := this.durationTotalSeconds
 		
-		For _,unit in Duration.supportedUnitsAry {
-			multiplier := Duration.getUnitMultiplier(unit)
+		For unit,multiplier in Duration._units {
 			quantity := remainingSeconds // multiplier
 			remainingSeconds -= quantity * multiplier
 			

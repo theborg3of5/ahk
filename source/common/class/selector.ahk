@@ -115,7 +115,7 @@ class Selector {
 	;                 that callers can apply filtering if needed. See TableList for available
 	;                 filtering functions.
 	;---------
-	dataTL[] {
+	dataTL {
 		get {
 			return this._dataTL
 		}

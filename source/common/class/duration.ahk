@@ -25,19 +25,19 @@ class Duration {
 	; NOTES:          These counts take into account the other units - for example, a Duration with
 	;                 1:01:00 will return "1" for minutes (not 61 minutes).
 	;---------
-	hours[] {
+	hours {
 		get {
 			this.getUnitBreakdown(h)
 			return h
 		}
 	}
-	minutes[] {
+	minutes {
 		get {
 			this.getUnitBreakdown("", m)
 			return m
 		}
 	}
-	seconds[] {
+	seconds {
 		get {
 			this.getUnitBreakdown("", "", s)
 			return s
@@ -53,7 +53,7 @@ class Duration {
 	;                   5:03
 	;                   3
 	;---------
-	displayTime[] {
+	displayTime {
 		get {
 			this.getUnitBreakdown(hours, minutes, seconds)
 			
@@ -69,7 +69,7 @@ class Duration {
 	;---------
 	; DESCRIPTION:    Whether the duration has no time remaining.
 	;---------
-	isZero[] {
+	isZero {
 		get {
 			return (this.durationTotalSeconds = 0)
 		}

@@ -100,7 +100,7 @@ class TableListMod {
 	;---------
 	; DESCRIPTION:    The label originally given for this mod action.
 	;---------
-	label[] {
+	label {
 		get {
 			return this.labelFromParent
 		}

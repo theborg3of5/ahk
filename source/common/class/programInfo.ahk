@@ -26,7 +26,7 @@ class ProgramInfo {
 	;---------
 	; DESCRIPTION:    Name of the program
 	;---------
-   name[] {
+   name {
       get {
          return this.programName
       }
@@ -35,7 +35,7 @@ class ProgramInfo {
 	;---------
 	; DESCRIPTION:    Full filepath to launch the program
 	;---------
-   path[] {
+   path {
       get {
          return this.programPath
       }

@@ -43,7 +43,7 @@ class SelectorChoice {
 	;---------
 	; DESCRIPTION:    The full data object for this choice.
 	;---------
-	dataObject[] {
+	dataObject {
 		get {
 			return this.data
 		}
@@ -52,7 +52,7 @@ class SelectorChoice {
 	;---------
 	; DESCRIPTION:    The display name for the given choice.
 	;---------
-	name[] {
+	name {
 		get {
 			return this.data["NAME"]
 		}
@@ -62,7 +62,7 @@ class SelectorChoice {
 	; DESCRIPTION:    The (single) abbreviation to display for this choice. Note that if there were
 	;                 multiple abbreviations given as an array, this will just be the first one.
 	;---------
-	abbrev[] {
+	abbrev {
 		get {
 			abbrev := this.data["ABBREV"]
 			if(isObject(abbrev))

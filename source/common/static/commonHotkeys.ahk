@@ -15,6 +15,29 @@ class CommonHotkeys {
 	static ScriptType_Sub        := 2 ; Standalone scripts that the main script starts and that run alongside the main script
 	static ScriptType_Standalone := 3 ; One-off scripts, not connected to main script
 	
+	
+	;---------
+	; DESCRIPTION:    Wrappers for checking which "type" the script is. These correspond to
+	;                 CommonHotkeys.ScriptType_*.
+	; RETURNS:        true if the script matches the type in question, false otherwise.
+	;---------
+	IsMain {
+		get {
+			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Main)
+		}
+	}
+	IsSub {
+		get {
+			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Sub)
+		}
+	}
+	IsStandalone {
+		get {
+			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Standalone)
+		}
+	}
+	
+	
 	;---------
 	; DESCRIPTION:    Set up the common hotkeys.
 	; PARAMETERS:
@@ -56,27 +79,6 @@ class CommonHotkeys {
 		
 		CommonHotkeys._noSuspend := false
 		Hotkey, !#x, On
-	}
-	
-	;---------
-	; DESCRIPTION:    Wrappers for checking which "type" the script is. These correspond to
-	;                 CommonHotkeys.ScriptType_*.
-	; RETURNS:        true if the script matches the type in question, false otherwise.
-	;---------
-	IsMain {
-		get {
-			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Main)
-		}
-	}
-	IsSub {
-		get {
-			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Sub)
-		}
-	}
-	IsStandalone {
-		get {
-			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Standalone)
-		}
 	}
 	
 	

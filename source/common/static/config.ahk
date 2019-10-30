@@ -23,6 +23,18 @@ class Config {
 	static TitleContains_End   := "END"
 	static TitleContains_Exact := "EXACT"
 	
+	
+	;---------
+	; DESCRIPTION:    Whether this class has been initialized. Used to not show debug popups when
+	;                 it's not initialized, to cut down on popups on restart in high-traffic areas.
+	;---------
+	initialized {
+		get {
+			return this.initDone
+		}
+	}
+	
+	
 	;---------
 	; DESCRIPTION:    Initialize this static config class. Loads information from various config files (see individual this.load* functions).
 	;---------
@@ -51,15 +63,10 @@ class Config {
 		this.initDone := true
 	}
 	
-	;---------
-	; DESCRIPTION:    Whether this class has been initialized. Used to not show debug popups when
-	;                 it's not initialized, to cut down on popups on restart in high-traffic areas.
-	;---------
-	initialized {
-		get {
-			return this.initDone
-		}
-	}
+	
+	; --------------------------------------------------
+	; -------------------- Privates --------------------
+	; --------------------------------------------------
 	
 	;---------
 	; DESCRIPTION:    The private information from the privates file from initialization.
@@ -73,6 +80,7 @@ class Config {
 			return this.privates[key]
 		}
 	}
+	
 	;---------
 	; DESCRIPTION:    Replace any tags matching private keys, with those corresponding private values.
 	; PARAMETERS:
@@ -82,6 +90,11 @@ class Config {
 	replacePrivateTags(inputString) {
 		return inputString.replaceTags(this.privates)
 	}
+	
+	
+	; --------------------------------------------------
+	; -------------------- Settings --------------------
+	; --------------------------------------------------
 	
 	;---------
 	; DESCRIPTION:    Which machine we're configured to act as, from the Machine_* constants in this class.
@@ -151,6 +164,7 @@ class Config {
 			IniWrite, % value, % this.settingsINIPath, % "Main", % "MEDIA_PLAYER"
 		}
 	}
+	
 	;---------
 	; DESCRIPTION:    Whether the named media player is what we're configured to use.
 	; PARAMETERS:
@@ -160,6 +174,7 @@ class Config {
 	isMediaPlayer(mediaPlayerName) {
 		return (this.mediaPlayer = mediaPlayerName)
 	}
+	
 	;---------
 	; DESCRIPTION:    Check whether a window for the current media player exists.
 	; RETURNS:        true if it does exist, false otherwise.
@@ -168,6 +183,7 @@ class Config {
 		player := this.mediaPlayer
 		return this.doesWindowExist(player)
 	}
+	
 	;---------
 	; DESCRIPTION:    Run the currently configured media player.
 	;---------
@@ -181,6 +197,11 @@ class Config {
 		}
 	}
 	
+	
+	; --------------------------------------------------
+	; --------------------- Windows --------------------
+	; --------------------------------------------------
+	
 	;---------
 	; DESCRIPTION:    Return the WindowInfo instance corresponding to the provided name.
 	; PARAMETERS:
@@ -193,6 +214,7 @@ class Config {
 			return this.windows[name].clone()
 		}
 	}
+	
 	;---------
 	; DESCRIPTION:    Check whether the named window is currently active.
 	; PARAMETERS:
@@ -202,6 +224,7 @@ class Config {
 	isWindowActive(name) {
 		return WinActive(this.windowInfo[name].titleString)
 	}
+	
 	;---------
 	; DESCRIPTION:    Check whether the named window currently exists.
 	; PARAMETERS:
@@ -211,6 +234,7 @@ class Config {
 	doesWindowExist(name) {
 		return WinExist(this.windowInfo[name].titleString)
 	}
+	
 	;---------
 	; DESCRIPTION:    Find the WindowInfo instance that matches the specified window.
 	; PARAMETERS:
@@ -249,6 +273,7 @@ class Config {
 		
 		return bestMatch.clone() ; Handles "" fine ("".clone() = "")
 	}
+	
 	;---------
 	; DESCRIPTION:    Find the name of the specified window, if a WindowInfo instance exists.
 	; PARAMETERS:
@@ -259,6 +284,11 @@ class Config {
 		winInfo := this.findWindowInfo(titleString)
 		return winInfo.name
 	}
+	
+	
+	; --------------------------------------------------
+	; ---------------------- Paths ---------------------
+	; --------------------------------------------------
 	
 	;---------
 	; DESCRIPTION:    A particular path from this class.
@@ -272,6 +302,7 @@ class Config {
 			return this.paths[key]
 		}
 	}
+	
 	;---------
 	; DESCRIPTION:    Replace any tags matching path keys, with those corresponding paths.
 	; PARAMETERS:
@@ -281,6 +312,11 @@ class Config {
 	replacePathTags(inputPath) {
 		return inputPath.replaceTags(this.paths)
 	}
+	
+	
+	; --------------------------------------------------
+	; -------------------- Programs --------------------
+	; --------------------------------------------------
 	
 	;---------
 	; DESCRIPTION:    Activate the window matching the specified name, running it if it doesn't yet exist.
@@ -313,6 +349,11 @@ class Config {
 		
 		RunLib.runAsUser(path, args)
 	}
+	
+	
+	; --------------------------------------------------
+	; ---------------------- Games ---------------------
+	; --------------------------------------------------
 	
 	;---------
 	; DESCRIPTION:    Check whether the specified window is a game (as identified in the games file passed in).

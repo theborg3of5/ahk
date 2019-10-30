@@ -61,7 +61,7 @@ class WindowInfo {
 	;---------
 	; DESCRIPTION:    Name of the window
 	;---------
-	name[] {
+	name {
 		get {
 			return this.windowName
 		}
@@ -70,7 +70,7 @@ class WindowInfo {
 	;---------
 	; DESCRIPTION:    EXE for the program
 	;---------
-	exe[] {
+	exe {
 		get {
 			return this.windowExe
 		}
@@ -79,7 +79,7 @@ class WindowInfo {
 	;---------
 	; DESCRIPTION:    AHK class of the window
 	;---------
-	class[] {
+	class {
 		get {
 			return this.windowClass
 		}
@@ -88,7 +88,7 @@ class WindowInfo {
 	;---------
 	; DESCRIPTION:    Title of the window
 	;---------
-	title[] {
+	title {
 		get {
 			return this.windowTitle
 		}
@@ -97,7 +97,7 @@ class WindowInfo {
 	;---------
 	; DESCRIPTION:    Edge type of the window (from WindowInfo.EdgeStyle_* constants)
 	;---------
-	edgeType[] {
+	edgeType {
 		get {
 			return this.windowEdgeType
 		}
@@ -107,7 +107,7 @@ class WindowInfo {
 	; DESCRIPTION:    If the window has a specific title match mode that needs to be used when
 	;                 locating it, this will return that override.
 	;---------
-	titleStringMatchModeOverride[] {
+	titleStringMatchModeOverride {
 		get {
 			return this.windowTitleStringMatchModeOverride
 		}
@@ -117,7 +117,7 @@ class WindowInfo {
 	; DESCRIPTION:    A string that can be used with WinActive() and the like to identify this
 	;                 window.
 	;---------
-	titleString[] {
+	titleString {
 		get {
 			return WindowLib.buildTitleString(this.exe, this.class, this.title)
 		}
@@ -127,7 +127,7 @@ class WindowInfo {
 	; DESCRIPTION:    Priority of this WindowInfo instance versus others. Can be used to break a tie
 	;                 if multiple instances match a given window.
 	;---------
-	priority[] {
+	priority {
 		get {
 			return this.windowPriority
 		}

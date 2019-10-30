@@ -68,9 +68,7 @@
 					The "Title" section will start a new super-column in the popup.
 		
 	Gui Settings
-		Some settings related to the popup may be customized using one of the following methods:
-			1. Specified in the TLS file (using the @ character, see "Settings" character above)
-			2. Programmatically, using the .SetGuiSetting() function
+		Some settings related to the popup may be customized by specifying them in the TLS file (using the @ character, see "Settings" character above).
 		Note that these settings only have an effect on the popup shown by .selectGui().
 		
 		Available settings:
@@ -90,7 +88,6 @@
 		s := new Selector("C:\ahk\configs.tls")                    ; Read in the "configs.tls" TLS file
 		s.SetTitle("New title!")                                   ; Set the popup's title to "New title!"
 		s.dataTL.filterByColumn("MACHINE", "HOME_DESKTOP")         ; Only include choices which which have the "MACHINE" column set to "HOME_DESKTOP" (or blank)
-		s.SetGuiSetting("MinColumnWidth", 500)                     ; Set the minimum super-column width to 500 pixels
 		s.AddOverrideFields(["CONFIG_NAME", "CONFIG_NUM"])         ; Two additional override fields for the popup.
 		s.SetDefaultOverrides({CONFIG_NAME: "Windows"})            ; Default a value of "Windows" into the "CONFIG_NAME" override field
 		
@@ -132,8 +129,6 @@ class Selector {
 	; RETURNS:        A new Selector object.
 	;---------
 	__New(filePath) {
-		this.setDefaultGuiSettings()
-		
 		if(filePath) {
 			this.filePath := FileLib.findConfigFilePath(filePath)
 			this.loadFromFile()
@@ -143,19 +138,22 @@ class Selector {
 	}
 	
 	;---------
-	; DESCRIPTION:    Override a gui-related setting. The list of these settings and what they do may be found
-	;                 in the class documentation above.
-	; PARAMETERS:
-	;  name  (I,REQ) - Name of the setting to override.
-	;  value (I,REQ) - Value to set the setting to.
-	; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui().
+	; DESCRIPTION:    Turn off the override fields in the popup.
+	; RETURNS:        this
 	;---------
-	SetGuiSetting(name, value) {
-		if(name = "")
-			return
-		
-		this.guiSettings[name] := value
-		
+	OverrideFieldsOff() {
+		this.overrideFields := "" ; Get rid of override fields entirely.
+		return this
+	}
+	
+	;---------
+	; DESCRIPTION:    Set the popup's title.
+	; PARAMETERS:
+	;  title (I,REQ) - The title to use.
+	; RETURNS:        this
+	;---------
+	SetTitle(title) {
+		this._windowTitle := title
 		return this
 	}
 	
@@ -191,26 +189,6 @@ class Selector {
 	}
 	
 	;---------
-	; DESCRIPTION:    Turn off the override fields in the popup.
-	; RETURNS:        this
-	;---------
-	OverrideFieldsOff() {
-		this.overrideFields := "" ; Get rid of override fields entirely.
-		return this
-	}
-	
-	;---------
-	; DESCRIPTION:    Set the popup's title.
-	; PARAMETERS:
-	;  title (I,REQ) - The title to use.
-	; RETURNS:        this
-	;---------
-	SetTitle(title) {
-		this.guiSettings["WindowTitle"] := title
-		return this
-	}
-	
-	;---------
 	; DESCRIPTION:    Show a popup to the user so they can select one of the choices we've prepared
 	;                 and enter any additional override information.
 	; PARAMETERS:
@@ -221,7 +199,6 @@ class Selector {
 	;                 returned.
 	;---------
 	selectGui(returnColumn := "") {
-		; Debug.popup("Selector.selectGui","Start", "GUI Settings",guiSettings)
 		if(!this.loadChoicesFromData())
 			return ""
 		
@@ -287,22 +264,15 @@ class Selector {
 	static Char_CommandStart       := "+"
 	static Char_Command_Edit       := "e"
 	
+	_windowTitle      := "Please make a choice by either number or abbreviation:" ; The title of the window
+	_minColumnWidth   := 0     ; How wide (in pixels) each column must be, at a minimum.
 	choices           := []    ; Array of visible choices the user can pick from (array of SelectorChoice objects).
 	sectionTitles     := {}    ; {choiceIndex: title} - Lines that will be displayed as titles (index matches the first choice that should be under this title)
 	overrideFields    := ""    ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers)
-	guiSettings       := {}    ; {settingName: value} - Settings related to the GUI popup we show
 	filePath          := ""    ; Where the file lives if we're reading one in.
 	suppressData      := false ; Whether to ignore all data from the user (choice and overrides). Typically used when we've done something else (like edit the TLS file).
 	_dataTL           := ""    ; TableList instance read from file, which we'll extract choice and other info from.
 	_defaultOverrides := ""    ; {columnLabel: value} - Default values to show in override fields, by column name
-	
-	;---------
-	; DESCRIPTION:    Populate this.guiSettings with our defaults for various gui settings.
-	;---------
-	setDefaultGuiSettings() {
-		this.guiSettings["MinColumnWidth"] := 0
-		this.guiSettings["WindowTitle"]    := "Please make a choice by either number or abbreviation:"
-	}
 	
 	;---------
 	; DESCRIPTION:    Read everything from the TLS file into a TableList instance and load most of
@@ -314,8 +284,7 @@ class Selector {
 	loadFromFile() {
 		tl := new TableList(this.filePath, {this.Char_OverrideFieldIndex: "OVERRIDE_INDEX"})
 		
-		For name,value in tl.settings
-			this.SetGuiSetting(name, value)
+		this.updateSettings(tl.settings)
 		
 		; Special override field index row that tells us how we should arrange data inputs.
 		fieldIndices := tl.keyRow["OVERRIDE_INDEX"]
@@ -328,6 +297,21 @@ class Selector {
 		}
 		
 		this._dataTL := tl
+	}
+	
+	;---------
+	; DESCRIPTION:    Update our settings based on the array of settings from the TLS file.
+	; PARAMETERS:
+	;  settings (I,REQ) - Associative array of settings. Format:
+	;                      settings[name] := value
+	;---------
+	updateSettings(settings) {
+		For name,value in settings {
+			if(name = "WindowTitle")
+				this._windowTitle := value
+			if(name = "MinColumnWidth")
+				this._minColumnWidth := value
+		}
 	}
 	
 	;---------
@@ -360,8 +344,8 @@ class Selector {
 	;                 overrides.
 	;---------
 	doSelectGui() {
-		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this.guiSettings["MinColumnWidth"])
-		sGui.show(this.guiSettings["WindowTitle"], this._defaultOverrides)
+		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this._minColumnWidth)
+		sGui.show(this._windowTitle, this._defaultOverrides)
 		
 		; User's choice is main data source
 		choiceData := this.parseChoice(sGui.getChoiceQuery())
@@ -429,11 +413,14 @@ class Selector {
 	; Debug info (used by the Debug class)
 	debugName := "Selector"
 	debugToString(debugBuilder) {
-		debugBuilder.addLine("Override fields", this.overrideFields)
-		debugBuilder.addLine("GUI settings",    this.guiSettings)
-		debugBuilder.addLine("Filepath",        this.filePath)
-		debugBuilder.addLine("Suppress data?",  this.suppressData)
-		debugBuilder.addLine("Choices",         this.choices)
-		debugBuilder.addLine("Section titles",  this.sectionTitles)
+		debugBuilder.addLine("Filepath",          this.filePath)
+		debugBuilder.addLine("Suppress data?",    this.suppressData)
+		debugBuilder.addLine("Window title",      this._windowTitle)
+		debugBuilder.addLine("Min column width",  this._minColumnWidth)
+		debugBuilder.addLine("Override fields",   this.overrideFields)
+		debugBuilder.addLine("Default overrides", this._defaultOverrides)
+		debugBuilder.addLine("Choices",           this.choices)
+		debugBuilder.addLine("Section titles",    this.sectionTitles)
+		debugBuilder.addLine("Override fields",   this._dataTL)
 	}
 }

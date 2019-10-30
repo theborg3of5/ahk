@@ -22,7 +22,6 @@
 	Standardize how we format & structure classes
 		Capitalization (Public vs _private members, Public vs private functions)
 		Startup/default values
-			Selector > guiSettings
 			Hyperlinker > windows
 			Toast > styles
 			WindowActions > actionOverrides
@@ -61,6 +60,7 @@
 	1.1.31.00
 		Switch()
 			PhoneLib.reduceToDigits()
+			Selector.updateSettings()
 			Likely others too - WindowActions and similar would probably benefit
 	1.1.31.01
 		Execute (X) hotstrings can support spaces

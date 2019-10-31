@@ -42,6 +42,7 @@
 	::it"s::it's ; "
 	::that"s::that's ; "
 	::scheduleable::schedulable
+	::createable::creatable
 	::performably::performable
 	::resizeable::resizable
 	::overrideable::overridable

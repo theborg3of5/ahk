@@ -25,9 +25,7 @@
 []
 
 # Monthlies
-	Put away local backup drives							2
 	Book OTF														21
-	Plug in local backup drives							LAST
 	Check FatMax charge										-			SUN				1
 	Weigh cats													-			WED				2
 	Schedule haircut											-			SAT				2

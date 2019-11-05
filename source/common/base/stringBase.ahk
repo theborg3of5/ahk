@@ -87,7 +87,7 @@ class StringBase {
 	containsAnyOf(needlesAry, ByRef matchedNeedle := "") {
 		earliestMatchedPos := 0
 		
-		For i,needle in needlesAry {
+		For _,needle in needlesAry {
 			matchedPos := this.contains(needle)
 			if(matchedPos) {
 				if(!earliestMatchedPos || (matchedPos < earliestMatchedPos)) {
@@ -116,13 +116,16 @@ class StringBase {
 	;---------
 	; DESCRIPTION:    Wrapper for .startsWith() that takes an array of strings to check.
 	; PARAMETERS:
-	;  needlesAry (I,REQ) - Array of strings to check.
+	;  needlesAry    (I,REQ) - Array of strings to check.
+	;  matchedNeedle (O,OPT) - The first matching entry we found in the needlesAry.
 	; RETURNS:        True if this string starts with any of the provided check strings, False otherwise.
 	;---------
-	startsWithAnyOf(needlesAry) {
-		For i,needle in needlesAry {
-			if(this.startsWith(needle))
+	startsWithAnyOf(needlesAry, ByRef matchedNeedle := "") {
+		For _,needle in needlesAry {
+			if(this.startsWith(needle)) {
+				matchedNeedle := needle
 				return true
+			}
 		}
 		
 		return false

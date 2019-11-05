@@ -51,10 +51,10 @@ class NotepadPlusPlus {
 		if(lineAfter.startsWith(A_Space))
 			Send, {Delete}
 		
-		numSpaces := NotepadPlusPlus.getDocumentationLineIndent(lineBefore)
+		indent := NotepadPlusPlus.getNextDocLineIndent(lineBefore)
 		
 		Send, {Enter} ; Start the new line - assuming that Notepad++ will put us at the same indentation level (before the semicolon) as the previous row.
-		Send, % ";" StringLib.getSpaces(numSpaces)
+		Send, % indent
 	}
 	
 	;---------
@@ -216,36 +216,50 @@ class NotepadPlusPlus {
 		)"
 	
 	;---------
-	; DESCRIPTION:    Figure out where the indentation for a line is positioned (in terms of the
-	;                 number of spaces after the comment character).
+	; DESCRIPTION:    Figure out how much indentation is needed for the next line of documentation,
+	;                 based on the current line.
 	; PARAMETERS:
-	;  line (I,REQ) - The line that we're trying to determine indentation for.
-	; RETURNS:        The number of spaces after the comment character that the indent is.
+	;  line (I,REQ) - The line that we're trying to determine indentation after.
+	; RETURNS:        The indentation to use:
+	;                  If bullets: ";" + indentation + bullet + " "
+	;                  Otherwise: ";" + indentation
 	;---------
-	getDocumentationLineIndent(line) {
+	getNextDocLineIndent(line) {
 		line := line.clean() ; Drop (and ignore) any leading/trailing whitespace and odd characters
-		line := line.removeFromStart("; ") ; Trim off the starting comment char + space
-		numSpaces := 1 ; Space we just trimmed off
+		line := line.removeFromStart(";") ; Trim off the starting comment char
 		
+		; Leading spaces after the comment
+		numSpaces := StringLib.countLeadingSpaces(line)
+		line := line.withoutWhitespace()
+		
+		; Keyword line
 		keywords := ["DESCRIPTION:", "PARAMETERS:", "RETURNS:", "SIDE EFFECTS:", "NOTES:"]
-		matchedPos := line.containsAnyOf(keywords, matchedKeyword)
-		if(matchedPos) {
-			; Keyword line - add length of keyword + however many spaces are after it.
+		if(line.containsAnyOf(keywords, matchedKeyword)) {
+			; Add length of keyword + however many spaces are after it.
 			numSpaces += matchedKeyword.length()
 			line := line.removeFromStart(matchedKeyword)
 			numSpaces += StringLib.countLeadingSpaces(line)
-		} else {
-			matchedPos := line.containsRegEx("P)\((I|O|IO),(OPT|REQ)\) - ", matchedTextLen)
-			if(matchedPos) {
-				; Parameter line - add the position of the "(I,REQ) - "-style description - 1 + its length.
-				numSpaces += (matchedPos - 1) + matchedTextLen
-			} else {
-				; Floating line - just count the spaces.
-				numSpaces += StringLib.countLeadingSpaces(line)
-			}
+			
+			return ";" StringLib.getSpaces(numSpaces)
 		}
 		
-		return numSpaces
+		; Parameter line - add the position of the "(I,REQ) - "-style description - 1 + its length.
+		paramTypePos := line.containsRegEx("P)\((I|O|IO),(OPT|REQ)\) - ", matchedTextLen)
+		if(paramTypePos) {
+			paramNameLength := paramTypePos - 1 ; Includes the space between the name and the type as well
+			numSpaces += paramNameLength + matchedTextLen
+			
+			return ";" StringLib.getSpaces(numSpaces)
+		}
+		
+		; Line that starts with some sort of bullet - include the bullet in the next line.
+		bullets := ["*", "-"]
+		if(line.startsWithAnyOf(bullets, matchedBullet)) {
+			return ";" StringLib.getSpaces(numSpaces) matchedBullet " "
+		}
+		
+		; Floating line - just the same spaces we stripped off at the start.
+		return ";" StringLib.getSpaces(numSpaces)
 	}
 	
 	;---------

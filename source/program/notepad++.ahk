@@ -35,23 +35,23 @@ class NotepadPlusPlus {
 	insertIndentedNewline() {
 		; Read in both sides of the current line - the left will help us find where the indent is, the right is what we're moving.
 		Send, {Shift Down}{Home}{Shift Up}
-		lineStart := SelectLib.getText()
+		lineBefore := SelectLib.getText()
 		Send, {Shift Down}{End}{Shift Up}
-		lineEnd := SelectLib.getText()
+		lineAfter := SelectLib.getText()
 		
 		; Put the cursor back where it was, where we want to insert the newline.
-		if(lineEnd = "")
+		if(lineAfter = "")
 			Send, {End}
 		else
 			Send, {Left}
 		
 		; If we would have a widowed (on the end of the old line) or orphaned (at the start of the new line) space, remove it.
-		if(lineStart.endsWith(A_Space))
+		if(lineBefore.endsWith(A_Space))
 			Send, {Backspace}
-		if(lineEnd.startsWith(A_Space))
+		if(lineAfter.startsWith(A_Space))
 			Send, {Delete}
 		
-		numSpaces := NotepadPlusPlus.getDocumentationLineIndent(lineStart)
+		numSpaces := NotepadPlusPlus.getDocumentationLineIndent(lineBefore)
 		
 		Send, {Enter} ; Start the new line - assuming that Notepad++ will put us at the same indentation level (before the semicolon) as the previous row.
 		Send, % ";" StringLib.getSpaces(numSpaces)

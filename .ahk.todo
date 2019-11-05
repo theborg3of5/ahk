@@ -4,10 +4,13 @@
 		Use cases:
 			Debug toast
 			Debug popup (would need to set font if so)
-	Look into auto-completion in Notepad++ for AHK
-		In general for the language
-		Could we add our own library of functions?
-		Could we add our own classes and such?
+	Notepad++ and AHK
+		Styling - update from https://www.autohotkey.com/boards/viewtopic.php?t=50
+			Probably add the .xml to my repo for version tracking
+		Look into auto-completion in Notepad++ for AHK
+			In general for the language
+			Could we add our own library of functions?
+			Could we add our own classes and such?
 	Figure out what to do about FileLib.cleanupPath() dropping (valid) quotes from the end of URLs
 		Separate cleaning for URLs?
 			How to sense? Using ActionObjectPath?

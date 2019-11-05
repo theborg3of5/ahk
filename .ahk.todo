@@ -9,8 +9,10 @@
 			Probably add the .xml to my repo for version tracking
 		Look into auto-completion in Notepad++ for AHK
 			In general for the language
+				C:\Program Files\Notepad++\autoCompletion\AutoHotkey.xml
 			Could we add our own library of functions?
 			Could we add our own classes and such?
+			Autocompletion file documentation: https://web.archive.org/web/20190607225203/http://docs.notepad-plus-plus.org/index.php/Auto_Completion
 		Consider a new user-defined language for my todo lists - folding like python, but don't have all the weird highlighting (or single quote handling).
 	Look into new styling for comments and for code/comment foldering, from syntax highlighting file:
 		Nesting/separate formatting within comments: https://ivan-radic.github.io/udl-documentation/comments/

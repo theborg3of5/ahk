@@ -5,8 +5,6 @@
 			Debug toast
 			Debug popup (would need to set font if so)
 	Notepad++ and AHK
-		Styling - update from https://www.autohotkey.com/boards/viewtopic.php?t=50
-			Probably add the .xml to my repo for version tracking
 		Look into auto-completion in Notepad++ for AHK
 			In general for the language
 				C:\Program Files\Notepad++\autoCompletion\AutoHotkey.xml

@@ -100,7 +100,7 @@
 		s := new Selector("C:\ahk\paths.tls")      ; Read in the "paths.tls" TLS file
 		path := s.selectChoice(pathAbbrev, "PATH") ; Return only the "PATH" value, not the whole return array
 	=--
-=-- */
+*/ ; =--
 
 class Selector {
 

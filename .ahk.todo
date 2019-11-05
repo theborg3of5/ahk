@@ -9,8 +9,6 @@
 		Could we add our own library of functions?
 		Could we add our own classes and such?
 	Notepad++ AHK documentation
-		Update Notepad++ AHK documentation stuff to handle properties (with or without [])
-			Properties with parameters, too - maybe just treat [] the same as ()?
 		Make Ctrl+Enter hotkey in Notepad++ also add in bullets (* or -) if they started the previous row (ignoring whitespace and comment char, but not other stuff like (I,REQ))
 	Figure out what to do about FileLib.cleanupPath() dropping (valid) quotes from the end of URLs
 		Separate cleaning for URLs?

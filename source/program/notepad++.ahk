@@ -100,11 +100,11 @@ class NotepadPlusPlus {
 		; Select the following line after this one to get parameter information
 		Send, {Down}
 		SelectLib.selectCurrentLine()
-		functionDefLine := SelectLib.getText().clean()
+		definitionLine := SelectLib.getText().clean()
 		Send, {Up}
 		
 		; Check for parameters
-		paramsList := functionDefLine.firstBetweenStrings("(", ")")
+		paramsList := NotepadPlusPlus.getParamsListFromDefinitionLine(definitionLine)
 		if(paramsList = "") {
 			; No parameters, just send the basic base
 			SendRaw, % NotepadPlusPlus.ahkHeaderBase
@@ -155,6 +155,18 @@ class NotepadPlusPlus {
 		header := NotepadPlusPlus.ahkHeaderBaseWithParams
 		header := header.replaceTag("PARAMETERS", paramLines.join("`n"))
 		SendRaw, % header
+	}
+	
+	getParamsListFromDefinitionLine(definitionLine) {
+		; Function
+		if(definitionLine.contains("("))
+			return definitionLine.firstBetweenStrings("(", ")")
+		
+		; Property with brackets
+		if(definitionLine.contains("["))
+			return definitionLine.firstBetweenStrings("[", "]")
+		
+		return ""
 	}
 	
 	;---------

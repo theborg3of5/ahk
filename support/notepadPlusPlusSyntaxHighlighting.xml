@@ -3,7 +3,7 @@
     <!-- *gdb - Add "master" for .ahk.master files -->
     <UserLang name="AutoHotkey" ext="ahk ahkl ahkh ia master" udlVersion="2.1">
         <Settings>
-            <Global caseIgnored="yes" allowFoldOfComments="yes" foldCompact="no" forcePureLC="0" decimalSeparator="0" />
+            <Global caseIgnored="yes" allowFoldOfComments="no" foldCompact="no" forcePureLC="0" decimalSeparator="0" />
             <Prefix Keywords1="no" Keywords2="no" Keywords3="no" Keywords4="yes" Keywords5="no" Keywords6="yes" Keywords7="no" Keywords8="yes" />
         </Settings>
         <KeywordLists>

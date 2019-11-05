@@ -1,13 +1,12 @@
 #Include selectorGui.ahk
 #Include selectorChoice.ahk
 
-/* Class that selects an option from a given set of choices, and returns info about that choice.
-	
-	Choices
+/* Class that selects an option from a given set of choices, and returns info about that choice. --=
+	--= Choices
 		Choices are read from a TableList Selector (.tls) file. See documentation for the TableList class for general file format (applies to .tl or tls files), and "File Format" below for additional Selector-specific details.
 		These choices may also be filtered (see the documentation for .dataTL below) - this allows you to use a single file of information to be used in different ways.
-		
-	Selection
+	=--
+	--= Selection
 		This class can be used in one of two ways:
 		1. Gui method (.selectGui())
 				Show a popup containing the available choices and a field where the user can enter their selection using either the index or abbreviation of a choice. If override fields are visible (see "Data Override Fields" below) they can override specific information about that choice (or even submit the popup without a choice, only overrides) as well.
@@ -18,8 +17,8 @@
 			
 		2. Silent method (.selectChoice())
 				Select a choice silently, based on programmatic input.
-		
-	File Format
+	=--
+	--= File Format
 		Starting a row in the TableList file with certain characters has special meaning (beyond those documented in the TableList class):
 			( - Model row (required)
 				The file should include a single model row (above all choices), which gives a name to each column in the file. Most column names will simply determine the subscript in the return array that the data from that column will be returned in, but these columns have special meaning:
@@ -66,8 +65,8 @@
 					# | Title
 				Result:
 					The "Title" section will start a new super-column in the popup.
-		
-	Gui Settings
+	=--
+	--= Gui Settings
 		Some settings related to the popup may be customized by specifying them in the TLS file (using the @ character, see "Settings" character above).
 		Note that these settings only have an effect on the popup shown by .selectGui().
 		
@@ -77,14 +76,14 @@
 			
 			MinColumnWidth
 				If this is set, each super-column in the popup will be that number of pixels wide at a minimum (each may be wider if the choices in that column are wider). See the FlexTable class for how super-columns work.
-		
-	Data Override Fields
+	=--
+	--= Data Override Fields
 		If an override field index row is specified in the TLS file, the popup shown by .selectGui() will include not only a choice field, but also fields for each column given a non-zero index in the override field index row. The fields are shown in the order specified by the row (i.e. 1 is first after the choice field, 2 is second, etc.). That the fields can be programmatically suppressed using the .OverrideFieldsOff() function.
 		These fields give a user the ability to override data from their selected choice (or submit the popup without a choice, only overrides). If the user changes the value of the field (it defaults to the column label), that value will be used instead of the selected choice's value for that column.
 		Even if there is no override field index row in the TLS file, the .AddOverrideFields() function may be used to add additional fields to the popup. The values from these fields will appear in the return array just like other override fields, under the subscript with their name.
 		Values may be defaulted into these fields using the .SetDefaultOverrides() function.
-	
-	Example Usage (Popup)
+	=--
+	--= Example Usage (Popup)
 		s := new Selector("C:\ahk\configs.tls")                    ; Read in the "configs.tls" TLS file
 		s.SetTitle("New title!")                                   ; Set the popup's title to "New title!"
 		s.dataTL.filterByColumn("MACHINE", "HOME_DESKTOP")         ; Only include choices which which have the "MACHINE" column set to "HOME_DESKTOP" (or blank)
@@ -94,13 +93,14 @@
 		data := s.selectGui()                                      ; Show the popup and retrieve the entire data array
 		MsgBox, % "Chosen config name: " data["CONFIG_NAME"]
 		MsgBox, % "Chosen config num: "  data["CONFIG_NUM"]
-		
-	Example Usage (Silent)
+	=--
+	--= Example Usage (Silent)
 		pathAbbrev := <user input>
 		
 		s := new Selector("C:\ahk\paths.tls")      ; Read in the "paths.tls" TLS file
 		path := s.selectChoice(pathAbbrev, "PATH") ; Return only the "PATH" value, not the whole return array
-*/
+	=--
+=-- */
 
 class Selector {
 

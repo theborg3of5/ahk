@@ -87,7 +87,7 @@ class ActionObjectRedirector {
 		; Silent selection from actionObject TLS to see if we match an EMC2-type INI (filtered list so no match means not EMC2).
 		s := new Selector("actionObject.tls")
 		s.dataTL.filterByColumn("TYPE", ActionObjectRedirector.Type_EMC2)
-		this.ini := s.selectChoice(this.ini, "SUBTYPE")
+		this.subType := s.selectChoice(this.subType, "SUBTYPE")
 		
 		data := s.selectChoice(record.ini)
 		if(!data)

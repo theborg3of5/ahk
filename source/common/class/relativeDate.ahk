@@ -25,10 +25,7 @@
 */ ; --=
 
 class RelativeDate extends RelativeDateTimeBase {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	;---------
 	; DESCRIPTION:    Create a new representation of a date relative to right now.
@@ -49,9 +46,7 @@ class RelativeDate extends RelativeDateTimeBase {
 	}
 
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	;---------
 	; DESCRIPTION:    Handle the actual date shift relative to today.
@@ -97,4 +92,5 @@ class RelativeDate extends RelativeDateTimeBase {
 		this._year += numToShift
 		this.updateInstantFromParts()
 	}
+	; #END#
 }

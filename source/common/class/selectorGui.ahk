@@ -8,10 +8,7 @@
 */ ; --=
 
 class SelectorGui {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	;---------
 	; DESCRIPTION:    Create a new SelectorGui instance.
@@ -71,9 +68,7 @@ class SelectorGui {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	; Special characters
 	static Char_NewColumn := "|"
@@ -351,7 +346,8 @@ class SelectorGui {
 	}
 	
 	
-	; Debug info (used by the Debug class)
+	; #DEBUG#
+	
 	debugName := "SelectorGui"
 	debugToString(debugBuilder) {
 		debugBuilder.addLine("Gui ID (handle)",            this.guiId)
@@ -364,6 +360,7 @@ class SelectorGui {
 		debugBuilder.addLine("Total width",                this.totalWidth)
 		debugBuilder.addLine("Choices table width",        this.choicesWidth)
 	}
+	; #END#
 }
 
 ; GUI Events - these can't live in the class because they're only specified by name (via the +Label option on the gui).

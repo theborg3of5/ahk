@@ -205,10 +205,7 @@
 */ ; --=
 
 class TableList {
-	
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	; Special characters
 	static Char_Ignore      := ";"
@@ -446,9 +443,7 @@ class TableList {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	static autoFilters := [] ; Array of {"COLUMN":filterColumn, "VALUE":filterValue} objects
 	
@@ -703,7 +698,9 @@ class TableList {
 			return (valueToCompare = filterValue)
 	}
 	
-	; Debug info
+	
+	; #DEBUG#
+	
 	debugName := "TableList"
 	debugToString(debugBuilder) {
 		debugBuilder.addLine("Chars",         this.chars)
@@ -715,4 +712,5 @@ class TableList {
 		debugBuilder.addLine("Headers",       this._headers)
 		debugBuilder.addLine("Table",         this.table)
 	}
+	; #END#
 }

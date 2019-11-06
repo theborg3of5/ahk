@@ -6,10 +6,7 @@
 */ ; --=
 
 class CommonHotkeys {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	; Different "types" of scripts, which get different sets of hotkeys
 	static ScriptType_Main       := 1 ; Main script
@@ -83,9 +80,7 @@ class CommonHotkeys {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	static _scriptType         := "" ; Type of script, from CommonHotkeys.ScriptType_* constants
 	static _confirmExit        := false ; Whether to confirm before exiting
@@ -223,6 +218,7 @@ class CommonHotkeys {
 		; Debug.popup("standaloneWinId",standaloneWinId, "testWinId",testWinId, "(standaloneWinId || testWinId)",(standaloneWinId || testWinId))
 		return !(standaloneWinId || testWinId)
 	}
+	; #END#
 }
 
 ;---------

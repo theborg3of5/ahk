@@ -1,10 +1,7 @@
 ; Clipboard-related helper functions.
 
 class ClipboardLib {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	;---------
 	; DESCRIPTION:    Copy something to the clipboard using the given hotkey, waiting for it to
@@ -202,9 +199,8 @@ class ClipboardLib {
 		ClipboardLib.saveToManager()
 	}
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	
+	; #PRIVATE#
 	
 	;---------
 	; DESCRIPTION:    Force the clipboard manager to store the current value, generally useful just
@@ -216,4 +212,5 @@ class ClipboardLib {
 		else ; Otherwise, just wait a second for it to register normally.
 			Sleep, 1000
 	}
+	; #END#
 }

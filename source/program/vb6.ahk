@@ -81,10 +81,7 @@
 
 ; VB6-specific actions. Everything should be called statically.
 class VB6 {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	static objectComboBoxClassNN    := "ComboBox1" ; Object dropdown in top-left
 	static procedureComboBoxClassNN := "ComboBox2" ; Procedure dropdown in top-right
@@ -171,9 +168,7 @@ class VB6 {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	;---------
 	; DESCRIPTION:    Check whether the current window within VB is in "code" mode (as opposed to a design view).
@@ -247,6 +242,7 @@ class VB6 {
 		; Move the mouse back to its former position.
 		MouseMove, prevX, prevY
 	}
+	; #END#
 }
 
 

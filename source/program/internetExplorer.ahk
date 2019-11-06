@@ -5,10 +5,7 @@
 #If
 
 class InternetExplorer {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	moveURLToDefaultBrowser(){
 		url := ControlGetText("Edit1", "A") ; Get URL from URL bar control
@@ -20,4 +17,5 @@ class InternetExplorer {
 		WinClose   ; Close the window
 		Run, % url ; Open in default browser
 	}
+	; #END#
 }

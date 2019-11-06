@@ -19,10 +19,7 @@
 */ ; --=
 
 class ActionObjectEMC2 extends ActionObjectBase {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	id    := "" ; ID of the object
 	ini   := "" ; INI for the object, from EMC2 subtypes in actionObject.tl
@@ -128,9 +125,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	;---------
 	; DESCRIPTION:    Check whether this object can be opened in Sherlock or Nova (rather than emc2summary).
@@ -166,4 +161,5 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		this.id  := data["VALUE"]
 		return true
 	}
+	; #END#
 }

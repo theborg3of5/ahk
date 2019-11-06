@@ -1,10 +1,7 @@
 ; Class for adding a hyperlink to the currently-selected text.
 
 class Hyperlinker {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	; Methods for setting link information for the selected text.
 	static Method_PopupField   := "POPUP_FIELD"
@@ -54,9 +51,7 @@ class Hyperlinker {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 
 	;---------
 	; DESCRIPTION:    Associative array of windows information.
@@ -278,4 +273,5 @@ class Hyperlinker {
 		if(closeMethod = Hyperlinker.CloseMethod_Alt_A)
 			Send, !a
 	}
+	; #END#
 }

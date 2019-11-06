@@ -1,10 +1,7 @@
 ; Helper functions for hotkeys.
 
 class HotkeyLib {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	;---------
 	; DESCRIPTION:    Release all modifier keys. This is useful when certain modifier keys get "stuck" down.
@@ -36,9 +33,7 @@ class HotkeyLib {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	;---------
 	; DESCRIPTION:    Given a character from a hotkey string, figure out the name of the corresponding key.
@@ -74,4 +69,5 @@ class HotkeyLib {
 		; Otherwise, probably a letter or number.
 		return hotkeyChar
 	}
+	; #END#
 }

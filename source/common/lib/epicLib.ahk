@@ -1,10 +1,7 @@
 ; Various Epic utility functions.
 
 class EpicLib {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	;---------
 	; DESCRIPTION:    Run Hyperspace locally for the given version and environment.
@@ -59,7 +56,8 @@ class EpicLib {
 		EpicLib.splitServerLocation(serverLocation, routine, tag)
 		tag := tag.beforeString("+")
 		return tag "^" routine
-	}	
+	}
+	; #END#
 }
 
 

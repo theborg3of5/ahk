@@ -8,10 +8,7 @@
 */ ; --=
 
 class MousePosition {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	x := 0 ; X coordinate for the mouse at the time this instance was created.
 	y := 0 ; Y coordinate for the mouse at the time this instance was created.
@@ -38,5 +35,5 @@ class MousePosition {
 		distanceX := x - this.x
 		distanceY := y - this.y
 	}
-	
+	; #END#
 }

@@ -6,7 +6,6 @@
 */ ; --=
 
 class ClassName {
-
 	; #PUBLIC#
 	
 	__New() {

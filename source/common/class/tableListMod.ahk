@@ -47,10 +47,7 @@
 */ ; --=
 
 class TableListMod {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	; Operation identifiers
 	static Operation_Replace    := "replaceWith"
@@ -108,16 +105,16 @@ class TableListMod {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	column          := ""
 	operation       := ""
 	text            := ""
 	labelFromParent := ""
 	
-	; Debug info (used by the Debug class)
+	
+	; #DEBUG#
+	
 	debugName := "TableListMod"
 	debugToString(debugBuilder) {
 		debugBuilder.addLine("Column",    this.column)
@@ -125,4 +122,5 @@ class TableListMod {
 		debugBuilder.addLine("Text",      this.text)
 		debugBuilder.addLine("Label",     this.labelFromParent)
 	}
+	; #END#
 }

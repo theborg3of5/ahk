@@ -1,10 +1,7 @@
 ; Functions for running various searches.
 
 class SearchLib {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	;---------
 	; DESCRIPTION:    Run a generic search with the selected text, prompting the user for what kind
@@ -137,9 +134,8 @@ class SearchLib {
 		Config.runProgram("Everything", "-search " searchTerm)
 	}
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	
+	; #PRIVATE#
 	
 	;---------
 	; DESCRIPTION:    Escape the given string so it's safe to use when running a URL directly.
@@ -155,4 +151,5 @@ class SearchLib {
 		
 		return encodedString
 	}
+	; #END#
 }

@@ -5,10 +5,7 @@
 */ ; --=
 
 class RelativeDateTimeBase {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	;---------
 	; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
@@ -37,9 +34,7 @@ class RelativeDateTimeBase {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	_instant := "" ; The actual timestamp that we calculate based on the relative date/time string.
 	
@@ -119,4 +114,5 @@ class RelativeDateTimeBase {
 	doShift(shiftAmount, unit) {
 		new ErrorToast("RelativeDateTimeBase.doShift called", "The child class should override doShift().").showMedium()
 	}
+	; #END#
 }

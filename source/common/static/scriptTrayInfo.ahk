@@ -6,10 +6,7 @@
 */ ; --=
 
 class ScriptTrayInfo {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	;---------
 	; DESCRIPTION:    Create a new object representing the tray information for the script, including icons.
@@ -69,9 +66,7 @@ class ScriptTrayInfo {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	static _iconStates := {} ; Associative array representing which icon to use in different situations - see .getIconForCurrentState() for explanation.
 
@@ -107,4 +102,5 @@ class ScriptTrayInfo {
 		
 		return "" ; If we get to a state where there's no matching icon, just return "".
 	}
+	; #END#
 }

@@ -1,10 +1,7 @@
 ; A static library of Microsoft-level constants and system values.
 
 class MicrosoftLib {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	; Window styles ( https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric )
 	static Style_Caption := 0xC00000   ; WS_CAPTION - Window has a caption (top bar + borders).
@@ -33,4 +30,5 @@ class MicrosoftLib {
 	; Scroll Bar Requests/Messages ( https://docs.microsoft.com/en-us/windows/desktop/Controls/about-scroll-bars )
 	static ScrollBar_Left  := 0 ; SB_LINELEFT  - Scroll 1 unit to the left
 	static ScrollBar_Right := 1 ; SB_LINERIGHT - Scroll 1 unit to the right
+	; #END#
 }

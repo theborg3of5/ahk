@@ -1,10 +1,7 @@
 ; Helper functions for dealing with selected text
 
 class SelectLib {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	;---------
 	; DESCRIPTION:    Get the selected text using the clipboard.
@@ -67,5 +64,5 @@ class SelectLib {
 		Send, {Right %needleLen%} ; Select to end of needle.
 		Send, {Shift Up}
 	}
-	
+	; #END#
 }

@@ -15,10 +15,7 @@
 */ ; --=
 
 class ActionObjectPath extends ActionObjectBase {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	static PathType_FilePath := "FILEPATH" ; Local file path
 	static PathType_URL      := "URL"
@@ -111,9 +108,7 @@ class ActionObjectPath extends ActionObjectBase {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	;---------
 	; DESCRIPTION:    Prompt the user for the path type or path if either are missing.
@@ -136,4 +131,5 @@ class ActionObjectPath extends ActionObjectBase {
 		this.path     := data["VALUE"]
 		return true
 	}
+	; #END#
 }

@@ -2,10 +2,7 @@
 ; Warning: most of these only work in a work context (cisco webdialer number formats).
 
 class PhoneLib {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	;---------
 	; DESCRIPTION:    Format a local (10-digit) phone number with parens/spaces/dash.
@@ -101,9 +98,7 @@ class PhoneLib {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	;---------
 	; DESCRIPTION:    Show the user a confirmation popup for the call we're about to make.
@@ -153,5 +148,5 @@ class PhoneLib {
 		
 		return Config.private["CISCO_PHONE_BASE"].replaceTag("COMMAND", command)
 	}
-	
+	; #END#
 }

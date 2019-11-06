@@ -18,10 +18,7 @@
 */ ; --=
 
 class ActionObject {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	;---------
 	; DESCRIPTION:    Determine the type of ActionObject class to use based on the type/value
@@ -43,9 +40,7 @@ class ActionObject {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	value   := "" ; Value (the unique bit of info to act upon, like a path or identifier)
 	type    := "" ; Determined type of ActionObject, from .Type_* constants
@@ -175,4 +170,5 @@ class ActionObject {
 		new ErrorToast("Unrecognized type", "ActionObject doesn't know what to do with this type: " this.type).showMedium()
 		return ""
 	}
+	; #END#
 }

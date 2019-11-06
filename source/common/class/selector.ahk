@@ -104,7 +104,6 @@
 */ ; --=
 
 class Selector {
-
 	; #PUBLIC#
 	
 	static Char_OverrideFieldIndex := ")"
@@ -422,5 +421,4 @@ class Selector {
 		debugBuilder.addLine("Override fields",   this._dataTL)
 	}
 	; #END#
-	
 }

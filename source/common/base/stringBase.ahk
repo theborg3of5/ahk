@@ -10,10 +10,7 @@
 */ ; --=
 
 class StringBase {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	;---------
 	; DESCRIPTION:    Wrapper for StrLen().
@@ -440,9 +437,7 @@ class StringBase {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	;---------
 	; DESCRIPTION:    Get the portion of this string that is between the provided strings.
@@ -460,4 +455,5 @@ class StringBase {
 		; Trim off everything before (and including) the remaining instance (first or last depending on upToLastEndString) of the endString
 		return outStr.beforeString(endString, upToLastEndString)
 	}
+	; #END#
 }

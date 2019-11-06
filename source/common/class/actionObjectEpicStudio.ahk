@@ -15,10 +15,7 @@
 */ ; --=
 
 class ActionObjectEpicStudio extends ActionObjectBase {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	static DescriptorType_Routine := "ROUTINE" ; Server code location, including tag if applicable
 	static DescriptorType_DLG     := "DLG"     ; DLG, for opening in EpicStudio
@@ -80,9 +77,7 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	;---------
 	; DESCRIPTION:    Try to figure out what kind of descriptor we've been given based on its format.
@@ -121,4 +116,5 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 		this.descriptor     := data["VALUE"]
 		return true
 	}
+	; #END#
 }

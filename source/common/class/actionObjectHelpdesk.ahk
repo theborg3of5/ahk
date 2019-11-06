@@ -12,10 +12,7 @@
 */ ; --=
 
 class ActionObjectHelpdesk extends ActionObjectBase {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	id := "" ; ID of the helpdesk request
 	
@@ -43,4 +40,5 @@ class ActionObjectHelpdesk extends ActionObjectBase {
 	getLinkEdit() {
 		return this.getLink()
 	}
+	; #END#
 }

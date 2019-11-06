@@ -1,10 +1,7 @@
 ; Data class to hold identifying information about a specific window.
 
 class WindowInfo {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	; Constants for the type of edge a window has (see VisualWindow class for what this means/how it's used).
 	static EdgeStyle_HasPadding := "HAS_PADDING" ; The window has the standard padding around the edges.
@@ -134,9 +131,7 @@ class WindowInfo {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	windowName  := ""
 	windowExe   := ""
@@ -148,7 +143,9 @@ class WindowInfo {
 	windowEdgeType                     := ""
 	windowPriority                     := ""
 	
-	; Debug info (used by the Debug class)
+	
+	; #DEBUG#
+	
 	debugName := "WindowInfo"
 	debugToString(debugBuilder) {
 		debugBuilder.addLine("Name"                            , this.name)
@@ -158,4 +155,5 @@ class WindowInfo {
 		debugBuilder.addLine("Edge type"                       , this.edgeType)
 		debugBuilder.addLine("Title string match mode override", this.titleStringMatchModeOverride)
 	}
+	; #END#
 }

@@ -9,10 +9,7 @@
 */ ; --=
 
 class ArrayBase {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	static isArray := true ; Flag for when we need to tell the difference between an array and an object.
 	
@@ -113,4 +110,5 @@ class ArrayBase {
 			return
 		this.removeAt(this.minIndex(), this.length())
 	}
+	; #END#
 }

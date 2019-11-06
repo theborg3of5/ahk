@@ -24,10 +24,7 @@
 */ ; --=
 
 class RelativeTime extends RelativeDateTimeBase {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	;---------
 	; DESCRIPTION:    Create a new representation of a time relative to right now.
@@ -48,9 +45,7 @@ class RelativeTime extends RelativeDateTimeBase {
 	}
 
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	;---------
 	; DESCRIPTION:    Handle the actual time shift relative to now.
@@ -66,4 +61,5 @@ class RelativeTime extends RelativeDateTimeBase {
 		this._instant := EnvAdd(this._instant, shiftAmount, unit) ; Can't use += format because it doesn't support this.*-style variable names.
 		this.updatePartsFromInstant()
 	}
+	; #END#
 }

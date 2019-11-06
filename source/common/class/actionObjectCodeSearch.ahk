@@ -14,10 +14,7 @@
 */ ; --=
 
 class ActionObjectCodeSearch extends ActionObjectBase {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	static LocationType_Server := "SERVER" ; Server code location, including tag if applicable
 	static LocationType_Client := "CLIENT" ; Client filename
@@ -69,9 +66,7 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	;---------
 	; DESCRIPTION:    Try to figure out what kind of location we've been given based on its format.
@@ -110,4 +105,5 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 		this.location     := data["VALUE"]
 		return true
 	}
+	; #END#
 }

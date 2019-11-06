@@ -1,10 +1,7 @@
 ; Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
 
 class Config {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	; Constants for specific machines (matched to settings.ini).
 	static Machine_WorkLaptop  := "WORK_LAPTOP"
@@ -373,9 +370,7 @@ class Config {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	static initDone        := false ; True once we're done initializing for the first time.
 	static _rootPath       := ""    ; The root of this set of scripts.
@@ -527,4 +522,5 @@ class Config {
 		Debug.popup("Unsupported match method",method)
 		return ""
 	}
+	; #END#
 }

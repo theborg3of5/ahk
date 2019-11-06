@@ -1,10 +1,7 @@
 ; Data class to hold information about a specific program.
 
 class ProgramInfo {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
    ;---------
    ; DESCRIPTION:    Creates a new instance of ProgramInfo.
@@ -42,17 +39,18 @@ class ProgramInfo {
    }
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
    programName := ""
    programPath := ""
    
-   ; Debug info (used by the Debug class)
+	
+	; #DEBUG#
+	
    debugName := "ProgramInfo"
    debugToString(debugBuilder) {
       debugBuilder.addLine("Name", this.name)
       debugBuilder.addLine("Path", this.path)
    }
+	; #END#
 }

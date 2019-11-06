@@ -17,10 +17,7 @@
 #If
 
 class Explorer {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	static ThisPCFolderUUID := "::{20d04fe0-3aea-1069-a2d8-08002b30309d}"
 	
@@ -45,9 +42,7 @@ class Explorer {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	static ShowHiddenRegKeyName := "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 	static ShowHiddenRegValueName := "Hidden"
@@ -55,4 +50,5 @@ class Explorer {
 	; Whether we're currently hiding or showing hidden files.
 	static HiddenState_Visible := 1
 	static HiddenState_Hidden  := 2
+	; #END#
 }

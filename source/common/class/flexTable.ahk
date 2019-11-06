@@ -56,10 +56,7 @@
 */ ; --=
 
 class FlexTable {
-
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	;---------
 	; DESCRIPTION:    Create a new FlexTable instance.
@@ -182,9 +179,7 @@ class FlexTable {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	guiId := ""
 	
@@ -244,7 +239,8 @@ class FlexTable {
 	}
 	
 	
-	; Debug info (used by the Debug class)
+	; #DEBUG#
+	
 	debugName := "FlexTable"
 	debugToString(debugBuilder) {
 		debugBuilder.addLine("Gui ID",                this.guiId)
@@ -256,4 +252,5 @@ class FlexTable {
 		debugBuilder.addLine("Column padding",        this.columnPadding)
 		debugBuilder.addLine("Min column width",      this.minColumnWidth)
 	}
+	; #END#
 }

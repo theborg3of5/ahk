@@ -1,5 +1,4 @@
-/* Data structure and manipulation functions.
-*/
+; Data structure and manipulation functions.
 
 class DataLib {
 

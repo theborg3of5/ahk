@@ -1,6 +1,6 @@
 #Include ..\base\actionObjectBase.ahk
 
-/* Calculates and sends a date relative to the class's instantiation.
+/* Calculates and sends a date relative to the class's instantiation. =--
 	
 	Relative date string format
 		The relative date string is in this format:
@@ -21,7 +21,8 @@
 		rd := new RelativeDate("m+5") ; 5 months in the future, at the date this line runs
 		newTime := rd.Instant         ; Get the calculated date
 		rd.SendInFormat("M/d/yy")     ; Send the calculated date in a specific format
-*/
+	
+*/ ; --=
 
 class RelativeDate extends RelativeDateTimeBase {
 

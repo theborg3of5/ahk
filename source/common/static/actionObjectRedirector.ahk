@@ -4,7 +4,7 @@
 #Include %A_LineFile%\..\..\class\actionObjectHelpdesk.ahk
 #Include %A_LineFile%\..\..\class\actionObjectPath.ahk
 
-/* Class that figures out what kind of ActionObject* class is needed based on the input (and prompting the user) and returns it.
+/* Class that figures out what kind of ActionObject* class is needed based on the input (and prompting the user) and returns it. =--
 	
 	Example Usage
 		; Determine type based on input
@@ -14,7 +14,8 @@
 		; Will prompt user for both type and value with Selector popup because neither given
 		ao := new ActionObjectRedirector()
 		ao.linkSelectedTextWeb() ; Links the selected text with a link built from the specific ActionObject* class in question
-*/
+	
+*/ ; --=
 
 class ActionObjectRedirector {
 

@@ -1,5 +1,4 @@
-/* Functions for running various searches.
-*/
+; Functions for running various searches.
 
 class SearchLib {
 

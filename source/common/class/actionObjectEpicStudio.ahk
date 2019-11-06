@@ -1,6 +1,6 @@
 #Include ..\base\actionObjectBase.ahk
 
-/* Class for performing actions based on a code location or DLG in EpicStudio.
+/* Class for performing actions based on a code location or DLG in EpicStudio. =--
 	
 	Note that several other operations are also available from the base class (.copyLink*(), .linkSelectedText*()).
 	
@@ -11,7 +11,8 @@
 		
 		ao := new ActionObjectEpicStudio(123456) ; DLG ID
 		ao.openEdit() ; Open DLG in EpicStudio
-*/
+	
+*/ ; --=
 
 class ActionObjectEpicStudio extends ActionObjectBase {
 

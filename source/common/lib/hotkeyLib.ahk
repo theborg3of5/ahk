@@ -1,5 +1,4 @@
-/* Helper functions for hotkeys.
-*/
+; Helper functions for hotkeys.
 
 class HotkeyLib {
 

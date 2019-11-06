@@ -1,5 +1,4 @@
-/* Helper functions for dealing with selected text
-*/
+; Helper functions for dealing with selected text
 
 class SelectLib {
 

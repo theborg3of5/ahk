@@ -1,5 +1,4 @@
-/* Library of helpful functions related to various windows.
-*/
+; Library of helpful functions related to various windows.
 
 class WindowLib {
 

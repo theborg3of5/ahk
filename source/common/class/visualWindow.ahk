@@ -1,4 +1,4 @@
-/* Provides a way to interact with windows with AHK at the size/position that they appear to be.
+/* Provides a way to interact with windows with AHK at the size/position that they appear to be. =--
 	
 	In Windows 10, windows are not always the size that they appear for AHK - there is sometimes a wider, invisible offset around them between, making them look smaller (and further right/down) than they appear. This class provides a way to move and resize a window as if it was the size which it appears, plus a few additional features to save on the math required to say, align a window's right edge to the side of the monitor.
 	
@@ -23,7 +23,8 @@
 	Example Usage
 		window := new VisualWindow("A") ; Create a new VisualWindow representing the active window ("A")
 		window.move(VisualWindow.X_Centered, VisualWindow.Y_Centered) ; Center window
-*/
+	
+*/ ; --=
 
 class VisualWindow {
 

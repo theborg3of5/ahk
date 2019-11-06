@@ -1,10 +1,11 @@
-/* Simple class that represents a mouse position and can easily tell you how far the mouse is from that position currently.
+/* Simple class that represents a mouse position and can easily tell you how far the mouse is from that position currently. =--
 	
 	Example Usage
 		mp := new MousePosition() ; Stores off current mouse position
 		originalXPos := mp.x ; Original X coordinate of the mouse
 		mp.getDistanceFromCurrentPosition(distanceX, distanceY)
-*/
+	
+*/ ; --=
 
 class MousePosition {
 

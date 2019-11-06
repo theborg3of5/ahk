@@ -1,5 +1,5 @@
-/* Clipboard-related helper functions.
-*/
+; Clipboard-related helper functions.
+
 class ClipboardLib {
 
 ; ====================================================================================================

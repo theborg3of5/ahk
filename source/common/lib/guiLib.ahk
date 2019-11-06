@@ -1,5 +1,4 @@
-/* Gui-related helper functions.
-*/
+; Gui-related helper functions.
 
 class GuiLib {
 

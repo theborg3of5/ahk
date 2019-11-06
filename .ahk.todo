@@ -20,10 +20,11 @@
 				Maybe based on a central documentation method (like we thought about below)?
 					Maybe a specially-formatted comment at the top of the file instead?
 			Autocompletion file documentation: https://web.archive.org/web/20190607225203/http://docs.notepad-plus-plus.org/index.php/Auto_Completion
+		Syntax highlighting
+			Could we do something special for our public/private headers?
+				So we can do a single-line call-out instead of the big thing we have now
+				Could we add folding at that level, too?
 		Consider a new user-defined language for my todo lists - folding like python, but don't have all the weird highlighting (or single quote handling).
-	Look into new styling for comments and for code/comment foldering, from syntax highlighting file:
-		Nesting/separate formatting within comments: https://ivan-radic.github.io/udl-documentation/comments/
-		Can we define our own (single-line bits) for public/private sections of classes instead of the big ==== blocks?
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:

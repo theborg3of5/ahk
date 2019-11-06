@@ -1,5 +1,4 @@
-/* A static library of Microsoft-level constants and system values.
-*/
+; A static library of Microsoft-level constants and system values.
 
 class MicrosoftLib {
 

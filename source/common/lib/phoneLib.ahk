@@ -1,7 +1,5 @@
-/* Phone number and calling-related functions.
-	
-	Warning: most of these only work in a work context (cisco webdialer number formats).
-*/
+; Phone number and calling-related functions.
+; Warning: most of these only work in a work context (cisco webdialer number formats).
 
 class PhoneLib {
 

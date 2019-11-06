@@ -1,5 +1,4 @@
-/* Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
-*/
+; Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
 
 class Config {
 

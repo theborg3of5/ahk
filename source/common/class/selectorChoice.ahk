@@ -1,5 +1,4 @@
-/* Representation of a single choice within a Selector object.
-*/
+; Representation of a single choice within a Selector object.
 
 class SelectorChoice {
 

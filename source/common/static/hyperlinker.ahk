@@ -1,5 +1,4 @@
-/* Class for adding a hyperlink to the currently-selected text.
-*/
+; Class for adding a hyperlink to the currently-selected text.
 
 class Hyperlinker {
 

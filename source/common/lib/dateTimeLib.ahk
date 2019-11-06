@@ -1,5 +1,4 @@
-/* Date and time utility functions.
-*/
+; Date and time utility functions.
 
 class DateTimeLib {
 

@@ -1,5 +1,4 @@
-/* String manipulation functions.
-*/
+; String manipulation functions.
 
 class StringLib {
 

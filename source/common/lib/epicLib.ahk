@@ -1,5 +1,4 @@
-/* Various Epic utility functions.
-*/
+; Various Epic utility functions.
 
 class EpicLib {
 

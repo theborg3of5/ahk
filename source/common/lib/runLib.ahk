@@ -1,5 +1,4 @@
-/* Utility functions for running scripts, commands, and other programs.
-*/
+; Utility functions for running scripts, commands, and other programs.
 
 class RunLib {
 

@@ -1,4 +1,4 @@
-/* Class that shows something like a toast notification.
+/* Class that shows something like a toast notification. =--
 	
 	Usage:
 		Create Toast instance
@@ -24,7 +24,8 @@
 		t.showForSeconds(3) ; Toast becomes visible again for 3 seconds, then it's hidden automatically
 		...
 		t.close() ; Toast is destroyed
-*/
+	
+*/ ; --=
 
 class Toast {
 

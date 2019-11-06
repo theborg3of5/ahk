@@ -14,6 +14,7 @@ class FormatList {
 	
 	; Formats for reading/writing lists.
 	static Format_Array         := "ARRAY"
+	static Format_Space         := "SPACE"
 	static Format_Commas        := "COMMA"
 	static Format_CommasSpaced  := "COMMA_SPACED"
 	static Format_NewLines      := "NEWLINE"
@@ -102,6 +103,7 @@ class FormatList {
 		
 		; Turn the list into an array.
 		this.listAry := this.convertListToArray(listObject, format)
+		Debug.popup("this.listAry",this.listAry)
 		return true
 	}
 	
@@ -137,6 +139,10 @@ class FormatList {
 		distinctDelimsCount := 0
 		if(listString.contains(",")) {
 			foundFormat := FormatList.Format_Commas ; Also covers Format_CommasSpaced, see .convertListToArray().
+			distinctDelimsCount++
+		}
+		if(listString.contains(" ")) {
+			foundFormat := FormatList.Format_Space
 			distinctDelimsCount++
 		}
 		if(listString.contains("`r`n")) {
@@ -180,6 +186,8 @@ class FormatList {
 			listAry := listObject
 		if(format = FormatList.Format_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
 			listAry := [listObject]
+		if(format = FormatList.Format_Space)
+			listAry := listObject.split(" ", " `t") ; Drop leading/trailing spaces, tabs
 		if(format = FormatList.Format_Commas) ; Also covers Format_CommasSpaced, we just treat the extra space as whitespace to clean out.
 			listAry := listObject.split(",", " `t") ; Drop leading/trailing spaces, tabs
 		if(format = FormatList.Format_NewLines)
@@ -209,6 +217,8 @@ class FormatList {
 		
 		if(format = FormatList.Format_Array)
 			return this.listAry
+		if(format = FormatList.Format_Space)
+			return this.listAry.join(" ")
 		if(format = FormatList.Format_Commas)
 			return this.listAry.join(",")
 		if(format = FormatList.Format_CommasSpaced)
@@ -230,7 +240,7 @@ class FormatList {
 			return true
 		
 		; Stuff that doesn't involve extra keys - just Send what comes out of .getListInFormat().
-		if(format = FormatList.Format_Commas || format = FormatList.Format_CommasSpaced || format = FormatList.Format_NewLines) {
+		if(format = FormatList.Format_Space || format = FormatList.Format_Commas || format = FormatList.Format_CommasSpaced || format = FormatList.Format_NewLines) {
 			SendRaw, % this.getListInFormat(format)
 			return true
 		}

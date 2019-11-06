@@ -3,6 +3,7 @@
 (	NAME									ABBREV	FORMAT
 
 	Array									a			ARRAY
+	Space-delimited					s			SPACE
 	Comma-delimited					c			COMMA
 	Comma-delimited with spaces	cs			COMMA_SPACED
 	Newline-delimited					nl			NEWLINE

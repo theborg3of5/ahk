@@ -1,23 +1,23 @@
-#Include %A_LineFile%\..\..\class\actionObjectCodeSearch.ahk
-#Include %A_LineFile%\..\..\class\actionObjectEMC2.ahk
-#Include %A_LineFile%\..\..\class\actionObjectEpicStudio.ahk
-#Include %A_LineFile%\..\..\class\actionObjectHelpdesk.ahk
-#Include %A_LineFile%\..\..\class\actionObjectPath.ahk
+#Include %A_LineFile%\..\actionObjectCodeSearch.ahk
+#Include %A_LineFile%\..\actionObjectEMC2.ahk
+#Include %A_LineFile%\..\actionObjectEpicStudio.ahk
+#Include %A_LineFile%\..\actionObjectHelpdesk.ahk
+#Include %A_LineFile%\..\actionObjectPath.ahk
 
-/* Class that figures out what kind of ActionObject* class is needed based on the input (and prompting the user) and returns it. =--
+/* Class that takes some text representing an object, and allows the caller to do something with it. This class itself mostly redirects to the child ActionObject* classes, based on the input (and prompting the user). =--
 	
 	Example Usage
 		; Determine type based on input
-		ao := new ActionObjectRedirector("DLG 123456") ; This will be an EMC2-type object, so ao is an ActionObjectEMC2 instance
+		ao := new ActionObject("DLG 123456") ; This will be an EMC2-type object, so ao is an ActionObjectEMC2 instance
 		ao.openWeb() ; Open the web version of the object
 		
 		; Will prompt user for both type and value with Selector popup because neither given
-		ao := new ActionObjectRedirector()
+		ao := new ActionObject()
 		ao.linkSelectedTextWeb() ; Links the selected text with a link built from the specific ActionObject* class in question
 	
 */ ; --=
 
-class ActionObjectRedirector {
+class ActionObject {
 
 ; ====================================================================================================
 ; ============================================== PUBLIC ==============================================
@@ -29,7 +29,7 @@ class ActionObjectRedirector {
 	; PARAMETERS:
 	;  value (I,OPT) - Input value to evaluate.
 	; RETURNS:        An instance of ActionObject* (Code, EMC2, etc.) for the chosen type.
-	; NOTES:          This does NOT return an ActionObjectRedirector instance.
+	; NOTES:          This does NOT return an ActionObject instance.
 	;---------
 	__New(value := "") {
 		this.value := value
@@ -38,7 +38,7 @@ class ActionObjectRedirector {
 		this.determineType()
 		this.selectMissingInfo()
 		
-		; Debug.toast("ActionObjectRedirector","All info determined", "this",this)
+		; Debug.toast("ActionObject","All info determined", "this",this)
 		return this.getTypeSpecificObject()
 	}
 	
@@ -86,7 +86,7 @@ class ActionObjectRedirector {
 	tryProcessAsEMC2(record) {
 		; Silent selection from actionObject TLS to see if we match an EMC2-type INI (filtered list so no match means not EMC2).
 		s := new Selector("actionObject.tls")
-		s.dataTL.filterByColumn("TYPE", ActionObjectRedirector.Type_EMC2)
+		s.dataTL.filterByColumn("TYPE", ActionObject.Type_EMC2)
 		this.subType := s.selectChoice(this.subType, "SUBTYPE")
 		
 		data := s.selectChoice(record.ini)
@@ -172,7 +172,7 @@ class ActionObjectRedirector {
 		if(this.type = this.Type_Path)
 			return new ActionObjectPath(this.value, this.subType)
 		
-		new ErrorToast("Unrecognized type", "ActionObjectRedirector doesn't know what to do with this type: " this.type).showMedium()
+		new ErrorToast("Unrecognized type", "ActionObject doesn't know what to do with this type: " this.type).showMedium()
 		return ""
 	}
 }

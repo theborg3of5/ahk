@@ -39,6 +39,7 @@ Object(params*) {
 ; ============================================= INCLUDES =============================================
 ; ====================================================================================================
 #Include %A_LineFile%\..\class
+	#Include actionObject.ahk
 	#Include debugBuilder.ahk
 	#Include duration.ahk
 	#Include epicRecord.ahk
@@ -76,7 +77,6 @@ Object(params*) {
 	#Include windowLib.ahk
 
 #Include %A_LineFile%\..\static
-	#Include actionObjectRedirector.ahk
 	#Include config.ahk
 	#Include commonHotkeys.ahk
 	#Include debug.ahk

@@ -73,7 +73,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	postProcess() {
 		; INI - make sure the INI is the "real" EMC2 one.
 		s := new Selector("actionObject.tls")
-		s.dataTL.filterByColumn("TYPE", ActionObjectRedirector.Type_EMC2)
+		s.dataTL.filterByColumn("TYPE", ActionObject.Type_EMC2)
 		this.ini := s.selectChoice(this.ini, "SUBTYPE")
 		
 		; Title - clean up, drop anything extra that we don't need.
@@ -155,7 +155,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		
 		s := new Selector("actionObject.tls").SetTitle("Enter INI and ID")
 		s.SetDefaultOverrides({"VALUE":this.id})
-		s.dataTL.filterByColumn("TYPE", ActionObjectRedirector.Type_EMC2)
+		s.dataTL.filterByColumn("TYPE", ActionObject.Type_EMC2)
 		data := s.selectGui()
 		if(!data)
 			return false

@@ -110,7 +110,7 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 			return true
 		
 		s := new Selector("actionObject.tls").SetDefaultOverrides({"VALUE":this.descriptor})
-		s.dataTL.filterByColumn("TYPE", ActionObjectRedirector.Type_EpicStudio)
+		s.dataTL.filterByColumn("TYPE", ActionObject.Type_EpicStudio)
 		data := s.selectGui()
 		if(!data)
 			return false

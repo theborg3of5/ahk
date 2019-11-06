@@ -125,7 +125,7 @@ class ActionObjectPath extends ActionObjectBase {
 			return true
 		
 		s := new Selector("actionObject.tls").SetDefaultOverrides({"VALUE":this.path})
-		s.dataTL.filterByColumn("TYPE", ActionObjectRedirector.Type_Path)
+		s.dataTL.filterByColumn("TYPE", ActionObject.Type_Path)
 		data := s.selectGui()
 		if(!data)
 			return false

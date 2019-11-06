@@ -4,12 +4,6 @@
 		Use cases:
 			Debug toast
 			Debug popup (would need to set font if so)
-	ActionObjectRedirector isn't really static, but it's in the static folder?
-		Should it just be moved to class\?
-			Should it really just be ActionObject (no Redirector)?
-				Could it be combined with ActionObjectBase somehow?
-		Should it be made actually static?
-			This will probably make things uglier - can't just do new ActionObjectRedirector().openWeb(), would be something more like ActionObjectRedirector.get().openWeb()
 	Notepad++ and AHK
 		Look into auto-completion in Notepad++ for AHK
 			In general for the language

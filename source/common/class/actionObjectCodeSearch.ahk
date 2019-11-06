@@ -99,7 +99,7 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 			return true
 		
 		s := new Selector("actionObject.tls").SetDefaultOverrides({"VALUE":this.location})
-		s.dataTL.filterByColumn("TYPE", ActionObjectRedirector.Type_CodeSearch)
+		s.dataTL.filterByColumn("TYPE", ActionObject.Type_CodeSearch)
 		data := s.selectGui()
 		if(!data)
 			return false

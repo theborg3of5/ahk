@@ -10,16 +10,14 @@
 				C:\Program Files\Notepad++\autoCompletion\AutoHotkey.xml
 			Could we add our own library of functions?
 			Could we add our own classes and such?
+			Could we generate/add to the XML file automatically (or at least, via script) based on the contents of the scripts themselves?
+				Maybe based on a central documentation method (like we thought about below)?
+					Maybe a specially-formatted comment at the top of the file instead?
 			Autocompletion file documentation: https://web.archive.org/web/20190607225203/http://docs.notepad-plus-plus.org/index.php/Auto_Completion
 		Consider a new user-defined language for my todo lists - folding like python, but don't have all the weird highlighting (or single quote handling).
 	Look into new styling for comments and for code/comment foldering, from syntax highlighting file:
 		Nesting/separate formatting within comments: https://ivan-radic.github.io/udl-documentation/comments/
 		Can we define our own (single-line bits) for public/private sections of classes instead of the big ==== blocks?
-	Figure out what to do about FileLib.cleanupPath() dropping (valid) quotes from the end of URLs
-		Separate cleaning for URLs?
-			How to sense? Using ActionObjectPath?
-		Should we integrate this into ActionObjectPath instead? Is that overkill?
-		Another option: a new Path class, that ActionObjectPath just uses?
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:
@@ -33,10 +31,8 @@
 		Possibly reconsider the 100-char limit - wouldn't wider make more sense?
 		Could take into account whether there would be only 1 small word moved down
 		Could handle multiple line breaks
-	Allow opening routines in EpicStudio in an environment other than DBC Dev (allow CDE)
-		Options:
-			New column in actionObject.tl for environment (would also allow us to expand codesearch routine option)
-			New type of codesearch type with separate branch in ActionObject (not ideal)
+	Allow opening routines in EpicStudio in an environment other than DBC Dev (mainly to allow CDE)
+		Probably a new (optional) data element throughout ActionObject* (and a new column in actionObject.tls)
 	EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments
@@ -54,6 +50,10 @@
 		Pidgin window - top-right of left monitor
 	Possibly have ActionObjectPath append a www. or http(s):// to the start of URLs before trying to launch them?
 		Probably do it in open(), where we also check whether a local path exists
+	Figure out some central documentation method
+		Dynamically pull hotkeys for the currently focused program?
+		Hotkey to show window with all currently active hotkeys, divided up into current-program-specific and others
+			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
 	
 # Version Restrictions
 	VDI current AHK version: 1.1.28.00
@@ -84,7 +84,6 @@
 	Consider adding a way to match on some other column than just NAME and ABBREV
 		Use cases
 			Transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
-				Alternatively, build out environments in Config (though only if Epic machine) so we can retrieve specific data from it like we do windows, etc.
 	
 # Toast
 	Could we avoid flickering between .showPersistent() and .setText()?
@@ -101,16 +100,4 @@
 			iconTester.ahk - don't need a toast message up front, can be blank to start and we can just call switchToIconWithNum(0) instead of getting the text
 	Do we want to add negative x/y values to mean how far off of the right/bottom to be?
 		Would let us say, implement timer to be like the Windows media tile
-	
-# Documentation
-	Figure out some central documentation method
-		Dynamically pull hotkeys for the currently focused program?
-		Hotkey to show window with all currently active hotkeys, divided up into current-program-specific and others
-			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
-	common
-		functions
-			epic
-			gui
-			io
-			string
 	

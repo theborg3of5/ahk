@@ -22,8 +22,7 @@
 			Autocompletion file documentation: https://web.archive.org/web/20190607225203/http://docs.notepad-plus-plus.org/index.php/Auto_Completion
 		Syntax highlighting
 			Could we do something special for our public/private headers?
-				So we can do a single-line call-out instead of the big thing we have now
-				Could we add folding at that level, too?
+				Update all classes with new method
 		Consider a new user-defined language for my todo lists - folding like python, but don't have all the weird highlighting (or single quote handling).
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow

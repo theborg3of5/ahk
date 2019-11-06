@@ -105,9 +105,7 @@
 
 class Selector {
 
-; ====================================================================================================
-; ============================================== PUBLIC ==============================================
-; ====================================================================================================
+	; #PUBLIC#
 	
 	static Char_OverrideFieldIndex := ")"
 	
@@ -258,9 +256,7 @@ class Selector {
 	}
 	
 	
-; ====================================================================================================
-; ============================================== PRIVATE =============================================
-; ====================================================================================================
+	; #PRIVATE#
 	
 	static Char_CommandStart       := "+"
 	static Char_Command_Edit       := "e"
@@ -411,7 +407,8 @@ class Selector {
 	}
 	
 	
-	; Debug info (used by the Debug class)
+	; #DEBUG#
+	
 	debugName := "Selector"
 	debugToString(debugBuilder) {
 		debugBuilder.addLine("Filepath",          this.filePath)
@@ -424,4 +421,6 @@ class Selector {
 		debugBuilder.addLine("Section titles",    this.sectionTitles)
 		debugBuilder.addLine("Override fields",   this._dataTL)
 	}
+	; #END#
+	
 }

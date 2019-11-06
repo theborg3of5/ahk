@@ -4,7 +4,7 @@
         <!-- Notepad++ Autocomplete for AutoHotkey -->
         <!-- Main wordlist by: fincs & SciTE4AutoHotkey v3.0.00 -->
         <!-- Credits: infogulch, jNizM, tidbit, twiz, vsub -->
-		  <!-- *gdb - Added period (.) to additionalWordChar -->
+		  <!-- *gdb - Added period (.) to additionalWordChar for class references -->
         <Environment ignoreCase="yes" startFunc="(" stopFunc=")" paramSeparator="," terminal="" additionalWordChar="#{@."/>
         <KeyWord name="Abort"/>
         <KeyWord name="AboveNormal"/>

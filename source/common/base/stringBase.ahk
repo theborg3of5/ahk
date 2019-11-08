@@ -380,13 +380,13 @@ class StringBase {
 		outStr := this
 		
 		stringsToTrim := []
-		stringsToTrim.push(Chr(10))    ; Newline (`n)
-		stringsToTrim.push(Chr(13))    ; Carriage return (`r)
-		stringsToTrim.push(Chr(46))    ; Period (.)
-		stringsToTrim.push(Chr(160))   ; Non-breaking space/nbsp ( )
-		stringsToTrim.push(Chr(8226))  ; First level bullet (filled circle)
-		stringsToTrim.push(Chr(111))   ; Second level bullet (empty circle)
-		stringsToTrim.push(Chr(61607)) ; Third level bullet (filled square)
+		stringsToTrim.push(Chr(10))         ; Newline (`n)
+		stringsToTrim.push(Chr(13))         ; Carriage return (`r)
+		stringsToTrim.push(Chr(46))         ; Period (.)
+		stringsToTrim.push(Chr(160))        ; Non-breaking space/nbsp ( )
+		stringsToTrim.push(Chr(8226)  "`t") ; First level bullet (filled circle) + tab
+		stringsToTrim.push(Chr(111)   "`t") ; Second level bullet (letter o)     + tab
+		stringsToTrim.push(Chr(61607) "`t") ; Third level bullet (filled square) + tab
 		
 		For _,string in additionalStringsToRemove
 			stringsToTrim.push(string)

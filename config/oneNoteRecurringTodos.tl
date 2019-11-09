@@ -29,7 +29,8 @@
 	Check FatMax charge										-			SUN				1
 	Weigh cats													-			WED				2
 	Schedule haircut											-			SAT				2
-	Periodic cleaning (small trash cans, kitchen)	-			SUN				2
+	Clean bathrooms											-			SUN				2
+	Periodic cleaning (small trash cans, kitchen)	-			SUN				3
 	Transcribe instructor meeting notes					-			SUN				1
 	Call Azzam grandparents									-			SAT				2
 	Call Borg grandparents									-			SAT				4

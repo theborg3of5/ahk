@@ -14,7 +14,9 @@
 				Maybe based on a central documentation method (like we thought about below)?
 					Maybe a specially-formatted comment at the top of the file instead?
 			Autocompletion file documentation: https://web.archive.org/web/20190607225203/http://docs.notepad-plus-plus.org/index.php/Auto_Completion
-		Consider a new user-defined language for my todo lists - folding like python, but don't have all the weird highlighting (or single quote handling).
+		Consider additional user-defined languages:
+			My todo lists - folding like python, but don't have all the weird highlighting (or single quote handling).
+			tl/tls files
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:

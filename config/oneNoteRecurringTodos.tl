@@ -17,7 +17,6 @@
 	Dishes from weekend
 	Trash, recycling out
 	Meal planning
-	Play with cats (and walk Dart)
 	Dishes from dinner
 	Order/obtain groceries
 	Review/type Ninpo notes

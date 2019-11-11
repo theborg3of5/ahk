@@ -29,6 +29,7 @@
 			EMC2 XDS Approval						-								ThunderRT6FormDC				A Reviewer Approved
 			EMC2 XDS Email							-								ThunderRT6FormDC				E-Mail Design
 			EMC2 XDS Open Design					-								ThunderRT6FormDC				Open/New Design
+			EMC2 XDS Magnify						-								ThunderRT6FormDC				Magnify
 			EMC2 XDS Submit						-								-									Submit Design for Review
 	[-2]
 	

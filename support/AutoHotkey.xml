@@ -4,7 +4,7 @@
         <!-- Notepad++ Autocomplete for AutoHotkey -->
         <!-- Main wordlist by: fincs & SciTE4AutoHotkey v3.0.00 -->
         <!-- Credits: infogulch, jNizM, tidbit, twiz, vsub -->
-		  <!-- *gdb - Added period (.) to additionalWordChar for class references -->
+		  <!-- *gdb - Added period (.) to additionalWordChar -->
         <Environment ignoreCase="yes" startFunc="(" stopFunc=")" paramSeparator="," terminal="" additionalWordChar="#{@."/>
         <KeyWord name="Abort"/>
         <KeyWord name="AboveNormal"/>
@@ -435,6 +435,7 @@
         <KeyWord name="DateTime"/>
         <KeyWord name="Days"/>
         <KeyWord name="DDL"/>
+		  <!-- *gdb - Debug functions -->
         <KeyWord name="Debug.popup" func="yes">
             <Overload retVal="" descr="Show a debug popup">
                 <Param name="Label1"/>
@@ -442,6 +443,14 @@
                 <Param name="..."/>
             </Overload>
         </KeyWord>
+        <KeyWord name="Debug.toast" func="yes">
+            <Overload retVal="" descr="Show a debug toast">
+                <Param name="Label1"/>
+					 <Param name="Var1"/>
+                <Param name="..."/>
+            </Overload>
+        </KeyWord>
+		  <!-- *gdb - End Debug functions -->
         <KeyWord name="Default"/>
         <KeyWord name="Del"/>
         <KeyWord name="Delete"/>

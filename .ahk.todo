@@ -11,7 +11,7 @@
 			Could we add our own library of functions?
 				Generating from script files
 					Figure out what to do (if anything) for the mock class in debug.ahk (ObjectWithDebug)
-					Will need to re-sort based on function name, within blocks - functions within a library aren't in alphabetical order!
+					Have it read in the XML file and replace the class chunks it recognizes (between the matching "*gdb START/END CLASS: " comments)
 			Could we add our own classes and such?
 			Could we add public constants from some libraries/classes, too?
 				func="no" might be helpful for that

@@ -263,51 +263,13 @@
         <KeyWord name="Clipboardall"/>
 
         <!-- *gdb START CLASS: ClipboardLib -->
-        <KeyWord name="ClipboardLib.copyWithHotkey" func="yes">
+        <KeyWord name="ClipboardLib.addToHistory" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Copy something to the clipboard using the given hotkey, waiting for it to
-							;                 take and returning whether we actually got something.
+							; DESCRIPTION:    Add something to the clipboard history, restoring the original clipboard value.
 							; PARAMETERS:
-							;  hotkeyKeys (I,REQ) - The keys to send in order to copy something to the clipboard.
-							; RETURNS:        true if we successfully copied something, false otherwise.
+							;  textToSave (I,REQ) - Text to add to the clipboard history.
 							;---------">
-                <Param name="hotkeyKeys" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="ClipboardLib.getWithHotkey" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Get some text by copying it to the clipboard using the given hotkey.
-							; PARAMETERS:
-							;  hotkeyKeys (I,REQ) - The keys to send in order to copy something to the clipboard.
-							; RETURNS:        The copied text.
-							;---------">
-                <Param name="hotkeyKeys" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="ClipboardLib.copyWithFunction" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Copy something using the provided functor object, but make sure that we actually
-							;                 get something on the clipboard.
-							; PARAMETERS:
-							;  boundFunc (I,REQ) - Functor object to run in order to copy something to the clipboard.
-							; RETURNS:        true if we successfully copied something, false otherwise.
-							;---------">
-                <Param name="boundFunc" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="ClipboardLib.getWithFunction" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Get some content using a BoundFunc object which copies something to the clipboard.
-							; PARAMETERS:
-							;  boundFunc (I,REQ) - A BoundFunc object created with Func.Bind() or ObjBindMethod(), which will
-							;                      copy the desired content to the clipboard.
-							; RETURNS:        The copied content.
-							;---------">
-                <Param name="boundFunc" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.copyFilePathWithHotkey" func="yes">
@@ -319,7 +281,6 @@
 							; PARAMETERS:
 							;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file to the clipboard.
 							;---------">
-                <Param name="hotkeyKeys" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.copyFolderPathWithHotkey" func="yes">
@@ -332,7 +293,58 @@
 							; PARAMETERS:
 							;  fileHotkeyKeys (I,REQ) - The keys to send in order to copy a FILE in the folder you want to the clipboard.
 							;---------">
-                <Param name="fileHotkeyKeys" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.copyWithFunction" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Copy something using the provided functor object, but make sure that we actually
+							;                 get something on the clipboard.
+							; PARAMETERS:
+							;  boundFunc (I,REQ) - Functor object to run in order to copy something to the clipboard.
+							; RETURNS:        true if we successfully copied something, false otherwise.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.copyWithHotkey" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Copy something to the clipboard using the given hotkey, waiting for it to
+							;                 take and returning whether we actually got something.
+							; PARAMETERS:
+							;  hotkeyKeys (I,REQ) - The keys to send in order to copy something to the clipboard.
+							; RETURNS:        true if we successfully copied something, false otherwise.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.getWithFunction" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get some content using a BoundFunc object which copies something to the clipboard.
+							; PARAMETERS:
+							;  boundFunc (I,REQ) - A BoundFunc object created with Func.Bind() or ObjBindMethod(), which will
+							;                      copy the desired content to the clipboard.
+							; RETURNS:        The copied content.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.getWithHotkey" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get some text by copying it to the clipboard using the given hotkey.
+							; PARAMETERS:
+							;  hotkeyKeys (I,REQ) - The keys to send in order to copy something to the clipboard.
+							; RETURNS:        The copied text.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.send" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Send the provided text using the clipboard, restoring the clipboard afterwards.
+							; PARAMETERS:
+							;  value (I,REQ) - The text to send.
+							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.set" func="yes">
@@ -345,8 +357,6 @@
 							;                          everything, not just the text on the clipboard). This can be used to
 							;                          restore the clipboard later if needed.
 							;---------">
-                <Param name="value" />
-                <Param name="ByRef origClipboard := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.setAndToast" func="yes">
@@ -357,8 +367,6 @@
 							;  newValue  (I,REQ) - The value to put on the clipboard.
 							;  clipLabel (I,REQ) - The label to show in the toast for the thing on the clipboard.
 							;---------">
-                <Param name="newValue" />
-                <Param name="clipLabel" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.setAndToastError" func="yes">
@@ -371,10 +379,6 @@
 							;  problemMessage (I,REQ) - The problem that occurred.
 							;  errorMessage   (I,OPT) - What went wrong on a technical level.
 							;---------">
-                <Param name="newValue" />
-                <Param name="clipLabel" />
-                <Param name="problemMessage" />
-                <Param name="errorMessage := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.toastNewValue" func="yes">
@@ -385,27 +389,6 @@
 							; PARAMETERS:
 							;  clipLabel (I,REQ) - The label to show in the toast for the thing on the clipboard.
 							;---------">
-                <Param name="clipLabel" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="ClipboardLib.send" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Send the provided text using the clipboard, restoring the clipboard afterwards.
-							; PARAMETERS:
-							;  value (I,REQ) - The text to send.
-							;---------">
-                <Param name="value" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="ClipboardLib.addToHistory" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Add something to the clipboard history, restoring the original clipboard value.
-							; PARAMETERS:
-							;  textToSave (I,REQ) - Text to add to the clipboard history.
-							;---------">
-                <Param name="textToSave" />
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: ClipboardLib -->
@@ -607,7 +590,6 @@
 							;                 to show a popup before that point, you can use the .popupEarly() function
 							;                 instead.
 							;---------">
-                <Param name="params*" />
             </Overload>
         </KeyWord>
         <KeyWord name="Debug.popupEarly" func="yes">
@@ -616,7 +598,6 @@
 							; DESCRIPTION:    Same as .popup(), but will run before Config is initialized. See
 							;                 .popup() for details and parameters.
 							;---------">
-                <Param name="params*" />
             </Overload>
         </KeyWord>
         <KeyWord name="Debug.toast" func="yes">
@@ -630,7 +611,6 @@
 							;                   we will interpret it as a value (not a label), but for >1 arguments an
 							;                   even number of arguments should be passed in label,value pairs.
 							;---------">
-                <Param name="params*" />
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: Debug -->
@@ -1919,15 +1899,6 @@
         <KeyWord name="Section"/>
 
         <!-- *gdb START CLASS: Selector -->
-        <KeyWord name="Selector.dataTL" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    The TableList instance that holds all data read from the file, available so
-							;                 that callers can apply filtering if needed. See TableList for available
-							;                 filtering functions.
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="Selector" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -1937,26 +1908,6 @@
 							;                     read from. See above for format.
 							; RETURNS:        A new Selector object.
 							;---------">
-                <Param name="filePath" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Selector.OverrideFieldsOff" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Turn off the override fields in the popup.
-							; RETURNS:        this
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Selector.SetTitle" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Set the popup's title.
-							; PARAMETERS:
-							;  title (I,REQ) - The title to use.
-							; RETURNS:        this
-							;---------">
-                <Param name="title" />
             </Overload>
         </KeyWord>
         <KeyWord name="Selector.AddOverrideFields" func="yes">
@@ -1969,50 +1920,23 @@
 							; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui().
 							;                 Default override values for these fields (if desired) can be set using the .SetDefaultOverrides() function.
 							;---------">
-                <Param name="fieldsToAdd" />
             </Overload>
         </KeyWord>
-        <KeyWord name="Selector.SetDefaultOverrides" func="yes">
+        <KeyWord name="Selector.dataTL" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Set the default values for the override fields in the popup.
-							; PARAMETERS:
-							;  defaultOverrides (I,REQ) - Associative array fo default overrides, format:
-							;                              {columnLabel: value}
+							; DESCRIPTION:    The TableList instance that holds all data read from the file, available so
+							;                 that callers can apply filtering if needed. See TableList for available
+							;                 filtering functions.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Selector.OverrideFieldsOff" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Turn off the override fields in the popup.
 							; RETURNS:        this
 							;---------">
-                <Param name="defaultOverrides" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Selector.selectGui" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Show a popup to the user so they can select one of the choices we've prepared
-							;                 and enter any additional override information.
-							; PARAMETERS:
-							;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this
-							;                         name will be returned.
-							; RETURNS:        An array of data as chosen/overridden by the user. If the returnColumn
-							;                 parameter was specified, only the subscript matching that name will be
-							;                 returned.
-							;---------">
-                <Param name="returnColumn := &quot;&quot;" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Selector.selectChoice" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Programmatically select a choice from those we've prepared.
-							; PARAMETERS:
-							;  choiceString (I,REQ) - The string to try and match against the given choices. We will match this string
-							;                         against the index or abbreviation of the choice.
-							;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this name will
-							;                         be returned.
-							; RETURNS:        An array of data for the choice matching the given string. If the returnColumn parameter
-							;                 was specified, only the subscript matching that name will be returned.
-							;---------">
-                <Param name="choiceString" />
-                <Param name="returnColumn := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="Selector.select" func="yes">
@@ -2030,8 +1954,55 @@
 							; RETURNS:        An array of data for the choice matching the given string. If the returnColumn
 							;                 parameter was specified, only the subscript matching that name will be returned.
 							;---------">
-                <Param name="choiceString := &quot;&quot;" />
-                <Param name="returnColumn := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Selector.selectChoice" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Programmatically select a choice from those we've prepared.
+							; PARAMETERS:
+							;  choiceString (I,REQ) - The string to try and match against the given choices. We will match this string
+							;                         against the index or abbreviation of the choice.
+							;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this name will
+							;                         be returned.
+							; RETURNS:        An array of data for the choice matching the given string. If the returnColumn parameter
+							;                 was specified, only the subscript matching that name will be returned.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Selector.selectGui" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Show a popup to the user so they can select one of the choices we've prepared
+							;                 and enter any additional override information.
+							; PARAMETERS:
+							;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this
+							;                         name will be returned.
+							; RETURNS:        An array of data as chosen/overridden by the user. If the returnColumn
+							;                 parameter was specified, only the subscript matching that name will be
+							;                 returned.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Selector.SetDefaultOverrides" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the default values for the override fields in the popup.
+							; PARAMETERS:
+							;  defaultOverrides (I,REQ) - Associative array fo default overrides, format:
+							;                              {columnLabel: value}
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Selector.SetTitle" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the popup's title.
+							; PARAMETERS:
+							;  title (I,REQ) - The title to use.
+							; RETURNS:        this
+							;---------">
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: Selector -->

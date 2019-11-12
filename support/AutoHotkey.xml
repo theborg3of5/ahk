@@ -1917,6 +1917,125 @@
         <KeyWord name="ScrollLock"/>
         <KeyWord name="Seconds"/>
         <KeyWord name="Section"/>
+
+        <!-- *gdb START CLASS: Selector -->
+        <KeyWord name="Selector.dataTL" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    The TableList instance that holds all data read from the file, available so
+							;                 that callers can apply filtering if needed. See TableList for available
+							;                 filtering functions.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Selector" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Creates a new instance of the Selector class.
+							; PARAMETERS:
+							;  filePath (I,REQ) - The Selector file (.tls) where the choices that will be selected from will be
+							;                     read from. See above for format.
+							; RETURNS:        A new Selector object.
+							;---------">
+                <Param name="filePath" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Selector.OverrideFieldsOff" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Turn off the override fields in the popup.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Selector.SetTitle" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the popup's title.
+							; PARAMETERS:
+							;  title (I,REQ) - The title to use.
+							; RETURNS:        this
+							;---------">
+                <Param name="title" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Selector.AddOverrideFields" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add additional override fields to the popup shown to the user, and return whatever data
+							;                 they add (or is defaulted in) in the final return array.
+							; PARAMETERS:
+							;  fieldsToAdd (I,REQ) - Numerically-indexed array of field names (treated the same as column names from choices) to add.
+							; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui().
+							;                 Default override values for these fields (if desired) can be set using the .SetDefaultOverrides() function.
+							;---------">
+                <Param name="fieldsToAdd" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Selector.SetDefaultOverrides" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the default values for the override fields in the popup.
+							; PARAMETERS:
+							;  defaultOverrides (I,REQ) - Associative array fo default overrides, format:
+							;                              {columnLabel: value}
+							; RETURNS:        this
+							;---------">
+                <Param name="defaultOverrides" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Selector.selectGui" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Show a popup to the user so they can select one of the choices we've prepared
+							;                 and enter any additional override information.
+							; PARAMETERS:
+							;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this
+							;                         name will be returned.
+							; RETURNS:        An array of data as chosen/overridden by the user. If the returnColumn
+							;                 parameter was specified, only the subscript matching that name will be
+							;                 returned.
+							;---------">
+                <Param name="returnColumn := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Selector.selectChoice" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Programmatically select a choice from those we've prepared.
+							; PARAMETERS:
+							;  choiceString (I,REQ) - The string to try and match against the given choices. We will match this string
+							;                         against the index or abbreviation of the choice.
+							;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this name will
+							;                         be returned.
+							; RETURNS:        An array of data for the choice matching the given string. If the returnColumn parameter
+							;                 was specified, only the subscript matching that name will be returned.
+							;---------">
+                <Param name="choiceString" />
+                <Param name="returnColumn := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Selector.select" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Helper function that calls either .selectGui() or .selectChoice() based on whether the
+							;                 given choice is blank.
+							; PARAMETERS:
+							;  choiceString (I,OPT) - The string to try and match against the given choices. If this is blank, we'll
+							;                         call .selectGui() to show a popup to the user where they pick their choice and
+							;                         enter any additional override information. If this is not blank, we'll match
+							;                         it against the index or abbreviation of the choices and return the results.
+							;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this name will
+							;                         be returned.
+							; RETURNS:        An array of data for the choice matching the given string. If the returnColumn
+							;                 parameter was specified, only the subscript matching that name will be returned.
+							;---------">
+                <Param name="choiceString := &quot;&quot;" />
+                <Param name="returnColumn := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: Selector -->
+
         <KeyWord name="Send" func="no">
             <Overload retVal="">
                 <Param name="Keys"/>

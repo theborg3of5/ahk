@@ -9,6 +9,9 @@
 			In general for the language
 				C:\Program Files\Notepad++\autoCompletion\AutoHotkey.xml
 			Could we add our own library of functions?
+				Generating from script files
+					Figure out what to do (if anything) for the mock class in debug.ahk (ObjectWithDebug)
+					Exclude classes in a "#PRIVATE" chunk (basically everything after a private chunk, until we get to a new class or "#PUBLIC" chunk?)
 			Could we add our own classes and such?
 			Could we add public constants from some libraries/classes, too?
 				func="no" might be helpful for that

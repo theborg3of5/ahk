@@ -77,7 +77,7 @@ class StringBase {
 	;---------
 	; DESCRIPTION:    Wrapper for .contains() which takes an array of search strings.
 	; PARAMETERS:
-	;  needlesAry    (I,REQ) - The array of strings to search for
+	;  needlesAry    (I,REQ) - The array/object of strings to search for (we'll search for the values, not the keys/indices)
 	;  matchedNeedle (O,OPT) - The needle that we matched
 	; RETURNS:        The position of the first occurrence of any needle.
 	;---------

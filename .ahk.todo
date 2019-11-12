@@ -10,6 +10,8 @@
 				C:\Program Files\Notepad++\autoCompletion\AutoHotkey.xml
 			Could we add our own library of functions?
 			Could we add our own classes and such?
+			Could we add public constants from some libraries/classes, too?
+				func="no" might be helpful for that
 			Could we generate/add to the XML file automatically (or at least, via script) based on the contents of the scripts themselves?
 				Maybe based on a central documentation method (like we thought about below)?
 					Maybe a specially-formatted comment at the top of the file instead?

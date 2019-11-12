@@ -1,3 +1,5 @@
+<!-- Based on syntax highlighting from https://github.com/jNizM/ahk_notepad-plus-plus -->
+<!-- This file should live in the Notepad++ program files folder, under autoCompletion\ -->
 <?xml version="1.0" encoding="windows-1252"?>
 <NotepadPlus>
     <AutoComplete language="AutoHotkey">
@@ -259,6 +261,162 @@
         <KeyWord name="Click"/>
         <KeyWord name="Clipboard"/>
         <KeyWord name="Clipboardall"/>
+		  
+		  <!-- ClipboardLib -->
+        <KeyWord name="ClipboardLib.copyWithHotkey" func="yes">
+            <Overload retVal="" descr="
+;---------
+; DESCRIPTION:    Copy something to the clipboard using the given hotkey, waiting for it to
+;                 take and returning whether we actually got something.
+; PARAMETERS:
+;  hotkeyKeys (I,REQ) - The keys to send in order to copy something to the clipboard.
+; RETURNS:        true if we successfully copied something, false otherwise.
+;---------">
+                <Param name="hotkeyKeys" />
+</Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.getWithHotkey" func="yes">
+            <Overload retVal="" descr="
+;---------
+; DESCRIPTION:    Get some text by copying it to the clipboard using the given hotkey.
+; PARAMETERS:
+;  hotkeyKeys (I,REQ) - The keys to send in order to copy something to the clipboard.
+; RETURNS:        The copied text.
+;---------">
+                <Param name="hotkeyKeys" />
+</Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.copyWithFunction" func="yes">
+            <Overload retVal="" descr="
+;---------
+; DESCRIPTION:    Copy something using the provided functor object, but make sure that we actually
+;                 get something on the clipboard.
+; PARAMETERS:
+;  boundFunc (I,REQ) - Functor object to run in order to copy something to the clipboard.
+; RETURNS:        true if we successfully copied something, false otherwise.
+;---------">
+                <Param name="boundFunc" />
+</Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.getWithFunction" func="yes">
+            <Overload retVal="" descr="
+;---------
+; DESCRIPTION:    Get some content using a BoundFunc object which copies something to the clipboard.
+; PARAMETERS:
+;  boundFunc (I,REQ) - A BoundFunc object created with Func.Bind() or ObjBindMethod(), which will
+;                      copy the desired content to the clipboard.
+; RETURNS:        The copied content.
+;---------">
+                <Param name="boundFunc" />
+</Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.copyFilePathWithHotkey" func="yes">
+            <Overload retVal="" descr="
+;---------
+; DESCRIPTION:    Copy a file path with the provided hotkeys, making sure that:
+;                  * We wait long enough for the file to get onto the clipboard
+;                  * The path has been cleaned up and mapped
+; PARAMETERS:
+;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file to the clipboard.
+;---------">
+                <Param name="hotkeyKeys" />
+</Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.copyFolderPathWithHotkey" func="yes">
+            <Overload retVal="" descr="
+;---------
+; DESCRIPTION:    Copy a folder path with the provided hotkeys, making sure that:
+;                  * We wait long enough for the folder to get onto the clipboard
+;                  * The path has been cleaned up and mapped
+;                  * There's a trailing backslash on the end
+; PARAMETERS:
+;  fileHotkeyKeys (I,REQ) - The keys to send in order to copy a FILE in the folder you want to the clipboard.
+;---------">
+                <Param name="fileHotkeyKeys" />
+</Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.set" func="yes">
+            <Overload retVal="" descr="
+;---------
+; DESCRIPTION:    Set the clipboard to the given value, and wait to make sure it applies before returning.
+; PARAMETERS:
+;  value         (I,REQ) - Value to set.
+;  origClipboard (O,OPT) - The original value of ClipboardAll (which is binary and contains
+;                          everything, not just the text on the clipboard). This can be used to
+;                          restore the clipboard later if needed.
+;---------">
+                <Param name="value" />
+                <Param name="ByRef origClipboard := &quot;&quot;" />
+</Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.setAndToast" func="yes">
+            <Overload retVal="" descr="
+;---------
+; DESCRIPTION:    Set the clipboard to the given value and show a toast about it which includes the value.
+; PARAMETERS:
+;  newValue  (I,REQ) - The value to put on the clipboard.
+;  clipLabel (I,REQ) - The label to show in the toast for the thing on the clipboard.
+;---------">
+                <Param name="newValue" />
+                <Param name="clipLabel" />
+</Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.setAndToastError" func="yes">
+            <Overload retVal="" descr="
+;---------
+; DESCRIPTION:    Set the clipboard to the given value and show an error toast about it.
+; PARAMETERS:
+;  newValue       (I,REQ) - The value to put on the clipboard.
+;  clipLabel      (I,REQ) - The label to show in the toast for the thing on the clipboard.
+;  problemMessage (I,REQ) - The problem that occurred.
+;  errorMessage   (I,OPT) - What went wrong on a technical level.
+;---------">
+                <Param name="newValue" />
+                <Param name="clipLabel" />
+                <Param name="problemMessage" />
+                <Param name="errorMessage := &quot;&quot;" />
+</Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.toastNewValue" func="yes">
+            <Overload retVal="" descr="
+;---------
+; DESCRIPTION:    Show a toast about the clipboard's current state (basically whether it's set or not),
+;                 also including the actual value.
+; PARAMETERS:
+;  clipLabel (I,REQ) - The label to show in the toast for the thing on the clipboard.
+;---------">
+                <Param name="clipLabel" />
+</Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.send" func="yes">
+            <Overload retVal="" descr="
+;---------
+; DESCRIPTION:    Send the provided text using the clipboard, restoring the clipboard afterwards.
+; PARAMETERS:
+;  value (I,REQ) - The text to send.
+;---------">
+                <Param name="value" />
+</Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.addToHistory" func="yes">
+            <Overload retVal="" descr="
+;---------
+; DESCRIPTION:    Add something to the clipboard history, restoring the original clipboard value.
+; PARAMETERS:
+;  textToSave (I,REQ) - Text to add to the clipboard history.
+;---------">
+                <Param name="textToSave" />
+</Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.saveToManager" func="yes">
+            <Overload retVal="" descr="
+;---------
+; DESCRIPTION:    Force the clipboard manager to store the current value, generally useful just
+;                 before you change the clipboard to something else.
+;---------"></Overload>
+        </KeyWord>
+		  <!-- /ClipboardLib -->
+		  
         <KeyWord name="ClipWait" func="no">
             <Overload retVal="">
                 <Param name="SecondsToWait"/>
@@ -439,7 +597,7 @@
         <KeyWord name="Debug.popup" func="yes">
             <Overload retVal="" descr="Show a debug popup">
                 <Param name="Label1"/>
-					 <Param name="Var1"/>
+					 <Param name="Var1 = &quot;&quot;"/>
                 <Param name="..."/>
             </Overload>
         </KeyWord>

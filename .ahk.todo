@@ -16,7 +16,6 @@
 				C:\Program Files\Notepad++\autoCompletion\AutoHotkey.xml
 			Generating from script files
 				Should we really keep support for documenting variables? Or if we're documenting it anyway, should we just only support properties?
-				Figure out ignoring classes with no documented members - shouldn't error out on those.
 				Do we want to try and handle inheritance? That is, pull in info from the base class (which we'll need to make sure we process first) when we find the "extends" keyword?
 		Consider additional user-defined languages:
 			My todo lists - folding like python, but don't have all the weird highlighting (or single quote handling).

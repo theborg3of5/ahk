@@ -719,9 +719,6 @@
         <KeyWord name="Days"/>
         <KeyWord name="DDL"/>
 
-        <!-- *gdb START CLASS: ObjectWithDebug -->
-        <!-- *gdb END CLASS: ObjectWithDebug -->
-
         <!-- *gdb START CLASS: Debug -->
         <KeyWord name="Debug.popup" func="yes">
             <Overload retVal="" descr="

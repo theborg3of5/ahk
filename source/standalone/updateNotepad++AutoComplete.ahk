@@ -162,7 +162,7 @@ getAutoCompleteXMLForScript(path) {
 						name := currClassName "." name
 				}
 				
-				isFunc := "yes" ; or "no" ; GDB TODO
+				isFunc := "yes" ; Always "yes" - allows me to type an open paren and get the popup of info.
 				
 				headerIndent := StringLib.getTabs(7) ; We can indent with tabs and it's ignored - cleaner XML and result looks the same.
 				headerText := "`n" headerIndent docLines.join("`n" headerIndent) ; Add a newline at the start to separate the header from the definition line in the popup
@@ -227,7 +227,9 @@ getAutoCompleteXMLForScript(path) {
 				classXML := classXML.appendPiece(endBlockComment, "`n")
 				
 				; Flush to allXML and clear the class
-				allXML[currClassName] := classXML
+				if(!DataLib.isNullOrEmpty(classFunctionXMLs)) ; Only add to allXML if we actually have documented functions to include
+					allXML[currClassName] := classXML
+				
 				classXML := ""
 				classFunctionXMLs := {}
 			}
@@ -252,7 +254,9 @@ getAutoCompleteXMLForScript(path) {
 		classXML := classXML.appendPiece(endBlockComment, "`n")
 		
 		; Flush to allXML and clear the class
-		allXML[currClassName] := classXML
+		if(!DataLib.isNullOrEmpty(classFunctions)) ; Only add to allXML if we actually have documented functions to include
+			allXML[currClassName] := classXML
+		
 		classXML := ""
 		classFunctionXMLs := {}
 	}

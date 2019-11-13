@@ -5,14 +5,29 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
 
+
+startBlockCommentBaseXML := "
+	(
+        <!-- *gdb START CLASS: <CLASS_NAME> -->
+	)"
+endBlockCommentBaseXML := "
+	(
+        <!-- *gdb END CLASS: <CLASS_NAME> -->
+	)"
+
+
+
 allXML := ""
 
-commonRoot := Config.path["AHK_ROOT"] "\source\common"
+commonRoot := Config.path["AHK_SOURCE"] "\common"
 
-; clipboard := getAutoCompleteXMLForScript(commonRoot "\class\selector.ahk")
-; clipboard := getAutoCompleteXMLForScript(commonRoot "\static\debug.ahk")
-; clipboard := getAutoCompleteXMLForScript(commonRoot "\lib\clipboardLib.ahk")
-clipboard := getAutoCompleteXMLForScript(commonRoot "\class\epicRecord.ahk")
+autoCompleteXMLs := {}
+autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\selector.ahk"))
+autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\selector.ahk"))
+autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\static\debug.ahk"))
+autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\lib\clipboardLib.ahk"))
+autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\epicRecord.ahk"))
+; Debug.popup("autoCompleteXMLs",autoCompleteXMLs)
 
 ; allXML .= getAutoCompleteXMLForFolder(commonRoot "\base")
 ; allXML .= getAutoCompleteXMLForFolder(commonRoot "\class")
@@ -20,6 +35,32 @@ clipboard := getAutoCompleteXMLForScript(commonRoot "\class\epicRecord.ahk")
 ; allXML .= getAutoCompleteXMLForFolder(commonRoot "\lib")
 ; allXML .= getAutoCompleteXMLForFolder(commonRoot "\static")
 ; clipboard := allXML
+
+autoCompleteFilePath := Config.path["AHK_SUPPORT"] "\AutoHotkey.xml"
+originalXML := FileRead(autoCompleteFilePath)
+
+newXML := originalXML
+For className,classXML in autoCompleteXMLs {
+	; Find the block in the original XML for this class
+	startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
+	endBlockComment   := endBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
+	
+	if(!newXML.contains(startBlockComment) || !newXML.contains(endBlockComment)) {
+		new ErrorToast("Could not add class' XML to auto-complete file: " className, "Could not find matching comment block - must be added manually if it doesn't exist.").showMedium()
+		Continue
+	}
+	
+	xmlBefore := newXML.beforeString(startBlockComment)
+	xmlAfter := newXML.afterString(endBlockComment)
+	
+	newXML := xmlBefore classXML xmlAfter
+}
+
+; clipboard := newXML
+FileLib.replaceFileWithString(autoCompleteFilePath, newXML)
+
+activeAutoCompleteFilePath := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
+FileLib.replaceFileWithString(activeAutoCompleteFilePath, newXML)
 
 MsgBox, done
 
@@ -50,7 +91,7 @@ getAutoCompleteXMLForScript(path) {
             <Overload retVal=""<RETURNS>"" descr=""<DESCRIPTION>""><PARAMS>
             </Overload>
         </KeyWord>
-		)" ; <PARAMS> has no indent so each line of the params can indent itself the same.
+		)" ; <PARAMS> has no indent/newline so each line of the params can indent itself the same.
 	paramBaseXML := "
 		(
                 <Param name=""<PARAM>"" />
@@ -69,7 +110,7 @@ getAutoCompleteXMLForScript(path) {
 	outOfScope := false
 	docLines := []
 	
-	allXML := ""
+	allXML := {}
 	classXML := ""
 	currClassName := ""
 	
@@ -164,10 +205,9 @@ getAutoCompleteXMLForScript(path) {
 				
 				endBlockComment := endBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
 				classXML := classXML.appendPiece(endBlockComment, "`n")
-				classXML .= "`n" ; Add an extra newline after finishing a block
 				
 				; Flush to allXML and clear the class
-				allXML .= classXML
+				allXML[currClassName] := classXML
 				classXML := ""
 				classFunctionXMLs := {}
 			}
@@ -177,7 +217,7 @@ getAutoCompleteXMLForScript(path) {
 			
 			; Add an XML comment to say we're starting a block
 			startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
-			classXML .= "`n" startBlockComment ; Add an extra newline before a new block
+			classXML .= startBlockComment
 		}
 	}
 	
@@ -190,10 +230,9 @@ getAutoCompleteXMLForScript(path) {
 		
 		endBlockComment := endBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
 		classXML := classXML.appendPiece(endBlockComment, "`n")
-		classXML .= "`n" ; Add an extra newline after finishing a block
 		
 		; Flush to allXML and clear the class
-		allXML .= classXML
+		allXML[currClassName] := classXML
 		classXML := ""
 		classFunctionXMLs := {}
 	}

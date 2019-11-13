@@ -10,10 +10,7 @@
 				C:\Program Files\Notepad++\autoCompletion\AutoHotkey.xml
 			Could we add our own library of functions?
 				Generating from script files
-					Figure out what to do (if anything) for the mock class in debug.ahk (ObjectWithDebug)
 					Have it read in the XML file and replace the class chunks it recognizes (between the matching "*gdb START/END CLASS: " comments)
-					Since we have to type "(" to trigger the info popup, figure out some way to call out properties in that popup
-						Maybe just adding square brackets to the end if it's not a function?
 			Could we add our own classes and such?
 			Could we add public constants from some libraries/classes, too?
 				func="no" might be helpful for that

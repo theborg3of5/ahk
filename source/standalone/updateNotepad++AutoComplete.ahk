@@ -9,9 +9,9 @@ allXML := ""
 
 commonRoot := Config.path["AHK_ROOT"] "\source\common"
 
-; clipboard := getAutoCompleteXMLForScript(commonRoot "\class\selector.ahk")
+clipboard := getAutoCompleteXMLForScript(commonRoot "\class\selector.ahk")
 ; clipboard := getAutoCompleteXMLForScript(commonRoot "\static\debug.ahk")
-clipboard := getAutoCompleteXMLForScript(commonRoot "\lib\clipboardLib.ahk")
+; clipboard := getAutoCompleteXMLForScript(commonRoot "\lib\clipboardLib.ahk")
 
 ; allXML .= getAutoCompleteXMLForFolder(commonRoot "\base")
 ; allXML .= getAutoCompleteXMLForFolder(commonRoot "\class")
@@ -46,10 +46,10 @@ getAutoCompleteXMLForScript(path) {
 	keywordBaseXML := "
 		(
         <KeyWord name=""<NAME>"" func=""<IS_FUNC>"">
-            <Overload retVal="""" descr=""<DESCRIPTION>""><PARAMS>
+            <Overload retVal=""<RETURNS>"" descr=""<DESCRIPTION>""><PARAMS>
             </Overload>
         </KeyWord>
-		)" ; retVal attribute seems required for auto-completion to work correctly, <PARAMS> has no indent so each line of the params can indent itself the same.
+		)" ; <PARAMS> has no indent so each line of the params can indent itself the same.
 	paramBaseXML := "
 		(
                 <Param name=""<PARAM>"" />
@@ -87,6 +87,12 @@ getAutoCompleteXMLForScript(path) {
 				name := getNameFromDefLine(defLine)
 				params := NotepadPlusPlus.getParamsListFromDefinitionLine(defLine)
 				
+				; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
+				retValue := ""
+				if(!defLine.contains("(")) {
+					retValue := "[Property]"
+				}
+				
 				if(currClassName != "") {
 					if(name = "__New")
 						name := currClassName
@@ -113,7 +119,7 @@ getAutoCompleteXMLForScript(path) {
 					allParamsXML := "`n" allParamsXML ; Newline before the whole params block
 				}
 				
-				keywordTags := {"NAME":name, "IS_FUNC":isFunc, "DESCRIPTION":headerText, "PARAMS":allParamsXML}
+				keywordTags := {"NAME":name, "IS_FUNC":isFunc, "RETURNS":retValue, "DESCRIPTION":headerText, "PARAMS":allParamsXML}
 				keywordXML := keywordBaseXML.replaceTags(keywordTags)
 				
 				; Debug.popup("name",name, "description",description, "parameters",parameters, "returns",returns, "sideEffects",sideEffects, "notes",notes, "keywordXML",keywordXML)

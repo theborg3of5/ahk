@@ -1,5 +1,6 @@
 <!-- Based on syntax highlighting from https://github.com/jNizM/ahk_notepad-plus-plus -->
 <!-- This file should live in the Notepad++ program files folder, under autoCompletion\ -->
+<!-- The only documentation I've found for the format of this file is here: https://web.archive.org/web/20190607225203/http://docs.notepad-plus-plus.org/index.php/Auto_Completion#Sorting -->
 <?xml version="1.0" encoding="windows-1252"?>
 <NotepadPlus>
     <AutoComplete language="AutoHotkey">
@@ -1923,7 +1924,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="Selector.dataTL" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The TableList instance that holds all data read from the file, available so
 							;                 that callers can apply filtering if needed. See TableList for available

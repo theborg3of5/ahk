@@ -1,4 +1,6 @@
 # New Ideas
+	Update compileEpicStudioRegex to use toast blocking instead of a separate wait
+		Are there others that I missed, too?
 	Consider moving mergeObjects into ObjectBase - pretty much all callers would work fine with mergeFromObject(), and it's a little clearer what's winning then, too.
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
 		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
@@ -12,6 +14,7 @@
 			Generating from script files
 				Have it read in the XML file and replace the class chunks it recognizes (between the matching "*gdb START/END CLASS: " comments)
 				Should we really keep support for documenting variables? Or if we're documenting it anyway, should we just only support properties?
+				If we're going to include the "external" folder of files, handle no class name better
 				Will probably need to break class names on space to avoid the extends keyword cases
 				Do we want to try and handle inheritance? That is, pull in info from the base class (which we'll need to make sure we process first) when we find the "extends" keyword?
 		Consider additional user-defined languages:

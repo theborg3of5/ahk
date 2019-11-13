@@ -27,27 +27,31 @@ autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\static\debug.ahk"))
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\lib\clipboardLib.ahk"))
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\epicRecord.ahk"))
-; Debug.popup("autoCompleteXMLs",autoCompleteXMLs)
 
-; allXML .= getAutoCompleteXMLForFolder(commonRoot "\base")
-; allXML .= getAutoCompleteXMLForFolder(commonRoot "\class")
-; allXML .= getAutoCompleteXMLForFolder(commonRoot "\external")
-; allXML .= getAutoCompleteXMLForFolder(commonRoot "\lib")
-; allXML .= getAutoCompleteXMLForFolder(commonRoot "\static")
-; clipboard := allXML
+autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\duration.ahk"))
+autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\formatList.ahk"))
+
+; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\base"))
+; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\class"))
+; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\external"))
+; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\lib"))
+; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\static"))
+; Debug.popup("autoCompleteXMLs",autoCompleteXMLs)
 
 autoCompleteFilePath := Config.path["AHK_SUPPORT"] "\AutoHotkey.xml"
 originalXML := FileRead(autoCompleteFilePath)
 
 newXML := originalXML
+failedClasses := {}
 For className,classXML in autoCompleteXMLs {
 	; Find the block in the original XML for this class
 	startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
 	endBlockComment   := endBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
 	
 	if(!newXML.contains(startBlockComment) || !newXML.contains(endBlockComment)) {
-		new ErrorToast("Could not add class' XML to auto-complete file: " className, "Could not find matching comment block - must be added manually if it doesn't exist.").showMedium()
+		failedClasses[className] := classXML
 		Continue
+		
 	}
 	
 	xmlBefore := newXML.beforeString(startBlockComment)
@@ -56,23 +60,39 @@ For className,classXML in autoCompleteXMLs {
 	newXML := xmlBefore classXML xmlAfter
 }
 
+failedNameList := ""
+failedBlocks := ""
+if(!DataLib.isNullOrEmpty(failedClasses)) {
+	For className,classXML in failedClasses {
+		failedNameList := failedNameList.appendPiece(className)
+		
+		startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
+		endBlockComment   := endBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
+		failedBlocks .= "`n`n" startBlockComment "`n" endBlockComment "`n" ; Made so it can be pasted at the end of the last line it should be after - extra line of space above and below the new block.
+	}
+	
+	ClipboardLib.set(failedBlocks)
+	new ErrorToast("Could not add some classes' XML to auto-complete file", "Could not find matching comment block for these classes: " failedNameList, "Comment blocks for all failed classes have been added to the clipboard - add them into the file in alphabetical order").blockingOn().showMedium()
+}
+
 ; clipboard := newXML
 FileLib.replaceFileWithString(autoCompleteFilePath, newXML)
 
 activeAutoCompleteFilePath := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
 FileLib.replaceFileWithString(activeAutoCompleteFilePath, newXML)
 
-MsgBox, done
-
+new Toast("Updated both versions of the auto-complete file").blockingOn().showMedium()
 ExitApp
 
 getAutoCompleteXMLForFolder(path) {
+	autoCompleteXMLs := {}
+	
 	Loop, Files, %path%\*.ahk, RF ; Recursive, files (not directories)
 	{
-		allXML .= getAutoCompleteXMLForScript(A_LoopFileLongPath)
+		autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(A_LoopFileLongPath))
 	}
 	
-	return allXML
+	return autoCompleteXMLs
 }
 
 getAutoCompleteXMLForScript(path) {

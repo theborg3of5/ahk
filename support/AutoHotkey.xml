@@ -671,6 +671,71 @@
             </Overload>
         </KeyWord>
         <KeyWord name="DropDownList"/>
+
+        <!-- *gdb START CLASS: Duration -->
+        <KeyWord name="Duration" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new Duration object based on a duration string.
+							; PARAMETERS:
+							;  durationString (I,OPT) - A string describing how much time this Duration instance should
+							;                           represent. See class header for format. If not given, we'll default
+							;                           to no time (0 seconds).
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Duration.addTime" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add/remove a certain amount of time to/from this Duration.
+							; PARAMETERS:
+							;  value    (I,REQ) - How much time to add or remove.
+							;  unitChar (I,OPT) - Character (from Duration.Char_* constants) representing the unit you want
+							;                     to add. Defaults to &quot;s&quot; (seconds).
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Duration.addTimeFromDurationString" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a certain amount of time to this Duration.
+							; PARAMETERS:
+							;  durationString (I,REQ) - A string describing how much time we should add to this Duration.
+							;                           See class header for format.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Duration.displayTime" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    A string representation of the total time in the duration, broken down into
+							;                 hours, minutes, and seconds. Hours (and their following :) are only included
+							;                 if there are >0 hours, and minutes are the same (unless there are hours, in
+							;                 which case minutes are always included). For example:
+							;                   1:05:03
+							;                   5:03
+							;                   3
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Duration.hours" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Hours/minutes/seconds in this duration.
+							; NOTES:          These counts take into account the other units - for example, a Duration with
+							;                 1:01:00 will return &quot;1&quot; for minutes (not 61 minutes).
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Duration.isZero" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Whether the duration has no time remaining.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: Duration -->
+
         <KeyWord name="Edit"/>
         <KeyWord name="Eject"/>
         <KeyWord name="Else"/>
@@ -1037,6 +1102,41 @@
             </Overload>
         </KeyWord>
         <KeyWord name="Force"/>
+
+        <!-- *gdb START CLASS: FormatList -->
+        <KeyWord name="FormatList" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new FormatList object.
+							; PARAMETERS:
+							;  listObject (I,REQ) - Object representing the list, may be an array or delimited string.
+							;  inFormat   (I,OPT) - Format that the list is in (from FormatList.Format_* constants). If not
+							;                       given, we will try to determine it ourselves and prompt the user if we
+							;                       can't figure it out.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FormatList.getList" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the list in a certain format, programmatically.
+							; PARAMETERS:
+							;  format (I,OPT) - Format to get the list in. If not given, we'll prompt the user for it.
+							; RETURNS:        The list, in the chosen format.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FormatList.sendList" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Send the list to the current window, in a certain format.
+							; PARAMETERS:
+							;  format (I,OPT) - Format to send the list in. If not given, we'll prompt the user for it.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: FormatList -->
+
         <KeyWord name="FormatTime" func="no">
             <Overload retVal="">
                 <Param name="OutputVar"/>

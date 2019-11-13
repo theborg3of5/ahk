@@ -26,9 +26,17 @@
 class EpicRecord {
 	; #PUBLIC#
 	
-	; Properties of the record.
-	ini   := ""
-	id    := ""
+	;---------
+	; DESCRIPTION:    The INI for this record.
+	;---------
+	ini := ""
+	;---------
+	; DESCRIPTION:    The ID for this record.
+	;---------
+	id := ""
+	;---------
+	; DESCRIPTION:    The title for this record.
+	;---------
 	title := ""
 	
 	;---------

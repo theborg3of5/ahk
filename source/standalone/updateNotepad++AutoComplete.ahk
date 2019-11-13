@@ -134,7 +134,7 @@ getAutoCompleteXMLForScript(path) {
 	classXML := ""
 	currClassName := ""
 	
-	classFunctionXMLs := {} ; {functionName: keywordXML}
+	classFunctions := {} ; {functionName: keywordTags}
 	
 	For lineNumber,line in linesAry {
 		line := line.withoutWhitespace()
@@ -181,13 +181,7 @@ getAutoCompleteXMLForScript(path) {
 					allParamsXML := "`n" allParamsXML ; Newline before the whole params block
 				}
 				
-				keywordTags := {"NAME":name, "IS_FUNC":isFunc, "RETURNS":retValue, "DESCRIPTION":headerText, "PARAMS":allParamsXML}
-				keywordXML := keywordBaseXML.replaceTags(keywordTags)
-				
-				; Debug.popup("name",name, "description",description, "parameters",parameters, "returns",returns, "sideEffects",sideEffects, "notes",notes, "keywordXML",keywordXML)
-				; Debug.popup(keywordXML)
-				
-				classFunctionXMLs[name] := keywordXML
+				classFunctions[name] := {"NAME":name, "IS_FUNC":isFunc, "RETURNS":retValue, "DESCRIPTION":headerText, "PARAMS":allParamsXML}
 				
 				docLines := []
 				inBlock := false
@@ -219,19 +213,20 @@ getAutoCompleteXMLForScript(path) {
 			; If there was a class open before, add a closing comment for it.
 			if(currClassName != "") {
 				; Save off all functions in this class to class XML
-				For _,xml in classFunctionXMLs { ; Should be looping in alphabetical order
-					classXML := classXML.appendPiece(xml, "`n")
+				For _,keywordTags in classFunctions { ; Should be looping in alphabetical order
+					functionXML := keywordBaseXML.replaceTags(keywordTags)
+					classXML := classXML.appendPiece(functionXML, "`n")
 				}
 				
 				endBlockComment := endBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
 				classXML := classXML.appendPiece(endBlockComment, "`n")
 				
 				; Flush to allXML and clear the class
-				if(!DataLib.isNullOrEmpty(classFunctionXMLs)) ; Only add to allXML if we actually have documented functions to include
+				if(!DataLib.isNullOrEmpty(classFunctions)) ; Only add to allXML if we actually have documented functions to include
 					allXML[currClassName] := classXML
 				
 				classXML := ""
-				classFunctionXMLs := {}
+				classFunctions := {}
 			}
 			
 			; Get new class name
@@ -246,8 +241,9 @@ getAutoCompleteXMLForScript(path) {
 	; If there was a class open at the end, finish it off.
 	if(currClassName != "") {
 		; Save off all functions in this class to class XML
-		For _,xml in classFunctionXMLs { ; Should be looping in alphabetical order
-			classXML := classXML.appendPiece(xml, "`n")
+		For _,keywordTags in classFunctions { ; Should be looping in alphabetical order
+			functionXML := keywordBaseXML.replaceTags(keywordTags)
+			classXML := classXML.appendPiece(functionXML, "`n")
 		}
 		
 		endBlockComment := endBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
@@ -258,7 +254,7 @@ getAutoCompleteXMLForScript(path) {
 			allXML[currClassName] := classXML
 		
 		classXML := ""
-		classFunctionXMLs := {}
+		classFunctions := {}
 	}
 	
 	return allXML

@@ -40,5 +40,22 @@ class ObjectBase {
 				return index
 		return ""
 	}
+	
+	;---------
+	; DESCRIPTION:    Recursively merge two objects together into a new object containing the data from both.
+	; PARAMETERS:
+	;  overrides (I,REQ) - The object to merge data from. The object in this parameter "wins" when
+	;                      both this parameter and the instance of this class have the same
+	;                      index/property - that is, we'll replace the value on the class instance
+	;                      with the value from this parameter.
+	;---------
+	mergeFromObject(objectToAppend) {
+		For index,value in objectToAppend {
+			if(IsObject(value))
+				this[index] := DataLib.mergeObjects(this[index], value)
+			else
+				this[index] := value
+		}
+	}
 	; #END#
 }

@@ -162,26 +162,16 @@ getAutoCompleteXMLForScript(path) {
 						name := currClassName "." name
 				}
 				
-				isFunc := "yes" ; Always "yes" - allows me to type an open paren and get the popup of info.
-				
 				headerIndent := StringLib.getTabs(7) ; We can indent with tabs and it's ignored - cleaner XML and result looks the same.
 				headerText := "`n" headerIndent docLines.join("`n" headerIndent) ; Add a newline at the start to separate the header from the definition line in the popup
 				headerText := headerText.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
 				
+				paramsAry := []
+				if(params != "")
+					paramsAry := splitVarList(params)
 				
-				
-				
-				allParamsXML := ""
-				if(params != "") {
-					For _,param in splitVarList(params) {
-						param := param.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
-						paramXML := paramBaseXML.replaceTag("PARAM", param)
-						allParamsXML := allParamsXML.appendPiece(paramXML, "`n")
-					}
-					allParamsXML := "`n" allParamsXML ; Newline before the whole params block
-				}
-				
-				classFunctions[name] := {"NAME":name, "IS_FUNC":isFunc, "RETURNS":retValue, "DESCRIPTION":headerText, "PARAMS":allParamsXML}
+				isFunc := "yes" ; Always "yes" - allows me to type an open paren and get the popup of info.
+				classFunctions[name] := {"NAME":name, "IS_FUNC":isFunc, "RETURNS":retValue, "DESCRIPTION":headerText, "PARAMS_ARY":paramsAry}
 				
 				docLines := []
 				inBlock := false
@@ -214,6 +204,21 @@ getAutoCompleteXMLForScript(path) {
 			if(currClassName != "") {
 				; Save off all functions in this class to class XML
 				For _,keywordTags in classFunctions { ; Should be looping in alphabetical order
+					paramsAry := keywordTags["PARAMS_ARY"]
+					
+					allParamsXML := ""
+					if(!DataLib.isNullOrEmpty(paramsAry)) {
+						For _,param in paramsAry {
+							param := param.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
+							paramXML := paramBaseXML.replaceTag("PARAM", param)
+							allParamsXML := allParamsXML.appendPiece(paramXML, "`n")
+						}
+						allParamsXML := "`n" allParamsXML ; Newline before the whole params block
+					}
+					
+					keywordTags["PARAMS"] := allParamsXML
+					
+					
 					functionXML := keywordBaseXML.replaceTags(keywordTags)
 					classXML := classXML.appendPiece(functionXML, "`n")
 				}
@@ -242,6 +247,21 @@ getAutoCompleteXMLForScript(path) {
 	if(currClassName != "") {
 		; Save off all functions in this class to class XML
 		For _,keywordTags in classFunctions { ; Should be looping in alphabetical order
+			paramsAry := keywordTags["PARAMS_ARY"]
+			
+			allParamsXML := ""
+			if(!DataLib.isNullOrEmpty(paramsAry)) {
+				For _,param in paramsAry {
+					param := param.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
+					paramXML := paramBaseXML.replaceTag("PARAM", param)
+					allParamsXML := allParamsXML.appendPiece(paramXML, "`n")
+				}
+				allParamsXML := "`n" allParamsXML ; Newline before the whole params block
+			}
+			
+			keywordTags["PARAMS"] := allParamsXML
+			
+			
 			functionXML := keywordBaseXML.replaceTags(keywordTags)
 			classXML := classXML.appendPiece(functionXML, "`n")
 		}

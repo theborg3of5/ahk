@@ -28,12 +28,13 @@ autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\static
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\lib\clipboardLib.ahk"))
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\epicRecord.ahk"))
 
+autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\external\commandFunctions.ahk"))
+
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\duration.ahk"))
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\formatList.ahk"))
 
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\base"))
 ; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\class"))
-; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\external"))
 ; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\lib"))
 ; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\static"))
 ; Debug.popup("autoCompleteXMLs",autoCompleteXMLs)

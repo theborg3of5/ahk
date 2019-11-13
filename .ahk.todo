@@ -12,10 +12,10 @@
 			In general for the language
 				C:\Program Files\Notepad++\autoCompletion\AutoHotkey.xml
 			Generating from script files
-				Have it read in the XML file and replace the class chunks it recognizes (between the matching "*gdb START/END CLASS: " comments)
 				Should we really keep support for documenting variables? Or if we're documenting it anyway, should we just only support properties?
 				If we're going to include the "external" folder of files, handle no class name better
 				Will probably need to break class names on space to avoid the extends keyword cases
+				Figure out ignoring classes with no documented members - shouldn't error out on those.
 				Do we want to try and handle inheritance? That is, pull in info from the base class (which we'll need to make sure we process first) when we find the "extends" keyword?
 		Consider additional user-defined languages:
 			My todo lists - folding like python, but don't have all the weird highlighting (or single quote handling).

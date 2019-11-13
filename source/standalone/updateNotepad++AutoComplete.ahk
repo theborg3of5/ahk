@@ -31,7 +31,7 @@ autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\duration.ahk"))
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\formatList.ahk"))
 
-; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\base"))
+autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\base"))
 ; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\class"))
 ; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\external"))
 ; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\lib"))

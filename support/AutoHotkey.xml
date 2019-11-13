@@ -21,6 +21,61 @@
                 <Param name="Number"/>
             </Overload>
         </KeyWord>
+
+        <!-- *gdb START CLASS: ActionObjectBase -->
+        <KeyWord name="ActionObjectBase.copyLink" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the the object on the clipboard.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectBase.getLink" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object.
+							; RETURNS:        Link to the web version of the object.
+							; NOTES:          Should be overridden by child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectBase.getLinkEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the edit link for the object.
+							; RETURNS:        Link to the edit version of the object.
+							; NOTES:          Should be overridden by child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectBase.getLinkWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the web link for the object.
+							; RETURNS:        Link to the web version of the object.
+							; NOTES:          Should be overridden by child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectBase.linkSelectedText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it.
+							; PARAMETERS:
+							;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
+							;                           weren't able to link the selected text.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectBase.open" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: ActionObjectBase -->
+
         <KeyWord name="ActiveX"/>
         <KeyWord name="Add"/>
         <KeyWord name="AHK_class"/>
@@ -43,6 +98,78 @@
         <KeyWord name="And"/>
         <KeyWord name="AppsKey"/>
         <KeyWord name="Array"/>
+
+        <!-- *gdb START CLASS: ArrayBase -->
+        <KeyWord name="ArrayBase.appendArray" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Append the values from the given array to the end of this array.
+							; PARAMETERS:
+							;  arrayToAppend (I,REQ) - The array of values to add.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ArrayBase.clear" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Remove all entries from this array.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ArrayBase.contains" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether this array contains a particular value.
+							; PARAMETERS:
+							;  needle (I,REQ) - The value to search the array for.
+							; RETURNS:        The first index where we found the value in question.
+							;                 &quot;&quot; if we didn't find it at all.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ArrayBase.count" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Temporary override for built-in .count() function, until everywhere I use AHK
+							;                 is updated to at least 1.1.29.00.
+							; RETURNS:        Number of elements in the array
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ArrayBase.join" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Combine all array values into a single string.
+							; PARAMETERS:
+							;  delim (I,OPT) - Delimiter to include between array entries. Defaults to a comma (,).
+							; RETURNS:        Combined string
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ArrayBase.removeDuplicates" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Removes any duplicate entries from the array, leaving the first instance alone.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ArrayBase.removeEmpties" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Removes any empty (&quot;&quot;) entries from the array.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ArrayBase.static" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Flag that lets us know that this is a proper array (not some other object).
+							; RETURNS:        true
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: ArrayBase -->
+
         <KeyWord name="Asc" func="yes">
             <Overload retVal="">
                 <Param name="&quot;String&quot;"/>
@@ -1807,6 +1934,42 @@
         <KeyWord name="ObjAddRef"/>
         <KeyWord name="ObjClone"/>
         <KeyWord name="Object"/>
+
+        <!-- *gdb START CLASS: ObjectBase -->
+        <KeyWord name="ObjectBase.contains" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether this object contains a particular value.
+							; PARAMETERS:
+							;  needle (I,REQ) - The value to search the object for.
+							; RETURNS:        The first index where we found the value in question.
+							;                 &quot;&quot; if we didn't find it at all.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ObjectBase.count" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Temporary override for built-in .count() function, until everywhere I use AHK
+							;                 is updated to at least 1.1.29.00.
+							; RETURNS:        Number of key/element pairs in the object
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ObjectBase.mergeFromObject" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Recursively merge two objects together into a new object containing the data from both.
+							; PARAMETERS:
+							;  overrides (I,REQ) - The object to merge data from. The object in this parameter &quot;wins&quot; when
+							;                      both this parameter and the instance of this class have the same
+							;                      index/property - that is, we'll replace the value on the class instance
+							;                      with the value from this parameter.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: ObjectBase -->
+
         <KeyWord name="ObjGetAddress"/>
         <KeyWord name="ObjGetCapacity"/>
         <KeyWord name="ObjHasKey"/>
@@ -2001,6 +2164,26 @@
         <KeyWord name="Reg_Resource_Requirements_List"/>
         <KeyWord name="Reg_SZ"/>
         <KeyWord name="Relative"/>
+
+        <!-- *gdb START CLASS: RelativeDateTimeBase -->
+        <KeyWord name="RelativeDateTimeBase.Instant" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="RelativeDateTimeBase.SendInFormat" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Send the relative date/time in a particular format.
+							; PARAMETERS:
+							;  format (I,REQ) - The format to send the date/time in, a la FormatTime().
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: RelativeDateTimeBase -->
+
         <KeyWord name="Reload"/>
         <KeyWord name="Rename"/>
         <KeyWord name="Repeat"/>
@@ -2454,6 +2637,307 @@
             </Overload>
         </KeyWord>
         <KeyWord name="Strike"/>
+
+        <!-- *gdb START CLASS: StringBase -->
+        <KeyWord name="StringBase.allBetweenStrings" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the portion of the string that is between the two provided strings. This
+							;                 is the greedy function - it will go from the first instance of startString
+							;                 to the LAST instance of endString.
+							; PARAMETERS:
+							;  startString (I,REQ) - String to start matching at
+							;  endString   (I,REQ) - String to finish matching at
+							; RETURNS:        Requested chunk of this string.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.appendPiece" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Append a piece to this string with a delimiter, but only add a delimiter if it's needed.
+							; PARAMETERS:
+							;  pieceToAdd (I,REQ) - Piece to add to the string
+							;  delimiter  (I,OPT) - Delimiter to add before the new piece (if applicable). Defaults to a comma (,).
+							; RETURNS:        The updated string.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.beforeString" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the portion of this string before/after the given string.
+							; PARAMETERS:
+							;  checkString   (I,REQ) - The string to return before/after. Will not be included in the result (unless there are multiple)
+							;  searchFromEnd (I,OPT) - Set to True to start searching from the end of the string instead of the start.
+							; RETURNS:        The requested portion of this string.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.clean" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Remove certain characters (and optionally, additional passed-in strings) from
+							;                 the start and end of this string, and replace certain odd characters with
+							;                 better equivalents.
+							; PARAMETERS:
+							;  additionalStringsToRemove (I,OPT) - Pass in an array of strings to have them also removed
+							;                                      from the start and end of this string.
+							; RETURNS:        The updated string
+							; NOTES:          Order doesn't matter - we keep cleaning until we don't find any of the
+							;                 provided strings at the start or end of the output.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.contains" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for InStr() - check if a string contains a search string.
+							; PARAMETERS:
+							;  needle        (I,REQ) - String to search for
+							;  searchFromEnd (I,OPT) - Whether to reverse search (start from end and return the position of the last match)
+							; RETURNS:        The position of the match we found (first or last, depending on searchFromEnd parameter)
+							;                 0 if nothing found
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.containsAnyOf" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for .contains() which takes an array of search strings.
+							; PARAMETERS:
+							;  needlesAry    (I,REQ) - The array/object of strings to search for (we'll search for the values, not the keys/indices)
+							;  matchedNeedle (O,OPT) - The needle that we matched
+							; RETURNS:        The position of the first occurrence of any needle.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.containsRegEx" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for RegExMatch() - check if a string contains a search regex.
+							; PARAMETERS:
+							;  needleRegEx (I,REQ) - RegEx to search for
+							;  outputVar   (O,OPT) - Output variable - can be the matched string, position+length, or a
+							;                        match object (depending on the mode specified in needleRegEx, see
+							;                        RegExMatch() for details).
+							; RETURNS:        The position of the first match, 0 if nothing found.
+							; SIDE EFFECTS:
+							; NOTES:
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.countMatches" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Count how many times a search string occurs in this string.
+							; PARAMETERS:
+							;  needle (I,REQ) - The search string
+							; RETURNS:        How many times the search string appears.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.firstBetweenStrings" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the portion of the string that is between the two provided strings. This
+							;                 is the non-greedy function - it will go from the first instance of startString
+							;                 to the first instance of endString.
+							; PARAMETERS:
+							;  startString (I,REQ) - String to start matching at
+							;  endString   (I,REQ) - String to finish matching at
+							; RETURNS:        Requested chunk of this string.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.firstLine" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the first line of this string.
+							; RETURNS:        The first line of this string (everything up to the first newline)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.isAlpha" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper functions for whether a string is alphabetic, numeric, or alphanumeric.
+							; RETURNS:        True if the string is, False otherwise.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.length" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for StrLen().
+							; RETURNS:        Length of string
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.prePadToLength" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Left-pad the string to the specified length.
+							; PARAMETERS:
+							;  numChars (I,REQ) - How many characters the final string should be (at minimum).
+							;  withChar (I,OPT) - The character to use to do the padding. Defaults to space ( ).
+							; RETURNS:        The string, padded out to the specified length.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.prependIfMissing" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a string to the beginning/end of this string, but only if that string is
+							;                 not already in place.
+							; PARAMETERS:
+							;  strToAdd (I,REQ) - String to add at the beginning/end.
+							; RETURNS:        Updated string.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.remove" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Remove all instances of the provided string from this string.
+							; PARAMETERS:
+							;  needle (I,REQ) - Text to remove all instances of.
+							; RETURNS:        The updated string
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.removeFromStart" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Remove a string (if it exists) from the start/end of this string.
+							; PARAMETERS:
+							;  toRemove (I,REQ) - The string to remove from the start or end of this string.
+							; RETURNS:        The updated string, after removing toRemove.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.removeRegEx" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Remove all matches for the provided RegEx from this string.
+							; PARAMETERS:
+							;  needleRegEx (I,REQ) - RegEx to match on.
+							; RETURNS:        The updated string
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.replace" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrappers for StrReplace - replace all (or one) instance(s) of the provided
+							;                 string, with the replacement text.
+							; PARAMETERS:
+							;  needle      (I,REQ) - String to replace
+							;  replaceWith (I,REQ) - String to replace with
+							; RETURNS:        The updated string
+							; NOTES:          If you just want to remove all instances of a string, use .remove() instead.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.replaceRegEx" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for RegExReplace - replace all matches for the provided RegEx, with
+							;                 the provided replacement text.
+							; PARAMETERS:
+							;  needleRegEx (I,REQ) - RegEx to match on.
+							;  replaceWith (I,REQ) - Text to replace matches with.
+							; RETURNS:        The updated string
+							; NOTES:          If you just want to remove all matches, use .removeRegEx() intead.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.replaceTag" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Replace a tag (&quot;<TAG_NAME>&quot;) in this string with the provided replacement.
+							; PARAMETERS:
+							;  tagName     (I,REQ) - The name of the tag to replace (no angle brackets)
+							;  replacement (I,REQ) - The text to replace all instances of the tag with.
+							; RETURNS:        The updated string.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.replaceTags" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Replace multiple tags with corresponding replacement texts (see .replaceTag()).
+							; PARAMETERS:
+							;  tagsAry (I,REQ) - Array of tag names and replacements. Format:
+							;                       tagsAry[&quot;TAG_NAME&quot;] := REPLACEMENT_TEXT
+							; RETURNS:        The updated string.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.slice" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Return a chunk of this string, given starting and ending positions.
+							; PARAMETERS:
+							;  startPos  (I,REQ) - Starting position
+							;  stopAtPos (I,REQ) - Ending position - return up to here, non-inclusive.
+							; RETURNS:        Chunk of this string specified.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.split" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    A wrapper for StrSplit() that returns an actual array (not an object).
+							; PARAMETERS:
+							;  delimiters             (I,OPT) - Delimiter (or array of delimiters) to split on
+							;  surroundingCharsToDrop (I,OPT) - Characters to drop from around each piece
+							; RETURNS:        Array of split-up string
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.startsWith" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether this string starts/ends with the provided string.
+							; PARAMETERS:
+							;  checkString (I,REQ) - The string to check whether this string starts/ends with.
+							; RETURNS:        True if it does, False otherwise.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.startsWithAnyOf" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for .startsWith() that takes an array of strings to check.
+							; PARAMETERS:
+							;  needlesAry    (I,REQ) - Array of strings to check.
+							;  matchedNeedle (O,OPT) - The first matching entry we found in the needlesAry.
+							; RETURNS:        True if this string starts with any of the provided check strings, False otherwise.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.sub" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for SubStr() - returns a chunk of this string.
+							; PARAMETERS:
+							;  startPos (I,REQ) - Position to start at (first character is position 1). Can be negative to count from end of string.
+							;  length   (I,OPT) - Number of characters to include. If left blank, we'll return the entire rest of the string.
+							; RETURNS:        The chunk of this string specified.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.withoutWhitespace" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the string, with no leading/trailing whitespace.
+							; RETURNS:        The string without whitespace.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: StringBase -->
+
         <KeyWord name="StringCaseSense" func="no">
             <Overload retVal="">
                 <Param name="On|Off|Locale"/>

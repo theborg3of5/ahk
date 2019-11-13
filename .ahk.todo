@@ -12,6 +12,8 @@
 				Generating from script files
 					Have it read in the XML file and replace the class chunks it recognizes (between the matching "*gdb START/END CLASS: " comments)
 					Should we really keep support for documenting variables? Or if we're documenting it anyway, should we just only support properties?
+					Will probably need to break class names on space to avoid the extends keyword cases
+					Do we want to try and handle inheritance? That is, pull in info from the base class (which we'll need to make sure we process first) when we find the "extends" keyword?
 			Could we add our own classes and such?
 			Could we add public constants from some libraries/classes, too?
 				func="no" might be helpful for that

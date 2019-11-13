@@ -17,14 +17,6 @@ class RelativeDateTimeBase {
 	}
 	
 	;---------
-	; NOTES:          Should be overridden by child class.
-	;---------
-	__New(relativeDateTime := "") {
-		new ErrorToast("RelativeDateTimeBase instance created", "RelativeDateTimeBase is a base class only, use a date/time-specific child class instead.").showMedium()
-		return ""
-	}
-	
-	;---------
 	; DESCRIPTION:    Send the relative date/time in a particular format.
 	; PARAMETERS:
 	;  format (I,REQ) - The format to send the date/time in, a la FormatTime().
@@ -45,6 +37,14 @@ class RelativeDateTimeBase {
 	_hour    := ""
 	_minute  := ""
 	_second  := ""
+	
+	;---------
+	; NOTES:          Should be overridden by child class.
+	;---------
+	__New(relativeDateTime := "") {
+		new ErrorToast("RelativeDateTimeBase instance created", "RelativeDateTimeBase is a base class only, use a date/time-specific child class instead.").showMedium()
+		return ""
+	}
 	
 	;---------
 	; DESCRIPTION:    Load the current date and time into class members.

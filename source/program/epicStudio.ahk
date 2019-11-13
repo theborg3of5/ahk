@@ -10,6 +10,9 @@
 	$^d::EpicStudio.deleteLinePreservingClipboard()
 	^l::EpicStudio.duplicateLine()
 	
+	; Treat ^Enter the same as Enter - I never want to insert a line before the current one.
+	^Enter::Send, {Enter}
+	
 	; Copy current code location
 	!c:: EpicStudio.copyCleanCodeLocation()  ; Cleaned, just the actual location
 	!#c::EpicStudio.copyLinkedCodeLocation() ; RTF location with link.

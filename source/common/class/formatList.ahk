@@ -99,7 +99,7 @@ class FormatList {
 		
 		; Turn the list into an array.
 		this.listAry := this.convertListToArray(listObject, format)
-		Debug.popup("this.listAry",this.listAry)
+		; Debug.popup("this.listAry",this.listAry)
 		return true
 	}
 	

@@ -718,6 +718,69 @@
             </Overload>
         </KeyWord>
         <KeyWord name="EnvUpdate"/>
+
+        <!-- *gdb START CLASS: EpicRecord -->
+        <KeyWord name="EpicRecord" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new EpicRecord object, optionally parsing it from a string.
+							; PARAMETERS:
+							;  recordString (I,OPT) - String representing the record. See class header for supported
+							;                         formats. If not given, record will need to be initialized with
+							;                         one of the .initFrom*() functions.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicRecord.id" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The ID for this record.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicRecord.ini" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The INI for this record.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicRecord.initFromEMC2Title" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Initialize the record based on the current EMC2 window title.
+							; NOTES:          This will only get the INI and ID, never the title.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicRecord.initFromRecordString" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Initialize the record based on a string.
+							; PARAMETERS:
+							;  recordString (I,REQ) - String representing the record. See class header for supported
+							;                         formats.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicRecord.recordString" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Constructed string representing the record:
+							;                   If we have a title: TITLE [R INI ID]
+							;                   If we don't have a title: R INI ID
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicRecord.title" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The title for this record.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: EpicRecord -->
+
         <KeyWord name="Error"/>
         <KeyWord name="ErrorLevel"/>
         <KeyWord name="Esc"/>

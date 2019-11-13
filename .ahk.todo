@@ -1,6 +1,9 @@
 # New Ideas
 	Update compileEpicStudioRegex to use toast blocking instead of a separate wait
 		Are there others that I missed, too?
+	Pull my own stuff out of commandFunctions
+		Setter functions that ruturn the original value
+		TitleMatchMode "enum"
 	Consider moving mergeObjects into ObjectBase - pretty much all callers would work fine with mergeFromObject(), and it's a little clearer what's winning then, too.
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
 		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?

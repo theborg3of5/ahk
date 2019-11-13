@@ -28,10 +28,9 @@ autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\static
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\lib\clipboardLib.ahk"))
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\epicRecord.ahk"))
 
-autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\external\commandFunctions.ahk"))
-
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\duration.ahk"))
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\formatList.ahk"))
+autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\errorToast.ahk"))
 
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\base"))
 ; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\class"))
@@ -148,7 +147,7 @@ getAutoCompleteXMLForScript(path) {
 				defLine := linesAry[lineNumber + 1]
 				defLine := defLine.withoutWhitespace().beforeString(" {")
 				name := getNameFromDefLine(defLine)
-				params := NotepadPlusPlus.getParamsListFromDefinitionLine(defLine)
+				params := getParamsListFromDefinitionLine(defLine)
 				
 				; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
 				retValue := ""
@@ -174,7 +173,7 @@ getAutoCompleteXMLForScript(path) {
 				
 				allParamsXML := ""
 				if(params != "") {
-					For _,param in params.split(",", " `t") {
+					For _,param in splitVarList(params) {
 						param := param.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
 						paramXML := paramBaseXML.replaceTag("PARAM", param)
 						allParamsXML := allParamsXML.appendPiece(paramXML, "`n")
@@ -234,7 +233,7 @@ getAutoCompleteXMLForScript(path) {
 			}
 			
 			; Get new class name
-			currClassName := line.removeFromStart("class ").removeFromEnd(" {")
+			currClassName := line.firstBetweenStrings("class ", " ") ; Break on space instead of end bracket so we don't end up including the "extends" bit for child classes.
 			
 			; Add an XML comment to say we're starting a block
 			startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
@@ -266,4 +265,48 @@ getNameFromDefLine(defLine) {
 	defLine := defLine.beforeString("[") ; If it's a property with parameters, stop at the open bracket.
 	defLine := defLine.beforeString(" ").beforeString(":") ; If it's a variable, drop any assignment or anything else that comes after the name.
 	return defLine ; If it's a property without parameters (or one of the above left only the name) then the whole thing is the name.
+}
+
+getParamsListFromDefinitionLine(definitionLine) {
+	; Function
+	if(definitionLine.contains("("))
+		return definitionLine.firstBetweenStrings("(", ")")
+	
+	; Property with brackets
+	if(definitionLine.contains("["))
+		return definitionLine.firstBetweenStrings("[", "]")
+	
+	return ""
+}
+splitVarList(varList) {
+	QUOTE := """" ; Double-quote character
+	paramsAry := []
+	
+	currentName := ""
+	openParens := 0
+	openQuotes := 0
+	Loop, Parse, varList
+	{
+		char := A_LoopField
+		
+		; Track open parens/quotes.
+		if(char = "(")
+			openParens++
+		if(char = ")")
+			openParens--
+		if(char = QUOTE)
+			openQuotes := mod(openQuotes + 1, 2) ; Quotes close other quotes, so just swap between open and closed
+		
+		; Split on commas, but only if there are no open parens or quotes.
+		if(char = "," && openParens = 0 && openQuotes = 0) {
+			paramsAry.push(currentName.withoutWhitespace())
+			currentName := ""
+			Continue
+		}
+		
+		currentName .= char
+	}
+	paramsAry.push(currentName.withoutWhitespace())
+	
+	return paramsAry
 }

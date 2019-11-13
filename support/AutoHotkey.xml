@@ -65,6 +65,7 @@
 							;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
 							;                           weren't able to link the selected text.
 							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectBase.open" func="yes">
@@ -107,6 +108,7 @@
 							; PARAMETERS:
 							;  arrayToAppend (I,REQ) - The array of values to add.
 							;---------">
+                <Param name="arrayToAppend" />
             </Overload>
         </KeyWord>
         <KeyWord name="ArrayBase.clear" func="yes">
@@ -125,6 +127,7 @@
 							; RETURNS:        The first index where we found the value in question.
 							;                 &quot;&quot; if we didn't find it at all.
 							;---------">
+                <Param name="needle" />
             </Overload>
         </KeyWord>
         <KeyWord name="ArrayBase.count" func="yes">
@@ -144,6 +147,7 @@
 							;  delim (I,OPT) - Delimiter to include between array entries. Defaults to a comma (,).
 							; RETURNS:        Combined string
 							;---------">
+                <Param name="delim := &quot;,&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ArrayBase.removeDuplicates" func="yes">
@@ -398,6 +402,7 @@
 							; PARAMETERS:
 							;  textToSave (I,REQ) - Text to add to the clipboard history.
 							;---------">
+                <Param name="textToSave" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.copyFilePathWithHotkey" func="yes">
@@ -409,6 +414,7 @@
 							; PARAMETERS:
 							;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file to the clipboard.
 							;---------">
+                <Param name="hotkeyKeys" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.copyFolderPathWithHotkey" func="yes">
@@ -421,6 +427,7 @@
 							; PARAMETERS:
 							;  fileHotkeyKeys (I,REQ) - The keys to send in order to copy a FILE in the folder you want to the clipboard.
 							;---------">
+                <Param name="fileHotkeyKeys" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.copyWithFunction" func="yes">
@@ -432,6 +439,7 @@
 							;  boundFunc (I,REQ) - Functor object to run in order to copy something to the clipboard.
 							; RETURNS:        true if we successfully copied something, false otherwise.
 							;---------">
+                <Param name="boundFunc" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.copyWithHotkey" func="yes">
@@ -443,6 +451,7 @@
 							;  hotkeyKeys (I,REQ) - The keys to send in order to copy something to the clipboard.
 							; RETURNS:        true if we successfully copied something, false otherwise.
 							;---------">
+                <Param name="hotkeyKeys" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.getWithFunction" func="yes">
@@ -454,6 +463,7 @@
 							;                      copy the desired content to the clipboard.
 							; RETURNS:        The copied content.
 							;---------">
+                <Param name="boundFunc" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.getWithHotkey" func="yes">
@@ -464,6 +474,7 @@
 							;  hotkeyKeys (I,REQ) - The keys to send in order to copy something to the clipboard.
 							; RETURNS:        The copied text.
 							;---------">
+                <Param name="hotkeyKeys" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.send" func="yes">
@@ -473,6 +484,7 @@
 							; PARAMETERS:
 							;  value (I,REQ) - The text to send.
 							;---------">
+                <Param name="value" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.set" func="yes">
@@ -485,6 +497,8 @@
 							;                          everything, not just the text on the clipboard). This can be used to
 							;                          restore the clipboard later if needed.
 							;---------">
+                <Param name="value" />
+                <Param name="ByRef origClipboard := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.setAndToast" func="yes">
@@ -495,6 +509,8 @@
 							;  newValue  (I,REQ) - The value to put on the clipboard.
 							;  clipLabel (I,REQ) - The label to show in the toast for the thing on the clipboard.
 							;---------">
+                <Param name="newValue" />
+                <Param name="clipLabel" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.setAndToastError" func="yes">
@@ -507,6 +523,10 @@
 							;  problemMessage (I,REQ) - The problem that occurred.
 							;  errorMessage   (I,OPT) - What went wrong on a technical level.
 							;---------">
+                <Param name="newValue" />
+                <Param name="clipLabel" />
+                <Param name="problemMessage" />
+                <Param name="errorMessage := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.toastNewValue" func="yes">
@@ -517,6 +537,7 @@
 							; PARAMETERS:
 							;  clipLabel (I,REQ) - The label to show in the toast for the thing on the clipboard.
 							;---------">
+                <Param name="clipLabel" />
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: ClipboardLib -->
@@ -718,6 +739,7 @@
 							;                 to show a popup before that point, you can use the .popupEarly() function
 							;                 instead.
 							;---------">
+                <Param name="params*" />
             </Overload>
         </KeyWord>
         <KeyWord name="Debug.popupEarly" func="yes">
@@ -726,6 +748,7 @@
 							; DESCRIPTION:    Same as .popup(), but will run before Config is initialized. See
 							;                 .popup() for details and parameters.
 							;---------">
+                <Param name="params*" />
             </Overload>
         </KeyWord>
         <KeyWord name="Debug.toast" func="yes">
@@ -739,6 +762,7 @@
 							;                   we will interpret it as a value (not a label), but for >1 arguments an
 							;                   even number of arguments should be passed in label,value pairs.
 							;---------">
+                <Param name="params*" />
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: Debug -->
@@ -809,6 +833,7 @@
 							;                           represent. See class header for format. If not given, we'll default
 							;                           to no time (0 seconds).
 							;---------">
+                <Param name="durationString := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="Duration.addTime" func="yes">
@@ -820,6 +845,8 @@
 							;  unitChar (I,OPT) - Character (from Duration.Char_* constants) representing the unit you want
 							;                     to add. Defaults to &quot;s&quot; (seconds).
 							;---------">
+                <Param name="value" />
+                <Param name="unitChar := &quot;s&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="Duration.addTimeFromDurationString" func="yes">
@@ -830,6 +857,7 @@
 							;  durationString (I,REQ) - A string describing how much time we should add to this Duration.
 							;                           See class header for format.
 							;---------">
+                <Param name="durationString" />
             </Overload>
         </KeyWord>
         <KeyWord name="Duration.displayTime" func="yes">
@@ -921,6 +949,7 @@
 							;                         formats. If not given, record will need to be initialized with
 							;                         one of the .initFrom*() functions.
 							;---------">
+                <Param name="recordString := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="EpicRecord.id" func="yes">
@@ -953,6 +982,7 @@
 							;  recordString (I,REQ) - String representing the record. See class header for supported
 							;                         formats.
 							;---------">
+                <Param name="recordString" />
             </Overload>
         </KeyWord>
         <KeyWord name="EpicRecord.recordString" func="yes">
@@ -975,6 +1005,24 @@
 
         <KeyWord name="Error"/>
         <KeyWord name="ErrorLevel"/>
+
+        <!-- *gdb START CLASS: ErrorToast -->
+        <KeyWord name="ErrorToast" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new ErrorToast object.
+							; PARAMETERS:
+							;  problemMessage    (I,REQ) - Text about what the problem is (what happened or weren't we able to do?)
+							;  errorMessage      (I,OPT) - Technical error text (what happened code-wise?)
+							;  mitigationMessage (I,OPT) - What we did instead (what did we do to make the failure less impactful?)
+							;---------">
+                <Param name="problemMessage" />
+                <Param name="errorMessage := &quot;&quot;" />
+                <Param name="mitigationMessage := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: ErrorToast -->
+
         <KeyWord name="Esc"/>
         <KeyWord name="Escape"/>
         <KeyWord name="Exception"/>
@@ -1241,6 +1289,8 @@
 							;                       given, we will try to determine it ourselves and prompt the user if we
 							;                       can't figure it out.
 							;---------">
+                <Param name="listObject" />
+                <Param name="inFormat := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="FormatList.getList" func="yes">
@@ -1251,6 +1301,7 @@
 							;  format (I,OPT) - Format to get the list in. If not given, we'll prompt the user for it.
 							; RETURNS:        The list, in the chosen format.
 							;---------">
+                <Param name="format := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="FormatList.sendList" func="yes">
@@ -1260,6 +1311,7 @@
 							; PARAMETERS:
 							;  format (I,OPT) - Format to send the list in. If not given, we'll prompt the user for it.
 							;---------">
+                <Param name="format := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: FormatList -->
@@ -1945,6 +1997,7 @@
 							; RETURNS:        The first index where we found the value in question.
 							;                 &quot;&quot; if we didn't find it at all.
 							;---------">
+                <Param name="needle" />
             </Overload>
         </KeyWord>
         <KeyWord name="ObjectBase.count" func="yes">
@@ -1966,6 +2019,7 @@
 							;                      index/property - that is, we'll replace the value on the class instance
 							;                      with the value from this parameter.
 							;---------">
+                <Param name="objectToAppend" />
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: ObjectBase -->
@@ -2180,6 +2234,7 @@
 							; PARAMETERS:
 							;  format (I,REQ) - The format to send the date/time in, a la FormatTime().
 							;---------">
+                <Param name="format" />
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: RelativeDateTimeBase -->
@@ -2255,6 +2310,7 @@
 							;                     read from. See above for format.
 							; RETURNS:        A new Selector object.
 							;---------">
+                <Param name="filePath" />
             </Overload>
         </KeyWord>
         <KeyWord name="Selector.AddOverrideFields" func="yes">
@@ -2267,6 +2323,7 @@
 							; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui().
 							;                 Default override values for these fields (if desired) can be set using the .SetDefaultOverrides() function.
 							;---------">
+                <Param name="fieldsToAdd" />
             </Overload>
         </KeyWord>
         <KeyWord name="Selector.dataTL" func="yes">
@@ -2301,6 +2358,8 @@
 							; RETURNS:        An array of data for the choice matching the given string. If the returnColumn
 							;                 parameter was specified, only the subscript matching that name will be returned.
 							;---------">
+                <Param name="choiceString := &quot;&quot;" />
+                <Param name="returnColumn := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="Selector.selectChoice" func="yes">
@@ -2315,6 +2374,8 @@
 							; RETURNS:        An array of data for the choice matching the given string. If the returnColumn parameter
 							;                 was specified, only the subscript matching that name will be returned.
 							;---------">
+                <Param name="choiceString" />
+                <Param name="returnColumn := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="Selector.selectGui" func="yes">
@@ -2329,6 +2390,7 @@
 							;                 parameter was specified, only the subscript matching that name will be
 							;                 returned.
 							;---------">
+                <Param name="returnColumn := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="Selector.SetDefaultOverrides" func="yes">
@@ -2340,6 +2402,7 @@
 							;                              {columnLabel: value}
 							; RETURNS:        this
 							;---------">
+                <Param name="defaultOverrides" />
             </Overload>
         </KeyWord>
         <KeyWord name="Selector.SetTitle" func="yes">
@@ -2350,6 +2413,7 @@
 							;  title (I,REQ) - The title to use.
 							; RETURNS:        this
 							;---------">
+                <Param name="title" />
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: Selector -->
@@ -2650,6 +2714,8 @@
 							;  endString   (I,REQ) - String to finish matching at
 							; RETURNS:        Requested chunk of this string.
 							;---------">
+                <Param name="startString" />
+                <Param name="endString" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.appendPiece" func="yes">
@@ -2661,6 +2727,8 @@
 							;  delimiter  (I,OPT) - Delimiter to add before the new piece (if applicable). Defaults to a comma (,).
 							; RETURNS:        The updated string.
 							;---------">
+                <Param name="pieceToAdd" />
+                <Param name="delimiter := &quot;,&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.beforeString" func="yes">
@@ -2672,6 +2740,8 @@
 							;  searchFromEnd (I,OPT) - Set to True to start searching from the end of the string instead of the start.
 							; RETURNS:        The requested portion of this string.
 							;---------">
+                <Param name="checkString" />
+                <Param name="searchFromEnd := false" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.clean" func="yes">
@@ -2687,6 +2757,7 @@
 							; NOTES:          Order doesn't matter - we keep cleaning until we don't find any of the
 							;                 provided strings at the start or end of the output.
 							;---------">
+                <Param name="additionalStringsToRemove := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.contains" func="yes">
@@ -2699,6 +2770,8 @@
 							; RETURNS:        The position of the match we found (first or last, depending on searchFromEnd parameter)
 							;                 0 if nothing found
 							;---------">
+                <Param name="needle" />
+                <Param name="searchFromEnd := false" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.containsAnyOf" func="yes">
@@ -2710,6 +2783,8 @@
 							;  matchedNeedle (O,OPT) - The needle that we matched
 							; RETURNS:        The position of the first occurrence of any needle.
 							;---------">
+                <Param name="needlesAry" />
+                <Param name="ByRef matchedNeedle := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.containsRegEx" func="yes">
@@ -2725,6 +2800,8 @@
 							; SIDE EFFECTS:
 							; NOTES:
 							;---------">
+                <Param name="needleRegEx" />
+                <Param name="ByRef outputVar := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.countMatches" func="yes">
@@ -2735,6 +2812,7 @@
 							;  needle (I,REQ) - The search string
 							; RETURNS:        How many times the search string appears.
 							;---------">
+                <Param name="needle" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.firstBetweenStrings" func="yes">
@@ -2748,6 +2826,8 @@
 							;  endString   (I,REQ) - String to finish matching at
 							; RETURNS:        Requested chunk of this string.
 							;---------">
+                <Param name="startString" />
+                <Param name="endString" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.firstLine" func="yes">
@@ -2783,6 +2863,8 @@
 							;  withChar (I,OPT) - The character to use to do the padding. Defaults to space ( ).
 							; RETURNS:        The string, padded out to the specified length.
 							;---------">
+                <Param name="numChars" />
+                <Param name="withChar := &quot; &quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.prependIfMissing" func="yes">
@@ -2794,6 +2876,7 @@
 							;  strToAdd (I,REQ) - String to add at the beginning/end.
 							; RETURNS:        Updated string.
 							;---------">
+                <Param name="strToAdd" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.remove" func="yes">
@@ -2804,6 +2887,7 @@
 							;  needle (I,REQ) - Text to remove all instances of.
 							; RETURNS:        The updated string
 							;---------">
+                <Param name="needle" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.removeFromStart" func="yes">
@@ -2814,6 +2898,7 @@
 							;  toRemove (I,REQ) - The string to remove from the start or end of this string.
 							; RETURNS:        The updated string, after removing toRemove.
 							;---------">
+                <Param name="toRemove" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.removeRegEx" func="yes">
@@ -2824,6 +2909,7 @@
 							;  needleRegEx (I,REQ) - RegEx to match on.
 							; RETURNS:        The updated string
 							;---------">
+                <Param name="needleRegEx" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.replace" func="yes">
@@ -2837,6 +2923,8 @@
 							; RETURNS:        The updated string
 							; NOTES:          If you just want to remove all instances of a string, use .remove() instead.
 							;---------">
+                <Param name="needle" />
+                <Param name="replaceWith" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.replaceRegEx" func="yes">
@@ -2850,6 +2938,8 @@
 							; RETURNS:        The updated string
 							; NOTES:          If you just want to remove all matches, use .removeRegEx() intead.
 							;---------">
+                <Param name="needleRegEx" />
+                <Param name="replaceWith" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.replaceTag" func="yes">
@@ -2861,6 +2951,8 @@
 							;  replacement (I,REQ) - The text to replace all instances of the tag with.
 							; RETURNS:        The updated string.
 							;---------">
+                <Param name="tagName" />
+                <Param name="replacement" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.replaceTags" func="yes">
@@ -2872,6 +2964,7 @@
 							;                       tagsAry[&quot;TAG_NAME&quot;] := REPLACEMENT_TEXT
 							; RETURNS:        The updated string.
 							;---------">
+                <Param name="tagsAry" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.slice" func="yes">
@@ -2883,6 +2976,8 @@
 							;  stopAtPos (I,REQ) - Ending position - return up to here, non-inclusive.
 							; RETURNS:        Chunk of this string specified.
 							;---------">
+                <Param name="startPos" />
+                <Param name="stopAtPos" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.split" func="yes">
@@ -2894,6 +2989,8 @@
 							;  surroundingCharsToDrop (I,OPT) - Characters to drop from around each piece
 							; RETURNS:        Array of split-up string
 							;---------">
+                <Param name="delimiters := &quot;&quot;" />
+                <Param name="surroundingCharsToDrop := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.startsWith" func="yes">
@@ -2904,6 +3001,7 @@
 							;  checkString (I,REQ) - The string to check whether this string starts/ends with.
 							; RETURNS:        True if it does, False otherwise.
 							;---------">
+                <Param name="checkString" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.startsWithAnyOf" func="yes">
@@ -2915,6 +3013,8 @@
 							;  matchedNeedle (O,OPT) - The first matching entry we found in the needlesAry.
 							; RETURNS:        True if this string starts with any of the provided check strings, False otherwise.
 							;---------">
+                <Param name="needlesAry" />
+                <Param name="ByRef matchedNeedle := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.sub" func="yes">
@@ -2926,6 +3026,8 @@
 							;  length   (I,OPT) - Number of characters to include. If left blank, we'll return the entire rest of the string.
 							; RETURNS:        The chunk of this string specified.
 							;---------">
+                <Param name="startPos" />
+                <Param name="length := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.withoutWhitespace" func="yes">

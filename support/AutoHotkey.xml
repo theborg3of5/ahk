@@ -2216,6 +2216,21 @@
         <KeyWord name="Reg_SZ"/>
         <KeyWord name="Relative"/>
 
+        <!-- *gdb START CLASS: RelativeDate -->
+        <KeyWord name="RelativeDate" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new representation of a date relative to right now.
+							; PARAMETERS:
+							;  relativeDate (I,OPT) - The relative date string to use to find the new date. If not provided,
+							;                         we'll prompt the user for it.
+							;---------">
+                <Param name="relativeDate := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: RelativeDate -->
+
+
         <!-- *gdb START CLASS: RelativeDateTimeBase -->
         <KeyWord name="RelativeDateTimeBase.Instant" func="yes">
             <Overload retVal="[Property]" descr="

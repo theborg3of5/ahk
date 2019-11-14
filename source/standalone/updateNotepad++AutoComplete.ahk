@@ -16,9 +16,6 @@ endBlockCommentBaseXML := "
 	)"
 
 
-
-allXML := ""
-
 commonRoot := Config.path["AHK_SOURCE"] "\common"
 
 classInfos := {}
@@ -26,10 +23,10 @@ classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\sele
 classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\static\debug.ahk"))
 classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\lib\clipboardLib.ahk"))
 classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\epicRecord.ahk"))
-
 classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\duration.ahk"))
 classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\formatList.ahk"))
 classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\errorToast.ahk"))
+classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\relativeDate.ahk"))
 
 classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\base"))
 ; classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\class"))

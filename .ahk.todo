@@ -1,9 +1,6 @@
 # New Ideas
 	Update compileEpicStudioRegex to use toast blocking instead of a separate wait
 		Are there others that I missed, too?
-	Pull my own stuff out of commandFunctions
-		Setter functions that ruturn the original value
-		TitleMatchMode "enum"
 	Consider moving mergeObjects into ObjectBase - pretty much all callers would work fine with mergeFromObject(), and it's a little clearer what's winning then, too.
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
 		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
@@ -12,42 +9,32 @@
 			Debug popup (would need to set font if so)
 	Notepad++ auto-completion
 		Documentation updates needed:
-			Multiple functions with 1 header (won't work):
-				ActionObjectBase
-				StringBase
-				ActionObjectCodeSearch
-				ActionObjectEMC2
-				ActionObjectEpicStudio
-				ActionObjectHelpdesk
-				ActionObjectPath
-				Duration
-				FlexTable
-				Toast
-				VisualWindow
-				DataLib
-				GuiLib
-				StringLib
-				WindowLib
-				CommonHotkeys
-				Config
-			Undocumented public properties:
-				ActionObjectCodeSearch
-				ActionObjectEMC2
-				ActionObjectEpicStudio
-				ActionObjectHelpdesk
-				ActionObjectPath
-				Duration
-				FormatList
-				MousePosition
-				Selector
-				TableList
-				TableListMod
-				VisualWindow
-				WindowInfo
-				MicrosoftLib
-				CommonHotkeys
-				Config
-				Hyperlinker
+			Class								Multiple functions, 1 header		Undocumented public properties
+			ActionObjectBase				1											-
+			StringBase                 1											-
+			ActionObjectCodeSearch     1                                1
+			ActionObjectEMC2           1                                1
+			ActionObjectEpicStudio     1                                1
+			ActionObjectHelpdesk       1                                1
+			ActionObjectPath           1                                1
+			Duration                   1                                1
+			FlexTable                  1											-
+			FormatList						-											1
+			MousePosition					-											1
+			Selector							-											1
+			TableList						-											1
+			TableListMod					-											1
+			Toast                      1											-
+			VisualWindow               1											1
+			WindowInfo						-											1
+			DataLib                    1											-
+			GuiLib                     1											-
+			MicrosoftLib					-											1
+			StringLib                  1											-
+			WindowLib                  1											-
+			CommonHotkeys              1											1
+			Config                     1											1
+			Hyperlinker						-											1
 	Consider additional user-defined languages in Notepad++:
 		My todo lists - folding like python, but don't have all the weird highlighting (or single quote handling).
 		tl/tls files

@@ -533,6 +533,14 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ArrayBase.isArray" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Flag that lets us know that this is a proper array (not some other object).
+							; RETURNS:        true
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="ArrayBase.join" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -555,14 +563,6 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Removes any empty (&quot;&quot;) entries from the array.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="ArrayBase.static" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Flag that lets us know that this is a proper array (not some other object).
-							; RETURNS:        true
 							;---------">
             </Overload>
         </KeyWord>
@@ -5297,6 +5297,38 @@
         <KeyWord name="Tile"/>
         <KeyWord name="Time"/>
         <KeyWord name="Tip"/>
+
+        <!-- *gdb START CLASS: TitleMatchMode -->
+        <KeyWord name="TitleMatchMode.Contains" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The title may contain the string anywhere inside.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TitleMatchMode.Exact" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The title must exactly equal the string.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TitleMatchMode.RegEx" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The title must match the regex string.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TitleMatchMode.Start" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The title must start with the string.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: TitleMatchMode -->
+
 
         <!-- *gdb START CLASS: Toast -->
         <KeyWord name="Toast" func="yes">

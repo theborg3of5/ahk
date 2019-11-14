@@ -317,7 +317,7 @@ getAutoCompleteInfoFromScript(path) {
 getNameFromDefLine(defLine) {
 	defLine := defLine.beforeString("(") ; If it's a function, stop at the open paren.
 	defLine := defLine.beforeString("[") ; If it's a property with parameters, stop at the open bracket.
-	defLine := defLine.beforeString(" ").beforeString(":") ; If it's a variable, drop any assignment or anything else that comes after the name.
+	defLine := defLine.afterString("static ").beforeString(" ").beforeString(":") ; If it's a variable, drop any assignment or anything else that comes after the name.
 	return defLine ; If it's a property without parameters (or one of the above left only the name) then the whole thing is the name.
 }
 

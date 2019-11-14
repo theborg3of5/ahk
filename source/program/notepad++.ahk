@@ -11,7 +11,7 @@
 	^Enter::NotepadPlusPlus.insertIndentedNewline() ; Add an indented newline
 	
 	; Insert various AHK dev/debug strings
-	:X:`;`;`;::NotepadPlusPlus.sendAHKFunctionHeader()                 ; Function header
+	:X:`;`;`;::NotepadPlusPlus.sendAHKHeader()                         ; Documentation header
 	:X:dbpop::NotepadPlusPlus.sendDebugCodeString("Debug.popup")       ; Debug popup
 	:X:dbto::NotepadPlusPlus.sendDebugCodeString("Debug.toast")        ; Debug toast
 	:X:edbpop::NotepadPlusPlus.sendDebugCodeString("Debug.popupEarly") ; Debug popup that appears at startup
@@ -24,7 +24,7 @@
 class NotepadPlusPlus {
 	; #PUBLIC#
 	
-	; All of the keywords possibly contained in the AHK function header - should be kept up to date with ahkHeaderBase* below.
+	; All of the keywords possibly contained in the AHK function header - should be kept up to date with ahkFunctionHeaderBase* below.
 	static ahkHeaderKeywords := ["DESCRIPTION", "PARAMETERS", "RETURNS", "SIDE EFFECTS", "NOTES"]
 	
 	;---------
@@ -96,18 +96,29 @@ class NotepadPlusPlus {
 	;                 the cursor.
 	; SIDE EFFECTS:   Selects the line below in order to process the parameters.
 	;---------
-	sendAHKFunctionHeader() {
+	sendAHKHeader() {
 		; Select the following line after this one to get parameter information
 		Send, {Down}
 		SelectLib.selectCurrentLine()
+		
 		definitionLine := SelectLib.getText().clean()
 		Send, {Up}
+		
+		; Determine if it's a function/property or just a class member.
+		equalsPos := definitionLine.contains(":=")
+		if(definitionLine.containsAnyOf(["(", "[", ":="], match)) {
+			if(match = ":=") { ; We found the equals before any opening paren/bracket
+				; No parameters, return value, or side effects - basic base for members.
+				SendRaw, % NotepadPlusPlus.ahkMemberHeaderBase
+				return
+			}
+		}
 		
 		; Check for parameters
 		paramsList := NotepadPlusPlus.getParamsListFromDefinitionLine(definitionLine)
 		if(paramsList = "") {
 			; No parameters, just send the basic base
-			SendRaw, % NotepadPlusPlus.ahkHeaderBase
+			SendRaw, % NotepadPlusPlus.ahkFunctionHeaderBase
 			return
 		}
 		
@@ -152,7 +163,7 @@ class NotepadPlusPlus {
 			paramLines.push(line)
 		}
 		
-		header := NotepadPlusPlus.ahkHeaderBaseWithParams
+		header := NotepadPlusPlus.ahkFunctionHeaderBaseWithParams
 		header := header.replaceTag("PARAMETERS", paramLines.join("`n"))
 		SendRaw, % header
 	}
@@ -186,7 +197,7 @@ class NotepadPlusPlus {
 	; #PRIVATE#
 	
 	; AHK headers bases - if these are updated, update ahkHeaderKeywords at the top as well.
-	static ahkHeaderBase := "
+	static ahkFunctionHeaderBase := "
 		( RTrim0
 		;---------
 		; DESCRIPTION:    
@@ -195,8 +206,14 @@ class NotepadPlusPlus {
 		; NOTES:          
 		;---------
 		)"
-	
-	static ahkHeaderBaseWithParams := "
+	static ahkMemberHeaderBase := "
+		( RTrim0
+		;---------
+		; DESCRIPTION:    
+		; NOTES:          
+		;---------
+		)"
+	static ahkFunctionHeaderBaseWithParams := "
 		( RTrim0
 		;---------
 		; DESCRIPTION:    
@@ -207,7 +224,6 @@ class NotepadPlusPlus {
 		; NOTES:          
 		;---------
 		)"
-	
 	static ahkParamBase := "
 		( RTrim0
 		;  <NAME><PADDING> (<IN_OUT>,<REQUIREMENT>) - 

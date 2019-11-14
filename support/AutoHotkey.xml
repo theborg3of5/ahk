@@ -978,8 +978,197 @@
         <KeyWord name="CtrlBreak"/>
         <KeyWord name="CtrlDown"/>
         <KeyWord name="CtrlUp"/>
+
+        <!-- *gdb START CLASS: DataLib -->
+        <KeyWord name="DataLib.bitFieldHasFlag" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check for, add, and remove flags from a bitfield.
+							; PARAMETERS:
+							;  bitField (I,REQ) - The bitfield to check or modify.
+							;  flag     (I,REQ) - The flag to check/add/remove.
+							; RETURNS:        The resulting bitfield.
+							;---------">
+                <Param name="bitField" />
+                <Param name="flag" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DataLib.convertObjectToArray" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Convert an object to an array.
+							; PARAMETERS:
+							;  obj (I,REQ) - The object to convert
+							; RETURNS:        The resulting array
+							; NOTES:          The indices are added in the same order as a For/in loop.
+							;---------">
+                <Param name="obj" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DataLib.convertPseudoArrayToArray" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Convert a pseudo-array into an actual array.
+							; PARAMETERS:
+							;  pseudoArrayName (I,REQ) - The name of the pseudo-array. This must be declared as a global prior
+							;                            to calling this function.
+							; RETURNS:        The resulting array
+							; NOTES:          This only supports pseudo-arrays where the count is in the base variable
+							;                 (i.e. Var = 5, Var1 is the first element, etc.)
+							;---------">
+                <Param name="pseudoArrayName" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DataLib.expandList" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Expand lists that can optionally contain numeric ranges (delimited by either
+							;                 colons or hyphens). For example:
+							;                  1,2:3,7,6-4 => [1, 2, 3, 7, 6, 5, 4]
+							; PARAMETERS:
+							;  listString (I,REQ) - The list to expand.
+							; RETURNS:        The resulting array of expanded values.
+							; NOTES:          Ranges with non-numeric values will be ignored (not included in the output array).
+							;---------">
+                <Param name="listString" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DataLib.firstNonBlankValue" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Find the first non-blank value from those given.
+							; PARAMETERS:
+							;  params* (I,REQ) - Variadic parameter - as many values as desired.
+							; RETURNS:        The first non-blank value.
+							;---------">
+                <Param name="params*" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DataLib.forceArray" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    If the given object is already an array (or object) return it, otherwise turn it into one.
+							; PARAMETERS:
+							;  obj (I,REQ) - The object to force to be an array.
+							; RETURNS:        An array (the obj parameter if it was one, or a new array with obj as the first and only value in it)
+							;---------">
+                <Param name="obj" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DataLib.forceNumber" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Force the given data to be a number.
+							; PARAMETERS:
+							;  data (I,REQ) - Data to force into a number.
+							; RETURNS:        If it's already numeric, the number. Otherwise, 0.
+							;---------">
+                <Param name="data" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DataLib.hexToInteger" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Convert a hex number to an integer.
+							; PARAMETERS:
+							;  hexNum (I,REQ) - The hex number to convert
+							; RETURNS:        The hex number as an integer.
+							;---------">
+                <Param name="hexNum" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DataLib.isNullOrEmpty" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether the provided object is empty, also checking if it's null.
+							; PARAMETERS:
+							;  obj (I,REQ) - The object/array to check.
+							; RETURNS:        true if the provided object is null (including &quot;&quot;) or empty (no values inside), false otherwise.
+							;---------">
+                <Param name="obj" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DataLib.max" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Find the numberic maximum of the given numbers.
+							; PARAMETERS:
+							;  nums* (I,REQ) - Variadic parameter - as many numbers as desired.
+							; RETURNS:        The numeric maximum of all given numbers.
+							;---------">
+                <Param name="nums*" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DataLib.mergeObjects" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Recursively merge two objects together into a new object containing the data from both.
+							; PARAMETERS:
+							;  baseObject (I,REQ) - The first object to merge.
+							;  overrides  (I,REQ) - The second object to merge. If both objects have the same property/index,
+							;                       this object's value will be included.
+							;---------">
+                <Param name="baseObject" />
+                <Param name="overrides" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DataLib.numToInteger" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Convert the provided number into an integer/hex code.
+							; PARAMETERS:
+							;  num (I,REQ) - The number to convert
+							; RETURNS:        The number as an integer/in hex.
+							;---------">
+                <Param name="num" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DataLib.updateMax" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for max() that updates the first parameter directly.
+							; PARAMETERS:
+							;  maxValue (IO,REQ) - The current maximum value. Will be updated if newValue is bigger.
+							;  newValue  (I,REQ) - The new value to compare to the current maximum.
+							;---------">
+                <Param name="ByRef maxValue" />
+                <Param name="newValue" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: DataLib -->
+
         <KeyWord name="Date"/>
         <KeyWord name="DateTime"/>
+
+        <!-- *gdb START CLASS: DateTimeLib -->
+        <KeyWord name="DateTimeLib.getLastDateOfMonth" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Figure out the last date in the provided month/year.
+							; PARAMETERS:
+							;  monthNum (I,OPT) - The month number to check
+							;  year     (I,OPT) - The year to check
+							; RETURNS:        The last date (with leading 0) in the given month.
+							;---------">
+                <Param name="monthNum := &quot;&quot;" />
+                <Param name="year := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DateTimeLib.replaceTags" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Replace tags matching different formats supported by FormatTime.
+							; PARAMETERS:
+							;  inString (I,REQ) - The string to replace tags in
+							;  dateTime (I,OPT) - The date/time to use when replacing tags
+							; RETURNS:        The updated string
+							;---------">
+                <Param name="inString" />
+                <Param name="instant := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: DateTimeLib -->
+
         <KeyWord name="Days"/>
         <KeyWord name="DDL"/>
 
@@ -1199,6 +1388,62 @@
             </Overload>
         </KeyWord>
         <KeyWord name="EnvUpdate"/>
+
+        <!-- *gdb START CLASS: EpicLib -->
+        <KeyWord name="EpicLib.dropOffsetFromServerLocation" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Drop the offset (&quot;+4&quot; in &quot;tag+4^routine&quot;) from the given server
+							;                 (so we'd return &quot;tag^routine&quot;).
+							; PARAMETERS:
+							;  serverLocation (I,REQ) - The server location to drop the offset from.
+							; RETURNS:        The updated server code location.
+							;---------">
+                <Param name="serverLocation" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicLib.runHyperspace" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Run Hyperspace locally for the given version and environment.
+							; PARAMETERS:
+							;  versionMajor (I,REQ) - Major version (before the dot in dotted version)
+							;  versionMinor (I,REQ) - Minor version (last digit, after the dot in dotted version)
+							;  environment  (I,OPT) - EpicComm ID for the environment to connect to.
+							;---------">
+                <Param name="versionMajor" />
+                <Param name="versionMinor" />
+                <Param name="environment" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicLib.runVDI" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open a VDI matching the given ID.
+							; PARAMETERS:
+							;  vdiId (I,REQ) - The ID of the VDI to open.
+							;---------">
+                <Param name="vdiId" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicLib.splitServerLocation" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Split the given server location into tag and routine.
+							; PARAMETERS:
+							;  serverLocation (I,REQ) - The location in server code to split.
+							;  routine        (O,OPT) - The routine
+							;  tag            (O,OPT) - The tag. May include offset, see notes below.
+							; NOTES:          Any offset from a tag will be included in the tag return value (i.e.
+							;                 TAG+3^ROUTINE splits into routine=ROUTINE and tag=TAG+3).
+							;---------">
+                <Param name="serverLocation" />
+                <Param name="ByRef routine := &quot;&quot;" />
+                <Param name="ByRef tag := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: EpicLib -->
+
 
         <!-- *gdb START CLASS: EpicRecord -->
         <KeyWord name="EpicRecord" func="yes">
@@ -1554,6 +1799,100 @@
                 <Param name="Flag"/>
             </Overload>
         </KeyWord>
+
+        <!-- *gdb START CLASS: FileLib -->
+        <KeyWord name="FileLib.cleanupPath" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Clean out unwanted garbage strings from paths and map path to any mapped network drives.
+							; PARAMETERS:
+							;  path (I,REQ) - The path to clean.
+							; RETURNS:        The cleaned-up and mapped path.
+							;---------">
+                <Param name="path" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FileLib.fileLinesToArray" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Read in a file and return it as an array.
+							; PARAMETERS:
+							;  fileName (I,REQ) - The path to the file to read in.
+							; RETURNS:        The array of file lines.
+							;---------">
+                <Param name="fileName" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FileLib.findConfigFilePath" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Find the given config file, by searching the following places for it:
+							;                  * The current folder
+							;                  * The AHK root config folder
+							;                  * The \local\ folder inside the AHK root config folder
+							;                  * The \ahkPrivate\ folder inside the AHK root config folder
+							; PARAMETERS:
+							;  path (I,REQ) - The filename or path to locate.
+							; RETURNS:        The absolute filepath, or &quot;&quot; if we couldn't find it.
+							;---------">
+                <Param name="path" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FileLib.folderExists" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether a folder exists at the given path.
+							; PARAMETERS:
+							;  folderPath (I,REQ) - The path to check for a folder.
+							; RETURNS:        true if it exists, false otherwise.
+							;---------">
+                <Param name="folderPath" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FileLib.getParentFolder" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the parent of the provided path.
+							; PARAMETERS:
+							;  path     (I,REQ) - The path to start with.
+							;  levelsUp (I,OPT) - How many levels to go up (where 1 is the parent of that path). Defaults to 1.
+							; RETURNS:        The parent (or higher depending of levelsUp) folder.
+							;---------">
+                <Param name="path" />
+                <Param name="levelsUp := 1" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FileLib.replaceFileWithString" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Replace the given file's contents with the provided string.
+							; PARAMETERS:
+							;  filePath    (I,REQ) - The path to the file to update.
+							;  newContents (I,REQ) - The contents to replace the file's contents with.
+							;---------">
+                <Param name="filePath" />
+                <Param name="newContents" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FileLib.sendPath" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Send a file or folder path in a particular format.
+							; PARAMETERS:
+							;  folderName       (I,REQ) - The name of the file/folder in Config's paths or privates.
+							;  subPath          (I,OPT) - The additional path to add to the end.
+							;  slashChar        (I,OPT) - The slash (forward or back) character to use in between the path
+							;                             and additional subPath, and at the end if addTrailingSlash = true.
+							;  addTrailingSlash (I,OPT) - Set to true to add a trailing slash to the end of the path.
+							;---------">
+                <Param name="folderName" />
+                <Param name="subPath := &quot;&quot;" />
+                <Param name="slashChar := &quot;\&quot;" />
+                <Param name="addTrailingSlash := false" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: FileLib -->
+
         <KeyWord name="FileMove" func="no">
             <Overload retVal="">
                 <Param name="SourcePattern"/>
@@ -1806,6 +2145,65 @@
         </KeyWord>
         <KeyWord name="GuiDropFiles"/>
         <KeyWord name="GuiEscape"/>
+
+        <!-- *gdb START CLASS: GuiLib -->
+        <KeyWord name="GuiLib.applyTitleFormat" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Apply/clear a title format (heavy weight, underline) for the next set of
+							;                 controls being added to the gui.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="GuiLib.createDynamicGlobal" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create/get the value of a global which can be used with a control, to
+							;                 reference that control (with GuiControl) or get the value of the control
+							;                 (with .getDynamicGlobal) later.
+							; PARAMETERS:
+							;  varName (I,REQ) - The name of the global variable to create/get the value of.
+							; RETURNS:        getDynamicGlobal: the value in the specified global.
+							; NOTES:          This basically exists to let us hide the static/global requirement for
+							;                 variables used by gui controls - as long as the global is only referenced
+							;                 via indirection, it won't be treated as a local variable in other functions.
+							;---------">
+                <Param name="varName" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="GuiLib.getLabelSizeForText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the size of a label with the given text.
+							; PARAMETERS:
+							;  text   (I,REQ) - The text to measure the size of.
+							;  width  (O,OPT) - The width of the label needed to hold the given text.
+							;  height (O,OPT) - The height of the label needed to hold the given text.
+							; SIDE EFFECTS:   This adds a hidden label to the gui (specifically, adds it so we can see the
+							;                 size, then hides it).
+							; NOTES:          This assumes that the formatting/default gui for the text in question are
+							;                 already in effect.
+							;---------">
+                <Param name="text" />
+                <Param name="ByRef width := &quot;&quot;" />
+                <Param name="ByRef height := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="GuiLib.showConfirmationPopup" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Show the user a yes/no confirmation popup to the user.
+							; PARAMETERS:
+							;  message (I,REQ) - The message to show in the popup.
+							;  title   (I,OPT) - The title of the popup
+							; RETURNS:        true/false - whether the user clicked the &quot;Yes&quot; button.
+							;---------">
+                <Param name="message" />
+                <Param name="title := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: GuiLib -->
+
         <KeyWord name="GuiSize"/>
         <KeyWord name="Hdr"/>
         <KeyWord name="Hidden"/>
@@ -1840,6 +2238,28 @@
                 <Param name="Expression"/>
             </Overload>
         </KeyWord>
+
+        <!-- *gdb START CLASS: HotkeyLib -->
+        <KeyWord name="HotkeyLib.releaseAllModifiers" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Release all modifier keys. This is useful when certain modifier keys get &quot;stuck&quot; down.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="HotkeyLib.waitForRelease" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wait for the given hotkey to be fully released (all modifiers included).
+							; PARAMETERS:
+							;  hotkeyString (I,OPT) - The hotkey to wait on. If not set, we'll use A_ThisHotkey to get the
+							;                         hotkey that triggered this function.
+							;---------">
+                <Param name="hotkeyString := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: HotkeyLib -->
+
         <KeyWord name="Hours"/>
         <KeyWord name="HScroll"/>
         <KeyWord name="Hwnd"/>
@@ -2473,6 +2893,58 @@
         </KeyWord>
         <KeyWord name="Pgdn"/>
         <KeyWord name="Pgup"/>
+
+        <!-- *gdb START CLASS: PhoneLib -->
+        <KeyWord name="PhoneLib.call" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Dials a given number using the Cisco WebDialer API.
+							; PARAMETERS:
+							;  formattedNum (I,REQ) - An optionally-formatted phone number to call.
+							;  name         (I,OPT) - If this is given, we'll show a name above the formatted number.
+							;---------">
+                <Param name="formattedNum" />
+                <Param name="name := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="PhoneLib.formatNumber" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Format a local (10-digit) phone number with parens/spaces/dash.
+							; PARAMETERS:
+							;  input (I,REQ) - The number for format.
+							; RETURNS:        The formatted number, in format:
+							;                  (XXX) XXX-XXXX
+							;---------">
+                <Param name="input" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="PhoneLib.getRawNumber" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Parse and process the given phone number into a valid number to call from work.
+							; PARAMETERS:
+							;  input (I/O/IO,REQ/OPT) - The string
+							; RETURNS:
+							; SIDE EFFECTS:
+							; NOTES:
+							;---------">
+                <Param name="input" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="PhoneLib.isValidNumber" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether the given string is a valid phone number.
+							; PARAMETERS:
+							;  number (I,REQ) - The string to evaluate
+							; RETURNS:        true/false - whether it's a valid phone number.
+							;---------">
+                <Param name="number" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: PhoneLib -->
+
         <KeyWord name="Pic"/>
         <KeyWord name="Picture"/>
         <KeyWord name="Pid"/>
@@ -2718,6 +3190,47 @@
                 <Param name="Domain"/>
             </Overload>
         </KeyWord>
+
+        <!-- *gdb START CLASS: RunLib -->
+        <KeyWord name="RunLib.runAsUser" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Run the given path as a non-elevated user.
+							; PARAMETERS:
+							;  path (I,REQ) - The path of the program to run.
+							;  args (I,OPT) - Parameters to pass to the program.
+							;---------">
+                <Param name="path" />
+                <Param name="args := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="RunLib.runCommand" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Run a command with cmd.exe.
+							; PARAMETERS:
+							;  commandToRun     (I,REQ) - The command to run.
+							;  workingDirectory (I,OPT) - The working directory to run the command in.
+							;  stayOpen         (I,OPT) - Set to true if you want the window to stay open after the command has run.
+							;---------">
+                <Param name="commandToRun" />
+                <Param name="workingDirectory := &quot;&quot;" />
+                <Param name="stayOpen := false" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="RunLib.runReturn" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Run the given command and return the output.
+							; PARAMETERS:
+							;  command (I,REQ) - Command to run.
+							; RETURNS:        The output from the command, as passed to standard out.
+							;---------">
+                <Param name="command" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: RunLib -->
+
         <KeyWord name="RunWait" func="no">
             <Overload retVal="">
                 <Param name="Target"/>
@@ -2776,8 +3289,136 @@
         <!-- *gdb END CLASS: ScriptTrayInfo -->
 
         <KeyWord name="ScrollLock"/>
+
+        <!-- *gdb START CLASS: SearchLib -->
+        <KeyWord name="SearchLib.baseURL" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Search for a term using the given base URL.
+							; PARAMETERS:
+							;  searchBaseURL (I,REQ) - The &quot;base&quot; URL (with %s in place of the search term) to search with.
+							;  searchTerm    (I,REQ) - The term to search for.
+							;---------">
+                <Param name="searchBaseURL" />
+                <Param name="searchTerm" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SearchLib.codeSearch" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Search for the given term/type/app with CodeSearch.
+							; PARAMETERS:
+							;  searchTerm (I,REQ) - Text to search for.
+							;  searchType (I,REQ) - Type of search, from: Server, Client, Records, ProgPoint
+							;  appKey     (I,OPT) - App key (goes on the end of CS_APP_ID_ for a private value) to search only
+							;                       within that app's code. Defaults to all apps (no filter).
+							;---------">
+                <Param name="searchTerm" />
+                <Param name="searchType" />
+                <Param name="appKey := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SearchLib.epicWiki" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Search the Epic wiki for the given term.
+							; PARAMETERS:
+							;  searchTerm (I,REQ) - Text to search for.
+							;  category   (I,OPT) - Category to restrict search results to within the wiki.
+							;---------">
+                <Param name="searchTerm" />
+                <Param name="category := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SearchLib.everything" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Run a search with Everything.
+							; PARAMETERS:
+							;  searchTerm (I,REQ) - Text to search for.
+							;---------">
+                <Param name="searchTerm" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SearchLib.grepWin" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Run a search with grepWin in the given path.
+							; PARAMETERS:
+							;  searchTerm   (I,REQ) - Text to search for.
+							;  pathToSearch (I,REQ) - Where to search files for the given term.
+							;---------">
+                <Param name="searchTerm" />
+                <Param name="pathToSearch" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SearchLib.guru" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Search Guru for the given text.
+							; PARAMETERS:
+							;  searchTerm (I,REQ) - Text to search for.
+							;---------">
+                <Param name="searchTerm" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SearchLib.selectedTextPrompt" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Run a generic search with the selected text, prompting the user for what kind
+							;                 of search it should be.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: SearchLib -->
+
         <KeyWord name="Seconds"/>
         <KeyWord name="Section"/>
+
+        <!-- *gdb START CLASS: SelectLib -->
+        <KeyWord name="SelectLib.getCleanFirstLine" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the first line of the selected text, cleaned.
+							; RETURNS:        The cleaned first line of the selected text.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SelectLib.getFirstLine" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the first line of the selected text.
+							; RETURNS:        The portion of the selected text before the first newline.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SelectLib.getText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the selected text using the clipboard.
+							; RETURNS:        The selected text.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SelectLib.selectCurrentLine" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Select the current line of text.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SelectLib.selectTextWithinSelection" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Select the given text, within the currently selected block of text.
+							; PARAMETERS:
+							;  needle (I,REQ) - The text to select.
+							;---------">
+                <Param name="needle" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: SelectLib -->
+
 
         <!-- *gdb START CLASS: Selector -->
         <KeyWord name="Selector" func="yes">
@@ -3546,6 +4187,83 @@
                 <Param name="InputVar"/>
             </Overload>
         </KeyWord>
+
+        <!-- *gdb START CLASS: StringLib -->
+        <KeyWord name="StringLib.countLeadingSpaces" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine how many spaces there are at the beginning of a string.
+							; PARAMETERS:
+							;  line (I,REQ) - The line to count spaces for.
+							; RETURNS:        The number of spaces at the beginning of the line.
+							;---------">
+                <Param name="line" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringLib.decodeFromURL" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Decode the given URL-safe text to bring it back to normal.
+							; PARAMETERS:
+							;  textToDecode (I,REQ) - The text to decode.
+							; RETURNS:        The decoded text.
+							;---------">
+                <Param name="textToDecode" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringLib.duplicate" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Duplicate the given string, the given number of times. For example,
+							;                 StringLib.duplicate(&quot;abc&quot;, 3) will produce &quot;abcabcabc&quot;.
+							; PARAMETERS:
+							;  stringToDup (I,REQ) - The string to duplicate
+							;  numTimes    (I,REQ) - How many times to duplicate the string. 1 returns the same string.
+							; RETURNS:        A string with the given number of duplicates.
+							;---------">
+                <Param name="stringToDup" />
+                <Param name="numTimes" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringLib.encodeForURL" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Encode the given text to be URL-safe.
+							; PARAMETERS:
+							;  textToEncode (I,REQ) - The text to encode
+							; RETURNS:        The encoded text.
+							;---------">
+                <Param name="textToEncode" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringLib.escapeCharUsingChar" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Escape all instances of a character in the given string, with a specific character.
+							; PARAMETERS:
+							;  inputString  (I,REQ) - The string to escape the character within.
+							;  charToEscape (I,REQ) - The character to escape
+							;  escapeChar   (I,OPT) - The escape character to use.
+							; RETURNS:        The string with all instances of the character escaped.
+							;---------">
+                <Param name="inputString" />
+                <Param name="charToEscape" />
+                <Param name="escapeChar := &quot;\&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringLib.getSpaces" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the specified number of spaces/tabs/dots.
+							; PARAMETERS:
+							;  numToGet (I,REQ) - How many of the relevant character to return.
+							; RETURNS:        As many spaces/dots as requested.
+							;---------">
+                <Param name="numToGet" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: StringLib -->
+
         <KeyWord name="StringLower" func="no">
             <Overload retVal="">
                 <Param name="OutputVar"/>
@@ -4003,6 +4721,187 @@
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: WindowActions -->
+
+
+        <!-- *gdb START CLASS: WindowLib -->
+        <KeyWord name="WindowLib.buildTitleString" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Build a title string that can be used to identify a window based on the given
+							;                 parts, for use with WinActivate and the like.
+							; PARAMETERS:
+							;  exeName  (I,OPT) - Executable name, will be paired with ahk_exe
+							;  winClass (I,OPT) - Window class, will be paired with ahk_class
+							;  winTitle (I,OPT) - Text that's part of the window title
+							; RETURNS:        Title string including all of the given criteria
+							;---------">
+                <Param name="exeName := &quot;&quot;" />
+                <Param name="winClass := &quot;&quot;" />
+                <Param name="winTitle := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.center" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Visually center the given window on its current monitor.
+							; PARAMETERS:
+							;  titleString (I,OPT) - Title string that identifies your chosen window.
+							;                        Defaults to the active window (&quot;A&quot;).
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.fakeMaximize" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Resize a window to take up the full size of the monitor, without actually
+							;                 maximizing that window.
+							; PARAMETERS:
+							;  titleString (I,OPT) - Title string that identifies your chosen window.
+							;                        Defaults to the active window (&quot;A&quot;).
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.getIdTitleString" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    For the window identified by the given title string, generate a title string
+							;                 that's guaranteed to match only that window (based on its window ID).
+							; PARAMETERS:
+							;  titleString (I,OPT) - Title string that identifies your chosen window.
+							;                        Defaults to the active window (&quot;A&quot;).
+							; RETURNS:        A title string that uniquely (using ahk_id) identifies only your chosen window.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.getIdTitleStringUnderMouse" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get an ID-based title string to identify the window under the mouse with.
+							; RETURNS:        title string (that uses ahk_id) identifying the window under the mouse.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.getMonitorWorkArea" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the dimensions of the work area of the monitor &quot;closest&quot; (according to
+							;                 Windows) to the given window.
+							; PARAMETERS:
+							;  titleString (I,OPT) - Title string that identifies your chosen window.
+							;                        Defaults to the active window (&quot;A&quot;).
+							; RETURNS:        Associative array of position/size information for the working area of the
+							;                 monitor that the window is &quot;closest&quot; to. Format:
+							;                    bounds[&quot;LEFT&quot;]   = X coordinate of monitor's (working area's) left bound
+							;                          [&quot;RIGHT&quot;]  = X coordinate of monitor's (working area's) right bound
+							;                          [&quot;TOP&quot;]    = Y coordinate of monitor's (working area's) top bound
+							;                          [&quot;BOTTOM&quot;] = Y coordinate of monitor's (working area's) bottom bound
+							;                          [&quot;WIDTH&quot;]  = width of the monitor's work area
+							;                          [&quot;HEIGHT&quot;] = height of the monitor's work area
+							; NOTES:          This working area excludes things like the taskbar - it's the full space that a
+							;                 window can occupy.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.getMouseMonitorBounds" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Find the monitor that the mouse is on and return its bounds.
+							; RETURNS:        The bounds of the monitor that the mouse is on.
+							; NOTES:          If the mouse is on the border between monitors, we will return the bottom-right most monitor.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.hasCaption" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether a window has the &quot;caption&quot; style (with a title bar and borders).
+							; PARAMETERS:
+							;  titleString (I,OPT) - Title string that identifies your chosen window.
+							;                        Defaults to the active window (&quot;A&quot;).
+							; RETURNS:        true/false, whether the window has the caption style.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.hasStyle" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether a window has a particular style or extended style
+							; PARAMETERS:
+							;  style       (I,REQ) - The style/extended style to check for.
+							;  titleString (I,OPT) - Title string that identifies your chosen window.
+							;                        Defaults to the active window (&quot;A&quot;).
+							; RETURNS:        true if the window has the given style/extended style, false otherwise.
+							;---------">
+                <Param name="style" />
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.isAlwaysOnTop" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether a window is set to be always on top.
+							; PARAMETERS:
+							;  titleString (I,OPT) - Title string that identifies your chosen window.
+							;                        Defaults to the active window (&quot;A&quot;).
+							; RETURNS:        true/false, whether the window is always on top.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.isMaximized" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether a window is maximized.
+							; PARAMETERS:
+							;  titleString (I,OPT) - Title string that identifies your chosen window.
+							;                        Defaults to the active window (&quot;A&quot;).
+							; RETURNS:        true if the window is maximized, false otherwise.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.isMinimized" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether a window is minimized.
+							; PARAMETERS:
+							;  titleString (I,OPT) - Title string that identifies your chosen window.
+							;                        Defaults to the active window (&quot;A&quot;).
+							; RETURNS:        true if the window is minimized, false otherwise.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.isSizable" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether a window is resizable.
+							; PARAMETERS:
+							;  titleString (I,OPT) - Title string that identifies your chosen window.
+							;                        Defaults to the active window (&quot;A&quot;).
+							; RETURNS:        true/false, whether the window is resizable.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.isVisible" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether a window is visible, based on its style.
+							; PARAMETERS:
+							;  titleString (I,OPT) - Title string that identifies your chosen window.
+							;                        Defaults to the active window (&quot;A&quot;).
+							; RETURNS:        true/false, whether the window is visible.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: WindowLib -->
 
         <KeyWord name="WinExist" func="yes">
             <Overload retVal="">

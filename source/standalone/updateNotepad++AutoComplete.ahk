@@ -100,6 +100,8 @@ getAutoCompleteXMLForFolder(path) {
 }
 	
 generateXMLForClasses(classInfos) {
+	; Debug.popup("classInfos",classInfos)
+	
 	startBlockCommentBaseXML := "
 		(
         <!-- *gdb START CLASS: <CLASS_NAME> -->
@@ -134,9 +136,8 @@ generateXMLForClasses(classInfos) {
 		
 		; Debug.popup("className",className)
 		
-		For functionName,keywordTags in classInfo {
-			; Debug.popup("className",className, "functionName",functionName)
-			; Debug.popup("functionName",functionName, "keywordTags",keywordTags)
+		For dotFunctionName,keywordTags in classInfo {
+			; Debug.popup("className",className, "dotFunctionName",dotFunctionName, "keywordTags",keywordTags)
 			
 			paramsAry := keywordTags["PARAMS_ARY"]
 			
@@ -151,6 +152,16 @@ generateXMLForClasses(classInfos) {
 			}
 			
 			keywordTags["PARAMS"] := allParamsXML
+			
+			functionName := dotFunctionName.removeFromStart(".")
+			if(functionName = "__New")
+				functionName := className
+			else
+				functionName := className "." functionName
+			keywordTags["NAME"] := functionName
+			
+			; if(functionName.contains("contains"))
+				; Debug.popup("keywordTags",keywordTags)
 			
 			functionXML := keywordBaseXML.replaceTags(keywordTags)
 			classXML := classXML.appendPiece(functionXML, "`n")
@@ -213,13 +224,6 @@ getAutoCompleteInfoFromScript(path) {
 					retValue := "[Property]"
 				}
 				
-				if(currClassName != "") {
-					if(name = "__New")
-						name := currClassName
-					else
-						name := currClassName "." name
-				}
-				
 				headerIndent := StringLib.getTabs(7) ; We can indent with tabs and it's ignored - cleaner XML and result looks the same.
 				headerText := "`n" headerIndent docLines.join("`n" headerIndent) ; Add a newline at the start to separate the header from the definition line in the popup
 				headerText := headerText.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
@@ -229,7 +233,11 @@ getAutoCompleteInfoFromScript(path) {
 					paramsAry := splitVarList(params)
 				
 				isFunc := "yes" ; Always "yes" - allows me to type an open paren and get the popup of info.
-				classFunctions[name] := {"NAME":name, "IS_FUNC":isFunc, "RETURNS":retValue, "DESCRIPTION":headerText, "PARAMS_ARY":paramsAry}
+				
+				; Store function info with an index preceded by a dot - otherwise we run into conflicts with things like contains(), which is actually a function for the object in question.
+				classFunctions["." name] := {"NAME":name, "IS_FUNC":isFunc, "RETURNS":retValue, "DESCRIPTION":headerText, "PARAMS_ARY":paramsAry}
+				; if(name.contains("contains"))
+					; Debug.popup("classFunctions[name]",classFunctions[name])
 				
 				docLines := []
 				inBlock := false

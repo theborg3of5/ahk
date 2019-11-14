@@ -212,15 +212,6 @@
 }
 
 { ; Setter functions that return the corresponding original value.
-	class TitleMatchMode {
-	; #PUBLIC#
-		
-		static Start    := 1
-		static Contains := 2
-		static Exact    := 3
-		static RegEx    := "RegEx"
-	; #END#
-	}
 	setTitleMatchMode(new) { ; Only returns the actual mode - if you want the original match mode speed value, use setTitleMatchSpeed() instead.
 		old := A_TitleMatchMode
 		SetTitleMatchMode, % new

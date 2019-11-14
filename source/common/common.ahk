@@ -80,7 +80,9 @@ Object(params*) {
 	#Include config.ahk
 	#Include commonHotkeys.ahk
 	#Include debug.ahk
+	#Include enums.ahk
 	#Include hyperlinker.ahk
+	#Include setters.ahk
 	#Include scriptTrayInfo.ahk
 	#Include windowActions.ahk
 	

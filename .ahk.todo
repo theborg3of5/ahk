@@ -12,6 +12,9 @@
 			Debug popup (would need to set font if so)
 	Notepad++ auto-completion
 		Should we really keep support for documenting variables? Or if we're documenting it anyway, should we just only support properties?
+			If we do keep it, we should probably add support for it to notepad++ header generation stuff, too
+				Probably check whether a "("/"{" comes before the first ":="?
+				Rename "sendAHKFunctionHeader" to be less function-centric, too?
 		Documentation updates needed:
 			Multiple functions with 1 header (won't work):
 				ActionObjectBase

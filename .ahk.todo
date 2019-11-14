@@ -38,6 +38,18 @@
 	Consider additional user-defined languages in Notepad++:
 		My todo lists - folding like python, but don't have all the weird highlighting (or single quote handling).
 		tl/tls files
+			Special characters
+				;  - Ignore (comment line)
+				(  - Model (highlight whole line)
+				@  - Settings (whole line, or at least word up to =)
+						Maybe also just specific setting names? WindowTitle, MinColumnWidth
+				#  - Headers (ideally different from comments?)
+				[] - Mod lines (highlight start/end chars, +/-numeric labels?, maybe specifically .replaceWith() stuff as well?)
+				|  - Multi-entry (make sure to support inside of mod lines)
+				-  - Placeholder (highlight char)
+				)  - Key (whole line)
+			Collapse on mods
+			Is there any fancy highlighting/lines we could add to match up with columns?
 	Should we move getParamsListFromDefinitionLine() and splitVarList() from NotepadPlusPlus class to somewhere in common?
 		Maybe just move all AHK language stuff into a new (static?) class?
 		splitVarList might even be a more general thing for StringLib - splitting on commas, but respecting quotes/parens.

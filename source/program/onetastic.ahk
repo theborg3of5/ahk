@@ -205,7 +205,7 @@ class OneTastic {
 	getFunctionDataFromFiles() {
 		allFunctionData := {} ; {"DEPENDENCIES":{functionName: [dependencyNames]}, "XML":{functionName: xml}}
 		
-		origWorkingDir := setWorkingDirectory(Config.path["ONETASTIC_FUNCTIONS"])
+		origWorkingDir := Setters.workingDirectory(Config.path["ONETASTIC_FUNCTIONS"])
 		Loop, Files, % "*.xml"
 		{
 			; Skip files that start with . (like function template)
@@ -220,7 +220,7 @@ class OneTastic {
 			allFunctionData["DEPENDENCIES", name] := OneTastic.getDependenciesFromXML(xml)
 			allFunctionData["XML",          name] := xml
 		}
-		setWorkingDirectory(origWorkingDir)
+		Setters.workingDirectory(origWorkingDir)
 		
 		; Debug.popup("allFunctionData",allFunctionData)
 		return allFunctionData
@@ -319,9 +319,9 @@ class OneTastic {
 	; DESCRIPTION:    Waits until the main macro editor window becomes active.
 	;---------
 	waitMacroEditorWindowActive() {
-		origMatchMode := setTitleMatchMode(TitleMatchMode.Contains)
+		origMatchMode := Setters.titleMatchMode(TitleMatchMode.Contains)
 		WinWaitActive, % " - Macro Editor"
-		setTitleMatchMode(origMatchMode)
+		Setters.titleMatchMode(origMatchMode)
 	}
 	; #END#
 }

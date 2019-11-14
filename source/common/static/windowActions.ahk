@@ -355,7 +355,7 @@ class WindowActions {
 		; Spotify
 		} else if(name = "Spotify") {
 			if(action = WindowActions.Action_Close) {
-				origMatchMode := setTitleMatchMode(TitleMatchMode.Contains)
+				origMatchMode := Setters.titleMatchMode(TitleMatchMode.Contains)
 				
 				; Spotify has a whole bunch of windows that are difficult to tell apart from 
 				; the real thing, so make sure we're closing the right one.
@@ -366,7 +366,7 @@ class WindowActions {
 				if(winId)
 					WinClose, ahk_id %winId%
 				
-				setTitleMatchMode(origMatchMode)
+				Setters.titleMatchMode(origMatchMode)
 			}
 		}
 	}

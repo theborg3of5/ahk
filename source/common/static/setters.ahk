@@ -3,7 +3,8 @@
 class Setters {
 	; #PUBLIC#
 	
-	titleMatchMode(new) { ; Only returns the actual mode - if you want the original match mode speed value, use setTitleMatchSpeed() instead.
+	; new should be a value from TitleMatchMode enum.
+	titleMatchMode(new) { ; Only returns the actual mode - if you want the original match mode speed value, use Setters.titleMatchSpeed() instead.
 		old := A_TitleMatchMode
 		SetTitleMatchMode, % new
 		return old
@@ -24,6 +25,7 @@ class Setters {
 		SetWorkingDir, % new
 		return old
 	}
+	
 	coordMode(targetType, relativeTo := "") {
 		if(targetType = "ToolTip")
 			old := A_CoordModeToolTip

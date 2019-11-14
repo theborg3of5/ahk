@@ -235,9 +235,9 @@ class VB6 {
 		; Store the old mouse position to move back to once we're finished.
 		MouseGetPos(prevX, prevY)
 		
-		origMouseCoordMode := setCoordMode("Mouse", mouseCoordMode)
+		origMouseCoordMode := Setters.coordMode("Mouse", mouseCoordMode)
 		Click, %x%, %y%
-		setCoordMode("Mouse", origMouseCoordMode)
+		Setters.coordMode("Mouse", origMouseCoordMode)
 		
 		; Move the mouse back to its former position.
 		MouseMove, prevX, prevY

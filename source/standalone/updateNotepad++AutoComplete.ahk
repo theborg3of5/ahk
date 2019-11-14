@@ -20,7 +20,6 @@ commonRoot := Config.path["AHK_SOURCE"] "\common"
 
 classInfos := {}
 classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\selector.ahk"))
-classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\static\debug.ahk"))
 classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\lib\clipboardLib.ahk"))
 classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\epicRecord.ahk"))
 classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\duration.ahk"))
@@ -32,7 +31,7 @@ classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\toas
 classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\base"))
 ; classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\class"))
 ; classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\lib"))
-; classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\static"))
+classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\static"))
 ; Debug.popup("classInfos",classInfos)
 
 autoCompleteXMLs := generateXMLForClasses(classInfos)

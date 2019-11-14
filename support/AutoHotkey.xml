@@ -551,6 +551,57 @@
         <KeyWord name="Close"/>
         <KeyWord name="Color"/>
         <KeyWord name="Combobox"/>
+
+        <!-- *gdb START CLASS: CommonHotkeys -->
+        <KeyWord name="CommonHotkeys.CommonHotkeys_doEmergencyExit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrappers for CommonHotkeys.* functions that we can point hotkeys to directly.
+							; NOTES:          We can technically point to the CommonHotkeys.* functions directly using
+							;                 ObjBindMethod(), but that doesn't work with Suspend, Permit (to allow the hotkey
+							;                 to work when the script is suspended). Some of these require that functionality,
+							;                 so they're all out here for consistency's sake.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="CommonHotkeys.ConfirmExitOn" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Turn on/off whether to prompt the user to confirm when exiting with the common exit hotkey (!+x).
+							;---------">
+                <Param name="message := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="CommonHotkeys.Init" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set up the common hotkeys.
+							; PARAMETERS:
+							;  scriptType (I,REQ) - The &quot;type&quot; of script, from CommonHotkeys.ScriptType_*. This determines
+							;                       which &quot;set&quot; of hotkeys are applied.
+							;---------">
+                <Param name="scriptType" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="CommonHotkeys.IsMain" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Wrappers for checking which &quot;type&quot; the script is. These correspond to
+							;                 CommonHotkeys.ScriptType_*.
+							; RETURNS:        true if the script matches the type in question, false otherwise.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="CommonHotkeys.NoSuspendOn" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Turn on/off whether to ignore the common suspend hotkey (!#x) or not.
+							; SIDE EFFECTS:   Will actually turn the hotkey on or off.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: CommonHotkeys -->
+
         <KeyWord name="ComObjActive"/>
         <KeyWord name="ComObjArray"/>
         <KeyWord name="ComObjConnect"/>
@@ -566,6 +617,219 @@
         <KeyWord name="ComObjUnwrap"/>
         <KeyWord name="ComObjValue"/>
         <KeyWord name="Comspec"/>
+
+        <!-- *gdb START CLASS: Config -->
+        <KeyWord name="Config.activateProgram" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Activate the window matching the specified name, running it if it doesn't yet exist.
+							; PARAMETERS:
+							;  name    (I,REQ) - The name of the window to activate.
+							;  runArgs (I,OPT) - If the window doesn't currently exist, we'll run the corresponding program with these parameters.
+							;---------">
+                <Param name="name" />
+                <Param name="runArgs := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.context" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Which context we're configured to act as, from the Context_* constants in this class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.contextIsWork" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Convenience functions for checking whether we're currently in a certain context
+							; RETURNS:        true if we are in the context in question, false otherwise.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.doesMediaPlayerExist" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether a window for the current media player exists.
+							; RETURNS:        true if it does exist, false otherwise.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.doesWindowExist" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the named window currently exists.
+							; PARAMETERS:
+							;  name (I,REQ) - Name of the window to check for.
+							; RETURNS:        true if it exists, false otherwise.
+							;---------">
+                <Param name="name" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.findWindowInfo" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Find the WindowInfo instance that matches the specified window.
+							; PARAMETERS:
+							;  titleString (I,OPT) - Title string that identifies the window in question. Defaults to the active window.
+							; RETURNS:        The WindowInfo instance matching the specified window.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.findWindowName" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Find the name of the specified window, if a WindowInfo instance exists.
+							; PARAMETERS:
+							;  titleString (I,OPT) - Title string that identifies the window in question. Defaults to the active window.
+							; RETURNS:        The NAME for the matched WindowInfo instance.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.Init" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Initialize this static config class. Loads information from various config files (see individual this.load* functions).
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.initialized" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Whether this class has been initialized. Used to not show debug popups when
+							;                 it's not initialized, to cut down on popups on restart in high-traffic areas.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.isMediaPlayer" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Whether the named media player is what we're configured to use.
+							; PARAMETERS:
+							;  mediaPlayerName (I,REQ) - The name of the media player to check.
+							; RETURNS:        true if we're configured to use the media player, false otherwise.
+							;---------">
+                <Param name="mediaPlayerName" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.isWindowActive" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the named window is currently active.
+							; PARAMETERS:
+							;  name (I,REQ) - Name of the window to check for.
+							; RETURNS:        true if it's active, false otherwise.
+							;---------">
+                <Param name="name" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.machine" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Which machine we're configured to act as, from the Machine_* constants in this class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.machineIsWorkLaptop" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Convenience functions for checking whether we're currently a certain machine.
+							; RETURNS:        true if we are the machine in question, false otherwise.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.mediaPlayer" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The name of the media player to use (from the NAME column in mediaPlayers.tls).
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.path" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    A particular path from this class.
+							; PARAMETERS:
+							;  key (I,REQ) - The key for the path you want.
+							;---------">
+                <Param name="key" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.private" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The private information from the privates file from initialization.
+							; PARAMETERS:
+							;  key(I,REQ) - The key to the bit of private info you want.
+							;---------">
+                <Param name="key" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.replacePathTags" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Replace any tags matching path keys, with those corresponding paths.
+							; PARAMETERS:
+							;  inputString (I,REQ) - The string to search and replace within.
+							; RETURNS:        The updated string
+							;---------">
+                <Param name="inputPath" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.replacePrivateTags" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Replace any tags matching private keys, with those corresponding private values.
+							; PARAMETERS:
+							;  inputString (I,REQ) - The string to search and replace within.
+							; RETURNS:        The updated string
+							;---------">
+                <Param name="inputString" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.runMediaPlayer" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Run the currently configured media player.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.runProgram" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Run the program matching the specified name.
+							; PARAMETERS:
+							;  name (I,REQ) - The name of the program to run.
+							;  args (I,OPT) - The arguments to run the program with.
+							;---------">
+                <Param name="name" />
+                <Param name="args := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.windowInfo" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Return the WindowInfo instance corresponding to the provided name.
+							; PARAMETERS:
+							;  name (I,REQ) - The name of the window to retrieve info for.
+							;---------">
+                <Param name="name" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.windowIsGame" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the specified window is a game (as identified in the games file passed in).
+							; PARAMETERS:
+							;  titleString (I,OPT) - Title string that identifies the window in question. Defaults to the active window.
+							; RETURNS:        true if the specified window is a game, false otherwise.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: Config -->
+
         <KeyWord name="Contains"/>
         <KeyWord name="Continue" func="no">
             <Overload retVal="">
@@ -1579,6 +1843,30 @@
         <KeyWord name="Hours"/>
         <KeyWord name="HScroll"/>
         <KeyWord name="Hwnd"/>
+
+        <!-- *gdb START CLASS: Hyperlinker -->
+        <KeyWord name="Hyperlinker.Init" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Initialize this class with the windows that support hyperlinking and their methods.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Hyperlinker.linkSelectedText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Link the selected text with the given URL/path.
+							; PARAMETERS:
+							;  path         (I,REQ) - URL or file path to link to.
+							;  errorMessage (O,OPT) - Error message about what went wrong if we return False.
+							; RETURNS:        True if successful, False if something went wrong.
+							;---------">
+                <Param name="path" />
+                <Param name="ByRef errorMessage := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: Hyperlinker -->
+
         <KeyWord name="Icon"/>
         <KeyWord name="IconSmall"/>
         <KeyWord name="ID"/>
@@ -2445,6 +2733,48 @@
         <KeyWord name="SB_SetParts"/>
         <KeyWord name="SB_SetText"/>
         <KeyWord name="Screen"/>
+
+        <!-- *gdb START CLASS: ScriptTrayInfo -->
+        <KeyWord name="ScriptTrayInfo.Init" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new object representing the tray information for the script, including icons.
+							; PARAMETERS:
+							;  tooltipText   (I,REQ) - Text to show when the user hovers over the tray icon.
+							;  normalIcon    (I,OPT) - The full path to the &quot;normal&quot; icon - this will be used when the script
+							;                          is not suspended.
+							;  suspendedIcon (I,OPT) - The full path to the suspended icon - this will be used when the script
+							;                          is suspended using the common !#x hotkey (see CommonHotkeys).
+							;---------">
+                <Param name="tooltipText" />
+                <Param name="normalIcon := &quot;&quot;" />
+                <Param name="suspendedIcon := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ScriptTrayInfo.setIconStates" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Directly set the array used to determine which tray icon to use based on
+							;                 different global variable states.
+							; PARAMETERS:
+							;  states (I,REQ) - A tree-like associative array that maps the states of different variables to
+							;                   the icons that we should use for the script. Format:
+							;                   	states[&quot;varName&quot;, varState] := iconPath
+							;                   See getIconForCurrentState() for a more in-depth explanation.
+							;---------">
+                <Param name="states" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ScriptTrayInfo.updateTrayIcon" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine the icon that should be used for the script (based on the variables
+							;                 defined in the _iconStates array) and apply it.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: ScriptTrayInfo -->
+
         <KeyWord name="ScrollLock"/>
         <KeyWord name="Seconds"/>
         <KeyWord name="Section"/>
@@ -3535,6 +3865,145 @@
             </Overload>
         </KeyWord>
         <KeyWord name="WinClose"/>
+
+        <!-- *gdb START CLASS: WindowActions -->
+        <KeyWord name="WindowActions.activateWindow" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Activate and show a window, respecting any custom overrides for the identified
+							;                 window.
+							; PARAMETERS:
+							;  titleString (I,REQ) - A title string identifying the window.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowActions.activateWindowByName" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Activate and show a window, respecting any custom overrides for the identified
+							;                 window.
+							; PARAMETERS:
+							;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+							;---------">
+                <Param name="name" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowActions.closeWindow" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Close a window, respecting any custom overrides for the identified window.
+							; PARAMETERS:
+							;  titleString (I,REQ) - A title string representing the window.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowActions.closeWindowByName" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Close a window, respecting any custom overrides for the identified window.
+							; PARAMETERS:
+							;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+							;---------">
+                <Param name="name" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowActions.deleteWord" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Delete a single word before the cursor within a particular window, respecting
+							;                 any custom overrides for the identified window.
+							; PARAMETERS:
+							;  titleString (I,REQ) - A title string representing the window.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowActions.deleteWordByName" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Delete a single word before the cursor within a particular window, respecting
+							;                 any custom overrides for the identified window.
+							; PARAMETERS:
+							;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+							;---------">
+                <Param name="name" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowActions.escAction" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Respond to the escape key within a particular window, respecting any custom
+							;                 overrides for the identified window.
+							; PARAMETERS:
+							;  titleString (I,REQ) - A title string representing the window.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowActions.escActionByName" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Respond to the escape key within a particular window, respecting any custom
+							;                 overrides for the identified window.
+							; PARAMETERS:
+							;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+							;---------">
+                <Param name="name" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowActions.Init" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Initialize this class with window identifiers and actions.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowActions.minimizeWindow" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Minimize a window, respecting any custom overrides for the identified window.
+							; PARAMETERS:
+							;  titleString (I,REQ) - A title string representing the window.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowActions.minimizeWindowByName" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Minimize a window, respecting any custom overrides for the identified window.
+							; PARAMETERS:
+							;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+							;---------">
+                <Param name="name" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowActions.selectAll" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Select all within a particular window, respecting any custom overrides for the
+							;                 identified window.
+							; PARAMETERS:
+							;  titleString (I,REQ) - A title string representing the window.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowActions.selectAllByName" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Select all within a particular window, respecting any custom overrides for the
+							;                 identified window.
+							; PARAMETERS:
+							;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+							;---------">
+                <Param name="name" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: WindowActions -->
+
         <KeyWord name="WinExist" func="yes">
             <Overload retVal="">
                 <Param name="WinTitle"/>

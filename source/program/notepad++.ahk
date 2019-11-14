@@ -24,9 +24,6 @@
 class NotepadPlusPlus {
 	; #PUBLIC#
 	
-	; All of the keywords possibly contained in the AHK function header - should be kept up to date with ahkFunctionHeaderBase* below.
-	static ahkHeaderKeywords := ["DESCRIPTION", "PARAMETERS", "RETURNS", "SIDE EFFECTS", "NOTES"]
-	
 	;---------
 	; DESCRIPTION:    Insert a newline at the cursor, indented to the same level as the current line.
 	;                 Also takes AHK headers into account, indenting to the proper level if you're
@@ -196,6 +193,9 @@ class NotepadPlusPlus {
 	
 	; #PRIVATE#
 	
+	; All of the keywords possibly contained in the AHK function header - should be kept up to date with ahkFunctionHeaderBase* below.
+	static ahkHeaderKeywords := ["DESCRIPTION:", "PARAMETERS:", "RETURNS:", "SIDE EFFECTS:", "NOTES:"]
+	
 	; AHK headers bases - if these are updated, update ahkHeaderKeywords at the top as well.
 	static ahkFunctionHeaderBase := "
 		( RTrim0
@@ -249,8 +249,8 @@ class NotepadPlusPlus {
 		; Keyword line
 		if(line.startsWithAnyOf(this.ahkHeaderKeywords, matchedKeyword)) {
 			; Add length of keyword + however many spaces are after it.
-			numSpaces += matchedKeyword.length() + 1 ; extra 1 for the colon
-			line := line.removeFromStart(matchedKeyword ":")
+			numSpaces += matchedKeyword.length()
+			line := line.removeFromStart(matchedKeyword)
 			numSpaces += StringLib.countLeadingSpaces(line)
 			
 			return ";" StringLib.getSpaces(numSpaces)

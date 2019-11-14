@@ -23,8 +23,6 @@
 				ActionObjectPath
 				Duration
 				FlexTable
-				FormatList
-				RelativeDate
 				Toast
 				VisualWindow
 				DataLib

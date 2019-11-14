@@ -22,6 +22,23 @@
             </Overload>
         </KeyWord>
 
+        <!-- *gdb START CLASS: ActionObject -->
+        <KeyWord name="ActionObject" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine the type of ActionObject class to use based on the type/value
+							;                 and return a new instance of that class.
+							; PARAMETERS:
+							;  value (I,OPT) - Input value to evaluate.
+							; RETURNS:        An instance of ActionObject* (Code, EMC2, etc.) for the chosen type.
+							; NOTES:          This does NOT return an ActionObject instance.
+							;---------">
+                <Param name="value := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: ActionObject -->
+
+
         <!-- *gdb START CLASS: ActionObjectBase -->
         <KeyWord name="ActionObjectBase.copyLink" func="yes">
             <Overload retVal="" descr="
@@ -76,6 +93,383 @@
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: ActionObjectBase -->
+
+
+        <!-- *gdb START CLASS: ActionObjectCodeSearch -->
+        <KeyWord name="ActionObjectCodeSearch" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new reference to a CodeSearch object.
+							; PARAMETERS:
+							;  location (I,REQ) - Value representing the code location
+							;---------">
+                <Param name="location" />
+                <Param name="locationType := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.copyLink" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the the object on the clipboard.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.getLink" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get a link in CodeSearch to the code location.
+							; RETURNS:        Link to CodeSearch for the code location.
+							; NOTES:          There's no web vs. edit version for this, so here's a generic tag that the
+							;                 others redirect to.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.getLinkEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the edit link for the object.
+							; RETURNS:        Link to the edit version of the object.
+							; NOTES:          Should be overridden by child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.getLinkWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the web link for the object.
+							; RETURNS:        Link to the web version of the object.
+							; NOTES:          Should be overridden by child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.linkSelectedText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it.
+							; PARAMETERS:
+							;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
+							;                           weren't able to link the selected text.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.open" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: ActionObjectCodeSearch -->
+
+
+        <!-- *gdb START CLASS: ActionObjectEMC2 -->
+        <KeyWord name="ActionObjectEMC2" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new reference to an EMC2 object.
+							; PARAMETERS:
+							;  id    (I,REQ) - ID of the object, or combined &quot;INI ID&quot;
+							;  ini   (I,OPT) - INI of the object, will be prompted for if not specified and we can't figure
+							;                  it out from ID.
+							;  title (I,OPT) - Title of the object
+							;---------">
+                <Param name="id" />
+                <Param name="ini := &quot;&quot;" />
+                <Param name="title := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.copyLink" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the the object on the clipboard.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.getLink" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object.
+							; RETURNS:        Link to the web version of the object.
+							; NOTES:          Should be overridden by child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.getLinkEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the edit link for the object.
+							; RETURNS:        Link to the edit version of the object.
+							; NOTES:          Should be overridden by child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.getLinkWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get a link to the EMC2 object.
+							; RETURNS:        Link to the object:
+							;                    Web: link to either emc2summary or Nova/Sherlock (depending on the INI)
+							;                    Edit: link to open it in EMC2.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.linkSelectedText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it.
+							; PARAMETERS:
+							;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
+							;                           weren't able to link the selected text.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.open" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.openWebBasic" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the EMC2 object in &quot;basic&quot; web - always emc2summary, even for
+							;                 Nova/Sherlock INIs.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.postProcess" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Do some additional processing on the different bits of info about the object.
+							; SIDE EFFECTS:   Can update this.ini and this.title.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: ActionObjectEMC2 -->
+
+
+        <!-- *gdb START CLASS: ActionObjectEpicStudio -->
+        <KeyWord name="ActionObjectEpicStudio" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new reference to a server code object.
+							; PARAMETERS:
+							;  descriptor     (I,REQ) - Value representing the object
+							;  descriptorType (I,OPT) - Type of descriptor, from DescriptorType_* constants. If not given, we'll figure it out
+							;                           based on the descriptor format or by prompting the user.
+							;---------">
+                <Param name="descriptor" />
+                <Param name="descriptorType := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.copyLink" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the the object on the clipboard.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.getLink" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get a link to the object (server code location or DLG) referenced by
+							;                 descriptor in EpicStudio.
+							; RETURNS:        Link to EpicStudio for the code location/DLG.
+							; NOTES:          There's no web vs. edit version for this, so here's a generic tag that the
+							;                 others redirect to.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.getLinkEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the edit link for the object.
+							; RETURNS:        Link to the edit version of the object.
+							; NOTES:          Should be overridden by child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.getLinkWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the web link for the object.
+							; RETURNS:        Link to the web version of the object.
+							; NOTES:          Should be overridden by child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.linkSelectedText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it.
+							; PARAMETERS:
+							;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
+							;                           weren't able to link the selected text.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.open" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: ActionObjectEpicStudio -->
+
+
+        <!-- *gdb START CLASS: ActionObjectHelpdesk -->
+        <KeyWord name="ActionObjectHelpdesk" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new reference to a helpdesk request.
+							; PARAMETERS:
+							;  id (I,REQ) - ID of the request.
+							;---------">
+                <Param name="id" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.copyLink" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the the object on the clipboard.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.getLink" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get a link to the helpdesk request.
+							; RETURNS:        Link to the helpdesk request.
+							; NOTES:          There's no web vs. edit version for this, so here's a generic tag that the
+							;                 others redirect to.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.getLinkEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the edit link for the object.
+							; RETURNS:        Link to the edit version of the object.
+							; NOTES:          Should be overridden by child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.getLinkWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the web link for the object.
+							; RETURNS:        Link to the web version of the object.
+							; NOTES:          Should be overridden by child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.linkSelectedText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it.
+							; PARAMETERS:
+							;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
+							;                           weren't able to link the selected text.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.open" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: ActionObjectHelpdesk -->
+
+
+        <!-- *gdb START CLASS: ActionObjectPath -->
+        <KeyWord name="ActionObjectPath" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new reference to a path.
+							; PARAMETERS:
+							;  path     (I,REQ) - The actual path
+							;  pathType (I,OPT) - Type of path, from PathType_* constants. If not given, we'll figure it out
+							;                     based on the path format or by prompting the user.
+							;---------">
+                <Param name="path" />
+                <Param name="pathType := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.copyLink" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the the object on the clipboard.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.determinePathType" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine the type of the given path.
+							; PARAMETERS:
+							;  path (I,REQ) - The path itself.
+							; RETURNS:        The type of path, from PathType_* constants.
+							;---------">
+                <Param name="path" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.getLink" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get a link to the path (that is, the path itself).
+							; RETURNS:        The path
+							; NOTES:          Web and edit functions do the same thing here - there is no difference between
+							;                 the two.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.getLinkEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the edit link for the object.
+							; RETURNS:        Link to the edit version of the object.
+							; NOTES:          Should be overridden by child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.getLinkWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the web link for the object.
+							; RETURNS:        Link to the web version of the object.
+							; NOTES:          Should be overridden by child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.linkSelectedText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it.
+							; PARAMETERS:
+							;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
+							;                           weren't able to link the selected text.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.open" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the path, doing a safety check for existence if it's a local file path.
+							; NOTES:          There's no web vs. edit version for this, so here's a generic tag that the
+							;                 others redirect to.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: ActionObjectPath -->
 
         <KeyWord name="ActiveX"/>
         <KeyWord name="Add"/>
@@ -1217,6 +1611,46 @@
         </KeyWord>
         <!-- *gdb END CLASS: Debug -->
 
+
+        <!-- *gdb START CLASS: DebugBuilder -->
+        <KeyWord name="DebugBuilder" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new DebugBuilder instance.
+							; PARAMETERS:
+							;  numTabs (I,OPT) - How many levels of indentation the string should start at. Added lines will
+							;                    be at this level + 1.
+							; RETURNS:        Reference to new DebugBuilder object
+							;---------">
+                <Param name="numTabs := 0" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugBuilder.addLine" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a properly-indented line* with the given label and value to the output
+							;                 string.
+							; PARAMETERS:
+							;  label (I,REQ) - The label to show for the given value
+							;  value (I,REQ) - The value to evaluate and show. Will be treated according to the logic
+							;                  described in the DEBUG class (see that class documentation for details).
+							; NOTES:          A &quot;line&quot; may actually contain multiple newlines, but anything below the
+							;                 initial line will be indented 1 level deeper.
+							;---------">
+                <Param name="label" />
+                <Param name="value" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugBuilder.toString" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Retrieve the debug string built by this class.
+							; RETURNS:        The string built by this class, in full.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: DebugBuilder -->
+
         <KeyWord name="Default"/>
         <KeyWord name="Del"/>
         <KeyWord name="Delete"/>
@@ -1980,6 +2414,105 @@
         <KeyWord name="FileSystem"/>
         <KeyWord name="First"/>
         <KeyWord name="Flash"/>
+
+        <!-- *gdb START CLASS: FlexTable -->
+        <KeyWord name="FlexTable" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new FlexTable instance.
+							; PARAMETERS:
+							;  guiId          (I,REQ) - ID of the GUI that we should add text controls to
+							;  x              (I,OPT) - X coordinate (in pixels) where the table should start. Defaults to 0 (left edge).
+							;  y              (I,OPT) - Y coordinate (in pixels) where the table should start. Defaults to 0 (top edge).
+							;  rowHeight      (I,OPT) - The height (in pixels) that a row should be in the table. Defaults to 25.
+							;  columnPadding  (I,OPT) - How much space (in pixels) should be between the end of the right-most
+							;                           cell in the previous column, and a new column. Defaults to 30.
+							;  minColumnWidth (I,OPT) - Minimum width that a column must be (regardless of where
+							;                           its right-most cell ends). Defaults to 0 (width of contents).
+							; RETURNS:        Reference to new FlexTable object
+							;---------">
+                <Param name="guiId" />
+                <Param name="x := 0" />
+                <Param name="y := 0" />
+                <Param name="rowHeight := 25" />
+                <Param name="columnPadding := 30" />
+                <Param name="minColumnWidth := 0" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FlexTable.addCell" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a &quot;cell&quot; to the current row.
+							; PARAMETERS:
+							;  cellText        (I,OPT) - Text to show in the cell
+							;  leftPadding     (I,OPT) - How far out from the previous cell (or start of the row/column if it's the
+							;                            first cell) this one should start.
+							;  width           (I,OPT) - How wide the cell should be. If not given, will calculate the width of the given text and use that.
+							;  extraProperties (I,OPT) - Any extra properties you want to apply to the text control (i.e. &quot;Right&quot; for right-aligned text)
+							; RETURNS:        Reference to new FlexTable object
+							;---------">
+                <Param name="cellText := &quot;&quot;" />
+                <Param name="leftPadding := &quot;&quot;" />
+                <Param name="width := &quot;&quot;" />
+                <Param name="extraProperties := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FlexTable.addColumn" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a new column (that wraps the whole table, not within the table) to the table
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FlexTable.addHeaderCell" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a specially-formatted (bold + underline) cell to the current row.
+							; PARAMETERS:
+							;  titleText       (I,REQ) - Text to show in the cell
+							;  leftPadding     (I,OPT) - How far out from the previous cell (or start of the row/column if it's the
+							;                            first cell) this one should start.
+							;  width           (I,OPT) - How wide the cell should be. If not given, will calculate the width of the given text and use that.
+							;  extraProperties (I,OPT) - Any extra properties you want to apply to the text control (i.e. &quot;Right&quot; for right-aligned text)
+							; RETURNS:        Reference to new FlexTable object
+							;---------">
+                <Param name="titleText" />
+                <Param name="leftPadding := &quot;&quot;" />
+                <Param name="width := &quot;&quot;" />
+                <Param name="extraProperties := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FlexTable.addRow" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a &quot;cell&quot; to the current row.
+							; PARAMETERS:
+							;  cellText        (I,OPT) - Text to show in the cell
+							;  leftPadding     (I,OPT) - How far out from the previous cell (or start of the row/column if it's the
+							;                            first cell) this one should start.
+							;  width           (I,OPT) - How wide the cell should be. If not given, will calculate the width of the given text and use that.
+							;  extraProperties (I,OPT) - Any extra properties you want to apply to the text control (i.e. &quot;Right&quot; for right-aligned text)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FlexTable.getTotalHeight" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the total height of the table
+							; RETURNS:        The total height of the table, from its starting point to the bottom of the lowest row.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FlexTable.getTotalWidth" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:		Get the total width of the table
+							; RETURNS:			The total width of the table, from its starting point to the right edge of the last cell.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: FlexTable -->
+
         <KeyWord name="Float"/>
         <KeyWord name="Floatfast"/>
         <KeyWord name="Floor" func="yes">
@@ -2728,6 +3261,30 @@
             </Overload>
         </KeyWord>
         <KeyWord name="MouseMoveOff"/>
+
+        <!-- *gdb START CLASS: MousePosition -->
+        <KeyWord name="MousePosition" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new MousePosition object which stores off the current mouse position.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MousePosition.getDistanceFromCurrentPosition" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Calculates the distance that the mouse has moved, relative to where it was
+							;                 when this instance was created.
+							; PARAMETERS:
+							;  distanceX (O,OPT) - The distance along the X axis (if the mouse moved to the right, this is positive)
+							;  distanceY (O,OPT) - The distance along the Y asix (if the mouse moved down, this is positive)
+							;---------">
+                <Param name="ByRef distanceX" />
+                <Param name="ByRef distanceY" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: MousePosition -->
+
         <KeyWord name="Move"/>
         <KeyWord name="MsgBox" func="no">
             <Overload retVal="">
@@ -2996,6 +3553,38 @@
         <KeyWord name="ProcessName"/>
         <KeyWord name="ProcessPath"/>
         <KeyWord name="ProgramFiles"/>
+
+        <!-- *gdb START CLASS: ProgramInfo -->
+        <KeyWord name="ProgramInfo" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Creates a new instance of ProgramInfo.
+							; PARAMETERS:
+							;  programAry (I,REQ) - Array of information about the program to store. Format:
+							;                          programAry[&quot;NAME&quot;] - Name of the program. Should match a single row
+							;                                               in windows.tl for identification purposes.
+							;                                    [&quot;PATH&quot;] - The full filepath to launch the program.
+							; RETURNS:        Reference to a new ProgramInfo object
+							;---------">
+                <Param name="programAry" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgramInfo.name" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Name of the program
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgramInfo.path" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Full filepath to launch the program
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: ProgramInfo -->
+
         <KeyWord name="Progress" func="no">
             <Overload retVal="">
                 <Param name="Off"/>
@@ -3126,6 +3715,38 @@
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: RelativeDate -->
+
+
+        <!-- *gdb START CLASS: RelativeTime -->
+        <KeyWord name="RelativeTime" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new representation of a time relative to right now.
+							; PARAMETERS:
+							;  relativeTime (I,OPT) - The relative time string to use to find the new time. If not provided,
+							;                         we'll prompt the user for it.
+							;---------">
+                <Param name="relativeTime := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="RelativeTime.Instant" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="RelativeTime.SendInFormat" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Send the relative date/time in a particular format.
+							; PARAMETERS:
+							;  format (I,REQ) - The format to send the date/time in, a la FormatTime().
+							;---------">
+                <Param name="format" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: RelativeTime -->
 
 
         <!-- *gdb START CLASS: RelativeDateTimeBase -->
@@ -3537,6 +4158,122 @@
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: Selector -->
+
+
+        <!-- *gdb START CLASS: SelectorChoice -->
+        <KeyWord name="SelectorChoice" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new SelectorChoice instance.
+							; PARAMETERS:
+							;  dataIn (I,REQ) - Assocative array of data that the choice contains.
+							;                 Format:
+							;                  dataIn[LABEL] := VALUE
+							;                 Special subscripts:
+							;                  &quot;ABBREV&quot; - Abbreviation of choice, first one (the display one) later accessible via .abbrev
+							;                  &quot;NAME&quot;   - Name of choice, later accessible via .name
+							; RETURNS:        Reference to new SelectorChoice object
+							;---------">
+                <Param name="dataIn" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SelectorChoice.abbrev" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The (single) abbreviation to display for this choice. Note that if there were
+							;                 multiple abbreviations given as an array, this will just be the first one.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SelectorChoice.dataObject" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The full data object for this choice.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SelectorChoice.matchesAbbrev" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether the given string matches any of the abbreviations
+							;                 (including those not displayed) for this choice.
+							; PARAMETERS:
+							;  stringToTest (I,REQ) - String to check against this choice.
+							; RETURNS:        true if it matches, false otherwise.
+							;---------">
+                <Param name="stringToTest" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SelectorChoice.name" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The display name for the given choice.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: SelectorChoice -->
+
+
+        <!-- *gdb START CLASS: SelectorGui -->
+        <KeyWord name="SelectorGui" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new SelectorGui instance.
+							; PARAMETERS:
+							;  choices        (I,REQ) - Array of SelectorChoice objects containing the information we need
+							;                           (name and abbreviation) to show a list of choices to the user.
+							;  sectionHeaders (I,OPT) - Array of headers that divide up sections of choices. The index on
+							;                           a given title should match that of the first choice that should be
+							;                           under that header.
+							;  overrideFields (I,OPT) - Array of labels (column headers in the TL file) for the data
+							;                           that should get override fields.
+							;  minColumnWidth (I,OPT) - Column width will never be smaller than the longest choice,
+							;                           but will also not get smaller than this value. Defaults to 0.
+							; RETURNS:        Reference to new SelectorGui object
+							;---------">
+                <Param name="choices" />
+                <Param name="sectionHeaders := &quot;&quot;" />
+                <Param name="overrideFields := &quot;&quot;" />
+                <Param name="minColumnWidth := 0" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SelectorGui.getChoiceQuery" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the user's query, as entered in the bottom-left field.
+							; RETURNS:        The user's entered text.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SelectorGui.getOverrideData" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the override data from column-specific fields.
+							; RETURNS:        Associative array of override data. Format:
+							;                  {columnLabel: value}
+							; NOTES:          If default override data was passed in, only values that have corresponding
+							;                 fields visible will be included here. Put another way, if you passed in values
+							;                 for columns which are not visible, those will be ignored and won't appear here.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SelectorGui.show" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Shows the popup, waits for it to be closed, and saves user inputs.
+							; PARAMETERS:
+							;  windowTitle         (I,REQ) - Title to show for the window.
+							;  defaultOverrideData (I,OPT) - Associative array of default data, format:
+							;                                 {columnLabel: value}
+							;                                NOTE: only values for columns that we're showing fields for
+							;                                will respect this value - if there's no field shown for the
+							;                                column, this value is ignored and effectively dropped.
+							;---------">
+                <Param name="windowTitle" />
+                <Param name="defaultOverrideData := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: SelectorGui -->
 
         <KeyWord name="Send" func="no">
             <Overload retVal="">
@@ -4370,6 +5107,183 @@
         <KeyWord name="SysMenu"/>
         <KeyWord name="Tab"/>
         <KeyWord name="Tab2"/>
+
+        <!-- *gdb START CLASS: TableList -->
+        <KeyWord name="TableList" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new TableList instance.
+							; PARAMETERS:
+							;  filePath    (I,REQ) - Path to the file to read from. May be a partial path if
+							;                        FileLib.findConfigFilePath() can find the correct thing.
+							;  keyRowChars (I,OPT) - Array of characters and key names to keep separate, see class
+							;                        documentation for more info. If a row starts with one of the characters
+							;                        included here, that row will not appear in the main table. Instead, it
+							;                        will be available using the .keyRow[<keyName>] property. Note that the
+							;                        row is still split and indexed based on the model row. Format (where
+							;                        keyName is the string you'll use with .keyRow[<keyName>] to retrieve
+							;                        the row later:
+							;                        	keyRowChars[<char>] := keyName
+							; RETURNS:        Reference to new TableList object
+							;---------">
+                <Param name="filePath" />
+                <Param name="keyRowChars := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.addAutomaticFilter" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a filter that will apply to all TableList instances in this script, automatically.
+							; PARAMETERS:
+							;  filterColumn (I,REQ) - The column to filter on. We'll look at the value of each row in this column.
+							;  filterValue  (I,REQ) - The value to filter on. Rows with this value (or blank) in the filter
+							;                         column will pass and not be filtered out.
+							;---------">
+                <Param name="filterColumn" />
+                <Param name="filterValue" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.filterByColumn" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Remove all rows that fail the provided filter.
+							; PARAMETERS:
+							;  filterColumn (I,REQ) - The column to check
+							;  filterValue  (I,REQ) - The value to check. In order to pass the filter (so to NOT be removed),
+							;                         a row must either have this value, or a blank value, for the filterColumn.
+							; RETURNS:        This object (for chaining)
+							;---------">
+                <Param name="filterColumn" />
+                <Param name="filterValue" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.filterOutEmptyForColumn" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Remove all rows from the table that have a blank value in the provided column.
+							; PARAMETERS:
+							;  column (I,REQ) - The column to remove rows based on.
+							; RETURNS:        This object (for chaining)
+							;---------">
+                <Param name="column" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.getColumnByColumn" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get one column of values from the table, indexed by another column.
+							; PARAMETERS:
+							;  valueColumn      (I,REQ) - The column to get values from
+							;  indexColumn      (I,REQ) - The column to index by
+							;  tiebreakerColumn (I,OPT) - If multiple rows have the same value in indexColumn, this column
+							;                             will be used to break a tie. If a row has a blank value in this
+							;                             column, it will lose to a row that has a value in this column.
+							; RETURNS:        Indexed array of values. Format:
+							;                   outputValues[indexColumnValue] := valueColumnValue
+							; NOTES:          Since the value in the index column is the new subscript, it's possible there
+							;                 will be some overlap. In the event that we have multiple rows with the same
+							;                 value, the first one wins, except for the tiebreaker case (see tiebreakerColumn)
+							;---------">
+                <Param name="valueColumn" />
+                <Param name="indexColumn" />
+                <Param name="tiebreakerColumn := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.getRowsByColumn" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the rows in the table, indexed by a particular column.
+							; PARAMETERS:
+							;  indexColumn      (I,REQ) - The column to index rows by.
+							;  tiebreakerColumn (I,OPT) - If multiple rows have the same value in indexColumn, this column
+							;                             will be used to break a tie. If a row has a blank value in this
+							;                             column, it will lose to a row that has a value in this column.
+							; RETURNS:        Indexed array of rows. Format:
+							;                   outputRows[indexColumnValue] := row
+							; NOTES:          Since the value in the index column is the new subscript, it's possible there
+							;                 will be some overlap. In the event that we have multiple rows with the same
+							;                 value, the first one wins, except for the tiebreaker case (see tiebreakerColumn)
+							;---------">
+                <Param name="indexColumn" />
+                <Param name="tiebreakerColumn := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.getTable" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Retrieve the processed table from the file you just loaded.
+							; RETURNS:        Processed table. Format:
+							;                 	table[rowNum, column] := value
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.headers" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The section headers extracted from the file. Format, where rowNum matches the
+							;                 row number of the first row in this section:
+							;                   headers[rowNum] := value
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.keyRow" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The key row (that was excluded from the table, based on the constructor's
+							;                 keyRowChars parameter) that matches the given name. Format:
+							;                   row[column] := value
+							; PARAMETERS:
+							;  name (I,REQ) - The key name that was associated with the row that you want.
+							;---------">
+                <Param name="name" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.settings" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The settings extracted from the file. Format:
+							;                   settings[name] := value
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: TableList -->
+
+
+        <!-- *gdb START CLASS: TableListMod -->
+        <KeyWord name="TableListMod" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new TableListMod instance.
+							; PARAMETERS:
+							;  modActString (I,REQ) - String defining the mod. Format (explained in class documentation):
+							;                         	COLUMN.OPERATION(TEXT)
+							;  label        (I,REQ) - Label associated with this mod.
+							; RETURNS:        Reference to new TableListMod object
+							;---------">
+                <Param name="modString" />
+                <Param name="label" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableListMod.executeMod" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Perform the action described in this mod on the given row.
+							; PARAMETERS:
+							;  row (IO,REQ) - Associative array of column names => column values for a single row.
+							;                 Will be updated according to the action described in this mod.
+							;---------">
+                <Param name="ByRef row" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableListMod.label" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The label originally given for this mod action.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: TableListMod -->
+
         <KeyWord name="Tabstop"/>
         <KeyWord name="Tan" func="yes">
             <Overload retVal="">
@@ -4558,6 +5472,42 @@
         <KeyWord name="Vis"/>
         <KeyWord name="VisFirst"/>
         <KeyWord name="Visible"/>
+
+        <!-- *gdb START CLASS: VisualWindow -->
+        <KeyWord name="VisualWindow" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new VisualWindow object to interact with a window as it appears.
+							; PARAMETERS:
+							;  titleString  (I,REQ) - A title string describing the window this object should represent/affect.
+							;  snapDistance (I,OPT) - If the window should snap to the edges of the monitor when moved, set
+							;                         this to the distance (in pixels) at which the window should snap. Note
+							;                         that snapping must still separately be turned on (with .snapOn() function).
+							;                         Defaults to 0.
+							; RETURNS:        Reference to new VisualWindow instance
+							;---------">
+                <Param name="titleString" />
+                <Param name="snapDistance := 0" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.getActualPosition" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the actual position of the window (not the visual position).
+							; PARAMETERS:
+							;  x      (O,OPT) - X coordinate of window's top-left corner
+							;  y      (O,OPT) - Y coordinate of window's top-left corner
+							;  width  (O,OPT) - Width of window
+							;  height (O,OPT) - Height of window
+							;---------">
+                <Param name="ByRef x := &quot;&quot;" />
+                <Param name="ByRef y := &quot;&quot;" />
+                <Param name="ByRef width := &quot;&quot;" />
+                <Param name="ByRef height := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: VisualWindow -->
+
         <KeyWord name="Volume_Down"/>
         <KeyWord name="Volume_Mute"/>
         <KeyWord name="volume_Up"/>
@@ -4721,6 +5671,59 @@
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: WindowActions -->
+
+
+        <!-- *gdb START CLASS: WindowInfo -->
+        <KeyWord name="WindowInfo" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Creates a new instance of WindowInfo.
+							; PARAMETERS:
+							;  windowAry (I,REQ) - Array of identifying information about the window. Format:
+							;                         windowAry[&quot;NAME&quot;]  - The name of the window, for identification in code.
+							;                                  [&quot;EXE&quot;]   - The exe for the window
+							;                                  [&quot;CLASS&quot;] - The AHK class of the window
+							;                                  [&quot;TITLE&quot;] - The title of the window
+							;                      There are also a couple of special overrides available in the array:
+							;                         windowAry[&quot;EDGE_TYPE&quot;]
+							;                                      - The type of edges the window has (from
+							;                                        WindowInfo.EdgeStyle_* constants), which determines
+							;                                        whether the window is the size that it appears or if it
+							;                                        has invisible padding around it that needs to be taken
+							;                                        into account when resizing, etc.
+							;                                  [&quot;TITLE_STRING_MATCH_MODE_OVERRIDE&quot;]
+							;                                      - If the window has a specific title match mode that
+							;                                        needs to be used when locating it, this will return
+							;                                        that override.
+							;                                  [&quot;PRIORITY&quot;]
+							;                                      - If more than one WindowInfo instance matches a given
+							;                                        window, this can be used to break the tie.
+							;---------">
+                <Param name="windowAry" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowInfo.class" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    AHK class of the window
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowInfo.exe" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    EXE for the program
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowInfo.name" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Name of the window
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: WindowInfo -->
 
 
         <!-- *gdb START CLASS: WindowLib -->

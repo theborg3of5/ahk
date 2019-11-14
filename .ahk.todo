@@ -48,8 +48,6 @@
 				CommonHotkeys
 				Config
 				Hyperlinker
-			Not yet documented (or finished implementing/making use of, to be removed from commandFunctions)
-				Setters
 	Consider additional user-defined languages in Notepad++:
 		My todo lists - folding like python, but don't have all the weird highlighting (or single quote handling).
 		tl/tls files

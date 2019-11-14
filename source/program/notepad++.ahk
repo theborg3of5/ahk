@@ -249,7 +249,7 @@ class NotepadPlusPlus {
 		; Keyword line
 		if(line.startsWithAnyOf(this.ahkHeaderKeywords, matchedKeyword)) {
 			; Add length of keyword + however many spaces are after it.
-			numSpaces += matchedKeyword.length()
+			numSpaces += matchedKeyword.length() + 1 ; extra 1 for the colon
 			line := line.removeFromStart(matchedKeyword ":")
 			numSpaces += StringLib.countLeadingSpaces(line)
 			

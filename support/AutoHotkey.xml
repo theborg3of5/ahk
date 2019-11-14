@@ -3631,7 +3631,6 @@ Alphabet Notes:     # and { Seems broken, Possibly related to additionalWordChar
         <KeyWord name="{ScrollLock}"/>
         <KeyWord name="{Shift}"/>
         <KeyWord name="{ShiftDown}"/>
-		  
         <KeyWord name="{ShiftUp}"/>
         <KeyWord name="{Space}"/>
         <KeyWord name="{Tab}"/>

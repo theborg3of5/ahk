@@ -126,6 +126,29 @@ generateXMLForClasses(classInfos) {
 	
 	; Generate XML for each class
 	For className,classInfo in classInfos {
+		
+		; Add any inherited functions (only 1 layer deep) into the array of info for this class
+		For dotFunctionName,keywordTags in classInfo {
+			parentClassName := classInfo["PARENT_CLASS"]
+			
+			Debug.popup("className",className, "parentClassName",parentClassName, "dotFunctionName",dotFunctionName)
+			
+			if(parentClassName != "") {
+				
+				
+				For parentDotFunctionName,parentKeywordTags in classInfo[parentClassName] {
+					parentFunctionName := parentDotFunctionName.removeFromStart(".")
+					if(parentFunctionName = "__New")
+						Continue
+					if(classInfo.HasKey(parentFunctionName)) ; Child object should win
+						Continue
+					
+					classInfo[parentDotFunctionName] := parentKeywordTags
+				}
+			}
+			Break
+		}
+		
 		classXML := ""
 		
 		; Debug.popup("className",className, "classInfo",classInfo)
@@ -167,7 +190,7 @@ generateXMLForClasses(classInfos) {
 			classXML := classXML.appendPiece(functionXML, "`n")
 		}
 		
-		; Add an XML comment ot say we're ending a block
+		; Add an XML comment to say we're ending a block
 		endBlockComment := endBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
 		classXML := classXML.appendPiece(endBlockComment, "`n")
 		
@@ -235,9 +258,10 @@ getAutoCompleteInfoFromScript(path) {
 				isFunc := "yes" ; Always "yes" - allows me to type an open paren and get the popup of info.
 				
 				; Store function info with an index preceded by a dot - otherwise we run into conflicts with things like contains(), which is actually a function for the object in question.
-				classFunctions["." name] := {"NAME":name, "IS_FUNC":isFunc, "RETURNS":retValue, "DESCRIPTION":headerText, "PARAMS_ARY":paramsAry}
-				; if(name.contains("contains"))
-					; Debug.popup("classFunctions[name]",classFunctions[name])
+				classFunctions["." name] := {"NAME":name, "IS_FUNC":isFunc, "RETURNS":retValue, "DESCRIPTION":headerText, "PARAMS_ARY":paramsAry, "PARENT_CLASS":currParentClassName}
+				
+				; if(currParentClassName != "")
+					; Debug.popup("currClassName",currClassName, "name",name, "currParentClassName",currParentClassName)
 				
 				docLines := []
 				inBlock := false
@@ -268,90 +292,30 @@ getAutoCompleteInfoFromScript(path) {
 		if(line.startsWith("class ") && line.endsWith(" {")) {
 			; If there was a class open before, add a closing comment for it.
 			if(currClassName != "") {
-				; ; Save off all functions in this class to class XML
-				; For _,keywordTags in classFunctions { ; Should be looping in alphabetical order
-					; paramsAry := keywordTags["PARAMS_ARY"]
-					
-					; allParamsXML := ""
-					; if(!DataLib.isNullOrEmpty(paramsAry)) {
-						; For _,param in paramsAry {
-							; param := param.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
-							; paramXML := paramBaseXML.replaceTag("PARAM", param)
-							; allParamsXML := allParamsXML.appendPiece(paramXML, "`n")
-						; }
-						; allParamsXML := "`n" allParamsXML ; Newline before the whole params block
-					; }
-					
-					; keywordTags["PARAMS"] := allParamsXML
-					
-					
-					; functionXML := keywordBaseXML.replaceTags(keywordTags)
-					; classXML := classXML.appendPiece(functionXML, "`n")
-				; }
-				
-				; endBlockComment := endBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
-				; classXML := classXML.appendPiece(endBlockComment, "`n")
-				
 				; Save off all functions in this class to class object
 				if(!DataLib.isNullOrEmpty(classFunctions)) { ; Only add to allXML if we actually have documented functions to include
 					classInfos[currClassName] := classFunctions
-					; Debug.popup("currClassName1",currClassName)
 				}
 				
-				; ; Flush to classInfos and clear the class
-				; if(!DataLib.isNullOrEmpty(classFunctions)) ; Only add to allXML if we actually have documented functions to include
-					; allXML[currClassName] := classXML
-				
-				; classXML := ""
 				classFunctions := {}
 			}
 			
 			; Get new class name
 			currClassName := line.firstBetweenStrings("class ", " ") ; Break on space instead of end bracket so we don't end up including the "extends" bit for child classes.
-			
-			; ; Add an XML comment to say we're starting a block
-			; startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
-			; classXML .= startBlockComment
+			currParentClassName := ""
+			if(line.contains(" extends "))
+				currParentClassName := line.firstBetweenStrings(" extends ", " {")
 		}
 	}
 	
 	; If there was a class open at the end, finish it off.
 	if(currClassName != "") {
-		; ; Save off all functions in this class to class XML
-		; For _,keywordTags in classFunctions { ; Should be looping in alphabetical order
-			; paramsAry := keywordTags["PARAMS_ARY"]
-			
-			; allParamsXML := ""
-			; if(!DataLib.isNullOrEmpty(paramsAry)) {
-				; For _,param in paramsAry {
-					; param := param.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
-					; paramXML := paramBaseXML.replaceTag("PARAM", param)
-					; allParamsXML := allParamsXML.appendPiece(paramXML, "`n")
-				; }
-				; allParamsXML := "`n" allParamsXML ; Newline before the whole params block
-			; }
-			
-			; keywordTags["PARAMS"] := allParamsXML
-			
-			
-			; functionXML := keywordBaseXML.replaceTags(keywordTags)
-			; classXML := classXML.appendPiece(functionXML, "`n")
-		; }
-		
-		; endBlockComment := endBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
-		; classXML := classXML.appendPiece(endBlockComment, "`n")
-		
 		; Save off all functions in this class to class object
 		if(!DataLib.isNullOrEmpty(classFunctions)) { ; Only add to allXML if we actually have documented functions to include
 			classInfos[currClassName] := classFunctions
 			; Debug.popup("currClassName2",currClassName)
 		}
 		
-		; ; Flush to classInfos and clear the class
-		; if(!DataLib.isNullOrEmpty(classFunctions)) ; Only add to allXML if we actually have documented functions to include
-			; allXML[currClassName] := classXML
-		
-		; classXML := ""
 		classFunctions := {}
 	}
 	

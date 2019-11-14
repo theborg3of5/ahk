@@ -21,23 +21,23 @@ allXML := ""
 
 commonRoot := Config.path["AHK_SOURCE"] "\common"
 
-autoCompleteXMLs := {}
-autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\selector.ahk"))
-autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\static\debug.ahk"))
-autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\lib\clipboardLib.ahk"))
-autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\epicRecord.ahk"))
+classInfos := {}
+classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\selector.ahk"))
+classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\static\debug.ahk"))
+classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\lib\clipboardLib.ahk"))
+classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\epicRecord.ahk"))
 
-autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\duration.ahk"))
-autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\formatList.ahk"))
-autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\errorToast.ahk"))
+classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\duration.ahk"))
+classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\formatList.ahk"))
+classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\errorToast.ahk"))
 
-autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\base"))
-; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\class"))
-; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\lib"))
-; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\static"))
-; Debug.popup("autoCompleteXMLs",autoCompleteXMLs)
+classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\base"))
+; classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\class"))
+; classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\lib"))
+; classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\static"))
+; Debug.popup("classInfos",classInfos)
 
-; Debug.popup("autoCompleteXMLs[""StringBase""]",autoCompleteXMLs["StringBase"])
+autoCompleteXMLs := generateXMLForClasses(classInfos)
 
 autoCompleteFilePath := Config.path["AHK_SUPPORT"] "\AutoHotkey.xml"
 originalXML := FileRead(autoCompleteFilePath)
@@ -87,19 +87,18 @@ FileLib.replaceFileWithString(activeAutoCompleteFilePath, newXML)
 new Toast("Updated both versions of the auto-complete file").blockingOn().showMedium()
 ExitApp
 
-getAutoCompleteXMLForFolder(path) {
+getAutoCompleteInfoForFolder(path) {
 	classInfos := {}
-	
 	Loop, Files, %path%\*.ahk, RF ; Recursive, files (not directories)
 	{
 		classInfos.mergeFromObject(getAutoCompleteInfoFromScript(A_LoopFileLongPath))
 	}
-	
-	return generateXMLForClasses(classInfos)
+	return classInfos
 }
 
-getAutoCompleteXMLForScript(path) {
-	classInfos := getAutoCompleteInfoFromScript(path)
+getAutoCompleteXMLForFolder(path) {
+	classInfos := getAutoCompleteInfoForFolder(path)
+	
 	return generateXMLForClasses(classInfos)
 }
 	

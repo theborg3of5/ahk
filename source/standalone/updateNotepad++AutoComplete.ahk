@@ -88,18 +88,22 @@ new Toast("Updated both versions of the auto-complete file").blockingOn().showMe
 ExitApp
 
 getAutoCompleteXMLForFolder(path) {
-	autoCompleteXMLs := {}
+	classInfos := {}
 	
 	Loop, Files, %path%\*.ahk, RF ; Recursive, files (not directories)
 	{
-		autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(A_LoopFileLongPath))
+		classInfos.mergeFromObject(getAutoCompleteInfoFromScript(A_LoopFileLongPath))
 	}
 	
-	return autoCompleteXMLs
+	return generateXMLForClasses(classInfos)
 }
 
 getAutoCompleteXMLForScript(path) {
-	docSeparator := ";---------"
+	classInfos := getAutoCompleteInfoFromScript(path)
+	return generateXMLForClasses(classInfos)
+}
+	
+generateXMLForClasses(classInfos) {
 	startBlockCommentBaseXML := "
 		(
         <!-- *gdb START CLASS: <CLASS_NAME> -->
@@ -119,6 +123,61 @@ getAutoCompleteXMLForScript(path) {
 		(
                 <Param name=""<PARAM>"" />
 		)"
+	
+	allXML := {}
+	
+	; Generate XML for each class
+	For className,classInfo in classInfos {
+		classXML := ""
+		
+		; Debug.popup("className",className, "classInfo",classInfo)
+		
+		; Add an XML comment to say we're starting a block
+		startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
+		classXML .= startBlockComment
+		
+		; Debug.popup("className",className)
+		
+		For functionName,keywordTags in classInfo {
+			; Debug.popup("className",className, "functionName",functionName)
+			; Debug.popup("functionName",functionName, "keywordTags",keywordTags)
+			
+			paramsAry := keywordTags["PARAMS_ARY"]
+			
+			allParamsXML := ""
+			if(!DataLib.isNullOrEmpty(paramsAry)) {
+				For _,param in paramsAry {
+					param := param.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
+					paramXML := paramBaseXML.replaceTag("PARAM", param)
+					allParamsXML := allParamsXML.appendPiece(paramXML, "`n")
+				}
+				allParamsXML := "`n" allParamsXML ; Newline before the whole params block
+			}
+			
+			keywordTags["PARAMS"] := allParamsXML
+			
+			functionXML := keywordBaseXML.replaceTags(keywordTags)
+			classXML := classXML.appendPiece(functionXML, "`n")
+		}
+		
+		; Add an XML comment ot say we're ending a block
+		endBlockComment := endBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
+		classXML := classXML.appendPiece(endBlockComment, "`n")
+		
+		; Flush to allXML
+		allXML[className] := classXML
+		
+		; Debug.popup("className",className, "classXML",classXML)
+	}
+	
+	
+	
+	return allXML
+	
+}
+
+getAutoCompleteInfoFromScript(path) {
+	docSeparator := ";---------"
 	publicScopeStart  := "; #PUBLIC#"
 	privateScopeStart := "; #PRIVATE#"
 	debugScopeStart   := "; #DEBUG#"
@@ -133,7 +192,6 @@ getAutoCompleteXMLForScript(path) {
 	outOfScope := false
 	docLines := []
 	
-	allXML := {}
 	classXML := ""
 	currClassName := ""
 	
@@ -302,53 +360,9 @@ getAutoCompleteXMLForScript(path) {
 	
 	; Debug.popup("classInfos",classInfos)
 	
-	; Generate XML for each class
-	For className,classInfo in classInfos {
-		classXML := ""
-		
-		; Debug.popup("className",className, "classInfo",classInfo)
-		
-		; Add an XML comment to say we're starting a block
-		startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
-		classXML .= startBlockComment
-		
-		; Debug.popup("className",className)
-		
-		For functionName,keywordTags in classInfo {
-			; Debug.popup("className",className, "functionName",functionName)
-			; Debug.popup("functionName",functionName, "keywordTags",keywordTags)
-			
-			paramsAry := keywordTags["PARAMS_ARY"]
-			
-			allParamsXML := ""
-			if(!DataLib.isNullOrEmpty(paramsAry)) {
-				For _,param in paramsAry {
-					param := param.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
-					paramXML := paramBaseXML.replaceTag("PARAM", param)
-					allParamsXML := allParamsXML.appendPiece(paramXML, "`n")
-				}
-				allParamsXML := "`n" allParamsXML ; Newline before the whole params block
-			}
-			
-			keywordTags["PARAMS"] := allParamsXML
-			
-			functionXML := keywordBaseXML.replaceTags(keywordTags)
-			classXML := classXML.appendPiece(functionXML, "`n")
-		}
-		
-		; Add an XML comment ot say we're ending a block
-		endBlockComment := endBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
-		classXML := classXML.appendPiece(endBlockComment, "`n")
-		
-		; Flush to allXML
-		allXML[className] := classXML
-		
-		; Debug.popup("className",className, "classXML",classXML)
-	}
+	return classInfos
 	
 	
-	
-	return allXML
 }
 
 getNameFromDefLine(defLine) {

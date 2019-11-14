@@ -12,6 +12,48 @@
 			Debug popup (would need to set font if so)
 	Notepad++ auto-completion
 		Should we really keep support for documenting variables? Or if we're documenting it anyway, should we just only support properties?
+		Documentation updates needed:
+			Multiple functions with 1 header (won't work):
+				ActionObjectBase
+				StringBase
+				ActionObjectCodeSearch
+				ActionObjectEMC2
+				ActionObjectEpicStudio
+				ActionObjectHelpdesk
+				ActionObjectPath
+				Duration
+				FlexTable
+				FormatList
+				RelativeDate
+				Toast
+				VisualWindow
+				DataLib
+				GuiLib
+				StringLib
+				WindowLib
+				CommonHotkeys
+				Config
+			Undocumented public properties:
+				ActionObjectCodeSearch
+				ActionObjectEMC2
+				ActionObjectEpicStudio
+				ActionObjectHelpdesk
+				ActionObjectPath
+				Duration
+				FormatList
+				MousePosition
+				Selector
+				TableList
+				TableListMod
+				VisualWindow
+				WindowInfo
+				MicrosoftLib
+				CommonHotkeys
+				Config
+				Hyperlinker
+			Not yet documented (or finished implementing/making use of, to be removed from commandFunctions)
+				Enums
+				Setters
 	Consider additional user-defined languages in Notepad++:
 		My todo lists - folding like python, but don't have all the weird highlighting (or single quote handling).
 		tl/tls files

@@ -4,7 +4,7 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
-
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
 startBlockCommentBaseXML := "
 	(
@@ -44,10 +44,6 @@ For className,classXML in autoCompleteXMLs {
 	
 	xmlBefore := newXML.beforeString(startBlockComment)
 	xmlAfter := newXML.afterString(endBlockComment)
-	
-	; clipboard := xmlBefore "GDBHERE" xmlAfter
-	; Debug.popup("xmlBefore",xmlBefore)
-	
 	newXML := xmlBefore classXML xmlAfter
 }
 
@@ -63,7 +59,7 @@ if(!DataLib.isNullOrEmpty(failedClasses)) {
 	}
 	
 	ClipboardLib.set(failedBlocks)
-	new ErrorToast("Could not add some classes' XML to auto-complete file", "Could not find matching comment block for these classes: " failedNameList, "Comment blocks for all failed classes have been added to the clipboard - add them into the file in alphabetical order").blockingOn().showMedium()
+	new ErrorToast("Could not add some classes' XML to auto-complete file", "Could not find matching comment block for these classes: " failedNameList, "Comment blocks for all failed classes have been added to the clipboard - add them into the file in alphabetical order").blockingOn().showLong()
 }
 
 ; clipboard := newXML
@@ -84,12 +80,6 @@ getAutoCompleteInfoForFolder(path) {
 	return classInfos
 }
 
-getAutoCompleteXMLForFolder(path) {
-	classInfos := getAutoCompleteInfoForFolder(path)
-	
-	return generateXMLForClasses(classInfos)
-}
-	
 generateXMLForClasses(classInfos) {
 	; Debug.popup("classInfos",classInfos)
 	
@@ -280,7 +270,7 @@ getAutoCompleteInfoFromScript(path) {
 		}
 		
 		; Class declaration - anything below this should start with "<className>."
-		if(line.startsWith("class ") && line.endsWith(" {")) {
+		if(line.startsWith("class ") && line.endsWith(" {") && line != "class {") {
 			; If there was a class open before, add a closing comment for it.
 			if(currClassName != "") {
 				; Save off all functions in this class to class object

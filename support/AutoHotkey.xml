@@ -5709,6 +5709,13 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="WindowInfo.edgeType" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Edge type of the window (from WindowInfo.EdgeStyle_* constants)
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="WindowInfo.exe" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -5720,6 +5727,37 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Name of the window
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowInfo.priority" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Priority of this WindowInfo instance versus others. Can be used to break a tie
+							;                 if multiple instances match a given window.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowInfo.title" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Title of the window
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowInfo.titleString" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    A string that can be used with WinActive() and the like to identify this
+							;                 window.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowInfo.titleStringMatchModeOverride" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    If the window has a specific title match mode that needs to be used when
+							;                 locating it, this will return that override.
 							;---------">
             </Overload>
         </KeyWord>

@@ -23,7 +23,6 @@ commonRoot := Config.path["AHK_SOURCE"] "\common"
 
 autoCompleteXMLs := {}
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\selector.ahk"))
-autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\selector.ahk"))
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\static\debug.ahk"))
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\lib\clipboardLib.ahk"))
 autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForScript(commonRoot "\class\epicRecord.ahk"))
@@ -38,6 +37,8 @@ autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\base")
 ; autoCompleteXMLs.mergeFromObject(getAutoCompleteXMLForFolder(commonRoot "\static"))
 ; Debug.popup("autoCompleteXMLs",autoCompleteXMLs)
 
+; Debug.popup("autoCompleteXMLs[""StringBase""]",autoCompleteXMLs["StringBase"])
+
 autoCompleteFilePath := Config.path["AHK_SUPPORT"] "\AutoHotkey.xml"
 originalXML := FileRead(autoCompleteFilePath)
 
@@ -51,11 +52,13 @@ For className,classXML in autoCompleteXMLs {
 	if(!newXML.contains(startBlockComment) || !newXML.contains(endBlockComment)) {
 		failedClasses[className] := classXML
 		Continue
-		
 	}
 	
 	xmlBefore := newXML.beforeString(startBlockComment)
 	xmlAfter := newXML.afterString(endBlockComment)
+	
+	; clipboard := xmlBefore "GDBHERE" xmlAfter
+	; Debug.popup("xmlBefore",xmlBefore)
 	
 	newXML := xmlBefore classXML xmlAfter
 }
@@ -135,6 +138,7 @@ getAutoCompleteXMLForScript(path) {
 	currClassName := ""
 	
 	classFunctions := {} ; {functionName: keywordTags}
+	classInfos := {} ; {className: classFunctions}
 	
 	For lineNumber,line in linesAry {
 		line := line.withoutWhitespace()
@@ -202,51 +206,118 @@ getAutoCompleteXMLForScript(path) {
 		if(line.startsWith("class ") && line.endsWith(" {")) {
 			; If there was a class open before, add a closing comment for it.
 			if(currClassName != "") {
-				; Save off all functions in this class to class XML
-				For _,keywordTags in classFunctions { ; Should be looping in alphabetical order
-					paramsAry := keywordTags["PARAMS_ARY"]
+				; ; Save off all functions in this class to class XML
+				; For _,keywordTags in classFunctions { ; Should be looping in alphabetical order
+					; paramsAry := keywordTags["PARAMS_ARY"]
 					
-					allParamsXML := ""
-					if(!DataLib.isNullOrEmpty(paramsAry)) {
-						For _,param in paramsAry {
-							param := param.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
-							paramXML := paramBaseXML.replaceTag("PARAM", param)
-							allParamsXML := allParamsXML.appendPiece(paramXML, "`n")
-						}
-						allParamsXML := "`n" allParamsXML ; Newline before the whole params block
-					}
+					; allParamsXML := ""
+					; if(!DataLib.isNullOrEmpty(paramsAry)) {
+						; For _,param in paramsAry {
+							; param := param.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
+							; paramXML := paramBaseXML.replaceTag("PARAM", param)
+							; allParamsXML := allParamsXML.appendPiece(paramXML, "`n")
+						; }
+						; allParamsXML := "`n" allParamsXML ; Newline before the whole params block
+					; }
 					
-					keywordTags["PARAMS"] := allParamsXML
+					; keywordTags["PARAMS"] := allParamsXML
 					
 					
-					functionXML := keywordBaseXML.replaceTags(keywordTags)
-					classXML := classXML.appendPiece(functionXML, "`n")
+					; functionXML := keywordBaseXML.replaceTags(keywordTags)
+					; classXML := classXML.appendPiece(functionXML, "`n")
+				; }
+				
+				; endBlockComment := endBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
+				; classXML := classXML.appendPiece(endBlockComment, "`n")
+				
+				; Save off all functions in this class to class object
+				if(!DataLib.isNullOrEmpty(classFunctions)) { ; Only add to allXML if we actually have documented functions to include
+					classInfos[currClassName] := classFunctions
+					; Debug.popup("currClassName1",currClassName)
 				}
 				
-				endBlockComment := endBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
-				classXML := classXML.appendPiece(endBlockComment, "`n")
+				; ; Flush to classInfos and clear the class
+				; if(!DataLib.isNullOrEmpty(classFunctions)) ; Only add to allXML if we actually have documented functions to include
+					; allXML[currClassName] := classXML
 				
-				; Flush to allXML and clear the class
-				if(!DataLib.isNullOrEmpty(classFunctions)) ; Only add to allXML if we actually have documented functions to include
-					allXML[currClassName] := classXML
-				
-				classXML := ""
+				; classXML := ""
 				classFunctions := {}
 			}
 			
 			; Get new class name
 			currClassName := line.firstBetweenStrings("class ", " ") ; Break on space instead of end bracket so we don't end up including the "extends" bit for child classes.
 			
-			; Add an XML comment to say we're starting a block
-			startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
-			classXML .= startBlockComment
+			; ; Add an XML comment to say we're starting a block
+			; startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
+			; classXML .= startBlockComment
 		}
 	}
 	
 	; If there was a class open at the end, finish it off.
 	if(currClassName != "") {
-		; Save off all functions in this class to class XML
-		For _,keywordTags in classFunctions { ; Should be looping in alphabetical order
+		; ; Save off all functions in this class to class XML
+		; For _,keywordTags in classFunctions { ; Should be looping in alphabetical order
+			; paramsAry := keywordTags["PARAMS_ARY"]
+			
+			; allParamsXML := ""
+			; if(!DataLib.isNullOrEmpty(paramsAry)) {
+				; For _,param in paramsAry {
+					; param := param.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
+					; paramXML := paramBaseXML.replaceTag("PARAM", param)
+					; allParamsXML := allParamsXML.appendPiece(paramXML, "`n")
+				; }
+				; allParamsXML := "`n" allParamsXML ; Newline before the whole params block
+			; }
+			
+			; keywordTags["PARAMS"] := allParamsXML
+			
+			
+			; functionXML := keywordBaseXML.replaceTags(keywordTags)
+			; classXML := classXML.appendPiece(functionXML, "`n")
+		; }
+		
+		; endBlockComment := endBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
+		; classXML := classXML.appendPiece(endBlockComment, "`n")
+		
+		; Save off all functions in this class to class object
+		if(!DataLib.isNullOrEmpty(classFunctions)) { ; Only add to allXML if we actually have documented functions to include
+			classInfos[currClassName] := classFunctions
+			; Debug.popup("currClassName2",currClassName)
+		}
+		
+		; ; Flush to classInfos and clear the class
+		; if(!DataLib.isNullOrEmpty(classFunctions)) ; Only add to allXML if we actually have documented functions to include
+			; allXML[currClassName] := classXML
+		
+		; classXML := ""
+		classFunctions := {}
+	}
+	
+	; Get new class name
+	currClassName := line.firstBetweenStrings("class ", " ") ; Break on space instead of end bracket so we don't end up including the "extends" bit for child classes.
+	
+	; ; Add an XML comment to say we're starting a block
+	; startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
+	; classXML .= startBlockComment
+	
+	; Debug.popup("classInfos",classInfos)
+	
+	; Generate XML for each class
+	For className,classInfo in classInfos {
+		classXML := ""
+		
+		; Debug.popup("className",className, "classInfo",classInfo)
+		
+		; Add an XML comment to say we're starting a block
+		startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
+		classXML .= startBlockComment
+		
+		; Debug.popup("className",className)
+		
+		For functionName,keywordTags in classInfo {
+			; Debug.popup("className",className, "functionName",functionName)
+			; Debug.popup("functionName",functionName, "keywordTags",keywordTags)
+			
 			paramsAry := keywordTags["PARAMS_ARY"]
 			
 			allParamsXML := ""
@@ -261,21 +332,21 @@ getAutoCompleteXMLForScript(path) {
 			
 			keywordTags["PARAMS"] := allParamsXML
 			
-			
 			functionXML := keywordBaseXML.replaceTags(keywordTags)
 			classXML := classXML.appendPiece(functionXML, "`n")
 		}
 		
-		endBlockComment := endBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
+		; Add an XML comment ot say we're ending a block
+		endBlockComment := endBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
 		classXML := classXML.appendPiece(endBlockComment, "`n")
 		
-		; Flush to allXML and clear the class
-		if(!DataLib.isNullOrEmpty(classFunctions)) ; Only add to allXML if we actually have documented functions to include
-			allXML[currClassName] := classXML
+		; Flush to allXML
+		allXML[className] := classXML
 		
-		classXML := ""
-		classFunctions := {}
+		; Debug.popup("className",className, "classXML",classXML)
 	}
+	
+	
 	
 	return allXML
 }

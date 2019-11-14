@@ -1018,6 +1018,126 @@
                 <Param name="mitigationMessage := &quot;&quot;" />
             </Overload>
         </KeyWord>
+        <KeyWord name="ErrorToast.blockingOn" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Turn blocking on/off
+							; RETURNS:        this
+							; NOTES:          Blocking means that we'll sleep the calling script while the toast is showing
+							;                 on a timer, rather than setting a timer and allowing execution to continue.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ErrorToast.close" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Hide and destroy the GUI for this toast.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ErrorToast.ErrorToast" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new Toast object.
+							; PARAMETERS:
+							;  toastText      (I,OPT) - The text to show in the toast.
+							;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be
+							;                           found in .getStyles().
+							;---------">
+                <Param name="toastText := &quot;&quot;" />
+                <Param name="styleOverrides := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ErrorToast.hide" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Fade the toast out, but don't destroy it (use .close() instead if you're
+							;                 finished with the toast).
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ErrorToast.persistentOn" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Turn persistence on/off
+							; RETURNS:        this
+							; NOTES:          Persistence means that the toast will be hidden (rather than destroyed) when we
+							;                 finish showing it on a timer.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ErrorToast.setText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Change the text for the toast.
+							; PARAMETERS:
+							;  toastText (I,REQ) - The text to show in the toast.
+							; RETURNS:        this
+							; NOTES:          Will try to maintain the same position, but toast size will expand to fit text.
+							;---------">
+                <Param name="toastText" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ErrorToast.show" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Show this toast indefinitely, until it is hidden or closed.
+							; PARAMETERS:
+							;  x (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
+							;              Defaults to previous position (if set), then right edge of screen.
+							;  y (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
+							;              Defaults to previous position (if set), then bottom edge of screen.
+							; RETURNS:        this
+							;---------">
+                <Param name="x := &quot;&quot;" />
+                <Param name="y := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ErrorToast.showForSeconds" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Show the toast for a certain number of seconds, then hide or destroy it (based
+							;                 on whether it's marked as persistent).
+							; PARAMETERS:
+							;  numSeconds (I,REQ) - The number of seconds to show the toast for.
+							;  x          (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
+							;                       Defaults to previous position (if set), then right edge of screen.
+							;  y          (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
+							;                       Defaults to previous position (if set), then bottom edge of screen.
+							; RETURNS:        this
+							;---------">
+                <Param name="numSeconds" />
+                <Param name="x := &quot;&quot;" />
+                <Param name="y := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ErrorToast.showLong" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for .showForSeconds for a &quot;long&quot; toast (shown for 5 seconds) in
+							;                 the bottom-right corner of the screen.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ErrorToast.showMedium" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for .showForSeconds for a &quot;medium&quot; toast (shown for 2 seconds) in
+							;                 the bottom-right corner of the screen.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ErrorToast.showShort" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for .showForSeconds for a &quot;short&quot; toast (shown for 1 second) in
+							;                 the bottom-right corner of the screen.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
         <!-- *gdb END CLASS: ErrorToast -->
 
         <KeyWord name="Esc"/>
@@ -2228,6 +2348,23 @@
                 <Param name="relativeDate := &quot;&quot;" />
             </Overload>
         </KeyWord>
+        <KeyWord name="RelativeDate.Instant" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="RelativeDate.SendInFormat" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Send the relative date/time in a particular format.
+							; PARAMETERS:
+							;  format (I,REQ) - The format to send the date/time in, a la FormatTime().
+							;---------">
+                <Param name="format" />
+            </Overload>
+        </KeyWord>
         <!-- *gdb END CLASS: RelativeDate -->
 
 
@@ -3198,6 +3335,130 @@
         <KeyWord name="Tile"/>
         <KeyWord name="Time"/>
         <KeyWord name="Tip"/>
+
+        <!-- *gdb START CLASS: Toast -->
+        <KeyWord name="Toast" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new Toast object.
+							; PARAMETERS:
+							;  toastText      (I,OPT) - The text to show in the toast.
+							;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be
+							;                           found in .getStyles().
+							;---------">
+                <Param name="toastText := &quot;&quot;" />
+                <Param name="styleOverrides := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Toast.blockingOn" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Turn blocking on/off
+							; RETURNS:        this
+							; NOTES:          Blocking means that we'll sleep the calling script while the toast is showing
+							;                 on a timer, rather than setting a timer and allowing execution to continue.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Toast.close" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Hide and destroy the GUI for this toast.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Toast.hide" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Fade the toast out, but don't destroy it (use .close() instead if you're
+							;                 finished with the toast).
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Toast.persistentOn" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Turn persistence on/off
+							; RETURNS:        this
+							; NOTES:          Persistence means that the toast will be hidden (rather than destroyed) when we
+							;                 finish showing it on a timer.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Toast.setText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Change the text for the toast.
+							; PARAMETERS:
+							;  toastText (I,REQ) - The text to show in the toast.
+							; RETURNS:        this
+							; NOTES:          Will try to maintain the same position, but toast size will expand to fit text.
+							;---------">
+                <Param name="toastText" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Toast.show" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Show this toast indefinitely, until it is hidden or closed.
+							; PARAMETERS:
+							;  x (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
+							;              Defaults to previous position (if set), then right edge of screen.
+							;  y (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
+							;              Defaults to previous position (if set), then bottom edge of screen.
+							; RETURNS:        this
+							;---------">
+                <Param name="x := &quot;&quot;" />
+                <Param name="y := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Toast.showForSeconds" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Show the toast for a certain number of seconds, then hide or destroy it (based
+							;                 on whether it's marked as persistent).
+							; PARAMETERS:
+							;  numSeconds (I,REQ) - The number of seconds to show the toast for.
+							;  x          (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
+							;                       Defaults to previous position (if set), then right edge of screen.
+							;  y          (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
+							;                       Defaults to previous position (if set), then bottom edge of screen.
+							; RETURNS:        this
+							;---------">
+                <Param name="numSeconds" />
+                <Param name="x := &quot;&quot;" />
+                <Param name="y := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Toast.showLong" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for .showForSeconds for a &quot;long&quot; toast (shown for 5 seconds) in
+							;                 the bottom-right corner of the screen.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Toast.showMedium" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for .showForSeconds for a &quot;medium&quot; toast (shown for 2 seconds) in
+							;                 the bottom-right corner of the screen.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Toast.showShort" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for .showForSeconds for a &quot;short&quot; toast (shown for 1 second) in
+							;                 the bottom-right corner of the screen.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: Toast -->
+
         <KeyWord name="ToCodePage"/>
         <KeyWord name="ToggleCheck"/>
         <KeyWord name="ToggleEnable"/>

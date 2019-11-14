@@ -10,16 +10,11 @@
 		Use cases:
 			Debug toast
 			Debug popup (would need to set font if so)
-	Notepad++ and AHK
-		Look into auto-completion in Notepad++ for AHK
-			In general for the language
-				C:\Program Files\Notepad++\autoCompletion\AutoHotkey.xml
-			Generating from script files
-				Should we really keep support for documenting variables? Or if we're documenting it anyway, should we just only support properties?
-				Do we want to try and handle inheritance? That is, pull in info from the base class (which we'll need to make sure we process first) when we find the "extends" keyword?
-		Consider additional user-defined languages:
-			My todo lists - folding like python, but don't have all the weird highlighting (or single quote handling).
-			tl/tls files
+	Notepad++ auto-completion
+		Should we really keep support for documenting variables? Or if we're documenting it anyway, should we just only support properties?
+	Consider additional user-defined languages in Notepad++:
+		My todo lists - folding like python, but don't have all the weird highlighting (or single quote handling).
+		tl/tls files
 	Should we move getParamsListFromDefinitionLine() and splitVarList() from NotepadPlusPlus class to somewhere in common?
 		Maybe just move all AHK language stuff into a new (static?) class?
 		splitVarList might even be a more general thing for StringLib - splitting on commas, but respecting quotes/parens.

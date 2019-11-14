@@ -27,6 +27,7 @@ classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\dura
 classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\formatList.ahk"))
 classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\errorToast.ahk"))
 classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\relativeDate.ahk"))
+classInfos.mergeFromObject(getAutoCompleteInfoFromScript(commonRoot "\class\toast.ahk"))
 
 classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\base"))
 ; classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\class"))
@@ -129,18 +130,18 @@ generateXMLForClasses(classInfos) {
 		
 		; Add any inherited functions (only 1 layer deep) into the array of info for this class
 		For dotFunctionName,keywordTags in classInfo {
-			parentClassName := classInfo["PARENT_CLASS"]
+			parentClassName := keywordTags["PARENT_CLASS"]
 			
-			Debug.popup("className",className, "parentClassName",parentClassName, "dotFunctionName",dotFunctionName)
 			
 			if(parentClassName != "") {
+				; Debug.popup("className",className, "parentClassName",parentClassName, "dotFunctionName",dotFunctionName, "keywordTags",keywordTags, "classInfos[parentClassName]",classInfos[parentClassName])
 				
-				
-				For parentDotFunctionName,parentKeywordTags in classInfo[parentClassName] {
-					parentFunctionName := parentDotFunctionName.removeFromStart(".")
-					if(parentFunctionName = "__New")
-						Continue
-					if(classInfo.HasKey(parentFunctionName)) ; Child object should win
+				For parentDotFunctionName,parentKeywordTags in classInfos[parentClassName] {
+					; Debug.popup("parentClassName",parentClassName, "parentDotFunctionName",parentDotFunctionName, "parentKeywordTags",parentKeywordTags)
+					
+					if(parentDotFunctionName = ".__New")
+						parentDotFunctionName := "." className
+					if(classInfo.HasKey(parentDotFunctionName)) ; Child object should win
 						Continue
 					
 					classInfo[parentDotFunctionName] := parentKeywordTags

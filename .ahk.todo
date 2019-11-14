@@ -36,7 +36,9 @@
 			Config                     1											1
 			Hyperlinker						-											1
 	Consider additional user-defined languages in Notepad++:
-		My todo lists - folding like python, but don't have all the weird highlighting (or single quote handling).
+		My todo lists
+			Folding like python (hierarchical on every indent)
+			Headers
 		tl/tls files
 			Special characters
 				;  - Ignore (comment line)

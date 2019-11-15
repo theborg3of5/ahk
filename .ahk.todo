@@ -21,11 +21,7 @@
 			VisualWindow               1											1
 			WindowInfo						-											1
 			
-			DataLib                    1											-
-			GuiLib                     1											-
 			MicrosoftLib					-											1
-			StringLib                  1											-
-			WindowLib                  1											-
 			
 			CommonHotkeys              1											1
 			Config                     1											1

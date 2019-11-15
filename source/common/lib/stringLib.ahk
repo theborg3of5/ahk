@@ -37,17 +37,29 @@ class StringLib {
 	}
 	
 	;---------
-	; DESCRIPTION:    Get the specified number of spaces/tabs/dots.
+	; DESCRIPTION:    Get the specified number of spaces.
 	; PARAMETERS:
-	;  numToGet (I,REQ) - How many of the relevant character to return.
-	; RETURNS:        As many spaces/dots as requested.
+	;  numToGet (I,REQ) - How many spaces to return.
+	; RETURNS:        As many spaces as requested.
 	;---------
 	getSpaces(numToGet) {
 		return StringLib.duplicate(A_Space, numToGet)
 	}
+	;---------
+	; DESCRIPTION:    Get the specified number of tabs.
+	; PARAMETERS:
+	;  numToGet (I,REQ) - How many tabs to return.
+	; RETURNS:        As many tabs as requested.
+	;---------
 	getTabs(numToGet) {
 		return StringLib.duplicate(A_Tab, numToGet)
 	}
+	;---------
+	; DESCRIPTION:    Get the specified number of dots.
+	; PARAMETERS:
+	;  numToGet (I,REQ) - How many dots to return.
+	; RETURNS:        As many dots as requested.
+	;---------
 	getDots(numToGet) {
 		return StringLib.duplicate(".", numToGet)
 	}

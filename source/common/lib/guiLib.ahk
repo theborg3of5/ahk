@@ -19,12 +19,16 @@ class GuiLib {
 	}
 	
 	;---------
-	; DESCRIPTION:    Apply/clear a title format (heavy weight, underline) for the next set of
-	;                 controls being added to the gui.
+	; DESCRIPTION:    Apply a title format (heavy weight, underline) for the next set of controls
+	;                 being added to the gui.
 	;---------
 	applyTitleFormat() {
 		Gui, Font, w600 underline ; Heavier weight (not quite bold), underline.
 	}
+	;---------
+	; DESCRIPTION:    Clear a title format (heavy weight, underline) for the next set of controls
+	;                 being added to the gui.
+	;---------
 	clearTitleFormat() {
 		Gui, Font, norm
 	}
@@ -55,12 +59,10 @@ class GuiLib {
 	}
 	
 	;---------
-	; DESCRIPTION:    Create/get the value of a global which can be used with a control, to
-	;                 reference that control (with GuiControl) or get the value of the control
-	;                 (with .getDynamicGlobal) later.
+	; DESCRIPTION:    Create a global to assign to a control so we can reference the control (with
+	;                 GuiControl, or get the value with .getDynamicGlobal) dynamically.
 	; PARAMETERS:
-	;  varName (I,REQ) - The name of the global variable to create/get the value of.
-	; RETURNS:        getDynamicGlobal: the value in the specified global.
+	;  varName (I,REQ) - The name of the global variable to create.
 	; NOTES:          This basically exists to let us hide the static/global requirement for
 	;                 variables used by gui controls - as long as the global is only referenced
 	;                 via indirection, it won't be treated as a local variable in other functions.
@@ -69,6 +71,16 @@ class GuiLib {
 		global
 		%varName% := ""
 	}
+	;---------
+	; DESCRIPTION:    Get the value of a control using the dynamic global (created with
+	;                 .createDynamicGlobal) that's assigned to it.
+	; PARAMETERS:
+	;  varName (I,REQ) - The name of the global variable to get the value of.
+	; RETURNS:        The value in the specified global (aka the value of the control).
+	; NOTES:          This basically exists to let us hide the static/global requirement for
+	;                 variables used by gui controls - as long as the global is only referenced
+	;                 via indirection, it won't be treated as a local variable in other functions.
+	;---------
 	getDynamicGlobal(varName) {
 		global
 		local value := %varName%

@@ -70,18 +70,26 @@ class WindowLib {
 	}
 	
 	;---------
-	; DESCRIPTION:    Check whether a window has a particular style or extended style
+	; DESCRIPTION:    Check whether a window has a particular style.
 	; PARAMETERS:
-	;  style       (I,REQ) - The style/extended style to check for.
+	;  style       (I,REQ) - The style to check for.
 	;  titleString (I,OPT) - Title string that identifies your chosen window.
 	;                        Defaults to the active window ("A").
-	; RETURNS:        true if the window has the given style/extended style, false otherwise.
+	; RETURNS:        true/false
 	;---------
 	hasStyle(style, titleString := "A") {
 		return DataLib.bitFieldHasFlag(WinGet("Style", titleString), style)
 	}
-	hasExStyle(style, titleString := "A") {
-		return DataLib.bitFieldHasFlag(WinGet("ExStyle", titleString), style)
+	;---------
+	; DESCRIPTION:    Check whether a window has a particular extended style.
+	; PARAMETERS:
+	;  extendedStyle (I,REQ) - The extended style to check for.
+	;  titleString   (I,OPT) - Title string that identifies your chosen window.
+	;                          Defaults to the active window ("A").
+	; RETURNS:        true/false
+	;---------
+	hasExStyle(extendedStyle, titleString := "A") {
+		return DataLib.bitFieldHasFlag(WinGet("ExStyle", titleString), extendedStyle)
 	}
 	
 	;---------

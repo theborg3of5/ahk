@@ -16,8 +16,6 @@ class DataLib {
 		
 		; Handling for strings
 		return (obj = "")
-		
-		; return !obj.count() ; Either count() is defined (empty object/array) and returns 0, or it's not (and we get "").
 	}
 	
 	;---------
@@ -91,14 +89,21 @@ class DataLib {
 	}
 	
 	;---------
-	; DESCRIPTION:    Convert the provided number into an integer/hex code.
+	; DESCRIPTION:    Convert the provided number into an integer.
 	; PARAMETERS:
 	;  num (I,REQ) - The number to convert
-	; RETURNS:        The number as an integer/in hex.
+	; RETURNS:        The number as an integer.
 	;---------
 	numToInteger(num) {
 		return Format("{1:i}", num)
 	}
+	
+	;---------
+	; DESCRIPTION:    Convert the provided number into a hex code.
+	; PARAMETERS:
+	;  num (I,REQ) - The number to convert
+	; RETURNS:        The number in hex format.
+	;---------
 	numToHex(num) {
 		return Format("{1:x}", num)
 	}
@@ -115,18 +120,32 @@ class DataLib {
 	}
 	
 	;---------
-	; DESCRIPTION:    Check for, add, and remove flags from a bitfield.
+	; DESCRIPTION:    Check for a particular flag in a bitfield.
 	; PARAMETERS:
-	;  bitField (I,REQ) - The bitfield to check or modify.
-	;  flag     (I,REQ) - The flag to check/add/remove.
-	; RETURNS:        The resulting bitfield.
+	;  bitField (I,REQ) - The bitfield to check within
+	;  flag     (I,REQ) - The flag to check
+	; RETURNS:        true/false
 	;---------
 	bitFieldHasFlag(bitField, flag) {
 		return (bitField & flag) > 0
 	}
+	;---------
+	; DESCRIPTION:    Add a flag to a bitfield.
+	; PARAMETERS:
+	;  bitField (I,REQ) - The bitfield to update
+	;  flag     (I,REQ) - The flag to add
+	; RETURNS:        The resulting bitfield
+	;---------
 	bitFieldAddFlag(bitField, flag) {
 		return (bitField | flag)
 	}
+	;---------
+	; DESCRIPTION:    Remove a flag from a bitfield.
+	; PARAMETERS:
+	;  bitField (I,REQ) - The bitfield to update
+	;  flag     (I,REQ) - The flag to remove
+	; RETURNS:        The resulting bitfield
+	;---------
 	bitFieldRemoveFlag(bitField, flag) {
 		return (bitField & ~flag)
 	}

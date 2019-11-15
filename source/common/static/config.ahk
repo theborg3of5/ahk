@@ -3,21 +3,54 @@
 class Config {
 	; #PUBLIC#
 	
-	; Constants for specific machines (matched to settings.ini).
+	; [[ Constants for specific machines (matched to settings.ini) ]] --=
+	;---------
+	; DESCRIPTION:    Work laptop machine
+	;---------
 	static Machine_WorkLaptop  := "WORK_LAPTOP"
+	;---------
+	; DESCRIPTION:    Work VDI machine
+	;---------
 	static Machine_WorkVDI     := "WORK_VDI"
-	static Machine_HomeLaptop  := "HOME_LAPTOP"
+	;---------
+	; DESCRIPTION:    Home desktop machine
+	;---------
 	static Machine_HomeDesktop := "HOME_DESKTOP"
+	;---------
+	; DESCRIPTION:    Home laptop machine
+	;---------
+	static Machine_HomeLaptop  := "HOME_LAPTOP"
+	; =--
 	
-	; Constants for contexts
+	; [[ Contexts ]] --=
+	;---------
+	; DESCRIPTION:    Work context
+	;---------
 	static Context_Work := "WORK"
+	;---------
+	; DESCRIPTION:    Home context
+	;---------
 	static Context_Home := "HOME"
+	; =--
 	
-	; Title string matching modes
+	; [[ Title string matching modes ]] --=
+	;---------
+	; DESCRIPTION:    Title can contain text anywhere
+	;---------
 	static TitleContains_Any   := "ANY"
+	;---------
+	; DESCRIPTION:    Title must start with text
+	;---------
 	static TitleContains_Start := "START"
+	;---------
+	; DESCRIPTION:    Title must end with text
+	;---------
 	static TitleContains_End   := "END"
+	;---------
+	; DESCRIPTION:    Title must exactly equal text
+	;---------
 	static TitleContains_Exact := "EXACT"
+	; =--
 	
 	
 	;---------
@@ -60,10 +93,7 @@ class Config {
 	}
 	
 	
-	; --------------------------------------------------
-	; -------------------- Privates --------------------
-	; --------------------------------------------------
-	
+	; [[ Privates ]] --=
 	;---------
 	; DESCRIPTION:    The private information from the privates file from initialization.
 	; PARAMETERS:
@@ -86,12 +116,11 @@ class Config {
 	replacePrivateTags(inputString) {
 		return inputString.replaceTags(this.privates)
 	}
+	; =--
 	
 	
-	; --------------------------------------------------
-	; -------------------- Settings --------------------
-	; --------------------------------------------------
-	
+	; [[ Settings ]] --=
+	; [[ Current machine checks ]] --=
 	;---------
 	; DESCRIPTION:    Which machine we're configured to act as, from the Machine_* constants in this class.
 	;---------
@@ -101,30 +130,40 @@ class Config {
 		}
 	}
 	;---------
-	; DESCRIPTION:    Convenience functions for checking whether we're currently a certain machine.
-	; RETURNS:        true if we are the machine in question, false otherwise.
+	; DESCRIPTION:    Work laptop machine.
 	;---------
 	machineIsWorkLaptop {
 		get {
 			return (this.machine = Config.Machine_WorkLaptop)
 		}
 	}
+	;---------
+	; DESCRIPTION:    Work VDI machine.
+	;---------
 	machineIsWorkVDI {
 		get {
 			return (this.machine = Config.Machine_WorkVDI)
 		}
 	}
+	;---------
+	; DESCRIPTION:    Home desktop machine.
+	;---------
 	machineIsHomeDesktop {
 		get {
 			return (this.machine = Config.Machine_HomeDesktop)
 		}
 	}
+	;---------
+	; DESCRIPTION:    Home laptop machine.
+	;---------
 	machineIsHomeLaptop {
 		get {
 			return (this.machine = Config.Machine_HomeLaptop)
 		}
 	}
+	; =--
 	
+	; [[ Current context checks ]] --=
 	;---------
 	; DESCRIPTION:    Which context we're configured to act as, from the Context_* constants in this class.
 	;---------
@@ -134,19 +173,22 @@ class Config {
 		}
 	}
 	;---------
-	; DESCRIPTION:    Convenience functions for checking whether we're currently in a certain context
-	; RETURNS:        true if we are in the context in question, false otherwise.
+	; DESCRIPTION:    Work context
 	;---------
 	contextIsWork {
 		get {
 			return (this.context = Config.Context_Work)
 		}
 	}
+	;---------
+	; DESCRIPTION:    Home context
+	;---------
 	contextIsHome {
 		get {
 			return (this.context = Config.Context_Home)
 		}
 	}
+	; =--
 	
 	;---------
 	; DESCRIPTION:    The name of the media player to use (from the NAME column in mediaPlayers.tls).
@@ -192,12 +234,10 @@ class Config {
 			this.runProgram(player)
 		}
 	}
+	; =--
 	
 	
-	; --------------------------------------------------
-	; --------------------- Windows --------------------
-	; --------------------------------------------------
-	
+	; [[ Windows ]] --=
 	;---------
 	; DESCRIPTION:    Return the WindowInfo instance corresponding to the provided name.
 	; PARAMETERS:
@@ -280,12 +320,10 @@ class Config {
 		winInfo := this.findWindowInfo(titleString)
 		return winInfo.name
 	}
+	; =--
 	
 	
-	; --------------------------------------------------
-	; ---------------------- Paths ---------------------
-	; --------------------------------------------------
-	
+	; [[ Paths ]] --=
 	;---------
 	; DESCRIPTION:    A particular path from this class.
 	; PARAMETERS:
@@ -308,12 +346,10 @@ class Config {
 	replacePathTags(inputPath) {
 		return inputPath.replaceTags(this.paths)
 	}
+	; =--
 	
 	
-	; --------------------------------------------------
-	; -------------------- Programs --------------------
-	; --------------------------------------------------
-	
+	; [[ Programs ]] --=
 	;---------
 	; DESCRIPTION:    Activate the window matching the specified name, running it if it doesn't yet exist.
 	; PARAMETERS:
@@ -345,12 +381,10 @@ class Config {
 		
 		RunLib.runAsUser(path, args)
 	}
+	; =--
 	
 	
-	; --------------------------------------------------
-	; ---------------------- Games ---------------------
-	; --------------------------------------------------
-	
+	; [[ Games ]] --=
 	;---------
 	; DESCRIPTION:    Check whether the specified window is a game (as identified in the games file passed in).
 	; PARAMETERS:
@@ -368,6 +402,7 @@ class Config {
 		
 		return false
 	}
+	; =--
 	
 	
 	; #PRIVATE#

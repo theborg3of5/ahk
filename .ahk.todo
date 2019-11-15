@@ -21,8 +21,6 @@
 			Toast                      1											-
 			VisualWindow               1											1
 			WindowInfo						-											1
-			
-			Config                     1											1
 	Consider additional user-defined languages in Notepad++:
 		My todo lists
 			Folding like python (hierarchical on every indent)

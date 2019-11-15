@@ -1445,11 +1445,31 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="Config.Context_Home" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Home context
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.Context_Work" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Work context
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.contextIsHome" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Home context
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="Config.contextIsWork" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Convenience functions for checking whether we're currently in a certain context
-							; RETURNS:        true if we are in the context in question, false otherwise.
+							; DESCRIPTION:    Work context
 							;---------">
             </Overload>
         </KeyWord>
@@ -1538,11 +1558,59 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="Config.Machine_HomeDesktop" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Home desktop machine
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.Machine_HomeLaptop" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Home laptop machine
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.Machine_WorkLaptop" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Work laptop machine
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.Machine_WorkVDI" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Work VDI machine
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.machineIsHomeDesktop" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Home desktop machine.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.machineIsHomeLaptop" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Home laptop machine.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="Config.machineIsWorkLaptop" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Convenience functions for checking whether we're currently a certain machine.
-							; RETURNS:        true if we are the machine in question, false otherwise.
+							; DESCRIPTION:    Work laptop machine.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.machineIsWorkVDI" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Work VDI machine.
 							;---------">
             </Overload>
         </KeyWord>
@@ -1612,6 +1680,34 @@
 							;---------">
                 <Param name="name" />
                 <Param name="args := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.TitleContains_Any" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Title can contain text anywhere
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.TitleContains_End" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Title must end with text
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.TitleContains_Exact" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Title must exactly equal text
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.TitleContains_Start" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Title must start with text
+							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="Config.windowInfo" func="yes">

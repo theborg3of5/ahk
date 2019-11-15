@@ -10,11 +10,6 @@
 	Notepad++ auto-completion
 		Documentation updates needed:
 			Class								Multiple functions, 1 header		Undocumented public properties
-			ActionObjectCodeSearch     1                                1
-			ActionObjectEMC2           1                                1
-			ActionObjectEpicStudio     1                                1
-			ActionObjectHelpdesk       1                                1
-			ActionObjectPath           1                                1
 			Duration                   1                                1
 			FlexTable                  1											-
 			FormatList						-											1

@@ -14,7 +14,10 @@
 class ActionObjectHelpdesk extends ActionObjectBase {
 	; #PUBLIC#
 	
-	id := "" ; ID of the helpdesk request
+	;---------
+	; DESCRIPTION:    Helpdesk request ID.
+	;---------
+	id := ""
 	
 	;---------
 	; DESCRIPTION:    Create a new reference to a helpdesk request.

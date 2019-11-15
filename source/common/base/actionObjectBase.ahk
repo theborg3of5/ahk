@@ -32,7 +32,7 @@ class ActionObjectBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Put a link to the the object on the clipboard.
+	; DESCRIPTION:    Put a link to the object on the clipboard.
 	;---------
 	copyLink() {
 		this.doCopyLink(this.getLink())
@@ -121,7 +121,7 @@ class ActionObjectBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Put the provided link to the the object on the clipboard.
+	; DESCRIPTION:    Put the provided link to the object on the clipboard.
 	;  link (I,REQ) - Link to copy.
 	;---------
 	doCopyLink(link) {

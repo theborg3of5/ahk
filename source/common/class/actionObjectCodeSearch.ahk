@@ -16,11 +16,23 @@
 class ActionObjectCodeSearch extends ActionObjectBase {
 	; #PUBLIC#
 	
-	static LocationType_Server := "SERVER" ; Server code location, including tag if applicable
-	static LocationType_Client := "CLIENT" ; Client filename
+	;---------
+	; DESCRIPTION:    Server code location, including tag if applicable
+	;---------
+	static LocationType_Server := "SERVER"
+	;---------
+	; DESCRIPTION:    Client filename
+	;---------
+	static LocationType_Client := "CLIENT"
 	
-	location     := "" ; Code location to work with
-	locationType := "" ; Which type of code, server or client (from LocationType_* constants)
+	;---------
+	; DESCRIPTION:    Code location to work with
+	;---------
+	location     := ""
+	;---------
+	; DESCRIPTION:    Which type of code, server or client (from LocationType_* constants)
+	;---------
+	locationType := ""
 	
 	;---------
 	; DESCRIPTION:    Create a new reference to a CodeSearch object.
@@ -41,8 +53,6 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 	;---------
 	; DESCRIPTION:    Get a link in CodeSearch to the code location.
 	; RETURNS:        Link to CodeSearch for the code location.
-	; NOTES:          There's no web vs. edit version for this, so here's a generic tag that the
-	;                 others redirect to.
 	;---------
 	getLink() {
 		if(this.locationType = ActionObjectCodeSearch.LocationType_Server) {

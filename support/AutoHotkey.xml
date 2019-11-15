@@ -43,7 +43,7 @@
         <KeyWord name="ActionObjectBase.copyLink" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Put a link to the the object on the clipboard.
+							; DESCRIPTION:    Put a link to the object on the clipboard.
 							;---------">
             </Overload>
         </KeyWord>
@@ -73,18 +73,16 @@
         <KeyWord name="ActionObjectBase.getLinkEdit" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get the edit link for the object.
-							; RETURNS:        Link to the edit version of the object.
-							; NOTES:          Should be overridden by child class.
+							; DESCRIPTION:    Get an edit link for the object. This just calls .getLink() unless it's
+							;                 overridden by the child class.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectBase.getLinkWeb" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get the web link for the object.
-							; RETURNS:        Link to the web version of the object.
-							; NOTES:          Should be overridden by child class.
+							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
+							;                 overridden by the child class.
 							;---------">
             </Overload>
         </KeyWord>
@@ -156,7 +154,7 @@
         <KeyWord name="ActionObjectCodeSearch.copyLink" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Put a link to the the object on the clipboard.
+							; DESCRIPTION:    Put a link to the object on the clipboard.
 							;---------">
             </Overload>
         </KeyWord>
@@ -179,26 +177,22 @@
 							;---------
 							; DESCRIPTION:    Get a link in CodeSearch to the code location.
 							; RETURNS:        Link to CodeSearch for the code location.
-							; NOTES:          There's no web vs. edit version for this, so here's a generic tag that the
-							;                 others redirect to.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.getLinkEdit" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get the edit link for the object.
-							; RETURNS:        Link to the edit version of the object.
-							; NOTES:          Should be overridden by child class.
+							; DESCRIPTION:    Get an edit link for the object. This just calls .getLink() unless it's
+							;                 overridden by the child class.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.getLinkWeb" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get the web link for the object.
-							; RETURNS:        Link to the web version of the object.
-							; NOTES:          Should be overridden by child class.
+							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
+							;                 overridden by the child class.
 							;---------">
             </Overload>
         </KeyWord>
@@ -229,6 +223,34 @@
 							;                 specifically in web mode.
 							;---------">
                 <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.location" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Code location to work with
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.locationType" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Which type of code, server or client (from LocationType_* constants)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.LocationType_Client" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Client filename
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.LocationType_Server" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Server code location, including tag if applicable
+							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.open" func="yes">
@@ -274,7 +296,7 @@
         <KeyWord name="ActionObjectEMC2.copyLink" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Put a link to the the object on the clipboard.
+							; DESCRIPTION:    Put a link to the object on the clipboard.
 							;---------">
             </Overload>
         </KeyWord>
@@ -304,19 +326,30 @@
         <KeyWord name="ActionObjectEMC2.getLinkEdit" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get the edit link for the object.
-							; RETURNS:        Link to the edit version of the object.
-							; NOTES:          Should be overridden by child class.
+							; DESCRIPTION:    Get an edit link to the object.
+							; RETURNS:        Link to the object that opens it in EMC2.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.getLinkWeb" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get a link to the EMC2 object.
-							; RETURNS:        Link to the object:
-							;                    Web: link to either emc2summary or Nova/Sherlock (depending on the INI)
-							;                    Edit: link to open it in EMC2.
+							; DESCRIPTION:    Get a web link to the object.
+							; RETURNS:        Link to either emc2summary or Nova/Sherlock (depending on the INI)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.id" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    ID of the object
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.ini" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    INI for the object, from EMC2 subtypes in actionObject.tl
 							;---------">
             </Overload>
         </KeyWord>
@@ -378,11 +411,18 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectEMC2.postProcess" func="yes">
-            <Overload retVal="" descr="
+        <KeyWord name="ActionObjectEMC2.standardEMC2String" func="yes">
+            <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Do some additional processing on the different bits of info about the object.
-							; SIDE EFFECTS:   Can update this.ini and this.title.
+							; DESCRIPTION:    The &quot;standard&quot; EMC2 object string
+							; RETURNS:        <INI> <ID> - <TITLE>
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.title" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Title for the EMC2 object
 							;---------">
             </Overload>
         </KeyWord>
@@ -406,7 +446,7 @@
         <KeyWord name="ActionObjectEpicStudio.copyLink" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Put a link to the the object on the clipboard.
+							; DESCRIPTION:    Put a link to the object on the clipboard.
 							;---------">
             </Overload>
         </KeyWord>
@@ -424,32 +464,56 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.descriptor" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Reference to object
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.descriptorType" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Type of object (from DescriptorType_* constants)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.DescriptorType_DLG" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    DLG, for opening in EpicStudio
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.DescriptorType_Routine" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Server code location, including tag is applicable
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.getLink" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Get a link to the object (server code location or DLG) referenced by
 							;                 descriptor in EpicStudio.
 							; RETURNS:        Link to EpicStudio for the code location/DLG.
-							; NOTES:          There's no web vs. edit version for this, so here's a generic tag that the
-							;                 others redirect to.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.getLinkEdit" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get the edit link for the object.
-							; RETURNS:        Link to the edit version of the object.
-							; NOTES:          Should be overridden by child class.
+							; DESCRIPTION:    Get an edit link for the object. This just calls .getLink() unless it's
+							;                 overridden by the child class.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.getLinkWeb" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get the web link for the object.
-							; RETURNS:        Link to the web version of the object.
-							; NOTES:          Should be overridden by child class.
+							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
+							;                 overridden by the child class.
 							;---------">
             </Overload>
         </KeyWord>
@@ -520,7 +584,7 @@
         <KeyWord name="ActionObjectHelpdesk.copyLink" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Put a link to the the object on the clipboard.
+							; DESCRIPTION:    Put a link to the object on the clipboard.
 							;---------">
             </Overload>
         </KeyWord>
@@ -543,26 +607,29 @@
 							;---------
 							; DESCRIPTION:    Get a link to the helpdesk request.
 							; RETURNS:        Link to the helpdesk request.
-							; NOTES:          There's no web vs. edit version for this, so here's a generic tag that the
-							;                 others redirect to.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.getLinkEdit" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get the edit link for the object.
-							; RETURNS:        Link to the edit version of the object.
-							; NOTES:          Should be overridden by child class.
+							; DESCRIPTION:    Get an edit link for the object. This just calls .getLink() unless it's
+							;                 overridden by the child class.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.getLinkWeb" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get the web link for the object.
-							; RETURNS:        Link to the web version of the object.
-							; NOTES:          Should be overridden by child class.
+							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
+							;                 overridden by the child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.id" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Helpdesk request ID.
 							;---------">
             </Overload>
         </KeyWord>
@@ -636,7 +703,7 @@
         <KeyWord name="ActionObjectPath.copyLink" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Put a link to the the object on the clipboard.
+							; DESCRIPTION:    Put a link to the object on the clipboard.
 							;---------">
             </Overload>
         </KeyWord>
@@ -670,26 +737,22 @@
 							;---------
 							; DESCRIPTION:    Get a link to the path (that is, the path itself).
 							; RETURNS:        The path
-							; NOTES:          Web and edit functions do the same thing here - there is no difference between
-							;                 the two.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.getLinkEdit" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get the edit link for the object.
-							; RETURNS:        Link to the edit version of the object.
-							; NOTES:          Should be overridden by child class.
+							; DESCRIPTION:    Get an edit link for the object. This just calls .getLink() unless it's
+							;                 overridden by the child class.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.getLinkWeb" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get the web link for the object.
-							; RETURNS:        Link to the web version of the object.
-							; NOTES:          Should be overridden by child class.
+							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
+							;                 overridden by the child class.
 							;---------">
             </Overload>
         </KeyWord>
@@ -726,8 +789,6 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Open the path, doing a safety check for existence if it's a local file path.
-							; NOTES:          There's no web vs. edit version for this, so here's a generic tag that the
-							;                 others redirect to.
 							;---------">
             </Overload>
         </KeyWord>
@@ -742,6 +803,34 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Open the object, specifically in web mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.path" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The path itself.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.pathType" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The type of path, from PathType_*.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.PathType_FilePath" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Local file path
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.PathType_URL" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    URL
 							;---------">
             </Overload>
         </KeyWord>

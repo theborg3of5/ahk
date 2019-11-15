@@ -17,11 +17,23 @@
 class ActionObjectEpicStudio extends ActionObjectBase {
 	; #PUBLIC#
 	
-	static DescriptorType_Routine := "ROUTINE" ; Server code location, including tag if applicable
-	static DescriptorType_DLG     := "DLG"     ; DLG, for opening in EpicStudio
+	;---------
+	; DESCRIPTION:    Server code location, including tag is applicable
+	;---------
+	static DescriptorType_Routine := "ROUTINE"
+	;---------
+	; DESCRIPTION:    DLG, for opening in EpicStudio
+	;---------
+	static DescriptorType_DLG     := "DLG"
 	
-	descriptor     := "" ; Reference to object
-	descriptorType := "" ; Type of object (from DescriptorType_* constants)
+	;---------
+	; DESCRIPTION:    Reference to object
+	;---------
+	descriptor     := ""
+	;---------
+	; DESCRIPTION:    Type of object (from DescriptorType_* constants)
+	;---------
+	descriptorType := ""
 	
 	;---------
 	; DESCRIPTION:    Create a new reference to a server code object.
@@ -45,8 +57,6 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 	; DESCRIPTION:    Get a link to the object (server code location or DLG) referenced by
 	;                 descriptor in EpicStudio.
 	; RETURNS:        Link to EpicStudio for the code location/DLG.
-	; NOTES:          There's no web vs. edit version for this, so here's a generic tag that the
-	;                 others redirect to.
 	;---------
 	getLink() {
 		if(this.descriptorType = ActionObjectEpicStudio.DescriptorType_Routine) {

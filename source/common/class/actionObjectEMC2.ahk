@@ -21,9 +21,18 @@
 class ActionObjectEMC2 extends ActionObjectBase {
 	; #PUBLIC#
 	
-	id    := "" ; ID of the object
-	ini   := "" ; INI for the object, from EMC2 subtypes in actionObject.tl
-	title := "" ; Title for the EMC2 object
+	;---------
+	; DESCRIPTION:    ID of the object
+	;---------
+	id    := ""
+	;---------
+	; DESCRIPTION:    INI for the object, from EMC2 subtypes in actionObject.tl
+	;---------
+	ini   := ""
+	;---------
+	; DESCRIPTION:    Title for the EMC2 object
+	;---------
+	title := ""
 	
 	;---------
 	; DESCRIPTION:    The "standard" EMC2 object string

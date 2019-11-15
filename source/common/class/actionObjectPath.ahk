@@ -17,11 +17,23 @@
 class ActionObjectPath extends ActionObjectBase {
 	; #PUBLIC#
 	
-	static PathType_FilePath := "FILEPATH" ; Local file path
+	;---------
+	; DESCRIPTION:    Local file path
+	;---------
+	static PathType_FilePath := "FILEPATH"
+	;---------
+	; DESCRIPTION:    URL
+	;---------
 	static PathType_URL      := "URL"
 	
-	path     := "" ; The path itself.
-	pathType := "" ; Type of path, from PathType_* constants.
+	;---------
+	; DESCRIPTION:    The path itself.
+	;---------
+	path     := ""
+	;---------
+	; DESCRIPTION:    The type of path, from PathType_*.
+	;---------
+	pathType := ""
 	
 	;---------
 	; DESCRIPTION:    Create a new reference to a path.

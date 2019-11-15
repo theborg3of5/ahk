@@ -1,6 +1,6 @@
 #Include ..\base\actionObjectBase.ahk
 
-/* Class for performing actions on a path. =--
+/* Class for performing actions on a path. --=
 	
 	Note that several other operations are also available from the base class (.copyLink*(), .linkSelectedText*()).
 	
@@ -12,7 +12,7 @@
 		ao := new ActionObjectPath("google.com", ActionObjectPath.PathType_URL) ; Specify path type if known to avoid prompting
 		ao.openEdit() ; Run URL
 	
-*/ ; --=
+*/ ; =--
 
 class ActionObjectPath extends ActionObjectBase {
 	; #PUBLIC#

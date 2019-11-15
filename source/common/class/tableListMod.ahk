@@ -1,4 +1,4 @@
-/* Class which represents a particular change (mod action) that should be made to a "row" array in a TableList. =--
+/* Class which represents a particular change (mod action) that should be made to a "row" array in a TableList. --=
 	
 	A mod action is defined by a string using a particular syntax:
 		COLUMN.OPERATION(TEXT)
@@ -44,7 +44,7 @@
 					Result
 						AAAz
 	
-*/ ; --=
+*/ ; =--
 
 class TableListMod {
 	; #PUBLIC#

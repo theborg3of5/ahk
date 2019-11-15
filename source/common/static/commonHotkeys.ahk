@@ -1,14 +1,14 @@
-/* Class for applying certain common hotkeys to a script, based on the type of script and certain flags. =--
+/* Class for applying certain common hotkeys to a script, based on the type of script and certain flags. --=
 	
 	Example usage:
 		CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 	
-*/ ; --=
+*/ ; =--
 
 class CommonHotkeys {
 	; #PUBLIC#
 	
-	; [[ Different "types" of scripts, which get different sets of hotkeys ]] =--
+	; [[ Different "types" of scripts, which get different sets of hotkeys ]] --=
 	;---------
 	; DESCRIPTION:    Main script
 	;---------
@@ -21,9 +21,9 @@ class CommonHotkeys {
 	; DESCRIPTION:    One-off scripts, not connected to main script
 	;---------
 	static ScriptType_Standalone := 3
-	; --=
+	; =--
 	
-	; [[ Wrappers for checking which "type" the script is ]] =--
+	; [[ Wrappers for checking which "type" the script is ]] --=
 	;---------
 	; DESCRIPTION:    Main script
 	;---------
@@ -48,7 +48,7 @@ class CommonHotkeys {
 			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Standalone)
 		}
 	}
-	; --=
+	; =--
 	
 	
 	;---------

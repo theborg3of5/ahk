@@ -1,6 +1,6 @@
 #Include ..\base\actionObjectBase.ahk
 
-/* Class for performing actions on a helpdesk request. =--
+/* Class for performing actions on a helpdesk request. --=
 	
 	Note that several other operations are also available from the base class (.copyLink*(), .linkSelectedText*()).
 	
@@ -9,7 +9,7 @@
 		MsgBox, ao.getLinkWeb()  ; Link to helpdesk request (equivalent to .getLinkEdit())
 		ao.openWeb()             ; Open web portal to request (equivalent to .openEdit())
 	
-*/ ; --=
+*/ ; =--
 
 class ActionObjectHelpdesk extends ActionObjectBase {
 	; #PUBLIC#

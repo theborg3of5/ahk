@@ -1,5 +1,5 @@
-/* Static class to show debug information about whatever it's given. =--
-	=-- Motivation
+/* Static class to show debug information about whatever it's given. --=
+	--= Motivation
 			This class is intended to show information in a slightly more structured and considerably deeper way than simply including the variable on a popup can do. It:
 				* Recurses into objects
 				* Supports label-object pairs in a single function call (variadic arguments instead of building an array yourself)
@@ -78,8 +78,8 @@
 				;		 Descriptive name of property 1: A
 				;		 Descriptive name of property 2: B
 		
-	--=
-*/ ; --=
+	=--
+*/ ; =--
 
 class Debug {
 	; #PUBLIC#

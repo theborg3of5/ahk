@@ -1,4 +1,4 @@
-/* Base class for type-specific ActionObject child classes. =--
+/* Base class for type-specific ActionObject child classes. --=
 	
 	This is intended to serve as a skeleton for those specific child classes, and should not be instantiated directly.
 	
@@ -7,7 +7,7 @@
 		Override the .getLink*() functions below for the types of links that the child supports (general/web/edit)
 		Override others as needed (for example, .open() could also use an existence check for local paths)
 	
-*/ ; --=
+*/ ; =--
 
 class ActionObjectBase {
 	; #PUBLIC#

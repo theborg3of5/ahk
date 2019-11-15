@@ -1,11 +1,11 @@
-/* Class for generating and interacting with a Selector popup. =--
+/* Class for generating and interacting with a Selector popup. --=
 	
 	Usage:
 		Create a new SelectorGui instance
 		Show popup (.show)
 		Get any needed info back (.getChoiceQuery, .getOverrideData)
 	
-*/ ; --=
+*/ ; =--
 
 class SelectorGui {
 	; #PUBLIC#

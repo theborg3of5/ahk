@@ -1,4 +1,4 @@
-/* Class that shows something like a toast notification. =--
+/* Class that shows something like a toast notification. --=
 	
 	Usage:
 		Create Toast instance
@@ -25,7 +25,7 @@
 		...
 		t.close() ; Toast is destroyed
 	
-*/ ; --=
+*/ ; =--
 
 class Toast {
 	; #PUBLIC#

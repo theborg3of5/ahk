@@ -1,6 +1,6 @@
 #Include ..\base\actionObjectBase.ahk
 
-/* Class for performing actions on EMC2 objects. =--
+/* Class for performing actions on EMC2 objects. --=
 	
 	Note that several other operations are also available from the base class (.copyLink*(), .linkSelectedText*()).
 	
@@ -16,7 +16,7 @@
 		ao := new ActionObjectEMC2(123456) ; ID without an INI, user will be prompted for the INI
 		ao.openEdit() ; Open object in EMC2
 	
-*/ ; --=
+*/ ; =--
 
 class ActionObjectEMC2 extends ActionObjectBase {
 	; #PUBLIC#

@@ -1,9 +1,9 @@
-/* GDB TODO =--
+/* GDB TODO --=
 	
 	Example Usage
 		GDB TODO
 	
-*/ ; --=
+*/ ; =--
 
 class ClassName {
 	; #PUBLIC#

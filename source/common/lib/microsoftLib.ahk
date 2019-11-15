@@ -3,7 +3,7 @@
 class MicrosoftLib {
 	; #PUBLIC#
 	
-	; [[ Window styles ( https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric ) ]] =--
+	; [[ Window styles ( https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric ) ]] --=
 	;---------
 	; DESCRIPTION:    The window has a caption (top bar + borders)
 	; NOTES:          WS_CAPTION
@@ -19,9 +19,9 @@ class MicrosoftLib {
 	; NOTES:          WS_VISIBLE
 	;---------
 	static Style_Visible := 0x10000000
-	; --=
+	; =--
 	
-	; [[ Extended window styles ]] =--
+	; [[ Extended window styles ]] --=
 	;---------
 	; DESCRIPTION:    Always on top
 	; NOTES:          WS_EX_TOPMOST
@@ -37,9 +37,9 @@ class MicrosoftLib {
 	; NOTES:          WS_EX_CLIENTEDGE
 	;---------
 	static ExStyle_SunkenBorder := 0x200
-	; --=
+	; =--
 	
-	; [[ System-level window measurements ( https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics ) ]] =--
+	; [[ System-level window measurements ( https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics ) ]] --=
 	;---------
 	; DESCRIPTION:    For non-3D windows (which should be most), the thickness of the left/right borders.
 	; NOTES:          Uses SM_CXBORDER
@@ -80,9 +80,9 @@ class MicrosoftLib {
 	; NOTES:          Uses SM_CYMAXIMIZED
 	;---------
 	static MaximizedWindowWidth := SysGet(62)
-	; --=
+	; =--
 	
-	; [[ Windows Messages ( https://autohotkey.com/docs/misc/SendMessageList.htm ) ]] =--
+	; [[ Windows Messages ( https://autohotkey.com/docs/misc/SendMessageList.htm ) ]] --=
 	;---------
 	; DESCRIPTION:    Doing something from the "Window" menu, or clicking one of the max/min/restore/close buttons
 	; NOTES:          WM_SYSCOMMAND
@@ -93,9 +93,9 @@ class MicrosoftLib {
 	; NOTES:          WM_HSCROLL
 	;---------
 	static Message_HorizScroll := 0x114
-	; --=
+	; =--
 	
-	; [[ Scroll Bar Requests/Messages ( https://docs.microsoft.com/en-us/windows/desktop/Controls/about-scroll-bars ) ]] =--
+	; [[ Scroll Bar Requests/Messages ( https://docs.microsoft.com/en-us/windows/desktop/Controls/about-scroll-bars ) ]] --=
 	;---------
 	; DESCRIPTION:    Scroll 1 unit to the left
 	; NOTES:          SB_LINELEFT
@@ -106,6 +106,6 @@ class MicrosoftLib {
 	; NOTES:          SB_LINERIGHT
 	;---------
 	static ScrollBar_Right := 1
-	; --=
+	; =--
 	; #END#
 }

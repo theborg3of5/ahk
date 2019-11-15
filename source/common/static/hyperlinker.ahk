@@ -3,7 +3,7 @@
 class Hyperlinker {
 	; #PUBLIC#
 	
-	; [[ Methods for setting link information for the selected text ]] =--
+	; [[ Methods for setting link information for the selected text ]] --=
 	;---------
 	; DESCRIPTION:    There's a popup with a field.
 	;---------
@@ -17,9 +17,9 @@ class Hyperlinker {
 	;                 string with <tags> for replacement.
 	;---------
 	static Method_TaggedString := "TAGGED_STRING"
-	; --=
+	; =--
 	
-	; [[ Methods for closing the linking popup (when applicable) ]] =--
+	; [[ Methods for closing the linking popup (when applicable) ]] --=
 	;---------
 	; DESCRIPTION:    Pressing enter.
 	;---------
@@ -28,7 +28,7 @@ class Hyperlinker {
 	; DESCRIPTION:    Pressing alt+A.
 	;---------
 	static CloseMethod_Alt_A := "ALT_A"
-	; --=
+	; =--
 	
 	;---------
 	; DESCRIPTION:    Initialize this class with the windows that support hyperlinking and their methods.

@@ -1,4 +1,4 @@
-/* Base class for strings to extend (technically for their base to extend), so we can add these functions directly to strings. =--
+/* Base class for strings to extend (technically for their base to extend), so we can add these functions directly to strings. --=
 	
 	Note: this does not allow you to manipulate the string itself - all functions return the result of the operation.
 		For example: appendPiece() returns the new string, so you must capture the return value instead of just calling it (i.e. str := str.appendPiece() instead of just str.appendPiece())
@@ -7,7 +7,7 @@
 		str := "abcd"
 		result := str.contains("b") ; result = 2
 	
-*/ ; --=
+*/ ; =--
 
 class StringBase {
 	; #PUBLIC#

@@ -1,4 +1,4 @@
-/* Non-static class for building custom debug strings for use by the DEBUG class. =--
+/* Non-static class for building custom debug strings for use by the DEBUG class. --=
 	
 	Motivation
 		This is a simple class that can be passed to classes that want the DEBUG class to show something different than just their class properties with those variable names.
@@ -27,7 +27,7 @@
 			
 			Note that indentation is handled by this class - each line will be shown one line deeper than the overall line (with the debugName) for the class.
 	
-*/ ; --=
+*/ ; =--
 
 class DebugBuilder {
 	; #PUBLIC#

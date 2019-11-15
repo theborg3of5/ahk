@@ -1,8 +1,8 @@
-/* Base class for relative date/time classes. =--
+/* Base class for relative date/time classes. --=
 	
 	Should not be used directly, only extended.
 	
-*/ ; --=
+*/ ; =--
 
 class RelativeDateTimeBase {
 	; #PUBLIC#

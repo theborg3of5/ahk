@@ -106,6 +106,9 @@
 class Selector {
 	; #PUBLIC#
 	
+	;---------
+	; DESCRIPTION:    The character to use for override field indices.
+	;---------
 	static Char_OverrideFieldIndex := ")"
 	
 	;---------

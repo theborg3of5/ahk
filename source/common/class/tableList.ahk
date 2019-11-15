@@ -207,17 +207,49 @@
 class TableList {
 	; #PUBLIC#
 	
-	; Special characters
+	; [[ Special characters ]] --=
+	;---------
+	; DESCRIPTION:    Ignore (comment) character
+	;---------
 	static Char_Ignore      := ";"
+	;---------
+	; DESCRIPTION:    Model character
+	;---------
 	static Char_Model       := "("
+	;---------
+	; DESCRIPTION:    Settings character
+	;---------
 	static Char_Setting     := "@"
-	static Char_Header      := "# " ; Must include the space
+	;---------
+	; DESCRIPTION:    Header character
+	; NOTES:          Must include the trailing space
+	;---------
+	static Char_Header      := "# "
+	;---------
+	; DESCRIPTION:    Placeholder character
+	;---------
 	static Char_Placeholder := "-"
+	;---------
+	; DESCRIPTION:    Multi-entry character
+	;---------
 	static Char_MultiEntry  := "|"
+	;---------
+	; DESCRIPTION:    Mod start character
+	;---------
 	static Char_Mod_Start       := "["
+	;---------
+	; DESCRIPTION:    Mod end character
+	;---------
 	static Char_Mod_End         := "]"
+	;---------
+	; DESCRIPTION:    Mod add label character
+	;---------
 	static Char_Mod_AddLabel    := "+"
+	;---------
+	; DESCRIPTION:    Mod remove label character
+	;---------
 	static Char_Mod_RemoveLabel := "-"
+	; =--
 	
 	;---------
 	; DESCRIPTION:    Create a new TableList instance.

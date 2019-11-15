@@ -42,30 +42,37 @@ class Toast {
 	}
 	
 	;---------
-	; DESCRIPTION:    Turn persistence on/off
+	; DESCRIPTION:    Make the toast persistent - that is, when we finish showing it on a timer it is hidden rather than destroyed.
 	; RETURNS:        this
-	; NOTES:          Persistence means that the toast will be hidden (rather than destroyed) when we
-	;                 finish showing it on a timer.
 	;---------
 	persistentOn() {
 		this.isPersistent := true
 		return this
 	}
+	;---------
+	; DESCRIPTION:    Make the toast non-persistent - when we finish showing it on a timer it will be destroyed.
+	; RETURNS:        this
+	;---------
 	persistentOff() {
 		this.isPersistent := false
 		return this
 	}
 	
 	;---------
-	; DESCRIPTION:    Turn blocking on/off
+	; DESCRIPTION:    Make this toast blocking - that is, we'll sleep the calling script while the
+	;                 toast is showing on a timer, rather than jobbing it off with a timer and
+	;                 allowing execution to continue.
 	; RETURNS:        this
-	; NOTES:          Blocking means that we'll sleep the calling script while the toast is showing
-	;                 on a timer, rather than setting a timer and allowing execution to continue.
 	;---------
 	blockingOn() {
 		this.isBlocking := true
 		return this
 	}
+	;---------
+	; DESCRIPTION:    Make this toast non-blocking - that is, we'll allow execution to continue by
+	;                 jobbing off the hide operation with a timer.
+	; RETURNS:        this
+	;---------
 	blockingOff() {
 		this.isBlocking := false
 		return this

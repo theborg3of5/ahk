@@ -3,9 +3,16 @@
 class WindowInfo {
 	; #PUBLIC#
 	
-	; Constants for the type of edge a window has (see VisualWindow class for what this means/how it's used).
-	static EdgeStyle_HasPadding := "HAS_PADDING" ; The window has the standard padding around the edges.
-	static EdgeStyle_NoPadding  := "NO_PADDING"  ; The window has no padding around the edges.
+	; [[ Window edge types (see VisualWindow class for what this means/how it's used). ]] --=
+	;---------
+	; DESCRIPTION:    The window has the standard padding around the edges.
+	;---------
+	static EdgeStyle_HasPadding := "HAS_PADDING"
+	;---------
+	; DESCRIPTION:    The window has no padding around the edges.
+	;---------
+	static EdgeStyle_NoPadding  := "NO_PADDING"
+	; =--
 	
 	;---------
 	; DESCRIPTION:    Creates a new instance of WindowInfo.

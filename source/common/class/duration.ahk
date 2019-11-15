@@ -13,15 +13,22 @@
 class Duration {
 	; #PUBLIC#
 	
-	; Supported characters
-	static Char_Hour   := "h" ; Hours
-	static Char_Minute := "m" ; Minutes
-	static Char_Second := "s" ; Seconds
+	; [[ Supported characters ]]
+	;---------
+	; DESCRIPTION:    Hours
+	;---------
+	static Char_Hour   := "h"
+	;---------
+	; DESCRIPTION:    Minutes
+	;---------
+	static Char_Minute := "m"
+	;---------
+	; DESCRIPTION:    Seconds
+	;---------
+	static Char_Second := "s"
 	
 	;---------
-	; DESCRIPTION:    Hours/minutes/seconds in this duration.
-	; NOTES:          These counts take into account the other units - for example, a Duration with
-	;                 1:01:00 will return "1" for minutes (not 61 minutes).
+	; DESCRIPTION:    Hours in this duration.
 	;---------
 	hours {
 		get {
@@ -29,12 +36,22 @@ class Duration {
 			return h
 		}
 	}
+	;---------
+	; DESCRIPTION:    Minutes in this duration.
+	; NOTES:          This count takes into account larger units - for example, a Duration with
+	;                 1:01:00 will return "1" for minutes (not 61 minutes).
+	;---------
 	minutes {
 		get {
 			this.getUnitBreakdown("", m)
 			return m
 		}
 	}
+	;---------
+	; DESCRIPTION:    Seconds in this duration.
+	; NOTES:          This count takes into account larger units - for example, a Duration with
+	;                 1:01:01 will return "1" for seconds (not 3661 seconds).
+	;---------
 	seconds {
 		get {
 			this.getUnitBreakdown("", "", s)
@@ -109,9 +126,9 @@ class Duration {
 	}
 	
 	;---------
-	; DESCRIPTION:    Add/remove a certain amount of time to/from this Duration.
+	; DESCRIPTION:    Add a certain amount of time to this Duration.
 	; PARAMETERS:
-	;  value    (I,REQ) - How much time to add or remove.
+	;  value    (I,REQ) - How much time to add.
 	;  unitChar (I,OPT) - Character (from Duration.Char_* constants) representing the unit you want
 	;                     to add. Defaults to "s" (seconds).
 	;---------
@@ -123,6 +140,13 @@ class Duration {
 		
 		; Debug.popup("Duration.addTime","Finish", "value",value, "unitChar",unitChar, "multiplier",this._units[unitChar], "Seconds added",value * this.getUnitMultiplier(unitChar), "this.durationTotalSeconds",this.durationTotalSeconds)
 	}
+	;---------
+	; DESCRIPTION:    Remove a certain amount of time from this Duration.
+	; PARAMETERS:
+	;  value    (I,REQ) - How much time to remove.
+	;  unitChar (I,OPT) - Character (from Duration.Char_* constants) representing the unit you want
+	;                     to remove. Defaults to "s" (seconds).
+	;---------
 	subTime(value, unitChar := "s") {
 		this.addTime(-value, unitChar)
 	}

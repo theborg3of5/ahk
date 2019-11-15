@@ -49,11 +49,6 @@
 class TableListMod {
 	; #PUBLIC#
 	
-	; Operation identifiers
-	static Operation_Replace    := "replaceWith"
-	static Operation_AddToStart := "addToStart"
-	static Operation_AddToEnd   := "addToEnd"
-	
 	;---------
 	; DESCRIPTION:    Create a new TableListMod instance.
 	; PARAMETERS:
@@ -106,6 +101,11 @@ class TableListMod {
 	
 	
 	; #PRIVATE#
+	
+	; Operation identifiers
+	static Operation_Replace    := "replaceWith"
+	static Operation_AddToStart := "addToStart"
+	static Operation_AddToEnd   := "addToEnd"
 	
 	column          := ""
 	operation       := ""

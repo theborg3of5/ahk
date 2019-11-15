@@ -10,13 +10,32 @@
 class FormatList {
 	; #PUBLIC#
 	
-	; Formats for reading/writing lists.
+	; [[ Formats for reading/writing lists ]] --=
+	;---------
+	; DESCRIPTION:    Array
+	;---------
 	static Format_Array         := "ARRAY"
+	;---------
+	; DESCRIPTION:    Space-delimited
+	;---------
 	static Format_Space         := "SPACE"
+	;---------
+	; DESCRIPTION:    Comma-delimited (no space)
+	;---------
 	static Format_Commas        := "COMMA"
+	;---------
+	; DESCRIPTION:    Comma-delimited (with spaces)
+	;---------
 	static Format_CommasSpaced  := "COMMA_SPACED"
+	;---------
+	; DESCRIPTION:    Newline-delimited
+	;---------
 	static Format_NewLines      := "NEWLINE"
+	;---------
+	; DESCRIPTION:    OneNote columns (double-newline delimited)
+	;---------
 	static Format_OneNoteColumn := "ONENOTE_COLUMN"
+	; =--
 	
 	;---------
 	; DESCRIPTION:    Create a new FormatList object.
@@ -71,7 +90,7 @@ class FormatList {
 	
 	; #PRIVATE#
 	
-	listAry := ""
+	listAry := "" ; Internal array representation of the list
 	
 	; Special, internal-only list formats
 	static Format_Ambiguous     := "AMBIGUOUS"      ; Can't tell what the format is, so we'll have to ask the user.

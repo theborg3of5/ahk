@@ -3,6 +3,8 @@
 	Example Usage
 		GDB TODO
 	
+	GDB TODO: Update auto-complete and syntax highlighting notepad++ definitions
+	
 */ ; =--
 
 class ClassName {

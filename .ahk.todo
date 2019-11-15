@@ -2,11 +2,12 @@
 	Update compileEpicStudioRegex to use toast blocking instead of a separate wait
 		Are there others that I missed, too?
 	Consider moving mergeObjects into ObjectBase - pretty much all callers would work fine with mergeFromObject(), and it's a little clearer what's winning then, too.
-	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
-		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
-		Use cases:
-			Debug toast
-			Debug popup (would need to set font if so)
+	Possibly have ActionObjectPath append a www. or http(s):// to the start of URLs before trying to launch them?
+		Probably do it in open(), where we also check whether a local path exists
+	Should we move getParamsListFromDefinitionLine() and splitVarList() from NotepadPlusPlus class to somewhere in common?
+		Maybe just move all AHK language stuff into a new (static?) class?
+		splitVarList might even be a more general thing for StringLib - splitting on commas, but respecting quotes/parens.
+	Clean up (and probably rename) updateNotepad++AutoComplete script
 	Consider additional user-defined languages in Notepad++:
 		My todo lists
 			Folding like python (hierarchical on every indent)
@@ -24,9 +25,15 @@
 				)  - Key (whole line)
 			Collapse on mods
 			Is there any fancy highlighting/lines we could add to match up with columns?
-	Should we move getParamsListFromDefinitionLine() and splitVarList() from NotepadPlusPlus class to somewhere in common?
-		Maybe just move all AHK language stuff into a new (static?) class?
-		splitVarList might even be a more general thing for StringLib - splitting on commas, but respecting quotes/parens.
+	Standardize how we format & structure classes
+		Capitalization (Public vs _private members, Public vs private functions)
+			Do we really need the _ for private members?
+				Benefit: allows the same name for a corresponding public property
+	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
+		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
+		Use cases:
+			Debug toast
+			Debug popup (would need to set font if so)
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:
@@ -34,10 +41,6 @@
 			Just having a function with the right name
 				Would require a mapping from window name to class where function lives
 			Have programs that need special handling call into the logic themselves and handle special logic
-	Standardize how we format & structure classes
-		Capitalization (Public vs _private members, Public vs private functions)
-			Do we really need the _ for private members?
-				Benefit: allows the same name for a corresponding public property
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
 		Possibly reconsider the 100-char limit - wouldn't wider make more sense?
 		Could take into account whether there would be only 1 small word moved down
@@ -59,28 +62,10 @@
 			MatterMost - half of left screen
 		Telegram - left monitor, top or bottom depending on machine
 		Pidgin window - top-right of left monitor
-	Possibly have ActionObjectPath append a www. or http(s):// to the start of URLs before trying to launch them?
-		Probably do it in open(), where we also check whether a local path exists
 	Figure out some central documentation method
 		Dynamically pull hotkeys for the currently focused program?
 		Hotkey to show window with all currently active hotkeys, divided up into current-program-specific and others
 			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
-	
-# Version Restrictions
-	VDI current AHK version: 1.1.28.00
-	1.1.29.00
-		.Count()
-			Remove special handling in array/object base classes
-	1.1.31.00
-		Switch()
-			PhoneLib.reduceToDigits()
-			Selector.updateSettings()
-			Likely others too - WindowActions and similar would probably benefit
-	1.1.31.01
-		Execute (X) hotstrings can support spaces
-			notepadPlusPlus
-			emc2
-			hotstrings
 	
 # TableList
 	Do we really need to make the "key" rows a dynamic thing? Couldn't we just move it directly into TableList instead?
@@ -113,4 +98,20 @@
 			iconTester.ahk - don't need a toast message up front, can be blank to start and we can just call switchToIconWithNum(0) instead of getting the text
 	Do we want to add negative x/y values to mean how far off of the right/bottom to be?
 		Would let us say, implement timer to be like the Windows media tile
+	
+# Version Restrictions
+	VDI current AHK version: 1.1.28.00
+	1.1.29.00
+		.Count()
+			Remove special handling in array/object base classes
+	1.1.31.00
+		Switch()
+			PhoneLib.reduceToDigits()
+			Selector.updateSettings()
+			Likely others too - WindowActions and similar would probably benefit
+	1.1.31.01
+		Execute (X) hotstrings can support spaces
+			notepadPlusPlus
+			emc2
+			hotstrings
 	

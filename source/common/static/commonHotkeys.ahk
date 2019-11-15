@@ -8,32 +8,47 @@
 class CommonHotkeys {
 	; #PUBLIC#
 	
-	; Different "types" of scripts, which get different sets of hotkeys
-	static ScriptType_Main       := 1 ; Main script
-	static ScriptType_Sub        := 2 ; Standalone scripts that the main script starts and that run alongside the main script
-	static ScriptType_Standalone := 3 ; One-off scripts, not connected to main script
-	
-	
+	; [[ Different "types" of scripts, which get different sets of hotkeys ]] =--
 	;---------
-	; DESCRIPTION:    Wrappers for checking which "type" the script is. These correspond to
-	;                 CommonHotkeys.ScriptType_*.
-	; RETURNS:        true if the script matches the type in question, false otherwise.
+	; DESCRIPTION:    Main script
+	;---------
+	static ScriptType_Main       := 1
+	;---------
+	; DESCRIPTION:    Standalone scripts that the main script starts and that run alongside the main script
+	;---------
+	static ScriptType_Sub        := 2
+	;---------
+	; DESCRIPTION:    One-off scripts, not connected to main script
+	;---------
+	static ScriptType_Standalone := 3
+	; --=
+	
+	; [[ Wrappers for checking which "type" the script is ]] =--
+	;---------
+	; DESCRIPTION:    Main script
 	;---------
 	IsMain {
 		get {
 			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Main)
 		}
 	}
+	;---------
+	; DESCRIPTION:    Standalone scripts that the main script starts and that run alongside the main script
+	;---------
 	IsSub {
 		get {
 			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Sub)
 		}
 	}
+	;---------
+	; DESCRIPTION:    One-off scripts, not connected to main script
+	;---------
 	IsStandalone {
 		get {
 			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Standalone)
 		}
 	}
+	; --=
 	
 	
 	;---------
@@ -49,20 +64,23 @@ class CommonHotkeys {
 	}
 	
 	;---------
-	; DESCRIPTION:    Turn on/off whether to prompt the user to confirm when exiting with the common exit hotkey (!+x).
+	; DESCRIPTION:    Prompt the user to confirm when exiting with the common exit hotkey (!+x).
 	;---------
 	ConfirmExitOn(message := "") {
 		CommonHotkeys._confirmExit := true
 		if(message != "")
 			CommonHotkeys._confirmExitMessage := message
 	}
+	;---------
+	; DESCRIPTION:    Do not prompt the user to confirm when exiting with the common exit hotkey (!+x).
+	;---------
 	ConfirmExitOff() {
 		CommonHotkeys._confirmExit := false
 	}
 	
 	;---------
-	; DESCRIPTION:    Turn on/off whether to ignore the common suspend hotkey (!#x) or not.
-	; SIDE EFFECTS:   Will actually turn the hotkey on or off.
+	; DESCRIPTION:    Ignore the common suspend hotkey (!#x).
+	; SIDE EFFECTS:   Actually turns the hotkey off.
 	;---------
 	NoSuspendOn() {
 		if(CommonHotkeys._noSuspend)
@@ -71,6 +89,10 @@ class CommonHotkeys {
 		CommonHotkeys._noSuspend := true
 		Hotkey, !#x, Off
 	}
+	;---------
+	; DESCRIPTION:    Respect the common suspend hotkey (!#x).
+	; SIDE EFFECTS:   Actually turns the hotkey on.
+	;---------
 	NoSuspendOff() {
 		if(!CommonHotkeys._noSuspend)
 			return

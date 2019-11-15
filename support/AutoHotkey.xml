@@ -1323,10 +1323,17 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="CommonHotkeys.ConfirmExitOff" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Do not prompt the user to confirm when exiting with the common exit hotkey (!+x).
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="CommonHotkeys.ConfirmExitOn" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Turn on/off whether to prompt the user to confirm when exiting with the common exit hotkey (!+x).
+							; DESCRIPTION:    Prompt the user to confirm when exiting with the common exit hotkey (!+x).
 							;---------">
                 <Param name="message := &quot;&quot;" />
             </Overload>
@@ -1345,17 +1352,58 @@
         <KeyWord name="CommonHotkeys.IsMain" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Wrappers for checking which &quot;type&quot; the script is. These correspond to
-							;                 CommonHotkeys.ScriptType_*.
-							; RETURNS:        true if the script matches the type in question, false otherwise.
+							; DESCRIPTION:    Main script
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="CommonHotkeys.IsStandalone" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    One-off scripts, not connected to main script
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="CommonHotkeys.IsSub" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Standalone scripts that the main script starts and that run alongside the main script
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="CommonHotkeys.NoSuspendOff" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Respect the common suspend hotkey (!#x).
+							; SIDE EFFECTS:   Actually turns the hotkey on.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="CommonHotkeys.NoSuspendOn" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Turn on/off whether to ignore the common suspend hotkey (!#x) or not.
-							; SIDE EFFECTS:   Will actually turn the hotkey on or off.
+							; DESCRIPTION:    Ignore the common suspend hotkey (!#x).
+							; SIDE EFFECTS:   Actually turns the hotkey off.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="CommonHotkeys.ScriptType_Main" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Main script
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="CommonHotkeys.ScriptType_Standalone" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    One-off scripts, not connected to main script
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="CommonHotkeys.ScriptType_Sub" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Standalone scripts that the main script starts and that run alongside the main script
 							;---------">
             </Overload>
         </KeyWord>
@@ -1739,14 +1787,40 @@
         <KeyWord name="CtrlUp"/>
 
         <!-- *gdb START CLASS: DataLib -->
+        <KeyWord name="DataLib.bitFieldAddFlag" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a flag to a bitfield.
+							; PARAMETERS:
+							;  bitField (I,REQ) - The bitfield to update
+							;  flag     (I,REQ) - The flag to add
+							; RETURNS:        The resulting bitfield
+							;---------">
+                <Param name="bitField" />
+                <Param name="flag" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="DataLib.bitFieldHasFlag" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Check for, add, and remove flags from a bitfield.
+							; DESCRIPTION:    Check for a particular flag in a bitfield.
 							; PARAMETERS:
-							;  bitField (I,REQ) - The bitfield to check or modify.
-							;  flag     (I,REQ) - The flag to check/add/remove.
-							; RETURNS:        The resulting bitfield.
+							;  bitField (I,REQ) - The bitfield to check within
+							;  flag     (I,REQ) - The flag to check
+							; RETURNS:        true/false
+							;---------">
+                <Param name="bitField" />
+                <Param name="flag" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DataLib.bitFieldRemoveFlag" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Remove a flag from a bitfield.
+							; PARAMETERS:
+							;  bitField (I,REQ) - The bitfield to update
+							;  flag     (I,REQ) - The flag to remove
+							; RETURNS:        The resulting bitfield
 							;---------">
                 <Param name="bitField" />
                 <Param name="flag" />
@@ -1871,13 +1945,24 @@
                 <Param name="overrides" />
             </Overload>
         </KeyWord>
+        <KeyWord name="DataLib.numToHex" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Convert the provided number into a hex code.
+							; PARAMETERS:
+							;  num (I,REQ) - The number to convert
+							; RETURNS:        The number in hex format.
+							;---------">
+                <Param name="num" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="DataLib.numToInteger" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Convert the provided number into an integer/hex code.
+							; DESCRIPTION:    Convert the provided number into an integer.
 							; PARAMETERS:
 							;  num (I,REQ) - The number to convert
-							; RETURNS:        The number as an integer/in hex.
+							; RETURNS:        The number as an integer.
 							;---------">
                 <Param name="num" />
             </Overload>
@@ -3048,20 +3133,41 @@
         <KeyWord name="GuiLib.applyTitleFormat" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Apply/clear a title format (heavy weight, underline) for the next set of
-							;                 controls being added to the gui.
+							; DESCRIPTION:    Apply a title format (heavy weight, underline) for the next set of controls
+							;                 being added to the gui.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="GuiLib.clearTitleFormat" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Clear a title format (heavy weight, underline) for the next set of controls
+							;                 being added to the gui.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="GuiLib.createDynamicGlobal" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Create/get the value of a global which can be used with a control, to
-							;                 reference that control (with GuiControl) or get the value of the control
-							;                 (with .getDynamicGlobal) later.
+							; DESCRIPTION:    Create a global to assign to a control so we can reference the control (with
+							;                 GuiControl, or get the value with .getDynamicGlobal) dynamically.
 							; PARAMETERS:
-							;  varName (I,REQ) - The name of the global variable to create/get the value of.
-							; RETURNS:        getDynamicGlobal: the value in the specified global.
+							;  varName (I,REQ) - The name of the global variable to create.
+							; NOTES:          This basically exists to let us hide the static/global requirement for
+							;                 variables used by gui controls - as long as the global is only referenced
+							;                 via indirection, it won't be treated as a local variable in other functions.
+							;---------">
+                <Param name="varName" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="GuiLib.getDynamicGlobal" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the value of a control using the dynamic global (created with
+							;                 .createDynamicGlobal) that's assigned to it.
+							; PARAMETERS:
+							;  varName (I,REQ) - The name of the global variable to get the value of.
+							; RETURNS:        The value in the specified global (aka the value of the control).
 							; NOTES:          This basically exists to let us hide the static/global requirement for
 							;                 variables used by gui controls - as long as the global is only referenced
 							;                 via indirection, it won't be treated as a local variable in other functions.
@@ -3163,6 +3269,20 @@
         <KeyWord name="Hwnd"/>
 
         <!-- *gdb START CLASS: Hyperlinker -->
+        <KeyWord name="Hyperlinker.CloseMethod_Alt_A" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Pressing alt+A.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Hyperlinker.CloseMethod_Enter" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Pressing enter.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="Hyperlinker.Init" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -3181,6 +3301,28 @@
 							;---------">
                 <Param name="path" />
                 <Param name="ByRef errorMessage := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Hyperlinker.Method_PopupField" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    There's a popup with a field.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Hyperlinker.Method_TaggedString" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    It's text-based, where we'll generate the &quot;link&quot; (typically markdown) from a
+							;                 string with <tags> for replacement.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Hyperlinker.Method_WebField" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    There's a web &quot;popup&quot;.
+							;---------">
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: Hyperlinker -->
@@ -3570,6 +3712,162 @@
                 <Param name="P5"/>
             </Overload>
         </KeyWord>
+
+        <!-- *gdb START CLASS: MicrosoftLib -->
+        <KeyWord name="MicrosoftLib.BorderX" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    For non-3D windows (which should be most), the thickness of the left/right borders.
+							; NOTES:          Uses SM_CXBORDER
+							;---------">
+                <Param name="5" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.BorderY" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    For non-3D windows (which should be most), the thickness of the top/bottom borders.
+							; NOTES:          Uses SM_CYBORDER
+							;---------">
+                <Param name="6" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.ExStyle_AlwaysOnTop" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Always on top
+							; NOTES:          WS_EX_TOPMOST
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.ExStyle_ClickThrough" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Clicking on the window actually clicks on whatever is below it.
+							; NOTES:          WS_EX_CLICKTHROUGH
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.ExStyle_SunkenBorder" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Controls: border with sunken edge (on by default for many control types)
+							; NOTES:          WS_EX_CLIENTEDGE
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.FrameX_CaptionNoSizable" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Thickness of the left/right borders for windows with a caption that are NOT sizable.
+							; NOTES:          Uses SM_CXFIXEDFRAME
+							;---------">
+                <Param name="7" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.FrameX_CaptionSizable" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Thickness of the left/right borders for windows with a caption that are sizable (aka SM_CXFRAME).
+							; NOTES:          Uses SM_CXSIZEFRAME
+							;---------">
+                <Param name="32" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.FrameY_CaptionNoSizable" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Thickness of the top/bottom borders for windows with a caption that are NOT sizable.
+							; NOTES:          Uses SM_CYFIXEDFRAME
+							;---------">
+                <Param name="8" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.FrameY_CaptionSizable" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Thickness of the top/bottom borders for windows with a caption that are sizable (aka SM_CYFRAME).
+							; NOTES:          Uses SM_CYSIZEFRAME
+							;---------">
+                <Param name="33" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.MaximizedWindowHeight" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Total width of a maximized window on the primary monitor. Includes any weird offsets.
+							; NOTES:          Uses SM_CXMAXIMIZED
+							;---------">
+                <Param name="61" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.MaximizedWindowWidth" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Total height of a maximized window on the primary monitor. Includes any weird offsets.
+							; NOTES:          Uses SM_CYMAXIMIZED
+							;---------">
+                <Param name="62" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.Message_HorizScroll" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Scroll event in the window's horizontal scroll bar
+							; NOTES:          WM_HSCROLL
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.Message_WindowMenu" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Doing something from the &quot;Window&quot; menu, or clicking one of the max/min/restore/close buttons
+							; NOTES:          WM_SYSCOMMAND
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.ScrollBar_Left" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Scroll 1 unit to the left
+							; NOTES:          SB_LINELEFT
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.ScrollBar_Right" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Scroll 1 unit to the right
+							; NOTES:          SB_LINERIGHT
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.Style_Caption" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The window has a caption (top bar + borders)
+							; NOTES:          WS_CAPTION
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.Style_Sizable" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Window can be sized.
+							; NOTES:          WS_SIZEBOX (aka WS_THICKFRAME)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.Style_Visible" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Window is visible
+							; NOTES:          WS_VISIBLE
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: MicrosoftLib -->
+
         <KeyWord name="Minimize"/>
         <KeyWord name="MinimizeBox"/>
         <KeyWord name="MinMax"/>
@@ -5507,13 +5805,35 @@
                 <Param name="escapeChar := &quot;\&quot;" />
             </Overload>
         </KeyWord>
+        <KeyWord name="StringLib.getDots" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the specified number of dots.
+							; PARAMETERS:
+							;  numToGet (I,REQ) - How many dots to return.
+							; RETURNS:        As many dots as requested.
+							;---------">
+                <Param name="numToGet" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="StringLib.getSpaces" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get the specified number of spaces/tabs/dots.
+							; DESCRIPTION:    Get the specified number of spaces.
 							; PARAMETERS:
-							;  numToGet (I,REQ) - How many of the relevant character to return.
-							; RETURNS:        As many spaces/dots as requested.
+							;  numToGet (I,REQ) - How many spaces to return.
+							; RETURNS:        As many spaces as requested.
+							;---------">
+                <Param name="numToGet" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringLib.getTabs" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the specified number of tabs.
+							; PARAMETERS:
+							;  numToGet (I,REQ) - How many tabs to return.
+							; RETURNS:        As many tabs as requested.
 							;---------">
                 <Param name="numToGet" />
             </Overload>
@@ -6419,15 +6739,29 @@
                 <Param name="titleString := &quot;A&quot;" />
             </Overload>
         </KeyWord>
+        <KeyWord name="WindowLib.hasExStyle" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether a window has a particular extended style.
+							; PARAMETERS:
+							;  extendedStyle (I,REQ) - The extended style to check for.
+							;  titleString   (I,OPT) - Title string that identifies your chosen window.
+							;                          Defaults to the active window (&quot;A&quot;).
+							; RETURNS:        true/false
+							;---------">
+                <Param name="extendedStyle" />
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="WindowLib.hasStyle" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Check whether a window has a particular style or extended style
+							; DESCRIPTION:    Check whether a window has a particular style.
 							; PARAMETERS:
-							;  style       (I,REQ) - The style/extended style to check for.
+							;  style       (I,REQ) - The style to check for.
 							;  titleString (I,OPT) - Title string that identifies your chosen window.
 							;                        Defaults to the active window (&quot;A&quot;).
-							; RETURNS:        true if the window has the given style/extended style, false otherwise.
+							; RETURNS:        true/false
 							;---------">
                 <Param name="style" />
                 <Param name="titleString := &quot;A&quot;" />

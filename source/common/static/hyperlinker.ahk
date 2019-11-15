@@ -3,14 +3,32 @@
 class Hyperlinker {
 	; #PUBLIC#
 	
-	; Methods for setting link information for the selected text.
+	; [[ Methods for setting link information for the selected text ]] =--
+	;---------
+	; DESCRIPTION:    There's a popup with a field.
+	;---------
 	static Method_PopupField   := "POPUP_FIELD"
+	;---------
+	; DESCRIPTION:    There's a web "popup".
+	;---------
 	static Method_WebField     := "WEB_FIELD"
+	;---------
+	; DESCRIPTION:    It's text-based, where we'll generate the "link" (typically markdown) from a
+	;                 string with <tags> for replacement.
+	;---------
 	static Method_TaggedString := "TAGGED_STRING"
+	; --=
 	
-	; Methods for closing the linking popup (when applicable)
+	; [[ Methods for closing the linking popup (when applicable) ]] =--
+	;---------
+	; DESCRIPTION:    Pressing enter.
+	;---------
 	static CloseMethod_Enter := "ENTER"
+	;---------
+	; DESCRIPTION:    Pressing alt+A.
+	;---------
 	static CloseMethod_Alt_A := "ALT_A"
+	; --=
 	
 	;---------
 	; DESCRIPTION:    Initialize this class with the windows that support hyperlinking and their methods.

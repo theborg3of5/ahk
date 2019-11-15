@@ -10,6 +10,7 @@
 	Notepad++ auto-completion
 		Documentation updates needed:
 			Class								Multiple functions, 1 header		Undocumented public properties
+			
 			Duration                   1                                1
 			FlexTable                  1											-
 			FormatList						-											1
@@ -21,9 +22,7 @@
 			VisualWindow               1											1
 			WindowInfo						-											1
 			
-			CommonHotkeys              1											1
 			Config                     1											1
-			Hyperlinker						-											1
 	Consider additional user-defined languages in Notepad++:
 		My todo lists
 			Folding like python (hierarchical on every indent)

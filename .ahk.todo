@@ -10,8 +10,6 @@
 	Notepad++ auto-completion
 		Documentation updates needed:
 			Class								Multiple functions, 1 header		Undocumented public properties
-			ActionObjectBase				1											-
-			StringBase                 1											-
 			ActionObjectCodeSearch     1                                1
 			ActionObjectEMC2           1                                1
 			ActionObjectEpicStudio     1                                1
@@ -27,11 +25,13 @@
 			Toast                      1											-
 			VisualWindow               1											1
 			WindowInfo						-											1
+			
 			DataLib                    1											-
 			GuiLib                     1											-
 			MicrosoftLib					-											1
 			StringLib                  1											-
 			WindowLib                  1											-
+			
 			CommonHotkeys              1											1
 			Config                     1											1
 			Hyperlinker						-											1

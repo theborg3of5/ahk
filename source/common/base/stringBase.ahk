@@ -21,15 +21,23 @@ class StringBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Wrapper functions for whether a string is alphabetic, numeric, or alphanumeric.
-	; RETURNS:        True if the string is, False otherwise.
+	; DESCRIPTION:    Wrapper for whether a string is alphabetic.
+	; RETURNS:        true/false
 	;---------
 	isAlpha() {
 		return IfIs(this, "Alpha")
 	}
+	;---------
+	; DESCRIPTION:    Wrapper function for whether a string is numeric.
+	; RETURNS:        true/false
+	;---------
 	isNum() {
 		return IfIs(this, "Number")
 	}
+	;---------
+	; DESCRIPTION:    Wrapper function for whether a string is alphanumeric.
+	; RETURNS:        true/false
+	;---------
 	isAlphaNum() {
 		return IfIs(this, "AlNum")
 	}
@@ -98,14 +106,20 @@ class StringBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Check whether this string starts/ends with the provided string.
+	; DESCRIPTION:    Check whether this string starts with the provided string.
 	; PARAMETERS:
-	;  checkString (I,REQ) - The string to check whether this string starts/ends with.
+	;  checkString (I,REQ) - The string to check whether this string starts with.
 	; RETURNS:        True if it does, False otherwise.
 	;---------
 	startsWith(checkString) {
 		return (this.sub(1, checkString.length()) = checkString)
 	}
+	;---------
+	; DESCRIPTION:    Check whether this string ends with the provided string.
+	; PARAMETERS:
+	;  checkString (I,REQ) - The string to check whether this string ends with.
+	; RETURNS:        True if it does, False otherwise.
+	;---------
 	endsWith(checkString) {
 		return (this.sub(this.length() - checkString.length() + 1) = checkString)
 	}
@@ -154,10 +168,12 @@ class StringBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Get the portion of this string before/after the given string.
+	; DESCRIPTION:    Get the portion of this string before the given string.
 	; PARAMETERS:
-	;  checkString   (I,REQ) - The string to return before/after. Will not be included in the result (unless there are multiple)
-	;  searchFromEnd (I,OPT) - Set to True to start searching from the end of the string instead of the start.
+	;  checkString   (I,REQ) - The string to return before, will not be included in the result
+	;                          (unless there are multiple).
+	;  searchFromEnd (I,OPT) - Set to True to start searching from the end of the string instead of
+	;                          the start.
 	; RETURNS:        The requested portion of this string.
 	;---------
 	beforeString(checkString, searchFromEnd := false) {
@@ -167,6 +183,15 @@ class StringBase {
 		
 		return this.sub(1, checkStringPos - 1)
 	}
+	;---------
+	; DESCRIPTION:    Get the portion of this string after the given string.
+	; PARAMETERS:
+	;  checkString   (I,REQ) - The string to return after, will not be included in the result
+	;                          (unless there are multiple).
+	;  searchFromEnd (I,OPT) - Set to True to start searching from the end of the string instead of
+	;                          the start.
+	; RETURNS:        The requested portion of this string.
+	;---------
 	afterString(checkString, searchFromEnd := false) {
 		checkStringPos := this.contains(checkString, searchFromEnd)
 		if(!checkStringPos)
@@ -202,9 +227,9 @@ class StringBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Remove a string (if it exists) from the start/end of this string.
+	; DESCRIPTION:    Remove a string (if it exists) from the start of this string.
 	; PARAMETERS:
-	;  toRemove (I,REQ) - The string to remove from the start or end of this string.
+	;  toRemove (I,REQ) - The string to remove from the start of this string.
 	; RETURNS:        The updated string, after removing toRemove.
 	;---------
 	removeFromStart(toRemove) {
@@ -213,6 +238,12 @@ class StringBase {
 		
 		return this.sub(toRemove.length() + 1)
 	}
+	;---------
+	; DESCRIPTION:    Remove a string (if it exists) from the end of this string.
+	; PARAMETERS:
+	;  toRemove (I,REQ) - The string to remove from the end of this string.
+	; RETURNS:        The updated string, after removing toRemove.
+	;---------
 	removeFromEnd(toRemove) {
 		if(!this.endsWith(toRemove))
 			return this
@@ -221,10 +252,10 @@ class StringBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Add a string to the beginning/end of this string, but only if that string is
-	;                 not already in place.
+	; DESCRIPTION:    Add a string to the beginning of this string, but only if that string is not
+	;                 already in place.
 	; PARAMETERS:
-	;  strToAdd (I,REQ) - String to add at the beginning/end.
+	;  strToAdd (I,REQ) - String to add at the beginning.
 	; RETURNS:        Updated string.
 	;---------
 	prependIfMissing(strToAdd) {
@@ -233,6 +264,13 @@ class StringBase {
 		
 		return this
 	}
+	;---------
+	; DESCRIPTION:    Add a string to the end of this string, but only if that string is not already
+	;                 in place.
+	; PARAMETERS:
+	;  strToAdd (I,REQ) - String to add at the end.
+	; RETURNS:        Updated string.
+	;---------
 	appendIfMissing(strToAdd) {
 		if(this.sub(- (strToAdd.length() - 1) ) != strToAdd)
 			return this strToAdd
@@ -274,8 +312,8 @@ class StringBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Wrappers for StrReplace - replace all (or one) instance(s) of the provided
-	;                 string, with the replacement text.
+	; DESCRIPTION:    Wrappers for StrReplace - replace all instances of the provided string, with
+	;                 the replacement text.
 	; PARAMETERS:
 	;  needle      (I,REQ) - String to replace
 	;  replaceWith (I,REQ) - String to replace with
@@ -285,6 +323,15 @@ class StringBase {
 	replace(needle, replaceWith) {
 		return StrReplace(this, needle, replaceWith) ; Replace all
 	}
+	;---------
+	; DESCRIPTION:    Wrapper for StrReplace - replace one instance of the provided string, with the
+	;                 replacement text.
+	; PARAMETERS:
+	;  needle      (I,REQ) - String to replace
+	;  replaceWith (I,REQ) - String to replace with
+	; RETURNS:        The updated string
+	; NOTES:          If you just want to remove all instances of a string, use .remove() instead.
+	;---------
 	replaceOne(needle, replaceWith) {
 		return StrReplace(this, needle, replaceWith, "", 1) ; Replace 1
 	}

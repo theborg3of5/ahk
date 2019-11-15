@@ -18,9 +18,15 @@ class ActionObjectBase {
 	open() {
 		this.doOpen(this.getLink())
 	}
+	;---------
+	; DESCRIPTION:    Open the object, specifically in web mode.
+	;---------
 	openWeb() {
 		this.doOpen(this.getLinkWeb())
 	}
+	;---------
+	; DESCRIPTION:    Open the object, specifically in edit mode.
+	;---------
 	openEdit() {
 		this.doOpen(this.getLinkEdit())
 	}
@@ -31,9 +37,15 @@ class ActionObjectBase {
 	copyLink() {
 		this.doCopyLink(this.getLink())
 	}
+	;---------
+	; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
+	;---------
 	copyLinkWeb() {
 		this.doCopyLink(this.getLinkWeb())
 	}
+	;---------
+	; DESCRIPTION:    Put a link to the object on the clipboard, specifically in edit mode.
+	;---------
 	copyLinkEdit() {
 		this.doCopyLink(this.getLinkEdit())
 	}
@@ -47,9 +59,17 @@ class ActionObjectBase {
 	linkSelectedText(problemMessage := "Failed to link selected text") {
 		this.doLinkSelectedText(problemMessage, this.getLink())
 	}
+	;---------
+	; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+	;                 specifically in web mode.
+	;---------
 	linkSelectedTextWeb(problemMessage := "Failed to link selected text") {
 		this.doLinkSelectedText(problemMessage, this.getLinkWeb())
 	}
+	;---------
+	; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+	;                 specifically in edit mode.
+	;---------
 	linkSelectedTextEdit(problemMessage := "Failed to link selected text") {
 		this.doLinkSelectedText(problemMessage, this.getLinkEdit())
 	}

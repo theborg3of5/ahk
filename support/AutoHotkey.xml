@@ -47,6 +47,20 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectBase.copyLinkEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in edit mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectBase.copyLinkWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectBase.getLink" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -85,10 +99,42 @@
                 <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectBase.linkSelectedTextEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+							;                 specifically in edit mode.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectBase.linkSelectedTextWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+							;                 specifically in web mode.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectBase.open" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectBase.openEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object, specifically in edit mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectBase.openWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object, specifically in web mode.
 							;---------">
             </Overload>
         </KeyWord>
@@ -111,6 +157,20 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the the object on the clipboard.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.copyLinkEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in edit mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.copyLinkWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
 							;---------">
             </Overload>
         </KeyWord>
@@ -153,10 +213,42 @@
                 <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.linkSelectedTextEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+							;                 specifically in edit mode.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.linkSelectedTextWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+							;                 specifically in web mode.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.open" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.openEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object, specifically in edit mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.openWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object, specifically in web mode.
 							;---------">
             </Overload>
         </KeyWord>
@@ -183,6 +275,20 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the the object on the clipboard.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.copyLinkEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in edit mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.copyLinkWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
 							;---------">
             </Overload>
         </KeyWord>
@@ -225,10 +331,42 @@
                 <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectEMC2.linkSelectedTextEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+							;                 specifically in edit mode.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.linkSelectedTextWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+							;                 specifically in web mode.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectEMC2.open" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.openEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object, specifically in edit mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.openWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object, specifically in web mode.
 							;---------">
             </Overload>
         </KeyWord>
@@ -272,6 +410,20 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.copyLinkEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in edit mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.copyLinkWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.getLink" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -312,10 +464,42 @@
                 <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.linkSelectedTextEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+							;                 specifically in edit mode.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.linkSelectedTextWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+							;                 specifically in web mode.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.open" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.openEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object, specifically in edit mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.openWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object, specifically in web mode.
 							;---------">
             </Overload>
         </KeyWord>
@@ -337,6 +521,20 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the the object on the clipboard.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.copyLinkEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in edit mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.copyLinkWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
 							;---------">
             </Overload>
         </KeyWord>
@@ -379,10 +577,42 @@
                 <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.linkSelectedTextEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+							;                 specifically in edit mode.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.linkSelectedTextWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+							;                 specifically in web mode.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.open" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.openEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object, specifically in edit mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.openWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object, specifically in web mode.
 							;---------">
             </Overload>
         </KeyWord>
@@ -407,6 +637,20 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the the object on the clipboard.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.copyLinkEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in edit mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.copyLinkWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
 							;---------">
             </Overload>
         </KeyWord>
@@ -460,12 +704,44 @@
                 <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectPath.linkSelectedTextEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+							;                 specifically in edit mode.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.linkSelectedTextWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+							;                 specifically in web mode.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectPath.open" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Open the path, doing a safety check for existence if it's a local file path.
 							; NOTES:          There's no web vs. edit version for this, so here's a generic tag that the
 							;                 others redirect to.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.openEdit" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object, specifically in edit mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.openWeb" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Open the object, specifically in web mode.
 							;---------">
             </Overload>
         </KeyWord>
@@ -4632,6 +4908,21 @@
         <KeyWord name="Strike"/>
 
         <!-- *gdb START CLASS: StringBase -->
+        <KeyWord name="StringBase.afterString" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the portion of this string after the given string.
+							; PARAMETERS:
+							;  checkString   (I,REQ) - The string to return after, will not be included in the result
+							;                          (unless there are multiple).
+							;  searchFromEnd (I,OPT) - Set to True to start searching from the end of the string instead of
+							;                          the start.
+							; RETURNS:        The requested portion of this string.
+							;---------">
+                <Param name="checkString" />
+                <Param name="searchFromEnd := false" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="StringBase.allBetweenStrings" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -4645,6 +4936,18 @@
 							;---------">
                 <Param name="startString" />
                 <Param name="endString" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.appendIfMissing" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a string to the end of this string, but only if that string is not already
+							;                 in place.
+							; PARAMETERS:
+							;  strToAdd (I,REQ) - String to add at the end.
+							; RETURNS:        Updated string.
+							;---------">
+                <Param name="strToAdd" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.appendPiece" func="yes">
@@ -4663,10 +4966,12 @@
         <KeyWord name="StringBase.beforeString" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get the portion of this string before/after the given string.
+							; DESCRIPTION:    Get the portion of this string before the given string.
 							; PARAMETERS:
-							;  checkString   (I,REQ) - The string to return before/after. Will not be included in the result (unless there are multiple)
-							;  searchFromEnd (I,OPT) - Set to True to start searching from the end of the string instead of the start.
+							;  checkString   (I,REQ) - The string to return before, will not be included in the result
+							;                          (unless there are multiple).
+							;  searchFromEnd (I,OPT) - Set to True to start searching from the end of the string instead of
+							;                          the start.
 							; RETURNS:        The requested portion of this string.
 							;---------">
                 <Param name="checkString" />
@@ -4744,6 +5049,17 @@
                 <Param name="needle" />
             </Overload>
         </KeyWord>
+        <KeyWord name="StringBase.endsWith" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether this string ends with the provided string.
+							; PARAMETERS:
+							;  checkString (I,REQ) - The string to check whether this string ends with.
+							; RETURNS:        True if it does, False otherwise.
+							;---------">
+                <Param name="checkString" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="StringBase.firstBetweenStrings" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -4770,8 +5086,24 @@
         <KeyWord name="StringBase.isAlpha" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Wrapper functions for whether a string is alphabetic, numeric, or alphanumeric.
-							; RETURNS:        True if the string is, False otherwise.
+							; DESCRIPTION:    Wrapper for whether a string is alphabetic.
+							; RETURNS:        true/false
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.isAlphaNum" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper function for whether a string is alphanumeric.
+							; RETURNS:        true/false
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.isNum" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper function for whether a string is numeric.
+							; RETURNS:        true/false
 							;---------">
             </Overload>
         </KeyWord>
@@ -4799,10 +5131,10 @@
         <KeyWord name="StringBase.prependIfMissing" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Add a string to the beginning/end of this string, but only if that string is
-							;                 not already in place.
+							; DESCRIPTION:    Add a string to the beginning of this string, but only if that string is not
+							;                 already in place.
 							; PARAMETERS:
-							;  strToAdd (I,REQ) - String to add at the beginning/end.
+							;  strToAdd (I,REQ) - String to add at the beginning.
 							; RETURNS:        Updated string.
 							;---------">
                 <Param name="strToAdd" />
@@ -4819,12 +5151,23 @@
                 <Param name="needle" />
             </Overload>
         </KeyWord>
+        <KeyWord name="StringBase.removeFromEnd" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Remove a string (if it exists) from the end of this string.
+							; PARAMETERS:
+							;  toRemove (I,REQ) - The string to remove from the end of this string.
+							; RETURNS:        The updated string, after removing toRemove.
+							;---------">
+                <Param name="toRemove" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="StringBase.removeFromStart" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Remove a string (if it exists) from the start/end of this string.
+							; DESCRIPTION:    Remove a string (if it exists) from the start of this string.
 							; PARAMETERS:
-							;  toRemove (I,REQ) - The string to remove from the start or end of this string.
+							;  toRemove (I,REQ) - The string to remove from the start of this string.
 							; RETURNS:        The updated string, after removing toRemove.
 							;---------">
                 <Param name="toRemove" />
@@ -4844,8 +5187,23 @@
         <KeyWord name="StringBase.replace" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Wrappers for StrReplace - replace all (or one) instance(s) of the provided
-							;                 string, with the replacement text.
+							; DESCRIPTION:    Wrappers for StrReplace - replace all instances of the provided string, with
+							;                 the replacement text.
+							; PARAMETERS:
+							;  needle      (I,REQ) - String to replace
+							;  replaceWith (I,REQ) - String to replace with
+							; RETURNS:        The updated string
+							; NOTES:          If you just want to remove all instances of a string, use .remove() instead.
+							;---------">
+                <Param name="needle" />
+                <Param name="replaceWith" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.replaceOne" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for StrReplace - replace one instance of the provided string, with the
+							;                 replacement text.
 							; PARAMETERS:
 							;  needle      (I,REQ) - String to replace
 							;  replaceWith (I,REQ) - String to replace with
@@ -4925,9 +5283,9 @@
         <KeyWord name="StringBase.startsWith" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Check whether this string starts/ends with the provided string.
+							; DESCRIPTION:    Check whether this string starts with the provided string.
 							; PARAMETERS:
-							;  checkString (I,REQ) - The string to check whether this string starts/ends with.
+							;  checkString (I,REQ) - The string to check whether this string starts with.
 							; RETURNS:        True if it does, False otherwise.
 							;---------">
                 <Param name="checkString" />

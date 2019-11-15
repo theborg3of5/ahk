@@ -7,11 +7,6 @@
 		Use cases:
 			Debug toast
 			Debug popup (would need to set font if so)
-	Notepad++ auto-completion
-		Documentation updates needed:
-			Class								Multiple functions, 1 header		Undocumented public properties
-			
-			VisualWindow               1											1
 	Consider additional user-defined languages in Notepad++:
 		My todo lists
 			Folding like python (hierarchical on every indent)

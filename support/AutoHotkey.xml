@@ -2269,9 +2269,9 @@
         <KeyWord name="Duration.addTime" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Add/remove a certain amount of time to/from this Duration.
+							; DESCRIPTION:    Add a certain amount of time to this Duration.
 							; PARAMETERS:
-							;  value    (I,REQ) - How much time to add or remove.
+							;  value    (I,REQ) - How much time to add.
 							;  unitChar (I,OPT) - Character (from Duration.Char_* constants) representing the unit you want
 							;                     to add. Defaults to &quot;s&quot; (seconds).
 							;---------">
@@ -2290,6 +2290,27 @@
                 <Param name="durationString" />
             </Overload>
         </KeyWord>
+        <KeyWord name="Duration.Char_Hour" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Hours
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Duration.Char_Minute" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Minutes
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Duration.Char_Second" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Seconds
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="Duration.displayTime" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -2306,9 +2327,7 @@
         <KeyWord name="Duration.hours" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Hours/minutes/seconds in this duration.
-							; NOTES:          These counts take into account the other units - for example, a Duration with
-							;                 1:01:00 will return &quot;1&quot; for minutes (not 61 minutes).
+							; DESCRIPTION:    Hours in this duration.
 							;---------">
             </Overload>
         </KeyWord>
@@ -2317,6 +2336,37 @@
 							;---------
 							; DESCRIPTION:    Whether the duration has no time remaining.
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Duration.minutes" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Minutes in this duration.
+							; NOTES:          This count takes into account larger units - for example, a Duration with
+							;                 1:01:00 will return &quot;1&quot; for minutes (not 61 minutes).
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Duration.seconds" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Seconds in this duration.
+							; NOTES:          This count takes into account larger units - for example, a Duration with
+							;                 1:01:01 will return &quot;1&quot; for seconds (not 3661 seconds).
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Duration.subTime" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Remove a certain amount of time from this Duration.
+							; PARAMETERS:
+							;  value    (I,REQ) - How much time to remove.
+							;  unitChar (I,OPT) - Character (from Duration.Char_* constants) representing the unit you want
+							;                     to remove. Defaults to &quot;s&quot; (seconds).
+							;---------">
+                <Param name="value" />
+                <Param name="unitChar := &quot;s&quot;" />
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: Duration -->
@@ -2507,13 +2557,22 @@
                 <Param name="mitigationMessage := &quot;&quot;" />
             </Overload>
         </KeyWord>
+        <KeyWord name="ErrorToast.blockingOff" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Make this toast non-blocking - that is, we'll allow execution to continue by
+							;                 jobbing off the hide operation with a timer.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="ErrorToast.blockingOn" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Turn blocking on/off
+							; DESCRIPTION:    Make this toast blocking - that is, we'll sleep the calling script while the
+							;                 toast is showing on a timer, rather than jobbing it off with a timer and
+							;                 allowing execution to continue.
 							; RETURNS:        this
-							; NOTES:          Blocking means that we'll sleep the calling script while the toast is showing
-							;                 on a timer, rather than setting a timer and allowing execution to continue.
 							;---------">
             </Overload>
         </KeyWord>
@@ -2545,13 +2604,19 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ErrorToast.persistentOff" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Make the toast non-persistent - when we finish showing it on a timer it will be destroyed.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="ErrorToast.persistentOn" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Turn persistence on/off
+							; DESCRIPTION:    Make the toast persistent - that is, when we finish showing it on a timer it is hidden rather than destroyed.
 							; RETURNS:        this
-							; NOTES:          Persistence means that the toast will be hidden (rather than destroyed) when we
-							;                 finish showing it on a timer.
 							;---------">
             </Overload>
         </KeyWord>
@@ -3090,6 +3155,48 @@
 							;---------">
                 <Param name="listObject" />
                 <Param name="inFormat := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FormatList.Format_Array" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Array
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FormatList.Format_Commas" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Comma-delimited (no space)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FormatList.Format_CommasSpaced" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Comma-delimited (with spaces)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FormatList.Format_NewLines" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Newline-delimited
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FormatList.Format_OneNoteColumn" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    OneNote columns (double-newline delimited)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FormatList.Format_Space" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Space-delimited
+							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="FormatList.getList" func="yes">
@@ -4042,6 +4149,20 @@
                 <Param name="ByRef distanceY" />
             </Overload>
         </KeyWord>
+        <KeyWord name="MousePosition.x" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    X coordinate for the mouse at the time this instance was created.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MousePosition.y" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Y coordinate for the mouse at the time this instance was created.
+							;---------">
+            </Overload>
+        </KeyWord>
         <!-- *gdb END CLASS: MousePosition -->
 
         <KeyWord name="Move"/>
@@ -4824,6 +4945,13 @@
 							;                 Default override values for these fields (if desired) can be set using the .SetDefaultOverrides() function.
 							;---------">
                 <Param name="fieldsToAdd" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Selector.Char_OverrideFieldIndex" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The character to use for override field indices.
+							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="Selector.dataTL" func="yes">
@@ -6078,6 +6206,79 @@
                 <Param name="filterValue" />
             </Overload>
         </KeyWord>
+        <KeyWord name="TableList.Char_Header" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Header character
+							; NOTES:          Must include the trailing space
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.Char_Ignore" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Ignore (comment) character
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.Char_Mod_AddLabel" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Mod add label character
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.Char_Mod_End" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Mod end character
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.Char_Mod_RemoveLabel" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Mod remove label character
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.Char_Mod_Start" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Mod start character
+							;---------">
+                <Param name="&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.Char_Model" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Model character
+							;---------">
+                <Param name="&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.Char_MultiEntry" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Multi-entry character
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.Char_Placeholder" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Placeholder character
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.Char_Setting" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Settings character
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="TableList.filterByColumn" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -6279,13 +6480,22 @@
                 <Param name="styleOverrides := &quot;&quot;" />
             </Overload>
         </KeyWord>
+        <KeyWord name="Toast.blockingOff" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Make this toast non-blocking - that is, we'll allow execution to continue by
+							;                 jobbing off the hide operation with a timer.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="Toast.blockingOn" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Turn blocking on/off
+							; DESCRIPTION:    Make this toast blocking - that is, we'll sleep the calling script while the
+							;                 toast is showing on a timer, rather than jobbing it off with a timer and
+							;                 allowing execution to continue.
 							; RETURNS:        this
-							; NOTES:          Blocking means that we'll sleep the calling script while the toast is showing
-							;                 on a timer, rather than setting a timer and allowing execution to continue.
 							;---------">
             </Overload>
         </KeyWord>
@@ -6304,13 +6514,19 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="Toast.persistentOff" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Make the toast non-persistent - when we finish showing it on a timer it will be destroyed.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="Toast.persistentOn" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Turn persistence on/off
+							; DESCRIPTION:    Make the toast persistent - that is, when we finish showing it on a timer it is hidden rather than destroyed.
 							; RETURNS:        this
-							; NOTES:          Persistence means that the toast will be hidden (rather than destroyed) when we
-							;                 finish showing it on a timer.
 							;---------">
             </Overload>
         </KeyWord>
@@ -6457,6 +6673,13 @@
                 <Param name="snapDistance := 0" />
             </Overload>
         </KeyWord>
+        <KeyWord name="VisualWindow.bottomY" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The Y coordinate of the visual bottom edge of the window
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="VisualWindow.getActualPosition" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -6471,6 +6694,248 @@
                 <Param name="ByRef y := &quot;&quot;" />
                 <Param name="ByRef width := &quot;&quot;" />
                 <Param name="ByRef height := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.height" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The visual height of the window
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.leftX" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The X coordinate of the visual left edge of the window
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.move" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Move the window to the specified coordinates (without snapping).
+							; PARAMETERS:
+							;  x (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
+							;  y (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
+							; NOTES:          Does not support snapping.
+							;---------">
+                <Param name="x := &quot;&quot;" />
+                <Param name="y := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.moveBottomLeftToPos" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Move the bottom-left corner of the window to the given coordinate.
+							; PARAMETERS:
+							;  x (I,REQ) - The x coordinate to move to
+							;  y (I,REQ) - The y coordinate to move to
+							; NOTES:          Supports snapping
+							;---------">
+                <Param name="x" />
+                <Param name="y" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.moveBottomRightToPos" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Move the bottom-right corner of the window to the given coordinate.
+							; PARAMETERS:
+							;  x (I,REQ) - The x coordinate to move to
+							;  y (I,REQ) - The y coordinate to move to
+							; NOTES:          Supports snapping
+							;---------">
+                <Param name="x" />
+                <Param name="y" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.moveTopLeftToPos" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Move the top-left corner of the window to the given coordinate.
+							; PARAMETERS:
+							;  x (I,REQ) - The x coordinate to move to
+							;  y (I,REQ) - The y coordinate to move to
+							; NOTES:          Supports snapping
+							;---------">
+                <Param name="x" />
+                <Param name="y" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.moveTopRightToPos" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Move the top-right corner of the window to the given coordinate.
+							; PARAMETERS:
+							;  x (I,REQ) - The x coordinate to move to
+							;  y (I,REQ) - The y coordinate to move to
+							; NOTES:          Supports snapping
+							;---------">
+                <Param name="x" />
+                <Param name="y" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.resize" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Resize the window to the specified size (without snapping).
+							; PARAMETERS:
+							;  width  (I,OPT) - The width to resize to
+							;  height (I,OPT) - The height to resize to
+							; NOTES:          Does not support snapping.
+							;---------">
+                <Param name="width := &quot;&quot;" />
+                <Param name="height := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.resizeBottomLeftToPos" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Resize the window so that the bottom-left corner is in the given coordinate.
+							; PARAMETERS:
+							;  x (I,REQ) - The x coordinate to resize to
+							;  y (I,REQ) - The y coordinate to resize to
+							; NOTES:          Supports snapping
+							;---------">
+                <Param name="x" />
+                <Param name="y" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.resizeBottomRightToPos" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Resize the window so that the bottom-right corner is in the given coordinate.
+							; PARAMETERS:
+							;  x (I,REQ) - The x coordinate to resize to
+							;  y (I,REQ) - The y coordinate to resize to
+							; NOTES:          Supports snapping
+							;---------">
+                <Param name="x" />
+                <Param name="y" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.resizeMove" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Resize and move the window, all in one operation.
+							; PARAMETERS:
+							;  width  (I,OPT) - The width to resize to
+							;  height (I,OPT) - The height to resize to
+							;  x      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
+							;  y      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
+							; RETURNS:
+							; SIDE EFFECTS:
+							; NOTES:          Does not support snapping.
+							;---------">
+                <Param name="width := &quot;&quot;" />
+                <Param name="height := &quot;&quot;" />
+                <Param name="x := &quot;&quot;" />
+                <Param name="y := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.resizeTopLeftToPos" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Resize the window so that the top-left corner is in the given coordinate.
+							; PARAMETERS:
+							;  x (I,REQ) - The x coordinate to resize to
+							;  y (I,REQ) - The y coordinate to resize to
+							; NOTES:          Supports snapping
+							;---------">
+                <Param name="x" />
+                <Param name="y" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.resizeTopRightToPos" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Resize the window so that the top-right corner is in the given coordinate.
+							; PARAMETERS:
+							;  x (I,REQ) - The x coordinate to resize to
+							;  y (I,REQ) - The y coordinate to resize to
+							; NOTES:          Supports snapping
+							;---------">
+                <Param name="x" />
+                <Param name="y" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.rightX" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The X coordinate of the visual right edge of the window
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.snapOff" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Turn off snapping - the window will move exactly where directed, not
+							;                 &quot;snapping&quot; to monitor edges.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.snapOn" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Turn on snapping - the window will &quot;snap&quot; to the end of the monitor within a
+							;                 certain distance.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.topY" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The Y coordinate of the visual top edge of the window
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.width" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The visual width of the window
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.X_Centered" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Horizontally centered
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.X_LeftEdge" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Against left edge of screen
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.X_RightEdge" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Against right edge of screen
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.Y_BottomEdge" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Against bottom edge of screen
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.Y_Centered" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Vertically centered
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.Y_TopEdge" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Against top edge of screen
+							;---------">
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: VisualWindow -->
@@ -6673,6 +7138,20 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    AHK class of the window
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowInfo.EdgeStyle_HasPadding" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The window has the standard padding around the edges.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowInfo.EdgeStyle_NoPadding" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The window has no padding around the edges.
 							;---------">
             </Overload>
         </KeyWord>

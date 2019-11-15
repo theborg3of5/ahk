@@ -29,22 +29,59 @@
 class VisualWindow {
 	; #PUBLIC#
 	
-	leftX   := 0 ; The X coordinate of the visual left edge of the window
-	rightX  := 0 ; The X coordinate of the visual right edge of the window
-	topY    := 0 ; The Y coordinate of the visual top edge of the window
-	bottomY := 0 ; The Y coordinate of the visual bottom edge of the window
-	width   := 0 ; The visual width of the window
-	height  := 0 ; The visual height of the window
+	; [[ Special window position constants ]] --=
+	;---------
+	; DESCRIPTION:    Against left edge of screen
+	;---------
+	static X_LeftEdge   := "LEFT_EDGE"
+	;---------
+	; DESCRIPTION:    Against right edge of screen
+	;---------
+	static X_RightEdge  := "RIGHT_EDGE"
+	;---------
+	; DESCRIPTION:    Horizontally centered
+	;---------
+	static X_Centered   := "CENTERED"
+	;---------
+	; DESCRIPTION:    Against top edge of screen
+	;---------
+	static Y_TopEdge    := "TOP_EDGE"
+	;---------
+	; DESCRIPTION:    Against bottom edge of screen
+	;---------
+	static Y_BottomEdge := "BOTTOM_EDGE"
+	;---------
+	; DESCRIPTION:    Vertically centered
+	;---------
+	static Y_Centered   := "CENTERED"
+	; =--
 	
-	; --------------------------------------------
-	; -- Constants for special window positions --
-	; --------------------------------------------
-	static X_LeftEdge   := "LEFT_EDGE"   ; Against left edge of screen
-	static X_RightEdge  := "RIGHT_EDGE"  ; Against right edge of screen
-	static X_Centered   := "CENTERED"    ; Horizontally centered
-	static Y_TopEdge    := "TOP_EDGE"    ; Against top edge of screen
-	static Y_BottomEdge := "BOTTOM_EDGE" ; Against bottom edge of screen
-	static Y_Centered   := "CENTERED"    ; Vertically centered
+	; [[ Window position properties ]] --=
+	;---------
+	; DESCRIPTION:    The X coordinate of the visual left edge of the window
+	;---------
+	leftX   := 0
+	;---------
+	; DESCRIPTION:    The X coordinate of the visual right edge of the window
+	;---------
+	rightX  := 0
+	;---------
+	; DESCRIPTION:    The Y coordinate of the visual top edge of the window
+	;---------
+	topY    := 0
+	;---------
+	; DESCRIPTION:    The Y coordinate of the visual bottom edge of the window
+	;---------
+	bottomY := 0
+	;---------
+	; DESCRIPTION:    The visual width of the window
+	;---------
+	width   := 0
+	;---------
+	; DESCRIPTION:    The visual height of the window
+	;---------
+	height  := 0
+	; =--
 	
 	;---------
 	; DESCRIPTION:    Create a new VisualWindow object to interact with a window as it appears.
@@ -89,9 +126,14 @@ class VisualWindow {
 	}
 	
 	
-	; --------------------------------------------------------------------------------------------------------
-	; -- General movement/resizing (no snapping, supports special window positions [see X_*/Y_* constants]) --
-	; --------------------------------------------------------------------------------------------------------
+	; [[ General movement/resizing (no snapping) ]] --=
+	;---------
+	; DESCRIPTION:    Move the window to the specified coordinates (without snapping).
+	; PARAMETERS:
+	;  x (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
+	;  y (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
+	; NOTES:          Does not support snapping.
+	;---------
 	move(x := "", y := "") {
 		this.convertSpecialWindowCoordinates(x, y)
 		
@@ -102,6 +144,13 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
+	;---------
+	; DESCRIPTION:    Resize the window to the specified size (without snapping).
+	; PARAMETERS:
+	;  width  (I,OPT) - The width to resize to
+	;  height (I,OPT) - The height to resize to
+	; NOTES:          Does not support snapping.
+	;---------
 	resize(width := "", height := "") {
 		if(width != "")
 			this.rsToWidth(width)
@@ -110,6 +159,17 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
+	;---------
+	; DESCRIPTION:    Resize and move the window, all in one operation.
+	; PARAMETERS:
+	;  width  (I,OPT) - The width to resize to
+	;  height (I,OPT) - The height to resize to
+	;  x      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
+	;  y      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
+	; RETURNS:        
+	; SIDE EFFECTS:   
+	; NOTES:          Does not support snapping.
+	;---------
 	resizeMove(width := "", height := "", x := "", y := "") {
 		; Resizing must happen first so that any special x/y values can be calculated accurately (i.e. center using new width).
 		if(width != "")
@@ -125,11 +185,17 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
+	; =--
 	
 	
-	; --------------------------------------------------------------------------------
-	; -- Movement based on corners (supports snapping, no special window positions) --
-	; --------------------------------------------------------------------------------
+	; [[ Movement based on corners (supports snapping) ]] --=
+	;---------
+	; DESCRIPTION:    Move the top-left corner of the window to the given coordinate.
+	; PARAMETERS:
+	;  x (I,REQ) - The x coordinate to move to
+	;  y (I,REQ) - The y coordinate to move to
+	; NOTES:          Supports snapping
+	;---------
 	moveTopLeftToPos(x, y) {
 		this.mvLeftToX(x)
 		this.mvTopToY(y)
@@ -137,13 +203,13 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
-	moveBottomLeftToPos(x, y) {
-		this.mvLeftToX(x)
-		this.mvBottomToY(y)
-		this.mvSnap()
-		
-		this.applyPosition()
-	}
+	;---------
+	; DESCRIPTION:    Move the top-right corner of the window to the given coordinate.
+	; PARAMETERS:
+	;  x (I,REQ) - The x coordinate to move to
+	;  y (I,REQ) - The y coordinate to move to
+	; NOTES:          Supports snapping
+	;---------
 	moveTopRightToPos(x, y) {
 		this.mvRightToX(x)
 		this.mvTopToY(y)
@@ -151,6 +217,27 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
+	;---------
+	; DESCRIPTION:    Move the bottom-left corner of the window to the given coordinate.
+	; PARAMETERS:
+	;  x (I,REQ) - The x coordinate to move to
+	;  y (I,REQ) - The y coordinate to move to
+	; NOTES:          Supports snapping
+	;---------
+	moveBottomLeftToPos(x, y) {
+		this.mvLeftToX(x)
+		this.mvBottomToY(y)
+		this.mvSnap()
+		
+		this.applyPosition()
+	}
+	;---------
+	; DESCRIPTION:    Move the bottom-right corner of the window to the given coordinate.
+	; PARAMETERS:
+	;  x (I,REQ) - The x coordinate to move to
+	;  y (I,REQ) - The y coordinate to move to
+	; NOTES:          Supports snapping
+	;---------
 	moveBottomRightToPos(x, y) {
 		this.mvRightToX(x)
 		this.mvBottomToY(y)
@@ -158,10 +245,16 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
+	; =--
 	
-	; --------------------------------------------------------------------------------
-	; -- Resizing based on corners (supports snapping, no special window positions) --
-	; --------------------------------------------------------------------------------
+	; [[ Resizing based on corners (supports snapping) ]] --=
+	;---------
+	; DESCRIPTION:    Resize the window so that the top-left corner is in the given coordinate.
+	; PARAMETERS:
+	;  x (I,REQ) - The x coordinate to resize to
+	;  y (I,REQ) - The y coordinate to resize to
+	; NOTES:          Supports snapping
+	;---------
 	resizeTopLeftToPos(x, y) {
 		this.rsLeftToX(x)
 		this.rsTopToY(y)
@@ -169,6 +262,13 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
+	;---------
+	; DESCRIPTION:    Resize the window so that the top-right corner is in the given coordinate.
+	; PARAMETERS:
+	;  x (I,REQ) - The x coordinate to resize to
+	;  y (I,REQ) - The y coordinate to resize to
+	; NOTES:          Supports snapping
+	;---------
 	resizeTopRightToPos(x, y) {
 		this.rsRightToX(x)
 		this.rsTopToY(y)
@@ -176,6 +276,13 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
+	;---------
+	; DESCRIPTION:    Resize the window so that the bottom-left corner is in the given coordinate.
+	; PARAMETERS:
+	;  x (I,REQ) - The x coordinate to resize to
+	;  y (I,REQ) - The y coordinate to resize to
+	; NOTES:          Supports snapping
+	;---------
 	resizeBottomLeftToPos(x, y) {
 		this.rsLeftToX(x)
 		this.rsBottomToY(y)
@@ -183,6 +290,13 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
+	;---------
+	; DESCRIPTION:    Resize the window so that the bottom-right corner is in the given coordinate.
+	; PARAMETERS:
+	;  x (I,REQ) - The x coordinate to resize to
+	;  y (I,REQ) - The y coordinate to resize to
+	; NOTES:          Supports snapping
+	;---------
 	resizeBottomRightToPos(x, y) {
 		this.rsRightToX(x)
 		this.rsBottomToY(y)
@@ -190,13 +304,19 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
+	; =--
 	
-	; -----------------------------------------------
-	; -- Snapping control: turn snapping on or off --
-	; -----------------------------------------------
+	;---------
+	; DESCRIPTION:    Turn on snapping - the window will "snap" to the end of the monitor within a
+	;                 certain distance.
+	;---------
 	snapOn() {
 		this.isSnapOn := true
 	}
+	;---------
+	; DESCRIPTION:    Turn off snapping - the window will move exactly where directed, not
+	;                 "snapping" to monitor edges.
+	;---------
 	snapOff() {
 		this.isSnapOn := false
 	}

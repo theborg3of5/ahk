@@ -69,12 +69,6 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 		
 		return ""
 	}
-	getLinkWeb() {
-		return this.getLink()
-	}
-	getLinkEdit() {
-		return this.getLink()
-	}
 	
 	
 	; #PRIVATE#

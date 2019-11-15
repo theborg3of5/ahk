@@ -67,7 +67,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	; DESCRIPTION:    Do some additional processing on the different bits of info about the object.
 	; SIDE EFFECTS:   Can update this.ini and this.title.
 	;---------
-	postProcess() {
+	postProcess() { ; GDB TODO should this be private instead?
 		; INI - make sure the INI is the "real" EMC2 one.
 		s := new Selector("actionObject.tls")
 		s.dataTL.filterByColumn("TYPE", ActionObject.Type_EMC2)

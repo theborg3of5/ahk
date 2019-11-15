@@ -84,22 +84,18 @@ class ActionObjectBase {
 		return ""
 	}
 	;---------
-	; DESCRIPTION:    Get the web link for the object.
-	; RETURNS:        Link to the web version of the object.
-	; NOTES:          Should be overridden by child class.
+	; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
+	;                 overridden by the child class.
 	;---------
 	getLinkWeb() {
-		new ErrorToast("ActionObjectBase.getLinkWeb() called directly", ".getLinkWeb() is not implemented by this child ActionObject* class").showMedium()
-		return ""
+		return this.getLink()
 	}
 	;---------
-	; DESCRIPTION:    Get the edit link for the object.
-	; RETURNS:        Link to the edit version of the object.
-	; NOTES:          Should be overridden by child class.
+	; DESCRIPTION:    Get an edit link for the object. This just calls .getLink() unless it's
+	;                 overridden by the child class.
 	;---------
 	getLinkEdit() {
-		new ErrorToast("ActionObjectBase.getLinkEdit() called directly", ".getLinkEdit() is not implemented by this child ActionObject* class").showMedium()
-		return ""
+		return this.getLink()
 	}
 	
 	

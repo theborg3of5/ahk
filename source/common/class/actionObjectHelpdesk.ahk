@@ -28,17 +28,9 @@ class ActionObjectHelpdesk extends ActionObjectBase {
 	;---------
 	; DESCRIPTION:    Get a link to the helpdesk request.
 	; RETURNS:        Link to the helpdesk request.
-	; NOTES:          There's no web vs. edit version for this, so here's a generic tag that the
-	;                 others redirect to.
 	;---------
 	getLink() {
 		return Config.private["HELPDESK_BASE"].replaceTag("ID", this.id)
-	}
-	getLinkWeb() {
-		return this.getLink()
-	}
-	getLinkEdit() {
-		return this.getLink()
 	}
 	; #END#
 }

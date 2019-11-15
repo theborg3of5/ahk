@@ -71,8 +71,6 @@ class ActionObjectPath extends ActionObjectBase {
 	
 	;---------
 	; DESCRIPTION:    Open the path, doing a safety check for existence if it's a local file path.
-	; NOTES:          There's no web vs. edit version for this, so here's a generic tag that the
-	;                 others redirect to.
 	;---------
 	open() {
 		if(!this.path)
@@ -84,27 +82,13 @@ class ActionObjectPath extends ActionObjectBase {
 		
 		Run(this.path)
 	}
-	openWeb() {
-		this.open()
-	}
-	openEdit() {
-		this.open()
-	}
 	
 	;---------
 	; DESCRIPTION:    Get a link to the path (that is, the path itself).
 	; RETURNS:        The path
-	; NOTES:          Web and edit functions do the same thing here - there is no difference between
-	;                 the two.
 	;---------
 	getLink() {
 		return this.path
-	}
-	getLinkWeb() {
-		return this.getLink()
-	}
-	getLinkEdit() {
-		return this.getLink()
 	}
 	
 	

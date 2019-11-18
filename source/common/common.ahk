@@ -62,6 +62,7 @@ Object(params*) {
 	#Include HTTPRequest.ahk
 	
 #Include %A_LineFile%\..\lib
+	#Include ahkCodeLib.ahk
 	#Include clipboardLib.ahk
 	#Include dataLib.ahk
 	#Include dateTimeLib.ahk

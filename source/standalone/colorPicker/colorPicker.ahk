@@ -23,8 +23,8 @@ global MAGNIFIER_RADIUS := 5
 global MAGNIFIER_GRID_SIZE := 2 * MAGNIFIER_RADIUS + 1
 
 ; Make mouse and pixel coordinate modes both relative to the screen (not the window)
-Setters.coordMode("Mouse", "Screen")
-Setters.coordMode("Pixel", "Screen")
+CoordMode, Mouse, Screen
+CoordMode, Pixel, Screen
 
 buildGui()
 Loop

@@ -1,7 +1,9 @@
 # New Ideas
 	Should we move getParamsListFromDefinitionLine() and splitVarList() from NotepadPlusPlus class to somewhere in common?
-		Maybe just move all AHK language stuff into a new (static?) class?
+		Maybe just move all AHK language stuff into a new (static? lib?) class?
 		splitVarList might even be a more general thing for StringLib - splitting on commas, but respecting quotes/parens.
+	Should setters/enums scripts live in lib\ folder instead of static? They don't have state.
+		Or, for Setters - should we add a state? Could store the "previous" value in a member and give each setter a corresponding ".restore*" function to use instead.
 	Clean up (and probably rename) updateNotepad++AutoComplete script
 	Consider additional user-defined languages in Notepad++:
 		My todo lists

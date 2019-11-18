@@ -38,7 +38,6 @@ Loop, Files, % "*.bits"
 	FileLib.replaceFileWithString(baseName ".regex", finalString)
 }
 
-new Toast("Compiled all .bits files into .regex files").showMedium()
-Sleep, 2500 ; Wait for the toast to finish and fade out before exiting
+new Toast("Compiled all .bits files into .regex files").blockingOn().showMedium()
 
 ExitApp

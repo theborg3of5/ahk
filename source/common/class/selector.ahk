@@ -354,8 +354,9 @@ class Selector {
 		; Override fields can add to that too.
 		overrideData := sGui.getOverrideData()
 		
-		; Debug.popup("Selector.doSelectGui","Finish", "Choice data",choiceData, "Override data",overrideData, "Merged data",DataLib.mergeObjects(choiceData, overrideData))
-		return DataLib.mergeObjects(choiceData, overrideData)
+		choiceData.mergeFromObject(overrideData)
+		; Debug.popup("Selector.doSelectGui","Finish", "choiceData",choiceData)
+		return choiceData
 	}
 	
 	;---------

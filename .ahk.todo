@@ -1,5 +1,4 @@
 # New Ideas
-	Consider moving mergeObjects into ObjectBase - pretty much all callers would work fine with mergeFromObject(), and it's a little clearer what's winning then, too.
 	Possibly have ActionObjectPath append a www. or http(s):// to the start of URLs before trying to launch them?
 		Probably do it in open(), where we also check whether a local path exists
 	Should we move getParamsListFromDefinitionLine() and splitVarList() from NotepadPlusPlus class to somewhere in common?

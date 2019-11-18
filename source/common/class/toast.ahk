@@ -259,9 +259,7 @@ class Toast {
 		styles["TEXT_ALIGN"]       := "Left"
 		
 		; Merge in any overrides
-		styles := DataLib.mergeObjects(styles, styleOverrides)
-		
-		return styles
+		return styles.mergeFromObject(styleOverrides)
 	}
 	
 	;---------

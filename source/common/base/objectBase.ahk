@@ -42,12 +42,13 @@ class ObjectBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Recursively merge two objects together into a new object containing the data from both.
+	; DESCRIPTION:    Recursively merge the keys/properties from another object into this one.
 	; PARAMETERS:
 	;  overrides (I,REQ) - The object to merge data from. The object in this parameter "wins" when
 	;                      both this parameter and the instance of this class have the same
 	;                      index/property - that is, we'll replace the value on the class instance
 	;                      with the value from this parameter.
+	; RETURNS:        this
 	;---------
 	mergeFromObject(objectToAppend) {
 		For index,value in objectToAppend {
@@ -56,6 +57,8 @@ class ObjectBase {
 			else
 				this[index] := value
 		}
+		
+		return this
 	}
 	; #END#
 }

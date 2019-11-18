@@ -14,6 +14,8 @@ class ActionObjectBase {
 	
 	;---------
 	; DESCRIPTION:    Open the object.
+	; NOTES:          If you want to override this in a child class, consider overriding
+	;                 .openWeb/.openEdit as well - they don't come through here by default.
 	;---------
 	open() {
 		this.doOpen(this.getLink())

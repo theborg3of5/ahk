@@ -54,6 +54,8 @@ class ActionObjectPath extends ActionObjectBase {
 		
 		if(!this.selectMissingInfo())
 			return
+		
+		this.postProcess()
 	}
 	
 	;---------
@@ -82,29 +84,35 @@ class ActionObjectPath extends ActionObjectBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Open the path, doing a safety check for existence if it's a local file path.
-	;---------
-	open() {
-		if(!this.path)
-			return
-		if(this.pathType = ActionObjectPath.PathType_FilePath && !FileExist(this.path)) { ; Don't try to open a non-existent local path
-			Debug.popup("Local file or folder does not exist", this.path)
-			return
-		}
-		
-		Run(this.path)
-	}
-	
-	;---------
 	; DESCRIPTION:    Get a link to the path (that is, the path itself).
 	; RETURNS:        The path
 	;---------
 	getLink() {
+		if(this.pathType = ActionObjectPath.PathType_FilePath) {
+			if(!FileExist(this.path)) { ; Don't try to open a non-existent local path
+				new ErrorToast("Local file or folder does not exist", this.path).showMedium()
+				return ""
+			}
+		}
+		
 		return this.path
 	}
 	
 	
 	; #PRIVATE#
+	
+	;---------
+	; DESCRIPTION:    Do some additional processing on the different bits of info about the object.
+	; SIDE EFFECTS:   Can update this.path.
+	;---------
+	postProcess() {
+		; For URLs, make sure that they have a protocol at the start so Windows knows how to run it
+		; as a URL (not a local path).
+		if(this.pathType = ActionObjectPath.PathType_URL) {
+			if(!this.path.contains("//")) ; No protocol
+				this.path := "https://" this.path ; Add a protocol on so Windows knows to run it as a URL.
+		}
+	}
 	
 	;---------
 	; DESCRIPTION:    Prompt the user for the path type or path if either are missing.

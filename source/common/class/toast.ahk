@@ -271,7 +271,7 @@ class Toast {
 	;              Defaults to bottom edge.
 	;---------
 	move(x := "", y := "") {
-		origDetectSetting := Setters.detectHiddenWindows("On")
+		settings := new TempSettings().detectHiddenWindows("On")
 		
 		; Default to current position, then bottom-right corner
 		x := DataLib.firstNonBlankValue(x, this.x, VisualWindow.X_RightEdge)
@@ -296,7 +296,7 @@ class Toast {
 		this.x := x
 		this.y := y
 		
-		Setters.detectHiddenWindows(origDetectSetting)
+		settings.restore()
 	}
 	
 	;---------

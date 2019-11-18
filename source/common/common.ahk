@@ -52,6 +52,7 @@ Object(params*) {
 	#Include relativeTime.ahk
 	#Include selector.ahk
 	#Include tableList.ahk
+	#Include tempSettings.ahk
 	#Include toast.ahk
 	#Include visualWindow.ahk
 	#Include windowInfo.ahk
@@ -82,7 +83,6 @@ Object(params*) {
 	#Include commonHotkeys.ahk
 	#Include debug.ahk
 	#Include hyperlinker.ahk
-	#Include setters.ahk
 	#Include scriptTrayInfo.ahk
 	#Include windowActions.ahk
 	

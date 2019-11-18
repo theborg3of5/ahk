@@ -119,6 +119,8 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
+							; NOTES:          If you want to override this in a child class, consider overriding
+							;                 .openWeb/.openEdit as well - they don't come through here by default.
 							;---------">
             </Overload>
         </KeyWord>
@@ -257,6 +259,8 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
+							; NOTES:          If you want to override this in a child class, consider overriding
+							;                 .openWeb/.openEdit as well - they don't come through here by default.
 							;---------">
             </Overload>
         </KeyWord>
@@ -386,6 +390,8 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
+							; NOTES:          If you want to override this in a child class, consider overriding
+							;                 .openWeb/.openEdit as well - they don't come through here by default.
 							;---------">
             </Overload>
         </KeyWord>
@@ -550,6 +556,8 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
+							; NOTES:          If you want to override this in a child class, consider overriding
+							;                 .openWeb/.openEdit as well - they don't come through here by default.
 							;---------">
             </Overload>
         </KeyWord>
@@ -666,6 +674,8 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
+							; NOTES:          If you want to override this in a child class, consider overriding
+							;                 .openWeb/.openEdit as well - they don't come through here by default.
 							;---------">
             </Overload>
         </KeyWord>
@@ -788,7 +798,9 @@
         <KeyWord name="ActionObjectPath.open" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Open the path, doing a safety check for existence if it's a local file path.
+							; DESCRIPTION:    Open the object.
+							; NOTES:          If you want to override this in a child class, consider overriding
+							;                 .openWeb/.openEdit as well - they don't come through here by default.
 							;---------">
             </Overload>
         </KeyWord>
@@ -4274,12 +4286,13 @@
         <KeyWord name="ObjectBase.mergeFromObject" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Recursively merge two objects together into a new object containing the data from both.
+							; DESCRIPTION:    Recursively merge the keys/properties from another object into this one.
 							; PARAMETERS:
 							;  overrides (I,REQ) - The object to merge data from. The object in this parameter &quot;wins&quot; when
 							;                      both this parameter and the instance of this class have the same
 							;                      index/property - that is, we'll replace the value on the class instance
 							;                      with the value from this parameter.
+							; RETURNS:        this
 							;---------">
                 <Param name="objectToAppend" />
             </Overload>
@@ -5279,78 +5292,6 @@
                 <Param name="On|Off"/>
             </Overload>
         </KeyWord>
-
-        <!-- *gdb START CLASS: Setters -->
-        <KeyWord name="Setters.coordMode" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Set the CoordMode (Screen/Relative/Window/Client) for a particular target type
-							;                 (ToolTip/Pixel/Mouse/Caret/Menu).
-							; PARAMETERS:
-							;  new (I,REQ) - The new CoordMode.
-							; RETURNS:        The original CoordMode.
-							;---------">
-                <Param name="targetType" />
-                <Param name="relativeTo := &quot;&quot;" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Setters.detectHiddenWindows" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Set whether we should detect hidden windows (On/Off).
-							; PARAMETERS:
-							;  new (I,REQ) - The new setting.
-							; RETURNS:        The original value.
-							;---------">
-                <Param name="new" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Setters.sendLevel" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Set the SendLevel (0-100) for the script.
-							; PARAMETERS:
-							;  new (I,REQ) - The new SendLevel.
-							; RETURNS:        The original SendLevel.
-							;---------">
-                <Param name="new" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Setters.titleMatchMode" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Set the title match mode (see TitleMatchMode &quot;enum&quot; for values).
-							; PARAMETERS:
-							;  new (I,REQ) - The new title match mode.
-							; RETURNS:        The original title match mode.
-							;---------">
-                <Param name="new" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Setters.titleMatchSpeed" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Set the title match speed (Slow/Fast).
-							; PARAMETERS:
-							;  new (I,REQ) - The new title match speed.
-							; RETURNS:        The original title match speed.
-							;---------">
-                <Param name="new" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Setters.workingDirectory" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Set the current working directory.
-							; PARAMETERS:
-							;  new (I,REQ) - The new working directory.
-							; RETURNS:        The original working directory.
-							;---------">
-                <Param name="new" />
-            </Overload>
-        </KeyWord>
-        <!-- *gdb END CLASS: Setters -->
-
         <KeyWord name="SetTimer" func="no">
             <Overload retVal="">
                 <Param name="Label"/>
@@ -6426,6 +6367,90 @@
                 <Param name="Number"/>
             </Overload>
         </KeyWord>
+
+        <!-- *gdb START CLASS: TempSettings -->
+        <KeyWord name="TempSettings.coordMode" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the CoordMode for a particular target type.
+							; PARAMETERS:
+							;  targetType (I,REQ) - The target type (ToolTip/Pixel/Mouse/Caret/Menu)
+							;  new        (I,REQ) - The new CoordMode (Screen/Relative/Window/Client)
+							; RETURNS:        this
+							;---------">
+                <Param name="targetType" />
+                <Param name="new" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TempSettings.detectHiddenWindows" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set whether we should detect hidden windows.
+							; PARAMETERS:
+							;  new (I,REQ) - The new setting (On/Off).
+							; RETURNS:        this
+							;---------">
+                <Param name="new" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TempSettings.restore" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Restore all settings that were changed here, to their value just before the
+							;                 first time they were changed.
+							; NOTES:          This can only restore settings that were set using this class.
+							;                 This function should only be called once - make a new instance of this class
+							;                 if you need to set/restore settings multiple times.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TempSettings.sendLevel" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the SendLevel for the script.
+							; PARAMETERS:
+							;  new (I,REQ) - The new SendLevel (0-100).
+							; RETURNS:        this
+							;---------">
+                <Param name="new" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TempSettings.titleMatchMode" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the title match mode.
+							; PARAMETERS:
+							;  new (I,REQ) - The new title match mode (use TitleMatchMode &quot;enum&quot; for named values).
+							; RETURNS:        this
+							; NOTES:          If you want to set the title match speed, use .titleMatchSpeed() instead.
+							;---------">
+                <Param name="new" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TempSettings.titleMatchSpeed" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the title match speed.
+							; PARAMETERS:
+							;  new (I,REQ) - The new title match speed (Slow/Fast).
+							; RETURNS:        this
+							;---------">
+                <Param name="new" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TempSettings.workingDirectory" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the current working directory.
+							; PARAMETERS:
+							;  new (I,REQ) - The new working directory.
+							; RETURNS:        this
+							;---------">
+                <Param name="new" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: TempSettings -->
+
         <KeyWord name="Text"/>
         <KeyWord name="Theme"/>
         <KeyWord name="This"/>

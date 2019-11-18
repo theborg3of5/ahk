@@ -191,9 +191,9 @@ class WindowLib {
 	; NOTES:          If the mouse is on the border between monitors, we will return the bottom-right most monitor.
 	;---------
 	getMouseMonitorBounds() {
-		origMouseCoordMode := Setters.coordMode("Mouse", "Screen")
+		settings := new TempSettings().coordMode("Mouse", "Screen")
 		MouseGetPos(mouseX, mouseY)
-		Setters.coordMode("Mouse", origMouseCoordMode)
+		settings.restore()
 		
 		partialMatches := []
 		

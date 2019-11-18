@@ -144,8 +144,9 @@ class EpicStudio {
 	isDebugging() {
 		isDebugging := false
 		
-		origMatchMode  := Setters.titleMatchMode(TitleMatchMode.Contains)
-		origMatchSpeed := Setters.titleMatchSpeed("Slow")
+		settings := new TempSettings()
+		settings.titleMatchMode(TitleMatchMode.Contains)
+		settings.titleMatchSpeed("Slow")
 		
 		; Match on text in the window for the main debugging targets
 		winId := WinActive("", Config.private["ES_PUTTY_EXE"])
@@ -154,9 +155,7 @@ class EpicStudio {
 		if(!winId)
 			winId := WinActive("", Config.private["ES_VB6_EXE"])
 		
-		Setters.titleMatchMode(origMatchMode)
-		Setters.titleMatchSpeed(origMatchSpeed)
-		
+		settings.restore()
 		return isDebugging
 	}
 	

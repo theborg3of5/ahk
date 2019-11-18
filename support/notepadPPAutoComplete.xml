@@ -850,6 +850,65 @@
 
         <KeyWord name="ActiveX"/>
         <KeyWord name="Add"/>
+
+        <!-- *gdb START CLASS: AHKCodeLib -->
+        <KeyWord name="AHKCodeLib.generateDebugParams" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Generate a list of parameters for the Debug.popup/Debug.toast functions,
+							;                 in &quot;varName&quot;,varName pairs.
+							; PARAMETERS:
+							;  varList (I,REQ) - Comma-separated list of parameters to generate the debug parameters for.
+							; RETURNS:        Comma-separated list of parameters, spaced in pairs, of &quot;varName&quot;,varName.
+							;                 Example:
+							;                 	Input: var1,var2
+							;                 	Output: &quot;var1&quot;,var1, &quot;var2&quot;,var2
+							;---------">
+                <Param name="varList" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="AHKCodeLib.getDefLineParts" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Extract the relevant information from a definition line.
+							; PARAMETERS:
+							;  defLine   (I,REQ) - The definition line for the function to document, with the name and parameters.
+							;  name      (O,OPT) - The name of the function/property/member.
+							;  paramsAry (O,OPT) - If the function/property has parameters, this is an array of them,
+							;                      including any &quot;ByRef&quot; or default values.
+							;---------">
+                <Param name="defLine" />
+                <Param name="ByRef name := &quot;&quot;" />
+                <Param name="ByRef paramsAry := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="AHKCodeLib.getDocHeader" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Generate a documentation header based on the definition line provided.
+							; PARAMETERS:
+							;  defLine (I,REQ) - The definition line for the function to document, with the name and parameters.
+							; RETURNS:        The full text of the documentation header to insert.
+							;---------">
+                <Param name="defLine" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="AHKCodeLib.getNextDocLineIndent" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Figure out how much indentation is needed for the next line of documentation,
+							;                 based on the current line.
+							; PARAMETERS:
+							;  line (I,REQ) - The line that we're trying to determine indentation after.
+							; RETURNS:        The indentation to use:
+							;                  If bullets: &quot;;&quot; + indentation + bullet + &quot; &quot;
+							;                  Otherwise: &quot;;&quot; + indentation
+							;---------">
+                <Param name="line" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: AHKCodeLib -->
+
         <KeyWord name="AHK_class"/>
         <KeyWord name="AHK_exe"/>
         <KeyWord name="AHK_group"/>

@@ -1,22 +1,16 @@
 ; Functions related to editing AHK scripts and their documentation.
 ; GDB TODO: Update auto-complete and syntax highlighting notepad++ definitions
-; GDB TODO: update all function headers
 
 class AHKCodeLib {
 	; #PUBLIC#
 	
-	; insertIndentedNewline() { => getNextDocLineIndent(line)*
-	; sendDebugCodeString(functionName) {
-	; insertDebugParams() { => generateDebugParams(varList)
-	; sendAHKHeader() { => getDocHeader(defLine)
-	; sendAHKClassTemplate() {
-	
 	;---------
-	; DESCRIPTION:    Insert a function header based on the function defined on the line below
-	;                 the cursor.
-	; SIDE EFFECTS:   Selects the line below in order to process the parameters.
+	; DESCRIPTION:    Generate a documentation header based on the definition line provided.
+	; PARAMETERS:
+	;  defLine (I,REQ) - The definition line for the function to document, with the name and parameters.
+	; RETURNS:        The full text of the documentation header to insert.
 	;---------
-	getDocHeader(defLine := "") {
+	getDocHeader(defLine) {
 		; Determine if it's a function/property or just a class member.
 		equalsPos := defLine.contains(":=")
 		if(defLine.containsAnyOf(["(", "[", ":="], match)) {
@@ -30,7 +24,7 @@ class AHKCodeLib {
 			return AHKCodeLib.headerBase_Function ; No parameters => basic function base
 		
 		; Build array of parameter info
-		paramLines := []
+		paramInfos := []
 		maxParamLength := 0
 		For _,param in paramsAry {
 			; Input/output can be partially deduced by whether it's ByRef
@@ -49,7 +43,7 @@ class AHKCodeLib {
 				requirement := "REQ" ; Required if no default
 			}
 			
-			paramLines.push({"NAME":param, "IN_OUT":inOut, "REQUIREMENT":requirement})
+			paramInfos.push({"NAME":param, "IN_OUT":inOut, "REQUIREMENT":requirement})
 			
 			; Also track the max length of any parameter name so we can space things out appropriately.
 			DataLib.updateMax(maxParamLength, param.length())
@@ -57,7 +51,7 @@ class AHKCodeLib {
 		
 		; Build a line for each parameter, padding things out to make them even
 		paramLines := []
-		For _,paramObj in paramLines {
+		For _,paramObj in paramInfos {
 			line := AHKCodeLib.paramBase
 			
 			padding := StringLib.getSpaces(maxParamLength - paramObj["NAME"].length())
@@ -74,7 +68,14 @@ class AHKCodeLib {
 		return header.replaceTag("PARAMETERS", paramLines.join("`n"))
 	}
 	
-
+	;---------
+	; DESCRIPTION:    Extract the relevant information from a definition line.
+	; PARAMETERS:
+	;  defLine   (I,REQ) - The definition line for the function to document, with the name and parameters.
+	;  name      (O,OPT) - The name of the function/property/member.
+	;  paramsAry (O,OPT) - If the function/property has parameters, this is an array of them,
+	;                      including any "ByRef" or default values.
+	;---------
 	getDefLineParts(defLine, ByRef name := "", ByRef paramsAry := "") {
 		; Trim off the static modifier if it's there - we don't care here.
 		defLine := defLine.removeFromStart("static ")
@@ -181,6 +182,7 @@ class AHKCodeLib {
 		return paramsString
 	}
 	
+	
 	; #PRIVATE#
 	
 	; All of the keywords possibly contained in the documentation header - should be kept up to date with headerBase* members below.
@@ -233,7 +235,7 @@ class AHKCodeLib {
 		
 		currentName := ""
 		openParens := 0
-		openQuotes := 0
+		openQuotes := false
 		Loop, Parse, varList
 		{
 			char := A_LoopField
@@ -244,10 +246,10 @@ class AHKCodeLib {
 			if(char = ")")
 				openParens--
 			if(char = QUOTE)
-				openQuotes := mod(openQuotes + 1, 2) ; Quotes close other quotes, so just swap between open and closed
+				openQuotes := !openQuotes ; Quotes close other quotes, so just swap between open and closed
 			
 			; Split on commas, but only if there are no open parens or quotes.
-			if(char = "," && openParens = 0 && openQuotes = 0) {
+			if(char = "," && openParens = 0 && !openQuotes) {
 				paramsAry.push(currentName.withoutWhitespace())
 				currentName := ""
 				Continue

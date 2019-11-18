@@ -27,7 +27,7 @@ classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\static"))
 
 autoCompleteXMLs := generateXMLForClasses(classInfos)
 
-autoCompleteFilePath := Config.path["AHK_SUPPORT"] "\AutoHotkey.xml"
+autoCompleteFilePath := Config.path["AHK_SUPPORT"] "\notepadPPAutoComplete.xml"
 originalXML := FileRead(autoCompleteFilePath)
 
 newXML := originalXML

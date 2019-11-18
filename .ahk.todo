@@ -1,5 +1,4 @@
 # New Ideas
-	Can we rename the autocomplete file, since we automatically update the right file in the update script?
 	Update compileEpicStudioRegex to use toast blocking instead of a separate wait
 		Are there others that I missed, too?
 	Consider moving mergeObjects into ObjectBase - pretty much all callers would work fine with mergeFromObject(), and it's a little clearer what's winning then, too.

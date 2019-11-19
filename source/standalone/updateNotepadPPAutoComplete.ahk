@@ -93,11 +93,17 @@ getAllCommonDocs() {
 	commonRoot := Config.path["AHK_SOURCE"] "\common\"
 	
 	docs := {}
-	docs.mergeFromObject(getDocsForAllScriptsInFolder(commonRoot "base"))
-	docs.mergeFromObject(getDocsForAllScriptsInFolder(commonRoot "class"))
-	docs.mergeFromObject(getDocsForAllScriptsInFolder(commonRoot "lib"))
-	docs.mergeFromObject(getDocsForAllScriptsInFolder(commonRoot "static"))
+	docs.appendObject(getDocsForAllScriptsInFolder(commonRoot "base"))
+	docs.appendObject(getDocsForAllScriptsInFolder(commonRoot "class"))
+	docs.appendObject(getDocsForAllScriptsInFolder(commonRoot "lib"))
+	docs.appendObject(getDocsForAllScriptsInFolder(commonRoot "static"))
 	; Deliberately leaving external\ out - don't want to try and document those myself, no good reason to.
+	
+	
+	
+	; tempClass := docs["ActionObjectBase"]
+	; MsgBox, % "ActionObjectBase: " tempClass.generateXML()
+	
 	
 	return docs
 }
@@ -113,11 +119,11 @@ getDocsForAllScriptsInFolder(folderPath) {
 		; Find groups of lines that give us info about a function - basically the stuff between two docSeparator lines, and the line following (which should have the name).
 		inBlock := false
 		outOfScope := false
-		docLines := []
+		headerLines := []
 		
-		currClassName := ""
+		; currClassName := ""
 		
-		classDocs := {} ; {className: {className.memberName: docInfo}}
+		; classDocs := {} ; {className: {className.memberName: docInfo}}
 		
 		For lineNumber,line in linesAry {
 			line := line.withoutWhitespace()
@@ -125,26 +131,33 @@ getDocsForAllScriptsInFolder(folderPath) {
 			; Finishing a block - grab the name from the next line (which should be a definition line) and store everything off.
 			if(inBlock) {
 				if(line = docSeparator) {
-					docLines.push(line)
-					
+					headerLines.push(line)
 					defLine := linesAry[lineNumber + 1]
-					AHKCodeLib.getDefLineParts(defLine, name, paramsAry)
 					
-					; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
-					retValue := ""
-					if(!defLine.contains("("))
-						retValue := returnValueProperty
+					member := new AutoCompleteMember(defLine, headerLines)
+					classObj.addMember(member)
 					
-					headerText := "`n" headerIndent docLines.join("`n" headerIndent) ; Add a newline at the start to separate the header from the definition line in the popup
-					headerText := headerText.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
 					
-					dotName := "." name ; The index is the name with a preceding dot - otherwise we start overwriting things like <array>.contains with this array, and that breaks stuff.
-					classDocs[currClassName, dotName] := {"NAME":name, "RETURNS":retValue, "DESCRIPTION":headerText, "PARAMS_ARY":paramsAry, "PARENT_CLASS":currParentClassName}
 					
-					docLines := []
+					; AHKCodeLib.getDefLineParts(defLine, name, paramsAry)
+					
+					; ; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
+					; retValue := ""
+					; if(!defLine.contains("("))
+						; retValue := returnValueProperty
+					
+					; headerText := "`n" headerIndent headerLines.join("`n" headerIndent) ; Add a newline at the start to separate the header from the definition line in the popup
+					; headerText := headerText.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
+					
+					; dotName := "." name ; The index is the name with a preceding dot - otherwise we start overwriting things like <array>.contains with this array, and that breaks stuff.
+					; classDocs[currClassName, dotName] := {"NAME":name, "RETURNS":retValue, "DESCRIPTION":headerText, "PARAMS_ARY":paramsAry, "PARENT_CLASS":currParentClassName}
+					
+					
+					
+					headerLines := []
 					inBlock := false
 				} else {
-					docLines.push(line)
+					headerLines.push(line)
 				}
 				Continue
 			}
@@ -161,22 +174,21 @@ getDocsForAllScriptsInFolder(folderPath) {
 			}
 			
 			if(line = docSeparator) {
-				docLines.push(line)
+				headerLines.push(line)
 				inBlock := true
 				Continue
 			}
 			
-			; Class declaration - any functions below this should start with "<className>."
+			; Class declaration
 			if(line.startsWith("class ") && line.endsWith(" {") && line != "class {") {
-				; Get new class name
-				currClassName := line.firstBetweenStrings("class ", " ") ; Break on space instead of end bracket so we don't end up including the "extends" bit for child classes.
-				currParentClassName := ""
-				if(line.contains(" extends "))
-					currParentClassName := line.firstBetweenStrings(" extends ", " {")
+				classObj := new AutoCompleteClass(line)
+				docs[classObj.name] := classObj ; Point to class (which is what we'll actually be updating) from docs
+				
+				Continue
 			}
 		}
 		
-		docs.mergeFromObject(classDocs)
+		; docs.appendObject(classDocs)
 	}
 	
 	return docs
@@ -186,42 +198,38 @@ generateXMLForClasses(classDocs) {
 	allXML := {} ; {className: classXML}
 	
 	; Generate XML for each class
-	For className,classMembers in classDocs {
-		
+	For _,classObj in classDocs {
 		; Add any inherited functions (only 1 layer deep) into the array of info for this class ; GDB TODO make this a pre-processing step, after we have all info but before we start generating any XML
-		For _,keywordTags in classMembers {
-			parentClassName := keywordTags["PARENT_CLASS"] ; GDB TODO figure out how to store this at the class level, not on the individual functions like this.
-			
-			if(parentClassName != "") {
-				
-				For parentMemberDotName,parentKeywordTags in classDocs[parentClassName] {
-					if(classMembers.HasKey(parentMemberDotName)) ; Child object should win
-						Continue
-					
-					classMembers[parentMemberDotName] := parentKeywordTags
-				}
-			}
-			Break
+		if(classObj.parentName != "") {
+			For _,member in classDocs[classObj.parentName].members
+				classObj.addMemberIfNew(member)
 		}
 		
-		classXML := ""
+		; Debug.popup("classObj",classObj, "classObj.generateXML()",classObj.generateXML())
 		
-		; Add an XML comment to say we're starting a block
-		startBlockComment := startClassCommentBase.replaceTag("CLASS_NAME", className)
-		classXML .= startBlockComment
+		; Skip classes with no members
+		if(classObj.members.count() = 0)
+			Continue
 		
-		For _,docs in classMembers {
-			; Debug.popup("className",className, "docs",docs)
-			memberXML := generateMemberXML(className, docs)
-			classXML := classXML.appendPiece(memberXML, "`n")
-		}
+		; classXML := class.generateXML()
 		
-		; Add an XML comment to say we're ending a block
-		endBlockComment := endClassCommentBase.replaceTag("CLASS_NAME", className)
-		classXML := classXML.appendPiece(endBlockComment, "`n")
+		; ; Add an XML comment to say we're starting a block
+		; startBlockComment := startClassCommentBase.replaceTag("CLASS_NAME", className)
+		; classXML .= startBlockComment
+		
+		; For _,docs in class {
+			; ; Debug.popup("className",className, "docs",docs)
+			; memberXML := generateMemberXML(className, docs)
+			; classXML := classXML.appendPiece(memberXML, "`n")
+		; }
+		
+		; ; Add an XML comment to say we're ending a block
+		; endBlockComment := endClassCommentBase.replaceTag("CLASS_NAME", className)
+		; classXML := classXML.appendPiece(endBlockComment, "`n")
 		
 		; Flush to allXML
-		allXML[className] := classXML
+		; Debug.popup("class",class, "class.generateXML()",class.generateXML())
+		allXML[classObj.name] := classObj.generateXML()
 	}
 	
 	
@@ -230,37 +238,6 @@ generateXMLForClasses(classDocs) {
 	
 }
 
-generateMemberXML(className, docs) {
-	xml := keywordBaseXML
-	
-	; Full name is "<class>.<member>", except for constructors which are just "<class>".
-	if(docs["NAME"] = "__New")
-		fullName := className
-	else
-		fullName := className "." docs["NAME"]
-	
-	xml := xml.replaceTag("FULL_NAME",   fullName)
-	xml := xml.replaceTag("RETURNS",     docs["RETURNS"])
-	xml := xml.replaceTag("DESCRIPTION", docs["DESCRIPTION"])
-	xml := xml.replaceTag("PARAMS_XML",  getParamsXML(docs["PARAMS_ARY"]))
-	
-	return xml
-}
-
-getParamsXML(paramsAry) {
-	if(DataLib.isNullOrEmpty(paramsAry))
-		return ""
-	
-	paramsXML := ""
-	For _,paramName in paramsAry {
-		paramName := paramName.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
-		xml := paramBaseXML.replaceTag("PARAM_NAME", paramName)
-		
-		paramsXML := paramsXML.appendPiece(xml, "`n")
-	}
-	
-	return "`n" paramsXML ; Newline before the whole params block
-}
 
 
 ; GDB TODO have these classes generate their own XMLs
@@ -287,30 +264,59 @@ class AutoCompleteClass {
 		}
 	}
 	
-	__New(name, parentName := "") {
-		this.name       := name
-		this.parentName := parentName
+	
+	__New(defLine) {
+		this.name := defLine.firstBetweenStrings("class ", " ") ; Break on space instead of end bracket so we don't end up including the "extends" bit for child classes.
+		if(defLine.contains(" extends "))
+			this.parentName := defLine.firstBetweenStrings(" extends ", " {")
+		
+		; Debug.popup("this",this, "this.generateXML()",this.generateXML())
 	}
 	
 	
 	addMember(member) {
+		if(member.name = "")
+			return
+		
 		dotName := "." member.name ; The index is the name with a preceding dot - otherwise we start overwriting things like <array>.contains with this array, and that breaks stuff.
+		this.members[dotName] := member
+	}
+	addMemberIfNew(member) {
+		if(member.name = "")
+			return
+		
+		dotName := "." member.name ; The index is the name with a preceding dot - otherwise we start overwriting things like <array>.contains with this array, and that breaks stuff.
+		if(this.members.HasKey(dotName))
+			return
+		
 		this.members[dotName] := member
 	}
 	
 	generateXML() {
-		classXML := this.startComment
+		xml := this.startComment
 		
 		For _,member in this.members
-			classXML .= "`n" member.generateXML()
+			xml .= "`n" member.generateXML(this.name)
 		
-		classXML .= "`n" this.endComment
-		return classXML
+		xml .= "`n" this.endComment
+		
+		; Debug.popup("AutoCompleteClass.generateXML()",, "this",this, "xml",xml)
+		return xml
 	}
 	
 	; #PRIVATE#
 	
 	
+	
+	
+	; #DEBUG#
+	
+	debugName := "AutoCompleteClass"
+	debugToString(debugBuilder) {
+		debugBuilder.addLine("Name", this.name)
+		debugBuilder.addLine("Parent name", this.parentName)
+		debugBuilder.addLine("Members", this.members)
+	}
 	; #END#
 }
 
@@ -370,7 +376,7 @@ class AutoCompleteMember {
 	
 	generateFullName(className) {
 		; Special case: constructors are just <className>
-		if(docs["NAME"] = "__New")
+		if(this.name = "__New")
 			return className
 		
 		; Full name is <class>.<member>
@@ -386,11 +392,21 @@ class AutoCompleteMember {
 			paramName := paramName.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
 			xml := paramBaseXML.replaceTag("PARAM_NAME", paramName)
 			
-			paramsXML .= "`n" paramsXML ; Start with an extra newline to put the params block on a new line
+			paramsXML .= "`n" xml ; Start with an extra newline to put the params block on a new line
 		}
 		
 		return paramsXML
 	}
+	
+	
+	; #DEBUG#
+	
+	debugName := "AutoCompleteMember"
+	debugToString(debugBuilder) {
+		debugBuilder.addLine("Name", this.name)
+		debugBuilder.addLine("Returns", this.returns)
+		debugBuilder.addLine("Description", this.description)
+		debugBuilder.addLine("Params array", this.paramsAry)
+	}
 	; #END#
 }
-

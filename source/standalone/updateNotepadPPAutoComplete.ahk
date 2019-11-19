@@ -37,82 +37,66 @@ global scopeEnd          := "; #END#"
 global headerIndent := StringLib.getTabs(7) ; We can indent with tabs and it's ignored - cleaner XML and result looks the same.
 global returnValueProperty := "[Property]"
 
-
-
-classDocs := getAllCommonDocs()
-
-autoCompleteXMLs := generateXMLForClasses(classDocs)
-
+; Read in the current XML, to update
 autoCompleteFilePath := Config.path["AHK_SUPPORT"] "\notepadPPAutoComplete.xml"
-originalXML := FileRead(autoCompleteFilePath)
+autoCompleteXML := FileRead(autoCompleteFilePath)
 
-newXML := originalXML
-failedClasses := {}
-For className,classXML in autoCompleteXMLs { ; GDB TODO break this section up more
-	; Find the block in the original XML for this class
-	startBlockComment := startClassCommentBase.replaceTag("CLASS_NAME", className)
-	endBlockComment   := endClassCommentBase.replaceTag("CLASS_NAME", className)
-	
-	if(!newXML.contains(startBlockComment) || !newXML.contains(endBlockComment)) {
-		failedClasses[className] := classXML
-		Continue
-	}
-	
-	xmlBefore := newXML.beforeString(startBlockComment)
-	xmlAfter := newXML.afterString(endBlockComment)
-	newXML := xmlBefore classXML xmlAfter
+; Get info about all classes we care about and use it to update the XML
+classes := getAllCommonClasses()
+if(!updateClassesInXML(classes, autoCompleteXML, failedClasses)) {
+	handleFailedClasses(failedClasses)
+	ExitApp
 }
 
-failedNameList := ""
-failedBlocks   := ""
-if(!DataLib.isNullOrEmpty(failedClasses)) {
-	For className,classXML in failedClasses {
-		failedNameList := failedNameList.appendPiece(className)
-		
-		startBlockComment := startClassCommentBase.replaceTag("CLASS_NAME", className)
-		endBlockComment   := endClassCommentBase.replaceTag("CLASS_NAME", className)
-		failedBlocks .= "`n`n" startBlockComment "`n" endBlockComment "`n" ; Made so it can be pasted at the end of the last line it should be after - extra line of space above and below the new block.
-	}
-	
-	ClipboardLib.set(failedBlocks)
-	new ErrorToast("Could not add some classes' XML to auto-complete file", "Could not find matching comment block for these classes: " failedNameList, "Comment blocks for all failed classes have been added to the clipboard - add them into the file in alphabetical order").blockingOn().showLong()
-}
+; Update the version-controlled file
+FileLib.replaceFileWithString(autoCompleteFilePath, autoCompleteXML)
 
-; clipboard := newXML
-FileLib.replaceFileWithString(autoCompleteFilePath, newXML)
-
+; Update the file Notepad++ is actually using
 activeAutoCompleteFilePath := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
-FileLib.replaceFileWithString(activeAutoCompleteFilePath, newXML)
+FileLib.replaceFileWithString(activeAutoCompleteFilePath, autoCompleteXML)
 
+; Notify the user that we're done and exit.
 new Toast("Updated both versions of the auto-complete file").blockingOn().showMedium()
 ExitApp
 
 
 
-getAllCommonDocs() {
+getAllCommonClasses() {
 	commonRoot := Config.path["AHK_SOURCE"] "\common\"
 	
-	docs := {}
-	docs.appendObject(getDocsForAllScriptsInFolder(commonRoot "base"))
-	docs.appendObject(getDocsForAllScriptsInFolder(commonRoot "class"))
-	docs.appendObject(getDocsForAllScriptsInFolder(commonRoot "lib"))
-	docs.appendObject(getDocsForAllScriptsInFolder(commonRoot "static"))
+	classes := {}
+	classes.appendObject(getClassesFromFolder(commonRoot "base"))
+	classes.appendObject(getClassesFromFolder(commonRoot "class"))
+	classes.appendObject(getClassesFromFolder(commonRoot "lib"))
+	classes.appendObject(getClassesFromFolder(commonRoot "static"))
 	; Deliberately leaving external\ out - don't want to try and document those myself, no good reason to.
 	
+	; Post-processing
+	classesToDelete := []
+	For className,classObj in classes {
+		; Mark any classes with no members for deletion
+		if(classObj.members.count() = 0)
+			classesToDelete.push(className)
+		
+		; Add any inherited members (only 1 layer deep) into the array of info for this class
+		if(classObj.parentName != "") {
+			For _,member in classes[classObj.parentName].members
+				classObj.addMemberIfNew(member)
+		}
+	}
+	For _,className in classesToDelete
+		classes.Delete(className)
 	
-	
-	; tempClass := docs["ActionObjectBase"]
-	; MsgBox, % "ActionObjectBase: " tempClass.generateXML()
-	
-	
-	return docs
+	return classes
 }
 
 
 
-getDocsForAllScriptsInFolder(folderPath) {
-	docs := {}
-	Loop, Files, %folderPath%\*.ahk, RF ; Recursive, files (not directories)
+getClassesFromFolder(folderPath) {
+	classes := {}
+	
+	; Loop over all scripts in folder to find classes
+	Loop, Files, %folderPath%\*.ahk, RF ; [R]ecursive, [F]iles (not [D]irectories)
 	{ ; GDB TODO: should we just make this an infinite loop (or do some pre-processing before-hand) so we don't need to have the inBlock/outOfScope stuff?
 		linesAry := FileLib.fileLinesToArray(A_LoopFileLongPath)
 		
@@ -120,10 +104,6 @@ getDocsForAllScriptsInFolder(folderPath) {
 		inBlock := false
 		outOfScope := false
 		headerLines := []
-		
-		; currClassName := ""
-		
-		; classDocs := {} ; {className: {className.memberName: docInfo}}
 		
 		For lineNumber,line in linesAry {
 			line := line.withoutWhitespace()
@@ -136,23 +116,6 @@ getDocsForAllScriptsInFolder(folderPath) {
 					
 					member := new AutoCompleteMember(defLine, headerLines)
 					classObj.addMember(member)
-					
-					
-					
-					; AHKCodeLib.getDefLineParts(defLine, name, paramsAry)
-					
-					; ; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
-					; retValue := ""
-					; if(!defLine.contains("("))
-						; retValue := returnValueProperty
-					
-					; headerText := "`n" headerIndent headerLines.join("`n" headerIndent) ; Add a newline at the start to separate the header from the definition line in the popup
-					; headerText := headerText.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
-					
-					; dotName := "." name ; The index is the name with a preceding dot - otherwise we start overwriting things like <array>.contains with this array, and that breaks stuff.
-					; classDocs[currClassName, dotName] := {"NAME":name, "RETURNS":retValue, "DESCRIPTION":headerText, "PARAMS_ARY":paramsAry, "PARENT_CLASS":currParentClassName}
-					
-					
 					
 					headerLines := []
 					inBlock := false
@@ -182,65 +145,53 @@ getDocsForAllScriptsInFolder(folderPath) {
 			; Class declaration
 			if(line.startsWith("class ") && line.endsWith(" {") && line != "class {") {
 				classObj := new AutoCompleteClass(line)
-				docs[classObj.name] := classObj ; Point to class (which is what we'll actually be updating) from docs
+				classes[classObj.name] := classObj ; Point to classObj (which is what we'll actually be updating) from classes
 				
 				Continue
 			}
 		}
-		
-		; docs.appendObject(classDocs)
 	}
 	
-	return docs
+	return classes
 }
 
-generateXMLForClasses(classDocs) {
-	allXML := {} ; {className: classXML}
-	
-	; Generate XML for each class
-	For _,classObj in classDocs {
-		; Add any inherited functions (only 1 layer deep) into the array of info for this class ; GDB TODO make this a pre-processing step, after we have all info but before we start generating any XML
-		if(classObj.parentName != "") {
-			For _,member in classDocs[classObj.parentName].members
-				classObj.addMemberIfNew(member)
+updateClassesInXML(classes, ByRef xml, ByRef failedClasses) {
+	failedClasses := []
+
+	For _,classObj in classes {
+		startComment := classObj.startComment
+		endComment   := classObj.endComment
+		
+		; Fail this class if there's not already a block to replace in the XML.
+		if(!xml.contains(startComment) || !xml.contains(endComment)) {
+			failedClasses.push(classObj)
+			Continue
 		}
 		
-		; Debug.popup("classObj",classObj, "classObj.generateXML()",classObj.generateXML())
-		
-		; Skip classes with no members
-		if(classObj.members.count() = 0)
-			Continue
-		
-		; classXML := class.generateXML()
-		
-		; ; Add an XML comment to say we're starting a block
-		; startBlockComment := startClassCommentBase.replaceTag("CLASS_NAME", className)
-		; classXML .= startBlockComment
-		
-		; For _,docs in class {
-			; ; Debug.popup("className",className, "docs",docs)
-			; memberXML := generateMemberXML(className, docs)
-			; classXML := classXML.appendPiece(memberXML, "`n")
-		; }
-		
-		; ; Add an XML comment to say we're ending a block
-		; endBlockComment := endClassCommentBase.replaceTag("CLASS_NAME", className)
-		; classXML := classXML.appendPiece(endBlockComment, "`n")
-		
-		; Flush to allXML
-		; Debug.popup("class",class, "class.generateXML()",class.generateXML())
-		allXML[classObj.name] := classObj.generateXML()
+		; Find the block in the original XML for this class and replace it with the class' XML (which
+		; includes the start/end comments).
+		xmlBefore := xml.beforeString(classObj.startComment)
+		xmlAfter := xml.afterString(classObj.endComment)
+		xml := xmlBefore classObj.generateXML() xmlAfter
 	}
 	
-	
-	
-	return allXML
-	
+	return (DataLib.isNullOrEmpty(failedClasses))
 }
 
 
+handleFailedClasses(failedClasses) {
+	failedNames  := ""
+	failedBlocks := ""
+	
+	For _,classObj in failedClasses {
+		failedNames := failedNames.appendPiece(classObj.name, ",")
+		failedBlocks .= "`n" classObj.emptyBlock
+	}
 
-; GDB TODO have these classes generate their own XMLs
+	ClipboardLib.set(failedBlocks)
+	new ErrorToast("Blocks for some classes could not be found in the existing file", "Could not find matching comment block for these classes: " failedNames, "Comment blocks for all failed classes have been added to the clipboard - add them into the file in alphabetical order").blockingOn().showLong()
+}
+
 
 ; Represents an entire class that we want to add auto-complete info for.
 class AutoCompleteClass {
@@ -264,13 +215,19 @@ class AutoCompleteClass {
 		}
 	}
 	
+	emptyBlock {
+		get {
+			; Extra newlines so we can paste this at the end of the line this should follow, leaving
+			; an extra line of space above and below.
+			return "`n" this.startComment "`n" this.endComment "`n"
+		}
+	}
+	
 	
 	__New(defLine) {
 		this.name := defLine.firstBetweenStrings("class ", " ") ; Break on space instead of end bracket so we don't end up including the "extends" bit for child classes.
 		if(defLine.contains(" extends "))
 			this.parentName := defLine.firstBetweenStrings(" extends ", " {")
-		
-		; Debug.popup("this",this, "this.generateXML()",this.generateXML())
 	}
 	
 	

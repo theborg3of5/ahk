@@ -46,6 +46,28 @@ class ArrayBase {
 	}
 	
 	;---------
+	; DESCRIPTION:    Get the value just after the given index, incrementing that index to match.
+	; PARAMETERS:
+	;  index (IO,REQ) - The index to increment, then return the value for.
+	; RETURNS:        The next value
+	;---------
+	next(ByRef index) {
+		index++
+		return this[index]
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the value just before the given index, decrementing that index to match.
+	; PARAMETERS:
+	;  index (IO,REQ) - The index to decrement, then return the value for.
+	; RETURNS:        The previous value        
+	;---------
+	previous(ByRef index) {
+		index--
+		return this[index]
+	}
+	
+	;---------
 	; DESCRIPTION:    Append the values from the given array to the end of this array.
 	; PARAMETERS:
 	;  arrayToAppend (I,REQ) - The array of values to add.

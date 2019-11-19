@@ -87,14 +87,18 @@ class FileLib {
 	;---------
 	; DESCRIPTION:    Read in a file and return it as an array.
 	; PARAMETERS:
-	;  fileName (I,REQ) - The path to the file to read in.
-	; RETURNS:        The array of file lines.
+	;  fileName       (I,REQ) - The path to the file to read in.
+	;  dropWhitespace (I,OPT) - Set this to true to drop leading/trailing whitespace from every line in the file.
+	; RETURNS:        The array of file lines, indexed so that ary[1] := line 1.
 	;---------
-	fileLinesToArray(fileName) {
-		lines := Object()
-		Loop, Read, %fileName%
+	fileLinesToArray(fileName, dropWhitespace := false) {
+		lines := []
+		Loop, Read, % fileName
 		{
-			lines[A_Index] := A_LoopReadLine
+			if(dropWhitespace)
+				lines.insertAt(A_Index, A_LoopReadLine.withoutWhitespace())
+			else
+				lines.insertAt(A_Index, A_LoopReadLine)
 		}
 		return lines
 	}

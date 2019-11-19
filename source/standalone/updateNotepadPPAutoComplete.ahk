@@ -97,55 +97,48 @@ getClassesFromFolder(folderPath) {
 	
 	; Loop over all scripts in folder to find classes
 	Loop, Files, %folderPath%\*.ahk, RF ; [R]ecursive, [F]iles (not [D]irectories)
-	{ ; GDB TODO: should we just make this an infinite loop (or do some pre-processing before-hand) so we don't need to have the inBlock/outOfScope stuff?
-		linesAry := FileLib.fileLinesToArray(A_LoopFileLongPath)
+	{
+		linesAry := FileLib.fileLinesToArray(A_LoopFileLongPath, true)
 		
-		; Find groups of lines that give us info about a function - basically the stuff between two docSeparator lines, and the line following (which should have the name).
-		inBlock := false
-		outOfScope := false
-		headerLines := []
-		
-		For lineNumber,line in linesAry {
-			line := line.withoutWhitespace()
+		ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).
+		while(ln < linesAry.count()) {
+			line := linesAry.next(ln)
 			
-			; Finishing a block - grab the name from the next line (which should be a definition line) and store everything off.
-			if(inBlock) {
-				if(line = docSeparator) {
+			; Block of documentation - read the whole thing in and create a member.
+			if(line = docSeparator) {
+				; Store the full header in an array
+				headerLines := [line]
+				Loop {
+					line := linesAry.next(ln)
 					headerLines.push(line)
-					defLine := linesAry[lineNumber + 1]
 					
-					member := new AutoCompleteMember(defLine, headerLines)
-					classObj.addMember(member)
-					
-					headerLines := []
-					inBlock := false
-				} else {
-					headerLines.push(line)
+					if(line = docSeparator)
+						Break
 				}
+				
+				; Get the definition line (first line after the header), too.
+				defLine := linesAry.next(ln)
+				
+				; Feed the data to a new member object and add that to our current class object.
+				member := new AutoCompleteMember(defLine, headerLines)
+				classObj.addMember(member)
+				
 				Continue
 			}
 			
-			; Ignore stuff that's in a private or debug scope.
+			; Block of private/debug scope - ignore everything up until we hit a public/end of scope.
 			if(line = scopeStartPrivate || line = scopeStartDebug) {
-				outOfScope := true
-			}
-			if(outOfScope) {
-				if(line = scopeStartPublic || line = scopeEnd)
-					outOfScope := false
-				else
-					Continue
-			}
-			
-			if(line = docSeparator) {
-				headerLines.push(line)
-				inBlock := true
+				while(line != scopeStartPublic && line != scopeEnd) {
+					line := linesAry.next(ln)
+				}
+				
 				Continue
 			}
 			
 			; Class declaration
 			if(line.startsWith("class ") && line.endsWith(" {") && line != "class {") {
 				classObj := new AutoCompleteClass(line)
-				classes[classObj.name] := classObj ; Point to classObj (which is what we'll actually be updating) from classes
+				classes[classObj.name] := classObj ; Point to classObj (which is what we'll actually be updating) from classes object
 				
 				Continue
 			}

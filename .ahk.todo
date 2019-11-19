@@ -1,7 +1,4 @@
 # New Ideas
-	Should we move getParamsListFromDefinitionLine() and splitVarList() from NotepadPlusPlus class to somewhere in common?
-		Maybe just move all AHK language stuff into a new (static? lib?) class?
-		splitVarList might even be a more general thing for StringLib - splitting on commas, but respecting quotes/parens.
 	Clean up updateNotepad++AutoComplete script
 	Move debugName into debugToString() - probably a ByRef parameter?
 	Re-examine object merge functions and callers

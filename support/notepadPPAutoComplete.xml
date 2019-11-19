@@ -988,6 +988,28 @@
                 <Param name="delim := &quot;,&quot;" />
             </Overload>
         </KeyWord>
+        <KeyWord name="ArrayBase.next" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the value just after the given index, incrementing that index to match.
+							; PARAMETERS:
+							;  index (IO,REQ) - The index to increment, then return the value for.
+							; RETURNS:        The next value
+							;---------">
+                <Param name="ByRef index" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ArrayBase.previous" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the value just before the given index, decrementing that index to match.
+							; PARAMETERS:
+							;  index (IO,REQ) - The index to decrement, then return the value for.
+							; RETURNS:        The previous value
+							;---------">
+                <Param name="ByRef index" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ArrayBase.removeDuplicates" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -2920,10 +2942,12 @@
 							;---------
 							; DESCRIPTION:    Read in a file and return it as an array.
 							; PARAMETERS:
-							;  fileName (I,REQ) - The path to the file to read in.
-							; RETURNS:        The array of file lines.
+							;  fileName       (I,REQ) - The path to the file to read in.
+							;  dropWhitespace (I,OPT) - Set this to true to drop leading/trailing whitespace from every line in the file.
+							; RETURNS:        The array of file lines, indexed so that ary[1] := line 1.
 							;---------">
                 <Param name="fileName" />
+                <Param name="dropWhitespace := false" />
             </Overload>
         </KeyWord>
         <KeyWord name="FileLib.findConfigFilePath" func="yes">

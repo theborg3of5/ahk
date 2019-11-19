@@ -12,7 +12,6 @@ class AHKCodeLib {
 	;---------
 	getDocHeader(defLine) {
 		; Determine if it's a function/property or just a class member.
-		equalsPos := defLine.contains(":=")
 		if(defLine.containsAnyOf(["(", "[", ":="], match)) {
 			if(match = ":=") ; We found the equals before any opening paren/bracket
 				return AHKCodeLib.headerBase_Member ; No parameters/return value/side effects => basic member base.
@@ -77,28 +76,32 @@ class AHKCodeLib {
 	;                      including any "ByRef" or default values.
 	;---------
 	getDefLineParts(defLine, ByRef name := "", ByRef paramsAry := "") {
-		; Trim off the static modifier if it's there - we don't care here.
+		; Trim off any indentation and the static modifier if it's there - we don't care here.
+		defLine := defLine.withoutWhitespace()
 		defLine := defLine.removeFromStart("static ")
 		
-		; Function
-		if(defLine.contains("(")) {
+		lineType := AHKCodeLib.getDefLineType(defLine)
+		if(lineType = "FUNCTION") {
 			name := defLine.beforeString("(")
 			paramsList := defLine.firstBetweenStrings("(", ")")
 		
-		; Property with brackets
-		} else if(defLine.contains("[")) {
+		} else if(lineType = "PROPERTY") {
 			name := defLine.beforeString("[")
+			if(defLine.contains("["))
 			paramsList := defLine.firstBetweenStrings("[", "]")
 		
-		; Property without brackets or other member
-		} else {
-			name := defLine.beforeString(" ") ; First space, before any brackets {properties} or values (members).
+		} else if(lineType = "OTHER") {
+			name := defLine.beforeString(" ") ; First space, before any brackets (for properties) or default values (for members).
 			paramsList := ""
 		}
 		
 		paramsAry := AHKCodeLib.splitVarList(paramsList)
+		
+		if(defLine.contains("FrameY_CaptionSizable"))
+			Debug.popup("defLine",defLine, "lineType",lineType, "name",name, "paramsList",paramsList, "paramsAry",paramsAry)
+		; if(name.contains("Char_Model"))
+			; Debug.popup("defLine",defLine, "name",name, "paramsList",paramsList, "paramsAry",paramsAry)
 	}
-	
 	
 	;---------
 	; DESCRIPTION:    Figure out how much indentation is needed for the next line of documentation,
@@ -222,6 +225,34 @@ class AHKCodeLib {
 		)"
 	
 	;---------
+	; DESCRIPTION:    Determine what kind of line the given definition line is.
+	; PARAMETERS:
+	;  defLine (I,REQ) - The line to check.
+	; RETURNS:        "FUNCTION" - Functions
+	;                 "PROPERTY" - Properties with square brackets
+	;                 "OTHER"    - Members or properties without square brackets
+	;---------
+	getDefLineType(defLine) {
+		; Member with a default value
+		if(defLine.containsAnyOf(["(", "[", ":="], match)) {
+			if(match = ":=") { ; We found the equals before any opening paren/bracket
+				return "OTHER"
+			}
+		}
+		
+		; Function
+		if(defLine.contains("("))
+			return "FUNCTION"
+		
+		; Property with brackets
+		if(defLine.contains("["))
+			return "PROPERTY"
+		
+		; Property without parameters or member without a default value
+		return "OTHER"
+	}
+	
+	;---------
 	; DESCRIPTION:    Manually split up the variable list by comma, so we can keep commas
 	;                 parens/quotes intact instead of splitting on them. This also drops any
 	;                 leading/trailing whitespace from each variable name.
@@ -230,6 +261,9 @@ class AHKCodeLib {
 	; RETURNS:        Array of variable names, split on commas.
 	;---------
 	splitVarList(varList) {
+		if(varList = "")
+			return []
+		
 		QUOTE := """" ; Double-quote character
 		paramsAry := []
 		

@@ -3994,7 +3994,6 @@
 							; DESCRIPTION:    For non-3D windows (which should be most), the thickness of the left/right borders.
 							; NOTES:          Uses SM_CXBORDER
 							;---------">
-                <Param name="5" />
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.BorderY" func="yes">
@@ -4003,7 +4002,6 @@
 							; DESCRIPTION:    For non-3D windows (which should be most), the thickness of the top/bottom borders.
 							; NOTES:          Uses SM_CYBORDER
 							;---------">
-                <Param name="6" />
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.ExStyle_AlwaysOnTop" func="yes">
@@ -4036,7 +4034,6 @@
 							; DESCRIPTION:    Thickness of the left/right borders for windows with a caption that are NOT sizable.
 							; NOTES:          Uses SM_CXFIXEDFRAME
 							;---------">
-                <Param name="7" />
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.FrameX_CaptionSizable" func="yes">
@@ -4045,7 +4042,6 @@
 							; DESCRIPTION:    Thickness of the left/right borders for windows with a caption that are sizable (aka SM_CXFRAME).
 							; NOTES:          Uses SM_CXSIZEFRAME
 							;---------">
-                <Param name="32" />
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.FrameY_CaptionNoSizable" func="yes">
@@ -4054,7 +4050,6 @@
 							; DESCRIPTION:    Thickness of the top/bottom borders for windows with a caption that are NOT sizable.
 							; NOTES:          Uses SM_CYFIXEDFRAME
 							;---------">
-                <Param name="8" />
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.FrameY_CaptionSizable" func="yes">
@@ -4063,7 +4058,6 @@
 							; DESCRIPTION:    Thickness of the top/bottom borders for windows with a caption that are sizable (aka SM_CYFRAME).
 							; NOTES:          Uses SM_CYSIZEFRAME
 							;---------">
-                <Param name="33" />
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.MaximizedWindowHeight" func="yes">
@@ -4072,7 +4066,6 @@
 							; DESCRIPTION:    Total width of a maximized window on the primary monitor. Includes any weird offsets.
 							; NOTES:          Uses SM_CXMAXIMIZED
 							;---------">
-                <Param name="61" />
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.MaximizedWindowWidth" func="yes">
@@ -4081,7 +4074,6 @@
 							; DESCRIPTION:    Total height of a maximized window on the primary monitor. Includes any weird offsets.
 							; NOTES:          Uses SM_CYMAXIMIZED
 							;---------">
-                <Param name="62" />
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.Message_HorizScroll" func="yes">
@@ -6247,7 +6239,6 @@
 							;---------
 							; DESCRIPTION:    Mod start character
 							;---------">
-                <Param name="&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="TableList.Char_Model" func="yes">
@@ -6255,7 +6246,6 @@
 							;---------
 							; DESCRIPTION:    Model character
 							;---------">
-                <Param name="&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="TableList.Char_MultiEntry" func="yes">

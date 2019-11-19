@@ -218,9 +218,7 @@ getAutoCompleteInfoFromScript(path) {
 				docLines.push(line)
 				
 				defLine := linesAry[lineNumber + 1]
-				defLine := defLine.withoutWhitespace().beforeString(" {")
-				name := getNameFromDefLine(defLine)
-				params := getParamsListFromDefinitionLine(defLine)
+				AHKCodeLib.getDefLineParts(defLine, name, paramsAry)
 				
 				; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
 				retValue := ""
@@ -232,17 +230,10 @@ getAutoCompleteInfoFromScript(path) {
 				headerText := "`n" headerIndent docLines.join("`n" headerIndent) ; Add a newline at the start to separate the header from the definition line in the popup
 				headerText := headerText.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
 				
-				paramsAry := []
-				if(params != "")
-					paramsAry := splitVarList(params)
-				
 				isFunc := "yes" ; Always "yes" - allows me to type an open paren and get the popup of info.
 				
 				; Store function info with an index preceded by a dot - otherwise we run into conflicts with things like contains(), which is actually a function for the object in question.
 				classFunctions["." name] := {"NAME":name, "IS_FUNC":isFunc, "RETURNS":retValue, "DESCRIPTION":headerText, "PARAMS_ARY":paramsAry, "PARENT_CLASS":currParentClassName}
-				
-				; if(currParentClassName != "")
-					; Debug.popup("currClassName",currClassName, "name",name, "currParentClassName",currParentClassName)
 				
 				docLines := []
 				inBlock := false
@@ -302,10 +293,6 @@ getAutoCompleteInfoFromScript(path) {
 	
 	; Get new class name
 	currClassName := line.firstBetweenStrings("class ", " ") ; Break on space instead of end bracket so we don't end up including the "extends" bit for child classes.
-	
-	; ; Add an XML comment to say we're starting a block
-	; startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", currClassName)
-	; classXML .= startBlockComment
 	
 	; Debug.popup("classInfos",classInfos)
 	

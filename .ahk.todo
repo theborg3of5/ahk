@@ -103,6 +103,7 @@
 		Switch()
 			PhoneLib.reduceToDigits()
 			Selector.updateSettings()
+			AHKCodeLib.getDefLineParts()
 			Likely others too - WindowActions and similar would probably benefit
 	1.1.31.01
 		Execute (X) hotstrings can support spaces

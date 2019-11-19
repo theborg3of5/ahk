@@ -103,10 +103,10 @@ getAllCommonDocs() {
 
 
 
-getDocsForScriptsInFolder(path) {
+getDocsForScriptsInFolder(folderPath) {
 	docs := {}
-	Loop, Files, %path%\*.ahk, RF ; Recursive, files (not directories)
-	{
+	Loop, Files, %folderPath%\*.ahk, RF ; Recursive, files (not directories)
+	{ ; GDB TODO: should we just make this an infinite loop (or do some pre-processing before-hand) so we don't need to have the inBlock/outOfScope stuff?
 		linesAry := FileLib.fileLinesToArray(A_LoopFileLongPath)
 		
 		; Find groups of lines that give us info about a function - basically the stuff between two docSeparator lines, and the line following (which should have the name).
@@ -137,12 +137,7 @@ getDocsForScriptsInFolder(path) {
 					headerText := "`n" headerIndent docLines.join("`n" headerIndent) ; Add a newline at the start to separate the header from the definition line in the popup
 					headerText := headerText.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
 					
-					; if(name = currClassName ".__New")
-						; dotName := currClassName
-					; else
-						; dotName := currClassName "." name
-					
-					dotName := "." name
+					dotName := "." name ; The index is the name with a preceding dot - otherwise we start overwriting things like <array>.contains with this array, and that breaks stuff.
 					classDocs[currClassName, dotName] := {"NAME":name, "RETURNS":retValue, "DESCRIPTION":headerText, "PARAMS_ARY":paramsAry, "PARENT_CLASS":currParentClassName}
 					
 					docLines := []
@@ -194,13 +189,11 @@ generateXMLForClasses(classDocs) {
 		
 		; Add any inherited functions (only 1 layer deep) into the array of info for this class
 		For _,keywordTags in classMembers {
-			parentClassName := keywordTags["PARENT_CLASS"]
+			parentClassName := keywordTags["PARENT_CLASS"] ; GDB TODO figure out how to store this at the class level, not on the individual functions like this.
 			
 			if(parentClassName != "") {
 				
 				For parentMemberDotName,parentKeywordTags in classDocs[parentClassName] {
-					; Debug.popup("parentClassName",parentClassName, "parentMemberDotName",parentMemberDotName, "parentKeywordTags",parentKeywordTags)
-					
 					if(classMembers.HasKey(parentMemberDotName)) ; Child object should win
 						Continue
 					

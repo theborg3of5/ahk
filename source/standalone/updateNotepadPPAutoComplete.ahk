@@ -6,11 +6,12 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
-global startBlockCommentBaseXML := "
+; GDB TODO determine whether any of these constants should really live outside of the new class/member classes
+global startClassCommentBase := "
 	(
         <!-- *gdb START CLASS: <CLASS_NAME> -->
 	)"
-global endBlockCommentBaseXML := "
+global endClassCommentBase := "
 	(
         <!-- *gdb END CLASS: <CLASS_NAME> -->
 	)"
@@ -33,8 +34,8 @@ global scopeStartPublic  := "; #PUBLIC#"
 global scopeStartPrivate := "; #PRIVATE#"
 global scopeStartDebug   := "; #DEBUG#"
 global scopeEnd          := "; #END#"
-global headerIndent := StringLib.getTabs(7) ; We can indent with tabs and it's ignored - cleaner XML and result looks the same. ; GDB TODO should this move into the new member class?
-global returnValueProperty := "[Property]" ; GDB TODO should this move into the new member class?
+global headerIndent := StringLib.getTabs(7) ; We can indent with tabs and it's ignored - cleaner XML and result looks the same.
+global returnValueProperty := "[Property]"
 
 
 
@@ -49,8 +50,8 @@ newXML := originalXML
 failedClasses := {}
 For className,classXML in autoCompleteXMLs { ; GDB TODO break this section up more
 	; Find the block in the original XML for this class
-	startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
-	endBlockComment   := endBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
+	startBlockComment := startClassCommentBase.replaceTag("CLASS_NAME", className)
+	endBlockComment   := endClassCommentBase.replaceTag("CLASS_NAME", className)
 	
 	if(!newXML.contains(startBlockComment) || !newXML.contains(endBlockComment)) {
 		failedClasses[className] := classXML
@@ -68,8 +69,8 @@ if(!DataLib.isNullOrEmpty(failedClasses)) {
 	For className,classXML in failedClasses {
 		failedNameList := failedNameList.appendPiece(className)
 		
-		startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
-		endBlockComment   := endBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
+		startBlockComment := startClassCommentBase.replaceTag("CLASS_NAME", className)
+		endBlockComment   := endClassCommentBase.replaceTag("CLASS_NAME", className)
 		failedBlocks .= "`n`n" startBlockComment "`n" endBlockComment "`n" ; Made so it can be pasted at the end of the last line it should be after - extra line of space above and below the new block.
 	}
 	
@@ -187,7 +188,7 @@ generateXMLForClasses(classDocs) {
 	; Generate XML for each class
 	For className,classMembers in classDocs {
 		
-		; Add any inherited functions (only 1 layer deep) into the array of info for this class
+		; Add any inherited functions (only 1 layer deep) into the array of info for this class ; GDB TODO make this a pre-processing step, after we have all info but before we start generating any XML
 		For _,keywordTags in classMembers {
 			parentClassName := keywordTags["PARENT_CLASS"] ; GDB TODO figure out how to store this at the class level, not on the individual functions like this.
 			
@@ -206,7 +207,7 @@ generateXMLForClasses(classDocs) {
 		classXML := ""
 		
 		; Add an XML comment to say we're starting a block
-		startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
+		startBlockComment := startClassCommentBase.replaceTag("CLASS_NAME", className)
 		classXML .= startBlockComment
 		
 		For _,docs in classMembers {
@@ -216,7 +217,7 @@ generateXMLForClasses(classDocs) {
 		}
 		
 		; Add an XML comment to say we're ending a block
-		endBlockComment := endBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
+		endBlockComment := endClassCommentBase.replaceTag("CLASS_NAME", className)
 		classXML := classXML.appendPiece(endBlockComment, "`n")
 		
 		; Flush to allXML
@@ -274,6 +275,18 @@ class AutoCompleteClass {
 	members    := {} ; {.memberName: AutoCompleteMember}
 	
 	
+	startComment {
+		get {
+			return startClassCommentBase.replaceTag("CLASS_NAME", this.name)
+		}
+	}
+	
+	endComment {
+		get {
+			return endClassCommentBase.replaceTag("CLASS_NAME", this.name)
+		}
+	}
+	
 	__New(name, parentName := "") {
 		this.name       := name
 		this.parentName := parentName
@@ -284,6 +297,19 @@ class AutoCompleteClass {
 		dotName := "." member.name ; The index is the name with a preceding dot - otherwise we start overwriting things like <array>.contains with this array, and that breaks stuff.
 		this.members[dotName] := member
 	}
+	
+	generateXML() {
+		classXML := this.startComment
+		
+		For _,member in this.members
+			classXML .= "`n" member.generateXML()
+		
+		classXML .= "`n" this.endComment
+		return classXML
+	}
+	
+	; #PRIVATE#
+	
 	
 	; #END#
 }
@@ -312,6 +338,18 @@ class AutoCompleteMember {
 	}
 	
 	
+	generateXML(className) {
+		xml := keywordBaseXML
+		
+		xml := xml.replaceTag("FULL_NAME",   this.generateFullName(className))
+		xml := xml.replaceTag("RETURNS",     this.returns)
+		xml := xml.replaceTag("DESCRIPTION", this.description)
+		xml := xml.replaceTag("PARAMS_XML",  this.generateParamsXML())
+		
+		return xml
+	}
+	
+	
 	; #PRIVATE#
 	
 	formatHeaderAsDescription(headerLines) {
@@ -330,6 +368,29 @@ class AutoCompleteMember {
 		return headerText
 	}
 	
+	generateFullName(className) {
+		; Special case: constructors are just <className>
+		if(docs["NAME"] = "__New")
+			return className
+		
+		; Full name is <class>.<member>
+		return className "." this.name
+	}
+	
+	generateParamsXML() {
+		if(DataLib.isNullOrEmpty(this.paramsAry))
+			return ""
+		
+		paramsXML := ""
+		For _,paramName in this.paramsAry {
+			paramName := paramName.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
+			xml := paramBaseXML.replaceTag("PARAM_NAME", paramName)
+			
+			paramsXML .= "`n" paramsXML ; Start with an extra newline to put the params block on a new line
+		}
+		
+		return paramsXML
+	}
 	; #END#
 }
 

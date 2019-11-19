@@ -850,6 +850,11 @@
 
         <KeyWord name="ActiveX"/>
         <KeyWord name="Add"/>
+        <KeyWord name="AHK_class"/>
+        <KeyWord name="AHK_exe"/>
+        <KeyWord name="AHK_group"/>
+        <KeyWord name="AHK_id"/>
+        <KeyWord name="AHK_pid"/>
 
         <!-- *gdb START CLASS: AHKCodeLib -->
         <KeyWord name="AHKCodeLib.generateDebugParams" func="yes">
@@ -909,11 +914,6 @@
         </KeyWord>
         <!-- *gdb END CLASS: AHKCodeLib -->
 
-        <KeyWord name="AHK_class"/>
-        <KeyWord name="AHK_exe"/>
-        <KeyWord name="AHK_group"/>
-        <KeyWord name="AHK_id"/>
-        <KeyWord name="AHK_pid"/>
         <KeyWord name="All"/>
         <KeyWord name="Alnum"/>
         <KeyWord name="Alpha"/>

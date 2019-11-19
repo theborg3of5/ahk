@@ -3,6 +3,10 @@
 		Maybe just move all AHK language stuff into a new (static? lib?) class?
 		splitVarList might even be a more general thing for StringLib - splitting on commas, but respecting quotes/parens.
 	Clean up updateNotepad++AutoComplete script
+	Move debugName into debugToString() - probably a ByRef parameter?
+	Re-examine object merge functions and callers
+		Looks like the current method breaks class instances - it doesn't copy over functions and the like
+		.clone() or a straight := set is probably what I want in any class cases, instead
 	Consider additional user-defined languages in Notepad++:
 		My todo lists
 			Folding like python (hierarchical on every indent)

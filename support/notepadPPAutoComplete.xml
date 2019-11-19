@@ -4300,6 +4300,20 @@
         <KeyWord name="Object"/>
 
         <!-- *gdb START CLASS: ObjectBase -->
+        <KeyWord name="ObjectBase.appendObject" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add the basic members (not including functions) from the given object into
+							;                 this object.
+							; PARAMETERS:
+							;  objectToAppend (I,REQ) - The object to merge content from.
+							; RETURNS:        this
+							; NOTES:          If the new object has the same key as this one, the new value will overwrite
+							;                 our existing one, even if the new one is blank.
+							;---------">
+                <Param name="objectToAppend" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ObjectBase.contains" func="yes">
             <Overload retVal="" descr="
 							;---------

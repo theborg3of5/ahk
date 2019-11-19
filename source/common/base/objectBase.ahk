@@ -60,5 +60,21 @@ class ObjectBase {
 		
 		return this
 	}
+	
+	;---------
+	; DESCRIPTION:    Add the basic members (not including functions) from the given object into
+	;                 this object.
+	; PARAMETERS:
+	;  objectToAppend (I,REQ) - The object to merge content from.
+	; RETURNS:        this
+	; NOTES:          If the new object has the same key as this one, the new value will overwrite
+	;                 our existing one, even if the new one is blank.
+	;---------
+	appendObject(objectToAppend) {
+		For index,value in objectToAppend
+			this[index] := value
+		
+		return this
+	}
 	; #END#
 }

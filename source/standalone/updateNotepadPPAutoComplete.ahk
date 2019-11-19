@@ -33,8 +33,8 @@ global scopeStartPublic  := "; #PUBLIC#"
 global scopeStartPrivate := "; #PRIVATE#"
 global scopeStartDebug   := "; #DEBUG#"
 global scopeEnd          := "; #END#"
-global headerIndent := StringLib.getTabs(7) ; We can indent with tabs and it's ignored - cleaner XML and result looks the same.
-global returnValueProperty := "[Property]"
+global headerIndent := StringLib.getTabs(7) ; We can indent with tabs and it's ignored - cleaner XML and result looks the same. ; GDB TODO should this move into the new member class?
+global returnValueProperty := "[Property]" ; GDB TODO should this move into the new member class?
 
 
 
@@ -47,7 +47,7 @@ originalXML := FileRead(autoCompleteFilePath)
 
 newXML := originalXML
 failedClasses := {}
-For className,classXML in autoCompleteXMLs {
+For className,classXML in autoCompleteXMLs { ; GDB TODO break this section up more
 	; Find the block in the original XML for this class
 	startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
 	endBlockComment   := endBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
@@ -63,7 +63,7 @@ For className,classXML in autoCompleteXMLs {
 }
 
 failedNameList := ""
-failedBlocks := ""
+failedBlocks   := ""
 if(!DataLib.isNullOrEmpty(failedClasses)) {
 	For className,classXML in failedClasses {
 		failedNameList := failedNameList.appendPiece(className)
@@ -92,10 +92,10 @@ getAllCommonDocs() {
 	commonRoot := Config.path["AHK_SOURCE"] "\common\"
 	
 	docs := {}
-	docs.mergeFromObject(getDocsForScriptsInFolder(commonRoot "base"))
-	docs.mergeFromObject(getDocsForScriptsInFolder(commonRoot "class"))
-	docs.mergeFromObject(getDocsForScriptsInFolder(commonRoot "lib"))
-	docs.mergeFromObject(getDocsForScriptsInFolder(commonRoot "static"))
+	docs.mergeFromObject(getDocsForAllScriptsInFolder(commonRoot "base"))
+	docs.mergeFromObject(getDocsForAllScriptsInFolder(commonRoot "class"))
+	docs.mergeFromObject(getDocsForAllScriptsInFolder(commonRoot "lib"))
+	docs.mergeFromObject(getDocsForAllScriptsInFolder(commonRoot "static"))
 	; Deliberately leaving external\ out - don't want to try and document those myself, no good reason to.
 	
 	return docs
@@ -103,7 +103,7 @@ getAllCommonDocs() {
 
 
 
-getDocsForScriptsInFolder(folderPath) {
+getDocsForAllScriptsInFolder(folderPath) {
 	docs := {}
 	Loop, Files, %folderPath%\*.ahk, RF ; Recursive, files (not directories)
 	{ ; GDB TODO: should we just make this an infinite loop (or do some pre-processing before-hand) so we don't need to have the inBlock/outOfScope stuff?
@@ -260,3 +260,76 @@ getParamsXML(paramsAry) {
 	
 	return "`n" paramsXML ; Newline before the whole params block
 }
+
+
+; GDB TODO have these classes generate their own XMLs
+
+; Represents an entire class that we want to add auto-complete info for.
+class AutoCompleteClass {
+	; #PUBLIC#
+	
+	; GDB TODO document class
+	name       := ""
+	parentName := ""
+	members    := {} ; {.memberName: AutoCompleteMember}
+	
+	
+	__New(name, parentName := "") {
+		this.name       := name
+		this.parentName := parentName
+	}
+	
+	
+	addMember(member) {
+		dotName := "." member.name ; The index is the name with a preceding dot - otherwise we start overwriting things like <array>.contains with this array, and that breaks stuff.
+		this.members[dotName] := member
+	}
+	
+	; #END#
+}
+
+; Represents a single class member that we want to add auto-complete info for.
+class AutoCompleteMember {
+	; #PUBLIC#
+	
+	name        := ""
+	returns     := ""
+	description := ""
+	paramsAry   := []
+	
+	
+	__New(defLine, headerLines) {
+		AHKCodeLib.getDefLineParts(defLine, name, paramsAry)
+		this.name      := name
+		this.paramsAry := paramsAry
+		
+		; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
+		if(!defLine.contains("("))
+			this.returns := returnValueProperty
+		
+		; The description is the actual function header, indented nicely.
+		this.description := this.formatHeaderAsDescription(headerLines)
+	}
+	
+	
+	; #PRIVATE#
+	
+	formatHeaderAsDescription(headerLines) {
+		; Put the lines back together
+		headerText := headerLines.join("`n")
+		
+		; Replace double-quotes with their XML-safe equivalent
+		headerText := headerText.replace("""", "&quot;")
+		
+		; Add a newline at the start to separate the header from the definition line in the popup
+		headerText := "`n" headerText
+		
+		; Indent the whole thing with tabs (which appear in the XML but are ignored in the popup)
+		headerText := headerText.replace("`n", "`n" headerIndent)
+		
+		return headerText
+	}
+	
+	; #END#
+}
+

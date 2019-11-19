@@ -25,7 +25,10 @@
 	
 	; Debug, auto-search for workstation ID.
 	~F5::EpicStudio.runDebug("ws:" Config.private["WORK_COMPUTER_NAME"])
-	F6:: EpicStudio.runDebug("ws:" A_IPAddress1)
+	F6::
+		Send, {F5}
+		EpicStudio.runDebug("user:" Config.private["WORK_USERNAME"])
+	return
 #If
 
 class EpicStudio {
@@ -117,12 +120,6 @@ class EpicStudio {
 		WinWait, Attach to Process, , 5
 		if(ErrorLevel)
 			return
-		
-		currFilter := ControlGet("Line", 1, EpicStudio.Debug_OtherProcessField, "A")
-		if(currFilter) {
-			ControlFocus, % EpicStudio.Debug_OtherProcessField, A
-			return ; There's already something plugged into the field, so just put the focus there in case they want to change it.
-		}
 		
 		; Pick the radio button for "Other existing process:".
 		ControlFocus, % EpicStudio.Debug_OtherProcessButton, A

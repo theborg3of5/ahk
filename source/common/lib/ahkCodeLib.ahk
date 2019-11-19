@@ -96,11 +96,6 @@ class AHKCodeLib {
 		}
 		
 		paramsAry := AHKCodeLib.splitVarList(paramsList)
-		
-		if(defLine.contains("FrameY_CaptionSizable"))
-			Debug.popup("defLine",defLine, "lineType",lineType, "name",name, "paramsList",paramsList, "paramsAry",paramsAry)
-		; if(name.contains("Char_Model"))
-			; Debug.popup("defLine",defLine, "name",name, "paramsList",paramsList, "paramsAry",paramsAry)
 	}
 	
 	;---------

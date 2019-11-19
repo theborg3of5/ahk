@@ -2654,19 +2654,6 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ErrorToast.ErrorToast" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Create a new Toast object.
-							; PARAMETERS:
-							;  toastText      (I,OPT) - The text to show in the toast.
-							;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be
-							;                           found in .getStyles().
-							;---------">
-                <Param name="toastText := &quot;&quot;" />
-                <Param name="styleOverrides := &quot;&quot;" />
-            </Overload>
-        </KeyWord>
         <KeyWord name="ErrorToast.hide" func="yes">
             <Overload retVal="" descr="
 							;---------

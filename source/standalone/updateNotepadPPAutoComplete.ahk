@@ -6,26 +6,41 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
-startBlockCommentBaseXML := "
+global startBlockCommentBaseXML := "
 	(
         <!-- *gdb START CLASS: <CLASS_NAME> -->
 	)"
-endBlockCommentBaseXML := "
+global endBlockCommentBaseXML := "
 	(
         <!-- *gdb END CLASS: <CLASS_NAME> -->
 	)"
 
+; <PARAMS_XML> has no indent/newline so each line of the params can indent itself the same.
+; Always func="yes", because that allows us to get a popup with the info.
+global keywordBaseXML := "
+	(
+        <KeyWord name=""<FULL_NAME>"" func=""yes"">
+            <Overload retVal=""<RETURNS>"" descr=""<DESCRIPTION>""><PARAMS_XML>
+            </Overload>
+        </KeyWord>
+	)"
+global paramBaseXML := "
+	(
+                <Param name=""<PARAM_NAME>"" />
+	)"
+global docSeparator := ";---------"
+global scopeStartPublic  := "; #PUBLIC#"
+global scopeStartPrivate := "; #PRIVATE#"
+global scopeStartDebug   := "; #DEBUG#"
+global scopeEnd          := "; #END#"
+global headerIndent := StringLib.getTabs(7) ; We can indent with tabs and it's ignored - cleaner XML and result looks the same.
+global returnValueProperty := "[Property]"
 
-commonRoot := Config.path["AHK_SOURCE"] "\common"
 
-classInfos := {}
-classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\base"))
-classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\class"))
-classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\lib"))
-classInfos.mergeFromObject(getAutoCompleteInfoForFolder(commonRoot "\static"))
-; Debug.popup("classInfos",classInfos)
 
-autoCompleteXMLs := generateXMLForClasses(classInfos)
+classDocs := getAllCommonDocs()
+
+autoCompleteXMLs := generateXMLForClasses(classDocs)
 
 autoCompleteFilePath := Config.path["AHK_SUPPORT"] "\notepadPPAutoComplete.xml"
 originalXML := FileRead(autoCompleteFilePath)
@@ -71,60 +86,125 @@ FileLib.replaceFileWithString(activeAutoCompleteFilePath, newXML)
 new Toast("Updated both versions of the auto-complete file").blockingOn().showMedium()
 ExitApp
 
-getAutoCompleteInfoForFolder(path) {
-	classInfos := {}
-	Loop, Files, %path%\*.ahk, RF ; Recursive, files (not directories)
-	{
-		classInfos.mergeFromObject(getAutoCompleteInfoFromScript(A_LoopFileLongPath))
-	}
-	return classInfos
+
+
+getAllCommonDocs() {
+	commonRoot := Config.path["AHK_SOURCE"] "\common\"
+	
+	docs := {}
+	docs.mergeFromObject(getDocsForScriptsInFolder(commonRoot "base"))
+	docs.mergeFromObject(getDocsForScriptsInFolder(commonRoot "class"))
+	docs.mergeFromObject(getDocsForScriptsInFolder(commonRoot "lib"))
+	docs.mergeFromObject(getDocsForScriptsInFolder(commonRoot "static"))
+	; Deliberately leaving external\ out - don't want to try and document those myself, no good reason to.
+	
+	return docs
 }
 
-generateXMLForClasses(classInfos) {
-	; Debug.popup("classInfos",classInfos)
+
+
+getDocsForScriptsInFolder(path) {
+	docs := {}
+	Loop, Files, %path%\*.ahk, RF ; Recursive, files (not directories)
+	{
+		linesAry := FileLib.fileLinesToArray(A_LoopFileLongPath)
+		
+		; Find groups of lines that give us info about a function - basically the stuff between two docSeparator lines, and the line following (which should have the name).
+		inBlock := false
+		outOfScope := false
+		docLines := []
+		
+		currClassName := ""
+		
+		classDocs := {} ; {className: {className.memberName: docInfo}}
+		
+		For lineNumber,line in linesAry {
+			line := line.withoutWhitespace()
+			
+			; Finishing a block - grab the name from the next line (which should be a definition line) and store everything off.
+			if(inBlock) {
+				if(line = docSeparator) {
+					docLines.push(line)
+					
+					defLine := linesAry[lineNumber + 1]
+					AHKCodeLib.getDefLineParts(defLine, name, paramsAry)
+					
+					; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
+					retValue := ""
+					if(!defLine.contains("("))
+						retValue := returnValueProperty
+					
+					headerText := "`n" headerIndent docLines.join("`n" headerIndent) ; Add a newline at the start to separate the header from the definition line in the popup
+					headerText := headerText.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
+					
+					; if(name = currClassName ".__New")
+						; dotName := currClassName
+					; else
+						; dotName := currClassName "." name
+					
+					dotName := "." name
+					classDocs[currClassName, dotName] := {"NAME":name, "RETURNS":retValue, "DESCRIPTION":headerText, "PARAMS_ARY":paramsAry, "PARENT_CLASS":currParentClassName}
+					
+					docLines := []
+					inBlock := false
+				} else {
+					docLines.push(line)
+				}
+				Continue
+			}
+			
+			; Ignore stuff that's in a private or debug scope.
+			if(line = scopeStartPrivate || line = scopeStartDebug) {
+				outOfScope := true
+			}
+			if(outOfScope) {
+				if(line = scopeStartPublic || line = scopeEnd)
+					outOfScope := false
+				else
+					Continue
+			}
+			
+			if(line = docSeparator) {
+				docLines.push(line)
+				inBlock := true
+				Continue
+			}
+			
+			; Class declaration - any functions below this should start with "<className>."
+			if(line.startsWith("class ") && line.endsWith(" {") && line != "class {") {
+				; Get new class name
+				currClassName := line.firstBetweenStrings("class ", " ") ; Break on space instead of end bracket so we don't end up including the "extends" bit for child classes.
+				currParentClassName := ""
+				if(line.contains(" extends "))
+					currParentClassName := line.firstBetweenStrings(" extends ", " {")
+			}
+		}
+		
+		docs.mergeFromObject(classDocs)
+	}
 	
-	startBlockCommentBaseXML := "
-		(
-        <!-- *gdb START CLASS: <CLASS_NAME> -->
-		)"
-	endBlockCommentBaseXML := "
-		(
-        <!-- *gdb END CLASS: <CLASS_NAME> -->
-		)"
-	keywordBaseXML := "
-		(
-        <KeyWord name=""<NAME>"" func=""<IS_FUNC>"">
-            <Overload retVal=""<RETURNS>"" descr=""<DESCRIPTION>""><PARAMS>
-            </Overload>
-        </KeyWord>
-		)" ; <PARAMS> has no indent/newline so each line of the params can indent itself the same.
-	paramBaseXML := "
-		(
-                <Param name=""<PARAM>"" />
-		)"
-	
-	allXML := {}
+	return docs
+}
+
+generateXMLForClasses(classDocs) {
+	allXML := {} ; {className: classXML}
 	
 	; Generate XML for each class
-	For className,classInfo in classInfos {
+	For className,classMembers in classDocs {
 		
 		; Add any inherited functions (only 1 layer deep) into the array of info for this class
-		For dotFunctionName,keywordTags in classInfo {
+		For _,keywordTags in classMembers {
 			parentClassName := keywordTags["PARENT_CLASS"]
 			
-			
 			if(parentClassName != "") {
-				; Debug.popup("className",className, "parentClassName",parentClassName, "dotFunctionName",dotFunctionName, "keywordTags",keywordTags, "classInfos[parentClassName]",classInfos[parentClassName])
 				
-				For parentDotFunctionName,parentKeywordTags in classInfos[parentClassName] {
-					; Debug.popup("parentClassName",parentClassName, "parentDotFunctionName",parentDotFunctionName, "parentKeywordTags",parentKeywordTags)
+				For parentMemberDotName,parentKeywordTags in classDocs[parentClassName] {
+					; Debug.popup("parentClassName",parentClassName, "parentMemberDotName",parentMemberDotName, "parentKeywordTags",parentKeywordTags)
 					
-					if(parentDotFunctionName = ".__New")
-						parentDotFunctionName := "." className
-					if(classInfo.HasKey(parentDotFunctionName)) ; Child object should win
+					if(classMembers.HasKey(parentMemberDotName)) ; Child object should win
 						Continue
 					
-					classInfo[parentDotFunctionName] := parentKeywordTags
+					classMembers[parentMemberDotName] := parentKeywordTags
 				}
 			}
 			Break
@@ -132,43 +212,14 @@ generateXMLForClasses(classInfos) {
 		
 		classXML := ""
 		
-		; Debug.popup("className",className, "classInfo",classInfo)
-		
 		; Add an XML comment to say we're starting a block
 		startBlockComment := startBlockCommentBaseXML.replaceTag("CLASS_NAME", className)
 		classXML .= startBlockComment
 		
-		; Debug.popup("className",className)
-		
-		For dotFunctionName,keywordTags in classInfo {
-			; Debug.popup("className",className, "dotFunctionName",dotFunctionName, "keywordTags",keywordTags)
-			
-			paramsAry := keywordTags["PARAMS_ARY"]
-			
-			allParamsXML := ""
-			if(!DataLib.isNullOrEmpty(paramsAry)) {
-				For _,param in paramsAry {
-					param := param.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
-					paramXML := paramBaseXML.replaceTag("PARAM", param)
-					allParamsXML := allParamsXML.appendPiece(paramXML, "`n")
-				}
-				allParamsXML := "`n" allParamsXML ; Newline before the whole params block
-			}
-			
-			keywordTags["PARAMS"] := allParamsXML
-			
-			functionName := dotFunctionName.removeFromStart(".")
-			if(functionName = "__New")
-				functionName := className
-			else
-				functionName := className "." functionName
-			keywordTags["NAME"] := functionName
-			
-			; if(functionName.contains("contains"))
-				; Debug.popup("keywordTags",keywordTags)
-			
-			functionXML := keywordBaseXML.replaceTags(keywordTags)
-			classXML := classXML.appendPiece(functionXML, "`n")
+		For _,docs in classMembers {
+			; Debug.popup("className",className, "docs",docs)
+			memberXML := generateMemberXML(className, docs)
+			classXML := classXML.appendPiece(memberXML, "`n")
 		}
 		
 		; Add an XML comment to say we're ending a block
@@ -177,8 +228,6 @@ generateXMLForClasses(classInfos) {
 		
 		; Flush to allXML
 		allXML[className] := classXML
-		
-		; Debug.popup("className",className, "classXML",classXML)
 	}
 	
 	
@@ -187,167 +236,34 @@ generateXMLForClasses(classInfos) {
 	
 }
 
-getAutoCompleteInfoFromScript(path) {
-	docSeparator := ";---------"
-	publicScopeStart  := "; #PUBLIC#"
-	privateScopeStart := "; #PRIVATE#"
-	debugScopeStart   := "; #DEBUG#"
-	allScopeEnd       := "; #END#"
+generateMemberXML(className, docs) {
+	xml := keywordBaseXML
 	
+	; Full name is "<class>.<member>", except for constructors which are just "<class>".
+	if(docs["NAME"] = "__New")
+		fullName := className
+	else
+		fullName := className "." docs["NAME"]
 	
-	linesAry := FileLib.fileLinesToArray(path)
-	; Debug.popup("linesAry",linesAry)
+	xml := xml.replaceTag("FULL_NAME",   fullName)
+	xml := xml.replaceTag("RETURNS",     docs["RETURNS"])
+	xml := xml.replaceTag("DESCRIPTION", docs["DESCRIPTION"])
+	xml := xml.replaceTag("PARAMS_XML",  getParamsXML(docs["PARAMS_ARY"]))
 	
-	; Find groups of lines that give us info about a function - basically the stuff between two docSeparator lines, and the line following (which should have the name).
-	inBlock := false
-	outOfScope := false
-	docLines := []
-	
-	classXML := ""
-	currClassName := ""
-	
-	classFunctions := {} ; {functionName: keywordTags}
-	classInfos := {} ; {className: classFunctions}
-	
-	For lineNumber,line in linesAry {
-		line := line.withoutWhitespace()
-		
-		; Finishing a block - grab the name from the next line (which should be a definition line) and store everything off.
-		if(inBlock) {
-			if(line = docSeparator) {
-				docLines.push(line)
-				
-				defLine := linesAry[lineNumber + 1]
-				AHKCodeLib.getDefLineParts(defLine, name, paramsAry)
-				
-				; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
-				retValue := ""
-				if(!defLine.contains("(")) {
-					retValue := "[Property]"
-				}
-				
-				headerIndent := StringLib.getTabs(7) ; We can indent with tabs and it's ignored - cleaner XML and result looks the same.
-				headerText := "`n" headerIndent docLines.join("`n" headerIndent) ; Add a newline at the start to separate the header from the definition line in the popup
-				headerText := headerText.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
-				
-				isFunc := "yes" ; Always "yes" - allows me to type an open paren and get the popup of info.
-				
-				; Store function info with an index preceded by a dot - otherwise we run into conflicts with things like contains(), which is actually a function for the object in question.
-				classFunctions["." name] := {"NAME":name, "IS_FUNC":isFunc, "RETURNS":retValue, "DESCRIPTION":headerText, "PARAMS_ARY":paramsAry, "PARENT_CLASS":currParentClassName}
-				
-				docLines := []
-				inBlock := false
-			} else {
-				docLines.push(line)
-			}
-			Continue
-		}
-		
-		; Ignore stuff that's in a private or debug scope.
-		if(line = privateScopeStart || line = debugScopeStart) {
-			outOfScope := true
-		}
-		if(outOfScope) {
-			if(line = publicScopeStart || line = allScopeEnd)
-				outOfScope := false
-			else
-				Continue
-		}
-		
-		if(line = docSeparator) {
-			docLines.push(line)
-			inBlock := true
-			Continue
-		}
-		
-		; Class declaration - anything below this should start with "<className>."
-		if(line.startsWith("class ") && line.endsWith(" {") && line != "class {") {
-			; If there was a class open before, add a closing comment for it.
-			if(currClassName != "") {
-				; Save off all functions in this class to class object
-				if(!DataLib.isNullOrEmpty(classFunctions)) { ; Only add to allXML if we actually have documented functions to include
-					classInfos[currClassName] := classFunctions
-				}
-				
-				classFunctions := {}
-			}
-			
-			; Get new class name
-			currClassName := line.firstBetweenStrings("class ", " ") ; Break on space instead of end bracket so we don't end up including the "extends" bit for child classes.
-			currParentClassName := ""
-			if(line.contains(" extends "))
-				currParentClassName := line.firstBetweenStrings(" extends ", " {")
-		}
-	}
-	
-	; If there was a class open at the end, finish it off.
-	if(currClassName != "") {
-		; Save off all functions in this class to class object
-		if(!DataLib.isNullOrEmpty(classFunctions)) { ; Only add to allXML if we actually have documented functions to include
-			classInfos[currClassName] := classFunctions
-			; Debug.popup("currClassName2",currClassName)
-		}
-		
-		classFunctions := {}
-	}
-	
-	; Get new class name
-	currClassName := line.firstBetweenStrings("class ", " ") ; Break on space instead of end bracket so we don't end up including the "extends" bit for child classes.
-	
-	; Debug.popup("classInfos",classInfos)
-	
-	return classInfos
-	
-	
+	return xml
 }
 
-getNameFromDefLine(defLine) {
-	defLine := defLine.beforeString("(") ; If it's a function, stop at the open paren.
-	defLine := defLine.beforeString("[") ; If it's a property with parameters, stop at the open bracket.
-	defLine := defLine.afterString("static ").beforeString(" ").beforeString(":") ; If it's a variable, drop any assignment or anything else that comes after the name.
-	return defLine ; If it's a property without parameters (or one of the above left only the name) then the whole thing is the name.
-}
-
-getParamsListFromDefinitionLine(definitionLine) {
-	; Function
-	if(definitionLine.contains("("))
-		return definitionLine.firstBetweenStrings("(", ")")
+getParamsXML(paramsAry) {
+	if(DataLib.isNullOrEmpty(paramsAry))
+		return ""
 	
-	; Property with brackets
-	if(definitionLine.contains("["))
-		return definitionLine.firstBetweenStrings("[", "]")
-	
-	return ""
-}
-splitVarList(varList) {
-	QUOTE := """" ; Double-quote character
-	paramsAry := []
-	
-	currentName := ""
-	openParens := 0
-	openQuotes := 0
-	Loop, Parse, varList
-	{
-		char := A_LoopField
+	paramsXML := ""
+	For _,paramName in paramsAry {
+		paramName := paramName.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
+		xml := paramBaseXML.replaceTag("PARAM_NAME", paramName)
 		
-		; Track open parens/quotes.
-		if(char = "(")
-			openParens++
-		if(char = ")")
-			openParens--
-		if(char = QUOTE)
-			openQuotes := mod(openQuotes + 1, 2) ; Quotes close other quotes, so just swap between open and closed
-		
-		; Split on commas, but only if there are no open parens or quotes.
-		if(char = "," && openParens = 0 && openQuotes = 0) {
-			paramsAry.push(currentName.withoutWhitespace())
-			currentName := ""
-			Continue
-		}
-		
-		currentName .= char
+		paramsXML := paramsXML.appendPiece(xml, "`n")
 	}
-	paramsAry.push(currentName.withoutWhitespace())
 	
-	return paramsAry
+	return "`n" paramsXML ; Newline before the whole params block
 }

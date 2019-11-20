@@ -45,7 +45,7 @@
 						The popup's title will be "This is the new title!"
 					
 				#  - Section title
-					Starting a row with this character (plus a space) will start a new "section" in the popup, with an extra newline followed by the rest of the row's text as a title (bolded/underlined). Note that if no choices appear after one of these rows (which can happen when filtering choices), only the most recent section title row will apply. Additionally, you can force a new super-column in the popup using a pipe (|) character - see "New column" character below.
+					Starting a row with this character (plus a space) will start a new "section" in the popup, with an extra newline followed by the rest of the row's text as a title (bolded/underlined). Note that if no choices appear after one of these rows (which can happen when filtering choices), only the most recent section title row will apply. Additionally, you can force a new super-column in the popup using an exclamation point (!) character - see "New column" character below.
 					Example:
 						# Stuff
 					Result:
@@ -59,10 +59,10 @@
 					Result:
 						The "Programs" choice will appear in the popup with an abbreviation of "prog", but the "prg" abbreviation may also be used to select that choice.
 					
-				| - New column (in section title row)
+				! - New column (in section title row)
 					If this character is put at the beginning of a section title row (with a space on either side), that title will force a new super-column in the popup.
 					Example:
-						# | Title
+						# ! Title
 					Result:
 						The "Title" section will start a new super-column in the popup.
 			
@@ -105,11 +105,6 @@
 
 class Selector {
 	; #PUBLIC#
-	
-	;---------
-	; DESCRIPTION:    The character to use for override field indices.
-	;---------
-	static Char_OverrideFieldIndex := ")"
 	
 	;---------
 	; DESCRIPTION:    The TableList instance that holds all data read from the file, available so
@@ -281,13 +276,13 @@ class Selector {
 	;                 caller can still modify them by filtering the TableList via .dataTL).
 	;---------
 	loadFromFile() {
-		tl := new TableList(this.filePath, {this.Char_OverrideFieldIndex: "OVERRIDE_INDEX"})
+		tl := new TableList(this.filePath)
 		
 		this.updateSettings(tl.settings)
 		
 		; Special override field index row that tells us how we should arrange data inputs.
-		fieldIndices := tl.keyRow["OVERRIDE_INDEX"]
-		if(fieldIndices) {
+		fieldIndices := tl.columnInfo
+		if(!DataLib.isNullOrEmpty(fieldIndices)) {
 			this.overrideFields := {}
 			For label,fieldIndex in fieldIndices {
 				if(fieldIndex > 0) ; Ignore data columns we don't want fields for (fieldIndex = 0)

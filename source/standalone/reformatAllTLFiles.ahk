@@ -147,8 +147,8 @@ splitRow(row) {
 stripOffModelKeyPrefix(ByRef row) {
 	if(row.startsWith(TableList.Char_Model))
 		prefix := TableList.Char_Model
-	else if(row.startsWith(Selector.Char_OverrideFieldIndex))
-		prefix := Selector.Char_OverrideFieldIndex
+	else if(row.startsWith(TableList.Char_ColumnInfo))
+		prefix := TableList.Char_ColumnInfo
 	
 	; Remove the prefix and any extra whitespace from the row so it can be split normally.
 	if(prefix != "")

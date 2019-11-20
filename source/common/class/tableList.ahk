@@ -40,7 +40,7 @@
 				Music          MUSIC          C:\Users\user\Music              HOME_LAPTOP
 				Music          MUSIC          D:\Music                         EPIC_LAPTOP
 			
-			We can also use comments, and add a key row (which this class will use as indices in the 2D array you get back):
+			We can also use comments, and add a model row (which this class will use as indices in the 2D array you get back):
 				(  NAME           ABBREV         PATH                             MACHINE
 				
 				; AHK Folders
@@ -133,7 +133,10 @@
 					If the line starts with this character (ignoring any whitespace before that), the line is ignored and not added to the table.
 				
 				Model - (
-					This is the key row mentioned above - the 2D array that you get back will use these column headers as string indices into each "row" array.
+					This is the model row mentioned above - the 2D array that you get back will use these column headers as string indices into each "row" array.
+				
+				Column info - )
+					Similar to the model row, this row stores information about each column as a whole. This will be stored separately from the normal rows, and can be retrieved via the .columnInfo property.
 				
 				Setting - @
 					Any row that begins with this is assumed to be of the form @SettingName=value. Settings can be accessed using the .settings property.
@@ -162,19 +165,18 @@
 					Mod lines should end with this character.
 			
 	--- Other features
-			Key rows
-				The constructor's keyRowChars parameter can be used to separate certain rows from the others based on their starting character, excluding them from the main table. Instead, those rows (which will still be split and indexed based on the model row) are stored off using the key name given as part of the parameter, and are accessible using the .keyRow[<keyName>] property.
-				Note that there should be only one row per character/key in this array.
+			Column info row
+				Using the column info character, you can provide information about each column as a whole. Just start a row with that character, and the caller can retrieve that info, indexed by column name, using the .columnInfo property.
+				Note that there should only be one column info row per file - if there are multiple, only the last one will be available via the property.
 				Example:
 					File:
 						(  NAME  ABBREV   VALUE
 						)  0     2        1
 						...
 					Code:
-						keyRowChars := {")": "OVERRIDE_INDEX"}
-						tl := new TableList(filePath, "", keyRowChars)
+						tl := new TableList(filePath)
 						table := tl.getTable()
-						overrideIndex := tl.keyRow["OVERRIDE_INDEX"]
+						overrideIndex := tl.columnInfo
 					Result:
 						table does not include row starting with ")"
 						overrideIndex["ABBREV"] := 2
@@ -217,6 +219,10 @@ class TableList {
 	;---------
 	static Char_Model       := "("
 	;---------
+	; DESCRIPTION:    Column info character
+	;---------
+	static Char_ColumnInfo  := ")"
+	;---------
 	; DESCRIPTION:    Settings character
 	;---------
 	static Char_Setting     := "@"
@@ -256,25 +262,15 @@ class TableList {
 	; PARAMETERS:
 	;  filePath    (I,REQ) - Path to the file to read from. May be a partial path if
 	;                        FileLib.findConfigFilePath() can find the correct thing.
-	;  keyRowChars (I,OPT) - Array of characters and key names to keep separate, see class
-	;                        documentation for more info. If a row starts with one of the characters
-	;                        included here, that row will not appear in the main table. Instead, it
-	;                        will be available using the .keyRow[<keyName>] property. Note that the
-	;                        row is still split and indexed based on the model row. Format (where
-	;                        keyName is the string you'll use with .keyRow[<keyName>] to retrieve
-	;                        the row later:
-	;                        	keyRowChars[<char>] := keyName
 	; RETURNS:        Reference to new TableList object
 	;---------
-	__New(filePath, keyRowChars := "") {
+	__New(filePath) {
 		if(!filePath)
 			return ""
 		
 		filePath := FileLib.findConfigFilePath(filePath)
 		if(!FileExist(filePath))
 			return ""
-		
-		this.keyRowChars := keyRowChars
 		
 		lines := FileLib.fileLinesToArray(filePath)
 		this.parseList(lines)
@@ -441,15 +437,12 @@ class TableList {
 	}
 	
 	;---------
-	; DESCRIPTION:    The key row (that was excluded from the table, based on the constructor's
-	;                 keyRowChars parameter) that matches the given name. Format:
-	;                   row[column] := value
-	; PARAMETERS:
-	;  name (I,REQ) - The key name that was associated with the row that you want.
+	; DESCRIPTION:    Information about each column, from the column info row of the file (assuming
+	;                 one existed).
 	;---------
-	keyRow[name] {
+	columnInfo {
 		get {
-			return this._keyRows[name]
+			return this._columnInfo
 		}
 	}
 	
@@ -482,9 +475,8 @@ class TableList {
 	mods        := []
 	table       := []
 	indexLabels := []
-	keyRowChars := {} ; {character: label}
 	
-	_keyRows    := {} ; {keyRowLabel: rowObj}
+	_columnInfo := {} ; {columnName: value}
 	_settings   := {} ; {settingName: settingValue}
 	_headers    := {} ; {firstRowNumberUnderHeader: headerText}
 	
@@ -524,7 +516,6 @@ class TableList {
 		if(row.startsWith(this.Char_Ignore))
 			return
 		
-		firstChar := row.sub(1, 1)
 		if(row.startsWith(this.Char_Setting))
 			this.processSetting(row)
 		
@@ -534,8 +525,8 @@ class TableList {
 		else if(row.startsWith(this.Char_Header))
 			this.processHeader(row)
 		
-		else if(this.keyRowChars.hasKey(firstChar)) ; Key characters mean that we split the row, but always store it separately from everything else.
-			this.processKey(row)
+		else if(row.startsWith(this.Char_ColumnInfo))
+			this.processColumnInfo(row)
 		
 		else if(row.startsWith(this.Char_Mod_Start))
 			this.processMod(row)
@@ -585,20 +576,14 @@ class TableList {
 		this._headers[firstRowNumber] := headerText
 	}
 	
-	;---------
-	; DESCRIPTION:    Parse a key row - this is one that we will split and index like a normal row,
-	;                 but will store separately.
-	; PARAMETERS:
-	;  row (I,REQ) - Key row that we're processing (string).
-	;---------
-	processKey(row) {
+	processColumnInfo(row) {
 		firstChar := row.sub(1, 1)
 		rowAry := row.split(A_Tab)
 		
 		rowAry.RemoveAt(1) ; Get rid of the separate char bit (")").
 		this.applyIndexLabels(rowAry)
 		
-		this._keyRows[this.keyRowChars[firstChar]] := rowAry
+		this._columnInfo := rowAry
 	}
 	
 	;---------
@@ -739,10 +724,9 @@ class TableList {
 	
 	debugToString(ByRef builder) {
 		builder.addLine("Chars",         this.chars)
-		builder.addLine("Key row chars", this.keyRowChars)
 		builder.addLine("Index labels",  this.indexLabels)
 		builder.addLine("Mods",          this.mods)
-		builder.addLine("Key rows",      this._keyRows)
+		builder.addLine("Column info",   this._columnInfo)
 		builder.addLine("Settings",      this._settings)
 		builder.addLine("Headers",       this._headers)
 		builder.addLine("Table",         this.table)

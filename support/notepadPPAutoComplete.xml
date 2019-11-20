@@ -5009,13 +5009,6 @@
                 <Param name="fieldsToAdd" />
             </Overload>
         </KeyWord>
-        <KeyWord name="Selector.Char_OverrideFieldIndex" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    The character to use for override field indices.
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="Selector.dataTL" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -6169,18 +6162,9 @@
 							; PARAMETERS:
 							;  filePath    (I,REQ) - Path to the file to read from. May be a partial path if
 							;                        FileLib.findConfigFilePath() can find the correct thing.
-							;  keyRowChars (I,OPT) - Array of characters and key names to keep separate, see class
-							;                        documentation for more info. If a row starts with one of the characters
-							;                        included here, that row will not appear in the main table. Instead, it
-							;                        will be available using the .keyRow[<keyName>] property. Note that the
-							;                        row is still split and indexed based on the model row. Format (where
-							;                        keyName is the string you'll use with .keyRow[<keyName>] to retrieve
-							;                        the row later:
-							;                        	keyRowChars[<char>] := keyName
 							; RETURNS:        Reference to new TableList object
 							;---------">
                 <Param name="filePath" />
-                <Param name="keyRowChars := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="TableList.addAutomaticFilter" func="yes">
@@ -6194,6 +6178,13 @@
 							;---------">
                 <Param name="filterColumn" />
                 <Param name="filterValue" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.Char_ColumnInfo" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Column info character
+							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="TableList.Char_Header" func="yes">
@@ -6264,6 +6255,14 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Settings character
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.columnInfo" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Information about each column, from the column info row of the file (assuming
+							;                 one existed).
 							;---------">
             </Overload>
         </KeyWord>
@@ -6348,18 +6347,6 @@
 							;                 row number of the first row in this section:
 							;                   headers[rowNum] := value
 							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="TableList.keyRow" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    The key row (that was excluded from the table, based on the constructor's
-							;                 keyRowChars parameter) that matches the given name. Format:
-							;                   row[column] := value
-							; PARAMETERS:
-							;  name (I,REQ) - The key name that was associated with the row that you want.
-							;---------">
-                <Param name="name" />
             </Overload>
         </KeyWord>
         <KeyWord name="TableList.settings" func="yes">

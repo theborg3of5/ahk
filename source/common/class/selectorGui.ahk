@@ -71,7 +71,7 @@ class SelectorGui {
 	; #PRIVATE#
 	
 	; Special characters
-	static Char_NewColumn := "|"
+	static Char_NewColumn := "! " ; Space after is required
 	
 	static GuiSpecialLabelsPrefix      := "SelectorGui"
 	static baseFieldVarChoice          := "Choice"
@@ -155,8 +155,8 @@ class SelectorGui {
 			sectionTitle := sectionHeaders[i]
 			
 			; Add new column if needed
-			if(sectionTitle.startsWith(this.Char_NewColumn " ")) {
-				sectionTitle := sectionTitle.removeFromStart(this.Char_NewColumn " ")
+			if(sectionTitle.startsWith(this.Char_NewColumn)) {
+				sectionTitle := sectionTitle.removeFromStart(this.Char_NewColumn)
 				flex.addColumn()
 				isEmptyColumn := true
 			}

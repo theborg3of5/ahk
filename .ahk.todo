@@ -14,12 +14,11 @@
 				|  - Multi-entry (make sure to support inside of mod lines)
 				-  - Placeholder (highlight char)
 				)  - Key (whole line)
+				!  - New column
 			Collapse on mods
 			Is there any fancy highlighting/lines we could add to match up with columns?
 	Standardize how we format & structure classes
 		Capitalization (Public vs _private members, Public vs private functions)
-			Do we really need the _ for private members?
-				Benefit: allows the same name for a corresponding public property
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
 		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
 		Use cases:

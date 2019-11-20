@@ -1,7 +1,4 @@
 # New Ideas
-	Re-examine object merge functions and callers
-		Looks like the current method breaks class instances - it doesn't copy over functions and the like
-		.clone() or a straight := set is probably what I want in any class cases, instead
 	Consider additional user-defined languages in Notepad++:
 		My todo lists
 			Folding like python (hierarchical on every indent)

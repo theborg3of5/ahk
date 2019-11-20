@@ -42,35 +42,15 @@ class ObjectBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Recursively merge the keys/properties from another object into this one.
-	; PARAMETERS:
-	;  overrides (I,REQ) - The object to merge data from. The object in this parameter "wins" when
-	;                      both this parameter and the instance of this class have the same
-	;                      index/property - that is, we'll replace the value on the class instance
-	;                      with the value from this parameter.
-	; RETURNS:        this
-	;---------
-	mergeFromObject(objectToAppend) {
-		For index,value in objectToAppend {
-			if(IsObject(value))
-				this[index] := DataLib.mergeObjects(this[index], value)
-			else
-				this[index] := value
-		}
-		
-		return this
-	}
-	
-	;---------
 	; DESCRIPTION:    Add the basic members (not including functions) from the given object into
 	;                 this object.
 	; PARAMETERS:
-	;  objectToAppend (I,REQ) - The object to merge content from.
+	;  objectToAppend (I,REQ) - The object to append the contents of.
 	; RETURNS:        this
 	; NOTES:          If the new object has the same key as this one, the new value will overwrite
 	;                 our existing one, even if the new one is blank.
 	;---------
-	appendObject(objectToAppend) {
+	mergeFromObject(objectToAppend) {
 		For index,value in objectToAppend
 			this[index] := value
 		

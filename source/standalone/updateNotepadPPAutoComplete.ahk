@@ -46,10 +46,10 @@ getAllCommonClasses() {
 	commonRoot := Config.path["AHK_SOURCE"] "\common\"
 	
 	classes := {}
-	classes.appendObject(getClassesFromFolder(commonRoot "base"))
-	classes.appendObject(getClassesFromFolder(commonRoot "class"))
-	classes.appendObject(getClassesFromFolder(commonRoot "lib"))
-	classes.appendObject(getClassesFromFolder(commonRoot "static"))
+	classes.mergeFromObject(getClassesFromFolder(commonRoot "base"))
+	classes.mergeFromObject(getClassesFromFolder(commonRoot "class"))
+	classes.mergeFromObject(getClassesFromFolder(commonRoot "lib"))
+	classes.mergeFromObject(getClassesFromFolder(commonRoot "static"))
 	; Deliberately leaving external\ out - don't want to try and document those myself, no good reason to.
 	
 	; Post-processing

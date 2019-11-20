@@ -2121,19 +2121,6 @@
                 <Param name="nums*" />
             </Overload>
         </KeyWord>
-        <KeyWord name="DataLib.mergeObjects" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Recursively merge two objects together into a new object containing the data from both.
-							; PARAMETERS:
-							;  baseObject (I,REQ) - The first object to merge.
-							;  overrides  (I,REQ) - The second object to merge. If both objects have the same property/index,
-							;                       this object's value will be included.
-							;---------">
-                <Param name="baseObject" />
-                <Param name="overrides" />
-            </Overload>
-        </KeyWord>
         <KeyWord name="DataLib.numToHex" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -4324,20 +4311,6 @@
         <KeyWord name="Object"/>
 
         <!-- *gdb START CLASS: ObjectBase -->
-        <KeyWord name="ObjectBase.appendObject" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Add the basic members (not including functions) from the given object into
-							;                 this object.
-							; PARAMETERS:
-							;  objectToAppend (I,REQ) - The object to merge content from.
-							; RETURNS:        this
-							; NOTES:          If the new object has the same key as this one, the new value will overwrite
-							;                 our existing one, even if the new one is blank.
-							;---------">
-                <Param name="objectToAppend" />
-            </Overload>
-        </KeyWord>
         <KeyWord name="ObjectBase.contains" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -4362,13 +4335,13 @@
         <KeyWord name="ObjectBase.mergeFromObject" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Recursively merge the keys/properties from another object into this one.
+							; DESCRIPTION:    Add the basic members (not including functions) from the given object into
+							;                 this object.
 							; PARAMETERS:
-							;  overrides (I,REQ) - The object to merge data from. The object in this parameter &quot;wins&quot; when
-							;                      both this parameter and the instance of this class have the same
-							;                      index/property - that is, we'll replace the value on the class instance
-							;                      with the value from this parameter.
+							;  objectToAppend (I,REQ) - The object to append the contents of.
 							; RETURNS:        this
+							; NOTES:          If the new object has the same key as this one, the new value will overwrite
+							;                 our existing one, even if the new one is blank.
 							;---------">
                 <Param name="objectToAppend" />
             </Overload>

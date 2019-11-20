@@ -185,29 +185,6 @@ class DataLib {
 	}
 	
 	;---------
-	; DESCRIPTION:    Recursively merge two objects together into a new object containing the data from both.
-	; PARAMETERS:
-	;  baseObject (I,REQ) - The first object to merge.
-	;  overrides  (I,REQ) - The second object to merge. If both objects have the same property/index,
-	;                       this object's value will be included.
-	;---------
-	mergeObjects(baseObject, overrides) {
-		if(IsObject(baseObject))
-			retAry := baseObject.clone()
-		else
-			retAry := {}
-		
-		For index,value in overrides {
-			if(IsObject(value))
-				retAry[index] := DataLib.mergeObjects(baseObject[index], value)
-			else
-				retAry[index] := value
-		}
-		
-		return retAry
-	}
-	
-	;---------
 	; DESCRIPTION:    Expand lists that can optionally contain numeric ranges (delimited by either
 	;                 colons or hyphens). For example:
 	;                  1,2:3,7,6-4 => [1, 2, 3, 7, 6, 5, 4]

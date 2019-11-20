@@ -6,36 +6,13 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
-; GDB TODO determine whether any of these constants should really live outside of the new class/member classes
-global startClassCommentBase := "
-	(
-        <!-- *gdb START CLASS: <CLASS_NAME> -->
-	)"
-global endClassCommentBase := "
-	(
-        <!-- *gdb END CLASS: <CLASS_NAME> -->
-	)"
+; Constants we use to pick apart scripts for their component parts.
+global Header_StartEnd    := ";---------"
+global ScopeStart_Public  := "; #PUBLIC#"
+global ScopeStart_Private := "; #PRIVATE#"
+global ScopeStart_Debug   := "; #DEBUG#"
+global ScopeEnd           := "; #END#"
 
-; <PARAMS_XML> has no indent/newline so each line of the params can indent itself the same.
-; Always func="yes", because that allows us to get a popup with the info.
-global keywordBaseXML := "
-	(
-        <KeyWord name=""<FULL_NAME>"" func=""yes"">
-            <Overload retVal=""<RETURNS>"" descr=""<DESCRIPTION>""><PARAMS_XML>
-            </Overload>
-        </KeyWord>
-	)"
-global paramBaseXML := "
-	(
-                <Param name=""<PARAM_NAME>"" />
-	)"
-global docSeparator := ";---------"
-global scopeStartPublic  := "; #PUBLIC#"
-global scopeStartPrivate := "; #PRIVATE#"
-global scopeStartDebug   := "; #DEBUG#"
-global scopeEnd          := "; #END#"
-global headerIndent := StringLib.getTabs(7) ; We can indent with tabs and it's ignored - cleaner XML and result looks the same.
-global returnValueProperty := "[Property]"
 
 ; Read in the current XML, to update
 autoCompleteFilePath := Config.path["AHK_SUPPORT"] "\notepadPPAutoComplete.xml"
@@ -60,7 +37,11 @@ new Toast("Updated both versions of the auto-complete file").blockingOn().showMe
 ExitApp
 
 
-
+;---------
+; DESCRIPTION:    Get AutoCompleteClass objects for all relevant classes in the common\ folder,
+;                 excluding those with no public members.
+; RETURNS:        An associative array of AutoCompleteClass objects, indexed by the class' names.
+;---------
 getAllCommonClasses() {
 	commonRoot := Config.path["AHK_SOURCE"] "\common\"
 	
@@ -91,7 +72,12 @@ getAllCommonClasses() {
 }
 
 
-
+;---------
+; DESCRIPTION:    Get AutoCompleteClass objects for all classes in all scripts in the given folder.
+; PARAMETERS:
+;  folderPath (I,REQ) - The full path to the folder to read from.
+; RETURNS:        An associative array of AutoCompleteClass objects, indexed by the class' names.
+;---------
 getClassesFromFolder(folderPath) {
 	classes := {}
 	
@@ -105,14 +91,14 @@ getClassesFromFolder(folderPath) {
 			line := linesAry.next(ln)
 			
 			; Block of documentation - read the whole thing in and create a member.
-			if(line = docSeparator) {
+			if(line = Header_StartEnd) {
 				; Store the full header in an array
 				headerLines := [line]
 				Loop {
 					line := linesAry.next(ln)
 					headerLines.push(line)
 					
-					if(line = docSeparator)
+					if(line = Header_StartEnd)
 						Break
 				}
 				
@@ -127,8 +113,8 @@ getClassesFromFolder(folderPath) {
 			}
 			
 			; Block of private/debug scope - ignore everything up until we hit a public/end of scope.
-			if(line = scopeStartPrivate || line = scopeStartDebug) {
-				while(line != scopeStartPublic && line != scopeEnd) {
+			if(line = ScopeStart_Private || line = ScopeStart_Debug) {
+				while(line != ScopeStart_Public && line != ScopeEnd) {
 					line := linesAry.next(ln)
 				}
 				
@@ -148,6 +134,15 @@ getClassesFromFolder(folderPath) {
 	return classes
 }
 
+;---------
+; DESCRIPTION:    Update the given XML with the XML of the given classes.
+; PARAMETERS:
+;  classes       (I,REQ) - An array of AutoCompleteClass objects to update in the XML.
+;  xml          (IO,REQ) - The XML to update.
+;  failedClasses (O,REQ) - If we can't find the right place to put any of the given classes, we'll
+;                          return an array of the problematic AutoCompleteClass objects here.
+; RETURNS:        true/false - were we able to add all classes?
+;---------
 updateClassesInXML(classes, ByRef xml, ByRef failedClasses) {
 	failedClasses := []
 
@@ -163,15 +158,21 @@ updateClassesInXML(classes, ByRef xml, ByRef failedClasses) {
 		
 		; Find the block in the original XML for this class and replace it with the class' XML (which
 		; includes the start/end comments).
-		xmlBefore := xml.beforeString(classObj.startComment)
-		xmlAfter := xml.afterString(classObj.endComment)
+		xmlBefore := xml.beforeString(startComment)
+		xmlAfter := xml.afterString(endComment)
 		xml := xmlBefore classObj.generateXML() xmlAfter
 	}
 	
 	return (DataLib.isNullOrEmpty(failedClasses))
 }
 
-
+;---------
+; DESCRIPTION:    Notify the user that we couldn't add some classes to the XML, and put the empty
+;                 blocks for those on the clipboard for the user to add manually.
+; PARAMETERS:
+;  failedClasses (I,REQ) - An array of AutoCompleteClass objects for the classes we couldn't add
+;                          to the auto-complete XML file.
+;---------
 handleFailedClasses(failedClasses) {
 	failedNames  := ""
 	failedBlocks := ""
@@ -190,24 +191,35 @@ handleFailedClasses(failedClasses) {
 class AutoCompleteClass {
 	; #PUBLIC#
 	
-	; GDB TODO document class
-	name       := ""
-	parentName := ""
+	name       := "" ; The class' name
+	parentName := "" ; The name of the class' parent (if it extends another class)
 	members    := {} ; {.memberName: AutoCompleteMember}
 	
-	
+	;---------
+	; DESCRIPTION:    The starting comment for this class - this goes at the end of the XML block for
+	;                 this class.
+	;---------
 	startComment {
 		get {
-			return startClassCommentBase.replaceTag("CLASS_NAME", this.name)
+			return this.CommentBase_Start.replaceTag("CLASS_NAME", this.name)
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    The ending comment for this class - this goes at the end of the XML block for
+	;                 this class.
+	;---------
 	endComment {
 		get {
-			return endClassCommentBase.replaceTag("CLASS_NAME", this.name)
+			return this.CommentBase_End.replaceTag("CLASS_NAME", this.name)
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    The XML to give to the user when we don't have somewhere to put this class'
+	;                 XML - just the starting and ending comments, plus newlines to space things
+	;                 out nicely.
+	;---------
 	emptyBlock {
 		get {
 			; Extra newlines so we can paste this at the end of the line this should follow, leaving
@@ -217,13 +229,22 @@ class AutoCompleteClass {
 	}
 	
 	
+	;---------
+	; DESCRIPTION:    Create a new class representation.
+	; PARAMETERS:
+	;  defLine (I,REQ) - The definition line for the class - the one that starts with "class ".
+	;---------
 	__New(defLine) {
 		this.name := defLine.firstBetweenStrings("class ", " ") ; Break on space instead of end bracket so we don't end up including the "extends" bit for child classes.
 		if(defLine.contains(" extends "))
 			this.parentName := defLine.firstBetweenStrings(" extends ", " {")
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Add the given member to this class.
+	; PARAMETERS:
+	;  member (I,REQ) - The member to add.
+	;---------
 	addMember(member) {
 		if(member.name = "")
 			return
@@ -231,6 +252,12 @@ class AutoCompleteClass {
 		dotName := "." member.name ; The index is the name with a preceding dot - otherwise we start overwriting things like <array>.contains with this array, and that breaks stuff.
 		this.members[dotName] := member
 	}
+	;---------
+	; DESCRIPTION:    Add the given member to this class, but only if a member with the same name
+	;                 doesn't already exist.
+	; PARAMETERS:
+	;  member (I,REQ) - The member to add.
+	;---------
 	addMemberIfNew(member) {
 		if(member.name = "")
 			return
@@ -242,6 +269,10 @@ class AutoCompleteClass {
 		this.members[dotName] := member
 	}
 	
+	;---------
+	; DESCRIPTION:    Generate the XML for this class and all of its members.
+	; RETURNS:        The generated XML
+	;---------
 	generateXML() {
 		xml := this.startComment
 		
@@ -254,18 +285,27 @@ class AutoCompleteClass {
 		return xml
 	}
 	
+	
 	; #PRIVATE#
 	
-	
+	; XML comments that go at the start/end of all members of the class.
+	static CommentBase_Start := "
+		(
+        <!-- *gdb START CLASS: <CLASS_NAME> -->
+		)"
+	static CommentBase_End := "
+		(
+        <!-- *gdb END CLASS: <CLASS_NAME> -->
+		)"
 	
 	
 	; #DEBUG#
 	
 	debugName := "AutoCompleteClass"
 	debugToString(debugBuilder) {
-		debugBuilder.addLine("Name", this.name)
+		debugBuilder.addLine("Name",        this.name)
 		debugBuilder.addLine("Parent name", this.parentName)
-		debugBuilder.addLine("Members", this.members)
+		debugBuilder.addLine("Members",     this.members)
 	}
 	; #END#
 }
@@ -279,7 +319,13 @@ class AutoCompleteMember {
 	description := ""
 	paramsAry   := []
 	
-	
+	;---------
+	; DESCRIPTION:    Create a new member.
+	; PARAMETERS:
+	;  defLine     (I,REQ) - The definition line for the member - that is, its first line
+	;                        (function definition, etc.).
+	;  headerLines (I,REQ) - An array of lines making up the full header for this member.
+	;---------
 	__New(defLine, headerLines) {
 		AHKCodeLib.getDefLineParts(defLine, name, paramsAry)
 		this.name      := name
@@ -287,15 +333,20 @@ class AutoCompleteMember {
 		
 		; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
 		if(!defLine.contains("("))
-			this.returns := returnValueProperty
+			this.returns := this.ReturnValue_Property
 		
 		; The description is the actual function header, indented nicely.
 		this.description := this.formatHeaderAsDescription(headerLines)
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Generate the XML for this member.
+	; PARAMETERS:
+	;  className (I,REQ) - The class that this member belongs to.
+	; RETURNS:        The XML for this member.
+	;---------
 	generateXML(className) {
-		xml := keywordBaseXML
+		xml := this.BaseXML_Keyword
 		
 		xml := xml.replaceTag("FULL_NAME",   this.generateFullName(className))
 		xml := xml.replaceTag("RETURNS",     this.returns)
@@ -308,6 +359,28 @@ class AutoCompleteMember {
 	
 	; #PRIVATE#
 	
+	static ReturnValue_Property := "[Property]"
+	; <PARAMS_XML> has no indent/newline so each line of the params can indent itself the same.
+	; Always func="yes", because that allows us to get a popup with the info.
+	static BaseXML_Keyword := "
+		(
+        <KeyWord name=""<FULL_NAME>"" func=""yes"">
+            <Overload retVal=""<RETURNS>"" descr=""<DESCRIPTION>""><PARAMS_XML>
+            </Overload>
+        </KeyWord>
+		)"
+	static BaseXML_Param := "
+		(
+                <Param name=""<PARAM_NAME>"" />
+		)"
+	static Indent_Header := StringLib.getTabs(7) ; We can indent with tabs and it's ignored - cleaner XML and result looks the same.
+	
+	;---------
+	; DESCRIPTION:    Turn the array of documentation lines into a single, indented, XML-safe string.
+	; PARAMETERS:
+	;  headerLines (I,REQ) - An array of lines containing the header for this member.
+	; RETURNS:        The header string to plug into the XML description for the member.
+	;---------
 	formatHeaderAsDescription(headerLines) {
 		; Put the lines back together
 		headerText := headerLines.join("`n")
@@ -319,11 +392,17 @@ class AutoCompleteMember {
 		headerText := "`n" headerText
 		
 		; Indent the whole thing with tabs (which appear in the XML but are ignored in the popup)
-		headerText := headerText.replace("`n", "`n" headerIndent)
+		headerText := headerText.replace("`n", "`n" this.Indent_Header)
 		
 		return headerText
 	}
 	
+	;---------
+	; DESCRIPTION:    Determine the full name of this member.
+	; PARAMETERS:
+	;  className (I,REQ) - The name of the class this member is part of.
+	; RETURNS:        Either className.memberName, or just className for constructors.
+	;---------
 	generateFullName(className) {
 		; Special case: constructors are just <className>
 		if(this.name = "__New")
@@ -333,6 +412,10 @@ class AutoCompleteMember {
 		return className "." this.name
 	}
 	
+	;---------
+	; DESCRIPTION:    Generate the XML for this member's parameters (if any).
+	; RETURNS:        The generated XML
+	;---------
 	generateParamsXML() {
 		if(DataLib.isNullOrEmpty(this.paramsAry))
 			return ""
@@ -340,7 +423,7 @@ class AutoCompleteMember {
 		paramsXML := ""
 		For _,paramName in this.paramsAry {
 			paramName := paramName.replace("""", "&quot;") ; Replace double-quotes with their XML-safe equivalent.
-			xml := paramBaseXML.replaceTag("PARAM_NAME", paramName)
+			xml := this.BaseXML_Param.replaceTag("PARAM_NAME", paramName)
 			
 			paramsXML .= "`n" xml ; Start with an extra newline to put the params block on a new line
 		}
@@ -353,9 +436,9 @@ class AutoCompleteMember {
 	
 	debugName := "AutoCompleteMember"
 	debugToString(debugBuilder) {
-		debugBuilder.addLine("Name", this.name)
-		debugBuilder.addLine("Returns", this.returns)
-		debugBuilder.addLine("Description", this.description)
+		debugBuilder.addLine("Name",         this.name)
+		debugBuilder.addLine("Returns",      this.returns)
+		debugBuilder.addLine("Description",  this.description)
 		debugBuilder.addLine("Params array", this.paramsAry)
 	}
 	; #END#

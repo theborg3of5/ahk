@@ -1,5 +1,4 @@
 ; Functions related to editing AHK scripts and their documentation.
-; GDB TODO: Update auto-complete and syntax highlighting notepad++ definitions
 
 class AHKCodeLib {
 	; #PUBLIC#

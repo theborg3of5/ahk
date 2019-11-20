@@ -348,17 +348,20 @@ class SelectorGui {
 	
 	; #DEBUG#
 	
-	debugName := "SelectorGui"
-	debugToString(debugBuilder) {
-		debugBuilder.addLine("Gui ID (handle)",            this.guiId)
-		debugBuilder.addLine("Choice field var",           this.fieldVarChoice)
-		debugBuilder.addLine("Override fields var prefix", this.fieldVarOverridesPrefix)
-		debugBuilder.addLine("Override fields",            this.overrideFields)
-		debugBuilder.addLine("Choice query",               this.choiceQuery)
-		debugBuilder.addLine("Override data",              this.overrideData)
-		debugBuilder.addLine("Total height",               this.totalHeight)
-		debugBuilder.addLine("Total width",                this.totalWidth)
-		debugBuilder.addLine("Choices table width",        this.choicesWidth)
+	getDebugTypeName() {
+		return "SelectorGui"
+	}
+	
+	debugToString(ByRef builder) {
+		builder.addLine("Gui ID (handle)",            this.guiId)
+		builder.addLine("Choice field var",           this.fieldVarChoice)
+		builder.addLine("Override fields var prefix", this.fieldVarOverridesPrefix)
+		builder.addLine("Override fields",            this.overrideFields)
+		builder.addLine("Choice query",               this.choiceQuery)
+		builder.addLine("Override data",              this.overrideData)
+		builder.addLine("Total height",               this.totalHeight)
+		builder.addLine("Total width",                this.totalWidth)
+		builder.addLine("Choices table width",        this.choicesWidth)
 	}
 	; #END#
 }

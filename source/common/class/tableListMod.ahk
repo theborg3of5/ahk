@@ -115,12 +115,15 @@ class TableListMod {
 	
 	; #DEBUG#
 	
-	debugName := "TableListMod"
-	debugToString(debugBuilder) {
-		debugBuilder.addLine("Column",    this.column)
-		debugBuilder.addLine("Operation", this.operation)
-		debugBuilder.addLine("Text",      this.text)
-		debugBuilder.addLine("Label",     this.labelFromParent)
+	getDebugTypeName() {
+		return "TableListMod"
+	}
+	
+	debugToString(ByRef builder) {
+		builder.addLine("Column",    this.column)
+		builder.addLine("Operation", this.operation)
+		builder.addLine("Text",      this.text)
+		builder.addLine("Label",     this.labelFromParent)
 	}
 	; #END#
 }

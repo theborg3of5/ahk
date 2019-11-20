@@ -76,9 +76,8 @@ class SelectorChoice {
 	
 	; #DEBUG#
 	
-	debugName := "SelectorChoice"
-	debugToString(debugBuilder) {
-		debugBuilder.addLine("Data", this.data)
+	getDebugTypeName() {
+		return "SelectorChoice"
 	}
 	; #END#
 }

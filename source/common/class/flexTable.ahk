@@ -241,16 +241,19 @@ class FlexTable {
 	
 	; #DEBUG#
 	
-	debugName := "FlexTable"
-	debugToString(debugBuilder) {
-		debugBuilder.addLine("Gui ID",                this.guiId)
-		debugBuilder.addLine("Min X",                 this.xMin)
-		debugBuilder.addLine("Min Y",                 this.yMin)
-		debugBuilder.addLine("Max X",                 this.xMax)
-		debugBuilder.addLine("Max Y",                 this.yMax)
-		debugBuilder.addLine("Row height",            this.rowHeight)
-		debugBuilder.addLine("Column padding",        this.columnPadding)
-		debugBuilder.addLine("Min column width",      this.minColumnWidth)
+	getDebugTypeName() {
+		return "FlexTable"
+	}
+	
+	debugToString(ByRef builder) {
+		builder.addLine("Gui ID",           this.guiId)
+		builder.addLine("Min X",            this.xMin)
+		builder.addLine("Min Y",            this.yMin)
+		builder.addLine("Max X",            this.xMax)
+		builder.addLine("Max Y",            this.yMax)
+		builder.addLine("Row height",       this.rowHeight)
+		builder.addLine("Column padding",   this.columnPadding)
+		builder.addLine("Min column width", this.minColumnWidth)
 	}
 	; #END#
 }

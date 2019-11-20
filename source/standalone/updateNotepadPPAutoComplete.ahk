@@ -301,11 +301,14 @@ class AutoCompleteClass {
 	
 	; #DEBUG#
 	
-	debugName := "AutoCompleteClass"
-	debugToString(debugBuilder) {
-		debugBuilder.addLine("Name",        this.name)
-		debugBuilder.addLine("Parent name", this.parentName)
-		debugBuilder.addLine("Members",     this.members)
+	getDebugTypeName() {
+		return "AutoCompleteClass"
+	}
+	
+	debugToString(ByRef builder) {
+		builder.addLine("Name",        this.name)
+		builder.addLine("Parent name", this.parentName)
+		builder.addLine("Members",     this.members)
 	}
 	; #END#
 }
@@ -434,12 +437,14 @@ class AutoCompleteMember {
 	
 	; #DEBUG#
 	
-	debugName := "AutoCompleteMember"
-	debugToString(debugBuilder) {
-		debugBuilder.addLine("Name",         this.name)
-		debugBuilder.addLine("Returns",      this.returns)
-		debugBuilder.addLine("Description",  this.description)
-		debugBuilder.addLine("Params array", this.paramsAry)
+	getDebugTypeName() {
+		return "AutoCompleteMember"
+	}
+	buildDebugDisplay(ByRef builder) {
+		builder.addLine("Name",         this.name)
+		builder.addLine("Returns",      this.returns)
+		builder.addLine("Description",  this.description)
+		builder.addLine("Params array", this.paramsAry)
 	}
 	; #END#
 }

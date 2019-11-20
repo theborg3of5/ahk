@@ -153,14 +153,17 @@ class WindowInfo {
 	
 	; #DEBUG#
 	
-	debugName := "WindowInfo"
-	debugToString(debugBuilder) {
-		debugBuilder.addLine("Name"                            , this.name)
-		debugBuilder.addLine("EXE"                             , this.exe)
-		debugBuilder.addLine("Class"                           , this.class)
-		debugBuilder.addLine("Title"                           , this.title)
-		debugBuilder.addLine("Edge type"                       , this.edgeType)
-		debugBuilder.addLine("Title string match mode override", this.titleStringMatchModeOverride)
+	getDebugTypeName() {
+		return "WindowInfo"
+	}
+	
+	debugToString(ByRef builder) {
+		builder.addLine("Name"                            , this.name)
+		builder.addLine("EXE"                             , this.exe)
+		builder.addLine("Class"                           , this.class)
+		builder.addLine("Title"                           , this.title)
+		builder.addLine("Edge type"                       , this.edgeType)
+		builder.addLine("Title string match mode override", this.titleStringMatchModeOverride)
 	}
 	; #END#
 }

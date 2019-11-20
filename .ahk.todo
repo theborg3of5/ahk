@@ -1,5 +1,4 @@
 # New Ideas
-	Move debugName into debugToString() - probably a ByRef parameter?
 	Re-examine object merge functions and callers
 		Looks like the current method breaks class instances - it doesn't copy over functions and the like
 		.clone() or a straight := set is probably what I want in any class cases, instead

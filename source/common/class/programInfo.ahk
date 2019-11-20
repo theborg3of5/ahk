@@ -47,10 +47,13 @@ class ProgramInfo {
 	
 	; #DEBUG#
 	
-   debugName := "ProgramInfo"
-   debugToString(debugBuilder) {
-      debugBuilder.addLine("Name", this.name)
-      debugBuilder.addLine("Path", this.path)
+	getDebugTypeName() {
+		return "ProgramInfo"
+	}
+	
+   debugToString(ByRef builder) {
+      builder.addLine("Name", this.name)
+      builder.addLine("Path", this.path)
    }
 	; #END#
 }

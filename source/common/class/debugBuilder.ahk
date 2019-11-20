@@ -13,10 +13,14 @@
 				}
 				
 				; Debug info
-				debugName := "ObjectWithDebug"
-				debugToString(debugBuilder) {
-					debugBuilder.addLine("Descriptive name of property 1", this.var1)
-					debugBuilder.addLine("Descriptive name of property 2", this.var2)
+				
+				getDebugTypeName() {
+					return "ObjectWithDebug"
+				}
+				
+				debugToString(ByRef builder) {
+					builder.addLine("Descriptive name of property 1", this.var1)
+					builder.addLine("Descriptive name of property 2", this.var2)
 				}
 			}
 			
@@ -25,7 +29,7 @@
 					Descriptive name of property 1: A
 					Descriptive name of property 2: B
 			
-			Note that indentation is handled by this class - each line will be shown one line deeper than the overall line (with the debugName) for the class.
+			Note that indentation is handled by this class - each line will be shown one line deeper than the overall line (with the type name) for the class.
 	
 */ ; =--
 

@@ -412,17 +412,20 @@ class Selector {
 	
 	; #DEBUG#
 	
-	debugName := "Selector"
-	debugToString(debugBuilder) {
-		debugBuilder.addLine("Filepath",          this.filePath)
-		debugBuilder.addLine("Suppress data?",    this.suppressData)
-		debugBuilder.addLine("Window title",      this._windowTitle)
-		debugBuilder.addLine("Min column width",  this._minColumnWidth)
-		debugBuilder.addLine("Override fields",   this.overrideFields)
-		debugBuilder.addLine("Default overrides", this._defaultOverrides)
-		debugBuilder.addLine("Choices",           this.choices)
-		debugBuilder.addLine("Section titles",    this.sectionTitles)
-		debugBuilder.addLine("Override fields",   this._dataTL)
+	getDebugTypeName() {
+		return "Selector"
+	}
+	
+	debugToString(ByRef builder) {
+		builder.addLine("Filepath",          this.filePath)
+		builder.addLine("Suppress data?",    this.suppressData)
+		builder.addLine("Window title",      this._windowTitle)
+		builder.addLine("Min column width",  this._minColumnWidth)
+		builder.addLine("Override fields",   this.overrideFields)
+		builder.addLine("Default overrides", this._defaultOverrides)
+		builder.addLine("Choices",           this.choices)
+		builder.addLine("Section titles",    this.sectionTitles)
+		builder.addLine("Override fields",   this._dataTL)
 	}
 	; #END#
 }

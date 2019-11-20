@@ -20,9 +20,12 @@ class ClassName {
 	
 	; #DEBUG#
 	
-	debugName := "GDB TODO"
-	debugToString(debugBuilder) {
-		debugBuilder.addLine("GDB TODO", this.GDBTODO)
+	getDebugTypeName() {
+		return "GDB TODO"
+	}
+	
+	buildDebugDisplay(ByRef builder) {
+		builder.addLine("GDB TODO", this.GDBTODO)
 	}
 	; #END#
 }

@@ -733,16 +733,19 @@ class TableList {
 	
 	; #DEBUG#
 	
-	debugName := "TableList"
-	debugToString(debugBuilder) {
-		debugBuilder.addLine("Chars",         this.chars)
-		debugBuilder.addLine("Key row chars", this.keyRowChars)
-		debugBuilder.addLine("Index labels",  this.indexLabels)
-		debugBuilder.addLine("Mods",          this.mods)
-		debugBuilder.addLine("Key rows",      this._keyRows)
-		debugBuilder.addLine("Settings",      this._settings)
-		debugBuilder.addLine("Headers",       this._headers)
-		debugBuilder.addLine("Table",         this.table)
+	getDebugTypeName() {
+		return "TableList"
+	}
+	
+	debugToString(ByRef builder) {
+		builder.addLine("Chars",         this.chars)
+		builder.addLine("Key row chars", this.keyRowChars)
+		builder.addLine("Index labels",  this.indexLabels)
+		builder.addLine("Mods",          this.mods)
+		builder.addLine("Key rows",      this._keyRows)
+		builder.addLine("Settings",      this._settings)
+		builder.addLine("Headers",       this._headers)
+		builder.addLine("Table",         this.table)
 	}
 	; #END#
 }

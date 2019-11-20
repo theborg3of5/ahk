@@ -58,10 +58,6 @@
 		Hotkey to show popup with all currently active hotkeys, divided up into current-program-specific and others
 			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
 	
-# TableList
-	TableList mods - consider making it a replacement by default (only 1 active mod), only stack with labels
-		Use case: onenote todos, dailies section could be more compact
-	
 # Selector
 	Add some setting to have the popup appear when we pass in a bad value?
 		Use case: Snapper, when we're on an INI we don't have items for.

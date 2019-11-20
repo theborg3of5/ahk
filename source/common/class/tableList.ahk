@@ -483,11 +483,11 @@ class TableList {
 	;---------
 	; DESCRIPTION:    Given an array of lines from a file, parse out the data into internal structures.
 	; PARAMETERS:
-	;  lines (I,REQ) - Numeric array of lines from the file.
+	;  linesAry (I,REQ) - Numeric array of lines from the file.
 	;---------
-	parseList(lines) {
+	parseList(linesAry) {
 		; Loop through and do work on them.
-		For i,row in lines {
+		For _,row in linesAry {
 			row := row.withoutWhitespace()
 			
 			; Reduce any sets of multiple tabs in a row to a single one.
@@ -593,9 +593,7 @@ class TableList {
 	; SIDE EFFECTS:   May change the currently active mods
 	;---------
 	processMod(row) {
-		label := 0
-		
-		; Strip off the starting/ending mod characters ([ and ] by default).
+		; Strip off the starting/ending mod characters (square brackets).
 		row := row.removeFromStart(this.Char_Mod_Start)
 		row := row.removeFromEnd(this.Char_Mod_End)
 		
@@ -608,20 +606,21 @@ class TableList {
 			if(row.startsWith(this.Char_Mod_RemoveLabel)) {
 				remLabel := row.removeFromStart(this.Char_Mod_RemoveLabel)
 				this.killMods(remLabel)
-				label := 0
-				
 				return
 			}
 			
-			; Split into individual mods.
-			newModsSplit := row.split(this.Char_MultiEntry)
-			For i,currMod in newModsSplit {
-				; Check for an add row label.
-				if(i = 1 && currMod.startsWith(this.Char_Mod_AddLabel))
-					label := currMod.removeFromStart(this.Char_Mod_AddLabel)
-				else
-					this.mods.push(new TableListMod(currMod, label))
+			; Check for an append row label.
+			; If there's not one, we're replacing all existing mods, so kill all existing ones.
+			if(row.startsWith(this.Char_Mod_AddLabel)) {
+				labelNum := row.firstBetweenStrings(this.Char_Mod_AddLabel, this.Char_MultiEntry)
+				row := row.afterString(this.Char_MultiEntry) ; Drop the label off the front since it's not a mod itself
+			} else {
+				this.mods := []
 			}
+			
+			; Store off the new mods.
+			For _,currMod in row.split(this.Char_MultiEntry)
+				this.mods.push(new TableListMod(currMod, label))
 		}
 	}
 	
@@ -682,9 +681,9 @@ class TableList {
 	;---------
 	; DESCRIPTION:    Remove any active mods that match the given label.
 	; PARAMETERS:
-	;  killLabel (I,OPT) - Numeric label to remove matching mods. Defaults to 0 (default label for all mods).
+	;  killLabel (I,REQ) - Numeric label to remove matching mods.
 	;---------
-	killMods(killLabel := 0) {
+	killMods(killLabel) {
 		For i,mod in this.mods
 			if(mod.label = killLabel)
 				this.mods.Delete(i)

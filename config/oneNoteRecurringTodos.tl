@@ -3,14 +3,12 @@
 # Dailies
 [DAY_ABBREV.replaceWith(THURS)]
 	Transcribe kids' class notes
-[]
 [DAY_ABBREV.replaceWith(SAT)]
 	Dishes from week
 	Wash laundry
 	Dry laundry
 	Clean off desk
 	Pull to-dos from specific sections below
-[]
 [DAY_ABBREV.replaceWith(SUN)]
 	Fold laundry
 	Roomba

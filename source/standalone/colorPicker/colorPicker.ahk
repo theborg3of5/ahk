@@ -8,19 +8,18 @@ ScriptTrayInfo.Init("AHK: Color Picker", "color.ico", "colorRed.ico")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
 ; Gui settings
-global GUI_TITLE         := "AHK_ColorPicker"
-global GUI_WIDTH         := 100
-global GUI_HEIGHT        := 50
-global MOUSE_GUI_PADDING := 10
+global GUI_TITLE           := "AHK_ColorPicker"
+global GUI_SPACING         := 10 ; For margins, space between labels, etc.
+global MOUSE_GUI_PADDING   := 10 ; Space between the mouse and the gui
+global MAGNIFIER_RADIUS    := 5
+global MAGNIFIER_GRID_SIZE := 2 * MAGNIFIER_RADIUS + 1
 
 ; Label settings
-global FONT_NAME   := "Consolas"
-global FONT_SIZE   := 14 ; Points
-global FONT_HEIGHT := 24 ; Pixels, including padding
-global ColorText ; reference variable for label
+global FONT_NAME := "Consolas"
+global FONT_SIZE := 14 ; Points
 
-global MAGNIFIER_RADIUS := 5
-global MAGNIFIER_GRID_SIZE := 2 * MAGNIFIER_RADIUS + 1
+global GuiWidth, GuiHeight ; Calculated based on contents
+global LabelHex, LabelRGB ; reference variables for labels
 
 ; Make mouse and pixel coordinate modes both relative to the screen (not the window)
 CoordMode, Mouse, Screen
@@ -37,52 +36,59 @@ ExitApp
 RButton::
 	Gui, Hide
 	
-	foundColor := getRGBUnderMouse()
-	if(foundColor = "") {
+	hexColor := getColorUnderMouse()
+	if(hexColor = "") {
 		new ErrorToast("Failed to get RGB color code").blockingOn().showMedium()
 		ExitApp
 	}
 	
-	ClipboardLib.set(foundColor)
-	new Toast("Clipboard set to " "RGB color code" ":`n" foundColor).blockingOn().showMedium()
+	ClipboardLib.set(hexColor)
+	new Toast("Clipboard set to " "RGB color code" ":`n" hexColor).blockingOn().showMedium()
 	ExitApp
 return
 
 
 buildGui() {
 	; Set overall gui properties
+	Gui, New, +HWNDwinId ; Sets winId := ahk_id
 	Gui, -Caption +ToolWindow +AlwaysOnTop +Border ; No title bar/menu, don't include in taskbar, always on top, show a border
-	Gui, Show, % "w" GUI_WIDTH " h" GUI_HEIGHT " Hide", % GUI_TITLE ; Set size (but don't show yet)
 	Gui, Font, % " s" FONT_SIZE, % FONT_NAME
+	Gui, Margin, % GUI_SPACING, % GUI_SPACING
 
-	; Add label
-	textHeight := FONT_HEIGHT
-	textWidth  := GUI_WIDTH ; Full width so we can center horizontally
-	textX      := 0 ; Left side so we cover the width fully
-	textY      := (GUI_HEIGHT - textHeight) / 2 ; Vertically centered
-	Gui, Add, Text, % "vColorText Center x" textX " y" textY " w" textWidth " h" textHeight ; ColorText is global variable to reference this control by
+	; Add label (vLabel* are Label* variables to reference these controls by)
+	defaultText := "123456" ; The controls auto-size, so we need to give them something to start with. We're using a monospace font and everything is 6 chars wide, so this works well.
+	Gui, Add, Text, % "Center vLabelHex"                     , % defaultText
+	Gui, Add, Text, % "Center vLabelRGB y+" GUI_SPACING " R3", % defaultText ; RGB table goes a little lower and has 3 rows
+	
+	; Auto-size gui, set title, store off size in globals
+	Gui, Show, % "AutoSize Hide", % GUI_TITLE ; Hide - don't actually show it until we have real values in place.
+	settings := new TempSettings().detectHiddenWindows("On")
+	WinGetPos, , , GuiWidth, GuiHeight, % "ahk_id " winId ; titleString
+	settings.restore()
 }
 
 
 updateGui() {
 	; Get color under mouse
 	MouseGetPos(mouseX, mouseY)
-	foundColor := getRGBUnderMouse(mouseX, mouseY)
+	hexColor := getColorUnderMouse(mouseX, mouseY)
 	
 	; Background is the current color
-	Gui, Color, % foundColor
+	Gui, Color, % hexColor
 	
 	; Text value is the current color
-	GuiControl, , ColorText, % foundColor
+	GuiControl, , LabelHex, % hexColor
+	GuiControl, , LabelRGB, % getRGBText(hexColor)
 	
 	; Text color is the inverse of the background color
-	Gui, Font, % "c" invertColor(foundColor)
-	GuiControl, Font, ColorText
+	Gui, Font, % "c" invertColor(hexColor)
+	GuiControl, Font, LabelHex
+	GuiControl, Font, LabelRGB
 	
 	moveGui(mouseX, mouseY)
 }
 
-getRGBUnderMouse(mouseX := "", mouseY := "") {
+getColorUnderMouse(mouseX := "", mouseY := "") {
 	if(mouseX = "" || mouseY = "")
 		MouseGetPos(mouseX, mouseY)
 	
@@ -92,16 +98,31 @@ getRGBUnderMouse(mouseX := "", mouseY := "") {
 	return color
 }
 
-invertColor(color) {
-	; Get RGB bits as integers
-	r := DataLib.hexToInteger(color.sub(1, 2))
-	g := DataLib.hexToInteger(color.sub(3, 2))
-	b := DataLib.hexToInteger(color.sub(5))
+getRGBText(hexColor) {
+	RGB := hexColorToRGB(hexColor)
 	
-	; Reverse integers
-	newR := 255 - r
-	newG := 255 - g
-	newB := 255 - b
+	outText :=   "R  " RGB["R"].prePadToLength(3)
+	outText .= "`nG  " RGB["G"].prePadToLength(3)
+	outText .= "`nB  " RGB["B"].prePadToLength(3)
+	
+	return outText
+}
+
+hexColorToRGB(hex) {
+	r := DataLib.hexToInteger(hex.sub(1, 2))
+	g := DataLib.hexToInteger(hex.sub(3, 2))
+	b := DataLib.hexToInteger(hex.sub(5))
+	
+	return {"R":r, "G":g, "B":b}
+}
+
+; hexColor should just be the hex code, no "0x" at the start like PixelGetColor returns it.
+invertColor(hexColor) {
+	; Get individual RGB bits and invert them
+	RGB := hexColorToRGB(hexColor)
+	newR := 255 - RGB["R"]
+	newG := 255 - RGB["G"]
+	newB := 255 - RGB["B"]
 	
 	; Convert back to hex and recombine
 	finalR := DataLib.numToHex(newR).prePadToLength(2, "0")
@@ -114,19 +135,19 @@ invertColor(color) {
 moveGui(mouseX, mouseY) {
 	; Gui lives a little above and to the right of the cursor by default
 	guiX := mouseX + MOUSE_GUI_PADDING
-	guiY := mouseY - MOUSE_GUI_PADDING - GUI_HEIGHT
+	guiY := mouseY - MOUSE_GUI_PADDING - GuiHeight
 	
 	bounds := WindowLib.getMouseMonitorBounds()
 	
 	; Check if we're past the right edge of the monitor
-	distanceX := bounds["RIGHT"] - (guiX + GUI_WIDTH) ; From right edge of gui to right edge of monitor
+	distanceX := bounds["RIGHT"] - (guiX + GuiWidth) ; From right edge of gui to right edge of monitor
 	if(distanceX < 0)
-		guiX := mouseX - MOUSE_GUI_PADDING - GUI_WIDTH ; Left side of cursor
+		guiX := mouseX - MOUSE_GUI_PADDING - GuiWidth ; Left side of cursor
 	
 	; Check if we're past the top edge of the monitor
 	distanceY := guiY - bounds["TOP"] ; From top edge of gui to top edge of monitor
 	if(distanceY < 0)
 		guiY := mouseY + MOUSE_GUI_PADDING ; Below cursor
 	
-	Gui, Show, % "NoActivate x" guiX " y" guiY " w" GUI_WIDTH " h" GUI_HEIGHT
+	Gui, Show, % "NoActivate x" guiX " y" guiY
 }

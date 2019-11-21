@@ -1,6 +1,8 @@
 # New Ideas
 	ColorPicker - add display of RBG as well
 		Probably an option (middle-click maybe?) to copy RGB instead of hex, too
+			For RGB, not as useful to copy - maybe this just queues up a toast and another hotkey to send to 3 boxes?
+				Probably good to have a copy option in addition, maybe as a second second-level hotkey
 	Notepad++: could we do a syntax-highlighting copy script like we do for auto-complete?
 		Potential problem: user defined langs appears to be stored in %APPDATA% instead of the program files folder, at least on my work laptop
 			Is that consistent?
@@ -28,9 +30,12 @@
 		Capitalization (Public vs _private members, Public vs private functions)
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
 		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
+		Support right-alignment of columns
+		Support min column width
 		Use cases:
 			Debug toast
 			Debug popup (would need to set font if so)
+			ColorPicker - RGB "table"
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:
@@ -67,6 +72,16 @@
 # Selector
 	Add some setting to have the popup appear when we pass in a bad value?
 		Use case: Snapper, when we're on an INI we don't have items for.
+	Re-examine SelectorGui/FlexTable - could we simplify out a lot of the extra logic using built-in Gui positioning options?
+		https://www.autohotkey.com/docs/commands/Gui.htm#PosSize
+			Gui, Margin + AutoSize to avoid needing to keep track of a total height/width for the popup
+			wp/hp/x+n/y+n for sizing/positioning relative to last control
+			x+m/y+m to use margin value
+			xs/ys for "sections" - looks like I could use xs to start a new "row" (use the same X-value as the start of the "section")
+				Can use +n/-n for these as well
+		If I go through the trouble of doing this, also make index/abbreviation columns resize dynamically
+			Would need some way to figure out the max width of all text that WILL BE in a given column
+			OR: add all of one column, for the entire super-column, at once - then use xs+n to place the next column, etc.
 	Dynamically resize abbreviation column based on widest value?
 		To allow longer abbreviations
 		Is that going to get weird with SelectorGui+FlexTable interactions?

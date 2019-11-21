@@ -8,7 +8,6 @@ ScriptTrayInfo.Init("AHK: Color Picker", "color.ico", "colorRed.ico")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
 ; Gui settings
-global GUI_TITLE           := "AHK_ColorPicker"
 global GUI_SPACING         := 10 ; For margins, space between labels, etc.
 global MOUSE_GUI_PADDING   := 10 ; Space between the mouse and the gui
 global MAGNIFIER_RADIUS    := 5
@@ -21,9 +20,13 @@ global FONT_SIZE := 14 ; Points
 global GuiWidth, GuiHeight ; Calculated based on contents
 global LabelHex, LabelRGB ; reference variables for labels
 
+global GuiId ; Window handle for the gui.
+
 ; Make mouse and pixel coordinate modes both relative to the screen (not the window)
 CoordMode, Mouse, Screen
 CoordMode, Pixel, Screen
+
+; GDB TODO show a toast describing the hotkeys that can be used
 
 buildGui()
 Loop
@@ -32,26 +35,55 @@ ExitApp
 
 
 
-; Copy color, display result, and exit.
+; Copy hex color
 RButton::
-	Gui, Hide
-	
+	finishGui()
 	hexColor := getColorUnderMouse()
-	if(hexColor = "") {
-		new ErrorToast("Failed to get RGB color code").blockingOn().showMedium()
-		ExitApp
-	}
 	
 	ClipboardLib.set(hexColor)
-	new Toast("Clipboard set to " "RGB color code" ":`n" hexColor).blockingOn().showMedium()
+	new Toast("Clipboard set to hex color code:`n" hexColor).blockingOn().showMedium()
+	ExitApp
+return
+
+; Copy RGB color
+^RButton::
+	finishGui()
+	hexColor := getColorUnderMouse()
+	
+	RGB := hexColorToRGB(hexColor)
+	rgbColor := "(" RGB["R"] "," RGB["G"] "," RGB["B"] ")"
+	
+	ClipboardLib.set(rgbColor)
+	new Toast("Clipboard set to RGB color code:`n" rgbColor).blockingOn().showMedium()
+	ExitApp
+return
+
+; Send RGB to a color dialog
+MButton::
+	finishGui()
+	hexColor := getColorUnderMouse()
+	
+	RGB := hexColorToRGB(hexColor)
+	rgbColor := "(" RGB["R"] "," RGB["G"] "," RGB["B"] ")"
+	
+	t := new Toast("Ready to send RGB color to a color dialog: " rgbColor "`nMiddle-click again to send").show()
+	KeyWait, MButton, D
+	
+	Send, !r
+	Send, % RGB["R"]
+	Send, !g
+	Send, % RGB["G"]
+	Send, !u
+	Send, % RGB["B"]
+	
+	t.close()
 	ExitApp
 return
 
 
 buildGui() {
 	; Set overall gui properties
-	Gui, New, +HWNDwinId ; Sets winId := ahk_id
-	Gui, -Caption +ToolWindow +AlwaysOnTop +Border ; No title bar/menu, don't include in taskbar, always on top, show a border
+	Gui, New, -Caption +ToolWindow +AlwaysOnTop +Border +HWNDGuiId ; No title bar/menu, don't include in taskbar, always on top, show a border, set GuiId := window handle (which can be used with ahk_id)
 	Gui, Font, % " s" FONT_SIZE, % FONT_NAME
 	Gui, Margin, % GUI_SPACING, % GUI_SPACING
 
@@ -60,10 +92,10 @@ buildGui() {
 	Gui, Add, Text, % "Center vLabelHex"                     , % defaultText
 	Gui, Add, Text, % "Center vLabelRGB y+" GUI_SPACING " R3", % defaultText ; RGB table goes a little lower and has 3 rows
 	
-	; Auto-size gui, set title, store off size in globals
-	Gui, Show, % "AutoSize Hide", % GUI_TITLE ; Hide - don't actually show it until we have real values in place.
+	; Auto-size gui and store off size in globals
+	Gui, Show, % "AutoSize Hide" ; Hide - don't actually show it until we have real values in place.
 	settings := new TempSettings().detectHiddenWindows("On")
-	WinGetPos, , , GuiWidth, GuiHeight, % "ahk_id " winId ; titleString
+	WinGetPos, , , GuiWidth, GuiHeight, % "ahk_id " GuiId
 	settings.restore()
 }
 
@@ -150,4 +182,10 @@ moveGui(mouseX, mouseY) {
 		guiY := mouseY + MOUSE_GUI_PADDING ; Below cursor
 	
 	Gui, Show, % "NoActivate x" guiX " y" guiY
+}
+
+finishGui() {
+	; We need to specify the gui to affect since we created it using Gui, New and this could be a different thread (started by a hotkey).
+	Gui, % GuiId ":Default"
+	Gui, Destroy
 }

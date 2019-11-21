@@ -118,6 +118,18 @@ class Debug {
 	}
 	
 	;---------
+	; DESCRIPTION:    Copy debug info about the provided parameters to the clipboard. Useful when
+	;                 the debug info has too many lines to show in a popup or toast.
+	; PARAMETERS:
+	;  params (I,REQ) - A variable number of arguments to display in the popup. For 1 argument,
+	;                   we will interpret it as a value (not a label), but for >1 arguments an
+	;                   even number of arguments should be passed in label,value pairs.
+	;---------
+	copy(params*) {
+		clipboard := this.buildDebugString(params*)
+	}
+	
+	;---------
 	; DESCRIPTION:    Display a toast (brief, semi-transparent display in the bottom-right) of
 	;                 information about the information provided. See class documentation for
 	;                 information about how we handle labels, values, arrays, and objects.

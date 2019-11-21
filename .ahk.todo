@@ -1,8 +1,15 @@
 # New Ideas
+	ColorPicker - add display of RBG as well
+		Probably an option (middle-click maybe?) to copy RGB instead of hex, too
+	Notepad++: could we do a syntax-highlighting copy script like we do for auto-complete?
+		Potential problem: user defined langs appears to be stored in %APPDATA% instead of the program files folder, at least on my work laptop
+			Is that consistent?
+			Can I just tweak the installer to make it work right?
+			Can I just have files in both folders?
 	Consider additional user-defined languages in Notepad++:
 		My todo lists
-			Folding like python (hierarchical on every indent)
 			Headers
+			Custom folding based on prefix chars?
 		tl/tls files
 			Special characters
 				;  - Ignore (comment line)

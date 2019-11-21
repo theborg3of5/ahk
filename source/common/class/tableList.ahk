@@ -594,8 +594,7 @@ class TableList {
 	;---------
 	processMod(row) {
 		; Strip off the starting/ending mod characters (square brackets).
-		row := row.removeFromStart(this.Char_Mod_Start)
-		row := row.removeFromEnd(this.Char_Mod_End)
+		row := row.allBetweenStrings(this.Char_Mod_Start, this.Char_Mod_End)
 		
 		; If it's just blank, all previous mods are wiped clean.
 		if(row = "") {
@@ -620,7 +619,7 @@ class TableList {
 			
 			; Store off the new mods.
 			For _,currMod in row.split(this.Char_MultiEntry)
-				this.mods.push(new TableListMod(currMod, label))
+				this.mods.push(new TableListMod(currMod, labelNum))
 		}
 	}
 	

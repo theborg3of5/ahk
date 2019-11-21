@@ -26,13 +26,20 @@ global GuiId ; Window handle for the gui.
 CoordMode, Mouse, Screen
 CoordMode, Pixel, Screen
 
-; GDB TODO show a toast describing the hotkeys that can be used
+; Show a toast describing the hotkeys that can be used
+hotkeyDisplay := "
+	(
+		Right-click: Copy hex color to clipboard
+		Ctrl + Right-click: Copy RGB color to clipboard
+		Middle-click: Hold RGB color to send to a color dialog
+	)"
+
+new Toast(hotkeyDisplay).showMedium()
 
 buildGui()
 Loop
 	updateGui()
 ExitApp
-
 
 
 ; Copy hex color

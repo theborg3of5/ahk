@@ -38,7 +38,7 @@
 		Use cases:
 			Debug toast
 			Debug popup (would need to set font if so)
-			ColorPicker - RGB "table"
+			ColorPicker - RGB "table", hotkey toast
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:

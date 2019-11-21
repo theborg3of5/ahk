@@ -18,7 +18,8 @@
 	:X:dbparam::NotepadPlusPlus.insertDebugParams()                    ; Debug parameters
 	:X:dbm::SendRaw, % "MsgBox, % "
 	
-	:X:.ahkclass::NotepadPlusPlus.sendClassTemplate()
+	:X:ahkcont::NotepadPlusPlus.sendContinuationBlock()
+	:X:ahkclass::NotepadPlusPlus.sendClassTemplate()
 #If
 	
 class NotepadPlusPlus {
@@ -102,6 +103,30 @@ class NotepadPlusPlus {
 		Send, {Up}
 		
 		SendRaw, % AHKCodeLib.getDocHeader(defLine)
+	}
+	
+	;---------
+	; DESCRIPTION:    Create a continuation block and put the cursor inside.
+	; NOTES:          Assumes that you're already at the end of the line where you want to start
+	;                 the block.
+	;---------
+	sendContinuationBlock() {
+		Send, {Home}{Shift Down}{Home}{Shift Up} ; Start selecting at the start of the line to get the indentation
+		parentIndent := SelectLib.getText()
+		Sleep, 100 ; Make sure Ctrl is up so we don't end up jumping to the end of the file.
+		Send, {End} ; Get back to the end of the line
+		
+		sectionBase := "
+			( LTrim
+				""
+					`t(
+						`t`t
+					`t)""
+			)"
+		sectionString := sectionBase.replace("`n", "`n" parentIndent) ; Add parent's indent to each line (except the first one)
+		
+		ClipboardLib.send(sectionString)
+		Send, {Up}{End} ; Get into the new block
 	}
 	
 	;---------

@@ -187,35 +187,35 @@ class AHKCodeLib {
 	
 	; Header bases
 	static headerBase_Member := "
-		( RTrim0
-		;---------
-		; DESCRIPTION:    
-		; NOTES:          
-		;---------
+		( LTrim RTrim0
+			;---------
+			; DESCRIPTION:    
+			; NOTES:          
+			;---------
 		)"
 	static headerBase_Function := "
-		( RTrim0
-		;---------
-		; DESCRIPTION:    
-		; RETURNS:        
-		; SIDE EFFECTS:   
-		; NOTES:          
-		;---------
+		( LTrim RTrim0
+			;---------
+			; DESCRIPTION:    
+			; RETURNS:        
+			; SIDE EFFECTS:   
+			; NOTES:          
+			;---------
 		)"
 	static headerBase_FunctionWithParams := "
-		( RTrim0
-		;---------
-		; DESCRIPTION:    
-		; PARAMETERS:
-		<PARAMETERS>
-		; RETURNS:        
-		; SIDE EFFECTS:   
-		; NOTES:          
-		;---------
+		( LTrim RTrim0
+			;---------
+			; DESCRIPTION:    
+			; PARAMETERS:
+			<PARAMETERS>
+			; RETURNS:        
+			; SIDE EFFECTS:   
+			; NOTES:          
+			;---------
 		)"
 	static paramBase := "
-		( RTrim0
-		;  <NAME><PADDING> (<IN_OUT>,<REQUIREMENT>) - 
+		( LTrim RTrim0
+			;  <NAME><PADDING> (<IN_OUT>,<REQUIREMENT>) - 
 		)"
 	
 	;---------

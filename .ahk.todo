@@ -1,5 +1,4 @@
 # New Ideas
-	Fix new replace-by-default mods case for reformat TL script
 	Can we add an !l hotkey to Explorer to show the git log for the AHK folder?
 		Probably using AppsKey to show menu + L
 		Could we expand it to also do SVN log for EpicSource folders?

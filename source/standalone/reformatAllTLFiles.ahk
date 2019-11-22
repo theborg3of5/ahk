@@ -62,7 +62,7 @@ reformatRows(rows) {
 		
 		; Mod rows indent based on how many mods are open.
 		if(row.startsWith(TableList.Char_Mod_Start)) {
-			modContents := row.removeFromStart(TableList.Char_Mod_Start).removeFromEnd(TableList.Char_Mod_End)
+			modContents := row.allBetweenStrings(TableList.Char_Mod_Start, TableList.Char_Mod_End)
 			
 			; Clear all mods - zero out indent.
 			if(modContents = "") {
@@ -78,10 +78,18 @@ reformatRows(rows) {
 				Continue
 			}
 			
-			; Adding a mod - increase indent.
-			newRows.push(StringLib.getTabs(modIndentLevel) row)
-			modIndentLevel++
-			Continue
+			; Adding a mod
+			if(modContents.startsWith(TableList.Char_Mod_AddLabel)) {
+				; Increase indent
+				newRows.push(StringLib.getTabs(modIndentLevel) row)
+				modIndentLevel++
+				Continue
+			} else {
+				; No label: replacing all previous mods.
+				newRows.push(row)
+				modIndentLevel := 1
+				Continue
+			}
 		}
 		
 		prefix := stripOffModelKeyPrefix(row) ; Model/key rows have a special prefix that comes before starting indentation.
@@ -109,13 +117,15 @@ getDimensions(rows, ByRef normalIndentLevel, ByRef columnWidthsAry) {
 		
 		; Mod rows shift the level based on the max mods open (1 mod open = 1 additional indent), but don't affect column widths.
 		if(row.startsWith(TableList.Char_Mod_Start)) {
-			modContents := row.removeFromStart(TableList.Char_Mod_Start).removeFromEnd(TableList.Char_Mod_End)
+			modContents := row.allBetweenStrings(TableList.Char_Mod_Start, TableList.Char_Mod_End)
 			if(modContents = "") ; Clearing all mods
 				numOpenMods := 0
 			else if(modContents.startsWith(TableList.Char_Mod_RemoveLabel)) ; Closing one specific mod
 				numOpenMods--
-			else
+			else if(modContents.startsWith(TableList.Char_Mod_AddLabel)) ; Adding one mod
 				numOpenMods++
+			else ; Replacing all existing mods
+				numOpenMods := 1
 			
 			DataLib.updateMax(normalIndentLevel, numOpenMods)
 			Continue

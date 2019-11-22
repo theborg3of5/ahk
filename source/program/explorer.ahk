@@ -14,6 +14,14 @@
 	
 	; Hide/show hidden files
 	#h::Explorer.toggleHiddenFiles()
+	
+	; Show TortoiseSVN/TortoiseGit log for current selection (both have an "l" hotkey in the
+	; right-click menu, and appear only when the item is in that type of repo)
+	!l::
+		HotkeyLib.waitForRelease()
+		Send, {AppsKey}
+		Send, l
+	return
 #If
 
 class Explorer {

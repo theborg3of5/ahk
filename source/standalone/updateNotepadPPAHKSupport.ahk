@@ -13,9 +13,9 @@ global ScopeStart_Private := "; #PRIVATE#"
 global ScopeStart_Debug   := "; #DEBUG#"
 global ScopeEnd           := "; #END#"
 
-completionFile       := Config.path["AHK_SUPPORT"] "\notepadPPAutoComplete.xml"
+completionFile       := Config.path["AHK_SUPPORT"]   "\notepadPPAutoComplete.xml"
 completionFileActive := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
-syntaxFile           := Config.path["AHK_SUPPORT"] "\notepadPPSyntaxHighlighting.xml"
+syntaxFile           := Config.path["AHK_SUPPORT"]   "\notepadPPSyntaxHighlighting.xml"
 syntaxFileActive     := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml"
 
 ; [[ Auto-complete ]]

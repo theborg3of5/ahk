@@ -6,6 +6,10 @@
 				Or: both of them already use L in the right-click menu, might just work since the option only displays if the folder is a repo
 	Notepad++ AHK syntax highlighting: can we auto-update the XML based on the code, like we do for auto-complete?
 		Could we even use the same data structure/info from reading all the scripts?
+		Folder to keyword mapping:
+			static\        - Keywords2
+			lib\           - Keywords3
+			base\ + class\ - Keywords6
 	Consider additional user-defined languages in Notepad++:
 		My todo lists
 			Headers

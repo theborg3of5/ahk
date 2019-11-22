@@ -1,11 +1,4 @@
 # New Ideas
-	ColorPicker - add hotkeys to make use of RGB values
-		Copy RGB instead of hex
-		Prime another hotkey to fill in individual boxes in the windows color dialog?
-			Can use !R/!G/!U to focus relevant boxes
-		Probably an option (middle-click maybe?) to copy RGB instead of hex, too
-			For RGB, not as useful to copy - maybe this just queues up a toast and another hotkey to send to 3 boxes?
-				Probably good to have a copy option in addition, maybe as a second second-level hotkey
 	Notepad++: could we do a syntax-highlighting copy script like we do for auto-complete?
 		Potential problem: user defined langs appears to be stored in %APPDATA% instead of the program files folder, at least on my work laptop
 			Is that consistent?

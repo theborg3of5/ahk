@@ -15,10 +15,10 @@
 ^!#k::new ActionObject(SelectLib.getText()).linkSelectedTextWeb()
 ^!k:: new ActionObject(SelectLib.getText()).linkSelectedTextEdit()
 
-; Easy editing for often-accessed scripts
-!+e::
-	selectEditScript() {
-		path := new Selector("editScripts.tls").selectGui("PATH")
+; Selector to allow easy editing of config or code files that we edit often
+!+c::
+	selectEditFile() {
+		path := new Selector("editFiles.tls").selectGui("PATH")
 		if(!path)
 			return
 		
@@ -29,18 +29,6 @@
 		}
 		
 		Config.runProgram("Notepad++", path)
-	}
-
-; Selector to allow easy editing of config TL files that don't show a popup
-!+c::
-	selectConfig() {
-		path := new Selector("configs.tls").selectGui("PATH")
-		if(!path)
-			return
-		
-		path := Config.replacePathTags(path)
-		if(FileExist(path))
-			Run(path)
 	}
 
 

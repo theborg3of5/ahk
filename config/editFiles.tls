@@ -1,7 +1,8 @@
-@WindowTitle=Pick a config file to open:
+@WindowTitle=Pick a file to edit:
 
 (	NAME										ABBREV		PATH
 
+# Config
 [PATH.addToStart(<AHK_CONFIG>\)]
 	All current Epic environments		allenv		ahkPrivate\allCurrentEpicEnvironments.txt
 	Games										g				games.tl
@@ -15,3 +16,13 @@
 	Windows									w|win			windows.tl
 	Windows Actions						wa|wina		windowActions.tl
 []
+
+# ! Code
+[PATH.addToStart(<AHK_SOURCE>\)]
+	Main										m				main.ahk
+	Common									com			common\common.ahk
+	Config									con|conf		common\static\config.ahk
+	Command Functions						cf				common\external\commandFunctions.ahk
+	Hotstrings								h				general\hotstrings.ahk
+[]
+	Test										t				<AHK_ROOT>\test\test.ahk

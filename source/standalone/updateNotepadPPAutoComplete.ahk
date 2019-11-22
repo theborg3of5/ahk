@@ -13,10 +13,14 @@ global ScopeStart_Private := "; #PRIVATE#"
 global ScopeStart_Debug   := "; #DEBUG#"
 global ScopeEnd           := "; #END#"
 
+completionFile       := Config.path["AHK_SUPPORT"] "\notepadPPAutoComplete.xml"
+completionFileActive := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
+syntaxFile           := Config.path["AHK_SUPPORT"] "\notepadPPSyntaxHighlighting.xml"
+syntaxFileActive     := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml"
 
+; [[ Auto-complete ]]
 ; Read in the current XML, to update
-autoCompleteFilePath := Config.path["AHK_SUPPORT"] "\notepadPPAutoComplete.xml"
-autoCompleteXML := FileRead(autoCompleteFilePath)
+autoCompleteXML := FileRead(completionFile)
 
 ; Get info about all classes we care about and use it to update the XML
 classes := getAllCommonClasses()
@@ -25,15 +29,26 @@ if(!updateClassesInXML(classes, autoCompleteXML, failedClasses)) {
 	ExitApp
 }
 
-; Update the version-controlled file
-FileLib.replaceFileWithString(autoCompleteFilePath, autoCompleteXML)
+FileLib.replaceFileWithString(completionFile, autoCompleteXML)
+FileLib.replaceFileWithString(completionFileActive, autoCompleteXML)
 
-; Update the file Notepad++ is actually using
-activeAutoCompleteFilePath := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
-FileLib.replaceFileWithString(activeAutoCompleteFilePath, autoCompleteXML)
+t := new Toast().show()
+t.setText("Updated both versions of the auto-complete file")
 
-; Notify the user that we're done and exit.
-new Toast("Updated both versions of the auto-complete file").blockingOn().showMedium()
+; [[ Syntax highlighting ]]
+; Get the <UserLang> tag from the support XML
+syntaxXML := FileRead(syntaxFile)
+langXML := syntaxXML.allBetweenStrings("<NotepadPlus>", "</NotepadPlus>").clean() ; Trim off the newlines and initial indentation too
+
+; Replace the same tag in the active XML and write it to the active file
+syntaxXMLActive := FileRead(syntaxFileActive)
+beforeXML := syntaxXMLActive.beforeString("<UserLang name=""AutoHotkey""")
+afterXML := syntaxXMLActive.afterString("<UserLang name=""AutoHotkey""").afterString("</UserLang>")
+newSyntaxXML := beforeXML langXML afterXML
+FileLib.replaceFileWithString(syntaxFileActive, newSyntaxXML)
+
+t.setText("Updated syntax highlighting tag for Notepad++ (requires restart)").blockingOn().showMedium()
+
 ExitApp
 
 

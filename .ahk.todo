@@ -1,9 +1,6 @@
 # New Ideas
-	Notepad++: could we do a syntax-highlighting copy script like we do for auto-complete?
-		Potential problem: user defined langs appears to be stored in %APPDATA% instead of the program files folder, at least on my work laptop
-			Is that consistent?
-			Can I just tweak the installer to make it work right?
-			Can I just have files in both folders?
+	Notepad++ AHK syntax highlighting: can we auto-update the XML based on the code, like we do for auto-complete?
+		Could we even use the same data structure/info from reading all the scripts?
 	Consider additional user-defined languages in Notepad++:
 		My todo lists
 			Headers
@@ -86,6 +83,11 @@
 			Transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
 	
 # Toast
+	Consider a new function to append a new line of text (and maybe one to just append text to the current line) to the current Toast.
+		Could be nice to have in progress-type scenarios, to show what we've already done.
+		Use cases:
+			firstSetup
+			updateNotepadPP*
 	Could we avoid flickering between .showPersistent() and .setText()?
 		Maybe some way to set position without showing?
 		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?

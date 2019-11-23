@@ -32,8 +32,7 @@ if(!updateClassesInXML(classes, autoCompleteXML, failedClasses)) {
 FileLib.replaceFileWithString(completionFile, autoCompleteXML)
 FileLib.replaceFileWithString(completionFileActive, autoCompleteXML)
 
-t := new Toast().show()
-t.setText("Updated both versions of the auto-complete file")
+t := new Toast("Updated both versions of the auto-complete file").show()
 
 ; [[ Syntax highlighting ]]
 ; Get the <UserLang> tag from the support XML

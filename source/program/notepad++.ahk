@@ -7,6 +7,7 @@
 	; Copy current file/folder to clipboard.
 	!c::ClipboardLib.copyFilePathWithHotkey("!c")
 	!#c::ClipboardLib.copyFolderPathWithHotkey("!c")
+	^+o::NotepadPlusPlus.openCurrentParentFolder()
 	
 	^Enter::NotepadPlusPlus.insertIndentedNewline() ; Add an indented newline
 	
@@ -24,6 +25,30 @@
 	
 class NotepadPlusPlus {
 	; #PUBLIC#
+	
+	;---------
+	; DESCRIPTION:    Open the current file's parent folder in Explorer.
+	; NOTES:          We have to do this instead of using the native option, because the native
+	;                 option doesn't open it correctly (it opens a new window instead of adding a
+	;                 tab to QTTabBar).
+	;---------
+	openCurrentParentFolder() {
+		filePath := ClipboardLib.getWithHotkey("!c")
+		if(!filePath) {
+			new ErrorToast("Could not open parent folder", "Failed to retrieve current file path").showMedium()
+			return
+		}
+		
+		filePath := FileLib.cleanupPath(filePath)
+		parentFolder := FileLib.getParentFolder(filePath)
+		
+		if(!FileLib.folderExists(parentFolder)) {
+			new ErrorToast("Could not open parent folder", "Folder does not exist: " parentFolder).showMedium()
+			return
+		}
+		
+		Run(parentFolder)
+	}
 	
 	;---------
 	; DESCRIPTION:    Insert a newline at the cursor, indented to the same level as the current line.

@@ -88,9 +88,7 @@ class ClipboardLib {
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file to the clipboard.
 	;---------
 	copyFilePathWithHotkey(hotkeyKeys) {
-		ClipboardLib.copyWithHotkey(hotkeyKeys)
-		
-		path := Clipboard
+		path := ClipboardLib.getWithHotkey(hotkeyKeys)
 		if(path)
 			path := FileLib.cleanupPath(path)
 		
@@ -105,9 +103,7 @@ class ClipboardLib {
 	;  fileHotkeyKeys (I,REQ) - The keys to send in order to copy a FILE in the folder you want to the clipboard.
 	;---------
 	copyFolderPathWithHotkey(fileHotkeyKeys) {
-		ClipboardLib.copyWithHotkey(fileHotkeyKeys)
-		
-		path := Clipboard
+		path := ClipboardLib.getWithHotkey(fileHotkeyKeys)
 		if(path) {
 			path := FileLib.cleanupPath(path)
 			parentFolder := FileLib.getParentFolder(path)     ; Actually get the folder instead of the file

@@ -20,6 +20,7 @@
 [CONTEXT.replaceWith(WORK)]
 	; Private pass-throughs - private tags to replace in folder paths
 	Epic DBC Design						EPIC_DBC_DESIGN
+	Epic DBC Partial Installers		EPIC_DBC_PARTIAL_INSTALLERS
 	Epic Net Home							EPIC_NET_HOME
 	Epic NFS 3 Day							EPIC_NFS_3DAY
 	Epic NFS 3 Day (Unix)				EPIC_NFS_3DAY_UNIX

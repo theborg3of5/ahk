@@ -19,7 +19,7 @@
 ; Some programs are only available on specific machines
 #If Config.machineIsHomeDesktop
 	^!#f::Config.runProgram("Firefox Portable")
-#If Config.machineIsHomeDesktop || Config.machineIsWorkLaptop
+#If Config.machineIsHomeDesktop || Config.machineIsWorkLaptop || Config.machineIsHomeLaptop
 	#s::  Config.runProgram("Spotify") ; Can't unminimize from tray with any reasonable logic, so re-run to do so.
 	#f::  Config.activateProgram("Everything")
 	#t::  Config.runProgram("Telegram")

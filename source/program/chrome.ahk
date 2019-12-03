@@ -68,7 +68,13 @@ class Chrome {
 	;---------
 	getTitle() {
 		title := WinGetActiveTitle().removeFromEnd(" - Google Chrome")
+		
+		; Wiki pages don't need the ending
 		title := title.removeFromEnd(" - Wiki")
+		
+		; Rearrange NullEx post titles slightly
+		if(title.endsWith(" - NullException"))
+			title := "NullEx - " title.removeFromEnd(" - NullException")
 		
 		if(Chrome.isCurrentPageCodeSearch()) {
 			; Special handling for CodeSearch - just get the file name, plus the current selection as the function.

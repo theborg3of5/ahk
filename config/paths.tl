@@ -37,9 +37,10 @@
 	AHK Support								AHK_SUPPORT								<AHK_ROOT>\support
 	AHK Templates							AHK_TEMPLATE							<AHK_ROOT>\template
 	Downloads								USER_DOWNLOADS							<USER_ROOT>\Downloads
-	User Dev									USER_DEV									<USER_ROOT>\Dev
 
 	; Dev
+	User Dev									USER_DEV									<USER_ROOT>\Dev
+	NotepadPlusPlus Sessions			NOTEPAD_PP_SESSIONS					<USER_ROOT>\Dev\NotepadPlusPlus Sessions
 	Onetastic Macros						ONETASTIC_MACROS						<USER_ROOT>\OnetasticMacros
 	Onetastic Functions					ONETASTIC_FUNCTIONS					<USER_ROOT>\OnetasticMacros\Functions
 

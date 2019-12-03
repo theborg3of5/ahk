@@ -16,6 +16,7 @@
 
 # Development
 	Onetastic Macros				ot			<ONETASTIC_MACROS>
+	NotepadPlusPlus Sessions	sess|nps	<NOTEPAD_PP_SESSIONS>
 
 [CONTEXT.replaceWith(WORK)]
 # Work Local

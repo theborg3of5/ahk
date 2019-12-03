@@ -107,6 +107,7 @@
 	:X:devf::sendFolderPath("USER_DEV")
 	
 	:X:otmf::sendFolderPath("ONETASTIC_MACROS")
+	:X:npsf::sendFolderPath("NOTEPAD_PP_SESSIONS")
 	
 	
 	; AHK

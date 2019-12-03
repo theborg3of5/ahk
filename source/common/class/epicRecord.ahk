@@ -129,7 +129,7 @@ class EpicRecord {
 		} else if(!recordString.contains(" ")) {
 			this.id := recordString
 			
-		; 4) {R } + INI ID + {space} + {: or -} + {title}
+		; 4) {R } + INI {#}ID + {space} + {: or -} + {title}
 		} else {
 			recordString := recordString.removeFromStart("R ") ; Trim off "R " at start if it's there.
 			this.ini := recordString.beforeString(" ")
@@ -143,6 +143,9 @@ class EpicRecord {
 				this.id := recordString.afterString(" ")
 			}
 		}
+		
+		; Make sure there's no extra # on the front of the ID
+		this.id := this.id.removeFromStart("#")
 		
 		; Make sure everything is free of extra whitespace
 		this.ini   := this.ini.withoutWhitespace()

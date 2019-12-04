@@ -2600,6 +2600,7 @@
 							;---------
 							; DESCRIPTION:    Initialize the record based on the current EMC2 window title.
 							; NOTES:          This will only get the INI and ID, never the title.
+							; RETURNS:        this
 							;---------">
             </Overload>
         </KeyWord>
@@ -2610,6 +2611,7 @@
 							; PARAMETERS:
 							;  recordString (I,REQ) - String representing the record. See class header for supported
 							;                         formats.
+							; RETURNS:        this
 							;---------">
                 <Param name="recordString" />
             </Overload>

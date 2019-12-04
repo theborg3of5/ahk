@@ -1,6 +1,4 @@
 # New Ideas
-	Do we want open-in-EMC2 hotkeys for Chrome like we have for Outlook?
-		Parse the title, turn it into an EMC2 ID, open if applicable
 	Notepad++ AHK syntax highlighting: can we auto-update the XML based on the code, like we do for auto-complete?
 		Could we even use the same data structure/info from reading all the scripts?
 		Folder to keyword mapping:

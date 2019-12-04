@@ -18,6 +18,10 @@
 #If Config.isWindowActive("Outlook") && (Outlook.IsCurrentScreenMail() || Outlook.IsCurrentScreenMailMessage())
 	; Copy current message title to clipboard
 	!c::Outlook.CopyCurrentMessageTitle()
+	
+	; Open the relevant record (if applicable) for the current message
+	!w::Outlook.OpenEMC2ObjectFromCurrentMessageWeb()
+	!e::Outlook.OpenEMC2ObjectFromCurrentMessageEdit()
 #If
 
 ; Calendar folders
@@ -100,16 +104,24 @@ class Outlook {
 	; DESCRIPTION:    Put the current email message's title on the clipboard, cleaning it up as needed.
 	;---------
 	CopyCurrentMessageTitle() {
-		title := ControlGetText(this.MailSubjectControlClassNN, "A")
-		if(title = "") {
-			new ErrorToast("Copy title failed", "Could not get title from message control").showMedium()
-			return
-		}
-		
-		; Remove the extra email stuff
-		title := title.clean(["RE:", "FW:"])
-		
+		title := this.getCurrentMessageTitle()
 		ClipboardLib.setAndToast(title, "title")
+	}
+	
+	;---------
+	; DESCRIPTION:    If the current email message's title describes an EMC2 object, open that object in web mode.
+	;---------
+	OpenEMC2ObjectFromCurrentMessageWeb() {
+		title := this.getCurrentMessageTitle()
+		new ActionObjectEMC2(title).openWeb()
+	}
+	
+	;---------
+	; DESCRIPTION:    If the current email message's title describes an EMC2 object, open that object in edit mode.
+	;---------
+	OpenEMC2ObjectFromCurrentMessageEdit() {
+		title := this.getCurrentMessageTitle()
+		new ActionObjectEMC2(title).openEdit()
 	}
 	
 	
@@ -129,6 +141,21 @@ class Outlook {
 		}
 		
 		return false
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the title for the current email message.
+	; RETURNS:        The title, cleaned up (RE:/FW: and any other odd characters removed)
+	;---------
+	getCurrentMessageTitle() {
+		title := ControlGetText(this.MailSubjectControlClassNN, "A")
+		if(title = "") {
+			new ErrorToast("Copy title failed", "Could not get title from message control").showMedium()
+			return
+		}
+		
+		; Remove the extra email stuff
+		return title.clean(["RE:", "FW:"])
 	}
 	; #END#
 }

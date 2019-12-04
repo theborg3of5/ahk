@@ -72,12 +72,15 @@ class EpicRecord {
 	; PARAMETERS:
 	;  recordString (I,REQ) - String representing the record. See class header for supported
 	;                         formats.
+	; RETURNS:        this
 	;---------
 	initFromRecordString(recordString) {
 		if(recordString = "")
 			return
 		
 		this.processRecordString(recordString)
+		
+		return this
 	}
 	
 	;---------

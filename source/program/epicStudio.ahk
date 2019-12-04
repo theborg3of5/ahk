@@ -96,8 +96,7 @@ class EpicStudio {
 	; DESCRIPTION:    Link the current routine to the DLG currently open in EMC2.
 	;---------
 	linkRoutineToCurrentDLG() {
-		record := new EpicRecord()
-		record.initFromEMC2Title()
+		record := new EpicRecord().initFromEMC2Title()
 		if(record.ini != "DLG" || record.id = "")
 			return
 		

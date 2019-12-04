@@ -17,8 +17,7 @@
 		MsgBox, % record.ini
 		MsgBox, % record.recordString ; R UCL 123456
 		
-		record := new EpicRecord()
-		record.initFromEMC2Title() ; Use EMC2 window title to get needed info
+		record := new EpicRecord().initFromEMC2Title() ; Use EMC2 window title to get needed info
 		MsgBox, % record.recordString ; R DLG 123456
 	
 */ ; =--
@@ -86,6 +85,7 @@ class EpicRecord {
 	;---------
 	; DESCRIPTION:    Initialize the record based on the current EMC2 window title.
 	; NOTES:          This will only get the INI and ID, never the title.
+	; RETURNS:        this
 	;---------
 	initFromEMC2Title() {
 		title := WinGetTitle(Config.windowInfo["EMC2"].titleString)
@@ -96,6 +96,8 @@ class EpicRecord {
 			return
 		
 		this.initFromRecordString(title)
+		
+		return this
 	}
 	
 	

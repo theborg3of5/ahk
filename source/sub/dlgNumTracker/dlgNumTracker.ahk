@@ -18,8 +18,7 @@ MainLoop:
 	if(!Config.doesWindowExist("EMC2"))
 		return
 	
-	record := new EpicRecord()
-	record.initFromEMC2Title()
+	record := new EpicRecord().initFromEMC2Title()
 	if(record.ini != "DLG")
 		return
 	currDLGId := record.id

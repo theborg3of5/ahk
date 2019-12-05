@@ -1,4 +1,11 @@
 # New Ideas
+	Can we do something to split up the multi-class program scripts?
+		Should they be separate files?
+			Maybe a sub-folder in program\?
+				Only apply this to sub-program-specific classes, not the main ones
+		Specifics:
+			EpicStudio - MSnippets
+			OneNote - OneNoteTodoPage, OneNoteRecurringTodo
 	Notepad++ AHK syntax highlighting: can we auto-update the XML based on the code, like we do for auto-complete?
 		Could we even use the same data structure/info from reading all the scripts?
 		Folder to keyword mapping:
@@ -7,8 +14,10 @@
 			base\ + class\ - Keywords6
 	Consider additional user-defined languages in Notepad++:
 		My todo lists
+			!? We can't override the python language to add extra exceptions or something, can we?
 			Headers
 			Custom folding based on prefix chars?
+				If we can't come up with something solid for this, may as well stick to python - often build up long lists that I'd want to be able to collapse at various levels.
 		tl/tls files
 			Special characters
 				;  - Ignore (comment line)
@@ -25,6 +34,45 @@
 			Is there any fancy highlighting/lines we could add to match up with columns?
 	Standardize how we format & structure classes
 		Capitalization (Public vs _private members, Public vs private functions)
+			What about constants? Should they just always be public so they can be Constant capitalization?
+			BoundFunc functions
+				Should they be public instead of private?
+				Do we want any special naming scheme (like a leading __) for these?
+					Currently some places are using one leading _, but that clashes with my new private member plan.
+		Specific offenders
+			Lowercase public members
+				Snapper - should its _private constants be public Constants instead?
+				VB6
+			Non-_ private members
+				Putty - shouldn't lowercase public members be private instead?
+				Explorer - but these are constants, should they really just be public instead?
+				OneNoteRecurringTodo
+			Lowercase public functions
+				Chrome
+				Ditto
+				EMC2
+				EpicStudio
+					MSnippets
+				Excel
+				Explorer
+					Should we pull HiddenState_ constants out into an enum of sorts?
+						Either in enums script, or just as a separate class in the same file
+						ExplorerHiddenFilesState {}
+				Hyperspace
+				InternetExplorer
+				Notepad++
+				OneNote
+					OneNoteTodoPage
+					OneNoteRecurringTodo
+				OneTastic
+				Putty
+				Snapper
+				Telegram
+				VB6
+			_private boundFunc functions
+				Chrome
+				Hyperspace
+				OneNote
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
 		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
 		Support right-alignment of columns

@@ -125,7 +125,6 @@ class VisualWindow {
 		height := this.height + this.windowOffsets["BOTTOM"] + this.windowOffsets["TOP"]
 	}
 	
-	
 	; [[ General movement/resizing (no snapping) ]] --=
 	;---------
 	; DESCRIPTION:    Move the window to the specified coordinates (without snapping).
@@ -186,7 +185,6 @@ class VisualWindow {
 		this.applyPosition()
 	}
 	; =--
-	
 	
 	; [[ Movement based on corners (supports snapping) ]] --=
 	;---------
@@ -309,16 +307,20 @@ class VisualWindow {
 	;---------
 	; DESCRIPTION:    Turn on snapping - the window will "snap" to the end of the monitor within a
 	;                 certain distance.
+	; RETURNS:        this
 	;---------
 	snapOn() {
 		this.isSnapOn := true
+		return this
 	}
 	;---------
 	; DESCRIPTION:    Turn off snapping - the window will move exactly where directed, not
 	;                 "snapping" to monitor edges.
+	; RETURNS:        this
 	;---------
 	snapOff() {
 		this.isSnapOn := false
+		return this
 	}
 	
 	

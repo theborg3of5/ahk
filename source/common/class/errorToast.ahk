@@ -23,7 +23,7 @@ class ErrorToast extends Toast {
 		toastText := this.buildErrorText(problemMessage, errorMessage, mitigationMessage)
 		overrides := this.getStyleOverrides()
 		
-		this.init(toastText, overrides)
+		this.initialize(toastText, overrides)
 	}
 	
 	

@@ -38,7 +38,7 @@ class Toast {
 	;                           found in .getStyles().
 	;---------
 	__New(toastText := "", styleOverrides := "") {
-		this.init(toastText, styleOverrides)
+		this.initialize(toastText, styleOverrides)
 	}
 	
 	;---------
@@ -202,7 +202,7 @@ class Toast {
 	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be
 	;                           found in .getStyles().
 	;---------
-	init(toastText := "", styleOverrides := "") {
+	initialize(toastText := "", styleOverrides := "") {
 		this.buildGui(styleOverrides)
 		
 		if(toastText)

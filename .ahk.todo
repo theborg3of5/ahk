@@ -1,175 +1,51 @@
 # New Ideas
 	Standardize how we format & structure classes
-		Capitalization
-			Members
-				PublicMember
-				_privateMember
-			Functions
-				PublicFunction
-				privateFunction
-			Constants
-				PUBLIC_CONSTANT
-				PRIVATE_CONSTANT
-		Member order
-			Public
-				EXTERNAL_CONSTANTS
-				OtherStaticMembers
-				OtherMembers
-				__New()
-				Functions
-			Private
-				INTERNAL_CONSTANTS
-				_otherStaticMembers
-				_otherMembers
-				functions
-		Specific offenders
-			Lowercase public members
-				program
-					Snapper - should its _private constants be public Constants instead?
-					VB6
-				base
-					ArrayBase
-				class_
-					ActionObject
-					ActionObjectCodeSearch
-					ActionObjectEMC2
-					ActionObjectEpicStudio
-					ActionObjectHelpdesk
-					ActionObjectPath
-					Duration
-					EpicRecord
-					MousePosition
-					ProgramInfo
-					Selector
-					TableList
-					TableListMod
-					VisualWindow
-					WindowInfo
-				static
-					Config
-			Constants
-				program
-					Explorer
-				class_
-					ActionObject
-					ActionObjectCodeSearch
-					ActionObjectEpicStudio
-					ActionObjectPath
-					Duration (public and private)
-					FormatList
-					SelectorGui
-					TableList
-					TableListMod
-					Toast
-					VisualWindow (public and private)
-					WindowInfo
-				lib
-					AHKCodeLib
-				static
-					CommonHotkeys
-					Config
-					Debug
-					Hyperlinker
-					WindowActions
-			Lowercase public functions
-				program
-					Chrome
-					Ditto
-					EMC2
-					EpicStudio
-						MSnippets
-					Excel
-					Explorer
-						Should we pull HiddenState_ constants out into an enum of sorts?
-							Either in enums script, or just as a separate class in the same file
-							ExplorerHiddenFilesState {}
-					Hyperspace
-					InternetExplorer
-					Notepad++
-					OneNote
-						OneNoteTodoPage
-						OneNoteRecurringTodo
-					OneTastic
-					Putty
-					Snapper
-					Telegram
-					VB6
-				base
-					ActionObjectBase
-					ArrayBase
-					ObjectBase
-					StringBase
-				class_
-					ActionObjectCodeSearch
-					ActionObjectEMC2
-					ActionObjectEpicStudio
-					ActionObjectHelpdesk
-					ActionObjectPath
-					DebugBuilder
-					Duration
-					EpicRecord
-					FlexTable
-					FormatList
-					MousePosition
-					Selector
-					SelectorChoice
-					SelectorGui
-					TableList
-					TableListMod
-					TempSettings
-					Toast
-					VisualWindow
-				lib
-					AHKCodeLib
-					ClipboardLib
-					DataLib
-					DateTimeLib
-					EpicLib
-					FileLib
-					GuiLib
-					HotkeyLib
-					PhoneLib
-					RunLib
-					SearchLib
-					SelectLib
-					StringLib
-					WindowLib
-				static
-					Config
-					Debug
-					Hyperlinker
-					ScriptTrayInfo
-					WindowActions
-			Non-_ private members
-				program
-					Putty - shouldn't lowercase public members be private instead?
-					OneNoteRecurringTodo
-				class_
-					ActionObject
-					DebugBuilder
-					Duration
-					FlexTable
-					FormatList
-					ProgramInfo
-					Selector
-					SelectorChoice
-					SelectorGui
-					TableList
-					TableListMod
-					Toast
-					VisualWindow
-					WindowInfo
-				static
-					Config
-			BoundFunc functions
-				program
-					Chrome
-					Hyperspace
-					OneNote
-				class_
-					Toast
-				static
-					CommonHotkeys
+		Add member order/capitalization to class template somehow
+		! With auto-complete, we don't really need to distinguish public vs. private functions - only the public ones will show up in auto-complete.
+		The _privateMember format might still be worth doing to allow public properties with the same name as a private member
+			Do we actually have a need to do that, though?
+				Only in specific cases, where we're actually doing additional logic for the public function/property (like for TempSettings, where we're storing off the previous value)
+		New plan:
+			Capitalization - only constants are PascalCase, everything else is camelCase
+				One exception - an Init() function that acts like a constructor for a static class should also be PascalCase.
+			Order
+				Public
+					Constants
+					staticMembers
+					nonStaticMembers
+					properties
+					__New()/Init()
+					otherFunctions
+				Private
+					Constants
+					staticMembers
+					nonStaticMembers
+					functions
+			Specific offenders
+				Out of order members
+					***
+				PublicMembersOrFunctions
+					***
+				_privateMembers
+					***
+				_boundFuncFunctions
+					program
+						Chrome
+						Hyperspace
+						OneNote
+				Constants (to review scope/capitalization of)
+					program
+						Snapper - _names
+					class_
+						SelectorGui - should Char_NewColumn be public?
+						TableListMod - should Operation_ constants be public? [[Unsure]]
+						VisualWindow - do we want to keep the RESIZE_ capitalization for those constants?
+					lib
+						AHKCodeLib
+					static
+						Config - should Machine_/Context_ constants be private, since all callers can just use wrapper properties?
+						Debug
+	Putty - shouldn't last* members be private instead?
 	Duration - can we rearrange units vs. characters again?
 		Currently, individual char constants and char->covert mapping:
 			static Char_Hour := "h"

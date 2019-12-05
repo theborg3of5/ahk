@@ -42,16 +42,16 @@ class ActionObject {
 	
 	; #PRIVATE#
 	
-	value   := "" ; Value (the unique bit of info to act upon, like a path or identifier)
-	type    := "" ; Determined type of ActionObject, from .Type_* constants
-	subType := "" ; Determined sub-type, an additional categorization within a particular ActionObject* class.
-	
 	; Type constants
 	static Type_CodeSearch := "CODESEARCH"
 	static Type_EpicStudio := "EPICSTUDIO"
 	static Type_EMC2       := "EMC2"
 	static Type_Helpdesk   := "HELPDESK"
 	static Type_Path       := "PATH"
+	
+	value   := "" ; Value (the unique bit of info to act upon, like a path or identifier)
+	type    := "" ; Determined type of ActionObject, from .Type_* constants
+	subType := "" ; Determined sub-type, an additional categorization within a particular ActionObject* class.
 	
 	;---------
 	; DESCRIPTION:    Try to determine the type of ActionObject that we'll need based on the input value.

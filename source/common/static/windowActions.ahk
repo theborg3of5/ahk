@@ -124,23 +124,23 @@ class WindowActions {
 	
 	; #PRIVATE#
 	
-	_actionOverrides := "" ; {windowName: {action: method}}
+	; Supported window actions
+	static Action_None       := "NONE"        ; Nothing
+	static Action_Activate   := "ACTIVATE"    ; Activate the window
+	static Action_Close      := "CLOSE"       ; Close the window
+	static Action_EscapeKey  := "ESC"         ; Handle the escape key being pressed
+	static Action_Minimize   := "MIN"         ; Minimize the window
+	static Action_SelectAll  := "SELECT_ALL"  ; Select all of the current field
+	static Action_DeleteWord := "DELETE_WORD" ; Delete the word to the left of the cursor
 	
-	; Constants for supported window actions
-	static Action_None       := "NONE"
-	static Action_Other      := "OTHER"
-	static Action_Activate   := "ACTIVATE"
-	static Action_Close      := "CLOSE"
-	static Action_EscapeKey  := "ESC"
-	static Action_Minimize   := "MIN"
-	static Action_SelectAll  := "SELECT_ALL"
-	static Action_DeleteWord := "DELETE_WORD"
-
-	; Constants for supported methods for performing the actions above
-	static Method_Default          := "DEFAULT"
-	static Method_Minimize_Message := "POST_MESSAGE"
-	static Method_SelectAll_Home   := "HOME_END"
-	static Method_DeleteWord_Ctrl  := "CTRL_SHIFT"
+	; Supported action methods
+	static Method_Default          := "DEFAULT"      ; Use the default way of performing the action
+	static Method_Other            := "OTHER"        ; Something special, defined in .doSpecialWindowMethod
+	static Method_Minimize_Message := "POST_MESSAGE" ; Minimize: send a windows message to do it
+	static Method_SelectAll_Home   := "HOME_END"     ; Select all: send home/end (and holding shift in between)
+	static Method_DeleteWord_Ctrl  := "CTRL_SHIFT"   ; Delete word: send Ctrl+Shift+Left to select it, then delete
+	
+	_actionOverrides := "" ; {windowName: {action: method}}
 	
 	;---------
 	; DESCRIPTION:    Set up the needed information to perform a window action and execute it.
@@ -181,7 +181,7 @@ class WindowActions {
 		
 		; How we want to perform the action
 		method := windowActionSettings[action]
-		if(method = WindowActions.Action_Other) {
+		if(method = WindowActions.Method_Other) {
 			this.doSpecialWindowMethod(action, titleString, windowActionSettings)
 			return
 		}

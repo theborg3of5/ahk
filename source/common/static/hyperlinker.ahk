@@ -102,28 +102,8 @@ class Hyperlinker {
 	; DESCRIPTION:    Grab the array of linking window info for the given starting window name.
 	; PARAMETERS:
 	;  windowName (I,REQ) - Starting window name, should match NAME column in windows.tl.
-	; RETURNS:        Array of linking-related info about the window matching the given name. Format:
-	;                    ary["NAME"]                  = Name of the window we're starting from,
-	;                                                   matches NAME column in windows.tl (also the
-	;                                                   <name> top-level subscript)
-	;                       ["SET_PATH_METHOD"]       = Method that should be used to add the link,
-	;                                                   from the Hyperlinker.Method_* constants at the
-	;                                                   top of this file.
-	;                       ["CLOSE_METHOD"]          = Method that should be used to close the linking
-	;                                                   popup (if applicable), from the Hyperlinker.CloseMethod_*
-	;                                                   constants at the top of this file.
-	;                       ["LINK_POPUP"]            = If the method is Hyperlinker.Method_PopupField,
-	;                                                   this is the title string for the linking
-	;                                                   popup where we'll enter the path.
-	;                       ["PATH_FIELD_CONTROL_ID"] = If the method is Hyperlinker.Method_PopupField,
-	;                                                   this is the control ID for the field where
-	;                                                   the path goes.
-	;                       ["TAGGED_STRING_BASE"]    = If the method is Hyperlinker.Method_TaggedString,
-	;                                                   this is the "base" string that describes the
-	;                                                   format of the final linked string (that
-	;                                                   includes both the selected text and the path).
-	;                                                   It should include both <TEXT> and <PATH> tags
-	;                                                   for those respective bits of data.
+	; RETURNS:        Array of linking-related info about the window matching the given name.
+	;                 See ._windows for format.
 	;---------
 	getWindowLinkInfo(windowName) {
 		if(!windowName)

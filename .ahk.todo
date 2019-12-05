@@ -1,4 +1,173 @@
 # New Ideas
+	Standardize how we format & structure classes
+		Capitalization (Public vs _private members, Public vs private functions)
+			What about constants? Should they just always be public so they can be Constant capitalization?
+				No, some of them don't make sense to be public.
+					How should the private constants be formatted, then?
+						_Constant, maybe?
+			BoundFunc functions
+				Should they be public instead of private?
+				Do we want any special naming scheme (like a leading __) for these?
+					Currently some places are using one leading _, but that clashes with my new private member plan.
+		Member order
+			Public
+				ExternalConstants
+				OtherStaticMembers
+				OtherMembers
+				__New()
+				Functions
+			Private
+				_InternalConstants
+				_otherStaticMembers
+				_otherMembers
+				functions
+		Specific offenders
+			Lowercase public members
+				program
+					Snapper - should its _private constants be public Constants instead?
+					VB6
+				base
+					ArrayBase
+				class_
+					ActionObject
+					ActionObjectCodeSearch
+					ActionObjectEMC2
+					ActionObjectEpicStudio
+					ActionObjectHelpdesk
+					ActionObjectPath
+					Duration
+					EpicRecord
+					MousePosition
+					ProgramInfo
+					Selector
+					TableList
+					TableListMod
+					VisualWindow
+					WindowInfo
+				static
+					Config
+			Constants
+				program
+					Explorer
+				class_
+					ActionObject
+					ActionObjectCodeSearch
+					ActionObjectEpicStudio
+					ActionObjectPath
+					Duration (public and private)
+					FormatList
+					SelectorGui
+					TableList
+					TableListMod
+					Toast
+					VisualWindow (public and private)
+					WindowInfo
+				lib
+					AHKCodeLib
+				static
+					CommonHotkeys
+					Config
+					Debug
+					Hyperlinker
+					WindowActions
+			Lowercase public functions
+				program
+					Chrome
+					Ditto
+					EMC2
+					EpicStudio
+						MSnippets
+					Excel
+					Explorer
+						Should we pull HiddenState_ constants out into an enum of sorts?
+							Either in enums script, or just as a separate class in the same file
+							ExplorerHiddenFilesState {}
+					Hyperspace
+					InternetExplorer
+					Notepad++
+					OneNote
+						OneNoteTodoPage
+						OneNoteRecurringTodo
+					OneTastic
+					Putty
+					Snapper
+					Telegram
+					VB6
+				base
+					ActionObjectBase
+					ArrayBase
+					ObjectBase
+					StringBase
+				class_
+					ActionObjectCodeSearch
+					ActionObjectEMC2
+					ActionObjectEpicStudio
+					ActionObjectHelpdesk
+					ActionObjectPath
+					DebugBuilder
+					Duration
+					EpicRecord
+					FlexTable
+					FormatList
+					MousePosition
+					Selector
+					SelectorChoice
+					SelectorGui
+					TableList
+					TableListMod
+					TempSettings
+					Toast
+					VisualWindow
+				lib
+					AHKCodeLib
+					ClipboardLib
+					DataLib
+					DateTimeLib
+					EpicLib
+					FileLib
+					GuiLib
+					HotkeyLib
+					PhoneLib
+					RunLib
+					SearchLib
+					SelectLib
+					StringLib
+					WindowLib
+				static
+					Config
+					Debug
+					Hyperlinker
+					ScriptTrayInfo
+					WindowActions
+			Non-_ private members
+				program
+					Putty - shouldn't lowercase public members be private instead?
+					OneNoteRecurringTodo
+				class_
+					ActionObject
+					DebugBuilder
+					Duration
+					FlexTable
+					FormatList
+					ProgramInfo
+					Selector
+					SelectorChoice
+					SelectorGui
+					TableList
+					TableListMod
+					Toast
+					VisualWindow
+					WindowInfo
+				static
+					Config
+			_private boundFunc functions
+				program
+					Chrome
+					Hyperspace
+					OneNote
+	Can we rename FormatList to make more sense?
+		It's an instance class, so maybe FormattedList?
+	Consider renaming getDebugTypeName to start with "debug" so everything in the debug scope does.
 	Can we do something to split up the multi-class program scripts?
 		Should they be separate files?
 			Maybe a sub-folder in program\?
@@ -32,47 +201,6 @@
 				!  - New column
 			Collapse on mods
 			Is there any fancy highlighting/lines we could add to match up with columns?
-	Standardize how we format & structure classes
-		Capitalization (Public vs _private members, Public vs private functions)
-			What about constants? Should they just always be public so they can be Constant capitalization?
-			BoundFunc functions
-				Should they be public instead of private?
-				Do we want any special naming scheme (like a leading __) for these?
-					Currently some places are using one leading _, but that clashes with my new private member plan.
-		Specific offenders
-			Lowercase public members
-				Snapper - should its _private constants be public Constants instead?
-				VB6
-			Non-_ private members
-				Putty - shouldn't lowercase public members be private instead?
-				Explorer - but these are constants, should they really just be public instead?
-				OneNoteRecurringTodo
-			Lowercase public functions
-				Chrome
-				Ditto
-				EMC2
-				EpicStudio
-					MSnippets
-				Excel
-				Explorer
-					Should we pull HiddenState_ constants out into an enum of sorts?
-						Either in enums script, or just as a separate class in the same file
-						ExplorerHiddenFilesState {}
-				Hyperspace
-				InternetExplorer
-				Notepad++
-				OneNote
-					OneNoteTodoPage
-					OneNoteRecurringTodo
-				OneTastic
-				Putty
-				Snapper
-				Telegram
-				VB6
-			_private boundFunc functions
-				Chrome
-				Hyperspace
-				OneNote
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
 		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
 		Support right-alignment of columns

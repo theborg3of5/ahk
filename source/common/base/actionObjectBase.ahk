@@ -13,6 +13,14 @@ class ActionObjectBase {
 	; #PUBLIC#
 	
 	;---------
+	; NOTES:          Should not be called directly - all child classes should override this.
+	;---------
+	__New(value) {
+		new ErrorToast("ActionObjectBase instance created", "ActionObjectBase is a base class only, use a type-specific child class instead.").showMedium()
+		return ""
+	}
+	
+	;---------
 	; DESCRIPTION:    Open the object.
 	; NOTES:          If you want to override this in a child class, consider overriding
 	;                 .openWeb/.openEdit as well - they don't come through here by default.
@@ -102,16 +110,6 @@ class ActionObjectBase {
 	
 	
 	; #PRIVATE#
-	
-	;---------
-	; PARAMETERS:
-	;  value (I,REQ) - Value for the new class.
-	; NOTES:          Should be overridden by child class.
-	;---------
-	__New(value) {
-		new ErrorToast("ActionObject instance created", "ActionObjectBase is a base class only, use a type-specific child class instead.").showMedium()
-		return ""
-	}
 	
 	;---------
 	; DESCRIPTION:    Open provided link to the object.

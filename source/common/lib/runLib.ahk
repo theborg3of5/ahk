@@ -33,7 +33,7 @@ class RunLib {
 			return
 		}
 		
-		RunLib.ShellRun(path, args)
+		RunLib.shellRun(path, args)
 	}
 
 	;---------
@@ -74,7 +74,7 @@ class RunLib {
 			4 "Verb" (For example, pass "RunAs" to run as administrator)
 			5 Suggestion to the application about how to show its window - see the msdn link for possible values
 	*/
-	ShellRun(prms*) {
+	shellRun(prms*) {
 		shellWindows := ComObjCreate("{9BA05972-F6A8-11CF-A442-00A0C90A8F39}")
 		
 		desktop := shellWindows.Item(ComObj(19, 8)) ; VT_UI4, SCW_DESKTOP

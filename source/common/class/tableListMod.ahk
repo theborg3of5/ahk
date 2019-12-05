@@ -50,6 +50,16 @@ class TableListMod {
 	; #PUBLIC#
 	
 	;---------
+	; DESCRIPTION:    The label originally given for this mod action.
+	;---------
+	label {
+		get {
+			return this.labelFromParent
+		}
+	}
+	
+	
+	;---------
 	; DESCRIPTION:    Create a new TableListMod instance.
 	; PARAMETERS:
 	;  modActString (I,REQ) - String defining the mod. Format (explained in class documentation):
@@ -88,15 +98,6 @@ class TableListMod {
 		
 		; Put the column back into the full row.
 		row[this.column] := newValue
-	}
-	
-	;---------
-	; DESCRIPTION:    The label originally given for this mod action.
-	;---------
-	label {
-		get {
-			return this.labelFromParent
-		}
 	}
 	
 	

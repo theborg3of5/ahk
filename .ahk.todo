@@ -1,23 +1,24 @@
 # New Ideas
 	Standardize how we format & structure classes
-		Capitalization (Public vs _private members, Public vs private functions)
-			What about constants? Should they just always be public so they can be Constant capitalization?
-				No, some of them don't make sense to be public.
-					How should the private constants be formatted, then?
-						_Constant, maybe?
-			BoundFunc functions
-				Should they be public instead of private?
-				Do we want any special naming scheme (like a leading __) for these?
-					Currently some places are using one leading _, but that clashes with my new private member plan.
+		Capitalization
+			Members
+				PublicMember
+				_privateMember
+			Functions
+				PublicFunction
+				privateFunction
+			Constants
+				PUBLIC_CONSTANT
+				PRIVATE_CONSTANT
 		Member order
 			Public
-				ExternalConstants
+				EXTERNAL_CONSTANTS
 				OtherStaticMembers
 				OtherMembers
 				__New()
 				Functions
 			Private
-				_InternalConstants
+				INTERNAL_CONSTANTS
 				_otherStaticMembers
 				_otherMembers
 				functions
@@ -160,11 +161,32 @@
 					WindowInfo
 				static
 					Config
-			_private boundFunc functions
+			BoundFunc functions
 				program
 					Chrome
 					Hyperspace
 					OneNote
+				class_
+					Toast
+				static
+					CommonHotkeys
+	Duration - can we rearrange units vs. characters again?
+		Currently, individual char constants and char->covert mapping:
+			static Char_Hour := "h"
+			...
+			static _units := {Duration.Char_Hour:3600, Duration.Char_Minute:60, Duration.Char_Second:1} ; {unitChar: multiplierToSeconds}
+		Maybe turn it into unit-specific chunks, like this:
+			static Unit_Hour := {"Char":"h", "Conversion":3600}
+				Use by external caller: durationObj.subTime(1, Duration.Unit_Second["Char"])
+		Or, just 2 separate constants each:
+			static Unit_Hour := "h"
+			static Convert_Hour := 3600
+		Or, 2 mappings to conversion factor?
+			static UnitChars   := {"Hour":3600, "Minute":60, "Second":1}
+			static UnitConvert := {"h":   3600, "m":     60, "s":     1}
+	Auto-complete - could we make a special kind of header that can cover multiple things?
+		At least one-line constants (just X number of lines until we get a blank line, maybe?)
+			Would let us line things up nicely again
 	Can we rename FormatList to make more sense?
 		It's an instance class, so maybe FormattedList?
 	Consider renaming getDebugTypeName to start with "debug" so everything in the debug scope does.

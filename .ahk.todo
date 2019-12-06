@@ -19,10 +19,6 @@
 				functions
 		Specific offenders
 			Constants (to review scope/capitalization of)
-				class_
-					SelectorGui - capitalization, spacing/positioning should maybe be static, should Char_NewColumn be public?
-					TableListMod - should Operation_ constants be public? [[Unsure]]
-					VisualWindow - do we want to keep the RESIZE_ capitalization for those constants?
 				lib
 					AHKCodeLib
 				static

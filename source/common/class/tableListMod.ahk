@@ -52,12 +52,7 @@ class TableListMod {
 	;---------
 	; DESCRIPTION:    The label originally given for this mod action.
 	;---------
-	label {
-		get {
-			return this.labelFromParent
-		}
-	}
-	
+	label := ""
 	
 	;---------
 	; DESCRIPTION:    Create a new TableListMod instance.
@@ -68,7 +63,7 @@ class TableListMod {
 	; RETURNS:        Reference to new TableListMod object
 	;---------
 	__New(modString, label) {
-		this.labelFromParent := label
+		this.label := label
 		
 		; Pull the relevant info out of the string.
 		this.column    := modString.beforeString(".")
@@ -108,23 +103,15 @@ class TableListMod {
 	static Operation_AddToStart := "addToStart"
 	static Operation_AddToEnd   := "addToEnd"
 	
-	column          := ""
-	operation       := ""
-	text            := ""
-	labelFromParent := ""
+	column    := ""
+	operation := ""
+	text      := ""
 	
 	
 	; #DEBUG#
 	
 	getDebugTypeName() {
 		return "TableListMod"
-	}
-	
-	debugToString(ByRef builder) {
-		builder.addLine("Column",    this.column)
-		builder.addLine("Operation", this.operation)
-		builder.addLine("Text",      this.text)
-		builder.addLine("Label",     this.labelFromParent)
 	}
 	; #END#
 }

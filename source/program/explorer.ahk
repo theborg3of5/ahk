@@ -29,6 +29,9 @@ class Explorer {
 	
 	static ThisPCFolderUUID := "::{20d04fe0-3aea-1069-a2d8-08002b30309d}"
 	
+	
+	; #INTERNAL#
+	
 	;---------
 	; DESCRIPTION:    Toggle whether hidden files are visible in Explorer or not.
 	; NOTES:          Inspired by http://www.autohotkey.com/forum/post-342375.html#342375

@@ -2255,6 +2255,18 @@
         <KeyWord name="Digit"/>
         <KeyWord name="Disable"/>
         <KeyWord name="Disabled"/>
+
+        <!-- *gdb START CLASS: Ditto -->
+        <KeyWord name="Ditto.saveCurrentClipboard" func="yes">
+            <Overload retVal="[Requires program includes]" descr="
+							;---------
+							; DESCRIPTION:    Force Ditto to save the current clipboard state as a clip. Useful when you want to
+							;                 add something to the clipboard history, but restore the current clipboard as well.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: Ditto -->
+
         <KeyWord name="DllCall" func="yes">
             <Overload retVal="">
                 <Param name="&quot;DllFile\Function&quot;"/>
@@ -4285,6 +4297,22 @@
         <KeyWord name="Off"/>
         <KeyWord name="Ok"/>
         <KeyWord name="On"/>
+
+        <!-- *gdb START CLASS: OneNote -->
+        <KeyWord name="OneNote.linkEMC2ObjectInLine" func="yes">
+            <Overload retVal="[Requires program includes]" descr="
+							;---------
+							; DESCRIPTION:    Select the current line and link the given EMC2 object (described by INI/ID).
+							; PARAMETERS:
+							;  ini (I,REQ) - INI of the object to link
+							;  id  (I,REQ) - ID of the object to link
+							;---------">
+                <Param name="ini" />
+                <Param name="id" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: OneNote -->
+
         <KeyWord name="OnExit"/>
         <KeyWord name="OnMessage" func="yes">
             <Overload retVal="">
@@ -4299,6 +4327,18 @@
             </Overload>
         </KeyWord>
         <KeyWord name="Or"/>
+
+        <!-- *gdb START CLASS: Outlook -->
+        <KeyWord name="Outlook.isTLGCalendarActive" func="yes">
+            <Overload retVal="[Requires program includes]" descr="
+							;---------
+							; DESCRIPTION:    Check whether the TLG calendar is currently active.
+							; RETURNS:        true/false
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: Outlook -->
+
         <KeyWord name="OutputDebug" func="no">
             <Overload retVal="">
                 <Param name="Text"/>
@@ -5313,6 +5353,30 @@
             </Overload>
         </KeyWord>
         <KeyWord name="Slider"/>
+
+        <!-- *gdb START CLASS: Snapper -->
+        <KeyWord name="Snapper.buildURL" func="yes">
+            <Overload retVal="[Requires program includes]" descr="
+							;---------
+							; DESCRIPTION:    Build a URL that will open something in Snapper.
+							; PARAMETERS:
+							;  environment (I,OPT) - COMMID of the environment to get a URL for. If not given, we'll try to
+							;                        default from whatever's currently selected in Snapper.
+							;  ini         (I,OPT) - INI of the record(s) to launch. If this or idList is blank, both will
+							;                        be set to &quot;X&quot;, which will show an error popup, but still connect
+							;                        Snapper to the chosen right environment.
+							;  idList      (I,OPT) - Comma-separated list of record IDs (or colon-separated ranges of IDs)
+							;                        to launch. If blank, both ini and idList will be treated as &quot;X&quot; as
+							;                        described above.
+							; RETURNS:        URL to launch Snapper.
+							;---------">
+                <Param name="environment := &quot;&quot;" />
+                <Param name="ini := &quot;&quot;" />
+                <Param name="idList := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: Snapper -->
+
         <KeyWord name="Sort" func="no">
             <Overload retVal="">
                 <Param name="VarName"/>
@@ -6333,6 +6397,17 @@
                 <Param name="Number"/>
             </Overload>
         </KeyWord>
+
+        <!-- *gdb START CLASS: Telegram -->
+        <KeyWord name="Telegram.focusNormalChat" func="yes">
+            <Overload retVal="[Requires program includes]" descr="
+							;---------
+							; DESCRIPTION:    Focus the &quot;Normal&quot; chat that's the only one I use in Telegram.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: Telegram -->
+
 
         <!-- *gdb START CLASS: TempSettings -->
         <KeyWord name="TempSettings.coordMode" func="yes">

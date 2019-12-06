@@ -40,7 +40,7 @@
 
 
 class EMC2 {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	;---------
 	; DESCRIPTION:    Insert a specific SmartText in the current field.

@@ -41,7 +41,7 @@
 #If
 
 class Putty {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	static ChangeSettingsOption := 0x50 ; IDM_RECONF, found in Putty's source code in window.c: https://github.com/codexns/putty/blob/master/windows/window.c
 	

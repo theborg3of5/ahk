@@ -44,7 +44,7 @@
 #If
 
 class Excel {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	;---------
 	; DESCRIPTION:    AutoFit the column widths for the entire sheet.

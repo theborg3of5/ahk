@@ -23,7 +23,7 @@
 #If
 
 class Hyperspace {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	;---------
 	; DESCRIPTION:    Determine whether any version of Hyperspace is active.

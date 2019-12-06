@@ -84,7 +84,23 @@
 class OneNote {
 	; #PUBLIC#
 	
-	static RightClickMenuTitleString := "ahk_class Net UI Tool Window"
+	;---------
+	; DESCRIPTION:    Select the current line and link the given EMC2 object (described by INI/ID).
+	; PARAMETERS:
+	;  ini (I,REQ) - INI of the object to link
+	;  id  (I,REQ) - ID of the object to link
+	;---------
+	linkEMC2ObjectInLine(ini, id) {
+		SelectLib.selectCurrentLine() ; Select whole line, but avoid the extra indentation and newline that comes with ^a.
+		SelectLib.selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
+		
+		new ActionObjectEMC2(id, ini).linkSelectedTextWeb("Failed to link EMC2 object text")
+		
+		Send, {End}
+	}
+	
+	
+	; #INTERNAL#
 	
 	;---------
 	; DESCRIPTION:    Scroll left/right in the OneNote window (assuming it's under the mouse)
@@ -209,13 +225,13 @@ class OneNote {
 		Send, r    ; Remove link
 		
 		; Go ahead and finish if the right-click menu is gone, we're done.
-		if(!WinActive(OneNote.RightClickMenuTitleString))
+		if(!WinActive(OneNote.TitleString_RightClickMenu))
 			return
 		
 		; If the right click menu is still open (probably because it wasn't a link and therefore
 		; there was no "r" option), give it a tick to close on its own, then close it.
 		Sleep, 100
-		if(WinActive(OneNote.RightClickMenuTitleString))
+		if(WinActive(OneNote.TitleString_RightClickMenu))
 			Send, {Esc}
 	}
 	
@@ -269,23 +285,10 @@ class OneNote {
 		ao.linkSelectedTextEdit("Failed to add EMC2 object edit link")
 	}
 	
-	;---------
-	; DESCRIPTION:    Select the current line and link the given EMC2 object (described by INI/ID).
-	; PARAMETERS:
-	;  ini (I,REQ) - INI of the object to link
-	;  id  (I,REQ) - ID of the object to link
-	;---------
-	linkEMC2ObjectInLine(ini, id) {
-		SelectLib.selectCurrentLine() ; Select whole line, but avoid the extra indentation and newline that comes with ^a.
-		SelectLib.selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
-		
-		new ActionObjectEMC2(id, ini).linkSelectedTextWeb("Failed to link EMC2 object text")
-		
-		Send, {End}
-	}
-	
 	
 	; #PRIVATE#
+	
+	static TitleString_RightClickMenu := "ahk_class Net UI Tool Window"
 	
 	;---------
 	; DESCRIPTION:    Get a link to the current page
@@ -340,13 +343,13 @@ class OneNote {
 	;---------
 	copyLinkToCurrentParagraph() {
 		Send, +{F10}
-		WinWaitActive, % OneNote.RightClickMenuTitleString
+		WinWaitActive, % OneNote.TitleString_RightClickMenu
 		Send, p
-		WinWaitNotActive, % OneNote.RightClickMenuTitleString, , 0.5
+		WinWaitNotActive, % OneNote.TitleString_RightClickMenu, , 0.5
 		
 		; Special handling: if we didn't get anything, it might be because the special paste menu item was there (where the only option is "Paste (P)").
 		; If that's the case, try getting to the second "p" option and submit it.
-		if(WinActive(OneNote.RightClickMenuTitleString))
+		if(WinActive(OneNote.TitleString_RightClickMenu))
 			Send, p{Enter}
 	}
 	
@@ -355,7 +358,7 @@ class OneNote {
 	;---------
 	doCopyLinkUnderMouse() {
 		Click, Right
-		WinWaitActive, % OneNote.RightClickMenuTitleString
+		WinWaitActive, % OneNote.TitleString_RightClickMenu
 		Send, i ; Copy Link
 	}
 	
@@ -373,7 +376,7 @@ class OneNote {
 
 ; A helper class for all of the logic that goes into my OneNote organizational system.
 class OneNoteTodoPage {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	;---------
 	; DESCRIPTION:    Collapse the todo page to different levels.
@@ -652,7 +655,7 @@ class OneNoteTodoPage {
 	This class represents a single recurring todo item, along with the timeframe filtering info that goes with it.
 */
 class OneNoteRecurringTodo {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	;---------
 	; DESCRIPTION:    Create a new recurring todo object.

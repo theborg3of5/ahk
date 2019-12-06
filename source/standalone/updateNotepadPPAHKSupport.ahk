@@ -7,11 +7,10 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
 ; Constants we use to pick apart scripts for their component parts.
-global Header_StartEnd    := ";---------"
-global ScopeStart_Public  := "; #PUBLIC#"
-global ScopeStart_Private := "; #PRIVATE#"
-global ScopeStart_Debug   := "; #DEBUG#"
-global ScopeEnd           := "; #END#"
+global Header_StartEnd            := ";---------"
+global ScopeStart_Public          := "; #PUBLIC#"
+global ScopeStart_NonPublicScopes := ["; #INTERNAL#", "; #PRIVATE#", "; #DEBUG#"]
+global ScopeEnd                   := "; #END#"
 
 completionFile       := Config.path["AHK_SUPPORT"]   "\notepadPPAutoComplete.xml"
 completionFileActive := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
@@ -23,7 +22,7 @@ syntaxFileActive     := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.
 autoCompleteXML := FileRead(completionFile)
 
 ; Get info about all classes we care about and use it to update the XML
-classes := getAllCommonClasses()
+classes := getAllClasses()
 if(!updateClassesInXML(classes, autoCompleteXML, failedClasses)) {
 	handleFailedClasses(failedClasses)
 	ExitApp
@@ -56,7 +55,7 @@ ExitApp
 ;                 excluding those with no public members.
 ; RETURNS:        An associative array of AutoCompleteClass objects, indexed by the class' names.
 ;---------
-getAllCommonClasses() {
+getAllClasses() {
 	commonRoot := Config.path["AHK_SOURCE"] "\common\"
 	
 	classes := {}
@@ -65,6 +64,9 @@ getAllCommonClasses() {
 	classes.mergeFromObject(getClassesFromFolder(commonRoot "lib"))
 	classes.mergeFromObject(getClassesFromFolder(commonRoot "static"))
 	; Deliberately leaving external\ out - don't want to try and document those myself, no good reason to.
+	
+	; Also include public functions from program-specific classes, but call out that they're not available everywhere.
+	classes.mergeFromObject(getClassesFromFolder(Config.path["AHK_SOURCE"] "\program", "[Requires program includes]"))
 	
 	; Post-processing
 	classesToDelete := []
@@ -92,7 +94,7 @@ getAllCommonClasses() {
 ;  folderPath (I,REQ) - The full path to the folder to read from.
 ; RETURNS:        An associative array of AutoCompleteClass objects, indexed by the class' names.
 ;---------
-getClassesFromFolder(folderPath) {
+getClassesFromFolder(folderPath, returnsPrefix := "") {
 	classes := {}
 	
 	; Loop over all scripts in folder to find classes
@@ -120,14 +122,14 @@ getClassesFromFolder(folderPath) {
 				defLine := linesAry.next(ln)
 				
 				; Feed the data to a new member object and add that to our current class object.
-				member := new AutoCompleteMember(defLine, headerLines)
+				member := new AutoCompleteMember(defLine, headerLines, returnsPrefix)
 				classObj.addMember(member)
 				
 				Continue
 			}
 			
 			; Block of private/debug scope - ignore everything up until we hit a public/end of scope.
-			if(line = ScopeStart_Private || line = ScopeStart_Debug) {
+			if(ScopeStart_NonPublicScopes.contains(line)) {
 				while(line != ScopeStart_Public && line != ScopeEnd) {
 					line := linesAry.next(ln)
 				}
@@ -203,7 +205,7 @@ handleFailedClasses(failedClasses) {
 
 ; Represents an entire class that we want to add auto-complete info for.
 class AutoCompleteClass {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	name       := "" ; The class' name
 	parentName := "" ; The name of the class' parent (if it extends another class)
@@ -318,18 +320,12 @@ class AutoCompleteClass {
 	getDebugTypeName() {
 		return "AutoCompleteClass"
 	}
-	
-	debugToString(ByRef builder) {
-		builder.addLine("Name",        this.name)
-		builder.addLine("Parent name", this.parentName)
-		builder.addLine("Members",     this.members)
-	}
 	; #END#
 }
 
 ; Represents a single class member that we want to add auto-complete info for.
 class AutoCompleteMember {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	name        := ""
 	returns     := ""
@@ -339,18 +335,20 @@ class AutoCompleteMember {
 	;---------
 	; DESCRIPTION:    Create a new member.
 	; PARAMETERS:
-	;  defLine     (I,REQ) - The definition line for the member - that is, its first line
-	;                        (function definition, etc.).
-	;  headerLines (I,REQ) - An array of lines making up the full header for this member.
+	;  defLine       (I,REQ) - The definition line for the member - that is, its first line
+	;                          (function definition, etc.).
+	;  headerLines   (I,REQ) - An array of lines making up the full header for this member.
+	;  returnsPrefix (I,OPT) - If specified, the returns value will appear as a prefix on the return value.
 	;---------
-	__New(defLine, headerLines) {
+	__New(defLine, headerLines, returnsPrefix := "") {
 		AHKCodeLib.getDefLineParts(defLine, name, paramsAry)
 		this.name      := name
 		this.paramsAry := paramsAry
 		
 		; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
+		this.returns := returnsPrefix
 		if(!defLine.contains("("))
-			this.returns := this.ReturnValue_Property
+			this.returns := this.returns.appendPiece(this.ReturnValue_Property, " ")
 		
 		; The description is the actual function header, indented nicely.
 		this.description := this.formatHeaderAsDescription(headerLines)
@@ -453,12 +451,6 @@ class AutoCompleteMember {
 	
 	getDebugTypeName() {
 		return "AutoCompleteMember"
-	}
-	buildDebugDisplay(ByRef builder) {
-		builder.addLine("Name",         this.name)
-		builder.addLine("Returns",      this.returns)
-		builder.addLine("Description",  this.description)
-		builder.addLine("Params array", this.paramsAry)
 	}
 	; #END#
 }

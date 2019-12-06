@@ -24,7 +24,7 @@
 #If
 	
 class NotepadPlusPlus {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	;---------
 	; DESCRIPTION:    Open the current file's parent folder in Explorer.

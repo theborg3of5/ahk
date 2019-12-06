@@ -32,7 +32,7 @@
 #If
 
 class EpicStudio {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	; Debug window controls
 	static Debug_OtherProcessButton := "WindowsForms10.BUTTON.app.0.141b42a_r9_ad11" ; "Other Process" radio button
@@ -176,7 +176,7 @@ class EpicStudio {
 
 ; Static class for inserting snippets of M code into EpicStudio.
 class MSnippets {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	;---------
 	; DESCRIPTION:    Generate and insert an M snippet.

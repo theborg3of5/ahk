@@ -18,6 +18,14 @@ class GDBTODO {
 	;  - otherFunctions
 	
 	
+	; #INTERNAL#
+	
+	;  - Constants
+	;  - staticMembers
+	;  - nonStaticMembers
+	;  - functions
+	
+	
 	; #PRIVATE#
 	
 	;  - Constants

@@ -57,6 +57,17 @@ class Outlook {
 	; #PUBLIC#
 	
 	;---------
+	; DESCRIPTION:    Check whether the TLG calendar is currently active.
+	; RETURNS:        true/false
+	;---------
+	isTLGCalendarActive() {
+		return this.areAnyOfFoldersActive([this.TLGFolder])
+	}
+	
+	
+	; #INTERNAL#
+	
+	;---------
 	; DESCRIPTION:    Determine whether the current screen is one of our mail folders.
 	; RETURNS:        true/false
 	;---------
@@ -70,14 +81,6 @@ class Outlook {
 	;---------
 	isCurrentScreenCalendar() {
 		return this.areAnyOfFoldersActive(this.CalendarFolders)
-	}
-	
-	;---------
-	; DESCRIPTION:    Check whether the TLG calendar is currently active.
-	; RETURNS:        true/false
-	;---------
-	isTLGCalendarActive() {
-		return this.areAnyOfFoldersActive([this.TLGFolder])
 	}
 	
 	;---------

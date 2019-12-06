@@ -81,7 +81,7 @@
 
 ; VB6-specific actions. Everything should be called statically.
 class VB6 {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	;---------
 	; DESCRIPTION:    Add different variations on a contact comment at the current cursor position.

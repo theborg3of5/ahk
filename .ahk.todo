@@ -1,6 +1,4 @@
 # New Ideas
-	Consider an additional "INTERNAL" scope for classes
-		For program-specific classes, these will be the ones that the hotkeys for that class can use - PUBLIC will be reserved for stuff that can be called from outside the script.
 	Putty - shouldn't last* members be private instead?
 	Duration - can we rearrange units vs. characters again?
 		Currently, individual char constants and char->covert mapping:

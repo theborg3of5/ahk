@@ -13,6 +13,49 @@ class Snapper {
 	; #PUBLIC#
 	
 	;---------
+	; DESCRIPTION:    Build a URL that will open something in Snapper.
+	; PARAMETERS:
+	;  environment (I,OPT) - COMMID of the environment to get a URL for. If not given, we'll try to
+	;                        default from whatever's currently selected in Snapper.
+	;  ini         (I,OPT) - INI of the record(s) to launch. If this or idList is blank, both will
+	;                        be set to "X", which will show an error popup, but still connect
+	;                        Snapper to the chosen right environment.
+	;  idList      (I,OPT) - Comma-separated list of record IDs (or colon-separated ranges of IDs)
+	;                        to launch. If blank, both ini and idList will be treated as "X" as
+	;                        described above.
+	; RETURNS:        URL to launch Snapper.
+	;---------
+	buildURL(environment := "", ini := "", idList := "") { ; idList is a comma-separated list of IDs
+		if(!environment)
+			environment := Snapper.getCurrentEnvironment() ; Try to default from what Snapper has open right now if no environment given.
+		if(!environment)
+			return ""
+		
+		if(!ini || !idList) { ; These aren't be parameter defaults in case of blank parameters (not simply not passed at all)
+			ini    := "X"
+			idList := "X"
+		}
+		
+		outURL := Config.private["SNAPPER_URL_BASE"]
+		idAry := DataLib.expandList(idList)
+		if(idAry.count() > 10)
+			if(!GuiLib.showConfirmationPopup("You're trying to open more than 10 records in Snapper - are you sure you want to continue?", "Opening many records in Snapper"))
+				return ""
+		
+		For i,id in idAry {
+			if(!id)
+				Continue
+			
+			outURL .= ini "." id "." environment "/"
+		}
+		
+		return outURL
+	}
+	
+	
+	; #INTERNAL#
+	
+	;---------
 	; DESCRIPTION:    Send the text needed to ignore items that I've deemed unimportant (according
 	;                 to snapperIgnoreItems.tls) to Snapper and apply.
 	;---------
@@ -53,46 +96,6 @@ class Snapper {
 		} else {
 			Send, {Enter}
 		}
-	}
-
-	;---------
-	; DESCRIPTION:    Build a URL that will open something in Snapper.
-	; PARAMETERS:
-	;  environment (I,OPT) - COMMID of the environment to get a URL for. If not given, we'll try to
-	;                        default from whatever's currently selected in Snapper.
-	;  ini         (I,OPT) - INI of the record(s) to launch. If this or idList is blank, both will
-	;                        be set to "X", which will show an error popup, but still connect
-	;                        Snapper to the chosen right environment.
-	;  idList      (I,OPT) - Comma-separated list of record IDs (or colon-separated ranges of IDs)
-	;                        to launch. If blank, both ini and idList will be treated as "X" as
-	;                        described above.
-	; RETURNS:        URL to launch Snapper.
-	;---------
-	buildURL(environment := "", ini := "", idList := "") { ; idList is a comma-separated list of IDs
-		if(!environment)
-			environment := Snapper.getCurrentEnvironment() ; Try to default from what Snapper has open right now if no environment given.
-		if(!environment)
-			return ""
-		
-		if(!ini || !idList) { ; These aren't be parameter defaults in case of blank parameters (not simply not passed at all)
-			ini    := "X"
-			idList := "X"
-		}
-		
-		outURL := Config.private["SNAPPER_URL_BASE"]
-		idAry := DataLib.expandList(idList)
-		if(idAry.count() > 10)
-			if(!GuiLib.showConfirmationPopup("You're trying to open more than 10 records in Snapper - are you sure you want to continue?", "Opening many records in Snapper"))
-				return ""
-		
-		For i,id in idAry {
-			if(!id)
-				Continue
-			
-			outURL .= ini "." id "." environment "/"
-		}
-		
-		return outURL
 	}
 	
 	

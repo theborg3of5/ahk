@@ -1,7 +1,7 @@
 /* Class for duration information, which takes in a string with a particular format. --=
    
    Input string format:
-		1 or more of Nu, where N is a number and u is a unit from the following list:
+		1 or more of nU, where n is a number and U is a unit from the following list:
 			h - Hours
 			m - Minutes
 			s - Seconds
@@ -13,7 +13,7 @@
 class Duration {
 	; #PUBLIC#
 	
-	; [[ Supported characters ]]
+	; [[ Supported characters - conversion factors are in .unitConversionFactors ]]
 	;---------
 	; DESCRIPTION:    Hours
 	;---------
@@ -136,9 +136,7 @@ class Duration {
 		if(!this.isUnitChar(unitChar))
 			return
 		
-		this.durationTotalSeconds += value * this._units[unitChar]
-		
-		; Debug.popup("Duration.addTime","Finish", "value",value, "unitChar",unitChar, "multiplier",this._units[unitChar], "Seconds added",value * this.getUnitMultiplier(unitChar), "this.durationTotalSeconds",this.durationTotalSeconds)
+		this.durationTotalSeconds += value * this.unitConversionFactors[unitChar]
 	}
 	;---------
 	; DESCRIPTION:    Remove a certain amount of time from this Duration.
@@ -154,8 +152,8 @@ class Duration {
 	
 	; #PRIVATE#
 	
-	; All supported units, from largest to smallest.
-	static _units := {Duration.Char_Hour:3600, Duration.Char_Minute:60, Duration.Char_Second:1} ; {unitChar: multiplierToSeconds}
+	; All supported units, from largest to smallest, with their conversion to seconds.
+	static unitConversionFactors := {Duration.Char_Hour:3600, Duration.Char_Minute:60, Duration.Char_Second:1} ; {unitChar: multiplierToSeconds}
 	
 	durationTotalSeconds := 0 ; The internal representation of all time (including hours, minutes, seconds)
 	
@@ -167,19 +165,7 @@ class Duration {
 	; RETURNS:        True if it's supported, False otherwise.
 	;---------
 	isUnitChar(char) {
-		return Duration._units.HasKey(char)
-	}
-	
-	;---------
-	; DESCRIPTION:    Get the conversion factor from the given unit character to seconds.
-	; PARAMETERS:
-	;  char (I,REQ) - The character to check.
-	; RETURNS:        The number of seconds in the provided unit.
-	;---------
-	getUnitMultiplier(char) {
-		if(char = "")
-			return 0
-		return Duration._units[char]
+		return Duration.unitConversionFactors.HasKey(char)
 	}
 	
 	;---------
@@ -192,7 +178,7 @@ class Duration {
 	getUnitBreakdown(ByRef hours := "", ByRef minutes := "", ByRef seconds := "") {
 		remainingSeconds := this.durationTotalSeconds
 		
-		For unit,multiplier in Duration._units {
+		For unit,multiplier in Duration.unitConversionFactors {
 			quantity := remainingSeconds // multiplier
 			remainingSeconds -= quantity * multiplier
 			

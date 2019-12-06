@@ -389,7 +389,7 @@ class MSnippets {
 		arrayName := data["ARRAY_OR_INI"]
 		valueList := data["VARS_OR_VALUES"]
 		
-		listAry := new FormatList(valueList).getList(FormatList.Format_Array)
+		listAry := new FormattedList(valueList).getList(FormattedList.Format_Array)
 		
 		newLine := MSnippets.getMNewLinePlusIndent(numIndents)
 		lineBase := Config.private["M_LIST_ARRAY_INDEX"]

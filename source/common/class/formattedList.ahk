@@ -1,13 +1,13 @@
 /* Class to represent a list of strings, that can be parsed and output in a variety of different formats. --=
 	
 	Example usage
-		fl := new FormatList(clipboard)
-		listAry := fl.getList(FormatList.Format_Array) ; Get the list as an array
+		fl := new FormattedList(clipboard)
+		listAry := fl.getList(FormattedList.Format_Array) ; Get the list as an array
 		fl.sendList() ; Prompt the user for the format to send in
 	
 */ ; =--
 
-class FormatList {
+class FormattedList {
 	; #PUBLIC#
 	
 	; [[ Formats for reading/writing lists ]] --=
@@ -38,10 +38,10 @@ class FormatList {
 	; =--
 	
 	;---------
-	; DESCRIPTION:    Create a new FormatList object.
+	; DESCRIPTION:    Create a new FormattedList object.
 	; PARAMETERS:
 	;  listObject (I,REQ) - Object representing the list, may be an array or delimited string.
-	;  inFormat   (I,OPT) - Format that the list is in (from FormatList.Format_* constants). If not
+	;  inFormat   (I,OPT) - Format that the list is in (from .Format_* constants). If not
 	;                       given, we will try to determine it ourselves and prompt the user if we
 	;                       can't figure it out.
 	;---------
@@ -65,11 +65,11 @@ class FormatList {
 		if(!format)
 			return ""
 		
-		formattedList := this.getListInFormat(format)
-		if(formattedList = "")
+		listInFormat := this.getListInFormat(format)
+		if(listInFormat = "")
 			new ErrorToast("Could not get list", "Format is not gettable: " format).showMedium()
 		
-		return formattedList
+		return listInFormat
 	}
 	
 	;---------
@@ -100,7 +100,7 @@ class FormatList {
 	; DESCRIPTION:    Read in the provided list object and store it in an internal (array) format.
 	; PARAMETERS:
 	;  listObject (I,REQ) - The list to determine the format of.
-	;  format     (I,OPT) - Format that the list is in (from FormatList.Format_* constants). If not
+	;  format     (I,OPT) - Format that the list is in (from .Format_* constants). If not
 	;                       given, we will try to determine it ourselves and prompt the user if we
 	;                       can't figure it out.
 	; RETURNS:        true if we were successful, false if we couldn't determine the format (and
@@ -127,17 +127,17 @@ class FormatList {
 	;                 if we can't figure it out on our own.
 	; PARAMETERS:
 	;  listObject (I,REQ) - The list to determine the format of.
-	; RETURNS:        The determined format, from FormatList.Format_*
+	; RETURNS:        The determined format, from .Format_*
 	;---------
 	determineListFormat(listObject) {
 		; Try to figure it out based on the list object itself.
 		if(isObject(listObject)) ; All objects are assumed to be arrays
-			format := FormatList.Format_Array
+			format := this.Format_Array
 		else ; Everything else is assumed to be a string
-			format := FormatList.determineFormatByDelimiters(listObject)
+			format := this.determineFormatByDelimiters(listObject)
 		
 		; If we can't tell, ask the user.
-		if(format = FormatList.Format_Ambiguous)
+		if(format = this.Format_Ambiguous)
 			format := this.promptForFormat("Enter INPUT format for list")
 		
 		return format
@@ -148,33 +148,33 @@ class FormatList {
 	;                 delimiters it contains.
 	; PARAMETERS:
 	;  listString (I,REQ) - The string list to check.
-	; RETURNS:        The determined format, from FormatList.Format_*
+	; RETURNS:        The determined format, from .Format_*
 	;---------
 	determineFormatByDelimiters(listString) {
 		distinctDelimsCount := 0
 		if(listString.contains(",")) {
-			foundFormat := FormatList.Format_Commas ; Also covers Format_CommasSpaced, see .convertListToArray().
+			foundFormat := this.Format_Commas ; Also covers Format_CommasSpaced, see .convertListToArray().
 			distinctDelimsCount++
 		}
 		if(listString.contains(" ")) {
-			foundFormat := FormatList.Format_Space
+			foundFormat := this.Format_Space
 			distinctDelimsCount++
 		}
 		if(listString.contains("`r`n")) {
-			foundFormat := FormatList.Format_NewLines
+			foundFormat := this.Format_NewLines
 			distinctDelimsCount++
 		}
 		if(listString.contains("`r`n`r`n")) {
-			foundFormat := FormatList.Format_OneNoteColumn
+			foundFormat := this.Format_OneNoteColumn
 			distinctDelimsCount++
 		}
 		
 		if(distinctDelimsCount = 0)
-			return FormatList.Format_UnknownSingle ; No delimiters, so we're not sure which format it is, but just a single value - so we know what to do with it.
+			return this.Format_UnknownSingle ; No delimiters, so we're not sure which format it is, but just a single value - so we know what to do with it.
 		if(distinctDelimsCount = 1)
 			return foundFormat ; Just one matching delimiter, that's gotta be it.
 		if(distinctDelimsCount > 1)
-			return FormatList.Format_Ambiguous ; We found multiple possibilities, ask the user to choose.
+			return this.Format_Ambiguous ; We found multiple possibilities, ask the user to choose.
 		
 		return ""
 	}
@@ -183,7 +183,7 @@ class FormatList {
 	; DESCRIPTION:    Prompt the user for an input or output format for the list.
 	; PARAMETERS:
 	;  title (I,REQ) - The title to prompt the user with.
-	; RETURNS:        The chosen format, should match a value from FormatList.Format_*
+	; RETURNS:        The chosen format, should match a value from .Format_*
 	;---------
 	promptForFormat(title) {
 		return new Selector("listFormats.tls").setTitle(title).selectGui("FORMAT")
@@ -197,17 +197,17 @@ class FormatList {
 	; RETURNS:        The array representation of the list
 	;---------
 	convertListToArray(listObject, format) {
-		if(format = FormatList.Format_Array)
+		if(format = this.Format_Array)
 			listAry := listObject
-		if(format = FormatList.Format_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
+		if(format = this.Format_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
 			listAry := [listObject]
-		if(format = FormatList.Format_Space)
+		if(format = this.Format_Space)
 			listAry := listObject.split(" ", " `t") ; Drop leading/trailing spaces, tabs
-		if(format = FormatList.Format_Commas) ; Also covers Format_CommasSpaced, we just treat the extra space as whitespace to clean out.
+		if(format = this.Format_Commas) ; Also covers Format_CommasSpaced, we just treat the extra space as whitespace to clean out.
 			listAry := listObject.split(",", " `t") ; Drop leading/trailing spaces, tabs
-		if(format = FormatList.Format_NewLines)
+		if(format = this.Format_NewLines)
 			listAry := listObject.split("`r`n", " `t") ; Drop leading/trailing spaces, tabs
-		if(format = FormatList.Format_OneNoteColumn) ; Cells are separated by double newlines
+		if(format = this.Format_OneNoteColumn) ; Cells are separated by double newlines
 			listAry := listObject.split("`r`n`r`n", " `t`r`n") ; Drop leading/trailing spaces, tabs, newlines
 		
 		listAry.removeEmpties()
@@ -223,22 +223,22 @@ class FormatList {
 	;---------
 	; DESCRIPTION:    Return the list in the given format.
 	; PARAMETERS:
-	;  format (I,REQ) - The format (from FormatList.Format_*) to return the list in.
+	;  format (I,REQ) - The format (from .Format_*) to return the list in.
 	; RETURNS:        The formatted list.
 	;---------
 	getListInFormat(format) {
 		if(!this.listAry || !format)
 			return ""
 		
-		if(format = FormatList.Format_Array)
+		if(format = this.Format_Array)
 			return this.listAry
-		if(format = FormatList.Format_Space)
+		if(format = this.Format_Space)
 			return this.listAry.join(" ")
-		if(format = FormatList.Format_Commas)
+		if(format = this.Format_Commas)
 			return this.listAry.join(",")
-		if(format = FormatList.Format_CommasSpaced)
+		if(format = this.Format_CommasSpaced)
 			return this.listAry.join(", ")
-		if(format = FormatList.Format_NewLines)
+		if(format = this.Format_NewLines)
 			return this.listAry.join("`n")
 		
 		return ""
@@ -247,7 +247,7 @@ class FormatList {
 	;---------
 	; DESCRIPTION:    Send the list to the current window in a particular format.
 	; PARAMETERS:
-	;  format (I,REQ) - The format to use (FormatList.Format_*).
+	;  format (I,REQ) - The format to use (.Format_*).
 	; RETURNS:        true if successful, false if something went wrong (like an unsupported format).
 	;---------
 	sendListInFormat(format) {
@@ -255,13 +255,13 @@ class FormatList {
 			return true
 		
 		; Stuff that doesn't involve extra keys - just Send what comes out of .getListInFormat().
-		if(format = FormatList.Format_Space || format = FormatList.Format_Commas || format = FormatList.Format_CommasSpaced || format = FormatList.Format_NewLines) {
+		if(format = this.Format_Space || format = this.Format_Commas || format = this.Format_CommasSpaced || format = this.Format_NewLines) {
 			SendRaw, % this.getListInFormat(format)
 			return true
 		}
 		
 		; OneNote columns - send a down arrow keystroke between items.
-		if(format = FormatList.Format_OneNoteColumn) {
+		if(format = this.Format_OneNoteColumn) {
 			For i,item in this.listAry {
 				SendRaw, % item
 				if(i < this.listAry.length()) {

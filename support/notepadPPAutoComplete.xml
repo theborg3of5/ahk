@@ -3183,14 +3183,14 @@
         </KeyWord>
         <KeyWord name="Force"/>
 
-        <!-- *gdb START CLASS: FormatList -->
-        <KeyWord name="FormatList" func="yes">
+        <!-- *gdb START CLASS: FormattedList -->
+        <KeyWord name="FormattedList" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Create a new FormatList object.
+							; DESCRIPTION:    Create a new FormattedList object.
 							; PARAMETERS:
 							;  listObject (I,REQ) - Object representing the list, may be an array or delimited string.
-							;  inFormat   (I,OPT) - Format that the list is in (from FormatList.Format_* constants). If not
+							;  inFormat   (I,OPT) - Format that the list is in (from .Format_* constants). If not
 							;                       given, we will try to determine it ourselves and prompt the user if we
 							;                       can't figure it out.
 							;---------">
@@ -3198,49 +3198,49 @@
                 <Param name="inFormat := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="FormatList.Format_Array" func="yes">
+        <KeyWord name="FormattedList.Format_Array" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Array
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="FormatList.Format_Commas" func="yes">
+        <KeyWord name="FormattedList.Format_Commas" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Comma-delimited (no space)
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="FormatList.Format_CommasSpaced" func="yes">
+        <KeyWord name="FormattedList.Format_CommasSpaced" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Comma-delimited (with spaces)
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="FormatList.Format_NewLines" func="yes">
+        <KeyWord name="FormattedList.Format_NewLines" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Newline-delimited
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="FormatList.Format_OneNoteColumn" func="yes">
+        <KeyWord name="FormattedList.Format_OneNoteColumn" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    OneNote columns (double-newline delimited)
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="FormatList.Format_Space" func="yes">
+        <KeyWord name="FormattedList.Format_Space" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Space-delimited
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="FormatList.getList" func="yes">
+        <KeyWord name="FormattedList.getList" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Get the list in a certain format, programmatically.
@@ -3251,7 +3251,7 @@
                 <Param name="format := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="FormatList.sendList" func="yes">
+        <KeyWord name="FormattedList.sendList" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Send the list to the current window, in a certain format.
@@ -3261,7 +3261,7 @@
                 <Param name="format := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <!-- *gdb END CLASS: FormatList -->
+        <!-- *gdb END CLASS: FormattedList -->
 
         <KeyWord name="FormatTime" func="no">
             <Overload retVal="">

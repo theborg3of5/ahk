@@ -15,17 +15,17 @@
 #If
 
 ; Mail folders
-#If Config.isWindowActive("Outlook") && (Outlook.IsCurrentScreenMail() || Outlook.IsCurrentScreenMailMessage())
+#If Config.isWindowActive("Outlook") && (Outlook.isCurrentScreenMail() || Outlook.isCurrentScreenMailMessage())
 	; Copy current message title to clipboard
-	!c::Outlook.CopyCurrentMessageTitle()
+	!c::Outlook.copyCurrentMessageTitle()
 	
 	; Open the relevant record (if applicable) for the current message
-	!w::Outlook.OpenEMC2ObjectFromCurrentMessageWeb()
-	!e::Outlook.OpenEMC2ObjectFromCurrentMessageEdit()
+	!w::Outlook.openEMC2ObjectFromCurrentMessageWeb()
+	!e::Outlook.openEMC2ObjectFromCurrentMessageEdit()
 #If
 
 ; Calendar folders
-#If Config.isWindowActive("Outlook") && Outlook.IsCurrentScreenCalendar()
+#If Config.isWindowActive("Outlook") && Outlook.isCurrentScreenCalendar()
 	; Shortcut to go to today on the calendar. (In desired, 3-day view.)
 	^t::
 		; Go to today.
@@ -56,27 +56,35 @@
 class Outlook {
 	; #PUBLIC#
 	
-	; The ClassNN for the control that contains the subject of the message. Should be the same for inline and popped-out messages.
-	static MailSubjectControlClassNN := "RichEdit20WPT7"
-	
-	; Folder names for different areas
-	static TLGFolder := "TLG"
-	static CalendarFolders := ["Calendar", "TLG"]
-	static MailFolders := ["Inbox", "Wait", "Later Use", "Archive", "Sent Items", "Drafts", "Deleted Items"]
-	
 	;---------
 	; DESCRIPTION:    Determine whether the current screen is one of our mail folders.
 	; RETURNS:        true/false
 	;---------
-	IsCurrentScreenMail() {
+	isCurrentScreenMail() {
 		return this.areAnyOfFoldersActive(this.MailFolders)
+	}
+	
+	;---------
+	; DESCRIPTION:    Determine whether the current screen is one of our calendar folders.
+	; RETURNS:        true/false
+	;---------
+	isCurrentScreenCalendar() {
+		return this.areAnyOfFoldersActive(this.CalendarFolders)
+	}
+	
+	;---------
+	; DESCRIPTION:    Check whether the TLG calendar is currently active.
+	; RETURNS:        true/false
+	;---------
+	isTLGCalendarActive() {
+		return this.areAnyOfFoldersActive([this.TLGFolder])
 	}
 	
 	;---------
 	; DESCRIPTION:    Determine whether the current window is a mail message popup
 	; RETURNS:        The window ID/false
 	;---------
-	IsCurrentScreenMailMessage() {
+	isCurrentScreenMailMessage() {
 		settings := new TempSettings().titleMatchMode(TitleMatchMode.Contains)
 		isMailMessage := WinActive("- Message (")
 		settings.restore()
@@ -85,25 +93,9 @@ class Outlook {
 	}
 	
 	;---------
-	; DESCRIPTION:    Check whether the TLG calendar is currently active.
-	; RETURNS:        true/false
-	;---------
-	IsTLGCalendarActive() {
-		return this.areAnyOfFoldersActive([this.TLGFolder])
-	}
-	
-	;---------
-	; DESCRIPTION:    Determine whether the current screen is one of our calendar folders.
-	; RETURNS:        true/false
-	;---------
-	IsCurrentScreenCalendar() {
-		return this.areAnyOfFoldersActive(this.CalendarFolders)
-	}
-	
-	;---------
 	; DESCRIPTION:    Put the current email message's title on the clipboard, cleaning it up as needed.
 	;---------
-	CopyCurrentMessageTitle() {
+	copyCurrentMessageTitle() {
 		title := this.getCurrentMessageTitle()
 		ClipboardLib.setAndToast(title, "title")
 	}
@@ -111,7 +103,7 @@ class Outlook {
 	;---------
 	; DESCRIPTION:    If the current email message's title describes an EMC2 object, open that object in web mode.
 	;---------
-	OpenEMC2ObjectFromCurrentMessageWeb() {
+	openEMC2ObjectFromCurrentMessageWeb() {
 		title := this.getCurrentMessageTitle()
 		new ActionObjectEMC2(title).openWeb()
 	}
@@ -119,13 +111,21 @@ class Outlook {
 	;---------
 	; DESCRIPTION:    If the current email message's title describes an EMC2 object, open that object in edit mode.
 	;---------
-	OpenEMC2ObjectFromCurrentMessageEdit() {
+	openEMC2ObjectFromCurrentMessageEdit() {
 		title := this.getCurrentMessageTitle()
 		new ActionObjectEMC2(title).openEdit()
 	}
 	
 	
 	; #PRIVATE#
+	
+	; The ClassNN for the control that contains the subject of the message. Should be the same for inline and popped-out messages.
+	static MailSubjectControlClassNN := "RichEdit20WPT7"
+	
+	; Folder names for different areas
+	static TLGFolder := "TLG"
+	static CalendarFolders := ["Calendar", "TLG"]
+	static MailFolders := ["Inbox", "Wait", "Later Use", "Archive", "Sent Items", "Drafts", "Deleted Items"]
 	
 	;---------
 	; DESCRIPTION:    Determine whether any of the folders in the given array are currently active.

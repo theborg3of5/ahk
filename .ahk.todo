@@ -1,70 +1,64 @@
 # New Ideas
+	Consider an additional "INTERNAL" scope for classes
+		For program-specific classes, these will be the ones that the hotkeys for that class can use - PUBLIC will be reserved for stuff that can be called from outside the script.
 	Standardize how we format & structure classes
-		Add member order/capitalization to class template somehow
-		! With auto-complete, we don't really need to distinguish public vs. private functions - only the public ones will show up in auto-complete.
-		The _privateMember format might still be worth doing to allow public properties with the same name as a private member
-			Do we actually have a need to do that, though?
-				Only in specific cases, where we're actually doing additional logic for the public function/property (like for TempSettings, where we're storing off the previous value)
-		New plan:
-			Capitalization - only constants are PascalCase, everything else is camelCase
-				One exception - an Init() function that acts like a constructor for a static class should also be PascalCase.
-			Order
-				Public
-					Constants
-					staticMembers
-					nonStaticMembers
-					properties
-					__New()/Init()
-					otherFunctions
-				Private
-					Constants
-					staticMembers
-					nonStaticMembers
-					functions
-			Specific offenders
-				PublicMembersOrFunctions
-					program
-						Outlook
-					base
-						RelativeDateTimeBase
-					class_
-						Selector
-					static
-						CommonHotkeys
-				_privateMembers
-					program
-						Snapper
-					base
-						RelativeDateTimeBase
-					class_
-						ProgramInfo - would probably benefit
-						Selector - all except dataTL
-						WindowInfo - would probably benefit
-					static
-						CommonHotkeys
-						Config (_rootPath)
-						Hyperlinker (_windows)
-						ScriptTrayInfo (_iconStates)
-						WindowActions (_actionOverrides)
-				_boundFuncFunctions
-					program
-						Chrome
-						Hyperspace
-						OneNote
-				Constants (to review scope/capitalization of)
-					program
-						Explorer
-						Snapper - _names
-						VB6
-					class_
-						SelectorGui - capitalization, spacing/positioning should maybe be static, should Char_NewColumn be public?
-						TableListMod - should Operation_ constants be public? [[Unsure]]
-						VisualWindow - do we want to keep the RESIZE_ capitalization for those constants?
-					lib
-						AHKCodeLib
-					static
-						Config - should Machine_/Context_ constants be private, since all callers can just use wrapper properties?
-						Debug
+		Capitalization - only constants are PascalCase, everything else is camelCase
+			One exception - an Init() function that acts like a constructor for a static class should also be PascalCase.
+		Order
+			Public
+				Constants
+				staticMembers
+				nonStaticMembers
+				properties
+				__New()/Init()
+				otherFunctions
+			Private
+				Constants
+				staticMembers
+				nonStaticMembers
+				functions
+		Specific offenders
+			PublicMembersOrFunctions
+				base
+					RelativeDateTimeBase
+				class_
+					Selector
+				static
+					CommonHotkeys
+			_privateMembers
+				program
+					Snapper
+				base
+					RelativeDateTimeBase
+				class_
+					ProgramInfo - would probably benefit
+					Selector - all except dataTL
+					WindowInfo - would probably benefit
+				static
+					CommonHotkeys
+					Config (_rootPath)
+					Hyperlinker (_windows)
+					ScriptTrayInfo (_iconStates)
+					WindowActions (_actionOverrides)
+			_boundFuncFunctions
+				program
+					Chrome
+					Hyperspace
+					OneNote
+			Constants (to review scope/capitalization of)
+				program
+					Explorer
+					Snapper - _names
+					VB6
+				class_
+					SelectorGui - capitalization, spacing/positioning should maybe be static, should Char_NewColumn be public?
+					TableListMod - should Operation_ constants be public? [[Unsure]]
+					VisualWindow - do we want to keep the RESIZE_ capitalization for those constants?
+				lib
+					AHKCodeLib
+				static
+					Config - should Machine_/Context_ constants be private, since all callers can just use wrapper properties?
+					Debug
 	Putty - shouldn't last* members be private instead?
 	Duration - can we rearrange units vs. characters again?
 		Currently, individual char constants and char->covert mapping:

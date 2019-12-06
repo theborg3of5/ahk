@@ -98,7 +98,7 @@
 			textToSend := textToSend.replaceTag("DLG",      data["DLG"])
 			textToSend := textToSend.replaceTag("MESSAGE",  combinedMessage)
 			
-			if(Outlook.IsTLGCalendarActive()) {
+			if(Outlook.isTLGCalendarActive()) {
 				SendRaw, % textToSend
 				Send, {Enter}
 			} else {

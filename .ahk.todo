@@ -19,9 +19,6 @@
 				functions
 		Specific offenders
 			Constants (to review scope/capitalization of)
-				program
-					Explorer
-					VB6
 				class_
 					SelectorGui - capitalization, spacing/positioning should maybe be static, should Char_NewColumn be public?
 					TableListMod - should Operation_ constants be public? [[Unsure]]

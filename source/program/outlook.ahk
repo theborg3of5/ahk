@@ -120,7 +120,7 @@ class Outlook {
 	; #PRIVATE#
 	
 	; The ClassNN for the control that contains the subject of the message. Should be the same for inline and popped-out messages.
-	static MailSubjectControlClassNN := "RichEdit20WPT7"
+	static ClassNN_MailSubject := "RichEdit20WPT7"
 	
 	; Folder names for different areas
 	static TLGFolder := "TLG"
@@ -148,7 +148,7 @@ class Outlook {
 	; RETURNS:        The title, cleaned up (RE:/FW: and any other odd characters removed)
 	;---------
 	getCurrentMessageTitle() {
-		title := ControlGetText(this.MailSubjectControlClassNN, "A")
+		title := ControlGetText(this.ClassNN_MailSubject, "A")
 		if(title = "") {
 			new ErrorToast("Copy title failed", "Could not get title from message control").showMedium()
 			return

@@ -2,8 +2,6 @@
 	Auto-complete - could we make a special kind of header that can cover multiple things?
 		At least one-line constants (just X number of lines until we get a blank line, maybe?)
 			Would let us line things up nicely again
-	Can we rename FormatList to make more sense?
-		It's an instance class, so maybe FormattedList?
 	Consider renaming getDebugTypeName to start with "debug" so everything in the debug scope does.
 	Can we do something to split up the multi-class program scripts?
 		Should they be separate files?

@@ -18,12 +18,6 @@
 				nonStaticMembers
 				functions
 		Specific offenders
-			_privateMembers
-				static
-					Config (_rootPath)
-					Hyperlinker (_windows)
-					ScriptTrayInfo (_iconStates)
-					WindowActions (_actionOverrides)
 			_boundFuncFunctions
 				program
 					Chrome

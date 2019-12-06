@@ -7,8 +7,8 @@ class WindowActions {
 	; DESCRIPTION:    Initialize this class with window identifiers and actions.
 	;---------
 	Init() {
-		this._actionOverrides := new TableList("windowActions.tl").getRowsByColumn("NAME")
-		; Debug.popupEarly("WindowActions.Init",, "this._actionOverrides",this._actionOverrides)
+		this.actionOverrides := new TableList("windowActions.tl").getRowsByColumn("NAME")
+		; Debug.popupEarly("WindowActions.Init",, "this.actionOverrides",this.actionOverrides)
 	}
 	
 	;---------
@@ -140,7 +140,7 @@ class WindowActions {
 	static Method_SelectAll_Home   := "HOME_END"     ; Select all: send home/end (and holding shift in between)
 	static Method_DeleteWord_Ctrl  := "CTRL_SHIFT"   ; Delete word: send Ctrl+Shift+Left to select it, then delete
 	
-	_actionOverrides := "" ; {windowName: {action: method}}
+	actionOverrides := "" ; {windowName: {action: method}}
 	
 	;---------
 	; DESCRIPTION:    Set up the needed information to perform a window action and execute it.
@@ -162,8 +162,8 @@ class WindowActions {
 		if(!titleString)
 			titleString := Config.windowInfo[name].titleString
 		
-		; Debug.popup("WindowActions.windowAction","Finished prep", "action",action, "titleString",titleString, "this._actionOverrides[name]",this._actionOverrides[name])
-		this.doWindowAction(action, titleString, this._actionOverrides[name])
+		; Debug.popup("WindowActions.windowAction","Finished prep", "action",action, "titleString",titleString, "this.actionOverrides[name]",this.actionOverrides[name])
+		this.doWindowAction(action, titleString, this.actionOverrides[name])
 	}
 	
 	;---------
@@ -173,7 +173,7 @@ class WindowActions {
 	;  titleString          (I,REQ) - A title string that identifies the window we want to perform
 	;                                 the action on.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from this._actionOverrides.
+	;                                 question, from this.actionOverrides.
 	;---------
 	doWindowAction(action, titleString, windowActionSettings) {
 		if(!action || !titleString)
@@ -214,7 +214,7 @@ class WindowActions {
 	;                                 constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from this._actionOverrides.
+	;                                 question, from this.actionOverrides.
 	; NOTES:          If we don't recognize the specific method, we'll call back into
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
@@ -234,7 +234,7 @@ class WindowActions {
 	;                                 constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from this._actionOverrides.
+	;                                 question, from this.actionOverrides.
 	; NOTES:          If we don't recognize the specific method, we'll call back into
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
@@ -252,7 +252,7 @@ class WindowActions {
 	;                                 constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from this._actionOverrides.
+	;                                 question, from this.actionOverrides.
 	; NOTES:          If we don't recognize the specific method, we'll call back into
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
@@ -275,7 +275,7 @@ class WindowActions {
 	;                                 constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from this._actionOverrides.
+	;                                 question, from this.actionOverrides.
 	; NOTES:          If we don't recognize the specific method, we'll call back into
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
@@ -292,7 +292,7 @@ class WindowActions {
 	;                                 constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from this._actionOverrides.
+	;                                 question, from this.actionOverrides.
 	; NOTES:          If we don't recognize the specific method, we'll call back into
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
@@ -314,7 +314,7 @@ class WindowActions {
 	;                                 constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from this._actionOverrides.
+	;                                 question, from this.actionOverrides.
 	; NOTES:          If we don't recognize the specific method, we'll call back into
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
@@ -339,7 +339,7 @@ class WindowActions {
 	;  action               (I,REQ) - The action to try and perform.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from this._actionOverrides.
+	;                                 question, from this.actionOverrides.
 	;---------
 	doSpecialWindowMethod(action, titleString, windowActionSettings) {
 		if(!action)

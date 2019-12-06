@@ -7,8 +7,8 @@ class Hyperlinker {
 	; DESCRIPTION:    Initialize this class with the windows that support hyperlinking and their methods.
 	;---------
 	Init() {
-		this._windows := new TableList("hyperlinkWindows.tl").getRowsByColumn("NAME")
-		; Debug.popup("Hyperlinker.Init",, "this._windows",this._windows)
+		this.windows := new TableList("hyperlinkWindows.tl").getRowsByColumn("NAME")
+		; Debug.popup("Hyperlinker.Init",, "this.windows",this.windows)
 	}
 	
 	;---------
@@ -27,7 +27,7 @@ class Hyperlinker {
 		path := FileLib.cleanupPath(path)
 		windowName := Config.findWindowName()
 		windowLinkInfoAry := Hyperlinker.getWindowLinkInfo(windowName)
-		; Debug.popup("Hyperlinker.linkSelectedText","Finished gathering info", "windowName",windowName, "windowLinkInfoAry",windowLinkInfoAry, "Hyperlinker._windows",Hyperlinker._windows)
+		; Debug.popup("Hyperlinker.linkSelectedText","Finished gathering info", "windowName",windowName, "windowLinkInfoAry",windowLinkInfoAry, "Hyperlinker.windows",Hyperlinker.windows)
 		
 		if(!windowLinkInfoAry) {
 			errorMessage := "Window not supported: " windowName
@@ -55,7 +55,7 @@ class Hyperlinker {
 
 	;---------
 	; DESCRIPTION:    Associative array of windows information.
-	; FORMAT:         First-level subscript is name. Second-level subscripts (i.e. _windows[<name>, "NAME"]):
+	; FORMAT:         First-level subscript is name. Second-level subscripts (i.e. windows[<name>, "NAME"]):
 	;                  ["NAME"]                  = Name of the window we're starting from,
 	;                                              matches NAME column in windows.tl (also
 	;                                              the <name> top-level subscript)
@@ -78,19 +78,19 @@ class Hyperlinker {
 	;                                              It should include both <TEXT> and <PATH> tags
 	;                                              for those respective bits of data.
 	;---------
-	static _windows := ""
+	static windows := ""
 	
 	;---------
 	; DESCRIPTION:    Grab the array of linking window info for the given starting window name.
 	; PARAMETERS:
 	;  windowName (I,REQ) - Starting window name, should match NAME column in windows.tl.
 	; RETURNS:        Array of linking-related info about the window matching the given name.
-	;                 See ._windows for format.
+	;                 See .windows for format.
 	;---------
 	getWindowLinkInfo(windowName) {
 		if(!windowName)
 			return ""
-		return Hyperlinker._windows[windowName]
+		return Hyperlinker.windows[windowName]
 	}
 	
 	;---------

@@ -69,7 +69,7 @@ class Config {
 	;---------
 	Init() {
 		; All config files are expected to live in config/ folder under the root of this repo.
-		this._rootPath := FileLib.getParentFolder(A_LineFile, 4) ; Root path is 3 levels out, plus one to get out of file itself.
+		this.rootPath := FileLib.getParentFolder(A_LineFile, 4) ; Root path is 3 levels out, plus one to get out of file itself.
 		
 		; Read in settings and add automatic context/machine filters to TableList.
 		this.loadSettings()
@@ -402,7 +402,7 @@ class Config {
 	; #PRIVATE#
 	
 	static initDone        := false ; True once we're done initializing for the first time.
-	static _rootPath       := ""    ; The root of this set of scripts.
+	static rootPath        := ""    ; The root of this set of scripts.
 	static settingsINIPath := ""    ; The full path to the settings INI, so we can write to it if things change.
 	static settings        := {}    ; {NAME: VALUE}
 	static windows         := {}    ; {NAME: WindowInfo}
@@ -415,7 +415,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the privates file.
 	;---------
 	loadPrivates() {
-		filePath := this._rootPath "\config\ahkPrivate\privates.tl"
+		filePath := this.rootPath "\config\ahkPrivate\privates.tl"
 		this.privates := new TableList(filePath).getColumnByColumn("VALUE", "KEY")
 	}
 	
@@ -423,7 +423,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the settings file.
 	;---------
 	loadSettings() {
-		this.settingsINIPath := this._rootPath "\config\local\settings.ini"
+		this.settingsINIPath := this.rootPath "\config\local\settings.ini"
 		
 		settings := {}
 		settings["MACHINE"]      := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from Config.Machine_* constants
@@ -437,7 +437,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the windows file.
 	;---------
 	loadWindows() {
-		filePath := this._rootPath "\config\windows.tl"
+		filePath := this.rootPath "\config\windows.tl"
 		windowsTable := new TableList(filePath).getTable()
 		
 		windows := {}
@@ -455,7 +455,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the paths file.
 	;---------
 	loadPaths() {
-		filePath := this._rootPath "\config\paths.tl"
+		filePath := this.rootPath "\config\paths.tl"
 		pathsAry := new TableList(filePath).getColumnByColumn("PATH", "KEY")
 		
 		; Grab special path tags from the system to replace in the ones we just read in.
@@ -498,7 +498,7 @@ class Config {
 		tags["WINDOWS"]            := A_WinDir                               ; C:\Windows
 		tags["CMD"]                := A_ComSpec                              ; C:\Windows\system32\cmd.exe
 		
-		tags["AHK_ROOT"]           := this._rootPath
+		tags["AHK_ROOT"]           := this.rootPath
 		
 		return tags
 	}
@@ -507,7 +507,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the programs file.
 	;---------
 	loadPrograms() {
-		filePath := this._rootPath "\config\programs.tl"
+		filePath := this.rootPath "\config\programs.tl"
 		programsTable := new TableList(filePath).getRowsByColumn("NAME", "MACHINE")
 		
 		; Turn each row into a ProgramInfo object.
@@ -522,7 +522,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the games file.
 	;---------
 	loadGames() {
-		filePath := this._rootPath "\config\games.tl"
+		filePath := this.rootPath "\config\games.tl"
 		this.games := new TableList(filePath).getTable()
 	}
 	

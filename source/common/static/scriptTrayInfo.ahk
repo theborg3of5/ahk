@@ -25,9 +25,9 @@ class ScriptTrayInfo {
 			Menu, Tray, Icon, , , 1
 		
 		; Build states array from given icons
-		this._iconStates := {}
-		this._iconStates["A_IsSuspended", 0] := normalIcon
-		this._iconStates["A_IsSuspended", 1] := suspendedIcon
+		this.stateIcons := {}
+		this.stateIcons["A_IsSuspended", 0] := normalIcon
+		this.stateIcons["A_IsSuspended", 1] := suspendedIcon
 		
 		this.updateTrayIcon()
 	}
@@ -41,20 +41,20 @@ class ScriptTrayInfo {
 	;                   	states["varName", varState] := iconPath
 	;                   See getIconForCurrentState() for a more in-depth explanation.
 	;---------
-	setIconStates(states) {
+	setStateIcons(states) {
 		Menu, Tray, Icon, , , 1 ; Assume that there will always be a path in here to a suspended icon we should use.
 		
-		this._iconStates := states
+		this.stateIcons := states
 		this.updateTrayIcon()
 	}
 
 	;---------
 	; DESCRIPTION:    Determine the icon that should be used for the script (based on the variables
-	;                 defined in the _iconStates array) and apply it.
+	;                 defined in the stateIcons array) and apply it.
 	;---------
 	updateTrayIcon() {
-		newIcon := this.getIconForCurrentState(this._iconStates)
-		; Debug.popup("ScriptTrayInfo.updateTrayIcon","Start", "this._iconStates",this._iconStates, "newIcon",newIcon)
+		newIcon := this.getIconForCurrentState(this.stateIcons)
+		; Debug.popup("ScriptTrayInfo.updateTrayIcon","Start", "this.stateIcons",this.stateIcons, "newIcon",newIcon)
 		if(!newIcon)
 			return
 			
@@ -68,7 +68,7 @@ class ScriptTrayInfo {
 	
 	; #PRIVATE#
 	
-	static _iconStates := {} ; Associative array representing which icon to use in different situations - see .getIconForCurrentState() for explanation.
+	static stateIcons := {} ; Associative array representing which icon to use in different situations - see .getIconForCurrentState() for explanation.
 
 	;---------
 	; DESCRIPTION:    Recursively drill down into the given array and determine (based on the states

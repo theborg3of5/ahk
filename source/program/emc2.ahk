@@ -53,7 +53,7 @@ class EMC2 {
 		Send, ^{F10}
 		WinWaitActive, SmartText Lookup
 		Sleep, 500
-		SendRaw, %smartTextName%
+		SendRaw, % smartTextName
 		Send, {Enter}
 		Sleep, 500
 		Send, {Enter}

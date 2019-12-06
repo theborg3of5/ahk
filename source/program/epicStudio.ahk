@@ -52,7 +52,9 @@ class EpicStudio {
 		clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Select and copy the current line, then add it as the next line.
+	;---------
 	duplicateLine() {
 		Send, {End}                        ; Start from end of line
 		Send, {Shift Down}{Home}{Shift Up} ; Select whole line (excluding leading indentation/tab/etc.)
@@ -172,9 +174,7 @@ class EpicStudio {
 	; #END#
 }
 
-/*
-	Static class for inserting snippets of M code into EpicStudio.
-*/
+; Static class for inserting snippets of M code into EpicStudio.
 class MSnippets {
 	; #PUBLIC#
 	

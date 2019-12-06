@@ -90,11 +90,11 @@ class FormatList {
 	
 	; #PRIVATE#
 	
-	listAry := "" ; Internal array representation of the list
-	
 	; Special, internal-only list formats
 	static Format_Ambiguous     := "AMBIGUOUS"      ; Can't tell what the format is, so we'll have to ask the user.
 	static Format_UnknownSingle := "UNKNOWN_SINGLE" ; We don't know what the format is, but it looks like a single item only.
+	
+	listAry := "" ; Internal array representation of the list
 	
 	;---------
 	; DESCRIPTION:    Read in the provided list object and store it in an internal (array) format.

@@ -326,16 +326,16 @@ class VisualWindow {
 	
 	; #PRIVATE#
 	
-	titleString   := ""
-	snapDistance  := 0
-	isSnapOn      := false
-	windowOffsets := ""
-	
 	; Constants for which direction we're resizing in, for snapping purposes
 	static RESIZE_Y_TOP    := "TOP"
 	static RESIZE_Y_BOTTOM := "BOTTOM"
 	static RESIZE_X_LEFT   := "LEFT"
 	static RESIZE_X_RIGHT  := "RIGHT"
+	
+	titleString   := ""
+	snapDistance  := 0
+	isSnapOn      := false
+	windowOffsets := ""
 	
 	;---------
 	; DESCRIPTION:    Actually move/resize the window to the updated (visual, converted to actual)
@@ -346,6 +346,14 @@ class VisualWindow {
 		WinMove, %titleString%, , x, y, width, height
 	}
 	
+	;---------
+	; DESCRIPTION:    Turn the given actual position/size into the visual equivalent.
+	; PARAMETERS:
+	;  x      (I/O,OPT) - X coordinate
+	;  y      (I/O,OPT) - Y coordinate
+	;  width  (I/O,OPT) - Width of the window
+	;  height (I/O,OPT) - Height of the window
+	;---------
 	convertActualToVisualPosition(ByRef x := "", ByRef y := "", ByRef width := "", ByRef height := "") {
 		x      := x      +  this.windowOffsets["LEFT"]
 		y      := y      +  this.windowOffsets["TOP"]
@@ -353,6 +361,10 @@ class VisualWindow {
 		height := height - (this.windowOffsets["BOTTOM"] + this.windowOffsets["TOP"])
 	}
 	
+	;---------
+	; DESCRIPTION:    Figure out what the offsets of the window should be.
+	; RETURNS:        Associative array of offsets with "LEFT"/"RIGHT"/"TOP"/"BOTTOM" subscripts.
+	;---------
 	calculateWindowOffsets() {
 		windowOffsets := {}
 		

@@ -22,12 +22,30 @@
 					nonStaticMembers
 					functions
 			Specific offenders
-				Out of order members
-					***
 				PublicMembersOrFunctions
-					***
+					program
+						Outlook
+					base
+						RelativeDateTimeBase
+					class_
+						Selector
+					static
+						CommonHotkeys
 				_privateMembers
-					***
+					program
+						Snapper
+					base
+						RelativeDateTimeBase
+					class_
+						ProgramInfo - would probably benefit
+						Selector - all except dataTL
+						WindowInfo - would probably benefit
+					static
+						CommonHotkeys
+						Config (_rootPath)
+						Hyperlinker (_windows)
+						ScriptTrayInfo (_iconStates)
+						WindowActions (_actionOverrides)
 				_boundFuncFunctions
 					program
 						Chrome
@@ -35,9 +53,11 @@
 						OneNote
 				Constants (to review scope/capitalization of)
 					program
+						Explorer
 						Snapper - _names
+						VB6
 					class_
-						SelectorGui - should Char_NewColumn be public?
+						SelectorGui - capitalization, spacing/positioning should maybe be static, should Char_NewColumn be public?
 						TableListMod - should Operation_ constants be public? [[Unsure]]
 						VisualWindow - do we want to keep the RESIZE_ capitalization for those constants?
 					lib

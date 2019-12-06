@@ -116,10 +116,9 @@ class Config {
 	replacePrivateTags(inputString) {
 		return inputString.replaceTags(this.privates)
 	}
-	; =--
 	
 	
-	; [[ Settings ]] --=
+	; [[ Settings ]] ---
 	; [[ Current machine checks ]] --=
 	;---------
 	; DESCRIPTION:    Which machine we're configured to act as, from the Machine_* constants in this class.
@@ -161,9 +160,8 @@ class Config {
 			return (this.machine = Config.Machine_HomeLaptop)
 		}
 	}
-	; =--
 	
-	; [[ Current context checks ]] --=
+	; [[ Current context checks ]] ---
 	;---------
 	; DESCRIPTION:    Which context we're configured to act as, from the Context_* constants in this class.
 	;---------
@@ -234,10 +232,9 @@ class Config {
 			this.runProgram(player)
 		}
 	}
-	; =--
 	
 	
-	; [[ Windows ]] --=
+	; [[ Windows ]] ---
 	;---------
 	; DESCRIPTION:    Return the WindowInfo instance corresponding to the provided name.
 	; PARAMETERS:
@@ -320,10 +317,9 @@ class Config {
 		winInfo := this.findWindowInfo(titleString)
 		return winInfo.name
 	}
-	; =--
 	
 	
-	; [[ Paths ]] --=
+	; [[ Paths ]] ---
 	;---------
 	; DESCRIPTION:    A particular path from this class.
 	; PARAMETERS:
@@ -346,10 +342,9 @@ class Config {
 	replacePathTags(inputPath) {
 		return inputPath.replaceTags(this.paths)
 	}
-	; =--
 	
 	
-	; [[ Programs ]] --=
+	; [[ Programs ]] ---
 	;---------
 	; DESCRIPTION:    Activate the window matching the specified name, running it if it doesn't yet exist.
 	; PARAMETERS:
@@ -381,10 +376,9 @@ class Config {
 		
 		RunLib.runAsUser(path, args)
 	}
-	; =--
 	
 	
-	; [[ Games ]] --=
+	; [[ Games ]] ---
 	;---------
 	; DESCRIPTION:    Check whether the specified window is a game (as identified in the games file passed in).
 	; PARAMETERS:
@@ -554,7 +548,7 @@ class Config {
 		else if(method = Config.TitleContains_Exact)
 			return (haystack = needle)
 		
-		Debug.popup("Unsupported match method",method)
+		new ErrorToast("Could not check match with method", "Unsupported match method: " method).showMedium()
 		return ""
 	}
 	; #END#

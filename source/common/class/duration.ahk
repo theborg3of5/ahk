@@ -154,10 +154,10 @@ class Duration {
 	
 	; #PRIVATE#
 	
-	durationTotalSeconds := 0 ; The internal representation of all time (including hours, minutes, seconds)
-	
 	; All supported units, from largest to smallest.
 	static _units := {Duration.Char_Hour:3600, Duration.Char_Minute:60, Duration.Char_Second:1} ; {unitChar: multiplierToSeconds}
+	
+	durationTotalSeconds := 0 ; The internal representation of all time (including hours, minutes, seconds)
 	
 	
 	;---------

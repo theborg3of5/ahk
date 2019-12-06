@@ -370,9 +370,8 @@ class OneNote {
 	; #END#
 }
 
-/*
-	A helper class for all of the logic that goes into my OneNote organizational system.
-*/
+
+; A helper class for all of the logic that goes into my OneNote organizational system.
 class OneNoteTodoPage {
 	; #PUBLIC#
 	

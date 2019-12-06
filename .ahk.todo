@@ -19,9 +19,6 @@
 				functions
 		Specific offenders
 			_privateMembers
-				class_
-					ProgramInfo - would probably benefit
-					WindowInfo - would probably benefit
 				static
 					Config (_rootPath)
 					Hyperlinker (_windows)

@@ -2,6 +2,15 @@
 
 class ProgramInfo {
 	; #PUBLIC#
+   
+	;---------
+	; DESCRIPTION:    Name of the program
+	;---------
+   name := ""
+	;---------
+	; DESCRIPTION:    Full filepath to launch the program
+	;---------
+   path := ""
 	
    ;---------
    ; DESCRIPTION:    Creates a new instance of ProgramInfo.
@@ -13,36 +22,12 @@ class ProgramInfo {
    ; RETURNS:        Reference to a new ProgramInfo object
    ;---------
    __New(programAry) {
-      this.programName := programAry["NAME"]
-      this.programPath := programAry["PATH"]
+      this.name := programAry["NAME"]
+      this.path := programAry["PATH"]
 		
 		; Replace any path tags
-		this.programPath := Config.replacePathTags(this.programPath)
+		this.path := Config.replacePathTags(this.path)
    }
-   
-	;---------
-	; DESCRIPTION:    Name of the program
-	;---------
-   name {
-      get {
-         return this.programName
-      }
-   }
-	
-	;---------
-	; DESCRIPTION:    Full filepath to launch the program
-	;---------
-   path {
-      get {
-         return this.programPath
-      }
-   }
-	
-	
-	; #PRIVATE#
-	
-   programName := ""
-   programPath := ""
    
 	
 	; #DEBUG#
@@ -50,10 +35,5 @@ class ProgramInfo {
 	getDebugTypeName() {
 		return "ProgramInfo"
 	}
-	
-   debugToString(ByRef builder) {
-      builder.addLine("Name", this.name)
-      builder.addLine("Path", this.path)
-   }
 	; #END#
 }

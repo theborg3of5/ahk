@@ -23,33 +23,6 @@ class CommonHotkeys {
 	static ScriptType_Standalone := 3
 	; =--
 	
-	; [[ Wrappers for checking which "type" the script is ]] --=
-	;---------
-	; DESCRIPTION:    Main script
-	;---------
-	IsMain {
-		get {
-			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Main)
-		}
-	}
-	;---------
-	; DESCRIPTION:    Standalone scripts that the main script starts and that run alongside the main script
-	;---------
-	IsSub {
-		get {
-			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Sub)
-		}
-	}
-	;---------
-	; DESCRIPTION:    One-off scripts, not connected to main script
-	;---------
-	IsStandalone {
-		get {
-			return (CommonHotkeys._scriptType = CommonHotkeys.ScriptType_Standalone)
-		}
-	}
-	; =--
-	
 	
 	;---------
 	; DESCRIPTION:    Set up the common hotkeys.
@@ -58,56 +31,67 @@ class CommonHotkeys {
 	;                       which "set" of hotkeys are applied.
 	;---------
 	Init(scriptType) {
-		CommonHotkeys._scriptType := scriptType
+		this.scriptType := scriptType
 		
-		CommonHotkeys.applyHotkeys()
+		this.applyHotkeys()
 	}
 	
 	;---------
 	; DESCRIPTION:    Prompt the user to confirm when exiting with the common exit hotkey (!+x).
 	;---------
-	ConfirmExitOn(message := "") {
-		CommonHotkeys._confirmExit := true
+	confirmExitOn(message := "") {
+		this.confirmExit := true
 		if(message != "")
-			CommonHotkeys._confirmExitMessage := message
+			this.confirmExitMessage := message
 	}
 	;---------
 	; DESCRIPTION:    Do not prompt the user to confirm when exiting with the common exit hotkey (!+x).
 	;---------
-	ConfirmExitOff() {
-		CommonHotkeys._confirmExit := false
+	confirmExitOff() {
+		this.confirmExit := false
 	}
 	
 	;---------
 	; DESCRIPTION:    Ignore the common suspend hotkey (!#x).
 	; SIDE EFFECTS:   Actually turns the hotkey off.
 	;---------
-	NoSuspendOn() {
-		if(CommonHotkeys._noSuspend)
+	noSuspendOn() {
+		if(this.noSuspend)
 			return
 		
-		CommonHotkeys._noSuspend := true
+		this.noSuspend := true
 		Hotkey, !#x, Off
 	}
 	;---------
 	; DESCRIPTION:    Respect the common suspend hotkey (!#x).
 	; SIDE EFFECTS:   Actually turns the hotkey on.
 	;---------
-	NoSuspendOff() {
-		if(!CommonHotkeys._noSuspend)
+	noSuspendOff() {
+		if(!this.noSuspend)
 			return
 		
-		CommonHotkeys._noSuspend := false
+		this.noSuspend := false
 		Hotkey, !#x, On
 	}
 	
 	
 	; #PRIVATE#
 	
-	static _scriptType         := "" ; Type of script, from CommonHotkeys.ScriptType_* constants
-	static _confirmExit        := false ; Whether to confirm before exiting
-	static _confirmExitMessage := "Are you sure you want to exit this script?" ; Message to show when confirming an exit based on _confirmExit
-	static _noSuspend          := false ; Whether the suspend hotkey is suppressed
+	static scriptType         := "" ; Type of script, from .ScriptType_* constants
+	static confirmExit        := false ; Whether to confirm before exiting
+	static confirmExitMessage := "Are you sure you want to exit this script?" ; Message to show when confirming an exit based on .confirmExit
+	static noSuspend          := false ; Whether the suspend hotkey is suppressed
+	
+	; Wrappers for whether we're a particular script type.
+	isMain() {
+		return (this.scriptType = this.ScriptType_Main)
+	}
+	isSub() {
+		return (this.scriptType = this.ScriptType_Sub)
+	}
+	isStandalone() {
+		return (this.scriptType = this.ScriptType_Standalone)
+	}
 	
 	;---------
 	; DESCRIPTION:    Apply the basic "set" of hotkeys matching the script's type.
@@ -115,28 +99,28 @@ class CommonHotkeys {
 	applyHotkeys() {
 		; Exit
 		Hotkey, ~^!+#r, CommonHotkeys_doEmergencyExit
-		if(CommonHotkeys.IsStandalone)
+		if(this.isStandalone())
 			Hotkey, !+x, CommonHotkeys_doExit
-		if(CommonHotkeys.IsMain) {
+		if(this.isMain()) {
 			; Block close hotkey (as it does bad things in some places) if there are no standalone scripts running
-			noStandaloneScriptsRunning := ObjBindMethod(CommonHotkeys, "noStandaloneScriptsRunning")
+			noStandaloneScriptsRunning := ObjBindMethod(this, "noStandaloneScriptsRunning")
 			Hotkey, If, % noStandaloneScriptsRunning
 			Hotkey, !+x, CommonHotkeys_doBlock ; Catch exit hotkey in main so it doesn't bleed through when there are no standalone scripts
 			Hotkey, If ; Clear condition
 		}
 		
-		; Suspend (on by default, can be disabled/re-enabled with CommonHotkeys.NoSuspend)
-		if(CommonHotkeys.IsMain)
+		; Suspend (on by default, can be disabled/re-enabled with .NoSuspend)
+		if(this.isMain())
 			Hotkey, !#x, CommonHotkeys_doToggleSuspend ; Main script catches it to prevent it falling through
-		if(CommonHotkeys.IsSub || CommonHotkeys.IsStandalone)
+		if(this.isSub() || this.isStandalone())
 			Hotkey, ~!#x, CommonHotkeys_doToggleSuspend ; Other scripts let it fall through so all other scripts can react
 		
 		; Reload
-		if(CommonHotkeys.IsMain)
+		if(this.isMain())
 			Hotkey, !+r, CommonHotkeys_doReload ; Main only, it replaces the sub scripts by running them again.
-		if(CommonHotkeys.IsStandalone) {
+		if(this.isStandalone()) {
 			; Reload on save if editing the script in question
-			isEditingThisScript := ObjBindMethod(CommonHotkeys, "isEditingThisScript")
+			isEditingThisScript := ObjBindMethod(this, "isEditingThisScript")
 			Hotkey, If, % isEditingThisScript
 			Hotkey, ~^s, CommonHotkeys_doReload
 			Hotkey, If ; Clear condition
@@ -164,8 +148,8 @@ class CommonHotkeys {
 	;---------
 	doExit() {
 		; Confirm exiting if that's turned on.
-		if(CommonHotkeys._confirmExit) {
-			if(!GuiLib.showConfirmationPopup(CommonHotkeys._confirmExitMessage))
+		if(this.confirmExit) {
+			if(!GuiLib.showConfirmationPopup(this.confirmExitMessage))
 				return
 		}
 		

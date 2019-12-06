@@ -18,9 +18,6 @@
 				nonStaticMembers
 				functions
 		Specific offenders
-			PublicMembersOrFunctions
-				static
-					CommonHotkeys
 			_privateMembers
 				program
 					Snapper
@@ -28,7 +25,6 @@
 					ProgramInfo - would probably benefit
 					WindowInfo - would probably benefit
 				static
-					CommonHotkeys
 					Config (_rootPath)
 					Hyperlinker (_windows)
 					ScriptTrayInfo (_iconStates)

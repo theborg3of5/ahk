@@ -108,8 +108,8 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 		if(this.descriptor != "" && this.descriptorType != "")
 			return true
 		
-		s := new Selector("actionObject.tls").SetDefaultOverrides({"VALUE":this.descriptor})
-		s.dataTL.filterByColumn("TYPE", ActionObject.Type_EpicStudio)
+		s := new Selector("actionObject.tls").setDefaultOverrides({"VALUE":this.descriptor})
+		s.dataTableList.filterByColumn("TYPE", ActionObject.Type_EpicStudio)
 		data := s.selectGui()
 		if(!data)
 			return false

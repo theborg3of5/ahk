@@ -10,7 +10,7 @@ class SearchLib {
 	selectedTextPrompt() {
 		text := SelectLib.getCleanFirstLine()
 		
-		s := new Selector("search.tls").SetDefaultOverrides({"SEARCH_TERM":text})
+		s := new Selector("search.tls").setDefaultOverrides({"SEARCH_TERM":text})
 		data := s.selectGui()
 		if(!data)
 			return

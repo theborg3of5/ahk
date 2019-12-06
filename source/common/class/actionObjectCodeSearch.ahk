@@ -97,8 +97,8 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 		if(this.location != "" && this.locationType != "")
 			return true
 		
-		s := new Selector("actionObject.tls").SetDefaultOverrides({"VALUE":this.location})
-		s.dataTL.filterByColumn("TYPE", ActionObject.Type_CodeSearch)
+		s := new Selector("actionObject.tls").setDefaultOverrides({"VALUE":this.location})
+		s.dataTableList.filterByColumn("TYPE", ActionObject.Type_CodeSearch)
 		data := s.selectGui()
 		if(!data)
 			return false

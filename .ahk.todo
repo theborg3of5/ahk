@@ -19,20 +19,13 @@
 				functions
 		Specific offenders
 			PublicMembersOrFunctions
-				base
-					RelativeDateTimeBase
-				class_
-					Selector
 				static
 					CommonHotkeys
 			_privateMembers
 				program
 					Snapper
-				base
-					RelativeDateTimeBase
 				class_
 					ProgramInfo - would probably benefit
-					Selector - all except dataTL
 					WindowInfo - would probably benefit
 				static
 					CommonHotkeys

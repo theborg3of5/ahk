@@ -10,10 +10,18 @@ class RelativeDateTimeBase {
 	;---------
 	; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
 	;---------
-	Instant {
+	instant {
 		get {
 			return this._instant
 		}
+	}
+	
+	;---------
+	; NOTES:          Should be overridden by child class.
+	;---------
+	__New(relativeDateTime := "") {
+		new ErrorToast("RelativeDateTimeBase instance created", "RelativeDateTimeBase is a base class only, use a date/time-specific child class instead.").showMedium()
+		return ""
 	}
 	
 	;---------
@@ -25,26 +33,18 @@ class RelativeDateTimeBase {
 		Send, % FormatTime(this._instant, format)
 	}
 	
-	;---------
-	; NOTES:          Should be overridden by child class.
-	;---------
-	__New(relativeDateTime := "") {
-		new ErrorToast("RelativeDateTimeBase instance created", "RelativeDateTimeBase is a base class only, use a date/time-specific child class instead.").showMedium()
-		return ""
-	}
-	
 	
 	; #PRIVATE#
 	
 	_instant := "" ; The actual timestamp that we calculate based on the relative date/time string.
 	
 	; The current value for different time units.
-	_year    := ""
-	_month   := ""
-	_day     := ""
-	_hour    := ""
-	_minute  := ""
-	_second  := ""
+	year    := ""
+	month   := ""
+	day     := ""
+	hour    := ""
+	minute  := ""
+	second  := ""
 	
 	;---------
 	; DESCRIPTION:    Load the current date and time into class members.
@@ -52,12 +52,12 @@ class RelativeDateTimeBase {
 	loadCurrentDateTime() {
 		this._instant := A_Now
 		
-		this._year   := A_YYYY
-		this._month  := A_MM
-		this._day    := A_DD
-		this._hour   := A_Hour
-		this._minute := A_Min
-		this._second := A_Sec
+		this.year   := A_YYYY
+		this.month  := A_MM
+		this.day    := A_DD
+		this.hour   := A_Hour
+		this.minute := A_Min
+		this.second := A_Sec
 	}
 	
 	;---------
@@ -85,24 +85,24 @@ class RelativeDateTimeBase {
 	; DESCRIPTION:    Update the individual member variables for different units based on the instant.
 	;---------
 	updatePartsFromInstant() {
-		this._year   := this._instant.sub(1,  4)
-		this._month  := this._instant.sub(5,  2)
-		this._day    := this._instant.sub(7,  2)
-		this._hour   := this._instant.sub(9,  2)
-		this._minute := this._instant.sub(11, 2)
-		this._second := this._instant.sub(13, 2)
+		this.year   := this._instant.sub(1,  4)
+		this.month  := this._instant.sub(5,  2)
+		this.day    := this._instant.sub(7,  2)
+		this.hour   := this._instant.sub(9,  2)
+		this.minute := this._instant.sub(11, 2)
+		this.second := this._instant.sub(13, 2)
 	}
 	
 	;---------
 	; DESCRIPTION:    Update the instant based on the individual member variables for different units.
 	;---------
 	updateInstantFromParts() {
-		year   :=   this._year.prePadToLength(4, "0")
-		month  :=  this._month.prePadToLength(2, "0")
-		day    :=    this._day.prePadToLength(2, "0")
-		hour   :=   this._hour.prePadToLength(2, "0")
-		minute := this._minute.prePadToLength(2, "0")
-		second := this._second.prePadToLength(2, "0")
+		year   :=   this.year.prePadToLength(4, "0")
+		month  :=  this.month.prePadToLength(2, "0")
+		day    :=    this.day.prePadToLength(2, "0")
+		hour   :=   this.hour.prePadToLength(2, "0")
+		minute := this.minute.prePadToLength(2, "0")
+		second := this.second.prePadToLength(2, "0")
 		
 		this._instant := year month day hour minute second
 	}

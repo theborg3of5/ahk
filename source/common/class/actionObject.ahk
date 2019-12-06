@@ -81,7 +81,7 @@ class ActionObject {
 	tryProcessAsEMC2(record) {
 		; Silent selection from actionObject TLS to see if we match an EMC2-type INI (filtered list so no match means not EMC2).
 		s := new Selector("actionObject.tls")
-		s.dataTL.filterByColumn("TYPE", ActionObject.Type_EMC2)
+		s.dataTableList.filterByColumn("TYPE", ActionObject.Type_EMC2)
 		this.subType := s.selectChoice(this.subType, "SUBTYPE")
 		
 		data := s.selectChoice(record.ini)
@@ -134,7 +134,7 @@ class ActionObject {
 		if(this.value != "" && this.type != "")
 			return
 		
-		s := new Selector("actionObject.tls").SetDefaultOverrides({"VALUE":this.value})
+		s := new Selector("actionObject.tls").setDefaultOverrides({"VALUE":this.value})
 		data := s.selectGui()
 		if(!data)
 			return

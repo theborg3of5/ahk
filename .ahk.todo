@@ -19,8 +19,6 @@
 				functions
 		Specific offenders
 			Constants (to review scope/capitalization of)
-				lib
-					AHKCodeLib
 				static
 					Config - should Machine_/Context_ constants be private, since all callers can just use wrapper properties?
 					Debug

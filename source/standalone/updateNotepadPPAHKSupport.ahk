@@ -12,18 +12,21 @@ global ScopeStart_Public          := "; #PUBLIC#"
 global ScopeStart_NonPublicScopes := ["; #INTERNAL#", "; #PRIVATE#", "; #DEBUG#"]
 global ScopeEnd                   := "; #END#"
 
-completionFile       := Config.path["AHK_SUPPORT"]   "\notepadPPAutoComplete.xml"
+; completionFileBase   := Config.path["AHK_SUPPORT"]   "\notepadPPBase_AutoComplete.xml"
+syntaxFileBase       := Config.path["AHK_SUPPORT"]   "\notepadPPSyntaxHighlightingBase.xml" ; GDB TODO consider renaming all of these files - prefixes, suffixes, extensions, etc. to make it clear what they are.
+completionFile       := Config.path["AHK_SUPPORT"]   "\notepadPPAutoComplete.xml"           ; GDB TODO maybe even rename this support\ folder to include "notepad++" or "notepadPP"? notepadPPSupport\ or notepad++Support\, maybe?
+syntaxFileResult     := Config.path["AHK_SUPPORT"]   "\notepadPPSyntaxHighlighting.xml"
 completionFileActive := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
-syntaxFile           := Config.path["AHK_SUPPORT"]   "\notepadPPSyntaxHighlighting.xml"
 syntaxFileActive     := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml"
 
-; [[ Auto-complete ]]
-; Read in the current XML, to update
-autoCompleteXML := FileRead(completionFile)
 
-; Get info about all classes we care about and use it to update the XML
-classes := getAllClasses()
-if(!updateClassesInXML(classes, autoCompleteXML, failedClasses)) {
+; Get info about all classes/functions we care about.
+getDataFromScripts(functionsByClassName, classesByGroup)
+
+; [[ Auto-complete ]]
+; Read in and update the support XML
+autoCompleteXML := FileRead(completionFile)
+if(!updateAutoCompleteXML(functionsByClassName, autoCompleteXML, failedClasses)) {
 	handleFailedClasses(failedClasses)
 	ExitApp
 }
@@ -34,9 +37,13 @@ FileLib.replaceFileWithString(completionFileActive, autoCompleteXML)
 t := new Toast("Updated both versions of the auto-complete file").show()
 
 ; [[ Syntax highlighting ]]
-; Get the <UserLang> tag from the support XML
-syntaxXML := FileRead(syntaxFile)
-langXML := syntaxXML.allBetweenStrings("<NotepadPlus>", "</NotepadPlus>").clean() ; Trim off the newlines and initial indentation too
+; Read in the tag we're interested in from the support XML base
+syntaxXMLBase := FileRead(syntaxFileBase)
+langXML := syntaxXMLBase.allBetweenStrings("<NotepadPlus>", "</NotepadPlus>").clean() ; Trim off the newlines and initial indentation too
+For groupName,classNames in classesByGroup {
+	groupTextToReplace := "{{REPLACE: " groupName "}}"
+	langXML := langXML.replace(groupTextToReplace, classNames)
+}
 
 ; Replace the same tag in the active XML and write it to the active file
 syntaxXMLActive := FileRead(syntaxFileActive)
@@ -45,9 +52,48 @@ afterXML := syntaxXMLActive.afterString("<UserLang name=""AutoHotkey""").afterSt
 newSyntaxXML := beforeXML langXML afterXML
 FileLib.replaceFileWithString(syntaxFileActive, newSyntaxXML)
 
-t.setText("Updated syntax highlighting tag for Notepad++ (requires restart)").blockingOn().showMedium()
+; Write a copy of the file to the support folder as well
+FileLib.replaceFileWithString(syntaxFileResult, newSyntaxXML)
+
+t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
 
 ExitApp
+
+; GDB TODO update documentation
+getDataFromScripts(ByRef functionsByClassName, ByRef classesByGroup) {
+	functionsByClassName := {}
+	
+	; Read in and extract all classes from scripts in these folders
+	addClassesFromFolder(functionsByClassName, Config.path["AHK_SOURCE"] "\common\base",   "BASE_CLASSES")
+	addClassesFromFolder(functionsByClassName, Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
+	addClassesFromFolder(functionsByClassName, Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
+	addClassesFromFolder(functionsByClassName, Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
+	addClassesFromFolder(functionsByClassName, Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Include program-specific classes, but call them out.
+	
+	; Post-processing
+	classesToDelete := []
+	For className,classObj in functionsByClassName {
+		; Mark any classes with no members for deletion
+		if(classObj.members.count() = 0)
+			classesToDelete.push(className)
+		
+		; Handle inheritance: add any parent members (only 1 layer deep) into this class
+		if(classObj.parentName != "") {
+			For _,member in functionsByClassName[classObj.parentName].members
+				classObj.addMemberIfNew(member)
+		}
+	}
+	For _,className in classesToDelete
+		functionsByClassName.Delete(className)
+	
+	; Generate class name lists by group
+	classesByGroup := {}
+	For className,classObj in functionsByClassName {
+		names := classesByGroup[classObj.group]
+		names := names.appendPiece(className, " ")
+		classesByGroup[classObj.group] := names
+	}
+}
 
 
 ;---------
@@ -55,18 +101,14 @@ ExitApp
 ;                 excluding those with no public members.
 ; RETURNS:        An associative array of AutoCompleteClass objects, indexed by the class' names.
 ;---------
-getAllClasses() {
-	commonRoot := Config.path["AHK_SOURCE"] "\common\"
-	
+getAllClasses() { ; GDB TODO delete
 	classes := {}
-	classes.mergeFromObject(getClassesFromFolder(commonRoot "base"))
-	classes.mergeFromObject(getClassesFromFolder(commonRoot "class"))
-	classes.mergeFromObject(getClassesFromFolder(commonRoot "lib"))
-	classes.mergeFromObject(getClassesFromFolder(commonRoot "static"))
-	; Deliberately leaving external\ out - don't want to try and document those myself, no good reason to.
 	
-	; Also include public functions from program-specific classes, but call out that they're not available everywhere.
-	classes.mergeFromObject(getClassesFromFolder(Config.path["AHK_SOURCE"] "\program", "[Requires program includes]"))
+	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\common\base",   "BASE_CLASSES")
+	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
+	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
+	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
+	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Include program-specific classes, but call them out.
 	
 	; Post-processing
 	classesToDelete := []
@@ -88,13 +130,21 @@ getAllClasses() {
 }
 
 
+addClassesFromFolder(ByRef classes, folderPath, classGroup, returnsPrefix := "") {
+	newClasses := getClassesFromFolder(folderPath, classGroup, returnsPrefix)
+	return classes.mergeFromObject(newClasses)
+}
+
 ;---------
 ; DESCRIPTION:    Get AutoCompleteClass objects for all classes in all scripts in the given folder.
 ; PARAMETERS:
-;  folderPath (I,REQ) - The full path to the folder to read from.
+;  folderPath    (I,REQ) - The full path to the folder to read from.
+;  classGroup    (I,REQ) - Which "group" the classes in this folder should have - this determines
+;                          how they get syntax-highlighted.
+;  returnsPrefix (I,OPT) - If specified, the returns value will appear as a prefix on the return value.
 ; RETURNS:        An associative array of AutoCompleteClass objects, indexed by the class' names.
 ;---------
-getClassesFromFolder(folderPath, returnsPrefix := "") {
+getClassesFromFolder(folderPath, classGroup, returnsPrefix := "") {
 	classes := {}
 	
 	; Loop over all scripts in folder to find classes
@@ -139,7 +189,7 @@ getClassesFromFolder(folderPath, returnsPrefix := "") {
 			
 			; Class declaration
 			if(line.startsWith("class ") && line.endsWith(" {") && line != "class {") {
-				classObj := new AutoCompleteClass(line)
+				classObj := new AutoCompleteClass(line, classGroup)
 				classes[classObj.name] := classObj ; Point to classObj (which is what we'll actually be updating) from classes object
 				
 				Continue
@@ -159,7 +209,7 @@ getClassesFromFolder(folderPath, returnsPrefix := "") {
 ;                          return an array of the problematic AutoCompleteClass objects here.
 ; RETURNS:        true/false - were we able to add all classes?
 ;---------
-updateClassesInXML(classes, ByRef xml, ByRef failedClasses) {
+updateAutoCompleteXML(classes, ByRef xml, ByRef failedClasses) {
 	failedClasses := []
 
 	For _,classObj in classes {
@@ -209,6 +259,7 @@ class AutoCompleteClass {
 	
 	name       := "" ; The class' name
 	parentName := "" ; The name of the class' parent (if it extends another class)
+	group      := "" ; The group (used for syntax highlighting)
 	members    := {} ; {.memberName: AutoCompleteMember}
 	
 	;---------
@@ -249,11 +300,14 @@ class AutoCompleteClass {
 	; DESCRIPTION:    Create a new class representation.
 	; PARAMETERS:
 	;  defLine (I,REQ) - The definition line for the class - the one that starts with "class ".
+	;  group   (I,REQ) - The group this class should be part of, for syntax highlighting purposes.
 	;---------
-	__New(defLine) {
+	__New(defLine, group) {
 		this.name := defLine.firstBetweenStrings("class ", " ") ; Break on space instead of end bracket so we don't end up including the "extends" bit for child classes.
 		if(defLine.contains(" extends "))
 			this.parentName := defLine.firstBetweenStrings(" extends ", " {")
+		
+		this.group := group
 	}
 	
 	;---------

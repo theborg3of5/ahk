@@ -103,7 +103,7 @@ class Debug {
 	;---------
 	popup(params*) {
 		; Only start showing popups once Config is finished loading - popupEarly can be used if you want to show debug messages in these cases.
-		if(!Config.initialized)
+		if(!Config.isInitialized)
 			return
 		
 		MsgBox, % this.buildDebugString(params*)
@@ -145,7 +145,7 @@ class Debug {
 	
 	; #PRIVATE#
 	
-	static singleIndent := "    " ; 4 spaces are used for each level of indentation.
+	static SingleIndent := "    " ; 4 spaces are used for each level of indentation.
 	
 	;---------
 	; DESCRIPTION:    Build the debug string for the given value or label-value pairs.
@@ -303,7 +303,7 @@ class Debug {
 	; RETURNS:        As many spaces are needed to indent to the given level.
 	;---------
 	getIndent(numIndents) {
-		return StringLib.duplicate(Debug.singleIndent, numIndents)
+		return StringLib.duplicate(Debug.SingleIndent, numIndents)
 	}
 	
 	;---------

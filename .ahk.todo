@@ -1,27 +1,6 @@
 # New Ideas
 	Consider an additional "INTERNAL" scope for classes
 		For program-specific classes, these will be the ones that the hotkeys for that class can use - PUBLIC will be reserved for stuff that can be called from outside the script.
-	Standardize how we format & structure classes
-		Capitalization - only constants are PascalCase, everything else is camelCase
-			One exception - an Init() function that acts like a constructor for a static class should also be PascalCase.
-		Order
-			Public
-				Constants
-				staticMembers
-				nonStaticMembers
-				properties
-				__New()/Init()
-				otherFunctions
-			Private
-				Constants
-				staticMembers
-				nonStaticMembers
-				functions
-		Specific offenders
-			Constants (to review scope/capitalization of)
-				static
-					Config - should Machine_/Context_ constants be private, since all callers can just use wrapper properties?
-					Debug
 	Putty - shouldn't last* members be private instead?
 	Duration - can we rearrange units vs. characters again?
 		Currently, individual char constants and char->covert mapping:

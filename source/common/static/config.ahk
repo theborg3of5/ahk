@@ -3,36 +3,6 @@
 class Config {
 	; #PUBLIC#
 	
-	; [[ Constants for specific machines (matched to settings.ini) ]] --=
-	;---------
-	; DESCRIPTION:    Work laptop machine
-	;---------
-	static Machine_WorkLaptop  := "WORK_LAPTOP"
-	;---------
-	; DESCRIPTION:    Work VDI machine
-	;---------
-	static Machine_WorkVDI     := "WORK_VDI"
-	;---------
-	; DESCRIPTION:    Home desktop machine
-	;---------
-	static Machine_HomeDesktop := "HOME_DESKTOP"
-	;---------
-	; DESCRIPTION:    Home laptop machine
-	;---------
-	static Machine_HomeLaptop  := "HOME_LAPTOP"
-	; =--
-	
-	; [[ Contexts ]] --=
-	;---------
-	; DESCRIPTION:    Work context
-	;---------
-	static Context_Work := "WORK"
-	;---------
-	; DESCRIPTION:    Home context
-	;---------
-	static Context_Home := "HOME"
-	; =--
-	
 	; [[ Title string matching modes ]] --=
 	;---------
 	; DESCRIPTION:    Title can contain text anywhere
@@ -52,12 +22,11 @@ class Config {
 	static TitleContains_Exact := "EXACT"
 	; =--
 	
-	
 	;---------
 	; DESCRIPTION:    Whether this class has been initialized. Used to not show debug popups when
 	;                 it's not initialized, to cut down on popups on restart in high-traffic areas.
 	;---------
-	initialized {
+	isInitialized {
 		get {
 			return this.initDone
 		}
@@ -400,6 +369,16 @@ class Config {
 	
 	
 	; #PRIVATE#
+	
+	; Machines
+	static Machine_WorkLaptop  := "WORK_LAPTOP"  ; Work laptop
+	static Machine_WorkVDI     := "WORK_VDI"     ; Work VDI
+	static Machine_HomeDesktop := "HOME_DESKTOP" ; Home desktop
+	static Machine_HomeLaptop  := "HOME_LAPTOP"  ; Home laptop
+	
+	; Contexts
+	static Context_Work := "WORK" ; Work context
+	static Context_Home := "HOME" ; Home context
 	
 	static initDone        := false ; True once we're done initializing for the first time.
 	static rootPath        := ""    ; The root of this set of scripts.

@@ -40,6 +40,14 @@
 
 
         <!-- *gdb START CLASS: ActionObjectBase -->
+        <KeyWord name="ActionObjectBase" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; NOTES:          Should not be called directly - all child classes should override this.
+							;---------">
+                <Param name="value" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectBase.copyLink" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -1416,14 +1424,14 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="CommonHotkeys.ConfirmExitOff" func="yes">
+        <KeyWord name="CommonHotkeys.confirmExitOff" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Do not prompt the user to confirm when exiting with the common exit hotkey (!+x).
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="CommonHotkeys.ConfirmExitOn" func="yes">
+        <KeyWord name="CommonHotkeys.confirmExitOn" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Prompt the user to confirm when exiting with the common exit hotkey (!+x).
@@ -1442,28 +1450,7 @@
                 <Param name="scriptType" />
             </Overload>
         </KeyWord>
-        <KeyWord name="CommonHotkeys.IsMain" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Main script
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="CommonHotkeys.IsStandalone" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    One-off scripts, not connected to main script
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="CommonHotkeys.IsSub" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Standalone scripts that the main script starts and that run alongside the main script
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="CommonHotkeys.NoSuspendOff" func="yes">
+        <KeyWord name="CommonHotkeys.noSuspendOff" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Respect the common suspend hotkey (!#x).
@@ -1471,7 +1458,7 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="CommonHotkeys.NoSuspendOn" func="yes">
+        <KeyWord name="CommonHotkeys.noSuspendOn" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Ignore the common suspend hotkey (!#x).
@@ -1538,20 +1525,6 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="Config.Context_Home" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Home context
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Config.Context_Work" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Work context
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="Config.contextIsHome" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -1614,7 +1587,7 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="Config.initialized" func="yes">
+        <KeyWord name="Config.isInitialized" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Whether this class has been initialized. Used to not show debug popups when
@@ -1648,34 +1621,6 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Which machine we're configured to act as, from the Machine_* constants in this class.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Config.Machine_HomeDesktop" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Home desktop machine
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Config.Machine_HomeLaptop" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Home laptop machine
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Config.Machine_WorkLaptop" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Work laptop machine
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Config.Machine_WorkVDI" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Work VDI machine
 							;---------">
             </Overload>
         </KeyWord>
@@ -3556,20 +3501,6 @@
         <KeyWord name="Hwnd"/>
 
         <!-- *gdb START CLASS: Hyperlinker -->
-        <KeyWord name="Hyperlinker.CloseMethod_Alt_A" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Pressing alt+A.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Hyperlinker.CloseMethod_Enter" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Pressing enter.
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="Hyperlinker.Init" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -3588,28 +3519,6 @@
 							;---------">
                 <Param name="path" />
                 <Param name="ByRef errorMessage := &quot;&quot;" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Hyperlinker.Method_PopupField" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    There's a popup with a field.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Hyperlinker.Method_TaggedString" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    It's text-based, where we'll generate the &quot;link&quot; (typically markdown) from a
-							;                 string with <tags> for replacement.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Hyperlinker.Method_WebField" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    There's a web &quot;popup&quot;.
-							;---------">
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: Hyperlinker -->
@@ -4654,7 +4563,7 @@
                 <Param name="relativeDate := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="RelativeDate.Instant" func="yes">
+        <KeyWord name="RelativeDate.instant" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
@@ -4686,7 +4595,7 @@
                 <Param name="relativeTime := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="RelativeTime.Instant" func="yes">
+        <KeyWord name="RelativeTime.instant" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
@@ -4707,7 +4616,15 @@
 
 
         <!-- *gdb START CLASS: RelativeDateTimeBase -->
-        <KeyWord name="RelativeDateTimeBase.Instant" func="yes">
+        <KeyWord name="RelativeDateTimeBase" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; NOTES:          Should be overridden by child class.
+							;---------">
+                <Param name="relativeDateTime := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="RelativeDateTimeBase.instant" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
@@ -4842,7 +4759,7 @@
                 <Param name="suspendedIcon := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="ScriptTrayInfo.setIconStates" func="yes">
+        <KeyWord name="ScriptTrayInfo.setStateIcons" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Directly set the array used to determine which tray icon to use based on
@@ -4860,7 +4777,7 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Determine the icon that should be used for the script (based on the variables
-							;                 defined in the _iconStates array) and apply it.
+							;                 defined in the stateIcons array) and apply it.
 							;---------">
             </Overload>
         </KeyWord>
@@ -5011,7 +4928,7 @@
                 <Param name="filePath" />
             </Overload>
         </KeyWord>
-        <KeyWord name="Selector.AddOverrideFields" func="yes">
+        <KeyWord name="Selector.addOverrideFields" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Add additional override fields to the popup shown to the user, and return whatever data
@@ -5019,12 +4936,12 @@
 							; PARAMETERS:
 							;  fieldsToAdd (I,REQ) - Numerically-indexed array of field names (treated the same as column names from choices) to add.
 							; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui().
-							;                 Default override values for these fields (if desired) can be set using the .SetDefaultOverrides() function.
+							;                 Default override values for these fields (if desired) can be set using the .setDefaultOverrides() function.
 							;---------">
                 <Param name="fieldsToAdd" />
             </Overload>
         </KeyWord>
-        <KeyWord name="Selector.dataTL" func="yes">
+        <KeyWord name="Selector.dataTableList" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The TableList instance that holds all data read from the file, available so
@@ -5033,7 +4950,7 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="Selector.OverrideFieldsOff" func="yes">
+        <KeyWord name="Selector.overrideFieldsOff" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Turn off the override fields in the popup.
@@ -5091,7 +5008,7 @@
                 <Param name="returnColumn := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="Selector.SetDefaultOverrides" func="yes">
+        <KeyWord name="Selector.setDefaultOverrides" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Set the default values for the override fields in the popup.
@@ -5103,7 +5020,7 @@
                 <Param name="defaultOverrides" />
             </Overload>
         </KeyWord>
-        <KeyWord name="Selector.SetTitle" func="yes">
+        <KeyWord name="Selector.setTitle" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Set the popup's title.
@@ -6945,6 +6862,7 @@
 							;---------
 							; DESCRIPTION:    Turn off snapping - the window will move exactly where directed, not
 							;                 &quot;snapping&quot; to monitor edges.
+							; RETURNS:        this
 							;---------">
             </Overload>
         </KeyWord>
@@ -6953,6 +6871,7 @@
 							;---------
 							; DESCRIPTION:    Turn on snapping - the window will &quot;snap&quot; to the end of the monitor within a
 							;                 certain distance.
+							; RETURNS:        this
 							;---------">
             </Overload>
         </KeyWord>
@@ -7191,7 +7110,10 @@
 							;                                  [&quot;CLASS&quot;] - The AHK class of the window
 							;                                  [&quot;TITLE&quot;] - The title of the window
 							;                      There are also a couple of special overrides available in the array:
-							;                         windowAry[&quot;EDGE_TYPE&quot;]
+							;                         windowAry[&quot;PRIORITY&quot;]
+							;                                      - If more than one WindowInfo instance matches a given
+							;                                        window, this can be used to break the tie.
+							;                                  [&quot;EDGE_TYPE&quot;]
 							;                                      - The type of edges the window has (from
 							;                                        WindowInfo.EdgeStyle_* constants), which determines
 							;                                        whether the window is the size that it appears or if it
@@ -7201,9 +7123,6 @@
 							;                                      - If the window has a specific title match mode that
 							;                                        needs to be used when locating it, this will return
 							;                                        that override.
-							;                                  [&quot;PRIORITY&quot;]
-							;                                      - If more than one WindowInfo instance matches a given
-							;                                        window, this can be used to break the tie.
 							;---------">
                 <Param name="windowAry" />
             </Overload>

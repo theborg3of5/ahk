@@ -19,8 +19,6 @@
 				functions
 		Specific offenders
 			_privateMembers
-				program
-					Snapper
 				class_
 					ProgramInfo - would probably benefit
 					WindowInfo - would probably benefit
@@ -37,7 +35,6 @@
 			Constants (to review scope/capitalization of)
 				program
 					Explorer
-					Snapper - _names
 					VB6
 				class_
 					SelectorGui - capitalization, spacing/positioning should maybe be static, should Char_NewColumn be public?

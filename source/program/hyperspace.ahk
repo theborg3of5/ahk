@@ -87,14 +87,14 @@ class Hyperspace {
 	; RETURNS:        The HTML from the current display in Hyperspace.
 	;---------
 	getCurrentDisplayHTML() {
-		copyHTMLFunction := ObjBindMethod(Hyperspace, "_copyDisplayHTML")
+		copyHTMLFunction := ObjBindMethod(Hyperspace, "copyDisplayHTML")
 		return ClipboardLib.getWithFunction(copyHTMLFunction)
 	}
 	
 	;---------
 	; DESCRIPTION:    Copy the current display's HTML to the clipboard.
 	;---------
-	_copyDisplayHTML() {
+	copyDisplayHTML() {
 		; Grab the HTML with HTMLGrabber hotkey.
 		SendPlay, , ^!+c
 	}

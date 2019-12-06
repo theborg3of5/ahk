@@ -190,7 +190,7 @@ class OneNote {
 	; DESCRIPTION:    Copy the link for the text that's under the mouse (if any) to the clipboard.
 	;---------
 	copyLinkUnderMouse() {
-		copyLinkFunction := ObjBindMethod(OneNote, "_copyLinkUnderMouse")
+		copyLinkFunction := ObjBindMethod(OneNote, "doCopyLinkUnderMouse")
 		if(!ClipboardLib.copyWithFunction(copyLinkFunction)) {
 			; If we clicked on something other than a link, the i option is "Link..." which will open the Link popup. Close it if it appeared.
 			if(WinActive("Link ahk_class NUIDialog ahk_exe ONENOTE.EXE"))
@@ -331,14 +331,14 @@ class OneNote {
 	; RETURNS:        The link to the current paragraph.
 	;---------
 	getLinkToCurrentParagraph() {
-		copyFunction := ObjBindMethod(OneNote, "_copyLinkToCurrentParagraph")
+		copyFunction := ObjBindMethod(OneNote, "copyLinkToCurrentParagraph")
 		return ClipboardLib.getWithFunction(copyFunction)
 	}
 	
 	;---------
 	; DESCRIPTION:    Copy a link to the current paragraph to the clipboard.
 	;---------
-	_copyLinkToCurrentParagraph() {
+	copyLinkToCurrentParagraph() {
 		Send, +{F10}
 		WinWaitActive, % OneNote.RightClickMenuTitleString
 		Send, p
@@ -353,7 +353,7 @@ class OneNote {
 	;---------
 	; DESCRIPTION:    Copy the link target under the mouse to the clipboard.
 	;---------
-	_copyLinkUnderMouse() {
+	doCopyLinkUnderMouse() {
 		Click, Right
 		WinWaitActive, % OneNote.RightClickMenuTitleString
 		Send, i ; Copy Link

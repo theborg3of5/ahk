@@ -12,8 +12,8 @@ if(!txId)
 	txId := Config.private["RFL_TX_ID"]
 
 ; Create a Selector so the user can pick the environment and give us the TX's ID.
-s := new Selector("epicEnvironments.tls").SetTitle("Dump Data Transaction from Environment to File")
-s.AddOverrideFields(["TX_ID"]).SetDefaultOverrides({"TX_ID":txId}) ; Add a field for the TX's ID and default it in if it was given already.
+s := new Selector("epicEnvironments.tls").setTitle("Dump Data Transaction from Environment to File")
+s.addOverrideFields(["TX_ID"]).setDefaultOverrides({"TX_ID":txId}) ; Add a field for the TX's ID and default it in if it was given already.
 data := s.selectGui()
 if(!data)
 	ExitApp

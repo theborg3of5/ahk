@@ -35,8 +35,8 @@
 #If Config.contextIsWork
 	^!+d::
 		selectDLG() {
-			s := new Selector("outlookTLG.tls").OverrideFieldsOff()
-			s.dataTL.filterOutEmptyForColumn("DLG")
+			s := new Selector("outlookTLG.tls").overrideFieldsOff()
+			s.dataTableList.filterOutEmptyForColumn("DLG")
 			dlgId := s.selectGui("DLG")
 			if(!dlgId)
 				return
@@ -48,7 +48,7 @@
 	
 	^!+h::
 		selectHyperspace() {
-			data := new Selector("epicEnvironments.tls").SetTitle("Launch Hyperspace in Environment").selectGui()
+			data := new Selector("epicEnvironments.tls").setTitle("Launch Hyperspace in Environment").selectGui()
 			if(data)
 				EpicLib.runHyperspace(data["MAJOR"], data["MINOR"], data["COMM_ID"])
 		}
@@ -66,8 +66,8 @@
 		selectSnapper() {
 			record := new EpicRecord(SelectLib.getText())
 			
-			s := new Selector("epicEnvironments.tls").SetTitle("Open Record(s) in Snapper in Environment")
-			s.AddOverrideFields(["INI", "ID"]).SetDefaultOverrides({"INI":record.ini, "ID":record.id}) ; Add fields for INI/ID and default in values if we figured them out
+			s := new Selector("epicEnvironments.tls").setTitle("Open Record(s) in Snapper in Environment")
+			s.addOverrideFields(["INI", "ID"]).setDefaultOverrides({"INI":record.ini, "ID":record.id}) ; Add fields for INI/ID and default in values if we figured them out
 			data := s.selectGui()
 			if(!data)
 				return
@@ -98,7 +98,7 @@
 			textToSend := textToSend.replaceTag("DLG",      data["DLG"])
 			textToSend := textToSend.replaceTag("MESSAGE",  combinedMessage)
 			
-			if(Config.isWindowActive("Outlook Calendar TLG")) {
+			if(Outlook.isTLGCalendarActive()) {
 				SendRaw, % textToSend
 				Send, {Enter}
 			} else {
@@ -108,7 +108,7 @@
 	
 	^!+r::
 		selectThunder() {
-			data := new Selector("epicEnvironments.tls").SetTitle("Launch Thunder Environment").selectGui()
+			data := new Selector("epicEnvironments.tls").setTitle("Launch Thunder Environment").selectGui()
 			if(!data)
 				return
 			
@@ -120,7 +120,7 @@
 	
 	!+v::
 		selectVDI() {
-			data := new Selector("epicEnvironments.tls").SetTitle("Launch VDI for Environment").selectGui()
+			data := new Selector("epicEnvironments.tls").setTitle("Launch VDI for Environment").selectGui()
 			if(!data)
 				return
 			

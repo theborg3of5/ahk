@@ -20,7 +20,12 @@
 	!c::Chrome.copyTitle()
 	!#c::Chrome.copyTitleLink()
 	
-	; Send to Telegram (and pick the correct chat).
+	; Open different objects based on the title.
+	!w::Chrome.openCurrentEMC2ObjectWeb()
+	!e::Chrome.openCurrentEMC2ObjectEdit()
+	^+o::Chrome.openCodeSearchServerCodeInEpicStudio()
+	
+	; Send to Telegram (and pick the correct chat). Relies on !t also triggering the Send to Telegram extension.
 	~!t::
 		WinWaitActive, % Config.windowInfo["Telegram"].titleString
 		Telegram.focusNormalChat()
@@ -29,14 +34,10 @@
 	; Handling for file links
 	^RButton::Chrome.copyLinkTarget() ; Copy
 	^MButton::Chrome.openLinkTarget() ; Open
-#IfWinActive
-	
-#If Config.isWindowActive("Chrome")
-	^+o::Chrome.openCodeSearchServerCodeInEpicStudio()
 #If
 
 class Chrome {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	;---------
 	; DESCRIPTION:    Put the title of the current tab on the clipboard, with some special exceptions.
@@ -61,14 +62,39 @@ class Chrome {
 	}
 	
 	;---------
-	; DESCRIPTION:    Copy the title and strip " - Google Chrome" off the end.
+	; DESCRIPTION:    Open the EMC2 object on the current page up in the "proper" web version -
+	;                 Sherlock for SLGs, etc.
+	;---------
+	openCurrentEMC2ObjectWeb() {
+		new ActionObjectEMC2(Chrome.getTitle()).openWeb()
+	}
+	
+	;---------
+	; DESCRIPTION:    Open the EMC2 object on the current page up in EMC2.
+	;---------
+	openCurrentEMC2ObjectEdit() {
+		new ActionObjectEMC2(Chrome.getTitle()).openEdit()
+	}
+	
+	;---------
+	; DESCRIPTION:    Copy the title and rearrange/clean it up a bit.
 	; RETURNS:        Title of the window, cleaned and processed.
-	; NOTES:          For CodeSearch, we copy the current routine (and the tag, from the selected
-	;                 text) instead of the actual title.
+	; NOTES:          Some cases (most notably CodeSearch) will end up with something completely
+	;                 different from the title.
 	;---------
 	getTitle() {
 		title := WinGetActiveTitle().removeFromEnd(" - Google Chrome")
+		
+		; Wiki pages don't need the ending
 		title := title.removeFromEnd(" - Wiki")
+		
+		; Rearrange NullEx post titles slightly
+		if(title.endsWith(" - NullException"))
+			title := "NullEx - " title.removeFromEnd(" - NullException")
+		
+		; SLGs in "basic" web mode just show the URL as the title - transform that into an EMC2 record string instead.
+		if(title.startsWith(Config.private["EMC2_SLG_TITLE_URL_START"]))
+			title := "SLG " title.removeFromStart(Config.private["EMC2_SLG_TITLE_URL_START"])
 		
 		if(Chrome.isCurrentPageCodeSearch()) {
 			; Special handling for CodeSearch - just get the file name, plus the current selection as the function.
@@ -76,11 +102,11 @@ class Chrome {
 			function := SelectLib.getCleanFirstLine()
 			
 			; Client files should always have an extension
-			if(file.contains(".")) {
+			if(file.contains(".")) { ; Client files - <file> > <function>()
 				title := file
 				if(function != "")
 					title .= " > " function "()"
-			} else { ; Server routines
+			} else { ; Server routines - <tag>^<routine>, or just <routine>
 				title := function.appendPiece(file, "^")
 			}
 		}
@@ -115,7 +141,7 @@ class Chrome {
 	; DESCRIPTION:    Open the file-type link under the mouse.
 	;---------
 	openLinkTarget() {
-		filePath := ClipboardLib.getWithFunction(ObjBindMethod(Chrome, "_getLinkTargetOnClipboard"))
+		filePath := ClipboardLib.getWithFunction(ObjBindMethod(Chrome, "getLinkTargetOnClipboard"))
 		if(filePath) {
 			new Toast("Got link target, opening:`n" filePath).showShort()
 			Run(filePath)
@@ -128,7 +154,7 @@ class Chrome {
 	; DESCRIPTION:    Copy the file-type link under the mouse, also showing the user a toast about it.
 	;---------
 	copyLinkTarget() {
-		ClipboardLib.copyWithFunction(ObjBindMethod(Chrome, "_getLinkTargetOnClipboard"))
+		ClipboardLib.copyWithFunction(ObjBindMethod(Chrome, "getLinkTargetOnClipboard"))
 		ClipboardLib.toastNewValue("link target")
 	}
 	
@@ -150,7 +176,7 @@ class Chrome {
 	;---------
 	; DESCRIPTION:    Copy the target of the link under the mouse to the clipboard.
 	;---------
-	_getLinkTargetOnClipboard() {
+	getLinkTargetOnClipboard() {
 		Click, Right
 		Sleep, 100   ; Wait for right-click menu to appear
 		Send, e      ; Copy link address

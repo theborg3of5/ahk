@@ -4,7 +4,7 @@
 /* Class that selects an option from a given set of choices, and returns info about that choice. --=
 	--= Choices
 			Choices are read from a TableList Selector (.tls) file. See documentation for the TableList class for general file format (applies to .tl or tls files), and "File Format" below for additional Selector-specific details.
-			These choices may also be filtered (see the documentation for .dataTL below) - this allows you to use a single file of information to be used in different ways.
+			These choices may also be filtered (see the documentation for .dataTableList below) - this allows you to use a single file of information to be used in different ways.
 		
 	--- Selection
 			This class can be used in one of two ways:
@@ -30,7 +30,7 @@
 						Values in the NAME and ABBREV columns will be displayed for choices as described above, and the return array will have a "PATH" subscript with the corresponding value from the selected choice.
 					
 				) - override field index row
-					These rows assign a numeric index to each column in the model row. This index will be the position the corresponding data override field will have in the popup. An index of 0 tells the UI not to show the field corresponding to that column at all. Note that the existence of this row will cause data override fields to be shown - the fields can be programmatically suppressed using the .OverrideFieldsOff() function. See "Data Override Fields" below for more details.
+					These rows assign a numeric index to each column in the model row. This index will be the position the corresponding data override field will have in the popup. An index of 0 tells the UI not to show the field corresponding to that column at all. Note that the existence of this row will cause data override fields to be shown - the fields can be programmatically suppressed using the .overrideFieldsOff() function. See "Data Override Fields" below for more details.
 					Example:
 						(	NAME		ABBREV		PATH
 						)	0			0				1
@@ -78,17 +78,17 @@
 					If this is set, each super-column in the popup will be that number of pixels wide at a minimum (each may be wider if the choices in that column are wider). See the FlexTable class for how super-columns work.
 			
 	--- Data Override Fields
-			If an override field index row is specified in the TLS file, the popup shown by .selectGui() will include not only a choice field, but also fields for each column given a non-zero index in the override field index row. The fields are shown in the order specified by the row (i.e. 1 is first after the choice field, 2 is second, etc.). That the fields can be programmatically suppressed using the .OverrideFieldsOff() function.
+			If an override field index row is specified in the TLS file, the popup shown by .selectGui() will include not only a choice field, but also fields for each column given a non-zero index in the override field index row. The fields are shown in the order specified by the row (i.e. 1 is first after the choice field, 2 is second, etc.). That the fields can be programmatically suppressed using the .overrideFieldsOff() function.
 			These fields give a user the ability to override data from their selected choice (or submit the popup without a choice, only overrides). If the user changes the value of the field (it defaults to the column label), that value will be used instead of the selected choice's value for that column.
-			Even if there is no override field index row in the TLS file, the .AddOverrideFields() function may be used to add additional fields to the popup. The values from these fields will appear in the return array just like other override fields, under the subscript with their name.
-			Values may be defaulted into these fields using the .SetDefaultOverrides() function.
+			Even if there is no override field index row in the TLS file, the .addOverrideFields() function may be used to add additional fields to the popup. The values from these fields will appear in the return array just like other override fields, under the subscript with their name.
+			Values may be defaulted into these fields using the .setDefaultOverrides() function.
 			
 	--- Example Usage (Popup)
 			s := new Selector("C:\ahk\configs.tls")                    ; Read in the "configs.tls" TLS file
-			s.SetTitle("New title!")                                   ; Set the popup's title to "New title!"
-			s.dataTL.filterByColumn("MACHINE", "HOME_DESKTOP")         ; Only include choices which which have the "MACHINE" column set to "HOME_DESKTOP" (or blank)
-			s.AddOverrideFields(["CONFIG_NAME", "CONFIG_NUM"])         ; Two additional override fields for the popup.
-			s.SetDefaultOverrides({CONFIG_NAME: "Windows"})            ; Default a value of "Windows" into the "CONFIG_NAME" override field
+			s.setTitle("New title!")                                   ; Set the popup's title to "New title!"
+			s.dataTableList.filterByColumn("MACHINE", "HOME_DESKTOP")         ; Only include choices which which have the "MACHINE" column set to "HOME_DESKTOP" (or blank)
+			s.addOverrideFields(["CONFIG_NAME", "CONFIG_NUM"])         ; Two additional override fields for the popup.
+			s.setDefaultOverrides({CONFIG_NAME: "Windows"})            ; Default a value of "Windows" into the "CONFIG_NAME" override field
 			
 			data := s.selectGui()                                      ; Show the popup and retrieve the entire data array
 			MsgBox, % "Chosen config name: " data["CONFIG_NAME"]
@@ -111,9 +111,9 @@ class Selector {
 	;                 that callers can apply filtering if needed. See TableList for available
 	;                 filtering functions.
 	;---------
-	dataTL {
+	dataTableList {
 		get {
-			return this._dataTL
+			return this.dataTL
 		}
 	}
 	
@@ -137,7 +137,7 @@ class Selector {
 	; DESCRIPTION:    Turn off the override fields in the popup.
 	; RETURNS:        this
 	;---------
-	OverrideFieldsOff() {
+	overrideFieldsOff() {
 		this.overrideFields := "" ; Get rid of override fields entirely.
 		return this
 	}
@@ -148,8 +148,8 @@ class Selector {
 	;  title (I,REQ) - The title to use.
 	; RETURNS:        this
 	;---------
-	SetTitle(title) {
-		this._windowTitle := title
+	setTitle(title) {
+		this.windowTitle := title
 		return this
 	}
 	
@@ -159,9 +159,9 @@ class Selector {
 	; PARAMETERS:
 	;  fieldsToAdd (I,REQ) - Numerically-indexed array of field names (treated the same as column names from choices) to add.
 	; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui().
-	;                 Default override values for these fields (if desired) can be set using the .SetDefaultOverrides() function.
+	;                 Default override values for these fields (if desired) can be set using the .setDefaultOverrides() function.
 	;---------
-	AddOverrideFields(fieldsToAdd) {
+	addOverrideFields(fieldsToAdd) {
 		if(!this.overrideFields)
 			this.overrideFields := {}
 		
@@ -179,8 +179,8 @@ class Selector {
 	;                              {columnLabel: value}
 	; RETURNS:        this
 	;---------
-	SetDefaultOverrides(defaultOverrides) {
-		this._defaultOverrides := defaultOverrides
+	setDefaultOverrides(defaultOverrides) {
+		this.defaultOverrides := defaultOverrides
 		return this
 	}
 	
@@ -258,22 +258,22 @@ class Selector {
 	static Char_CommandStart       := "+"
 	static Char_Command_Edit       := "e"
 	
-	_windowTitle      := "Please make a choice by either number or abbreviation:" ; The title of the window
-	_minColumnWidth   := 0     ; How wide (in pixels) each column must be, at a minimum.
-	choices           := []    ; Array of visible choices the user can pick from (array of SelectorChoice objects).
-	sectionTitles     := {}    ; {choiceIndex: title} - Lines that will be displayed as titles (index matches the first choice that should be under this title)
-	overrideFields    := ""    ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers)
-	filePath          := ""    ; Where the file lives if we're reading one in.
-	suppressData      := false ; Whether to ignore all data from the user (choice and overrides). Typically used when we've done something else (like edit the TLS file).
-	_dataTL           := ""    ; TableList instance read from file, which we'll extract choice and other info from.
-	_defaultOverrides := ""    ; {columnLabel: value} - Default values to show in override fields, by column name
+	windowTitle      := "Please make a choice by either index or abbreviation:" ; The title of the window
+	minColumnWidth   := 0     ; How wide (in pixels) each column must be, at a minimum.
+	choices          := []    ; Array of visible choices the user can pick from (array of SelectorChoice objects).
+	sectionTitles    := {}    ; {choiceIndex: title} - Lines that will be displayed as titles (index matches the first choice that should be under this title)
+	overrideFields   := ""    ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers)
+	filePath         := ""    ; Where the file lives if we're reading one in.
+	suppressData     := false ; Whether to ignore all data from the user (choice and overrides). Typically used when we've done something else (like edit the TLS file).
+	defaultOverrides := ""    ; {columnLabel: value} - Default values to show in override fields, by column name
+	dataTL           := ""    ; TableList instance read from file, which we'll extract choice and other info from.
 	
 	;---------
 	; DESCRIPTION:    Read everything from the TLS file into a TableList instance and load most of
 	;                 it into this class.
 	; NOTES:          This reads the choices into the TableList instance, but it does not load them
 	;                 into this class until we're actually doing selection (as before then the
-	;                 caller can still modify them by filtering the TableList via .dataTL).
+	;                 caller can still modify them by filtering the TableList via .dataTableList).
 	;---------
 	loadFromFile() {
 		tl := new TableList(this.filePath)
@@ -290,7 +290,7 @@ class Selector {
 			}
 		}
 		
-		this._dataTL := tl
+		this.dataTL := tl
 	}
 	
 	;---------
@@ -302,9 +302,9 @@ class Selector {
 	updateSettings(settings) {
 		For name,value in settings {
 			if(name = "WindowTitle")
-				this._windowTitle := value
+				this.windowTitle := value
 			if(name = "MinColumnWidth")
-				this._minColumnWidth := value
+				this.minColumnWidth := value
 		}
 	}
 	
@@ -315,10 +315,10 @@ class Selector {
 	;---------
 	loadChoicesFromData() {
 		; Load the section headers
-		this.sectionTitles := this._dataTL.headers
+		this.sectionTitles := this.dataTL.headers
 		
 		; Load the choices
-		For _,row in this._dataTL.getTable()
+		For _,row in this.dataTL.getTable()
 			this.choices.push(new SelectorChoice(row))
 		
 		; Show a warning and fail if we didn't actually manage to load any choices.
@@ -338,8 +338,8 @@ class Selector {
 	;                 overrides.
 	;---------
 	doSelectGui() {
-		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this._minColumnWidth)
-		sGui.show(this._windowTitle, this._defaultOverrides)
+		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this.minColumnWidth)
+		sGui.show(this.windowTitle, this.defaultOverrides)
 		
 		; User's choice is main data source
 		choiceData := this.parseChoice(sGui.getChoiceQuery())
@@ -413,13 +413,13 @@ class Selector {
 	debugToString(ByRef builder) {
 		builder.addLine("Filepath",          this.filePath)
 		builder.addLine("Suppress data?",    this.suppressData)
-		builder.addLine("Window title",      this._windowTitle)
-		builder.addLine("Min column width",  this._minColumnWidth)
+		builder.addLine("Window title",      this.windowTitle)
+		builder.addLine("Min column width",  this.minColumnWidth)
 		builder.addLine("Override fields",   this.overrideFields)
-		builder.addLine("Default overrides", this._defaultOverrides)
+		builder.addLine("Default overrides", this.defaultOverrides)
 		builder.addLine("Choices",           this.choices)
 		builder.addLine("Section titles",    this.sectionTitles)
-		builder.addLine("Override fields",   this._dataTL)
+		builder.addLine("Override fields",   this.dataTL)
 	}
 	; #END#
 }

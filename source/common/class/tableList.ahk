@@ -258,6 +258,38 @@ class TableList {
 	; =--
 	
 	;---------
+	; DESCRIPTION:    Information about each column, from the column info row of the file (assuming
+	;                 one existed).
+	;---------
+	columnInfo {
+		get {
+			return this._columnInfo
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    The settings extracted from the file. Format:
+	;                   settings[name] := value
+	;---------
+	settings {
+		get {
+			return this._settings
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    The section headers extracted from the file. Format, where rowNum matches the
+	;                 row number of the first row in this section:
+	;                   headers[rowNum] := value
+	;---------
+	headers {
+		get {
+			return this._headers
+		}
+	}
+	
+	
+	;---------
 	; DESCRIPTION:    Create a new TableList instance.
 	; PARAMETERS:
 	;  filePath    (I,REQ) - Path to the file to read from. May be a partial path if
@@ -434,37 +466,6 @@ class TableList {
 		}
 		
 		return outputRows
-	}
-	
-	;---------
-	; DESCRIPTION:    Information about each column, from the column info row of the file (assuming
-	;                 one existed).
-	;---------
-	columnInfo {
-		get {
-			return this._columnInfo
-		}
-	}
-	
-	;---------
-	; DESCRIPTION:    The settings extracted from the file. Format:
-	;                   settings[name] := value
-	;---------
-	settings {
-		get {
-			return this._settings
-		}
-	}
-	
-	;---------
-	; DESCRIPTION:    The section headers extracted from the file. Format, where rowNum matches the
-	;                 row number of the first row in this section:
-	;                   headers[rowNum] := value
-	;---------
-	headers {
-		get {
-			return this._headers
-		}
 	}
 	
 	

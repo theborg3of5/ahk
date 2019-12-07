@@ -1,14 +1,31 @@
 # New Ideas
+	Auto-complete - could we make a special kind of header that can cover multiple things?
+		At least one-line constants (just X number of lines until we get a blank line, maybe?)
+			Would let us line things up nicely again
+	Consider renaming getDebugTypeName to start with "debug" so everything in the debug scope does.
+	Can we do something to split up the multi-class program scripts?
+		Should they be separate files?
+			Maybe a sub-folder in program\?
+				Only apply this to sub-program-specific classes, not the main ones
+		Specifics:
+			EpicStudio - MSnippets
+			OneNote - OneNoteTodoPage, OneNoteRecurringTodo
 	Notepad++ AHK syntax highlighting: can we auto-update the XML based on the code, like we do for auto-complete?
 		Could we even use the same data structure/info from reading all the scripts?
 		Folder to keyword mapping:
 			static\        - Keywords2
 			lib\           - Keywords3
 			base\ + class\ - Keywords6
+		Clean up/rearrange things as needed
+		Consider making the auto-complete handling template-based as well?
+			Each has a template file in the support\ folder
+			For now (maybe remove later), each also has a copy of the result in the same folder, also under version control - to make it easy to see what's changing on update
 	Consider additional user-defined languages in Notepad++:
 		My todo lists
+			!? We can't override the python language to add extra exceptions or something, can we?
 			Headers
 			Custom folding based on prefix chars?
+				If we can't come up with something solid for this, may as well stick to python - often build up long lists that I'd want to be able to collapse at various levels.
 		tl/tls files
 			Special characters
 				;  - Ignore (comment line)
@@ -23,8 +40,6 @@
 				!  - New column
 			Collapse on mods
 			Is there any fancy highlighting/lines we could add to match up with columns?
-	Standardize how we format & structure classes
-		Capitalization (Public vs _private members, Public vs private functions)
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
 		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
 		Support right-alignment of columns

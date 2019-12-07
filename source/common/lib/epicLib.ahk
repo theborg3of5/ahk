@@ -23,9 +23,6 @@ class EpicLib {
 		Run(Config.private["VDI_BASE"].replaceTag("VDI_ID", vdiId))
 	}
 	
-	; Split serverLocation into routine and tag (assume it's just the routine if no ^ included).
-	; Note that 
-	
 	;---------
 	; DESCRIPTION:    Split the given server location into tag and routine.
 	; PARAMETERS:

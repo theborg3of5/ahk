@@ -35,8 +35,8 @@ class TempSettings {
 	; RETURNS:        this
 	;---------
 	coordMode(targetType, new) {
-		if(this._titleMatchMode != "")
-			this._titleMatchMode := this.getCoordMode(targetType)
+		if(this._coordMode[targetType] != "")
+			this._coordMode[targetType] := this.getCoordMode(targetType)
 		
 		CoordMode, % targetType, % new
 		return this

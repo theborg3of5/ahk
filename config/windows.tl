@@ -37,8 +37,6 @@
 			EpicStudio Tokenize String			EpicStudio.exe				Tokenize String
 			OneTastic Macro Editor XML			ONENOTE.EXE					Onetastic Window				Edit XML
 			OneTastic Macro Editor				ONENOTE.EXE					Onetastic Window
-			Outlook Calendar Main				OUTLOOK.EXE					rctrl_renwnd32					Calendar - <WORK_EMAIL> - Outlook			NO_PADDING
-			Outlook Calendar TLG					OUTLOOK.EXE					rctrl_renwnd32					TLG - <WORK_EMAIL> - Outlook					NO_PADDING
 			Pidgin Buddy List						pidgin.exe					-									Buddy List
 [-1]
 

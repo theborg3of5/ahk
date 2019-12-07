@@ -20,6 +20,7 @@
 [CONTEXT.replaceWith(WORK)]
 	; Private pass-throughs - private tags to replace in folder paths
 	Epic DBC Design						EPIC_DBC_DESIGN
+	Epic DBC Partial Installers		EPIC_DBC_PARTIAL_INSTALLERS
 	Epic Net Home							EPIC_NET_HOME
 	Epic NFS 3 Day							EPIC_NFS_3DAY
 	Epic NFS 3 Day (Unix)				EPIC_NFS_3DAY_UNIX
@@ -36,9 +37,10 @@
 	AHK Support								AHK_SUPPORT								<AHK_ROOT>\support
 	AHK Templates							AHK_TEMPLATE							<AHK_ROOT>\template
 	Downloads								USER_DOWNLOADS							<USER_ROOT>\Downloads
-	User Dev									USER_DEV									<USER_ROOT>\Dev
 
 	; Dev
+	User Dev									USER_DEV									<USER_ROOT>\Dev
+	NotepadPlusPlus Sessions			NOTEPAD_PP_SESSIONS					<USER_ROOT>\Dev\NotepadPlusPlus Sessions
 	Onetastic Macros						ONETASTIC_MACROS						<USER_ROOT>\OnetasticMacros
 	Onetastic Functions					ONETASTIC_FUNCTIONS					<USER_ROOT>\OnetasticMacros\Functions
 

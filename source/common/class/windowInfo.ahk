@@ -15,107 +15,35 @@ class WindowInfo {
 	; =--
 	
 	;---------
-	; DESCRIPTION:    Creates a new instance of WindowInfo.
-	; PARAMETERS:
-	;  windowAry (I,REQ) - Array of identifying information about the window. Format:
-	;                         windowAry["NAME"]  - The name of the window, for identification in code.
-	;                                  ["EXE"]   - The exe for the window
-	;                                  ["CLASS"] - The AHK class of the window
-	;                                  ["TITLE"] - The title of the window
-	;                      There are also a couple of special overrides available in the array:
-	;                         windowAry["EDGE_TYPE"]
-	;                                      - The type of edges the window has (from
-	;                                        WindowInfo.EdgeStyle_* constants), which determines
-	;                                        whether the window is the size that it appears or if it
-	;                                        has invisible padding around it that needs to be taken
-	;                                        into account when resizing, etc.
-	;                                  ["TITLE_STRING_MATCH_MODE_OVERRIDE"]
-	;                                      - If the window has a specific title match mode that
-	;                                        needs to be used when locating it, this will return
-	;                                        that override.
-	;                                  ["PRIORITY"]
-	;                                      - If more than one WindowInfo instance matches a given
-	;                                        window, this can be used to break the tie.
-	;---------
-	__New(windowAry) {
-		this.windowName  := windowAry["NAME"]
-		this.windowExe   := windowAry["EXE"]
-		this.windowClass := windowAry["CLASS"]
-		this.windowTitle := windowAry["TITLE"]
-		
-		; Replace any private tags lurking in this info.
-		this.windowName  := Config.replacePrivateTags(this.windowName)
-		this.windowExe   := Config.replacePrivateTags(this.windowExe)
-		this.windowClass := Config.replacePrivateTags(this.windowClass)
-		this.windowTitle := Config.replacePrivateTags(this.windowTitle)
-		
-		if(windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"] != "")
-			this.windowTitleStringMatchModeOverride := windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"]
-		else
-			this.windowTitleStringMatchModeOverride := Config.TitleContains_Any ; Default value
-		
-		if(windowAry["EDGE_TYPE"] != "")
-			this.windowEdgeType := windowAry["EDGE_TYPE"]
-		else
-			this.windowEdgeType := WindowInfo.EdgeStyle_HasPadding
-		
-		this.windowPriority := windowAry["PRIORITY"]
-	}
-	
-	;---------
 	; DESCRIPTION:    Name of the window
 	;---------
-	name {
-		get {
-			return this.windowName
-		}
-	}
-	
+	name := ""
 	;---------
 	; DESCRIPTION:    EXE for the program
 	;---------
-	exe {
-		get {
-			return this.windowExe
-		}
-	}
-	
+	exe := ""
 	;---------
 	; DESCRIPTION:    AHK class of the window
 	;---------
-	class {
-		get {
-			return this.windowClass
-		}
-	}
-	
+	class := ""
 	;---------
 	; DESCRIPTION:    Title of the window
 	;---------
-	title {
-		get {
-			return this.windowTitle
-		}
-	}
-	
+	title := ""
+	;---------
+	; DESCRIPTION:    Priority of this WindowInfo instance versus others. Can be used to break a tie
+	;                 if multiple instances match a given window.
+	;---------
+	priority := ""
 	;---------
 	; DESCRIPTION:    Edge type of the window (from WindowInfo.EdgeStyle_* constants)
 	;---------
-	edgeType {
-		get {
-			return this.windowEdgeType
-		}
-	}
-	
+	edgeType := WindowInfo.EdgeStyle_HasPadding
 	;---------
 	; DESCRIPTION:    If the window has a specific title match mode that needs to be used when
 	;                 locating it, this will return that override.
 	;---------
-	titleStringMatchModeOverride {
-		get {
-			return this.windowTitleStringMatchModeOverride
-		}
-	}
+	titleStringMatchModeOverride := Config.TitleContains_Any
 	
 	;---------
 	; DESCRIPTION:    A string that can be used with WinActive() and the like to identify this
@@ -128,42 +56,52 @@ class WindowInfo {
 	}
 	
 	;---------
-	; DESCRIPTION:    Priority of this WindowInfo instance versus others. Can be used to break a tie
-	;                 if multiple instances match a given window.
+	; DESCRIPTION:    Creates a new instance of WindowInfo.
+	; PARAMETERS:
+	;  windowAry (I,REQ) - Array of identifying information about the window. Format:
+	;                         windowAry["NAME"]  - The name of the window, for identification in code.
+	;                                  ["EXE"]   - The exe for the window
+	;                                  ["CLASS"] - The AHK class of the window
+	;                                  ["TITLE"] - The title of the window
+	;                      There are also a couple of special overrides available in the array:
+	;                         windowAry["PRIORITY"]
+	;                                      - If more than one WindowInfo instance matches a given
+	;                                        window, this can be used to break the tie.
+	;                                  ["EDGE_TYPE"]
+	;                                      - The type of edges the window has (from
+	;                                        WindowInfo.EdgeStyle_* constants), which determines
+	;                                        whether the window is the size that it appears or if it
+	;                                        has invisible padding around it that needs to be taken
+	;                                        into account when resizing, etc.
+	;                                  ["TITLE_STRING_MATCH_MODE_OVERRIDE"]
+	;                                      - If the window has a specific title match mode that
+	;                                        needs to be used when locating it, this will return
+	;                                        that override.
 	;---------
-	priority {
-		get {
-			return this.windowPriority
-		}
+	__New(windowAry) {
+		this.name  := windowAry["NAME"]
+		this.exe   := windowAry["EXE"]
+		this.class := windowAry["CLASS"]
+		this.title := windowAry["TITLE"]
+		
+		; Replace any private tags lurking in these portions of info.
+		this.name  := Config.replacePrivateTags(this.name)
+		this.exe   := Config.replacePrivateTags(this.exe)
+		this.class := Config.replacePrivateTags(this.class)
+		this.title := Config.replacePrivateTags(this.title)
+		
+		this.priority := windowAry["PRIORITY"]
+		if(windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"] != "")
+			this.titleStringMatchModeOverride := windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"]
+		if(windowAry["EDGE_TYPE"] != "")
+			this.edgeType := windowAry["EDGE_TYPE"]
 	}
-	
-	
-	; #PRIVATE#
-	
-	windowName  := ""
-	windowExe   := ""
-	windowClass := ""
-	windowTitle := ""
-	windowText  := ""
-	
-	windowTitleStringMatchModeOverride := ""
-	windowEdgeType                     := ""
-	windowPriority                     := ""
 	
 	
 	; #DEBUG#
 	
 	getDebugTypeName() {
 		return "WindowInfo"
-	}
-	
-	debugToString(ByRef builder) {
-		builder.addLine("Name"                            , this.name)
-		builder.addLine("EXE"                             , this.exe)
-		builder.addLine("Class"                           , this.class)
-		builder.addLine("Title"                           , this.title)
-		builder.addLine("Edge type"                       , this.edgeType)
-		builder.addLine("Title string match mode override", this.titleStringMatchModeOverride)
 	}
 	; #END#
 }

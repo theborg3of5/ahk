@@ -125,7 +125,6 @@ class VisualWindow {
 		height := this.height + this.windowOffsets["BOTTOM"] + this.windowOffsets["TOP"]
 	}
 	
-	
 	; [[ General movement/resizing (no snapping) ]] --=
 	;---------
 	; DESCRIPTION:    Move the window to the specified coordinates (without snapping).
@@ -185,10 +184,8 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
-	; =--
 	
-	
-	; [[ Movement based on corners (supports snapping) ]] --=
+	; [[ Movement based on corners (supports snapping) ]] ---
 	;---------
 	; DESCRIPTION:    Move the top-left corner of the window to the given coordinate.
 	; PARAMETERS:
@@ -245,9 +242,8 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
-	; =--
 	
-	; [[ Resizing based on corners (supports snapping) ]] --=
+	; [[ Resizing based on corners (supports snapping) ]] ---
 	;---------
 	; DESCRIPTION:    Resize the window so that the top-left corner is in the given coordinate.
 	; PARAMETERS:
@@ -258,7 +254,7 @@ class VisualWindow {
 	resizeTopLeftToPos(x, y) {
 		this.rsLeftToX(x)
 		this.rsTopToY(y)
-		this.rsSnap(VisualWindow.RESIZE_X_LEFT, VisualWindow.RESIZE_Y_TOP)
+		this.rsSnap(this.Resize_X_ToLeft, this.Resize_Y_ToTop)
 		
 		this.applyPosition()
 	}
@@ -272,7 +268,7 @@ class VisualWindow {
 	resizeTopRightToPos(x, y) {
 		this.rsRightToX(x)
 		this.rsTopToY(y)
-		this.rsSnap(VisualWindow.RESIZE_X_RIGHT, VisualWindow.RESIZE_Y_TOP)
+		this.rsSnap(this.Resize_X_ToRight, this.Resize_Y_ToTop)
 		
 		this.applyPosition()
 	}
@@ -286,7 +282,7 @@ class VisualWindow {
 	resizeBottomLeftToPos(x, y) {
 		this.rsLeftToX(x)
 		this.rsBottomToY(y)
-		this.rsSnap(VisualWindow.RESIZE_X_LEFT, VisualWindow.RESIZE_Y_BOTTOM)
+		this.rsSnap(this.Resize_X_ToLeft, this.Resize_Y_ToBottom)
 		
 		this.applyPosition()
 	}
@@ -300,7 +296,7 @@ class VisualWindow {
 	resizeBottomRightToPos(x, y) {
 		this.rsRightToX(x)
 		this.rsBottomToY(y)
-		this.rsSnap(VisualWindow.RESIZE_X_RIGHT, VisualWindow.RESIZE_Y_BOTTOM)
+		this.rsSnap(this.Resize_X_ToRight, this.Resize_Y_ToBottom)
 		
 		this.applyPosition()
 	}
@@ -309,31 +305,35 @@ class VisualWindow {
 	;---------
 	; DESCRIPTION:    Turn on snapping - the window will "snap" to the end of the monitor within a
 	;                 certain distance.
+	; RETURNS:        this
 	;---------
 	snapOn() {
 		this.isSnapOn := true
+		return this
 	}
 	;---------
 	; DESCRIPTION:    Turn off snapping - the window will move exactly where directed, not
 	;                 "snapping" to monitor edges.
+	; RETURNS:        this
 	;---------
 	snapOff() {
 		this.isSnapOn := false
+		return this
 	}
 	
 	
 	; #PRIVATE#
 	
+	; Constants for which direction we're resizing in, for snapping purposes
+	static Resize_Y_ToTop    := "TOP"
+	static Resize_Y_ToBottom := "BOTTOM"
+	static Resize_X_ToLeft   := "LEFT"
+	static Resize_X_ToRight  := "RIGHT"
+	
 	titleString   := ""
 	snapDistance  := 0
 	isSnapOn      := false
 	windowOffsets := ""
-	
-	; Constants for which direction we're resizing in, for snapping purposes
-	static RESIZE_Y_TOP    := "TOP"
-	static RESIZE_Y_BOTTOM := "BOTTOM"
-	static RESIZE_X_LEFT   := "LEFT"
-	static RESIZE_X_RIGHT  := "RIGHT"
 	
 	;---------
 	; DESCRIPTION:    Actually move/resize the window to the updated (visual, converted to actual)
@@ -344,6 +344,14 @@ class VisualWindow {
 		WinMove, %titleString%, , x, y, width, height
 	}
 	
+	;---------
+	; DESCRIPTION:    Turn the given actual position/size into the visual equivalent.
+	; PARAMETERS:
+	;  x      (I/O,OPT) - X coordinate
+	;  y      (I/O,OPT) - Y coordinate
+	;  width  (I/O,OPT) - Width of the window
+	;  height (I/O,OPT) - Height of the window
+	;---------
 	convertActualToVisualPosition(ByRef x := "", ByRef y := "", ByRef width := "", ByRef height := "") {
 		x      := x      +  this.windowOffsets["LEFT"]
 		y      := y      +  this.windowOffsets["TOP"]
@@ -351,6 +359,10 @@ class VisualWindow {
 		height := height - (this.windowOffsets["BOTTOM"] + this.windowOffsets["TOP"])
 	}
 	
+	;---------
+	; DESCRIPTION:    Figure out what the offsets of the window should be.
+	; RETURNS:        Associative array of offsets with "LEFT"/"RIGHT"/"TOP"/"BOTTOM" subscripts.
+	;---------
 	calculateWindowOffsets() {
 		windowOffsets := {}
 		
@@ -383,9 +395,7 @@ class VisualWindow {
 		return windowOffsets
 	}
 	
-	; -------------------------------------------------
-	; -- Moving window based on certain window edges --
-	; -------------------------------------------------
+	; [[ Moving window based on certain window edges ]] --=
 	mvLeftToX(x) {
 		this.leftX  := x
 		this.rightX := x + this.width
@@ -403,9 +413,7 @@ class VisualWindow {
 		this.bottomY := y
 	}
 	
-	; ---------------------------------------------------
-	; -- Resizing window based on certain window edges --
-	; ---------------------------------------------------
+	; [[ Resizing window based on certain window edges ]] ---
 	rsLeftToX(x) {
 		this.leftX := x
 		this.width := this.rightX - x
@@ -423,9 +431,7 @@ class VisualWindow {
 		this.height  := y - this.topY
 	}
 	
-	; --------------------------------------------------------------------------------
-	; -- Resizing window with a specific width/height (towards bottom-right corner) --
-	; --------------------------------------------------------------------------------
+	; [[ Resizing window with a specific width/height (towards bottom-right corner) ]] ---
 	rsToWidth(width) {
 		this.width  := width
 		this.rightX := this.leftX + width
@@ -435,9 +441,7 @@ class VisualWindow {
 		this.bottomY := this.topY + height
 	}
 	
-	; --------------
-	; -- Snapping --
-	; --------------
+	; [[ Snapping ]] ---
 	mvSnap() {
 		if(!this.isSnapOn)
 			return
@@ -471,29 +475,27 @@ class VisualWindow {
 		bottomDistance := abs(this.bottomY - monitorBounds["BOTTOM"])
 		
 		; Snap to left edge of screen
-		if(directionX = VisualWindow.RESIZE_X_LEFT) {
+		if(directionX = this.Resize_X_ToLeft) {
 			if((leftDistance > 0) && (leftDistance <= this.snapDistance))
 				this.rsLeftToX(monitorBounds["LEFT"])
 		; Snap to right edge of screen
-		} else if(directionX = VisualWindow.RESIZE_X_RIGHT) {
+		} else if(directionX = this.Resize_X_ToRight) {
 			if((rightDistance > 0) && (rightDistance <= this.snapDistance))
 				this.rsRightToX(monitorBounds["RIGHT"])
 		}
 		
 		; Snap to top edge of screen
-		if(directionY = VisualWindow.RESIZE_Y_TOP) {
+		if(directionY = this.Resize_Y_ToTop) {
 			if((topDistance > 0) && (topDistance <= this.snapDistance))
 				this.rsTopToY(monitorBounds["TOP"])
 		; Snap to bottom edge of screen
-		} else if(directionY = VisualWindow.RESIZE_Y_BOTTOM) {
+		} else if(directionY = this.Resize_Y_ToBottom) {
 			if((bottomDistance > 0) && (bottomDistance <= this.snapDistance))
 				this.rsBottomToY(monitorBounds["BOTTOM"])
 		}
 	}
 	
-	; ---------------------------------------------------------------------------
-	; -- Special window coordinates (for window placement relative to monitor) --
-	; ---------------------------------------------------------------------------
+	; [[ Special window coordinates (for window placement relative to monitor) ]] ---
 	convertSpecialWindowCoordinates(ByRef x, ByRef y) {
 		monitorBounds := WindowLib.getMonitorWorkArea(this.titleString)
 		x := this.convertSpecialWindowX(x, monitorBounds)
@@ -523,5 +525,6 @@ class VisualWindow {
 		
 		return y ; Just return the original value if it wasn't special
 	}
+	; =--
 	; #END#
 }

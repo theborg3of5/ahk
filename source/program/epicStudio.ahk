@@ -32,7 +32,7 @@
 #If
 
 class EpicStudio {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	; Debug window controls
 	static Debug_OtherProcessButton := "WindowsForms10.BUTTON.app.0.141b42a_r9_ad11" ; "Other Process" radio button
@@ -52,7 +52,9 @@ class EpicStudio {
 		clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Select and copy the current line, then add it as the next line.
+	;---------
 	duplicateLine() {
 		Send, {End}                        ; Start from end of line
 		Send, {Shift Down}{Home}{Shift Up} ; Select whole line (excluding leading indentation/tab/etc.)
@@ -96,8 +98,7 @@ class EpicStudio {
 	; DESCRIPTION:    Link the current routine to the DLG currently open in EMC2.
 	;---------
 	linkRoutineToCurrentDLG() {
-		record := new EpicRecord()
-		record.initFromEMC2Title()
+		record := new EpicRecord().initFromEMC2Title()
 		if(record.ini != "DLG" || record.id = "")
 			return
 		
@@ -173,11 +174,9 @@ class EpicStudio {
 	; #END#
 }
 
-/*
-	Static class for inserting snippets of M code into EpicStudio.
-*/
+; Static class for inserting snippets of M code into EpicStudio.
 class MSnippets {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	;---------
 	; DESCRIPTION:    Generate and insert an M snippet.
@@ -390,7 +389,7 @@ class MSnippets {
 		arrayName := data["ARRAY_OR_INI"]
 		valueList := data["VARS_OR_VALUES"]
 		
-		listAry := new FormatList(valueList).getList(FormatList.Format_Array)
+		listAry := new FormattedList(valueList).getList(FormattedList.Format_Array)
 		
 		newLine := MSnippets.getMNewLinePlusIndent(numIndents)
 		lineBase := Config.private["M_LIST_ARRAY_INDEX"]

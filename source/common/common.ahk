@@ -41,7 +41,7 @@ Object(params*) {
 	#Include epicRecord.ahk
 	#Include errorToast.ahk
 	#Include flexTable.ahk
-	#Include formatList.ahk
+	#Include formattedList.ahk
 	#Include mousePosition.ahk
 	#Include programInfo.ahk
 	#Include relativeDate.ahk

@@ -19,7 +19,7 @@
 	
 	Example Usage
 		rd := new RelativeDate("m+5") ; 5 months in the future, at the date this line runs
-		newTime := rd.Instant         ; Get the calculated date
+		newTime := rd.instant         ; Get the calculated date
 		rd.SendInFormat("M/d/yy")     ; Send the calculated date in a specific format
 	
 */ ; =--
@@ -79,17 +79,17 @@ class RelativeDate extends RelativeDateTimeBase {
 	}
 	shiftMonth(numToShift) {
 		; Update the month
-		this._month += numToShift
+		this.month += numToShift
 		
 		; If the month gets out of bounds, shift the year accordingly
-		if(this._month < 1 || this._month > 12) {
-			this._year += this._month // 12
-			this._month := mod(this._month, 12)
+		if(this.month < 1 || this.month > 12) {
+			this.year += this.month // 12
+			this.month := mod(this.month, 12)
 		}
 		this.updateInstantFromParts()
 	}
 	shiftYear(numToShift) {
-		this._year += numToShift
+		this.year += numToShift
 		this.updateInstantFromParts()
 	}
 	; #END#

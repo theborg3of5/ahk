@@ -123,8 +123,8 @@ class ActionObjectPath extends ActionObjectBase {
 		if(this.path != "" && this.pathType != "")
 			return true
 		
-		s := new Selector("actionObject.tls").SetDefaultOverrides({"VALUE":this.path})
-		s.dataTL.filterByColumn("TYPE", ActionObject.Type_Path)
+		s := new Selector("actionObject.tls").setDefaultOverrides({"VALUE":this.path})
+		s.dataTableList.filterByColumn("TYPE", ActionObject.Type_Path)
 		data := s.selectGui()
 		if(!data)
 			return false

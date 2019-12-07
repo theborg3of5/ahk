@@ -13,49 +13,6 @@ class Snapper {
 	; #PUBLIC#
 	
 	;---------
-	; DESCRIPTION:    Send the text needed to ignore items that I've deemed unimportant (according
-	;                 to snapperIgnoreItems.tls) to Snapper and apply.
-	;---------
-	sendItemsToIgnore() {
-		; First, try to get the INI of the record ourselves.
-		ControlFocus, % Snapper._recordListClassNN, A ; Focus the record list so we can copy from it to get the INI.
-		recordText := SelectLib.getText()
-		ini := recordText.sub(1, 3)
-		ControlFocus, % Snapper._itemFilterClassNN, A ; Put focus back on the item filter field
-		
-		itemsList := new Selector("snapperIgnoreItems.tls").select(ini, "STATUS_ITEMS")
-		if(!itemsList && (ini != ""))
-			itemsList := new Selector("snapperIgnoreItems.tls").select("", "STATUS_ITEMS") ; Show the popup if we got a bad INI
-		if(!itemsList)
-			return
-		
-		itemsAry := itemsList.split(",")
-		For i,item in itemsAry {
-			if(i > 1)
-				excludeItemsString .= ","
-			excludeItemsString .= "-" item
-		}
-		
-		Send, % excludeItemsString
-		Send, {Enter}
-	}
-	
-	;---------
-	; DESCRIPTION:    In the add records popup, a user can enter comma-separated IDs and this will
-	;                 read them out, close the window and launch them all.
-	;---------
-	addMultipleRecordsFromAddPopup() {
-		url := Snapper.getURLFromAddRecordPopup()
-		if(url) {
-			Send, !c ; Close add record popup (can't use WinClose as that triggers validation on ID field)
-			WinWaitActive, Snapper
-			Run(url)
-		} else {
-			Send, {Enter}
-		}
-	}
-
-	;---------
 	; DESCRIPTION:    Build a URL that will open something in Snapper.
 	; PARAMETERS:
 	;  environment (I,OPT) - COMMID of the environment to get a URL for. If not given, we'll try to
@@ -96,10 +53,56 @@ class Snapper {
 	}
 	
 	
+	; #INTERNAL#
+	
+	;---------
+	; DESCRIPTION:    Send the text needed to ignore items that I've deemed unimportant (according
+	;                 to snapperIgnoreItems.tls) to Snapper and apply.
+	;---------
+	sendItemsToIgnore() {
+		; First, try to get the INI of the record ourselves.
+		ControlFocus, % Snapper.ClassNN_RecordList, A ; Focus the record list so we can copy from it to get the INI.
+		recordText := SelectLib.getText()
+		ini := recordText.sub(1, 3)
+		ControlFocus, % Snapper.ClassNN_ItemFilter, A ; Put focus back on the item filter field
+		
+		itemsList := new Selector("snapperIgnoreItems.tls").select(ini, "STATUS_ITEMS")
+		if(!itemsList && (ini != ""))
+			itemsList := new Selector("snapperIgnoreItems.tls").select("", "STATUS_ITEMS") ; Show the popup if we got a bad INI
+		if(!itemsList)
+			return
+		
+		itemsAry := itemsList.split(",")
+		For i,item in itemsAry {
+			if(i > 1)
+				excludeItemsString .= ","
+			excludeItemsString .= "-" item
+		}
+		
+		Send, % excludeItemsString
+		Send, {Enter}
+	}
+	
+	;---------
+	; DESCRIPTION:    In the add records popup, a user can enter comma-separated IDs and this will
+	;                 read them out, close the window and launch them all.
+	;---------
+	addMultipleRecordsFromAddPopup() {
+		url := Snapper.getURLFromAddRecordPopup()
+		if(url) {
+			Send, !c ; Close add record popup (can't use WinClose as that triggers validation on ID field)
+			WinWaitActive, Snapper
+			Run(url)
+		} else {
+			Send, {Enter}
+		}
+	}
+	
+	
 	; #PRIVATE#
 	
-	static _recordListClassNN := "ListView20WndClass1" ; The control which holds the list of records.
-	static _itemFilterClassNN := "ThunderRT6TextBox2"  ; The "Filter Items" field.
+	static ClassNN_RecordList := "ListView20WndClass1" ; The control which holds the list of records.
+	static ClassNN_ItemFilter := "ThunderRT6TextBox2"  ; The "Filter Items" field.
 	
 	;---------
 	; DESCRIPTION:    Extract info from the main Snapper window and the Add Records popup to build a

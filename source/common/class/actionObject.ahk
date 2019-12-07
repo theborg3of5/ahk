@@ -42,16 +42,16 @@ class ActionObject {
 	
 	; #PRIVATE#
 	
-	value   := "" ; Value (the unique bit of info to act upon, like a path or identifier)
-	type    := "" ; Determined type of ActionObject, from .Type_* constants
-	subType := "" ; Determined sub-type, an additional categorization within a particular ActionObject* class.
-	
 	; Type constants
 	static Type_CodeSearch := "CODESEARCH"
 	static Type_EpicStudio := "EPICSTUDIO"
 	static Type_EMC2       := "EMC2"
 	static Type_Helpdesk   := "HELPDESK"
 	static Type_Path       := "PATH"
+	
+	value   := "" ; Value (the unique bit of info to act upon, like a path or identifier)
+	type    := "" ; Determined type of ActionObject, from .Type_* constants
+	subType := "" ; Determined sub-type, an additional categorization within a particular ActionObject* class.
 	
 	;---------
 	; DESCRIPTION:    Try to determine the type of ActionObject that we'll need based on the input value.
@@ -81,7 +81,7 @@ class ActionObject {
 	tryProcessAsEMC2(record) {
 		; Silent selection from actionObject TLS to see if we match an EMC2-type INI (filtered list so no match means not EMC2).
 		s := new Selector("actionObject.tls")
-		s.dataTL.filterByColumn("TYPE", ActionObject.Type_EMC2)
+		s.dataTableList.filterByColumn("TYPE", ActionObject.Type_EMC2)
 		this.subType := s.selectChoice(this.subType, "SUBTYPE")
 		
 		data := s.selectChoice(record.ini)
@@ -134,7 +134,7 @@ class ActionObject {
 		if(this.value != "" && this.type != "")
 			return
 		
-		s := new Selector("actionObject.tls").SetDefaultOverrides({"VALUE":this.value})
+		s := new Selector("actionObject.tls").setDefaultOverrides({"VALUE":this.value})
 		data := s.selectGui()
 		if(!data)
 			return

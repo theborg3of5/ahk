@@ -37,7 +37,7 @@
 #If	
 
 class OneTastic {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	;---------
 	; DESCRIPTION:    Delete the currently visible function.

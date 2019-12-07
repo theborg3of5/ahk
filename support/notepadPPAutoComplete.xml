@@ -40,6 +40,14 @@
 
 
         <!-- *gdb START CLASS: ActionObjectBase -->
+        <KeyWord name="ActionObjectBase" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; NOTES:          Should not be called directly - all child classes should override this.
+							;---------">
+                <Param name="value" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectBase.copyLink" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -1416,14 +1424,14 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="CommonHotkeys.ConfirmExitOff" func="yes">
+        <KeyWord name="CommonHotkeys.confirmExitOff" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Do not prompt the user to confirm when exiting with the common exit hotkey (!+x).
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="CommonHotkeys.ConfirmExitOn" func="yes">
+        <KeyWord name="CommonHotkeys.confirmExitOn" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Prompt the user to confirm when exiting with the common exit hotkey (!+x).
@@ -1442,28 +1450,7 @@
                 <Param name="scriptType" />
             </Overload>
         </KeyWord>
-        <KeyWord name="CommonHotkeys.IsMain" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Main script
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="CommonHotkeys.IsStandalone" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    One-off scripts, not connected to main script
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="CommonHotkeys.IsSub" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Standalone scripts that the main script starts and that run alongside the main script
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="CommonHotkeys.NoSuspendOff" func="yes">
+        <KeyWord name="CommonHotkeys.noSuspendOff" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Respect the common suspend hotkey (!#x).
@@ -1471,7 +1458,7 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="CommonHotkeys.NoSuspendOn" func="yes">
+        <KeyWord name="CommonHotkeys.noSuspendOn" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Ignore the common suspend hotkey (!#x).
@@ -1538,20 +1525,6 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="Config.Context_Home" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Home context
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Config.Context_Work" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Work context
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="Config.contextIsHome" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -1614,7 +1587,7 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="Config.initialized" func="yes">
+        <KeyWord name="Config.isInitialized" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Whether this class has been initialized. Used to not show debug popups when
@@ -1648,34 +1621,6 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Which machine we're configured to act as, from the Machine_* constants in this class.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Config.Machine_HomeDesktop" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Home desktop machine
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Config.Machine_HomeLaptop" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Home laptop machine
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Config.Machine_WorkLaptop" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Work laptop machine
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Config.Machine_WorkVDI" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Work VDI machine
 							;---------">
             </Overload>
         </KeyWord>
@@ -2310,6 +2255,18 @@
         <KeyWord name="Digit"/>
         <KeyWord name="Disable"/>
         <KeyWord name="Disabled"/>
+
+        <!-- *gdb START CLASS: Ditto -->
+        <KeyWord name="Ditto.saveCurrentClipboard" func="yes">
+            <Overload retVal="[Requires program includes]" descr="
+							;---------
+							; DESCRIPTION:    Force Ditto to save the current clipboard state as a clip. Useful when you want to
+							;                 add something to the clipboard history, but restore the current clipboard as well.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: Ditto -->
+
         <KeyWord name="DllCall" func="yes">
             <Overload retVal="">
                 <Param name="&quot;DllFile\Function&quot;"/>
@@ -2600,6 +2557,7 @@
 							;---------
 							; DESCRIPTION:    Initialize the record based on the current EMC2 window title.
 							; NOTES:          This will only get the INI and ID, never the title.
+							; RETURNS:        this
 							;---------">
             </Overload>
         </KeyWord>
@@ -2610,6 +2568,7 @@
 							; PARAMETERS:
 							;  recordString (I,REQ) - String representing the record. See class header for supported
 							;                         formats.
+							; RETURNS:        this
 							;---------">
                 <Param name="recordString" />
             </Overload>
@@ -3224,14 +3183,14 @@
         </KeyWord>
         <KeyWord name="Force"/>
 
-        <!-- *gdb START CLASS: FormatList -->
-        <KeyWord name="FormatList" func="yes">
+        <!-- *gdb START CLASS: FormattedList -->
+        <KeyWord name="FormattedList" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Create a new FormatList object.
+							; DESCRIPTION:    Create a new FormattedList object.
 							; PARAMETERS:
 							;  listObject (I,REQ) - Object representing the list, may be an array or delimited string.
-							;  inFormat   (I,OPT) - Format that the list is in (from FormatList.Format_* constants). If not
+							;  inFormat   (I,OPT) - Format that the list is in (from .Format_* constants). If not
 							;                       given, we will try to determine it ourselves and prompt the user if we
 							;                       can't figure it out.
 							;---------">
@@ -3239,49 +3198,49 @@
                 <Param name="inFormat := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="FormatList.Format_Array" func="yes">
+        <KeyWord name="FormattedList.Format_Array" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Array
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="FormatList.Format_Commas" func="yes">
+        <KeyWord name="FormattedList.Format_Commas" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Comma-delimited (no space)
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="FormatList.Format_CommasSpaced" func="yes">
+        <KeyWord name="FormattedList.Format_CommasSpaced" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Comma-delimited (with spaces)
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="FormatList.Format_NewLines" func="yes">
+        <KeyWord name="FormattedList.Format_NewLines" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Newline-delimited
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="FormatList.Format_OneNoteColumn" func="yes">
+        <KeyWord name="FormattedList.Format_OneNoteColumn" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    OneNote columns (double-newline delimited)
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="FormatList.Format_Space" func="yes">
+        <KeyWord name="FormattedList.Format_Space" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Space-delimited
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="FormatList.getList" func="yes">
+        <KeyWord name="FormattedList.getList" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Get the list in a certain format, programmatically.
@@ -3292,7 +3251,7 @@
                 <Param name="format := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="FormatList.sendList" func="yes">
+        <KeyWord name="FormattedList.sendList" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Send the list to the current window, in a certain format.
@@ -3302,7 +3261,7 @@
                 <Param name="format := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <!-- *gdb END CLASS: FormatList -->
+        <!-- *gdb END CLASS: FormattedList -->
 
         <KeyWord name="FormatTime" func="no">
             <Overload retVal="">
@@ -3554,20 +3513,6 @@
         <KeyWord name="Hwnd"/>
 
         <!-- *gdb START CLASS: Hyperlinker -->
-        <KeyWord name="Hyperlinker.CloseMethod_Alt_A" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Pressing alt+A.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Hyperlinker.CloseMethod_Enter" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Pressing enter.
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="Hyperlinker.Init" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -3586,28 +3531,6 @@
 							;---------">
                 <Param name="path" />
                 <Param name="ByRef errorMessage := &quot;&quot;" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Hyperlinker.Method_PopupField" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    There's a popup with a field.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Hyperlinker.Method_TaggedString" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    It's text-based, where we'll generate the &quot;link&quot; (typically markdown) from a
-							;                 string with <tags> for replacement.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Hyperlinker.Method_WebField" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    There's a web &quot;popup&quot;.
-							;---------">
             </Overload>
         </KeyWord>
         <!-- *gdb END CLASS: Hyperlinker -->
@@ -4374,6 +4297,22 @@
         <KeyWord name="Off"/>
         <KeyWord name="Ok"/>
         <KeyWord name="On"/>
+
+        <!-- *gdb START CLASS: OneNote -->
+        <KeyWord name="OneNote.linkEMC2ObjectInLine" func="yes">
+            <Overload retVal="[Requires program includes]" descr="
+							;---------
+							; DESCRIPTION:    Select the current line and link the given EMC2 object (described by INI/ID).
+							; PARAMETERS:
+							;  ini (I,REQ) - INI of the object to link
+							;  id  (I,REQ) - ID of the object to link
+							;---------">
+                <Param name="ini" />
+                <Param name="id" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: OneNote -->
+
         <KeyWord name="OnExit"/>
         <KeyWord name="OnMessage" func="yes">
             <Overload retVal="">
@@ -4388,6 +4327,18 @@
             </Overload>
         </KeyWord>
         <KeyWord name="Or"/>
+
+        <!-- *gdb START CLASS: Outlook -->
+        <KeyWord name="Outlook.isTLGCalendarActive" func="yes">
+            <Overload retVal="[Requires program includes]" descr="
+							;---------
+							; DESCRIPTION:    Check whether the TLG calendar is currently active.
+							; RETURNS:        true/false
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: Outlook -->
+
         <KeyWord name="OutputDebug" func="no">
             <Overload retVal="">
                 <Param name="Text"/>
@@ -4652,7 +4603,7 @@
                 <Param name="relativeDate := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="RelativeDate.Instant" func="yes">
+        <KeyWord name="RelativeDate.instant" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
@@ -4684,7 +4635,7 @@
                 <Param name="relativeTime := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="RelativeTime.Instant" func="yes">
+        <KeyWord name="RelativeTime.instant" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
@@ -4705,7 +4656,15 @@
 
 
         <!-- *gdb START CLASS: RelativeDateTimeBase -->
-        <KeyWord name="RelativeDateTimeBase.Instant" func="yes">
+        <KeyWord name="RelativeDateTimeBase" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; NOTES:          Should be overridden by child class.
+							;---------">
+                <Param name="relativeDateTime := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="RelativeDateTimeBase.instant" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
@@ -4840,7 +4799,7 @@
                 <Param name="suspendedIcon := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="ScriptTrayInfo.setIconStates" func="yes">
+        <KeyWord name="ScriptTrayInfo.setStateIcons" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Directly set the array used to determine which tray icon to use based on
@@ -4858,7 +4817,7 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Determine the icon that should be used for the script (based on the variables
-							;                 defined in the _iconStates array) and apply it.
+							;                 defined in the stateIcons array) and apply it.
 							;---------">
             </Overload>
         </KeyWord>
@@ -5009,7 +4968,7 @@
                 <Param name="filePath" />
             </Overload>
         </KeyWord>
-        <KeyWord name="Selector.AddOverrideFields" func="yes">
+        <KeyWord name="Selector.addOverrideFields" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Add additional override fields to the popup shown to the user, and return whatever data
@@ -5017,12 +4976,12 @@
 							; PARAMETERS:
 							;  fieldsToAdd (I,REQ) - Numerically-indexed array of field names (treated the same as column names from choices) to add.
 							; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui().
-							;                 Default override values for these fields (if desired) can be set using the .SetDefaultOverrides() function.
+							;                 Default override values for these fields (if desired) can be set using the .setDefaultOverrides() function.
 							;---------">
                 <Param name="fieldsToAdd" />
             </Overload>
         </KeyWord>
-        <KeyWord name="Selector.dataTL" func="yes">
+        <KeyWord name="Selector.dataTableList" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The TableList instance that holds all data read from the file, available so
@@ -5031,7 +4990,7 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="Selector.OverrideFieldsOff" func="yes">
+        <KeyWord name="Selector.overrideFieldsOff" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Turn off the override fields in the popup.
@@ -5089,7 +5048,7 @@
                 <Param name="returnColumn := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="Selector.SetDefaultOverrides" func="yes">
+        <KeyWord name="Selector.setDefaultOverrides" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Set the default values for the override fields in the popup.
@@ -5101,7 +5060,7 @@
                 <Param name="defaultOverrides" />
             </Overload>
         </KeyWord>
-        <KeyWord name="Selector.SetTitle" func="yes">
+        <KeyWord name="Selector.setTitle" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Set the popup's title.
@@ -5394,6 +5353,30 @@
             </Overload>
         </KeyWord>
         <KeyWord name="Slider"/>
+
+        <!-- *gdb START CLASS: Snapper -->
+        <KeyWord name="Snapper.buildURL" func="yes">
+            <Overload retVal="[Requires program includes]" descr="
+							;---------
+							; DESCRIPTION:    Build a URL that will open something in Snapper.
+							; PARAMETERS:
+							;  environment (I,OPT) - COMMID of the environment to get a URL for. If not given, we'll try to
+							;                        default from whatever's currently selected in Snapper.
+							;  ini         (I,OPT) - INI of the record(s) to launch. If this or idList is blank, both will
+							;                        be set to &quot;X&quot;, which will show an error popup, but still connect
+							;                        Snapper to the chosen right environment.
+							;  idList      (I,OPT) - Comma-separated list of record IDs (or colon-separated ranges of IDs)
+							;                        to launch. If blank, both ini and idList will be treated as &quot;X&quot; as
+							;                        described above.
+							; RETURNS:        URL to launch Snapper.
+							;---------">
+                <Param name="environment := &quot;&quot;" />
+                <Param name="ini := &quot;&quot;" />
+                <Param name="idList := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: Snapper -->
+
         <KeyWord name="Sort" func="no">
             <Overload retVal="">
                 <Param name="VarName"/>
@@ -6415,6 +6398,17 @@
             </Overload>
         </KeyWord>
 
+        <!-- *gdb START CLASS: Telegram -->
+        <KeyWord name="Telegram.focusNormalChat" func="yes">
+            <Overload retVal="[Requires program includes]" descr="
+							;---------
+							; DESCRIPTION:    Focus the &quot;Normal&quot; chat that's the only one I use in Telegram.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <!-- *gdb END CLASS: Telegram -->
+
+
         <!-- *gdb START CLASS: TempSettings -->
         <KeyWord name="TempSettings.coordMode" func="yes">
             <Overload retVal="" descr="
@@ -6943,6 +6937,7 @@
 							;---------
 							; DESCRIPTION:    Turn off snapping - the window will move exactly where directed, not
 							;                 &quot;snapping&quot; to monitor edges.
+							; RETURNS:        this
 							;---------">
             </Overload>
         </KeyWord>
@@ -6951,6 +6946,7 @@
 							;---------
 							; DESCRIPTION:    Turn on snapping - the window will &quot;snap&quot; to the end of the monitor within a
 							;                 certain distance.
+							; RETURNS:        this
 							;---------">
             </Overload>
         </KeyWord>
@@ -7189,7 +7185,10 @@
 							;                                  [&quot;CLASS&quot;] - The AHK class of the window
 							;                                  [&quot;TITLE&quot;] - The title of the window
 							;                      There are also a couple of special overrides available in the array:
-							;                         windowAry[&quot;EDGE_TYPE&quot;]
+							;                         windowAry[&quot;PRIORITY&quot;]
+							;                                      - If more than one WindowInfo instance matches a given
+							;                                        window, this can be used to break the tie.
+							;                                  [&quot;EDGE_TYPE&quot;]
 							;                                      - The type of edges the window has (from
 							;                                        WindowInfo.EdgeStyle_* constants), which determines
 							;                                        whether the window is the size that it appears or if it
@@ -7199,9 +7198,6 @@
 							;                                      - If the window has a specific title match mode that
 							;                                        needs to be used when locating it, this will return
 							;                                        that override.
-							;                                  [&quot;PRIORITY&quot;]
-							;                                      - If more than one WindowInfo instance matches a given
-							;                                        window, this can be used to break the tie.
 							;---------">
                 <Param name="windowAry" />
             </Overload>

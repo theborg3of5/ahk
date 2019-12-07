@@ -7,15 +7,31 @@
 	
 */ ; =--
 
-class ClassName {
+class GDBTODO {
 	; #PUBLIC#
 	
-	__New() {
-		
-	}
+	;  - Constants
+	;  - staticMembers
+	;  - nonStaticMembers
+	;  - properties
+	;  - __New()/Init()
+	;  - otherFunctions
+	
+	
+	; #INTERNAL#
+	
+	;  - Constants
+	;  - staticMembers
+	;  - nonStaticMembers
+	;  - functions
 	
 	
 	; #PRIVATE#
+	
+	;  - Constants
+	;  - staticMembers
+	;  - nonStaticMembers
+	;  - functions
 	
 	
 	; #DEBUG#

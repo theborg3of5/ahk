@@ -13,13 +13,13 @@ class AHKCodeLib {
 		; Determine if it's a function/property or just a class member.
 		if(defLine.containsAnyOf(["(", "[", ":="], match)) {
 			if(match = ":=") ; We found the equals before any opening paren/bracket
-				return AHKCodeLib.headerBase_Member ; No parameters/return value/side effects => basic member base.
+				return AHKCodeLib.HeaderBase_Member ; No parameters/return value/side effects => basic member base.
 		}
 		
 		; Check for parameters
 		AHKCodeLib.getDefLineParts(defLine, name, paramsAry)
 		if(paramsAry.count() = 0)
-			return AHKCodeLib.headerBase_Function ; No parameters => basic function base
+			return AHKCodeLib.HeaderBase_Function ; No parameters => basic function base
 		
 		; Build array of parameter info
 		paramInfos := []
@@ -50,7 +50,7 @@ class AHKCodeLib {
 		; Build a line for each parameter, padding things out to make them even
 		paramLines := []
 		For _,paramObj in paramInfos {
-			line := AHKCodeLib.paramBase
+			line := AHKCodeLib.HeaderBase_SingleParam
 			
 			padding := StringLib.getSpaces(maxParamLength - paramObj["NAME"].length())
 			
@@ -62,7 +62,7 @@ class AHKCodeLib {
 			paramLines.push(line)
 		}
 		
-		header := AHKCodeLib.headerBase_FunctionWithParams
+		header := AHKCodeLib.HeaderBase_FunctionWithParams
 		return header.replaceTag("PARAMETERS", paramLines.join("`n"))
 	}
 	
@@ -115,7 +115,7 @@ class AHKCodeLib {
 		line := line.withoutWhitespace()
 		
 		; Keyword line
-		if(line.startsWithAnyOf(this.headerKeywords, matchedKeyword)) {
+		if(line.startsWithAnyOf(this.HeaderKeywords, matchedKeyword)) {
 			; Add length of keyword + however many spaces are after it.
 			numSpaces += matchedKeyword.length()
 			line := line.removeFromStart(matchedKeyword)
@@ -182,18 +182,18 @@ class AHKCodeLib {
 	
 	; #PRIVATE#
 	
-	; All of the keywords possibly contained in the documentation header - should be kept up to date with headerBase* members below.
-	static headerKeywords := ["DESCRIPTION:", "PARAMETERS:", "RETURNS:", "SIDE EFFECTS:", "NOTES:"]
+	; All of the keywords possibly contained in the documentation header - should be kept up to date with HeaderBase* constants below.
+	static HeaderKeywords := ["DESCRIPTION:", "PARAMETERS:", "RETURNS:", "SIDE EFFECTS:", "NOTES:"]
 	
 	; Header bases
-	static headerBase_Member := "
+	static HeaderBase_Member := "
 		( LTrim RTrim0
 			;---------
 			; DESCRIPTION:    
 			; NOTES:          
 			;---------
 		)"
-	static headerBase_Function := "
+	static HeaderBase_Function := "
 		( LTrim RTrim0
 			;---------
 			; DESCRIPTION:    
@@ -202,7 +202,7 @@ class AHKCodeLib {
 			; NOTES:          
 			;---------
 		)"
-	static headerBase_FunctionWithParams := "
+	static HeaderBase_FunctionWithParams := "
 		( LTrim RTrim0
 			;---------
 			; DESCRIPTION:    
@@ -213,7 +213,7 @@ class AHKCodeLib {
 			; NOTES:          
 			;---------
 		)"
-	static paramBase := "
+	static HeaderBase_SingleParam := "
 		( LTrim RTrim0
 			;  <NAME><PADDING> (<IN_OUT>,<REQUIREMENT>) - 
 		)"

@@ -5,7 +5,7 @@
 #If
 
 class InternetExplorer {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	moveURLToDefaultBrowser(){
 		url := ControlGetText("Edit1", "A") ; Get URL from URL bar control

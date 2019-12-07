@@ -81,10 +81,7 @@
 
 ; VB6-specific actions. Everything should be called statically.
 class VB6 {
-	; #PUBLIC#
-	
-	static objectComboBoxClassNN    := "ComboBox1" ; Object dropdown in top-left
-	static procedureComboBoxClassNN := "ComboBox2" ; Procedure dropdown in top-right
+	; #INTERNAL#
 	
 	;---------
 	; DESCRIPTION:    Add different variations on a contact comment at the current cursor position.
@@ -130,8 +127,8 @@ class VB6 {
 	; DESCRIPTION:    Add error handler logic for current function.
 	;---------
 	addErrorHandlerForCurrentFunction() {
-		currentObject    := ControlGet("List", "Selected", VB6.objectComboBoxClassNN)
-		currentProcedure := ControlGet("List", "Selected", VB6.procedureComboBoxClassNN)
+		currentObject    := ControlGet("List", "Selected", VB6.ClassNN_ObjectComboBox)
+		currentProcedure := ControlGet("List", "Selected", VB6.ClassNN_ProcedureComboBox)
 		if(currentObject != "(General)")
 			functionName := currentObject "_" currentProcedure
 		else
@@ -169,6 +166,9 @@ class VB6 {
 	
 	
 	; #PRIVATE#
+	
+	static ClassNN_ObjectComboBox    := "ComboBox1" ; Object dropdown in top-left
+	static ClassNN_ProcedureComboBox := "ComboBox2" ; Procedure dropdown in top-right
 	
 	;---------
 	; DESCRIPTION:    Check whether the current window within VB is in "code" mode (as opposed to a design view).

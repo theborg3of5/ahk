@@ -73,25 +73,25 @@ class SelectorGui {
 	; Special characters
 	static Char_NewColumn := "! " ; Space after is required
 	
-	static GuiSpecialLabelsPrefix      := "SelectorGui"
-	static baseFieldVarChoice          := "Choice"
-	static baseFieldVarOverridesPrefix := "Override"
-	static defaultFontColor            := "BDAE9D"
-	static fieldGhostFontColor         := "BDAE9D"
+	static Prefix_GuiSpecialLabels        := "SelectorGui"
+	static FieldVarSuffix_Choice          := "Choice"
+	static FieldVarSuffix_OverridesPrefix := "Override"
+	static FontColor_Default              := "BDAE9D"
+	static FontColor_Ghost                := "BDAE9D"
 	
-	guiId                   := "" ; Window handle for the gui
-	fieldVarChoice          := "" ; Unique name (starting with this.guiId) for the choice field.
-	fieldVarOverridesPrefix := "" ; Unique prefix (starting with this.guiId) for the override fields.
+	; GUI spacing/positioning constants
+	static Margins :=  {LEFT:10, RIGHT:10, TOP:10, BOTTOM:10}
+	static Padding :=  {INDEX_ABBREV:5, ABBREV_NAME:10, OVERRIDE_FIELDS:5, COLUMNS:30}
+	static Widths  :=  {INDEX:25, ABBREV:50} ; Other widths are calculated based on contents and available space
+	static Heights :=  {LINE:25, FIELD:24}
+	
+	guiId                    := "" ; Window handle for the gui
+	fieldVar_Choice          := "" ; Unique name (starting with this.guiId) for the choice field.
+	fieldVar_OverridesPrefix := "" ; Unique prefix (starting with this.guiId) for the override fields.
 	
 	overrideFields := "" ; Simple array of the names for the fields to add
 	choiceQuery    := "" ; What the user entered in the query (bottom-left) field
 	overrideData   := {} ; {label: inputValue}
-	
-	; GUI spacing/positioning properties
-	margins :=  {LEFT:10, RIGHT:10, TOP:10, BOTTOM:10}
-	padding :=  {INDEX_ABBREV:5, ABBREV_NAME:10, OVERRIDE_FIELDS:5, COLUMNS:30}
-	widths  :=  {INDEX:25, ABBREV:50} ; Other widths are calculated based on contents and available space
-	heights :=  {LINE:25, FIELD:24}
 	
 	; Height and width for the gui as a whole
 	totalHeight   := 0
@@ -109,15 +109,15 @@ class SelectorGui {
 	;  minColumnWidth (I,REQ) - Minimum width (in px) that each column should be.
 	;---------
 	buildPopup(choices, sectionHeaders, minColumnWidth) {
-		this.totalHeight += this.margins["TOP"]
-		this.totalWidth  += this.margins["LEFT"]
+		this.totalHeight += this.Margins["TOP"]
+		this.totalWidth  += this.Margins["LEFT"]
 		
 		this.createPopup()
 		this.addChoices(choices, sectionHeaders, minColumnWidth)
 		this.addFields()
 		
-		this.totalHeight += this.margins["BOTTOM"]
-		this.totalWidth  += this.margins["RIGHT"]
+		this.totalHeight += this.Margins["BOTTOM"]
+		this.totalWidth  += this.Margins["RIGHT"]
 		; Debug.popup("SelectorGui.buildPopup","Finish", "height",this.totalHeight, "width",this.totalWidth)
 	}
 	
@@ -130,12 +130,12 @@ class SelectorGui {
 		this.guiId := guiId ; from +HWND* setting above
 		
 		; Names for global variables that we'll use for values of fields. This way they can be declared global and retrieved in the same way, without having to pre-define global variables.
-		this.fieldVarChoice          := guiId SelectorGui.baseFieldVarChoice
-		this.fieldVarOverridesPrefix := guiId SelectorGui.baseFieldVarOverridesPrefix
+		this.fieldVar_Choice          := guiId SelectorGui.FieldVarSuffix_Choice
+		this.fieldVar_OverridesPrefix := guiId SelectorGui.FieldVarSuffix_OverridesPrefix
 		
-		Gui, % "+LastFound +Label" SelectorGui.GuiSpecialLabelsPrefix  ; +LabelSelectorGui: Gui* events will call SelectorGui* functions (GuiClose > SelectorGuiClose, etc.).
+		Gui, % "+LastFound +Label" SelectorGui.Prefix_GuiSpecialLabels  ; +LabelSelectorGui: Gui* events will call SelectorGui* functions (GuiClose > SelectorGuiClose, etc.).
 		Gui, Color, 2A211C
-		Gui, Font, % "s12 c" SelectorGui.defaultFontColor
+		Gui, Font, % "s12 c" SelectorGui.FontColor_Default
 		Gui, Add, Button, Hidden Default +gSelectorGuiSubmit ; Hidden button for {Enter} submission.
 	}
 	
@@ -148,7 +148,7 @@ class SelectorGui {
 	;  minColumnWidth (I,REQ) - Minimum width (in px) that each column should be.
 	;---------
 	addChoices(choices, sectionHeaders, minColumnWidth) {
-		flex := new FlexTable(this.guiId, this.margins["LEFT"], this.margins["TOP"], this.heights["LINE"], this.padding["COLUMNS"], minColumnWidth)
+		flex := new FlexTable(this.guiId, this.Margins["LEFT"], this.Margins["TOP"], this.Heights["LINE"], this.Padding["COLUMNS"], minColumnWidth)
 		
 		isEmptyColumn := true
 		For i,choice in choices {
@@ -197,9 +197,9 @@ class SelectorGui {
 	;  choice (I,REQ) - The choice to pull abbreviation and name from.
 	;---------
 	addChoiceToTable(flex, index, choice) {
-		flex.addCell(index         ")", 0,                            this.widths["INDEX"],  "Right")
-		flex.addCell(choice.abbrev ":", this.padding["INDEX_ABBREV"], this.widths["ABBREV"])
-		flex.addCell(choice.name,       this.padding["ABBREV_NAME"])
+		flex.addCell(index         ")", 0,                            this.Widths["INDEX"],  "Right")
+		flex.addCell(choice.abbrev ":", this.Padding["INDEX_ABBREV"], this.Widths["ABBREV"])
+		flex.addCell(choice.name,       this.Padding["ABBREV_NAME"])
 	}
 	
 	;---------
@@ -207,13 +207,13 @@ class SelectorGui {
 	; SIDE EFFECTS:   Updates the total height based on what we added.
 	;---------
 	addFields() {
-		this.totalHeight += this.heights["LINE"] ; Add an empty line before the fields.
+		this.totalHeight += this.Heights["LINE"] ; Add an empty line before the fields.
 		
 		this.addChoiceField()
 		if(this.overrideFields)
 			this.addOverrideFields()
 		
-		this.totalHeight += this.heights["FIELD"]
+		this.totalHeight += this.Heights["FIELD"]
 	}
 	
 	;---------
@@ -222,10 +222,10 @@ class SelectorGui {
 	addChoiceField() {
 		Gui, Font, -c ; Revert the color back to system default (so it can match the edit fields, which use the system default background).
 		
-		x := this.margins["LEFT"] ; Lines up with first column's indices
+		x := this.Margins["LEFT"] ; Lines up with first column's indices
 		y := this.totalHeight
 		w := this.calcChoiceFieldWidth()
-		this.addField(this.fieldVarChoice, x, y, w, this.heights["FIELD"])
+		this.addField(this.fieldVar_Choice, x, y, w, this.Heights["FIELD"])
 	}
 	
 	;---------
@@ -235,7 +235,7 @@ class SelectorGui {
 	;---------
 	calcChoiceFieldWidth() {
 		if(this.overrideFields)
-			return this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"]
+			return this.Widths["INDEX"] + this.Padding["INDEX_ABBREV"] + this.Widths["ABBREV"]
 		else
 			return this.choicesWidth
 	}
@@ -245,12 +245,12 @@ class SelectorGui {
 	;                 data regardless of the choice they pick.
 	;---------
 	addOverrideFields() {
-		Gui, Font, % "c" SelectorGui.fieldGhostFontColor ; Start out gray (default, ghost-texty values) - SelectorGuiOverrideFieldChanged() will change it dynamically based on contents.
+		Gui, Font, % "c" SelectorGui.FontColor_Ghost ; Start out gray (default, ghost-texty values) - SelectorGuiOverrideFieldChanged() will change it dynamically based on contents.
 		
 		; Where to start placing override fields - lines up with the first choice column's names.
-		xOverridesBlock := this.margins["LEFT"] + this.widths["INDEX"] + this.padding["INDEX_ABBREV"] + this.widths["ABBREV"] + this.padding["ABBREV_NAME"]
+		xOverridesBlock := this.Margins["LEFT"] + this.Widths["INDEX"] + this.Padding["INDEX_ABBREV"] + this.Widths["ABBREV"] + this.Padding["ABBREV_NAME"]
 		; Total width available to the override fields - Fill the rest of the horizontal space under the choices table.
-		xChoicesRightEdge := this.margins["LEFT"] + this.choicesWidth
+		xChoicesRightEdge := this.Margins["LEFT"] + this.choicesWidth
 		wOverridesBlock := xChoicesRightEdge - xOverridesBlock
 		
 		x := xOverridesBlock
@@ -258,9 +258,9 @@ class SelectorGui {
 		width := this.calcSingleOverrideFieldWidth(wOverridesBlock)
 		
 		For _,label in this.overrideFields {
-			varName := this.fieldVarOverridesPrefix label
-			this.addField(varName, x, y, width, this.heights["FIELD"], label, SelectorGui.GuiSpecialLabelsPrefix "OverrideFieldChanged") ; Default in the label, like ghost text, and bind any changes to SelectorGuiOverrideFieldChanged().
-			x += width + this.padding["OVERRIDE_FIELDS"]
+			varName := this.fieldVar_OverridesPrefix label
+			this.addField(varName, x, y, width, this.Heights["FIELD"], label, SelectorGui.Prefix_GuiSpecialLabels "OverrideFieldChanged") ; Default in the label, like ghost text, and bind any changes to SelectorGuiOverrideFieldChanged().
+			x += width + this.Padding["OVERRIDE_FIELDS"]
 		}
 	}
 	
@@ -273,7 +273,7 @@ class SelectorGui {
 	;---------
 	calcSingleOverrideFieldWidth(overrideBlockWidth) {
 		numDataFields  := this.overrideFields.length()
-		widthForFields := overrideBlockWidth - ((numDataFields - 1) * this.padding["OVERRIDE_FIELDS"])
+		widthForFields := overrideBlockWidth - ((numDataFields - 1) * this.Padding["OVERRIDE_FIELDS"])
 		return widthForFields / numDataFields
 	}
 	
@@ -324,7 +324,7 @@ class SelectorGui {
 		Gui, Show, % "h" this.totalHeight " w" this.totalWidth, % windowTitle
 		
 		; Focus the choice field
-		GuiControl, Focus, % this.fieldVarChoice
+		GuiControl, Focus, % this.fieldVar_Choice
 		
 		; Wait for gui to close
 		WinWaitClose, % "ahk_id " this.guiId
@@ -335,11 +335,11 @@ class SelectorGui {
 	;---------
 	saveUserInputs() {
 		; Choice field
-		this.choiceQuery := GuiLib.getDynamicGlobal(this.fieldVarChoice) ; Global value set by Gui, Submit
+		this.choiceQuery := GuiLib.getDynamicGlobal(this.fieldVar_Choice) ; Global value set by Gui, Submit
 		
 		; Override fields
 		For num,label in this.overrideFields {
-			inputVal := GuiLib.getDynamicGlobal(this.fieldVarOverridesPrefix label) ; Global value set by Gui, Submit
+			inputVal := GuiLib.getDynamicGlobal(this.fieldVar_OverridesPrefix label) ; Global value set by Gui, Submit
 			if(inputVal && (inputVal != label))
 				this.overrideData[label] := inputVal
 		}
@@ -354,8 +354,8 @@ class SelectorGui {
 	
 	debugToString(ByRef builder) {
 		builder.addLine("Gui ID (handle)",            this.guiId)
-		builder.addLine("Choice field var",           this.fieldVarChoice)
-		builder.addLine("Override fields var prefix", this.fieldVarOverridesPrefix)
+		builder.addLine("Choice field var",           this.fieldVar_Choice)
+		builder.addLine("Override fields var prefix", this.fieldVar_OverridesPrefix)
 		builder.addLine("Override fields",            this.overrideFields)
 		builder.addLine("Choice query",               this.choiceQuery)
 		builder.addLine("Override data",              this.overrideData)
@@ -379,13 +379,13 @@ SelectorGuiSubmit() {
 }
 ; One of the override fields changed
 SelectorGuiOverrideFieldChanged() {
-	fieldName := A_GuiControl.removeFromStart(A_Gui SelectorGui.baseFieldVarOverridesPrefix)
+	fieldName := A_GuiControl.removeFromStart(A_Gui SelectorGui.FieldVarSuffix_OverridesPrefix)
 	value := GuiControlGet("", A_GuiControl)
 	; Debug.popup("A_GuiControl",A_GuiControl, "A_Gui",A_Gui, "fieldName",fieldName, "value",value)
 	
 	; Set the overall gui font color - ghost if it's the default, black (default color) otherwise
 	if(fieldName = value)
-		Gui, Font, % "c" SelectorGui.fieldGhostFontColor
+		Gui, Font, % "c" SelectorGui.FontColor_Ghost
 	else
 		Gui, Font, -c
 	

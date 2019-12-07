@@ -41,13 +41,9 @@
 #If
 
 class Putty {
-	; #PUBLIC#
+	; #INTERNAL#
 	
 	static ChangeSettingsOption := 0x50 ; IDM_RECONF, found in Putty's source code in window.c: https://github.com/codexns/putty/blob/master/windows/window.c
-	
-	; For Home+F9 searching repeatedly.
-	static lastSearchType := ""
-	static lastSearchText := ""
 	
 	;---------
 	; DESCRIPTION:    Prompt for some text, then insert it (without overwriting) by inserting spaces.
@@ -73,13 +69,13 @@ class Putty {
 	; PARAMETERS:
 	;  usePrevious (I,OPT) - Set to true to use the last search type/text instead of prompting the
 	;                        user. This is ignored if there was no last search type/text.
-	; SIDE EFFECTS:   Sets Putty.lastSearch* to whatever is chosen here for re-use later.
+	; SIDE EFFECTS:   Sets Putty.LastSearch_* to whatever is chosen here for re-use later.
 	;---------
 	recordEditSearch(usePrevious := false) {
 		; Start with the last search type/text if requested.
 		if(usePrevious) {
-			searchType := Putty.lastSearchType
-			searchText := Putty.lastSearchText
+			searchType := Putty.LastSearch_Type
+			searchText := Putty.LastSearch_Text
 		}
 	
 		; If no previous values (or not using them), prompt the user for how/what to search.
@@ -100,8 +96,8 @@ class Putty {
 		Send, {Enter}
 		
 		; Store off the latest search for use with ^g later.
-		Putty.lastSearchType := searchType
-		Putty.lastSearchText := searchText
+		Putty.LastSearch_Type := searchType
+		Putty.LastSearch_Text := searchText
 	}
 
 	;---------
@@ -147,6 +143,10 @@ class Putty {
 	
 	
 	; #PRIVATE#
+	
+	; For Home+F9 searching repeatedly.
+	static LastSearch_Type := ""
+	static LastSearch_Text := ""
 	
 	;---------
 	; DESCRIPTION:    Get the log file for the current Putty session via the settings window.

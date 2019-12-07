@@ -17,8 +17,7 @@
 		MsgBox, % record.ini
 		MsgBox, % record.recordString ; R UCL 123456
 		
-		record := new EpicRecord()
-		record.initFromEMC2Title() ; Use EMC2 window title to get needed info
+		record := new EpicRecord().initFromEMC2Title() ; Use EMC2 window title to get needed info
 		MsgBox, % record.recordString ; R DLG 123456
 	
 */ ; =--
@@ -72,17 +71,21 @@ class EpicRecord {
 	; PARAMETERS:
 	;  recordString (I,REQ) - String representing the record. See class header for supported
 	;                         formats.
+	; RETURNS:        this
 	;---------
 	initFromRecordString(recordString) {
 		if(recordString = "")
 			return
 		
 		this.processRecordString(recordString)
+		
+		return this
 	}
 	
 	;---------
 	; DESCRIPTION:    Initialize the record based on the current EMC2 window title.
 	; NOTES:          This will only get the INI and ID, never the title.
+	; RETURNS:        this
 	;---------
 	initFromEMC2Title() {
 		title := WinGetTitle(Config.windowInfo["EMC2"].titleString)
@@ -93,6 +96,8 @@ class EpicRecord {
 			return
 		
 		this.initFromRecordString(title)
+		
+		return this
 	}
 	
 	
@@ -129,7 +134,7 @@ class EpicRecord {
 		} else if(!recordString.contains(" ")) {
 			this.id := recordString
 			
-		; 4) {R } + INI ID + {space} + {: or -} + {title}
+		; 4) {R } + INI {#}ID + {space} + {: or -} + {title}
 		} else {
 			recordString := recordString.removeFromStart("R ") ; Trim off "R " at start if it's there.
 			this.ini := recordString.beforeString(" ")
@@ -143,6 +148,9 @@ class EpicRecord {
 				this.id := recordString.afterString(" ")
 			}
 		}
+		
+		; Make sure there's no extra # on the front of the ID
+		this.id := this.id.removeFromStart("#")
 		
 		; Make sure everything is free of extra whitespace
 		this.ini   := this.ini.withoutWhitespace()
@@ -161,7 +169,7 @@ class EpicRecord {
 		if(this.ini != "" && this.id != "") ; Nothing required is missing.
 			return true
 		
-		s := new Selector("epicRecord.tls").SetDefaultOverrides({"INI":this.ini, "ID":this.id})
+		s := new Selector("epicRecord.tls").setDefaultOverrides({"INI":this.ini, "ID":this.id})
 		data := s.selectGui()
 		if(!data)
 			return false

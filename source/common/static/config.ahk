@@ -3,36 +3,6 @@
 class Config {
 	; #PUBLIC#
 	
-	; [[ Constants for specific machines (matched to settings.ini) ]] --=
-	;---------
-	; DESCRIPTION:    Work laptop machine
-	;---------
-	static Machine_WorkLaptop  := "WORK_LAPTOP"
-	;---------
-	; DESCRIPTION:    Work VDI machine
-	;---------
-	static Machine_WorkVDI     := "WORK_VDI"
-	;---------
-	; DESCRIPTION:    Home desktop machine
-	;---------
-	static Machine_HomeDesktop := "HOME_DESKTOP"
-	;---------
-	; DESCRIPTION:    Home laptop machine
-	;---------
-	static Machine_HomeLaptop  := "HOME_LAPTOP"
-	; =--
-	
-	; [[ Contexts ]] --=
-	;---------
-	; DESCRIPTION:    Work context
-	;---------
-	static Context_Work := "WORK"
-	;---------
-	; DESCRIPTION:    Home context
-	;---------
-	static Context_Home := "HOME"
-	; =--
-	
 	; [[ Title string matching modes ]] --=
 	;---------
 	; DESCRIPTION:    Title can contain text anywhere
@@ -52,12 +22,11 @@ class Config {
 	static TitleContains_Exact := "EXACT"
 	; =--
 	
-	
 	;---------
 	; DESCRIPTION:    Whether this class has been initialized. Used to not show debug popups when
 	;                 it's not initialized, to cut down on popups on restart in high-traffic areas.
 	;---------
-	initialized {
+	isInitialized {
 		get {
 			return this.initDone
 		}
@@ -69,7 +38,7 @@ class Config {
 	;---------
 	Init() {
 		; All config files are expected to live in config/ folder under the root of this repo.
-		this._rootPath := FileLib.getParentFolder(A_LineFile, 4) ; Root path is 3 levels out, plus one to get out of file itself.
+		this.rootPath := FileLib.getParentFolder(A_LineFile, 4) ; Root path is 3 levels out, plus one to get out of file itself.
 		
 		; Read in settings and add automatic context/machine filters to TableList.
 		this.loadSettings()
@@ -116,10 +85,9 @@ class Config {
 	replacePrivateTags(inputString) {
 		return inputString.replaceTags(this.privates)
 	}
-	; =--
 	
 	
-	; [[ Settings ]] --=
+	; [[ Settings ]] ---
 	; [[ Current machine checks ]] --=
 	;---------
 	; DESCRIPTION:    Which machine we're configured to act as, from the Machine_* constants in this class.
@@ -161,9 +129,8 @@ class Config {
 			return (this.machine = Config.Machine_HomeLaptop)
 		}
 	}
-	; =--
 	
-	; [[ Current context checks ]] --=
+	; [[ Current context checks ]] ---
 	;---------
 	; DESCRIPTION:    Which context we're configured to act as, from the Context_* constants in this class.
 	;---------
@@ -234,10 +201,9 @@ class Config {
 			this.runProgram(player)
 		}
 	}
-	; =--
 	
 	
-	; [[ Windows ]] --=
+	; [[ Windows ]] ---
 	;---------
 	; DESCRIPTION:    Return the WindowInfo instance corresponding to the provided name.
 	; PARAMETERS:
@@ -320,10 +286,9 @@ class Config {
 		winInfo := this.findWindowInfo(titleString)
 		return winInfo.name
 	}
-	; =--
 	
 	
-	; [[ Paths ]] --=
+	; [[ Paths ]] ---
 	;---------
 	; DESCRIPTION:    A particular path from this class.
 	; PARAMETERS:
@@ -346,10 +311,9 @@ class Config {
 	replacePathTags(inputPath) {
 		return inputPath.replaceTags(this.paths)
 	}
-	; =--
 	
 	
-	; [[ Programs ]] --=
+	; [[ Programs ]] ---
 	;---------
 	; DESCRIPTION:    Activate the window matching the specified name, running it if it doesn't yet exist.
 	; PARAMETERS:
@@ -381,10 +345,9 @@ class Config {
 		
 		RunLib.runAsUser(path, args)
 	}
-	; =--
 	
 	
-	; [[ Games ]] --=
+	; [[ Games ]] ---
 	;---------
 	; DESCRIPTION:    Check whether the specified window is a game (as identified in the games file passed in).
 	; PARAMETERS:
@@ -407,8 +370,18 @@ class Config {
 	
 	; #PRIVATE#
 	
+	; Machines
+	static Machine_WorkLaptop  := "WORK_LAPTOP"  ; Work laptop
+	static Machine_WorkVDI     := "WORK_VDI"     ; Work VDI
+	static Machine_HomeDesktop := "HOME_DESKTOP" ; Home desktop
+	static Machine_HomeLaptop  := "HOME_LAPTOP"  ; Home laptop
+	
+	; Contexts
+	static Context_Work := "WORK" ; Work context
+	static Context_Home := "HOME" ; Home context
+	
 	static initDone        := false ; True once we're done initializing for the first time.
-	static _rootPath       := ""    ; The root of this set of scripts.
+	static rootPath        := ""    ; The root of this set of scripts.
 	static settingsINIPath := ""    ; The full path to the settings INI, so we can write to it if things change.
 	static settings        := {}    ; {NAME: VALUE}
 	static windows         := {}    ; {NAME: WindowInfo}
@@ -421,7 +394,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the privates file.
 	;---------
 	loadPrivates() {
-		filePath := this._rootPath "\config\ahkPrivate\privates.tl"
+		filePath := this.rootPath "\config\ahkPrivate\privates.tl"
 		this.privates := new TableList(filePath).getColumnByColumn("VALUE", "KEY")
 	}
 	
@@ -429,7 +402,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the settings file.
 	;---------
 	loadSettings() {
-		this.settingsINIPath := this._rootPath "\config\local\settings.ini"
+		this.settingsINIPath := this.rootPath "\config\local\settings.ini"
 		
 		settings := {}
 		settings["MACHINE"]      := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from Config.Machine_* constants
@@ -443,7 +416,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the windows file.
 	;---------
 	loadWindows() {
-		filePath := this._rootPath "\config\windows.tl"
+		filePath := this.rootPath "\config\windows.tl"
 		windowsTable := new TableList(filePath).getTable()
 		
 		windows := {}
@@ -461,7 +434,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the paths file.
 	;---------
 	loadPaths() {
-		filePath := this._rootPath "\config\paths.tl"
+		filePath := this.rootPath "\config\paths.tl"
 		pathsAry := new TableList(filePath).getColumnByColumn("PATH", "KEY")
 		
 		; Grab special path tags from the system to replace in the ones we just read in.
@@ -504,7 +477,7 @@ class Config {
 		tags["WINDOWS"]            := A_WinDir                               ; C:\Windows
 		tags["CMD"]                := A_ComSpec                              ; C:\Windows\system32\cmd.exe
 		
-		tags["AHK_ROOT"]           := this._rootPath
+		tags["AHK_ROOT"]           := this.rootPath
 		
 		return tags
 	}
@@ -513,7 +486,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the programs file.
 	;---------
 	loadPrograms() {
-		filePath := this._rootPath "\config\programs.tl"
+		filePath := this.rootPath "\config\programs.tl"
 		programsTable := new TableList(filePath).getRowsByColumn("NAME", "MACHINE")
 		
 		; Turn each row into a ProgramInfo object.
@@ -528,7 +501,7 @@ class Config {
 	; DESCRIPTION:    Read in and store the contents of the games file.
 	;---------
 	loadGames() {
-		filePath := this._rootPath "\config\games.tl"
+		filePath := this.rootPath "\config\games.tl"
 		this.games := new TableList(filePath).getTable()
 	}
 	
@@ -554,7 +527,7 @@ class Config {
 		else if(method = Config.TitleContains_Exact)
 			return (haystack = needle)
 		
-		Debug.popup("Unsupported match method",method)
+		new ErrorToast("Could not check match with method", "Unsupported match method: " method).showMedium()
 		return ""
 	}
 	; #END#

@@ -1,6 +1,6 @@
 ; These are all of the path tags that will be replaced when using Config.replacePathTags().
 
-(	NAME										KEY										PATH													CONTEXT
+(	NAME										KEY										PATH														CONTEXT
 
 	; Pass-throughs - paths which are retrieved/calculated in Config.loadPaths(). These can also be used in this file.
 	AHK Root									AHK_ROOT

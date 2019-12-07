@@ -34,6 +34,7 @@
 
 # Yearlies
 	Check various airline rewards points				-			SAT				1							JAN
+	Get together dojo dues									1			-					-							JAN
 	Check various hotel rewards points					-			SAT				1							FEB
 	Review Google Play subscriptions						-			SAT				1							MAR
 	Update Windows recovery drive + archive			-			SAT				1							JUN

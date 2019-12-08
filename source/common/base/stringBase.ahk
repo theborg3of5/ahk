@@ -42,6 +42,10 @@ class StringBase {
 		return IfIs(this, "AlNum")
 	}
 	
+	charAt(pos) {
+		return this.sub(pos, 1)
+	}
+	
 	;---------
 	; DESCRIPTION:    Wrapper for InStr() - check if a string contains a search string.
 	; PARAMETERS:

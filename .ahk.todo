@@ -1,4 +1,6 @@
 # New Ideas
+	Test and document new to*Array functions in ObjectBase, or get rid of them.
+		Same for StringBase.charAt()
 	Auto-complete - could we make a special kind of header that can cover multiple things?
 		At least one-line constants (just X number of lines until we get a blank line, maybe?)
 			Would let us line things up nicely again

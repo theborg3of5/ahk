@@ -638,6 +638,7 @@
                 <Param name="FilePattern"/>
             </Overload>
         </KeyWord>
+		  <!-- *gdb - Remove extra FileGetAttrib declaration -->
         <KeyWord name="FileGetAttrib" func="no">
             <Overload retVal="">
                 <Param name="OutputVar"/>
@@ -809,6 +810,7 @@
                 <Param name="Key"/>
             </Overload>
         </KeyWord>
+		  <!-- *gdb - Remove extra GetKeyState declaration -->
         <KeyWord name="GetKeyState" func="yes">
             <Overload retVal="">
                 <Param name="&quot;KeyName&quot;"/>
@@ -929,6 +931,7 @@
         <KeyWord name="IconSmall"/>
         <KeyWord name="ID"/>
         <KeyWord name="IDLast"/>
+		  <!-- *gdb - Combine If declarations -->
         <KeyWord name="If" func="yes">
             <Overload retVal="[Command version]">
                 <Param name="var"/>
@@ -1249,6 +1252,7 @@
                 <Param name="Recurse?"/>
             </Overload>
         </KeyWord>
+		  <!-- *gdb - Remove extra Loop declaration -->
         <KeyWord name="Low"/>
         <KeyWord name="Lower"/>
         <KeyWord name="Lowercase"/>
@@ -1438,6 +1442,7 @@
         <KeyWord name="Off"/>
         <KeyWord name="Ok"/>
         <KeyWord name="On"/>
+		  <!-- *gdb - Remove extra OnExit declaration -->
         <KeyWord name="OnExit" func="yes">
             <Overload retVal="">
                 <Param name="Label"/>
@@ -1450,6 +1455,7 @@
                 <Param name="MaxThreads"/>
             </Overload>
         </KeyWord>
+		  <!-- *gdb - Move OnExit up to correct sorted spot -->
         <KeyWord name="Or"/>
         <KeyWord name="OutputDebug" func="no">
             <Overload retVal="">

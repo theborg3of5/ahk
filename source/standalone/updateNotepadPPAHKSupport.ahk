@@ -28,16 +28,138 @@ getDataFromScripts(functionsByClassName, classesByGroup)
 
 
 
+; GDB TODO new autocomplete plan:
+;  - Read in XML from "template"
+;  - Loop through (ignoring comments!) until we find a keyword line that sorts before our class name.
+;  - Insert our class XML (either stay at starting position, or add the number of lines we're adding - probably the latter)
+;  - Continue looping until done (make sure we have an ending case - check for </AutoComplete> tag, test with ___)
+
+
+
 autoCompleteXML := FileRead(pathCompletion_Template)
 
 ; Build a list of the names in the file, so we can figure out where to insert our new blocks of XML.
-linesAry := FileLib.fileLinesToArray(pathCompletion_Template)
+linesAry := FileLib.fileLinesToArray(pathCompletion_Template, true)
 keywordsAry := []
-
 commentOn := false
+For _,line in linesAry {
+	; Ignore comment blocks
+	if(line.startsWith("<!--")) {
+		commentOn := true
+	}
+	if(line.endsWith("-->")) {
+		commentOn := false
+		Continue
+	}
+	if(commentOn)
+		Continue
+	
+	if(!line.startsWith("<KeyWord name="""))
+		Continue
+	
+	keywordName := line.firstBetweenStrings("<KeyWord name=""", """")
+	keywordsAry.push(keywordName)
+}
+
+Debug.popup("keywordsAry",keywordsAry)
+clipboard := keywordsAry.join("`n")
+
+; result1 := keywordCompare("aaa", "aaa") ; 0
+; result2 := keywordCompare("aaa", "abc") ; -1
+; result3 := keywordCompare("bbb", "abc") ; 1
+; result4 := keywordCompare("aaa", "aa")  ; 1
+; result5 := keywordCompare("aa", "aaa")  ; -1
+; result6 := keywordCompare("_a", "aa")   ; 1
+; result7 := keywordCompare("aa", "_a")   ; -1
+; Debug.popup("result1",result1, "result2",result2, "result3",result3, "result4",result4, "result5",result5, "result6",result6, "result7",result7)
+
+result1 := sortsBefore("aaa", "aaa") ; false
+result2 := sortsBefore("aaa", "abc") ; true
+result3 := sortsBefore("bbb", "abc") ; false
+result4 := sortsBefore("aaa", "aa")  ; false
+result5 := sortsBefore("aa", "aaa")  ; true
+result6 := sortsBefore("_a", "aa")   ; false
+result7 := sortsBefore("aa", "_a")   ; true
+Debug.popup("result1",result1, "result2",result2, "result3",result3, "result4",result4, "result5",result5, "result6",result6, "result7",result7)
+
+ExitApp
+
+
+; keywordCompare(name1, name2) {
+	; Loop, Parse, name1
+	; {
+		; char1 := A_LoopField
+		; char2 := name2.charAt(A_Index)
+		
+		; if(char1 = char2)
+			; Continue
+		
+		; if(char2 = "")
+			; return 1
+		
+		; if(char1 = "_")
+			; return 1
+		; if(char2 = "_")
+			; return -1
+		
+		; if(char1 < char2)
+			; return -1
+		; if(char1 > char2)
+			; return 1
+	; }
+	
+	; ; Everything must be equal for the length of name1 to get here.
+	
+	; if(name2.length() > name1.length())
+		; return -1
+	
+	; return 0
+; }
+
+sortsBefore(name1, name2) {
+	Loop, Parse, name1
+	{
+		char1 := A_LoopField
+		char2 := name2.charAt(A_Index)
+		
+		; Same character - keep going
+		if(char1 = char2)
+			Continue
+		
+		; Shorter name goes first
+		if(char2 = "")
+			return false
+		
+		; Underscore should sort after everything else
+		if(char1 = "_")
+			return false
+		if(char2 = "_")
+			return true
+		
+		; Otherwise we can use normal character comparison
+		if(char1 < char2)
+			return true
+		if(char1 > char2)
+			return false
+	}
+	
+	; Everything must be equal for the length of name1 to get here.
+	
+	; If name1 is shorter, it should come first.
+	if(name2.length() > name1.length())
+		return true
+	
+	; If we do get duplicates, leave them in stable order.
+	return false
+}
+
+
+
+
 
 keywordsXML := {} ; {keywordName: keywordXML}
 
+commentOn := false
 ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).
 while(ln < linesAry.count()) {
 	line := linesAry.next(ln)

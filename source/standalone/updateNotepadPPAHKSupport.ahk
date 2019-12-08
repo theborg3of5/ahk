@@ -29,14 +29,66 @@ getDataFromScripts(functionsByClassName, classesByGroup)
 
 
 ; GDB TODO new autocomplete plan:
+;  - Read in all class information
+;     - Put class names into a numeric array, in order - probably use Sort command + ObjectBase.toKeysArray()
+;     - Sort class array properly for XML (underscores last) - probably use Sort command + sortsAfter + ObjectBase.toKeysArray()
 ;  - Read in XML from "template"
-;  - Loop through (ignoring comments!) until we find a keyword line that sorts before our class name.
-;  - Insert our class XML (either stay at starting position, or add the number of lines we're adding - probably the latter)
+;  - Loop through class array, gradually advancing through XML lines (ignoring comments!), until we find a keyword line that does NOT sort after our class name
+;  - Insert our class XML
+;     - Get rid of class start/end comments and extra space, just insert
+;     - Either stay at starting position, or add the number of lines we're adding
+;        - If the latter, we should end up checking the same line again, so we can put the next class right after the one we just inserted if that's the right thing to do.
 ;  - Continue looping until done (make sure we have an ending case - check for </AutoComplete> tag, test with ___)
 
+; Put class objects into auto-complete-sorted order by name
+classNames := functionsByClassName.toKeysArray().join("`n")
+Sort, classNames, F sortsAfter
+classes := []
+For _,className in classNames.split("`n")
+	classes.push(functionsByClassName[className])
 
+; Read in XML from "template"
+xmlLines := FileLib.fileLinesToArray(pathCompletion_Template)
 
-autoCompleteXML := FileRead(pathCompletion_Template)
+; Loop through our sorted classes, inserting their XML in the right place as we go.
+commentOn := false
+ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).
+For _,classObj in classes { ; Sorted class objects
+	while(ln < xmlLines.count()) { ; Loop over lines of XML
+		line := xmlLines.next(ln).withoutWhitespace()
+		
+		; Ignore comment blocks
+		if(line.startsWith("<!--")) {
+			commentOn := true
+		}
+		if(line.endsWith("-->")) {
+			commentOn := false
+			Continue
+		}
+		if(commentOn)
+			Continue
+		
+		; Ignore anything that's not a keyword line
+		if(!line.startsWith("<KeyWord name="""))
+			Continue
+		
+		; If the class name sorts after the current keyword, we haven't gone far enough yet.
+		keywordName := line.firstBetweenStrings("<KeyWord name=""", """")
+		if(sortsAfter(classObj.name, keywordName))
+			Continue
+		
+		; We've found the right spot - insert our XML.
+		classXML := classObj.generateXML()
+		xmlLines.InsertAt(ln, classXML) ; This technically puts a bunch of lines of text into one "line", but we're never going to insert something in the middle of the class, so that should be fine.
+		ln-- ; Take a step backwards so we check the same line we just checked (which is just after the class XML we just inserted) against the next class.
+		Break ; Move onto the next class.
+	}
+}
+
+outputPath := Config.path["AHK_ROOT"] "\output\notepadPPAutoComplete.xml"
+FileLib.replaceFileWithString(outputPath, xmlLines.join("`n"))
+
+ExitApp
 
 ; Build a list of the names in the file, so we can figure out where to insert our new blocks of XML.
 linesAry := FileLib.fileLinesToArray(pathCompletion_Template, true)
@@ -44,9 +96,8 @@ keywordsAry := []
 commentOn := false
 For _,line in linesAry {
 	; Ignore comment blocks
-	if(line.startsWith("<!--")) {
+	if(line.startsWith("<!--"))
 		commentOn := true
-	}
 	if(line.endsWith("-->")) {
 		commentOn := false
 		Continue
@@ -68,20 +119,13 @@ clipboard := allKeywords
 
 MsgBox, hold
 allKeywordsSorted := allKeywords
-Sort, allKeywordsSorted, F keywordCompare
+Sort, allKeywordsSorted, F sortsAfter
 clipboard := allKeywordsSorted
 
 
 ExitApp
 
-keywordCompare(name1, name2) {
-	if(sortsBefore(name1, name2))
-		return -1
-	else
-		return 1
-}
-
-sortsBefore(name1, name2) {
+sortsAfter(name1, name2) {
 	Loop, Parse, name1
 	{
 		char1 := A_LoopField
@@ -93,31 +137,31 @@ sortsBefore(name1, name2) {
 		
 		; Shorter name goes first
 		if(char2 = "")
-			return false
+			return 1
 		
 		; Underscore should sort after everything else
 		if(char1 = "_")
-			return false
+			return 1
 		if(char2 = "_")
-			return true
+			return -1
 		
 		; Otherwise we can use normal character comparison
 		if(char1 < char2)
-			return true
+			return -1
 		if(char1 > char2)
-			return false
+			return 1
 	}
 	
 	; Everything must be equal for the length of name1 to get here.
 	
 	; If name1 is shorter, it should come first.
 	if(name2.length() > name1.length())
-		return true
+		return -1
 	
-	; If we do get duplicates, leave them in stable order.
-	return false
+	return 0
 }
 
+; autoCompleteXML := FileRead(pathCompletion_Template)
 
 
 

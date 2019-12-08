@@ -62,59 +62,24 @@ For _,line in linesAry {
 }
 
 Debug.popup("keywordsAry",keywordsAry)
-clipboard := keywordsAry.join("`n")
 
-; result1 := keywordCompare("aaa", "aaa") ; 0
-; result2 := keywordCompare("aaa", "abc") ; -1
-; result3 := keywordCompare("bbb", "abc") ; 1
-; result4 := keywordCompare("aaa", "aa")  ; 1
-; result5 := keywordCompare("aa", "aaa")  ; -1
-; result6 := keywordCompare("_a", "aa")   ; 1
-; result7 := keywordCompare("aa", "_a")   ; -1
-; Debug.popup("result1",result1, "result2",result2, "result3",result3, "result4",result4, "result5",result5, "result6",result6, "result7",result7)
+allKeywords := keywordsAry.join("`n")
+clipboard := allKeywords
 
-result1 := sortsBefore("aaa", "aaa") ; false
-result2 := sortsBefore("aaa", "abc") ; true
-result3 := sortsBefore("bbb", "abc") ; false
-result4 := sortsBefore("aaa", "aa")  ; false
-result5 := sortsBefore("aa", "aaa")  ; true
-result6 := sortsBefore("_a", "aa")   ; false
-result7 := sortsBefore("aa", "_a")   ; true
-Debug.popup("result1",result1, "result2",result2, "result3",result3, "result4",result4, "result5",result5, "result6",result6, "result7",result7)
+MsgBox, hold
+allKeywordsSorted := allKeywords
+Sort, allKeywordsSorted, F keywordCompare
+clipboard := allKeywordsSorted
+
 
 ExitApp
 
-
-; keywordCompare(name1, name2) {
-	; Loop, Parse, name1
-	; {
-		; char1 := A_LoopField
-		; char2 := name2.charAt(A_Index)
-		
-		; if(char1 = char2)
-			; Continue
-		
-		; if(char2 = "")
-			; return 1
-		
-		; if(char1 = "_")
-			; return 1
-		; if(char2 = "_")
-			; return -1
-		
-		; if(char1 < char2)
-			; return -1
-		; if(char1 > char2)
-			; return 1
-	; }
-	
-	; ; Everything must be equal for the length of name1 to get here.
-	
-	; if(name2.length() > name1.length())
-		; return -1
-	
-	; return 0
-; }
+keywordCompare(name1, name2) {
+	if(sortsBefore(name1, name2))
+		return -1
+	else
+		return 1
+}
 
 sortsBefore(name1, name2) {
 	Loop, Parse, name1

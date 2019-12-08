@@ -903,6 +903,7 @@
         <KeyWord name="HKEY_CLASSES_ROOT"/>
         <KeyWord name="HKEY_CURRENT_CONFIG"/>
         <KeyWord name="HKEY_CURRENT_USER"/>
+		  <!-- *gdb - remove duplicate HKEY_CURRENT_USER declaration -->
         <KeyWord name="HKEY_LOCAL_MACHINE"/>
         <KeyWord name="HKEY_USERS"/>
         <KeyWord name="HKLM"/>
@@ -1585,6 +1586,7 @@
                 <Param name="StartingPos = 1"/>
             </Overload>
         </KeyWord>
+		  <!-- *gdb - Remove extra newline -->
         <KeyWord name="Region"/>
         <KeyWord name="RegisterCallback" func="yes">
             <Overload retVal="">

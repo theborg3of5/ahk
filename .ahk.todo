@@ -29,6 +29,8 @@
 						compiled\
 						output\
 							Preferred right now.
+			If we remove the need for the support\ folder, get rid of all references to it in path and hotstrings as well.
+			If we keep output, add path/hotstring and maybe folder access to it.
 	Consider additional user-defined languages in Notepad++:
 		My todo lists
 			!? We can't override the python language to add extra exceptions or something, can we?

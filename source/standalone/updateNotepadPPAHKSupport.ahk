@@ -6,14 +6,17 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
+; #MaxMem 128 ; Increase max size of a variable so we can fit all XML in one
+
 ; Constants we use to pick apart scripts for their component parts.
 global Header_StartEnd            := ";---------"
 global ScopeStart_Public          := "; #PUBLIC#"
 global ScopeStart_NonPublicScopes := ["; #INTERNAL#", "; #PRIVATE#", "; #DEBUG#"]
 global ScopeEnd                   := "; #END#"
 
-; completionFileBase   := Config.path["AHK_SUPPORT"]   "\notepadPPBase_AutoComplete.xml"
-syntaxFileBase       := Config.path["AHK_SUPPORT"]   "\notepadPPSyntaxHighlightingBase.xml" ; GDB TODO consider renaming all of these files - prefixes, suffixes, extensions, etc. to make it clear what they are.
+; pathCompletion_Template := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete.xml"
+pathCompletion_Template := Config.path["AHK_SUPPORT"] "\originalAutoComplete_Cleaned.xml" ; GDB TEMP
+pathSyntax_Template := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting.xml" ; GDB TODO consider renaming all of these files - prefixes, suffixes, extensions, etc. to make it clear what they are.
 completionFile       := Config.path["AHK_SUPPORT"]   "\notepadPPAutoComplete.xml"           ; GDB TODO maybe even rename this support\ folder to include "notepad++" or "notepadPP"? notepadPPSupport\ or notepad++Support\, maybe?
 syntaxFileResult     := Config.path["AHK_SUPPORT"]   "\notepadPPSyntaxHighlighting.xml"
 completionFileActive := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
@@ -22,6 +25,106 @@ syntaxFileActive     := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.
 
 ; Get info about all classes/functions we care about.
 getDataFromScripts(functionsByClassName, classesByGroup)
+
+
+
+autoCompleteXML := FileRead(pathCompletion_Template)
+
+; Build a list of the names in the file, so we can figure out where to insert our new blocks of XML.
+linesAry := FileLib.fileLinesToArray(pathCompletion_Template)
+keywordsAry := []
+
+commentOn := false
+
+keywordsXML := {} ; {keywordName: keywordXML}
+
+ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).
+while(ln < linesAry.count()) {
+	line := linesAry.next(ln)
+	cleanLine := line.withoutWhitespace()
+	
+	; if(ln > 2277) {
+		; Debug.popup("ln",ln, "line",line, "keywordsXML",keywordsXML)
+	; }
+	
+	; Ignore comment blocks
+	if(cleanLine.startsWith("<!--")) {
+		commentOn := true
+	}
+	if(cleanLine.endsWith("-->")) {
+		commentOn := false
+		Continue
+	}
+	if(commentOn)
+		Continue
+	
+	; Debug.popup("line",line)
+	
+	; Keyword line(s)
+	if(cleanLine.startsWith("<KeyWord name=""")) {
+		keywordName := " " cleanLine.firstBetweenStrings("<KeyWord name=""", """")
+		keywordXML := line
+		
+		if(!cleanLine.endsWith("/>")) { ; Not a self-closing tag, need to keep getting lines.
+			Loop {
+				line := linesAry.next(ln)
+				keywordXML .= "`n" line
+				
+				cleanLine := line.withoutWhitespace()
+				if(cleanLine = "</KeyWord>")
+					Break
+			}
+		}
+		
+		keywordsXML[keywordName] := keywordXML
+		; Debug.popup("keywordName",keywordName, "keywordXML",keywordXML, "keywordsXML",keywordsXML)
+		
+		Continue
+	}
+}
+
+Debug.popup("keywordsXML",keywordsXML)
+; For name,xml in keywordsXML {
+	; MsgBox % name "`n" xml
+; }
+
+; ExitApp
+
+clipboard := keywordsXML.toValuesArray().join("`n")
+ExitApp
+
+allXML := keywordsXML.toValuesArray().join("`n")
+Sort, allXML
+clipboard := allXML
+
+; GDB TODO: current problem: sorting
+; _ seems like it should sort AFTER everything else, but AHK sorting by key seems to sort _ before everything else.
+; Might need to check numbers as well?
+; Sort command might help: https://www.autohotkey.com/docs/commands/Sort.htm
+
+ExitApp
+
+
+
+
+For className,classObj in classes {
+	; className
+	
+	; Find the block in the original XML for this class and replace it with the class' XML (which
+	; includes the start/end comments).
+	xmlBefore := xml.beforeString(startComment)
+	xmlAfter := xml.afterString(endComment)
+	xml := xmlBefore classObj.generateXML() xmlAfter
+}
+
+ExitApp
+
+
+
+
+
+
+
 
 ; [[ Auto-complete ]]
 ; Read in and update the support XML
@@ -38,7 +141,7 @@ t := new Toast("Updated both versions of the auto-complete file").show()
 
 ; [[ Syntax highlighting ]]
 ; Read in the tag we're interested in from the support XML base
-syntaxXMLBase := FileRead(syntaxFileBase)
+syntaxXMLBase := FileRead(pathSyntax_Template)
 langXML := syntaxXMLBase.allBetweenStrings("<NotepadPlus>", "</NotepadPlus>").clean() ; Trim off the newlines and initial indentation too
 For groupName,classNames in classesByGroup {
 	groupTextToReplace := "{{REPLACE: " groupName "}}"
@@ -68,9 +171,9 @@ getDataFromScripts(ByRef functionsByClassName, ByRef classesByGroup) {
 	addClassesFromFolder(functionsByClassName, Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
 	addClassesFromFolder(functionsByClassName, Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
 	addClassesFromFolder(functionsByClassName, Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
-	addClassesFromFolder(functionsByClassName, Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Include program-specific classes, but call them out.
+	addClassesFromFolder(functionsByClassName, Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Include program-specific classes, but with a returns prefix.
 	
-	; Post-processing
+	; Post-processing - remove empty classes and handle inheritance.
 	classesToDelete := []
 	For className,classObj in functionsByClassName {
 		; Mark any classes with no members for deletion
@@ -95,44 +198,19 @@ getDataFromScripts(ByRef functionsByClassName, ByRef classesByGroup) {
 	}
 }
 
-
 ;---------
-; DESCRIPTION:    Get AutoCompleteClass objects for all relevant classes in the common\ folder,
-;                 excluding those with no public members.
-; RETURNS:        An associative array of AutoCompleteClass objects, indexed by the class' names.
+; DESCRIPTION:    Add all classes from the scripts in the given folder to the classes object.
+; PARAMETERS:
+;  classes       (IO,REQ) - The object to add the class objects to, indexed by class name.
+;  folderPath     (I,REQ) - The full path to the folder to read from.
+;  classGroup     (I,REQ) - The class group that all of these classes should be a part of, used for
+;                           syntax highlighting.
+;  returnsPrefix  (I,OPT) - The prefix to add to the auto-complete return value of all functions in
+;                           all classes in this folder.
 ;---------
-getAllClasses() { ; GDB TODO delete
-	classes := {}
-	
-	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\common\base",   "BASE_CLASSES")
-	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
-	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
-	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
-	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Include program-specific classes, but call them out.
-	
-	; Post-processing
-	classesToDelete := []
-	For className,classObj in classes {
-		; Mark any classes with no members for deletion
-		if(classObj.members.count() = 0)
-			classesToDelete.push(className)
-		
-		; Add any inherited members (only 1 layer deep) into the array of info for this class
-		if(classObj.parentName != "") {
-			For _,member in classes[classObj.parentName].members
-				classObj.addMemberIfNew(member)
-		}
-	}
-	For _,className in classesToDelete
-		classes.Delete(className)
-	
-	return classes
-}
-
-
 addClassesFromFolder(ByRef classes, folderPath, classGroup, returnsPrefix := "") {
 	newClasses := getClassesFromFolder(folderPath, classGroup, returnsPrefix)
-	return classes.mergeFromObject(newClasses)
+	classes.mergeFromObject(newClasses)
 }
 
 ;---------

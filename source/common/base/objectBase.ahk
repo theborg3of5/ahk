@@ -56,5 +56,21 @@ class ObjectBase {
 		
 		return this
 	}
+	
+	
+	toKeysArray() {
+		ary := []
+		For key,_ in this
+			ary.push(key)
+		return ary
+	}
+	
+	
+	toValuesArray() {
+		ary := []
+		For _,value in this
+			ary.push(value)
+		return ary
+	}
 	; #END#
 }

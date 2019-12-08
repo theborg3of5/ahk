@@ -21,7 +21,14 @@
 		Clean up/rearrange things as needed
 		Consider making the auto-complete handling template-based as well?
 			Each has a template file in the support\ folder
+				Or: put them in the template\ folder
 			For now (maybe remove later), each also has a copy of the result in the same folder, also under version control - to make it easy to see what's changing on update
+				Would be nice to keep that ability (even if it clutters commits a bit) - could we keep them in a separate folder instead, like bin\?
+					Other folder name ideas:
+						results\
+						compiled\
+						output\
+							Preferred right now.
 	Consider additional user-defined languages in Notepad++:
 		My todo lists
 			!? We can't override the python language to add extra exceptions or something, can we?

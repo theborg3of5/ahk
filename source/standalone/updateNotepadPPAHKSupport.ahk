@@ -74,11 +74,14 @@ For _,classObj in classes { ; Sorted class objects
 		
 		; If the class name sorts after the current keyword, we haven't gone far enough yet.
 		keywordName := line.firstBetweenStrings("<KeyWord name=""", """")
-		if(sortsAfter(classObj.name, keywordName))
+		; Debug.popup("keywordName",keywordName, "classObj.name",classObj.name, "sortsAfter(classObj.name, keywordName)",sortsAfter(classObj.name, keywordName))
+		
+		if(sortsAfter(classObj.name, keywordName) > 0)
 			Continue
 		
 		; We've found the right spot - insert our XML.
 		classXML := classObj.generateXML()
+		; Debug.popup("classXML",classXML)
 		xmlLines.InsertAt(ln, classXML) ; This technically puts a bunch of lines of text into one "line", but we're never going to insert something in the middle of the class, so that should be fine.
 		ln-- ; Take a step backwards so we check the same line we just checked (which is just after the class XML we just inserted) against the next class.
 		Break ; Move onto the next class.
@@ -553,15 +556,20 @@ class AutoCompleteClass {
 	; RETURNS:        The generated XML
 	;---------
 	generateXML() {
-		xml := this.startComment
-		
+		xml := ""
 		For _,member in this.members
-			xml .= "`n" member.generateXML(this.name)
-		
-		xml .= "`n" this.endComment
-		
-		; Debug.popup("AutoCompleteClass.generateXML()",, "this",this, "xml",xml)
+			xml := xml.appendPiece(member.generateXML(this.name), "`n")
 		return xml
+		
+		; xml := this.startComment
+		
+		; For _,member in this.members
+			; xml .= "`n" member.generateXML(this.name)
+		
+		; xml .= "`n" this.endComment
+		
+		; ; Debug.popup("AutoCompleteClass.generateXML()",, "this",this, "xml",xml)
+		; return xml
 	}
 	
 	

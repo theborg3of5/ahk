@@ -1,10 +1,14 @@
+<!-- Based on syntax highlighting from https://github.com/jNizM/ahk_notepad-plus-plus -->
+<!-- This file should live in the Notepad++ program files folder, under autoCompletion\ -->
+<!-- The only documentation I've found for the format of this file is here: https://web.archive.org/web/20190607225203/http://docs.notepad-plus-plus.org/index.php/Auto_Completion#Sorting -->
 <?xml version="1.0" encoding="windows-1252"?>
 <NotepadPlus>
     <AutoComplete language="AutoHotkey">
         <!-- Notepad++ Autocomplete for AutoHotkey -->
         <!-- Main wordlist by: fincs & SciTE4AutoHotkey v3.0.00 -->
         <!-- Credits: infogulch, jNizM, tidbit, twiz, vsub -->
-        <Environment ignoreCase="yes" startFunc="(" stopFunc=")" paramSeparator="," terminal="" additionalWordChar="#{@"/>
+		  <!-- *gdb - Added period (.) to additionalWordChar -->
+        <Environment ignoreCase="yes" startFunc="(" stopFunc=")" paramSeparator="," terminal="" additionalWordChar="#{@."/>
         <KeyWord name="Abort"/>
         <KeyWord name="AboveNormal"/>
         <KeyWord name="Abs" func="yes">
@@ -952,6 +956,7 @@
                 <Param name="FilePattern"/>
             </Overload>
         </KeyWord>
+		  <!-- *gdb - Remove extra IfExist declaration -->
         <KeyWord name="IfGreater" func="no">
             <Overload retVal="">
                 <Param name="var"/>

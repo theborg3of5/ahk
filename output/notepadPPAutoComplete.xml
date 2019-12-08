@@ -3441,6 +3441,7 @@
                 <Param name="FilePattern"/>
             </Overload>
         </KeyWord>
+		  <!-- *gdb - Remove extra IfExist declaration -->
         <KeyWord name="IfGreater" func="no">
             <Overload retVal="">
                 <Param name="var"/>

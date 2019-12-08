@@ -24,14 +24,21 @@ syntaxFileActive     := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.
 
 
 ; Get info about all classes/functions we care about.
-getDataFromScripts(functionsByClassName, classesByGroup)
+autoCompleteClasses := getDataFromScripts()
+syntaxClassGroups := getSyntaxClassGroups(autoCompleteClasses)
+
+; Read in XML from "template" file and update that XML based on the classes we found.
+xmlLines := FileLib.fileLinesToArray(pathCompletion_Template)
+
+
+updateAutoCompleteXML(xmlLines, autoCompleteClasses)
 
 
 
 ; GDB TODO new autocomplete plan:
 ;  - Read in all class information
 ;     - Put class names into a numeric array, in order - probably use Sort command + ObjectBase.toKeysArray()
-;     - Sort class array properly for XML (underscores last) - probably use Sort command + sortsAfter + ObjectBase.toKeysArray()
+;     - Sort class array properly for XML (underscores last) - probably use Sort command + keywordSortsAfter + ObjectBase.toKeysArray()
 ;  - Read in XML from "template"
 ;  - Loop through class array, gradually advancing through XML lines (ignoring comments!), until we find a keyword line that does NOT sort after our class name
 ;  - Insert our class XML
@@ -40,296 +47,101 @@ getDataFromScripts(functionsByClassName, classesByGroup)
 ;        - If the latter, we should end up checking the same line again, so we can put the next class right after the one we just inserted if that's the right thing to do.
 ;  - Continue looping until done (make sure we have an ending case - check for </AutoComplete> tag, test with ___)
 
-; Put class objects into auto-complete-sorted order by name
-classNames := functionsByClassName.toKeysArray().join("`n")
-Sort, classNames, F sortsAfter
-classes := []
-For _,className in classNames.split("`n")
-	classes.push(functionsByClassName[className])
 
-; Read in XML from "template"
-xmlLines := FileLib.fileLinesToArray(pathCompletion_Template)
-
-; Loop through our sorted classes, inserting their XML in the right place as we go.
-commentOn := false
-ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).
-For _,classObj in classes { ; Sorted class objects
-	while(ln < xmlLines.count()) { ; Loop over lines of XML
-		line := xmlLines.next(ln).withoutWhitespace()
-		
-		; Ignore comment blocks
-		if(line.startsWith("<!--")) {
-			commentOn := true
-		}
-		if(line.endsWith("-->")) {
-			commentOn := false
-			Continue
-		}
-		if(commentOn)
-			Continue
-		
-		; Ignore anything that's not a keyword line
-		if(!line.startsWith("<KeyWord name="""))
-			Continue
-		
-		; If the class name sorts after the current keyword, we haven't gone far enough yet.
-		keywordName := line.firstBetweenStrings("<KeyWord name=""", """")
-		; Debug.popup("keywordName",keywordName, "classObj.name",classObj.name, "sortsAfter(classObj.name, keywordName)",sortsAfter(classObj.name, keywordName))
-		
-		if(sortsAfter(classObj.name, keywordName) > 0)
-			Continue
-		
-		; We've found the right spot - insert our XML.
-		classXML := classObj.generateXML()
-		; Debug.popup("classXML",classXML)
-		xmlLines.InsertAt(ln, classXML) ; This technically puts a bunch of lines of text into one "line", but we're never going to insert something in the middle of the class, so that should be fine.
-		ln-- ; Take a step backwards so we check the same line we just checked (which is just after the class XML we just inserted) against the next class.
-		Break ; Move onto the next class.
-	}
-}
 
 outputPath := Config.path["AHK_ROOT"] "\output\notepadPPAutoComplete.xml"
 FileLib.replaceFileWithString(outputPath, xmlLines.join("`n"))
 
 ExitApp
 
-; Build a list of the names in the file, so we can figure out where to insert our new blocks of XML.
-linesAry := FileLib.fileLinesToArray(pathCompletion_Template, true)
-keywordsAry := []
-commentOn := false
-For _,line in linesAry {
-	; Ignore comment blocks
-	if(line.startsWith("<!--"))
-		commentOn := true
-	if(line.endsWith("-->")) {
-		commentOn := false
-		Continue
-	}
-	if(commentOn)
-		Continue
-	
-	if(!line.startsWith("<KeyWord name="""))
-		Continue
-	
-	keywordName := line.firstBetweenStrings("<KeyWord name=""", """")
-	keywordsAry.push(keywordName)
-}
-
-Debug.popup("keywordsAry",keywordsAry)
-
-allKeywords := keywordsAry.join("`n")
-clipboard := allKeywords
-
-MsgBox, hold
-allKeywordsSorted := allKeywords
-Sort, allKeywordsSorted, F sortsAfter
-clipboard := allKeywordsSorted
-
-
-ExitApp
-
-sortsAfter(name1, name2) {
-	Loop, Parse, name1
-	{
-		char1 := A_LoopField
-		char2 := name2.charAt(A_Index)
-		
-		; Same character - keep going
-		if(char1 = char2)
-			Continue
-		
-		; Shorter name goes first
-		if(char2 = "")
-			return 1
-		
-		; Underscore should sort after everything else
-		if(char1 = "_")
-			return 1
-		if(char2 = "_")
-			return -1
-		
-		; Otherwise we can use normal character comparison
-		if(char1 < char2)
-			return -1
-		if(char1 > char2)
-			return 1
-	}
-	
-	; Everything must be equal for the length of name1 to get here.
-	
-	; If name1 is shorter, it should come first.
-	if(name2.length() > name1.length())
-		return -1
-	
-	return 0
-}
-
-; autoCompleteXML := FileRead(pathCompletion_Template)
 
 
 
 
-keywordsXML := {} ; {keywordName: keywordXML}
 
-commentOn := false
-ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).
-while(ln < linesAry.count()) {
-	line := linesAry.next(ln)
-	cleanLine := line.withoutWhitespace()
-	
-	; if(ln > 2277) {
-		; Debug.popup("ln",ln, "line",line, "keywordsXML",keywordsXML)
-	; }
-	
-	; Ignore comment blocks
-	if(cleanLine.startsWith("<!--")) {
-		commentOn := true
-	}
-	if(cleanLine.endsWith("-->")) {
-		commentOn := false
-		Continue
-	}
-	if(commentOn)
-		Continue
-	
-	; Debug.popup("line",line)
-	
-	; Keyword line(s)
-	if(cleanLine.startsWith("<KeyWord name=""")) {
-		keywordName := " " cleanLine.firstBetweenStrings("<KeyWord name=""", """")
-		keywordXML := line
-		
-		if(!cleanLine.endsWith("/>")) { ; Not a self-closing tag, need to keep getting lines.
-			Loop {
-				line := linesAry.next(ln)
-				keywordXML .= "`n" line
-				
-				cleanLine := line.withoutWhitespace()
-				if(cleanLine = "</KeyWord>")
-					Break
-			}
-		}
-		
-		keywordsXML[keywordName] := keywordXML
-		; Debug.popup("keywordName",keywordName, "keywordXML",keywordXML, "keywordsXML",keywordsXML)
-		
-		Continue
-	}
-}
 
-Debug.popup("keywordsXML",keywordsXML)
-; For name,xml in keywordsXML {
-	; MsgBox % name "`n" xml
+
+
+
+
+; ; [[ Auto-complete ]]
+; ; Read in and update the support XML
+; autoCompleteXML := FileRead(completionFile)
+; if(!updateAutoCompleteXML(functionsByClassName, autoCompleteXML, failedClasses)) {
+	; handleFailedClasses(failedClasses)
+	; ExitApp
 ; }
 
-; ExitApp
+; FileLib.replaceFileWithString(completionFile, autoCompleteXML)
+; FileLib.replaceFileWithString(completionFileActive, autoCompleteXML)
 
-clipboard := keywordsXML.toValuesArray().join("`n")
-ExitApp
+; t := new Toast("Updated both versions of the auto-complete file").show()
 
-allXML := keywordsXML.toValuesArray().join("`n")
-Sort, allXML
-clipboard := allXML
+; ; [[ Syntax highlighting ]]
+; ; Read in the tag we're interested in from the support XML base
+; syntaxXMLBase := FileRead(pathSyntax_Template)
+; langXML := syntaxXMLBase.allBetweenStrings("<NotepadPlus>", "</NotepadPlus>").clean() ; Trim off the newlines and initial indentation too
+; For groupName,classNames in syntaxClassGroups {
+	; groupTextToReplace := "{{REPLACE: " groupName "}}"
+	; langXML := langXML.replace(groupTextToReplace, classNames)
+; }
 
-; GDB TODO: current problem: sorting
-; _ seems like it should sort AFTER everything else, but AHK sorting by key seems to sort _ before everything else.
-; Might need to check numbers as well?
-; Sort command might help: https://www.autohotkey.com/docs/commands/Sort.htm
+; ; Replace the same tag in the active XML and write it to the active file
+; syntaxXMLActive := FileRead(syntaxFileActive)
+; beforeXML := syntaxXMLActive.beforeString("<UserLang name=""AutoHotkey""")
+; afterXML := syntaxXMLActive.afterString("<UserLang name=""AutoHotkey""").afterString("</UserLang>")
+; newSyntaxXML := beforeXML langXML afterXML
+; FileLib.replaceFileWithString(syntaxFileActive, newSyntaxXML)
 
-ExitApp
+; ; Write a copy of the file to the support folder as well
+; FileLib.replaceFileWithString(syntaxFileResult, newSyntaxXML)
 
-
-
-
-For className,classObj in classes {
-	; className
-	
-	; Find the block in the original XML for this class and replace it with the class' XML (which
-	; includes the start/end comments).
-	xmlBefore := xml.beforeString(startComment)
-	xmlAfter := xml.afterString(endComment)
-	xml := xmlBefore classObj.generateXML() xmlAfter
-}
-
-ExitApp
-
-
-
-
-
-
-
-
-; [[ Auto-complete ]]
-; Read in and update the support XML
-autoCompleteXML := FileRead(completionFile)
-if(!updateAutoCompleteXML(functionsByClassName, autoCompleteXML, failedClasses)) {
-	handleFailedClasses(failedClasses)
-	ExitApp
-}
-
-FileLib.replaceFileWithString(completionFile, autoCompleteXML)
-FileLib.replaceFileWithString(completionFileActive, autoCompleteXML)
-
-t := new Toast("Updated both versions of the auto-complete file").show()
-
-; [[ Syntax highlighting ]]
-; Read in the tag we're interested in from the support XML base
-syntaxXMLBase := FileRead(pathSyntax_Template)
-langXML := syntaxXMLBase.allBetweenStrings("<NotepadPlus>", "</NotepadPlus>").clean() ; Trim off the newlines and initial indentation too
-For groupName,classNames in classesByGroup {
-	groupTextToReplace := "{{REPLACE: " groupName "}}"
-	langXML := langXML.replace(groupTextToReplace, classNames)
-}
-
-; Replace the same tag in the active XML and write it to the active file
-syntaxXMLActive := FileRead(syntaxFileActive)
-beforeXML := syntaxXMLActive.beforeString("<UserLang name=""AutoHotkey""")
-afterXML := syntaxXMLActive.afterString("<UserLang name=""AutoHotkey""").afterString("</UserLang>")
-newSyntaxXML := beforeXML langXML afterXML
-FileLib.replaceFileWithString(syntaxFileActive, newSyntaxXML)
-
-; Write a copy of the file to the support folder as well
-FileLib.replaceFileWithString(syntaxFileResult, newSyntaxXML)
-
-t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
+; t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
 
 ExitApp
 
 ; GDB TODO update documentation
-getDataFromScripts(ByRef functionsByClassName, ByRef classesByGroup) {
-	functionsByClassName := {}
+getDataFromScripts() {
+	classes := {}
 	
 	; Read in and extract all classes from scripts in these folders
-	addClassesFromFolder(functionsByClassName, Config.path["AHK_SOURCE"] "\common\base",   "BASE_CLASSES")
-	addClassesFromFolder(functionsByClassName, Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
-	addClassesFromFolder(functionsByClassName, Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
-	addClassesFromFolder(functionsByClassName, Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
-	addClassesFromFolder(functionsByClassName, Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Include program-specific classes, but with a returns prefix.
+	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\common\base",   "BASE_CLASSES")
+	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
+	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
+	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
+	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Include program-specific classes, but with a returns prefix.
 	
-	; Post-processing - remove empty classes and handle inheritance.
+	; Remove empty classes and handle inheritance.
 	classesToDelete := []
-	For className,classObj in functionsByClassName {
+	For className,classObj in classes {
 		; Mark any classes with no members for deletion
 		if(classObj.members.count() = 0)
 			classesToDelete.push(className)
 		
 		; Handle inheritance: add any parent members (only 1 layer deep) into this class
 		if(classObj.parentName != "") {
-			For _,member in functionsByClassName[classObj.parentName].members
+			For _,member in classes[classObj.parentName].members
 				classObj.addMemberIfNew(member)
 		}
 	}
 	For _,className in classesToDelete
-		functionsByClassName.Delete(className)
+		classes.Delete(className)
 	
-	; Generate class name lists by group
-	classesByGroup := {}
-	For className,classObj in functionsByClassName {
-		names := classesByGroup[classObj.group]
-		names := names.appendPiece(className, " ")
-		classesByGroup[classObj.group] := names
+	; Sort properly (underscores sort last)
+	return getAutoCompleteSortedClasses(classes)
+}
+
+; Generate class name lists by group
+getSyntaxClassGroups(autoCompleteClasses) {
+	classGroups := {}
+	
+	For _,classObj in autoCompleteClasses {
+		names := classGroups[classObj.group]
+		names := names.appendPiece(classObj.name, " ")
+		classGroups[classObj.group] := names
 	}
+	
+	return classGroups
 }
 
 ;---------
@@ -412,6 +224,63 @@ getClassesFromFolder(folderPath, classGroup, returnsPrefix := "") {
 	return classes
 }
 
+updateAutoCompleteXML(ByRef xmlLines, classes) {
+	; Loop through our sorted classes, inserting their XML in the right place as we go.
+	commentOn := false
+	ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).
+	For _,classObj in classes { ; Sorted class objects
+		while(ln < xmlLines.count()) { ; Loop over lines of XML
+			line := xmlLines.next(ln).withoutWhitespace()
+			
+			; Ignore comment blocks
+			if(line.startsWith("<!--")) {
+				commentOn := true
+			}
+			if(line.endsWith("-->")) {
+				commentOn := false
+				Continue
+			}
+			if(commentOn)
+				Continue
+			
+			; Ignore anything that's not a keyword line
+			if(!line.startsWith("<KeyWord name="""))
+				Continue
+			
+			; If the class name sorts after the current keyword, we haven't gone far enough yet.
+			keywordName := line.firstBetweenStrings("<KeyWord name=""", """")
+			; Debug.popup("keywordName",keywordName, "classObj.name",classObj.name, "keywordSortsAfter(classObj.name, keywordName)",keywordSortsAfter(classObj.name, keywordName))
+			
+			if(keywordSortsAfter(classObj.name, keywordName) > 0)
+				Continue
+			
+			; We've found the right spot - insert our XML.
+			classXML := classObj.generateXML()
+			; Debug.popup("classXML",classXML)
+			xmlLines.InsertAt(ln, classXML) ; This technically puts a bunch of lines of text into one "line", but we're never going to insert something in the middle of the class, so that should be fine.
+			ln-- ; Take a step backwards so we check the same line we just checked (which is just after the class XML we just inserted) against the next class.
+			Break ; Move onto the next class.
+		}
+	} ; This will technically fail to add anything that sorts to the very end, but I don't think I'm ever going to create a new class that starts with __ so we should be fine.
+}
+
+; Sort classes by name, in an auto-complete safe way (underscores sort last) ; GDB TODO
+getAutoCompleteSortedClasses(functionsByClassName) {
+	classes := []
+	
+	; Get just the names and sort those
+	classNames := functionsByClassName.toKeysArray().join("`n")
+	Sort, classNames, F keywordSortsAfter
+	
+	; Populate new array in correct order
+	For _,className in classNames.split("`n")
+		classes.push(functionsByClassName[className])
+	
+	return classes
+}
+
+
+
 ;---------
 ; DESCRIPTION:    Update the given XML with the XML of the given classes.
 ; PARAMETERS:
@@ -421,28 +290,67 @@ getClassesFromFolder(folderPath, classGroup, returnsPrefix := "") {
 ;                          return an array of the problematic AutoCompleteClass objects here.
 ; RETURNS:        true/false - were we able to add all classes?
 ;---------
-updateAutoCompleteXML(classes, ByRef xml, ByRef failedClasses) {
-	failedClasses := []
+; updateAutoCompleteXML(classes, ByRef xml, ByRef failedClasses) {
+	; failedClasses := []
 
-	For _,classObj in classes {
-		startComment := classObj.startComment
-		endComment   := classObj.endComment
+	; For _,classObj in classes {
+		; startComment := classObj.startComment
+		; endComment   := classObj.endComment
 		
-		; Fail this class if there's not already a block to replace in the XML.
-		if(!xml.contains(startComment) || !xml.contains(endComment)) {
-			failedClasses.push(classObj)
+		; ; Fail this class if there's not already a block to replace in the XML.
+		; if(!xml.contains(startComment) || !xml.contains(endComment)) {
+			; failedClasses.push(classObj)
+			; Continue
+		; }
+		
+		; ; Find the block in the original XML for this class and replace it with the class' XML (which
+		; ; includes the start/end comments).
+		; xmlBefore := xml.beforeString(startComment)
+		; xmlAfter := xml.afterString(endComment)
+		; xml := xmlBefore classObj.generateXML() xmlAfter
+	; }
+	
+	; return (DataLib.isNullOrEmpty(failedClasses))
+; }
+
+
+keywordSortsAfter(name1, name2) {
+	Loop, Parse, name1
+	{
+		char1 := A_LoopField
+		char2 := name2.charAt(A_Index)
+		
+		; Same character - keep going
+		if(char1 = char2)
 			Continue
-		}
 		
-		; Find the block in the original XML for this class and replace it with the class' XML (which
-		; includes the start/end comments).
-		xmlBefore := xml.beforeString(startComment)
-		xmlAfter := xml.afterString(endComment)
-		xml := xmlBefore classObj.generateXML() xmlAfter
+		; Shorter name goes first
+		if(char2 = "")
+			return 1
+		
+		; Underscore should sort after everything else
+		if(char1 = "_")
+			return 1
+		if(char2 = "_")
+			return -1
+		
+		; Otherwise we can use normal character comparison
+		if(char1 < char2)
+			return -1
+		if(char1 > char2)
+			return 1
 	}
 	
-	return (DataLib.isNullOrEmpty(failedClasses))
+	; Everything must be equal for the length of name1 to get here.
+	
+	; If name1 is shorter, it should come first.
+	if(name2.length() > name1.length())
+		return -1
+	
+	return 0
 }
+
+
 
 ;---------
 ; DESCRIPTION:    Notify the user that we couldn't add some classes to the XML, and put the empty

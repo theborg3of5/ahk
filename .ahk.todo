@@ -1,4 +1,6 @@
 # New Ideas
+	Formalize output\ folder (used by updateNotepadPPAHKSupport) and get rid of support\ folder (no longer used by the same)
+		Also update references in hotstrings, paths, folders, etc.
 	Test and document new to*Array functions in ObjectBase, or get rid of them.
 		Same for StringBase.charAt()
 	Auto-complete - could we make a special kind of header that can cover multiple things?
@@ -12,25 +14,6 @@
 		Specifics:
 			EpicStudio - MSnippets
 			OneNote - OneNoteTodoPage, OneNoteRecurringTodo
-	Notepad++ AHK syntax highlighting: can we auto-update the XML based on the code, like we do for auto-complete?
-		Could we even use the same data structure/info from reading all the scripts?
-		Folder to keyword mapping:
-			static\        - Keywords2
-			lib\           - Keywords3
-			base\ + class\ - Keywords6
-		Clean up/rearrange things as needed
-		Consider making the auto-complete handling template-based as well?
-			Each has a template file in the support\ folder
-				Or: put them in the template\ folder
-			For now (maybe remove later), each also has a copy of the result in the same folder, also under version control - to make it easy to see what's changing on update
-				Would be nice to keep that ability (even if it clutters commits a bit) - could we keep them in a separate folder instead, like bin\?
-					Other folder name ideas:
-						results\
-						compiled\
-						output\
-							Preferred right now.
-			If we remove the need for the support\ folder, get rid of all references to it in path and hotstrings as well.
-			If we keep output, add path/hotstring and maybe folder access to it.
 	Consider additional user-defined languages in Notepad++:
 		My todo lists
 			!? We can't override the python language to add extra exceptions or something, can we?

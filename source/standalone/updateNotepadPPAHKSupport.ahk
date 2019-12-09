@@ -69,7 +69,7 @@ langXML := syntaxXML.allBetweenStrings("<UserLang name=""AutoHotkey""", "</UserL
 activeSyntaxXML := FileRead(path_SyntaxActive)
 
 replaceXML := activeSyntaxXML.firstBetweenStrings("<UserLang name=""AutoHotkey""", "</UserLang>")
-activeSyntaxXML := activeSyntaxXML.replace(toReplace, replaceXML)
+activeSyntaxXML := activeSyntaxXML.replace(replaceXML, langXML)
 
 ; replaceWithinString(activeSyntaxXML, "<UserLang name=""AutoHotkey""", "</UserLang>", langXML)
 

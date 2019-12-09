@@ -1,6 +1,6 @@
 <!-- Based on syntax highlighting from https://github.com/jNizM/ahk_notepad-plus-plus -->
 <!-- To use:
-   Replace the existing <UserLang name="AutoHotkey"> tag in %APPDATA%\Notepad++\userDefineLang.xml with the <UserLang> tag from this file
+   Replace the existing <UserLang> tag for AutoHotkey in %APPDATA%\Notepad++\userDefineLang.xml with the <UserLang> tag from this file
    OR
    Import this file using Language > Define your language...
 -->

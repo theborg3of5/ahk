@@ -7,7 +7,7 @@
         <!-- Notepad++ Autocomplete for AutoHotkey -->
         <!-- Main wordlist by: fincs & SciTE4AutoHotkey v3.0.00 -->
         <!-- Credits: infogulch, jNizM, tidbit, twiz, vsub -->
-		  <!-- *gdb - Added period (.) to additionalWordChar for class function support -->
+		  <!-- *gdb - Added period (.) to additionalWordChar -->
         <Environment ignoreCase="yes" startFunc="(" stopFunc=")" paramSeparator="," terminal="" additionalWordChar="#{@."/>
         <KeyWord name="Abort"/>
         <KeyWord name="AboveNormal"/>
@@ -642,11 +642,7 @@
                 <Param name="FilePattern"/>
             </Overload>
         </KeyWord>
-        <KeyWord name="FileGetAttrib" func="yes">
-            <Overload retVal="">
-                <Param name="FilePattern"/>
-            </Overload>
-        </KeyWord>
+		  <!-- *gdb - Remove extra FileGetAttrib declaration -->
         <KeyWord name="FileGetAttrib" func="no">
             <Overload retVal="">
                 <Param name="OutputVar"/>
@@ -818,13 +814,7 @@
                 <Param name="Key"/>
             </Overload>
         </KeyWord>
-        <KeyWord name="GetKeyState" func="no">
-            <Overload retVal="">
-                <Param name="OutputVar"/>
-                <Param name="KeyName"/>
-                <Param name="Mode"/>
-            </Overload>
-        </KeyWord>
+		  <!-- *gdb - Remove extra GetKeyState declaration -->
         <KeyWord name="GetKeyState" func="yes">
             <Overload retVal="">
                 <Param name="&quot;KeyName&quot;"/>
@@ -917,7 +907,7 @@
         <KeyWord name="HKEY_CLASSES_ROOT"/>
         <KeyWord name="HKEY_CURRENT_CONFIG"/>
         <KeyWord name="HKEY_CURRENT_USER"/>
-        <KeyWord name="HKEY_CURRENT_USER"/>
+		  <!-- *gdb - remove duplicate HKEY_CURRENT_USER declaration -->
         <KeyWord name="HKEY_LOCAL_MACHINE"/>
         <KeyWord name="HKEY_USERS"/>
         <KeyWord name="HKLM"/>
@@ -946,12 +936,11 @@
         <KeyWord name="IconSmall"/>
         <KeyWord name="ID"/>
         <KeyWord name="IDLast"/>
-        <KeyWord name="If" func="no">
-            <Overload retVal="">
+		  <!-- *gdb - Combine If declarations -->
+        <KeyWord name="If" func="yes">
+            <Overload retVal="[Command version]">
                 <Param name="var"/>
             </Overload>
-        </KeyWord>
-        <KeyWord name="If" func="yes">
             <Overload retVal="">
                 <Param name="expression"/>
             </Overload>
@@ -967,11 +956,7 @@
                 <Param name="FilePattern"/>
             </Overload>
         </KeyWord>
-        <KeyWord name="IfExist" func="yes">
-            <Overload retVal="">
-                <Param name="FilePattern"/>
-            </Overload>
-        </KeyWord>
+		  <!-- *gdb - Remove extra IfExist declaration -->
         <KeyWord name="IfGreater" func="no">
             <Overload retVal="">
                 <Param name="var"/>
@@ -1273,23 +1258,7 @@
                 <Param name="Recurse?"/>
             </Overload>
         </KeyWord>
-        <KeyWord name="Loop" func="yes">
-            <Overload retVal="">
-                <Param name="files &amp; folders"/>
-            </Overload>
-            <Overload retVal="">
-                <Param name="normal"/>
-            </Overload>
-            <Overload retVal="">
-                <Param name="parse a string"/>
-            </Overload>
-            <Overload retVal="">
-                <Param name="read file contents"/>
-            </Overload>
-            <Overload retVal="">
-                <Param name="registry"/>
-            </Overload>
-        </KeyWord>
+		  <!-- *gdb - Remove extra Loop declaration -->
         <KeyWord name="Low"/>
         <KeyWord name="Lower"/>
         <KeyWord name="Lowercase"/>
@@ -1479,7 +1448,12 @@
         <KeyWord name="Off"/>
         <KeyWord name="Ok"/>
         <KeyWord name="On"/>
-        <KeyWord name="OnExit"/>
+		  <!-- *gdb - Remove extra OnExit declaration -->
+        <KeyWord name="OnExit" func="yes">
+            <Overload retVal="">
+                <Param name="Label"/>
+            </Overload>
+        </KeyWord>
         <KeyWord name="OnMessage" func="yes">
             <Overload retVal="">
                 <Param name="MsgNumber"/>
@@ -1487,11 +1461,7 @@
                 <Param name="MaxThreads"/>
             </Overload>
         </KeyWord>
-        <KeyWord name="OnExit" func="no">
-            <Overload retVal="">
-                <Param name="Label"/>
-            </Overload>
-        </KeyWord>
+		  <!-- *gdb - Move OnExit up to correct sorted spot -->
         <KeyWord name="Or"/>
         <KeyWord name="OutputDebug" func="no">
             <Overload retVal="">
@@ -1621,7 +1591,7 @@
                 <Param name="StartingPos = 1"/>
             </Overload>
         </KeyWord>
-
+		  <!-- *gdb - Remove extra newline -->
         <KeyWord name="Region"/>
         <KeyWord name="RegisterCallback" func="yes">
             <Overload retVal="">

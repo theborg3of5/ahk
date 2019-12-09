@@ -14,25 +14,21 @@ global ScopeStart_Public          := "; #PUBLIC#"
 global ScopeStart_NonPublicScopes := ["; #INTERNAL#", "; #PRIVATE#", "; #DEBUG#"]
 global ScopeEnd                   := "; #END#"
 
-; pathCompletion_Template := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete.xml"
-pathCompletion_Template := Config.path["AHK_SUPPORT"] "\originalAutoComplete_Cleaned.xml" ; GDB TEMP
-pathSyntax_Template := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting.xml" ; GDB TODO consider renaming all of these files - prefixes, suffixes, extensions, etc. to make it clear what they are.
-completionFile       := Config.path["AHK_SUPPORT"]   "\notepadPPAutoComplete.xml"           ; GDB TODO maybe even rename this support\ folder to include "notepad++" or "notepadPP"? notepadPPSupport\ or notepad++Support\, maybe?
+path_CompletionTemplate := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete.xml"
+path_SyntaxTemplate     := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting.xml"
+
+path_CompletionOutput := Config.path["AHK_ROOT"] "\output\notepadPP_AutoComplete.xml" ; GDB TODO formalize output\ folder
+path_SyntaxOutput     := Config.path["AHK_ROOT"] "\output\notepadPP_SyntaxHighlighting.xml" ; GDB TODO formalize output\ folder
+
+path_CompletionActive := Config.path["AHK_ROOT"] "\output\notepadPP_AutoCompleteActive.xml"
+path_SyntaxActive := Config.path["AHK_ROOT"] "\output\notepadPP_SyntaxHighlightingActive.xml"
+; path_CompletionActive := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
+; path_SyntaxActive     := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml"
+
+completionFile       := Config.path["AHK_SUPPORT"]   "\notepadPPAutoComplete.xml"
 syntaxFileResult     := Config.path["AHK_SUPPORT"]   "\notepadPPSyntaxHighlighting.xml"
 completionFileActive := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
 syntaxFileActive     := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml"
-
-
-; Get info about all classes/functions we care about.
-autoCompleteClasses := getDataFromScripts()
-syntaxClassGroups := getSyntaxClassGroups(autoCompleteClasses)
-
-; Read in XML from "template" file and update that XML based on the classes we found.
-xmlLines := FileLib.fileLinesToArray(pathCompletion_Template)
-
-
-updateAutoCompleteXML(xmlLines, autoCompleteClasses)
-
 
 
 ; GDB TODO new autocomplete plan:
@@ -48,57 +44,56 @@ updateAutoCompleteXML(xmlLines, autoCompleteClasses)
 ;  - Continue looping until done (make sure we have an ending case - check for </AutoComplete> tag, test with ___)
 
 
+; [[ Auto-complete ]]
+autoCompleteClasses := getDataFromScripts()
+xmlLines := FileLib.fileLinesToArray(path_CompletionTemplate)
+updateAutoCompleteXML(xmlLines, autoCompleteClasses)
 
-outputPath := Config.path["AHK_ROOT"] "\output\notepadPPAutoComplete.xml"
-FileLib.replaceFileWithString(outputPath, xmlLines.join("`n"))
+newXML := xmlLines.join("`n")
+FileLib.replaceFileWithString(path_CompletionActive, newXML)
+FileLib.replaceFileWithString(path_CompletionOutput, newXML)
 
-ExitApp
+t := new Toast("Updated both versions of the auto-complete file").show()
+
+; [[ Syntax highlighting ]]
+; We can get the class groups we need from the auto complete classes we built above
+syntaxXML := FileRead(path_SyntaxTemplate)
+updateSyntaxHighlightingXML(syntaxXML, autoCompleteClasses)
+FileLib.replaceFileWithString(path_SyntaxOutput, syntaxXML)
+
+; For the active file, we don't want to replace the whole thing, as there could be other
+; user-defined languages - so just replace the AHK <UserLang> tag.
+; langXML := syntaxXML.allBetweenStrings("<NotepadPlus>", "</NotepadPlus>").clean() ; Trim off the newlines and initial indentation too
+langXML := syntaxXML.allBetweenStrings("<UserLang name=""AutoHotkey""", "</UserLang>")
+
+activeSyntaxXML := FileRead(path_SyntaxActive)
+
+replaceXML := activeSyntaxXML.firstBetweenStrings("<UserLang name=""AutoHotkey""", "</UserLang>")
+activeSyntaxXML := activeSyntaxXML.replace(toReplace, replaceXML)
+
+; replaceWithinString(activeSyntaxXML, "<UserLang name=""AutoHotkey""", "</UserLang>", langXML)
+
+; beforeXML := activeSyntaxXML.beforeString("<UserLang name=""AutoHotkey""")
+; afterXML  := activeSyntaxXML.afterString("<UserLang name=""AutoHotkey""").afterString("</UserLang>")
+; activeSyntaxXML := beforeXML langXML afterXML
+FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
 
 
-
-
-
-
-
-
-
-
-
-; ; [[ Auto-complete ]]
-; ; Read in and update the support XML
-; autoCompleteXML := FileRead(completionFile)
-; if(!updateAutoCompleteXML(functionsByClassName, autoCompleteXML, failedClasses)) {
-	; handleFailedClasses(failedClasses)
-	; ExitApp
-; }
-
-; FileLib.replaceFileWithString(completionFile, autoCompleteXML)
-; FileLib.replaceFileWithString(completionFileActive, autoCompleteXML)
-
-; t := new Toast("Updated both versions of the auto-complete file").show()
-
-; ; [[ Syntax highlighting ]]
-; ; Read in the tag we're interested in from the support XML base
-; syntaxXMLBase := FileRead(pathSyntax_Template)
-; langXML := syntaxXMLBase.allBetweenStrings("<NotepadPlus>", "</NotepadPlus>").clean() ; Trim off the newlines and initial indentation too
-; For groupName,classNames in syntaxClassGroups {
-	; groupTextToReplace := "{{REPLACE: " groupName "}}"
-	; langXML := langXML.replace(groupTextToReplace, classNames)
-; }
-
-; ; Replace the same tag in the active XML and write it to the active file
-; syntaxXMLActive := FileRead(syntaxFileActive)
-; beforeXML := syntaxXMLActive.beforeString("<UserLang name=""AutoHotkey""")
-; afterXML := syntaxXMLActive.afterString("<UserLang name=""AutoHotkey""").afterString("</UserLang>")
-; newSyntaxXML := beforeXML langXML afterXML
-; FileLib.replaceFileWithString(syntaxFileActive, newSyntaxXML)
-
-; ; Write a copy of the file to the support folder as well
-; FileLib.replaceFileWithString(syntaxFileResult, newSyntaxXML)
-
-; t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
+t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
 
 ExitApp
+
+
+replaceWithinString(ByRef toUpdate, startWith, endWith, replaceWith) { ; startWith/endWith are part of what we replace
+	; before := toUpdate.beforeString(startWith) ; Everything before what we're replacing
+	; after  := toUpdate.afterString(startWith).afterString(endWith) ; Everything after (also making sure we're after our starting point)
+	; toUpdate := before replaceWith after
+	
+	toReplace := toUpdate.firstBetweenStrings(startWith, endWith)
+	toUpdate := toUpdate.replace(toReplace, replaceWith)
+}
+
+
 
 ; GDB TODO update documentation
 getDataFromScripts() {
@@ -279,7 +274,16 @@ getAutoCompleteSortedClasses(functionsByClassName) {
 	return classes
 }
 
-
+updateSyntaxHighlightingXML(ByRef syntaxXML, autoCompleteClasses) {
+	; Generate the class groups we need from our auto-complete classes
+	syntaxClassGroups := getSyntaxClassGroups(autoCompleteClasses)
+	
+	; Update all replacements
+	For groupName,classNames in syntaxClassGroups {
+		groupTextToReplace := "{{REPLACE: " groupName "}}"
+		syntaxXML := syntaxXML.replace(groupTextToReplace, classNames)
+	}
+}
 
 ;---------
 ; DESCRIPTION:    Update the given XML with the XML of the given classes.

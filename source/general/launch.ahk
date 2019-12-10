@@ -9,7 +9,7 @@
 
 ; Generic copy link - copy links to a variety of different things based on the selected text.
 ^!#l::new ActionObject(SelectLib.getText()).copyLinkWeb()
-^!l:: new ActionObject(SelectLib.getText()).copyLinkEdit()
+$^!l:: new ActionObject(SelectLib.getText()).copyLinkEdit()
 
 ; Generic hyperlinker - get link based on the selected text and then apply it to that same text.
 ^!#k::new ActionObject(SelectLib.getText()).linkSelectedTextWeb()

@@ -8,18 +8,20 @@
 	Consider additional user-defined languages in Notepad++:
 		tl/tls files
 			Syntax highlighting
-				;  - Ignore (comment line)
+				Collapse on mods
+					! This one is looking impossible.
 				(  - Model (highlight whole line)
+						Will need to be (( or something else that's not an exact operator to work.
+				)  - Key (whole line)
+						Will need to be )) or something else that's not an exact operator to work.
+				;  - Ignore (comment line)
 				@  - Settings (whole line, or at least word up to =)
 						Maybe also just specific setting names? WindowTitle, MinColumnWidth
 				## - Headers (ideally different from comments?)
 				[] - Mod lines (highlight start/end chars, +/-numeric labels?, maybe specifically .replaceWith() stuff as well?)
 				|  - Multi-entry (make sure to support inside of mod lines)
 				-  - Placeholder (highlight char)
-				)  - Key (whole line)
 				!  - New column
-				Collapse on mods
-				Is there any fancy highlighting/lines we could add to match up with columns?
 			We could add an auto-complete for this too - for specific settings and replaceWith/addToStart/addToEnd
 			Could we structure things so that the syntax (and auto-complete if we add it) can be updated with notepad update script?
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
@@ -64,6 +66,34 @@
 			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
 	
 # TableList
+	Consider allowing spaces within mods (if it doesn't work already):
+		[ MAJOR.replaceWith(9) | MINOR.replaceWith(2) ]
+	Consider reworking the file syntax
+		What if we had mods be nested curly-bracket blocks?
+			Could sense { by that being the end of the row
+			Could sense } by that being the only thing in the row (to avoid false positives)
+			Example:
+				@SettingName=settingValue
+				
+				# ! Header
+				; Comment
+				NAME.addToStart(yo) | NAME.addToEnd(end) {
+					VALUE.replaceWith(val1) {
+						Row 1					abbr1				-
+					}
+						Row 2					abbr2				val2
+				}
+			Model/key row ideas:
+				[M]	NAME					ABBREV			VALUE
+				[K]	0						0					1
+				
+				[		NAME					ABBREV			VALUE
+						0						0					1			]
+				
+				[
+						NAME					ABBREV			VALUE
+						0						0					1
+				]
 	Consider a new .setIfEmpty/.defaultTo mod that only replaces if there's no value
 		Would let us basically have a default value that individual, inline rows can override if needed
 		Use cases:

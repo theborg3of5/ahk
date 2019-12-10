@@ -4133,6 +4133,22 @@
                 <Param name="objectToAppend" />
             </Overload>
         </KeyWord>
+        <KeyWord name="ObjectBase.toKeysArray" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the keys of this object as an array.
+							; RETURNS:        A numerically-indexed array of the keys, in order of those keys.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ObjectBase.toValuesArray" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the values of this object as an array.
+							; RETURNS:        A numerically-indexed array of the values, in order of the original keys.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="ObjGetAddress"/>
         <KeyWord name="ObjGetCapacity"/>
         <KeyWord name="ObjHasKey"/>
@@ -5354,6 +5370,19 @@
 							;---------">
                 <Param name="checkString" />
                 <Param name="searchFromEnd := false" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.charAt" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Return the single character at the given position in the string.
+							; PARAMETERS:
+							;  pos (I,REQ) - The position, where the first character is 1. 0 and below are treated as the
+							;                number of characters from the end of the string - 0 is the last character,
+							;                -1 is the next-to-last character, etc.
+							; RETURNS:        The character from the given position.
+							;---------">
+                <Param name="pos" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.clean" func="yes">

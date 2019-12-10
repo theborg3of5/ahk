@@ -21,7 +21,7 @@
 	^+l::EpicStudio.linkRoutineToCurrentDLG()
 	
 	; Generate and insert snippet
-	:X:.snip::MSnippets.insertMSnippet()
+	:X:.snip::EpicStudio.insertMSnippet()
 	
 	; Debug, auto-search for workstation ID.
 	~F5::EpicStudio.runDebug("ws:" Config.private["WORK_COMPUTER_NAME"])
@@ -171,13 +171,8 @@ class EpicStudio {
 		new ErrorToast("Failed to get code location").showMedium()
 		return false
 	}
-	; #END#
-}
-
-; Static class for inserting snippets of M code into EpicStudio.
-class MSnippets {
-	; #INTERNAL#
 	
+	; [[M Snippets]] --=
 	;---------
 	; DESCRIPTION:    Generate and insert an M snippet.
 	;---------
@@ -203,15 +198,12 @@ class MSnippets {
 		data := new Selector("MSnippets.tls").selectGui()
 		
 		if(data["TYPE"] = "LOOP")
-			snipString := MSnippets.buildMLoop(data, numIndents)
+			snipString := EpicStudio.buildMLoop(data, numIndents)
 		else if(data["TYPE"] = "LIST")
-			snipString := MSnippets.buildList(data, numIndents)
+			snipString := EpicStudio.buildList(data, numIndents)
 		
 		ClipboardLib.send(snipString) ; Better to send with the clipboard, otherwise we have to deal with EpicStudio adding in dot-levels itself.
 	}
-	
-	
-	; #PRIVATE#
 	
 	;---------
 	; DESCRIPTION:    Generate an M for loop with the given data.
@@ -225,23 +217,23 @@ class MSnippets {
 		loopString := ""
 		
 		if(data["SUBTYPE"] = "ARRAY_GLO") {
-			loopString .= MSnippets.buildMArrayLoop(data, numIndents)
+			loopString .= EpicStudio.buildMArrayLoop(data, numIndents)
 		
 		} else if(data["SUBTYPE"] = "ID") {
-			loopString .= MSnippets.buildMIdLoop(data, numIndents)
+			loopString .= EpicStudio.buildMIdLoop(data, numIndents)
 		
 		} else if(data["SUBTYPE"] = "DAT") {
-			loopString .= MSnippets.buildMDatLoop(data, numIndents)
+			loopString .= EpicStudio.buildMDatLoop(data, numIndents)
 			
 		} else if(data["SUBTYPE"] = "ID_DAT") {
-			loopString .= MSnippets.buildMIdLoop(data, numIndents)
-			loopString .= MSnippets.buildMDatLoop(data, numIndents)
+			loopString .= EpicStudio.buildMIdLoop(data, numIndents)
+			loopString .= EpicStudio.buildMDatLoop(data, numIndents)
 			
 		} else if(data["SUBTYPE"] = "INDEX_REG_VALUE") {
-			loopString .= MSnippets.buildMIndexRegularValueLoop(data, numIndents)
+			loopString .= EpicStudio.buildMIndexRegularValueLoop(data, numIndents)
 			
 		} else if(data["SUBTYPE"] = "INDEX_REG_ID") {
-			loopString .= MSnippets.buildMIndexRegularIDLoop(data, numIndents)
+			loopString .= EpicStudio.buildMIndexRegularIDLoop(data, numIndents)
 			
 		}
 		
@@ -259,7 +251,7 @@ class MSnippets {
 	;---------
 	buildList(data, numIndents) {
 		if(data["SUBTYPE"] = "INDEX")
-			return MSnippets.buildMListIndex(data, numIndents)
+			return EpicStudio.buildMListIndex(data, numIndents)
 	}
 	
 	;---------
@@ -285,7 +277,7 @@ class MSnippets {
 			
 			prevIterators .= iterator ","
 			numIndents++
-			loopString .= MSnippets.getMNewLinePlusIndent(numIndents)
+			loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
 		}
 		
 		return loopString
@@ -307,7 +299,7 @@ class MSnippets {
 		loopString := Config.private["M_LOOP_ID_BASE"].replaceTags({"INI":ini, "ID_VAR":idVar})
 		
 		numIndents++
-		loopString .= MSnippets.getMNewLinePlusIndent(numIndents)
+		loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
 		return loopString
 	}
 	
@@ -328,7 +320,7 @@ class MSnippets {
 		loopString := Config.private["M_LOOP_DAT_BASE"].replaceTags({"INI":ini, "ID_VAR":idVar, "DAT_VAR":datVar, "ITEM":""})
 		
 		numIndents++
-		loopString .= MSnippets.getMNewLinePlusIndent(numIndents)
+		loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
 		return loopString
 	}
 	
@@ -349,7 +341,7 @@ class MSnippets {
 		loopString := Config.private["M_LOOP_INDEX_REGULAR_NEXT_VALUE"].replaceTags({"INI":ini, "ITEM":"", "VALUE_VAR":valueVar})
 		
 		numIndents++
-		loopString .= MSnippets.getMNewLinePlusIndent(numIndents)
+		loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
 		return loopString
 	}
 	
@@ -372,7 +364,7 @@ class MSnippets {
 		loopString := Config.private["M_LOOP_INDEX_REGULAR_NEXT_ID"].replaceTags({"INI":ini, "ITEM":"", "VALUE_VAR":valueVar, "ID_VAR":idVar})
 		
 		numIndents++
-		loopString .= MSnippets.getMNewLinePlusIndent(numIndents)
+		loopString .= EpicStudio.getMNewLinePlusIndent(numIndents)
 		return loopString
 	}
 	
@@ -391,7 +383,7 @@ class MSnippets {
 		
 		listAry := new FormattedList(valueList).getList(FormattedList.Format_Array)
 		
-		newLine := MSnippets.getMNewLinePlusIndent(numIndents)
+		newLine := EpicStudio.getMNewLinePlusIndent(numIndents)
 		lineBase := Config.private["M_LIST_ARRAY_INDEX"]
 		
 		listString := ""
@@ -417,5 +409,6 @@ class MSnippets {
 		
 		return outString
 	}
+	; =--
 	; #END#
 }

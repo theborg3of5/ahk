@@ -34,7 +34,7 @@
 	; General
 	AHK Config								AHK_CONFIG								<AHK_ROOT>\config
 	AHK Source								AHK_SOURCE								<AHK_ROOT>\source
-	AHK Support								AHK_SUPPORT								<AHK_ROOT>\support
+	AHK Output								AHK_OUTPUT								<AHK_ROOT>\output
 	AHK Templates							AHK_TEMPLATE							<AHK_ROOT>\template
 	Downloads								USER_DOWNLOADS							<USER_ROOT>\Downloads
 

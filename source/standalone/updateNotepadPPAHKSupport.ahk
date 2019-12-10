@@ -14,8 +14,8 @@ global ScopeEnd                   := "; #END#"
 
 path_CompletionTemplate := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete.xml"
 path_SyntaxTemplate     := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting.xml"
-path_CompletionOutput   := Config.path["AHK_ROOT"] "\output\notepadPP_AutoComplete.xml" ; GDB TODO formalize output\ folder
-path_SyntaxOutput       := Config.path["AHK_ROOT"] "\output\notepadPP_SyntaxHighlighting.xml"
+path_CompletionOutput   := Config.path["AHK_OUTPUT"]   "\notepadPP_AutoComplete.xml"
+path_SyntaxOutput       := Config.path["AHK_OUTPUT"]   "\notepadPP_SyntaxHighlighting.xml"
 path_CompletionActive   := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
 path_SyntaxActive       := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml"
 

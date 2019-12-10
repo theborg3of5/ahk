@@ -1,6 +1,4 @@
 # New Ideas
-	Formalize output\ folder (used by updateNotepadPPAHKSupport) and get rid of support\ folder (no longer used by the same)
-		Also update references in hotstrings, paths, folders, etc.
 	Test and document new to*Array functions in ObjectBase, or get rid of them.
 		Same for StringBase.charAt()
 	Auto-complete - could we make a special kind of header that can cover multiple things?

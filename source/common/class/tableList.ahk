@@ -174,9 +174,9 @@
 						)  0     2        1
 						...
 					Code:
-						tl := new TableList(filePath)
-						table := tl.getTable()
-						overrideIndex := tl.columnInfo
+;						tl := new TableList(filePath)
+;						table := tl.getTable()
+;						overrideIndex := tl.columnInfo
 					Result:
 						table does not include row starting with ")"
 						overrideIndex["ABBREV"] := 2
@@ -194,9 +194,9 @@
 							Spotify  spot     C:\Spotify\Spotify.exe                       ASUS_LAPTOP
 							Firefox  fox      C:\Program Files\Firefox\firefox.exe         
 					Code:
-						tl := new TableList(filePath).filterByColumn("MACHINE", "HOME_DESKTOP")
-						tl.filterOutEmptyForColumn("MACHINE")
-						table := tl.getTable()
+;						tl := new TableList(filePath).filterByColumn("MACHINE", "HOME_DESKTOP")
+;						tl.filterOutEmptyForColumn("MACHINE")
+;						table := tl.getTable()
 					Result:
 						table[1, "NAME"]   = Spotify
 						table[1, "ABBREV"] = spot
@@ -717,7 +717,7 @@ class TableList {
 	
 	; #DEBUG#
 	
-	getDebugTypeName() {
+	debugTypeName() {
 		return "TableList"
 	}
 	

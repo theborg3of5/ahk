@@ -1,8 +1,8 @@
 /* Base class to override Object's default base with, so we can add these functions directly to objects. --=
 	
 	Example usage:
-		obj := {"A":1, "B":2}
-		result := obj.contains(2) ; result = "B"
+;		obj := {"A":1, "B":2}
+;		result := obj.contains(2) ; result = "B"
 	
 */ ; =--
 

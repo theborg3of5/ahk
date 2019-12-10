@@ -110,7 +110,7 @@ class TableListMod {
 	
 	; #DEBUG#
 	
-	getDebugTypeName() {
+	debugTypeName() {
 		return "TableListMod"
 	}
 	; #END#

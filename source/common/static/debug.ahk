@@ -17,12 +17,12 @@
 							[1] A
 							[2] B
 				Associative arrays work the same way, with the actual indices inside the square brackets.
-			Objects: If an object has implemented the .getDebugTypeName() and .debugToString() functions, it will be displayed as described in the "Special Properties and Functions" section below. If not, it will be treated the same as an array (where we show the subscripts [variables] underneath an "Array (numVariables)" line.
+			Objects: If an object has implemented the .debugTypeName() or .debugToString() functions, it will be displayed as described in the "Special Properties and Functions" section below. If not, it will be treated the same as an array (where we show the subscripts [variables] underneath an "Array (numVariables)" line.
 			
 	--- Special Properties and Functions
 			If a class has the following properties and functions, Debug.popup/.toast will display information about an instance of that class differently.
 			
-			.getDebugTypeName()
+			.debugTypeName()
 				If this is implemented, then the object's top value will be "{typeName}" (with brackets) instead of the usual "Array/Object (<count>)".
 				
 			.debugToString(ByRef builder)
@@ -33,53 +33,53 @@
 			Indentation within the popup or toast is done using spaces instead of tabs (4 spaces per level) in order to avoid odd wrapping and alignment issues.
 			
 	--- Example Usage
-			value := 1
-			numericArray := ["value1", "value2"]
-			assocArray := {"label1":"value1", "label2":"value2"}
-			
-			class ObjectWithDebug {
-				__New() {
-					this.var1 := "A"
-					this.var2 := "B"
-				}
-				
-				; Debug info
-				getDebugTypeName() {
-					return "ObjectWithDebug"
-				}
-				
-				debugToString(ByRef builder) {
-					builder.addLine("Descriptive name of property 1", this.var1)
-					builder.addLine("Descriptive name of property 2", this.var2)
-				}
-			}
-			objectInstance := new ObjectWithDebug()
-			
-			Debug.popup("A",value, "B",numericArray, "C",assocArray, "D",objectInstance)
-				; Shows a popup with this text:
-				;	A: 1
-				;	B: Array (2)
-				;		 [1] value1
-				;		 [2] value2
-				;	C: Array (2)
-				;		 [label1] value1
-				;		 [label2] value2
-				;	D: {ObjectWithDebug}
-				;		 Descriptive name of property 1: A
-				;		 Descriptive name of property 2: B
-				
-			Debug.toast("A",value, "B",numericArray, "C",assocArray, "D",objectInstance)
-				; Shows a brief toast (non-focusable, semi-transparent gui) in the bottom-right with this text:
-				;	A: 1
-				;	B: Array (2)
-				;		 [1] value1
-				;		 [2] value2
-				;	C: Array (2)
-				;		 [label1] value1
-				;		 [label2] value2
-				;	D: {ObjectWithDebug}
-				;		 Descriptive name of property 1: A
-				;		 Descriptive name of property 2: B
+;			value := 1
+;			numericArray := ["value1", "value2"]
+;			assocArray := {"label1":"value1", "label2":"value2"}
+;			
+;			class ObjectWithDebug {
+;				__New() {
+;					this.var1 := "A"
+;					this.var2 := "B"
+;				}
+;				
+;				; Debug info
+;				debugTypeName() {
+;					return "ObjectWithDebug"
+;				}
+;				
+;				debugToString(ByRef builder) {
+;					builder.addLine("Descriptive name of property 1", this.var1)
+;					builder.addLine("Descriptive name of property 2", this.var2)
+;				}
+;			}
+;			objectInstance := new ObjectWithDebug()
+;			
+;			Debug.popup("A",value, "B",numericArray, "C",assocArray, "D",objectInstance)
+;				Shows a popup with this text:
+;					A: 1
+;					B: Array (2)
+;						 [1] value1
+;						 [2] value2
+;					C: Array (2)
+;						 [label1] value1
+;						 [label2] value2
+;					D: {ObjectWithDebug}
+;						 Descriptive name of property 1: A
+;						 Descriptive name of property 2: B
+;				
+;			Debug.toast("A",value, "B",numericArray, "C",assocArray, "D",objectInstance)
+;				Shows a brief toast (non-focusable, semi-transparent gui) in the bottom-right with this text:
+;					A: 1
+;					B: Array (2)
+;						 [1] value1
+;						 [2] value2
+;					C: Array (2)
+;						 [label1] value1
+;						 [label2] value2
+;					D: {ObjectWithDebug}
+;						 Descriptive name of property 1: A
+;						 Descriptive name of property 2: B
 		
 	=--
 */ ; =--
@@ -310,15 +310,15 @@ class Debug {
 	; DESCRIPTION:    Determine the name we should show for an object (array or class instance)
 	; PARAMETERS:
 	;  value (I,REQ) - Object to determine the name of.
-	; RETURNS:        "{getDebugTypeName()}" for objects that implement .getDebugTypeName()
+	; RETURNS:        "{debugTypeName()}" for objects that implement .debugTypeName()
 	;                 "Array (numIndices)" for arrays
 	;                 "Object (numIndices)" for objects
 	;---------
 	getObjectName(value) {
 		; If an object has its own name specified, use it.
 		
-		if(isFunc(value.getDebugTypeName))
-			return "{" value.getDebugTypeName() "}"
+		if(isFunc(value.debugTypeName))
+			return "{" value.debugTypeName() "}"
 			
 		; For other objects, just use a generic "Array"/"Object" label and add the number of elements.
 		if(value.isArray)

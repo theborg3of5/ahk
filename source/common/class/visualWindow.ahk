@@ -21,8 +21,8 @@
 			Note that this is only supported when you are NOT moving or resizing based on a particular corner [.move() and .resizeMove()].
 		
 	Example Usage
-		window := new VisualWindow("A") ; Create a new VisualWindow representing the active window ("A")
-		window.move(VisualWindow.X_Centered, VisualWindow.Y_Centered) ; Center window
+;		window := new VisualWindow("A") ; Create a new VisualWindow representing the active window ("A")
+;		window.move(VisualWindow.X_Centered, VisualWindow.Y_Centered) ; Center window
 	
 */ ; =--
 

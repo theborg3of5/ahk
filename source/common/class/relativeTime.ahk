@@ -17,9 +17,9 @@
 			s - seconds
 	
 	Example Usage
-		rt := new RelativeTime("h+5") ; 5 hours in the future, at the time this line runs
-		newTime := rt.instant         ; Get the calculated instant
-		rt.SendInFormat("hh:mm:ss")   ; Send the calculated date in a specific format
+;		rt := new RelativeTime("h+5") ; 5 hours in the future, at the time this line runs
+;		newTime := rt.instant         ; Get the calculated instant
+;		rt.SendInFormat("hh:mm:ss")   ; Send the calculated date in a specific format
 	
 */ ; =--
 

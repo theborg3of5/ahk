@@ -4,8 +4,8 @@
 		For example: appendPiece() returns the new string, so you must capture the return value instead of just calling it (i.e. str := str.appendPiece() instead of just str.appendPiece())
 	
 	Example usage:
-		str := "abcd"
-		result := str.contains("b") ; result = 2
+;		str := "abcd"
+;		result := str.contains("b") ; result = 2
 	
 */ ; =--
 

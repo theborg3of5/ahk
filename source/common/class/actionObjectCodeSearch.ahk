@@ -5,11 +5,11 @@
 	Note that several other operations are also available from the base class (.copyLink*(), .linkSelectedText*()).
 	
 	Example Usage
-		ao := new ActionObjectCodeSearch("tagName^routineName")
-		MsgBox, ao.getLinkWeb()  ; Link in CodeSearch
-		ao.openWeb()             ; Open in CodeSearch
-		
-		new ActionObjecCodeSearch("blah.cls").open() ; Opens a search page for the filename, since we can't know the right directory ID
+;		ao := new ActionObjectCodeSearch("tagName^routineName")
+;		MsgBox, ao.getLinkWeb()  ; Link in CodeSearch
+;		ao.openWeb()             ; Open in CodeSearch
+;		
+;		new ActionObjecCodeSearch("blah.cls").open() ; Opens a search page for the filename, since we can't know the right directory ID
 	
 */ ; =--
 

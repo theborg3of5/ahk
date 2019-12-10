@@ -5,16 +5,16 @@
 	Note that several other operations are also available from the base class (.copyLink*(), .linkSelectedText*()).
 	
 	Example Usage
-		ao := new ActionObjectEMC2("DLG 123456")
-		MsgBox, ao.getLinkWeb()      ; Link in web (emc2summary or Nova/Sherlock as appropriate)
-		MsgBox, ao.getLinkWebBasic() ; Link in "basic" web (always emc2summary)
-		MsgBox, ao.getLinkEdit()     ; Link to edit in EMC2
-		ao.openWeb()                 ; Open in web (emc2summary or Nova/Sherlock as appropriate)
-		ao.openWebBasic()            ; Open in "basic" web (always emc2summary)
-		ao.openEdit()                ; Open to edit in EMC2
-		
-		ao := new ActionObjectEMC2(123456) ; ID without an INI, user will be prompted for the INI
-		ao.openEdit() ; Open object in EMC2
+;		ao := new ActionObjectEMC2("DLG 123456")
+;		MsgBox, ao.getLinkWeb()      ; Link in web (emc2summary or Nova/Sherlock as appropriate)
+;		MsgBox, ao.getLinkWebBasic() ; Link in "basic" web (always emc2summary)
+;		MsgBox, ao.getLinkEdit()     ; Link to edit in EMC2
+;		ao.openWeb()                 ; Open in web (emc2summary or Nova/Sherlock as appropriate)
+;		ao.openWebBasic()            ; Open in "basic" web (always emc2summary)
+;		ao.openEdit()                ; Open to edit in EMC2
+;		
+;		ao := new ActionObjectEMC2(123456) ; ID without an INI, user will be prompted for the INI
+;		ao.openEdit() ; Open object in EMC2
 	
 */ ; =--
 

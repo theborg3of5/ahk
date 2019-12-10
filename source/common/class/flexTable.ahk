@@ -24,27 +24,27 @@
 		
 	--- Example:
 			Code:
-				flex := new FlexTable("Gui105") ; Start table at 0,0 in gui and use default properties.
-														  ; First column and row are implied, so no need to add them
-				flex.addCell("a")               ; First cell on first row, with calculated width to match contents
-				flex.addCell("b", 10, 50)       ; Another cell on same row, starting 10px out from the previous one with a width of 50px
-				flex.addCell("c")               ; Another cell on same row, starting at end of previous cell
-				
-				flex.addRow()                   ; New row (like hitting return in a text editor)
-				flex.addHeaderCell("HEADER")    ; Special kind of cell with formatting (bold/underline)
-				
-				flex.addRow()                   ; New row
-				flex.addCell("d")               ; First cell in row, calculated width
-				flex.addCell("e")               ; Next cell in row, starting immediately after
-				
-				flex.addRow()
-				flex.addCell("f")
-				flex.addCell("g")
-				
-				flex.addColumn()
-				flex.addHeaderCell("NEXT COLUMN HEADER")
-				flex.addRow()
-				flex.addCell("Right-aligned value", 0, 100, "Right")
+;				flex := new FlexTable("Gui105") ; Start table at 0,0 in gui and use default properties.
+;														  ; First column and row are implied, so no need to add them
+;				flex.addCell("a")               ; First cell on first row, with calculated width to match contents
+;				flex.addCell("b", 10, 50)       ; Another cell on same row, starting 10px out from the previous one with a width of 50px
+;				flex.addCell("c")               ; Another cell on same row, starting at end of previous cell
+;				
+;				flex.addRow()                   ; New row (like hitting return in a text editor)
+;				flex.addHeaderCell("HEADER")    ; Special kind of cell with formatting (bold/underline)
+;				
+;				flex.addRow()                   ; New row
+;				flex.addCell("d")               ; First cell in row, calculated width
+;				flex.addCell("e")               ; Next cell in row, starting immediately after
+;				
+;				flex.addRow()
+;				flex.addCell("f")
+;				flex.addCell("g")
+;				
+;				flex.addColumn()
+;				flex.addHeaderCell("NEXT COLUMN HEADER")
+;				flex.addRow()
+;				flex.addCell("Right-aligned value", 0, 100, "Right")
 				
 			Result (ALL CAPS are bolded/underlined):
 				a	b			c			NEXT COLUMN HEADER
@@ -241,7 +241,7 @@ class FlexTable {
 	
 	; #DEBUG#
 	
-	getDebugTypeName() {
+	debugTypeName() {
 		return "FlexTable"
 	}
 	

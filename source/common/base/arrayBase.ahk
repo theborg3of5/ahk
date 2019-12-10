@@ -3,8 +3,8 @@
 	NOTE: the functions here are only guaranteed to work on numeric arrays (though they technically exist on associative arrays initially created with []).
 	
 	Example usage:
-		ary := ["a", "b"]
-		str := ary.join() ; str = "a,b"
+;		ary := ["a", "b"]
+;		str := ary.join() ; str = "a,b"
 	
 */ ; =--
 

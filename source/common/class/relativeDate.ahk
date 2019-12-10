@@ -18,9 +18,9 @@
 			t - days (stands for "today")
 	
 	Example Usage
-		rd := new RelativeDate("m+5") ; 5 months in the future, at the date this line runs
-		newTime := rd.instant         ; Get the calculated date
-		rd.SendInFormat("M/d/yy")     ; Send the calculated date in a specific format
+;		rd := new RelativeDate("m+5") ; 5 months in the future, at the date this line runs
+;		newTime := rd.instant         ; Get the calculated date
+;		rd.SendInFormat("M/d/yy")     ; Send the calculated date in a specific format
 	
 */ ; =--
 

@@ -6,23 +6,23 @@
 	Usage
 		Classes which wish to have a custom debug string should implement a .debugToString function that takes an instance of this class as its only parameter. Within that function they can call <debugBuilderVariable>.addLine() to add a label/value pair to the custom string.
 		Example:
-			class ObjectWithDebug {
-				__New() {
-					this.var1 := "A"
-					this.var2 := "B"
-				}
-				
-				; Debug info
-				
-				getDebugTypeName() {
-					return "ObjectWithDebug"
-				}
-				
-				debugToString(ByRef builder) {
-					builder.addLine("Descriptive name of property 1", this.var1)
-					builder.addLine("Descriptive name of property 2", this.var2)
-				}
-			}
+;			class ObjectWithDebug {
+;				__New() {
+;					this.var1 := "A"
+;					this.var2 := "B"
+;				}
+;				
+;				; Debug info
+;				
+;				debugTypeName() {
+;					return "ObjectWithDebug"
+;				}
+;				
+;				debugToString(ByRef builder) {
+;					builder.addLine("Descriptive name of property 1", this.var1)
+;					builder.addLine("Descriptive name of property 2", this.var2)
+;				}
+;			}
 			
 			When an instance of this class is evaluated with the DEBUG class, we will call the .debugToString() function to get the value to show, giving something like this (label specified by caller to DEBUG):
 				<label>: {ObjectWithDebug}

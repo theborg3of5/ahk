@@ -76,7 +76,7 @@ class SelectorChoice {
 	
 	; #DEBUG#
 	
-	getDebugTypeName() {
+	debugTypeName() {
 		return "SelectorChoice"
 	}
 	; #END#

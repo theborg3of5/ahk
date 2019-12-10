@@ -84,21 +84,21 @@
 			Values may be defaulted into these fields using the .setDefaultOverrides() function.
 			
 	--- Example Usage (Popup)
-			s := new Selector("C:\ahk\configs.tls")                    ; Read in the "configs.tls" TLS file
-			s.setTitle("New title!")                                   ; Set the popup's title to "New title!"
-			s.dataTableList.filterByColumn("MACHINE", "HOME_DESKTOP")         ; Only include choices which which have the "MACHINE" column set to "HOME_DESKTOP" (or blank)
-			s.addOverrideFields(["CONFIG_NAME", "CONFIG_NUM"])         ; Two additional override fields for the popup.
-			s.setDefaultOverrides({CONFIG_NAME: "Windows"})            ; Default a value of "Windows" into the "CONFIG_NAME" override field
-			
-			data := s.selectGui()                                      ; Show the popup and retrieve the entire data array
-			MsgBox, % "Chosen config name: " data["CONFIG_NAME"]
-			MsgBox, % "Chosen config num: "  data["CONFIG_NUM"]
+;			s := new Selector("C:\ahk\configs.tls")                    ; Read in the "configs.tls" TLS file
+;			s.setTitle("New title!")                                   ; Set the popup's title to "New title!"
+;			s.dataTableList.filterByColumn("MACHINE", "HOME_DESKTOP")         ; Only include choices which which have the "MACHINE" column set to "HOME_DESKTOP" (or blank)
+;			s.addOverrideFields(["CONFIG_NAME", "CONFIG_NUM"])         ; Two additional override fields for the popup.
+;			s.setDefaultOverrides({CONFIG_NAME: "Windows"})            ; Default a value of "Windows" into the "CONFIG_NAME" override field
+;			
+;			data := s.selectGui()                                      ; Show the popup and retrieve the entire data array
+;			MsgBox, % "Chosen config name: " data["CONFIG_NAME"]
+;			MsgBox, % "Chosen config num: "  data["CONFIG_NUM"]
 			
 	--- Example Usage (Silent)
-			pathAbbrev := <user input>
-			
-			s := new Selector("C:\ahk\paths.tls")      ; Read in the "paths.tls" TLS file
-			path := s.selectChoice(pathAbbrev, "PATH") ; Return only the "PATH" value, not the whole return array
+;			pathAbbrev := <user input>
+;			
+;			s := new Selector("C:\ahk\paths.tls")      ; Read in the "paths.tls" TLS file
+;			path := s.selectChoice(pathAbbrev, "PATH") ; Return only the "PATH" value, not the whole return array
 			
 	=--
 */ ; =--
@@ -406,7 +406,7 @@ class Selector {
 	
 	; #DEBUG#
 	
-	getDebugTypeName() {
+	debugTypeName() {
 		return "Selector"
 	}
 	

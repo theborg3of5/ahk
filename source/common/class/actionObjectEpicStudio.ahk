@@ -5,12 +5,12 @@
 	Note that several other operations are also available from the base class (.copyLink*(), .linkSelectedText*()).
 	
 	Example Usage
-		ao := new ActionObjectEpicStudio("tagName^routineName")
-		MsgBox, ao.getLinkEdit() ; Link in EpicStudio
-		ao.openEdit()            ; Open in EpicStudio
-		
-		ao := new ActionObjectEpicStudio(123456) ; DLG ID
-		ao.openEdit() ; Open DLG in EpicStudio
+;		ao := new ActionObjectEpicStudio("tagName^routineName")
+;		MsgBox, ao.getLinkEdit() ; Link in EpicStudio
+;		ao.openEdit()            ; Open in EpicStudio
+;		
+;		ao := new ActionObjectEpicStudio(123456) ; DLG ID
+;		ao.openEdit() ; Open DLG in EpicStudio
 	
 */ ; =--
 

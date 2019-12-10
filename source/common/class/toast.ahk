@@ -7,23 +7,23 @@
 		If it's persistent, close it when finished (.close)
 	
 	Example:
-		; Show a toast on a 5-second timer
-		t := new Toast("5-second timer toast!")
-		t.showForSeconds(5)
-		; OR:
-		new Toast("5-second timer toast!").showLong()
-		
-		; Show a toast, then hide it after finishing a longer-running action
-		t := new Toast("Running long action").persistentOn() ; Make it persistent so showing it on a timer doesn't destroy it
-		t.show()
-		... ; Long action happens
-		t.setText("Next step")
-		... ; Next step happens
-		t.hide() ; Toast is hidden but still exists
-		...
-		t.showForSeconds(3) ; Toast becomes visible again for 3 seconds, then it's hidden automatically
-		...
-		t.close() ; Toast is destroyed
+;		; Show a toast on a 5-second timer
+;		t := new Toast("5-second timer toast!")
+;		t.showForSeconds(5)
+;		; OR:
+;		new Toast("5-second timer toast!").showLong()
+;		
+;		; Show a toast, then hide it after finishing a longer-running action
+;		t := new Toast("Running long action").persistentOn() ; Make it persistent so showing it on a timer doesn't destroy it
+;		t.show()
+;		... ; Long action happens
+;		t.setText("Next step")
+;		... ; Next step happens
+;		t.hide() ; Toast is hidden but still exists
+;		...
+;		t.showForSeconds(3) ; Toast becomes visible again for 3 seconds, then it's hidden automatically
+;		...
+;		t.close() ; Toast is destroyed
 	
 */ ; =--
 

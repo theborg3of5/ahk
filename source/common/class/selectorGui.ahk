@@ -348,7 +348,7 @@ class SelectorGui {
 	
 	; #DEBUG#
 	
-	getDebugTypeName() {
+	debugTypeName() {
 		return "SelectorGui"
 	}
 	

@@ -100,7 +100,7 @@ class WindowInfo {
 	
 	; #DEBUG#
 	
-	getDebugTypeName() {
+	debugTypeName() {
 		return "WindowInfo"
 	}
 	; #END#

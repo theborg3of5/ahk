@@ -1,11 +1,11 @@
 /* Extension of Toast with specific overrides for styles and text format. --=
 	
 	Usage:
-		new ErrorToast("<problem>", "<why>", "<any mitigation we did>").showMedium()
+;		new ErrorToast("<problem>", "<why>", "<any mitigation we did>").showMedium()
 	
 	Example:
-		; Couldn't send the built text to the specified window because it doesn't exist, so we put it on the clipboard instead.
-		new ErrorToast("Could not send text to window", "Window does not exist: " windowName, "Put built text on the clipboard instead: " clipboard).showMedium()
+;		; Couldn't send the built text to the specified window because it doesn't exist, so we put it on the clipboard instead.
+;		new ErrorToast("Could not send text to window", "Window does not exist: " windowName, "Put built text on the clipboard instead: " clipboard).showMedium()
 	
 */ ; =--
 

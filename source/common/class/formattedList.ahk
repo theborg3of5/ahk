@@ -1,9 +1,9 @@
 /* Class to represent a list of strings, that can be parsed and output in a variety of different formats. --=
 	
 	Example usage
-		fl := new FormattedList(clipboard)
-		listAry := fl.getList(FormattedList.Format_Array) ; Get the list as an array
-		fl.sendList() ; Prompt the user for the format to send in
+;		fl := new FormattedList(clipboard)
+;		listAry := fl.getList(FormattedList.Format_Array) ; Get the list as an array
+;		fl.sendList() ; Prompt the user for the format to send in
 	
 */ ; =--
 

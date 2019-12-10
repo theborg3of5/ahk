@@ -7,13 +7,13 @@
 /* Class that takes some text representing an object, and allows the caller to do something with it. This class itself mostly redirects to the child ActionObject* classes, based on the input (and prompting the user). --=
 	
 	Example Usage
-		; Determine type based on input
-		ao := new ActionObject("DLG 123456") ; This will be an EMC2-type object, so ao is an ActionObjectEMC2 instance
-		ao.openWeb() ; Open the web version of the object
-		
-		; Will prompt user for both type and value with Selector popup because neither given
-		ao := new ActionObject()
-		ao.linkSelectedTextWeb() ; Links the selected text with a link built from the specific ActionObject* class in question
+;		; Determine type based on input
+;		ao := new ActionObject("DLG 123456") ; This will be an EMC2-type object, so ao is an ActionObjectEMC2 instance
+;		ao.openWeb() ; Open the web version of the object
+;		
+;		; Will prompt user for both type and value with Selector popup because neither given
+;		ao := new ActionObject()
+;		ao.linkSelectedTextWeb() ; Links the selected text with a link built from the specific ActionObject* class in question
 	
 */ ; =--
 

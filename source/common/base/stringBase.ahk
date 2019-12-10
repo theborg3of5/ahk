@@ -42,6 +42,14 @@ class StringBase {
 		return IfIs(this, "AlNum")
 	}
 	
+	;---------
+	; DESCRIPTION:    Return the single character at the given position in the string.
+	; PARAMETERS:
+	;  pos (I,REQ) - The position, where the first character is 1. 0 and below are treated as the
+	;                number of characters from the end of the string - 0 is the last character,
+	;                -1 is the next-to-last character, etc.
+	; RETURNS:        The character from the given position.
+	;---------
 	charAt(pos) {
 		return this.sub(pos, 1)
 	}

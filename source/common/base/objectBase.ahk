@@ -57,15 +57,20 @@ class ObjectBase {
 		return this
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Get the keys of this object as an array.
+	; RETURNS:        A numerically-indexed array of the keys, in order of those keys.
+	;---------
 	toKeysArray() {
 		ary := []
 		For key,_ in this
 			ary.push(key)
 		return ary
 	}
-	
-	
+	;---------
+	; DESCRIPTION:    Get the values of this object as an array.
+	; RETURNS:        A numerically-indexed array of the values, in order of the original keys.
+	;---------
 	toValuesArray() {
 		ary := []
 		For _,value in this

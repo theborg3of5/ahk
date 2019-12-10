@@ -10,18 +10,13 @@
 			EpicStudio - MSnippets
 			OneNote - OneNoteTodoPage, OneNoteRecurringTodo
 	Consider additional user-defined languages in Notepad++:
-		My todo lists
-			!? We can't override the python language to add extra exceptions or something, can we?
-			Headers
-			Custom folding based on prefix chars?
-				If we can't come up with something solid for this, may as well stick to python - often build up long lists that I'd want to be able to collapse at various levels.
 		tl/tls files
 			Special characters
 				;  - Ignore (comment line)
 				(  - Model (highlight whole line)
 				@  - Settings (whole line, or at least word up to =)
 						Maybe also just specific setting names? WindowTitle, MinColumnWidth
-				#  - Headers (ideally different from comments?)
+				## - Headers (ideally different from comments?)
 				[] - Mod lines (highlight start/end chars, +/-numeric labels?, maybe specifically .replaceWith() stuff as well?)
 				|  - Multi-entry (make sure to support inside of mod lines)
 				-  - Placeholder (highlight char)

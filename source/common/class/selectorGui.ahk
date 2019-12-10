@@ -348,11 +348,11 @@ class SelectorGui {
 	
 	; #DEBUG#
 	
-	debugTypeName() {
+	Debug_TypeName() {
 		return "SelectorGui"
 	}
 	
-	debugToString(ByRef builder) {
+	Debug_ToString(ByRef builder) {
 		builder.addLine("Gui ID (handle)",            this.guiId)
 		builder.addLine("Choice field var",           this.fieldVar_Choice)
 		builder.addLine("Override fields var prefix", this.fieldVar_OverridesPrefix)

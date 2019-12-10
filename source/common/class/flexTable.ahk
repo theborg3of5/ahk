@@ -241,11 +241,11 @@ class FlexTable {
 	
 	; #DEBUG#
 	
-	debugTypeName() {
+	Debug_TypeName() {
 		return "FlexTable"
 	}
 	
-	debugToString(ByRef builder) {
+	Debug_ToString(ByRef builder) {
 		builder.addLine("Gui ID",           this.guiId)
 		builder.addLine("Min X",            this.xMin)
 		builder.addLine("Min Y",            this.yMin)

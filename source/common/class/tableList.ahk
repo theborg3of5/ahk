@@ -717,11 +717,11 @@ class TableList {
 	
 	; #DEBUG#
 	
-	debugTypeName() {
+	Debug_TypeName() {
 		return "TableList"
 	}
 	
-	debugToString(ByRef builder) {
+	Debug_ToString(ByRef builder) {
 		builder.addLine("Chars",         this.chars)
 		builder.addLine("Index labels",  this.indexLabels)
 		builder.addLine("Mods",          this.mods)

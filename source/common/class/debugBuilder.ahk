@@ -4,7 +4,7 @@
 		This is a simple class that can be passed to classes that want the DEBUG class to show something different than just their class properties with those variable names.
 		
 	Usage
-		Classes which wish to have a custom debug string should implement a .debugToString function that takes an instance of this class as its only parameter. Within that function they can call <debugBuilderVariable>.addLine() to add a label/value pair to the custom string.
+		Classes which wish to have a custom debug string should implement a .Debug_ToString function that takes an instance of this class as its only parameter. Within that function they can call <debugBuilderVariable>.addLine() to add a label/value pair to the custom string.
 		Example:
 ;			class ObjectWithDebug {
 ;				__New() {
@@ -14,17 +14,17 @@
 ;				
 ;				; Debug info
 ;				
-;				debugTypeName() {
+;				Debug_TypeName() {
 ;					return "ObjectWithDebug"
 ;				}
 ;				
-;				debugToString(ByRef builder) {
+;				Debug_ToString(ByRef builder) {
 ;					builder.addLine("Descriptive name of property 1", this.var1)
 ;					builder.addLine("Descriptive name of property 2", this.var2)
 ;				}
 ;			}
 			
-			When an instance of this class is evaluated with the DEBUG class, we will call the .debugToString() function to get the value to show, giving something like this (label specified by caller to DEBUG):
+			When an instance of this class is evaluated with the DEBUG class, we will call the .Debug_ToString() function to get the value to show, giving something like this (label specified by caller to DEBUG):
 				<label>: {ObjectWithDebug}
 					Descriptive name of property 1: A
 					Descriptive name of property 2: B

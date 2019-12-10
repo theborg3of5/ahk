@@ -32,7 +32,7 @@ class ProgramInfo {
 	
 	; #DEBUG#
 	
-	debugTypeName() {
+	Debug_TypeName() {
 		return "ProgramInfo"
 	}
 	; #END#

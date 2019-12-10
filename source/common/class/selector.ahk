@@ -406,11 +406,11 @@ class Selector {
 	
 	; #DEBUG#
 	
-	debugTypeName() {
+	Debug_TypeName() {
 		return "Selector"
 	}
 	
-	debugToString(ByRef builder) {
+	Debug_ToString(ByRef builder) {
 		builder.addLine("Filepath",          this.filePath)
 		builder.addLine("Suppress data?",    this.suppressData)
 		builder.addLine("Window title",      this.windowTitle)

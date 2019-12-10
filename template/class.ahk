@@ -36,7 +36,7 @@ class GDBTODO {
 	
 	; #DEBUG#
 	
-	debugTypeName() {
+	Debug_TypeName() {
 		return "GDB TODO"
 	}
 	

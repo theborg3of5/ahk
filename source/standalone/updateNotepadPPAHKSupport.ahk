@@ -371,7 +371,7 @@ class AutoCompleteClass {
 	
 	; #DEBUG#
 	
-	debugTypeName() {
+	Debug_TypeName() {
 		return "AutoCompleteClass"
 	}
 	; #END#
@@ -503,7 +503,7 @@ class AutoCompleteMember {
 	
 	; #DEBUG#
 	
-	debugTypeName() {
+	Debug_TypeName() {
 		return "AutoCompleteMember"
 	}
 	; #END#

@@ -92,30 +92,14 @@ getAutoCompleteClasses() {
 ;---------
 ; DESCRIPTION:    Add all classes from the scripts in the given folder to the classes object.
 ; PARAMETERS:
-;  classes       (IO,REQ) - The object to add the class objects to, indexed by class name.
-;  folderPath     (I,REQ) - The full path to the folder to read from.
-;  classGroup     (I,REQ) - The class group that all of these classes should be a part of, used for
-;                           syntax highlighting.
-;  returnsPrefix  (I,OPT) - The prefix to add to the auto-complete return value of all functions in
-;                           all classes in this folder.
-;---------
-addClassesFromFolder(ByRef classes, folderPath, classGroup, returnsPrefix := "") {
-	newClasses := getClassesFromFolder(folderPath, classGroup, returnsPrefix)
-	classes.mergeFromObject(newClasses)
-}
-
-;---------
-; DESCRIPTION:    Get AutoCompleteClass objects for all classes in all scripts in the given folder.
-; PARAMETERS:
+;  classes      (IO,REQ) - The object to add the class objects to, indexed by class name.
 ;  folderPath    (I,REQ) - The full path to the folder to read from.
 ;  classGroup    (I,REQ) - Which "group" the classes in this folder should have - this determines
 ;                          how they get syntax-highlighted.
-;  returnsPrefix (I,OPT) - If specified, the returns value will appear as a prefix on the return value.
-; RETURNS:        An associative array of AutoCompleteClass objects, indexed by the class' names.
+;  returnsPrefix (I,OPT) - The prefix to add to the auto-complete return value of all functions in
+;                          all classes in this folder.
 ;---------
-getClassesFromFolder(folderPath, classGroup, returnsPrefix := "") {
-	classes := {}
-	
+addClassesFromFolder(ByRef classes, folderPath, classGroup, returnsPrefix := "") {
 	; Loop over all scripts in folder to find classes
 	Loop, Files, %folderPath%\*.ahk, RF ; [R]ecursive, [F]iles (not [D]irectories)
 	{

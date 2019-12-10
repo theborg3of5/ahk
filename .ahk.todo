@@ -2,13 +2,6 @@
 	Auto-complete - could we make a special kind of header that can cover multiple things?
 		At least one-line constants (just X number of lines until we get a blank line, maybe?)
 			Would let us line things up nicely again
-	Can we do something to split up the multi-class program scripts?
-		Should they be separate files?
-			Maybe a sub-folder in program\?
-				Only apply this to sub-program-specific classes, not the main ones
-		Specifics:
-			EpicStudio - MSnippets
-			OneNote - OneNoteTodoPage, OneNoteRecurringTodo
 	Consider additional user-defined languages in Notepad++:
 		tl/tls files
 			Special characters

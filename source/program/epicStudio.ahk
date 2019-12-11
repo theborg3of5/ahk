@@ -123,6 +123,12 @@ class EpicStudio {
 		if(ErrorLevel)
 			return
 		
+		; If there's already something plugged into the field (like a specific process ID), just leave it be - focus the field and return.
+		if(ControlGet("Line", 1, EpicStudio.Debug_OtherProcessField, "A")) {
+			ControlFocus, % EpicStudio.Debug_OtherProcessField, A
+			return
+		}
+		
 		; Pick the radio button for "Other existing process:".
 		ControlFocus, % EpicStudio.Debug_OtherProcessButton, A
 		ControlSend, % EpicStudio.Debug_OtherProcessButton, {Space}, A

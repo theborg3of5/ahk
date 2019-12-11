@@ -43,15 +43,15 @@ class EpicLib {
 	}
 	
 	;---------
-	; DESCRIPTION:    Drop the offset ("+4" in "tag+4^routine") from the given server 
-	;                 (so we'd return "tag^routine").
+	; DESCRIPTION:    Drop the offset ("+4" in "tag+4^routine", can also be negative) from the
+	;                 given server (so we'd return "tag^routine").
 	; PARAMETERS:
 	;  serverLocation (I,REQ) - The server location to drop the offset from.
 	; RETURNS:        The updated server code location.
 	;---------
 	dropOffsetFromServerLocation(serverLocation) {
 		EpicLib.splitServerLocation(serverLocation, routine, tag)
-		tag := tag.beforeString("+")
+		tag := tag.beforeString("+").beforeString("-")
 		return tag "^" routine
 	}
 	; #END#

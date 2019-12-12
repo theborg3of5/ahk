@@ -2399,8 +2399,8 @@
         <KeyWord name="EpicLib.dropOffsetFromServerLocation" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Drop the offset (&quot;+4&quot; in &quot;tag+4^routine&quot;) from the given server
-							;                 (so we'd return &quot;tag^routine&quot;).
+							; DESCRIPTION:    Drop the offset (&quot;+4&quot; in &quot;tag+4^routine&quot;, can also be negative) from the
+							;                 given server (so we'd return &quot;tag^routine&quot;).
 							; PARAMETERS:
 							;  serverLocation (I,REQ) - The server location to drop the offset from.
 							; RETURNS:        The updated server code location.

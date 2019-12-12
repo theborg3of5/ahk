@@ -34,8 +34,8 @@ $^!l:: new ActionObject(SelectLib.getText()).copyLinkEdit()
 
 #If Config.contextIsWork
 	^!+d::
-		selectDLG() {
-			s := new Selector("outlookTLG.tls").overrideFieldsOff()
+		selectDLGId() {
+			s := new Selector("tlg.tls").overrideFieldsOff()
 			s.dataTableList.filterOutEmptyForColumn("DLG")
 			dlgId := s.selectGui("DLG")
 			if(!dlgId)
@@ -83,7 +83,7 @@ $^!l:: new ActionObject(SelectLib.getText()).copyLinkEdit()
 #If Config.machineIsWorkLaptop
 	^!+t::
 		selectOutlookTLG() {
-			data := new Selector("outlookTLG.tls").selectGui()
+			data := new Selector("tlg.tls").selectGui()
 			if(!data)
 				return
 			

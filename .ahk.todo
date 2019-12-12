@@ -1,5 +1,4 @@
 # New Ideas
-	Rename outlookTLG to something more generic - maybe something about DLG/PRJ IDs, or just EMC2 IDs?
 	Make ^d work as a delete line hotkey for TortoiseGit commit popup, for combining recent commits workflow.
 		^l seems to do it, so could just map it that way.
 	Auto-complete - could we make a special kind of header that can cover multiple things?
@@ -99,7 +98,7 @@
 		Use cases:
 			epicEnvironments
 			actionObject
-			outlookTLG
+			tlg
 			puttyCommands
 			windows (maybe priority?)
 			search

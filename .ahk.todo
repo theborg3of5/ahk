@@ -72,6 +72,9 @@
 			Example:
 				@SettingName=settingValue
 				
+				[	NAME					ABBREV			VALUE		]
+				{	0						0					1			}
+				
 				# ! Header
 				; Comment
 				NAME.addToStart(yo) | NAME.addToEnd(end) {
@@ -80,17 +83,10 @@
 					}
 						Row 2					abbr2				val2
 				}
-			Model/key row ideas:
-				[M]	NAME					ABBREV			VALUE
-				[K]	0						0					1
-				
-				[		NAME					ABBREV			VALUE
-						0						0					1			]
-				
-				[
-						NAME					ABBREV			VALUE
-						0						0					1
-				]
+			Alternative model/key row ideas:
+				[	NAME					ABBREV			VALUE
+					0						0					1			]
+				[	NAME					ABBREV			VALUE		]
 	Consider a new .setIfEmpty/.defaultTo mod that only replaces if there's no value
 		Would let us basically have a default value that individual, inline rows can override if needed
 		Use cases:

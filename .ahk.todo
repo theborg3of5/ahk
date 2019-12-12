@@ -1,6 +1,4 @@
 # New Ideas
-	Make ^d work as a delete line hotkey for TortoiseGit commit popup, for combining recent commits workflow.
-		^l seems to do it, so could just map it that way.
 	Auto-complete - could we make a special kind of header that can cover multiple things?
 		At least one-line constants (just X number of lines until we get a blank line, maybe?)
 			Would let us line things up nicely again

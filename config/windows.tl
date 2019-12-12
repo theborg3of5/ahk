@@ -78,6 +78,8 @@
 			Teams										Teams.exe					-									-														NO_PADDING
 			Telegram									Telegram.exe				Qt5QWindowIcon					-														NO_PADDING
 			Thunder									Thunder.exe					-									Thunder
+			TortoiseGit								TortoiseGitProc.exe
+			TortoiseSVN								TortoiseProc.exe
 			TrueCrypt								TrueCrypt.exe				CustomDlg
 			VB6										VB6.exe						wndclass_desked_gsk
 			VMware Horizon Client				vmware-view.exe

@@ -69,6 +69,7 @@ if(Config.contextIsWork) { ; Work-specific subs
 #Include sumatraPDF.ahk
 #Include teams.ahk
 #Include telegram.ahk
+#Include tortoise.ahk
 #Include vb6.ahk
 #Include visualStudio.ahk
 #Include wilma.ahk

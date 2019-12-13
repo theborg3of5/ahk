@@ -1,6 +1,6 @@
 @MinColumnWidth=350
 
-(	NAME									ABBREV	FORMAT
+[	NAME									ABBREV	FORMAT	]
 
 	Array									a			ARRAY
 	Space-delimited					s			SPACE

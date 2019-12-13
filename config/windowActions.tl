@@ -1,4 +1,4 @@
-(	NAME										ESC		MIN				SELECT_ALL		DELETE_WORD		CLOSE		MACHINE
+[	NAME										ESC		MIN				SELECT_ALL		DELETE_WORD		CLOSE		MACHINE	]
 
 ; Values for all columns (except NAME) come from WindowActions.Method_* (for how to do the action) or WindowActions.Action_* (to do some other action, like close on escape key) constants.
 

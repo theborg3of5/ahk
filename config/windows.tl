@@ -1,21 +1,21 @@
-(			NAME										EXE							CLASS								TITLE													EDGE_TYPE		TITLE_STRING_MATCH_MODE_OVERRIDE		PRIORITY
+[			NAME										EXE							CLASS								TITLE													EDGE_TYPE		TITLE_STRING_MATCH_MODE_OVERRIDE		PRIORITY	]
 
 ; Specific windows within a program (overlap with their less-specific counterparts below).
-[+1|PRIORITY.replaceWith(0)]
+~PRIORITY.replaceWith(0) {
 			AutoHotkey WinSpy						AutoHotkey.exe				AutoHotkeyGUI					Window Spy
 			AutoHotkey Toast						AutoHotkey.exe				AutoHotkeyGUI					[TOAST]												NO_PADDING
 			Chrome Join								chrome.exe					-									Join
 			Chrome TickTick						chrome.exe					-									All - TickTick
 	
 	; EMC2 windows
-	[+2|EXE.replaceWith(EpicD89.exe)]
+	~EXE.replaceWith(EpicD89.exe) {
 		; Different sections of the main EMC2 window.
-		[+3|CLASS.replaceWith(ThunderRT6MDIForm)|TITLE_STRING_MATCH_MODE_OVERRIDE.replaceWith(START)]
+		~CLASS.replaceWith(ThunderRT6MDIForm) | ~TITLE_STRING_MATCH_MODE_OVERRIDE.replaceWith(START) {
 			EMC2 DLG									-								-									DLG
 			EMC2 PRJ									-								-									PRJ
 			EMC2 QAN									-								-									QAN
 			EMC2 XDS									-								-									XDS
-		[-3]
+		}
 			EMC2 DLG Email							-								-									E-mail Development Log
 			EMC2 DLG Issue Email					-								-									Email Issue
 			EMC2 DLG/XDS Issue Popup			-								-									Issue Response
@@ -31,17 +31,17 @@
 			EMC2 XDS Open Design					-								ThunderRT6FormDC				Open/New Design
 			EMC2 XDS Magnify						-								ThunderRT6FormDC				Magnify
 			EMC2 XDS Submit						-								-									Submit Design for Review
-	[-2]
+	}
 	
 			EpicStudio New Object Window		EpicStudio.exe				New Object
 			EpicStudio Tokenize String			EpicStudio.exe				Tokenize String
 			OneTastic Macro Editor XML			ONENOTE.EXE					Onetastic Window				Edit XML
 			OneTastic Macro Editor				ONENOTE.EXE					Onetastic Window
 			Pidgin Buddy List						pidgin.exe					-									Buddy List
-[-1]
+}
 
 ; Most general form of various windows (specifics above should override).
-[PRIORITY.replaceWith(1)]
+~PRIORITY.replaceWith(1) {
 			AutoHotkey								AutoHotkey.exe				AutoHotkeyGUI					-
 			Chrome									chrome.exe					Chrome_WidgetWin_1			-
 			Cisco AnyConnect VPN					vpnui.exe					#32770							Cisco AnyConnect Secure Mobility Client
@@ -89,4 +89,4 @@
 			Windows Taskbar Secondary			explorer.exe				Shell_SecondaryTrayWnd
 			Word										WINWORD.EXE					-									-														NO_PADDING
 			yEd										yEd.exe
-[]
+}

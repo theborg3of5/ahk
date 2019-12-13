@@ -1,15 +1,15 @@
-(	TITLE															DATE		DAY_ABBREV		NUM_DAY_OF_MONTH		MONTH_ABBREV
+[	TITLE															DATE		DAY_ABBREV		NUM_DAY_OF_MONTH		MONTH_ABBREV	]
 
 # Dailies
-[DAY_ABBREV.replaceWith(THURS)]
+~DAY_ABBREV.replaceWith(THURS) {
 	Transcribe kids' class notes
-[DAY_ABBREV.replaceWith(SAT)]
+} ~DAY_ABBREV.replaceWith(SAT) {
 	Dishes from week
 	Wash laundry
 	Dry laundry
 	Clean off desk
 	Pull to-dos from specific sections below
-[DAY_ABBREV.replaceWith(SUN)]
+} ~DAY_ABBREV.replaceWith(SUN) {
 	Fold laundry
 	Roomba
 	Dishes from weekend
@@ -19,7 +19,7 @@
 	Order/obtain groceries
 	Review/type Ninpo notes
 	Pull to-dos from specific sections below
-[]
+}
 
 # Monthlies
 	Book OTF														21

@@ -1,6 +1,6 @@
-(	NAME							PATH																						MACHINE
+[	NAME							PATH																						MACHINE	]
 
-[PATH.addToStart(<PROGRAM_FILES_86>\)]
+~PATH.addToStart(<PROGRAM_FILES_86>\) {
 	Chrome						Google\Chrome\Application\chrome.exe
 	EMC2							Epic\v8.9\EMC2\Shared Files\EpicD89.exe
 	EpicStudio					EpicStudio\EpicStudio.exe
@@ -16,7 +16,7 @@
 	VB6							Microsoft Visual Studio\VB98\VB6.EXE
 	VMware Horizon Client	VMware\VMware Horizon View Client\vmware-view.exe
 	Visual Studio				Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.exe
-[PATH.addToStart(<PROGRAM_FILES>\)]
+} ~PATH.addToStart(<PROGRAM_FILES>\) {
 	AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk
 	Everything					Everything\Everything.exe
 	Internet Explorer			Internet Explorer\iexplore.exe
@@ -24,10 +24,10 @@
 	TrueCrypt					TrueCrypt\TrueCrypt.exe
 	GrepWin						grepWin\grepWin.exe
 	yEd							yWorks\yEd\yEd.exe
-[PATH.addToStart(<WINDOWS>\)]
+} ~PATH.addToStart(<WINDOWS>\) {
 	Explorer						explorer.exe
 	Notepad						System32\notepad.exe
-[]
+}
 
 	Process Explorer			<PROGRAM_FILES>\Process Explorer\procexp.exe									WORK_LAPTOP
 	Process Explorer			<EPIC_PERSONAL>\Programs\Process Explorer\procexp.exe						WORK_VDI

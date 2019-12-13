@@ -1,6 +1,6 @@
 @WindowTitle=Select media player to control with media keys:
 
-(	NAME				ABBREV		PROGRAM_NAME
-	Spotify			s|spot		Spotify
-	Foobar2000		f|foo			Foobar
-	Youtube			y|you|yt		Chrome
+[	NAME				ABBREV		PROGRAM_NAME	]
+	Spotify			s | spot		Spotify
+	Foobar2000		f | foo			Foobar
+	Youtube			y | you | yt		Chrome

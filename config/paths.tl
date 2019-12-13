@@ -1,6 +1,6 @@
 ; These are all of the path tags that will be replaced when using Config.replacePathTags().
 
-(	NAME										KEY										PATH														CONTEXT
+[	NAME										KEY										PATH														CONTEXT	]
 
 	; Pass-throughs - paths which are retrieved/calculated in Config.loadPaths(). These can also be used in this file.
 	AHK Root									AHK_ROOT
@@ -17,7 +17,7 @@
 	User Root								USER_ROOT
 	Windows (System Root)				WINDOWS
 
-[CONTEXT.replaceWith(WORK)]
+~CONTEXT.replaceWith(WORK) {
 	; Private pass-throughs - private tags to replace in folder paths
 	Epic DBC Design						EPIC_DBC_DESIGN
 	Epic DBC Partial Installers		EPIC_DBC_PARTIAL_INSTALLERS
@@ -29,7 +29,7 @@
 	Epic Personal							EPIC_PERSONAL
 	Epic Source S1							EPIC_SOURCE_S1
 	Epic VDI Settings						EPIC_VDI_SETTINGS
-[]
+}
 
 	; General
 	AHK Config								AHK_CONFIG								<AHK_ROOT>\config
@@ -44,11 +44,11 @@
 	Onetastic Macros						ONETASTIC_MACROS						<USER_ROOT>\OnetasticMacros
 	Onetastic Functions					ONETASTIC_FUNCTIONS					<USER_ROOT>\OnetasticMacros\Functions
 
-[CONTEXT.replaceWith(WORK)]
+~CONTEXT.replaceWith(WORK) {
 	; Work
 	VB6 Compile								VB6_COMPILE								<USER_ROOT>\Dev\Temp\Compile
 	Transaction Diff						TX_DIFF									C:\Program Files\TransactionDiff
 	Transaction Diff Results			TX_DIFF_OUTPUT							<USER_ROOT>\Dev\TransactionDiffOutput
 	EpicStudio Global Highlights		EPICSTUDIO_GLOBAL_HIGHLIGHTS		<USER_ROOT>\EpicStudioGlobalHighlights
 	Epic Personal AHK						EPIC_PERSONAL_AHK						<EPIC_PERSONAL>\ahk
-[]
+}

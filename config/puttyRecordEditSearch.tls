@@ -1,5 +1,5 @@
-(	NAME		ABBREV	SEARCH_TYPE		SEARCH_TEXT
-)	0			0			0					1
+[	NAME		ABBREV	SEARCH_TYPE		SEARCH_TEXT	]
+(	0			0			0					1				)
 
 	Item		i			I
 	Text		t			T

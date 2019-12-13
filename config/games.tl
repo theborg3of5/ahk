@@ -1,4 +1,4 @@
-(	NAME						EXE
+[	NAME						EXE	]
 
 	Overwatch				Overwatch.exe
 	Insurgency				insurgency.exe

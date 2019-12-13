@@ -1,14 +1,14 @@
-(	NAME								ABBREV		PATH																									CONTEXT
+[	NAME								ABBREV		PATH																									CONTEXT	]
 
 # General
 	Downloads						dl				<USER_DOWNLOADS>
-[CONTEXT.replaceWith(WORK)]
+~CONTEXT.replaceWith(WORK) {
 	Design							des			<USER_ROOT>\Design
 	Shortcuts						sc				<USER_ROOT>\Shortcuts
 	Personal							pers			<EPIC_PERSONAL>
 	Public							pub			<EPIC_PERSONAL>\Public
 	QuickRef							qr				<USER_ROOT>\QuickRef
-[]
+}
 
 # System
 	Startup							start			<USER_STARTUP>
@@ -16,9 +16,9 @@
 
 # Development
 	Onetastic Macros				ot				<ONETASTIC_MACROS>
-	NotepadPlusPlus Sessions	sess|nps		<NOTEPAD_PP_SESSIONS>
+	NotepadPlusPlus Sessions	sess			<NOTEPAD_PP_SESSIONS>
 
-[CONTEXT.replaceWith(WORK)]
+~CONTEXT.replaceWith(WORK) {
 # Work Local
 	Dev								dev			<USER_DEV>
 	Templates						tp				<USER_DEV>\Templates
@@ -37,4 +37,4 @@
 	VDI Settings					vdi			<EPIC_VDI_SETTINGS>
 	DBC Design						dbcd			<EPIC_DBC_DESIGN>
 	DBC Partial Installers		dbcpi			<EPIC_DBC_PARTIAL_INSTALLERS>
-[]
+}

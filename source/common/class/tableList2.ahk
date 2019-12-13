@@ -206,10 +206,17 @@
 	=--
 */ ; =--
 
-class TableList {
+class TableList2 {
 	; #PUBLIC#
 	
 	; [[ Special characters ]] --=
+	
+	
+	static Char_Model_Start := "["
+	static Char_Model_End := "]"
+	static Char_ColumnInfo_Start := "{"
+	static Char_ColumnInfo_End := "}"
+	
 	;---------
 	; DESCRIPTION:    Ignore (comment) character
 	;---------
@@ -217,11 +224,11 @@ class TableList {
 	;---------
 	; DESCRIPTION:    Model character
 	;---------
-	static Char_Model       := "("
+	; static Char_Model       := "("
 	;---------
 	; DESCRIPTION:    Column info character
 	;---------
-	static Char_ColumnInfo  := ")"
+	; static Char_ColumnInfo  := ")"
 	;---------
 	; DESCRIPTION:    Settings character
 	;---------
@@ -308,7 +315,7 @@ class TableList {
 		this.parseList(lines)
 		
 		; Apply any automatic filters.
-		For _,filter in TableList.autoFilters
+		For _,filter in TableList2.autoFilters
 			this.filterByColumn(filter["COLUMN"], filter["VALUE"])
 	}
 	
@@ -321,7 +328,7 @@ class TableList {
 	;---------
 	addAutomaticFilter(filterColumn, filterValue) {
 		filter := {"COLUMN":filterColumn, "VALUE":filterValue}
-		TableList.autoFilters.push(filter)
+		TableList2.autoFilters.push(filter)
 	}
 	
 	;---------
@@ -501,7 +508,7 @@ class TableList {
 			this.processRow(row)
 		}
 		
-		; Debug.popup("TableList.parseList","Finish", "State",this)
+		; Debug.popup("TableList2.parseList","Finish", "State",this)
 	}
 	
 	;---------
@@ -520,13 +527,13 @@ class TableList {
 		if(row.startsWith(this.Char_Setting))
 			this.processSetting(row)
 		
-		else if(row.startsWith(this.Char_Model)) ; Model row, causes us to use string subscripts instead of numeric per entry.
+		else if(row.startsWith(this.Char_Model_Start) && row.endsWith(this.Char_Model_End)) ; Model row, tells us which string subscripts to use for columns.
 			this.processModel(row)
 		
 		else if(row.startsWith(this.Char_Header))
 			this.processHeader(row)
 		
-		else if(row.startsWith(this.Char_ColumnInfo))
+		else if(row.startsWith(this.Char_ColumnInfo_Start) && row.endsWith(this.Char_ColumnInfo_End))
 			this.processColumnInfo(row)
 		
 		else if(row.startsWith(this.Char_Mod_Start))
@@ -549,7 +556,7 @@ class TableList {
 		
 		name  := row.beforeString("=")
 		value := row.afterString("=")
-		; Debug.popup("TableList.processSetting","Pulled out data", "Name",name, "Value",value)
+		; Debug.popup("TableList2.processSetting","Pulled out data", "Name",name, "Value",value)
 		
 		this._settings[name] := value
 	}
@@ -562,7 +569,10 @@ class TableList {
 	;---------
 	processModel(row) {
 		rowAry := row.split(A_Tab)
-		rowAry.RemoveAt(1) ; Get rid of the "(" bit and shift elements to fill.
+		
+		rowAry.RemoveAt(1) ; Get rid of the leading "[" (and shift elements to fill).
+		rowAry.Pop() ; Get rid of the ending "]"
+		
 		this.indexLabels := rowAry
 	}
 	
@@ -583,10 +593,10 @@ class TableList {
 	;  row (I,REQ) - Column info row to process.
 	;---------
 	processColumnInfo(row) {
-		firstChar := row.sub(1, 1)
 		rowAry := row.split(A_Tab)
 		
-		rowAry.RemoveAt(1) ; Get rid of the separate char bit (")").
+		rowAry.RemoveAt(1) ; Get rid of the leading "{" (and shift elements to fill).
+		rowAry.Pop() ; Get rid of the ending "}"
 		this.applyIndexLabels(rowAry)
 		
 		this._columnInfo := rowAry

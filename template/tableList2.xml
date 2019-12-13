@@ -39,12 +39,12 @@
             <Keywords name="Keywords6"></Keywords>
             <Keywords name="Keywords7"></Keywords>
             <Keywords name="Keywords8"></Keywords>
-				<!-- *gdb - Model row, key row + mod column names -->
+				<!-- *gdb - Model row, column info row + mod column names -->
             <Keywords name="Delimiters">00[&#x0009; 01 02] 03{&#x0009; 03~ 04 05} 05. 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23</Keywords>
         </KeywordLists>
         <Styles>
             <WordsStyle name="DEFAULT" fgColor="EDEDE4" bgColor="2A211C" fontName="" fontStyle="0" nesting="0" />
-            <WordsStyle name="COMMENTS" fgColor="0080C0" bgColor="2A211C" fontName="" fontStyle="0" nesting="0" />
+            <WordsStyle name="COMMENTS" fgColor="0080C0" bgColor="2A211C" fontName="" fontStyle="0" nesting="512" />
             <WordsStyle name="LINE COMMENTS" fgColor="0080FF" bgColor="2A211C" fontName="" fontStyle="1" nesting="0" />
             <WordsStyle name="NUMBERS" fgColor="EDEDE4" bgColor="2A211C" fontName="" fontStyle="0" nesting="0" />
             <WordsStyle name="KEYWORDS1" fgColor="A3BFCD" bgColor="2A211C" fontName="" fontStyle="0" nesting="0" />

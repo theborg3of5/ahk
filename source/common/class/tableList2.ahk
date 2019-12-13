@@ -1,4 +1,4 @@
-; #Include tableListMod2.ahk ; GDB TODO
+#Include tableListMod2.ahk
 
 /* Class that parses and processes a specially-formatted file. --=
 	--= Motivation
@@ -651,7 +651,7 @@ class TableList2 {
 		; Split up any entries that include the multi-entry character (pipe by default).
 		For i,value in rowAry
 			if(value.contains(this.Char_MultiEntry))
-				rowAry[i] := value.split(this.Char_MultiEntry)
+				rowAry[i] := value.split(this.Char_MultiEntry, A_Space)
 		
 		this.table.push(rowAry)
 	}

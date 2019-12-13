@@ -255,8 +255,8 @@ class Selector {
 	
 	; #PRIVATE#
 	
-	static Char_CommandStart       := "+"
-	static Char_Command_Edit       := "e"
+	static Char_CommandStart := "+"
+	static Char_Command_Edit := "e"
 	
 	windowTitle      := "Please make a choice by either index or abbreviation:" ; The title of the window
 	minColumnWidth   := 0     ; How wide (in pixels) each column must be, at a minimum.

@@ -10,8 +10,6 @@
 		Result:
 			All following rows will have the string "C:\users\" added to the beginning of their "PATH" column.
 	
-	The mod action also takes a numeric label, which is used by the parent TableList to remove specific mods later as needed.
-	
 	Operations
 		The operation of a mod action determines how it changes the chosen column:
 			replaceWith
@@ -46,27 +44,23 @@
 	
 */ ; =--
 
+; GDB TODO reformat examples in header, and other documentation in various locations to match
+
 class TableListMod {
 	; #PUBLIC#
 	
-	;---------
-	; DESCRIPTION:    The label originally given for this mod action.
-	;---------
-	label := ""
+	static Char_TargetPrefix := "~"
 	
 	;---------
 	; DESCRIPTION:    Create a new TableListMod instance.
 	; PARAMETERS:
 	;  modActString (I,REQ) - String defining the mod. Format (explained in class documentation):
 	;                         	COLUMN.OPERATION(TEXT)
-	;  label        (I,REQ) - Label associated with this mod.
 	; RETURNS:        Reference to new TableListMod object
 	;---------
-	__New(modString, label) {
-		this.label := label
-		
+	__New(modString) {
 		; Pull the relevant info out of the string.
-		this.column    := modString.beforeString(".")
+		this.column    := modString.firstBetweenStrings(this.Char_TargetPrefix, ".")
 		this.operation := modString.firstBetweenStrings(".", "(")
 		this.text      := modString.allBetweenStrings("(", ")") ; Go to the last close-paren, to allow other close-parens in the string
 		

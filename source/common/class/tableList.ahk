@@ -88,7 +88,7 @@
 				(none) - Clear all mods
 					If no actions are specified at all (i.e. a line containing only "[]"), we will clear all previously added mods.
 				
-				+n - Add label (n can be any number)
+				+n - Add label (n can be any number) ; GDB TODO lots of documentation updates here
 					Labels all following mods on the same row with the given number, which can be used to specifically clear them later.
 					Example:
 						Mod line
@@ -210,6 +210,16 @@ class TableList {
 	; #PUBLIC#
 	
 	; [[ Special characters ]] --=
+	
+	
+	static Char_Model_Start := "["
+	static Char_Model_End := "]"
+	static Char_ColumnInfo_Start := "("
+	static Char_ColumnInfo_End := ")"
+	
+	static Char_Mod_Open := "{"
+	static Char_Mod_Close := "}"
+	
 	;---------
 	; DESCRIPTION:    Ignore (comment) character
 	;---------
@@ -217,11 +227,11 @@ class TableList {
 	;---------
 	; DESCRIPTION:    Model character
 	;---------
-	static Char_Model       := "("
+	; static Char_Model       := "("
 	;---------
 	; DESCRIPTION:    Column info character
 	;---------
-	static Char_ColumnInfo  := ")"
+	; static Char_ColumnInfo  := ")"
 	;---------
 	; DESCRIPTION:    Settings character
 	;---------
@@ -242,19 +252,19 @@ class TableList {
 	;---------
 	; DESCRIPTION:    Mod start character
 	;---------
-	static Char_Mod_Start       := "["
+	; static Char_Mod_Start       := "["
 	;---------
 	; DESCRIPTION:    Mod end character
 	;---------
-	static Char_Mod_End         := "]"
+	; static Char_Mod_End         := "]"
 	;---------
 	; DESCRIPTION:    Mod add label character
 	;---------
-	static Char_Mod_AddLabel    := "+"
+	; static Char_Mod_AddLabel    := "+"
 	;---------
 	; DESCRIPTION:    Mod remove label character
 	;---------
-	static Char_Mod_RemoveLabel := "-"
+	; static Char_Mod_RemoveLabel := "-"
 	; =--
 	
 	;---------
@@ -473,7 +483,7 @@ class TableList {
 	
 	static autoFilters := [] ; Array of {"COLUMN":filterColumn, "VALUE":filterValue} objects
 	
-	mods        := []
+	modSets     := [] ; Array of sets of mods, treated like a stack.
 	table       := []
 	indexLabels := []
 	
@@ -520,17 +530,17 @@ class TableList {
 		if(row.startsWith(this.Char_Setting))
 			this.processSetting(row)
 		
-		else if(row.startsWith(this.Char_Model)) ; Model row, causes us to use string subscripts instead of numeric per entry.
+		else if(row.startsWith(this.Char_Model_Start) && row.endsWith(this.Char_Model_End)) ; Model row, tells us which string subscripts to use for columns.
 			this.processModel(row)
 		
 		else if(row.startsWith(this.Char_Header))
 			this.processHeader(row)
 		
-		else if(row.startsWith(this.Char_ColumnInfo))
+		else if(row.startsWith(this.Char_ColumnInfo_Start) && row.endsWith(this.Char_ColumnInfo_End))
 			this.processColumnInfo(row)
 		
-		else if(row.startsWith(this.Char_Mod_Start))
-			this.processMod(row)
+		else if(row.startsWith(TableListMod.Char_TargetPrefix) || row.startsWith(this.Char_Mod_Close))
+			this.processMods(row)
 		
 		else
 			this.processNormal(row)
@@ -562,7 +572,10 @@ class TableList {
 	;---------
 	processModel(row) {
 		rowAry := row.split(A_Tab)
-		rowAry.RemoveAt(1) ; Get rid of the "(" bit and shift elements to fill.
+		
+		rowAry.removeAt(1) ; Get rid of the leading "[" (and shift elements to fill).
+		rowAry.pop() ; Get rid of the ending "]"
+		
 		this.indexLabels := rowAry
 	}
 	
@@ -583,10 +596,10 @@ class TableList {
 	;  row (I,REQ) - Column info row to process.
 	;---------
 	processColumnInfo(row) {
-		firstChar := row.sub(1, 1)
 		rowAry := row.split(A_Tab)
 		
-		rowAry.RemoveAt(1) ; Get rid of the separate char bit (")").
+		rowAry.removeAt(1) ; Get rid of the leading "{" (and shift elements to fill).
+		rowAry.pop() ; Get rid of the ending "}"
 		this.applyIndexLabels(rowAry)
 		
 		this._columnInfo := rowAry
@@ -598,34 +611,25 @@ class TableList {
 	;  row (I,REQ) - Mod row that we're processing (string).
 	; SIDE EFFECTS:   May change the currently active mods
 	;---------
-	processMod(row) {
-		; Strip off the starting/ending mod characters (square brackets).
-		row := row.allBetweenStrings(this.Char_Mod_Start, this.Char_Mod_End)
+	processMods(row) {
+		; A closing bracket means we're remove the last set of mods.
+		if(row.startsWith(this.Char_Mod_Close)) {
+			this.modSets.pop()
+			row := row.removeFromStart(this.Char_Mod_Close).withoutWhitespace()
+		}
+		; If we were only closing the last mode, we're done.
+		if(row = "")
+			return
 		
-		; If it's just blank, all previous mods are wiped clean.
-		if(row = "") {
-			this.mods := []
-		} else {
-			; Check for a remove row label.
-			; Assuming here that it will be the first and only thing in the mod row.
-			if(row.startsWith(this.Char_Mod_RemoveLabel)) {
-				remLabel := row.removeFromStart(this.Char_Mod_RemoveLabel)
-				this.killMods(remLabel)
-				return
-			}
+		; An opening bracket at the end means we're opening new mods.
+		if(row.endsWith(this.Char_Mod_Open)) {
+			row := row.removeFromEnd(this.Char_Mod_Open).withoutWhitespace()
+			newMods := []
+			For _,modString in row.split("|", A_Space)
+				newMods.push(new TableListMod(modString))
 			
-			; Check for an append row label.
-			; If there's not one, we're replacing all existing mods, so kill all existing ones.
-			if(row.startsWith(this.Char_Mod_AddLabel)) {
-				labelNum := row.firstBetweenStrings(this.Char_Mod_AddLabel, this.Char_MultiEntry)
-				row := row.afterString(this.Char_MultiEntry) ; Drop the label off the front since it's not a mod itself
-			} else {
-				this.mods := []
-			}
-			
-			; Store off the new mods.
-			For _,currMod in row.split(this.Char_MultiEntry)
-				this.mods.push(new TableListMod(currMod, labelNum))
+			; Add the set of new mods to our stack of them.
+			this.modSets.push(newMods)
 		}
 	}
 	
@@ -647,7 +651,7 @@ class TableList {
 		; Split up any entries that include the multi-entry character (pipe by default).
 		For i,value in rowAry
 			if(value.contains(this.Char_MultiEntry))
-				rowAry[i] := value.split(this.Char_MultiEntry)
+				rowAry[i] := value.split(this.Char_MultiEntry, A_Space)
 		
 		this.table.push(rowAry)
 	}
@@ -679,19 +683,10 @@ class TableList {
 	;  rowAry (IO,REQ) - Array representing a row in the table. 
 	;---------
 	applyMods(ByRef rowAry) {
-		For i,currMod in this.mods
-			currMod.executeMod(rowAry)
-	}
-	
-	;---------
-	; DESCRIPTION:    Remove any active mods that match the given label.
-	; PARAMETERS:
-	;  killLabel (I,REQ) - Numeric label to remove matching mods.
-	;---------
-	killMods(killLabel) {
-		For i,mod in this.mods
-			if(mod.label = killLabel)
-				this.mods.Delete(i)
+		For _,modSet in this.modSets {
+			For _,mod in modSet
+				mod.executeMod(rowAry)
+		}
 	}
 	
 	;---------
@@ -729,7 +724,7 @@ class TableList {
 	Debug_ToString(ByRef builder) {
 		builder.addLine("Chars",         this.chars)
 		builder.addLine("Index labels",  this.indexLabels)
-		builder.addLine("Mods",          this.mods)
+		builder.addLine("Mods",          this.modSets)
 		builder.addLine("Column info",   this._columnInfo)
 		builder.addLine("Settings",      this._settings)
 		builder.addLine("Headers",       this._headers)

@@ -20,20 +20,20 @@
 			
 	--- File Format
 			Starting a row in the TableList file with certain characters has special meaning (beyond those documented in the TableList class):
-				( - Model row (required)
+				[ - Model row (required, should end with a corresponding ])
 					The file should include a single model row (above all choices), which gives a name to each column in the file. Most column names will simply determine the subscript in the return array that the data from that column will be returned in, but these columns have special meaning:
 							NAME   - This is the display name for a choice in the popup that can be shown to a user.
 							ABBREV - This is displayed next to the display name for a choice in the popup. Additionally, a choice can be selected using the abbreviation (in addition to the index).
 					Example:
-						(	NAME		ABBREV		PATH
+						[	NAME		ABBREV		PATH	]
 					Result:
 						Values in the NAME and ABBREV columns will be displayed for choices as described above, and the return array will have a "PATH" subscript with the corresponding value from the selected choice.
 					
-				) - override field index row
+				) - Override field index row
 					These rows assign a numeric index to each column in the model row. This index will be the position the corresponding data override field will have in the popup. An index of 0 tells the UI not to show the field corresponding to that column at all. Note that the existence of this row will cause data override fields to be shown - the fields can be programmatically suppressed using the .overrideFieldsOff() function. See "Data Override Fields" below for more details.
 					Example:
-						(	NAME		ABBREV		PATH
-						)	0			0				1
+						[	NAME		ABBREV		PATH	]
+						(	0			0				1		)
 					Result:
 						A "PATH" field will appear next to the choice field.
 					
@@ -55,7 +55,7 @@
 				| - Abbreviation delimiter
 					You can give an individual choice multiple abbreviations that can all be used to select the choice, separated by this character. Only the first abbreviation will be displayed.
 					Example:
-						Programs		prog|prg		programs.tls
+						Programs		prog | prg		programs.tls
 					Result:
 						The "Programs" choice will appear in the popup with an abbreviation of "prog", but the "prg" abbreviation may also be used to select that choice.
 					

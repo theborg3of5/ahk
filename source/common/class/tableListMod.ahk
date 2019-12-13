@@ -1,22 +1,22 @@
 /* Class which represents a particular change (mod action) that should be made to a "row" array in a TableList. --=
 	
 	A mod action is defined by a string using a particular syntax:
-		COLUMN.OPERATION(TEXT)
+		~COLUMN.OPERATION(TEXT)
 			COLUMN    - The name of the column that this mod action should apply to.
 			OPERATION - A string (that matches one of the TableListMod.Operation_* constants below) what we want to do (see "Operations" section).
 			TEXT      - The text that is used by the operation (see "Operations" section).
 		Example:
-			PATH.addToStart(C:\users\)
+			~PATH.addToStart(C:\users\)
 		Result:
-			All following rows will have the string "C:\users\" added to the beginning of their "PATH" column.
+			All rows which the mod is applied to will have the string "C:\users\" added to the beginning of their "PATH" column.
 	
 	Operations
 		The operation of a mod action determines how it changes the chosen column:
 			replaceWith
 				Replace the column.
 				Example:
-					Mod line
-						[COL.replaceWith(z)]
+					Mod string
+						~COL.replaceWith(z)
 					Normal line (COL column)
 						AAA
 					Result
@@ -25,8 +25,8 @@
 			addToStart
 				Prepend to the column (add to the beginning).
 				Example:
-					Mod line
-						[COL.addToStart(z)]
+					Mod string
+						~COL.addToStart(z)
 					Normal line (COL column)
 						AAA
 					Result
@@ -35,16 +35,14 @@
 			addToEnd
 				Append to the column (add to the end).
 				Example:
-					Mod line
-						[COL.addToEnd(z)]
+					Mod string
+						~COL.addToEnd(z)
 					Normal line (COL column)
 						AAA
 					Result
 						AAAz
 	
 */ ; =--
-
-; GDB TODO reformat examples in header, and other documentation in various locations to match
 
 class TableListMod {
 	; #PUBLIC#
@@ -55,7 +53,7 @@ class TableListMod {
 	; DESCRIPTION:    Create a new TableListMod instance.
 	; PARAMETERS:
 	;  modActString (I,REQ) - String defining the mod. Format (explained in class documentation):
-	;                         	COLUMN.OPERATION(TEXT)
+	;                         	~COLUMN.OPERATION(TEXT)
 	; RETURNS:        Reference to new TableListMod object
 	;---------
 	__New(modString) {

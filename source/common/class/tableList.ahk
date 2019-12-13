@@ -41,7 +41,7 @@
 				Music          MUSIC          D:\Music                         EPIC_LAPTOP
 			
 			We can also use comments, and add a model row (which this class will use as indices in the 2D array you get back):
-				(  NAME           ABBREV         PATH                             MACHINE
+				[  NAME           ABBREV         PATH                             MACHINE	]
 				
 				; AHK Folders
 					AHK Config     AHK_CONFIG     C:\ahk\config
@@ -57,86 +57,70 @@
 					Music          MUSIC          D:\Music                         EPIC_LAPTOP
 			
 			We can also use the Mods feature (see "Mods" section below) to de-duplicate some info:
-				(  NAME           ABBREV         PATH              MACHINE
+				[  NAME           ABBREV         PATH              MACHINE	]
 				
 				; AHK Folders
-				[PATH.addToStart(C:\ahk\)]
+				~PATH.addToStart(C:\ahk\) {
 					AHK Config     AHK_CONFIG     config
 					AHK Source     AHK_SOURCE     source
-				[]
+				}
 				
 				; User Folders
-				[PATH.addToStart(C:\Users\user\)]
+				~PATH.addToStart(C:\Users\user\) {
 					Downloads      DOWNLOADS      Downloads
 					VB6 Compile    VB6_COMPILE    Dev\Temp\Compile  EPIC_LAPTOP
-				[]
+				}
 				
 				; Music variations per machine
-				[PATH.addToEnd(\Music)]
+				~PATH.addToEnd(\Music) {
 					Music          MUSIC          C:\Users\user     HOME_DESKTOP
 					Music          MUSIC          C:\Users\user     HOME_LAPTOP
 					Music          MUSIC          D:                EPIC_LAPTOP
-				[]
+				}
 			
 	--- Mods
 			A "Mod" (short for "modification") line allows you to apply the same changes to all following rows (until the mod(s) are cleared). They are formatted as follows:
-				* They should start with the mod start ([) character and end with the mod end (]) character. Like other lines, they can be indented as desired.
-				* A mod line can contain 0 or more mod actions, separated by the multi-entry (|) character.
+				* Individual mod strings (in format ~COLUMN.OPERATION(TEXT)) are separated by a pipe (|).
+				* The lines that a mod affects are wrapped in curly brackets:
+					* Any line that adds mods should end with an opening bracket ({)
+					* Closing brackets may be their own line, or may start another line (a la else-if statements).
+				* Like other lines, they can be indented as desired.
 				* Additional information about mod actions can be found in the TableListMod class.
 			
-			Some special meta mod actions (not covered by the TableListMod class):
-				(none) - Clear all mods
-					If no actions are specified at all (i.e. a line containing only "[]"), we will clear all previously added mods.
-				
-				+n - Add label (n can be any number) ; GDB TODO lots of documentation updates here
-					Labels all following mods on the same row with the given number, which can be used to specifically clear them later.
-					Example:
-						Mod line
-							[+5|COL.addToStart(aaa)|COL.addToEnd(zzz)]
-						Result
-							Rows after this mod line will have "aaa" prepended and "zzz" appended to their COL column (same as if we'd left out the "+5|").
-				
-				-n - Remove mods with label (n can be any number)
-					Removes all currently active mods with this label. Typically the only thing on its row.
-					Example:
-						Mod line
-							[-5]
-						Result
-							If there was a mod with a label of 5, it will not apply to any rows after this line.
-				
 				For example, these two files have the same result:
 					File A
-						(     NAME           TYPE     COLOR
+						[     NAME           TYPE     COLOR	]
 								Apple          FRUIT    RED
 								Strawberry     FRUIT    RED
 								Bell pepper    VEGGIE   RED
 								Radish         VEGGIE   RED
 								Cherry         FRUIT    RED
 					File B
-						(     NAME           TYPE     COLOR
+						[     NAME           TYPE     COLOR		VALUE	]
 						
-						[COLOR.replaceWith(RED)]
-							[+1|TYPE.replaceWith(FRUIT)]
+						~COLOR.replaceWith(RED) {
+							~TYPE.replaceWith(FRUIT) {
 								Apple
 								Strawberry
 								Cherry
-							[-1]
-							[+2|TYPE.replaceWith(VEGGIE)]
+							} ~TYPE.replaceWith(VEGGIE) | ~VALUE.replaceWith(5) {
 								Bell pepper    VEGGIE
 								Radish         VEGGIE
-							[-2]
-						[]
+							}
+						}
 			
 	--- Special Characters
 			At the start of a row:
 				Ignore - ;
 					If the line starts with this character (ignoring any whitespace before that), the line is ignored and not added to the table.
 				
-				Model - (
+				Model - [
 					This is the model row mentioned above - the 2D array that you get back will use these column headers as string indices into each "row" array.
+					The row should end with the corresponding ending character (a closing bracket)
 				
-				Column info - )
+				Column info - (
 					Similar to the model row, this row stores information about each column as a whole. This will be stored separately from the normal rows, and can be retrieved via the .columnInfo property.
+					The row should end with the corresponding ending character (a closing paren)
 				
 				Setting - @
 					Any row that begins with this is assumed to be of the form @SettingName=value. Settings can be accessed using the .settings property.
@@ -144,8 +128,8 @@
 				Header - # (with a space after)
 					Any row starting with this will be added to the .headers property instead of the main table, with its index being that of the next row added to the table.
 				
-				Mod start - [
-					A line which begins with this character will be processed as a mod (see "Mods" section for details).
+				Mods - ~ or }
+					A line which begins with either of these characters will be processed as a mod (see "Mods" section for details).
 					
 			Within a "normal" row (not started with any of the special characters above):
 				Placeholder - - (hyphen)
@@ -154,15 +138,11 @@
 				Multi-entry - |
 					If this is included in a value for a column, the value for that row will be an array of the pipe-delimited values.
 			
-			Within a mod row (after the MOD,START character, see "Mods" section for details):
-				Mod add label - +
-					Associate the mods on this line with the numeric label following this character.
-					
-				Mod remove label - - (hyphen)
-					Remove all mods with the numeric label following this character.
-					
-				Mod end - ]
-					Mod lines should end with this character.
+			Within a mod row (see "Mods" section for details):
+				Mod apply open - {
+					This should appear at the end of a mod row that's adding a new set of mods.
+				Mod apply close - }
+					This can appear at the start of the mod line instead of on its own line, for else-if-style bracketing.
 			
 	--- Other features
 			Column info row
@@ -170,15 +150,15 @@
 				Note that there should only be one column info row per file - if there are multiple, only the last one will be available via the property.
 				Example:
 					File:
-						(  NAME  ABBREV   VALUE
-						)  0     2        1
+						[  NAME  ABBREV   VALUE	]
+						(  0     2        1		)
 						...
 					Code:
 ;						tl := new TableList(filePath)
 ;						table := tl.getTable()
 ;						overrideIndex := tl.columnInfo
 					Result:
-						table does not include row starting with ")"
+						table does not include the column info row
 						overrideIndex["ABBREV"] := 2
 										 ["NAME"]   := 0
 										 ["VALUE"]  := 1
@@ -188,7 +168,7 @@
 					
 				Example:
 					File:
-						(  NAME     ABBREV   PATH                                         MACHINE
+						[  NAME     ABBREV   PATH                                         MACHINE	]
 							Spotify  spot     C:\Program Files (x86)\Spotify\Spotify.exe   HOME_DESKTOP
 							Spotify  spot     C:\Program Files\Spotify\Spotify.exe         EPIC_LAPTOP
 							Spotify  spot     C:\Spotify\Spotify.exe                       ASUS_LAPTOP
@@ -238,9 +218,8 @@ class TableList {
 	static Char_Setting     := "@"
 	;---------
 	; DESCRIPTION:    Header character
-	; NOTES:          Must include the trailing space
 	;---------
-	static Char_Header      := "# "
+	static Char_Header      := "# " ; Must include the trailing space
 	;---------
 	; DESCRIPTION:    Placeholder character
 	;---------

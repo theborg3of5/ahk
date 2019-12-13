@@ -69,6 +69,7 @@
 		What if we had mods be nested curly-bracket blocks?
 			Could sense { by that being the end of the row
 			Could sense } by that being the only thing in the row (to avoid false positives)
+				Or: just it being the start of the row (so we can handle an else-if sort of layout)
 			Example:
 				@SettingName=settingValue
 				

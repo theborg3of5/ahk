@@ -190,28 +190,26 @@ class TableList {
 	; #PUBLIC#
 	
 	; [[ Special characters ]] --=
-	
-	
-	static Char_Model_Start := "["
-	static Char_Model_End := "]"
-	static Char_ColumnInfo_Start := "("
-	static Char_ColumnInfo_End := ")"
-	
-	static Char_Mod_Open := "{"
-	static Char_Mod_Close := "}"
-	
 	;---------
 	; DESCRIPTION:    Ignore (comment) character
 	;---------
 	static Char_Ignore      := ";"
 	;---------
-	; DESCRIPTION:    Model character
+	; DESCRIPTION:    The start of the model row
 	;---------
-	; static Char_Model       := "("
+	static Char_Model_Start := "["
 	;---------
-	; DESCRIPTION:    Column info character
+	; DESCRIPTION:    The end of the model row
 	;---------
-	; static Char_ColumnInfo  := ")"
+	static Char_Model_End := "]"
+	;---------
+	; DESCRIPTION:    The start of the column info row
+	;---------
+	static Char_ColumnInfo_Start := "("
+	;---------
+	; DESCRIPTION:    The start of the column info row
+	;---------
+	static Char_ColumnInfo_End := ")"
 	;---------
 	; DESCRIPTION:    Settings character
 	;---------
@@ -229,21 +227,13 @@ class TableList {
 	;---------
 	static Char_MultiEntry  := "|"
 	;---------
-	; DESCRIPTION:    Mod start character
+	; DESCRIPTION:    The character which starts applying mods to rows.
 	;---------
-	; static Char_Mod_Start       := "["
+	static Char_Mod_Open := "{"
 	;---------
-	; DESCRIPTION:    Mod end character
+	; DESCRIPTION:    The character which stops applying mods to rows.
 	;---------
-	; static Char_Mod_End         := "]"
-	;---------
-	; DESCRIPTION:    Mod add label character
-	;---------
-	; static Char_Mod_AddLabel    := "+"
-	;---------
-	; DESCRIPTION:    Mod remove label character
-	;---------
-	; static Char_Mod_RemoveLabel := "-"
+	static Char_Mod_Close := "}"
 	; =--
 	
 	;---------

@@ -5985,10 +5985,17 @@
                 <Param name="filterValue" />
             </Overload>
         </KeyWord>
-        <KeyWord name="TableList.Char_ColumnInfo" func="yes">
+        <KeyWord name="TableList.Char_ColumnInfo_End" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Column info character
+							; DESCRIPTION:    The start of the column info row
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.Char_ColumnInfo_Start" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    The start of the column info row
 							;---------">
             </Overload>
         </KeyWord>
@@ -5996,7 +6003,6 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Header character
-							; NOTES:          Must include the trailing space
 							;---------">
             </Overload>
         </KeyWord>
@@ -6007,38 +6013,31 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="TableList.Char_Mod_AddLabel" func="yes">
+        <KeyWord name="TableList.Char_Mod_Close" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Mod add label character
+							; DESCRIPTION:    The character which stops applying mods to rows.
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="TableList.Char_Mod_End" func="yes">
+        <KeyWord name="TableList.Char_Mod_Open" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Mod end character
+							; DESCRIPTION:    The character which starts applying mods to rows.
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="TableList.Char_Mod_RemoveLabel" func="yes">
+        <KeyWord name="TableList.Char_Model_End" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Mod remove label character
+							; DESCRIPTION:    The end of the model row
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="TableList.Char_Mod_Start" func="yes">
+        <KeyWord name="TableList.Char_Model_Start" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Mod start character
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="TableList.Char_Model" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Model character
+							; DESCRIPTION:    The start of the model row
 							;---------">
             </Overload>
         </KeyWord>
@@ -6168,12 +6167,10 @@
 							; DESCRIPTION:    Create a new TableListMod instance.
 							; PARAMETERS:
 							;  modActString (I,REQ) - String defining the mod. Format (explained in class documentation):
-							;                         	COLUMN.OPERATION(TEXT)
-							;  label        (I,REQ) - Label associated with this mod.
+							;                         	~COLUMN.OPERATION(TEXT)
 							; RETURNS:        Reference to new TableListMod object
 							;---------">
                 <Param name="modString" />
-                <Param name="label" />
             </Overload>
         </KeyWord>
         <KeyWord name="TableListMod.executeMod" func="yes">
@@ -6185,13 +6182,6 @@
 							;                 Will be updated according to the action described in this mod.
 							;---------">
                 <Param name="ByRef row" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="TableListMod.label" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    The label originally given for this mod action.
-							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="Tabstop"/>

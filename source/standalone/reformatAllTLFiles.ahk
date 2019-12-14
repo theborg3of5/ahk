@@ -10,6 +10,13 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 global SPACES_PER_TAB := 3
 global MIN_COLUMN_PADDING := 1 ; At least 1 tab between columns
 
+; Convenience constants that are shorter than referencing TableList constants directly.
+global MODEL_START   := TableList.Char_Model_Start
+global MODEL_END     := TableList.Char_Model_End
+global COLINFO_START := TableList.Char_ColumnInfo_Start
+global COLINFO_END   := TableList.Char_ColumnInfo_End
+
+
 if(!GuiLib.showConfirmationPopup("Reformat all TL/TLS files in AHK root directory?"))
 	ExitApp
 
@@ -34,20 +41,6 @@ reformatFile(filePath) {
 	FileLib.replaceFileWithString(filePath, fileContents)
 }
 
-getCharacterWidth(stringToMeasure) { ; GDB TODO - this isn't accurate, need to track tab STOPS, not just how long tabs are (because they vary!)
-	numChars := 0
-	
-	Loop, Parse, % stringToMeasure
-	{
-		if(A_LoopField = A_Tab)
-			numChars += (SPACES_PER_TAB - mod(numChars, SPACES_PER_TAB))
-		else
-			numChars++
-	}
-	
-	return numChars
-}
-
 reformatRows(rows) {
 	getDimensions(rows, normalIndentLevel, columnWidthsAry)
 	
@@ -56,46 +49,43 @@ reformatRows(rows) {
 	For _,rowText in rows {
 		row := rowText.withoutWhitespace()
 		
-		; Model and Column Info rows get indented to match normal rows, but also have a prefix and suffix to add, with at least a little spacing.
-		if(row.startsWith(TableList.Char_Model_Start)) {
-			prefix := TableList.Char_Model_Start
-			suffix := TableList.Char_Model_End
-			rowContent := row.removeFromStart(prefix).removeFromEnd(suffix).withoutWhitespace()
+		; Model row gets its contents indented to match normal rows, with the closing bracket 1 tab off the last element.
+		if(isModel(row)) {
+			rowContent := removePrefixSuffix(row)
 			rowContent := fixColumnWidths(rowContent, columnWidthsAry)
+			rowSoFar := MODEL_START StringLib.getTabs(normalIndentLevel) rowContent "`t" ; Always one tab before the closing bracket.
 			
-			rowSoFar := prefix StringLib.getTabs(normalIndentLevel) rowContent "`t" ; Always one tab before the closing bracket.
-			columnInfoClosePosition := getCharacterWidth(rowSoFar) ; Measure where the closing bracket is so we can match the position in the column info row.
-			row := rowSoFar suffix
+			; Measure where the closing bracket is so we can match the position in the column info row.
+			columnInfoClosePosition := getCharacterWidth(rowSoFar)
 			
+			row := rowSoFar MODEL_END
 			newRows.push(row)
 			Continue
 		}
 		
-		if(row.startsWith(TableList.Char_ColumnInfo_Start)) {
-			prefix := TableList.Char_ColumnInfo_Start
-			suffix := TableList.Char_ColumnInfo_End
-			rowContent := row.removeFromStart(prefix).removeFromEnd(suffix).withoutWhitespace()
+		; Column info row gets its contents indented to match normal rows, with the closing paren matching the model row's closing bracket.
+		if(isColumnInfo(row)) {
+			rowContent := removePrefixSuffix(row)
 			rowContent := fixColumnWidths(rowContent, columnWidthsAry)
+			rowSoFar := COLINFO_START StringLib.getTabs(normalIndentLevel) rowContent
 			
-			rowSoFar := prefix StringLib.getTabs(normalIndentLevel) rowContent
-			
-			; Align the ending bracket with the model row's.
+			; Align the ending paren with the model row's ending bracket.
 			numSpacesShort := columnInfoClosePosition - getCharacterWidth(rowSoFar)
 			numTabsShort := Ceil(numSpacesShort / SPACES_PER_TAB)
-			row := rowSoFar StringLib.getTabs(numTabsShort) suffix
 			
+			row := rowSoFar StringLib.getTabs(numTabsShort) COLINFO_END
 			newRows.push(row)
 			Continue
 		}
 		
 		; Comment rows are left exactly as-is (including indentation).
-		if(row.startsWith(TableList.Char_Ignore)) {
+		if(isIgnore(row)) {
 			newRows.push(rowText) ; rowText, not row - preserve original indentation.
 			Continue
 		}
 		
 		; Setting and header rows are never split, and get no indentation.
-		if(row.startsWith(TableList.Char_Setting) || row.startsWith(TableList.Char_Header)) {
+		if(isSetting(row) || isHeader(row)) {
 			newRows.push(row)
 			Continue
 		}
@@ -107,14 +97,14 @@ reformatRows(rows) {
 		}
 		
 		; Closing a mod set - decrease indent.
-		if(row.startsWith(TableList.Char_Mod_Close)) {
+		if(isModClose(row)) {
 			modIndentLevel-- ; Decrease this first so this row goes a level back.
 			newRows.push(StringLib.getTabs(modIndentLevel) row)
 			Continue
 		}
 		
 		; Adding a mod set
-		if(row.endsWith(TableList.Char_Mod_Open)) {
+		if(isModOpen(row)) {
 			; Increase indent
 			newRows.push(StringLib.getTabs(modIndentLevel) row)
 			modIndentLevel++
@@ -139,35 +129,29 @@ getDimensions(rows, ByRef normalIndentLevel, ByRef columnWidthsAry) {
 		row := row.withoutWhitespace()
 		
 		; Some rows don't affect widths or indentation
-		if(row.startsWith(TableList.Char_Ignore) || row.startsWith(TableList.Char_Setting) || row.startsWith(TableList.Char_Header))
+		if(isIgnore(row) || isSetting(row) || isHeader(row))
 			Continue
 		
 		; Removing a mod set
-		if(row.startsWith(TableList.Char_Mod_Close)) {
+		if(isModClose(row)) {
 			numOpenMods--
 			DataLib.updateMax(normalIndentLevel, numOpenMods)
 			Continue
 		}
 		
 		; Adding a mod set
-		if(row.endsWith(TableList.Char_Mod_Open)) {
+		if(isModOpen(row)) {
 			numOpenMods++
 			DataLib.updateMax(normalIndentLevel, numOpenMods)
 			Continue
 		}
 		
 		; Model/column info rows - make sure "normal" indentation is at least 1 so we can separate the first column from the prefix.
-		if(row.startsWith(TableList.Char_Model_Start) || row.startsWith(TableList.Char_ColumnInfo_Start)) {
+		if(isModel(row) || isColumnInfo(row)) {
 			DataLib.updateMax(normalIndentLevel, 1)
 			
-			; Also track size of each column (in tabs).
-			row := row.removeFromStart(TableList.Char_Model_Start).removeFromEnd(TableList.Char_Model_End).withoutWhitespace() ; GDB TODO clean this up better
-			row := row.removeFromStart(TableList.Char_ColumnInfo_Start).removeFromEnd(TableList.Char_ColumnInfo_End).withoutWhitespace()
-			For columnIndex,value in splitRow(row) {
-				width := Ceil(value.length() / SPACES_PER_TAB) + MIN_COLUMN_PADDING ; Width in tabs - ceiling means we'll get at least 1 FULL tab of padding
-				columnWidthsAry[columnIndex] := DataLib.max(columnWidthsAry[columnIndex], width)
-			}
-			Continue
+			; Remove the prefix/suffix so we can count the columns inside towards the column widths
+			row := removePrefixSuffix(row)
 		}
 		
 		; Track size of each column (in tabs).
@@ -189,18 +173,24 @@ splitRow(row) {
 	return row.split(A_Tab)
 }
 
-; GDB TODO rename if we keep this - column info, not key
-stripOffModelKeyPrefix(ByRef row) {
-	if(row.startsWith(TableList.Char_Model_Start))
-		prefix := TableList.Char_Model_Start
-	else if(row.startsWith(TableList.Char_ColumnInfo_Start))
-		prefix := TableList.Char_ColumnInfo_Start
+getCharacterWidth(stringToMeasure) {
+	numChars := 0
 	
-	; Remove the prefix and any extra whitespace from the row so it can be split normally.
-	if(prefix != "")
-		row := row.removeFromStart(prefix).withoutWhitespace()
+	Loop, Parse, % stringToMeasure
+	{
+		if(A_LoopField = A_Tab)
+			numChars += (SPACES_PER_TAB - mod(numChars, SPACES_PER_TAB)) ; Each tab brings us to the next tab stop
+		else
+			numChars++
+	}
 	
-	return prefix
+	return numChars
+}
+
+removePrefixSuffix(row) {
+	row := row.removeFromStart(MODEL_START).removeFromEnd(MODEL_END)
+	row := row.removeFromStart(COLINFO_START).removeFromEnd(COLINFO_END)
+	return row.withoutWhitespace()
 }
 
 fixColumnWidths(row, columnWidthsAry) {
@@ -213,4 +203,26 @@ fixColumnWidths(row, columnWidthsAry) {
 	}
 	
 	return newRow.withoutWhitespace() ; Trim off any extra indentation we don't need at the end of the row
+}
+
+isIgnore(row) {
+	return row.startsWith(TableList.Char_Ignore)
+}
+isSetting(row) {
+	return row.startsWith(TableList.Char_Setting)
+}
+isHeader(row) {
+	return row.startsWith(TableList.Char_Header)
+}
+isModClose(row) {
+	return row.startsWith(TableList.Char_Mod_Close)
+}
+isModOpen(row) {
+	return row.endsWith(TableList.Char_Mod_Open)
+}
+isModel(row) {
+	return row.startsWith(TableList.Char_Model_Start)
+}
+isColumnInfo(row) {
+	return row.startsWith(TableList.Char_ColumnInfo_Start)
 }

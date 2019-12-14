@@ -5,21 +5,6 @@
 			Would let us line things up nicely again
 	Consider additional user-defined languages in Notepad++:
 		tl/tls files
-			Syntax highlighting
-				Collapse on mods
-					! This one is looking impossible.
-				(  - Model (highlight whole line)
-						Will need to be (( or something else that's not an exact operator to work.
-				)  - Key (whole line)
-						Will need to be )) or something else that's not an exact operator to work.
-				;  - Ignore (comment line)
-				@  - Settings (whole line, or at least word up to =)
-						Maybe also just specific setting names? WindowTitle, MinColumnWidth
-				## - Headers (ideally different from comments?)
-				[] - Mod lines (highlight start/end chars, +/-numeric labels?, maybe specifically .replaceWith() stuff as well?)
-				|  - Multi-entry (make sure to support inside of mod lines)
-				-  - Placeholder (highlight char)
-				!  - New column
 			We could add an auto-complete for this too - for specific settings and replaceWith/addToStart/addToEnd
 			Could we structure things so that the syntax (and auto-complete if we add it) can be updated with notepad update script?
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table

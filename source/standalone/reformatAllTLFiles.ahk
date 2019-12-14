@@ -40,7 +40,7 @@ getCharacterWidth(stringToMeasure) { ; GDB TODO - this isn't accurate, need to t
 	Loop, Parse, % stringToMeasure
 	{
 		if(A_LoopField = A_Tab)
-			numChars += SPACES_PER_TAB
+			numChars += (SPACES_PER_TAB - mod(numChars, SPACES_PER_TAB))
 		else
 			numChars++
 	}

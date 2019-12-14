@@ -34,10 +34,11 @@ reformatFile(filePath) {
 	FileLib.replaceFileWithString(filePath, fileContents)
 }
 
-getCharacterWidth(stringToMeasure) {
+getCharacterWidth(stringToMeasure) { ; GDB TODO - this isn't accurate, need to track tab STOPS, not just how long tabs are (because they vary!)
 	numChars := 0
 	
-	Loop, Parse {
+	Loop, Parse, % stringToMeasure
+	{
 		if(A_LoopField = A_Tab)
 			numChars += SPACES_PER_TAB
 		else
@@ -67,6 +68,7 @@ reformatRows(rows) {
 			row := rowSoFar suffix
 			
 			newRows.push(row)
+			Continue
 		}
 		
 		if(row.startsWith(TableList.Char_ColumnInfo_Start)) {
@@ -83,6 +85,7 @@ reformatRows(rows) {
 			row := rowSoFar StringLib.getTabs(numTabsShort) suffix
 			
 			newRows.push(row)
+			Continue
 		}
 		
 		; Comment rows are left exactly as-is (including indentation).
@@ -154,8 +157,18 @@ getDimensions(rows, ByRef normalIndentLevel, ByRef columnWidthsAry) {
 		}
 		
 		; Model/column info rows - make sure "normal" indentation is at least 1 so we can separate the first column from the prefix.
-		if(row.startsWith(TableList.Char_Model_Start) || row.startsWith(TableList.Char_ColumnInfo_Start))
+		if(row.startsWith(TableList.Char_Model_Start) || row.startsWith(TableList.Char_ColumnInfo_Start)) {
 			DataLib.updateMax(normalIndentLevel, 1)
+			
+			; Also track size of each column (in tabs).
+			row := row.removeFromStart(TableList.Char_Model_Start).removeFromEnd(TableList.Char_Model_End).withoutWhitespace() ; GDB TODO clean this up better
+			row := row.removeFromStart(TableList.Char_ColumnInfo_Start).removeFromEnd(TableList.Char_ColumnInfo_End).withoutWhitespace()
+			For columnIndex,value in splitRow(row) {
+				width := Ceil(value.length() / SPACES_PER_TAB) + MIN_COLUMN_PADDING ; Width in tabs - ceiling means we'll get at least 1 FULL tab of padding
+				columnWidthsAry[columnIndex] := DataLib.max(columnWidthsAry[columnIndex], width)
+			}
+			Continue
+		}
 		
 		; Track size of each column (in tabs).
 		For columnIndex,value in splitRow(row) {

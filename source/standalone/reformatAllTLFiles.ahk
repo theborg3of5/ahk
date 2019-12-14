@@ -34,6 +34,19 @@ reformatFile(filePath) {
 	FileLib.replaceFileWithString(filePath, fileContents)
 }
 
+getCharacterWidth(stringToMeasure) {
+	numChars := 0
+	
+	Loop, Parse {
+		if(A_LoopField = A_Tab)
+			numChars += SPACES_PER_TAB
+		else
+			numChars++
+	}
+	
+	return numChars
+}
+
 reformatRows(rows) {
 	getDimensions(rows, normalIndentLevel, columnWidthsAry)
 	
@@ -41,6 +54,36 @@ reformatRows(rows) {
 	newRows := []
 	For _,rowText in rows {
 		row := rowText.withoutWhitespace()
+		
+		; Model and Column Info rows get indented to match normal rows, but also have a prefix and suffix to add, with at least a little spacing.
+		if(row.startsWith(TableList.Char_Model_Start)) {
+			prefix := TableList.Char_Model_Start
+			suffix := TableList.Char_Model_End
+			rowContent := row.removeFromStart(prefix).removeFromEnd(suffix).withoutWhitespace()
+			rowContent := fixColumnWidths(rowContent, columnWidthsAry)
+			
+			rowSoFar := prefix StringLib.getTabs(normalIndentLevel) rowContent "`t" ; Always one tab before the closing bracket.
+			columnInfoClosePosition := getCharacterWidth(rowSoFar) ; Measure where the closing bracket is so we can match the position in the column info row.
+			row := rowSoFar suffix
+			
+			newRows.push(row)
+		}
+		
+		if(row.startsWith(TableList.Char_ColumnInfo_Start)) {
+			prefix := TableList.Char_ColumnInfo_Start
+			suffix := TableList.Char_ColumnInfo_End
+			rowContent := row.removeFromStart(prefix).removeFromEnd(suffix).withoutWhitespace()
+			rowContent := fixColumnWidths(rowContent, columnWidthsAry)
+			
+			rowSoFar := prefix StringLib.getTabs(normalIndentLevel) rowContent
+			
+			; Align the ending bracket with the model row's.
+			numSpacesShort := columnInfoClosePosition - getCharacterWidth(rowSoFar)
+			numTabsShort := Ceil(numSpacesShort / SPACES_PER_TAB)
+			row := rowSoFar StringLib.getTabs(numTabsShort) suffix
+			
+			newRows.push(row)
+		}
 		
 		; Comment rows are left exactly as-is (including indentation).
 		if(row.startsWith(TableList.Char_Ignore)) {
@@ -60,43 +103,24 @@ reformatRows(rows) {
 			Continue
 		}
 		
-		; Mod rows indent based on how many mods are open.
-		if(row.startsWith(TableList.Char_Mod_Start)) {
-			modContents := row.allBetweenStrings(TableList.Char_Mod_Start, TableList.Char_Mod_End)
-			
-			; Clear all mods - zero out indent.
-			if(modContents = "") {
-				newRows.push(row) ; No indentation for this row, either.
-				modIndentLevel := 0
-				Continue
-			}
-			
-			; Removing a mod - decrease indent.
-			if(modContents.startsWith(TableList.Char_Mod_RemoveLabel)) {
-				modIndentLevel-- ; Decrease this first so this row goes a level back.
-				newRows.push(StringLib.getTabs(modIndentLevel) row)
-				Continue
-			}
-			
-			; Adding a mod
-			if(modContents.startsWith(TableList.Char_Mod_AddLabel)) {
-				; Increase indent
-				newRows.push(StringLib.getTabs(modIndentLevel) row)
-				modIndentLevel++
-				Continue
-			} else {
-				; No label: replacing all previous mods.
-				newRows.push(row)
-				modIndentLevel := 1
-				Continue
-			}
+		; Closing a mod set - decrease indent.
+		if(row.startsWith(TableList.Char_Mod_Close)) {
+			modIndentLevel-- ; Decrease this first so this row goes a level back.
+			newRows.push(StringLib.getTabs(modIndentLevel) row)
+			Continue
 		}
 		
-		prefix := stripOffModelKeyPrefix(row) ; Model/key rows have a special prefix that comes before starting indentation.
+		; Adding a mod set
+		if(row.endsWith(TableList.Char_Mod_Open)) {
+			; Increase indent
+			newRows.push(StringLib.getTabs(modIndentLevel) row)
+			modIndentLevel++
+			Continue
+		}
+		
 		indent := StringLib.getTabs(normalIndentLevel)
 		row    := fixColumnWidths(row, columnWidthsAry)
-		
-		newRows.push(prefix indent row)
+		newRows.push(indent row)
 	}
 	
 	return newRows
@@ -115,24 +139,22 @@ getDimensions(rows, ByRef normalIndentLevel, ByRef columnWidthsAry) {
 		if(row.startsWith(TableList.Char_Ignore) || row.startsWith(TableList.Char_Setting) || row.startsWith(TableList.Char_Header))
 			Continue
 		
-		; Mod rows shift the level based on the max mods open (1 mod open = 1 additional indent), but don't affect column widths.
-		if(row.startsWith(TableList.Char_Mod_Start)) {
-			modContents := row.allBetweenStrings(TableList.Char_Mod_Start, TableList.Char_Mod_End)
-			if(modContents = "") ; Clearing all mods
-				numOpenMods := 0
-			else if(modContents.startsWith(TableList.Char_Mod_RemoveLabel)) ; Closing one specific mod
-				numOpenMods--
-			else if(modContents.startsWith(TableList.Char_Mod_AddLabel)) ; Adding one mod
-				numOpenMods++
-			else ; Replacing all existing mods
-				numOpenMods := 1
-			
+		; Removing a mod set
+		if(row.startsWith(TableList.Char_Mod_Close)) {
+			numOpenMods--
 			DataLib.updateMax(normalIndentLevel, numOpenMods)
 			Continue
 		}
 		
-		; Model/key rows - make sure "normal" indentation is at least 1 so we can separate the first column from the prefix.
-		if(stripOffModelKeyPrefix(row) != "")
+		; Adding a mod set
+		if(row.endsWith(TableList.Char_Mod_Open)) {
+			numOpenMods++
+			DataLib.updateMax(normalIndentLevel, numOpenMods)
+			Continue
+		}
+		
+		; Model/column info rows - make sure "normal" indentation is at least 1 so we can separate the first column from the prefix.
+		if(row.startsWith(TableList.Char_Model_Start) || row.startsWith(TableList.Char_ColumnInfo_Start))
 			DataLib.updateMax(normalIndentLevel, 1)
 		
 		; Track size of each column (in tabs).
@@ -154,11 +176,12 @@ splitRow(row) {
 	return row.split(A_Tab)
 }
 
+; GDB TODO rename if we keep this - column info, not key
 stripOffModelKeyPrefix(ByRef row) {
-	if(row.startsWith(TableList.Char_Model))
-		prefix := TableList.Char_Model
-	else if(row.startsWith(TableList.Char_ColumnInfo))
-		prefix := TableList.Char_ColumnInfo
+	if(row.startsWith(TableList.Char_Model_Start))
+		prefix := TableList.Char_Model_Start
+	else if(row.startsWith(TableList.Char_ColumnInfo_Start))
+		prefix := TableList.Char_ColumnInfo_Start
 	
 	; Remove the prefix and any extra whitespace from the row so it can be split normally.
 	if(prefix != "")

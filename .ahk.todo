@@ -7,28 +7,29 @@
 		tl/tls files
 			Consider changing settings format to be "@setting()" instead of "@setting=" - so we trigger AutoComplete documentation popup naturally
 				Would also let us get rid of = as an operator
-			Consider moving documentation (and maybe also implementation?) for AutoComplete targets (settings, mod operations) into those scripts - with (and maybe as) documentation headers?
-				Can we use the same thing to update syntax highlighting?
-				For mod operations, could either do indirection or just have an if/else block to pick the right function
-				For settings (as used by Selector), they could be public properties (WindowTitle, MinColumnWidth) that act the same as the updateSettings() function
-					If we make the parameter default be our default value, it would show up in the Auto-complete popup nicely as well
-						Could just call whatever switch statement we end up with between settings for TableList for every setting instead of looping so we apply those defaults
-					So far (undo if we don't follow this through):
-						Added WindowTitle/MinColumnWidth functions to Selector with the documentation we want
-							Renamed existing members with the lowercase names to add a leading underscore
-						Added operation members to TableListMod + make use of them
-						Added getMember function to AutoCompleteClass (to encapsulate dotName stuff there)
-					Need to figure out:
-						Retrieving the specific members from Selector/TableListMod
-							New scope?
-							Something in the documentation header?
-								Then we actually have to read the header in existing AHK logic, though...
-							Read file in separately (yes, a second time for the update script)?
-								Then the members could go in the private scope to hide from normal AHK auto-complete
-								Could also add a name override or something to the documentation header?
-						@ retValue value for settings (reduce from current [@])
-							Should be able to just set .returns for AutoCompleteMember instance, or else have something in the header that does it?
-						Can we hide WindowTitle/MinColumnWidth from normal AHK auto-complete?
+			Consider moving documentation for AutoComplete targets (settings, mod operations) into those scripts - with (or maybe purely as?) documentation headers?
+				Can we use the same data to update syntax highlighting?
+					! is this just totally overkill? Should we just hard-code the operations/settings and add comments to update them manually?
+					How will we tell the difference between settings and mod operations?
+						Based on specific scripts, like we do with groups?
+				So far (undo if we don't follow this through):
+					Added WindowTitle/MinColumnWidth functions to Selector with the documentation we want
+						Renamed existing members with the lowercase names to add a leading underscore
+					Added operation members to TableListMod
+					Added getMember function to AutoCompleteClass (to encapsulate dotName stuff there)
+				Need to figure out:
+					Retrieving the specific members from Selector/TableListMod
+						New scope?
+						Something in the documentation header?
+							Then we actually have to read the header in existing AHK logic, though...
+						Read file in separately (yes, a second time for the update script)?
+							Then the members could go in the private scope to hide from normal AHK auto-complete
+							Could also add a name override or something to the documentation header?
+					@ retValue value for settings (reduce from current [@])
+						Should be able to just set .returns for AutoCompleteMember instance, or else have something in the header that does it?
+	Reconsider "debug" scope - can we just put debug stuff at the end of the private scope instead?
+		Or even at the end of the public scope?
+			Should we document it, then? Or specifically don't so it doesn't appear in auto-complete?
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
 		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
 		Support right-alignment of columns

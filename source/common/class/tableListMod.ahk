@@ -74,6 +74,7 @@ class TableListMod {
 	executeMod(ByRef row) {
 		columnValue := row[this.column]
 		
+		; Each of these should have a matching stub + documentation in the MOD OPERATION STUBS section.
 		if(this.operation = "replaceWith")
 			newValue := this.text
 		else if(this.operation = "addToStart")
@@ -87,8 +88,17 @@ class TableListMod {
 		row[this.column] := newValue
 	}
 	
-	; [[Operations definitions, used for auto-complete in TL/TLS files]] --=
+	
+	; #PRIVATE#
+	
+	column    := "" ; The name of the column to operate on
+	operation := "" ; The operation to perform
+	text      := "" ; The text to use
+	
+	
+	; [[MOD OPERATION STUBS]] --=
 	;---------
+	; LANGUAGE:       TableList
 	; DESCRIPTION:    Add the given text to the start of this column.
 	; PARAMETERS:
 	;  text (I,REQ) - Text to add to start.
@@ -96,6 +106,7 @@ class TableListMod {
 	addToStart(text) {
 	}
 	;---------
+	; LANGUAGE:       TableList
 	; DESCRIPTION:    Add the given text to the end of this column.
 	; PARAMETERS:
 	;  text (I,REQ) - Text to add to end.
@@ -103,6 +114,7 @@ class TableListMod {
 	addToEnd(text) {
 	}
 	;---------
+	; LANGUAGE:       TableList
 	; DESCRIPTION:    Replace this column with the given value.
 	; PARAMETERS:
 	;  text (I,REQ) - Text to replace with.
@@ -110,13 +122,6 @@ class TableListMod {
 	replaceWith(text) {
 	}
 	; =--
-	
-	
-	; #PRIVATE#
-	
-	column    := ""
-	operation := ""
-	text      := ""
 	
 	
 	; #DEBUG#

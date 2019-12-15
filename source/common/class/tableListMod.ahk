@@ -96,7 +96,7 @@ class TableListMod {
 	text      := "" ; The text to use
 	
 	
-	; [[MOD OPERATION STUBS]] --=
+	; [[TABLELIST STUBS - MOD OPERATIONS]] --=
 	;---------
 	; LANGUAGE:       TableList
 	; DESCRIPTION:    Add the given text to the start of this column.

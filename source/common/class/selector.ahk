@@ -252,24 +252,6 @@ class Selector {
 			return this.selectGui(returnColumn)
 	}
 	
-	; [[Settings from TL/TLS file]]
-	;---------
-	; DESCRIPTION:    If this is set, we'll show the given text as the window title (aka the caption).
-	; PARAMETERS:
-	;  title (I,REQ) - The title to use.
-	;---------
-	WindowTitle(title) {
-		this.setTitle(title)
-	}
-	;---------
-	; DESCRIPTION:    If this is set, each super-column in the display will be at least this wide.
-	; PARAMETERS:
-	;  minWidth (I,REQ) - The minimum width (in pixels).
-	;---------
-	MinColumnWidth(minWidth) {
-		this._minColumnWidth := minWidth
-	}
-	
 	
 	; #PRIVATE#
 	
@@ -419,6 +401,22 @@ class Selector {
 		}
 		
 		return ""
+	}
+	
+	; [[TABLELIST STUBS - SETTINGS]]
+	;---------
+	; DESCRIPTION:    If this is set, we'll show the given text as the window title (aka the caption).
+	; PARAMETERS:
+	;  title (I,REQ) - The title to use.
+	;---------
+	WindowTitle(title) {
+	}
+	;---------
+	; DESCRIPTION:    If this is set, each super-column in the display will be at least this wide.
+	; PARAMETERS:
+	;  minWidth (I,REQ) - The minimum width (in pixels).
+	;---------
+	MinColumnWidth(minWidth) {
 	}
 	
 	

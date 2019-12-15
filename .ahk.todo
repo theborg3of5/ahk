@@ -25,7 +25,7 @@
 						Read file in separately (yes, a second time for the update script)?
 							Then the members could go in the private scope to hide from normal AHK auto-complete
 							Could also add a name override or something to the documentation header?
-					@ retValue value for settings (reduce from current [@])
+					@ retValue value for settings (+ reduce from current [@])
 						Should be able to just set .returns for AutoCompleteMember instance, or else have something in the header that does it?
 	Reconsider "debug" scope - can we just put debug stuff at the end of the private scope instead?
 		Or even at the end of the public scope?

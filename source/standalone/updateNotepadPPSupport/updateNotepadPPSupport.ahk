@@ -18,53 +18,57 @@ global ScopeEnd                   := "; #END#"
 ; [[Filepaths]] --=
 path_CompletionTemplate_AHK := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete_AHK.xml"
 path_CompletionTemplate_TL  := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete_TL.xml"
-path_SyntaxTemplate_AHK     := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting_AHK.xml"
-path_SyntaxTemplate_TL      := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting_TL.xml"
+path_CompletionOutput_AHK   := Config.path["AHK_OUTPUT"]   "\notepadPP_AutoComplete_AHK.xml"
+path_CompletionOutput_TL    := Config.path["AHK_OUTPUT"]   "\notepadPP_AutoComplete_TL.xml"
 
-path_CompletionOutput_AHK := Config.path["AHK_OUTPUT"]   "\notepadPP_AutoComplete_AHK.xml"
-path_CompletionOutput_TL  := Config.path["AHK_OUTPUT"]   "\notepadPP_AutoComplete_TL.xml"
-path_SyntaxOutput_AHK     := Config.path["AHK_OUTPUT"]   "\notepadPP_SyntaxHighlighting_AHK.xml"
-path_SyntaxOutput_TL      := Config.path["AHK_OUTPUT"]   "\notepadPP_SyntaxHighlighting_TL.xml"
+path_SyntaxTemplate_AHK := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting_AHK.xml"
+path_SyntaxTemplate_TL  := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting_TL.xml"
+path_SyntaxOutput_AHK   := Config.path["AHK_OUTPUT"]   "\notepadPP_SyntaxHighlighting_AHK.xml"
+path_SyntaxOutput_TL    := Config.path["AHK_OUTPUT"]   "\notepadPP_SyntaxHighlighting_TL.xml"
 
-path_AHK_CompletionActive := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
-path_TL_CompletionActive  := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\TableList.xml"
+path_SyntaxTemplate_Base  := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting_Base.xml" ; Base XML in case the file doesn't exist yet
+path_CompletionActive_AHK := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
+path_CompletionActive_TL  := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\TableList.xml"
 path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml" ; This file is for all user-defined languages
 
 
 ; [[ Auto-complete ]] ---
+; AHK: use documentation read from various script files
 autoCompleteClasses := getAutoCompleteClasses()
 xmlLines := FileLib.fileLinesToArray(path_CompletionTemplate_AHK)
 updateAutoCompleteXML(xmlLines, autoCompleteClasses)
 
 newXML := xmlLines.join("`n")
-FileLib.replaceFileWithString(path_AHK_CompletionActive, newXML)
 FileLib.replaceFileWithString(path_CompletionOutput_AHK, newXML)
+FileLib.replaceFileWithString(path_CompletionActive_AHK, newXML)
+
+; TL: the template file already has what we want to plug in, no processing needed.
+newXML := FileRead(path_CompletionTemplate_TL)
+FileLib.replaceFileWithString(path_CompletionOutput_TL, newXML)
+FileLib.replaceFileWithString(path_CompletionActive_TL, newXML)
 
 t := new Toast("Updated both versions of the auto-complete file").show()
 
 
 ; [[ Syntax highlighting ]] ---
 ; AHK: we can get the class groups we need from the auto complete classes we built above
-syntaxXML := FileRead(path_SyntaxTemplate_AHK)
-updateSyntaxHighlightingXML(syntaxXML, autoCompleteClasses)
-FileLib.replaceFileWithString(path_SyntaxOutput_AHK, syntaxXML)
+xmlSyntax_AHK := FileRead(path_SyntaxTemplate_AHK)
+updateAHKSyntaxXML(xmlSyntax_AHK, autoCompleteClasses)
+FileLib.replaceFileWithString(path_SyntaxOutput_AHK, xmlSyntax_AHK)
 
-; TL: 
-; FileLib.replaceFileWithString(path_SyntaxOutput_TL, syntaxXML)
-; path_SyntaxTemplate_TL
+; TL: the template file already has exactly what we want to plug in, no processing needed.
+xmlSyntax_TL := FileRead(path_SyntaxTemplate_TL)
+FileLib.replaceFileWithString(path_SyntaxOutput_TL, xmlSyntax_TL)
 
-; If the active file doesn't exist, just populate it with the same content.
-if(!FileExist(path_SyntaxActive)) {
-	FileLib.replaceFileWithString(path_SyntaxActive, syntaxXML)
-} else {
-	; If the active file does exist, we don't want to replace the whole thing, as there could be other
-	; user-defined languages - so just replace the AHK <UserLang> tag.
-	langXML := syntaxXML.allBetweenStrings("<UserLang name=""AutoHotkey""", "</UserLang>")
-
+; Get the XML to update - from either an existing file or the base template.
+if(FileExist(path_SyntaxActive))
 	activeSyntaxXML := FileRead(path_SyntaxActive)
-	replaceXML := activeSyntaxXML.firstBetweenStrings("<UserLang name=""AutoHotkey""", "</UserLang>")
-	activeSyntaxXML := activeSyntaxXML.replace(replaceXML, langXML)
-}
+else
+	activeSyntaxXML := FileRead(path_SyntaxTemplate_Base)
+
+; Plug each language into its spot in the XML
+updateLangInSyntaxXML(activeSyntaxXML, "AutoHotkey", xmlSyntax_AHK)
+updateLangInSyntaxXML(activeSyntaxXML, "TableList",  xmlSyntax_TL)
 FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
 ; =--
 
@@ -286,12 +290,12 @@ keywordSortsAfter(word1, word2) {
 }
 
 ;---------
-; DESCRIPTION:    Update the given syntax highlighting XML with groups of space-separated class names.
+; DESCRIPTION:    Update the given AHK syntax highlighting XML with groups of space-separated class names.
 ; PARAMETERS:
 ;  syntaxXML           (IO,REQ) - The XML to update.
 ;  autoCompleteClasses  (I,REQ) - The array of AutoCompleteClass instances from getAutoCompleteClasses().
 ;---------
-updateSyntaxHighlightingXML(ByRef syntaxXML, autoCompleteClasses) {
+updateAHKSyntaxXML(ByRef syntaxXML, autoCompleteClasses) {
 	; Generate the class groups we need from our auto-complete classes
 	classGroups := {}
 	For _,classObj in autoCompleteClasses {
@@ -305,4 +309,20 @@ updateSyntaxHighlightingXML(ByRef syntaxXML, autoCompleteClasses) {
 		groupTextToReplace := "{{REPLACE: " groupName "}}"
 		syntaxXML := syntaxXML.replace(groupTextToReplace, classNames)
 	}
+}
+
+;---------
+; DESCRIPTION:    Update the given XML with the given language-specific XML.
+; PARAMETERS:
+;  activeSyntaxXML (IO,REQ) - XML to update with the language.
+;  langName         (I,REQ) - The name of the language, should be the name from the <UserLang> tag that we'll replace.
+;  langFullXML      (I,REQ) - The full, importable XML for the lanaguage (including the <NotepadPlusPlus> tag)
+;---------
+updateLangInSyntaxXML(ByRef activeSyntaxXML, langName,  langFullXML) {
+	; We only need the chunk of XML specific to the language (including the rest of the opening <UserLang> tag, which has file extensions and such)
+	langXML := langFullXML.allBetweenStrings("<UserLang name=""" langName """", "</UserLang>")
+	
+	; Replace the same thing in the active XML.
+	xmlToReplace := activeSyntaxXML.firstBetweenStrings("<UserLang name=""" langName """", "</UserLang>")
+	activeSyntaxXML := activeSyntaxXML.replace(xmlToReplace, langXML)
 }

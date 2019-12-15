@@ -5,8 +5,9 @@
 			Would let us line things up nicely again
 	Consider additional user-defined languages in Notepad++:
 		tl/tls files
-			We could add an auto-complete for this too - for specific settings and replaceWith/addToStart/addToEnd
-			Could we structure things so that the syntax (and auto-complete if we add it) can be updated with notepad update script?
+			Consider changing settings format to be "@setting()" instead of "@setting=" - so we trigger AutoComplete documentation popup naturally
+			Consider moving documentation (and maybe just implementation?) for AutoComplete targets (settings, mod operations) into those scripts - with (and maybe as) documentation headers?
+				For mod operations, could either do indirection or just have an if/else block to pick the right function
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
 		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
 		Support right-alignment of columns

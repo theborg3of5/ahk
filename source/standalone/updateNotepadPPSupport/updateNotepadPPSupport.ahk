@@ -15,43 +15,59 @@ global ScopeStart_Public          := "; #PUBLIC#"
 global ScopeStart_NonPublicScopes := ["; #INTERNAL#", "; #PRIVATE#", "; #DEBUG#"]
 global ScopeEnd                   := "; #END#"
 
-path_AHK_CompletionTemplate := Config.path["AHK_TEMPLATE"] "\notepadPP_AHK_AutoComplete.xml"
-path_AHK_SyntaxTemplate     := Config.path["AHK_TEMPLATE"] "\notepadPP_AHK_SyntaxHighlighting.xml"
-path_AHK_CompletionOutput   := Config.path["AHK_OUTPUT"]   "\notepadPP_AHK_AutoComplete.xml"
-path_AHK_SyntaxOutput       := Config.path["AHK_OUTPUT"]   "\notepadPP_AHK_SyntaxHighlighting.xml"
-path_AHK_CompletionActive   := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
-path_AHK_SyntaxActive       := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml"
+; [[Filepaths]] --=
+path_CompletionTemplate_AHK := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete_AHK.xml"
+path_CompletionTemplate_TL  := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete_TL.xml"
+path_SyntaxTemplate_AHK     := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting_AHK.xml"
+path_SyntaxTemplate_TL      := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting_TL.xml"
 
-; [[ Auto-complete ]]
+path_CompletionOutput_AHK := Config.path["AHK_OUTPUT"]   "\notepadPP_AutoComplete_AHK.xml"
+path_CompletionOutput_TL  := Config.path["AHK_OUTPUT"]   "\notepadPP_AutoComplete_TL.xml"
+path_SyntaxOutput_AHK     := Config.path["AHK_OUTPUT"]   "\notepadPP_SyntaxHighlighting_AHK.xml"
+path_SyntaxOutput_TL      := Config.path["AHK_OUTPUT"]   "\notepadPP_SyntaxHighlighting_TL.xml"
+
+path_AHK_CompletionActive := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
+path_TL_CompletionActive  := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\TableList.xml"
+path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml" ; This file is for all user-defined languages
+
+
+; [[ Auto-complete ]] ---
 autoCompleteClasses := getAutoCompleteClasses()
-xmlLines := FileLib.fileLinesToArray(path_AHK_CompletionTemplate)
+xmlLines := FileLib.fileLinesToArray(path_CompletionTemplate_AHK)
 updateAutoCompleteXML(xmlLines, autoCompleteClasses)
 
 newXML := xmlLines.join("`n")
 FileLib.replaceFileWithString(path_AHK_CompletionActive, newXML)
-FileLib.replaceFileWithString(path_AHK_CompletionOutput, newXML)
+FileLib.replaceFileWithString(path_CompletionOutput_AHK, newXML)
 
 t := new Toast("Updated both versions of the auto-complete file").show()
 
-; [[ Syntax highlighting ]]
-; We can get the class groups we need from the auto complete classes we built above
-syntaxXML := FileRead(path_AHK_SyntaxTemplate)
+
+; [[ Syntax highlighting ]] ---
+; AHK: we can get the class groups we need from the auto complete classes we built above
+syntaxXML := FileRead(path_SyntaxTemplate_AHK)
 updateSyntaxHighlightingXML(syntaxXML, autoCompleteClasses)
-FileLib.replaceFileWithString(path_AHK_SyntaxOutput, syntaxXML)
+FileLib.replaceFileWithString(path_SyntaxOutput_AHK, syntaxXML)
+
+; TL: 
+; FileLib.replaceFileWithString(path_SyntaxOutput_TL, syntaxXML)
+; path_SyntaxTemplate_TL
 
 ; If the active file doesn't exist, just populate it with the same content.
-if(!FileExist(path_AHK_SyntaxActive)) {
-	FileLib.replaceFileWithString(path_AHK_SyntaxActive, syntaxXML)
+if(!FileExist(path_SyntaxActive)) {
+	FileLib.replaceFileWithString(path_SyntaxActive, syntaxXML)
 } else {
 	; If the active file does exist, we don't want to replace the whole thing, as there could be other
 	; user-defined languages - so just replace the AHK <UserLang> tag.
 	langXML := syntaxXML.allBetweenStrings("<UserLang name=""AutoHotkey""", "</UserLang>")
 
-	activeSyntaxXML := FileRead(path_AHK_SyntaxActive)
+	activeSyntaxXML := FileRead(path_SyntaxActive)
 	replaceXML := activeSyntaxXML.firstBetweenStrings("<UserLang name=""AutoHotkey""", "</UserLang>")
 	activeSyntaxXML := activeSyntaxXML.replace(replaceXML, langXML)
 }
-FileLib.replaceFileWithString(path_AHK_SyntaxActive, activeSyntaxXML)
+FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
+; =--
+
 
 t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
 

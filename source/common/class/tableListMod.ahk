@@ -74,12 +74,12 @@ class TableListMod {
 	executeMod(ByRef row) {
 		columnValue := row[this.column]
 		
-		if(this.operation = TableListMod.Operation_Replace)
-			newValue := this.text
-		else if(this.operation = TableListMod.Operation_AddToStart)
-			newValue := this.text columnValue
-		else if(this.operation = TableListMod.Operation_AddToEnd)
-			newValue := columnValue this.text
+		if(this.operation = "addToStart")
+			newValue := this.addToStart(this.text, columnValue)
+		else if(this.operation = "addToEnd")
+			newValue := this.addToEnd(this.text, columnValue)
+		else if(this.operation = "replaceWith")
+			newValue := this.replaceWith(this.text, columnValue)
 		
 		; Debug.popup("Row", row, "Column value to modify", columnValue, "Operation", this.operation, "Text", this.text, "Result", newValue, "Mod",this)
 		
@@ -87,13 +87,38 @@ class TableListMod {
 		row[this.column] := newValue
 	}
 	
+	; [[Operations, also used for auto-complete in TL/TLS files]] --=
+	;---------
+	; DESCRIPTION:    Add the given text to the start of this column.
+	; PARAMETERS:
+	;  text        (I,REQ) - Text to use.
+	;  columnValue (I,OPT) - (in code only) the value of the column to act on.
+	;---------
+	addToStart(text, columnValue := "") {
+		return text columnValue
+	}
+	;---------
+	; DESCRIPTION:    Add the given text to the end of this column.
+	; PARAMETERS:
+	;  text        (I,REQ) - Text to use.
+	;  columnValue (I,OPT) - (in code only) the value of the column to act on.
+	;---------
+	addToEnd(text, columnValue := "") {
+		return columnValue text
+	}
+	;---------
+	; DESCRIPTION:    Replace this column with the given value.
+	; PARAMETERS:
+	;  text        (I,REQ) - Text to use.
+	;  columnValue (I,OPT) - (in code only) the value of the column to act on.
+	;---------
+	replaceWith(text, columnValue := "") {
+		return text
+	}
+	; =--
+	
 	
 	; #PRIVATE#
-	
-	; Operation identifiers
-	static Operation_Replace    := "replaceWith"
-	static Operation_AddToStart := "addToStart"
-	static Operation_AddToEnd   := "addToEnd"
 	
 	column    := ""
 	operation := ""

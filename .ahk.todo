@@ -16,6 +16,7 @@
 					So far (undo if we don't follow this through):
 						Added WindowTitle/MinColumnWidth functions to Selector with the documentation we want
 							Renamed existing members with the lowercase names to add a leading underscore
+						Added operation members to TableListMod + make use of them
 						Added getMember function to AutoCompleteClass (to encapsulate dotName stuff there)
 					Need to figure out:
 						Retrieving the specific members from Selector/TableListMod
@@ -26,6 +27,7 @@
 								Then the members could go in the private scope to hide from normal AHK auto-complete
 								Could also add a name override or something to the documentation header?
 						@ retValue value for settings (reduce from current [@])
+							Should be able to just set .returns for AutoCompleteMember instance, or else have something in the header that does it?
 						Can we hide WindowTitle/MinColumnWidth from normal AHK auto-complete?
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
 		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?

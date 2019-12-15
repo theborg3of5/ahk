@@ -149,7 +149,7 @@ class Selector {
 	; RETURNS:        this
 	;---------
 	setTitle(title) {
-		this.windowTitle := title
+		this._windowTitle := title
 		return this
 	}
 	
@@ -252,14 +252,32 @@ class Selector {
 			return this.selectGui(returnColumn)
 	}
 	
+	; [[Settings from TL/TLS file]]
+	;---------
+	; DESCRIPTION:    If this is set, we'll show the given text as the window title (aka the caption).
+	; PARAMETERS:
+	;  title (I,REQ) - The title to use.
+	;---------
+	WindowTitle(title) {
+		this.setTitle(title)
+	}
+	;---------
+	; DESCRIPTION:    If this is set, each super-column in the display will be at least this wide.
+	; PARAMETERS:
+	;  minWidth (I,REQ) - The minimum width (in pixels).
+	;---------
+	MinColumnWidth(minWidth) {
+		this._minColumnWidth := minWidth
+	}
+	
 	
 	; #PRIVATE#
 	
 	static Char_CommandStart := "+"
 	static Char_Command_Edit := "e"
 	
-	windowTitle      := "Please make a choice by either index or abbreviation:" ; The title of the window
-	minColumnWidth   := 0     ; How wide (in pixels) each column must be, at a minimum.
+	_windowTitle      := "Please make a choice by either index or abbreviation:" ; The title of the window
+	_minColumnWidth   := 0    ; How wide (in pixels) each column must be, at a minimum.
 	choices          := []    ; Array of visible choices the user can pick from (array of SelectorChoice objects).
 	sectionTitles    := {}    ; {choiceIndex: title} - Lines that will be displayed as titles (index matches the first choice that should be under this title)
 	overrideFields   := ""    ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers)
@@ -302,9 +320,9 @@ class Selector {
 	updateSettings(settings) {
 		For name,value in settings {
 			if(name = "WindowTitle")
-				this.windowTitle := value
+				this._windowTitle := value
 			if(name = "MinColumnWidth")
-				this.minColumnWidth := value
+				this._minColumnWidth := value
 		}
 	}
 	
@@ -338,8 +356,8 @@ class Selector {
 	;                 overrides.
 	;---------
 	doSelectGui() {
-		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this.minColumnWidth)
-		sGui.show(this.windowTitle, this.defaultOverrides)
+		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this._minColumnWidth)
+		sGui.show(this._windowTitle, this.defaultOverrides)
 		
 		; User's choice is main data source
 		choiceData := this.parseChoice(sGui.getChoiceQuery())
@@ -413,8 +431,8 @@ class Selector {
 	Debug_ToString(ByRef builder) {
 		builder.addLine("Filepath",          this.filePath)
 		builder.addLine("Suppress data?",    this.suppressData)
-		builder.addLine("Window title",      this.windowTitle)
-		builder.addLine("Min column width",  this.minColumnWidth)
+		builder.addLine("Window title",      this._windowTitle)
+		builder.addLine("Min column width",  this._minColumnWidth)
 		builder.addLine("Override fields",   this.overrideFields)
 		builder.addLine("Default overrides", this.defaultOverrides)
 		builder.addLine("Choices",           this.choices)

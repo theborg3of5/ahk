@@ -51,6 +51,17 @@ class AutoCompleteClass {
 	}
 	
 	;---------
+	; DESCRIPTION:    Get the member with the given name.
+	; PARAMETERS:
+	;  name (I,REQ) - The name of the member to retrieve.
+	; RETURNS:        An AutoCompleteMember instance representing the member.
+	;---------
+	getMember(name) {
+		dotName := "." name
+		return this.members[dotName]
+	}
+	
+	;---------
 	; DESCRIPTION:    Generate the XML for this class and all of its members.
 	; RETURNS:        The generated XML
 	;---------

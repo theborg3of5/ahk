@@ -74,12 +74,12 @@ class TableListMod {
 	executeMod(ByRef row) {
 		columnValue := row[this.column]
 		
-		if(this.operation = "addToStart")
-			newValue := this.addToStart(this.text, columnValue)
+		if(this.operation = "replaceWith")
+			newValue := this.text
+		else if(this.operation = "addToStart")
+			newValue := this.text columnValue
 		else if(this.operation = "addToEnd")
-			newValue := this.addToEnd(this.text, columnValue)
-		else if(this.operation = "replaceWith")
-			newValue := this.replaceWith(this.text, columnValue)
+			newValue := columnValue this.text
 		
 		; Debug.popup("Row", row, "Column value to modify", columnValue, "Operation", this.operation, "Text", this.text, "Result", newValue, "Mod",this)
 		
@@ -87,33 +87,27 @@ class TableListMod {
 		row[this.column] := newValue
 	}
 	
-	; [[Operations, also used for auto-complete in TL/TLS files]] --=
+	; [[Operations definitions, used for auto-complete in TL/TLS files]] --=
 	;---------
 	; DESCRIPTION:    Add the given text to the start of this column.
 	; PARAMETERS:
-	;  text        (I,REQ) - Text to use.
-	;  columnValue (I,OPT) - (in code only) the value of the column to act on.
+	;  text (I,REQ) - Text to add to start.
 	;---------
-	addToStart(text, columnValue := "") {
-		return text columnValue
+	addToStart(text) {
 	}
 	;---------
 	; DESCRIPTION:    Add the given text to the end of this column.
 	; PARAMETERS:
-	;  text        (I,REQ) - Text to use.
-	;  columnValue (I,OPT) - (in code only) the value of the column to act on.
+	;  text (I,REQ) - Text to add to end.
 	;---------
-	addToEnd(text, columnValue := "") {
-		return columnValue text
+	addToEnd(text) {
 	}
 	;---------
 	; DESCRIPTION:    Replace this column with the given value.
 	; PARAMETERS:
-	;  text        (I,REQ) - Text to use.
-	;  columnValue (I,OPT) - (in code only) the value of the column to act on.
+	;  text (I,REQ) - Text to replace with.
 	;---------
-	replaceWith(text, columnValue := "") {
-		return text
+	replaceWith(text) {
 	}
 	; =--
 	

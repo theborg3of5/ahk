@@ -15,43 +15,43 @@ global ScopeStart_Public          := "; #PUBLIC#"
 global ScopeStart_NonPublicScopes := ["; #INTERNAL#", "; #PRIVATE#", "; #DEBUG#"]
 global ScopeEnd                   := "; #END#"
 
-path_CompletionTemplate := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete.xml"
-path_SyntaxTemplate     := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting.xml"
-path_CompletionOutput   := Config.path["AHK_OUTPUT"]   "\notepadPP_AutoComplete.xml"
-path_SyntaxOutput       := Config.path["AHK_OUTPUT"]   "\notepadPP_SyntaxHighlighting.xml"
-path_CompletionActive   := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
-path_SyntaxActive       := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml"
+path_AHK_CompletionTemplate := Config.path["AHK_TEMPLATE"] "\notepadPP_AHK_AutoComplete.xml"
+path_AHK_SyntaxTemplate     := Config.path["AHK_TEMPLATE"] "\notepadPP_AHK_SyntaxHighlighting.xml"
+path_AHK_CompletionOutput   := Config.path["AHK_OUTPUT"]   "\notepadPP_AHK_AutoComplete.xml"
+path_AHK_SyntaxOutput       := Config.path["AHK_OUTPUT"]   "\notepadPP_AHK_SyntaxHighlighting.xml"
+path_AHK_CompletionActive   := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
+path_AHK_SyntaxActive       := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml"
 
 ; [[ Auto-complete ]]
 autoCompleteClasses := getAutoCompleteClasses()
-xmlLines := FileLib.fileLinesToArray(path_CompletionTemplate)
+xmlLines := FileLib.fileLinesToArray(path_AHK_CompletionTemplate)
 updateAutoCompleteXML(xmlLines, autoCompleteClasses)
 
 newXML := xmlLines.join("`n")
-FileLib.replaceFileWithString(path_CompletionActive, newXML)
-FileLib.replaceFileWithString(path_CompletionOutput, newXML)
+FileLib.replaceFileWithString(path_AHK_CompletionActive, newXML)
+FileLib.replaceFileWithString(path_AHK_CompletionOutput, newXML)
 
 t := new Toast("Updated both versions of the auto-complete file").show()
 
 ; [[ Syntax highlighting ]]
 ; We can get the class groups we need from the auto complete classes we built above
-syntaxXML := FileRead(path_SyntaxTemplate)
+syntaxXML := FileRead(path_AHK_SyntaxTemplate)
 updateSyntaxHighlightingXML(syntaxXML, autoCompleteClasses)
-FileLib.replaceFileWithString(path_SyntaxOutput, syntaxXML)
+FileLib.replaceFileWithString(path_AHK_SyntaxOutput, syntaxXML)
 
 ; If the active file doesn't exist, just populate it with the same content.
-if(!FileExist(path_SyntaxActive)) {
-	FileLib.replaceFileWithString(path_SyntaxActive, syntaxXML)
+if(!FileExist(path_AHK_SyntaxActive)) {
+	FileLib.replaceFileWithString(path_AHK_SyntaxActive, syntaxXML)
 } else {
 	; If the active file does exist, we don't want to replace the whole thing, as there could be other
 	; user-defined languages - so just replace the AHK <UserLang> tag.
 	langXML := syntaxXML.allBetweenStrings("<UserLang name=""AutoHotkey""", "</UserLang>")
 
-	activeSyntaxXML := FileRead(path_SyntaxActive)
+	activeSyntaxXML := FileRead(path_AHK_SyntaxActive)
 	replaceXML := activeSyntaxXML.firstBetweenStrings("<UserLang name=""AutoHotkey""", "</UserLang>")
 	activeSyntaxXML := activeSyntaxXML.replace(replaceXML, langXML)
 }
-FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
+FileLib.replaceFileWithString(path_AHK_SyntaxActive, activeSyntaxXML)
 
 t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
 

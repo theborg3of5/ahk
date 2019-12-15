@@ -2,9 +2,8 @@
     <UserLang name="TableList" ext="tl tls" udlVersion="2.1">
         <Settings>
             <Global caseIgnored="yes" allowFoldOfComments="no" foldCompact="no" forcePureLC="2" decimalSeparator="0" />
-				<!-- *gdb - Keywords 3 (settings) are prefix mode so we can highlight any setting this way -->
 				<!-- *gdb - Keywords 4 (mod column names) are prefix mode so we can highlight them to match the model row -->
-            <Prefix Keywords1="no" Keywords2="no" Keywords3="yes" Keywords4="yes" Keywords5="no" Keywords6="no" Keywords7="no" Keywords8="no" />
+            <Prefix Keywords1="no" Keywords2="no" Keywords3="no" Keywords4="yes" Keywords5="no" Keywords6="no" Keywords7="no" Keywords8="no" />
         </Settings>
         <KeywordLists>
 				<!-- *gdb - Headers and ignore lines -->
@@ -33,8 +32,8 @@
             <Keywords name="Keywords1">addToStart addToEnd replaceWith</Keywords>
 				<!-- *gdb - New column character, from SelectorGui.Char_NewColumn -->
             <Keywords name="Keywords2">!</Keywords>
-				<!-- *gdb - Settings prefix, from TableList.Char_Setting -->
-            <Keywords name="Keywords3">@</Keywords>
+				<!-- *gdb - Settings, from Selector -->
+            <Keywords name="Keywords3">@MinColumnWidth @WindowTitle</Keywords>
 				<!-- *gdb - Prefix for mod column identifiers, from TableListMod.Char_TargetPrefix -->
             <Keywords name="Keywords4">~</Keywords>
             <Keywords name="Keywords5"></Keywords>

@@ -6,8 +6,13 @@
 	Consider additional user-defined languages in Notepad++:
 		tl/tls files
 			Consider changing settings format to be "@setting()" instead of "@setting=" - so we trigger AutoComplete documentation popup naturally
+				Would also let us get rid of = as an operator
 			Consider moving documentation (and maybe just implementation?) for AutoComplete targets (settings, mod operations) into those scripts - with (and maybe as) documentation headers?
 				For mod operations, could either do indirection or just have an if/else block to pick the right function
+				For settings (as used by Selector), they could be public properties (WindowTitle, MinColumnWidth) that act the same as the updateSettings() function
+					If we make the parameter default be our default value, it would show up in the Auto-complete popup nicely as well
+						Could just call whatever switch statement we end up with between settings for TableList for every setting instead of looping so we apply those defaults
+				If do this, we can specify individual settings in syntax highlighting instead of using the @ as a prefix as well
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
 		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
 		Support right-alignment of columns

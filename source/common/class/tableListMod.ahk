@@ -121,7 +121,7 @@ class TableListMod {
 	;---------
 	replaceWith(text) {
 	}
-	; =--
+	; [[END TABLELIST STUBS]] =--
 	
 	
 	; #DEBUG#

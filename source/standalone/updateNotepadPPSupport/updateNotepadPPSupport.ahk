@@ -42,7 +42,15 @@ newXML := xmlLines.join("`n")
 FileLib.replaceFileWithString(path_CompletionOutput_AHK, newXML)
 FileLib.replaceFileWithString(path_CompletionActive_AHK, newXML)
 
-; TL: the template file already has what we want to plug in, no processing needed.
+; ; TL: use documentation from specific scripts
+; xmlLines := FileLib.fileLinesToArray(path_CompletionTemplate_TL)
+
+; stubsStart := "; [[TABLELIST STUBS"
+; stubsEnd := "; [[END TABLELIST STUBS"
+
+
+
+; TL: the template file already has what we want to plug in, no processing needed. ; GDB TODO update
 newXML := FileRead(path_CompletionTemplate_TL)
 FileLib.replaceFileWithString(path_CompletionOutput_TL, newXML)
 FileLib.replaceFileWithString(path_CompletionActive_TL, newXML)

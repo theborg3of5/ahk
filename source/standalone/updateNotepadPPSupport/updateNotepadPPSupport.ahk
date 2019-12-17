@@ -15,7 +15,7 @@ global ScopeStart_Public          := "; #PUBLIC#"
 global ScopeStart_NonPublicScopes := ["; #INTERNAL#", "; #PRIVATE#", "; #DEBUG#"]
 global ScopeEnd                   := "; #END#"
 
-; [[Filepaths]] --=
+; [[File paths]] --=
 path_CompletionTemplate_AHK := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete_AHK.xml"
 path_CompletionTemplate_TL  := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete_TL.xml"
 path_CompletionOutput_AHK   := Config.path["AHK_OUTPUT"]   "\notepadPP_AutoComplete_AHK.xml"
@@ -26,7 +26,7 @@ path_SyntaxTemplate_TL  := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlig
 path_SyntaxOutput_AHK   := Config.path["AHK_OUTPUT"]   "\notepadPP_SyntaxHighlighting_AHK.xml"
 path_SyntaxOutput_TL    := Config.path["AHK_OUTPUT"]   "\notepadPP_SyntaxHighlighting_TL.xml"
 
-path_SyntaxTemplate_Base  := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting_Base.xml" ; Base XML in case the file doesn't exist yet
+path_SyntaxTemplate_Base  := Config.path["AHK_TEMPLATE"]  "\notepadPP_SyntaxHighlighting_Base.xml" ; Base XML in case the file doesn't exist yet
 path_CompletionActive_AHK := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
 path_CompletionActive_TL  := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\TableList.xml"
 path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml" ; This file is for all user-defined languages
@@ -43,6 +43,23 @@ FileLib.replaceFileWithString(path_CompletionOutput_AHK, newXML)
 FileLib.replaceFileWithString(path_CompletionActive_AHK, newXML)
 
 
+; GDB TODO next plans:
+;	- Can we just do one read-in of various scripts for both AHK and TL languages?
+;		- Still need folder-level divisions for class groups for syntax highlighting
+;			- Unless we want to add script-level headers to cover that?
+;		- What level would we need to store/track things at?
+;			- Auto-complete really only needs member level when we're done, but we do need class level for post-processing (inheritance) + syntax highlighting
+;			- Would class-level, but with a "none"/"" or similar class work?
+;				- Could cause issues for sorting - we'd need to get down to the member level before sorting for auto-complete updates.
+;					- Or would it matter? We don't have anything for AHK that has no class, and nothing with a class for TL, right?
+;			- Potential structure: Language > Class > Member
+;				- Class members don't really need to be stored with a dot - just store them numerically and we'll sort everything when we output (maybe triggered by generateXML, even?)
+;				- Examples:
+;					AHK > ActionObjectPath > copyLink
+;					TL > "" > WindowTitle
+;	- Extra "@" returns prefix/value should probably live at the member level - maybe an addition to the doc header? @DOC-RETURNS: or similar?
+;	- Should the TL format call-out really just be at the member level as well, instead of the [[STUB]] stuff?
+;		- LANGUAGE, @LANGUAGE, DOC-LANGUAGE, @DOC-LANG?
 
 
 
@@ -270,7 +287,6 @@ updateAutoCompleteXML(ByRef xmlLines, classes) {
 			
 			; If the class name sorts after the current keyword, we haven't gone far enough yet.
 			keywordName := line.firstBetweenStrings("<KeyWord name=""", """")
-			
 			if(keywordSortsAfter(classObj.name, keywordName) > 0)
 				Continue
 			

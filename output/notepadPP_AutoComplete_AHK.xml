@@ -5144,7 +5144,8 @@
         <KeyWord name="Shift"/>
         <KeyWord name="ShiftAltTab"/>
         <KeyWord name="ShiftDown"/>
-        <KeyWord name="shiftup"/>
+		  <!-- *gdb - Capitalize shiftup -->
+        <KeyWord name="ShiftUp"/>
         <KeyWord name="Show"/>
         <KeyWord name="Shutdown" func="no">
             <Overload retVal="">
@@ -6783,7 +6784,8 @@
         </KeyWord>
         <KeyWord name="Volume_Down"/>
         <KeyWord name="Volume_Mute"/>
-        <KeyWord name="volume_Up"/>
+		  <!-- *gdb - Capitalize volume_up -->
+        <KeyWord name="Volume_Up"/>
         <KeyWord name="VScroll"/>
         <KeyWord name="WaitClose"/>
         <KeyWord name="WantCtrlA"/>

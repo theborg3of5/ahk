@@ -403,6 +403,7 @@ class Selector {
 		return ""
 	}
 	
+	; GDB TODO add a call-out about this wherever we implement settings
 	; [[TABLELIST STUBS]] --= ; Settings - these drive auto-complete for TableList files
 	;---------
 	; DESCRIPTION:    If this is set, we'll show the given text as the window title (aka the caption).

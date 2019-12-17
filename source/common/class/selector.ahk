@@ -403,7 +403,7 @@ class Selector {
 		return ""
 	}
 	
-	; [[TABLELIST STUBS - SETTINGS]]
+	; [[TABLELIST STUBS]] --= ; Settings - these drive auto-complete for TableList files
 	;---------
 	; DESCRIPTION:    If this is set, we'll show the given text as the window title (aka the caption).
 	; PARAMETERS:
@@ -418,6 +418,7 @@ class Selector {
 	;---------
 	MinColumnWidth(minWidth) {
 	}
+	; =--
 	
 	
 	; #DEBUG#

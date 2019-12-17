@@ -42,16 +42,105 @@ newXML := xmlLines.join("`n")
 FileLib.replaceFileWithString(path_CompletionOutput_AHK, newXML)
 FileLib.replaceFileWithString(path_CompletionActive_AHK, newXML)
 
-; ; TL: use documentation from specific scripts
+
+
+
+
+
+
+
+; TL: use documentation from specific scripts
 ; xmlLines := FileLib.fileLinesToArray(path_CompletionTemplate_TL)
 
-; stubsStart := "; [[TABLELIST STUBS"
-; stubsEnd := "; [[END TABLELIST STUBS"
+stubsStart := "[[TABLELIST STUBS]]"
+stubsEnd := "[[END TABLELIST STUBS]]"
+
+path := Config.path["AHK_SOURCE"] "\common\class\TableListMod.ahk"
+
+stubLines := FileRead(path).allBetweenStrings(stubsStart, stubsEnd)
+linesAry := stubLines.split("`r`n")
+linesAry.removeAt(1) ; Drop the remainder of the opening line
+linesAry.pop() ; Drop the leftovers from the last line
+
+; Debug.popup("linesAry",linesAry)
+
+tlMembers := {}
+ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).
+while(ln < linesAry.count()) {
+	line := linesAry.next(ln).withoutWhitespace()
+	
+	; Debug.popup("line","z" line "z", "Header_StartEnd","z" Header_StartEnd "z", "line = Header_StartEnd",(line = Header_StartEnd))
+	
+	; Block of documentation - read the whole thing in and create a member.
+	if(line = Header_StartEnd) {
+		; Debug.popup("line",, "line",line)
+		; Store the full header in an array
+		headerLines := [line]
+		Loop {
+			line := linesAry.next(ln).withoutWhitespace()
+			headerLines.push(line)
+			
+			if(line = Header_StartEnd)
+				Break
+		}
+		
+		; Get the definition line (first line after the header), too.
+		defLine := linesAry.next(ln)
+		
+		; Feed the data to a new member object and add that to our current class object.
+		member := new AutoCompleteMember(defLine, headerLines, returnsPrefix)
+		tlMembers["." member.name] := member
+		
+		Continue
+	}
+}
+
+; Debug.popup("tlMembers",tlMembers)
+
+sortedMembers := []
+
+; Get the names and sort them
+; memberNames := tlMembers.toKeysArray().join("`n")
+
+For dotName,_ in tlMembers
+	memberNames := memberNames.appendPiece(dotName.removeFromStart("."), "`n")
+
+Sort, memberNames, F keywordSortsAfter
+
+; Populate new array in correct order
+For _,name in memberNames.split("`n")
+	sortedMembers.push(tlMembers["." name])
 
 
 
-; TL: the template file already has what we want to plug in, no processing needed. ; GDB TODO update
-newXML := FileRead(path_CompletionTemplate_TL)
+; Debug.popup("tlMembers",tlMembers, "sortedMembers",sortedMembers)
+Debug.popup("sortedMembers",sortedMembers)
+
+keywordsXML := ""
+For _,member in sortedMembers
+	keywordsXML := keywordsXML.appendPiece(member.generateXML(), "`n")
+
+templateXML := FileRead(path_CompletionTemplate_TL)
+newXML := templateXML.replace("{{REPLACE: KEYWORDS}}", keywordsXML)
+
+Debug.popup("keywordsXML",keywordsXML, "newXML",newXML)
+clipboard := newXML
+
+
+
+ExitApp
+
+
+
+
+
+
+
+
+
+
+; ; TL: the template file already has what we want to plug in, no processing needed. ; GDB TODO update
+; newXML := FileRead(path_CompletionTemplate_TL)
 FileLib.replaceFileWithString(path_CompletionOutput_TL, newXML)
 FileLib.replaceFileWithString(path_CompletionActive_TL, newXML)
 

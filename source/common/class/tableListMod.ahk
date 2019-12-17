@@ -96,7 +96,7 @@ class TableListMod {
 	text      := "" ; The text to use
 	
 	
-	; [[TABLELIST STUBS - MOD OPERATIONS]] --=
+	; [[TABLELIST STUBS]] --= ; Mod operations - these drive auto-complete for TableList files
 	;---------
 	; LANGUAGE:       TableList
 	; DESCRIPTION:    Add the given text to the start of this column.

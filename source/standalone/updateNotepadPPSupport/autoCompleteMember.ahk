@@ -32,10 +32,10 @@ class AutoCompleteMember {
 	;---------
 	; DESCRIPTION:    Generate the XML for this member.
 	; PARAMETERS:
-	;  className (I,REQ) - The class that this member belongs to.
+	;  className (I,OPT) - The class that this member belongs to.
 	; RETURNS:        The XML for this member.
 	;---------
-	generateXML(className) {
+	generateXML(className := "") {
 		xml := this.BaseXML_Keyword
 		
 		xml := xml.replaceTag("FULL_NAME",   this.generateFullName(className))
@@ -98,8 +98,10 @@ class AutoCompleteMember {
 		if(this.name = "__New")
 			return className
 		
-		; Full name is <class>.<member>
-		return className "." this.name
+		; Full name is <class>.<member> or just <member> if no class
+		if(className != "")
+			return className "." this.name
+		return this.name
 	}
 	
 	;---------

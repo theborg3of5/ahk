@@ -30,6 +30,9 @@
 	Reconsider "debug" scope - can we just put debug stuff at the end of the private scope instead?
 		Or even at the end of the public scope?
 			Should we document it, then? Or specifically don't so it doesn't appear in auto-complete?
+		Alternatively, should we just have an "other" scope that includes anything that shouldn't be called by normal code?
+			Debug_*
+			Auto-complete-specific things like TableList stubs
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
 		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
 		Support right-alignment of columns

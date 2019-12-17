@@ -98,7 +98,6 @@ class TableListMod {
 	
 	; [[TABLELIST STUBS]] --= ; Mod operations - these drive auto-complete for TableList files
 	;---------
-	; LANGUAGE:       TableList
 	; DESCRIPTION:    Add the given text to the start of this column.
 	; PARAMETERS:
 	;  text (I,REQ) - Text to add to start.
@@ -106,7 +105,6 @@ class TableListMod {
 	addToStart(text) {
 	}
 	;---------
-	; LANGUAGE:       TableList
 	; DESCRIPTION:    Add the given text to the end of this column.
 	; PARAMETERS:
 	;  text (I,REQ) - Text to add to end.
@@ -114,7 +112,6 @@ class TableListMod {
 	addToEnd(text) {
 	}
 	;---------
-	; LANGUAGE:       TableList
 	; DESCRIPTION:    Replace this column with the given value.
 	; PARAMETERS:
 	;  text (I,REQ) - Text to replace with.

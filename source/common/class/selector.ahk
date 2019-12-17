@@ -418,7 +418,7 @@ class Selector {
 	;---------
 	MinColumnWidth(minWidth) {
 	}
-	; =--
+	; [[END TABLELIST STUBS]] =--
 	
 	
 	; #DEBUG#

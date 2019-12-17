@@ -52,69 +52,24 @@ FileLib.replaceFileWithString(path_CompletionActive_AHK, newXML)
 ; TL: use documentation from specific scripts
 ; xmlLines := FileLib.fileLinesToArray(path_CompletionTemplate_TL)
 
-stubsStart := "[[TABLELIST STUBS]]"
-stubsEnd := "[[END TABLELIST STUBS]]"
 
-path := Config.path["AHK_SOURCE"] "\common\class\TableListMod.ahk"
+membersByDotName := {}
+addTLMembersFromStubs(membersByDotName, Config.path["AHK_SOURCE"] "\common\class\Selector.ahk", "@")
+addTLMembersFromStubs(membersByDotName, Config.path["AHK_SOURCE"] "\common\class\TableListMod.ahk")
 
-stubLines := FileRead(path).allBetweenStrings(stubsStart, stubsEnd)
-linesAry := stubLines.split("`r`n")
-linesAry.removeAt(1) ; Drop the remainder of the opening line
-linesAry.pop() ; Drop the leftovers from the last line
 
-; Debug.popup("linesAry",linesAry)
-
-tlMembers := {}
-ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).
-while(ln < linesAry.count()) {
-	line := linesAry.next(ln).withoutWhitespace()
-	
-	; Debug.popup("line","z" line "z", "Header_StartEnd","z" Header_StartEnd "z", "line = Header_StartEnd",(line = Header_StartEnd))
-	
-	; Block of documentation - read the whole thing in and create a member.
-	if(line = Header_StartEnd) {
-		; Debug.popup("line",, "line",line)
-		; Store the full header in an array
-		headerLines := [line]
-		Loop {
-			line := linesAry.next(ln).withoutWhitespace()
-			headerLines.push(line)
-			
-			if(line = Header_StartEnd)
-				Break
-		}
-		
-		; Get the definition line (first line after the header), too.
-		defLine := linesAry.next(ln)
-		
-		; Feed the data to a new member object and add that to our current class object.
-		member := new AutoCompleteMember(defLine, headerLines, returnsPrefix)
-		tlMembers["." member.name] := member
-		
-		Continue
-	}
-}
-
-; Debug.popup("tlMembers",tlMembers)
+; Debug.popup("membersByDotName",membersByDotName)
 
 sortedMembers := []
 
 ; Get the names and sort them
-; memberNames := tlMembers.toKeysArray().join("`n")
-
-For dotName,_ in tlMembers
+For dotName,_ in membersByDotName
 	memberNames := memberNames.appendPiece(dotName.removeFromStart("."), "`n")
-
 Sort, memberNames, F keywordSortsAfter
-
-; Populate new array in correct order
 For _,name in memberNames.split("`n")
-	sortedMembers.push(tlMembers["." name])
+	sortedMembers.push(membersByDotName["." name])
 
-
-
-; Debug.popup("tlMembers",tlMembers, "sortedMembers",sortedMembers)
-Debug.popup("sortedMembers",sortedMembers)
+; Debug.popup("sortedMembers",sortedMembers)
 
 keywordsXML := ""
 For _,member in sortedMembers
@@ -123,24 +78,11 @@ For _,member in sortedMembers
 templateXML := FileRead(path_CompletionTemplate_TL)
 newXML := templateXML.replace("{{REPLACE: KEYWORDS}}", keywordsXML)
 
-Debug.popup("keywordsXML",keywordsXML, "newXML",newXML)
-clipboard := newXML
+; Debug.popup("keywordsXML",keywordsXML, "newXML",newXML)
+; clipboard := newXML
 
 
 
-ExitApp
-
-
-
-
-
-
-
-
-
-
-; ; TL: the template file already has what we want to plug in, no processing needed. ; GDB TODO update
-; newXML := FileRead(path_CompletionTemplate_TL)
 FileLib.replaceFileWithString(path_CompletionOutput_TL, newXML)
 FileLib.replaceFileWithString(path_CompletionActive_TL, newXML)
 
@@ -386,6 +328,49 @@ keywordSortsAfter(word1, word2) {
 	return 0
 }
 
+; GDB TODO
+addTLMembersFromStubs(ByRef membersByDotName, path, returnsPrefix := "") {
+	stubsStart := "[[TABLELIST STUBS]]"
+	stubsEnd := "[[END TABLELIST STUBS]]"
+	
+	stubLines := FileRead(path).allBetweenStrings(stubsStart, stubsEnd)
+	linesAry := stubLines.split("`r`n")
+	linesAry.removeAt(1) ; Drop the remainder of the opening line
+	linesAry.pop() ; Drop the leftovers from the last line
+
+	; Debug.popup("linesAry",linesAry)
+
+	ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).
+	while(ln < linesAry.count()) {
+		line := linesAry.next(ln).withoutWhitespace()
+		
+		; Debug.popup("line","z" line "z", "Header_StartEnd","z" Header_StartEnd "z", "line = Header_StartEnd",(line = Header_StartEnd))
+		
+		; Block of documentation - read the whole thing in and create a member.
+		if(line = Header_StartEnd) {
+			; Debug.popup("line",, "line",line)
+			; Store the full header in an array
+			headerLines := [line]
+			Loop {
+				line := linesAry.next(ln).withoutWhitespace()
+				headerLines.push(line)
+				
+				if(line = Header_StartEnd)
+					Break
+			}
+			
+			; Get the definition line (first line after the header), too.
+			defLine := linesAry.next(ln)
+			
+			; Feed the data to a new member object and add that to our current class object.
+			member := new AutoCompleteMember(defLine, headerLines, returnsPrefix)
+			membersByDotName["." member.name] := member
+			
+			Continue
+		}
+	}
+}
+
 ;---------
 ; DESCRIPTION:    Update the given AHK syntax highlighting XML with groups of space-separated class names.
 ; PARAMETERS:
@@ -415,7 +400,7 @@ updateAHKSyntaxXML(ByRef syntaxXML, autoCompleteClasses) {
 ;  langName         (I,REQ) - The name of the language, should be the name from the <UserLang> tag that we'll replace.
 ;  langFullXML      (I,REQ) - The full, importable XML for the lanaguage (including the <NotepadPlusPlus> tag)
 ;---------
-updateLangInSyntaxXML(ByRef activeSyntaxXML, langName,  langFullXML) {
+updateLangInSyntaxXML(ByRef activeSyntaxXML, langName, langFullXML) {
 	; We only need the chunk of XML specific to the language (including the rest of the opening <UserLang> tag, which has file extensions and such)
 	langXML := langFullXML.allBetweenStrings("<UserLang name=""" langName """", "</UserLang>")
 	

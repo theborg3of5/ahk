@@ -2,13 +2,12 @@
 <NotepadPlus>
     <AutoComplete language="TableList">
         <Environment ignoreCase="yes" startFunc="(" stopFunc=")" paramSeparator="," terminal="" additionalWordChar="" />
-		  
         <KeyWord name="addToEnd" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Add the given text to the end of this column.
 							; PARAMETERS:
-							;  text (I,REQ) - Text to use.
+							;  text (I,REQ) - Text to add to end.
 							;---------">
                 <Param name="text" />
             </Overload>
@@ -18,7 +17,7 @@
 							;---------
 							; DESCRIPTION:    Add the given text to the start of this column.
 							; PARAMETERS:
-							;  text (I,REQ) - Text to use.
+							;  text (I,REQ) - Text to add to start.
 							;---------">
                 <Param name="text" />
             </Overload>
@@ -30,7 +29,7 @@
 							; PARAMETERS:
 							;  minWidth (I,REQ) - The minimum width (in pixels).
 							;---------">
-                <Param name="text" />
+                <Param name="minWidth" />
             </Overload>
         </KeyWord>
         <KeyWord name="replaceWith" func="yes">
@@ -38,7 +37,7 @@
 							;---------
 							; DESCRIPTION:    Replace this column with the given value.
 							; PARAMETERS:
-							;  text (I,REQ) - Text to use.
+							;  text (I,REQ) - Text to replace with.
 							;---------">
                 <Param name="text" />
             </Overload>
@@ -50,7 +49,7 @@
 							; PARAMETERS:
 							;  title (I,REQ) - The title to use.
 							;---------">
-                <Param name="text" />
+                <Param name="title" />
             </Overload>
         </KeyWord>
     </AutoComplete>

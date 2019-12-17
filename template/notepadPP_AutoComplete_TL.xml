@@ -2,6 +2,6 @@
 <NotepadPlus>
     <AutoComplete language="TableList">
         <Environment ignoreCase="yes" startFunc="(" stopFunc=")" paramSeparator="," terminal="" additionalWordChar="" />
-{{REPLACE: KEYWORDS}}
+{{KEYWORDS}}
     </AutoComplete>
 </NotepadPlus>

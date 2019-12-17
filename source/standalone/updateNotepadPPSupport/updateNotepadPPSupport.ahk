@@ -76,7 +76,7 @@ For _,member in sortedMembers
 	keywordsXML := keywordsXML.appendPiece(member.generateXML(), "`n")
 
 templateXML := FileRead(path_CompletionTemplate_TL)
-newXML := templateXML.replace("{{REPLACE: KEYWORDS}}", keywordsXML)
+newXML := templateXML.replace("{{KEYWORDS}}", keywordsXML)
 
 ; Debug.popup("keywordsXML",keywordsXML, "newXML",newXML)
 ; clipboard := newXML
@@ -388,7 +388,7 @@ updateAHKSyntaxXML(ByRef syntaxXML, autoCompleteClasses) {
 	
 	; Update all replacement markers with the groups
 	For groupName,classNames in classGroups {
-		groupTextToReplace := "{{REPLACE: " groupName "}}"
+		groupTextToReplace := "{{" groupName "}}"
 		syntaxXML := syntaxXML.replace(groupTextToReplace, classNames)
 	}
 }

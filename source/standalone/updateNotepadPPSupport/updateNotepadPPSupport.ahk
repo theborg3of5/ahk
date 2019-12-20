@@ -58,8 +58,9 @@ FileLib.replaceFileWithString(path_CompletionActive_AHK, newXML)
 ;					AHK > ActionObjectPath > copyLink
 ;					TL > "" > WindowTitle
 ;	- Extra "@" returns prefix/value should probably live at the member level - maybe an addition to the doc header? @DOC-RETURNS: or similar?
+;		- NPP-RETURNS
 ;	- Should the TL format call-out really just be at the member level as well, instead of the [[STUB]] stuff?
-;		- LANGUAGE, @LANGUAGE, DOC-LANGUAGE, @DOC-LANG?
+;		- NPP-LANGUAGE
 
 
 

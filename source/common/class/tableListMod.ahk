@@ -74,7 +74,7 @@ class TableListMod {
 	executeMod(ByRef row) {
 		columnValue := row[this.column]
 		
-		; Each of these should have a matching stub + documentation in the MOD OPERATION STUBS section.
+		; Each of these should have a matching stub + documentation in the TABLELIST STUBS - MOD OPERATIONS section.
 		if(this.operation = "replaceWith")
 			newValue := this.text
 		else if(this.operation = "addToStart")
@@ -96,8 +96,9 @@ class TableListMod {
 	text      := "" ; The text to use
 	
 	
-	; [[TABLELIST STUBS]] --= ; Mod operations - these drive auto-complete for TableList files
+	; [[TABLELIST STUBS - MOD OPERATIONS]]
 	;---------
+	; NPP-LANG:       TableList
 	; DESCRIPTION:    Add the given text to the start of this column.
 	; PARAMETERS:
 	;  text (I,REQ) - Text to add to start.
@@ -105,6 +106,7 @@ class TableListMod {
 	addToStart(text) {
 	}
 	;---------
+	; NPP-LANG:       TableList
 	; DESCRIPTION:    Add the given text to the end of this column.
 	; PARAMETERS:
 	;  text (I,REQ) - Text to add to end.
@@ -112,13 +114,13 @@ class TableListMod {
 	addToEnd(text) {
 	}
 	;---------
+	; NPP-LANG:       TableList
 	; DESCRIPTION:    Replace this column with the given value.
 	; PARAMETERS:
 	;  text (I,REQ) - Text to replace with.
 	;---------
 	replaceWith(text) {
 	}
-	; [[END TABLELIST STUBS]] =--
 	
 	
 	; #DEBUG#

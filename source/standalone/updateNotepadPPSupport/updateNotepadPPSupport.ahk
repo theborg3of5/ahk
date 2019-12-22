@@ -36,7 +36,7 @@ path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefine
 ;  - Add NPP-RETURNS and NPP-LANG to list of header keywords for indentation and such
 
 global ahkClasses := {} ; {className: AutoCompleteClass}
-global tlMembers := []
+global tlMembers := {} ; {memberName: AutoCompleteMember}
 
 ; [[ Extract data from scripts ]] ---
 
@@ -63,31 +63,8 @@ For className,classObj in ahkClasses {
 For _,className in classesToDelete
 	ahkClasses.Delete(className)
 
-
-
-; Sort properly (underscores sort last) - AHK
-sortedAHKClasses := []
-; Get the names and sort them
-
-classNames := ahkClasses.toKeysArray().join("`n")
-; ahkClassesAry := ahkClasses.toValuesArray()
-; classNames := ahkClassesAry.getChildrenReducedToMember("name").join("`n")
-
-Sort, classNames, F keywordSortsAfter
-; Populate new array in correct order
-For _,className in classNames.split("`n")
-	sortedAHKClasses.push(ahkClasses[className])
-
-; Sort properly - TL
-sortedTLMembers := []
-memberNames := tlMembers.getChildrenReducedToMember("name").join("`n")
-Sort, memberNames, F keywordSortsAfter
-For _,name in memberNames.split("`n") {
-	For _,member in tlMembers {
-		if(member.name = name)
-			sortedTLMembers.push(member)
-	}
-}
+sortedAHKClasses := getSortedKeywordAry(ahkClasses)
+sortedTLMembers := getSortedKeywordAry(tlMembers)
 
 
 ; [[ Auto-complete ]] ---
@@ -215,8 +192,8 @@ addFromFolder(folderPath, classGroup, returnsPrefix := "") {
 				
 				if(tlBlockOn) {
 					; Feed the header to a new member object and add it to the TL members array.
-					tlMembers.push(new AutoCompleteMember(headerLines)) ; No defLine/returnsPrefix - these headers specify their own.
-					; Debug.popup("tlMembers",tlMembers)
+					member := new AutoCompleteMember(headerLines) ; No defLine/returnsPrefix - these headers specify their own.
+					tlMembers[member.name] := member
 				} else {
 					; Get the definition line (first line after the header) too.
 					defLine := linesAry.next(ln)
@@ -316,6 +293,20 @@ updateAutoCompleteXML(ByRef xmlLines, classes) {
 	} ; This will technically fail to add anything that sorts to the very end, but I don't think I'm ever going to create a new class that starts with __ so we should be fine.
 }
 
+; GDB TODO
+getSortedKeywordAry(toSort) {
+	sortedAry := []
+	
+	namesList := toSort.toKeysArray().join("`n")
+	Sort, namesList, F keywordSortsAfter
+	
+	; Populate new array in sorted order
+	For _,name in namesList.split("`n")
+		sortedAry.push(toSort[name])
+	
+	return sortedAry
+}
+
 ;---------
 ; DESCRIPTION:    Comparison function for sorting in auto-complete order.
 ; PARAMETERS:
@@ -359,49 +350,6 @@ keywordSortsAfter(word1, word2) {
 		return -1
 	
 	return 0
-}
-
-; GDB TODO
-addTLMembersFromStubs(ByRef membersByDotName, path, returnsPrefix := "") {
-	stubsStart := "[[TABLELIST STUBS]]"
-	stubsEnd := "[[END TABLELIST STUBS]]"
-	
-	stubLines := FileRead(path).allBetweenStrings(stubsStart, stubsEnd)
-	linesAry := stubLines.split("`r`n")
-	linesAry.removeAt(1) ; Drop the remainder of the opening line
-	linesAry.pop() ; Drop the leftovers from the last line
-
-	; Debug.popup("linesAry",linesAry)
-
-	ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).
-	while(ln < linesAry.count()) {
-		line := linesAry.next(ln).withoutWhitespace()
-		
-		; Debug.popup("line","z" line "z", "Header_StartEnd","z" Header_StartEnd "z", "line = Header_StartEnd",(line = Header_StartEnd))
-		
-		; Block of documentation - read the whole thing in and create a member.
-		if(line = Header_StartEnd) {
-			; Debug.popup("line",, "line",line)
-			; Store the full header in an array
-			headerLines := [line]
-			Loop {
-				line := linesAry.next(ln).withoutWhitespace()
-				headerLines.push(line)
-				
-				if(line = Header_StartEnd)
-					Break
-			}
-			
-			; Get the definition line (first line after the header), too.
-			defLine := linesAry.next(ln)
-			
-			; Feed the data to a new member object and add that to our current class object.
-			member := new AutoCompleteMember(headerLines, defLine, returnsPrefix)
-			membersByDotName["." member.name] := member
-			
-			Continue
-		}
-	}
 }
 
 ;---------

@@ -15,30 +15,32 @@ global ScopeStart_Public          := "; #PUBLIC#"
 global ScopeStart_NonPublicScopes := ["; #INTERNAL#", "; #PRIVATE#", "; #DEBUG#"]
 global ScopeEnd                   := "; #END#"
 
+
 ; [[File paths]] --=
+; Auto-completion
 path_CompletionTemplate_AHK := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete_AHK.xml"
 path_CompletionTemplate_TL  := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete_TL.xml"
 path_CompletionOutput_AHK   := Config.path["AHK_OUTPUT"]   "\notepadPP_AutoComplete_AHK.xml"
 path_CompletionOutput_TL    := Config.path["AHK_OUTPUT"]   "\notepadPP_AutoComplete_TL.xml"
 
-path_SyntaxTemplate_AHK := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting_AHK.xml"
-path_SyntaxTemplate_TL  := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting_TL.xml"
-path_SyntaxOutput_AHK   := Config.path["AHK_OUTPUT"]   "\notepadPP_SyntaxHighlighting_AHK.xml"
-path_SyntaxOutput_TL    := Config.path["AHK_OUTPUT"]   "\notepadPP_SyntaxHighlighting_TL.xml"
+; Syntax highlighting
+path_SyntaxTemplate_Base := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting_Base.xml" ; Base XML in case the file doesn't exist yet
+path_SyntaxTemplate_AHK  := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting_AHK.xml"
+path_SyntaxTemplate_TL   := Config.path["AHK_TEMPLATE"] "\notepadPP_SyntaxHighlighting_TL.xml"
+path_SyntaxOutput_AHK    := Config.path["AHK_OUTPUT"]   "\notepadPP_SyntaxHighlighting_AHK.xml"
+path_SyntaxOutput_TL     := Config.path["AHK_OUTPUT"]   "\notepadPP_SyntaxHighlighting_TL.xml"
 
-path_SyntaxTemplate_Base  := Config.path["AHK_TEMPLATE"]  "\notepadPP_SyntaxHighlighting_Base.xml" ; Base XML in case the file doesn't exist yet
+; "Active" files used directly by Notepad++
 path_CompletionActive_AHK := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
 path_CompletionActive_TL  := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\TableList.xml"
 path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml" ; This file is for all user-defined languages
 
 
-; GDB TODO next plans:
-;  - Add NPP-RETURNS and NPP-LANG to list of header keywords for indentation and such
-
 ; [[ Extract data ]] ---
 ahkClasses := []
 tlMembers  := []
 getDataFromScripts(ahkClasses, tlMembers)
+
 
 ; [[ Auto-complete ]] ---
 newXML := updateCompletionXML_AHK(path_CompletionTemplate_AHK, ahkClasses)
@@ -53,25 +55,20 @@ t := new Toast("Updated both versions of the auto-complete file").show()
 
 
 ; [[ Syntax highlighting ]] ---
-xmlSyntaxAHK := FileRead(path_SyntaxTemplate_AHK)
-updateSyntaxXML_AHK(xmlSyntaxAHK, ahkClasses)
-FileLib.replaceFileWithString(path_SyntaxOutput_AHK, xmlSyntaxAHK)
+newXML_AHK := updateSyntaxXML_AHK(path_SyntaxTemplate_AHK, ahkClasses)
+FileLib.replaceFileWithString(path_SyntaxOutput_AHK, newXML_AHK)
 
-xmlSyntaxTL := FileRead(path_SyntaxTemplate_TL)
-updateSyntaxXML_TL(xmlSyntaxTL, tlMembers)
-FileLib.replaceFileWithString(path_SyntaxOutput_TL, xmlSyntaxTL)
+newXML_TL := updateSyntaxXML_TL(path_SyntaxTemplate_TL, tlMembers)
+FileLib.replaceFileWithString(path_SyntaxOutput_TL, newXML_TL)
 
-; Get the combined XML to update - from either an existing file or the base template.
+; Custom syntax highlighting lives in one "active" file for all languages, so we need to update the file instead of replacing it.
 if(FileExist(path_SyntaxActive))
 	activeSyntaxXML := FileRead(path_SyntaxActive)
 else
 	activeSyntaxXML := FileRead(path_SyntaxTemplate_Base)
-
-; Plug each language into its spot in the XML
 updateLangInSyntaxXML(activeSyntaxXML, "AutoHotkey", xmlSyntaxAHK)
 updateLangInSyntaxXML(activeSyntaxXML, "TableList",  xmlSyntaxTL)
 FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
-
 
 t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
 ; =--
@@ -79,7 +76,14 @@ t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").b
 ExitApp
 
 
-; GDB TODO
+;---------
+; DESCRIPTION:    Read the scripts from various folders and populate the given arrays with
+;                 information about AHK classes and TableList file format.
+; PARAMETERS:
+;  sortedAHKClasses (O,REQ) - Array of AutoCompleteClass instances representing AHK classes and
+;                             their members, sorted in auto-complete order.
+;  sortedTLMembers  (O,REQ) - Array of TableList file type members, sorted in auto-complete order.
+;---------
 getDataFromScripts(ByRef sortedAHKClasses, ByRef sortedTLMembers) {
 	ahkClasses := {} ; {className: AutoCompleteClass}
 	tlMembers  := {} ; {memberName: AutoCompleteMember}
@@ -173,7 +177,12 @@ addFromFolder(ByRef ahkClasses, ByRef tlMembers, folderPath, classGroup, returns
 	}
 }
 
-; GDB TODO - remove empty classes, handle inheritance
+;---------
+; DESCRIPTION:    Go through the given array of AHK class objects and remove empty classes + update
+;                 classes with a parentName specified (a la inheritance).
+; PARAMETERS:
+;  ahkClasses (IO,REQ) - Associative array of AutoCompleteClass objects to update.
+;---------
 processAHKClasses(ByRef ahkClasses) {
 	emptyClasses := []
 	For className,classObj in ahkClasses {
@@ -193,7 +202,13 @@ processAHKClasses(ByRef ahkClasses) {
 		ahkClasses.Delete(className)
 }
 
-; GDB TODO
+;---------
+; DESCRIPTION:    Sort the given associative array of objects in keyword order (alphabetical, but
+;                 underscores sort last).
+; PARAMETERS:
+;  toSort (I,REQ) - The associative array to sort. Format: {name: object}
+; RETURNS:        A numeric array of the same objects, sorted in keyword order.
+;---------
 getSortedKeywordAry(toSort) {
 	sortedAry := []
 	
@@ -253,14 +268,14 @@ keywordSortsAfter(word1, word2) {
 }
 
 ;---------
-; DESCRIPTION:    Update the given array of XML lines using the given array of class information.
+; DESCRIPTION:    Update the AHK base XML using the given array of AHK classes.
 ; PARAMETERS:
-;  basePath (I,REQ) - The file path for the XML file to use as a base
-;  classes  (I,REQ) - A numeric array of AutoCompleteClass instances in auto-complete order.
+;  templatePath (I,REQ) - The file path for the XML file to use as a base
+;  classes      (I,REQ) - A numeric array of AutoCompleteClass instances in auto-complete order.
 ; RETURNS:        The updated XML
 ;---------
-updateCompletionXML_AHK(basePath, classes) {
-	xmlLines := FileLib.fileLinesToArray(basePath)
+updateCompletionXML_AHK(templatePath, classes) {
+	xmlLines := FileLib.fileLinesToArray(templatePath)
 
 	; Loop through our sorted classes, inserting their XML in the right place as we go.
 	commentOn := false
@@ -300,24 +315,30 @@ updateCompletionXML_AHK(basePath, classes) {
 	return xmlLines.join("`n")
 }
 
-; GDB TODO
-updateCompletionXML_TL(basePath, tlMembers) {
+;---------
+; DESCRIPTION:    Update the TL base XML using the given array of TL members.
+; PARAMETERS:
+;  templatePath (I,REQ) - The file path for the XML file to use as a base
+;  tlMembers    (I,REQ) - A numeric array of AutoCompleteMember instances in auto-complete order.
+; RETURNS:        The updated XML
+;---------
+updateCompletionXML_TL(templatePath, tlMembers) {
 	; Generate the keywords XML
 	keywordsXML := ""
 	For _,member in tlMembers
 		keywordsXML := keywordsXML.appendPiece(member.generateXML(), "`n")
 
-	templateXML := FileRead(basePath)
+	templateXML := FileRead(templatePath)
 	return replaceMarker(templateXML, "KEYWORDS", keywordsXML)
 }
 
 ;---------
-; DESCRIPTION:    Update the given AHK syntax highlighting XML with groups of space-separated class names.
+; DESCRIPTION:    Update AHK syntax highlighting XML with groups of space-separated class names.
 ; PARAMETERS:
-;  syntaxXML  (IO,REQ) - The XML to update.
-;  ahkClasses  (I,REQ) - The array of AutoCompleteClass instances from getAutoCompleteClasses(). ; GDB TODO
+;  templatePath (I,REQ) - The file path of the template XML.
+;  ahkClasses   (I,REQ) - The sorted array of AutoCompleteClass instances from getDataFromScripts().
 ;---------
-updateSyntaxXML_AHK(ByRef syntaxXML, ahkClasses) {
+updateSyntaxXML_AHK(templatePath, ahkClasses) {
 	; Generate the class groups we need from our auto-complete classes
 	classGroups := {}
 	For _,classObj in ahkClasses {
@@ -327,12 +348,20 @@ updateSyntaxXML_AHK(ByRef syntaxXML, ahkClasses) {
 	}
 	
 	; Update all replacement markers with the groups
+	syntaxXML := FileRead(templatePath)
 	For groupName,classNames in classGroups
 		syntaxXML := replaceMarker(syntaxXML, groupName, classNames)
+	
+	return syntaxXML
 }
 
-; GDB TODO
-updateSyntaxXML_TL(ByRef syntaxXML, tlMembers) {
+;---------
+; DESCRIPTION:    Update TL syntax highlighting XML with groups of space-separated member names.
+; PARAMETERS:
+;  templatePath (I,REQ) - The file path of the template XML.
+;  tlMembers    (I,REQ) - The sorted array of AutoCompleteMember instances from getDataFromScripts().
+;---------
+updateSyntaxXML_TL(templatePath, tlMembers) {
 	; Generate the groups
 	memberGroups := {}
 	For _,member in tlMembers {
@@ -350,8 +379,11 @@ updateSyntaxXML_TL(ByRef syntaxXML, tlMembers) {
 	}
 	
 	; Update replacement markers
+	syntaxXML := FileRead(templatePath)
 	For groupName,memberNames in memberGroups
 		syntaxXML := replaceMarker(syntaxXML, groupName, memberNames)
+	
+	return syntaxXML
 }
 	
 ;---------

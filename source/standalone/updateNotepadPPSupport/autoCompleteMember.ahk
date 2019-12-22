@@ -12,41 +12,24 @@ class AutoCompleteMember {
 	; PARAMETERS:
 	;  headerLines   (I,REQ) - An array of lines making up the full header for this member.
 	;  defLine       (I,OPT) - The definition line for the member - that is, its first line
-	;                          (function definition, etc.). GDB TODO talk about overrides in this header
-	;  returnsPrefix (I,OPT) - If specified, the returns value will appear as a prefix on the return value.
+	;                          (function definition, etc.). Ignored if there's a NPP-DEF-LINE line
+	;                          in the header.
+	;  returnsPrefix (I,OPT) - If specified, the returns value will appear as a prefix on the return
+	;                          value. Ignored if there's a NPP-RETURNS line in the header.
 	;---------
-	__New(headerLines, defLine := "", returnsPrefix := "") { ; GDB TODO can we structure this better/break it out into smaller functions?
-		; Check the header for any NPP-* overrides
-		linesToDelete := []
-		For ln,line in headerLines {
-			line := line.removeFromStart("; ")
-			if(line.startsWith("NPP-DEF-LINE:")) {
-				defLine := line.removeFromStart("NPP-DEF-LINE:").withoutWhitespace()
-				linesToDelete.push(ln)
-			}
-			if(line.startsWith("NPP-RETURNS:")) {
-				linesToDelete.push(ln)
-				returnsOverride := line.removeFromStart("NPP-RETURNS:").withoutWhitespace()
-			}
-		}
-		; Remove the lines for the NPP-* overrides as well
-		For _,ln in linesToDelete
-			headerLines.delete(ln)
+	__New(headerLines, defLine := "", returnsPrefix := "") {
+		this.returns := returnsPrefix
 		
-		; The description is the actual function header, indented nicely.
-		this.description := this.formatHeaderAsDescription(headerLines)
-		
-		AHKCodeLib.getDefLineParts(defLine, name, paramsAry)
-		this.name      := name
-		this.paramsAry := paramsAry
-		this.returns   := returnsPrefix
+		this.handleHeader(headerLines, defLine) ; Can replace defLine based on header
 		
 		; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
 		if(!defLine.contains("("))
 			this.returns := this.returns.appendPiece(this.ReturnValue_Property, " ")
 		
-		if(returnsOverride)
-			this.returns := returnsOverride
+		; Extract info from the definition line
+		AHKCodeLib.getDefLineParts(defLine, name, paramsAry)
+		this.name      := name
+		this.paramsAry := paramsAry
 	}
 	
 	;---------
@@ -85,6 +68,35 @@ class AutoCompleteMember {
 		)"
 	static Indent_Header := StringLib.getTabs(7) ; We can indent with tabs and it's ignored - cleaner XML and result looks the same.
 	
+	;---------
+	; DESCRIPTION:    Go through the header and update this class as needed.
+	; PARAMETERS:
+	;  headerLines (I,REQ) - An array of header lines
+	;  defLine     (O,REQ) - Will be replaced with a new definition line if one is defined in the
+	;                        header (NPP-DEF-LINE).
+	;---------
+	handleHeader(headerLines, ByRef defLine) {
+		; Check the header for any NPP-* overrides
+		linesToDelete := []
+		For ln,line in headerLines {
+			line := line.removeFromStart("; ")
+			if(line.startsWith("NPP-DEF-LINE:")) {
+				linesToDelete.push(ln)
+				defLine := line.removeFromStart("NPP-DEF-LINE:").withoutWhitespace()
+			}
+			if(line.startsWith("NPP-RETURNS:")) {
+				linesToDelete.push(ln)
+				retVal := line.removeFromStart("NPP-RETURNS:").withoutWhitespace()
+				this.returns := this.returns.appendPiece(retVal, " ")
+			}
+		}
+		; Remove the lines for the NPP-* overrides as well
+		For _,ln in linesToDelete
+			headerLines.delete(ln)
+		
+		; The description is the actual function header, indented nicely.
+		this.description := this.formatHeaderAsDescription(headerLines)
+	}
 	
 	;---------
 	; DESCRIPTION:    Turn the array of documentation lines into a single, indented, XML-safe string.

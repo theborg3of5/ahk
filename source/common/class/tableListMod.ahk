@@ -74,7 +74,7 @@ class TableListMod {
 	executeMod(ByRef row) {
 		columnValue := row[this.column]
 		
-		; Each of these should have a matching stub + documentation in the TABLELIST STUBS - MOD OPERATIONS section. ; GDB TODO update
+		; Each of these should have a matching stub + documentation in the (@)NPP-TABLELIST section.
 		if(this.operation = "replaceWith")
 			newValue := this.text
 		else if(this.operation = "addToStart")
@@ -88,7 +88,6 @@ class TableListMod {
 		row[this.column] := newValue
 	}
 	
-	; GDB TODO add some highlighting for these start/end lines
 	; @NPP-TABLELIST
 	;---------
 	; NPP-DEF-LINE:   addToStart(text)

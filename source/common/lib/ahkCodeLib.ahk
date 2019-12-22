@@ -192,7 +192,8 @@ class AHKCodeLib {
 	; #PRIVATE#
 	
 	; All of the keywords possibly contained in the documentation header - should be kept up to date with HeaderBase* constants below.
-	static HeaderKeywords := ["DESCRIPTION:", "PARAMETERS:", "RETURNS:", "SIDE EFFECTS:", "NOTES:"]
+	; NPP-* are used for auto-completion/syntax highlighting generation
+	static HeaderKeywords := ["DESCRIPTION:", "PARAMETERS:", "RETURNS:", "SIDE EFFECTS:", "NOTES:", "NPP-DEF-LINE:", "NPP-RETURNS:"]
 	
 	; Header bases
 	static HeaderBase_Member := "

@@ -77,5 +77,24 @@ class ObjectBase {
 			ary.push(value)
 		return ary
 	}
+	
+	;---------
+	; DESCRIPTION:    Generate an object which contains the same indices, but with each child object
+	;                 replaced with that child object's value for the given member.
+	;                 For example, using a memberName of "test":
+	;                    this["A"] := {"test":1}
+	;                    this["B"] := {"test":2}
+	;                 Will return:
+	;                    {"A":1, "B":2}
+	; PARAMETERS:
+	;  memberName (I,REQ) - The name of the member to get for each child object.
+	; RETURNS:        The new array of member values.
+	;---------
+	getChildrenReducedToMember(memberName) {
+		retObj := []
+		For index,child in this
+			retObj[index] := child[memberName]
+		return retObj
+	}
 	; #END#
 }

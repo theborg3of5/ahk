@@ -948,6 +948,20 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ArrayBase.getChildrenReducedToMember" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Generate an array which contains the same indices, but with each child object
+							;                 replaced with that child object's value for the given member.
+							;                 For example, using a memberName of &quot;test&quot;:
+							;                    [ {&quot;test&quot;:&quot;A&quot;}, {&quot;test&quot;:&quot;B&quot;} ] => [&quot;A&quot;, &quot;B&quot;]
+							; PARAMETERS:
+							;  memberName (I,REQ) - The name of the member to get for each child object.
+							; RETURNS:        The new array of member values.
+							;---------">
+                <Param name="memberName" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ArrayBase.isArray" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -4122,6 +4136,23 @@
 							;                 is updated to at least 1.1.29.00.
 							; RETURNS:        Number of key/element pairs in the object
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ObjectBase.getChildrenReducedToMember" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Generate an object which contains the same indices, but with each child object
+							;                 replaced with that child object's value for the given member.
+							;                 For example, using a memberName of &quot;test&quot;:
+							;                    this[&quot;A&quot;] := {&quot;test&quot;:1}
+							;                    this[&quot;B&quot;] := {&quot;test&quot;:2}
+							;                 Will return:
+							;                    {&quot;A&quot;:1, &quot;B&quot;:2}
+							; PARAMETERS:
+							;  memberName (I,REQ) - The name of the member to get for each child object.
+							; RETURNS:        The new array of member values.
+							;---------">
+                <Param name="memberName" />
             </Overload>
         </KeyWord>
         <KeyWord name="ObjectBase.mergeFromObject" func="yes">

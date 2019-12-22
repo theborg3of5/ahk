@@ -68,7 +68,11 @@ For _,className in classesToDelete
 ; Sort properly (underscores sort last) - AHK
 sortedAHKClasses := []
 ; Get the names and sort them
+
 classNames := ahkClasses.toKeysArray().join("`n")
+; ahkClassesAry := ahkClasses.toValuesArray()
+; classNames := ahkClassesAry.getChildrenReducedToMember("name").join("`n")
+
 Sort, classNames, F keywordSortsAfter
 ; Populate new array in correct order
 For _,className in classNames.split("`n")
@@ -76,9 +80,7 @@ For _,className in classNames.split("`n")
 
 ; Sort properly - TL
 sortedTLMembers := []
-memberNames := ""
-For _,member in tlMembers
-	memberNames := memberNames.appendPiece(member.name, "`n")
+memberNames := tlMembers.getChildrenReducedToMember("name").join("`n")
 Sort, memberNames, F keywordSortsAfter
 For _,name in memberNames.split("`n") {
 	For _,member in tlMembers {

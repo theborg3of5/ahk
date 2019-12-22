@@ -119,7 +119,7 @@ class ArrayBase {
 	join(delim := ",") {
 		outString := ""
 		
-		For _,value in this {
+		For _,value in this { ; GDB TODO can't this just use .appendPiece()? If not, add a comment to explain why.
 			if(outString)
 				outString .= delim
 			outString .= value
@@ -136,5 +136,22 @@ class ArrayBase {
 			return
 		this.removeAt(this.minIndex(), this.length())
 	}
+	
+	;---------
+	; DESCRIPTION:    Generate an array which contains the same indices, but with each child object
+	;                 replaced with that child object's value for the given member.
+	;                 For example, using a memberName of "test":
+	;                    [ {"test":"A"}, {"test":"B"} ] => ["A", "B"]
+	; PARAMETERS:
+	;  memberName (I,REQ) - The name of the member to get for each child object.
+	; RETURNS:        The new array of member values.
+	;---------
+	getChildrenReducedToMember(memberName) {
+		retAry := []
+		For _,child in this
+			retAry.push(child[memberName])
+		return retAry
+	}
+	
 	; #END#
 }

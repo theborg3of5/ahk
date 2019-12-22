@@ -877,12 +877,17 @@
 							; DESCRIPTION:    Figure out how much indentation is needed for the next line of documentation,
 							;                 based on the current line.
 							; PARAMETERS:
-							;  line (I,REQ) - The line that we're trying to determine indentation after.
+							;  line            (I,REQ) - The line that we're trying to determine indentation after.
+							;  numExtraIndents (I,OPT) - How many extra indents to do versus the start of the current line.
+							;                            Defaults to 0 (same level as the current line).
 							; RETURNS:        The indentation to use:
-							;                  If bullets: &quot;;&quot; + indentation + bullet + &quot; &quot;
-							;                  Otherwise: &quot;;&quot; + indentation
+							;                    &quot;;&quot;
+							;                    align with previous line
+							;                    extra indents
+							;                    bullet and trailing space if previous line had it
 							;---------">
                 <Param name="line" />
+                <Param name="numExtraIndents" />
             </Overload>
         </KeyWord>
         <KeyWord name="AHK_class"/>

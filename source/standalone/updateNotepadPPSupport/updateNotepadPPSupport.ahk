@@ -32,26 +32,7 @@ path_CompletionActive_TL  := Config.path["PROGRAM_FILES"] "\Notepad++\autoComple
 path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml" ; This file is for all user-defined languages
 
 
-; GDB TODO consider something that more cleanly handles {{TAGS}} replacement - probably just in this file unless we find other needs for it.
-
-
 ; GDB TODO next plans:
-;	- Can we just do one read-in of various scripts for both AHK and TL languages?
-;		- Still need folder-level divisions for class groups for syntax highlighting
-;		- What level would we need to store/track things at?
-;			- Auto-complete really only needs member level when we're done, but we do need class level for post-processing (inheritance) + syntax highlighting
-;			- Would class-level, but with a "none"/"" or similar class work?
-;				- Could cause issues for sorting - we'd need to get down to the member level before sorting for auto-complete updates.
-;					- Or would it matter? We don't have anything for AHK that has no class, and nothing with a class for TL, right?
-;			- Potential structure: Language > Class > Member
-;				- Class members don't really need to be stored with a dot - just store them numerically and we'll sort everything when we output (maybe triggered by generateXML, even?)
-;				- Examples:
-;					AHK > ActionObjectPath > copyLink
-;					TL > "" > WindowTitle
-;	- Extra "@" returns prefix/value should probably live at the member level - maybe an addition to the doc header? @DOC-RETURNS: or similar?
-;		- NPP-RETURNS
-;	- Should the TL format call-out really just be at the member level as well, instead of the [[STUB]] stuff?
-;		- NPP-LANGUAGE
 ;  - Add NPP-RETURNS and NPP-LANG to list of header keywords for indentation and such
 
 global ahkClasses := {} ; {className: AutoCompleteClass}
@@ -107,10 +88,6 @@ For _,name in memberNames.split("`n") {
 }
 
 
-; Debug.copy("sortedTLMembers",sortedTLMembers, "sortedAHKClasses",sortedAHKClasses)
-; ExitApp
-
-
 ; [[ Auto-complete ]] ---
 xmlLines := FileLib.fileLinesToArray(path_CompletionTemplate_AHK)
 updateAutoCompleteXML(xmlLines, ahkClasses)
@@ -124,7 +101,8 @@ For _,member in sortedTLMembers
 	keywordsXML := keywordsXML.appendPiece(member.generateXML(), "`n")
 
 templateXML := FileRead(path_CompletionTemplate_TL)
-newXML := templateXML.replace("{{KEYWORDS}}", keywordsXML)
+newXML := replaceMarker(templateXML, "KEYWORDS", keywordsXML)
+
 FileLib.replaceFileWithString(path_CompletionOutput_TL, newXML)
 ; FileLib.replaceFileWithString(path_CompletionActive_TL, newXML)
 
@@ -157,86 +135,6 @@ updateLangInSyntaxXML(activeSyntaxXML, "TableList",  xmlSyntaxTL)
 
 t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
 ; =--
-
-
-
-
-
-
-
-
-ExitApp
-
-
-
-; [[ Auto-complete ]] ---
-; AHK: use documentation read from various script files
-ahkClasses := getAutoCompleteClasses()
-xmlLines := FileLib.fileLinesToArray(path_CompletionTemplate_AHK)
-updateAutoCompleteXML(xmlLines, ahkClasses)
-
-newXML := xmlLines.join("`n")
-FileLib.replaceFileWithString(path_CompletionOutput_AHK, newXML)
-FileLib.replaceFileWithString(path_CompletionActive_AHK, newXML)
-
-; TL: use documentation from specific scripts
-membersByDotName := {}
-addTLMembersFromStubs(membersByDotName, Config.path["AHK_SOURCE"] "\common\class\Selector.ahk", "@")
-addTLMembersFromStubs(membersByDotName, Config.path["AHK_SOURCE"] "\common\class\TableListMod.ahk")
-
-sortedMembers := []
-
-; Get the names and sort them
-For dotName,_ in membersByDotName
-	memberNames := memberNames.appendPiece(dotName.removeFromStart("."), "`n")
-Sort, memberNames, F keywordSortsAfter
-For _,name in memberNames.split("`n")
-	sortedMembers.push(membersByDotName["." name])
-
-; Debug.popup("sortedMembers",sortedMembers)
-
-keywordsXML := ""
-For _,member in sortedMembers
-	keywordsXML := keywordsXML.appendPiece(member.generateXML(), "`n")
-
-templateXML := FileRead(path_CompletionTemplate_TL)
-newXML := templateXML.replace("{{KEYWORDS}}", keywordsXML)
-
-; Debug.popup("keywordsXML",keywordsXML, "newXML",newXML)
-; clipboard := newXML
-
-
-
-FileLib.replaceFileWithString(path_CompletionOutput_TL, newXML)
-FileLib.replaceFileWithString(path_CompletionActive_TL, newXML)
-
-t := new Toast("Updated both versions of the auto-complete file").show()
-
-
-; [[ Syntax highlighting ]] ---
-; AHK: we can get the class groups we need from the auto complete classes we built above
-xmlSyntaxAHK := FileRead(path_SyntaxTemplate_AHK)
-updateAHKSyntaxXML(xmlSyntaxAHK, ahkClasses)
-FileLib.replaceFileWithString(path_SyntaxOutput_AHK, xmlSyntaxAHK)
-
-; TL: the template file already has exactly what we want to plug in, no processing needed.
-xmlSyntaxTL := FileRead(path_SyntaxTemplate_TL)
-FileLib.replaceFileWithString(path_SyntaxOutput_TL, xmlSyntaxTL)
-
-; Get the XML to update - from either an existing file or the base template.
-if(FileExist(path_SyntaxActive))
-	activeSyntaxXML := FileRead(path_SyntaxActive)
-else
-	activeSyntaxXML := FileRead(path_SyntaxTemplate_Base)
-
-; Plug each language into its spot in the XML
-updateLangInSyntaxXML(activeSyntaxXML, "AutoHotkey", xmlSyntaxAHK)
-updateLangInSyntaxXML(activeSyntaxXML, "TableList",  xmlSyntaxTL)
-FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
-; =--
-
-
-t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
 
 ExitApp
 
@@ -520,10 +418,8 @@ updateAHKSyntaxXML(ByRef syntaxXML, ahkClasses) {
 	}
 	
 	; Update all replacement markers with the groups
-	For groupName,classNames in classGroups {
-		groupTextToReplace := "{{" groupName "}}"
-		syntaxXML := syntaxXML.replace(groupTextToReplace, classNames)
-	}
+	For groupName,classNames in classGroups
+		syntaxXML := replaceMarker(syntaxXML, groupName, classNames)
 }
 
 
@@ -545,10 +441,8 @@ updateTLSyntaxXML(ByRef syntaxXML, tlMembers) {
 	}
 	
 	; Update replacement markers
-	For groupName,memberNames in memberGroups {
-		groupTextToReplace := "{{" groupName "}}"
-		syntaxXML := syntaxXML.replace(groupTextToReplace, memberNames)
-	}
+	For groupName,memberNames in memberGroups
+		syntaxXML := replaceMarker(syntaxXML, groupName, memberNames)
 }
 
 ;---------
@@ -565,4 +459,16 @@ updateLangInSyntaxXML(ByRef activeSyntaxXML, langName, langFullXML) {
 	; Replace the same thing in the active XML.
 	xmlToReplace := activeSyntaxXML.firstBetweenStrings("<UserLang name=""" langName """", "</UserLang>")
 	activeSyntaxXML := activeSyntaxXML.replace(xmlToReplace, langXML)
+}
+	
+;---------
+; DESCRIPTION:    Replace an XML-safe marker ("{{markerName}}") in the given XML string with the
+;                 provided replacement.
+; PARAMETERS:
+;  markerName  (I,REQ) - The name of the tag to replace (no angle brackets)
+;  replacement (I,REQ) - The text to replace all instances of the tag with.
+; RETURNS:        The updated string.
+;---------
+replaceMarker(baseString, markerName, replacement) {
+	return baseString.replace("{{" markerName "}}", replacement)
 }

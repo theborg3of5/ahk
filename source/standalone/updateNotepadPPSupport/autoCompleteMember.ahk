@@ -15,10 +15,7 @@ class AutoCompleteMember {
 	;                          (function definition, etc.). GDB TODO talk about overrides in this header
 	;  returnsPrefix (I,OPT) - If specified, the returns value will appear as a prefix on the return value.
 	;---------
-	__New(headerLines, defLine := "", returnsPrefix := "") {
-		; if(defLine = "")
-			; Debug.popup("headerLines",headerLines)
-		
+	__New(headerLines, defLine := "", returnsPrefix := "") { ; GDB TODO can we structure this better/break it out into smaller functions?
 		; Check the header for any NPP-* overrides
 		linesToDelete := []
 		For ln,line in headerLines {

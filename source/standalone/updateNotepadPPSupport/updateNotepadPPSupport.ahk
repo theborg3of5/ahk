@@ -35,69 +35,32 @@ path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefine
 ; GDB TODO next plans:
 ;  - Add NPP-RETURNS and NPP-LANG to list of header keywords for indentation and such
 
-global ahkClasses := {} ; {className: AutoCompleteClass}
-global tlMembers := {} ; {memberName: AutoCompleteMember}
-
-; [[ Extract data from scripts ]] ---
-
-; Read in and extract all classes from scripts in these folders
-addFromFolder(Config.path["AHK_SOURCE"] "\common\base",   "BASE_CLASSES")
-addFromFolder(Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
-addFromFolder(Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
-addFromFolder(Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
-addFromFolder(Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Include program-specific classes, but with a returns prefix.
-
-; Remove empty classes and handle inheritance.
-classesToDelete := []
-For className,classObj in ahkClasses {
-	; Mark any classes with no members for deletion
-	if(classObj.members.count() = 0)
-		classesToDelete.push(className)
-	
-	; Handle inheritance: add any parent members (only 1 layer deep) into this class
-	if(classObj.parentName != "") {
-		For _,member in ahkClasses[classObj.parentName].members
-			classObj.addMemberIfNew(member)
-	}
-}
-For _,className in classesToDelete
-	ahkClasses.Delete(className)
-
-sortedAHKClasses := getSortedKeywordAry(ahkClasses)
-sortedTLMembers := getSortedKeywordAry(tlMembers)
-
+; [[ Extract data ]] ---
+ahkClasses := []
+tlMembers  := []
+populateScriptData(ahkClasses, tlMembers)
 
 ; [[ Auto-complete ]] ---
-xmlLines := FileLib.fileLinesToArray(path_CompletionTemplate_AHK)
-updateAutoCompleteXML(xmlLines, ahkClasses)
-newXML := xmlLines.join("`n")
+newXML := updateCompletionXML_AHK(path_CompletionTemplate_AHK, ahkClasses)
 FileLib.replaceFileWithString(path_CompletionOutput_AHK, newXML)
-; FileLib.replaceFileWithString(path_CompletionActive_AHK, newXML)
+FileLib.replaceFileWithString(path_CompletionActive_AHK, newXML)
 
-
-keywordsXML := ""
-For _,member in sortedTLMembers
-	keywordsXML := keywordsXML.appendPiece(member.generateXML(), "`n")
-
-templateXML := FileRead(path_CompletionTemplate_TL)
-newXML := replaceMarker(templateXML, "KEYWORDS", keywordsXML)
-
+newXML := updateCompletionXML_TL(path_CompletionTemplate_TL, tlMembers)
 FileLib.replaceFileWithString(path_CompletionOutput_TL, newXML)
-; FileLib.replaceFileWithString(path_CompletionActive_TL, newXML)
+FileLib.replaceFileWithString(path_CompletionActive_TL, newXML)
 
 t := new Toast("Updated both versions of the auto-complete file").show()
-
 
 
 ; [[ Syntax highlighting ]] ---
 ; AHK: we can get the class groups we need from the auto complete classes we built above
 xmlSyntaxAHK := FileRead(path_SyntaxTemplate_AHK)
-updateAHKSyntaxXML(xmlSyntaxAHK, ahkClasses)
+updateSyntaxXML_AHK(xmlSyntaxAHK, ahkClasses)
 FileLib.replaceFileWithString(path_SyntaxOutput_AHK, xmlSyntaxAHK)
 
 ; TL: the template file already has exactly what we want to plug in, no processing needed.
 xmlSyntaxTL := FileRead(path_SyntaxTemplate_TL)
-updateTLSyntaxXML(xmlSyntaxTL, sortedTLMembers)
+updateSyntaxXML_TL(xmlSyntaxTL, tlMembers)
 FileLib.replaceFileWithString(path_SyntaxOutput_TL, xmlSyntaxTL)
 
 ; Get the combined XML to update - from either an existing file or the base template.
@@ -109,7 +72,7 @@ else
 ; Plug each language into its spot in the XML
 updateLangInSyntaxXML(activeSyntaxXML, "AutoHotkey", xmlSyntaxAHK)
 updateLangInSyntaxXML(activeSyntaxXML, "TableList",  xmlSyntaxTL)
-; FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
+FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
 
 
 t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
@@ -118,38 +81,24 @@ t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").b
 ExitApp
 
 
-;---------
-; DESCRIPTION:    Get an array of classes that we care about for auto-completion purposes.
-; RETURNS:        An array of AutoCompleteClass instances, in auto-complete sorted order.
-;---------
-getAutoCompleteClasses() {
-	classes := {}
+; GDB TODO
+populateScriptData(ByRef sortedAHKClasses, ByRef sortedTLMembers) {
+	ahkClasses := {} ; {className: AutoCompleteClass}
+	tlMembers  := {} ; {memberName: AutoCompleteMember}
 	
 	; Read in and extract all classes from scripts in these folders
-	; addFromFolder(classes, Config.path["AHK_SOURCE"] "\common\base",   "BASE_CLASSES")
-	; addFromFolder(classes, Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
-	; addFromFolder(classes, Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
-	; addFromFolder(classes, Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
-	; addFromFolder(classes, Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Include program-specific classes, but with a returns prefix.
+	addFromFolder(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\base",   "BASE_CLASSES")
+	addFromFolder(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
+	addFromFolder(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
+	addFromFolder(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
+	addFromFolder(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Program-specific classes
 	
-	; Remove empty classes and handle inheritance.
-	classesToDelete := []
-	For className,classObj in classes {
-		; Mark any classes with no members for deletion
-		if(classObj.members.count() = 0)
-			classesToDelete.push(className)
-		
-		; Handle inheritance: add any parent members (only 1 layer deep) into this class
-		if(classObj.parentName != "") {
-			For _,member in classes[classObj.parentName].members
-				classObj.addMemberIfNew(member)
-		}
-	}
-	For _,className in classesToDelete
-		classes.Delete(className)
+	; AHK classes need a little post-processing
+	processAHKClasses(ahkClasses)
 	
-	; Sort properly (underscores sort last)
-	return getAutoCompleteSortedClasses(classes)
+	; Return sorted arrays of keywords
+	sortedAHKClasses := getSortedKeywordAry(ahkClasses)
+	sortedTLMembers  := getSortedKeywordAry(tlMembers)
 }
 
 ;---------
@@ -161,7 +110,7 @@ getAutoCompleteClasses() {
 ;  returnsPrefix (I,OPT) - The prefix to add to the auto-complete return value of all functions in
 ;                          all classes in this folder.
 ;---------
-addFromFolder(folderPath, classGroup, returnsPrefix := "") {
+addFromFolder(ByRef ahkClasses, ByRef tlMembers, folderPath, classGroup, returnsPrefix := "") {
 	; Loop over all scripts in folder to find classes
 	Loop, Files, %folderPath%\*.ahk, RF ; [R]ecursive, [F]iles (not [D]irectories)
 	{
@@ -226,71 +175,24 @@ addFromFolder(folderPath, classGroup, returnsPrefix := "") {
 	}
 }
 
-;---------
-; DESCRIPTION:    Convert the className-indexed associative array into a normal array, sorted in
-;                 auto-complete order.
-; PARAMETERS:
-;  functionsByClassName (I,REQ) - The associative array of AutoCompleteClass instances. Format:
-;                                  functionsByClassName[className] := autoCompleteClassInstance
-; RETURNS:        A numeric array, sorted in auto-complete order
-; NOTES:          Auto-complete order is case-insensitive alphabetical order, but where underscore
-;                 sorts after everything else.
-;---------
-getAutoCompleteSortedClasses(functionsByClassName) {
-	classes := []
-	
-	; Get the names and sort them
-	classNames := functionsByClassName.toKeysArray().join("`n")
-	Sort, classNames, F keywordSortsAfter
-	
-	; Populate new array in correct order
-	For _,className in classNames.split("`n")
-		classes.push(functionsByClassName[className])
-	
-	return classes
-}
-
-;---------
-; DESCRIPTION:    Update the given array of XML lines using the given array of class information.
-; PARAMETERS:
-;  xmlLines (IO,REQ) - An array of XML lines to update.
-;  classes   (I,REQ) - A numeric array of AutoCompleteClass instances. Must be in auto-complete order.
-;---------
-updateAutoCompleteXML(ByRef xmlLines, classes) {
-	; Loop through our sorted classes, inserting their XML in the right place as we go.
-	commentOn := false
-	ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).
-	For _,classObj in classes { ; Sorted class objects
-		while(ln < xmlLines.count()) { ; Loop over lines of XML
-			line := xmlLines.next(ln).withoutWhitespace()
-			
-			; Ignore comment blocks
-			if(line.startsWith("<!--")) {
-				commentOn := true
-			}
-			if(line.endsWith("-->")) {
-				commentOn := false
-				Continue
-			}
-			if(commentOn)
-				Continue
-			
-			; Ignore anything that's not a keyword line
-			if(!line.startsWith("<KeyWord name="""))
-				Continue
-			
-			; If the class name sorts after the current keyword, we haven't gone far enough yet.
-			keywordName := line.firstBetweenStrings("<KeyWord name=""", """")
-			if(keywordSortsAfter(classObj.name, keywordName) > 0)
-				Continue
-			
-			; We've found the right spot - insert our XML.
-			classXML := classObj.generateXML()
-			xmlLines.InsertAt(ln, classXML) ; This technically puts a bunch of lines of text into one "line", but we're never going to insert something in the middle of the class, so that should be fine.
-			ln-- ; Take a step backwards so we check the same line we just checked (which is just after the class XML we just inserted) against the next class.
-			Break ; Move onto the next class.
+; GDB TODO - remove empty classes, handle inheritance
+processAHKClasses(ByRef ahkClasses) {
+	emptyClasses := []
+	For className,classObj in ahkClasses {
+		; Mark any classes with no members for deletion
+		if(classObj.members.count() = 0)
+			emptyClasses.push(className)
+		
+		; Handle inheritance: add any parent members (only 1 layer deep) into this class
+		if(classObj.parentName != "") {
+			For _,member in ahkClasses[classObj.parentName].members
+				classObj.addMemberIfNew(member)
 		}
-	} ; This will technically fail to add anything that sorts to the very end, but I don't think I'm ever going to create a new class that starts with __ so we should be fine.
+	}
+	
+	; Delete empty classes
+	For _,className in emptyClasses
+		ahkClasses.Delete(className)
 }
 
 ; GDB TODO
@@ -353,12 +255,71 @@ keywordSortsAfter(word1, word2) {
 }
 
 ;---------
+; DESCRIPTION:    Update the given array of XML lines using the given array of class information.
+; PARAMETERS:
+;  basePath (I,REQ) - The file path for the XML file to use as a base
+;  classes  (I,REQ) - A numeric array of AutoCompleteClass instances in auto-complete order.
+; RETURNS:        The updated XML
+;---------
+updateCompletionXML_AHK(basePath, classes) {
+	xmlLines := FileLib.fileLinesToArray(basePath)
+
+	; Loop through our sorted classes, inserting their XML in the right place as we go.
+	commentOn := false
+	ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).
+	For _,classObj in classes { ; Sorted class objects
+		while(ln < xmlLines.count()) { ; Loop over lines of XML
+			line := xmlLines.next(ln).withoutWhitespace()
+			
+			; Ignore comment blocks
+			if(line.startsWith("<!--")) {
+				commentOn := true
+			}
+			if(line.endsWith("-->")) {
+				commentOn := false
+				Continue
+			}
+			if(commentOn)
+				Continue
+			
+			; Ignore anything that's not a keyword line
+			if(!line.startsWith("<KeyWord name="""))
+				Continue
+			
+			; If the class name sorts after the current keyword, we haven't gone far enough yet.
+			keywordName := line.firstBetweenStrings("<KeyWord name=""", """")
+			if(keywordSortsAfter(classObj.name, keywordName) > 0)
+				Continue
+			
+			; We've found the right spot - insert our XML.
+			classXML := classObj.generateXML()
+			xmlLines.InsertAt(ln, classXML) ; This technically puts a bunch of lines of text into one "line", but we're never going to insert something in the middle of the class, so that should be fine.
+			ln-- ; Take a step backwards so we check the same line we just checked (which is just after the class XML we just inserted) against the next class.
+			Break ; Move onto the next class.
+		}
+	} ; This will technically fail to add anything that sorts to the very end, but I don't think I'm ever going to create a new class that starts with __ so we should be fine.
+	
+	return xmlLines.join("`n")
+}
+
+; GDB TODO
+updateCompletionXML_TL(basePath, tlMembers) {
+	; Generate the keywords XML
+	keywordsXML := ""
+	For _,member in tlMembers
+		keywordsXML := keywordsXML.appendPiece(member.generateXML(), "`n")
+
+	templateXML := FileRead(basePath)
+	return replaceMarker(templateXML, "KEYWORDS", keywordsXML)
+}
+
+;---------
 ; DESCRIPTION:    Update the given AHK syntax highlighting XML with groups of space-separated class names.
 ; PARAMETERS:
 ;  syntaxXML  (IO,REQ) - The XML to update.
 ;  ahkClasses  (I,REQ) - The array of AutoCompleteClass instances from getAutoCompleteClasses(). ; GDB TODO
 ;---------
-updateAHKSyntaxXML(ByRef syntaxXML, ahkClasses) {
+updateSyntaxXML_AHK(ByRef syntaxXML, ahkClasses) {
 	; Generate the class groups we need from our auto-complete classes
 	classGroups := {}
 	For _,classObj in ahkClasses {
@@ -372,8 +333,8 @@ updateAHKSyntaxXML(ByRef syntaxXML, ahkClasses) {
 		syntaxXML := replaceMarker(syntaxXML, groupName, classNames)
 }
 
-
-updateTLSyntaxXML(ByRef syntaxXML, tlMembers) {
+; GDB TODO
+updateSyntaxXML_TL(ByRef syntaxXML, tlMembers) {
 	; Generate the groups
 	memberGroups := {}
 	For _,member in tlMembers {
@@ -394,6 +355,18 @@ updateTLSyntaxXML(ByRef syntaxXML, tlMembers) {
 	For groupName,memberNames in memberGroups
 		syntaxXML := replaceMarker(syntaxXML, groupName, memberNames)
 }
+	
+;---------
+; DESCRIPTION:    Replace an XML-safe marker ("{{markerName}}") in the given XML string with the
+;                 provided replacement.
+; PARAMETERS:
+;  markerName  (I,REQ) - The name of the tag to replace (no angle brackets)
+;  replacement (I,REQ) - The text to replace all instances of the tag with.
+; RETURNS:        The updated string.
+;---------
+replaceMarker(baseString, markerName, replacement) {
+	return baseString.replace("{{" markerName "}}", replacement)
+}
 
 ;---------
 ; DESCRIPTION:    Update the given XML with the given language-specific XML.
@@ -409,16 +382,4 @@ updateLangInSyntaxXML(ByRef activeSyntaxXML, langName, langFullXML) {
 	; Replace the same thing in the active XML.
 	xmlToReplace := activeSyntaxXML.firstBetweenStrings("<UserLang name=""" langName """", "</UserLang>")
 	activeSyntaxXML := activeSyntaxXML.replace(xmlToReplace, langXML)
-}
-	
-;---------
-; DESCRIPTION:    Replace an XML-safe marker ("{{markerName}}") in the given XML string with the
-;                 provided replacement.
-; PARAMETERS:
-;  markerName  (I,REQ) - The name of the tag to replace (no angle brackets)
-;  replacement (I,REQ) - The text to replace all instances of the tag with.
-; RETURNS:        The updated string.
-;---------
-replaceMarker(baseString, markerName, replacement) {
-	return baseString.replace("{{" markerName "}}", replacement)
 }

@@ -32,21 +32,12 @@ path_CompletionActive_TL  := Config.path["PROGRAM_FILES"] "\Notepad++\autoComple
 path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml" ; This file is for all user-defined languages
 
 
-; [[ Auto-complete ]] ---
-; AHK: use documentation read from various script files
-autoCompleteClasses := getAutoCompleteClasses()
-xmlLines := FileLib.fileLinesToArray(path_CompletionTemplate_AHK)
-updateAutoCompleteXML(xmlLines, autoCompleteClasses)
 
-newXML := xmlLines.join("`n")
-FileLib.replaceFileWithString(path_CompletionOutput_AHK, newXML)
-FileLib.replaceFileWithString(path_CompletionActive_AHK, newXML)
 
 
 ; GDB TODO next plans:
 ;	- Can we just do one read-in of various scripts for both AHK and TL languages?
 ;		- Still need folder-level divisions for class groups for syntax highlighting
-;			- Unless we want to add script-level headers to cover that?
 ;		- What level would we need to store/track things at?
 ;			- Auto-complete really only needs member level when we're done, but we do need class level for post-processing (inheritance) + syntax highlighting
 ;			- Would class-level, but with a "none"/"" or similar class work?
@@ -67,16 +58,30 @@ FileLib.replaceFileWithString(path_CompletionActive_AHK, newXML)
 
 
 
+
+
+
+
+
+
+
+
+
+
+; [[ Auto-complete ]] ---
+; AHK: use documentation read from various script files
+autoCompleteClasses := getAutoCompleteClasses()
+xmlLines := FileLib.fileLinesToArray(path_CompletionTemplate_AHK)
+updateAutoCompleteXML(xmlLines, autoCompleteClasses)
+
+newXML := xmlLines.join("`n")
+FileLib.replaceFileWithString(path_CompletionOutput_AHK, newXML)
+FileLib.replaceFileWithString(path_CompletionActive_AHK, newXML)
+
 ; TL: use documentation from specific scripts
-; xmlLines := FileLib.fileLinesToArray(path_CompletionTemplate_TL)
-
-
 membersByDotName := {}
 addTLMembersFromStubs(membersByDotName, Config.path["AHK_SOURCE"] "\common\class\Selector.ahk", "@")
 addTLMembersFromStubs(membersByDotName, Config.path["AHK_SOURCE"] "\common\class\TableListMod.ahk")
-
-
-; Debug.popup("membersByDotName",membersByDotName)
 
 sortedMembers := []
 

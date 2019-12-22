@@ -252,14 +252,32 @@ class Selector {
 			return this.selectGui(returnColumn)
 	}
 	
+	; GDB TODO add a call-out about this wherever we implement settings
+	; @NPP-TABLELIST
+	;---------
+	; NPP-DEF-LINE:   WindowTitle(title)
+	; NPP-RETURNS:    @
+	; DESCRIPTION:    If this is set, we'll show the given text as the window title (aka the caption).
+	; PARAMETERS:
+	;  title (I,REQ) - The title to use.
+	;---------
+	
+	;---------
+	; NPP-DEF-LINE:   MinColumnWidth(minWidth)
+	; NPP-RETURNS:    @
+	; DESCRIPTION:    If this is set, each super-column in the display will be at least this wide.
+	; PARAMETERS:
+	;  minWidth (I,REQ) - The minimum width (in pixels).
+	;---------
+	; @NPP-TABLELIST-END
 	
 	; #PRIVATE#
 	
 	static Char_CommandStart := "+"
 	static Char_Command_Edit := "e"
 	
-	_windowTitle      := "Please make a choice by either index or abbreviation:" ; The title of the window
-	_minColumnWidth   := 0    ; How wide (in pixels) each column must be, at a minimum.
+	_windowTitle     := "Please make a choice by either index or abbreviation:" ; The title of the window
+	_minColumnWidth  := 0    ; How wide (in pixels) each column must be, at a minimum.
 	choices          := []    ; Array of visible choices the user can pick from (array of SelectorChoice objects).
 	sectionTitles    := {}    ; {choiceIndex: title} - Lines that will be displayed as titles (index matches the first choice that should be under this title)
 	overrideFields   := ""    ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers)
@@ -401,27 +419,6 @@ class Selector {
 		}
 		
 		return ""
-	}
-	
-	; GDB TODO add a call-out about this wherever we implement settings
-	; [[TABLELIST STUBS - SETTINGS]]
-	;---------
-	; NPP-LANG:       TableList
-	; NPP-RETURNS:    @
-	; DESCRIPTION:    If this is set, we'll show the given text as the window title (aka the caption).
-	; PARAMETERS:
-	;  title (I,REQ) - The title to use.
-	;---------
-	WindowTitle(title) {
-	}
-	;---------
-	; NPP-LANG:       TableList
-	; NPP-RETURNS:    @
-	; DESCRIPTION:    If this is set, each super-column in the display will be at least this wide.
-	; PARAMETERS:
-	;  minWidth (I,REQ) - The minimum width (in pixels).
-	;---------
-	MinColumnWidth(minWidth) {
 	}
 	
 	

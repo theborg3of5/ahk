@@ -10,23 +10,46 @@ class AutoCompleteMember {
 	;---------
 	; DESCRIPTION:    Create a new member.
 	; PARAMETERS:
-	;  defLine       (I,REQ) - The definition line for the member - that is, its first line
-	;                          (function definition, etc.).
 	;  headerLines   (I,REQ) - An array of lines making up the full header for this member.
+	;  defLine       (I,OPT) - The definition line for the member - that is, its first line
+	;                          (function definition, etc.). GDB TODO talk about overrides in this header
 	;  returnsPrefix (I,OPT) - If specified, the returns value will appear as a prefix on the return value.
 	;---------
-	__New(defLine, headerLines, returnsPrefix := "") {
-		AHKCodeLib.getDefLineParts(defLine, name, paramsAry)
-		this.name      := name
-		this.paramsAry := paramsAry
+	__New(headerLines, defLine := "", returnsPrefix := "") {
+		; if(defLine = "")
+			; Debug.popup("headerLines",headerLines)
 		
-		; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
-		this.returns := returnsPrefix
-		if(!defLine.contains("("))
-			this.returns := this.returns.appendPiece(this.ReturnValue_Property, " ")
+		; Check the header for any NPP-* overrides
+		linesToDelete := []
+		For ln,line in headerLines {
+			line := line.removeFromStart("; ")
+			if(line.startsWith("NPP-DEF-LINE:")) {
+				defLine := line.removeFromStart("NPP-DEF-LINE:").withoutWhitespace()
+				linesToDelete.push(ln)
+			}
+			if(line.startsWith("NPP-RETURNS:")) {
+				linesToDelete.push(ln)
+				returnsOverride := line.removeFromStart("NPP-RETURNS:").withoutWhitespace()
+			}
+		}
+		; Remove the lines for the NPP-* overrides as well
+		For _,ln in linesToDelete
+			headerLines.delete(ln)
 		
 		; The description is the actual function header, indented nicely.
 		this.description := this.formatHeaderAsDescription(headerLines)
+		
+		AHKCodeLib.getDefLineParts(defLine, name, paramsAry)
+		this.name      := name
+		this.paramsAry := paramsAry
+		this.returns   := returnsPrefix
+		
+		; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
+		if(!defLine.contains("("))
+			this.returns := this.returns.appendPiece(this.ReturnValue_Property, " ")
+		
+		if(returnsOverride)
+			this.returns := returnsOverride
 	}
 	
 	;---------
@@ -64,6 +87,7 @@ class AutoCompleteMember {
                 <Param name=""<PARAM_NAME>"" />
 		)"
 	static Indent_Header := StringLib.getTabs(7) ; We can indent with tabs and it's ignored - cleaner XML and result looks the same.
+	
 	
 	;---------
 	; DESCRIPTION:    Turn the array of documentation lines into a single, indented, XML-safe string.
@@ -128,6 +152,13 @@ class AutoCompleteMember {
 	
 	Debug_TypeName() {
 		return "AutoCompleteMember"
+	}
+
+	Debug_ToString(ByRef builder) {
+		builder.addLine("Name", this.name)
+		builder.addLine("Returns", this.returns)
+		builder.addLine("Parameters", this.paramsAry)
+		builder.addLine("Description", this.description)
 	}
 	; #END#
 }

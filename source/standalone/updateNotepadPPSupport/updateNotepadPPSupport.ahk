@@ -52,12 +52,140 @@ path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefine
 ;		- NPP-RETURNS
 ;	- Should the TL format call-out really just be at the member level as well, instead of the [[STUB]] stuff?
 ;		- NPP-LANGUAGE
+;  - Add NPP-RETURNS and NPP-LANG to list of header keywords for indentation and such
+
+; scriptData := {} ; {language: {className: AutoCompleteClass}}
+ahkClasses := {} ; {className: AutoCompleteClass}
+tlMembers := []
+
+; folderPath := Config.path["AHK_SOURCE"] "\common\class"
+; groupName := "INSTANCE_CLASSES"
+
+; ; Loop over all scripts in folder to find classes
+; Loop, Files, %folderPath%\*.ahk, RF ; [R]ecursive, [F]iles (not [D]irectories)
+; {
+	; linesAry := FileLib.fileLinesToArray(A_LoopFileLongPath, true)
+	
+	; tlBlockOn := false
+	; ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).
+	; while(ln < linesAry.count()) {
+		; line := linesAry.next(ln)
+		
+		; ; There are blocks of headers with no corresponding definition lines, specific to the TableList file format.
+		; if(line = "; @NPP-TABLELIST")
+			; tlBlockOn := true
+		; if(line = "; @NPP-TABLELIST-END")
+			; tlBlockOn := false
+		
+		; ; Block of documentation - read the whole thing in and create a member.
+		; if(line = Header_StartEnd) {
+			; ; Grab the whole header
+			; headerLines := [line]
+			; Loop {
+				; line := linesAry.next(ln)
+				; headerLines.push(line)
+				
+				; if(line = Header_StartEnd)
+					; Break
+			; }
+			
+			; if(tlBlockOn) {
+				; ; Feed the header to a new member object and add it to the TL members array.
+				; tlMembers.push(new AutoCompleteMember(headerLines)) ; No defLine/returnsPrefix - these headers specify their own.
+				; ; Debug.popup("tlMembers",tlMembers)
+			; } else {
+				; ; Get the definition line (first line after the header) too.
+				; defLine := linesAry.next(ln)
+				
+				; ; Feed the data to a new member object and add that to our current class object.
+				; member := new AutoCompleteMember(headerLines, defLine, returnsPrefix)
+				; classObj.addMember(member)
+			; }
+			
+			; Continue
+		; }
+		
+		; ; Block of private/debug scope - ignore everything up until we hit a public/end of scope.
+		; if(ScopeStart_NonPublicScopes.contains(line)) {
+			; while(line != ScopeStart_Public && line != ScopeEnd) {
+				; line := linesAry.next(ln)
+			; }
+			
+			; Continue
+		; }
+		
+		; ; Class declaration
+		; if(line.startsWith("class ") && line.endsWith(" {") && line != "class {") {
+			; classObj := new AutoCompleteClass(line, classGroup)
+			; ahkClasses[classObj.name] := classObj ; Point to classObj (which is what we'll actually be updating) from classes object
+			
+			; Continue
+		; }
+	; }
+; }
+
+; ; Debug.popup("ahkClasses",ahkClasses, "tlMembers",tlMembers)
+; Debug.copy("ahkClasses",ahkClasses, "tlMembers",tlMembers)
+
+; ExitApp
 
 
 
 
+; Read in and extract all classes from scripts in these folders
+addScriptData(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\base",   "BASE_CLASSES")
+addScriptData(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
+addScriptData(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
+addScriptData(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
+addScriptData(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Include program-specific classes, but with a returns prefix.
+
+; Remove empty classes and handle inheritance.
+classesToDelete := []
+For className,classObj in ahkClasses {
+	; Mark any classes with no members for deletion
+	if(classObj.members.count() = 0)
+		classesToDelete.push(className)
+	
+	; Handle inheritance: add any parent members (only 1 layer deep) into this class
+	if(classObj.parentName != "") {
+		For _,member in ahkClasses[classObj.parentName].members
+			classObj.addMemberIfNew(member)
+	}
+}
+For _,className in classesToDelete
+	ahkClasses.Delete(className)
 
 
+
+; Sort properly (underscores sort last)
+sortedAHKClasses := []
+
+; Get the names and sort them
+classNames := ahkClasses.toKeysArray().join("`n")
+Sort, classNames, F keywordSortsAfter
+
+; Populate new array in correct order
+For _,className in classNames.split("`n")
+	sortedAHKClasses.push(ahkClasses[className])
+
+
+
+; Sort properly
+sortedTLMembers := []
+memberNames := ""
+For _,member in tlMembers
+	memberNames := memberNames.appendPiece(member.name, "`n")
+Sort, memberNames, F keywordSortsAfter
+For _,name in memberNames.split("`n") {
+	For _,member in tlMembers {
+		if(member.name = name)
+			sortedTLMembers.push(member)
+	}
+}
+
+
+Debug.copy("sortedTLMembers",sortedTLMembers, "sortedAHKClasses",sortedAHKClasses)
+ExitApp
 
 
 
@@ -148,11 +276,11 @@ getAutoCompleteClasses() {
 	classes := {}
 	
 	; Read in and extract all classes from scripts in these folders
-	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\common\base",   "BASE_CLASSES")
-	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
-	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
-	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
-	addClassesFromFolder(classes, Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Include program-specific classes, but with a returns prefix.
+	; addScriptData(classes, Config.path["AHK_SOURCE"] "\common\base",   "BASE_CLASSES")
+	; addScriptData(classes, Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
+	; addScriptData(classes, Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
+	; addScriptData(classes, Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
+	; addScriptData(classes, Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Include program-specific classes, but with a returns prefix.
 	
 	; Remove empty classes and handle inheritance.
 	classesToDelete := []
@@ -175,28 +303,36 @@ getAutoCompleteClasses() {
 }
 
 ;---------
-; DESCRIPTION:    Add all classes from the scripts in the given folder to the classes object.
+; DESCRIPTION:    Add documentation data from the scripts in the given folder to the classes object.
 ; PARAMETERS:
-;  classes      (IO,REQ) - The object to add the class objects to, indexed by class name.
+;  ahkClasses   (IO,REQ) - The object to add the AHK class objects to, indexed by class name.
+;  tlMembers    (IO,REQ) - An array of members for the TableList format.
 ;  folderPath    (I,REQ) - The full path to the folder to read from.
 ;  classGroup    (I,REQ) - Which "group" the classes in this folder should have - this determines
 ;                          how they get syntax-highlighted.
 ;  returnsPrefix (I,OPT) - The prefix to add to the auto-complete return value of all functions in
 ;                          all classes in this folder.
 ;---------
-addClassesFromFolder(ByRef classes, folderPath, classGroup, returnsPrefix := "") {
+addScriptData(ByRef ahkClasses, ByRef tlMembers, folderPath, classGroup, returnsPrefix := "") {
 	; Loop over all scripts in folder to find classes
 	Loop, Files, %folderPath%\*.ahk, RF ; [R]ecursive, [F]iles (not [D]irectories)
 	{
 		linesAry := FileLib.fileLinesToArray(A_LoopFileLongPath, true)
 		
+		tlBlockOn := false
 		ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).
 		while(ln < linesAry.count()) {
 			line := linesAry.next(ln)
 			
+			; There are blocks of headers with no corresponding definition lines, specific to the TableList file format.
+			if(line = "; @NPP-TABLELIST")
+				tlBlockOn := true
+			if(line = "; @NPP-TABLELIST-END")
+				tlBlockOn := false
+			
 			; Block of documentation - read the whole thing in and create a member.
 			if(line = Header_StartEnd) {
-				; Store the full header in an array
+				; Grab the whole header
 				headerLines := [line]
 				Loop {
 					line := linesAry.next(ln)
@@ -206,12 +342,18 @@ addClassesFromFolder(ByRef classes, folderPath, classGroup, returnsPrefix := "")
 						Break
 				}
 				
-				; Get the definition line (first line after the header), too.
-				defLine := linesAry.next(ln)
-				
-				; Feed the data to a new member object and add that to our current class object.
-				member := new AutoCompleteMember(defLine, headerLines, returnsPrefix)
-				classObj.addMember(member)
+				if(tlBlockOn) {
+					; Feed the header to a new member object and add it to the TL members array.
+					tlMembers.push(new AutoCompleteMember(headerLines)) ; No defLine/returnsPrefix - these headers specify their own.
+					; Debug.popup("tlMembers",tlMembers)
+				} else {
+					; Get the definition line (first line after the header) too.
+					defLine := linesAry.next(ln)
+					
+					; Feed the data to a new member object and add that to our current class object.
+					member := new AutoCompleteMember(headerLines, defLine, returnsPrefix)
+					classObj.addMember(member)
+				}
 				
 				Continue
 			}
@@ -228,14 +370,12 @@ addClassesFromFolder(ByRef classes, folderPath, classGroup, returnsPrefix := "")
 			; Class declaration
 			if(line.startsWith("class ") && line.endsWith(" {") && line != "class {") {
 				classObj := new AutoCompleteClass(line, classGroup)
-				classes[classObj.name] := classObj ; Point to classObj (which is what we'll actually be updating) from classes object
+				ahkClasses[classObj.name] := classObj ; Point to classObj (which is what we'll actually be updating) from classes object
 				
 				Continue
 			}
 		}
 	}
-	
-	return classes
 }
 
 ;---------
@@ -385,7 +525,7 @@ addTLMembersFromStubs(ByRef membersByDotName, path, returnsPrefix := "") {
 			defLine := linesAry.next(ln)
 			
 			; Feed the data to a new member object and add that to our current class object.
-			member := new AutoCompleteMember(defLine, headerLines, returnsPrefix)
+			member := new AutoCompleteMember(headerLines, defLine, returnsPrefix)
 			membersByDotName["." member.name] := member
 			
 			Continue

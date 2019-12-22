@@ -74,7 +74,7 @@ class TableListMod {
 	executeMod(ByRef row) {
 		columnValue := row[this.column]
 		
-		; Each of these should have a matching stub + documentation in the TABLELIST STUBS - MOD OPERATIONS section.
+		; Each of these should have a matching stub + documentation in the TABLELIST STUBS - MOD OPERATIONS section. ; GDB TODO update
 		if(this.operation = "replaceWith")
 			newValue := this.text
 		else if(this.operation = "addToStart")
@@ -88,39 +88,36 @@ class TableListMod {
 		row[this.column] := newValue
 	}
 	
+	; GDB TODO add some highlighting for these start/end lines
+	; @NPP-TABLELIST
+	;---------
+	; NPP-DEF-LINE:   addToStart(text)
+	; DESCRIPTION:    Add the given text to the start of this column.
+	; PARAMETERS:
+	;  text (I,REQ) - Text to add to start.
+	;---------
+	
+	;---------
+	; NPP-DEF-LINE:   addToEnd(text)
+	; DESCRIPTION:    Add the given text to the end of this column.
+	; PARAMETERS:
+	;  text (I,REQ) - Text to add to end.
+	;---------
+	
+	;---------
+	; NPP-DEF-LINE:   replaceWith(text)
+	; DESCRIPTION:    Replace this column with the given value.
+	; PARAMETERS:
+	;  text (I,REQ) - Text to replace with.
+	;---------
+	; @NPP-TABLELIST-END
+	
 	
 	; #PRIVATE#
 	
 	column    := "" ; The name of the column to operate on
 	operation := "" ; The operation to perform
 	text      := "" ; The text to use
-	
-	
-	; [[TABLELIST STUBS - MOD OPERATIONS]]
-	;---------
-	; NPP-LANG:       TableList
-	; DESCRIPTION:    Add the given text to the start of this column.
-	; PARAMETERS:
-	;  text (I,REQ) - Text to add to start.
-	;---------
-	addToStart(text) {
-	}
-	;---------
-	; NPP-LANG:       TableList
-	; DESCRIPTION:    Add the given text to the end of this column.
-	; PARAMETERS:
-	;  text (I,REQ) - Text to add to end.
-	;---------
-	addToEnd(text) {
-	}
-	;---------
-	; NPP-LANG:       TableList
-	; DESCRIPTION:    Replace this column with the given value.
-	; PARAMETERS:
-	;  text (I,REQ) - Text to replace with.
-	;---------
-	replaceWith(text) {
-	}
 	
 	
 	; #DEBUG#

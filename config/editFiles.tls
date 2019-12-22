@@ -1,4 +1,4 @@
-@WindowTitle=Pick a file to edit:
+@WindowTitle(Pick a file to edit:)
 
 [	NAME										ABBREV			PATH	]
 

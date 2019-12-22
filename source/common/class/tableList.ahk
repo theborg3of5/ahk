@@ -123,7 +123,7 @@
 					The row should end with the corresponding ending character (a closing paren)
 				
 				Setting - @
-					Any row that begins with this is assumed to be of the form @SettingName=value. Settings can be accessed using the .settings property.
+					Any row that begins with this is assumed to be of the form @SettingName(value). Settings can be accessed using the .settings property.
 				
 				Header - # (with a space after)
 					Any row starting with this will be added to the .headers property instead of the main table, with its index being that of the next row added to the table.
@@ -211,7 +211,7 @@ class TableList {
 	;---------
 	static Char_ColumnInfo_End := ")"
 	;---------
-	; DESCRIPTION:    Settings character
+	; DESCRIPTION:    Settings prefix
 	;---------
 	static Char_Setting     := "@"
 	;---------
@@ -526,8 +526,8 @@ class TableList {
 		if(!row)
 			return
 		
-		name  := row.beforeString("=")
-		value := row.afterString("=")
+		name  := row.beforeString("(")
+		value := row.allBetweenStrings("(", ")")
 		; Debug.popup("TableList.processSetting","Pulled out data", "Name",name, "Value",value)
 		
 		this._settings[name] := value

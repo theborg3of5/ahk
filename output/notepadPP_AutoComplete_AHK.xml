@@ -6095,7 +6095,7 @@
         <KeyWord name="TableList.Char_Setting" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Settings character
+							; DESCRIPTION:    Settings prefix
 							;---------">
             </Overload>
         </KeyWord>

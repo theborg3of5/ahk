@@ -1,4 +1,4 @@
-@WindowTitle=Select media player to control with media keys:
+@WindowTitle(Select media player to control with media keys:)
 
 [	NAME				ABBREV			PROGRAM_NAME	]
 	Spotify			s | spot			Spotify

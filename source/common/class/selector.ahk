@@ -40,7 +40,7 @@
 				@ - Gui setting
 					All gui settings (see "Gui Settings" below for a list) may be preset in the file using a line that starts with the @ character, with an = between the name of the setting and the value.
 					Example:
-						@WindowTitle=This is the new title!
+						@WindowTitle(This is the new title!)
 					Result:
 						The popup's title will be "This is the new title!"
 					

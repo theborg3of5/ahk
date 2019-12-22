@@ -1,4 +1,4 @@
-@MinColumnWidth=350
+@MinColumnWidth(350)
 
 [	NAME									ABBREV	FORMAT	]
 

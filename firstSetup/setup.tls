@@ -1,5 +1,5 @@
-@WindowTitle=Select Machine to set up:
-@MinColumnWidth=300
+@WindowTitle(Select Machine to set up:)
+@MinColumnWidth(300)
 
 [	NAME				ABBREV						NEW_CONTEXT		NEW_MACHINE		MEDIA_PLAYER	]
 

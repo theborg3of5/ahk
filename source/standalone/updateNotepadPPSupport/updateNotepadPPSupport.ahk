@@ -66,9 +66,10 @@ if(FileExist(path_SyntaxActive))
 	activeSyntaxXML := FileRead(path_SyntaxActive)
 else
 	activeSyntaxXML := FileRead(path_SyntaxTemplate_Base)
-updateLangInSyntaxXML(activeSyntaxXML, "AutoHotkey", xmlSyntaxAHK)
-updateLangInSyntaxXML(activeSyntaxXML, "TableList",  xmlSyntaxTL)
+updateLangInSyntaxXML(activeSyntaxXML, "AutoHotkey", newXML_AHK)
+updateLangInSyntaxXML(activeSyntaxXML, "TableList",  newXML_TL)
 FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
+Debug.popup("activeSyntaxXML",activeSyntaxXML)
 
 t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
 ; =--
@@ -406,10 +407,18 @@ replaceMarker(baseString, markerName, replacement) {
 ;  langFullXML      (I,REQ) - The full, importable XML for the lanaguage (including the <NotepadPlusPlus> tag)
 ;---------
 updateLangInSyntaxXML(ByRef activeSyntaxXML, langName, langFullXML) {
+	LANG_START := "<UserLang name=""" langName """"
+	LANG_END   := "</UserLang>"
+	
 	; We only need the chunk of XML specific to the language (including the rest of the opening <UserLang> tag, which has file extensions and such)
-	langXML := langFullXML.allBetweenStrings("<UserLang name=""" langName """", "</UserLang>")
+	langXML := langFullXML.allBetweenStrings(LANG_START, LANG_END)
+	langXML := LANG_START langXML LANG_END ; Include the starting/ending points so it's unique within the file, even for empty tags in template
 	
 	; Replace the same thing in the active XML.
-	xmlToReplace := activeSyntaxXML.firstBetweenStrings("<UserLang name=""" langName """", "</UserLang>")
+	xmlToReplace := activeSyntaxXML.firstBetweenStrings(LANG_START, LANG_END)
+	xmlToReplace := LANG_START xmlToReplace LANG_END
+	
+	Debug.popup("xmlToReplace",xmlToReplace, "langXML",langXML)
+	
 	activeSyntaxXML := activeSyntaxXML.replace(xmlToReplace, langXML)
 }

@@ -40,7 +40,7 @@ class GDBTODO {
 		return "GDB TODO"
 	}
 	
-	buildDebugDisplay(ByRef builder) {
+	Debug_ToString(ByRef builder) {
 		builder.addLine("GDB TODO", this.GDBTODO)
 	}
 	; #END#

@@ -29,11 +29,11 @@
             <Keywords name="Folders in comment, middle"></Keywords>
             <Keywords name="Folders in comment, close"></Keywords>
 				<!-- *gdb - Mod operations, from TableListMod.Operation_* -->
-            <Keywords name="Keywords1">addToStart addToEnd replaceWith</Keywords>
+            <Keywords name="Keywords1">{{MOD_OPERATIONS}}</Keywords>
 				<!-- *gdb - New column character, from SelectorGui.Char_NewColumn -->
             <Keywords name="Keywords2">!</Keywords>
 				<!-- *gdb - Settings, from Selector -->
-            <Keywords name="Keywords3">@MinColumnWidth @WindowTitle</Keywords>
+            <Keywords name="Keywords3">{{SETTINGS}}</Keywords>
 				<!-- *gdb - Prefix for mod column identifiers, from TableListMod.Char_TargetPrefix -->
             <Keywords name="Keywords4">~</Keywords>
             <Keywords name="Keywords5"></Keywords>

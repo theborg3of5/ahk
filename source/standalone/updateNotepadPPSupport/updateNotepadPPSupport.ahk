@@ -32,7 +32,7 @@ path_CompletionActive_TL  := Config.path["PROGRAM_FILES"] "\Notepad++\autoComple
 path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml" ; This file is for all user-defined languages
 
 
-
+; GDB TODO consider something that more cleanly handles {{TAGS}} replacement - probably just in this file unless we find other needs for it.
 
 
 ; GDB TODO next plans:
@@ -54,90 +54,17 @@ path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefine
 ;		- NPP-LANGUAGE
 ;  - Add NPP-RETURNS and NPP-LANG to list of header keywords for indentation and such
 
-; scriptData := {} ; {language: {className: AutoCompleteClass}}
-ahkClasses := {} ; {className: AutoCompleteClass}
-tlMembers := []
+global ahkClasses := {} ; {className: AutoCompleteClass}
+global tlMembers := []
 
-; folderPath := Config.path["AHK_SOURCE"] "\common\class"
-; groupName := "INSTANCE_CLASSES"
-
-; ; Loop over all scripts in folder to find classes
-; Loop, Files, %folderPath%\*.ahk, RF ; [R]ecursive, [F]iles (not [D]irectories)
-; {
-	; linesAry := FileLib.fileLinesToArray(A_LoopFileLongPath, true)
-	
-	; tlBlockOn := false
-	; ln := 0 ; Lines start at 1 (and the loop starts by increasing the index).
-	; while(ln < linesAry.count()) {
-		; line := linesAry.next(ln)
-		
-		; ; There are blocks of headers with no corresponding definition lines, specific to the TableList file format.
-		; if(line = "; @NPP-TABLELIST")
-			; tlBlockOn := true
-		; if(line = "; @NPP-TABLELIST-END")
-			; tlBlockOn := false
-		
-		; ; Block of documentation - read the whole thing in and create a member.
-		; if(line = Header_StartEnd) {
-			; ; Grab the whole header
-			; headerLines := [line]
-			; Loop {
-				; line := linesAry.next(ln)
-				; headerLines.push(line)
-				
-				; if(line = Header_StartEnd)
-					; Break
-			; }
-			
-			; if(tlBlockOn) {
-				; ; Feed the header to a new member object and add it to the TL members array.
-				; tlMembers.push(new AutoCompleteMember(headerLines)) ; No defLine/returnsPrefix - these headers specify their own.
-				; ; Debug.popup("tlMembers",tlMembers)
-			; } else {
-				; ; Get the definition line (first line after the header) too.
-				; defLine := linesAry.next(ln)
-				
-				; ; Feed the data to a new member object and add that to our current class object.
-				; member := new AutoCompleteMember(headerLines, defLine, returnsPrefix)
-				; classObj.addMember(member)
-			; }
-			
-			; Continue
-		; }
-		
-		; ; Block of private/debug scope - ignore everything up until we hit a public/end of scope.
-		; if(ScopeStart_NonPublicScopes.contains(line)) {
-			; while(line != ScopeStart_Public && line != ScopeEnd) {
-				; line := linesAry.next(ln)
-			; }
-			
-			; Continue
-		; }
-		
-		; ; Class declaration
-		; if(line.startsWith("class ") && line.endsWith(" {") && line != "class {") {
-			; classObj := new AutoCompleteClass(line, classGroup)
-			; ahkClasses[classObj.name] := classObj ; Point to classObj (which is what we'll actually be updating) from classes object
-			
-			; Continue
-		; }
-	; }
-; }
-
-; ; Debug.popup("ahkClasses",ahkClasses, "tlMembers",tlMembers)
-; Debug.copy("ahkClasses",ahkClasses, "tlMembers",tlMembers)
-
-; ExitApp
-
-
-
+; [[ Extract data from scripts ]] ---
 
 ; Read in and extract all classes from scripts in these folders
-addScriptData(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\base",   "BASE_CLASSES")
-addScriptData(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
-addScriptData(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
-addScriptData(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
-addScriptData(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Include program-specific classes, but with a returns prefix.
+addFromFolder(Config.path["AHK_SOURCE"] "\common\base",   "BASE_CLASSES")
+addFromFolder(Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
+addFromFolder(Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
+addFromFolder(Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
+addFromFolder(Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Include program-specific classes, but with a returns prefix.
 
 ; Remove empty classes and handle inheritance.
 classesToDelete := []
@@ -157,20 +84,16 @@ For _,className in classesToDelete
 
 
 
-; Sort properly (underscores sort last)
+; Sort properly (underscores sort last) - AHK
 sortedAHKClasses := []
-
 ; Get the names and sort them
 classNames := ahkClasses.toKeysArray().join("`n")
 Sort, classNames, F keywordSortsAfter
-
 ; Populate new array in correct order
 For _,className in classNames.split("`n")
 	sortedAHKClasses.push(ahkClasses[className])
 
-
-
-; Sort properly
+; Sort properly - TL
 sortedTLMembers := []
 memberNames := ""
 For _,member in tlMembers
@@ -184,23 +107,73 @@ For _,name in memberNames.split("`n") {
 }
 
 
-Debug.copy("sortedTLMembers",sortedTLMembers, "sortedAHKClasses",sortedAHKClasses)
+; Debug.copy("sortedTLMembers",sortedTLMembers, "sortedAHKClasses",sortedAHKClasses)
+; ExitApp
+
+
+; [[ Auto-complete ]] ---
+xmlLines := FileLib.fileLinesToArray(path_CompletionTemplate_AHK)
+updateAutoCompleteXML(xmlLines, ahkClasses)
+newXML := xmlLines.join("`n")
+FileLib.replaceFileWithString(path_CompletionOutput_AHK, newXML)
+; FileLib.replaceFileWithString(path_CompletionActive_AHK, newXML)
+
+
+keywordsXML := ""
+For _,member in sortedTLMembers
+	keywordsXML := keywordsXML.appendPiece(member.generateXML(), "`n")
+
+templateXML := FileRead(path_CompletionTemplate_TL)
+newXML := templateXML.replace("{{KEYWORDS}}", keywordsXML)
+FileLib.replaceFileWithString(path_CompletionOutput_TL, newXML)
+; FileLib.replaceFileWithString(path_CompletionActive_TL, newXML)
+
+t := new Toast("Updated both versions of the auto-complete file").show()
+
+
+
+; [[ Syntax highlighting ]] ---
+; AHK: we can get the class groups we need from the auto complete classes we built above
+xmlSyntaxAHK := FileRead(path_SyntaxTemplate_AHK)
+updateAHKSyntaxXML(xmlSyntaxAHK, ahkClasses)
+FileLib.replaceFileWithString(path_SyntaxOutput_AHK, xmlSyntaxAHK)
+
+; TL: the template file already has exactly what we want to plug in, no processing needed.
+xmlSyntaxTL := FileRead(path_SyntaxTemplate_TL)
+updateTLSyntaxXML(xmlSyntaxTL, sortedTLMembers)
+FileLib.replaceFileWithString(path_SyntaxOutput_TL, xmlSyntaxTL)
+
+; Get the combined XML to update - from either an existing file or the base template.
+if(FileExist(path_SyntaxActive))
+	activeSyntaxXML := FileRead(path_SyntaxActive)
+else
+	activeSyntaxXML := FileRead(path_SyntaxTemplate_Base)
+
+; Plug each language into its spot in the XML
+updateLangInSyntaxXML(activeSyntaxXML, "AutoHotkey", xmlSyntaxAHK)
+updateLangInSyntaxXML(activeSyntaxXML, "TableList",  xmlSyntaxTL)
+; FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
+
+
+t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
+; =--
+
+
+
+
+
+
+
+
 ExitApp
-
-
-
-
-
-
-
 
 
 
 ; [[ Auto-complete ]] ---
 ; AHK: use documentation read from various script files
-autoCompleteClasses := getAutoCompleteClasses()
+ahkClasses := getAutoCompleteClasses()
 xmlLines := FileLib.fileLinesToArray(path_CompletionTemplate_AHK)
-updateAutoCompleteXML(xmlLines, autoCompleteClasses)
+updateAutoCompleteXML(xmlLines, ahkClasses)
 
 newXML := xmlLines.join("`n")
 FileLib.replaceFileWithString(path_CompletionOutput_AHK, newXML)
@@ -242,13 +215,13 @@ t := new Toast("Updated both versions of the auto-complete file").show()
 
 ; [[ Syntax highlighting ]] ---
 ; AHK: we can get the class groups we need from the auto complete classes we built above
-xmlSyntax_AHK := FileRead(path_SyntaxTemplate_AHK)
-updateAHKSyntaxXML(xmlSyntax_AHK, autoCompleteClasses)
-FileLib.replaceFileWithString(path_SyntaxOutput_AHK, xmlSyntax_AHK)
+xmlSyntaxAHK := FileRead(path_SyntaxTemplate_AHK)
+updateAHKSyntaxXML(xmlSyntaxAHK, ahkClasses)
+FileLib.replaceFileWithString(path_SyntaxOutput_AHK, xmlSyntaxAHK)
 
 ; TL: the template file already has exactly what we want to plug in, no processing needed.
-xmlSyntax_TL := FileRead(path_SyntaxTemplate_TL)
-FileLib.replaceFileWithString(path_SyntaxOutput_TL, xmlSyntax_TL)
+xmlSyntaxTL := FileRead(path_SyntaxTemplate_TL)
+FileLib.replaceFileWithString(path_SyntaxOutput_TL, xmlSyntaxTL)
 
 ; Get the XML to update - from either an existing file or the base template.
 if(FileExist(path_SyntaxActive))
@@ -257,8 +230,8 @@ else
 	activeSyntaxXML := FileRead(path_SyntaxTemplate_Base)
 
 ; Plug each language into its spot in the XML
-updateLangInSyntaxXML(activeSyntaxXML, "AutoHotkey", xmlSyntax_AHK)
-updateLangInSyntaxXML(activeSyntaxXML, "TableList",  xmlSyntax_TL)
+updateLangInSyntaxXML(activeSyntaxXML, "AutoHotkey", xmlSyntaxAHK)
+updateLangInSyntaxXML(activeSyntaxXML, "TableList",  xmlSyntaxTL)
 FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
 ; =--
 
@@ -276,11 +249,11 @@ getAutoCompleteClasses() {
 	classes := {}
 	
 	; Read in and extract all classes from scripts in these folders
-	; addScriptData(classes, Config.path["AHK_SOURCE"] "\common\base",   "BASE_CLASSES")
-	; addScriptData(classes, Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
-	; addScriptData(classes, Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
-	; addScriptData(classes, Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
-	; addScriptData(classes, Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Include program-specific classes, but with a returns prefix.
+	; addFromFolder(classes, Config.path["AHK_SOURCE"] "\common\base",   "BASE_CLASSES")
+	; addFromFolder(classes, Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
+	; addFromFolder(classes, Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
+	; addFromFolder(classes, Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
+	; addFromFolder(classes, Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Include program-specific classes, but with a returns prefix.
 	
 	; Remove empty classes and handle inheritance.
 	classesToDelete := []
@@ -305,15 +278,13 @@ getAutoCompleteClasses() {
 ;---------
 ; DESCRIPTION:    Add documentation data from the scripts in the given folder to the classes object.
 ; PARAMETERS:
-;  ahkClasses   (IO,REQ) - The object to add the AHK class objects to, indexed by class name.
-;  tlMembers    (IO,REQ) - An array of members for the TableList format.
 ;  folderPath    (I,REQ) - The full path to the folder to read from.
 ;  classGroup    (I,REQ) - Which "group" the classes in this folder should have - this determines
 ;                          how they get syntax-highlighted.
 ;  returnsPrefix (I,OPT) - The prefix to add to the auto-complete return value of all functions in
 ;                          all classes in this folder.
 ;---------
-addScriptData(ByRef ahkClasses, ByRef tlMembers, folderPath, classGroup, returnsPrefix := "") {
+addFromFolder(folderPath, classGroup, returnsPrefix := "") {
 	; Loop over all scripts in folder to find classes
 	Loop, Files, %folderPath%\*.ahk, RF ; [R]ecursive, [F]iles (not [D]irectories)
 	{
@@ -536,13 +507,13 @@ addTLMembersFromStubs(ByRef membersByDotName, path, returnsPrefix := "") {
 ;---------
 ; DESCRIPTION:    Update the given AHK syntax highlighting XML with groups of space-separated class names.
 ; PARAMETERS:
-;  syntaxXML           (IO,REQ) - The XML to update.
-;  autoCompleteClasses  (I,REQ) - The array of AutoCompleteClass instances from getAutoCompleteClasses().
+;  syntaxXML  (IO,REQ) - The XML to update.
+;  ahkClasses  (I,REQ) - The array of AutoCompleteClass instances from getAutoCompleteClasses(). ; GDB TODO
 ;---------
-updateAHKSyntaxXML(ByRef syntaxXML, autoCompleteClasses) {
+updateAHKSyntaxXML(ByRef syntaxXML, ahkClasses) {
 	; Generate the class groups we need from our auto-complete classes
 	classGroups := {}
-	For _,classObj in autoCompleteClasses {
+	For _,classObj in ahkClasses {
 		names := classGroups[classObj.group]
 		names := names.appendPiece(classObj.name, " ")
 		classGroups[classObj.group] := names
@@ -552,6 +523,31 @@ updateAHKSyntaxXML(ByRef syntaxXML, autoCompleteClasses) {
 	For groupName,classNames in classGroups {
 		groupTextToReplace := "{{" groupName "}}"
 		syntaxXML := syntaxXML.replace(groupTextToReplace, classNames)
+	}
+}
+
+
+updateTLSyntaxXML(ByRef syntaxXML, tlMembers) {
+	; Generate the groups
+	memberGroups := {}
+	For _,member in tlMembers {
+		if(member.returns = "@") {
+			group := "SETTINGS"
+			name := "@" member.name
+		} else {
+			group := "MOD_OPERATIONS"
+			name := member.name
+		}
+		
+		names := memberGroups[group]
+		names := names.appendPiece(name, " ")
+		memberGroups[group] := names
+	}
+	
+	; Update replacement markers
+	For groupName,memberNames in memberGroups {
+		groupTextToReplace := "{{" groupName "}}"
+		syntaxXML := syntaxXML.replace(groupTextToReplace, memberNames)
 	}
 }
 

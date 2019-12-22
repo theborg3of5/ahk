@@ -29,7 +29,7 @@
             <Keywords name="Folders in comment, middle"></Keywords>
             <Keywords name="Folders in comment, close"></Keywords>
 				<!-- *gdb - Mod operations, from TableListMod.Operation_* -->
-            <Keywords name="Keywords1">addToStart addToEnd replaceWith</Keywords>
+            <Keywords name="Keywords1">addToEnd addToStart replaceWith</Keywords>
 				<!-- *gdb - New column character, from SelectorGui.Char_NewColumn -->
             <Keywords name="Keywords2">!</Keywords>
 				<!-- *gdb - Settings, from Selector -->

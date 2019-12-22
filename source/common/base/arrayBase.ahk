@@ -119,8 +119,8 @@ class ArrayBase {
 	join(delim := ",") {
 		outString := ""
 		
-		For _,value in this { ; GDB TODO can't this just use .appendPiece()? If not, add a comment to explain why.
-			if(outString)
+		For _,value in this {
+			if(outString) ; Can't use .appendPiece for this because it ignores empty values (which we want to keep).
 				outString .= delim
 			outString .= value
 		}

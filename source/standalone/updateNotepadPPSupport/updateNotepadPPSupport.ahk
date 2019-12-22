@@ -38,7 +38,7 @@ path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefine
 ; [[ Extract data ]] ---
 ahkClasses := []
 tlMembers  := []
-populateScriptData(ahkClasses, tlMembers)
+getDataFromScripts(ahkClasses, tlMembers)
 
 ; [[ Auto-complete ]] ---
 newXML := updateCompletionXML_AHK(path_CompletionTemplate_AHK, ahkClasses)
@@ -53,12 +53,10 @@ t := new Toast("Updated both versions of the auto-complete file").show()
 
 
 ; [[ Syntax highlighting ]] ---
-; AHK: we can get the class groups we need from the auto complete classes we built above
 xmlSyntaxAHK := FileRead(path_SyntaxTemplate_AHK)
 updateSyntaxXML_AHK(xmlSyntaxAHK, ahkClasses)
 FileLib.replaceFileWithString(path_SyntaxOutput_AHK, xmlSyntaxAHK)
 
-; TL: the template file already has exactly what we want to plug in, no processing needed.
 xmlSyntaxTL := FileRead(path_SyntaxTemplate_TL)
 updateSyntaxXML_TL(xmlSyntaxTL, tlMembers)
 FileLib.replaceFileWithString(path_SyntaxOutput_TL, xmlSyntaxTL)
@@ -82,7 +80,7 @@ ExitApp
 
 
 ; GDB TODO
-populateScriptData(ByRef sortedAHKClasses, ByRef sortedTLMembers) {
+getDataFromScripts(ByRef sortedAHKClasses, ByRef sortedTLMembers) {
 	ahkClasses := {} ; {className: AutoCompleteClass}
 	tlMembers  := {} ; {memberName: AutoCompleteMember}
 	
@@ -122,10 +120,10 @@ addFromFolder(ByRef ahkClasses, ByRef tlMembers, folderPath, classGroup, returns
 			line := linesAry.next(ln)
 			
 			; There are blocks of headers with no corresponding definition lines, specific to the TableList file format.
-			if(line = "; @NPP-TABLELIST")
-				tlBlockOn := true
-			if(line = "; @NPP-TABLELIST-END")
+			if(line.startsWith("; @NPP-TABLELIST-END"))
 				tlBlockOn := false
+			else if(line.startsWith("; @NPP-TABLELIST"))
+				tlBlockOn := true
 			
 			; Block of documentation - read the whole thing in and create a member.
 			if(line = Header_StartEnd) {

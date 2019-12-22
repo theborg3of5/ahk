@@ -3,6 +3,8 @@
 class AHKCodeLib {
 	; #PUBLIC#
 	
+	static SPACES_PER_TAB := 3 ; How many spaces are treated as a tab for indentation purposes.
+	
 	;---------
 	; DESCRIPTION:    Generate a documentation header based on the definition line provided.
 	; PARAMETERS:
@@ -101,18 +103,25 @@ class AHKCodeLib {
 	; DESCRIPTION:    Figure out how much indentation is needed for the next line of documentation,
 	;                 based on the current line.
 	; PARAMETERS:
-	;  line (I,REQ) - The line that we're trying to determine indentation after.
+	;  line            (I,REQ) - The line that we're trying to determine indentation after.
+	;  numExtraIndents (I,OPT) - How many extra indents to do versus the start of the current line.
+	;                            Defaults to 0 (same level as the current line).
 	; RETURNS:        The indentation to use:
-	;                  If bullets: ";" + indentation + bullet + " "
-	;                  Otherwise: ";" + indentation
+	;                    ";"
+	;                    align with previous line
+	;                    extra indents
+	;                    bullet and trailing space if previous line had it
 	;---------
-	getNextDocLineIndent(line) {
+	getNextDocLineIndent(line, numExtraIndents) {
 		line := line.clean() ; Drop (and ignore) any leading/trailing whitespace and odd characters
 		line := line.removeFromStart(";") ; Trim off the starting comment char
 		
 		; Leading spaces after the comment
 		numSpaces := StringLib.countLeadingSpaces(line)
 		line := line.withoutWhitespace()
+		
+		; Add in any extra indents
+		numSpaces += numExtraIndents * this.SPACES_PER_TAB
 		
 		; Keyword line
 		if(line.startsWithAnyOf(this.HeaderKeywords, matchedKeyword)) {

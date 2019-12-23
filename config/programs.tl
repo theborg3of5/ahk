@@ -6,7 +6,7 @@
 	EpicStudio					EpicStudio\EpicStudio.exe
 	Foobar						foobar2000\foobar2000.exe
 	Launchy						Launchy\Launchy.exe
-	Notepad++					Notepad++\notepad++.exe																HOME_LAPTOP
+	Notepad++					Notepad++\notepad++.exe																HOME_LAPTOP | WORK_VDI
 	OneNote						Microsoft Office\Office16\ONENOTE.EXE											WORK_LAPTOP
 	OneNote						Microsoft Office\root\Office16\ONENOTE.EXE
 	Outlook						Microsoft Office\Office16\OUTLOOK.EXE

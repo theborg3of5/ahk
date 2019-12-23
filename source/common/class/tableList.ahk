@@ -678,7 +678,7 @@ class TableList {
 		
 		; Check the value
 		if(isObject(valueToCompare))
-			return valueToCompare.contains(value)
+			return valueToCompare.contains(filterValue)
 		else
 			return (valueToCompare = filterValue)
 	}

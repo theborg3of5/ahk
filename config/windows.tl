@@ -44,7 +44,7 @@
 ~PRIORITY.replaceWith(1) {
 			AutoHotkey								AutoHotkey.exe				AutoHotkeyGUI					-
 			Chrome									chrome.exe					Chrome_WidgetWin_1			-
-			Cisco AnyConnect VPN					vpnui.exe					#32770							Cisco AnyConnect Secure Mobility Client
+			Cisco AnyConnect VPN					vpnui.exe					-									Cisco AnyConnect Secure Mobility Client
 			Discord									Discord.exe					-									-														NO_PADDING
 			EMC2										EpicD89.exe					-									EMC2													-					START
 			EpicStudio								EpicStudio.exe				-									EpicStudio

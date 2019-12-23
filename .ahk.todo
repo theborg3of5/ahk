@@ -45,31 +45,6 @@
 			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
 	
 # TableList
-	Consider allowing spaces within mods (if it doesn't work already):
-		[ MAJOR.replaceWith(9) | MINOR.replaceWith(2) ]
-	Consider reworking the file syntax
-		What if we had mods be nested curly-bracket blocks?
-			Could sense { by that being the end of the row
-			Could sense } by that being the only thing in the row (to avoid false positives)
-				Or: just it being the start of the row (so we can handle an else-if sort of layout)
-			Example:
-				@SettingName=settingValue
-				
-				[	NAME					ABBREV			VALUE		]
-				{	0						0					1			}
-				
-				# ! Header
-				; Comment
-				NAME.addToStart(yo) | NAME.addToEnd(end) {
-					VALUE.replaceWith(val1) {
-						Row 1					abbr1				-
-					}
-						Row 2					abbr2				val2
-				}
-			Alternative model/key row ideas:
-				[	NAME					ABBREV			VALUE
-					0						0					1			]
-				[	NAME					ABBREV			VALUE		]
 	Consider a new .setIfEmpty/.defaultTo mod that only replaces if there's no value
 		Would let us basically have a default value that individual, inline rows can override if needed
 		Use cases:

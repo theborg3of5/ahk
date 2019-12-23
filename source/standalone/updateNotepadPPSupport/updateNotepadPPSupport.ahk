@@ -69,7 +69,6 @@ else
 updateLangInSyntaxXML(activeSyntaxXML, "AutoHotkey", newXML_AHK)
 updateLangInSyntaxXML(activeSyntaxXML, "TableList",  newXML_TL)
 FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
-Debug.popup("activeSyntaxXML",activeSyntaxXML)
 
 t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
 ; =--
@@ -417,8 +416,6 @@ updateLangInSyntaxXML(ByRef activeSyntaxXML, langName, langFullXML) {
 	; Replace the same thing in the active XML.
 	xmlToReplace := activeSyntaxXML.firstBetweenStrings(LANG_START, LANG_END)
 	xmlToReplace := LANG_START xmlToReplace LANG_END
-	
-	Debug.popup("xmlToReplace",xmlToReplace, "langXML",langXML)
 	
 	activeSyntaxXML := activeSyntaxXML.replace(xmlToReplace, langXML)
 }

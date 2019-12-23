@@ -12,6 +12,9 @@
 	!c::ClipboardLib.copyFilePathWithHotkey("!c")     ; Current file
 	!#c::ClipboardLib.copyFolderPathWithHotkey("^!c") ; Current folder
 	
+	; Relative shortcut creation
+	^+s::Explorer.createRelativeShortcut()
+	
 	; Hide/show hidden files
 	#h::Explorer.toggleHiddenFiles()
 	
@@ -50,6 +53,11 @@ class Explorer {
 		; Set registry key for whether to show hidden files and refresh to apply.
 		RegWrite, REG_DWORD, % Explorer.ShowHiddenRegKeyName, % Explorer.ShowHiddenRegValueName, % newValue
 		Send, {F5}
+	}
+	
+	
+	createRelativeShortcut() {
+		; GDB TODO should we have constants or functions or something for getting the current file/folder so it's easier to use in code here?
 	}
 	
 	

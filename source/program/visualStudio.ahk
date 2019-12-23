@@ -5,6 +5,6 @@
 	^+t::Send, !fj1 ; Open last-closed project
 
 	; Copy current file/folder paths to clipboard
-	!c::ClipboardLib.copyFilePathWithHotkey("^+c")    ; Current file
-	!#c::ClipboardLib.copyFolderPathWithHotkey("^+c") ; Current file's folder
+	!c::ClipboardLib.copyFilePathWithHotkey("^+c")        ; Current file
+	!#c::ClipboardLib.copyFolderPathWithFileHotkey("^+c") ; Current file's folder
 #If

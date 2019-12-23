@@ -6,7 +6,7 @@
 	
 	; Copy current file/folder to clipboard.
 	!c::ClipboardLib.copyFilePathWithHotkey("!c")
-	!#c::ClipboardLib.copyFolderPathWithHotkey("!c")
+	!#c::ClipboardLib.copyFolderPathWithFileHotkey("!c")
 	^+o::NotepadPlusPlus.openCurrentParentFolder()
 	
 	^Enter:: NotepadPlusPlus.insertIndentedNewline() ; Add an indented newline

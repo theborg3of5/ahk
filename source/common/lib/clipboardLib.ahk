@@ -85,7 +85,7 @@ class ClipboardLib {
 	;                  * We wait long enough for the file to get onto the clipboard
 	;                  * The path has been cleaned up and mapped
 	; PARAMETERS:
-	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file to the clipboard.
+	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
 	;---------
 	copyFilePathWithHotkey(hotkeyKeys) {
 		path := ClipboardLib.getWithHotkey(hotkeyKeys)
@@ -100,9 +100,26 @@ class ClipboardLib {
 	;                  * The path has been cleaned up and mapped
 	;                  * There's a trailing backslash on the end
 	; PARAMETERS:
+	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the folder's path to the clipboard.
+	;---------
+	copyFolderPathWithHotkey(hotkeyKeys) {
+		path := ClipboardLib.getWithHotkey(hotkeyKeys)
+		if(path) {
+			path := FileLib.cleanupPath(path)
+			path := path.appendIfMissing("\") ; Add the trailing backslash since it's a folder
+		}
+		
+		ClipboardLib.setAndToast(path, "folder path")
+	}
+	;---------
+	; DESCRIPTION:    Copy a folder path with the provided hotkeys, making sure that:
+	;                  * We wait long enough for the folder to get onto the clipboard
+	;                  * The path has been cleaned up and mapped
+	;                  * There's a trailing backslash on the end
+	; PARAMETERS:
 	;  fileHotkeyKeys (I,REQ) - The keys to send in order to copy a FILE in the folder you want to the clipboard.
 	;---------
-	copyFolderPathWithHotkey(fileHotkeyKeys) {
+	copyFolderPathWithFileHotkey(fileHotkeyKeys) {
 		path := ClipboardLib.getWithHotkey(fileHotkeyKeys)
 		if(path) {
 			path := FileLib.cleanupPath(path)

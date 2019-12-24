@@ -87,10 +87,7 @@ $^!l:: new ActionObject(SelectLib.getText()).copyLinkEdit()
 			if(!data)
 				return
 			
-			combinedMessage := data["BASE_MESSAGE"]
-			if(data["BASE_MESSAGE"] && data["MESSAGE"])
-				combinedMessage .= " - " ; Hyphen in between base message and normal message
-			combinedMessage .= data["MESSAGE"]
+			combinedMessage := data["MESSAGE_PREFIX"].appendPiece(data["MESSAGE"], " - ")
 			
 			textToSend := Config.private["OUTLOOK_TLG_BASE"]
 			textToSend := textToSend.replaceTag("TLP",      data["TLP"])

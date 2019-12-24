@@ -128,5 +128,27 @@ class StringLib {
 		
 		return outString
 	}
+	
+	;---------
+	; DESCRIPTION:    Find the "overlap" between two strings - that is, everything (from the start)
+	;                 that's the same in both of them.
+	; PARAMETERS:
+	;  string1 (I,REQ) - The first string to compare
+	;  string2 (I,REQ) - The second string to compare
+	; RETURNS:        The longest string that both of the given ones start with.
+	;---------
+	findStringOverlapFromStart(string1, string2) {
+		overlap := ""
+		
+		Loop, Parse, string1
+		{
+			if(A_LoopField != string2.charAt(A_Index))
+				Break
+			overlap .= A_LoopField
+		}
+		
+		return overlap
+	}
+	
 	; #END#
 }

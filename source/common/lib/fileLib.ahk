@@ -146,6 +146,58 @@ class FileLib {
 		
 		Send, % folderPath
 	}
+	
+	
+	;---------
+	; DESCRIPTION:    Find the deepest common folder for the two given paths - that is, the lowest
+	;                 common denominator of their parent folders.
+	; PARAMETERS:
+	;  path1 (I,REQ) - The first path to compare
+	;  path2 (I,REQ) - The second path to compare
+	; RETURNS:        The deepest parent folder (never a file, even if it's the same path twice)
+	;                 that both paths have in common, with a trailing backslash.
+	; NOTES:          This assumes that the paths are already cleaned up - they can't have quotes
+	;                 or odd characters, and they should both be either mapped to drives or not.
+	;---------
+	findCommonFolder(path1, path2) {
+		; First, reduce both paths to their deepest folders (themselves if they're already a folder).
+		; Note that this should leave both of them with a trailing backslash (important later).
+		folder1 := FileLib.reduceToFolder(path1)
+		folder2 := FileLib.reduceToFolder(path2)
+		
+		; If that yeilds the same folder already, we're done.
+		if(folder1 = folder2)
+			return folder1
+		
+		; Start with the string overlap - that gets us pretty close.
+		overlapPath := StringLib.findStringOverlapFromStart(path1, path2)
+		
+		; If the last character is a backslash, then both paths contained this folder and we're done.
+		if(overlapPath.endsWith("\"))
+			return overlapPath
+		
+		; Otherwise, the last bit of the path is a partial folder name (for at least one of the paths),
+		; so the parent of that is our actual common folder.
+		return FileLib.getParentFolder(overlapPath).appendIfMissing("\")
+	}
+	; #PRIVATE#
+	
+	
+	;---------
+	; DESCRIPTION:    Reduce the given path to a folder.
+	; PARAMETERS:
+	;  path (I,REQ) - The path to reduce.
+	; RETURNS:        The same path (if it was a valid folder) or its parent, with a trailing backslash.
+	; NOTES:          Assumes that the path is valid (that is, at least the folders involved exist).
+	;---------
+	reduceToFolder(path) {
+		if(FileLib.folderExists(path)) ; If it's already a folder, we're done.
+			folder := path
+		else
+			folder := FileLib.getParentFolder(path)
+		
+		return folder.appendIfMissing("\")
+	}
 	; #END#
 }
 

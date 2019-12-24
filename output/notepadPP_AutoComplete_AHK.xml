@@ -1253,12 +1253,12 @@
 							;                  * We wait long enough for the file to get onto the clipboard
 							;                  * The path has been cleaned up and mapped
 							; PARAMETERS:
-							;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file to the clipboard.
+							;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
 							;---------">
                 <Param name="hotkeyKeys" />
             </Overload>
         </KeyWord>
-        <KeyWord name="ClipboardLib.copyFolderPathWithHotkey" func="yes">
+        <KeyWord name="ClipboardLib.copyFolderPathWithFileHotkey" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Copy a folder path with the provided hotkeys, making sure that:
@@ -1269,6 +1269,19 @@
 							;  fileHotkeyKeys (I,REQ) - The keys to send in order to copy a FILE in the folder you want to the clipboard.
 							;---------">
                 <Param name="fileHotkeyKeys" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ClipboardLib.copyFolderPathWithHotkey" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Copy a folder path with the provided hotkeys, making sure that:
+							;                  * We wait long enough for the folder to get onto the clipboard
+							;                  * The path has been cleaned up and mapped
+							;                  * There's a trailing backslash on the end
+							; PARAMETERS:
+							;  hotkeyKeys (I,REQ) - The keys to send in order to copy the folder's path to the clipboard.
+							;---------">
+                <Param name="hotkeyKeys" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.copyWithFunction" func="yes">
@@ -2836,6 +2849,23 @@
 							;---------">
                 <Param name="fileName" />
                 <Param name="dropWhitespace := false" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FileLib.findCommonFolder" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Find the deepest common folder for the two given paths - that is, the lowest
+							;                 common denominator of their parent folders.
+							; PARAMETERS:
+							;  path1 (I,REQ) - The first path to compare
+							;  path2 (I,REQ) - The second path to compare
+							; RETURNS:        The deepest parent folder (never a file, even if it's the same path twice)
+							;                 that both paths have in common, with a trailing backslash.
+							; NOTES:          This assumes that the paths are already cleaned up - they can't have quotes
+							;                 or odd characters, and they should both be either mapped to drives or not.
+							;---------">
+                <Param name="path1" />
+                <Param name="path2" />
             </Overload>
         </KeyWord>
         <KeyWord name="FileLib.findConfigFilePath" func="yes">
@@ -5856,6 +5886,20 @@
                 <Param name="inputString" />
                 <Param name="charToEscape" />
                 <Param name="escapeChar := &quot;\&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringLib.findStringOverlapFromStart" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Find the &quot;overlap&quot; between two strings - that is, everything (from the start)
+							;                 that's the same in both of them.
+							; PARAMETERS:
+							;  string1 (I,REQ) - The first string to compare
+							;  string2 (I,REQ) - The second string to compare
+							; RETURNS:        The longest string that both of the given ones start with.
+							;---------">
+                <Param name="string1" />
+                <Param name="string2" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringLib.getDots" func="yes">

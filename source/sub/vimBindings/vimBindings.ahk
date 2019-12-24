@@ -35,6 +35,7 @@ return
 	F6::
 	F8::
 	F9::
+		HotkeyLib.releaseAllModifiers() ; Make very sure that we're not also holding down shift (which would close the window).
 		Send, ^w
 		turnVimKeysOn()
 	return
@@ -54,6 +55,10 @@ return
 	; Next/Previous Tab.
 	o::Send, ^{Tab}
 	u::Send, ^+{Tab}
+	
+	; Move tabs left/right (with this extension: https://chrome.google.com/webstore/detail/rearrange-tabs/ccnnhhnmpoffieppjjkhdakcoejcpbga )
+	+o::Send, !+{Right}
+	+u::Send, !+{Left}
 	
 	; Auto-pause (so we'll switch back on enter/escape)
 	~^l::
@@ -112,13 +117,11 @@ return
 	~+l::
 	~+m::
 	~+n::
-	~+o::
 	~+p::
 	~+q::
 	~+r::
 	~+s::
 	~+t::
-	~+u::
 	~+v::
 	~+w::
 	~+x::

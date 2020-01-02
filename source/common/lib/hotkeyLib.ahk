@@ -33,13 +33,6 @@ class HotkeyLib {
 	}
 	
 	
-	sendUsingLevel(hotkeyString, level) {
-		settings := new TempSettings().sendLevel(level)
-		Send, % hotkeyString
-		settings.restore()
-	}
-	
-	
 	; #PRIVATE#
 	
 	;---------

@@ -25,15 +25,15 @@
 	!e::Chrome.openCurrentEMC2ObjectEdit()
 	^+o::Chrome.openCodeSearchServerCodeInEpicStudio()
 	
-	; Send to Telegram (and pick the correct chat). Relies on !t also triggering the Send to Telegram extension.
-	~!t::
-		WinWaitActive, % Config.windowInfo["Telegram"].titleString
-		Telegram.focusNormalChat()
-	return
-	
 	; Handling for file links
 	^RButton::Chrome.copyLinkTarget() ; Copy
 	^MButton::Chrome.openLinkTarget() ; Open
+	
+	; Extension-specific handling
+	~!t:: ; Send to Telegram (and pick the correct chat). Relies on !t also triggering the Send to Telegram extension.
+		WinWaitActive, % Config.windowInfo["Telegram"].titleString
+		Telegram.focusNormalChat()
+	return
 #If
 
 class Chrome {

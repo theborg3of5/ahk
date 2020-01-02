@@ -34,6 +34,7 @@
 		WinWaitActive, % Config.windowInfo["Telegram"].titleString
 		Telegram.focusNormalChat()
 	return
+	^!d::Send, !+d ; Dark Reader - site-level hotkey (Chrome won't let me bind this directly)
 #If
 
 class Chrome {

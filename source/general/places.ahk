@@ -1,9 +1,9 @@
 ; Hotkeys for opening different locations, both local (folders) and remote (URLs).
 
 ; Specific folders
-!+a::openFolder("AHK_ROOT")
-!+d::openFolder("USER_DOWNLOADS")
-!+u::openFolder("USER_ROOT")
+ !+a::openFolder("AHK_ROOT")
+$!+d::openFolder("USER_DOWNLOADS")
+ !+u::openFolder("USER_ROOT")
 openFolder(folderName) {
 	folderPath := Config.path[folderName]
 	if(FileLib.folderExists(folderPath))

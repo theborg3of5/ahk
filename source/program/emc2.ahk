@@ -97,9 +97,12 @@ class EMC2 {
 		if(record.ini != "DLG" || record.id = "")
 			return
 		
-		new Toast("Opening DLG in EpicStudio: " record.id).showMedium()
+		t := new Toast("Opening DLG in EpicStudio: " record.id).show()
 		
 		new ActionObjectEpicStudio(record.id, ActionObjectEpicStudio.DescriptorType_DLG).openEdit()
+		
+		WinWaitActive, % Config.windowInfo["EpicStudio"].titleString, , 10 ; 10-second timeout
+		t.close()
 	}
 	
 	;---------

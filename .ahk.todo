@@ -1,6 +1,5 @@
 # New Ideas
 	Start working on a pared-down version of ActionObject* stuff (maybe only EMC2 objects?) that could be shared
-	Relative shortcut creation hotkey - consider (optionally, ask with popup?) adding a similar shortcut to the parent folder
 	Should we create wrappers for SplitPath for the specific bits we typically need
 		Would make it easier to tell what's going on when we just need a filename, like in Explorer relative shortcut logic.
 	Auto-complete - could we make a special kind of header that can cover multiple things?

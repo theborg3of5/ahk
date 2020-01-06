@@ -13,7 +13,7 @@
 	!#c::ClipboardLib.copyFolderPathWithHotkey(Explorer.Hotkey_CopyCurrentFolder) ; Current folder
 	
 	; Relative shortcut creation
-	^+s::Explorer.createRelativeShortcut()
+	^+s::Explorer.createRelativeShortcutToFile()
 	
 	; Hide/show hidden files
 	#h::Explorer.toggleHiddenFiles()
@@ -64,7 +64,7 @@ class Explorer {
 	;                 desired folder for the shortcut file.
 	; NOTES:          Calls into different logic depending on whether this is the first or second trigger.
 	;---------
-	createRelativeShortcut() {
+	createRelativeShortcutToFile() {
 		; Initial trigger
 		if(this._relativeTarget = "") {
 			targetPath := this.getRelativeShortcutTarget()
@@ -82,7 +82,7 @@ class Explorer {
 			targetPath := this._relativeTarget
 			this.cleanupRelative() ; Clears _relativeTarget
 				
-			this._createRelativeShortcut(sourceFolder, targetPath)
+			this.createRelative(sourceFolder, targetPath)
 		}
 	}
 	
@@ -153,20 +153,20 @@ class Explorer {
 	;---------
 	; DESCRIPTION:    Create a relative shortcut using some cmd.exe shenanigans.
 	; PARAMETERS:
-	;  sourceFolder (I,REQ) - The folder where the new shortcut should live
+	;  sourceFolder (I,REQ) - The folder where the new shortcut should live (with trailing backslash)
 	;  targetPath   (I,REQ) - The file the shortcut should point to
 	;---------
-	_createRelativeShortcut(sourceFolder, targetPath) {
+	createRelative(sourceFolder, targetPath) {
 		; Find the relative path from source folder to target.
 		relativePath := this.getRelativePath(sourceFolder, targetPath)
 		
 		; Build and create the shortcut
 		SplitPath(targetPath, targetName)
-		shortcutFilePath := sourceFolder.appendIfMissing("\") targetName ".lnk"
+		shortcutFilePath := sourceFolder targetName ".lnk"
 		args := "/c start """" ""%CD%\" relativePath """" ; %CD% is current directory
 		FileCreateShortcut, % A_ComSpec, % shortcutFilePath, , % args
 		
-		t := new Toast("Created shortcut!").blockingOn().showShort()
+		t := new Toast("Created shortcuts!").showShort()
 	}
 	
 	;---------
@@ -192,7 +192,7 @@ class Explorer {
 		}
 		
 		; Get the path from the overlap to the source.
-		targetRelative := targetPath.removeFromStart(commonFolder) ; No backslash here, because commonFolder has a backslash on the end
+		targetRelative := targetPath.removeFromStart(commonFolder) ; No leading backslash here, because commonFolder has a backslash on the end
 		
 		return sourceRelative targetRelative
 	}

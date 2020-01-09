@@ -20,20 +20,29 @@ class InternetExplorer {
 	}
 	
 	pickF12Element() {
-		f12DevToolsTitleString := "ahk_class F12FrameWindow ahk_exe IEXPLORE.EXE"
-		
-		if(!WindowLib.isVisible(f12DevToolsTitleString)) ; Apparently a non-visible window with this string can exist so we can't just check WinExist.
+		if(!WindowLib.isVisible(this.F12DevToolsTitleString)) ; Apparently a non-visible window with this string can exist so we can't just check WinExist.
 			firstTimeOpening := true
 		
 		Send, {F12} ; Open or switch to F12 Dev Tools
-		WinWaitActive, % f12DevToolsTitleString
+		WinWaitActive, % this.F12DevToolsTitleString
 		
-		if(firstTimeOpening) {
-			Sleep, 1000 ; Give it a second to finish loading before we send stuff to it
-			Send, {Tab} ; Get off the stuff in the titlebar that doesn't accept hotkeys.
-		}
+		if(firstTimeOpening)
+			Sleep, 1000 ; Give it a few seconds to finish loading before we send stuff to it
+		
+		; Make sure we're not focused on the toolbar - it doesn't accept hotkeys.
+		if(ControlGetFocus("A") = this.ClassNN_F12DevToolsToolbar)
+			Send, ^2 ; Focus Console tab
+			Sleep, 100
+			Send, ^1 ; Focus back to Dom Explorer tab - this should focus what's inside.
 		
 		Send, ^b ; Element picker hotkey
 	}
+	
+	
+	; #PRIVATE#
+	static F12DevToolsTitleString := "ahk_class F12FrameWindow ahk_exe IEXPLORE.EXE"
+	static ClassNN_F12DevToolsToolbar := "Internet Explorer_Server8"
+	
+	
 	; #END#
 }

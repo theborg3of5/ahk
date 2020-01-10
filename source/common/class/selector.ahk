@@ -270,6 +270,7 @@ class Selector {
 	;---------
 	; @NPP-TABLELIST-END
 	
+	
 	; #PRIVATE#
 	
 	static Char_CommandStart := "+"

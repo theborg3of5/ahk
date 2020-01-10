@@ -30,11 +30,8 @@
 	^MButton::Chrome.openLinkTarget() ; Open
 	
 	; Extension-specific handling
-	~!t:: ; Send to Telegram (and pick the correct chat). Relies on !t also triggering the Send to Telegram extension.
-		WinWaitActive, % Config.windowInfo["Telegram"].titleString
-		Telegram.focusNormalChat()
-	return
-	^!d::Send, !+d ; Dark Reader - site-level hotkey (Chrome won't let me bind this directly)
+	!t::Telegram.shareURL(Chrome.getCurrentURL()) ; Share to Telegram.
+	^!d::Send, !+d ; Deluminate - site-level hotkey (Chrome won't let me bind this directly)
 #If
 
 class Chrome {
@@ -53,13 +50,21 @@ class Chrome {
 	;---------
 	copyTitleLink() {
 		title := Chrome.getTitle()
-		
+		url := Chrome.getCurrentURL()
+		ClipboardLib.setAndToast(title "`n" url, "title and URL")
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the current tab's URL, restoring focus to the web page.
+	; RETURNS:        The current URL
+	;---------
+	getCurrentURL() {
 		Send, ^l     ; Focus address bar
 		Sleep, 100   ; Wait for address bar to get focused
 		url := SelectLib.getText()
-		Send, {F6 4} ; Focus the web page again
+		Send, {F6 3} ; Focus the web page again
 		
-		ClipboardLib.setAndToast(title "`n" url, "title and URL")
+		return url
 	}
 	
 	;---------

@@ -35,7 +35,7 @@ openFolder(folderName) {
 	}
 
 ; Send cleaned-up path (remove odd garbage from around path, switch to mapped network drives)
-!+p::sendCleanedUpPath()
+!+p:: sendCleanedUpPath()
 !+#p::sendCleanedUpPath(true)
 sendCleanedUpPath(containingFolderOnly := false) {
 	path := FileLib.cleanupPath(clipboard)
@@ -64,5 +64,5 @@ $^!+f::Run("http://feedly.com/i/latest") ; $ as Notepad++ highlight-all hotkey s
 
 ; OneNote Online
 !+o:: Run("https://www.onenote.com/notebooks?auth=1&nf=1&fromAR=1")
-!+t:: Run(Config.private["ONENOTE_ONLINE_NOTEBOOK_DO"])
-!+#t::Run(Config.private["ONENOTE_ONLINE_NOTEBOOK_LIFE"])
+!+t:: Run("https://ticktick.com/#q/all/tasks")
+!+#t::Run(Config.private["ONENOTE_ONLINE_NOTEBOOK_DO"])

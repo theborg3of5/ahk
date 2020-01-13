@@ -2,6 +2,10 @@
 	Auto-complete - could we make a special kind of header that can cover multiple things?
 		At least one-line constants (just X number of lines until we get a blank line, maybe?)
 			Would let us line things up nicely again
+	Auto-complete: reconsider "NPP-" prefix on documentation bits
+		Maybe use "DOC-" prefix instead?
+			Or is that more where these elements are, instead of what they do?
+	Auto-complete: should we add some of our recent special additions like @NPP-TABLELIST@ and @GROUP@?
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
 		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
 		Support right-alignment of columns

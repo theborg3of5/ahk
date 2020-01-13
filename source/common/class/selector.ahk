@@ -252,7 +252,7 @@ class Selector {
 			return this.selectGui(returnColumn)
 	}
 	
-	; @NPP-TABLELIST
+	; @NPP-TABLELIST@
 	;---------
 	; NPP-DEF-LINE:   WindowTitle(title)
 	; NPP-RETURNS:    @
@@ -268,7 +268,7 @@ class Selector {
 	; PARAMETERS:
 	;  minWidth (I,REQ) - The minimum width (in pixels).
 	;---------
-	; @NPP-TABLELIST-END
+	; @NPP-TABLELIST-END@
 	
 	
 	; #PRIVATE#

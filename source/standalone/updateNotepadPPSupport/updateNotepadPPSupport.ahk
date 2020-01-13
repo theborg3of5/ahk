@@ -124,9 +124,9 @@ addFromFolder(ByRef ahkClasses, ByRef tlMembers, folderPath, classGroup, returns
 			line := linesAry.next(ln)
 			
 			; There are blocks of headers with no corresponding definition lines, specific to the TableList file format.
-			if(line.startsWith("; @NPP-TABLELIST-END"))
+			if(line.startsWith("; @NPP-TABLELIST-END@"))
 				tlBlockOn := false
-			else if(line.startsWith("; @NPP-TABLELIST"))
+			else if(line.startsWith("; @NPP-TABLELIST@"))
 				tlBlockOn := true
 			
 			; Block of documentation - read the whole thing in and create a member.

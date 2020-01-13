@@ -88,7 +88,7 @@ class TableListMod {
 		row[this.column] := newValue
 	}
 	
-	; @NPP-TABLELIST
+	; @NPP-TABLELIST@
 	;---------
 	; NPP-DEF-LINE:   addToStart(text)
 	; DESCRIPTION:    Add the given text to the start of this column.
@@ -109,7 +109,7 @@ class TableListMod {
 	; PARAMETERS:
 	;  text (I,REQ) - Text to replace with.
 	;---------
-	; @NPP-TABLELIST-END
+	; @NPP-TABLELIST-END@
 	
 	
 	; #PRIVATE#

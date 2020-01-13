@@ -189,52 +189,19 @@
 class TableList {
 	; #PUBLIC#
 	
-	; [[ Special characters ]] --=
-	;---------
-	; DESCRIPTION:    Ignore (comment) character
-	;---------
-	static Char_Ignore      := ";"
-	;---------
-	; DESCRIPTION:    The start of the model row
-	;---------
-	static Char_Model_Start := "["
-	;---------
-	; DESCRIPTION:    The end of the model row
-	;---------
-	static Char_Model_End := "]"
-	;---------
-	; DESCRIPTION:    The start of the column info row
-	;---------
-	static Char_ColumnInfo_Start := "("
-	;---------
-	; DESCRIPTION:    The start of the column info row
-	;---------
-	static Char_ColumnInfo_End := ")"
-	;---------
-	; DESCRIPTION:    Settings prefix
-	;---------
-	static Char_Setting     := "@"
-	;---------
-	; DESCRIPTION:    Header character
-	;---------
-	static Char_Header      := "# " ; Must include the trailing space
-	;---------
-	; DESCRIPTION:    Placeholder character
-	;---------
-	static Char_Placeholder := "-"
-	;---------
-	; DESCRIPTION:    Multi-entry character
-	;---------
-	static Char_MultiEntry  := "|"
-	;---------
-	; DESCRIPTION:    The character which starts applying mods to rows.
-	;---------
-	static Char_Mod_Open := "{"
-	;---------
-	; DESCRIPTION:    The character which stops applying mods to rows.
-	;---------
-	static Char_Mod_Close := "}"
-	; =--
+	; @GROUP@ Special characters within a TableList file.
+	static Char_Ignore           := ";"  ; Ignore (comment) character
+	static Char_Model_Start      := "["  ; The start of the model row
+	static Char_Model_End        := "]"  ; The end of the model row
+	static Char_ColumnInfo_Start := "("  ; The start of the column info row
+	static Char_ColumnInfo_End   := ")"  ; The start of the column info row
+	static Char_Setting          := "@"  ; Settings prefix
+	static Char_Header           := "# " ; Header character (must include the trailing space)
+	static Char_Placeholder      := "-"  ; Placeholder character
+	static Char_MultiEntry       := "|"  ; Multi-entry character
+	static Char_Mod_Open         := "{"  ; The character which starts applying mods to rows.
+	static Char_Mod_Close        := "}"  ; The character which stops applying mods to rows.
+	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    Information about each column, from the column info row of the file (assuming

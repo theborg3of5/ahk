@@ -129,6 +129,31 @@ addFromFolder(ByRef ahkClasses, ByRef tlMembers, folderPath, classGroup, returns
 			else if(line.startsWith("; @NPP-TABLELIST@"))
 				tlBlockOn := true
 			
+			; Group block - grab the whole thing at once and create a member per line inside.
+			if(line.startsWith("; @GROUP@")) {
+				groupDescription := line.removeFromStart("; @GROUP@ ") ; Drop the space after the second @ too
+				
+				; Make a member for each line until we finish
+				Loop {
+					; Get each member and note down its comment at the end of the line.
+					line := linesAry.next(ln)
+					if(line.startsWith("; @GROUP-END@"))
+						Break
+					
+					comment := line.afterString(";", true).withoutWhitespace()
+					
+					; Build/split a header to pass to AutoCompleteMember.
+					headerParts := {"GROUP": groupDescription}
+					if(comment != "")
+						headerParts["DESCRIPTION"] := comment
+					headerLines := AHKCodeLib.generateHeaderWithParts(headerParts).split("`n")
+					
+					; Feed the data to a new member object and add that to our current class object.
+					member := new AutoCompleteMember(headerLines, line)
+					classObj.addMember(member)
+				}
+			}
+			
 			; Block of documentation - read the whole thing in and create a member.
 			if(line = Header_StartEnd) {
 				; Grab the whole header

@@ -5589,6 +5589,19 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="StringBase.postPadToLength" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Right-pad the string to the specified length.
+							; PARAMETERS:
+							;  numChars (I,REQ) - How many characters the final string should be (at minimum).
+							;  withChar (I,OPT) - The character to use to do the padding. Defaults to space ( ).
+							; RETURNS:        The string, padded out to the specified length.
+							;---------">
+                <Param name="numChars" />
+                <Param name="withChar := &quot; &quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="StringBase.prePadToLength" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -6070,20 +6083,23 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The start of the column info row
+							; GROUP:          Special characters within a TableList file.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="TableList.Char_ColumnInfo_Start" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The start of the column info row
+							; GROUP:          Special characters within a TableList file.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="TableList.Char_Header" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Header character
+							; DESCRIPTION:    Header character (must include the trailing space)
+							; GROUP:          Special characters within a TableList file.
 							;---------">
             </Overload>
         </KeyWord>
@@ -6091,6 +6107,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Ignore (comment) character
+							; GROUP:          Special characters within a TableList file.
 							;---------">
             </Overload>
         </KeyWord>
@@ -6098,6 +6115,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The character which stops applying mods to rows.
+							; GROUP:          Special characters within a TableList file.
 							;---------">
             </Overload>
         </KeyWord>
@@ -6105,6 +6123,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The character which starts applying mods to rows.
+							; GROUP:          Special characters within a TableList file.
 							;---------">
             </Overload>
         </KeyWord>
@@ -6112,6 +6131,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The end of the model row
+							; GROUP:          Special characters within a TableList file.
 							;---------">
             </Overload>
         </KeyWord>
@@ -6119,6 +6139,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The start of the model row
+							; GROUP:          Special characters within a TableList file.
 							;---------">
             </Overload>
         </KeyWord>
@@ -6126,6 +6147,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Multi-entry character
+							; GROUP:          Special characters within a TableList file.
 							;---------">
             </Overload>
         </KeyWord>
@@ -6133,6 +6155,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Placeholder character
+							; GROUP:          Special characters within a TableList file.
 							;---------">
             </Overload>
         </KeyWord>
@@ -6140,6 +6163,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Settings prefix
+							; GROUP:          Special characters within a TableList file.
 							;---------">
             </Overload>
         </KeyWord>
@@ -6271,11 +6295,14 @@
                 <Param name="Number"/>
             </Overload>
         </KeyWord>
-        <KeyWord name="Telegram.focusNormalChat" func="yes">
+        <KeyWord name="Telegram.shareURL" func="yes">
             <Overload retVal="[Requires program includes]" descr="
 							;---------
-							; DESCRIPTION:    Focus the &quot;Normal&quot; chat that's the only one I use in Telegram.
+							; DESCRIPTION:    Share the provided URL to Telegram and focus the normal chat.
+							; PARAMETERS:
+							;  url (I,REQ) - The URL to share.
 							;---------">
+                <Param name="url" />
             </Overload>
         </KeyWord>
         <KeyWord name="TempSettings.coordMode" func="yes">

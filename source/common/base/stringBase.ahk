@@ -324,6 +324,22 @@ class StringBase {
 	}
 	
 	;---------
+	; DESCRIPTION:    Right-pad the string to the specified length.
+	; PARAMETERS:
+	;  numChars (I,REQ) - How many characters the final string should be (at minimum).
+	;  withChar (I,OPT) - The character to use to do the padding. Defaults to space ( ).
+	; RETURNS:        The string, padded out to the specified length.
+	;---------
+	postPadToLength(numChars, withChar := " ") {
+		outStr := this
+		
+		while(outStr.length() < numChars)
+			outStr .= withChar
+		
+		return outStr
+	}
+	
+	;---------
 	; DESCRIPTION:    Wrappers for StrReplace - replace all instances of the provided string, with
 	;                 the replacement text.
 	; PARAMETERS:

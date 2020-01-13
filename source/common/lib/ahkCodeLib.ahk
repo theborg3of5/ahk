@@ -188,12 +188,30 @@ class AHKCodeLib {
 		return paramsString
 	}
 	
+	;---------
+	; DESCRIPTION:    Generate an AHK documentation header based on the given keyword:value pairs.
+	; PARAMETERS:
+	;  parts (I,REQ) - An associative array of {KEYWORD: VALUE}
+	; RETURNS:        Header as a string
+	; NOTES:          This only handles key-value pairs, not special parameter stuff.
+	;---------
+	generateHeaderWithParts(parts) {
+		header := ";---------"
+		For keyword,value in parts {
+			keyword := keyword.appendIfMissing(":")
+			header .= "`n; " keyword.postPadToLength(16) value
+		}
+		header .= "`n;---------"
+		
+		return header
+	}
+	
 	
 	; #PRIVATE#
 	
 	; All of the keywords possibly contained in the documentation header - should be kept up to date with HeaderBase* constants below.
 	; NPP-* are used for auto-completion/syntax highlighting generation
-	static HeaderKeywords := ["DESCRIPTION:", "PARAMETERS:", "RETURNS:", "SIDE EFFECTS:", "NOTES:", "NPP-DEF-LINE:", "NPP-RETURNS:"]
+	static HeaderKeywords := ["DESCRIPTION:", "PARAMETERS:", "RETURNS:", "SIDE EFFECTS:", "NOTES:", "NPP-DEF-LINE:", "NPP-RETURNS:", "GROUP:"]
 	
 	; Header bases
 	static HeaderBase_Member := "

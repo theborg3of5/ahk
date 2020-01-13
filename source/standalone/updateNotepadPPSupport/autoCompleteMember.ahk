@@ -23,7 +23,7 @@ class AutoCompleteMember {
 		this.handleHeader(headerLines, defLine) ; Can replace defLine based on header
 		
 		; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
-		if(!defLine.contains("("))
+		if(!defLine.beforeString("""").contains("(")) ; Check only before the first quote to avoid things like a constant "("
 			this.returns := this.returns.appendPiece(this.ReturnValue_Property, " ")
 		
 		; Extract info from the definition line

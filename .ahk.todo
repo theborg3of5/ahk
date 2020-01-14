@@ -1,7 +1,4 @@
 # New Ideas
-	Auto-complete: reconsider "NPP-" prefix on documentation bits
-		Maybe use "DOC-" prefix instead?
-			Or is that more where these elements are, instead of what they do?
 	AHKCodeLib.generateHeaderWithParts - can we make more use of this for generating headers?
 		If we expand it to handle parameters (either as a separate parameter or just a special "PARAMETERS" subscript of the existing parts parameter), should be able to use it for everything, right?
 		Make the magic 16 a private constant for the class

@@ -47,6 +47,9 @@
 class TableListMod {
 	; #PUBLIC#
 	
+	;---------
+	; DESCRIPTION:    The prefix character for mods, that comes just before the column to affect.
+	;---------
 	static Char_TargetPrefix := "~"
 	
 	;---------

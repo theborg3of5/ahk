@@ -131,7 +131,7 @@ addFromFolder(ByRef ahkClasses, ByRef tlMembers, folderPath, classGroup, returns
 			
 			; Group block - grab the whole thing at once and create a member per line inside.
 			if(line.startsWith("; @GROUP@")) {
-				groupDescription := line.removeFromStart("; @GROUP@ ") ; Drop the space after the second @ too
+				groupDescription := line.removeFromStart("; @GROUP@").withoutWhitespace() ; Drop the space after the second @ too
 				
 				; Make a member for each line until we finish
 				Loop {
@@ -143,7 +143,9 @@ addFromFolder(ByRef ahkClasses, ByRef tlMembers, folderPath, classGroup, returns
 					comment := line.afterString(";", true).withoutWhitespace()
 					
 					; Build/split a header to pass to AutoCompleteMember.
-					headerParts := {"GROUP": groupDescription}
+					headerParts := {}
+					if(groupDescription != "")
+						headerParts["GROUP"] := groupDescription
 					if(comment != "")
 						headerParts["DESCRIPTION"] := comment
 					headerLines := AHKCodeLib.generateHeaderWithParts(headerParts).split("`n")

@@ -4,21 +4,11 @@
 class TitleMatchMode {
 	; #PUBLIC#
 	
-	;---------
-	; DESCRIPTION:    The title must start with the string.
-	;---------
-	static Start := 1
-	;---------
-	; DESCRIPTION:    The title may contain the string anywhere inside.
-	;---------
-	static Contains := 2
-	;---------
-	; DESCRIPTION:    The title must exactly equal the string.
-	;---------
-	static Exact := 3
-	;---------
-	; DESCRIPTION:    The title must match the regex string.
-	;---------
-	static RegEx := "RegEx"
+	; @GROUP@ Title match mode options
+	static Start    := 1       ; The title must start with the string.
+	static Contains := 2       ; The title may contain the string anywhere inside.
+	static Exact    := 3       ; The title must exactly equal the string.
+	static RegEx    := "RegEx" ; The title must match the provided regex.
+	; @GROUP-END@
 	; #END#
 }

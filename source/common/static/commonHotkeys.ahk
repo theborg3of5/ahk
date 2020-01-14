@@ -8,21 +8,11 @@
 class CommonHotkeys {
 	; #PUBLIC#
 	
-	; [[ Different "types" of scripts, which get different sets of hotkeys ]] --=
-	;---------
-	; DESCRIPTION:    Main script
-	;---------
-	static ScriptType_Main       := 1
-	;---------
-	; DESCRIPTION:    Standalone scripts that the main script starts and that run alongside the main script
-	;---------
-	static ScriptType_Sub        := 2
-	;---------
-	; DESCRIPTION:    One-off scripts, not connected to main script
-	;---------
-	static ScriptType_Standalone := 3
-	; =--
-	
+	; @GROUP@ Different "types" of scripts, which get different sets of hotkeys
+	static ScriptType_Main       := 1 ; Main script
+	static ScriptType_Sub        := 2 ; Standalone scripts that the main script starts and that run alongside the main script
+	static ScriptType_Standalone := 3 ; One-off scripts, not connected to main script
+	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    Set up the common hotkeys.

@@ -10,14 +10,10 @@
 class MousePosition {
 	; #PUBLIC#
 	
-	;---------
-	; DESCRIPTION:    X coordinate for the mouse at the time this instance was created.
-	;---------
-	x := 0
-	;---------
-	; DESCRIPTION:    Y coordinate for the mouse at the time this instance was created.
-	;---------
-	y := 0
+	; @GROUP@
+	x := 0 ; X coordinate for the mouse at the time this instance was created.
+	y := 0 ; Y coordinate for the mouse at the time this instance was created.
+	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    Create a new MousePosition object which stores off the current mouse position.

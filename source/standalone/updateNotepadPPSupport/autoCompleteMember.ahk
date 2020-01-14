@@ -23,7 +23,7 @@ class AutoCompleteMember {
 		this.handleHeader(headerLines, defLine) ; Can replace defLine based on header
 		
 		; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
-		if(!defLine.beforeString("""").contains("(")) ; Check only before the first quote to avoid things like a constant "("
+		if(!this.isFunction(defLine))
 			this.returns := this.returns.appendPiece(this.ReturnValue_Property, " ")
 		
 		; Extract info from the definition line
@@ -118,6 +118,24 @@ class AutoCompleteMember {
 		headerText := headerText.replace("`n", "`n" this.Indent_Header)
 		
 		return headerText
+	}
+	
+	;---------
+	; DESCRIPTION:    Determine whether the given definition line represents a function, based on
+	;                 whether it contains an open paren.
+	; PARAMETERS:
+	;  defLine (I,REQ) - The definition line
+	; RETURNS:        true/false - is it a function?
+	;---------
+	isFunction(defLine) {
+		; Strip off the first quote onward - by the time we hit a value or parameter default we should have already found an open paren.
+		defLine := defLine.beforeString("""")
+		
+		; Strip off the first comment character onward - comments have no bearing here.
+		defLine := defLine.beforeString(";")
+		
+		; If there's an open paren, it's a function.
+		return defLine.contains("(")
 	}
 	
 	;---------

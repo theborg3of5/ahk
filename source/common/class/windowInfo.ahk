@@ -3,47 +3,20 @@
 class WindowInfo {
 	; #PUBLIC#
 	
-	; [[ Window edge types (see VisualWindow class for what this means/how it's used). ]] --=
-	;---------
-	; DESCRIPTION:    The window has the standard padding around the edges.
-	;---------
-	static EdgeStyle_HasPadding := "HAS_PADDING"
-	;---------
-	; DESCRIPTION:    The window has no padding around the edges.
-	;---------
-	static EdgeStyle_NoPadding  := "NO_PADDING"
-	; =--
+	; @GROUP@ Window edge types (see VisualWindow class for what this means/how it's used).
+	static EdgeStyle_HasPadding := "HAS_PADDING" ; The window has the standard padding around the edges.
+	static EdgeStyle_NoPadding  := "NO_PADDING"  ; The window has no padding around the edges.
+	; @GROUP-END@
 	
-	;---------
-	; DESCRIPTION:    Name of the window
-	;---------
-	name := ""
-	;---------
-	; DESCRIPTION:    EXE for the program
-	;---------
-	exe := ""
-	;---------
-	; DESCRIPTION:    AHK class of the window
-	;---------
-	class := ""
-	;---------
-	; DESCRIPTION:    Title of the window
-	;---------
-	title := ""
-	;---------
-	; DESCRIPTION:    Priority of this WindowInfo instance versus others. Can be used to break a tie
-	;                 if multiple instances match a given window.
-	;---------
-	priority := ""
-	;---------
-	; DESCRIPTION:    Edge type of the window (from WindowInfo.EdgeStyle_* constants)
-	;---------
-	edgeType := WindowInfo.EdgeStyle_HasPadding
-	;---------
-	; DESCRIPTION:    If the window has a specific title match mode that needs to be used when
-	;                 locating it, this will return that override.
-	;---------
-	titleStringMatchModeOverride := Config.TitleContains_Any
+	; @GROUP@
+	name     := ""                              ; Name of the window
+	exe      := ""                              ; EXE for the corresonding program
+	class    := ""                              ; AHK class of the window
+	title    := ""                              ; Title of the window
+	priority := ""                              ; Priority of this WindowInfo instance versus others. Can be used to break a tie if multiple instances match a given window.
+	edgeType := WindowInfo.EdgeStyle_HasPadding ; Edge type of the window (from WindowInfo.EdgeStyle_* constants)
+	titleStringMatchModeOverride := Config.TitleContains_Any ; If the window has a specific title match mode that needs to be used when locating it, this will return that override.
+	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    A string that can be used with WinActive() and the like to identify this

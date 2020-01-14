@@ -243,6 +243,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Client filename
+							; GROUP:          Location types
 							;---------">
             </Overload>
         </KeyWord>
@@ -250,6 +251,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Server code location, including tag if applicable
+							; GROUP:          Location types
 							;---------">
             </Overload>
         </KeyWord>
@@ -478,13 +480,15 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    DLG, for opening in EpicStudio
+							; GROUP:          Descriptor types
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.DescriptorType_Routine" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Server code location, including tag is applicable
+							; DESCRIPTION:    Server code location, including tag if applicable
+							; GROUP:          Descriptor types
 							;---------">
             </Overload>
         </KeyWord>
@@ -818,6 +822,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Local file path
+							; GROUP:          Path types
 							;---------">
             </Overload>
         </KeyWord>
@@ -825,6 +830,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    URL
+							; GROUP:          Path types
 							;---------">
             </Overload>
         </KeyWord>
@@ -843,6 +849,18 @@
 							;                 	Output: &quot;var1&quot;,var1, &quot;var2&quot;,var2
 							;---------">
                 <Param name="varList" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="AHKCodeLib.generateHeaderWithParts" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Generate an AHK documentation header based on the given keyword:value pairs.
+							; PARAMETERS:
+							;  parts (I,REQ) - An associative array of {KEYWORD: VALUE}
+							; RETURNS:        Header as a string
+							; NOTES:          This only handles key-value pairs, not special parameter stuff.
+							;---------">
+                <Param name="parts" />
             </Overload>
         </KeyWord>
         <KeyWord name="AHKCodeLib.getDefLineParts" func="yes">
@@ -888,6 +906,13 @@
 							;---------">
                 <Param name="line" />
                 <Param name="numExtraIndents" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="AHKCodeLib.SPACES_PER_TAB" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    How many spaces are treated as a tab for indentation purposes.
+							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="AHK_class"/>
@@ -1460,6 +1485,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Main script
+							; GROUP:          Different &quot;types&quot; of scripts, which get different sets of hotkeys
 							;---------">
             </Overload>
         </KeyWord>
@@ -1467,6 +1493,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    One-off scripts, not connected to main script
+							; GROUP:          Different &quot;types&quot; of scripts, which get different sets of hotkeys
 							;---------">
             </Overload>
         </KeyWord>
@@ -1474,6 +1501,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Standalone scripts that the main script starts and that run alongside the main script
+							; GROUP:          Different &quot;types&quot; of scripts, which get different sets of hotkeys
 							;---------">
             </Overload>
         </KeyWord>
@@ -1710,6 +1738,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Title can contain text anywhere
+							; GROUP:          Title string matching modes
 							;---------">
             </Overload>
         </KeyWord>
@@ -1717,6 +1746,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Title must end with text
+							; GROUP:          Title string matching modes
 							;---------">
             </Overload>
         </KeyWord>
@@ -1724,6 +1754,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Title must exactly equal text
+							; GROUP:          Title string matching modes
 							;---------">
             </Overload>
         </KeyWord>
@@ -1731,6 +1762,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Title must start with text
+							; GROUP:          Title string matching modes
 							;---------">
             </Overload>
         </KeyWord>
@@ -2306,6 +2338,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Hours
+							; GROUP:          Supported characters (see .unitConversionFactors for conversion factors)
 							;---------">
             </Overload>
         </KeyWord>
@@ -2313,6 +2346,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Minutes
+							; GROUP:          Supported characters (see .unitConversionFactors for conversion factors)
 							;---------">
             </Overload>
         </KeyWord>
@@ -2320,6 +2354,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Seconds
+							; GROUP:          Supported characters (see .unitConversionFactors for conversion factors)
 							;---------">
             </Overload>
         </KeyWord>
@@ -2700,6 +2735,13 @@
             </Overload>
         </KeyWord>
         <KeyWord name="Expand"/>
+        <KeyWord name="Explorer.ThisPCFolderUUID" func="yes">
+            <Overload retVal="[Requires program includes] [Property]" descr="
+							;---------
+							; DESCRIPTION:    This is the UUID for the &quot;This PC&quot; folder that shows all drives.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="ExStyle"/>
         <KeyWord name="Extends"/>
         <KeyWord name="F1"/>
@@ -3153,6 +3195,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Array
+							; GROUP:          Formats for reading/writing lists
 							;---------">
             </Overload>
         </KeyWord>
@@ -3160,6 +3203,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Comma-delimited (no space)
+							; GROUP:          Formats for reading/writing lists
 							;---------">
             </Overload>
         </KeyWord>
@@ -3167,6 +3211,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Comma-delimited (with spaces)
+							; GROUP:          Formats for reading/writing lists
 							;---------">
             </Overload>
         </KeyWord>
@@ -3174,6 +3219,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Newline-delimited
+							; GROUP:          Formats for reading/writing lists
 							;---------">
             </Overload>
         </KeyWord>
@@ -3181,6 +3227,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    OneNote columns (double-newline delimited)
+							; GROUP:          Formats for reading/writing lists
 							;---------">
             </Overload>
         </KeyWord>
@@ -3188,6 +3235,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Space-delimited
+							; GROUP:          Formats for reading/writing lists
 							;---------">
             </Overload>
         </KeyWord>
@@ -3833,144 +3881,144 @@
         <KeyWord name="MicrosoftLib.BorderX" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    For non-3D windows (which should be most), the thickness of the left/right borders.
-							; NOTES:          Uses SM_CXBORDER
+							; DESCRIPTION:    For non-3D windows (which should be most), the thickness of the left/right borders (uses SM_CXBORDER).
+							; GROUP:          System-level window measurements ( https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics )
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.BorderY" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    For non-3D windows (which should be most), the thickness of the top/bottom borders.
-							; NOTES:          Uses SM_CYBORDER
+							; DESCRIPTION:    For non-3D windows (which should be most), the thickness of the top/bottom borders (uses SM_CYBORDER).
+							; GROUP:          System-level window measurements ( https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics )
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.ExStyle_AlwaysOnTop" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Always on top
-							; NOTES:          WS_EX_TOPMOST
+							; DESCRIPTION:    Always on top (WS_EX_TOPMOST)
+							; GROUP:          Extended window styles
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.ExStyle_ClickThrough" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Clicking on the window actually clicks on whatever is below it.
-							; NOTES:          WS_EX_CLICKTHROUGH
+							; DESCRIPTION:    Clicking on the window actually clicks on whatever is below it (WS_EX_CLICKTHROUGH).
+							; GROUP:          Extended window styles
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.ExStyle_SunkenBorder" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Controls: border with sunken edge (on by default for many control types)
-							; NOTES:          WS_EX_CLIENTEDGE
+							; DESCRIPTION:    Controls: border with sunken edge, on by default for many control types (WS_EX_CLIENTEDGE).
+							; GROUP:          Extended window styles
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.FrameX_CaptionNoSizable" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Thickness of the left/right borders for windows with a caption that are NOT sizable.
-							; NOTES:          Uses SM_CXFIXEDFRAME
+							; DESCRIPTION:    Thickness of the left/right borders for windows with a caption that are NOT sizable (uses SM_CXFIXEDFRAME).
+							; GROUP:          System-level window measurements ( https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics )
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.FrameX_CaptionSizable" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Thickness of the left/right borders for windows with a caption that are sizable (aka SM_CXFRAME).
-							; NOTES:          Uses SM_CXSIZEFRAME
+							; DESCRIPTION:    Thickness of the left/right borders for windows with a caption that are sizable (uses SM_CXSIZEFRAME/SM_CXFRAME).
+							; GROUP:          System-level window measurements ( https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics )
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.FrameY_CaptionNoSizable" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Thickness of the top/bottom borders for windows with a caption that are NOT sizable.
-							; NOTES:          Uses SM_CYFIXEDFRAME
+							; DESCRIPTION:    Thickness of the top/bottom borders for windows with a caption that are NOT sizable (uses SM_CYFIXEDFRAME).
+							; GROUP:          System-level window measurements ( https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics )
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.FrameY_CaptionSizable" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Thickness of the top/bottom borders for windows with a caption that are sizable (aka SM_CYFRAME).
-							; NOTES:          Uses SM_CYSIZEFRAME
+							; DESCRIPTION:    Thickness of the top/bottom borders for windows with a caption that are sizable (uses SM_CYSIZEFRAME/SM_CYFRAME).
+							; GROUP:          System-level window measurements ( https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics )
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.MaximizedWindowHeight" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Total width of a maximized window on the primary monitor. Includes any weird offsets.
-							; NOTES:          Uses SM_CXMAXIMIZED
+							; DESCRIPTION:    Total width of a maximized window on the primary monitor. Includes any weird offsets. (uses SM_CXMAXIMIZED)
+							; GROUP:          System-level window measurements ( https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics )
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.MaximizedWindowWidth" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Total height of a maximized window on the primary monitor. Includes any weird offsets.
-							; NOTES:          Uses SM_CYMAXIMIZED
+							; DESCRIPTION:    Total height of a maximized window on the primary monitor. Includes any weird offsets. (uses SM_CYMAXIMIZED)
+							; GROUP:          System-level window measurements ( https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics )
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.Message_HorizScroll" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Scroll event in the window's horizontal scroll bar
-							; NOTES:          WM_HSCROLL
+							; DESCRIPTION:    Scroll event in the window's horizontal scroll bar (WM_HSCROLL)
+							; GROUP:          Windows Messages ( https://autohotkey.com/docs/misc/SendMessageList.htm )
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.Message_WindowMenu" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Doing something from the &quot;Window&quot; menu, or clicking one of the max/min/restore/close buttons
-							; NOTES:          WM_SYSCOMMAND
+							; DESCRIPTION:    Doing something from the &quot;Window&quot; menu, or clicking one of the max/min/restore/close buttons (WM_SYSCOMMAND)
+							; GROUP:          Windows Messages ( https://autohotkey.com/docs/misc/SendMessageList.htm )
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.ScrollBar_Left" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Scroll 1 unit to the left
-							; NOTES:          SB_LINELEFT
+							; DESCRIPTION:    Scroll 1 unit to the left (SB_LINELEFT)
+							; GROUP:          Scroll Bar Requests/Messages ( https://docs.microsoft.com/en-us/windows/desktop/Controls/about-scroll-bars )
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.ScrollBar_Right" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Scroll 1 unit to the right
-							; NOTES:          SB_LINERIGHT
+							; DESCRIPTION:    Scroll 1 unit to the right (SB_LINERIGHT)
+							; GROUP:          Scroll Bar Requests/Messages ( https://docs.microsoft.com/en-us/windows/desktop/Controls/about-scroll-bars )
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.Style_Caption" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    The window has a caption (top bar + borders)
-							; NOTES:          WS_CAPTION
+							; DESCRIPTION:    The window has a caption - that is, a top bar + borders (WS_CAPTION)
+							; GROUP:          Window styles ( https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric )
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.Style_Sizable" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Window can be sized.
-							; NOTES:          WS_SIZEBOX (aka WS_THICKFRAME)
+							; DESCRIPTION:    Window can be sized (WS_SIZEBOX/WS_THICKFRAME).
+							; GROUP:          Window styles ( https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric )
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="MicrosoftLib.Style_Visible" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Window is visible
-							; NOTES:          WS_VISIBLE
+							; DESCRIPTION:    Window is visible (WS_VISIBLE)
+							; GROUP:          Window styles ( https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric )
 							;---------">
             </Overload>
         </KeyWord>
@@ -5379,6 +5427,7 @@
 							;  searchFromEnd (I,OPT) - Set to True to start searching from the end of the string instead of
 							;                          the start.
 							; RETURNS:        The requested portion of this string.
+							; NOTES:          If checkString isn't found, we return the original string.
 							;---------">
                 <Param name="checkString" />
                 <Param name="searchFromEnd := false" />
@@ -5393,7 +5442,10 @@
 							; PARAMETERS:
 							;  startString (I,REQ) - String to start matching at
 							;  endString   (I,REQ) - String to finish matching at
-							; RETURNS:        Requested chunk of this string.
+							; RETURNS:        Requested chunk of this string, with some caveats:
+							;                  - endString not found/endString before startString => everything after startString
+							;                  - startString not found                            => everything before endString
+							;                  - Neither found                                    => original string
 							;---------">
                 <Param name="startString" />
                 <Param name="endString" />
@@ -5434,6 +5486,7 @@
 							;  searchFromEnd (I,OPT) - Set to True to start searching from the end of the string instead of
 							;                          the start.
 							; RETURNS:        The requested portion of this string.
+							; NOTES:          If checkString isn't found, we return the original string.
 							;---------">
                 <Param name="checkString" />
                 <Param name="searchFromEnd := false" />
@@ -5543,7 +5596,10 @@
 							; PARAMETERS:
 							;  startString (I,REQ) - String to start matching at
 							;  endString   (I,REQ) - String to finish matching at
-							; RETURNS:        Requested chunk of this string.
+							; RETURNS:        Requested chunk of this string, with some caveats:
+							;                  - endString not found/endString before startString => everything after startString
+							;                  - startString not found                            => everything before endString
+							;                  - Neither found                                    => original string
 							;---------">
                 <Param name="startString" />
                 <Param name="endString" />
@@ -6278,6 +6334,13 @@
                 <Param name="modString" />
             </Overload>
         </KeyWord>
+        <KeyWord name="TableListMod.Char_TargetPrefix" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The prefix character for mods, that comes just before the column to affect.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="TableListMod.executeMod" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -6396,6 +6459,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The title may contain the string anywhere inside.
+							; GROUP:          Title match mode options
 							;---------">
             </Overload>
         </KeyWord>
@@ -6403,13 +6467,15 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The title must exactly equal the string.
+							; GROUP:          Title match mode options
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="TitleMatchMode.RegEx" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    The title must match the regex string.
+							; DESCRIPTION:    The title must match the provided regex.
+							; GROUP:          Title match mode options
 							;---------">
             </Overload>
         </KeyWord>
@@ -6417,6 +6483,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The title must start with the string.
+							; GROUP:          Title match mode options
 							;---------">
             </Overload>
         </KeyWord>
@@ -6626,6 +6693,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The Y coordinate of the visual bottom edge of the window
+							; GROUP:          Window position properties
 							;---------">
             </Overload>
         </KeyWord>
@@ -6649,6 +6717,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The visual height of the window
+							; GROUP:          Window position properties
 							;---------">
             </Overload>
         </KeyWord>
@@ -6656,6 +6725,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The X coordinate of the visual left edge of the window
+							; GROUP:          Window position properties
 							;---------">
             </Overload>
         </KeyWord>
@@ -6812,6 +6882,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The X coordinate of the visual right edge of the window
+							; GROUP:          Window position properties
 							;---------">
             </Overload>
         </KeyWord>
@@ -6837,6 +6908,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The Y coordinate of the visual top edge of the window
+							; GROUP:          Window position properties
 							;---------">
             </Overload>
         </KeyWord>
@@ -6844,6 +6916,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The visual width of the window
+							; GROUP:          Window position properties
 							;---------">
             </Overload>
         </KeyWord>
@@ -6851,6 +6924,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Horizontally centered
+							; GROUP:          Special window position constants
 							;---------">
             </Overload>
         </KeyWord>
@@ -6858,6 +6932,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Against left edge of screen
+							; GROUP:          Special window position constants
 							;---------">
             </Overload>
         </KeyWord>
@@ -6865,6 +6940,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Against right edge of screen
+							; GROUP:          Special window position constants
 							;---------">
             </Overload>
         </KeyWord>
@@ -6872,6 +6948,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Against bottom edge of screen
+							; GROUP:          Special window position constants
 							;---------">
             </Overload>
         </KeyWord>
@@ -6879,6 +6956,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Vertically centered
+							; GROUP:          Special window position constants
 							;---------">
             </Overload>
         </KeyWord>
@@ -6886,6 +6964,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Against top edge of screen
+							; GROUP:          Special window position constants
 							;---------">
             </Overload>
         </KeyWord>
@@ -7089,6 +7168,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The window has the standard padding around the edges.
+							; GROUP:          Window edge types (see VisualWindow class for what this means/how it's used).
 							;---------">
             </Overload>
         </KeyWord>
@@ -7096,6 +7176,7 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The window has no padding around the edges.
+							; GROUP:          Window edge types (see VisualWindow class for what this means/how it's used).
 							;---------">
             </Overload>
         </KeyWord>
@@ -7109,7 +7190,7 @@
         <KeyWord name="WindowInfo.exe" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    EXE for the program
+							; DESCRIPTION:    EXE for the corresonding program
 							;---------">
             </Overload>
         </KeyWord>
@@ -7123,8 +7204,7 @@
         <KeyWord name="WindowInfo.priority" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Priority of this WindowInfo instance versus others. Can be used to break a tie
-							;                 if multiple instances match a given window.
+							; DESCRIPTION:    Priority of this WindowInfo instance versus others. Can be used to break a tie if multiple instances match a given window.
 							;---------">
             </Overload>
         </KeyWord>
@@ -7146,8 +7226,7 @@
         <KeyWord name="WindowInfo.titleStringMatchModeOverride" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    If the window has a specific title match mode that needs to be used when
-							;                 locating it, this will return that override.
+							; DESCRIPTION:    If the window has a specific title match mode that needs to be used when locating it, this will return that override.
 							;---------">
             </Overload>
         </KeyWord>

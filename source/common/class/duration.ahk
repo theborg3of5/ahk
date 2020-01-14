@@ -13,19 +13,11 @@
 class Duration {
 	; #PUBLIC#
 	
-	; [[ Supported characters - conversion factors are in .unitConversionFactors ]]
-	;---------
-	; DESCRIPTION:    Hours
-	;---------
-	static Char_Hour   := "h"
-	;---------
-	; DESCRIPTION:    Minutes
-	;---------
-	static Char_Minute := "m"
-	;---------
-	; DESCRIPTION:    Seconds
-	;---------
-	static Char_Second := "s"
+	; @GROUP@ Supported characters (see .unitConversionFactors for conversion factors)
+	static Char_Hour   := "h" ; Hours
+	static Char_Minute := "m" ; Minutes
+	static Char_Second := "s" ; Seconds
+	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    Hours in this duration.

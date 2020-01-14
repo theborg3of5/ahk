@@ -17,23 +17,15 @@
 class ActionObjectEpicStudio extends ActionObjectBase {
 	; #PUBLIC#
 	
-	;---------
-	; DESCRIPTION:    Server code location, including tag is applicable
-	;---------
-	static DescriptorType_Routine := "ROUTINE"
-	;---------
-	; DESCRIPTION:    DLG, for opening in EpicStudio
-	;---------
-	static DescriptorType_DLG     := "DLG"
+	; @GROUP@ Descriptor types
+	static DescriptorType_Routine := "ROUTINE" ; Server code location, including tag if applicable
+	static DescriptorType_DLG     := "DLG"     ; DLG, for opening in EpicStudio
+	; @GROUP-END@
 	
-	;---------
-	; DESCRIPTION:    Reference to object
-	;---------
-	descriptor     := ""
-	;---------
-	; DESCRIPTION:    Type of object (from DescriptorType_* constants)
-	;---------
-	descriptorType := ""
+	; @GROUP@
+	descriptor     := "" ; Reference to object
+	descriptorType := "" ; Type of object (from DescriptorType_* constants)
+	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    Create a new reference to a server code object.

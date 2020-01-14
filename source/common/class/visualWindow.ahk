@@ -29,59 +29,23 @@
 class VisualWindow {
 	; #PUBLIC#
 	
-	; [[ Special window position constants ]] --=
-	;---------
-	; DESCRIPTION:    Against left edge of screen
-	;---------
-	static X_LeftEdge   := "LEFT_EDGE"
-	;---------
-	; DESCRIPTION:    Against right edge of screen
-	;---------
-	static X_RightEdge  := "RIGHT_EDGE"
-	;---------
-	; DESCRIPTION:    Horizontally centered
-	;---------
-	static X_Centered   := "CENTERED"
-	;---------
-	; DESCRIPTION:    Against top edge of screen
-	;---------
-	static Y_TopEdge    := "TOP_EDGE"
-	;---------
-	; DESCRIPTION:    Against bottom edge of screen
-	;---------
-	static Y_BottomEdge := "BOTTOM_EDGE"
-	;---------
-	; DESCRIPTION:    Vertically centered
-	;---------
-	static Y_Centered   := "CENTERED"
-	; =--
+	; @GROUP@ Special window position constants
+	static X_LeftEdge   := "LEFT_EDGE"   ; Against left edge of screen
+	static X_RightEdge  := "RIGHT_EDGE"  ; Against right edge of screen
+	static X_Centered   := "CENTERED"    ; Horizontally centered
+	static Y_TopEdge    := "TOP_EDGE"    ; Against top edge of screen
+	static Y_BottomEdge := "BOTTOM_EDGE" ; Against bottom edge of screen
+	static Y_Centered   := "CENTERED"    ; Vertically centered
+	; @GROUP-END@
 	
-	; [[ Window position properties ]] --=
-	;---------
-	; DESCRIPTION:    The X coordinate of the visual left edge of the window
-	;---------
-	leftX   := 0
-	;---------
-	; DESCRIPTION:    The X coordinate of the visual right edge of the window
-	;---------
-	rightX  := 0
-	;---------
-	; DESCRIPTION:    The Y coordinate of the visual top edge of the window
-	;---------
-	topY    := 0
-	;---------
-	; DESCRIPTION:    The Y coordinate of the visual bottom edge of the window
-	;---------
-	bottomY := 0
-	;---------
-	; DESCRIPTION:    The visual width of the window
-	;---------
-	width   := 0
-	;---------
-	; DESCRIPTION:    The visual height of the window
-	;---------
-	height  := 0
-	; =--
+	; @GROUP@ Window position properties
+	leftX   := 0 ; The X coordinate of the visual left edge of the window
+	rightX  := 0 ; The X coordinate of the visual right edge of the window
+	topY    := 0 ; The Y coordinate of the visual top edge of the window
+	bottomY := 0 ; The Y coordinate of the visual bottom edge of the window
+	width   := 0 ; The visual width of the window
+	height  := 0 ; The visual height of the window
+	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    Create a new VisualWindow object to interact with a window as it appears.

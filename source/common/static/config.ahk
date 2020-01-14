@@ -3,24 +3,12 @@
 class Config {
 	; #PUBLIC#
 	
-	; [[ Title string matching modes ]] --=
-	;---------
-	; DESCRIPTION:    Title can contain text anywhere
-	;---------
-	static TitleContains_Any   := "ANY"
-	;---------
-	; DESCRIPTION:    Title must start with text
-	;---------
-	static TitleContains_Start := "START"
-	;---------
-	; DESCRIPTION:    Title must end with text
-	;---------
-	static TitleContains_End   := "END"
-	;---------
-	; DESCRIPTION:    Title must exactly equal text
-	;---------
-	static TitleContains_Exact := "EXACT"
-	; =--
+	; @GROUP@ Title string matching modes
+	static TitleContains_Any   := "ANY"   ; Title can contain text anywhere
+	static TitleContains_Start := "START" ; Title must start with text
+	static TitleContains_End   := "END"   ; Title must end with text
+	static TitleContains_Exact := "EXACT" ; Title must exactly equal text
+	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    Whether this class has been initialized. Used to not show debug popups when

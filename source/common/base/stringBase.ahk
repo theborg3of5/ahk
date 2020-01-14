@@ -187,6 +187,7 @@ class StringBase {
 	;  searchFromEnd (I,OPT) - Set to True to start searching from the end of the string instead of
 	;                          the start.
 	; RETURNS:        The requested portion of this string.
+	; NOTES:          If checkString isn't found, we return the original string.
 	;---------
 	beforeString(checkString, searchFromEnd := false) {
 		checkStringPos := this.contains(checkString, searchFromEnd)
@@ -203,6 +204,7 @@ class StringBase {
 	;  searchFromEnd (I,OPT) - Set to True to start searching from the end of the string instead of
 	;                          the start.
 	; RETURNS:        The requested portion of this string.
+	; NOTES:          If checkString isn't found, we return the original string.
 	;---------
 	afterString(checkString, searchFromEnd := false) {
 		checkStringPos := this.contains(checkString, searchFromEnd)
@@ -219,7 +221,10 @@ class StringBase {
 	; PARAMETERS:
 	;  startString (I,REQ) - String to start matching at
 	;  endString   (I,REQ) - String to finish matching at
-	; RETURNS:        Requested chunk of this string.
+	; RETURNS:        Requested chunk of this string, with some caveats:
+	;                  - endString not found/endString before startString => everything after startString
+	;                  - startString not found                            => everything before endString
+	;                  - Neither found                                    => original string
 	;---------
 	firstBetweenStrings(startString, endString) {
 		return this.getBetweenStrings(startString, endString, false)
@@ -232,7 +237,10 @@ class StringBase {
 	; PARAMETERS:
 	;  startString (I,REQ) - String to start matching at
 	;  endString   (I,REQ) - String to finish matching at
-	; RETURNS:        Requested chunk of this string.
+	; RETURNS:        Requested chunk of this string, with some caveats:
+	;                  - endString not found/endString before startString => everything after startString
+	;                  - startString not found                            => everything before endString
+	;                  - Neither found                                    => original string
 	;---------
 	allBetweenStrings(startString, endString) {
 		return this.getBetweenStrings(startString, endString, true)

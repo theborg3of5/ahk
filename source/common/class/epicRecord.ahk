@@ -25,18 +25,11 @@
 class EpicRecord {
 	; #PUBLIC#
 	
-	;---------
-	; DESCRIPTION:    The INI for this record.
-	;---------
-	ini := ""
-	;---------
-	; DESCRIPTION:    The ID for this record.
-	;---------
-	id := ""
-	;---------
-	; DESCRIPTION:    The title for this record.
-	;---------
-	title := ""
+	; @GROUP@
+	ini   := "" ; The INI for this record.
+	id    := "" ; The ID for this record.
+	title := "" ; The title for this record.
+	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    Constructed string representing the record:

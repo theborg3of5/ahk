@@ -10,32 +10,14 @@
 class FormattedList {
 	; #PUBLIC#
 	
-	; [[ Formats for reading/writing lists ]] --=
-	;---------
-	; DESCRIPTION:    Array
-	;---------
-	static Format_Array         := "ARRAY"
-	;---------
-	; DESCRIPTION:    Space-delimited
-	;---------
-	static Format_Space         := "SPACE"
-	;---------
-	; DESCRIPTION:    Comma-delimited (no space)
-	;---------
-	static Format_Commas        := "COMMA"
-	;---------
-	; DESCRIPTION:    Comma-delimited (with spaces)
-	;---------
-	static Format_CommasSpaced  := "COMMA_SPACED"
-	;---------
-	; DESCRIPTION:    Newline-delimited
-	;---------
-	static Format_NewLines      := "NEWLINE"
-	;---------
-	; DESCRIPTION:    OneNote columns (double-newline delimited)
-	;---------
-	static Format_OneNoteColumn := "ONENOTE_COLUMN"
-	; =--
+	; @GROUP@ Formats for reading/writing lists
+	static Format_Array         := "ARRAY"          ; Array
+	static Format_Space         := "SPACE"          ; Space-delimited
+	static Format_Commas        := "COMMA"          ; Comma-delimited (no space)
+	static Format_CommasSpaced  := "COMMA_SPACED"   ; Comma-delimited (with spaces)
+	static Format_NewLines      := "NEWLINE"        ; Newline-delimited
+	static Format_OneNoteColumn := "ONENOTE_COLUMN" ; OneNote columns (double-newline delimited)
+	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    Create a new FormattedList object.

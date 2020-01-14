@@ -16,23 +16,15 @@
 class ActionObjectCodeSearch extends ActionObjectBase {
 	; #PUBLIC#
 	
-	;---------
-	; DESCRIPTION:    Server code location, including tag if applicable
-	;---------
-	static LocationType_Server := "SERVER"
-	;---------
-	; DESCRIPTION:    Client filename
-	;---------
-	static LocationType_Client := "CLIENT"
+	; @GROUP@ Location types
+	static LocationType_Server := "SERVER" ; Server code location, including tag if applicable
+	static LocationType_Client := "CLIENT" ; Client filename
+	; @GROUP-END@
 	
-	;---------
-	; DESCRIPTION:    Code location to work with
-	;---------
-	location     := ""
-	;---------
-	; DESCRIPTION:    Which type of code, server or client (from LocationType_* constants)
-	;---------
-	locationType := ""
+	; @GROUP@
+	location     := "" ; Code location to work with
+	locationType := "" ; Which type of code, server or client (from LocationType_* constants)
+	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    Create a new reference to a CodeSearch object.

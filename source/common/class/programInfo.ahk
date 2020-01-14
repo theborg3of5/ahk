@@ -3,14 +3,10 @@
 class ProgramInfo {
 	; #PUBLIC#
    
-	;---------
-	; DESCRIPTION:    Name of the program
-	;---------
-   name := ""
-	;---------
-	; DESCRIPTION:    Full filepath to launch the program
-	;---------
-   path := ""
+	; @GROUP@
+   name := "" ; Name of the program
+   path := "" ; Full filepath to launch the program
+	; @GROUP-END@
 	
    ;---------
    ; DESCRIPTION:    Creates a new instance of ProgramInfo.

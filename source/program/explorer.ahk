@@ -30,6 +30,9 @@
 class Explorer {
 	; #PUBLIC#
 	
+	;---------
+	; DESCRIPTION:    This is the UUID for the "This PC" folder that shows all drives.
+	;---------
 	static ThisPCFolderUUID := "::{20d04fe0-3aea-1069-a2d8-08002b30309d}"
 	
 	

@@ -2,6 +2,7 @@
 	Auto-complete: reconsider "NPP-" prefix on documentation bits
 		Maybe use "DOC-" prefix instead?
 			Or is that more where these elements are, instead of what they do?
+	EpicStudio.Debug_OtherProcess* - should be private
 	Auto-complete: should we add some of our recent special additions like @NPP-TABLELIST@ and @GROUP@?
 	AHKCodeLib.generateHeaderWithParts - can we make more use of this for generating headers?
 		If we expand it to handle parameters (either as a separate parameter or just a special "PARAMETERS" subscript of the existing parts parameter), should be able to use it for everything, right?

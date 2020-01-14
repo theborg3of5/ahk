@@ -3,7 +3,10 @@
 class AHKCodeLib {
 	; #PUBLIC#
 	
-	static SPACES_PER_TAB := 3 ; How many spaces are treated as a tab for indentation purposes.
+	;---------
+	; DESCRIPTION:    How many spaces are treated as a tab for indentation purposes.
+	;---------
+	static SPACES_PER_TAB := 3
 	
 	;---------
 	; DESCRIPTION:    Generate a documentation header based on the definition line provided.

@@ -35,10 +35,6 @@
 class EpicStudio {
 	; #INTERNAL#
 	
-	; Debug window controls
-	static Debug_OtherProcessButton := "WindowsForms10.BUTTON.app.0.141b42a_r9_ad11" ; "Other Process" radio button
-	static Debug_OtherProcessField  := "Edit1" ; "Other Process" search field
-	
 	;---------
 	; DESCRIPTION:    Delete the current line in EpicStudio, but preserve the clipboard (delete line
 	;                 hotkey puts the line on the clipboard)
@@ -148,6 +144,10 @@ class EpicStudio {
 	
 	
 	; #PRIVATE#
+	
+	; Debug window controls
+	static Debug_OtherProcessButton := "WindowsForms10.BUTTON.app.0.141b42a_r9_ad11" ; "Other Process" radio button
+	static Debug_OtherProcessField  := "Edit1" ; "Other Process" search field
 	
 	;---------
 	; DESCRIPTION:    Determine whether EpicStudio is in debug mode right now.

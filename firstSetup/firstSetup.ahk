@@ -36,7 +36,7 @@ t := new Toast()
 t.show()
 
 ; Pull the needed values from our selection.
-t.setText("Reading values from selection...")
+t.addLine("Reading values from selection...")
 tagsToReplace := {}
 tagsToReplace["AHK_ROOT"]     := ahkRootPath
 tagsToReplace["CONTEXT"]      := machineInfo["NEW_CONTEXT"]
@@ -45,7 +45,7 @@ tagsToReplace["MEDIA_PLAYER"] := machineInfo["MEDIA_PLAYER"]
 ; Debug.popup("Finished tags to replace",tagsToReplace)
 
 ; Loop over files we need to process and put places.
-t.setText("Processing files...")
+t.addLine("Processing files...")
 For fromPath,toPath in copyPaths {
 	; Read it in.
 	fileContents := FileRead(fromPath)
@@ -70,7 +70,7 @@ For fromPath,toPath in copyPaths {
 
 if(!useSlimMode) {
 	; Hide all .git system files and folders, for a cleaner appearance.
-	t.setText("Hiding .git files and folders...")
+	t.addLine("Hiding .git files and folders...")
 	For _,name in gitNames {
 		Loop, Files, %ahkRootPath%\*%name%, RDF
 		{

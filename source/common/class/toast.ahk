@@ -149,13 +149,37 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Change the text for the toast.
 	; PARAMETERS:
-	;  toastText (I,REQ) - The text to show in the toast.
+	;  newText (I,REQ) - The text to show in the toast.
 	; RETURNS:        this
 	; NOTES:          Will try to maintain the same position, but toast size will expand to fit text.
 	;---------
-	setText(toastText) {
-		this.setLabelText(toastText)
+	setText(newText) {
+		this.setLabelText(newText)
 		this.move()
+		return this
+	}
+	
+	;---------
+	; DESCRIPTION:    Add some text to the end of the current toast text.
+	; PARAMETERS:
+	;  textToAdd (I,REQ) - The text to add to the end
+	; RETURNS:        this
+	;---------
+	appendText(textToAdd) {
+		currText := GuiControlGet("", this.labelVarName)
+		this.setText(currText textToAdd)
+		return this
+	}
+	
+	;---------
+	; DESCRIPTION:    Add a line of text at the bottom of the toast.
+	; PARAMETERS:
+	;  lineToAdd (I,REQ) - The line of text to add at the bottom of the toast (newline not included).
+	; RETURNS:        this
+	;---------
+	addLine(lineToAdd) {
+		currText := GuiControlGet("", this.labelVarName)
+		this.setText(currText.appendPiece(lineToAdd, "`n"))
 		return this
 	}
 	
@@ -302,17 +326,17 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Set the text of the toast label and resize it fit that text.
 	; PARAMETERS:
-	;  toastText (I,REQ) - The text to show in the toast.
+	;  newText (I,REQ) - The text to show in the toast.
 	;---------
-	setLabelText(toastText) {
-		toastText := StringLib.escapeCharUsingChar(toastText, "&", "&")
+	setLabelText(newText) {
+		newText := StringLib.escapeCharUsingChar(newText, "&", "&")
 		Gui, % this.guiId ":Default"
 		
 		; Figure out how big the text control needs to be to fit its contents
-		GuiLib.getLabelSizeForText(toastText, textWidth, textHeight)
+		GuiLib.getLabelSizeForText(newText, textWidth, textHeight)
 		
 		; Update the text and width/height
-		GuiControl,     , % this.labelVarName, % toastText
+		GuiControl,     , % this.labelVarName, % newText
 		GuiControl, Move, % this.labelVarName, % "w" textWidth " h" textHeight
 	}
 	

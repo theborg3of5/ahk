@@ -70,7 +70,7 @@ updateLangInSyntaxXML(activeSyntaxXML, "AutoHotkey", newXML_AHK)
 updateLangInSyntaxXML(activeSyntaxXML, "TableList",  newXML_TL)
 FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
 
-t.setText("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
+t.addLine("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
 ; =--
 
 ExitApp

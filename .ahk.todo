@@ -59,11 +59,6 @@
 			Transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
 	
 # Toast
-	Consider a new function to append a new line of text (and maybe one to just append text to the current line) to the current Toast.
-		Could be nice to have in progress-type scenarios, to show what we've already done.
-		Use cases:
-			firstSetup
-			updateNotepadPP*
 	Could we avoid flickering between .showPersistent() and .setText()?
 		Maybe some way to set position without showing?
 		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?

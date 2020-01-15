@@ -21,14 +21,9 @@ class AHKCodeLib {
 				return this.generateHeaderWithParts({"DESCRIPTION":"", "NOTES":""})
 		}
 		
-		; Check for parameters
-		AHKCodeLib.getDefLineParts(defLine, name, paramsAry)
-		if(paramsAry.count() = 0)
-			return AHKCodeLib.HeaderBase_Function ; No parameters => basic function base
-		
-		; Build array of parameter info
+		; Get parameter info
+		AHKCodeLib.getDefLineParts(defLine, "", paramsAry)
 		paramInfos := []
-		maxParamLength := 0
 		For _,param in paramsAry {
 			; Input/output can be partially deduced by whether it's ByRef
 			if(param.startsWith("ByRef ")) {
@@ -47,28 +42,55 @@ class AHKCodeLib {
 			}
 			
 			paramInfos.push({"NAME":param, "IN_OUT":inOut, "REQUIREMENT":requirement})
-			
-			; Also track the max length of any parameter name so we can space things out appropriately.
-			DataLib.updateMax(maxParamLength, param.length())
 		}
 		
-		; Build a line for each parameter, padding things out to make them even
-		paramLines := []
-		For _,paramObj in paramInfos {
-			line := AHKCodeLib.HeaderBase_SingleParam
+		return AHKCodeLib.generateHeaderWithParts({"DESCRIPTION":"", "RETURNS":"", "SIDE EFFECTS":"", "NOTES": ""}, paramInfos)
+	}
+	
+	;---------
+	; DESCRIPTION:    Generate an AHK documentation header based on the given keyword:value pairs.
+	; PARAMETERS:
+	;  parts     (I,REQ) - An associative array of {KEYWORD: VALUE}
+	;  paramsAry (I,OPT) - An array of objects with parameter info. We'll add these to the header
+	;                      regardless of whether a "PARAMETERS" keyword is found in the parts
+	;                      parameter. Format per element:
+	;                       {"NAME":name, "IN_OUT":I/O/IO, "REQUIREMENT":REQ/OPT}
+	; RETURNS:        The generated header as a string
+	;---------
+	generateHeaderWithParts(parts, paramsAry := "") {
+		header := ";---------"
+		For _,keyword in AHKCodeLib.HeaderKeywords { ; Go in order of this list of keywords
+			; Only include keywords from the parts parameter (except for the PARAMETERS keyword, which should only be included if paramsAry is given)
+			if(! (parts.hasKey(keyword) || (keyword = "PARAMETERS" && !DataLib.isNullOrEmpty(paramsAry))) )
+				Continue
 			
-			padding := StringLib.getSpaces(maxParamLength - paramObj["NAME"].length())
-			
-			line := line.replaceTag("NAME",        paramObj["NAME"])
-			line := line.replaceTag("IN_OUT",      paramObj["IN_OUT"])
-			line := line.replaceTag("REQUIREMENT", paramObj["REQUIREMENT"])
-			line := line.replaceTag("PADDING",     padding)
-			
-			paramLines.push(line)
+			if(keyword = "PARAMETERS") {
+				header .= "`n; PARAMETERS:"
+				
+				; First figure out the longest parameter name so we can pad the others out appropriately.
+				maxParamLength := 0
+				For _,paramInfo in paramsAry
+					DataLib.updateMax(maxParamLength, paramInfo["NAME"].length())
+				
+				; Add a line for each parameter
+				For _,paramInfo in paramsAry {
+					padding := StringLib.getSpaces(maxParamLength - paramInfo["NAME"].length())
+					
+					line := AHKCodeLib.HeaderSingleParamBase
+					line := line.replaceTags(paramInfo)
+					line := line.replaceTag("PADDING", padding)
+					
+					header .= "`n" line
+				}
+			} else {
+				line := ("; " keyword ":").postPadToLength(AHKCodeLib.HeaderKeywordIndentStop)
+				line .= parts[keyword]
+				header .= "`n" line
+			}
 		}
+		header .= "`n;---------"
 		
-		header := AHKCodeLib.HeaderBase_FunctionWithParams
-		return header.replaceTag("PARAMETERS", paramLines.join("`n"))
+		return header
 	}
 	
 	;---------
@@ -127,10 +149,10 @@ class AHKCodeLib {
 		numSpaces += numExtraIndents * this.SPACES_PER_TAB
 		
 		; Keyword line
-		if(line.startsWithAnyOf(this.HeaderKeywordsWithColon, matchedKeyword)) {
+		if(line.startsWithAnyOf(this.HeaderKeywords, matchedKeyword)) {
 			; Add length of keyword + however many spaces are after it.
-			numSpaces += matchedKeyword.length()
-			line := line.removeFromStart(matchedKeyword)
+			numSpaces += matchedKeyword.length() + 1 ; +1 for the colon
+			line := line.removeFromStart(matchedKeyword ":")
 			numSpaces += StringLib.countLeadingSpaces(line)
 			
 			return ";" StringLib.getSpaces(numSpaces)
@@ -191,60 +213,16 @@ class AHKCodeLib {
 		return paramsString
 	}
 	
-	;---------
-	; DESCRIPTION:    Generate an AHK documentation header based on the given keyword:value pairs.
-	; PARAMETERS:
-	;  parts (I,REQ) - An associative array of {KEYWORD: VALUE}
-	; RETURNS:        Header as a string
-	; NOTES:          This only handles key-value pairs, not special parameter stuff.
-	;---------
-	generateHeaderWithParts(parts) {
-		header := ";---------"
-		For _,keyword in AHKCodeLib.HeaderKeywords { ; Go in order of this list of keywords
-			if(!parts.hasKey(keyword))
-				Continue
-			
-			line := ("; " keyword ":").postPadToLength(AHKCodeLib.HeaderIndentStop) ; Comment, keyword, indentation
-			line .= parts[keyword]
-			header .= "`n" line
-		}
-		header .= "`n;---------"
-		
-		return header
-	}
-	
 	
 	; #PRIVATE#
 	
-	; All of the keywords possibly contained in the documentation header - should be kept up to date with HeaderBase* constants below.
-	; NPP-* and GROUP are used for auto-completion/syntax highlighting generation
-	static HeaderKeywords := ["DESCRIPTION", "PARAMETERS", "RETURNS", "SIDE EFFECTS", "NOTES", "GROUP", "NPP-DEF-LINE", "NPP-RETURNS"]
-	static HeaderKeywordsWithColon := ["DESCRIPTION:", "PARAMETERS:", "RETURNS:", "SIDE EFFECTS:", "NOTES:", "GROUP:", "NPP-DEF-LINE:", "NPP-RETURNS:"] ; GDB TODO probably just generate this on the fly in the single caller instead.
+	; All of the keywords possibly contained in the documentation header, in the order they should be shown in.
+	static HeaderKeywords := ["DESCRIPTION", "PARAMETERS", "RETURNS", "SIDE EFFECTS", "NOTES", "GROUP", "NPP-DEF-LINE", "NPP-RETURNS"] ; NPP-* and GROUP are used for auto-completion/syntax highlighting generation
 	
-	static HeaderIndentStop := 18 ; How many characters over we should be from the start of the line (after indentation) for header values.
+	static HeaderKeywordIndentStop := 18 ; How many characters over we should be from the start of the line (after indentation) for header values.
 	
-	; Header bases
-	static HeaderBase_Function := "
-		( LTrim RTrim0
-			;---------
-			; DESCRIPTION:    
-			; RETURNS:        
-			; SIDE EFFECTS:   
-			; NOTES:          
-			;---------
-		)"
-	static HeaderBase_FunctionWithParams := "
-		( LTrim RTrim0
-			;---------
-			; DESCRIPTION:    
-			; PARAMETERS:
-			<PARAMETERS>
-			; RETURNS:        
-			; SIDE EFFECTS:   
-			; NOTES:          
-			;---------
-		)"
-	static HeaderBase_SingleParam := "
+	; The structure for documenting a single parameter
+	static HeaderSingleParamBase := "
 		( LTrim RTrim0
 			;  <NAME><PADDING> (<IN_OUT>,<REQUIREMENT>) - 
 		)"

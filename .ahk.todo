@@ -1,6 +1,4 @@
 # New Ideas
-	AHKCodeLib.generateHeaderWithParts - can we make more use of this for generating headers?
-		If we expand it to handle parameters (either as a separate parameter or just a special "PARAMETERS" subscript of the existing parts parameter), should be able to use it for everything, right?
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
 		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
 		Support right-alignment of columns

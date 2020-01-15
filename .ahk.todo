@@ -41,8 +41,6 @@
 			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
 	
 # Selector
-	Add some setting to have the popup appear when we pass in a bad value?
-		Use case: Snapper, when we're on an INI we don't have items for.
 	Re-examine SelectorGui/FlexTable - could we simplify out a lot of the extra logic using built-in Gui positioning options?
 		https://www.autohotkey.com/docs/commands/Gui.htm#PosSize
 			Gui, Margin + AutoSize to avoid needing to keep track of a total height/width for the popup

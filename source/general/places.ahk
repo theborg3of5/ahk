@@ -13,7 +13,7 @@ openFolder(folderName) {
 ; Open folder from list
 ^!+w::
 	selectFolder() {
-		folderPath := new Selector("folders.tls").select(folderName, "PATH")
+		folderPath := new Selector("folders.tls").selectGui("PATH")
 		folderPath := Config.replacePathTags(folderPath)
 		
 		if(folderPath = "")

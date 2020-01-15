@@ -67,8 +67,6 @@ class Snapper {
 		ControlFocus, % Snapper.ClassNN_ItemFilter, A ; Put focus back on the item filter field
 		
 		itemsList := new Selector("snapperIgnoreItems.tls").select(ini, "STATUS_ITEMS")
-		if(!itemsList && (ini != ""))
-			itemsList := new Selector("snapperIgnoreItems.tls").select("", "STATUS_ITEMS") ; Show the popup if we got a bad INI
 		if(!itemsList)
 			return
 		

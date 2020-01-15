@@ -124,6 +124,8 @@ class Putty {
 	;---------
 	sendCommand(key := "") {
 		data := new Selector("puttyCommands.tls").select(key)
+		if(!data)
+			return
 		
 		command   := data["COMMAND"]
 		sendAfter := data["SEND_AFTER"]

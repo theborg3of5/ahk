@@ -233,23 +233,29 @@ class Selector {
 	}
 	
 	;---------
-	; DESCRIPTION:    Helper function that calls either .selectGui() or .selectChoice() based on whether the
-	;                 given choice is blank.
+	; DESCRIPTION:    Helper function that will try to run a silent selection based on the input,
+	;                 but if that fails it will prompt the user.
 	; PARAMETERS:
-	;  choiceString (I,OPT) - The string to try and match against the given choices. If this is blank, we'll
-	;                         call .selectGui() to show a popup to the user where they pick their choice and
-	;                         enter any additional override information. If this is not blank, we'll match
-	;                         it against the index or abbreviation of the choices and return the results.
+	;  choiceString (I,OPT) - The string to try and match against the given choices. If this is not
+	;                         blank, we'll match it against the index or abbreviation of the choices
+	;                         first. If that doesn't return anything or if this parameter was blank
+	;                         we'll call .selectGui() to show a popup to the user where they pick
+	;                         their choice and enter any additional override information.
 	;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this name will
 	;                         be returned.
 	; RETURNS:        An array of data for the choice matching the given string. If the returnColumn
 	;                 parameter was specified, only the subscript matching that name will be returned.
 	;---------
 	select(choiceString := "", returnColumn := "") {
+		; If something is given, try that silently first
 		if(choiceString)
-			return this.selectChoice(choiceString, returnColumn)
-		else
-			return this.selectGui(returnColumn)
+			result := this.selectChoice(choiceString, returnColumn)
+		
+		; If we don't have a result yet, prompt the user.
+		if(!result)
+			result := this.selectGui(returnColumn)
+		
+		return result
 	}
 	
 	; @NPP-TABLELIST@

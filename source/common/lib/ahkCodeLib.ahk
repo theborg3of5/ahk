@@ -18,7 +18,7 @@ class AHKCodeLib {
 		; Determine if it's a function/property or just a class member.
 		if(defLine.containsAnyOf(["(", "[", ":="], match)) {
 			if(match = ":=") ; We found the equals before any opening paren/bracket
-				return AHKCodeLib.HeaderBase_Member ; No parameters/return value/side effects => basic member base.
+				return this.generateHeaderWithParts({"DESCRIPTION":"", "NOTES":""})
 		}
 		
 		; Check for parameters
@@ -127,7 +127,7 @@ class AHKCodeLib {
 		numSpaces += numExtraIndents * this.SPACES_PER_TAB
 		
 		; Keyword line
-		if(line.startsWithAnyOf(this.HeaderKeywords, matchedKeyword)) {
+		if(line.startsWithAnyOf(this.HeaderKeywordsWithColon, matchedKeyword)) {
 			; Add length of keyword + however many spaces are after it.
 			numSpaces += matchedKeyword.length()
 			line := line.removeFromStart(matchedKeyword)
@@ -200,9 +200,13 @@ class AHKCodeLib {
 	;---------
 	generateHeaderWithParts(parts) {
 		header := ";---------"
-		For keyword,value in parts {
-			keyword := keyword.appendIfMissing(":")
-			header .= "`n; " keyword.postPadToLength(16) value
+		For _,keyword in AHKCodeLib.HeaderKeywords { ; Go in order of this list of keywords
+			if(!parts.hasKey(keyword))
+				Continue
+			
+			line := ("; " keyword ":").postPadToLength(AHKCodeLib.HeaderIndentStop) ; Comment, keyword, indentation
+			line .= parts[keyword]
+			header .= "`n" line
 		}
 		header .= "`n;---------"
 		
@@ -214,16 +218,12 @@ class AHKCodeLib {
 	
 	; All of the keywords possibly contained in the documentation header - should be kept up to date with HeaderBase* constants below.
 	; NPP-* and GROUP are used for auto-completion/syntax highlighting generation
-	static HeaderKeywords := ["DESCRIPTION:", "PARAMETERS:", "RETURNS:", "SIDE EFFECTS:", "NOTES:", "NPP-DEF-LINE:", "NPP-RETURNS:", "GROUP:"]
+	static HeaderKeywords := ["DESCRIPTION", "PARAMETERS", "RETURNS", "SIDE EFFECTS", "NOTES", "GROUP", "NPP-DEF-LINE", "NPP-RETURNS"]
+	static HeaderKeywordsWithColon := ["DESCRIPTION:", "PARAMETERS:", "RETURNS:", "SIDE EFFECTS:", "NOTES:", "GROUP:", "NPP-DEF-LINE:", "NPP-RETURNS:"] ; GDB TODO probably just generate this on the fly in the single caller instead.
+	
+	static HeaderIndentStop := 18 ; How many characters over we should be from the start of the line (after indentation) for header values.
 	
 	; Header bases
-	static HeaderBase_Member := "
-		( LTrim RTrim0
-			;---------
-			; DESCRIPTION:    
-			; NOTES:          
-			;---------
-		)"
 	static HeaderBase_Function := "
 		( LTrim RTrim0
 			;---------

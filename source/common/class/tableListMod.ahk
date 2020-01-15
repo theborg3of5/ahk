@@ -78,12 +78,17 @@ class TableListMod {
 		columnValue := row[this.column]
 		
 		; Each of these should have a matching stub + documentation in the (@)NPP-TABLELIST section.
-		if(this.operation = "replaceWith")
-			newValue := this.text
-		else if(this.operation = "addToStart")
+		if(this.operation = "addToStart") {
 			newValue := this.text columnValue
-		else if(this.operation = "addToEnd")
+		} else if(this.operation = "addToEnd") {
 			newValue := columnValue this.text
+		} else if(this.operation = "replaceWith") {
+			newValue := this.text
+		} else if(this.operation = "defaultTo") {
+			newValue := columnValue
+			if(newValue = "")
+				newValue := this.text
+		}
 		
 		; Debug.popup("Row", row, "Column value to modify", columnValue, "Operation", this.operation, "Text", this.text, "Result", newValue, "Mod",this)
 		
@@ -111,6 +116,13 @@ class TableListMod {
 	; DESCRIPTION:    Replace this column with the given value.
 	; PARAMETERS:
 	;  text (I,REQ) - Text to replace with.
+	;---------
+	
+	;---------
+	; NPP-DEF-LINE:   defaultTo(text)
+	; DESCRIPTION:    Set this column to the given value, but only if there's not already a value in place.
+	; PARAMETERS:
+	;  text (I,REQ) - Text to default in.
 	;---------
 	; @NPP-TABLELIST-END@
 	

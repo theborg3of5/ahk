@@ -856,11 +856,15 @@
 							;---------
 							; DESCRIPTION:    Generate an AHK documentation header based on the given keyword:value pairs.
 							; PARAMETERS:
-							;  parts (I,REQ) - An associative array of {KEYWORD: VALUE}
-							; RETURNS:        Header as a string
-							; NOTES:          This only handles key-value pairs, not special parameter stuff.
+							;  parts     (I,REQ) - An associative array of {KEYWORD: VALUE}
+							;  paramsAry (I,OPT) - An array of objects with parameter info. We'll add these to the header
+							;                      regardless of whether a &quot;PARAMETERS&quot; keyword is found in the parts
+							;                      parameter. Format per element:
+							;                       {&quot;NAME&quot;:name, &quot;IN_OUT&quot;:I/O/IO, &quot;REQUIREMENT&quot;:REQ/OPT}
+							; RETURNS:        The generated header as a string
 							;---------">
                 <Param name="parts" />
+                <Param name="paramsAry := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="AHKCodeLib.getDefLineParts" func="yes">

@@ -22,6 +22,16 @@
                 <Param name="text" />
             </Overload>
         </KeyWord>
+        <KeyWord name="defaultTo" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set this column to the given value, but only if there's not already a value in place.
+							; PARAMETERS:
+							;  text (I,REQ) - Text to default in.
+							;---------">
+                <Param name="text" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="MinColumnWidth" func="yes">
             <Overload retVal="@" descr="
 							;---------

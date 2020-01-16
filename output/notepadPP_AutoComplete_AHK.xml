@@ -6488,6 +6488,30 @@
             </Overload>
         </KeyWord>
         <KeyWord name="Text"/>
+        <KeyWord name="TextAlignment.Center" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The title must exactly equal the string.
+							; GROUP:          Text alignment options
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TextAlignment.Left" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The title must start with the string.
+							; GROUP:          Text alignment options
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TextAlignment.Right" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The title may contain the string anywhere inside.
+							; GROUP:          Text alignment options
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="Theme"/>
         <KeyWord name="This"/>
         <KeyWord name="Thread"/>

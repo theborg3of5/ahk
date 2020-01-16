@@ -1,8 +1,5 @@
 # New Ideas
 	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
-		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
-		Support right-alignment of columns
-		Support min column width
 		Use cases:
 			Debug toast
 			Debug popup (would need to set font if so)

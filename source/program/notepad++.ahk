@@ -5,8 +5,8 @@
 	F6::Send, ^w ; Close with F6 hotkey, like we do for browsers.
 	
 	; Snippets
-	:X:if`t`t::NotepadPlusPlus.sendSnippet("if")
-	:X:for`t`t::NotepadPlusPlus.sendSnippet("for")
+	:X:.if::NotepadPlusPlus.sendSnippet("if")
+	:X:.for::NotepadPlusPlus.sendSnippet("for")
 	
 	; Copy current file/folder to clipboard.
 	!c::ClipboardLib.copyFilePathWithHotkey("!c")

@@ -68,7 +68,7 @@ class AutoCompleteClass {
 	generateXML() {
 		xml := ""
 		For _,member in this.members
-			xml := xml.appendPiece(member.generateXML(this.name), "`n")
+			xml := xml.appendLine(member.generateXML(this.name))
 		return xml
 	}
 	

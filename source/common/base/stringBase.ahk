@@ -422,6 +422,17 @@ class StringBase {
 	}
 	
 	;---------
+	; DESCRIPTION:    Add a new line with the provided text to this string, but don't add an extra
+	;                 newline if this is the first line.
+	; PARAMETERS:
+	;  lineToAdd (I,REQ) - The line to add to the end
+	; RETURNS:        The updated string
+	;---------
+	appendLine(lineToAdd) {
+		return this.appendPiece(lineToAdd, "`n")
+	}
+	
+	;---------
 	; DESCRIPTION:    Replace a tag ("<TAG_NAME>") in this string with the provided replacement.
 	; PARAMETERS:
 	;  tagName     (I,REQ) - The name of the tag to replace (no angle brackets)

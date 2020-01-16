@@ -353,7 +353,7 @@ updateCompletionXML_TL(templatePath, tlMembers) {
 	; Generate the keywords XML
 	keywordsXML := ""
 	For _,member in tlMembers
-		keywordsXML := keywordsXML.appendPiece(member.generateXML(), "`n")
+		keywordsXML := keywordsXML.appendLine(member.generateXML())
 
 	templateXML := FileRead(templatePath)
 	return replaceMarker(templateXML, "KEYWORDS", keywordsXML)

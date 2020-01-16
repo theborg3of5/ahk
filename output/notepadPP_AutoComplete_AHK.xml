@@ -5490,6 +5490,18 @@
                 <Param name="strToAdd" />
             </Overload>
         </KeyWord>
+        <KeyWord name="StringBase.appendLine" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a new line with the provided text to this string, but don't add an extra
+							;                 newline if this is the first line.
+							; PARAMETERS:
+							;  lineToAdd (I,REQ) - The line to add to the end
+							; RETURNS:        The updated string
+							;---------">
+                <Param name="lineToAdd" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="StringBase.appendPiece" func="yes">
             <Overload retVal="" descr="
 							;---------

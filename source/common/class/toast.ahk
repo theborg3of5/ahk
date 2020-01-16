@@ -179,7 +179,7 @@ class Toast {
 	;---------
 	addLine(lineToAdd) {
 		currText := GuiControlGet("", this.labelVarName)
-		this.setText(currText.appendPiece(lineToAdd, "`n"))
+		this.setText(currText.appendLine(lineToAdd))
 		return this
 	}
 	

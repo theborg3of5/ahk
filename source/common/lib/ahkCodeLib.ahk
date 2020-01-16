@@ -223,7 +223,7 @@ class AHKCodeLib {
 	
 	; The structure for documenting a single parameter
 	static HeaderSingleParamBase := "
-		( LTrim RTrim0
+		( RTrim0
 			;  <NAME><PADDING> (<IN_OUT>,<REQUIREMENT>) - 
 		)"
 	

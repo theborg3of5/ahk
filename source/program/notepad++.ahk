@@ -4,6 +4,10 @@
 	!f::Send, ^!+f ; Use !f hotkey for highlighting with the first style (ControlSend so we don't trigger other hotkeys)
 	F6::Send, ^w ; Close with F6 hotkey, like we do for browsers.
 	
+	; Snippets
+	:X:if`t`t::NotepadPlusPlus.sendSnippet("if")
+	:X:for`t`t::NotepadPlusPlus.sendSnippet("for")
+	
 	; Copy current file/folder to clipboard.
 	!c::ClipboardLib.copyFilePathWithHotkey("!c")
 	!#c::ClipboardLib.copyFolderPathWithFileHotkey("!c")
@@ -140,13 +144,10 @@ class NotepadPlusPlus {
 	;                 the block.
 	;---------
 	sendContinuationBlock() {
-		Send, {Home}{Shift Down}{Home}{Shift Up} ; Start selecting at the start of the line to get the indentation
-		parentIndent := SelectLib.getText()
-		Sleep, 100 ; Make sure Ctrl is up so we don't end up jumping to the end of the file.
-		Send, {End} ; Get back to the end of the line
+		parentIndent := this.getCurrentLineIndent()
 		
 		sectionBase := "
-			( LTrim
+			(
 				""
 					`t(
 						`t`t
@@ -169,6 +170,56 @@ class NotepadPlusPlus {
 		}
 		
 		ClipboardLib.send(templateString)
+	}
+	
+	;---------
+	; DESCRIPTION:    Send a code snippet.
+	; PARAMETERS:
+	;  snippetName (I,REQ) - The name of the snippet, see code for which are supported.
+	; NOTES:          The snippet will be inserted at the end of the current line
+	;---------
+	sendSnippet(snippetName) {
+		currentIndent := this.getCurrentLineIndent()
+		
+		if(snippetName = "if") {
+			snippet := "
+				(
+					if() {
+						`t
+					}
+				)"
+			snipString := snippet.replace("`n", "`n" currentIndent) ; Add indent to each line (except the first one)
+			ClipboardLib.send(snipString)
+			Send, {Up 2}{End}{Left 3} ; Inside the if parens
+			
+		} else if(snippetName = "for") {
+			snippet := "
+				(
+					For(, in ) {
+						`t
+					}
+				)"
+			snipString := snippet.replace("`n", "`n" currentIndent) ; Add indent to each line (except the first one)
+			ClipboardLib.send(snipString)
+			Send, {Up 2}{End}{Left 8} ; At the index spot
+		}
+	}
+	
+	
+	; #PRIVATE#
+	
+	;---------
+	; DESCRIPTION:    Get the indentation from the current line (as the whitespace it is, not a count).
+	; RETURNS:        The whitespace that makes up the indentation.
+	; SIDE EFFECTS:   Ends up at the end of the current line, not where we started.
+	;---------
+	getCurrentLineIndent() {
+		Send, {Home}{Shift Down}{Home}{Shift Up} ; Start selecting at the start of the line to get the indentation
+		indent := SelectLib.getText()
+		Sleep, 100 ; Make sure Ctrl is up so we don't end up jumping to the end of the file.
+		Send, {End} ; Get back to the end of the line
+		
+		return indent
 	}
 	; #END#
 }

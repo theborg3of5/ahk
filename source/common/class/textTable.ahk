@@ -6,7 +6,6 @@
 ;		GDB TODO
 	
 	GDB TODO
-		Somehow support sub-tables as well? Maybe just additional instances of these same 'text tables"?
 		Update auto-complete and syntax highlighting notepad++ definitions
 	
 */ ; =--
@@ -48,13 +47,16 @@ class TextTable {
 		return this
 	}
 	
-	addRow(row) {
-		; Add the row to the table
-		this.dataTable.push(row.clone())
+	addRow(newRow) {
+		; If any of the values are multi-line, split the row up into multiple and add those.
+		For _,value in newRow {
+			if(value.countMatches("`n")) {
+				this.handleMultiLineValues(newRow)
+				return
+			}
+		}
 		
-		; Track the max width of all elements per column
-		For columnIndex,cellValue in row
-			this.columnWidths[columnIndex] := DataLib.max(this.columnWidths[columnIndex], cellValue.length())
+		this._addRow(newRow)
 	}
 	
 	generateString() {
@@ -63,8 +65,8 @@ class TextTable {
 		
 		For _,row in this.dataTable {
 			rowString := ""
-			For columnIndex,cellValue in row {
-				cellString := this.padValue(cellValue, columnIndex)
+			For columnIndex,value in row {
+				cellString := this.padValue(value, columnIndex)
 				rowString := rowString.appendPiece(cellString, columnPadding)
 			}
 			outputString := outputString.appendLine(rowString)
@@ -81,12 +83,22 @@ class TextTable {
 	
 	;  - nonStaticMembers
 	dataTable := []
-	columnWidths := []
+	columnWidths := [] ; Numbers of characters
 	columnAlignments := [] ; TextAlignment.* values, defaults to this.defaultAlignment
 	spacesBetweenColumns := 2 ; Minimum number of spaces between cell values
 	defaultAlignment := TextAlignment.Left ; The default alignment for all cells
 	
 	;  - functions
+	
+	_addRow(newRow) {
+		; Add the row to the table
+		this.dataTable.push(newRow.clone())
+		
+		; Keep track of columns' max width
+		For columnIndex,value in newRow
+			this.columnWidths[columnIndex] := DataLib.max(this.columnWidths[columnIndex], value.length())
+	}
+	
 	padValue(value, columnIndex) {
 		width := this.columnWidths[columnIndex]
 		alignment := DataLib.firstNonBlankValue(this.columnAlignments[columnIndex], this.defaultAlignment) ; Default to left-aligned
@@ -107,6 +119,34 @@ class TextTable {
 		}
 		
 		return value
+	}
+	
+	handleMultiLineValues(originalRow) {
+		numColumns := originalRow.count()
+		
+		; Split the row up into a transposed table (columns, then rows)
+		flippedTable := []
+		maxNumLines := 0
+		For columnIndex,value in originalRow {
+			valueLines := value.split("`n", "`r") ; Drop carriage returns if they're in there too
+			DataLib.updateMax(maxNumLines, valueLines.count())
+			flippedTable.push(valueLines)
+		}
+		
+		; Build each new row using a value from each column.
+		Loop, % maxNumLines {
+			rowIndex := A_Index
+			newRow := []
+			
+			Loop, % numColumns {
+				columnIndex := A_Index
+				
+				value := flippedTable[columnIndex, rowIndex]
+				newRow.push(value)
+			}
+			
+			this._addRow(newRow)
+		}
 	}
 	
 	

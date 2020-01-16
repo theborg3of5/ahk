@@ -5,8 +5,7 @@
 	
 	GDB TODO
 		Update auto-complete and syntax highlighting notepad++ definitions
-		Setting for how much space between columns
-		Functions for adding rows individually
+		Call out that this requires a monospace font
 	
 */ ; =--
 
@@ -18,37 +17,41 @@ class TextTable {
 	;  - staticMembers
 	
 	;  - nonStaticMembers
-	spacesBetweenColumns := 2
+	columnPadding := 2 ; Minimum number of spaces between cell values
 	
 	;  - properties
 	
 	__New(dataTable := "", columnPadding := "") {
 		if(columnPadding != "")
-			this.spacesBetweenColumns := columnPadding
+			this.columnPadding := columnPadding
 		
-		; Copy the data over
+		; Add any provided rows
 		For _,row in dataTable
-			this.table.push(row.clone())
-		Debug.popup("dataTable",dataTable, "this.table",this.table)
+			this.addRow(row)
 		
-		; Figure out the max width of each column.
-		For _,row in this.table {
-			For columnIndex,cellValue in row
-				this.columnWidths[columnIndex] := DataLib.max(this.columnWidths[columnIndex], cellValue.length())
-		}
-		Debug.popup("this.table",this.table, "this.columnWidths",this.columnWidths)
+		; Debug.popup("dataTable",dataTable, "this.dataTable",this.dataTable, "this.columnWidths",this.columnWidths)
+		Debug.popup("this",this)
 	}
 	
 	;  - otherFunctions
 	
+	addRow(row) {
+		; Add the row to the table
+		this.dataTable.push(row.clone())
+		
+		; Track the max width of all elements per column
+		For columnIndex,cellValue in row
+			this.columnWidths[columnIndex] := DataLib.max(this.columnWidths[columnIndex], cellValue.length())
+	}
+	
 	generateString() {
 		outputString := ""
 		
-		For _,row in this.table {
+		For _,row in this.dataTable {
 			rowString := ""
 			For columnIndex,cellValue in row {
 				cellString := cellValue.postPadToLength(this.columnWidths[columnIndex])
-				rowString := rowString.appendPiece(cellString, StringLib.getSpaces(this.spacesBetweenColumns))
+				rowString := rowString.appendPiece(cellString, StringLib.getSpaces(this.columnPadding))
 			}
 			outputString := outputString.appendLine(rowString)
 		}
@@ -74,7 +77,7 @@ class TextTable {
 	;  - staticMembers
 	
 	;  - nonStaticMembers
-	table := []
+	dataTable := []
 	columnWidths := []
 	
 	;  - functions
@@ -83,11 +86,13 @@ class TextTable {
 	; #DEBUG#
 	
 	Debug_TypeName() {
-		return "GDB TODO"
+		return "TextTable"
 	}
 	
-	Debug_ToString(ByRef builder) {
-		builder.addLine("GDB TODO", this.GDBTODO)
-	}
+	; Debug_ToString(ByRef builder) {
+		; builder.addLine("Internal table", this.dataTable)
+		; builder.addLine("Column widths", this.columnWidths)
+		; builder.addLine("Generated table", this.generateString())
+	; }
 	; #END#
 }

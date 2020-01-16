@@ -195,13 +195,13 @@ class NotepadPlusPlus {
 		} else if(snippetName = "for") {
 			snippet := "
 				(
-					For(, in ) {
+					For , in  {
 						`t
 					}
 				)"
 			snipString := snippet.replace("`n", "`n" currentIndent) ; Add indent to each line (except the first one)
 			ClipboardLib.send(snipString)
-			Send, {Up 2}{End}{Left 8} ; At the index spot
+			Send, {Up 2}{End}{Left 7} ; At the index spot
 		}
 	}
 	

@@ -1,8 +1,7 @@
 # New Ideas
-	Consider a new "text table" class, that takes a bunch of label-value pairs and (assuming a fixed-width font) aligns everything like a table
-		Use cases:
-			Debug toast
-			Debug popup (would need to set font if so)
+	Consider using TextTable for these use cases:
+		Debug toast
+		Debug popup (would need to set font if so)
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:

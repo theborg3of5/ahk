@@ -1,26 +1,31 @@
-/* GDB TODO --=
-	
-	GDB TODO Call out that this requires a monospace font
+/* This class takes a table of values and turns it into an aligned plain-text table. --=
+	NOTE: This only really works with a monospace font, as it aligns based on characters.
 	
 	Example Usage
-;		GDB TODO
-	
-	GDB TODO
-		Update auto-complete and syntax highlighting notepad++ definitions
-	
+;		dataTable := []
+;		dataTable.push(["val1", "val2", "val3"])
+;		dataTable.push(["value4", "value5", "value6"])
+;		tt := new TextTable(dataTable)
+;		tt.setColumnPadding(1) ; Minimum number of spaces between values
+;		tt.setDefaultAlignment(TextAlignment.Center) ; All columns default to centered
+;		tt.setColumnAlignment(2, TextAlignment.Right) ; Column 2 (base-1 indexed)
+;		tt.addRow(["v7", "v8", "v9"]) ; Add a new row dynamically (settings still apply)
+;		output := tt.generateText()
+;		
+;		output:
+;		 val1    val2  val3 
+;		value4 value5 value6
+;		  v7       v8   v9  
+;
 */ ; =--
 
 class TextTable {
 	; #PUBLIC#
 	
-	;  - Constants
-	
-	;  - staticMembers
-	
-	;  - nonStaticMembers
-	
-	;  - properties
-	
+	;---------
+	; PARAMETERS:
+	;  dataTable (I,OPT) - 2-dimensional array of string values to include in the table.
+	;---------
 	__New(dataTable := "") {
 		if(spacesBetweenColumns != "")
 			spacesBetweenColumns := spacesBetweenColumns
@@ -30,23 +35,45 @@ class TextTable {
 			this.addRow(row)
 	}
 	
-	;  - otherFunctions
-	
+	;---------
+	; DESCRIPTION:    Set the minimum number of spaces between values in each row.
+	; PARAMETERS:
+	;  numSpaces (I,REQ) - How many spaces to require
+	; RETURNS:        this
+	;---------
 	setColumnPadding(numSpaces) {
 		this.spacesBetweenColumns := numSpaces
 		return this
 	}
 	
-	setDefaultAlignment(newAlignment) { ; From TextAlignment.*
+	;---------
+	; DESCRIPTION:    Set the default alignment for all columns in this table.
+	; PARAMETERS:
+	;  newAlignment (I,REQ) - A text-alignment value from TextAlignment.*
+	; RETURNS:        this
+	;---------
+	setDefaultAlignment(newAlignment) {
 		this.defaultAlignment := newAlignment
 		return this
 	}
 	
-	setColumnAlignment(columnIndex, newAlignment) { ; From TextAlignment.*
+	;---------
+	; DESCRIPTION:    Set the alignment for a specific column.
+	; PARAMETERS:
+	;  columnIndex  (I,REQ) - The column index (base-1) to update
+	;  newAlignment (I,REQ) - A text-alignment value from TextAlignment.*
+	; RETURNS:        this
+	;---------
+	setColumnAlignment(columnIndex, newAlignment) {
 		this.columnAlignments[columnIndex] := newAlignment
 		return this
 	}
 	
+	;---------
+	; DESCRIPTION:    Add a new row to the table.
+	; PARAMETERS:
+	;  newRow (I,REQ) - An array of values to add as a new row in the table.
+	;---------
 	addRow(newRow) {
 		; If any of the values are multi-line, split the row up into multiple and add those.
 		For _,value in newRow {
@@ -59,14 +86,18 @@ class TextTable {
 		this._addRow(newRow)
 	}
 	
-	generateString() {
+	;---------
+	; DESCRIPTION:    Generate the table as a string
+	; RETURNS:        The table, as a string
+	;---------
+	generateText() {
 		outputString := ""
 		columnPadding := StringLib.getSpaces(this.spacesBetweenColumns)
 		
 		For _,row in this.dataTable {
 			rowString := ""
 			For columnIndex,value in row {
-				cellString := this.padValue(value, columnIndex)
+				cellString := this.formatValue(value, columnIndex)
 				rowString := rowString.appendPiece(cellString, columnPadding)
 			}
 			outputString := outputString.appendLine(rowString)
@@ -77,19 +108,18 @@ class TextTable {
 	
 	; #PRIVATE#
 	
-	;  - Constants
+	dataTable            := []                 ; Our 2-dimensional array of values.
+	columnWidths         := []                 ; Numbers of characters
+	columnAlignments     := []                 ; TextAlignment.* values, defaults to this.defaultAlignment
+	spacesBetweenColumns := 2                  ; Minimum number of spaces between cell values
+	defaultAlignment     := TextAlignment.Left ; The default alignment for all cells
 	
-	;  - staticMembers
-	
-	;  - nonStaticMembers
-	dataTable := []
-	columnWidths := [] ; Numbers of characters
-	columnAlignments := [] ; TextAlignment.* values, defaults to this.defaultAlignment
-	spacesBetweenColumns := 2 ; Minimum number of spaces between cell values
-	defaultAlignment := TextAlignment.Left ; The default alignment for all cells
-	
-	;  - functions
-	
+	;---------
+	; DESCRIPTION:    Add a new row to the table, without extra handling for multi-line values.
+	; PARAMETERS:
+	;  newRow (I,REQ) - The array to add to the table.
+	; SIDE EFFECTS:   Updates column widths
+	;---------
 	_addRow(newRow) {
 		; Add the row to the table
 		this.dataTable.push(newRow.clone())
@@ -99,7 +129,14 @@ class TextTable {
 			this.columnWidths[columnIndex] := DataLib.max(this.columnWidths[columnIndex], value.length())
 	}
 	
-	padValue(value, columnIndex) {
+	;---------
+	; DESCRIPTION:    Pad and align the provided value according to the column specifications.
+	; PARAMETERS:
+	;  value       (I,REQ) - The value to update
+	;  columnIndex (I,REQ) - The index of the column the value is in
+	; RETURNS:        The formatted value, with appropriate padding
+	;---------
+	formatValue(value, columnIndex) {
 		width := this.columnWidths[columnIndex]
 		alignment := DataLib.firstNonBlankValue(this.columnAlignments[columnIndex], this.defaultAlignment) ; Default to left-aligned
 		
@@ -121,6 +158,12 @@ class TextTable {
 		return value
 	}
 	
+	;---------
+	; DESCRIPTION:    Turn a row which has values containing newlines into multiple rows, and add
+	;                 those rows to our table.
+	; PARAMETERS:
+	;  originalRow (I,REQ) - The row to split
+	;---------
 	handleMultiLineValues(originalRow) {
 		numColumns := originalRow.count()
 		
@@ -155,11 +198,5 @@ class TextTable {
 	Debug_TypeName() {
 		return "TextTable"
 	}
-	
-	; Debug_ToString(ByRef builder) {
-		; builder.addLine("Internal table", this.dataTable)
-		; builder.addLine("Column widths", this.columnWidths)
-		; builder.addLine("Generated table", this.generateString())
-	; }
 	; #END#
 }

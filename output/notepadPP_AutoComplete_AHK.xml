@@ -6512,6 +6512,68 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="TextTable" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; PARAMETERS:
+							;  dataTable (I,OPT) - 2-dimensional array of string values to include in the table.
+							;---------">
+                <Param name="dataTable := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TextTable.addRow" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a new row to the table.
+							; PARAMETERS:
+							;  newRow (I,REQ) - An array of values to add as a new row in the table.
+							;---------">
+                <Param name="newRow" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TextTable.generateText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Generate the table as a string
+							; RETURNS:        The table, as a string
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TextTable.setColumnAlignment" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the alignment for a specific column.
+							; PARAMETERS:
+							;  columnIndex  (I,REQ) - The column index (base-1) to update
+							;  newAlignment (I,REQ) - A text-alignment value from TextAlignment.*
+							; RETURNS:        this
+							;---------">
+                <Param name="columnIndex" />
+                <Param name="newAlignment" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TextTable.setColumnPadding" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the minimum number of spaces between values in each row.
+							; PARAMETERS:
+							;  numSpaces (I,REQ) - How many spaces to require
+							; RETURNS:        this
+							;---------">
+                <Param name="numSpaces" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TextTable.setDefaultAlignment" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the default alignment for all columns in this table.
+							; PARAMETERS:
+							;  newAlignment (I,REQ) - A text-alignment value from TextAlignment.*
+							; RETURNS:        this
+							;---------">
+                <Param name="newAlignment" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="Theme"/>
         <KeyWord name="This"/>
         <KeyWord name="Thread"/>

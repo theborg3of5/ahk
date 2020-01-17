@@ -140,7 +140,7 @@ getColorUnderMouse(mouseX := "", mouseY := "") {
 getRGBText(hexColor) {
 	RGB := hexColorToRGB(hexColor)
 	tt := new TextTable([ ["R",RGB["R"]], ["G",RGB["G"]], ["B",RGB["B"]] ]).setColumnPadding(3)
-	return tt.generateString()
+	return tt.generateText()
 }
 
 hexColorToRGB(hex) {

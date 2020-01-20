@@ -56,10 +56,6 @@ return
 	o::Send, ^{Tab}
 	u::Send, ^+{Tab}
 	
-	; Move tabs left/right (with this extension: https://chrome.google.com/webstore/detail/rearrange-tabs/ccnnhhnmpoffieppjjkhdakcoejcpbga )
-	+o::Send, !+{Right}
-	+u::Send, !+{Left}
-	
 	; Auto-pause (so we'll switch back on enter/escape)
 	~^l::
 	~^t::
@@ -117,11 +113,13 @@ return
 	~+l::
 	~+m::
 	~+n::
+	~+o::
 	~+p::
 	~+q::
 	~+r::
 	~+s::
 	~+t::
+	~+u::
 	~+v::
 	~+w::
 	~+x::

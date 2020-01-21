@@ -47,11 +47,6 @@ return
 
 ; Run as long as vimkeys are on.
 #If browserActive() && areVimKeysOn()
-	; Pause/suspend.
-	i::
-		turnVimOffManual()
-	return
-	
 	; Next/Previous Tab.
 	o::Send, ^{Tab}
 	u::Send, ^+{Tab}
@@ -72,6 +67,7 @@ return
 	~f::
 	~g::
 	~h::
+	~i:: ; This one is effectively the "turn it off" key, so it should always do that (even if the rest of these keys start doing something different).
 	~l::
 	~m::
 	~n::

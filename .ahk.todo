@@ -2,6 +2,11 @@
 	Consider using TextTable for these use cases:
 		Debug toast
 		Debug popup (would need to set font if so)
+			Can't actually set font, so we'd have to make a new popup gui for this
+				Either text or edit field
+					Can text be selectable so I can grab specific parts of the output if desired?
+				Light text on dark background?
+				Could we easily add an extra hotkey to copy the contents (ideally ^c)?
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:

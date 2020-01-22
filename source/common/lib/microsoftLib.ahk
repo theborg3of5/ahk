@@ -22,8 +22,6 @@ class MicrosoftLib {
 	static FrameY_CaptionNoSizable := SysGet(8)  ; Thickness of the top/bottom borders for windows with a caption that are NOT sizable (uses SM_CYFIXEDFRAME).
 	static FrameX_CaptionSizable   := SysGet(32) ; Thickness of the left/right borders for windows with a caption that are sizable (uses SM_CXSIZEFRAME/SM_CXFRAME).
 	static FrameY_CaptionSizable   := SysGet(33) ; Thickness of the top/bottom borders for windows with a caption that are sizable (uses SM_CYSIZEFRAME/SM_CYFRAME).
-	static MaximizedWindowHeight   := SysGet(61) ; Total width of a maximized window on the primary monitor. Includes any weird offsets. (uses SM_CXMAXIMIZED)
-	static MaximizedWindowWidth    := SysGet(62) ; Total height of a maximized window on the primary monitor. Includes any weird offsets. (uses SM_CYMAXIMIZED)
 	; @GROUP-END@
 	
 	; @GROUP@ Windows Messages ( https://autohotkey.com/docs/misc/SendMessageList.htm )

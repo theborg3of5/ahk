@@ -22,7 +22,6 @@
 }
 
 # Monthlies
-	Book OTF														21
 	Check FatMax charge										-			SUN				1
 	Transcribe instructor meeting notes					-			SAT				1
 	Weigh cats													-			WED				2

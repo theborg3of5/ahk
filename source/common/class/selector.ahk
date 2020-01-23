@@ -247,15 +247,26 @@ class Selector {
 	;                 parameter was specified, only the subscript matching that name will be returned.
 	;---------
 	select(choiceString := "", returnColumn := "") {
+		if(!this.loadChoicesFromData())
+			return ""
+		
 		; If something is given, try that silently first
 		if(choiceString)
-			result := this.selectChoice(choiceString, returnColumn)
+			data := this.parseChoice(choiceString)
 		
 		; If we don't have a result yet, prompt the user.
-		if(!result)
-			result := this.selectGui(returnColumn)
+		if(!data)
+			data := this.doSelectGui()
 		
-		return result
+		; If there's no result return "" so callers can just check !data
+		if(DataLib.isNullOrEmpty(data))
+			return ""
+		
+		; Return a specific column if requested
+		if(returnColumn)
+			return data[returnColumn]
+		
+		return data
 	}
 	
 	; @NPP-TABLELIST@

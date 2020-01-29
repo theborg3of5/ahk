@@ -1,5 +1,7 @@
 ﻿; Disconnect hotkey (for computer that's being remoted into).
 $!Esc::
+	if(!GuiLib.showConfirmationPopup("Are you sure you want to disconnect from this computer?", "Disconnect?"))
+		return
 	RunLib.runCommand("tsdiscon")
 	SetNumLockState, AlwaysOn
 return

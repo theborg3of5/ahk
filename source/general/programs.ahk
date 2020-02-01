@@ -24,6 +24,7 @@
 	#f::  Config.activateProgram("Everything")
 	#t::  Config.runProgram("Telegram")
 	!+g:: Config.activateProgram("GitHub")
+	!#s:: Config.runProgram("Slack")
 	^!+o::Config.activateProgram("OneNote")
 	^!+x::Config.activateProgram("Launchy")
 #If Config.machineIsWorkLaptop

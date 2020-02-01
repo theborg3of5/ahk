@@ -34,6 +34,7 @@
 	Process Explorer			<PROGRAM_FILES>\ProcessExplorer\procexp.exe
 
 	GitHub						<USER_APPDATA_LOCAL>\GitHubDesktop\GitHubDesktop.exe
+	Slack							<USER_APPDATA_LOCAL>\slack\slack.exe											HOME_DESKTOP
 	Spotify						<USER_APPDATA>\Spotify\Spotify.exe
 	Telegram						<USER_APPDATA>\Telegram Desktop\Telegram.exe
 	Firefox Portable			S:\FirefoxPortable\FirefoxPortable.exe											HOME_DESKTOP

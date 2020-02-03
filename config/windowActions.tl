@@ -26,6 +26,7 @@
 	Pidgin Buddy List						CLOSE		CLOSE
 	Republic Anywhere						CLOSE		CLOSE
 	Skype										CLOSE
+	Slack										CLOSE		-					-					-					-			HOME_DESKTOP
 	Spotify									CLOSE		CLOSE				-					-					OTHER
 	Telegram									CLOSE		CLOSE				-					-					-
 	Thunder									CLOSE

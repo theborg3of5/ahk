@@ -73,6 +73,7 @@
 			Republic Anywhere						Republic Anywhere.exe
 			Skype										Skype.exe
 			Snapper									Snapper.exe
+			Slack										slack.exe					-									-														NO_PADDING
 			Spotify									Spotify.exe					-									-														NO_PADDING
 			Steam										Steam.exe					-									-														NO_PADDING
 			Teams										Teams.exe					-									-														NO_PADDING

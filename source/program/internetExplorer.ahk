@@ -3,6 +3,10 @@
 	; Get URL, close tab, and open the URL in your default web browser.
 	^+o::InternetExplorer.moveURLToDefaultBrowser()
 	^+c::InternetExplorer.pickF12Element()
+	
+	; Handling for file links
+	^RButton::InternetExplorer.copyLinkTarget() ; Copy
+	^MButton::InternetExplorer.openLinkTarget() ; Open
 #If
 
 class InternetExplorer {
@@ -37,12 +41,41 @@ class InternetExplorer {
 		
 		Send, ^b ; Element picker hotkey
 	}
+
+	;---------
+	; DESCRIPTION:    Open the file-type link under the mouse.
+	;---------
+	openLinkTarget() {
+		path := ClipboardLib.getWithFunction(ObjBindMethod(InternetExplorer, "getLinkTargetOnClipboard"))
+		if(path) {
+			new Toast("Got link target, opening:`n" path).showShort()
+			Run(path)
+		} else {
+			new ErrorToast("Failed to get link target").showMedium()
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Copy the file-type link under the mouse, also showing the user a toast about it.
+	;---------
+	copyLinkTarget() {
+		ClipboardLib.copyWithFunction(ObjBindMethod(InternetExplorer, "getLinkTargetOnClipboard"))
+		ClipboardLib.toastNewValue("link target")
+	}
 	
 	
 	; #PRIVATE#
 	static F12DevToolsTitleString := "ahk_class F12FrameWindow ahk_exe IEXPLORE.EXE"
 	static ClassNN_F12DevToolsToolbar := "Internet Explorer_Server8"
 	
+	;---------
+	; DESCRIPTION:    Copy the target of the link under the mouse to the clipboard.
+	;---------
+	getLinkTargetOnClipboard() {
+		Click, Right
+		Sleep, 100     ; Wait for right-click menu to appear
+		Send, t{Enter} ; Copy Shortcut
+	}
 	
 	; #END#
 }

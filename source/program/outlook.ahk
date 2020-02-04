@@ -45,6 +45,9 @@
 		Send, oc
 		Send, a
 	return
+	
+	+WheelDown::Send, {Right}
+	+WheelUp::  Send, {Left}
 #If
 
 ; Universal new email.

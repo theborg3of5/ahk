@@ -28,7 +28,7 @@
 	return
 	
 	; Make (compile).
-	^m::
+	^+b::
 		Send, !f
 		Sleep, 100
 		Send, k

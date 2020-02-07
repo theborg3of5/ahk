@@ -168,7 +168,7 @@ class Explorer {
 		
 		; Optionally create shortcut to parent folder as well
 		if(GuiLib.showConfirmationPopup("Also create shortcut to target parent?"))
-			this.createRelativeShortcut(sourceFolder, FileLib.getParentFolder(relativePath))
+			this.createRelativeShortcut(sourceFolder, FileLib.getParentFolder(relativePath) " Folder")
 		
 		t := new Toast("Created shortcuts!").showShort()
 	}

@@ -15,7 +15,6 @@
 	Dishes from weekend
 	Trash, recycling out
 	Meal planning
-	Dishes from dinner
 	Order/obtain groceries
 	Review/type Ninpo notes
 	Pull to-dos from specific sections below

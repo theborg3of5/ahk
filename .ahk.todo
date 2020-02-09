@@ -1,4 +1,7 @@
 # New Ideas
+	Pull out/simplify TortoiseSVN DLG-filler script for coworkers
+	Revision URLs with TortoiseSVN
+		url := "tsvncmd:command:log?path:http://einstein/svn/dev1/branches?startrev:" revisionNum "?endrev:" revisionNum
 	Consider using TextTable for these use cases:
 		Debug toast
 		Debug popup (would need to set font if so)

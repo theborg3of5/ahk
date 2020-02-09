@@ -147,10 +147,10 @@ class Chrome {
 	; DESCRIPTION:    Open the file-type link under the mouse.
 	;---------
 	openLinkTarget() {
-		filePath := ClipboardLib.getWithFunction(ObjBindMethod(Chrome, "getLinkTargetOnClipboard"))
-		if(filePath) {
-			new Toast("Got link target, opening:`n" filePath).showShort()
-			Run(filePath)
+		path := ClipboardLib.getWithFunction(ObjBindMethod(Chrome, "getLinkTargetOnClipboard"))
+		if(path) {
+			new Toast("Got link target, opening:`n" path).showShort()
+			Run(path)
 		} else {
 			new ErrorToast("Failed to get link target").showMedium()
 		}

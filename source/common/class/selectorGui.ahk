@@ -73,7 +73,7 @@ class SelectorGui {
 	; Special characters
 	static Char_NewColumn := "! " ; Space after is required
 	
-	static Prefix_GuiSpecialLabels        := "SelectorGui"
+	static Prefix_GuiSpecialLabels        := "SelectorGui_"
 	static FieldVarSuffix_Choice          := "Choice"
 	static FieldVarSuffix_OverridesPrefix := "Override"
 	static FontColor_Default              := "BDAE9D"
@@ -133,10 +133,10 @@ class SelectorGui {
 		this.fieldVar_Choice          := guiId SelectorGui.FieldVarSuffix_Choice
 		this.fieldVar_OverridesPrefix := guiId SelectorGui.FieldVarSuffix_OverridesPrefix
 		
-		Gui, % "+LastFound +Label" SelectorGui.Prefix_GuiSpecialLabels  ; +LabelSelectorGui: Gui* events will call SelectorGui* functions (GuiClose > SelectorGuiClose, etc.).
+		Gui, % "+LastFound +Label" SelectorGui.Prefix_GuiSpecialLabels  ; +LabelSelectorGui: Gui* events will call SelectorGui* functions (GuiClose > SelectorGui_Close, etc.).
 		Gui, Color, 2A211C
 		Gui, Font, % "s12 c" SelectorGui.FontColor_Default
-		Gui, Add, Button, Hidden Default +gSelectorGuiSubmit ; Hidden button for {Enter} submission.
+		Gui, Add, Button, Hidden Default +gSelectorGui_Submit ; Hidden button for {Enter} submission.
 	}
 	
 	;---------
@@ -245,7 +245,7 @@ class SelectorGui {
 	;                 data regardless of the choice they pick.
 	;---------
 	addOverrideFields() {
-		Gui, Font, % "c" SelectorGui.FontColor_Ghost ; Start out gray (default, ghost-texty values) - SelectorGuiOverrideFieldChanged() will change it dynamically based on contents.
+		Gui, Font, % "c" SelectorGui.FontColor_Ghost ; Start out gray (default, ghost-texty values) - SelectorGui_OverrideFieldChanged() will change it dynamically based on contents.
 		
 		; Where to start placing override fields - lines up with the first choice column's names.
 		xOverridesBlock := this.Margins["LEFT"] + this.Widths["INDEX"] + this.Padding["INDEX_ABBREV"] + this.Widths["ABBREV"] + this.Padding["ABBREV_NAME"]
@@ -259,7 +259,7 @@ class SelectorGui {
 		
 		For _,label in this.overrideFields {
 			varName := this.fieldVar_OverridesPrefix label
-			this.addField(varName, x, y, width, this.Heights["FIELD"], label, SelectorGui.Prefix_GuiSpecialLabels "OverrideFieldChanged") ; Default in the label, like ghost text, and bind any changes to SelectorGuiOverrideFieldChanged().
+			this.addField(varName, x, y, width, this.Heights["FIELD"], label, SelectorGui.Prefix_GuiSpecialLabels "OverrideFieldChanged") ; Default in the label, like ghost text, and bind any changes to SelectorGui_OverrideFieldChanged().
 			x += width + this.Padding["OVERRIDE_FIELDS"]
 		}
 	}
@@ -369,16 +369,16 @@ class SelectorGui {
 ; GUI Events - these can't live in the class because they're only specified by name (via the +Label option on the gui).
 
 ; Window was closed
-SelectorGuiClose() {
+SelectorGui_Close() {
 	Gui, Destroy
 }
 ; Enter was pressed (which fires the hidden, default button)
-SelectorGuiSubmit() {
+SelectorGui_Submit() {
 	Gui, Submit ; Actually saves edit controls' values to respective GuiIn* variables
 	Gui, Destroy
 }
 ; One of the override fields changed
-SelectorGuiOverrideFieldChanged() {
+SelectorGui_OverrideFieldChanged() {
 	fieldName := A_GuiControl.removeFromStart(A_Gui SelectorGui.FieldVarSuffix_OverridesPrefix)
 	value := GuiControlGet("", A_GuiControl)
 	; Debug.popup("A_GuiControl",A_GuiControl, "A_Gui",A_Gui, "fieldName",fieldName, "value",value)

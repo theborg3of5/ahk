@@ -32,9 +32,9 @@ class DebugPopup {
 	__New() { ; GDB TODO take it variadic parameters and turn them into a dataTable for TextTable
 		
 		
-		global DebugEdit := 5
+		global DebugEdit := 5 ; GDB TODO do this nicer, probably with a unique, incrementing value like SelectorGui does
 		
-		
+		; GDB TODO move all of these to constants
 		fontSize := 12 ; 12pt
 		fontName := "Consolas"
 		editLineHeight := 19 ; For size 12 Consolas

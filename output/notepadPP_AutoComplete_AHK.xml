@@ -2076,7 +2076,7 @@
         <KeyWord name="DataLib.max" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Find the numberic maximum of the given numbers.
+							; DESCRIPTION:    Find the numeric maximum of the given numbers.
 							; PARAMETERS:
 							;  nums* (I,REQ) - Variadic parameter - as many numbers as desired.
 							; RETURNS:        The numeric maximum of all given numbers.
@@ -2104,6 +2104,18 @@
 							; RETURNS:        The number as an integer.
 							;---------">
                 <Param name="num" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DataLib.sum" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Find the numeric sum of all elements.
+							; PARAMETERS:
+							;  nums* (I,REQ) - Variadic parameter - as many numbers as desired.
+							; RETURNS:        The total of all elements
+							; NOTES:          Any non-numeric indices will be treated as 0.
+							;---------">
+                <Param name="nums*" />
             </Overload>
         </KeyWord>
         <KeyWord name="DataLib.updateMax" func="yes">
@@ -3972,22 +3984,6 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Thickness of the top/bottom borders for windows with a caption that are sizable (uses SM_CYSIZEFRAME/SM_CYFRAME).
-							; GROUP:          System-level window measurements ( https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics )
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="MicrosoftLib.MaximizedWindowHeight" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Total width of a maximized window on the primary monitor. Includes any weird offsets. (uses SM_CXMAXIMIZED)
-							; GROUP:          System-level window measurements ( https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics )
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="MicrosoftLib.MaximizedWindowWidth" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Total height of a maximized window on the primary monitor. Includes any weird offsets. (uses SM_CYMAXIMIZED)
 							; GROUP:          System-level window measurements ( https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics )
 							;---------">
             </Overload>
@@ -6021,6 +6017,17 @@
                 <Param name="numToGet" />
             </Overload>
         </KeyWord>
+        <KeyWord name="StringLib.getNewlines" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the specified number of newlines.
+							; PARAMETERS:
+							;  numToGet (I,REQ) - How many newlines to return.
+							; RETURNS:        As many newlines as requested.
+							;---------">
+                <Param name="numToGet" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="StringLib.getSpaces" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -6536,6 +6543,14 @@
 							;---------
 							; DESCRIPTION:    Generate the table as a string
 							; RETURNS:        The table, as a string
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TextTable.getWidth" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the current total width of the table.
+							; RETURNS:        The current width of the table, including all columns and padding.
 							;---------">
             </Overload>
         </KeyWord>

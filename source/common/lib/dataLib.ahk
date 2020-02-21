@@ -59,7 +59,7 @@ class DataLib {
 	}
 	
 	;---------
-	; DESCRIPTION:    Find the numberic maximum of the given numbers.
+	; DESCRIPTION:    Find the numeric maximum of the given numbers.
 	; PARAMETERS:
 	;  nums* (I,REQ) - Variadic parameter - as many numbers as desired.
 	; RETURNS:        The numeric maximum of all given numbers.
@@ -76,6 +76,20 @@ class DataLib {
 		}
 		
 		return max
+	}
+	
+	;---------
+	; DESCRIPTION:    Find the numeric sum of all elements.
+	; PARAMETERS:
+	;  nums* (I,REQ) - Variadic parameter - as many numbers as desired.
+	; RETURNS:        The total of all elements
+	; NOTES:          Any non-numeric indices will be treated as 0.
+	;---------
+	sum(nums*) {
+		total := 0
+		For _,n in nums
+			total += DataLib.forceNumber(n)
+		return total
 	}
 	
 	;---------

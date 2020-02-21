@@ -55,6 +55,15 @@ class StringLib {
 		return StringLib.duplicate(A_Tab, numToGet)
 	}
 	;---------
+	; DESCRIPTION:    Get the specified number of newlines.
+	; PARAMETERS:
+	;  numToGet (I,REQ) - How many newlines to return.
+	; RETURNS:        As many newlines as requested.
+	;---------
+	getNewlines(numToGet) {
+		return StringLib.duplicate("`n", numToGet)
+	}
+	;---------
 	; DESCRIPTION:    Get the specified number of dots.
 	; PARAMETERS:
 	;  numToGet (I,REQ) - How many dots to return.

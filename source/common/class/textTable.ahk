@@ -27,9 +27,6 @@ class TextTable {
 	;  dataTable (I,OPT) - 2-dimensional array of string values to include in the table.
 	;---------
 	__New(dataTable := "") {
-		if(spacesBetweenColumns != "")
-			spacesBetweenColumns := spacesBetweenColumns
-		
 		; Add any provided rows
 		For _,row in dataTable
 			this.addRow(row)
@@ -84,6 +81,17 @@ class TextTable {
 		}
 		
 		this._addRow(newRow)
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the current total width of the table.
+	; RETURNS:        The current width of the table, including all columns and padding.
+	;---------
+	getWidth() {
+		columnsTotal := DataLib.sum(this.columnWidths*)
+		paddingTotal := this.spacesBetweenColumns * (this.columnWidths.count() - 1)
+		
+		return columnsTotal + paddingTotal
 	}
 	
 	;---------

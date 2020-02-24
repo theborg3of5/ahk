@@ -165,8 +165,6 @@ class Debug {
 		
 		; Otherwise, assume we have a list of label,value pairs (2 parameters at a time go together).
 		pairedParams := this.convertParamsToPaired(params)
-		; For i,row in pairedParams
-			; MsgBox, % i "`n" row["LABEL"] "`n" row["VALUE"]
 		
 		For i,row in pairedParams {
 			newString := this.buildDebugStringForPair(row["LABEL"], row["VALUE"])
@@ -249,42 +247,11 @@ class Debug {
 			return outString
 		}
 		
-		
-		
-		; typeName := ""
-		; if(isFunc(value.getDebugDisplay)) {
-			; builder := new DebugBuilder(numTabs + 1)
-			; value.getDebugDisplay(typeName, builder)
-			
-			; ; If an object has its own type name specified, use it.
-			; if(typeName != "")
-				; outString .= "{" typeName "}"
-			; ; For other objects, just use a generic "Array" or "Object" label and add the number of elements.
-			; else if(value.isArray)
-				; outString .= "Array (" value.count() ")"
-			; else
-				; outString .= "Object (" value.count() ")"
-			
-			; builderString := builder.toString()
-			; if(builderString != "") {
-				; outString .= "`n" builderString
-			; } else {
-				; For subIndex,subVal in value
-					; outString .= "`n" this.buildValueDebugString(subVal, numTabs + 1, true, subIndex)
-			; }
-		; }
-		
-		
-		
+		; Add object name
 		outString .= this.getObjectName(value)
 		
-		; If an object has its own logic for what to display for debug, use that.
-		if(isFunc(value.buildDebugDisplay)) {
-			builder := new DebugBuilder(numTabs + 1)
-			value.buildDebugDisplay(builder)
-			outString .= "`n" builder.toString()
 		; If an object has its own debug printout, use that rather than looping.
-		} else if(isFunc(value.Debug_ToString)) {
+		if(isFunc(value.Debug_ToString)) {
 			builder := new DebugBuilder(numTabs + 1)
 			value.Debug_ToString(builder)
 			outString .= "`n" builder.toString()
@@ -316,7 +283,6 @@ class Debug {
 	;---------
 	getObjectName(value) {
 		; If an object has its own name specified, use it.
-		
 		if(isFunc(value.Debug_TypeName))
 			return "{" value.Debug_TypeName() "}"
 			

@@ -29,7 +29,7 @@ class DebugPopup {
 	
 	;  - properties
 	;  - __New()/Init()
-	__New() { ; GDB TODO take it variadic parameters and turn them into a dataTable for TextTable
+	__New(dataTable) { ; GDB TODO take it variadic parameters and turn them into a dataTable for TextTable
 		
 		
 		global DebugEdit := 5 ; GDB TODO do this nicer, probably with a unique, incrementing value like SelectorGui does
@@ -45,8 +45,21 @@ class DebugPopup {
 		backgroundColor := "2A211C"
 		fontColor := "BDAE9D"
 		
-		dataTable := [ ["A", "B"], ["C", "De"], ["F", "Gee"] ]
-		tt := new TextTable(dataTable)
+		; winId       := WinGet("ID", "A")
+		; winInfo     := Config.findWindowInfo()
+		; winExe      := WinGet("ProcessName", "A")
+		; winClass    := WinGetClass("A")
+		; title       := WinGetTitle("A")
+		; tooltipText := getTooltipText()
+		; currControl := ControlGetFocus("A")
+		; dataTable := [ ["ID", winId], ["Name", winInfo.name], ["EXE", winExe], ["Class", winClass], ["Title", title], ["Tooltip Text", tooltipText], ["Current Control ID", currControl], ["WinInfo", winInfo] ]
+		
+		; dataTable := Debug.convertParamsToPaired(params)
+		
+		
+		
+		
+		tt := new TextTable(dataTable).setColumnPadding(4)
 		message := tt.generateText()
 		lineWidth := tt.getWidth()
 		
@@ -120,7 +133,7 @@ class DebugPopup {
 		
 		Gui, Add, Button, Hidden Default gDebugPopupGui_Close x0 y0 ; DebugPopupGui_Close call on click/activate
 		
-		Gui, -MinimizeBox -MaximizeBox
+		Gui, -MinimizeBox -MaximizeBox +ToolWindow
 		GuiControl, Focus, % this.EditField_VarName
 		
 		; guiWidth := editWidth + 10

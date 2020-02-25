@@ -72,13 +72,12 @@ class DebugPopup {
 			( LTrim0
 Alpha:    alpha
 Beta:     beta
-Cee:      cee
 Delta:    Selector {}
             DeltaOne   | delta1                          
-            DeltaTwo   | delta2                          
             DeltaThree | TableList {}
                             DeltaThreeAlpha | delta3alpha
                             DeltaThreeBeta  | delta3beta
+            DeltaTwo   | delta2                          
 Epsilon:  Array (3)
             1  | epsilon1
             2  | episolon2

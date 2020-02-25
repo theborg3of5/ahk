@@ -46,9 +46,89 @@ class DebugPopup {
 		fontColor := "BDAE9D"
 		
 		
-		tt := new TextTable(dataTable).setColumnPadding(4)
-		message := tt.generateText()
-		lineWidth := tt.getWidth()
+		; tt := new TextTable(dataTable).setColumnPadding(4)
+		; message := tt.generateText()
+		; lineWidth := tt.getWidth()
+		
+		message := "
+			( LTrim0
+Alpha:    alpha
+Beta:     beta
+Cee:      cee
+           ________
+Delta:    |Selector|__________________________________________
+          |   [DeltaOne]    delta1                            |
+          |   [DeltaTwo]    delta2                            |
+			 |                  _________                        |
+          |   [DeltaThree]  |TableList|_____________________  |
+          |                 | [DeltaThreeAlpha]  delta3alpha| |
+          |                 | [DeltaThreeBeta]   delta3beta | |
+          |                 |_______________________________| |
+          |___________________________________________________|
+Epsilon:  Array (3)
+            [1]   epsilon1
+            [2]   episolon2
+            [3]   epsilon3
+            [10]  episolon10
+)"
+
+		; message := "
+			; ( LTrim0
+; Alpha:    alpha
+; Beta:     beta
+; Cee:      cee
+; Delta:    {Selector}
+           ; - [DeltaOne]    delta1
+           ; - [DeltaTwo]    delta2
+           ; - [DeltaThree]  {TableList}
+                            ; - [DeltaThreeAlpha] delta3alpha
+                            ; - [DeltaThreeBeta]  delta3beta
+; Epsilon:  Array (3)
+           ; - [1]   epsilon1
+           ; - [2]   episolon2
+           ; - [3]   epsilon3
+           ; - [10]  episolon10
+; )"
+
+		; message := "
+			; ( LTrim0
+; Alpha:    alpha
+; Beta:     beta
+; Cee:      cee
+; Delta:    {Selector}
+           ; - DeltaOne:   delta1
+           ; - DeltaTwo:   delta2
+           ; - DeltaThree: {TableList}
+                          ; - DeltaThreeAlpha: delta3alpha
+                          ; - DeltaThreeBeta:  delta3beta
+; Epsilon:  Array (3)
+           ; - 1:  epsilon1
+           ; - 2:  episolon2
+           ; - 3:  epsilon3
+           ; - 10: episolon10
+; )"
+
+		; message := "
+			; ( LTrim0
+; Alpha:    alpha
+; Beta:     beta
+; Cee:      cee
+; Delta:    {Selector}
+            ; DeltaOne:   delta1
+            ; DeltaTwo:   delta2
+            ; DeltaThree: {TableList}
+                          ; DeltaThreeAlpha: delta3alpha
+                          ; DeltaThreeBeta:  delta3beta
+; Epsilon:  Array (3)
+            ; 1:  epsilon1
+            ; 2:  episolon2
+            ; 3:  epsilon3
+            ; 10: episolon10
+; )"
+
+		lineWidth := 61
+		
+		
 		
 		; Debug.popup("message",message, "tt.getWidth()",tt.getWidth())
 		

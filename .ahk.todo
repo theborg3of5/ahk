@@ -6,6 +6,7 @@
 			Sleep, 100
 			Send, {Down 5}{Enter}
 		Edit version too, just for completeness (would just press enter to open)
+	Should reloading the script also release all modifiers?
 	Revision URLs with TortoiseSVN
 		url := "tsvncmd:command:log?path:http://einstein/svn/dev1/branches?startrev:" revisionNum "?endrev:" revisionNum
 	Consider using TextTable for these use cases:

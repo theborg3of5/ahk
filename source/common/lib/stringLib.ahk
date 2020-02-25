@@ -37,6 +37,21 @@ class StringLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Indent the entire given block of text by adding the given number of spaces to
+	;                 the start of each line.
+	; PARAMETERS:
+	;  textBlock  (I,REQ) - The block of text to indent. May have either `r`n or `n-style newlines.
+	;  numSpaces  (I,REQ) - The number of spaces to indent by.
+	; RETURNS:        The indented block
+	;---------
+	indentBlock(textBlock, numSpaces) {
+		indentText := StringLib.getSpaces(numSpaces)
+		newBlock := indentText textBlock ; Make sure to indent the first row, too
+		
+		return newBlock.replace("`n", "`n" indentText)
+	}
+	
+	;---------
 	; DESCRIPTION:    Get the specified number of spaces.
 	; PARAMETERS:
 	;  numToGet (I,REQ) - How many spaces to return.

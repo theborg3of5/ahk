@@ -6,10 +6,10 @@
 ;		dataTable.push(["val1", "val2", "val3"])
 ;		dataTable.push(["value4", "value5", "value6"])
 ;		tt := new TextTable(dataTable)
-;		tt.setColumnPadding(1) ; Minimum number of spaces between values
+;		tt.setColumnDivider(" ") ; Divider between columns (1 space)
 ;		tt.setDefaultAlignment(TextAlignment.Center) ; All columns default to centered
 ;		tt.setColumnAlignment(2, TextAlignment.Right) ; Column 2 (base-1 indexed)
-;		tt.addRow(["v7", "v8", "v9"]) ; Add a new row dynamically (settings still apply)
+;		tt.addRow("v7", "v8", "v9") ; Add a new row dynamically (settings still apply)
 ;		output := tt.generateText()
 ;		
 ;		output:
@@ -29,17 +29,17 @@ class TextTable {
 	__New(dataTable := "") {
 		; Add any provided rows
 		For _,row in dataTable
-			this.addRow(row)
+			this.addRow(row*)
 	}
 	
 	;---------
-	; DESCRIPTION:    Set the minimum number of spaces between values in each row.
+	; DESCRIPTION:    Set the string that will be put between each cell in a row.
 	; PARAMETERS:
-	;  numSpaces (I,REQ) - How many spaces to require
+	;  dividerString (I,REQ) - The new divider string
 	; RETURNS:        this
 	;---------
-	setColumnPadding(numSpaces) {
-		this.spacesBetweenColumns := numSpaces
+	setColumnDivider(dividerString) {
+		this.columnDividerString := dividerString
 		return this
 	}
 	
@@ -69,18 +69,18 @@ class TextTable {
 	;---------
 	; DESCRIPTION:    Add a new row to the table.
 	; PARAMETERS:
-	;  newRow (I,REQ) - An array of values to add as a new row in the table.
+	;  newValues* (I,REQ) - Variadic parameter, pass in however many elements you want in column order.
 	;---------
-	addRow(newRow) {
+	addRow(newValues*) {
 		; If any of the values are multi-line, split the row up into multiple and add those.
-		For _,value in newRow {
+		For _,value in newValues {
 			if(value.countMatches("`n")) {
-				this.handleMultiLineValues(newRow)
+				this.handleMultiLineValues(newValues)
 				return
 			}
 		}
 		
-		this._addRow(newRow)
+		this._addRow(newValues)
 	}
 	
 	;---------
@@ -89,7 +89,7 @@ class TextTable {
 	;---------
 	getWidth() {
 		columnsTotal := DataLib.sum(this.columnWidths*)
-		paddingTotal := this.spacesBetweenColumns * (this.columnWidths.count() - 1)
+		paddingTotal := this.columnDividerString.length() * (this.columnWidths.count() - 1)
 		
 		return columnsTotal + paddingTotal
 	}
@@ -100,13 +100,12 @@ class TextTable {
 	;---------
 	generateText() {
 		outputString := ""
-		columnPadding := StringLib.getSpaces(this.spacesBetweenColumns)
 		
 		For _,row in this.dataTable {
 			rowString := ""
 			For columnIndex,value in row {
 				cellString := this.formatValue(value, columnIndex)
-				rowString := rowString.appendPiece(cellString, columnPadding)
+				rowString := rowString.appendPiece(cellString, this.columnDividerString)
 			}
 			outputString := outputString.appendLine(rowString)
 		}
@@ -119,7 +118,7 @@ class TextTable {
 	dataTable            := []                 ; Our 2-dimensional array of values.
 	columnWidths         := []                 ; Numbers of characters
 	columnAlignments     := []                 ; TextAlignment.* values, defaults to this.defaultAlignment
-	spacesBetweenColumns := 2                  ; Minimum number of spaces between cell values
+	columnDividerString  := "  "               ; The text that should divide cells in a row
 	defaultAlignment     := TextAlignment.Left ; The default alignment for all cells
 	
 	;---------

@@ -6050,6 +6050,20 @@
                 <Param name="numToGet" />
             </Overload>
         </KeyWord>
+        <KeyWord name="StringLib.indentBlock" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Indent the entire given block of text by adding the given number of spaces to
+							;                 the start of each line.
+							; PARAMETERS:
+							;  textBlock  (I,REQ) - The block of text to indent. May have either `r`n or `n-style newlines.
+							;  numSpaces  (I,REQ) - The number of spaces to indent by.
+							; RETURNS:        The indented block
+							;---------">
+                <Param name="textBlock" />
+                <Param name="numSpaces" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="StringLower" func="no">
             <Overload retVal="">
                 <Param name="OutputVar"/>
@@ -6533,9 +6547,9 @@
 							;---------
 							; DESCRIPTION:    Add a new row to the table.
 							; PARAMETERS:
-							;  newRow (I,REQ) - An array of values to add as a new row in the table.
+							;  newValues* (I,REQ) - Variadic parameter, pass in however many elements you want in column order.
 							;---------">
-                <Param name="newRow" />
+                <Param name="newValues*" />
             </Overload>
         </KeyWord>
         <KeyWord name="TextTable.generateText" func="yes">
@@ -6567,15 +6581,15 @@
                 <Param name="newAlignment" />
             </Overload>
         </KeyWord>
-        <KeyWord name="TextTable.setColumnPadding" func="yes">
+        <KeyWord name="TextTable.setColumnDivider" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Set the minimum number of spaces between values in each row.
+							; DESCRIPTION:    Set the string that will be put between each cell in a row.
 							; PARAMETERS:
-							;  numSpaces (I,REQ) - How many spaces to require
+							;  dividerString (I,REQ) - The new divider string
 							; RETURNS:        this
 							;---------">
-                <Param name="numSpaces" />
+                <Param name="dividerString" />
             </Overload>
         </KeyWord>
         <KeyWord name="TextTable.setDefaultAlignment" func="yes">

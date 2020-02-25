@@ -45,19 +45,6 @@ class DebugPopup {
 		backgroundColor := "2A211C"
 		fontColor := "BDAE9D"
 		
-		; winId       := WinGet("ID", "A")
-		; winInfo     := Config.findWindowInfo()
-		; winExe      := WinGet("ProcessName", "A")
-		; winClass    := WinGetClass("A")
-		; title       := WinGetTitle("A")
-		; tooltipText := getTooltipText()
-		; currControl := ControlGetFocus("A")
-		; dataTable := [ ["ID", winId], ["Name", winInfo.name], ["EXE", winExe], ["Class", winClass], ["Title", title], ["Tooltip Text", tooltipText], ["Current Control ID", currControl], ["WinInfo", winInfo] ]
-		
-		; dataTable := Debug.convertParamsToPaired(params)
-		
-		
-		
 		
 		tt := new TextTable(dataTable).setColumnPadding(4)
 		message := tt.generateText()

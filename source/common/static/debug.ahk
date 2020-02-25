@@ -166,7 +166,7 @@ class Debug {
 		; Otherwise, assume we have a list of label,value pairs (2 parameters at a time go together).
 		pairedParams := this.convertParamsToPaired(params)
 		
-		For i,row in pairedParams {
+		For _,row in pairedParams {
 			newString := this.buildDebugStringForPair(row["LABEL"], row["VALUE"])
 			outString := outString.appendLine(newString)
 		}

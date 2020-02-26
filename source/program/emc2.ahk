@@ -5,10 +5,10 @@
 
 ; Main EMC2 window
 #If Config.isWindowActive("EMC2")
-	^h::Send, ^7     ; Make ^h for server object, similar to ^g for client object.
-	^+8::Send, !o    ; Contact comment, EpicStudio-style.
-	$F5::+F5         ; Make F5 work everywhere by mapping it to shift + F5.
-	^+t::return      ; Block ^+t login from Hyperspace - it does very strange zoom-in things and other nonsense.
+	^h::Send, ^7  ; Make ^h for server object, similar to ^g for client object.
+	^+8::Send, !o ; Contact comment, EpicStudio-style.
+	$F5::+F5      ; Make F5 work everywhere by mapping it to shift + F5.
+	^+t::return   ; Block ^+t login from Hyperspace - it does very strange zoom-in things and other nonsense.
 	
 	; Link and record number things based on the current record.
 	!c:: EMC2.copyCurrentRecord()          ; Get INI/ID
@@ -76,6 +76,14 @@ class EMC2 {
 	; DESCRIPTION:    Open the current record in web mode.
 	;---------
 	openCurrentRecordWeb() {
+		; Special case for worklist - use right-click menu as we don't have any info in the title for the selected row
+		if(Config.isWindowActive("EMC2 Worklist")) {
+			Send, {AppsKey} ; Right-click simulation
+			Sleep, 100      ; Wait for right-click menu to appear
+			Send, v{Enter}  ; "View * as HTML", "View *", or "View * in Browser" are all the first "V" item in the menu
+			return
+		}
+		
 		record := new EpicRecord().initFromEMC2Title()
 		new ActionObjectEMC2(record.id, record.ini).openWeb()
 	}

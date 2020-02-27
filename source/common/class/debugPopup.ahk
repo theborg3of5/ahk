@@ -27,9 +27,54 @@ class DebugPopup {
 		return (windowUnderMouse = this.guiId && mouseName = this.EditField_VarName)
 	}
 	
+	
+	buildValueDebugString(value) { ; GDB TODO these should move back into Debug when we're ready
+		; Base case - not a complex object, just return the value to show.
+		if(!isObject(value))
+			return value
+		
+		; For objects, compile child values
+		builder := new DebugBuilder2()
+		if(isFunc(value.Debug_ToString)) { ; If an object has its own debug logic, use that rather than looping.
+			value.Debug_ToString(builder)
+		} else {
+			For subIndex,subVal in value
+				builder.addLine(subIndex, subVal)
+		}
+		childBlock := builder.toString()
+		
+		; Final value is the name followed by the block of children on the next line, indented.
+		return getObjectName(value) "`n" StringLib.indentBlock(childBlock, 2)
+	}
+	
+	convertParamsToPaired(params*) {
+		pairedParams := []
+		
+		Loop, % params.MaxIndex() // 2 {
+			key   := params[A_Index * 2 - 1]
+			value := params[A_Index * 2]
+			pairedParams.Push({"LABEL":key, "VALUE":value})
+		}
+		
+		return pairedParams
+	}
+
+	getObjectName(value) {
+		; If an object has its own name specified, use it.
+		if(isFunc(value.Debug_TypeName))
+			return value.Debug_TypeName() " {}"
+			
+		; For other objects, just use a generic "Array"/"Object" label and add the number of elements.
+		if(value.isArray)
+			return "Array (" value.count() ")"
+		return "Object (" value.count() ")"
+	}
+	
+	
+	
 	;  - properties
 	;  - __New()/Init()
-	__New(dataTable) { ; GDB TODO take it variadic parameters and turn them into a dataTable for TextTable
+	__New(params*) { ; GDB TODO take it variadic parameters and turn them into a dataTable for TextTable
 		
 		
 		global DebugEdit := 5 ; GDB TODO do this nicer, probably with a unique, incrementing value like SelectorGui does
@@ -46,27 +91,35 @@ class DebugPopup {
 		fontColor := "BDAE9D"
 		
 		
-		tt := new TextTable(dataTable)
+		
+		paramPairs := this.convertParamsToPaired(params*)
+		
+		tt := new TextTable()
+		For _,row in paramPairs {
+			tt.addRow(row["LABEL"] ":", buildValueDebugString(row["VALUE"]))
+		}
+		
+		; tt := new TextTable(dataTable)
 		message := tt.generateText()
 		lineWidth := tt.getWidth()
 		
-		message := "
-			( LTrim0
-Alpha:    alpha
-Beta:     beta
-Delta:    Selector {}
-            DeltaOne   | delta1                          
-            DeltaThree | TableList {}
-                            DeltaThreeAlpha | delta3alpha
-                            DeltaThreeBeta  | delta3beta
-            DeltaTwo   | delta2                          
-Epsilon:  Array (3)
-            1  | epsilon1
-            2  | episolon2
-            3  | epsilon3
-            10 | episolon10
-)"
-		lineWidth := 58
+		; message := "
+			; ( LTrim0
+; Alpha:    alpha
+; Beta:     beta
+; Delta:    Selector {}
+            ; DeltaOne   | delta1                          
+            ; DeltaThree | TableList {}
+                            ; DeltaThreeAlpha | delta3alpha
+                            ; DeltaThreeBeta  | delta3beta
+            ; DeltaTwo   | delta2                          
+; Epsilon:  Array (3)
+            ; 1  | epsilon1
+            ; 2  | episolon2
+            ; 3  | epsilon3
+            ; 10 | episolon10
+; )"
+		; lineWidth := 58
 		
 		
 		
@@ -140,7 +193,7 @@ Epsilon:  Array (3)
 		
 		Gui, Add, Button, Hidden Default gDebugPopupGui_Close x0 y0 ; DebugPopupGui_Close call on click/activate
 		
-		Gui, -MinimizeBox -MaximizeBox +ToolWindow
+		Gui, -MinimizeBox -MaximizeBox ; +ToolWindow
 		GuiControl, Focus, % this.EditField_VarName
 		
 		; guiWidth := editWidth + 10

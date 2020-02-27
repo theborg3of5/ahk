@@ -5,6 +5,7 @@
 	
 	GDB TODO
 		Update auto-complete and syntax highlighting notepad++ definitions
+		Consider adding something (row of dashes/underscores that's the full width, maybe?) to the bottom (and maybe pipes or similar to the right margin?) if it's tall enough to need scrolling.
 	
 */ ; =--
 
@@ -44,7 +45,7 @@ class DebugPopup {
 		childBlock := builder.toString()
 		
 		; Final value is the name followed by the block of children on the next line, indented.
-		return getObjectName(value) "`n" StringLib.indentBlock(childBlock, 2)
+		return this.getObjectName(value) "`n" StringLib.indentBlock(childBlock, 2)
 	}
 	
 	convertParamsToPaired(params*) {
@@ -71,6 +72,7 @@ class DebugPopup {
 	}
 	
 	
+; Edit width = 9*numChars + 13
 	
 	;  - properties
 	;  - __New()/Init()
@@ -96,7 +98,7 @@ class DebugPopup {
 		
 		tt := new TextTable()
 		For _,row in paramPairs {
-			tt.addRow(row["LABEL"] ":", buildValueDebugString(row["VALUE"]))
+			tt.addRow(row["LABEL"] ":", this.buildValueDebugString(row["VALUE"]))
 		}
 		
 		; tt := new TextTable(dataTable)
@@ -162,10 +164,12 @@ class DebugPopup {
 		
 		
 		
-		
-		
+		; GDB TODO can we use a blank icon with this logic to have a popup with no icon?
+		; tempIcon := A_IconFile
+		; Menu, Tray, Icon, % "testRed.ico"
 		Gui, New, % "+HWNDguiId +Label" this.Prefix_GuiSpecialLabels ; guiId := gui's window handle, DebugPopupGui_* functions instead of Gui*
 		this.guiId := guiId
+		; Menu, Tray, Icon, % tempIcon
 		
 		Gui, Margin, 5, 5
 		Gui, Color, % backgroundColor
@@ -193,7 +197,7 @@ class DebugPopup {
 		
 		Gui, Add, Button, Hidden Default gDebugPopupGui_Close x0 y0 ; DebugPopupGui_Close call on click/activate
 		
-		Gui, -MinimizeBox -MaximizeBox ; +ToolWindow
+		Gui, -MinimizeBox -MaximizeBox  ;+0x800000 ; 0x800000=WS_BORDER ; -0x400000 ; 0x400000=WS_DLGFRAME +ToolWindow
 		GuiControl, Focus, % this.EditField_VarName
 		
 		; guiWidth := editWidth + 10
@@ -278,4 +282,53 @@ class DebugPopup {
 
 DebugPopupGui_Close() {
 	Gui, Destroy
+}
+
+
+
+
+class DebugBuilder2 {
+	; #PUBLIC#
+	
+	;---------
+	; DESCRIPTION:    Create a new DebugBuilder instance.
+	; PARAMETERS:
+	;  numTabs (I,OPT) - How many levels of indentation the string should start at. Added lines will
+	;                    be at this level + 1.
+	; RETURNS:        Reference to new DebugBuilder object
+	;---------
+	__New() {
+		this.tt := new TextTable().setColumnDivider(" | ")
+	}
+	
+	;---------
+	; DESCRIPTION:    Add a properly-indented line* with the given label and value to the output
+	;                 string.
+	; PARAMETERS:
+	;  label (I,REQ) - The label to show for the given value
+	;  value (I,REQ) - The value to evaluate and show. Will be treated according to the logic
+	;                  described in the DEBUG class (see that class documentation for details).
+	; NOTES:          A "line" may actually contain multiple newlines, but anything below the
+	;                 initial line will be indented 1 level deeper.
+	;---------
+	addLine(label, value) {
+		this.tt.addRow(label, DebugPopup.buildValueDebugString(value))
+		; newLine := Debug.buildDebugStringForPair(label, value, this.numTabs)
+		; this.outString := this.outString.appendLine(newLine)
+	}
+	
+	;---------
+	; DESCRIPTION:    Retrieve the debug string built by this class.
+	; RETURNS:        The string built by this class, in full.
+	;---------
+	toString() {
+		return this.tt.generateText()
+	}
+	
+	
+	; #PRIVATE#
+	
+	tt   := ""  ; How indented our base level of text should be.
+	; outString := "" ; Built-up string to eventually return.
+	; #END#
 }

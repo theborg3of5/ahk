@@ -43,8 +43,19 @@ class DebugPopup {
 				builder.addLine(subIndex, subVal)
 		}
 		childBlock := builder.toString()
-		if(childBlock != "") ; Child block should be indented, all together
-			childBlock := StringLib.indentBlock(childBlock, 2)
+		if(childBlock != "") {
+			newBlock := ""
+			Loop, Parse, childBlock, "`n"
+				newBlock := newBlock.appendLine(Chr(0x2502) " " A_LoopField " " Chr(0x2502)) ; 0x2502 │
+			childBlock := newBlock
+			
+			; 0x252C ┬, 0x2534 ┴
+			topLine := Chr(0x250C) Chr(0x2500) StringLib.duplicate(Chr(0x2500), 29) Chr(0x252C) StringLib.duplicate(Chr(0x2500), builder.tt.getWidth() - 30) Chr(0x2500) Chr(0x2510) ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
+			bottomLine := Chr(0x2514) Chr(0x2500) StringLib.duplicate(Chr(0x2500), builder.tt.getWidth()) Chr(0x2500) Chr(0x2518) ; 0x2500 ─, 0x2514 └, 0x2518 ┘
+			childBlock := topLine "`n" childBlock "`n" bottomLine
+			
+			; childBlock := StringLib.indentBlock(childBlock, 2) ; Child block should be indented, all together
+		}
 		
 		; Final value is the name followed by the (indented) block of children on the next line.
 		objName := this.getObjectName(value)
@@ -111,11 +122,15 @@ class DebugPopup {
 
 		
 		Loop, Parse, message, "`n"
-			newMessage := newMessage.appendLine("| " A_LoopField " |")
+			newMessage := newMessage.appendLine(Chr(0x2503) " " A_LoopField " " Chr(0x2503)) ; 0x2503 ┃
+			; newMessage := newMessage.appendLine(Chr(0x2502) " " A_LoopField " " Chr(0x2502)) ; 0x2502 │
 		message := newMessage
 		
-		edgeLine := "+-" StringLib.duplicate("-", lineWidth) "-+"
-		message := edgeLine "`n" message "`n" edgeLine
+		; topLine := Chr(0x250C) Chr(0x2500) StringLib.duplicate(Chr(0x2500), lineWidth) Chr(0x2500) Chr(0x2510) ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
+		; bottomLine := Chr(0x2514) Chr(0x2500) StringLib.duplicate(Chr(0x2500), lineWidth) Chr(0x2500) Chr(0x2518) ; 0x2500 ─, 0x2514 └, 0x2518 ┘
+		topLine := Chr(0x250F) Chr(0x2501) StringLib.duplicate(Chr(0x2501), lineWidth) Chr(0x2501) Chr(0x2513) ; 0x2501 ━, 0x250F ┏, 0x2513 ┓
+		bottomLine := Chr(0x2501) Chr(0x2501) StringLib.duplicate(Chr(0x2501), lineWidth) Chr(0x2501) Chr(0x251B) ; 0x2501 ━, 0x2517 ┗, 0x251B ┛
+		message := topLine "`n" message "`n" bottomLine
 		
 		lineWidth += 4
 		numLines += 2
@@ -282,7 +297,7 @@ class DebugBuilder2 {
 	; RETURNS:        Reference to new DebugBuilder object
 	;---------
 	__New() {
-		this.tt := new TextTable().setColumnDivider(" | ")
+		this.tt := new TextTable().setColumnDivider(" " Chr(0x2502) " ")
 	}
 	
 	;---------

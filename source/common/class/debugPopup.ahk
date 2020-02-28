@@ -43,9 +43,12 @@ class DebugPopup {
 				builder.addLine(subIndex, subVal)
 		}
 		childBlock := builder.toString()
+		if(childBlock != "") ; Child block should be indented, all together
+			childBlock := StringLib.indentBlock(childBlock, 2)
 		
-		; Final value is the name followed by the block of children on the next line, indented.
-		return this.getObjectName(value) "`n" StringLib.indentBlock(childBlock, 2)
+		; Final value is the name followed by the (indented) block of children on the next line.
+		objName := this.getObjectName(value)
+		return objName.appendLine(childBlock)
 	}
 	
 	convertParamsToPaired(params*) {
@@ -101,33 +104,13 @@ class DebugPopup {
 			tt.addRow(row["LABEL"] ":", this.buildValueDebugString(row["VALUE"]))
 		}
 		
-		; tt := new TextTable(dataTable)
 		message := tt.generateText()
 		lineWidth := tt.getWidth()
-		
-		; message := "
-			; ( LTrim0
-; Alpha:    alpha
-; Beta:     beta
-; Delta:    Selector {}
-            ; DeltaOne   | delta1                          
-            ; DeltaThree | TableList {}
-                            ; DeltaThreeAlpha | delta3alpha
-                            ; DeltaThreeBeta  | delta3beta
-            ; DeltaTwo   | delta2                          
-; Epsilon:  Array (3)
-            ; 1  | epsilon1
-            ; 2  | episolon2
-            ; 3  | epsilon3
-            ; 10 | episolon10
-; )"
-		; lineWidth := 58
-		
-		
-		
-		; Debug.popup("message",message, "tt.getWidth()",tt.getWidth())
-		
 		numLines := message.countMatches("`n") + 1
+		
+		
+		
+		
 		
 		workArea := WindowLib.getMonitorWorkArea()
 		
@@ -160,7 +143,27 @@ class DebugPopup {
 		; Debug.popup("numCharsToShow",numCharsToShow, "numCharsToShow*charWidth",numCharsToShow*charWidth, "editLeftPaddingBuiltIn",editLeftPaddingBuiltIn, "needHScroll",needHScroll, "editWidth",editWidth, "fullWidth",fullWidth)
 		
 		
-		
+		if(needVScroll) {
+			numDashes := lineWidth - 2
+			edgeText := "+" StringLib.duplicate("-", lineWidth - 2)
+			if(!needHScroll)
+				edgeText .= "+"
+			
+			message := edgeText "`n" message "`n" edgeText
+		}
+		if(needHScroll) {
+			newMessage := ""
+			Loop, Parse, message, "`n"
+			{
+				if(A_Index = 1 || A_Index = (message.countMatches("`n") + 1))
+					line := "+" A_LoopField "+"
+				else
+					line := "|" A_LoopField "|"
+				
+				newMessage := newMessage.appendLine(line)
+			}
+			message := newMessage
+		}
 		
 		
 		

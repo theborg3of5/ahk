@@ -99,6 +99,7 @@
 			Selector.updateSettings()
 			AHKCodeLib.getDefLineParts()
 			TextTable.padValue()
+			TextTable.setBorderType()
 			NotepadPlusPlus.sendSnippet()
 			Likely others too - WindowActions and similar would probably benefit
 	1.1.31.01

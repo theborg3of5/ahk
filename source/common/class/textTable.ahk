@@ -19,17 +19,29 @@
 ;
 */ ; =--
 
+;GDB TODO update various documentation for this class, including the above
+
 class TextTable {
 	; #PUBLIC#
+	
+	static BorderType_None     := "NONE"
+	static BorderType_Line     := "LINE"
+	static BorderType_BoldLine := "BOLD_LINE"
 	
 	;---------
 	; PARAMETERS:
 	;  dataTable (I,OPT) - 2-dimensional array of string values to include in the table.
 	;---------
 	__New(dataTable := "") {
-		; Add any provided rows
-		For _,row in dataTable
-			this.addRow(row*)
+		this.addRows(dataTable*)
+	}
+	
+	
+	setTopTitle(title) {
+		this.topTitle := title
+	}
+	setBottomTitle(title) {
+		this.bottomTitle := title
 	}
 	
 	;---------
@@ -66,10 +78,45 @@ class TextTable {
 		return this
 	}
 	
+	
+	setBorderType(borderType) {
+		if(borderType = this.BorderType_None) {
+			this.borderH  := ""
+			this.borderV  := ""
+			this.borderTL := ""
+			this.borderTR := ""
+			this.borderBL := ""
+			this.borderBR := ""
+			this.outerPaddingH := 0
+			this.outerPaddingV := 0
+			
+		} else if(borderType = this.BorderType_Line) {
+			this.borderH  := Chr(0x2501) ; ━
+			this.borderV  := Chr(0x2503) ; ┃
+			this.borderTL := Chr(0x250F) ; ┏
+			this.borderTR := Chr(0x2513) ; ┓
+			this.borderBL := Chr(0x2517) ; ┗
+			this.borderBR := Chr(0x251B) ; ┛
+			this.outerPaddingH := 1
+			this.outerPaddingV := 0
+			
+		} else if(borderType = this.BorderType_BoldLine) {
+			this.borderH  := Chr(0x2500) ; ─
+			this.borderV  := Chr(0x2502) ; │
+			this.borderTL := Chr(0x250C) ; ┌
+			this.borderTR := Chr(0x2510) ; ┐
+			this.borderBL := Chr(0x2514) ; └
+			this.borderBR := Chr(0x2518) ; ┘
+			this.outerPaddingH := 1
+			this.outerPaddingV := 0
+		}
+	}
+	
 	;---------
 	; DESCRIPTION:    Add a new row to the table.
 	; PARAMETERS:
 	;  newValues* (I,REQ) - Variadic parameter, pass in however many elements you want in column order.
+	; RETURNS:        this
 	;---------
 	addRow(newValues*) {
 		; If any of the values are multi-line, split the row up into multiple and add those.
@@ -81,6 +128,16 @@ class TextTable {
 		}
 		
 		this._addRow(newValues)
+		
+		return this
+	}
+	
+	
+	addRows(newRows*) {
+		For _,row in newRows
+			this.addRow(row*)
+		
+		return this
 	}
 	
 	;---------
@@ -88,10 +145,13 @@ class TextTable {
 	; RETURNS:        The current width of the table, including all columns and padding.
 	;---------
 	getWidth() {
-		columnsTotal := DataLib.sum(this.columnWidths*)
-		paddingTotal := this.columnDividerString.length() * (this.columnWidths.count() - 1)
+		contentWidth      := this.getContentWidth()
+		outerPaddingWidth := this.outerPaddingH    * 2
+		bordersWidth      := this.borderV.length() * 2
 		
-		return columnsTotal + paddingTotal
+		; GDB TODO take top/bottom title widths into account - probably a max() call
+		
+		return contentWidth + outerPaddingWidth + bordersWidth
 	}
 	
 	;---------
@@ -99,7 +159,11 @@ class TextTable {
 	; RETURNS:        The current height of the table.
 	;---------
 	getHeight() {
-		return this.dataTable.count()
+		contentHeight      := this.getContentHeight()
+		outerPaddingHeight := this.outerPaddingV    * 2
+		bordersHeight      := this.borderH.length() * 2
+		
+		return contentHeight + outerPaddingHeight + bordersHeight
 	}
 	
 	;---------
@@ -107,27 +171,51 @@ class TextTable {
 	; RETURNS:        The table, as a string
 	;---------
 	generateText() {
-		outputString := ""
+		output := ""
 		
+		output := output.appendLine(this.generateTopBlock())
+		
+		
+		
+		content := "" ; GDB TODO should this block be pulled out into a separate function?
 		For _,row in this.dataTable {
 			rowString := ""
+			
 			For columnIndex,value in row {
 				cellString := this.formatValue(value, columnIndex)
 				rowString := rowString.appendPiece(cellString, this.columnDividerString)
 			}
-			outputString := outputString.appendLine(rowString)
+			content := content.appendLine(rowString)
 		}
 		
-		return outputString
+		; GDB TODO apply side blocks to all content lines
+		; content := this.applySideBlocks(content)
+		
+		output .= content
+		
+		; output := output.appendLine(this.generateBottomBlock())
+		
+		return output
 	}
 	
 	; #PRIVATE#
 	
-	dataTable            := []                 ; Our 2-dimensional array of values.
-	columnWidths         := []                 ; Numbers of characters
-	columnAlignments     := []                 ; TextAlignment.* values, defaults to this.defaultAlignment
-	columnDividerString  := "  "               ; The text that should divide cells in a row
-	defaultAlignment     := TextAlignment.Left ; The default alignment for all cells
+	topTitle            := ""                 ; Title to show above the table.
+	bottomTitle         := ""                 ; Title to show below the table.
+	dataTable           := []                 ; Our 2-dimensional array of values.
+	columnWidths        := []                 ; Numbers of characters
+	columnAlignments    := []                 ; TextAlignment.* values, defaults to this.defaultAlignment
+	columnDividerString := "  "               ; The text that should divide cells in a row
+	defaultAlignment    := TextAlignment.Left ; The default alignment for all cells
+	
+	outerPaddingH := 0 ; Spaces between borders and values on left/right
+	outerPaddingV := 0 ; Lines between borders and values on top/bottom
+	borderH  := ""
+	borderV  := ""
+	borderTL := ""
+	borderTR := ""
+	borderBL := ""
+	borderBR := ""
 	
 	;---------
 	; DESCRIPTION:    Add a new row to the table, without extra handling for multi-line values.
@@ -142,6 +230,72 @@ class TextTable {
 		; Keep track of columns' max width
 		For columnIndex,value in newRow
 			this.columnWidths[columnIndex] := DataLib.max(this.columnWidths[columnIndex], value.length())
+	}
+	
+	
+	generateTopBlock() {
+		block := ""
+		
+		; Use spaces for any blank border characters, to ensure spacing stays correct
+		lineH    := DataLib.firstNonBlankValue(this.borderH,  " ")
+		lineV    := DataLib.firstNonBlankValue(this.borderV,  " ")
+		cornerTL := DataLib.firstNonBlankValue(this.borderTL, " ")
+		cornerTR := DataLib.firstNonBlankValue(this.borderTR, " ")
+		cornerBL := DataLib.firstNonBlankValue(this.borderBL, " ")
+		cornerBR := DataLib.firstNonBlankValue(this.borderBR, " ")
+		
+		; Title/border line
+		if(this.needTopBorderTitleLine()) {
+			insideWidth := this.getContentWidth() + (this.outerPaddingH * 2) ; Width between corners
+			if(this.topTitle != "") {
+				title := " " this.topTitle " " ; Go ahead and pad the title so we don't have to take that padding into account separately
+				
+				leftoverWidth := insideWidth - title.length()
+				leftSpace := leftoverWidth // 2
+				rightSpace := leftoverWidth - leftSpace ; Bias left if uneven leftover space
+				
+				topLine := cornerTL StringLib.duplicate(lineH, leftSpace) title StringLib.duplicate(lineH, rightSpace) cornerTR
+				; topLine := cornerTL lineH.duplicate(leftSpace) title lineH.duplicate(rightSpace) cornerTR ; GDB TODO move duplicate to StringBase for a more succict syntax
+			} else {
+				topLine := cornerTL StringLib.duplicate(lineH, insideWidth) cornerTR
+			}
+			
+			block := block.appendLine(topLine)
+		}
+		
+		block := block StringLib.getNewlines(this.outerPaddingV)
+		
+		return block
+	}
+	
+	needTopBorderTitleLine() {
+		if(this.topTitle != "")
+			return true
+		if(this.borderH != "" || this.borderTL != "" || this.borderTR != "")
+			return true
+		
+		return false
+	}
+	
+	needBottomBlock() {
+		
+	}
+	
+	needSideBlocks() {
+		
+	}
+	
+	
+	getContentWidth() {
+		columnsWidth := DataLib.sum(this.columnWidths*)
+		dividersWidth := this.columnDividerString.length() * (this.columnWidths.count() - 1)
+		
+		return columnsWidth + dividersWidth
+	}
+	
+	
+	getContentHeight() {
+		return this.dataTable.count()
 	}
 	
 	;---------

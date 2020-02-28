@@ -43,6 +43,7 @@ class DebugPopup {
 			For subIndex,subVal in value
 				builder.addLine(subIndex, subVal)
 		}
+		
 		childBlock := builder.toString()
 		if(childBlock != "") {
 			; childBlock := StringLib.indentBlock(childBlock, 1)

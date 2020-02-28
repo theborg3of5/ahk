@@ -59,15 +59,26 @@ class DebugPopup {
 			
 			objName := " " this.getObjectName(value) " "
 			totalWidth := builder.tt.getWidth()
-			numDashes := (totalWidth - objName.length()) // 2
 			
 			lines := ""
+			numDashes := (totalWidth - objName.length()) // 2
 			lines .= StringLib.duplicate(Chr(0x2500), numDashes)
 			lines .= objName
 			lines .= StringLib.duplicate(Chr(0x2500), totalWidth - objName.length() - numDashes)
 			
-			topLine := Chr(0x250C) lines Chr(0x2500) Chr(0x2500) Chr(0x2510) ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
+			; lines := objName StringLib.duplicate(Chr(0x2500), totalWidth - objName.length() - 1) Chr(0x2500)
+			
+			topLine := Chr(0x250C) Chr(0x2500) lines Chr(0x2500) Chr(0x2510) ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
 			bottomLine := Chr(0x2514) Chr(0x2500) lines Chr(0x2500) Chr(0x2518) ; 0x2500 ─, 0x2514 └, 0x2518 ┘
+			; GDB TODO consider only including the name in the bottom line if the table (including lines or not?) is 50+ lines
+			; GDB TODO take care of case when object name is too long - probably leave space at end of table, not try to center or space it out
+			
+			
+			; topLine := Chr(0x250C) Chr(0x2500) objName StringLib.duplicate(Chr(0x2500), totalWidth - objName.length() - 1) Chr(0x2500) Chr(0x2500) Chr(0x2510) ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
+			; bottomLine := Chr(0x2514) StringLib.duplicate(Chr(0x2500), totalWidth - objName.length() - 1) Chr(0x2500) Chr(0x2500) objName Chr(0x2500) Chr(0x2518) ; 0x2500 ─, 0x2514 └, 0x2518 ┘
+			
+			
+			
 			childBlock := topLine "`n" childBlock "`n" bottomLine
 			
 			; childBlock := StringLib.indentBlock(childBlock, 2) ; Child block should be indented, all together

@@ -84,7 +84,7 @@ class TextTable {
 	}
 	
 	;---------
-	; DESCRIPTION:    Get the current total width of the table.
+	; DESCRIPTION:    Get the current total width of the table in characters.
 	; RETURNS:        The current width of the table, including all columns and padding.
 	;---------
 	getWidth() {
@@ -92,6 +92,14 @@ class TextTable {
 		paddingTotal := this.columnDividerString.length() * (this.columnWidths.count() - 1)
 		
 		return columnsTotal + paddingTotal
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the current total height of the table in lines.
+	; RETURNS:        The current height of the table.
+	;---------
+	getHeight() {
+		return this.dataTable.count()
 	}
 	
 	;---------

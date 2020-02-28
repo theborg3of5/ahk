@@ -47,35 +47,41 @@ class DebugPopup {
 		if(childBlock != "") {
 			; childBlock := StringLib.indentBlock(childBlock, 1)
 			
+			lineH    := Chr(0x2500) ; ─
+			lineV    := Chr(0x2502) ; │
+			cornerTL := Chr(0x250C) ; ┌
+			cornerBL := Chr(0x2514) ; └
+			cornerTR := Chr(0x2510) ; ┐
+			cornerBR := Chr(0x2518) ; ┘
+			
 			newBlock := ""
 			Loop, Parse, childBlock, "`n"
-				newBlock := newBlock.appendLine(Chr(0x2502) " " A_LoopField " " Chr(0x2502)) ; 0x2502 │
+				newBlock := newBlock.appendLine(lineV " " A_LoopField " " lineV)
 			childBlock := newBlock
-			
-			; 0x252C ┬, 0x2534 ┴
-			; topLine := Chr(0x250C) Chr(0x2500) StringLib.duplicate(Chr(0x2500), 29) Chr(0x252C) StringLib.duplicate(Chr(0x2500), builder.tt.getWidth() - 30) Chr(0x2500) Chr(0x2510) ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
-			
-			; lines := StringLib.duplicate(Chr(0x2500), builder.tt.getWidth())
 			
 			objName := " " this.getObjectName(value) " "
 			totalWidth := builder.tt.getWidth()
 			
-			lines := ""
+			; lines := ""
 			numDashes := (totalWidth - objName.length()) // 2
-			lines .= StringLib.duplicate(Chr(0x2500), numDashes)
-			lines .= objName
-			lines .= StringLib.duplicate(Chr(0x2500), totalWidth - objName.length() - numDashes)
+			linesWithName := StringLib.duplicate(lineH, numDashes) objName StringLib.duplicate(lineH, totalWidth - objName.length() - numDashes)
 			
-			; lines := objName StringLib.duplicate(Chr(0x2500), totalWidth - objName.length() - 1) Chr(0x2500)
+			; lines := objName StringLib.duplicate(lineH, totalWidth - objName.length() - 1) lineH
 			
-			topLine := Chr(0x250C) Chr(0x2500) lines Chr(0x2500) Chr(0x2510) ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
-			bottomLine := Chr(0x2514) Chr(0x2500) lines Chr(0x2500) Chr(0x2518) ; 0x2500 ─, 0x2514 └, 0x2518 ┘
+			topLine := cornerTL lineH linesWithName lineH cornerTR ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
+			
+			if(builder.tt.getHeight() >= 50)
+				bottomLine := cornerBL lineH linesWithName lineH cornerBR ; 0x2500 ─, 0x2514 └, 0x2518 ┘
+			else
+				bottomLine := cornerBL lineH StringLib.duplicate(lineH, linesWithName.length()) lineH cornerBR ; 0x2500 ─, 0x2514 └, 0x2518 ┘
+				
+			
 			; GDB TODO consider only including the name in the bottom line if the table (including lines or not?) is 50+ lines
 			; GDB TODO take care of case when object name is too long - probably leave space at end of table, not try to center or space it out
 			
 			
-			; topLine := Chr(0x250C) Chr(0x2500) objName StringLib.duplicate(Chr(0x2500), totalWidth - objName.length() - 1) Chr(0x2500) Chr(0x2500) Chr(0x2510) ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
-			; bottomLine := Chr(0x2514) StringLib.duplicate(Chr(0x2500), totalWidth - objName.length() - 1) Chr(0x2500) Chr(0x2500) objName Chr(0x2500) Chr(0x2518) ; 0x2500 ─, 0x2514 └, 0x2518 ┘
+			; topLine := cornerTL lineH objName StringLib.duplicate(lineH, totalWidth - objName.length() - 1) lineH lineH cornerTR ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
+			; bottomLine := cornerBL StringLib.duplicate(lineH, totalWidth - objName.length() - 1) lineH lineH objName lineH cornerBR ; 0x2500 ─, 0x2514 └, 0x2518 ┘
 			
 			
 			
@@ -148,17 +154,21 @@ class DebugPopup {
 		lineWidth := tt.getWidth()
 		numLines := message.countMatches("`n") + 1
 		
-
+		; (Bold ones)
+		lineH    := Chr(0x2501) ; ━
+		lineV    := Chr(0x2503) ; ┃
+		cornerTL := Chr(0x250F) ; ┏
+		cornerBL := Chr(0x2517) ; ┗
+		cornerTR := Chr(0x2513) ; ┓
+		cornerBR := Chr(0x251B) ; ┛
 		
 		Loop, Parse, message, "`n"
-			newMessage := newMessage.appendLine(Chr(0x2503) " " A_LoopField " " Chr(0x2503)) ; 0x2503 ┃
-			; newMessage := newMessage.appendLine(Chr(0x2502) " " A_LoopField " " Chr(0x2502)) ; 0x2502 │
+			newMessage := newMessage.appendLine(lineV " " A_LoopField " " lineV) ; 0x2503 ┃
+			; newMessage := newMessage.appendLine(lineV " " A_LoopField " " lineV) ; 0x2502 │
 		message := newMessage
 		
-		; topLine := Chr(0x250C) Chr(0x2500) StringLib.duplicate(Chr(0x2500), lineWidth) Chr(0x2500) Chr(0x2510) ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
-		; bottomLine := Chr(0x2514) Chr(0x2500) StringLib.duplicate(Chr(0x2500), lineWidth) Chr(0x2500) Chr(0x2518) ; 0x2500 ─, 0x2514 └, 0x2518 ┘
-		topLine := Chr(0x250F) Chr(0x2501) StringLib.duplicate(Chr(0x2501), lineWidth) Chr(0x2501) Chr(0x2513) ; 0x2501 ━, 0x250F ┏, 0x2513 ┓
-		bottomLine := Chr(0x2517) Chr(0x2501) StringLib.duplicate(Chr(0x2501), lineWidth) Chr(0x2501) Chr(0x251B) ; 0x2501 ━, 0x2517 ┗, 0x251B ┛
+		topLine := cornerTL lineH StringLib.duplicate(lineH, lineWidth) lineH cornerTR
+		bottomLine := cornerBL lineH StringLib.duplicate(lineH, lineWidth) lineH cornerBR
 		message := topLine "`n" message "`n" bottomLine
 		
 		lineWidth += 4

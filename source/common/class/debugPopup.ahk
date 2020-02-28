@@ -5,7 +5,8 @@
 	
 	GDB TODO
 		Update auto-complete and syntax highlighting notepad++ definitions
-		Consider adding something (row of dashes/underscores that's the full width, maybe?) to the bottom (and maybe pipes or similar to the right margin?) if it's tall enough to need scrolling.
+		Consider augmenting scroll hotkeys to scroll faster - maybe by adding Ctrl to them?
+			Alternatively, make them faster by default and make Ctrl slow them down to 1 char/line at a time
 	
 */ ; =--
 
@@ -44,17 +45,34 @@ class DebugPopup {
 		}
 		childBlock := builder.toString()
 		if(childBlock != "") {
+			; childBlock := StringLib.indentBlock(childBlock, 1)
+			
 			newBlock := ""
 			Loop, Parse, childBlock, "`n"
 				newBlock := newBlock.appendLine(Chr(0x2502) " " A_LoopField " " Chr(0x2502)) ; 0x2502 │
 			childBlock := newBlock
 			
 			; 0x252C ┬, 0x2534 ┴
-			topLine := Chr(0x250C) Chr(0x2500) StringLib.duplicate(Chr(0x2500), 29) Chr(0x252C) StringLib.duplicate(Chr(0x2500), builder.tt.getWidth() - 30) Chr(0x2500) Chr(0x2510) ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
-			bottomLine := Chr(0x2514) Chr(0x2500) StringLib.duplicate(Chr(0x2500), builder.tt.getWidth()) Chr(0x2500) Chr(0x2518) ; 0x2500 ─, 0x2514 └, 0x2518 ┘
+			; topLine := Chr(0x250C) Chr(0x2500) StringLib.duplicate(Chr(0x2500), 29) Chr(0x252C) StringLib.duplicate(Chr(0x2500), builder.tt.getWidth() - 30) Chr(0x2500) Chr(0x2510) ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
+			
+			; lines := StringLib.duplicate(Chr(0x2500), builder.tt.getWidth())
+			
+			objName := " " this.getObjectName(value) " "
+			totalWidth := builder.tt.getWidth()
+			numDashes := (totalWidth - objName.length()) // 2
+			
+			lines := ""
+			lines .= StringLib.duplicate(Chr(0x2500), numDashes)
+			lines .= objName
+			lines .= StringLib.duplicate(Chr(0x2500), totalWidth - objName.length() - numDashes)
+			
+			topLine := Chr(0x250C) lines Chr(0x2500) Chr(0x2500) Chr(0x2510) ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
+			bottomLine := Chr(0x2514) Chr(0x2500) lines Chr(0x2500) Chr(0x2518) ; 0x2500 ─, 0x2514 └, 0x2518 ┘
 			childBlock := topLine "`n" childBlock "`n" bottomLine
 			
 			; childBlock := StringLib.indentBlock(childBlock, 2) ; Child block should be indented, all together
+			
+			return childBlock
 		}
 		
 		; Final value is the name followed by the (indented) block of children on the next line.
@@ -77,7 +95,7 @@ class DebugPopup {
 	getObjectName(value) {
 		; If an object has its own name specified, use it.
 		if(isFunc(value.Debug_TypeName))
-			return value.Debug_TypeName() " {}"
+			return value.Debug_TypeName()
 			
 		; For other objects, just use a generic "Array"/"Object" label and add the number of elements.
 		if(value.isArray)
@@ -129,7 +147,7 @@ class DebugPopup {
 		; topLine := Chr(0x250C) Chr(0x2500) StringLib.duplicate(Chr(0x2500), lineWidth) Chr(0x2500) Chr(0x2510) ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
 		; bottomLine := Chr(0x2514) Chr(0x2500) StringLib.duplicate(Chr(0x2500), lineWidth) Chr(0x2500) Chr(0x2518) ; 0x2500 ─, 0x2514 └, 0x2518 ┘
 		topLine := Chr(0x250F) Chr(0x2501) StringLib.duplicate(Chr(0x2501), lineWidth) Chr(0x2501) Chr(0x2513) ; 0x2501 ━, 0x250F ┏, 0x2513 ┓
-		bottomLine := Chr(0x2501) Chr(0x2501) StringLib.duplicate(Chr(0x2501), lineWidth) Chr(0x2501) Chr(0x251B) ; 0x2501 ━, 0x2517 ┗, 0x251B ┛
+		bottomLine := Chr(0x2517) Chr(0x2501) StringLib.duplicate(Chr(0x2501), lineWidth) Chr(0x2501) Chr(0x251B) ; 0x2501 ━, 0x2517 ┗, 0x251B ┛
 		message := topLine "`n" message "`n" bottomLine
 		
 		lineWidth += 4
@@ -170,7 +188,7 @@ class DebugPopup {
 		Gui, New, % "+HWNDguiId +Label" this.Prefix_GuiSpecialLabels ; guiId := gui's window handle, DebugPopupGui_* functions instead of Gui*
 		this.guiId := guiId
 		
-		Gui, Margin, 5, 5
+		Gui, Margin, 0, 0
 		Gui, Color, % backgroundColor
 		Gui, Font, % "c" fontColor " s" fontSize, % fontName
 		
@@ -297,7 +315,7 @@ class DebugBuilder2 {
 	; RETURNS:        Reference to new DebugBuilder object
 	;---------
 	__New() {
-		this.tt := new TextTable().setColumnDivider(" " Chr(0x2502) " ")
+		this.tt := new TextTable() ;.setColumnDivider(" " Chr(0x2502) " ")
 	}
 	
 	;---------
@@ -311,7 +329,7 @@ class DebugBuilder2 {
 	;                 initial line will be indented 1 level deeper.
 	;---------
 	addLine(label, value) {
-		this.tt.addRow(label, DebugPopup.buildValueDebugString(value))
+		this.tt.addRow(label ":", DebugPopup.buildValueDebugString(value))
 		; newLine := Debug.buildDebugStringForPair(label, value, this.numTabs)
 		; this.outString := this.outString.appendLine(newLine)
 	}

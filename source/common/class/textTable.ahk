@@ -255,7 +255,6 @@ class TextTable {
 				rightSpace := leftoverWidth - leftSpace ; Bias left if uneven leftover space
 				
 				topLine := cornerTL StringLib.duplicate(lineH, leftSpace) title StringLib.duplicate(lineH, rightSpace) cornerTR
-				; topLine := cornerTL lineH.duplicate(leftSpace) title lineH.duplicate(rightSpace) cornerTR ; GDB TODO move duplicate to StringBase for a more succict syntax
 			} else {
 				topLine := cornerTL StringLib.duplicate(lineH, insideWidth) cornerTR
 			}

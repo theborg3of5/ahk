@@ -108,9 +108,17 @@ class DebugPopup {
 		lineWidth := tt.getWidth()
 		numLines := message.countMatches("`n") + 1
 		
+
 		
+		Loop, Parse, message, "`n"
+			newMessage := newMessage.appendLine("| " A_LoopField " |")
+		message := newMessage
 		
+		edgeLine := "+-" StringLib.duplicate("-", lineWidth) "-+"
+		message := edgeLine "`n" message "`n" edgeLine
 		
+		lineWidth += 4
+		numLines += 2
 		
 		workArea := WindowLib.getMonitorWorkArea()
 		
@@ -143,29 +151,6 @@ class DebugPopup {
 		; Debug.popup("numCharsToShow",numCharsToShow, "numCharsToShow*charWidth",numCharsToShow*charWidth, "editLeftPaddingBuiltIn",editLeftPaddingBuiltIn, "needHScroll",needHScroll, "editWidth",editWidth, "fullWidth",fullWidth)
 		
 		
-		if(needVScroll) {
-			numDashes := lineWidth - 2
-			edgeText := "+" StringLib.duplicate("-", lineWidth - 2)
-			if(!needHScroll)
-				edgeText .= "+"
-			
-			message := edgeText "`n" message "`n" edgeText
-		}
-		if(needHScroll) {
-			newMessage := ""
-			Loop, Parse, message, "`n"
-			{
-				if(A_Index = 1 || A_Index = (message.countMatches("`n") + 1))
-					line := "+" A_LoopField "+"
-				else
-					line := "|" A_LoopField "|"
-				
-				newMessage := newMessage.appendLine(line)
-			}
-			message := newMessage
-		}
-		
-		
 		
 		Gui, New, % "+HWNDguiId +Label" this.Prefix_GuiSpecialLabels ; guiId := gui's window handle, DebugPopupGui_* functions instead of Gui*
 		this.guiId := guiId
@@ -177,17 +162,17 @@ class DebugPopup {
 		editProperties := "ReadOnly -WantReturn -E0x200 -VScroll -Wrap v" this.EditField_VarName " h" editHeight " w" editWidth
 		Gui, Add, Edit, % editProperties, % message
 		
-		if(needHScroll) {
-			; To vertically center, we need to add enough newlines to shift the arrows down.
-			numTopNewlines := (numLinesToShow - 2) // 2 ; 2 for arrows themselves, half for just top
-			arrowsText := StringLib.getNewlines(numTopNewLines) Chr(0x25C0) "`n" Chr(0x25B6) ; ◀ `n ▶ (Extra for Notepad++: ●)
-			Gui, Add, Text, x+1 hp Center +BackgroundTrans h%editHeight%, % arrowsText ; GDB TODO 0 to named variable?
-		}
+		; if(needHScroll) {
+			; ; To vertically center, we need to add enough newlines to shift the arrows down.
+			; numTopNewlines := (numLinesToShow - 2) // 2 ; 2 for arrows themselves, half for just top
+			; arrowsText := StringLib.getNewlines(numTopNewLines) Chr(0x25C0) "`n" Chr(0x25B6) ; ◀ `n ▶ (Extra for Notepad++: ●)
+			; Gui, Add, Text, x+1 hp Center +BackgroundTrans h%editHeight%, % arrowsText ; GDB TODO 0 to named variable?
+		; }
 		
-		if(needVScroll) {
-			arrowsText := Chr(0x25B2) " " Chr(0x25BC) ; ▲ ▼
-			Gui, Add, Text, xm y+0 Center +BackgroundTrans w%editWidth%, % arrowsText ; GDB TODO 0 to named variable?
-		}
+		; if(needVScroll) {
+			; arrowsText := Chr(0x25B2) " " Chr(0x25BC) ; ▲ ▼
+			; Gui, Add, Text, xm y+0 Center +BackgroundTrans w%editWidth%, % arrowsText ; GDB TODO 0 to named variable?
+		; }
 		
 		
 		

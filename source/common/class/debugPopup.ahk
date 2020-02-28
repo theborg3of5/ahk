@@ -164,12 +164,8 @@ class DebugPopup {
 		
 		
 		
-		; GDB TODO can we use a blank icon with this logic to have a popup with no icon?
-		; tempIcon := A_IconFile
-		; Menu, Tray, Icon, % "testRed.ico"
 		Gui, New, % "+HWNDguiId +Label" this.Prefix_GuiSpecialLabels ; guiId := gui's window handle, DebugPopupGui_* functions instead of Gui*
 		this.guiId := guiId
-		; Menu, Tray, Icon, % tempIcon
 		
 		Gui, Margin, 5, 5
 		Gui, Color, % backgroundColor

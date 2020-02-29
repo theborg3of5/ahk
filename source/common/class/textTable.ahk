@@ -39,9 +39,11 @@ class TextTable {
 	
 	setTopTitle(title) {
 		this.topTitle := title
+		return this
 	}
 	setBottomTitle(title) {
 		this.bottomTitle := title
+		return this
 	}
 	
 	;---------
@@ -91,16 +93,6 @@ class TextTable {
 			this.outerPaddingV := 0
 			
 		} else if(borderType = this.BorderType_Line) {
-			this.borderH  := Chr(0x2501) ; ━
-			this.borderV  := Chr(0x2503) ; ┃
-			this.borderTL := Chr(0x250F) ; ┏
-			this.borderTR := Chr(0x2513) ; ┓
-			this.borderBL := Chr(0x2517) ; ┗
-			this.borderBR := Chr(0x251B) ; ┛
-			this.outerPaddingH := 1
-			this.outerPaddingV := 0
-			
-		} else if(borderType = this.BorderType_BoldLine) {
 			this.borderH  := Chr(0x2500) ; ─
 			this.borderV  := Chr(0x2502) ; │
 			this.borderTL := Chr(0x250C) ; ┌
@@ -109,7 +101,19 @@ class TextTable {
 			this.borderBR := Chr(0x2518) ; ┘
 			this.outerPaddingH := 1
 			this.outerPaddingV := 0
+			
+		} else if(borderType = this.BorderType_BoldLine) {
+			this.borderH  := Chr(0x2501) ; ━
+			this.borderV  := Chr(0x2503) ; ┃
+			this.borderTL := Chr(0x250F) ; ┏
+			this.borderTR := Chr(0x2513) ; ┓
+			this.borderBL := Chr(0x2517) ; ┗
+			this.borderBR := Chr(0x251B) ; ┛
+			this.outerPaddingH := 1
+			this.outerPaddingV := 0
 		}
+		
+		return this
 	}
 	
 	;---------
@@ -174,26 +178,8 @@ class TextTable {
 		output := ""
 		
 		output := output.appendLine(this.generateTopBlock())
-		
-		
-		
-		content := "" ; GDB TODO should this block be pulled out into a separate function?
-		For _,row in this.dataTable {
-			rowString := ""
-			
-			For columnIndex,value in row {
-				cellString := this.formatValue(value, columnIndex)
-				rowString := rowString.appendPiece(cellString, this.columnDividerString)
-			}
-			content := content.appendLine(rowString)
-		}
-		
-		; GDB TODO apply side blocks to all content lines
-		; content := this.applySideBlocks(content)
-		
-		output .= content
-		
-		; output := output.appendLine(this.generateBottomBlock())
+		output := output.appendLine(this.generateContent())
+		output := output.appendLine(this.generateBottomBlock())
 		
 		return output
 	}
@@ -238,17 +224,16 @@ class TextTable {
 		
 		; Use spaces for any blank border characters, to ensure spacing stays correct
 		lineH    := DataLib.firstNonBlankValue(this.borderH,  " ")
-		lineV    := DataLib.firstNonBlankValue(this.borderV,  " ")
 		cornerTL := DataLib.firstNonBlankValue(this.borderTL, " ")
 		cornerTR := DataLib.firstNonBlankValue(this.borderTR, " ")
-		cornerBL := DataLib.firstNonBlankValue(this.borderBL, " ")
-		cornerBR := DataLib.firstNonBlankValue(this.borderBR, " ")
 		
 		; Title/border line
 		if(this.needTopBorderTitleLine()) {
 			insideWidth := this.getContentWidth() + (this.outerPaddingH * 2) ; Width between corners
 			if(this.topTitle != "") {
 				title := " " this.topTitle " " ; Go ahead and pad the title so we don't have to take that padding into account separately
+				
+				; GDB TODO figure out how to handle titles that make the box longer than the content - need to pass that info around somehow, probably a parameter?
 				
 				leftoverWidth := insideWidth - title.length()
 				leftSpace := leftoverWidth // 2
@@ -262,7 +247,8 @@ class TextTable {
 			block := block.appendLine(topLine)
 		}
 		
-		block := block StringLib.getNewlines(this.outerPaddingV)
+		; Padding
+		block .= StringLib.getNewlines(this.outerPaddingV)
 		
 		return block
 	}
@@ -276,12 +262,76 @@ class TextTable {
 		return false
 	}
 	
-	needBottomBlock() {
+	generateContent() {
+		lineV := DataLib.firstNonBlankValue(this.borderV, " ")
+		padding := StringLib.getSpaces(this.outerPaddingH)
 		
+		content := ""
+		For _,row in this.dataTable {
+			rowString := ""
+			
+			For columnIndex,value in row {
+				cellString := this.formatValue(value, columnIndex)
+				rowString := rowString.appendPiece(cellString, this.columnDividerString)
+			}
+			
+			rowString := padding rowString padding
+			
+			if(this.needSideBorders())
+				rowString := lineV rowString lineV
+			
+			content := content.appendLine(rowString)
+		}
+		
+		return content
 	}
 	
-	needSideBlocks() {
+	generateBottomBlock() { ; GDB TODO there's a lot of overlap between this and generateTopBlock - is there anything shared that would make sense to pull out?
+		block := ""
 		
+		; Use spaces for any blank border characters, to ensure spacing stays correct
+		lineH    := DataLib.firstNonBlankValue(this.borderH,  " ")
+		cornerBL := DataLib.firstNonBlankValue(this.borderBL, " ")
+		cornerBR := DataLib.firstNonBlankValue(this.borderBR, " ")
+		
+		; Padding
+		block .= StringLib.getNewlines(this.outerPaddingV)
+		
+		; Title/border line
+		if(this.needBottomBorderTitleLine()) {
+			insideWidth := this.getContentWidth() + (this.outerPaddingH * 2) ; Width between corners
+			if(this.bottomTitle != "") {
+				title := " " this.bottomTitle " " ; Go ahead and pad the title so we don't have to take that padding into account separately
+				
+				leftoverWidth := insideWidth - title.length()
+				leftSpace := leftoverWidth // 2
+				rightSpace := leftoverWidth - leftSpace ; Bias left if uneven leftover space
+				
+				bottomLine := cornerBL StringLib.duplicate(lineH, leftSpace) title StringLib.duplicate(lineH, rightSpace) cornerBR
+			} else {
+				bottomLine := cornerBL StringLib.duplicate(lineH, insideWidth) cornerBR
+			}
+			
+			block := block.appendLine(bottomLine)
+		}
+		
+		return block
+	}
+	
+	needBottomBorderTitleLine() {
+		if(this.bottomTitle != "")
+			return true
+		if(this.borderH != "" || this.borderBL != "" || this.borderBR != "")
+			return true
+		
+		return false
+	}
+	
+	needSideBorders() {
+		if(this.borderV != "")
+			return true
+		
+		return false
 	}
 	
 	

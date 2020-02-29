@@ -7,6 +7,7 @@
 		Update auto-complete and syntax highlighting notepad++ definitions
 		Consider augmenting scroll hotkeys to scroll faster - maybe by adding Ctrl to them?
 			Alternatively, make them faster by default and make Ctrl slow them down to 1 char/line at a time
+		Consider going back to a ToolWindow - could add a title at the top (embedded in the top border) using new topBorder option for TextTable
 	
 */ ; =--
 
@@ -36,66 +37,40 @@ class DebugPopup {
 			return value
 		
 		; For objects, compile child values
+		objName := this.getObjectName(value)
 		builder := new DebugBuilder2()
 		if(isFunc(value.Debug_ToString)) { ; If an object has its own debug logic, use that rather than looping.
 			value.Debug_ToString(builder)
+			tt := builder.tt
 		} else {
+			; For subIndex,subVal in value
+				; builder.addLine(subIndex, subVal)
+			
+			if(value.count() = 0)
+				return objName
+			
+			tt := new TextTable()
+			
 			For subIndex,subVal in value
-				builder.addLine(subIndex, subVal)
+				tt.addRow(subIndex ":", DebugPopup.buildValueDebugString(subVal))
 		}
 		
-		childBlock := builder.toString()
-		if(childBlock != "") {
-			; childBlock := StringLib.indentBlock(childBlock, 1)
-			
-			lineH    := Chr(0x2500) ; ─
-			lineV    := Chr(0x2502) ; │
-			cornerTL := Chr(0x250C) ; ┌
-			cornerBL := Chr(0x2514) ; └
-			cornerTR := Chr(0x2510) ; ┐
-			cornerBR := Chr(0x2518) ; ┘
-			
-			newBlock := ""
-			Loop, Parse, childBlock, "`n"
-				newBlock := newBlock.appendLine(lineV " " A_LoopField " " lineV)
-			childBlock := newBlock
-			
-			objName := " " this.getObjectName(value) " "
-			totalWidth := builder.tt.getWidth()
-			
-			; lines := ""
-			numDashes := (totalWidth - objName.length()) // 2
-			linesWithName := StringLib.duplicate(lineH, numDashes) objName StringLib.duplicate(lineH, totalWidth - objName.length() - numDashes)
-			
-			; lines := objName StringLib.duplicate(lineH, totalWidth - objName.length() - 1) lineH
-			
-			topLine := cornerTL lineH linesWithName lineH cornerTR ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
-			
-			if(builder.tt.getHeight() >= 50)
-				bottomLine := cornerBL lineH linesWithName lineH cornerBR ; 0x2500 ─, 0x2514 └, 0x2518 ┘
-			else
-				bottomLine := cornerBL lineH StringLib.duplicate(lineH, linesWithName.length()) lineH cornerBR ; 0x2500 ─, 0x2514 └, 0x2518 ┘
-				
-			
-			; GDB TODO consider only including the name in the bottom line if the table (including lines or not?) is 50+ lines
-			; GDB TODO take care of case when object name is too long - probably leave space at end of table, not try to center or space it out
-			
-			
-			; topLine := cornerTL lineH objName StringLib.duplicate(lineH, totalWidth - objName.length() - 1) lineH lineH cornerTR ; 0x2500 ─, 0x250C ┌, 0x2510 ┐
-			; bottomLine := cornerBL StringLib.duplicate(lineH, totalWidth - objName.length() - 1) lineH lineH objName lineH cornerBR ; 0x2500 ─, 0x2514 └, 0x2518 ┘
-			
-			
-			
-			childBlock := topLine "`n" childBlock "`n" bottomLine
-			
-			; childBlock := StringLib.indentBlock(childBlock, 2) ; Child block should be indented, all together
-			
-			return childBlock
-		}
+		tt.setBorderType(TextTable.BorderType_Line)
+		tt.setTopTitle(objName)
+		if(tt.getHeight() >= 50)
+			tt.setBottomTitle(objName)
 		
-		; Final value is the name followed by the (indented) block of children on the next line.
-		objName := this.getObjectName(value)
-		return objName.appendLine(childBlock)
+		childBlock := tt.generateText()
+		return childBlock
+		
+		; ; childBlock := builder.toString()
+		; if(childBlock != "") {
+			; return childBlock
+		; }
+		
+		; ; Final value is the name followed by the (indented) block of children on the next line.
+		; objName := this.getObjectName(value) ; GDB TODO handle
+		; return objName.appendLine(childBlock)
 	}
 	
 	convertParamsToPaired(params*) {
@@ -146,7 +121,7 @@ class DebugPopup {
 		
 		paramPairs := this.convertParamsToPaired(params*)
 		
-		tt := new TextTable()
+		tt := new TextTable().setBorderType(TextTable.BorderType_BoldLine)
 		For _,row in paramPairs {
 			tt.addRow(row["LABEL"] ":", this.buildValueDebugString(row["VALUE"]))
 		}
@@ -154,26 +129,6 @@ class DebugPopup {
 		message := tt.generateText()
 		lineWidth := tt.getWidth()
 		numLines := message.countMatches("`n") + 1
-		
-		; (Bold ones)
-		lineH    := Chr(0x2501) ; ━
-		lineV    := Chr(0x2503) ; ┃
-		cornerTL := Chr(0x250F) ; ┏
-		cornerBL := Chr(0x2517) ; ┗
-		cornerTR := Chr(0x2513) ; ┓
-		cornerBR := Chr(0x251B) ; ┛
-		
-		Loop, Parse, message, "`n"
-			newMessage := newMessage.appendLine(lineV " " A_LoopField " " lineV) ; 0x2503 ┃
-			; newMessage := newMessage.appendLine(lineV " " A_LoopField " " lineV) ; 0x2502 │
-		message := newMessage
-		
-		topLine := cornerTL lineH StringLib.duplicate(lineH, lineWidth) lineH cornerTR
-		bottomLine := cornerBL lineH StringLib.duplicate(lineH, lineWidth) lineH cornerBR
-		message := topLine "`n" message "`n" bottomLine
-		
-		lineWidth += 4
-		numLines += 2
 		
 		workArea := WindowLib.getMonitorWorkArea()
 		
@@ -216,19 +171,6 @@ class DebugPopup {
 		
 		editProperties := "ReadOnly -WantReturn -E0x200 -VScroll -Wrap v" this.EditField_VarName " h" editHeight " w" editWidth
 		Gui, Add, Edit, % editProperties, % message
-		
-		; if(needHScroll) {
-			; ; To vertically center, we need to add enough newlines to shift the arrows down.
-			; numTopNewlines := (numLinesToShow - 2) // 2 ; 2 for arrows themselves, half for just top
-			; arrowsText := StringLib.getNewlines(numTopNewLines) Chr(0x25C0) "`n" Chr(0x25B6) ; ◀ `n ▶ (Extra for Notepad++: ●)
-			; Gui, Add, Text, x+1 hp Center +BackgroundTrans h%editHeight%, % arrowsText ; GDB TODO 0 to named variable?
-		; }
-		
-		; if(needVScroll) {
-			; arrowsText := Chr(0x25B2) " " Chr(0x25BC) ; ▲ ▼
-			; Gui, Add, Text, xm y+0 Center +BackgroundTrans w%editWidth%, % arrowsText ; GDB TODO 0 to named variable?
-		; }
-		
 		
 		
 		Gui, Font ; Restore font to default
@@ -337,7 +279,7 @@ class DebugBuilder2 {
 	; RETURNS:        Reference to new DebugBuilder object
 	;---------
 	__New() {
-		this.tt := new TextTable() ;.setColumnDivider(" " Chr(0x2502) " ")
+		this.tt := new TextTable() ;.setBorderType(TextTable.BorderType_Line) ;.setColumnDivider(" " Chr(0x2502) " ")
 	}
 	
 	;---------

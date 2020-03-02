@@ -2,31 +2,53 @@
 	NOTE: This only really works with a monospace font, as it aligns based on characters.
 	
 	Example Usage
+;		; Add data
 ;		dataTable := []
 ;		dataTable.push(["val1", "val2", "val3"])
 ;		dataTable.push(["value4", "value5", "value6"])
 ;		tt := new TextTable(dataTable)
-;		tt.setColumnDivider(" ") ; Divider between columns (1 space)
-;		tt.setDefaultAlignment(TextAlignment.Center) ; All columns default to centered
+;		; OR
+;		tt := new TextTable().addRow("val1", "val2", "val3")
+;		tt.addRow("value4", "value5", "value6")
+;		; OR
+;		tt := new TextTable().addRows(["val1", "val2", "val3"], ["value4", "value5", "value6"])
+;		
+;		; Change settings, add more data
+;		tt.setColumnDivider(" ")                      ; Divider between columns (1 space)
+;		tt.setDefaultAlignment(TextAlignment.Center)  ; All columns default to centered
 ;		tt.setColumnAlignment(2, TextAlignment.Right) ; Column 2 (base-1 indexed)
-;		tt.addRow("v7", "v8", "v9") ; Add a new row dynamically (settings still apply)
+;		tt.addRow("v7", "v8", "v9")                   ; Add a new row dynamically (settings still apply)
+;		
+;		; Generate output
 ;		output := tt.generateText()
 ;		
 ;		output:
 ;		 val1    val2  val3 
 ;		value4 value5 value6
 ;		  v7       v8   v9  
-;
+;		
+;		
+;		; Borders example
+;		tt := new TextTable().setBorderType(TextTable.BorderType_Line)
+;		tt.setColumnDivider(" | ")
+;		tt.setTopTitle("Fruits")
+;		tt.setBottomTitle("Yum!")
+;		tt.addRow("apple", "banana", "coconut")
+;		output := tt.generateText()
+;		
+;		output:
+;		┌───────── Fruits ─────────┐
+;		│ apple | banana | coconut │
+;		└────────── Yum! ──────────┘
 */ ; =--
-
-;GDB TODO update various documentation for this class, including the above
 
 class TextTable {
 	; #PUBLIC#
-	
-	static BorderType_None     := "NONE"
-	static BorderType_Line     := "LINE"
-	static BorderType_BoldLine := "BOLD_LINE"
+	; @GROUP@ Border types
+	static BorderType_None     := "NONE"      ; No border
+	static BorderType_Line     := "LINE"      ; A thin line border using Unicode characters
+	static BorderType_BoldLine := "BOLD_LINE" ; A thick line border using Unicode characters
+	; @GROUP-END@
 	
 	;---------
 	; PARAMETERS:
@@ -36,11 +58,23 @@ class TextTable {
 		this.addRows(dataTable*)
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Set the title to show at the top of the table, as part of the border.
+	; PARAMETERS:
+	;  title (I,REQ) - The title to show
+	; RETURNS:        this
+	;---------
 	setTopTitle(title) {
 		this.topTitle := title
 		return this
 	}
+	
+	;---------
+	; DESCRIPTION:    Set the title to show at the bottom of the table, as part of the border.
+	; PARAMETERS:
+	;  title (I,REQ) - The title to show
+	; RETURNS:        this
+	;---------
 	setBottomTitle(title) {
 		this.bottomTitle := title
 		return this
@@ -80,7 +114,14 @@ class TextTable {
 		return this
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Set the type of border to show the table with.
+	; PARAMETERS:
+	;  borderType (I,REQ) - The type of border to set, from .BorderType_* constants.
+	; RETURNS:        
+	; SIDE EFFECTS:   
+	; NOTES:          
+	;---------
 	setBorderType(borderType) {
 		if(borderType = this.BorderType_None) {
 			this.borderH  := ""
@@ -136,7 +177,12 @@ class TextTable {
 		return this
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Add multiple new rows to the table
+	; PARAMETERS:
+	;  newRows* (I,REQ) - Variadic parameter, pass in however many [cell, cell, cell] rows as desired.
+	; RETURNS:        this
+	;---------
 	addRows(newRows*) {
 		For _,row in newRows
 			this.addRow(row*)
@@ -192,17 +238,17 @@ class TextTable {
 	dataTable           := []                 ; Our 2-dimensional array of values.
 	columnWidths        := []                 ; Numbers of characters
 	columnAlignments    := []                 ; TextAlignment.* values, defaults to this.defaultAlignment
-	columnDividerString := "  "               ; The text that should divide cells in a row
+	columnDividerString := "  "               ; The text that should divide columns in a row
 	defaultAlignment    := TextAlignment.Left ; The default alignment for all cells
 	
-	outerPaddingH := 0 ; Spaces between borders and values on left/right
-	outerPaddingV := 0 ; Lines between borders and values on top/bottom
-	borderH  := ""
-	borderV  := ""
-	borderTL := ""
-	borderTR := ""
-	borderBL := ""
-	borderBR := ""
+	outerPaddingH := 0  ; Spaces between borders and values on left/right
+	outerPaddingV := 0  ; Lines between borders and values on top/bottom
+	borderH       := "" ; Horizontal border character
+	borderV       := "" ; Vertical border character
+	borderTL      := "" ; Top-left corner border character
+	borderTR      := "" ; Top-right corner border character
+	borderBL      := "" ; Bottom-left corner border character
+	borderBR      := "" ; Bottom-right corner border character
 	
 	;---------
 	; DESCRIPTION:    Add a new row to the table, without extra handling for multi-line values.
@@ -219,7 +265,15 @@ class TextTable {
 			this.columnWidths[columnIndex] := DataLib.max(this.columnWidths[columnIndex], value.length())
 	}
 	
-	generateTopBottomLine(title, leftCorner, rightCorner) {
+	;---------
+	; DESCRIPTION:    Generate the border line for the top or bottom of the table.
+	; PARAMETERS:
+	;  title       (I,OPT) - The title to show within the line. If blank, we'll just fill the space with more border.
+	;  leftCorner  (I,OPT) - The left-corner character
+	;  rightCorner (I,OPT) - The right-corner character
+	; RETURNS:        The border line requested, or "" if no line is needed
+	;---------
+	generateTopBottomLine(title := "", leftCorner := "", rightCorner := "") {
 		; Don't need the line at all if there's nothing to show.
 		if(title = "" && leftCorner = "" && rightCorner = "" && this.borderH = "")
 			return ""
@@ -237,8 +291,10 @@ class TextTable {
 		return leftCorner StringLib.padCenter(" " title " ", this.getInnerWidth(), lineH) rightCorner
 	}
 	
-	
-	
+	;---------
+	; DESCRIPTION:    Generate the content for the table, including side borders if needed.
+	; RETURNS:        The text of the content of the table.
+	;---------
 	generateContent() {
 		lineV := DataLib.firstNonBlankValue(this.borderV, " ")
 		padding := StringLib.getSpaces(this.outerPaddingH)
@@ -258,7 +314,7 @@ class TextTable {
 			leftoverWidth := this.getInnerWidth() - rowString.length()
 			rowString .= StringLib.getSpaces(leftoverWidth)
 			
-			if(this.needSideBorders())
+			if(this.borderV != "")
 				rowString := lineV rowString lineV
 			
 			content := content.appendLine(rowString)
@@ -267,14 +323,10 @@ class TextTable {
 		return content
 	}
 	
-	needSideBorders() {
-		if(this.borderV != "")
-			return true
-		
-		return false
-	}
-	
-	
+	;---------
+	; DESCRIPTION:    Get the width of the inside of the table (everything except for the border characters).
+	; RETURNS:        The width needed to fit everything in the table (content and title)
+	;---------
 	getInnerWidth() {
 		bodyWidth    := this.outerPaddingH + this.getContentWidth() + this.outerPaddingH
 		topLineWidth := 1                  + this.topTitle.length() + 1                  ; 1s for padding around title
@@ -282,6 +334,10 @@ class TextTable {
 		return DataLib.max(bodyWidth, topLineWidth)
 	}
 	
+	;---------
+	; DESCRIPTION:    Get the width of the content of the table (just the data + column dividers).
+	; RETURNS:        Number of characters across for the table content
+	;---------
 	getContentWidth() {
 		columnsWidth := DataLib.sum(this.columnWidths*)
 		dividersWidth := this.columnDividerString.length() * (this.columnWidths.count() - 1)
@@ -289,7 +345,10 @@ class TextTable {
 		return columnsWidth + dividersWidth
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Get the height of the table content (just the data).
+	; RETURNS:        Number of lines tall the content is.
+	;---------
 	getContentHeight() {
 		return this.dataTable.count()
 	}

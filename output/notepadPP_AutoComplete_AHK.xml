@@ -6565,8 +6565,44 @@
 							; DESCRIPTION:    Add a new row to the table.
 							; PARAMETERS:
 							;  newValues* (I,REQ) - Variadic parameter, pass in however many elements you want in column order.
+							; RETURNS:        this
 							;---------">
                 <Param name="newValues*" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TextTable.addRows" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add multiple new rows to the table
+							; PARAMETERS:
+							;  newRows* (I,REQ) - Variadic parameter, pass in however many [cell, cell, cell] rows as desired.
+							; RETURNS:        this
+							;---------">
+                <Param name="newRows*" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TextTable.BorderType_BoldLine" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    A thick line border using Unicode characters
+							; GROUP:          Border types
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TextTable.BorderType_Line" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    A thin line border using Unicode characters
+							; GROUP:          Border types
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TextTable.BorderType_None" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    No border
+							; GROUP:          Border types
+							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="TextTable.generateText" func="yes">
@@ -6577,12 +6613,44 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="TextTable.getHeight" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the current total height of the table in lines.
+							; RETURNS:        The current height of the table.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="TextTable.getWidth" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get the current total width of the table.
+							; DESCRIPTION:    Get the current total width of the table in characters.
 							; RETURNS:        The current width of the table, including all columns and padding.
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TextTable.setBorderType" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the type of border to show the table with.
+							; PARAMETERS:
+							;  borderType (I,REQ) - The type of border to set, from .BorderType_* constants.
+							; RETURNS:
+							; SIDE EFFECTS:
+							; NOTES:
+							;---------">
+                <Param name="borderType" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TextTable.setBottomTitle" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the title to show at the bottom of the table, as part of the border.
+							; PARAMETERS:
+							;  title (I,REQ) - The title to show
+							; RETURNS:        this
+							;---------">
+                <Param name="title" />
             </Overload>
         </KeyWord>
         <KeyWord name="TextTable.setColumnAlignment" func="yes">
@@ -6618,6 +6686,17 @@
 							; RETURNS:        this
 							;---------">
                 <Param name="newAlignment" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TextTable.setTopTitle" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the title to show at the top of the table, as part of the border.
+							; PARAMETERS:
+							;  title (I,REQ) - The title to show
+							; RETURNS:        this
+							;---------">
+                <Param name="title" />
             </Overload>
         </KeyWord>
         <KeyWord name="Theme"/>

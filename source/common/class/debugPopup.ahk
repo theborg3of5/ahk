@@ -5,6 +5,10 @@
 	
 	GDB TODO
 		Update auto-complete and syntax highlighting notepad++ definitions
+		Could/should DebugBuilder (or maybe something named a little differently) just extend TextTable?
+			That way we just override .addRow (or just keep .addLine) and call into the base behavior with our ":"/debug build value stuff
+			Then it makes more sense to just have both branches use DebugBuilder, too - it theoretically takes care of the recursion itself (we call it, it calls getValueDebugString, etc.)
+			Alternatively, should it encapsulate all of the build-the-TextTable logic, and leave DebugPopup only the actual gui/popup stuff?
 	
 */ ; =--
 
@@ -102,6 +106,12 @@ class DebugPopup {
 		backgroundColor := "444444"
 		fontColor := "00FF00"
 		
+		
+		
+		
+		
+		
+		
 		paramPairs := this.convertParamsToPaired(params*)
 		
 		tt := new TextTable().setTopTitle("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
@@ -111,7 +121,11 @@ class DebugPopup {
 		
 		message := tt.generateText()
 		lineWidth := tt.getWidth()
-		numLines := message.countMatches("`n") + 1
+		numLines := tt.getHeight()
+		
+		
+		
+		; numLines := message.countMatches("`n") + 1
 		
 		workArea := WindowLib.getMonitorWorkArea()
 		
@@ -176,7 +190,6 @@ class DebugPopup {
 		
 		mouseIsOverEditField := ObjBindMethod(this, "mouseIsOverEditField")
 		Hotkey, If, % mouseIsOverEditField
-		; Hotkey, IfWinActive, % "ahk_id " guiId
 		if(needVScroll) {
 			scrollUp   := ObjBindMethod(this, "scrollUp",   3)
 			scrollDown := ObjBindMethod(this, "scrollDown", 3)
@@ -200,7 +213,6 @@ class DebugPopup {
 			Hotkey, ~+^WheelDown, % scrollRightPrecise
 		}
 		Hotkey, If
-		; Hotkey, IfWinActive
 		
 		; WinWaitClose
 		
@@ -309,4 +321,95 @@ class DebugBuilder2 {
 	tt   := ""  ; How indented our base level of text should be.
 	; outString := "" ; Built-up string to eventually return.
 	; #END#
+}
+
+class DebugBuilder3 {
+	table := "" ; Outer TextTable instance
+	
+	__New(params*) {
+		this.table := new TextTable()
+		this.table.setTopTitle("Debug Info")
+		this.table.setBorderType(TextTable.BorderType_BoldLine)
+		
+		; Parse the given labels and parameters and add their debug info to the table.
+		Loop, % params.MaxIndex() // 2 {
+			label := params[A_Index * 2 - 1]
+			value := params[A_Index * 2]
+			this.addLine(label, value)
+		}
+	}
+	
+	getText() {
+		return this.table.generateText()
+	}
+	
+	getWidth() {
+		return this.table.getWidth()
+	}
+	
+	getHeight() {
+		return this.table.getHeight()
+	}
+	
+	addLine(label, value) {
+		this.table.addRow(label ":", this.buildValueDebugString(value))
+	}
+	
+	
+	
+	buildValueDebugString(value) {
+		; Base case - not a complex object, just return the value to show.
+		if(!isObject(value))
+			return value
+		
+		; Just display the name if it's an empty object (like an empty array)
+		objName := this.getObjectName(value)
+		if(value.count() = 0)
+			return objName
+		
+		; Compile child values
+		childTable := new TextTable()
+		if(isFunc(value.Debug_ToString)) { ; If an object has its own debug logic, use that rather than looping.
+			builder := new DebugInfo()
+			value.Debug_ToString(builder)
+			; For subLabel,subVal in builder.data
+				; childTable.addRow(subLabel, this.buildValueDebugString(subVal))
+			
+		} else {
+			; For subLabel,subVal in value
+				; builder.addLine(subLabel, subVal)
+		} ; GDB TODO figure out how to structure this - it would be nice if we could just call into the same add logic (that takes care of the recursion) from both Debug_ToString stuff and looping, but is it worth it?
+		;		- Are we talking about a DebugTable class that extends TextTable and just has an addLine wrapper around base.addRow that calls into DebugBuilder.buildValueDebugString?
+		;		- Alternatively, should this be a fully recursive thing?
+		;			- If it is, how do we handle the thick vs. thin border? Something passed in by parent, or maybe only passed in by top-level logic and not passed down to children?
+		
+		if(tt.getHeight() >= 50)
+			tt.setBottomTitle(objName)
+		
+		childBlock := tt.generateText()
+		return childBlock
+	}
+
+	getObjectName(value) {
+		; If an object has its own name specified, use it.
+		if(isFunc(value.Debug_TypeName))
+			return value.Debug_TypeName()
+			
+		; For other objects, just use a generic "Array"/"Object" label and add the number of elements.
+		if(value.isArray)
+			return "Array (" value.count() ")"
+		return "Object (" value.count() ")"
+	}
+	
+	
+	
+	
+}
+
+class DebugInfo {
+	data := []
+	
+	addLine(label, value) {
+		this.data.push([label, value])
+	}
 }

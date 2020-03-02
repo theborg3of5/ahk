@@ -109,6 +109,24 @@ class StringLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Pad both sides of the given text to get a string that's the given width.
+	; PARAMETERS:
+	;  textToCenter (I,REQ) - The text to center
+	;  goalLength   (I,REQ) - The number of characters long that the resulting string should be.
+	;  padChar      (I,OPT) - The character to use as padding. Defaults to space.
+	; RETURNS:        Padded string
+	; NOTES:          If the difference between the length of the text and goal is odd, we'll bias
+	;                 to the left (1 extra padding char on the right).
+	;---------
+	padCenter(textToCenter, goalLength, padChar := " ") {
+		leftoverWidth := goalLength - textToCenter.length()
+		leftSpace := leftoverWidth // 2
+		rightSpace := leftoverWidth - leftSpace ; Bias left if uneven leftover space
+		
+		return StringLib.duplicate(padChar, leftSpace) textToCenter StringLib.duplicate(padChar, rightSpace)
+	}
+	
+	;---------
 	; DESCRIPTION:    Encode the given text to be URL-safe.
 	; PARAMETERS:
 	;  textToEncode (I,REQ) - The text to encode

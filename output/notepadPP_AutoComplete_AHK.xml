@@ -6064,6 +6064,23 @@
                 <Param name="numSpaces" />
             </Overload>
         </KeyWord>
+        <KeyWord name="StringLib.padCenter" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Pad both sides of the given text to get a string that's the given width.
+							; PARAMETERS:
+							;  textToCenter (I,REQ) - The text to center
+							;  goalLength   (I,REQ) - The number of characters long that the resulting string should be.
+							;  padChar      (I,OPT) - The character to use as padding. Defaults to space.
+							; RETURNS:        Padded string
+							; NOTES:          If the difference between the length of the text and goal is odd, we'll bias
+							;                 to the left (1 extra padding char on the right).
+							;---------">
+                <Param name="textToCenter" />
+                <Param name="goalLength" />
+                <Param name="padChar := &quot; &quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="StringLower" func="no">
             <Overload retVal="">
                 <Param name="OutputVar"/>

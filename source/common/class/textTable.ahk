@@ -149,13 +149,10 @@ class TextTable {
 	; RETURNS:        The current width of the table, including all columns and padding.
 	;---------
 	getWidth() {
-		contentWidth      := this.getContentWidth()
-		outerPaddingWidth := this.outerPaddingH    * 2
-		bordersWidth      := this.borderV.length() * 2
+		bodyWidth    := this.borderV.length()  + this.outerPaddingH + this.getContentWidth() + this.outerPaddingH + this.borderV.length()
+		topLineWidth := this.borderTL.length() + 1                  + this.topTitle.length() + 1                  + this.borderTR.length() ; 1s for padding around title
 		
-		; GDB TODO take top/bottom title widths into account - probably a max() call
-		
-		return contentWidth + outerPaddingWidth + bordersWidth
+		return DataLib.max(bodyWidth, topLineWidth)
 	}
 	
 	;---------
@@ -177,9 +174,10 @@ class TextTable {
 	generateText() {
 		output := ""
 		
-		output := output.appendLine(this.generateTopBlock())
-		output := output.appendLine(this.generateContent())
-		output := output.appendLine(this.generateBottomBlock())
+		innerWidth := this.getInnerWidth()
+		output := output.appendLine(this.generateTopBlock(innerWidth))
+		output := output.appendLine(this.generateContent(innerWidth))
+		output := output.appendLine(this.generateBottomBlock(innerWidth))
 		
 		return output
 	}
@@ -219,7 +217,7 @@ class TextTable {
 	}
 	
 	
-	generateTopBlock() {
+	generateTopBlock(innerWidth) {
 		block := ""
 		
 		; Use spaces for any blank border characters, to ensure spacing stays correct
@@ -229,19 +227,17 @@ class TextTable {
 		
 		; Title/border line
 		if(this.needTopBorderTitleLine()) {
-			insideWidth := this.getContentWidth() + (this.outerPaddingH * 2) ; Width between corners
 			if(this.topTitle != "") {
 				title := " " this.topTitle " " ; Go ahead and pad the title so we don't have to take that padding into account separately
 				
-				; GDB TODO figure out how to handle titles that make the box longer than the content - need to pass that info around somehow, probably a parameter?
-				
-				leftoverWidth := insideWidth - title.length()
+				; Pad out both sides if the content is wider.
+				leftoverWidth := innerWidth - title.length()
 				leftSpace := leftoverWidth // 2
 				rightSpace := leftoverWidth - leftSpace ; Bias left if uneven leftover space
 				
 				topLine := cornerTL StringLib.duplicate(lineH, leftSpace) title StringLib.duplicate(lineH, rightSpace) cornerTR
 			} else {
-				topLine := cornerTL StringLib.duplicate(lineH, insideWidth) cornerTR
+				topLine := cornerTL StringLib.duplicate(lineH, innerWidth) cornerTR
 			}
 			
 			block := block.appendLine(topLine)
@@ -262,7 +258,9 @@ class TextTable {
 		return false
 	}
 	
-	generateContent() {
+	
+	
+	generateContent(innerWidth) {
 		lineV := DataLib.firstNonBlankValue(this.borderV, " ")
 		padding := StringLib.getSpaces(this.outerPaddingH)
 		
@@ -277,6 +275,10 @@ class TextTable {
 			
 			rowString := padding rowString padding
 			
+			; Pad out the right edge if the title was wider.
+			leftoverWidth := innerWidth - rowString.length()
+			rowString .= StringLib.getSpaces(leftoverWidth)
+			
 			if(this.needSideBorders())
 				rowString := lineV rowString lineV
 			
@@ -286,7 +288,7 @@ class TextTable {
 		return content
 	}
 	
-	generateBottomBlock() { ; GDB TODO there's a lot of overlap between this and generateTopBlock - is there anything shared that would make sense to pull out?
+	generateBottomBlock(innerWidth) { ; GDB TODO there's a lot of overlap between this and generateTopBlock - is there anything shared that would make sense to pull out?
 		block := ""
 		
 		; Use spaces for any blank border characters, to ensure spacing stays correct
@@ -299,17 +301,17 @@ class TextTable {
 		
 		; Title/border line
 		if(this.needBottomBorderTitleLine()) {
-			insideWidth := this.getContentWidth() + (this.outerPaddingH * 2) ; Width between corners
 			if(this.bottomTitle != "") {
 				title := " " this.bottomTitle " " ; Go ahead and pad the title so we don't have to take that padding into account separately
 				
-				leftoverWidth := insideWidth - title.length()
+				; Pad out both sides if the content is wider.
+				leftoverWidth := innerWidth - title.length()
 				leftSpace := leftoverWidth // 2
 				rightSpace := leftoverWidth - leftSpace ; Bias left if uneven leftover space
 				
 				bottomLine := cornerBL StringLib.duplicate(lineH, leftSpace) title StringLib.duplicate(lineH, rightSpace) cornerBR
 			} else {
-				bottomLine := cornerBL StringLib.duplicate(lineH, insideWidth) cornerBR
+				bottomLine := cornerBL StringLib.duplicate(lineH, innerWidth) cornerBR
 			}
 			
 			block := block.appendLine(bottomLine)
@@ -334,6 +336,13 @@ class TextTable {
 		return false
 	}
 	
+	
+	getInnerWidth() {
+		bodyWidth    := this.outerPaddingH + this.getContentWidth() + this.outerPaddingH
+		topLineWidth := 1                  + this.topTitle.length() + 1                  ; 1s for padding around title
+		
+		return DataLib.max(bodyWidth, topLineWidth)
+	}
 	
 	getContentWidth() {
 		columnsWidth := DataLib.sum(this.columnWidths*)

@@ -5,8 +5,6 @@
 	
 	GDB TODO
 		Update auto-complete and syntax highlighting notepad++ definitions
-		Consider augmenting scroll hotkeys to scroll faster - maybe by adding Ctrl to them?
-			Alternatively, make them faster by default and make Ctrl slow them down to 1 char/line at a time
 		Consider going back to a ToolWindow - could add a title at the top (embedded in the top border) using new topBorder option for TextTable
 	
 */ ; =--
@@ -43,9 +41,6 @@ class DebugPopup {
 			value.Debug_ToString(builder)
 			tt := builder.tt
 		} else {
-			; For subIndex,subVal in value
-				; builder.addLine(subIndex, subVal)
-			
 			if(value.count() = 0)
 				return objName
 			
@@ -62,15 +57,6 @@ class DebugPopup {
 		
 		childBlock := tt.generateText()
 		return childBlock
-		
-		; ; childBlock := builder.toString()
-		; if(childBlock != "") {
-			; return childBlock
-		; }
-		
-		; ; Final value is the name followed by the (indented) block of children on the next line.
-		; objName := this.getObjectName(value) ; GDB TODO handle
-		; return objName.appendLine(childBlock)
 	}
 	
 	convertParamsToPaired(params*) {
@@ -114,14 +100,12 @@ class DebugPopup {
 		
 		editTotalMarginWidth := 8 ; How much extra space the edit control needs to cut off at character edges
 		
-		backgroundColor := "2A211C"
-		fontColor := "BDAE9D"
-		
-		
+		backgroundColor := "444444"
+		fontColor := "00FF00"
 		
 		paramPairs := this.convertParamsToPaired(params*)
 		
-		tt := new TextTable().setBorderType(TextTable.BorderType_BoldLine)
+		tt := new TextTable().setTopTitle("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
 		For _,row in paramPairs {
 			tt.addRow(row["LABEL"] ":", this.buildValueDebugString(row["VALUE"]))
 		}
@@ -178,7 +162,7 @@ class DebugPopup {
 		
 		Gui, Add, Button, Hidden Default gDebugPopupGui_Close x0 y0 ; DebugPopupGui_Close call on click/activate
 		
-		Gui, -MinimizeBox -MaximizeBox  ;+0x800000 ; 0x800000=WS_BORDER ; -0x400000 ; 0x400000=WS_DLGFRAME +ToolWindow
+		Gui, -MinimizeBox -MaximizeBox -0x400000 ; 0x400000=WS_DLGFRAME +ToolWindow ;+0x800000 ; 0x800000=WS_BORDER ;
 		GuiControl, Focus, % this.EditField_VarName
 		
 		; guiWidth := editWidth + 10
@@ -195,16 +179,26 @@ class DebugPopup {
 		Hotkey, If, % mouseIsOverEditField
 		; Hotkey, IfWinActive, % "ahk_id " guiId
 		if(needVScroll) {
-			scrollUp    := ObjBindMethod(this, "scrollUp")
-			scrollDown  := ObjBindMethod(this, "scrollDown")
-			Hotkey, ~WheelUp,   % scrollUp
-			Hotkey, ~WheelDown, % scrollDown
+			scrollUp   := ObjBindMethod(this, "scrollUp",   3)
+			scrollDown := ObjBindMethod(this, "scrollDown", 3)
+			Hotkey, ~WheelUp,    % scrollUp
+			Hotkey, ~WheelDown,  % scrollDown
+			
+			scrollUpPrecise   := ObjBindMethod(this, "scrollUp",   1)
+			scrollDownPrecise := ObjBindMethod(this, "scrollDown", 1)
+			Hotkey, ~^WheelUp,   % scrollUpPrecise
+			Hotkey, ~^WheelDown, % scrollDownPrecise
 		}
 		if(needHScroll) {
-			scrollLeft  := ObjBindMethod(this, "scrollLeft")
-			scrollRight := ObjBindMethod(this, "scrollRight")
-			Hotkey, ~+WheelUp,   % scrollLeft
-			Hotkey, ~+WheelDown, % scrollRight
+			scrollLeft  := ObjBindMethod(this, "scrollLeft",  10)
+			scrollRight := ObjBindMethod(this, "scrollRight", 10)
+			Hotkey, ~+WheelUp,    % scrollLeft
+			Hotkey, ~+WheelDown,  % scrollRight
+			
+			scrollLeftPrecise  := ObjBindMethod(this, "scrollLeft",  1)
+			scrollRightPrecise := ObjBindMethod(this, "scrollRight", 1)
+			Hotkey, ~+^WheelUp,   % scrollLeftPrecise
+			Hotkey, ~+^WheelDown, % scrollRightPrecise
 		}
 		Hotkey, If
 		; Hotkey, IfWinActive
@@ -230,17 +224,21 @@ class DebugPopup {
 		
 	}
 	;  - otherFunctions
-	scrollUp() { ; GDB TODO should these specific send-message commands just live in MicrosoftLib?
-		SendMessage, 0x115, 0, , Edit1, % "ahk_id " this.guiId ; WM_VSCROLL, SB_LINEUP
+	scrollUp(numLines := 1) { ; GDB TODO should these specific send-message commands just live in MicrosoftLib?
+		Loop, % numLines
+			SendMessage, 0x115, 0, , Edit1, % "ahk_id " this.guiId ; WM_VSCROLL, SB_LINEUP
 	}
-	scrollDown() { ; GDB TODO can we use something more specific than Edit1?
-		SendMessage, 0x115, 1, , Edit1, % "ahk_id " this.guiId ; WM_VSCROLL, SB_LINEDOWN
+	scrollDown(numLines := 1) { ; GDB TODO can we use something more specific than Edit1?
+		Loop, % numLines
+			SendMessage, 0x115, 1, , Edit1, % "ahk_id " this.guiId ; WM_VSCROLL, SB_LINEDOWN
 	}
-	scrollLeft() {
-		SendMessage, 0x114, 0, , Edit1, % "ahk_id " this.guiId ; WM_HSCROLL, SB_LINELEFT
+	scrollLeft(numLines := 1) {
+		Loop, % numLines
+			SendMessage, 0x114, 0, , Edit1, % "ahk_id " this.guiId ; WM_HSCROLL, SB_LINELEFT
 	}
-	scrollRight() {
-		SendMessage, 0x114, 1, , Edit1, % "ahk_id " this.guiId ; WM_HSCROLL, SB_LINERIGHT
+	scrollRight(numLines := 1) {
+		Loop, % numLines
+			SendMessage, 0x114, 1, , Edit1, % "ahk_id " this.guiId ; WM_HSCROLL, SB_LINERIGHT
 	}
 	
 	

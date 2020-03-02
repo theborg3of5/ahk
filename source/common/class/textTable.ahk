@@ -174,10 +174,13 @@ class TextTable {
 	generateText() {
 		output := ""
 		
-		innerWidth := this.getInnerWidth()
-		output := output.appendLine(this.generateTopBlock(innerWidth))
-		output := output.appendLine(this.generateContent(innerWidth))
-		output := output.appendLine(this.generateBottomBlock(innerWidth))
+		output := output.appendLine(this.generateTopBottomLine(this.topTitle, this.borderTL, this.borderTR))
+		output .= StringLib.getNewlines(this.outerPaddingV)
+		
+		output := output.appendLine(this.generateContent())
+		
+		output .= StringLib.getNewlines(this.outerPaddingV)
+		output := output.appendLine(this.generateTopBottomLine(this.bottomTitle, this.borderBL, this.borderBR))
 		
 		return output
 	}
@@ -216,51 +219,27 @@ class TextTable {
 			this.columnWidths[columnIndex] := DataLib.max(this.columnWidths[columnIndex], value.length())
 	}
 	
-	
-	generateTopBlock(innerWidth) {
-		block := ""
+	generateTopBottomLine(title, leftCorner, rightCorner) {
+		; Don't need the line at all if there's nothing to show.
+		if(title = "" && leftCorner = "" && rightCorner = "" && this.borderH = "")
+			return ""
 		
 		; Use spaces for any blank border characters, to ensure spacing stays correct
-		lineH    := DataLib.firstNonBlankValue(this.borderH,  " ")
-		cornerTL := DataLib.firstNonBlankValue(this.borderTL, " ")
-		cornerTR := DataLib.firstNonBlankValue(this.borderTR, " ")
+		lineH       := DataLib.firstNonBlankValue(this.borderH, " ")
+		leftCorner  := DataLib.firstNonBlankValue(leftCorner,   " ")
+		rightCorner := DataLib.firstNonBlankValue(rightCorner,  " ")
 		
-		; Title/border line
-		if(this.needTopBorderTitleLine()) {
-			if(this.topTitle != "") {
-				title := " " this.topTitle " " ; Go ahead and pad the title so we don't have to take that padding into account separately
-				
-				; Pad out both sides if the content is wider.
-				leftoverWidth := innerWidth - title.length()
-				leftSpace := leftoverWidth // 2
-				rightSpace := leftoverWidth - leftSpace ; Bias left if uneven leftover space
-				
-				topLine := cornerTL StringLib.duplicate(lineH, leftSpace) title StringLib.duplicate(lineH, rightSpace) cornerTR
-			} else {
-				topLine := cornerTL StringLib.duplicate(lineH, innerWidth) cornerTR
-			}
-			
-			block := block.appendLine(topLine)
-		}
+		; If there's no title, it's just the corners + horizontal lines as needed.
+		if(title = "")
+			return leftCorner StringLib.duplicate(lineH, this.getInnerWidth()) rightCorner
 		
-		; Padding
-		block .= StringLib.getNewlines(this.outerPaddingV)
-		
-		return block
-	}
-	
-	needTopBorderTitleLine() {
-		if(this.topTitle != "")
-			return true
-		if(this.borderH != "" || this.borderTL != "" || this.borderTR != "")
-			return true
-		
-		return false
+		; Otherwise, center the title in the space with padding and borders around it.
+		return leftCorner StringLib.padCenter(" " title " ", this.getInnerWidth(), lineH) rightCorner
 	}
 	
 	
 	
-	generateContent(innerWidth) {
+	generateContent() {
 		lineV := DataLib.firstNonBlankValue(this.borderV, " ")
 		padding := StringLib.getSpaces(this.outerPaddingH)
 		
@@ -276,7 +255,7 @@ class TextTable {
 			rowString := padding rowString padding
 			
 			; Pad out the right edge if the title was wider.
-			leftoverWidth := innerWidth - rowString.length()
+			leftoverWidth := this.getInnerWidth() - rowString.length()
 			rowString .= StringLib.getSpaces(leftoverWidth)
 			
 			if(this.needSideBorders())
@@ -286,47 +265,6 @@ class TextTable {
 		}
 		
 		return content
-	}
-	
-	generateBottomBlock(innerWidth) { ; GDB TODO there's a lot of overlap between this and generateTopBlock - is there anything shared that would make sense to pull out?
-		block := ""
-		
-		; Use spaces for any blank border characters, to ensure spacing stays correct
-		lineH    := DataLib.firstNonBlankValue(this.borderH,  " ")
-		cornerBL := DataLib.firstNonBlankValue(this.borderBL, " ")
-		cornerBR := DataLib.firstNonBlankValue(this.borderBR, " ")
-		
-		; Padding
-		block .= StringLib.getNewlines(this.outerPaddingV)
-		
-		; Title/border line
-		if(this.needBottomBorderTitleLine()) {
-			if(this.bottomTitle != "") {
-				title := " " this.bottomTitle " " ; Go ahead and pad the title so we don't have to take that padding into account separately
-				
-				; Pad out both sides if the content is wider.
-				leftoverWidth := innerWidth - title.length()
-				leftSpace := leftoverWidth // 2
-				rightSpace := leftoverWidth - leftSpace ; Bias left if uneven leftover space
-				
-				bottomLine := cornerBL StringLib.duplicate(lineH, leftSpace) title StringLib.duplicate(lineH, rightSpace) cornerBR
-			} else {
-				bottomLine := cornerBL StringLib.duplicate(lineH, innerWidth) cornerBR
-			}
-			
-			block := block.appendLine(bottomLine)
-		}
-		
-		return block
-	}
-	
-	needBottomBorderTitleLine() {
-		if(this.bottomTitle != "")
-			return true
-		if(this.borderH != "" || this.borderBL != "" || this.borderBR != "")
-			return true
-		
-		return false
 	}
 	
 	needSideBorders() {

@@ -22,6 +22,133 @@ class DebugPopup {
 	editFieldVar := ""
 	
 	
+	
+	
+	;  - properties
+	;  - __New()/Init()
+	__New(params*) {
+		
+		
+		
+		
+		table := new DebugTable("Debug Info").thickBorderOn()
+		table.addPairs(params*)
+		
+		message   := table.getText()
+		lineWidth := table.getWidth()
+		numLines  := table.getHeight()
+		
+		
+		; Use a maxiumum of 90% of available height/width so we're not right up against the edges
+		workArea := WindowLib.getMonitorWorkArea()
+		availableHeight := workArea["HEIGHT"] * 0.9
+		availableWidth  := workArea["WIDTH"]  * 0.9
+		
+		; Calculate edit control height/width and whether we need to scroll
+		editHeight := this.calcMaxSize(availableHeight, this.Edit_LineHeight, numLines, needVScroll)
+		; For width, there's a margin involved - take it out before we call calcMaxSize (as that works on units, characters here) and add it back on afterwards.
+		availableWidth -= this.Edit_TotalMarginWidth
+		editWidth := this.calcMaxSize(availableWidth, this.Edit_CharWidth, lineWidth, needHScroll) + this.Edit_TotalMarginWidth
+		
+		mouseIsOverEditField := ObjBindMethod(this, "mouseIsOverEditField")
+		Hotkey, If, % mouseIsOverEditField
+		if(needVScroll) {
+			scrollUp   := ObjBindMethod(this, "scrollUp")
+			scrollDown := ObjBindMethod(this, "scrollDown")
+			Hotkey, ~WheelUp,    % scrollUp
+			Hotkey, ~WheelDown,  % scrollDown
+			
+			scrollUpPrecise   := ObjBindMethod(this, "scrollUp",   1)
+			scrollDownPrecise := ObjBindMethod(this, "scrollDown", 1)
+			Hotkey, ~^WheelUp,   % scrollUpPrecise
+			Hotkey, ~^WheelDown, % scrollDownPrecise
+		}
+		if(needHScroll) {
+			scrollLeft  := ObjBindMethod(this, "scrollLeft")
+			scrollRight := ObjBindMethod(this, "scrollRight")
+			Hotkey, ~+WheelUp,    % scrollLeft
+			Hotkey, ~+WheelDown,  % scrollRight
+			
+			scrollLeftPrecise  := ObjBindMethod(this, "scrollLeft",  1)
+			scrollRightPrecise := ObjBindMethod(this, "scrollRight", 1)
+			Hotkey, ~+^WheelUp,   % scrollLeftPrecise
+			Hotkey, ~+^WheelDown, % scrollRightPrecise
+		}
+		Hotkey, If
+		
+		
+		
+		Gui, New, % "+HWNDguiId +Label" this.Prefix_GuiSpecialLabels ; guiId := gui's window handle, DebugPopupGui_* functions instead of Gui*
+		this.guiId := guiId
+		
+		this.editFieldVar := this.guiId "DebugEdit"
+		GuiLib.createDynamicGlobal(this.editFieldVar)
+		
+		Gui, Margin, 0, 0
+		Gui, Color, % this.BackgroundColor
+		Gui, Font, % "c" this.FontColor " s" this.FontSize, % this.FontName
+		
+		editProperties := "ReadOnly -WantReturn -VScroll -Wrap -E" MicrosoftLib.ExStyle_SunkenBorder
+		Gui, Add, Edit, % editProperties " h" editHeight " w" editWidth " v" this.editFieldVar, % message
+		
+		Gui, Add, Button, Hidden Default x0 y0 gDebugPopupGui_Close ; DebugPopupGui_Close call on activate (with {Enter} since it's Default)
+		
+		Gui, % "-MinimizeBox -MaximizeBox -" MicrosoftLib.Style_CaptionHead
+		GuiControl, Focus, % this.editFieldVar
+		
+		Gui, Show, , % "Debug Info"
+		
+		
+		
+		; WinWaitClose
+		
+		; GDB TODO do we need to disable the hotkeys when we close? (only if they exist, though - either check if the hotkeys exist, or just use needVScroll/needHScroll)
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+	;  - otherFunctions
+	
+	
+	; #INTERNAL#
+	
+	;  - Constants
+	;  - staticMembers
+	;  - nonStaticMembers
+	;  - functions
+	
+	
+	; #PRIVATE#
+	
+	;  - Constants
+	static BackgroundColor       := "444444"
+	static FontColor             := "00FF00"
+	static FontName              := "Consolas"
+	static FontSize              := 12 ; points
+	static Edit_LineHeight       := 19 ; How many px tall each line is in the edit control
+	static Edit_CharWidth        := 9  ; How many px wide each character is in the edit control
+	static Edit_TotalMarginWidth := 8  ; How much extra space the edit control needs to cut off at character edges
+	
+	static Edit_ControlId := "Edit1"
+	
+	;  - staticMembers
+	;  - nonStaticMembers
+	;  - functions
+	
+	
 	mouseIsOverEditField() {
 		MouseGetPos("", "", windowUnderMouse, varNameUnderMouse)
 		GuiControlGet, mouseName, % this.guiId ":Name", % varNameUnderMouse
@@ -61,226 +188,38 @@ class DebugPopup {
 		return numPiecesToShow * pieceSize
 	}
 	
-	
-	;  - properties
-	;  - __New()/Init()
-	__New(params*) {
+	;---------
+	; DESCRIPTION:    Send scroll messages to this gui.
+	; PARAMETERS:
+	;  scrollType      (I,REQ) - The type of scrolling from MicrosoftLib.Message_*Scroll
+	;  scrollDirection (I,REQ) - The direction to scroll from MicrosoftLib.ScrollBar_*
+	;  count           (I,REQ) - How many messages to send (roughly how many lines/characters to scroll)
+	;---------
+	sendScrollMessages(scrollType, scrollDirection, count) {
+		controlId := this.Edit_ControlId
+		titleString := "ahk_id " this.guiId
 		
-		
-		
-		
-		table := new DebugTable("Debug Info").thickBorderOn()
-		table.addPairs(params*)
-		
-		message   := table.getText()
-		lineWidth := table.getWidth()
-		numLines  := table.getHeight()
-		
-		
-		; Use a maxiumum of 90% of available height/width so we're not right up against the edges
-		workArea := WindowLib.getMonitorWorkArea()
-		availableHeight := workArea["HEIGHT"] * 0.9
-		availableWidth  := workArea["WIDTH"]  * 0.9
-		
-		; Calculate edit control height/width and whether we need to scroll
-		editHeight := this.calcMaxSize(availableHeight, this.Edit_LineHeight, numLines, needVScroll)
-		; For width, there's a margin involved - take it out before we call calcMaxSize (as that works on units, characters here) and add it back on afterwards.
-		availableWidth -= this.Edit_TotalMarginWidth
-		editWidth := this.calcMaxSize(availableWidth, this.Edit_CharWidth, lineWidth, needHScroll) + this.Edit_TotalMarginWidth
-		
-		Gui, New, % "+HWNDguiId +Label" this.Prefix_GuiSpecialLabels ; guiId := gui's window handle, DebugPopupGui_* functions instead of Gui*
-		this.guiId := guiId
-		
-		this.editFieldVar := this.guiId "DebugEdit"
-		GuiLib.createDynamicGlobal(this.editFieldVar)
-		
-		Gui, Margin, 0, 0
-		Gui, Color, % this.BackgroundColor
-		Gui, Font, % "c" this.FontColor " s" this.FontSize, % this.FontName
-		
-		editProperties := "ReadOnly -WantReturn -E0x200 -VScroll -Wrap v" this.editFieldVar " h" editHeight " w" editWidth
-		Gui, Add, Edit, % editProperties, % message
-		
-		
-		Gui, Font ; Restore font to default
-		
-		
-		Gui, Add, Button, Hidden Default gDebugPopupGui_Close x0 y0 ; DebugPopupGui_Close call on click/activate
-		
-		Gui, -MinimizeBox -MaximizeBox -0x400000 ; 0x400000=WS_DLGFRAME +ToolWindow ;+0x800000 ; 0x800000=WS_BORDER ;
-		GuiControl, Focus, % this.editFieldVar
-		
-		Gui, Show
-		
-		
-		mouseIsOverEditField := ObjBindMethod(this, "mouseIsOverEditField")
-		Hotkey, If, % mouseIsOverEditField
-		if(needVScroll) {
-			scrollUp   := ObjBindMethod(this, "scrollUp",   3)
-			scrollDown := ObjBindMethod(this, "scrollDown", 3)
-			Hotkey, ~WheelUp,    % scrollUp
-			Hotkey, ~WheelDown,  % scrollDown
-			
-			scrollUpPrecise   := ObjBindMethod(this, "scrollUp",   1)
-			scrollDownPrecise := ObjBindMethod(this, "scrollDown", 1)
-			Hotkey, ~^WheelUp,   % scrollUpPrecise
-			Hotkey, ~^WheelDown, % scrollDownPrecise
-		}
-		if(needHScroll) {
-			scrollLeft  := ObjBindMethod(this, "scrollLeft",  10)
-			scrollRight := ObjBindMethod(this, "scrollRight", 10)
-			Hotkey, ~+WheelUp,    % scrollLeft
-			Hotkey, ~+WheelDown,  % scrollRight
-			
-			scrollLeftPrecise  := ObjBindMethod(this, "scrollLeft",  1)
-			scrollRightPrecise := ObjBindMethod(this, "scrollRight", 1)
-			Hotkey, ~+^WheelUp,   % scrollLeftPrecise
-			Hotkey, ~+^WheelDown, % scrollRightPrecise
-		}
-		Hotkey, If
-		
-		; WinWaitClose
-		
-		; GDB TODO do we need to disable the hotkeys when we close? (only if they exist, though - either check if the hotkeys exist, or just use needVScroll/needHScroll)
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	}
-	;  - otherFunctions
-	scrollUp(numLines := 1) { ; GDB TODO should these specific send-message commands just live in MicrosoftLib?
-		Loop, % numLines
-			SendMessage, 0x115, 0, , Edit1, % "ahk_id " this.guiId ; WM_VSCROLL, SB_LINEUP
-	}
-	scrollDown(numLines := 1) { ; GDB TODO can we use something more specific than Edit1? If not, can we pull that out into a constant at least?
-		Loop, % numLines
-			SendMessage, 0x115, 1, , Edit1, % "ahk_id " this.guiId ; WM_VSCROLL, SB_LINEDOWN
-	}
-	scrollLeft(numLines := 1) {
-		Loop, % numLines
-			SendMessage, 0x114, 0, , Edit1, % "ahk_id " this.guiId ; WM_HSCROLL, SB_LINELEFT
-	}
-	scrollRight(numLines := 1) {
-		Loop, % numLines
-			SendMessage, 0x114, 1, , Edit1, % "ahk_id " this.guiId ; WM_HSCROLL, SB_LINERIGHT
+		Loop, % count
+			SendMessage, % scrollType, % scrollDirection, , % controlId, % titleString
 	}
 	
-	
-	; #INTERNAL#
-	
-	;  - Constants
-	;  - staticMembers
-	;  - nonStaticMembers
-	;  - functions
-	
-	
-	; #PRIVATE#
-	
-	;  - Constants
-	static BackgroundColor       := "444444"
-	static FontColor             := "00FF00"
-	static FontName              := "Consolas"
-	static FontSize              := 12 ; points
-	static Edit_LineHeight       := 19 ; How many px tall each line is in the edit control
-	static Edit_CharWidth        := 9  ; How many px wide each character is in the edit control
-	static Edit_TotalMarginWidth := 8  ; How much extra space the edit control needs to cut off at character edges
-	
-	;  - staticMembers
-	;  - nonStaticMembers
-	;  - functions
+	; Scroll in specific directions
+	scrollUp(count := 3) {
+		this.sendScrollMessages(MicrosoftLib.Message_VertScroll,  MicrosoftLib.ScrollBar_Up,    count)
+	}
+	scrollDown(count := 3) {
+		this.sendScrollMessages(MicrosoftLib.Message_VertScroll,  MicrosoftLib.ScrollBar_Down,  count)
+	}
+	scrollLeft(count := 10) {
+		this.sendScrollMessages(MicrosoftLib.Message_HorizScroll, MicrosoftLib.ScrollBar_Left,  count)
+	}
+	scrollRight(count := 10) {
+		this.sendScrollMessages(MicrosoftLib.Message_HorizScroll, MicrosoftLib.ScrollBar_Right, count)
+	}
 	; #END#
 }
 
+; Close label triggered by the hidden, default button in DebugPopup.
 DebugPopupGui_Close() {
 	Gui, Destroy
-}
-
-class DebugTable {
-	title := ""
-	table := new TextTable().setBorderType(TextTable.BorderType_Line)
-	
-	__New(title) {
-		this.title := title
-		this.table.setTopTitle(title)
-	}
-	
-	thickBorderOn() {
-		this.table.setBorderType(TextTable.BorderType_BoldLine)
-		return this
-	}
-	
-	addPairs(params*) {
-		Loop, % params.MaxIndex() // 2 {
-			label := params[A_Index * 2 - 1]
-			value := params[A_Index * 2]
-			this.addLine(label, value)
-		}
-	}
-	
-	addLine(label, value) {
-		this.table.addRow(label ":", this.buildValueDebugString(value))
-	}
-	
-	getText() {
-		; Also add the title to the bottom if the table ends up tall enough.
-		if(this.table.getHeight() > 50)
-			this.table.setBottomTitle(this.title)
-		
-		return this.table.getText()
-	}
-	
-	getWidth() {
-		return this.table.getWidth()
-	}
-	
-	getHeight() {
-		return this.table.getHeight()
-	}
-	
-	
-	
-	buildValueDebugString(value) {
-		; Base case - not a complex object, just return the value to show.
-		if(!isObject(value))
-			return value
-		
-		; Just display the name if it's an empty object (like an empty array)
-		objName := this.getObjectName(value)
-		if(value.count() = 0)
-			return objName
-		
-		; Compile child values
-		childTable := new DebugTable(objName)
-		if(isFunc(value.Debug_ToString)) { ; If an object has its own debug logic, use that rather than looping.
-			value.Debug_ToString(childTable)
-		} else {
-			For subLabel,subVal in value
-				childTable.addLine(subLabel, subVal)
-		}
-		
-		return childTable.getText()
-	}
-
-	getObjectName(value) {
-		; If an object has its own name specified, use it.
-		if(isFunc(value.Debug_TypeName))
-			return value.Debug_TypeName()
-			
-		; For other objects, just use a generic "Array"/"Object" label and add the number of elements.
-		if(value.isArray)
-			return "Array (" value.count() ")"
-		return "Object (" value.count() ")"
-	}
 }

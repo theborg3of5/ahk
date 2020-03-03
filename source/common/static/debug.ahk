@@ -1,3 +1,6 @@
+#Include %A_LineFile%\..\..\class\debugTable.ahk
+#Include %A_LineFile%\..\..\class\debugPopup.ahk
+
 /* Static class to show debug information about whatever it's given. --=
 	--= Motivation
 			This class is intended to show information in a slightly more structured and considerably deeper way than simply including the variable on a popup can do. It:

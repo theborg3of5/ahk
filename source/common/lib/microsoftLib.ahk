@@ -4,9 +4,10 @@ class MicrosoftLib {
 	; #PUBLIC#
 	
 	; @GROUP@ Window styles ( https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric )
-	static Style_Caption := 0xC00000   ; The window has a caption - that is, a top bar + borders (WS_CAPTION)
-	static Style_Sizable := 0x40000    ; Window can be sized (WS_SIZEBOX/WS_THICKFRAME).
-	static Style_Visible := 0x10000000 ; Window is visible (WS_VISIBLE)
+	static Style_Caption     := 0xC00000   ; The window has a caption - that is, a top bar + borders (WS_CAPTION)
+	static Style_CaptionHead := 0x400000   ; Window has a top bar (WS_DLGFRAME). Included in Style_Caption.
+	static Style_Sizable     := 0x40000    ; Window can be sized (WS_SIZEBOX/WS_THICKFRAME).
+	static Style_Visible     := 0x10000000 ; Window is visible (WS_VISIBLE)
 	; @GROUP-END@
 	
 	; @GROUP@ Extended window styles
@@ -26,10 +27,13 @@ class MicrosoftLib {
 	
 	; @GROUP@ Windows Messages ( https://autohotkey.com/docs/misc/SendMessageList.htm )
 	static Message_WindowMenu  := 0x112 ; Doing something from the "Window" menu, or clicking one of the max/min/restore/close buttons (WM_SYSCOMMAND)
+	static Message_VertScroll  := 0x115 ; Scroll event in the window's vertical scroll bar (WM_VSCROLL)
 	static Message_HorizScroll := 0x114 ; Scroll event in the window's horizontal scroll bar (WM_HSCROLL)
 	; @GROUP-END@
 	
 	; @GROUP@ Scroll Bar Requests/Messages ( https://docs.microsoft.com/en-us/windows/desktop/Controls/about-scroll-bars )
+	static ScrollBar_Up    := 0 ; Scroll 1 unit to the left (SB_LINEUP)
+	static ScrollBar_Down  := 1 ; Scroll 1 unit to the right (SB_LINEDOWN)
 	static ScrollBar_Left  := 0 ; Scroll 1 unit to the left (SB_LINELEFT)
 	static ScrollBar_Right := 1 ; Scroll 1 unit to the right (SB_LINERIGHT)
 	; @GROUP-END@

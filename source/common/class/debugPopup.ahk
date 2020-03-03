@@ -62,23 +62,6 @@ class DebugPopup {
 	}
 	
 	
-	requiresScroll(available, pieceSize, numPieces, ByRef finalSize) {
-		; The size this would be if we didn't scroll
-		possibleSize := numPieces * pieceSize
-		
-		; If it already fits within the available space, no problem.
-		if(possibleSize <= available) {
-			finalSize := possibleSize
-			return false
-		}
-		
-		; Otherwise we'll need to scroll.
-		numPiecesToShow := available // pieceSize
-		finalSize := numPiecesToShow * pieceSize
-		return true
-	}
-	
-	
 	;  - properties
 	;  - __New()/Init()
 	__New(params*) {
@@ -105,45 +88,13 @@ class DebugPopup {
 		numLines  := table.getHeight()
 		
 		
-		
-		
-		
-		
 		; 90% of available height/width so we're not right up against the edges
 		workArea := WindowLib.getMonitorWorkArea()
 		availableHeight := workArea["HEIGHT"] * 0.9
 		availableWidth  := workArea["WIDTH"]  * 0.9
 		
-		; needVScroll := this.requiresScroll(availableHeight, editLineHeight, numLines, editHeight)
-		editHeight := this.calcMaxSize(availableHeight, editLineHeight, numLines, needVScroll)
-		; needVScroll := false
-		; possibleHeight := (editLineHeight * numLines)
-		; if(possibleHeight > availableHeight) {
-			; numLinesToShow := availableHeight // editLineHeight
-			; needVScroll := true
-		; } else {
-			; numLinesToShow := numLines
-		; }
-		; editHeight := (editLineHeight * numLinesToShow)
-		
-		; GDB TODO this whole block seems like a good function - "find max possible size based on max + margin + increments)
-		
-		; availableWidth -= editTotalMarginWidth
-		
-		; needHScroll := false
-		; possibleWidth := (lineWidth * editCharWidth)
-		; if(possibleWidth > availableWidth) {
-			; numCharsToShow := availableWidth // editCharWidth
-			; needHScroll := true
-		; } else {
-			; numCharsToShow := lineWidth
-		; }
-		; editWidth := (numCharsToShow * editCharWidth) + editTotalMarginWidth
-		
-		editWidth := this.calcMaxSize(availableWidth - editTotalMarginWidth, editCharWidth, lineWidth, needHScroll) + editTotalMarginWidth
-		
-		; Debug.popup("numCharsToShow",numCharsToShow, "numCharsToShow*editCharWidth",numCharsToShow*editCharWidth, "editLeftPaddingBuiltIn",editLeftPaddingBuiltIn, "needHScroll",needHScroll, "editWidth",editWidth, "fullWidth",fullWidth)
-		
+		editHeight := this.calcMaxSize(availableHeight,                       editLineHeight, numLines,  needVScroll)
+		editWidth  := this.calcMaxSize(availableWidth - editTotalMarginWidth, editCharWidth,  lineWidth, needHScroll) + editTotalMarginWidth ; The margins shouldn't count towards the scrollable space, but we need them for the final width.
 		
 		
 		Gui, New, % "+HWNDguiId +Label" this.Prefix_GuiSpecialLabels ; guiId := gui's window handle, DebugPopupGui_* functions instead of Gui*
@@ -168,14 +119,7 @@ class DebugPopup {
 		Gui, -MinimizeBox -MaximizeBox -0x400000 ; 0x400000=WS_DLGFRAME +ToolWindow ;+0x800000 ; 0x800000=WS_BORDER ;
 		GuiControl, Focus, % this.editFieldVar
 		
-		; guiWidth := editWidth + 10
-		; Gui, Show, % "w" guiWidth, Debug Info
-		Gui, Show, , Debug Info
-		
-		Gui, +LastFound ; GDB TODO do we still need this?
-		
-		; WinGetPos, , , winWidth, winHeight
-		; Debug.popup("numLines",numLines, "winWidth",winWidth, "winHeight",winHeight, "workArea",workArea)
+		Gui, Show
 		
 		
 		mouseIsOverEditField := ObjBindMethod(this, "mouseIsOverEditField")
@@ -229,7 +173,7 @@ class DebugPopup {
 		Loop, % numLines
 			SendMessage, 0x115, 0, , Edit1, % "ahk_id " this.guiId ; WM_VSCROLL, SB_LINEUP
 	}
-	scrollDown(numLines := 1) { ; GDB TODO can we use something more specific than Edit1?
+	scrollDown(numLines := 1) { ; GDB TODO can we use something more specific than Edit1? If not, can we pull that out into a constant at least?
 		Loop, % numLines
 			SendMessage, 0x115, 1, , Edit1, % "ahk_id " this.guiId ; WM_VSCROLL, SB_LINEDOWN
 	}

@@ -15,11 +15,11 @@ class DebugPopup {
 	
 	;  - Constants
 	static Prefix_GuiSpecialLabels := "DebugPopupGui_" ; Used to have the gui call DebugPopupGui_* functions instead of just Gui* ones
-	static EditField_VarName := "DebugEdit"
 	;  - staticMembers
 	
 	;  - nonStaticMembers
-	guiId       := ""
+	guiId := ""
+	editFieldVar := ""
 	
 	
 	mouseIsOverEditField() {
@@ -34,9 +34,6 @@ class DebugPopup {
 	;  - properties
 	;  - __New()/Init()
 	__New(params*) {
-		
-		
-		global DebugEdit := 5 ; GDB TODO do this nicer, probably with a unique, incrementing value like SelectorGui does
 		
 		; GDB TODO move all of these to constants
 		fontSize := 12 ; 12pt
@@ -97,11 +94,14 @@ class DebugPopup {
 		Gui, New, % "+HWNDguiId +Label" this.Prefix_GuiSpecialLabels ; guiId := gui's window handle, DebugPopupGui_* functions instead of Gui*
 		this.guiId := guiId
 		
+		this.editFieldVar := this.guiId "DebugEdit"
+		GuiLib.createDynamicGlobal(this.editFieldVar)
+		
 		Gui, Margin, 0, 0
 		Gui, Color, % backgroundColor
 		Gui, Font, % "c" fontColor " s" fontSize, % fontName
 		
-		editProperties := "ReadOnly -WantReturn -E0x200 -VScroll -Wrap v" this.EditField_VarName " h" editHeight " w" editWidth
+		editProperties := "ReadOnly -WantReturn -E0x200 -VScroll -Wrap v" this.editFieldVar " h" editHeight " w" editWidth
 		Gui, Add, Edit, % editProperties, % message
 		
 		
@@ -111,7 +111,7 @@ class DebugPopup {
 		Gui, Add, Button, Hidden Default gDebugPopupGui_Close x0 y0 ; DebugPopupGui_Close call on click/activate
 		
 		Gui, -MinimizeBox -MaximizeBox -0x400000 ; 0x400000=WS_DLGFRAME +ToolWindow ;+0x800000 ; 0x800000=WS_BORDER ;
-		GuiControl, Focus, % this.EditField_VarName
+		GuiControl, Focus, % this.editFieldVar
 		
 		; guiWidth := editWidth + 10
 		; Gui, Show, % "w" guiWidth, Debug Info

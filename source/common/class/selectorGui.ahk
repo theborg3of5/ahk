@@ -126,14 +126,14 @@ class SelectorGui {
 	; SIDE EFFECTS:   Stores off the new gui's window handle and our new unique field ID/prefixes.
 	;---------
 	createPopup() {
-		Gui, New, +HWNDguiId
-		this.guiId := guiId ; from +HWND* setting above
+		Gui, New, +HWNDguiId ; guiId := window handle
+		this.guiId := guiId
 		
 		; Names for global variables that we'll use for values of fields. This way they can be declared global and retrieved in the same way, without having to pre-define global variables.
 		this.fieldVar_Choice          := guiId SelectorGui.FieldVarSuffix_Choice
 		this.fieldVar_OverridesPrefix := guiId SelectorGui.FieldVarSuffix_OverridesPrefix
 		
-		Gui, % "+LastFound +Label" SelectorGui.Prefix_GuiSpecialLabels  ; +LabelSelectorGui: Gui* events will call SelectorGui* functions (GuiClose > SelectorGui_Close, etc.).
+		Gui, % "+LastFound +Label" SelectorGui.Prefix_GuiSpecialLabels  ; SelectorGui_ prefix for Gui* functions (GuiClose > SelectorGui_Close, etc.).
 		Gui, Color, 2A211C
 		Gui, Font, % "s12 c" SelectorGui.FontColor_Default
 		Gui, Add, Button, Hidden Default +gSelectorGui_Submit ; Hidden button for {Enter} submission.

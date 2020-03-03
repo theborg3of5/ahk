@@ -136,7 +136,7 @@ class SelectorGui {
 		Gui, % "+LastFound +Label" SelectorGui.Prefix_GuiSpecialLabels  ; SelectorGui_ prefix for Gui* functions (GuiClose > SelectorGui_Close, etc.).
 		Gui, Color, 2A211C
 		Gui, Font, % "s12 c" SelectorGui.FontColor_Default
-		Gui, Add, Button, Hidden Default +gSelectorGui_Submit ; Hidden button for {Enter} submission.
+		Gui, Add, Button, Hidden Default +gSelectorGui_Submit ; Hidden button for {Enter} submission - calls into SelectorGui_Submit
 	}
 	
 	;---------

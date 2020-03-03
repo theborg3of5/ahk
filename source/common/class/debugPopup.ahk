@@ -18,88 +18,18 @@ class DebugPopup {
 	;  - staticMembers
 	
 	;  - nonStaticMembers
-	guiId := ""
-	editFieldVar := ""
-	
-	
-	
-	
 	;  - properties
 	;  - __New()/Init()
 	__New(params*) {
+		; Build the table of info
 		table := new DebugTable("Debug Info").thickBorderOn()
 		table.addPairs(params*)
 		
-		; Use a maxiumum of 90% of available height/width so we're not right up against the edges
-		workArea := WindowLib.getMonitorWorkArea()
-		availableHeight := workArea["HEIGHT"] * 0.9
-		availableWidth  := workArea["WIDTH"]  * 0.9
-		
-		; For width, there's a margin involved - take it out before we call calcMaxSize (as that works on units, characters here) and add it back on afterwards.
-		availableWidth -= this.Edit_TotalMarginWidth
-		
-		; Calculate edit control height/width and whether we need to scroll
-		editHeight := this.calcMaxSize(availableHeight, this.Edit_LineHeight, table.getHeight(), needVScroll)
-		editWidth  := this.calcMaxSize(availableWidth,  this.Edit_CharWidth,  table.getWidth(),  needHScroll) + this.Edit_TotalMarginWidth ; Add margin back on
-		
-		
-		
-		
-		this.addScrollHotkeys(needVScroll, needHScroll)
-		
-		
-		
-		Gui, New, % "+HWNDguiId +Label" this.Prefix_GuiSpecialLabels ; guiId := gui's window handle, DebugPopupGui_* functions instead of Gui*
-		this.guiId := guiId
-		
-		this.editFieldVar := this.guiId "DebugEdit"
-		GuiLib.createDynamicGlobal(this.editFieldVar)
-		
-		Gui, Margin, 0, 0
-		Gui, Color, % this.BackgroundColor
-		Gui, Font, % "c" this.FontColor " s" this.FontSize, % this.FontName
-		
-		editProperties := "ReadOnly -WantReturn -VScroll -Wrap -E" MicrosoftLib.ExStyle_SunkenBorder
-		Gui, Add, Edit, % editProperties " h" editHeight " w" editWidth " v" this.editFieldVar, % table.getText()
-		
-		Gui, Add, Button, Hidden Default x0 y0 gDebugPopupGui_Close ; DebugPopupGui_Close call on activate (with {Enter} since it's Default)
-		
-		Gui, % "-MinimizeBox -MaximizeBox -" MicrosoftLib.Style_CaptionHead
-		GuiControl, Focus, % this.editFieldVar
-		
-		Gui, Show, , % "Debug Info"
-		
-		
-		
-		; WinWaitClose
-		
-		; GDB TODO do we need to disable the hotkeys when we close? (only if they exist, though - either check if the hotkeys exist, or just use needVScroll/needHScroll)
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		; Set up and show popup
+		editSizes := this.calculatePopupDimensions(table)
+		this.createAndShowPopup(editSizes, table)
 	}
 	;  - otherFunctions
-	
-	
-	; #INTERNAL#
-	
-	;  - Constants
-	;  - staticMembers
-	;  - nonStaticMembers
-	;  - functions
 	
 	
 	; #PRIVATE#
@@ -117,11 +47,27 @@ class DebugPopup {
 	
 	;  - staticMembers
 	;  - nonStaticMembers
+	guiId        := "" ; Gui's window handle
+	editFieldVar := "" ; Unique ID for edit field, based on this.guiId
 	;  - functions
 	
-	calcMaxSize(available, pieceSize, numPieces, ByRef needScroll) {
-		needScroll := false
+	calculatePopupDimensions(table) {
+		; Use a maxiumum of 90% of available height/width so we're not right up against the edges
+		workArea := WindowLib.getMonitorWorkArea()
+		availableWidth  := workArea["WIDTH"]  * 0.9
+		availableHeight := workArea["HEIGHT"] * 0.9
 		
+		; For width, there's a margin involved - take it out before we call calcMaxSize (as that works on units, characters here) and add it back on afterwards.
+		availableWidth -= this.Edit_TotalMarginWidth
+		
+		; Calculate edit control height/width and whether we need to scroll
+		editHeight := this.calcMaxSize(availableHeight, this.Edit_LineHeight, table.getHeight())
+		editWidth  := this.calcMaxSize(availableWidth,  this.Edit_CharWidth,  table.getWidth()) + this.Edit_TotalMarginWidth ; Add margin back on
+		
+		return {"WIDTH":editWidth, "HEIGHT":editHeight}
+	}
+	
+	calcMaxSize(available, pieceSize, numPieces) {
 		; The size this would be if we didn't scroll
 		possibleSize := numPieces * pieceSize
 		
@@ -130,37 +76,8 @@ class DebugPopup {
 			return possibleSize
 		
 		; Otherwise we'll need to show a smaller size and scroll.
-		needScroll := true
 		numPiecesToShow := available // pieceSize
 		return numPiecesToShow * pieceSize
-	}
-	
-	addScrollHotkeys(needVScroll, needHScroll) {
-		mouseIsOverEditField := ObjBindMethod(this, "mouseIsOverEditField")
-		Hotkey, If, % mouseIsOverEditField
-		if(needVScroll) {
-			scrollUp   := ObjBindMethod(this, "scrollUp")
-			scrollDown := ObjBindMethod(this, "scrollDown")
-			Hotkey, ~WheelUp,    % scrollUp
-			Hotkey, ~WheelDown,  % scrollDown
-			
-			scrollUpPrecise   := ObjBindMethod(this, "scrollUp",   1)
-			scrollDownPrecise := ObjBindMethod(this, "scrollDown", 1)
-			Hotkey, ~^WheelUp,   % scrollUpPrecise
-			Hotkey, ~^WheelDown, % scrollDownPrecise
-		}
-		if(needHScroll) {
-			scrollLeft  := ObjBindMethod(this, "scrollLeft")
-			scrollRight := ObjBindMethod(this, "scrollRight")
-			Hotkey, ~+WheelUp,    % scrollLeft
-			Hotkey, ~+WheelDown,  % scrollRight
-			
-			scrollLeftPrecise  := ObjBindMethod(this, "scrollLeft",  1)
-			scrollRightPrecise := ObjBindMethod(this, "scrollRight", 1)
-			Hotkey, ~+^WheelUp,   % scrollLeftPrecise
-			Hotkey, ~+^WheelDown, % scrollRightPrecise
-		}
-		Hotkey, If
 	}
 	
 	mouseIsOverEditField() {
@@ -170,6 +87,64 @@ class DebugPopup {
 		
 		controlUnderMouse := GuiControlGet(this.guiId ":Name", varNameUnderMouse)
 		return (controlUnderMouse = this.editFieldVar)
+	}
+	
+	createAndShowPopup(editSizes, table) {
+		; Create gui
+		guiProperties .= "+Label" this.Prefix_GuiSpecialLabels ; DebugPopupGui_* functions instead of Gui*
+		guiProperties .= " -" MicrosoftLib.Style_CaptionHead   ; No title bar
+		Gui, New, % guiProperties, % "Debug Info"
+		
+		; Store off window ID, initialize edit field variable
+		Gui, +HWNDguiId
+		this.guiId := guiId
+		this.editFieldVar := this.guiId "DebugEdit"
+		GuiLib.createDynamicGlobal(this.editFieldVar)
+		
+		; Apply margins and colors
+		Gui, Margin, 0, 0
+		Gui, Color, % this.BackgroundColor
+		Gui, Font, % "c" this.FontColor " s" this.FontSize, % this.FontName
+		
+		; Create and focus edit control (holds everything we display)
+		editProperties := "ReadOnly -WantReturn -E" MicrosoftLib.ExStyle_SunkenBorder ; Read-only, don't consume {Enter} keystroke, no thick border
+		editProperties .= " -VScroll -HScroll -Wrap w" editSizes["WIDTH"] " h" editSizes["HEIGHT"] ; No scrollbars, no wrapping, specific width/height
+		editProperties .= " v" this.editFieldVar
+		Gui, Add, Edit, % editProperties, % table.getText()
+		GuiControl, Focus, % this.editFieldVar
+		
+		; Add hidden button to respond to {Enter} keystroke (because it's Default)
+		Gui, Add, Button, Hidden Default x0 y0 gDebugPopupGui_Close ; DebugPopupGui_Close call on activate
+		
+		; Show the resulting popup and add scrolling hotkeys
+		Gui, Show
+		this.addScrollHotkeys()
+	}
+	
+	addScrollHotkeys() {
+		; Note: using a BoundFunc this way causes a small memory leak - the BoundFunc object is never released until the script exits. That said, it's insignificant enough that it shouldn't matter in practice, especially for a debug popup.
+		mouseIsOverEditField := ObjBindMethod(this, "mouseIsOverEditField")
+		Hotkey, If, % mouseIsOverEditField
+		
+		scrollUp   := ObjBindMethod(this, "scrollUp")
+		scrollDown := ObjBindMethod(this, "scrollDown")
+		Hotkey, WheelUp,    % scrollUp
+		Hotkey, WheelDown,  % scrollDown
+		scrollUpPrecise   := ObjBindMethod(this, "scrollUp",   1) ; GDB TODO would it be overkill to functionalize these two scroll hotkey blocks? Probably pass in WheelUp/+WheelUp + "scrollUp","scrollDown"/"scrollLeft","scrollRight"
+		scrollDownPrecise := ObjBindMethod(this, "scrollDown", 1)
+		Hotkey, ^WheelUp,   % scrollUpPrecise
+		Hotkey, ^WheelDown, % scrollDownPrecise
+		
+		scrollLeft  := ObjBindMethod(this, "scrollLeft")
+		scrollRight := ObjBindMethod(this, "scrollRight")
+		Hotkey, +WheelUp,    % scrollLeft
+		Hotkey, +WheelDown,  % scrollRight
+		scrollLeftPrecise  := ObjBindMethod(this, "scrollLeft",  1)
+		scrollRightPrecise := ObjBindMethod(this, "scrollRight", 1)
+		Hotkey, +^WheelUp,   % scrollLeftPrecise
+		Hotkey, +^WheelDown, % scrollRightPrecise
+		
+		Hotkey, If
 	}
 	
 	;---------

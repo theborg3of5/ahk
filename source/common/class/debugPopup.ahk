@@ -27,10 +27,6 @@ class DebugPopup {
 	;  - properties
 	;  - __New()/Init()
 	__New(params*) {
-		
-		
-		
-		
 		table := new DebugTable("Debug Info").thickBorderOn()
 		table.addPairs(params*)
 		
@@ -50,31 +46,8 @@ class DebugPopup {
 		availableWidth -= this.Edit_TotalMarginWidth
 		editWidth := this.calcMaxSize(availableWidth, this.Edit_CharWidth, lineWidth, needHScroll) + this.Edit_TotalMarginWidth
 		
-		mouseIsOverEditField := ObjBindMethod(this, "mouseIsOverEditField")
-		Hotkey, If, % mouseIsOverEditField
-		if(needVScroll) {
-			scrollUp   := ObjBindMethod(this, "scrollUp")
-			scrollDown := ObjBindMethod(this, "scrollDown")
-			Hotkey, ~WheelUp,    % scrollUp
-			Hotkey, ~WheelDown,  % scrollDown
-			
-			scrollUpPrecise   := ObjBindMethod(this, "scrollUp",   1)
-			scrollDownPrecise := ObjBindMethod(this, "scrollDown", 1)
-			Hotkey, ~^WheelUp,   % scrollUpPrecise
-			Hotkey, ~^WheelDown, % scrollDownPrecise
-		}
-		if(needHScroll) {
-			scrollLeft  := ObjBindMethod(this, "scrollLeft")
-			scrollRight := ObjBindMethod(this, "scrollRight")
-			Hotkey, ~+WheelUp,    % scrollLeft
-			Hotkey, ~+WheelDown,  % scrollRight
-			
-			scrollLeftPrecise  := ObjBindMethod(this, "scrollLeft",  1)
-			scrollRightPrecise := ObjBindMethod(this, "scrollRight", 1)
-			Hotkey, ~+^WheelUp,   % scrollLeftPrecise
-			Hotkey, ~+^WheelDown, % scrollRightPrecise
-		}
-		Hotkey, If
+		this.addScrollHotkeys(needVScroll, needHScroll)
+		
 		
 		
 		
@@ -148,30 +121,6 @@ class DebugPopup {
 	;  - nonStaticMembers
 	;  - functions
 	
-	
-	mouseIsOverEditField() {
-		MouseGetPos("", "", windowUnderMouse, varNameUnderMouse)
-		GuiControlGet, mouseName, % this.guiId ":Name", % varNameUnderMouse
-		
-		return (windowUnderMouse = this.guiId) && (mouseName = this.editFieldVar)
-	}
-	
-	
-	
-	
-	calcMaxSizeBeforeScroll(available, pieceSize, numPieces) {
-		; The size this would be if we didn't scroll
-		possibleSize := (pieceSize * numPieces)
-		
-		; If it already fits within the available space, no problem.
-		if(possibleSize <= available)
-			return numPieces * pieceSize
-		
-		; Otherwise we'll need to only show some of the space (and scroll).
-		numPiecesToShow := available // pieceSize
-		return numPiecesToShow * pieceSize
-	}
-	
 	calcMaxSize(available, pieceSize, numPieces, ByRef needScroll) {
 		needScroll := false
 		
@@ -186,6 +135,43 @@ class DebugPopup {
 		needScroll := true
 		numPiecesToShow := available // pieceSize
 		return numPiecesToShow * pieceSize
+	}
+	
+	addScrollHotkeys(needVScroll, needHScroll) {
+		mouseIsOverEditField := ObjBindMethod(this, "mouseIsOverEditField")
+		Hotkey, If, % mouseIsOverEditField
+		if(needVScroll) {
+			scrollUp   := ObjBindMethod(this, "scrollUp")
+			scrollDown := ObjBindMethod(this, "scrollDown")
+			Hotkey, ~WheelUp,    % scrollUp
+			Hotkey, ~WheelDown,  % scrollDown
+			
+			scrollUpPrecise   := ObjBindMethod(this, "scrollUp",   1)
+			scrollDownPrecise := ObjBindMethod(this, "scrollDown", 1)
+			Hotkey, ~^WheelUp,   % scrollUpPrecise
+			Hotkey, ~^WheelDown, % scrollDownPrecise
+		}
+		if(needHScroll) {
+			scrollLeft  := ObjBindMethod(this, "scrollLeft")
+			scrollRight := ObjBindMethod(this, "scrollRight")
+			Hotkey, ~+WheelUp,    % scrollLeft
+			Hotkey, ~+WheelDown,  % scrollRight
+			
+			scrollLeftPrecise  := ObjBindMethod(this, "scrollLeft",  1)
+			scrollRightPrecise := ObjBindMethod(this, "scrollRight", 1)
+			Hotkey, ~+^WheelUp,   % scrollLeftPrecise
+			Hotkey, ~+^WheelDown, % scrollRightPrecise
+		}
+		Hotkey, If
+	}
+	
+	mouseIsOverEditField() {
+		MouseGetPos("", "", windowUnderMouse, varNameUnderMouse)
+		if(windowUnderMouse != this.guiId)
+			return false
+		
+		controlUnderMouse := GuiControlGet(this.guiId ":Name", varNameUnderMouse)
+		return (controlUnderMouse = this.editFieldVar)
 	}
 	
 	;---------
@@ -203,7 +189,7 @@ class DebugPopup {
 			SendMessage, % scrollType, % scrollDirection, , % controlId, % titleString
 	}
 	
-	; Scroll in specific directions
+	; Scroll in specific directions - by default, 3 lines up/down and 10 characters left/right.
 	scrollUp(count := 3) {
 		this.sendScrollMessages(MicrosoftLib.Message_VertScroll,  MicrosoftLib.ScrollBar_Up,    count)
 	}

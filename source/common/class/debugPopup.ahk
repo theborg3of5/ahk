@@ -26,9 +26,57 @@ class DebugPopup {
 		MouseGetPos("", "", windowUnderMouse, varNameUnderMouse)
 		GuiControlGet, mouseName, % this.guiId ":Name", % varNameUnderMouse
 		
-		return (windowUnderMouse = this.guiId && mouseName = this.EditField_VarName)
+		return (windowUnderMouse = this.guiId && mouseName = this.editFieldVar)
 	}
 	
+	
+	
+	
+	calcMaxSizeBeforeScroll(available, pieceSize, numPieces) {
+		; The size this would be if we didn't scroll
+		possibleSize := (pieceSize * numPieces)
+		
+		; If it already fits within the available space, no problem.
+		if(possibleSize <= available)
+			return numPieces * pieceSize
+		
+		; Otherwise we'll need to only show some of the space (and scroll).
+		numPiecesToShow := available // pieceSize
+		return numPiecesToShow * pieceSize
+	}
+	
+	calcMaxSize(available, pieceSize, numPieces, ByRef needScroll) {
+		needScroll := false
+		
+		; The size this would be if we didn't scroll
+		possibleSize := numPieces * pieceSize
+		
+		; If it already fits within the available space, no problem.
+		if(possibleSize <= available)
+			return possibleSize
+		
+		; Otherwise we'll need to show a smaller size and scroll.
+		needScroll := true
+		numPiecesToShow := available // pieceSize
+		return numPiecesToShow * pieceSize
+	}
+	
+	
+	requiresScroll(available, pieceSize, numPieces, ByRef finalSize) {
+		; The size this would be if we didn't scroll
+		possibleSize := numPieces * pieceSize
+		
+		; If it already fits within the available space, no problem.
+		if(possibleSize <= available) {
+			finalSize := possibleSize
+			return false
+		}
+		
+		; Otherwise we'll need to scroll.
+		numPiecesToShow := available // pieceSize
+		finalSize := numPiecesToShow * pieceSize
+		return true
+	}
 	
 	
 	;  - properties
@@ -39,7 +87,7 @@ class DebugPopup {
 		fontSize := 12 ; 12pt
 		fontName := "Consolas"
 		editLineHeight := 19 ; For size 12 Consolas
-		charWidth := 9
+		editCharWidth := 9
 		
 		editTotalMarginWidth := 8 ; How much extra space the edit control needs to cut off at character edges
 		
@@ -60,34 +108,41 @@ class DebugPopup {
 		
 		
 		
-		needVScroll := false
-		needHScroll := false
 		
 		; 90% of available height/width so we're not right up against the edges
 		workArea := WindowLib.getMonitorWorkArea()
 		availableHeight := workArea["HEIGHT"] * 0.9
 		availableWidth  := workArea["WIDTH"]  * 0.9
 		
-		possibleHeight := (editLineHeight * numLines)
-		if(possibleHeight > availableHeight) {
-			numLinesToShow := availableHeight // editLineHeight
-			needVScroll := true
-		} else {
-			numLinesToShow := numLines
-		}
-		editHeight := (editLineHeight * numLinesToShow)
+		; needVScroll := this.requiresScroll(availableHeight, editLineHeight, numLines, editHeight)
+		editHeight := this.calcMaxSize(availableHeight, editLineHeight, numLines, needVScroll)
+		; needVScroll := false
+		; possibleHeight := (editLineHeight * numLines)
+		; if(possibleHeight > availableHeight) {
+			; numLinesToShow := availableHeight // editLineHeight
+			; needVScroll := true
+		; } else {
+			; numLinesToShow := numLines
+		; }
+		; editHeight := (editLineHeight * numLinesToShow)
 		
 		; GDB TODO this whole block seems like a good function - "find max possible size based on max + margin + increments)
-		possibleWidth := (lineWidth * charWidth) + editTotalMarginWidth
-		if(possibleWidth > availableWidth) {
-			numCharsToShow := (availableWidth - editTotalMarginWidth) // charWidth
-			needHScroll := true
-		} else {
-			numCharsToShow := lineWidth
-		}
-		editWidth := (numCharsToShow * charWidth) + editTotalMarginWidth
 		
-		; Debug.popup("numCharsToShow",numCharsToShow, "numCharsToShow*charWidth",numCharsToShow*charWidth, "editLeftPaddingBuiltIn",editLeftPaddingBuiltIn, "needHScroll",needHScroll, "editWidth",editWidth, "fullWidth",fullWidth)
+		; availableWidth -= editTotalMarginWidth
+		
+		; needHScroll := false
+		; possibleWidth := (lineWidth * editCharWidth)
+		; if(possibleWidth > availableWidth) {
+			; numCharsToShow := availableWidth // editCharWidth
+			; needHScroll := true
+		; } else {
+			; numCharsToShow := lineWidth
+		; }
+		; editWidth := (numCharsToShow * editCharWidth) + editTotalMarginWidth
+		
+		editWidth := this.calcMaxSize(availableWidth - editTotalMarginWidth, editCharWidth, lineWidth, needHScroll) + editTotalMarginWidth
+		
+		; Debug.popup("numCharsToShow",numCharsToShow, "numCharsToShow*editCharWidth",numCharsToShow*editCharWidth, "editLeftPaddingBuiltIn",editLeftPaddingBuiltIn, "needHScroll",needHScroll, "editWidth",editWidth, "fullWidth",fullWidth)
 		
 		
 		

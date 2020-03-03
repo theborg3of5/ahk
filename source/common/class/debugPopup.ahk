@@ -26,7 +26,7 @@ class DebugPopup {
 		MouseGetPos("", "", windowUnderMouse, varNameUnderMouse)
 		GuiControlGet, mouseName, % this.guiId ":Name", % varNameUnderMouse
 		
-		return (windowUnderMouse = this.guiId && mouseName = this.editFieldVar)
+		return (windowUnderMouse = this.guiId) && (mouseName = this.editFieldVar)
 	}
 	
 	
@@ -66,17 +66,6 @@ class DebugPopup {
 	;  - __New()/Init()
 	__New(params*) {
 		
-		; GDB TODO move all of these to constants
-		fontSize := 12 ; 12pt
-		fontName := "Consolas"
-		editLineHeight := 19 ; For size 12 Consolas
-		editCharWidth := 9
-		
-		editTotalMarginWidth := 8 ; How much extra space the edit control needs to cut off at character edges
-		
-		backgroundColor := "444444"
-		fontColor := "00FF00"
-		
 		
 		
 		
@@ -88,14 +77,16 @@ class DebugPopup {
 		numLines  := table.getHeight()
 		
 		
-		; 90% of available height/width so we're not right up against the edges
+		; Use a maxiumum of 90% of available height/width so we're not right up against the edges
 		workArea := WindowLib.getMonitorWorkArea()
 		availableHeight := workArea["HEIGHT"] * 0.9
 		availableWidth  := workArea["WIDTH"]  * 0.9
 		
-		editHeight := this.calcMaxSize(availableHeight,                       editLineHeight, numLines,  needVScroll)
-		editWidth  := this.calcMaxSize(availableWidth - editTotalMarginWidth, editCharWidth,  lineWidth, needHScroll) + editTotalMarginWidth ; The margins shouldn't count towards the scrollable space, but we need them for the final width.
-		
+		; Calculate edit control height/width and whether we need to scroll
+		editHeight := this.calcMaxSize(availableHeight, this.Edit_LineHeight, numLines, needVScroll)
+		; For width, there's a margin involved - take it out before we call calcMaxSize (as that works on units, characters here) and add it back on afterwards.
+		availableWidth -= this.Edit_TotalMarginWidth
+		editWidth := this.calcMaxSize(availableWidth, this.Edit_CharWidth, lineWidth, needHScroll) + this.Edit_TotalMarginWidth
 		
 		Gui, New, % "+HWNDguiId +Label" this.Prefix_GuiSpecialLabels ; guiId := gui's window handle, DebugPopupGui_* functions instead of Gui*
 		this.guiId := guiId
@@ -104,8 +95,8 @@ class DebugPopup {
 		GuiLib.createDynamicGlobal(this.editFieldVar)
 		
 		Gui, Margin, 0, 0
-		Gui, Color, % backgroundColor
-		Gui, Font, % "c" fontColor " s" fontSize, % fontName
+		Gui, Color, % this.BackgroundColor
+		Gui, Font, % "c" this.FontColor " s" this.FontSize, % this.FontName
 		
 		editProperties := "ReadOnly -WantReturn -E0x200 -VScroll -Wrap v" this.editFieldVar " h" editHeight " w" editWidth
 		Gui, Add, Edit, % editProperties, % message
@@ -198,6 +189,14 @@ class DebugPopup {
 	; #PRIVATE#
 	
 	;  - Constants
+	static BackgroundColor       := "444444"
+	static FontColor             := "00FF00"
+	static FontName              := "Consolas"
+	static FontSize              := 12 ; points
+	static Edit_LineHeight       := 19 ; How many px tall each line is in the edit control
+	static Edit_CharWidth        := 9  ; How many px wide each character is in the edit control
+	static Edit_TotalMarginWidth := 8  ; How much extra space the edit control needs to cut off at character edges
+	
 	;  - staticMembers
 	;  - nonStaticMembers
 	;  - functions

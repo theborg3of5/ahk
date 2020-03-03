@@ -58,7 +58,7 @@ class DebugPopup {
 		if(tt.getHeight() >= 50)
 			tt.setBottomTitle(objName)
 		
-		childBlock := tt.generateText()
+		childBlock := tt.getText()
 		return childBlock
 	}
 	
@@ -112,16 +112,33 @@ class DebugPopup {
 		
 		
 		
-		paramPairs := this.convertParamsToPaired(params*)
+		; paramPairs := this.convertParamsToPaired(params*)
 		
-		tt := new TextTable().setTopTitle("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
-		For _,row in paramPairs {
-			tt.addRow(row["LABEL"] ":", this.buildValueDebugString(row["VALUE"]))
+		; tt := new TextTable().setTopTitle("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
+		; For _,row in paramPairs {
+			; tt.addRow(row["LABEL"] ":", this.buildValueDebugString(row["VALUE"]))
+		; }
+		
+		
+		
+		table := new DebugTable("Debug Info").thickBorderOn()
+		
+		; Parse the given labels and parameters and add their debug info to the table.
+		Loop, % params.MaxIndex() // 2 {
+			label := params[A_Index * 2 - 1]
+			value := params[A_Index * 2]
+			table.addLine(label, value)
 		}
 		
-		message := tt.generateText()
-		lineWidth := tt.getWidth()
-		numLines := tt.getHeight()
+		
+		
+		
+		
+		
+		
+		message := table.getText()
+		lineWidth := table.getWidth()
+		numLines := table.getHeight()
 		
 		
 		
@@ -312,7 +329,7 @@ class DebugBuilder2 {
 	; RETURNS:        The string built by this class, in full.
 	;---------
 	toString() {
-		return this.tt.generateText()
+		return this.tt.getText()
 	}
 	
 	
@@ -323,13 +340,14 @@ class DebugBuilder2 {
 	; #END#
 }
 
-class DebugBuilder3 {
+class DebugBuilder3 { ; GDB TODO should this just be static, or even part of Debug?
 	table := "" ; Outer TextTable instance
 	
 	__New(params*) {
 		this.table := new TextTable()
 		this.table.setTopTitle("Debug Info")
 		this.table.setBorderType(TextTable.BorderType_BoldLine)
+		this.table := new DebugTable("Debug Info").thickBorderOn()
 		
 		; Parse the given labels and parameters and add their debug info to the table.
 		Loop, % params.MaxIndex() // 2 {
@@ -340,7 +358,7 @@ class DebugBuilder3 {
 	}
 	
 	getText() {
-		return this.table.generateText()
+		return this.table.getText()
 	}
 	
 	getWidth() {
@@ -368,26 +386,15 @@ class DebugBuilder3 {
 			return objName
 		
 		; Compile child values
-		childTable := new TextTable()
+		childTable := new DebugTable(objName)
 		if(isFunc(value.Debug_ToString)) { ; If an object has its own debug logic, use that rather than looping.
-			builder := new DebugInfo()
-			value.Debug_ToString(builder)
-			; For subLabel,subVal in builder.data
-				; childTable.addRow(subLabel, this.buildValueDebugString(subVal))
-			
+			value.Debug_ToString(childTable)
 		} else {
-			; For subLabel,subVal in value
-				; builder.addLine(subLabel, subVal)
-		} ; GDB TODO figure out how to structure this - it would be nice if we could just call into the same add logic (that takes care of the recursion) from both Debug_ToString stuff and looping, but is it worth it?
-		;		- Are we talking about a DebugTable class that extends TextTable and just has an addLine wrapper around base.addRow that calls into DebugBuilder.buildValueDebugString?
-		;		- Alternatively, should this be a fully recursive thing?
-		;			- If it is, how do we handle the thick vs. thin border? Something passed in by parent, or maybe only passed in by top-level logic and not passed down to children?
+			For subLabel,subVal in value
+				childTable.addLine(subLabel, subVal)
+		}
 		
-		if(tt.getHeight() >= 50)
-			tt.setBottomTitle(objName)
-		
-		childBlock := tt.generateText()
-		return childBlock
+		return childTable.getText()
 	}
 
 	getObjectName(value) {
@@ -406,10 +413,37 @@ class DebugBuilder3 {
 	
 }
 
-class DebugInfo {
-	data := []
+class DebugTable {
+	title := ""
+	table := new TextTable().setBorderType(TextTable.BorderType_Line)
+	
+	__New(title) {
+		this.title := title
+		this.table.setTopTitle(title)
+	}
+	
+	thickBorderOn() {
+		this.table.setBorderType(TextTable.BorderType_BoldLine)
+		return this
+	}
 	
 	addLine(label, value) {
-		this.data.push([label, value])
+		this.table.addRow(label ":", DebugBuilder3.buildValueDebugString(value))
+	}
+	
+	getText() {
+		; Also add the title to the bottom if the table ends up tall enough.
+		if(this.table.getHeight() > 50)
+			this.table.setBottomTitle(this.title)
+		
+		return this.table.getText()
+	}
+	
+	getWidth() {
+		return this.table.getWidth()
+	}
+	
+	getHeight() {
+		return this.table.getHeight()
 	}
 }

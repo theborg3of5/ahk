@@ -20,7 +20,7 @@
 ;		tt.addRow("v7", "v8", "v9")                   ; Add a new row dynamically (settings still apply)
 ;		
 ;		; Generate output
-;		output := tt.generateText()
+;		output := tt.getText()
 ;		
 ;		output:
 ;		 val1    val2  val3 
@@ -34,7 +34,7 @@
 ;		tt.setTopTitle("Fruits")
 ;		tt.setBottomTitle("Yum!")
 ;		tt.addRow("apple", "banana", "coconut")
-;		output := tt.generateText()
+;		output := tt.getText()
 ;		
 ;		output:
 ;		┌───────── Fruits ─────────┐
@@ -217,7 +217,7 @@ class TextTable {
 	; DESCRIPTION:    Generate the table as a string
 	; RETURNS:        The table, as a string
 	;---------
-	generateText() {
+	getText() {
 		output := ""
 		
 		output := output.appendLine(this.generateTopBottomLine(this.topTitle, this.borderTL, this.borderTR))

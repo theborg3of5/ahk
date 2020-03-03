@@ -30,24 +30,22 @@ class DebugPopup {
 		table := new DebugTable("Debug Info").thickBorderOn()
 		table.addPairs(params*)
 		
-		message   := table.getText()
-		lineWidth := table.getWidth()
-		numLines  := table.getHeight()
-		
-		
 		; Use a maxiumum of 90% of available height/width so we're not right up against the edges
 		workArea := WindowLib.getMonitorWorkArea()
 		availableHeight := workArea["HEIGHT"] * 0.9
 		availableWidth  := workArea["WIDTH"]  * 0.9
 		
-		; Calculate edit control height/width and whether we need to scroll
-		editHeight := this.calcMaxSize(availableHeight, this.Edit_LineHeight, numLines, needVScroll)
 		; For width, there's a margin involved - take it out before we call calcMaxSize (as that works on units, characters here) and add it back on afterwards.
 		availableWidth -= this.Edit_TotalMarginWidth
-		editWidth := this.calcMaxSize(availableWidth, this.Edit_CharWidth, lineWidth, needHScroll) + this.Edit_TotalMarginWidth
+		
+		; Calculate edit control height/width and whether we need to scroll
+		editHeight := this.calcMaxSize(availableHeight, this.Edit_LineHeight, table.getHeight(), needVScroll)
+		editWidth  := this.calcMaxSize(availableWidth,  this.Edit_CharWidth,  table.getWidth(),  needHScroll) + this.Edit_TotalMarginWidth ; Add margin back on
+		
+		
+		
 		
 		this.addScrollHotkeys(needVScroll, needHScroll)
-		
 		
 		
 		
@@ -62,7 +60,7 @@ class DebugPopup {
 		Gui, Font, % "c" this.FontColor " s" this.FontSize, % this.FontName
 		
 		editProperties := "ReadOnly -WantReturn -VScroll -Wrap -E" MicrosoftLib.ExStyle_SunkenBorder
-		Gui, Add, Edit, % editProperties " h" editHeight " w" editWidth " v" this.editFieldVar, % message
+		Gui, Add, Edit, % editProperties " h" editHeight " w" editWidth " v" this.editFieldVar, % table.getText()
 		
 		Gui, Add, Button, Hidden Default x0 y0 gDebugPopupGui_Close ; DebugPopupGui_Close call on activate (with {Enter} since it's Default)
 		

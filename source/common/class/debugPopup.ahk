@@ -5,12 +5,10 @@
 	
 	GDB TODO
 		Update auto-complete and syntax highlighting notepad++ definitions
-		Could/should DebugBuilder (or maybe something named a little differently) just extend TextTable?
-			That way we just override .addRow (or just keep .addLine) and call into the base behavior with our ":"/debug build value stuff
-			Then it makes more sense to just have both branches use DebugBuilder, too - it theoretically takes care of the recursion itself (we call it, it calls getValueDebugString, etc.)
-			Alternatively, should it encapsulate all of the build-the-TextTable logic, and leave DebugPopup only the actual gui/popup stuff?
 	
 */ ; =--
+
+; Edit width = 9*numChars + 13
 
 class DebugPopup {
 	; #PUBLIC#
@@ -32,65 +30,10 @@ class DebugPopup {
 	}
 	
 	
-	buildValueDebugString(value) { ; GDB TODO these should move back into Debug when we're ready
-		; Base case - not a complex object, just return the value to show.
-		if(!isObject(value))
-			return value
-		
-		; For objects, compile child values
-		objName := this.getObjectName(value)
-		builder := new DebugBuilder2()
-		if(isFunc(value.Debug_ToString)) { ; If an object has its own debug logic, use that rather than looping.
-			value.Debug_ToString(builder)
-			tt := builder.tt
-		} else {
-			if(value.count() = 0)
-				return objName
-			
-			tt := new TextTable()
-			
-			For subIndex,subVal in value
-				tt.addRow(subIndex ":", DebugPopup.buildValueDebugString(subVal))
-		}
-		
-		tt.setBorderType(TextTable.BorderType_Line)
-		tt.setTopTitle(objName)
-		if(tt.getHeight() >= 50)
-			tt.setBottomTitle(objName)
-		
-		childBlock := tt.getText()
-		return childBlock
-	}
-	
-	convertParamsToPaired(params*) {
-		pairedParams := []
-		
-		Loop, % params.MaxIndex() // 2 {
-			key   := params[A_Index * 2 - 1]
-			value := params[A_Index * 2]
-			pairedParams.Push({"LABEL":key, "VALUE":value})
-		}
-		
-		return pairedParams
-	}
-
-	getObjectName(value) {
-		; If an object has its own name specified, use it.
-		if(isFunc(value.Debug_TypeName))
-			return value.Debug_TypeName()
-			
-		; For other objects, just use a generic "Array"/"Object" label and add the number of elements.
-		if(value.isArray)
-			return "Array (" value.count() ")"
-		return "Object (" value.count() ")"
-	}
-	
-	
-; Edit width = 9*numChars + 13
 	
 	;  - properties
 	;  - __New()/Init()
-	__New(params*) { ; GDB TODO take it variadic parameters and turn them into a dataTable for TextTable
+	__New(params*) {
 		
 		
 		global DebugEdit := 5 ; GDB TODO do this nicer, probably with a unique, incrementing value like SelectorGui does
@@ -109,47 +52,22 @@ class DebugPopup {
 		
 		
 		
-		
-		
-		
-		; paramPairs := this.convertParamsToPaired(params*)
-		
-		; tt := new TextTable().setTopTitle("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
-		; For _,row in paramPairs {
-			; tt.addRow(row["LABEL"] ":", this.buildValueDebugString(row["VALUE"]))
-		; }
-		
-		
-		
 		table := new DebugTable("Debug Info").thickBorderOn()
+		table.addPairs(params*)
 		
-		; Parse the given labels and parameters and add their debug info to the table.
-		Loop, % params.MaxIndex() // 2 {
-			label := params[A_Index * 2 - 1]
-			value := params[A_Index * 2]
-			table.addLine(label, value)
-		}
-		
-		
-		
-		
-		
-		
-		
-		message := table.getText()
+		message   := table.getText()
 		lineWidth := table.getWidth()
-		numLines := table.getHeight()
+		numLines  := table.getHeight()
 		
 		
 		
-		; numLines := message.countMatches("`n") + 1
 		
-		workArea := WindowLib.getMonitorWorkArea()
 		
 		needVScroll := false
 		needHScroll := false
 		
 		; 90% of available height/width so we're not right up against the edges
+		workArea := WindowLib.getMonitorWorkArea()
 		availableHeight := workArea["HEIGHT"] * 0.9
 		availableWidth  := workArea["WIDTH"]  * 0.9
 		
@@ -199,7 +117,7 @@ class DebugPopup {
 		; Gui, Show, % "w" guiWidth, Debug Info
 		Gui, Show, , Debug Info
 		
-		Gui, +LastFound
+		Gui, +LastFound ; GDB TODO do we still need this?
 		
 		; WinGetPos, , , winWidth, winHeight
 		; Debug.popup("numLines",numLines, "winWidth",winWidth, "winHeight",winHeight, "workArea",workArea)
@@ -291,65 +209,21 @@ DebugPopupGui_Close() {
 	Gui, Destroy
 }
 
-
-
-
-class DebugBuilder2 {
-	; #PUBLIC#
+class DebugTable {
+	title := ""
+	table := new TextTable().setBorderType(TextTable.BorderType_Line)
 	
-	;---------
-	; DESCRIPTION:    Create a new DebugBuilder instance.
-	; PARAMETERS:
-	;  numTabs (I,OPT) - How many levels of indentation the string should start at. Added lines will
-	;                    be at this level + 1.
-	; RETURNS:        Reference to new DebugBuilder object
-	;---------
-	__New() {
-		this.tt := new TextTable() ;.setBorderType(TextTable.BorderType_Line) ;.setColumnDivider(" " Chr(0x2502) " ")
+	__New(title) {
+		this.title := title
+		this.table.setTopTitle(title)
 	}
 	
-	;---------
-	; DESCRIPTION:    Add a properly-indented line* with the given label and value to the output
-	;                 string.
-	; PARAMETERS:
-	;  label (I,REQ) - The label to show for the given value
-	;  value (I,REQ) - The value to evaluate and show. Will be treated according to the logic
-	;                  described in the DEBUG class (see that class documentation for details).
-	; NOTES:          A "line" may actually contain multiple newlines, but anything below the
-	;                 initial line will be indented 1 level deeper.
-	;---------
-	addLine(label, value) {
-		this.tt.addRow(label ":", DebugPopup.buildValueDebugString(value))
-		; newLine := Debug.buildDebugStringForPair(label, value, this.numTabs)
-		; this.outString := this.outString.appendLine(newLine)
-	}
-	
-	;---------
-	; DESCRIPTION:    Retrieve the debug string built by this class.
-	; RETURNS:        The string built by this class, in full.
-	;---------
-	toString() {
-		return this.tt.getText()
-	}
-	
-	
-	; #PRIVATE#
-	
-	tt   := ""  ; How indented our base level of text should be.
-	; outString := "" ; Built-up string to eventually return.
-	; #END#
-}
-
-class DebugBuilder3 { ; GDB TODO should this just be static, or even part of Debug?
-	table := "" ; Outer TextTable instance
-	
-	__New(params*) {
-		this.table := new TextTable()
-		this.table.setTopTitle("Debug Info")
+	thickBorderOn() {
 		this.table.setBorderType(TextTable.BorderType_BoldLine)
-		this.table := new DebugTable("Debug Info").thickBorderOn()
-		
-		; Parse the given labels and parameters and add their debug info to the table.
+		return this
+	}
+	
+	addPairs(params*) {
 		Loop, % params.MaxIndex() // 2 {
 			label := params[A_Index * 2 - 1]
 			value := params[A_Index * 2]
@@ -357,7 +231,15 @@ class DebugBuilder3 { ; GDB TODO should this just be static, or even part of Deb
 		}
 	}
 	
+	addLine(label, value) {
+		this.table.addRow(label ":", this.buildValueDebugString(value))
+	}
+	
 	getText() {
+		; Also add the title to the bottom if the table ends up tall enough.
+		if(this.table.getHeight() > 50)
+			this.table.setBottomTitle(this.title)
+		
 		return this.table.getText()
 	}
 	
@@ -367,10 +249,6 @@ class DebugBuilder3 { ; GDB TODO should this just be static, or even part of Deb
 	
 	getHeight() {
 		return this.table.getHeight()
-	}
-	
-	addLine(label, value) {
-		this.table.addRow(label ":", this.buildValueDebugString(value))
 	}
 	
 	
@@ -406,44 +284,5 @@ class DebugBuilder3 { ; GDB TODO should this just be static, or even part of Deb
 		if(value.isArray)
 			return "Array (" value.count() ")"
 		return "Object (" value.count() ")"
-	}
-	
-	
-	
-	
-}
-
-class DebugTable {
-	title := ""
-	table := new TextTable().setBorderType(TextTable.BorderType_Line)
-	
-	__New(title) {
-		this.title := title
-		this.table.setTopTitle(title)
-	}
-	
-	thickBorderOn() {
-		this.table.setBorderType(TextTable.BorderType_BoldLine)
-		return this
-	}
-	
-	addLine(label, value) {
-		this.table.addRow(label ":", DebugBuilder3.buildValueDebugString(value))
-	}
-	
-	getText() {
-		; Also add the title to the bottom if the table ends up tall enough.
-		if(this.table.getHeight() > 50)
-			this.table.setBottomTitle(this.title)
-		
-		return this.table.getText()
-	}
-	
-	getWidth() {
-		return this.table.getWidth()
-	}
-	
-	getHeight() {
-		return this.table.getHeight()
 	}
 }

@@ -22,7 +22,7 @@ class DebugPopup {
 	;  - __New()/Init()
 	__New(params*) {
 		; Build the table of info
-		table := new DebugTable("Debug Info").thickBorderOn()
+		table := new DebugTable("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
 		table.addPairs(params*)
 		
 		; Set up and show popup

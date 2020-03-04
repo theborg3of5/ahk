@@ -5,13 +5,10 @@
 	
 	GDB TODO
 		Update auto-complete and syntax highlighting notepad++ definitions
-		Should this literally be an extension of TextTable?
-			Can we override getText() like we want to, and still call into the base logic?
-				If that's the only problem, should we just rename one of the two getText()s?
 	
 */ ; =--
 
-class DebugTable {
+class DebugTable extends TextTable {
 	; #PUBLIC#
 	
 	;  - Constants
@@ -21,13 +18,12 @@ class DebugTable {
 	;  - __New()/Init()
 	__New(title) {
 		this.title := title
-		this.table.setTopTitle(title)
+		
+		this.setBorderType(TextTable.BorderType_Line)
+		this.setTopTitle(title)
 	}
+	
 	;  - otherFunctions
-	thickBorderOn() {
-		this.table.setBorderType(TextTable.BorderType_BoldLine)
-		return this
-	}
 	
 	addPairs(params*) {
 		Loop, % params.MaxIndex() // 2 {
@@ -38,23 +34,15 @@ class DebugTable {
 	}
 	
 	addLine(label, value) {
-		this.table.addRow(label ":", this.buildValueDebugString(value))
+		this.addRow(label ":", this.buildValueDebugString(value))
 	}
 	
 	getText() {
 		; Also add the title to the bottom if the table ends up tall enough.
-		if(this.table.getHeight() > 50)
-			this.table.setBottomTitle(this.title)
+		if(this.getHeight() > 50)
+			this.setBottomTitle(this.title)
 		
-		return this.table.getText()
-	}
-	
-	getWidth() {
-		return this.table.getWidth()
-	}
-	
-	getHeight() {
-		return this.table.getHeight()
+		return base.getText()
 	}
 	
 	
@@ -72,7 +60,7 @@ class DebugTable {
 	;  - staticMembers
 	;  - nonStaticMembers
 	title := ""
-	table := new TextTable().setBorderType(TextTable.BorderType_Line)
+	
 	;  - functions
 	buildValueDebugString(value) {
 		; Base case - not a complex object, just return the value to show.

@@ -99,11 +99,7 @@ class DebugTable extends TextTable {
 	; #DEBUG#
 	
 	Debug_TypeName() {
-		return "GDB TODO"
-	}
-	
-	Debug_ToString(ByRef builder) {
-		builder.addLine("GDB TODO", this.GDBTODO)
+		return "DebugTable"
 	}
 	; #END#
 }

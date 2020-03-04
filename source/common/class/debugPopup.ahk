@@ -126,25 +126,24 @@ class DebugPopup {
 		mouseIsOverEditField := ObjBindMethod(this, "mouseIsOverEditField")
 		Hotkey, If, % mouseIsOverEditField
 		
-		scrollUp   := ObjBindMethod(this, "scrollUp")
-		scrollDown := ObjBindMethod(this, "scrollDown")
-		Hotkey, WheelUp,    % scrollUp
-		Hotkey, WheelDown,  % scrollDown
-		scrollUpPrecise   := ObjBindMethod(this, "scrollUp",   1) ; GDB TODO would it be overkill to functionalize these two scroll hotkey blocks? Probably pass in WheelUp/+WheelUp + "scrollUp","scrollDown"/"scrollLeft","scrollRight"
-		scrollDownPrecise := ObjBindMethod(this, "scrollDown", 1)
-		Hotkey, ^WheelUp,   % scrollUpPrecise
-		Hotkey, ^WheelDown, % scrollDownPrecise
-		
-		scrollLeft  := ObjBindMethod(this, "scrollLeft")
-		scrollRight := ObjBindMethod(this, "scrollRight")
-		Hotkey, +WheelUp,    % scrollLeft
-		Hotkey, +WheelDown,  % scrollRight
-		scrollLeftPrecise  := ObjBindMethod(this, "scrollLeft",  1)
-		scrollRightPrecise := ObjBindMethod(this, "scrollRight", 1)
-		Hotkey, +^WheelUp,   % scrollLeftPrecise
-		Hotkey, +^WheelDown, % scrollRightPrecise
+		; Each direction (up/down/left/right) has 2 hotkeys that go with it - the ones here and the
+		; same with Ctrl added, which does a "precise" scroll (1 line/character).
+		this.addScrollHotkeySet("WheelUp"   , "scrollUp")
+		this.addScrollHotkeySet("WheelDown" , "scrollDown")
+		this.addScrollHotkeySet("+WheelUp"  , "scrollLeft")
+		this.addScrollHotkeySet("+WheelDown", "scrollRight")
 		
 		Hotkey, If
+	}
+	
+	addScrollHotkeySet(hotkeyString, methodName) {
+		; Basic scrolling hotkey (uses the default scroll amount from the named method)
+		scrollMethod := ObjBindMethod(this, methodName)
+		Hotkey, % hotkeyString, % scrollMethod
+		
+		; Precise scrolling hotkey - 1 character or line at a time.
+		scrollMethodPrecise := ObjBindMethod(this, methodName, 1)
+		Hotkey, % "^" hotkeyString, % scrollMethodPrecise
 	}
 	
 	;---------

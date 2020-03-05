@@ -386,7 +386,10 @@ class Selector {
 		overrideData := sGui.getOverrideData()
 		
 		; Return the combination of the choice and overrides.
-		return choiceData.mergeFromObject(overrideData)
+		if(choiceData)
+			return choiceData.mergeFromObject(overrideData)
+		else
+			return overrideData
 	}
 	
 	;---------

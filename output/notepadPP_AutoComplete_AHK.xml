@@ -4344,6 +4344,16 @@
         <KeyWord name="NoStandard"/>
         <KeyWord name="Not"/>
         <KeyWord name="NoTab"/>
+        <KeyWord name="Notepad.openNewInstanceWithText" func="yes">
+            <Overload retVal="[Requires program includes]" descr="
+							;---------
+							; DESCRIPTION:    Open a new instance of Notepad and set its content to the provided text.
+							; PARAMETERS:
+							;  text (I,REQ) - The text to add to the new window.
+							;---------">
+                <Param name="text" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="NoTimers"/>
         <KeyWord name="Number"/>
         <KeyWord name="NumGet" func="yes">

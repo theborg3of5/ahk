@@ -2166,9 +2166,9 @@
 							; DESCRIPTION:    Copy debug info about the provided parameters to the clipboard. Useful when
 							;                 the debug info has too many lines to show in a popup or toast.
 							; PARAMETERS:
-							;  params (I,REQ) - A variable number of arguments to display in the popup. For 1 argument,
-							;                   we will interpret it as a value (not a label), but for >1 arguments an
-							;                   even number of arguments should be passed in label,value pairs.
+							;  params* (I,REQ) - A variable number of arguments to display in the popup. For 1 argument,
+							;                    we will interpret it as a value (not a label), but for >1 arguments an
+							;                    even number of arguments should be passed in label,value pairs.
 							;---------">
                 <Param name="params*" />
             </Overload>
@@ -2208,47 +2208,197 @@
 							;                 information about the information provided. See class documentation for
 							;                 information about how we handle labels, values, arrays, and objects.
 							; PARAMETERS:
-							;  params (I,REQ) - A variable number of arguments to display in the popup. For 1 argument,
-							;                   we will interpret it as a value (not a label), but for >1 arguments an
-							;                   even number of arguments should be passed in label,value pairs.
+							;  params* (I,REQ) - A variable number of arguments to display in the popup. For 1 argument,
+							;                    we will interpret it as a value (not a label), but for >1 arguments an
+							;                    even number of arguments should be passed in label,value pairs.
 							;---------">
                 <Param name="params*" />
             </Overload>
         </KeyWord>
-        <KeyWord name="DebugBuilder" func="yes">
+        <KeyWord name="DebugPopup" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Create a new DebugBuilder instance.
+							; DESCRIPTION:    Build and show a new debug popup, where the contents is generated using a DebugTable.
 							; PARAMETERS:
-							;  numTabs (I,OPT) - How many levels of indentation the string should start at. Added lines will
-							;                    be at this level + 1.
-							; RETURNS:        Reference to new DebugBuilder object
+							;  params* (I,REQ) - As many parameters as needed, in label,value pairs
+							;                    (i.e. &quot;label1&quot;,value1,&quot;label2&quot;,value2...)
 							;---------">
-                <Param name="numTabs := 0" />
+                <Param name="params*" />
             </Overload>
         </KeyWord>
-        <KeyWord name="DebugBuilder.addLine" func="yes">
+        <KeyWord name="DebugTable" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Add a properly-indented line* with the given label and value to the output
-							;                 string.
+							; DESCRIPTION:
 							; PARAMETERS:
-							;  label (I,REQ) - The label to show for the given value
-							;  value (I,REQ) - The value to evaluate and show. Will be treated according to the logic
-							;                  described in the DEBUG class (see that class documentation for details).
-							; NOTES:          A &quot;line&quot; may actually contain multiple newlines, but anything below the
-							;                 initial line will be indented 1 level deeper.
+							;  title (I,OPT) - If you want to show a title at the top of the table, pass it in here. If
+							;                  given and the table gets >=50 lines tall, this title will also appear at
+							;                  the bottom.
+							;---------">
+                <Param name="title := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugTable.addLine" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a single label/value pair to the table.
+							; PARAMETERS:
+							;  label (I,REQ) - The label to show next to the value.
+							;  value (I,REQ) - The value to show information about.
 							;---------">
                 <Param name="label" />
                 <Param name="value" />
             </Overload>
         </KeyWord>
-        <KeyWord name="DebugBuilder.toString" func="yes">
+        <KeyWord name="DebugTable.addPairs" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Retrieve the debug string built by this class.
-							; RETURNS:        The string built by this class, in full.
+							; DESCRIPTION:    Add a set of paired parameters to the table.
+							; PARAMETERS:
+							;  params* (I,REQ) - As many parameters as needed, in label,value pairs
+							;                    (i.e. &quot;label1&quot;,value1,&quot;label2&quot;,value2...)
 							;---------">
+                <Param name="params*" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugTable.addRow" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a new row to the table.
+							; PARAMETERS:
+							;  newValues* (I,REQ) - Variadic parameter, pass in however many elements you want in column order.
+							; RETURNS:        this
+							;---------">
+                <Param name="newValues*" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugTable.addRows" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add multiple new rows to the table
+							; PARAMETERS:
+							;  newRows* (I,REQ) - Variadic parameter, pass in however many [cell, cell, cell] rows as desired.
+							; RETURNS:        this
+							;---------">
+                <Param name="newRows*" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugTable.BorderType_BoldLine" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    A thick line border using Unicode characters
+							; GROUP:          Border types
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugTable.BorderType_Line" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    A thin line border using Unicode characters
+							; GROUP:          Border types
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugTable.BorderType_None" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    No border
+							; GROUP:          Border types
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugTable.getHeight" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the current total height of the table in lines.
+							; RETURNS:        The current height of the table.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugTable.getText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the text for the table.
+							; RETURNS:        The generated text.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugTable.getWidth" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the current total width of the table in characters.
+							; RETURNS:        The current width of the table, including all columns and padding.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugTable.setBorderType" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the type of border to show the table with.
+							; PARAMETERS:
+							;  borderType (I,REQ) - The type of border to set, from .BorderType_* constants.
+							; RETURNS:
+							; SIDE EFFECTS:
+							; NOTES:
+							;---------">
+                <Param name="borderType" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugTable.setBottomTitle" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the title to show at the bottom of the table, as part of the border.
+							; PARAMETERS:
+							;  title (I,REQ) - The title to show
+							; RETURNS:        this
+							;---------">
+                <Param name="title" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugTable.setColumnAlignment" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the alignment for a specific column.
+							; PARAMETERS:
+							;  columnIndex  (I,REQ) - The column index (base-1) to update
+							;  newAlignment (I,REQ) - A text-alignment value from TextAlignment.*
+							; RETURNS:        this
+							;---------">
+                <Param name="columnIndex" />
+                <Param name="newAlignment" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugTable.setColumnDivider" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the string that will be put between each cell in a row.
+							; PARAMETERS:
+							;  dividerString (I,REQ) - The new divider string
+							; RETURNS:        this
+							;---------">
+                <Param name="dividerString" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugTable.setDefaultAlignment" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the default alignment for all columns in this table.
+							; PARAMETERS:
+							;  newAlignment (I,REQ) - A text-alignment value from TextAlignment.*
+							; RETURNS:        this
+							;---------">
+                <Param name="newAlignment" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DebugTable.setTopTitle" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set the title to show at the top of the table, as part of the border.
+							; PARAMETERS:
+							;  title (I,REQ) - The title to show
+							; RETURNS:        this
+							;---------">
+                <Param name="title" />
             </Overload>
         </KeyWord>
         <KeyWord name="Default"/>
@@ -3996,11 +4146,27 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="MicrosoftLib.Message_VertScroll" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Scroll event in the window's vertical scroll bar (WM_VSCROLL)
+							; GROUP:          Windows Messages ( https://autohotkey.com/docs/misc/SendMessageList.htm )
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="MicrosoftLib.Message_WindowMenu" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Doing something from the &quot;Window&quot; menu, or clicking one of the max/min/restore/close buttons (WM_SYSCOMMAND)
 							; GROUP:          Windows Messages ( https://autohotkey.com/docs/misc/SendMessageList.htm )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.ScrollBar_Down" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Scroll 1 unit to the right (SB_LINEDOWN)
+							; GROUP:          Scroll Bar Requests/Messages ( https://docs.microsoft.com/en-us/windows/desktop/Controls/about-scroll-bars )
 							;---------">
             </Overload>
         </KeyWord>
@@ -4020,10 +4186,26 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="MicrosoftLib.ScrollBar_Up" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Scroll 1 unit to the left (SB_LINEUP)
+							; GROUP:          Scroll Bar Requests/Messages ( https://docs.microsoft.com/en-us/windows/desktop/Controls/about-scroll-bars )
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="MicrosoftLib.Style_Caption" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The window has a caption - that is, a top bar + borders (WS_CAPTION)
+							; GROUP:          Window styles ( https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.Style_CaptionHead" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Window has a top bar (WS_DLGFRAME). Included in Style_Caption.
 							; GROUP:          Window styles ( https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric )
 							;---------">
             </Overload>
@@ -6605,19 +6787,19 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="TextTable.generateText" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Generate the table as a string
-							; RETURNS:        The table, as a string
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="TextTable.getHeight" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Get the current total height of the table in lines.
 							; RETURNS:        The current height of the table.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TextTable.getText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Generate the table as a string
+							; RETURNS:        The table, as a string
 							;---------">
             </Overload>
         </KeyWord>

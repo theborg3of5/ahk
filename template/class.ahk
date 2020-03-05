@@ -41,8 +41,8 @@ class GDBTODO {
 		return "GDB TODO"
 	}
 	
-	Debug_ToString(ByRef builder) {
-		builder.addLine("GDB TODO", this.GDBTODO)
+	Debug_ToString(ByRef table) {
+		table.addLine("GDB TODO", this.GDBTODO)
 	}
 	; #END#
 }

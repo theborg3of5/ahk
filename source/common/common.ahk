@@ -36,7 +36,6 @@ Object(params*) {
 ; [[ Includes ]] --=
 #Include %A_LineFile%\..\class
 	#Include actionObject.ahk
-	#Include debugBuilder.ahk
 	#Include duration.ahk
 	#Include epicRecord.ahk
 	#Include errorToast.ahk

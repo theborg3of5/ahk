@@ -1,57 +1,65 @@
-/* GDB TODO --=
+/* A dynamically-sized, scrollable, copyable popup of debug information. --=
+		The popup does not use scrollbars, but still responds to mouse wheel events:
+			* Wheel                - scroll vertically
+			* Ctrl + Wheel         - scroll vertically one line at a time
+			* Shift + Wheel        - scroll horizontally
+			* Ctrl + Shift + Wheel - scroll horizontally one character at a time
+		It will resize itself to its contents up to 90% of the current screen's size, at which point it will scroll.
 	
 	Example Usage
-;		GDB TODO
-	
-	GDB TODO
-		Update auto-complete and syntax highlighting notepad++ definitions
-	
+;		new DebugPopup("a",1, "b",2) ; Results in a popup with this text:
+;     											┏ Debug Info ┓
+													┃ a:  1      ┃
+													┃ b:  2      ┃
+													┗━━━━━━━━━━━━┛
 */ ; =--
-
-; Edit width = 9*numChars + 13
 
 class DebugPopup {
 	; #PUBLIC#
 	
-	;  - Constants
-	static Prefix_GuiSpecialLabels := "DebugPopupGui_" ; Used to have the gui call DebugPopupGui_* functions instead of just Gui* ones
-	;  - staticMembers
-	
-	;  - nonStaticMembers
-	;  - properties
-	;  - __New()/Init()
+	;---------
+	; DESCRIPTION:    Build and show a new debug popup, where the contents is generated using a DebugTable.
+	; PARAMETERS:
+	;  params* (I,REQ) - As many parameters as needed, in label,value pairs
+	;                    (i.e. "label1",value1,"label2",value2...)
+	;---------
 	__New(params*) {
 		; Build the table of info
 		table := new DebugTable("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
 		table.addPairs(params*)
 		
 		; Set up and show popup
-		editSizes := this.calculatePopupDimensions(table)
+		editSizes := this.calculateEditDimensions(table)
 		this.createAndShowPopup(editSizes, table)
 	}
-	;  - otherFunctions
 	
 	
 	; #PRIVATE#
 	
 	;  - Constants
+	static Prefix_GuiSpecialLabels := "DebugPopupGui_" ; Used to have the gui call DebugPopupGui_* functions instead of just Gui* ones
+	static Edit_ControlId := "Edit1"
+	
 	static BackgroundColor       := "444444"
 	static FontColor             := "00FF00"
 	static FontName              := "Consolas"
-	static FontSize              := 12 ; points
+	static FontSize              := 12 ; In points
 	static Edit_LineHeight       := 19 ; How many px tall each line is in the edit control
 	static Edit_CharWidth        := 9  ; How many px wide each character is in the edit control
 	static Edit_TotalMarginWidth := 8  ; How much extra space the edit control needs to cut off at character edges
 	
-	static Edit_ControlId := "Edit1"
-	
-	;  - staticMembers
-	;  - nonStaticMembers
 	guiId        := "" ; Gui's window handle
 	editFieldVar := "" ; Unique ID for edit field, based on this.guiId
-	;  - functions
 	
-	calculatePopupDimensions(table) {
+	;---------
+	; DESCRIPTION:    Calculate the width and height of the edit field based on the content of the given DebugTable.
+	; PARAMETERS:
+	;  table (I,REQ) - The DebugTable that will provide our content.
+	; RETURNS:        The size that the edit field should be, sized so that we don't cut off in the middle of a character or line.
+	;                    ["WIDTH"]
+	;                    ["HEIGHT"]
+	;---------
+	calculateEditDimensions(table) {
 		; Use a maxiumum of 90% of available height/width so we're not right up against the edges
 		workArea := WindowLib.getMonitorWorkArea()
 		availableWidth  := workArea["WIDTH"]  * 0.9
@@ -67,6 +75,14 @@ class DebugPopup {
 		return {"WIDTH":editWidth, "HEIGHT":editHeight}
 	}
 	
+	;---------
+	; DESCRIPTION:    Calculate the max size (in units - typically lines or characters) given a space to fit into and the size of each unit.
+	; PARAMETERS:
+	;  available (I,REQ) - The total available space that we have to fit into.
+	;  pieceSize (I,REQ) - The size of the unit we need to work with.
+	;  numPieces (I,REQ) - How many pieces there are total in the content.
+	; RETURNS:        The numeric size that's the largest we can get without cutting off a unit in the middle.
+	;---------
 	calcMaxSize(available, pieceSize, numPieces) {
 		; The size this would be if we didn't scroll
 		possibleSize := numPieces * pieceSize
@@ -80,15 +96,12 @@ class DebugPopup {
 		return numPiecesToShow * pieceSize
 	}
 	
-	mouseIsOverEditField() {
-		MouseGetPos("", "", windowUnderMouse, varNameUnderMouse)
-		if(windowUnderMouse != this.guiId)
-			return false
-		
-		controlUnderMouse := GuiControlGet(this.guiId ":Name", varNameUnderMouse)
-		return (controlUnderMouse = this.editFieldVar)
-	}
-	
+	;---------
+	; DESCRIPTION:    Create and show the gui.
+	; PARAMETERS:
+	;  editSizes (I,REQ) - The width/height that the edit field needs to be.
+	;  table     (I,REQ) - The DebugTable of content we want to show in the popup.
+	;---------
 	createAndShowPopup(editSizes, table) {
 		; Create gui
 		guiProperties .= "+Label" this.Prefix_GuiSpecialLabels ; DebugPopupGui_* functions instead of Gui*
@@ -121,6 +134,10 @@ class DebugPopup {
 		this.addScrollHotkeys()
 	}
 	
+	;---------
+	; DESCRIPTION:    Add scrolling hotkeys to the edit field. Since we're hiding scrollbars,
+	;                 scrolling won't work without this.
+	;---------
 	addScrollHotkeys() {
 		; Note: using a BoundFunc this way causes a small memory leak - the BoundFunc object is never released until the script exits. That said, it's insignificant enough that it shouldn't matter in practice, especially for a debug popup.
 		mouseIsOverEditField := ObjBindMethod(this, "mouseIsOverEditField")
@@ -136,6 +153,29 @@ class DebugPopup {
 		Hotkey, If
 	}
 	
+	;---------
+	; DESCRIPTION:    Check whether the mouse is currently over the edit field in this popup. Used for hotkeys.
+	; RETURNS:        true/false
+	;---------
+	mouseIsOverEditField() {
+		MouseGetPos("", "", windowUnderMouse, varNameUnderMouse)
+		if(windowUnderMouse != this.guiId)
+			return false
+		
+		controlUnderMouse := GuiControlGet(this.guiId ":Name", varNameUnderMouse)
+		return (controlUnderMouse = this.editFieldVar)
+	}
+	
+	;---------
+	; DESCRIPTION:    Add one set of hotkeys - a normal scroll that moves the default number of
+	;                 lines/characters, and a "precise" version that adds Ctrl and scrolls 1
+	;                 line/character at a time.
+	; PARAMETERS:
+	;  hotkeyString (I,REQ) - The hotkey that should trigger this scroll behavior (and that adding
+	;                         Ctrl to will scroll "precisely").
+	;  methodName   (I,REQ) - The name of the function to trigger when this hotkey is pressed. The
+	;                         function should take 1 parameter for how many units to scroll.
+	;---------
 	addScrollHotkeySet(hotkeyString, methodName) {
 		; Basic scrolling hotkey (uses the default scroll amount from the named method)
 		scrollMethod := ObjBindMethod(this, methodName)
@@ -176,6 +216,7 @@ class DebugPopup {
 	}
 	; #END#
 }
+
 
 ; Close label triggered by the hidden, default button in DebugPopup.
 DebugPopupGui_Close() {

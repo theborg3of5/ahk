@@ -657,14 +657,14 @@ class TableList {
 		return "TableList"
 	}
 	
-	Debug_ToString(ByRef builder) {
-		builder.addLine("Chars",         this.chars)
-		builder.addLine("Index labels",  this.indexLabels)
-		builder.addLine("Mods",          this.modSets)
-		builder.addLine("Column info",   this._columnInfo)
-		builder.addLine("Settings",      this._settings)
-		builder.addLine("Headers",       this._headers)
-		builder.addLine("Table",         this.table)
+	Debug_ToString(ByRef table) {
+		table.addLine("Chars",        this.chars)
+		table.addLine("Index labels", this.indexLabels)
+		table.addLine("Mods",         this.modSets)
+		table.addLine("Column info",  this._columnInfo)
+		table.addLine("Settings",     this._settings)
+		table.addLine("Headers",      this._headers)
+		table.addLine("Table",        this.table)
 	}
 	; #END#
 }

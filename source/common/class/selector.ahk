@@ -446,16 +446,16 @@ class Selector {
 		return "Selector"
 	}
 	
-	Debug_ToString(ByRef builder) {
-		builder.addLine("Filepath",          this.filePath)
-		builder.addLine("Suppress data?",    this.suppressData)
-		builder.addLine("Window title",      this._windowTitle)
-		builder.addLine("Min column width",  this._minColumnWidth)
-		builder.addLine("Override fields",   this.overrideFields)
-		builder.addLine("Default overrides", this.defaultOverrides)
-		builder.addLine("Choices",           this.choices)
-		builder.addLine("Section titles",    this.sectionTitles)
-		builder.addLine("Override fields",   this.dataTL)
+	Debug_ToString(ByRef table) {
+		table.addLine("Filepath",          this.filePath)
+		table.addLine("Suppress data?",    this.suppressData)
+		table.addLine("Window title",      this._windowTitle)
+		table.addLine("Min column width",  this._minColumnWidth)
+		table.addLine("Override fields",   this.overrideFields)
+		table.addLine("Default overrides", this.defaultOverrides)
+		table.addLine("Choices",           this.choices)
+		table.addLine("Section titles",    this.sectionTitles)
+		table.addLine("Override fields",   this.dataTL)
 	}
 	; #END#
 }

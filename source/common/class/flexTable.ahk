@@ -245,15 +245,15 @@ class FlexTable {
 		return "FlexTable"
 	}
 	
-	Debug_ToString(ByRef builder) {
-		builder.addLine("Gui ID",           this.guiId)
-		builder.addLine("Min X",            this.xMin)
-		builder.addLine("Min Y",            this.yMin)
-		builder.addLine("Max X",            this.xMax)
-		builder.addLine("Max Y",            this.yMax)
-		builder.addLine("Row height",       this.rowHeight)
-		builder.addLine("Column padding",   this.columnPadding)
-		builder.addLine("Min column width", this.minColumnWidth)
+	Debug_ToString(ByRef table) {
+		table.addLine("Gui ID",           this.guiId)
+		table.addLine("Min X",            this.xMin)
+		table.addLine("Min Y",            this.yMin)
+		table.addLine("Max X",            this.xMax)
+		table.addLine("Max Y",            this.yMax)
+		table.addLine("Row height",       this.rowHeight)
+		table.addLine("Column padding",   this.columnPadding)
+		table.addLine("Min column width", this.minColumnWidth)
 	}
 	; #END#
 }

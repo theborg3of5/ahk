@@ -181,11 +181,11 @@ class AutoCompleteMember {
 		return "AutoCompleteMember"
 	}
 
-	Debug_ToString(ByRef builder) {
-		builder.addLine("Name", this.name)
-		builder.addLine("Returns", this.returns)
-		builder.addLine("Parameters", this.paramsAry)
-		builder.addLine("Description", this.description)
+	Debug_ToString(ByRef table) {
+		table.addLine("Name", this.name)
+		table.addLine("Returns", this.returns)
+		table.addLine("Parameters", this.paramsAry)
+		table.addLine("Description", this.description)
 	}
 	; #END#
 }

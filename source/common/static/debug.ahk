@@ -3,7 +3,7 @@
 
 /* Static class to show debug information about whatever it's given.
 		Mostly relies on DebugTable to generate the debug display, then wraps in a DebugPopup, Toast, etc. as requested.
-*/ ;
+*/
 
 class Debug {
 	; #PUBLIC#

@@ -1,8 +1,4 @@
 # New Ideas
-	Consider using TextTable for these use cases:
-		Debug popup (would need to set font if so)
-			Could we easily add an extra hotkey to copy the contents (ideally ^c)?
-			Could we also have a hotkey that mimics !v (maybe just that hotkey!) that just uses the contents instead of having to select all?
 	Selector no longer seems to support exclusively override data - add that back in, for phone selector if nothing else.
 	Consider moving StringLib.duplicate() into StringBase instead - it's on the line, but the StringBase syntax will be much more succinct and easier to read.
 		Alternate, shorter name: .repeat()

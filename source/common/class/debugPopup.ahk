@@ -103,6 +103,8 @@ class DebugPopup {
 	;  table     (I,REQ) - The DebugTable of content we want to show in the popup.
 	;---------
 	createAndShowPopup(editSizes, table) {
+		content := table.getText()
+		
 		; Create gui
 		guiProperties .= "+Label" this.Prefix_GuiSpecialLabels ; DebugPopupGui_* functions instead of Gui*
 		guiProperties .= " -" MicrosoftLib.Style_CaptionHead   ; No title bar
@@ -123,20 +125,51 @@ class DebugPopup {
 		editProperties := "ReadOnly -WantReturn -E" MicrosoftLib.ExStyle_SunkenBorder ; Read-only, don't consume {Enter} keystroke, no thick border
 		editProperties .= " -VScroll -HScroll -Wrap w" editSizes["WIDTH"] " h" editSizes["HEIGHT"] ; No scrollbars, no wrapping, specific width/height
 		editProperties .= " v" this.editFieldVar
-		Gui, Add, Edit, % editProperties, % table.getText()
+		Gui, Add, Edit, % editProperties, % content
 		GuiControl, Focus, % this.editFieldVar
 		
 		; Add hidden button to respond to {Enter} keystroke (because it's Default)
 		Gui, Add, Button, Hidden Default x0 y0 gDebugPopupGui_Close ; DebugPopupGui_Close call on activate
 		
-		; Show the resulting popup and add scrolling hotkeys
+		; Show the resulting popup
 		Gui, Show
+		
+		; Add hotkeys
+		this.addNotepadHotkey(content)
 		this.addScrollHotkeys()
 	}
 	
 	;---------
-	; DESCRIPTION:    Add scrolling hotkeys to the edit field. Since we're hiding scrollbars,
-	;                 scrolling won't work without this.
+	; DESCRIPTION:    Add a replacement hotkey for !v that just uses the entire content of the popup
+	;                 instead of requiring the user to select something. Or, if Notepad class isn't
+	;                 available, just put it on the clipboard and toast about it.
+	; PARAMETERS:
+	;  content (I,REQ) - The full content to use when this hotkey is triggered.
+	;---------
+	addNotepadHotkey(content) {
+		Hotkey, IfWinActive, % "ahk_id " this.guiId
+		
+		if(Notepad)
+			hotkeyFunction := ObjBindMethod(Notepad, "openNewInstanceWithText", content) ; Notepad.openNewInstanceWithText
+		else ; If notepad not available, hotkey should copy and toast about it instead
+			hotkeyFunction := ObjBindMethod(this, "copyContentAndToast", content)
+		Hotkey, !v, % hotkeyFunction
+		
+		Hotkey, IfWinActive
+	}
+	
+	;---------
+	; DESCRIPTION:    Copy the content of the table to the clipboard and let the user know we did so with a toast.
+	; PARAMETERS:
+	;  content (I,REQ) - The content to copy
+	;---------
+	copyContentAndToast(content) {
+		ClipboardLib.set(content)
+		new Toast("Clipboard set to debug content").showMedium()
+	}
+	
+	;---------
+	; DESCRIPTION:    Add scrolling hotkeys to the edit field - since we're hiding scrollbars, scrolling won't work without these.
 	;---------
 	addScrollHotkeys() {
 		; Note: using a BoundFunc this way causes a small memory leak - the BoundFunc object is never released until the script exits. That said, it's insignificant enough that it shouldn't matter in practice, especially for a debug popup.

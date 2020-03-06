@@ -7,7 +7,7 @@ class WindowActions {
 	; DESCRIPTION:    Initialize this class with window identifiers and actions.
 	;---------
 	Init() {
-		this.actionOverrides := new TableList("windowActions.tl").getRowsByColumn("NAME")
+		this.actionOverrides := new TableList("windowActions.tl").getRowsByColumn("NAME", "MACHINE")
 		; Debug.popupEarly("WindowActions.Init",, "this.actionOverrides",this.actionOverrides)
 	}
 	

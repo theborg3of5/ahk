@@ -237,7 +237,7 @@ class MSnippets {
 		outString := "`n`t" ; New line + tab (at the start of every line)
 		
 		; Add indentation
-		outString .= StringLib.duplicate(". ", currNumIndents)
+		outString .= ". ".repeat(currNumIndents)
 		
 		return outString
 	}

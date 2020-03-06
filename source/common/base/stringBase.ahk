@@ -433,6 +433,25 @@ class StringBase {
 	}
 	
 	;---------
+	; DESCRIPTION:    Repeat this string a certain number of times.
+	;                 For example, "a".repeat(3) will return "aaa".
+	; PARAMETERS:
+	;  numTimes (I,REQ) - How many times to duplicate the string. 1 returns the same string.
+	; RETURNS:        A new string with the given number of copies.
+	;---------
+	repeat(numTimes) {
+		if(this = "" || numTimes < 1)
+			return ""
+		
+		outStr := ""
+		
+		Loop, % numTimes
+			outStr .= this
+		
+		return outStr
+	}
+	
+	;---------
 	; DESCRIPTION:    Replace a tag ("<TAG_NAME>") in this string with the provided replacement.
 	; PARAMETERS:
 	;  tagName     (I,REQ) - The name of the tag to replace (no angle brackets)

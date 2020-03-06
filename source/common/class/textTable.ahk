@@ -285,7 +285,7 @@ class TextTable {
 		
 		; If there's no title, it's just the corners + horizontal lines as needed.
 		if(title = "")
-			return leftCorner StringLib.duplicate(lineH, this.getInnerWidth()) rightCorner
+			return leftCorner lineH.repeat(this.getInnerWidth()) rightCorner
 		
 		; Otherwise, center the title in the space with padding and borders around it.
 		return leftCorner StringLib.padCenter(" " title " ", this.getInnerWidth(), lineH) rightCorner

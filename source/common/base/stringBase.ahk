@@ -440,15 +440,7 @@ class StringBase {
 	; RETURNS:        A new string with the given number of copies.
 	;---------
 	repeat(numTimes) {
-		if(this = "" || numTimes < 1)
-			return ""
-		
-		outStr := ""
-		
-		Loop, % numTimes
-			outStr .= this
-		
-		return outStr
+		return StringLib.duplicate(this, numTimes)
 	}
 	
 	;---------

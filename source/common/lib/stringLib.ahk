@@ -58,7 +58,7 @@ class StringLib {
 	; RETURNS:        As many spaces as requested.
 	;---------
 	getSpaces(numToGet) {
-		return A_Space.repeat(numToGet)
+		return StringLib.duplicate(A_Space, numToGet)
 	}
 	;---------
 	; DESCRIPTION:    Get the specified number of tabs.
@@ -67,7 +67,7 @@ class StringLib {
 	; RETURNS:        As many tabs as requested.
 	;---------
 	getTabs(numToGet) {
-		return A_Tab.repeat(numToGet)
+		return StringLib.duplicate(A_Tab, numToGet)
 	}
 	;---------
 	; DESCRIPTION:    Get the specified number of newlines.
@@ -76,7 +76,7 @@ class StringLib {
 	; RETURNS:        As many newlines as requested.
 	;---------
 	getNewlines(numToGet) {
-		return "`n".repeat(numToGet)
+		return StringLib.duplicate("`n", numToGet)
 	}
 	;---------
 	; DESCRIPTION:    Get the specified number of dots.
@@ -85,7 +85,27 @@ class StringLib {
 	; RETURNS:        As many dots as requested.
 	;---------
 	getDots(numToGet) {
-		return ".".repeat(numToGet)
+		return StringLib.duplicate(".", numToGet)
+	}
+	
+	;---------
+	; DESCRIPTION:    Duplicate the given string, the given number of times. For example,
+	;                 StringLib.duplicate("abc", 3) will produce "abcabcabc".
+	; PARAMETERS:
+	;  stringToDup (I,REQ) - The string to duplicate
+	;  numTimes    (I,REQ) - How many times to duplicate the string. 1 returns the same string.
+	; RETURNS:        A string with the given number of duplicates.
+	;---------
+	duplicate(stringToDup, numTimes) {
+		if(stringToDup = "" || numTimes < 1)
+			return ""
+		
+		outStr := ""
+		
+		Loop, %numTimes%
+			outStr .= stringToDup
+		
+		return outStr
 	}
 	
 	;---------
@@ -103,7 +123,7 @@ class StringLib {
 		leftSpace := leftoverWidth // 2
 		rightSpace := leftoverWidth - leftSpace ; Bias left if uneven leftover space
 		
-		return padChar.repeat(leftSpace) textToCenter padChar.repeat(rightSpace)
+		return StringLib.duplicate(padChar, leftSpace) textToCenter StringLib.duplicate(padChar, rightSpace)
 	}
 	
 	;---------

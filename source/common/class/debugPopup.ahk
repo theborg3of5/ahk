@@ -31,6 +31,8 @@ class DebugPopup {
 		; Set up and show popup
 		editSizes := this.calculateEditDimensions(table)
 		this.createAndShowPopup(editSizes, table)
+		
+		WinWaitClose, % "ahk_id " this.guiId
 	}
 	
 	

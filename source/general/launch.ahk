@@ -35,7 +35,7 @@ $^!l:: new ActionObject(SelectLib.getText()).copyLinkEdit()
 #If Config.contextIsWork
 	^!+d::
 		selectDLGId() {
-			s := new Selector("tlg.tls").overrideFieldsOff()
+			s := new Selector("tlg.tls").setTitle("Select DLG/PRJ to send ID").overrideFieldsOff()
 			s.dataTableList.filterOutEmptyForColumn("DLG")
 			dlgId := s.selectGui("DLG")
 			if(!dlgId)

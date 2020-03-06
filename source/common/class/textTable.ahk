@@ -164,7 +164,7 @@ class TextTable {
 	; RETURNS:        this
 	;---------
 	addRow(newValues*) {
-		newValues := DataLib.convertObjectToArray(newValues)
+		newValues := DataLib.rebaseVariadicAry(newValues)
 		
 		; If any of the values are multi-line, split the row up into multiple and add those.
 		For _,value in newValues {

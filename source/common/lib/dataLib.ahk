@@ -199,6 +199,19 @@ class DataLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Variadic parameter arrays don't have the same base array as those created
+	;                 with [], which means they can't handle things like .count() - this returns
+	;                 an identical version that does.
+	; PARAMETERS:
+	;  paramAry (I,REQ) - The parameter array (from a parameter ending with * in the function's
+	;                     definition line), to fix.
+	; RETURNS:        An array with the same values that uses the shared base object.
+	;---------
+	rebaseVariadicAry(paramAry) {
+		return Array(paramAry*)
+	}
+	
+	;---------
 	; DESCRIPTION:    Expand lists that can optionally contain numeric ranges (delimited by either
 	;                 colons or hyphens). For example:
 	;                  1,2:3,7,6-4 => [1, 2, 3, 7, 6, 5, 4]

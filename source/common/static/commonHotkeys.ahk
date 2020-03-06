@@ -106,8 +106,11 @@ class CommonHotkeys {
 			Hotkey, ~!#x, CommonHotkeys_doToggleSuspend ; Other scripts let it fall through so all other scripts can react
 		
 		; Reload
-		if(this.isMain())
-			Hotkey, !+r, CommonHotkeys_doReload ; Main only, it replaces the sub scripts by running them again.
+		if(this.isMain()) {
+			; This one has to use ObjBindMethod so that we 
+			reloadMethod := ObjBindMethod(this, "doReload", true) ; this.doReload(true)
+			Hotkey, !+r, % reloadMethod ; Main only, it replaces the sub scripts by running them again.
+		}
 		if(this.isStandalone()) {
 			; Reload on save if editing the script in question
 			isEditingThisScript := ObjBindMethod(this, "isEditingThisScript")
@@ -149,7 +152,10 @@ class CommonHotkeys {
 	;---------
 	; DESCRIPTION:    Reload the script.
 	;---------
-	doReload() {
+	doReload(isMain := false) {
+		if(isMain)
+			HotkeyLib.releaseAllModifiers()
+		
 		Reload
 	}
 	
@@ -224,6 +230,7 @@ class CommonHotkeys {
 ;                 to work when the script is suspended). Some of these require that functionality,
 ;                 so they're all out here for consistency's sake.
 ;---------
+
 CommonHotkeys_doEmergencyExit() {
 	Suspend, Permit
 	CommonHotkeys.doEmergencyExit()

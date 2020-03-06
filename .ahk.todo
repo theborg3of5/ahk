@@ -1,5 +1,4 @@
 # New Ideas
-	Should reloading the script also release all modifiers?
 	DebugPopup doesn't handle tabs well - need to adjust width handling (probably in TextTable?) to take tab length into account (looks like 8 characters, but is it variable?)
 	Revision URLs with TortoiseSVN
 		url := "tsvncmd:command:log?path:http://einstein/svn/dev1/branches?startrev:" revisionNum "?endrev:" revisionNum

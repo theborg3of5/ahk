@@ -31,7 +31,7 @@ class ClipboardLib {
 			return
 		
 		; PuTTY auto-copies the selection to the clipboard, and ^c causes an interrupt, so do nothing.
-		if(Config.isWindowActive("Putty"))
+		if(Config.isWindowActive("Putty") && !WinActive("PuTTY Reconfiguration"))
 			return Clipboard
 		
 		origClipboard := ClipboardAll ; Back up the clipboard since we're going to use it to get the selected text.

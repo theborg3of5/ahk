@@ -164,6 +164,8 @@ class TextTable {
 	; RETURNS:        this
 	;---------
 	addRow(newValues*) {
+		newValues := DataLib.convertObjectToArray(newValues)
+		
 		; If any of the values are multi-line, split the row up into multiple and add those.
 		For _,value in newValues {
 			if(value.countMatches("`n")) {

@@ -68,6 +68,30 @@ class SelectorGui {
 	}
 	
 	
+	; #INTERNAL#
+	
+	;---------
+	; DESCRIPTION:    Update the font color of the given control so that it's "ghosted" if it's the initial value, and black otherwise.
+	; PARAMETERS:
+	;  guiId     (I,REQ) - The ID of the gui the control lives on
+	;  controlId (I,REQ) - The ID of the control to update
+	;---------
+	updateOverrideField(guiId, controlId) {
+		fieldName := controlId.removeFromStart(guiId SelectorGui.FieldVarSuffix_OverridesPrefix)
+		value := GuiControlGet("", controlId)
+		; Debug.popup("controlId",controlId, "guiId",guiId, "fieldName",fieldName, "value",value)
+		
+		; Set the overall gui font color - ghost if it's the default, black (default color) otherwise
+		if(fieldName = value)
+			Gui, Font, % "c" SelectorGui.FontColor_Ghost
+		else
+			Gui, Font, -c
+		
+		; Tell the edit control to update to match
+		GuiControl, Font, % controlId
+	}
+	
+	
 	; #PRIVATE#
 	
 	; Special characters
@@ -379,16 +403,5 @@ SelectorGui_Submit() {
 }
 ; One of the override fields changed
 SelectorGui_OverrideFieldChanged() {
-	fieldName := A_GuiControl.removeFromStart(A_Gui SelectorGui.FieldVarSuffix_OverridesPrefix)
-	value := GuiControlGet("", A_GuiControl)
-	; Debug.popup("A_GuiControl",A_GuiControl, "A_Gui",A_Gui, "fieldName",fieldName, "value",value)
-	
-	; Set the overall gui font color - ghost if it's the default, black (default color) otherwise
-	if(fieldName = value)
-		Gui, Font, % "c" SelectorGui.FontColor_Ghost
-	else
-		Gui, Font, -c
-	
-	; Tell the edit control to update to match
-	GuiControl, Font, % A_GuiControl
+	SelectorGui.updateOverrideField(A_Gui, A_GuiControl)
 }

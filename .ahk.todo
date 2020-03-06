@@ -1,6 +1,4 @@
 # New Ideas
-	Consider moving logic from SelectorGui_OverrideFieldChanged() into a (static) method in SelectorGui - can just pass the control ID in and it can handle the rest.
-		No more having to reference ghost/normal color from outside the class that way.
 	Should reloading the script also release all modifiers?
 	DebugPopup doesn't handle tabs well - need to adjust width handling (probably in TextTable?) to take tab length into account (looks like 8 characters, but is it variable?)
 	Revision URLs with TortoiseSVN

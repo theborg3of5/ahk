@@ -257,12 +257,18 @@ class TextTable {
 	; SIDE EFFECTS:   Updates column widths
 	;---------
 	_addRow(newRow) {
-		; Add the row to the table
-		this.dataTable.push(newRow.clone())
+		row := newRow.clone()
 		
-		; Keep track of columns' max width
-		For columnIndex,value in newRow
+		; Do a little pre-processing on values and track columns' max width.
+		For columnIndex,value in row {
+			value := value.replace("`t", "{Tab}") ; We can't easily deal with the width of tabs, so replace them with something else instead
+			row[columnIndex] := value
+			
 			this.columnWidths[columnIndex] := DataLib.max(this.columnWidths[columnIndex], value.length())
+		}
+		
+		; Add the row to the table
+		this.dataTable.push(row)
 	}
 	
 	;---------

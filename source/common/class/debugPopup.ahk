@@ -7,11 +7,10 @@
 		It will resize itself to its contents up to 90% of the current screen's size, at which point it will scroll.
 	
 	Example Usage
-;		new DebugPopup("a",1, "b",2) ; Results in a popup with this text:
-;     											┏ Debug Info ┓
-													┃ a:  1      ┃
-													┃ b:  2      ┃
-													┗━━━━━━━━━━━━┛
+;		new DebugPopup("a",1, "b",2) ; Results in a popup with this text: ┏ Debug Info ┓
+													                                 ┃ a:  1      ┃
+													                                 ┃ b:  2      ┃
+													                                 ┗━━━━━━━━━━━━┛
 */ ; =--
 
 class DebugPopup {

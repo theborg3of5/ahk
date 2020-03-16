@@ -241,7 +241,7 @@ class Toast {
 	; SIDE EFFECTS:   Updates members for window handle and label global variable name.
 	;---------
 	buildGui(styleOverrides := "") {
-		; Create Gui and save off window handle
+		; Create gui and save off window handle
 		Gui, New, +HWNDguiId ; guiId := window handle
 		this.guiId := guiId
 		

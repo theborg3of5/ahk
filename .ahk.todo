@@ -1,6 +1,4 @@
 # New Ideas
-	Gui settings to consider for SelectorGui
-		-MinimizeBox -MaximizeBox
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:

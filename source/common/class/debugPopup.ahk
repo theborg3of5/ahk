@@ -104,7 +104,7 @@ class DebugPopup {
 	;  table     (I,REQ) - The DebugTable of content we want to show in the popup.
 	;---------
 	createAndShowPopup(editSizes, table) {
-		; Create Gui and save off window handle
+		; Create gui and save off window handle
 		Gui, New, +HWNDguiId, % "Debug Info" ; guiId := window handle
 		this.guiId := guiId
 		

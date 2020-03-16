@@ -75,6 +75,8 @@
 			updateNotepadPPAHKSupport
 	Do we want to add negative x/y values to mean how far off of the right/bottom to be?
 		Would let us say, implement timer to be like the Windows media tile
+		Would this be better as a new setting/parameter, rather than overloading the x/y coordinates?
+			Should we be doing the same for our current "special" values, too?
 	
 # Version Restrictions
 	VDI current AHK version: 1.1.28.00

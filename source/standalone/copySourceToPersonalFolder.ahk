@@ -27,7 +27,7 @@ Loop, Files, %destinationRoot%\*, D ; Directories
 	FileRemoveDir, % A_LoopFilePath, 1 ; 1-Delete recursively
 
 ; Copy over everything from source except git-related stuff.
-t.setText("Copying files from source to destination...")
+t.addLine("Copying files from source to destination...")
 gitNames := [".git", ".gitignore", ".gitattributes"]
 SetWorkingDir, % sourceRoot ; Set working directory and use a relative file pattern so that A_LoopFilePath has only the folders at the start for FileCopy.
 Loop, Files, *, FDR ; All files and folder, recursing into folders
@@ -44,6 +44,6 @@ Loop, Files, *, FDR ; All files and folder, recursing into folders
 		FileCopy, % A_LoopFilePath, % destinationPath
 }
 
-t.setText("Done!").blockingOn().showMedium() ; Destroys toast since it's not persistent
+t.addLine("Done!").blockingOn().showMedium() ; Destroys toast since it's not persistent
 
 ExitApp

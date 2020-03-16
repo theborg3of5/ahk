@@ -104,25 +104,25 @@ class DebugPopup {
 	;  table     (I,REQ) - The DebugTable of content we want to show in the popup.
 	;---------
 	createAndShowPopup(editSizes, table) {
-		content := table.getText()
-		
-		; Create gui
-		guiProperties .= "+Label" this.Prefix_GuiSpecialLabels ; DebugPopupGui_* functions instead of Gui*
-		guiProperties .= " -" MicrosoftLib.Style_CaptionHead   ; No title bar
-		Gui, New, % guiProperties, % "Debug Info"
-		
-		; Store off window ID, initialize edit field variable
-		Gui, +HWNDguiId
+		; Create Gui and save off window handle
+		Gui, New, +HWNDguiId, % "Debug Info" ; guiId := window handle
 		this.guiId := guiId
-		this.editFieldVar := this.guiId "DebugEdit"
-		GuiLib.createDynamicGlobal(this.editFieldVar)
+		
+		; Other gui options
+		Gui, % "+Label" this.Prefix_GuiSpecialLabels ; DebugPopupGui_* functions instead of Gui*
+		Gui, -Caption +Border ; No titlebar/menu, but still have a border
 		
 		; Apply margins and colors
 		Gui, Margin, 0, 0
 		Gui, Color, % this.BackgroundColor
 		Gui, Font, % "c" this.FontColor " s" this.FontSize, % this.FontName
 		
+		; Initialize edit field variable
+		this.editFieldVar := this.guiId "DebugEdit"
+		GuiLib.createDynamicGlobal(this.editFieldVar)
+		
 		; Create and focus edit control (holds everything we display)
+		content := table.getText()
 		editProperties := "ReadOnly -WantReturn -E" MicrosoftLib.ExStyle_SunkenBorder ; Read-only, don't consume {Enter} keystroke, no thick border
 		editProperties .= " -VScroll -HScroll -Wrap w" editSizes["WIDTH"] " h" editSizes["HEIGHT"] ; No scrollbars, no wrapping, specific width/height
 		editProperties .= " v" this.editFieldVar

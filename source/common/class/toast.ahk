@@ -241,12 +241,13 @@ class Toast {
 	; SIDE EFFECTS:   Updates members for window handle and label global variable name.
 	;---------
 	buildGui(styleOverrides := "") {
-		; Create Gui and save off window handle (which is also winId)
-		Gui, New, +HWNDwinId
-		this.guiId := winId
+		; Create Gui and save off window handle
+		Gui, New, +HWNDguiId ; guiId := window handle
+		this.guiId := guiId
 		
 		; Other gui options
-		Gui, +AlwaysOnTop -Caption +LastFound +ToolWindow
+		Gui, -Caption ; No titlebar/menu or border
+		Gui, +AlwaysOnTop +ToolWindow ; Always on top, but don't show in taskbar
 		Gui, % "+E" MicrosoftLib.ExStyle_ClickThrough ; Can't be focused with a click (you "click through" to window underneath)
 		
 		; Set formatting options

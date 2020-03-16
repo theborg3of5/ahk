@@ -89,8 +89,10 @@ return
 
 
 buildGui() {
-	; Set overall gui properties
-	Gui, New, -Caption +ToolWindow +AlwaysOnTop +Border +HWNDGuiId ; No title bar/menu, don't include in taskbar, always on top, show a border, set GuiId := window handle (which can be used with ahk_id)
+	; Create gui and set overall properties
+	Gui, New, +HWNDGuiId ; GuiId := window handle (which can be used with ahk_id)
+	Gui, -Caption +Border ; No titlebar/menu, but still have a border
+	Gui, +AlwaysOnTop +ToolWindow ; Always on top, but don't show in taskbar
 	Gui, Font, % " s" FONT_SIZE, % FONT_NAME
 	Gui, Margin, % GUI_SPACING, % GUI_SPACING
 

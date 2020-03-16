@@ -1,5 +1,4 @@
 # New Ideas
-	Can we use group documentation stuff for StringLib.get*()?
 	Sounds like we can specify the gui for GuiControlGet without making it the default one, by adding the <ID>: prefix to the subcommand: https://www.autohotkey.com/docs/commands/GuiControlGet.htm#Remarks
 		Could that simplify some of our gui handling for SelectorGui and the like?
 		Is it better to leave some of the bigger chunks using the default for easier reading?

@@ -330,6 +330,7 @@ class SelectorGui {
 	; PARAMETERS:
 	;  defaultOverrideData (I,OPT) - Associative array of default data, format:
 	;                                 {columnLabel: value}
+	; NOTES:          Assumes that the desired gui is the default.
 	;---------
 	setDefaultOverrides(defaultOverrideData) {
 		For label,value in defaultOverrideData {
@@ -343,6 +344,7 @@ class SelectorGui {
 	; PARAMETERS:
 	;  windowTitle (I,REQ) - The title of the window.
 	; SIDE EFFECTS:   Automatically focuses the choice field.
+	; NOTES:          Assumes that the desired gui is the default.
 	;---------
 	showPopup(windowTitle) {
 		Gui, Show, % "h" this.totalHeight " w" this.totalWidth, % windowTitle

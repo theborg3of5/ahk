@@ -1,4 +1,5 @@
 # New Ideas
+	Add a startup toast to preciseMouse to call out hotkeys
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:

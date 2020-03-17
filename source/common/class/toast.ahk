@@ -312,7 +312,7 @@ class Toast {
 		else
 			Gui, Show, AutoSize NoActivate, % Toast.ToastTitle ; Resize to size of contents
 		
-		window := new VisualWindow(titleString).move(x, y) ; Blank title string for last found window
+		window := new VisualWindow(titleString).move(x, y)
 		
 		if(isWinHidden)
 			Gui, Show, NoActivate, % Toast.ToastTitle

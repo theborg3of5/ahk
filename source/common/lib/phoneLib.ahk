@@ -33,10 +33,8 @@ class PhoneLib {
 	;---------
 	; DESCRIPTION:    Parse and process the given phone number into a valid number to call from work.
 	; PARAMETERS:
-	;  input (I/O/IO,REQ/OPT) - The string
-	; RETURNS:        
-	; SIDE EFFECTS:   
-	; NOTES:          
+	;  input (I,REQ) - The input string to parse.
+	; RETURNS:        The processed number, or "HANGUP" if that was passed in.
 	;---------
 	getRawNumber(input) {
 		; Special case - hang up

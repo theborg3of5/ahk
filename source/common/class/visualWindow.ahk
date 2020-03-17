@@ -305,16 +305,16 @@ class VisualWindow {
 	;---------
 	applyPosition() {
 		this.getActualPosition(x, y, width, height) ; Add offsets back in
-		WinMove, %titleString%, , x, y, width, height
+		WinMove, % this.titleString, , x, y, width, height
 	}
 	
 	;---------
 	; DESCRIPTION:    Turn the given actual position/size into the visual equivalent.
 	; PARAMETERS:
-	;  x      (I/O,OPT) - X coordinate
-	;  y      (I/O,OPT) - Y coordinate
-	;  width  (I/O,OPT) - Width of the window
-	;  height (I/O,OPT) - Height of the window
+	;  x      (IO,OPT) - X coordinate
+	;  y      (IO,OPT) - Y coordinate
+	;  width  (IO,OPT) - Width of the window
+	;  height (IO,OPT) - Height of the window
 	;---------
 	convertActualToVisualPosition(ByRef x := "", ByRef y := "", ByRef width := "", ByRef height := "") {
 		x      := x      +  this.windowOffsets["LEFT"]
@@ -359,7 +359,7 @@ class VisualWindow {
 		return windowOffsets
 	}
 	
-	; [[ Moving window based on certain window edges ]] --=
+	; [[ Moving window so specific window edges are somewhere ]] --=
 	mvLeftToX(x) {
 		this.leftX  := x
 		this.rightX := x + this.width
@@ -377,7 +377,7 @@ class VisualWindow {
 		this.bottomY := y
 	}
 	
-	; [[ Resizing window based on certain window edges ]] ---
+	; [[ Resizing window so specific window edges are somewhere ]] ---
 	rsLeftToX(x) {
 		this.leftX := x
 		this.width := this.rightX - x
@@ -395,7 +395,7 @@ class VisualWindow {
 		this.height  := y - this.topY
 	}
 	
-	; [[ Resizing window with a specific width/height (towards bottom-right corner) ]] ---
+	; [[ Resizing window to a specific width/height (towards bottom-right corner) ]] ---
 	rsToWidth(width) {
 		this.width  := width
 		this.rightX := this.leftX + width

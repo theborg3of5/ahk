@@ -7,6 +7,8 @@
 			Just having a function with the right name
 				Would require a mapping from window name to class where function lives
 			Have programs that need special handling call into the logic themselves and handle special logic
+	Consider pulling more CommonHotkeys-related code into that class
+		Starting loop, or even just having the caller pass in the name of the label directly - no longer has to be the same across all.
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
 		Possibly reconsider the 100-char limit - wouldn't wider make more sense?
 		Could take into account whether there would be only 1 small word moved down

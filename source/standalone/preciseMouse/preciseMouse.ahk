@@ -16,7 +16,7 @@ global keyRunOnce := {"Left":false, "Right":false, "Up":false, "Down":false}
 global keyHeld    := {"Left":false, "Right":false, "Up":false, "Down":false}
 global keyCounts  := {"Left":0,     "Right":0,     "Up":0,     "Down":0}
 
-SetTimer, MainLoop, 10 ; 10 ms, timer toggled by commonHotkeys' suspend hotkey.
+SetTimer, MainLoop, 10 ; 10 ms, timer toggled by CommonHotkeys' suspend hotkey.
 MainLoop:
 	; For keys held down, add to the counts too
 	For keyName,_ in keyCounts {

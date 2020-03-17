@@ -11,7 +11,7 @@ global tortoiseTitleRegEx := "O)^C:\\EpicSource\\\d\.\d\\DLG-(\w+)[-\\].* - Comm
 global dlgFieldId     := "Edit2"
 global messageFieldId := "Scintilla1"
 
-SetTimer, MainLoop, -100 ; Run once, timer toggled by commonHotkeys' suspend hotkey.
+SetTimer, MainLoop, -100 ; Run once, timer toggled by CommonHotkeys' suspend hotkey.
 
 MainLoop:
 	SetTitleMatchMode, RegEx ; For some reason, setting it once in auto-execute section doesn't always work - so set it here instead.

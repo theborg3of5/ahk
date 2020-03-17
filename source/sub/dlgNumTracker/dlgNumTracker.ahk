@@ -9,7 +9,7 @@ ScriptTrayInfo.Init(scriptTitle, "hash.ico", "redHash.ico")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub)
 
 global currDLGId
-SetTimer, MainLoop, 5000 ; 5s, timer toggled by commonHotkeys' suspend hotkey.
+SetTimer, MainLoop, 5000 ; 5s, timer toggled by CommonHotkeys' suspend hotkey.
 SetTitleMatchMode, % TitleMatchMode.Contains
 
 

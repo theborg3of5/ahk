@@ -8,7 +8,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 ScriptTrayInfo.Init("AHK: Controller Emulator", "controllerGreen.ico", "controllerRed.ico")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
-SetTimer, MainLoop, 100 ; 100ms, timer toggled by commonHotkeys' suspend hotkey.
+SetTimer, MainLoop, 100 ; 100ms, timer toggled by CommonHotkeys' suspend hotkey.
 XInput_Init()
 
 

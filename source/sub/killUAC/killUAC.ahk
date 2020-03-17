@@ -8,7 +8,7 @@ ScriptTrayInfo.Init("AHK: Kill UAC", "shieldGreen.ico", "shieldRed.ico")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub)
 
 disableUserAccountControl() ; Do it once immediately.
-SetTimer, MainLoop, 1800000 ; 30m, timer toggled by commonHotkeys' suspend hotkey.
+SetTimer, MainLoop, 1800000 ; 30m, timer toggled by CommonHotkeys' suspend hotkey.
 return
 
 MainLoop:

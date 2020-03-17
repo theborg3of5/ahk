@@ -16,6 +16,14 @@ global keyRunOnce := {"Left":false, "Right":false, "Up":false, "Down":false}
 global keyHeld    := {"Left":false, "Right":false, "Up":false, "Down":false}
 global keyCounts  := {"Left":0,     "Right":0,     "Up":0,     "Down":0}
 
+; Show a toast with the controls.
+tt := new TextTable().setBorderType(TextTable.BorderType_Line).setColumnDivider(" ")
+tt.addRow("Space/Numpad0:", "Left mouse button")
+tt.addRow("Arrows:", "Move mouse")
+tt.addRow("Shift (hold):", "Move slowly")
+tt.addRow("Alt (hold):", "Move quickly")
+new Toast(tt.getText()).showForSeconds(5)
+
 SetTimer, MainLoop, 10 ; 10 ms, timer toggled by CommonHotkeys' suspend hotkey.
 MainLoop:
 	; For keys held down, add to the counts too

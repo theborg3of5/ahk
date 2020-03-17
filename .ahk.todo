@@ -1,5 +1,4 @@
 # New Ideas
-	Add a startup toast to preciseMouse to call out hotkeys
 	Consider changing the approach for hyperlinker a bit
 		Have OneNote, others that need special handling do it themselves somehow
 		Ideas:
@@ -9,6 +8,11 @@
 			Have programs that need special handling call into the logic themselves and handle special logic
 	Consider pulling more CommonHotkeys-related code into that class
 		Starting loop, or even just having the caller pass in the name of the label directly - no longer has to be the same across all.
+	Would ScriptTrayInfo benefit from chaining rather than a bunch of Init params?
+		i.e., ScriptTrayInfo.setTitle("title!").setIcon("green.ico").setSuspIcon("red.ico")
+			Or, ScriptTrayInfo.setTitle("title!").setIcons("green.ico", "red.ico")
+			Can we chain a static class this way?
+			vs: ScriptTrayInfo.Init("title!", "green.ico", "red.ico")
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
 		Possibly reconsider the 100-char limit - wouldn't wider make more sense?
 		Could take into account whether there would be only 1 small word moved down

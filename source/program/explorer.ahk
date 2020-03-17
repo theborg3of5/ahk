@@ -167,8 +167,12 @@ class Explorer {
 		this.createRelativeShortcut(sourceFolder, relativePath)
 		
 		; Optionally create shortcut to parent folder as well
-		if(GuiLib.showConfirmationPopup("Also create shortcut to target parent?"))
-			this.createRelativeShortcut(sourceFolder, FileLib.getParentFolder(relativePath) " Folder")
+		if(GuiLib.showConfirmationPopup("Also create shortcut to target parent?")) {
+			parentPath := FileLib.getParentFolder(relativePath)
+			SplitPath(parentPath, parentName)
+			
+			this.createRelativeShortcut(sourceFolder, parentPath, parentName " Folder")
+		}
 		
 		t := new Toast("Created shortcuts!").showShort()
 	}
@@ -178,10 +182,13 @@ class Explorer {
 	; PARAMETERS:
 	;  shortcutParentFolder (I,REQ) - The folder where the new shortcut should live (with trailing backslash)
 	;  relativePath         (I,REQ) - The relative path to the target (no leading backslash), from the shortcut parent folder
+	;  shortcutName         (I,OPT) - The name the shortcut file should have 
 	;---------
-	createRelativeShortcut(shortcutParentFolder, relativePath) {
-		SplitPath(relativePath, targetName)
-		shortcutFilePath := shortcutParentFolder targetName ".lnk"
+	createRelativeShortcut(shortcutParentFolder, relativePath, shortcutName := "") {
+		if(shortcutName = "")
+			SplitPath(relativePath, shortcutName)
+		
+		shortcutFilePath := shortcutParentFolder shortcutName ".lnk"
 		args := "/c start """" ""%CD%\" relativePath """" ; %CD% is current directory
 		FileCreateShortcut, % A_ComSpec, % shortcutFilePath, , % args
 	}

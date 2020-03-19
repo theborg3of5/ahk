@@ -34,7 +34,7 @@
 			MatterMost - half of left screen
 		Telegram - left monitor, top or bottom depending on machine
 		Pidgin window - top-right of left monitor
-	Figure out some central documentation method
+	Figure out some central documentation method for hotkeys
 		Dynamically pull hotkeys for the currently focused program?
 		Hotkey to show popup with all currently active hotkeys, divided up into current-program-specific and others
 			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
@@ -61,6 +61,10 @@
 	Consider a positioning option for center/corners of current window
 		Use cases:
 			Window always-on-top set, make sure it's visible on that window
+	Do we want to add negative x/y values to mean how far off of the right/bottom to be?
+		Would let us say, implement timer to be like the Windows media tile
+		Would this be better as a new setting/parameter, rather than overloading the x/y coordinates?
+			Should we be doing the same for our current "special" values, too?
 	Could we avoid flickering between .showPersistent() and .setText()?
 		Maybe some way to set position without showing?
 		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?
@@ -74,10 +78,6 @@
 		When we fix this, we can update:
 			iconTester.ahk - don't need a toast message up front, can be blank to start and we can just call switchToIconWithNum(0) instead of getting the text
 			updateNotepadPPAHKSupport
-	Do we want to add negative x/y values to mean how far off of the right/bottom to be?
-		Would let us say, implement timer to be like the Windows media tile
-		Would this be better as a new setting/parameter, rather than overloading the x/y coordinates?
-			Should we be doing the same for our current "special" values, too?
 	
 # Version Restrictions
 	VDI current AHK version: 1.1.28.00

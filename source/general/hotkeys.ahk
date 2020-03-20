@@ -19,6 +19,11 @@
 ; Release all modifier keys, for cases when some might be "stuck" down.
 *#Space::HotkeyLib.releaseAllModifiers()
 
+; Suppress the calculator button on my work keyboard (for using my work keyboard from home)
+#If Config.machineIsWorkLaptop
+	Launch_App2::return
+#If
+
 ; Launchy normally uses CapsLock, but (very) occasionally, we need to use it for its intended purpose.
 ^!CapsLock::SetCapsLockState, On
 

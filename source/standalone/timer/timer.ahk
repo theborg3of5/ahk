@@ -23,8 +23,7 @@ if(!getTimerInfo(durationString, labelText))
 
 ; Set up Toast and show initial time
 toastObj := buildTimerToast()
-toastObj.show(VisualWindow.X_RightEdge, VisualWindow.Y_TopEdge)
-
+toastObj.show(VisualWindow.X_RightEdge "-10", VisualWindow.Y_TopEdge "+10")
 
 ; Start ticking once per second
 SetTimer, decrementTimer, 1000

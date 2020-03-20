@@ -61,10 +61,6 @@
 	Consider a positioning option for center/corners of current window
 		Use cases:
 			Window always-on-top set, make sure it's visible on that window
-	Do we want to add negative x/y values to mean how far off of the right/bottom to be?
-		Would let us say, implement timer to be like the Windows media tile
-		Would this be better as a new setting/parameter, rather than overloading the x/y coordinates?
-			Should we be doing the same for our current "special" values, too?
 	Could we avoid flickering between .showPersistent() and .setText()?
 		Maybe some way to set position without showing?
 		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?

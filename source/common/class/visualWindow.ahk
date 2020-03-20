@@ -1,6 +1,6 @@
 /* Provides a way to interact with windows with AHK at the size/position that they appear to be. --=
 	
-	In Windows 10, windows are not always the size that they appear for AHK - there is sometimes a wider, invisible offset around them between, making them look smaller (and further right/down) than they appear. This class provides a way to move and resize a window as if it was the size which it appears, plus a few additional features to save on the math required to say, align a window's right edge to the side of the monitor.
+	In Windows 10, windows are not always the size that they appear for AHK - there is sometimes a wider, invisible border offset around them between, making them look smaller (and further right/down) than they appear. This class provides a way to move and resize a window as if it was the size which it appears, plus a few additional features to save on the math required to say, align a window's right edge to the side of the monitor.
 	
 	Basic operations
 		Get actual position
@@ -60,7 +60,7 @@ class VisualWindow {
 	__New(titleString, snapDistance := 0) {
 		this.titleString := WindowLib.getIdTitleString(titleString) ; Convert title string to ID in case it was active window ("A") or similar
 		this.snapDistance := snapDistance
-		this.windowOffsets := this.calculateWindowOffsets()
+		this.borderOffsets := this.calculateBorderOffsets()
 		
 		WinGetPos, x, y, width, height, % this.titleString
 		this.convertActualToVisualPosition(x, y, width, height)
@@ -83,10 +83,10 @@ class VisualWindow {
 	;  height (O,OPT) - Height of window
 	;---------
 	getActualPosition(ByRef x := "", ByRef y := "", ByRef width := "", ByRef height := "") {
-		x      := this.leftX  - this.windowOffsets["LEFT"]
-		y      := this.topY   - this.windowOffsets["TOP"]
-		width  := this.width  + this.windowOffsets["LEFT"]   + this.windowOffsets["RIGHT"]
-		height := this.height + this.windowOffsets["BOTTOM"] + this.windowOffsets["TOP"]
+		x      := this.leftX  - this.borderOffsets["LEFT"]
+		y      := this.topY   - this.borderOffsets["TOP"]
+		width  := this.width  + this.borderOffsets["LEFT"]   + this.borderOffsets["RIGHT"]
+		height := this.height + this.borderOffsets["BOTTOM"] + this.borderOffsets["TOP"]
 	}
 	
 	; [[ General movement/resizing (no snapping) ]] --=
@@ -297,7 +297,7 @@ class VisualWindow {
 	titleString   := ""
 	snapDistance  := 0
 	isSnapOn      := false
-	windowOffsets := ""
+	borderOffsets := ""
 	
 	;---------
 	; DESCRIPTION:    Actually move/resize the window to the updated (visual, converted to actual)
@@ -317,18 +317,18 @@ class VisualWindow {
 	;  height (IO,OPT) - Height of the window
 	;---------
 	convertActualToVisualPosition(ByRef x := "", ByRef y := "", ByRef width := "", ByRef height := "") {
-		x      := x      +  this.windowOffsets["LEFT"]
-		y      := y      +  this.windowOffsets["TOP"]
-		width  := width  - (this.windowOffsets["LEFT"]   + this.windowOffsets["RIGHT"])
-		height := height - (this.windowOffsets["BOTTOM"] + this.windowOffsets["TOP"])
+		x      := x      +  this.borderOffsets["LEFT"]
+		y      := y      +  this.borderOffsets["TOP"]
+		width  := width  - (this.borderOffsets["LEFT"]   + this.borderOffsets["RIGHT"])
+		height := height - (this.borderOffsets["BOTTOM"] + this.borderOffsets["TOP"])
 	}
 	
 	;---------
 	; DESCRIPTION:    Figure out what the offsets of the window should be.
 	; RETURNS:        Associative array of offsets with "LEFT"/"RIGHT"/"TOP"/"BOTTOM" subscripts.
 	;---------
-	calculateWindowOffsets() {
-		windowOffsets := {}
+	calculateBorderOffsets() {
+		borderOffsets := {}
 		
 		if(Config.findWindowInfo(this.titleString).edgeType = WindowInfo.EdgeStyle_NoPadding) { ; Specific window has no padding
 			offsetWidth  := 0
@@ -351,12 +351,12 @@ class VisualWindow {
 			}
 		}
 	
-		windowOffsets["LEFT"]   := offsetWidth
-		windowOffsets["RIGHT"]  := offsetWidth
-		windowOffsets["TOP"]    := 0 ; Assuming the taskbar is on top (no offset), otherwise could use something like https://autohotkey.com/board/topic/91513-function-get-the-taskbar-location-win7/ to figure out where it is.
-		windowOffsets["BOTTOM"] := offsetHeight
+		borderOffsets["LEFT"]   := offsetWidth
+		borderOffsets["RIGHT"]  := offsetWidth
+		borderOffsets["TOP"]    := 0 ; Assuming the taskbar is on top (no offset), otherwise could use something like https://autohotkey.com/board/topic/91513-function-get-the-taskbar-location-win7/ to figure out where it is.
+		borderOffsets["BOTTOM"] := offsetHeight
 		
-		return windowOffsets
+		return borderOffsets
 	}
 	
 	; [[ Moving window so specific window edges are somewhere ]] --=
@@ -460,34 +460,65 @@ class VisualWindow {
 	}
 	
 	; [[ Special window coordinates (for window placement relative to monitor) ]] ---
+	;---------
+	; DESCRIPTION:    Convert the given strings into proper coordinates, supporting various special
+	;                 values (VisualWindow.X_*/Y_*) and a +/- offset on the end.
+	; PARAMETERS:
+	;  x (IO,REQ) - X string. Will be replaced with the new X coordinate.
+	;  y (IO,REQ) - Y string. Will be replaced with the new Y coordinate.
+	; NOTES:          Supported formats (as X examples, Y is the same format but different constants):
+	;                   5                          => 5 (normal coordinate)
+	;                   VisualWindow.X_LeftEdge    => {left edge of the monitor}
+	;                   VisualWindow.X_RightEdge+5 => {x so the right edge of the window is 5px from the right edge of the monitor}
+	;---------
 	convertSpecialWindowCoordinates(ByRef x, ByRef y) {
 		monitorBounds := WindowLib.getMonitorWorkArea(this.titleString)
 		x := this.convertSpecialWindowX(x, monitorBounds)
 		y := this.convertSpecialWindowY(y, monitorBounds)
 	}
 	convertSpecialWindowX(x, monitorBounds) {
-		if(x = VisualWindow.X_LeftEdge)
-			return monitorBounds["LEFT"]
+		specialValues := [VisualWindow.X_LeftEdge, VisualWindow.X_RightEdge, VisualWindow.X_Centered]
+		if(!x.startsWithAnyOf(specialValues, match))
+			return x ; Just return the original value if it wasn't special
 		
+		; Convert the special value.
+		if(match = VisualWindow.X_LeftEdge)
+			newX := monitorBounds["LEFT"]
 		monitorWindowDiff := monitorBounds["WIDTH"] - this.width
-		if(x = VisualWindow.X_RightEdge)
-			return monitorBounds["LEFT"] + monitorWindowDiff
-		if(x = VisualWindow.X_Centered)
-			return monitorBounds["LEFT"] + (monitorWindowDiff / 2)
+		if(match = VisualWindow.X_RightEdge)
+			newX := monitorBounds["LEFT"] + monitorWindowDiff
+		if(match = VisualWindow.X_Centered)
+			newX := monitorBounds["LEFT"] + (monitorWindowDiff / 2)
 		
-		return x ; Just return the original value if it wasn't special
+		; If there's an offset on the end, add that on.
+		offset := x.removeFromStart(match).removeFromStart("+") ; Strip off +, but leave - (as a negative sign)
+		if(offSet != "")
+			newX += offset
+		
+		; Debug.popup("x",x, "specialValues",specialValues, "monitorBounds",monitorBounds, "match",match, "offset",offset, "newX",newX, "this",this)
+		return newX
 	}
 	convertSpecialWindowY(y, monitorBounds) {
-		if(y = VisualWindow.Y_TopEdge)
-			return monitorBounds["TOP"]
+		specialValues := [VisualWindow.Y_TopEdge, VisualWindow.Y_BottomEdge, VisualWindow.Y_Centered]
+		if(!y.startsWithAnyOf(specialValues, match))
+			return y ; Just return the original value if it wasn't special
 		
+		; Convert the special value.
+		if(match = VisualWindow.Y_TopEdge)
+			newY := monitorBounds["TOP"]
 		monitorWindowDiff := monitorBounds["HEIGHT"] - this.height
-		if(y = VisualWindow.Y_BottomEdge)
-			return monitorBounds["TOP"] + monitorWindowDiff
-		if(y = VisualWindow.Y_Centered)
-			return monitorBounds["TOP"] + (monitorWindowDiff / 2)
+		if(match = VisualWindow.Y_BottomEdge)
+			newY := monitorBounds["TOP"] + monitorWindowDiff
+		if(match = VisualWindow.Y_Centered)
+			newY := monitorBounds["TOP"] + (monitorWindowDiff / 2)
 		
-		return y ; Just return the original value if it wasn't special
+		; If there's an offset on the end, add that on.
+		offset := y.removeFromStart(match).removeFromStart("+") ; Strip off +, but leave - (as a negative sign)
+		if(offSet != "")
+			newY += offset
+		
+		; Debug.popup("y",y, "specialValues",specialValues, "monitorBounds",monitorBounds, "match",match, "offset",offset, "newY",newY, "this",this)
+		return newY
 	}
 	; =--
 	; #END#

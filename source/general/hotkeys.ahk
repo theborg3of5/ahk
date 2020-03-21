@@ -5,10 +5,11 @@
 	$Volume_Mute::DllCall("LockWorkStation")	; Lock computer.
 #If Config.machineIsHomeLaptop || Config.machineIsWorkLaptop || Config.machineIsWorkVDI
 	AppsKey::RWin ; No right windows key on these machines, so use the AppsKey (right-click key) instead.
-#If Config.machineIsWorkLaptop || Config.machineIsWorkVDI
-	Browser_Back::LButton
-	Browser_Forward::RButton
 #If
+
+; Extra buttons on the ergonomic keyboard
+Browser_Back::LButton
+Browser_Forward::RButton
 
 ; Scroll horizontally with Shift held down.
 #If !(Config.isWindowActive("EpicStudio") || Config.isWindowActive("Chrome")) ; Chrome and EpicStudio handle their own horizontal scrolling, and doesn't support WheelLeft/Right all the time.

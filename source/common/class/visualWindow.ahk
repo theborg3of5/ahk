@@ -19,6 +19,7 @@
 		Special window positions
 			This class can move windows to several "special" positions relative to the window's monitor, aligning the window to the edges/corners/centers of the monitor. The options (for X and Y each) are left/top, middle, and right/bottom (see X_* and Y_* constants below).
 			Note that this is only supported when you are NOT moving or resizing based on a particular corner [.move() and .resizeMove()].
+			The "special" positions may also be used relative to a specific window - just pass the titleString for that window to .move().
 		
 	Example Usage
 ;		window := new VisualWindow("A") ; Create a new VisualWindow representing the active window ("A")
@@ -93,12 +94,14 @@ class VisualWindow {
 	;---------
 	; DESCRIPTION:    Move the window to the specified coordinates (without snapping).
 	; PARAMETERS:
-	;  x (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
-	;  y (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
+	;  x                     (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
+	;  y                     (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
+	;  relativeToTitleString (I,OPT) - The titleString of a window to calculate any "special" positions
+	;                                  relative to. If not given, we'll use the whole monitor instead.
 	; NOTES:          Does not support snapping.
 	;---------
-	move(x := "", y := "") {
-		this.convertSpecialWindowCoordinates(x, y)
+	move(x := "", y := "", relativeToTitleString := "") {
+		this.convertSpecialWindowCoordinates(x, y, relativeToTitleString)
 		
 		if(x != "")
 			this.mvLeftToX(x)
@@ -285,6 +288,30 @@ class VisualWindow {
 		return this
 	}
 	
+	;---------
+	; DESCRIPTION:    Get the visual dimensions of the window as a bounds array.
+	; RETURNS:        An associative array of bounding info:
+	;                   bounds["LEFT"]   - X coordinate of the left edge
+	;                   bounds["RIGHT"]  - X coordinate of the right edge
+	;                   bounds["TOP"]    - Y coordinate of the top edge
+	;                   bounds["BOTTOM"] - Y coordinate of the bottom edge
+	;                   bounds["WIDTH"]  - Window width
+	;                   bounds["HEIGHT"] - Window height
+	; NOTES:          These are the VISUAL dimensions, not the actual (according to Windows) ones.
+	;                 See .getActualPosition() for the actual ones.
+	;---------
+	getBounds() {
+		bounds := {}
+		bounds["LEFT"]   := this.leftX
+		bounds["RIGHT"]  := this.rightX
+		bounds["TOP"]    := this.topY
+		bounds["BOTTOM"] := this.bottomY
+		bounds["WIDTH"]  := this.width
+		bounds["HEIGHT"] := this.height
+		
+		return bounds
+	}
+	
 	
 	; #PRIVATE#
 	
@@ -464,60 +491,67 @@ class VisualWindow {
 	; DESCRIPTION:    Convert the given strings into proper coordinates, supporting various special
 	;                 values (VisualWindow.X_*/Y_*) and a +/- offset on the end.
 	; PARAMETERS:
-	;  x (IO,REQ) - X string. Will be replaced with the new X coordinate.
-	;  y (IO,REQ) - Y string. Will be replaced with the new Y coordinate.
+	;  x                    (IO,REQ) - X string. Will be replaced with the new X coordinate.
+	;  y                    (IO,REQ) - Y string. Will be replaced with the new Y coordinate.
+	;  relativeToTitleString (I,OPT) - The titleString of a window to calculate any "special" positions
+	;                                  relative to. If not given, we'll use the whole monitor instead.
 	; NOTES:          Supported formats (as X examples, Y is the same format but different constants):
 	;                   5                          => 5 (normal coordinate)
 	;                   VisualWindow.X_LeftEdge    => {left edge of the monitor}
 	;                   VisualWindow.X_RightEdge+5 => {x so the right edge of the window is 5px from the right edge of the monitor}
 	;---------
-	convertSpecialWindowCoordinates(ByRef x, ByRef y) {
-		monitorBounds := WindowLib.getMonitorWorkArea(this.titleString)
-		x := this.convertSpecialWindowX(x, monitorBounds)
-		y := this.convertSpecialWindowY(y, monitorBounds)
+	convertSpecialWindowCoordinates(ByRef x, ByRef y, relativeToTitleString := "") {
+		; The dimensions that we're converting relative to can be for a specific given window, or the whole current monitor.
+		if(relativeToTitleString != "" && !WindowLib.isMaximized(relativeToTitleString)) ; Just use the screen if the window is maximized - the dimensions extend outside of the screen.
+			bounds := new VisualWindow(relativeToTitleString).getBounds()
+		else
+			bounds := WindowLib.getMonitorWorkArea(this.titleString)
+		
+		x := this.convertSpecialWindowX(x, bounds)
+		y := this.convertSpecialWindowY(y, bounds)
 	}
-	convertSpecialWindowX(x, monitorBounds) {
+	convertSpecialWindowX(x, bounds) {
 		specialValues := [VisualWindow.X_LeftEdge, VisualWindow.X_RightEdge, VisualWindow.X_Centered]
 		if(!x.startsWithAnyOf(specialValues, match))
 			return x ; Just return the original value if it wasn't special
 		
 		; Convert the special value.
 		if(match = VisualWindow.X_LeftEdge)
-			newX := monitorBounds["LEFT"]
-		monitorWindowDiff := monitorBounds["WIDTH"] - this.width
+			newX := bounds["LEFT"]
+		monitorWindowDiff := bounds["WIDTH"] - this.width
 		if(match = VisualWindow.X_RightEdge)
-			newX := monitorBounds["LEFT"] + monitorWindowDiff
+			newX := bounds["LEFT"] + monitorWindowDiff
 		if(match = VisualWindow.X_Centered)
-			newX := monitorBounds["LEFT"] + (monitorWindowDiff / 2)
+			newX := bounds["LEFT"] + (monitorWindowDiff / 2)
 		
 		; If there's an offset on the end, add that on.
 		offset := x.removeFromStart(match).removeFromStart("+") ; Strip off +, but leave - (as a negative sign)
 		if(offSet != "")
 			newX += offset
 		
-		; Debug.popup("x",x, "specialValues",specialValues, "monitorBounds",monitorBounds, "match",match, "offset",offset, "newX",newX, "this",this)
+		; Debug.popup("x",x, "specialValues",specialValues, "bounds",bounds, "match",match, "offset",offset, "newX",newX, "this",this)
 		return newX
 	}
-	convertSpecialWindowY(y, monitorBounds) {
+	convertSpecialWindowY(y, bounds) {
 		specialValues := [VisualWindow.Y_TopEdge, VisualWindow.Y_BottomEdge, VisualWindow.Y_Centered]
 		if(!y.startsWithAnyOf(specialValues, match))
 			return y ; Just return the original value if it wasn't special
 		
 		; Convert the special value.
 		if(match = VisualWindow.Y_TopEdge)
-			newY := monitorBounds["TOP"]
-		monitorWindowDiff := monitorBounds["HEIGHT"] - this.height
+			newY := bounds["TOP"]
+		monitorWindowDiff := bounds["HEIGHT"] - this.height
 		if(match = VisualWindow.Y_BottomEdge)
-			newY := monitorBounds["TOP"] + monitorWindowDiff
+			newY := bounds["TOP"] + monitorWindowDiff
 		if(match = VisualWindow.Y_Centered)
-			newY := monitorBounds["TOP"] + (monitorWindowDiff / 2)
+			newY := bounds["TOP"] + (monitorWindowDiff / 2)
 		
 		; If there's an offset on the end, add that on.
 		offset := y.removeFromStart(match).removeFromStart("+") ; Strip off +, but leave - (as a negative sign)
 		if(offSet != "")
 			newY += offset
 		
-		; Debug.popup("y",y, "specialValues",specialValues, "monitorBounds",monitorBounds, "match",match, "offset",offset, "newY",newY, "this",this)
+		; Debug.popup("y",y, "specialValues",specialValues, "bounds",bounds, "match",match, "offset",offset, "newY",newY, "this",this)
 		return newY
 	}
 	; =--

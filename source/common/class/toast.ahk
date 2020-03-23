@@ -79,6 +79,20 @@ class Toast {
 	}
 	
 	;---------
+	; DESCRIPTION:    If you want the toast to be positioned relative to a particular window
+	;                 (using VisualWindow's "special" coordinates), you can set that window here.
+	; PARAMETERS:
+	;  titleString (I,REQ) - A titleString that identifies the parent window.
+	; RETURNS:        this
+	; NOTES:          This only affects new calls to .show(), and only applies when using "special"
+	;                 coordinates - it won't automatically follow the parent window around.
+	;---------
+	setParent(titleString) {
+		this.parentTitleString := WindowLib.getIdTitleString(titleString)
+		return this
+	}
+	
+	;---------
 	; DESCRIPTION:    Wrapper for .showForSeconds for a "short" toast (shown for 1 second) in
 	;                 the bottom-right corner of the screen.
 	; RETURNS:        this
@@ -210,11 +224,13 @@ class Toast {
 	
 	static ToastTitle := "[TOAST]"
 	
-	styles         := ""
-	guiId          := ""
-	labelVarName   := ""
-	x              := ""
-	y              := ""
+	styles            := ""
+	guiId             := ""
+	labelVarName      := ""
+	x                 := ""
+	y                 := ""
+	parentTitleString := "" ; If this is set, we'll position relative to the window identified here for "special" coordinates.
+	
 	isGuiDestroyed := false ; To make sure we're not trying to hide/close an already-destroyed toast.
 	isPersistent   := false ; Whether this is persistent or just single-use.
 	isBlocking     := false ; Whether showing on a timer should block the caller until it hides.
@@ -312,7 +328,8 @@ class Toast {
 		else
 			Gui, Show, AutoSize NoActivate, % Toast.ToastTitle ; Resize to size of contents
 		
-		window := new VisualWindow(titleString).move(x, y)
+		window := new VisualWindow(titleString)
+		window.move(x, y, this.parentTitleString)
 		
 		if(isWinHidden)
 			Gui, Show, NoActivate, % Toast.ToastTitle

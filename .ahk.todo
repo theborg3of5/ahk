@@ -13,6 +13,8 @@
 			Or, ScriptTrayInfo.setTitle("title!").setIcons("green.ico", "red.ico")
 			Can we chain a static class this way?
 			vs: ScriptTrayInfo.Init("title!", "green.ico", "red.ico")
+	Could the ActionObject* children just provide their own functions for testing if we think a given string matches them?
+		Instead of trying to duplicate their logic in ActionObject itself
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
 		Possibly reconsider the 100-char limit - wouldn't wider make more sense?
 		Could take into account whether there would be only 1 small word moved down

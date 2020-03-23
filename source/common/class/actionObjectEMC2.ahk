@@ -56,6 +56,8 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		; If we don't know the INI yet, assume the ID is a combined string (i.e. "DLG 123456" or
 		; "DLG 123456: HB/PB WE DID SOME STUFF") and try to split it into its component parts.
 		if(this.id != "" && this.ini = "") {
+			this.preProcess() ; Do a little cleanup to make sure EpicRecord can handle the string
+			
 			record := new EpicRecord(this.id)
 			this.ini   := record.ini
 			this.id    := record.id
@@ -102,6 +104,16 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	
 	
 	; #PRIVATE#
+	
+	;---------
+	; DESCRIPTION:    Clean off any extra stuff from the start of the string so EpicRecord can handle it properly.
+	; SIDE EFFECTS:   Can update this.id
+	; NOTES:          This logic is not taken into account by ActionObject when it's trying to determine the type.
+	;---------
+	preProcess() {
+		; Email subject case: date change notifications
+		this.id := this.id.removeFromStart("Date change notification for ")
+	}
 	
 	;---------
 	; DESCRIPTION:    Do some additional processing on the different bits of info about the object.

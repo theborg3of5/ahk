@@ -11,10 +11,10 @@ return
 +#t::
 	toggleAlwaysOnTop() {
 		WinSet, AlwaysOnTop, Toggle, A
-		if(WindowLib.isAlwaysOnTop())
-			new Toast("Window set to always on top").showMedium()
+		if(WindowLib.isAlwaysOnTop("A"))
+			new Toast("Window set to always on top").setParent("A").showMedium()
 		else
-			new Toast("Window set to NOT always on top").showMedium()
+			new Toast("Window set to NOT always on top").setParent("A").showMedium()
 	}
 
 ; Center current window onscreen.

@@ -60,10 +60,6 @@
 			Transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
 	
 # Toast
-	Consider a positioning option for center/corners of current window
-		Probably need to check whether window is maximized - if so, just use the equivalent screen placement instead.
-		Use cases:
-			Window always-on-top set, make sure it's visible on that window
 	Could we avoid flickering between .showPersistent() and .setText()?
 		Maybe some way to set position without showing?
 		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?

@@ -61,6 +61,7 @@
 	
 # Toast
 	Consider a positioning option for center/corners of current window
+		Probably need to check whether window is maximized - if so, just use the equivalent screen placement instead.
 		Use cases:
 			Window always-on-top set, make sure it's visible on that window
 	Could we avoid flickering between .showPersistent() and .setText()?

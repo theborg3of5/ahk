@@ -2095,6 +2095,20 @@
                 <Param name="num" />
             </Overload>
         </KeyWord>
+        <KeyWord name="DataLib.rebaseVariadicAry" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Variadic parameter arrays don't have the same base array as those created
+							;                 with [], which means they can't handle things like .count() - this returns
+							;                 an identical version that does.
+							; PARAMETERS:
+							;  paramAry (I,REQ) - The parameter array (from a parameter ending with * in the function's
+							;                     definition line), to fix.
+							; RETURNS:        An array with the same values that uses the shared base object.
+							;---------">
+                <Param name="paramAry" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="DataLib.sum" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -2819,6 +2833,20 @@
 							; DESCRIPTION:    Make the toast persistent - that is, when we finish showing it on a timer it is hidden rather than destroyed.
 							; RETURNS:        this
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ErrorToast.setParent" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    If you want the toast to be positioned relative to a particular window
+							;                 (using VisualWindow's &quot;special&quot; coordinates), you can set that window here.
+							; PARAMETERS:
+							;  titleString (I,REQ) - A titleString that identifies the parent window.
+							; RETURNS:        this
+							; NOTES:          This only affects new calls to .show(), and only applies when using &quot;special&quot;
+							;                 coordinates - it won't automatically follow the parent window around.
+							;---------">
+                <Param name="titleString" />
             </Overload>
         </KeyWord>
         <KeyWord name="ErrorToast.setText" func="yes">
@@ -4560,10 +4588,8 @@
 							;---------
 							; DESCRIPTION:    Parse and process the given phone number into a valid number to call from work.
 							; PARAMETERS:
-							;  input (I/O/IO,REQ/OPT) - The string
-							; RETURNS:
-							; SIDE EFFECTS:
-							; NOTES:
+							;  input (I,REQ) - The input string to parse.
+							; RETURNS:        The processed number, or &quot;HANGUP&quot; if that was passed in.
 							;---------">
                 <Param name="input" />
             </Overload>
@@ -7015,6 +7041,20 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="Toast.setParent" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    If you want the toast to be positioned relative to a particular window
+							;                 (using VisualWindow's &quot;special&quot; coordinates), you can set that window here.
+							; PARAMETERS:
+							;  titleString (I,REQ) - A titleString that identifies the parent window.
+							; RETURNS:        this
+							; NOTES:          This only affects new calls to .show(), and only applies when using &quot;special&quot;
+							;                 coordinates - it won't automatically follow the parent window around.
+							;---------">
+                <Param name="titleString" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="Toast.setText" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -7178,6 +7218,22 @@
                 <Param name="ByRef height := &quot;&quot;" />
             </Overload>
         </KeyWord>
+        <KeyWord name="VisualWindow.getBounds" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the visual dimensions of the window as a bounds array.
+							; RETURNS:        An associative array of bounding info:
+							;                   bounds[&quot;LEFT&quot;]   - X coordinate of the left edge
+							;                   bounds[&quot;RIGHT&quot;]  - X coordinate of the right edge
+							;                   bounds[&quot;TOP&quot;]    - Y coordinate of the top edge
+							;                   bounds[&quot;BOTTOM&quot;] - Y coordinate of the bottom edge
+							;                   bounds[&quot;WIDTH&quot;]  - Window width
+							;                   bounds[&quot;HEIGHT&quot;] - Window height
+							; NOTES:          These are the VISUAL dimensions, not the actual (according to Windows) ones.
+							;                 See .getActualPosition() for the actual ones.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="VisualWindow.height" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -7199,12 +7255,15 @@
 							;---------
 							; DESCRIPTION:    Move the window to the specified coordinates (without snapping).
 							; PARAMETERS:
-							;  x (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
-							;  y (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
+							;  x                     (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
+							;  y                     (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
+							;  relativeToTitleString (I,OPT) - The titleString of a window to calculate any &quot;special&quot; positions
+							;                                  relative to. If not given, we'll use the whole monitor instead.
 							; NOTES:          Does not support snapping.
 							;---------">
                 <Param name="x := &quot;&quot;" />
                 <Param name="y := &quot;&quot;" />
+                <Param name="relativeToTitleString := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="VisualWindow.moveBottomLeftToPos" func="yes">

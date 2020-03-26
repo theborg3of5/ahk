@@ -1,16 +1,4 @@
 # New Ideas
-	Consider changing the approach for hyperlinker a bit
-		Have OneNote, others that need special handling do it themselves somehow
-		Ideas:
-			Passing in a BoundFunc
-			Just having a function with the right name
-				Would require a mapping from window name to class where function lives
-			Have programs that need special handling call into the logic themselves and handle special logic
-	Would ScriptTrayInfo benefit from chaining rather than a bunch of Init params?
-		i.e., ScriptTrayInfo.setTitle("title!").setIcon("green.ico").setSuspIcon("red.ico")
-			Or, ScriptTrayInfo.setTitle("title!").setIcons("green.ico", "red.ico")
-			Can we chain a static class this way?
-			vs: ScriptTrayInfo.Init("title!", "green.ico", "red.ico")
 	Could the ActionObject* children just provide their own functions for testing if we think a given string matches them?
 		Instead of trying to duplicate their logic in ActionObject itself
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
@@ -19,6 +7,13 @@
 		Could handle multiple line breaks
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (mainly to allow CDE)
 		Probably a new (optional) data element throughout ActionObject* (and a new column in actionObject.tls)
+	Consider changing the approach for hyperlinker a bit
+		Have OneNote, others that need special handling do it themselves somehow
+		Ideas:
+			Passing in a BoundFunc
+			Just having a function with the right name
+				Would require a mapping from window name to class where function lives
+			Have programs that need special handling call into the logic themselves and handle special logic
 	EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments

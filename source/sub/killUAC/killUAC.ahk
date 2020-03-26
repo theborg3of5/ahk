@@ -5,13 +5,13 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
 ScriptTrayInfo.Init("AHK: Kill UAC", "shieldGreen.ico", "shieldRed.ico")
-CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub)
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub, "DoDisable")
 
 disableUserAccountControl() ; Do it once immediately.
-SetTimer, MainLoop, 1800000 ; 30m, timer toggled by CommonHotkeys' suspend hotkey.
+SetTimer, DoDisable, 1800000 ; 30m
 return
 
-MainLoop:
+DoDisable:
 	disableUserAccountControl()
 return
 

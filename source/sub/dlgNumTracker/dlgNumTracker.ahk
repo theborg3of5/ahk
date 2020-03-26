@@ -6,14 +6,14 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 scriptTitle := "AHK: DLG Number Tracker"
 ScriptTrayInfo.Init(scriptTitle, "hash.ico", "redHash.ico")
-CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub)
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub, "UpdateID")
 
 global currDLGId
-SetTimer, MainLoop, 5000 ; 5s, timer toggled by CommonHotkeys' suspend hotkey.
+SetTimer, UpdateID, 5000 ; 5s
 SetTitleMatchMode, % TitleMatchMode.Contains
 
 
-MainLoop:
+UpdateID:
 	; Don't do anything if EMC2 isn't open.
 	if(!Config.doesWindowExist("EMC2"))
 		return

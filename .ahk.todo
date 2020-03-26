@@ -6,8 +6,6 @@
 			Just having a function with the right name
 				Would require a mapping from window name to class where function lives
 			Have programs that need special handling call into the logic themselves and handle special logic
-	Consider pulling more CommonHotkeys-related code into that class
-		Starting loop, or even just having the caller pass in the name of the label directly - no longer has to be the same across all.
 	Would ScriptTrayInfo benefit from chaining rather than a bunch of Init params?
 		i.e., ScriptTrayInfo.setTitle("title!").setIcon("green.ico").setSuspIcon("red.ico")
 			Or, ScriptTrayInfo.setTitle("title!").setIcons("green.ico", "red.ico")

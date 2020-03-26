@@ -17,11 +17,14 @@ class CommonHotkeys {
 	;---------
 	; DESCRIPTION:    Set up the common hotkeys.
 	; PARAMETERS:
-	;  scriptType (I,REQ) - The "type" of script, from CommonHotkeys.ScriptType_*. This determines
-	;                       which "set" of hotkeys are applied.
+	;  scriptType        (I,REQ) - The "type" of script, from CommonHotkeys.ScriptType_*. This
+	;                              determines which "set" of hotkeys are applied.
+	;  suspendTimerLabel (I,OPT) - If given, the timer for this label will be toggled off when the
+	;                              script is suspended, and back on when the script is unsuspended.
 	;---------
-	Init(scriptType) {
-		this.scriptType := scriptType
+	Init(scriptType, suspendTimerLabel := "") {
+		this.scriptType        := scriptType
+		this.suspendTimerLabel := suspendTimerLabel
 		
 		this.applyHotkeys()
 	}
@@ -71,6 +74,7 @@ class CommonHotkeys {
 	static confirmExit        := false ; Whether to confirm before exiting
 	static confirmExitMessage := "Are you sure you want to exit this script?" ; Message to show when confirming an exit based on .confirmExit
 	static noSuspend          := false ; Whether the suspend hotkey is suppressed
+	static suspendTimerLabel  := "" ; The name of a label for which the timer should be turned off when the script is suspended.
 	
 	; Wrappers for whether we're a particular script type.
 	isMain() {
@@ -162,7 +166,7 @@ class CommonHotkeys {
 	;---------
 	; DESCRIPTION:    Suspend the script, updating the tray icon, pausing a timer with a special name
 	;                 and calling pre-suspend/post-unsuspend hooks.
-	; NOTES:          - Any timers for the label called "MainLoop" will be disabled on suspend and re-enabled on unsuspend.
+	; NOTES:          - Any timers for the label named in this.suspendTimerLabel will be disabled on suspend and re-enabled on unsuspend.
 	;                 - If a function named "beforeSuspend" exists, we will call it before we suspend the script.
 	;                 - If a function named "afterUnsuspend" exists, we will call it after we unsuspend the script.
 	;---------
@@ -178,13 +182,8 @@ class CommonHotkeys {
 		ScriptTrayInfo.updateTrayIcon()
 		
 		; Timers
-		mainLoopLabel := "MainLoop"
-		if(IsLabel(mainLoopLabel)) {
-			if(A_IsSuspended)
-				SetTimer, % mainLoopLabel, Off
-			else
-				SetTimer, % mainLoopLabel, On
-		}
+		if(IsLabel(this.suspendTimerLabel))
+			SetTimer, % this.suspendTimerLabel, % A_IsSuspended ? "Off" : "On"
 		
 		; Post-unsuspend hook (implemented by calling script)
 		if(!A_IsSuspended) { ; Just unsuspended

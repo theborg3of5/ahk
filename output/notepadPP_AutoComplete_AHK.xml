@@ -1452,10 +1452,13 @@
 							;---------
 							; DESCRIPTION:    Set up the common hotkeys.
 							; PARAMETERS:
-							;  scriptType (I,REQ) - The &quot;type&quot; of script, from CommonHotkeys.ScriptType_*. This determines
-							;                       which &quot;set&quot; of hotkeys are applied.
+							;  scriptType        (I,REQ) - The &quot;type&quot; of script, from CommonHotkeys.ScriptType_*. This
+							;                              determines which &quot;set&quot; of hotkeys are applied.
+							;  suspendTimerLabel (I,OPT) - If given, the timer for this label will be toggled off when the
+							;                              script is suspended, and back on when the script is unsuspended.
 							;---------">
                 <Param name="scriptType" />
+                <Param name="suspendTimerLabel := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="CommonHotkeys.noSuspendOff" func="yes">

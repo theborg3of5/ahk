@@ -5,7 +5,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
 ScriptTrayInfo.Init("AHK: Precise Mouse Movement", "mouseGreen.ico", "mouseRed.ico")
-CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone, "HandleKeys")
 
 ; 200 hotkeys allowed per 2 seconds (to allow long holds for moving mouse further)
 #MaxHotkeysPerInterval, 200
@@ -19,13 +19,13 @@ global keyCounts  := {"Left":0,     "Right":0,     "Up":0,     "Down":0}
 ; Show a toast with the controls.
 tt := new TextTable().setBorderType(TextTable.BorderType_Line).setColumnDivider(" ")
 tt.addRow("Space/Numpad0:", "Left mouse button")
-tt.addRow("Arrows:", "Move mouse")
-tt.addRow("Shift (hold):", "Move slowly")
-tt.addRow("Alt (hold):", "Move quickly")
+tt.addRow("Arrows:"       , "Move mouse")
+tt.addRow("Shift (hold):" , "Move slowly")
+tt.addRow("Alt (hold):"   , "Move quickly")
 new Toast(tt.getText()).showForSeconds(5)
 
-SetTimer, MainLoop, 10 ; 10 ms, timer toggled by CommonHotkeys' suspend hotkey.
-MainLoop:
+SetTimer, HandleKeys, 10
+HandleKeys:
 	; For keys held down, add to the counts too
 	For keyName,_ in keyCounts {
 		if(!keyHeld[keyName]) ; Only add to counts here if the key is being held down (so first just adds 1, not potentially multiple depending on the timer)

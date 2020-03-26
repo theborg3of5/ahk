@@ -5,15 +5,15 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
 ScriptTrayInfo.Init("AHK: TortoiseSVN DLG ID Filler", "turtle.ico", "turtleRed.ico")
-CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub)
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Sub, "DoFill")
 
 global tortoiseTitleRegEx := "O)^C:\\EpicSource\\\d\.\d\\DLG-(\w+)[-\\].* - Commit - TortoiseSVN" ; O option to get match object instead of pseudo-array
 global dlgFieldId     := "Edit2"
 global messageFieldId := "Scintilla1"
 
-SetTimer, MainLoop, -100 ; Run once, timer toggled by CommonHotkeys' suspend hotkey.
+SetTimer, DoFill, -100 ; Run once to start, timer toggled by CommonHotkeys' suspend hotkey.
 
-MainLoop:
+DoFill:
 	SetTitleMatchMode, RegEx ; For some reason, setting it once in auto-execute section doesn't always work - so set it here instead.
 	WinWaitActive, % tortoiseTitleRegEx
 	if(A_IsSuspended)
@@ -25,7 +25,7 @@ MainLoop:
 	if(A_IsSuspended)
 		return
 	
-	SetTimer, MainLoop, -100 ; Run again
+	SetTimer, DoFill, -100 ; Run again
 return
 
 addDLGToCommitWindow() {

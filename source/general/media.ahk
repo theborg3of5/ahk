@@ -23,6 +23,11 @@
 		}
 	}
 
+#If Config.machineIsHomeDesktop()
+	; SoundSwitch: toggle the recording device along with the output device.
+	~^F12::^+F12
+#If
+
 #If !Config.doesMediaPlayerExist()
 	^!Up::
 	^!Down::

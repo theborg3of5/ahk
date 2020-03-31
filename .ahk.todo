@@ -1,4 +1,8 @@
 # New Ideas
+	Make Ctrl+Backspace work properly in EMC2 change-decision popups
+		Title: Change Decision: Waiting for Changes
+			Probably just use "Change Decision: "?
+		Resubmit-type popups, too?
 	Could the ActionObject* children just provide their own functions for testing if we think a given string matches them?
 		Instead of trying to duplicate their logic in ActionObject itself
 		Could we keep a static version of the actionObject TableList?

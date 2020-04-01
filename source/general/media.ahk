@@ -25,7 +25,10 @@
 
 #If Config.machineIsHomeDesktop()
 	; SoundSwitch: toggle the recording device along with the output device.
-	~^F12::^+F12
+	~^F12::
+		Sleep, 1000 ; Sleep in between so we show both banners
+		Send, ^+{F12}
+	return
 #If
 
 #If !Config.doesMediaPlayerExist()

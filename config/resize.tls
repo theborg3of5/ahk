@@ -16,7 +16,7 @@
 # Specifics
 	Semi-maximized (fits around time)	smax		1460		1050		RIGHT_EDGE		CENTERED		HOME
 	Social (Telegram, Pidgin)				soc		950		750		RIGHT_EDGE		TOP_EDGE
-	; Social (Telegram, Pidgin)				soc		950		750		RIGHT_EDGE		BOTTOM_EDGE		WORK
+	; Social (Telegram, Pidgin)				soc		950		750		RIGHT_EDGE		BOTTOM_EDGE		WORK ; GDB WFH
 
 ~CONTEXT.replaceWith(WORK) {
 # Development

@@ -1,15 +1,18 @@
 ; General hotkeys that aren't program-specific.
 
 ; Different hotkeys based on machine
-; #If Config.machineIsHomeDesktop
+; #If Config.machineIsHomeDesktop ; GDB WFH
 	; $Volume_Mute::DllCall("LockWorkStation")	; Lock computer.
+#If Config.machineIsWorkLaptop
+	; Suppress the calculator button on my work keyboard (for when using my work keyboard from home)
+	Launch_App2::return
+#If ; #If Config.machineIsWorkLaptop || Config.machineIsWorkVDI
+	; Extra buttons on the ergonomic keyboard as left/right clicks
+	Browser_Back::LButton
+	Browser_Forward::RButton
 ; #If Config.machineIsHomeLaptop || Config.machineIsWorkLaptop || Config.machineIsWorkVDI
 	AppsKey::RWin ; No right windows key on these machines, so use the AppsKey (right-click key) instead.
 ; #If
-
-; Extra buttons on the ergonomic keyboard
-Browser_Back::LButton
-Browser_Forward::RButton
 
 ; Scroll horizontally with Shift held down.
 #If !(Config.isWindowActive("EpicStudio") || Config.isWindowActive("Chrome")) ; Chrome and EpicStudio handle their own horizontal scrolling, and doesn't support WheelLeft/Right all the time.
@@ -19,11 +22,6 @@ Browser_Forward::RButton
 
 ; Release all modifier keys, for cases when some might be "stuck" down.
 *#Space::HotkeyLib.releaseAllModifiers()
-
-; Suppress the calculator button on my work keyboard (for using my work keyboard from home)
-#If Config.machineIsWorkLaptop
-	Launch_App2::return
-#If
 
 ; Launchy normally uses CapsLock, but (very) occasionally, we need to use it for its intended purpose.
 ^!CapsLock::SetCapsLockState, On

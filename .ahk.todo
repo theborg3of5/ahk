@@ -1,4 +1,5 @@
 # New Ideas
+	Is the media player stuff in config worth keeping around? I don't really switch music programs anymore, and Chrome awkwardly tries to grab media keys anyway.
 	Make Ctrl+Backspace work properly in EMC2 change-decision popups
 		Title: Change Decision: Waiting for Changes
 			Probably just use "Change Decision: "?

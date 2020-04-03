@@ -29,6 +29,7 @@ class MicrosoftLib {
 	static Message_WindowMenu  := 0x112 ; Doing something from the "Window" menu, or clicking one of the max/min/restore/close buttons (WM_SYSCOMMAND)
 	static Message_VertScroll  := 0x115 ; Scroll event in the window's vertical scroll bar (WM_VSCROLL)
 	static Message_HorizScroll := 0x114 ; Scroll event in the window's horizontal scroll bar (WM_HSCROLL)
+	static Message_AppCommand  := 0x319 ; Send a specific command to an app (WM_APPCOMMAND)
 	; @GROUP-END@
 	
 	; @GROUP@ Scroll Bar Requests/Messages ( https://docs.microsoft.com/en-us/windows/desktop/Controls/about-scroll-bars )
@@ -37,5 +38,12 @@ class MicrosoftLib {
 	static ScrollBar_Left  := 0 ; Scroll 1 unit to the left (SB_LINELEFT)
 	static ScrollBar_Right := 1 ; Scroll 1 unit to the right (SB_LINERIGHT)
 	; @GROUP-END@
+	
+	; @GROUP@ App Commands for use with WM_APPCOMMAND ( https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-appcommand )
+	static AppCommand_PlayPause     := 0xE0000 ; Media - play/pause toggle (APPCOMMAND_MEDIA_PLAY_PAUSE)
+	static AppCommand_NextTrack     := 0xB0000 ; Media - next track (APPCOMMAND_MEDIA_NEXTTRACK)
+	static AppCommand_PreviousTrack := 0xC0000 ; Media - previous track (APPCOMMAND_MEDIA_PREVIOUSTRACK)
+	; @GROUP-END@
+	
 	; #END#
 }

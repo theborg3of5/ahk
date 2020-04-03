@@ -4086,6 +4086,30 @@
                 <Param name="P5"/>
             </Overload>
         </KeyWord>
+        <KeyWord name="MicrosoftLib.AppCommand_NextTrack" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Media - next track (APPCOMMAND_MEDIA_NEXTTRACK)
+							; GROUP:          App Commands for use with WM_APPCOMMAND ( https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-appcommand )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.AppCommand_PlayPause" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Media - play/pause toggle (APPCOMMAND_MEDIA_PLAY_PAUSE)
+							; GROUP:          App Commands for use with WM_APPCOMMAND ( https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-appcommand )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.AppCommand_PreviousTrack" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Media - previous track (APPCOMMAND_MEDIA_PREVIOUSTRACK)
+							; GROUP:          App Commands for use with WM_APPCOMMAND ( https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-appcommand )
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="MicrosoftLib.BorderX" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -4155,6 +4179,14 @@
 							;---------
 							; DESCRIPTION:    Thickness of the top/bottom borders for windows with a caption that are sizable (uses SM_CYSIZEFRAME/SM_CYFRAME).
 							; GROUP:          System-level window measurements ( https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.Message_AppCommand" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Send a specific command to an app (WM_APPCOMMAND)
+							; GROUP:          Windows Messages ( https://autohotkey.com/docs/misc/SendMessageList.htm )
 							;---------">
             </Overload>
         </KeyWord>
@@ -5609,6 +5641,15 @@
                 <Param name="OutExtension"/>
                 <Param name="OutNameNoExt"/>
                 <Param name="OutDrive"/>
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Spotify.getMainWindowId" func="yes">
+            <Overload retVal="[Requires program includes]" descr="
+							;---------
+							; DESCRIPTION:    Spotify has a whole bunch of windows that are difficult to tell apart from the
+							;                 real thing. This finds and returns the window ID of the &quot;main&quot; one.
+							; RETURNS:        ID/handle of Spotify's main window
+							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="Sqrt" func="yes">

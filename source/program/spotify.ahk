@@ -16,20 +16,36 @@
 class Spotify {
 	; #PUBLIC#
 	
-	
+	;---------
+	; DESCRIPTION:    Toggle play/pause.
+	; SIDE EFFECTS:   Shows a toast with the current song info, if applicable.
+	;---------
 	playPause() {
-		this.sendCommandAndShowInfo(0xE0000)
+		this.sendCommandAndShowInfo(MicrosoftLib.AppCommand_PlayPause)
 	}
 	
+	;---------
+	; DESCRIPTION:    Go to the previous track.
+	; SIDE EFFECTS:   Shows a toast with the new song info, if applicable.
+	;---------
 	previousTrack() {
-		this.sendCommandAndShowInfo(0xC0000)
+		this.sendCommandAndShowInfo(MicrosoftLib.AppCommand_PreviousTrack)
 	}
 	
+	;---------
+	; DESCRIPTION:    Go to the next track.
+	; SIDE EFFECTS:   Shows a toast with the new song info, if applicable.
+	;---------
 	nextTrack() {
-		this.sendCommandAndShowInfo(0xB0000)
+		this.sendCommandAndShowInfo(MicrosoftLib.AppCommand_NextTrack)
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Show the current song's title and artist in a toast (if there's one playing right now).
+	; PARAMETERS:
+	;  idString (I,OPT) - The identifying string for Spotify's main window. Will be retrieved from
+	;                     .getMainWindowId() if not given.
+	;---------
 	showCurrentInfo(idString := "") {
 		if(idString = "")
 			idString := "ahk_id " this.getMainWindowId()
@@ -38,12 +54,8 @@ class Spotify {
 		if(!title.contains("-")) ; No song information (presumably because we just paused or hit the end of a playlist)
 			return
 		
-		; Debug.popup("titleBefore",titleBefore, "titleAfter",titleAfter, "title",title)
 		artist := title.beforeString(" - ")
 		song   := title.afterString(" - ")
-		; titleAry := title.split("-", A_Space)
-		; artist := titleAry[1]
-		; song   := titleAry[2]
 		
 		styles := {}
 		styles["BACKGROUND_COLOR"] := "000000" ; Black
@@ -81,13 +93,18 @@ class Spotify {
 	
 	; #PRIVATE#
 	
-	
+	;---------
+	; DESCRIPTION:    Send a specific app command to the main Spotify window, then show info about
+	;                 the new song once it changes.
+	; PARAMETERS:
+	;  command (I,REQ) - The command (from MicrosoftLib.AppCommand_*) to send
+	;---------
 	sendCommandAndShowInfo(command) {
 		idString := "ahk_id " this.getMainWindowId()
 		titleBefore := WinGetTitle(idString)
 		
 		; Send the message
-		PostMessage, 0x319, , % command, , % idString
+		PostMessage, MicrosoftLib.Message_AppCommand, , % command, , % idString
 		
 		; Wait for the title to change so we can get the new one
 		WinWaitClose, % WindowLib.buildTitleString("Spotify.exe", , titleBefore), , 3 ; 3s timeout

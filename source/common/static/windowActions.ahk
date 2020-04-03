@@ -354,20 +354,8 @@ class WindowActions {
 		
 		; Spotify
 		} else if(name = "Spotify") {
-			if(action = WindowActions.Action_Close) {
-				settings := new TempSettings().titleMatchMode(TitleMatchMode.Contains)
-				
-				; Spotify has a whole bunch of windows that are difficult to tell apart from 
-				; the real thing, so make sure we're closing the right one.
-				winId := WinExist(WindowLib.buildTitleString("Spotify.exe", "", "Spotify")) ; Title is "Spotify" if playing nothing
-				if(!winId)
-					winId := WinExist(WindowLib.buildTitleString("Spotify.exe", "", "-")) ; Title has a hyphen between the title and artist if it is playing something
-				
-				if(winId)
-					WinClose, ahk_id %winId%
-				
-				settings.restore()
-			}
+			if(action = WindowActions.Action_Close)
+				WinClose, % "ahk_id " Spotify.getMainWindowId()
 		}
 	}
 	; #END#

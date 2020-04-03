@@ -19,7 +19,9 @@ else if(command = "PREVIOUS_TRACK")
 	Spotify.previousTrack()
 else if(command = "NEXT_TRACK")
 	Spotify.nextTrack()
+else if(command = "SHOW_INFO")
+	Spotify.showCurrentInfo()
 
 ExitApp
 
-#Include ..\program\spotify.ahk ; At end because otherwise its hotkeys prevent the above execution
+#Include ..\program\spotify.ahk ; At end because otherwise its hotkeys prevent the above execution - we just need the Spotify class.

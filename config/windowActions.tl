@@ -19,7 +19,7 @@
 	GitHub									CLOSE
 	GrepWin									CLOSE
 	KDiff										CLOSE
-	Mattermost								CLOSE		CLOSE
+	Messenger								MIN		-					-					-					-			HOME_DESKTOP
 	Teams										CLOSE		CLOSE
 	Notepad									CLOSE		-					-					CTRL_SHIFT
 	OneTastic Macro Editor XML			-			-					HOME_END

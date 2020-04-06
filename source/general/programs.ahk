@@ -6,6 +6,7 @@
 ^!+n::Config.activateProgram("Notepad++")
 ^!#n::Config.runProgram("Notepad")
 ^!#/::Config.activateProgram("AutoHotkey WinSpy")
+^!+m::Config.activateProgram("Messenger")
 
 ; Some programs are work-specific
 #If Config.contextIsWork

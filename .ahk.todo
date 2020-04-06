@@ -1,5 +1,12 @@
 # New Ideas
 	Is the media player stuff in config worth keeping around? I don't really switch music programs anymore, and Chrome awkwardly tries to grab media keys anyway.
+	Reformat-TLs script not working right for nested mods - see programs.tl
+	Figure out what's going on with auto-complete TL file changing - line endings or something?
+	Should Config.runProgram core logic (running differently based on pathType) move into ProgramInfo itself?
+		The naming of ProgramInfo is odd for that, but what would be better?
+			Can't use just "program" - too generic, easily overwritten
+			ProgramObject/ProgramObj?
+				But this is really just the ability to run a program + info, not as all-encompassing as that name implies
 	Make Ctrl+Backspace work properly in EMC2 change-decision popups
 		Title: Change Decision: Waiting for Changes
 			Probably just use "Change Decision: "?
@@ -91,6 +98,7 @@
 			TextTable.padValue()
 			TextTable.setBorderType()
 			NotepadPlusPlus.sendSnippet()
+			Config.runProgram()
 			Likely others too - WindowActions and similar would probably benefit
 	1.1.31.01
 		Execute (X) hotstrings can support spaces

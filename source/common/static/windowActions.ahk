@@ -189,17 +189,17 @@ class WindowActions {
 			method := WindowActions.Method_Default
 		
 		; Do that action.
-		if(action = WindowActions.Action_None)             ; Do nothing
+		if(action = WindowActions.Action_None)            ; Do nothing
 			return
-		else if(action = WindowActions.Action_Activate)    ; Activate the given window
+		else if(action = WindowActions.Action_Activate)   ; Activate the given window
 			this.doActivateWindow(method, titleString, windowActionSettings)
-		else if(action = WindowActions.Action_Close)       ; Close the given window
+		else if(action = WindowActions.Action_Close)      ; Close the given window
 			this.doCloseWindow(method, titleString, windowActionSettings)
 		else if(action = WindowActions.Action_DeleteWord) ; Backspace one word
 			this.doDeleteWord(method, titleString, windowActionSettings)
-		else if(action = WindowActions.Action_EscapeKey)         ; React to the escape key (generally to minimize or close the window)
+		else if(action = WindowActions.Action_EscapeKey)  ; React to the escape key (generally to minimize or close the window)
 			this.doEscAction(method, titleString, windowActionSettings)
-		else if(action = WindowActions.Action_Minimize)         ; Minimize the given window
+		else if(action = WindowActions.Action_Minimize)   ; Minimize the given window
 			this.doMinimizeWindow(method, titleString, windowActionSettings)
 		else if(action = WindowActions.Action_SelectAll)  ; Select all
 			this.doSelectAll(method, titleString, windowActionSettings)

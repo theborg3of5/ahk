@@ -4719,6 +4719,37 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ProgramInfo.pathType" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The type of path from ProgramInfo.PathType_*
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgramInfo.PathType_EXE" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    A &quot;normal&quot; path to an executable
+							; GROUP:          Path types (affects how the path is run)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgramInfo.PathType_URL" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    A web URL
+							; GROUP:          Path types (affects how the path is run)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgramInfo.PathType_WinApp" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    A windows app (fka universal app)
+							; GROUP:          Path types (affects how the path is run)
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="Progress" func="no">
             <Overload retVal="">
                 <Param name="Off"/>
@@ -5650,6 +5681,41 @@
 							;                 real thing. This finds and returns the window ID of the &quot;main&quot; one.
 							; RETURNS:        ID/handle of Spotify's main window
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Spotify.nextTrack" func="yes">
+            <Overload retVal="[Requires program includes]" descr="
+							;---------
+							; DESCRIPTION:    Go to the next track.
+							; SIDE EFFECTS:   Shows a toast with the new song info, if applicable.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Spotify.playPause" func="yes">
+            <Overload retVal="[Requires program includes]" descr="
+							;---------
+							; DESCRIPTION:    Toggle play/pause.
+							; SIDE EFFECTS:   Shows a toast with the current song info, if applicable.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Spotify.previousTrack" func="yes">
+            <Overload retVal="[Requires program includes]" descr="
+							;---------
+							; DESCRIPTION:    Go to the previous track.
+							; SIDE EFFECTS:   Shows a toast with the new song info, if applicable.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Spotify.showCurrentInfo" func="yes">
+            <Overload retVal="[Requires program includes]" descr="
+							;---------
+							; DESCRIPTION:    Show the current song's title and artist in a toast (if there's one playing right now).
+							; PARAMETERS:
+							;  idString (I,OPT) - The identifying string for Spotify's main window. Will be retrieved from
+							;                     .getMainWindowId() if not given.
+							;---------">
+                <Param name="idString := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="Sqrt" func="yes">

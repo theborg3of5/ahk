@@ -2,10 +2,17 @@
 
 class ProgramInfo {
 	; #PUBLIC#
+	
+	; @GROUP@ Path types (affects how the path is run)
+	static PathType_EXE    := "EXE" ; A "normal" path to an executable
+	static PathType_WinApp := "APP" ; A windows app (fka universal app)
+	static PathType_URL    := "URL" ; A web URL
+	; @GROUP-END@
    
 	; @GROUP@
-   name := "" ; Name of the program
-   path := "" ; Full filepath to launch the program
+   name     := "" ; Name of the program
+   path     := "" ; Full filepath to launch the program
+	pathType := "" ; The type of path from ProgramInfo.PathType_*
 	; @GROUP-END@
 	
    ;---------
@@ -18,8 +25,9 @@ class ProgramInfo {
    ; RETURNS:        Reference to a new ProgramInfo object
    ;---------
    __New(programAry) {
-      this.name := programAry["NAME"]
-      this.path := programAry["PATH"]
+      this.name     := programAry["NAME"]
+      this.path     := programAry["PATH"]
+		this.pathType := programAry["PATH_TYPE"]
 		
 		; Replace any path tags
 		this.path := Config.replacePathTags(this.path)

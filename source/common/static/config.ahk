@@ -34,7 +34,7 @@ class Config {
 		TableList.addAutomaticFilter("MACHINE", this.machine)
 		
 		; Read in and process the other files.
-		this.loadPrivates() ; This should be loaded before most other things, as they can use the resulting tags.
+		this.loadPrivates() ; This should be loaded before most other things, as the rest can use the resulting tags.
 		this.loadWindows()
 		this.loadPaths()
 		this.loadPrograms()
@@ -325,13 +325,24 @@ class Config {
 	runProgram(name, args := "") {
 		HotkeyLib.waitForRelease()
 		
-		path := this.programs[name].path
-		if(!FileExist(path)) {
-			new ErrorToast("Could not run program: " name, "Path does not exist: " path).showMedium()
-			return
+		pathType := this.programs[name].pathType
+		path     := this.programs[name].path
+		
+		; Safety checks
+		if(pathType = ProgramInfo.PathType_EXE) {
+			if(!FileExist(path)) {
+				new ErrorToast("Could not run program: " name, "Path does not exist: " path).showMedium()
+				return
+			}
 		}
 		
-		RunLib.runAsUser(path, args)
+		; Path type determines how we run the path
+		if(pathType = ProgramInfo.PathType_EXE)
+			RunLib.runAsUser(path, args)
+		else if(pathType = ProgramInfo.PathType_URL)
+			Run(path) ; Must be run directly, since it's not a file that exists
+		else if(pathType = ProgramInfo.PathType_WinApp)
+			Run("explorer.exe " path) ; Must be run this way, not as user (possibly needs to be as admin)
 	}
 	
 	

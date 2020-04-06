@@ -1,4 +1,6 @@
-[	NAME							PATH																						MACHINE	]
+[	NAME							PATH																						MACHINE				PATH_TYPE	]
+
+~PATH_TYPE.defaultTo(EXE) {
 
 ~PATH.addToStart(<PROGRAM_FILES_86>\) {
 	Chrome						Google\Chrome\Application\chrome.exe
@@ -14,8 +16,8 @@
 	Snapper						Epic\Snapper\Snapper.exe
 	Thunder						Thunder\Thunder.exe
 	VB6							Microsoft Visual Studio\VB98\VB6.EXE
-	VMware Horizon Client	VMware\VMware Horizon View Client\vmware-view.exe
 	Visual Studio				Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.exe
+	VMware Horizon Client	VMware\VMware Horizon View Client\vmware-view.exe
 } ~PATH.addToStart(<PROGRAM_FILES>\) {
 	AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk
 	Everything					Everything\Everything.exe
@@ -38,3 +40,4 @@
 	Spotify						<USER_APPDATA>\Spotify\Spotify.exe
 	Telegram						<USER_APPDATA>\Telegram Desktop\Telegram.exe
 	Firefox Portable			S:\FirefoxPortable\FirefoxPortable.exe											HOME_DESKTOP
+}

@@ -96,6 +96,12 @@ reformatRows(rows) {
 			Continue
 		}
 		
+		; Closing previous mod + opening a new one on the same line ("} ... {")
+		if(isModClose(row) && isModOpen(row)) {
+			newRows.push(StringLib.getTabs(modIndentLevel - 1) row) ; Indent this at one level back, but leave the indent level as-is since we're opening a new mod.
+			Continue
+		}
+		
 		; Closing a mod set - decrease indent.
 		if(isModClose(row)) {
 			modIndentLevel-- ; Decrease this first so this row goes a level back.

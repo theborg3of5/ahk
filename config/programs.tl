@@ -25,22 +25,22 @@
 		TrueCrypt					TrueCrypt\TrueCrypt.exe
 		GrepWin						grepWin\grepWin.exe
 		yEd							yWorks\yEd\yEd.exe
-} ~PATH.addToStart(<WINDOWS>\) {
+	} ~PATH.addToStart(<WINDOWS>\) {
 		Explorer						explorer.exe
 		Notepad						System32\notepad.exe
-}
-
+	}
+	
 ; Windows apps - PATH is the logical path, found using instructions here:
 ; https://answers.microsoft.com/en-us/windows/forum/windows_10-windows_store/starting-windows-10-store-app-from-the-command/836354c5-b5af-4d6c-b414-80e40ed14675)
-~PATH.addToStart(shell:appsFolder\) | ~PATH_TYPE.replaceWith(APP) {
+	~PATH.addToStart(shell:appsFolder\) | ~PATH_TYPE.replaceWith(APP) {
 		Messenger					FACEBOOK.317180B0BB486_8xx8rvfyw5nnt!App										HOME_DESKTOP
-}
+	}
 		Messenger					https://www.messenger.com															-									URL
-
+	
 		Process Explorer			<PROGRAM_FILES>\Process Explorer\procexp.exe									WORK_LAPTOP
 		Process Explorer			<EPIC_PERSONAL>\Programs\Process Explorer\procexp.exe						WORK_VDI
 		Process Explorer			<PROGRAM_FILES>\ProcessExplorer\procexp.exe
-
+	
 		GitHub						<USER_APPDATA_LOCAL>\GitHubDesktop\GitHubDesktop.exe
 		Slack							<USER_APPDATA_LOCAL>\slack\slack.exe											HOME_DESKTOP
 		Spotify						<USER_APPDATA>\Spotify\Spotify.exe

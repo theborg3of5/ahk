@@ -1,6 +1,5 @@
 # New Ideas
 	Is the media player stuff in config worth keeping around? I don't really switch music programs anymore, and Chrome awkwardly tries to grab media keys anyway.
-	Reformat-TLs script not working right for nested mods - see programs.tl
 	Figure out what's going on with auto-complete TL file changing - line endings or something?
 	Should Config.runProgram core logic (running differently based on pathType) move into ProgramInfo itself?
 		The naming of ProgramInfo is odd for that, but what would be better?

@@ -111,7 +111,7 @@ class Chrome {
 			if(file.contains(".")) { ; Client files - <file> > <function>()
 				title := file
 				if(function != "")
-					title .= " > " function "()"
+					title .= "::" function "()"
 			} else { ; Server routines - <tag>^<routine>, or just <routine>
 				title := function.appendPiece(file, "^")
 			}

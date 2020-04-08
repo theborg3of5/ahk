@@ -51,23 +51,14 @@ class Spotify {
 			idString := "ahk_id " this.getMainWindowId()
 		
 		title := WinGetTitle(idString)
-		if(!title.contains("-")) ; No song information (presumably because we just paused or hit the end of a playlist)
+		if(!title.contains("-")) { ; No song information (presumably because we just paused or hit the end of a playlist)
+			this.showInfoToast("Paused")
 			return
+		}
 		
 		artist := title.beforeString(" - ")
 		song   := title.afterString(" - ")
-		
-		styles := {}
-		styles["BACKGROUND_COLOR"] := "000000" ; Black
-		styles["FONT_COLOR"]       := "CCCCCC" ; Light gray
-		styles["FONT_SIZE"]        := 20
-		styles["FONT_NAME"]        := "Segoe UI"
-		styles["MARGIN_X"]         := 40
-		styles["MARGIN_Y"]         := 20
-		
-		t := new Toast(song "`n`n" artist, styles)
-		t.blockingOn()
-		t.showForSeconds(2, VisualWindow.X_LeftEdge "+50", VisualWindow.Y_TopEdge "+30")
+		this.showInfoToast(song "`n`n" artist)
 	}
 	
 	;---------
@@ -112,6 +103,25 @@ class Spotify {
 			return
 		
 		this.showCurrentInfo(idString)
+	}
+	
+	;---------
+	; DESCRIPTION:    Show the given string in a toast in the top-left.
+	; PARAMETERS:
+	;  infoString (I,REQ) - The string to show. May include newlines if desired.
+	;---------
+	showInfoToast(infoString) {
+		styles := {}
+		styles["BACKGROUND_COLOR"] := "000000" ; Black
+		styles["FONT_COLOR"]       := "CCCCCC" ; Light gray
+		styles["FONT_SIZE"]        := 20
+		styles["FONT_NAME"]        := "Segoe UI"
+		styles["MARGIN_X"]         := 40
+		styles["MARGIN_Y"]         := 20
+		
+		t := new Toast(infoString, styles)
+		t.blockingOn()
+		t.showForSeconds(2, VisualWindow.X_LeftEdge "+50", VisualWindow.Y_TopEdge "+30")
 	}
 	
 	; #END#

@@ -4,8 +4,12 @@
 ; #If Config.machineIsHomeDesktop ; GDB WFH
 	; $Volume_Mute::DllCall("LockWorkStation")	; Lock computer.
 #If Config.machineIsWorkLaptop
-	; Suppress the calculator button on my work keyboard (for when using my work keyboard from home)
-	Launch_App2::return
+	; Suppress certain buttons on my work keyboard (for when using my work keyboard from home)
+	Launch_App2:: ; Calculator key
+	Browser_Home::
+	Browser_Search::
+	Launch_Mail::
+	return
 #If ; #If Config.machineIsWorkLaptop || Config.machineIsWorkVDI
 	; Extra buttons on the ergonomic keyboard as left/right clicks
 	Browser_Back::LButton

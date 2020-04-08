@@ -1,4 +1,7 @@
 # New Ideas
+	Consider adding an extra data/override field to linking action popup for link text
+		Presumably type over whatever was selected (or just type if nothing was selected) with the value
+	Add toast on pause for Spotify/RDP handling
 	Is the media player stuff in config worth keeping around? I don't really switch music programs anymore, and Chrome awkwardly tries to grab media keys anyway.
 	Figure out what's going on with auto-complete TL file changing - line endings or something?
 	Should Config.runProgram core logic (running differently based on pathType) move into ProgramInfo itself?

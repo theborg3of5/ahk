@@ -123,35 +123,36 @@ class TextTable {
 	; NOTES:          
 	;---------
 	setBorderType(borderType) {
-		if(borderType = this.BorderType_None) {
-			this.borderH  := ""
-			this.borderV  := ""
-			this.borderTL := ""
-			this.borderTR := ""
-			this.borderBL := ""
-			this.borderBR := ""
-			this.outerPaddingH := 0
-			this.outerPaddingV := 0
-			
-		} else if(borderType = this.BorderType_Line) {
-			this.borderH  := Chr(0x2500) ; ─
-			this.borderV  := Chr(0x2502) ; │
-			this.borderTL := Chr(0x250C) ; ┌
-			this.borderTR := Chr(0x2510) ; ┐
-			this.borderBL := Chr(0x2514) ; └
-			this.borderBR := Chr(0x2518) ; ┘
-			this.outerPaddingH := 1
-			this.outerPaddingV := 0
-			
-		} else if(borderType = this.BorderType_BoldLine) {
-			this.borderH  := Chr(0x2501) ; ━
-			this.borderV  := Chr(0x2503) ; ┃
-			this.borderTL := Chr(0x250F) ; ┏
-			this.borderTR := Chr(0x2513) ; ┓
-			this.borderBL := Chr(0x2517) ; ┗
-			this.borderBR := Chr(0x251B) ; ┛
-			this.outerPaddingH := 1
-			this.outerPaddingV := 0
+		Switch borderType {
+			Case this.BorderType_None:
+				this.borderH  := ""
+				this.borderV  := ""
+				this.borderTL := ""
+				this.borderTR := ""
+				this.borderBL := ""
+				this.borderBR := ""
+				this.outerPaddingH := 0
+				this.outerPaddingV := 0
+				
+			Case this.BorderType_Line:
+				this.borderH  := Chr(0x2500) ; ─
+				this.borderV  := Chr(0x2502) ; │
+				this.borderTL := Chr(0x250C) ; ┌
+				this.borderTR := Chr(0x2510) ; ┐
+				this.borderBL := Chr(0x2514) ; └
+				this.borderBR := Chr(0x2518) ; ┘
+				this.outerPaddingH := 1
+				this.outerPaddingV := 0
+				
+			Case this.BorderType_BoldLine:
+				this.borderH  := Chr(0x2501) ; ━
+				this.borderV  := Chr(0x2503) ; ┃
+				this.borderTL := Chr(0x250F) ; ┏
+				this.borderTR := Chr(0x2513) ; ┓
+				this.borderBL := Chr(0x2517) ; ┗
+				this.borderBR := Chr(0x251B) ; ┛
+				this.outerPaddingH := 1
+				this.outerPaddingV := 0
 		}
 		
 		return this
@@ -372,22 +373,27 @@ class TextTable {
 		width := this.columnWidths[columnIndex]
 		alignment := DataLib.firstNonBlankValue(this.columnAlignments[columnIndex], this.defaultAlignment) ; Default to left-aligned
 		
-		; Left or right alignment, just put any remaining space there.
-		if(alignment = TextAlignment.Left)
-			return value.postPadToLength(width)
-		if(alignment = TextAlignment.Right)
-			return value.prePadToLength(width)
-		
-		; Center alignment, split it in between.
-		if(alignment = TextAlignment.Center) {
-			numSpacesNeeded := width - value.length()
-			numRightSpaces := numSpacesNeeded // 2 ; If there's an odd number, right gets one less (floor division)
-			numLeftSpaces := numSpacesNeeded - numRightSpaces
-			
-			return StringLib.getSpaces(numLeftSpaces) value StringLib.getSpaces(numRightSpaces)
+		Switch alignment {
+			Case TextAlignment.Left:   return value.postPadToLength(width)
+			Case TextAlignment.Right:  return value.prePadToLength(width)
+			Case TextAlignment.Center: return this.centerPadToLength(value, width)
+			Default:                   return value
 		}
-		
-		return value
+	}
+	
+	;---------
+	; DESCRIPTION:    Center the given value within the provided number of characters wide.
+	; PARAMETERS:
+	;  value (I,REQ) - The value to center
+	;  width (I,REQ) - The width to pad out to/center within.
+	; RETURNS:        The padded value
+	; NOTES:          If the leftover space is not evenly divisible, left side gets one extra space.
+	;---------
+	centerPadToLength(value, width) {
+		numSpacesNeeded := width - value.length()
+		numRightSpaces := numSpacesNeeded // 2 ; If there's an odd number, right gets one less (floor division)
+		numLeftSpaces := numSpacesNeeded - numRightSpaces
+		return StringLib.getSpaces(numLeftSpaces) value StringLib.getSpaces(numRightSpaces)
 	}
 	
 	;---------

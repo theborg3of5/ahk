@@ -149,23 +149,14 @@ class ActionObject {
 	; RETURNS:        New instance of an ActionObject* class
 	;---------
 	getTypeSpecificObject() {
-		if(this.type = "")
-			return "" ; No determined type, silent quit, return nothing
-		
-		if(this.type = this.Type_CodeSearch)
-			return new ActionObjectCodeSearch(this.value, this.subType)
-		
-		if(this.type = this.Type_EpicStudio)
-			return new ActionObjectEpicStudio(this.value, this.subType)
-		
-		if(this.type = this.Type_EMC2)
-			return new ActionObjectEMC2(this.value, this.subType)
-		
-		if(this.type = this.Type_Helpdesk)
-			return new ActionObjectHelpdesk(this.value)
-		
-		if(this.type = this.Type_Path)
-			return new ActionObjectPath(this.value, this.subType)
+		Switch this.type {
+			Case "":                   return "" ; No determined type, silent quit, return nothing
+			Case this.Type_CodeSearch: return new ActionObjectCodeSearch(this.value, this.subType)
+			Case this.Type_EpicStudio: return new ActionObjectEpicStudio(this.value, this.subType)
+			Case this.Type_EMC2:       return new ActionObjectEMC2(      this.value, this.subType)
+			Case this.Type_Helpdesk:   return new ActionObjectHelpdesk(  this.value)
+			Case this.Type_Path:       return new ActionObjectPath(      this.value, this.subType)
+		}
 		
 		new ErrorToast("Unrecognized type", "ActionObject doesn't know what to do with this type: " this.type).showMedium()
 		return ""

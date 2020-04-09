@@ -26,10 +26,10 @@ class Hyperlinker {
 		
 		path := FileLib.cleanupPath(path)
 		windowName := Config.findWindowName()
-		windowLinkInfoAry := Hyperlinker.getWindowLinkInfo(windowName)
-		; Debug.popup("Hyperlinker.linkSelectedText","Finished gathering info", "windowName",windowName, "windowLinkInfoAry",windowLinkInfoAry, "Hyperlinker.windows",Hyperlinker.windows)
+		windowLinkInfo := Hyperlinker.getWindowLinkInfo(windowName)
+		; Debug.popup("Hyperlinker.linkSelectedText","Finished gathering info", "windowName",windowName, "windowLinkInfo",windowLinkInfo, "Hyperlinker.windows",Hyperlinker.windows)
 		
-		if(!windowLinkInfoAry) {
+		if(!windowLinkInfo) {
 			errorMessage := "Window not supported: " windowName
 			return false
 		}
@@ -38,7 +38,7 @@ class Hyperlinker {
 		if(windowName = "OneNote") ; OneNote can't handle double quotes in URLs for some reason, so encode them.
 			path := path.replace("""", "%22")
 		
-		return Hyperlinker.doLink(path, windowLinkInfoAry, errorMessage)
+		return Hyperlinker.doLink(path, windowLinkInfo, errorMessage)
 	}
 	
 	
@@ -97,23 +97,22 @@ class Hyperlinker {
 	; DESCRIPTION:    Actually link the selected text with the given path, in whatever way is
 	;                 required by our window-specific configuration.
 	; PARAMETERS:
-	;  path              (I,REQ) - URL or file path to link to.
-	;  windowLinkInfoAry (I,REQ) - Array of linking-related info about the window matching the given
-	;                              name. See getWindowLinkInfo() for format.
-	;  errorMessage      (O,OPT) - Error message about what went wrong if we return False.
+	;  path           (I,REQ) - URL or file path to link to.
+	;  windowLinkInfo (I,REQ) - Array of linking-related info about the window matching the given
+	;                           name. See getWindowLinkInfo() for format.
+	;  errorMessage   (O,OPT) - Error message about what went wrong if we return False.
 	; RETURNS:        True for success, False if something went wrong.
 	;---------
-	doLink(path, windowLinkInfoAry, ByRef errorMessage := "") {
-		; Debug.toast("Hyperlinker.doLink","Start", "path",path, "windowLinkInfoAry",windowLinkInfoAry)
+	doLink(path, windowLinkInfo, ByRef errorMessage := "") {
+		; Debug.toast("Hyperlinker.doLink","Start", "path",path, "windowLinkInfo",windowLinkInfo)
 		
 		; Handle linking differently depending on the specified method.
-		setPathMethod := windowLinkInfoAry["SET_PATH_METHOD"]
-		if(setPathMethod = Hyperlinker.Method_PopupField)
-			return Hyperlinker.linkPopupField(path, windowLinkInfoAry["LINK_POPUP"], windowLinkInfoAry["PATH_FIELD_CONTROL_ID"], windowLinkInfoAry["CLOSE_METHOD"])
-		if(setPathMethod = Hyperlinker.Method_WebField)
-			return Hyperlinker.linkWebField(path, windowLinkInfoAry["CLOSE_METHOD"])
-		if(setPathMethod = Hyperlinker.Method_TaggedString)
-			return Hyperlinker.linkTaggedString(path, windowLinkInfoAry["TAGGED_STRING_BASE"])
+		setPathMethod := windowLinkInfo["SET_PATH_METHOD"]
+		Switch setPathMethod {
+			Case this.Method_PopupField:   return Hyperlinker.linkPopupField(path, windowLinkInfo)
+			Case this.Method_WebField:     return Hyperlinker.linkWebField(path, windowLinkInfo["CLOSE_METHOD"])
+			Case this.Method_TaggedString: return Hyperlinker.linkTaggedString(path, windowLinkInfo["TAGGED_STRING_BASE"])
+		}
 		
 		errorMessage := "Unsupported set path method: " setPathMethod
 		return false
@@ -123,14 +122,15 @@ class Hyperlinker {
 	; DESCRIPTION:    Link the selected text when the window in question offers a popup and a proper
 	;                 (non-web-based) field.
 	; PARAMETERS:
-	;  path                 (I,REQ) - URL or file path to link to.
-	;  linkPopupTitleString (I,REQ) - The title string for the linking popup where we'll enter the path.
-	;  fieldControlId       (I,REQ) - The control ID for the field wherethe path goes.
+	;  path     (I,REQ) - URL or file path to link to.
+	;  linkInfo (I,REQ) - Array of linking-related info about the window matching the given name.
+	;                     See getWindowLinkInfo() for format.
 	; RETURNS:        True for success, False if something went wrong.
-	; SIDE EFFECTS:   
-	; NOTES:          
 	;---------
-	linkPopupField(path, linkPopupTitleString, fieldControlId, closeMethod) {
+	linkPopupField(path, linkInfo) {
+		linkPopupTitleString := linkInfo["LINK_POPUP"]
+		fieldControlId       := linkInfo["PATH_FIELD_CONTROL_ID"]
+		closeMethod          := linkInfo["CLOSE_METHOD"]
 		if(!linkPopupTitleString || !fieldControlId || !closeMethod)
 			return false
 		

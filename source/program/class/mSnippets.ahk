@@ -25,11 +25,10 @@ class MSnippets {
 			Send, {Backspace}
 		
 		data := new Selector("MSnippets.tls").selectGui()
-		
-		if(data["TYPE"] = "LOOP")
-			snipString := MSnippets.buildMLoop(data, numIndents)
-		else if(data["TYPE"] = "LIST")
-			snipString := MSnippets.buildList(data, numIndents)
+		Switch data["TYPE"] {
+			Case "LOOP": snipString := MSnippets.buildMLoop(data, numIndents)
+			Case "LIST": snipString := MSnippets.buildList(data, numIndents)
+		}
 		
 		ClipboardLib.send(snipString) ; Better to send with the clipboard, otherwise we have to deal with EpicStudio adding in dot-levels itself.
 	}
@@ -48,25 +47,13 @@ class MSnippets {
 	buildMLoop(data, numIndents) {
 		loopString := ""
 		
-		if(data["SUBTYPE"] = "ARRAY_GLO") {
-			loopString .= MSnippets.buildMArrayLoop(data, numIndents)
-		
-		} else if(data["SUBTYPE"] = "ID") {
-			loopString .= MSnippets.buildMIdLoop(data, numIndents)
-		
-		} else if(data["SUBTYPE"] = "DAT") {
-			loopString .= MSnippets.buildMDatLoop(data, numIndents)
-			
-		} else if(data["SUBTYPE"] = "ID_DAT") {
-			loopString .= MSnippets.buildMIdLoop(data, numIndents)
-			loopString .= MSnippets.buildMDatLoop(data, numIndents)
-			
-		} else if(data["SUBTYPE"] = "INDEX_REG_VALUE") {
-			loopString .= MSnippets.buildMIndexRegularValueLoop(data, numIndents)
-			
-		} else if(data["SUBTYPE"] = "INDEX_REG_ID") {
-			loopString .= MSnippets.buildMIndexRegularIDLoop(data, numIndents)
-			
+		Switch data["SUBTYPE"] {
+			Case "ARRAY_GLO":       loopString .= MSnippets.buildMArrayLoop(data, numIndents)
+			Case "ID":              loopString .= MSnippets.buildMIdLoop(data, numIndents)
+			Case "DAT":             loopString .= MSnippets.buildMDatLoop(data, numIndents)
+			Case "ID_DAT":          loopString .= MSnippets.buildMIdLoop(data, numIndents) MSnippets.buildMDatLoop(data, numIndents)
+			Case "INDEX_REG_VALUE": loopString .= MSnippets.buildMIndexRegularValueLoop(data, numIndents)
+			Case "INDEX_REG_ID":    loopString .= MSnippets.buildMIndexRegularIDLoop(data, numIndents)
 		}
 		
 		return loopString
@@ -82,8 +69,9 @@ class MSnippets {
 	; RETURNS:        String containing the generated code.
 	;---------
 	buildList(data, numIndents) {
-		if(data["SUBTYPE"] = "INDEX")
-			return MSnippets.buildMListIndex(data, numIndents)
+		Switch data["SUBTYPE"] {
+			Case "INDEX": return MSnippets.buildMListIndex(data, numIndents)
+		}
 	}
 	
 	;---------

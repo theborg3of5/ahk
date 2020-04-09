@@ -13,14 +13,12 @@ if(!command)
 	ExitApp
 
 ; Send the command
-if(command = "PLAY_PAUSE")
-	Spotify.playPause()
-else if(command = "PREVIOUS_TRACK")
-	Spotify.previousTrack()
-else if(command = "NEXT_TRACK")
-	Spotify.nextTrack()
-else if(command = "SHOW_INFO")
-	Spotify.showCurrentInfo()
+Switch command {
+	Case "PLAY_PAUSE":     Spotify.playPause()
+	Case "PREVIOUS_TRACK": Spotify.previousTrack()
+	Case "NEXT_TRACK":     Spotify.nextTrack()
+	Case "SHOW_INFO":      Spotify.showCurrentInfo()
+}
 
 ExitApp
 

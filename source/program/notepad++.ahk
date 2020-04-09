@@ -181,27 +181,28 @@ class NotepadPlusPlus {
 	sendSnippet(snippetName) {
 		currentIndent := this.getCurrentLineIndent()
 		
-		if(snippetName = "if") {
-			snippet := "
-				(
-					if() {
-						`t
-					}
-				)"
-			snipString := snippet.replace("`n", "`n" currentIndent) ; Add indent to each line (except the first one)
-			ClipboardLib.send(snipString)
-			Send, {Up 2}{End}{Left 3} ; Inside the if parens
-			
-		} else if(snippetName = "for") {
-			snippet := "
-				(
-					For , in  {
-						`t
-					}
-				)"
-			snipString := snippet.replace("`n", "`n" currentIndent) ; Add indent to each line (except the first one)
-			ClipboardLib.send(snipString)
-			Send, {Up 2}{End}{Left 7} ; At the index spot
+		Switch snippetName {
+			Case "if":
+				snippet := "
+					(
+						if() {
+							`t
+						}
+					)"
+				snipString := snippet.replace("`n", "`n" currentIndent) ; Add indent to each line (except the first one)
+				ClipboardLib.send(snipString)
+				Send, {Up 2}{End}{Left 3} ; Inside the if parens
+				
+			Case "for":
+				snippet := "
+					(
+						For , in  {
+							`t
+						}
+					)"
+				snipString := snippet.replace("`n", "`n" currentIndent) ; Add indent to each line (except the first one)
+				ClipboardLib.send(snipString)
+				Send, {Up 2}{End}{Left 7} ; At the index spot
 		}
 	}
 	

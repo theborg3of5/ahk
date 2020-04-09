@@ -51,25 +51,24 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 	; RETURNS:        Link to EpicStudio for the code location/DLG.
 	;---------
 	getLink() {
-		if(this.descriptorType = ActionObjectEpicStudio.DescriptorType_Routine) {
-			EpicLib.splitServerLocation(this.descriptor, routine, tag)
-			environmentId := Config.private["DBC_DEV_ENV_ID"] ; Always use DBC Dev environment
-			
-			url := Config.private["EPICSTUDIO_URL_BASE_ROUTINE"]
-			url := url.replaceTag("ROUTINE",     routine)
-			url := url.replaceTag("TAG",         tag)
-			url := url.replaceTag("ENVIRONMENT", environmentId)
-			
-			return url
+		url := ""
+		
+		Switch this.descriptorType {
+			Case this.DescriptorType_Routine:
+				EpicLib.splitServerLocation(this.descriptor, routine, tag)
+				environmentId := Config.private["DBC_DEV_ENV_ID"] ; Always use DBC Dev environment
+				
+				url := Config.private["EPICSTUDIO_URL_BASE_ROUTINE"]
+				url := url.replaceTag("ROUTINE",     routine)
+				url := url.replaceTag("TAG",         tag)
+				url := url.replaceTag("ENVIRONMENT", environmentId)
+				
+			Case this.DescriptorType_DLG:
+				url := Config.private["EPICSTUDIO_URL_BASE_DLG"]
+				url := url.replaceTag("DLG_ID", this.descriptor)
 		}
 		
-		if(this.descriptorType = ActionObjectEpicStudio.DescriptorType_DLG) {
-			url := Config.private["EPICSTUDIO_URL_BASE_DLG"]
-			url := url.replaceTag("DLG_ID", this.descriptor)
-			return url
-		}
-		
-		return ""
+		return url
 	}
 	
 	

@@ -21,18 +21,14 @@ class SearchLib {
 		
 		subTypesAry := DataLib.forceArray(data["SUBTYPE"]) ; Force it to be an array so we can always loop over it.
 		For _,subType in subTypesAry { ; For searching multiple at once.
-			if(data["SEARCH_TYPE"] = "WEB")
-				SearchLib.baseURL(subType, searchTerm)
-			else if(data["SEARCH_TYPE"] = "CODESEARCH")
-				SearchLib.codeSearch(searchTerm, subType, data["APP_KEY"])
-			else if(data["SEARCH_TYPE"] = "GURU")
-				SearchLib.guru(searchTerm)
-			else if(data["SEARCH_TYPE"] = "WIKI") ; Epic wiki search.
-				SearchLib.epicWiki(searchTerm, subType)
-			else if(data["SEARCH_TYPE"] = "GREPWIN")
-				SearchLib.grepWin(searchTerm, subType)
-			else if(data["SEARCH_TYPE"] = "EVERYTHING")
-				SearchLib.everything(searchTerm)
+			Switch data["SEARCH_TYPE"] {
+				Case "WEB":        SearchLib.urlBase(subType, searchTerm)
+				Case "CODESEARCH": SearchLib.codeSearch(searchTerm, subType, data["APP_KEY"])
+				Case "GURU":       SearchLib.guru(searchTerm)
+				Case "WIKI":       SearchLib.epicWiki(searchTerm, subType) ; Epic wiki search.
+				Case "GREPWIN":    SearchLib.grepWin(searchTerm, subType)
+				Case "EVERYTHING": SearchLib.everything(searchTerm)
+			}
 		}
 	}
 	
@@ -42,7 +38,7 @@ class SearchLib {
 	;  searchBaseURL (I,REQ) - The "base" URL (with %s in place of the search term) to search with.
 	;  searchTerm    (I,REQ) - The term to search for.
 	;---------
-	baseURL(searchBaseURL, searchTerm) {
+	urlBase(searchBaseURL, searchTerm) {
 		searchTerm := SearchLib.escapeTermForRunURL(searchTerm)
 		url := searchBaseURL.replace("%s", searchTerm)
 		Run(url)

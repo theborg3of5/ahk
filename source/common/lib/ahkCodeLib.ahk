@@ -106,19 +106,19 @@ class AHKCodeLib {
 		defLine := defLine.withoutWhitespace()
 		defLine := defLine.removeFromStart("static ")
 		
-		lineType := AHKCodeLib.getDefLineType(defLine)
-		if(lineType = "FUNCTION") {
-			name := defLine.beforeString("(")
-			paramsList := defLine.firstBetweenStrings("(", ")")
-		
-		} else if(lineType = "PROPERTY") {
-			name := defLine.beforeString("[")
-			if(defLine.contains("["))
-			paramsList := defLine.firstBetweenStrings("[", "]")
-		
-		} else if(lineType = "OTHER") {
-			name := defLine.beforeString(" ") ; First space, before any brackets (for properties) or default values (for members).
-			paramsList := ""
+		Switch AHKCodeLib.getDefLineType(defLine) {
+			Case "FUNCTION":
+				name := defLine.beforeString("(")
+				paramsList := defLine.firstBetweenStrings("(", ")")
+			
+			Case "PROPERTY":
+				name := defLine.beforeString("[")
+				if(defLine.contains("["))
+				paramsList := defLine.firstBetweenStrings("[", "]")
+			
+			Case "OTHER":
+				name := defLine.beforeString(" ") ; First space, before any brackets (for properties) or default values (for members).
+				paramsList := ""
 		}
 		
 		paramsAry := AHKCodeLib.splitVarList(paramsList)

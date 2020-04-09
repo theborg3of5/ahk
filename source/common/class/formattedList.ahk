@@ -179,18 +179,14 @@ class FormattedList {
 	; RETURNS:        The array representation of the list
 	;---------
 	convertListToArray(listObject, format) {
-		if(format = this.Format_Array)
-			listAry := listObject
-		if(format = this.Format_UnknownSingle) ; We don't know what delimiter the list was input with, but it seems to just be a single element, so it doesn't matter.
-			listAry := [listObject]
-		if(format = this.Format_Space)
-			listAry := listObject.split(" ", " `t") ; Drop leading/trailing spaces, tabs
-		if(format = this.Format_Commas) ; Also covers Format_CommasSpaced, we just treat the extra space as whitespace to clean out.
-			listAry := listObject.split(",", " `t") ; Drop leading/trailing spaces, tabs
-		if(format = this.Format_NewLines)
-			listAry := listObject.split("`r`n", " `t") ; Drop leading/trailing spaces, tabs
-		if(format = this.Format_OneNoteColumn) ; Cells are separated by double newlines
-			listAry := listObject.split("`r`n`r`n", " `t`r`n") ; Drop leading/trailing spaces, tabs, newlines
+		Switch format {
+			Case this.Format_Array:                           listAry := listObject
+			Case this.Format_UnknownSingle:                   listAry := [listObject] ; No idea of delimiter, but just one element so it doesn't matter.
+			Case this.Format_Space:                           listAry := listObject.split(" ", " `t")
+			Case this.Format_Commas,this.Format_CommasSpaced: listAry := listObject.split(",", " `t") 
+			Case this.Format_NewLines:                        listAry := listObject.split("`r`n", " `t")
+			Case this.Format_OneNoteColumn:                   listAry := listObject.split("`r`n`r`n", " `t`r`n")
+		}
 		
 		listAry.removeEmpties()
 		
@@ -212,18 +208,14 @@ class FormattedList {
 		if(!this.listAry || !format)
 			return ""
 		
-		if(format = this.Format_Array)
-			return this.listAry
-		if(format = this.Format_Space)
-			return this.listAry.join(" ")
-		if(format = this.Format_Commas)
-			return this.listAry.join(",")
-		if(format = this.Format_CommasSpaced)
-			return this.listAry.join(", ")
-		if(format = this.Format_NewLines)
-			return this.listAry.join("`n")
-		
-		return ""
+		Switch format {
+			Case this.Format_Array:        return this.listAry
+			Case this.Format_Space:        return this.listAry.join(" ")
+			Case this.Format_Commas:       return this.listAry.join(",")
+			Case this.Format_CommasSpaced: return this.listAry.join(", ")
+			Case this.Format_NewLines:     return this.listAry.join("`n")
+			Default:                       return ""
+		}
 	}
 	
 	;---------
@@ -236,22 +228,22 @@ class FormattedList {
 		if(!this.listAry || !format)
 			return true
 		
-		; Stuff that doesn't involve extra keys - just Send what comes out of .getListInFormat().
-		if(format = this.Format_Space || format = this.Format_Commas || format = this.Format_CommasSpaced || format = this.Format_NewLines) {
-			SendRaw, % this.getListInFormat(format)
-			return true
-		}
-		
-		; OneNote columns - send a down arrow keystroke between items.
-		if(format = this.Format_OneNoteColumn) {
-			For i,item in this.listAry {
-				SendRaw, % item
-				if(i < this.listAry.length()) {
-					SendPlay, {Down} ; SendPlay is required because OneNote doesn't reliably take {Down} keystrokes otherwise.
-					Sleep, 150 ; Required because otherwise the down keystrokes can get out of sync with the items.
+		Switch format {
+			; Stuff that doesn't involve extra keys - just Send what comes out of .getListInFormat().
+			Case this.Format_Space,this.Format_Commas,this.Format_CommasSpaced,this.Format_NewLines:
+				SendRaw, % this.getListInFormat(format)
+				return true
+				
+			; OneNote columns - send a down arrow keystroke between items.
+			Case this.Format_OneNoteColumn:
+				For i,item in this.listAry {
+					SendRaw, % item
+					if(i < this.listAry.length()) {
+						SendPlay, {Down} ; SendPlay is required because OneNote doesn't reliably take {Down} keystrokes otherwise.
+						Sleep, 150 ; Required because otherwise the down keystrokes can get out of sync with the items.
+					}
 				}
-			}
-			return true
+				return true
 		}
 		
 		return false

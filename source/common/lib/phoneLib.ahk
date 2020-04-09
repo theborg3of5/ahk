@@ -45,27 +45,18 @@ class PhoneLib {
 		number := number.removeRegEx("[^0-9\+]") ; Strip out anything that's not a number (or plus)
 		number := number.replaceRegEx("\+" , "011") ; + becomes country exit code (USA code here)
 		
-		len := number.length()
-		if(len = 4)  ; Old extension.
-			return "7" number
-		if(len = 5)  ; Extension.
-			return number
-		if(len = 7)  ; Normal
-			return number
-		if(len = 10) ; Normal with area code.
-			return "81" number
-		if(len = 11) ; Normal with 1 + area code at beginning.
-			return "8" number
-		if(len = 12) ; Normal with 8 + 1 + area code at beginning.
-			return number
-		if(len = 14) ; International number with exit code, just needs 8 to get out.
-			return "8" number
-		if(len = 15) ; International number with 2-digit exit code and 8, should be set.
-			return number
-		if(len = 16) ; International number with 3-digit exit code and 8, should be set.
-			return number
-		
-		return ""
+		Switch number.length() {
+			Case 4:  return "7"  number ; Old extension.
+			Case 5:  return      number ; Extension.
+			Case 7:  return      number ; Normal
+			Case 10: return "81" number ; Normal with area code.
+			Case 11: return "8"  number ; Normal with 1 + area code at beginning.
+			Case 12: return      number ; Normal with 8 + 1 + area code at beginning.
+			Case 14: return "8"  number ; International number with exit code, just needs 8 to get out.
+			Case 15: return      number ; International number with 2-digit exit code and 8, should be set.
+			Case 16: return      number ; International number with 3-digit exit code and 8, should be set.
+			Default: return ""          ; We don't know how to handle this number of digits, wipe the number.
+		}
 	}
 	
 	;---------

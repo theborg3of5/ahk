@@ -128,19 +128,19 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		; Title - clean up, drop anything extra that we don't need.
 		removeAry := ["-", "/", "\", ":", ",", "DBC"] ; Don't need "DBC" on the start of every EMC2 title.
 		; INI-specific strings to remove
-		if(this.ini = "DLG") {
-			; All permutations of these can appear
-			For _,role in ["A PQA 1 Reviewer", "A PQA 2 Reviewer", "An Expert Reviewer", "A QA 1 Reviewer", "A QA 2 Reviewer"] {
-				For _,result in ["is Waiting for Changes", "has signed off"] {
-					actionStrings.push("(" role " " result ")")
+		Switch this.ini {
+			Case "DLG":
+				removeAry.push("(Developer has reset your status)")
+				; All permutations of these can appear
+				For _,role in ["A PQA 1 Reviewer", "A PQA 2 Reviewer", "An Expert Reviewer", "A QA 1 Reviewer", "A QA 2 Reviewer"] {
+					For _,result in ["is Waiting for Changes", "has signed off"] {
+						removeAry.push("(" role " " result ")")
+					}
 				}
-			}
-			actionStrings := ["(Developer has reset your status)"]
-			removeAry.appendArray(actionStrings)
-		} else if(this.ini = "XDS") {
-			removeAry.appendArray(["(A Reviewer Approved)", "(A Reviewer is Waiting for Changes)", "(A Reviewer Declined to Review)"])
-		} else if(this.ini = "SLG") {
-			removeAry.appendArray(["--Assigned To:"])
+			Case "XDS":
+				removeAry.appendArray(["(A Reviewer Approved)", "(A Reviewer is Waiting for Changes)", "(A Reviewer Declined to Review)"])
+			Case "SLG":
+				removeAry.appendArray(["--Assigned To:"])
 		}
 		
 		this.title := this.title.clean(removeAry)

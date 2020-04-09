@@ -337,12 +337,11 @@ class Config {
 		}
 		
 		; Path type determines how we run the path
-		if(pathType = ProgramInfo.PathType_EXE)
-			RunLib.runAsUser(path, args)
-		else if(pathType = ProgramInfo.PathType_URL)
-			Run(path) ; Must be run directly, since it's not a file that exists
-		else if(pathType = ProgramInfo.PathType_WinApp)
-			Run("explorer.exe " path) ; Must be run this way, not as user (possibly needs to be as admin)
+		Switch pathType {
+			Case ProgramInfo.PathType_EXE:    RunLib.runAsUser(path, args)
+			Case ProgramInfo.PathType_URL:    Run(path) ; Must be run directly, since it's not a file that exists
+			Case ProgramInfo.PathType_WinApp: Run("explorer.exe " path) ; Must be run this way, not as user (possibly needs to be as admin)
+		}
 	}
 	
 	
@@ -514,17 +513,12 @@ class Config {
 	;                 else, true/false for whether we found a match.
 	;---------
 	matchesWithMethod(haystack, needle, method := "ANY") { ; method := Config.TitleContains_Any
-		if(method = Config.TitleContains_Any)
-			return haystack.contains(needle)
-		
-		else if(method = Config.TitleContains_Start)
-			return haystack.startsWith(needle)
-		
-		else if(method = Config.TitleContains_End)
-			return haystack.endsWith(needle)
-		
-		else if(method = Config.TitleContains_Exact)
-			return (haystack = needle)
+		Switch method {
+			Case Config.TitleContains_Any:   return haystack.contains(needle)
+			Case Config.TitleContains_Start: return haystack.startsWith(needle)
+			Case Config.TitleContains_End:   return haystack.endsWith(needle)
+			Case Config.TitleContains_Exact: return (haystack = needle)
+		}
 		
 		new ErrorToast("Could not check match with method", "Unsupported match method: " method).showMedium()
 		return ""

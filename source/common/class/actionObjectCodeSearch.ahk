@@ -47,16 +47,17 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 	; RETURNS:        Link to CodeSearch for the code location.
 	;---------
 	getLink() {
-		if(this.locationType = ActionObjectCodeSearch.LocationType_Server) {
-			EpicLib.splitServerLocation(this.location, routine, tag)
-			routine := StringLib.encodeForURL(routine)
-			tag     := StringLib.encodeForURL(tag)
-			
-			return Config.private["CS_SERVER_CODE_BASE"].replaceTags({"ROUTINE":routine, "TAG":tag})
+		Switch this.locationType {
+			Case this.LocationType_Server:
+				EpicLib.splitServerLocation(this.location, routine, tag)
+				routine := StringLib.encodeForURL(routine)
+				tag     := StringLib.encodeForURL(tag)
+				
+				return Config.private["CS_SERVER_CODE_BASE"].replaceTags({"ROUTINE":routine, "TAG":tag})
+				
+			Case this.LocationType_Client:
+				return Config.private["CS_CLIENT_CODE_BASE"].replaceTag("FILENAME", this.location)
 		}
-		
-		if(this.locationType = ActionObjectCodeSearch.LocationType_Client)
-			return Config.private["CS_CLIENT_CODE_BASE"].replaceTag("FILENAME", this.location)
 		
 		return ""
 	}

@@ -46,28 +46,15 @@ class HotkeyLib {
 		if(!hotkeyChar)
 			return ""
 		
-		; Special characters for how a hotkey is checked
-		if(hotkeyChar = "*")
-			return ""
-		if(hotkeyChar = "$")
-			return ""
-		if(hotkeyChar = "~")
-			return ""
-		if(hotkeyChar = " ")
-			return "" ; Space within hotkey - probably around an & or similar.
-		
-		; Modifier keys
-		if(hotkeyChar = "#")
-			return "LWin" ; There's no generic "Win", so just pick the left one.
-		if(hotkeyChar = "!")
-			return "Alt"
-		if(hotkeyChar = "^")
-			return "Ctrl"
-		if(hotkeyChar = "+")
-			return "Shift"
-		
-		; Otherwise, probably a letter or number.
-		return hotkeyChar
+		Switch hotkeyChar {
+			Case "*","$","~": return "" ; Special characters for how a hotkey is checked
+			Case " ":         return "" ; Space within hotkey (means nothing) - probably around an & or similar.
+			Case "#":         return "LWin" ; There's no generic "Win", so just pick the left one.
+			Case "!":         return "Alt"
+			Case "^":         return "Ctrl"
+			Case "+":         return "Shift"
+			Default:          return hotkeyChar ; Otherwise, probably a letter or number.
+		}
 	}
 	; #END#
 }

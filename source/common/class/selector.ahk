@@ -337,10 +337,10 @@ class Selector {
 	updateSettings(settings) {
 		For name,value in settings {
 			; The (@)NPP-TABLELIST section in this class should be kept up-to-date with all available settings.
-			if(name = "WindowTitle")
-				this._windowTitle := value
-			if(name = "MinColumnWidth")
-				this._minColumnWidth := value
+			Switch name {
+				Case "WindowTitle":    this._windowTitle := value
+				Case "MinColumnWidth": this._minColumnWidth := value
+			}
 		}
 	}
 	

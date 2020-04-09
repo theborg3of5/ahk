@@ -40,7 +40,7 @@
             <!-- *gdb - Add scope ending tag -->
             <Keywords name="Folders in comment, close">=-- #END#</Keywords>
             <Keywords name="Keywords1">
-					break byref catch class continue else exit exitapp finally for global gosub goto if ifequal ifexist ifgreater ifgreaterorequal ifinstring ifless iflessorequal ifmsgbox ifnotequal ifnotexist ifnotinstring ifwinactive ifwinexist ifwinnotactive ifwinnotexist local loop onexit pause return settimer sleep static suspend throw try until var while
+					break byref case catch class continue else exit exitapp finally for global gosub goto if ifequal ifexist ifgreater ifgreaterorequal ifinstring ifless iflessorequal ifmsgbox ifnotequal ifnotexist ifnotinstring ifwinactive ifwinexist ifwinnotactive ifwinnotexist local loop onexit pause return settimer sleep static suspend switch throw try until var while
 				</Keywords>
             <!-- *gdb - Add static classes -->
             <Keywords name="Keywords2">

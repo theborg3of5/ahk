@@ -174,12 +174,11 @@ class Duration {
 			quantity := remainingSeconds // multiplier
 			remainingSeconds -= quantity * multiplier
 			
-			if(unit = Duration.Char_Hour)
-				hours := quantity
-			if(unit = Duration.Char_Minute)
-				minutes := quantity
-			if(unit = Duration.Char_Second)
-				seconds := quantity
+			Switch unit {
+				Case this.Char_Hour:   hours   := quantity
+				Case this.Char_Minute: minutes := quantity
+				Case this.Char_Second: seconds := quantity
+			}
 		}
 		
 		; Debug.popup("this.durationTotalSeconds",this.durationTotalSeconds, "hours",hours, "minutes",minutes, "seconds",seconds)

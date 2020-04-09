@@ -55,14 +55,12 @@ class RelativeDate extends RelativeDateTimeBase {
 	;  unit        (I,REQ) - The unit to shift in
 	;---------
 	doShift(shiftAmount, unit) {
-		if(unit = "d" || unit = "t") ; Relative days can also be written as "t" for today.
-			this.shiftDay(shiftAmount)
-		if(unit = "w")
-			this.shiftWeek(shiftAmount)
-		if(unit = "m")
-			this.shiftMonth(shiftAmount)
-		if(unit = "y")
-			this.shiftYear(shiftAmount)
+		Switch unit {
+			Case "d","t": this.shiftDay(shiftAmount) ; Relative days can also be written as "t" for today.
+			Case "w":     this.shiftWeek(shiftAmount)
+			Case "m":     this.shiftMonth(shiftAmount)
+			Case "y":     this.shiftYear(shiftAmount)
+		}
 	}
 	
 	;---------

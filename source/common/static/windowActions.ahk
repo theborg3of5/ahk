@@ -189,22 +189,16 @@ class WindowActions {
 			method := WindowActions.Method_Default
 		
 		; Do that action.
-		if(action = WindowActions.Action_None)            ; Do nothing
-			return
-		else if(action = WindowActions.Action_Activate)   ; Activate the given window
-			this.doActivateWindow(method, titleString, windowActionSettings)
-		else if(action = WindowActions.Action_Close)      ; Close the given window
-			this.doCloseWindow(method, titleString, windowActionSettings)
-		else if(action = WindowActions.Action_DeleteWord) ; Backspace one word
-			this.doDeleteWord(method, titleString, windowActionSettings)
-		else if(action = WindowActions.Action_EscapeKey)  ; React to the escape key (generally to minimize or close the window)
-			this.doEscAction(method, titleString, windowActionSettings)
-		else if(action = WindowActions.Action_Minimize)   ; Minimize the given window
-			this.doMinimizeWindow(method, titleString, windowActionSettings)
-		else if(action = WindowActions.Action_SelectAll)  ; Select all
-			this.doSelectAll(method, titleString, windowActionSettings)
-		else
-			Debug.popup("WindowActions.doWindowAction","Error", "Action not found",action)
+		Switch action {
+			Case this.Action_None:       return                                                           ; Do nothing
+			Case this.Action_Activate:   this.doActivateWindow(method, titleString, windowActionSettings) ; Activate the given window
+			Case this.Action_Close:      this.doCloseWindow(   method, titleString, windowActionSettings) ; Close the given window
+			Case this.Action_DeleteWord: this.doDeleteWord(    method, titleString, windowActionSettings) ; Backspace one word
+			Case this.Action_EscapeKey:  this.doEscAction(     method, titleString, windowActionSettings) ; React to the escape key (generally to minimize or close the window)
+			Case this.Action_Minimize:   this.doMinimizeWindow(method, titleString, windowActionSettings) ; Minimize the given window
+			Case this.Action_SelectAll:  this.doSelectAll(     method, titleString, windowActionSettings) ; Select all
+			Default: Debug.popup("WindowActions.doWindowAction","Error", "Action not found",action)
+		}
 	}
 	
 	;---------
@@ -219,12 +213,12 @@ class WindowActions {
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
 	doActivateWindow(method, titleString, windowActionSettings) {
-		if(method = WindowActions.Method_Default) {
-			WinShow,     %titleString%
-			WinActivate, %titleString%
-			
-		} else {
-			this.doWindowAction(method, titleString, windowActionSettings)
+		Switch method {
+			Case this.Method_Default:
+				WinShow,     %titleString%
+				WinActivate, %titleString%
+			Default:
+				this.doWindowAction(method, titleString, windowActionSettings)
 		}
 	}
 	;---------
@@ -239,11 +233,10 @@ class WindowActions {
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
 	doCloseWindow(method, titleString, windowActionSettings) {
-		if(method = WindowActions.Method_Default)
-			WinClose, %titleString%
-			
-		else
-			this.doWindowAction(method, titleString, windowActionSettings)
+		Switch method {
+			Case this.Method_Default: WinClose, %titleString%
+			Default:                  this.doWindowAction(method, titleString, windowActionSettings)
+		}
 	}
 	;---------
 	; DESCRIPTION:    Delete a word in the specified window.
@@ -257,14 +250,13 @@ class WindowActions {
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
 	doDeleteWord(method, titleString, windowActionSettings) {
-		if(method = WindowActions.Method_Default) {
+		Switch method {
+		Case this.Method_Default:
 			Send, ^{Backspace}
-			
-		} else if(method = WindowActions.Method_DeleteWord_Ctrl) { ; For older places that don't allow it properly.
+		Case this.Method_DeleteWord_Ctrl: ; For older places that don't allow it properly.
 			Send, ^+{Left}
 			Send, {Backspace}
-			
-		} else {
+		Default:
 			this.doWindowAction(method, titleString, windowActionSettings)
 		}
 	}
@@ -280,10 +272,10 @@ class WindowActions {
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
 	doEscAction(method, titleString, windowActionSettings) {
-		if(method = WindowActions.Method_Default) ; Default is to do nothing.
-			return
-		else
-			this.doWindowAction(method, titleString, windowActionSettings)
+		Switch method {
+			Case this.Method_Default: return ; Default is to do nothing.
+			Default:                  this.doWindowAction(method, titleString, windowActionSettings)
+		}
 	}
 	;---------
 	; DESCRIPTION:    Minimize the specified window.
@@ -297,14 +289,10 @@ class WindowActions {
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
 	doMinimizeWindow(method, titleString, windowActionSettings) {
-		if(method = WindowActions.Method_Default) {
-			WinMinimize, %titleString%
-		
-		} else if(method = WindowActions.Method_Minimize_Message) {
-			PostMessage, 0x112, 0xF020 , , , %titleString%
-		
-		} else {
-			this.doWindowAction(method, titleString, windowActionSettings)
+		Switch method {
+			Case this.Method_Default:          WinMinimize, %titleString%
+			Case this.Method_Minimize_Message: PostMessage, 0x112, 0xF020 , , , %titleString%
+			Default:                           this.doWindowAction(method, titleString, windowActionSettings)
 		}
 	}
 	;---------
@@ -319,15 +307,14 @@ class WindowActions {
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
 	doSelectAll(method, titleString, windowActionSettings) {
-		if(method = WindowActions.Method_Default) {
-			Send, ^a
-		
-		} else if(method = WindowActions.Method_SelectAll_Home) { ; For older places that don't allow it properly.
-			Send, ^{Home}
-			Send, ^+{End}
-		
-		} else {
-			this.doWindowAction(method, titleString, windowActionSettings)
+		Switch method {
+			Case this.Method_Default:
+				Send, ^a
+			Case this.Method_SelectAll_Home: ; For older places that don't allow it properly.
+				Send, ^{Home}
+				Send, ^+{End}
+			Default:
+				this.doWindowAction(method, titleString, windowActionSettings)
 		}
 	}
 	
@@ -345,17 +332,14 @@ class WindowActions {
 		if(!action)
 			return ""
 		
-		name := windowActionSettings["NAME"]
-		
-		; Windows explorer
-		if(name = "Explorer") {
-			if(action = WindowActions.Action_Minimize)
-				Send, !q ; QTTabBar's min to tray hotkey
-		
-		; Spotify
-		} else if(name = "Spotify") {
-			if(action = WindowActions.Action_Close)
-				WinClose, % "ahk_id " Spotify.getMainWindowId()
+		Switch windowActionSettings["NAME"] {
+			Case "Explorer":
+				if(action = WindowActions.Action_Minimize)
+					Send, !q ; QTTabBar's min to tray hotkey
+			
+			Case "Spotify":
+				if(action = WindowActions.Action_Close)
+					WinClose, % "ahk_id " Spotify.getMainWindowId()
 		}
 	}
 	; #END#

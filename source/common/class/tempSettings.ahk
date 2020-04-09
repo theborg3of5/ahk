@@ -130,16 +130,13 @@ class TempSettings {
 	; RETURNS:        The current coordinate mode for the given type
 	;---------
 	getCoordMode(targetType) {
-		if(targetType = "ToolTip")
-			return A_CoordModeToolTip
-		if(targetType = "Pixel")
-			return A_CoordModePixel
-		if(targetType = "Mouse")
-			return A_CoordModeMouse
-		if(targetType = "Caret")
-			return A_CoordModeCaret
-		if(targetType = "Menu")
-			return A_CoordModeMenu
+		Switch targetType {
+			Case "ToolTip": return A_CoordModeToolTip
+			Case "Pixel":   return A_CoordModePixel
+			Case "Mouse":   return A_CoordModeMouse
+			Case "Caret":   return A_CoordModeCaret
+			Case "Menu":    return A_CoordModeMenu
+		}
 	}
 	; #END#
 }

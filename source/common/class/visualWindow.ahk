@@ -516,13 +516,12 @@ class VisualWindow {
 			return x ; Just return the original value if it wasn't special
 		
 		; Convert the special value.
-		if(match = VisualWindow.X_LeftEdge)
-			newX := bounds["LEFT"]
 		monitorWindowDiff := bounds["WIDTH"] - this.width
-		if(match = VisualWindow.X_RightEdge)
-			newX := bounds["LEFT"] + monitorWindowDiff
-		if(match = VisualWindow.X_Centered)
-			newX := bounds["LEFT"] + (monitorWindowDiff / 2)
+		Switch match {
+			Case this.X_LeftEdge:  newX := bounds["LEFT"]
+			Case this.X_RightEdge: newX := bounds["LEFT"] +  monitorWindowDiff
+			Case this.X_Centered:  newX := bounds["LEFT"] + (monitorWindowDiff / 2)
+		}
 		
 		; If there's an offset on the end, add that on.
 		offset := x.removeFromStart(match).removeFromStart("+") ; Strip off +, but leave - (as a negative sign)
@@ -538,13 +537,12 @@ class VisualWindow {
 			return y ; Just return the original value if it wasn't special
 		
 		; Convert the special value.
-		if(match = VisualWindow.Y_TopEdge)
-			newY := bounds["TOP"]
 		monitorWindowDiff := bounds["HEIGHT"] - this.height
-		if(match = VisualWindow.Y_BottomEdge)
-			newY := bounds["TOP"] + monitorWindowDiff
-		if(match = VisualWindow.Y_Centered)
-			newY := bounds["TOP"] + (monitorWindowDiff / 2)
+		Switch match {
+			Case this.Y_TopEdge:    newY := bounds["TOP"]
+			Case this.Y_BottomEdge: newY := bounds["TOP"] +  monitorWindowDiff
+			Case this.Y_Centered:   newY := bounds["TOP"] + (monitorWindowDiff / 2)
+		}
 		
 		; If there's an offset on the end, add that on.
 		offset := y.removeFromStart(match).removeFromStart("+") ; Strip off +, but leave - (as a negative sign)

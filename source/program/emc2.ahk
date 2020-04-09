@@ -5,7 +5,7 @@
 
 ; Main EMC2 window
 #If Config.isWindowActive("EMC2")
-	^h::Send, ^7  ; Make ^h for server object, similar to ^g for client object.
+	^h:: Send, ^7 ; Make ^h for server object, similar to ^g for client object.
 	^+8::Send, !o ; Contact comment, EpicStudio-style.
 	$F5::+F5      ; Make F5 work everywhere by mapping it to shift + F5.
 	^+t::return   ; Block ^+t login from Hyperspace - it does very strange zoom-in things and other nonsense.
@@ -17,9 +17,9 @@
 	^+o::EMC2.openCurrentDLGInEpicStudio() ; Take DLG # and pop up the DLG in EpicStudio sidebar.
 	
 	; SmartText hotstrings. Added to favorites to deal with duplicate/similar names.
-	:X:qa.dbc::EMC2.insertSmartText("DBC QA INSTRUCTIONS")
+	:X:qa.dbc:: EMC2.insertSmartText("DBC QA INSTRUCTIONS")
 	:X:qa.sdbc::EMC2.insertSmartText("DBC SIMPLE AND STRAIGHTFORWARD QA INSTRUCTIONS")
-	:X:qa.new::EMC2.insertSmartText("QA INSTRUCTIONS - NEW CHANGES")
+	:X:qa.new:: EMC2.insertSmartText("QA INSTRUCTIONS - NEW CHANGES")
 	
 	:X:openall::EMC2.openRelatedQANsFromTable() ; Open all related QANs from an object in EMC2.
 #If

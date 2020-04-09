@@ -102,9 +102,4 @@
 			NotepadPlusPlus.sendSnippet()
 			Config.runProgram()
 			Likely others too - WindowActions and similar would probably benefit
-	1.1.31.01
-		Execute (X) hotstrings can support spaces after second ::
-			notepadPlusPlus
-			emc2
-			hotstrings
 	

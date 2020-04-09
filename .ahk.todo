@@ -1,5 +1,4 @@
 # New Ideas
-	Retire tortoiseSVN DLG filler now that there's an explorer extension alternative.
 	Consider adding an extra data/override field to linking action popup for link text
 		Presumably type over whatever was selected (or just type if nothing was selected) with the value
 	ColorPicker's toast is much wider than it needs to be - is that a new systemic problem or specific?

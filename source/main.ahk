@@ -26,7 +26,6 @@ Run(subFolder "vimBindings\vimBindings.ahk")
 Run(subFolder "windowMoverSizer\windowMoverSizer.ahk")
 if(Config.contextIsWork) { ; Work-specific subs
 	Run(subFolder "dlgNumTracker\dlgNumTracker.ahk")
-	Run(subFolder "tortoiseFillerDLG\tortoiseFillerDLG.ahk")
 	if(Config.machineIsWorkLaptop)
 		Run(subFolder "killUAC\killUAC.ahk")
 }

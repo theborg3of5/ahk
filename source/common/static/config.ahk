@@ -232,24 +232,24 @@ class Config {
 	; RETURNS:        The WindowInfo instance matching the specified window.
 	;---------
 	findWindowInfo(titleString := "A") {
-		exe      := WinGet("ProcessName", titleString)
-		ahkclass := WinGetClass(titleString)
-		title    := WinGetTitle(titleString)
+		exeToMatch      := WinGet("ProcessName", titleString)
+		classToMatch := WinGetClass(titleString)
+		titleToMatch    := WinGetTitle(titleString)
 		
 		bestMatch := ""
 		For _,winInfo in this.windows {
-			; Debug.popup("Against WindowInfo",winInfo, "EXE",exe, "Class",ahkClass, "Title",title)
-			if(exe      && winInfo.exe   && (exe != winInfo.exe))
+			; Debug.popup("Against WindowInfo",winInfo, "EXE",exeToMatch, "Class",classToMatch, "Title",titleToMatch)
+			if(exeToMatch   && winInfo.exe   && (exeToMatch != winInfo.exe))
 				Continue
-			if(ahkClass && winInfo.class && (ahkClass != winInfo.class))
+			if(classToMatch && winInfo.class && (classToMatch != winInfo.class))
 				Continue
-			if(title    && winInfo.title) {
+			if(titleToMatch && winInfo.title) {
 				; Allow titles to be compared more flexibly than straight equality.
 				stringMatchMode := winInfo.titleStringMatchModeOverride
 				if(!stringMatchMode)
 					stringMatchMode := Config.TitleContains_Any ; Default if not overridden
 				
-				if(!this.matchesWithMethod(title, winInfo.title, stringMatchMode))
+				if(!this.matchesWithMethod(titleToMatch, winInfo.title, stringMatchMode))
 					Continue
 			}
 			

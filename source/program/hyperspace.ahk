@@ -29,7 +29,7 @@ class Hyperspace {
 	
 	;---------
 	; DESCRIPTION:    Determine whether any version of Hyperspace is active.
-	; RETURNS:        true if a Hyperspace is active, False otherwise.
+	; RETURNS:        true if a Hyperspace is active, false otherwise.
 	; NOTES:          We can't use the Config.isWindowActive() here because the EXE is version-
 	;                 specific and we want to support any version.
 	;---------

@@ -968,15 +968,6 @@
                 <Param name="needle" />
             </Overload>
         </KeyWord>
-        <KeyWord name="ArrayBase.count" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Temporary override for built-in .count() function, until everywhere I use AHK
-							;                 is updated to at least 1.1.29.00.
-							; RETURNS:        Number of elements in the array
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="ArrayBase.getChildrenReducedToMember" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -2102,8 +2093,8 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Variadic parameter arrays don't have the same base array as those created
-							;                 with [], which means they can't handle things like .count() - this returns
-							;                 an identical version that does.
+							;                 with [], which means they can't handle things like .contains() - this
+							;                 returns an identical version that does.
 							; PARAMETERS:
 							;  paramAry (I,REQ) - The parameter array (from a parameter ending with * in the function's
 							;                     definition line), to fix.
@@ -4471,15 +4462,6 @@
 							;                 &quot;&quot; if we didn't find it at all.
 							;---------">
                 <Param name="needle" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="ObjectBase.count" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Temporary override for built-in .count() function, until everywhere I use AHK
-							;                 is updated to at least 1.1.29.00.
-							; RETURNS:        Number of key/element pairs in the object
-							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ObjectBase.getChildrenReducedToMember" func="yes">

@@ -18,20 +18,6 @@ class ArrayBase {
 	static isArray := true ; Flag for when we need to tell the difference between an array and an object.
 	
 	;---------
-	; DESCRIPTION:    Temporary override for built-in .count() function, until everywhere I use AHK
-	;                 is updated to at least 1.1.29.00.
-	; RETURNS:        Number of elements in the array
-	;---------
-	count() {
-		functionName := "ObjCount"
-		if(IsFunc(functionName))
-			return %functionName%(this)
-		
-		; The below is to support prior to AHK v1.1.29.00 (where ObjCount()/.count() did not yet exist).
-		return this.length()
-	}
-	
-	;---------
 	; DESCRIPTION:    Check whether this array contains a particular value.
 	; PARAMETERS:
 	;  needle (I,REQ) - The value to search the array for.

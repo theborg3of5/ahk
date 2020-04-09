@@ -11,7 +11,7 @@ class DataLib {
 	;---------
 	isNullOrEmpty(obj) {
 		; All objects/arrays should have a count() function we can check.
-		if(IsFunc(obj.count))
+		if(IsObject(obj))
 			return (obj.count() = 0)
 		
 		; Handling for strings
@@ -200,8 +200,8 @@ class DataLib {
 	
 	;---------
 	; DESCRIPTION:    Variadic parameter arrays don't have the same base array as those created
-	;                 with [], which means they can't handle things like .count() - this returns
-	;                 an identical version that does.
+	;                 with [], which means they can't handle things like .contains() - this
+	;                 returns an identical version that does.
 	; PARAMETERS:
 	;  paramAry (I,REQ) - The parameter array (from a parameter ending with * in the function's
 	;                     definition line), to fix.

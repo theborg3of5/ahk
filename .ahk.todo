@@ -2,6 +2,7 @@
 	Consider adding an extra data/override field to linking action popup for link text
 		Presumably type over whatever was selected (or just type if nothing was selected) with the value
 	Is the media player stuff in config worth keeping around? I don't really switch music programs anymore, and Chrome awkwardly tries to grab media keys anyway.
+		Possibly replace it with something based on RDP/Spotify command script?
 	Figure out what's going on with auto-complete TL file changing - line endings or something?
 	Should Config.runProgram core logic (running differently based on pathType) move into ProgramInfo itself?
 		The naming of ProgramInfo is odd for that, but what would be better?
@@ -48,7 +49,7 @@
 			MatterMost - half of left screen
 		Telegram - left monitor, top or bottom depending on machine
 		Pidgin window - top-right of left monitor
-	Figure out some central documentation method for hotkeys
+	Figure out some standard documentation method for hotkeys
 		Dynamically pull hotkeys for the currently focused program?
 		Hotkey to show popup with all currently active hotkeys, divided up into current-program-specific and others
 			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
@@ -102,7 +103,7 @@
 			Config.runProgram()
 			Likely others too - WindowActions and similar would probably benefit
 	1.1.31.01
-		Execute (X) hotstrings can support spaces
+		Execute (X) hotstrings can support spaces after second ::
 			notepadPlusPlus
 			emc2
 			hotstrings

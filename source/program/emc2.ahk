@@ -11,7 +11,7 @@
 	^+t::return   ; Block ^+t login from Hyperspace - it does very strange zoom-in things and other nonsense.
 	
 	; Link and record number things based on the current record.
-	!c:: EMC2.copyCurrentRecord()          ; Get INI/ID
+	!c:: EMC2.copyCurrentRecord()          ; Get ID
 	!w:: EMC2.openCurrentRecordWeb()       ; Open web version of the current object.
 	!+w::EMC2.openCurrentRecordWebBasic()  ; Open "basic" web version (always EMC2 summary, even for Sherlock/Nova records) of the current object.
 	^+o::EMC2.openCurrentDLGInEpicStudio() ; Take DLG # and pop up the DLG in EpicStudio sidebar.
@@ -69,7 +69,7 @@ class EMC2 {
 	copyCurrentRecord() {
 		record := new EpicRecord().initFromEMC2Title()
 		if(record.id)
-			ClipboardLib.setAndToast(record.ini " " record.id, "EMC2 record INI/ID")
+			ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
 	}
 	
 	;---------

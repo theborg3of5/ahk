@@ -28,7 +28,7 @@ CoordMode, Pixel, Screen
 
 ; Show a toast describing the hotkeys that can be used
 hotkeyDisplay := "
-	(
+	( LTrim
 		Right-click: Copy hex color to clipboard
 		Ctrl + Right-click: Copy RGB color to clipboard
 		Middle-click: Hold RGB color to send to a color dialog

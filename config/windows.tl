@@ -60,7 +60,7 @@
 			GrepWin									grepWin.exe
 			Hyperspace								EpicD93.exe
 			Internet Explorer						IEXPLORE.EXE
-			KDiff										kdiff3.exe
+			KDiff										kdiff3.exe					-									- KDiff3
 			Launchy									Launchy.exe
 			Messenger								Messenger.exe				-									Messenger:											NO_PADDING
 			Notepad									notepad.exe

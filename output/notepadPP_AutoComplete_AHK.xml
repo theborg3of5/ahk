@@ -5045,18 +5045,6 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ScrollLock"/>
-        <KeyWord name="SearchLib.baseURL" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Search for a term using the given base URL.
-							; PARAMETERS:
-							;  searchBaseURL (I,REQ) - The &quot;base&quot; URL (with %s in place of the search term) to search with.
-							;  searchTerm    (I,REQ) - The term to search for.
-							;---------">
-                <Param name="searchBaseURL" />
-                <Param name="searchTerm" />
-            </Overload>
-        </KeyWord>
         <KeyWord name="SearchLib.codeSearch" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -5122,6 +5110,18 @@
 							; DESCRIPTION:    Run a generic search with the selected text, prompting the user for what kind
 							;                 of search it should be.
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SearchLib.urlBase" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Search for a term using the given base URL.
+							; PARAMETERS:
+							;  searchBaseURL (I,REQ) - The &quot;base&quot; URL (with %s in place of the search term) to search with.
+							;  searchTerm    (I,REQ) - The term to search for.
+							;---------">
+                <Param name="searchBaseURL" />
+                <Param name="searchTerm" />
             </Overload>
         </KeyWord>
         <KeyWord name="Seconds"/>

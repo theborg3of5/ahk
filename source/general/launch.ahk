@@ -87,7 +87,8 @@ $^!l:: new ActionObject(SelectLib.getText()).copyLinkEdit()
 			if(!data)
 				return
 			
-			combinedMessage := data["MESSAGE_PREFIX"].appendPiece(data["MESSAGE"], " - ")
+			fullName := data["NAME_PREFIX"] data["NAME"]
+			combinedMessage := fullName.appendPiece(data["MESSAGE"], " - ")
 			
 			textToSend := Config.private["OUTLOOK_TLG_BASE"]
 			textToSend := textToSend.replaceTag("TLP",      data["TLP"])

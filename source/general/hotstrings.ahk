@@ -49,6 +49,7 @@
 	::Tapestery::Tapestry
 	::InBasket::In Basket
 	::flase::false
+	::assocition::association
 }
 
 { ; Expansions

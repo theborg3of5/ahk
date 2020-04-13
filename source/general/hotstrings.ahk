@@ -50,6 +50,7 @@
 	::InBasket::In Basket
 	::flase::false
 	::assocition::association
+	::valiation::validation
 }
 
 { ; Expansions
@@ -69,7 +70,7 @@
 	
 	:?:sync'ly::synchronously
 	
-	::asig::and so it goes, and so it goes, and you're the only one who knows...
+	::.asig::and so it goes, and so it goes, and you're the only one who knows...
 	
 	::.shrug::{U+AF}\_({U+30C4})_/{U+AF} ; ¯\_(ツ)_/¯ - 0xAF=¯, 0x30C4=ツ
 }

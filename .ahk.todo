@@ -1,5 +1,4 @@
 # New Ideas
-	Make !#+n hotkey use clipboard as ID if there's a * there
 	Something that searches (S1) solutions folder for a project, like FindSolutionContainingProject CS script.
 		Loop through *.sln files, search contents for given (project name) string.
 	Consider adding an extra data/override field to linking action popup for link text

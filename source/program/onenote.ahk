@@ -275,6 +275,20 @@ class OneNote {
 		recordText := linkText.beforeString(" (")
 		editText   := linkText.firstBetweenStrings("(", ")")
 		
+		; If there's not an ID in place yet, update the recordText using the ID (we're assuming is) on the clipboard.
+		if(recordText.endsWith(" *")) {
+			newId := clipboard.clean()
+			if(!newId.sub(2).isNum()) { ; Safety check: ID should be numeric after first character (for SU DLGs)
+				new ErrorToast("No record ID found", "Neither the line text nor the clipboard contained a valid record ID").showMedium()
+				return
+			}
+			
+			SelectLib.selectTextWithinSelection(recordText) ; Whole line is already selected so we can use this
+			recordText := recordText.removeFromEnd("*") newId
+			Send, % recordText
+			OneNote.selectLine() ; Re-select whole line so we can use SelectLib.selectTextWithinSelection() below
+		}
+		
 		ao := new ActionObjectEMC2(recordText)
 		; Debug.popup("Line",lineText, "Record text",recordText, "Edit text",editText, "ao.ini",ao.ini, "ao.id",ao.id)
 		
@@ -282,6 +296,7 @@ class OneNote {
 		ao.linkSelectedTextWeb("Failed to add EMC2 object web link")
 		
 		OneNote.selectLine() ; Re-select whole line so we can use SelectLib.selectTextWithinSelection() again
+		
 		SelectLib.selectTextWithinSelection(editText)
 		ao.linkSelectedTextEdit("Failed to add EMC2 object edit link")
 	}

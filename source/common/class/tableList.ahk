@@ -577,12 +577,14 @@ class TableList {
 	processNormal(row) {
 		rowAry := row.split(A_Tab)
 		this.applyIndexLabels(rowAry)
-		this.applyMods(rowAry)
 		
 		; If any of the values were a placeholder, remove them now.
 		For i,value in rowAry.clone() ; Clone since we're deleting things.
 			if(value = this.Char_Placeholder)
 				rowAry.Delete(i)
+		
+		; Apply any active mods.
+		this.applyMods(rowAry)
 		
 		; Split up any entries that include the multi-entry character (pipe by default).
 		For i,value in rowAry

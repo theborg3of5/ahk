@@ -1,6 +1,4 @@
 # New Ideas
-	Something that searches (S1) solutions folder for a project, like FindSolutionContainingProject CS script.
-		Loop through *.sln files, search contents for given (project name) string.
 	Consider adding an extra data/override field to linking action popup for link text
 		Presumably type over whatever was selected (or just type if nothing was selected) with the value
 	Add to debug table/popup - turn `r`n into those markers instead of newlines

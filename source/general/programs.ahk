@@ -3,10 +3,10 @@
 #e::  Config.activateProgram("Explorer", Explorer.ThisPCFolderUUID) ; Start up at "This PC" folder if we have to run it.
 !`::  Config.activateProgram("Process Explorer")
 ^!+g::Config.activateProgram("Chrome")
+^!+m::Config.activateProgram("Messenger")
 ^!+n::Config.activateProgram("Notepad++")
 ^!#n::Config.runProgram("Notepad")
 ^!#/::Config.activateProgram("AutoHotkey WinSpy")
-^!+m::Config.activateProgram("Messenger")
 
 ; Some programs are work-specific
 #If Config.contextIsWork

@@ -9,7 +9,7 @@
 
 ; Generic copy link - copy links to a variety of different things based on the selected text.
 ^!#l::new ActionObject(SelectLib.getText()).copyLinkWeb()
-$^!l:: new ActionObject(SelectLib.getText()).copyLinkEdit()
+$^!l::new ActionObject(SelectLib.getText()).copyLinkEdit()
 
 ; Generic hyperlinker - get link based on the selected text and then apply it to that same text.
 ^!#k::new ActionObject(SelectLib.getText()).linkSelectedTextWeb()
@@ -67,7 +67,7 @@ $^!l:: new ActionObject(SelectLib.getText()).copyLinkEdit()
 			record := new EpicRecord(SelectLib.getText())
 			
 			s := new Selector("epicEnvironments.tls").setTitle("Open Record(s) in Snapper in Environment")
-			s.addOverrideFields(["INI", "ID"]).setDefaultOverrides({"INI":record.ini, "ID":record.id}) ; Add fields for INI/ID and default in values if we figured them out
+			s.addOverrideFields(["INI", "ID"]).setDefaultOverrides({"INI":record.ini, "ID":record.id}) ; Add fields for INI/ID and default in any values that we figured out
 			data := s.selectGui()
 			if(!data)
 				return
@@ -75,7 +75,7 @@ $^!l:: new ActionObject(SelectLib.getText()).copyLinkEdit()
 			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
 				Config.runProgram("Snapper")
 			else
-				Run(Snapper.buildURL(data["COMM_ID"], data["INI"], data["ID"])) ; data["ID"] can contain a comma-delimited list if that's what the user entered
+				Run(Snapper.buildURL(data["COMM_ID"], data["INI"], data["ID"])) ; data["ID"] can contain a list or range if that's what the user entered
 		}
 #If
 

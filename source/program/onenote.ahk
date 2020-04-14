@@ -77,9 +77,6 @@
 	:*X:.todo::OneNoteTodoPage.addRecurringForToday()     ; Add recurring todos for today
 	:*X:.ttodo::OneNoteTodoPage.addRecurringForTomorrow() ; Add recurring todos for tomorrow
 
-	; Clean up a table from an emc2summary page
-	^+f::OneNote.cleanUpEMC2SummaryTableFormatting()
-	
 	; Update links for a dev structure section header
 	!+#n::OneNote.linkDevStructureSectionTitle()
 #If
@@ -237,29 +234,6 @@ class OneNote {
 		Sleep, 100
 		if(WinActive(OneNote.TitleString_RightClickMenu))
 			Send, {Esc}
-	}
-	
-	;---------
-	; DESCRIPTION:    When an objects table is copied over from an emc2summary page, it has a lot of formatting quirks we don't want - this removes them.
-	;---------
-	cleanUpEMC2SummaryTableFormatting() {
-		; Unhide table borders
-		Send, {AppsKey} ; Open right-click menu
-		Send, a         ; Table menu
-		Send, h         ; (Un)hide borders
-		Send, {Enter}   ; Multiple with h, so enter to submit it
-		
-		; Normalize text, indent table (table stays selected through all of these)
-		Send, ^{a 4}    ; Select the whole table
-		Send, ^+n       ; Normal text (get rid of underlines, text colors, etc.)
-		Send, {Tab}     ; Indent the table once
-		
-		; Remove shading
-		Send, {AppsKey} ; Open right-click menu
-		Send, a         ; Table menu
-		Send, {Up 5}    ; Shading option
-		Send, {Right}   ; Open
-		Send, n         ; No color
 	}
 	
 	;---------

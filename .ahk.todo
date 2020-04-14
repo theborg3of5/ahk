@@ -1,4 +1,5 @@
 # New Ideas
+	Consider retiring OneNote EMC2 objects table cleanup - it's been replaced by the objects list in EMC2.
 	Something that searches (S1) solutions folder for a project, like FindSolutionContainingProject CS script.
 		Loop through *.sln files, search contents for given (project name) string.
 	Consider adding an extra data/override field to linking action popup for link text

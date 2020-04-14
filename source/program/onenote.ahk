@@ -1,5 +1,8 @@
 ; OneNote hotkeys.
 #If Config.isWindowActive("OneNote")
+	; Block certain hotkeys that I accidentally trigger, but don't want to use
+	^+1::return ; Add Outlook task
+	
 	; Make ctrl+tab (and XButtons) switch pages, not sections
 	^Tab:: Send, ^{PgDn}
 	^+Tab::Send, ^{PgUp}

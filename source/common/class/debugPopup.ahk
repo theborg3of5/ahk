@@ -149,24 +149,9 @@ class DebugPopup {
    ;---------
    addNotepadHotkey(content) {
       Hotkey, IfWinActive, % "ahk_id " this.guiId
-      
-      if(Notepad)
-         hotkeyFunction := ObjBindMethod(Notepad, "openNewInstanceWithText", content) ; Notepad.openNewInstanceWithText
-      else ; If notepad not available, hotkey should copy and toast about it instead
-         hotkeyFunction := ObjBindMethod(this, "copyContentAndToast", content)
+		hotkeyFunction := ObjBindMethod(LaunchLib, "openNewNotepadWithText", content) ; LaunchLib.openNewNotepadWithText
       Hotkey, !v, % hotkeyFunction
-      
       Hotkey, IfWinActive
-   }
-   
-   ;---------
-   ; DESCRIPTION:    Copy the content of the table to the clipboard and let the user know we did so with a toast.
-   ; PARAMETERS:
-   ;  content (I,REQ) - The content to copy
-   ;---------
-   copyContentAndToast(content) {
-      ClipboardLib.set(content)
-      new Toast("Clipboard set to debug content").showMedium()
    }
    
    ;---------

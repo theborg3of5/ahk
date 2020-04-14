@@ -1,8 +1,6 @@
 # New Ideas
 	Consider adding an extra data/override field to linking action popup for link text
 		Presumably type over whatever was selected (or just type if nothing was selected) with the value
-	Add to debug table/popup - turn `r`n into those markers instead of newlines
-		Will probably need an option (probably a different function) to turn it off for certain string values
 	Is the media player stuff in config worth keeping around? I don't really switch music programs anymore, and Chrome awkwardly tries to grab media keys anyway.
 		Possibly replace it with something based on RDP/Spotify command script?
 	Should Config.runProgram core logic (running differently based on pathType) move into ProgramInfo itself?

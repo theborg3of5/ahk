@@ -32,6 +32,31 @@ class Program {
 		; Replace any path tags
 		this.path := Config.replacePathTags(this.path)
    }
+	
+	;---------
+	; DESCRIPTION:    Run this program with the given arguments.
+	; PARAMETERS:
+	;  args (I,OPT) - The command-line arguments to pass to the program when we run it.
+	; RETURNS:        false if we couldn't run the program, true otherwise.
+	;---------
+	run(args := "") {
+		; Safety checks
+		if(this.pathType = this.PathType_EXE) {
+			if(!FileExist(this.path)) {
+				new ErrorToast("Could not run program: " this.name, "Path does not exist: " this.path).showMedium()
+				return false
+			}
+		}
+		
+		; Path type determines how we run the path
+		Switch this.pathType {
+			Case this.PathType_EXE:    RunLib.runAsUser(this.path, args)
+			Case this.PathType_URL:    Run(this.path) ; Must be run directly, since it's not a file that exists
+			Case this.PathType_WinApp: Run("explorer.exe " this.path) ; Must be run this way, not as user (possibly needs to be as admin)
+		}
+		
+		return true
+	}
    
 	
 	; #DEBUG#

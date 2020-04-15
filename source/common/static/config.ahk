@@ -232,9 +232,9 @@ class Config {
 	; RETURNS:        The WindowInfo instance matching the specified window.
 	;---------
 	findWindowInfo(titleString := "A") {
-		exeToMatch      := WinGet("ProcessName", titleString)
+		exeToMatch   := WinGet("ProcessName", titleString)
 		classToMatch := WinGetClass(titleString)
-		titleToMatch    := WinGetTitle(titleString)
+		titleToMatch := WinGetTitle(titleString)
 		
 		bestMatch := ""
 		For _,winInfo in this.windows {
@@ -325,23 +325,9 @@ class Config {
 	runProgram(name, args := "") {
 		HotkeyLib.waitForRelease()
 		
-		pathType := this.programs[name].pathType
-		path     := this.programs[name].path
-		
-		; Safety checks
-		if(pathType = Program.PathType_EXE) {
-			if(!FileExist(path)) {
-				new ErrorToast("Could not run program: " name, "Path does not exist: " path).showMedium()
-				return
-			}
-		}
-		
-		; Path type determines how we run the path
-		Switch pathType {
-			Case Program.PathType_EXE:    RunLib.runAsUser(path, args)
-			Case Program.PathType_URL:    Run(path) ; Must be run directly, since it's not a file that exists
-			Case Program.PathType_WinApp: Run("explorer.exe " path) ; Must be run this way, not as user (possibly needs to be as admin)
-		}
+		prog := this.programs[name]
+		if(prog)
+			prog.run(args)
 	}
 	
 	

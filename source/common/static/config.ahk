@@ -329,7 +329,7 @@ class Config {
 		path     := this.programs[name].path
 		
 		; Safety checks
-		if(pathType = ProgramInfo.PathType_EXE) {
+		if(pathType = Program.PathType_EXE) {
 			if(!FileExist(path)) {
 				new ErrorToast("Could not run program: " name, "Path does not exist: " path).showMedium()
 				return
@@ -338,9 +338,9 @@ class Config {
 		
 		; Path type determines how we run the path
 		Switch pathType {
-			Case ProgramInfo.PathType_EXE:    RunLib.runAsUser(path, args)
-			Case ProgramInfo.PathType_URL:    Run(path) ; Must be run directly, since it's not a file that exists
-			Case ProgramInfo.PathType_WinApp: Run("explorer.exe " path) ; Must be run this way, not as user (possibly needs to be as admin)
+			Case Program.PathType_EXE:    RunLib.runAsUser(path, args)
+			Case Program.PathType_URL:    Run(path) ; Must be run directly, since it's not a file that exists
+			Case Program.PathType_WinApp: Run("explorer.exe " path) ; Must be run this way, not as user (possibly needs to be as admin)
 		}
 	}
 	
@@ -384,7 +384,7 @@ class Config {
 	static settings        := {}    ; {NAME: VALUE}
 	static windows         := {}    ; {NAME: WindowInfo}
 	static paths           := {}    ; {KEY: PATH}
-	static programs        := {}    ; {NAME: ProgramInfo}
+	static programs        := {}    ; {NAME: Program}
 	static games           := []    ; [{NAME:name, EXE:exe}]
 	static privates        := {}    ; {KEY: VALUE}
 	
@@ -487,10 +487,10 @@ class Config {
 		filePath := this.rootPath "\config\programs.tl"
 		programsTable := new TableList(filePath).getRowsByColumn("NAME", "MACHINE")
 		
-		; Turn each row into a ProgramInfo object.
+		; Turn each row into a Program object.
 		programs := {}
 		For name,row in programsTable
-			programs[name] := new ProgramInfo(row)
+			programs[name] := new Program(row)
 		
 		this.programs := programs
 	}

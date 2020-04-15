@@ -1,6 +1,6 @@
-; Data class to hold information about a specific program.
+; Class that represents a specific program and all the information needed to run it.
 
-class ProgramInfo {
+class Program {
 	; #PUBLIC#
 	
 	; @GROUP@ Path types (affects how the path is run)
@@ -12,17 +12,17 @@ class ProgramInfo {
 	; @GROUP@
    name     := "" ; Name of the program
    path     := "" ; Full filepath to launch the program
-	pathType := "" ; The type of path from ProgramInfo.PathType_*
+	pathType := "" ; The type of path from Program.PathType_*
 	; @GROUP-END@
 	
    ;---------
-   ; DESCRIPTION:    Creates a new instance of ProgramInfo.
+   ; DESCRIPTION:    Creates a new instance of Program.
    ; PARAMETERS:
    ;  programAry (I,REQ) - Array of information about the program to store. Format:
    ;                          programAry["NAME"] - Name of the program. Should match a single row
    ;                                               in windows.tl for identification purposes.
    ;                                    ["PATH"] - The full filepath to launch the program.
-   ; RETURNS:        Reference to a new ProgramInfo object
+   ; RETURNS:        Reference to a new Program object
    ;---------
    __New(programAry) {
       this.name     := programAry["NAME"]
@@ -37,7 +37,7 @@ class ProgramInfo {
 	; #DEBUG#
 	
 	Debug_TypeName() {
-		return "ProgramInfo"
+		return "Program"
 	}
 	; #END#
 }

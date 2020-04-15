@@ -42,7 +42,7 @@ Object(params*) {
 	#Include flexTable.ahk
 	#Include formattedList.ahk
 	#Include mousePosition.ahk
-	#Include programInfo.ahk
+	#Include program.ahk
 	#Include relativeDate.ahk
 	#Include relativeTime.ahk
 	#Include selector.ahk

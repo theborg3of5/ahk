@@ -51,6 +51,40 @@ class ActionObjectPath extends ActionObjectBase {
 	}
 	
 	;---------
+	; DESCRIPTION:    Determine whether the given string must be this type of ActionObject.
+	; PARAMETERS:
+	;  value    (I,REQ) - The value to evaluate
+	;  pathType (O,OPT) - If the value is a path, the path type
+	; RETURNS:        true/false - whether the given value must be a path.
+	;---------
+	isThisType(value, ByRef pathType := "") {
+		matchedPathType := this.determinePathType(value)
+		if(matchedPathType = "")
+			return false
+		
+		pathType := matchedPathType
+		return true
+	}
+	
+	;---------
+	; DESCRIPTION:    Get a link to the path (that is, the path itself).
+	; RETURNS:        The path
+	;---------
+	getLink() {
+		if(this.pathType = ActionObjectPath.PathType_FilePath) {
+			if(!FileExist(this.path)) { ; Don't try to open a non-existent local path
+				new ErrorToast("Local file or folder does not exist", this.path).showMedium()
+				return ""
+			}
+		}
+		
+		return this.path
+	}
+	
+	
+	; #PRIVATE#
+	
+	;---------
 	; DESCRIPTION:    Determine the type of the given path.
 	; PARAMETERS:
 	;  path (I,REQ) - The path itself.
@@ -74,24 +108,6 @@ class ActionObjectPath extends ActionObjectBase {
 		; Unknown
 		return ""
 	}
-	
-	;---------
-	; DESCRIPTION:    Get a link to the path (that is, the path itself).
-	; RETURNS:        The path
-	;---------
-	getLink() {
-		if(this.pathType = ActionObjectPath.PathType_FilePath) {
-			if(!FileExist(this.path)) { ; Don't try to open a non-existent local path
-				new ErrorToast("Local file or folder does not exist", this.path).showMedium()
-				return ""
-			}
-		}
-		
-		return this.path
-	}
-	
-	
-	; #PRIVATE#
 	
 	;---------
 	; DESCRIPTION:    Do some additional processing on the different bits of info about the object.

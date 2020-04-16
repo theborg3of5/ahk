@@ -25,7 +25,25 @@ class ActionObjectHelpdesk extends ActionObjectBase {
 	;  id (I,REQ) - ID of the request.
 	;---------
 	__New(id) {
+		; Drop the leading INI if it's given.
+		id := id.clean().removeFromStart("HDR ")
+		
 		this.id := id
+	}
+	
+	;---------
+	; DESCRIPTION:    Determine whether the given string must be this type of ActionObject.
+	; PARAMETERS:
+	;  value (I,REQ) - The value to evaluate
+	;  id    (O,OPT) - If the value is a helpdesk ticket, the ID
+	; RETURNS:        true/false - whether the given value must be a helpdesk ticket.
+	;---------
+	isThisType(value, ByRef id := "") {
+		if(!value.startsWith("HDR "))
+			return false
+		
+		id := value.removeFromStart("HDR ")
+		return true
 	}
 	
 	;---------

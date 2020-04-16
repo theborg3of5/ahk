@@ -71,6 +71,32 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	}
 	
 	;---------
+	; DESCRIPTION:    Determine whether the given string must be this type of ActionObject.
+	; PARAMETERS:
+	;  value (I,REQ) - The value to evaluate
+	;  ini   (O,OPT) - If the value is an EMC2 record, the INI
+	;  id    (O,OPT) - If the value is an EMC2 record, the ID
+	; RETURNS:        true/false - whether the given value must be an EMC2 object.
+	;---------
+	isThisType(value, ByRef ini := "", ByRef id := "") {
+		record := new EpicRecord(value)
+		if(record.ini = "" || record.id = "")
+			return false
+		
+		; Silent selection from actionObject TLS to see if we match an EMC2-type INI (filtered list so no match means not EMC2).
+		s := new Selector("actionObject.tls")
+		s.dataTableList.filterByColumn("TYPE", ActionObject.Type_EMC2)
+		matchedINI := s.selectChoice(record.ini, "SUBTYPE")
+		if(matchedINI = "")
+			return false
+		
+		; The value does match this type, so return the info we found to save a little work later.
+		ini := matchedINI
+		id  := record.id
+		return true
+	}
+	
+	;---------
 	; DESCRIPTION:    Open the EMC2 object in "basic" web - always emc2summary, even for
 	;                 Nova/Sherlock INIs.
 	;---------

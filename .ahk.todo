@@ -7,16 +7,8 @@
 		Title: Change Decision: Waiting for Changes
 			Probably just use "Change Decision: "?
 		Resubmit-type popups, too?
-	Could the ActionObject* children just provide their own functions for testing if we think a given string matches them?
-		! Actually, we're not saving anything right now - the only things we do for multiple types is EpicRecord, and that's all string manipulation.
-			So just move everything into the type classes instead, then?
-		Instead of trying to duplicate their logic in ActionObject itself
-		Could we keep a static version of the actionObject TableList?
-			Can we handle filtering properly?
-			Seems like each child would need its own static copy if we want to do this
-			Would need to add the ability to pass in a TableList instead of a filename/path (and handle issues with not having a path, like +e command)
-		Does it really make sense to use a Selector to determine type? Should it just be a hard-coded function in each child instead?
-			Benefit of using Selector: automatic abbreviation/"actual" ini handling (zqn/qan/q, etc.)
+	Can we save some performance in ActionObjectEMC2 by having a static Selector object and re-using it?
+		Seems like Selector should theoretically work multiple times now (from the .select*() functions at least)
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
 		Possibly reconsider the 100-char limit - wouldn't wider make more sense?
 		Could take into account whether there would be only 1 small word moved down

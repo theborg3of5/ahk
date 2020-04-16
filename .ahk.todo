@@ -1,6 +1,4 @@
 # New Ideas
-	Consider adding an extra data/override field to linking action popup for link text
-		Presumably type over whatever was selected (or just type if nothing was selected) with the value
 	Is the media player stuff in config worth keeping around? I don't really switch music programs anymore, and Chrome awkwardly tries to grab media keys anyway.
 		Possibly replace it with something based on RDP/Spotify command script, that interacts directly with Spotify instead of letting other things steal the media keys?
 	Make Ctrl+Backspace work properly in EMC2 change-decision popups

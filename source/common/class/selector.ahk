@@ -299,7 +299,6 @@ class Selector {
 	sectionTitles    := {}    ; {choiceIndex: title} - Lines that will be displayed as titles (index matches the first choice that should be under this title)
 	overrideFields   := ""    ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers)
 	filePath         := ""    ; Where the file lives if we're reading one in.
-	suppressData     := false ; Whether to ignore all data from the user (choice and overrides). Typically used when we've done something else (like edit the TLS file).
 	defaultOverrides := ""    ; {columnLabel: value} - Default values to show in override fields, by column name
 	dataTL           := ""    ; TableList instance read from file, which we'll extract choice and other info from.
 	
@@ -354,6 +353,7 @@ class Selector {
 		this.sectionTitles := this.dataTL.headers
 		
 		; Load the choices
+		this.choices := []
 		For _,row in this.dataTL.getTable()
 			this.choices.push(new SelectorChoice(row))
 		
@@ -378,8 +378,8 @@ class Selector {
 		sGui.show(this._windowTitle, this.defaultOverrides)
 		
 		; User's choice is main data source
-		choiceData := this.parseChoice(sGui.getChoiceQuery())
-		if(this.suppressData)
+		choiceData := this.parseChoice(sGui.getChoiceQuery(), suppressData)
+		if(suppressData)
 			return ""
 		
 		; Override fields can add to that too.
@@ -399,17 +399,21 @@ class Selector {
 	;                 abbreviation.
 	; PARAMETERS:
 	;  userChoiceString (I,REQ) - The string that the user typed in the choice field.
+	;  suppressData     (O,OPT) - Will be set to true if we should return empty data (like when the
+	;                             edit command is entered)
 	; RETURNS:        If we found a matching choice (and the input wasn't a command), the
 	;                 data array from that choice. Otherwise, "".
 	;---------
-	parseChoice(userChoiceString) {
+	parseChoice(userChoiceString, ByRef suppressData := "") {
+		suppressData := false
+		
 		; Command choice - edit ini, etc.
 		if(userChoiceString.startsWith(this.Char_CommandStart)) {
 			commandChar := userChoiceString.afterString(this.Char_CommandStart)
 			
 			; Edit action - open the current INI file for editing
 			if(commandChar = this.Char_Command_Edit) {
-				this.suppressData := true
+				suppressData := true
 				Run(this.filePath)
 			}
 			
@@ -451,7 +455,6 @@ class Selector {
 	
 	Debug_ToString(ByRef table) {
 		table.addLine("Filepath",          this.filePath)
-		table.addLine("Suppress data?",    this.suppressData)
 		table.addLine("Window title",      this._windowTitle)
 		table.addLine("Min column width",  this._minColumnWidth)
 		table.addLine("Override fields",   this.overrideFields)

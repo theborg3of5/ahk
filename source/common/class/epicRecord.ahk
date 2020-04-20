@@ -38,7 +38,7 @@ class EpicRecord {
 	;---------
 	recordString {
 		get {
-			if(!this.selectMissingInfo())
+			if(this.ini = "" || this.id = "") ; Missing some info, just return blank
 				return ""
 			if(this.title != "")
 				return this.title " [R " this.ini " " this.id "]" ; "TITLE [R INI ID]"
@@ -151,27 +151,6 @@ class EpicRecord {
 		this.title := this.title.withoutWhitespace()
 		
 		; Debug.popup("recordString",recordString, "this",this)
-	}
-	
-	;---------
-	; DESCRIPTION:    Prompt the user for any missing-but-required information using a Selector popup.
-	; RETURNS:        True if all required information was obtained, False if not.
-	; SIDE EFFECTS:   Sets .ini and .id.
-	;---------
-	selectMissingInfo() {
-		if(this.ini != "" && this.id != "") ; Nothing required is missing.
-			return true
-		
-		s := new Selector("epicRecord.tls").setDefaultOverrides({"INI":this.ini, "ID":this.id})
-		data := s.selectGui()
-		if(!data)
-			return false
-		if(data["INI"] = "" || data["ID"] = "") ; Didn't get everything we needed.
-			return false
-		
-		this.ini := data["INI"]
-		this.id  := data["ID"]
-		return true
 	}
 	; #END#
 }

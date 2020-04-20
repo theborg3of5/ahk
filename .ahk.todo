@@ -1,6 +1,4 @@
 # New Ideas
-	EpicRecord.selectMissingInfo seems like overkill (and completely unused)
-		Should we just show an error toast (or even just return "" from record string) if we don't have something instead?
 	Is the media player stuff in config worth keeping around? I don't really switch music programs anymore, and Chrome awkwardly tries to grab media keys anyway.
 		Possibly replace it with something based on RDP/Spotify command script, that interacts directly with Spotify instead of letting other things steal the media keys?
 	Make Ctrl+Backspace work properly in EMC2 change-decision popups

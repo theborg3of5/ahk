@@ -1,16 +1,17 @@
 # New Ideas
-	Is the media player stuff in config worth keeping around? I don't really switch music programs anymore, and Chrome awkwardly tries to grab media keys anyway.
-		Possibly replace it with something based on RDP/Spotify command script, that interacts directly with Spotify instead of letting other things steal the media keys?
+	Consider centralizing ActionObject*.selectMissingInfo() logic - it looks very similar, should we just turn it into a base function?
+		Could take arguments for value + subType
+		Type could be either another parameter, or built into the class (overridden by children) as a public member
 	Make Ctrl+Backspace work properly in EMC2 change-decision popups
 		Title: Change Decision: Waiting for Changes
 			Probably just use "Change Decision: "?
 		Resubmit-type popups, too?
-	Can we save some performance in ActionObjectEMC2 by having a static Selector object and re-using it?
-		Seems like Selector should theoretically work multiple times now (from the .select*() functions at least)
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
 		Possibly reconsider the 100-char limit - wouldn't wider make more sense?
 		Could take into account whether there would be only 1 small word moved down
 		Could handle multiple line breaks
+	Is the media player stuff in config worth keeping around? I don't really switch music programs anymore, and Chrome awkwardly tries to grab media keys anyway.
+		Possibly replace it with something based on RDP/Spotify command script, that interacts directly with Spotify instead of letting other things steal the media keys?
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (mainly to allow CDE)
 		Probably a new (optional) data element throughout ActionObject* (and a new column in actionObject.tls)
 	Consider changing the approach for hyperlinker a bit

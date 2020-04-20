@@ -158,7 +158,7 @@ class Selector {
 	;                 they add (or is defaulted in) in the final return array.
 	; PARAMETERS:
 	;  fieldsToAdd (I,REQ) - Numerically-indexed array of field names (treated the same as column names from choices) to add.
-	; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui().
+	; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui()/.select().
 	;                 Default override values for these fields (if desired) can be set using the .setDefaultOverrides() function.
 	;---------
 	addOverrideFields(fieldsToAdd) {
@@ -178,6 +178,8 @@ class Selector {
 	;  defaultOverrides (I,REQ) - Associative array fo default overrides, format:
 	;                              {columnLabel: value}
 	; RETURNS:        this
+	; NOTES:          These overrides are only used if you do a user selection (.selectGui(), or
+	;                 .select() with a blank choiceString) - otherwise they are ignored.
 	;---------
 	setDefaultOverrides(defaultOverrides) {
 		this.defaultOverrides := defaultOverrides

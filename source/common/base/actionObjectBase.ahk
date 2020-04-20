@@ -108,6 +108,19 @@ class ActionObjectBase {
 		return this.getLink()
 	}
 	
+	;---------
+	; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter the
+	;                 choices to only those matching the given type.
+	; PARAMETERS:
+	;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
+	; RETURNS:        A new Selector instance, filtered to the given type.
+	;---------
+	getTypeFilteredSelector(type) {
+		s := new Selector("actionObject.tls")
+		s.dataTableList.filterByColumn("TYPE", type)
+		
+		return s
+	}
 	
 	; #PRIVATE#
 	

@@ -84,9 +84,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 			return false
 		
 		; Silent selection from actionObject TLS to see if we match an EMC2-type INI (filtered list so no match means not EMC2).
-		s := new Selector("actionObject.tls")
-		s.dataTableList.filterByColumn("TYPE", ActionObject.Type_EMC2)
-		matchedINI := s.selectChoice(record.ini, "SUBTYPE")
+		matchedINI := this._selector.selectChoice(record.ini, "SUBTYPE")
 		if(matchedINI = "")
 			return false
 		
@@ -131,6 +129,23 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	
 	; #PRIVATE#
 	
+	static _selectorInstance := "" ; Selector instance used to check or map the record INI.
+	
+	;---------
+	; DESCRIPTION:    Static Selector instance, filtered to the EMC2 type.
+	; SIDE EFFECTS:   Populates ._selectorInstance if it's not already.
+	;---------
+	_selector {
+		get {
+			; Create the selector instance the first time
+			if(!this._selectorInstance)
+				this._selectorInstance := this.getTypeFilteredSelector(ActionObject.Type_EMC2)
+			
+			return this._selectorInstance
+		}
+	}
+	
+	
 	;---------
 	; DESCRIPTION:    Clean off any extra stuff from the start of the string so EpicRecord can handle it properly.
 	; PARAMETERS:
@@ -150,9 +165,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;---------
 	postProcess() {
 		; INI - make sure the INI is the "real" EMC2 one.
-		s := new Selector("actionObject.tls")
-		s.dataTableList.filterByColumn("TYPE", ActionObject.Type_EMC2)
-		this.ini := s.selectChoice(this.ini, "SUBTYPE")
+		this.ini := this._selector.selectChoice(this.ini, "SUBTYPE")
 		
 		; Title - clean up, drop anything extra that we don't need.
 		removeAry := ["-", "/", "\", ":", ",", "DBC"] ; Don't need "DBC" on the start of every EMC2 title.
@@ -200,9 +213,9 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		if(this.ini != "" && this.id != "") ; Nothing required is missing.
 			return true
 		
-		s := new Selector("actionObject.tls").setTitle("Enter INI and ID")
+		s := this._selector
+		s.setTitle("Enter INI and ID")
 		s.setDefaultOverrides({"VALUE":this.id})
-		s.dataTableList.filterByColumn("TYPE", ActionObject.Type_EMC2)
 		data := s.selectGui()
 		if(!data)
 			return false

@@ -17,6 +17,8 @@
 class ActionObjectPath extends ActionObjectBase {
 	; #PUBLIC#
 	
+	ActionObjectType := ActionObject.Type_Path
+	
 	; @GROUP@ Path types
 	static PathType_FilePath := "FILEPATH" ; Local file path
 	static PathType_URL      := "URL"      ; URL
@@ -35,18 +37,18 @@ class ActionObjectPath extends ActionObjectBase {
 	;                     based on the path format or by prompting the user.
 	;---------
 	__New(path, pathType := "") {
-		this.path     := path
-		this.pathType := pathType
 		
 		; Make sure there's no quotes or other oddities surrounding the path
-		this.path := this.path.clean([""""]) ; Single double-quote character
+		path := path.clean([""""]) ; Single double-quote character
 		
-		if(this.pathType = "")
-			this.pathType := this.determinePathType(this.path)
+		if(pathType = "")
+			pathType := this.determinePathType(path)
 		
-		if(!this.selectMissingInfo())
+		if(!this.selectMissingInfo(path, pathType))
 			return
 		
+		this.path     := path
+		this.pathType := pathType
 		this.postProcess()
 	}
 	
@@ -120,28 +122,6 @@ class ActionObjectPath extends ActionObjectBase {
 			if(!this.path.contains("//")) ; No protocol
 				this.path := "https://" this.path ; Add a protocol on so Windows knows to run it as a URL.
 		}
-	}
-	
-	;---------
-	; DESCRIPTION:    Prompt the user for the path type or path if either are missing.
-	; SIDE EFFECTS:   Sets .pathType/.path based on user inputs.
-	;---------
-	selectMissingInfo() {
-		; Nothing is missing
-		if(this.path != "" && this.pathType != "")
-			return true
-		
-		s := this.getTypeFilteredSelector(ActionObject.Type_Path)
-		s.setDefaultOverrides({"VALUE":this.path})
-		data := s.selectGui()
-		if(!data)
-			return false
-		if(data["SUBTYPE"] = "" || data["VALUE"] = "") ; Didn't get everything we needed.
-			return false
-		
-		this.pathType := data["SUBTYPE"]
-		this.path     := data["VALUE"]
-		return true
 	}
 	; #END#
 }

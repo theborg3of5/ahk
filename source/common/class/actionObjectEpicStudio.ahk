@@ -17,6 +17,8 @@
 class ActionObjectEpicStudio extends ActionObjectBase {
 	; #PUBLIC#
 	
+	ActionObjectType := ActionObject.Type_EpicStudio
+	
 	; @GROUP@ Descriptor types
 	static DescriptorType_Routine := "ROUTINE" ; Server code location, including tag if applicable
 	static DescriptorType_DLG     := "DLG"     ; DLG, for opening in EpicStudio
@@ -35,14 +37,14 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 	;                           based on the descriptor format or by prompting the user.
 	;---------
 	__New(descriptor, descriptorType := "") {
+		if(descriptorType = "")
+			descriptorType := this.determineDescriptorType()
+		
+		if(!this.selectMissingInfo(descriptor, descriptorType))
+			return ""
+		
 		this.descriptor     := descriptor
 		this.descriptorType := descriptorType
-		
-		if(this.descriptorType = "")
-			this.descriptorType := this.determineDescriptorType()
-		
-		if(!this.selectMissingInfo())
-			return ""
 	}
 	
 	;---------
@@ -88,28 +90,6 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 			return ActionObjectEpicStudio.DescriptorType_DLG
 		
 		return ""
-	}
-	
-	;---------
-	; DESCRIPTION:    Prompt the user for the descriptor type or descriptor if either are missing.
-	; SIDE EFFECTS:   Sets .descriptorType/.descriptor based on user inputs.
-	;---------
-	selectMissingInfo() {
-		; Nothing is missing
-		if(this.descriptor != "" && this.descriptorType != "")
-			return true
-		
-		s := this.getTypeFilteredSelector(ActionObject.Type_EpicStudio)
-		s.setDefaultOverrides({"VALUE":this.descriptor})
-		data := s.selectGui()
-		if(!data)
-			return false
-		if(data["SUBTYPE"] = "" || data["VALUE"] = "") ; Didn't get everything we needed.
-			return false
-		
-		this.descriptorType := data["SUBTYPE"]
-		this.descriptor     := data["VALUE"]
-		return true
 	}
 	; #END#
 }

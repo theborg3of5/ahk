@@ -13,6 +13,13 @@ class ActionObjectBase {
 	; #PUBLIC#
 	
 	;---------
+	; DESCRIPTION:    What type of ActionObject the child class implements.
+	; NOTES:          Should be overridden by child class.
+	;---------
+	ActionObjectType := ""
+	
+	
+	;---------
 	; NOTES:          Should not be called directly - all child classes should override this.
 	;---------
 	__New(value) {
@@ -122,6 +129,47 @@ class ActionObjectBase {
 		return s
 	}
 	
+	;---------
+	; DESCRIPTION:    Check whether the given value or subType is missing, and if it is, prompt the
+	;                 user with a Selector instance (filtered to the child's type) to get the info.
+	; PARAMETERS:
+	;  value      (IO,REQ) - The core value, will be updated if the user changes it in the Selector popup.
+	;  subType    (IO,REQ) - The subType, will be populated with a new value if the user selects one.
+	;  popupTitle  (I,OPT) - If you want to show a different title than the one in the ActionObject
+	;                        TLS, pass it here.
+	; RETURNS:        true if we have both pieces of info, false if something is missing.
+	;---------
+	selectMissingInfo(ByRef value, ByRef subType, popupTitle := "") {
+		; ActionObjectType must be set by child to use this function.
+		if(this.ActionObjectType = "") {
+			new ErrorToast("No ActionObjectType found", "ActionObject* child did not override ActionObjectType property").showMedium()
+			return false
+		}
+		
+		; Nothing is missing, so nothing to do.
+		if(value != "" && subType != "")
+			return true
+		
+		; Use a type-filtered Selector to get any missing info.
+		s := this.getTypeFilteredSelector(this.ActionObjectType) ; GDB TODO should getTypeFilteredSelector just move directly into here now that this is the central logic?
+		s.setDefaultOverrides({"VALUE":value}) ; 						  GDB TODO alternatively/additionally - should we just cache the type-filtered selector instance here?
+		if(popupTitle != "")
+			s.setTitle(popupTitle)
+		data := s.selectGui()
+		
+		; Fail if we didn't get everything we needed.
+		if(!data)
+			return false
+		if(data["SUBTYPE"] = "" || data["VALUE"] = "")
+			return false
+		
+		; Save off updated values and return success
+		subType := data["SUBTYPE"]
+		value   := data["VALUE"]
+		return true
+	}
+	
+	
 	; #PRIVATE#
 	
 	;---------
@@ -154,18 +202,6 @@ class ActionObjectBase {
 		
 		if(!Hyperlinker.linkSelectedText(link, errorMessage))
 			ClipboardLib.setAndToastError(link, "link", problemMessage, errorMessage)
-	}
-	
-	;---------
-	; DESCRIPTION:    Get the link for the object.
-	; PARAMETERS:
-	;  caller (I,OPT) - Name of the calling function, to include in error toast.
-	; RETURNS:        Link to the object.
-	;---------
-	doGetLink(callerName) {
-		displayName := "." callerName "()"
-		new ErrorToast("ActionObjectBase" displayName " called directly", displayName " is not implemented by this child ActionObject* class").showMedium()
-		return ""
 	}
 	; #END#
 }

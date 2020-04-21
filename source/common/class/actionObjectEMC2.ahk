@@ -21,6 +21,8 @@
 class ActionObjectEMC2 extends ActionObjectBase {
 	; #PUBLIC#
 	
+	ActionObjectType := ActionObject.Type_EMC2
+	
 	; @GROUP@
 	id    := "" ; ID of the object
 	ini   := "" ; INI for the object, from EMC2 subtypes in actionObject.tl
@@ -47,24 +49,23 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;  title (I,OPT) - Title of the object
 	;---------
 	__New(id, ini := "", title := "") {
+		; If we don't know the INI yet, assume the ID is a combined string (i.e. "DLG 123456" or
+		; "DLG 123456: HB/PB WE DID SOME STUFF") and try to split it into its component parts.
+		if(id != "" && ini = "") {
+			value := this.cleanValue(id) ; Do a little cleanup to make sure EpicRecord can handle the string
+			
+			record := new EpicRecord(value)
+			ini   := record.ini
+			id    := record.id
+			title := record.title
+		}
+		
+		if(!this.selectMissingInfo(id, ini, "Enter INI and ID"))
+			return ""
+		
 		this.id    := id
 		this.ini   := ini
 		this.title := title
-		
-		; If we don't know the INI yet, assume the ID is a combined string (i.e. "DLG 123456" or
-		; "DLG 123456: HB/PB WE DID SOME STUFF") and try to split it into its component parts.
-		if(this.id != "" && this.ini = "") {
-			value := this.cleanValue(this.id) ; Do a little cleanup to make sure EpicRecord can handle the string
-			
-			record := new EpicRecord(value)
-			this.ini   := record.ini
-			this.id    := record.id
-			this.title := record.title
-		}
-		
-		if(!this.selectMissingInfo())
-			return ""
-		
 		this.postProcess()
 	}
 	
@@ -199,30 +200,6 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;---------
 	isNovaObject() {
 		return (this.ini = "DRN")
-	}
-	
-	;---------
-	; DESCRIPTION:    Prompt the user for any missing-but-required info that we couldn't figure out
-	;                 on our own.
-	; SIDE EFFECTS:   Sets .ini and .id based on the user's inputs.
-	; RETURNS:        True if all required info was received, False otherwise.
-	;---------
-	selectMissingInfo() {
-		if(this.ini != "" && this.id != "") ; Nothing required is missing.
-			return true
-		
-		s := this._selector
-		s.setTitle("Enter INI and ID")
-		s.setDefaultOverrides({"VALUE":this.id})
-		data := s.selectGui()
-		if(!data)
-			return false
-		if(data["SUBTYPE"] = "" || data["VALUE"] = "") ; Didn't get everything we needed.
-			return false
-		
-		this.ini := data["SUBTYPE"]
-		this.id  := data["VALUE"]
-		return true
 	}
 	; #END#
 }

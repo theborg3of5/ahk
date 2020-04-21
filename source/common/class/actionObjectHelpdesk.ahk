@@ -14,6 +14,8 @@
 class ActionObjectHelpdesk extends ActionObjectBase {
 	; #PUBLIC#
 	
+	ActionObjectType := ActionObject.Type_Helpdesk
+	
 	;---------
 	; DESCRIPTION:    Helpdesk request ID.
 	;---------

@@ -16,6 +16,8 @@
 class ActionObjectCodeSearch extends ActionObjectBase {
 	; #PUBLIC#
 	
+	ActionObjectType := ActionObject.Type_CodeSearch
+	
 	; @GROUP@ Location types
 	static LocationType_Server := "SERVER" ; Server code location, including tag if applicable
 	static LocationType_Client := "CLIENT" ; Client filename
@@ -32,14 +34,14 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 	;  location (I,REQ) - Value representing the code location
 	;---------
 	__New(location, locationType := "") {
+		if(locationType = "")
+			locationType := this.determineLocationType()
+		
+		if(!this.selectMissingInfo(location, locationType))
+			return ""
+		
 		this.location     := location
 		this.locationType := locationType
-		
-		if(this.locationType = "")
-			this.locationType := this.determineLocationType()
-		
-		if(!this.selectMissingInfo())
-			return ""
 	}
 	
 	;---------
@@ -67,40 +69,20 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 	
 	;---------
 	; DESCRIPTION:    Try to figure out what kind of location we've been given based on its format.
+	; PARAMETERS:
+	;  location (I,REQ) - The location to try and figure out the type of.
 	; RETURNS:        Location type from LocationType_* constants
 	;---------
-	determineLocationType() {
+	determineLocationType(location) {
 		; Includes a tag/routine separator
-		if(this.location.contains("^"))
+		if(location.contains("^"))
 			return ActionObjectCodeSearch.LocationType_Server
 		
 		; Includes a file extension
-		if(this.location.contains("."))
+		if(location.contains("."))
 			return ActionObjectCodeSearch.LocationType_Client
 		
 		return ""
-	}
-	
-	;---------
-	; DESCRIPTION:    Prompt the user for the code location if it's missing.
-	; SIDE EFFECTS:   Sets .location based on user inputs.
-	;---------
-	selectMissingInfo() {
-		; Nothing is missing
-		if(this.location != "" && this.locationType != "")
-			return true
-		
-		s := this.getTypeFilteredSelector(ActionObject.Type_CodeSearch)
-		s.setDefaultOverrides({"VALUE":this.location})
-		data := s.selectGui()
-		if(!data)
-			return false
-		if(data["SUBTYPE"] = "" || data["VALUE"] = "") ; Didn't get everything we needed.
-			return false
-		
-		this.locationType := data["SUBTYPE"]
-		this.location     := data["VALUE"]
-		return true
 	}
 	; #END#
 }

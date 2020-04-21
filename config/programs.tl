@@ -15,7 +15,7 @@
 		Snapper						Epic\Snapper\Snapper.exe
 		Thunder						Thunder\Thunder.exe
 		VB6							Microsoft Visual Studio\VB98\VB6.EXE
-		Visual Studio				Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.exe
+		Visual Studio				Microsoft Visual Studio\2019\Professional\Common7\IDE\devenv.exe
 		VMware Horizon Client	VMware\VMware Horizon View Client\vmware-view.exe
 	} ~PATH.addToStart(<PROGRAM_FILES>\) {
 		AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk

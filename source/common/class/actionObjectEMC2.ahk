@@ -33,8 +33,6 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;---------
 	standardEMC2String {
 		get {
-			if(!this.selectMissingInfo())
-				return ""
 			return this.ini " " this.id " - " this.title
 		}
 	}

@@ -2,6 +2,11 @@
 	Consider centralizing ActionObject*.selectMissingInfo() logic - it looks very similar, should we just turn it into a base function?
 		Could take arguments for value + subType
 		Type could be either another parameter, or built into the class (overridden by children) as a public member
+	Are ^+!# hotkeys fine to use again?
+	Consider adding client/server CodeSearch open cases to search (as a pass-through)
+	DLG selector - add some way to launch the DLG (probably just in web mode)?
+		Maybe an additional field?
+		Possibly just a separate hotkey - maybe use ^+!#d ?
 	Consider hotstrings for some of my other common helper classes - Toast, ErrorToast
 	Make Ctrl+Backspace work properly in EMC2 change-decision popups
 		Title: Change Decision: Waiting for Changes

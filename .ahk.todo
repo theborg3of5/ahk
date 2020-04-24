@@ -4,6 +4,8 @@
 		Type could be either another parameter, or built into the class (overridden by children) as a public member
 	Are ^+!# hotkeys fine to use again?
 	Consider adding client/server CodeSearch open cases to search (as a pass-through)
+	EpicStudio debug popup - make it easier to go back to searching by ws after there's already a process ID in the field
+		.ws hotstring or something similar, maybe?
 	DLG selector - add some way to launch the DLG (probably just in web mode)?
 		Maybe an additional field?
 		Possibly just a separate hotkey - maybe use ^+!#d ?

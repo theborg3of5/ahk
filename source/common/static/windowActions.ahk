@@ -18,7 +18,7 @@ class WindowActions {
 	;  titleString (I,REQ) - A title string identifying the window.
 	;---------
 	activateWindow(titleString := "A") {
-		this.windowAction(WindowActions.Action_Activate, "", titleString)
+		this.windowAction(this.Action_Activate, "", titleString)
 	}
 	;---------
 	; DESCRIPTION:    Activate and show a window, respecting any custom overrides for the identified
@@ -27,7 +27,7 @@ class WindowActions {
 	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
 	;---------
 	activateWindowByName(name) {
-		this.windowAction(WindowActions.Action_Activate, name)
+		this.windowAction(this.Action_Activate, name)
 	}
 	
 	;---------
@@ -36,7 +36,7 @@ class WindowActions {
 	;  titleString (I,REQ) - A title string representing the window.
 	;---------
 	closeWindow(titleString := "A") {
-		this.windowAction(WindowActions.Action_Close, "", titleString)
+		this.windowAction(this.Action_Close, "", titleString)
 	}
 	;---------
 	; DESCRIPTION:    Close a window, respecting any custom overrides for the identified window.
@@ -44,7 +44,7 @@ class WindowActions {
 	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
 	;---------
 	closeWindowByName(name) {
-		this.windowAction(WindowActions.Action_Close, name)
+		this.windowAction(this.Action_Close, name)
 	}
 	
 	;---------
@@ -54,7 +54,7 @@ class WindowActions {
 	;  titleString (I,REQ) - A title string representing the window.
 	;---------
 	deleteWord(titleString := "A") {
-		this.windowAction(WindowActions.Action_DeleteWord, "", titleString)
+		this.windowAction(this.Action_DeleteWord, "", titleString)
 	}
 	;---------
 	; DESCRIPTION:    Delete a single word before the cursor within a particular window, respecting
@@ -63,7 +63,7 @@ class WindowActions {
 	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
 	;---------
 	deleteWordByName(name) {
-		this.windowAction(WindowActions.Action_DeleteWord, name)
+		this.windowAction(this.Action_DeleteWord, name)
 	}
 	
 	;---------
@@ -73,7 +73,7 @@ class WindowActions {
 	;  titleString (I,REQ) - A title string representing the window.
 	;---------
 	escAction(titleString := "A") {
-		this.windowAction(WindowActions.Action_EscapeKey, "", titleString)
+		this.windowAction(this.Action_EscapeKey, "", titleString)
 	}
 	;---------
 	; DESCRIPTION:    Respond to the escape key within a particular window, respecting any custom
@@ -82,7 +82,7 @@ class WindowActions {
 	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
 	;---------
 	escActionByName(name) {
-		this.windowAction(WindowActions.Action_EscapeKey, name)
+		this.windowAction(this.Action_EscapeKey, name)
 	}
 	
 	;---------
@@ -91,7 +91,7 @@ class WindowActions {
 	;  titleString (I,REQ) - A title string representing the window.
 	;---------
 	minimizeWindow(titleString := "A") {
-		this.windowAction(WindowActions.Action_Minimize, "", titleString)
+		this.windowAction(this.Action_Minimize, "", titleString)
 	}
 	;---------
 	; DESCRIPTION:    Minimize a window, respecting any custom overrides for the identified window.
@@ -99,7 +99,7 @@ class WindowActions {
 	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
 	;---------
 	minimizeWindowByName(name) {
-		this.windowAction(WindowActions.Action_Minimize, name)
+		this.windowAction(this.Action_Minimize, name)
 	}
 	
 	;---------
@@ -109,7 +109,7 @@ class WindowActions {
 	;  titleString (I,REQ) - A title string representing the window.
 	;---------
 	selectAll(titleString := "A") {
-		this.windowAction(WindowActions.Action_SelectAll, "", titleString)
+		this.windowAction(this.Action_SelectAll, "", titleString)
 	}
 	;---------
 	; DESCRIPTION:    Select all within a particular window, respecting any custom overrides for the
@@ -173,7 +173,7 @@ class WindowActions {
 	;  titleString          (I,REQ) - A title string that identifies the window we want to perform
 	;                                 the action on.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from this.actionOverrides.
+	;                                 question, from WindowActions.actionOverrides.
 	;---------
 	doWindowAction(action, titleString, windowActionSettings) {
 		if(!action || !titleString)
@@ -181,12 +181,12 @@ class WindowActions {
 		
 		; How we want to perform the action
 		method := windowActionSettings[action]
-		if(method = WindowActions.Method_Other) {
+		if(method = this.Method_Other) {
 			this.doSpecialWindowMethod(action, titleString, windowActionSettings)
 			return
 		}
 		if(method = "")
-			method := WindowActions.Method_Default
+			method := this.Method_Default
 		
 		; Do that action.
 		Switch action {
@@ -208,7 +208,7 @@ class WindowActions {
 	;                                 constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from this.actionOverrides.
+	;                                 question, from WindowActions.actionOverrides.
 	; NOTES:          If we don't recognize the specific method, we'll call back into
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
@@ -228,7 +228,7 @@ class WindowActions {
 	;                                 constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from this.actionOverrides.
+	;                                 question, from WindowActions.actionOverrides.
 	; NOTES:          If we don't recognize the specific method, we'll call back into
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
@@ -245,7 +245,7 @@ class WindowActions {
 	;                                 constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from this.actionOverrides.
+	;                                 question, from WindowActions.actionOverrides.
 	; NOTES:          If we don't recognize the specific method, we'll call back into
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
@@ -267,7 +267,7 @@ class WindowActions {
 	;                                 constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from this.actionOverrides.
+	;                                 question, from WindowActions.actionOverrides.
 	; NOTES:          If we don't recognize the specific method, we'll call back into
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
@@ -284,7 +284,7 @@ class WindowActions {
 	;                                 constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from this.actionOverrides.
+	;                                 question, from WindowActions.actionOverrides.
 	; NOTES:          If we don't recognize the specific method, we'll call back into
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
@@ -302,7 +302,7 @@ class WindowActions {
 	;                                 constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from this.actionOverrides.
+	;                                 question, from WindowActions.actionOverrides.
 	; NOTES:          If we don't recognize the specific method, we'll call back into
 	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
 	;---------
@@ -326,7 +326,7 @@ class WindowActions {
 	;  action               (I,REQ) - The action to try and perform.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from this.actionOverrides.
+	;                                 question, from WindowActions.actionOverrides.
 	;---------
 	doSpecialWindowMethod(action, titleString, windowActionSettings) {
 		if(!action)
@@ -334,7 +334,7 @@ class WindowActions {
 		
 		Switch windowActionSettings["NAME"] {
 			Case "Explorer":
-				if(action = WindowActions.Action_Minimize)
+				if(action = this.Action_Minimize)
 					Send, !q ; QTTabBar's min to tray hotkey
 			
 			Case "Spotify":

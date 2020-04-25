@@ -1,4 +1,9 @@
 # New Ideas
+	Fix Spotify program activation - currently can't work because no access to Spotify class from WindowActions in standalone script
+		Should we just separate the program classes from their hotkeys somehow, so we can include the classes in common?
+			Maybe a \program\ folder in \common\ with class.ahk scripts
+			Include an include line at the top of program hotkey scripts with the corresponding class script
+				Then we don't have to include it in common - standalone scripts can reference a separate include file (with a separate documents library pointer)
 	Consider centralizing ActionObject*.selectMissingInfo() logic - it looks very similar, should we just turn it into a base function?
 		Could take arguments for value + subType
 		Type could be either another parameter, or built into the class (overridden by children) as a public member

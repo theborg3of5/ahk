@@ -25,8 +25,8 @@
 	Transcribe instructor meeting notes					-			SAT				1
 	Weigh cats													-			WED				2
 	Schedule haircut											-			SAT				2
-	Clean bathrooms											-			SUN				2
 	Periodic cleaning (small trash cans, kitchen)	-			SUN				3
+	Clean bathrooms											-			SUN				4
 	Call Azzam grandparents									-			SAT				2
 	Call Borg grandparents									-			SAT				4
 

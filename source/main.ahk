@@ -60,7 +60,6 @@ if(Config.contextIsWork) { ; Work-specific subs
 #Include onenote.ahk
 #Include onetastic.ahk
 #Include outlook.ahk
-#Include pidgin.ahk
 #Include putty.ahk
 #Include remoteDesktop.ahk
 #Include snapper.ahk

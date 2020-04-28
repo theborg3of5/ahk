@@ -338,8 +338,13 @@ class WindowActions {
 					Send, !q ; QTTabBar's min to tray hotkey
 			
 			Case "Spotify":
-				if(action = WindowActions.Action_Close)
-					WinClose, % "ahk_id " Spotify.getMainWindowId()
+				idString := "ahk_id " Spotify.getMainWindowId()
+				Switch action {
+					Case this.Action_Activate:
+						WinActivate, % idString
+					Case this.Action_Close:
+						WinClose, % idString
+				}
 		}
 	}
 	; #END#

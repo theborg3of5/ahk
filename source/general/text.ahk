@@ -57,5 +57,5 @@ return
 		if(selectedText = "")
 			return
 		
-		LaunchLib.openNewNotepadWithText(selectedText)
+		Notepad.openNewInstanceWithText(selectedText)
 	}

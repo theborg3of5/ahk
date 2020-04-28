@@ -1,14 +1,12 @@
-; Library of functions for launching different programs and windows.
-
-class LaunchLib {
-	; #PUBLIC#
+class Notepad {
+	; #INTERNAL#
 	
 	;---------
 	; DESCRIPTION:    Open a new instance of Notepad and set its content to the provided text.
 	; PARAMETERS:
 	;  text (I,REQ) - The text to add to the new window.
 	;---------
-	openNewNotepadWithText(text) {
+	openNewInstanceWithText(text) {
 		Config.runProgram("Notepad")
 		
 		titleString := "Untitled - Notepad " Config.windowInfo["Notepad"].titleString ; For a brand-new instance of notepad

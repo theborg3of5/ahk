@@ -2,7 +2,6 @@
 	Consider centralizing ActionObject*.selectMissingInfo() logic - it looks very similar, should we just turn it into a base function?
 		Could take arguments for value + subType
 		Type could be either another parameter, or built into the class (overridden by children) as a public member
-	Consider moving notepad new instance logic back into a Notepad class (and get rid of LaunchLib)
 	Should some of the launch methods in launch.ahk live in their respective program-specific classes, now that those will be available to standalone scripts?
 		Snapper
 		Hyperspace

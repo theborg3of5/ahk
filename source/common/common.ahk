@@ -67,7 +67,6 @@ Object(params*) {
 	#Include fileLib.ahk
 	#Include guiLib.ahk
 	#Include hotkeyLib.ahk
-	#Include launchLib.ahk
 	#Include microsoftLib.ahk
 	#Include phoneLib.ahk
 	#Include runLib.ahk
@@ -86,6 +85,7 @@ Object(params*) {
 	#Include hyperspace.ahk
 	#Include internetExplorer.ahk
 	#Include mSnippets.ahk
+	#Include notepad.ahk
 	#Include notepadPlusPlus.ahk
 	#Include onenote.ahk
 	#Include oneNoteRecurringTodo.ahk

@@ -149,7 +149,7 @@ class DebugPopup {
    ;---------
    addNotepadHotkey(content) {
       Hotkey, IfWinActive, % "ahk_id " this.guiId
-		hotkeyFunction := ObjBindMethod(LaunchLib, "openNewNotepadWithText", content) ; LaunchLib.openNewNotepadWithText
+		hotkeyFunction := ObjBindMethod(Notepad, "openNewInstanceWithText", content) ; Notepad.openNewInstanceWithText
       Hotkey, !v, % hotkeyFunction
       Hotkey, IfWinActive
    }

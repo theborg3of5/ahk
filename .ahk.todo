@@ -2,9 +2,11 @@
 	Consider centralizing ActionObject*.selectMissingInfo() logic - it looks very similar, should we just turn it into a base function?
 		Could take arguments for value + subType
 		Type could be either another parameter, or built into the class (overridden by children) as a public member
-	Should some of the launch methods in launch.ahk live in their respective program-specific classes, now that those will be available to standalone scripts?
+	Should some of the launch method logic in launch.ahk live in their respective program-specific classes, now that those will be available to standalone scripts?
 		Snapper
 		Hyperspace
+		Most of the others to EpicLib
+		Config/script opener in NotepadPlusPlus, or somewhere else?
 	Are ^+!# hotkeys fine to use again?
 	Consider adding client/server CodeSearch open cases to search (as a pass-through)
 	EpicStudio debug popup - make it easier to go back to searching by ws after there's already a process ID in the field

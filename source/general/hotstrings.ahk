@@ -124,6 +124,7 @@
 	:X:acf::   sendFolderPath("AHK_SOURCE", "common\class")
 	:X:abf::   sendFolderPath("AHK_SOURCE", "common\base")
 	:X:alf::   sendFolderPath("AHK_SOURCE", "common\lib")
+	:X:apcf::  sendFolderPath("AHK_SOURCE", "common\program")
 	:X:asf::   sendFolderPath("AHK_SOURCE", "common\static")
 	
 	; Epic - General

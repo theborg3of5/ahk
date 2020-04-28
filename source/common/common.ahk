@@ -86,7 +86,7 @@ Object(params*) {
 	#Include hyperspace.ahk
 	#Include internetExplorer.ahk
 	#Include mSnippets.ahk
-	#Include notepad++.ahk
+	#Include notepadPlusPlus.ahk
 	#Include onenote.ahk
 	#Include oneNoteRecurringTodo.ahk
 	#Include oneNoteTodoPage.ahk

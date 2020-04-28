@@ -4,6 +4,8 @@
 			Maybe a \program\ folder in \common\ with class.ahk scripts
 			Include an include line at the top of program hotkey scripts with the corresponding class script
 				Then we don't have to include it in common - standalone scripts can reference a separate include file (with a separate documents library pointer)
+					Or: have main include it like it does the program scripts.
+				Alternatively again: just always include it in common includes.
 	Consider centralizing ActionObject*.selectMissingInfo() logic - it looks very similar, should we just turn it into a base function?
 		Could take arguments for value + subType
 		Type could be either another parameter, or built into the class (overridden by children) as a public member

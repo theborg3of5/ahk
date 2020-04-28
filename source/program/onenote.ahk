@@ -81,7 +81,7 @@
 	!+#n::OneNote.linkDevStructureSectionTitle()
 #If
 
-#Include %A_LineFile%\..\class\oneNoteTodoPage.ahk
+#Include %A_LineFile%\..\..\common\program\oneNoteTodoPage.ahk
 class OneNote {
 	; #PUBLIC#
 	

@@ -21,7 +21,7 @@
 	^+l::EpicStudio.linkRoutineToCurrentDLG()
 	
 	; Generate and insert snippet
-	:X:.snip::EpicStudio.insertMSnippet()
+	:X:.snip::MSnippets.insertSnippet()
 	
 	; Debug, auto-search for workstation ID.
 	~F5::EpicStudio.runDebug("ws:" Config.private["WORK_COMPUTER_NAME"])
@@ -31,7 +31,8 @@
 	return
 #If
 
-#Include class\mSnippets.ahk
+#Include %A_LineFile%\..\..\common\program\mSnippets.ahk
+
 class EpicStudio {
 	; #INTERNAL#
 	
@@ -133,13 +134,6 @@ class EpicStudio {
 		ControlFocus, % EpicStudio.Debug_OtherProcessField, A
 		Send, % searchString
 		Send, {Enter}{Down}
-	}
-	
-	;---------
-	; DESCRIPTION:    Insert an M snippet.
-	;---------
-	insertMSnippet() {
-		MSnippets.insertSnippet()
 	}
 	
 	

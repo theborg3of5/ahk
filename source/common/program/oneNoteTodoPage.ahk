@@ -1,4 +1,4 @@
-#Include %A_LineFile%\..\oneNoteRecurringTodo.ahk
+#Include oneNoteRecurringTodo.ahk
 
 ; A helper class for all of the logic that goes into my OneNote organizational system.
 class OneNoteTodoPage {

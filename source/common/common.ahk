@@ -76,6 +76,28 @@ Object(params*) {
 	#Include stringLib.ahk
 	#Include windowLib.ahk
 
+#Include %A_LineFile%\..\program
+	#Include chrome.ahk
+	#Include ditto.ahk
+	#Include emc2.ahk
+	#Include epicStudio.ahk
+	#Include excel.ahk
+	#Include explorer.ahk
+	#Include hyperspace.ahk
+	#Include internetExplorer.ahk
+	#Include mSnippets.ahk
+	#Include notepad++.ahk
+	#Include onenote.ahk
+	#Include oneNoteRecurringTodo.ahk
+	#Include oneNoteTodoPage.ahk
+	#Include onetastic.ahk
+	#Include outlook.ahk
+	#Include putty.ahk
+	#Include snapper.ahk
+	#Include spotify.ahk
+	#Include telegram.ahk
+	#Include vb6.ahk
+	
 #Include %A_LineFile%\..\static
 	#Include config.ahk
 	#Include commonHotkeys.ahk

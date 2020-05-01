@@ -12,6 +12,12 @@ command = %1% ; Input from command line
 if(!command)
 	ExitApp
 
+if(!Config.doesWindowExist("Spotify")) {
+	Config.runProgram("Spotify")
+	new Toast("Spotify not yet running, launching...").blockingOn().showMedium()
+	ExitApp
+}
+
 ; Send the command
 Switch command {
 	Case "PLAY_PAUSE":     Spotify.playPause()

@@ -1,6 +1,5 @@
 # New Ideas
 	Have spotify command script start it up if it's not running
-	Should my client CodeSearch linking stuff reverse the order since I'm using :: instead of > now? Is that how the scoping operator works?
 	Consider centralizing ActionObject*.selectMissingInfo() logic - it looks very similar, should we just turn it into a base function?
 		Could take arguments for value + subType
 		Type could be either another parameter, or built into the class (overridden by children) as a public member

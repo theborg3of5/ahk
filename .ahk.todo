@@ -10,10 +10,6 @@
 		Maybe an additional field?
 		Possibly just a separate hotkey - maybe use ^+!#d ?
 	Consider hotstrings for some of my other common helper classes - Toast, ErrorToast
-	Make Ctrl+Backspace work properly in EMC2 change-decision popups
-		Title: Change Decision: Waiting for Changes
-			Probably just use "Change Decision: "?
-		Resubmit-type popups, too?
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
 		Possibly reconsider the 100-char limit - wouldn't wider make more sense?
 		Could take into account whether there would be only 1 small word moved down

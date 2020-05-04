@@ -16,6 +16,7 @@
 			EMC2 QAN									-								-									QAN
 			EMC2 XDS									-								-									XDS
 		}
+			EMC2 DLG Change Status				-								ThunderRT6FormDC				Change Decision:
 			EMC2 DLG Email							-								-									E-mail Development Log
 			EMC2 DLG Issue Email					-								-									Email Issue
 			EMC2 DLG/XDS Issue Popup			-								-									Issue Response

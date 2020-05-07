@@ -16,14 +16,17 @@
 	^Enter:: NotepadPlusPlus.insertIndentedNewline() ; Add an indented newline
 	^+Enter::NotepadPlusPlus.insertIndentedNewline(1) ; Add an indented newline + 1 indent
 	
-	; Insert various AHK dev/debug strings
-	:X:`;`;`;:: NotepadPlusPlus.sendDocHeader()                         ; Documentation header
+	; AHK debug strings
 	:X:dbpop::  NotepadPlusPlus.sendDebugCodeString("Debug.popup")      ; Debug popup
 	:X:dbto::   NotepadPlusPlus.sendDebugCodeString("Debug.toast")      ; Debug toast
 	:X:edbpop:: NotepadPlusPlus.sendDebugCodeString("Debug.popupEarly") ; Debug popup that appears at startup
 	:X:dbparam::NotepadPlusPlus.insertDebugParams()                     ; Debug parameters
 	:X:dbm::    SendRaw, % "MsgBox, % "
 	
+	; Other AHK dev strings
+	:X:`;`;`;:: NotepadPlusPlus.sendDocHeader()
 	:X:ahkcont:: NotepadPlusPlus.sendContinuationBlock()
 	:X:ahkclass::NotepadPlusPlus.sendClassTemplate()
+	:X:ahkto:: Send, new Toast("").showMedium(){Left 15}
+	:X:ahketo::Send, new ErrorToast("").showMedium(){Left 15}
 #If

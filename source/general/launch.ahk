@@ -33,18 +33,28 @@
 
 
 #If Config.contextIsWork
-	^!+d::
-		selectDLGId() {
-			s := new Selector("tlg.tls").setTitle("Select DLG/PRJ to send ID").overrideFieldsOff()
-			s.dataTableList.filterOutEmptyForColumn("DLG")
-			dlgId := s.selectGui("DLG")
-			if(!dlgId)
-				return
-			
-			dlgId := dlgId.removeFromStart("P.")
-			ClipboardLib.addToHistory(dlgId)
-			Send, % dlgId
+	^!+d::Send, % selectTLGId().removeFromStart("P.")
+	^!#d:: selectTLGActionObject().openWeb()
+	^!+#d::selectTLGActionObject().openEdit()
+	selectTLGId() {
+		s := new Selector("tlg.tls").setTitle("Select DLG/PRJ ID").overrideFieldsOff()
+		s.dataTableList.filterOutEmptyForColumn("DLG")
+		return s.selectGui("DLG")
+	}
+	selectTLGActionObject() {
+		recId := selectTLGId()
+		if(!recId)
+			return ""
+		
+		if(recId.startsWith("P.")) {
+			recId := recId.removeFromStart("P.")
+			recINI := "PRJ"
+		} else {
+			recINI := "DLG"
 		}
+		
+		return new ActionObjectEMC2(recId, recINI)
+	}
 	
 	^!+h::
 		selectHyperspace() {

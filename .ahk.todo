@@ -5,9 +5,6 @@
 	EpicStudio debug popup - make it easier to go back to searching by ws after there's already a process ID in the field
 		.ws hotstring or something similar, maybe?
 			Will want other option too (whatever works for some putty windows now)
-	DLG selector - add some way to launch the DLG (probably just in web mode)?
-		Maybe an additional field?
-		Possibly just a separate hotkey - maybe use ^+!#d ?
 	Consider hotstrings for some of my other common helper classes - Toast, ErrorToast
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
 		Possibly reconsider the 100-char limit - wouldn't wider make more sense?

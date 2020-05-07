@@ -1,6 +1,4 @@
 # New Ideas
-	Consider static methods on Toast/ErrorToast for most common use - show something for medium time with minimal messages
-		Update hotstrings to use those instead if we create them
 	Consider centralizing ActionObject*.selectMissingInfo() logic - it looks very similar, should we just turn it into a base function?
 		Could take arguments for value + subType
 		Type could be either another parameter, or built into the class (overridden by children) as a public member

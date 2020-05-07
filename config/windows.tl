@@ -36,8 +36,9 @@
 			EMC2 XDS Submit						-								-									Submit Design for Review
 	}
 	
-			EpicStudio New Object Window		EpicStudio.exe				New Object
-			EpicStudio Tokenize String			EpicStudio.exe				Tokenize String
+			EpicStudio New Object Window		EpicStudio.exe				-									New Object
+			EpicStudio Tokenize String			EpicStudio.exe				-									Tokenize String
+			EpicStudio Attach to Process		EpicStudio.exe				-									Attach to Process
 			OneTastic Macro Editor XML			ONENOTE.EXE					Onetastic Window				Edit XML
 			OneTastic Macro Editor				ONENOTE.EXE					Onetastic Window
 			Pidgin Buddy List						pidgin.exe					-									Buddy List

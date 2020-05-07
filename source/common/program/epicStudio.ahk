@@ -75,31 +75,51 @@ class EpicStudio {
 	;---------
 	; DESCRIPTION:    Run EpicStudio in debug mode, or continue debugging if we're already in it.
 	; PARAMETERS:
-	;  searchString (I,REQ) - String to automatically search for in the attach process popup
+	;  searchStringKey (I,REQ) - A key describing which search string to automatically search for in
+	;                            the attach process popup. See .doDebugSearch for options.
 	;---------
-	runDebug(searchString) {
+	runDebug(searchStringKey) {
 		; Don't try and debug again if ES is already doing so.
 		if(EpicStudio.isDebugging())
 			return
 		
-		WinWait, Attach to Process, , 5
+		WinWait, % Config.windowInfo["EpicStudio Attach to Process"].titleString, , 5
 		if(ErrorLevel)
 			return
 		
-		; If there's already something plugged into the field (like a specific process ID), just leave it be - focus the field and return.
+		; Pick the radio button for "Other existing process:"
+		ControlSend,  % EpicStudio.Debug_OtherProcessButton, {Space}, A
+			
+		; There's already something plugged into the field (like a specific process ID), just focus the field and leave it be.
 		if(ControlGet("Line", 1, EpicStudio.Debug_OtherProcessField, "A")) {
 			ControlFocus, % EpicStudio.Debug_OtherProcessField, A
 			return
 		}
 		
-		; Pick the radio button for "Other existing process:".
-		ControlFocus, % EpicStudio.Debug_OtherProcessButton, A
-		ControlSend, % EpicStudio.Debug_OtherProcessButton, {Space}, A
+		; Perform the search
+		this.doDebugSearch(searchStringKey)
+	}
+	
+	;---------
+	; DESCRIPTION:    Generate a search string given a type, then search with it.
+	; PARAMETERS:
+	;  key (I,REQ) - A key describing the type of search string. Options: WORKSTATION, USER
+	;---------
+	doDebugSearch(key) {
+		if(!key)
+			return
 		
-		; Focus the filter field and send what we want to send.
-		ControlFocus, % EpicStudio.Debug_OtherProcessField, A
+		Switch key {
+			Case "WORKSTATION":
+				searchString := "ws:" Config.private["WORK_COMPUTER_NAME"]
+			Case "USER":
+				searchString := "user:" Config.private["WORK_USERNAME"]
+		}
+		if(!searchString)
+			return
+		
 		Send, % searchString
-		Send, {Enter}{Down}
+		Send, {Enter} ; Submit search
 	}
 	
 	

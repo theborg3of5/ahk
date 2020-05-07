@@ -24,9 +24,15 @@
 	:X:.snip::MSnippets.insertSnippet()
 	
 	; Debug, auto-search for workstation ID.
-	~F5::EpicStudio.runDebug("ws:" Config.private["WORK_COMPUTER_NAME"])
+	~F5::EpicStudio.runDebug("WORKSTATION")
 	F6::
 		Send, {F5}
-		EpicStudio.runDebug("user:" Config.private["WORK_USERNAME"])
+		EpicStudio.runDebug("USER")
 	return
+
+; Debug window
+#If Config.isWindowActive("EpicStudio Attach to Process")
+	; Search presets (match debug-launching ones above)
+	F5::EpicStudio.doDebugSearch("WORKSTATION")
+	F6::EpicStudio.doDebugSearch("USER")
 #If

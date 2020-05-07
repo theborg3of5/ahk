@@ -2,9 +2,6 @@
 	Consider centralizing ActionObject*.selectMissingInfo() logic - it looks very similar, should we just turn it into a base function?
 		Could take arguments for value + subType
 		Type could be either another parameter, or built into the class (overridden by children) as a public member
-	EpicStudio debug popup - make it easier to go back to searching by ws after there's already a process ID in the field
-		.ws hotstring or something similar, maybe?
-			Will want other option too (whatever works for some putty windows now)
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
 		Possibly reconsider the 100-char limit - wouldn't wider make more sense?
 		Could take into account whether there would be only 1 small word moved down

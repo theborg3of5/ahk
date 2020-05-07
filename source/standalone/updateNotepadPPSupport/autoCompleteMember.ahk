@@ -14,17 +14,13 @@ class AutoCompleteMember {
 	;  defLine       (I,OPT) - The definition line for the member - that is, its first line
 	;                          (function definition, etc.). Ignored if there's a NPP-DEF-LINE line
 	;                          in the header.
-	;  returnsPrefix (I,OPT) - If specified, the returns value will appear as a prefix on the return
-	;                          value. Ignored if there's a NPP-RETURNS line in the header.
 	;---------
-	__New(headerLines, defLine := "", returnsPrefix := "") {
-		this.returns := returnsPrefix
-		
+	__New(headerLines, defLine := "") {
 		this.handleHeader(headerLines, defLine) ; Can replace defLine based on header
 		
 		; Properties get special handling to call them out as properties (not functions), since you have to use an open paren to get the popup to display.
 		if(!this.isFunction(defLine))
-			this.returns := this.returns.appendPiece(this.ReturnValue_Property, " ")
+			this.returns := this.ReturnValue_Property
 		
 		; Extract info from the definition line
 		AHKCodeLib.getDefLineParts(defLine, name, paramsAry)
@@ -182,9 +178,9 @@ class AutoCompleteMember {
 	}
 
 	Debug_ToString(ByRef table) {
-		table.addLine("Name", this.name)
-		table.addLine("Returns", this.returns)
-		table.addLine("Parameters", this.paramsAry)
+		table.addLine("Name",        this.name)
+		table.addLine("Returns",     this.returns)
+		table.addLine("Parameters",  this.paramsAry)
 		table.addLine("Description", this.description)
 	}
 	; #END#

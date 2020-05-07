@@ -8,7 +8,7 @@
 	
 	; Line operations
 	$^d::EpicStudio.deleteLinePreservingClipboard()
-	^l::EpicStudio.duplicateLine()
+	^l:: EpicStudio.duplicateLine()
 	
 	; Treat ^Enter the same as Enter - I never want to insert a line before the current one.
 	^Enter::Send, {Enter}

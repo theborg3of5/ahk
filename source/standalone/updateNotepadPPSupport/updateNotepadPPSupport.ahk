@@ -89,11 +89,11 @@ getDataFromScripts(ByRef sortedAHKClasses, ByRef sortedTLMembers) {
 	tlMembers  := {} ; {memberName: AutoCompleteMember}
 	
 	; Read in and extract all classes from scripts in these folders
-	addFromFolder(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\base",   "BASE_CLASSES")
-	addFromFolder(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\class",  "INSTANCE_CLASSES")
-	addFromFolder(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\lib",    "LIB_CLASSES")
-	addFromFolder(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\static", "STATIC_CLASSES")
-	addFromFolder(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\program",       "PROGRAM_CLASSES", "[Requires program includes]") ; Program-specific classes
+	addFromFolder(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\base",    "BASE_CLASSES")
+	addFromFolder(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\class",   "INSTANCE_CLASSES")
+	addFromFolder(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\lib",     "LIB_CLASSES")
+	addFromFolder(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\program", "PROGRAM_CLASSES")
+	addFromFolder(ahkClasses, tlMembers, Config.path["AHK_SOURCE"] "\common\static",  "STATIC_CLASSES")
 	
 	; AHK classes need a little post-processing
 	processAHKClasses(ahkClasses)
@@ -109,10 +109,8 @@ getDataFromScripts(ByRef sortedAHKClasses, ByRef sortedTLMembers) {
 ;  folderPath    (I,REQ) - The full path to the folder to read from.
 ;  classGroup    (I,REQ) - Which "group" the classes in this folder should have - this determines
 ;                          how they get syntax-highlighted.
-;  returnsPrefix (I,OPT) - The prefix to add to the auto-complete return value of all functions in
-;                          all classes in this folder.
 ;---------
-addFromFolder(ByRef ahkClasses, ByRef tlMembers, folderPath, classGroup, returnsPrefix := "") {
+addFromFolder(ByRef ahkClasses, ByRef tlMembers, folderPath, classGroup) {
 	; Loop over all scripts in folder to find classes
 	Loop, Files, %folderPath%\*.ahk, RF ; [R]ecursive, [F]iles (not [D]irectories)
 	{
@@ -170,14 +168,14 @@ addFromFolder(ByRef ahkClasses, ByRef tlMembers, folderPath, classGroup, returns
 				
 				if(tlBlockOn) {
 					; Feed the header to a new member object and add it to the TL members array.
-					member := new AutoCompleteMember(headerLines) ; No defLine/returnsPrefix - these headers specify their own.
+					member := new AutoCompleteMember(headerLines) ; No defLine - these headers specify their own.
 					tlMembers[member.name] := member
 				} else {
 					; Get the definition line (first line after the header) too.
 					defLine := linesAry.next(ln)
 					
 					; Feed the data to a new member object and add that to our current class object.
-					member := new AutoCompleteMember(headerLines, defLine, returnsPrefix)
+					member := new AutoCompleteMember(headerLines, defLine)
 					classObj.addMember(member)
 				}
 				

@@ -2419,7 +2419,7 @@
         <KeyWord name="Disable"/>
         <KeyWord name="Disabled"/>
         <KeyWord name="Ditto.saveCurrentClipboard" func="yes">
-            <Overload retVal="[Requires program includes]" descr="
+            <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Force Ditto to save the current clipboard state as a clip. Useful when you want to
 							;                 add something to the clipboard history, but restore the current clipboard as well.
@@ -2935,7 +2935,7 @@
         </KeyWord>
         <KeyWord name="Expand"/>
         <KeyWord name="Explorer.ThisPCFolderUUID" func="yes">
-            <Overload retVal="[Requires program includes] [Property]" descr="
+            <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    This is the UUID for the &quot;This PC&quot; folder that shows all drives.
 							;---------">
@@ -3976,16 +3976,6 @@
         <KeyWord name="LAlt"/>
         <KeyWord name="LastFound"/>
         <KeyWord name="LastFoundExist"/>
-        <KeyWord name="LaunchLib.openNewNotepadWithText" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Open a new instance of Notepad and set its content to the provided text.
-							; PARAMETERS:
-							;  text (I,REQ) - The text to add to the new window.
-							;---------">
-                <Param name="text" />
-            </Overload>
-        </KeyWord>
         <KeyWord name="Launch_App1"/>
         <KeyWord name="Launch_App2"/>
         <KeyWord name="Launch_Mail"/>
@@ -4526,7 +4516,7 @@
         <KeyWord name="On"/>
 		  <!-- *gdb - Remove extra OnExit declaration -->
         <KeyWord name="OneNote.linkEMC2ObjectInLine" func="yes">
-            <Overload retVal="[Requires program includes]" descr="
+            <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Select the current line and link the given EMC2 object (described by INI/ID).
 							; PARAMETERS:
@@ -4552,7 +4542,7 @@
 		  <!-- *gdb - Move OnExit up to correct sorted spot -->
         <KeyWord name="Or"/>
         <KeyWord name="Outlook.isTLGCalendarActive" func="yes">
-            <Overload retVal="[Requires program includes]" descr="
+            <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Check whether the TLG calendar is currently active.
 							; RETURNS:        true/false
@@ -4672,43 +4662,42 @@
         </KeyWord>
         <KeyWord name="ProcessName"/>
         <KeyWord name="ProcessPath"/>
-        <KeyWord name="ProgramFiles"/>
-        <KeyWord name="ProgramInfo" func="yes">
+        <KeyWord name="Program" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Creates a new instance of ProgramInfo.
+							; DESCRIPTION:    Creates a new instance of Program.
 							; PARAMETERS:
 							;  programAry (I,REQ) - Array of information about the program to store. Format:
 							;                          programAry[&quot;NAME&quot;] - Name of the program. Should match a single row
 							;                                               in windows.tl for identification purposes.
 							;                                    [&quot;PATH&quot;] - The full filepath to launch the program.
-							; RETURNS:        Reference to a new ProgramInfo object
+							; RETURNS:        Reference to a new Program object
 							;---------">
                 <Param name="programAry" />
             </Overload>
         </KeyWord>
-        <KeyWord name="ProgramInfo.name" func="yes">
+        <KeyWord name="Program.name" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Name of the program
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ProgramInfo.path" func="yes">
+        <KeyWord name="Program.path" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Full filepath to launch the program
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ProgramInfo.pathType" func="yes">
+        <KeyWord name="Program.pathType" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    The type of path from ProgramInfo.PathType_*
+							; DESCRIPTION:    The type of path from Program.PathType_*
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ProgramInfo.PathType_EXE" func="yes">
+        <KeyWord name="Program.PathType_EXE" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    A &quot;normal&quot; path to an executable
@@ -4716,7 +4705,7 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ProgramInfo.PathType_URL" func="yes">
+        <KeyWord name="Program.PathType_URL" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    A web URL
@@ -4724,7 +4713,7 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ProgramInfo.PathType_WinApp" func="yes">
+        <KeyWord name="Program.PathType_WinApp" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    A windows app (fka universal app)
@@ -4732,6 +4721,18 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="Program.run" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Run this program with the given arguments.
+							; PARAMETERS:
+							;  args (I,OPT) - The command-line arguments to pass to the program when we run it.
+							; RETURNS:        false if we couldn't run the program, true otherwise.
+							;---------">
+                <Param name="args := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgramFiles"/>
         <KeyWord name="Progress" func="no">
             <Overload retVal="">
                 <Param name="Off"/>
@@ -5186,7 +5187,7 @@
 							;                 they add (or is defaulted in) in the final return array.
 							; PARAMETERS:
 							;  fieldsToAdd (I,REQ) - Numerically-indexed array of field names (treated the same as column names from choices) to add.
-							; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui().
+							; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui()/.select().
 							;                 Default override values for these fields (if desired) can be set using the .setDefaultOverrides() function.
 							;---------">
                 <Param name="fieldsToAdd" />
@@ -5268,6 +5269,8 @@
 							;  defaultOverrides (I,REQ) - Associative array fo default overrides, format:
 							;                              {columnLabel: value}
 							; RETURNS:        this
+							; NOTES:          These overrides are only used if you do a user selection (.selectGui(), or
+							;                 .select() with a blank choiceString) - otherwise they are ignored.
 							;---------">
                 <Param name="defaultOverrides" />
             </Overload>
@@ -5557,7 +5560,7 @@
         </KeyWord>
         <KeyWord name="Slider"/>
         <KeyWord name="Snapper.buildURL" func="yes">
-            <Overload retVal="[Requires program includes]" descr="
+            <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Build a URL that will open something in Snapper.
 							; PARAMETERS:
@@ -5657,7 +5660,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="Spotify.getMainWindowId" func="yes">
-            <Overload retVal="[Requires program includes]" descr="
+            <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Spotify has a whole bunch of windows that are difficult to tell apart from the
 							;                 real thing. This finds and returns the window ID of the &quot;main&quot; one.
@@ -5666,7 +5669,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="Spotify.nextTrack" func="yes">
-            <Overload retVal="[Requires program includes]" descr="
+            <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Go to the next track.
 							; SIDE EFFECTS:   Shows a toast with the new song info, if applicable.
@@ -5674,7 +5677,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="Spotify.playPause" func="yes">
-            <Overload retVal="[Requires program includes]" descr="
+            <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Toggle play/pause.
 							; SIDE EFFECTS:   Shows a toast with the current song info, if applicable.
@@ -5682,7 +5685,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="Spotify.previousTrack" func="yes">
-            <Overload retVal="[Requires program includes]" descr="
+            <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Go to the previous track.
 							; SIDE EFFECTS:   Shows a toast with the new song info, if applicable.
@@ -5690,7 +5693,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="Spotify.showCurrentInfo" func="yes">
-            <Overload retVal="[Requires program includes]" descr="
+            <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Show the current song's title and artist in a toast (if there's one playing right now).
 							; PARAMETERS:
@@ -6747,7 +6750,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="Telegram.shareURL" func="yes">
-            <Overload retVal="[Requires program includes]" descr="
+            <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Share the provided URL to Telegram and focus the normal chat.
 							; PARAMETERS:

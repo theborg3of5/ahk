@@ -2,8 +2,6 @@
 	Consider centralizing ActionObject*.selectMissingInfo() logic - it looks very similar, should we just turn it into a base function?
 		Could take arguments for value + subType
 		Type could be either another parameter, or built into the class (overridden by children) as a public member
-	Are ^+!# hotkeys fine to use again?
-		Is that only because of the remote-desktop thing? Test on local machine first.
 	EpicStudio debug popup - make it easier to go back to searching by ws after there's already a process ID in the field
 		.ws hotstring or something similar, maybe?
 			Will want other option too (whatever works for some putty windows now)

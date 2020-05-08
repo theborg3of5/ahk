@@ -13,18 +13,10 @@
 	EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments
-	Add some way to move windows where I want them
-		Hotkey-triggered, for all windows in list?
-		Maybe lean on monitor fixer script from before?
-		Make sure monitor exists before putting a window there
-		Spotify
-			Switch to other monitor, then correct one
-			At home: move to correct height (not cut off)
-		Work
-			KDiff window - maximize on center screen
-			MatterMost - half of left screen
-		Telegram - left monitor, top or bottom depending on machine
-		Pidgin window - top-right of left monitor
+	Is there some way to fix Spotify placement at startup?
+		It ends up too low (probably because of my taskbar on top), and sometimes the taskbar button thinks it's on the wrong monitor
+			The monitor bit probably doesn't matter, considering I close it (min to tray) pretty shortly after
+				Would closing it (min to tray) and then re-opening it be an option to fix the monitor tasbar bit?
 	Figure out some standard documentation method for hotkeys
 		Dynamically pull hotkeys for the currently focused program?
 		Hotkey to show popup with all currently active hotkeys, divided up into current-program-specific and others
@@ -44,9 +36,6 @@
 	Dynamically resize abbreviation column based on widest value?
 		To allow longer abbreviations
 		Is that going to get weird with SelectorGui+FlexTable interactions?
-	Consider adding a way to match on some other column than just NAME and ABBREV
-		Use cases
-			Transaction dump all script, to get name from epicEnvironments TLS instead of just using COMMID
 	
 # Toast
 	Could we avoid flickering between .showPersistent() and .setText()?

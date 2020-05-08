@@ -60,7 +60,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 			title := record.title
 		}
 		
-		if(!this.selectMissingInfo(id, ini, "Enter INI and ID"))
+		if(!this.selectMissingInfo(id, ini, "Select INI and ID"))
 			return ""
 		
 		this.id    := id
@@ -76,6 +76,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;  ini   (O,OPT) - If the value is an EMC2 record, the INI
 	;  id    (O,OPT) - If the value is an EMC2 record, the ID
 	; RETURNS:        true/false - whether the given value must be an EMC2 object.
+	; NOTES:          Must be effectively static - this is called before we decide what kind of object to return.
 	;---------
 	isThisType(value, ByRef ini := "", ByRef id := "") {
 		record := new EpicRecord(value)
@@ -83,7 +84,8 @@ class ActionObjectEMC2 extends ActionObjectBase {
 			return false
 		
 		; Silent selection from actionObject TLS to see if we match an EMC2-type INI (filtered list so no match means not EMC2).
-		matchedINI := this._selector.selectChoice(record.ini, "SUBTYPE")
+		s := ActionObjectBase.getTypeSelector(ActionObject.Type_EMC2)
+		matchedINI := s.selectChoice(record.ini, "SUBTYPE")
 		if(matchedINI = "")
 			return false
 		
@@ -128,23 +130,6 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	
 	; #PRIVATE#
 	
-	static _selectorInstance := "" ; Selector instance used to check or map the record INI.
-	
-	;---------
-	; DESCRIPTION:    Static Selector instance, filtered to the EMC2 type.
-	; SIDE EFFECTS:   Populates ._selectorInstance if it's not already.
-	;---------
-	_selector {
-		get {
-			; Create the selector instance the first time
-			if(!this._selectorInstance)
-				this._selectorInstance := this.getTypeFilteredSelector(ActionObject.Type_EMC2)
-			
-			return this._selectorInstance
-		}
-	}
-	
-	
 	;---------
 	; DESCRIPTION:    Clean off any extra stuff from the start of the string so EpicRecord can handle it properly.
 	; PARAMETERS:
@@ -164,7 +149,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;---------
 	postProcess() {
 		; INI - make sure the INI is the "real" EMC2 one.
-		this.ini := this._selector.selectChoice(this.ini, "SUBTYPE")
+		this.ini := this.getTypeSelector(ActionObject.Type_EMC2).selectChoice(this.ini, "SUBTYPE")
 		
 		; Title - clean up, drop anything extra that we don't need.
 		removeAry := ["-", "/", "\", ":", ",", "DBC"] ; Don't need "DBC" on the start of every EMC2 title.

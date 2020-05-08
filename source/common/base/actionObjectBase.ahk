@@ -6,6 +6,10 @@
 		Have its own constructor (__New)
 		Override the .getLink*() functions below for the types of links that the child supports (general/web/edit)
 		Override others as needed (for example, .open() could also use an existence check for local paths)
+		Override ActionObjectType with the value from ActionObject.Type_* that it implements
+		
+	Child classes may also use these functions:
+		selectMissingInfo - Check whether there's any required info (value and subType) missing, and if so, prompt the user with a filtered Selector popup to get that info.
 	
 */ ; =--
 
@@ -25,6 +29,30 @@ class ActionObjectBase {
 	__New(value) {
 		new ErrorToast("ActionObjectBase instance created", "ActionObjectBase is a base class only, use a type-specific child class instead.").showMedium()
 		return ""
+	}
+	
+	;---------
+	; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
+	;                 choices to only those matching the given type.
+	; PARAMETERS:
+	;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
+	; RETURNS:        An ActionObject Selector instance, filtered to the given type.
+	; SIDE EFFECTS:   Populates type subscript in .typeSelectors if it doesn't yet exist.
+	;---------
+	getTypeSelector(type) {
+		if(type = "")
+			return ""
+		
+		; If an instance already exists, just use that.
+		if(this.typeSelectors[type])
+			return this.typeSelectors[type]
+			
+		; Otherwise, create a new one.
+		s := new Selector("actionObject.tls")
+		s.dataTableList.filterByColumn("TYPE", type)
+		
+		this.typeSelectors[type] := s ; Cache the value off for later use.
+		return s
 	}
 	
 	;---------
@@ -116,20 +144,6 @@ class ActionObjectBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter the
-	;                 choices to only those matching the given type.
-	; PARAMETERS:
-	;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
-	; RETURNS:        A new Selector instance, filtered to the given type.
-	;---------
-	getTypeFilteredSelector(type) {
-		s := new Selector("actionObject.tls")
-		s.dataTableList.filterByColumn("TYPE", type)
-		
-		return s
-	}
-	
-	;---------
 	; DESCRIPTION:    Check whether the given value or subType is missing, and if it is, prompt the
 	;                 user with a Selector instance (filtered to the child's type) to get the info.
 	; PARAMETERS:
@@ -138,6 +152,7 @@ class ActionObjectBase {
 	;  popupTitle  (I,OPT) - If you want to show a different title than the one in the ActionObject
 	;                        TLS, pass it here.
 	; RETURNS:        true if we have both pieces of info, false if something is missing.
+	; NOTES:          Should only be called by child instances.
 	;---------
 	selectMissingInfo(ByRef value, ByRef subType, popupTitle := "") {
 		; ActionObjectType must be set by child to use this function.
@@ -151,8 +166,8 @@ class ActionObjectBase {
 			return true
 		
 		; Use a type-filtered Selector to get any missing info.
-		s := this.getTypeFilteredSelector(this.ActionObjectType) ; GDB TODO should getTypeFilteredSelector just move directly into here now that this is the central logic?
-		s.setDefaultOverrides({"VALUE":value}) ; 						  GDB TODO alternatively/additionally - should we just cache the type-filtered selector instance here?
+		s := this.getTypeSelector(this.ActionObjectType)
+		s.setDefaultOverrides({"VALUE":value})
 		if(popupTitle != "")
 			s.setTitle(popupTitle)
 		data := s.selectGui()
@@ -171,6 +186,9 @@ class ActionObjectBase {
 	
 	
 	; #PRIVATE#
+	
+	static typeSelectors := {} ; {ActionObjectType: Selector}
+	
 	
 	;---------
 	; DESCRIPTION:    Open provided link to the object.

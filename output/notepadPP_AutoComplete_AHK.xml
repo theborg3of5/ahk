@@ -42,6 +42,14 @@
                 <Param name="value" />
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectBase.ActionObjectType" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    What type of ActionObject the child class implements.
+							; NOTES:          Should be overridden by child class.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectBase.copyLink" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -86,6 +94,19 @@
 							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
 							;                 overridden by the child class.
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectBase.getTypeSelector" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
+							;                 choices to only those matching the given type.
+							; PARAMETERS:
+							;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
+							; RETURNS:        An ActionObject Selector instance, filtered to the given type.
+							; SIDE EFFECTS:   Populates type subscript in .typeSelectors if it doesn't yet exist.
+							;---------">
+                <Param name="type" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectBase.linkSelectedText" func="yes">
@@ -140,6 +161,24 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectBase.selectMissingInfo" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the given value or subType is missing, and if it is, prompt the
+							;                 user with a Selector instance (filtered to the child's type) to get the info.
+							; PARAMETERS:
+							;  value      (IO,REQ) - The core value, will be updated if the user changes it in the Selector popup.
+							;  subType    (IO,REQ) - The subType, will be populated with a new value if the user selects one.
+							;  popupTitle  (I,OPT) - If you want to show a different title than the one in the ActionObject
+							;                        TLS, pass it here.
+							; RETURNS:        true if we have both pieces of info, false if something is missing.
+							; NOTES:          Should only be called by child instances.
+							;---------">
+                <Param name="ByRef value" />
+                <Param name="ByRef subType" />
+                <Param name="popupTitle := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectCodeSearch" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -149,6 +188,14 @@
 							;---------">
                 <Param name="location" />
                 <Param name="locationType := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.ActionObjectType" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    What type of ActionObject the child class implements.
+							; NOTES:          Should be overridden by child class.
+							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.copyLink" func="yes">
@@ -194,6 +241,19 @@
 							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
 							;                 overridden by the child class.
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.getTypeSelector" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
+							;                 choices to only those matching the given type.
+							; PARAMETERS:
+							;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
+							; RETURNS:        An ActionObject Selector instance, filtered to the given type.
+							; SIDE EFFECTS:   Populates type subscript in .typeSelectors if it doesn't yet exist.
+							;---------">
+                <Param name="type" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.linkSelectedText" func="yes">
@@ -278,6 +338,24 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.selectMissingInfo" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the given value or subType is missing, and if it is, prompt the
+							;                 user with a Selector instance (filtered to the child's type) to get the info.
+							; PARAMETERS:
+							;  value      (IO,REQ) - The core value, will be updated if the user changes it in the Selector popup.
+							;  subType    (IO,REQ) - The subType, will be populated with a new value if the user selects one.
+							;  popupTitle  (I,OPT) - If you want to show a different title than the one in the ActionObject
+							;                        TLS, pass it here.
+							; RETURNS:        true if we have both pieces of info, false if something is missing.
+							; NOTES:          Should only be called by child instances.
+							;---------">
+                <Param name="ByRef value" />
+                <Param name="ByRef subType" />
+                <Param name="popupTitle := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectEMC2" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -291,6 +369,14 @@
                 <Param name="id" />
                 <Param name="ini := &quot;&quot;" />
                 <Param name="title := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.ActionObjectType" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    What type of ActionObject the child class implements.
+							; NOTES:          Should be overridden by child class.
+							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.copyLink" func="yes">
@@ -339,6 +425,19 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectEMC2.getTypeSelector" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
+							;                 choices to only those matching the given type.
+							; PARAMETERS:
+							;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
+							; RETURNS:        An ActionObject Selector instance, filtered to the given type.
+							; SIDE EFFECTS:   Populates type subscript in .typeSelectors if it doesn't yet exist.
+							;---------">
+                <Param name="type" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectEMC2.id" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -351,6 +450,22 @@
 							;---------
 							; DESCRIPTION:    INI for the object, from EMC2 subtypes in actionObject.tl
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEMC2.isThisType" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether the given string must be this type of ActionObject.
+							; PARAMETERS:
+							;  value (I,REQ) - The value to evaluate
+							;  ini   (O,OPT) - If the value is an EMC2 record, the INI
+							;  id    (O,OPT) - If the value is an EMC2 record, the ID
+							; RETURNS:        true/false - whether the given value must be an EMC2 object.
+							; NOTES:          Must be effectively static - this is called before we decide what kind of object to return.
+							;---------">
+                <Param name="value" />
+                <Param name="ByRef ini := &quot;&quot;" />
+                <Param name="ByRef id := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.linkSelectedText" func="yes">
@@ -413,6 +528,24 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectEMC2.selectMissingInfo" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the given value or subType is missing, and if it is, prompt the
+							;                 user with a Selector instance (filtered to the child's type) to get the info.
+							; PARAMETERS:
+							;  value      (IO,REQ) - The core value, will be updated if the user changes it in the Selector popup.
+							;  subType    (IO,REQ) - The subType, will be populated with a new value if the user selects one.
+							;  popupTitle  (I,OPT) - If you want to show a different title than the one in the ActionObject
+							;                        TLS, pass it here.
+							; RETURNS:        true if we have both pieces of info, false if something is missing.
+							; NOTES:          Should only be called by child instances.
+							;---------">
+                <Param name="ByRef value" />
+                <Param name="ByRef subType" />
+                <Param name="popupTitle := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectEMC2.standardEMC2String" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -439,6 +572,14 @@
 							;---------">
                 <Param name="descriptor" />
                 <Param name="descriptorType := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.ActionObjectType" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    What type of ActionObject the child class implements.
+							; NOTES:          Should be overridden by child class.
+							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.copyLink" func="yes">
@@ -517,6 +658,19 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.getTypeSelector" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
+							;                 choices to only those matching the given type.
+							; PARAMETERS:
+							;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
+							; RETURNS:        An ActionObject Selector instance, filtered to the given type.
+							; SIDE EFFECTS:   Populates type subscript in .typeSelectors if it doesn't yet exist.
+							;---------">
+                <Param name="type" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.linkSelectedText" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -569,6 +723,24 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.selectMissingInfo" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the given value or subType is missing, and if it is, prompt the
+							;                 user with a Selector instance (filtered to the child's type) to get the info.
+							; PARAMETERS:
+							;  value      (IO,REQ) - The core value, will be updated if the user changes it in the Selector popup.
+							;  subType    (IO,REQ) - The subType, will be populated with a new value if the user selects one.
+							;  popupTitle  (I,OPT) - If you want to show a different title than the one in the ActionObject
+							;                        TLS, pass it here.
+							; RETURNS:        true if we have both pieces of info, false if something is missing.
+							; NOTES:          Should only be called by child instances.
+							;---------">
+                <Param name="ByRef value" />
+                <Param name="ByRef subType" />
+                <Param name="popupTitle := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectHelpdesk" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -577,6 +749,14 @@
 							;  id (I,REQ) - ID of the request.
 							;---------">
                 <Param name="id" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.ActionObjectType" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    What type of ActionObject the child class implements.
+							; NOTES:          Should be overridden by child class.
+							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.copyLink" func="yes">
@@ -624,11 +804,37 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.getTypeSelector" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
+							;                 choices to only those matching the given type.
+							; PARAMETERS:
+							;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
+							; RETURNS:        An ActionObject Selector instance, filtered to the given type.
+							; SIDE EFFECTS:   Populates type subscript in .typeSelectors if it doesn't yet exist.
+							;---------">
+                <Param name="type" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.id" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Helpdesk request ID.
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.isThisType" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether the given string must be this type of ActionObject.
+							; PARAMETERS:
+							;  value (I,REQ) - The value to evaluate
+							;  id    (O,OPT) - If the value is a helpdesk ticket, the ID
+							; RETURNS:        true/false - whether the given value must be a helpdesk ticket.
+							;---------">
+                <Param name="value" />
+                <Param name="ByRef id := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.linkSelectedText" func="yes">
@@ -683,6 +889,24 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectHelpdesk.selectMissingInfo" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the given value or subType is missing, and if it is, prompt the
+							;                 user with a Selector instance (filtered to the child's type) to get the info.
+							; PARAMETERS:
+							;  value      (IO,REQ) - The core value, will be updated if the user changes it in the Selector popup.
+							;  subType    (IO,REQ) - The subType, will be populated with a new value if the user selects one.
+							;  popupTitle  (I,OPT) - If you want to show a different title than the one in the ActionObject
+							;                        TLS, pass it here.
+							; RETURNS:        true if we have both pieces of info, false if something is missing.
+							; NOTES:          Should only be called by child instances.
+							;---------">
+                <Param name="ByRef value" />
+                <Param name="ByRef subType" />
+                <Param name="popupTitle := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectPath" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -694,6 +918,14 @@
 							;---------">
                 <Param name="path" />
                 <Param name="pathType := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.ActionObjectType" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    What type of ActionObject the child class implements.
+							; NOTES:          Should be overridden by child class.
+							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.copyLink" func="yes">
@@ -715,17 +947,6 @@
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
 							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="ActionObjectPath.determinePathType" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Determine the type of the given path.
-							; PARAMETERS:
-							;  path (I,REQ) - The path itself.
-							; RETURNS:        The type of path, from PathType_* constants.
-							;---------">
-                <Param name="path" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.getLink" func="yes">
@@ -750,6 +971,32 @@
 							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
 							;                 overridden by the child class.
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.getTypeSelector" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
+							;                 choices to only those matching the given type.
+							; PARAMETERS:
+							;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
+							; RETURNS:        An ActionObject Selector instance, filtered to the given type.
+							; SIDE EFFECTS:   Populates type subscript in .typeSelectors if it doesn't yet exist.
+							;---------">
+                <Param name="type" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.isThisType" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether the given string must be this type of ActionObject.
+							; PARAMETERS:
+							;  value    (I,REQ) - The value to evaluate
+							;  pathType (O,OPT) - If the value is a path, the path type
+							; RETURNS:        true/false - whether the given value must be a path.
+							;---------">
+                <Param name="value" />
+                <Param name="ByRef pathType := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.linkSelectedText" func="yes">
@@ -832,6 +1079,24 @@
 							; DESCRIPTION:    URL
 							; GROUP:          Path types
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectPath.selectMissingInfo" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the given value or subType is missing, and if it is, prompt the
+							;                 user with a Selector instance (filtered to the child's type) to get the info.
+							; PARAMETERS:
+							;  value      (IO,REQ) - The core value, will be updated if the user changes it in the Selector popup.
+							;  subType    (IO,REQ) - The subType, will be populated with a new value if the user selects one.
+							;  popupTitle  (I,OPT) - If you want to show a different title than the one in the ActionObject
+							;                        TLS, pass it here.
+							; RETURNS:        true if we have both pieces of info, false if something is missing.
+							; NOTES:          Should only be called by child instances.
+							;---------">
+                <Param name="ByRef value" />
+                <Param name="ByRef subType" />
+                <Param name="popupTitle := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActiveX"/>

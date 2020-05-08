@@ -1,8 +1,8 @@
-#Include %A_LineFile%\..\actionObjectCodeSearch.ahk
-#Include %A_LineFile%\..\actionObjectEMC2.ahk
-#Include %A_LineFile%\..\actionObjectEpicStudio.ahk
-#Include %A_LineFile%\..\actionObjectHelpdesk.ahk
-#Include %A_LineFile%\..\actionObjectPath.ahk
+#Include actionObjectCodeSearch.ahk
+#Include actionObjectEMC2.ahk
+#Include actionObjectEpicStudio.ahk
+#Include actionObjectHelpdesk.ahk
+#Include actionObjectPath.ahk
 
 /* Class that takes some text representing an object, and allows the caller to do something with it. This class itself mostly redirects to the child ActionObject* classes, based on the input (and prompting the user). --=
 	

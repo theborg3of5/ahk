@@ -7,13 +7,9 @@
 		Possibly replace it with something based on RDP/Spotify command script, that interacts directly with Spotify instead of letting other things steal the media keys?
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (mainly to allow CDE)
 		Probably a new (optional) data element throughout ActionObject* (and a new column in actionObject.tls)
-	Consider changing the approach for hyperlinker a bit
-		Have OneNote, others that need special handling do it themselves somehow
-		Ideas:
-			Passing in a BoundFunc
-			Just having a function with the right name
-				Would require a mapping from window name to class where function lives
-			Have programs that need special handling call into the logic themselves and handle special logic
+			Do we want free-text input (to match on epicEnvironments TLS, presumably?)
+		Alternative idea: just have ActionObjectEpicStudio launch the epicEnvironments selector before it opens/links, so I can pick the environment
+			Wouldn't this be annoying to do all the time, though?
 	EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments

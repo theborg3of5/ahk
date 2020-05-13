@@ -42,6 +42,7 @@
 			OneTastic Macro Editor XML			ONENOTE.EXE					Onetastic Window				Edit XML
 			OneTastic Macro Editor				ONENOTE.EXE					Onetastic Window
 			Pidgin Buddy List						pidgin.exe					-									Buddy List
+			Zoom Meeting							Zoom.exe						ZPContentViewWndClass
 }
 
 ; Most general form of various windows (specifics above should override).

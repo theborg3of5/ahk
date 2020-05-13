@@ -14,7 +14,7 @@ startupFolder  := ahkRootPath "\source"
 mainAHKPath    := startupFolder "\main.ahk"
 
 copyPaths := {}
-copyPaths["..\template\includeCommon.ahk"] := userPath "\Documents\AutoHotkey\Lib\includeCommon.ahk"
+copyPaths["..\template\includeCommon.ahk"] := A_MyDocuments "\AutoHotkey\Lib\includeCommon.ahk"
 copyPaths["..\template\settings.ini"]      := ahkRootPath "\config\local\settings.ini"
 
 gitNames := []

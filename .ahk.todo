@@ -1,6 +1,7 @@
 # New Ideas
 	Support better hotkeys for zoom
 		Reset existing ones, those are what we'll remap to
+		Could we make use of the extra remote keyboard keys? Do they send something I can catch?
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
 		Possibly reconsider the 100-char limit - wouldn't wider make more sense?
 		Could take into account whether there would be only 1 small word moved down

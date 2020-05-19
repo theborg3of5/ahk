@@ -3,4 +3,6 @@
 	
 	!a::^+m ; Toggle mute
 	!v::^+o ; Toggle video
+	
+	!o::Send, ^, ; Settings
 #If

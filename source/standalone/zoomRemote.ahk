@@ -9,28 +9,40 @@ CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
 global isGalleryView := true ; Default is gallery view, at least in the meetings I frequent
 
-#IfWinActive, ahk_exe Zoom.exe ahk_class ZPContentViewWndClass
+;#IfWinActive, ahk_exe Zoom.exe ahk_class ZPContentViewWndClass
 	; Specific views, directly
-	F1::
-		Send, !{F1}
-		isGalleryView := false
+	!F1::
+	#d:: ; Desktop   (F1 on remote keyboard)
+		switchToSpeakerView()
 	return
-	F2::
-		Send, !{F2}
-		isGalleryView := true
+	!F2::
+	#^Backspace:: ; Task view (F2 on remote keyboard)
+		switchToGalleryView()
 	return
-
-	; Easier toggles with extra buttons
-	Launch_Media::toggleView()
-	Browser_Home::!a ; Toggle mute
+	
+	; Easier toggles using extra buttons
+	Launch_Media::!a ; Toggle mute
+	Browser_Home::toggleView()
 #IfWinActive
+
+switchToSpeakerView() {
+	global isGalleryView
+	
+	Send, !{F1}
+	isGalleryView := false
+}
+switchToGalleryView() {
+	global isGalleryView
+	
+	Send, !{F2}
+	isGalleryView := true
+}
 
 toggleView() {
 	global isGalleryView
-	isGalleryView := !isGalleryView
 	
 	if(isGalleryView)
-		Send, !F1
+		switchToSpeakerView()
 	else
-		Send, !F2
+		switchToGalleryView()
 }

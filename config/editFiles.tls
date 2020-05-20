@@ -12,6 +12,7 @@
 	Private values							priv				ahkPrivate\privates.tl
 	Programs									prog				programs.tl
 	Settings									s					local\settings.ini
+	Snapper ignore items					snap				ahkPrivate\snapperIgnoreItems.tls
 	Mapped drives							md					ahkPrivate\mappedDrives.tl
 	Windows									w | win			windows.tl
 	Windows Actions						wa | wina		windowActions.tl

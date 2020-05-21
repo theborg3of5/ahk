@@ -28,16 +28,26 @@ class Spotify {
 	;---------
 	; DESCRIPTION:    Show the current song's title and artist in a toast (if there's one playing right now).
 	; PARAMETERS:
-	;  idString (I,OPT) - The identifying string for Spotify's main window. Will be retrieved from
-	;                     .getMainWindowId() if not given.
+	;  idString    (I,OPT) - The identifying string for Spotify's main window. Will be retrieved from
+	;                        .getMainWindowId() if not given.
+	;  titleBefore (I,OPT) - If we just changed the title (like when we send a command), the old title.
+	;                        Will be used to display previous song info if we just paused.
 	;---------
-	showCurrentInfo(idString := "") {
+	showCurrentInfo(idString := "", titleBefore := "") {
 		if(idString = "")
 			idString := "ahk_id " this.getMainWindowId()
 		
 		title := WinGetTitle(idString)
-		if(!title.contains("-")) { ; No song information (presumably because we just paused or hit the end of a playlist)
-			this.showInfoToast("Paused")
+		if(!title.contains(" - ")) { ; No song information (presumably because we just paused or hit the end of a playlist)
+			; If we just came from a state with song info, show what it was (for when we paused)
+			if(titleBefore.contains(" - ")) {
+				artist := titleBefore.beforeString(" - ")
+				song   := titleBefore.afterString(" - ")
+				this.showInfoToast(song " [Paused]" "`n`n" artist)
+			} else {
+				this.showInfoToast("Paused")
+			}
+			
 			return
 		}
 		
@@ -87,7 +97,7 @@ class Spotify {
 		if(ErrorLevel = 1) ; Timed out
 			return
 		
-		this.showCurrentInfo(idString)
+		this.showCurrentInfo(idString, titleBefore)
 	}
 	
 	;---------

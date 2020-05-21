@@ -81,14 +81,7 @@ if(!useSlimMode) {
 
 t.close()
 
-if(useSlimMode) {
-	shouldRun := true
-} else {
-	MsgBox, 4, , Run now?
-	IfMsgBox Yes
-		shouldRun := true
-}
-if(shouldRun)
+if(useSlimMode || GuiLib.showConfirmationPopup("Run now?"))
 	Run(mainAHKPath, startupFolder)
 
 ExitApp

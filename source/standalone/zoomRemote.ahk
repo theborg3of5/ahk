@@ -9,10 +9,10 @@ CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
 global isGalleryView := true ; Default is gallery view, at least in the meetings I frequent
 
-;#IfWinActive, ahk_exe Zoom.exe ahk_class ZPContentViewWndClass
+#IfWinActive, ahk_exe Zoom.exe ahk_class ZPContentViewWndClass
 	; Specific views, directly
 	!F1::
-	#d:: ; Desktop   (F1 on remote keyboard)
+	#d::          ; Desktop (F1 on remote keyboard)
 		switchToSpeakerView()
 	return
 	!F2::

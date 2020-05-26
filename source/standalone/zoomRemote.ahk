@@ -22,6 +22,7 @@ global isGalleryView := true ; Default is gallery view, at least in the meetings
 	
 	; Easier toggles using extra buttons
 	Launch_Media::!a ; Toggle mute
+	!z::!v           ; Toggle video
 	Browser_Home::toggleView()
 #IfWinActive
 

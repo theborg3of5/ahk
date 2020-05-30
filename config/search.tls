@@ -7,6 +7,7 @@
 ; (SUBTYPE = <URL with %s for query>)
 ~SEARCH_TYPE.replaceWith(WEB) {
 		Google								g						https://www.google.com/search?q=%s
+		Google Maps							gmap | gmaps		https://www.google.com/maps/preview?q=%s
 		Gmail									gm						https://mail.google.com/mail/u/0/#search/%s
 		Youtube								yt						https://www.youtube.com/results?search_query=%s
 		Steam									st						https://store.steampowered.com/search/?term=%s

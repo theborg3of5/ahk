@@ -51,6 +51,7 @@ if(Config.contextIsWork) { ; Work-specific subs
 #Include excel.ahk
 #Include explorer.ahk
 #Include fastStoneImageViewer.ahk
+#Include gitHubDesktop.ahk
 #Include greenshot.ahk
 #Include hyperspace.ahk
 #Include internetExplorer.ahk

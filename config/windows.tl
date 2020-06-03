@@ -57,7 +57,7 @@
 			Explorer									explorer.exe				CabinetWClass
 			Firefox Portable						firefox.exe
 			Foobar									foobar2000.exe
-			GitHub									GitHubDesktop.exe			-									-														NO_PADDING
+			GitHub Desktop							GitHubDesktop.exe			-									-														NO_PADDING
 			Greenshot Capture						Greenshot.exe				-									Greenshot capture form
 			Greenshot Image Editor				Greenshot.exe				-									Greenshot image editor
 			GrepWin									grepWin.exe

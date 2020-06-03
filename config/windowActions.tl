@@ -16,7 +16,7 @@
 	EMC2 XDS Submit						-			-					HOME_END			CTRL_SHIFT
 	Explorer									MIN		OTHER
 	Explorer									MIN		-					-					-					-			-	WORK_VDI
-	GitHub									CLOSE
+	GitHub Desktop							CLOSE
 	GrepWin									CLOSE
 	KDiff										CLOSE
 	Messenger								MIN		-					-					-					-			-	HOME_DESKTOP

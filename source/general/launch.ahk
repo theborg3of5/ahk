@@ -100,7 +100,7 @@
 			if(!data)
 				return
 			
-			fullName := data["NAME_PREFIX"] data["NAME"]
+			fullName := data["NAME_OUTPUT_PREFIX"] data["NAME"]
 			combinedMessage := fullName.appendPiece(data["MESSAGE"], " - ")
 			
 			; Record field can contain DLG (no prefix), PRJ (P. prefix), or QAN (Q. prefix) IDs.

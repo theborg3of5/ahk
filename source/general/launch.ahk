@@ -33,13 +33,13 @@
 
 
 #If Config.contextIsWork
-	^!+d::Send, % selectTLGId().removeFromStart("P.")
+	^!+d:: Send, % selectTLGId().removeFromStart("P.").removeFromStart("Q.")
 	^!#d:: selectTLGActionObject().openWeb()
 	^!+#d::selectTLGActionObject().openEdit()
 	selectTLGId() {
-		s := new Selector("tlg.tls").setTitle("Select DLG/PRJ ID").overrideFieldsOff()
-		s.dataTableList.filterOutEmptyForColumn("DLG")
-		return s.selectGui("DLG")
+		s := new Selector("tlg.tls").setTitle("Select EMC2 Record ID").overrideFieldsOff()
+		s.dataTableList.filterOutEmptyForColumn("RECORD")
+		return s.selectGui("RECORD")
 	}
 	selectTLGActionObject() {
 		recId := selectTLGId()
@@ -49,6 +49,9 @@
 		if(recId.startsWith("P.")) {
 			recId := recId.removeFromStart("P.")
 			recINI := "PRJ"
+		} else if(recId.startsWith("Q.")) {
+			recId := recId.removeFromStart("Q.")
+			recINI := "QAN"
 		} else {
 			recINI := "DLG"
 		}
@@ -100,10 +103,21 @@
 			fullName := data["NAME_PREFIX"] data["NAME"]
 			combinedMessage := fullName.appendPiece(data["MESSAGE"], " - ")
 			
+			; Record field can contain DLG (no prefix), PRJ (P. prefix), or QAN (Q. prefix) IDs.
+			recId := data["RECORD"]
+			if(recId.startsWith("P."))
+				prjId := recId.removeFromStart("P.")
+			else if(recId.startsWith("Q."))
+				qanId := recId.removeFromStart("Q.")
+			else
+				dlgId := recId
+			
 			textToSend := Config.private["OUTLOOK_TLG_BASE"]
 			textToSend := textToSend.replaceTag("TLP",      data["TLP"])
 			textToSend := textToSend.replaceTag("CUSTOMER", data["CUSTOMER"])
-			textToSend := textToSend.replaceTag("DLG",      data["DLG"])
+			textToSend := textToSend.replaceTag("DLG",      dlgId)
+			textToSend := textToSend.replaceTag("PRJ",      prjId)
+			textToSend := textToSend.replaceTag("QAN",      qanId)
 			textToSend := textToSend.replaceTag("MESSAGE",  combinedMessage)
 			
 			if(Outlook.isTLGCalendarActive()) {

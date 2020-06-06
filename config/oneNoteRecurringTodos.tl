@@ -27,11 +27,11 @@
 	Schedule haircut											-			SAT				2
 	Periodic cleaning (small trash cans, kitchen)	-			SUN				3
 	
-	Clean bathrooms											-			SUN				2
-	Clean bathrooms											-			SUN				4
+	Clean master sinks										-			SAT				2
+	Clean all sinks											-			SAT				4
 	
-	Call Azzam grandparents									-			SAT				2
-	Call Borg grandparents									-			SAT				4
+	Call Azzam grandparents									-			SUN				2
+	Call Borg grandparents									-			SUN				4
 
 # Yearlies
 	Check various airline rewards points				-			SAT				1							JAN

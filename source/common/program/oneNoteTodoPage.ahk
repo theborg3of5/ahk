@@ -270,7 +270,7 @@ class OneNoteTodoPage {
 			if(i > 1)
 				Send, {Enter}
 			
-			Send, % item
+			SendRaw, % item
 		}
 	}
 	; #END#

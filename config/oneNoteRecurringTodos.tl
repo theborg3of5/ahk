@@ -27,8 +27,8 @@
 	Schedule haircut											-			SAT				2
 	Periodic cleaning (small trash cans, kitchen)	-			SUN				3
 	
-	Clean master sinks										-			SAT				2
-	Clean all sinks											-			SAT				4
+	Clean all sinks											-			SAT				1
+	Clean master sinks										-			SAT				3
 	
 	Call Azzam grandparents									-			SUN				2
 	Call Borg grandparents									-			SUN				4

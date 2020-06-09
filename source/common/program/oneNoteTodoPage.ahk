@@ -95,7 +95,7 @@ class OneNoteTodoPage {
 		Send, ^!m                  ; Move or copy page
 		WinWaitActive, Move or Copy Pages
 		Sleep, 500                 ; Wait a half second for the popup to be input-ready
-		Send, {Down 5}             ; Select first section from first notebook (bypassing "Recent picks" section)
+		Send, Do                   ; Search for "Do" notebook, should automatically select first result (which should be the one we want)
 		Send, !c                   ; Copy button
 		WinWaitClose, Move or Copy Pages
 		

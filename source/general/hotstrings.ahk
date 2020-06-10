@@ -66,6 +66,7 @@
 	::heir'l::hierarchical
 	::auth'n::authorization
 	::ass'n::association
+	::assoc'n::association
 	::qai::QA Instructions
 	
 	:?:sync'ly::synchronously

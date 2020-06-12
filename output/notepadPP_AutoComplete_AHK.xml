@@ -5962,10 +5962,13 @@
 							;---------
 							; DESCRIPTION:    Show the current song's title and artist in a toast (if there's one playing right now).
 							; PARAMETERS:
-							;  idString (I,OPT) - The identifying string for Spotify's main window. Will be retrieved from
-							;                     .getMainWindowId() if not given.
+							;  idString    (I,OPT) - The identifying string for Spotify's main window. Will be retrieved from
+							;                        .getMainWindowId() if not given.
+							;  titleBefore (I,OPT) - If we just changed the title (like when we send a command), the old title.
+							;                        Will be used to display previous song info if we just paused.
 							;---------">
                 <Param name="idString := &quot;&quot;" />
+                <Param name="titleBefore := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="Sqrt" func="yes">

@@ -15,7 +15,7 @@
 #If
 
 ; Mail folders
-#If Config.isWindowActive("Outlook") && (Outlook.isCurrentScreenMail() || Outlook.isCurrentScreenMailMessage())
+#If Config.isWindowActive("Outlook") && (Outlook.isCurrentScreenMail() || Outlook.isMailMessagePopupActive())
 	; Copy current message title to clipboard
 	!c::Outlook.copyCurrentMessageTitle()
 	

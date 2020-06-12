@@ -32,7 +32,7 @@ class Outlook {
 	; DESCRIPTION:    Determine whether the current window is a mail message popup
 	; RETURNS:        The window ID/false
 	;---------
-	isCurrentScreenMailMessage() {
+	isMailMessagePopupActive() {
 		settings := new TempSettings().titleMatchMode(TitleMatchMode.Contains)
 		isMailMessage := WinActive("- Message (")
 		settings.restore()
@@ -68,7 +68,9 @@ class Outlook {
 	; #PRIVATE#
 	
 	; The ClassNN for the control that contains the subject of the message. Should be the same for inline and popped-out messages.
-	static ClassNN_MailSubject := "RichEdit20WPT7"
+	static ClassNN_MailSubject_View        := "RichEdit20WPT7" ; View has the same ClassNN for both inline and popup
+	static ClassNN_MailSubject_Edit_Inline := "RichEdit20WPT20"
+	static ClassNN_MailSubject_Edit_Popup  := "RichEdit20WPT4"
 	
 	; Folder names for different areas
 	static TLGFolder := "TLG"
@@ -96,7 +98,14 @@ class Outlook {
 	; RETURNS:        The title, cleaned up (RE:/FW: and any other odd characters removed)
 	;---------
 	getCurrentMessageTitle() {
-		title := ControlGetText(this.ClassNN_MailSubject, "A")
+		title := ControlGetText(this.ClassNN_MailSubject_View, "A")
+		if(title = "") {
+			if(this.isMailMessagePopupActive())
+				title := ControlGetText(this.ClassNN_MailSubject_Edit_Popup, "A")
+			else
+				title := ControlGetText(this.ClassNN_MailSubject_Edit_Inline, "A")
+		}
+		
 		if(title = "") {
 			new ErrorToast("Copy title failed", "Could not get title from message control").showMedium()
 			return

@@ -7,7 +7,7 @@
 	All current Epic environments		allenv			ahkPrivate\allCurrentEpicEnvironments.txt
 	Games										g					games.tl
 	Hyperlink windows						link				hyperlinkWindows.tl
-	OneNote recurring todos				todo				oneNoteRecurringTodos.tl
+	OneNote recurring todos				todo				ahkPrivate\oneNoteRecurringTodos.tl
 	Paths										path				paths.tl
 	Private values							priv				ahkPrivate\privates.tl
 	Programs									prog				programs.tl

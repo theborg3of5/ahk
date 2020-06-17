@@ -1,4 +1,6 @@
 # New Ideas
+	VPN resize option seems like it has to be relative to middle monitor - should it?
+		If I want it to be relative to the monitor, do I need to use one of the special values instead?
 	Consider turning backtick key into a new window action - I'm using it as an escape replacement in a number of places now
 		Messenger
 		GitHub Desktop

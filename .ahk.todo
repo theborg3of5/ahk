@@ -5,14 +5,6 @@
 		Messenger
 		GitHub Desktop
 		...
-	Date/time/instant/DTE handler
-		Go from:
-			Date > DTE
-			DTE > Date
-			Date + time > instant (probably the trickiest to parse)
-				Ideally support just date doing this too (to proper midnight)
-			Instant > date + time
-			Instant > DTE
 	With new EMC2 version, do I need to add more specifications (probably ahk classes?) to various EMC2 windows?
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
 		Possibly reconsider the 100-char limit - wouldn't wider make more sense?

@@ -137,7 +137,7 @@ class AHKCodeLib {
 	;                    extra indents
 	;                    bullet and trailing space if previous line had it
 	;---------
-	getNextDocLineIndent(line, numExtraIndents) {
+	getNextDocLineIndent(line, numExtraIndents := 0) {
 		line := line.clean() ; Drop (and ignore) any leading/trailing whitespace and odd characters
 		line := line.removeFromStart(";") ; Trim off the starting comment char
 		

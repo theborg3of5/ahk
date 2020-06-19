@@ -1116,6 +1116,17 @@
                 <Param name="varList" />
             </Overload>
         </KeyWord>
+        <KeyWord name="AHKCodeLib.generateDocHeader" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Generate a documentation header based on the definition line provided.
+							; PARAMETERS:
+							;  defLine (I,REQ) - The definition line for the function to document, with the name and parameters.
+							; RETURNS:        The full text of the documentation header to insert.
+							;---------">
+                <Param name="defLine" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="AHKCodeLib.generateHeaderWithParts" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -1145,17 +1156,6 @@
                 <Param name="defLine" />
                 <Param name="ByRef name := &quot;&quot;" />
                 <Param name="ByRef paramsAry := &quot;&quot;" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="AHKCodeLib.getDocHeader" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Generate a documentation header based on the definition line provided.
-							; PARAMETERS:
-							;  defLine (I,REQ) - The definition line for the function to document, with the name and parameters.
-							; RETURNS:        The full text of the documentation header to insert.
-							;---------">
-                <Param name="defLine" />
             </Overload>
         </KeyWord>
         <KeyWord name="AHKCodeLib.getNextDocLineIndent" func="yes">

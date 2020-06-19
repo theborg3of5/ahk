@@ -105,7 +105,7 @@ class NotepadPlusPlus {
 		defLine := SelectLib.getText().clean()
 		Send, {Up}
 		
-		SendRaw, % AHKCodeLib.getDocHeader(defLine)
+		SendRaw, % AHKCodeLib.generateDocHeader(defLine)
 	}
 	
 	;---------

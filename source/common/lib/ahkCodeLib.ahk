@@ -14,7 +14,7 @@ class AHKCodeLib {
 	;  defLine (I,REQ) - The definition line for the function to document, with the name and parameters.
 	; RETURNS:        The full text of the documentation header to insert.
 	;---------
-	getDocHeader(defLine) {
+	generateDocHeader(defLine) {
 		; Determine if it's a function/property or just a class member.
 		if(defLine.containsAnyOf(["(", "[", ":="], match)) {
 			if(match = ":=") ; We found the equals before any opening paren/bracket

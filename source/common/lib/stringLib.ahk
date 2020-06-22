@@ -17,6 +17,23 @@ class StringLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Determine whether the given string is empty or contains only whitespace.
+	; PARAMETERS:
+	;  stringToCheck (I,REQ) - The string to analyze.
+	; RETURNS:        true if the string has nothing or nothing but whitespace.
+	;---------
+	isNullOrWhitespace(stringToCheck) {
+		if(stringToCheck = "")
+			return true
+		
+		cleanedString := stringToCheck.withoutWhitespace()
+		if(cleanedString = "")
+			return true
+		
+		return false
+	}
+	
+	;---------
 	; DESCRIPTION:    Determine how many spaces there are at the beginning of a string.
 	; PARAMETERS:
 	;  line (I,REQ) - The line to count spaces for.

@@ -1174,7 +1174,7 @@
 							;                    bullet and trailing space if previous line had it
 							;---------">
                 <Param name="line" />
-                <Param name="numExtraIndents" />
+                <Param name="numExtraIndents := 0" />
             </Overload>
         </KeyWord>
         <KeyWord name="AHKCodeLib.SPACES_PER_TAB" func="yes">
@@ -6644,6 +6644,17 @@
 							;---------">
                 <Param name="textBlock" />
                 <Param name="numSpaces" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringLib.isNullOrWhitespace" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether the given string is empty or contains only whitespace.
+							; PARAMETERS:
+							;  stringToCheck (I,REQ) - The string to analyze.
+							; RETURNS:        true if the string has nothing or nothing but whitespace.
+							;---------">
+                <Param name="stringToCheck" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringLib.padCenter" func="yes">

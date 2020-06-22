@@ -68,9 +68,9 @@ class Outlook {
 	; #PRIVATE#
 	
 	; The ClassNN for the control that contains the subject of the message. Should be the same for inline and popped-out messages.
-	static ClassNN_MailSubject_View        := "RichEdit20WPT7" ; View has the same ClassNN for both inline and popup
-	static ClassNN_MailSubject_Edit_Inline := "RichEdit20WPT20"
-	static ClassNN_MailSubject_Edit_Popup  := "RichEdit20WPT4"
+	static ClassNN_MailSubject_View   := "RichEdit20WPT7"  ; View has the same ClassNN for both inline and popup
+	static ClassNN_MailSubject_Edit_1 := "RichEdit20WPT20" ; What we usually get inline (but not always)
+	static ClassNN_MailSubject_Edit_2 := "RichEdit20WPT4"  ; Generally what we get in the popup, but sometimes inline too
 	
 	; Folder names for different areas
 	static TLGFolder := "TLG"
@@ -99,11 +99,14 @@ class Outlook {
 	;---------
 	getCurrentMessageTitle() {
 		title := ControlGetText(this.ClassNN_MailSubject_View, "A")
-		if(title = "") {
-			if(this.isMailMessagePopupActive())
-				title := ControlGetText(this.ClassNN_MailSubject_Edit_Popup, "A")
-			else
-				title := ControlGetText(this.ClassNN_MailSubject_Edit_Inline, "A")
+		if(StringLib.isNullOrWhitespace(title)) {
+			if(this.isMailMessagePopupActive()) {
+				title := ControlGetText(this.ClassNN_MailSubject_Edit_2, "A")
+			} else {
+				title := ControlGetText(this.ClassNN_MailSubject_Edit_1, "A")
+				if(StringLib.isNullOrWhitespace(title)) ; Try the other control ID if we don't get it from what we expect - sometimes inline uses the popup control ID.
+					title := ControlGetText(this.ClassNN_MailSubject_Edit_2, "A")
+			}
 		}
 		
 		if(title = "") {

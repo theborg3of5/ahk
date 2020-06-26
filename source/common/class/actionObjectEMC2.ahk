@@ -137,8 +137,10 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	; NOTES:          This logic is not taken into account by ActionObject when it's trying to determine the type.
 	;---------
 	cleanValue(value) {
-		; Email subject case: date change notifications
-		value := value.removeFromStart("Date change notification for ")
+		; Email subject handling
+		value := value.removeFromStart("Date change notification for ") ; Date change notifications
+		if(value.startsWith("PRJ Readiness  "))
+			value := value.replaceOne("PRJ Readiness  ", "PRJ ")
 		
 		return value
 	}

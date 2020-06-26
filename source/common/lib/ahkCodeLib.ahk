@@ -126,27 +126,22 @@ class AHKCodeLib {
 	
 	;---------
 	; DESCRIPTION:    Figure out how much indentation is needed for the next line of documentation,
-	;                 based on the current line.
+	;                 based on the given line.
 	; PARAMETERS:
 	;  line            (I,REQ) - The line that we're trying to determine indentation after.
-	;  numExtraIndents (I,OPT) - How many extra indents to do versus the start of the current line.
-	;                            Defaults to 0 (same level as the current line).
 	; RETURNS:        The indentation to use:
 	;                    ";"
 	;                    align with previous line
 	;                    extra indents
 	;                    bullet and trailing space if previous line had it
 	;---------
-	getNextDocLineIndent(line, numExtraIndents := 0) {
+	getNextDocLineIndent(line) {
 		line := line.clean() ; Drop (and ignore) any leading/trailing whitespace and odd characters
 		line := line.removeFromStart(";") ; Trim off the starting comment char
 		
 		; Leading spaces after the comment
 		numSpaces := StringLib.countLeadingSpaces(line)
 		line := line.withoutWhitespace()
-		
-		; Add in any extra indents
-		numSpaces += numExtraIndents * this.SPACES_PER_TAB
 		
 		; Keyword line
 		if(line.startsWithAnyOf(this.HeaderKeywords, matchedKeyword)) {
@@ -155,26 +150,20 @@ class AHKCodeLib {
 			line := line.removeFromStart(matchedKeyword ":")
 			numSpaces += StringLib.countLeadingSpaces(line)
 			
-			return ";" StringLib.getSpaces(numSpaces)
+			return StringLib.getSpaces(numSpaces)
 		}
 		
 		; Parameter line - add the position of the "(I,REQ) - "-style description - 1 + its length.
 		paramTypePos := line.containsRegEx("P)\((I|O|IO),(OPT|REQ)\) - ", matchedTextLen)
 		if(paramTypePos) {
-			paramNameLength := paramTypePos - 1 ; Includes the space between the name and the type as well
+			paramNameLength := paramTypePos - 1 ; Includes the space between the param name and ( as well
 			numSpaces += paramNameLength + matchedTextLen
 			
-			return ";" StringLib.getSpaces(numSpaces)
-		}
-		
-		; Line that starts with some sort of bullet - include the bullet in the next line.
-		bullets := ["*", "-"]
-		if(line.startsWithAnyOf(bullets, matchedBullet)) {
-			return ";" StringLib.getSpaces(numSpaces) matchedBullet " "
+			return StringLib.getSpaces(numSpaces)
 		}
 		
 		; Floating line - just the same spaces we stripped off at the start.
-		return ";" StringLib.getSpaces(numSpaces)
+		return StringLib.getSpaces(numSpaces)
 	}
 	
 	;---------

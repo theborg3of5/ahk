@@ -29,11 +29,8 @@ class NotepadPlusPlus {
 	; DESCRIPTION:    Insert a newline at the cursor, indented to the same level as the current line.
 	;                 Also takes AHK headers into account, indenting to the proper level if you're
 	;                 within one.
-	; PARAMETERS:
-	;  numExtraIndents (I,OPT) - How many extra indents to do versus the start of the current line.
-	;                            Defaults to 0 (same level as the current line).
 	;---------
-	insertIndentedNewline(numExtraIndents := 0) {
+	insertIndentedNewline() {
 		; Read in both sides of the current line - the left will help us find where the indent is, the right is what we're moving.
 		Send, {Shift Down}{Home}{Shift Up}
 		lineBefore := SelectLib.getText()
@@ -52,10 +49,10 @@ class NotepadPlusPlus {
 		if(lineAfter.startsWith(A_Space))
 			Send, {Delete}
 		
-		indent := AHKCodeLib.getNextDocLineIndent(lineBefore, numExtraIndents)
+		indent := AHKCodeLib.getNextDocLineIndent(lineBefore)
 		
 		Send, {Enter} ; Start the new line - assuming that Notepad++ will put us at the same indentation level (before the semicolon) as the previous row.
-		Send, % indent
+		Send, % ";" indent
 	}
 	
 	;---------

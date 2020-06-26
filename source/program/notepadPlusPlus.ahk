@@ -14,7 +14,6 @@
 	^+o::NotepadPlusPlus.openCurrentParentFolder()
 	
 	^Enter:: NotepadPlusPlus.insertIndentedNewline() ; Add an indented newline
-	^+Enter::NotepadPlusPlus.insertIndentedNewline(1) ; Add an indented newline + 1 indent
 	
 	; AHK debug strings
 	:X:dbpop::  NotepadPlusPlus.sendDebugCodeString("Debug.popup")      ; Debug popup

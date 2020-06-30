@@ -6,6 +6,8 @@
 		GitHub Desktop
 		Teams
 		Telegram
+	Consider making use of #Requires <version>: https://www.autohotkey.com/docs/commands/_Requires.htm
+	Consider adding #Warn for unreachable code: https://www.autohotkey.com/docs/commands/_Warn.htm#Unreachable
 	With new EMC2 version, do I need to add more specifications (probably ahk classes?) to various EMC2 windows?
 	Hotkey for automatically breaking up documentation lines to 100 chars wide
 		Possibly reconsider the 100-char limit - wouldn't wider make more sense?

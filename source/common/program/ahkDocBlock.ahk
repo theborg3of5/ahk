@@ -15,18 +15,22 @@ class AHKDocBlock {
 	;  - staticMembers
 	;  - nonStaticMembers
 	;  - properties
-	rewrappedString {
-		get {
-			return ""
-		}
+	;  - __New()/Init()
+	__New(docString := "") {
+		if(docString != "")
+			this.initFromDocString(docString)
 	}
 	
-	;  - __New()/Init()
-	__New(docString) {
+	initFromSelection() {
+		docString := this.getDocFromSelection()
 		this.initFromDocString(docString)
+		return this
 	}
 	
 	;  - otherFunctions
+	getString() {
+		return this.rebuildDocString()
+	}
 	
 	; #INTERNAL#
 	
@@ -48,6 +52,32 @@ class AHKDocBlock {
 	unwrappedContent := "" ; The actual content, collapsed to a single line.
 	
 	;  - functions
+	
+	getDocFromSelection() {
+		selection := SelectLib.getText()
+		
+		; Multiple lines - we can pull anything not selected in the first line, from the second line, and should since we don't know which direction we selected from (so trying to reselect might just mess with the last line)
+		if(selection.contains("`n"))
+			return selection
+		
+		; The line starts with indent - assume the user got it all.
+		if(selection.startsWith("`t"))
+			return selection
+		
+		; We can't get the indent from the current selection (which may be nothing), so reselect the whole line (including the indent).
+		Send, {End 2}{Shift Down}{Home 2}{Shift Up} ; Select the entire line, including indent (End twice to get to end of wrapped line, Home twice to try and get indent too).
+		selection := SelectLib.getText()
+		
+		; We got the indent on the first try (non-wrapped line)
+		if(selection.startsWith("`t"))
+			return selection
+		
+		; Either a wrapped string, or no indent at start - either way, we can select one more chunk with Home and have everything.
+		Send, {Shift Down}{Home}{Shift Up}
+		selection := SelectLib.getText()
+		
+		return selection
+	}
 	
 	initFromDocString(docString) {
 		; ["OUTER_FIRST"] ; Leading indent, comment character (;), and leading spaces. Must be tracked separately for multi-line cases where entire first line not selected (so we don't add extra indents and such when it's already there).
@@ -110,9 +140,22 @@ class AHKDocBlock {
 			
 			this.unwrappedContent := this.unwrappedContent.appendPiece(line, " ")
 		}
+	}
+	
+	
+	rebuildDocString() {
+		wrappedContentLines := StringLib.wrapToWidth(this.unwrappedContent, 80) ; GDB TODO up to at least 100 once done testing
 		
-		; Debug.popup("docString",docString, "outerFirst","x" outerFirst "x", "outerRest","x" outerRest "x", "innerFirst","x" innerFirst "x", "innerRest","x" innerRest "x", "content",content)
-		; return {"OUTER_FIRST":outerFirst, "OUTER_REST":outerRest, "INNER_FIRST":innerFirst, "INNER_REST":innerRest, "CONTENT":content}
+		docString := ""
+		For i,line in wrappedContentLines {
+			if(i = 1)
+				line := this.outerFirst this.innerFirst line
+			else
+				line := this.outerRest this.innerRest line
+			docString := docString.appendLine(line)
+		}
+		
+		return docString
 	}
 	
 	

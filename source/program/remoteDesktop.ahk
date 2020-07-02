@@ -7,6 +7,8 @@ $!Esc::
 return
 
 #If Config.isWindowActive("Remote Desktop")
+	NumLock::return ; Divert NumLock on the base machine - otherwise it goes off on an infinite loop of trying to restore it for AlwaysOn setting.
+	
 	; Allow escape from remote desktop with hotkey (for computer you're remoting from).
 	!CapsLock::	; One of a few keys that the host still captures.
 		Suspend, Off

@@ -189,6 +189,48 @@ class StringLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Wrap the given string to the provided dimensions.
+	; PARAMETERS:
+	;  inString             (I,REQ) - The string (without newlines) to wrap.
+	;  goalWidth            (I,REQ) - The width (in characters) that we should shoot for.
+	;  allowedFinalOverhang (I,OPT) - The number of characters of overhang that's allowed on the final line,
+	;                                 to avoid an additional line containing only a single short word.
+	; RETURNS:        The same string, wrapped to the goal width with newlines.
+	;---------
+	wrapToWidth(inString, goalWidth, allowedFinalOverhang := 5) {
+		maxLastLineWidth := goalWidth + allowedFinalOverhang
+		words := inString.split(" ")
+		
+		line := ""
+		wrappedLines := []
+		For i,word in words {
+			potentialLine := line.appendPiece(word, " ")
+			lineLength := potentialLine.length()
+			
+			; We haven't exceeded our desired length yet. Just add the word and move on.
+			if(lineLength <= goalWidth) {
+				line := potentialLine
+				Continue
+			}
+			
+			; We've exceeded the goal length, but this is the last word we need to add -
+			; allow it to stay on the same line if the new length will be within goal +
+			; allowed overhang.
+			if(lineLength <= maxLastLineWidth && i = words.length()) {
+				line := potentialLine
+				Continue
+			}
+			
+			; Save off our previous line and start the next one.
+			wrappedLines.push(line)
+			line := word
+		}
+		wrappedLines.push(line) ; Get the last line as we finish
+		
+		return wrappedLines
+	}
+	
+	;---------
 	; DESCRIPTION:    Find the "overlap" between two strings - that is, everything (from the start)
 	;                 that's the same in both of them.
 	; PARAMETERS:

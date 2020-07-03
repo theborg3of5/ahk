@@ -1,3 +1,4 @@
+#Include ahkDocBlock.ahk
 class NotepadPlusPlus {
 	; #INTERNAL#
 	

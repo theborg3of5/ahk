@@ -8,6 +8,19 @@
 		Is there something similar we could (optionally, somehow?) replace spaces with?
 			Maybe the optional is just when there's more than 1 in a row?
 	Consider updating the header stuff in AHKCodeLib to use new AHKDocBlock class
+	New idea: a TLS of useful unicode symbols
+		Examples: ✗ (U+2717), ✓ (U+2713), arrows?
+		Could specify in the file using the unicode code if needed
+			Ideally still include the code somewhere if not
+		Name should include the symbol, like one of these:
+			✓ - Check mark
+			✓ (Check mark)
+			Check mark (✓)
+			Check mark - ✓
+			✓ - Check mark (U+2713)
+			✓ (Check mark - U+2713)
+			Check mark (✓ - U+2713)
+			Check mark - ✓ (U+2713)
 	Consider turning backtick key into a new window action - I'm using it as an escape replacement in a number of places now
 		Messenger
 		GitHub Desktop

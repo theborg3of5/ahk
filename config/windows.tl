@@ -65,7 +65,7 @@
 			Internet Explorer						IEXPLORE.EXE
 			KDiff										kdiff3.exe					-									- KDiff3
 			Launchy									Launchy.exe
-			Messenger								Messenger.exe				-									Messenger:											NO_PADDING
+			Messenger								Messenger.exe				-									Messenger											NO_PADDING		EXACT
 			Notepad									notepad.exe
 			Notepad++								notepad++.exe				Notepad++
 			OneNote									ONENOTE.EXE					Framework::CFrame				-														NO_PADDING

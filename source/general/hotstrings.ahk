@@ -52,6 +52,7 @@
 	::assocition::association
 	::valiation::validation
 	::verpleedag::verpleegdag
+	::helptext::help text
 }
 
 { ; Expansions

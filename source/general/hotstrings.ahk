@@ -53,6 +53,7 @@
 	::valiation::validation
 	::verpleedag::verpleegdag
 	::helptext::help text
+	::precendence::precedence
 }
 
 { ; Expansions

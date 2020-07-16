@@ -190,3 +190,31 @@ class AHKDocBlock {
 	}
 	; #END#
 }
+
+; Test cases: --=
+; This is a short, single line with no indent.
+
+; This is a short, single line with no indent, that will nonetheless need to wrap because it's just so long.
+	
+	; This is a short, single line.
+	
+	; This is a group of short lines
+	; that seem to have been somewhat
+	; over-wrapped.
+	
+	; This is such a long line of documentation, isn't it? Wow it just keeps going for days and days...
+	
+	; This is such a long line of documentation, isn't it? It even wraps around in a single screen in notepad, look at it wrap and wrap and go on and on...look at it wrap and wrap and go on and on...look at it wrap and wrap and go on and on...look at it wrap and wrap and go on and on...
+	
+	; This is a set of long lines that weren't wrapped quite propertly to begin with, but at
+	; least they tried?
+	
+	;---------
+	; DESCRIPTION:    This will be a rather long description, that just keeps going and just keeps going, and just keeps going and just keeps going, you know?
+	; PARAMETERS:
+	;  inString             (I,REQ) - This will be a short parameter description
+	;  goalWidth            (I,REQ) - This will be a longer parameter description, which also keeps going, and going, and going for days upon days.
+	;  allowedFinalOverhang (I,OPT) - This will be a longer parameter description,
+	;                                 that has already been wrapped, but not very well - too short at the first line, and too long on the last.
+	;---------
+; =--

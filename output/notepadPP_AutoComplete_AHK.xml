@@ -1158,29 +1158,52 @@
                 <Param name="ByRef paramsAry := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="AHKCodeLib.getNextDocLineIndent" func="yes">
-            <Overload retVal="" descr="
+        <KeyWord name="AHKCodeLib.HeaderKeywords" func="yes">
+            <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Figure out how much indentation is needed for the next line of documentation,
-							;                 based on the current line.
-							; PARAMETERS:
-							;  line            (I,REQ) - The line that we're trying to determine indentation after.
-							;  numExtraIndents (I,OPT) - How many extra indents to do versus the start of the current line.
-							;                            Defaults to 0 (same level as the current line).
-							; RETURNS:        The indentation to use:
-							;                    &quot;;&quot;
-							;                    align with previous line
-							;                    extra indents
-							;                    bullet and trailing space if previous line had it
+							; DESCRIPTION:    All of the keywords possibly contained in the documentation header, in the order they should be shown in.
+							; NOTES:          NPP-* and GROUP are used for auto-completion/syntax highlighting generation
 							;---------">
-                <Param name="line" />
-                <Param name="numExtraIndents := 0" />
             </Overload>
         </KeyWord>
         <KeyWord name="AHKCodeLib.SPACES_PER_TAB" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    How many spaces are treated as a tab for indentation purposes.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="AHKDocBlock" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new representation of a block of documentation.
+							; PARAMETERS:
+							;  docString (I,REQ) - The block of documentation to process.
+							;---------">
+                <Param name="docString := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="AHKDocBlock.getWrappedString" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrap the content and recombine it with our various bits of indentation to create our finished doc string.
+							; RETURNS:        The wrapped and indented string for this documentation block
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="AHKDocBlock.initFromSelection" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Initialize this class using the selection, rather than passing in a string value to the constructor.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="AHKDocBlock.rewrapSelection" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Replace the selected documentation block (and potentially a little of its surroundings) with a
+							;                 rewrapped version of the same.
 							;---------">
             </Overload>
         </KeyWord>
@@ -6672,6 +6695,22 @@
                 <Param name="textToCenter" />
                 <Param name="goalLength" />
                 <Param name="padChar := &quot; &quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringLib.wrapToWidth" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrap the given string to the provided dimensions.
+							; PARAMETERS:
+							;  inString             (I,REQ) - The string (without newlines) to wrap.
+							;  goalWidth            (I,REQ) - The width (in characters) that we should shoot for.
+							;  allowedFinalOverhang (I,OPT) - The number of characters of overhang that's allowed on the final line,
+							;                                 to avoid an additional line containing only a single short word.
+							; RETURNS:        The same string, wrapped to the goal width with newlines.
+							;---------">
+                <Param name="inString" />
+                <Param name="goalWidth" />
+                <Param name="allowedFinalOverhang := 5" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringLower" func="no">

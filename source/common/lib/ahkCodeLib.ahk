@@ -9,6 +9,12 @@ class AHKCodeLib {
 	static SPACES_PER_TAB := 3
 	
 	;---------
+	; DESCRIPTION:    All of the keywords possibly contained in the documentation header, in the order they should be shown in.
+	; NOTES:          NPP-* and GROUP are used for auto-completion/syntax highlighting generation
+	;---------
+	static HeaderKeywords := ["DESCRIPTION", "PARAMETERS", "RETURNS", "SIDE EFFECTS", "NOTES", "GROUP", "NPP-DEF-LINE", "NPP-RETURNS"]
+	
+	;---------
 	; DESCRIPTION:    Generate a documentation header based on the definition line provided.
 	; PARAMETERS:
 	;  defLine (I,REQ) - The definition line for the function to document, with the name and parameters.
@@ -162,9 +168,6 @@ class AHKCodeLib {
 	
 	
 	; #PRIVATE#
-	
-	; All of the keywords possibly contained in the documentation header, in the order they should be shown in.
-	static HeaderKeywords := ["DESCRIPTION", "PARAMETERS", "RETURNS", "SIDE EFFECTS", "NOTES", "GROUP", "NPP-DEF-LINE", "NPP-RETURNS"] ; NPP-* and GROUP are used for auto-completion/syntax highlighting generation
 	
 	static HeaderKeywordIndentStop := 18 ; How many characters over we should be from the start of the line (after indentation) for header values.
 	

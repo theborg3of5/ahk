@@ -5,8 +5,10 @@
 		Probably prefer the actual expression over the label if they differ? So just read the expression directly?
 		{Home} twice gets us to the start of a wrapped line in notepad++
 	DebugPopup - could we replace tabs with a tab-looking arrow, like notepad++, word, etc. use?
+		Could we handle it such that it's the same width as an actual tab (3 spaces for me in notepad++)?
 		Is there something similar we could (optionally, somehow?) replace spaces with?
 			Maybe the optional is just when there's more than 1 in a row?
+			Use case: ahkDocBlock indent bits
 	Consider updating the header stuff in AHKCodeLib to use new AHKDocBlock class
 	New idea: a TLS of useful unicode symbols
 		Examples: ✗ (U+2717), ✓ (U+2713), arrows?

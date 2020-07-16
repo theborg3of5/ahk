@@ -14,7 +14,7 @@
 	^+o::NotepadPlusPlus.openCurrentParentFolder()
 	
 	; Redo the indentation for the selected documentation lines
-	^Enter::new AHKDocBlock().reindentSelection()
+	^Enter::new AHKDocBlock().rewrapSelection()
 	
 	; AHK debug strings
 	:X:dbpop::  NotepadPlusPlus.sendDebugCodeString("Debug.popup")      ; Debug popup

@@ -1,63 +1,80 @@
-/* GDB TODO --=
+/* Class representing a block of documentation in AHK code, in Notepad++. --=
 	
 	Example Usage
-;		GDB TODO
-	
-	GDB TODO
-		Update auto-complete and syntax highlighting notepad++ definitions
+;		block := new AHKDocBlock().initFromSelection()
+;		wrappedDoc := block.getWrappedString() ; Wrapped version of the selected documentation block
+
+;		new AHKDocBlock().rewrapSelection() ; Selects whole line if needed, then redoes wrapping, maintaining indentation appropriately
 	
 */ ; =--
 
 class AHKDocBlock {
 	; #PUBLIC#
 	
-	;  - Constants
-	;  - staticMembers
-	;  - nonStaticMembers
-	;  - properties
-	;  - __New()/Init()
+	;---------
+	; DESCRIPTION:    Create a new representation of a block of documentation.
+	; PARAMETERS:
+	;  docString (I,REQ) - The block of documentation to process.
+	;---------
 	__New(docString := "") {
 		if(docString != "")
 			this.initFromDocString(docString)
 	}
 	
+	;---------
+	; DESCRIPTION:    Initialize this class using the selection, rather than passing in a string value to the constructor.
+	; RETURNS:        this
+	;---------
 	initFromSelection() {
 		docString := this.getDocFromSelection()
 		this.initFromDocString(docString)
 		return this
 	}
 	
-	reindentSelection() {
+	;---------
+	; DESCRIPTION:    Wrap the content and recombine it with our various bits of indentation to create our finished doc string.
+	; RETURNS:        The wrapped and indented string for this documentation block
+	;---------
+	getWrappedString() {
+		wrappedContentLines := StringLib.wrapToWidth(this.unwrappedContent, 100)
+		
+		docString := ""
+		For i,line in wrappedContentLines {
+			if(i = 1)
+				line := this.outerFirst this.innerFirst line
+			else
+				line := this.outerRest this.innerRest line
+			docString := docString.appendLine(line)
+		}
+		
+		return docString
+	}
+	
+	;---------
+	; DESCRIPTION:    Replace the selected documentation block (and potentially a little of its surroundings) with a
+	;                 rewrapped version of the same.
+	;---------
+	rewrapSelection() {
 		this.initFromSelection()
-		ClipboardLib.send(this.getString())
+		ClipboardLib.send(this.getWrappedString())
 	}
-	
-	;  - otherFunctions
-	getString() {
-		return this.rebuildDocString()
-	}
-	
-	; #INTERNAL#
-	
-	;  - Constants
-	;  - staticMembers
-	;  - nonStaticMembers
-	;  - functions
 	
 	
 	; #PRIVATE#
 	
-	;  - Constants
-	;  - staticMembers
-	;  - nonStaticMembers
 	outerFirst       := "" ; Tabs, semicolon, leading spaces for first line. Tracked separately for multi-line cases where first-line indent not selected, so we don't duplicate it.
 	outerRest        := "" ; Tabs, semicolon, leading spaces for other lines.
 	innerFirst       := "" ; Keyword + spaces for first line.
 	innerRest        := "" ; Spaces to match keyword for other lines.
 	unwrappedContent := "" ; The actual content, collapsed to a single line.
 	
-	;  - functions
-	
+	;---------
+	; DESCRIPTION:    Use the selected text (and potentialy select some of the surrounding text if needed) to get a
+	;                 documentation block that we can work with.
+	; RETURNS:        The located documentation block.
+	; SIDE EFFECTS:   Can select more of the surrounding text if we don't have everything we need to start with.
+	; NOTES:          Can be called with nothing selected to select everything we need, as a shortcut.
+	;---------
 	getDocFromSelection() {
 		selection := SelectLib.getText()
 		
@@ -88,6 +105,11 @@ class AHKDocBlock {
 		return selection
 	}
 	
+	;---------
+	; DESCRIPTION:    Split the given documentation block into various pieces of indentation and content.
+	; PARAMETERS:
+	;  docString (I,REQ) - The block of documentation to process.
+	;---------
 	initFromDocString(docString) {
 		docLines := docString.split("`n", "`r")
 		
@@ -129,35 +151,27 @@ class AHKDocBlock {
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    Using the first line of the block, extract any prefixes specific to a documentation header (i.e.
+	;                 DESCRIPTION: or parameter lines).
+	; PARAMETERS:
+	;  docLines (I,REQ) - Array of lines representing the documentation block
+	; RETURNS:        The found prefix, or "" if one not found
+	;---------
 	getHeaderPrefix(docLines) {
 		; The prefix in question will only be on the first line, after the outer indent, so we can trim our search to just that.
 		docLine := docLines[1].removeFromStart(this.outerFirst)
 		
-		; GDB TODO AHKCodeLib.HeaderKeywords is private - consider turning it (or maybe this needle?) into a public constant or something
 		; Header keyword lines
 		needle := "^(" AHKCodeLib.HeaderKeywords.join("|") "):\s+" ; Starts with (^) any of the keywords followed by a colon (:) and 1+ spaces
 		if(docLine.containsRegEx(needle, match))
 			return match
 		
 		; Parameter lines
-		if(docLine.containsRegEx(".*\((I|O|IO),(OPT|REQ)\) - ", match))
+		if(docLine.containsRegEx(".*\((I|O|IO),(OPT|REQ)\) - ", match)) ; Variable name + properties + leading hyphen and space
 			return match
-	}
-	
-	
-	rebuildDocString() {
-		wrappedContentLines := StringLib.wrapToWidth(this.unwrappedContent, 100)
 		
-		docString := ""
-		For i,line in wrappedContentLines {
-			if(i = 1)
-				line := this.outerFirst this.innerFirst line
-			else
-				line := this.outerRest this.innerRest line
-			docString := docString.appendLine(line)
-		}
-		
-		return docString
+		return ""
 	}
 	
 	
@@ -168,7 +182,11 @@ class AHKDocBlock {
 	}
 	
 	Debug_ToString(ByRef table) {
-		table.addLine("GDB TODO", this.GDBTODO)
+		table.addLine("Outer indent, first line",          "x" this.outerFirst "x") ; x around indents so you can actually see
+		table.addLine("Outer indent, other lines",         "x" this.outerRest  "x")
+		table.addLine("Inner indent/keywords, first line", "x" this.innerFirst "x")
+		table.addLine("Inner indent, other lines",         "x" this.innerRest  "x")
+		table.addLine("Unwrapped content",                     this.unwrappedContent)
 	}
 	; #END#
 }

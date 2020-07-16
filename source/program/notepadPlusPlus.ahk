@@ -1,19 +1,20 @@
 #If Config.isWindowActive("Notepad++")
-	!x::return ; Block close-document hotkey that can't be changed/removed.
-	^+t::Send, !f1 ; Re-open last closed document.
+	!x::return      ; Block close-document hotkey that can't be changed/removed.
+	^+t::Send, !f1  ; Re-open last closed document.
 	!f:: Send, ^!+f ; Use !f hotkey for highlighting with the first style (ControlSend so we don't trigger other hotkeys)
-	F6:: Send, ^w ; Close with F6 hotkey, like we do for browsers.
+	F6:: Send, ^w   ; Close with F6 hotkey, like we do for browsers.
 	
 	; Snippets
 	:X:.if:: NotepadPlusPlus.sendSnippet("if")
 	:X:.for::NotepadPlusPlus.sendSnippet("for")
 	
-	; Copy current file/folder to clipboard.
+	; Current file/folder operations
 	!c::ClipboardLib.copyFilePathWithHotkey("!c")
 	!#c::ClipboardLib.copyFolderPathWithFileHotkey("!c")
 	^+o::NotepadPlusPlus.openCurrentParentFolder()
 	
-	^Enter:: NotepadPlusPlus.insertIndentedNewline() ; Add an indented newline
+	; Redo the indentation for the selected documentation lines
+	^Enter::new AHKDocBlock().reindentSelection()
 	
 	; AHK debug strings
 	:X:dbpop::  NotepadPlusPlus.sendDebugCodeString("Debug.popup")      ; Debug popup
@@ -23,7 +24,7 @@
 	:X:dbm::    SendRaw, % "MsgBox, % "
 	
 	; Other AHK dev strings
-	:X:`;`;`;:: NotepadPlusPlus.sendDocHeader()
+	:X:`;`;`;::  NotepadPlusPlus.sendDocHeader()
 	:X:ahkcont:: NotepadPlusPlus.sendContinuationBlock()
 	:X:ahkclass::NotepadPlusPlus.sendClassTemplate()
 	:X:ahkto:: Send, new Toast("").showMedium(){Left 15}

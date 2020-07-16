@@ -27,36 +27,6 @@ class NotepadPlusPlus {
 	}
 	
 	;---------
-	; DESCRIPTION:    Insert a newline at the cursor, indented to the same level as the current line.
-	;                 Also takes AHK headers into account, indenting to the proper level if you're
-	;                 within one.
-	;---------
-	insertIndentedNewline() {
-		; Read in both sides of the current line - the left will help us find where the indent is, the right is what we're moving.
-		Send, {Shift Down}{Home}{Shift Up}
-		lineBefore := SelectLib.getText()
-		Send, {Shift Down}{End}{Shift Up}
-		lineAfter := SelectLib.getText()
-		
-		; Put the cursor back where it was, where we want to insert the newline.
-		if(lineAfter = "")
-			Send, {End}
-		else
-			Send, {Left}
-		
-		; If we would have a widowed (on the end of the old line) or orphaned (at the start of the new line) space, remove it.
-		if(lineBefore.endsWith(A_Space))
-			Send, {Backspace}
-		if(lineAfter.startsWith(A_Space))
-			Send, {Delete}
-		
-		indent := AHKCodeLib.getNextDocLineIndent(lineBefore)
-		
-		Send, {Enter} ; Start the new line - assuming that Notepad++ will put us at the same indentation level (before the semicolon) as the previous row.
-		Send, % ";" indent
-	}
-	
-	;---------
 	; DESCRIPTION:    Send a debug code string using the given function name, prompting the user for
 	;                 the list of parameters to use (in "varName",varName parameter pairs).
 	; PARAMETERS:

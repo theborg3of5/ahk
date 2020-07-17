@@ -1,6 +1,4 @@
 # New Ideas
-	VPN resize option seems like it has to be relative to middle monitor - should it?
-		If I want it to be relative to the monitor, do I need to use one of the special values instead?
 	Consider a way to read debug popup strings back in so I can easily edit expressions inside and have them re-expand appropriately.
 		Probably prefer the actual expression over the label if they differ? So just read the expression directly?
 		{Home} twice gets us to the start of a wrapped line in notepad++
@@ -9,20 +7,6 @@
 		Is there something similar we could (optionally, somehow?) replace spaces with?
 			Maybe the optional is just when there's more than 1 in a row?
 			Use case: ahkDocBlock indent bits
-	Consider updating the header stuff in AHKCodeLib to use new AHKDocBlock class
-	New idea: a TLS of useful unicode symbols (potential hotkey: #' or #; or #`)
-		Examples: ✗ (U+2717), ✓ (U+2713), arrows?
-		Could specify in the file using the unicode code if needed
-			Ideally still include the code somewhere if not
-		Name should include the symbol, like one of these:
-			✓ - Check mark
-			✓ (Check mark)
-			Check mark (✓)
-			Check mark - ✓
-			✓ - Check mark (U+2713)
-			✓ (Check mark - U+2713)
-			Check mark (✓ - U+2713)
-			Check mark - ✓ (U+2713)
 	Does the division between text.ahk and launch.ahk make sense? There's text-related stuff in launch.ahk.
 		Options:
 			Combine the two (into a script named what, though?)

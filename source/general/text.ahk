@@ -59,3 +59,12 @@ return
 		
 		Notepad.openNewInstanceWithText(selectedText)
 	}
+
+; Send specific (Unicode) symbols
+#`;::
+	selectSymbol() {
+		code := new Selector("symbols.tls").selectGui("UNICODE")
+		if(code != "")
+			Send, % Chr("0x" code)
+	}
+return

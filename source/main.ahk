@@ -19,6 +19,7 @@ SetScrollLockState, AlwaysOff                ; Turn off Scroll Lock so it can be
 SetNumLockState,    AlwaysOn                 ; Force NumLock to always stay on.
 SetDefaultMouseSpeed, 0                      ; Fasted mouse speed for mouse commands (MouseMove in particular)
 SetMouseDelay, 0                             ; Smallest possible delay after mouse movements/clicks
+FileEncoding, UTF-8-Raw                      ; Read files using UTF-8 encoding by default, but don't add a mark at the start of saved files to that effect.
 
 ; Sub scripts. Must be first to execute so they can spin off and be on their own.
 subFolder := A_ScriptDir "\sub\"

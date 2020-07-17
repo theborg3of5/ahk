@@ -1,0 +1,12 @@
+@WindowTitle(Symbol to insert:)
+
+[	NAME															ABBREV		UNICODE	]
+
+	✓ - Check mark												chk			2713
+	✗ - Ballot x												x				2717
+	← - Leftwards arrow										l | left		2190
+	→ - Rightwards arrow										r | right	2192
+	🡠 - Wide-headed leftwards light barb arrow		wl | lw		1f860
+	🡢 - Wide-headed rightwards light barb arrow		wr | rw		1f862
+
+; UNICODE - The unicode code, U+<code> or Chr(0x<code>)

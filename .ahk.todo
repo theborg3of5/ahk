@@ -10,7 +10,7 @@
 			Maybe the optional is just when there's more than 1 in a row?
 			Use case: ahkDocBlock indent bits
 	Consider updating the header stuff in AHKCodeLib to use new AHKDocBlock class
-	New idea: a TLS of useful unicode symbols
+	New idea: a TLS of useful unicode symbols (potential hotkey: #' or #; or #`)
 		Examples: ✗ (U+2717), ✓ (U+2713), arrows?
 		Could specify in the file using the unicode code if needed
 			Ideally still include the code somewhere if not
@@ -23,6 +23,10 @@
 			✓ (Check mark - U+2713)
 			Check mark (✓ - U+2713)
 			Check mark - ✓ (U+2713)
+	Does the division between text.ahk and launch.ahk make sense? There's text-related stuff in launch.ahk.
+		Options:
+			Combine the two (into a script named what, though?)
+			Move text-related things over to text.ahk (does this mean separating universal link from universal open, though?)
 	Consider turning backtick key into a new window action - I'm using it as an escape replacement in a number of places now
 		Messenger
 		GitHub Desktop
@@ -35,12 +39,8 @@
 			Title with meeting running: Meeting | Microsoft Teams
 			Looks like this should work even once the window is closed (minimized to tray)
 	With new EMC2 version, do I need to add more specifications (probably ahk classes?) to various EMC2 windows?
-	Hotkey for automatically breaking up documentation lines to 100 chars wide
-		Possibly reconsider the 100-char limit - wouldn't wider make more sense?
-		Could take into account whether there would be only 1 small word moved down
-		Could handle multiple line breaks
 	Consider a "preset" for searching for "GDB TODO"/"GDBTODO" tag in AHK source
-		Would want to exclude class.ahk file (or maybe just template folder?) so we don't get the false positives there
+		Shouldn't need extra exclusions - just use the source folder as the root
 	Is the media player stuff in config worth keeping around? I don't really switch music programs anymore, and Chrome awkwardly tries to grab media keys anyway.
 		Possibly replace it with something based on RDP/Spotify command script, that interacts directly with Spotify instead of letting other things steal the media keys?
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (mainly to allow CDE)

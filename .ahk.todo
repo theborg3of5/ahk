@@ -1,4 +1,5 @@
 # New Ideas
+	New EpicStudio snippet for looping over a multi-response item?
 	Consider a way to read debug popup strings back in so I can easily edit expressions inside and have them re-expand appropriately.
 		Probably prefer the actual expression over the label if they differ? So just read the expression directly?
 		{Home} twice gets us to the start of a wrapped line in notepad++

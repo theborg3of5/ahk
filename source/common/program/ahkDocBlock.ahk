@@ -209,12 +209,10 @@ class AHKDocBlock {
 	; This is a set of long lines that weren't wrapped quite propertly to begin with, but at
 	; least they tried?
 	
-	;---------
 	; DESCRIPTION:    This will be a rather long description, that just keeps going and just keeps going, and just keeps going and just keeps going, you know?
 	; PARAMETERS:
 	;  inString             (I,REQ) - This will be a short parameter description
 	;  goalWidth            (I,REQ) - This will be a longer parameter description, which also keeps going, and going, and going for days upon days.
 	;  allowedFinalOverhang (I,OPT) - This will be a longer parameter description,
 	;                                 that has already been wrapped, but not very well - too short at the first line, and too long on the last.
-	;---------
 ; =--

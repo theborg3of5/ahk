@@ -48,12 +48,13 @@ class MSnippets {
 		loopString := ""
 		
 		Switch data["SUBTYPE"] {
-			Case "ARRAY_GLO":       loopString .= MSnippets.buildMArrayLoop(data, numIndents)
-			Case "ID":              loopString .= MSnippets.buildMIdLoop(data, numIndents)
-			Case "DAT":             loopString .= MSnippets.buildMDatLoop(data, numIndents)
-			Case "ID_DAT":          loopString .= MSnippets.buildMIdLoop(data, numIndents) MSnippets.buildMDatLoop(data, numIndents)
+			Case "ARRAY_GLO":       loopString .= MSnippets.buildMArrayLoop(            data, numIndents)
+			Case "ID":              loopString .= MSnippets.buildMIdLoop(               data, numIndents)
+			Case "DAT":             loopString .= MSnippets.buildMDatLoop(              data, numIndents)
+			Case "ID_DAT":          loopString .= MSnippets.buildMIdLoop(               data, numIndents) MSnippets.buildMDatLoop(data, numIndents)
 			Case "INDEX_REG_VALUE": loopString .= MSnippets.buildMIndexRegularValueLoop(data, numIndents)
-			Case "INDEX_REG_ID":    loopString .= MSnippets.buildMIndexRegularIDLoop(data, numIndents)
+			Case "INDEX_REG_ID":    loopString .= MSnippets.buildMIndexRegularIDLoop(   data, numIndents)
+			Case "MULTI_ITEM":      loopString .= MSnippets.buildMultiItemLoop(         data, numIndents)
 		}
 		
 		return loopString
@@ -189,6 +190,32 @@ class MSnippets {
 	}
 	
 	;---------
+	; DESCRIPTION:    Generate an M for loop over a multi-response item.
+	; PARAMETERS:
+	;  data        (I,REQ) - Array of data needed to generate the loop. Important subscripts:
+	;                          ["ARRAY_OR_INI"]   - The INI of the record to loop through
+	;                          ["VARS_OR_VALUES"] - The item number to use
+	;  numIndents (IO,REQ) - The starting indentation for the loop. Will be updated as we add nested
+	;                        loops, final value is 1 more than the last loop.
+	; RETURNS:        String for the generated loop
+	;---------
+	buildMultiItemLoop(data, ByRef numIndents) {
+		ini := stringUpper(data["ARRAY_OR_INI"])
+		item := data["VARS_OR_VALUES"]
+		
+		idVar  := stringLower(ini) "Id"
+		datVar := stringLower(ini) "Dat"
+		lnVar  := "ln"
+		
+		loopString := Config.private["M_LOOP_MULTI_ITEM"].replaceTags({"INI":ini, "ITEM":item, "ID_VAR":idVar, "DAT_VAR":datVar, "LINE_VAR":lnVar})
+		numIndents++
+		loopString .= MSnippets.getMNewLinePlusIndent(numIndents)
+		loopString .= Config.private["M_GETI"].replaceTags({"INI":ini, "ITEM":item, "ID_VAR":idVar, "DAT_VAR":datVar, "LINE_VAR":lnVar})
+		
+		return loopString
+	}
+	
+	;---------
 	; DESCRIPTION:    Generate an indexed [ary(value)=""] array in M code.
 	; PARAMETERS:
 	;  data       (I,REQ) - Array of data needed to generate the list. Important subscripts:
@@ -197,7 +224,7 @@ class MSnippets {
 	;  numIndents (I,REQ) - The starting indentation for the list.
 	; RETURNS:        String for generated array
 	;---------
-	buildMListIndex(data, numIndents) {
+	buildMListIndex(data, ByRef numIndents) {
 		arrayName := data["ARRAY_OR_INI"]
 		valueList := data["VARS_OR_VALUES"]
 		

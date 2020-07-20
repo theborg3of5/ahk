@@ -1,8 +1,9 @@
 # New Ideas
-	New EpicStudio snippet for looping over a multi-response item?
 	Consider a way to read debug popup strings back in so I can easily edit expressions inside and have them re-expand appropriately.
 		Probably prefer the actual expression over the label if they differ? So just read the expression directly?
 		{Home} twice gets us to the start of a wrapped line in notepad++
+	EpicStudio - consider a hotstring for my debug-logging functions
+		OR: add them to snippets instead?
 	DebugPopup - could we replace tabs with a tab-looking arrow, like notepad++, word, etc. use?
 		Could we handle it such that it's the same width as an actual tab (3 spaces for me in notepad++)?
 		Is there something similar we could (optionally, somehow?) replace spaces with?

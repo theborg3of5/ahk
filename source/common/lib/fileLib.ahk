@@ -38,8 +38,9 @@ class FileLib {
 	; RETURNS:        The cleaned-up and mapped path.
 	;---------
 	cleanupPath(path) {
-		path := path.replace("%20", A_Space) ; In case it's a URL'd file path
-		path := path.clean(["file:///", """"])
+		path := path.replace("%20", A_Space).replace("/", "\") ; In case it's a URL'd file path
+		path := path.replace("\\\", "\\") ; Trim 3 backslashes (typically from file:///) down to 2
+		path := path.clean(["file:", """"])
 		
 		; Convert paths to use mapped drive letters
 		table := new TableList("mappedDrives.tl").getTable()

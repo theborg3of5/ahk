@@ -92,6 +92,9 @@ class OneNoteTodoPage {
 		Send, pc
 		Send, {Enter}
 		
+		; Collapse to line level before I leave so it's easier to find stuff when looking back.
+		OneNoteTodoPage.collapseToAllItems()
+		
 		Send, ^!m                  ; Move or copy page
 		WinWaitActive, Move or Copy Pages
 		Sleep, 500                 ; Wait a half second for the popup to be input-ready

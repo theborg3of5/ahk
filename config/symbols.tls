@@ -8,5 +8,7 @@
 	→ - Rightwards arrow										r | right	2192
 	🡠 - Wide-headed leftwards light barb arrow		wl | lw		1f860
 	🡢 - Wide-headed rightwards light barb arrow		wr | rw		1f862
+	· - Middle dot 											dot			00b7
+	― - Horizontal bar										hline			2015
 
 ; UNICODE - The unicode code, U+<code> or Chr(0x<code>)

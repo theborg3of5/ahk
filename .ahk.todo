@@ -1,10 +1,6 @@
 # New Ideas
-	DebugPopup - could we replace tabs with a tab-looking arrow, like notepad++, word, etc. use?
-		Could we handle it such that it's the same width as an actual tab (3 spaces for me in notepad++)?
-			! No, that's not going to work - TextTable stuff is all based on all characters being the same width.
-		Is there something similar we could (optionally, somehow?) replace spaces with?
-			Maybe the optional is just when there's more than 1 in a row?
-			Use case: ahkDocBlock indent bits
+	Autocomplete - for inherited methods, could we show the original class that used them as a prefix or something?
+		Or at least the direct parent?
 	Does the division between text.ahk and launch.ahk make sense? There's text-related stuff in launch.ahk.
 		Options:
 			Combine the two (into a script named what, though?)

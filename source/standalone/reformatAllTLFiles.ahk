@@ -8,7 +8,6 @@ FileEncoding, UTF-8-Raw      ; Read files in UTF-8 encoding by default, to handl
 
 #Include <includeCommon>
 
-global SPACES_PER_TAB := 3
 global MIN_COLUMN_PADDING := 1 ; At least 1 tab between columns
 
 ; Convenience constants that are shorter than referencing TableList constants directly.
@@ -72,7 +71,7 @@ reformatRows(rows) {
 			
 			; Align the ending paren with the model row's ending bracket.
 			numSpacesShort := columnInfoClosePosition - getCharacterWidth(rowSoFar)
-			numTabsShort := Ceil(numSpacesShort / SPACES_PER_TAB)
+			numTabsShort := Ceil(numSpacesShort / NotepadPlusPlus.TabWidth)
 			
 			row := rowSoFar StringLib.getTabs(numTabsShort) COLINFO_END
 			newRows.push(row)
@@ -163,7 +162,7 @@ getDimensions(rows, ByRef normalIndentLevel, ByRef columnWidthsAry) {
 		
 		; Track size of each column (in tabs).
 		For columnIndex,value in splitRow(row) {
-			width := Ceil(value.length() / SPACES_PER_TAB) + MIN_COLUMN_PADDING ; Width in tabs - ceiling means we'll get at least 1 FULL tab of padding
+			width := Ceil(value.length() / NotepadPlusPlus.TabWidth) + MIN_COLUMN_PADDING ; Width in tabs - ceiling means we'll get at least 1 FULL tab of padding
 			columnWidthsAry[columnIndex] := DataLib.max(columnWidthsAry[columnIndex], width)
 		}
 	}
@@ -186,7 +185,7 @@ getCharacterWidth(stringToMeasure) {
 	Loop, Parse, % stringToMeasure
 	{
 		if(A_LoopField = A_Tab)
-			numChars += (SPACES_PER_TAB - mod(numChars, SPACES_PER_TAB)) ; Each tab brings us to the next tab stop
+			numChars += (NotepadPlusPlus.TabWidth - mod(numChars, NotepadPlusPlus.TabWidth)) ; Each tab brings us to the next tab stop
 		else
 			numChars++
 	}
@@ -205,7 +204,7 @@ fixColumnWidths(row, columnWidthsAry) {
 	
 	For columnIndex,value in splitRow(row) {
 		columnWidth := columnWidthsAry[columnIndex]
-		valueWidth := Floor(value.length() / SPACES_PER_TAB) ; Width in tabs
+		valueWidth := Floor(value.length() / NotepadPlusPlus.TabWidth) ; Width in tabs
 		newRow .= value StringLib.getTabs(columnWidth - valueWidth)
 	}
 	

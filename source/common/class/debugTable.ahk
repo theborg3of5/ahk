@@ -149,8 +149,7 @@ class DebugTable extends TextTable {
 	title := "" ; The title to show at the top (and bottom, if we get tall enough)
 	
 	;---------
-	; DESCRIPTION:    Build a formatted string for the given value (a smaller DebugTable instance
-	;                 for arrays/objects).
+	; DESCRIPTION:    Build a formatted string for the given value (a smaller DebugTable instance for arrays/objects).
 	; PARAMETERS:
 	;  value (I,REQ) - The value to generate an explanation of.
 	; RETURNS:        The generated text
@@ -158,7 +157,7 @@ class DebugTable extends TextTable {
 	buildValueDebugString(value) {
 		; Base case - not a complex object, just return the value to show.
 		if(!isObject(value))
-			return value
+			return this.convertWhitespace(value)
 		
 		; Just display the name if it's an empty object (like an empty array)
 		objName := this.getObjectName(value)
@@ -178,8 +177,36 @@ class DebugTable extends TextTable {
 	}
 	
 	;---------
-	; DESCRIPTION:    Get the name describing the given object, based on its type and whether it
-	;                 implements Debug_TypeName().
+	; DESCRIPTION:    Convert certain whitespace strings into visible characters so we can see differences in width, etc.
+	;                 more easily.
+	; PARAMETERS:
+	;  value (I,REQ) - The string to convert
+	; RETURNS:        The converted string
+	;---------
+	convertWhitespace(value) {
+		; Replace tabs with an arrow made up of width-1 characters (same width as tabs in Notepad++), so it's
+		; the desired width but more visible and doesn't mess with the layout.
+		line := Chr(0x2015) ; ―
+		head := Chr(0x2192) ; →
+		arrow := StringLib.duplicate(line, NotepadPlusPlus.TabWidth - 1) head
+		value := value.replace(A_Tab, arrow)
+		
+		; Replace leading, trailing, and more than 1 space in a row with dots so they're more visible.
+		dot := Chr(0x00b7) ; ·
+		while(value.containsRegEx("  +", match)) {  ; 2+ spaces in a row
+			replaceWith := StringLib.duplicate(dot, match.length()) ; Replace them with the same number of dots
+			value := value.replace(match, replaceWith)
+		}
+		if(value.startsWith(A_Space)) ; These come after in case there are 2 leading/trailing spaces (which this would make only 1, failing the above pattern).
+			value := dot value.removeFromStart(A_Space)
+		if(value.endsWith(A_Space))
+			value := value.removeFromEnd(A_Space) dot
+		
+		return value
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the name describing the given object, based on its type and whether it implements Debug_TypeName().
 	; PARAMETERS:
 	;  value (I,REQ) - The value to name
 	; RETURNS:        The chosen name

@@ -182,11 +182,11 @@ class AHKDocBlock {
 	}
 	
 	Debug_ToString(ByRef table) {
-		table.addLine("Outer indent, first line",          "x" this.outerFirst "x") ; x around indents so you can actually see
-		table.addLine("Outer indent, other lines",         "x" this.outerRest  "x")
-		table.addLine("Inner indent/keywords, first line", "x" this.innerFirst "x")
-		table.addLine("Inner indent, other lines",         "x" this.innerRest  "x")
-		table.addLine("Unwrapped content",                     this.unwrappedContent)
+		table.addLine("Outer indent, first line",          this.outerFirst)
+		table.addLine("Outer indent, other lines",         this.outerRest)
+		table.addLine("Inner indent/keywords, first line", this.innerFirst)
+		table.addLine("Inner indent, other lines",         this.innerRest)
+		table.addLine("Unwrapped content",                 this.unwrappedContent)
 	}
 	; #END#
 }

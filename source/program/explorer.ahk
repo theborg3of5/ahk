@@ -25,4 +25,8 @@
 		Send, {AppsKey}
 		Send, l
 	return
+	
+	; Open EMC2 objects based on the active folder name.
+	!w::Explorer.getActiveFolderEMC2Object().openWeb()
+	!e::Explorer.getActiveFolderEMC2Object().openEdit()
 #If

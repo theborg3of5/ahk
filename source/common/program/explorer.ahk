@@ -60,6 +60,38 @@ class Explorer {
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    If the currently active folder is one of a few special formats, get the corresponding EMC2 object so
+	;                 we can open or link to it.
+	; RETURNS:        A new ActionObjectEMC2 instance, or "" if it's not a special folder that links to an EMC2 object.
+	;---------
+	getActiveFolderEMC2Object() {
+		; Get current folder name from title
+		name := WinGetActiveTitle()
+		
+		; Try it as a project folder (PRJ ###### ...)
+		if(name.startsWith("PRJ ")) {
+			ini := "PRJ"
+			id  := name.removeFromStart("PRJ ").beforeString(" ") ; ID should be everything up to the next space
+			
+		; Try it as a DLG source folder (DLG-######[-#])
+		} else if(name.startsWith("DLG-")) {
+			ini := "DLG"
+			id  := name.removeFromStart("DLG-").beforeString("-") ; Up to the next dash (which would be the folder version) or the end of the string
+			
+		; Try it as a design folder (x###### ...)
+		} else if(name.startsWith("x")) {
+			ini := "XDS"
+			id  := name.removeFromStart("x").beforeString(" ") ; ID should be everything up to the next space
+			
+		} else {
+			return ""
+		}
+		
+		; Debug.popup("name",name, "ini",ini, "id",id)
+		return new ActionObjectEMC2(id, ini)
+	}
+	
 	
 	; #PRIVATE#
 	

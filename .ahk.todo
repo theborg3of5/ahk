@@ -1,9 +1,4 @@
 # New Ideas
-	!e/!w hotkeys for Explorer, to easily jump to a DLG from its client folder (...\DLG-123456[-1])
-		Potentially also support:
-			Project folders (PRJ 123456 - ...)
-			Design folders (x123456 ...)/(q123456 x123456 ...)
-				Ignore the QAN ID in these cases
 	Can we update !+p path-cleanup hotkey to handle forward slashes (including file:// prefix)?
 	Consider a way to read debug popup strings back in so I can easily edit expressions inside and have them re-expand appropriately.
 		Probably prefer the actual expression over the label if they differ? So just read the expression directly?

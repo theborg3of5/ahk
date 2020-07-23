@@ -18,8 +18,14 @@
 	; Link routine to currently open DLG in EMC2.
 	^+l::EpicStudio.linkRoutineToCurrentDLG()
 	
-	; Generate and insert snippet
+	; Generate and insert snippets
 	:X:.snip::MSnippets.insertSnippet()
+	
+	; Debug code strings
+	:X:gdblog::   ClipboardLib.send(Config.private["M_DEBUG_LOG"])
+	:X:gdbbreak:: ClipboardLib.send(Config.private["M_DEBUG_BREAK"])
+	:X:gdbpbreak::ClipboardLib.send(Config.private["M_DEBUG_BREAK_PATIENT"])
+	:X:gdbsnap::  ClipboardLib.send(Config.private["M_DEBUG_SNAP_START"])
 	
 	; Debug, auto-search for workstation ID.
 	~F5::EpicStudio.runDebug("WORKSTATION")

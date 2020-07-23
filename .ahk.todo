@@ -1,8 +1,7 @@
 # New Ideas
-	EpicStudio - consider a hotstring for my debug-logging functions
-		OR: add them to snippets instead?
 	DebugPopup - could we replace tabs with a tab-looking arrow, like notepad++, word, etc. use?
 		Could we handle it such that it's the same width as an actual tab (3 spaces for me in notepad++)?
+			! No, that's not going to work - TextTable stuff is all based on all characters being the same width.
 		Is there something similar we could (optionally, somehow?) replace spaces with?
 			Maybe the optional is just when there's more than 1 in a row?
 			Use case: ahkDocBlock indent bits

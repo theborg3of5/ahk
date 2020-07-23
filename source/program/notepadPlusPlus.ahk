@@ -7,9 +7,13 @@
 	; Snippets
 	:X:.if:: NotepadPlusPlus.sendSnippet("if")
 	:X:.for::NotepadPlusPlus.sendSnippet("for")
+	:X:.?::
+		ClipboardLib.send("( ?  : )")
+		Send, {Left 7}
+	return
 	
 	; Current file/folder operations
-	!c::ClipboardLib.copyFilePathWithHotkey("!c")
+	!c:: ClipboardLib.copyFilePathWithHotkey("!c")
 	!#c::ClipboardLib.copyFolderPathWithFileHotkey("!c")
 	^+o::NotepadPlusPlus.openCurrentParentFolder()
 	
@@ -17,11 +21,11 @@
 	^Enter::new AHKDocBlock().rewrapSelection()
 	
 	; AHK debug strings
-	:X:dbpop::  NotepadPlusPlus.sendDebugCodeString("Debug.popup")      ; Debug popup
-	:X:dbto::   NotepadPlusPlus.sendDebugCodeString("Debug.toast")      ; Debug toast
-	:X:edbpop:: NotepadPlusPlus.sendDebugCodeString("Debug.popupEarly") ; Debug popup that appears at startup
-	:X:dbparam::NotepadPlusPlus.insertDebugParams()                     ; Debug parameters
 	:X:dbm::    SendRaw, % "MsgBox, % "
+	:X:dbpop::  NotepadPlusPlus.sendDebugCodeString("Debug.popup",      clipboard) ; Debug popup
+	:X:dbto::   NotepadPlusPlus.sendDebugCodeString("Debug.toast",      clipboard) ; Debug toast
+	:X:edbpop:: NotepadPlusPlus.sendDebugCodeString("Debug.popupEarly", clipboard) ; Debug popup that appears at startup
+	^e::NotepadPlusPlus.editDebugLine()
 	
 	; Other AHK dev strings
 	:X:`;`;`;::  NotepadPlusPlus.sendDocHeader()

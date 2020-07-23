@@ -153,7 +153,7 @@ class AHKCodeLib {
 		; Special case: if first param starts with +, it's a top-level message that should be shown with no corresponding data.
 		if(paramsAry[1].startsWith("+")) {
 			label := paramsAry[1].afterString("+")
-			paramsString .= QUOTE label QUOTE ","
+			paramsString .= QUOTE label QUOTE "," QUOTE QUOTE
 			paramsAry.RemoveAt(1)
 		}
 		
@@ -164,6 +164,38 @@ class AHKCodeLib {
 		}
 		
 		return paramsString
+	}
+	
+	;---------
+	; DESCRIPTION:    The reverse the generateDebugParams - take the paired parameters list and turn it back into the
+	;                 original parameters the user chose.
+	; PARAMETERS:
+	;  debugParamList (I,REQ) - The list of paired parameters, originally from generateDebugParams.
+	; RETURNS:        A list of the original parameters.
+	;---------
+	reduceDebugParams(debugParamList) {
+		QUOTE := """" ; Double-quote character
+		
+		; Now get down to our original list by preferring the second of each pair of parameters.
+		paramsAry := []
+		lastNameParam := ""
+		For i,param in AHKCodeLib.splitVarList(debugParamList) {
+			; Generally ignore odd-numbered parameters, but store them until we're done with their corresponding even param in case it's a label case.
+			if(i.isOddNum()) {
+				lastNameParam := param
+				Continue
+			}
+			
+			; If the even-numbered parameter is a blank string, it's a label case - use the last name param with a + instead.
+			if(param = QUOTE QUOTE) {
+				paramsAry.push("+" lastNameParam.allBetweenStrings(QUOTE, QUOTE)) ; Add the + for label, remove the quotes
+				Continue
+			}
+			
+			paramsAry.push(param)
+		}
+		
+		return paramsAry.join(",")
 	}
 	
 	
@@ -221,22 +253,24 @@ class AHKCodeLib {
 		paramsAry := []
 		
 		currentName := ""
-		openParens := 0
-		openQuotes := false
+		openParens   := 0
+		openBrackets := 0
+		openQuotes   := false
 		Loop, Parse, varList
 		{
 			char := A_LoopField
 			
-			; Track open parens/quotes.
-			if(char = "(")
-				openParens++
-			if(char = ")")
-				openParens--
-			if(char = QUOTE)
-				openQuotes := !openQuotes ; Quotes close other quotes, so just swap between open and closed
+			; Track open parens, brackets, and quotes.
+			Switch char {
+				Case "(":   openParens++
+				Case ")":   openParens--
+				Case "[":   openBrackets++
+				Case "]":   openBrackets--
+				Case QUOTE: openQuotes := !openQuotes ; Quotes close other quotes, so just swap between open and closed
+			}
 			
 			; Split on commas, but only if there are no open parens or quotes.
-			if(char = "," && openParens = 0 && !openQuotes) {
+			if(char = "," && openParens = 0 && !openQuotes && !openBrackets) {
 				paramsAry.push(currentName.withoutWhitespace())
 				currentName := ""
 				Continue

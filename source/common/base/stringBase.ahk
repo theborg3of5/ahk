@@ -43,6 +43,22 @@ class StringBase {
 	}
 	
 	;---------
+	; DESCRIPTION:    Check whether this object is both a number and even.
+	; RETURNS:        true/false
+	;---------
+	isEvenNum() {
+		return ( this.isNum() && (mod(this, 2) = 0) )
+	}
+	
+	;---------
+	; DESCRIPTION:    Check whether this object is both a number and odd.
+	; RETURNS:        true/false
+	;---------
+	isOddNum() {
+		return ( this.isNum() && (mod(this, 2) = 1) )
+	}
+	
+	;---------
 	; DESCRIPTION:    Return the single character at the given position in the string.
 	; PARAMETERS:
 	;  pos (I,REQ) - The position, where the first character is 1. 0 and below are treated as the

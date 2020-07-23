@@ -30,13 +30,14 @@ class NotepadPlusPlus {
 	; DESCRIPTION:    Send a debug code string using the given function name, prompting the user for
 	;                 the list of parameters to use (in "varName",varName parameter pairs).
 	; PARAMETERS:
-	;  functionName (I,REQ) - Name of the function to send before the parameters.
+	;  functionName   (I,REQ) - Name of the function to send before the parameters.
+	;  defaultVarList (I,OPT) - Var list to default into the popup.
 	;---------
-	sendDebugCodeString(functionName) {
+	sendDebugCodeString(functionName, defaultVarList := "") {
 		if(functionName = "")
 			return
 		
-		varList := InputBox("Enter variables to send debug string for", , , 500, 100, , , , , clipboard)
+		varList := InputBox("Enter variables to send debug string for", , , 500, 100, , , , , defaultVarList)
 		if(ErrorLevel) ; Popup was cancelled or timed out
 			return
 		
@@ -49,15 +50,25 @@ class NotepadPlusPlus {
 	}
 	
 	;---------
-	; DESCRIPTION:    Generate and insert debug parameters, prompting the user for which variables
-	;                 to include.
+	; DESCRIPTION:    Take an existing debug line and let the user edit and replace the parameters.
 	;---------
-	insertDebugParams() {
-		varList := clipboard
-		if(!varList)
-			return
+	editDebugLine() {
+		Send, {End 2} ; Get to end, even if it's a wrapped line
+		Send, {Shift Down}
+		Send, {Home 2} ; Get to the start, even if it's a wrapped line (may also select indent)
+		Send, {Shift Up}
+		debugLine := SelectLib.getText()
 		
-		Send, % AHKCodeLib.generateDebugParams(varList)
+		; We don't want indentation, so if we got it, deselect it.
+		if(debugLine.startsWith("`t")) {
+			Send, {Shift Down}{Home}{Shift Up} ; Jumps to end of indentation
+			debugLine := debugLine.withoutWhitespace()
+		}
+		
+		functionName := debugLine.beforeString("(")
+		paramsString := debugLine.allBetweenStrings("(", ")")
+		reducedParams := AHKCodeLib.reduceDebugParams(paramsString)
+		this.sendDebugCodeString(functionName, reducedParams)
 	}
 	
 	;---------

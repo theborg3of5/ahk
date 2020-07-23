@@ -1166,6 +1166,18 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="AHKCodeLib.reduceDebugParams" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    The reverse the generateDebugParams - take the paired parameters list and turn it back into the
+							;                 original parameters the user chose.
+							; PARAMETERS:
+							;  debugParamList (I,REQ) - The list of paired parameters, originally from generateDebugParams.
+							; RETURNS:        A list of the original parameters.
+							;---------">
+                <Param name="debugParamList" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="AHKCodeLib.SPACES_PER_TAB" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -6257,10 +6269,26 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="StringBase.isEvenNum" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether this object is both a number and even.
+							; RETURNS:        true/false
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="StringBase.isNum" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Wrapper function for whether a string is numeric.
+							; RETURNS:        true/false
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.isOddNum" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether this object is both a number and odd.
 							; RETURNS:        true/false
 							;---------">
             </Overload>

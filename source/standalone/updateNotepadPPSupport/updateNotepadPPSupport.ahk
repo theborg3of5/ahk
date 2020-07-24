@@ -216,9 +216,13 @@ processAHKClasses(ByRef ahkClasses) {
 			emptyClasses.push(className)
 		
 		; Handle inheritance: add any parent members (only 1 layer deep) into this class
-		if(classObj.parentName != "") {
-			For _,member in ahkClasses[classObj.parentName].members
-				classObj.addMemberIfNew(member)
+		parentName := classObj.parentName
+		if(parentName != "") {
+			For _,member in ahkClasses[parentName].members {
+				tempMember := member.clone()
+				tempMember.returns := tempMember.returns.appendPiece("{" parentName "}", " ") ; Add the parent name onto inherited members "returns" value.
+				classObj.addMemberIfNew(tempMember)
+			}
 		}
 	}
 	

@@ -191,7 +191,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.ActionObjectType" func="yes">
-            <Overload retVal="[Property]" descr="
+            <Overload retVal="[Property] {ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    What type of ActionObject the child class implements.
 							; NOTES:          Should be overridden by child class.
@@ -199,21 +199,21 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.copyLink" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.copyLinkEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in edit mode.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.copyLinkWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
 							;---------">
@@ -228,7 +228,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.getLinkEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get an edit link for the object. This just calls .getLink() unless it's
 							;                 overridden by the child class.
@@ -236,7 +236,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.getLinkWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
 							;                 overridden by the child class.
@@ -244,7 +244,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.getTypeSelector" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
 							;                 choices to only those matching the given type.
@@ -257,7 +257,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.linkSelectedText" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it.
 							; PARAMETERS:
@@ -268,7 +268,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.linkSelectedTextEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
 							;                 specifically in edit mode.
@@ -277,7 +277,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.linkSelectedTextWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
 							;                 specifically in web mode.
@@ -316,7 +316,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.open" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
 							; NOTES:          If you want to override this in a child class, consider overriding
@@ -325,21 +325,21 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.openEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object, specifically in edit mode.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.openWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object, specifically in web mode.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.selectMissingInfo" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Check whether the given value or subType is missing, and if it is, prompt the
 							;                 user with a Selector instance (filtered to the child's type) to get the info.
@@ -372,7 +372,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.ActionObjectType" func="yes">
-            <Overload retVal="[Property]" descr="
+            <Overload retVal="[Property] {ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    What type of ActionObject the child class implements.
 							; NOTES:          Should be overridden by child class.
@@ -380,28 +380,28 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.copyLink" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.copyLinkEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in edit mode.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.copyLinkWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.getLink" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object.
 							; RETURNS:        Link to the web version of the object.
@@ -426,7 +426,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.getTypeSelector" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
 							;                 choices to only those matching the given type.
@@ -469,7 +469,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.linkSelectedText" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it.
 							; PARAMETERS:
@@ -480,7 +480,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.linkSelectedTextEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
 							;                 specifically in edit mode.
@@ -489,7 +489,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.linkSelectedTextWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
 							;                 specifically in web mode.
@@ -498,7 +498,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.open" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
 							; NOTES:          If you want to override this in a child class, consider overriding
@@ -507,14 +507,14 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.openEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object, specifically in edit mode.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.openWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object, specifically in web mode.
 							;---------">
@@ -529,7 +529,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.selectMissingInfo" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Check whether the given value or subType is missing, and if it is, prompt the
 							;                 user with a Selector instance (filtered to the child's type) to get the info.
@@ -575,7 +575,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.ActionObjectType" func="yes">
-            <Overload retVal="[Property]" descr="
+            <Overload retVal="[Property] {ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    What type of ActionObject the child class implements.
 							; NOTES:          Should be overridden by child class.
@@ -583,21 +583,21 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.copyLink" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.copyLinkEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in edit mode.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.copyLinkWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
 							;---------">
@@ -643,7 +643,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.getLinkEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get an edit link for the object. This just calls .getLink() unless it's
 							;                 overridden by the child class.
@@ -651,7 +651,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.getLinkWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
 							;                 overridden by the child class.
@@ -659,7 +659,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.getTypeSelector" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
 							;                 choices to only those matching the given type.
@@ -672,7 +672,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.linkSelectedText" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it.
 							; PARAMETERS:
@@ -683,7 +683,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.linkSelectedTextEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
 							;                 specifically in edit mode.
@@ -692,7 +692,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.linkSelectedTextWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
 							;                 specifically in web mode.
@@ -701,7 +701,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.open" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
 							; NOTES:          If you want to override this in a child class, consider overriding
@@ -710,21 +710,21 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.openEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object, specifically in edit mode.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.openWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object, specifically in web mode.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.selectMissingInfo" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Check whether the given value or subType is missing, and if it is, prompt the
 							;                 user with a Selector instance (filtered to the child's type) to get the info.
@@ -752,7 +752,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.ActionObjectType" func="yes">
-            <Overload retVal="[Property]" descr="
+            <Overload retVal="[Property] {ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    What type of ActionObject the child class implements.
 							; NOTES:          Should be overridden by child class.
@@ -760,21 +760,21 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.copyLink" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.copyLinkEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in edit mode.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.copyLinkWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
 							;---------">
@@ -789,7 +789,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.getLinkEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get an edit link for the object. This just calls .getLink() unless it's
 							;                 overridden by the child class.
@@ -797,7 +797,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.getLinkWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
 							;                 overridden by the child class.
@@ -805,7 +805,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.getTypeSelector" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
 							;                 choices to only those matching the given type.
@@ -838,7 +838,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.linkSelectedText" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it.
 							; PARAMETERS:
@@ -849,7 +849,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.linkSelectedTextEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
 							;                 specifically in edit mode.
@@ -858,7 +858,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.linkSelectedTextWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
 							;                 specifically in web mode.
@@ -867,7 +867,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.open" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
 							; NOTES:          If you want to override this in a child class, consider overriding
@@ -876,21 +876,21 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.openEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object, specifically in edit mode.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.openWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object, specifically in web mode.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.selectMissingInfo" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Check whether the given value or subType is missing, and if it is, prompt the
 							;                 user with a Selector instance (filtered to the child's type) to get the info.
@@ -921,7 +921,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.ActionObjectType" func="yes">
-            <Overload retVal="[Property]" descr="
+            <Overload retVal="[Property] {ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    What type of ActionObject the child class implements.
 							; NOTES:          Should be overridden by child class.
@@ -929,21 +929,21 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.copyLink" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.copyLinkEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in edit mode.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.copyLinkWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
 							;---------">
@@ -958,7 +958,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.getLinkEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get an edit link for the object. This just calls .getLink() unless it's
 							;                 overridden by the child class.
@@ -966,7 +966,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.getLinkWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
 							;                 overridden by the child class.
@@ -974,7 +974,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.getTypeSelector" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
 							;                 choices to only those matching the given type.
@@ -1000,7 +1000,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.linkSelectedText" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it.
 							; PARAMETERS:
@@ -1011,7 +1011,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.linkSelectedTextEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
 							;                 specifically in edit mode.
@@ -1020,7 +1020,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.linkSelectedTextWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
 							;                 specifically in web mode.
@@ -1029,7 +1029,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.open" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
 							; NOTES:          If you want to override this in a child class, consider overriding
@@ -1038,14 +1038,14 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.openEdit" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object, specifically in edit mode.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.openWeb" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object, specifically in web mode.
 							;---------">
@@ -1082,7 +1082,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.selectMissingInfo" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Check whether the given value or subType is missing, and if it is, prompt the
 							;                 user with a Selector instance (filtered to the child's type) to get the info.
@@ -2559,7 +2559,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="DebugTable.addRow" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{TextTable}" descr="
 							;---------
 							; DESCRIPTION:    Add a new row to the table.
 							; PARAMETERS:
@@ -2570,7 +2570,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="DebugTable.addRows" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{TextTable}" descr="
 							;---------
 							; DESCRIPTION:    Add multiple new rows to the table
 							; PARAMETERS:
@@ -2581,7 +2581,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="DebugTable.BorderType_BoldLine" func="yes">
-            <Overload retVal="[Property]" descr="
+            <Overload retVal="[Property] {TextTable}" descr="
 							;---------
 							; DESCRIPTION:    A thick line border using Unicode characters
 							; GROUP:          Border types
@@ -2589,7 +2589,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="DebugTable.BorderType_Line" func="yes">
-            <Overload retVal="[Property]" descr="
+            <Overload retVal="[Property] {TextTable}" descr="
 							;---------
 							; DESCRIPTION:    A thin line border using Unicode characters
 							; GROUP:          Border types
@@ -2597,7 +2597,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="DebugTable.BorderType_None" func="yes">
-            <Overload retVal="[Property]" descr="
+            <Overload retVal="[Property] {TextTable}" descr="
 							;---------
 							; DESCRIPTION:    No border
 							; GROUP:          Border types
@@ -2605,7 +2605,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="DebugTable.getHeight" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{TextTable}" descr="
 							;---------
 							; DESCRIPTION:    Get the current total height of the table in lines.
 							; RETURNS:        The current height of the table.
@@ -2621,7 +2621,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="DebugTable.getWidth" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{TextTable}" descr="
 							;---------
 							; DESCRIPTION:    Get the current total width of the table in characters.
 							; RETURNS:        The current width of the table, including all columns and padding.
@@ -2629,7 +2629,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="DebugTable.setBorderType" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{TextTable}" descr="
 							;---------
 							; DESCRIPTION:    Set the type of border to show the table with.
 							; PARAMETERS:
@@ -2642,7 +2642,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="DebugTable.setBottomTitle" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{TextTable}" descr="
 							;---------
 							; DESCRIPTION:    Set the title to show at the bottom of the table, as part of the border.
 							; PARAMETERS:
@@ -2653,7 +2653,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="DebugTable.setColumnAlignment" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{TextTable}" descr="
 							;---------
 							; DESCRIPTION:    Set the alignment for a specific column.
 							; PARAMETERS:
@@ -2666,7 +2666,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="DebugTable.setColumnDivider" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{TextTable}" descr="
 							;---------
 							; DESCRIPTION:    Set the string that will be put between each cell in a row.
 							; PARAMETERS:
@@ -2677,7 +2677,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="DebugTable.setDefaultAlignment" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{TextTable}" descr="
 							;---------
 							; DESCRIPTION:    Set the default alignment for all columns in this table.
 							; PARAMETERS:
@@ -2688,7 +2688,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="DebugTable.setTopTitle" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{TextTable}" descr="
 							;---------
 							; DESCRIPTION:    Set the title to show at the top of the table, as part of the border.
 							; PARAMETERS:
@@ -3058,7 +3058,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ErrorToast.addLine" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{Toast}" descr="
 							;---------
 							; DESCRIPTION:    Add a line of text at the bottom of the toast.
 							; PARAMETERS:
@@ -3069,7 +3069,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ErrorToast.appendText" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{Toast}" descr="
 							;---------
 							; DESCRIPTION:    Add some text to the end of the current toast text.
 							; PARAMETERS:
@@ -3080,7 +3080,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ErrorToast.blockingOff" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{Toast}" descr="
 							;---------
 							; DESCRIPTION:    Make this toast non-blocking - that is, we'll allow execution to continue by
 							;                 jobbing off the hide operation with a timer.
@@ -3089,7 +3089,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ErrorToast.blockingOn" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{Toast}" descr="
 							;---------
 							; DESCRIPTION:    Make this toast blocking - that is, we'll sleep the calling script while the
 							;                 toast is showing on a timer, rather than jobbing it off with a timer and
@@ -3099,14 +3099,14 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ErrorToast.close" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{Toast}" descr="
 							;---------
 							; DESCRIPTION:    Hide and destroy the GUI for this toast.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ErrorToast.hide" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{Toast}" descr="
 							;---------
 							; DESCRIPTION:    Fade the toast out, but don't destroy it (use .close() instead if you're
 							;                 finished with the toast).
@@ -3114,7 +3114,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ErrorToast.persistentOff" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{Toast}" descr="
 							;---------
 							; DESCRIPTION:    Make the toast non-persistent - when we finish showing it on a timer it will be destroyed.
 							; RETURNS:        this
@@ -3122,7 +3122,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ErrorToast.persistentOn" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{Toast}" descr="
 							;---------
 							; DESCRIPTION:    Make the toast persistent - that is, when we finish showing it on a timer it is hidden rather than destroyed.
 							; RETURNS:        this
@@ -3130,7 +3130,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ErrorToast.setParent" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{Toast}" descr="
 							;---------
 							; DESCRIPTION:    If you want the toast to be positioned relative to a particular window
 							;                 (using VisualWindow's &quot;special&quot; coordinates), you can set that window here.
@@ -3144,7 +3144,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ErrorToast.setText" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{Toast}" descr="
 							;---------
 							; DESCRIPTION:    Change the text for the toast.
 							; PARAMETERS:
@@ -3156,7 +3156,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ErrorToast.show" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{Toast}" descr="
 							;---------
 							; DESCRIPTION:    Show this toast indefinitely, until it is hidden or closed.
 							; PARAMETERS:
@@ -3171,7 +3171,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ErrorToast.showForSeconds" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{Toast}" descr="
 							;---------
 							; DESCRIPTION:    Show the toast for a certain number of seconds, then hide or destroy it (based
 							;                 on whether it's marked as persistent).
@@ -3189,7 +3189,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ErrorToast.showLong" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{Toast}" descr="
 							;---------
 							; DESCRIPTION:    Wrapper for .showForSeconds for a &quot;long&quot; toast (shown for 5 seconds) in
 							;                 the bottom-right corner of the screen.
@@ -3198,7 +3198,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ErrorToast.showMedium" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{Toast}" descr="
 							;---------
 							; DESCRIPTION:    Wrapper for .showForSeconds for a &quot;medium&quot; toast (shown for 2 seconds) in
 							;                 the bottom-right corner of the screen.
@@ -3207,7 +3207,7 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ErrorToast.showShort" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{Toast}" descr="
 							;---------
 							; DESCRIPTION:    Wrapper for .showForSeconds for a &quot;short&quot; toast (shown for 1 second) in
 							;                 the bottom-right corner of the screen.
@@ -4687,6 +4687,13 @@
         <KeyWord name="NoStandard"/>
         <KeyWord name="Not"/>
         <KeyWord name="NoTab"/>
+        <KeyWord name="NotepadPlusPlus.TabWidth" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    How many characters wide a tab is in Notepad++.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="NoTimers"/>
         <KeyWord name="Number"/>
         <KeyWord name="NumGet" func="yes">
@@ -5144,14 +5151,14 @@
             </Overload>
         </KeyWord>
         <KeyWord name="RelativeDate.instant" func="yes">
-            <Overload retVal="[Property]" descr="
+            <Overload retVal="[Property] {RelativeDateTimeBase}" descr="
 							;---------
 							; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="RelativeDate.SendInFormat" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{RelativeDateTimeBase}" descr="
 							;---------
 							; DESCRIPTION:    Send the relative date/time in a particular format.
 							; PARAMETERS:
@@ -5197,14 +5204,14 @@
             </Overload>
         </KeyWord>
         <KeyWord name="RelativeTime.instant" func="yes">
-            <Overload retVal="[Property]" descr="
+            <Overload retVal="[Property] {RelativeDateTimeBase}" descr="
 							;---------
 							; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
 							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="RelativeTime.SendInFormat" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{RelativeDateTimeBase}" descr="
 							;---------
 							; DESCRIPTION:    Send the relative date/time in a particular format.
 							; PARAMETERS:

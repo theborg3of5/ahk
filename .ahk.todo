@@ -1,9 +1,4 @@
 # New Ideas
-	Autocomplete - for inherited methods, could we show the parent class as a prefix or something?
-		Parent classes only go 1 layer deep anyway, so no need to worry about further up than that
-		Challenge: AutoCompleteClass instance knows about its parent, but it needs to get to the AutoCompleteMember instances to be added as a prefix (or rather, the "returns" value)
-			AutoCompleteMember creation happens before we know about parent class, let alone parent class members
-			Will probably need to happen in processAHKClasses() when we're inheriting the members - maybe just replace/update the .returns at that point?
 	Does the division between text.ahk and launch.ahk make sense? There's text-related stuff in launch.ahk.
 		Options:
 			Combine the two (into a script named what, though?)

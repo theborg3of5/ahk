@@ -8,7 +8,7 @@
 	
 	^!c::Hyperspace.openCurrentDisplayHTML() ; Open the current display's HTML in IE.
 	
-	; ^!l::Send, ^!l ; Bypass the normal linking hotkey everywhere else, as logging out is more helpful here. GDB WFH
+	; ^!l::Send, ^!l ; Bypass the normal linking hotkey everywhere else, as logging out is more helpful here. GDB WFH - confirm this is fine to remove
 #If
 
 ; HSWeb debugging - Hyperspace main window or IE

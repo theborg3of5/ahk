@@ -1,4 +1,4 @@
-[	NAME										ESC		MIN				SELECT_ALL		DELETE_WORD		CLOSE		ACTIVATE		MACHINE	]
+[	NAME										ESC		MIN				SELECT_ALL		DELETE_WORD		CLOSE		ACTIVATE		BACKTICK		MACHINE	]
 
 ; Values for all columns (except NAME) come from WindowActions.Method_* (for how to do the action) or WindowActions.Action_* (to do some other action, like close on escape key) constants.
 
@@ -15,20 +15,20 @@
 	EMC2 XDS Open Design					-			-					-					CTRL_SHIFT
 	EMC2 XDS Submit						-			-					HOME_END			CTRL_SHIFT
 	Explorer									MIN		OTHER
-	Explorer									MIN		-					-					-					-			-				WORK_VDI
-	GitHub Desktop							CLOSE
+	Explorer									MIN		-					-					-					-			-				-	WORK_VDI
+	GitHub Desktop							CLOSE		-					-					-					-			-				ESCAPE
 	GrepWin									CLOSE
 	KDiff										CLOSE
-	Messenger								MIN		-					-					-					-			-				HOME_DESKTOP
-	Teams										CLOSE		CLOSE
+	Messenger								MIN		-					-					-					-			-				ESCAPE	HOME_DESKTOP
 	Notepad									CLOSE		-					-					CTRL_SHIFT
 	OneTastic Macro Editor XML			-			-					HOME_END
 	Pidgin Buddy List						CLOSE		CLOSE
 	Republic Anywhere						CLOSE		CLOSE
 	Skype										CLOSE
-	Slack										CLOSE		-					-					-					-			-				HOME_DESKTOP
+	Slack										CLOSE		-					-					-					-			-				-	HOME_DESKTOP
 	Spotify									CLOSE		CLOSE				-					-					OTHER		OTHER
-	Telegram									CLOSE		CLOSE				-					-					-
+	Teams										CLOSE		CLOSE				-					-					-			-				ESCAPE
+	Telegram									CLOSE		CLOSE				-					-					-			-				ESCAPE
 	Thunder									CLOSE
 	VB6										-			POST_MESSAGE
 

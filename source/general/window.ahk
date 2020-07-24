@@ -6,6 +6,8 @@ $!q::WindowActions.minimizeWindow()
 	WindowActions.escAction()
 	KeyWait, Esc, T1 ; Ensures that we don't have fall-through window closing.
 return
+; When escape key is useful but is being used to minimize/close things, use backtick as a replacement.
+$`::WindowActions.backtickAction()
 
 ; Sets current window to stay on top
 +#t::

@@ -12,8 +12,7 @@ class WindowActions {
 	}
 	
 	;---------
-	; DESCRIPTION:    Activate and show a window, respecting any custom overrides for the identified
-	;                 window.
+	; DESCRIPTION:    Activate and show a window, respecting any custom overrides for the identified window.
 	; PARAMETERS:
 	;  titleString (I,REQ) - A title string identifying the window.
 	;---------
@@ -21,10 +20,9 @@ class WindowActions {
 		this.windowAction(this.Action_Activate, "", titleString)
 	}
 	;---------
-	; DESCRIPTION:    Activate and show a window, respecting any custom overrides for the identified
-	;                 window.
+	; DESCRIPTION:    Activate and show a window, respecting any custom overrides for the identified window.
 	; PARAMETERS:
-	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+	;  name (I,REQ) - The name of the window, as defined in windows.tl.
 	;---------
 	activateWindowByName(name) {
 		this.windowAction(this.Action_Activate, name)
@@ -41,15 +39,15 @@ class WindowActions {
 	;---------
 	; DESCRIPTION:    Close a window, respecting any custom overrides for the identified window.
 	; PARAMETERS:
-	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+	;  name (I,REQ) - The name of the window, as defined in windows.tl.
 	;---------
 	closeWindowByName(name) {
 		this.windowAction(this.Action_Close, name)
 	}
 	
 	;---------
-	; DESCRIPTION:    Delete a single word before the cursor within a particular window, respecting
-	;                 any custom overrides for the identified window.
+	; DESCRIPTION:    Delete a single word before the cursor within a particular window, respecting any custom overrides
+	;                 for the identified window.
 	; PARAMETERS:
 	;  titleString (I,REQ) - A title string representing the window.
 	;---------
@@ -57,18 +55,18 @@ class WindowActions {
 		this.windowAction(this.Action_DeleteWord, "", titleString)
 	}
 	;---------
-	; DESCRIPTION:    Delete a single word before the cursor within a particular window, respecting
-	;                 any custom overrides for the identified window.
+	; DESCRIPTION:    Delete a single word before the cursor within a particular window, respecting any custom overrides
+	;                 for the identified window.
 	; PARAMETERS:
-	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+	;  name (I,REQ) - The name of the window, as defined in windows.tl.
 	;---------
 	deleteWordByName(name) {
 		this.windowAction(this.Action_DeleteWord, name)
 	}
 	
 	;---------
-	; DESCRIPTION:    Respond to the escape key within a particular window, respecting any custom
-	;                 overrides for the identified window.
+	; DESCRIPTION:    Respond to the escape key within a particular window, respecting any custom overrides for the
+	;                 identified window.
 	; PARAMETERS:
 	;  titleString (I,REQ) - A title string representing the window.
 	;---------
@@ -76,10 +74,10 @@ class WindowActions {
 		this.windowAction(this.Action_EscapeKey, "", titleString)
 	}
 	;---------
-	; DESCRIPTION:    Respond to the escape key within a particular window, respecting any custom
-	;                 overrides for the identified window.
+	; DESCRIPTION:    Respond to the escape key within a particular window, respecting any custom overrides for the
+	;                 identified window.
 	; PARAMETERS:
-	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+	;  name (I,REQ) - The name of the window, as defined in windows.tl.
 	;---------
 	escActionByName(name) {
 		this.windowAction(this.Action_EscapeKey, name)
@@ -96,15 +94,14 @@ class WindowActions {
 	;---------
 	; DESCRIPTION:    Minimize a window, respecting any custom overrides for the identified window.
 	; PARAMETERS:
-	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+	;  name (I,REQ) - The name of the window, as defined in windows.tl.
 	;---------
 	minimizeWindowByName(name) {
 		this.windowAction(this.Action_Minimize, name)
 	}
 	
 	;---------
-	; DESCRIPTION:    Select all within a particular window, respecting any custom overrides for the
-	;                 identified window.
+	; DESCRIPTION:    Select all within a particular window, respecting any custom overrides for the identified window.
 	; PARAMETERS:
 	;  titleString (I,REQ) - A title string representing the window.
 	;---------
@@ -112,13 +109,31 @@ class WindowActions {
 		this.windowAction(this.Action_SelectAll, "", titleString)
 	}
 	;---------
-	; DESCRIPTION:    Select all within a particular window, respecting any custom overrides for the
-	;                 identified window.
+	; DESCRIPTION:    Select all within a particular window, respecting any custom overrides for the identified window.
 	; PARAMETERS:
-	;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+	;  name (I,REQ) - The name of the window, as defined in windows.tl.
 	;---------
 	selectAllByName(name) {
 		this.windowAction(WindowActions.Action_SelectAll, name)
+	}
+	
+	;---------
+	; DESCRIPTION:    Respond to the backtick key within a particular window. Generally used to send Escape when Escape is
+	;                 being used for something else.
+	; PARAMETERS:
+	;  titleString (I,OPT) - A title string representing the window.
+	;---------
+	backtickAction(titleString := "A") {
+		this.windowAction(this.Action_Backtick, "", titleString)
+	}
+	;---------
+	; DESCRIPTION:    Respond to the backtick key within a particular window. Generally used to send Escape when Escape is
+	;                 being used for something else.
+	; PARAMETERS:
+	;  name (I,REQ) - The name of the window, as defined in windows.tl.
+	;---------
+	backtickActionByName(name) {
+		this.windowAction(this.Action_Backtick, name)
 	}
 	
 	
@@ -127,11 +142,12 @@ class WindowActions {
 	; Supported window actions
 	static Action_None       := "NONE"        ; Nothing
 	static Action_Activate   := "ACTIVATE"    ; Activate the window
+	static Action_Backtick   := "BACKTICK"    ; Handle the backtick key being pressed
 	static Action_Close      := "CLOSE"       ; Close the window
+	static Action_DeleteWord := "DELETE_WORD" ; Delete the word to the left of the cursor
 	static Action_EscapeKey  := "ESC"         ; Handle the escape key being pressed
 	static Action_Minimize   := "MIN"         ; Minimize the window
 	static Action_SelectAll  := "SELECT_ALL"  ; Select all of the current field
-	static Action_DeleteWord := "DELETE_WORD" ; Delete the word to the left of the cursor
 	
 	; Supported action methods
 	static Method_Default          := "DEFAULT"      ; Use the default way of performing the action
@@ -139,6 +155,7 @@ class WindowActions {
 	static Method_Minimize_Message := "POST_MESSAGE" ; Minimize: send a windows message to do it
 	static Method_SelectAll_Home   := "HOME_END"     ; Select all: send home/end (and holding shift in between)
 	static Method_DeleteWord_Ctrl  := "CTRL_SHIFT"   ; Delete word: send Ctrl+Shift+Left to select it, then delete
+	static Method_Esc              := "ESCAPE"       ; Send an escape keystroke
 	
 	actionOverrides := "" ; {windowName: {action: method}}
 	
@@ -146,10 +163,9 @@ class WindowActions {
 	; DESCRIPTION:    Set up the needed information to perform a window action and execute it.
 	; PARAMETERS:
 	;  action      (I,REQ) - The action to perform, from WindowActions.Action_* constants.
-	;  name        (I,OPT) - The name of the window, as identified in windows.tl. Either this or
-	;                        titleString is required.
-	;  titleString (I,OPT) - A title string that identifies the window we want to perform the action
-	;                        on. Either this or name is required.
+	;  name        (I,OPT) - The name of the window, as identified in windows.tl. Either this or titleString is required.
+	;  titleString (I,OPT) - A title string that identifies the window we want to perform the action on. Either this or name is
+	;                        required.
 	;---------
 	windowAction(action, name := "", titleString := "") {
 		if(!action)
@@ -170,10 +186,8 @@ class WindowActions {
 	; DESCRIPTION:    Perform an action on the identified window, respecting any overrides.
 	; PARAMETERS:
 	;  action               (I,REQ) - The action to perform, from WindowActions.Action_* constants.
-	;  titleString          (I,REQ) - A title string that identifies the window we want to perform
-	;                                 the action on.
-	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from WindowActions.actionOverrides.
+	;  titleString          (I,REQ) - A title string that identifies the window we want to perform the action on.
+	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
 	;---------
 	doWindowAction(action, titleString, windowActionSettings) {
 		if(!action || !titleString)
@@ -192,6 +206,7 @@ class WindowActions {
 		Switch action {
 			Case this.Action_None:       return                                                           ; Do nothing
 			Case this.Action_Activate:   this.doActivateWindow(method, titleString, windowActionSettings) ; Activate the given window
+			Case this.Action_Backtick:   this.doBacktickAction(method, titleString, windowActionSettings) ; React to backtick
 			Case this.Action_Close:      this.doCloseWindow(   method, titleString, windowActionSettings) ; Close the given window
 			Case this.Action_DeleteWord: this.doDeleteWord(    method, titleString, windowActionSettings) ; Backspace one word
 			Case this.Action_EscapeKey:  this.doEscAction(     method, titleString, windowActionSettings) ; React to the escape key (generally to minimize or close the window)
@@ -204,13 +219,11 @@ class WindowActions {
 	;---------
 	; DESCRIPTION:    Activate the specified window.
 	; PARAMETERS:
-	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_*
-	;                                 constants.
+	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_* constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
-	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from WindowActions.actionOverrides.
-	; NOTES:          If we don't recognize the specific method, we'll call back into
-	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
+	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
+	; NOTES:          If we don't recognize the specific method, we'll call back into doWindowAction() to see if it's
+	;                 another action (ESC > CLOSE, etc.).
 	;---------
 	doActivateWindow(method, titleString, windowActionSettings) {
 		Switch method {
@@ -222,15 +235,29 @@ class WindowActions {
 		}
 	}
 	;---------
+	; DESCRIPTION:    Respond to the backtick key in the specified window.
+	; PARAMETERS:
+	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_* constants.
+	;  titleString          (I,REQ) - Title string identifying the window to act upon.
+	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
+	; NOTES:          If we don't recognize the specific method, we'll call back into doWindowAction() to see if it's
+	;                 another action (ESC > CLOSE, etc.).
+	;---------
+	doBacktickAction(method, titleString, windowActionSettings) {
+		Switch method {
+			Case this.Method_Default: Send, `` ; Default is to just let the keystroke through (escaped).
+			Case this.Method_Esc:     Send, {Esc} ; Send escape - backtick is usually used for a replacement for escape in these cases.
+			Default:                  this.doWindowAction(method, titleString, windowActionSettings)
+		}
+	}
+	;---------
 	; DESCRIPTION:    Close the specified window.
 	; PARAMETERS:
-	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_*
-	;                                 constants.
+	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_* constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
-	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from WindowActions.actionOverrides.
-	; NOTES:          If we don't recognize the specific method, we'll call back into
-	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
+	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
+	; NOTES:          If we don't recognize the specific method, we'll call back into doWindowAction() to see if it's
+	;                 another action (ESC > CLOSE, etc.).
 	;---------
 	doCloseWindow(method, titleString, windowActionSettings) {
 		Switch method {
@@ -241,13 +268,11 @@ class WindowActions {
 	;---------
 	; DESCRIPTION:    Delete a word in the specified window.
 	; PARAMETERS:
-	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_*
-	;                                 constants.
+	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_* constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
-	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from WindowActions.actionOverrides.
-	; NOTES:          If we don't recognize the specific method, we'll call back into
-	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
+	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
+	; NOTES:          If we don't recognize the specific method, we'll call back into doWindowAction() to see if it's
+	;                 another action (ESC > CLOSE, etc.).
 	;---------
 	doDeleteWord(method, titleString, windowActionSettings) {
 		Switch method {
@@ -263,13 +288,11 @@ class WindowActions {
 	;---------
 	; DESCRIPTION:    Respond to the escape key in the specified window.
 	; PARAMETERS:
-	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_*
-	;                                 constants.
+	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_* constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
-	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from WindowActions.actionOverrides.
-	; NOTES:          If we don't recognize the specific method, we'll call back into
-	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
+	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
+	; NOTES:          If we don't recognize the specific method, we'll call back into doWindowAction() to see if it's
+	;                 another action (ESC > CLOSE, etc.).
 	;---------
 	doEscAction(method, titleString, windowActionSettings) {
 		Switch method {
@@ -280,13 +303,11 @@ class WindowActions {
 	;---------
 	; DESCRIPTION:    Minimize the specified window.
 	; PARAMETERS:
-	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_*
-	;                                 constants.
+	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_* constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
-	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from WindowActions.actionOverrides.
-	; NOTES:          If we don't recognize the specific method, we'll call back into
-	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
+	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
+	; NOTES:          If we don't recognize the specific method, we'll call back into doWindowAction() to see if it's
+	;                 another action (ESC > CLOSE, etc.).
 	;---------
 	doMinimizeWindow(method, titleString, windowActionSettings) {
 		Switch method {
@@ -298,13 +319,11 @@ class WindowActions {
 	;---------
 	; DESCRIPTION:    Select all text in the specified window.
 	; PARAMETERS:
-	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_*
-	;                                 constants.
+	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_* constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
-	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from WindowActions.actionOverrides.
-	; NOTES:          If we don't recognize the specific method, we'll call back into
-	;                 doWindowAction() to see if it's another action (ESC > CLOSE, etc.).
+	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
+	; NOTES:          If we don't recognize the specific method, we'll call back into doWindowAction() to see if it's
+	;                 another action (ESC > CLOSE, etc.).
 	;---------
 	doSelectAll(method, titleString, windowActionSettings) {
 		Switch method {
@@ -319,14 +338,12 @@ class WindowActions {
 	}
 	
 	;---------
-	; DESCRIPTION:    Catch-all function for performing actions on windows, where those action
-	;                 overrides are unique to the particular program (and therefore not worth
-	;                 standardizing into a method constant).
+	; DESCRIPTION:    Catch-all function for performing actions on windows, where those action overrides are unique to the
+	;                 particular program (and therefore not worth standardizing into a method constant).
 	; PARAMETERS:
 	;  action               (I,REQ) - The action to try and perform.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
-	;  windowActionSettings (I,REQ) - Array of action override information for the window in
-	;                                 question, from WindowActions.actionOverrides.
+	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
 	;---------
 	doSpecialWindowMethod(action, titleString, windowActionSettings) {
 		if(!action)

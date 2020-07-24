@@ -7969,8 +7969,7 @@
         <KeyWord name="WindowActions.activateWindow" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Activate and show a window, respecting any custom overrides for the identified
-							;                 window.
+							; DESCRIPTION:    Activate and show a window, respecting any custom overrides for the identified window.
 							; PARAMETERS:
 							;  titleString (I,REQ) - A title string identifying the window.
 							;---------">
@@ -7980,10 +7979,31 @@
         <KeyWord name="WindowActions.activateWindowByName" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Activate and show a window, respecting any custom overrides for the identified
-							;                 window.
+							; DESCRIPTION:    Activate and show a window, respecting any custom overrides for the identified window.
 							; PARAMETERS:
-							;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+							;  name (I,REQ) - The name of the window, as defined in windows.tl.
+							;---------">
+                <Param name="name" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowActions.backtickAction" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Respond to the backtick key within a particular window. Generally used to send Escape when Escape is
+							;                 being used for something else.
+							; PARAMETERS:
+							;  titleString (I,OPT) - A title string representing the window.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowActions.backtickActionByName" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Respond to the backtick key within a particular window. Generally used to send Escape when Escape is
+							;                 being used for something else.
+							; PARAMETERS:
+							;  name (I,REQ) - The name of the window, as defined in windows.tl.
 							;---------">
                 <Param name="name" />
             </Overload>
@@ -8003,7 +8023,7 @@
 							;---------
 							; DESCRIPTION:    Close a window, respecting any custom overrides for the identified window.
 							; PARAMETERS:
-							;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+							;  name (I,REQ) - The name of the window, as defined in windows.tl.
 							;---------">
                 <Param name="name" />
             </Overload>
@@ -8011,8 +8031,8 @@
         <KeyWord name="WindowActions.deleteWord" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Delete a single word before the cursor within a particular window, respecting
-							;                 any custom overrides for the identified window.
+							; DESCRIPTION:    Delete a single word before the cursor within a particular window, respecting any custom overrides
+							;                 for the identified window.
 							; PARAMETERS:
 							;  titleString (I,REQ) - A title string representing the window.
 							;---------">
@@ -8022,10 +8042,10 @@
         <KeyWord name="WindowActions.deleteWordByName" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Delete a single word before the cursor within a particular window, respecting
-							;                 any custom overrides for the identified window.
+							; DESCRIPTION:    Delete a single word before the cursor within a particular window, respecting any custom overrides
+							;                 for the identified window.
 							; PARAMETERS:
-							;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+							;  name (I,REQ) - The name of the window, as defined in windows.tl.
 							;---------">
                 <Param name="name" />
             </Overload>
@@ -8033,8 +8053,8 @@
         <KeyWord name="WindowActions.escAction" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Respond to the escape key within a particular window, respecting any custom
-							;                 overrides for the identified window.
+							; DESCRIPTION:    Respond to the escape key within a particular window, respecting any custom overrides for the
+							;                 identified window.
 							; PARAMETERS:
 							;  titleString (I,REQ) - A title string representing the window.
 							;---------">
@@ -8044,10 +8064,10 @@
         <KeyWord name="WindowActions.escActionByName" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Respond to the escape key within a particular window, respecting any custom
-							;                 overrides for the identified window.
+							; DESCRIPTION:    Respond to the escape key within a particular window, respecting any custom overrides for the
+							;                 identified window.
 							; PARAMETERS:
-							;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+							;  name (I,REQ) - The name of the window, as defined in windows.tl.
 							;---------">
                 <Param name="name" />
             </Overload>
@@ -8074,7 +8094,7 @@
 							;---------
 							; DESCRIPTION:    Minimize a window, respecting any custom overrides for the identified window.
 							; PARAMETERS:
-							;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+							;  name (I,REQ) - The name of the window, as defined in windows.tl.
 							;---------">
                 <Param name="name" />
             </Overload>
@@ -8082,8 +8102,7 @@
         <KeyWord name="WindowActions.selectAll" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Select all within a particular window, respecting any custom overrides for the
-							;                 identified window.
+							; DESCRIPTION:    Select all within a particular window, respecting any custom overrides for the identified window.
 							; PARAMETERS:
 							;  titleString (I,REQ) - A title string representing the window.
 							;---------">
@@ -8093,10 +8112,9 @@
         <KeyWord name="WindowActions.selectAllByName" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Select all within a particular window, respecting any custom overrides for the
-							;                 identified window.
+							; DESCRIPTION:    Select all within a particular window, respecting any custom overrides for the identified window.
 							; PARAMETERS:
-							;  name (I,REQ) - The name of the window to activate, as defined in windows.tl.
+							;  name (I,REQ) - The name of the window, as defined in windows.tl.
 							;---------">
                 <Param name="name" />
             </Overload>

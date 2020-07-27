@@ -4,8 +4,6 @@
 			Combine the two (into a script named what, though?)
 			Move text-related things over to text.ahk (does this mean separating universal link from universal open, though?)
 	Get rid of Messenger, Github Desktop scripts if I don't use them for something new soon
-	Consider making use of #Requires <version>: https://www.autohotkey.com/docs/commands/_Requires.htm
-	Consider adding #Warn for unreachable code: https://www.autohotkey.com/docs/commands/_Warn.htm#Unreachable
 	Teams: could we make the mute/video toggles, universal hotkeys?
 		Based on existence of Teams window with meeting running
 			Title with meeting running: Meeting | Microsoft Teams

@@ -67,4 +67,3 @@ return
 		if(code != "")
 			Send, % Chr("0x" code)
 	}
-return

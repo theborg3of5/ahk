@@ -54,6 +54,7 @@
 	::verpleedag::verpleegdag
 	::helptext::help text
 	::precendence::precedence
+	::abcense::absence
 }
 
 { ; Expansions

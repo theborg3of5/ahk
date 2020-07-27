@@ -76,8 +76,19 @@ class OneNoteTodoPage {
 		if(todayOnly)
 			Send, !+3 ; Collapse to headers under Today (which collapses headers under Today so only todos on level 4 are visible)
 		
-		; Get down to first item under Today header
-		Send, {End}{Right}{End}{Right} ; End of "Do" line, right to "Today" line, end of "Today" line, right to first item line. For some reason OneNote won't take {Down} keystrokes reliably, but this seems to work instead.
+		this.cursorToFirstTodayItem()
+	}
+	
+	;---------
+	; DESCRIPTION:    Get to the first item under the second-level "Today" header.
+	;---------
+	cursorToFirstTodayItem() {
+		Send, ^{Home} ; Top-level ("Do") header
+		
+		; For some reason OneNote won't take {Down} keystrokes reliably, but getting to the end of the line
+		; and using {Right} seems to work instead.
+		Send, {End}{Right} ; End of "Do" line, right to following "Today" line
+		Send, {End}{Right} ; End of "Today" line, right to following item line
 	}
 	
 	;---------
@@ -145,9 +156,8 @@ class OneNoteTodoPage {
 		Sleep, 1000                                    ; Wait for selection to take
 		Send, % OneNoteTodoPage.generateTitle(instant) ; Send title
 		
-		OneNoteTodoPage.collapseToTodayItems() ; Also puts us on the first line of today's todos
-		
 		; Insert any applicable recurring todos
+		this.cursorToFirstTodayItem()
 		OneNoteTodoPage.sendRecurringTodos(instant)
 	}
 	

@@ -8,9 +8,9 @@
 		Based on existence of Teams window with meeting running
 			Title with meeting running: Meeting | Microsoft Teams
 			Looks like this should work even once the window is closed (minimized to tray)
-	With new EMC2 version, do I need to add more specifications (probably ahk classes?) to various EMC2 windows?
 	Is the media player stuff in config worth keeping around? I don't really switch music programs anymore, and Chrome awkwardly tries to grab media keys anyway.
 		Possibly replace it with something based on RDP/Spotify command script, that interacts directly with Spotify instead of letting other things steal the media keys?
+		Wait until a little after WFH stuff is done to decide.
 	Allow opening routines in EpicStudio in an environment other than DBC Dev (mainly to allow CDE)
 		Probably a new (optional) data element throughout ActionObject* (and a new column in actionObject.tls)
 			Do we want free-text input (to match on epicEnvironments TLS, presumably?)

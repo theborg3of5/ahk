@@ -264,7 +264,7 @@ class OneTastic {
 		; Add function signature
 		Send, ^{NumpadAdd} ; New function
 		WinWaitActive, Function Signature Editor
-		ControlSetText, Edit2, % functionSignature, A
+		ControlSetText, Edit1, % functionSignature, A
 		Send, {Space} ; Parsed value doesn't update unless we actually change something (setting the field doesn't count), so add a space (which is ignored by the parser).
 		Send, !o ; OK out of window
 		

@@ -3,17 +3,15 @@
 	^l::Send, !d
 		
 	; Open "new tab" (to This PC)
-	#e::
+	#e:: ; While explorer is already active - otherwise, this activates it.
 	^t::
 		Run(Explorer.ThisPCFolderUUID)
 	return
 	
 	; Copy current folder/file paths to clipboard
-	!c::ClipboardLib.copyFilePathWithHotkey(Explorer.Hotkey_CopyCurrentFile)      ; Current file
+	!c:: ClipboardLib.copyFilePathWithHotkey(  Explorer.Hotkey_CopyCurrentFile)   ; Current file
 	!#c::ClipboardLib.copyFolderPathWithHotkey(Explorer.Hotkey_CopyCurrentFolder) ; Current folder
-	
-	; Relative shortcut creation
-	^+s::Explorer.createRelativeShortcutToFile()
+	^!#c::Explorer.copyPathRelativeToSource() ; Current file, but drop the usual EpicSource stuff up through the DLG folder.
 	
 	; Hide/show hidden files
 	#h::Explorer.toggleHiddenFiles()
@@ -25,6 +23,9 @@
 		Send, {AppsKey}
 		Send, l
 	return
+	
+	; Relative shortcut creation
+	^+s::Explorer.createRelativeShortcutToFile()
 	
 	; Open EMC2 objects based on the active folder name.
 	!w::Explorer.getActiveFolderEMC2Object().openWeb()

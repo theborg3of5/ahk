@@ -45,8 +45,12 @@ class ErrorToast extends Toast {
 	;---------
 	buildErrorText(problemMessage, errorMessage, mitigationMessage) {
 		text := problemMessage
-		text := text.appendPiece(errorMessage,      ":`n")
-		text := text.appendPiece(mitigationMessage, "`n`n")
+		
+		if(errorMessage != "")
+			text .= ":`n" errorMessage ; Add colon to previous line
+		
+		if(mitigationMessage != "")
+			text .= "`n`n" mitigationMessage
 		
 		return text
 	}

@@ -27,6 +27,7 @@
 	Epic NFS Ask							EPIC_NFS_ASK
 	Epic Temp Daily						EPIC_TEMP_DAILY
 	Epic Personal							EPIC_PERSONAL
+	Epic Source Current Version		EPIC_SOURCE
 	Epic Source S1							EPIC_SOURCE_S1
 	Epic VDI Settings						EPIC_VDI_SETTINGS
 	Epic Environment TraceX Files		EPIC_HSWEB_TRACE

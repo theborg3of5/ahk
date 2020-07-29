@@ -131,6 +131,34 @@ class ClipboardLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Grabs the path for the current file, trims it down to the bit inside the DLG/App * folder, and puts
+	;                 it on the clipboard.
+	; PARAMETERS:
+	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
+	;---------
+	copyPathRelativeToSource(hotkeyKeys) {
+		path := ClipboardLib.getWithHotkey(hotkeyKeys)
+		if(!path) {
+			new ErrorToast("Could not copy source-relative path", "Failed to get file path").showMedium()
+			return
+		}
+			
+		path := FileLib.cleanupPath(path)
+		
+		sourceRoot := Config.private["EPIC_SOURCE"] "\"
+		if(!path.startsWith(sourceRoot)) {
+			ClipboardLib.setAndToastError(path, "path", "Could not copy source-relative path", "Path is not in source root")
+			return
+		}
+		path := path.removeFromStart(sourceRoot)
+		
+		; Strip off one more parent - it's either one of the main folders (App *) or a DLG folder (DLG-*)
+		path := "\" path.afterString("\") ; Keep the leading backslash
+		
+		ClipboardLib.setAndToast(path, "DLG file path")
+	}
+	
+	;---------
 	; DESCRIPTION:    Set the clipboard to the given value, and wait to make sure it applies before returning.
 	; PARAMETERS:
 	;  value         (I,REQ) - Value to set.

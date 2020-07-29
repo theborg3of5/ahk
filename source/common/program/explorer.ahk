@@ -14,32 +14,6 @@ class Explorer {
 	static Hotkey_CopyCurrentFolder := "^!c"
 	
 	;---------
-	; DESCRIPTION:    Grabs the path for the current file, trims it down to the bit inside the DLG/App * folder, and puts
-	;                 it on the clipboard.
-	;---------
-	copyPathRelativeToSource() {
-		path := ClipboardLib.getWithHotkey(this.Hotkey_CopyCurrentFile)
-		if(!path) {
-			new ErrorToast("Could not copy source-relative path", "Failed to get file path").showMedium()
-			return
-		}
-			
-		path := FileLib.cleanupPath(path)
-		
-		sourceRoot := Config.private["EPIC_SOURCE"] "\"
-		if(!path.startsWith(sourceRoot)) {
-			ClipboardLib.setAndToastError(path, "path", "Could not copy source-relative path", "Path is not in source root")
-			return
-		}
-		path := path.removeFromStart(sourceRoot)
-		
-		; Strip off one more parent - it's either one of the main folders (App *) or a DLG folder (DLG-*)
-		path := "\" path.afterString("\") ; Keep the leading backslash
-		
-		ClipboardLib.setAndToast(path, "DLG file path")
-	}
-	
-	;---------
 	; DESCRIPTION:    Toggle whether hidden files are visible in Explorer or not.
 	; NOTES:          Inspired by http://www.autohotkey.com/forum/post-342375.html#342375
 	;---------

@@ -54,6 +54,7 @@
 	::helptext::help text
 	::precendence::precedence
 	::abcense::absence
+	::voilates::violates
 
 ; [[ Expansions ]] ---
 	::f'n::function

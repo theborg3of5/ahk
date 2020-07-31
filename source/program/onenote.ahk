@@ -57,10 +57,16 @@
 	$^+d::OneNote.deletePageWithConfirm()
 	!m::  OneNote.addMeetingNotes()
 	^0::  OneNote.zoomTo100Percent()
-	^+c:: OneNote.applyCodeStyle()
-	^l::  OneNote.createLinkPageSpecSection()
-	^+l:: OneNote.createLinkDevPageSpecSection()
-	^+i:: OneNote.addSubLinesToSelectedLines()
+	
+	; OneTastic custom styles and macros
+	^+c::OneNote.applyCodeStyle()
+	^+i::OneNote.addSubLinesToSelectedLines()
+	!t:: OneNote.collapseToUnfinishedTags()
+	^l:: OneNote.createAndLinkPageInSpecificSection()
+	
+	; Work-specific macros
+	^+a::OneNote.applyDevStructureToCurrentPage()
+	^+l::OneNote.createAndLinkDevPageInSpecificSection()
 	
 	; Link handling
 	!c::      OneNote.copyLinkToCurrentPage()

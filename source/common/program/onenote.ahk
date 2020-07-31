@@ -20,6 +20,59 @@ class OneNote {
 	
 	; #INTERNAL#
 	
+	; Named wrappers quick access toolbar items.
+	newSubpage() {
+		Send, !1
+	}
+	promoteSubpage() {
+		Send, !2
+	}
+	makeSubpage() {
+		Send, !3
+	}
+	deletePage() {
+		Send, !4
+	}
+	addMeetingNotes() {
+		Send, !5
+	}
+	zoomTo100Percent() {
+		Send, !6
+	}
+	runOnetasticToolbarMacro(keys) {
+		Send, !7 ; Onetastic Toolbar macro set
+		Send, % keys
+	}
+	runOnetasticWorkToolbarMacro(keys) {
+		Send, !8 ; Onetastic Work Toolbar macro set
+		Send, % keys
+	}
+	
+	; Named wrappers for specific toolbar macros, using quick access item + hotkeys
+	addSubLinesToSelectedLines() {
+		this.runOnetasticToolbarMacro("y1")
+	}
+	collapseToUnfinishedTags() {
+		this.runOnetasticToolbarMacro("y2")
+	}
+	createAndLinkPageInSpecificSection() {
+		this.runOnetasticToolbarMacro("y3")
+	}
+	applyDevStructureToCurrentPage() {
+		this.runOnetasticWorkToolbarMacro("y1")
+	}
+	createAndLinkDevPageInSpecificSection() {
+		this.runOnetasticWorkToolbarMacro("y2")
+	}
+	
+	;---------
+	; DESCRIPTION:    Apply the custom Onetastic "code" style to the selected text.
+	;---------
+	applyCodeStyle() {	; Custom styles from Onetastic
+		Send, !hy3    ; Home > Custom Styles
+		Send, {Enter} ; Select first one (my "code" style)
+	}
+	
 	;---------
 	; DESCRIPTION:    Scroll left/right in the OneNote window (assuming it's under the mouse)
 	;---------
@@ -53,54 +106,12 @@ class OneNote {
 	}
 	
 	;---------
-	; DESCRIPTION:    Named commands for hard-coded references to quick access toolbar items in OneNote.
-	;---------
-	newSubpage() {
-		Send, !1
-	}
-	promoteSubpage() {
-		Send, !2
-	}
-	makeSubpage() {
-		Send, !3
-	}
-	deletePage() {
-		Send, !4
-	}
-	addMeetingNotes() {
-		Send, !5
-	}
-	zoomTo100Percent() {
-		Send, !6
-	}
-	customStyles() {	; Custom styles from OneTastic
-		Send, !7
-	}
-	createLinkPageSpecSection() { ; Custom OneTastic macro - create linked page in specific(s) section
-		Send, !8
-	}
-	createLinkDevPageSpecSection() { ; Custom OneTastic macro - create linked dev page in specifics section
-		Send, !9
-	}
-	addSubLinesToSelectedLines() { ; Custom OneTastic macro - add sub-lines to selected lines
-		Send, !0
-	}
-	
-	;---------
 	; DESCRIPTION:    Confirm with the user that they want to delete the current page, then do so.
 	;---------
 	deletePageWithConfirm() {
 		; Confirmation to avoid accidental page deletion
 		if(GuiLib.showConfirmationPopup("Are you sure you want to delete this page?", "Delete page?"))
 			OneNote.deletePage()
-	}
-	
-	;---------
-	; DESCRIPTION:    Format the selected text as code using OneTastic custom styles.
-	;---------
-	applyCodeStyle() {
-		OneNote.customStyles()
-		Send, {Enter}
 	}
 	
 	;---------

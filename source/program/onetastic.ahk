@@ -1,6 +1,11 @@
 #If Config.isWindowActive("OneTastic Macro Editor")
 	; Insert statement hotkeys
-	^`;::!6 ; Insert comment 
+	^`;::
+		Send, !6 ; Insert comment 
+		Send, {Enter} ; Edit comment text
+		WinWaitActive, Comment Editor
+		Send, {Delete}{Enter}
+	return
 	
 	; Move line up/down
 	!Up::  Send, ^{Up}

@@ -31,6 +31,7 @@
 	Epic Source S1							EPIC_SOURCE_S1
 	Epic VDI Settings						EPIC_VDI_SETTINGS
 	Epic Environment TraceX Files		EPIC_HSWEB_TRACE
+	Epic Shared UX Resources			EPIC_UX_SHARED
 }
 
 	; General

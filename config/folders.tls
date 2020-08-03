@@ -35,6 +35,7 @@
 	Temp Daily						temp		<EPIC_TEMP_DAILY>
 	Temp Daily (Today)			ttemp		<EPIC_TEMP_DAILY>\<M>-<d>-<yy>
 	VDI Settings					vdi		<EPIC_VDI_SETTINGS>
+	UX Shared Resources			ux			<EPIC_UX_SHARED>
 	DBC Design						dbcd		<EPIC_DBC_DESIGN>
 	DBC Partial Installers		dbcpi		<EPIC_DBC_PARTIAL_INSTALLERS>
 	Environment TraceX Files	etrace	<EPIC_HSWEB_TRACE>

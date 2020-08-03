@@ -93,21 +93,12 @@ class ActionObjectPath extends ActionObjectBase {
 	; RETURNS:        The type of path, from PathType_* constants.
 	;---------
 	determinePathType(path) {
-		; Full URLs
-		if(path.startsWithAnyOf(["http://", "https://"]))
+		if(StringLib.isURL(path))
 			return ActionObjectPath.PathType_URL
 		
-		; Filepaths
-		if(path.startsWithAnyOf(["file:///", "\\"])) ; URL-formatted file path, Windows network path
-			return ActionObjectPath.PathType_FilePath
-		if(path.sub(2, 2) = ":\")  ; Windows filepath (starts with drive letter + :\)
+		if(FileLib.isFilePath(path))
 			return ActionObjectPath.PathType_FilePath
 		
-		; Partial URLs (www.google.com, similar)
-		if(path.startsWithAnyOf(["www.", "vpn.", "m."]))
-			return ActionObjectPath.PathType_URL
-		
-		; Unknown
 		return ""
 	}
 	
@@ -116,11 +107,15 @@ class ActionObjectPath extends ActionObjectBase {
 	; SIDE EFFECTS:   Can update this.path.
 	;---------
 	postProcess() {
-		; For URLs, make sure that they have a protocol at the start so Windows knows how to run it
-		; as a URL (not a local path).
-		if(this.pathType = ActionObjectPath.PathType_URL) {
-			if(!this.path.contains("//")) ; No protocol
-				this.path := "https://" this.path ; Add a protocol on so Windows knows to run it as a URL.
+		Switch this.pathType {
+			case ActionObjectPath.PathType_URL:
+				; For URLs, make sure that they have a protocol at the start so Windows knows how to run it as a URL
+				; (not a local path).
+				if(!this.path.contains("//")) ; No protocol
+					this.path := "https://" this.path ; Add a protocol on so Windows knows to run it as a URL.
+			
+			case ActionObjectPath.PathType_FilePath:
+				this.path := FileLib.cleanupPath(this.path)
 		}
 	}
 	; #END#

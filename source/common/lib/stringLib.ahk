@@ -34,6 +34,25 @@ class StringLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Determine whether a given string is formatted like a URL.
+	; PARAMETERS:
+	;  input (I,REQ) - The string to check.
+	; RETURNS:        true/false - is the string a URL?
+	;---------
+	isURL(input) {
+		; Full URLs
+		if(input.startsWithAnyOf(["http://", "https://"]))
+			return true
+		
+		; Partial URLs (www.google.com, similar)
+		if(input.startsWithAnyOf(["www.", "vpn.", "m."]))
+			return true
+		
+		; No match
+		return false
+	}
+	
+	;---------
 	; DESCRIPTION:    Determine how many spaces there are at the beginning of a string.
 	; PARAMETERS:
 	;  line (I,REQ) - The line to count spaces for.

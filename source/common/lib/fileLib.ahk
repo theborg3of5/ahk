@@ -30,6 +30,25 @@ class FileLib {
 		
 		return outPath
 	}
+	
+	;---------
+	; DESCRIPTION:    Determine whether a given string is formatted like a file path.
+	; PARAMETERS:
+	;  path (I,REQ) - The string to check.
+	; RETURNS:        true/false - is the string a filepath?
+	;---------
+	isFilePath(path) {
+		; URL-formatted file path, Windows network path
+		if(path.startsWithAnyOf(["file://", "\\"]))
+			return true
+		
+		; Filepath starting with a drive letter
+		if(path.sub(2, 2) = ":\")
+			return true
+		
+		; Unknown
+		return false
+	}
 
 	;---------
 	; DESCRIPTION:    Clean out unwanted garbage strings from paths and map path to any mapped network drives.
@@ -38,9 +57,22 @@ class FileLib {
 	; RETURNS:        The cleaned-up and mapped path.
 	;---------
 	cleanupPath(path) {
-		path := path.replace("%20", A_Space).replace("/", "\") ; In case it's a URL'd file path
-		path := path.replace("\\\", "\\") ; Trim 3 backslashes (typically from file:///) down to 2
-		path := path.clean(["file:", """"])
+		; Return non-file URLs as-is, no cleaning.
+		if(StringLib.isURL(path))
+			return path
+		
+		; Clean + drop any leading/trailing quotes
+		path := path.clean([""""])
+		
+		; Fix any strange formattings that could come from being a URL'd filepath (like from a wiki)
+		if(path.containsRegEx("file:\/+", protocol)) {
+			path := path.removeFromStart(protocol)
+			if(protocol = "file://") ; 2 slashes means it's a path with a hostname (that should start with two backslashes)
+				path := "\\" path
+			
+			path := StringLib.decodeFromURL(path) ; Decode any encoded characters (like %20 for space)
+			path := path.replace("/", "\")        ; Flip slashes
+		}
 		
 		; Convert paths to use mapped drive letters
 		table := new TableList("mappedDrives.tl").getTable()

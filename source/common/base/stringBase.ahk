@@ -92,8 +92,6 @@ class StringBase {
 	;                        match object (depending on the mode specified in needleRegEx, see
 	;                        RegExMatch() for details).
 	; RETURNS:        The position of the first match, 0 if nothing found.
-	; SIDE EFFECTS:   
-	; NOTES:          
 	;---------
 	containsRegEx(needleRegEx, ByRef outputVar := "") {
 		return RegExMatch(this, needleRegEx, outputVar)

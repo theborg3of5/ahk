@@ -1,5 +1,4 @@
 # New Ideas
-	OneTastic macro editor - make ^; comment the current line (by adding a comment and putting the line under it), and ^Enter add a new commented line
 	Does the division between text.ahk and launch.ahk make sense? There's text-related stuff in launch.ahk.
 		Options:
 			Combine the two (into a script named what, though?)

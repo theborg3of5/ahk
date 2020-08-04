@@ -1,4 +1,11 @@
 # New Ideas
+	TLG selector - could we make it a better repository of important/often-used previous IDs?
+		Maybe add another column and filter that out of the TLG popup?
+		Alternatively, could we split the TLG selector from old records we're probably not logging anymore?
+			What about the overlap?
+				Maybe we could grab only certain rows from the "history" one, and merge them into the TLG one?
+					This sounds kind of horribly complicated for very little gain - the filter approach above is probably better.
+	TLG selector - consider swapping TLP and record columns, given how often I edit one (record) over the other
 	Does the division between text.ahk and launch.ahk make sense? There's text-related stuff in launch.ahk.
 		Options:
 			Combine the two (into a script named what, though?)
@@ -42,6 +49,13 @@
 	Dynamically resize abbreviation column based on widest value?
 		To allow longer abbreviations
 		Is that going to get weird with SelectorGui+FlexTable interactions?
+	The @MinColumnWidth setting is currently used to make sure that field names show up - could we just handle that more automatically instead?
+		Somehow measure the width a field would need to be to fit its description comfortably
+			Or does that happen automatically if you add it with a value?
+		Maybe include an additional buffer on the end?
+			Maybe make it optional with an overall setting?
+		What about column widths, in a new top-level line like we have for field order/whether to show?
+			Could potentially combine it with the existing () line - INDEX-WIDTH, where width is optional (and presumably in pixels?)
 	
 # Toast
 	Could we avoid flickering between .showPersistent() and .setText()?

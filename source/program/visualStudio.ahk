@@ -8,4 +8,10 @@
 	!c::  ClipboardLib.copyFilePathWithHotkey(      "^+c") ; Current file
 	!#c:: ClipboardLib.copyFolderPathWithFileHotkey("^+c") ; Current file's folder
 	^!#c::ClipboardLib.copyPathRelativeToSource(    "^+c") ; Current file, but drop the usual EpicSource stuff up through the DLG folder.
+	
+	; Subword navigation, because I can't use the windows key in hotkeys otherwise
+	^#Left::  Send, ^!{Numpad1} ; Previous subword
+	^#Right:: Send, ^!{Numpad2} ; Next subword
+	^#+Left:: Send, ^!{Numpad3} ; Extend selection previous
+	^#+Right::Send, ^!{Numpad4} ; Extend selection next
 #If

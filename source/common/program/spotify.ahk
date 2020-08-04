@@ -62,8 +62,8 @@ class Spotify {
 	; RETURNS:        ID/handle of Spotify's main window
 	;---------
 	getMainWindowId() {
-		titleString     := WindowLib.buildTitleString("Spotify.exe", "", "Spotify") ; If not playing, title is just "Spotify" or "Spotify Premium"
-		titleStringPlay := WindowLib.buildTitleString("Spotify.exe", "", " - ")     ; If playing, title includes a hyphen with spaces around it (between the title and artist)
+		titleString     := WindowLib.buildTitleString("Spotify.exe", "Chrome_WidgetWin_0", "Spotify") ; If not playing, title is just "Spotify" or "Spotify Premium"
+		titleStringPlay := WindowLib.buildTitleString("Spotify.exe", "Chrome_WidgetWin_0", " - ")     ; If playing, title includes spaced hyphen (between the title and artist)
 		
 		settings := new TempSettings()
 		settings.detectHiddenWindows("On")

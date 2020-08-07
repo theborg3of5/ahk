@@ -150,7 +150,7 @@ class OneNote {
 	;---------
 	removeLinkUnderMouse() {
 		Click, Right
-		Sleep, 100 ; Wait for menu to appear
+		WinWaitActive, % OneNote.TitleString_RightClickMenu
 		Send, r    ; Remove link
 		
 		; Go ahead and finish if the right-click menu is gone, we're done.

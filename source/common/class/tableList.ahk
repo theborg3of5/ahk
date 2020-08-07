@@ -288,7 +288,7 @@ class TableList {
 	; RETURNS:        This object (for chaining)
 	;---------
 	filterByColumn(filterColumn, filterValue) { ; Blank values always pass filter - callers can use filterOutEmptyForColumn() to get rid of those.
-		if(filterColumn = "" || filterValue = "")
+		if(filterColumn = "")
 			return this
 		
 		newTable   := []

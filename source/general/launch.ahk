@@ -96,7 +96,9 @@
 #If Config.machineIsWorkLaptop
 	^!+t::
 		selectOutlookTLG() {
-			data := new Selector("tlg.tls").selectGui()
+			s := new Selector("tlg.tls").setTitle("Select EMC2 Record ID")
+			s.dataTableList.filterByColumn("OLD", "") ; Filter out old records (have a value in the OLD column)
+			data := s.selectGui()
 			if(!data)
 				return
 			

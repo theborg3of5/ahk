@@ -1,5 +1,4 @@
 # New Ideas
-	TLG selector - consider swapping TLP and record columns, given how often I edit one (record) over the other
 	Does the division between text.ahk and launch.ahk make sense? There's text-related stuff in launch.ahk.
 		Options:
 			Combine the two (into a script named what, though?)

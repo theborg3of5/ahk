@@ -1,8 +1,73 @@
 # New Ideas
-	Does the division between text.ahk and launch.ahk make sense? There's text-related stuff in launch.ahk.
-		Options:
-			Combine the two (into a script named what, though?)
-			Move text-related things over to text.ahk (does this mean separating universal link from universal open, though?)
+	Git setup - figure out what the recent changes from the work setup tutorial were, and whether they matter for my purposes
+		git config --global pull.rebase true
+		git config --global merge.ff false
+		git config --global fetch.prune true
+	Reexamine script division in general folder (except hotstrings, those are fine)
+		Current scripts
+			hotkeys
+				Mute-lock
+				Suppress extra buttons
+				Browser back/forward clicks
+				AppsKey-Windows key
+				Horizontal scrolling (except in a couple of specific programs)
+					Could we have those programs let the hotkeys through instead?
+						Would using ~ prefix override the general bit?
+				Release all modifiers
+				Extra mouse buttons-tab switch (except in a couple of specific programs)
+					Same as above, could those programs handle it instead?
+				Computer sleep
+				Computer lock
+			launch
+				Generic search
+				Generic open
+				Generic copy link
+				Generic hyperlink
+				Selector edit file
+				Selector TLG/DLGs
+				Selector Hyperspace
+				Selector environment ID
+				Selector Snapper
+				Selector Thunder
+				Selector VDI
+				Selector phone
+			media
+				Volume up/down
+				Mute toggle
+				Change media player
+				SoundSwitch
+				Media keys
+			places
+				Open specific folders
+				Selector folder
+				Clean path/parent path
+				Open specific websites
+			programs
+				Launch/activate various programs
+			text
+				Select all
+				Delete word
+				Send raw clipboard
+				Hyperlink selected text
+				Send hyperlinked text/url combo
+				Send standard object string
+				Send clipboard as a formatted list
+				Copy selected text into a new notepad instance
+				Selector symbols
+			window
+				Minimize window
+				Escape action
+				Backtick action
+				Always on top
+				Center window
+				Fake-maximize window
+				Selector resize
+		Issues/thoughts
+			launch/text split is strange - text-related stuff in launch, but some of it is very related to universal launch (which should probably stay in launch?)
+			WindowActions.* hotkey redirectors should probably all live together
+				hotkeys?
+				window? (because window-specific handling is the point)
+			Would media make more sense as "sound"?
 	Get rid of Messenger, Github Desktop scripts if I don't use them for something new soon
 	Teams: could we make the mute/video toggles, universal hotkeys?
 		Based on existence of Teams window with meeting running

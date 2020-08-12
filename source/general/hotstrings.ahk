@@ -55,6 +55,7 @@
 	::precendence::precedence
 	::abcense::absence
 	::voilates::violates
+	::timeframe::time frame
 
 ; [[ Expansions ]] ---
 	::f'n::function

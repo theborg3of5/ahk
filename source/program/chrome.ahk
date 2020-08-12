@@ -32,4 +32,8 @@
 	; Extension-specific handling
 	!t::Telegram.shareURL(Chrome.getCurrentURL()) ; Share to Telegram.
 	^!d::Send, !+d ; Deluminate - site-level hotkey (Chrome won't let me bind this directly)
+	; LastPass loses all settings when it updates periodically, so I'm overriding the hotkeys here instead.
+	!PgDn::!PgUp ; Reverse next/previous site hotkeys
+	!PgUp::!PgDn
+	!+l::Send, ^!h ; Open vault
 #If

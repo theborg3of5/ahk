@@ -94,6 +94,7 @@ Object(params*) {
 	#Include outlook.ahk
 	#Include putty.ahk
 	#Include snapper.ahk
+	#Include soundSwitch.ahk
 	#Include spotify.ahk
 	#Include telegram.ahk
 	#Include vb6.ahk

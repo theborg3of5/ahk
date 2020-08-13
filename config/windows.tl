@@ -78,6 +78,7 @@
 			Skype										Skype.exe
 			Snapper									Snapper.exe
 			Slack										slack.exe					-									-														NO_PADDING
+			SoundSwitch								SoundSwitch.exe
 			Spotify									Spotify.exe					-									-														NO_PADDING
 			Steam										Steam.exe					-									-														NO_PADDING
 			Teams										Teams.exe					-									-														NO_PADDING

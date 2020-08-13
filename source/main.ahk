@@ -66,6 +66,7 @@ if(Config.contextIsWork) { ; Work-specific subs
 #Include putty.ahk
 #Include remoteDesktop.ahk
 #Include snapper.ahk
+#Include soundSwitch.ahk
 #Include spotify.ahk
 #Include sumatraPDF.ahk
 #Include teams.ahk

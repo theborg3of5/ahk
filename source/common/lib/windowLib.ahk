@@ -132,8 +132,7 @@ class WindowLib {
 	; RETURNS:        A title string that uniquely (using ahk_id) identifies only your chosen window.
 	;---------
 	getIdTitleString(titleString := "A") {
-		WinGet, winId, ID, % titleString
-		return "ahk_id " winId
+		return "ahk_id " WinGet("ID", titleString)
 	}
 	
 	;---------

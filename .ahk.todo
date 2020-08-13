@@ -1,4 +1,6 @@
 # New Ideas
+	Consider making copy-to-new-notepad set the value based on existence instead of becoming active
+		What if there are multiple notepad instances, though?
 	Git setup - figure out what the recent changes from the work setup tutorial were, and whether they matter for my purposes
 		git config --global pull.rebase true
 		git config --global merge.ff false

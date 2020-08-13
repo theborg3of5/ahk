@@ -1,4 +1,16 @@
 # New Ideas
+	Messenger activation sometimes gets the wrong window
+		Even though Messenger is set as an "Exact" title match
+			Turns out this isn't respected when we get down into WindowActions!
+				Specifically, we just go from name to titleString (ignoring match-mode override) in .windowAction()
+		Fix ideas:
+			Somehow carry either the name or just the whole WindowInfo instance down through to all actions
+			Fully identify the window we want up front, by converting the info from WindowInfo into an ID string
+				Is this logic something that should just live in WindowInfo, as a "find ID for window matching me"?
+					And/or should the actual core logic be in something like WindowLib, as a "find ID for window matching this info"
+						That way it's not limited to WindowInfo instances
+						On the other hand, we could just use WindowInfo as our data structure for "window identifying info"
+					Regardless of where the logic goes, could it replace/be used by Config.findWindowInfo()?
 	Consider making copy-to-new-notepad set the value based on existence instead of becoming active
 		What if there are multiple notepad instances, though?
 	Git setup - figure out what the recent changes from the work setup tutorial were, and whether they matter for my purposes

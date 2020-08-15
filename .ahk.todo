@@ -1,4 +1,13 @@
 # New Ideas
+	Hotkey to auto-resize/auto-place certain windows
+		Specific windows
+			Various "social" windows
+			Spotify
+			OneNote
+			VPN
+			Explorer
+		Should we just do all windows?
+			Hit common things like Chrome, too
 	Some way to look ahead at upcoming recurring todos
 		Probably something DebugPopup-based?
 		.todo hotstring or similar, rather than another separate hotkey?

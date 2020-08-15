@@ -1,4 +1,11 @@
 # New Ideas
+	Some way to look ahead at upcoming recurring todos
+		Probably something DebugPopup-based?
+		.todo hotstring or similar, rather than another separate hotkey?
+		Probably a popup for how far ahead to look
+			Defaulted to t+1?
+			Maybe just take in a range of dates, so I could look at the next week?
+				At that point, is the popup just another selector with shortcuts for tomorrow, next week, next month, etc.?
 	Messenger activation sometimes gets the wrong window
 		Even though Messenger is set as an "Exact" title match
 			Turns out this isn't respected when we get down into WindowActions!

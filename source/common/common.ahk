@@ -88,8 +88,6 @@ Object(params*) {
 	#Include notepad.ahk
 	#Include notepadPlusPlus.ahk
 	#Include onenote.ahk
-	#Include oneNoteRecurringTodo.ahk
-	#Include oneNoteTodoPage.ahk
 	#Include onetastic.ahk
 	#Include outlook.ahk
 	#Include putty.ahk

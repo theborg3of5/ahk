@@ -8,6 +8,15 @@
 			Explorer
 		Should we just do all windows?
 			Hit common things like Chrome, too
+	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
+		We're using it in several places that aren't really debug now:
+			findProjectInSolutionsFolder
+				Title: Found projects in solutions folder
+				Content: more or less the same
+			Onenote recurring todo peek
+				Title: Recurring todos peek
+				Content: Each day as if it were an independent array
+					For this, we'd need to open up DebugPopup to adding individual lines, not just all the content at once - is that a problem?
 	Some way to look ahead at upcoming recurring todos
 		Probably something DebugPopup-based?
 		.todo hotstring or similar, rather than another separate hotkey?

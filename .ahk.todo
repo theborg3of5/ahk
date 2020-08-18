@@ -116,6 +116,7 @@
 			Do we want free-text input (to match on epicEnvironments TLS, presumably?)
 		Alternative idea: just have ActionObjectEpicStudio launch the epicEnvironments selector before it opens/links, so I can pick the environment
 			Wouldn't this be annoying to do all the time, though?
+		Another alternative: a separate es* choice for common environments (maybe only really need CDE, anyway - esc?)
 	EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments

@@ -34,23 +34,7 @@ class OneNoteTodoPage {
 		OneNoteTodoPage.copy(instant)
 	}
 	
-	;---------
-	; DESCRIPTION:    Add the recurring todo items (from oneNoteRecurringTodos.tl) that match
-	;                 today's date.
-	;---------
-	addRecurringForToday() {
-		OneNoteTodoPage.sendRecurringTodos(A_Now)
-	}
 	
-	;---------
-	; DESCRIPTION:    Add the recurring todo items (from oneNoteRecurringTodos.tl) that match
-	;                 tomorrow's date.
-	;---------
-	addRecurringForTomorrow() {
-		instant := A_Now
-		instant += 1, Days
-		OneNoteTodoPage.sendRecurringTodos(instant)
-	}
 	
 	
 	; #PRIVATE#

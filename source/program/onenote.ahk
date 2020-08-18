@@ -80,8 +80,6 @@
 	^!t::      OneNoteTodoPage.collapseToTodayAll()       ; Today only, fully expanded
 	^+m::      OneNoteTodoPage.copyForToday()             ; New page for today
 	^+#m::     OneNoteTodoPage.copyForTomorrow()          ; New page for tomorrow
-	:*X:.todo::OneNoteTodoPage.addRecurringForToday()     ; Add recurring todos for today
-	:*X:.ttodo::OneNoteTodoPage.addRecurringForTomorrow() ; Add recurring todos for tomorrow
 
 	; Update links for a dev structure section header
 	!+#n::OneNote.linkDevStructureSectionTitle()

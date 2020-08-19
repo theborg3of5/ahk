@@ -1604,6 +1604,17 @@
                 <Param name="hotkeyKeys" />
             </Overload>
         </KeyWord>
+        <KeyWord name="ClipboardLib.copyPathRelativeToSource" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Grabs the path for the current file, trims it down to the bit inside the DLG/App * folder, and puts
+							;                 it on the clipboard.
+							; PARAMETERS:
+							;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
+							;---------">
+                <Param name="hotkeyKeys" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ClipboardLib.copyWithFunction" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -2310,6 +2321,17 @@
 							; RETURNS:        The first non-blank value.
 							;---------">
                 <Param name="params*" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DataLib.flattenObjectToArray" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Flatten an object (including any sub-objects) into a simple array.
+							; PARAMETERS:
+							;  objectToFlatten (I,REQ) - The object to base our new array on.
+							; RETURNS:        An array containing all values from the object, in depth-first order.
+							;---------">
+                <Param name="objectToFlatten" />
             </Overload>
         </KeyWord>
         <KeyWord name="DataLib.forceArray" func="yes">
@@ -3446,6 +3468,17 @@
 							;---------">
                 <Param name="path" />
                 <Param name="levelsUp := 1" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FileLib.isFilePath" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether a given string is formatted like a file path.
+							; PARAMETERS:
+							;  path (I,REQ) - The string to check.
+							; RETURNS:        true/false - is the string a filepath?
+							;---------">
+                <Param name="path" />
             </Overload>
         </KeyWord>
         <KeyWord name="FileLib.replaceFileWithString" func="yes">
@@ -5933,6 +5966,15 @@
                 <Param name="DeviceNumber"/>
             </Overload>
         </KeyWord>
+        <KeyWord name="SoundSwitch.toggleDevices" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Toggle both the playback and recording devices using SoundSwitch.
+							; SIDE EFFECTS:   If remote desktop is currently active, this will briefly activate the windows taskbar on the local
+							;                 machine before going back.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="Space"/>
         <KeyWord name="SplashImage" func="no">
             <Overload retVal="">
@@ -6205,8 +6247,6 @@
 							;                        match object (depending on the mode specified in needleRegEx, see
 							;                        RegExMatch() for details).
 							; RETURNS:        The position of the first match, 0 if nothing found.
-							; SIDE EFFECTS:
-							; NOTES:
 							;---------">
                 <Param name="needleRegEx" />
                 <Param name="ByRef outputVar := &quot;&quot;" />
@@ -6713,6 +6753,17 @@
 							; RETURNS:        true if the string has nothing or nothing but whitespace.
 							;---------">
                 <Param name="stringToCheck" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringLib.isURL" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether a given string is formatted like a URL.
+							; PARAMETERS:
+							;  input (I,REQ) - The string to check.
+							; RETURNS:        true/false - is the string a URL?
+							;---------">
+                <Param name="input" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringLib.padCenter" func="yes">

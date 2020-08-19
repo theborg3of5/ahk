@@ -18,13 +18,6 @@
 				Content: Each day as if it were an independent array
 					For this, we'd need to open up DebugPopup to adding individual lines, not just all the content at once - is that a problem?
 					This would allow us to add rows in the order we wanted - so we could flip the date order back to day-date, not date-day
-	Some way to look ahead at upcoming recurring todos
-		Probably something DebugPopup-based?
-		.todo hotstring or similar, rather than another separate hotkey?
-		Probably a popup for how far ahead to look
-			Defaulted to t+1?
-			Maybe just take in a range of dates, so I could look at the next week?
-				At that point, is the popup just another selector with shortcuts for tomorrow, next week, next month, etc.?
 	Messenger activation sometimes gets the wrong window
 		Even though Messenger is set as an "Exact" title match
 			Turns out this isn't respected when we get down into WindowActions!

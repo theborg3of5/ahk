@@ -29,12 +29,32 @@ class OneNoteTodoPage {
 	; DESCRIPTION:    Make a copy of the current todo page and update it to be for tomorrow.
 	;---------
 	copyForTomorrow() {
-		instant := A_Now
-		instant += 1, Days
-		OneNoteTodoPage.copy(instant)
+		OneNoteTodoPage.copy(EnvAdd(A_Now, 1, "Days"))
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Show a popup with the recurring todo items from future dates.
+	; SIDE EFFECTS:   Prompts the user for how many days in the future to search.
+	;---------
+	peekAtFutureTodos() {
+		; Figure out start/end of range
+		numDays := InputBox("Peek at todo items", "Enter the number of days forward to check:", , 280, 125, , , , , 1) ; Default = 1 for tomorrow only
+		if(!numDays) ; Blank, 0, negatives not supported
+			return
+		startDate := EnvAdd(A_Now, 1,       "Days") ; Always start with tomorrow
+		endDate   := EnvAdd(A_Now, numDays, "Days")
+		
+		todosByDate := this.getTodosForDateRange(startDate, endDate)
+		
+		todosByDay := {}
+		For instant,todos in todosByDate {
+			dateName := FormatTime(instant, "M/d (ddd)")
+			todosByDay[dateName] := todos
+		}
+		
+		dateRange := FormatTime(startDate, "ddd M/d") " - " FormatTime(endDate, "ddd M/d")
+		Debug.popup("Date range",dateRange, "Todos by day",todosByDay)
+	}
 	
 	
 	; #PRIVATE#
@@ -168,12 +188,10 @@ class OneNoteTodoPage {
 			
 			; Weekdays are weekly
 			; Calculate datetimes for Monday and Friday to use, even if it's not currently Monday.
-			mondayDateTime := instant
-			mondayDateTime += -(dayOfWeek - 2), days ; If it's not Monday, get back to Monday's date.
+			mondayDateTime := EnvAdd(instant, -(dayOfWeek - 2), "Days") ; If it's not Monday, get back to Monday's date.
 			mondayTitle := FormatTime(mondayDateTime, "M/d`, dddd")
 			
-			fridayDateTime := mondayDateTime
-			fridayDateTime += 4, days
+			fridayDateTime := EnvAdd(mondayDateTime, 4, "Days")
 			fridayTitle := FormatTime(fridayDateTime, "M/d`, dddd")
 			
 			; Debug.popup("A_Now",A_Now, "instant",instant, "mondayDateTime",mondayDateTime, "mondayTitle",mondayTitle, "fridayDateTime",fridayDateTime, "fridayTitle",fridayTitle)
@@ -188,28 +206,18 @@ class OneNoteTodoPage {
 	; SIDE EFFECTS:   Inserts a new line for the todos if you're on a non-blank line to start.
 	; NOTES:          The inserted todos may not only be for the day of the provided instant - in
 	;                 certain contexts, we will also check the surrounding weekdays (see
-	;                 .getInstantsToCheck for details).
+	;                 .getRelatedDateRange for details).
 	;---------
 	sendRecurringTodos(instant) {
-		; Get array of instants to check.
-		instantsAry := OneNoteTodoPage.getInstantsToCheck(instant)
+		; Expand the range if needed
+		this.getRelatedDateRange(instant, startDate, endDate)
 		
-		; Read in table of todos to find which apply
-		table := new TableList("oneNoteRecurringTodos.tl").getTable()
-		matchingTodos := []
-		For _,todoAry in table {
-			todo := new OneNoteRecurringTodo(todoAry)
-			For _,instant in instantsAry {
-				if(!todo.matchesInstant(instant))
-					Continue
-				
-				; Debug.popup("Matched todo","", "todo",todo)
-				matchingTodos.push(todo.title)
-			}
-		}
+		; Get the matching todos
+		todosByDate := this.getTodosForDateRange(startDate, endDate)
+		; Debug.popup("todosByDate",todosByDate)
 		
 		; Bail if there's nothing to insert.
-		if(DataLib.isNullOrEmpty(matchingTodos))
+		if(DataLib.isNullOrEmpty(todosByDate))
 			return
 			
 		; Check whether we're already on a blank line or not.
@@ -218,57 +226,90 @@ class OneNoteTodoPage {
 		if(SelectLib.getFirstLine() != "")
 			OneNote.insertBlankLine()
 		
-		; Debug.popup("matchingTodos",matchingTodos)
-		OneNoteTodoPage.sendItems(matchingTodos)
+		todoItems := DataLib.flattenObjectToArray(todosByDate)
+		OneNoteTodoPage.sendItems(todoItems)
 	}
 	
 	;---------
-	; DESCRIPTION:    Determine which days we should find recurring todo items for, based on the
-	;                 context (work or home) and whether it's a weekday or weekend.
+	; DESCRIPTION:    Expand the date range that we're considering to include related dates - for example, at home there's
+	;                 only one todo page per 5 consecutive weekdays, all bundled together.
 	; PARAMETERS:
-	;  instant (I,REQ) - The instant to evaluate
-	; RETURNS:        If (and only if) it's a weekday and we're in a home context, we'll return an
-	;                 array for all weekdays in the current week (from Monday to Friday). Otherwise,
-	;                 we'll return an array with just the provided instant in it.
+	;  instant   (I,REQ) - The instant to evaluate
+	;  startDate (O,REQ) - The start of the range that includes related dates
+	;  endDate   (O,REQ) - The end of the range that includes related dates
 	;---------
-	getInstantsToCheck(instant) {
-		; (Doesn't apply at work - no recurring todos)
+	getRelatedDateRange(instant, ByRef startDate, ByRef endDate) {
+		; Start out with a 1-day range of our given instant.
+		startDate := instant
+		endDate   := instant
+		
+		; At work, nothing special.
+		if(Config.contextIsWork)
+			return
 		
 		; At home, it varies by day of the week
 		if(Config.contextIsHome) {
 			dayOfWeek := FormatTime(instant, "Wday") ; Day of the week, 1 (Sunday) to 7 (Saturday)
 			
-			; Weekend pages at home are daily
+			; Weekend pages at home are daily - no change.
 			if((dayOfWeek = 1) || (dayOfWeek = 7)) ; Sunday or Saturday
-				return [instant]
+				return
 			
-			; Weekdays are weekly from Monday to Friday
-			instant += -(dayOfWeek - 2), Days
-			instantsAry := [instant] ; Instant for Monday
-			Loop, 4 {
-				instant += 1, Days
-				instantsAry.push(instant)
-			}
-			
-			return instantsAry
+			; Weekdays are one weekly page from Monday to Friday.
+			startDate := EnvAdd(instant, -(dayOfWeek - 2), "Days") ; Back to Monday
+			endDate   := EnvAdd(startDate, 4,              "Days") ; Out to Friday
+			return
 		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Generate a 2D array of recurring todo items, divided up by date, for the given date range.
+	; PARAMETERS:
+	;  startDate (I,REQ) - Start date instant (inclusive)
+	;  endDate   (I,REQ) - End date instant (inclusive)
+	; RETURNS:        2D array of todo titles. Format:
+	;                   todosByDate[dateInstant][ln] := todoTitle
+	;---------
+	getTodosForDateRange(startDate, endDate) {
+		table := new TableList("oneNoteRecurringTodos.tl").getTable()
+		todosByDate := {}
+		For _,todoAry in table {
+			todo := new OneNoteRecurringTodo(todoAry)
+			
+			; Loop through date range and check the todo against each
+			instant := startDate
+			while(instant <= endDate) {
+				if(todo.matchesInstant(instant)) {
+					if(!todosByDate[instant])
+						todosByDate[instant] := []
+					
+					todosByDate[instant].push(todo.title)
+				}
+				
+				instant += 1, Days
+			}
+		}
+		
+		return todosByDate
 	}
 	
 	;---------
 	; DESCRIPTION:    Send the given items with a to-do tag (bound to Ctrl+1).
 	; PARAMETERS:
-	;  items (I,REQ) - Simple array of todo items to send.
+	;  items      (I,REQ) - Simple array of todo items to send.
 	;---------
 	sendItems(items) {
 		Send, ^0 ; Clear current tag (so we're definitely adding the to-do tag, not checking it off)
 		Send, ^1 ; To-do tag
 		
 		For i,item in items {
-			if(i > 1)
+			if(i > 0)
 				Send, {Enter}
 			
 			SendRaw, % item
 		}
 	}
+	
+	
 	; #END#
 }

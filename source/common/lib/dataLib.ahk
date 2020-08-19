@@ -199,6 +199,31 @@ class DataLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Flatten an object (including any sub-objects) into a simple array.
+	; PARAMETERS:
+	;  objectToFlatten (I,REQ) - The object to base our new array on.
+	; RETURNS:        An array containing all values from the object, in depth-first order.
+	;---------
+	flattenObjectToArray(objectToFlatten) {
+		if(!isObject(objectToFlatten))
+			return objectToFlatten
+		
+		flatArray := []
+		For _,prop in objectToFlatten {
+			; If the property is also an object, flatten that and merge it in.
+			if(isObject(prop)) {
+				flatProp := this.flattenObjectToArray(prop)
+				flatArray.appendArray(flatProp)
+				Continue
+			}
+			
+			flatArray.push(prop)
+		}
+		
+		return flatArray
+	}
+	
+	;---------
 	; DESCRIPTION:    Variadic parameter arrays don't have the same base array as those created
 	;                 with [], which means they can't handle things like .contains() - this
 	;                 returns an identical version that does.

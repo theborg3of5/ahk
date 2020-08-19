@@ -50,6 +50,15 @@
 		Send, {F9} ; Sync All Notebooks Now
 	return
 	
+	; Focus notebooks by index
+	!1::
+	!2::
+	!3::
+	!4::
+	!5::
+		OneNote.focusNotebookWithIndex(A_ThisHotkey.afterString("!"))
+	return
+	
 	; Various specific commands based on the quick access toolbar.
 	$^+n::OneNote.newSubpage()
 	^+[:: OneNote.promoteSubpage()

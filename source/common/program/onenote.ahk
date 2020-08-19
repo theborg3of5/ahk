@@ -86,6 +86,19 @@ class OneNote {
 	}
 	
 	;---------
+	; DESCRIPTION:    Focus the notebook in the given index (base 1) in the notebook bar.
+	; PARAMETERS:
+	;  index (I,REQ) - The index of the notebook to focus (base 1)
+	;---------
+	focusNotebookWithIndex(index) {
+		numTabs := index - 1
+		
+		Send, ^g ; Focus notebook bar
+		Send, {Tab %numTabs%}
+		Send, {Enter}{Escape} ; Select notebook, unfocus notebook bar
+	}
+	
+	;---------
 	; DESCRIPTION:    If the paste popup has appeared, get rid of it. Typically this is used for AHK
 	;                 hotkeys that use the Control key, which sometimes causes the paste popup to
 	;                 appear afterwards (if we pasted recently).

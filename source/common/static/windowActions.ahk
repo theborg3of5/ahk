@@ -139,7 +139,7 @@ class WindowActions {
 	
 	; #PRIVATE#
 	
-	; Supported window actions
+	; [[Supported window actions]] --=
 	static Action_None       := "NONE"        ; Nothing
 	static Action_Activate   := "ACTIVATE"    ; Activate the window
 	static Action_Backtick   := "BACKTICK"    ; Handle the backtick key being pressed
@@ -149,13 +149,14 @@ class WindowActions {
 	static Action_Minimize   := "MIN"         ; Minimize the window
 	static Action_SelectAll  := "SELECT_ALL"  ; Select all of the current field
 	
-	; Supported action methods
+	; [[Supported action methods]] ---
 	static Method_Default          := "DEFAULT"      ; Use the default way of performing the action
 	static Method_Other            := "OTHER"        ; Something special, defined in .doSpecialWindowMethod
 	static Method_Minimize_Message := "POST_MESSAGE" ; Minimize: send a windows message to do it
 	static Method_SelectAll_Home   := "HOME_END"     ; Select all: send home/end (and holding shift in between)
 	static Method_DeleteWord_Ctrl  := "CTRL_SHIFT"   ; Delete word: send Ctrl+Shift+Left to select it, then delete
 	static Method_Esc              := "ESCAPE"       ; Send an escape keystroke
+	; =--
 	
 	actionOverrides := "" ; {windowName: {action: method}}
 	
@@ -173,10 +174,18 @@ class WindowActions {
 		if(!titleString && !name)
 			return
 		
-		if(!name)
-			name := Config.findWindowName(titleString)
-		if(!titleString)
-			titleString := Config.windowInfo[name].titleString
+		; Get name and window info if we can.
+		if(name) {
+			winInfo := Config.windowInfo[name]
+		} else {
+			winInfo := Config.findWindowInfo(titleString)
+			name := winInfo.name
+		}
+		
+		; If we found window info, use that to more exactly identify the window before we move forward.
+		winId := winInfo.getMatchingWindow()
+		if(winId)
+			titleString := "ahk_id " winId
 		
 		; Debug.popup("WindowActions.windowAction","Finished prep", "action",action, "titleString",titleString, "this.actionOverrides[name]",this.actionOverrides[name])
 		this.doWindowAction(action, titleString, this.actionOverrides[name])

@@ -70,6 +70,36 @@ class WindowInfo {
 			this.edgeType := windowAry["EDGE_TYPE"]
 	}
 	
+	;---------
+	; DESCRIPTION:    Get the the first window that matches all of the critieria contained in this class.
+	; RETURNS:        The matching window's ID
+	;---------
+	getMatchingWindow() {
+		matchMode := this.getTitleMatchMode()
+		
+		settings := new TempSettings().titleMatchMode(matchMode)
+		winId := WinExist(this.titleString)
+		settings.restore()
+		
+		return winId
+	}
+	
+	
+	; #PRIVATE#
+	
+	;---------
+	; DESCRIPTION:    Turn Config's version of title match mode into the real deal for use with WinExist, WinActivate, etc.
+	; RETURNS:        Value from TitleMatchMode.* matching the title string match mode override for this window info.
+	; NOTES:          Does not support Config.TitleContains_End
+	;---------
+	getTitleMatchMode() {
+		Switch this.titleStringMatchModeOverride {
+			Case Config.TitleContains_Start: return TitleMatchMode.Start
+			Case Config.TitleContains_Any:   return TitleMatchMode.Contains
+			Case Config.TitleContains_Exact: return TitleMatchMode.Exact
+		}
+	}
+	
 	
 	; #DEBUG#
 	

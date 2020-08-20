@@ -51,7 +51,7 @@ class DataLib {
 	;  params* (I,REQ) - Variadic parameter - as many values as desired.
 	; RETURNS:        The first non-blank value.
 	;---------
-	firstNonBlankValue(params*) {
+	coalesce(params*) {
 		For _,param in params {
 			if(param != "")
 				return param

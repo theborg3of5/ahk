@@ -315,8 +315,8 @@ class Toast {
 		settings := new TempSettings().detectHiddenWindows("On")
 		
 		; Default to current position, then bottom-right corner
-		x := DataLib.firstNonBlankValue(x, this.x, VisualWindow.X_RightEdge)
-		y := DataLib.firstNonBlankValue(y, this.y, VisualWindow.Y_BottomEdge)
+		x := DataLib.coalesce(x, this.x, VisualWindow.X_RightEdge)
+		y := DataLib.coalesce(y, this.y, VisualWindow.Y_BottomEdge)
 		
 		Gui, % this.guiId ":Default"
 		Gui, +LastFound ; Needed to identify the window on next line

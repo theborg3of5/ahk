@@ -288,9 +288,9 @@ class TextTable {
 			return ""
 		
 		; Use spaces for any blank border characters, to ensure spacing stays correct
-		lineH       := DataLib.firstNonBlankValue(this.borderH, " ")
-		leftCorner  := DataLib.firstNonBlankValue(leftCorner,   " ")
-		rightCorner := DataLib.firstNonBlankValue(rightCorner,  " ")
+		lineH       := DataLib.coalesce(this.borderH, " ")
+		leftCorner  := DataLib.coalesce(leftCorner,   " ")
+		rightCorner := DataLib.coalesce(rightCorner,  " ")
 		
 		; If there's no title, it's just the corners + horizontal lines as needed.
 		if(title = "")
@@ -305,7 +305,7 @@ class TextTable {
 	; RETURNS:        The text of the content of the table.
 	;---------
 	generateContent() {
-		lineV := DataLib.firstNonBlankValue(this.borderV, " ")
+		lineV := DataLib.coalesce(this.borderV, " ")
 		padding := StringLib.getSpaces(this.outerPaddingH)
 		
 		content := ""
@@ -371,7 +371,7 @@ class TextTable {
 	;---------
 	formatValue(value, columnIndex) {
 		width := this.columnWidths[columnIndex]
-		alignment := DataLib.firstNonBlankValue(this.columnAlignments[columnIndex], this.defaultAlignment) ; Default to left-aligned
+		alignment := DataLib.coalesce(this.columnAlignments[columnIndex], this.defaultAlignment) ; Default to left-aligned
 		
 		Switch alignment {
 			Case TextAlignment.Left:   return value.postPadToLength(width)

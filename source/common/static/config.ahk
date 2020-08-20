@@ -6,7 +6,6 @@ class Config {
 	; @GROUP@ Title string matching modes
 	static TitleContains_Any   := "ANY"   ; Title can contain text anywhere
 	static TitleContains_Start := "START" ; Title must start with text
-	static TitleContains_End   := "END"   ; Title must end with text
 	static TitleContains_Exact := "EXACT" ; Title must exactly equal text
 	; @GROUP-END@
 	
@@ -245,7 +244,7 @@ class Config {
 				Continue
 			if(titleToMatch && winInfo.title) {
 				; Allow titles to be compared more flexibly than straight equality.
-				stringMatchMode := winInfo.titleStringMatchModeOverride
+				stringMatchMode := winInfo.titleMatchMode
 				if(!stringMatchMode)
 					stringMatchMode := Config.TitleContains_Any ; Default if not overridden
 				
@@ -502,7 +501,6 @@ class Config {
 		Switch method {
 			Case Config.TitleContains_Any:   return haystack.contains(needle)
 			Case Config.TitleContains_Start: return haystack.startsWith(needle)
-			Case Config.TitleContains_End:   return haystack.endsWith(needle)
 			Case Config.TitleContains_Exact: return (haystack = needle)
 		}
 		

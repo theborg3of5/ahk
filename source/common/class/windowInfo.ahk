@@ -9,13 +9,13 @@ class WindowInfo {
 	; @GROUP-END@
 	
 	; @GROUP@
-	name     := ""                              ; Name of the window
-	exe      := ""                              ; EXE for the corresonding program
-	class    := ""                              ; AHK class of the window
-	title    := ""                              ; Title of the window
-	priority := ""                              ; Priority of this WindowInfo instance versus others. Can be used to break a tie if multiple instances match a given window.
-	edgeType := WindowInfo.EdgeStyle_HasPadding ; Edge type of the window (from WindowInfo.EdgeStyle_* constants)
-	titleStringMatchModeOverride := Config.TitleContains_Any ; If the window has a specific title match mode that needs to be used when locating it, this will return that override.
+	name           := "" ; Name of the window
+	exe            := "" ; EXE for the corresonding program
+	class          := "" ; AHK class of the window
+	title          := "" ; Title of the window
+	priority       := "" ; Priority of this WindowInfo instance versus others. Can be used to break a tie if multiple instances match a given window.
+	edgeType       := "" ; Edge type of the window (from WindowInfo.EdgeStyle_* constants)
+	titleMatchMode := "" ; If the window has a specific title match mode that needs to be used when locating it, this will return that override.
 	; @GROUP-END@
 	
 	;---------
@@ -52,22 +52,16 @@ class WindowInfo {
 	;                                        that override.
 	;---------
 	__New(windowAry) {
-		this.name  := windowAry["NAME"]
-		this.exe   := windowAry["EXE"]
-		this.class := windowAry["CLASS"]
-		this.title := windowAry["TITLE"]
-		
 		; Replace any private tags lurking in these portions of info.
-		this.name  := Config.replacePrivateTags(this.name)
-		this.exe   := Config.replacePrivateTags(this.exe)
-		this.class := Config.replacePrivateTags(this.class)
-		this.title := Config.replacePrivateTags(this.title)
+		this.name  := Config.replacePrivateTags(windowAry["NAME"])
+		this.exe   := Config.replacePrivateTags(windowAry["EXE"])
+		this.class := Config.replacePrivateTags(windowAry["CLASS"])
+		this.title := Config.replacePrivateTags(windowAry["TITLE"])
 		
 		this.priority := windowAry["PRIORITY"]
-		if(windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"] != "")
-			this.titleStringMatchModeOverride := windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"]
-		if(windowAry["EDGE_TYPE"] != "")
-			this.edgeType := windowAry["EDGE_TYPE"]
+		
+		this.titleMatchMode := DataLib.coalesce(windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"], Config.TitleContains_Any)
+		this.edgeType := DataLib.coalesce(windowAry["EDGE_TYPE"], this.EdgeStyle_HasPadding)
 	}
 	
 	;---------
@@ -93,7 +87,7 @@ class WindowInfo {
 	; NOTES:          Does not support Config.TitleContains_End
 	;---------
 	getTitleMatchMode() {
-		Switch this.titleStringMatchModeOverride {
+		Switch this.titleMatchMode {
 			Case Config.TitleContains_Start: return TitleMatchMode.Start
 			Case Config.TitleContains_Any:   return TitleMatchMode.Contains
 			Case Config.TitleContains_Exact: return TitleMatchMode.Exact

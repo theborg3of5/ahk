@@ -2040,14 +2040,6 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="Config.TitleContains_End" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Title must end with text
-							; GROUP:          Title string matching modes
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="Config.TitleContains_Exact" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -2272,6 +2264,17 @@
                 <Param name="flag" />
             </Overload>
         </KeyWord>
+        <KeyWord name="DataLib.coalesce" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Find the first non-blank value from those given.
+							; PARAMETERS:
+							;  params* (I,REQ) - Variadic parameter - as many values as desired.
+							; RETURNS:        The first non-blank value.
+							;---------">
+                <Param name="params*" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="DataLib.convertObjectToArray" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -2310,17 +2313,6 @@
 							; NOTES:          Ranges with non-numeric values will be ignored (not included in the output array).
 							;---------">
                 <Param name="listString" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="DataLib.firstNonBlankValue" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Find the first non-blank value from those given.
-							; PARAMETERS:
-							;  params* (I,REQ) - Variadic parameter - as many values as desired.
-							; RETURNS:        The first non-blank value.
-							;---------">
-                <Param name="params*" />
             </Overload>
         </KeyWord>
         <KeyWord name="DataLib.flattenObjectToArray" func="yes">
@@ -8235,6 +8227,14 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="WindowInfo.getMatchingWindow" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the the first window that matches all of the critieria contained in this class.
+							; RETURNS:        The matching window's ID
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="WindowInfo.name" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -8256,18 +8256,18 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="WindowInfo.titleMatchMode" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    If the window has a specific title match mode that needs to be used when locating it, this will return that override.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="WindowInfo.titleString" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    A string that can be used with WinActive() and the like to identify this
 							;                 window.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="WindowInfo.titleStringMatchModeOverride" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    If the window has a specific title match mode that needs to be used when locating it, this will return that override.
 							;---------">
             </Overload>
         </KeyWord>

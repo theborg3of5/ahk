@@ -3,12 +3,6 @@
 class Config {
 	; #PUBLIC#
 	
-	; @GROUP@ Title string matching modes
-	static TitleContains_Any   := "ANY"   ; Title can contain text anywhere
-	static TitleContains_Start := "START" ; Title must start with text
-	static TitleContains_Exact := "EXACT" ; Title must exactly equal text
-	; @GROUP-END@
-	
 	;---------
 	; DESCRIPTION:    Whether this class has been initialized. Used to not show debug popups when
 	;                 it's not initialized, to cut down on popups on restart in high-traffic areas.
@@ -231,26 +225,14 @@ class Config {
 	; RETURNS:        The WindowInfo instance matching the specified window.
 	;---------
 	findWindowInfo(titleString := "A") {
-		exeToMatch   := WinGet("ProcessName", titleString)
-		classToMatch := WinGetClass(titleString)
-		titleToMatch := WinGetTitle(titleString)
-		
+		exe   := WinGet("ProcessName", titleString)
+		class := WinGetClass(titleString)
+		title := WinGetTitle(titleString)
+
 		bestMatch := ""
 		For _,winInfo in this.windows {
-			; Debug.popup("Against WindowInfo",winInfo, "EXE",exeToMatch, "Class",classToMatch, "Title",titleToMatch)
-			if(exeToMatch   && winInfo.exe   && (exeToMatch != winInfo.exe))
+			if(!winInfo.windowMatchesPieces(exe, class, title))
 				Continue
-			if(classToMatch && winInfo.class && (classToMatch != winInfo.class))
-				Continue
-			if(titleToMatch && winInfo.title) {
-				; Allow titles to be compared more flexibly than straight equality.
-				stringMatchMode := winInfo.titleMatchMode
-				if(!stringMatchMode)
-					stringMatchMode := Config.TitleContains_Any ; Default if not overridden
-				
-				if(!this.matchesWithMethod(titleToMatch, winInfo.title, stringMatchMode))
-					Continue
-			}
 			
 			; If we already found another match, don't replace it unless the new match has a better (lower) priority
 			if((bestMatch != "") && bestMatch.priority < winInfo.priority)
@@ -486,26 +468,6 @@ class Config {
 	loadGames() {
 		filePath := this.rootPath "\config\games.tl"
 		this.games := new TableList(filePath).getTable()
-	}
-	
-	;---------
-	; DESCRIPTION:    Check whether the provided string contains a search string, with a specified match method.
-	; PARAMETERS:
-	;  haystack (I,REQ) - The string to search within.
-	;  needle   (I,REQ) - The string to search for.
-	;  method   (I,OPT) - The method to use when searching, from TitleContains_* constants in this class.
-	; RETURNS:        For TitleContains_Any, the position where we found the match. For everything
-	;                 else, true/false for whether we found a match.
-	;---------
-	matchesWithMethod(haystack, needle, method := "ANY") { ; method := Config.TitleContains_Any
-		Switch method {
-			Case Config.TitleContains_Any:   return haystack.contains(needle)
-			Case Config.TitleContains_Start: return haystack.startsWith(needle)
-			Case Config.TitleContains_Exact: return (haystack = needle)
-		}
-		
-		new ErrorToast("Could not check match with method", "Unsupported match method: " method).showMedium()
-		return ""
 	}
 	; #END#
 }

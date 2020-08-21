@@ -1,4 +1,4 @@
-[			NAME										EXE							CLASS								TITLE													EDGE_TYPE		TITLE_STRING_MATCH_MODE_OVERRIDE		PRIORITY	]
+[			NAME										EXE							CLASS								TITLE													EDGE_TYPE		TITLE_MATCH_MODE		PRIORITY	]
 
 ; Specific windows within a program (overlap with their less-specific counterparts below).
 ~PRIORITY.replaceWith(0) {
@@ -10,7 +10,7 @@
 	; EMC2 windows
 	~EXE.replaceWith(EpicD94.exe) {
 		; Different sections of the main EMC2 window.
-		~CLASS.replaceWith(ThunderRT6MDIForm) | ~TITLE_STRING_MATCH_MODE_OVERRIDE.replaceWith(START) {
+		~CLASS.replaceWith(ThunderRT6MDIForm) | ~TITLE_MATCH_MODE.replaceWith(START) {
 			EMC2 DLG									-								-									DLG
 			EMC2 PRJ									-								-									PRJ
 			EMC2 QAN									-								-									QAN

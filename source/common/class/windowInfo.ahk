@@ -15,12 +15,13 @@ class WindowInfo {
 	title          := "" ; Title of the window
 	priority       := "" ; Priority of this WindowInfo instance versus others. Can be used to break a tie if multiple instances match a given window.
 	edgeType       := "" ; Edge type of the window (from WindowInfo.EdgeStyle_* constants)
-	titleMatchMode := "" ; If the window has a specific title match mode that needs to be used when locating it, this will return that override.
+	titleMatchMode := "" ; The title match mode (from TitleMatchMode.*) to use when searching for this window
 	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    A string that can be used with WinActive() and the like to identify this
 	;                 window.
+	; NOTES:          Make sure to check .titleMatchMode as well, in case the window requires a special condition there.
 	;---------
 	titleString {
 		get {
@@ -46,7 +47,7 @@ class WindowInfo {
 	;                                        whether the window is the size that it appears or if it
 	;                                        has invisible padding around it that needs to be taken
 	;                                        into account when resizing, etc.
-	;                                  ["TITLE_STRING_MATCH_MODE_OVERRIDE"]
+	;                                  ["TITLE_MATCH_MODE"]
 	;                                      - If the window has a specific title match mode that
 	;                                        needs to be used when locating it, this will return
 	;                                        that override.
@@ -60,8 +61,10 @@ class WindowInfo {
 		
 		this.priority := windowAry["PRIORITY"]
 		
-		this.titleMatchMode := DataLib.coalesce(windowAry["TITLE_STRING_MATCH_MODE_OVERRIDE"], Config.TitleContains_Any)
-		this.edgeType := DataLib.coalesce(windowAry["EDGE_TYPE"], this.EdgeStyle_HasPadding)
+		; Handle defaults
+		matchMode := this.convertTitleMatchMode(windowAry["TITLE_MATCH_MODE"])
+		this.titleMatchMode := DataLib.coalesce(matchMode,              TitleMatchMode.Contains)
+		this.edgeType       := DataLib.coalesce(windowAry["EDGE_TYPE"], this.EdgeStyle_HasPadding)
 	}
 	
 	;---------
@@ -69,28 +72,80 @@ class WindowInfo {
 	; RETURNS:        The matching window's ID
 	;---------
 	getMatchingWindow() {
-		matchMode := this.getTitleMatchMode()
-		
-		settings := new TempSettings().titleMatchMode(matchMode)
+		settings := new TempSettings().titleMatchMode(this.titleMatchMode)
 		winId := WinExist(this.titleString)
 		settings.restore()
 		
 		return winId
 	}
 	
+	;---------
+	; DESCRIPTION:    Check whether the window matching the given title string matches all of our info.
+	; PARAMETERS:
+	;  titleString (I,REQ) - Title string identifying the window in question.
+	; RETURNS:        true/false - does it match?
+	; NOTES:          Blank values for this class' pieces are effectively wildcards - they match anything.
+	;---------
+	windowMatches(titleString) {
+		exe   := WinGet("ProcessName", titleString)
+		class := WinGetClass(titleString)
+		title := WinGetTitle(titleString)
+		return this.windowMatchesPieces(exe, class, title)
+	}
+	
+	;---------
+	; DESCRIPTION:    Check whether the given info matches what we have here.
+	; PARAMETERS:
+	;  exe   (I,OPT) - Window exe
+	;  class (I,OPT) - Window class
+	;  title (I,OPT) - Window title
+	; RETURNS:        true/false - did all of the pieces match?
+	; NOTES:          Blank values for this class' pieces are effectively wildcards - they match anything.
+	;---------
+	windowMatchesPieces(exe := "", class := "", title := "") {
+		; Check EXE, if we have it specified
+		if(this.exe && (this.exe != exe))
+			return false
+		
+		; Check class, if we have it specified
+		if(this.class && (this.class != class))
+			return false
+		
+		; Title is checked based on titleMatchMode, if we have it specified
+		if(this.title && !this.titleMatches(title))
+			return false
+		
+		return true
+	}
+	
 	
 	; #PRIVATE#
 	
 	;---------
-	; DESCRIPTION:    Turn Config's version of title match mode into the real deal for use with WinExist, WinActivate, etc.
-	; RETURNS:        Value from TitleMatchMode.* matching the title string match mode override for this window info.
-	; NOTES:          Does not support Config.TitleContains_End
+	; DESCRIPTION:    Map a set of string values, to the actual numeric values that will work with SetTitleMatchMode.
+	; PARAMETERS:
+	;  stringMode (I,REQ) - Any of "START", "CONTAINS", and "EXACT".
+	; RETURNS:        Value from TitleMatchMode.* that can be used with SetTitleMatchMode.
 	;---------
-	getTitleMatchMode() {
+	convertTitleMatchMode(stringMode) {
+		Switch stringMode {
+			Case "START":    return TitleMatchMode.Start
+			Case "CONTAINS": return TitleMatchMode.Contains
+			Case "EXACT":    return TitleMatchMode.Exact
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Check whether the given title matches ours, taking the titleMatchMode into account.
+	; PARAMETERS:
+	;  title (I,REQ) - The title to check.
+	; RETURNS:        true/false - does the given title match ours?
+	;---------
+	titleMatches(title) {
 		Switch this.titleMatchMode {
-			Case Config.TitleContains_Start: return TitleMatchMode.Start
-			Case Config.TitleContains_Any:   return TitleMatchMode.Contains
-			Case Config.TitleContains_Exact: return TitleMatchMode.Exact
+			Case TitleMatchMode.Start:    return title.startsWith(this.title)
+			Case TitleMatchMode.Contains: return (title.contains(this.title)>0)
+			Case TitleMatchMode.Exact:    return (title = this.title)
 		}
 	}
 	

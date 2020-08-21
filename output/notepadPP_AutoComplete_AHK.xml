@@ -7399,6 +7399,17 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="TitleMatchMode.convertFromString" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Map a set of string values, to the actual numeric values that will work with SetTitleMatchMode.
+							; PARAMETERS:
+							;  stringMode (I,REQ) - String version of any match mode (see .MatchModeString_*).
+							; RETURNS:        Value from TitleMatchMode.* that can be used with SetTitleMatchMode.
+							;---------">
+                <Param name="stringMode" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="TitleMatchMode.Exact" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -7421,6 +7432,21 @@
 							; DESCRIPTION:    The title must start with the string.
 							; GROUP:          Title match mode options
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TitleMatchMode.titleMatches" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the two titles match, taking the given titleMatchMode into account.
+							; PARAMETERS:
+							;  title     (I,REQ) - The first title, that we want to check for a match
+							;  needle    (I,REQ) - The value to search for (title should contain/start with/equal/match this regex)
+							;  matchMode (I,REQ) - The match mode to use, from TitleMatchMode.*
+							; RETURNS:        true/false - do the titles match?
+							;---------">
+                <Param name="title" />
+                <Param name="needle" />
+                <Param name="matchMode" />
             </Overload>
         </KeyWord>
         <KeyWord name="Toast" func="yes">

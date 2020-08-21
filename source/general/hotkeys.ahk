@@ -36,9 +36,14 @@
 	XButton2::activateWindowUnderMouseAndSendKeys("^+{Tab}")
 	activateWindowUnderMouseAndSendKeys(keys) {
 		idString := WindowLib.getIdTitleStringUnderMouse()
-		windowName := Config.findWindowName(idString)
-		if(windowName != "Windows Taskbar" && windowName != "Windows Taskbar Secondary") ; Don't try to focus Windows taskbar
-			WinActivate, % idString
+		
+		; Ignore Windows taskbars entirely.
+		if(Config.windowInfo["Windows Taskbar"].windowMatches(idString))
+			return
+		if(Config.windowInfo["Windows Taskbar Secondary"].windowMatches(idString))
+			return
+		
+		WinActivate, % idString
 		
 		settings := new TempSettings().sendLevel(1) ; Allow the keystrokes to be caught and handled by other hotkeys.
 		Send, %keys%

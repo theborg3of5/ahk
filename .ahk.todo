@@ -28,8 +28,6 @@
 		git config --global pull.rebase true
 		git config --global merge.ff false
 		git config --global fetch.prune true
-	activateWindowUnderMouseAndSendKeys() - would it be faster to check if the window is one of the specific ones we're checking for?
-		That way it doesn't have to loop through all of the window definitions, right?
 	Reexamine script division in general folder (except hotstrings, those are fine)
 		New plan
 			epic

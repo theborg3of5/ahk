@@ -24,10 +24,7 @@
 		Maybe as a replacement, or suffix for the "Debug Info" title?
 	Consider making copy-to-new-notepad set the value based on existence instead of becoming active
 		What if there are multiple notepad instances, though?
-	Git setup - figure out what the recent changes from the work setup tutorial were, and whether they matter for my purposes
-		git config --global pull.rebase true
-		git config --global merge.ff false
-		git config --global fetch.prune true
+			Could we find the most-recently-created one? Maybe based on ID order, or some other way?
 	Reexamine script division in general folder (except hotstrings, those are fine)
 		New plan
 			epic

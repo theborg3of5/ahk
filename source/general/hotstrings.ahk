@@ -15,7 +15,7 @@
 	
 	:X:uname::Send, % Config.private["USERNAME"]
 
-; [[ Typo correction ]] ---
+; [[ Typo correction ]] ===
 	:*0:,3::<3
 	::<#::<3
 	::<43::<3
@@ -57,7 +57,7 @@
 	::voilates::violates
 	::timeframe::time frame
 
-; [[ Expansions ]] ---
+; [[ Expansions ]] ===
 	::f'n::function
 	::def'n::definition
 	::int'l::international
@@ -79,7 +79,7 @@
 	
 	::.shrug::{U+AF}\_({U+30C4})_/{U+AF} ; ¯\_(ツ)_/¯ - 0xAF=¯, 0x30C4=ツ
 
-; [[ Date and time ]] ---
+; [[ Date and time ]] ===
 	:X:idate::Send, % FormatTime(A_Now, "M/d/yy")
 	:X:itime::Send, % FormatTime(A_Now, "h:mm tt")
 	
@@ -100,7 +100,7 @@
 	:X:adidate::new RelativeDate().SendInFormat("dddd`, M/d")
 	:X:aitime:: new RelativeTime().SendInFormat("h:mm tt")
 
-; [[ Folders and paths ]] ---
+; [[ Folders and paths ]] ===
 	; General
 	:X:pff:: sendFolderPath("PROGRAM_FILES")
 	:X:xpff::sendFolderPath("PROGRAM_FILES_86")

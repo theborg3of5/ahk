@@ -68,7 +68,7 @@ class Config {
 	}
 	
 	
-	; [[ Settings ]] ---
+	; [[ Settings ]] ===
 	; [[ Current machine checks ]] --=
 	;---------
 	; DESCRIPTION:    Which machine we're configured to act as, from the Machine_* constants in this class.
@@ -111,7 +111,7 @@ class Config {
 		}
 	}
 	
-	; [[ Current context checks ]] ---
+	; [[ Current context checks ]] ===
 	;---------
 	; DESCRIPTION:    Which context we're configured to act as, from the Context_* constants in this class.
 	;---------
@@ -184,7 +184,7 @@ class Config {
 	}
 	
 	
-	; [[ Windows ]] ---
+	; [[ Windows ]] ===
 	;---------
 	; DESCRIPTION:    Return the WindowInfo instance corresponding to the provided name.
 	; PARAMETERS:
@@ -257,7 +257,7 @@ class Config {
 	}
 	
 	
-	; [[ Paths ]] ---
+	; [[ Paths ]] ===
 	;---------
 	; DESCRIPTION:    A particular path from this class.
 	; PARAMETERS:
@@ -282,7 +282,7 @@ class Config {
 	}
 	
 	
-	; [[ Programs ]] ---
+	; [[ Programs ]] ===
 	;---------
 	; DESCRIPTION:    Activate the window matching the specified name, running it if it doesn't yet exist.
 	; PARAMETERS:
@@ -312,7 +312,7 @@ class Config {
 	}
 	
 	
-	; [[ Games ]] ---
+	; [[ Games ]] ===
 	;---------
 	; DESCRIPTION:    Check whether the specified window is a game (as identified in the games file passed in).
 	; PARAMETERS:

@@ -31,7 +31,7 @@ if(Config.contextIsWork) { ; Work-specific subs
 		Run(subFolder "killUAC\killUAC.ahk")
 }
 
-; === Include other scripts ===
+; Include other scripts
 #Include %A_ScriptDir%\general\ ; General hotkeys.
 #Include hotkeys.ahk
 #Include hotstrings.ahk ; Must go after startup, but before hotkeys begin.

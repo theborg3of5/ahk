@@ -36,13 +36,13 @@ path_CompletionActive_TL  := Config.path["PROGRAM_FILES"] "\Notepad++\autoComple
 path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml" ; This file is for all user-defined languages
 
 
-; [[ Extract data ]] ---
+; [[ Extract data ]] ===
 ahkClasses := []
 tlMembers  := []
 getDataFromScripts(ahkClasses, tlMembers)
 
 
-; [[ Auto-complete ]] ---
+; [[ Auto-complete ]] ===
 newXML := updateCompletionXML_AHK(path_CompletionTemplate_AHK, ahkClasses)
 FileLib.replaceFileWithString(path_CompletionOutput_AHK, newXML)
 FileLib.replaceFileWithString(path_CompletionActive_AHK, newXML)
@@ -54,7 +54,7 @@ FileLib.replaceFileWithString(path_CompletionActive_TL, newXML)
 t := new Toast("Updated both versions of the auto-complete file").show()
 
 
-; [[ Syntax highlighting ]] ---
+; [[ Syntax highlighting ]] ===
 newXML_AHK := updateSyntaxXML_AHK(path_SyntaxTemplate_AHK, ahkClasses)
 FileLib.replaceFileWithString(path_SyntaxOutput_AHK, newXML_AHK)
 

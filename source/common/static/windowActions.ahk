@@ -149,7 +149,7 @@ class WindowActions {
 	static Action_Minimize   := "MIN"         ; Minimize the window
 	static Action_SelectAll  := "SELECT_ALL"  ; Select all of the current field
 	
-	; [[Supported action methods]] ---
+	; [[Supported action methods]] ===
 	static Method_Default          := "DEFAULT"      ; Use the default way of performing the action
 	static Method_Other            := "OTHER"        ; Something special, defined in .doSpecialWindowMethod
 	static Method_Minimize_Message := "POST_MESSAGE" ; Minimize: send a windows message to do it

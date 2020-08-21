@@ -152,7 +152,7 @@ class VisualWindow {
 		this.applyPosition()
 	}
 	
-	; [[ Movement based on corners (supports snapping) ]] ---
+	; [[ Movement based on corners (supports snapping) ]] ===
 	;---------
 	; DESCRIPTION:    Move the top-left corner of the window to the given coordinate.
 	; PARAMETERS:
@@ -210,7 +210,7 @@ class VisualWindow {
 		this.applyPosition()
 	}
 	
-	; [[ Resizing based on corners (supports snapping) ]] ---
+	; [[ Resizing based on corners (supports snapping) ]] ===
 	;---------
 	; DESCRIPTION:    Resize the window so that the top-left corner is in the given coordinate.
 	; PARAMETERS:
@@ -404,7 +404,7 @@ class VisualWindow {
 		this.bottomY := y
 	}
 	
-	; [[ Resizing window so specific window edges are somewhere ]] ---
+	; [[ Resizing window so specific window edges are somewhere ]] ===
 	rsLeftToX(x) {
 		this.leftX := x
 		this.width := this.rightX - x
@@ -422,7 +422,7 @@ class VisualWindow {
 		this.height  := y - this.topY
 	}
 	
-	; [[ Resizing window to a specific width/height (towards bottom-right corner) ]] ---
+	; [[ Resizing window to a specific width/height (towards bottom-right corner) ]] ===
 	rsToWidth(width) {
 		this.width  := width
 		this.rightX := this.leftX + width
@@ -432,7 +432,7 @@ class VisualWindow {
 		this.bottomY := this.topY + height
 	}
 	
-	; [[ Snapping ]] ---
+	; [[ Snapping ]] ===
 	mvSnap() {
 		if(!this.isSnapOn)
 			return
@@ -486,7 +486,7 @@ class VisualWindow {
 		}
 	}
 	
-	; [[ Special window coordinates (for window placement relative to monitor) ]] ---
+	; [[ Special window coordinates (for window placement relative to monitor) ]] ===
 	;---------
 	; DESCRIPTION:    Convert the given strings into proper coordinates, supporting various special
 	;                 values (VisualWindow.X_*/Y_*) and a +/- offset on the end.

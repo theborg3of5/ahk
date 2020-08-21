@@ -34,9 +34,7 @@ if(Config.contextIsWork) { ; Work-specific subs
 ; Include other scripts
 #Include %A_ScriptDir%\general\ ; General hotkeys.
 #Include epic.ahk
-#Include hotkeys.ahk
 #Include hotstrings.ahk ; Must go after startup, but before hotkeys begin.
-#Include launch.ahk
 #Include media.ahk
 #Include places.ahk
 #Include programs.ahk

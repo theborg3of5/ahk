@@ -33,12 +33,15 @@ if(Config.contextIsWork) { ; Work-specific subs
 
 ; Include other scripts
 #Include %A_ScriptDir%\general\ ; General hotkeys.
+#Include epic.ahk
 #Include hotkeys.ahk
 #Include hotstrings.ahk ; Must go after startup, but before hotkeys begin.
 #Include launch.ahk
 #Include media.ahk
 #Include places.ahk
 #Include programs.ahk
+#Include selection.ahk
+#Include system.ahk
 #Include text.ahk
 #Include window.ahk
 
@@ -52,13 +55,11 @@ if(Config.contextIsWork) { ; Work-specific subs
 #Include excel.ahk
 #Include explorer.ahk
 #Include fastStoneImageViewer.ahk
-#Include gitHubDesktop.ahk
 #Include greenshot.ahk
 #Include hyperspace.ahk
 #Include internetExplorer.ahk
 #Include kdiff.ahk
 #Include launchy.ahk
-#Include messenger.ahk
 #Include notepadPlusPlus.ahk
 #Include onenote.ahk
 #Include onetastic.ahk
@@ -66,7 +67,6 @@ if(Config.contextIsWork) { ; Work-specific subs
 #Include putty.ahk
 #Include remoteDesktop.ahk
 #Include snapper.ahk
-#Include soundSwitch.ahk
 #Include spotify.ahk
 #Include sumatraPDF.ahk
 #Include teams.ahk

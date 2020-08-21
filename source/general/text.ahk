@@ -1,23 +1,10 @@
 ; Hotkeys for getting/sending and manipulating text.
 
-; Select all with special per-window handling.
-$^a::WindowActions.selectAll()
-
-; Backspace shortcut for those that don't handle it well.
-$^Backspace::WindowActions.deleteWord()
-
+; Send clipboard as plain text.
 ^!v::
 	HotkeyLib.waitForRelease()
 	Send, {Text}%Clipboard%
 return
-
-; Turn the selected text into a link to the URL on the clipboard.
-^+k::
-	linkSelectedText() {
-		HotkeyLib.waitForRelease()
-		if(!Hyperlinker.linkSelectedText(Clipboard, errorMessage))
-			new ErrorToast("Failed to link selected text", errorMessage).showMedium()
-	}
 	
 ; Send a (newline-separated) text/URL combo from the clipboard as a link.
 ^+#k::
@@ -49,16 +36,6 @@ return
 
 ; Send the clipboard as a list.
 ^#v::new FormattedList(Clipboard).sendList()
-
-; Grab the selected text and pop it into a new Notepad window
-!v::
-	putSelectedTextIntoNewNotepadWindow() {
-		selectedText := SelectLib.getText()
-		if(selectedText = "")
-			return
-		
-		Notepad.openNewInstanceWithText(selectedText)
-	}
 
 ; Send specific (Unicode) symbols
 #`;::

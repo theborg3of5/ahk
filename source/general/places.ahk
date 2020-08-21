@@ -1,10 +1,11 @@
 ; Hotkeys for opening different locations, both local (folders) and remote (URLs).
 
+; [[Local/Remote Paths]] --=
 ; Specific folders
- !+a::openFolder("AHK_ROOT")
-$!+d::openFolder("USER_DOWNLOADS")
- !+u::openFolder("USER_ROOT")
-openFolder(folderName) {
+ !+a::openPath("AHK_ROOT")
+$!+d::openPath("USER_DOWNLOADS")
+ !+u::openPath("USER_ROOT")
+openPath(folderName) {
 	folderPath := Config.path[folderName]
 	if(FileLib.folderExists(folderPath))
 		Run(folderPath)
@@ -46,8 +47,24 @@ sendCleanedUpPath(containingFolderOnly := false) {
 	SendRaw, % path
 }
 
+; Selector to allow easy editing of config or code files that we edit often
+!+c::
+	selectEditFile() {
+		path := new Selector("editFiles.tls").selectGui("PATH")
+		if(!path)
+			return
+		
+		path := Config.replacePathTags(path)
+		if(!FileExist(path)) {
+			new ErrorText("Script does not exist: " path).showMedium()
+			return
+		}
+		
+		Config.runProgram("Notepad++", path)
+	}
 
-; Websites
+
+; [[Websites]] ===
 $^!+f::Run("http://feedly.com/i/latest") ; $ as Notepad++ highlight-all hotkey sends these keys
 ^!#m:: Run("https://mail.google.com/mail/u/0/#inbox")
 ^!+a::
@@ -65,3 +82,4 @@ $^!+f::Run("http://feedly.com/i/latest") ; $ as Notepad++ highlight-all hotkey s
 !+o:: Run("https://www.onenote.com/notebooks?auth=1&nf=1&fromAR=1")
 !+t:: Run("https://ticktick.com/#q/all/tasks")
 !+#t::Run(Config.private["ONENOTE_ONLINE_NOTEBOOK_DO"])
+; =--

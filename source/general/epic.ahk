@@ -1,38 +1,6 @@
-; Launch miscellaneous actions.
+; Work-specific hotkeys
 
-; Generic search for selected text.
-!+f::SearchLib.selectedTextPrompt()
-
-; Generic open - open a variety of different things based on the selected text.
-^!#o::  new ActionObject(SelectLib.getText()).openWeb()
-^!#+o:: new ActionObject(SelectLib.getText()).openEdit()
-
-; Generic copy link - copy links to a variety of different things based on the selected text.
-^!#l:: new ActionObject(SelectLib.getText()).copyLinkWeb()
-^!#+l::new ActionObject(SelectLib.getText()).copyLinkEdit()
-
-; Generic hyperlinker - get link based on the selected text and then apply it to that same text.
-^!#k::  new ActionObject(SelectLib.getText()).linkSelectedTextWeb()
-^!#+k:: new ActionObject(SelectLib.getText()).linkSelectedTextEdit()
-
-; Selector to allow easy editing of config or code files that we edit often
-!+c::
-	selectEditFile() {
-		path := new Selector("editFiles.tls").selectGui("PATH")
-		if(!path)
-			return
-		
-		path := Config.replacePathTags(path)
-		if(!FileExist(path)) {
-			new ErrorText("Script does not exist: " path).showMedium()
-			return
-		}
-		
-		Config.runProgram("Notepad++", path)
-	}
-
-
-#If Config.contextIsWork
+#If Config.contextIsWork ; Any work machine --=
 	^!+d:: Send, % selectTLGId().removeFromStart("P.").removeFromStart("Q.")
 	^!#d:: selectTLGActionObject().openWeb()
 	^!+#d::selectTLGActionObject().openEdit()
@@ -90,10 +58,8 @@
 			else
 				Run(Snapper.buildURL(data["COMM_ID"], data["INI"], data["ID"])) ; data["ID"] can contain a list or range if that's what the user entered
 		}
-#If
 
-
-#If Config.machineIsWorkLaptop
+#If Config.machineIsWorkLaptop ; Main work laptop only (not other work machines) ===
 	^!+t::
 		selectOutlookTLG() {
 			s := new Selector("tlg.tls").setTitle("Select EMC2 Record ID")
@@ -173,4 +139,4 @@
 					PhoneLib.call(data["NUMBER"], data["NAME"])
 			}
 		}
-#If
+#If ; =--

@@ -23,6 +23,11 @@
 		}
 	}
 
+; SoundSwitch handling
+#If Config.doesWindowExist("SoundSwitch")
+	^F12::SoundSwitch.toggleDevices()
+#If
+
 ; #If !Config.doesMediaPlayerExist() ; GDB WFH
 	; ^!Up::
 	; ^!Down::

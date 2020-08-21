@@ -25,65 +25,8 @@
 	Consider making copy-to-new-notepad set the value based on existence instead of becoming active
 		What if there are multiple notepad instances, though?
 			Could we find the most-recently-created one? Maybe based on ID order, or some other way?
-	Reexamine script division in general folder (except hotstrings, those are fine)
-		New plan
-			epic
-				Selector TLG/DLGs
-				Selector Hyperspace
-				Selector environment ID
-				Selector Snapper
-				Selector Thunder
-				Selector VDI
-				Selector phone
-			media
-				Volume up/down
-				Mute toggle
-				Change media player
-				SoundSwitch
-				Media keys
-			places
-				Open specific folders
-				Selector folder
-				Clean path/parent path
-				Open specific websites
-				Selector edit file
-			selection
-				Generic search
-				Generic open
-				Generic copy link
-				Generic hyperlink
-				Hyperlink selected text
-				Copy selected text into a new notepad instance
-			system
-				Mute-lock
-				AppsKey-Windows key
-				Computer sleep
-				Computer lock
-				Suppress extra buttons
-				Browser back/forward clicks
-				Release all modifiers
-			text
-				Send raw clipboard
-				Send hyperlinked text/url combo
-				Send standard object string
-				Send clipboard as a formatted list
-				Selector symbols
-			window (actions on a particular window)
-				Action select all
-				Action delete word
-				Action escape
-				Action backtick
-				(Action) minimize window
-				Always on top
-				Center window
-				Fake-maximize window
-				Selector resize
-				Horizontal scrolling (except in a couple of specific programs)
-					Could we have those programs let the hotkeys through instead?
-						Would using ~ prefix override the general bit?
-				Extra mouse buttons-tab switch (except in a couple of specific programs)
-					Same as above, could those programs handle it instead?
-	Get rid of Messenger, Github Desktop scripts if I don't use them for something new soon
+	Extra mouse buttons tab switch, horizontal scrolling exceptions
+		Could those live with the specific programs as an override, instead of being called out here?
 	Teams: could we make the mute/video toggles, universal hotkeys?
 		Based on existence of Teams window with meeting running
 			Title with meeting running: Meeting | Microsoft Teams

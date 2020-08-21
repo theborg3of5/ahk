@@ -15,17 +15,17 @@
 	EMC2 XDS Open Design					-			-					-					CTRL_SHIFT
 	EMC2 XDS Submit						-			-					HOME_END			CTRL_SHIFT
 	Explorer									MIN		OTHER
-	Explorer									MIN		-					-					-					-			-				-	WORK_VDI
+	Explorer									MIN		-					-					-					-			-				-				WORK_VDI
 	GitHub Desktop							CLOSE		-					-					-					-			-				ESCAPE
 	GrepWin									CLOSE
 	KDiff										CLOSE
-	Messenger								MIN		-					-					-					-			-				ESCAPE	HOME_DESKTOP
+	Messenger								MIN		-					-					-					-			-				ESCAPE		HOME_DESKTOP
 	Notepad									CLOSE		-					-					CTRL_SHIFT
 	OneTastic Macro Editor XML			-			-					HOME_END
 	Pidgin Buddy List						CLOSE		CLOSE
 	Republic Anywhere						CLOSE		CLOSE
 	Skype										CLOSE
-	Slack										CLOSE		-					-					-					-			-				-	HOME_DESKTOP
+	Slack										CLOSE		-					-					-					-			-				-				HOME_DESKTOP
 	Spotify									CLOSE		CLOSE				-					-					OTHER		OTHER
 	Teams										CLOSE		CLOSE				-					-					-			-				ESCAPE
 	Telegram									CLOSE		CLOSE				-					-					-			-				ESCAPE

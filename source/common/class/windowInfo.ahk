@@ -60,11 +60,9 @@ class WindowInfo {
 		this.title := Config.replacePrivateTags(windowAry["TITLE"])
 		
 		this.priority := windowAry["PRIORITY"]
+		this.edgeType := windowAry["EDGE_TYPE"]
 		
-		; Handle defaults
-		matchMode := this.convertTitleMatchMode(windowAry["TITLE_MATCH_MODE"])
-		this.titleMatchMode := DataLib.coalesce(matchMode,              TitleMatchMode.Contains)
-		this.edgeType       := DataLib.coalesce(windowAry["EDGE_TYPE"], this.EdgeStyle_HasPadding)
+		this.titleMatchMode := this.convertTitleMatchMode(windowAry["TITLE_MATCH_MODE"])
 	}
 	
 	;---------

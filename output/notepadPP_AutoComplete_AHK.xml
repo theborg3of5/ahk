@@ -2032,30 +2032,6 @@
                 <Param name="args := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="Config.TitleContains_Any" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Title can contain text anywhere
-							; GROUP:          Title string matching modes
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Config.TitleContains_Exact" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Title must exactly equal text
-							; GROUP:          Title string matching modes
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Config.TitleContains_Start" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Title must start with text
-							; GROUP:          Title string matching modes
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="Config.windowInfo" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -8182,7 +8158,7 @@
 							;                                        whether the window is the size that it appears or if it
 							;                                        has invisible padding around it that needs to be taken
 							;                                        into account when resizing, etc.
-							;                                  [&quot;TITLE_STRING_MATCH_MODE_OVERRIDE&quot;]
+							;                                  [&quot;TITLE_MATCH_MODE&quot;]
 							;                                      - If the window has a specific title match mode that
 							;                                        needs to be used when locating it, this will return
 							;                                        that override.
@@ -8259,7 +8235,7 @@
         <KeyWord name="WindowInfo.titleMatchMode" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    If the window has a specific title match mode that needs to be used when locating it, this will return that override.
+							; DESCRIPTION:    The title match mode (from TitleMatchMode.*) to use when searching for this window
 							;---------">
             </Overload>
         </KeyWord>
@@ -8268,7 +8244,36 @@
 							;---------
 							; DESCRIPTION:    A string that can be used with WinActive() and the like to identify this
 							;                 window.
+							; NOTES:          Make sure to check .titleMatchMode as well, in case the window requires a special condition there.
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowInfo.windowMatches" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the window matching the given title string matches all of our info.
+							; PARAMETERS:
+							;  titleString (I,REQ) - Title string identifying the window in question.
+							; RETURNS:        true/false - does it match?
+							; NOTES:          Blank values for this class' pieces are effectively wildcards - they match anything.
+							;---------">
+                <Param name="titleString" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowInfo.windowMatchesPieces" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the given info matches what we have here.
+							; PARAMETERS:
+							;  exe   (I,OPT) - Window exe
+							;  class (I,OPT) - Window class
+							;  title (I,OPT) - Window title
+							; RETURNS:        true/false - did all of the pieces match?
+							; NOTES:          Blank values for this class' pieces are effectively wildcards - they match anything.
+							;---------">
+                <Param name="exe := &quot;&quot;" />
+                <Param name="class := &quot;&quot;" />
+                <Param name="title := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="WindowLib.buildTitleString" func="yes">

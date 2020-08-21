@@ -62,7 +62,6 @@ Object(params*) {
 	#Include clipboardLib.ahk
 	#Include dataLib.ahk
 	#Include dateTimeLib.ahk
-	#Include enums.ahk
 	#Include epicLib.ahk
 	#Include fileLib.ahk
 	#Include guiLib.ahk
@@ -101,8 +100,10 @@ Object(params*) {
 	#Include config.ahk
 	#Include commonHotkeys.ahk
 	#Include debug.ahk
+	#Include enums.ahk
 	#Include hyperlinker.ahk
 	#Include scriptTrayInfo.ahk
+	#Include titleMatchMode.ahk
 	#Include windowActions.ahk
 ; =--
 

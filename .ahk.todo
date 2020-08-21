@@ -22,9 +22,6 @@
 					This would allow us to add rows in the order we wanted - so we could flip the date order back to day-date, not date-day
 	Could we have DebugPopup treat a first parameter starting with a +, as a title?
 		Maybe as a replacement, or suffix for the "Debug Info" title?
-	WindowInfo.convertTitleMatchMode() - would it be cleaner to pull the string constants out into a fake-enum (StringTitleMatchMode_* or similar)?
-		Alternatively, could we add some sort of mapping to the TitleMatchMode class? As a static function, perhaps?
-			Maybe move titleMatches in, too?
 	Consider making copy-to-new-notepad set the value based on existence instead of becoming active
 		What if there are multiple notepad instances, though?
 	Git setup - figure out what the recent changes from the work setup tutorial were, and whether they matter for my purposes

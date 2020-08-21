@@ -62,7 +62,7 @@ class WindowInfo {
 		this.priority := windowAry["PRIORITY"]
 		this.edgeType := windowAry["EDGE_TYPE"]
 		
-		this.titleMatchMode := this.convertTitleMatchMode(windowAry["TITLE_MATCH_MODE"])
+		this.titleMatchMode := TitleMatchMode.convertFromString(windowAry["TITLE_MATCH_MODE"])
 	}
 	
 	;---------
@@ -110,41 +110,10 @@ class WindowInfo {
 			return false
 		
 		; Title is checked based on titleMatchMode, if we have it specified
-		if(this.title && !this.titleMatches(title))
+		if(this.title && !TitleMatchMode.titleMatches(title, this.title, this.titleMatchMode))
 			return false
 		
 		return true
-	}
-	
-	
-	; #PRIVATE#
-	
-	;---------
-	; DESCRIPTION:    Map a set of string values, to the actual numeric values that will work with SetTitleMatchMode.
-	; PARAMETERS:
-	;  stringMode (I,REQ) - Any of "START", "CONTAINS", and "EXACT".
-	; RETURNS:        Value from TitleMatchMode.* that can be used with SetTitleMatchMode.
-	;---------
-	convertTitleMatchMode(stringMode) {
-		Switch stringMode {
-			Case "START":    return TitleMatchMode.Start
-			Case "CONTAINS": return TitleMatchMode.Contains
-			Case "EXACT":    return TitleMatchMode.Exact
-		}
-	}
-	
-	;---------
-	; DESCRIPTION:    Check whether the given title matches ours, taking the titleMatchMode into account.
-	; PARAMETERS:
-	;  title (I,REQ) - The title to check.
-	; RETURNS:        true/false - does the given title match ours?
-	;---------
-	titleMatches(title) {
-		Switch this.titleMatchMode {
-			Case TitleMatchMode.Start:    return title.startsWith(this.title)
-			Case TitleMatchMode.Contains: return (title.contains(this.title)>0)
-			Case TitleMatchMode.Exact:    return (title = this.title)
-		}
 	}
 	
 	

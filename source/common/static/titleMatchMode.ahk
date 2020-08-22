@@ -33,7 +33,7 @@ class TitleMatchMode {
 	; RETURNS:        true/false - do the titles match?
 	;---------
 	titleMatches(title, needle, matchMode) {
-		Switch this.titleMatchMode {
+		Switch matchMode {
 			Case TitleMatchMode.Start:    return title.startsWith(needle)
 			Case TitleMatchMode.Contains: return (title.contains(needle)>0)
 			Case TitleMatchMode.Exact:    return (title = needle)

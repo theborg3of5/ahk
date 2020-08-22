@@ -174,18 +174,18 @@ class WindowActions {
 		if(!titleString && !name)
 			return
 		
-		; Get name and window info if we can.
-		if(name) {
-			winInfo := Config.windowInfo[name]
-		} else {
-			winInfo := Config.findWindowInfo(titleString)
-			name := winInfo.name
-		}
+		if(!name)
+			name := Config.findWindowName(titleString)
 		
-		; If we found window info, use that to more exactly identify the window before we move forward.
-		winId := winInfo.getMatchingWindow()
-		if(winId)
+		; Identify the window we want to act upon with a titleString that uses its ID.
+		if(titleString) {
+			titleString := WindowLib.getIdTitleString(titleString)
+		} else {
+			winId := Config.windowInfo[name].getMatchingWindow()
+			if(!winId)
+				return
 			titleString := "ahk_id " winId
+		}
 		
 		; Debug.popup("WindowActions.windowAction","Finished prep", "action",action, "titleString",titleString, "this.actionOverrides[name]",this.actionOverrides[name])
 		this.doWindowAction(action, titleString, this.actionOverrides[name])

@@ -1,5 +1,4 @@
 # New Ideas
-	New winId stuff in WindowActions.windowAction() seems to have broken minimizing Chrome
 	Hotkey to auto-resize/auto-place certain windows
 		Specific windows
 			Various "social" windows

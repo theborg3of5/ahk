@@ -22,9 +22,8 @@
 					This would allow us to add rows in the order we wanted - so we could flip the date order back to day-date, not date-day
 	Could we have DebugPopup treat a first parameter starting with a +, as a title?
 		Maybe as a replacement, or suffix for the "Debug Info" title?
-	Consider making copy-to-new-notepad set the value based on existence instead of becoming active
-		What if there are multiple notepad instances, though?
-			Could we find the most-recently-created one? Maybe based on ID order, or some other way?
+	Re-examine how we run programs and such (RunLib.runAsUser stuff) - could it be the reason we have focus issues?
+		Also, could we work around it with a WinWaitExist + WinActivate?
 	Extra mouse buttons tab switch, horizontal scrolling exceptions
 		Could those live with the specific programs as an override, instead of being called out here?
 	Teams: could we make the mute/video toggles, universal hotkeys?

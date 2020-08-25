@@ -187,7 +187,6 @@ class WindowActions {
 			titleString := "ahk_id " winId
 		}
 		
-		; Debug.popup("WindowActions.windowAction","Finished prep", "action",action, "titleString",titleString, "this.actionOverrides[name]",this.actionOverrides[name])
 		this.doWindowAction(action, titleString, this.actionOverrides[name])
 	}
 	

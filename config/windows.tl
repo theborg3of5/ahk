@@ -76,7 +76,8 @@
 				PowerPoint								POWERPNT.EXE				-									-														NO_PADDING
 				Process Explorer						PROCEXP64.exe				PROCEXPL
 				Putty										putty.exe
-				Remote Desktop							-								TscShellContainerClass
+				Remote Desktop							mstsc.exe					TscShellContainerClass
+				Remote Desktop Reconnecting		mstsc.exe					#32770
 				Republic Anywhere						Republic Anywhere.exe
 				Skype										Skype.exe
 				Snapper									Snapper.exe

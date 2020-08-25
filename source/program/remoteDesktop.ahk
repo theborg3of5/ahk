@@ -6,7 +6,7 @@ $!Esc::
 	SetNumLockState, AlwaysOn
 return
 
-#If Config.isWindowActive("Remote Desktop")
+#If Config.isWindowActive("Remote Desktop") || Config.isWindowActive("Remote Desktop Reconnecting")
 	NumLock::return ; Divert NumLock on the base machine - otherwise it goes off on an infinite loop of trying to restore it for AlwaysOn setting.
 	
 	; Allow escape from remote desktop with hotkey (for computer you're remoting from).

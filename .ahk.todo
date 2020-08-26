@@ -20,8 +20,6 @@
 				Content: Each day as if it were an independent array
 					For this, we'd need to open up DebugPopup to adding individual lines, not just all the content at once - is that a problem?
 					This would allow us to add rows in the order we wanted - so we could flip the date order back to day-date, not date-day
-	Editing debug strings doesn't work with a subtitle first parameter (+syntax)
-		Probably just requires an update to AHKCodeLib.reduceDebugParams
 	Re-examine how we run programs and such (RunLib.runAsUser stuff) - could it be the reason we have focus issues?
 		Also, could we work around it with a WinWaitExist + WinActivate?
 	Extra mouse buttons tab switch, horizontal scrolling exceptions

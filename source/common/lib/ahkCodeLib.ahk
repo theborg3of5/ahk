@@ -174,24 +174,21 @@ class AHKCodeLib {
 	;---------
 	reduceDebugParams(debugParamList) {
 		QUOTE := """" ; Double-quote character
-		
-		; Now get down to our original list by preferring the second of each pair of parameters.
+		debugParamsAry := AHKCodeLib.splitVarList(debugParamList)
 		paramsAry := []
-		lastNameParam := ""
-		For i,param in AHKCodeLib.splitVarList(debugParamList) {
-			; Generally ignore odd-numbered parameters, but store them until we're done with their corresponding even param in case it's a label case.
-			if(i.isOddNum()) {
-				lastNameParam := param
-				Continue
-			}
-			
-			; If the even-numbered parameter is a blank string, it's a label case - use the last name param with a + instead.
-			if(param = QUOTE QUOTE) {
-				paramsAry.push("+" lastNameParam.allBetweenStrings(QUOTE, QUOTE)) ; Add the + for label, remove the quotes
-				Continue
-			}
-			
-			paramsAry.push(param)
+		
+		; Special case: a first parameter with a + prefix is a subtitle, just add it as-is (don't try to pair
+		; it with the next parameter).
+		if(debugParamsAry[1].startsWith(QUOTE "+")) {
+			title := debugParamsAry.RemoveAt(1)
+			title := title.removeFromStart(QUOTE).removeFromEnd(QUOTE)
+			paramsAry.push(title)
+		}
+		
+		; Now get down to the original list (assuming the pairs were all identical) by grabbing only the second of each pair of parameters.
+		For i,param in debugParamsAry {
+			if(i.isEvenNum())
+				paramsAry.push(param)
 		}
 		
 		return paramsAry.join(",")

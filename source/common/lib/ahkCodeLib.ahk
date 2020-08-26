@@ -150,11 +150,10 @@ class AHKCodeLib {
 		; Split list into array
 		paramsAry := AHKCodeLib.splitVarList(varList)
 		
-		; Special case: if first param starts with +, it's a top-level message that should be shown with no corresponding data.
+		; Special case: if first param starts with +, it's a subtitle that doesn't need a corresponding value parameter.
 		if(paramsAry[1].startsWith("+")) {
-			label := paramsAry[1].afterString("+")
-			paramsString .= QUOTE label QUOTE "," QUOTE QUOTE
-			paramsAry.RemoveAt(1)
+			label := paramsAry.RemoveAt(1)
+			paramsString .= QUOTE label QUOTE
 		}
 		
 		For i,param in paramsAry {

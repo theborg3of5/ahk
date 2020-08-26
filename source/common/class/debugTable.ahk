@@ -101,10 +101,8 @@ class DebugTable extends TextTable {
 	;                  the bottom.
 	;---------
 	__New(title := "") {
-		this.title := title
-		
+		this.setTitle(title)
 		this.setBorderType(TextTable.BorderType_Line)
-		this.setTopTitle(title)
 	}
 	
 	;---------
@@ -114,6 +112,12 @@ class DebugTable extends TextTable {
 	;                    (i.e. "label1",value1,"label2",value2...)
 	;---------
 	addPairs(params*) {
+		; Special case: if the first parameter starts with a + character, treat it as a subtitle.
+		if(params[1].startsWith("+")) {
+			subtitle := params.removeAt(1).removeFromStart("+")
+			this.setTitle(this.title ": " subtitle)
+		}
+		
 		Loop, % params.MaxIndex() // 2 {
 			label := params[A_Index * 2 - 1]
 			value := params[A_Index * 2]
@@ -147,6 +151,18 @@ class DebugTable extends TextTable {
 	; #PRIVATE#
 	
 	title := "" ; The title to show at the top (and bottom, if we get tall enough)
+	
+	;---------
+	; DESCRIPTION:    Set the title for this table. Will be used for the top title, and if the table is tall enough, the
+	;                 bottom title as well. This mostly exists to ensure that we update our base's top title whenever we
+	;                 update the title.
+	; PARAMETERS:
+	;  title (I,REQ) - The new title.
+	;---------
+	setTitle(title) {
+		this.title := title
+		this.setTopTitle(title) ; Must be set as early as possible so table width is correct if the title is the longest thing.
+	}
 	
 	;---------
 	; DESCRIPTION:    Build a formatted string for the given value (a smaller DebugTable instance for arrays/objects).

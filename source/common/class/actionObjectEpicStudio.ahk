@@ -20,8 +20,9 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 	ActionObjectType := ActionObject.Type_EpicStudio
 	
 	; @GROUP@ Descriptor types
-	static DescriptorType_Routine := "ROUTINE" ; Server code location, including tag if applicable
-	static DescriptorType_DLG     := "DLG"     ; DLG, for opening in EpicStudio
+	static DescriptorType_Routine    := "ROUTINE" ; Server code location, including tag if applicable
+	static DescriptorType_RoutineCDE := "ROUTINE_CDE" ; Server code location, including tag if applicable - in CDE
+	static DescriptorType_DLG        := "DLG"     ; DLG, for opening in EpicStudio
 	; @GROUP-END@
 	
 	; @GROUP@
@@ -56,9 +57,13 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 		url := ""
 		
 		Switch this.descriptorType {
-			Case this.DescriptorType_Routine:
+			Case this.DescriptorType_Routine, this.DescriptorType_RoutineCDE:
 				EpicLib.splitServerLocation(this.descriptor, routine, tag)
-				environmentId := Config.private["DBC_DEV_ENV_ID"] ; Always use DBC Dev environment
+				
+				if(this.descriptorType = this.DescriptorType_Routine)
+					environmentId := Config.private["DBC_DEV_ENV_ID"]
+				else if(this.descriptorType = this.DescriptorType_RoutineCDE)
+					environmentId := Config.private["CDE_ENV_ID"]
 				
 				url := Config.private["EPICSTUDIO_URL_BASE_ROUTINE"]
 				url := url.replaceTag("ROUTINE",     routine)

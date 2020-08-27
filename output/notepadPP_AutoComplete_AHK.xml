@@ -633,6 +633,14 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectEpicStudio.DescriptorType_RoutineCDE" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Server code location, including tag if applicable - in CDE
+							; GROUP:          Descriptor types
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.getLink" func="yes">
             <Overload retVal="" descr="
 							;---------

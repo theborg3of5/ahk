@@ -1,4 +1,9 @@
 # New Ideas
+	OneNote todo peek
+		Support past dates (what did I miss during this trip?)
+		Possibly support exact dates, if not already there (RelativeDate usage, maybe?)
+			Consider expanding into something that can INSERT all of the todos within a past range? (.ptodo, maybe?)
+	OneNote todos seem to be missing checkboxes since my last batch of updates (at least when there are no todos to start)
 	Hotkey to auto-resize/auto-place certain windows
 		Specific windows
 			Various "social" windows

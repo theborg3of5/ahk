@@ -30,18 +30,10 @@ class RelativeDate extends RelativeDateTimeBase {
 	;---------
 	; DESCRIPTION:    Create a new representation of a date relative to right now.
 	; PARAMETERS:
-	;  relativeDate (I,OPT) - The relative date string to use to find the new date. If not provided,
-	;                         we'll prompt the user for it.
+	;  relativeDate (I,REQ) - The relative date string to use to find the new date.
 	;---------
-	__New(relativeDate := "") {
+	__New(relativeDate) {
 		this.loadCurrentDateTime()
-		
-		; If no relative date string is passed, prompt the user for a relative one.
-		if(relativeDate = "")
-			relativeDate := InputBox("Enter relative date string", , , 300, 100)
-		if(relativeDate = "")
-			return ""
-		
 		this.shiftByRelativeString(relativeDate)
 	}
 

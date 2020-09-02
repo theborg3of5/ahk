@@ -1,5 +1,6 @@
 # New Ideas
 	OneNote todo peek
+		Quit on escape/blank input
 		Support past dates (what did I miss during this trip?)
 		Possibly support exact dates, if not already there (RelativeDate usage, maybe?)
 			Consider expanding into something that can INSERT all of the todos within a past range? (.ptodo, maybe?)

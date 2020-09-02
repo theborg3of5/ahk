@@ -19,7 +19,7 @@ class RelativeDateTimeBase {
 	;---------
 	; NOTES:          Should be overridden by child class.
 	;---------
-	__New(relativeDateTime := "") {
+	__New() {
 		new ErrorToast("RelativeDateTimeBase instance created", "RelativeDateTimeBase is a base class only, use a date/time-specific child class instead.").showMedium()
 		return ""
 	}
@@ -29,14 +29,12 @@ class RelativeDateTimeBase {
 	; PARAMETERS:
 	;  format (I,REQ) - The format to send the date/time in, a la FormatTime().
 	;---------
-	SendInFormat(format) {
+	sendInFormat(format) {
 		Send, % FormatTime(this._instant, format)
 	}
 	
 	
-	; #PRIVATE#
-	
-	_instant := "" ; The actual timestamp that we calculate based on the relative date/time string.
+	; #INTERNAL#
 	
 	; The current value for different time units.
 	year    := ""
@@ -114,5 +112,10 @@ class RelativeDateTimeBase {
 	doShift(shiftAmount, unit) {
 		new ErrorToast("RelativeDateTimeBase.doShift called", "The child class should override doShift().").showMedium()
 	}
+	
+	
+	; #PRIVATE#
+	
+	_instant := "" ; The actual timestamp that we calculate based on the relative date/time string.
 	; #END#
 }

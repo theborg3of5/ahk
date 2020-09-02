@@ -95,11 +95,11 @@
 	return
 	
 	; Relative dates/times
-	:X:aidate:: new RelativeDate().SendInFormat("M/d/yy")
-	:X:aiddate::new RelativeDate().SendInFormat("M/d`, dddd")
-	:X:adidate::new RelativeDate().SendInFormat("dddd`, M/d")
-	:X:aitime:: new RelativeTime().SendInFormat("h:mm tt")
-
+	:X:aidate:: sendArbitraryDate("M/d/yy")
+	:X:aiddate::sendArbitraryDate("M/d`, dddd")
+	:X:adidate::sendArbitraryDate("dddd`, M/d")
+	:X:aitime:: sendArbitraryTime("h:mm tt")
+	
 ; [[ Folders and paths ]] ===
 	; General
 	:X:pff:: sendFolderPath("PROGRAM_FILES")
@@ -146,8 +146,28 @@
 ; =--
 #If
 
+; [[Helper functions]] --=
+sendArbitraryDate(format) {
+	QUOTE := """"
+	
+	title := "Insert date in " QUOTE format.remove("`") QUOTE " format:"
+	dateString := InputBox(title, "Enter a relative date string to insert that date in the above format.", , 425, 125)
+	if(dateString = "")
+		return ""
+	
+	new RelativeDate(dateString).sendInFormat(format)
+}
+sendArbitraryTime(format) {
+	QUOTE := """"
+	
+	title := "Insert date in " QUOTE format.remove("`") QUOTE " format:"
+	timeString := InputBox(title, "Enter a relative time string to insert that time in the above format.", , 425, 125)
+	if(timeString = "")
+		return ""
+	
+	new RelativeTime(timeString).sendInFormat(format)
+}
 
-; Helper functions for sending file/folder paths in the desired format.
 sendFilePath(folderName, subPath := "") {
 	FileLib.sendPath(folderName, subPath)
 }
@@ -157,3 +177,5 @@ sendFolderPath(folderName, subPath := "") {
 sendUnixFolderPath(folderName, subPath := "") {
 	FileLib.sendPath(folderName, subPath, "/", true)
 }
+
+; =--

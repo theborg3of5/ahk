@@ -29,18 +29,10 @@ class RelativeTime extends RelativeDateTimeBase {
 	;---------
 	; DESCRIPTION:    Create a new representation of a time relative to right now.
 	; PARAMETERS:
-	;  relativeTime (I,OPT) - The relative time string to use to find the new time. If not provided,
-	;                         we'll prompt the user for it.
+	;  relativeTime (I,REQ) - The relative time string to use to find the new time.
 	;---------
-	__New(relativeTime := "") {
+	__New(relativeTime) {
 		this.loadCurrentDateTime()
-		
-		; If no relative time string is passed, prompt the user for a relative one.
-		if(relativeTime = "")
-			relativeTime := InputBox("Enter relative time string", , , 300, 100)
-		if(relativeTime = "")
-			return ""
-		
 		this.shiftByRelativeString(relativeTime)
 	}
 

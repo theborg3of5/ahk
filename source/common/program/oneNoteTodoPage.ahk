@@ -343,7 +343,7 @@ class OneNoteTodoPage {
 		Send, ^1 ; To-do tag
 		
 		For i,item in items {
-			if(i > 0)
+			if(i > 1)
 				Send, {Enter}
 			
 			SendRaw, % item

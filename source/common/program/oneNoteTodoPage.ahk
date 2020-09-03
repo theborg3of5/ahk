@@ -34,26 +34,43 @@ class OneNoteTodoPage {
 	
 	;---------
 	; DESCRIPTION:    Show a popup with the recurring todo items from future dates.
-	; SIDE EFFECTS:   Prompts the user for how many days in the future to search.
+	; SIDE EFFECTS:   Prompts the user for the date range to view todos from.
 	;---------
-	peekAtFutureTodos() {
-		; Figure out start/end of range
-		numDays := InputBox("Peek at todo items", "Enter the number of days forward to check:", , 280, 125, , , , , 1) ; Default = 1 for tomorrow only
-		if(!numDays) ; Blank, 0, negatives not supported
-			return
-		startDate := EnvAdd(A_Now, 1,       "Days") ; Always start with tomorrow
-		endDate   := EnvAdd(A_Now, numDays, "Days")
+	peekOtherTodos() {
+		startDate := ""
+		endDate   := ""
+		this.promptOtherDateRange("Peek at todo items for date range", startDate, endDate)
 		
 		todosByDate := this.getTodosForDateRange(startDate, endDate)
-		
 		todosByDay := {}
 		For instant,todos in todosByDate {
-			dateName := FormatTime(instant, "M/d (ddd)")
+			dateName := FormatTime(instant, "M/d (ddd)") ; Date format is this way so things show up in the correct order.
 			todosByDay[dateName] := todos
 		}
 		
 		dateRange := FormatTime(startDate, "ddd M/d") " - " FormatTime(endDate, "ddd M/d")
 		Debug.popup("Date range",dateRange, "Todos by day",todosByDay)
+	}
+	
+	;---------
+	; DESCRIPTION:    Insert todos from a date range in the past or future. Useful for missed days.
+	; SIDE EFFECTS:   Prompts the user for the date range to add todos from.
+	;---------
+	insertOtherTodos() {
+		startDate := ""
+		endDate   := ""
+		this.promptOtherDateRange("Insert todo items for date range", startDate, endDate)
+		
+		todosByDate := this.getTodosForDateRange(startDate, endDate)
+		
+		; Check whether we're already on a blank line or not.
+		Send, {Home} ; Start of line
+		Send, {Shift Down}{End}{Shift Up} ; Select to end of line
+		if(SelectLib.getFirstLine() != "")
+			OneNote.insertBlankLine()
+		
+		todoItems := DataLib.flattenObjectToArray(todosByDate)
+		OneNoteTodoPage.sendItems(todoItems)
 	}
 	
 	
@@ -291,6 +308,29 @@ class OneNoteTodoPage {
 		}
 		
 		return todosByDate
+	}
+	
+	;---------
+	; DESCRIPTION:    Ask the user for an edge date (where the new range will be between today and the edge date).
+	; PARAMETERS:
+	;  title     (I,REQ) - Title of the popup that will be shown asking the user for their edge date (the one besides today).
+	;  startDate (O,REQ) - Start date of the chosen range
+	;  endDate   (O,REQ) - End date of the chosen range
+	; NOTES:          Today is never included in the range - so it will either end yesterday (if the edge date is in the
+	;                 past) or start tomorrow (if the edge date is in the future).
+	;---------
+	promptOtherDateRange(title, ByRef startDate, ByRef endDate) {
+		dateString := InputBox(title, "Enter a relative date string to use all todos between today (exclusive) and that date (inclusive).", , 350, 150)
+		
+		; Figure out start/end of range
+		edgeDate := new RelativeDate(dateString).instant
+		if(edgeDate > A_Now) { ; Future dates, start with tomorrow
+			startDate := EnvAdd(A_Now, 1, "Days")
+			endDate   := edgeDate
+		} else if(edgeDate < A_Now) { ; Past dates, end with yesterday
+			startDate := edgeDate
+			endDate   := EnvAdd(A_Now, -1, "Days")
+		}
 	}
 	
 	;---------

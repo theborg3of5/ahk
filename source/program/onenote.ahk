@@ -84,12 +84,13 @@
 	^MButton::OneNote.removeLinkUnderMouse()
 	
 	; Todo page handling
-	^t::       OneNoteTodoPage.collapseToTodayItems() ; Today only, item-level
-	^+t::      OneNoteTodoPage.collapseToAllItems()   ; All sections, item-level
-	^!t::      OneNoteTodoPage.collapseToTodayAll()   ; Today only, fully expanded
-	^+m::      OneNoteTodoPage.copyForToday()         ; New page for today
-	^+#m::     OneNoteTodoPage.copyForTomorrow()      ; New page for tomorrow
-	:*X:.todo::OneNoteTodoPage.peekAtFutureTodos()    ; Peek at upcoming todo items
+	^t::        OneNoteTodoPage.collapseToTodayItems() ; Today only, item-level
+	^+t::       OneNoteTodoPage.collapseToAllItems()   ; All sections, item-level
+	^!t::       OneNoteTodoPage.collapseToTodayAll()   ; Today only, fully expanded
+	^+m::       OneNoteTodoPage.copyForToday()         ; New page for today
+	^+#m::      OneNoteTodoPage.copyForTomorrow()      ; New page for tomorrow
+	:*X:.todo:: OneNoteTodoPage.peekOtherTodos()       ; Peek at past/future todo items
+	:*X:.itodo::OneNoteTodoPage.insertOtherTodos()     ; Insert past/future todo items
 
 	; Update links for a dev structure section header
 	!+#n::OneNote.linkDevStructureSectionTitle()

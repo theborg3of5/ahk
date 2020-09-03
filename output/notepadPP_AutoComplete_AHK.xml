@@ -5153,10 +5153,9 @@
 							;---------
 							; DESCRIPTION:    Create a new representation of a date relative to right now.
 							; PARAMETERS:
-							;  relativeDate (I,OPT) - The relative date string to use to find the new date. If not provided,
-							;                         we'll prompt the user for it.
+							;  relativeDate (I,REQ) - The relative date string to use to find the new date.
 							;---------">
-                <Param name="relativeDate := &quot;&quot;" />
+                <Param name="relativeDate" />
             </Overload>
         </KeyWord>
         <KeyWord name="RelativeDate.instant" func="yes">
@@ -5166,7 +5165,7 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="RelativeDate.SendInFormat" func="yes">
+        <KeyWord name="RelativeDate.sendInFormat" func="yes">
             <Overload retVal="{RelativeDateTimeBase}" descr="
 							;---------
 							; DESCRIPTION:    Send the relative date/time in a particular format.
@@ -5181,7 +5180,6 @@
 							;---------
 							; NOTES:          Should be overridden by child class.
 							;---------">
-                <Param name="relativeDateTime := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="RelativeDateTimeBase.instant" func="yes">
@@ -5191,7 +5189,7 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="RelativeDateTimeBase.SendInFormat" func="yes">
+        <KeyWord name="RelativeDateTimeBase.sendInFormat" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Send the relative date/time in a particular format.
@@ -5206,10 +5204,9 @@
 							;---------
 							; DESCRIPTION:    Create a new representation of a time relative to right now.
 							; PARAMETERS:
-							;  relativeTime (I,OPT) - The relative time string to use to find the new time. If not provided,
-							;                         we'll prompt the user for it.
+							;  relativeTime (I,REQ) - The relative time string to use to find the new time.
 							;---------">
-                <Param name="relativeTime := &quot;&quot;" />
+                <Param name="relativeTime" />
             </Overload>
         </KeyWord>
         <KeyWord name="RelativeTime.instant" func="yes">
@@ -5219,7 +5216,7 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="RelativeTime.SendInFormat" func="yes">
+        <KeyWord name="RelativeTime.sendInFormat" func="yes">
             <Overload retVal="{RelativeDateTimeBase}" descr="
 							;---------
 							; DESCRIPTION:    Send the relative date/time in a particular format.

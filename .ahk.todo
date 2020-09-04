@@ -17,6 +17,8 @@
 				Probably like VPN case - just a specific X coordinate that puts it on that screen
 				Most windows will stay on their respective window, so it should be fine.
 					Although, social windows could just be given x = -width instead?
+			Do we need support for moving/fixing ALL windows, or really just the current one?
+				Should at least have something (ideally a simple hotkey) for just the current one, add + for all
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?
 			Or could we turn DebugPopup into something (TextPopup?) that takes (or lets you pick between, or lets you override a default) a TextTable instance (dependency-injection style)?

@@ -511,7 +511,7 @@ class VisualWindow {
 		y := this.convertSpecialWindowY(y, bounds)
 	}
 	convertSpecialWindowX(x, bounds) {
-		specialValues := [VisualWindow.X_LeftEdge, VisualWindow.X_RightEdge, VisualWindow.X_Centered]
+		specialValues := [ VisualWindow.X_LeftEdge, VisualWindow.X_RightEdge, VisualWindow.X_Centered ]
 		if(!x.startsWithAnyOf(specialValues, match))
 			return x ; Just return the original value if it wasn't special
 		

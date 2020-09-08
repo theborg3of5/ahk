@@ -29,6 +29,7 @@
 		Follow-ups
 			Search for GDB TODOs
 			Consider updating fake-maximize hotkey to use new FULL width/height constants instead of finding the bounds and such itself
+			Make sure Spotify current-status toast is fixed
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?
 			Or could we turn DebugPopup into something (TextPopup?) that takes (or lets you pick between, or lets you override a default) a TextTable instance (dependency-injection style)?

@@ -88,7 +88,7 @@ class Toast {
 	;                 coordinates - it won't automatically follow the parent window around.
 	;---------
 	setParent(titleString) {
-		this.parentTitleString := WindowLib.getIdTitleString(titleString)
+		this.parentIdString := WindowLib.getIdTitleString(titleString)
 		return this
 	}
 	
@@ -224,12 +224,12 @@ class Toast {
 	
 	static ToastTitle := "[TOAST]"
 	
-	styles            := ""
-	guiId             := ""
-	labelVarName      := ""
-	x                 := ""
-	y                 := ""
-	parentTitleString := "" ; If this is set, we'll position relative to the window identified here for "special" coordinates.
+	styles         := ""
+	guiId          := ""
+	labelVarName   := ""
+	x              := ""
+	y              := ""
+	parentIdString := "" ; If this is set, we'll position relative to the window identified here for "special" coordinates.
 	
 	isGuiDestroyed := false ; To make sure we're not trying to hide/close an already-destroyed toast.
 	isPersistent   := false ; Whether this is persistent or just single-use.
@@ -329,7 +329,8 @@ class Toast {
 			Gui, Show, AutoSize NoActivate, % Toast.ToastTitle ; Resize to size of contents
 		
 		window := new VisualWindow(titleString)
-		window.move(x, y, this.parentTitleString)
+		parentBounds := new VisualWindow(this.parentIdString).getBounds()
+		window.move(x, y, parentBounds)
 		
 		if(isWinHidden)
 			Gui, Show, NoActivate, % Toast.ToastTitle

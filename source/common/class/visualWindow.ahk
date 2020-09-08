@@ -94,14 +94,14 @@ class VisualWindow {
 	;---------
 	; DESCRIPTION:    Move the window to the specified coordinates (without snapping).
 	; PARAMETERS:
-	;  x                     (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
-	;  y                     (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
-	;  relativeToTitleString (I,OPT) - The titleString of a window to calculate any "special" positions
-	;                                  relative to. If not given, we'll use the whole monitor instead.
+	;  x      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
+	;  y      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
+	;  bounds (I,OPT) - If using VisualWindow.X_* or .Y_* constants, the bounds that the window should be positioned
+	;                   relative to. Defaults to the window's current monitor.
 	; NOTES:          Does not support snapping.
 	;---------
-	move(x := "", y := "", relativeToTitleString := "") {
-		this.convertSpecialWindowCoordinates(x, y, relativeToTitleString)
+	move(x := "", y := "", bounds := "") {
+		this.convertSpecialWindowCoordinates(x, y, bounds)
 		
 		if(x != "")
 			this.mvLeftToX(x)
@@ -132,18 +132,18 @@ class VisualWindow {
 	;  height (I,OPT) - The height to resize to
 	;  x      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
 	;  y      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
-	; RETURNS:        
-	; SIDE EFFECTS:   
+	;  bounds (I,OPT) - If using VisualWindow.X_* or .Y_* constants, the bounds that the window should be positioned
+	;                   relative to. Defaults to the window's current monitor.
 	; NOTES:          Does not support snapping.
 	;---------
-	resizeMove(width := "", height := "", x := "", y := "") {
+	resizeMove(width := "", height := "", x := "", y := "", bounds := "") {
 		; Resizing must happen first so that any special x/y values can be calculated accurately (i.e. center using new width).
 		if(width != "")
 			this.rsToWidth(width)
 		if(height != "")
 			this.rsToHeight(height)
 		
-		this.convertSpecialWindowCoordinates(x, y)
+		this.convertSpecialWindowCoordinates(x, y, bounds)
 		if(x != "")
 			this.mvLeftToX(x)
 		if(y != "")
@@ -437,7 +437,7 @@ class VisualWindow {
 		if(!this.isSnapOn)
 			return
 		
-		monitorBounds := WindowLib.getMonitorWorkArea(this.titleString)
+		monitorBounds := WindowLib.getMonitorWorkArea(this.titleString) ; Should always be the monitor we're currently on, since we're snapping to the edges of that monitor
 		leftDistance   := abs(this.leftX   - monitorBounds["LEFT"])
 		rightDistance  := abs(this.rightX  - monitorBounds["RIGHT"])
 		topDistance    := abs(this.topY    - monitorBounds["TOP"])
@@ -459,7 +459,7 @@ class VisualWindow {
 		if(!this.isSnapOn)
 			return
 		
-		monitorBounds := WindowLib.getMonitorWorkArea(this.titleString)
+		monitorBounds := WindowLib.getMonitorWorkArea(this.titleString) ; Should always be the monitor we're currently on, since we're snapping to the edges of that monitor
 		leftDistance   := abs(this.leftX   - monitorBounds["LEFT"])
 		rightDistance  := abs(this.rightX  - monitorBounds["RIGHT"])
 		topDistance    := abs(this.topY    - monitorBounds["TOP"])
@@ -491,21 +491,18 @@ class VisualWindow {
 	; DESCRIPTION:    Convert the given strings into proper coordinates, supporting various special
 	;                 values (VisualWindow.X_*/Y_*) and a +/- offset on the end.
 	; PARAMETERS:
-	;  x                    (IO,REQ) - X string. Will be replaced with the new X coordinate.
-	;  y                    (IO,REQ) - Y string. Will be replaced with the new Y coordinate.
-	;  relativeToTitleString (I,OPT) - The titleString of a window to calculate any "special" positions
-	;                                  relative to. If not given, we'll use the whole monitor instead.
+	;  x     (IO,REQ) - X string. Will be replaced with the new X coordinate.
+	;  y     (IO,REQ) - Y string. Will be replaced with the new Y coordinate.
+	;  bounds (I,OPT) - If using VisualWindow.X_* or .Y_* constants, the bounds that the window should be positioned
+	;                   relative to. Defaults to the window's current monitor.
 	; NOTES:          Supported formats (as X examples, Y is the same format but different constants):
-	;                   5                          => 5 (normal coordinate)
-	;                   VisualWindow.X_LeftEdge    => {left edge of the monitor}
-	;                   VisualWindow.X_RightEdge+5 => {x so the right edge of the window is 5px from the right edge of the monitor}
+	;                   5                                           => 5 (normal coordinate)
+	;                   "LEFT_EDGE"    (VisualWindow.X_LeftEdge)    => {left edge of the monitor}
+	;                   "RIGHT_EDGE+5" (VisualWindow.X_RightEdge+5) => {x so the right edge of the window is 5px from the right edge of the monitor}
 	;---------
-	convertSpecialWindowCoordinates(ByRef x, ByRef y, relativeToTitleString := "") {
-		; The dimensions that we're converting relative to can be for a specific given window, or the whole current monitor.
-		if(relativeToTitleString != "" && !WindowLib.isMaximized(relativeToTitleString)) ; Just use the screen if the window is maximized - the dimensions extend outside of the screen.
-			bounds := new VisualWindow(relativeToTitleString).getBounds()
-		else
-			bounds := WindowLib.getMonitorWorkArea(this.titleString)
+	convertSpecialWindowCoordinates(ByRef x, ByRef y, bounds := "") {
+		if(DataLib.isNullOrEmpty(bounds))
+			bounds := WindowLib.getMonitorWorkArea(this.titleString) ; Default to the bounds of the monitor that the window is currently on.
 		
 		x := this.convertSpecialWindowX(x, bounds)
 		y := this.convertSpecialWindowY(y, bounds)

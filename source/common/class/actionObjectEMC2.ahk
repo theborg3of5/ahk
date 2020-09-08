@@ -165,6 +165,9 @@ class ActionObjectEMC2 extends ActionObjectBase {
 						removeAry.push("(" role " " result ")")
 					}
 				}
+				For _,status in ["PQA 1", "QA 1", "PQA 2", "QA 2", "Final Stage Comp"] {
+					removeAry.push("Status Changed to " status)
+				}
 			Case "XDS":
 				removeAry.appendArray(["(A Reviewer Approved)", "(A Reviewer is Waiting for Changes)", "(A Reviewer Declined to Review)"])
 			Case "SLG":

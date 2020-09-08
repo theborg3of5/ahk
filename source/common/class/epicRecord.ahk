@@ -9,6 +9,7 @@
 		R INI ID
 		R INI ID: TITLE
 		R INI ID - TITLE
+		R INI ID TITLE
 		ID
 	
 	Example Usage
@@ -127,13 +128,14 @@ class EpicRecord {
 		} else if(!recordString.contains(" ")) {
 			this.id := recordString
 			
-		; 4) {R } + INI {#}ID + {space} + {: or -} + {title}
+		; 4) {R }INI ID{ }{: or -}{ }{Title}
 		} else {
 			recordString := recordString.removeFromStart("R ") ; Trim off "R " at start if it's there.
 			this.ini := recordString.beforeString(" ")
-			if(recordString.containsAnyOf([":", "-"], matchedDelim)) {
+			recordString := recordString.afterString(" ") ; Trim off INI, we're done with it
+			if(recordString.containsAnyOf([":", "-", " "], matchedDelim)) {
 				; ID is everything up to the first delimiter
-				this.id := recordString.firstBetweenStrings(" ", matchedDelim)
+				this.id := recordString.beforeString(matchedDelim)
 				; Title is everything after
 				this.title := recordString.afterString(matchedDelim)
 			} else {

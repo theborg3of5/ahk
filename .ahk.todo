@@ -1,4 +1,7 @@
 # New Ideas
+	WinGet() - should we just add a warning and have callers call a WindowLib function that returns all bounds (including index, if that stays consistent)?
+		Rather than having the halfway point set through WinGet wrapper
+		Also, standardize LEFT vs Left capitalization - using both in various spots, would prefer just one (probably LEFT?)
 	Hotkey to auto-resize/auto-place certain windows
 		Specific windows
 			Various "social" windows
@@ -22,6 +25,10 @@
 			What hotkey(s) should this be bound to?
 				#+ combo is what we use for most other current-window stuff
 				#+x or #+z, maybe? Either adding ^ for the all-windows option, or using #!^ variant instead?
+				#+f is also a good option, for "fix"
+		Follow-ups
+			Search for GDB TODOs
+			Consider updating fake-maximize hotkey to use new FULL width/height constants instead of finding the bounds and such itself
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?
 			Or could we turn DebugPopup into something (TextPopup?) that takes (or lets you pick between, or lets you override a default) a TextTable instance (dependency-injection style)?

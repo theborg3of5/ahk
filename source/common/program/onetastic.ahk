@@ -15,7 +15,7 @@ class OneTastic {
 	}
 
 	;---------
-	; DESCRIPTION:    Open the XML popup for the current macro or function.        
+	; DESCRIPTION:    Open the XML popup for the current macro or function.
 	;---------
 	openEditXMLPopup() {
 		Send, !u ; Function

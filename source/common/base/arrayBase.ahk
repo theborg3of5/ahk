@@ -46,7 +46,7 @@ class ArrayBase {
 	; DESCRIPTION:    Get the value just before the given index, decrementing that index to match.
 	; PARAMETERS:
 	;  index (IO,REQ) - The index to decrement, then return the value for.
-	; RETURNS:        The previous value        
+	; RETURNS:        The previous value
 	;---------
 	previous(ByRef index) {
 		index--

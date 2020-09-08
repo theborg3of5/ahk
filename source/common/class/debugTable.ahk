@@ -94,7 +94,7 @@ class DebugTable extends TextTable {
 	; #PUBLIC#
 	
 	;---------
-	; DESCRIPTION:    
+	; DESCRIPTION:    Create a new DebugTable instance.
 	; PARAMETERS:
 	;  title (I,OPT) - If you want to show a title at the top of the table, pass it in here. If
 	;                  given and the table gets >=50 lines tall, this title will also appear at

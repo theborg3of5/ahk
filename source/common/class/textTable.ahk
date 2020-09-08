@@ -118,9 +118,7 @@ class TextTable {
 	; DESCRIPTION:    Set the type of border to show the table with.
 	; PARAMETERS:
 	;  borderType (I,REQ) - The type of border to set, from .BorderType_* constants.
-	; RETURNS:        
-	; SIDE EFFECTS:   
-	; NOTES:          
+	; RETURNS:        this
 	;---------
 	setBorderType(borderType) {
 		Switch borderType {

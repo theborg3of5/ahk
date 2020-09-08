@@ -109,7 +109,6 @@ class EMC2 {
 	;---------
 	; DESCRIPTION:    Get an array of QAN IDs from the related QANs table on an EMC2 object.
 	; RETURNS:        Array of QAN IDs.
-	; SIDE EFFECTS:   
 	; NOTES:          This assumes that you're already in the first row of the related QANs table.
 	;---------
 	getRelatedQANsAry() {

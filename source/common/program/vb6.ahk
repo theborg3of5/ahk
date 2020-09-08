@@ -73,7 +73,7 @@ class VB6 {
 	}
 	
 	;---------
-	; DESCRIPTION:    Close the current file.        
+	; DESCRIPTION:    Close the current file.
 	;---------
 	closeCurrentFile() {
 		window := new VisualWindow("A")

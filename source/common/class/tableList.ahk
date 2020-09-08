@@ -172,7 +172,7 @@
 							Spotify  spot     C:\Program Files (x86)\Spotify\Spotify.exe   HOME_DESKTOP
 							Spotify  spot     C:\Program Files\Spotify\Spotify.exe         EPIC_LAPTOP
 							Spotify  spot     C:\Spotify\Spotify.exe                       ASUS_LAPTOP
-							Firefox  fox      C:\Program Files\Firefox\firefox.exe         
+							Firefox  fox      C:\Program Files\Firefox\firefox.exe
 					Code:
 ;						tl := new TableList(filePath).filterByColumn("MACHINE", "HOME_DESKTOP")
 ;						tl.filterOutEmptyForColumn("MACHINE")

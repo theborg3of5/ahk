@@ -1,6 +1,6 @@
 /* Class for duration information, which takes in a string with a particular format. --=
-   
-   Input string format:
+	
+	Input string format:
 		1 or more of nU, where n is a number and U is a unit from the following list:
 			h - Hours
 			m - Minutes

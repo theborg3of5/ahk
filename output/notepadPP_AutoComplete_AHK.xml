@@ -2524,7 +2524,7 @@
         <KeyWord name="DebugTable" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:
+							; DESCRIPTION:    Create a new DebugTable instance.
 							; PARAMETERS:
 							;  title (I,OPT) - If you want to show a title at the top of the table, pass it in here. If
 							;                  given and the table gets >=50 lines tall, this title will also appear at
@@ -2632,9 +2632,7 @@
 							; DESCRIPTION:    Set the type of border to show the table with.
 							; PARAMETERS:
 							;  borderType (I,REQ) - The type of border to set, from .BorderType_* constants.
-							; RETURNS:
-							; SIDE EFFECTS:
-							; NOTES:
+							; RETURNS:        this
 							;---------">
                 <Param name="borderType" />
             </Overload>
@@ -7326,9 +7324,7 @@
 							; DESCRIPTION:    Set the type of border to show the table with.
 							; PARAMETERS:
 							;  borderType (I,REQ) - The type of border to set, from .BorderType_* constants.
-							; RETURNS:
-							; SIDE EFFECTS:
-							; NOTES:
+							; RETURNS:        this
 							;---------">
                 <Param name="borderType" />
             </Overload>
@@ -7740,6 +7736,14 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="VisualWindow.Height_Full" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    static Height_Full := &quot;FULL&quot;
+							; GROUP:          Special window size constants
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="VisualWindow.leftX" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -7753,15 +7757,15 @@
 							;---------
 							; DESCRIPTION:    Move the window to the specified coordinates (without snapping).
 							; PARAMETERS:
-							;  x                     (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
-							;  y                     (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
-							;  relativeToTitleString (I,OPT) - The titleString of a window to calculate any &quot;special&quot; positions
-							;                                  relative to. If not given, we'll use the whole monitor instead.
+							;  x      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
+							;  y      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
+							;  bounds (I,REQ) - The bounds that the window should be sized/positioned relative to, used for
+							;                   VisualWindow.X_*/.Y_*/.Width_*/.Height_* constants. Defaults to the window's current monitor.
 							; NOTES:          Does not support snapping.
 							;---------">
                 <Param name="x := &quot;&quot;" />
                 <Param name="y := &quot;&quot;" />
-                <Param name="relativeToTitleString := &quot;&quot;" />
+                <Param name="bounds := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="VisualWindow.moveBottomLeftToPos" func="yes">
@@ -7823,10 +7827,13 @@
 							; PARAMETERS:
 							;  width  (I,OPT) - The width to resize to
 							;  height (I,OPT) - The height to resize to
+							;  bounds (I,REQ) - The bounds that the window should be sized/positioned relative to, used for
+							;                   VisualWindow.X_*/.Y_*/.Width_*/.Height_* constants. Defaults to the window's current monitor.
 							; NOTES:          Does not support snapping.
 							;---------">
                 <Param name="width := &quot;&quot;" />
                 <Param name="height := &quot;&quot;" />
+                <Param name="bounds := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="VisualWindow.resizeBottomLeftToPos" func="yes">
@@ -7864,14 +7871,15 @@
 							;  height (I,OPT) - The height to resize to
 							;  x      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
 							;  y      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
-							; RETURNS:
-							; SIDE EFFECTS:
+							;  bounds (I,REQ) - The bounds that the window should be sized/positioned relative to, used for
+							;                   VisualWindow.X_*/.Y_*/.Width_*/.Height_* constants. Defaults to the window's current monitor.
 							; NOTES:          Does not support snapping.
 							;---------">
                 <Param name="width := &quot;&quot;" />
                 <Param name="height := &quot;&quot;" />
                 <Param name="x := &quot;&quot;" />
                 <Param name="y := &quot;&quot;" />
+                <Param name="bounds := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="VisualWindow.resizeTopLeftToPos" func="yes">
@@ -7939,6 +7947,14 @@
 							;---------
 							; DESCRIPTION:    The visual width of the window
 							; GROUP:          Window position properties
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.Width_Full" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    static Width_Full  := &quot;FULL&quot;
+							; GROUP:          Special window size constants
 							;---------">
             </Overload>
         </KeyWord>
@@ -8234,7 +8250,7 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="WindowInfo.getMatchingWindow" func="yes">
+        <KeyWord name="WindowInfo.getMatchingWindowID" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Get the the first window that matches all of the critieria contained in this class.

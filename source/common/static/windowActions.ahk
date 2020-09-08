@@ -181,7 +181,7 @@ class WindowActions {
 		if(titleString) {
 			titleString := WindowLib.getIdTitleString(titleString)
 		} else {
-			winId := Config.windowInfo[name].getMatchingWindow()
+			winId := Config.windowInfo[name].getMatchingWindowID()
 			if(!winId)
 				return
 			titleString := "ahk_id " winId

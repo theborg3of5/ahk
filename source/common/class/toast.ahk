@@ -329,7 +329,9 @@ class Toast {
 			Gui, Show, AutoSize NoActivate, % Toast.ToastTitle ; Resize to size of contents
 		
 		window := new VisualWindow(titleString)
-		parentBounds := new VisualWindow(this.parentIdString).getBounds()
+		parentBounds := ""
+		if(this.parentIdString != "")
+			parentBounds := new VisualWindow(this.parentIdString).getBounds()
 		window.move(x, y, parentBounds)
 		
 		if(isWinHidden)

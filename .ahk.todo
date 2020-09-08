@@ -44,10 +44,6 @@
 					This would allow us to add rows in the order we wanted - so we could flip the date order back to day-date, not date-day
 	Re-examine how we run programs and such (RunLib.runAsUser stuff) - could it be the reason we have focus issues?
 		Also, could we work around it with a WinWaitExist + WinActivate?
-	Teams: could we make the mute/video toggles, universal hotkeys?
-		Based on existence of Teams window with meeting running
-			Title with meeting running: Meeting | Microsoft Teams
-			Looks like this should work even once the window is closed (minimized to tray)
 	Is the media player stuff in config worth keeping around? I don't really switch music programs anymore, and Chrome awkwardly tries to grab media keys anyway.
 		Possibly replace it with something based on RDP/Spotify command script, that interacts directly with Spotify instead of letting other things steal the media keys?
 		Wait until a little after WFH stuff is done to decide.

@@ -136,6 +136,29 @@ class WindowLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Visually center the given window on its current monitor.
+	; PARAMETERS:
+	;  titleString (I,OPT) - Title string that identifies your chosen window.
+	;                        Defaults to the active window ("A").
+	;---------
+	center(titleString := "A") {
+		new VisualWindow(titleString).move(VisualWindow.X_Centered, VisualWindow.Y_Centered)
+	}
+	
+	;---------
+	; DESCRIPTION:    Resize a window to take up the full size of the monitor, without actually
+	;                 maximizing that window.
+	; PARAMETERS:
+	;  titleString (I,OPT) - Title string that identifies your chosen window.
+	;                        Defaults to the active window ("A").
+	;---------
+	fakeMaximize(titleString := "A") {
+		monitorBounds := WindowLib.getMonitorWorkArea(titleString)
+		new VisualWindow(titleString).resizeMove(monitorBounds["WIDTH"], monitorBounds["HEIGHT"], VisualWindow.X_Centered, VisualWindow.Y_Centered)
+	}
+	
+	; [[Monitor/screen size]] --=
+	;---------
 	; DESCRIPTION:    Get the dimensions of the work area of the monitor "closest" (according to
 	;                 Windows) to the given window.
 	; PARAMETERS:
@@ -242,26 +265,62 @@ class WindowLib {
 	}
 	
 	;---------
-	; DESCRIPTION:    Visually center the given window on its current monitor.
-	; PARAMETERS:
-	;  titleString (I,OPT) - Title string that identifies your chosen window.
-	;                        Defaults to the active window ("A").
+	; DESCRIPTION:    Get the bounds of all monitors, indexed by which position (left/middle/right) they are in.
+	; RETURNS:        Array of monitor bounds (individual monitors' bounds are from .getMonitorWorkBounds):
+	;                    monitors["LEFT"]   = Monitor bounds for left-most monitor
+	;                    monitors["MIDDLE"] = Monitor bounds for center monitor
+	;                    monitors["RIGHT"]  = Monitor bounds for right-most monitor
+	; NOTES:          Assumes there are only 3 monitors, and they're laid out in a horizontal line.
 	;---------
-	center(titleString := "A") {
-		new VisualWindow(titleString).move(VisualWindow.X_Centered, VisualWindow.Y_Centered)
+	getMonitorBoundsByPosition() {
+		Loop, % SysGet("MonitorCount") {
+			bounds := WindowLib.getMonitorWorkBounds(A_Index)
+			
+			; If this is the first one we found, stick it into all spots.
+			if(monLeft = "") {
+				monLeft  := bounds
+				monMid   := bounds
+				monRight := bounds
+				Continue
+			}
+			
+			if(bounds["LEFT"] < monLeft["LEFT"])
+				monLeft := bounds
+			else if(bounds["LEFT"] > monRight["LEFT"])
+				monRight := bounds
+			else
+				monMid := bounds
+		}
+		
+		return {"LEFT":monLeft, "MIDDLE":monMid, "RIGHT":monRight}
 	}
 	
 	;---------
-	; DESCRIPTION:    Resize a window to take up the full size of the monitor, without actually
-	;                 maximizing that window.
+	; DESCRIPTION:    Get the bounds of a specific monitor by its index.
 	; PARAMETERS:
-	;  titleString (I,OPT) - Title string that identifies your chosen window.
-	;                        Defaults to the active window ("A").
+	;  index (I,REQ) - The index (according to AHK, not Windows) of the monitor.
+	; RETURNS:        An array of monitor work area dimensions:
+	;                    bounds["LEFT"]   = X coordinate of monitor work area's left edge
+	;                    bounds["RIGHT"]  = X coordinate of monitor work area's right edge
+	;                    bounds["TOP"]    = Y coordinate of monitor work area's top edge
+	;                    bounds["BOTTOM"] = Y coordinate of monitor work area's bottom edge
+	;                    bounds["WIDTH"]  = Width of the monitor's work area
+	;                    bounds["HEIGHT"] = Height of the monitor's work area
+	;                    bounds["INDEX"]  = Monitor index (according to AHK)
+	; NOTES:          This gives the monitor work area, not its total dimensions.
 	;---------
-	fakeMaximize(titleString := "A") {
-		monitorBounds := WindowLib.getMonitorWorkArea(titleString)
-		new VisualWindow(titleString).resizeMove(monitorBounds["WIDTH"], monitorBounds["HEIGHT"], VisualWindow.X_Centered, VisualWindow.Y_Centered)
+	getMonitorWorkBounds(index) {
+		; Gives us left/right/top/bottom info
+		bounds := SysGet("MonitorWorkArea", index)
+		
+		; Add a little extra information to the array
+		bounds["WIDTH"]  := bounds["RIGHT"]  - bounds["LEFT"]
+		bounds["HEIGHT"] := bounds["BOTTOM"] - bounds["TOP"]
+		bounds["INDEX"]  := index
+		
+		return bounds
 	}
+	; =--
 	
 	
 	; #PRIVATE#

@@ -202,7 +202,7 @@
 	WinGet(Cmd := "", WinTitle := "", WinText := "", ExcludeTitle := "", ExcludeText := "") {
 		if(Cmd = "List" || Cmd = "ControlList") {
 			global winGetValue
-			WinGet, winGetValue, %Cmd%, %WinTitle%, %WinText%, %ExcludeTitle%, %ExcludeText%
+			WinGet, winGetValue, % Cmd, % WinTitle, % WinText, % ExcludeTitle, % ExcludeText
 			return DataLib.convertPseudoArrayToArray("winGetValue")
 		}
 		

@@ -185,11 +185,10 @@ class WindowLib {
 	; DESCRIPTION:    Get the dimensions of the work area of the monitor "closest" (according to
 	;                 Windows) to the given window.
 	; PARAMETERS:
-	;  titleString (I,OPT) - Title string that identifies your chosen window.
-	;                        Defaults to the active window ("A").
+	;  titleString (I,REQ) - Title string that identifies your chosen window.
 	; RETURNS:        Associative array of position/size information for the working area of the
 	;                 monitor that the window is "closest" to. Format:
-	;                    bounds["LEFT"]   = X coordinate of monitor's (working area's) left bound
+	;                    workArea["LEFT"]   = X coordinate of monitor's (working area's) left bound
 	;                          ["RIGHT"]  = X coordinate of monitor's (working area's) right bound
 	;                          ["TOP"]    = Y coordinate of monitor's (working area's) top bound
 	;                          ["BOTTOM"] = Y coordinate of monitor's (working area's) bottom bound
@@ -198,7 +197,7 @@ class WindowLib {
 	; NOTES:          This working area excludes things like the taskbar - it's the full space that a
 	;                 window can occupy.
 	;---------
-	getMonitorWorkAreaForWindow(titleString := "A") {
+	getMonitorWorkAreaForWindow(titleString) {
 		winId := WinExist(titleString) ; Window handle
 		
 		; Get the monitor nearest to the window with the MonitorFromWindow function (https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-monitorfromwindow )

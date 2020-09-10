@@ -13,14 +13,15 @@
 	
 	# Social windows
 	~WIDTH.replaceWith(950) | ~HEIGHT.replaceWith(750) | ~X.replaceWith(RIGHT_EDGE) {
-		Messenger							-					TOP_EDGE			-					-					HOME
-		Slack									-					TOP_EDGE			-					-					HOME
-		Republic Anywhere					-					TOP_EDGE			-					-					HOME
-		Telegram								-					TOP_EDGE			-					-					HOME
-		Messenger							-					BOTTOM_EDGE
-		Slack									-					BOTTOM_EDGE
-		Republic Anywhere					-					BOTTOM_EDGE
-		Telegram								-					BOTTOM_EDGE
+		; GDB WFH
+		; Messenger							-					BOTTOM_EDGE		-					-					WORK
+		; Slack									-					BOTTOM_EDGE		-					-					WORK
+		; Republic Anywhere					-					BOTTOM_EDGE		-					-					WORK
+		; Telegram								-					BOTTOM_EDGE		-					-					WORK
+		Messenger							-					TOP_EDGE
+		Slack									-					TOP_EDGE
+		Republic Anywhere					-					TOP_EDGE
+		Telegram								-					TOP_EDGE
 	}
 }
 

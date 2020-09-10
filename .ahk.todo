@@ -19,6 +19,7 @@
 					Maybe get rid of fake-maximize hotkey and library function, and just make the (now much simpler, no need to get monitor) equivalent call to VisualWindow.resizeMove in VDI selector logic instead?
 			May be able to drop restore handling for maximized windows from windowMoverSizer
 			Should we drop X/Y option from resize selector, since all of the special ones should now be covered by positioning stuff?
+	There's a lot of monitor-specific logic in WindowLib now - should we break it out into a new MonitorLib class?
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?
 			Or could we turn DebugPopup into something (TextPopup?) that takes (or lets you pick between, or lets you override a default) a TextTable instance (dependency-injection style)?

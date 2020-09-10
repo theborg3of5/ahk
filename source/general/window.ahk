@@ -53,15 +53,17 @@ $!q::WindowActions.minimizeWindow()
 	}
 
 ; "Fix" window position and size to match configuration TL
-#+f::
-	fixWindowPositionSingle() {
-		titleString := "A"
-		
+ #+f::fixWindowPositions("A")
+^#+f::fixWindowPositions() ; Fix all windows in the config file
+fixWindowPositions(titleString := "") {
+	table := new TableList(".\windowPositions.tl").getRowsByColumn("NAME")
+	
+	; Fix a single window.
+	if(titleString != "") {
 		name := Config.findWindowName(titleString)
 		if(!name)
 			return
 		
-		table := new TableList(".\windowPositions.tl").getRowsByColumn("NAME")
 		position := table[name]
 		
 		; If we didn't find a line in the table for the window name, make sure it doesn't match any of the other rows' windows (for specific overrides).
@@ -76,15 +78,15 @@ $!q::WindowActions.minimizeWindow()
 		}
 		
 		fixWindowPosition(titleString, position)
-	}
-^#+f::
-	fixWindowPositionAll() {
-		table := new TableList("windowPositions.tl").getRowsByColumn("NAME")
+	
+	; Fix all the windows in the config file at once.
+	} else {
 		For name,position in table {
 			idString := "ahk_id " Config.windowInfo[name].getMatchingWindowID()
 			fixWindowPosition(idString, position)
 		}
 	}
+}
 fixWindowPosition(titleString, position) {
 	if(!position)
 		return
@@ -92,9 +94,8 @@ fixWindowPosition(titleString, position) {
 	; Track initially-minimized windows so we can re-minimize them when we're done (VisualWindow.resizeMove will restore them).
 	startedMinimized := WindowLib.isMinimized(titleString)
 	
-	monitorBoundsByLocation := WindowLib.getMonitorBoundsByLocation()
-	monitorBounds := monitorBoundsByLocation[position["MONITOR"]]
-	new VisualWindow(titleString).resizeMove(position["WIDTH"], position["HEIGHT"], position["X"], position["Y"], monitorBounds)
+	workArea := WindowLib.monitorWorkAreaForLocation[position["MONITOR"]]
+	new VisualWindow(titleString).resizeMove(position["WIDTH"], position["HEIGHT"], position["X"], position["Y"], workArea)
 	
 	; Re-minimize if the window started out that way.
 	if(startedMinimized)

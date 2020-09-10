@@ -7739,7 +7739,15 @@
         <KeyWord name="VisualWindow.Height_Full" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    static Height_Full := &quot;FULL&quot;
+							; DESCRIPTION:    The full height of the monitor (or other bounds, if given)
+							; GROUP:          Special window size constants
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.Height_Maximize" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Maximize the window (must be used with .Width_Maximize).
 							; GROUP:          Special window size constants
 							;---------">
             </Overload>
@@ -7953,7 +7961,15 @@
         <KeyWord name="VisualWindow.Width_Full" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    static Width_Full  := &quot;FULL&quot;
+							; DESCRIPTION:    The full width of the monitor (or other bounds, if given)
+							; GROUP:          Special window size constants
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.Width_Maximize" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Maximize the window (must be used with .Height_Maximize).
 							; GROUP:          Special window size constants
 							;---------">
             </Overload>
@@ -8383,6 +8399,25 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="WindowLib.getMonitorWorkArea" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the bounds of a specific monitor by its index.
+							; PARAMETERS:
+							;  index (I,REQ) - The index (according to AHK, not Windows) of the monitor.
+							; RETURNS:        An array of monitor work area dimensions:
+							;                    bounds[&quot;LEFT&quot;]   = X coordinate of monitor work area's left edge
+							;                    bounds[&quot;RIGHT&quot;]  = X coordinate of monitor work area's right edge
+							;                    bounds[&quot;TOP&quot;]    = Y coordinate of monitor work area's top edge
+							;                    bounds[&quot;BOTTOM&quot;] = Y coordinate of monitor work area's bottom edge
+							;                    bounds[&quot;WIDTH&quot;]  = Width of the monitor's work area
+							;                    bounds[&quot;HEIGHT&quot;] = Height of the monitor's work area
+							;                    bounds[&quot;INDEX&quot;]  = Monitor index (according to AHK)
+							; NOTES:          This gives the monitor work area, not its total dimensions.
+							;---------">
+                <Param name="index" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="WindowLib.getMonitorWorkAreaForWindow" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -8403,6 +8438,16 @@
 							;                 window can occupy.
 							;---------">
                 <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.getMonitorWorkAreasByLocation" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the bounds of all monitors, indexed by which position (left/middle/right) they are in.
+							; RETURNS:        Array of monitor bounds - indices are WindowLib.MonitorLocation_* constants, and each monitor's
+							;                 bounds come from .getMonitorWorkArea.
+							; NOTES:          Assumes there are only 3 monitors, and they're laid out in a horizontal line.
+							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="WindowLib.getMouseMonitorBounds" func="yes">
@@ -8512,6 +8557,43 @@
 							; RETURNS:        true/false, whether the window is visible.
 							;---------">
                 <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.MonitorLocation_Left" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Left-most monitor
+							; GROUP:          Monitor locations (only 3 monitors in a horizontal line supported)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.MonitorLocation_Middle" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Center monitor
+							; GROUP:          Monitor locations (only 3 monitors in a horizontal line supported)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.MonitorLocation_Right" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Right-most monitor
+							; GROUP:          Monitor locations (only 3 monitors in a horizontal line supported)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.monitorWorkAreaForLocation" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:
+							; PARAMETERS:
+							;  location (I,REQ) - The location of the monitor to get the work area bounds for, from WindowLib.MonitorLocation_*.
+							; RETURNS:        Bounds array for the requested monitor (see .getMonitorWorkBounds)
+							; SIDE EFFECTS:
+							; NOTES:
+							;---------">
+                <Param name="location" />
             </Overload>
         </KeyWord>
         <KeyWord name="WinExist" func="yes">

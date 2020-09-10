@@ -1,7 +1,30 @@
-; Library of helpful functions related to various windows.
+; Library of helpful functions for examining and manipulating a window.
 
 class WindowLib {
 	; #PUBLIC#
+	
+	; @GROUP@ Monitor locations (only 3 monitors in a horizontal line supported)
+	static MonitorLocation_Left   := "LEFT"   ; Left-most monitor
+	static MonitorLocation_Middle := "MIDDLE" ; Center monitor
+	static MonitorLocation_Right  := "RIGHT"  ; Right-most monitor
+	; @GROUP-END@
+	
+	;---------
+	; DESCRIPTION:    
+	; PARAMETERS:
+	;  location (I,REQ) - The location of the monitor to get the work area bounds for, from WindowLib.MonitorLocation_*.
+	; RETURNS:        Bounds array for the requested monitor (see .getMonitorWorkBounds)
+	; SIDE EFFECTS:   
+	; NOTES:          
+	;---------
+	monitorWorkAreaForLocation[location] {
+		get {
+			if(location = "")
+				return ""
+			
+			return this.getMonitorWorkAreasByLocation()[location]
+		}
+	}
 	
 	;---------
 	; DESCRIPTION:    Determine whether a window is maximized.
@@ -266,37 +289,40 @@ class WindowLib {
 	
 	;---------
 	; DESCRIPTION:    Get the bounds of all monitors, indexed by which position (left/middle/right) they are in.
-	; RETURNS:        Array of monitor bounds (individual monitors' bounds are from .getMonitorWorkBounds):
-	;                    monitors["LEFT"]   = Monitor bounds for left-most monitor
-	;                    monitors["MIDDLE"] = Monitor bounds for center monitor
-	;                    monitors["RIGHT"]  = Monitor bounds for right-most monitor
+	; RETURNS:        Array of monitor bounds - indices are WindowLib.MonitorLocation_* constants, and each monitor's
+	;                 bounds come from .getMonitorWorkArea.
 	; NOTES:          Assumes there are only 3 monitors, and they're laid out in a horizontal line.
 	;---------
-	getMonitorBoundsByLocation() {
-		if(this.monitorBoundsByLocation)
-			return this.monitorBoundsByLocation
+	getMonitorWorkAreasByLocation() {
+		if(this._monitorWorkAreasByLocation)
+			return this._monitorWorkAreasByLocation
 		
 		Loop, % SysGet("MonitorCount") {
-			bounds := WindowLib.getMonitorWorkBounds(A_Index)
+			currMon := WindowLib.getMonitorWorkArea(A_Index)
 			
 			; If this is the first one we found, stick it into all spots.
 			if(monLeft = "") {
-				monLeft  := bounds
-				monMid   := bounds
-				monRight := bounds
+				monLeft  := currMon
+				monMid   := currMon
+				monRight := currMon
 				Continue
 			}
 			
-			if(bounds["LEFT"] < monLeft["LEFT"])
-				monLeft := bounds
-			else if(bounds["LEFT"] > monRight["LEFT"])
-				monRight := bounds
+			if(currMon["LEFT"] < monLeft["LEFT"])
+				monLeft := currMon
+			else if(currMon["LEFT"] > monRight["LEFT"])
+				monRight := currMon
 			else
-				monMid := bounds
+				monMid := currMon
 		}
 		
-		this.monitorBoundsByLocation := {"LEFT":monLeft, "MIDDLE":monMid, "RIGHT":monRight}
-		return this.monitorBoundsByLocation
+		monitors := {}
+		monitors[WindowLib.MonitorLocation_Left]   := monLeft
+		monitors[WindowLib.MonitorLocation_Middle] := monMid
+		monitors[WindowLib.MonitorLocation_Right]  := monRight
+		
+		this._monitorWorkAreasByLocation := monitors
+		return monitors
 	}
 	
 	;---------
@@ -313,7 +339,7 @@ class WindowLib {
 	;                    bounds["INDEX"]  = Monitor index (according to AHK)
 	; NOTES:          This gives the monitor work area, not its total dimensions.
 	;---------
-	getMonitorWorkBounds(index) {
+	getMonitorWorkArea(index) {
 		; Gives us left/right/top/bottom info
 		bounds := SysGet("MonitorWorkArea", index)
 		
@@ -329,7 +355,7 @@ class WindowLib {
 	
 	; #PRIVATE#
 	
-	static monitorBoundsByLocation := ""
+	static _monitorWorkAreasByLocation := ""
 	
 	;---------
 	; DESCRIPTION:    Determine which of the two bounds objects is the further lower and right.

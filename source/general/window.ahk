@@ -31,9 +31,6 @@ $!q::WindowActions.minimizeWindow()
 ; Center current window onscreen.
 #+c::WindowLib.center()
 
-; Fake-maximize the window and center it.
-#+m::WindowLib.fakeMaximize()
-
 ; Resize window
 #+r::
 	selectResize() {

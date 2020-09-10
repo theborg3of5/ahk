@@ -123,7 +123,9 @@
 				WinWaitActive, ahk_exe vmware-view.exe, , 10, VMware Horizon Client ; Ignore the loading-type popup that happens initially with excluded title.
 				if(ErrorLevel) ; Set if we timed out or if somethign else went wrong.
 					return
-				WindowLib.fakeMaximize()
+				
+				monitorWorkArea := WindowLib.getMonitorWorkAreaForWindow(titleString)
+				new VisualWindow("A").resizeMove(VisualWindow.Width_Full, VisualWindow.Height_Full, VisualWindow.X_Centered, VisualWindow.Y_Centered)
 			}
 		}
 	

@@ -169,18 +169,6 @@ class WindowLib {
 		new VisualWindow(titleString).move(VisualWindow.X_Centered, VisualWindow.Y_Centered)
 	}
 	
-	;---------
-	; DESCRIPTION:    Resize a window to take up the full size of the monitor, without actually
-	;                 maximizing that window.
-	; PARAMETERS:
-	;  titleString (I,OPT) - Title string that identifies your chosen window.
-	;                        Defaults to the active window ("A").
-	;---------
-	fakeMaximize(titleString := "A") {
-		monitorWorkArea := WindowLib.getMonitorWorkAreaForWindow(titleString)
-		new VisualWindow(titleString).resizeMove(monitorWorkArea["WIDTH"], monitorWorkArea["HEIGHT"], VisualWindow.X_Centered, VisualWindow.Y_Centered)
-	}
-	
 	; [[Monitor/screen size]] --=
 	;---------
 	; DESCRIPTION:    Get the dimensions of the work area of the monitor "closest" (according to

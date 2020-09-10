@@ -16,7 +16,7 @@
 			Consider updating fake-maximize hotkey to use new FULL width/height constants instead of finding the bounds and such itself
 				OR: can we just drop that hotkey entirely, since the one window that we use it for (VDIs) is covered by the "fix" stuff?
 					If we do drop it, we'll need to make the logic callable from VDI selector
-					Maybe get rid of the fake-maximize library function and just make the (now much simpler, no need to get monitor) equivalent call to VisualWindow.resizeMove
+					Maybe get rid of fake-maximize hotkey and library function, and just make the (now much simpler, no need to get monitor) equivalent call to VisualWindow.resizeMove in VDI selector logic instead?
 			May be able to drop restore handling for maximized windows from windowMoverSizer
 			Should we drop X/Y option from resize selector, since all of the special ones should now be covered by positioning stuff?
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?

@@ -19,7 +19,7 @@ $`::WindowActions.backtickAction()
 $!q::WindowActions.minimizeWindow()
 
 ; Sets current window to stay on top
-+#t::
+#+t::
 	toggleAlwaysOnTop() {
 		WinSet, AlwaysOnTop, Toggle, A
 		if(WindowLib.isAlwaysOnTop("A"))
@@ -29,13 +29,13 @@ $!q::WindowActions.minimizeWindow()
 	}
 
 ; Center current window onscreen.
-+#c::WindowLib.center()
+#+c::WindowLib.center()
 
 ; Fake-maximize the window and center it.
-+#m::WindowLib.fakeMaximize()
+#+m::WindowLib.fakeMaximize()
 
 ; Resize window
-+#r::
+#+r::
 	selectResize() {
 		data := new Selector("resize.tls").selectGui()
 		if(!data)
@@ -51,6 +51,55 @@ $!q::WindowActions.minimizeWindow()
 		
 		new VisualWindow("A").resizeMove(data["WIDTH"], data["HEIGHT"], x, y)
 	}
+
+; "Fix" window position and size to match configuration TL
+#+f::
+	fixWindowPositionSingle() {
+		titleString := "A"
+		
+		name := Config.findWindowName(titleString)
+		if(!name)
+			return
+		
+		table := new TableList(".\windowPositions.tl").getRowsByColumn("NAME")
+		position := table[name]
+		
+		; If we didn't find a line in the table for the window name, make sure it doesn't match any of the other rows' windows (for specific overrides).
+		if(!position) {
+			; GDB TODO consider a version of Config.findWindowName() that returns something other than the lowest-priority option - maybe return array of results, indexed by priority?
+			For posName,pos in table {
+				if(Config.windowInfo[posName].windowMatches(titleString)) {
+					position := pos
+					break
+				}
+			}
+		}
+		
+		fixWindowPosition(titleString, position)
+	}
+^#+f::
+	fixWindowPositionAll() {
+		table := new TableList("windowPositions.tl").getRowsByColumn("NAME")
+		For name,position in table {
+			idString := "ahk_id " Config.windowInfo[name].getMatchingWindowID()
+			fixWindowPosition(idString, position)
+		}
+	}
+fixWindowPosition(titleString, position) {
+	if(!position)
+		return
+	
+	; Track initially-minimized windows so we can re-minimize them when we're done (VisualWindow.resizeMove will restore them).
+	startedMinimized := WindowLib.isMinimized(titleString)
+	
+	monitorBoundsByLocation := WindowLib.getMonitorBoundsByLocation()
+	monitorBounds := monitorBoundsByLocation[position["MONITOR"]]
+	new VisualWindow(titleString).resizeMove(position["WIDTH"], position["HEIGHT"], position["X"], position["Y"], monitorBounds)
+	
+	; Re-minimize if the window started out that way.
+	if(startedMinimized)
+		WinMinimize, % titleString
+}
 
 ; Scroll horizontally with Shift held down.
 #If !(Config.isWindowActive("EpicStudio") || Config.isWindowActive("Chrome")) ; Chrome and EpicStudio handle their own horizontal scrolling, and doesn't support WheelLeft/Right all the time.

@@ -1,11 +1,11 @@
 @WindowTitle(Resize active window to size:)
 @MinColumnWidth(350)
 
-; X and Y values can be coordinates or constant values from VisualWindow.X_*/VisualWindow.Y_*
+; WIDTH/HEIGHT can be special values from VisualWindow.Width_* and VisualWindow.Height_*
 ; From AHK Active Window Info, these numbers should match the top set of w/h, not the client ones.
 
-[	NAME											ABBREV		WIDTH		HEIGHT	X					Y				CONTEXT	]
-(	0												0				1			2			0					0				0			)
+[	NAME											ABBREV		WIDTH		HEIGHT	CONTEXT	]
+(	0												0				1			2			0			)
 
 # General sizes
 	FHD (1920x1080)							h				1920		1080
@@ -14,10 +14,7 @@
 	Small (800x600)							sm				800		600
 
 # Specifics
-	Semi-maximized (fits around time)	smax			1460		1050		RIGHT_EDGE		CENTERED		HOME
-	Social (Telegram, Pidgin)				soc			950		750		RIGHT_EDGE		TOP_EDGE
-	; Social (Telegram, Pidgin)				soc			950		750		RIGHT_EDGE		BOTTOM_EDGE		WORK ; GDB WFH
-	VPN											vpn | v		-			-			1945				300			HOME
+	Semi-maximized (fits around time)	smax			1460		FULL		HOME
 
 # Development
 ~CONTEXT.replaceWith(WORK) {

@@ -41,15 +41,7 @@ $!q::WindowActions.minimizeWindow()
 		if(!data)
 			return
 		
-		; Default to centering resized window if nothing specified.
-		x := data["X"]
-		y := data["Y"]
-		if(x = "")
-			x := VisualWindow.X_Centered
-		if(y = "")
-			y := VisualWindow.Y_Centered
-		
-		new VisualWindow("A").resizeMove(data["WIDTH"], data["HEIGHT"], x, y)
+		new VisualWindow("A").resizeMove(data["WIDTH"], data["HEIGHT"], VisualWindow.X_Centered, VisualWindow.Y_Centered) ; Center resized window
 	}
 
 ; "Fix" window position and size to match configuration TL

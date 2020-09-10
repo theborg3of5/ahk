@@ -3,25 +3,7 @@
 		Rather than having the halfway point set through WinGet wrapper
 		Also, standardize LEFT vs Left capitalization - using both in various spots, would prefer just one (probably LEFT?)
 	Hotkey to auto-resize/auto-place certain windows
-		Specific windows
-			Various "social" windows
-			Spotify
-			OneNote
-			VPN
-			Explorer
-		Should we just do all windows?
-			Hit common things like Chrome, too
 		Outstanding questions
-			How should we find the windows in question?
-				Will the WindowInfo find function work?
-					Seems like it should - that's the window that we perform actions on (for Spotify it's the actual main window, for example).
-				Otherwise, do we have to loop over all (visible, will want to turn off hidden window detection) windows and compare each?
-			How do we want to handle specific monitors?
-				Probably like VPN case - just a specific X coordinate that puts it on that screen
-				Most windows will stay on their respective window, so it should be fine.
-					Although, social windows could just be given x = -width instead?
-			Do we need support for moving/fixing ALL windows, or really just the current one?
-				Should at least have something (ideally a simple hotkey) for just the current one, add + for all
 			What hotkey(s) should this be bound to?
 				#+ combo is what we use for most other current-window stuff
 				#+x or #+z, maybe? Either adding ^ for the all-windows option, or using #!^ variant instead?
@@ -29,7 +11,7 @@
 		Follow-ups
 			Search for GDB TODOs
 			Consider updating fake-maximize hotkey to use new FULL width/height constants instead of finding the bounds and such itself
-			Make sure Spotify current-status toast is fixed
+			May be able to drop restore handling for maximized windows from windowMoverSizer
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?
 			Or could we turn DebugPopup into something (TextPopup?) that takes (or lets you pick between, or lets you override a default) a TextTable instance (dependency-injection style)?
@@ -90,6 +72,7 @@
 		Looks like the issue is that we make the toast bigger enough that Windows decides it's on the next monitor
 			We create a new VisualWindow each time we want to move the Toast
 				Maybe we should have a persistent one instead?
+					We could have VisualWindow track the monitor it's on, as well (could be compared when we use .resizeMove())
 			The actual resizing (via Gui, Show with AutoSize) happens in Toast.move()
 				What if we create the VisualWindow earlier (before the AutoSize) and somehow use that to save off or anchor the Toast to the current monitor?
 		When we fix this, we can update:

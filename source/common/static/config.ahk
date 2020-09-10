@@ -221,10 +221,10 @@ class Config {
 	;---------
 	; DESCRIPTION:    Find the WindowInfo instance that matches the specified window.
 	; PARAMETERS:
-	;  titleString (I,OPT) - Title string that identifies the window in question. Defaults to the active window.
+	;  titleString (I,REQ) - Title string that identifies the window in question.
 	; RETURNS:        The WindowInfo instance matching the specified window.
 	;---------
-	findWindowInfo(titleString := "A") {
+	findWindowInfo(titleString) {
 		exe   := WinGet("ProcessName", titleString)
 		class := WinGetClass(titleString)
 		title := WinGetTitle(titleString)
@@ -254,6 +254,17 @@ class Config {
 	findWindowName(titleString := "A") {
 		winInfo := this.findWindowInfo(titleString)
 		return winInfo.name
+	}
+	
+	
+				else
+					matchingNames[priority].push(winInfo.name)
+			}
+		}
+		
+		if(DataLib.isNullOrEmpty(matchingNames))
+			return ""
+		return matchingNames
 	}
 	
 	

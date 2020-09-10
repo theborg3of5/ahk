@@ -36,7 +36,7 @@ class EMC2 {
 	;---------
 	openCurrentRecordWeb() {
 		; Special case for worklist - use right-click menu as we don't have any info in the title for the selected row
-		if(Config.findWindowName() = "EMC2 Worklist") {
+		if(Config.findWindowName("A") = "EMC2 Worklist") {
 			Send, {AppsKey} ; Right-click simulation
 			Sleep, 100      ; Wait for right-click menu to appear
 			Send, v{Enter}  ; "View * as HTML", "View *", or "View * in Browser" are all the first "V" item in the menu

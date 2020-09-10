@@ -25,7 +25,7 @@ class Hyperlinker {
 		}
 		
 		path := FileLib.cleanupPath(path)
-		windowName := Config.findWindowName()
+		windowName := Config.findWindowName("A")
 		windowLinkInfo := Hyperlinker.getWindowLinkInfo(windowName)
 		; Debug.popup("Hyperlinker.linkSelectedText","Finished gathering info", "windowName",windowName, "windowLinkInfo",windowLinkInfo, "Hyperlinker.windows",Hyperlinker.windows)
 		

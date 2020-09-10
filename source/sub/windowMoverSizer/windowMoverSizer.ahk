@@ -113,9 +113,6 @@ dragWindowPrep(ByRef window, ByRef mouseStart) {
 	if(isExcludedWindow(titleString))
 		return false
 	
-	if(WindowLib.isMaximized(titleString))
-		WinRestore, % titleString
-	
 	window := new VisualWindow(titleString, SnappingDistance)
 	window.snapOn() ; Turn on snapping
 	mouseStart := new MousePosition()

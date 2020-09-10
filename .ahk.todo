@@ -11,20 +11,11 @@
 		Rather than having the halfway point set through WinGet wrapper
 		Also, standardize LEFT vs Left capitalization - using both in various spots, would prefer just one (probably LEFT?)
 	Hotkey to auto-resize/auto-place certain windows
-		Outstanding questions
-			What hotkey(s) should this be bound to?
-				#+ combo is what we use for most other current-window stuff
-				#+x or #+z, maybe? Either adding ^ for the all-windows option, or using #!^ variant instead?
-				#+f is also a good option, for "fix"
-				Alternative: turn single and all choices into resize selector options?
-					This isn't quite the same thing conceptually, though?
 		Follow-ups
-			Search for GDB TODOs
 			Consider updating fake-maximize hotkey to use new FULL width/height constants instead of finding the bounds and such itself
 				OR: can we just drop that hotkey entirely, since the one window that we use it for (VDIs) is covered by the "fix" stuff?
 					If we do drop it, we'll need to make the logic callable from VDI selector
 					Maybe get rid of fake-maximize hotkey and library function, and just make the (now much simpler, no need to get monitor) equivalent call to VisualWindow.resizeMove in VDI selector logic instead?
-			May be able to drop restore handling for maximized windows from windowMoverSizer
 	There's a lot of monitor-specific logic in WindowLib now - should we break it out into a new MonitorLib class?
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?

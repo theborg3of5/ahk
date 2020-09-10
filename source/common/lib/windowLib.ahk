@@ -22,7 +22,8 @@ class WindowLib {
 			if(location = "")
 				return ""
 			
-			return this.getMonitorWorkAreasByLocation()[location]
+			areas := this.getMonitorWorkAreasByLocation()
+			return areas[location]
 		}
 	}
 	
@@ -218,15 +219,41 @@ class WindowLib {
 		memOffsetRight  := memOffsetTop   + 4 ; Top   + LONG top   [4]
 		memOffsetBottom := memOffsetRight + 4 ; Right + LONG right [4]
 		
-		bounds := {}
-		bounds["LEFT"]   := NumGet(monitorInfo, memOffsetLeft,   "Int")
-		bounds["TOP"]    := NumGet(monitorInfo, memOffsetTop,    "Int")
-		bounds["RIGHT"]  := NumGet(monitorInfo, memOffsetRight,  "Int")
-		bounds["BOTTOM"] := NumGet(monitorInfo, memOffsetBottom, "Int")
-		bounds["WIDTH"]  := bounds["RIGHT"]  - bounds["LEFT"]
-		bounds["HEIGHT"] := bounds["BOTTOM"] - bounds["TOP"]
+		workArea := {}
+		workArea["LEFT"]   := NumGet(monitorInfo, memOffsetLeft,   "Int")
+		workArea["TOP"]    := NumGet(monitorInfo, memOffsetTop,    "Int")
+		workArea["RIGHT"]  := NumGet(monitorInfo, memOffsetRight,  "Int")
+		workArea["BOTTOM"] := NumGet(monitorInfo, memOffsetBottom, "Int")
+		this.addAdditionalBoundsInfo(workArea)
 		
-		return bounds
+		return workArea
+	}
+	
+	;---------
+	; DESCRIPTION:    Determine whether the given window is on (or rather, nearest to, according to Windows) the monitor
+	;                 with the given index.
+	; PARAMETERS:
+	;  titleString (I,REQ) - Title string representing the window.
+	;  index       (I,REQ) - Index (according to AHK) of the monitor to check against.
+	; RETURNS:        true/false - is the window on the given monitor?
+	;---------
+	isWindowOnMonitor(titleString, index) {
+		return (this.getMonitorIndexForWindow(titleString) = index)
+	}
+	
+	;---------
+	; DESCRIPTION:    Determine whether the given window is on (or rather, nearest to, according to Windows) the monitor
+	;                 with the given index.
+	; PARAMETERS:
+	;  titleString (I,REQ) - Title string representing the window.
+	;  location    (I,REQ) - Location constant (from WindowLib.MonitorLocation_*) for which monitor location we're checking against.
+	; RETURNS:        true/false - is the window on the monitor with the given location?
+	;---------
+	isWindowOnMonitorWithLocation(titleString, location) {
+		workArea := this.monitorWorkAreaForLocation[location]
+		locationIndex := workArea["MONITOR_INDEX"]
+		
+		return this.isWindowOnMonitor(titleString, locationIndex)
 	}
 	
 	;---------
@@ -285,6 +312,32 @@ class WindowLib {
 		
 		return foundBounds
 	}
+	; =--
+	
+	
+	; #PRIVATE#
+	
+	static _monitorWorkAreasByLocation := ""
+	
+	;---------
+	; DESCRIPTION:    Determine which of the two bounds objects is the further lower and right.
+	; PARAMETERS:
+	;  firstBounds  (I,REQ) - The first bounds object. Important subscripts are "RIGHT" and "BOTTOM".
+	;  secondBounds (I,REQ) - The second bounds object. Important subscripts are "RIGHT" and "BOTTOM".
+	; RETURNS:        true if the second bounds object is further right or bottom, false otherwise.
+	;---------
+	isSecondMonitorMoreLowerRight(firstBounds, secondBounds) {
+		if(firstBounds = "")
+			return true
+		
+		if(secondBounds["RIGHT"] > firstBounds["RIGHT"])
+			return true
+		
+		if(secondBounds["BOTTOM"] > firstBounds["BOTTOM"])
+			return true
+		
+		return false
+	}
 	
 	;---------
 	; DESCRIPTION:    Get the bounds of all monitors, indexed by which position (left/middle/right) they are in.
@@ -316,9 +369,9 @@ class WindowLib {
 		}
 		
 		monitors := {}
-		monitors[WindowLib.MonitorLocation_Left]   := monLeft
-		monitors[WindowLib.MonitorLocation_Middle] := monMid
-		monitors[WindowLib.MonitorLocation_Right]  := monRight
+		monitors[ WindowLib.MonitorLocation_Left   ] := monLeft
+		monitors[ WindowLib.MonitorLocation_Middle ] := monMid
+		monitors[ WindowLib.MonitorLocation_Right  ] := monRight
 		
 		this._monitorWorkAreasByLocation := monitors
 		return monitors
@@ -329,51 +382,82 @@ class WindowLib {
 	; PARAMETERS:
 	;  index (I,REQ) - The index (according to AHK, not Windows) of the monitor.
 	; RETURNS:        An array of monitor work area dimensions:
-	;                    bounds["LEFT"]   = X coordinate of monitor work area's left edge
-	;                    bounds["RIGHT"]  = X coordinate of monitor work area's right edge
-	;                    bounds["TOP"]    = Y coordinate of monitor work area's top edge
-	;                    bounds["BOTTOM"] = Y coordinate of monitor work area's bottom edge
-	;                    bounds["WIDTH"]  = Width of the monitor's work area
-	;                    bounds["HEIGHT"] = Height of the monitor's work area
-	;                    bounds["INDEX"]  = Monitor index (according to AHK)
+	;                    bounds["LEFT"]          = X coordinate of monitor work area's left edge
+	;                    bounds["RIGHT"]         = X coordinate of monitor work area's right edge
+	;                    bounds["TOP"]           = Y coordinate of monitor work area's top edge
+	;                    bounds["BOTTOM"]        = Y coordinate of monitor work area's bottom edge
+	;                    bounds["WIDTH"]         = Width of the monitor's work area
+	;                    bounds["HEIGHT"]        = Height of the monitor's work area
+	;                    bounds["MONITOR_INDEX"] = Monitor index (according to AHK)
 	; NOTES:          This gives the monitor work area, not its total dimensions.
 	;---------
 	getMonitorWorkArea(index) {
 		; Gives us left/right/top/bottom info
 		bounds := SysGet("MonitorWorkArea", index)
 		
-		; Add a little extra information to the array
-		bounds["WIDTH"]  := bounds["RIGHT"]  - bounds["LEFT"]
-		bounds["HEIGHT"] := bounds["BOTTOM"] - bounds["TOP"]
-		bounds["INDEX"]  := index
+		; Add width/height and monitor index (if not given)
+		this.addAdditionalBoundsInfo(bounds, index)
 		
 		return bounds
 	}
-	; =--
-	
-	
-	; #PRIVATE#
-	
-	static _monitorWorkAreasByLocation := ""
 	
 	;---------
-	; DESCRIPTION:    Determine which of the two bounds objects is the further lower and right.
+	; DESCRIPTION:    Get the index (according to AHK) of the monitor that the given window is nearest to.
 	; PARAMETERS:
-	;  firstBounds  (I,REQ) - The first bounds object. Important subscripts are "RIGHT" and "BOTTOM".
-	;  secondBounds (I,REQ) - The second bounds object. Important subscripts are "RIGHT" and "BOTTOM".
-	; RETURNS:        true if the second bounds object is further right or bottom, false otherwise.
+	;  titleString (I,REQ) - Title string representing the window.
+	; RETURNS:        The numeric index of the monitor that the window is on.
 	;---------
-	isSecondMonitorMoreLowerRight(firstBounds, secondBounds) {
-		if(firstBounds = "")
-			return true
+	getMonitorIndexForWindow(titleString) {
+		workArea := this.getMonitorWorkAreaForWindow(titleString)
+		return workArea["MONITOR_INDEX"]
+	}
+	
+	;---------
+	; DESCRIPTION:    Add some additional info calculated onto the given bounds array for easy access.
+	; PARAMETERS:
+	;  bounds (IO,REQ) - The bounds array to update.
+	;  index   (I,OPT) - If known, the index (according to AHK) of the monitor that these bounds represent. If blank, we'll
+	;                    loop through all monitors to determine which one exactly matches these bounds.
+	;---------
+	addAdditionalBoundsInfo(ByRef bounds, index := "") {
+		; Calculate width and height for easier access.
+		bounds["WIDTH"]  := bounds["RIGHT"]  - bounds["LEFT"]
+		bounds["HEIGHT"] := bounds["BOTTOM"] - bounds["TOP"]
 		
-		if(secondBounds["RIGHT"] > firstBounds["RIGHT"])
-			return true
+		; If we weren't given the index, figure it out.
+		if(index = "") {
+			Loop, % SysGet("MonitorCount") {
+				; Check for a match on either work area or full bounds
+				if(this.boundsMatch(bounds, SysGet("MonitorWorkArea", A_Index))
+				|| this.boundsMatch(bounds, SysGet("Monitor",         A_Index))) {
+					index := A_Index
+					Break
+				}
+			}
+		}
+		bounds["MONITOR_INDEX"] := index
+	}
+	
+	;---------
+	; DESCRIPTION:    Check whether two sets of bounds match on the most basic level (ignoring calculated values).
+	; PARAMETERS:
+	;  boundsA (I,REQ) - First set of bounds to check
+	;  boundsB (I,REQ) - Second set of bounds to check
+	; RETURNS:        true/false - are they the same?
+	;---------
+	boundsMatch(boundsA, boundsB) {
+		; Just check the 4 edges - width/height are calculated from these values, and this logic typically
+		; used to figure out index so we can't check that either.
+		if(boundsA["LEFT"]   != boundsB["LEFT"])
+			return false
+		if(boundsA["RIGHT"]  != boundsB["RIGHT"])
+			return false
+		if(boundsA["TOP"]    != boundsB["TOP"])
+			return false
+		if(boundsA["BOTTOM"] != boundsB["BOTTOM"])
+			return false
 		
-		if(secondBounds["BOTTOM"] > firstBounds["BOTTOM"])
-			return true
-		
-		return false
+		return true
 	}
 	; #END#
 }

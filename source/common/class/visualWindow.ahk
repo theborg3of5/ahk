@@ -4,7 +4,7 @@
 	
 	Basic operations
 		Get actual position
-			You can get the actual position of a window after manipulating it with this class using the .getActualPosition() function.
+			You can get the actual position of a window after manipulating it with this class using the .calcActualPosition() function.
 		Moving
 			You can place windows at a particular position, either just based on their top-left corner [.move() and .resizeMove(), support special window positions] or based on any corner [.move*ToPos(), support snapping].
 		Resizing
@@ -81,7 +81,7 @@ class VisualWindow {
 	;  width  (O,OPT) - Width of window
 	;  height (O,OPT) - Height of window
 	;---------
-	getActualPosition(ByRef x := "", ByRef y := "", ByRef width := "", ByRef height := "") {
+	calcActualPosition(ByRef x := "", ByRef y := "", ByRef width := "", ByRef height := "") {
 		x      := this.leftX  - this.borderOffsets["LEFT"]
 		y      := this.topY   - this.borderOffsets["TOP"]
 		width  := this.width  + this.borderOffsets["LEFT"]   + this.borderOffsets["RIGHT"]
@@ -99,7 +99,7 @@ class VisualWindow {
 	; NOTES:          Does not support snapping.
 	;---------
 	move(x := "", y := "", bounds := "") {
-		shouldMaximize := this.windowPrep("", "", x, y, bounds)
+		this.prepWindow()
 		
 		; Default to the bounds of the monitor that the window is currently on.
 		if(!bounds)
@@ -123,19 +123,19 @@ class VisualWindow {
 	; NOTES:          Does not support snapping.
 	;---------
 	resize(width := "", height := "", bounds := "") {
-		shouldMaximize := this.windowPrep(width, height, "", "", bounds)
+		this.prepWindow()
 		
 		; Default to the bounds of the monitor that the window is currently on.
 		if(!bounds)
 			bounds := WindowLib.getMonitorWorkAreaForWindow(this.titleString)
 		
-		this.convertSpecialWindowSizes(width, height, bounds)
+		shouldMax := this.convertSpecialWindowSizes(width, height, bounds)
 		if(width != "")
 			this.rsToWidth(width)
 		if(height != "")
 			this.rsToHeight(height)
 		
-		this.applyPosition()
+		this.applyPosition(shouldMax)
 	}
 	;---------
 	; DESCRIPTION:    Resize and move the window, all in one operation.
@@ -149,14 +149,14 @@ class VisualWindow {
 	; NOTES:          Does not support snapping.
 	;---------
 	resizeMove(width := "", height := "", x := "", y := "", bounds := "") {
-		shouldMaximize := this.windowPrep(width, height, x, y, bounds)
+		this.prepWindow()
 		
 		; Default to the bounds of the monitor that the window is currently on.
 		if(!bounds)
 			bounds := WindowLib.getMonitorWorkAreaForWindow(this.titleString)
 		
-		; Resizing must happen first so that any special x/y values can be calculated accurately (i.e. center using new width).
-		this.convertSpecialWindowSizes(width, height, bounds)
+		; Resize should happen first as convertSpecialWindowPositions() uses updated (numeric) size in its calculations.
+		shouldMax := this.convertSpecialWindowSizes(width, height, bounds)
 		if(width != "")
 			this.rsToWidth(width)
 		if(height != "")
@@ -168,7 +168,7 @@ class VisualWindow {
 		if(y != "")
 			this.mvTopToY(y)
 		
-		this.applyPosition(shouldMaximize)
+		this.applyPosition(shouldMax)
 	}
 	
 	
@@ -181,6 +181,8 @@ class VisualWindow {
 	; NOTES:          Supports snapping
 	;---------
 	moveTopLeftToPos(x, y) {
+		this.prepWindow()
+		
 		this.mvLeftToX(x)
 		this.mvTopToY(y)
 		this.mvSnap()
@@ -195,6 +197,8 @@ class VisualWindow {
 	; NOTES:          Supports snapping
 	;---------
 	moveTopRightToPos(x, y) {
+		this.prepWindow()
+		
 		this.mvRightToX(x)
 		this.mvTopToY(y)
 		this.mvSnap()
@@ -209,6 +213,8 @@ class VisualWindow {
 	; NOTES:          Supports snapping
 	;---------
 	moveBottomLeftToPos(x, y) {
+		this.prepWindow()
+		
 		this.mvLeftToX(x)
 		this.mvBottomToY(y)
 		this.mvSnap()
@@ -223,6 +229,8 @@ class VisualWindow {
 	; NOTES:          Supports snapping
 	;---------
 	moveBottomRightToPos(x, y) {
+		this.prepWindow()
+		
 		this.mvRightToX(x)
 		this.mvBottomToY(y)
 		this.mvSnap()
@@ -239,6 +247,8 @@ class VisualWindow {
 	; NOTES:          Supports snapping
 	;---------
 	resizeTopLeftToPos(x, y) {
+		this.prepWindow()
+		
 		this.rsLeftToX(x)
 		this.rsTopToY(y)
 		this.rsSnap(this.Resize_X_ToLeft, this.Resize_Y_ToTop)
@@ -253,6 +263,8 @@ class VisualWindow {
 	; NOTES:          Supports snapping
 	;---------
 	resizeTopRightToPos(x, y) {
+		this.prepWindow()
+		
 		this.rsRightToX(x)
 		this.rsTopToY(y)
 		this.rsSnap(this.Resize_X_ToRight, this.Resize_Y_ToTop)
@@ -267,6 +279,8 @@ class VisualWindow {
 	; NOTES:          Supports snapping
 	;---------
 	resizeBottomLeftToPos(x, y) {
+		this.prepWindow()
+		
 		this.rsLeftToX(x)
 		this.rsBottomToY(y)
 		this.rsSnap(this.Resize_X_ToLeft, this.Resize_Y_ToBottom)
@@ -281,6 +295,8 @@ class VisualWindow {
 	; NOTES:          Supports snapping
 	;---------
 	resizeBottomRightToPos(x, y) {
+		this.prepWindow()
+		
 		this.rsRightToX(x)
 		this.rsBottomToY(y)
 		this.rsSnap(this.Resize_X_ToRight, this.Resize_Y_ToBottom)
@@ -318,7 +334,7 @@ class VisualWindow {
 	;                   bounds["WIDTH"]  - Window width
 	;                   bounds["HEIGHT"] - Window height
 	; NOTES:          These are the VISUAL dimensions, not the actual (according to Windows) ones.
-	;                 See .getActualPosition() for the actual ones.
+	;                 See .calcActualPosition() for the actual ones.
 	;---------
 	getBounds() {
 		bounds := {}
@@ -414,54 +430,30 @@ class VisualWindow {
 	}
 	
 	;---------
+	; DESCRIPTION:    Prepare a window to be moved or resized, by restoring it and updating our measurements if needed.
+	;---------
+	prepWindow() {
+		; Restore minimized and maximized windows so we can move/resize them properly.
+		if(WindowLib.isMinimized(this.titleString) || WindowLib.isMaximized(this.titleString)) {
+			WinRestore, % this.titleString
+			this.updateToCurrentPosition()
+		}
+	}
+	
+	;---------
 	; DESCRIPTION:    Actually move/resize the window to the updated (visual, converted to actual)
 	;                 dimensions in this class.
 	; PARAMETERS:
 	;  doMaximize (I,OPT) - true to maximize the window after we move it.
 	;---------
 	applyPosition(doMaximize := false) {
-		this.getActualPosition(x, y, width, height) ; Add offsets back in
+		this.calcActualPosition(x, y, width, height) ; Add offsets back in
 		WinMove, % this.titleString, , x, y, width, height
 		
 		if(doMaximize)
 			WinMaximize, % this.titleString
 	}
 	
-	;---------
-	; DESCRIPTION:    Prepare to move or resize a window, by restoring it if needed and adjusting things if we're going to
-	;                 maximize the it.
-	; PARAMETERS:
-	;  width  (IO,REQ) - Desired width, or a VisualWindow.Width_* constant.
-	;  height (IO,REQ) - Desired height, or a VisualWindow.Width_* constant.
-	;  x      (IO,REQ) - Desired x coordinate, or a VisualWindow.X_* constant.
-	;  y      (IO,REQ) - Desired y coordinate, or a VisualWindow.Y_* constant.
-	;  bounds  (I,REQ) - The bounds that the window should be sized/positioned relative to, used for
-	;                    VisualWindow.X_*/.Y_*/.Width_*/.Height_* constants. Defaults to the window's current monitor.
-	; RETURNS:        true/false - should we maximize the window?
-	; NOTES:          width/height/x/y may be updated if the window should be maximized based on the given width/height.
-	;---------
-	windowPrep(ByRef width, ByRef height, ByRef x, ByRef y, bounds) {
-		; Restore minimized and maximized windows so we can move/resize them properly.
-		if(WindowLib.isMinimized(this.titleString) || WindowLib.isMaximized(this.titleString)) {
-			WinRestore, % this.titleString
-			this.updateToCurrentPosition()
-		}
-		
-		shouldMaximize := (width = VisualWindow.Width_Maximize && height = VisualWindow.Height_Maximize)
-		if(shouldMaximize) {
-			; Skip resizing as maximized windows just take up the whole screen.
-			width  := ""
-			height := ""
-			
-			; If we're maximizing on a specific monitor (explicit bounds given), make sure we don't skip moving (prevent blank x/y values).
-			if(bounds) {
-				x := VisualWindow.X_Centered
-				y := VisualWindow.Y_Centered
-			}
-		}
-		
-		return shouldMaximize
-	}
 	
 	; [[ Moving window so specific window edges are somewhere ]] --=
 	mvLeftToX(x) {
@@ -565,19 +557,29 @@ class VisualWindow {
 	
 	; [[ Special window sizes/positions (for window placement relative to monitor) ]] ===
 	;---------
-	; DESCRIPTION:    
+	; DESCRIPTION:    Convert the given strings into proper width/height values, supporting various special values
+	;                 (VisualWindow.Width_*/.Height_*).
 	; PARAMETERS:
-	;  width  (IO,REQ) - Width string. Will be replaced with the new (numeric) width.
-	;  height (IO,REQ) - Height string. Will be replaced with the new (numeric) height.
+	;  width  (IO,REQ) - Width string. Will be replaced with the new (numeric or blank) width.
+	;  height (IO,REQ) - Height string. Will be replaced with the new (numeric or blank) height.
 	;  bounds  (I,REQ) - The bounds that the window should be positioned relative to, for use with VisualWindow.Width_* or
 	;                    .Height_* constants.
+	; RETURNS:        true/false - should we maximize this window?
 	;---------
 	convertSpecialWindowSizes(ByRef width, ByRef height, bounds) {
+		shouldMax := (width = this.Width_Maximize && height = this.Height_Maximize)
+		
 		; Convert any special values, everything else is left alone.
-		if(width = VisualWindow.Width_Full)
-			width := bounds["WIDTH"]
-		if(height = VisualWindow.Height_Full)
-			height := bounds["HEIGHT"]
+		Switch width {
+			Case this.Width_Full:      width := bounds["WIDTH"]
+			Case this.Width_Maximize:  width := "" ; Maximize was already checked before this function and will be applied later, so we can skip the resize.
+		}
+		Switch height {
+			Case this.Height_Full:     height := bounds["HEIGHT"]
+			Case this.Height_Maximize: height := "" ; Maximize was already checked before this function and will be applied later, so we can skip the resize.
+		}
+		
+		return shouldMax
 	}
 	
 	;---------
@@ -594,11 +596,20 @@ class VisualWindow {
 	;                   "RIGHT_EDGE+5" (VisualWindow.X_RightEdge+5) => {x so the right edge of the window is 5px from the right edge of the monitor}
 	;---------
 	convertSpecialWindowPositions(ByRef x, ByRef y, bounds) {
+		; If our bounds will take us to another monitor, make sure x and y aren't blank (as that will make us
+		; skip moving the window entirely).
+		if(!WindowLib.isWindowOnMonitor(this.titleString, bounds["MONITOR_INDEX"])) {
+			if(x = "" && y = "") {
+				x := this.X_Centered
+				y := this.Y_Centered
+			}
+		}
+		
 		x := this.convertSpecialWindowX(x, bounds)
 		y := this.convertSpecialWindowY(y, bounds)
 	}
 	convertSpecialWindowX(x, bounds) {
-		specialValues := [ VisualWindow.X_LeftEdge, VisualWindow.X_RightEdge, VisualWindow.X_Centered ]
+		specialValues := [ this.X_LeftEdge, this.X_RightEdge, this.X_Centered ]
 		if(!x.startsWithAnyOf(specialValues, match))
 			return x + bounds["LEFT"] ; Just return the original value (within the given bounds) if it wasn't special
 		
@@ -619,7 +630,7 @@ class VisualWindow {
 		return newX
 	}
 	convertSpecialWindowY(y, bounds) {
-		specialValues := [ VisualWindow.Y_TopEdge, VisualWindow.Y_BottomEdge, VisualWindow.Y_Centered]
+		specialValues := [ this.Y_TopEdge, this.Y_BottomEdge, this.Y_Centered]
 		if(!y.startsWithAnyOf(specialValues, match))
 			return y + bounds["TOP"] ; Just return the original value (within the given bounds) if it wasn't special
 		

@@ -103,7 +103,7 @@ class VisualWindow {
 		
 		; Default to the bounds of the monitor that the window is currently on.
 		if(!bounds)
-			bounds := WindowLib.getMonitorWorkArea(this.titleString)
+			bounds := WindowLib.getMonitorWorkAreaForWindow(this.titleString)
 		
 		this.convertSpecialWindowPositions(x, y, bounds)
 		if(x != "")
@@ -127,7 +127,7 @@ class VisualWindow {
 		
 		; Default to the bounds of the monitor that the window is currently on.
 		if(!bounds)
-			bounds := WindowLib.getMonitorWorkArea(this.titleString)
+			bounds := WindowLib.getMonitorWorkAreaForWindow(this.titleString)
 		
 		this.convertSpecialWindowSizes(width, height, bounds)
 		if(width != "")
@@ -153,7 +153,7 @@ class VisualWindow {
 		
 		; Default to the bounds of the monitor that the window is currently on.
 		if(!bounds)
-			bounds := WindowLib.getMonitorWorkArea(this.titleString)
+			bounds := WindowLib.getMonitorWorkAreaForWindow(this.titleString)
 		
 		; Resizing must happen first so that any special x/y values can be calculated accurately (i.e. center using new width).
 		this.convertSpecialWindowSizes(width, height, bounds)
@@ -514,7 +514,7 @@ class VisualWindow {
 		if(!this.isSnapOn)
 			return
 		
-		monitorBounds := WindowLib.getMonitorWorkArea(this.titleString) ; Should always be the monitor we're currently on, since we're snapping to the edges of that monitor
+		monitorBounds := WindowLib.getMonitorWorkAreaForWindow(this.titleString) ; Should always be the monitor we're currently on, since we're snapping to the edges of that monitor
 		leftDistance   := abs(this.leftX   - monitorBounds["LEFT"])
 		rightDistance  := abs(this.rightX  - monitorBounds["RIGHT"])
 		topDistance    := abs(this.topY    - monitorBounds["TOP"])
@@ -536,7 +536,7 @@ class VisualWindow {
 		if(!this.isSnapOn)
 			return
 		
-		monitorBounds := WindowLib.getMonitorWorkArea(this.titleString) ; Should always be the monitor we're currently on, since we're snapping to the edges of that monitor
+		monitorBounds := WindowLib.getMonitorWorkAreaForWindow(this.titleString) ; Should always be the monitor we're currently on, since we're snapping to the edges of that monitor
 		leftDistance   := abs(this.leftX   - monitorBounds["LEFT"])
 		rightDistance  := abs(this.rightX  - monitorBounds["RIGHT"])
 		topDistance    := abs(this.topY    - monitorBounds["TOP"])

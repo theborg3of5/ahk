@@ -62,7 +62,7 @@ class DebugPopup {
 	;---------
 	calculateEditDimensions(table) {
 		; Use a maxiumum of 90% of available height/width so we're not right up against the edges
-		workArea := WindowLib.getMonitorWorkArea()
+		workArea := WindowLib.getMonitorWorkAreaForWindow()
 		availableWidth  := workArea["WIDTH"]  * 0.9
 		availableHeight := workArea["HEIGHT"] * 0.9
 		

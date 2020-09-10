@@ -153,8 +153,8 @@ class WindowLib {
 	;                        Defaults to the active window ("A").
 	;---------
 	fakeMaximize(titleString := "A") {
-		monitorBounds := WindowLib.getMonitorWorkArea(titleString)
-		new VisualWindow(titleString).resizeMove(monitorBounds["WIDTH"], monitorBounds["HEIGHT"], VisualWindow.X_Centered, VisualWindow.Y_Centered)
+		monitorWorkArea := WindowLib.getMonitorWorkAreaForWindow(titleString)
+		new VisualWindow(titleString).resizeMove(monitorWorkArea["WIDTH"], monitorWorkArea["HEIGHT"], VisualWindow.X_Centered, VisualWindow.Y_Centered)
 	}
 	
 	; [[Monitor/screen size]] --=
@@ -175,7 +175,7 @@ class WindowLib {
 	; NOTES:          This working area excludes things like the taskbar - it's the full space that a
 	;                 window can occupy.
 	;---------
-	getMonitorWorkArea(titleString := "A") {
+	getMonitorWorkAreaForWindow(titleString := "A") {
 		winId := WinExist(titleString) ; Window handle
 		
 		; Get the monitor nearest to the window with the MonitorFromWindow function (https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-monitorfromwindow )

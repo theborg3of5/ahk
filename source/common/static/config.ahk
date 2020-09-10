@@ -248,15 +248,32 @@ class Config {
 	;---------
 	; DESCRIPTION:    Find the name of the specified window, if a WindowInfo instance exists.
 	; PARAMETERS:
-	;  titleString (I,OPT) - Title string that identifies the window in question. Defaults to the active window.
+	;  titleString (I,REQ) - Title string that identifies the window in question.
 	; RETURNS:        The NAME for the matched WindowInfo instance.
 	;---------
-	findWindowName(titleString := "A") {
+	findWindowName(titleString) {
 		winInfo := this.findWindowInfo(titleString)
 		return winInfo.name
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Find the names of all WindowInfo instances that match the given window.
+	; PARAMETERS:
+	;  titleString (I,REQ) - Title string that identifies the window in question.
+	; RETURNS:        Array of WindowInfo names, divided up by priority:
+	;                    matchingNames[priority] := [name1, name2]
+	;---------
+	findAllMatchingWindowNames(titleString) {
+		exe   := WinGet("ProcessName", titleString)
+		class := WinGetClass(titleString)
+		title := WinGetTitle(titleString)
+
+		matchingNames := {}
+		For _,winInfo in this.windows {
+			if(winInfo.windowMatchesPieces(exe, class, title)) {
+				priority := winInfo.priority
+				if(!matchingNames[priority])
+					matchingNames[priority] := [winInfo.name]
 				else
 					matchingNames[priority].push(winInfo.name)
 			}

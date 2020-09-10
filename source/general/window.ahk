@@ -60,19 +60,11 @@ fixWindowPositions(titleString := "") {
 	
 	; Fix a single window.
 	if(titleString != "") {
-		name := Config.findWindowName(titleString)
-		if(!name)
-			return
-		
-		position := table[name]
-		
-		; If we didn't find a line in the table for the window name, make sure it doesn't match any of the other rows' windows (for specific overrides).
-		if(!position) {
-			; GDB TODO consider a version of Config.findWindowName() that returns something other than the lowest-priority option - maybe return array of results, indexed by priority?
-			For posName,pos in table {
-				if(Config.windowInfo[posName].windowMatches(titleString)) {
-					position := pos
-					break
+		For priority,names in Config.findAllMatchingWindowNames(titleString) { ; Looping in priority order
+			For _,name in names {
+				if(table[name]) {
+					position := table[name]
+					Break
 				}
 			}
 		}

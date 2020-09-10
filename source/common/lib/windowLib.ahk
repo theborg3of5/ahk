@@ -272,7 +272,10 @@ class WindowLib {
 	;                    monitors["RIGHT"]  = Monitor bounds for right-most monitor
 	; NOTES:          Assumes there are only 3 monitors, and they're laid out in a horizontal line.
 	;---------
-	getMonitorBoundsByPosition() {
+	getMonitorBoundsByLocation() {
+		if(this.monitorBoundsByLocation)
+			return this.monitorBoundsByLocation
+		
 		Loop, % SysGet("MonitorCount") {
 			bounds := WindowLib.getMonitorWorkBounds(A_Index)
 			
@@ -292,7 +295,8 @@ class WindowLib {
 				monMid := bounds
 		}
 		
-		return {"LEFT":monLeft, "MIDDLE":monMid, "RIGHT":monRight}
+		this.monitorBoundsByLocation := {"LEFT":monLeft, "MIDDLE":monMid, "RIGHT":monRight}
+		return this.monitorBoundsByLocation
 	}
 	
 	;---------
@@ -324,6 +328,8 @@ class WindowLib {
 	
 	
 	; #PRIVATE#
+	
+	static monitorBoundsByLocation := ""
 	
 	;---------
 	; DESCRIPTION:    Determine which of the two bounds objects is the further lower and right.

@@ -50,7 +50,7 @@
 	; Most general form of various windows (specifics above should override).
 	~PRIORITY.replaceWith(1) {
 				AutoHotkey								AutoHotkey.exe				AutoHotkeyGUI					-
-				Chrome									chrome.exe					Chrome_WidgetWin_1			-
+				Chrome									chrome.exe					Chrome_WidgetWin_1			- Google Chrome
 				Cisco AnyConnect VPN					vpnui.exe					-									Cisco AnyConnect Secure Mobility Client
 				Discord									Discord.exe					-									-														NO_PADDING
 				EMC2										EpicD94.exe					-									EMC2

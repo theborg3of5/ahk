@@ -1859,7 +1859,7 @@
 							; DESCRIPTION:    Check whether the named window currently exists.
 							; PARAMETERS:
 							;  name (I,REQ) - Name of the window to check for.
-							; RETURNS:        true if it exists, false otherwise.
+							; RETURNS:        The window ID if it exists, otherwise false.
 							;---------">
                 <Param name="name" />
             </Overload>
@@ -1930,7 +1930,7 @@
 							; DESCRIPTION:    Check whether the named window is currently active.
 							; PARAMETERS:
 							;  name (I,REQ) - Name of the window to check for.
-							; RETURNS:        true if it's active, false otherwise.
+							; RETURNS:        The window ID if it's active, otherwise false.
 							;---------">
                 <Param name="name" />
             </Overload>
@@ -2057,6 +2057,19 @@
 							; RETURNS:        true if the specified window is a game, false otherwise.
 							;---------">
                 <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Config.windowMatchesInfo" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the given window matches the info with the provided name.
+							; PARAMETERS:
+							;  titleString (I,REQ) - Title string identifying the window to check
+							;  name        (I,REQ) - Name of the WindowInfo to compare it to
+							; RETURNS:        true/false - does it match?
+							;---------">
+                <Param name="titleString" />
+                <Param name="name" />
             </Overload>
         </KeyWord>
         <KeyWord name="Contains"/>
@@ -8247,11 +8260,27 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="WindowInfo.exists" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Does a window exist that matches our info?
+							; RETURNS:        The matching window ID if one exists, false otherwise.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="WindowInfo.getMatchingWindowID" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Get the the first window that matches all of the critieria contained in this class.
 							; RETURNS:        The matching window's ID
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowInfo.isActive" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Does the active window match our info?
+							; RETURNS:        The window ID if it matches, false otherwise.
 							;---------">
             </Overload>
         </KeyWord>
@@ -8340,18 +8369,6 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Visually center the given window on its current monitor.
-							; PARAMETERS:
-							;  titleString (I,OPT) - Title string that identifies your chosen window.
-							;                        Defaults to the active window (&quot;A&quot;).
-							;---------">
-                <Param name="titleString := &quot;A&quot;" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="WindowLib.fakeMaximize" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Resize a window to take up the full size of the monitor, without actually
-							;                 maximizing that window.
 							; PARAMETERS:
 							;  titleString (I,OPT) - Title string that identifies your chosen window.
 							;                        Defaults to the active window (&quot;A&quot;).

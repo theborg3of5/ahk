@@ -95,18 +95,28 @@ class WindowInfo {
 		return this.windowMatchesPieces(exe, class, title)
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Does the active window match our info?
+	; RETURNS:        The window ID if it matches, false otherwise.
+	;---------
 	isActive() {
 		ts := new TempSettings().titleMatchMode(this.titleMatchMode)
-		return WinActive(this.titleString)
+		winId := WinActive(this.titleString)
 		ts.restore()
+		
+		return winId
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Does a window exist that matches our info?
+	; RETURNS:        The matching window ID if one exists, false otherwise.
+	;---------
 	exists() {
 		ts := new TempSettings().titleMatchMode(this.titleMatchMode)
-		return WinExist(this.titleString)
+		winId := WinExist(this.titleString)
 		ts.restore()
+		
+		return winId
 	}
 	
 	;---------

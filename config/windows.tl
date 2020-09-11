@@ -45,6 +45,7 @@
 				OneTastic Macro Editor XML			ONENOTE.EXE					Onetastic Window				Edit XML
 				OneTastic Macro Editor				ONENOTE.EXE					Onetastic Window
 				Pidgin Buddy List						pidgin.exe					-									Buddy List
+				Snapper Add Records					Snapper.exe					-									Add a Record
 	}
 	
 	; Most general form of various windows (specifics above should override).
@@ -80,7 +81,7 @@
 				Remote Desktop Reconnecting		mstsc.exe					#32770
 				Republic Anywhere						Republic Anywhere.exe
 				Skype										Skype.exe
-				Snapper									Snapper.exe
+				Snapper									Snapper.exe					-									Snapper
 				Slack										slack.exe					-									-														NO_PADDING
 				SoundSwitch								SoundSwitch.exe
 				Spotify									Spotify.exe					-									-														NO_PADDING

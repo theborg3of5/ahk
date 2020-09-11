@@ -5,6 +5,6 @@
 #If
 
 ; Add record window
-#If WinActive("Add a Record " Config.windowInfo["Snapper"].titleString)
+#If Config.isWindowActive("Snapper Add Records")
 	^Enter::Snapper.addMultipleRecordsFromAddPopup()
 #If

@@ -100,7 +100,7 @@
 	getURLFromAddRecordPopup() {
 		commId := Snapper.getCurrentEnvironment()
 		
-		titleString := "Add a Record " Config.windowInfo["Snapper"].titleString ; Add record popup
+		titleString := Config.windowInfo["Snapper Add Records"].titleString
 		ini    := ControlGetText("ThunderRT6TextBox1", titleString)
 		idList := ControlGetText("ThunderRT6TextBox2", titleString)
 		
@@ -116,9 +116,7 @@
 	; RETURNS:        COMMID of the current environment open in Snapper.
 	;---------
 	getCurrentEnvironment() {
-		; Main Snapper window titleString
-		titleString := "Snapper " Config.windowInfo["Snapper"].titleString
-		if(!WinExist(titleString))
+		if(!Config.windowInfo["Snapper"].exists())
 			return ""
 		
 		environmentText := ControlGetText("ThunderRT6ComboBox2", titleString)

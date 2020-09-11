@@ -1,4 +1,8 @@
 # New Ideas
+	Fix Google Chrome matching
+		Looks like it's because we're using pure WinActive() in Config, not respecting the title match mode
+			Probably need special wrappers within WindowInfo for that
+			May need to update other spots that are using .titleString to do something similar, too.
 	Would it make sense to have some of my custom GUIs extend VisualWindow, rather than having them create or track one separately?
 	Defaulting values into a potentially-populated variable - dig into options a little more, is there something better than our current coalesce?
 		Ideas

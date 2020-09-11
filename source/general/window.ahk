@@ -74,7 +74,7 @@ fixWindowPosition(titleString, position) {
 	; Track initially-minimized windows so we can re-minimize them when we're done (VisualWindow.resizeMove will restore them).
 	startedMinimized := WindowLib.isMinimized(titleString)
 	
-	workArea := WindowLib.monitorWorkAreaForLocation[position["MONITOR"]]
+	workArea := MonitorLib.workAreaForLocation[position["MONITOR"]]
 	new VisualWindow(titleString).resizeMove(position["WIDTH"], position["HEIGHT"], position["X"], position["Y"], workArea)
 	
 	; Re-minimize if the window started out that way.

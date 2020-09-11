@@ -67,6 +67,7 @@ Object(params*) {
 	#Include guiLib.ahk
 	#Include hotkeyLib.ahk
 	#Include microsoftLib.ahk
+	#Include monitorLib.ahk
 	#Include phoneLib.ahk
 	#Include runLib.ahk
 	#Include searchLib.ahk

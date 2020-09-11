@@ -10,7 +10,6 @@
 	WinGet() - should we just add a warning and have callers call a WindowLib function that returns all bounds (including index, if that stays consistent)?
 		Rather than having the halfway point set through WinGet wrapper
 		Also, standardize LEFT vs Left capitalization - using both in various spots, would prefer just one (probably LEFT?)
-	There's a lot of monitor-specific logic in WindowLib now - should we break it out into a new MonitorLib class?
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?
 			Or could we turn DebugPopup into something (TextPopup?) that takes (or lets you pick between, or lets you override a default) a TextTable instance (dependency-injection style)?

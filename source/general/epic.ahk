@@ -124,7 +124,7 @@
 				if(ErrorLevel) ; Set if we timed out or if somethign else went wrong.
 					return
 				
-				monitorWorkArea := WindowLib.getMonitorWorkAreaForWindow(titleString)
+				monitorWorkArea := MonitorLib.getWorkAreaForWindow(titleString)
 				new VisualWindow("A").resizeMove(VisualWindow.Width_Full, VisualWindow.Height_Full, VisualWindow.X_Centered, VisualWindow.Y_Centered)
 			}
 		}

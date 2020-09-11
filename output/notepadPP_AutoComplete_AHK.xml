@@ -4598,6 +4598,101 @@
             </Overload>
         </KeyWord>
         <KeyWord name="MonitorCount"/>
+        <KeyWord name="MonitorLib.getMonitorWorkAreaForWindow" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the dimensions of the work area of the monitor &quot;closest&quot; (according to
+							;                 Windows) to the given window.
+							; PARAMETERS:
+							;  titleString (I,REQ) - Title string that identifies your chosen window.
+							; RETURNS:        Associative array of position/size information for the working area of the
+							;                 monitor that the window is &quot;closest&quot; to. Format:
+							;                    workArea[&quot;LEFT&quot;]   = X coordinate of monitor's (working area's) left bound
+							;                          [&quot;RIGHT&quot;]  = X coordinate of monitor's (working area's) right bound
+							;                          [&quot;TOP&quot;]    = Y coordinate of monitor's (working area's) top bound
+							;                          [&quot;BOTTOM&quot;] = Y coordinate of monitor's (working area's) bottom bound
+							;                          [&quot;WIDTH&quot;]  = width of the monitor's work area
+							;                          [&quot;HEIGHT&quot;] = height of the monitor's work area
+							; NOTES:          This working area excludes things like the taskbar - it's the full space that a
+							;                 window can occupy.
+							;---------">
+                <Param name="titleString" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MonitorLib.getMouseMonitorBounds" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Find the monitor that the mouse is on and return its bounds.
+							; RETURNS:        The bounds of the monitor that the mouse is on.
+							; NOTES:          If the mouse is on the border between monitors, we will return the bottom-right most monitor.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MonitorLib.isWindowOnMonitor" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether the given window is on (or rather, nearest to, according to Windows) the monitor
+							;                 with the given index.
+							; PARAMETERS:
+							;  titleString (I,REQ) - Title string representing the window.
+							;  index       (I,REQ) - Index (according to AHK) of the monitor to check against.
+							; RETURNS:        true/false - is the window on the given monitor?
+							;---------">
+                <Param name="titleString" />
+                <Param name="index" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MonitorLib.isWindowOnMonitorWithLocation" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether the given window is on (or rather, nearest to, according to Windows) the monitor
+							;                 with the given index.
+							; PARAMETERS:
+							;  titleString (I,REQ) - Title string representing the window.
+							;  location    (I,REQ) - Location constant (from MonitorLib.MonitorLocation_*) for which monitor location we're checking against.
+							; RETURNS:        true/false - is the window on the monitor with the given location?
+							;---------">
+                <Param name="titleString" />
+                <Param name="location" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MonitorLib.MonitorLocation_Left" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Left-most monitor
+							; GROUP:          Monitor locations (only 3 monitors in a horizontal line supported)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MonitorLib.MonitorLocation_Middle" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Center monitor
+							; GROUP:          Monitor locations (only 3 monitors in a horizontal line supported)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MonitorLib.MonitorLocation_Right" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Right-most monitor
+							; GROUP:          Monitor locations (only 3 monitors in a horizontal line supported)
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MonitorLib.monitorWorkAreaForLocation" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:
+							; PARAMETERS:
+							;  location (I,REQ) - The location of the monitor to get the work area bounds for, from MonitorLib.MonitorLocation_*.
+							; RETURNS:        Bounds array for the requested monitor (see .getMonitorWorkBounds)
+							; SIDE EFFECTS:
+							; NOTES:
+							;---------">
+                <Param name="location" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="MonitorName"/>
         <KeyWord name="MonitorPrimary"/>
         <KeyWord name="MonitorWorkArea"/>
@@ -8397,36 +8492,6 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="WindowLib.getMonitorWorkAreaForWindow" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Get the dimensions of the work area of the monitor &quot;closest&quot; (according to
-							;                 Windows) to the given window.
-							; PARAMETERS:
-							;  titleString (I,REQ) - Title string that identifies your chosen window.
-							; RETURNS:        Associative array of position/size information for the working area of the
-							;                 monitor that the window is &quot;closest&quot; to. Format:
-							;                    workArea[&quot;LEFT&quot;]   = X coordinate of monitor's (working area's) left bound
-							;                          [&quot;RIGHT&quot;]  = X coordinate of monitor's (working area's) right bound
-							;                          [&quot;TOP&quot;]    = Y coordinate of monitor's (working area's) top bound
-							;                          [&quot;BOTTOM&quot;] = Y coordinate of monitor's (working area's) bottom bound
-							;                          [&quot;WIDTH&quot;]  = width of the monitor's work area
-							;                          [&quot;HEIGHT&quot;] = height of the monitor's work area
-							; NOTES:          This working area excludes things like the taskbar - it's the full space that a
-							;                 window can occupy.
-							;---------">
-                <Param name="titleString" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="WindowLib.getMouseMonitorBounds" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Find the monitor that the mouse is on and return its bounds.
-							; RETURNS:        The bounds of the monitor that the mouse is on.
-							; NOTES:          If the mouse is on the border between monitors, we will return the bottom-right most monitor.
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="WindowLib.hasCaption" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -8525,71 +8590,6 @@
 							; RETURNS:        true/false, whether the window is visible.
 							;---------">
                 <Param name="titleString := &quot;A&quot;" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="WindowLib.isWindowOnMonitor" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Determine whether the given window is on (or rather, nearest to, according to Windows) the monitor
-							;                 with the given index.
-							; PARAMETERS:
-							;  titleString (I,REQ) - Title string representing the window.
-							;  index       (I,REQ) - Index (according to AHK) of the monitor to check against.
-							; RETURNS:        true/false - is the window on the given monitor?
-							;---------">
-                <Param name="titleString" />
-                <Param name="index" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="WindowLib.isWindowOnMonitorWithLocation" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Determine whether the given window is on (or rather, nearest to, according to Windows) the monitor
-							;                 with the given index.
-							; PARAMETERS:
-							;  titleString (I,REQ) - Title string representing the window.
-							;  location    (I,REQ) - Location constant (from WindowLib.MonitorLocation_*) for which monitor location we're checking against.
-							; RETURNS:        true/false - is the window on the monitor with the given location?
-							;---------">
-                <Param name="titleString" />
-                <Param name="location" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="WindowLib.MonitorLocation_Left" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Left-most monitor
-							; GROUP:          Monitor locations (only 3 monitors in a horizontal line supported)
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="WindowLib.MonitorLocation_Middle" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Center monitor
-							; GROUP:          Monitor locations (only 3 monitors in a horizontal line supported)
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="WindowLib.MonitorLocation_Right" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Right-most monitor
-							; GROUP:          Monitor locations (only 3 monitors in a horizontal line supported)
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="WindowLib.monitorWorkAreaForLocation" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:
-							; PARAMETERS:
-							;  location (I,REQ) - The location of the monitor to get the work area bounds for, from WindowLib.MonitorLocation_*.
-							; RETURNS:        Bounds array for the requested monitor (see .getMonitorWorkBounds)
-							; SIDE EFFECTS:
-							; NOTES:
-							;---------">
-                <Param name="location" />
             </Overload>
         </KeyWord>
         <KeyWord name="WinExist" func="yes">

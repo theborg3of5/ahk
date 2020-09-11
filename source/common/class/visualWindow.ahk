@@ -103,7 +103,7 @@ class VisualWindow {
 		
 		; Default to the bounds of the monitor that the window is currently on.
 		if(!bounds)
-			bounds := WindowLib.getMonitorWorkAreaForWindow(this.titleString)
+			bounds := MonitorLib.getWorkAreaForWindow(this.titleString)
 		
 		this.convertSpecialWindowPositions(x, y, bounds)
 		if(x != "")
@@ -127,7 +127,7 @@ class VisualWindow {
 		
 		; Default to the bounds of the monitor that the window is currently on.
 		if(!bounds)
-			bounds := WindowLib.getMonitorWorkAreaForWindow(this.titleString)
+			bounds := MonitorLib.getWorkAreaForWindow(this.titleString)
 		
 		shouldMax := this.convertSpecialWindowSizes(width, height, bounds)
 		if(width != "")
@@ -153,7 +153,7 @@ class VisualWindow {
 		
 		; Default to the bounds of the monitor that the window is currently on.
 		if(!bounds)
-			bounds := WindowLib.getMonitorWorkAreaForWindow(this.titleString)
+			bounds := MonitorLib.getWorkAreaForWindow(this.titleString)
 		
 		; Resize should happen first as convertSpecialWindowPositions() uses updated (numeric) size in its calculations.
 		shouldMax := this.convertSpecialWindowSizes(width, height, bounds)
@@ -506,7 +506,7 @@ class VisualWindow {
 		if(!this.isSnapOn)
 			return
 		
-		monitorBounds := WindowLib.getMonitorWorkAreaForWindow(this.titleString) ; Should always be the monitor we're currently on, since we're snapping to the edges of that monitor
+		monitorBounds := MonitorLib.getWorkAreaForWindow(this.titleString) ; Should always be the monitor we're currently on, since we're snapping to the edges of that monitor
 		leftDistance   := abs(this.leftX   - monitorBounds["LEFT"])
 		rightDistance  := abs(this.rightX  - monitorBounds["RIGHT"])
 		topDistance    := abs(this.topY    - monitorBounds["TOP"])
@@ -528,7 +528,7 @@ class VisualWindow {
 		if(!this.isSnapOn)
 			return
 		
-		monitorBounds := WindowLib.getMonitorWorkAreaForWindow(this.titleString) ; Should always be the monitor we're currently on, since we're snapping to the edges of that monitor
+		monitorBounds := MonitorLib.getWorkAreaForWindow(this.titleString) ; Should always be the monitor we're currently on, since we're snapping to the edges of that monitor
 		leftDistance   := abs(this.leftX   - monitorBounds["LEFT"])
 		rightDistance  := abs(this.rightX  - monitorBounds["RIGHT"])
 		topDistance    := abs(this.topY    - monitorBounds["TOP"])
@@ -598,7 +598,7 @@ class VisualWindow {
 	convertSpecialWindowPositions(ByRef x, ByRef y, bounds) {
 		; If our bounds will take us to another monitor, make sure x and y aren't blank (as that will make us
 		; skip moving the window entirely).
-		if(!WindowLib.isWindowOnMonitor(this.titleString, bounds["MONITOR_INDEX"])) {
+		if(!MonitorLib.isWindowOnMonitor(this.titleString, bounds["MONITOR_INDEX"])) {
 			if(x = "" && y = "") {
 				x := this.X_Centered
 				y := this.Y_Centered

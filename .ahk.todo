@@ -1,6 +1,5 @@
 # New Ideas
 	Add a toast at the end of fix-all-window-positions logic, so I can tell when it's done easier
-	Consider updating other spots that use WindowInfo.titleString to use new Config.windowMatchesInfo() wrapper, so it respects .titleMatchMode appropriately
 	Would it make sense to have some of my custom GUIs extend VisualWindow, rather than having them create or track one separately?
 	Defaulting values into a potentially-populated variable - dig into options a little more, is there something better than our current coalesce?
 		Ideas

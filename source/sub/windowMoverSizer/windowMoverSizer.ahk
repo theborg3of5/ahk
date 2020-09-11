@@ -127,10 +127,9 @@ dragWindowPrep(ByRef window, ByRef mouseStart) {
 ; RETURNS:        true if the window should be excluded, false otherwise.
 ;---------
 isExcludedWindow(titleString) {
-	windowName := Config.findWindowName(titleString)
-	if(windowName = "Windows Taskbar")
+	if(Config.windowMatchesInfo(titleString, "Windows Taskbar"))
 		return true
-	if(windowName = "Windows Taskbar Secondary")
+	if(Config.windowMatchesInfo(titleString, "Windows Taskbar Secondary"))
 		return true
 	
 	return false

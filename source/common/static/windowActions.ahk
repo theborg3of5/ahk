@@ -178,14 +178,10 @@ class WindowActions {
 			name := Config.findWindowName(titleString)
 		
 		; Identify the window we want to act upon with a titleString that uses its ID.
-		if(titleString) {
+		if(titleString)
 			titleString := WindowLib.getIdTitleString(titleString)
-		} else {
-			winId := Config.windowInfo[name].getMatchingWindowID()
-			if(!winId)
-				return
-			titleString := "ahk_id " winId
-		}
+		else
+			titleString := Config.windowInfo[name].idString
 		
 		this.doWindowAction(action, titleString, this.actionOverrides[name])
 	}

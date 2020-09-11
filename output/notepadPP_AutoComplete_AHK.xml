@@ -8268,11 +8268,10 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="WindowInfo.getMatchingWindowID" func="yes">
-            <Overload retVal="" descr="
+        <KeyWord name="WindowInfo.idString" func="yes">
+            <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    Get the the first window that matches all of the critieria contained in this class.
-							; RETURNS:        The matching window's ID
+							; DESCRIPTION:    A title string that includes the ID of the single window that best matches this info.
 							;---------">
             </Overload>
         </KeyWord>
@@ -8317,7 +8316,8 @@
 							;---------
 							; DESCRIPTION:    A string that can be used with WinActive() and the like to identify this
 							;                 window.
-							; NOTES:          Make sure to check .titleMatchMode as well, in case the window requires a special condition there.
+							; NOTES:          Make sure to check .titleMatchMode as well, in case the window requires a special condition there -
+							;                 or better yet, use one of the provided wrappers (.isActive(), .exists(), etc.)
 							;---------">
             </Overload>
         </KeyWord>

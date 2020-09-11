@@ -62,10 +62,9 @@ fixWindowPositions(titleString := "") {
 	
 	; Fix all the windows in the config file at once.
 	} else {
-		For name,position in table {
-			idString := "ahk_id " Config.windowInfo[name].getMatchingWindowID()
-			fixWindowPosition(idString, position)
-		}
+		For name,position in table
+			fixWindowPosition(Config.windowInfo[name].idString, position)
+		new Toast("All window positions fixed").showShort()
 	}
 }
 fixWindowPosition(titleString, position) {

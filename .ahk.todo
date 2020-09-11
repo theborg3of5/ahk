@@ -1,5 +1,4 @@
 # New Ideas
-	Add a toast at the end of fix-all-window-positions logic, so I can tell when it's done easier
 	Would it make sense to have some of my custom GUIs extend VisualWindow, rather than having them create or track one separately?
 	Defaulting values into a potentially-populated variable - dig into options a little more, is there something better than our current coalesce?
 		Ideas
@@ -32,10 +31,6 @@
 	EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments
-	Is there some way to fix Spotify placement at startup?
-		It ends up too low (probably because of my taskbar on top), and sometimes the taskbar button thinks it's on the wrong monitor
-			The monitor bit probably doesn't matter, considering I close it (min to tray) pretty shortly after
-				Would closing it (min to tray) and then re-opening it be an option to fix the monitor tasbar bit?
 	Figure out some standard documentation method for hotkeys
 		Dynamically pull hotkeys for the currently focused program?
 		Hotkey to show popup with all currently active hotkeys, divided up into current-program-specific and others

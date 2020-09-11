@@ -95,6 +95,20 @@ class WindowInfo {
 		return this.windowMatchesPieces(exe, class, title)
 	}
 	
+	
+	isActive() {
+		ts := new TempSettings().titleMatchMode(this.titleMatchMode)
+		return WinActive(this.titleString)
+		ts.restore()
+	}
+	
+	
+	exists() {
+		ts := new TempSettings().titleMatchMode(this.titleMatchMode)
+		return WinExist(this.titleString)
+		ts.restore()
+	}
+	
 	;---------
 	; DESCRIPTION:    Check whether the given info matches what we have here.
 	; PARAMETERS:

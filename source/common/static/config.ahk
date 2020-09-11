@@ -202,20 +202,31 @@ class Config {
 	; DESCRIPTION:    Check whether the named window is currently active.
 	; PARAMETERS:
 	;  name (I,REQ) - Name of the window to check for.
-	; RETURNS:        true if it's active, false otherwise.
+	; RETURNS:        The window ID if it's active, otherwise false.
 	;---------
 	isWindowActive(name) {
-		return WinActive(this.windowInfo[name].titleString)
+		return this.windowInfo[name].isActive()
 	}
 	
 	;---------
 	; DESCRIPTION:    Check whether the named window currently exists.
 	; PARAMETERS:
 	;  name (I,REQ) - Name of the window to check for.
-	; RETURNS:        true if it exists, false otherwise.
+	; RETURNS:        The window ID if it exists, otherwise false.
 	;---------
 	doesWindowExist(name) {
-		return WinExist(this.windowInfo[name].titleString)
+		return this.windowInfo[name].exists()
+	}
+	
+	;---------
+	; DESCRIPTION:    Check whether the given window matches the info with the provided name.
+	; PARAMETERS:
+	;  titleString (I,REQ) - Title string identifying the window to check
+	;  name        (I,REQ) - Name of the WindowInfo to compare it to
+	; RETURNS:        true/false - does it match?
+	;---------
+	windowMatchesInfo(titleString, name) {
+		return this.windowInfo[name].windowMatches(titleString)
 	}
 	
 	;---------

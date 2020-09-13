@@ -193,7 +193,7 @@
 	SysGet(Subcommand, Param3 := "") {
 		if(Subcommand = "Monitor" || Subcommand = "MonitorWorkArea") {
 			SysGet, bounds, % Subcommand, % Param3
-			return {"Left":boundsLeft, "Right":boundsRight, "Top":boundsTop, "Bottom":boundsBottom}
+			return {"LEFT":boundsLeft, "RIGHT":boundsRight, "TOP":boundsTop, "BOTTOM":boundsBottom}
 		}
 		
 		SysGet, v, %Subcommand%, %Param3%

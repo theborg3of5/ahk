@@ -1,7 +1,4 @@
 # New Ideas
-	WinGet() - should we just add a warning and have callers call a WindowLib function that returns all bounds (including index, if that stays consistent)?
-		Rather than having the halfway point set through WinGet wrapper
-		Also, standardize LEFT vs Left capitalization - using both in various spots, would prefer just one (probably LEFT?)
 	Defaulting values into a potentially-populated variable - dig into options a little more, is there something better than our current coalesce?
 		Ideas
 			x := DataLib.coalesce(x, this.X_Centered)

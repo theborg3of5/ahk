@@ -1,5 +1,7 @@
 # New Ideas
-	Would it make sense to have some of my custom GUIs extend VisualWindow, rather than having them create or track one separately?
+	WinGet() - should we just add a warning and have callers call a WindowLib function that returns all bounds (including index, if that stays consistent)?
+		Rather than having the halfway point set through WinGet wrapper
+		Also, standardize LEFT vs Left capitalization - using both in various spots, would prefer just one (probably LEFT?)
 	Defaulting values into a potentially-populated variable - dig into options a little more, is there something better than our current coalesce?
 		Ideas
 			x := DataLib.coalesce(x, this.X_Centered)
@@ -7,9 +9,7 @@
 			if(x = "")
 				x := this.X_Centered
 			x := (x != "") ? x : this.X_Centered
-	WinGet() - should we just add a warning and have callers call a WindowLib function that returns all bounds (including index, if that stays consistent)?
-		Rather than having the halfway point set through WinGet wrapper
-		Also, standardize LEFT vs Left capitalization - using both in various spots, would prefer just one (probably LEFT?)
+	Would it make sense to have some of my custom GUIs extend VisualWindow, rather than having them create or track one separately?
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?
 			Or could we turn DebugPopup into something (TextPopup?) that takes (or lets you pick between, or lets you override a default) a TextTable instance (dependency-injection style)?
@@ -24,9 +24,6 @@
 					This would allow us to add rows in the order we wanted - so we could flip the date order back to day-date, not date-day
 	Re-examine how we run programs and such (RunLib.runAsUser stuff) - could it be the reason we have focus issues?
 		Also, could we work around it with a WinWaitExist + WinActivate?
-	Is the media player stuff in config worth keeping around? I don't really switch music programs anymore, and Chrome awkwardly tries to grab media keys anyway.
-		Possibly replace it with something based on RDP/Spotify command script, that interacts directly with Spotify instead of letting other things steal the media keys?
-		Wait until a little after WFH stuff is done to decide.
 	EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments
@@ -34,6 +31,9 @@
 		Dynamically pull hotkeys for the currently focused program?
 		Hotkey to show popup with all currently active hotkeys, divided up into current-program-specific and others
 			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
+	Is the media player stuff in config worth keeping around? I don't really switch music programs anymore, and Chrome awkwardly tries to grab media keys anyway.
+		Possibly replace it with something based on RDP/Spotify command script, that interacts directly with Spotify instead of letting other things steal the media keys?
+		Wait until a little after WFH stuff is done to decide.
 	
 # Selector
 	Re-examine SelectorGui/FlexTable - could we simplify out a lot of the extra logic using built-in Gui positioning options?

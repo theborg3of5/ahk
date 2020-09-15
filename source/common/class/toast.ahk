@@ -220,20 +220,7 @@ class Toast {
 	}
 	
 	
-	; #PRIVATE#
-	
-	static ToastTitle := "[TOAST]"
-	
-	styles         := ""
-	guiId          := ""
-	labelVarName   := ""
-	x              := ""
-	y              := ""
-	parentIdString := "" ; If this is set, we'll position relative to the window identified here for "special" coordinates.
-	
-	isGuiDestroyed := false ; To make sure we're not trying to hide/close an already-destroyed toast.
-	isPersistent   := false ; Whether this is persistent or just single-use.
-	isBlocking     := false ; Whether showing on a timer should block the caller until it hides.
+	; #INTERNAL#
 	
 	;---------
 	; DESCRIPTION:    Set up the Toast - build the gui, set the text (if given).
@@ -248,6 +235,22 @@ class Toast {
 		if(toastText)
 			this.setLabelText(toastText)
 	}
+	
+	
+	; #PRIVATE#
+	
+	static ToastTitle := "[TOAST]"
+	
+	styles         := ""
+	guiId          := ""
+	labelVarName   := ""
+	x              := ""
+	y              := ""
+	parentIdString := "" ; If this is set, we'll position relative to the window identified here for "special" coordinates.
+	
+	isGuiDestroyed := false ; To make sure we're not trying to hide/close an already-destroyed toast.
+	isPersistent   := false ; Whether this is persistent or just single-use.
+	isBlocking     := false ; Whether showing on a timer should block the caller until it hides.
 	
 	;---------
 	; DESCRIPTION:    Build the toast gui, applying various properties.
@@ -324,9 +327,9 @@ class Toast {
 		
 		isWinHidden := !WindowLib.isVisible(titleString)
 		if(isWinHidden)
-			Gui, Show, AutoSize NoActivate Hide, % Toast.ToastTitle ; Resize to size of contents, but keep toast hidden (and actually show it further down)
+			Gui, Show, AutoSize NoActivate Hide, % this.ToastTitle ; Resize to size of contents, but keep toast hidden (and actually show it further down)
 		else
-			Gui, Show, AutoSize NoActivate, % Toast.ToastTitle ; Resize to size of contents
+			Gui, Show, AutoSize NoActivate, % this.ToastTitle ; Resize to size of contents
 		
 		window := new VisualWindow(titleString)
 		parentBounds := ""
@@ -335,7 +338,7 @@ class Toast {
 		window.move(x, y, parentBounds)
 		
 		if(isWinHidden)
-			Gui, Show, NoActivate, % Toast.ToastTitle
+			Gui, Show, NoActivate, % this.ToastTitle
 		
 		; Store off new position
 		this.x := x

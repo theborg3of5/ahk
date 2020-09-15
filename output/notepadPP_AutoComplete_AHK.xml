@@ -7856,8 +7856,8 @@
 							; PARAMETERS:
 							;  x      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
 							;  y      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
-							;  bounds (I,REQ) - The bounds that the window should be sized/positioned relative to, used for
-							;                   VisualWindow.X_*/.Y_*/.Width_*/.Height_* constants. Defaults to the window's current monitor.
+							;  bounds (I,OPT) - If specified, x and y will be treated as relative to these bounds. If not, special values from
+							;                   VisualWindow.X_* or .Y_* will be calculated relative to the window's current monitor.
 							; NOTES:          Does not support snapping.
 							;---------">
                 <Param name="x := &quot;&quot;" />
@@ -7924,8 +7924,8 @@
 							; PARAMETERS:
 							;  width  (I,OPT) - The width to resize to
 							;  height (I,OPT) - The height to resize to
-							;  bounds (I,REQ) - The bounds that the window should be sized/positioned relative to, used for
-							;                   VisualWindow.X_*/.Y_*/.Width_*/.Height_* constants. Defaults to the window's current monitor.
+							;  bounds (I,OPT) - If specified, width and height will be treated as relative to these bounds. If not, special values
+							;                   from VisualWindow.Width_* or .Height_* will be calculated relative to the window's current monitor.
 							; NOTES:          Does not support snapping.
 							;---------">
                 <Param name="width := &quot;&quot;" />
@@ -7968,8 +7968,9 @@
 							;  height (I,OPT) - The height to resize to
 							;  x      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
 							;  y      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
-							;  bounds (I,REQ) - The bounds that the window should be sized/positioned relative to, used for
-							;                   VisualWindow.X_*/.Y_*/.Width_*/.Height_* constants. Defaults to the window's current monitor.
+							;  bounds (I,OPT) - If specified, width/height/x/y will all be treated as relative to these bounds. If not, special
+							;                   values from VisualWindow.Width_*/.Height_*/.X_*/.Y_* will be calculated relative to the window's
+							;                   current monitor.
 							; NOTES:          Does not support snapping.
 							;---------">
                 <Param name="width := &quot;&quot;" />

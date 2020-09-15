@@ -94,16 +94,12 @@ class VisualWindow {
 	; PARAMETERS:
 	;  x      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
 	;  y      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
-	;  bounds (I,REQ) - The bounds that the window should be sized/positioned relative to, used for
-	;                   VisualWindow.X_*/.Y_*/.Width_*/.Height_* constants. Defaults to the window's current monitor.
+	;  bounds (I,OPT) - If specified, x and y will be treated as relative to these bounds. If not, special values from
+	;                   VisualWindow.X_* or .Y_* will be calculated relative to the window's current monitor.
 	; NOTES:          Does not support snapping.
 	;---------
 	move(x := "", y := "", bounds := "") {
 		this.prepWindow()
-		
-		; Default to the bounds of the monitor that the window is currently on.
-		if(!bounds)
-			bounds := MonitorLib.getWorkAreaForWindow(this.titleString)
 		
 		this.convertSpecialWindowPositions(x, y, bounds)
 		if(x != "")
@@ -118,16 +114,12 @@ class VisualWindow {
 	; PARAMETERS:
 	;  width  (I,OPT) - The width to resize to
 	;  height (I,OPT) - The height to resize to
-	;  bounds (I,REQ) - The bounds that the window should be sized/positioned relative to, used for
-	;                   VisualWindow.X_*/.Y_*/.Width_*/.Height_* constants. Defaults to the window's current monitor.
+	;  bounds (I,OPT) - If specified, width and height will be treated as relative to these bounds. If not, special values
+	;                   from VisualWindow.Width_* or .Height_* will be calculated relative to the window's current monitor.
 	; NOTES:          Does not support snapping.
 	;---------
 	resize(width := "", height := "", bounds := "") {
 		this.prepWindow()
-		
-		; Default to the bounds of the monitor that the window is currently on.
-		if(!bounds)
-			bounds := MonitorLib.getWorkAreaForWindow(this.titleString)
 		
 		shouldMax := this.convertSpecialWindowSizes(width, height, bounds)
 		if(width != "")
@@ -144,16 +136,13 @@ class VisualWindow {
 	;  height (I,OPT) - The height to resize to
 	;  x      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
 	;  y      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
-	;  bounds (I,REQ) - The bounds that the window should be sized/positioned relative to, used for
-	;                   VisualWindow.X_*/.Y_*/.Width_*/.Height_* constants. Defaults to the window's current monitor.
+	;  bounds (I,OPT) - If specified, width/height/x/y will all be treated as relative to these bounds. If not, special
+	;                   values from VisualWindow.Width_*/.Height_*/.X_*/.Y_* will be calculated relative to the window's
+	;                   current monitor.
 	; NOTES:          Does not support snapping.
 	;---------
 	resizeMove(width := "", height := "", x := "", y := "", bounds := "") {
 		this.prepWindow()
-		
-		; Default to the bounds of the monitor that the window is currently on.
-		if(!bounds)
-			bounds := MonitorLib.getWorkAreaForWindow(this.titleString)
 		
 		; Resize should happen first as convertSpecialWindowPositions() uses updated (numeric) size in its calculations.
 		shouldMax := this.convertSpecialWindowSizes(width, height, bounds)
@@ -562,12 +551,16 @@ class VisualWindow {
 	; PARAMETERS:
 	;  width  (IO,REQ) - Width string. Will be replaced with the new (numeric or blank) width.
 	;  height (IO,REQ) - Height string. Will be replaced with the new (numeric or blank) height.
-	;  bounds  (I,REQ) - The bounds that the window should be positioned relative to, for use with VisualWindow.Width_* or
-	;                    .Height_* constants.
+	;  bounds  (I,OPT) - If specified, width and height will be treated as relative to these bounds. If not, special values
+	;                    from VisualWindow.Width_* or .Height_* will be calculated relative to the window's current monitor.
 	; RETURNS:        true/false - should we maximize this window?
 	;---------
-	convertSpecialWindowSizes(ByRef width, ByRef height, bounds) {
+	convertSpecialWindowSizes(ByRef width, ByRef height, bounds := "") {
 		shouldMax := (width = this.Width_Maximize && height = this.Height_Maximize)
+		
+		; Default to the bounds of the monitor that the window is currently on for use with special values below.
+		if(!bounds)
+			bounds := MonitorLib.getWorkAreaForWindow(this.titleString)
 		
 		; Convert any special values, everything else is left alone.
 		Switch width {
@@ -588,14 +581,14 @@ class VisualWindow {
 	; PARAMETERS:
 	;  x     (IO,REQ) - X string. Will be replaced with the new X coordinate.
 	;  y     (IO,REQ) - Y string. Will be replaced with the new Y coordinate.
-	;  bounds (I,REQ) - The bounds that the window should be positioned relative to, for use with VisualWindow.X_* or .Y_*
-	;                   constants.
+	;  bounds (I,OPT) - If specified, x and y will be treated as relative to these bounds. If not, special values from
+	;                   VisualWindow.X_* or .Y_* will be calculated relative to the window's current monitor.
 	; NOTES:          Supported formats (as X examples, Y is the same format but different constants):
 	;                   5                                           => 5 (normal coordinate)
 	;                   "LEFT_EDGE"    (VisualWindow.X_LeftEdge)    => {left edge of the monitor}
 	;                   "RIGHT_EDGE+5" (VisualWindow.X_RightEdge+5) => {x so the right edge of the window is 5px from the right edge of the monitor}
 	;---------
-	convertSpecialWindowPositions(ByRef x, ByRef y, bounds) {
+	convertSpecialWindowPositions(ByRef x, ByRef y, bounds := "") {
 		; If our bounds will take us to another monitor, make sure x and y aren't blank (as that will make us
 		; skip moving the window entirely).
 		if(!MonitorLib.isWindowOnMonitor(this.titleString, bounds["MONITOR_INDEX"])) {
@@ -610,8 +603,15 @@ class VisualWindow {
 	}
 	convertSpecialWindowX(x, bounds) {
 		specialValues := [ this.X_LeftEdge, this.X_RightEdge, this.X_Centered ]
-		if(!x.startsWithAnyOf(specialValues, match))
-			return x + bounds["LEFT"] ; Just return the original value (within the given bounds) if it wasn't special
+		if(!x.startsWithAnyOf(specialValues, match)) {
+			if(bounds)
+				x += bounds["LEFT"] ; If we were GIVEN specific bounds, numeric values are relative to them
+			return x
+		}
+		
+		; Default to the bounds of the monitor that the window is currently on for use with special values below.
+		if(!bounds)
+			bounds := MonitorLib.getWorkAreaForWindow(this.titleString)
 		
 		; Convert the special value.
 		monitorWindowDiff := bounds["WIDTH"] - this.width
@@ -631,8 +631,15 @@ class VisualWindow {
 	}
 	convertSpecialWindowY(y, bounds) {
 		specialValues := [ this.Y_TopEdge, this.Y_BottomEdge, this.Y_Centered]
-		if(!y.startsWithAnyOf(specialValues, match))
-			return y + bounds["TOP"] ; Just return the original value (within the given bounds) if it wasn't special
+		if(!y.startsWithAnyOf(specialValues, match)) {
+			if(bounds)
+				y += bounds["TOP"] ; If we were GIVEN specific bounds, numeric values are relative to them
+			return y
+		}
+		
+		; Default to the bounds of the monitor that the window is currently on for use with special values below.
+		if(!bounds)
+			bounds := MonitorLib.getWorkAreaForWindow(this.titleString)
 		
 		; Convert the special value.
 		monitorWindowDiff := bounds["HEIGHT"] - this.height

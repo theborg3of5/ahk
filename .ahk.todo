@@ -58,14 +58,4 @@
 	Could we avoid flickering between .showPersistent() and .setText()?
 		Maybe some way to set position without showing?
 		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?
-	Figure out how to deal with Toast/VisualWindow issue where upper-right toasts jump to the next monitor over
-		Happens if they're anchored to right edge and then their text gets longer by enough.
-		Looks like the issue is that we make the toast bigger enough that Windows decides it's on the next monitor
-			We create a new VisualWindow each time we want to move the Toast
-				Maybe we should have a persistent one instead?
-					We could have VisualWindow track the monitor it's on, as well (could be compared when we use .resizeMove())
-			The actual resizing (via Gui, Show with AutoSize) happens in Toast.move()
-				What if we create the VisualWindow earlier (before the AutoSize) and somehow use that to save off or anchor the Toast to the current monitor?
-		Should we still consider a persistent VisualWindow (or at least monitor index/bounds), rather than the current pass-through?
-			Trick will be making sure it's updated appropriately (in the setText() case, just before we change the text).
 	

@@ -169,10 +169,10 @@ class Toast {
 	;---------
 	setText(newText) {
 		; Save off the bounds of the toast's current monitor so when we move it with VisualWindow later, we can stay on that monitor.
-		bounds := MonitorLib.getWorkAreaForWindow("ahk_id " this.guiId)
+		currMonitorBounds := MonitorLib.getWorkAreaForWindow("ahk_id " this.guiId)
 		
 		this.setLabelText(newText)
-		this.move("", "", bounds)
+		this.move("", "", currMonitorBounds)
 		return this
 	}
 	
@@ -231,6 +231,8 @@ class Toast {
 	;  toastText      (I,OPT) - The text to show in the toast.
 	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be
 	;                           found in .getStyles().
+	; NOTES:          This exists primarily for child classes, so they can use the same setup logic while having their own
+	;                 constructor.
 	;---------
 	initialize(toastText := "", styleOverrides := "") {
 		this.buildGui(styleOverrides)
@@ -317,8 +319,8 @@ class Toast {
 	;  y      (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
 	;                   Defaults to bottom edge.
 	;  bounds (I,OPT) - If set, the toast will use these bounds for any special values from VisualWindow.X_*/Y_*. For
-	;                   example, passing the bounds of the current monitor will make the toast align itself to any special
-	;                   values in the x/y parameters.
+	;                   example, passing the bounds of the current monitor will make the toast align itself to the
+	;                   respective edge of that monitor.
 	;---------
 	move(x := "", y := "", bounds := "") {
 		settings := new TempSettings().detectHiddenWindows("On")

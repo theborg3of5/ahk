@@ -37,12 +37,18 @@ path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefine
 
 
 ; [[ Extract data ]] ===
+t := new Toast("Extracting data from scripts...").show()
+
 ahkClasses := []
 tlMembers  := []
 getDataFromScripts(ahkClasses, tlMembers)
 
+t.appendText("Done")
+
 
 ; [[ Auto-complete ]] ===
+t.addLine("Updating auto-complete file (both versions)...")
+
 newXML := updateCompletionXML_AHK(path_CompletionTemplate_AHK, ahkClasses)
 FileLib.replaceFileWithString(path_CompletionOutput_AHK, newXML)
 FileLib.replaceFileWithString(path_CompletionActive_AHK, newXML)
@@ -51,10 +57,12 @@ newXML := updateCompletionXML_TL(path_CompletionTemplate_TL, tlMembers)
 FileLib.replaceFileWithString(path_CompletionOutput_TL, newXML)
 FileLib.replaceFileWithString(path_CompletionActive_TL, newXML)
 
-t := new Toast("Updated both versions of the auto-complete file").show()
+t.appendText("Done")
 
 
 ; [[ Syntax highlighting ]] ===
+t.addLine("Updating syntax highlighting file...")
+
 newXML_AHK := updateSyntaxXML_AHK(path_SyntaxTemplate_AHK, ahkClasses)
 FileLib.replaceFileWithString(path_SyntaxOutput_AHK, newXML_AHK)
 
@@ -70,9 +78,10 @@ updateLangInSyntaxXML(activeSyntaxXML, "AutoHotkey", newXML_AHK)
 updateLangInSyntaxXML(activeSyntaxXML, "TableList",  newXML_TL)
 FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
 
-t.addLine("Updated syntax highlighting file for Notepad++ (requires restart)").blockingOn().showMedium()
+t.appendText("Done (requires restart)")
 ; =--
 
+t.addLine("Complete!").blockingOn().showMedium()
 ExitApp
 
 

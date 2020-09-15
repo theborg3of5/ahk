@@ -168,8 +168,11 @@ class Toast {
 	; NOTES:          Will try to maintain the same position, but toast size will expand to fit text.
 	;---------
 	setText(newText) {
+		; Save off the bounds of the toast's current monitor so when we move it with VisualWindow later, we can stay on that monitor.
+		bounds := MonitorLib.getWorkAreaForWindow("ahk_id " this.guiId)
+		
 		this.setLabelText(newText)
-		this.move()
+		this.move("", "", bounds)
 		return this
 	}
 	
@@ -309,12 +312,15 @@ class Toast {
 	;---------
 	; DESCRIPTION:    Move the toast gui to the given coordinates and resize it to its contents.
 	; PARAMETERS:
-	;  x (I,REQ) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
-	;              Defaults to right edge.
-	;  y (I,REQ) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
-	;              Defaults to bottom edge.
+	;  x      (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
+	;                   Defaults to right edge.
+	;  y      (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
+	;                   Defaults to bottom edge.
+	;  bounds (I,OPT) - If set, the toast will use these bounds for any special values from VisualWindow.X_*/Y_*. For
+	;                   example, passing the bounds of the current monitor will make the toast align itself to any special
+	;                   values in the x/y parameters.
 	;---------
-	move(x := "", y := "") {
+	move(x := "", y := "", bounds := "") {
 		settings := new TempSettings().detectHiddenWindows("On")
 		
 		; Default to current position, then bottom-right corner
@@ -322,20 +328,20 @@ class Toast {
 		y := DataLib.coalesce(y, this.y, VisualWindow.Y_BottomEdge)
 		
 		Gui, % this.guiId ":Default"
-		Gui, +LastFound ; Needed to identify the window on next line
-		titleString := WindowLib.getIdTitleString("") ; Blank title string input for last found window
+		idString := "ahk_id " this.guiId
 		
-		isWinHidden := !WindowLib.isVisible(titleString)
+		isWinHidden := !WindowLib.isVisible(idString)
 		if(isWinHidden)
-			Gui, Show, AutoSize NoActivate Hide, % this.ToastTitle ; Resize to size of contents, but keep toast hidden (and actually show it further down)
+			Gui, Show, AutoSize NoActivate Hide, % this.ToastTitle ; Resize to size of contents, but keep toast hidden until after we move it to reduce flicker
 		else
-			Gui, Show, AutoSize NoActivate, % this.ToastTitle ; Resize to size of contents
+			Gui, Show, AutoSize NoActivate,      % this.ToastTitle ; Resize to size of contents
 		
-		window := new VisualWindow(titleString)
-		parentBounds := ""
+		; If a parent is specified, use the bounds of that window instead of the toast's current monitor.
 		if(this.parentIdString != "")
-			parentBounds := new VisualWindow(this.parentIdString).getBounds()
-		window.move(x, y, parentBounds)
+			bounds := new VisualWindow(this.parentIdString).getBounds()
+		
+		window := new VisualWindow(idString)
+		window.move(x, y, bounds)
 		
 		if(isWinHidden)
 			Gui, Show, NoActivate, % this.ToastTitle

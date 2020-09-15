@@ -66,7 +66,6 @@
 					We could have VisualWindow track the monitor it's on, as well (could be compared when we use .resizeMove())
 			The actual resizing (via Gui, Show with AutoSize) happens in Toast.move()
 				What if we create the VisualWindow earlier (before the AutoSize) and somehow use that to save off or anchor the Toast to the current monitor?
-		When we fix this, we can update:
-			iconTester.ahk - don't need a toast message up front, can be blank to start and we can just call switchToIconWithNum(0) instead of getting the text
-			updateNotepadPPAHKSupport
+		Should we still consider a persistent VisualWindow (or at least monitor index/bounds), rather than the current pass-through?
+			Trick will be making sure it's updated appropriately (in the setText() case, just before we change the text).
 	

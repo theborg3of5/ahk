@@ -1,5 +1,6 @@
 # New Ideas
-	colorPicker - could we change the cursor to a crosshair or something similar?
+	Add some ability to call into logic on exit using CommonHotkeys' !+x hotkey
+		Use case: colorPicker needs to restore cursors on exit
 	Defaulting values into a potentially-populated variable - dig into options a little more, is there something better than our current coalesce?
 		Ideas
 			x := DataLib.coalesce(x, this.X_Centered)

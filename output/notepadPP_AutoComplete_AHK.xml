@@ -4491,6 +4491,134 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="MicrosoftLib.IDC_APPSTARTING" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Working In Background
+							; GROUP:          Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.IDC_ARROW" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Normal Select
+							; GROUP:          Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.IDC_CROSS" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Precision Select
+							; GROUP:          Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.IDC_HAND" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Link Select
+							; GROUP:          Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.IDC_HELP" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Help Select
+							; GROUP:          Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.IDC_IBEAM" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Text Select
+							; GROUP:          Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.IDC_ICON" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Obsolete
+							; GROUP:          Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.IDC_NO" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Unavailable
+							; GROUP:          Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.IDC_SIZE" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Obsolete, use ICD_SIZEALL instead
+							; GROUP:          Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.IDC_SIZEALL" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Move
+							; GROUP:          Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.IDC_SIZENESW" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Diagonal Resize 2
+							; GROUP:          Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.IDC_SIZENS" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Vertical Resize
+							; GROUP:          Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.IDC_SIZENWSE" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Diagonal Resize 1
+							; GROUP:          Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.IDC_SIZEWE" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Horizontal Resize
+							; GROUP:          Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.IDC_UPARROW" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Alternate Select
+							; GROUP:          Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.IDC_WAIT" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Busy
+							; GROUP:          Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="MicrosoftLib.Message_AppCommand" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -4523,6 +4651,14 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="MicrosoftLib.restoreAllCursors" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Restore all mouse cursors to their default values.
+							; NOTES:          Based on RestoreCursors() here: https://autohotkey.com/board/topic/32608-changing-the-system-cursor/
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="MicrosoftLib.ScrollBar_Down" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -4552,6 +4688,26 @@
 							;---------
 							; DESCRIPTION:    Scroll 1 unit to the left (SB_LINEUP)
 							; GROUP:          Scroll Bar Requests/Messages ( https://docs.microsoft.com/en-us/windows/desktop/Controls/about-scroll-bars )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.setAllCursorsToIcon" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Set all mouse cursors to use the given icon.
+							; PARAMETERS:
+							;  icon (I,REQ) - Filepath of the icon (.cur file) to use.
+							; NOTES:          Logic based on SetSystemCursor() here: https://autohotkey.com/board/topic/32608-changing-the-system-cursor/
+							;                 You can restore cursors to their defaults with .restoreAllCursors() .
+							;---------">
+                <Param name="icon" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.SPI_SETCURSORS" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Reload system cursors
+							; GROUP:          Info options, for use with SystemParametersInfoA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa )
 							;---------">
             </Overload>
         </KeyWord>

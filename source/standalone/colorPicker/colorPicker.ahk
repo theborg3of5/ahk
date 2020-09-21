@@ -106,6 +106,9 @@ buildGui() {
 	settings := new TempSettings().detectHiddenWindows("On")
 	WinGetPos, , , GuiWidth, GuiHeight, % "ahk_id " GuiId
 	settings.restore()
+	
+	; Set the cursor to a special cross that allows us to see the spot we're picking.
+	MicrosoftLib.setAllCursorsToIcon("cross.cur")
 }
 
 
@@ -198,4 +201,7 @@ finishGui() {
 	; We need to specify the gui to affect since we created it using Gui, New and this could be a different thread (started by a hotkey).
 	Gui, % GuiId ":Default"
 	Gui, Destroy
+	
+	; Also restore cursors since we're done picking the color.
+	MicrosoftLib.restoreAllCursors()
 }

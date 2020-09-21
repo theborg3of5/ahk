@@ -4,3 +4,5 @@ color.ico
 	Icon by Yusuke Kamiyamane (http://p.yusukekamiyamane.com/)
 colorRed.ico
 	Based on Icon by Yusuke Kamiyamane (http://p.yusukekamiyamane.com/)
+cross.cur
+	From Chrome Cursor Set (https://www.deviantart.com/bokuwatensai/art/Chrome-Cursor-Set-177736893 ), by bokuwatensai (https://www.deviantart.com/bokuwatensai)

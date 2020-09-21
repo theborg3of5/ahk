@@ -63,7 +63,7 @@ class ClipboardLib {
 	;---------
 	; DESCRIPTION:    Get some content using a BoundFunc object which copies something to the clipboard.
 	; PARAMETERS:
-	;  boundFunc (I,REQ) - A BoundFunc object created with Func.Bind() or ObjBindMethod(), which will
+	;  boundFunc (I,REQ) - A BoundFunc object created with Func().Bind() or ObjBindMethod(), which will
 	;                      copy the desired content to the clipboard.
 	; RETURNS:        The copied content.
 	;---------

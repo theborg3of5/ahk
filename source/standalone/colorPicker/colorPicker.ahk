@@ -6,6 +6,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 ScriptTrayInfo.Init("AHK: Color Picker", "color.ico", "colorRed.ico")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
+CommonHotkeys.setExitFunc(Func("onExit"))
 
 ; Gui settings
 global GUI_SPACING         := 10 ; For margins, space between labels, etc.
@@ -203,5 +204,10 @@ finishGui() {
 	Gui, Destroy
 	
 	; Also restore cursors since we're done picking the color.
+	MicrosoftLib.restoreAllCursors()
+}
+
+onExit() {
+	; Restore cursors in case we're quitting early.
 	MicrosoftLib.restoreAllCursors()
 }

@@ -67,6 +67,15 @@ class CommonHotkeys {
 		Hotkey, !#x, On
 	}
 	
+	;---------
+	; DESCRIPTION:    Add a function that will be called on exit using the "normal" (non-emergency) exit hotkey.
+	; PARAMETERS:
+	;  funcObject (I,REQ) - Function object (created with Func(), Func().Bind(), ObjBindMethod(), etc.) to call on exit.
+	;---------
+	setExitFunc(funcObject) {
+		this.exitFunc := funcObject
+	}
+	
 	
 	; #PRIVATE#
 	
@@ -75,6 +84,7 @@ class CommonHotkeys {
 	static confirmExitMessage := "Are you sure you want to exit this script?" ; Message to show when confirming an exit based on .confirmExit
 	static noSuspend          := false ; Whether the suspend hotkey is suppressed
 	static suspendTimerLabel  := "" ; The name of a label for which the timer should be turned off when the script is suspended.
+	static exitFunc           := "" ; A BoundFunc object to call when exiting using exit using normal (non-emergency) hotkey.
 	
 	; Wrappers for whether we're a particular script type.
 	isMain() {
@@ -149,6 +159,9 @@ class CommonHotkeys {
 			if(!GuiLib.showConfirmationPopup(this.confirmExitMessage))
 				return
 		}
+		
+		if(this.exitFunc)
+			this.exitFunc.call()
 		
 		ExitApp
 	}

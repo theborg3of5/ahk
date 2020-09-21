@@ -1,4 +1,5 @@
 # New Ideas
+	colorPicker - could we change the cursor to a crosshair or something similar?
 	Defaulting values into a potentially-populated variable - dig into options a little more, is there something better than our current coalesce?
 		Ideas
 			x := DataLib.coalesce(x, this.X_Centered)

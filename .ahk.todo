@@ -1,4 +1,6 @@
 # New Ideas
+	CommonHotkeys - would suspendTimerLabel make more sense as a separate (chained, hopefully) setter function call, so it's more obvious what it is?
+		i.e. CommonHotkeys.init(CommonHotkeys.ScriptType_Main).suspendTimerLabel("Label") instead of CommonHotkeys.init(CommonHotkeys.ScriptType_Main, "Label")
 	Defaulting values into a potentially-populated variable - dig into options a little more, is there something better than our current coalesce?
 		Ideas
 			x := DataLib.coalesce(x, this.X_Centered)

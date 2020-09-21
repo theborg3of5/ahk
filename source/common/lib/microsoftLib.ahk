@@ -1,4 +1,4 @@
-; A static library of Microsoft-level constants and system values.
+; A static library of Microsoft-level constants/system values and helper functions.
 
 class MicrosoftLib {
 	; #PUBLIC#
@@ -45,5 +45,54 @@ class MicrosoftLib {
 	static AppCommand_PreviousTrack := 0xC0000 ; Media - previous track (APPCOMMAND_MEDIA_PREVIOUSTRACK)
 	; @GROUP-END@
 	
+	; @GROUP@ Info options, for use with SystemParametersInfoA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa )
+	static SPI_SETCURSORS := 0x0057 ; Reload system cursors
+	; @GROUP-END@
+	
+	; @GROUP@ Mouse cursor types, for use with LoadCursorA (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora )
+	static IDC_ARROW       := 32512
+	static IDC_IBEAM       := 32513
+	static IDC_WAIT        := 32514
+	static IDC_CROSS       := 32515
+	static IDC_UPARROW     := 32516
+	static IDC_SIZE        := 32640
+	static IDC_ICON        := 32641
+	static IDC_SIZENWSE    := 32642
+	static IDC_SIZENESW    := 32643
+	static IDC_SIZEWE      := 32644
+	static IDC_SIZENS      := 32645
+	static IDC_SIZEALL     := 32646
+	static IDC_NO          := 32648
+	static IDC_HAND        := 32649
+	static IDC_APPSTARTING := 32650
+	static IDC_HELP        := 32651
+	; @GROUP-END@
+	
+
+	;---------
+	; DESCRIPTION:    Set all mouse cursors to use the given icon.
+	; PARAMETERS:
+	;  icon (I,REQ) - Filepath of the icon (.cur file) to use.
+	; NOTES:          Logic based on SetSystemCursor() here: https://autohotkey.com/board/topic/32608-changing-the-system-cursor/
+	;                 You can restore cursors to their defaults with .restoreAllCursors() .
+	;---------
+	setAllCursorsToIcon(icon)
+	{
+		cursorTypes := [ this.IDC_ARROW,  this.IDC_IBEAM,  this.IDC_WAIT,    this.IDC_CROSS, this.IDC_UPARROW, this.IDC_SIZE,        this.IDC_ICON, this.IDC_SIZENWSE, this.IDC_SIZENESW
+		               , this.IDC_SIZEWE, this.IDC_SIZENS, this.IDC_SIZEALL, this.IDC_NO,    this.IDC_HAND,    this.IDC_APPSTARTING, this.IDC_HELP ]
+		For _,type in cursorTypes {
+			cursorHandle := DllCall("LoadCursorFromFile", "Str",icon) ; We seem to need a new handle for each replacement
+			DllCall("SetSystemCursor", "UInt",cursorHandle, "Int",type)
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Restore all mouse cursors to their default values.
+	; NOTES:          Based on RestoreCursors() here: https://autohotkey.com/board/topic/32608-changing-the-system-cursor/
+	;---------
+	restoreAllCursors() 
+	{
+		DllCall("SystemParametersInfo", "UInt",this.SPI_SETCURSORS, "UInt",0, "UInt",0, "UInt",0 )
+	}
 	; #END#
 }

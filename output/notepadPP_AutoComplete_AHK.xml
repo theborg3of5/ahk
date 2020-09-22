@@ -1638,7 +1638,7 @@
 							;---------
 							; DESCRIPTION:    Get some content using a BoundFunc object which copies something to the clipboard.
 							; PARAMETERS:
-							;  boundFunc (I,REQ) - A BoundFunc object created with Func.Bind() or ObjBindMethod(), which will
+							;  boundFunc (I,REQ) - A BoundFunc object created with Func().Bind() or ObjBindMethod(), which will
 							;                      copy the desired content to the clipboard.
 							; RETURNS:        The copied content.
 							;---------">
@@ -1795,6 +1795,16 @@
 							; DESCRIPTION:    Standalone scripts that the main script starts and that run alongside the main script
 							; GROUP:          Different &quot;types&quot; of scripts, which get different sets of hotkeys
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="CommonHotkeys.setExitFunc" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a function that will be called on exit using the &quot;normal&quot; (non-emergency) exit hotkey.
+							; PARAMETERS:
+							;  funcObject (I,REQ) - Function object (created with Func(), Func().Bind(), ObjBindMethod(), etc.) to call on exit.
+							;---------">
+                <Param name="funcObject" />
             </Overload>
         </KeyWord>
         <KeyWord name="ComObjActive"/>

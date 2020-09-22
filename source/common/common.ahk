@@ -105,6 +105,7 @@ Object(params*) {
 	#Include hyperlinker.ahk
 	#Include scriptTrayInfo.ahk
 	#Include titleMatchMode.ahk
+	#Include VA.ahk
 	#Include windowActions.ahk
 ; =--
 

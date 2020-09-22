@@ -106,6 +106,11 @@ class Spotify {
 	;  infoString (I,REQ) - The string to show. May include newlines if desired.
 	;---------
 	showInfoToast(infoString) {
+		; Get the current playback and recording device names and include them at the bottom.
+		playName   := VA_GetDeviceName(VA_GetDevice("playback")).beforeString(" (") ; Trim off the controller name (on the end in parens) for both
+		recordName := VA_GetDeviceName(VA_GetDevice("capture" )).beforeString(" (")
+		infoString .= "`n`n" playName " / " recordName
+		
 		styles := {}
 		styles["BACKGROUND_COLOR"] := "000000" ; Black
 		styles["FONT_COLOR"]       := "CCCCCC" ; Light gray

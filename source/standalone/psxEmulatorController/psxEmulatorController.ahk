@@ -6,7 +6,8 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 #Include XInput.ahk
 ScriptTrayInfo.Init("AHK: Controller Emulator", "controllerGreen.ico", "controllerRed.ico")
-CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone, "CheckInputState")
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
+CommonHotkeys.setSuspendTimerLabel("CheckInputState")
 
 SetTimer, CheckInputState, 100
 XInput_Init()

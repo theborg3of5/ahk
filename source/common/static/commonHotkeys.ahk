@@ -19,14 +19,21 @@ class CommonHotkeys {
 	; PARAMETERS:
 	;  scriptType        (I,REQ) - The "type" of script, from CommonHotkeys.ScriptType_*. This
 	;                              determines which "set" of hotkeys are applied.
-	;  suspendTimerLabel (I,OPT) - If given, the timer for this label will be toggled off when the
-	;                              script is suspended, and back on when the script is unsuspended.
 	;---------
-	Init(scriptType, suspendTimerLabel := "") {
-		this.scriptType        := scriptType
-		this.suspendTimerLabel := suspendTimerLabel
+	Init(scriptType) {
+		this.scriptType := scriptType
 		
 		this.applyHotkeys()
+	}
+	
+	;---------
+	; DESCRIPTION:    The name of a label that should be suspended when the script is suspended using the hotkey from this
+	;                 class.
+	; PARAMETERS:
+	;  newLabel (I,REQ) - The name of the label.
+	;---------
+	setSuspendTimerLabel(newLabel) {
+		this.suspendTimerLabel := newLabel
 	}
 	
 	;---------

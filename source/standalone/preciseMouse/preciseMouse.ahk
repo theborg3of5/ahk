@@ -5,7 +5,8 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
 ScriptTrayInfo.Init("AHK: Precise Mouse Movement", "mouseGreen.ico", "mouseRed.ico")
-CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone, "HandleKeys")
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
+CommonHotkeys.setSuspendTimerLabel("HandleKeys")
 
 ; 200 hotkeys allowed per 2 seconds (to allow long holds for moving mouse further)
 #MaxHotkeysPerInterval, 200

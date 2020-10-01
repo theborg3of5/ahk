@@ -25,6 +25,7 @@ Loop, Files, %destinationRoot%\*, F ; Files
 	FileDelete, % A_LoopFilePath
 Loop, Files, %destinationRoot%\*, D ; Directories
 	FileRemoveDir, % A_LoopFilePath, 1 ; 1-Delete recursively
+t.appendText("Done")
 
 ; Copy over everything from source except git-related stuff.
 t.addLine("Copying files from source to destination...")
@@ -43,7 +44,8 @@ Loop, Files, *, FDR ; All files and folder, recursing into folders
 	else
 		FileCopy, % A_LoopFilePath, % destinationPath
 }
+t.appendText("Done")
 
-t.addLine("Done!").blockingOn().showMedium() ; Destroys toast since it's not persistent
+t.addLine("Complete!").blockingOn().showMedium() ; Destroys toast since it's not persistent
 
 ExitApp

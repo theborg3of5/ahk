@@ -1,10 +1,4 @@
 # New Ideas
-	ProgressToast
-		Use cases:
-			copySourceToPersonalFolder
-			updateNotepadPPSupport
-			firstSetup
-			others?
 	Toast/ErrorToast - do we need to separate out initialize() logic, or could we just call it using base.__New() or similar?
 		https://www.autohotkey.com/docs/Objects.htm#Custom_Classes_method
 	Toast: could we avoid flickering between .show() and .setText()?

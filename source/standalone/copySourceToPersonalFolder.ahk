@@ -4,6 +4,7 @@ SendMode, Input              ; Recommended for new scripts due to its superior s
 
 #Include <includeCommon>
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
+progToast := new ProgressToast("Copy source to personal folder").blockingOn()
 
 sourceRoot      := Config.path["AHK_ROOT"]
 destinationRoot := Config.path["EPIC_PERSONAL_AHK"]
@@ -19,16 +20,14 @@ if(!GuiLib.showConfirmationPopup(confirmationMessage, "Delete and replace"))
 	ExitApp
 
 ; Delete existing contents of destination folder
-t := new Toast("Removing existing folders and files from destination...")
-t.show()
+progToast.nextStep("Removing existing folders and files from destination")
 Loop, Files, %destinationRoot%\*, F ; Files
 	FileDelete, % A_LoopFilePath
 Loop, Files, %destinationRoot%\*, D ; Directories
 	FileRemoveDir, % A_LoopFilePath, 1 ; 1-Delete recursively
-t.appendText("Done")
 
 ; Copy over everything from source except git-related stuff.
-t.addLine("Copying files from source to destination...")
+progToast.nextStep("Copying files from source to destination")
 gitNames := [".git", ".gitignore", ".gitattributes"]
 SetWorkingDir, % sourceRoot ; Set working directory and use a relative file pattern so that A_LoopFilePath has only the folders at the start for FileCopy.
 Loop, Files, *, FDR ; All files and folder, recursing into folders
@@ -44,8 +43,6 @@ Loop, Files, *, FDR ; All files and folder, recursing into folders
 	else
 		FileCopy, % A_LoopFilePath, % destinationPath
 }
-t.appendText("Done")
 
-t.addLine("Complete!").blockingOn().showMedium() ; Destroys toast since it's not persistent
-
+progToast.finish()
 ExitApp

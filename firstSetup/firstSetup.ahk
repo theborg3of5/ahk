@@ -5,6 +5,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include %A_ScriptDir%\..\source\common\common.ahk
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
+progToast := new ProgressToast("First-time setup")
 
 ; Various paths needed throughout.
 ahkRootPath    := FileLib.getParentFolder(A_ScriptDir)
@@ -32,11 +33,8 @@ if(!machineInfo)
 	ExitApp
 ; Debug.popup("Machine Info Selected", machineInfo)
 
-t := new Toast()
-t.show()
-
 ; Pull the needed values from our selection.
-t.addLine("Reading values from selection...")
+progToast.nextStep("Reading values from selection")
 tagsToReplace := {}
 tagsToReplace["AHK_ROOT"]     := ahkRootPath
 tagsToReplace["CONTEXT"]      := machineInfo["NEW_CONTEXT"]
@@ -45,7 +43,7 @@ tagsToReplace["MEDIA_PLAYER"] := machineInfo["MEDIA_PLAYER"]
 ; Debug.popup("Finished tags to replace",tagsToReplace)
 
 ; Loop over files we need to process and put places.
-t.addLine("Processing files...")
+progToast.nextStep("Processing files")
 For fromPath,toPath in copyPaths {
 	; Read it in.
 	fileContents := FileRead(fromPath)
@@ -70,7 +68,7 @@ For fromPath,toPath in copyPaths {
 
 if(!useSlimMode) {
 	; Hide all .git system files and folders, for a cleaner appearance.
-	t.addLine("Hiding .git files and folders...")
+	progToast.nextStep("Hiding .git files and folders")
 	For _,name in gitNames {
 		Loop, Files, %ahkRootPath%\*%name%, RDF
 		{
@@ -79,7 +77,7 @@ if(!useSlimMode) {
 	}
 }
 
-t.close()
+progToast.finish()
 
 if(useSlimMode || GuiLib.showConfirmationPopup("Run now?"))
 	Run(mainAHKPath, startupFolder)

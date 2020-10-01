@@ -5,6 +5,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
+progToast := new ProgressToast("Update Notepad++ Support").blockingOn()
 
 #Include autoCompleteClass.ahk
 #Include autoCompleteMember.ahk
@@ -37,17 +38,15 @@ path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefine
 
 
 ; [[ Extract data ]] ===
-t := new Toast("Extracting data from scripts...").show()
+progToast.nextStep("Extracting data from scripts")
 
 ahkClasses := []
 tlMembers  := []
 getDataFromScripts(ahkClasses, tlMembers)
 
-t.appendText("Done")
-
 
 ; [[ Auto-complete ]] ===
-t.addLine("Updating auto-complete file (both versions)...")
+progToast.nextStep("Updating auto-complete files")
 
 newXML := updateCompletionXML_AHK(path_CompletionTemplate_AHK, ahkClasses)
 FileLib.replaceFileWithString(path_CompletionOutput_AHK, newXML)
@@ -57,11 +56,9 @@ newXML := updateCompletionXML_TL(path_CompletionTemplate_TL, tlMembers)
 FileLib.replaceFileWithString(path_CompletionOutput_TL, newXML)
 FileLib.replaceFileWithString(path_CompletionActive_TL, newXML)
 
-t.appendText("Done")
-
 
 ; [[ Syntax highlighting ]] ===
-t.addLine("Updating syntax highlighting file...")
+progToast.nextStep("Updating syntax highlighting file (requires restart)")
 
 newXML_AHK := updateSyntaxXML_AHK(path_SyntaxTemplate_AHK, ahkClasses)
 FileLib.replaceFileWithString(path_SyntaxOutput_AHK, newXML_AHK)
@@ -77,11 +74,9 @@ else
 updateLangInSyntaxXML(activeSyntaxXML, "AutoHotkey", newXML_AHK)
 updateLangInSyntaxXML(activeSyntaxXML, "TableList",  newXML_TL)
 FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
-
-t.appendText("Done (requires restart)")
 ; =--
 
-t.addLine("Complete!").blockingOn().showMedium()
+progToast.finish()
 ExitApp
 
 

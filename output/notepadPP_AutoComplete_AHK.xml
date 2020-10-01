@@ -5322,6 +5322,202 @@
                 <Param name="FontName"/>
             </Overload>
         </KeyWord>
+        <KeyWord name="ProgressToast" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new progress toast.
+							; PARAMETERS:
+							;  title (I,OPT) - Title to show at the top of the toast with a : on the end.
+							;---------">
+                <Param name="title := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.addLine" func="yes">
+            <Overload retVal="{Toast}" descr="
+							;---------
+							; DESCRIPTION:    Add a line of text at the bottom of the toast.
+							; PARAMETERS:
+							;  lineToAdd (I,REQ) - The line of text to add at the bottom of the toast (newline not included).
+							; RETURNS:        this
+							;---------">
+                <Param name="lineToAdd" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.appendText" func="yes">
+            <Overload retVal="{Toast}" descr="
+							;---------
+							; DESCRIPTION:    Add some text to the end of the current toast text.
+							; PARAMETERS:
+							;  textToAdd (I,REQ) - The text to add to the end
+							; RETURNS:        this
+							;---------">
+                <Param name="textToAdd" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.blockingOff" func="yes">
+            <Overload retVal="{Toast}" descr="
+							;---------
+							; DESCRIPTION:    Make this toast non-blocking - that is, we'll allow execution to continue by
+							;                 jobbing off the hide operation with a timer.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.blockingOn" func="yes">
+            <Overload retVal="{Toast}" descr="
+							;---------
+							; DESCRIPTION:    Make this toast blocking - that is, we'll sleep the calling script while the
+							;                 toast is showing on a timer, rather than jobbing it off with a timer and
+							;                 allowing execution to continue.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.close" func="yes">
+            <Overload retVal="{Toast}" descr="
+							;---------
+							; DESCRIPTION:    Hide and destroy the GUI for this toast.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.finish" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Finish this progress display and fade the toast out shortly after.
+							; PARAMETERS:
+							;  finishText (I,OPT) - The text to display as the final line in the toast, to say that we're finished. Defaults to &quot;Finished!&quot;.
+							; SIDE EFFECTS:   Hides the toast after a medium timeout.
+							; NOTES:          If you're finishing just before ending a script, you can call .blockingOn() any time before this to
+							;                 make the toast-fade out use Sleep instead of a timer, to ensure the script waits until the toast is
+							;                 done showing before exiting.
+							;---------">
+                <Param name="finishText := &quot;Finished!&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.hide" func="yes">
+            <Overload retVal="{Toast}" descr="
+							;---------
+							; DESCRIPTION:    Fade the toast out, but don't destroy it (use .close() instead if you're
+							;                 finished with the toast).
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.nextStep" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Display a step with a ... on the end. If there's already a step in progress, finish it using the
+							;                 last specified done text.
+							; PARAMETERS:
+							;  stepText (I,REQ) - The text to show for the new step. Will be added to a new line in the toast.
+							;  doneText (I,OPT) - We'll complete this step by adding this text to the end of the line. Defaults to &quot;done&quot;.
+							; SIDE EFFECTS:   Shows the toast if this is the first step, and finishes the previous step if one is in progress.
+							;---------">
+                <Param name="stepText" />
+                <Param name="doneText := &quot;done&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.persistentOff" func="yes">
+            <Overload retVal="{Toast}" descr="
+							;---------
+							; DESCRIPTION:    Make the toast non-persistent - when we finish showing it on a timer it will be destroyed.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.persistentOn" func="yes">
+            <Overload retVal="{Toast}" descr="
+							;---------
+							; DESCRIPTION:    Make the toast persistent - that is, when we finish showing it on a timer it is hidden rather than destroyed.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.setParent" func="yes">
+            <Overload retVal="{Toast}" descr="
+							;---------
+							; DESCRIPTION:    If you want the toast to be positioned relative to a particular window
+							;                 (using VisualWindow's &quot;special&quot; coordinates), you can set that window here.
+							; PARAMETERS:
+							;  titleString (I,REQ) - A titleString that identifies the parent window.
+							; RETURNS:        this
+							; NOTES:          This only affects new calls to .show(), and only applies when using &quot;special&quot;
+							;                 coordinates - it won't automatically follow the parent window around.
+							;---------">
+                <Param name="titleString" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.setText" func="yes">
+            <Overload retVal="{Toast}" descr="
+							;---------
+							; DESCRIPTION:    Change the text for the toast.
+							; PARAMETERS:
+							;  newText (I,REQ) - The text to show in the toast.
+							; RETURNS:        this
+							; NOTES:          Will try to maintain the same position, but toast size will expand to fit text.
+							;---------">
+                <Param name="newText" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.show" func="yes">
+            <Overload retVal="{Toast}" descr="
+							;---------
+							; DESCRIPTION:    Show this toast indefinitely, until it is hidden or closed.
+							; PARAMETERS:
+							;  x (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
+							;              Defaults to previous position (if set), then right edge of screen.
+							;  y (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
+							;              Defaults to previous position (if set), then bottom edge of screen.
+							; RETURNS:        this
+							;---------">
+                <Param name="x := &quot;&quot;" />
+                <Param name="y := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.showForSeconds" func="yes">
+            <Overload retVal="{Toast}" descr="
+							;---------
+							; DESCRIPTION:    Show the toast for a certain number of seconds, then hide or destroy it (based
+							;                 on whether it's marked as persistent).
+							; PARAMETERS:
+							;  numSeconds (I,REQ) - The number of seconds to show the toast for.
+							;  x          (I,OPT) - The x coordinate to show the toast at (or special value from VisualWindow.X_*).
+							;                       Defaults to previous position (if set), then right edge of screen.
+							;  y          (I,OPT) - The y coordinate to show the toast at (or special value from VisualWindow.Y_*).
+							;                       Defaults to previous position (if set), then bottom edge of screen.
+							; RETURNS:        this
+							;---------">
+                <Param name="numSeconds" />
+                <Param name="x := &quot;&quot;" />
+                <Param name="y := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.showLong" func="yes">
+            <Overload retVal="{Toast}" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for .showForSeconds for a &quot;long&quot; toast (shown for 5 seconds) in
+							;                 the bottom-right corner of the screen.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.showMedium" func="yes">
+            <Overload retVal="{Toast}" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for .showForSeconds for a &quot;medium&quot; toast (shown for 2 seconds) in
+							;                 the bottom-right corner of the screen.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ProgressToast.showShort" func="yes">
+            <Overload retVal="{Toast}" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for .showForSeconds for a &quot;short&quot; toast (shown for 1 second) in
+							;                 the bottom-right corner of the screen.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="Radio"/>
         <KeyWord name="RAlt"/>
         <KeyWord name="Random" func="no">

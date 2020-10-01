@@ -43,6 +43,7 @@ Object(params*) {
 	#Include formattedList.ahk
 	#Include mousePosition.ahk
 	#Include program.ahk
+	#Include progressToast.ahk
 	#Include relativeDate.ahk
 	#Include relativeTime.ahk
 	#Include selector.ahk

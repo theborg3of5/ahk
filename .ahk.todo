@@ -1,12 +1,10 @@
 # New Ideas
-	Would it make sense to have a progress-tracking toast that scripts can use?
+	ProgressToast
 		Use cases:
 			copySourceToPersonalFolder
 			updateNotepadPPSupport
+			firstSetup
 			others?
-		Could left-align it so "Done" additions don't make things jump
-		.newStep(text), .stepDone(), .finish()
-		Maybe call it "ProgressToast"?
 	Defaulting values into a potentially-populated variable - dig into options a little more, is there something better than our current coalesce?
 		Ideas
 			x := DataLib.coalesce(x, this.X_Centered)

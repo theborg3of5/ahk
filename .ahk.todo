@@ -5,6 +5,11 @@
 			updateNotepadPPSupport
 			firstSetup
 			others?
+	Toast/ErrorToast - do we need to separate out initialize() logic, or could we just call it using base.__New() or similar?
+		https://www.autohotkey.com/docs/Objects.htm#Custom_Classes_method
+	Toast: could we avoid flickering between .show() and .setText()?
+		Maybe some way to set position without showing?
+		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?
 	Defaulting values into a potentially-populated variable - dig into options a little more, is there something better than our current coalesce?
 		Ideas
 			x := DataLib.coalesce(x, this.X_Centered)
@@ -59,9 +64,4 @@
 			Maybe make it optional with an overall setting?
 		What about column widths, in a new top-level line like we have for field order/whether to show?
 			Could potentially combine it with the existing () line - INDEX-WIDTH, where width is optional (and presumably in pixels?)
-	
-# Toast
-	Could we avoid flickering between .showPersistent() and .setText()?
-		Maybe some way to set position without showing?
-		It's kind of strange that .setText() shows the toast if it's hidden - could we avoid that, or is it required by Toast framework?
 	

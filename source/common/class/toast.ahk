@@ -107,7 +107,7 @@ class Toast {
 	; RETURNS:        this
 	;---------
 	showMedium() {
-		this.showForSeconds(2, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
+		this.showForSeconds(2) ;, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge) ; GDB TODO do we really need to specify x and y here?
 	}
 	
 	;---------
@@ -183,7 +183,7 @@ class Toast {
 	; RETURNS:        this
 	;---------
 	appendText(textToAdd) {
-		currText := GuiControlGet("", this.labelVarName)
+		currText := this.getCurrentText()
 		this.setText(currText textToAdd)
 		return this
 	}
@@ -195,7 +195,7 @@ class Toast {
 	; RETURNS:        this
 	;---------
 	addLine(lineToAdd) {
-		currText := GuiControlGet("", this.labelVarName)
+		currText := this.getCurrentText()
 		this.setText(currText.appendLine(lineToAdd))
 		return this
 	}
@@ -239,6 +239,33 @@ class Toast {
 		
 		if(toastText)
 			this.setLabelText(toastText)
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the current text for this toast.
+	; RETURNS:        The current text.
+	;---------
+	getCurrentText() {
+		return GuiControlGet("", this.labelVarName)
+	}
+	
+	;---------
+	; DESCRIPTION:    Set the text of the toast label and resize it fit that text.
+	; PARAMETERS:
+	;  newText (I,REQ) - The text to show in the toast.
+	; NOTES:          Does not show or move the toast to fit the new text - should really only be used to set text before
+	;                 initially showing toast.
+	;---------
+	setLabelText(newText) {
+		newText := StringLib.escapeCharUsingChar(newText, "&", "&")
+		Gui, % this.guiId ":Default"
+		
+		; Figure out how big the text control needs to be to fit its contents
+		GuiLib.getLabelSizeForText(newText, textWidth, textHeight)
+		
+		; Update the text and width/height
+		GuiControl,     , % this.labelVarName, % newText
+		GuiControl, Move, % this.labelVarName, % "w" textWidth " h" textHeight
 	}
 	
 	
@@ -292,7 +319,7 @@ class Toast {
 	; PARAMETERS:
 	;  styleOverrides (I,OPT) - Array of style overrides, see default styles below for supported
 	;                           subscripts. Format:
-	;                              styleOverrides(<property>) := <value>
+	;                              styleOverrides[property] := value
 	; RETURNS:        Combined array of styles to use for the toast gui.
 	;---------
 	getStyles(styleOverrides := "") {
@@ -353,23 +380,6 @@ class Toast {
 		this.y := y
 		
 		settings.restore()
-	}
-	
-	;---------
-	; DESCRIPTION:    Set the text of the toast label and resize it fit that text.
-	; PARAMETERS:
-	;  newText (I,REQ) - The text to show in the toast.
-	;---------
-	setLabelText(newText) {
-		newText := StringLib.escapeCharUsingChar(newText, "&", "&")
-		Gui, % this.guiId ":Default"
-		
-		; Figure out how big the text control needs to be to fit its contents
-		GuiLib.getLabelSizeForText(newText, textWidth, textHeight)
-		
-		; Update the text and width/height
-		GuiControl,     , % this.labelVarName, % newText
-		GuiControl, Move, % this.labelVarName, % "w" textWidth " h" textHeight
 	}
 	
 	;---------

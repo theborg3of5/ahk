@@ -1,11 +1,11 @@
 # New Ideas
 	Defaulting values into a potentially-populated variable - dig into options a little more, is there something better than our current coalesce?
 		Ideas
-			x := DataLib.coalesce(x, this.X_Centered)
-			x := x.defaultIfBlank(this.X_Centered)
-			if(x = "")
-				x := this.X_Centered
-			x := (x != "") ? x : this.X_Centered
+			xVarName := DataLib.coalesce(xVarName, this.X_Centered)
+			xVarName := xVarName.defaultIfBlank(this.X_Centered)
+			if(xVarName = "")
+				xVarName := this.X_Centered
+			xVarName := (xVarName != "") ? xVarName : this.X_Centered
 	Would it make sense to have some of my custom GUIs extend VisualWindow, rather than having them create or track one separately?
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?

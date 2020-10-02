@@ -38,7 +38,10 @@ class Toast {
 	;                           found in .getStyles().
 	;---------
 	__New(toastText := "", styleOverrides := "") {
-		this.initialize(toastText, styleOverrides)
+		this.buildGui(styleOverrides)
+		
+		if(toastText)
+			this.setLabelText(toastText)
 	}
 	
 	;---------
@@ -98,7 +101,7 @@ class Toast {
 	; RETURNS:        this
 	;---------
 	showShort() {
-		this.showForSeconds(1, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
+		this.showForSeconds(1)
 	}
 	
 	;---------
@@ -107,7 +110,7 @@ class Toast {
 	; RETURNS:        this
 	;---------
 	showMedium() {
-		this.showForSeconds(2) ;, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge) ; GDB TODO do we really need to specify x and y here?
+		this.showForSeconds(2)
 	}
 	
 	;---------
@@ -116,7 +119,7 @@ class Toast {
 	; RETURNS:        this
 	;---------
 	showLong() {
-		this.showForSeconds(5, VisualWindow.X_RightEdge, VisualWindow.Y_BottomEdge)
+		this.showForSeconds(5)
 	}
 	
 	;---------
@@ -224,22 +227,6 @@ class Toast {
 	
 	
 	; #INTERNAL#
-	
-	;---------
-	; DESCRIPTION:    Set up the Toast - build the gui, set the text (if given).
-	; PARAMETERS:
-	;  toastText      (I,OPT) - The text to show in the toast.
-	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be
-	;                           found in .getStyles().
-	; NOTES:          This exists primarily for child classes, so they can use the same setup logic while having their own
-	;                 constructor.
-	;---------
-	initialize(toastText := "", styleOverrides := "") {
-		this.buildGui(styleOverrides)
-		
-		if(toastText)
-			this.setLabelText(toastText)
-	}
 	
 	;---------
 	; DESCRIPTION:    Get the current text for this toast.

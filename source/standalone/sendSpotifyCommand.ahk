@@ -12,7 +12,7 @@ command = %1% ; Input from command line
 if(!command)
 	ExitApp
 
-if(!Config.doesWindowExist("Spotify")) {
+if(command != "SHOW_INFO" && !Config.doesWindowExist("Spotify")) { ; Don't launch Spotify just to show the info display
 	Config.runProgram("Spotify")
 	new Toast("Spotify not yet running, launching...").blockingOn().showMedium()
 	ExitApp

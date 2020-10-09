@@ -21,6 +21,7 @@
 		AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk
 		Everything					Everything\Everything.exe
 		Internet Explorer			Internet Explorer\iexplore.exe
+		KDiff							KDiff3\kdiff3.exe
 		Notepad++					Notepad++\notepad++.exe
 		TrueCrypt					TrueCrypt\TrueCrypt.exe
 		GrepWin						grepWin\grepWin.exe

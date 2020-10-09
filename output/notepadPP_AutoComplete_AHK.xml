@@ -7011,6 +7011,7 @@
 							; DESCRIPTION:    Get the string, with no leading/trailing whitespace.
 							; RETURNS:        The string without whitespace.
 							;---------">
+                <Param name="dropNewlines := false" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringCaseSense" func="no">
@@ -7060,6 +7061,20 @@
 							; RETURNS:        The decoded text.
 							;---------">
                 <Param name="textToDecode" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringLib.dropLeadingTrailing" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Remove certain strings from the start/end of the given string.
+							; PARAMETERS:
+							;  inString      (I,REQ) - The string to remove things from
+							;  removeStrings (I,OPT) - Array of strings to remove from the start/end of inString.
+							; RETURNS:        The resulting string
+							; SIDE EFFECTS:   Always removes leading/trailing whitespace.
+							;---------">
+                <Param name="inString" />
+                <Param name="removeStrings := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringLib.duplicate" func="yes">

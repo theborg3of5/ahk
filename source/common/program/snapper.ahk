@@ -75,44 +75,50 @@
 	;---------
 	diffHelpText() {
 		; Get input
-		inputText := SelectLib.getText()
+		inputText := StringLib.dropLeadingTrailing(SelectLib.getText(), ["`r", "`n"]) ; Drop outer newlines
 		if(inputText = "") {
 			new ErrorToast("No help text selected").showShort()
 			return
 		}
 		
-		; Process into 2 separate blocks of text
-		inputText := inputText.afterString("`n").clean() ; Drop first line (should be a line 0) and trailing newline
-		prevLineNum := 0
+		; If the string starts with a DAT, strip it off (since we'll split the blocks on the next one we find)
+		firstWord := inputText.beforeString(" ")
+		if(firstWord.isNum() && firstWord.length() = 5)
+			inputText := inputText.removeFromStart(firstWord " ")
+		; If the first line is a line 0, drop it entirely
+		if(inputText.startsWith("0 "))
+			inputText := inputText.afterString("`n")
 		
 		; Split into 2 blocks to diff
 		leftLines  := []
 		rightLines := []
-		onLeft     := true
+		outLines := leftLines
+		prevLineNum := 0
 		For _,line in inputText.split("`n", "`r ") {
-			if(this.isHelpTextZeroLine(line)) {
-				onLeft := false
+			; When we hit a DAT, drop it and swap to right block
+			firstWord := line.beforeString(" ")
+			if(firstWord.isNum() && firstWord.length() = 5) {
+				line := line.removeFromStart(firstWord " ")
+				outLines := rightLines
 				prevLineNum := 0
-				Continue
+				
+				; Ignore the line if it's a line 0 (otherwise let it through normally)
+				if(line.startsWith("0 "))
+					Continue
 			}
 			
-			; Decide which side we're putting this line into.
-			if(onLeft)
-				outLines := leftLines
-			else
-				outLines := rightLines
-			
-			; Track the line number and add empty lines if we jump
+			; Line number handling
 			lineNum := line.beforeString(" ")
 			expectedNum := prevLineNum + 1
-			if(lineNum > expectedNum) {
+			if(lineNum > expectedNum) { ; Add lines to fill in gap
 				Loop, % lineNum - expectedNum
 					outLines.push("")
 			}
 			prevLineNum := lineNum
+			line := line.removeFromStart(lineNum " ") ; Remove line number
 			
-			; Remove line number
-			line := line.removeFromStart(lineNum " ")
+			; Fake newlines
+			line := line.replace("<13><10>", "`n")
 			
 			outLines.push(line)
 		}
@@ -152,7 +158,7 @@
 	;  line (I,REQ) - The line to check.
 	; RETURNS:        true/false - is it a zero line?
 	;---------
-	isHelpTextZeroLine(line) {
+	isHelpTextFirstLine(line) {
 		words := line.split(" ")
 		
 		; First word should be DAT

@@ -498,6 +498,7 @@ class StringBase {
 	clean(additionalStringsToRemove := "") {
 		outStr := this
 		
+		; Drop leading/trailing odd characters
 		stringsToTrim := []
 		stringsToTrim.push(Chr(10))         ; Newline (`n)
 		stringsToTrim.push(Chr(13))         ; Carriage return (`r)
@@ -510,30 +511,9 @@ class StringBase {
 		For _,string in additionalStringsToRemove
 			stringsToTrim.push(string)
 		
-		while(!isClean) {
-			isClean := true
-			
-			; Leading/trailing whitespace
-			noWhitespace := outStr.withoutWhitespace()
-			if(noWhitespace != outStr) {
-				outStr := noWhitespace
-				isClean := false
-			}
-			
-			; Remove specific strings from start/end
-			For _,removeString in stringsToTrim {
-				if(outStr.startsWith(removeString)) {
-					outStr := outStr.removeFromStart(removeString)
-					isClean := false
-				}
-				if(outStr.endsWith(removeString)) {
-					outStr := outStr.removeFromEnd(removeString)
-					isClean := false
-				}
-			}
-		}
+		outStr := StringLib.dropLeadingTrailing(outStr, stringsToTrim)
 		
-		; Replace odd characters
+		; Replace certain characters
 		stringsToReplace := {}
 		stringsToReplace[Chr(160)] := A_Space ; Non-breaking space/nbsp => Normal space
 		

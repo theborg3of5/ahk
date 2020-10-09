@@ -88,6 +88,43 @@ class StringLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Remove certain strings from the start/end of the given string.
+	; PARAMETERS:
+	;  inString      (I,REQ) - The string to remove things from
+	;  removeStrings (I,OPT) - Array of strings to remove from the start/end of inString.
+	; RETURNS:        The resulting string
+	; SIDE EFFECTS:   Always removes leading/trailing whitespace.
+	;---------
+	dropLeadingTrailing(inString, removeStrings := "") {
+		outStr := inString
+		
+		while(!isClean) {
+			isClean := true
+			
+			; Always drop leading/trailing whitespace
+			noWhitespace := outStr.withoutWhitespace()
+			if(noWhitespace != outStr) {
+				outStr := noWhitespace
+				isClean := false
+			}
+			
+			; Remove specific strings from start/end
+			For _,dropString in removeStrings {
+				if(outStr.startsWith(dropString)) {
+					outStr := outStr.removeFromStart(dropString)
+					isClean := false
+				}
+				if(outStr.endsWith(dropString)) {
+					outStr := outStr.removeFromEnd(dropString)
+					isClean := false
+				}
+			}
+		}
+		
+		return outStr
+	}
+	
+	;---------
 	; DESCRIPTION:    Get the specified number of spaces.
 	; PARAMETERS:
 	;  numToGet (I,REQ) - How many spaces to return.

@@ -27,29 +27,44 @@ return
 	}
 	
 	; Process into 2 separate blocks of text
-	inputText := inputText.afterString("`n").withoutWhitespace() ; Drop first line (should be a line 0)
+	inputText := inputText.afterString("`n").clean() ; Drop first line (should be a line 0) and trailing newline
+	prevLineNum := 0
 	
+	; Split into 2 blocks to diff
 	leftLines  := []
 	rightLines := []
 	onLeft     := true
 	For _,line in inputText.split("`n", "`r ") {
 		if(isZeroLine(line)) {
 			onLeft := false
+			prevLineNum := 0
 			Continue
 		}
 		
-		; Remove all line numbers
-		line := line.afterString(" ")
-		
+		; Decide which side we're putting this line into.
 		if(onLeft)
-			leftLines.push(line)
+			outLines := leftLines
 		else
-			rightLines.push(line)
+			outLines := rightLines
+		
+		; Track the line number and add empty lines if we jump
+		lineNum := line.beforeString(" ")
+		expectedNum := prevLineNum + 1
+		if(lineNum > expectedNum) {
+			Loop, % lineNum - expectedNum
+				outLines.push("")
+		}
+		prevLineNum := lineNum
+		
+		; Remove line number
+		line := line.removeFromStart(lineNum " ")
+		
+		outLines.push(line)
 	}
 	
+	; Put the blocks in files and diff it
 	FileLib.replaceFileWithString(pathLeft,  leftLines.join("`n"))
 	FileLib.replaceFileWithString(pathRight, rightLines.join("`n"))
-	
 	Config.runProgram("KDiff", pathLeft " " pathRight)
 return
 

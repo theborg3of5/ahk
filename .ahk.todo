@@ -1,10 +1,5 @@
 # New Ideas
 	Odd error toast when opening URL with a space in it
-	New script idea: diff help text
-		Text from clipboard
-		Split on the DAT/0 line
-		Remove all line numbers, leading tabs, and newlines
-		Save resulting strings into 2 files and launch something to diff them (KDiff, Notepad++, WinMerge, etc.)
 	Defaulting values into a potentially-populated variable - dig into options a little more, is there something better than our current coalesce?
 		Ideas
 			xVarName := DataLib.coalesce(xVarName, this.X_Centered)

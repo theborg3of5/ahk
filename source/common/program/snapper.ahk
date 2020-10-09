@@ -82,9 +82,7 @@
 		}
 		
 		; If the string starts with a DAT, strip it off (since we'll split the blocks on the next one we find)
-		firstWord := inputText.beforeString(" ")
-		if(firstWord.isNum() && firstWord.length() = 5)
-			inputText := inputText.removeFromStart(firstWord " ")
+		this.removeDatFromHelpText(inputText)
 		; If the first line is a line 0, drop it entirely
 		if(inputText.startsWith("0 "))
 			inputText := inputText.afterString("`n")
@@ -96,9 +94,7 @@
 		prevLineNum := 0
 		For _,line in inputText.split("`n", "`r ") {
 			; When we hit a DAT, drop it and swap to right block
-			firstWord := line.beforeString(" ")
-			if(firstWord.isNum() && firstWord.length() = 5) {
-				line := line.removeFromStart(firstWord " ")
+			if(this.removeDatFromHelpText(line)) {
 				outLines := rightLines
 				prevLineNum := 0
 				
@@ -153,20 +149,19 @@
 	static ClassNN_ItemFilter := "ThunderRT6TextBox2"  ; The "Filter Items" field.
 	
 	;---------
-	; DESCRIPTION:    Check whether the given line of help text is a line 0.
+	; DESCRIPTION:    Check whether the given help text starts with a DAT, and if it does trim it off.
 	; PARAMETERS:
-	;  line (I,REQ) - The line to check.
-	; RETURNS:        true/false - is it a zero line?
+	;  text (IO,REQ) - The text to check and trim the DAT off of.
+	; RETURNS:        true/false - did the text start with a DAT?
 	;---------
-	isHelpTextFirstLine(line) {
-		words := line.split(" ")
+	removeDatFromHelpText(ByRef text) {
+		firstWord := text.beforeString(" ")
+		if(firstWord.isNum() && firstWord.length() = 5) {
+			text := text.removeFromStart(firstWord " ")
+			return true
+		}
 		
-		; First word should be DAT
-		if(!words[1].isNum() || words[1].length() != 5)
-			return false
-		
-		; Second word should be 0
-		return (words[2] = "0")
+		return false
 	}
 	
 	;---------

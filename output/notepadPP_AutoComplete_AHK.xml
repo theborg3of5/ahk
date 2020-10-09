@@ -7011,7 +7011,6 @@
 							; DESCRIPTION:    Get the string, with no leading/trailing whitespace.
 							; RETURNS:        The string without whitespace.
 							;---------">
-                <Param name="dropNewlines := false" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringCaseSense" func="no">

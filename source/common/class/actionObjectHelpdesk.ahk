@@ -41,6 +41,9 @@ class ActionObjectHelpdesk extends ActionObjectBase {
 	; RETURNS:        true/false - whether the given value must be a helpdesk ticket.
 	;---------
 	isThisType(value, ByRef id := "") {
+		if(!Config.contextIsWork)
+			return false
+		
 		if(!value.startsWith("HDR "))
 			return false
 		

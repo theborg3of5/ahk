@@ -1,5 +1,4 @@
 # New Ideas
-	Odd error toast when opening URL with a space in it
 	Defaulting values into a potentially-populated variable - dig into options a little more, is there something better than our current coalesce?
 		Ideas
 			xVarName := DataLib.coalesce(xVarName, this.X_Centered)

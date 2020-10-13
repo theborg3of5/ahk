@@ -79,6 +79,9 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	; NOTES:          Must be effectively static - this is called before we decide what kind of object to return.
 	;---------
 	isThisType(value, ByRef ini := "", ByRef id := "") {
+		if(!Config.contextIsWork)
+			return false
+		
 		record := new EpicRecord(value)
 		if(record.ini = "" || record.id = "")
 			return false

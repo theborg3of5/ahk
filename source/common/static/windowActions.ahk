@@ -280,13 +280,13 @@ class WindowActions {
 	;---------
 	doDeleteWord(method, titleString, windowActionSettings) {
 		Switch method {
-		Case this.Method_Default:
-			Send, ^{Backspace}
-		Case this.Method_DeleteWord_Ctrl: ; For older places that don't allow it properly.
-			Send, ^+{Left}
-			Send, {Backspace}
-		Default:
-			this.doWindowAction(method, titleString, windowActionSettings)
+			Case this.Method_Default:
+				Send, ^{Backspace}
+			Case this.Method_DeleteWord_Ctrl: ; For older places that don't allow it properly.
+				Send, ^+{Left}
+				Send, {Backspace}
+			Default:
+				this.doWindowAction(method, titleString, windowActionSettings)
 		}
 	}
 	;---------

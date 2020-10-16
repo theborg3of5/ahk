@@ -6,7 +6,6 @@
 			if(xVarName = "")
 				xVarName := this.X_Centered
 			xVarName := (xVarName != "") ? xVarName : this.X_Centered
-	Add a safety check when editing debug lines - make sure it actually starts with one of the debug functions.
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?
 			Or could we turn DebugPopup into something (TextPopup?) that takes (or lets you pick between, or lets you override a default) a TextTable instance (dependency-injection style)?

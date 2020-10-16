@@ -74,6 +74,11 @@ class NotepadPlusPlus {
 		}
 		
 		functionName := debugLine.beforeString("(")
+		if(!functionName.startsWith("Debug.")) { ; Don't edit non-debug lines
+			Send, {Right} ; Deselect line
+			return
+		}
+		
 		paramsString := debugLine.allBetweenStrings("(", ")")
 		reducedParams := AHKCodeLib.reduceDebugParams(paramsString)
 		this.sendDebugCodeString(functionName, reducedParams)

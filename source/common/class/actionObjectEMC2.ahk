@@ -52,7 +52,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		; If we don't know the INI yet, assume the ID is a combined string (i.e. "DLG 123456" or
 		; "DLG 123456: HB/PB WE DID SOME STUFF") and try to split it into its component parts.
 		if(id != "" && ini = "") {
-			value := this.cleanValue(id) ; Do a little cleanup to make sure EpicRecord can handle the string
+			value := this.preProcess(id) ; Do a little cleanup to make sure EpicRecord can handle the string
 			
 			record := new EpicRecord(value)
 			ini   := record.ini
@@ -134,16 +134,32 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	; #PRIVATE#
 	
 	;---------
-	; DESCRIPTION:    Clean off any extra stuff from the start of the string so EpicRecord can handle it properly.
+	; DESCRIPTION:    Clean up the string if it has extra stuff or odd formats, so EpicRecord can handle it properly.
 	; PARAMETERS:
 	;  value (I,REQ) - The value to clean
 	; NOTES:          This logic is not taken into account by ActionObject when it's trying to determine the type.
 	;---------
-	cleanValue(value) {
+	preProcess(value) {
 		; Email subject handling
 		value := value.removeFromStart("Date change notification for ") ; Date change notifications
 		if(value.startsWith("PRJ Readiness  "))
 			value := value.replaceOne("PRJ Readiness  ", "PRJ ")
+		if(value.startsWith("EMC2 Lock: ")) {
+			value := value.removeFromStart("EMC2 Lock: ").removeFromEnd(" is locked")
+			title   := value.beforeString(" [")
+			id      := value.afterString("] ")
+			iniName := value.firstBetweenStrings(" [", "] ")
+			
+			; Convert the name of the record type into an INI.
+			Switch iniName {
+				Case "Development Log": ini := "DLG"
+				Case "Design":          ini := "XDS"
+				Case "Main":            ini := "QAN" ; Yes, this is weird. Not sure why it uses "Main", but it's distinct from the others so it works.
+				Case "Project":         ini := "PRJ"
+			}
+			
+			value := ini " " id " - " title
+		}
 		
 		return value
 	}

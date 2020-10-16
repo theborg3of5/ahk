@@ -114,7 +114,8 @@ class Outlook {
 			return
 		}
 		
-		; Remove the extra email stuff
+		; Remove the extra email stuff.
+		; Note: any Epic-record-specific stuff should live in either ActionObjectEMC2 or EpicRecord instead of here.
 		return title.clean(["RE:", "FW:"])
 	}
 	; #END#

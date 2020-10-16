@@ -7234,13 +7234,13 @@
 							; PARAMETERS:
 							;  inString             (I,REQ) - The string (without newlines) to wrap.
 							;  goalWidth            (I,REQ) - The width (in characters) that we should shoot for.
-							;  allowedFinalOverhang (I,OPT) - The number of characters of overhang that's allowed on the final line,
-							;                                 to avoid an additional line containing only a single short word.
+							;  allowedFinalOverhang (I,OPT) - The number of characters of overhang that's allowed on the final line, to avoid an additional line
+							;                                 containing only a single short word.
 							; RETURNS:        The same string, wrapped to the goal width with newlines.
 							;---------">
                 <Param name="inString" />
                 <Param name="goalWidth" />
-                <Param name="allowedFinalOverhang := 5" />
+                <Param name="allowedFinalOverhang := 25" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringLower" func="no">

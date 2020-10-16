@@ -249,11 +249,11 @@ class StringLib {
 	; PARAMETERS:
 	;  inString             (I,REQ) - The string (without newlines) to wrap.
 	;  goalWidth            (I,REQ) - The width (in characters) that we should shoot for.
-	;  allowedFinalOverhang (I,OPT) - The number of characters of overhang that's allowed on the final line,
-	;                                 to avoid an additional line containing only a single short word.
+	;  allowedFinalOverhang (I,OPT) - The number of characters of overhang that's allowed on the final line, to avoid an additional line
+	;                                 containing only a single short word.
 	; RETURNS:        The same string, wrapped to the goal width with newlines.
 	;---------
-	wrapToWidth(inString, goalWidth, allowedFinalOverhang := 5) {
+	wrapToWidth(inString, goalWidth, allowedFinalOverhang := 25) {
 		maxLastLineWidth := goalWidth + allowedFinalOverhang
 		words := inString.split(" ")
 		

@@ -7,10 +7,7 @@
 	; Snippets
 	:X:.if:: NotepadPlusPlus.sendSnippet("if")
 	:X:.for::NotepadPlusPlus.sendSnippet("for")
-	:X:.?::
-		ClipboardLib.send("( ?  : )")
-		Send, {Left 7}
-	return
+	:X:.default::NotepadPlusPlus.sendDefaultingCodeString(clipboard)
 	
 	; Current file/folder operations
 	!c::  ClipboardLib.copyFilePathWithHotkey(      "!c")

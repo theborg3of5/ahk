@@ -35,6 +35,23 @@ class NotepadPlusPlus {
 	}
 	
 	;---------
+	; DESCRIPTION:    Send a code string for defaulting a variable to a different value if it's false/blank.
+	; PARAMETERS:
+	;  varName (I,OPT) - The name of the variable to work with. If not given, we'll prompt the user for it.
+	; SIDE EFFECTS:   Prompts the user for the default value.
+	;---------
+	sendDefaultingCodeString(varName := "") {
+		varAndDefault := InputBox("Enter variable and default value (comma-separated)", , , 500, 100, , , , , varName ", ")
+		if(varAndDefault = "")
+			return
+		
+		varName      := varAndDefault.beforeString(",")
+		defaultValue := varAndDefault.afterString(",").withoutWhitespace() ; Drop any leading space
+		
+		SendRaw, % varName " := " varName " ? " varName " : " defaultValue
+	}
+	
+	;---------
 	; DESCRIPTION:    Send a debug code string using the given function name, prompting the user for
 	;                 the list of parameters to use (in "varName",varName parameter pairs).
 	; PARAMETERS:

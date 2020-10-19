@@ -1,16 +1,4 @@
 # New Ideas
-	Defaulting values into a potentially-populated variable - dig into options a little more, is there something better than our current coalesce?
-		Goal: 1-line option, for easier reading (can space to line up across multiple lines)
-		Ideas
-			xVarName := DataLib.coalesce(xVarName, this.X_Centered)
-			x        := DataLib.coalesce(x       , this.X_ConstantValue)
-				Supports 3+ options as well
-			xVarName := (xVarName != "") ? xVarName : this.X_Centered
-			x        := (x        != "") ? x        : this.X_ConstantValue
-				
-			xVarName := xVarName ? xVarName : this.X_Centered
-			x        := x        ? x        : this.X_ConstantValue
-				
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?
 			Or could we turn DebugPopup into something (TextPopup?) that takes (or lets you pick between, or lets you override a default) a TextTable instance (dependency-injection style)?

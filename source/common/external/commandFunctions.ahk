@@ -181,7 +181,7 @@
 }
 
 { ; Commands that can return pseudo-arrays - return proper arrays or objects in those cases instead.
-	GuiControlGet(Subcommand = "", ControlID = "", Param4 = "") {
+	GuiControlGet(Subcommand := "", ControlID := "", Param4 := "") {
 		if(Subcommand = "Pos") {
 			GuiControlGet, Position, %Subcommand%, %ControlID%, %Param4%
 			return {"X":PositionX, "Y":PositionY, "W":PositionW, "H":PositionH}

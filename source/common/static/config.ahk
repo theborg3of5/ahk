@@ -447,10 +447,7 @@ class Config {
 		; Replace calculated and private path tags.
 		For key,path in pathsAry {
 			; Special case: for tags which are exclusively pass-throughs (blank path), just use the matching tag's value (from either path or private).
-			if(path = "")
-				path := systemPathTags[key]
-			if(path = "")
-				path := this.private[key]
+			path := DataLib.coalesce(path, systemPathTags[key], this.private[key])
 			
 			path := path.replaceTags(systemPathTags)
 			path := this.replacePrivateTags(path)

@@ -33,16 +33,13 @@ class DateTimeLib {
 	;---------
 	getLastDateOfMonth(monthNum := "", year := "") {
 		; Default in today's month/year if either is not given
-		if(monthNum = "")
-			monthNum := A_MM ; Current month number (with leading 0, though that doesn't matter)
-		if(year = "")
-			year := A_YYYY ; Current year
-
+		monthNum := monthNum ? monthNum : A_MM   ; Current month number (with leading 0, though that doesn't matter)
+		year     := year     ? year     : A_YYYY ; Current year
+		
 		; Get number of the next month
-		if(monthNum = 12)
+		nextMonthNum := monthNum + 1
+		if(nextMonthNum = 13) ; Wrap around at end of year
 			nextMonthNum := 1
-		else
-			nextMonthNum := monthNum + 1
 		
 		dateString := year nextMonthNum.prePadToLength(2, "0") ; First day of following month in YYYYMM format
 		dateString += -1, Days ; Go back a day to get to the last day of the given month

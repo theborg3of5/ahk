@@ -198,13 +198,11 @@ class WindowActions {
 			return
 		
 		; How we want to perform the action
-		method := windowActionSettings[action]
+		method := DataLib.coalesce(windowActionSettings[action], this.Method_Default)
 		if(method = this.Method_Other) {
 			this.doSpecialWindowMethod(action, titleString, windowActionSettings)
 			return
 		}
-		if(method = "")
-			method := this.Method_Default
 		
 		; Do that action.
 		Switch action {

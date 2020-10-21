@@ -15,6 +15,8 @@
 	; Screen wipe and clear scrollback
 	^+l::
 		Send, !{Space}
+		Send, t{Enter}
+		Send, !{Space}
 		Send, l
 	return
 	

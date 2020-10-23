@@ -14,7 +14,7 @@
 		AutoHotkey Docs					ahkd					https://cse.google.com/cse?cx=010629462602499112316:ywoq_rufgic&q=%s
 		Translate Dutch > English		tde | detrans		https://translate.google.com/#nl/en/%s
 		Translate English > Dutch		ted | edtrans		https://translate.google.com/#en/nl/%s
-		
+	
 		Google Maps Hospital				gh						https://www.google.com/maps/dir/600+Highland+Avenue,+Madison,+WI/%s
 }
 

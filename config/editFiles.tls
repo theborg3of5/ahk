@@ -1,30 +1,30 @@
 @WindowTitle(File to edit:)
 
-[	NAME										ABBREV			PATH	]
+[	NAME										ABBREV					PATH	]
 
 # Config
 ~PATH.addToStart(<AHK_CONFIG>\) {
-	All current Epic environments		allenv			ahkPrivate\allCurrentEpicEnvironments.txt
-	Games										g					games.tl
-	Hyperlink windows						link				hyperlinkWindows.tl
-	OneNote recurring todos				todo				ahkPrivate\oneNoteRecurringTodos.tl
-	Paths										path				paths.tl
-	Private values							priv				ahkPrivate\privates.tl
-	Programs									prog				programs.tl
-	Settings									s					local\settings.ini
-	Snapper ignore items					snap				ahkPrivate\snapperIgnoreItems.tls
-	Mapped drives							md					ahkPrivate\mappedDrives.tl
-	Windows									w  | win			windows.tl
-	Windows Actions						wa | wina		windowActions.tl
-	Window Positions						wp | winpos		windowPositions.tl
+	All current Epic environments		allenv					ahkPrivate\allCurrentEpicEnvironments.txt
+	Games										g							games.tl
+	Hyperlink windows						link						hyperlinkWindows.tl
+	OneNote recurring todos				todo						ahkPrivate\oneNoteRecurringTodos.tl
+	Paths										path						paths.tl
+	Private values							priv						ahkPrivate\privates.tl
+	Programs									prog						programs.tl
+	Settings									s							local\settings.ini
+	Snapper ignore items					snap						ahkPrivate\snapperIgnoreItems.tls
+	Mapped drives							md							ahkPrivate\mappedDrives.tl
+	Windows									w  | win					windows.tl
+	Windows Actions						wa | wina				windowActions.tl
+	Window Positions						wp | winpos | pos		windowPositions.tl
 }
 
 # ! Code
 ~PATH.addToStart(<AHK_SOURCE>\) {
-	Main										m					main.ahk
-	Common									com				common\common.ahk
-	Config									con | conf		common\static\config.ahk
-	Command Functions						cf					common\external\commandFunctions.ahk
-	Hotstrings								h					general\hotstrings.ahk
+	Main										m							main.ahk
+	Common									com						common\common.ahk
+	Config									con | conf				common\static\config.ahk
+	Command Functions						cf							common\external\commandFunctions.ahk
+	Hotstrings								h							general\hotstrings.ahk
 }
-	Test										t					<AHK_ROOT>\test\test.ahk
+	Test										t							<AHK_ROOT>\test\test.ahk

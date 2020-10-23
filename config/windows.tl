@@ -100,5 +100,6 @@
 				Windows Taskbar Secondary			explorer.exe				Shell_SecondaryTrayWnd
 				Word										WINWORD.EXE					-									-														NO_PADDING
 				yEd										yEd.exe
+				Zoom										Zoom.exe						ZPContentViewWndClass
 	}
 }

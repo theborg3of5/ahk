@@ -81,12 +81,14 @@
 				dlgId := recId
 			
 			textToSend := Config.private["OUTLOOK_TLG_BASE"]
+			textToSend := textToSend.replaceTag("MESSAGE",  combinedMessage) ; Replace the message first in case it contains any of the following tags
 			textToSend := textToSend.replaceTag("TLP",      data["TLP"])
 			textToSend := textToSend.replaceTag("CUSTOMER", data["CUSTOMER"])
 			textToSend := textToSend.replaceTag("DLG",      dlgId)
 			textToSend := textToSend.replaceTag("PRJ",      prjId)
 			textToSend := textToSend.replaceTag("QAN",      qanId)
-			textToSend := textToSend.replaceTag("MESSAGE",  combinedMessage)
+			
+			; textToSend := textToSend.replaceTag("QAN", qanId)
 			
 			if(Outlook.isTLGCalendarActive()) {
 				SendRaw, % textToSend

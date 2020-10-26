@@ -362,8 +362,7 @@ class StringBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Wrappers for StrReplace - replace all instances of the provided string, with
-	;                 the replacement text.
+	; DESCRIPTION:    Wrapper for StrReplace - replace all instances of the provided string, with the replacement text.
 	; PARAMETERS:
 	;  needle      (I,REQ) - String to replace
 	;  replaceWith (I,REQ) - String to replace with

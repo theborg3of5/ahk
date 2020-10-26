@@ -1,6 +1,4 @@
 # New Ideas
-	Consider adding QAN ID to message for QAN investigation TLP
-		Maybe a substitution tag for ID (only if it's a QAN) in that message prefix?
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?
 			Or could we turn DebugPopup into something (TextPopup?) that takes (or lets you pick between, or lets you override a default) a TextTable instance (dependency-injection style)?

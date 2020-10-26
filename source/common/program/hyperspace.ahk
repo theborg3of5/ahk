@@ -31,6 +31,10 @@ class Hyperspace {
 	;  useLastDepartment (I,OPT) - Set to false to not use the last department when logging in (so stop at that screen)
 	;---------
 	login(username, password, useLastDepartment := true) {
+		; Close the smart card login popup if it's open.
+		if(WinActive("Smart Card Login"))
+			Send, {Esc}
+		
 		Send, %username%{Tab}
 		Send, %password%{Enter}
 		HotkeyLib.releaseAllModifiers()

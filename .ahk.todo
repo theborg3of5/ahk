@@ -1,4 +1,6 @@
 # New Ideas
+	Add safety check to ensure we don't accidentally resize windows taskbar (mainly secondary ones)
+	Window-fixer hotkey: could we have maximized windows be centered within chosen monitor to start (and maybe not full-size)? Seems like it might be throwing Outlook off sometimes.
 	Consider having window fixer hotkey list out the windows it's fixing in a progress toast
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?

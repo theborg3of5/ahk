@@ -1,4 +1,5 @@
 # New Ideas
+	Confirm that weekly todos are working right - Kids' class item doesn't seem to be getting added
 	Add safety check to ensure we don't accidentally resize windows taskbar (mainly secondary ones)
 	Window-fixer hotkey: could we have maximized windows be centered within chosen monitor to start (and maybe not full-size)? Seems like it might be throwing Outlook off sometimes.
 	Consider having window fixer hotkey list out the windows it's fixing in a progress toast

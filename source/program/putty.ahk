@@ -21,8 +21,6 @@
 	return
 	
 	; Scrolling (^PgUp/^PgDn scrolls one line at a time)
-	WheelUp::   Send, ^{PgUp 5}
-	WheelDown:: Send, ^{PgDn 5}
 	^WheelUp::  Send, ^{PgUp}
 	^WheelDown::Send, ^{PgDn}
 	

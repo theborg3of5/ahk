@@ -1,4 +1,6 @@
 # New Ideas
+	Consider adding SVN revisions as a linkable/ActionObject* thing
+		Will I have to pick between repos for that? Maybe just do current version, or use another field for something like that?
 	Confirm that weekly todos are working right - Kids' class item doesn't seem to be getting added
 	Add safety check to ensure we don't accidentally resize windows taskbar (mainly secondary ones)
 	Window-fixer hotkey: could we have maximized windows be centered within chosen monitor to start (and maybe not full-size)? Seems like it might be throwing Outlook off sometimes.

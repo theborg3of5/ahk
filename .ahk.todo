@@ -1,4 +1,5 @@
 # New Ideas
+	EpicStudio regex - add parens myself instead of requiring them on each regex bit line
 	Consider adding SVN revisions as a linkable/ActionObject* thing
 		Will I have to pick between repos for that? Maybe just do current version, or use another field for something like that?
 	Confirm that weekly todos are working right - Kids' class item doesn't seem to be getting added

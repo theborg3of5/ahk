@@ -6875,8 +6875,7 @@
         <KeyWord name="StringBase.replace" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Wrappers for StrReplace - replace all instances of the provided string, with
-							;                 the replacement text.
+							; DESCRIPTION:    Wrapper for StrReplace - replace all instances of the provided string, with the replacement text.
 							; PARAMETERS:
 							;  needle      (I,REQ) - String to replace
 							;  replaceWith (I,REQ) - String to replace with
@@ -8212,7 +8211,15 @@
         <KeyWord name="VisualWindow.Height_Full" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    The full height of the monitor (or other bounds, if given)
+							; DESCRIPTION:    The full height of the monitor's working area (or other bounds, if given)
+							; GROUP:          Special window size constants
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.Height_Half" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Half of the full height of the monitor's working area (or other bounds, if given)
 							; GROUP:          Special window size constants
 							;---------">
             </Overload>
@@ -8435,7 +8442,15 @@
         <KeyWord name="VisualWindow.Width_Full" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:    The full width of the monitor (or other bounds, if given)
+							; DESCRIPTION:    The full width of the monitor's working area (or other bounds, if given)
+							; GROUP:          Special window size constants
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="VisualWindow.Width_Half" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Half of the full width of the monitor's working area (or other bounds, if given)
 							; GROUP:          Special window size constants
 							;---------">
             </Overload>

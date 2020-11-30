@@ -40,9 +40,11 @@ class VisualWindow {
 	; @GROUP-END@
 	
 	; @GROUP@ Special window size constants
-	static Width_Full      := "FULL" ; The full width of the monitor (or other bounds, if given)
+	static Width_Full      := "FULL" ; The full width of the monitor's working area (or other bounds, if given)
+	static Width_Half      := "HALF" ; Half of the full width of the monitor's working area (or other bounds, if given)
 	static Width_Maximize  := "MAX"  ; Maximize the window (must be used with .Height_Maximize).
-	static Height_Full     := "FULL" ; The full height of the monitor (or other bounds, if given)
+	static Height_Full     := "FULL" ; The full height of the monitor's working area (or other bounds, if given)
+	static Height_Half     := "HALF" ; Half of the full height of the monitor's working area (or other bounds, if given)
 	static Height_Maximize := "MAX"  ; Maximize the window (must be used with .Width_Maximize).
 	; @GROUP-END@
 	
@@ -565,10 +567,12 @@ class VisualWindow {
 		; Convert any special values, everything else is left alone.
 		Switch width {
 			Case this.Width_Full:      width := bounds["WIDTH"]
+			Case this.Width_Half:      width := bounds["WIDTH"] / 2
 			Case this.Width_Maximize:  width := "" ; Maximize was already checked before this function and will be applied later, so we can skip the resize.
 		}
 		Switch height {
 			Case this.Height_Full:     height := bounds["HEIGHT"]
+			Case this.Width_Half:      height := bounds["HEIGHT"] / 2
 			Case this.Height_Maximize: height := "" ; Maximize was already checked before this function and will be applied later, so we can skip the resize.
 		}
 		

@@ -2,9 +2,11 @@
 	Idea: selector of window-position "presets"
 		Use case: social windows when gaming on one of my monitors (different presets for middle monitor in use vs. left)
 	New selector idea: access to SVN logs for certain objects
-		Server (normally have to go through EMC2/EpicStudio
+		"C:\Program Files (x86)\TortoiseSVN\bin\TortoiseProc.exe" /command:log /path:"https://<...>.ROU"
+		Server (normally have to go through EMC2/EpicStudio)
+			Need to figure out object-name-to-URL scheme
 		Client?
-			Will need a good way to get at the right thing
+			Will need a good way to get at the right path
 	Consider adding SVN revisions as a linkable/ActionObject* thing
 		Will I have to pick between repos for that? Maybe just do current version, or use another field for something like that?
 	Confirm that weekly todos are working right - Kids' class item doesn't seem to be getting added

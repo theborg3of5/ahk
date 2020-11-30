@@ -15,7 +15,7 @@
 
 # Specifics
 	Semi-maximized (fits around time)	smax		1460		FULL		HOME
-	Quarter										q			960		540
+	Quarter										q			960		525
 
 # Development
 ~CONTEXT.replaceWith(WORK) {

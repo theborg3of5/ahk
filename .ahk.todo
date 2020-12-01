@@ -1,6 +1,5 @@
 # New Ideas
 	Window position fixer - we get stuck on Republic Anywhere when it's minimized to tray, but only at home - why?
-	Confirm that weekly todos are working right - Kids' class item doesn't seem to be getting added
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?
 			Or could we turn DebugPopup into something (TextPopup?) that takes (or lets you pick between, or lets you override a default) a TextTable instance (dependency-injection style)?

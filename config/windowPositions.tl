@@ -10,6 +10,7 @@
 		GitHub Desktop				CENTERED			CENTERED			1440		900
 		Teams							CENTERED			CENTERED			1440		900		WORK
 		Steam							CENTERED			CENTERED			1440		900		HOME
+		GrepWin						CENTERED			CENTERED			1440		900
 	
 # Social windows
 	~WIDTH.replaceWith(950) | ~HEIGHT.replaceWith(750) | ~X.replaceWith(RIGHT_EDGE) {

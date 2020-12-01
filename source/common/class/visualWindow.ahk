@@ -553,8 +553,9 @@ class VisualWindow {
 	; PARAMETERS:
 	;  width  (IO,REQ) - Width string. Will be replaced with the new (numeric or blank) width.
 	;  height (IO,REQ) - Height string. Will be replaced with the new (numeric or blank) height.
-	;  bounds  (I,OPT) - If specified, width and height will be treated as relative to these bounds. If not, special values
-	;                    from VisualWindow.Width_* or .Height_* will be calculated relative to the window's current monitor.
+	;  bounds  (I,OPT) - If specified, width and height will be treated as relative to these bounds. If not, this will be
+	;                    filled with bounds from the window's current monitor and special values from VisualWindow.Width_* or
+	;                    .Height_* will be calculated relative to that.
 	; RETURNS:        true/false - should we maximize this window?
 	;---------
 	convertSpecialWindowSizes(ByRef width, ByRef height, bounds := "") {
@@ -606,6 +607,10 @@ class VisualWindow {
 		y := this.convertSpecialWindowY(y, bounds)
 	}
 	convertSpecialWindowX(x, bounds) {
+		; Respect blank values as "don't change this coordinate"
+		if(x = "")
+			return ""
+		
 		specialValues := [ this.X_LeftEdge, this.X_RightEdge, this.X_Centered ]
 		if(!x.startsWithAnyOf(specialValues, match)) {
 			if(bounds)
@@ -634,6 +639,10 @@ class VisualWindow {
 		return newX
 	}
 	convertSpecialWindowY(y, bounds) {
+		; Respect blank values as "don't change this coordinate"
+		if(y = "")
+			return ""
+		
 		specialValues := [ this.Y_TopEdge, this.Y_BottomEdge, this.Y_Centered]
 		if(!y.startsWithAnyOf(specialValues, match)) {
 			if(bounds)

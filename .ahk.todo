@@ -3,7 +3,6 @@
 		Will I have to pick between repos for that? Maybe just do current version, or use another field for something like that?
 	Confirm that weekly todos are working right - Kids' class item doesn't seem to be getting added
 	Add safety check to ensure we don't accidentally resize windows taskbar (mainly secondary ones)
-	Window-fixer hotkey: could we have maximized windows be centered within chosen monitor to start (and maybe not full-size)? Seems like it might be throwing Outlook off sometimes.
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?
 			Or could we turn DebugPopup into something (TextPopup?) that takes (or lets you pick between, or lets you override a default) a TextTable instance (dependency-injection style)?

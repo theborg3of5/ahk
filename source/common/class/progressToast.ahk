@@ -3,7 +3,9 @@
 	Example Usage
 ;		progToast := new ProgressToast("Optional title")
 ;		progToast.nextStep("Step 1")
-;		progToast.nextStep("Step 2", "Complete!") ; Finish this step's line in the toast with the text "Complete!"
+;		progToast.nextStep("Step 2", "Complete!") ; Finish this step's line in the toast with the text "Complete!" instead of the usual "done"
+;		progToast.nextStep("Step 3")
+;		progToast.endStep("failed") ; Finish Step 3 with a custom message because it errored out
 ;		progToast.finish("Totally finished!") ; End the toast with a final line of text
 	
 */ ; =--
@@ -33,12 +35,23 @@ class ProgressToast extends Toast {
 	;---------
 	nextStep(stepText, doneText := "done") {
 		this.finishInProgressStep()
-		this.stepDoneText := doneText
+		this.currStepDoneText := doneText
 		
 		if(!this.isVisible)
 			this.addFirstStepAndShow(stepText "...")
 		else
 			this.addLine(stepText "...")
+	}
+	
+	;---------
+	; DESCRIPTION:    Finish the current step with a custom message. Useful if a step errored out and you don't want to
+	;                 show a normal doneText.
+	; PARAMETERS:
+	;  endText (I,REQ) - The custom text to finish the step with (goes after the ellipsis).
+	;---------
+	endStep(endText) {
+		this.currStepDoneText := endText
+		this.finishInProgressStep()
 	}
 	
 	;---------
@@ -61,7 +74,7 @@ class ProgressToast extends Toast {
 	; #PRIVATE#
 	
 	isVisible := false ; Whether we've shown the toast yet.
-	stepDoneText := "" ; The text to use to finish the currently-running step.
+	currStepDoneText := "" ; The text to use to finish the currently-running step.
 	
 	;---------
 	; DESCRIPTION:    Add the first step to the toast and make the toast visible.
@@ -84,7 +97,7 @@ class ProgressToast extends Toast {
 		if(!this.getCurrentText().endsWith("..."))
 			return
 		
-		doneText := this.stepDoneText.removeFromEnd("...") ; Make sure the done text doesn't end with our separator, otherwise we could keep finishing it forever
+		doneText := this.currStepDoneText.removeFromEnd("...") ; Make sure the done text doesn't end with our separator, otherwise we could keep finishing it forever
 		this.appendText(doneText)
 	}
 	; #END#

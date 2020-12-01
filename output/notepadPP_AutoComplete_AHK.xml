@@ -5380,6 +5380,17 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ProgressToast.endStep" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Finish the current step with a custom message. Useful if a step errored out and you don't want to
+							;                 show a normal doneText.
+							; PARAMETERS:
+							;  endText (I,REQ) - The custom text to finish the step with (goes after the ellipsis).
+							;---------">
+                <Param name="endText" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ProgressToast.finish" func="yes">
             <Overload retVal="" descr="
 							;---------

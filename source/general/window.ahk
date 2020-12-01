@@ -64,8 +64,15 @@ fixWindowPositions(titleString := "") {
 	} else {
 		pt := new ProgressToast("Fixing window positions")
 		For name,position in table {
-			pt.nextStep(name)
-			fixWindowPosition(Config.windowInfo[name].idString, position)
+			pt.nextStep(name, "fixed")
+			
+			winInfo := Config.windowInfo[name]
+			if(!winInfo.exists()) {
+				pt.endStep("not found")
+				Continue
+			}
+			
+			fixWindowPosition(winInfo.idString, position)
 		}
 		pt.finish()
 	}

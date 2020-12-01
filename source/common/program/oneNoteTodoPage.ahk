@@ -33,7 +33,7 @@ class OneNoteTodoPage {
 	}
 	
 	;---------
-	; DESCRIPTION:    Show a popup with the recurring todo items from future dates.
+	; DESCRIPTION:    Show a popup with the recurring todo items from a date range in the past or future.
 	; SIDE EFFECTS:   Prompts the user for the date range to view todos from.
 	;---------
 	peekOtherTodos() {

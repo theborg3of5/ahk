@@ -3,15 +3,31 @@
 	Should we open DebugPopup/DebugTable up a bit, for use outside of Debug.popup/toast?
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?
 			Or could we turn DebugPopup into something (TextPopup?) that takes (or lets you pick between, or lets you override a default) a TextTable instance (dependency-injection style)?
+		Newest plan:
+			Make DebugPopup take in a pre-filled DebugTable (or rather, a TextTable instance, which happens to be a TextTable)
+				Debug static class can initialize and pass the DebugTable like it does for toast and copy functions
+			Rename DebugPopup to TextPopup
+			Update callers below to use TextPopup, building their own TextTables
 		We're using it in several places that aren't really debug now:
 			findProjectInSolutionsFolder
 				Title: Found projects in solutions folder
 				Content: more or less the same
+				Goal:
+					Project name: <name>
+					Solutions:    Solution1
+					              Solution2
 			Onenote recurring todo peek
 				Title: Recurring todos peek
 				Content: Each day as if it were an independent array
 					For this, we'd need to open up DebugPopup to adding individual lines, not just all the content at once - is that a problem?
-					This would allow us to add rows in the order we wanted - so we could flip the date order back to day-date, not date-day
+					This would allow us to add rows in the order we wanted - so we could flip the date naming back to day-date, not date-day
+				Goal:
+					Date range: Mon 1/20 - Fri 1/24
+					Mon 1/20:   Item 1
+					            Item 2
+									Item 3
+					Tue 1/21:   Item 4
+					...
 	Re-examine how we run programs and such (RunLib.runAsUser stuff) - could it be the reason we have focus issues?
 		Also, could we work around it with a WinWaitExist + WinActivate?
 	EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines

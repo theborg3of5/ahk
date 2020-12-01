@@ -1,0 +1,8 @@
+@WindowTitle(Move/size windows to position preset:)
+
+; PRESET = PRESET from windowPositions.tl
+[	NAME								ABBREV	PRESET	]
+
+	Normal							n			NORMAL
+	Game on left monitor			gl			GAME_ON_LEFT
+	Game on middle monitor		gm			GAME_ON_MIDDLE

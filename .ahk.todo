@@ -1,6 +1,4 @@
 # New Ideas
-	Idea: selector of window-position "presets"
-		Use case: social windows when gaming on one of my monitors (different presets for middle monitor in use vs. left)
 	Consider adding SVN revisions as a linkable/ActionObject* thing
 		Will I have to pick between repos for that? Maybe just do current version, or use another field for something like that?
 	Confirm that weekly todos are working right - Kids' class item doesn't seem to be getting added

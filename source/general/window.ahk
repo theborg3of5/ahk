@@ -45,14 +45,22 @@ $!q::WindowActions.minimizeWindow()
  #+f::fixWindowPositions("A")
 ^#+f::fixWindowPositions() ; Fix all windows in the config file
 fixWindowPositions(titleString := "") {
-	table := new TableList(".\windowPositions.tl").getRowsByColumn("NAME")
+	; If we're being asked to fix a specific window, assume non-preset case. Otherwise, ask for preset (which can also turn out blank).
+	if(titleString != "")
+		preset := "NORMAL"
+	else
+		preset := new Selector("windowPositionPresets.tls").selectGui("PRESET")
+	if(preset = "")
+		return
+	
+	positions := new TableList("windowPositions.tl").filterByColumn("PRESET", preset).getRowsByColumn("NAME")
 	
 	; Fix a single window.
 	if(titleString != "") {
-		For priority,names in Config.findAllMatchingWindowNames(titleString) { ; Looping in priority order
+		For _,names in Config.findAllMatchingWindowNames(titleString) { ; Looping in priority order
 			For _,name in names {
-				if(table[name]) {
-					position := table[name]
+				if(positions[name]) {
+					position := positions[name]
 					Break
 				}
 			}
@@ -63,7 +71,7 @@ fixWindowPositions(titleString := "") {
 	; Fix all the windows in the config file at once.
 	} else {
 		pt := new ProgressToast("Fixing window positions")
-		For name,position in table {
+		For name,position in positions {
 			pt.nextStep(name, "fixed")
 			
 			winInfo := Config.windowInfo[name]

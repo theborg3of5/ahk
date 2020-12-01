@@ -144,5 +144,20 @@ class WindowLib {
 	center(titleString := "A") {
 		new VisualWindow(titleString).move(VisualWindow.X_Centered, VisualWindow.Y_Centered)
 	}
+	
+	;---------
+	; DESCRIPTION:    Check whether the given window is one that we shouldn't try to move or resize.
+	; PARAMETERS:
+	;  titleString (I,REQ) - Title string identifying the window in question.
+	; RETURNS:        true if the window should be excluded, false otherwise.
+	;---------
+	isNoMoveSizeWindow(titleString) {
+		if(Config.windowMatchesInfo(titleString, "Windows Taskbar"))
+			return true
+		if(Config.windowMatchesInfo(titleString, "Windows Taskbar Secondary"))
+			return true
+		
+		return false
+	}
 	; #END#
 }

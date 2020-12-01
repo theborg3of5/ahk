@@ -34,6 +34,11 @@ $!q::WindowActions.minimizeWindow()
 ; Resize window
 #+r::
 	selectResize() {
+		if(WindowLib.isNoMoveSizeWindow("A")) {
+			new ErrorToast("Invalid window for resizing").showShort()
+			return
+		}
+		
 		data := new Selector("resize.tls").selectGui()
 		if(!data)
 			return

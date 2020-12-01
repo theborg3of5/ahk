@@ -110,7 +110,7 @@ global WINDOWCORNER_BOTTOMRIGHT := "BOTTOM_RIGHT"
 ;---------
 dragWindowPrep(ByRef window, ByRef mouseStart) {
 	titleString := WindowLib.getIdTitleStringUnderMouse()
-	if(isExcludedWindow(titleString))
+	if(WindowLib.isNoMoveSizeWindow(titleString))
 		return false
 	
 	window := new VisualWindow(titleString, SnappingDistance)
@@ -118,21 +118,6 @@ dragWindowPrep(ByRef window, ByRef mouseStart) {
 	mouseStart := new MousePosition()
 	
 	return true
-}
-
-;---------
-; DESCRIPTION:    Check whether the given window is one that we shouldn't try to move or resize.
-; PARAMETERS:
-;  titleString (I,REQ) - Title string identifying the window in question.
-; RETURNS:        true if the window should be excluded, false otherwise.
-;---------
-isExcludedWindow(titleString) {
-	if(Config.windowMatchesInfo(titleString, "Windows Taskbar"))
-		return true
-	if(Config.windowMatchesInfo(titleString, "Windows Taskbar Secondary"))
-		return true
-	
-	return false
 }
 
 ;---------

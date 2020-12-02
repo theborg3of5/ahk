@@ -13,14 +13,28 @@ if(projectName = "")
 	ExitApp
 projectName := projectName.appendIfMissing(".csproj")
 
-matchedSolutions := []
-searchRoot := Config.private["EPIC_SOURCE_S1"] "\" Config.private["EPIC_HSWEB_SOLUTIONS"] "\"
-Loop, Files, % searchRoot "*.sln", RF ; [R]ecursive, [F]iles (not [D]irectories)
-{
-	content := FileRead(A_LoopFilePath)
-	if(content.contains(projectName))
-		matchedSolutions.push(A_LoopFilePath.removeFromStart(searchRoot))
-}
+tt := new TextTable("Found solutions containing project")
+tt.addRow("Project name:", projectName)
 
-Debug.popup("Project name",projectName, "Found in solutions",matchedSolutions)
+solutions := findSolutions(projectName)
+if(solutions = "")
+	solutions := "<none>"
+tt.addRow("Solutions:", solutions)
+
+new TextPopup(tt).show()
 ExitApp
+
+
+findSolutions(projectName) {
+	tt := new TextTable().setBorderType(TextTable.BorderType_Line)
+	
+	searchRoot := Config.private["EPIC_SOURCE_S1"] "\" Config.private["EPIC_HSWEB_SOLUTIONS"] "\"
+	Loop, Files, % searchRoot "*.sln", RF ; [R]ecursive, [F]iles (not [D]irectories)
+	{
+		content := FileRead(A_LoopFilePath)
+		if(content.contains(projectName))
+			tt.addRow(A_LoopFilePath.removeFromStart(searchRoot))
+	}
+	
+	return tt.getText()
+}

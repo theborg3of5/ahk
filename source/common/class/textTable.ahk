@@ -2,12 +2,6 @@
 	NOTE: This only really works with a monospace font, as it aligns based on characters.
 	
 	Example Usage
-;		; Add data
-;		dataTable := []
-;		dataTable.push(["val1", "val2", "val3"])
-;		dataTable.push(["value4", "value5", "value6"])
-;		tt := new TextTable(dataTable)
-;		; OR
 ;		tt := new TextTable().addRow("val1", "val2", "val3")
 ;		tt.addRow("value4", "value5", "value6")
 ;		; OR
@@ -52,10 +46,11 @@ class TextTable {
 	
 	;---------
 	; PARAMETERS:
-	;  dataTable (I,OPT) - 2-dimensional array of string values to include in the table.
+	;  title (I,OPT) - Title to show at the top of the table.
 	;---------
-	__New(dataTable := "") {
-		this.addRows(dataTable*)
+	__New(title := "") {
+		if(title != "")
+			this.setTopTitle(title)
 	}
 	
 	;---------

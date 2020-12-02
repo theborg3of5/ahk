@@ -40,16 +40,19 @@ class OneNoteTodoPage {
 		startDate := ""
 		endDate   := ""
 		this.promptOtherDateRange("Peek at todo items for date range", startDate, endDate)
-		
 		todosByDate := this.getTodosForDateRange(startDate, endDate)
-		todosByDay := {}
+		
+		tt := new TextTable("Recurring Todos Peek")
+		tt.addRow("Date range:", FormatTime(startDate, "ddd M/d") " - " FormatTime(endDate, "ddd M/d"))
 		For instant,todos in todosByDate {
-			dateName := FormatTime(instant, "M/d (ddd)") ; Date format is this way so things show up in the correct order.
-			todosByDay[dateName] := todos
+			tasksTable := new TextTable().setBorderType(TextTable.BorderType_Line)
+			For _,todo in todos
+				tasksTable.addRow(todo)
+			
+			tt.addRow(FormatTime(instant, "ddd M/d") ":", tasksTable.getText())
 		}
 		
-		dateRange := FormatTime(startDate, "ddd M/d") " - " FormatTime(endDate, "ddd M/d")
-		Debug.popup("Date range",dateRange, "Todos by day",todosByDay)
+		new TextPopup(tt).show()
 	}
 	
 	;---------

@@ -29,7 +29,7 @@ class Debug {
 		table := new DebugTable("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
 		table.addPairs(params*)
 		
-		new TextPopup(table)
+		new TextPopup(table).show()
 	}
 	
 	;---------
@@ -40,7 +40,7 @@ class Debug {
 		table := new DebugTable("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
 		table.addPairs(params*)
 		
-		new TextPopup(table)
+		new TextPopup(table).show()
 	}
 	
 	;---------

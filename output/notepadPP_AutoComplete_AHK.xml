@@ -7722,13 +7722,20 @@
                 <Param name="table" />
             </Overload>
         </KeyWord>
+        <KeyWord name="TextPopup.show" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Show the popup and pause until it closes.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="TextTable" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; PARAMETERS:
-							;  dataTable (I,OPT) - 2-dimensional array of string values to include in the table.
+							;  title (I,OPT) - Title to show at the top of the table.
 							;---------">
-                <Param name="dataTable := &quot;&quot;" />
+                <Param name="title := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="TextTable.addRow" func="yes">

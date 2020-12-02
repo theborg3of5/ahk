@@ -24,9 +24,19 @@ class TextPopup {
 	;                  content + determine the popup size.
 	;---------
 	__New(table) {
+		; Tell the table to have a nice thick outer border
+		table.setBorderType(TextTable.BorderType_BoldLine)
+		
 		; Set up and show popup
 		editSizes := this.calculateEditDimensions(table)
-		this.createAndShowPopup(editSizes, table)
+		this.guiId := this.createPopup(editSizes, table)
+	}
+	
+	;---------
+	; DESCRIPTION:    Show the popup and pause until it closes.
+	;---------
+	show() {
+		Gui, % this.guiId ":Show"
 		
 		; Wait for it to close (pausing the current script until that happens)
 		WinWaitClose, % "ahk_id " this.guiId
@@ -96,15 +106,15 @@ class TextPopup {
 	}
 	
 	;---------
-	; DESCRIPTION:    Create and show the gui.
+	; DESCRIPTION:    Generate the gui.
 	; PARAMETERS:
 	;  editSizes (I,REQ) - The width/height that the edit field needs to be.
 	;  table     (I,REQ) - The TextTable of content we want to show in the popup.
+	; RETURNS:        The guiId of the new popup (not yet shown)
 	;---------
-	createAndShowPopup(editSizes, table) {
+	createPopup(editSizes, table) {
 		; Create gui and save off window handle
 		Gui, New, +HWNDguiId ; guiId := window handle
-		this.guiId := guiId
 		
 		; Other gui options
 		Gui, % "+Label" this.Prefix_GuiSpecialLabels ; TextPopupGui_* functions instead of Gui*
@@ -116,7 +126,7 @@ class TextPopup {
 		Gui, Font, % "c" this.FontColor " s" this.FontSize, % this.FontName
 		
 		; Initialize edit field variable
-		this.editFieldVar := this.guiId "TextEdit"
+		this.editFieldVar := guiId "TextEdit"
 		GuiLib.createDynamicGlobal(this.editFieldVar)
 		
 		; Create and focus edit control (holds everything we display)
@@ -130,12 +140,11 @@ class TextPopup {
 		; Add hidden button to respond to {Enter} keystroke (because it's Default)
 		Gui, Add, Button, Hidden Default x0 y0 gTextPopupGui_Close ; TextPopupGui_Close call on activate
 		
-		; Show the resulting popup
-		Gui, Show
-		
 		; Add hotkeys
 		this.addNotepadHotkey(content)
 		this.addScrollHotkeys()
+		
+		return guiId
 	}
 	
 	;---------

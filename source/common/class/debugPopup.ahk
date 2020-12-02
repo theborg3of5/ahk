@@ -19,18 +19,15 @@ class DebugPopup {
 	;---------
 	; DESCRIPTION:    Build and show a new debug popup, where the contents is generated using a DebugTable.
 	; PARAMETERS:
-	;  params* (I,REQ) - As many parameters as needed, in label,value pairs
-	;                    (i.e. "label1",value1,"label2",value2...)
+	;  table (I,REQ) - A TextTable instance containing the content to show in the popup. We'll use it to show the desired
+	;                  content + determine the popup size.
 	;---------
-	__New(params*) {
-		; Build the table of info
-		table := new DebugTable("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
-		table.addPairs(params*)
-		
+	__New(table) {
 		; Set up and show popup
 		editSizes := this.calculateEditDimensions(table)
 		this.createAndShowPopup(editSizes, table)
 		
+		; Wait for it to close (pausing the current script until that happens)
 		WinWaitClose, % "ahk_id " this.guiId
 	}
 	
@@ -105,7 +102,7 @@ class DebugPopup {
 	;---------
 	createAndShowPopup(editSizes, table) {
 		; Create gui and save off window handle
-		Gui, New, +HWNDguiId, % "Debug Info" ; guiId := window handle
+		Gui, New, +HWNDguiId ; guiId := window handle
 		this.guiId := guiId
 		
 		; Other gui options

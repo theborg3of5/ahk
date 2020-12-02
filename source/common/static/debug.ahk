@@ -27,7 +27,10 @@ class Debug {
 		if(!Config.isInitialized)
 			return
 		
-		new DebugPopup(params*)
+		table := new DebugTable("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
+		table.addPairs(params*)
+		
+		new DebugPopup(table)
 	}
 	
 	;---------
@@ -35,7 +38,10 @@ class Debug {
 	;                 .popup() for details and parameters.
 	;---------
 	popupEarly(params*) {
-		new DebugPopup(params*)
+		table := new DebugTable("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
+		table.addPairs(params*)
+		
+		new DebugPopup(table)
 	}
 	
 	;---------

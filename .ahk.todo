@@ -4,8 +4,6 @@
 		Maybe a DebugPopup analog that just uses TextTable, instead of DebugTable?
 			Or could we turn DebugPopup into something (TextPopup?) that takes (or lets you pick between, or lets you override a default) a TextTable instance (dependency-injection style)?
 		Newest plan:
-			Make DebugPopup take in a pre-filled DebugTable (or rather, a TextTable instance, which happens to be a TextTable)
-				Debug static class can initialize and pass the DebugTable like it does for toast and copy functions
 			Rename DebugPopup to TextPopup
 			Update callers below to use TextPopup, building their own TextTables
 		We're using it in several places that aren't really debug now:

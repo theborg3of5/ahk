@@ -2539,17 +2539,6 @@
                 <Param name="params*" />
             </Overload>
         </KeyWord>
-        <KeyWord name="DebugPopup" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Build and show a new debug popup, where the contents is generated using a DebugTable.
-							; PARAMETERS:
-							;  params* (I,REQ) - As many parameters as needed, in label,value pairs
-							;                    (i.e. &quot;label1&quot;,value1,&quot;label2&quot;,value2...)
-							;---------">
-                <Param name="params*" />
-            </Overload>
-        </KeyWord>
         <KeyWord name="DebugTable" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -7722,6 +7711,17 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="TextPopup" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Build and show a new popup, where the content comes from a TextTable.
+							; PARAMETERS:
+							;  table (I,REQ) - A TextTable instance containing the content to show in the popup. We'll use it to show the desired
+							;                  content + determine the popup size.
+							;---------">
+                <Param name="table" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="TextTable" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -8977,6 +8977,17 @@
 							; RETURNS:        true if the window is minimized, false otherwise.
 							;---------">
                 <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.isNoMoveSizeWindow" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the given window is one that we shouldn't try to move or resize.
+							; PARAMETERS:
+							;  titleString (I,REQ) - Title string identifying the window in question.
+							; RETURNS:        true if the window should be excluded, false otherwise.
+							;---------">
+                <Param name="titleString" />
             </Overload>
         </KeyWord>
         <KeyWord name="WindowLib.isSizable" func="yes">

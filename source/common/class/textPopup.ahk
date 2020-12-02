@@ -1,4 +1,4 @@
-/* A dynamically-sized, scrollable, copyable popup of debug information. --=
+/* A dynamically-sized, scrollable, copyable popup of information in a monospace font. --=
       The popup does not use scrollbars, but still responds to mouse wheel events:
          * Wheel                - scroll vertically
          * Ctrl + Wheel         - scroll vertically one line at a time
@@ -7,17 +7,18 @@
       It will resize itself to its contents up to 90% of the current screen's size, at which point it will scroll.
    
    Example Usage
-;     new DebugPopup("a",1, "b",2) ; Results in a popup with this text: ┏ Debug Info ┓
-                                                                        ┃ a:  1      ┃
-                                                                        ┃ b:  2      ┃
-                                                                        ┗━━━━━━━━━━━━┛
+;		tt := new TextTable()
+;		tt.addRow("val1", "val2", "val3")
+;		tt.addRow("value4", "value5", "value6")
+;     new TextPopup(tt) ; Results in a popup with this text: val1    val2    val3  
+;		                                                       value4  value5  value6
 */ ; =--
 
-class DebugPopup {
+class TextPopup {
 	; #PUBLIC#
 	
 	;---------
-	; DESCRIPTION:    Build and show a new debug popup, where the contents is generated using a DebugTable.
+	; DESCRIPTION:    Build and show a new popup, where the content comes from a TextTable.
 	; PARAMETERS:
 	;  table (I,REQ) - A TextTable instance containing the content to show in the popup. We'll use it to show the desired
 	;                  content + determine the popup size.
@@ -35,7 +36,7 @@ class DebugPopup {
 	; #PRIVATE#
 	
 	;  - Constants
-	static Prefix_GuiSpecialLabels := "DebugPopupGui_" ; Used to have the gui call DebugPopupGui_* functions instead of just Gui* ones
+	static Prefix_GuiSpecialLabels := "TextPopupGui_" ; Used to have the gui call TextPopupGui_* functions instead of just Gui* ones
 	static Edit_ControlId := "Edit1"
 	
 	static BackgroundColor       := "444444"
@@ -50,9 +51,9 @@ class DebugPopup {
 	editFieldVar := "" ; Unique ID for edit field, based on this.guiId
 	
 	;---------
-	; DESCRIPTION:    Calculate the width and height of the edit field based on the content of the given DebugTable.
+	; DESCRIPTION:    Calculate the width and height of the edit field based on the content of the given TextTable.
 	; PARAMETERS:
-	;  table (I,REQ) - The DebugTable that will provide our content.
+	;  table (I,REQ) - The TextTable that will provide our content.
 	; RETURNS:        The size that the edit field should be, sized so that we don't cut off in the middle of a character or line.
 	;                    ["WIDTH"]
 	;                    ["HEIGHT"]
@@ -98,7 +99,7 @@ class DebugPopup {
 	; DESCRIPTION:    Create and show the gui.
 	; PARAMETERS:
 	;  editSizes (I,REQ) - The width/height that the edit field needs to be.
-	;  table     (I,REQ) - The DebugTable of content we want to show in the popup.
+	;  table     (I,REQ) - The TextTable of content we want to show in the popup.
 	;---------
 	createAndShowPopup(editSizes, table) {
 		; Create gui and save off window handle
@@ -106,7 +107,7 @@ class DebugPopup {
 		this.guiId := guiId
 		
 		; Other gui options
-		Gui, % "+Label" this.Prefix_GuiSpecialLabels ; DebugPopupGui_* functions instead of Gui*
+		Gui, % "+Label" this.Prefix_GuiSpecialLabels ; TextPopupGui_* functions instead of Gui*
 		Gui, -Caption +Border ; No titlebar/menu, but still have a border
 		
 		; Apply margins and colors
@@ -115,7 +116,7 @@ class DebugPopup {
 		Gui, Font, % "c" this.FontColor " s" this.FontSize, % this.FontName
 		
 		; Initialize edit field variable
-		this.editFieldVar := this.guiId "DebugEdit"
+		this.editFieldVar := this.guiId "TextEdit"
 		GuiLib.createDynamicGlobal(this.editFieldVar)
 		
 		; Create and focus edit control (holds everything we display)
@@ -127,7 +128,7 @@ class DebugPopup {
 		GuiControl, Focus, % this.editFieldVar
 		
 		; Add hidden button to respond to {Enter} keystroke (because it's Default)
-		Gui, Add, Button, Hidden Default x0 y0 gDebugPopupGui_Close ; DebugPopupGui_Close call on activate
+		Gui, Add, Button, Hidden Default x0 y0 gTextPopupGui_Close ; TextPopupGui_Close call on activate
 		
 		; Show the resulting popup
 		Gui, Show
@@ -155,7 +156,7 @@ class DebugPopup {
 	; DESCRIPTION:    Add scrolling hotkeys to the edit field - since we're hiding scrollbars, scrolling won't work without these.
 	;---------
 	addScrollHotkeys() {
-		; Note: using a BoundFunc this way causes a small memory leak - the BoundFunc object is never released until the script exits. That said, it's insignificant enough that it shouldn't matter in practice, especially for a debug popup.
+		; Note: using a BoundFunc this way causes a small memory leak - the BoundFunc object is never released until the script exits. That said, it's insignificant enough that it shouldn't matter much in practice.
 		mouseIsOverEditField := ObjBindMethod(this, "mouseIsOverEditField")
 		Hotkey, If, % mouseIsOverEditField
 		
@@ -234,7 +235,7 @@ class DebugPopup {
 }
 
 
-; Close label triggered by the hidden, default button in DebugPopup.
-DebugPopupGui_Close() {
+; Close label triggered by the hidden, default button in TextPopup.
+TextPopupGui_Close() {
 	Gui, Destroy
 }

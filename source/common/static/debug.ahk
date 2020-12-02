@@ -1,8 +1,7 @@
 #Include %A_LineFile%\..\..\class\debugTable.ahk
-#Include %A_LineFile%\..\..\class\debugPopup.ahk
 
 /* Static class to show debug information about whatever it's given.
-		Mostly relies on DebugTable to generate the debug display, then wraps in a DebugPopup, Toast, etc. as requested.
+		Mostly relies on DebugTable to generate the debug display, then wraps in a TextPopup, Toast, etc. as requested.
 */
 
 class Debug {
@@ -30,7 +29,7 @@ class Debug {
 		table := new DebugTable("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
 		table.addPairs(params*)
 		
-		new DebugPopup(table)
+		new TextPopup(table)
 	}
 	
 	;---------
@@ -41,7 +40,7 @@ class Debug {
 		table := new DebugTable("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
 		table.addPairs(params*)
 		
-		new DebugPopup(table)
+		new TextPopup(table)
 	}
 	
 	;---------

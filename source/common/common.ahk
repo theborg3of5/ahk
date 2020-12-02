@@ -49,6 +49,7 @@ Object(params*) {
 	#Include selector.ahk
 	#Include tableList.ahk
 	#Include tempSettings.ahk
+	#Include textPopup.ahk
 	#Include textTable.ahk
 	#Include toast.ahk
 	#Include visualWindow.ahk

@@ -56,6 +56,7 @@
 	::abcense::absence
 	::voilates::violates
 	::timeframe::time frame
+	::cahrge::charge
 
 ; [[ Expansions ]] ===
 	::f'n::function

@@ -1,4 +1,23 @@
 # New Ideas
+	Consider a new copy hotkey for Visual Studio - copies the selected tag + file, like we do for CodeSearch stuff
+		Do we want to rethink the file/folder hotkeys, and reserve !c for "copy this spot in the code"?
+		Hotkeys we could use:
+			!c - currently location in EpicStudio (and maybe CodeSearch?), file most other spots
+			!#c - currently folder in most spots
+			^!c
+			^#!c - currently DLG-relative folder copy for client (but not limited to Explorer, interestingly?)
+			^+c - currently copy script in EpicStudio, toggle comment/code elsewhere - NOT a good option to me.
+		Would we want just the file, or the whole (relative to DLG) path?
+			Maybe 2 separate hotkeys for that?
+		Possible things to copy:
+			File
+			Containing folder
+				Probably least useful - OPENING containing folder is typically more helpful.
+					Though, it would be nice if that hotkey (typically ^+o) matched modifiers with the corresponding copy-file hotkey
+						But, ^+c is no good - already overloaded - so maybe we change open-folder hotkey instead?
+			File, relative to DLG folder (client only)
+			Code location (file + selected function)
+			Full code location (path + file + selected function)
 	Window position fixer - we get stuck on Republic Anywhere when it's minimized to tray, but only at home - why?
 	Re-examine how we run programs and such (RunLib.runAsUser stuff) - could it be the reason we have focus issues?
 		Also, could we work around it with a WinWaitExist + WinActivate?

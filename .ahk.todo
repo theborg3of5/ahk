@@ -1,4 +1,20 @@
 # New Ideas
+	Could we make it easier to update current version of Hyperspace?
+		Places I have to change now:
+			Source folders in privates
+			EXE in windows
+			Current environments in epicEnvironments
+		Spots to update EMC2 version:
+			Path in programs
+			EXE in windows
+	Consider moving Hyperspace path back into programs with all the others
+		Could include version tags in path - replace them when running?
+			Probably a separate run function - .replaceTagsAndRun() or similar?
+				Could include the parameters in the caller, more like other programs
+		Same for VDI - is the separate run function really needed?
+			Would need to support some way to stick an argument in the middle of the string - maybe a generic <ARGS> tag or something similar?
+				ARGS is too generic, though - seems like it would go on the end?
+				Same mechanism as we end up using for Hyperspace, maybe?
 	Consider a new copy hotkey for Visual Studio - copies the selected tag + file, like we do for CodeSearch stuff
 		Do we want to rethink the file/folder hotkeys, and reserve !c for "copy this spot in the code"?
 		Hotkeys we could use:

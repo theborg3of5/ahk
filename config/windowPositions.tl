@@ -54,13 +54,13 @@
 	~WIDTH.defaultTo(HALF) | ~HEIGHT.defaultTo(HALF) {
 		~PRESET.replaceWith(GAME_ON_LEFT) | ~MONITOR.replaceWith(MIDDLE) {
 			Messenger					LEFT_EDGE		BOTTOM_EDGE
-			Republic Anywhere			LEFT_EDGE		TOP_EDGE
+			; Republic Anywhere			LEFT_EDGE		TOP_EDGE ; Some sort of issue with this crashes the script
 			Slack							RIGHT_EDGE		BOTTOM_EDGE
 			Telegram						RIGHT_EDGE		TOP_EDGE
 		}
 		~PRESET.replaceWith(GAME_ON_MIDDLE) | ~MONITOR.replaceWith(LEFT) {
 			Messenger					LEFT_EDGE		BOTTOM_EDGE
-			Republic Anywhere			LEFT_EDGE		TOP_EDGE
+			; Republic Anywhere			LEFT_EDGE		TOP_EDGE
 			Slack							RIGHT_EDGE		BOTTOM_EDGE
 			Telegram						RIGHT_EDGE		TOP_EDGE
 			Chrome						-					-					MAX		MAX

@@ -87,7 +87,7 @@
 				Spotify									Spotify.exe					-									-														NO_PADDING
 				Steam										Steam.exe					-									-														NO_PADDING
 				Teams										Teams.exe					-									-														NO_PADDING
-				Telegram									Telegram.exe				Qt5QWindowIcon					-														NO_PADDING
+				Telegram									Telegram.exe				Qt5152QWindowIcon				-														NO_PADDING
 				Thunder									Thunder.exe					-									Thunder
 				TortoiseGit								TortoiseGitProc.exe
 				TortoiseSVN								TortoiseProc.exe

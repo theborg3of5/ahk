@@ -10,8 +10,10 @@ return
 ^+#k::
 	sendLinkedTextFromClipboard() {
 		HotkeyLib.waitForRelease()
-		text := Clipboard.beforeString("`n")
-		url  := Clipboard.afterString("`n")
+		
+		value := clipboard.replace("`r`n", "`n") ; Replace `r`n with just `n to avoid counting/highlighting mishaps
+		text := value.beforeString("`n")
+		url  := value.afterString("`n")
 		
 		; Send and select the text
 		ClipboardLib.send(text)

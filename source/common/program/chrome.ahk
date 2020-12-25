@@ -19,16 +19,12 @@
 	}
 	
 	;---------
-	; DESCRIPTION:    Get the current tab's URL, restoring focus to the web page.
-	; RETURNS:        The current URL
+	; DESCRIPTION:    Get the current tab's URL, using the CopyTabTitleUrl extension:
+	;                 https://chrome.google.com/webstore/detail/copytabtitleurl/lmgbdjfoaihhgdphombpgjpaohjfeapp
+	; RETURNS:        The current tab's URL
 	;---------
 	getCurrentURL() {
-		Send, ^l     ; Focus address bar
-		Sleep, 100   ; Wait for address bar to get focused
-		url := SelectLib.getText()
-		Send, {F6 3} ; Focus the web page again
-		
-		return url
+		return ClipboardLib.getWithHotkey("!c") ; !c is the default hotkey for the extension
 	}
 	
 	;---------

@@ -1,6 +1,11 @@
 # New Ideas
 	Consider breaking some common bits for tiny standalone scripts, out into something separate from the normal load-all-common-stuff
 		Should help speed up tiny scripts like media keys
+	Consider adding "jiggling" for certain windows in fix-window-positions script, to fix toolbar buttons
+		Unmaximize (already doing this, I think?) + move to another monitor + move back
+		Windows
+			Outlook
+			Explorer
 	Could we make it easier to update current version of Hyperspace?
 		Places I have to change now:
 			Source folders in privates

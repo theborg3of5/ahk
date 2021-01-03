@@ -1,4 +1,6 @@
 # New Ideas
+	Request new chrome extension approval at work, or at least sideload it there:
+		https://chrome.google.com/webstore/detail/quick-copy-url/pejnfjhmapcmemanpjfalfkmeblolhnj
 	Consider breaking some common bits for tiny standalone scripts, out into something separate from the normal load-all-common-stuff
 		Should help speed up tiny scripts like media keys
 	Consider adding "jiggling" for certain windows in fix-window-positions script, to fix toolbar buttons

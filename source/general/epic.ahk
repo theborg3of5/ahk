@@ -1,16 +1,16 @@
 ; Work-specific hotkeys
 
 #If Config.contextIsWork ; Any work machine --=
-	^!+d:: Send, % selectTLGId().removeFromStart("P.").removeFromStart("Q.")
-	^!#d:: selectTLGActionObject().openWeb()
-	^!+#d::selectTLGActionObject().openEdit()
-	selectTLGId() {
-		s := new Selector("tlg.tls").setTitle("Select EMC2 Record ID").overrideFieldsOff()
+	^!+d:: Send, % selectTLGId("Select EMC2 Record to Send").removeFromStart("P.").removeFromStart("Q.")
+	^!#d:: selectTLGActionObject("Select EMC2 Record to View").openWeb()
+	^!+#d::selectTLGActionObject("Select EMC2 Record to Edit").openEdit()
+	selectTLGId(title) {
+		s := new Selector("tlg.tls").setTitle(title).overrideFieldsOff()
 		s.dataTableList.filterOutEmptyForColumn("RECORD")
 		return s.selectGui("RECORD")
 	}
-	selectTLGActionObject() {
-		recId := selectTLGId()
+	selectTLGActionObject(title) {
+		recId := selectTLGId(title)
 		if(!recId)
 			return ""
 		

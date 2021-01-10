@@ -20,7 +20,14 @@
 ; Some programs are only available on specific machines
 #If Config.machineIsHomeDesktop
 	^!+s::Config.runProgram("Slack")
-	^!#f::Config.runProgram("Firefox Portable")
+	^!#f::
+		; Safety check for VPN
+		if(Config.doesWindowExist("Cisco AnyConnect VPN")) {
+			MsgBox, oof
+			return
+		}
+		Config.runProgram("Firefox Portable")
+	return
 #If Config.machineIsHomeDesktop || Config.machineIsWorkLaptop || Config.machineIsHomeLaptop
 	#s::  Config.runProgram("Spotify") ; Can't unminimize from tray with any reasonable logic, so re-run to do so.
 	#f::  Config.activateProgram("Everything")

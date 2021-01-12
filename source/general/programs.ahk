@@ -23,7 +23,7 @@
 	^!#f::
 		; Safety check for VPN
 		if(Config.doesWindowExist("Cisco AnyConnect VPN")) {
-			MsgBox, oof
+			MsgBox, VPN running!
 			return
 		}
 		Config.runProgram("Firefox Portable")

@@ -48,7 +48,7 @@
 	::Tapestery::Tapestry
 	::InBasket::In Basket
 	::flase::false
-	::assocition::association
+	::associt::associat
 	::valiation::validation
 	::verpleedag::verpleegdag
 	::helptext::help text
@@ -72,6 +72,8 @@
 	::auth'n::authorization
 	::ass'n::association
 	::assoc'n::association
+	::ass'd::associated
+	::assoc'd::associated
 	::qai::QA Instructions
 	
 	:?:sync'ly::synchronously

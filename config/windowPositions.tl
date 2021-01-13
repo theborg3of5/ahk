@@ -34,7 +34,7 @@
 			VB6							-					-					MAX		MAX		WORK
 			Visual Studio				-					-					MAX		MAX		WORK
 			Hyperspace					CENTERED			CENTERED			1440		900		WORK
-			Zoom							CENTERED			CENTERED			1440		900		HOME
+			Zoom							-					-					MAX		MAX		HOME
 	}
 	
 	~MONITOR.replaceWith(RIGHT) {

@@ -1,4 +1,7 @@
 # New Ideas
+	Consider a toast when switching sound devices via SoundSwitch
+		Would show up in consistent location
+		If we hard-code the devices (or perhaps a special substring we add to them), we could show "from > to"-style display immediately
 	Request new chrome extension approval at work, or at least sideload it there:
 		https://chrome.google.com/webstore/detail/quick-copy-url/pejnfjhmapcmemanpjfalfkmeblolhnj
 	Consider breaking some common bits for tiny standalone scripts, out into something separate from the normal load-all-common-stuff

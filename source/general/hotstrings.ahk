@@ -109,11 +109,12 @@
 	:X:pff:: sendFolderPath("PROGRAM_FILES")
 	:X:xpff::sendFolderPath("PROGRAM_FILES_86")
 	
-	:X:urf:: sendFolderPath("USER_ROOT")
-	:X:dsf:: sendFolderPath("USER_DESKTOP")
-	:X:desf::sendFolderPath("USER_ROOT", "Design")
-	:X:dlf:: sendFolderPath("USER_DOWNLOADS")
-	:X:devf::sendFolderPath("USER_DEV")
+	:X:urf::  sendFolderPath("USER_ROOT")
+	:X:dsf::  sendFolderPath("USER_DESKTOP")
+	:X:desf:: sendFolderPath("USER_ROOT", "Design")
+	:X:dlf::  sendFolderPath("USER_DOWNLOADS")
+	:X:devf:: sendFolderPath("USER_DEV")
+	:X:zrzlf::sendFolderPath("USER_DEV", "zrzl")
 	
 	:X:otmf::sendFolderPath("ONETASTIC_MACROS")
 	:X:npsf::sendFolderPath("NOTEPAD_PP_SESSIONS")

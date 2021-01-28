@@ -19,12 +19,12 @@
 	}
 	
 	;---------
-	; DESCRIPTION:    Get the current tab's URL, using the CopyTabTitleUrl extension:
-	;                 https://chrome.google.com/webstore/detail/copytabtitleurl/lmgbdjfoaihhgdphombpgjpaohjfeapp
+	; DESCRIPTION:    Get the current tab's URL, using the Quick Copy URL extension:
+	;                 https://chrome.google.com/webstore/detail/quick-copy-url/pejnfjhmapcmemanpjfalfkmeblolhnj
 	; RETURNS:        The current tab's URL
 	;---------
 	getCurrentURL() {
-		return ClipboardLib.getWithHotkey("!c") ; !c is the default hotkey for the extension
+		return ClipboardLib.getWithHotkey("!c") ; !c = "Copy the URL of your current tab" hotkey
 	}
 	
 	;---------

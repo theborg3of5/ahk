@@ -11,7 +11,7 @@
 				Chrome TickTick						chrome.exe					-									All - TickTick
 		
 		; EMC2 windows
-		~EXE.replaceWith(EpicD95.exe) {
+		~EXE.replaceWith(EpicD96.exe) {
 			; Different sections of the main EMC2 window.
 			~CLASS.replaceWith(ThunderRT6MDIForm) | ~TITLE_MATCH_MODE.replaceWith(START) {
 				EMC2 DLG									-								-									DLG
@@ -54,7 +54,7 @@
 				Chrome									chrome.exe					Chrome_WidgetWin_1			- Google Chrome
 				Cisco AnyConnect VPN					vpnui.exe					-									Cisco AnyConnect Secure Mobility Client
 				Discord									Discord.exe					-									-														NO_PADDING
-				EMC2										EpicD95.exe					-									EMC2
+				EMC2										EpicD96.exe					-									EMC2
 				EpicStudio								EpicStudio.exe				-									EpicStudio
 				Everything								Everything.exe				EVERYTHING
 				Excel										EXCEL.EXE					-									-														NO_PADDING

@@ -88,8 +88,6 @@
 			textToSend := textToSend.replaceTag("PRJ",      prjId)
 			textToSend := textToSend.replaceTag("QAN",      qanId)
 			
-			; textToSend := textToSend.replaceTag("QAN", qanId)
-			
 			if(Outlook.isTLGCalendarActive()) {
 				SendRaw, % textToSend
 				Send, {Enter}

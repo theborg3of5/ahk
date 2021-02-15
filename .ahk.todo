@@ -1,4 +1,5 @@
 # New Ideas
+	Republic Anywhere is freezing window-position-fixer script again - can we add a timeout or something?
 	Consider a toast when switching sound devices via SoundSwitch
 		Would show up in consistent location
 		If we hard-code the devices (or perhaps a special substring we add to them), we could show "from > to"-style display immediately

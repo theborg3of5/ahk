@@ -7,12 +7,15 @@
 	:X:eemaila::Send, % Config.private["WORK_EMAIL"]
 	:X:oemaila::Send, % Config.private["OUTLOOK_EMAIL"]
 	
-	:X:phoneno:: Send,    % Config.private["PHONE_NUM"]
-	:X:fphoneno::Send,    % PhoneLib.formatNumber(Config.private["PHONE_NUM"])
+	:X:phoneno:: Send, % Config.private["PHONE_NUM"]
+	:X:fphoneno::Send, % PhoneLib.formatNumber(Config.private["PHONE_NUM"])
+	
 	:X:waddr::   SendRaw, % Config.private["HOME_ADDRESS"]
 	:X:aaddr::   SendRaw, % Config.private["APARTMENT_ADDRESS"]
 	:X:eaddr::   Send,    % Config.private["WORK_ADDRESS"]
 	:*0X:ezip::  Send,    % Config.private["WORK_ZIP_CODE"]
+	
+	:X?:ecompnum::Send, % Config.private["WORK_COMPUTER_NUM"]
 	
 	:X:uname::Send, % Config.private["USERNAME"]
 

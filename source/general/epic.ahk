@@ -71,12 +71,14 @@
 			fullName := data["NAME_OUTPUT_PREFIX"] data["NAME"]
 			combinedMessage := fullName.appendPiece(data["MESSAGE"], " - ")
 			
-			; Record field can contain DLG (no prefix), PRJ (P. prefix), or QAN (Q. prefix) IDs.
+			; Record field can contain DLG (no prefix), PRJ (P.), QAN (Q.), or SLG (S.) IDs.
 			recId := data["RECORD"]
 			if(recId.startsWith("P."))
 				prjId := recId.removeFromStart("P.")
 			else if(recId.startsWith("Q."))
 				qanId := recId.removeFromStart("Q.")
+			else if(recId.startsWith("S."))
+				slgId := recId.removeFromStart("S.")
 			else
 				dlgId := recId
 			
@@ -84,6 +86,7 @@
 			textToSend := textToSend.replaceTag("MESSAGE",  combinedMessage) ; Replace the message first in case it contains any of the following tags
 			textToSend := textToSend.replaceTag("TLP",      data["TLP"])
 			textToSend := textToSend.replaceTag("CUSTOMER", data["CUSTOMER"])
+			textToSend := textToSend.replaceTag("SLG",      slgId)
 			textToSend := textToSend.replaceTag("DLG",      dlgId)
 			textToSend := textToSend.replaceTag("PRJ",      prjId)
 			textToSend := textToSend.replaceTag("QAN",      qanId)

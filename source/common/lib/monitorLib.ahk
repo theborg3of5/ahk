@@ -173,29 +173,19 @@ class MonitorLib {
 		if(this._workAreasByLocation)
 			return this._workAreasByLocation
 		
+		; First get monitors, sorted left-to-right.
+		monitorsByLeft := {}
 		Loop, % SysGet("MonitorCount") {
 			currMon := MonitorLib.getWorkArea(A_Index)
-			
-			; If this is the first one we found, stick it into all spots.
-			if(monLeft = "") {
-				monLeft  := currMon
-				monMid   := currMon
-				monRight := currMon
-				Continue
-			}
-			
-			if(currMon["LEFT"] < monLeft["LEFT"])
-				monLeft := currMon
-			else if(currMon["LEFT"] > monRight["LEFT"])
-				monRight := currMon
-			else
-				monMid := currMon
+			monitorsByLeft[currMon["LEFT"]] := currMon
 		}
 		
+		; Slot the monitors into matching, labelled indices
+		monitorsInOrder := monitorsByLeft.toValuesArray()
 		areasByLocation := {}
-		areasByLocation[ MonitorLib.Location_Left   ] := monLeft
-		areasByLocation[ MonitorLib.Location_Middle ] := monMid
-		areasByLocation[ MonitorLib.Location_Right  ] := monRight
+		areasByLocation[ MonitorLib.Location_Left   ] := monitorsInOrder[1]
+		areasByLocation[ MonitorLib.Location_Middle ] := monitorsInOrder[2]
+		areasByLocation[ MonitorLib.Location_Right  ] := monitorsInOrder[3]
 		
 		this._workAreasByLocation := areasByLocation
 		return areasByLocation

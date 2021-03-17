@@ -11,4 +11,10 @@
 		WinWaitActive, % Config.windowInfo["Spotify"].titleString
 		Send, ^l
 	return
+	
+	; Alternative search hotkeys (that make more sense than the original)
+	^j::
+	^/::
+		Send, ^l
+	return
 #If

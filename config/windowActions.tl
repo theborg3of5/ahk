@@ -26,7 +26,7 @@
 	Republic Anywhere						CLOSE		CLOSE
 	Skype										CLOSE
 	Slack										CLOSE		-					-					-					-			-				ESCAPE		HOME_DESKTOP
-	Spotify									CLOSE		CLOSE				-					-					OTHER		OTHER
+	Spotify									CLOSE		CLOSE				-					-					OTHER		OTHER			ESCAPE
 	Teams										CLOSE		CLOSE				-					-					-			-				ESCAPE
 	Telegram									CLOSE		CLOSE				-					-					-			-				ESCAPE
 	Thunder									CLOSE

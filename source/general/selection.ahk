@@ -26,6 +26,9 @@
 ; Grab the selected text and pop it into a new Notepad window
 !v::
 	putSelectedTextIntoNewNotepadWindow() {
+		if(!GetKeyState("v", "P")) ; Check physical state so we can tell the difference between the keys being pressed vs. sent by keyboard macros.
+			return
+		
 		selectedText := SelectLib.getText()
 		if(selectedText = "")
 			return

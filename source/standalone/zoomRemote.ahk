@@ -11,19 +11,13 @@ global isGalleryView := true ; Default is gallery view, at least in the meetings
 
 #IfWinActive, ahk_exe Zoom.exe ahk_class ZPContentViewWndClass
 	; Specific views, directly
-	!F1::
-	#d::          ; Desktop (F1 on remote keyboard)
-		switchToSpeakerView()
-	return
-	!F2::
-	#^Backspace:: ; Task view (F2 on remote keyboard)
-		switchToGalleryView()
-	return
+	F1::switchToSpeakerView()
+	F2::switchToGalleryView()
 	
-	; Easier toggles using extra buttons
-	Launch_Media::!a ; Toggle mute
-	!z::!v           ; Toggle video
-	Browser_Home::toggleView()
+	; Remote keyboard has these extra bindings (via rebound keys):
+	; Music - Alt+A (toggle mute)
+	!F3::toggleView() ; Lock - Alt+F3
+	; Power - Alt+V (toggle video)
 #IfWinActive
 
 switchToSpeakerView() {

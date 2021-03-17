@@ -1,8 +1,11 @@
 # New Ideas
 	Republic Anywhere is freezing window-position-fixer script again - can we add a timeout or something?
-	Would it make sense to have my global Alt+<letter> hotkeys fall through to actually sending that letter if nothing is selected?
-		That would make it harder to just enter a number instead of selecting it
-			Then again, how much do I use that anyway?
+	Consider an open-DLG-in-EpicStudio hotkey for Chrome
+		^+o to match EMC2, or possibly a new !s hotkey for both?
+			!s would be more invasive as a global hotkey
+				Would it make sense to have my global Alt+<letter> hotkeys fall through to actually sending that letter if nothing is selected?
+					That would make it harder to just enter a number instead of selecting it
+						Then again, how much do I use that anyway?
 	Would a clear-all-notifications hotkey be nice for Windows notification center?
 		Or will it be easier to just tab a few times to get to the dismiss all button?
 		Focused "window" info

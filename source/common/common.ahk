@@ -98,6 +98,7 @@ Object(params*) {
 	#Include spotify.ahk
 	#Include telegram.ahk
 	#Include vb6.ahk
+	#Include zoom.ahk
 	
 #Include %A_LineFile%\..\static
 	#Include config.ahk

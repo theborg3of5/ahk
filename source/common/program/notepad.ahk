@@ -1,5 +1,5 @@
 class Notepad {
-	; #INTERNAL#
+	; #PUBLIC#
 	
 	;---------
 	; DESCRIPTION:    Open a new instance of Notepad and set its content to the provided text.

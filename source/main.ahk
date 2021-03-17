@@ -75,6 +75,7 @@ if(Config.contextIsWork) { ; Work-specific subs
 #Include wilma.ahk
 #Include word.ahk
 #Include yEd.ahk
+#Include zoom.ahk
 
 ; Before/after suspend hooks to allow *Lock keys to be hotkeys or ignored while script is active,
 ; but back to normal when script is suspended.

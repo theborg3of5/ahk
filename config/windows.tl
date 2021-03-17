@@ -44,7 +44,6 @@
 				EpicStudio Attach to Process		EpicStudio.exe				-									Attach to Process
 				OneTastic Macro Editor XML			ONENOTE.EXE					Onetastic Window				Edit XML
 				OneTastic Macro Editor				ONENOTE.EXE					Onetastic Window
-				Pidgin Buddy List						pidgin.exe					-									Buddy List
 				Snapper Add Records					Snapper.exe					-									Add a Record
 	}
 	

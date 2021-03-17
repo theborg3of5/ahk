@@ -22,7 +22,6 @@
 	Messenger								MIN		-					-					-					-			-				ESCAPE		HOME_DESKTOP
 	Notepad									CLOSE		-					-					CTRL_SHIFT
 	OneTastic Macro Editor XML			-			-					HOME_END
-	Pidgin Buddy List						CLOSE		CLOSE
 	Republic Anywhere						CLOSE		CLOSE
 	Skype										CLOSE
 	Slack										CLOSE		-					-					-					-			-				ESCAPE		HOME_DESKTOP

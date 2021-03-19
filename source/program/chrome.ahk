@@ -23,7 +23,7 @@
 	; Open different objects based on the title.
 	!w::Chrome.openCurrentEMC2ObjectWeb()
 	!e::Chrome.openCurrentEMC2ObjectEdit()
-	^+o::Chrome.openCodeSearchServerCodeInEpicStudio()
+	^+o::Chrome.openCurrentDLGInEpicStudio()
 	
 	; Handling for file links
 	^RButton::Chrome.copyLinkTarget() ; Copy

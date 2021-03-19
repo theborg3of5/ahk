@@ -43,6 +43,25 @@
 	}
 	
 	;---------
+	; DESCRIPTION:    Open the DLG from the current page in EpicStudio.
+	;---------
+	openCurrentDLGInEpicStudio() {
+		ao := new ActionObjectEMC2(Chrome.getTitle())
+		if(ao.ini != "DLG") {
+			new ErrorToast("Failed to launch DLG in EpicStudio", "Object was not a DLG").showMedium()
+			return
+		}
+		
+		if(ao.id = "") {
+			new ErrorToast("Failed to launch DLG in EpicStudio", "No DLG ID found").showMedium()
+			return
+		}
+		
+		t := new Toast("Opening DLG in EpicStudio: " ao.id).showShort()
+		new ActionObjectEpicStudio(ao.id, ActionObjectEpicStudio.DescriptorType_DLG).open()
+	}
+	
+	;---------
 	; DESCRIPTION:    Copy the title and rearrange/clean it up a bit.
 	; RETURNS:        Title of the window, cleaned and processed.
 	; NOTES:          Some cases (most notably CodeSearch) will end up with something completely
@@ -78,29 +97,6 @@
 		}
 		
 		return title
-	}
-	
-	;---------
-	; DESCRIPTION:    Open the current routine (and tag if it's the selected text) in EpicStudio
-	;                 for CodeSearch windows.
-	;---------
-	openCodeSearchServerCodeInEpicStudio() {
-		if(!Chrome.isCurrentPageCodeSearch())
-			return
-		
-		tag := SelectLib.getCleanFirstLine()
-		
-		title := WinGetActiveTitle()
-		title := title.removeFromEnd(" - Google Chrome")
-		titleAry := title.split("/")
-		routine := titleAry[1]
-		if(!routine)
-			return
-		
-		displayCode := tag.appendPiece(routine, "^")
-		new Toast("Opening server code in EpicStudio: " displayCode).showMedium()
-		
-		new ActionObjectEpicStudio(tag "^" routine, ActionObjectEpicStudio.DescriptorType_Routine).openEdit()
 	}
 
 	;---------

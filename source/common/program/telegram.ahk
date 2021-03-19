@@ -22,7 +22,7 @@ class Telegram {
 	; DESCRIPTION:    Focus the "Normal" chat that's the only one I use in Telegram.
 	;---------
 	focusNormalChat() {
-		Send, {Enter}
+		Send, ^1
 	}
 	
 	

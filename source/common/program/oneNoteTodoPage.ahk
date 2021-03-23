@@ -76,6 +76,32 @@ class OneNoteTodoPage {
 		OneNoteTodoPage.sendItems(todoItems)
 	}
 	
+	;---------
+	; DESCRIPTION:    Send the various sub-todos I add under most dev items.
+	;---------
+	insertDevTodos() {
+		todos := []
+		todos.push({tag:1, text:"Submit design"})
+		todos.push({tag:1, text:"Dev comp"})
+		todos.push({tag:5, text:"Design review"})
+		todos.push({tag:5, text:"PQA1 - "})
+		todos.push({tag:1, text:"Move to Stage 1"})
+		todos.push({tag:5, text:"QA1 - "})
+		todos.push({tag:5, text:"PQA2 - "})
+		todos.push({tag:1, text:"Move to Final"})
+		todos.push({tag:5, text:"QA2 - "})
+		
+		For index,todo in todos {
+			if(index > 1)
+				Send, {Enter}
+			
+			Send, ^0 ; Clear tag
+			Send, % "^" todo.tag ; Apply new tag
+			
+			SendRaw, % todo.text
+		}
+	}
+	
 	
 	; #PRIVATE#
 	

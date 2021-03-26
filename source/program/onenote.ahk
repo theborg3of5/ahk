@@ -92,6 +92,7 @@
 	:*X:.todo::   OneNoteTodoPage.peekOtherTodos()       ; Peek at past/future todo items
 	:*X:.itodo::  OneNoteTodoPage.insertOtherTodos()     ; Insert past/future todo items
 	:*X:.devtodo::OneNoteTodoPage.insertDevTodos()       ; Typical dev list of todo sub-items
+	:*X:.pqatodo::OneNoteTodoPage.insertPQATodos()       ; Typical PQA list of todo sub-items
 	
 	; Update links for a dev structure section header
 	!+#n::OneNote.linkDevStructureSectionTitle()

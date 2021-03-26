@@ -102,6 +102,13 @@ class OneNoteTodoPage {
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    Send the various sub-todos I add under most PQA items.
+	;---------
+	insertPQATodos() {
+		this.sendItems(["Review", "Test"])
+	}
+	
 	
 	; #PRIVATE#
 	

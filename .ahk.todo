@@ -1,4 +1,7 @@
 # New Ideas
+	Can we make hyperlink-copying hotkeys a little more reliable? Maybe wait a little longer, or do a WinWait(Active) on the right-click menu?
+		Chrome
+		OneNote
 	Republic Anywhere is freezing window-position-fixer script again - can we add a timeout or something?
 	Would a static ErrorToast wrapper make sense, rather than having to do the whole new ErrorToast("").showMedium() thing each time?
 	Would a clear-all-notifications hotkey be nice for Windows notification center?

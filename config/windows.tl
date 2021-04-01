@@ -45,7 +45,7 @@
 				OneTastic Macro Editor XML			ONENOTE.EXE					Onetastic Window				Edit XML
 				OneTastic Macro Editor				ONENOTE.EXE					Onetastic Window
 				Snapper Add Records					Snapper.exe					-									Add a Record
-				Zoom Default Meeting					Zoom.exe						ZPContentViewWndClass		Zoom
+				Zoom Default Meeting					Zoom.exe						ZPContentViewWndClass		Zoom													-					EXACT
 	}
 	
 	; Most general form of various windows (specifics above should override).

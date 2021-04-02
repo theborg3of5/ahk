@@ -62,15 +62,7 @@ fixWindowPositions(titleString := "") {
 	
 	; Fix a single window.
 	if(titleString != "") {
-		For _,names in Config.findAllMatchingWindowNames(titleString) { ; Looping in priority order
-			For _,name in names {
-				if(positions[name]) {
-					position := positions[name]
-					Break
-				}
-			}
-		}
-		
+		position := findBestMatchPosition(titleString, positions)
 		fixWindowPosition(titleString, position)
 	
 	; Fix all the windows in the config file at once.
@@ -88,6 +80,14 @@ fixWindowPositions(titleString := "") {
 			fixWindowPosition(winInfo.idString, position)
 		}
 		pt.finish()
+	}
+}
+findBestMatchPosition(titleString, positions) {
+	For _,names in Config.findAllMatchingWindowNames(titleString) { ; Looping by priority
+		For _,name in names {
+			if(positions[name])
+				return positions[name]
+		}
 	}
 }
 fixWindowPosition(titleString, position) {

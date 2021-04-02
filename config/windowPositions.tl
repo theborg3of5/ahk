@@ -67,3 +67,6 @@
 		}
 	}
 }
+
+; Specific windows that we shouldn't be trying to fix
+			Zoom Default Meeting

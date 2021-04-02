@@ -71,6 +71,12 @@ fixWindowPositions(titleString := "") {
 		For name,position in positions {
 			pt.nextStep(name, "fixed")
 			
+			; Ensure that the window we identified doesn't better match another, more specific position entry
+			if(name != Config.findWindowName(winInfo.idString)) {
+				pt.endStep("not found")
+				Continue
+			}
+			
 			winInfo := Config.windowInfo[name]
 			if(!winInfo.exists()) {
 				pt.endStep("not found")

@@ -1,11 +1,4 @@
 # New Ideas
-	Consider !w/!e hotkeys inside EpicStudio
-		Can pull from current object's DLG (from window title)
-		Could also pull from selected DLG in Object Explorer
-			^c gives us the full DLG ID + title
-			Probably want to limit this to when that control is focused
-				ClassNN:	WindowsForms10.Window.8.app.0.141b42a_r9_ad119
-					Seems pretty stable?
 	Window positions: consider a flag/column that DOESN'T re-minimize/re-hide/etc. windows - so they should all end up visible
 		Use with gm/gl presets
 	Can we make hyperlink-copying hotkeys a little more reliable? Maybe wait a little longer, or do a WinWait(Active) on the right-click menu?

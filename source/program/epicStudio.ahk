@@ -18,6 +18,10 @@
 	; Link routine to currently open DLG in EMC2.
 	^+l::EpicStudio.linkRoutineToCurrentDLG()
 	
+	; Edit/view current DLG.
+	!w::EpicStudio.openCurrentDLGWeb()
+	!e::EpicStudio.openCurrentDLGEdit()
+	
 	; Generate and insert snippets
 	:X:.snip::MSnippets.insertSnippet()
 	

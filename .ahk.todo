@@ -1,6 +1,7 @@
 # New Ideas
 	Window positions: consider a flag/column that DOESN'T re-minimize/re-hide/etc. windows - so they should all end up visible
 		Use with gm/gl presets
+	Consider renaming fixWindowPosition* stuff and moving it into a static class
 	Can we make hyperlink-copying hotkeys a little more reliable? Maybe wait a little longer, or do a WinWait(Active) on the right-click menu?
 		Chrome
 		OneNote

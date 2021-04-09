@@ -36,6 +36,10 @@ class WindowLib {
 		return this.hasStyle(MicrosoftLib.Style_Visible, titleString)
 	}
 	
+	makeVisible(titleString := "A") {
+		this.addStyle(MicrosoftLib.Style_Visible, titleString)
+	}
+	
 	;---------
 	; DESCRIPTION:    Determine whether a window is set to be always on top.
 	; PARAMETERS:
@@ -90,6 +94,10 @@ class WindowLib {
 	;---------
 	hasExStyle(extendedStyle, titleString := "A") {
 		return DataLib.bitFieldHasFlag(WinGet("ExStyle", titleString), extendedStyle)
+	}
+	
+	addStyle(style, titleString := "A") {
+		WinSet, Style, % "+" style, % titleString
 	}
 	
 	;---------

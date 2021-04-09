@@ -1,7 +1,7 @@
 ; NAME = NAME from windows.tl
 ; X/Y/WIDTH/HEIGHT support special constant values from VisualWindow (i.e. RIGHT_EDGE for VisualWindow.X_RightEdge)
 
-[			NAME							X					Y					WIDTH		HEIGHT	CONTEXT		MONITOR		PRESET	]
+[			NAME							X					Y					WIDTH		HEIGHT	CONTEXT		ACTIVATE		MONITOR		PRESET	]
 
 ~PRESET.defaultTo(NORMAL) {
 	~MONITOR.replaceWith(LEFT) {
@@ -51,7 +51,7 @@
 	
 	
 # Gaming presets - mostly quartered social windows on the non-gaming monitor
-	~WIDTH.defaultTo(HALF) | ~HEIGHT.defaultTo(HALF) {
+	~WIDTH.defaultTo(HALF) | ~HEIGHT.defaultTo(HALF) | ~ACTIVATE.defaultTo(1) {
 		~PRESET.replaceWith(GAME_ON_LEFT) | ~MONITOR.replaceWith(MIDDLE) {
 			Messenger					LEFT_EDGE		BOTTOM_EDGE
 			; Republic Anywhere			LEFT_EDGE		TOP_EDGE ; Some sort of issue with this crashes the script

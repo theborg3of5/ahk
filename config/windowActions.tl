@@ -24,10 +24,10 @@
 	OneTastic Macro Editor XML			-			-					HOME_END
 	Republic Anywhere						CLOSE		CLOSE
 	Skype										CLOSE
-	Slack										CLOSE		-					-					-					-			-				ESCAPE		HOME_DESKTOP
+	Slack										CLOSE		-					-					-					-			RUN			ESCAPE		HOME_DESKTOP
 	Spotify									CLOSE		CLOSE				-					-					OTHER		OTHER			ESCAPE
 	Teams										CLOSE		CLOSE				-					-					-			-				ESCAPE
-	Telegram									CLOSE		CLOSE				-					-					-			-				ESCAPE
+	Telegram									CLOSE		CLOSE				-					-					-			RUN			ESCAPE
 	Thunder									CLOSE
 	VB6										-			POST_MESSAGE
 

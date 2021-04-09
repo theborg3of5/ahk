@@ -156,6 +156,7 @@ class WindowActions {
 	static Method_SelectAll_Home   := "HOME_END"     ; Select all: send home/end (and holding shift in between)
 	static Method_DeleteWord_Ctrl  := "CTRL_SHIFT"   ; Delete word: send Ctrl+Shift+Left to select it, then delete
 	static Method_Esc              := "ESCAPE"       ; Send an escape keystroke
+	static Method_Run              := "RUN"          ; Run the named program
 	; =--
 	
 	actionOverrides := "" ; {windowName: {action: method}}
@@ -199,9 +200,13 @@ class WindowActions {
 		
 		; How we want to perform the action
 		method := DataLib.coalesce(windowActionSettings[action], this.Method_Default)
-		if(method = this.Method_Other) {
-			this.doSpecialWindowMethod(action, titleString, windowActionSettings)
-			return
+		Switch method {
+			Case this.Method_Other:
+				this.doSpecialWindowMethod(action, titleString, windowActionSettings)
+				return
+			Case this.Method_Run:
+				Config.runProgram(windowActionSettings["NAME"])
+				return
 		}
 		
 		; Do that action.

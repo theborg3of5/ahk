@@ -106,8 +106,10 @@ fixWindowPosition(titleString, position) {
 	workArea := MonitorLib.workAreaForLocation[position["MONITOR"]]
 	new VisualWindow(titleString).resizeMove(position["WIDTH"], position["HEIGHT"], position["X"], position["Y"], workArea)
 	
-	; Re-minimize if the window started out that way.
-	if(startedMinimized)
+	; Put window into final state
+	if(position["ACTIVATE"]) ; If the flag says to activate it, always do so.
+		Config.activateProgram(position["NAME"])
+	else if(startedMinimized) ; Otherwise, re-minimize the window if it started out that way.
 		WinMinimize, % titleString
 }
 

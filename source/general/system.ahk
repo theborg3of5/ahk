@@ -20,7 +20,7 @@
 	Browser_Forward::RButton
 #If Config.machineIsHomeLaptop || Config.machineIsWorkLaptop || Config.machineIsWorkVDI || Config.machineIsHomeDesktop ; GDB WFH +machineIsHomeDesktop
 	AppsKey::RWin ; No right windows key on these machines, so use the AppsKey (right-click key) instead.
-#If Config.machineIsWorkLaptop ; GDB WFH this whole suppress section
+#If Config.contextIsWork ; GDB WFH this whole suppress section
 	; Suppress certain buttons on my work keyboard (for when using my work keyboard from home)
 	Launch_App2:: ; Calculator key
 	Browser_Home::

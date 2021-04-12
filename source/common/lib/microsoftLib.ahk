@@ -32,6 +32,10 @@ class MicrosoftLib {
 	static Message_AppCommand  := 0x319 ; Send a specific command to an app (WM_APPCOMMAND)
 	; @GROUP-END@
 	
+	; @GROUP@ System Commands ( https://docs.microsoft.com/en-us/windows/win32/menurc/wm-syscommand )
+	static SystemCommand_Minimize := 0xF020 ; Minimize the window (SC_MINIMIZE)
+	; @GROUP-END@
+	
 	; @GROUP@ Scroll Bar Requests/Messages ( https://docs.microsoft.com/en-us/windows/desktop/Controls/about-scroll-bars )
 	static ScrollBar_Up    := 0 ; Scroll 1 unit to the left (SB_LINEUP)
 	static ScrollBar_Down  := 1 ; Scroll 1 unit to the right (SB_LINEDOWN)

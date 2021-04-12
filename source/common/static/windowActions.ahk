@@ -140,7 +140,6 @@ class WindowActions {
 	; #PRIVATE#
 	
 	; [[Supported window actions]] --=
-	static Action_None       := "NONE"        ; Nothing
 	static Action_Activate   := "ACTIVATE"    ; Activate the window
 	static Action_Backtick   := "BACKTICK"    ; Handle the backtick key being pressed
 	static Action_Close      := "CLOSE"       ; Close the window
@@ -150,13 +149,12 @@ class WindowActions {
 	static Action_SelectAll  := "SELECT_ALL"  ; Select all of the current field
 	
 	; [[Supported action methods]] ===
-	static Method_Default          := "DEFAULT"      ; Use the default way of performing the action
-	static Method_Other            := "OTHER"        ; Something special, defined in .doSpecialWindowMethod
-	static Method_Minimize_Message := "POST_MESSAGE" ; Minimize: send a windows message to do it
-	static Method_SelectAll_Home   := "HOME_END"     ; Select all: send home/end (and holding shift in between)
-	static Method_DeleteWord_Ctrl  := "CTRL_SHIFT"   ; Delete word: send Ctrl+Shift+Left to select it, then delete
-	static Method_Esc              := "ESCAPE"       ; Send an escape keystroke
-	static Method_Run              := "RUN"          ; Run the named program
+	static Method_Other             := "OTHER"        ; Special app-specific handling, defined in .performActionForOtherWindow
+	static Method_Minimize_Message  := "POST_MESSAGE" ; Minimize: send a windows message to do it
+	static Method_SelectAll_Home    := "HOME_END"     ; Select all using home/end keys
+	static Method_DeleteWord_Select := "SELECT"       ; Delete a word by selecting it
+	static Method_SendEsc           := "ESCAPE"       ; Send an escape keystroke
+	static Method_Run               := "RUN"          ; Run the named program
 	; =--
 	
 	actionOverrides := "" ; {windowName: {action: method}}
@@ -184,7 +182,7 @@ class WindowActions {
 		else
 			titleString := Config.windowInfo[name].idString
 		
-		this.doWindowAction(action, titleString, this.actionOverrides[name])
+		this.performAction(action, titleString, this.actionOverrides[name])
 	}
 	
 	;---------
@@ -194,154 +192,51 @@ class WindowActions {
 	;  titleString          (I,REQ) - A title string that identifies the window we want to perform the action on.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
 	;---------
-	doWindowAction(action, titleString, windowActionSettings) {
+	performAction(action, titleString, windowActionSettings) {
 		if(!action || !titleString)
 			return
 		
-		; How we want to perform the action
-		method := DataLib.coalesce(windowActionSettings[action], this.Method_Default)
-		Switch method {
-			Case this.Method_Other:
-				this.doSpecialWindowMethod(action, titleString, windowActionSettings)
-				return
-			Case this.Method_Run:
-				Config.runProgram(windowActionSettings["NAME"])
-				return
+		method := windowActionSettings[action]
+		
+		; If we don't have a specific method, use the default for the action
+		if(method = "") {
+			this.performDefaultMethod(action, titleString)
+			return
 		}
 		
-		; Do that action.
-		Switch action {
-			Case this.Action_None:       return                                                           ; Do nothing
-			Case this.Action_Activate:   this.doActivateWindow(method, titleString, windowActionSettings) ; Activate the given window
-			Case this.Action_Backtick:   this.doBacktickAction(method, titleString, windowActionSettings) ; React to backtick
-			Case this.Action_Close:      this.doCloseWindow(   method, titleString, windowActionSettings) ; Close the given window
-			Case this.Action_DeleteWord: this.doDeleteWord(    method, titleString, windowActionSettings) ; Backspace one word
-			Case this.Action_EscapeKey:  this.doEscAction(     method, titleString, windowActionSettings) ; React to the escape key (generally to minimize or close the window)
-			Case this.Action_Minimize:   this.doMinimizeWindow(method, titleString, windowActionSettings) ; Minimize the given window
-			Case this.Action_SelectAll:  this.doSelectAll(     method, titleString, windowActionSettings) ; Select all
-			Default: Debug.popup("WindowActions.doWindowAction","Error", "Action not found",action)
+		; Special app-specific handling (for one-off methods that aren't usable elsewhere)
+		if(method = this.Method_Other) {
+			this.performActionForOtherWindow(action, titleString, windowActionSettings)
+			return
 		}
+		
+		; If the method is another action, fall through to that
+		if(this.isAction(method)) {
+			this.performAction(method, titleString, windowActionSettings)
+			return
+		}
+		
+		; Perform the given method
+		this.performSpecificMethod(method, titleString, windowActionSettings)
 	}
 	
 	;---------
-	; DESCRIPTION:    Activate the specified window.
+	; DESCRIPTION:    Check whether the given string matches one of our actions.
 	; PARAMETERS:
-	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_* constants.
-	;  titleString          (I,REQ) - Title string identifying the window to act upon.
-	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
-	; NOTES:          If we don't recognize the specific method, we'll call back into doWindowAction() to see if it's
-	;                 another action (ESC > CLOSE, etc.).
+	;  action (I,REQ) - Action string to check
+	; RETURNS:        true/false - is it an action?
 	;---------
-	doActivateWindow(method, titleString, windowActionSettings) {
-		Switch method {
-			Case this.Method_Default:
-				WinShow,     %titleString%
-				WinActivate, %titleString%
-			Default:
-				this.doWindowAction(method, titleString, windowActionSettings)
-		}
-	}
-	;---------
-	; DESCRIPTION:    Respond to the backtick key in the specified window.
-	; PARAMETERS:
-	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_* constants.
-	;  titleString          (I,REQ) - Title string identifying the window to act upon.
-	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
-	; NOTES:          If we don't recognize the specific method, we'll call back into doWindowAction() to see if it's
-	;                 another action (ESC > CLOSE, etc.).
-	;---------
-	doBacktickAction(method, titleString, windowActionSettings) {
-		Switch method {
-			Case this.Method_Default: Send, `` ; Default is to just let the keystroke through (escaped).
-			Case this.Method_Esc:     Send, {Esc} ; Send escape - backtick is usually used for a replacement for escape in these cases.
-			Default:                  this.doWindowAction(method, titleString, windowActionSettings)
-		}
-	}
-	;---------
-	; DESCRIPTION:    Close the specified window.
-	; PARAMETERS:
-	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_* constants.
-	;  titleString          (I,REQ) - Title string identifying the window to act upon.
-	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
-	; NOTES:          If we don't recognize the specific method, we'll call back into doWindowAction() to see if it's
-	;                 another action (ESC > CLOSE, etc.).
-	;---------
-	doCloseWindow(method, titleString, windowActionSettings) {
-		Switch method {
-			Case this.Method_Default: WinClose, %titleString%
-			Default:                  this.doWindowAction(method, titleString, windowActionSettings)
-		}
-	}
-	;---------
-	; DESCRIPTION:    Delete a word in the specified window.
-	; PARAMETERS:
-	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_* constants.
-	;  titleString          (I,REQ) - Title string identifying the window to act upon.
-	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
-	; NOTES:          If we don't recognize the specific method, we'll call back into doWindowAction() to see if it's
-	;                 another action (ESC > CLOSE, etc.).
-	;---------
-	doDeleteWord(method, titleString, windowActionSettings) {
-		Switch method {
-			Case this.Method_Default:
-				Send, ^{Backspace}
-			Case this.Method_DeleteWord_Ctrl: ; For older places that don't allow it properly.
-				Send, ^+{Left}
-				Send, {Backspace}
-			Default:
-				this.doWindowAction(method, titleString, windowActionSettings)
-		}
-	}
-	;---------
-	; DESCRIPTION:    Respond to the escape key in the specified window.
-	; PARAMETERS:
-	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_* constants.
-	;  titleString          (I,REQ) - Title string identifying the window to act upon.
-	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
-	; NOTES:          If we don't recognize the specific method, we'll call back into doWindowAction() to see if it's
-	;                 another action (ESC > CLOSE, etc.).
-	;---------
-	doEscAction(method, titleString, windowActionSettings) {
-		Switch method {
-			Case this.Method_Default: return ; Default is to do nothing.
-			Default:                  this.doWindowAction(method, titleString, windowActionSettings)
-		}
-	}
-	;---------
-	; DESCRIPTION:    Minimize the specified window.
-	; PARAMETERS:
-	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_* constants.
-	;  titleString          (I,REQ) - Title string identifying the window to act upon.
-	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
-	; NOTES:          If we don't recognize the specific method, we'll call back into doWindowAction() to see if it's
-	;                 another action (ESC > CLOSE, etc.).
-	;---------
-	doMinimizeWindow(method, titleString, windowActionSettings) {
-		Switch method {
-			Case this.Method_Default:          WinMinimize, %titleString%
-			Case this.Method_Minimize_Message: PostMessage, 0x112, 0xF020 , , , %titleString%
-			Default:                           this.doWindowAction(method, titleString, windowActionSettings)
-		}
-	}
-	;---------
-	; DESCRIPTION:    Select all text in the specified window.
-	; PARAMETERS:
-	;  method               (I,REQ) - How the action should be performed, from WindowActions.Method_* constants.
-	;  titleString          (I,REQ) - Title string identifying the window to act upon.
-	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
-	; NOTES:          If we don't recognize the specific method, we'll call back into doWindowAction() to see if it's
-	;                 another action (ESC > CLOSE, etc.).
-	;---------
-	doSelectAll(method, titleString, windowActionSettings) {
-		Switch method {
-			Case this.Method_Default:
-				Send, ^a
-			Case this.Method_SelectAll_Home: ; For older places that don't allow it properly.
-				Send, ^{Home}
-				Send, ^+{End}
-			Default:
-				this.doWindowAction(method, titleString, windowActionSettings)
-		}
+	isAction(action) {
+		actions := []
+		actions.push(this.Action_Activate)
+		actions.push(this.Action_Backtick)
+		actions.push(this.Action_Close)
+		actions.push(this.Action_DeleteWord)
+		actions.push(this.Action_EscapeKey)
+		actions.push(this.Action_Minimize)
+		actions.push(this.Action_SelectAll)
+		
+		return actions.contains(action)
 	}
 	
 	;---------
@@ -352,7 +247,7 @@ class WindowActions {
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
 	;---------
-	doSpecialWindowMethod(action, titleString, windowActionSettings) {
+	performActionForOtherWindow(action, titleString, windowActionSettings) {
 		if(!action)
 			return ""
 		
@@ -369,6 +264,87 @@ class WindowActions {
 					Case this.Action_Close:
 						WinClose, % idString
 				}
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Perform the given action using our default method for it.
+	; PARAMETERS:
+	;  action      (I,REQ) - Action to perform, from Action_* constants.
+	;  titleString (I,REQ) - Title string identifying the window to act upon.
+	;---------
+	performDefaultMethod(action, titleString) {
+		Switch action {
+			; Show + activate the given window
+			Case this.Action_Activate:
+				WinShow,     %titleString%
+				WinActivate, %titleString%
+			
+			; React to backtick
+			Case this.Action_Backtick:
+				Send, `` ; Just let the key through
+			
+			; Close the given window
+			Case this.Action_Close:
+				WinClose, %titleString%
+			
+			; Backspace one word
+			Case this.Action_DeleteWord:
+				Send, ^{Backspace}
+			
+			; React to the escape key (generally to minimize or close the window)
+			Case this.Action_EscapeKey:
+				return ; Default is to do nothing.
+			
+			; Minimize the given window
+			Case this.Action_Minimize:
+				WinMinimize, % titleString
+			
+			; Select all
+			Case this.Action_SelectAll:
+				Send, ^a
+			
+			Default:
+				new ErrorToast("Could not perform method", "Unknown action: " action).showMedium()
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Perform a specific, named method.
+	; PARAMETERS:
+	;  method               (I,REQ) - Method to perform, from the Method_* constants.
+	;  titleString          (I,REQ) - Title string identifying the window to act upon.
+	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
+	; RETURNS:        
+	; SIDE EFFECTS:   
+	; NOTES:          
+	;---------
+	performSpecificMethod(method, titleString, windowActionSettings) {
+		Switch method {
+			; Run the named program
+			Case this.Method_Run:
+				Config.runProgram(windowActionSettings["NAME"])
+			
+			; Send a minimize message to the window
+			Case this.Method_Minimize_Message:
+				PostMessage, % MicrosoftLib.Message_WindowMenu, % SystemCommand_Minimize , , , % titleString
+			
+			; Select all using home/end keys
+			Case this.Method_SelectAll_Home:
+				Send, ^{Home}
+				Send, ^+{End}
+			
+			; Delete a work by selecting it
+			Case this.Method_DeleteWord_Select:
+				Send, ^+{Left}
+				Send, {Backspace}
+			
+			; Send an Escape keystroke
+			Case this.Method_SendEsc:
+				Send, {Esc}
+			
+			Default:
+				new ErrorToast("Could not perform method", "Method unknown: " method).showMedium()
 		}
 	}
 	; #END#

@@ -2,25 +2,25 @@
 
 ; Values for all columns (except NAME) come from WindowActions.Method_* (for how to do the action) or WindowActions.Action_* (to do some other action, like close on escape key) constants.
 
-	AutoHotkey								CLOSE		-					-					CTRL_SHIFT
+	AutoHotkey								CLOSE		-					-					SELECT
 	AutoHotkey WinSpy						CLOSE
 	Cisco AnyConnect VPN					CLOSE
-	EMC2 DLG Email							CLOSE		-					-					CTRL_SHIFT
-	EMC2 DLG Issue Email					CLOSE		-					-					CTRL_SHIFT
-	EMC2 DLG Resubmit						-			-					-					CTRL_SHIFT
-	EMC2 QAN Email							CLOSE		-					HOME_END			CTRL_SHIFT
-	EMC2 QAN Email Notify				CLOSE		-					-					CTRL_SHIFT
-	EMC2 XDS Approval						-			-					HOME_END			CTRL_SHIFT
-	EMC2 XDS Email							-			-					HOME_END			CTRL_SHIFT
-	EMC2 XDS Open Design					-			-					-					CTRL_SHIFT
-	EMC2 XDS Submit						-			-					HOME_END			CTRL_SHIFT
+	EMC2 DLG Email							CLOSE		-					-					SELECT
+	EMC2 DLG Issue Email					CLOSE		-					-					SELECT
+	EMC2 DLG Resubmit						-			-					-					SELECT
+	EMC2 QAN Email							CLOSE		-					HOME_END			SELECT
+	EMC2 QAN Email Notify				CLOSE		-					-					SELECT
+	EMC2 XDS Approval						-			-					HOME_END			SELECT
+	EMC2 XDS Email							-			-					HOME_END			SELECT
+	EMC2 XDS Open Design					-			-					-					SELECT
+	EMC2 XDS Submit						-			-					HOME_END			SELECT
 	Explorer									MIN		OTHER
 	Explorer									MIN		-					-					-					-			-				-				WORK_VDI
 	GitHub Desktop							CLOSE		-					-					-					-			-				ESCAPE
 	GrepWin									CLOSE
 	KDiff										CLOSE
 	Messenger								MIN		-					-					-					-			-				ESCAPE		HOME_DESKTOP
-	Notepad									CLOSE		-					-					CTRL_SHIFT
+	Notepad									CLOSE
 	OneTastic Macro Editor XML			-			-					HOME_END
 	Republic Anywhere						CLOSE		CLOSE
 	Skype										CLOSE
@@ -32,8 +32,8 @@
 	VB6										-			POST_MESSAGE
 
 	; EpicStudio popups - handle Ctrl+Backspace.
-	EpicStudio New Object Window		-			-					-					CTRL_SHIFT
-	EpicStudio Tokenize String			-			-					-					CTRL_SHIFT
+	EpicStudio New Object Window		-			-					-					SELECT
+	EpicStudio Tokenize String			-			-					-					SELECT
 
 	; Web popups - close on Escape.
 	Chrome Join								CLOSE

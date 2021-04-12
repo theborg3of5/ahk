@@ -1,5 +1,4 @@
 # New Ideas
-	WindowActions: would it make sense to just pull all of the specific (non-default) method handling up into doWindowAction, considering the methods aren't REALLY divided up by action?
 	Consider renaming fixWindowPosition* stuff and moving it into a static class
 	Can we make hyperlink-copying hotkeys a little more reliable? Maybe wait a little longer, or do a WinWait(Active) on the right-click menu?
 		Chrome

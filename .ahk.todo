@@ -1,4 +1,5 @@
 # New Ideas
+	Consider switching zoom mute toggle over to a click target within the zoom window
 	Would it make sense for TL/TLS processing to apply .addToStart() mods in reverse order?
 		So this would give us 21 instead of 12 (so more-nested bits apply first)
 			~A.addToStart(1) {

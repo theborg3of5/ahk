@@ -140,7 +140,7 @@
 	;---------
 	getLinkTargetOnClipboard() {
 		Click, Right
-		Sleep, 100   ; Wait for right-click menu to appear
+		Sleep, 500   ; Wait for right-click menu to appear
 		Send, e      ; Copy link address
 	}
 	; #END#

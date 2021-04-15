@@ -7,9 +7,6 @@
 		What about addToEnd? Same change, or does that make less sense?
 		Use case: epicEnvironments handling, would let me have smaller version-level COMM_ID bits (because I could add on the SU9 bit a layer up)
 	Consider renaming fixWindowPosition* stuff and moving it into a static class
-	Can we make hyperlink-copying hotkeys a little more reliable? Maybe wait a little longer, or do a WinWait(Active) on the right-click menu?
-		Chrome
-		OneNote
 	Would a static ErrorToast wrapper make sense, rather than having to do the whole new ErrorToast("").showMedium() thing each time?
 	Would a clear-all-notifications hotkey be nice for Windows notification center?
 		Or will it be easier to just tab a few times to get to the dismiss all button?

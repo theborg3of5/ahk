@@ -100,6 +100,9 @@ fixWindowPosition(titleString, position) {
 	if(!position)
 		return
 	
+	if(position["ACTIVATE"]) ; If the flag says to activate it, always do so.
+		Config.activateProgram(position["NAME"])
+	
 	; Track initially-minimized windows so we can re-minimize them when we're done (VisualWindow.resizeMove will restore them).
 	startedMinimized := WindowLib.isMinimized(titleString)
 	
@@ -107,9 +110,7 @@ fixWindowPosition(titleString, position) {
 	new VisualWindow(titleString).resizeMove(position["WIDTH"], position["HEIGHT"], position["X"], position["Y"], workArea)
 	
 	; Put window into final state
-	if(position["ACTIVATE"]) ; If the flag says to activate it, always do so.
-		Config.activateProgram(position["NAME"])
-	else if(startedMinimized) ; Otherwise, re-minimize the window if it started out that way.
+	if(startedMinimized) ; Otherwise, re-minimize the window if it started out that way.
 		WinMinimize, % titleString
 }
 

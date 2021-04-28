@@ -140,7 +140,7 @@ class EpicStudio {
 	; #PRIVATE#
 	
 	; Specific controls
-	static ClassNN_MainEditor            := "WindowsForms10.Window.8.app.0.141b42a_r9_ad170" ; Primary edit pane
+	static ClassNN_MainEditor            := "WindowsForms10.Window.8.app.0.141b42a_r9_ad163" ; Primary edit pane
 	static ClassNN_ObjectExplorerDLGEdit := "WindowsForms10.EDIT.app.0.141b42a_r9_ad13"      ; Object explorer DLG field
 	
 	; Debug window controls

@@ -323,6 +323,9 @@ class OneNoteTodoPage {
 	;                   todosByDate[dateInstant][ln] := todoTitle
 	;---------
 	getTodosForDateRange(startDate, endDate) {
+		if(!Config.contextIsHome) ; These todos are only for at home, not work.
+			return
+		
 		table := new TableList("oneNoteRecurringTodos.tl").getTable()
 		todosByDate := {}
 		For _,todoAry in table {

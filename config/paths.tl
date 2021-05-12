@@ -52,6 +52,6 @@
 	VB6 Compile								VB6_COMPILE								<USER_ROOT>\Dev\Temp\Compile
 	Transaction Diff						TX_DIFF									C:\Program Files\TransactionDiff
 	Transaction Diff Results			TX_DIFF_OUTPUT							<USER_ROOT>\Dev\TransactionDiffOutput
-	EpicStudio Global Highlights		EPICSTUDIO_GLOBAL_HIGHLIGHTS		<USER_ROOT>\EpicStudioGlobalHighlights
+	EpicStudio Global Highlights		EPICSTUDIO_GLOBAL_HIGHLIGHTS		<EPIC_PERSONAL>\EpicStudioGlobalHighlights
 	Epic Personal AHK						EPIC_PERSONAL_AHK						<EPIC_PERSONAL>\ahk
 }

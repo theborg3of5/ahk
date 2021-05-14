@@ -8,9 +8,7 @@
 		Foobar						foobar2000\foobar2000.exe
 		Launchy						Launchy\Launchy.exe
 		Notepad++					Notepad++\notepad++.exe																HOME_LAPTOP | WORK_VDI
-		OneNote						Microsoft Office\Office16\ONENOTE.EXE											WORK_LAPTOP
 		OneNote						Microsoft Office\root\Office16\ONENOTE.EXE
-		Outlook						Microsoft Office\Office16\OUTLOOK.EXE
 		Putty							PuTTY\putty.exe
 		Snapper						Epic\Snapper\Snapper.exe
 		Thunder						Thunder\Thunder.exe
@@ -19,10 +17,13 @@
 		VMware Horizon Client	VMware\VMware Horizon View Client\vmware-view.exe
 	} ~PATH.addToStart(<PROGRAM_FILES>\) {
 		AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk
+		Chrome						Google\Chrome\Application\chrome.exe											WORK_LAPTOP
 		Everything					Everything\Everything.exe
 		Internet Explorer			Internet Explorer\iexplore.exe
 		KDiff							KDiff3\kdiff3.exe
 		Notepad++					Notepad++\notepad++.exe
+		OneNote						Microsoft Office\root\Office16\ONENOTE.EXE									WORK_LAPTOP
+		Outlook						Microsoft Office\root\Office16\OUTLOOK.EXE									WORK_LAPTOP
 		TrueCrypt					TrueCrypt\TrueCrypt.exe
 		GrepWin						grepWin\grepWin.exe
 		yEd							yWorks\yEd\yEd.exe

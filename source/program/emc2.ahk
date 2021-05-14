@@ -31,6 +31,11 @@
 	^Up::  return
 #If
 
+; Design email window
+#If Config.IsWindowActive("EMC2 XDS Email")
+	:X:.dbcdevs::EMC2.sendDBCDevIDs()
+#If
+
 ; Lock/unlock hotkeys by INI
 #If Config.isWindowActive("EMC2 QAN") || Config.isWindowActive("EMC2 XDS")
 	^l::Send, !l

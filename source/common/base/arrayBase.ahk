@@ -32,6 +32,17 @@ class ArrayBase {
 	}
 	
 	;---------
+	; DESCRIPTION:    Remove the first instance of the given value, if it exists in the array.
+	; PARAMETERS:
+	;  value (I,REQ) - The value to find and remove from the array.
+	;---------
+	removeFirstInstanceOf(value) {
+		index := this.contains(value)
+		if(index)
+			this.RemoveAt(index)
+	}
+	
+	;---------
 	; DESCRIPTION:    Get the value just after the given index, incrementing that index to match.
 	; PARAMETERS:
 	;  index (IO,REQ) - The index to increment, then return the value for.

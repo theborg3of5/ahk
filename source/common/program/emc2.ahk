@@ -103,6 +103,19 @@ class EMC2 {
 				Run(url)
 	}
 	
+	;---------
+	; DESCRIPTION:    Send a list of DBC developer TLGs to a grid column (for emailing designs out for reviewers).
+	;---------
+	sendDBCDevIDs() {
+		IDs := Config.private["WORK_DBC_IDS"].split(",")
+		IDs.removeFirstInstanceOf(Config.private["WORK_ID"]) ; Don't include myself, don't need to email myself separately.
+		
+		For _,id in IDs {
+			SendRaw, % id
+			Send, {Enter}
+		}
+	}
+	
 	
 	; #PRIVATE#
 	

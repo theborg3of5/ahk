@@ -33,10 +33,10 @@ class OneNote {
 	deletePage() {
 		Send, !4
 	}
-	addMeetingNotes() {
+	meetingDetailsFromAnotherDay() {
 		Send, !5
 	}
-	zoomTo100Percent() {
+	setZoomTo100Percent() {
 		Send, !6
 	}
 	runOnetasticToolbarMacro(keys) {

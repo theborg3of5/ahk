@@ -64,8 +64,8 @@
 	^+[:: OneNote.promoteSubpage()
 	^+]:: OneNote.makeSubpage()
 	$^+d::OneNote.deletePageWithConfirm()
-	!m::  OneNote.addMeetingNotes()
-	^0::  OneNote.zoomTo100Percent()
+	!m::  OneNote.meetingDetailsFromAnotherDay()
+	^0::  OneNote.setZoomTo100Percent()
 	
 	; OneTastic custom styles and macros
 	^+c::OneNote.applyCodeStyle()

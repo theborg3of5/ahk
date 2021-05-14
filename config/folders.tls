@@ -3,7 +3,7 @@
 # General
 	Downloads						dl			<USER_DOWNLOADS>
 ~CONTEXT.replaceWith(WORK) {
-	Design							des		<USER_ROOT>\Design
+	Specifics						spec		<USER_ROOT>\Specifics
 	Shortcuts						sc			<USER_ROOT>\Shortcuts
 	Personal							pers		<EPIC_PERSONAL>
 	Public							pub		<EPIC_PERSONAL>\Public

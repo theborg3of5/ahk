@@ -114,7 +114,7 @@
 	
 	:X:urf::  sendFolderPath("USER_ROOT")
 	:X:dsf::  sendFolderPath("USER_DESKTOP")
-	:X:desf:: sendFolderPath("USER_ROOT", "Design")
+	:X:specf::sendFolderPath("USER_ROOT", "Specifics")
 	:X:dlf::  sendFolderPath("USER_DOWNLOADS")
 	:X:devf:: sendFolderPath("USER_DEV")
 	:X:zrzlf::sendFolderPath("USER_DEV", "zrzl")

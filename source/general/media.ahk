@@ -28,29 +28,24 @@
 	^F12::SoundSwitch.toggleDevices()
 #If
 
-; #If !Config.doesMediaPlayerExist() ; GDB WFH
-	; ^!Up::
-	; ^!Down::
-	; ^!Left::
-	; ^!Right::
-	; Media_Stop::
-	; Media_Play_Pause::
-	; Media_Prev::
-	; Media_Next::
-		; Config.runMediaPlayer()
-	; return
-; #If Config.doesMediaPlayerExist()
-	; ^!Up::
-	; Media_Stop::
-		; Config.runMediaPlayer()
-	; return
+#If !Config.doesMediaPlayerExist()
+	^!Up::
+	^!Down::
+	^!Left::
+	^!Right::
+	Media_Stop::
+	Media_Play_Pause::
+	Media_Prev::
+	Media_Next::
+		Config.runMediaPlayer()
+	return
+#If Config.doesMediaPlayerExist()
+	^!Up::
+	Media_Stop::
+		Config.runMediaPlayer()
+	return
 	
-	; ^!Down:: Send, {Media_Play_Pause}
-	; ^!Left:: Send, {Media_Prev}
-	; ^!Right::Send, {Media_Next}
-; #If
-#If Config.machineIsWorkLaptop
-	Media_Play_Pause::return
-	Media_Prev::return
-	Media_Next::return
+	^!Down:: Send, {Media_Play_Pause}
+	^!Left:: Send, {Media_Prev}
+	^!Right::Send, {Media_Next}
 #If

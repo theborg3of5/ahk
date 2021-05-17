@@ -7,8 +7,6 @@
 	^!t::Hyperspace.login(Config.private["WORK_ID"], Config.private["WORK_PASSWORD"], false) ; Don't use last department (=)
 	
 	^!c::Hyperspace.openCurrentDisplayHTML() ; Open the current display's HTML in IE.
-	
-	; ^!l::Send, ^!l ; Bypass the normal linking hotkey everywhere else, as logging out is more helpful here. GDB WFH - confirm this is fine to remove
 #If
 
 ; HSWeb debugging - Hyperspace main window or IE

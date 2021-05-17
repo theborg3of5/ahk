@@ -10,23 +10,16 @@
 ; Alternate lock computer hotkeys
 +#l::DllCall("LockWorkStation")
 #If Config.machineIsHomeDesktop
-	; $Volume_Mute::DllCall("LockWorkStation") ; GDB WFH
+	$Volume_Mute::DllCall("LockWorkStation")
 #If
 
 ; Remap different keyboards
-#If Config.machineIsWorkLaptop || Config.machineIsWorkVDI || Config.machineIsHomeDesktop ; GDB WFH +machineIsHomeDesktop
-	; Extra buttons on the ergonomic keyboard as left/right clicks
+#If Config.machineIsWorkLaptop || Config.machineIsWorkVDI
+	; Extra buttons on the ergonomic keyboard as left/right clicks (disable them in MS mouse and keyboard)
 	Browser_Back::LButton
 	Browser_Forward::RButton
-#If Config.machineIsHomeLaptop || Config.machineIsWorkLaptop || Config.machineIsWorkVDI || Config.machineIsHomeDesktop ; GDB WFH +machineIsHomeDesktop
+#If Config.machineIsHomeLaptop || Config.machineIsWorkLaptop || Config.machineIsWorkVDI
 	AppsKey::RWin ; No right windows key on these machines, so use the AppsKey (right-click key) instead.
-#If Config.contextIsWork ; GDB WFH this whole suppress section
-	; Suppress certain buttons on my work keyboard (for when using my work keyboard from home)
-	Launch_App2:: ; Calculator key
-	Browser_Home::
-	Browser_Search::
-	Launch_Mail::
-	return
 #If
 
 ; Release all modifier keys, for cases when some might be "stuck" down.

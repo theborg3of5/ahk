@@ -14,16 +14,11 @@
 			Teams							CENTERED			CENTERED			1440		900		WORK
 		
 # Social windows
-		~WIDTH.replaceWith(950) | ~HEIGHT.replaceWith(750) | ~X.replaceWith(RIGHT_EDGE) {
-			; GDB WFH
-			; Messenger					-					BOTTOM_EDGE		-			-			WORK
-			; Republic Anywhere			-					BOTTOM_EDGE		-			-			WORK
-			; Slack							-					BOTTOM_EDGE		-			-			WORK
-			; Telegram						-					BOTTOM_EDGE		-			-			WORK
-			Slack							-					TOP_EDGE
-			Republic Anywhere			-					TOP_EDGE
-			Messenger					-					TOP_EDGE
-			Telegram						-					TOP_EDGE
+		~WIDTH.replaceWith(950) | ~HEIGHT.replaceWith(750) | ~X.replaceWith(RIGHT_EDGE) | ~Y.replaceWith(TOP_EDGE) {
+			Slack
+			Republic Anywhere
+			Messenger
+			Telegram
 		}
 	}
 	
@@ -54,13 +49,11 @@
 	~WIDTH.defaultTo(HALF) | ~HEIGHT.defaultTo(HALF) | ~ACTIVATE.defaultTo(1) {
 		~PRESET.replaceWith(GAME_ON_LEFT) | ~MONITOR.replaceWith(MIDDLE) {
 			Messenger					LEFT_EDGE		BOTTOM_EDGE
-			; Republic Anywhere			LEFT_EDGE		TOP_EDGE ; Some sort of issue with this crashes the script
 			Slack							RIGHT_EDGE		BOTTOM_EDGE
 			Telegram						RIGHT_EDGE		TOP_EDGE
 		}
 		~PRESET.replaceWith(GAME_ON_MIDDLE) | ~MONITOR.replaceWith(LEFT) {
 			Messenger					LEFT_EDGE		BOTTOM_EDGE
-			; Republic Anywhere			LEFT_EDGE		TOP_EDGE
 			Slack							RIGHT_EDGE		BOTTOM_EDGE
 			Telegram						RIGHT_EDGE		TOP_EDGE
 			Chrome						-					-					MAX		MAX

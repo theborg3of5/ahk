@@ -3,7 +3,7 @@
 ~PATH_TYPE.defaultTo(EXE) {
 	~PATH.addToStart(<PROGRAM_FILES_86>\) {
 		Chrome						Google\Chrome\Application\chrome.exe
-		EMC2							Epic\v9.6\EMC2\Shared Files\EpicD96.exe
+		EMC2							Epic\v9.7\EMC2\Shared Files\EpicD97.exe
 		EpicStudio					EpicStudio\EpicStudio.exe
 		Foobar						foobar2000\foobar2000.exe
 		Launchy						Launchy\Launchy.exe

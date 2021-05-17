@@ -68,9 +68,8 @@ class Outlook {
 	; #PRIVATE#
 	
 	; The ClassNN for the control that contains the subject of the message. Should be the same for inline and popped-out messages.
-	static ClassNN_MailSubject_View   := "RichEdit20WPT7"  ; View has the same ClassNN for both inline and popup
-	static ClassNN_MailSubject_Edit_1 := "RichEdit20WPT20" ; What we usually get inline (but not always)
-	static ClassNN_MailSubject_Edit_2 := "RichEdit20WPT4"  ; Generally what we get in the popup, but sometimes inline too
+	static ClassNN_MailSubject_View := "RichEdit20WPT1" ; Most view and edit cases have the subject in this control
+	static ClassNN_MailSubject_Edit := "RichEdit20WPT5" ; This is for editing in a popup - subject is in a different control
 	
 	; Folder names for different areas
 	static TLGFolder := "TLG"
@@ -98,16 +97,9 @@ class Outlook {
 	; RETURNS:        The title, cleaned up (RE:/FW: and any other odd characters removed)
 	;---------
 	getCurrentMessageTitle() {
-		title := ControlGetText(this.ClassNN_MailSubject_View, "A")
-		if(StringLib.isNullOrWhitespace(title)) {
-			if(this.isMailMessagePopupActive()) {
-				title := ControlGetText(this.ClassNN_MailSubject_Edit_2, "A")
-			} else {
-				title := ControlGetText(this.ClassNN_MailSubject_Edit_1, "A")
-				if(StringLib.isNullOrWhitespace(title)) ; Try the other control ID if we don't get it from what we expect - sometimes inline uses the popup control ID.
-					title := ControlGetText(this.ClassNN_MailSubject_Edit_2, "A")
-			}
-		}
+		title := ControlGetText(this.ClassNN_MailSubject_View, "A") ; Most cases this control has the subject
+		if(title = Config.private["WORK_EMAIL"]) ; The exception is editing in a popup: we need to use a different control, but the original still exists with my email in it.
+			title := ControlGetText(this.ClassNN_MailSubject_Edit, "A")
 		
 		if(title = "") {
 			new ErrorToast("Copy title failed", "Could not get title from message control").showMedium()

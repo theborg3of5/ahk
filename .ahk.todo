@@ -1,5 +1,4 @@
 # New Ideas
-	Fix EMC2 ActionObject stuff for new Outlook
 	Onetastic macros now support exporting everything together - should we consider just building the sum HTML and importing that using the built-in import instead of our piecemeal approach?
 	Consider switching zoom mute toggle over to a click target within the zoom window - would that avoid the "ding" sound?
 	Would it make sense for TL/TLS processing to apply .addToStart() mods in reverse order?

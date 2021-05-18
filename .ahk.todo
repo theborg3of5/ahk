@@ -1,4 +1,8 @@
 # New Ideas
+	Figure out what to do with media player stuff
+		Including:
+			Spotify "commands"
+			Spotify showing info - is this useful anymore or can we go back to volume up/down to show actual media panel?
 	Onetastic macros now support exporting everything together - should we consider just building the sum XML and importing that using the built-in import instead of our piecemeal approach?
 	Consider switching zoom mute toggle over to a click target within the zoom window - would that avoid the "ding" sound?
 	Consider renaming fixWindowPosition* stuff and moving it into a static class
@@ -62,9 +66,6 @@
 		Dynamically pull hotkeys for the currently focused program?
 		Hotkey to show popup with all currently active hotkeys, divided up into current-program-specific and others
 			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
-	Is the media player stuff in config worth keeping around? I don't really switch music programs anymore, and Chrome awkwardly tries to grab media keys anyway.
-		Possibly replace it with something based on RDP/Spotify command script, that interacts directly with Spotify instead of letting other things steal the media keys?
-		Wait until a little after WFH stuff is done to decide.
 	
 # Selector
 	Re-examine SelectorGui/FlexTable - could we simplify out a lot of the extra logic using built-in Gui positioning options?

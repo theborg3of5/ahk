@@ -3,9 +3,9 @@
 ; Program in general
 #If Config.isWindowActive("Outlook")
 	; Move selected message(s) to a particular folder, and mark them as read.
-	$^e::Send, ^+1 ; Archive
-	^+w::Send, ^+2 ; Wait
-	^+l::Send, ^+3 ; Later use
+	$^e::Send, {Backspace} ; Archive
+	^+w::Send, ^+1 ; Wait
+	^+l::Send, ^+2 ; Later use
 	
 	; Format as code (using custom styles)
 	^+c::Send, ^!+2 ; Hotkey used in Outlook (won't let me use ^+c directly)

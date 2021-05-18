@@ -114,6 +114,5 @@ Object(params*) {
 
 ; [[ Initialization ]] --=
 Config.Init()
-WindowActions.Init()
 Hyperlinker.Init()
 ; =--

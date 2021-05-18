@@ -4,14 +4,6 @@ class WindowActions {
 	; #PUBLIC#
 	
 	;---------
-	; DESCRIPTION:    Initialize this class with window identifiers and actions.
-	;---------
-	Init() {
-		this.actionOverrides := new TableList("windowActions.tl").getRowsByColumn("NAME", "MACHINE")
-		; Debug.popupEarly("WindowActions.Init",, "this.actionOverrides",this.actionOverrides)
-	}
-	
-	;---------
 	; DESCRIPTION:    Activate and show a window, respecting any custom overrides for the identified window.
 	; PARAMETERS:
 	;  titleString (I,REQ) - A title string identifying the window.
@@ -157,7 +149,23 @@ class WindowActions {
 	static Method_Run               := "RUN"          ; Run the named program
 	; =--
 	
-	static actionOverrides := "" ; {windowName: {action: method}}
+	static _actionOverrides := "" ; {windowName: {action: method}}
+	
+	;---------
+	; DESCRIPTION:    Get an array of overrides for how to do actions for a particular named window.
+	; PARAMETERS:
+	;  name (I,REQ) - Name of the window we're interested in
+	; SIDE EFFECTS:   Initializes the static this._actionOverrides array the first time it's called.
+	;---------
+	actionOverrides[name] {
+		get {
+			; Initialize the overrides array the first time
+			if(!this._actionOverrides)
+				this._actionOverrides := new TableList("windowActions.tl").getRowsByColumn("NAME", "MACHINE")
+			
+			return this._actionOverrides[name]
+		}
+	}
 	
 	;---------
 	; DESCRIPTION:    Set up the needed information to perform a window action and execute it.

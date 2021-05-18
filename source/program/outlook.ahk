@@ -3,7 +3,7 @@
 ; Program in general
 #If Config.isWindowActive("Outlook")
 	; Move selected message(s) to a particular folder, and mark them as read.
-	$^e::Send, {Backspace} ; Archive
+	$^e::Send, !ho ; Archive
 	^+w::Send, ^+1 ; Wait
 	^+l::Send, ^+2 ; Later use
 	

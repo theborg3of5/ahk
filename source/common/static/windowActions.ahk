@@ -157,7 +157,7 @@ class WindowActions {
 	static Method_Run               := "RUN"          ; Run the named program
 	; =--
 	
-	actionOverrides := "" ; {windowName: {action: method}}
+	static actionOverrides := "" ; {windowName: {action: method}}
 	
 	;---------
 	; DESCRIPTION:    Set up the needed information to perform a window action and execute it.

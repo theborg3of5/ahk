@@ -1,12 +1,6 @@
 # New Ideas
-	Onetastic macros now support exporting everything together - should we consider just building the sum HTML and importing that using the built-in import instead of our piecemeal approach?
+	Onetastic macros now support exporting everything together - should we consider just building the sum XML and importing that using the built-in import instead of our piecemeal approach?
 	Consider switching zoom mute toggle over to a click target within the zoom window - would that avoid the "ding" sound?
-	Would it make sense for TL/TLS processing to apply .addToStart() mods in reverse order?
-		So this would give us 21 instead of 12 (so more-nested bits apply first)
-			~A.addToStart(1) {
-				~A.addToStart(2) {
-		What about addToEnd? Same change, or does that make less sense?
-		Use case: epicEnvironments handling, would let me have smaller version-level COMM_ID bits (because I could add on the SU9 bit a layer up)
 	Consider renaming fixWindowPosition* stuff and moving it into a static class
 	Would a static ErrorToast wrapper make sense, rather than having to do the whole new ErrorToast("").showMedium() thing each time?
 	Would a clear-all-notifications hotkey be nice for Windows notification center?
@@ -15,9 +9,6 @@
 			Action center
 			ahk_class Windows.UI.Core.CoreWindow
 			ahk_exe ShellExperienceHost.exe
-	Consider a toast when switching sound devices via SoundSwitch
-		Would show up in consistent location
-		If we hard-code the devices (or perhaps a special substring we add to them), we could show "from > to"-style display immediately
 	Consider breaking some common bits for tiny standalone scripts, out into something separate from the normal load-all-common-stuff
 		Should help speed up tiny scripts like media keys
 	Consider adding "jiggling" for certain windows in fix-window-positions script, to fix toolbar buttons
@@ -62,7 +53,6 @@
 			Code location with path (path + file + selected function)
 		Could have 1-3 common ones that get primo hotkeys, then a selector or something that lives on the last one
 			Or, just have a selector on !c and pick every time
-	Window position fixer - we get stuck on Republic Anywhere when it's minimized to tray, but only at home - why?
 	Re-examine how we run programs and such (RunLib.runAsUser stuff) - could it be the reason we have focus issues?
 		Also, could we work around it with a WinWaitExist + WinActivate?
 	EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines

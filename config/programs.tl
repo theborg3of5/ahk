@@ -33,6 +33,7 @@
 	}
 
 		Messenger					https://www.messenger.com															-									URL
+		Slack							https://app.slack.com/																-									URL
 	
 		Process Explorer			<PROGRAM_FILES>\Process Explorer\procexp.exe									WORK_LAPTOP
 		Process Explorer			<EPIC_PERSONAL>\Programs\Process Explorer\procexp.exe						WORK_VDI

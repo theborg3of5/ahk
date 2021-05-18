@@ -1,5 +1,7 @@
 # New Ideas
 	Could we move away from the .Init() calls in common.ahk, and move instead to initializing the object the first time it's used?
+		Method 1: call the same sort of .Init() function (which will early-quit after the first time) from every public function (or a common ancestor, like windowAction() for WindowActions)
+		Method 2: turn the variable that needs to be initialized into a private property - it initializes things the first time, then just returns the initialized instance thereafter
 		Alternatively, could it just be initialized when we declare the static variable in the class?
 			Challenge with this: StringBase/ArrayBase/ObjectBase aren't yet in place, which causes TableList to fail to process rows correctly
 	Figure out what to do with media player stuff

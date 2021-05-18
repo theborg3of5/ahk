@@ -4,14 +4,6 @@ class Hyperlinker {
 	; #PUBLIC#
 	
 	;---------
-	; DESCRIPTION:    Initialize this class with the windows that support hyperlinking and their methods.
-	;---------
-	Init() {
-		this.windows := new TableList("hyperlinkWindows.tl").getRowsByColumn("NAME")
-		; Debug.popup("Hyperlinker.Init",, "this.windows",this.windows)
-	}
-	
-	;---------
 	; DESCRIPTION:    Link the selected text with the given URL/path.
 	; PARAMETERS:
 	;  path         (I,REQ) - URL or file path to link to.
@@ -53,9 +45,10 @@ class Hyperlinker {
 	static CloseMethod_Enter := "ENTER" ; Pressing Enter
 	static CloseMethod_Alt_A := "ALT_A" ; Pressing Alt+A
 
+	static _windows := "" ; {NAME: <window's hyperlink info>}
+	
 	;---------
-	; DESCRIPTION:    Associative array of windows information.
-	; FORMAT:         First-level subscript is name. Second-level subscripts (i.e. windows[<name>, "NAME"]):
+	; DESCRIPTION:    Get the array of a window's hyperlinking information, format:
 	;                  ["NAME"]                  = Name of the window we're starting from,
 	;                                              matches NAME column in windows.tl (also
 	;                                              the <name> top-level subscript)
@@ -77,8 +70,18 @@ class Hyperlinker {
 	;                                              includes both the selected text and the path).
 	;                                              It should include both <TEXT> and <PATH> tags
 	;                                              for those respective bits of data.
+	; PARAMETERS:
+	;  name (I,REQ) - Name of the window we're interested in
+	; SIDE EFFECTS:   Initializes the static this._windows array the first time it's called.
 	;---------
-	static windows := ""
+	windows[name] {
+		get {
+			if(!this._windows)
+				this._windows := new TableList("hyperlinkWindows.tl").getRowsByColumn("NAME")
+			
+			return this._windows[name]
+		}
+	}
 	
 	;---------
 	; DESCRIPTION:    Grab the array of linking window info for the given starting window name.

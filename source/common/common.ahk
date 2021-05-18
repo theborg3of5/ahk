@@ -114,5 +114,4 @@ Object(params*) {
 
 ; [[ Initialization ]] --=
 Config.Init()
-Hyperlinker.Init()
 ; =--

@@ -32,8 +32,12 @@
 		Notepad						System32\notepad.exe
 	}
 
-		Messenger					https://www.messenger.com															-									URL
-		Slack							https://app.slack.com/																-									URL
+	~PATH_TYPE.replaceWith(URL) {
+		Messenger					https://www.messenger.com
+		Slack							https://app.slack.com/
+		Gmail							https://mail.google.com/mail/u/0/#inbox
+		Gmail							https://mail.google.com/mail/u/1/#inbox										WORK_LAPTOP
+	}
 	
 		Process Explorer			<PROGRAM_FILES>\Process Explorer\procexp.exe									WORK_LAPTOP
 		Process Explorer			<EPIC_PERSONAL>\Programs\Process Explorer\procexp.exe						WORK_VDI

@@ -66,10 +66,10 @@ sendCleanedUpPath(containingFolderOnly := false) {
 
 ; [[Websites]] ===
 $^!+f::Run("http://feedly.com/i/latest") ; $ as Notepad++ highlight-all hotkey sends these keys
-^!#m:: Run("https://mail.google.com/mail/u/0/#inbox")
+^!#m:: Config.runProgram("Gmail")
 ^!+a::
 	openUsualSites() {
-		Run("https://mail.google.com/mail/u/0/#inbox")
+		Config.runProgram("Gmail")
 		Sleep, 100
 		Run("http://www.facebook.com/")
 		Sleep, 100

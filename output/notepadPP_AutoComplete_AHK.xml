@@ -1331,6 +1331,16 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ArrayBase.removeFirstInstanceOf" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Remove the first instance of the given value, if it exists in the array.
+							; PARAMETERS:
+							;  value (I,REQ) - The value to find and remove from the array.
+							;---------">
+                <Param name="value" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="Asc" func="yes">
             <Overload retVal="">
                 <Param name="&quot;String&quot;"/>
@@ -4018,13 +4028,6 @@
         <KeyWord name="Hours"/>
         <KeyWord name="HScroll"/>
         <KeyWord name="Hwnd"/>
-        <KeyWord name="Hyperlinker.Init" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Initialize this class with the windows that support hyperlinking and their methods.
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="Hyperlinker.linkSelectedText" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -4747,6 +4750,14 @@
 							;---------
 							; DESCRIPTION:    Window is visible (WS_VISIBLE)
 							; GROUP:          Window styles ( https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric )
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="MicrosoftLib.SystemCommand_Minimize" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Minimize the window (SC_MINIMIZE)
+							; GROUP:          System Commands ( https://docs.microsoft.com/en-us/windows/win32/menurc/wm-syscommand )
 							;---------">
             </Overload>
         </KeyWord>
@@ -8669,13 +8680,6 @@
 							;  name (I,REQ) - The name of the window, as defined in windows.tl.
 							;---------">
                 <Param name="name" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="WindowActions.Init" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Initialize this class with window identifiers and actions.
-							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="WindowActions.minimizeWindow" func="yes">

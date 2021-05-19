@@ -1,12 +1,20 @@
 # New Ideas
-	Could we move away from the .Init() calls in common.ahk, and move instead to initializing the object the first time it's used?
-		Turn the variable that needs to be initialized into a private property - it initializes things the first time, then just returns the initialized instance thereafter
-		Remaining:
-			Common (could give us a significant performance boost at startup!)
+	Config: is it worth keeping .isInitialized stuff?
+		Would it be better to have the "early" debug popup/toast show up based on whether CommonHotkeys has been initialized?
+			Would let us potentially make stuff that's NOT early specific to a type of script (i.e. only show it for the main script)
+		Could we just replace it with a public flag (or public setter to a private flag, whatever) on Debug, so that the script itself could decide where the cutover point is?
+	Config: is it worth keeping .Init()?
+		rootPath would need to be set before callers use items
+			It's only used by the private, cached-on-demand stuff though - seems pretty reasonable
+			If we really wanted we could make it another cached-on-demand property, or just re-run the logic when we lazy-load the cached stuff
+		TableList automatic filters - where should those live?
 	Figure out what to do with media player stuff
 		Including:
 			Spotify "commands"
 			Spotify showing info - is this useful anymore or can we go back to volume up/down to show actual media panel?
+			Config media player stuff
+				Support in general
+				Setting settings value/settingsINIPath (only used by media player stuff)
 	Onetastic macros now support exporting everything together - should we consider just building the sum XML and importing that using the built-in import instead of our piecemeal approach?
 	Apparently class names are stored in object.__Class - could we use that and get rid of Debug_TypeName()?
 		Will want to double-check that we're not relying on that to decide whether to use a custom debug display (I'd hope we're using the actual debug method instead?)

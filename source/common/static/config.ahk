@@ -18,27 +18,13 @@ class Config {
 	; DESCRIPTION:    Initialize this static config class. Loads information from various config files (see individual this.load* functions).
 	;---------
 	Init() {
-		; All config files are expected to live in config/ folder under the root of this repo.
+		; Most files are expected to live within this repo.
 		this.rootPath := FileLib.getParentFolder(A_LineFile, 4) ; Root path is 3 levels out, plus one to get out of file itself.
 		
-		; Read in settings and add automatic context/machine filters to TableList.
-		this.loadSettings()
+		; Add automatic context/machine filters to TableList.
 		TableList.addAutomaticFilter("CONTEXT", this.context)
 		TableList.addAutomaticFilter("MACHINE", this.machine)
 		
-		; Read in and process the other files.
-		this.loadPrivates() ; This should be loaded before most other things, as the rest can use the resulting tags.
-		this.loadWindows()
-		this.loadPaths()
-		this.loadPrograms()
-		this.loadGames()
-		
-		; Debug.popupEarly("Config","Loaded all", "Settings",this.settings)
-		; Debug.popupEarly("Config","Loaded all", "Privates",this.privates)
-		; Debug.popupEarly("Config","Loaded all", "Windows",this.windows)
-		; Debug.popupEarly("Config","Loaded all", "Paths",this.paths)
-		; Debug.popupEarly("Config","Loaded all", "Programs",this.programs)
-		; Debug.popupEarly("Config","Loaded all", "Games",this.games)
 		this.initDone := true
 	}
 	
@@ -51,9 +37,8 @@ class Config {
 	;---------
 	private[key] {
 		get {
-			if(!key)
-				return ""
-			return this.privates[key]
+			privates := this.privates ; Need to pull this out first because this.privates is a property that doesn't take keys directly, but doing this.privates[name] will try to use a key directly.
+			return privates[key]
 		}
 	}
 	
@@ -75,7 +60,7 @@ class Config {
 	;---------
 	machine {
 		get {
-			return this.settings["MACHINE"]
+			return this.setting["MACHINE"]
 		}
 	}
 	;---------
@@ -117,7 +102,7 @@ class Config {
 	;---------
 	context {
 		get {
-			return this.settings["CONTEXT"]
+			return this.setting["CONTEXT"]
 		}
 	}
 	;---------
@@ -143,10 +128,10 @@ class Config {
 	;---------
 	mediaPlayer {
 		get {
-			return this.settings["MEDIA_PLAYER"]
+			return this.setting["MEDIA_PLAYER"]
 		}
 		set {
-			this.settings["MEDIA_PLAYER"] := value
+			this._settings["MEDIA_PLAYER"] := value
 			IniWrite, % value, % this.settingsINIPath, % "Main", % "MEDIA_PLAYER"
 		}
 	}
@@ -192,9 +177,8 @@ class Config {
 	;---------
 	windowInfo[name] {
 		get {
-			if(!name)
-				return ""
-			return this.windows[name].clone()
+			windows := this.windows ; Need to pull this out first because this.windows is a property that doesn't take keys directly, but doing this.windows[name] will try to use a key directly.
+			return windows[name].clone()
 		}
 	}
 	
@@ -304,9 +288,8 @@ class Config {
 	;---------
 	path[key] {
 		get {
-			if(!key)
-				return ""
-			return this.paths[key]
+			paths := this.paths ; Need to pull this out first because this.paths is a property that doesn't take keys directly, but doing this.paths[key] will try to use a key directly.
+			return paths[key]
 		}
 	}
 	
@@ -345,7 +328,7 @@ class Config {
 	runProgram(name, args := "") {
 		HotkeyLib.waitForRelease()
 		
-		prog := this.programs[name]
+		prog := this.program[name]
 		if(prog)
 			prog.run(args)
 	}
@@ -387,76 +370,137 @@ class Config {
 	static initDone        := false ; True once we're done initializing for the first time.
 	static rootPath        := ""    ; The root of this set of scripts.
 	static settingsINIPath := ""    ; The full path to the settings INI, so we can write to it if things change.
-	static settings        := {}    ; {NAME: VALUE}
-	static windows         := {}    ; {NAME: WindowInfo}
-	static paths           := {}    ; {KEY: PATH}
-	static programs        := {}    ; {NAME: Program}
-	static games           := []    ; [{NAME:name, EXE:exe}]
-	static privates        := {}    ; {KEY: VALUE}
+	
+	; Private caches (initialized on first use via private properties below)
+	static _settings       := ""    ; {NAME: VALUE}
+	static _privates       := ""    ; {KEY: VALUE}
+	static _windows        := ""    ; {NAME: WindowInfo}
+	static _paths          := ""    ; {KEY: PATH}
+	static _programs       := ""    ; {NAME: Program}
+	static _games          := ""    ; [{NAME:name, EXE:exe}]
+	
 	
 	;---------
-	; DESCRIPTION:    Read in and store the contents of the privates file.
+	; DESCRIPTION:    Get the value for a specific setting from our settings.ini file.
+	; PARAMETERS:
+	;  key (I,REQ) - The key for the setting in question.
+	; SIDE EFFECTS:   Initializes this._settings from the INI file the first time this is called.
 	;---------
-	loadPrivates() {
-		filePath := this.rootPath "\config\ahkPrivate\privates.tl"
-		this.privates := new TableList(filePath).getColumnByColumn("VALUE", "KEY")
-	}
-	
-	;---------
-	; DESCRIPTION:    Read in and store the contents of the settings file.
-	;---------
-	loadSettings() {
-		this.settingsINIPath := this.rootPath "\config\local\settings.ini"
-		
-		settings := {}
-		settings["MACHINE"]      := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from Config.Machine_* constants
-		settings["CONTEXT"]      := IniRead(this.settingsINIPath, "Main", "CONTEXT")         ; Which context this is, from Config.Context_* constants
-		settings["MEDIA_PLAYER"] := IniRead(this.settingsINIPath, "Main", "MEDIA_PLAYER")    ; What program the media keys should deal with
-		
-		this.settings := settings
-	}
-	
-	;---------
-	; DESCRIPTION:    Read in and store the contents of the windows file.
-	;---------
-	loadWindows() {
-		filePath := this.rootPath "\config\windows.tl"
-		windowsTable := new TableList(filePath).getTable()
-		
-		windows := {}
-		For _,row in windowsTable {
-			winInfo := new WindowInfo(row)
-			name := winInfo.name
-			if(name)
-				windows[name] := winInfo
-		}
-		
-		this.windows := windows
-	}
-	
-	;---------
-	; DESCRIPTION:    Read in and store the contents of the paths file.
-	;---------
-	loadPaths() {
-		filePath := this.rootPath "\config\paths.tl"
-		pathsAry := new TableList(filePath).getColumnByColumn("PATH", "KEY")
-		
-		; Grab special path tags from the system to replace in the ones we just read in.
-		systemPathTags := this.getSystemPathTags()
-		
-		; Replace calculated and private path tags.
-		For key,path in pathsAry {
-			; Special case: for tags which are exclusively pass-throughs (blank path), just use the matching tag's value (from either path or private).
-			path := DataLib.coalesce(path, systemPathTags[key], this.private[key])
+	setting[key] {
+		get {
+			if(!this._settings) {
+				this.settingsINIPath := this.rootPath "\config\local\settings.ini"
+				
+				this._settings := {}
+				this._settings["MACHINE"]      := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from Config.Machine_* constants
+				this._settings["CONTEXT"]      := IniRead(this.settingsINIPath, "Main", "CONTEXT")         ; Which context this is, from Config.Context_* constants
+				this._settings["MEDIA_PLAYER"] := IniRead(this.settingsINIPath, "Main", "MEDIA_PLAYER")    ; What program the media keys should deal with
+			}
 			
-			path := path.replaceTags(systemPathTags)
-			path := this.replacePrivateTags(path)
-			
-			pathsAry[key] := path ; make sure to store it back in the actual array
+			return this._settings[key]
 		}
-		
-		this.paths := pathsAry
 	}
+	
+	;---------
+	; DESCRIPTION:    Get the associative array of private info from our privates.tl file.
+	; SIDE EFFECTS:   Initializes this._privates the first time this is called.
+	;---------
+	privates {
+		get {
+			if(!this._privates)
+				this._privates := new TableList(this.rootPath "\config\ahkPrivate\privates.tl").getColumnByColumn("VALUE", "KEY")
+			
+			return this._privates
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the associative array of window info objects from our windows.tl file.
+	; SIDE EFFECTS:   Initializes this._windows the first time this is called.
+	;---------
+	windows {
+		get {
+			if(!this._windows) {
+				this._windows := {}
+				
+				windowsTable := new TableList(this.rootPath "\config\windows.tl").getTable()
+				For _,row in windowsTable {
+					winInfo := new WindowInfo(row)
+					name := winInfo.name
+					if(name)
+						this._windows[name] := winInfo
+				}
+			}
+			
+			return this._windows
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the associative array of paths from our paths.tl file.
+	; SIDE EFFECTS:   Initializes this._paths the first time this is called.
+	;---------
+	paths {
+		get {
+			if(!this._paths) {
+				pathsAry := new TableList(this.rootPath "\config\paths.tl").getColumnByColumn("PATH", "KEY")
+				
+				; Grab special path tags from the system to replace in the ones we just read in.
+				systemPathTags := this.getSystemPathTags()
+				
+				; Replace calculated and private path tags.
+				For key,path in pathsAry {
+					; Special case: for tags which are exclusively pass-throughs (blank path), just use the matching tag's value (from either path or private).
+					path := DataLib.coalesce(path, systemPathTags[key], this.private[key])
+					
+					path := path.replaceTags(systemPathTags)
+					path := this.replacePrivateTags(path)
+					
+					pathsAry[key] := path ; make sure to store it back in the actual array
+				}
+				
+				this._paths := pathsAry
+			}
+			
+			return this._paths
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the Program object corresponding to the given name.
+	; PARAMETERS:
+	;  name (I,REQ) - The name of the program you want.
+	; SIDE EFFECTS:   Initializes this._programs the first time this is called.
+	;---------
+	program[name] {
+		get {
+			if(!this._programs) {
+				this._programs := {}
+				
+				; Turn each row into a Program object.
+				programsTable := new TableList(this.rootPath "\config\programs.tl").getRowsByColumn("NAME", "MACHINE")
+				For progName,row in programsTable
+					this._programs[progName] := new Program(row)
+			}
+			
+			return this._programs[name]
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the array of games from our games.tl file.
+	; SIDE EFFECTS:   Initializes this._games the first time this is called.
+	;---------
+	games {
+		get {
+			if(!this._games)
+				this._games := new TableList(this.rootPath "\config\games.tl").getTable()
+			
+			return this._games
+		}
+	}
+	
+	
 	;---------
 	; DESCRIPTION:    Build a hard-coded array of KEY => PATH pairs that can be used to replace
 	;                 strings (and will also be applied to other paths as we read them in).
@@ -481,29 +525,6 @@ class Config {
 		tags["AHK_ROOT"]           := this.rootPath
 		
 		return tags
-	}
-	
-	;---------
-	; DESCRIPTION:    Read in and store the contents of the programs file.
-	;---------
-	loadPrograms() {
-		filePath := this.rootPath "\config\programs.tl"
-		programsTable := new TableList(filePath).getRowsByColumn("NAME", "MACHINE")
-		
-		; Turn each row into a Program object.
-		programs := {}
-		For name,row in programsTable
-			programs[name] := new Program(row)
-		
-		this.programs := programs
-	}
-	
-	;---------
-	; DESCRIPTION:    Read in and store the contents of the games file.
-	;---------
-	loadGames() {
-		filePath := this.rootPath "\config\games.tl"
-		this.games := new TableList(filePath).getTable()
 	}
 	; #END#
 }

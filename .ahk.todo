@@ -1,4 +1,7 @@
 # New Ideas
+	Is there some way to show all hotkeys that are active in current state?
+		Or is that evaluated when hotkeys are pressed?
+	Would it be nicer to move windowPositionPresets.tl into code and just generate those choices directly?
 	With 7+ Taskbar Tweaker being iffy at work, would it make sense to move back towards AHK handling middle click on taskbar button to close?
 		One method: right-click + get to close (like https://autohotkey.com/board/topic/149642-middle-click-on-taskbar-button-to-close-apps-windows-10/ )
 		Alternatively (or additionally), do we want to look into something with mover-sizer that closes the window, like the original stuff did?

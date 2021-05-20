@@ -17,6 +17,7 @@
 	Fake-maximized								fmax | fm	FULL		FULL
 	Semi-maximized (fits around time)	smax			1460		FULL		HOME
 	Quarter										q				HALF		HALF
+	Social										soc			950		750
 
 # Development
 ~CONTEXT.replaceWith(WORK) {

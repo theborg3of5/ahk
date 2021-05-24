@@ -16,6 +16,7 @@
 		Including:
 			Spotify "commands"
 			Spotify showing info - is this useful anymore or can we go back to volume up/down to show actual media panel?
+				Also trigger it from special 3?
 			Config media player stuff
 				Support in general
 				Setting settings value/settingsINIPath (only used by media player stuff)

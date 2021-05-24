@@ -31,16 +31,3 @@
 	!w::Explorer.getActiveFolderEMC2Object().openWeb()
 	!e::Explorer.getActiveFolderEMC2Object().openEdit()
 #If
-
-; Close on middle-clicking taskbar item.
-$MButton::
-	; Only fire when mouse is over an item in the taskbar.
-	if(!Explorer.mouseIsOverTaskbarItem()) {
-		Send, {MButton} ; Otherwise resend the key
-		return
-	}
-	
-	Send, +{RButton}
-	Sleep, 100
-	Send, c
-return

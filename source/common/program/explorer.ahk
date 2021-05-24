@@ -96,15 +96,6 @@ class Explorer {
 		return new ActionObjectEMC2(id, ini)
 	}
 	
-	;---------
-	; DESCRIPTION:    Check whether the mouse is over an item in the taskbar.
-	; RETURNS:        True/False - is the mouse over a taskbar item?
-	;---------
-	mouseIsOverTaskbarItem() {
-		MouseGetPos("", "", "", classNN)
-		return (classNN = "MSTaskListWClass1")
-	}
-	
 	
 	; #PRIVATE#
 	

@@ -18,9 +18,6 @@ class Config {
 	; DESCRIPTION:    Initialize this static config class. Loads information from various config files (see individual this.load* functions).
 	;---------
 	Init() {
-		; Most files are expected to live within this repo.
-		this.rootPath := FileLib.getParentFolder(A_LineFile, 4) ; Root path is 3 levels out, plus one to get out of file itself.
-		
 		; Add automatic context/machine filters to TableList.
 		TableList.addAutomaticFilter("CONTEXT", this.context)
 		TableList.addAutomaticFilter("MACHINE", this.machine)
@@ -389,7 +386,7 @@ class Config {
 	setting[key] {
 		get {
 			if(!this._settings) {
-				this.settingsINIPath := this.rootPath "\config\local\settings.ini"
+				this.settingsINIPath := this.getConfigPath("local\settings.ini")
 				
 				this._settings := {}
 				this._settings["MACHINE"]      := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from Config.Machine_* constants
@@ -408,7 +405,7 @@ class Config {
 	privates {
 		get {
 			if(!this._privates)
-				this._privates := new TableList(this.rootPath "\config\ahkPrivate\privates.tl").getColumnByColumn("VALUE", "KEY")
+				this._privates := new TableList(this.getConfigPath("ahkPrivate\privates.tl")).getColumnByColumn("VALUE", "KEY")
 			
 			return this._privates
 		}
@@ -423,7 +420,7 @@ class Config {
 			if(!this._windows) {
 				this._windows := {}
 				
-				windowsTable := new TableList(this.rootPath "\config\windows.tl").getTable()
+				windowsTable := new TableList(this.getConfigPath("windows.tl")).getTable()
 				For _,row in windowsTable {
 					winInfo := new WindowInfo(row)
 					name := winInfo.name
@@ -443,7 +440,7 @@ class Config {
 	paths {
 		get {
 			if(!this._paths) {
-				pathsAry := new TableList(this.rootPath "\config\paths.tl").getColumnByColumn("PATH", "KEY")
+				pathsAry := new TableList(this.getConfigPath("paths.tl")).getColumnByColumn("PATH", "KEY")
 				
 				; Grab special path tags from the system to replace in the ones we just read in.
 				systemPathTags := this.getSystemPathTags()
@@ -478,7 +475,7 @@ class Config {
 				this._programs := {}
 				
 				; Turn each row into a Program object.
-				programsTable := new TableList(this.rootPath "\config\programs.tl").getRowsByColumn("NAME", "MACHINE")
+				programsTable := new TableList(this.getConfigPath("programs.tl")).getRowsByColumn("NAME", "MACHINE")
 				For progName,row in programsTable
 					this._programs[progName] := new Program(row)
 			}
@@ -494,12 +491,31 @@ class Config {
 	games {
 		get {
 			if(!this._games)
-				this._games := new TableList(this.rootPath "\config\games.tl").getTable()
+				this._games := new TableList(this.getConfigPath("games.tl")).getTable()
 			
 			return this._games
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    Get an absolute path to a config file given its path relative to 
+	; PARAMETERS:
+	;  relativeConfigPath (I,REQ) - The path to the config file, from within the <root>\config\ folder. No leading backslash.
+	; RETURNS:        
+	; SIDE EFFECTS:   
+	; NOTES:          
+	;---------
+	getConfigPath(relativeConfigPath) {
+		return this.getRoot() "\config\" relativeConfigPath
+	}
+	
+	;---------
+	; DESCRIPTION:    Figure out the path to the root of this repository.
+	; RETURNS:        The absolute path to the repository root (the top-level folder), no trailing backslash.
+	;---------
+	getRoot() {
+		return FileLib.getParentFolder(A_LineFile, 4) ; Root path is 3 levels out, plus one to get out of file itself.
+	}
 	
 	;---------
 	; DESCRIPTION:    Build a hard-coded array of KEY => PATH pairs that can be used to replace
@@ -522,7 +538,7 @@ class Config {
 		tags["WINDOWS"]            := A_WinDir                               ; C:\Windows
 		tags["CMD"]                := A_ComSpec                              ; C:\Windows\system32\cmd.exe
 		
-		tags["AHK_ROOT"]           := this.rootPath
+		tags["AHK_ROOT"]           := this.getRoot()
 		
 		return tags
 	}

@@ -1,4 +1,5 @@
 # New Ideas
+	Consider a safety check on EpicRecord parsing so that INIs can only be 3 letters, not anything else
 	Is there some way to show all hotkeys that are active in current state?
 		Or is that evaluated when hotkeys are pressed?
 	Would it be nicer to move windowPositionPresets.tl into code and just generate those choices directly?

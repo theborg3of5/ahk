@@ -107,6 +107,11 @@ dragWindowPrep(ByRef window, ByRef mouseStart) {
 	if(WindowLib.isNoMoveSizeWindow(titleString))
 		return false
 	
+	; Restore maximized windows before we start so we can get their proper size before we start moving.
+	; Yes, VisualWindow will handle restoring itself, but not until after we've gotten our "start" position for the window.
+	if(WindowLib.isMaximized(titleString))
+		WinRestore, % titleString
+	
 	window := new VisualWindow(titleString, SnappingDistance)
 	window.snapOn() ; Turn on snapping
 	mouseStart := new MousePosition()

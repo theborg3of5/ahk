@@ -13,12 +13,6 @@ SetWinDelay, 2 ; This makes WinActivate and such have less of a delay - otherwis
 CoordMode, Mouse, Screen
 global SnappingDistance := 25 ; 25px
 
-; Corners of a window, for resizing purposes
-global WINDOWCORNER_TOPLEFT     := "TOP_LEFT"
-global WINDOWCORNER_TOPRIGHT    := "TOP_RIGHT"
-global WINDOWCORNER_BOTTOMLEFT  := "BOTTOM_LEFT"
-global WINDOWCORNER_BOTTOMRIGHT := "BOTTOM_RIGHT"
-
 ; Don't do anything while certain windows are active.
 #If !Config.windowIsGame() && !Config.isWindowActive("Remote Desktop") && !Config.isWindowActive("VMware Horizon Client")
 
@@ -73,13 +67,13 @@ global WINDOWCORNER_BOTTOMRIGHT := "BOTTOM_RIGHT"
 				; Calculate new position/size and move window
 				mouseStart.getDistanceFromCurrentPosition(distanceX, distanceY)
 				
-				if(resizeCorner = WINDOWCORNER_TOPLEFT)
+				if(resizeCorner = WindowCorner.TopLeft)
 					window.resizeTopLeftToPos(startLeftX + distanceX, startTopY + distanceY)
-				else if(resizeCorner = WINDOWCORNER_TOPRIGHT)
+				else if(resizeCorner = WindowCorner.TopRight)
 					window.resizeTopRightToPos(startRightX + distanceX, startTopY + distanceY)
-				else if(resizeCorner = WINDOWCORNER_BOTTOMLEFT)
+				else if(resizeCorner = WindowCorner.BottomLeft)
 					window.resizeBottomLeftToPos(startLeftX + distanceX, startBottomY + distanceY)
-				else if(resizeCorner = WINDOWCORNER_BOTTOMRIGHT)
+				else if(resizeCorner = WindowCorner.BottomRight)
 					window.resizeBottomRightToPos(startRightX + distanceX, startBottomY + distanceY)
 			}
 		}
@@ -157,11 +151,18 @@ getResizeCorner(window, mouseStart) {
 	middleY := window.topY  + (window.height / 2)
 	
 	if(x < middleX && y < middleY)
-		return WINDOWCORNER_TOPLEFT
+		return WindowCorner.TopLeft
 	if(x < middleX && y >= middleY)
-		return WINDOWCORNER_BOTTOMLEFT
+		return WindowCorner.BottomLeft
 	if(x >= middleX && y < middleY)
-		return WINDOWCORNER_TOPRIGHT
+		return WindowCorner.TopRight
 	if(x >= middleX && y >= middleY)
-		return WINDOWCORNER_BOTTOMRIGHT
+		return WindowCorner.BottomRight
+}
+
+class WindowCorner {
+	static TopLeft     := "TOP_LEFT"
+	static TopRight    := "TOP_RIGHT"
+	static BottomLeft  := "BOTTOM_LEFT"
+	static BottomRight := "BOTTOM_RIGHT"
 }

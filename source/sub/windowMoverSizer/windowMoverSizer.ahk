@@ -123,7 +123,7 @@ dragWindowPrep(ByRef window, ByRef mouseStart) {
 ;---------
 ; DESCRIPTION:    Do different things depending on what modifier keys are pressed/being held down.
 ;                 Specifically:
-;                    * If left ctrl is pressed, activate the window we're tragging
+;                    * If left ctrl is pressed, activate the window we're dragging
 ;                    * While left shift is held down, disable snapping
 ; PARAMETERS:
 ;  window (IO,REQ) - VisualWindow object connected to the window that's being moved or resized.

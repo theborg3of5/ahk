@@ -15,7 +15,7 @@ class GDBTODO {
 	;  - staticMembers
 	;  - nonStaticMembers
 	;  - properties
-	;  - __New()/Init()
+	;  - __New()
 	;  - otherFunctions
 	
 	

@@ -2,8 +2,10 @@
 	Consider a safety check on EpicRecord parsing so that INIs can only be 3 letters, not anything else
 	Is there some way to show all hotkeys that are active in current state?
 		Or is that evaluated when hotkeys are pressed?
+	Didn't we add a built-in !v hotkey for DebugPopup? Doesn't seem to be working if so.
 	Would it be nicer to move windowPositionPresets.tl into code and just generate those choices directly?
 	Consider adding something mover-sizer-based for closing windows (original had something like double-middle-click or something, I think?)
+	Unmaximizing a window by Alt+Dragging it seems to jump it to the top-left corner - why?
 	Config: is it worth keeping .Init()?
 		TableList automatic filters - where should those live?
 		.initDone/.isInitialized stuff - just used by debug, worth keeping?

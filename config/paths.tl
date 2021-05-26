@@ -49,7 +49,7 @@
 
 ~CONTEXT.replaceWith(WORK) {
 	; Work
-	VB6 Compile								VB6_COMPILE								<USER_ROOT>\Dev\Temp\Compile
+	VB6 Compile								VB6_COMPILE								<EPIC_SOURCE>\Compile
 	Transaction Diff						TX_DIFF									C:\Program Files\TransactionDiff
 	Transaction Diff Results			TX_DIFF_OUTPUT							<USER_ROOT>\Dev\TransactionDiffOutput
 	EpicStudio Global Highlights		EPICSTUDIO_GLOBAL_HIGHLIGHTS		<EPIC_PERSONAL>\EpicStudioGlobalHighlights

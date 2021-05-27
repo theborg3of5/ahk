@@ -25,10 +25,11 @@
 	~MONITOR.replaceWith(MIDDLE) {
 			Chrome						-					-					MAX		MAX
 			EpicStudio					-					-					MAX		MAX		WORK
+			Hyperspace					CENTERED			CENTERED			1920		1080		WORK
 			Notepad++					-					-					MAX		MAX
 			VB6							-					-					MAX		MAX		WORK
 			Visual Studio				-					-					MAX		MAX		WORK
-			Hyperspace					CENTERED			CENTERED			1920		1080		WORK
+			WebEx							CENTERED			CENTERED			1920		1080		WORK
 			Zoom							-					-					MAX		MAX		HOME
 	}
 	

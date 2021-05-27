@@ -137,6 +137,7 @@
 				
 				Multi-entry - |
 					If this is included in a value for a column, the value for that row will be an array of the pipe-delimited values.
+					If you need to include this character in your actual value, simply escape it with backslash (i.e. \|)
 			
 			Within a mod row (see "Mods" section for details):
 				Mod apply open - {
@@ -201,6 +202,7 @@ class TableList {
 	static Char_MultiEntry       := "|"  ; Multi-entry character
 	static Char_Mod_Open         := "{"  ; The character which starts applying mods to rows.
 	static Char_Mod_Close        := "}"  ; The character which stops applying mods to rows.
+	static Char_MultiEscape      := "\"  ; Escape character used to include multi-entry character in normal values.
 	; @GROUP-END@
 	
 	;---------
@@ -586,10 +588,11 @@ class TableList {
 		; Apply any active mods.
 		this.applyMods(rowAry)
 		
-		; Split up any entries that include the multi-entry character (pipe by default).
-		For i,value in rowAry
+		; Split up any entries that include the multi-entry character (pipe).
+		For i,value in rowAry {
 			if(value.contains(this.Char_MultiEntry))
-				rowAry[i] := value.split(this.Char_MultiEntry, A_Space)
+				rowAry[i] := this.splitMultiEntry(value)
+		}
 		
 		this.table.push(rowAry)
 	}
@@ -625,6 +628,28 @@ class TableList {
 			For _,mod in modSet
 				mod.executeMod(rowAry)
 		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Split a multi-entry value into an array.
+	; PARAMETERS:
+	;  value (I,REQ) - The value to split (assumed to contain Char_MultiEntry [pipe]).
+	; RETURNS:        Appropriately-split value, either a string (if value only contained escaped pipes) or an array.
+	; SIDE EFFECTS:   Unescapes any escaped pipes (after splitting on any non-escaped pipes).
+	;---------
+	splitMultiEntry(value) {
+		value := value.replace(this.Char_MultiEscape this.Char_MultiEntry, "<PLACEHOLDER>") ; Temporarily replace escaped pipes
+		
+		; Only escaped pipes, just return the original value (unescaping the pipes)
+		if(!value.contains(this.Char_MultiEntry))
+			return value.replace("<PLACEHOLDER>", this.Char_MultiEntry)
+		
+		; Split it up and put back escaped (now unescaped) pipes.
+		valueAry := value.split(this.Char_MultiEntry, A_Space)
+		For i,piece in valueAry
+			valueAry[i] := piece.replace("<PLACEHOLDER>", this.Char_MultiEntry)
+		
+		return valueAry
 	}
 	
 	;---------

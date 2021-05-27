@@ -47,6 +47,7 @@
 		GrepWin						<USER_APPDATA_LOCAL>\Apps\grepWin\grepWin.exe								WORK_LAPTOP
 		Slack							<USER_APPDATA_LOCAL>\slack\slack.exe											HOME_DESKTOP
 		Spotify						<USER_APPDATA>\Spotify\Spotify.exe
+		Teams							<USER_APPDATA_LOCAL>\Microsoft\Teams\current\Teams.exe					WORK_LAPTOP
 		Telegram						<USER_APPDATA>\Telegram Desktop\Telegram.exe
 		Firefox Portable			S:\FirefoxPortable\FirefoxPortable.exe											HOME_DESKTOP
 	

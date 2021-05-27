@@ -15,6 +15,7 @@
 	^!+v::Config.runProgram("VB6")
 	^!+y::Config.activateProgram("yEd")
 	^!#v::Config.runProgram("Visual Studio")
+	^!#t::Config.runProgram("Teams")
 #If
 
 ; Some programs are only available on specific machines

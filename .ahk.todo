@@ -1,5 +1,4 @@
 # New Ideas
-	Consider a safety check on EpicRecord parsing so that INIs can only be 3 letters, not anything else
 	Is there some way to show all hotkeys that are active in current state?
 		Or is that evaluated when hotkeys are pressed?
 	Didn't we add a built-in !v hotkey for DebugPopup? Doesn't seem to be working if so.

@@ -141,7 +141,7 @@ class TextPopup {
 		Gui, Add, Button, Hidden Default x0 y0 gTextPopupGui_Close ; TextPopupGui_Close call on activate
 		
 		; Add hotkeys
-		this.addNotepadHotkey(content)
+		this.addNotepadHotkey(guiId, content)
 		this.addScrollHotkeys()
 		
 		return guiId
@@ -152,10 +152,11 @@ class TextPopup {
 	;                 instead of requiring the user to select something. Or, if Notepad class isn't
 	;                 available, just put it on the clipboard and toast about it.
 	; PARAMETERS:
+	;  guiId   (I,REQ) - The GUI ID of the popup, to use to limit where the hotkey triggers.
 	;  content (I,REQ) - The full content to use when this hotkey is triggered.
 	;---------
-	addNotepadHotkey(content) {
-		Hotkey, IfWinActive, % "ahk_id " this.guiId
+	addNotepadHotkey(guiId, content) {
+		Hotkey, IfWinActive, % "ahk_id " guiId
 		hotkeyFunction := ObjBindMethod(Notepad, "openNewInstanceWithText", content) ; Notepad.openNewInstanceWithText
 		Hotkey, !v, % hotkeyFunction
 		Hotkey, IfWinActive

@@ -1,7 +1,6 @@
 # New Ideas
 	Is there some way to show all hotkeys that are active in current state?
 		Or is that evaluated when hotkeys are pressed?
-	Didn't we add a built-in !v hotkey for DebugPopup? Doesn't seem to be working if so.
 	Would it be nicer to move windowPositionPresets.tl into code and just generate those choices directly?
 	Consider adding something mover-sizer-based for closing windows (original had something like double-middle-click or something, I think?)
 	Config: is it worth keeping .Init()?

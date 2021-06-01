@@ -166,17 +166,8 @@ class Explorer {
 		; Find the relative path from source folder to target.
 		relativePath := this.getRelativePath(sourceFolder, targetPath)
 		
-		; Create the shortcut
+		; Create the shortcut and let the user know.
 		this.createRelativeShortcut(sourceFolder, relativePath)
-		
-		; Optionally create shortcut to parent folder as well
-		if(GuiLib.showConfirmationPopup("Also create shortcut to target parent?")) {
-			parentPath := FileLib.getParentFolder(relativePath)
-			SplitPath(parentPath, parentName)
-			
-			this.createRelativeShortcut(sourceFolder, parentPath, parentName " Folder")
-		}
-		
 		t := new Toast("Created shortcuts!").showShort()
 	}
 	

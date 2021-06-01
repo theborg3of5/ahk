@@ -59,6 +59,19 @@ class Debug {
 	}
 	
 	;---------
+	; DESCRIPTION:    Launch a new instance of Notepad with debug info about the given list of parameters.
+	; PARAMETERS:
+	;  params* (I,REQ) - A variable number of arguments to display in the popup. For 1 argument,
+	;                    we will interpret it as a value (not a label), but for >1 arguments an
+	;                    even number of arguments should be passed in label,value pairs.
+	;---------
+	notepad(params*) {
+		table := new DebugTable().setBorderType(TextTable.BorderType_None)
+		table.addPairs(params*)
+		Notepad.openNewInstanceWithText(table.getText())
+	}
+	
+	;---------
 	; DESCRIPTION:    Display a toast (brief, semi-transparent display in the bottom-right) of
 	;                 information about the information provided. See class documentation for
 	;                 information about how we handle labels, values, arrays, and objects.

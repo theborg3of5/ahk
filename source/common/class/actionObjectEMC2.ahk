@@ -158,6 +158,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 				Case "Design":          ini := "XDS"
 				Case "Main":            ini := "QAN" ; Yes, this is weird. Not sure why it uses "Main", but it's distinct from the others so it works.
 				Case "Project":         ini := "PRJ"
+				Case "Issue":           ini := "ZDQ"
 			}
 			
 			value := ini " " id " - " title

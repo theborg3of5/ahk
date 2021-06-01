@@ -45,7 +45,12 @@
 	
 	^!#s::
 		selectSnapper() {
-			record := new EpicRecord(SelectLib.getText())
+			selectedText := SelectLib.getText()
+			record := new EpicRecord(selectedText)
+			
+			; Don't include invalid INIs (anything that's not 3 characters)
+			if(record.ini && record.ini.length() != 3)
+				record := ""
 			
 			s := new Selector("epicEnvironments.tls").setTitle("Open Record(s) in Snapper in Environment")
 			s.addOverrideFields(["INI", "ID"]).setDefaultOverrides({"INI":record.ini, "ID":record.id}) ; Add fields for INI/ID and default in any values that we figured out

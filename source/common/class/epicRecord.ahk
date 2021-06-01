@@ -152,13 +152,6 @@ class EpicRecord {
 		this.id    := this.id.withoutWhitespace()
 		this.title := this.title.withoutWhitespace()
 		
-		; Fail for invalid INIs (anything that's not 3 characters)
-		if(this.ini && this.ini.length() != 3) {
-			this.ini   := ""
-			this.id    := ""
-			this.title := ""
-		}
-		
 		; Debug.popup("recordString",recordString, "this",this)
 	}
 	; #END#

@@ -25,6 +25,7 @@ class SearchLib {
 				Case "WEB":        SearchLib.urlBase(subType, searchTerm)
 				Case "CODESEARCH": SearchLib.codeSearch(searchTerm, subType, data["APP_KEY"])
 				Case "GURU":       SearchLib.guru(searchTerm)
+				Case "HUBBLE":     SearchLib.hubble(searchTerm, subType)
 				Case "WIKI":       SearchLib.epicWiki(searchTerm, subType) ; Epic wiki search.
 				Case "GREPWIN":    SearchLib.grepWin(searchTerm, subType)
 				Case "EVERYTHING": SearchLib.everything(searchTerm)
@@ -63,7 +64,7 @@ class SearchLib {
 		url := Config.private["CS_BASE"]
 		url := url.replaceTag("SEARCH_TYPE",  searchType)
 		url := url.replaceTag("APP_CRITERIA", appCriteria)
-		url := url.replaceTag("SEARCH_TERMS", "&a=" searchTerm)
+		url := url.replaceTag("QUERY", "&a=" searchTerm)
 		
 		Run(url)
 	}
@@ -76,6 +77,27 @@ class SearchLib {
 	guru(searchTerm) {
 		searchTerm := SearchLib.escapeTermForRunURL(searchTerm)
 		url := Config.private["GURU_SEARCH_BASE"] searchTerm
+		Run(url)
+	}
+	
+	;---------
+	; DESCRIPTION:    Search Hubble for the given text.
+	; PARAMETERS:
+	;  searchTerm (I,REQ) - Text to search for
+	;  searchType (I,REQ) - Type of search (basically the tab)
+	; SIDE EFFECTS:   Will also add additional filters depending on the tab
+	;---------
+	hubble(searchTerm, searchType) {
+		searchTerm := SearchLib.escapeTermForRunURL(searchTerm)
+		
+		url := Config.private["HUBBLE_SEARCH_BASE"]
+		url := url.replaceTag("QUERY", searchTerm)
+		
+		if(searchType = "QAN") {
+			url := url.replaceTag("SEARCH_TYPE", "zqn")
+			url := url.replaceTag("FILTERS", Config.private["HUBBLE_QAN_ACTIVE_FILTER"])
+		}
+		
 		Run(url)
 	}
 

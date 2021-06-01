@@ -23,6 +23,11 @@
 		Send, {AppsKey}
 		Send, l
 	return
+	!b:: ; Blame for the same
+		HotkeyLib.waitForRelease()
+		Send, {AppsKey}
+		Send, b
+	return
 	
 	; Relative shortcut creation
 	^+s::Explorer.createRelativeShortcutToFile()

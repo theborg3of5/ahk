@@ -27,6 +27,10 @@
 		HotkeyLib.waitForRelease()
 		Send, {AppsKey}
 		Send, b
+		
+		; Accept through starting revision window too, never want to start anywhere except first revision.
+		WinWaitActive, % Config.windowInfo["TortoiseSVN Blame Popup"].titleString
+		Send, {Enter}
 	return
 	
 	; Relative shortcut creation

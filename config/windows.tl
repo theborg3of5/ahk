@@ -45,6 +45,7 @@
 				OneTastic Macro Editor XML			ONENOTE.EXE					Onetastic Window				Edit XML
 				OneTastic Macro Editor				ONENOTE.EXE					Onetastic Window
 				Snapper Add Records					Snapper.exe					-									Add a Record
+				TortoiseSVN Blame Popup				TortoiseProc.exe			-									 - Blame - TortoiseSVN
 				Zoom Default Meeting					Zoom.exe						ZPContentViewWndClass		Zoom													-					EXACT
 	}
 	

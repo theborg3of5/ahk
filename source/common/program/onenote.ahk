@@ -47,6 +47,10 @@ class OneNote {
 		Send, !8 ; Onetastic Work Toolbar macro set
 		Send, % keys
 	}
+	customStylesCode() {
+		Send, !9 ; Onetastic Custom Styles
+		Send, {Enter} ; First one is my custom "Code" style.
+	}
 	
 	; Named wrappers for specific toolbar macros, using quick access item + hotkeys
 	addSubLinesToSelectedLines() {
@@ -63,14 +67,6 @@ class OneNote {
 	}
 	createAndLinkDevPageInSpecificSection() {
 		this.runOnetasticWorkToolbarMacro("y2")
-	}
-	
-	;---------
-	; DESCRIPTION:    Apply the custom Onetastic "code" style to the selected text.
-	;---------
-	applyCodeStyle() {	; Custom styles from Onetastic
-		Send, !hy3    ; Home > Custom Styles
-		Send, {Enter} ; Select first one (my "code" style)
 	}
 	
 	;---------

@@ -68,7 +68,7 @@
 	^0::  OneNote.setZoomTo100Percent()
 	
 	; OneTastic custom styles and macros
-	^+c::OneNote.applyCodeStyle()
+	^+c::OneNote.customStylesCode()
 	^+i::OneNote.addSubLinesToSelectedLines()
 	!t:: OneNote.collapseToUnfinishedTags()
 	^l:: OneNote.createAndLinkPageInSpecificSection()

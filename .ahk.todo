@@ -1,4 +1,7 @@
 # New Ideas
+	Could we make a nicer way to open snapper with an external ID?
+		Maybe something in front of the ID to say that it's external, like a leading #?
+		Probably launch with no INI/ID, wait for the error popup to appear, then launch the add window and search that way.
 	Is there some way to show all hotkeys that are active in current state?
 		Or is that evaluated when hotkeys are pressed?
 	Would it be nicer to move windowPositionPresets.tl into code and just generate those choices directly?

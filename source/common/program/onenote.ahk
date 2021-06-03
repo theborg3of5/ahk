@@ -39,17 +39,17 @@ class OneNote {
 	setZoomTo100Percent() {
 		Send, !6
 	}
+	customStylesCode() {
+		Send, !7 ; Onetastic Custom Styles
+		Send, {Enter} ; First one is my custom "Code" style.
+	}
 	runOnetasticToolbarMacro(keys) {
-		Send, !7 ; Onetastic Toolbar macro set
+		Send, !8 ; Onetastic Toolbar macro set
 		Send, % keys
 	}
 	runOnetasticWorkToolbarMacro(keys) {
-		Send, !8 ; Onetastic Work Toolbar macro set
+		Send, !9 ; Onetastic Work Toolbar macro set
 		Send, % keys
-	}
-	customStylesCode() {
-		Send, !9 ; Onetastic Custom Styles
-		Send, {Enter} ; First one is my custom "Code" style.
 	}
 	
 	; Named wrappers for specific toolbar macros, using quick access item + hotkeys

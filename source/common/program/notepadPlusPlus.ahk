@@ -35,6 +35,22 @@ class NotepadPlusPlus {
 	}
 	
 	;---------
+	; DESCRIPTION:    For program scripts, swap between the program script and its matching class script.
+	;---------
+	toggleProgramAndClass() {
+		currScriptPath := WinGetActiveTitle().beforeString(" - Notepad++", true)
+		SplitPath(currScriptPath, scriptName)
+		
+		if(currScriptPath.startsWith(Config.path["AHK_SOURCE"] "\program\"))
+			matchingScriptPath := Config.path["AHK_SOURCE"] "\common\program\" scriptName
+		else if(currScriptPath.startsWith(Config.path["AHK_SOURCE"] "\common\program\"))
+			matchingScriptPath := Config.path["AHK_SOURCE"] "\program\" scriptName
+		
+		if(FileExist(matchingScriptPath))
+			Config.runProgram("Notepad++", matchingScriptPath)
+	}
+	
+	;---------
 	; DESCRIPTION:    Send a code string for defaulting a variable to a different value if it's false/blank.
 	; PARAMETERS:
 	;  varName (I,OPT) - The name of the variable to work with. If not given, we'll prompt the user for it.

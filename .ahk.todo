@@ -3,10 +3,6 @@
 		Or is that evaluated when hotkeys are pressed?
 	Would it be nicer to move windowPositionPresets.tl into code and just generate those choices directly?
 	Consider adding something mover-sizer-based for closing windows (original had something like double-middle-click or something, I think?)
-	Idea: allow switching between program and program class scripts in Notepad++, like switching between code and design in VB6
-		Check path of current script - only do this if it's in <root>\source\program\ or <root>\source\common\program\
-		Grab the file name and put it on the opposite folder
-		Edit with Notepad++ to "switch"
 	Config: is it worth keeping .Init()?
 		TableList automatic filters - where should those live?
 		.initDone/.isInitialized stuff - just used by debug, worth keeping?

@@ -75,7 +75,7 @@
 				</Keywords>
             <!-- *gdb - Added Debug.popup/Debug.toast delimiters (03/05) for de-emphasizing debug lines -->
             <!-- *gdb - Added [[ and ]] (06/07) for section header formatting -->
-				<Keywords name="Delimiters">00&quot; 01 02&quot; 03Debug.popup 03Debug.toast 04 05((EOL)) 05((EOL)) 06[[ 07 08]] 09@NPP-TABLELIST 09@GROUP 10 11@ 11@ 12 13 14 15 16 17 18 19 20 21 22 23</Keywords>
+				<Keywords name="Delimiters">00&quot; 01 02&quot; 03Debug.popup 03Debug.toast 03Debug.copy 03Debug.notepad 04 05((EOL)) 05((EOL)) 05((EOL)) 05((EOL)) 06[[ 07 08]] 09@NPP-TABLELIST 09@GROUP 10 11@ 11@ 12 13 14 15 16 17 18 19 20 21 22 23</Keywords>
         </KeywordLists>
         <Styles>
             <!-- *gdb - Font colors customized to match Bespin Notepad++ theme -->

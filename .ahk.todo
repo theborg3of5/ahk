@@ -1,7 +1,6 @@
 # New Ideas
 	Is there some way to show all hotkeys that are active in current state?
 		Or is that evaluated when hotkeys are pressed?
-	Would it be nicer to move windowPositionPresets.tl into code and just generate those choices directly?
 	Consider adding something mover-sizer-based for closing windows (original had something like double-middle-click or something, I think?)
 	Config: is it worth keeping .Init()?
 		TableList automatic filters - where should those live?
@@ -23,19 +22,6 @@
 	Consider switching zoom mute toggle over to a click target within the zoom window - would that avoid the "ding" sound?
 	Consider renaming fixWindowPosition* stuff and moving it into a static class
 	Would a static ErrorToast wrapper make sense, rather than having to do the whole new ErrorToast("").showMedium() thing each time?
-	Would a clear-all-notifications hotkey be nice for Windows notification center?
-		Or will it be easier to just tab a few times to get to the dismiss all button?
-		Focused "window" info
-			Action center
-			ahk_class Windows.UI.Core.CoreWindow
-			ahk_exe ShellExperienceHost.exe
-	Consider breaking some common bits for tiny standalone scripts, out into something separate from the normal load-all-common-stuff
-		Should help speed up tiny scripts like media keys
-	Consider adding "jiggling" for certain windows in fix-window-positions script, to fix toolbar buttons
-		Unmaximize (already doing this, I think?) + move to another monitor + move back
-		Windows
-			Outlook
-			Explorer
 	Could we make it easier to update current version of Hyperspace?
 		Places I have to change now:
 			Source folders in privates

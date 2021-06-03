@@ -61,7 +61,7 @@
 			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
 				Config.runProgram("Snapper")
 			else
-				Run(Snapper.buildURL(data["COMM_ID"], data["INI"], data["ID"])) ; data["ID"] can contain a list or range if that's what the user entered
+				Snapper.addRecords(data["COMM_ID"], data["INI"], data["ID"]) ; data["ID"] can contain a list or range if that's what the user entered
 		}
 
 #If Config.machineIsWorkLaptop ; Main work laptop only (not other work machines) ===

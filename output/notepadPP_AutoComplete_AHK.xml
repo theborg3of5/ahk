@@ -2507,6 +2507,18 @@
                 <Param name="params*" />
             </Overload>
         </KeyWord>
+        <KeyWord name="Debug.notepad" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Launch a new instance of Notepad with debug info about the given list of parameters.
+							; PARAMETERS:
+							;  params* (I,REQ) - A variable number of arguments to display in the popup. For 1 argument,
+							;                    we will interpret it as a value (not a label), but for >1 arguments an
+							;                    even number of arguments should be passed in label,value pairs.
+							;---------">
+                <Param name="params*" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="Debug.popup" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -5896,6 +5908,19 @@
                 <Param name="searchTerm" />
             </Overload>
         </KeyWord>
+        <KeyWord name="SearchLib.hubble" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Search Hubble for the given text.
+							; PARAMETERS:
+							;  searchTerm (I,REQ) - Text to search for
+							;  searchType (I,REQ) - Type of search (basically the tab)
+							; SIDE EFFECTS:   Will also add additional filters depending on the tab
+							;---------">
+                <Param name="searchTerm" />
+                <Param name="searchType" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="SearchLib.selectedTextPrompt" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -6350,10 +6375,10 @@
             </Overload>
         </KeyWord>
         <KeyWord name="Slider"/>
-        <KeyWord name="Snapper.buildURL" func="yes">
+        <KeyWord name="Snapper.addRecords" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Build a URL that will open something in Snapper.
+							; DESCRIPTION:    Add a record to Snapper in the given environment.
 							; PARAMETERS:
 							;  environment (I,OPT) - COMMID of the environment to get a URL for. If not given, we'll try to
 							;                        default from whatever's currently selected in Snapper.
@@ -6362,8 +6387,7 @@
 							;                        Snapper to the chosen right environment.
 							;  idList      (I,OPT) - Comma-separated list of record IDs (or colon-separated ranges of IDs)
 							;                        to launch. If blank, both ini and idList will be treated as &quot;X&quot; as
-							;                        described above.
-							; RETURNS:        URL to launch Snapper.
+							;                        described above. Must be internal IDs, unless the string starts with &quot;#&quot;.
 							;---------">
                 <Param name="environment := &quot;&quot;" />
                 <Param name="ini := &quot;&quot;" />
@@ -7462,6 +7486,14 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Multi-entry character
+							; GROUP:          Special characters within a TableList file.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.Char_MultiEscape" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Escape character used to include multi-entry character in normal values.
 							; GROUP:          Special characters within a TableList file.
 							;---------">
             </Overload>
@@ -8876,6 +8908,19 @@
                 <Param name="title := &quot;&quot;" />
             </Overload>
         </KeyWord>
+        <KeyWord name="WindowLib.addStyle" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a style to the given window.
+							; PARAMETERS:
+							;  style       (I,REQ) - The style to add.
+							;  titleString (I,OPT) - Title string that identifies your chosen window.
+							;                        Defaults to the active window (&quot;A&quot;).
+							;---------">
+                <Param name="style" />
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="WindowLib.buildTitleString" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -9033,6 +9078,33 @@
 							; RETURNS:        true/false, whether the window is visible.
 							;---------">
                 <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.makeVisible" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Make a window visible.
+							; PARAMETERS:
+							;  titleString (I,OPT) - Title string that identifies your chosen window.
+							;                        Defaults to the active window (&quot;A&quot;).
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.waitControlActive" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wait until the specified control is active.
+							; PARAMETERS:
+							;  waitControlId (I,REQ) - The ID (classNN) of the control to wait on.
+							;  titleString   (I,OPT) - Title string that identifies your chosen window.
+							;                          Defaults to the active window (&quot;A&quot;).
+							;  timeout       (I,OPT) - Milliseconds to wait before timing out. Defaults to 1000ms.
+							; RETURNS:        true if the control became active, false if we timed out.
+							;---------">
+                <Param name="waitControlId" />
+                <Param name="titleString := &quot;A&quot;" />
+                <Param name="timeout := 1000" />
             </Overload>
         </KeyWord>
         <KeyWord name="WinExist" func="yes">

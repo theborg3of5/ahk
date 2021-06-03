@@ -2,6 +2,28 @@
 	; #PUBLIC#
 	
 	;---------
+	; DESCRIPTION:    Add a record to Snapper in the given environment.
+	; PARAMETERS:
+	;  environment (I,OPT) - COMMID of the environment to get a URL for. If not given, we'll try to
+	;                        default from whatever's currently selected in Snapper.
+	;  ini         (I,OPT) - INI of the record(s) to launch. If this or idList is blank, both will
+	;                        be set to "X", which will show an error popup, but still connect
+	;                        Snapper to the chosen right environment.
+	;  idList      (I,OPT) - Comma-separated list of record IDs (or colon-separated ranges of IDs)
+	;                        to launch. If blank, both ini and idList will be treated as "X" as
+	;                        described above. Must be internal IDs, unless the string starts with "#".
+	;---------
+	addRecords(environment := "", ini := "", idList := "") {
+		if(idList.startsWith("#"))
+			this.addRecordWithExternalId(environment, ini, idList.removeFromStart("#"))
+		else
+			Run(this.buildURL(environment, ini, idList))
+	}
+	
+	
+	; #INTERNAL#
+	
+	;---------
 	; DESCRIPTION:    Build a URL that will open something in Snapper.
 	; PARAMETERS:
 	;  environment (I,OPT) - COMMID of the environment to get a URL for. If not given, we'll try to
@@ -11,7 +33,7 @@
 	;                        Snapper to the chosen right environment.
 	;  idList      (I,OPT) - Comma-separated list of record IDs (or colon-separated ranges of IDs)
 	;                        to launch. If blank, both ini and idList will be treated as "X" as
-	;                        described above.
+	;                        described above. Must be internal IDs.
 	; RETURNS:        URL to launch Snapper.
 	;---------
 	buildURL(environment := "", ini := "", idList := "") { ; idList is a comma-separated list of IDs
@@ -41,8 +63,40 @@
 		return outURL
 	}
 	
-	
-	; #INTERNAL#
+	;---------
+	; DESCRIPTION:    Add a record to Snapper by external ID.
+	; PARAMETERS:
+	;  environment (I,OPT) - COMMID of the environment to get a URL for. If not given, we'll try to
+	;                        default from whatever's currently selected in Snapper.
+	;  ini         (I,REQ) - INI of the record(s) to launch.
+	;  externalId  (I,REQ) - The external ID of the record.
+	;---------
+	addRecordWithExternalId(environment, ini, externalId) {
+		; Connect to environment (also launches Snapper if it's not already open)
+		Run(Snapper.buildURL(environment))
+		
+		; Close the "ini/id invalid" popup that comes from us using "X" for both.
+		WinWaitActive, ahk_exe Snapper.exe ahk_class #32770
+		WinClose, A
+		WinWaitActive, % Config.windowInfo["Snapper"].titleString
+		
+		; Launch the add record popup
+		Send, !n
+		WinWaitActive, % Config.windowInfo["Snapper Add Records"].titleString
+		
+		; Plug in the INI
+		ControlSetText, ThunderRT6TextBox1, % ini, A
+		Send, {Enter} ; Submit to enable Record (ID) field
+		
+		; Plug in the ID
+		WindowLib.waitControlActive("ThunderRT6TextBox2")
+		ControlSetText, ThunderRT6TextBox2, % externalId, A
+		Send, {Enter} ; Submit
+		
+		; Accept the popup
+		WindowLib.waitControlActive("ThunderRT6TextBox3")
+		Send, !a ; Accept button
+	}
 	
 	;---------
 	; DESCRIPTION:    Send the text needed to ignore items that I've deemed unimportant (according

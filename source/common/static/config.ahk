@@ -34,8 +34,7 @@ class Config {
 	;---------
 	private[key] {
 		get {
-			privates := this.privates ; Need to pull this out first because this.privates is a property that doesn't take keys directly, but doing this.privates[name] will try to use a key directly.
-			return privates[key]
+			return (this.privates)[key] ; Parens are so it doesn't try to pass a parameter to the this.privates property.
 		}
 	}
 	
@@ -174,8 +173,7 @@ class Config {
 	;---------
 	windowInfo[name] {
 		get {
-			windows := this.windows ; Need to pull this out first because this.windows is a property that doesn't take keys directly, but doing this.windows[name] will try to use a key directly.
-			return windows[name].clone()
+			return (this.windows)[name].clone() ; Parens are so it doesn't try to pass a parameter to the this.privates property.
 		}
 	}
 	
@@ -285,8 +283,7 @@ class Config {
 	;---------
 	path[key] {
 		get {
-			paths := this.paths ; Need to pull this out first because this.paths is a property that doesn't take keys directly, but doing this.paths[key] will try to use a key directly.
-			return paths[key]
+			return (this.paths)[key] ; Parens are so it doesn't try to pass a parameter to the this.privates property.
 		}
 	}
 	

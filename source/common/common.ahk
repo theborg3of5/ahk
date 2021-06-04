@@ -110,6 +110,7 @@ Object(params*) {
 	#Include titleMatchMode.ahk
 	#Include VA.ahk
 	#Include windowActions.ahk
+	#Include windowPositions.ahk
 ; =--
 
 ; [[ Initialization ]] --=

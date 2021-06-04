@@ -47,72 +47,8 @@ $!q::WindowActions.minimizeWindow()
 	}
 
 ; "Fix" window position and size to match configuration TL
- #+f::fixWindowPositions("A")
-^#+f::fixWindowPositions() ; Fix all windows in the config file
-fixWindowPositions(titleString := "") {
-	; If we're being asked to fix a specific window, assume non-preset case. Otherwise, ask for preset (which can also turn out blank).
-	if(titleString != "")
-		preset := "NORMAL"
-	else
-		preset := new Selector("windowPositionPresets.tls").selectGui("PRESET")
-	if(preset = "")
-		return
-	
-	positions := new TableList("windowPositions.tl").filterByColumn("PRESET", preset).getRowsByColumn("NAME")
-	
-	; Fix a single window.
-	if(titleString != "") {
-		position := findBestMatchPosition(titleString, positions)
-		fixWindowPosition(titleString, position)
-	
-	; Fix all the windows in the config file at once.
-	} else {
-		pt := new ProgressToast("Fixing window positions")
-		For name,position in positions {
-			pt.nextStep(name, "fixed")
-			winInfo := Config.windowInfo[name]
-			
-			; Ensure that the window we identified doesn't better match another, more specific position entry
-			if(name != Config.findWindowName(winInfo.idString)) {
-				pt.endStep("not found")
-				Continue
-			}
-			
-			if(!winInfo.exists()) {
-				pt.endStep("not found")
-				Continue
-			}
-			
-			fixWindowPosition(winInfo.idString, position)
-		}
-		pt.finish()
-	}
-}
-findBestMatchPosition(titleString, positions) {
-	For _,names in Config.findAllMatchingWindowNames(titleString) { ; Looping by priority
-		For _,name in names {
-			if(positions[name])
-				return positions[name]
-		}
-	}
-}
-fixWindowPosition(titleString, position) {
-	if(!position)
-		return
-	
-	if(position["ACTIVATE"]) ; If the flag says to activate it, always do so.
-		Config.activateProgram(position["NAME"])
-	
-	; Track initially-minimized windows so we can re-minimize them when we're done (VisualWindow.resizeMove will restore them).
-	startedMinimized := WindowLib.isMinimized(titleString)
-	
-	workArea := MonitorLib.workAreaForLocation[position["MONITOR"]]
-	new VisualWindow(titleString).resizeMove(position["WIDTH"], position["HEIGHT"], position["X"], position["Y"], workArea)
-	
-	; Put window into final state
-	if(startedMinimized) ; Otherwise, re-minimize the window if it started out that way.
-		WinMinimize, % titleString
-}
+ #+f::WindowPositions.fixWindow() ; Active window
+^#+f::WindowPositions.fixAllWindows()
 
 ; Scroll horizontally with Shift held down.
 #If !(Config.isWindowActive("EpicStudio") || Config.isWindowActive("Chrome")) ; Chrome and EpicStudio handle their own horizontal scrolling, and doesn't support WheelLeft/Right all the time.

@@ -18,7 +18,6 @@
 	Explorer									MIN		-					-					-					-			-				-				WORK_VDI
 	GitHub Desktop							CLOSE		-					-					-					-			-				ESCAPE
 	GrepWin									CLOSE
-	KDiff										CLOSE
 	Messenger								MIN		-					-					-					-			-				ESCAPE		HOME_DESKTOP
 	Notepad									CLOSE
 	OneTastic Macro Editor XML			-			-					HOME_END

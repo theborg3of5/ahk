@@ -1,6 +1,4 @@
 # New Ideas
-	Is there some way to show all hotkeys that are active in current state?
-		Or is that evaluated when hotkeys are pressed?
 	Consider adding something mover-sizer-based for closing windows (original had something like double-middle-click or something, I think?)
 	Config: is it worth keeping .Init()?
 		TableList automatic filters - where should those live?
@@ -64,10 +62,6 @@
 	EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments
-	Figure out some standard documentation method for hotkeys
-		Dynamically pull hotkeys for the currently focused program?
-		Hotkey to show popup with all currently active hotkeys, divided up into current-program-specific and others
-			Maybe separate section for stuff that runs when some other window exists (media hotkeys, for example)
 	
 # Selector
 	Re-examine SelectorGui/FlexTable - could we simplify out a lot of the extra logic using built-in Gui positioning options?

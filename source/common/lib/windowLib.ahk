@@ -126,6 +126,8 @@ class WindowLib {
 			return true
 		if(Config.windowMatchesInfo(titleString, "Windows Taskbar Secondary"))
 			return true
+		if(Config.windowMatchesInfo(titleString, "Zoom Default Meeting"))
+			return true
 		
 		return false
 	}

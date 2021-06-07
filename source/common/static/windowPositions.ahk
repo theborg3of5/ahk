@@ -40,9 +40,8 @@ class WindowPositions {
 			pt.nextStep(name, "fixed")
 			winInfo := Config.windowInfo[name]
 			
-			; Ensure that the window we identified doesn't better match another, more specific position entry
-			if(name != Config.findWindowName(winInfo.idString)) {
-				pt.endStep("not found")
+			if(WindowLib.isNoMoveSizeWindow("A")) {
+				pt.endStep("found but not movable")
 				Continue
 			}
 			

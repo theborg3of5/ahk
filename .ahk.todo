@@ -1,4 +1,10 @@
 # New Ideas
+	Apparently class names are stored in object.__Class - could we use that and get rid of Debug_TypeName()?
+		Will want to double-check that we're not relying on that to decide whether to use a custom debug display (I'd hope we're using the actual debug method instead?)
+	Onetastic macros now support exporting everything together - should we consider just building the sum XML and importing that instead of our piecemeal approach?
+		Would let us import name/description/category directly, too
+		Could version-control the sub results like we do with EpicStudio regex patterns
+		Might be nice to use template XML files to build it, rather than doing it entirely in code?
 	Consider adding something mover-sizer-based for closing windows (original had something like double-middle-click or something, I think?)
 	Config: is it worth keeping .Init()?
 		TableList automatic filters - where should those live?
@@ -14,9 +20,6 @@
 			Config media player stuff
 				Support in general
 				Setting settings value/settingsINIPath (only used by media player stuff)
-	Onetastic macros now support exporting everything together - should we consider just building the sum XML and importing that using the built-in import instead of our piecemeal approach?
-	Apparently class names are stored in object.__Class - could we use that and get rid of Debug_TypeName()?
-		Will want to double-check that we're not relying on that to decide whether to use a custom debug display (I'd hope we're using the actual debug method instead?)
 	Consider switching zoom mute toggle over to a click target within the zoom window - would that avoid the "ding" sound?
 	Would a static ErrorToast wrapper make sense, rather than having to do the whole new ErrorToast("").showMedium() thing each time?
 	Could we make it easier to update current version of Hyperspace?

@@ -1,7 +1,5 @@
 /* Move and resize windows to match presets of different positions specified in a TL tile.
 		Presets come from PRESET column in config file, default is the NORMAL preset.
-	GDB TODO
-		Pull window position definition out into a data class (maybe just keep it in this file, or even nest it?)
 */
 
 class WindowPositions {
@@ -75,8 +73,13 @@ class WindowPositions {
 		get {
 			if(!this._positions)
 				this._positions := {}
-			if(!this._positions[preset])
-				this._positions[preset] := new TableList(this.Filename_Config).filterByColumn("PRESET", preset).getRowsByColumn("NAME")
+			if(!this._positions[preset]) {
+				presetPositions := new TableList(this.Filename_Config).filterByColumn("PRESET", preset).getRowsByColumn("NAME")
+				
+				this._positions[preset] := {}
+				For name,positionAry in presetPositions
+					this._positions[preset, name] := new this.WindowPosition(positionAry)
+			}
 			
 			return this._positions[preset]
 		}
@@ -141,14 +144,14 @@ class WindowPositions {
 		if(!position)
 			return
 		
-		if(position["ACTIVATE"]) ; If the flag says to activate it, always do so.
-			Config.activateProgram(position["NAME"])
+		if(position.shouldActivate) ; If the flag says to activate it, always do so.
+			Config.activateProgram(position.name)
 		
 		; Track initially-minimized windows so we can re-minimize them when we're done (VisualWindow.resizeMove will restore them).
 		startedMinimized := WindowLib.isMinimized(titleString)
 		
-		workArea := MonitorLib.workAreaForLocation[position["MONITOR"]]
-		new VisualWindow(titleString).resizeMove(position["WIDTH"], position["HEIGHT"], position["X"], position["Y"], workArea)
+		workArea := MonitorLib.workAreaForLocation[position.monitor]
+		new VisualWindow(titleString).resizeMove(position.width, position.height, position.x, position.y, workArea)
 		
 		; Put window into final state
 		if(startedMinimized) ; Otherwise, re-minimize the window if it started out that way.
@@ -156,20 +159,21 @@ class WindowPositions {
 	}
 	
 	
-	; Data class that holds the bits that make up 
+	; Data class that holds the bits that make up a window's position and how to make that happen.
 	class WindowPosition {
-		; @GROUP@ Window position properties
 		name    := "" ; Window name
 		monitor := "" ; Name of the monitor (from MonitorLib) the window should be on
 		width   := "" ; Window width
 		height  := "" ; Window height
 		x       := "" ; Top-left corner's x coordinate
 		y       := "" ; Top-left corner's y coordinate
-		; @GROUP-END@
 		
 		shouldActivate := "" ; Whether the window needs to be activated as part of "fixing" it
 		
 		__New(positionAry) {
+			if(!positionAry)
+				return ""
+			
 			this.name    := positionAry["NAME"]
 			this.monitor := positionAry["MONITOR"]
 			this.width   := positionAry["WIDTH"]
@@ -179,8 +183,6 @@ class WindowPositions {
 			
 			this.shouldActivate := positionAry["ACTIVATE"]
 		}
-		
-		; GDB TODO actually turn positions subscripts into instances of this class + read them accordingly
 	}
 	
 	; #END#

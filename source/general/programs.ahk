@@ -7,6 +7,7 @@
 ^!+n::Config.activateProgram("Notepad++")
 ^!#n::Config.runProgram("Notepad")
 ^!#/::Config.activateProgram("AutoHotkey WinSpy")
+#m::  Config.activateProgram("Chrome Messages", "--profile-directory=Default --app-id=hpfldicfbfomlpcikngkocigghgafkph")
 
 ; Some programs are work-specific
 #If Config.contextIsWork

@@ -7,8 +7,13 @@
 	~PRIORITY.replaceWith(0) {
 				AutoHotkey WinSpy						AutoHotkey.exe				AutoHotkeyGUI					Window Spy
 				AutoHotkey Toast						AutoHotkey.exe				AutoHotkeyGUI					[TOAST]												NO_PADDING
-				Chrome Join								chrome.exe					-									Join
-				Chrome TickTick						chrome.exe					-									All - TickTick
+				
+		; Special Chrome windows
+		~EXE.replaceWith(chrome.exe) {
+				Chrome Join								-								-									Join
+				Chrome TickTick						-								-									All - TickTick
+				Chrome Messages						-								-									Messages for web
+		}
 		
 		; EMC2 windows
 		~EXE.replaceWith(EpicD97.exe) {

@@ -3,6 +3,7 @@
 ~PATH_TYPE.defaultTo(EXE) {
 	~PATH.addToStart(<PROGRAM_FILES_86>\) {
 		Chrome						Google\Chrome\Application\chrome.exe
+		Chrome Messages			Google\Chrome\Application\chrome_proxy.exe
 		EMC2							Epic\v9.7\EMC2\Shared Files\EpicD97.exe
 		EpicStudio					EpicStudio\EpicStudio.exe
 		Foobar						foobar2000\foobar2000.exe
@@ -18,6 +19,7 @@
 	} ~PATH.addToStart(<PROGRAM_FILES>\) {
 		AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk
 		Chrome						Google\Chrome\Application\chrome.exe											WORK_LAPTOP
+		Chrome Messages			Google\Chrome\Application\chrome_proxy.exe 									WORK_LAPTOP
 		Everything					Everything\Everything.exe
 		Internet Explorer			Internet Explorer\iexplore.exe
 		KDiff							KDiff3\kdiff3.exe

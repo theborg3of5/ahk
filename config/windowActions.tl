@@ -37,6 +37,7 @@
 	; Web popups - close on Escape.
 	Chrome Join								CLOSE
 	Chrome TickTick						CLOSE
+	Chrome Messages						CLOSE
 
 	; Windows taskbars - don't minimize.
 	Windows Taskbar						-			NONE

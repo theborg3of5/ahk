@@ -27,6 +27,7 @@
 			EpicStudio					-					-					MAX		MAX		WORK
 			Hyperspace					CENTERED			CENTERED			1920		1080		WORK
 			Notepad++					-					-					MAX		MAX
+			Process Explorer			CENTERED			CENTERED			1440		900
 			VB6							-					-					MAX		MAX		WORK
 			Visual Studio				-					-					MAX		MAX		WORK
 			WebEx							CENTERED			CENTERED			1920		1080		WORK

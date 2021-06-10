@@ -47,8 +47,8 @@
 				EpicStudio New Object Window		EpicStudio.exe				-									New Object
 				EpicStudio Tokenize String			EpicStudio.exe				-									Tokenize String
 				EpicStudio Attach to Process		EpicStudio.exe				-									Attach to Process
-				OneTastic Macro Editor XML			ONENOTE.EXE					Onetastic Window				Edit XML
-				OneTastic Macro Editor				ONENOTE.EXE					Onetastic Window
+				Onetastic Macro Editor XML			ONENOTE.EXE					Onetastic Window				Edit XML
+				Onetastic Macro Editor				ONENOTE.EXE					Onetastic Window
 				Snapper Add Records					Snapper.exe					-									Add a Record
 				TortoiseSVN Blame Popup				TortoiseProc.exe			-									 - Blame - TortoiseSVN
 				Zoom Default Meeting					Zoom.exe						ZPContentViewWndClass		Zoom													-					EXACT

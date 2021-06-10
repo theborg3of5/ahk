@@ -24,7 +24,7 @@
 		AHK Root								ahkr					<AHK_ROOT>
 		AHK Source							ahks | ahkf			<AHK_SOURCE>
 		AHK Todo								ahkt					<AHK_SOURCE>																				-					-				-				GDB TODO
-		OneTastic Macros					ot						<ONETASTIC_MACROS>
+		Onetastic Macros					ot						<ONETASTIC_MACROS>
 }
 
 # Other

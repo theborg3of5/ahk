@@ -67,7 +67,7 @@
 	!m::  OneNote.meetingDetailsFromAnotherDay()
 	^0::  OneNote.setZoomTo100Percent()
 	
-	; OneTastic custom styles and macros
+	; Onetastic custom styles and macros
 	^+c::OneNote.customStylesCode()
 	^+i::OneNote.addSubLinesToSelectedLines()
 	!t:: OneNote.collapseToUnfinishedTags()

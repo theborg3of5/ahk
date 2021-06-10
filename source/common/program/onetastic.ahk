@@ -1,4 +1,4 @@
-class OneTastic {
+class Onetastic {
 	; #INTERNAL#
 	
 	;---------
@@ -27,7 +27,7 @@ class OneTastic {
 	; DESCRIPTION:    Copy the XML for the current macro or function.
 	;---------
 	copyCurrentXML() {
-		OneTastic.openEditXMLPopup()
+		Onetastic.openEditXMLPopup()
 		xml := ControlGetText("Edit1", "A")
 		
 		ClipboardLib.set(xml) ; Can't use ClipboardLib.setAndToast() because we don't want to show all of the XML
@@ -49,13 +49,13 @@ class OneTastic {
 		if(newXML = "")
 			return
 		
-		OneTastic.openEditXMLPopup()
+		Onetastic.openEditXMLPopup()
 		ControlSetText, Edit1, % newXML, A
 		Send, {Space} ; Parsed value doesn't update unless we actually change something (setting the field doesn't count), so add a space (which is ignored by the parser).
 		Send, !o ; OK out of window
 		
 		; Wait for window to close fully
-		OneTastic.waitMacroEditorWindowActive()
+		Onetastic.waitMacroEditorWindowActive()
 	}
 
 	;---------
@@ -75,15 +75,15 @@ class OneTastic {
 		
 		; Update the macro XML
 		Control, Choose, 1, ComboBox1, A ; Switch to Main() - always the first item
-		OneTastic.setCurrentXML(macroXML)
+		Onetastic.setCurrentXML(macroXML)
 		
 		; Delete all existing functions, we'll be "importing" them from scratch.
-		OneTastic.deleteAllUserFunctions()
+		Onetastic.deleteAllUserFunctions()
 		
 		; Import all needed dependencies.
-		dependencyXMLsAry := OneTastic.getAllDependencyXMLs(macroXML)
+		dependencyXMLsAry := Onetastic.getAllDependencyXMLs(macroXML)
 		For _,functionXML in dependencyXMLsAry
-			OneTastic.importFunction(functionXML)
+			Onetastic.importFunction(functionXML)
 	}
 	
 	
@@ -101,7 +101,7 @@ class OneTastic {
 		Control, Choose, % functionCount + 1, ComboBox1, A ; +1 to account for Main()
 		Loop {
 			; Finished when we reach Main().
-			if(OneTastic.isMainFunctionOpen())
+			if(Onetastic.isMainFunctionOpen())
 				Break
 			
 			; Safety check so we can't infinitely loop.
@@ -109,7 +109,7 @@ class OneTastic {
 			if(counter > functionCount)
 				Break
 			
-			OneTastic.deleteCurrentFunction(true)
+			Onetastic.deleteCurrentFunction(true)
 		}
 	}
 
@@ -135,16 +135,16 @@ class OneTastic {
 			return []
 		
 		; Read in info about all functions
-		allFunctionData := OneTastic.getFunctionDataFromFiles()
+		allFunctionData := Onetastic.getFunctionDataFromFiles()
 		
 		; Start with dependencies directly listed in start XML
-		startDependenciesAry := OneTastic.getDependenciesFromXML(startXML)
+		startDependenciesAry := Onetastic.getDependenciesFromXML(startXML)
 		; Debug.popup("startXML",startXML, "startDependenciesAry",startDependenciesAry)
 		
 		; Generate an array of the total dependencies in depth-first order
 		totalDependenciesAry := []
 		For _,functionName in startDependenciesAry {
-			functionDependenciesAry := OneTastic.compileDependenciesForFunction(functionName, allFunctionData["DEPENDENCIES"])
+			functionDependenciesAry := Onetastic.compileDependenciesForFunction(functionName, allFunctionData["DEPENDENCIES"])
 			totalDependenciesAry.appendArray(functionDependenciesAry)
 		}
 		totalDependenciesAry.removeDuplicates() ; Remove duplicates as we can't import functions more than once
@@ -179,7 +179,7 @@ class OneTastic {
 			if(!name)
 				Continue
 			
-			allFunctionData["DEPENDENCIES", name] := OneTastic.getDependenciesFromXML(xml)
+			allFunctionData["DEPENDENCIES", name] := Onetastic.getDependenciesFromXML(xml)
 			allFunctionData["XML",          name] := xml
 		}
 		settings.restore()
@@ -238,7 +238,7 @@ class OneTastic {
 			return outAry
 		
 		For _,dependencyName in allFunctionDependencies[functionName] {
-			subDependenciesAry := OneTastic.compileDependenciesForFunction(dependencyName, allFunctionDependencies)
+			subDependenciesAry := Onetastic.compileDependenciesForFunction(dependencyName, allFunctionDependencies)
 			outAry.appendArray(subDependenciesAry)
 			; Debug.popup("functionName",functionName, "dependencyName",dependencyName, "subDependenciesAry",subDependenciesAry, "outAry",outAry)
 		}
@@ -269,12 +269,12 @@ class OneTastic {
 		Send, !o ; OK out of window
 		
 		; Wait to get back to main macro editor window
-		OneTastic.waitMacroEditorWindowActive()
+		Onetastic.waitMacroEditorWindowActive()
 		
 		; Replace any instances of the special <CURRENT_MACHINE> tag with the AHK value for our current machine.
 		functionXML := functionXML.replaceTag("CURRENT_MACHINE", Config.machine)
 		
-		OneTastic.setCurrentXML(functionXML)
+		Onetastic.setCurrentXML(functionXML)
 	}
 
 	;---------

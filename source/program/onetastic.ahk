@@ -1,4 +1,4 @@
-#If Config.isWindowActive("OneTastic Macro Editor")
+#If Config.isWindowActive("Onetastic Macro Editor")
 	; Insert "empty" (comment) line
 	^Enter::
 		Send, !Q ; Insert comment 
@@ -38,15 +38,15 @@
 	^e::^F2
 	
 	; Delete current function
-	^d::OneTastic.deleteCurrentFunction()
+	^d::Onetastic.deleteCurrentFunction()
 	
 	; Open XML window
-	^+o::OneTastic.openEditXMLPopup()
+	^+o::Onetastic.openEditXMLPopup()
 	
 	; Copy/set current function XML
-	^+x::OneTastic.copyCurrentXML()
-	^+s::OneTastic.setCurrentXML(clipboard)
+	^+x::Onetastic.copyCurrentXML()
+	^+s::Onetastic.setCurrentXML(clipboard)
 	
 	; Update the current macro using the XML on the clipboard.
-	^!i::OneTastic.refreshMacroFromXML(clipboard)
+	^!i::Onetastic.refreshMacroFromXML(clipboard)
 #If

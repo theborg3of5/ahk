@@ -5,6 +5,10 @@
 		Would let us import name/description/category directly, too
 		Could version-control the sub results like we do with EpicStudio regex patterns
 		Might be nice to use template XML files to build it, rather than doing it entirely in code?
+	Onetastic: would it be nicer to have a tiny class (name + xml) to represent each function, rather than the double-layered array?
+		Could also include list of dependency names
+		Could just take the filename as input
+		Could add on other pieces like parameters (either as objects or import-ready XML) too
 	Consider adding something mover-sizer-based for closing windows (original had something like double-middle-click or something, I think?)
 	Config: is it worth keeping .Init()?
 		TableList automatic filters - where should those live?

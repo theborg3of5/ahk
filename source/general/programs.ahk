@@ -1,13 +1,14 @@
 ; Hotkeys to run/activate various programs.
 
-#e::  Config.activateProgram("Explorer", Explorer.ThisPCFolderUUID) ; Start up at "This PC" folder if we have to run it.
 !`::  Config.activateProgram("Process Explorer")
+#e::  Config.activateProgram("Explorer", Explorer.ThisPCFolderUUID) ; Start up at "This PC" folder if we have to run it.
+#m::  Config.activateProgram("Chrome Messages", "--profile-directory=Default --app-id=hpfldicfbfomlpcikngkocigghgafkph")
+#s::  Config.runProgram("Slack")
 ^!+g::Config.activateProgram("Chrome")
 ^!+m::Config.activateProgram("Messenger")
 ^!+n::Config.activateProgram("Notepad++")
 ^!#n::Config.runProgram("Notepad")
 ^!#/::Config.activateProgram("AutoHotkey WinSpy")
-#m::  Config.activateProgram("Chrome Messages", "--profile-directory=Default --app-id=hpfldicfbfomlpcikngkocigghgafkph")
 
 ; Some programs are work-specific
 #If Config.contextIsWork
@@ -31,7 +32,6 @@
 		Config.runProgram("Firefox Portable")
 	return
 #If Config.machineIsHomeDesktop || Config.machineIsWorkLaptop || Config.machineIsHomeLaptop
-	#s::  Config.runProgram("Spotify") ; Can't unminimize from tray with any reasonable logic, so re-run to do so.
 	#f::  Config.activateProgram("Everything")
 	#t::  Config.runProgram("Telegram")
 	!+g:: Config.activateProgram("GitHub Desktop")

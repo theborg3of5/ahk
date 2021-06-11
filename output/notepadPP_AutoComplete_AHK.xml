@@ -7106,6 +7106,18 @@
                 <Param name="textToDecode" />
             </Overload>
         </KeyWord>
+        <KeyWord name="StringLib.dropEmptyLines" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Drop any empty lines (leading/trailing or in the middle) from the provided string.
+							; PARAMETERS:
+							;  inString (I,REQ) - The string to process
+							; RETURNS:        The updated string.
+							; NOTES:          Only supports `n and `r`n line endings (which should cover most strings)
+							;---------">
+                <Param name="inString" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="StringLib.dropLeadingTrailing" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -9105,6 +9117,28 @@
                 <Param name="waitControlId" />
                 <Param name="titleString := &quot;A&quot;" />
                 <Param name="timeout := 1000" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowPositions.fixAllWindows" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    &quot;Fix&quot; all windows listed in the config file to match the positions specified there.
+							; PARAMETERS:
+							;  preset (I,OPT) - Name of the preset to apply. If not passed, user will get a Selector popup prompting them for one.
+							;---------">
+                <Param name="preset := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowPositions.fixWindow" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    &quot;Fix&quot; the position of the given window to match what's specified in our config file.
+							; PARAMETERS:
+							;  titleString (I,OPT) - Title string identifying the window to fix, defaults to active window (&quot;A&quot;).
+							;  preset      (I,OPT) - The preset to &quot;fix&quot; the window with regards to - a given window could have a different position per preset.
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+                <Param name="preset := &quot;NORMAL&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="WinExist" func="yes">

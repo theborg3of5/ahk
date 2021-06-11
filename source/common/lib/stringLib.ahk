@@ -125,6 +125,25 @@ class StringLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Drop any empty lines (leading/trailing or in the middle) from the provided string.
+	; PARAMETERS:
+	;  inString (I,REQ) - The string to process
+	; RETURNS:        The updated string.
+	; NOTES:          Only supports `n and `r`n line endings (which should cover most strings)
+	;---------
+	dropEmptyLines(inString) {
+		newlineNeedle := "(`n|`r`n)" ; Newline or return + newline
+		
+		; Reduce any spots where there's multiple newlines in a row
+		outString := inString.replaceRegEx(newlineNeedle "{2,}", "$1")
+		
+		; Drop leading/trailing newline
+		outString := outString.removeRegEx("^" newlineNeedle "|" newlineNeedle "$")
+		
+		return outString
+	}
+	
+	;---------
 	; DESCRIPTION:    Get the specified number of spaces.
 	; PARAMETERS:
 	;  numToGet (I,REQ) - How many spaces to return.

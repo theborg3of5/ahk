@@ -20,7 +20,6 @@
 	GrepWin									CLOSE
 	Messenger								MIN		-					-					-					-			-				ESCAPE		HOME_DESKTOP
 	Notepad									CLOSE
-	Onetastic Macro Editor XML			-			-					HOME_END
 	Republic Anywhere						CLOSE		CLOSE
 	Skype										CLOSE
 	Slack										CLOSE		-					-					-					-			RUN			ESCAPE		HOME_DESKTOP

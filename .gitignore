@@ -10,10 +10,3 @@ config/local/
 # Ignore folders containing other repositories
 test/
 config/ahkPrivate/
-
-# Test folder, ignore most things, but not subdirectories or test icons.
-test/*
-!test/testGreen.ico
-!test/testRed.ico
-!test/testWindowInfo.tls
-!test/*/

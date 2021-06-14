@@ -1,14 +1,6 @@
 # New Ideas
 	Apparently class names are stored in object.__Class - could we use that and get rid of Debug_TypeName()?
 		Will want to double-check that we're not relying on that to decide whether to use a custom debug display (I'd hope we're using the actual debug method instead?)
-	Onetastic macros now support exporting everything together - should we consider just building the sum XML and importing that instead of our piecemeal approach?
-		Would let us import name/description/category directly, too
-		Could version-control the sub results like we do with EpicStudio regex patterns
-		Might be nice to use template XML files to build it, rather than doing it entirely in code?
-	Onetastic: would it be nicer to have a tiny class (name + xml) to represent each function, rather than the double-layered array?
-		Could also include list of dependency names
-		Could just take the filename as input
-		Could add on other pieces like parameters (either as objects or import-ready XML) too
 	Add something (for testing purposes) that turns the clipboard into a pastable expression so I can stick it in a variable easily
 	Consider adding something mover-sizer-based for closing windows (original had something like double-middle-click or something, I think?)
 	Config: is it worth keeping .Init()?

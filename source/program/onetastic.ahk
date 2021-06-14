@@ -37,16 +37,9 @@
 	; Open function header edit window
 	^e::^F2
 	
-	; Delete current function
-	^d::Onetastic.deleteCurrentFunction()
-	
 	; Open XML window
 	^+o::Onetastic.openEditXMLPopup()
 	
 	; Copy/set current function XML
 	^+x::Onetastic.copyCurrentXML()
-	^+s::Onetastic.setCurrentXML(clipboard)
-	
-	; Update the current macro using the XML on the clipboard.
-	^!i::Onetastic.refreshMacroFromXML(clipboard)
 #If

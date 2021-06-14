@@ -177,10 +177,6 @@ class AHKDocBlock {
 	
 	; #DEBUG#
 	
-	Debug_TypeName() {
-		return "AHKDocBlock"
-	}
-	
 	Debug_ToString(ByRef table) {
 		table.addLine("Outer indent, first line",          this.outerFirst)
 		table.addLine("Outer indent, other lines",         this.outerRest)

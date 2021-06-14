@@ -680,10 +680,6 @@ class TableList {
 	
 	; #DEBUG#
 	
-	Debug_TypeName() {
-		return "TableList"
-	}
-	
 	Debug_ToString(ByRef table) {
 		table.addLine("Chars",        this.chars)
 		table.addLine("Index labels", this.indexLabels)

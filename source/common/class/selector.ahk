@@ -451,10 +451,6 @@ class Selector {
 	
 	; #DEBUG#
 	
-	Debug_TypeName() {
-		return "Selector"
-	}
-	
 	Debug_ToString(ByRef table) {
 		table.addLine("Filepath",          this.filePath)
 		table.addLine("Window title",      this._windowTitle)

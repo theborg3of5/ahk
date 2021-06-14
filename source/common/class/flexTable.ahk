@@ -241,10 +241,6 @@ class FlexTable {
 	
 	; #DEBUG#
 	
-	Debug_TypeName() {
-		return "FlexTable"
-	}
-	
 	Debug_ToString(ByRef table) {
 		table.addLine("Gui ID",           this.guiId)
 		table.addLine("Min X",            this.xMin)

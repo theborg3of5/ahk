@@ -1,6 +1,4 @@
 # New Ideas
-	Apparently class names are stored in object.__Class - could we use that and get rid of Debug_TypeName()?
-		Will want to double-check that we're not relying on that to decide whether to use a custom debug display (I'd hope we're using the actual debug method instead?)
 	Add something (for testing purposes) that turns the clipboard into a pastable expression so I can stick it in a variable easily
 	Consider adding something mover-sizer-based for closing windows (original had something like double-middle-click or something, I think?)
 	Config: is it worth keeping .Init()?

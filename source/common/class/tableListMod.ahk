@@ -127,12 +127,5 @@ class TableListMod {
 	column    := "" ; The name of the column to operate on
 	operation := "" ; The operation to perform
 	text      := "" ; The text to use
-	
-	
-	; #DEBUG#
-	
-	Debug_TypeName() {
-		return "TableListMod"
-	}
 	; #END#
 }

@@ -378,10 +378,6 @@ class SelectorGui {
 	
 	; #DEBUG#
 	
-	Debug_TypeName() {
-		return "SelectorGui"
-	}
-	
 	Debug_ToString(ByRef table) {
 		table.addLine("Gui ID (handle)",            this.guiId)
 		table.addLine("Choice field var",           this.fieldVar_Choice)

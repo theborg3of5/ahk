@@ -422,12 +422,5 @@ class TextTable {
 			this._addRow(newRow)
 		}
 	}
-	
-	
-	; #DEBUG#
-	
-	Debug_TypeName() {
-		return "TextTable"
-	}
 	; #END#
 }

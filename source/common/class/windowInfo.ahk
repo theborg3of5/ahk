@@ -160,12 +160,5 @@ class WindowInfo {
 		
 		return winId
 	}
-	
-	
-	; #DEBUG#
-	
-	Debug_TypeName() {
-		return "WindowInfo"
-	}
 	; #END#
 }

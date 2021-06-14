@@ -57,12 +57,5 @@ class Program {
 		
 		return true
 	}
-	
-	
-	; #DEBUG#
-	
-	Debug_TypeName() {
-		return "Program"
-	}
 	; #END#
 }

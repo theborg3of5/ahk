@@ -173,10 +173,6 @@ class AutoCompleteMember {
 	
 	; #DEBUG#
 	
-	Debug_TypeName() {
-		return "AutoCompleteMember"
-	}
-
 	Debug_ToString(ByRef table) {
 		table.addLine("Name",        this.name)
 		table.addLine("Returns",     this.returns)

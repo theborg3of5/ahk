@@ -71,12 +71,5 @@ class AutoCompleteClass {
 			xml := xml.appendLine(member.generateXML(this.name))
 		return xml
 	}
-	
-	
-	; #DEBUG#
-	
-	Debug_TypeName() {
-		return "AutoCompleteClass"
-	}
 	; #END#
 }

@@ -72,12 +72,5 @@ class SelectorChoice {
 	; #PRIVATE#
 	
 	data := {} ; {label: value}
-	
-	
-	; #DEBUG#
-	
-	Debug_TypeName() {
-		return "SelectorChoice"
-	}
 	; #END#
 }

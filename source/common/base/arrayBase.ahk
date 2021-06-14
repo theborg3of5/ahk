@@ -12,12 +12,6 @@ class ArrayBase {
 	; #PUBLIC#
 	
 	;---------
-	; DESCRIPTION:    Flag that lets us know that this is a proper array (not some other object).
-	; RETURNS:        true
-	;---------
-	static isArray := true ; Flag for when we need to tell the difference between an array and an object.
-	
-	;---------
 	; DESCRIPTION:    Check whether this array contains a particular value.
 	; PARAMETERS:
 	;  needle (I,REQ) - The value to search the array for.

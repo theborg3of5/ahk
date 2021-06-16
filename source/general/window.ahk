@@ -71,8 +71,6 @@ $!q::WindowActions.minimizeWindow()
 		
 		WinActivate, % idString
 		
-		settings := new TempSettings().sendLevel(1) ; Allow the keystrokes to be caught and handled by other hotkeys.
-		Send, %keys%
-		settings.restore()
+		HotkeyLib.sendCatchableKeys(keys)
 	}
 #If

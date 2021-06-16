@@ -3985,6 +3985,16 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="HotkeyLib.sendCatchableKeys" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Send a set of keys in a way that they can be caught and handled by other hotkeys in the same script.
+							; PARAMETERS:
+							;  keys (I,REQ) - The keys to send, for use with the Send command.
+							;---------">
+                <Param name="keys" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="HotkeyLib.waitForRelease" func="yes">
             <Overload retVal="" descr="
 							;---------

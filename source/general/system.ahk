@@ -16,8 +16,8 @@
 ; Remap different keyboards
 #If Config.machineIsWorkLaptop || Config.machineIsWorkVDI
 	; Extra buttons on the ergonomic keyboard as left/right clicks (disable them in MS mouse and keyboard)
-	Browser_Back::LButton
-	Browser_Forward::RButton
+	Browser_Back::   HotkeyLib.sendCatchableKeys("{LButton}")
+	Browser_Forward::HotkeyLib.sendCatchableKeys("{RButton}")
 #If Config.machineIsHomeLaptop || Config.machineIsWorkLaptop || Config.machineIsWorkVDI
 	AppsKey::RWin ; No right windows key on these machines, so use the AppsKey (right-click key) instead.
 #If

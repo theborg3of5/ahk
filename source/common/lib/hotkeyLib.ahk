@@ -33,6 +33,18 @@ class HotkeyLib {
 	}
 	
 	
+	;---------
+	; DESCRIPTION:    Send a set of keys in a way that they can be caught and handled by other hotkeys in the same script.
+	; PARAMETERS:
+	;  keys (I,REQ) - The keys to send, for use with the Send command.
+	;---------
+	sendCatchableKeys(keys) {
+		settings := new TempSettings().sendLevel(1) ; Level 1: keystrokes can be caught and handled by other hotkeys.
+		Send, % keys
+		settings.restore()
+	}
+	
+	
 	; #PRIVATE#
 	
 	;---------

@@ -71,8 +71,6 @@ $^!+f::Run("http://feedly.com/i/latest") ; $ as Notepad++ highlight-all hotkey s
 	openUsualSites() {
 		Config.runProgram("Gmail")
 		Sleep, 100
-		Run("http://www.facebook.com/")
-		Sleep, 100
 		Run("http://old.reddit.com/")
 		Sleep, 100
 		Run("http://feedly.com/i/latest")

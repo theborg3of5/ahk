@@ -119,51 +119,6 @@ class Config {
 	}
 	; =--
 	
-	;---------
-	; DESCRIPTION:    The name of the media player to use (from the NAME column in mediaPlayers.tls).
-	;---------
-	mediaPlayer {
-		get {
-			return this.setting["MEDIA_PLAYER"]
-		}
-		set {
-			this._settings["MEDIA_PLAYER"] := value
-			IniWrite, % value, % this.settingsINIPath, % "Main", % "MEDIA_PLAYER"
-		}
-	}
-	
-	;---------
-	; DESCRIPTION:    Whether the named media player is what we're configured to use.
-	; PARAMETERS:
-	;  mediaPlayerName (I,REQ) - The name of the media player to check.
-	; RETURNS:        true if we're configured to use the media player, false otherwise.
-	;---------
-	isMediaPlayer(mediaPlayerName) {
-		return (this.mediaPlayer = mediaPlayerName)
-	}
-	
-	;---------
-	; DESCRIPTION:    Check whether a window for the current media player exists.
-	; RETURNS:        true if it does exist, false otherwise.
-	;---------
-	doesMediaPlayerExist() {
-		player := this.mediaPlayer
-		return this.doesWindowExist(player)
-	}
-	
-	;---------
-	; DESCRIPTION:    Run the currently configured media player.
-	;---------
-	runMediaPlayer() {
-		player := this.mediaPlayer
-		if(player) {
-			; Always use runProgram based on the programs at play, but only show the "not yet running" toast if it really doesn't exist.
-			if(!this.doesWindowExist(player))
-				new Toast(player " not yet running, launching...").showMedium()
-			this.runProgram(player)
-		}
-	}
-	
 	
 	; [[ Windows ]] ===
 	;---------
@@ -363,7 +318,6 @@ class Config {
 	
 	static initDone        := false ; True once we're done initializing for the first time.
 	static rootPath        := ""    ; The root of this set of scripts.
-	static settingsINIPath := ""    ; The full path to the settings INI, so we can write to it if things change.
 	
 	; Private caches (initialized on first use via private properties below)
 	static _settings       := ""    ; {NAME: VALUE}
@@ -383,12 +337,11 @@ class Config {
 	setting[key] {
 		get {
 			if(!this._settings) {
-				this.settingsINIPath := this.getConfigPath("local\settings.ini")
+				settingsINIPath := this.getConfigPath("local\settings.ini")
 				
 				this._settings := {}
-				this._settings["MACHINE"]      := IniRead(this.settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from Config.Machine_* constants
-				this._settings["CONTEXT"]      := IniRead(this.settingsINIPath, "Main", "CONTEXT")         ; Which context this is, from Config.Context_* constants
-				this._settings["MEDIA_PLAYER"] := IniRead(this.settingsINIPath, "Main", "MEDIA_PLAYER")    ; What program the media keys should deal with
+				this._settings["MACHINE"]      := IniRead(settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from Config.Machine_* constants
+				this._settings["CONTEXT"]      := IniRead(settingsINIPath, "Main", "CONTEXT")         ; Which context this is, from Config.Context_* constants
 			}
 			
 			return this._settings[key]

@@ -33,7 +33,7 @@
 		Explorer						explorer.exe
 		Notepad						System32\notepad.exe
 	}
-
+	
 	~PATH_TYPE.replaceWith(URL) {
 		Messenger					https://www.messenger.com
 		Slack							https://app.slack.com/

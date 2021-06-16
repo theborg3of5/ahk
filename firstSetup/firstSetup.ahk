@@ -39,7 +39,6 @@ tagsToReplace := {}
 tagsToReplace["AHK_ROOT"]     := ahkRootPath
 tagsToReplace["CONTEXT"]      := machineInfo["NEW_CONTEXT"]
 tagsToReplace["MACHINE"]      := machineInfo["NEW_MACHINE"]
-tagsToReplace["MEDIA_PLAYER"] := machineInfo["MEDIA_PLAYER"]
 ; Debug.popup("Finished tags to replace",tagsToReplace)
 
 ; Loop over files we need to process and put places.

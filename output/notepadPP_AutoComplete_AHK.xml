@@ -1276,14 +1276,6 @@
                 <Param name="needle" />
             </Overload>
         </KeyWord>
-        <KeyWord name="ArrayBase.isArray" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    Flag that lets us know that this is a proper array (not some other object).
-							; RETURNS:        true
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="ArrayBase.join" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -1873,14 +1865,6 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="Config.doesMediaPlayerExist" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Check whether a window for the current media player exists.
-							; RETURNS:        true if it does exist, false otherwise.
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="Config.doesWindowExist" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -1941,17 +1925,6 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="Config.isMediaPlayer" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Whether the named media player is what we're configured to use.
-							; PARAMETERS:
-							;  mediaPlayerName (I,REQ) - The name of the media player to check.
-							; RETURNS:        true if we're configured to use the media player, false otherwise.
-							;---------">
-                <Param name="mediaPlayerName" />
-            </Overload>
-        </KeyWord>
         <KeyWord name="Config.isWindowActive" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -1998,13 +1971,6 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="Config.mediaPlayer" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    The name of the media player to use (from the NAME column in mediaPlayers.tls).
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="Config.path" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -2045,13 +2011,6 @@
 							; RETURNS:        The updated string
 							;---------">
                 <Param name="inputString" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Config.runMediaPlayer" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Run the currently configured media player.
-							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="Config.runProgram" func="yes">
@@ -6490,44 +6449,6 @@
 							;                 real thing. This finds and returns the window ID of the &quot;main&quot; one.
 							; RETURNS:        ID/handle of Spotify's main window
 							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Spotify.nextTrack" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Go to the next track.
-							; SIDE EFFECTS:   Shows a toast with the new song info, if applicable.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Spotify.playPause" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Toggle play/pause.
-							; SIDE EFFECTS:   Shows a toast with the current song info, if applicable.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Spotify.previousTrack" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Go to the previous track.
-							; SIDE EFFECTS:   Shows a toast with the new song info, if applicable.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="Spotify.showCurrentInfo" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Show the current song's title and artist in a toast (if there's one playing right now).
-							; PARAMETERS:
-							;  idString    (I,OPT) - The identifying string for Spotify's main window. Will be retrieved from
-							;                        .getMainWindowId() if not given.
-							;  titleBefore (I,OPT) - If we just changed the title (like when we send a command), the old title.
-							;                        Will be used to display previous song info if we just paused.
-							;---------">
-                <Param name="idString := &quot;&quot;" />
-                <Param name="titleBefore := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="Sqrt" func="yes">

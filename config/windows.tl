@@ -7,7 +7,7 @@
 	~PRIORITY.replaceWith(0) {
 				AutoHotkey WinSpy						AutoHotkey.exe				AutoHotkeyGUI					Window Spy
 				AutoHotkey Toast						AutoHotkey.exe				AutoHotkeyGUI					[TOAST]												NO_PADDING
-				
+		
 		; Special Chrome windows
 		~EXE.replaceWith(chrome.exe) {
 				Chrome Join								-								-									Join
@@ -93,7 +93,7 @@
 				SoundSwitch								SoundSwitch.exe
 				Spotify									Spotify.exe					-									-														NO_PADDING
 				Steam										Steam.exe					-									-														NO_PADDING
-				Teams										Teams.exe					-									\| Microsoft Teams									NO_PADDING
+				Teams										Teams.exe					-									\| Microsoft Teams								NO_PADDING
 				Telegram									Telegram.exe				Qt5152QWindowIcon				-														NO_PADDING
 				Thunder									Thunder.exe					-									Thunder
 				TortoiseGit								TortoiseGitProc.exe

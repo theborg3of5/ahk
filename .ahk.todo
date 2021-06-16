@@ -7,14 +7,7 @@
 			Would it be better to have the "early" debug popup/toast show up based on whether CommonHotkeys has been initialized?
 				Would let us potentially make stuff that's NOT early specific to a type of script (i.e. only show it for the main script)
 			Could we just replace it with a public flag (or public setter to a private flag, whatever) on Debug, so that the script itself could decide where the cutover point is?
-	Figure out what to do with media player stuff
-		Including:
-			Spotify "commands"
-			Spotify showing info - is this useful anymore or can we go back to volume up/down to show actual media panel?
-				Also trigger it from special 3?
-			Config media player stuff
-				Support in general
-				Setting settings value/settingsINIPath (only used by media player stuff)
+	Should I switch out the rest of the EPIC_ prefixes for privates and the like with WORK_?
 	Consider switching zoom mute toggle over to a click target within the zoom window - would that avoid the "ding" sound?
 	Would a static ErrorToast wrapper make sense, rather than having to do the whole new ErrorToast("").showMedium() thing each time?
 	Could we make it easier to update current version of Hyperspace?

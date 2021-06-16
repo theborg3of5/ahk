@@ -8,10 +8,10 @@
 				AHK Config	AHK_CONFIG	C:\ahk\config
 				AHK Source	AHK_SOURCE	C:\ahk\source
 				Downloads	DOWNLOADS	C:\Users\user\Downloads
-				VB6 Compile	VB6_COMPILE	C:\Users\user\Dev\Temp\Compile	EPIC_LAPTOP
+				VB6 Compile	VB6_COMPILE	C:\Users\user\Dev\Temp\Compile	WORK_LAPTOP
 				Music	MUSIC	C:\Users\user\Music	HOME_DESKTOP
 				Music	MUSIC	C:\Users\user\Music	HOME_LAPTOP
-				Music	MUSIC	D:\Music	EPIC_LAPTOP
+				Music	MUSIC	D:\Music	WORK_LAPTOP
 			
 			There's a few non-desirable things here:
 				1. None of the columns align, because the content is different widths
@@ -35,10 +35,10 @@
 				AHK Config     AHK_CONFIG     C:\ahk\config
 				AHK Source     AHK_SOURCE     C:\ahk\source
 				Downloads      DOWNLOADS      C:\Users\user\Downloads
-				VB6 Compile    VB6_COMPILE    C:\Users\user\Dev\Temp\Compile   EPIC_LAPTOP
+				VB6 Compile    VB6_COMPILE    C:\Users\user\Dev\Temp\Compile   WORK_LAPTOP
 				Music          MUSIC          C:\Users\user\Music              HOME_DESKTOP
 				Music          MUSIC          C:\Users\user\Music              HOME_LAPTOP
-				Music          MUSIC          D:\Music                         EPIC_LAPTOP
+				Music          MUSIC          D:\Music                         WORK_LAPTOP
 			
 			We can also use comments, and add a model row (which this class will use as indices in the 2D array you get back):
 				[  NAME           ABBREV         PATH                             MACHINE	]
@@ -49,12 +49,12 @@
 				
 				; User Folders
 					Downloads      DOWNLOADS      C:\Users\user\Downloads
-					VB6 Compile    VB6_COMPILE    C:\Users\user\Dev\Temp\Compile   EPIC_LAPTOP
+					VB6 Compile    VB6_COMPILE    C:\Users\user\Dev\Temp\Compile   WORK_LAPTOP
 				
 				; Music variations per machine
 					Music          MUSIC          C:\Users\user\Music              HOME_DESKTOP
 					Music          MUSIC          C:\Users\user\Music              HOME_LAPTOP
-					Music          MUSIC          D:\Music                         EPIC_LAPTOP
+					Music          MUSIC          D:\Music                         WORK_LAPTOP
 			
 			We can also use the Mods feature (see "Mods" section below) to de-duplicate some info:
 				[  NAME           ABBREV         PATH              MACHINE	]
@@ -68,14 +68,14 @@
 				; User Folders
 				~PATH.addToStart(C:\Users\user\) {
 					Downloads      DOWNLOADS      Downloads
-					VB6 Compile    VB6_COMPILE    Dev\Temp\Compile  EPIC_LAPTOP
+					VB6 Compile    VB6_COMPILE    Dev\Temp\Compile  WORK_LAPTOP
 				}
 				
 				; Music variations per machine
 				~PATH.addToEnd(\Music) {
 					Music          MUSIC          C:\Users\user     HOME_DESKTOP
 					Music          MUSIC          C:\Users\user     HOME_LAPTOP
-					Music          MUSIC          D:                EPIC_LAPTOP
+					Music          MUSIC          D:                WORK_LAPTOP
 				}
 			
 	--- Mods
@@ -171,7 +171,7 @@
 					File:
 						[  NAME     ABBREV   PATH                                         MACHINE	]
 							Spotify  spot     C:\Program Files (x86)\Spotify\Spotify.exe   HOME_DESKTOP
-							Spotify  spot     C:\Program Files\Spotify\Spotify.exe         EPIC_LAPTOP
+							Spotify  spot     C:\Program Files\Spotify\Spotify.exe         WORK_LAPTOP
 							Spotify  spot     C:\Spotify\Spotify.exe                       ASUS_LAPTOP
 							Firefox  fox      C:\Program Files\Firefox\firefox.exe
 					Code:

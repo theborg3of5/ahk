@@ -13,22 +13,12 @@
 		new Toast(muteMessage).showMedium()
 	}
 
-; Change the media player that media keys will deal with.
-^Volume_Mute::
-	changeMediaPlayer() {
-		programName := new Selector("mediaPlayers.tls").selectGui("PROGRAM_NAME")
-		if(programName) {
-			Config.mediaPlayer := programName
-			new Toast("Media player set to: " programName).showMedium()
-		}
-	}
-
 ; SoundSwitch handling
 #If Config.doesWindowExist("SoundSwitch")
 	^F12::SoundSwitch.toggleDevices()
 #If
 
-#If !Config.doesMediaPlayerExist()
+#If !Config.doesWindowExist("Spotify")
 	^!Up::
 	^!Down::
 	^!Left::
@@ -37,12 +27,12 @@
 	Media_Play_Pause::
 	Media_Prev::
 	Media_Next::
-		Config.runMediaPlayer()
+		Config.runProgram("Spotify")
 	return
-#If Config.doesMediaPlayerExist()
+#If Config.doesWindowExist("Spotify")
 	^!Up::
 	Media_Stop::
-		Config.runMediaPlayer()
+		Config.runProgram("Spotify")
 	return
 	
 	^!Down:: Send, {Media_Play_Pause}

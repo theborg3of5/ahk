@@ -61,8 +61,9 @@
 			!#c - full location
 				EpicStudio, CodeSearch, Visual Studio: (uncleaned) tag+x^routine / (linked) filepath::function()
 				Explorer, Everything, Notepad++: selected/current file path (folder for Explorer if nothing selected)
-			^#!c - DLG-relative location IN current view
-				CodeSearch, VisualStudio: \<path relative to DLG/App St1/App QA folder>
+			^#!c - DLG-relative FILE location IN current view
+				CodeSearch, VisualStudio: \<filepath relative to DLG/App St1/App QA folder>
+				Explorer, Everything, Notepad++: \<filepath relative to DLG/App St1/App QA folder>
 		Do we want to extend this further to Office (word/powerpoint/excel)
 			Using the document location I keep in the quick access toolbar anyway?
 				Could formalize that location with a function, etc.

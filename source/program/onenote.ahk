@@ -72,6 +72,7 @@
 	^+i::OneNote.addSubLinesToSelectedLines()
 	!t:: OneNote.collapseToUnfinishedTags()
 	^l:: OneNote.createAndLinkPageInSpecificSection()
+	^+w::OneNote.widenOutline()
 	
 	; Work-specific macros
 	^+a::OneNote.applyDevStructureToCurrentPage()

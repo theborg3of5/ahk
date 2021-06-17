@@ -62,6 +62,9 @@ class OneNote {
 	createAndLinkPageInSpecificSection() {
 		this.runOnetasticToolbarMacro("y3")
 	}
+	widenOutline() {
+		this.runOnetasticToolbarMacro("y4")
+	}
 	applyDevStructureToCurrentPage() {
 		this.runOnetasticWorkToolbarMacro("y1")
 	}

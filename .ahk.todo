@@ -10,6 +10,9 @@
 	Should I switch out the rest of the EPIC_ prefixes for privates and the like with WORK_?
 	Consider switching zoom mute toggle over to a click target within the zoom window - would that avoid the "ding" sound?
 	Would a static ErrorToast wrapper make sense, rather than having to do the whole new ErrorToast("").showMedium() thing each time?
+		Honestly do we just want a static method for Toast in general, for the simple calls?
+			So only get into the instance stuff when I need to set special settings or have it persist
+	CodeSearch: looks like the URL can include the full path now, could we use that to open in client instead of the search approach?
 	Could we make it easier to update current version of Hyperspace?
 		Places I have to change now:
 			Source folders in privates
@@ -34,6 +37,10 @@
 			^!c - currently smart copy in EpicStudio
 			^!#c - currently DLG-relative folder copy for client (but not limited to Explorer, interestingly?)
 			^+c - currently copy script in EpicStudio, toggle comment/code elsewhere - NOT a good option to me.
+			^+o - variety of disparate things:
+						Chrome, EMC2 - open current DLG in EpicStudio
+						Notepad++, Visual Studio - open current file's parent folder
+						EpicStudio - tag navigator
 		Would we want just the file, or the whole (relative to DLG) path?
 			Maybe 2 separate hotkeys for that?
 		Possible things to copy:
@@ -55,7 +62,10 @@
 				EpicStudio, CodeSearch, Visual Studio: (uncleaned) tag+x^routine / (linked) filepath::function()
 				Explorer, Everything, Notepad++: selected/current file path (folder for Explorer if nothing selected)
 			^#!c - DLG-relative location IN current view
-				CodeSearch, VisualStudio: \HSWeb\.editorconfig
+				CodeSearch, VisualStudio: \<path relative to DLG/App St1/App QA folder>
+		Do we want to extend this further to Office (word/powerpoint/excel)
+			Using the document location I keep in the quick access toolbar anyway?
+				Could formalize that location with a function, etc.
 	Re-examine how we run programs and such (RunLib.runAsUser stuff) - could it be the reason we have focus issues?
 		Also, could we work around it with a WinWaitExist + WinActivate?
 	EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines

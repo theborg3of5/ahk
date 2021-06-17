@@ -10,8 +10,14 @@
 	^g::Send, ^{PgDn}
 	^+g::Send, ^{PgUp}
 	
-	; Apply bullets
+	; Apply bullets and numbering
 	^.::^+l
+	^/::
+		Send, !h      ; Home
+		Send, n       ; Numbering
+		Send, {Right} ; First numbering format
+		Send, {Enter} ; Accept
+	return
 	
 	; Strikethrough
 	^-::

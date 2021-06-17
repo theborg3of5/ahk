@@ -10,8 +10,14 @@
 	; Format as code (using custom styles)
 	^+c::Send, ^!+2 ; Hotkey used in Outlook (won't let me use ^+c directly)
 	
-	; Bulleted list
+	; Bullets and numbering
 	^.::^+l
+	^/::
+		Send, !o      ; Format Text
+		Send, n       ; Numbering
+		Send, {Right} ; First numbering format
+		Send, {Enter} ; Accept
+	return
 #If
 
 ; Mail folders

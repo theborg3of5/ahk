@@ -143,5 +143,53 @@
 		Sleep, 500   ; Wait for right-click menu to appear
 		Send, e      ; Copy link address
 	}
+	
+	;---------
+	; DESCRIPTION:    Get the text from an HTML element on the current page.
+	; PARAMETERS:
+	;  querySelector (I,REQ) - Selector query (i.e. tag.class#id), for use with document.querySelector()
+	; RETURNS:        The text copied from that element
+	; NOTES:          Works using some JS code that temporarily selects the element in question and copies to the clipboard.
+	;---------
+	getElementText(querySelector) {
+		return ClipboardLib.getWithFunction(ObjBindMethod(Chrome, "copyElementText", querySelector))
+	}
+	
+	;---------
+	; DESCRIPTION:    Select the contents of a specific HTML element and copy it to the clipboard.
+	; PARAMETERS:
+	;  querySelector (I,REQ) - Selector query (i.e. tag.class#id), for use with document.querySelector()
+	; NOTES:          Works using some JS code that temporarily selects the element in question and copies to the clipboard.
+	;---------
+	copyElementText(querySelector) {
+		copyElementTextJS := "
+			(
+				/* Save off current selection so we can restore it below */
+				var selection = window.getSelection();
+				var oldRange = selection.getRangeAt(0); /* Assuming only 1 range currently selected */
+				
+				/* Select the text we want and copy it */
+				var newRange = document.createRange();
+				newRange.selectNodeContents(document.querySelector(""<QUERY_SELECTOR>""));
+				selection.removeAllRanges();
+				selection.addRange(newRange);
+				document.execCommand(""copy"");
+				
+				/* Put original selection back */
+				selection.removeAllRanges();
+				selection.addRange(oldRange);
+			)"
+		
+		jsCode := copyElementTextJS.replaceTag("QUERY_SELECTOR", querySelector)
+		
+		Send, ^l                  ; Focus address bar
+		Sleep, 100                ; Wait for it to get focus
+		Send, % "javascript:"     ; Can't paste this bit in, it gets stripped off (safety measure)
+		ClipboardLib.send(jsCode) ; Paste in JS code
+		Sleep, 400                ; JS code doesn't run without this - not sure if because content not all in yet, or another safety measure (I suspect the latter)
+		Send, {Enter}             ; Submit
+		
+		; JS code will update the clipboard
+	}
 	; #END#
 }

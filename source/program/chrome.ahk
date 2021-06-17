@@ -16,9 +16,10 @@
 		Send, e  ; Extensions
 	return
 	
-	; Copy title, stripping off the " - Google Chrome" at the end.
+	; Copy title, stripping off the " - Google Chrome" at the end (and other special handling for specific pages like CodeSearch).
 	!c::Chrome.copyTitle()
 	!#c::Chrome.copyTitleLink()
+	^!#c::Chrome.copyCodeSearchClientPath()
 	
 	; Open different objects based on the title.
 	!w::Chrome.openCurrentEMC2ObjectWeb()
@@ -30,7 +31,7 @@
 	^MButton::Chrome.openLinkTarget() ; Open
 	
 	; Extension-specific handling
-	!t::Telegram.shareURL(Chrome.getCurrentURL()) ; Share to Telegram.
+	!t::Telegram.shareURL(Chrome.getURL()) ; Share to Telegram.
 	^!d::Send, !+d ; Deluminate - site-level hotkey (Chrome won't let me bind this directly)
 	; LastPass loses all settings when it updates periodically, so I'm overriding the hotkeys here instead.
 	!PgDn::!PgUp ; Reverse next/previous site hotkeys

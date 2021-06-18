@@ -54,6 +54,29 @@ class EpicLib {
 		tag := tag.beforeString("+").beforeString("-")
 		return tag "^" routine
 	}
+	
+	;---------
+	; DESCRIPTION:    Given a file path, convert it to a "source-relative" path - that is, the relative path between the
+	;                 source root folder (DLG-* or App *) and the given location.
+	; PARAMETERS:
+	;  path (I,REQ) - The path to convert.
+	; RETURNS:        Relative path with leading backslash.
+	;---------
+	convertToSourceRelativePath(path) {
+		path := FileLib.cleanupPath(path)
+		
+		sourceRoot := Config.private["EPIC_SOURCE"] "\"
+		if(!path.startsWith(sourceRoot)) {
+			ClipboardLib.setAndToastError(path, "path", "Could not copy source-relative path", "Path is not in source root")
+			return ""
+		}
+		path := path.removeFromStart(sourceRoot)
+		
+		; Strip off one more parent - it's either one of the main folders (App *) or a DLG folder (DLG-*)
+		path := "\" path.afterString("\") ; Keep the leading backslash
+		
+		return path
+	}
 	; #END#
 }
 

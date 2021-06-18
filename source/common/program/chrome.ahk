@@ -20,7 +20,7 @@
 	
 	;---------
 	; DESCRIPTION:    Copy the relative path to the current file for client CodeSearch.
-	; RETURNS:        Root-relative filepath with leading backslash
+	; RETURNS:        Source-relative filepath with leading backslash
 	;---------
 	copyCodeSearchClientPath() {
 		if(!Chrome.isCurrentPageCodeSearchClient())
@@ -28,7 +28,7 @@
 		
 		path := "\" Chrome.getRawURL().firstBetweenStrings("&name=", "&")
 		path := StringLib.decodeFromURL(path)
-		ClipboardLib.setAndToast(path, "root-relative file path")
+		ClipboardLib.setAndToast(path, "source-relative file path")
 	}
 	
 	;---------
@@ -264,17 +264,6 @@
 		ClipboardLib.send(jsCode) ; Paste in JS code
 		Sleep, 400                ; JS code doesn't run without this - not sure if because content not all in yet, or another safety measure (I suspect the latter)
 		Send, {Enter}             ; Submit
-	}
-	
-	;---------
-	; DESCRIPTION:    Get the folder path of the current client file in CodeSearch.
-	; RETURNS:        Folder path (relative to root) with trailing backslash.
-	;---------
-	getCodeSearchClientFolderPath() {
-		; path := url.firstBetweenStrings("&name=", "&")
-		; path := StringLib.decodeFromURL(path)
-		
-		return 
 	}
 	
 	;---------

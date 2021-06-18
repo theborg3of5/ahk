@@ -9,9 +9,8 @@
 	return
 	
 	; Copy current folder/file paths to clipboard
-	!c::  ClipboardLib.copyFilePathWithHotkey(  Explorer.Hotkey_CopyCurrentFile)   ; Current file
-	!#c:: ClipboardLib.copyFolderPathWithHotkey(Explorer.Hotkey_CopyCurrentFolder) ; Current folder
-	^!#c::ClipboardLib.copyPathRelativeToSource(Explorer.Hotkey_CopyCurrentFile)   ; Current file, but drop the usual EpicSource stuff up through the DLG folder.
+	!c::  Explorer.copySelectedPath()                 ; Current file (or folder if nothing selected)
+	^!#c::Explorer.copySelectedPathRelativeToSource() ; Current file (or folder if nothing selected), but drop the usual EpicSource stuff up through the DLG folder.
 	
 	; Hide/show hidden files
 	#h::Explorer.toggleHiddenFiles()

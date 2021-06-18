@@ -9,10 +9,6 @@ class Explorer {
 	
 	; #INTERNAL#
 	
-	; Hotkeys (configured in QTTabBar) to copy the current file/folder path to the clipboard.
-	static Hotkey_CopyCurrentFile   := "!c"
-	static Hotkey_CopyCurrentFolder := "^!c"
-	
 	;---------
 	; DESCRIPTION:    Toggle whether hidden files are visible in Explorer or not.
 	; NOTES:          Inspired by http://www.autohotkey.com/forum/post-342375.html#342375
@@ -37,31 +33,21 @@ class Explorer {
 	}
 	
 	;---------
-	; DESCRIPTION:    Create a relative file or folder shortcut. This must be called twice - once
-	;                 when the user has the target file selected, and once when they are in the
-	;                 desired folder for the shortcut file.
-	; NOTES:          Calls into different logic depending on whether this is the first or second trigger.
+	; DESCRIPTION:    Copy the current path (selected file, or folder if no file selected).
 	;---------
-	createRelativeShortcutToFile() {
-		; Initial trigger
-		if(this._relativeTarget = "") {
-			targetPath := this.getRelativeShortcutTarget()
-			if(targetPath = "")
-				return
-			
-			this.saveRelative(targetPath) ; Sets _relativeTarget
-			
-		; Second trigger
-		} else {
-			sourceFolder := this.getRelativeSourceFolder()
-			if(sourceFolder = "")
-				return
-			
-			targetPath := this._relativeTarget
-			this.cleanupRelative() ; Clears _relativeTarget
-				
-			this.createRelative(sourceFolder, targetPath)
-		}
+	copySelectedPath() {
+		path := this.getSelectedPath(pathType)
+		ClipboardLib.setAndToast(path, pathType)
+	}
+	
+	;---------
+	; DESCRIPTION:    Copy the current source-relative (relative to DLG-* or App * folder) path (selected file, or folder
+	;                 if no file selected).
+	;---------
+	copySelectedPathRelativeToSource() {
+		path := this.getSelectedPath(pathType)
+		relativePath := EpicLib.convertToSourceRelativePath(path)
+		ClipboardLib.setAndToast(relativePath, "relative " pathType)
 	}
 	
 	;---------
@@ -96,14 +82,73 @@ class Explorer {
 		return new ActionObjectEMC2(id, ini)
 	}
 	
+	;---------
+	; DESCRIPTION:    Create a relative file or folder shortcut. This must be called twice - once
+	;                 when the user has the target file selected, and once when they are in the
+	;                 desired folder for the shortcut file.
+	; NOTES:          Calls into different logic depending on whether this is the first or second trigger.
+	;---------
+	createRelativeShortcutToFile() {
+		; Initial trigger
+		if(this._relativeTarget = "") {
+			targetPath := this.getRelativeShortcutTarget()
+			if(targetPath = "")
+				return
+			
+			this.saveRelative(targetPath) ; Sets _relativeTarget
+			
+		; Second trigger
+		} else {
+			sourceFolder := this.getRelativeSourceFolder()
+			if(sourceFolder = "")
+				return
+			
+			targetPath := this._relativeTarget
+			this.cleanupRelative() ; Clears _relativeTarget
+				
+			this.createRelative(sourceFolder, targetPath)
+		}
+	}
+	
 	
 	; #PRIVATE#
+	
+	; Hotkeys (configured in QTTabBar)
+	static Hotkey_CopyCurrentFile   := "!c"
+	static Hotkey_CopyCurrentFolder := "^!c"
 	
 	; Static state for relative shortcut generation.
 	static _relativeTarget := ""
 	static _relativeToast  := ""
 	
 	
+	;---------
+	; DESCRIPTION:    Get the path to the selected file, or the current folder if no file is selected.
+	; PARAMETERS:
+	;  pathType (O,OPT) - A name for the type of path ("file path" or "folder path") for display to the user.
+	; RETURNS:        Current absolute file path.
+	;---------
+	getSelectedPath(ByRef pathType := "") {
+		pathType := ""
+		
+		path := ClipboardLib.getWithHotkey(this.Hotkey_CopyCurrentFile)
+		if(path != "") {
+			pathType := "file path"
+			return path
+		}
+		
+		; If we didn't get anything, there probably wasn't a file selected - get the current folder instead.
+		path := ClipboardLib.getWithHotkey(this.Hotkey_CopyCurrentFolder)
+		if(path != "") {
+			pathType := "folder path"
+			return path
+		}
+		
+		; We couldn't find anything at all, no type.
+		return ""
+	}
+	
+	; [[Relative shortcuts]] --=
 	;---------
 	; DESCRIPTION:    Get the relative shortcut target using the current file in Explorer.
 	; RETURNS:        The path to the current file (cleaned up).
@@ -214,5 +259,7 @@ class Explorer {
 		
 		return sourceRelative targetRelative
 	}
+	; =--
+	
 	; #END#
 }

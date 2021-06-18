@@ -142,20 +142,10 @@ class ClipboardLib {
 			new ErrorToast("Could not copy source-relative path", "Failed to get file path").showMedium()
 			return
 		}
-			
-		path := FileLib.cleanupPath(path)
 		
-		sourceRoot := Config.private["EPIC_SOURCE"] "\"
-		if(!path.startsWith(sourceRoot)) {
-			ClipboardLib.setAndToastError(path, "path", "Could not copy source-relative path", "Path is not in source root")
-			return
-		}
-		path := path.removeFromStart(sourceRoot)
+		path := EpicLib.convertToSourceRelativePath(path)
 		
-		; Strip off one more parent - it's either one of the main folders (App *) or a DLG folder (DLG-*)
-		path := "\" path.afterString("\") ; Keep the leading backslash
-		
-		ClipboardLib.setAndToast(path, "DLG file path")
+		ClipboardLib.setAndToast(path, "Source-relative path")
 	}
 	
 	;---------

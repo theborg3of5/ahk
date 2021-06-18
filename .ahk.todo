@@ -1,4 +1,7 @@
 # New Ideas
+	Consider flipping our collapsing sections: =-- --- --= makes more visual sense than --= === =-- (the stuff inside is boxed in by the borders)
+		Notepad++ syntax files
+		Existing usage
 	Add something (for testing purposes) that turns the clipboard into a pastable expression so I can stick it in a variable easily
 	Consider adding something mover-sizer-based for closing windows (original had something like double-middle-click or something, I think?)
 	Config: is it worth keeping .Init()?
@@ -60,7 +63,7 @@
 				Explorer, Everything, Notepad++: selected/current file path (folder for Explorer if nothing selected)
 			!#c - full location
 				EpicStudio, CodeSearch, Visual Studio: (uncleaned) tag+x^routine / (linked) filepath::function()
-				Explorer, Everything, Notepad++: selected/current file path (folder for Explorer if nothing selected)
+				Explorer, Everything, Notepad++: nothing (!c is already full path)
 			^#!c - DLG-relative FILE location IN current view
 				CodeSearch, VisualStudio: \<filepath relative to DLG/App St1/App QA folder>
 				Explorer, Everything, Notepad++: \<filepath relative to DLG/App St1/App QA folder>

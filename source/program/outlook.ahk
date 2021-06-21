@@ -13,7 +13,10 @@
 	; Bullets and numbering
 	^.::^+l
 	^/::
-		Send, !o      ; Format Text
+		if(Outlook.isMailMessagePopupActive())
+			Send, !o   ; Format Text tab
+		else
+			Send, !e2  ; Message tab
 		Send, n       ; Numbering
 		Send, {Right} ; First numbering format
 		Send, {Enter} ; Accept

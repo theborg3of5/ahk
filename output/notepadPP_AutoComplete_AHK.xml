@@ -1574,32 +1574,6 @@
                 <Param name="hotkeyKeys" />
             </Overload>
         </KeyWord>
-        <KeyWord name="ClipboardLib.copyFolderPathWithFileHotkey" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Copy a folder path with the provided hotkeys, making sure that:
-							;                  * We wait long enough for the folder to get onto the clipboard
-							;                  * The path has been cleaned up and mapped
-							;                  * There's a trailing backslash on the end
-							; PARAMETERS:
-							;  fileHotkeyKeys (I,REQ) - The keys to send in order to copy a FILE in the folder you want to the clipboard.
-							;---------">
-                <Param name="fileHotkeyKeys" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="ClipboardLib.copyFolderPathWithHotkey" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Copy a folder path with the provided hotkeys, making sure that:
-							;                  * We wait long enough for the folder to get onto the clipboard
-							;                  * The path has been cleaned up and mapped
-							;                  * There's a trailing backslash on the end
-							; PARAMETERS:
-							;  hotkeyKeys (I,REQ) - The keys to send in order to copy the folder's path to the clipboard.
-							;---------">
-                <Param name="hotkeyKeys" />
-            </Overload>
-        </KeyWord>
         <KeyWord name="ClipboardLib.copyPathRelativeToSource" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -2921,6 +2895,18 @@
             </Overload>
         </KeyWord>
         <KeyWord name="EnvUpdate"/>
+        <KeyWord name="EpicLib.convertToSourceRelativePath" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Given a file path, convert it to a &quot;source-relative&quot; path - that is, the relative path between the
+							;                 source root folder (DLG-* or App *) and the given location.
+							; PARAMETERS:
+							;  path (I,REQ) - The path to convert.
+							; RETURNS:        Relative path with leading backslash.
+							;---------">
+                <Param name="path" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="EpicLib.dropOffsetFromServerLocation" func="yes">
             <Overload retVal="" descr="
 							;---------

@@ -33,41 +33,7 @@
 				ARGS is too generic, though - seems like it would go on the end?
 				Same mechanism as we end up using for Hyperspace, maybe?
 	Consider a new copy hotkey for Visual Studio - copies the selected tag + file, like we do for CodeSearch stuff
-		Do we want to rethink the file/folder hotkeys, and reserve !c for "copy this spot in the code"?
-		Hotkeys we could use:
-			!c - currently location in EpicStudio (and maybe CodeSearch?), file most other spots
-			!#c - currently folder in most spots
-			^!c - currently smart copy in EpicStudio
-			^!#c - currently DLG-relative folder copy for client (but not limited to Explorer, interestingly?)
-			^+c - currently copy script in EpicStudio, toggle comment/code elsewhere - NOT a good option to me.
-			^+o - variety of disparate things:
-						Chrome, EMC2 - open current DLG in EpicStudio
-						Notepad++, Visual Studio - open current file's parent folder
-						EpicStudio - tag navigator
-		Would we want just the file, or the whole (relative to DLG) path?
-			Maybe 2 separate hotkeys for that?
-		Possible things to copy:
-			Filepath
-			Containing folder
-				Probably least useful - OPENING containing folder is typically more helpful.
-					Though, it would be nice if that hotkey (typically ^+o) matched modifiers with the corresponding copy-file hotkey
-						But, ^+c is no good - already overloaded - so maybe we change open-folder hotkey instead?
-			Filepath, relative to DLG folder (client only)
-			Code location (file + selected function)
-			Code location with path (path + file + selected function)
-		Could have 1-3 common ones that get primo hotkeys, then a selector or something that lives on the last one
-			Or, just have a selector on !c and pick every time
-		Proposal
-			!c - location (the most useful one per view)
-				EpicStudio, CodeSearch, Visual Studio: tag^routine / filename::function()
-				Explorer, Everything, Notepad++: selected/current file path (folder for Explorer if nothing selected)
-			!#c - full location
-				EpicStudio, CodeSearch, Visual Studio: (uncleaned) tag+x^routine / (linked) filepath::function()
-				Explorer, Everything, Notepad++: nothing (!c is already full path)
-			^#!c - DLG-relative FILE location IN current view
-				CodeSearch, VisualStudio: \<filepath relative to DLG/App St1/App QA folder>
-				Explorer, Everything, Notepad++: \<filepath relative to DLG/App St1/App QA folder>
-		Do we want to extend this further to Office (word/powerpoint/excel)
+		Do we want to extend this further to Office (word/powerpoint/excel)?
 			Using the document location I keep in the quick access toolbar anyway?
 				Could formalize that location with a function, etc.
 	Re-examine how we run programs and such (RunLib.runAsUser stuff) - could it be the reason we have focus issues?

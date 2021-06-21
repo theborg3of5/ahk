@@ -94,41 +94,6 @@ class ClipboardLib {
 		
 		ClipboardLib.setAndToast(path, "file path")
 	}
-	;---------
-	; DESCRIPTION:    Copy a folder path with the provided hotkeys, making sure that:
-	;                  * We wait long enough for the folder to get onto the clipboard
-	;                  * The path has been cleaned up and mapped
-	;                  * There's a trailing backslash on the end
-	; PARAMETERS:
-	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the folder's path to the clipboard.
-	;---------
-	copyFolderPathWithHotkey(hotkeyKeys) {
-		path := ClipboardLib.getWithHotkey(hotkeyKeys)
-		if(path) {
-			path := FileLib.cleanupPath(path)
-			path := path.appendIfMissing("\") ; Add the trailing backslash since it's a folder
-		}
-		
-		ClipboardLib.setAndToast(path, "folder path")
-	}
-	;---------
-	; DESCRIPTION:    Copy a folder path with the provided hotkeys, making sure that:
-	;                  * We wait long enough for the folder to get onto the clipboard
-	;                  * The path has been cleaned up and mapped
-	;                  * There's a trailing backslash on the end
-	; PARAMETERS:
-	;  fileHotkeyKeys (I,REQ) - The keys to send in order to copy a FILE in the folder you want to the clipboard.
-	;---------
-	copyFolderPathWithFileHotkey(fileHotkeyKeys) {
-		path := ClipboardLib.getWithHotkey(fileHotkeyKeys)
-		if(path) {
-			path := FileLib.cleanupPath(path)
-			parentFolder := FileLib.getParentFolder(path)     ; Actually get the folder instead of the file
-			parentFolder := parentFolder.appendIfMissing("\") ; Add the trailing backslash since it's a folder
-		}
-		
-		ClipboardLib.setAndToast(parentFolder, "folder path")
-	}
 	
 	;---------
 	; DESCRIPTION:    Grabs the path for the current file, trims it down to the bit inside the DLG/App * folder, and puts

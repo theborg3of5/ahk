@@ -28,11 +28,11 @@
 	; New macro function
 	^n::^NumpadAdd
 	
-	; Open macro info window
-	^i::
-		Send, !f ; File
-		Send, i  ; Edit Macro Info...
-	return
+	; Import
+	^i::Send, !fp ; File > Import
+	
+	; Delete macro
+	^d::Send, !fd ; File > Delete
 	
 	; Open function header edit window
 	^e::^F2

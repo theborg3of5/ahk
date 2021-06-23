@@ -32,10 +32,6 @@
 			Would need to support some way to stick an argument in the middle of the string - maybe a generic <ARGS> tag or something similar?
 				ARGS is too generic, though - seems like it would go on the end?
 				Same mechanism as we end up using for Hyperspace, maybe?
-	Consider a new copy hotkey for Visual Studio - copies the selected tag + file, like we do for CodeSearch stuff
-		Do we want to extend this further to Office (word/powerpoint/excel)?
-			Using the document location I keep in the quick access toolbar anyway?
-				Could formalize that location with a function, etc.
 	Re-examine how we run programs and such (RunLib.runAsUser stuff) - could it be the reason we have focus issues?
 		Also, could we work around it with a WinWaitExist + WinActivate?
 	EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines

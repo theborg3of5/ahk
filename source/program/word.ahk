@@ -1,5 +1,11 @@
 ; Word hotkeys.
 #If Config.isWindowActive("Word")
+	; Copy the current document location
+	!c::
+		Send, !1 ; Document location (quick access position #1, should select field)
+		ClipboardLib.copyFilePathWithHotkey("^c")
+	return
+	
 	; Open (dialog, not screen)
 	^o::Send, ^!{F2}
 	

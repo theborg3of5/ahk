@@ -1,5 +1,11 @@
 ; Excel hotkeys.
 #If Config.isWindowActive("Excel")
+	; Copy the current document location
+	!c::
+		Send, !1 ; Document location (quick access position #1, should select field)
+		ClipboardLib.copyFilePathWithHotkey("^c")
+	return
+	
 	; Save as
 	^+s::Send, {F12}
 	

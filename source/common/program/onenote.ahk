@@ -136,8 +136,8 @@ class OneNote {
 	;---------
 	; DESCRIPTION:    Copy the current page's title and link to the clipboard.
 	;---------
-	copyTitleLinkToCurrentPage() {
-		link := OneNote.getLinkToCurrentPage()
+	copyTitleLinkToCurrentParagraph() {
+		link := OneNote.getLinkToCurrentParagraph()
 		title := OneNote.getPageTitle()
 		
 		ClipboardLib.setAndToast(title "`n" link, "page title + link")
@@ -235,18 +235,7 @@ class OneNote {
 		}
 		
 		; Trim off the paragraph-specific part.
-		copiedLink := copiedLink.removeRegEx("&object-id.*")
-		
-		; If there are two links involved (seems to happen with free version of OneNote), keep only the "onenote:" one (second line).
-		if(copiedLink.contains("`n")) {
-			linkAry := copiedLink.split("`n")
-			For i,link in linkAry {
-				if(link.contains("onenote:"))
-					linkToUse := link
-			}
-		} else {
-			linkToUse := copiedLink
-		}
+		linkToUse := linkToUse.removeRegEx("&object-id.*")
 		
 		return linkToUse
 	}
@@ -268,7 +257,17 @@ class OneNote {
 	;---------
 	getLinkToCurrentParagraph() {
 		copyFunction := ObjBindMethod(OneNote, "copyLinkToCurrentParagraph")
-		return ClipboardLib.getWithFunction(copyFunction)
+		copiedLink := ClipboardLib.getWithFunction(copyFunction)
+		
+		; If there are two links involved, keep only the local "onenote:" one (second line).
+		if(copiedLink.contains("`n")) {
+			For _,link in copiedLink.split("`n") {
+				if(link.contains("onenote:"))
+					return link
+			}
+		}
+		
+		return copiedLink
 	}
 	
 	;---------

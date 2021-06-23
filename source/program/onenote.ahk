@@ -80,7 +80,7 @@
 	
 	; Link handling
 	!c::      OneNote.copyLinkToCurrentPage()
-	!#c::     OneNote.copyTitleLinkToCurrentPage()
+	!#c::     OneNote.copyTitleLinkToCurrentParagraph()
 	^RButton::OneNote.copyLinkUnderMouse()
 	^MButton::OneNote.removeLinkUnderMouse()
 	

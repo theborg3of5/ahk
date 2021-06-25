@@ -130,7 +130,7 @@ class OneNote {
 	; DESCRIPTION:    Put a link to the current page on the clipboard.
 	;---------
 	copyLinkToCurrentPage() {
-		ClipboardLib.setAndToast(OneNote.getLinkToCurrentPage(), "link")
+		ClipboardLib.setAndToast(OneNote.getLinkToCurrentPage(), "page link")
 	}
 	
 	;---------
@@ -140,7 +140,7 @@ class OneNote {
 		link := OneNote.getLinkToCurrentParagraph()
 		title := OneNote.getPageTitle()
 		
-		ClipboardLib.setAndToast(title "`n" link, "page title + link")
+		ClipboardLib.setAndToast(title "`n" link, "page title + paragraph link")
 	}
 	
 	;---------
@@ -235,7 +235,7 @@ class OneNote {
 		}
 		
 		; Trim off the paragraph-specific part.
-		linkToUse := linkToUse.removeRegEx("&object-id.*")
+		linkToUse := copiedLink.removeRegEx("&object-id.*")
 		
 		return linkToUse
 	}

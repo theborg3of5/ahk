@@ -134,7 +134,7 @@
 	; DESCRIPTION:    Open the file-type link under the mouse.
 	;---------
 	openLinkTarget() {
-		path := ClipboardLib.getWithFunction(ObjBindMethod(Chrome, "getLinkTargetOnClipboard"))
+		path := this.getLinkTarget()
 		if(path) {
 			new Toast("Got link target, opening:`n" path).showShort()
 			Run(path)
@@ -147,8 +147,7 @@
 	; DESCRIPTION:    Copy the file-type link under the mouse, also showing the user a toast about it.
 	;---------
 	copyLinkTarget() {
-		ClipboardLib.copyWithFunction(ObjBindMethod(Chrome, "getLinkTargetOnClipboard"))
-		ClipboardLib.toastNewValue("link target")
+		ClipboardLib.setAndToast(this.getLinkTarget(), "link target")
 	}
 	
 	
@@ -184,6 +183,15 @@
 		
 		filename := WinGetActiveTitle().beforeString("/")
 		return filename.contains(".") ; Client files should always have an extension
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the (cleaned-up) path in the link currently under the mouse.
+	; RETURNS:        The cleaned-up path.
+	;---------
+	getLinkTarget() {
+		path := ClipboardLib.getWithFunction(ObjBindMethod(Chrome, "getLinkTargetOnClipboard"))
+		return FileLib.cleanupPath(path)
 	}
 	
 	;---------

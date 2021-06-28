@@ -36,7 +36,7 @@
 	
 	~PATH_TYPE.replaceWith(URL) {
 		Messenger					https://www.messenger.com
-		Slack							https://app.slack.com/
+		Slack							https://app.slack.com/client/<SLACK_MAIN_ID>
 		Gmail							https://mail.google.com/mail/u/0/#inbox
 		Gmail							https://mail.google.com/mail/u/1/#inbox										WORK_LAPTOP
 	}

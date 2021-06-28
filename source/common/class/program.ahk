@@ -29,8 +29,9 @@ class Program {
 		this.path     := programAry["PATH"]
 		this.pathType := programAry["PATH_TYPE"]
 		
-		; Replace any path tags
+		; Replace any path or private tags
 		this.path := Config.replacePathTags(this.path)
+		this.path := Config.replacePrivateTags(this.path)
 	}
 	
 	;---------

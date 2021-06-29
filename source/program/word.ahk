@@ -36,6 +36,12 @@
 		Send, ^!m
 	return
 	
+	; Toggle dark/light mode.
+	!d::
+		Send, !w ; View
+		Send, m1 ; Dark mode
+	return
+	
 	; Jump to next *** token and select it.
 	F2::
 		Send, ^g    ; Find/replace popup (Go To tab)

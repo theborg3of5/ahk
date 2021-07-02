@@ -44,7 +44,7 @@ class Program {
 		; Safety checks
 		if(this.pathType = this.PathType_EXE) {
 			if(!FileExist(this.path)) {
-				new ErrorToast("Could not run program: " this.name, "Path does not exist: " this.path).showMedium()
+				new ErrorToast("Could not run " this.name, "Path does not exist: " this.path).showMedium()
 				return false
 			}
 		}

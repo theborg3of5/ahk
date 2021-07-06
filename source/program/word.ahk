@@ -25,6 +25,13 @@
 		Send, {Enter} ; Accept
 	return
 	
+	; Toggle extra line spacing after paragraph
+	^+a::
+		Send, !h ; Home
+		Send, k  ; Line and Paragraph Spacing
+		Send, a  ; Add/Remove Space After Paragraph
+	return
+	
 	; Strikethrough
 	^-::
 		Send, !h

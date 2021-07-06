@@ -55,9 +55,19 @@ class Explorer {
 	;                 we can open or link to it.
 	; RETURNS:        A new ActionObjectEMC2 instance, or "" if it's not a special folder that links to an EMC2 object.
 	;---------
-	getActiveFolderEMC2Object() {
-		; Get current folder name from title
-		name := WinGetActiveTitle()
+	getSelectedFolderEMC2Object() {
+		path := this.getSelectedPath()
+		if(path = "") {
+			new ErrorToast("Could not get EMC2 object for selected folder", "Could not get selected folder path").showMedium()
+			return
+		}
+		
+		; Get the name of the folder we're interested in (could be the selected "file", or the parent)
+		SplitPath(path, fileName, folderName, fileExtension)
+		if(fileExtension != "") ; A file was selected, use the parent folder's name instead
+			SplitPath(folderName, name)
+		else
+			name := fileName
 		
 		; Try it as a project folder (PRJ ###### ...)
 		if(name.startsWith("PRJ ")) {

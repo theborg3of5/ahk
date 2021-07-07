@@ -21,6 +21,12 @@
 		Send, {Right} ; First numbering format
 		Send, {Enter} ; Accept
 	return
+	
+	; Toggle dark mode (not available as a command in non-editing message popup)
+	!d::
+		Send, !h ; Home
+		Send, b  ; Switch Background
+	return
 #If
 
 ; Mail folders

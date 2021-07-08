@@ -86,7 +86,6 @@
 				Putty										putty.exe
 				Remote Desktop							mstsc.exe					TscShellContainerClass
 				Remote Desktop Reconnecting		mstsc.exe					#32770
-				Republic Anywhere						Republic Anywhere.exe
 				Skype										Skype.exe
 				Snapper									Snapper.exe					-									Snapper
 				Slack										slack.exe					-									-														NO_PADDING

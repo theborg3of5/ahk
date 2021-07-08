@@ -15,9 +15,9 @@
 		
 # Social windows
 		~WIDTH.replaceWith(950) | ~HEIGHT.replaceWith(750) | ~X.replaceWith(RIGHT_EDGE) | ~Y.replaceWith(TOP_EDGE) {
-			Slack
-			Republic Anywhere
+			Chrome Messages
 			Messenger
+			Slack
 			Telegram
 		}
 	}
@@ -53,11 +53,14 @@
 			Messenger					LEFT_EDGE		BOTTOM_EDGE
 			Slack							RIGHT_EDGE		BOTTOM_EDGE
 			Telegram						RIGHT_EDGE		TOP_EDGE
+			Chrome Messages			LEFT_EDGE		TOP_EDGE
+			Chrome						-					-					MAX		MAX
 		}
 		~PRESET.replaceWith(GAME_ON_MIDDLE) | ~MONITOR.replaceWith(LEFT) {
 			Messenger					LEFT_EDGE		BOTTOM_EDGE
 			Slack							RIGHT_EDGE		BOTTOM_EDGE
 			Telegram						RIGHT_EDGE		TOP_EDGE
+			Chrome Messages			LEFT_EDGE		TOP_EDGE
 			Chrome						-					-					MAX		MAX
 		}
 	}

@@ -2,7 +2,6 @@
 	Consider flipping our collapsing sections: =-- --- --= makes more visual sense than --= === =-- (the stuff inside is boxed in by the borders)
 		Notepad++ syntax files
 		Existing usage
-	Consider adding error handling for Snapper so that it can show a toast and put the original ID list on the clipboard if Snapper is just throwing a tantrum.
 	Add something (for testing purposes) that turns the clipboard into a pastable expression so I can stick it in a variable easily
 	Consider adding something mover-sizer-based for closing windows (original had something like double-middle-click or something, I think?)
 	Config: is it worth keeping .Init()?

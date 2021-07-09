@@ -207,5 +207,30 @@ class WindowLib {
 		
 		return (controlId = waitControlId)
 	}
+	
+	;---------
+	; DESCRIPTION:    Wait on any of a number of windows to become active.
+	; PARAMETERS:
+	;  titleStrings (I,REQ) - An array of titleStrings that describe the various windows to wait on.
+	;  timeout      (I,OPT) - The timeout to give up after.
+	; RETURNS:        true if one of the windows became active, false if we timed out.
+	;---------
+	waitAnyOfWindowsActive(titleStrings, timeout := "") {
+		this.waitGroupIndex += 1
+		groupName := "WaitGroup" this.waitGroupIndex
+		
+		For _,titleString in titleStrings
+			GroupAdd, % groupName, % titleString
+		
+		WinWaitActive, % "ahk_group " groupName, , timeout
+		
+		return (ErrorLevel = 0) ; ErrorLevel = 1 if we timed out
+	}
+	
+	
+	; #PRIVATE#
+	
+	waitGroupIndex := 0 ; Counter to give us a unique group name for waitAnyOfWindowsActive each time (since we can't delete a group or remove window "rules" from them)
+	
 	; #END#
 }

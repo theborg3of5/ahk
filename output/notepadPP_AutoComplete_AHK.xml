@@ -9020,6 +9020,19 @@
                 <Param name="titleString := &quot;A&quot;" />
             </Overload>
         </KeyWord>
+        <KeyWord name="WindowLib.waitAnyOfWindowsActive" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wait on any of a number of windows to become active.
+							; PARAMETERS:
+							;  titleStrings (I,REQ) - An array of titleStrings that describe the various windows to wait on.
+							;  timeout      (I,OPT) - The timeout to give up after.
+							; RETURNS:        true if one of the windows became active, false if we timed out.
+							;---------">
+                <Param name="titleStrings" />
+                <Param name="timeout := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="WindowLib.waitControlActive" func="yes">
             <Overload retVal="" descr="
 							;---------

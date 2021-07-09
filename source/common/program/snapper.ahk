@@ -14,10 +14,20 @@
 	;                        described above. Must be internal IDs, unless the string starts with "#".
 	;---------
 	addRecords(environment := "", ini := "", idList := "") {
-		if(idList.startsWith("#"))
+		if(idList.startsWith("#")) {
 			this.addRecordWithExternalId(environment, ini, idList.removeFromStart("#"))
-		else
-			Run(this.buildURL(environment, ini, idList))
+			return
+		}
+		
+		Run(this.buildURL(environment, ini, idList))
+		
+		; Handle error popup and mitigate by putting ID list on clipboard.
+		errorTitleString := "ahk_exe SnapperHandler.exe" ; The error popup that appears when Snapper has popups open or whatnot so it failed to add the new records.
+		WindowLib.waitAnyOfWindowsActive([Config.windowInfo["Snapper"].titleString, errorTitleString]) ; Wait on either Snapper or the error popup to become active
+		if(WinActive(errorTitleString)) {
+			Send, {Space} ; Close the error window
+			ClipboardLib.setAndToastError(idList, "ID list", "Could not add records to Snapper", "Snapper claims to have popups open")
+		}
 	}
 	
 	

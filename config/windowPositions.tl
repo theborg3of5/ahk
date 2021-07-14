@@ -30,20 +30,22 @@
 			Process Explorer			CENTERED			CENTERED			1440		900
 			VB6							-					-					MAX		MAX		WORK
 			Visual Studio				-					-					MAX		MAX		WORK
-			WebEx							CENTERED			CENTERED			1920		1080		WORK
 			Zoom							-					-					MAX		MAX		HOME
 	}
 	
 	~MONITOR.replaceWith(RIGHT) {
 			Cisco AnyConnect VPN		LEFT_EDGE+25	300				-			-			HOME
-			VMware Horizon Client	CENTERED			CENTERED			FULL		FULL		WORK
 			EMC2							-					-					MAX		MAX		WORK
+			OneNote						-					-					MAX		MAX
+			Spotify						-					-					MAX		MAX
+			VMware Horizon Client	CENTERED			CENTERED			FULL		FULL		WORK
+			WebEx							CENTERED			CENTERED			1440		900		WORK
 		
 			Discord						RIGHT_EDGE		CENTERED			1460		FULL		HOME
 			OneNote						RIGHT_EDGE		CENTERED			1460		FULL		HOME
 			Spotify						RIGHT_EDGE		CENTERED			1460		FULL		HOME
-			OneNote						-					-					MAX		MAX
-			Spotify						-					-					MAX		MAX
+			
+			
 	}
 	
 	

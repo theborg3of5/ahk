@@ -266,6 +266,12 @@
 	;  jsCode (I,REQ) - Javascript code to run. If it contains newlines, make sure any comments use /**/ instead of // (otherwise everything after will be treated as commented out)
 	;---------
 	runJavascriptCode(jsCode) {
+		; Safety check to prevent us from just entering "javascript:" in the title bar, which navigates to a Google search.
+		if(jsCode = "") {
+			new ErrorToast("Failed to run JS code", "Given code was blank").showMedium()
+			return
+		}
+		
 		Send, ^l                  ; Focus address bar
 		Sleep, 100                ; Wait for it to get focus
 		Send, % "javascript:"     ; Can't paste this bit in, it gets stripped off (safety measure)

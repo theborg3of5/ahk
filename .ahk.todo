@@ -1,4 +1,5 @@
 # New Ideas
+	Can we make the CodeSearch JS bit more reliable, so we don't end up with just "javascript:" in the URL that navigates elsewhere?
 	Consider flipping our collapsing sections: =-- --- --= makes more visual sense than --= === =-- (the stuff inside is boxed in by the borders)
 		Notepad++ syntax files
 		Existing usage

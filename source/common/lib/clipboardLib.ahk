@@ -28,7 +28,7 @@ class ClipboardLib {
 	;---------
 	getWithHotkey(hotkeyKeys) {
 		if(hotkeyKeys = "")
-			return
+			return ""
 		
 		; PuTTY auto-copies the selection to the clipboard, and ^c causes an interrupt, so do nothing.
 		if(Config.isWindowActive("Putty") && !WinActive("PuTTY Reconfiguration"))

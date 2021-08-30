@@ -1592,9 +1592,12 @@
 							;                 get something on the clipboard.
 							; PARAMETERS:
 							;  boundFunc (I,REQ) - Functor object to run in order to copy something to the clipboard.
+							;  timeout   (I,OPT) - Timeout for the max length of time we should wait for the clipboard to contain the result. Defaults
+							;                      to 0.5 seconds.
 							; RETURNS:        true if we successfully copied something, false otherwise.
 							;---------">
                 <Param name="boundFunc" />
+                <Param name="timeout" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.copyWithHotkey" func="yes">
@@ -1616,9 +1619,12 @@
 							; PARAMETERS:
 							;  boundFunc (I,REQ) - A BoundFunc object created with Func().Bind() or ObjBindMethod(), which will
 							;                      copy the desired content to the clipboard.
+							;  timeout   (I,OPT) - Timeout for the max length of time we should wait for the clipboard to contain the result. Defaults
+							;                      to 0.5 seconds.
 							; RETURNS:        The copied content.
 							;---------">
                 <Param name="boundFunc" />
+                <Param name="timeout" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.getWithHotkey" func="yes">

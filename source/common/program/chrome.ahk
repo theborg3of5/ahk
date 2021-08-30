@@ -14,7 +14,7 @@
 	;---------
 	copyTitleLink() {
 		title := Chrome.getTitle()
-		url := Chrome.getURL()
+		url   := Chrome.getURL()
 		ClipboardLib.setAndToast(title "`n" url, "title and URL")
 	}
 	
@@ -206,23 +206,11 @@
 	;---------
 	; DESCRIPTION:    Get the text from an HTML element on the current page.
 	; PARAMETERS:
-	;  querySelector (I,REQ) - Selector query (i.e. tag.class#id), for use with document.querySelector()
-	; RETURNS:        The text copied from that element
-	; NOTES:          Works using some JS code that temporarily selects the element in question and copies to the clipboard.
-	;---------
-	getElementTextBySelector(querySelector) {
-		jsElementCode := "document.querySelector(""" querySelector """)"
-		return ClipboardLib.getWithFunction(ObjBindMethod(Chrome, "copyElementText", jsElementCode))
-	}
-	
-	;---------
-	; DESCRIPTION:    Get the text from an HTML element on the current page.
-	; PARAMETERS:
 	;  jsElementCode (I,REQ) - JS code that will return the element you're interested in.
 	; NOTES:          Works using some JS code that temporarily selects the element in question and copies to the clipboard.
 	;---------
 	getElementText(jsElementCode) {
-		return ClipboardLib.getWithFunction(ObjBindMethod(Chrome, "copyElementText", jsElementCode))
+		return ClipboardLib.getWithFunction(ObjBindMethod(Chrome, "copyElementText", jsElementCode), 2) ; Wait for longer than the default 0.5 seconds, for bigger pages where the JS takes longer to run.
 	}
 	
 	;---------
@@ -274,8 +262,11 @@
 		
 		Send, ^l                  ; Focus address bar
 		Sleep, 100                ; Wait for it to get focus
-		Send, % "javascript:"     ; Can't paste this bit in, it gets stripped off (safety measure)
-		ClipboardLib.send(jsCode) ; Paste in JS code
+		
+		; Paste in JS code
+		ClipboardLib.send("javascript") ; Need to split up the "javascript:" prefix because otherwise it gets stripped out on paste by Chrome.
+		ClipboardLib.send(":" jsCode)
+		
 		Sleep, 400                ; JS code doesn't run without this - not sure if because content not all in yet, or another safety measure (I suspect the latter)
 		Send, {Enter}             ; Submit
 	}

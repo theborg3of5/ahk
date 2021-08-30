@@ -48,15 +48,19 @@ class ClipboardLib {
 	;                 get something on the clipboard.
 	; PARAMETERS:
 	;  boundFunc (I,REQ) - Functor object to run in order to copy something to the clipboard.
+	;  timeout   (I,OPT) - Timeout for the max length of time we should wait for the clipboard to contain the result. Defaults
+	;                      to 0.5 seconds.
 	; RETURNS:        true if we successfully copied something, false otherwise.
 	;---------
-	copyWithFunction(boundFunc) {
+	copyWithFunction(boundFunc, timeout) {
 		if(!boundFunc)
 			return
+		if(timeout = "")
+			timeout := 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
 		
 		Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
 		%boundFunc%()
-		ClipWait, 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
+		ClipWait, % timeout
 		
 		return (ErrorLevel != 1)
 	}
@@ -65,14 +69,16 @@ class ClipboardLib {
 	; PARAMETERS:
 	;  boundFunc (I,REQ) - A BoundFunc object created with Func().Bind() or ObjBindMethod(), which will
 	;                      copy the desired content to the clipboard.
+	;  timeout   (I,OPT) - Timeout for the max length of time we should wait for the clipboard to contain the result. Defaults
+	;                      to 0.5 seconds.
 	; RETURNS:        The copied content.
 	;---------
-	getWithFunction(boundFunc) { ; boundFunc is a BoundFunc object created with Func.Bind() or ObjBindMethod().
+	getWithFunction(boundFunc, timeout) { ; boundFunc is a BoundFunc object created with Func.Bind() or ObjBindMethod().
 		if(!boundFunc)
 			return
 		
 		originalClipboard := ClipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
-		ClipboardLib.copyWithFunction(boundFunc)
+		ClipboardLib.copyWithFunction(boundFunc, timeout)
 		
 		textFound := Clipboard
 		Clipboard := originalClipboard    ; Restore the original clipboard. Note we're using Clipboard (not ClipboardAll).

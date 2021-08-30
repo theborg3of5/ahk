@@ -52,7 +52,7 @@ class ClipboardLib {
 	;                      to 0.5 seconds.
 	; RETURNS:        true if we successfully copied something, false otherwise.
 	;---------
-	copyWithFunction(boundFunc, timeout) {
+	copyWithFunction(boundFunc, timeout := "") {
 		if(!boundFunc)
 			return
 		if(timeout = "")
@@ -73,7 +73,7 @@ class ClipboardLib {
 	;                      to 0.5 seconds.
 	; RETURNS:        The copied content.
 	;---------
-	getWithFunction(boundFunc, timeout) { ; boundFunc is a BoundFunc object created with Func.Bind() or ObjBindMethod().
+	getWithFunction(boundFunc, timeout := "") { ; boundFunc is a BoundFunc object created with Func.Bind() or ObjBindMethod().
 		if(!boundFunc)
 			return
 		

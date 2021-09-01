@@ -105,7 +105,7 @@ class EpicRecord {
 	; SIDE EFFECTS:   Sets .ini, .id, and .title.
 	;---------
 	processRecordString(recordString) {
-		recordString := recordString.firstLine().clean() ; Make sure it's only 1 line, clean any funky characters off of string edges
+		recordString := recordString.firstLine().withoutWhitespace().clean() ; Make sure it's only 1 line, clean any spaces and funky characters off of string edges
 		if(recordString = "")
 			return
 		
@@ -125,7 +125,7 @@ class EpicRecord {
 			this.title := recordString.afterString(" - ")
 			
 		; 3) ID (no spaces)
-		} else if(!recordString.contains(" ")) {
+		} else if(!recordString.removeFromEnd(" ").contains(" ")) {
 			this.id := recordString
 			
 		; 4) {R }INI ID{ }{: or -}{ }{Title}

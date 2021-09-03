@@ -54,8 +54,14 @@ class EpicStudio {
 		if(!EpicStudio.copyCodeLocation())
 			return
 		
-		; Notify the user of the new value.
-		ClipboardLib.toastNewValue("linked code location")
+		; While the RTF link is on the clipboard, it doesn't paste cleanly into places like OneNote, so
+		; generate the link and do our newline-separated thing instead.
+		location := clipboard
+		link := new ActionObjectEpicStudio(location, ActionObjectEpicStudio.DescriptorType_Routine).getLink()
+		locationAndLink := location.appendLine(link)
+		
+		; Set the clipboard value and notify the user.
+		ClipboardLib.setAndToast(locationAndLink, "linked code location")
 	}
 	
 	;---------

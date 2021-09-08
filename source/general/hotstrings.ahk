@@ -11,8 +11,8 @@
 	:X:fphoneno::Send, % PhoneLib.formatNumber(Config.private["PHONE_NUM"])
 	
 	:X:waddr::   SendRaw, % Config.private["HOME_ADDRESS"]
-	:X:aaddr::   SendRaw, % Config.private["APARTMENT_ADDRESS"]
 	:X:eaddr::   Send,    % Config.private["WORK_ADDRESS"]
+	:*0X:wzip::  Send,    % Config.private["HOME_ZIP_CODE_FULL"]
 	:*0X:ezip::  Send,    % Config.private["WORK_ZIP_CODE"]
 	
 	:X?:ecompnum::Send, % Config.private["WORK_COMPUTER_NUM"]

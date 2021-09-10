@@ -25,6 +25,16 @@
 	; Generate and insert snippets
 	:X:.snip::MSnippets.insertSnippet()
 	
+	; Tiny snippet to either add something in the middle
+	::.qsplit:: ; Variable in the middle of a string
+		Send, % """__"""
+		Send, {Left 2}
+	return
+	::.split:: ; String in the middle of two variables
+		Send, % "_""""_"
+		Send, {Left 2}
+	return
+	
 	; Debug code strings
 	:X:gdblog::   ClipboardLib.send(Config.private["M_DEBUG_LOG"])
 	:X:gdbbreak:: ClipboardLib.send(Config.private["M_DEBUG_BREAK"])

@@ -25,6 +25,8 @@
 		Spots to update EMC2 version:
 			Path in programs
 			EXE in windows
+		EMC2 idea: make the path (and maybe even the EXE?) a generated path, like in Hyperspace
+			EMC2 version would probably live in config somewhere, maybe in settings?
 	Consider moving Hyperspace path back into programs with all the others
 		Could include version tags in path - replace them when running?
 			Probably a separate run function - .replaceTagsAndRun() or similar?

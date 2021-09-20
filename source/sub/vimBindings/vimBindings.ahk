@@ -33,6 +33,7 @@ return
 	return
 	
 	F6::
+	F7::
 	F8::
 	F9::
 		HotkeyLib.releaseAllModifiers() ; Make very sure that we're not also holding down shift (which would close the window).

@@ -32,7 +32,7 @@
 #If
 
 ; Design email window
-#If Config.IsWindowActive("EMC2 XDS Email") || Config.IsWindowActive("EMC2 DLG Email")
+#If Config.isWindowActive("EMC2 XDS Email") || Config.isWindowActive("EMC2 DLG Email") || Config.isWindowActive("EMC2 XDS Submit")
 	:X:.dbcdevs::EMC2.sendDBCDevIDs()
 #If
 

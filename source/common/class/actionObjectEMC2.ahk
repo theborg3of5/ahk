@@ -169,7 +169,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	
 	;---------
 	; DESCRIPTION:    Do some additional processing on the different bits of info about the object.
-	; SIDE EFFECTS:   Can update this.ini and this.title.
+	; SIDE EFFECTS:   Can update this.ini, this.id, and this.title.
 	;---------
 	postProcess() {
 		; INI - make sure the INI is the "real" EMC2 one.
@@ -195,6 +195,8 @@ class ActionObjectEMC2 extends ActionObjectBase {
 			Case "SLG":
 				removeAry.appendArray(["--Assigned To:"])
 		}
+		
+		this.id := StringUpper(this.id) ; Make sure ID is capitalized as some spots fail on lowercase starting letters (i.e. i1234567)
 		
 		this.title := this.title.clean(removeAry)
 	}

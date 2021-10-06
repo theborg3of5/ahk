@@ -31,6 +31,7 @@
 	; EpicStudio popups - handle Ctrl+Backspace.
 	EpicStudio New Object Window		-			-					-					SELECT
 	EpicStudio Tokenize String			-			-					-					SELECT
+	EpicStudio Bookmark Comment		-			-					-					SELECT
 
 	; Web popups - close on Escape.
 	Chrome Join								CLOSE

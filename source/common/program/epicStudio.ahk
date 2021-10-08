@@ -150,7 +150,7 @@ class EpicStudio {
 	static ClassNN_ObjectExplorerDLGEdit := "WindowsForms10.EDIT.app.0.141b42a_r9_ad13"      ; Object explorer DLG field
 	
 	; Debug window controls
-	static Debug_OtherProcessButton := "WindowsForms10.BUTTON.app.0.141b42a_r7_ad11" ; "Other Process" radio button
+	static Debug_OtherProcessButton := "WindowsForms10.BUTTON.app.0.141b42a_r7_ad12" ; "Other Process" radio button
 	static Debug_OtherProcessField  := "Edit1" ; "Other Process" search field
 	
 	;---------

@@ -36,12 +36,12 @@
 	~MONITOR.replaceWith(RIGHT) {
 			Discord						RIGHT_EDGE		CENTERED			1460		FULL		HOME
 			OneNote						RIGHT_EDGE		CENTERED			1460		FULL		HOME
-			Spotify						RIGHT_EDGE		CENTERED			1460		FULL		HOME
+			Spotify						RIGHT_EDGE		CENTERED			1460		FULL		HOME		1
 		
 			Cisco AnyConnect VPN		LEFT_EDGE+25	300				-			-			HOME
 			EMC2							-					-					MAX		MAX		WORK
 			OneNote						-					-					MAX		MAX
-			Spotify						-					-					MAX		MAX
+			Spotify						-					-					MAX		MAX					1
 			VMware Horizon Client	CENTERED			CENTERED			FULL		FULL		WORK
 			WebEx							CENTERED			CENTERED			1440		900		WORK
 	}

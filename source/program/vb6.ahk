@@ -1,13 +1,30 @@
 ; Hotkeys for VB6 IDE.
 
+; Find popup
+#IfWinActive, Find ahk_class #32770
+	 ^g::
+	^+g::
+		WinClose, A ; Close the find window
+		HotkeyLib.sendCatchableKeys(A_ThisHotkey) ; Send hotkey again
+	return
+#IfWinActive
+
+; Main editor
 #If Config.isWindowActive("VB6")
 	; Back and (sort of - actually jump to definition) forward in history.
 	!Left:: Send, ^+{F2}
 	!Right::Send,  +{F2}
 	
 	; Find next/previous.
-	 ^g::Send,  {F3}
-	^+g::Send, +{F3}
+	 ^g::Send, {F3}
+	^+g::
+		Send, +{F3}
+		
+		; If we're getting the "wrap around to the end to continue searching?" popup, always say yes.
+		WinWaitActive, % "Microsoft Visual Basic ahk_class #32770", , 0.5
+		if(WinActive("Microsoft Visual Basic ahk_class #32770"))
+			Send, y ; Yes
+	return
 	
 	; Comment/uncomment
 	 ^`;::VB6.clickUsingMode(126, 37, "Client")

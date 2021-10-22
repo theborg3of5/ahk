@@ -1,4 +1,5 @@
 # New Ideas
+	Do we want to create more specific client Codesearch types (for HSWeb only, etc.)?
 	Consider a standalone script that does the current-window-info-to-notepad stuff from test script (F2)
 	OneNote: some easier way to access list of toolbar entries?
 	KDiff: hotkey to flip sides

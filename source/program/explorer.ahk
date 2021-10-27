@@ -32,6 +32,13 @@
 		Send, {Enter}
 	return
 	
+	; Edit in Notepad++
+	^+e::
+		HotkeyLib.waitForRelease()
+		Send, {AppsKey}
+		Send, n{Enter}
+	return
+	
 	; Relative shortcut creation
 	^+s::Explorer.createRelativeShortcutToFile()
 	

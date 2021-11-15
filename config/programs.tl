@@ -4,7 +4,7 @@
 	~PATH.addToStart(<PROGRAM_FILES_86>\) {
 		Chrome						Google\Chrome\Application\chrome.exe
 		Chrome Messages			Google\Chrome\Application\chrome_proxy.exe
-		EMC2							Epic\v9.8\EMC2\Shared Files\EpicD98.exe
+		EMC2							Epic\v9.9\EMC2\Shared Files\EpicD99.exe
 		EpicStudio					EpicStudio\EpicStudio.exe
 		Foobar						foobar2000\foobar2000.exe
 		Launchy						Launchy\Launchy.exe

@@ -4,6 +4,7 @@
 #e::  Config.activateProgram("Explorer", Explorer.ThisPCFolderUUID) ; Start up at "This PC" folder if we have to run it.
 #m::  Config.activateProgram("Chrome Messages", "--profile-directory=Default --app-id=hpfldicfbfomlpcikngkocigghgafkph")
 #s::  Config.runProgram("Slack")
+!+t:: Config.activateProgram("Chrome TickTick", "--profile-directory=Default --app-id=cfammbeebmjdpoppachopcohfchgjapd")
 ^!+g::Config.activateProgram("Chrome")
 ^!+m::Config.activateProgram("Messenger")
 ^!+n::Config.activateProgram("Notepad++")

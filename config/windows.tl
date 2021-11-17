@@ -11,7 +11,7 @@
 		; Special Chrome windows
 		~EXE.replaceWith(chrome.exe) {
 				Chrome Join								-								-									Join
-				Chrome TickTick						-								-									All - TickTick
+				Chrome TickTick						-								-									 - TickTick
 				Chrome Messages						-								-									Messages for web
 		}
 		

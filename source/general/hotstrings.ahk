@@ -61,6 +61,7 @@
 	::voilates::violates
 	::timeframe::time frame
 	::cahrge::charge
+	::fitler::filter
 
 ; [[ Expansions ]] ===
 	::f'n::function

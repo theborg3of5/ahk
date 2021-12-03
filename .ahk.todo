@@ -2,7 +2,7 @@
 	Do we want to create more specific client Codesearch types (for HSWeb only, etc.)?
 	Consider a standalone script that does the current-window-info-to-notepad stuff from test script (F2)
 	OneNote: some easier way to access list of toolbar entries?
-	KDiff: hotkey to flip sides
+	KDiff: hotkey to flip sides (^s for swap?)
 	Consider flipping our collapsing sections: =-- --- --= makes more visual sense than --= === =-- (the stuff inside is boxed in by the borders)
 		Notepad++ syntax files
 		Existing usage

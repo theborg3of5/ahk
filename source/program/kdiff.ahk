@@ -23,7 +23,7 @@
 	return
 	
 	; Swap files
-	^s::
+	^!s::
 		Send, ^o            ; Open window
 		Send, +{Tab 2}      ; Focus starts on OK button, jump to Swap/Copy Names button
 		Send, {Space}       ; Open Swap/Copy Names dropdown

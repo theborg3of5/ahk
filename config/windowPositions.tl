@@ -12,6 +12,7 @@
 			GrepWin						CENTERED			CENTERED			1440		900
 			Steam							CENTERED			CENTERED			1440		900		HOME
 			Teams							CENTERED			CENTERED			1440		900		WORK
+			Chrome TickTick			RIGHT_EDGE		TOP_EDGE			1200		750
 		
 # Social windows
 		~WIDTH.replaceWith(950) | ~HEIGHT.replaceWith(750) | ~X.replaceWith(RIGHT_EDGE) | ~Y.replaceWith(TOP_EDGE) {

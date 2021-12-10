@@ -34,9 +34,9 @@
 	EpicStudio Bookmark Comment		-			-					-					SELECT
 
 	; Web popups - close on Escape.
-	Chrome Join								CLOSE
-	Chrome TickTick						CLOSE
-	Chrome Messages						CLOSE
+	Chrome Join								CLOSE		-					-					-					-			-				ESCAPE
+	Chrome TickTick						CLOSE		-					-					-					-			-				ESCAPE
+	Chrome Messages						CLOSE		-					-					-					-			-				ESCAPE
 
 	; Windows taskbars - don't minimize.
 	Windows Taskbar						-			NONE

@@ -30,6 +30,9 @@
 	^RButton::Chrome.copyLinkTarget() ; Copy
 	^MButton::Chrome.openLinkTarget() ; Open
 	
+	; Send page to IE/Edge
+	^+s::Config.runProgram("Internet Explorer", Chrome.getURL())
+	
 	; Extension-specific handling
 	!t::Telegram.shareURL(Chrome.getURL()) ; Share to Telegram.
 	^!d::Send, !+d ; Deluminate - site-level hotkey (Chrome won't let me bind this directly)

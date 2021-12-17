@@ -109,6 +109,10 @@ class EpicRecord {
 		if(recordString = "")
 			return
 		
+		; Replace any sets of multiple spaces with singles
+		while(recordString.contains("  "))
+			recordString := recordString.replace("  "," ")
+		
 		; 1) Title [R INI ID]
 		if(recordString.contains("[R ") && recordString.contains("]")) {
 			; Title is everything up to the opening square bracket

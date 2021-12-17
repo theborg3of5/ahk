@@ -147,8 +147,9 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		value := value.removeFromStart("Date change notification for ") ; Date change notifications
 		value := value.removeFromStart("Application removed from ")
 		value := value.removeFromStart("Priority Queue: ")
-		if(value.startsWith("PRJ Readiness  "))
-			value := value.replaceOne("PRJ Readiness  ", "PRJ ")
+		value := value.removeFromStart("[Signed] ")
+		if(value.startsWith("PRJ Readiness "))
+			value := value.replaceOne("PRJ Readiness ", "PRJ ")
 		if(value.startsWith("EMC2 Lock: ")) {
 			value := value.removeFromStart("EMC2 Lock: ").removeFromEnd(" is locked")
 			title   := value.beforeString(" [")

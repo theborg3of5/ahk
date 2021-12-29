@@ -220,16 +220,14 @@ class DebugTable extends TextTable {
 	; RETURNS:        The chosen name
 	;---------
 	getObjectName(value) {
-		className := value.__Class
-		
 		; For simple arrays and objects, use a generic label and add the number of elements.
-		if(className = "ArrayBase")
+		if(DataLib.isArray(value))
 			return "Array [" value.count() "]"
-		if(className = "ObjectBase")
+		if(DataLib.isObject(value))
 			return "Object {" value.count() "}"
 		
 		; Otherwise just use the class name.
-		return className
+		return value.__Class
 	}
 	; #END#
 }

@@ -4,6 +4,30 @@ class DataLib {
 	; #PUBLIC#
 	
 	;---------
+	; DESCRIPTION:    Check whether the given value is an array, by checking whether its base class is ArrayBase (set in
+	;                 this script library in arrayBase.ahk).
+	; PARAMETERS:
+	;  value (I,REQ) - Value to check
+	; RETURNS:        true/false
+	;---------
+	isArray(value) {
+		return value.__Class = "ArrayBase"
+	}
+	
+	;---------
+	; DESCRIPTION:    Check whether the given value is an object (versus an array), by checking whether its base class is
+	;                 ObjectBase (set in this script library in objectBase.ahk).
+	; PARAMETERS:
+	;  value (I,REQ) - Value to check
+	; RETURNS:        true/false
+	; NOTES:          If you just need to check whether something is an array or object vs. a simple value, just use the
+	;                 built-in IsObject().
+	;---------
+	isObject(value) {
+		return value.__Class = "ObjectBase"
+	}
+	
+	;---------
 	; DESCRIPTION:    Determine whether the provided object is empty, also checking if it's null.
 	; PARAMETERS:
 	;  obj (I,REQ) - The object/array to check.

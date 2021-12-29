@@ -2321,6 +2321,18 @@
                 <Param name="hexNum" />
             </Overload>
         </KeyWord>
+        <KeyWord name="DataLib.isArray" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the given value is an array, by checking whether its base class is ArrayBase (set in
+							;                 this script library in arrayBase.ahk).
+							; PARAMETERS:
+							;  value (I,REQ) - Value to check
+							; RETURNS:        true/false
+							;---------">
+                <Param name="value" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="DataLib.isNullOrEmpty" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -2330,6 +2342,20 @@
 							; RETURNS:        true if the provided object is null (including &quot;&quot;) or empty (no values inside), false otherwise.
 							;---------">
                 <Param name="obj" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="DataLib.isObject" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the given value is an object (versus an array), by checking whether its base class is
+							;                 ObjectBase (set in this script library in objectBase.ahk).
+							; PARAMETERS:
+							;  value (I,REQ) - Value to check
+							; RETURNS:        true/false
+							; NOTES:          If you just need to check whether something is an array or object vs. a simple value, just use the
+							;                 built-in IsObject().
+							;---------">
+                <Param name="value" />
             </Overload>
         </KeyWord>
         <KeyWord name="DataLib.max" func="yes">

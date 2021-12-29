@@ -1597,7 +1597,7 @@
 							; RETURNS:        true if we successfully copied something, false otherwise.
 							;---------">
                 <Param name="boundFunc" />
-                <Param name="timeout" />
+                <Param name="timeout := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.copyWithHotkey" func="yes">
@@ -1624,7 +1624,7 @@
 							; RETURNS:        The copied content.
 							;---------">
                 <Param name="boundFunc" />
-                <Param name="timeout" />
+                <Param name="timeout := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ClipboardLib.getWithHotkey" func="yes">

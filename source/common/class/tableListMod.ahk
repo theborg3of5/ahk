@@ -77,15 +77,16 @@ class TableListMod {
 	executeMod(ByRef row) {
 		columnValue := row[this.column]
 		
-		; Each of these should have a matching stub + documentation in the (@)NPP-TABLELIST section.
-		Switch this.operation {
-			Case "addToStart":  newValue := this.text columnValue
-			Case "addToEnd":    newValue := columnValue this.text
-			Case "replaceWith": newValue := this.text
-			Case "defaultTo":   newValue := (columnValue != "") ? columnValue : this.text
+		if(DataLib.isArray(columnValue)) {
+			newValue := []
+			For _,value in columnValue {
+				newValue.Push(this.executeOnce(value))
+			}
+		} else {
+			newValue := this.executeOnce(columnValue)
 		}
 		
-		; Debug.popup("Row", row, "Column value to modify", columnValue, "Operation", this.operation, "Text", this.text, "Result", newValue, "Mod",this)
+		; Debug.popup("Row",row, "Column to modify",this.column, "Column value to modify",columnValue, "Operation",this.operation, "Text",this.text, "Result",newValue, "Mod",this)
 		
 		; Put the column back into the full row.
 		row[this.column] := newValue
@@ -127,5 +128,22 @@ class TableListMod {
 	column    := "" ; The name of the column to operate on
 	operation := "" ; The operation to perform
 	text      := "" ; The text to use
+	
+	
+	;---------
+	; DESCRIPTION:    Execute the mod on a single value.
+	; PARAMETERS:
+	;  value (I,REQ) - The value to use.
+	; RETURNS:        The updated result.
+	;---------
+	executeOnce(value) {
+		; Each of these should have a matching stub + documentation in the (@)NPP-TABLELIST section.
+		Switch this.operation {
+			Case "addToStart":  return this.text value
+			Case "addToEnd":    return value this.text
+			Case "replaceWith": return this.text
+			Case "defaultTo":   return (value != "") ? value : this.text
+		}
+	}
 	; #END#
 }

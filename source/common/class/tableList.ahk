@@ -585,14 +585,14 @@ class TableList {
 			if(value = this.Char_Placeholder)
 				rowAry.Delete(i)
 		
-		; Apply any active mods.
-		this.applyMods(rowAry)
-		
 		; Split up any entries that include the multi-entry character (pipe).
 		For i,value in rowAry {
 			if(value.contains(this.Char_MultiEntry))
 				rowAry[i] := this.splitMultiEntry(value)
 		}
+		
+		; Apply any active mods.
+		this.applyMods(rowAry)
 		
 		this.table.push(rowAry)
 	}

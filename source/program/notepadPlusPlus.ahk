@@ -10,8 +10,8 @@
 	:X:.default::NotepadPlusPlus.sendDefaultingCodeString(clipboard)
 	
 	; Current file/folder operations
-	!c::  ClipboardLib.copyFilePathWithHotkey(      "!c")
-	^!#c::ClipboardLib.copyPathRelativeToSource(    "!c") ; Current file, but drop the usual EpicSource stuff up through the DLG folder.
+	!c::  ClipboardLib.copyFilePathWithHotkey(  "!c")
+	^!#c::ClipboardLib.copyPathRelativeToSource("!c") ; Current file, but drop the usual EpicSource stuff up through the DLG folder.
 	^+o::NotepadPlusPlus.openCurrentParentFolder()
 	
 	; For program scripts, swap to corresponding class script and back.

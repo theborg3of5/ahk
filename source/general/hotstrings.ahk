@@ -152,6 +152,9 @@
 	
 	; URLs
 	:X:lpv::Send, % "chrome-extension://hdokiejnpimakedhajhdlcegeplioahd/vault.html"
+	
+; [[ Useful strings ]] ===
+	:X:.tens::sendTenString()
 ; =--
 #If
 
@@ -175,6 +178,15 @@ sendArbitraryTime(format) {
 		return ""
 	
 	new RelativeTime(timeString).sendInFormat(format)
+}
+
+sendTenString() {
+	length := InputBox("Insert Ten-String", "How long can your text be?")
+	if(!length)
+		return
+	
+	baseString := "1234567890"
+	Send, % StringLib.duplicate(baseString, length // 10) baseString.sub(1, Mod(length, 10)) "|"
 }
 
 sendFilePath(folderName, subPath := "") {

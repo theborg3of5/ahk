@@ -1,4 +1,5 @@
 # New Ideas
+	Consider combining major/"minor" versions of Epic environments - just pass the dotted version around and .replace() the dot when needed.
 	Insert-current-DLG hotkey: consider a prompt for which window to pull from (like find-best-solution script does)
 		find-best-solution script handling
 			List: all active processes' main windows' titles, search for record type (i.e. "DLG")

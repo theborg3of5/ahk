@@ -48,7 +48,7 @@
 		Process Explorer			<PROGRAM_FILES>\ProcessExplorer\procexp.exe
 	
 		GitHub Desktop				<USER_APPDATA_LOCAL>\GitHubDesktop\GitHubDesktop.exe
-		GrepWin						<USER_APPDATA_LOCAL>\Apps\grepWin\grepWin.exe								WORK_LAPTOP
+		GrepWin						<USER_APPDATA_LOCAL>\Programs\grepWin\grepWin.exe							WORK_LAPTOP
 		Slack							<USER_APPDATA_LOCAL>\slack\slack.exe											HOME_DESKTOP
 		Spotify						<USER_APPDATA>\Spotify\Spotify.exe
 		Teams							<USER_APPDATA_LOCAL>\Microsoft\Teams\current\Teams.exe					WORK_LAPTOP

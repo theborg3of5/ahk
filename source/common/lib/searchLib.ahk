@@ -136,7 +136,7 @@ class SearchLib {
 		
 		args := "/regex:no"
 		args .= " /searchpath:" QUOTE pathToSearch " " QUOTE ; Extra space after path, otherwise trailing backslash escapes ending double quote
-		args .= " /searchfor:"  QUOTE searchTerm QUOTE
+		args .= " /searchfor:"  QUOTE searchTerm       QUOTE
 		args .= " /execute" ; Run it immediately if we got what to search for
 		
 		; Debug.popup("Path to search",pathToSearch, "To search",searchTerm, "Args",args)

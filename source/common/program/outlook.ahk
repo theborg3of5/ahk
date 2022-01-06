@@ -47,7 +47,6 @@ class Outlook {
 		title := this.getCurrentMessageTitle()
 		ClipboardLib.setAndToast(title, "title")
 	}
-	
 	;---------
 	; DESCRIPTION:    If the current email message's title describes an EMC2 object, open that object in web mode.
 	;---------
@@ -55,13 +54,47 @@ class Outlook {
 		title := this.getCurrentMessageTitle()
 		new ActionObjectEMC2(title).openWeb()
 	}
-	
 	;---------
 	; DESCRIPTION:    If the current email message's title describes an EMC2 object, open that object in edit mode.
 	;---------
 	openEMC2ObjectFromCurrentMessageEdit() {
 		title := this.getCurrentMessageTitle()
 		new ActionObjectEMC2(title).openEdit()
+	}
+	
+	;---------
+	; DESCRIPTION:    Copy the EMC2 record ID from the currently-selected TLG event to the clipboard.
+	;---------
+	copyEMC2RecordFromTLG() {
+		tlgString := SelectLib.getText()
+		if(tlgString = "")
+			return
+		
+		record := new EpicRecord().initFromTLGString(tlgString)
+		if(record.id)
+			ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
+	}
+	;---------
+	; DESCRIPTION:    Open the EMC2 record described in the currently selected TLG event in web.
+	;---------
+	openEMC2ObjectFromTLGWeb() {
+		tlgString := SelectLib.getText()
+		if(tlgString = "")
+			return
+		
+		record := new EpicRecord().initFromTLGString(tlgString)
+		new ActionObjectEMC2(record.id, record.ini).openWeb()
+	}
+	;---------
+	; DESCRIPTION:    Open the EMC2 record described in the currently selected TLG event in edit mode.
+	;---------
+	openEMC2ObjectFromTLGEdit() {
+		tlgString := SelectLib.getText()
+		if(tlgString = "")
+			return
+		
+		record := new EpicRecord().initFromTLGString(tlgString)
+		new ActionObjectEMC2(record.id, record.ini).openEdit()
 	}
 	
 	

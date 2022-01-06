@@ -94,6 +94,32 @@ class EpicRecord {
 		return this
 	}
 	
+	;---------
+	; DESCRIPTION:    Initialize the record based on a TLG string.
+	; PARAMETERS:
+	;  tlgString (I,REQ) - TLG string from Outlook TLG calendar.
+	; NOTES:          We assume there's only 1 record ID per string, so the first one will win.
+	; RETURNS:        this
+	;---------
+	initFromTLGString(tlgString) {
+		baseAry := Config.private["OUTLOOK_TLG_BASE"].split(["/", ","])
+		tlgAry := tlgString.split(["/", ","])
+		
+		recIDs := {}
+		For _,ini in ["SLG", "DLG", "PRJ", "QAN"] {
+			iniIndex := baseAry.contains("<" ini ">")
+			id := tlgAry[iniIndex]
+			
+			if(id != "") {
+				this.ini := ini
+				this.id  := id
+				Break
+			}
+		}
+		
+		return this
+	}
+	
 	
 	; #PRIVATE#
 	

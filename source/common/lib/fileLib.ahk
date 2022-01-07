@@ -83,6 +83,17 @@ class FileLib {
 			}
 		}
 		
+		; Redirect old paths that have been moved.
+		dbcDesignFolder := Config.path["EPIC_DBC_DESIGN"] "\" ; Add trailing backslash
+		if(path.startsWith(dbcDesignFolder)) { ; Old design documents
+			childFolder := path.firstBetweenStrings(dbcDesignFolder, "\")
+			folderYear := childFolder.sub(1, 4)
+			if(folderYear.isNum() && folderYear < 2020) { ; Year folders
+				path := path.replace(dbcDesignFolder, dbcDesignFolder "Old Design Documents\") ; Moved to subfolder
+				new Toast("Redirected path (old design document)").showMedium()
+			}
+		}
+		
 		; Debug.popup("Updated path",path, "Table",table)
 		return path
 	}

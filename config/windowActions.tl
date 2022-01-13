@@ -17,7 +17,6 @@
 	Explorer									MIN		OTHER				-					-					-			-				ESCAPE
 	Explorer									MIN		-					-					-					-			-				ESCAPE		WORK_VDI
 	GitHub Desktop							CLOSE		-					-					-					-			-				ESCAPE
-	GrepWin									CLOSE
 	Messenger								MIN		-					-					-					-			-				ESCAPE		HOME_DESKTOP
 	Notepad									CLOSE
 	Skype										CLOSE

@@ -6,12 +6,11 @@ class EpicLib {
 	;---------
 	; DESCRIPTION:    Run Hyperspace locally for the given version and environment.
 	; PARAMETERS:
-	;  versionMajor (I,REQ) - Major version (before the dot in dotted version)
-	;  versionMinor (I,REQ) - Minor version (last digit, after the dot in dotted version)
-	;  environment  (I,OPT) - EpicComm ID for the environment to connect to.
+	;  version     (I,REQ) - Dotted Hyperspace version
+	;  environment (I,OPT) - EpicComm ID for the environment to connect to.
 	;---------
-	runHyperspace(versionMajor, versionMinor, environment) {
-		Run(Config.private["HYPERSPACE_BASE"].replaceTags({"MAJOR":versionMajor, "MINOR":versionMinor, "ENVIRONMENT":environment}))
+	runHyperspace(version, environment) {
+		Run(Config.private["HYPERSPACE_BASE"].replaceTags({"VERSION":version, "VERSION_FLAT": version.remove(".") , "ENVIRONMENT":environment}))
 	}
 	
 	;---------

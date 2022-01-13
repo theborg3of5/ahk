@@ -31,7 +31,7 @@
 		selectHyperspace() {
 			data := new Selector("epicEnvironments.tls").setTitle("Launch Hyperspace in Environment").selectGui()
 			if(data)
-				EpicLib.runHyperspace(data["MAJOR"], data["MINOR"], data["COMM_ID"])
+				EpicLib.runHyperspace(data["VERSION"], data["COMM_ID"])
 		}
 	
 	^!+i::

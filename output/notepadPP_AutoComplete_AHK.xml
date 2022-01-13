@@ -2956,12 +2956,10 @@
 							;---------
 							; DESCRIPTION:    Run Hyperspace locally for the given version and environment.
 							; PARAMETERS:
-							;  versionMajor (I,REQ) - Major version (before the dot in dotted version)
-							;  versionMinor (I,REQ) - Minor version (last digit, after the dot in dotted version)
-							;  environment  (I,OPT) - EpicComm ID for the environment to connect to.
+							;  version     (I,REQ) - Dotted Hyperspace version
+							;  environment (I,OPT) - EpicComm ID for the environment to connect to.
 							;---------">
-                <Param name="versionMajor" />
-                <Param name="versionMinor" />
+                <Param name="version" />
                 <Param name="environment" />
             </Overload>
         </KeyWord>
@@ -3036,6 +3034,18 @@
 							; RETURNS:        this
 							;---------">
                 <Param name="recordString" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicRecord.initFromTLGString" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Initialize the record based on a TLG string.
+							; PARAMETERS:
+							;  tlgString (I,REQ) - TLG string from Outlook TLG calendar.
+							; NOTES:          We assume there's only 1 record ID per string, so the first one will win.
+							; RETURNS:        this
+							;---------">
+                <Param name="tlgString" />
             </Overload>
         </KeyWord>
         <KeyWord name="EpicRecord.recordString" func="yes">

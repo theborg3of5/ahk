@@ -81,6 +81,12 @@
 		if(title.endsWith(" - NullException"))
 			title := "NullEx - " title.removeFromEnd(" - NullException")
 		
+		; Guru pages don't need the ending
+		if(title.endsWith(" - Guru")) {
+			title := title.removeFromEnd(" - Guru")
+			title := title.removeFromEnd("'s Profile") ; Profiles are pretty self-explanatory with just the person's name, too.
+		}
+		
 		; SLGs in "basic" web mode just show the URL as the title - transform that into an EMC2 record string instead.
 		if(title.startsWith(Config.private["EMC2_SLG_TITLE_URL_START"]))
 			title := "SLG " title.removeFromStart(Config.private["EMC2_SLG_TITLE_URL_START"])

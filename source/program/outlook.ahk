@@ -39,9 +39,14 @@
 	!e::Outlook.openEMC2ObjectFromCurrentMessageEdit()
 #If
 
+; Normal calendar
+#If Outlook.isNormalCalendarActive()
+	!c::Outlook.copyEMC2ObjectFromEvent()
+	!w::new ActionObject(SelectLib.getText()).openWeb()
+	!e::new ActionObject(SelectLib.getText()).openEdit()
 ; TLG calendar
 #If Outlook.isTLGCalendarActive()
-	!c::Outlook.copyEMC2RecordFromTLG()
+	!c::Outlook.copyEMC2ObjectFromTLG()
 	!w::Outlook.openEMC2ObjectFromTLGWeb()
 	!e::Outlook.openEMC2ObjectFromTLGEdit()
 #If

@@ -9,6 +9,14 @@ class Outlook {
 		return this.areAnyOfFoldersActive([this.TLGFolder])
 	}
 	
+	;---------
+	; DESCRIPTION:    Check whether the normal calendar is currently active.
+	; RETURNS:        true/false
+	;---------
+	isNormalCalendarActive() {
+		return this.areAnyOfFoldersActive([this.CalendarFolder])
+	}
+	
 	
 	; #INTERNAL#
 	
@@ -63,9 +71,22 @@ class Outlook {
 	}
 	
 	;---------
+	; DESCRIPTION:    Copy the EMC2 record ID from the currently-selected calendar event to the clipboard.
+	;---------
+	copyEMC2ObjectFromEvent() {
+		eventTitle := SelectLib.getText()
+		if(eventTitle = "")
+			return
+		
+		record := new EpicRecord(eventTitle)
+		if(record.id)
+			ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
+	}
+	
+	;---------
 	; DESCRIPTION:    Copy the EMC2 record ID from the currently-selected TLG event to the clipboard.
 	;---------
-	copyEMC2RecordFromTLG() {
+	copyEMC2ObjectFromTLG() {
 		tlgString := SelectLib.getText()
 		if(tlgString = "")
 			return
@@ -106,7 +127,8 @@ class Outlook {
 	
 	; Folder names for different areas
 	static TLGFolder := "TLG"
-	static CalendarFolders := ["Calendar", "TLG"]
+	static CalendarFolder := "Calendar"
+	static CalendarFolders := [this.TLGFolder, this.CalendarFolder]
 	static MailFolders := ["Inbox", "Wait", "Later Use", "Archive", "Sent Items", "Drafts", "Deleted Items"]
 	
 	;---------

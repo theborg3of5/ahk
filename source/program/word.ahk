@@ -46,6 +46,7 @@
 	; Toggle dark/light mode.
 	!d::
 		Send, !w ; View
+		Sleep, 100
 		Send, m1 ; Dark mode
 	return
 	

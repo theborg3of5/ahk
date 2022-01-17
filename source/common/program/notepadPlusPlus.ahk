@@ -38,7 +38,7 @@ class NotepadPlusPlus {
 	; DESCRIPTION:    For program scripts, swap between the program script and its matching class script.
 	;---------
 	toggleProgramAndClass() {
-		currScriptPath := WinGetActiveTitle().beforeString(" - Notepad++", true)
+		currScriptPath := WinGetActiveTitle().beforeString(" - Notepad++", true).removeFromStart("*")
 		SplitPath(currScriptPath, scriptName)
 		
 		if(currScriptPath.startsWith(Config.path["AHK_SOURCE"] "\program\"))

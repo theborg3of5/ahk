@@ -91,15 +91,24 @@ class OneNoteTodoPage {
 		todos.push({tag:1, text:"Move to Final"})
 		todos.push({tag:5, text:"QA2 - "})
 		
-		For index,todo in todos {
-			if(index > 1)
-				Send, {Enter}
-			
-			Send, ^0 ; Clear tag
-			Send, % "^" todo.tag ; Apply new tag
-			
-			SendRaw, % todo.text
-		}
+		OneNoteTodoPage.sendItemsWithTags(todos)
+	}
+	
+	;---------
+	; DESCRIPTION:    Send the various sub-todos I add under most dev SU items.
+	;---------
+	insertDevSUTodos() {
+		todos := []
+		todos.push({tag:5, text:"Source logs to Stage 1"})
+		todos.push({tag:1, text:"Dev comp"})
+		todos.push({tag:5, text:"PQA1 - "})
+		todos.push({tag:1, text:"Move to Stage 1"})
+		todos.push({tag:5, text:"QA1 - "})
+		todos.push({tag:5, text:"PQA2 - "})
+		todos.push({tag:1, text:"Move to Final"})
+		todos.push({tag:5, text:"QA2 - "})
+		
+		OneNoteTodoPage.sendItemsWithTags(todos)
 	}
 	
 	;---------
@@ -385,6 +394,24 @@ class OneNoteTodoPage {
 				Send, {Enter}
 			
 			SendRaw, % item
+		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Send the given items with the given tags (defined and applied via ctrl + # hotkeys).
+	; PARAMETERS:
+	;  items (I,REQ) - Array of item objects, format:
+	;                    items[ln] := {tag:tagNumber, text:itemText}
+	;---------
+	sendItemsWithTags(items) {
+		For index,item in items {
+			if(index > 1)
+				Send, {Enter}
+			
+			Send, ^0 ; Clear tag
+			Send, % "^" item.tag ; Apply new tag
+			
+			SendRaw, % item.text
 		}
 	}
 	

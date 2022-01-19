@@ -92,14 +92,9 @@
 	^+#m::        OneNoteTodoPage.copyForTomorrow()      ; New page for tomorrow
 	:*X:.todo::   OneNoteTodoPage.peekOtherTodos()       ; Peek at past/future todo items
 	:*X:.itodo::  OneNoteTodoPage.insertOtherTodos()     ; Insert past/future todo items
-	:*X:.devdo::
-	:*X:.devtodo::
-		OneNoteTodoPage.insertDevTodos()       ; Typical dev list of todo sub-items
-	return
-	:*X:.pqado::
-	:*X:.pqatodo::
-		OneNoteTodoPage.insertPQATodos()       ; Typical PQA list of todo sub-items
-	return
+	:*X:.devdo::  OneNoteTodoPage.insertDevTodos()       ; Typical dev list of todo sub-items
+	:*X:.sudo::   OneNoteTodoPage.insertDevSUTodos()     ; Typical dev SU list of todo sub-items
+	:*X:.pqado::  OneNoteTodoPage.insertPQATodos()       ; Typical PQA list of todo sub-items
 	
 	; Update links for a dev structure section header
 	!+#n::OneNote.linkDevStructureSectionTitle()

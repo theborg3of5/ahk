@@ -73,7 +73,7 @@
 				Greenshot Capture						Greenshot.exe				-									Greenshot capture form
 				Greenshot Image Editor				Greenshot.exe				-									Greenshot image editor
 				GrepWin									grepWin.exe
-				Hyperspace								EpicD101.exe
+				Hyperspace								EpicD102.exe
 				Internet Explorer						IEXPLORE.EXE
 				KDiff										kdiff3.exe					-									- KDiff3
 				Launchy									Launchy.exe

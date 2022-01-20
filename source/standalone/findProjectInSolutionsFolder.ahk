@@ -28,7 +28,7 @@ ExitApp
 findSolutions(projectName) {
 	tt := new TextTable().setBorderType(TextTable.BorderType_Line)
 	
-	searchRoot := Config.private["EPIC_SOURCE_S1"] "\" Config.private["EPIC_HSWEB_SOLUTIONS"] "\"
+	searchRoot := Config.path["EPIC_SOURCE_S1"] "\" Config.private["EPIC_HSWEB_SOLUTIONS"] "\"
 	Loop, Files, % searchRoot "*.sln", RF ; [R]ecursive, [F]iles (not [D]irectories)
 	{
 		content := FileRead(A_LoopFilePath)

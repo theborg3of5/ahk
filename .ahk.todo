@@ -34,9 +34,9 @@
 	CodeSearch: looks like the URL can include the full path now, could we use that to open in client instead of the search approach?
 	Could we make it easier to update current version of Hyperspace?
 		Places I have to change now:
-			Source folders in privates
+			Source folder in privates
 			EXE in windows
-			Current environments in epicEnvironments
+			Current environments in epicEnvironments (+ add new SU lines)
 		Spots to update EMC2 version:
 			Path in programs
 			EXE in windows

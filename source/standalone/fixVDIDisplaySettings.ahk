@@ -35,7 +35,7 @@ Loop {
 ; Loop down through all entries and update the display setting.
 pt.nextStep("Fixing VDI entries (Esc to stop)")
 Loop {
-	Sleep, 250 ; Fields take a bit to load up sometimes.
+	Sleep, 750 ; Fields take a bit to load up sometimes.
 	
 	Control, ChooseString, Window - Large, ComboBox1, A
 	

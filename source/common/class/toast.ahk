@@ -51,6 +51,16 @@ class Toast {
 		
 		new Toast(toastText, overrides).showForSeconds(2)
 	}
+	
+	;---------
+	; DESCRIPTION:    Show a "blocking" toast (that stops execution while it's shown) for a medium time (2 seconds).
+	; PARAMETERS:
+	;  toastText      (I,OPT) - The text to show in the toast.
+	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be found in .getStyles().
+	;---------
+	BlockAndShowMedium(text, styleOverrides := "") {
+		new Toast(text, styleOverrides).blockingOn().showForSeconds(2)
+	}
 	; --=
 	
 	;---------

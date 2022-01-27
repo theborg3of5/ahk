@@ -49,7 +49,7 @@ RButton::
 	hexColor := getColorUnderMouse()
 	
 	ClipboardLib.set(hexColor)
-	new Toast("Clipboard set to hex color code:`n" hexColor).blockingOn().showMedium()
+	Toast.BlockAndShowMedium("Clipboard set to hex color code:`n" hexColor)
 	ExitApp
 return
 
@@ -62,7 +62,7 @@ return
 	rgbColor := "(" RGB["R"] "," RGB["G"] "," RGB["B"] ")"
 	
 	ClipboardLib.set(rgbColor)
-	new Toast("Clipboard set to RGB color code:`n" rgbColor).blockingOn().showMedium()
+	Toast.BlockAndShowMedium("Clipboard set to RGB color code:`n" rgbColor)
 	ExitApp
 return
 

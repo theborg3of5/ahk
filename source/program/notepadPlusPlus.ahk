@@ -31,7 +31,6 @@
 	:X:`;`;`;::  NotepadPlusPlus.sendDocHeader()
 	:X:ahkcont:: NotepadPlusPlus.sendContinuationBlock()
 	:X:ahkclass::NotepadPlusPlus.sendClassTemplate()
-	:X:ahkto:: Send, new Toast("").showMedium(){Left 15}
-	:X:ahketo::Send, new ErrorToast("").showMedium(){Left 15}
+	:X:ahkto:: Send, Toast.ShowMedium(""){Left 2}
 	:X:ahketo::Send, Toast.ShowError(""){Left 2}
 #If

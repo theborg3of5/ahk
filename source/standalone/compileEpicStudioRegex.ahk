@@ -40,6 +40,6 @@ Loop, Files, % "*.bits"
 	FileLib.replaceFileWithString(baseName ".regex", regexString)
 }
 
-new Toast("Compiled all .bits files into .regex files").blockingOn().showMedium()
+Toast.BlockAndShowMedium("Compiled all .bits files into .regex files")
 
 ExitApp

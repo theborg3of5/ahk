@@ -27,7 +27,7 @@ Loop, Files, %root%\*.tl*, RF
 	reformatFile(A_LoopFileFullPath)
 }
 
-new Toast("Reformatted all TL/TLS files in AHK root directory").blockingOn().showMedium()
+Toast.BlockAndShowMedium("Reformatted all TL/TLS files in AHK root directory")
 
 ExitApp
 

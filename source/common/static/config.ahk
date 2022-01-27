@@ -490,6 +490,8 @@ class Config {
 		
 		tags["AHK_ROOT"]           := this.getRoot()
 		
+		tags["EPIC_SOURCE_CURRENT"] := EpicLib.findCurrentVersionSourceFolder()
+		
 		return tags
 	}
 	; #END#

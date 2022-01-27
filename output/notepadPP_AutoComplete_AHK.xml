@@ -2951,6 +2951,15 @@
                 <Param name="serverLocation" />
             </Overload>
         </KeyWord>
+        <KeyWord name="EpicLib.findCurrentVersionSourceFolder" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Find the source folder of the current version, by looking for the biggest version number we have a
+							;                 folder for.
+							; RETURNS:        Full path to the current version's source folder (no trailing backslash).
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="EpicLib.runHyperspace" func="yes">
             <Overload retVal="" descr="
 							;---------

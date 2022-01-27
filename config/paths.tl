@@ -2,12 +2,13 @@
 
 [	NAME										KEY										PATH														CONTEXT	]
 
-	; Pass-throughs - paths which are retrieved/calculated in Config.loadPaths(). These can also be used in this file.
+	; Pass-throughs - paths which are retrieved/calculated in Config.getSystemPathTags(). These can also be used in this file.
 	AHK Root									AHK_ROOT
 	AppData (Roaming)						USER_APPDATA
 	AppData Local							USER_APPDATA_LOCAL
 	Command prompt path					CMD
 	Desktop									USER_DESKTOP
+	EpicSource (Current Version)		EPIC_SOURCE_CURRENT
 	Program Data							PROGRAM_DATA
 	Program Files							PROGRAM_FILES
 	Program Files (x86)					PROGRAM_FILES_86
@@ -27,7 +28,6 @@
 	Epic NFS Ask							EPIC_NFS_ASK
 	Epic Temp Daily						EPIC_TEMP_DAILY
 	Epic Personal							EPIC_PERSONAL
-	Epic Source Current					EPIC_SOURCE
 	Epic VDI Settings						EPIC_VDI_SETTINGS
 	Epic Environment TraceX Files		EPIC_HSWEB_TRACE
 	Epic Shared UX Resources			EPIC_UX_SHARED
@@ -48,8 +48,8 @@
 
 ~CONTEXT.replaceWith(WORK) {
 	; Work
-	Epic Source Current S1				EPIC_SOURCE_S1							<EPIC_SOURCE>\<EPIC_S1_FOLDER>
-	VB6 Compile								VB6_COMPILE								<EPIC_SOURCE>\Compile
+	Epic Source Current S1				EPIC_SOURCE_S1							<EPIC_SOURCE_CURRENT>\App St1
+	VB6 Compile								VB6_COMPILE								<EPIC_SOURCE_CURRENT>\Compile
 	Transaction Diff						TX_DIFF									C:\Program Files\TransactionDiff
 	Transaction Diff Results			TX_DIFF_OUTPUT							<USER_ROOT>\Dev\TransactionDiffOutput
 	EpicStudio Global Highlights		EPICSTUDIO_GLOBAL_HIGHLIGHTS		<EPIC_PERSONAL>\EpicStudioGlobalHighlights

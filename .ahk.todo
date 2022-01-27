@@ -28,7 +28,6 @@
 	CodeSearch: looks like the URL can include the full path now, could we use that to open in client instead of the search approach?
 	Could we make it easier to update current version of Hyperspace?
 		Places I have to change now:
-			Source folder in privates
 			Current environments in epicEnvironments (+ add new SU lines)
 			! Actually - all three of these are independent, and are updated at different times.
 				Environments update typically coincides with adding SU version lines, so centralizing that doesn't help.

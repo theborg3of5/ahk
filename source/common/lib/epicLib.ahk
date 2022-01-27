@@ -64,7 +64,7 @@ class EpicLib {
 	convertToSourceRelativePath(path) {
 		path := FileLib.cleanupPath(path)
 		
-		sourceRoot := Config.private["EPIC_SOURCE"] "\"
+		sourceRoot := Config.path["EPIC_SOURCE_CURRENT"] "\"
 		if(!path.startsWith(sourceRoot)) {
 			ClipboardLib.setAndToastError(path, "path", "Could not copy source-relative path", "Path is not in source root")
 			return ""
@@ -75,6 +75,30 @@ class EpicLib {
 		path := "\" path.afterString("\") ; Keep the leading backslash
 		
 		return path
+	}
+	
+	;---------
+	; DESCRIPTION:    Find the source folder of the current version, by looking for the biggest version number we have a
+	;                 folder for.
+	; RETURNS:        Full path to the current version's source folder (no trailing backslash).
+	;---------
+	findCurrentVersionSourceFolder() {
+		earliestVersion := 0.0
+		earliestPath := ""
+		
+		Loop, Files, C:\EpicSource\*, D
+		{
+			; Only consider #[#].# folders
+			if(!A_LoopFileName.matchesRegEx("\d{1,2}\.\d"))
+				Continue
+			
+			if(A_LoopFileName > earliestVersion) {
+				earliestVersion := A_LoopFileName
+				earliestPath := A_LoopFileLongPath
+			}
+		}
+		
+		return earliestPath
 	}
 	; #END#
 }

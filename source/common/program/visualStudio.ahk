@@ -7,7 +7,7 @@ class VisualStudio {
 	copyCodeLocationWithPath() {
 		path := ClipboardLib.getWithHotkey(this.Hotkey_CopyCurrentFile)
 		if(path = "") {
-			new ErrorToast("Failed to copy full code location", "Failed to get current file path").showMedium()
+			Toast.ShowError("Failed to copy full code location", "Failed to get current file path")
 			return ""
 		}
 		path := FileLib.cleanupPath(path)
@@ -28,7 +28,7 @@ class VisualStudio {
 	openParentFolder() {
 		path := ClipboardLib.getWithHotkey(this.Hotkey_CopyCurrentFile)
 		if(path = "") {
-			new ErrorToast("Failed to open parent folder", "Failed to get current file path").showMedium()
+			Toast.ShowError("Failed to open parent folder", "Failed to get current file path")
 			return ""
 		}
 		path := FileLib.cleanupPath(path)

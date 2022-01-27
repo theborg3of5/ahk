@@ -58,7 +58,7 @@ class Explorer {
 	getSelectedFolderEMC2Object() {
 		path := this.getSelectedPath()
 		if(path = "") {
-			new ErrorToast("Could not get EMC2 object for selected folder", "Could not get selected folder path").showMedium()
+			Toast.ShowError("Could not get EMC2 object for selected folder", "Could not get selected folder path")
 			return
 		}
 		
@@ -167,7 +167,7 @@ class Explorer {
 	getRelativeShortcutTarget() {
 		path := ClipboardLib.getWithHotkey(Explorer.Hotkey_CopyCurrentFile)
 		if(path = "") {
-			new ErrorToast("Failed to get file path for relative shortcut").showMedium()
+			Toast.ShowError("Failed to get file path for relative shortcut")
 			return ""
 		}
 		
@@ -182,7 +182,7 @@ class Explorer {
 	getRelativeSourceFolder() {
 		path := ClipboardLib.getWithHotkey(Explorer.Hotkey_CopyCurrentFolder)
 		if(path = "") {
-			new ErrorToast("Failed to get source folder path for relative shortcut").showMedium()
+			Toast.ShowError("Failed to get source folder path for relative shortcut")
 			return ""
 		}
 		

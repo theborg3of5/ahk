@@ -8,7 +8,7 @@
 	linkSelectedText() {
 		HotkeyLib.waitForRelease()
 		if(!Hyperlinker.linkSelectedText(Clipboard, errorMessage))
-			new ErrorToast("Failed to link selected text", errorMessage).showMedium()
+			Toast.ShowError("Failed to link selected text", errorMessage)
 	}
 
 ; Open - open a variety of different things based on the selected text.

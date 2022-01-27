@@ -313,7 +313,7 @@ class WindowActions {
 				Send, ^a
 			
 			Default:
-				new ErrorToast("Could not perform method", "Unknown action: " action).showMedium()
+				Toast.ShowError("Could not perform method", "Unknown action: " action)
 		}
 	}
 	
@@ -352,7 +352,7 @@ class WindowActions {
 				Send, {Esc}
 			
 			Default:
-				new ErrorToast("Could not perform method", "Method unknown: " method).showMedium()
+				Toast.ShowError("Could not perform method", "Method unknown: " method)
 		}
 	}
 	; #END#

@@ -203,7 +203,7 @@ class EpicStudio {
 		if(ClipboardLib.copyWithHotkey("^{Numpad9}")) ; Hotkey to copy code location to clipboard
 			return true
 		
-		new ErrorToast("Failed to get code location").showMedium()
+		Toast.ShowError("Failed to get code location")
 		return false
 	}
 	; #END#

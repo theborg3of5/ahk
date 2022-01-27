@@ -157,7 +157,7 @@ class Outlook {
 			title := ControlGetText(this.ClassNN_MailSubject_Edit, "A")
 		
 		if(title = "") {
-			new ErrorToast("Copy title failed", "Could not get title from message control").showMedium()
+			Toast.ShowError("Copy title failed", "Could not get title from message control")
 			return
 		}
 		

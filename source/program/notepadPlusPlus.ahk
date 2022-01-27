@@ -33,4 +33,5 @@
 	:X:ahkclass::NotepadPlusPlus.sendClassTemplate()
 	:X:ahkto:: Send, new Toast("").showMedium(){Left 15}
 	:X:ahketo::Send, new ErrorToast("").showMedium(){Left 15}
+	:X:ahketo::Send, Toast.ShowError(""){Left 2}
 #If

@@ -35,7 +35,7 @@ $!q::WindowActions.minimizeWindow()
 #+r::
 	selectResize() {
 		if(WindowLib.isNoMoveSizeWindow("A")) {
-			new ErrorToast("Invalid window for resizing").showShort()
+			Toast.ShowError("Invalid window for resizing")
 			return
 		}
 		

@@ -24,7 +24,7 @@ openPath(folderName) {
 		; If the folder doesn't exist, try to create it (with permission from user)
 		if(!FileLib.folderExists(folderPath)) {
 			if(!FileLib.folderExists(FileLib.getParentFolder(folderPath))) {
-				new ErrorToast("Could not open chosen folder", "Neither the folder nor its parent folder exist.").showMedium()
+				Toast.ShowError("Could not open chosen folder", "Neither the folder nor its parent folder exist.")
 				return ; Not going to try creating if not even the parent exists.
 			}
 			

@@ -131,7 +131,7 @@ class VB6 {
 		projectName := ControlGetText("PROJECT1")
 		dlgName := projectName.clean(["Project", "Group", "-"])
 		if(!dlgName.startsWith("DLG")) {
-			new ErrorToast("Failed to find DLG ID", "DLG name is not DLG######: " dlgName).showMedium()
+			Toast.ShowError("Failed to find DLG ID", "DLG name is not DLG######: " dlgName)
 			return ""
 		}
 		dlgId := dlgName.removeFromStart("DLG")

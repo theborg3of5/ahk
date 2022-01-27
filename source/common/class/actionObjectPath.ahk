@@ -75,7 +75,7 @@ class ActionObjectPath extends ActionObjectBase {
 	getLink() {
 		if(this.pathType = ActionObjectPath.PathType_FilePath) {
 			if(!FileExist(this.path)) { ; Don't try to open a non-existent local path
-				new ErrorToast("Local file or folder does not exist", this.path).showMedium()
+				Toast.ShowError("Local file or folder does not exist", this.path)
 				return ""
 			}
 		}

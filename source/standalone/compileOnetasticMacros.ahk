@@ -104,7 +104,7 @@ getFunction(name) {
 	if(!allFunctionObjects[name]) {
 		filepath := Config.path["ONETASTIC_FUNCTIONS"] "\" name ".xml"
 		if(!FileExist(filepath)) {
-			new ErrorToast("Could not load function: " name, "File does not exist: " filepath).showMedium()
+			Toast.ShowError("Could not load function: " name, "File does not exist: " filepath)
 			return ""
 		}
 		

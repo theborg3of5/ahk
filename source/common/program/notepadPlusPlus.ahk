@@ -19,7 +19,7 @@ class NotepadPlusPlus {
 	openCurrentParentFolder() {
 		filePath := ClipboardLib.getWithHotkey("!c")
 		if(!filePath) {
-			new ErrorToast("Could not open parent folder", "Failed to retrieve current file path").showMedium()
+			Toast.ShowError("Could not open parent folder", "Failed to retrieve current file path")
 			return
 		}
 		
@@ -27,7 +27,7 @@ class NotepadPlusPlus {
 		parentFolder := FileLib.getParentFolder(filePath)
 		
 		if(!FileLib.folderExists(parentFolder)) {
-			new ErrorToast("Could not open parent folder", "Folder does not exist: " parentFolder).showMedium()
+			Toast.ShowError("Could not open parent folder", "Folder does not exist: " parentFolder)
 			return
 		}
 		
@@ -160,7 +160,7 @@ class NotepadPlusPlus {
 	sendClassTemplate() {
 		templateString := FileRead(Config.path["AHK_TEMPLATE"] "\class.ahk")
 		if(!templateString) {
-			new ErrorToast("Could not insert AHK class template", "Could not read template file").showMedium()
+			Toast.ShowError("Could not insert AHK class template", "Could not read template file")
 			return
 		}
 		

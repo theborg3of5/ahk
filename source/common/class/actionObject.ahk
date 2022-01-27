@@ -106,7 +106,7 @@ class ActionObject {
 			Case this.Type_Path:       return new ActionObjectPath(      this.value, this.subType)
 		}
 		
-		new ErrorToast("Unrecognized type", "ActionObject doesn't know what to do with this type: " this.type).showMedium()
+		Toast.ShowError("Unrecognized type", "ActionObject doesn't know what to do with this type: " this.type)
 		return ""
 	}
 	; #END#

@@ -19,7 +19,7 @@ class Onetastic {
 		
 		ClipboardLib.set(xml) ; Can't use ClipboardLib.setAndToast() because we don't want to show all of the XML
 		if(Clipboard = "")
-			new ErrorToast("Failed to get XML").showMedium()
+			Toast.ShowError("Failed to get XML")
 		else
 			new Toast("Clipboard set to new XML").showMedium()
 		

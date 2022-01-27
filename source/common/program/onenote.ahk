@@ -196,7 +196,7 @@ class OneNote {
 		if(recordText.endsWith(" *")) {
 			newId := clipboard.clean()
 			if(!newId.sub(2).isNum()) { ; Safety check: ID should be numeric after first character (for SU DLGs)
-				new ErrorToast("No record ID found", "Neither the line text nor the clipboard contained a valid record ID").showMedium()
+				Toast.ShowError("No record ID found", "Neither the line text nor the clipboard contained a valid record ID")
 				return
 			}
 			
@@ -230,7 +230,7 @@ class OneNote {
 	getLinkToCurrentPage() {
 		copiedLink := OneNote.getLinkToCurrentParagraph()
 		if(copiedLink = "") {
-			new ErrorToast("Could not get paragraph link on clipboard").showMedium()
+			Toast.ShowError("Could not get paragraph link on clipboard")
 			return
 		}
 		

@@ -40,7 +40,7 @@
 			new Toast("Got link target, opening:`n" path).showShort()
 			Run(path)
 		} else {
-			new ErrorToast("Failed to get link target").showMedium()
+			Toast.ShowError("Failed to get link target")
 		}
 	}
 	

@@ -30,12 +30,34 @@
 class Toast {
 	; #PUBLIC#
 	
+	; [[Static one-off "show a toast" methods]] =--
+	;---------
+	; DESCRIPTION:    Show an error toast (styled to stand out and look like a problem) for a medium time (2 seconds).
+	; PARAMETERS:
+	;  problemMessage    (I,REQ) - Text about what the problem is (what happened or weren't we able to do?)
+	;  errorMessage      (I,OPT) - Technical error text (what happened code-wise?)
+	;  mitigationMessage (I,OPT) - What we did instead (what did we do to make the failure less impactful?)
+	;---------
+	ShowError(problemMessage, errorMessage := "", mitigationMessage := "") {
+		toastText := Toast.buildErrorText(problemMessage, errorMessage, mitigationMessage)
+		
+		overrides := {}
+		overrides["BACKGROUND_COLOR"] := "000000" ; Black
+		overrides["FONT_COLOR"]       := "CC9900" ; Dark yellow/gold
+		overrides["FONT_SIZE"]        := 22
+		overrides["MARGIN_X"]         := 6
+		overrides["MARGIN_Y"]         := 1
+		overrides["TEXT_ALIGN"]       := "Right"
+		
+		new Toast(toastText, overrides).showForSeconds(2)
+	}
+	; --=
+	
 	;---------
 	; DESCRIPTION:    Create a new Toast object.
 	; PARAMETERS:
 	;  toastText      (I,OPT) - The text to show in the toast.
-	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be
-	;                           found in .getStyles().
+	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be found in .getStyles().
 	;---------
 	__New(toastText := "", styleOverrides := "") {
 		this.buildGui(styleOverrides)
@@ -397,6 +419,32 @@ class Toast {
 			WinSet, Transparent, % startOpacity + (A_Index * stepSize), % "ahk_id " this.guiId
 			Sleep, 10 ; 10ms between steps - can vary fade speed with number of steps
 		}
+	}
+	
+	;---------
+	; DESCRIPTION:    Build the toast text to show for an error based on which bits of info we got.
+	; PARAMETERS:
+	;  problemMessage    (I,REQ) - Text about what the problem is (what happened or weren't we able to do?)
+	;  errorMessage      (I,OPT) - Technical error text (what happened code-wise?)
+	;  mitigationMessage (I,OPT) - What we did instead (what did we do to make the failure less impactful?)
+	; RETURNS:        A single string including whatever was populated. Format:
+	;                   problemMessage:
+	;                   errorMessage
+	;                   
+	;                   mitigationMessage
+	; NOTES:          If any of the bits are missing, their respective line will not be included (for
+	;                 mitigationMessage, that includes the extra newline too).
+	;---------
+	buildErrorText(problemMessage, errorMessage, mitigationMessage) {
+		text := problemMessage
+		
+		if(errorMessage != "")
+			text .= ":`n" errorMessage ; Add colon to previous line
+		
+		if(mitigationMessage != "")
+			text .= "`n`n" mitigationMessage
+		
+		return text
 	}
 	; #END#
 }

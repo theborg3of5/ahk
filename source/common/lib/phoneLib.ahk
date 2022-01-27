@@ -69,7 +69,7 @@ class PhoneLib {
 		; Get the raw number (with leading digits as needed) to plug into the URL.
 		rawNumber := PhoneLib.getRawNumber(formattedNum)
 		if(rawNumber = "") {
-			new ErrorToast("Could not make call", "Phone number is invalid: " formattedNum).showMedium()
+			Toast.ShowError("Could not make call", "Phone number is invalid: " formattedNum)
 			return
 		}
 		

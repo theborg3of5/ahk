@@ -29,7 +29,7 @@ class RunLib {
 	;---------
 	runAsUser(path, args := "") {
 		if(!FileExist(path)) {
-			new ErrorToast("Could not run path", "Does not exist: " path).showMedium()
+			Toast.ShowError("Could not run path", "Does not exist: " path)
 			return
 		}
 		

@@ -20,7 +20,7 @@ class RelativeDateTimeBase {
 	; NOTES:          Should be overridden by child class.
 	;---------
 	__New() {
-		new ErrorToast("RelativeDateTimeBase instance created", "RelativeDateTimeBase is a base class only, use a date/time-specific child class instead.").showMedium()
+		Toast.ShowError("RelativeDateTimeBase instance created", "RelativeDateTimeBase is a base class only, use a date/time-specific child class instead.")
 		return ""
 	}
 	
@@ -110,7 +110,7 @@ class RelativeDateTimeBase {
 	; NOTES:          Just shows an error - should be overridden by the child class.
 	;---------
 	doShift(shiftAmount, unit) {
-		new ErrorToast("RelativeDateTimeBase.doShift called", "The child class should override doShift().").showMedium()
+		Toast.ShowError("RelativeDateTimeBase.doShift called", "The child class should override doShift().")
 	}
 	
 	

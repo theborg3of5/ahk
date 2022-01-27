@@ -52,12 +52,12 @@
 	openCurrentDLGInEpicStudio() {
 		ao := new ActionObjectEMC2(Chrome.getTitle())
 		if(ao.ini != "DLG") {
-			new ErrorToast("Failed to launch DLG in EpicStudio", "Object was not a DLG").showMedium()
+			Toast.ShowError("Failed to launch DLG in EpicStudio", "Object was not a DLG")
 			return
 		}
 		
 		if(ao.id = "") {
-			new ErrorToast("Failed to launch DLG in EpicStudio", "No DLG ID found").showMedium()
+			Toast.ShowError("Failed to launch DLG in EpicStudio", "No DLG ID found")
 			return
 		}
 		
@@ -145,7 +145,7 @@
 			new Toast("Got link target, opening:`n" path).showShort()
 			Run(path)
 		} else {
-			new ErrorToast("Failed to get link target").showMedium()
+			Toast.ShowError("Failed to get link target")
 		}
 	}
 	
@@ -262,7 +262,7 @@
 	runJavascriptCode(jsCode) {
 		; Safety check to prevent us from just entering "javascript:" in the title bar, which navigates to a Google search.
 		if(jsCode = "") {
-			new ErrorToast("Failed to run JS code", "Given code was blank").showMedium()
+			Toast.ShowError("Failed to run JS code", "Given code was blank")
 			return
 		}
 		

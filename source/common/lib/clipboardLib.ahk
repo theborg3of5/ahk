@@ -110,7 +110,7 @@ class ClipboardLib {
 	copyPathRelativeToSource(hotkeyKeys) {
 		path := ClipboardLib.getWithHotkey(hotkeyKeys)
 		if(!path) {
-			new ErrorToast("Could not copy source-relative path", "Failed to get file path").showMedium()
+			Toast.ShowError("Could not copy source-relative path", "Failed to get file path")
 			return
 		}
 		
@@ -160,7 +160,7 @@ class ClipboardLib {
 	;---------
 	setAndToastError(newValue, clipLabel, problemMessage, errorMessage := "") {
 		ClipboardLib.set(newValue)
-		new ErrorToast(problemMessage, errorMessage, "Clipboard set to " clipLabel ":`n" Clipboard).showMedium()
+		Toast.ShowError(problemMessage, errorMessage, "Clipboard set to " clipLabel ":`n" Clipboard)
 	}
 	
 	;---------
@@ -171,7 +171,7 @@ class ClipboardLib {
 	;---------
 	toastNewValue(clipLabel) {
 		if(Clipboard = "")
-			new ErrorToast("Failed to get " clipLabel).showMedium()
+			Toast.ShowError("Failed to get " clipLabel)
 		else
 			new Toast("Clipboard set to " clipLabel ":`n" Clipboard).showMedium()
 	}

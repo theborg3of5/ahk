@@ -27,7 +27,7 @@ class ActionObjectBase {
 	; NOTES:          Should not be called directly - all child classes should override this.
 	;---------
 	__New(value) {
-		new ErrorToast("ActionObjectBase instance created", "ActionObjectBase is a base class only, use a type-specific child class instead.").showMedium()
+		Toast.ShowError("ActionObjectBase instance created", "ActionObjectBase is a base class only, use a type-specific child class instead.")
 		return ""
 	}
 	
@@ -125,7 +125,7 @@ class ActionObjectBase {
 	; NOTES:          Should be overridden by child class.
 	;---------
 	getLink() {
-		new ErrorToast("ActionObjectBase.getLink() called directly", ".getLink() is not implemented by this child ActionObject* class").showMedium()
+		Toast.ShowError("ActionObjectBase.getLink() called directly", ".getLink() is not implemented by this child ActionObject* class")
 		return ""
 	}
 	;---------
@@ -157,7 +157,7 @@ class ActionObjectBase {
 	selectMissingInfo(ByRef value, ByRef subType, popupTitle := "") {
 		; ActionObjectType must be set by child to use this function.
 		if(this.ActionObjectType = "") {
-			new ErrorToast("No ActionObjectType found", "ActionObject* child did not override ActionObjectType property").showMedium()
+			Toast.ShowError("No ActionObjectType found", "ActionObject* child did not override ActionObjectType property")
 			return false
 		}
 		

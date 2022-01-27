@@ -141,7 +141,7 @@
 		; Get input
 		inputText := StringLib.dropLeadingTrailing(SelectLib.getText(), ["`r", "`n"]) ; Drop outer newlines
 		if(inputText = "") {
-			new ErrorToast("No help text selected").showShort()
+			Toast.ShowError("No help text selected")
 			return
 		}
 		

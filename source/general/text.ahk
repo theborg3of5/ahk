@@ -21,7 +21,7 @@ return
 		Send, {Shift Down}{Left %textLen%}{Shift Up}
 		
 		if(!Hyperlinker.linkSelectedText(url, errorMessage))
-			new ErrorToast("Failed to link text", errorMessage).showMedium()
+			Toast.ShowError("Failed to link text", errorMessage)
 	}
 
 ; Turn clipboard into standard string and send it.

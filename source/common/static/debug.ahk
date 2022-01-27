@@ -84,7 +84,7 @@ class Debug {
 		table := new DebugTable().setBorderType(TextTable.BorderType_BoldLine)
 		table.addPairs(params*)
 		
-		new Toast(table.getText()).showLong()
+		Toast.ShowLong(table.getText())
 	}
 	; #END#
 }

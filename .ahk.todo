@@ -25,9 +25,6 @@
 			Could we just replace it with a public flag (or public setter to a private flag, whatever) on Debug, so that the script itself could decide where the cutover point is?
 	Should I switch out the rest of the EPIC_ prefixes for privates and the like with WORK_?
 	Consider switching zoom mute toggle over to a click target within the zoom window - would that avoid the "ding" sound?
-	Would a static ErrorToast wrapper make sense, rather than having to do the whole new ErrorToast("").showMedium() thing each time?
-		Honestly do we just want a static method for Toast in general, for the simple calls?
-			So only get into the instance stuff when I need to set special settings or have it persist
 	CodeSearch: looks like the URL can include the full path now, could we use that to open in client instead of the search approach?
 	Could we make it easier to update current version of Hyperspace?
 		Places I have to change now:

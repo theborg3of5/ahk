@@ -11,7 +11,7 @@
 ;		t := new Toast("5-second timer toast!")
 ;		t.showForSeconds(5)
 ;		; OR:
-;		new Toast("5-second timer toast!").showLong()
+;		Toast.ShowLong("5-second timer toast!")
 ;		
 ;		; Show a toast, then hide it after finishing a longer-running action
 ;		t := new Toast("Running long action").persistentOn() ; Make it persistent so showing it on a timer doesn't destroy it
@@ -50,6 +50,16 @@ class Toast {
 	;---------
 	ShowMedium(text, styleOverrides := "") {
 		new Toast(text, styleOverrides).showForSeconds(2)
+	}
+	
+	;---------
+	; DESCRIPTION:    Show a toast for a long time (5 seconds).
+	; PARAMETERS:
+	;  text           (I,REQ) - Text to include in the toast.
+	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be found in .getStyles().
+	;---------
+	ShowLong(text, styleOverrides := "") {
+		new Toast(text, styleOverrides).showForSeconds(5)
 	}
 	
 	;---------
@@ -146,15 +156,6 @@ class Toast {
 	setParent(titleString) {
 		this.parentIdString := WindowLib.getIdTitleString(titleString)
 		return this
-	}
-	
-	;---------
-	; DESCRIPTION:    Wrapper for .showForSeconds for a "long" toast (shown for 5 seconds) in
-	;                 the bottom-right corner of the screen.
-	; RETURNS:        this
-	;---------
-	showLong() {
-		this.showForSeconds(5)
 	}
 	
 	;---------

@@ -61,7 +61,7 @@
 			return
 		}
 		
-		new Toast("Opening DLG in EpicStudio: " ao.id).showShort()
+		Toast.ShowShort("Opening DLG in EpicStudio: " ao.id)
 		new ActionObjectEpicStudio(ao.id, ActionObjectEpicStudio.DescriptorType_DLG).open()
 	}
 	
@@ -142,7 +142,7 @@
 	openLinkTarget() {
 		path := this.getLinkTarget()
 		if(path) {
-			new Toast("Got link target, opening:`n" path).showShort()
+			Toast.ShowShort("Got link target, opening:`n" path)
 			Run(path)
 		} else {
 			Toast.ShowError("Failed to get link target")

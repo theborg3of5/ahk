@@ -32,6 +32,17 @@ class Toast {
 	
 	; [[Static one-off "show a toast" methods]] =--
 	;---------
+	; DESCRIPTION:    Show a toast for a short time (1 second).
+	; PARAMETERS:
+	;  text           (I,REQ) - Text to include in the toast.
+	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be
+	;                           found in .getStyles().
+	;---------
+	ShowShort(text, styleOverrides := "") {
+		new Toast(text, styleOverrides).showForSeconds(1)
+	}
+	
+	;---------
 	; DESCRIPTION:    Show a toast for a medium time (2 seconds).
 	; PARAMETERS:
 	;  text           (I,REQ) - Text to include in the toast.
@@ -135,15 +146,6 @@ class Toast {
 	setParent(titleString) {
 		this.parentIdString := WindowLib.getIdTitleString(titleString)
 		return this
-	}
-	
-	;---------
-	; DESCRIPTION:    Wrapper for .showForSeconds for a "short" toast (shown for 1 second) in
-	;                 the bottom-right corner of the screen.
-	; RETURNS:        this
-	;---------
-	showShort() {
-		this.showForSeconds(1)
 	}
 	
 	;---------

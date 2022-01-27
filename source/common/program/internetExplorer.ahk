@@ -37,7 +37,7 @@
 	openLinkTarget() {
 		path := ClipboardLib.getWithFunction(ObjBindMethod(InternetExplorer, "getLinkTargetOnClipboard"))
 		if(path) {
-			new Toast("Got link target, opening:`n" path).showShort()
+			Toast.ShowShort("Got link target, opening:`n" path)
 			Run(path)
 		} else {
 			Toast.ShowError("Failed to get link target")

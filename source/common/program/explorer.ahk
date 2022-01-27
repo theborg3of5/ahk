@@ -223,7 +223,7 @@ class Explorer {
 		
 		; Create the shortcut and let the user know.
 		this.createRelativeShortcut(sourceFolder, relativePath)
-		new Toast("Created shortcuts!").showShort()
+		Toast.ShowShort("Created shortcuts!")
 	}
 	
 	;---------

@@ -1,4 +1,4 @@
-; [[ Standard base replacement ]] --=
+; [[ Standard base replacement ]] =--
 #Include %A_LineFile%\..\base
 	#Include stringBase.ahk
 	#Include arrayBase.ahk
@@ -31,9 +31,9 @@ Object(params*) {
 	; Return the new object.
 	return objectInstance
 }
-; =--
+; --=
 
-; [[ Includes ]] --=
+; [[ Includes ]] =--
 #Include %A_LineFile%\..\class
 	#Include actionObject.ahk
 	#Include duration.ahk
@@ -112,8 +112,8 @@ Object(params*) {
 	#Include VA.ahk
 	#Include windowActions.ahk
 	#Include windowPositions.ahk
-; =--
+; --=
 
-; [[ Initialization ]] --=
+; [[ Initialization ]] =--
 Config.Init()
-; =--
+; --=

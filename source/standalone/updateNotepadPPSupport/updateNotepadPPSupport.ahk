@@ -17,7 +17,7 @@ global ScopeStart_NonPublicScopes := ["; #INTERNAL#", "; #PRIVATE#", "; #DEBUG#"
 global ScopeEnd                   := "; #END#"
 
 
-; [[File paths]] --=
+; [[File paths]] =--
 ; Auto-completion
 path_CompletionTemplate_AHK := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete_AHK.xml"
 path_CompletionTemplate_TL  := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete_TL.xml"
@@ -37,7 +37,7 @@ path_CompletionActive_TL  := Config.path["PROGRAM_FILES"] "\Notepad++\autoComple
 path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml" ; This file is for all user-defined languages
 
 
-; [[ Extract data ]] ===
+; [[ Extract data ]] ---
 progToast.nextStep("Extracting data from scripts")
 
 ahkClasses := []
@@ -45,7 +45,7 @@ tlMembers  := []
 getDataFromScripts(ahkClasses, tlMembers)
 
 
-; [[ Auto-complete ]] ===
+; [[ Auto-complete ]] ---
 progToast.nextStep("Updating auto-complete files")
 
 newXML := updateCompletionXML_AHK(path_CompletionTemplate_AHK, ahkClasses)
@@ -57,7 +57,7 @@ FileLib.replaceFileWithString(path_CompletionOutput_TL, newXML)
 FileLib.replaceFileWithString(path_CompletionActive_TL, newXML)
 
 
-; [[ Syntax highlighting ]] ===
+; [[ Syntax highlighting ]] ---
 progToast.nextStep("Updating syntax highlighting file (requires restart)")
 
 newXML_AHK := updateSyntaxXML_AHK(path_SyntaxTemplate_AHK, ahkClasses)
@@ -74,7 +74,7 @@ else
 updateLangInSyntaxXML(activeSyntaxXML, "AutoHotkey", newXML_AHK)
 updateLangInSyntaxXML(activeSyntaxXML, "TableList",  newXML_TL)
 FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
-; =--
+; --=
 
 progToast.finish()
 ExitApp

@@ -1,6 +1,6 @@
 ; Hotkeys for opening different locations, both local (folders) and remote (URLs).
 
-; [[Local/Remote Paths]] --=
+; [[Local/Remote Paths]] =--
 ; Specific folders
  !+a::openPath("AHK_ROOT")
 $!+d::openPath("USER_DOWNLOADS")
@@ -64,7 +64,7 @@ sendCleanedUpPath(containingFolderOnly := false) {
 	}
 
 
-; [[Websites]] ===
+; [[Websites]] ---
 $^!+f::Run("http://feedly.com/i/latest") ; $ as Notepad++ highlight-all hotkey sends these keys
 ^!#m:: Config.runProgram("Gmail")
 ^!+a::
@@ -79,4 +79,4 @@ $^!+f::Run("http://feedly.com/i/latest") ; $ as Notepad++ highlight-all hotkey s
 ; OneNote Online
 !+o:: Run("https://www.onenote.com/notebooks")
 !+#t::Run(Config.private["ONENOTE_ONLINE_NOTEBOOK_DO"])
-; =--
+; --=

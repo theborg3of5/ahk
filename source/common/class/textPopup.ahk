@@ -1,4 +1,4 @@
-/* A dynamically-sized, scrollable, copyable popup of information in a monospace font. --=
+/* A dynamically-sized, scrollable, copyable popup of information in a monospace font. =--
       The popup does not use scrollbars, but still responds to mouse wheel events:
          * Wheel                - scroll vertically
          * Ctrl + Wheel         - scroll vertically one line at a time
@@ -12,7 +12,7 @@
 ;		tt.addRow("value4", "value5", "value6")
 ;     new TextPopup(tt) ; Results in a popup with this text: val1    val2    val3  
 ;		                                                       value4  value5  value6
-*/ ; =--
+*/ ; --=
 
 class TextPopup {
 	; #PUBLIC#

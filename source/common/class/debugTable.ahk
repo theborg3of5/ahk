@@ -1,7 +1,7 @@
-/* A debug class which generates a structured table of recursive information about the given values. --=
+/* A debug class which generates a structured table of recursive information about the given values. =--
 		Note that this really only works with monospace fonts.
 	
-	--= Motivation
+	=-- Motivation
 			This class is intended to show information in a more structured and considerably deeper way than simply showing the value of a variable. It:
 				* Recurses into objects
 				* Supports label-object pairs in a single function call (variadic arguments instead of building an array yourself)
@@ -79,8 +79,8 @@
 ;			┃     │ Descriptive name of property 2:  B │ ┃
 ;			┃     └────────────────────────────────────┘ ┃
 ;			┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-	=--
-*/ ; =--
+	--=
+*/ ; --=
 
 class DebugTable extends TextTable {
 	; #PUBLIC#

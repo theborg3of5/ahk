@@ -158,7 +158,7 @@ class Explorer {
 		return ""
 	}
 	
-	; [[Relative shortcuts]] --=
+	; [[Relative shortcuts]] =--
 	;---------
 	; DESCRIPTION:    Get the relative shortcut target using the current file in Explorer.
 	; RETURNS:        The path to the current file (cleaned up).
@@ -269,7 +269,7 @@ class Explorer {
 		
 		return sourceRelative targetRelative
 	}
-	; =--
+	; --=
 	
 	; #END#
 }

@@ -1,7 +1,7 @@
 #Include tableListMod.ahk
 
-/* Class that parses and processes a specially-formatted file. --=
-	--= Motivation
+/* Class that parses and processes a specially-formatted file. =--
+	=-- Motivation
 			The goal of the .tl/.tls file format is to allow the file to be formatted with tabs so that it looks like a table in plain text, regardless of the size of the contents.
 			
 			For example, say we want to store and reference a list of folder paths. A simple tab-delimited file might look something like this:
@@ -184,8 +184,8 @@
 						table[1, "PATH"]   = C:\Program Files (x86)\Spotify\Spotify.exe
 						<"Firefox" line excluded because it was blank for this column>
 			
-	=--
-*/ ; =--
+	--=
+*/ ; --=
 
 class TableList {
 	; #PUBLIC#

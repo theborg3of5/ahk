@@ -1,7 +1,7 @@
 ; note to self: this must be in UTF-8 encoding.
 
 #If !Config.windowIsGame()
-; [[ Personal info ]] --=
+; [[ Personal info ]] =--
 	:X:emaila:: Send, % Config.private["EMAIL"]
 	:X:gemaila::Send, % Config.private["EMAIL_2"]
 	:X:eemaila::Send, % Config.private["WORK_EMAIL"]
@@ -19,7 +19,7 @@
 	
 	:X:uname::Send, % Config.private["USERNAME"]
 
-; [[ Typo correction ]] ===
+; [[ Typo correction ]] ---
 	:*0:,3::<3
 	::<#::<3
 	::<43::<3
@@ -63,7 +63,7 @@
 	::cahrge::charge
 	::fitler::filter
 
-; [[ Expansions ]] ===
+; [[ Expansions ]] ---
 	::f'n::function
 	::def'n::definition
 	::int'l::international
@@ -87,7 +87,7 @@
 	
 	::.shrug::{U+AF}\_({U+30C4})_/{U+AF} ; ¯\_(ツ)_/¯ - 0xAF=¯, 0x30C4=ツ
 
-; [[ Date and time ]] ===
+; [[ Date and time ]] ---
 	:X:idate::Send, % FormatTime(A_Now, "M/d/yy")
 	:X:itime::Send, % FormatTime(A_Now, "h:mm tt")
 	
@@ -108,7 +108,7 @@
 	:X:adidate::sendArbitraryDate("dddd`, M/d")
 	:X:aitime:: sendArbitraryTime("h:mm tt")
 	
-; [[ Folders and paths ]] ===
+; [[ Folders and paths ]] ---
 	; General
 	:X:pff:: sendFolderPath("PROGRAM_FILES")
 	:X:xpff::sendFolderPath("PROGRAM_FILES_86")
@@ -153,12 +153,12 @@
 	; URLs
 	:X:lpv::Send, % "chrome-extension://hdokiejnpimakedhajhdlcegeplioahd/vault.html"
 	
-; [[ Useful strings ]] ===
+; [[ Useful strings ]] ---
 	:X:.tens::sendTenString()
-; =--
+; --=
 #If
 
-; [[Helper functions]] --=
+; [[Helper functions]] =--
 sendArbitraryDate(format) {
 	QUOTE := """"
 	
@@ -199,4 +199,4 @@ sendUnixFolderPath(folderName, subPath := "") {
 	FileLib.sendPath(folderName, subPath, "/", true)
 }
 
-; =--
+; --=

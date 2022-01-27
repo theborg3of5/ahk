@@ -1,4 +1,4 @@
-/* Provides a way to interact with windows with AHK at the size/position that they appear to be. --=
+/* Provides a way to interact with windows with AHK at the size/position that they appear to be. =--
 	
 	In Windows 10, windows are not always the size that they appear for AHK - there is sometimes a wider, invisible border offset around them between, making them look smaller (and further right/down) than they appear. This class provides a way to move and resize a window as if it was the size which it appears, plus a few additional features to save on the math required to say, align a window's right edge to the side of the monitor.
 	
@@ -25,7 +25,7 @@
 ;		window := new VisualWindow("A") ; Create a new VisualWindow representing the active window ("A")
 ;		window.move(VisualWindow.X_Centered, VisualWindow.Y_Centered) ; Center window
 	
-*/ ; =--
+*/ ; --=
 
 class VisualWindow {
 	; #PUBLIC#
@@ -90,7 +90,7 @@ class VisualWindow {
 		height := this.height + this.borderOffsets["BOTTOM"] + this.borderOffsets["TOP"]
 	}
 	
-	; [[ General movement/resizing (no snapping) ]] --=
+	; [[ General movement/resizing (no snapping) ]] =--
 	;---------
 	; DESCRIPTION:    Move the window to the specified coordinates (without snapping).
 	; PARAMETERS:
@@ -163,7 +163,7 @@ class VisualWindow {
 	}
 	
 	
-	; [[ Movement based on corners (supports snapping) ]] ===
+	; [[ Movement based on corners (supports snapping) ]] ---
 	;---------
 	; DESCRIPTION:    Move the top-left corner of the window to the given coordinate.
 	; PARAMETERS:
@@ -229,7 +229,7 @@ class VisualWindow {
 		this.applyPosition()
 	}
 	
-	; [[ Resizing based on corners (supports snapping) ]] ===
+	; [[ Resizing based on corners (supports snapping) ]] ---
 	;---------
 	; DESCRIPTION:    Resize the window so that the top-left corner is in the given coordinate.
 	; PARAMETERS:
@@ -294,7 +294,7 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
-	; =--
+	; --=
 	
 	;---------
 	; DESCRIPTION:    Turn on snapping - the window will "snap" to the end of the monitor within a
@@ -446,7 +446,7 @@ class VisualWindow {
 	}
 	
 	
-	; [[ Moving window so specific window edges are somewhere ]] --=
+	; [[ Moving window so specific window edges are somewhere ]] =--
 	mvLeftToX(x) {
 		this.leftX  := x
 		this.rightX := x + this.width
@@ -464,7 +464,7 @@ class VisualWindow {
 		this.bottomY := y
 	}
 	
-	; [[ Resizing window so specific window edges are somewhere ]] ===
+	; [[ Resizing window so specific window edges are somewhere ]] ---
 	rsLeftToX(x) {
 		this.leftX := x
 		this.width := this.rightX - x
@@ -482,7 +482,7 @@ class VisualWindow {
 		this.height  := y - this.topY
 	}
 	
-	; [[ Resizing window to a specific width/height (towards bottom-right corner) ]] ===
+	; [[ Resizing window to a specific width/height (towards bottom-right corner) ]] ---
 	rsToWidth(width) {
 		this.width  := width
 		this.rightX := this.leftX + width
@@ -492,7 +492,7 @@ class VisualWindow {
 		this.bottomY := this.topY + height
 	}
 	
-	; [[ Snapping ]] ===
+	; [[ Snapping ]] ---
 	mvSnap() {
 		if(!this.isSnapOn)
 			return
@@ -546,7 +546,7 @@ class VisualWindow {
 		}
 	}
 	
-	; [[ Special window sizes/positions (for window placement relative to monitor) ]] ===
+	; [[ Special window sizes/positions (for window placement relative to monitor) ]] ---
 	;---------
 	; DESCRIPTION:    Convert the given strings into proper width/height values, supporting various special values
 	;                 (VisualWindow.Width_*/.Height_*).
@@ -670,6 +670,6 @@ class VisualWindow {
 		; Debug.popup("y",y, "specialValues",specialValues, "bounds",bounds, "match",match, "offset",offset, "newY",newY, "this",this)
 		return newY
 	}
-	; =--
+	; --=
 	; #END#
 }

@@ -1,9 +1,9 @@
-/* Class for applying certain common hotkeys to a script, based on the type of script and certain flags. --=
+/* Class for applying certain common hotkeys to a script, based on the type of script and certain flags. =--
 	
 	Example usage:
 ;		CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 	
-*/ ; =--
+*/ ; --=
 
 class CommonHotkeys {
 	; #PUBLIC#

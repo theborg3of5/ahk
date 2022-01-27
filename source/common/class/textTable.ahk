@@ -1,4 +1,4 @@
-/* This class takes a table of values and turns it into an aligned plain-text table. --=
+/* This class takes a table of values and turns it into an aligned plain-text table. =--
 	NOTE: This only really works with a monospace font, as it aligns based on characters.
 	
 	Example Usage
@@ -34,7 +34,7 @@
 ;		┌───────── Fruits ─────────┐
 ;		│ apple | banana | coconut │
 ;		└────────── Yum! ──────────┘
-*/ ; =--
+*/ ; --=
 
 class TextTable {
 	; #PUBLIC#

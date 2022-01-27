@@ -1,8 +1,8 @@
 #Include selectorGui.ahk
 #Include selectorChoice.ahk
 
-/* Class that selects an option from a given set of choices, and returns info about that choice. --=
-	--= Choices
+/* Class that selects an option from a given set of choices, and returns info about that choice. =--
+	=-- Choices
 			Choices are read from a TableList Selector (.tls) file. See documentation for the TableList class for general file format (applies to .tl or tls files), and "File Format" below for additional Selector-specific details.
 			These choices may also be filtered (see the documentation for .dataTableList below) - this allows you to use a single file of information to be used in different ways.
 		
@@ -100,8 +100,8 @@
 ;			s := new Selector("C:\ahk\paths.tls")      ; Read in the "paths.tls" TLS file
 ;			path := s.selectChoice(pathAbbrev, "PATH") ; Return only the "PATH" value, not the whole return array
 			
-	=--
-*/ ; =--
+	--=
+*/ ; --=
 
 class Selector {
 	; #PUBLIC#

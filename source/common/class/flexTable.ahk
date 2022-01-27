@@ -1,5 +1,5 @@
-/* Class for placing text controls onto a GUI, in a special table where the whole table can wrap around to new columns. --=
-	--= Concept:
+/* Class for placing text controls onto a GUI, in a special table where the whole table can wrap around to new columns. =--
+	=-- Concept:
 			If whole table, unconstrained would look like this:
 				1	2	3
 				4	5
@@ -52,8 +52,8 @@
 				de
 				fg
 			
-	=--
-*/ ; =--
+	--=
+*/ ; --=
 
 class FlexTable {
 	; #PUBLIC#

@@ -1,9 +1,9 @@
-/* Class for keeping track of (and updating) tray-related information about a script, including the tray icon. --=
+/* Class for keeping track of (and updating) tray-related information about a script, including the tray icon. =--
 	
 	Example usage:
 ;		ScriptTrayInfo.Init("AHK: Precise Mouse Movement", "mouseGreen.ico", "mouseRed.ico")
 	
-*/ ; =--
+*/ ; --=
 
 class ScriptTrayInfo {
 	; #PUBLIC#

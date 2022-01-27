@@ -5137,6 +5137,14 @@
         </KeyWord>
 		  <!-- *gdb - Move OnExit up to correct sorted spot -->
         <KeyWord name="Or"/>
+        <KeyWord name="Outlook.isNormalCalendarActive" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the normal calendar is currently active.
+							; RETURNS:        true/false
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="Outlook.isTLGCalendarActive" func="yes">
             <Overload retVal="" descr="
 							;---------

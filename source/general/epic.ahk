@@ -1,6 +1,6 @@
 ; Work-specific hotkeys
 
-#If Config.contextIsWork ; Any work machine --=
+#If Config.contextIsWork ; Any work machine =--
 	^!+d:: Send, % selectTLGId("Select EMC2 Record to Send").removeFromStart("P.").removeFromStart("Q.")
 	^!#d:: selectTLGActionObject("Select EMC2 Record to View").openWeb()
 	^!+#d::selectTLGActionObject("Select EMC2 Record to Edit").openEdit()
@@ -64,7 +64,7 @@
 				Snapper.addRecords(data["COMM_ID"], data["INI"], data["ID"]) ; data["ID"] can contain a list or range if that's what the user entered
 		}
 
-#If Config.machineIsWorkLaptop ; Main work laptop only (not other work machines) ===
+#If Config.machineIsWorkLaptop ; Main work laptop only (not other work machines) ---
 	^!+t::
 		selectOutlookTLG() {
 			s := new Selector("tlg.tls").setTitle("Select EMC2 Record ID")
@@ -149,4 +149,4 @@
 					PhoneLib.call(data["NUMBER"], data["NAME"])
 			}
 		}
-#If ; =--
+#If ; --=

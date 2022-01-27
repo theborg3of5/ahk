@@ -61,7 +61,7 @@
 			return
 		}
 		
-		t := new Toast("Opening DLG in EpicStudio: " ao.id).showShort()
+		new Toast("Opening DLG in EpicStudio: " ao.id).showShort()
 		new ActionObjectEpicStudio(ao.id, ActionObjectEpicStudio.DescriptorType_DLG).open()
 	}
 	

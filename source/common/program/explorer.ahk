@@ -223,7 +223,7 @@ class Explorer {
 		
 		; Create the shortcut and let the user know.
 		this.createRelativeShortcut(sourceFolder, relativePath)
-		t := new Toast("Created shortcuts!").showShort()
+		new Toast("Created shortcuts!").showShort()
 	}
 	
 	;---------

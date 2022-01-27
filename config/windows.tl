@@ -15,32 +15,33 @@
 				Chrome Messages						-								-									Messages for web
 		}
 		
-		; EMC2 windows
-		~EXE.replaceWith(EpicD99.exe) {
+		; EMC2 windows - we use RegEx match mode for EXE, so we can match any version (and also check the path for EMC2, to differentiate from Hyperspace).
+		~EXE.replaceWith(EMC2.+EpicD.+\.exe) | ~TITLE_MATCH_MODE.replaceWith(REGEX) {
 			; Different sections of the main EMC2 window.
-			~CLASS.replaceWith(ThunderRT6MDIForm) | ~TITLE_MATCH_MODE.replaceWith(START) {
-				EMC2 DLG									-								-									DLG
-				EMC2 PRJ									-								-									PRJ
-				EMC2 QAN									-								-									QAN
-				EMC2 XDS									-								-									XDS
+			~CLASS.replaceWith(ThunderRT6MDIForm) {
+				EMC2 DLG									-								-									DLG \d+
+				EMC2 PRJ									-								-									PRJ \d+
+				EMC2 QAN									-								-									QAN \d+
+				EMC2 XDS									-								-									XDS \d+
 			}
-				EMC2 DLG Change Status				-								ThunderRT6FormDC				Change Decision:
+			; Popups
+				EMC2 DLG Change Status				-								-									Change Decision:
 				EMC2 DLG Email							-								-									E-mail Development Log
 				EMC2 DLG Issue Email					-								-									Email Issue
 				EMC2 DLG/XDS Issue Popup			-								-									Issue Response
 				EMC2 DLG Resubmit						-								-									Resubmit for
 				EMC2 DRN Quick Review				-								-									Quick Review -
-				EMC2 PRJ Readiness Notes			-								ThunderRT6FormDC				Readiness Notes
-				EMC2 QAN Change Status				-								ThunderRT6FormDC				Change Note Status
+				EMC2 PRJ Readiness Notes			-								-									Readiness Notes
+				EMC2 QAN Change Status				-								-									Change Note Status
 				EMC2 QAN Email							-								-									Send E-Mail
 				EMC2 QAN Email Notify				-								-									EMC2 - QA Note E-Mail Notification
-				EMC2 QAN Notes							-								-									Note													-					EXACT
-				EMC2 Worklist							-								-									EMC2													-					EXACT
-				EMC2 XDS Approval						-								ThunderRT6FormDC				A Reviewer Approved
-				EMC2 XDS Wait for Changes			-								ThunderRT6FormDC				A Reviewer is Waiting for Changes
-				EMC2 XDS Email							-								ThunderRT6FormDC				E-Mail Design
-				EMC2 XDS Open Design					-								ThunderRT6FormDC				Open/New Design
-				EMC2 XDS Magnify						-								ThunderRT6FormDC				Magnify
+				EMC2 QAN Notes							-								-									Note details
+				EMC2 Worklist							-								-									^EMC2$
+				EMC2 XDS Approval						-								-									A Reviewer Approved
+				EMC2 XDS Wait for Changes			-								-									A Reviewer is Waiting for Changes
+				EMC2 XDS Email							-								-									E-Mail Design
+				EMC2 XDS Open Design					-								-									Open/New Design
+				EMC2 XDS Content						-								-									Magnify
 				EMC2 XDS Submit						-								-									Submit Design for Review
 		}
 		
@@ -62,7 +63,7 @@
 				Chrome									chrome.exe					Chrome_WidgetWin_1			- Google Chrome
 				Cisco AnyConnect VPN					vpnui.exe					-									Cisco AnyConnect Secure Mobility Client
 				Discord									Discord.exe					-									-														NO_PADDING
-				EMC2										EpicD99.exe					-									EMC2
+				EMC2										EMC2.+EpicD.+\.exe		-									-														-					REGEX
 				EpicStudio								EpicStudio.exe				-									EpicStudio
 				Everything								Everything.exe				EVERYTHING
 				Excel										EXCEL.EXE					-									-														NO_PADDING
@@ -73,7 +74,7 @@
 				Greenshot Capture						Greenshot.exe				-									Greenshot capture form
 				Greenshot Image Editor				Greenshot.exe				-									Greenshot image editor
 				GrepWin									grepWin.exe
-				Hyperspace								EpicD102.exe
+				Hyperspace								EpicD.+\.exe				-									-														-					REGEX
 				Internet Explorer						IEXPLORE.EXE
 				KDiff										kdiff3.exe					-									- KDiff3
 				Launchy									Launchy.exe

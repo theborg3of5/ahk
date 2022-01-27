@@ -6,7 +6,7 @@
 	EMC2 QAN							POPUP_FIELD			ENTER
 	EMC2 QAN change status		POPUP_FIELD			ENTER
 	EMC2 XDS							POPUP_FIELD			ENTER
-	EMC2 XDS Magnify				POPUP_FIELD			ENTER
+	EMC2 XDS Content				POPUP_FIELD			ENTER
 }
 
 	OneNote							POPUP_FIELD			ENTER				Link ahk_class NUIDialog		RICHEDIT60W2

@@ -29,12 +29,12 @@
 	Could we make it easier to update current version of Hyperspace?
 		Places I have to change now:
 			Source folder in privates
-			EXE in windows
 			Current environments in epicEnvironments (+ add new SU lines)
+			! Actually - all three of these are independent, and are updated at different times.
+				Environments update typically coincides with adding SU version lines, so centralizing that doesn't help.
 		Spots to update EMC2 version:
 			Path in programs
-			EXE in windows
-		EMC2 idea: make the path (and maybe even the EXE?) a generated path, like in Hyperspace
+		EMC2 idea: generate the path, like we do for Hyperspace
 			EMC2 version would probably live in config somewhere, maybe in settings?
 	Consider moving Hyperspace path back into programs with all the others
 		Could include version tags in path - replace them when running?

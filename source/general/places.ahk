@@ -56,7 +56,7 @@ sendCleanedUpPath(containingFolderOnly := false) {
 		
 		path := Config.replacePathTags(path)
 		if(!FileExist(path)) {
-			new ErrorText("Script does not exist: " path).showMedium()
+			Toast.ShowError("Script does not exist: " path)
 			return
 		}
 		

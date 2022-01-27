@@ -170,7 +170,7 @@ class Config {
 	; RETURNS:        The WindowInfo instance matching the specified window.
 	;---------
 	findWindowInfo(titleString) {
-		exe   := WinGet("ProcessName", titleString)
+		exe   := WinGet("ProcessPath", titleString) ; Use full process path so win_exe values can match on full path if needed.
 		class := WinGetClass(titleString)
 		title := WinGetTitle(titleString)
 
@@ -448,7 +448,7 @@ class Config {
 	}
 	
 	;---------
-	; DESCRIPTION:    Get an absolute path to a config file given its path relative to 
+	; DESCRIPTION:    Get an absolute path to a config file based on its relative path.
 	; PARAMETERS:
 	;  relativeConfigPath (I,REQ) - The path to the config file, from within the <root>\config\ folder. No leading backslash.
 	; RETURNS:        

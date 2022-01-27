@@ -128,7 +128,7 @@ class WindowInfo {
 	;---------
 	windowMatchesPieces(exe := "", class := "", title := "") {
 		; Check EXE, if we have it specified
-		if(this.exe && (this.exe != exe))
+		if(this.exe && !TitleMatchMode.matches(exe, this.exe, this.titleMatchMode))
 			return false
 		
 		; Check class, if we have it specified
@@ -136,7 +136,7 @@ class WindowInfo {
 			return false
 		
 		; Title is checked based on titleMatchMode, if we have it specified
-		if(this.title && !TitleMatchMode.titleMatches(title, this.title, this.titleMatchMode))
+		if(this.title && !TitleMatchMode.matches(title, this.title, this.titleMatchMode))
 			return false
 		
 		return true

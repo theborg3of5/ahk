@@ -25,19 +25,19 @@ class TitleMatchMode {
 	}
 	
 	;---------
-	; DESCRIPTION:    Check whether the two titles match, taking the given titleMatchMode into account.
+	; DESCRIPTION:    Check whether the two strings match, taking the given titleMatchMode into account.
 	; PARAMETERS:
-	;  title     (I,REQ) - The first title, that we want to check for a match
-	;  needle    (I,REQ) - The value to search for (title should contain/start with/equal/match this regex)
+	;  haystack  (I,REQ) - The first string, that we want to check for a match
+	;  needle    (I,REQ) - The value to search for (first string should contain/start with/equal/match this regex)
 	;  matchMode (I,REQ) - The match mode to use, from TitleMatchMode.*
 	; RETURNS:        true/false - do the titles match?
 	;---------
-	titleMatches(title, needle, matchMode) {
+	matches(haystack, needle, matchMode) {
 		Switch matchMode {
-			Case TitleMatchMode.Start:    return title.startsWith(needle)
-			Case TitleMatchMode.Contains: return (title.contains(needle)>0)
-			Case TitleMatchMode.Exact:    return (title = needle)
-			Case TitleMatchMode.RegEx:    return (title.containsRegEx(needle)>0)
+			Case TitleMatchMode.Start:    return haystack.startsWith(needle)
+			Case TitleMatchMode.Contains: return (haystack.contains(needle) > 0)
+			Case TitleMatchMode.Exact:    return (haystack = needle)
+			Case TitleMatchMode.RegEx:    return (haystack.containsRegEx(needle) > 0)
 		}
 	}
 	

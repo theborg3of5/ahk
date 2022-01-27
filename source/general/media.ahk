@@ -10,7 +10,7 @@
 			muteMessage := "Volume muted"
 		else
 			muteMessage := "Volume unmuted"
-		new Toast(muteMessage).showMedium()
+		Toast.ShowMedium(muteMessage)
 	}
 
 ; SoundSwitch handling

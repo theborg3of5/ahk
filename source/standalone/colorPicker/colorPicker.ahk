@@ -35,7 +35,7 @@ hotkeyDisplay := "
 		Middle-click: Hold RGB color to send to a color dialog
 	)"
 
-new Toast(hotkeyDisplay).showMedium()
+Toast.ShowMedium(hotkeyDisplay)
 
 buildGui()
 Loop

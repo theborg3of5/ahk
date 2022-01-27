@@ -20,10 +20,10 @@ class Explorer {
 		; Get current state and pick the opposite to use now.
 		currentState := RegRead(REG_KEY_NAME, REG_VALUE_NAME)
 		if(currentState = 2) {
-			new Toast("Showing hidden files...").showMedium()
+			Toast.ShowMedium("Showing hidden files...")
 			newValue := 1 ; Visible
 		} else {
-			new Toast("Hiding hidden files...").showMedium()
+			Toast.ShowMedium("Hiding hidden files...")
 			newValue := 2 ; Hidden
 		}
 		

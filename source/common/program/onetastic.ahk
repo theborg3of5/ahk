@@ -21,7 +21,7 @@ class Onetastic {
 		if(Clipboard = "")
 			Toast.ShowError("Failed to get XML")
 		else
-			new Toast("Clipboard set to new XML").showMedium()
+			Toast.ShowMedium("Clipboard set to new XML")
 		
 		if(xml)
 			Send, {Esc} ; Close the popup

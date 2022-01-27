@@ -90,7 +90,7 @@ class FileLib {
 			folderYear := childFolder.sub(1, 4)
 			if(folderYear.isNum() && folderYear < 2020) { ; Year folders
 				path := path.replace(dbcDesignFolder, dbcDesignFolder "Old Design Documents\") ; Moved to subfolder
-				new Toast("Redirected path (old design document)").showMedium()
+				Toast.ShowMedium("Redirected path (old design document)")
 			}
 		}
 		

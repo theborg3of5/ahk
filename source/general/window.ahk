@@ -23,9 +23,9 @@ $!q::WindowActions.minimizeWindow()
 	toggleAlwaysOnTop() {
 		WinSet, AlwaysOnTop, Toggle, A
 		if(WindowLib.isAlwaysOnTop("A"))
-			new Toast("Window set to always on top").setParent("A").showMedium()
+			Toast.ShowMedium("Window set to always on top").setParent("A")
 		else
-			new Toast("Window set to NOT always on top").setParent("A").showMedium()
+			Toast.ShowMedium("Window set to NOT always on top").setParent("A")
 	}
 
 ; Center current window onscreen.

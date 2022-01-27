@@ -67,7 +67,7 @@ class ProgressToast extends Toast {
 		this.finishInProgressStep()
 		
 		this.addLine(finishText)
-		this.showMedium()
+		this.showForSeconds(2)
 	}
 	
 	

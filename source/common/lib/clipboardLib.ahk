@@ -173,7 +173,7 @@ class ClipboardLib {
 		if(Clipboard = "")
 			Toast.ShowError("Failed to get " clipLabel)
 		else
-			new Toast("Clipboard set to " clipLabel ":`n" Clipboard).showMedium()
+			Toast.ShowMedium("Clipboard set to " clipLabel ":`n" Clipboard)
 	}
 	
 	;---------

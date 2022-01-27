@@ -32,6 +32,16 @@ class Toast {
 	
 	; [[Static one-off "show a toast" methods]] =--
 	;---------
+	; DESCRIPTION:    Show a toast for a medium time (2 seconds).
+	; PARAMETERS:
+	;  text           (I,REQ) - Text to include in the toast.
+	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be found in .getStyles().
+	;---------
+	ShowMedium(text, styleOverrides := "") {
+		new Toast(text, styleOverrides).showForSeconds(2)
+	}
+	
+	;---------
 	; DESCRIPTION:    Show an error toast (styled to stand out and look like a problem) for a medium time (2 seconds).
 	; PARAMETERS:
 	;  problemMessage    (I,REQ) - Text about what the problem is (what happened or weren't we able to do?)
@@ -49,7 +59,7 @@ class Toast {
 		overrides["MARGIN_Y"]         := 1
 		overrides["TEXT_ALIGN"]       := "Right"
 		
-		new Toast(toastText, overrides).showForSeconds(2)
+		Toast.ShowMedium(toastText, overrides)
 	}
 	
 	;---------
@@ -134,15 +144,6 @@ class Toast {
 	;---------
 	showShort() {
 		this.showForSeconds(1)
-	}
-	
-	;---------
-	; DESCRIPTION:    Wrapper for .showForSeconds for a "medium" toast (shown for 2 seconds) in
-	;                 the bottom-right corner of the screen.
-	; RETURNS:        this
-	;---------
-	showMedium() {
-		this.showForSeconds(2)
 	}
 	
 	;---------

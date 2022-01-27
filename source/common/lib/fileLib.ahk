@@ -65,7 +65,7 @@ class FileLib {
 		path := path.clean([""""])
 		
 		; Fix any strange formattings that could come from being a URL'd filepath (like from a wiki)
-		if(path.containsRegEx("file:\/+", protocol)) {
+		if(path.matchesRegEx("file:\/+", protocol)) {
 			path := path.removeFromStart(protocol)
 			if(protocol = "file://") ; 2 slashes means it's a path with a hostname (that should start with two backslashes)
 				path := "\\" path

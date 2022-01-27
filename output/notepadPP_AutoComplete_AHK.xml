@@ -6543,21 +6543,6 @@
                 <Param name="ByRef matchedNeedle := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="StringBase.containsRegEx" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Wrapper for RegExMatch() - check if a string contains a search regex.
-							; PARAMETERS:
-							;  needleRegEx (I,REQ) - RegEx to search for
-							;  outputVar   (O,OPT) - Output variable - can be the matched string, position+length, or a
-							;                        match object (depending on the mode specified in needleRegEx, see
-							;                        RegExMatch() for details).
-							; RETURNS:        The position of the first match, 0 if nothing found.
-							;---------">
-                <Param name="needleRegEx" />
-                <Param name="ByRef outputVar := &quot;&quot;" />
-            </Overload>
-        </KeyWord>
         <KeyWord name="StringBase.countMatches" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -6652,6 +6637,21 @@
 							; DESCRIPTION:    Wrapper for StrLen().
 							; RETURNS:        Length of string
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="StringBase.matchesRegEx" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Wrapper for RegExMatch() - check if a string contains a search regex.
+							; PARAMETERS:
+							;  needleRegEx (I,REQ) - RegEx to search for
+							;  outputVar   (O,OPT) - Output variable - can be the matched string, position+length, or a
+							;                        match object (depending on the mode specified in needleRegEx, see
+							;                        RegExMatch() for details).
+							; RETURNS:        The position of the first match, 0 if nothing found.
+							;---------">
+                <Param name="needleRegEx" />
+                <Param name="ByRef outputVar := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="StringBase.postPadToLength" func="yes">
@@ -7805,6 +7805,21 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="TitleMatchMode.matches" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the two strings match, taking the given titleMatchMode into account.
+							; PARAMETERS:
+							;  haystack  (I,REQ) - The first string, that we want to check for a match
+							;  needle    (I,REQ) - The value to search for (first string should contain/start with/equal/match this regex)
+							;  matchMode (I,REQ) - The match mode to use, from TitleMatchMode.*
+							; RETURNS:        true/false - do the titles match?
+							;---------">
+                <Param name="haystack" />
+                <Param name="needle" />
+                <Param name="matchMode" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="TitleMatchMode.RegEx" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -7819,21 +7834,6 @@
 							; DESCRIPTION:    The title must start with the string.
 							; GROUP:          Title match mode options
 							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="TitleMatchMode.titleMatches" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Check whether the two titles match, taking the given titleMatchMode into account.
-							; PARAMETERS:
-							;  title     (I,REQ) - The first title, that we want to check for a match
-							;  needle    (I,REQ) - The value to search for (title should contain/start with/equal/match this regex)
-							;  matchMode (I,REQ) - The match mode to use, from TitleMatchMode.*
-							; RETURNS:        true/false - do the titles match?
-							;---------">
-                <Param name="title" />
-                <Param name="needle" />
-                <Param name="matchMode" />
             </Overload>
         </KeyWord>
         <KeyWord name="Toast" func="yes">

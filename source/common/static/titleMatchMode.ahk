@@ -37,7 +37,7 @@ class TitleMatchMode {
 			Case TitleMatchMode.Start:    return haystack.startsWith(needle)
 			Case TitleMatchMode.Contains: return (haystack.contains(needle) > 0)
 			Case TitleMatchMode.Exact:    return (haystack = needle)
-			Case TitleMatchMode.RegEx:    return (haystack.containsRegEx(needle) > 0)
+			Case TitleMatchMode.RegEx:    return (haystack.matchesRegEx(needle) > 0)
 		}
 	}
 	

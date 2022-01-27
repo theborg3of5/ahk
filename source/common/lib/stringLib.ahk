@@ -228,7 +228,7 @@ class StringLib {
 		currentText := textToEncode
 		
 		; Temporarily trim off any http/https/etc. (will add back on at end)
-		if(currentText.containsRegEx("^\w+:/{0,2}", prefix))
+		if(currentText.matchesRegEx("^\w+:/{0,2}", prefix))
 			currentText := currentText.removeFromStart(prefix)
 		
 		; First replace any percents with the equivalent (since doing it later would also pick up anything else we've converted)
@@ -237,7 +237,7 @@ class StringLib {
 		currentText := currentText.replace(needle, replaceWith)
 		
 		; Replace any other iffy characters with their encoded equivalents
-		while(currentText.containsRegEx("i)[^\w\.~%]", charToReplace)) {
+		while(currentText.matchesRegEx("i)[^\w\.~%]", charToReplace)) {
 			replaceWith := "%" DataLib.numToHex(Asc(charToReplace))
 			currentText := currentText.replace(charToReplace, replaceWith)
 		}
@@ -254,7 +254,7 @@ class StringLib {
 	decodeFromURL(textToDecode) {
 		outString := textToDecode
 		
-		while(outString.containsRegEx("i)(?<=%)[\da-f]{1,2}", charCodeInHex)) {
+		while(outString.matchesRegEx("i)(?<=%)[\da-f]{1,2}", charCodeInHex)) {
 			needle := "%" charCodeInHex
 			replaceWith := Chr(DataLib.hexToInteger(charCodeInHex))
 			outString := outString.replace(needle, replaceWith)

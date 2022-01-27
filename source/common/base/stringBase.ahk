@@ -93,7 +93,7 @@ class StringBase {
 	;                        RegExMatch() for details).
 	; RETURNS:        The position of the first match, 0 if nothing found.
 	;---------
-	containsRegEx(needleRegEx, ByRef outputVar := "") {
+	matchesRegEx(needleRegEx, ByRef outputVar := "") {
 		return RegExMatch(this, needleRegEx, outputVar)
 	}
 	

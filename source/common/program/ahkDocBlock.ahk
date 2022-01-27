@@ -115,12 +115,12 @@ class AHKDocBlock {
 		
 		; Get the outer chunk from the first line.
 		outerNeedle := "^\t*;\s+" ; Optional leading indent, comment character (;), spaces.
-		docLines[1].containsRegEx(outerNeedle, match)
+		docLines[1].matchesRegEx(outerNeedle, match)
 		this.outerFirst := match
 		
 		; Figure out what the outer chunk should look like for subsequent lines.
 		if(docLines[2] != "") { ; With a multi-line selection, we can use the second line and we're guaranteed to get the full indentation
-			docLines[2].containsRegEx(outerNeedle, match)
+			docLines[2].matchesRegEx(outerNeedle, match)
 			this.outerRest := match ; Might include innerRest - if/when we can determine innerRest below, we'll remove it from outerRest.
 		} else { ; Otherwise, we just have to assume that the outer chunk for any new lines should match the old one (and it should if we got the whole line).
 			this.outerRest := this.outerFirst
@@ -164,11 +164,11 @@ class AHKDocBlock {
 		
 		; Header keyword lines
 		needle := "^(" AHKCodeLib.HeaderKeywords.join("|") "):\s+" ; Starts with (^) any of the keywords followed by a colon (:) and 1+ spaces
-		if(docLine.containsRegEx(needle, match))
+		if(docLine.matchesRegEx(needle, match))
 			return match
 		
 		; Parameter lines
-		if(docLine.containsRegEx(".*\((I|O|IO),(OPT|REQ)\) - ", match)) ; Variable name + properties + leading hyphen and space
+		if(docLine.matchesRegEx(".*\((I|O|IO),(OPT|REQ)\) - ", match)) ; Variable name + properties + leading hyphen and space
 			return match
 		
 		return ""

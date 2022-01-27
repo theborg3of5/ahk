@@ -285,8 +285,8 @@ class WindowActions {
 		Switch action {
 			; Show + activate the given window
 			Case this.Action_Activate:
-				WinShow,     %titleString%
-				WinActivate, %titleString%
+				WinShow,     % titleString
+				WinActivate, % titleString
 			
 			; React to backtick
 			Case this.Action_Backtick:
@@ -294,7 +294,7 @@ class WindowActions {
 			
 			; Close the given window
 			Case this.Action_Close:
-				WinClose, %titleString%
+				WinClose, % titleString
 			
 			; Backspace one word
 			Case this.Action_DeleteWord:

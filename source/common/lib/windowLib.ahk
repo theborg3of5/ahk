@@ -227,6 +227,29 @@ class WindowLib {
 		return (ErrorLevel = 0) ; ErrorLevel = 1 if we timed out
 	}
 	
+	;---------
+	; DESCRIPTION:    Grab the tooltip(s) shown onscreen. Based on
+	;                 http://www.autohotkey.com/board/topic/53672-get-the-text-content-of-a-tool-tip-window/?p=336440
+	; RETURNS:        Tooltip text
+	;---------
+	getTooltipText() {
+		outText := ""
+		
+		; Allow partial matching on ahk_class. (tooltips_class32, WindowsForms10.tooltips_class32.app.0.2bf8098_r13_ad1 so far)
+		settings := new TempSettings().titleMatchMode(TitleMatchMode.RegEx)
+		WinGet, winIDs, LIST, ahk_class tooltips_class32
+		settings.restore()
+		
+		Loop, %winIDs% {
+			currID := winIDs%A_Index%
+			tooltipText := ControlGetText( , "ahk_id " currID)
+			if(tooltipText != "")
+				outText := outText.appendLine(tooltipText)
+		}
+		
+		return outText
+	}
+	
 	
 	; #PRIVATE#
 	

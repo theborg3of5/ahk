@@ -1,4 +1,20 @@
 # New Ideas
+	Could we use RegEx TitleMatchMode on title to get rid of special Spotify cases in WindowInfo, WindowActions?
+	Consider a standalone script that does the current-window-info-to-notepad stuff from test script (F2)
+	Could we make it easier to update current version of EMC2?
+		Spots to update currently:
+			Path in programs
+				Could we make this dynamic, and just use the latest-installed version?
+		EMC2 idea: generate the path, like we do for Hyperspace
+			EMC2 version would probably live in config somewhere, maybe in settings?
+	Consider moving Hyperspace path back into programs with all the others
+		Could include version tags in path - replace them when running?
+			Probably a separate run function - .replaceTagsAndRun() or similar?
+				Could include the parameters in the caller, more like other programs
+		Same for VDI - is the separate run function really needed?
+			Would need to support some way to stick an argument in the middle of the string - maybe a generic <ARGS> tag or something similar?
+				ARGS is too generic, though - seems like it would go on the end?
+				Same mechanism as we end up using for Hyperspace, maybe?
 	Add some way to pull EMC2 IDs from various windows' titles
 		Could use find-best-solution script's approach - look for record types (like "DLG") and give user a list of window titles to pick from
 			Can maybe steal from ActionObjectEMC2 for help identifying record types
@@ -12,7 +28,6 @@
 			Generic copy/open/link hotkeys - fall back to this when nothing is selected? (may be overkill/get in the way)
 	EpicStudio debug: consider just using a single value of user:<EMP ID> instead of text name or workstation - seems to cut out the extra background stuff.
 	Do we want to create more specific client Codesearch types (for HSWeb only, etc.)?
-	Consider a standalone script that does the current-window-info-to-notepad stuff from test script (F2)
 	OneNote: some easier way to access list of quick access items? (for plugging them back into OneNote when it drops them)
 	If I end up using Hyperdrive often, add it as a new launch (probably on ^!#h)
 	Add something (for testing purposes) that turns the clipboard into a pastable expression so I can stick it in a variable easily
@@ -26,23 +41,6 @@
 	Should I switch out the rest of the EPIC_ prefixes for privates and the like with WORK_?
 	Consider switching zoom mute toggle over to a click target within the zoom window - would that avoid the "ding" sound?
 	CodeSearch: looks like the URL can include the full path now, could we use that to open in client instead of the search approach?
-	Could we make it easier to update current version of Hyperspace?
-		Places I have to change now:
-			Current environments in epicEnvironments (+ add new SU lines)
-			! Actually - all three of these are independent, and are updated at different times.
-				Environments update typically coincides with adding SU version lines, so centralizing that doesn't help.
-		Spots to update EMC2 version:
-			Path in programs
-		EMC2 idea: generate the path, like we do for Hyperspace
-			EMC2 version would probably live in config somewhere, maybe in settings?
-	Consider moving Hyperspace path back into programs with all the others
-		Could include version tags in path - replace them when running?
-			Probably a separate run function - .replaceTagsAndRun() or similar?
-				Could include the parameters in the caller, more like other programs
-		Same for VDI - is the separate run function really needed?
-			Would need to support some way to stick an argument in the middle of the string - maybe a generic <ARGS> tag or something similar?
-				ARGS is too generic, though - seems like it would go on the end?
-				Same mechanism as we end up using for Hyperspace, maybe?
 	Re-examine how we run programs and such (RunLib.runAsUser stuff) - could it be the reason we have focus issues?
 		Also, could we work around it with a WinWaitExist + WinActivate?
 	EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines

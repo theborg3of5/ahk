@@ -98,9 +98,9 @@ class WindowInfo {
 	; RETURNS:        The window ID if it matches, false otherwise.
 	;---------
 	isActive() {
-		ts := new TempSettings().titleMatchMode(this.titleMatchMode)
+		settings := new TempSettings().titleMatchMode(this.titleMatchMode)
 		winId := WinActive(this.titleString)
-		ts.restore()
+		settings.restore()
 		
 		return winId
 	}

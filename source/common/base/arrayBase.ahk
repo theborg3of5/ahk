@@ -29,11 +29,14 @@ class ArrayBase {
 	; DESCRIPTION:    Remove the first instance of the given value, if it exists in the array.
 	; PARAMETERS:
 	;  value (I,REQ) - The value to find and remove from the array.
+	; RETURNS:        This array
 	;---------
 	removeFirstInstanceOf(value) {
 		index := this.contains(value)
 		if(index)
 			this.RemoveAt(index)
+		
+		return this
 	}
 	
 	;---------
@@ -62,13 +65,16 @@ class ArrayBase {
 	; DESCRIPTION:    Append the values from the given array to the end of this array.
 	; PARAMETERS:
 	;  arrayToAppend (I,REQ) - The array of values to add.
+	; RETURNS:        This array
 	;---------
 	appendArray(arrayToAppend) {
 		this.push(arrayToAppend*)
+		return this
 	}
 	
 	;---------
 	; DESCRIPTION:    Removes any duplicate entries from the array, leaving the first instance alone.
+	; RETURNS:        This array
 	;---------
 	removeDuplicates() {
 		; Move everything over to a temporary array
@@ -82,10 +88,13 @@ class ArrayBase {
 			if(!this.contains(value))
 				this.push(value)
 		}
+		
+		return this
 	}
 	
 	;---------
 	; DESCRIPTION:    Removes any empty ("") entries from the array.
+	; RETURNS:        This array
 	;---------
 	removeEmpties() {
 		; Move everything over to a temporary array
@@ -99,6 +108,8 @@ class ArrayBase {
 			if(value != "")
 				this.push(value)
 		}
+		
+		return this
 	}
 	
 	;---------
@@ -121,11 +132,14 @@ class ArrayBase {
 	
 	;---------
 	; DESCRIPTION:    Remove all entries from this array.
+	; RETURNS:        This array
 	;---------
 	clear() {
 		if(this.length() = 0)
 			return
 		this.removeAt(this.minIndex(), this.length())
+		
+		return this
 	}
 	
 	; #END#

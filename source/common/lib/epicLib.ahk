@@ -83,8 +83,8 @@ class EpicLib {
 	; RETURNS:        Full path to the current version's source folder (no trailing backslash).
 	;---------
 	findCurrentVersionSourceFolder() {
-		earliestVersion := 0.0
-		earliestPath := ""
+		latestVersion := 0.0
+		latestPath := ""
 		
 		Loop, Files, C:\EpicSource\*, D
 		{
@@ -92,14 +92,39 @@ class EpicLib {
 			if(!A_LoopFileName.matchesRegEx("\d{1,2}\.\d"))
 				Continue
 			
-			if(A_LoopFileName > earliestVersion) {
-				earliestVersion := A_LoopFileName
-				earliestPath := A_LoopFileLongPath
+			if(A_LoopFileName > latestVersion) {
+				latestVersion := A_LoopFileName
+				latestPath := A_LoopFileLongPath
 			}
 		}
 		
-		return earliestPath
+		return latestPath
 	}
+	
+	;---------
+	; DESCRIPTION:    Finds the current path to the latest installed version of EMC2.
+	; RETURNS:        Full filepath (including the EpicD*.exe) for the latest installed version of EMC2.
+	;---------
+	findCurrentEMC2Path() {
+		latestVersion := 0.0
+		latestEMC2Folder := ""
+		
+		Loop, Files, C:\Program Files (x86)\Epic\v*.*, D
+		{
+			; Only consider versions where there's an EMC2 directory
+			if(!FileLib.folderExists(A_LoopFileLongPath "\EMC2"))
+				Continue
+			
+			version := A_LoopFileName.removeFromStart("v")
+			if(version > latestVersion) {
+				latestVersion := version
+				latestEMC2Folder := A_LoopFileLongPath "\EMC2"
+			}
+		}
+			
+		return latestEMC2Folder "\Shared Files\EpicD" latestVersion.remove(".") ".exe"
+	}
+	
 	; #END#
 }
 

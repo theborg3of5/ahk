@@ -5,7 +5,6 @@
 		Chrome						Google\Chrome\Application\chrome.exe
 		Chrome Messages			Google\Chrome\Application\chrome_proxy.exe
 		Chrome TickTick			Google\Chrome\Application\chrome_proxy.exe
-		EMC2							Epic\v9.9\EMC2\Shared Files\EpicD99.exe
 		EpicStudio					EpicStudio\EpicStudio.exe
 		Foobar						foobar2000\foobar2000.exe
 		Launchy						Launchy\Launchy.exe
@@ -47,6 +46,7 @@
 		Process Explorer			<EPIC_PERSONAL>\Programs\Process Explorer\procexp.exe						WORK_VDI
 		Process Explorer			<PROGRAM_FILES>\ProcessExplorer\procexp.exe
 	
+		EMC2							<EMC2_CURRENT_EXE>																	WORK_LAPTOP | WORK_VDI
 		GitHub Desktop				<USER_APPDATA_LOCAL>\GitHubDesktop\GitHubDesktop.exe
 		GrepWin						<USER_APPDATA_LOCAL>\Programs\grepWin\grepWin.exe							WORK_LAPTOP
 		Slack							<USER_APPDATA_LOCAL>\slack\slack.exe											HOME_DESKTOP

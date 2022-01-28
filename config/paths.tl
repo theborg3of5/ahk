@@ -8,6 +8,7 @@
 	AppData Local							USER_APPDATA_LOCAL
 	Command prompt path					CMD
 	Desktop									USER_DESKTOP
+	EMC2 executable (Current)			EMC2_CURRENT_EXE
 	EpicSource (Current Version)		EPIC_SOURCE_CURRENT
 	Program Data							PROGRAM_DATA
 	Program Files							PROGRAM_FILES

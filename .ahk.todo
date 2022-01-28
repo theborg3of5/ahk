@@ -1,14 +1,4 @@
 # New Ideas
-	Could we make it easier to update current version of EMC2?
-		Spots to update currently:
-			Path in programs
-				Could we make this dynamic, and just use the latest-installed version?
-					Maybe we keep the path in programs still?
-						Just add some special "wildcard" tags or something, where it errors our if there are multiple matches?
-							! Nope, just a wildcard won't work - there's an EpicD##Debug.exe executable in the same folder.
-						Maybe include version tags in path, matching whatever we do for Hyperspace?
-							Can figure out the current (latest installed) EMC2 version in Config
-						RegEx path to executable?
 	Consider moving Hyperspace path back into programs with all the others
 		Could include version tags in path - replace them when running?
 			Probably a separate run function - .replaceTagsAndRun() or similar?

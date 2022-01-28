@@ -2951,6 +2951,14 @@
                 <Param name="serverLocation" />
             </Overload>
         </KeyWord>
+        <KeyWord name="EpicLib.findCurrentEMC2Path" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Finds the current path to the latest installed version of EMC2.
+							; RETURNS:        Full filepath (including the EpicD*.exe) for the latest installed version of EMC2.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="EpicLib.findCurrentVersionSourceFolder" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -8702,6 +8710,14 @@
 							;---------
 							; DESCRIPTION:    Does a window exist that matches our info?
 							; RETURNS:        The matching window ID if one exists, false otherwise.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowInfo.getCurrTitle" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the current title of this window.
+							; RETURNS:        Window title
 							;---------">
             </Overload>
         </KeyWord>

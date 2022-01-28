@@ -491,6 +491,7 @@ class Config {
 		tags["AHK_ROOT"]           := this.getRoot()
 		
 		tags["EPIC_SOURCE_CURRENT"] := EpicLib.findCurrentVersionSourceFolder()
+		tags["EMC2_CURRENT_EXE"]    := EpicLib.findCurrentEMC2Path()
 		
 		return tags
 	}

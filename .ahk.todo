@@ -1,12 +1,4 @@
 # New Ideas
-	Consider moving Hyperspace path back into programs with all the others
-		Could include version tags in path - replace them when running?
-			Probably a separate run function - .replaceTagsAndRun() or similar?
-				Could include the parameters in the caller, more like other programs
-		Same for VDI - is the separate run function really needed?
-			Would need to support some way to stick an argument in the middle of the string - maybe a generic <ARGS> tag or something similar?
-				ARGS is too generic, though - seems like it would go on the end?
-				Same mechanism as we end up using for Hyperspace, maybe?
 	Add some way to pull EMC2 IDs from various windows' titles
 		Could use find-best-solution script's approach - look for record types (like "DLG") and give user a list of window titles to pick from
 			Can maybe steal from ActionObjectEMC2 for help identifying record types

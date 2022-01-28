@@ -82,7 +82,7 @@ class EpicRecord {
 	; RETURNS:        this
 	;---------
 	initFromEMC2Title() {
-		title := WinGetTitle(Config.windowInfo["EMC2"].titleString)
+		title := Config.windowInfo["EMC2"].getCurrTitle()
 		title := title.removeFromEnd(" - EMC2")
 		
 		; If no info available, bail.

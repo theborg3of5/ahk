@@ -118,6 +118,15 @@ class WindowInfo {
 	}
 	
 	;---------
+	; DESCRIPTION:    Get the current title of this window.
+	; RETURNS:        Window title
+	;---------
+	getCurrTitle() {
+		winId := this.exist()
+		return WinGetTitle(winId)
+	}
+	
+	;---------
 	; DESCRIPTION:    Check whether the given info matches what we have here.
 	; PARAMETERS:
 	;  exe   (I,OPT) - Window exe

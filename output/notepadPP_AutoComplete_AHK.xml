@@ -6361,15 +6361,6 @@
                 <Param name="OutDrive"/>
             </Overload>
         </KeyWord>
-        <KeyWord name="Spotify.getMainWindowId" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Spotify has a whole bunch of windows that are difficult to tell apart from the
-							;                 real thing. This finds and returns the window ID of the &quot;main&quot; one.
-							; RETURNS:        ID/handle of Spotify's main window
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="Sqrt" func="yes">
             <Overload retVal="">
                 <Param name="Number"/>
@@ -8853,6 +8844,15 @@
 							;---------
 							; DESCRIPTION:    Get an ID-based title string to identify the window under the mouse with.
 							; RETURNS:        title string (that uses ahk_id) identifying the window under the mouse.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="WindowLib.getTooltipText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Grab the tooltip(s) shown onscreen. Based on
+							;                 http://www.autohotkey.com/board/topic/53672-get-the-text-content-of-a-tool-tip-window/?p=336440
+							; RETURNS:        Tooltip text
 							;---------">
             </Overload>
         </KeyWord>

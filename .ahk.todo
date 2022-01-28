@@ -1,5 +1,4 @@
 # New Ideas
-	Could we use RegEx TitleMatchMode on title to get rid of special Spotify cases in WindowInfo, WindowActions?
 	Could we make it easier to update current version of EMC2?
 		Spots to update currently:
 			Path in programs

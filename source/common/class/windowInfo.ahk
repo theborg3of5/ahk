@@ -150,10 +150,6 @@ class WindowInfo {
 	; RETURNS:        The matching window's ID
 	;---------
 	getMatchingWindowID() {
-		; Spotify is a special case - we can't distill the right window down to a simple title string.
-		if(this.name = "Spotify")
-			return Spotify.getMainWindowId()
-		
 		settings := new TempSettings().titleMatchMode(this.titleMatchMode)
 		winId := WinExist(this.titleString)
 		settings.restore()

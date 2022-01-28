@@ -21,7 +21,7 @@
 	Notepad									CLOSE
 	Skype										CLOSE
 	Slack										CLOSE		-					-					-					-			RUN			ESCAPE		HOME_DESKTOP
-	Spotify									CLOSE		CLOSE				-					-					OTHER		OTHER			ESCAPE
+	Spotify									CLOSE		CLOSE				-					-					-			-				ESCAPE
 	Teams										CLOSE		CLOSE				-					-					-			-				ESCAPE
 	Telegram									CLOSE		CLOSE				-					-					-			RUN			ESCAPE
 	Thunder									CLOSE

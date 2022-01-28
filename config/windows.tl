@@ -92,7 +92,7 @@
 				Snapper									Snapper.exe					-									Snapper
 				Slack										slack.exe					-									-														NO_PADDING
 				SoundSwitch								SoundSwitch.exe
-				Spotify									Spotify.exe					-									-														NO_PADDING
+				Spotify									Spotify\.exe				Chrome_WidgetWin_0			(Spotify Premium)\|( - )						NO_PADDING		REGEX
 				Steam										Steam.exe					-									-														NO_PADDING
 				Teams										Teams.exe					-									\| Microsoft Teams								NO_PADDING
 				Telegram									Telegram.exe				Qt5152QWindowIcon				-														NO_PADDING

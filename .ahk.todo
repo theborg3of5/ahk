@@ -4,6 +4,17 @@
 			Can maybe steal from ActionObjectEMC2 for help identifying record types
 			Might want to look for naked IDs as well for stuff like SLG window titles?
 		If we want to use a Selector popup for this, might need to reintroduce passing in list of choices, or generate TableList manually
+			We pull this info from the TL in Selector:
+				Field indices (tl.columnInfo)
+				Settings (tl.settings)
+				Section headers (tl.headers)
+				Choices (tl.getTable)
+			Can already set field indices and title (not other settings):
+				s.addOverrideFields()
+				s.setTitle()
+			Would need to add choices and section headers:
+				s.setHeaders()
+				s.addChoice[s]()
 		Only prompt if multiple - otherwise just return the single found INI/ID
 			Maybe also suppress prompt if multiple titles, but all have same INI/ID (or even same ID but some have unknown INIs)?
 		Use cases:

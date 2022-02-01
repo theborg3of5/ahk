@@ -120,11 +120,11 @@ class Selector {
 	;---------
 	; DESCRIPTION:    Creates a new instance of the Selector class.
 	; PARAMETERS:
-	;  filePath (I,REQ) - The Selector file (.tls) where the choices that will be selected from will be
+	;  filePath (I,OPT) - The Selector file (.tls) where the choices that will be selected from will be
 	;                     read from. See above for format.
 	; RETURNS:        A new Selector object.
 	;---------
-	__New(filePath) {
+	__New(filePath := "") {
 		if(filePath) {
 			this.filePath := FileLib.findConfigFilePath(filePath)
 			this.loadFromFile()
@@ -157,7 +157,7 @@ class Selector {
 	; DESCRIPTION:    Add additional override fields to the popup shown to the user, and return whatever data
 	;                 they add (or is defaulted in) in the final return array.
 	; PARAMETERS:
-	;  fieldsToAdd (I,REQ) - Numerically-indexed array of field names (treated the same as column names from choices) to add.
+	;  fieldsToAdd (I,REQ) - Numerically-indexed object of field names (treated the same as column names from choices) to add.
 	; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui()/.select().
 	;                 Default override values for these fields (if desired) can be set using the .setDefaultOverrides() function.
 	;---------
@@ -184,6 +184,37 @@ class Selector {
 	setDefaultOverrides(defaultOverrides) {
 		this.defaultOverrides := defaultOverrides
 		return this
+	}
+	
+	;---------
+	; DESCRIPTION:    Add a single section header.
+	; PARAMETERS:
+	;  headerText       (I,REQ) - The text to use for the header.
+	;  firstChoiceIndex (I,REQ) - The index of the first choice that will be in this section.
+	; RETURNS:        
+	; SIDE EFFECTS:   
+	; NOTES:          
+	;---------
+	addSectionHeader(headerText, firstChoiceIndex) {
+		if(!this.sectionTitles)
+			this.sectionTitles := {}
+		
+		this.sectionTitles[firstChoiceIndex] := headerText
+	}
+	
+	;---------
+	; DESCRIPTION:    Add a single choice programmatically.
+	; PARAMETERS:
+	;  choice (I,REQ) - SelectorChoice instance to add.
+	; RETURNS:        Current count of choices.
+	;---------
+	addChoice(choice) {
+		if(!this.choices)
+			this.choices := []
+		
+		this.choices.push(choice)
+		
+		return this.choices.length()
 	}
 	
 	;---------
@@ -297,8 +328,8 @@ class Selector {
 	
 	_windowTitle     := "Please make a choice by either index or abbreviation:" ; The title of the window
 	_minColumnWidth  := 0     ; How wide (in pixels) each column must be, at a minimum.
-	choices          := []    ; Array of visible choices the user can pick from (array of SelectorChoice objects).
-	sectionTitles    := {}    ; {choiceIndex: title} - Lines that will be displayed as titles (index matches the first choice that should be under this title)
+	choices          := ""    ; Array of visible choices the user can pick from (array of SelectorChoice objects).
+	sectionTitles    := ""    ; {choiceIndex: title} - Lines that will be displayed as titles (index matches the first choice that should be under this title)
 	overrideFields   := ""    ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers)
 	filePath         := ""    ; Where the file lives if we're reading one in.
 	defaultOverrides := ""    ; {columnLabel: value} - Default values to show in override fields, by column name
@@ -351,13 +382,17 @@ class Selector {
 	; SIDE EFFECTS:   Shows an error toast if something went wrong.
 	;---------
 	loadChoicesFromData() {
+		; If choices have already been added (programmatically) and there's no TableList to pull from, we're done.
+		if(this.choices && !this.dataTL)
+			return true
+		
 		; Load the section headers
 		this.sectionTitles := this.dataTL.headers
 		
 		; Load the choices
 		this.choices := []
 		For _,row in this.dataTL.getTable()
-			this.choices.push(new SelectorChoice(row))
+			this.addChoice(new SelectorChoice(row))
 		
 		; Show a warning and fail if we didn't actually manage to load any choices.
 		if(!this.choices.length()) {
@@ -459,7 +494,7 @@ class Selector {
 		table.addLine("Default overrides", this.defaultOverrides)
 		table.addLine("Choices",           this.choices)
 		table.addLine("Section titles",    this.sectionTitles)
-		table.addLine("Override fields",   this.dataTL)
+		table.addLine("Data TableList",    this.dataTL)
 	}
 	; #END#
 }

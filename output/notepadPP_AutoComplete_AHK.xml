@@ -1253,6 +1253,7 @@
 							; DESCRIPTION:    Append the values from the given array to the end of this array.
 							; PARAMETERS:
 							;  arrayToAppend (I,REQ) - The array of values to add.
+							; RETURNS:        This array
 							;---------">
                 <Param name="arrayToAppend" />
             </Overload>
@@ -1261,6 +1262,7 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Remove all entries from this array.
+							; RETURNS:        This array
 							;---------">
             </Overload>
         </KeyWord>
@@ -1313,6 +1315,7 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Removes any duplicate entries from the array, leaving the first instance alone.
+							; RETURNS:        This array
 							;---------">
             </Overload>
         </KeyWord>
@@ -1320,6 +1323,7 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Removes any empty (&quot;&quot;) entries from the array.
+							; RETURNS:        This array
 							;---------">
             </Overload>
         </KeyWord>
@@ -1329,6 +1333,7 @@
 							; DESCRIPTION:    Remove the first instance of the given value, if it exists in the array.
 							; PARAMETERS:
 							;  value (I,REQ) - The value to find and remove from the array.
+							; RETURNS:        This array
 							;---------">
                 <Param name="value" />
             </Overload>
@@ -4982,6 +4987,15 @@
         </KeyWord>
 		  <!-- *gdb - Move OnExit up to correct sorted spot -->
         <KeyWord name="Or"/>
+        <KeyWord name="Outlook.getMessageTitle" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the title for the email message in the specified window.
+							; RETURNS:        The title, cleaned up (RE:/FW: and any other odd characters removed)
+							;---------">
+                <Param name="titleString := &quot;A&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="Outlook.isNormalCalendarActive" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -5875,11 +5889,22 @@
 							;---------
 							; DESCRIPTION:    Creates a new instance of the Selector class.
 							; PARAMETERS:
-							;  filePath (I,REQ) - The Selector file (.tls) where the choices that will be selected from will be
+							;  filePath (I,OPT) - The Selector file (.tls) where the choices that will be selected from will be
 							;                     read from. See above for format.
 							; RETURNS:        A new Selector object.
 							;---------">
-                <Param name="filePath" />
+                <Param name="filePath := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Selector.addChoice" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a single choice programmatically.
+							; PARAMETERS:
+							;  choice (I,REQ) - SelectorChoice instance to add.
+							; RETURNS:        Current count of choices.
+							;---------">
+                <Param name="choice" />
             </Overload>
         </KeyWord>
         <KeyWord name="Selector.addOverrideFields" func="yes">
@@ -5888,11 +5913,26 @@
 							; DESCRIPTION:    Add additional override fields to the popup shown to the user, and return whatever data
 							;                 they add (or is defaulted in) in the final return array.
 							; PARAMETERS:
-							;  fieldsToAdd (I,REQ) - Numerically-indexed array of field names (treated the same as column names from choices) to add.
+							;  fieldsToAdd (I,REQ) - Numerically-indexed object of field names (treated the same as column names from choices) to add.
 							; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui()/.select().
 							;                 Default override values for these fields (if desired) can be set using the .setDefaultOverrides() function.
 							;---------">
                 <Param name="fieldsToAdd" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="Selector.addSectionHeader" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Add a single section header.
+							; PARAMETERS:
+							;  headerText       (I,REQ) - The text to use for the header.
+							;  firstChoiceIndex (I,REQ) - The index of the first choice that will be in this section.
+							; RETURNS:
+							; SIDE EFFECTS:
+							; NOTES:
+							;---------">
+                <Param name="headerText" />
+                <Param name="firstChoiceIndex" />
             </Overload>
         </KeyWord>
         <KeyWord name="Selector.dataTableList" func="yes">

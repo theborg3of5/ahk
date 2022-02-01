@@ -536,8 +536,8 @@ class TableList {
 	processColumnInfo(row) {
 		rowAry := row.split(A_Tab)
 		
-		rowAry.removeAt(1) ; Get rid of the leading "{" (and shift elements to fill).
-		rowAry.pop() ; Get rid of the ending "}"
+		rowAry.removeAt(1) ; Get rid of the leading "(" (and shift elements to fill).
+		rowAry.pop() ; Get rid of the ending ")"
 		this.applyIndexLabels(rowAry)
 		
 		this._columnInfo := rowAry

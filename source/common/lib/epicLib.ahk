@@ -125,6 +125,145 @@ class EpicLib {
 		return latestEMC2Folder "\Shared Files\EpicD" latestVersion.remove(".") ".exe"
 	}
 	
+	; GDB TODO could we pull in a record title somehow?
+	;	- Could use for display in Selector (after INI + ID)
+	;  - Could be nice for figuring out where the random # choices came from
+	;	- Would probably require different structure for matches/possibles
+	selectEMC2RecordFromWindowTitles() { ; Assumption: any given ID will go with exactly 1 INI - I'm unlikely to ever see multiple.
+		winIDs := WinGet("List")
+		; Debug.popup("winIDs",winIDs)
+		
+		winTitles := []
+		For _,winId in winIDs
+			winTitles.push(WinGetTitle("ahk_id " winId))
+		
+		; Add in titles from a few special spots
+		winTitles.appendArray(this.getSpecialTitles())
+		
+		
+		
+		matches   := {} ; {id: ini}
+		possibles := {} ; {id: "u"}
+		
+		interestingTitles := []
+		For _,title in winTitles {
+			titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", "."], " ").removeEmpties()
+			For i,bit in titleBits {
+				if(this.isPossibleEMC2ID(bit)) {
+					possibleId  := bit
+					possibleINI := titleBits[i-1]
+					
+					; We've already had a proper match to this ID (and we shouldn't add
+					if(matches[possibleId])
+						Continue
+					
+					; First elements are always possible - they could be an ID, but we don't know the INI that goes with them.
+					if(i = 1) {
+						possibles[possibleId] := ""
+						Continue
+					}
+					
+					; INIs must be alphanumeric (basically, no characters), and cannot be purely numeric.
+					if(!possibleINI.isAlphaNum() || possibleINI.isNum()) {
+						possibles[possibleId] := ""
+						Continue
+					}
+					
+					; Try for a proper match.
+					if(!ActionObjectEMC2.isThisType(possibleINI " " possibleId, ini, id)) {
+						possibles[possibleId] := ""
+						Continue
+					}
+					
+					; Found a proper match, save it off.
+					matches[id] := ini
+					possibles.delete(id)
+				}
+			}
+		}
+		; Debug.popup("matches",matches, "possibles",possibles)
+		; return
+		
+		if(matches.count() = 0 && possibles.count() = 0) {
+			Toast.ShowError("No potential EMC2 record IDs found in window titles")
+			return ""
+		}
+		
+		s := new Selector().setTitle("Select EMC2 Object to use:").addOverrideFields({1:"INI"})
+		
+		s.addSectionHeader("EMC2 Records", 1)
+		lastChoiceNum := this.addChoicesToSelector(s, matches)
+		
+		s.addSectionHeader("Potential IDs", lastChoiceNum + 1)
+		this.addChoicesToSelector(s, possibles)
+		
+		data := s.selectGui()
+		if(!data) ; User didn't pick an option
+			return ""
+		
+		record := new EpicRecord()
+		record.id  := data["ID"]
+		record.ini := data["INI"]
+		return record
+	}
+	
+	
+	; #PRIVATE#
+	
+	
+	getSpecialTitles() {
+		titles := []
+		
+		; Outlook message titles
+		titles.push(Outlook.getMessageTitle(Config.windowInfo["Outlook"].idString))
+		
+		; Explorer may be minimized to the tray.
+		settings := new TempSettings().detectHiddenWindows("On")
+		titles.push(WinGetTitle(Config.windowInfo["Explorer"].idString))
+		settings.restore()
+		
+		return titles
+	}
+	
+	
+	addChoicesToSelector(s, options) { ; Assumes no overlap in abbreviation letters between different times this is called.
+		lastChoiceNum := 0
+		
+		abbrevNums := {} ; letter: lastUsedNumber
+		For id,ini in options {
+			; For possibles, use "u" for "unknown"
+			if(ini = "")
+				abbrevLetter := "u"
+			else
+				abbrevLetter := StringLower(ini.charAt(1))
+			
+			abbrevNum := DataLib.forceNumber(abbrevNums[abbrevLetter]) + 1
+			abbrevNums[abbrevLetter] := abbrevNum
+			abbrev := abbrevLetter abbrevNum
+			
+			name := ini.appendPiece(id, " ")
+			
+			lastChoiceNum := s.addChoice(new SelectorChoice({NAME:name, ABBREV:abbrev, INI:ini, ID:id}))
+		}
+		
+		return lastChoiceNum
+	}
+	
+	;---------
+	; DESCRIPTION:    Check whether the given string COULD be an EMC2 record ID - these are numeric except for SUs and TDE
+	;                 logs, which start with I and T respectively.
+	; PARAMETERS:
+	;  id (I,REQ) - Possible ID to evaluate.
+	; RETURNS:        true if possibly an ID, false otherwise.
+	;---------
+	isPossibleEMC2ID(id) {
+		; For SU DLG IDs, trim off leading letter so we recognize them as a numeric ID.
+		if(id.startsWithAnyOf(["I", "T"], letter))
+			id := id.removeFromStart(letter)
+		
+		return id.isNum()
+	}
+	
 	; #END#
 }
 

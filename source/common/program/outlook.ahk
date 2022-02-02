@@ -26,11 +26,6 @@ class Outlook {
 		if(title = Config.private["WORK_EMAIL"]) ; The exception is editing in a popup: we need to use a different control, but the original still exists with my email in it.
 			title := ControlGetText(this.ClassNN_MailSubject_Edit, titleString)
 		
-		if(title = "") {
-			Toast.ShowError("Copy title failed", "Could not get title from message control")
-			return
-		}
-		
 		; Remove the extra email stuff.
 		; Note: any Epic-record-specific stuff should live in either ActionObjectEMC2 or EpicRecord instead of here.
 		return title.clean(["RE:", "FW:"])
@@ -171,7 +166,12 @@ class Outlook {
 	; RETURNS:        The title, cleaned up (RE:/FW: and any other odd characters removed)
 	;---------
 	getCurrentMessageTitle() {
-		return this.getMessageTitle("A")
+		title := this.getMessageTitle("A")
+		
+		if(title = "")
+			Toast.ShowError("Copy title failed", "Could not get title from message control")
+		
+		return title
 	}
 	; #END#
 }

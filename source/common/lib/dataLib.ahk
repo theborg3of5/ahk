@@ -248,6 +248,22 @@ class DataLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Get a property value from all objects in a given array.
+	; PARAMETERS:
+	;  objectsAry   (I,REQ) - Array of objects.
+	;  propertyName (I,REQ) - Name of the property to get.
+	; RETURNS:        Array of found property values (including blanks).
+	;---------
+	getPropertyFromArrayChildren(objectsAry, propertyName) {
+		propertyValues := []
+		
+		For _,child in objectsAry
+			propertyValues.push(child[propertyName])
+		
+		return propertyValues
+	}
+	
+	;---------
 	; DESCRIPTION:    Variadic parameter arrays don't have the same base array as those created
 	;                 with [], which means they can't handle things like .contains() - this
 	;                 returns an identical version that does.

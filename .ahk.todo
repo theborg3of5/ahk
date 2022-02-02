@@ -1,4 +1,5 @@
 # New Ideas
+	Add !c copy-all hotkey to debug popup
 	Add some way to pull EMC2 IDs from various windows' titles
 		Could use find-best-solution script's approach - look for record types (like "DLG") and give user a list of window titles to pick from
 			Can maybe steal from ActionObjectEMC2 for help identifying record types

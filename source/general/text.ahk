@@ -24,18 +24,6 @@ return
 			Toast.ShowError("Failed to link text", errorMessage)
 	}
 
-; Turn clipboard into standard string and send it.
-!+n::
-	sendStandardEMC2ObjectString() {
-		HotkeyLib.waitForRelease()
-		ao := new ActionObjectEMC2(Clipboard)
-		ClipboardLib.send(ao.standardEMC2String) ; Can contain hotkey chars
-		
-		; Special case for OneNote: link the INI/ID as well.
-		if(Config.isWindowActive("OneNote"))
-			OneNote.linkEMC2ObjectInLine(ao.ini, ao.id)
-	}
-
 ; Send the clipboard as a list.
 ^#v::new FormattedList(Clipboard).sendList()
 

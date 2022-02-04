@@ -9,7 +9,7 @@ class OneNote {
 	;  id  (I,REQ) - ID of the object to link
 	;---------
 	linkEMC2ObjectInLine(ini, id) {
-		SelectLib.selectCurrentLine() ; Select whole line, but avoid the extra indentation and newline that comes with ^a.
+		this.selectLine(true) ; Select whole line but no newline/indent
 		SelectLib.selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
 		
 		new ActionObjectEMC2(id, ini).linkSelectedTextWeb("Failed to link EMC2 object text")
@@ -111,10 +111,15 @@ class OneNote {
 	
 	;---------
 	; DESCRIPTION:    Select the whole line in OneNote, taking into account that it might already be selected.
+	; PARAMETERS:
+	;  noIndentOrNewline (I,OPT) - Set this to true to leave the newline at the end of the line out of the selection.
 	;---------
-	selectLine() {
+	selectLine(noIndentOrNewline := false) {
 		Send, {Home} ; Make sure the line isn't already selected, otherwise we select the whole parent.
-		Send, ^a     ; Select all - gets entire line, including newline at end.
+		Send, ^a     ; Select all - gets entire line, including indentation and newline at end.
+		
+		if(noIndentOrNewline)
+			Send, {Shift Down}{Left}{Shift Up} ; Deselect newline on end
 	}
 	
 	;---------

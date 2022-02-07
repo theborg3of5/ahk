@@ -11,11 +11,8 @@
 ;		MsgBox, % record.ini ; DLG
 ;		MsgBox, % record.id  ; 123456
 ;		
-;		record := new EpicRecord().initFromEMC2Title() ; Use EMC2 window title to get needed info
+;		record := new EMC2Record().initFromEMC2Title() ; Use EMC2 window title to get needed info
 ;		MsgBox, % record.recordString ; R DLG 123456
-	
-	GDB TODO
-		Update auto-complete and syntax highlighting notepad++ definitions
 	
 */ ; --=
 

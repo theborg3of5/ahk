@@ -379,6 +379,20 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectEMC2.convertToUsefulINI" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Convert the given &quot;INI&quot; into the useful version of itself.
+							; PARAMETERS:
+							;  ini (I,REQ) - The ini to convert, can be any of:
+							;                 - Normal INI (DLG)
+							;                 - Special INI that we want a different version of (ZQN => QAN)
+							;                 - Word that describes an INI (Design)
+							; RETURNS:        The useful form of the INI, or &quot;&quot; if we couldn't match the input to one.
+							;---------">
+                <Param name="ini" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectEMC2.copyLink" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
@@ -458,8 +472,10 @@
 							; DESCRIPTION:    Determine whether the given string must be this type of ActionObject.
 							; PARAMETERS:
 							;  value (I,REQ) - The value to evaluate
-							;  ini   (O,OPT) - If the value is an EMC2 record, the INI
-							;  id    (O,OPT) - If the value is an EMC2 record, the ID
+							;  ini  (IO,OPT) - If the value is an EMC2 record, the INI.
+							;                  If passed in we'll evaluate this instead of trying to pull it from value.
+							;  id   (IO,OPT) - If the value is an EMC2 record, the ID.
+							;                  If passed in we'll evaluate this instead of trying to pull it from value.
 							; RETURNS:        true/false - whether the given value must be an EMC2 object.
 							; NOTES:          Must be effectively static - this is called before we decide what kind of object to return.
 							;---------">
@@ -2315,6 +2331,19 @@
                 <Param name="data" />
             </Overload>
         </KeyWord>
+        <KeyWord name="DataLib.getPropertyFromArrayChildren" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get a property value from all objects in a given array.
+							; PARAMETERS:
+							;  objectsAry   (I,REQ) - Array of objects.
+							;  propertyName (I,REQ) - Name of the property to get.
+							; RETURNS:        Array of found property values (including blanks).
+							;---------">
+                <Param name="objectsAry" />
+                <Param name="propertyName" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="DataLib.hexToInteger" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -2888,6 +2917,91 @@
         <KeyWord name="Edit"/>
         <KeyWord name="Eject"/>
         <KeyWord name="Else"/>
+        <KeyWord name="EMC2Record" func="yes">
+            <Overload retVal="{EpicRecord}" descr="
+							;---------
+							; DESCRIPTION:    Create a new EpicRecord object, optionally parsing it from a string.
+							; PARAMETERS:
+							;  recordString (I,OPT) - String representing the record. See class header for supported
+							;                         formats. If not given, record will need to be initialized with
+							;                         one of the .initFrom*() functions.
+							;---------">
+                <Param name="ini := &quot;&quot;" />
+                <Param name="id := &quot;&quot;" />
+                <Param name="title := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EMC2Record.id" func="yes">
+            <Overload retVal="[Property] {EpicRecord}" descr="
+							;---------
+							; DESCRIPTION:    The ID for this record.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EMC2Record.ini" func="yes">
+            <Overload retVal="[Property] {EpicRecord}" descr="
+							;---------
+							; DESCRIPTION:    The INI for this record.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EMC2Record.initFromEMC2Title" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Initialize the record based on the current EMC2 window title.
+							; NOTES:          This will only get the INI and ID, never the title.
+							; RETURNS:        this
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EMC2Record.initFromRecordString" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Initialize the record based on a string.
+							; PARAMETERS:
+							;  recordString (I,REQ) - String representing the record. See class header for supported
+							;                         formats.
+							; RETURNS:        this
+							;---------">
+                <Param name="recordString" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EMC2Record.initFromTLGString" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Initialize the record based on a TLG string.
+							; PARAMETERS:
+							;  tlgString (I,REQ) - TLG string from Outlook TLG calendar.
+							; NOTES:          We assume there's only 1 record ID per string, so the first one will win.
+							; RETURNS:        this
+							;---------">
+                <Param name="tlgString" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EMC2Record.recordString" func="yes">
+            <Overload retVal="[Property] {EpicRecord}" descr="
+							;---------
+							; DESCRIPTION:    Constructed string representing the record:
+							;                   If we have a title: TITLE [R INI ID]
+							;                   If we don't have a title: R INI ID
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EMC2Record.standardEMC2String" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The &quot;standard&quot; EMC2 object string
+							; RETURNS:        <INI> <ID> - <TITLE>
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EMC2Record.title" func="yes">
+            <Overload retVal="[Property] {EpicRecord}" descr="
+							;---------
+							; DESCRIPTION:    The title for this record.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="Enable"/>
         <KeyWord name="Enabled"/>
         <KeyWord name="End"/>
@@ -3020,7 +3134,9 @@
 							;                         formats. If not given, record will need to be initialized with
 							;                         one of the .initFrom*() functions.
 							;---------">
-                <Param name="recordString := &quot;&quot;" />
+                <Param name="ini := &quot;&quot;" />
+                <Param name="id := &quot;&quot;" />
+                <Param name="title := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="EpicRecord.id" func="yes">
@@ -3034,15 +3150,6 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The INI for this record.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="EpicRecord.initFromEMC2Title" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Initialize the record based on the current EMC2 window title.
-							; NOTES:          This will only get the INI and ID, never the title.
-							; RETURNS:        this
 							;---------">
             </Overload>
         </KeyWord>
@@ -6666,7 +6773,8 @@
         <KeyWord name="StringBase.isNum" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Wrapper function for whether a string is numeric.
+							; DESCRIPTION:    Wrapper function for whether a string is numeric (excludes hexadecimal numbers and doesn't allow
+							;                 leading +/-).
 							; RETURNS:        true/false
 							;---------">
             </Overload>

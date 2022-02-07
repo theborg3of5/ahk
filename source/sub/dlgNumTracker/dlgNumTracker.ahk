@@ -19,7 +19,7 @@ UpdateID:
 	if(!Config.doesWindowExist("EMC2"))
 		return
 	
-	record := new EpicRecord().initFromEMC2Title()
+	record := new EMC2Record().initFromEMC2Title()
 	if(record.ini != "DLG")
 		return
 	currDLGId := record.id

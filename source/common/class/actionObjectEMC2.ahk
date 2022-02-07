@@ -35,10 +35,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;---------
 	standardEMC2String {
 		get {
-			if(this.title = "") ; No title, just record
-				return this.ini " " this.id
-			
-			return this.ini " " this.id " - " this.title
+			return new EMC2Record(this.ini, this.id, this.title).standardEMC2String
 		}
 	}
 	

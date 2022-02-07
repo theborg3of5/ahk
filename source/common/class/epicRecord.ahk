@@ -57,23 +57,7 @@ class EpicRecord {
 	;---------
 	__New(recordString := "") {
 		if(recordString != "")
-			this.initFromRecordString(recordString)
-	}
-	
-	;---------
-	; DESCRIPTION:    Initialize the record based on a string.
-	; PARAMETERS:
-	;  recordString (I,REQ) - String representing the record. See class header for supported
-	;                         formats.
-	; RETURNS:        this
-	;---------
-	initFromRecordString(recordString) {
-		if(recordString = "")
-			return
-		
-		this.processRecordString(recordString)
-		
-		return this
+			this.processRecordString(recordString)
 	}
 	
 	;---------
@@ -89,7 +73,7 @@ class EpicRecord {
 		if(title = "EMC2")
 			return
 		
-		this.initFromRecordString(title)
+		this.processRecordString(title)
 		
 		return this
 	}

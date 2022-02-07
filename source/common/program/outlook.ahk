@@ -105,7 +105,7 @@ class Outlook {
 		if(tlgString = "")
 			return
 		
-		record := new EpicRecord().initFromTLGString(tlgString)
+		record := new EMC2Record().initFromTLGString(tlgString)
 		if(record.id)
 			ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
 	}
@@ -117,7 +117,7 @@ class Outlook {
 		if(tlgString = "")
 			return
 		
-		record := new EpicRecord().initFromTLGString(tlgString)
+		record := new EMC2Record().initFromTLGString(tlgString)
 		new ActionObjectEMC2(record.id, record.ini).openWeb()
 	}
 	;---------
@@ -128,7 +128,7 @@ class Outlook {
 		if(tlgString = "")
 			return
 		
-		record := new EpicRecord().initFromTLGString(tlgString)
+		record := new EMC2Record().initFromTLGString(tlgString)
 		new ActionObjectEMC2(record.id, record.ini).openEdit()
 	}
 	

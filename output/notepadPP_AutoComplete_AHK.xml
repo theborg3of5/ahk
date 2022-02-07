@@ -3165,18 +3165,6 @@
                 <Param name="recordString" />
             </Overload>
         </KeyWord>
-        <KeyWord name="EpicRecord.initFromTLGString" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Initialize the record based on a TLG string.
-							; PARAMETERS:
-							;  tlgString (I,REQ) - TLG string from Outlook TLG calendar.
-							; NOTES:          We assume there's only 1 record ID per string, so the first one will win.
-							; RETURNS:        this
-							;---------">
-                <Param name="tlgString" />
-            </Overload>
-        </KeyWord>
         <KeyWord name="EpicRecord.recordString" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------

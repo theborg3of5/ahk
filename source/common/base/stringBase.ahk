@@ -25,21 +25,28 @@ class StringBase {
 	; RETURNS:        true/false
 	;---------
 	isAlpha() {
-		return IfIs(this, "Alpha")
+		return IfIs(this, "alpha")
 	}
 	;---------
-	; DESCRIPTION:    Wrapper function for whether a string is numeric.
+	; DESCRIPTION:    Wrapper function for whether a string is numeric (excludes hexadecimal numbers and doesn't allow
+	;                 leading +/-).
 	; RETURNS:        true/false
 	;---------
 	isNum() {
-		return IfIs(this, "Number")
+		if(this = "")
+			return false
+		
+		if(this.contains("."))
+			return IfIs(this, "float")
+		
+		return IfIs(this, "digit")
 	}
 	;---------
 	; DESCRIPTION:    Wrapper function for whether a string is alphanumeric.
 	; RETURNS:        true/false
 	;---------
 	isAlphaNum() {
-		return IfIs(this, "AlNum")
+		return IfIs(this, "alnum")
 	}
 	
 	;---------

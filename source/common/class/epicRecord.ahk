@@ -15,11 +15,9 @@
 	Example Usage
 ;		; Parse a string into a record
 ;		record := new EpicRecord().initFromRecordString("R UCL 123456")
-;		MsgBox, % record.ini
+;		MsgBox, % record.ini          ; UCL
+;		MsgBox, % record.id           ; 123456
 ;		MsgBox, % record.recordString ; R UCL 123456
-;		
-;		record := new EpicRecord().initFromEMC2Title() ; Use EMC2 window title to get needed info
-;		MsgBox, % record.recordString ; R DLG 123456
 	
 */ ; --=
 

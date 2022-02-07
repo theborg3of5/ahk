@@ -53,13 +53,9 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;---------
 	__New(id, ini := "", title := "") {
 		; If we don't know the INI yet, assume the ID is a combined string (i.e. "DLG 123456" or
-		; "DLG 123456: HB/PB WE DID SOME STUFF") and try to split it into its component parts.
 		; "DLG 123456: WE DID SOME STUFF") and try to split it into its component parts.
 		if(id != "" && ini = "") {
-			value := this.preProcess(id) ; Do a little cleanup to make sure EpicRecord can handle the string
-			
-			record := new EpicRecord(value)
-			record := new EpicRecord().initFromRecordString(value)
+			record := new EMC2Record().initFromRecordString(id)
 			ini   := record.ini
 			id    := record.id
 			title := record.title
@@ -71,15 +67,16 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		this.id    := id
 		this.ini   := ini
 		this.title := title
-		this.postProcess()
 	}
 	
 	;---------
 	; DESCRIPTION:    Determine whether the given string must be this type of ActionObject.
 	; PARAMETERS:
 	;  value (I,REQ) - The value to evaluate
-	;  ini   (O,OPT) - If the value is an EMC2 record, the INI
-	;  id    (O,OPT) - If the value is an EMC2 record, the ID
+	;  ini  (IO,OPT) - If the value is an EMC2 record, the INI.
+	;                  If passed in we'll evaluate this instead of trying to pull it from value.
+	;  id   (IO,OPT) - If the value is an EMC2 record, the ID.
+	;                  If passed in we'll evaluate this instead of trying to pull it from value.
 	; RETURNS:        true/false - whether the given value must be an EMC2 object.
 	; NOTES:          Must be effectively static - this is called before we decide what kind of object to return.
 	;---------
@@ -87,18 +84,26 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		if(!Config.contextIsWork)
 			return false
 		
-		if(record.ini = "" || record.id = "")
+		record := new EpicRecord().initFromRecordString(value)
+		checkINI := DataLib.coalesce(ini, record.ini)
+		checkId  := DataLib.coalesce(id,  record.id)
+		
+		if(checkINI = "" || checkID = "")
+			return false
+		
+		; No numeric INIs allowed.
+		if(checkINI.isNum())
 			return false
 		
 		; Silent selection from actionObject TLS to see if we match an EMC2-type INI (filtered list so no match means not EMC2).
 		s := ActionObjectBase.getTypeSelector(ActionObject.Type_EMC2)
-		matchedINI := s.selectChoice(record.ini, "SUBTYPE")
+		matchedINI := s.selectChoice(checkINI, "SUBTYPE")
 		if(matchedINI = "")
 			return false
 		
 		; The value does match this type, so return the info we found to save a little work later.
 		ini := matchedINI
-		id  := record.id
+		id  := checkId
 		return true
 	}
 	
@@ -134,77 +139,21 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		return Config.private["EMC2_LINK_EDIT_BASE"].replaceTags({"INI":this.ini, "ID":this.id})
 	}
 	
+	;---------
+	; DESCRIPTION:    Convert the given "INI" into the useful version of itself.
+	; PARAMETERS:
+	;  ini (I,REQ) - The ini to convert, can be any of:
+	;                 - Normal INI (DLG)
+	;                 - Special INI that we want a different version of (ZQN => QAN)
+	;                 - Word that describes an INI (Design)
+	; RETURNS:        The useful form of the INI, or "" if we couldn't match the input to one.
+	;---------
+	convertToUsefulINI(ini) {
+		return this.getTypeSelector(ActionObject.Type_EMC2).selectChoice(ini, "SUBTYPE")
+	}
+	
 	
 	; #PRIVATE#
-	
-	;---------
-	; DESCRIPTION:    Clean up the string if it has extra stuff or odd formats, so EpicRecord can handle it properly.
-	; PARAMETERS:
-	;  value (I,REQ) - The value to clean
-	; NOTES:          This logic is not taken into account by ActionObject when it's trying to determine the type.
-	;---------
-	preProcess(value) {
-		; Email subject handling
-		value := value.removeFromStart("Date change notification for ") ; Date change notifications
-		value := value.removeFromStart("Application removed from ")
-		value := value.removeFromStart("Priority Queue: ")
-		value := value.removeFromStart("[Signed] ")
-		if(value.startsWith("PRJ Readiness "))
-			value := value.replaceOne("PRJ Readiness ", "PRJ ")
-		if(value.startsWith("EMC2 Lock: ")) {
-			value := value.removeFromStart("EMC2 Lock: ").removeFromEnd(" is locked")
-			title   := value.beforeString(" [")
-			id      := value.afterString("] ")
-			iniName := value.firstBetweenStrings(" [", "] ")
-			
-			; Convert the name of the record type into an INI.
-			Switch iniName {
-				Case "Development Log": ini := "DLG"
-				Case "Design":          ini := "XDS"
-				Case "Main":            ini := "QAN" ; Yes, this is weird. Not sure why it uses "Main", but it's distinct from the others so it works.
-				Case "Project":         ini := "PRJ"
-				Case "Issue":           ini := "ZDQ"
-			}
-			
-			value := ini " " id " - " title
-		}
-		
-		return value
-	}
-	
-	;---------
-	; DESCRIPTION:    Do some additional processing on the different bits of info about the object.
-	; SIDE EFFECTS:   Can update this.ini, this.id, and this.title.
-	;---------
-	postProcess() {
-		; INI - make sure the INI is the "real" EMC2 one.
-		this.ini := this.getTypeSelector(ActionObject.Type_EMC2).selectChoice(this.ini, "SUBTYPE")
-		
-		; Title - clean up, drop anything extra that we don't need.
-		removeAry := ["-", "/", "\", ":", ",", "DBC"] ; Don't need "DBC" on the start of every EMC2 title.
-		; INI-specific strings to remove
-		Switch this.ini {
-			Case "DLG":
-				removeAry.push("(Developer has reset your status)")
-				; All permutations of these can appear
-				For _,role in ["A PQA 1 Reviewer", "A PQA 2 Reviewer", "An Expert Reviewer", "A QA 1 Reviewer", "A QA 2 Reviewer"] {
-					For _,result in ["is Waiting for Changes", "has signed off"] {
-						removeAry.push("(" role " " result ")")
-					}
-				}
-				For _,status in ["PQA 1", "QA 1", "PQA 2", "QA 2", "Final Stage Comp"] {
-					removeAry.push("Status Changed to " status)
-				}
-			Case "XDS":
-				removeAry.appendArray(["(A Reviewer Approved)", "(A Reviewer is Waiting for Changes)", "(A Reviewer Declined to Review)"])
-			Case "SLG":
-				removeAry.appendArray(["--Assigned To:"])
-		}
-		
-		this.id := StringUpper(this.id) ; Make sure ID is capitalized as some spots fail on lowercase starting letters (i.e. i1234567)
-		
-		this.title := this.title.clean(removeAry)
-	}
 	
 	;---------
 	; DESCRIPTION:    Check whether this object can be opened in Sherlock (rather than emc2summary).

@@ -130,58 +130,15 @@ class EpicLib {
 	;  - Could be nice for figuring out where the random # choices came from
 	;	- Would probably require different structure for matches/possibles
 	selectEMC2RecordFromWindowTitles() { ; Assumption: any given ID will go with exactly 1 INI - I'm unlikely to ever see multiple.
-		winIDs := WinGet("List")
-		; Debug.popup("winIDs",winIDs)
-		
 		winTitles := []
-		For _,winId in winIDs
+		For _,winId in WinGet("List")
 			winTitles.push(WinGetTitle("ahk_id " winId))
 		
 		; Add in titles from a few special spots
 		winTitles.appendArray(this.getSpecialTitles())
 		
-		
-		
-		matches   := {} ; {id: ini}
-		possibles := {} ; {id: "u"}
-		
-		interestingTitles := []
-		For _,title in winTitles {
-			titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", "."], " ").removeEmpties()
-			For i,bit in titleBits {
-				if(this.isPossibleEMC2ID(bit)) {
-					possibleId  := bit
-					possibleINI := titleBits[i-1]
-					
-					; We've already had a proper match to this ID (and we shouldn't add
-					if(matches[possibleId])
-						Continue
-					
-					; First elements are always possible - they could be an ID, but we don't know the INI that goes with them.
-					if(i = 1) {
-						possibles[possibleId] := ""
-						Continue
-					}
-					
-					; INIs must be alphanumeric (basically, no characters), and cannot be purely numeric.
-					if(!possibleINI.isAlphaNum() || possibleINI.isNum()) {
-						possibles[possibleId] := ""
-						Continue
-					}
-					
-					; Try for a proper match.
-					if(!ActionObjectEMC2.isThisType(possibleINI " " possibleId, ini, id)) {
-						possibles[possibleId] := ""
-						Continue
-					}
-					
-					; Found a proper match, save it off.
-					matches[id] := ini
-					possibles.delete(id)
-				}
-			}
-		}
-		; Debug.popup("matches",matches, "possibles",possibles)
+		this.getMatchesFromTitles2(winTitles, matches, possibles)
+		Debug.popup("matches",matches, "possibles",possibles)
 		; return
 		
 		if(matches.count() = 0 && possibles.count() = 0) {
@@ -226,14 +183,133 @@ class EpicLib {
 	}
 	
 	
+	getMatchesFromTitles(titles, ByRef matches, ByRef possibles) {
+		
+		; GDB TODO compare this result to getMatchesFromTitles2() once I finish refactoring there.
+		
+		matches   := {} ; {id: EpicRecord}
+		possibles := {} ; {id: EpicRecord} (ini always "")
+		
+		; matches   := {} ; {id: ini}
+		; possibles := {} ; {id: ""}
+		
+		For _,title in titles {
+			
+			; First, try EpicRecord's parsing logic to see if we get something useful.
+			record := new EpicRecord().initFromRecordString(title)
+			if(ActionObjectEMC2.isThisType("", record.ini, record.id)) {
+				matches[record.id] := record
+				Continue
+			}
+			
+			titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", "."], " ").removeEmpties()
+			For i,potentialId in titleBits {
+				; Check whether this particular bit could even possibly be an ID.
+				if(!this.isPossibleEMC2ID(potentialId))
+					Continue
+				
+				; We've already had a proper match to this ID.
+				if(matches[potentialId])
+					Continue
+				
+				; Build the EpicRecord we'll save off. ; GDB TODO should we just combine both loops so we don't have to use this as the data structure?
+				record := new EpicRecord()
+				record.id    := potentialId
+				record.ini   := ""
+				record.title := title
+				
+				; First elements are always possible - they could be an ID, but we don't know the INI that goes with them.
+				if(i = 1) {
+					possibles[potentialId] := record
+					Continue
+				}
+				
+				; Try for a proper match using the potential INI just before our ID.
+				ini := titleBits[i-1]
+				id  := record.id
+				if(!ActionObjectEMC2.isThisType("", ini, id)) {
+					possibles[potentialId] := record
+					Continue
+				}
+				
+				; Found a proper match, save it off.
+				record.ini := ini
+				matches[id] := record
+				possibles.delete(id) ; If we have the same ID already in possibles, remove it.
+			}
+		}
+	}
+	
+	
+	getMatchesFromTitles2(titles, ByRef matches, ByRef possibles) {
+		
+		; GDB TODO switch over to using EMC2Record, with its special pre/post-processing handling for email subjects and the like.
+		
+		
+		matches   := {} ; {id: EpicRecord}
+		possibles := {} ; {id: EpicRecord} (ini always "")
+		
+		; matches   := {} ; {id: ini}
+		; possibles := {} ; {id: ""}
+		
+		For _,title in titles {
+			
+			; First, try EpicRecord's parsing logic to see if we get something useful.
+			record := new EpicRecord().initFromRecordString(title)
+			if(ActionObjectEMC2.isThisType("", record.ini, record.id)) {
+				matches[record.id] := record
+				Continue
+			}
+			
+			titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", "."], " ").removeEmpties()
+			For i,potentialId in titleBits {
+				; Check whether this particular bit could even possibly be an ID.
+				if(!this.isPossibleEMC2ID(potentialId))
+					Continue
+				
+				; We've already had a proper match to this ID.
+				if(matches[potentialId])
+					Continue
+				
+				; Build the EpicRecord we'll save off. ; GDB TODO should we just combine both loops so we don't have to use this as the data structure?
+				record := new EpicRecord()
+				record.id    := potentialId
+				record.ini   := ""
+				record.title := title
+				
+				; First elements are always possible - they could be an ID, but we don't know the INI that goes with them.
+				if(i = 1) {
+					possibles[potentialId] := record
+					Continue
+				}
+				
+				; Try for a proper match using the potential INI just before our ID.
+				ini := titleBits[i-1]
+				id  := record.id
+				if(!ActionObjectEMC2.isThisType("", ini, id)) {
+					possibles[potentialId] := record
+					Continue
+				}
+				
+				; Found a proper match, save it off.
+				record.ini := ini
+				matches[id] := record
+				possibles.delete(id) ; If we have the same ID already in possibles, remove it.
+			}
+		}
+	}
+	
+	
 	addChoicesToSelector(s, options) { ; Assumes no overlap in abbreviation letters between different times this is called.
 		lastChoiceNum := 0
 		
 		abbrevNums := {} ; letter: lastUsedNumber
-		For id,ini in options {
-			; For possibles, use "u" for "unknown"
+		For id,record in options {
+			ini := record.ini
+			title := record.title
+			
 			if(ini = "")
-				abbrevLetter := "u"
+				abbrevLetter := "u" ; Unknown INI
 			else
 				abbrevLetter := StringLower(ini.charAt(1))
 			
@@ -242,6 +318,9 @@ class EpicLib {
 			abbrev := abbrevLetter abbrevNum
 			
 			name := ini.appendPiece(id, " ")
+			name .= " - " title
+			
+			; DEBUG.POPUP("id",id, "record",record, "ini",ini, "title",title, "abbrevNum",abbrevNum, "abbrevNums",abbrevNums, "name",name)
 			
 			lastChoiceNum := s.addChoice(new SelectorChoice({NAME:name, ABBREV:abbrev, INI:ini, ID:id}))
 		}

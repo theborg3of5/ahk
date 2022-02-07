@@ -14,7 +14,7 @@
 	
 	Example Usage
 ;		; Parse a string into a record
-;		record := new EpicRecord("R UCL 123456")
+;		record := new EpicRecord().initFromRecordString("R UCL 123456")
 ;		MsgBox, % record.ini
 ;		MsgBox, % record.recordString ; R UCL 123456
 ;		
@@ -57,7 +57,23 @@ class EpicRecord {
 	;---------
 	__New(recordString := "") {
 		if(recordString != "")
-			this.processRecordString(recordString)
+			this.initFromRecordString(recordString)
+	}
+	
+	;---------
+	; DESCRIPTION:    Initialize the record based on a string.
+	; PARAMETERS:
+	;  recordString (I,REQ) - String representing the record. See class header for supported
+	;                         formats.
+	; RETURNS:        this
+	;---------
+	initFromRecordString(recordString) {
+		if(recordString = "")
+			return
+		
+		this.processRecordString(recordString)
+		
+		return this
 	}
 	
 	;---------
@@ -73,7 +89,7 @@ class EpicRecord {
 		if(title = "EMC2")
 			return
 		
-		this.processRecordString(title)
+		this.initFromRecordString(title)
 		
 		return this
 	}

@@ -92,7 +92,7 @@ class Outlook {
 		if(eventTitle = "")
 			return
 		
-		record := new EpicRecord(eventTitle)
+		record := new EpicRecord().initFromRecordString(eventTitle)
 		if(record.id)
 			ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
 	}

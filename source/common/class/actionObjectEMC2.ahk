@@ -54,10 +54,12 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	__New(id, ini := "", title := "") {
 		; If we don't know the INI yet, assume the ID is a combined string (i.e. "DLG 123456" or
 		; "DLG 123456: HB/PB WE DID SOME STUFF") and try to split it into its component parts.
+		; "DLG 123456: WE DID SOME STUFF") and try to split it into its component parts.
 		if(id != "" && ini = "") {
 			value := this.preProcess(id) ; Do a little cleanup to make sure EpicRecord can handle the string
 			
 			record := new EpicRecord(value)
+			record := new EpicRecord().initFromRecordString(value)
 			ini   := record.ini
 			id    := record.id
 			title := record.title
@@ -85,7 +87,6 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		if(!Config.contextIsWork)
 			return false
 		
-		record := new EpicRecord(value)
 		if(record.ini = "" || record.id = "")
 			return false
 		

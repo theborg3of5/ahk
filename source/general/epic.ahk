@@ -46,7 +46,7 @@
 	^!#s::
 		selectSnapper() {
 			selectedText := SelectLib.getText()
-			record := new EpicRecord(selectedText)
+			record := new EpicRecord().initFromRecordString(selectedText)
 			
 			; Don't include invalid INIs (anything that's not 3 characters)
 			if(record.ini && record.ini.length() != 3)

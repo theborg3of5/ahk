@@ -55,9 +55,10 @@ class EpicRecord {
 	;                         formats. If not given, record will need to be initialized with
 	;                         one of the .initFrom*() functions.
 	;---------
-	__New(recordString := "") {
-		if(recordString != "")
-			this.initFromRecordString(recordString)
+	__New(ini := "", id := "", title := "") {
+		this.ini   := ini
+		this.id    := id
+		this.title := title
 	}
 	
 	;---------

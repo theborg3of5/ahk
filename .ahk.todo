@@ -10,6 +10,15 @@
 			Insert-current-DLG hotkey (keep ^!i for sending just ID, add ^!#i for sending INI ID)
 			TLG selector - special keyword for RECORD that triggers this check (and possibly an extra popup)
 			Generic copy/open/link hotkeys - fall back to this when nothing is selected? (may be overkill/get in the way)
+	Expand arbitrary-date-sender to allow picking days of the week instead of just +/-x days
+		t<+-><mtwrfsu> => The mon/tues/etc. after/before today (noninclusive)
+		Alternative idea: use d (for day of week) instead of t: d<+-><mtwrfsu>
+			Example: d+t is the Tuesday after today
+		Alternative idea: just support "+d" as a general suffix, chainable to the end of any other statement
+			Doesn't seem worth making EVERYTHING chainable (what would m+1+1 mean?), so it'd be only these days of the week.
+		Alternative idea: add this to "w" instead:
+			w+1m => Next week's Monday
+		Will require updates to both RelativeDate (deciding how to apply different increments) and RelativeDateTimeBase (splitting up string)
 	EpicStudio debug: consider just using a single value of user:<EMP ID> instead of text name or workstation - seems to cut out the extra background stuff.
 	Do we want to create more specific client Codesearch types (for HSWeb only, etc.)?
 	OneNote: some easier way to access list of quick access items? (for plugging them back into OneNote when it drops them)

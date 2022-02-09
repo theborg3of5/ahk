@@ -27,3 +27,7 @@
 
 ; CapsLock is used by various other hotkeys, so this is the only way to actually use it as CapsLock.
 ^!CapsLock::SetCapsLockState, On
+
+; Disable various Windows hotkeys I don't want.
+#=::return ; Magnifier
+#-::return ; Magnifier

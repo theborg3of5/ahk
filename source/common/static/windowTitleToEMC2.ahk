@@ -15,6 +15,13 @@ class WindowTitleToEMC2 {
 	; #PUBLIC#
 	
 	;---------
+	; DESCRIPTION:    Ask the user to select an EMC2Record from the current window titles and send the corresponding ID.
+	;---------
+	sendIDFromAllWindowTitles() {
+		SendRaw, % this.selectRecordFromAllWindowTitles().id
+	}
+	
+	;---------
 	; DESCRIPTION:    Look thru all current window titles and ask the user to select from them.
 	; RETURNS:        EpicRecord instance describing the EMC2 object we believe the title they picked represents.
 	;---------
@@ -25,9 +32,17 @@ class WindowTitleToEMC2 {
 		this.getMatchesFromTitles(titles, matches, possibles)
 		; Debug.popup("matches",matches, "possibles",possibles)
 		
-		if(matches.count() = 0 && possibles.count() = 0) {
+		matchCount := DataLib.forceNumber(matches.count())
+		possibleCount := DataLib.forceNumber(possibles.count())
+		totalCount := matchCount + possibleCount
+		if(totalCount = 0) {
 			Toast.ShowError("No potential EMC2 record IDs found in window titles")
 			return ""
+		}
+		; Only 1 match, just return it directly.
+		if(totalCount = 1 && matchCount = 1) {
+			For _,record in matches
+				return record
 		}
 		
 		data := this.selectFromMatches(matches, possibles)
@@ -95,8 +110,9 @@ class WindowTitleToEMC2 {
 		For _,title in titles {
 			
 			; First, try ActionObjectEMC2's parsing logic on the full title to see if we get a full match right off the bat.
-			if(ActionObjectEMC2.isThisType(title, "", id)) {
-				matches[id] := new EMC2Record().initFromRecordString(title)
+			if(ActionObjectEMC2.isThisType(title)) {
+				record := new EMC2Record().initFromRecordString(title)
+				matches[record.id] := record
 				Continue
 			}
 			

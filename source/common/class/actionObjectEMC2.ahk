@@ -81,7 +81,8 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		if(!Config.contextIsWork)
 			return false
 		
-		record := new EpicRecord().initFromRecordString(value)
+		if(ini = "" || id = "")
+			record := new EMC2Record().initFromRecordString(value)
 		checkINI := DataLib.coalesce(ini, record.ini)
 		checkId  := DataLib.coalesce(id,  record.id)
 		
@@ -146,6 +147,10 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	; RETURNS:        The useful form of the INI, or "" if we couldn't match the input to one.
 	;---------
 	convertToUsefulINI(ini) {
+		; Don't allow numeric "INIs" - they're just picking choices from the Selector, not converting a valid value.
+		if(ini.isNum())
+			return ""
+		
 		return this.getTypeSelector(ActionObject.Type_EMC2).selectChoice(ini, "SUBTYPE")
 	}
 	

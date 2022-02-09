@@ -190,14 +190,18 @@ class Selector {
 	; DESCRIPTION:    Add a single section header.
 	; PARAMETERS:
 	;  headerText       (I,REQ) - The text to use for the header.
-	;  firstChoiceIndex (I,REQ) - The index of the first choice that will be in this section.
+	;  firstChoiceIndex (I,OPT) - The index of the first choice that will be in this section. If not passed, the header will be added
+	;                             at the end of the current list of choices (that is, the next choice that's added will be the first
+	;                             in this section).
 	; RETURNS:        
 	; SIDE EFFECTS:   
 	; NOTES:          
 	;---------
-	addSectionHeader(headerText, firstChoiceIndex) {
+	addSectionHeader(headerText, firstChoiceIndex := "") {
 		if(!this.sectionTitles)
 			this.sectionTitles := {}
+		if(firstChoiceIndex = "")
+			firstChoiceIndex := this.choices.length() + 1
 		
 		this.sectionTitles[firstChoiceIndex] := headerText
 	}

@@ -27,7 +27,7 @@ class Outlook {
 			title := ControlGetText(this.ClassNN_MailSubject_Edit, titleString)
 		
 		; Remove the extra email stuff.
-		; Note: any Epic-record-specific stuff should live in either ActionObjectEMC2 or EpicRecord instead of here.
+		; Note: any Epic-record-specific stuff should live in either ActionObjectEMC2 or EMC2Record instead of here.
 		return title.clean(["RE:", "FW:"])
 	}
 	
@@ -92,7 +92,7 @@ class Outlook {
 		if(eventTitle = "")
 			return
 		
-		record := new EpicRecord().initFromRecordString(eventTitle)
+		record := new EMC2Record().initFromRecordString(eventTitle)
 		if(record.id)
 			ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
 	}

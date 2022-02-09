@@ -1,7 +1,7 @@
 /* Static class to turn window titles into potential EMC2 objects and interact with them. =--
 	
 	Example Usage
-;		GDB TODO
+;		record := WindowTitleToEMC2.selectRecordFromAllWindowTitles() ; Shows popup and asks the user to pick an EMC2Object instance based on all current window titles.
 	
 	GDB TODO
 		Update auto-complete and syntax highlighting notepad++ definitions
@@ -14,19 +14,10 @@
 class WindowTitleToEMC2 {
 	; #PUBLIC#
 	
-	;  - Constants
-	;  - staticMembers
-	;  - nonStaticMembers
-	;  - properties
-	;  - __New()
-	;  - otherFunctions
-	
-	
-	
-	; GDB TODO could we pull in a record title somehow?
-	;	- Could use for display in Selector (after INI + ID)
-	;  - Could be nice for figuring out where the random # choices came from
-	;	- Would probably require different structure for matches/possibles
+	;---------
+	; DESCRIPTION:    Look thru all current window titles and ask the user to select from them.
+	; RETURNS:        EpicRecord instance describing the EMC2 object we believe the title they picked represents.
+	;---------
 	selectRecordFromAllWindowTitles() { ; Assumption: any given ID will go with exactly 1 INI - I'm unlikely to ever see multiple.
 		titles := this.getUsefulTitles()
 		; Debug.popup("titles",titles)
@@ -39,9 +30,7 @@ class WindowTitleToEMC2 {
 			return ""
 		}
 		
-		s := this.buildSelector(matches, possibles)
-		
-		data := s.selectGui()
+		data := this.selectFromMatches(matches, possibles)
 		if(!data) ; User didn't pick an option
 			return ""
 		
@@ -51,7 +40,10 @@ class WindowTitleToEMC2 {
 	
 	; #PRIVATE#
 	
-	
+	;---------
+	; DESCRIPTION:    Get a list of window titles that might contain EMC2 object references.
+	; RETURNS:        Array of window titles.
+	;---------
 	getUsefulTitles() {
 		; Look thru all windows (hidden included)
 		settings := new TempSettings().detectHiddenWindows("On")
@@ -89,7 +81,14 @@ class WindowTitleToEMC2 {
 		return titles
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Walk thru the provided list of titles and look for EMC2 object references.
+	; PARAMETERS:
+	;  titles    (I,REQ) - Array of window titles to consider.
+	;  matches   (O,REQ) - Confirmed EMC2 objects: associative array of EMC2Record objects, indexed by ID.
+	;  possibles (O,REQ) - Potential EMC2 objects: associative array of EMC2Record objects, indexed by ID. INI will always be
+	;                      blank for these.
+	;---------
 	getMatchesFromTitles(titles, ByRef matches, ByRef possibles) {
 		matches   := {} ; {id: EMC2Record}
 		possibles := {} ; {id: EMC2Record} (ini always "")
@@ -148,8 +147,14 @@ class WindowTitleToEMC2 {
 		return id.isNum()
 	}
 	
-	
-	buildSelector(matches, possibles) {
+	;---------
+	; DESCRIPTION:    Build a Selector and ask the user to pick from the matches we found.
+	; PARAMETERS:
+	;  matches   (I,REQ) - Associative array of confirmed EMC2Record objects, from getMatchesFromTitles.
+	;  possibles (I,REQ) - Associative array of potential EMC2Record objects, from getMatchesFromTitles.
+	; RETURNS:        Data array from Selector.selectGui().
+	;---------
+	selectFromMatches(matches, possibles) {
 		s := new Selector().setTitle("Select EMC2 Object to use:").addOverrideFields({1:"INI"})
 		
 		abbrevNums := {} ; {letter: lastUsedNumber}
@@ -161,10 +166,16 @@ class WindowTitleToEMC2 {
 		For _,record in possibles
 			s.addChoice(this.buildChoice(record, abbrevNums))
 		
-		return s
+		return s.selectGui()
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Turn the provided EMC2Record object into a SelectorChoice to show to the user.
+	; PARAMETERS:
+	;  record      (I,REQ) - EMC2Record object to use.
+	;  abbrevNums (IO,REQ) - Associative array of abbreviation letters to counts, used to generate unique abbreviations. {letter: lastUsedNumber}
+	; RETURNS:        SelectorChoice instance describing the provided record.
+	;---------
 	buildChoice(record, ByRef abbrevNums) {
 		ini   := record.ini
 		id    := record.id
@@ -183,24 +194,6 @@ class WindowTitleToEMC2 {
 		abbrev := abbrevLetter abbrevNum
 		
 		return new SelectorChoice({NAME:name, ABBREV:abbrev, INI:ini, ID:id, TITLE:title})
-	}
-	
-	; #PRIVATE#
-	
-	;  - Constants
-	;  - staticMembers
-	;  - nonStaticMembers
-	;  - functions
-	
-	
-	; #DEBUG#
-	
-	Debug_TypeName() {
-		return "GDB TODO"
-	}
-	
-	Debug_ToString(ByRef table) {
-		table.addLine("GDB TODO", this.GDBTODO)
 	}
 	; #END#
 }

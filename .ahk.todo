@@ -1,15 +1,6 @@
 # New Ideas
 	Add !c copy-all hotkey to debug popup
-	Add some way to pull EMC2 IDs from various windows' titles
-		Could use find-best-solution script's approach - look for record types (like "DLG") and give user a list of window titles to pick from
-			Can maybe steal from ActionObjectEMC2 for help identifying record types
-			Might want to look for naked IDs as well for stuff like SLG window titles?
-		Only prompt if multiple - otherwise just return the single found INI/ID
-			Maybe also suppress prompt if multiple titles, but all have same INI/ID (or even same ID but some have unknown INIs)?
-		Use cases:
-			Insert-current-DLG hotkey (keep ^!i for sending just ID, add ^!#i for sending INI ID)
-			TLG selector - special keyword for RECORD that triggers this check (and possibly an extra popup)
-			Generic copy/open/link hotkeys - fall back to this when nothing is selected? (may be overkill/get in the way)
+	Finish cleanup/further refactoring for WindowTitleToEMC2 and various affiliated logic.
 	EpicStudio debug: consider just using a single value of user:<EMP ID> instead of text name or workstation - seems to cut out the extra background stuff.
 	Do we want to create more specific client Codesearch types (for HSWeb only, etc.)?
 	OneNote: some easier way to access list of quick access items? (for plugging them back into OneNote when it drops them)

@@ -124,6 +124,21 @@ class EpicLib {
 			
 		return latestEMC2Folder "\Shared Files\EpicD" latestVersion.remove(".") ".exe"
 	}
+	
+	;---------
+	; DESCRIPTION:    Check whether the given string COULD be an EMC2 record ID - these are numeric except for SUs and TDE
+	;                 logs, which start with I and T respectively.
+	; PARAMETERS:
+	;  id (I,REQ) - Possible ID to evaluate.
+	; RETURNS:        true if possibly an ID, false otherwise.
+	;---------
+	isPossibleEMC2ID(id) {
+		; For SU DLG IDs, trim off leading letter so we recognize them as a numeric ID.
+		if(id.startsWithAnyOf(["I", "T"], letter))
+			id := id.removeFromStart(letter)
+		
+		return id.isNum()
+	}
 	; #END#
 }
 

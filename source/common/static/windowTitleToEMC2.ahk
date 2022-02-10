@@ -8,11 +8,93 @@
 		Ideas for more stuff to add:
 			Generic !w/!e hotkeys that use the current window title (overridden by program-specific ones as needed)
 				!c is used for paths and such, so not that.
+		Revisit organization of various EMC2 string parsing code
+			Current:
+				ActionObjectEMC2.isThisType() => EMC2Record.initFromRecordString()
+					MUST be an EMC2 record string
+					Only considers beginning of string
+				WindowTitleToEMC2.* => Considers all bits of the title, can return multiple matches, currently has ActionObjectEMC2.isThisType() "win" over anything else
+					Problem: because we currently make ActionObjectEMC2 "win", we miss any additional IDs in same title
+				EpicLib.isPossibleEMC2ID() => Used by both of the above
+			Desired use cases:
+				Insert ID from any of various open windows
+					? Actually, do we really want ALL windows? Or should we just identify the useful ones?
+						Useful ones would probably be:
+							Outlook message titles (both main and popup, right now only getting main)
+							EMC2 (title)
+							EpicStudio (title)
+							Visual Studio (title)
+							VB (sidebar title from project group)
+							Explorer (title)
+				Edit/View[/Copy?] EMC2 object from current window title
+					Still overridden by program-context hotkeys for special places like EMC2 or Outlook
+				TLG selector - special keyword for RECORD that triggers this check (and possibly an extra popup)?
+			New plan:
+				*
 	
 */ ; --=
 
 class WindowTitleToEMC2 {
 	; #PUBLIC#
+	
+	
+	getEMC2RecordFromTitle(title) {
+		matches   := {} ; {id: EMC2Record}
+		possibles := {} ; {id: EMC2Record} (ini always "")
+		
+		; First, try ActionObjectEMC2's parsing logic on the full title to see if we get a full match right off the bat.
+		if(ActionObjectEMC2.isThisType(title))
+			return new EMC2Record().initFromRecordString(title)
+		
+		; Split up the title and look for potential IDs.
+		titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", "."], " ").removeEmpties()
+		For i,potentialId in titleBits {
+			; Skip: this bit couldn't actually be an ID.
+			if(!EpicLib.isPossibleEMC2ID(potentialId))
+				Continue
+			; Skip: already have a proper match for this ID. ; GDB TODO need to also do this at loop level to prevent all-windows duplicates
+			if(matches[potentialId])
+				Continue
+			
+			; Possible: first element can't have a preceding INI.
+			if(i = 1) {
+				possibles[potentialId] := new EMC2Record("", potentialId, title)
+				Continue
+			}
+			
+			; Match: confirmed valid INI.
+			ini := titleBits[i-1]
+			id  := potentialId
+			if(ActionObjectEMC2.isThisType("", ini, id)) {
+				; Found a proper match, save it off.
+				matches[id] := new EMC2Record(ini, id, title)
+				possibles.delete(id) ; If we have the same ID already in possibles, remove it.
+				Continue
+			}
+			
+			; Possible: no valid INI.
+			possibles[potentialId] := new EMC2Record("", potentialId, title)
+		}
+		
+		matchCount := DataLib.forceNumber(matches.count())
+		possibleCount := DataLib.forceNumber(possibles.count())
+		totalCount := matchCount + possibleCount
+		if(totalCount = 0) {
+			Toast.ShowError("No potential EMC2 record IDs found in window titles")
+			return ""
+		}
+		; Only 1 match, just return it directly.
+		if(totalCount = 1 && matchCount = 1) {
+			For _,record in matches
+				return record
+		}
+		
+		data := this.selectFromMatches(matches, possibles)
+		if(!data) ; User didn't pick an option
+			return ""
+		
+		return new EpicRecord(data["INI"], data["ID"], data["TITLE"])
+	}
 	
 	;---------
 	; DESCRIPTION:    Ask the user to select an EMC2Record from the current window titles and send the corresponding ID.
@@ -60,9 +142,14 @@ class WindowTitleToEMC2 {
 	; RETURNS:        Array of window titles.
 	;---------
 	getUsefulTitles() {
+		titles := []
+		
+		; Make sure to include a few trusted/preferred windows/titles.
+		titles.push(Config.windowInfo["EMC2"].getCurrTitle()) ; EMC2
+		titles.push(Outlook.getMessageTitle(Config.windowInfo["Outlook"].idString)) ; Outlook message titles
+		
 		; Look thru all windows (hidden included)
 		settings := new TempSettings().detectHiddenWindows("On")
-		titles := []
 		For _,winId in WinGet("List") {
 			title := WinGetTitle("ahk_id " winId)
 			
@@ -89,9 +176,6 @@ class WindowTitleToEMC2 {
 			titles.push(title)
 		}
 		settings.restore()
-		
-		; Add in Outlook message titles (not actually window titles, but useful)
-		titles.push(Outlook.getMessageTitle(Config.windowInfo["Outlook"].idString))
 		
 		return titles
 	}
@@ -120,7 +204,7 @@ class WindowTitleToEMC2 {
 			titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", "."], " ").removeEmpties()
 			For i,potentialId in titleBits {
 				; Skip: this bit couldn't actually be an ID.
-				if(!this.isPossibleEMC2ID(potentialId))
+				if(!EpicLib.isPossibleEMC2ID(potentialId))
 					Continue
 				; Skip: already have a proper match for this ID.
 				if(matches[potentialId])
@@ -146,21 +230,6 @@ class WindowTitleToEMC2 {
 				possibles[potentialId] := new EMC2Record("", potentialId, title)
 			}
 		}
-	}
-	
-	;---------
-	; DESCRIPTION:    Check whether the given string COULD be an EMC2 record ID - these are numeric except for SUs and TDE
-	;                 logs, which start with I and T respectively.
-	; PARAMETERS:
-	;  id (I,REQ) - Possible ID to evaluate.
-	; RETURNS:        true if possibly an ID, false otherwise.
-	;---------
-	isPossibleEMC2ID(id) {
-		; For SU DLG IDs, trim off leading letter so we recognize them as a numeric ID.
-		if(id.startsWithAnyOf(["I", "T"], letter))
-			id := id.removeFromStart(letter)
-		
-		return id.isNum()
 	}
 	
 	;---------

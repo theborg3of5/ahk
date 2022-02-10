@@ -67,7 +67,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Determine whether the given string must be this type of ActionObject.
+	; DESCRIPTION:    Determine whether the given string MUST be this type of ActionObject.
 	; PARAMETERS:
 	;  value (I,REQ) - The value to evaluate
 	;  ini  (IO,OPT) - If the value is an EMC2 record, the INI.
@@ -86,11 +86,15 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		checkINI := DataLib.coalesce(ini, record.ini)
 		checkId  := DataLib.coalesce(id,  record.id)
 		
-		if(checkINI = "" || checkID = "")
+		if(checkINI = "" || checkId = "")
 			return false
 		
 		; No numeric INIs allowed.
 		if(checkINI.isNum())
+			return false
+		
+		; ID must be numeric (except for maybe an "I" or "T" prefix)
+		if(!EpicLib.isPossibleEMC2ID(checkId))
 			return false
 		
 		; Silent selection from actionObject TLS to see if we match an EMC2-type INI (filtered list so no match means not EMC2).

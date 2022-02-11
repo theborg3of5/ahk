@@ -19,16 +19,34 @@ class Outlook {
 	
 	;---------
 	; DESCRIPTION:    Get the title for the email message in the specified window.
+	; PARAMETERS:
+	;  titleString (I,OPT) - Title string identifying the window to use. Defaults to active window ("A").
 	; RETURNS:        The title, cleaned up (RE:/FW: and any other odd characters removed)
 	;---------
 	getMessageTitle(titleString := "A") {
 		title := ControlGetText(this.ClassNN_MailSubject_View, titleString) ; Most cases this control has the subject
-		if(title = Config.private["WORK_EMAIL"]) ; The exception is editing in a popup: we need to use a different control, but the original still exists with my email in it.
-			title := ControlGetText(this.ClassNN_MailSubject_Edit, titleString)
+		if(title = Config.private["WORK_EMAIL"]) ; The exception is editing in a popup: we need to use a different control, but the original still exists with just my email in it.
+			title := ControlGetText(this.ClassNN_MailSubject_Edit, titleString) ; Yes, we could use the window title instead if we wanted, but this gives us the title without an extra suffix.
 		
 		; Remove the extra email stuff.
 		; Note: any Epic-record-specific stuff should live in either ActionObjectEMC2 or EMC2Record instead of here.
 		return title.clean(["RE:", "FW:"])
+	}
+	
+	;---------
+	; DESCRIPTION:    Get message titles from all Outlook windows (main or popups).
+	; RETURNS:        Array of found window titles.
+	;---------
+	getAllMessageTitles() {
+		titles := []
+		
+		For _,windowId in WinGet("List", Config.windowInfo["Outlook"].titleString) {
+			title := this.getMessageTitle("ahk_id " windowId)
+			if(title)
+				titles.push(title)
+		}
+		
+		return titles
 	}
 	
 	

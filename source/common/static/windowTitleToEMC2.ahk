@@ -17,10 +17,10 @@
 					Problem: because we currently make ActionObjectEMC2 "win", we miss any additional IDs in same title
 				EpicLib.isPossibleEMC2ID() => Used by both of the above
 			Desired use cases:
-				Insert ID from any of various open windows
+				Insert ID (and maybe INI + ID + title?) from any of open windows
 					? Actually, do we really want ALL windows? Or should we just identify the useful ones?
 						Useful ones would probably be:
-							Outlook message titles (both main and popup, right now only getting main)
+							Outlook message titles
 							EMC2 (title)
 							EpicStudio (title)
 							Visual Studio (title)
@@ -29,8 +29,19 @@
 				Edit/View[/Copy?] EMC2 object from current window title
 					Still overridden by program-context hotkeys for special places like EMC2 or Outlook
 				TLG selector - special keyword for RECORD that triggers this check (and possibly an extra popup)?
+				Turning strings into definite EMC2 records, to edit/view/copy (currently using ActionObjectEMC2)
 			New plan:
-				*
+				(No functionality that only considers the start of the string anymore)
+				1. Is a given bit possibly an EMC2 ID? => EpicLib.isPossibleEMC2ID()
+				2. Email-subject-specific handling (pretty much all of EMC2Record.preProcess/.postProcess) should move to Outlook class
+				3. For a given string (generally a title of some sort), get exact matches only
+						Selector between them when 0 or multiple exacts
+						Basically #4, just ignore possible matches
+				4. For a given string (generally a title of some sort), get exact + possible matches both
+						Selector between them when 0 or multiple exacts
+				5. From a set of window titles (either all or a trusted few), get exact + possible matches both
+						Selector between them when 0 or multiple exacts
+						Basically #4 across multiple windows' titles
 	
 */ ; --=
 
@@ -146,7 +157,7 @@ class WindowTitleToEMC2 {
 		
 		; Make sure to include a few trusted/preferred windows/titles.
 		titles.push(Config.windowInfo["EMC2"].getCurrTitle()) ; EMC2
-		titles.push(Outlook.getMessageTitle(Config.windowInfo["Outlook"].idString)) ; Outlook message titles
+		titles.appendArray(Outlook.getAllMessageTitles()) ; Outlook message titles
 		
 		; Look thru all windows (hidden included)
 		settings := new TempSettings().detectHiddenWindows("On")

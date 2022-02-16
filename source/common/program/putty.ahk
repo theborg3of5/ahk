@@ -124,6 +124,7 @@ class Putty {
 		
 		Send, !g ; Category pane
 		Send, l  ; Logging tree node
+		Sleep, 500
 		Send, !f ; Log file name field
 		
 		logFile := SelectLib.getText()

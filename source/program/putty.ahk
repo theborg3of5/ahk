@@ -9,15 +9,14 @@
 	; Screen wipe
 	^l::
 		Send, !{Space}
-		Send, t
-		Send, {Enter}
+		Send, t ; Reset terminal
 	return
 	; Screen wipe and clear scrollback
 	^+l::
 		Send, !{Space}
-		Send, t{Enter}
+		Send, t ; Reset terminal
 		Send, !{Space}
-		Send, l
+		Send, l ; Clear scrollback
 	return
 	
 	; Scrolling (^PgUp/^PgDn scrolls one line at a time)

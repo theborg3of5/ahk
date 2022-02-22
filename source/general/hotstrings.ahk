@@ -53,6 +53,8 @@
 	::InBasket::In Basket
 	::flase::false
 	::associt::associat
+	::assocait::associat
+	::associatied::associated
 	::valiation::validation
 	::verpleedag::verpleegdag
 	::helptext::help text

@@ -139,6 +139,47 @@ class EpicLib {
 		
 		return id.isNum()
 	}
+	
+	;---------
+	; DESCRIPTION:    Convert the given "INI" into the useful version of itself.
+	; PARAMETERS:
+	;  ini (I,REQ) - The ini to convert, can be any of:
+	;                 - Normal INI (DLG, zdq)
+	;                 - Special INI that we want a different version of (ZQN => QAN)
+	;                 - Word that describes an INI (Design, log, development log)
+	; RETURNS:        The useful form of the INI, or "" if we couldn't match the input to one.
+	;---------
+	convertToUsefulEMC2INI(ini) {
+		; Don't allow numeric "INIs" - they're just picking choices from the Selector, not converting a valid value.
+		if(ini.isNum())
+			return ""
+		
+		s := this.getEMC2TypeSelector()
+		return s.selectChoice(ini, "SUBTYPE") ; Silent selection - no popup.
+	}
+	
+	
+	; #PRIVATE#
+	
+	emc2TypeSelector := "" ; Selector instance (performance cache)
+	
+	;---------
+	; DESCRIPTION:    Get a Selector instance you can use to map various INI-like strings to actual EMC2 INIs.
+	; RETURNS:        Selector instance
+	;---------
+	getEMC2TypeSelector() {
+		if(EpicLib.emc2TypeSelector)
+			return EpicLib.emc2TypeSelector
+		
+		; Use ActionObject's TLS (filtered to EMC2-type types) for mapping INIs
+		s := new Selector("actionObject.tls")
+		s.dataTableList.filterByColumn("TYPE", ActionObject.Type_EMC2)
+		
+		EpicLib.emc2TypeSelector := s ; Cache for future use
+		
+		return s
+	}
+	
 	; #END#
 }
 

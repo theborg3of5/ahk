@@ -61,6 +61,8 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		if(!this.selectMissingInfo(id, ini, "Select INI and ID"))
 			return ""
 		
+		id := StringUpper(id) ; Make sure ID is capitalized as EMC2 URLs fail on lowercase starting letters (i.e. i1234567)
+		
 		this.id    := id
 		this.ini   := ini
 		this.title := title
@@ -98,8 +100,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 			return false
 		
 		; Silent selection from actionObject TLS to see if we match an EMC2-type INI (filtered list so no match means not EMC2).
-		s := ActionObjectBase.getTypeSelector(ActionObject.Type_EMC2)
-		matchedINI := s.selectChoice(checkINI, "SUBTYPE")
+		matchedINI := EpicLib.convertToUsefulEMC2INI(checkINI)
 		if(matchedINI = "")
 			return false
 		
@@ -139,23 +140,6 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;---------
 	getLinkEdit() {
 		return Config.private["EMC2_LINK_EDIT_BASE"].replaceTags({"INI":this.ini, "ID":this.id})
-	}
-	
-	;---------
-	; DESCRIPTION:    Convert the given "INI" into the useful version of itself.
-	; PARAMETERS:
-	;  ini (I,REQ) - The ini to convert, can be any of:
-	;                 - Normal INI (DLG)
-	;                 - Special INI that we want a different version of (ZQN => QAN)
-	;                 - Word that describes an INI (Design)
-	; RETURNS:        The useful form of the INI, or "" if we couldn't match the input to one.
-	;---------
-	convertToUsefulINI(ini) {
-		; Don't allow numeric "INIs" - they're just picking choices from the Selector, not converting a valid value.
-		if(ini.isNum())
-			return ""
-		
-		return this.getTypeSelector(ActionObject.Type_EMC2).selectChoice(ini, "SUBTYPE")
 	}
 	
 	

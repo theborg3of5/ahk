@@ -76,7 +76,16 @@
 				. EpicLib.selectEMC2RecordsFromUsefulWindows() => compiles all results from "trusted" titles and shows a popup for them (if 1 total match, return that without a popup)
 					^!i - insert ID from window titles
 					Probably use EpicLib.extractEMC2Records for each title
-					
+				. Consider adding an ActionObjectEMC2 (maybe ActionObjectBase and other instances that make sense too?) function for copying + toasting
+					Maybe different ones for copying ID, INI ID, and INI ID - TITLE?
+						Need at least ID (can use INI/title in toast)
+						Callers:
+							EMC2
+								copyCurrentRecord()
+							Outlook
+								copyEMC2ObjectFromEvent()
+								copyEMC2ObjectFromTLG()
+								copyCurrentMessageTitle() (maybe)
 	
 */ ; --=
 

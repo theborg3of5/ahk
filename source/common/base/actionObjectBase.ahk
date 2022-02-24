@@ -32,30 +32,6 @@ class ActionObjectBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
-	;                 choices to only those matching the given type.
-	; PARAMETERS:
-	;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
-	; RETURNS:        An ActionObject Selector instance, filtered to the given type.
-	; SIDE EFFECTS:   Populates type subscript in .typeSelectors if it doesn't yet exist.
-	;---------
-	getTypeSelector(type) {
-		if(type = "")
-			return ""
-		
-		; If an instance already exists, just use that.
-		if(this.typeSelectors[type])
-			return this.typeSelectors[type]
-			
-		; Otherwise, create a new one.
-		s := new Selector("actionObject.tls")
-		s.dataTableList.filterByColumn("TYPE", type)
-		
-		this.typeSelectors[type] := s ; Cache the value off for later use.
-		return s
-	}
-	
-	;---------
 	; DESCRIPTION:    Open the object.
 	; NOTES:          If you want to override this in a child class, consider overriding
 	;                 .openWeb/.openEdit as well - they don't come through here by default.
@@ -187,8 +163,32 @@ class ActionObjectBase {
 	
 	; #PRIVATE#
 	
-	static typeSelectors := {} ; {ActionObjectType: Selector}
+	static typeSelectors := {} ; {ActionObject.Type_*: Selector}
 	
+	
+	;---------
+	; DESCRIPTION:    Get a Selector instance for the ActionObject TLS and filter its
+	;                 choices to only those matching the given type.
+	; PARAMETERS:
+	;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
+	; RETURNS:        An ActionObject Selector instance, filtered to the given type.
+	; SIDE EFFECTS:   Caches Selector instances in .typeSelectors.
+	;---------
+	getTypeSelector(type) {
+		if(type = "")
+			return ""
+		
+		; If an instance already exists, just use that.
+		if(this.typeSelectors[type])
+			return this.typeSelectors[type]
+			
+		; Otherwise, create a new one.
+		s := new Selector("actionObject.tls")
+		s.dataTableList.filterByColumn("TYPE", type)
+		
+		this.typeSelectors[type] := s ; Cache the value off for later use.
+		return s
+	}
 	
 	;---------
 	; DESCRIPTION:    Open provided link to the object.

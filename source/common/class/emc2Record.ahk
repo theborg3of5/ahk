@@ -28,7 +28,8 @@ class EMC2Record extends EpicRecord {
 			if(this.title = "") ; No title, just record
 				return this.ini " " this.id
 			
-			return this.ini " " this.id " - " this.title
+			title := this.title.clean(["DBC", "-", "/", "\", ":"]) ; Don't need "DBC" and a separator on the start of every EMC2 title.
+			return this.ini " " this.id " - " title
 		}
 	}
 	
@@ -101,27 +102,39 @@ class EMC2Record extends EpicRecord {
 	; NOTES:          This logic is not taken into account by ActionObject when it's trying to determine the type.
 	;---------
 	preProcess(value) {
-		; Email subject handling
-		value := value.removeFromStart("Date change notification for ") ; Date change notifications
-		value := value.removeFromStart("Application removed from ")
-		value := value.removeFromStart("Priority Queue: ")
-		value := value.removeFromStart("[Signed] ")
-		if(value.startsWith("PRJ Readiness "))
-			value := value.replaceOne("PRJ Readiness ", "PRJ ")
+		value := value.remove("Date change notification for")
+		value := value.remove("Application removed from")
+		value := value.remove("Priority Queue:")
+		value := value.remove("[Signed]")
+		value := value.remove("(Developer has reset your status)")
+		value := value.remove("A PQA 1 Reviewer is Waiting for Changes")
+		value := value.remove("A PQA 1 Reviewer has signed off")
+		value := value.remove("A PQA 2 Reviewer is Waiting for Changes")
+		value := value.remove("A PQA 2 Reviewer has signed off")
+		value := value.remove("An Expert Reviewer is Waiting for Changes")
+		value := value.remove("An Expert Reviewer has signed off")
+		value := value.remove("A QA 1 Reviewer is Waiting for Changes")
+		value := value.remove("A QA 1 Reviewer has signed off")
+		value := value.remove("A QA 2 Reviewer is Waiting for Changes")
+		value := value.remove("A QA 2 Reviewer has signed off")
+		value := value.remove("Status Changed to PQA 1")
+		value := value.remove("Status Changed to QA 1")
+		value := value.remove("Status Changed to PQA 2")
+		value := value.remove("Status Changed to QA 2")
+		value := value.remove("Status Changed to Final Stage Comp")
+		value := value.remove("(A Reviewer Approved)")
+		value := value.remove("(A Reviewer is Waiting for Changes)")
+		value := value.remove("(A Reviewer Declined to Review)")
+		value := value.remove("--Assigned To:")
+		
+		value := value.replace("PRJ Readiness ", "PRJ ") ; Needs to be slightly more specific - just removing "readiness" across the board is too broad.
+		
+		; EMC2 lock emails have stuff in a weird order - flip it around.
 		if(value.startsWith("EMC2 Lock: ")) {
 			value := value.removeFromStart("EMC2 Lock: ").removeFromEnd(" is locked")
-			title   := value.beforeString(" [")
-			id      := value.afterString("] ")
-			iniName := value.firstBetweenStrings(" [", "] ")
-			
-			; Convert the name of the record type into an INI.
-			Switch iniName {
-				Case "Development Log": ini := "DLG"
-				Case "Design":          ini := "XDS"
-				Case "Main":            ini := "QAN" ; Yes, this is weird. Not sure why it uses "Main", but it's distinct from the others so it works.
-				Case "Project":         ini := "PRJ"
-				Case "Issue":           ini := "ZDQ"
-			}
+			title := value.beforeString(" [")
+			id    := value.afterString("] ")
+			ini   := value.firstBetweenStrings(" [", "] ").afterString(" ", true) ; INI is between the brackets, but only get the last word (for "development log" case)
 			
 			value := ini " " id " - " title
 		}
@@ -135,32 +148,7 @@ class EMC2Record extends EpicRecord {
 	;---------
 	postProcess() {
 		; INI - make sure the INI is the "real" EMC2 one.
-		this.ini := ActionObjectEMC2.convertToUsefulINI(this.ini)
-		
-		; Title - clean up, drop anything extra that we don't need.
-		removeAry := ["-", "/", "\", ":", ",", "DBC"] ; Don't need "DBC" on the start of every EMC2 title.
-		; INI-specific strings to remove
-		Switch this.ini {
-			Case "DLG":
-				removeAry.push("(Developer has reset your status)")
-				; All permutations of these can appear
-				For _,role in ["A PQA 1 Reviewer", "A PQA 2 Reviewer", "An Expert Reviewer", "A QA 1 Reviewer", "A QA 2 Reviewer"] {
-					For _,result in ["is Waiting for Changes", "has signed off"] {
-						removeAry.push("(" role " " result ")")
-					}
-				}
-				For _,status in ["PQA 1", "QA 1", "PQA 2", "QA 2", "Final Stage Comp"] {
-					removeAry.push("Status Changed to " status)
-				}
-			Case "XDS":
-				removeAry.appendArray(["(A Reviewer Approved)", "(A Reviewer is Waiting for Changes)", "(A Reviewer Declined to Review)"])
-			Case "SLG":
-				removeAry.appendArray(["--Assigned To:"])
-		}
-		
-		this.id := StringUpper(this.id) ; Make sure ID is capitalized as some spots fail on lowercase starting letters (i.e. i1234567)
-		
-		this.title := this.title.clean(removeAry)
+		this.ini := EpicLib.convertToUsefulEMC2INI(this.ini)
 	}
 	; #END#
 }

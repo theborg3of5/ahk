@@ -63,7 +63,7 @@
 				Chrome									chrome.exe					Chrome_WidgetWin_1			- Google Chrome
 				Cisco AnyConnect VPN					vpnui.exe					-									Cisco AnyConnect Secure Mobility Client
 				Discord									Discord.exe					-									-														NO_PADDING
-				EMC2										EMC2.+EpicD.+\.exe		-									-														-					REGEX
+				EMC2										EMC2.+EpicD.+\.exe		ThunderRT6MDIForm				-														-					REGEX
 				EpicStudio								EpicStudio.exe				-									EpicStudio
 				Everything								Everything.exe				EVERYTHING
 				Excel										EXCEL.EXE					-									-														NO_PADDING

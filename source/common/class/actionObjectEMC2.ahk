@@ -62,10 +62,8 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	; DESCRIPTION:    Determine whether the given string MUST be this type of ActionObject.
 	; PARAMETERS:
 	;  value (I,REQ) - The value to evaluate
-	;  ini  (IO,OPT) - If the value is an EMC2 record, the INI.
-	;                  If passed in we'll evaluate this instead of trying to pull it from value.
-	;  id   (IO,OPT) - If the value is an EMC2 record, the ID.
-	;                  If passed in we'll evaluate this instead of trying to pull it from value.
+	;  ini   (O,OPT) - If the value is an EMC2 record, the INI.
+	;  id    (O,OPT) - If the value is an EMC2 record, the ID.
 	; RETURNS:        true/false - whether the given value must be an EMC2 object.
 	; NOTES:          Must be effectively static - this is called before we decide what kind of object to return.
 	;---------
@@ -73,29 +71,15 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		if(!Config.contextIsWork)
 			return false
 		
-		if(ini = "" || id = "")
-			record := new EMC2Record().initFromRecordString(value)
-		checkINI := DataLib.coalesce(ini, record.ini)
-		checkId  := DataLib.coalesce(id,  record.id)
+		record := new EMC2Record().initFromRecordString(value)
+		checkINI := record.ini
+		checkId  := record.id
 		
-		if(checkINI = "" || checkId = "")
-			return false
-		
-		; No numeric INIs allowed.
-		if(checkINI.isNum())
-			return false
-		
-		; ID must be numeric (except for maybe an "I" or "T" prefix)
-		if(!EpicLib.isPossibleEMC2ID(checkId))
-			return false
-		
-		; Silent selection from actionObject TLS to see if we match an EMC2-type INI (filtered list so no match means not EMC2).
-		matchedINI := EpicLib.convertToUsefulEMC2INI(checkINI)
-		if(matchedINI = "")
+		if(!EpicLib.couldBeEMC2Record(checkINI, checkId))
 			return false
 		
 		; The value does match this type, so return the info we found to save a little work later.
-		ini := matchedINI
+		ini := checkINI
 		id  := checkId
 		return true
 	}

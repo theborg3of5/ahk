@@ -49,7 +49,7 @@ class EpicLib {
 	; RETURNS:        The updated server code location.
 	;---------
 	dropOffsetFromServerLocation(serverLocation) {
-		EpicLib.splitServerLocation(serverLocation, routine, tag)
+		this.splitServerLocation(serverLocation, routine, tag)
 		tag := tag.beforeString("+").beforeString("-")
 		return tag "^" routine
 	}
@@ -140,6 +140,25 @@ class EpicLib {
 		return id.isNum()
 	}
 	
+	
+	couldBeEMC2Record(ByRef ini, id) { ; Checks whether this is PLAUSIBLY an EMC2 INI/ID, based on INI and ID format - no guarantee that it exists. Also converts INI to "proper" one.
+		; Need both INI and ID.
+		if(ini = "" || id = "")
+			return false
+		
+		; ID format check
+		if(!this.isPossibleEMC2ID(id))
+			return false
+		
+		; INI check
+		tempINI := this.convertToUsefulEMC2INI(ini)
+		if(tempINI = "")
+			return false
+		
+		ini := tempINI ; Return "proper" INI
+		return true
+	}
+	
 	;---------
 	; DESCRIPTION:    Convert the given "INI" into the useful version of itself.
 	; PARAMETERS:
@@ -168,14 +187,14 @@ class EpicLib {
 	; RETURNS:        Selector instance
 	;---------
 	getEMC2TypeSelector() {
-		if(EpicLib.emc2TypeSelector)
-			return EpicLib.emc2TypeSelector
+		if(this.emc2TypeSelector)
+			return this.emc2TypeSelector
 		
 		; Use ActionObject's TLS (filtered to EMC2-type types) for mapping INIs
 		s := new Selector("actionObject.tls")
 		s.dataTableList.filterByColumn("TYPE", ActionObject.Type_EMC2)
 		
-		EpicLib.emc2TypeSelector := s ; Cache for future use
+		this.emc2TypeSelector := s ; Cache for future use
 		
 		return s
 	}

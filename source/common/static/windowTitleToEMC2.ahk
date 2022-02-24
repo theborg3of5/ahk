@@ -60,23 +60,23 @@
 						Selector between them when 0 or multiple exacts
 						Basically #4 across multiple windows' titles
 			Code structure:
-				. Outlook class gets email-subject-specific handling (.preProcess/.postProcess) and initFromTLGString()
-				. Standard EMC2 string generation moves into Epic.sendStandardEMC2ObjectString()
-					Will call into EpicLib.selectEMC2Records() to get the needed ini/id/title
-				. EMC2 class gets a public getCurrentRecord() function (a la initFromEMC2Title()) that returns an EpicRecord from its current title (or "" if nothing there)
-				. Get rid of (now-empty) EMC2Record
-				. EpicRecord.initFromRecordString() stays, for RECORD string (ini/id/title in specific formats) to INI/ID/title
-				. EpicLib.isPossibleEMC2ID() stays
+				x. EpicLib.isPossibleEMC2ID() stays
 					Likely used by ActionObjectEMC2 to determine if given ID is EMC2 (for use from ActionObject)
+				x. Outlook class gets email-subject-specific handling (.preProcess/.postProcess) and initFromTLGString()
+				x. EpicRecord.initFromRecordString() stays, for RECORD string (ini/id/title in specific formats) to INI/ID/title
+				x. Standard EMC2 string generation moves into Epic.sendStandardEMC2ObjectString()
+					Will call into EpicLib.selectEMC2Records() to get the needed ini/id/title
 				. EpicLib.extractEMC2Records(fromString, possibleIDs) => returns exact matches
 					Likely used by ActionObjectEMC2 - only use the first result (exact, then possible)
 				. EpicLib.selectEMC2Records(fromString) => shows popup if multiple + returns choice OR if 1 exact match, return without popup)
 					Edit/View EMC2 record from current window title
 					TLG selector special "FIND" or "GET" keyword
+				. EMC2 class gets a public getCurrentRecord() function (a la initFromEMC2Title()) that returns an EpicRecord from its current title (or "" if nothing there)
+				. Get rid of (now-empty) EMC2Record
 				. EpicLib.selectEMC2RecordsFromUsefulWindows() => compiles all results from "trusted" titles and shows a popup for them (if 1 total match, return that without a popup)
 					^!i - insert ID from window titles
 					Probably use EpicLib.extractEMC2Records for each title
-				. Consider adding an ActionObjectEMC2 (maybe ActionObjectBase and other instances that make sense too?) function for copying + toasting
+				. Consider adding an ActionObjectEMC2 function for copying + toasting (maybe for ActionObjectBase and other instances that make sense too?)
 					Maybe different ones for copying ID, INI ID, and INI ID - TITLE?
 						Need at least ID (can use INI/title in toast)
 						Callers:
@@ -86,6 +86,7 @@
 								copyEMC2ObjectFromEvent()
 								copyEMC2ObjectFromTLG()
 								copyCurrentMessageTitle() (maybe)
+				. Consider putting all of the EMC2 record-specific stuff in EpicLib, into a new library (EMC2RecordLib, maybe?)
 	
 */ ; --=
 

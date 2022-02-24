@@ -132,10 +132,10 @@ class EpicRecord {
 		; Make sure there's no extra # on the front of the ID
 		this.id := this.id.removeFromStart("#")
 		
-		; Make sure everything is free of extra whitespace
+		; Make sure everything is free of extra whitespace and other odd characters
 		this.ini   := this.ini.withoutWhitespace()
 		this.id    := this.id.withoutWhitespace()
-		this.title := this.title.withoutWhitespace()
+		this.title := this.title.clean(["-"])
 		
 		; Debug.popup("recordString",recordString, "this",this)
 	}

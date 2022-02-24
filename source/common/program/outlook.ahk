@@ -86,7 +86,7 @@ class Outlook {
 		if(eventTitle = "")
 			return
 		
-		record := new EMC2Record().initFromRecordString(eventTitle)
+		record := new EpicRecord().initFromRecordString(eventTitle)
 		if(record.id)
 			ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
 	}
@@ -99,8 +99,8 @@ class Outlook {
 		if(tlgString = "")
 			return
 		
-		record := new EMC2Record().initFromTLGString(tlgString)
-		if(record.id)
+		record := this.getCurrentTLGRecord()
+		if(record)
 			ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
 	}
 	;---------
@@ -111,19 +111,17 @@ class Outlook {
 		if(tlgString = "")
 			return
 		
-		record := new EMC2Record().initFromTLGString(tlgString)
-		new ActionObjectEMC2(record.id, record.ini).openWeb()
+		record := this.getCurrentTLGRecord()
+		if(record)
+			new ActionObjectEMC2(record.id, record.ini).openWeb()
 	}
 	;---------
 	; DESCRIPTION:    Open the EMC2 record described in the currently selected TLG event in edit mode.
 	;---------
 	openEMC2ObjectFromTLGEdit() {
-		tlgString := SelectLib.getText() ; GDB TODO consider factoring out this getter logic from these 4 functions.
-		if(tlgString = "")
-			return
-		
-		record := new EMC2Record().initFromTLGString(tlgString)
-		new ActionObjectEMC2(record.id, record.ini).openEdit()
+		record := this.getCurrentTLGRecord()
+		if(record)
+			new ActionObjectEMC2(record.id, record.ini).openEdit()
 	}
 	
 	
@@ -190,6 +188,28 @@ class Outlook {
 		value := value.beforeString("--Assigned To: ") ; SLGs
 		
 		return value
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the current EMC2 record encoded in the selected TLG event's title.
+	; RETURNS:        EpicRecord instance from the event (or "" if no event found).
+	;---------
+	getCurrentTLGRecord() {
+		tlgString := SelectLib.getText()
+		if(!tlgString)
+			return ""
+		
+		baseAry := Config.private["OUTLOOK_TLG_BASE"].split(["/", ","])
+		tlgAry  := tlgString.split(["/", ","])
+		
+		recIDs := {}
+		For _,ini in ["SLG", "DLG", "PRJ", "QAN"] {
+			iniIndex := baseAry.contains("<" ini ">")
+			id := tlgAry[iniIndex]
+			
+			if(id != "")
+				return new EpicRecord(ini, id)
+		}
 	}
 	; #END#
 }

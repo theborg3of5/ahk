@@ -75,6 +75,7 @@
 				x. Update ActionObjectEMC2 to use new logic - EpicLib.extractEMC2Records
 				x. EMC2 class gets a public getCurrentRecord() function (a la initFromEMC2Title()) that returns an EpicRecord from its current title (or "" if nothing there)
 				. Outlook class gets initFromTLGString() equivalent
+				x. Outlook class gets initFromTLGString() equivalent
 				. EpicLib.selectEMC2RecordsFromUsefulWindows() => compiles all results from "trusted" titles and shows a popup for them (if 1 total match, return that without a popup)
 					^!i - insert ID from window titles
 					Probably use EpicLib.extractEMC2Records for each title

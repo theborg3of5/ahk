@@ -64,7 +64,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 			return ""
 		
 		this.id    := StringUpper(id) ; Make sure ID is capitalized as EMC2 URLs fail on lowercase starting letters (i.e. i1234567)
-		this.ini   := ini
+		this.ini   := EpicLib.convertToUsefulEMC2INI(ini) ; Make sure we've got the proper INI (in case the caller passed in something that needs to be converted)
 		this.title := title
 	}
 	

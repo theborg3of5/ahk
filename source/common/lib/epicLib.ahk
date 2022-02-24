@@ -259,7 +259,8 @@ class EpicLib {
 		if(!data) ; User didn't pick an option
 			return ""
 		
-		return new EpicRecord(data["INI"], data["ID"], data["TITLE"])
+		ini := this.convertToUsefulEMC2INI(data["INI"])
+		return new EpicRecord(ini, data["ID"], data["TITLE"])
 	}
 	
 	;---------

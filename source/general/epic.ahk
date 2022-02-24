@@ -69,10 +69,12 @@
 		sendStandardEMC2ObjectString() {
 			HotkeyLib.waitForRelease()
 			
-			ao := new ActionObjectEMC2(Clipboard) ; GDB TODO switch to new EpicLib handling once that's available
-			ini   := ao.ini
-			id    := ao.id
-			title := ao.title
+			record := EpicLib.selectEMC2RecordFromTitle(clipboard)
+			if(!record)
+				return
+			ini   := record.ini
+			id    := record.id
+			title := record.title
 			
 			title := title.clean(["DBC", "-", "/", "\", ":"]) ; Don't need "DBC" and a separator on the start of every EMC2 title.
 			ClipboardLib.send(ini " " id " - " title) ; Can contain hotkey chars

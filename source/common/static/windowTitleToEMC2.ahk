@@ -66,11 +66,15 @@
 				x. EpicRecord.initFromRecordString() stays, for RECORD string (ini/id/title in specific formats) to INI/ID/title
 				x. Standard EMC2 string generation moves into Epic.sendStandardEMC2ObjectString()
 					Will call into EpicLib.selectEMC2Records() to get the needed ini/id/title
-				. EpicLib.extractEMC2Records(fromString, possibleIDs) => returns exact matches
+				x. EpicLib.extractEMC2Records(fromString, possibleIDs) => returns exact matches
 					Likely used by ActionObjectEMC2 - only use the first result (exact, then possible)
-				. EpicLib.getEMC2RecordFromTitle(fromString) => shows popup if multiple + returns choice OR if 1 exact match, return without popup)
+				x. EpicLib.selectEMC2RecordFromTitle(fromString) => shows popup if multiple + returns choice OR if 1 exact match, return without popup)
 					Edit/View EMC2 record from current window title
 					TLG selector special "FIND" or "GET" keyword
+				x. Update Epic.sendStandardEMC2ObjectString() to use EpicLib.selectEMC2RecordFromTitle
+				. Update ActionObjectEMC2 to use new logic - EpicLib.extractEMC2Records
+				. TLG selector "FIND" or "GET" keyword
+				. Global edit/view from current window title
 				. EMC2 class gets a public getCurrentRecord() function (a la initFromEMC2Title()) that returns an EpicRecord from its current title (or "" if nothing there)
 				. Get rid of (now-empty) EMC2Record
 				. EpicLib.selectEMC2RecordsFromUsefulWindows() => compiles all results from "trusted" titles and shows a popup for them (if 1 total match, return that without a popup)

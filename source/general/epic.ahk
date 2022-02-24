@@ -63,7 +63,7 @@
 			else
 				Snapper.addRecords(data["COMM_ID"], data["INI"], data["ID"]) ; data["ID"] can contain a list or range if that's what the user entered
 		}
-
+	
 	; Turn clipboard into standard EMC2 string and send it.
 	!+n::
 		sendStandardEMC2ObjectString() {

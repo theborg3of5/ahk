@@ -23,10 +23,26 @@ class EMC2 {
 	}
 	
 	;---------
+	; DESCRIPTION:    Get an EpicRecord instance representing the record currently open in EMC2.
+	; RETURNS:        EpicRecord instance, or "" if one not found.
+	;---------
+	getCurrentRecord() {
+		title := Config.windowInfo["EMC2"].getCurrTitle()
+		title := title.removeFromEnd(" - EMC2")
+		
+		; If no info available, bail.
+		if(title = "EMC2")
+			return ""
+		
+		matches := EpicLib.extractEMC2RecordsFromTitle(title)
+		return matches[1] ; Assume there's only 1, exact match.
+	}
+	
+	;---------
 	; DESCRIPTION:    Copy the INI + ID of the currently open record to the clipboard.
 	;---------
 	copyCurrentRecord() {
-		record := new EMC2Record().initFromEMC2Title()
+		record := this.getCurrentRecord()
 		if(record.id)
 			ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
 	}
@@ -43,7 +59,7 @@ class EMC2 {
 			return
 		}
 		
-		record := new EMC2Record().initFromEMC2Title()
+		record := this.getCurrentRecord()
 		new ActionObjectEMC2(record.id, record.ini).openWeb()
 	}
 	
@@ -52,7 +68,7 @@ class EMC2 {
 	;                 Nova/Sherlock objects).
 	;---------
 	openCurrentRecordWebBasic() {
-		record := new EMC2Record().initFromEMC2Title()
+		record := this.getCurrentRecord()
 		new ActionObjectEMC2(record.id, record.ini).openWebBasic()
 	}
 	
@@ -60,7 +76,7 @@ class EMC2 {
 	; DESCRIPTION:    Open/focus the current DLG in EpicStudio.
 	;---------
 	openCurrentDLGInEpicStudio() {
-		record := new EMC2Record().initFromEMC2Title()
+		record := this.getCurrentRecord()
 		if(record.ini != "DLG" || record.id = "")
 			return
 		

@@ -128,7 +128,7 @@ class Config {
 	;---------
 	windowInfo[name] {
 		get {
-			return (this.windows)[name].clone() ; Parens are so it doesn't try to pass a parameter to the this.privates property.
+			return (this.windows)[name].clone() ; Parens are so it doesn't try to pass a parameter to the this.windows property.
 		}
 	}
 	

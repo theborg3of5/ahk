@@ -34,24 +34,6 @@ class EMC2Record extends EpicRecord {
 	}
 	
 	;---------
-	; DESCRIPTION:    Initialize the record based on the current EMC2 window title.
-	; NOTES:          This will only get the INI and ID, never the title.
-	; RETURNS:        this
-	;---------
-	initFromEMC2Title() {
-		title := Config.windowInfo["EMC2"].getCurrTitle()
-		title := title.removeFromEnd(" - EMC2")
-		
-		; If no info available, bail.
-		if(title = "EMC2")
-			return
-		
-		this.processRecordString(title)
-		
-		return this
-	}
-	
-	;---------
 	; DESCRIPTION:    Initialize the record based on a TLG string.
 	; PARAMETERS:
 	;  tlgString (I,REQ) - TLG string from Outlook TLG calendar.

@@ -62,7 +62,7 @@
 			Code structure:
 				x. EpicLib.isPossibleEMC2ID() stays
 					Likely used by ActionObjectEMC2 to determine if given ID is EMC2 (for use from ActionObject)
-				x. Outlook class gets email-subject-specific handling (.preProcess/.postProcess) and initFromTLGString()
+				x. Outlook class gets email-subject-specific handling (.preProcess/.postProcess)
 				x. EpicRecord.initFromRecordString() stays, for RECORD string (ini/id/title in specific formats) to INI/ID/title
 				x. Standard EMC2 string generation moves into Epic.sendStandardEMC2ObjectString()
 					Will call into EpicLib.selectEMC2Records() to get the needed ini/id/title
@@ -73,7 +73,8 @@
 					TLG selector special "FIND" or "GET" keyword
 				x. Update Epic.sendStandardEMC2ObjectString() to use EpicLib.selectEMC2RecordFromTitle
 				x. Update ActionObjectEMC2 to use new logic - EpicLib.extractEMC2Records
-				. EMC2 class gets a public getCurrentRecord() function (a la initFromEMC2Title()) that returns an EpicRecord from its current title (or "" if nothing there)
+				x. EMC2 class gets a public getCurrentRecord() function (a la initFromEMC2Title()) that returns an EpicRecord from its current title (or "" if nothing there)
+				. Outlook class gets initFromTLGString() equivalent
 				. EpicLib.selectEMC2RecordsFromUsefulWindows() => compiles all results from "trusted" titles and shows a popup for them (if 1 total match, return that without a popup)
 					^!i - insert ID from window titles
 					Probably use EpicLib.extractEMC2Records for each title

@@ -35,7 +35,7 @@ class WindowInfo {
 	;---------
 	idString {
 		get {
-			winId := this.getMatchingWindowID()
+			winId := this.exists()
 			if(winId = "")
 				return ""
 			
@@ -122,8 +122,8 @@ class WindowInfo {
 	; RETURNS:        Window title
 	;---------
 	getCurrTitle() {
-		winId := this.exist()
-		return WinGetTitle(winId)
+		winId := this.exists()
+		return WinGetTitle("ahk_id " winId)
 	}
 	
 	;---------
@@ -149,21 +149,6 @@ class WindowInfo {
 			return false
 		
 		return true
-	}
-	
-	
-	; #PRIVATE#
-	
-	;---------
-	; DESCRIPTION:    Get the the first window that matches all of the critieria contained in this class.
-	; RETURNS:        The matching window's ID
-	;---------
-	getMatchingWindowID() {
-		settings := new TempSettings().titleMatchMode(this.titleMatchMode)
-		winId := WinExist(this.titleString)
-		settings.restore()
-		
-		return winId
 	}
 	; #END#
 }

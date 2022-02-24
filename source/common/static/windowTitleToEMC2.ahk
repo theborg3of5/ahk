@@ -16,20 +16,37 @@
 				WindowTitleToEMC2.* => Considers all bits of the title, can return multiple matches, currently has ActionObjectEMC2.isThisType() "win" over anything else
 					Problem: because we currently make ActionObjectEMC2 "win", we miss any additional IDs in same title
 				EpicLib.isPossibleEMC2ID() => Used by both of the above
+				EMC2Record => pre/post processing + standard EMC2 string
 			Desired use cases:
-				Insert ID (and maybe INI + ID + title?) from any of open windows
-					? Actually, do we really want ALL windows? Or should we just identify the useful ones?
-						Useful ones would probably be:
-							Outlook message titles
-							EMC2 (title)
-							EpicStudio (title)
-							Visual Studio (title)
-							VB (sidebar title from project group)
-							Explorer (title)
-				Edit/View[/Copy?] EMC2 object from current window title
-					Still overridden by program-context hotkeys for special places like EMC2 or Outlook
-				TLG selector - special keyword for RECORD that triggers this check (and possibly an extra popup)?
-				Turning strings into definite EMC2 records, to edit/view/copy (currently using ActionObjectEMC2)
+				OneNote
+					linkEMC2ObjectInLine() - Used with !+n
+					linkDevStructureSectionTitle() - view and edit links
+				Outlook
+					openEMC2ObjectFromCurrentMessageWeb()/openEMC2ObjectFromCurrentMessageEdit()
+					copyEMC2ObjectFromEvent()
+					copyEMC2ObjectFromTLG()/openEMC2ObjectFromTLGWeb()/openEMC2ObjectFromTLGEdit()
+				Epic
+					selectTLGActionObject() - TLG list of EMC2 objects
+					sendStandardEMC2ObjectString()
+					^!i - insert ID from window titles
+						? Actually, do we really want ALL windows? Or should we just identify the useful ones?
+							Useful ones would probably be:
+								Outlook message titles
+								EMC2 (title)
+								EpicStudio (title)
+								Visual Studio (title)
+								VB (sidebar title from project group)
+								Explorer (title)
+				EMC2
+					copyCurrentRecord()/openCurrentRecordWeb()/openCurrentRecordWebBasic()/openCurrentDLGInEpicStudio()
+				EpicStudio
+					linkRoutineToCurrentDLG()
+				New
+					Edit/View EMC2 object from current window title (global !e/!w hotkeys)
+						Still overridden by program-context hotkeys for special places like EMC2 or Outlook
+					TLG selector - special keyword for RECORD that triggers this check (and possibly an extra popup)?
+						INI would become a prefix so the TLG logic puts it in the right spot
+						"FIND" or "GET" maybe?
 			New plan:
 				(No functionality that only considers the start of the string anymore)
 				1. Is a given bit possibly an EMC2 ID? => EpicLib.isPossibleEMC2ID()
@@ -42,6 +59,24 @@
 				5. From a set of window titles (either all or a trusted few), get exact + possible matches both
 						Selector between them when 0 or multiple exacts
 						Basically #4 across multiple windows' titles
+			Code structure:
+				. Outlook class gets email-subject-specific handling (.preProcess/.postProcess) and initFromTLGString()
+				. Standard EMC2 string generation moves into Epic.sendStandardEMC2ObjectString()
+					Will call into EpicLib.selectEMC2Records() to get the needed ini/id/title
+				. EMC2 class gets a public getCurrentRecord() function (a la initFromEMC2Title()) that returns an EpicRecord from its current title (or "" if nothing there)
+				. Get rid of (now-empty) EMC2Record
+				. EpicRecord.initFromRecordString() stays, for RECORD string (ini/id/title in specific formats) to INI/ID/title
+				. EpicLib.isPossibleEMC2ID() stays
+					Likely used by ActionObjectEMC2 to determine if given ID is EMC2 (for use from ActionObject)
+				. EpicLib.extractEMC2Records(fromString, possibleIDs) => returns exact matches
+					Likely used by ActionObjectEMC2 - only use the first result (exact, then possible)
+				. EpicLib.selectEMC2Records(fromString) => shows popup if multiple + returns choice OR if 1 exact match, return without popup)
+					Edit/View EMC2 record from current window title
+					TLG selector special "FIND" or "GET" keyword
+				. EpicLib.selectEMC2RecordsFromUsefulWindows() => compiles all results from "trusted" titles and shows a popup for them (if 1 total match, return that without a popup)
+					^!i - insert ID from window titles
+					Probably use EpicLib.extractEMC2Records for each title
+					
 	
 */ ; --=
 

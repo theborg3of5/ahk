@@ -37,7 +37,6 @@ Object(params*) {
 #Include %A_LineFile%\..\class
 	#Include actionObject.ahk
 	#Include duration.ahk
-	#Include emc2Record.ahk
 	#Include epicRecord.ahk
 	#Include flexTable.ahk
 	#Include formattedList.ahk

@@ -74,12 +74,11 @@
 				x. Update Epic.sendStandardEMC2ObjectString() to use EpicLib.selectEMC2RecordFromTitle
 				x. Update ActionObjectEMC2 to use new logic - EpicLib.extractEMC2Records
 				x. EMC2 class gets a public getCurrentRecord() function (a la initFromEMC2Title()) that returns an EpicRecord from its current title (or "" if nothing there)
-				. Outlook class gets initFromTLGString() equivalent
 				x. Outlook class gets initFromTLGString() equivalent
+				x. Get rid of (now-empty) EMC2Record
 				. EpicLib.selectEMC2RecordsFromUsefulWindows() => compiles all results from "trusted" titles and shows a popup for them (if 1 total match, return that without a popup)
 					^!i - insert ID from window titles
 					Probably use EpicLib.extractEMC2Records for each title
-				. Get rid of (now-empty) EMC2Record
 				. TLG selector "FIND" or "GET" keyword
 				. Global edit/view from current window title
 				. Consider adding an ActionObjectEMC2 function for copying + toasting (maybe for ActionObjectBase and other instances that make sense too?)
@@ -101,12 +100,12 @@ class WindowTitleToEMC2 {
 	
 	
 	getEMC2RecordFromTitle(title) {
-		matches   := {} ; {id: EMC2Record}
-		possibles := {} ; {id: EMC2Record} (ini always "")
+		matches   := {} ; {id: EpicRecord}
+		possibles := {} ; {id: EpicRecord} (ini always "")
 		
 		; First, try ActionObjectEMC2's parsing logic on the full title to see if we get a full match right off the bat.
 		if(ActionObjectEMC2.isThisType(title))
-			return new EMC2Record().initFromRecordString(title)
+			return new EpicRecord().initFromRecordString(title)
 		
 		; Split up the title and look for potential IDs.
 		titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", "."], " ").removeEmpties()
@@ -120,7 +119,7 @@ class WindowTitleToEMC2 {
 			
 			; Possible: first element can't have a preceding INI.
 			if(i = 1) {
-				possibles[potentialId] := new EMC2Record("", potentialId, title)
+				possibles[potentialId] := new EpicRecord("", potentialId, title)
 				Continue
 			}
 			
@@ -129,13 +128,13 @@ class WindowTitleToEMC2 {
 			id  := potentialId
 			if(ActionObjectEMC2.isThisType("", ini, id)) {
 				; Found a proper match, save it off.
-				matches[id] := new EMC2Record(ini, id, title)
+				matches[id] := new EpicRecord(ini, id, title)
 				possibles.delete(id) ; If we have the same ID already in possibles, remove it.
 				Continue
 			}
 			
 			; Possible: no valid INI.
-			possibles[potentialId] := new EMC2Record("", potentialId, title)
+			possibles[potentialId] := new EpicRecord("", potentialId, title)
 		}
 		
 		matchCount := DataLib.forceNumber(matches.count())
@@ -159,7 +158,7 @@ class WindowTitleToEMC2 {
 	}
 	
 	;---------
-	; DESCRIPTION:    Ask the user to select an EMC2Record from the current window titles and send the corresponding ID.
+	; DESCRIPTION:    Ask the user to select an EpicRecord from the current window titles and send the corresponding ID.
 	;---------
 	sendIDFromAllWindowTitles() {
 		SendRaw, % this.selectRecordFromAllWindowTitles().id
@@ -246,18 +245,18 @@ class WindowTitleToEMC2 {
 	; DESCRIPTION:    Walk thru the provided list of titles and look for EMC2 object references.
 	; PARAMETERS:
 	;  titles    (I,REQ) - Array of window titles to consider.
-	;  matches   (O,REQ) - Confirmed EMC2 objects: associative array of EMC2Record objects, indexed by ID.
-	;  possibles (O,REQ) - Potential EMC2 objects: associative array of EMC2Record objects, indexed by ID. INI will always be
+	;  matches   (O,REQ) - Confirmed EMC2 objects: associative array of EpicRecord objects, indexed by ID.
+	;  possibles (O,REQ) - Potential EMC2 objects: associative array of EpicRecord objects, indexed by ID. INI will always be
 	;                      blank for these.
 	;---------
 	getMatchesFromTitles(titles, ByRef matches, ByRef possibles) {
-		matches   := {} ; {id: EMC2Record}
-		possibles := {} ; {id: EMC2Record} (ini always "")
+		matches   := {} ; {id: EpicRecord}
+		possibles := {} ; {id: EpicRecord} (ini always "")
 		For _,title in titles {
 			
 			; First, try ActionObjectEMC2's parsing logic on the full title to see if we get a full match right off the bat.
 			if(ActionObjectEMC2.isThisType(title)) {
-				record := new EMC2Record().initFromRecordString(title)
+				record := new EpicRecord().initFromRecordString(title)
 				matches[record.id] := record
 				Continue
 			}
@@ -274,7 +273,7 @@ class WindowTitleToEMC2 {
 				
 				; Possible: first element can't have a preceding INI.
 				if(i = 1) {
-					possibles[potentialId] := new EMC2Record("", potentialId, title)
+					possibles[potentialId] := new EpicRecord("", potentialId, title)
 					Continue
 				}
 				
@@ -283,13 +282,13 @@ class WindowTitleToEMC2 {
 				id  := potentialId
 				if(ActionObjectEMC2.isThisType("", ini, id)) {
 					; Found a proper match, save it off.
-					matches[id] := new EMC2Record(ini, id, title)
+					matches[id] := new EpicRecord(ini, id, title)
 					possibles.delete(id) ; If we have the same ID already in possibles, remove it.
 					Continue
 				}
 				
 				; Possible: no valid INI.
-				possibles[potentialId] := new EMC2Record("", potentialId, title)
+				possibles[potentialId] := new EpicRecord("", potentialId, title)
 			}
 		}
 	}
@@ -297,8 +296,8 @@ class WindowTitleToEMC2 {
 	;---------
 	; DESCRIPTION:    Build a Selector and ask the user to pick from the matches we found.
 	; PARAMETERS:
-	;  matches   (I,REQ) - Associative array of confirmed EMC2Record objects, from getMatchesFromTitles.
-	;  possibles (I,REQ) - Associative array of potential EMC2Record objects, from getMatchesFromTitles.
+	;  matches   (I,REQ) - Associative array of confirmed EpicRecord objects, from getMatchesFromTitles.
+	;  possibles (I,REQ) - Associative array of potential EpicRecord objects, from getMatchesFromTitles.
 	; RETURNS:        Data array from Selector.selectGui().
 	;---------
 	selectFromMatches(matches, possibles) {
@@ -317,9 +316,9 @@ class WindowTitleToEMC2 {
 	}
 	
 	;---------
-	; DESCRIPTION:    Turn the provided EMC2Record object into a SelectorChoice to show to the user.
+	; DESCRIPTION:    Turn the provided EpicRecord object into a SelectorChoice to show to the user.
 	; PARAMETERS:
-	;  record      (I,REQ) - EMC2Record object to use.
+	;  record      (I,REQ) - EpicRecord object to use.
 	;  abbrevNums (IO,REQ) - Associative array of abbreviation letters to counts, used to generate unique abbreviations. {letter: lastUsedNumber}
 	; RETURNS:        SelectorChoice instance describing the provided record.
 	;---------

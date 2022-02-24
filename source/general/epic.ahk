@@ -68,12 +68,18 @@
 	!+n::
 		sendStandardEMC2ObjectString() {
 			HotkeyLib.waitForRelease()
-			ao := new ActionObjectEMC2(Clipboard)
-			ClipboardLib.send(ao.standardEMC2String) ; Can contain hotkey chars
+			
+			ao := new ActionObjectEMC2(Clipboard) ; GDB TODO switch to new EpicLib handling once that's available
+			ini   := ao.ini
+			id    := ao.id
+			title := ao.title
+			
+			title := title.clean(["DBC", "-", "/", "\", ":"]) ; Don't need "DBC" and a separator on the start of every EMC2 title.
+			ClipboardLib.send(ini " " id " - " title) ; Can contain hotkey chars
 			
 			; Special case for OneNote: link the INI/ID as well.
 			if(Config.isWindowActive("OneNote"))
-				OneNote.linkEMC2ObjectInLine(ao.ini, ao.id)
+				OneNote.linkEMC2ObjectInLine(ini, id)
 		}
 	
 	; Pull EMC2 record IDs from currently open window titles and prompt the user to send one.

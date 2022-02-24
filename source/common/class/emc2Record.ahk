@@ -20,20 +20,6 @@ class EMC2Record extends EpicRecord {
 	; #PUBLIC#
 	
 	;---------
-	; DESCRIPTION:    The "standard" EMC2 object string
-	; RETURNS:        <INI> <ID> - <TITLE>
-	;---------
-	standardEMC2String {
-		get {
-			if(this.title = "") ; No title, just record
-				return this.ini " " this.id
-			
-			title := this.title.clean(["DBC", "-", "/", "\", ":"]) ; Don't need "DBC" and a separator on the start of every EMC2 title.
-			return this.ini " " this.id " - " title
-		}
-	}
-	
-	;---------
 	; DESCRIPTION:    Initialize the record based on a string.
 	; PARAMETERS:
 	;  recordString (I,REQ) - String representing the record. See class header for supported

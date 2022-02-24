@@ -29,16 +29,6 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	title := "" ; Title for the EMC2 object
 	; @GROUP-END@
 	
-	;---------
-	; DESCRIPTION:    The "standard" EMC2 object string
-	; RETURNS:        <INI> <ID> - <TITLE>
-	;---------
-	standardEMC2String {
-		get {
-			return new EMC2Record(this.ini, this.id, this.title).standardEMC2String
-		}
-	}
-	
 	
 	;---------
 	; DESCRIPTION:    Create a new reference to an EMC2 object.

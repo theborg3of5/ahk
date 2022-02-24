@@ -41,7 +41,6 @@ class EMC2Record extends EpicRecord {
 	; RETURNS:        this
 	;---------
 	initFromRecordString(recordString) {
-		recordString := this.preProcess(recordString)
 		base.initFromRecordString(recordString)
 		this.postProcess()
 		
@@ -94,53 +93,6 @@ class EMC2Record extends EpicRecord {
 	
 	
 	; #PRIVATE#
-	
-	;---------
-	; DESCRIPTION:    Clean up the string if it has extra stuff or odd formats, so EpicRecord can handle it properly.
-	; PARAMETERS:
-	;  value (I,REQ) - The value to clean
-	; NOTES:          This logic is not taken into account by ActionObject when it's trying to determine the type.
-	;---------
-	preProcess(value) {
-		value := value.remove("Date change notification for")
-		value := value.remove("Application removed from")
-		value := value.remove("Priority Queue:")
-		value := value.remove("[Signed]")
-		value := value.remove("(Developer has reset your status)")
-		value := value.remove("A PQA 1 Reviewer is Waiting for Changes")
-		value := value.remove("A PQA 1 Reviewer has signed off")
-		value := value.remove("A PQA 2 Reviewer is Waiting for Changes")
-		value := value.remove("A PQA 2 Reviewer has signed off")
-		value := value.remove("An Expert Reviewer is Waiting for Changes")
-		value := value.remove("An Expert Reviewer has signed off")
-		value := value.remove("A QA 1 Reviewer is Waiting for Changes")
-		value := value.remove("A QA 1 Reviewer has signed off")
-		value := value.remove("A QA 2 Reviewer is Waiting for Changes")
-		value := value.remove("A QA 2 Reviewer has signed off")
-		value := value.remove("Status Changed to PQA 1")
-		value := value.remove("Status Changed to QA 1")
-		value := value.remove("Status Changed to PQA 2")
-		value := value.remove("Status Changed to QA 2")
-		value := value.remove("Status Changed to Final Stage Comp")
-		value := value.remove("(A Reviewer Approved)")
-		value := value.remove("(A Reviewer is Waiting for Changes)")
-		value := value.remove("(A Reviewer Declined to Review)")
-		value := value.remove("--Assigned To:")
-		
-		value := value.replace("PRJ Readiness ", "PRJ ") ; Needs to be slightly more specific - just removing "readiness" across the board is too broad.
-		
-		; EMC2 lock emails have stuff in a weird order - flip it around.
-		if(value.startsWith("EMC2 Lock: ")) {
-			value := value.removeFromStart("EMC2 Lock: ").removeFromEnd(" is locked")
-			title := value.beforeString(" [")
-			id    := value.afterString("] ")
-			ini   := value.firstBetweenStrings(" [", "] ").afterString(" ", true) ; INI is between the brackets, but only get the last word (for "development log" case)
-			
-			value := ini " " id " - " title
-		}
-		
-		return value
-	}
 	
 	;---------
 	; DESCRIPTION:    Do some additional processing on the different bits of info about the object.

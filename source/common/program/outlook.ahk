@@ -18,22 +18,6 @@ class Outlook {
 	}
 	
 	;---------
-	; DESCRIPTION:    Get the title for the email message in the specified window.
-	; PARAMETERS:
-	;  titleString (I,OPT) - Title string identifying the window to use. Defaults to active window ("A").
-	; RETURNS:        The title, cleaned up (RE:/FW: and any other odd characters removed)
-	;---------
-	getMessageTitle(titleString := "A") {
-		title := ControlGetText(this.ClassNN_MailSubject_View, titleString) ; Most cases this control has the subject
-		if(title = Config.private["WORK_EMAIL"]) ; The exception is editing in a popup: we need to use a different control, but the original still exists with just my email in it.
-			title := ControlGetText(this.ClassNN_MailSubject_Edit, titleString) ; Yes, we could use the window title instead if we wanted, but this gives us the title without an extra suffix.
-		
-		; Remove the extra email stuff.
-		; Note: any Epic-record-specific stuff should live in either ActionObjectEMC2 or EMC2Record instead of here.
-		return title.clean(["RE:", "FW:"])
-	}
-	
-	;---------
 	; DESCRIPTION:    Get message titles from all Outlook windows (main or popups).
 	; RETURNS:        Array of found window titles.
 	;---------
@@ -81,25 +65,17 @@ class Outlook {
 	}
 	
 	;---------
-	; DESCRIPTION:    Put the current email message's title on the clipboard, cleaning it up as needed.
+	; DESCRIPTION:    Get the title for the email message in the specified window.
+	; PARAMETERS:
+	;  titleString (I,OPT) - Title string identifying the window to use. Defaults to active window ("A").
+	; RETURNS:        The title, cleaned up (RE:/FW: and any other odd characters removed)
 	;---------
-	copyCurrentMessageTitle() {
-		title := this.getCurrentMessageTitle()
-		ClipboardLib.setAndToast(title, "title")
-	}
-	;---------
-	; DESCRIPTION:    If the current email message's title describes an EMC2 object, open that object in web mode.
-	;---------
-	openEMC2ObjectFromCurrentMessageWeb() {
-		title := this.getCurrentMessageTitle()
-		new ActionObjectEMC2(title).openWeb()
-	}
-	;---------
-	; DESCRIPTION:    If the current email message's title describes an EMC2 object, open that object in edit mode.
-	;---------
-	openEMC2ObjectFromCurrentMessageEdit() {
-		title := this.getCurrentMessageTitle()
-		new ActionObjectEMC2(title).openEdit()
+	getMessageTitle(titleString := "A") {
+		title := ControlGetText(this.ClassNN_MailSubject_View, titleString) ; Most cases this control has the subject
+		if(title = Config.private["WORK_EMAIL"]) ; The exception is editing in a popup: we need to use a different control, but the original still exists with just my email in it.
+			title := ControlGetText(this.ClassNN_MailSubject_Edit, titleString) ; Yes, we could use the window title instead if we wanted, but this doesn't give us an extra suffix.
+		
+		return this.cleanUpTitle(title)
 	}
 	
 	;---------
@@ -142,7 +118,7 @@ class Outlook {
 	; DESCRIPTION:    Open the EMC2 record described in the currently selected TLG event in edit mode.
 	;---------
 	openEMC2ObjectFromTLGEdit() {
-		tlgString := SelectLib.getText()
+		tlgString := SelectLib.getText() ; GDB TODO consider factoring out this getter logic from these 4 functions.
 		if(tlgString = "")
 			return
 		
@@ -180,16 +156,40 @@ class Outlook {
 	}
 	
 	;---------
-	; DESCRIPTION:    Get the title for the current email message.
-	; RETURNS:        The title, cleaned up (RE:/FW: and any other odd characters removed)
+	; DESCRIPTION:    Clean up the provided message title. Gets rid of garbage and massages certain EMC2 record titles to
+	;                 make it easier for downstream logic to handle them.
+	; PARAMETERS:
+	;  value (I,REQ) - The message title to clean up.
+	; RETURNS:        Cleaned-up title
 	;---------
-	getCurrentMessageTitle() {
-		title := this.getMessageTitle("A")
+	cleanUpTitle(value) {
+		; Remove reply/forward garbage, it's never helpful to include.
+		value := value.removeFromStart("RE: ")
+		value := value.removeFromStart("FW: ")
 		
-		if(title = "")
-			Toast.ShowError("Copy title failed", "Could not get title from message control")
+		; Do some special cleanup for EMC2 record titles, to make them easier for downstream logic to work with.
+		; Project readiness is obviously about the PRJ in question
+		value := value.replace("PRJ Readiness ", "PRJ ") ; Needs to be slightly more specific - just removing "readiness" across the board is too broad.
 		
-		return title
+		; EMC2 lock emails have stuff in a weird order: "EMC2 Lock: <title> [<ini>] <id> is locked"
+		if(value.startsWith("EMC2 Lock: ")) {
+			value := value.removeFromStart("EMC2 Lock: ").removeFromEnd(" is locked")
+			title := value.beforeString(" [")
+			id    := value.afterString("] ")
+			ini   := value.firstBetweenStrings(" [", "] ")
+			
+			; This isn't a true INI - it's words describing the INI instead. Convert it to the true INI for easier handling downstream.
+			if(ini = "Main") ; Yes, this is weird. Not sure why it uses "Main", but it's distinct from the others so it works.
+				ini := "QAN"
+			ini := EpicLib.convertToUsefulEMC2INI(ini)
+			
+			value := ini " " id " - " title
+		}
+		
+		; Other strings that get mixed up in record titles
+		value := value.beforeString("--Assigned To: ")
+		
+		return value
 	}
 	; #END#
 }

@@ -32,11 +32,11 @@
 ; Mail folders
 #If Config.isWindowActive("Outlook") && (Outlook.isCurrentScreenMail() || Outlook.isMailMessagePopupActive())
 	; Copy current message title to clipboard
-	!c::Outlook.copyCurrentMessageTitle()
+	!c::ClipboardLib.setAndToast(Outlook.getMessageTitle(), "title")
 	
 	; Open the relevant record (if applicable) for the current message
-	!w::Outlook.openEMC2ObjectFromCurrentMessageWeb()
-	!e::Outlook.openEMC2ObjectFromCurrentMessageEdit()
+	!w::new ActionObjectEMC2(Outlook.getMessageTitle()).openWeb()
+	!e::new ActionObjectEMC2(Outlook.getMessageTitle()).openEdit()
 #If
 
 ; Normal calendar

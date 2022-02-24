@@ -199,6 +199,118 @@ class EpicLib {
 		return s
 	}
 	
+	
+	extractEMC2RecordsFromTitle(title, ByRef possibles := "") { ; GDB TODO go over all of this logic again for further cleanup.
+		matches   := {} ; {id: EpicRecord}
+		possibles := {} ; {id: EpicRecord} (ini always "")
+		
+		; Split up the title and look for potential IDs.
+		titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", "."], " ").removeEmpties()
+		For i,potentialId in titleBits {
+			; Skip: this bit couldn't actually be an ID.
+			if(!this.isPossibleEMC2ID(potentialId))
+				Continue
+			; Skip: already have a proper match for this ID. ; GDB TODO need to also do this at loop level to prevent all-windows duplicates
+			if(matches[potentialId])
+				Continue
+			
+			; Possible: first element can't have a preceding INI.
+			if(i = 1) {
+				possibles[potentialId] := new EpicRecord("", potentialId, title)
+				Continue
+			}
+			
+			; Match: confirmed valid INI.
+			ini := titleBits[i-1]
+			id  := potentialId
+			if(this.couldBeEMC2Record(ini, id)) {
+				; Found a proper match, save it off.
+				matches[id] := new EpicRecord(ini, id, title)
+				possibles.delete(id) ; If we have the same ID already in possibles, remove it.
+				Continue
+			}
+			
+			; Possible: no valid INI.
+			possibles[potentialId] := new EpicRecord("", potentialId, title)
+		}
+		
+		; Debug.popup("titleBits",titleBits, "matches",matches, "possibles",possibles)
+		return matches
+	}
+	
+	
+	selectEMC2RecordFromTitle(title) {
+		matches := this.extractEMC2RecordsFromTitle(title, possibles)
+		
+		; No matches or possibles
+		if(matches.count() + possibles.count() = 0) {
+			Toast.ShowError("No potential EMC2 record IDs found in window title: " title)
+			return ""
+		}
+		
+		; Only 1 exact match, just return it directly (ignoring any possibles).
+		if(matches.count() = 1) {
+			For _,record in matches
+				return record
+		}
+		
+		; Prompt the user (even if there's just 1 possible, this gives them the opportunity to enter the INI)
+		data := this.selectFromEMC2RecordMatches(matches, possibles)
+		if(!data) ; User didn't pick an option
+			return ""
+		
+		return new EpicRecord(data["INI"], data["ID"], data["TITLE"])
+	}
+	
+	;---------
+	; DESCRIPTION:    Build a Selector and ask the user to pick from the matches we found.
+	; PARAMETERS:
+	;  matches   (I,REQ) - Associative array of confirmed EpicRecord objects, from getMatchesFromTitles.
+	;  possibles (I,REQ) - Associative array of potential EpicRecord objects, from getMatchesFromTitles.
+	; RETURNS:        Data array from Selector.selectGui().
+	;---------
+	selectFromEMC2RecordMatches(matches, possibles) {
+		s := new Selector().setTitle("Select EMC2 Object to use:").addOverrideFields({1:"INI"})
+		
+		abbrevNums := {} ; {letter: lastUsedNumber}
+		s.addSectionHeader("EMC2 Records")
+		For _,record in matches
+			s.addChoice(this.buildChoiceFromEMC2Record(record, abbrevNums))
+		
+		s.addSectionHeader("Potential IDs")
+		For _,record in possibles
+			s.addChoice(this.buildChoiceFromEMC2Record(record, abbrevNums))
+		
+		return s.selectGui()
+	}
+	
+	;---------
+	; DESCRIPTION:    Turn the provided EpicRecord object into a SelectorChoice to show to the user.
+	; PARAMETERS:
+	;  record      (I,REQ) - EpicRecord object to use.
+	;  abbrevNums (IO,REQ) - Associative array of abbreviation letters to counts, used to generate unique abbreviations. {letter: lastUsedNumber}
+	; RETURNS:        SelectorChoice instance describing the provided record.
+	;---------
+	buildChoiceFromEMC2Record(record, ByRef abbrevNums) {
+		ini   := record.ini
+		id    := record.id
+		title := record.title
+		
+		name := ini.appendPiece(id, " ") " - " title
+			
+		; Abbreviation is INI first letter + a counter.
+		ini := ini
+		if(ini = "")
+			abbrevLetter := "u" ; Unknown INI
+		else
+			abbrevLetter := StringLower(ini.charAt(1))
+		abbrevNum := DataLib.forceNumber(abbrevNums[abbrevLetter]) + 1
+		abbrevNums[abbrevLetter] := abbrevNum
+		abbrev := abbrevLetter abbrevNum
+		
+		return new SelectorChoice({NAME:name, ABBREV:abbrev, INI:ini, ID:id, TITLE:title})
+	}
+	
 	; #END#
 }
 

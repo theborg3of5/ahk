@@ -68,7 +68,7 @@
 					Will call into EpicLib.selectEMC2Records() to get the needed ini/id/title
 				. EpicLib.extractEMC2Records(fromString, possibleIDs) => returns exact matches
 					Likely used by ActionObjectEMC2 - only use the first result (exact, then possible)
-				. EpicLib.selectEMC2Records(fromString) => shows popup if multiple + returns choice OR if 1 exact match, return without popup)
+				. EpicLib.getEMC2RecordFromTitle(fromString) => shows popup if multiple + returns choice OR if 1 exact match, return without popup)
 					Edit/View EMC2 record from current window title
 					TLG selector special "FIND" or "GET" keyword
 				. EMC2 class gets a public getCurrentRecord() function (a la initFromEMC2Title()) that returns an EpicRecord from its current title (or "" if nothing there)

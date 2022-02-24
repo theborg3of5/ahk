@@ -42,18 +42,28 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		; If we don't know the INI yet, assume the ID is a combined string (i.e. "DLG 123456" or
 		; "DLG 123456: WE DID SOME STUFF") and try to split it into its component parts.
 		if(id != "" && ini = "") {
-			record := new EMC2Record().initFromRecordString(id)
-			ini   := record.ini
-			id    := record.id
-			title := record.title
+			matches := EpicLib.extractEMC2RecordsFromTitle(id, possibles)
+			if(matches.length() + possibles.length() = 0)
+				return false
+			
+			; Pick the first match if there is one ; GDB TODO probably pull this out since it's duplicated from isThisType().
+			if(matches.length() >= 1) {
+				ini   := matches[1].ini
+				id    := matches[1].id
+				title := matches[1].title
+			
+			; If there are possible matches, fail but still pass back the ID of the first one so it shows up in
+			; the Selector popup downstream.
+			} else if(possibles.length() >= 1) {
+				id    := possibles[1].id
+				title := possibles[1].title
+			}
 		}
 		
 		if(!this.selectMissingInfo(id, ini, "Select INI and ID"))
 			return ""
 		
-		id := StringUpper(id) ; Make sure ID is capitalized as EMC2 URLs fail on lowercase starting letters (i.e. i1234567)
-		
-		this.id    := id
+		this.id    := StringUpper(id) ; Make sure ID is capitalized as EMC2 URLs fail on lowercase starting letters (i.e. i1234567)
 		this.ini   := ini
 		this.title := title
 	}
@@ -71,17 +81,24 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		if(!Config.contextIsWork)
 			return false
 		
-		record := new EMC2Record().initFromRecordString(value)
-		checkINI := record.ini
-		checkId  := record.id
-		
-		if(!EpicLib.couldBeEMC2Record(checkINI, checkId))
+		matches := EpicLib.extractEMC2RecordsFromTitle(value, possibles)
+		if(matches.length() + possibles.length() = 0)
 			return false
 		
-		; The value does match this type, so return the info we found to save a little work later.
-		ini := checkINI
-		id  := checkId
-		return true
+		; Pick the first match if there is one
+		if(matches.length() >= 1) {
+			ini := matches[1].ini
+			id  := matches[1].id
+			return true
+		}
+		
+		; If there are possible matches, succeed but pass no INI so we get a corresponding popup downstream.
+		if(possibles.length() >= 1) {
+			id := possibles[1].id
+			return true
+		}
+		
+		return false
 	}
 	
 	;---------

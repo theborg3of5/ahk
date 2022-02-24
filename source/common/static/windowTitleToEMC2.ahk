@@ -72,14 +72,14 @@
 					Edit/View EMC2 record from current window title
 					TLG selector special "FIND" or "GET" keyword
 				x. Update Epic.sendStandardEMC2ObjectString() to use EpicLib.selectEMC2RecordFromTitle
-				. Update ActionObjectEMC2 to use new logic - EpicLib.extractEMC2Records
-				. TLG selector "FIND" or "GET" keyword
-				. Global edit/view from current window title
+				x. Update ActionObjectEMC2 to use new logic - EpicLib.extractEMC2Records
 				. EMC2 class gets a public getCurrentRecord() function (a la initFromEMC2Title()) that returns an EpicRecord from its current title (or "" if nothing there)
-				. Get rid of (now-empty) EMC2Record
 				. EpicLib.selectEMC2RecordsFromUsefulWindows() => compiles all results from "trusted" titles and shows a popup for them (if 1 total match, return that without a popup)
 					^!i - insert ID from window titles
 					Probably use EpicLib.extractEMC2Records for each title
+				. Get rid of (now-empty) EMC2Record
+				. TLG selector "FIND" or "GET" keyword
+				. Global edit/view from current window title
 				. Consider adding an ActionObjectEMC2 function for copying + toasting (maybe for ActionObjectBase and other instances that make sense too?)
 					Maybe different ones for copying ID, INI ID, and INI ID - TITLE?
 						Need at least ID (can use INI/title in toast)

@@ -200,7 +200,7 @@ class EpicLib {
 	}
 	
 	
-	extractEMC2RecordsFromTitle(title, ByRef possibles := "") { ; GDB TODO go over all of this logic again for further cleanup.
+	extractEMC2RecordsFromTitle(title, ByRef possiblesAry := "") { ; GDB TODO go over all of this logic again for further cleanup.
 		matches   := {} ; {id: EpicRecord}
 		possibles := {} ; {id: EpicRecord} (ini always "")
 		
@@ -234,8 +234,12 @@ class EpicLib {
 			possibles[potentialId] := new EpicRecord("", potentialId, title)
 		}
 		
+		; Return arrays, not objects.
+		matchesAry := DataLib.convertObjectToArray(matches)
+		possiblesAry := DataLib.convertObjectToArray(possibles)
+		
 		; Debug.popup("titleBits",titleBits, "matches",matches, "possibles",possibles)
-		return matches
+		return matchesAry
 	}
 	
 	
@@ -243,13 +247,13 @@ class EpicLib {
 		matches := this.extractEMC2RecordsFromTitle(title, possibles)
 		
 		; No matches or possibles
-		if(matches.count() + possibles.count() = 0) {
+		if(matches.length() + possibles.length() = 0) {
 			Toast.ShowError("No potential EMC2 record IDs found in window title: " title)
 			return ""
 		}
 		
 		; Only 1 exact match, just return it directly (ignoring any possibles).
-		if(matches.count() = 1) {
+		if(matches.length() = 1) {
 			For _,record in matches
 				return record
 		}

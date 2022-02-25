@@ -178,73 +178,27 @@ class EpicLib {
 	}
 	
 	
-	extractEMC2RecordsFromTitle(title, ByRef possibles := "", windowName := "") { ; GDB TODO go over all of this logic again for further cleanup.
-		; GDB TODO call out in header that there may be duplicate IDs + filter them out somewhere (maybe an extra parameter here to filter duplicates?)
-		; GDB TODO consider combining matches and possibles into one array, with parameter that filters out possibles
-		matches   := []
-		possibles := []
-		
-		; GDB TODO do we want to use EpicRecord's record-string-parsing to clean up titles, or even give it first dibs on adding a match/possible?
-		
-		; Split up the title and look for potential IDs.
-		titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", ".", "#"], " ").removeEmpties()
-		For i,potentialId in titleBits {
-			; Skip: this bit couldn't actually be an ID.
-			if(!this.couldBeEMC2ID(potentialId))
-				Continue
-			
-			; Possible: first element can't have a preceding INI.
-			if(i = 1) {
-				possibles.push(new EpicRecord("", potentialId, title, windowName))
-				Continue
-			}
-			
-			; Match: confirmed valid INI.
-			ini := titleBits[i-1]
-			id  := potentialId
-			if(this.couldBeEMC2Record(ini, id)) {
-				matches.push(new EpicRecord(ini, id, title, windowName))
-				Continue
-			}
-			
-			; Possible: no valid INI.
-			possibles.push(new EpicRecord("", potentialId, title, windowName))
-		}
-		
-		; Clean up title (remove INI/ID where possible) ; GDB TODO should we just be more aggressive removing the INI/ID + all separators, even from middle of string? Or at least doing this cleaner?
-		For _,record in matches
-			record.title := new EpicRecord().initFromRecordString(record.title).title
-		For _,record in possibles
-			record.title := new EpicRecord().initFromRecordString(record.title).title
-		
-		; Debug.popup("titleBits",titleBits, "matches",matches, "possibles",possibles)
-		return matches
-	}
-	
-	
 	getBestEMC2RecordFromTitle(title) {
-		matches := this.extractEMC2RecordsFromTitle(title, possibles)
+		this.extractEMC2RecordsFromTitle(title, exacts, possibles)
 		
 		; Return the first exact match, then the first possible match.
-		return DataLib.coalesce(matches[1], possibles[1])
+		return DataLib.coalesce(exacts[1], possibles[1])
 	}
 	
 	
 	selectEMC2RecordFromTitle(title) {
-		matches := this.extractEMC2RecordsFromTitle(title, possibles)
-		
-		; No matches or possibles
-		if(matches.length() + possibles.length() = 0) {
+		if(!this.extractEMC2RecordsFromTitle(title, exacts, possibles)) {
+			; No matches at all
 			Toast.ShowError("No potential EMC2 record IDs found in window title: " title)
 			return ""
 		}
 		
 		; Only 1 exact match, just return it directly (ignoring any possibles).
-		if(matches.length() = 1)
-			return matches[1]
+		if(exacts.length() = 1)
+			return exacts[1]
 		
 		; Prompt the user (even if there's just 1 possible, this gives them the opportunity to enter the INI)
-		data := this.selectFromEMC2RecordMatches(matches, possibles)
+		data := this.selectFromEMC2RecordMatches(exacts, possibles)
 		if(!data) ; User didn't pick an option
 			return ""
 		
@@ -254,30 +208,31 @@ class EpicLib {
 	
 	
 	selectEMC2RecordFromUsefulTitles() {
-		titles := this.getUsefulEMC2RecordTitles()
+		titles := this.getUsefulEMC2RecordWindows()
 		; Debug.popup("titles",titles)
 		
-		allMatches   := []
+		allExacts    := []
 		allPossibles := []
 		For windowName,title in titles {
-			matches := this.extractEMC2RecordsFromTitle(title, possibles, windowName)
-			allMatches.appendArray(matches)
-			allPossibles.appendArray(possibles)
+			if(this.extractEMC2RecordsFromTitle(title, exacts, possibles, windowName)) {
+				allExacts.appendArray(exacts)
+				allPossibles.appendArray(possibles)
+			}
 		}
-		Debug.popup("allMatches",allMatches, "allPossibles",allPossibles)
+		Debug.popup("allExacts",allExacts, "allPossibles",allPossibles)
 		
-		; No matches or possibles
-		if(allMatches.length() + allPossibles.length() = 0) {
+		; No exacts or possibles
+		if(allExacts.length() + allPossibles.length() = 0) {
 			Toast.ShowError("No potential EMC2 record IDs found.")
 			return ""
 		}
 		
 		; Only 1 exact match, just return it directly (ignoring any possibles).
-		if(allMatches.length() = 1)
-			return allMatches[1]
+		if(allExacts.length() = 1)
+			return allExacts[1]
 		
 		; Prompt the user (even if there's just 1 possible, this gives them the opportunity to enter the INI)
-		data := this.selectFromEMC2RecordMatches(allMatches, allPossibles)
+		data := this.selectFromEMC2RecordMatches(allExacts, allPossibles)
 		if(!data) ; User didn't pick an option
 			return ""
 		
@@ -308,14 +263,12 @@ class EpicLib {
 	}
 	
 	
-	getUsefulEMC2RecordTitles() {
+	getUsefulEMC2RecordWindows() {
 		titles := {} ; {windowName: title}
 		
 		; Normal titles
-		titles["EMC2"]          := Config.windowInfo["EMC2"].getCurrTitle()
-		titles["EpicStudio"]    := Config.windowInfo["EpicStudio"].getCurrTitle()
-		titles["Visual Studio"] := Config.windowInfo["Visual Studio"].getCurrTitle()
-		titles["Explorer"]      := Config.windowInfo["Explorer"].getCurrTitle()
+		For _,windowName in ["EMC2", "EpicStudio", "Visual Studio", "Explorer"]
+			titles[windowName] := Config.windowInfo[windowName].getCurrTitle()
 		
 		; Special "titles" extracted from inside the window(s)
 		For i,title in Outlook.getAllMessageTitles() ; Outlook message titles
@@ -325,19 +278,62 @@ class EpicLib {
 		return titles
 	}
 	
+	
+	extractEMC2RecordsFromTitle(title, ByRef exacts := "", ByRef possibles := "", windowName := "") { ; GDB TODO go over all of this logic again for further cleanup.
+		; GDB TODO call out in header that there may be duplicate IDs + filter them out somewhere (maybe an extra parameter here to filter duplicates?)
+		exacts    := []
+		possibles := []
+		
+		; GDB TODO do we want to use EpicRecord's record-string-parsing to clean up titles, or even give it first dibs on adding a match/possible?
+		
+		; Split up the title and look for potential IDs.
+		titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", ".", "#"], " ").removeEmpties()
+		For i,potentialId in titleBits {
+			; Skip: this bit couldn't actually be an ID.
+			if(!this.couldBeEMC2ID(potentialId))
+				Continue
+			
+			; Possible: first element can't have a preceding INI.
+			if(i = 1) {
+				possibles.push(new EpicRecord("", potentialId, title, windowName))
+				Continue
+			}
+			
+			; Match: confirmed valid INI.
+			ini := titleBits[i-1]
+			id  := potentialId
+			if(this.couldBeEMC2Record(ini, id)) {
+				exacts.push(new EpicRecord(ini, id, title, windowName))
+				Continue
+			}
+			
+			; Possible: no valid INI.
+			possibles.push(new EpicRecord("", potentialId, title, windowName))
+		}
+		
+		; Clean up title (remove INI/ID where possible) ; GDB TODO should we just be more aggressive removing the INI/ID + all separators, even from middle of string? Or at least doing this cleaner?
+		For _,record in exacts
+			record.title := new EpicRecord().initFromRecordString(record.title).title
+		For _,record in possibles
+			record.title := new EpicRecord().initFromRecordString(record.title).title
+		
+		; Debug.popup("titleBits",titleBits, "exacts",exacts, "possibles",possibles)
+		return (exacts.length() + possibles.length()) > 0
+	}
+	
 	;---------
 	; DESCRIPTION:    Build a Selector and ask the user to pick from the matches we found.
 	; PARAMETERS:
-	;  matches   (I,REQ) - Associative array of confirmed EpicRecord objects, from getMatchesFromTitles.
+	;  exacts   (I,REQ) - Associative array of confirmed EpicRecord objects, from getMatchesFromTitles.
 	;  possibles (I,REQ) - Associative array of potential EpicRecord objects, from getMatchesFromTitles.
 	; RETURNS:        Data array from Selector.selectGui().
 	;---------
-	selectFromEMC2RecordMatches(matches, possibles) {
+	selectFromEMC2RecordMatches(exacts, possibles) {
 		s := new Selector().setTitle("Select EMC2 Object to use:").addOverrideFields({1:"INI"})
 		
 		abbrevNums := {} ; {letter: lastUsedNumber}
-		s.addSectionHeader("EMC2 Records")
-		For _,record in matches
+		s.addSectionHeader("Full matches")
+		For _,record in exacts
 			s.addChoice(this.buildChoiceFromEMC2Record(record, abbrevNums))
 		
 		s.addSectionHeader("Potential IDs")

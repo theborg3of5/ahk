@@ -248,16 +248,17 @@ class EpicLib {
 	
 	selectEMC2RecordFromUsefulTitles() {
 		titles := this.getUsefulEMC2RecordTitles()
-		; Debug.popup("titles",titles)
+		Debug.popup("titles",titles)
 		
 		allMatches   := {} ; {id: EpicRecord}
 		allPossibles := {} ; {id: EpicRecord} (EpicRecord.ini always blank)
-		For _,title in titles {
+		For windowName,title in titles {
 			matchesAry := this.extractEMC2RecordsFromTitle(title, possiblesAry)
 			For _,record in matchesAry {
 				id := record.id
 				if(!allMatches[id]) {
 					allMatches[id] := record
+					allMatches[id, "Name"] := windowName
 					allPossibles.delete(id) ; If we have the same ID already in possibles, remove it.
 				}
 			}
@@ -265,6 +266,7 @@ class EpicLib {
 				id := record.id
 				if(!allPossibles[id] && !allMatches[id])
 					allPossibles[id] := record
+					allPossibles[id, "Name"] := windowName
 			}
 		}
 		; Debug.popup("allMatches",allMatches, "allPossibles",allPossibles)
@@ -314,18 +316,18 @@ class EpicLib {
 	
 	
 	getUsefulEMC2RecordTitles() {
-		titles := []
+		titles := {} ; {windowName: title}
 		
 		; Normal titles
-		titles.push(Config.windowInfo["EMC2"].getCurrTitle() " (EMC2)")          ; EMC2
-		titles.push(Config.windowInfo["EpicStudio"].getCurrTitle() " (EpicStudio)")    ; EpicStudio
-		titles.push(Config.windowInfo["Visual Studio"].getCurrTitle() " (Visual Studio)") ; Visual Studio
-		titles.push(Config.windowInfo["Explorer"].getCurrTitle() " (Explorer)")      ; Explorer
+		titles["EMC2"]          := Config.windowInfo["EMC2"].getCurrTitle()
+		titles["EpicStudio"]    := Config.windowInfo["EpicStudio"].getCurrTitle()
+		titles["Visual Studio"] := Config.windowInfo["Visual Studio"].getCurrTitle()
+		titles["Explorer"]      := Config.windowInfo["Explorer"].getCurrTitle()
 		
 		; Special "titles" extracted from inside the window(s)
-		For _,title in Outlook.getAllMessageTitles() ; Outlook message titles
-			titles.push(title " (Outlook)")
-		titles.push("DLG " VB6.getDLGIdFromProject() " (VB6)")     ; VB (sidebar title from project group)
+		For i,title in Outlook.getAllMessageTitles() ; Outlook message titles
+			titles["Outlook " i] := title
+		titles["VB6"] := "DLG " VB6.getDLGIdFromProject() ; VB6 (sidebar title from project group)
 		
 		return titles
 	}
@@ -342,12 +344,18 @@ class EpicLib {
 		
 		abbrevNums := {} ; {letter: lastUsedNumber}
 		s.addSectionHeader("EMC2 Records")
-		For _,record in matches
-			s.addChoice(this.buildChoiceFromEMC2Record(record, abbrevNums))
+		For id,record in matches {
+			choice := this.buildChoiceFromEMC2Record(record, abbrevNums)
+			choice.name := matches[id, "Name"] ": " choice.name
+			s.addChoice(choice)
+		}
 		
 		s.addSectionHeader("Potential IDs")
-		For _,record in possibles
-			s.addChoice(this.buildChoiceFromEMC2Record(record, abbrevNums))
+		For id,record in possibles {
+			choice := this.buildChoiceFromEMC2Record(record, abbrevNums)
+			choice.name := possibles[id, "Name"] ": " choice.name
+			s.addChoice(choice)
+		}
 		
 		return s.selectGui()
 	}

@@ -88,6 +88,11 @@ class FileLib {
 		if(path.startsWith(dbcDesignFolder)) { ; Old design documents
 			childFolder := path.firstBetweenStrings(dbcDesignFolder, "\")
 			folderYear := childFolder.sub(1, 4)
+			
+			; If the folder doesn't start with a year, check if it ends with one (i.e. August 2018).
+			if(!folderYear.isNum())
+				folderYear := childFolder.sub(-3) ; Last 4 characters
+			
 			if(folderYear.isNum() && folderYear < 2020) { ; Year folders
 				path := path.replace(dbcDesignFolder, dbcDesignFolder "Old Design Documents\") ; Moved to subfolder
 				Toast.ShowMedium("Redirected path (old design document)")

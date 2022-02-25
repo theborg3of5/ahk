@@ -178,28 +178,6 @@ class EpicLib {
 	}
 	
 	
-	; #PRIVATE#
-	
-	emc2TypeSelector := "" ; Selector instance (performance cache)
-	
-	;---------
-	; DESCRIPTION:    Get a Selector instance you can use to map various INI-like strings to actual EMC2 INIs.
-	; RETURNS:        Selector instance
-	;---------
-	getEMC2TypeSelector() {
-		if(this.emc2TypeSelector)
-			return this.emc2TypeSelector
-		
-		; Use ActionObject's TLS (filtered to EMC2-type types) for mapping INIs
-		s := new Selector("actionObject.tls")
-		s.dataTableList.filterByColumn("TYPE", ActionObject.Type_EMC2)
-		
-		this.emc2TypeSelector := s ; Cache for future use
-		
-		return s
-	}
-	
-	
 	extractEMC2RecordsFromTitle(title, ByRef possiblesAry := "") { ; GDB TODO go over all of this logic again for further cleanup.
 		matches   := {} ; {id: EpicRecord}
 		possibles := {} ; {id: EpicRecord} (ini always "")
@@ -265,6 +243,91 @@ class EpicLib {
 		
 		ini := this.convertToUsefulEMC2INI(data["INI"])
 		return new EpicRecord(ini, data["ID"], data["TITLE"])
+	}
+	
+	
+	selectEMC2RecordFromUsefulTitles() {
+		titles := this.getUsefulEMC2RecordTitles()
+		; Debug.popup("titles",titles)
+		
+		allMatches   := {} ; {id: EpicRecord}
+		allPossibles := {} ; {id: EpicRecord} (EpicRecord.ini always blank)
+		For _,title in titles {
+			matchesAry := this.extractEMC2RecordsFromTitle(title, possiblesAry)
+			For _,record in matchesAry {
+				id := record.id
+				if(!allMatches[id]) {
+					allMatches[id] := record
+					allPossibles.delete(id) ; If we have the same ID already in possibles, remove it.
+				}
+			}
+			For _,record in possiblesAry {
+				id := record.id
+				if(!allPossibles[id] && !allMatches[id])
+					allPossibles[id] := record
+			}
+		}
+		; Debug.popup("allMatches",allMatches, "allPossibles",allPossibles)
+		
+		; No matches or possibles
+		if(allMatches.length() + allPossibles.length() = 0) {
+			Toast.ShowError("No potential EMC2 record IDs found.")
+			return ""
+		}
+		
+		; Only 1 exact match, just return it directly (ignoring any possibles).
+		if(allMatches.length() = 1) {
+			For _,record in allMatches
+				return record
+		}
+		
+		; Prompt the user (even if there's just 1 possible, this gives them the opportunity to enter the INI)
+		data := this.selectFromEMC2RecordMatches(allMatches, allPossibles)
+		if(!data) ; User didn't pick an option
+			return ""
+		
+		ini := this.convertToUsefulEMC2INI(data["INI"])
+		return new EpicRecord(ini, data["ID"], data["TITLE"])
+	}
+	
+	
+	; #PRIVATE#
+	
+	emc2TypeSelector := "" ; Selector instance (performance cache)
+	
+	;---------
+	; DESCRIPTION:    Get a Selector instance you can use to map various INI-like strings to actual EMC2 INIs.
+	; RETURNS:        Selector instance
+	;---------
+	getEMC2TypeSelector() {
+		if(this.emc2TypeSelector)
+			return this.emc2TypeSelector
+		
+		; Use ActionObject's TLS (filtered to EMC2-type types) for mapping INIs
+		s := new Selector("actionObject.tls")
+		s.dataTableList.filterByColumn("TYPE", ActionObject.Type_EMC2)
+		
+		this.emc2TypeSelector := s ; Cache for future use
+		
+		return s
+	}
+	
+	
+	getUsefulEMC2RecordTitles() {
+		titles := []
+		
+		; Normal titles
+		titles.push(Config.windowInfo["EMC2"].getCurrTitle() " (EMC2)")          ; EMC2
+		titles.push(Config.windowInfo["EpicStudio"].getCurrTitle() " (EpicStudio)")    ; EpicStudio
+		titles.push(Config.windowInfo["Visual Studio"].getCurrTitle() " (Visual Studio)") ; Visual Studio
+		titles.push(Config.windowInfo["Explorer"].getCurrTitle() " (Explorer)")      ; Explorer
+		
+		; Special "titles" extracted from inside the window(s)
+		For _,title in Outlook.getAllMessageTitles() ; Outlook message titles
+			titles.push(title " (Outlook)")
+		titles.push("DLG " VB6.getDLGIdFromProject() " (VB6)")     ; VB (sidebar title from project group)
+		
+		return titles
 	}
 	
 	;---------

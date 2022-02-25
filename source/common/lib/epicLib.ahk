@@ -201,8 +201,7 @@ class EpicLib {
 		if(!data) ; User didn't pick an option
 			return ""
 		
-		ini := this.convertToUsefulEMC2INI(data["INI"]) ; GDB TODO probably move this and the conversion to EpicRecord into selectFromEMC2RecordMatches()
-		return new EpicRecord(ini, data["ID"], data["TITLE"])
+		return new EpicRecord(data["INI"], data["ID"], data["TITLE"])
 	}
 	
 	
@@ -235,7 +234,6 @@ class EpicLib {
 		if(!data) ; User didn't pick an option
 			return ""
 		
-		ini := this.convertToUsefulEMC2INI(data["INI"])
 		return new EpicRecord(ini, data["ID"], data["TITLE"])
 	}
 	

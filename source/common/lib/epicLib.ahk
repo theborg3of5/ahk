@@ -207,18 +207,18 @@ class EpicLib {
 	
 	
 	selectEMC2RecordFromUsefulTitles() {
-		titles := this.getUsefulEMC2RecordWindows()
-		; Debug.popup("titles",titles)
+		windows := this.getUsefulEMC2RecordWindows()
+		; Debug.popup("windows",windows)
 		
 		allExacts    := []
 		allPossibles := []
-		For windowName,title in titles {
-			if(this.extractEMC2RecordsFromTitle(title, exacts, possibles, windowName)) {
+		For _,window in windows {
+			if(this.extractEMC2RecordsFromTitle(window.title, exacts, possibles, window.windowName)) {
 				allExacts.appendArray(exacts)
 				allPossibles.appendArray(possibles)
 			}
 		}
-		Debug.popup("allExacts",allExacts, "allPossibles",allPossibles)
+		; Debug.popup("allExacts",allExacts, "allPossibles",allPossibles)
 		
 		; No exacts or possibles
 		if(allExacts.length() + allPossibles.length() = 0) {
@@ -263,20 +263,22 @@ class EpicLib {
 	
 	
 	getUsefulEMC2RecordWindows() {
-		titles := {} ; {windowName: title}
+		windows := [] ; [ {windowName, title} ]
 		
 		; Normal titles
-		For _,windowName in ["EMC2", "EpicStudio", "Visual Studio", "Explorer"]
-			titles[windowName] := Config.windowInfo[windowName].getCurrTitle()
+		For _,windowName in ["EMC2", "EpicStudio", "Visual Studio", "Explorer"] {
+			title := Config.windowInfo[windowName].getCurrTitle()
+			windows.push({windowName:windowName, title:title})
+		}
 		
 		; Special "titles" that are further cleaned, or extracted from inside the window(s)
 		For i,title in Chrome.getAllWindowTitles() ; Chrome window titles
-			titles["Chrome " i] := title
+			windows.push({windowName:"Chrome", title:title})
 		For i,title in Outlook.getAllMessageTitles() ; Outlook message titles
-			titles["Outlook " i] := title ; GDB TODO store the windowName at the title level somehow so titles doesn't have to be associative and we don't need this counter.
-		titles["VB6"] := "DLG " VB6.getDLGIdFromProject() ; VB6 (sidebar title from project group)
+			windows.push({windowName:"Outlook", title:title})
+		windows.push({windowName:"VB6", title:"DLG " VB6.getDLGIdFromProject()}) ; VB6 (sidebar title from project group)
 		
-		return titles
+		return windows
 	}
 	
 	

@@ -85,7 +85,12 @@
 		}
 	
 	; Pull EMC2 record IDs from currently open window titles and prompt the user to send one.
-	^!i::WindowTitleToEMC2.sendIDFromAllWindowTitles()
+	^!i::
+		sendEMC2RecordID() {
+			record := EpicLib.selectEMC2RecordFromUsefulTitles()
+			if(record)
+				SendRaw, % record.id
+		}
 
 #If Config.machineIsWorkLaptop ; Main work laptop only (not other work machines) ---
 	^!+t::

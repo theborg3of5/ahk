@@ -76,7 +76,7 @@
 				x. EMC2 class gets a public getCurrentRecord() function (a la initFromEMC2Title()) that returns an EpicRecord from its current title (or "" if nothing there)
 				x. Outlook class gets initFromTLGString() equivalent
 				x. Get rid of (now-empty) EMC2Record
-				. EpicLib.selectEMC2RecordsFromUsefulTitles() => compiles all results from "trusted" titles and shows a popup for them (if 1 total match, return that without a popup)
+				x. EpicLib.selectEMC2RecordsFromUsefulTitles() => compiles all results from "trusted" titles and shows a popup for them (if 1 total match, return that without a popup)
 					^!i - insert ID from window titles
 					Probably use EpicLib.extractEMC2Records for each title
 				. TLG selector "FIND" or "GET" keyword

@@ -67,12 +67,17 @@
 	
 	;---------
 	; DESCRIPTION:    Copy the title and rearrange/clean it up a bit.
+	; PARAMETERS:
+	;  titleString (I,REQ) - Title string representing the window to get the title of.
 	; RETURNS:        Title of the window, cleaned and processed.
 	; NOTES:          Some cases (most notably CodeSearch) will end up with something completely
 	;                 different from the title.
 	;---------
-	getTitle() {
-		title := WinGetActiveTitle().removeFromEnd(" - Google Chrome")
+	getTitle(titleString := "A") {
+		title := WinGetTitle(titleString)
+		
+		; This suffix is never helpful.
+		title := title.removeFromEnd(" - Google Chrome")
 		
 		; Wiki pages don't need the ending
 		title := title.removeFromEnd(" - Wiki")
@@ -106,6 +111,22 @@
 		}
 		
 		return title
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the (cleaned) titles of all Chrome windows.
+	; RETURNS:        Array of titles.
+	;---------
+	getAllWindowTitles() {
+		titles := []
+		
+		For _,windowId in WinGet("List", Config.windowInfo["Chrome"].titleString) {
+			title := this.getTitle("ahk_id " windowId)
+			if(title)
+				titles.push(title)
+		}
+		
+		return titles
 	}
 	
 	;---------

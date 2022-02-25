@@ -141,7 +141,7 @@ class EpicLib {
 	}
 	
 	
-	couldBeEMC2Record(ByRef ini, id) { ; Checks whether this is PLAUSIBLY an EMC2 INI/ID, based on INI and ID format - no guarantee that it exists. Also converts INI to "proper" one.
+	couldBeEMC2Record(ini, id) { ; Checks whether this is PLAUSIBLY an EMC2 INI/ID, based on INI and ID format - no guarantee that it exists.
 		; Need both INI and ID.
 		if(ini = "" || id = "")
 			return false
@@ -155,7 +155,6 @@ class EpicLib {
 		if(tempINI = "")
 			return false
 		
-		ini := tempINI ; Return "proper" INI
 		return true
 	}
 	
@@ -270,7 +269,9 @@ class EpicLib {
 		For _,windowName in ["EMC2", "EpicStudio", "Visual Studio", "Explorer"]
 			titles[windowName] := Config.windowInfo[windowName].getCurrTitle()
 		
-		; Special "titles" extracted from inside the window(s)
+		; Special "titles" that are further cleaned, or extracted from inside the window(s)
+		For i,title in Chrome.getAllWindowTitles() ; Chrome window titles
+			titles["Chrome " i] := title
 		For i,title in Outlook.getAllMessageTitles() ; Outlook message titles
 			titles["Outlook " i] := title ; GDB TODO store the windowName at the title level somehow so titles doesn't have to be associative and we don't need this counter.
 		titles["VB6"] := "DLG " VB6.getDLGIdFromProject() ; VB6 (sidebar title from project group)
@@ -346,6 +347,10 @@ class EpicLib {
 			}
 		}
 		; Debug.popup("titleBits",titleBits, "origExacts",origExacts, "origPossibles",origPossibles, "exacts",exacts, "possibles",possibles)
+		
+		; Convert all exact maches' INIs.
+		For i,exact in exacts
+			exacts[i].ini := EpicLib.convertToUsefulEMC2INI(exact.ini)
 		
 		; Debug.popup("titleBits",titleBits, "exacts",exacts, "possibles",possibles)
 		return (exacts.length() + possibles.length()) > 0

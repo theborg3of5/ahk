@@ -279,43 +279,73 @@ class EpicLib {
 	}
 	
 	
-	extractEMC2RecordsFromTitle(title, ByRef exacts := "", ByRef possibles := "", windowName := "") { ; GDB TODO go over all of this logic again for further cleanup.
-		; GDB TODO call out in header that there may be duplicate IDs + filter them out somewhere (maybe an extra parameter here to filter duplicates?)
+	extractEMC2RecordsFromTitle(title, ByRef exacts := "", ByRef possibles := "", windowName := "") {
 		exacts    := []
 		possibles := []
 		
-		; GDB TODO do we want to use EpicRecord's record-string-parsing to clean up titles, or even give it first dibs on adding a match/possible?
+		; Make sure the title is in a decent state to be parsed.
+		title := title.clean()
 		
-		; Split up the title and look for potential IDs.
-		titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", ".", "#"], " ").removeEmpties()
-		For i,potentialId in titleBits {
-			; Skip: this bit couldn't actually be an ID.
-			if(!this.couldBeEMC2ID(potentialId))
-				Continue
-			
-			; Possible: first element can't have a preceding INI.
-			if(i = 1) {
-				possibles.push(new EpicRecord("", potentialId, title, windowName))
-				Continue
-			}
-			
-			; Match: confirmed valid INI.
-			ini := titleBits[i-1]
-			id  := potentialId
-			if(this.couldBeEMC2Record(ini, id)) {
-				exacts.push(new EpicRecord(ini, id, title, windowName))
-				Continue
-			}
-			
-			; Possible: no valid INI.
-			possibles.push(new EpicRecord("", potentialId, title, windowName))
+		; First, give EpicRecord's parsing logic a shot - since most titles are close to this format, it gives us the best chance at a nicer title.
+		record := new EpicRecord().initFromRecordString(title)
+		if(this.couldBeEMC2Record(record.ini, record.id)) {
+			record.label := windowName
+			exacts.push(record)
 		}
 		
-		; Clean up title (remove INI/ID where possible) ; GDB TODO should we just be more aggressive removing the INI/ID + all separators, even from middle of string? Or at least doing this cleaner?
-		For _,record in exacts
-			record.title := new EpicRecord().initFromRecordString(record.title).title
-		For _,record in possibles
-			record.title := new EpicRecord().initFromRecordString(record.title).title
+		; Split up the title and look for potential IDs.
+		delims := [" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", ".", "#"]
+		titleBits := title.split(delims, " ").removeEmpties()
+		For i,id in titleBits {
+			; Extract other potential info
+			ini := titleBits[i - 1] ; INI is assumed to be the piece just before the ID.
+			; Title is the whole string, sans INI & ID (for a hopefully nicer title).
+			iniAndID := ini title.firstBetweenStrings(ini, id) id
+			recordTitle := title.remove(iniAndID).clean(delims)
+			
+			; Match: Valid INI + ID.
+			if(this.couldBeEMC2Record(ini, id)) {
+				exacts.push(new EpicRecord(ini, id, recordTitle, windowName))
+				Continue
+			}
+			
+			; Possible: ID has potential, but no valid INI.
+			if(this.couldBeEMC2ID(id))
+				possibles.push(new EpicRecord("", id, recordTitle, windowName))
+		}
+		
+		; origExacts := exacts.clone() ; GDB TODO remove
+		; origPossibles := possibles.clone()
+		
+		; GDB TODO consider handling these two with a Functor object approach - a DataLib function for removing duplicates, and a reference to a function that returns whether/which element to remove.
+		; Remove duplicate entries.
+		For i,exact1 in exacts.clone() {
+			For j,exact2 in exacts.clone() {
+				; Same element.
+				if(i = j)
+					Continue
+				
+				if(exact1.id = exact2.id) {
+					; If the titles (or title lengths) match too, just drop the later one.
+					if(exact1.title = exact2.title || exact1.title.length() = exact2.title.length())
+						exacts.delete(max(i, j))
+					
+					; Otherwise, keep the one with the shorter (and presumably nicer) title.
+					else if(exact1.title.length() > exact2.title.length())
+						exacts.delete(j)
+					else
+						exacts.delete(i)
+				}
+			}
+		}
+		; Filter out possibles for IDs we already have in exacts.
+		For _,exact in exacts.clone() {
+			For j,possible in possibles.clone() {
+				if(exact.id = possible.id)
+					possibles.delete(j)
+			}
+		}
+		; Debug.popup("titleBits",titleBits, "origExacts",origExacts, "origPossibles",origPossibles, "exacts",exacts, "possibles",possibles)
 		
 		; Debug.popup("titleBits",titleBits, "exacts",exacts, "possibles",possibles)
 		return (exacts.length() + possibles.length()) > 0

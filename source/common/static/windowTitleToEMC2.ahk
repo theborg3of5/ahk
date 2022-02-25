@@ -81,6 +81,7 @@
 					Probably use EpicLib.extractEMC2Records for each title
 				. TLG selector "FIND" or "GET" keyword
 				. Global edit/view from current window title
+				. Switch EpicStudio to use global edit/view from window title, rather than its own getCurrentDLG() (and callers) stuff.
 				. Consider adding an ActionObjectEMC2 function for copying + toasting (maybe for ActionObjectBase and other instances that make sense too?)
 					Maybe different ones for copying ID, INI ID, and INI ID - TITLE?
 						Need at least ID (can use INI/title in toast)

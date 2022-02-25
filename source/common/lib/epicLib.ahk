@@ -178,7 +178,7 @@ class EpicLib {
 	}
 	
 	
-	extractEMC2RecordsFromTitle(title, ByRef possibles := "") { ; GDB TODO go over all of this logic again for further cleanup.
+	extractEMC2RecordsFromTitle(title, ByRef possibles := "", windowName := "") { ; GDB TODO go over all of this logic again for further cleanup.
 		; GDB TODO call out in header that there may be duplicate IDs + filter them out somewhere (maybe an extra parameter here to filter duplicates?)
 		; GDB TODO consider combining matches and possibles into one array, with parameter that filters out possibles
 		matches   := []
@@ -195,7 +195,7 @@ class EpicLib {
 			
 			; Possible: first element can't have a preceding INI.
 			if(i = 1) {
-				possibles.push(new EpicRecord("", potentialId, title))
+				possibles.push(new EpicRecord("", potentialId, title, windowName))
 				Continue
 			}
 			
@@ -203,23 +203,19 @@ class EpicLib {
 			ini := titleBits[i-1]
 			id  := potentialId
 			if(this.couldBeEMC2Record(ini, id)) {
-				matches.push(new EpicRecord(ini, id, title))
+				matches.push(new EpicRecord(ini, id, title, windowName))
 				Continue
 			}
 			
 			; Possible: no valid INI.
-			possibles.push(new EpicRecord("", potentialId, title))
+			possibles.push(new EpicRecord("", potentialId, title, windowName))
 		}
 		
 		; Clean up title (remove INI/ID where possible) ; GDB TODO should we just be more aggressive removing the INI/ID + all separators, even from middle of string? Or at least doing this cleaner?
-		For _,record in matches {
-			tempRecord := new EpicRecord().initFromRecordString(record.title)
-			record.title := tempRecord.title
-		}
-		For _,record in possibles {
-			tempRecord := new EpicRecord().initFromRecordString(record.title)
-			record.title := tempRecord.title
-		}
+		For _,record in matches
+			record.title := new EpicRecord().initFromRecordString(record.title).title
+		For _,record in possibles
+			record.title := new EpicRecord().initFromRecordString(record.title).title
 		
 		; Debug.popup("titleBits",titleBits, "matches",matches, "possibles",possibles)
 		return matches
@@ -256,15 +252,9 @@ class EpicLib {
 		allMatches   := []
 		allPossibles := []
 		For windowName,title in titles {
-			matches := this.extractEMC2RecordsFromTitle(title, possibles)
-			For _,record in matches {
-				record.windowName := windowName
-				allMatches.push(record)
-			}
-			For _,record in possibles {
-				record.windowName := windowName
-				allMatches.push(record)
-			}
+			matches := this.extractEMC2RecordsFromTitle(title, possibles, windowName)
+			allMatches.appendArray(matches)
+			allPossibles.appendArray(possibles)
 		}
 		Debug.popup("allMatches",allMatches, "allPossibles",allPossibles)
 		
@@ -360,7 +350,7 @@ class EpicLib {
 		ini        := record.ini
 		id         := record.id
 		title      := record.title
-		windowName := record.windowName
+		windowName := record.label
 		
 		name := ""
 		if(windowName)
@@ -382,56 +372,6 @@ class EpicLib {
 		
 		return new SelectorChoice({NAME:name, ABBREV:abbrev, INI:ini, ID:id, TITLE:title})
 	}
-	
-	; /* GDB TODO =--
-		
-		; Example Usage
-	; ;		GDB TODO
-		
-		; GDB TODO
-			; Update auto-complete and syntax highlighting notepad++ definitions
-		
-	; */ ; --=
-
-	; class EMC2RecordFromTitle { ; GDB TODO would it be helpful to have this extend EpicRecord to use its record-string-parsing more directly?
-		; ; #PUBLIC#
-		
-		; ;  - Constants
-		; ;  - staticMembers
-		; ;  - nonStaticMembers
-		; ini        := ""
-		; id         := ""
-		; title      := ""
-		; windowName := ""
-		
-		; ;  - properties
-		; ;  - __New()
-		; __New(ini := "", id := "", title := "", windowName := "") {
-			; this.ini        := ini
-			; this.id         := id
-			; this.title      := title
-			; this.windowName := windowName
-		; }
-		
-		; ;  - otherFunctions
-		
-		
-		; ; #INTERNAL#
-		
-		; ;  - Constants
-		; ;  - staticMembers
-		; ;  - nonStaticMembers
-		; ;  - functions
-		
-		
-		; ; #PRIVATE#
-		
-		; ;  - Constants
-		; ;  - staticMembers
-		; ;  - nonStaticMembers
-		; ;  - functions
-		; ; #END#
-	; }
 	; #END#
 }
 

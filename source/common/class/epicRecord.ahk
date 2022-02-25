@@ -28,6 +28,7 @@ class EpicRecord {
 	ini   := "" ; The INI for this record.
 	id    := "" ; The ID for this record.
 	title := "" ; The title for this record.
+	label := "" ; A custom label the caller adds to the record.
 	; @GROUP-END@
 	
 	;---------
@@ -53,10 +54,20 @@ class EpicRecord {
 	;                         formats. If not given, record will need to be initialized with
 	;                         one of the .initFrom*() functions.
 	;---------
-	__New(ini := "", id := "", title := "") {
+	
+	;---------
+	; DESCRIPTION:    Create a new EpicRecord object, filling in its properties.
+	; PARAMETERS:
+	;  ini   (I,OPT) - Record INI
+	;  id    (I,OPT) - Record ID
+	;  title (I,OPT) - Record title
+	;  label (I,OPT) - Custom label to identify this record.
+	;---------
+	__New(ini := "", id := "", title := "", label := "") {
 		this.ini   := ini
 		this.id    := id
 		this.title := title
+		this.label := label
 	}
 	
 	;---------

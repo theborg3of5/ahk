@@ -132,7 +132,7 @@ class EpicLib {
 	;  id (I,REQ) - Possible ID to evaluate.
 	; RETURNS:        true if possibly an ID, false otherwise.
 	;---------
-	isPossibleEMC2ID(id) {
+	couldBeEMC2ID(id) {
 		; For SU DLG IDs, trim off leading letter so we recognize them as a numeric ID.
 		if(id.startsWithAnyOf(["I", "T"], letter))
 			id := id.removeFromStart(letter)
@@ -147,7 +147,7 @@ class EpicLib {
 			return false
 		
 		; ID format check
-		if(!this.isPossibleEMC2ID(id))
+		if(!this.couldBeEMC2ID(id))
 			return false
 		
 		; INI check
@@ -178,23 +178,24 @@ class EpicLib {
 	}
 	
 	
-	extractEMC2RecordsFromTitle(title, ByRef possiblesAry := "") { ; GDB TODO go over all of this logic again for further cleanup.
-		matches   := {} ; {id: EpicRecord}
-		possibles := {} ; {id: EpicRecord} (ini always "")
+	extractEMC2RecordsFromTitle(title, ByRef possibles := "") { ; GDB TODO go over all of this logic again for further cleanup.
+		; GDB TODO call out in header that there may be duplicate IDs + filter them out somewhere (maybe an extra parameter here to filter duplicates?)
+		; GDB TODO consider combining matches and possibles into one array, with parameter that filters out possibles
+		matches   := []
+		possibles := []
+		
+		; GDB TODO do we want to use EpicRecord's record-string-parsing to clean up titles, or even give it first dibs on adding a match/possible?
 		
 		; Split up the title and look for potential IDs.
 		titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", "."], " ").removeEmpties()
 		For i,potentialId in titleBits {
 			; Skip: this bit couldn't actually be an ID.
-			if(!this.isPossibleEMC2ID(potentialId))
-				Continue
-			; Skip: already have a proper match for this ID. ; GDB TODO need to also do this at loop level to prevent all-windows duplicates
-			if(matches[potentialId])
+			if(!this.couldBeEMC2ID(potentialId))
 				Continue
 			
 			; Possible: first element can't have a preceding INI.
 			if(i = 1) {
-				possibles[potentialId] := new EpicRecord("", potentialId, title)
+				possibles.push(new EpicRecord("", potentialId, title))
 				Continue
 			}
 			
@@ -202,22 +203,26 @@ class EpicLib {
 			ini := titleBits[i-1]
 			id  := potentialId
 			if(this.couldBeEMC2Record(ini, id)) {
-				; Found a proper match, save it off.
-				matches[id] := new EpicRecord(ini, id, title)
-				possibles.delete(id) ; If we have the same ID already in possibles, remove it.
+				matches.push(new EpicRecord(ini, id, title))
 				Continue
 			}
 			
 			; Possible: no valid INI.
-			possibles[potentialId] := new EpicRecord("", potentialId, title)
+			possibles.push(new EpicRecord("", potentialId, title))
 		}
 		
-		; Return arrays, not objects.
-		matchesAry := DataLib.convertObjectToArray(matches)
-		possiblesAry := DataLib.convertObjectToArray(possibles)
+		; Clean up title (remove INI/ID where possible) ; GDB TODO should we just be more aggressive removing the INI/ID + all separators, even from middle of string? Or at least doing this cleaner?
+		For _,record in matches {
+			tempRecord := new EpicRecord().initFromRecordString(record.title)
+			record.title := tempRecord.title
+		}
+		For _,record in possibles {
+			tempRecord := new EpicRecord().initFromRecordString(record.title)
+			record.title := tempRecord.title
+		}
 		
 		; Debug.popup("titleBits",titleBits, "matches",matches, "possibles",possibles)
-		return matchesAry
+		return matches
 	}
 	
 	
@@ -231,45 +236,37 @@ class EpicLib {
 		}
 		
 		; Only 1 exact match, just return it directly (ignoring any possibles).
-		if(matches.length() = 1) {
-			For _,record in matches
-				return record
-		}
+		if(matches.length() = 1)
+			return matches[1]
 		
 		; Prompt the user (even if there's just 1 possible, this gives them the opportunity to enter the INI)
 		data := this.selectFromEMC2RecordMatches(matches, possibles)
 		if(!data) ; User didn't pick an option
 			return ""
 		
-		ini := this.convertToUsefulEMC2INI(data["INI"])
+		ini := this.convertToUsefulEMC2INI(data["INI"]) ; GDB TODO probably move this and the conversion to EpicRecord into selectFromEMC2RecordMatches()
 		return new EpicRecord(ini, data["ID"], data["TITLE"])
 	}
 	
 	
 	selectEMC2RecordFromUsefulTitles() {
 		titles := this.getUsefulEMC2RecordTitles()
-		Debug.popup("titles",titles)
+		; Debug.popup("titles",titles)
 		
-		allMatches   := {} ; {id: EpicRecord}
-		allPossibles := {} ; {id: EpicRecord} (EpicRecord.ini always blank)
+		allMatches   := []
+		allPossibles := []
 		For windowName,title in titles {
-			matchesAry := this.extractEMC2RecordsFromTitle(title, possiblesAry)
-			For _,record in matchesAry {
-				id := record.id
-				if(!allMatches[id]) {
-					allMatches[id] := record
-					allMatches[id, "Name"] := windowName
-					allPossibles.delete(id) ; If we have the same ID already in possibles, remove it.
-				}
+			matches := this.extractEMC2RecordsFromTitle(title, possibles)
+			For _,record in matches {
+				record.windowName := windowName
+				allMatches.push(record)
 			}
-			For _,record in possiblesAry {
-				id := record.id
-				if(!allPossibles[id] && !allMatches[id])
-					allPossibles[id] := record
-					allPossibles[id, "Name"] := windowName
+			For _,record in possibles {
+				record.windowName := windowName
+				allMatches.push(record)
 			}
 		}
-		; Debug.popup("allMatches",allMatches, "allPossibles",allPossibles)
+		Debug.popup("allMatches",allMatches, "allPossibles",allPossibles)
 		
 		; No matches or possibles
 		if(allMatches.length() + allPossibles.length() = 0) {
@@ -278,10 +275,8 @@ class EpicLib {
 		}
 		
 		; Only 1 exact match, just return it directly (ignoring any possibles).
-		if(allMatches.length() = 1) {
-			For _,record in allMatches
-				return record
-		}
+		if(allMatches.length() = 1)
+			return allMatches[1]
 		
 		; Prompt the user (even if there's just 1 possible, this gives them the opportunity to enter the INI)
 		data := this.selectFromEMC2RecordMatches(allMatches, allPossibles)
@@ -326,7 +321,7 @@ class EpicLib {
 		
 		; Special "titles" extracted from inside the window(s)
 		For i,title in Outlook.getAllMessageTitles() ; Outlook message titles
-			titles["Outlook " i] := title
+			titles["Outlook " i] := title ; GDB TODO store the windowName at the title level somehow so titles doesn't have to be associative and we don't need this counter.
 		titles["VB6"] := "DLG " VB6.getDLGIdFromProject() ; VB6 (sidebar title from project group)
 		
 		return titles
@@ -344,18 +339,12 @@ class EpicLib {
 		
 		abbrevNums := {} ; {letter: lastUsedNumber}
 		s.addSectionHeader("EMC2 Records")
-		For id,record in matches {
-			choice := this.buildChoiceFromEMC2Record(record, abbrevNums)
-			choice.name := matches[id, "Name"] ": " choice.name
-			s.addChoice(choice)
-		}
+		For _,record in matches
+			s.addChoice(this.buildChoiceFromEMC2Record(record, abbrevNums))
 		
 		s.addSectionHeader("Potential IDs")
-		For id,record in possibles {
-			choice := this.buildChoiceFromEMC2Record(record, abbrevNums)
-			choice.name := possibles[id, "Name"] ": " choice.name
-			s.addChoice(choice)
-		}
+		For _,record in possibles
+			s.addChoice(this.buildChoiceFromEMC2Record(record, abbrevNums))
 		
 		return s.selectGui()
 	}
@@ -368,14 +357,21 @@ class EpicLib {
 	; RETURNS:        SelectorChoice instance describing the provided record.
 	;---------
 	buildChoiceFromEMC2Record(record, ByRef abbrevNums) {
-		ini   := record.ini
-		id    := record.id
-		title := record.title
+		ini        := record.ini
+		id         := record.id
+		title      := record.title
+		windowName := record.windowName
 		
-		name := ini.appendPiece(id, " ") " - " title
-			
+		name := ""
+		if(windowName)
+			name .= windowName " - "
+		if(ini)
+			name .= ini " "
+		name .= id
+		if(title)
+			name .= " - " title
+		
 		; Abbreviation is INI first letter + a counter.
-		ini := ini
 		if(ini = "")
 			abbrevLetter := "u" ; Unknown INI
 		else
@@ -387,6 +383,55 @@ class EpicLib {
 		return new SelectorChoice({NAME:name, ABBREV:abbrev, INI:ini, ID:id, TITLE:title})
 	}
 	
+	; /* GDB TODO =--
+		
+		; Example Usage
+	; ;		GDB TODO
+		
+		; GDB TODO
+			; Update auto-complete and syntax highlighting notepad++ definitions
+		
+	; */ ; --=
+
+	; class EMC2RecordFromTitle { ; GDB TODO would it be helpful to have this extend EpicRecord to use its record-string-parsing more directly?
+		; ; #PUBLIC#
+		
+		; ;  - Constants
+		; ;  - staticMembers
+		; ;  - nonStaticMembers
+		; ini        := ""
+		; id         := ""
+		; title      := ""
+		; windowName := ""
+		
+		; ;  - properties
+		; ;  - __New()
+		; __New(ini := "", id := "", title := "", windowName := "") {
+			; this.ini        := ini
+			; this.id         := id
+			; this.title      := title
+			; this.windowName := windowName
+		; }
+		
+		; ;  - otherFunctions
+		
+		
+		; ; #INTERNAL#
+		
+		; ;  - Constants
+		; ;  - staticMembers
+		; ;  - nonStaticMembers
+		; ;  - functions
+		
+		
+		; ; #PRIVATE#
+		
+		; ;  - Constants
+		; ;  - staticMembers
+		; ;  - nonStaticMembers
+		; ;  - functions
+		; ; #END#
+	; }
 	; #END#
 }
 

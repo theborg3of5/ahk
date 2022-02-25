@@ -15,7 +15,7 @@
 					Only considers beginning of string
 				WindowTitleToEMC2.* => Considers all bits of the title, can return multiple matches, currently has ActionObjectEMC2.isThisType() "win" over anything else
 					Problem: because we currently make ActionObjectEMC2 "win", we miss any additional IDs in same title
-				EpicLib.isPossibleEMC2ID() => Used by both of the above
+				EpicLib.couldBeEMC2ID() => Used by both of the above
 				EMC2Record => pre/post processing + standard EMC2 string
 			Desired use cases:
 				OneNote
@@ -49,7 +49,7 @@
 						"FIND" or "GET" maybe?
 			New plan:
 				(No functionality that only considers the start of the string anymore)
-				1. Is a given bit possibly an EMC2 ID? => EpicLib.isPossibleEMC2ID()
+				1. Is a given bit possibly an EMC2 ID? => EpicLib.couldBeEMC2ID()
 				2. Email-subject-specific handling (pretty much all of EMC2Record.preProcess/.postProcess) should move to Outlook class
 				3. For a given string (generally a title of some sort), get exact matches only
 						Selector between them when 0 or multiple exacts
@@ -60,7 +60,7 @@
 						Selector between them when 0 or multiple exacts
 						Basically #4 across multiple windows' titles
 			Code structure:
-				x. EpicLib.isPossibleEMC2ID() stays
+				x. EpicLib.couldBeEMC2ID() stays
 					Likely used by ActionObjectEMC2 to determine if given ID is EMC2 (for use from ActionObject)
 				x. Outlook class gets email-subject-specific handling (.preProcess/.postProcess)
 				x. EpicRecord.initFromRecordString() stays, for RECORD string (ini/id/title in specific formats) to INI/ID/title
@@ -111,7 +111,7 @@ class WindowTitleToEMC2 {
 		titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", "."], " ").removeEmpties()
 		For i,potentialId in titleBits {
 			; Skip: this bit couldn't actually be an ID.
-			if(!EpicLib.isPossibleEMC2ID(potentialId))
+			if(!EpicLib.couldBeEMC2ID(potentialId))
 				Continue
 			; Skip: already have a proper match for this ID. ; GDB TODO need to also do this at loop level to prevent all-windows duplicates
 			if(matches[potentialId])
@@ -265,7 +265,7 @@ class WindowTitleToEMC2 {
 			titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", "."], " ").removeEmpties()
 			For i,potentialId in titleBits {
 				; Skip: this bit couldn't actually be an ID.
-				if(!EpicLib.isPossibleEMC2ID(potentialId))
+				if(!EpicLib.couldBeEMC2ID(potentialId))
 					Continue
 				; Skip: already have a proper match for this ID.
 				if(matches[potentialId])

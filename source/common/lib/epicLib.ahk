@@ -187,7 +187,7 @@ class EpicLib {
 		; GDB TODO do we want to use EpicRecord's record-string-parsing to clean up titles, or even give it first dibs on adding a match/possible?
 		
 		; Split up the title and look for potential IDs.
-		titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", "."], " ").removeEmpties()
+		titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", ".", "#"], " ").removeEmpties()
 		For i,potentialId in titleBits {
 			; Skip: this bit couldn't actually be an ID.
 			if(!this.couldBeEMC2ID(potentialId))
@@ -219,6 +219,14 @@ class EpicLib {
 		
 		; Debug.popup("titleBits",titleBits, "matches",matches, "possibles",possibles)
 		return matches
+	}
+	
+	
+	getBestEMC2RecordFromTitle(title) {
+		matches := this.extractEMC2RecordsFromTitle(title, possibles)
+		
+		; Return the first exact match, then the first possible match.
+		return DataLib.coalesce(matches[1], possibles[1])
 	}
 	
 	

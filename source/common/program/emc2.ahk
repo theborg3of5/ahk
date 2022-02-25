@@ -28,14 +28,10 @@ class EMC2 {
 	;---------
 	getCurrentRecord() {
 		title := Config.windowInfo["EMC2"].getCurrTitle()
-		title := title.removeFromEnd(" - EMC2")
+		title := title.removeFromEnd("EMC2")
+		title := title.clean(["-"])
 		
-		; If no info available, bail.
-		if(title = "EMC2")
-			return ""
-		
-		matches := EpicLib.extractEMC2RecordsFromTitle(title)
-		return matches[1] ; Assume there's only 1, exact match.
+		return EpicLib.getBestEMC2RecordFromTitle(title)
 	}
 	
 	;---------

@@ -42,21 +42,11 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		; If we don't know the INI yet, assume the ID is a combined string (i.e. "DLG 123456" or
 		; "DLG 123456: WE DID SOME STUFF") and try to split it into its component parts.
 		if(id != "" && ini = "") {
-			matches := EpicLib.extractEMC2RecordsFromTitle(id, possibles)
-			if(matches.length() + possibles.length() = 0)
-				return false
-			
-			; Pick the first match if there is one ; GDB TODO probably pull this out since it's duplicated from isThisType().
-			if(matches.length() >= 1) {
-				ini   := matches[1].ini
-				id    := matches[1].id
-				title := matches[1].title
-			
-			; If there are possible matches, fail but still pass back the ID of the first one so it shows up in
-			; the Selector popup downstream.
-			} else if(possibles.length() >= 1) {
-				id    := possibles[1].id
-				title := possibles[1].title
+			match := EpicLib.getBestEMC2RecordFromTitle(id)
+			if(match) {
+				ini   := match.ini
+				id    := match.id
+				title := match.title
 			}
 		}
 		
@@ -81,20 +71,10 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		if(!Config.contextIsWork)
 			return false
 		
-		matches := EpicLib.extractEMC2RecordsFromTitle(value, possibles)
-		if(matches.length() + possibles.length() = 0)
-			return false
-		
-		; Pick the first match if there is one
-		if(matches.length() >= 1) {
-			ini := matches[1].ini
-			id  := matches[1].id
-			return true
-		}
-		
-		; If there are possible matches, succeed but pass no INI so we get a corresponding popup downstream.
-		if(possibles.length() >= 1) {
-			id := possibles[1].id
+		match := EpicLib.getBestEMC2RecordFromTitle(value)
+		if(match) {
+			ini := match.ini
+			id  := match.id
 			return true
 		}
 		

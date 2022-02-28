@@ -177,8 +177,8 @@ class EpicLib {
 	}
 	
 	
-	getBestEMC2RecordFromString(title) {
-		this.extractEMC2RecordsFromTitle(title, exacts, possibles)
+	getBestEMC2RecordFromString(text) {
+		this.extractEMC2RecordsFromText(text, exacts, possibles)
 		
 		; Return the first exact match, then the first possible match.
 		return DataLib.coalesce(exacts[1], possibles[1])
@@ -202,13 +202,13 @@ class EpicLib {
 	}
 	
 	
-	selectEMC2RecordFromString(title) {
-		if(!this.extractEMC2RecordsFromTitle(title, exacts, possibles)) {
+	selectEMC2RecordFromString(text) {
+		if(!this.extractEMC2RecordsFromText(text, exacts, possibles)) {
 			; No matches at all
-			Toast.ShowError("No potential EMC2 record IDs found in string: " title)
+			Toast.ShowError("No potential EMC2 record IDs found in string: " text)
 			return ""
 		}
-		; DEBUG.POPUP("title",title, "exacts",exacts, "possibles",possibles)
+		; DEBUG.POPUP("text",text, "exacts",exacts, "possibles",possibles)
 		
 		; Only 1 exact match, just return it directly (ignoring any possibles).
 		if(exacts.length() = 1)
@@ -230,7 +230,7 @@ class EpicLib {
 		allExacts    := []
 		allPossibles := []
 		For _,window in windows {
-			if(this.extractEMC2RecordsFromTitle(window.title, exacts, possibles, window.windowName)) {
+			if(this.extractEMC2RecordsFromText(window.title, exacts, possibles, window.windowName)) {
 				allExacts.appendArray(exacts)
 				allPossibles.appendArray(possibles)
 			}
@@ -317,27 +317,27 @@ class EpicLib {
 	}
 	
 	
-	extractEMC2RecordsFromTitle(title, ByRef exacts := "", ByRef possibles := "", windowName := "") {
+	extractEMC2RecordsFromText(text, ByRef exacts := "", ByRef possibles := "", windowName := "") {
 		exacts    := []
 		possibles := []
 		
-		; Make sure the title is in a decent state to be parsed.
-		title := title.clean()
+		; Make sure the text is in a decent state to be parsed.
+		text := text.clean()
 		
 		; First, give EpicRecord's parsing logic a shot - since most titles are close to this format, it gives us the best chance at a nicer title.
-		record := new EpicRecord().initFromRecordString(title)
+		record := new EpicRecord().initFromRecordString(text)
 		if(this.couldBeEMC2Record(record.ini, record.id)) {
 			record.label := windowName
 			record.title := this.cleanEMC2RecordTitle(record.title, record.ini, record.id)
 			exacts.push(record)
 		}
 		
-		; Split up the title and look for potential IDs.
-		titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", ".", "#"], " ").removeEmpties()
-		For i,id in titleBits {
+		; Split up the text and look for potential IDs.
+		textBits := text.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", ".", "#"], " ").removeEmpties()
+		For i,id in textBits {
 			; Extract other potential info
-			ini := titleBits[i - 1] ; INI is assumed to be the piece just before the ID.
-			recordTitle := this.cleanEMC2RecordTitle(title, ini, id)
+			ini := textBits[i - 1] ; INI is assumed to be the piece just before the ID.
+			recordTitle := this.cleanEMC2RecordTitle(text, ini, id)
 			
 			; Match: Valid INI + ID.
 			if(this.couldBeEMC2Record(ini, id)) {
@@ -381,21 +381,21 @@ class EpicLib {
 					possibles.removeAt(j)
 			}
 		}
-		; Debug.popup("titleBits",titleBits, "origExacts",origExacts, "origPossibles",origPossibles, "exacts",exacts, "possibles",possibles)
+		; Debug.popup("textBits",textBits, "origExacts",origExacts, "origPossibles",origPossibles, "exacts",exacts, "possibles",possibles)
 		
 		; Convert all exact maches' INIs.
 		For i,exact in exacts
 			exacts[i].ini := EpicLib.convertToUsefulEMC2INI(exact.ini)
 		
-		; Debug.popup("titleBits",titleBits, "exacts",exacts, "possibles",possibles)
+		; Debug.popup("textBits",textBits, "exacts",exacts, "possibles",possibles)
 		return (exacts.length() + possibles.length()) > 0
 	}
 	
 	;---------
 	; DESCRIPTION:    Build a Selector and ask the user to pick from the matches we found.
 	; PARAMETERS:
-	;  exacts   (I,REQ) - Associative array of confirmed EpicRecord objects, from getMatchesFromTitles.
-	;  possibles (I,REQ) - Associative array of potential EpicRecord objects, from getMatchesFromTitles.
+	;  exacts   (I,REQ) - Associative array of confirmed EpicRecord objects, from extractEMC2RecordsFromText.
+	;  possibles (I,REQ) - Associative array of potential EpicRecord objects, from extractEMC2RecordsFromText.
 	; RETURNS:        Data array from Selector.selectGui().
 	;---------
 	selectFromEMC2RecordMatches(exacts, possibles) {

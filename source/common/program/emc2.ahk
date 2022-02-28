@@ -23,39 +23,22 @@ class EMC2 {
 	}
 	
 	;---------
-	; DESCRIPTION:    Get an EpicRecord instance representing the record currently open in EMC2.
-	; RETURNS:        EpicRecord instance, or "" if one not found.
+	; DESCRIPTION:    Use the right-click menu to launch the currently-selected worklist item in web. Useful because we
+	;                 don't have title information to pull from when we're in a worklist.
 	;---------
-	getCurrentRecord() {
-		title := Config.windowInfo["EMC2"].getCurrTitle()
-		title := title.removeFromEnd("EMC2")
-		title := title.clean(["-"])
-		
-		return EpicLib.getBestEMC2RecordFromText(title)
-	}
-	
-	;---------
-	; DESCRIPTION:    Open the current record in web mode.
-	;---------
-	openCurrentRecordWeb() {
-		; Special case for worklist - use right-click menu as we don't have any info in the title for the selected row
-		if(Config.findWindowName("A") = "EMC2 Worklist") {
-			Send, {AppsKey} ; Right-click simulation
-			Sleep, 100      ; Wait for right-click menu to appear
-			Send, v{Enter}  ; "View * as HTML", "View *", or "View * in Browser" are all the first "V" item in the menu
-			return
-		}
-		
-		record := this.getCurrentRecord()
-		new ActionObjectEMC2(record.id, record.ini).openWeb()
+	openCurrentWorklistItemWeb() {
+		Send, {AppsKey} ; Right-click simulation
+		Sleep, 100      ; Wait for right-click menu to appear
+		Send, v{Enter}  ; "View * as HTML", "View *", or "View * in Browser" are all the first "V" item in the menu
+		return
 	}
 	
 	;---------
 	; DESCRIPTION:    Open the current record in "basic" web mode (emc2summary, even for
 	;                 Nova/Sherlock objects).
 	;---------
-	openCurrentRecordWebBasic() {
-		record := this.getCurrentRecord()
+	openCurrentRecordWebBasic() { ; GDB TODO is this really worth keeping around?
+		record := EpicLib.getBestEMC2RecordFromText(title)
 		new ActionObjectEMC2(record.id, record.ini).openWebBasic()
 	}
 	
@@ -63,14 +46,12 @@ class EMC2 {
 	; DESCRIPTION:    Open/focus the current DLG in EpicStudio.
 	;---------
 	openCurrentDLGInEpicStudio() {
-		record := this.getCurrentRecord()
+		record := EpicLib.getBestEMC2RecordFromText(title)
 		if(record.ini != "DLG" || record.id = "")
 			return
 		
 		t := new Toast("Opening DLG in EpicStudio: " record.id).show()
-		
 		new ActionObjectEpicStudio(record.id, ActionObjectEpicStudio.DescriptorType_DLG).openEdit()
-		
 		WinWaitActive, % Config.windowInfo["EpicStudio"].titleString, , 10 ; 10-second timeout
 		t.close()
 	}

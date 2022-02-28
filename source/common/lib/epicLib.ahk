@@ -191,6 +191,7 @@ class EpicLib {
 			Toast.ShowError("No potential EMC2 record IDs found in window title: " title)
 			return ""
 		}
+		; DEBUG.POPUP("title",title, "exacts",exacts, "possibles",possibles)
 		
 		; Only 1 exact match, just return it directly (ignoring any possibles).
 		if(exacts.length() = 1)
@@ -235,6 +236,25 @@ class EpicLib {
 			return ""
 		
 		return new EpicRecord(ini, data["ID"], data["TITLE"])
+	}
+	
+	;---------
+	; DESCRIPTION:    Clean up and trim an EMC2 record's title.
+	; PARAMETERS:
+	;  title (I,REQ) - The title to clean.
+	;  ini   (I,OPT) - INI of the record if we should remove it.
+	;  id    (I,OPT) - ID  of the record if we should remove it.
+	; RETURNS:        The title, but with extraneous bits (like the INI, ID, and "DBC" prefix) removed.
+	;---------
+	cleanEMC2RecordTitle(title, ini := "", id := "") {
+		; Take INI and ID (and anything in between) out if they're given.
+		iniAndID := ini title.firstBetweenStrings(ini, id) id
+		title := title.remove(iniAndID)
+		
+		; The "DBC" prefix isn't helpful when most of my records have it.
+		title := title.removeFromStart("DBC")
+		
+		return title.clean(["-", "/", "\", ":"])
 	}
 	
 	
@@ -291,18 +311,16 @@ class EpicLib {
 		record := new EpicRecord().initFromRecordString(title)
 		if(this.couldBeEMC2Record(record.ini, record.id)) {
 			record.label := windowName
+			record.title := this.cleanEMC2RecordTitle(record.title, record.ini, record.id)
 			exacts.push(record)
 		}
 		
 		; Split up the title and look for potential IDs.
-		delims := [" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", ".", "#"]
-		titleBits := title.split(delims, " ").removeEmpties()
+		titleBits := title.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", ".", "#"], " ").removeEmpties()
 		For i,id in titleBits {
 			; Extract other potential info
 			ini := titleBits[i - 1] ; INI is assumed to be the piece just before the ID.
-			; Title is the whole string, sans INI & ID (for a hopefully nicer title).
-			iniAndID := ini title.firstBetweenStrings(ini, id) id
-			recordTitle := title.remove(iniAndID).clean(delims)
+			recordTitle := this.cleanEMC2RecordTitle(title, ini, id)
 			
 			; Match: Valid INI + ID.
 			if(this.couldBeEMC2Record(ini, id)) {
@@ -329,13 +347,13 @@ class EpicLib {
 				if(exact1.id = exact2.id) {
 					; If the titles (or title lengths) match too, just drop the later one.
 					if(exact1.title = exact2.title || exact1.title.length() = exact2.title.length())
-						exacts.delete(max(i, j))
+						exacts.removeAt(max(i, j))
 					
 					; Otherwise, keep the one with the shorter (and presumably nicer) title.
 					else if(exact1.title.length() > exact2.title.length())
-						exacts.delete(j)
+						exacts.removeAt(i)
 					else
-						exacts.delete(i)
+						exacts.removeAt(j)
 				}
 			}
 		}
@@ -343,7 +361,7 @@ class EpicLib {
 		For _,exact in exacts.clone() {
 			For j,possible in possibles.clone() {
 				if(exact.id = possible.id)
-					possibles.delete(j)
+					possibles.removeAt(j)
 			}
 		}
 		; Debug.popup("titleBits",titleBits, "origExacts",origExacts, "origPossibles",origPossibles, "exacts",exacts, "possibles",possibles)

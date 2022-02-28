@@ -79,7 +79,7 @@
 				x. EpicLib.selectEMC2RecordsFromUsefulTitles() => compiles all results from "trusted" titles and shows a popup for them (if 1 total match, return that without a popup)
 					^!i - insert ID from window titles
 					Probably use EpicLib.extractEMC2Records for each title
-				. TLG selector "FIND" or "GET" keyword
+				x. TLG selector "FIND" or "GET" keyword
 				. Global edit/view from current window title
 				. Switch EpicStudio to use global edit/view from window title, rather than its own getCurrentDLG() (and callers) stuff.
 				. Consider adding an ActionObjectEMC2 function for copying + toasting (maybe for ActionObjectBase and other instances that make sense too?)

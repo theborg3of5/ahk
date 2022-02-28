@@ -130,10 +130,8 @@ class VB6 {
 		; Use the project/project group title, usually "Project Group - DLG######" or "Project - DLG######"
 		projectName := ControlGetText("PROJECT1", Config.windowInfo["VB6"].idString)
 		dlgName := projectName.clean(["Project", "Group", "-"])
-		if(!dlgName.startsWith("DLG")) {
-			Toast.ShowError("Failed to find DLG ID", "DLG name is not DLG######: " dlgName)
+		if(!dlgName.startsWith("DLG"))
 			return ""
-		}
 		dlgId := dlgName.removeFromStart("DLG")
 		
 		; Ignore anything after a dash (usually added by me to break up projects that are too large to load together).

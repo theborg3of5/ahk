@@ -76,7 +76,6 @@
 			id    := record.id
 			title := record.title
 			
-			title := title.clean(["DBC", "-", "/", "\", ":"]) ; Don't need "DBC" and a separator on the start of every EMC2 title.
 			ClipboardLib.send(ini " " id " - " title) ; Can contain hotkey chars
 			
 			; Special case for OneNote: link the INI/ID as well.
@@ -101,11 +100,23 @@
 			if(!data)
 				return
 			
+			; We can do an additional Selector popup to grab ID (and potentially title) from various window titles.
+			recId := data["RECORD"]
+			if(recId = "GET") {
+				record := EpicLib.selectEMC2RecordFromUsefulTitles()
+				if(!record)
+					return
+				recId := record.id
+				
+				if(record.title)
+					data["NAME"] := record.title
+			}
+			
+			; Message is a combination of a prefix, the name displayed in the Selector, and the user's entered message.
 			fullName := data["NAME_OUTPUT_PREFIX"] data["NAME"]
 			combinedMessage := fullName.appendPiece(data["MESSAGE"], " - ")
 			
 			; Record field can contain DLG (no prefix), PRJ (P.), QAN (Q.), or SLG (S.) IDs.
-			recId := data["RECORD"]
 			if(recId.startsWith("P."))
 				prjId := recId.removeFromStart("P.")
 			else if(recId.startsWith("Q."))

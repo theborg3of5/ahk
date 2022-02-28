@@ -126,15 +126,15 @@ class EpicLib {
 	}
 	
 	;---------
-	; DESCRIPTION:    Check whether the given string COULD be an EMC2 record ID - these are numeric except for SUs and TDE
-	;                 logs, which start with I and T respectively.
+	; DESCRIPTION:    Check whether the given string COULD be an EMC2 record ID - these are numeric except certain DLGs
+	;                 that have prefixes (I, T, CS, etc).
 	; PARAMETERS:
 	;  id (I,REQ) - Possible ID to evaluate.
 	; RETURNS:        true if possibly an ID, false otherwise.
 	;---------
 	couldBeEMC2ID(id) {
-		; For SU DLG IDs, trim off leading letter so we recognize them as a numeric ID.
-		if(id.startsWithAnyOf(["I", "T"], letter))
+		; For special DLG IDs (SUs, TDE, searches, etc.), trim off leading letter so we recognize them as a numeric ID.
+		if(id.startsWithAnyOf(["I", "T", "CS"], letter))
 			id := id.removeFromStart(letter)
 		
 		return id.isNum()
@@ -177,7 +177,7 @@ class EpicLib {
 	}
 	
 	
-	getBestEMC2RecordFromTitle(title) {
+	getBestEMC2RecordFromString(title) {
 		this.extractEMC2RecordsFromTitle(title, exacts, possibles)
 		
 		; Return the first exact match, then the first possible match.
@@ -185,10 +185,27 @@ class EpicLib {
 	}
 	
 	
-	selectEMC2RecordFromTitle(title) {
+	copyEMC2RecordIDFromSelection() {
+		text := SelectLib.getText()
+		if(!text) {
+			Toast.ShowError("Could not copy EMC2 record ID from string", "Selection is blank")
+			return ""
+		}
+		
+		record := this.selectEMC2RecordFromString(text)
+		if(!record) {
+			Toast.ShowError("Could not copy EMC2 record ID from string", "No potential EMC2 record IDs found in selection: " text)
+			return ""
+		}
+		
+		ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
+	}
+	
+	
+	selectEMC2RecordFromString(title) {
 		if(!this.extractEMC2RecordsFromTitle(title, exacts, possibles)) {
 			; No matches at all
-			Toast.ShowError("No potential EMC2 record IDs found in window title: " title)
+			Toast.ShowError("No potential EMC2 record IDs found in string: " title)
 			return ""
 		}
 		; DEBUG.POPUP("title",title, "exacts",exacts, "possibles",possibles)

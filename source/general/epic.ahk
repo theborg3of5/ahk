@@ -69,7 +69,7 @@
 		sendStandardEMC2ObjectString() {
 			HotkeyLib.waitForRelease()
 			
-			record := EpicLib.selectEMC2RecordFromTitle(clipboard)
+			record := EpicLib.selectEMC2RecordFromString(clipboard)
 			if(!record)
 				return
 			ini   := record.ini

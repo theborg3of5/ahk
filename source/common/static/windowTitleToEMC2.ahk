@@ -68,10 +68,10 @@
 					Will call into EpicLib.selectEMC2Records() to get the needed ini/id/title
 				x. EpicLib.extractEMC2Records(fromString, possibleIDs) => returns exact matches
 					Likely used by ActionObjectEMC2 - only use the first result (exact, then possible)
-				x. EpicLib.selectEMC2RecordFromTitle(fromString) => shows popup if multiple + returns choice OR if 1 exact match, return without popup)
+				x. EpicLib.selectEMC2RecordFromString(fromString) => shows popup if multiple + returns choice OR if 1 exact match, return without popup)
 					Edit/View EMC2 record from current window title
 					TLG selector special "FIND" or "GET" keyword
-				x. Update Epic.sendStandardEMC2ObjectString() to use EpicLib.selectEMC2RecordFromTitle
+				x. Update Epic.sendStandardEMC2ObjectString() to use EpicLib.selectEMC2RecordFromString
 				x. Update ActionObjectEMC2 to use new logic - EpicLib.extractEMC2Records
 				x. EMC2 class gets a public getCurrentRecord() function (a la initFromEMC2Title()) that returns an EpicRecord from its current title (or "" if nothing there)
 				x. Outlook class gets initFromTLGString() equivalent

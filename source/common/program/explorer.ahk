@@ -51,8 +51,7 @@ class Explorer {
 	}
 	
 	;---------
-	; DESCRIPTION:    If the currently active folder is one of a few special formats, get the corresponding EMC2 object so
-	;                 we can open or link to it.
+	; DESCRIPTION:    Get an EMC2 object using the selected file's/current folder's path rather than the title.
 	; RETURNS:        A new ActionObjectEMC2 instance, or "" if it's not a special folder that links to an EMC2 object.
 	;---------
 	getSelectedFolderEMC2Object() {
@@ -62,34 +61,11 @@ class Explorer {
 			return
 		}
 		
-		; Get the name of the folder we're interested in (could be the selected "file", or the parent)
-		SplitPath(path, fileName, folderName, fileExtension)
-		if(fileExtension != "") ; A file was selected, use the parent folder's name instead
-			SplitPath(folderName, name)
-		else
-			name := fileName
-		
-		; Try it as a project folder (PRJ ###### ...)
-		if(name.startsWith("PRJ ")) {
-			ini := "PRJ"
-			id  := name.removeFromStart("PRJ ").beforeString(" ") ; ID should be everything up to the next space
-			
-		; Try it as a DLG source folder (DLG-######[-#])
-		} else if(name.startsWith("DLG-")) {
-			ini := "DLG"
-			id  := name.removeFromStart("DLG-").beforeString("-") ; Up to the next dash (which would be the folder version) or the end of the string
-			
-		; Try it as a design folder (x###### ...)
-		} else if(name.startsWith("x")) {
-			ini := "XDS"
-			id  := name.removeFromStart("x").beforeString(" ") ; ID should be everything up to the next space
-			
-		} else {
+		record := EpicLib.selectEMC2RecordFromTitle(path)
+		if(!record)
 			return ""
-		}
 		
-		; Debug.popup("name",name, "ini",ini, "id",id)
-		return new ActionObjectEMC2(id, ini)
+		return new ActionObjectEMC2(record.id, record.ini)
 	}
 	
 	;---------

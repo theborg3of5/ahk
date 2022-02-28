@@ -79,22 +79,9 @@ class Outlook {
 	}
 	
 	;---------
-	; DESCRIPTION:    Copy the EMC2 record ID from the currently-selected calendar event to the clipboard.
-	;---------
-	copyEMC2ObjectFromEvent() {
-		eventTitle := SelectLib.getText()
-		if(eventTitle = "")
-			return
-		
-		record := new EpicRecord().initFromRecordString(eventTitle)
-		if(record.id)
-			ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
-	}
-	
-	;---------
 	; DESCRIPTION:    Copy the EMC2 record ID from the currently-selected TLG event to the clipboard.
 	;---------
-	copyEMC2ObjectFromTLG() {
+	copyEMC2ObjectIDFromTLG() {
 		tlgString := SelectLib.getText()
 		if(tlgString = "")
 			return

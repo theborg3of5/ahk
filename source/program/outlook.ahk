@@ -41,12 +41,12 @@
 
 ; Normal calendar
 #If Outlook.isNormalCalendarActive()
-	!c::Outlook.copyEMC2ObjectFromEvent()
-	!w::new ActionObject(SelectLib.getText()).openWeb()
-	!e::new ActionObject(SelectLib.getText()).openEdit()
+	!c::EpicLib.copyEMC2RecordIDFromSelection()
+	!w::new ActionObjectEMC2(SelectLib.getText()).openWeb()
+	!e::new ActionObjectEMC2(SelectLib.getText()).openEdit()
 ; TLG calendar
 #If Outlook.isTLGCalendarActive()
-	!c::Outlook.copyEMC2ObjectFromTLG()
+	!c::Outlook.copyEMC2ObjectIDFromTLG()
 	!w::Outlook.openEMC2ObjectFromTLGWeb()
 	!e::Outlook.openEMC2ObjectFromTLGEdit()
 #If

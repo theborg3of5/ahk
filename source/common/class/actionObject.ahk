@@ -58,18 +58,21 @@ class ActionObject {
 	; SIDE EFFECTS:   tryProcessAs* functions may set .value, .type, and .subType.
 	;---------
 	determineType() {
-		if(ActionObjectEMC2.isThisType(this.value, ini, id)) {
-			this.type    := this.Type_EMC2
-			this.subType := ini
-			this.value   := id
+		; GDB TODO add some sort of handling if multiple of these checks match, rather than "first match wins".
+		; Potential tricky bit - IDs would be massaged differently (full path vs INI + ID)
 		
-		} else if(ActionObjectHelpdesk.isThisType(this.value, id)) {
+		if(ActionObjectHelpdesk.isThisType(this.value, id)) {
 			this.type  := this.Type_Helpdesk
 			this.value := id
 			
 		} else if(ActionObjectPath.isThisType(this.value, pathType)) {
 			this.type    := this.Type_Path
 			this.subType := pathType
+		
+		} else if(ActionObjectEMC2.isThisType(this.value, ini, id)) {
+			this.type    := this.Type_EMC2
+			this.subType := ini
+			this.value   := id
 		}
 	}
 	

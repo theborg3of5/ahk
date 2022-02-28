@@ -41,7 +41,7 @@
 
 ; Normal calendar
 #If Outlook.isNormalCalendarActive()
-	!c::EpicLib.copyEMC2RecordIDFromSelection()
+	!c::EpicLib.copyEMC2RecordIDFromText(SelectLib.getText())
 	!w::new ActionObjectEMC2(SelectLib.getText()).openWeb()
 	!e::new ActionObjectEMC2(SelectLib.getText()).openEdit()
 ; TLG calendar

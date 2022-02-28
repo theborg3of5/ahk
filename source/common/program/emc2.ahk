@@ -35,15 +35,6 @@ class EMC2 {
 	}
 	
 	;---------
-	; DESCRIPTION:    Copy the INI + ID of the currently open record to the clipboard.
-	;---------
-	copyCurrentRecord() {
-		record := this.getCurrentRecord()
-		if(record.id)
-			ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
-	}
-	
-	;---------
 	; DESCRIPTION:    Open the current record in web mode.
 	;---------
 	openCurrentRecordWeb() {
@@ -82,37 +73,6 @@ class EMC2 {
 		
 		WinWaitActive, % Config.windowInfo["EpicStudio"].titleString, , 10 ; 10-second timeout
 		t.close()
-	}
-	
-	;---------
-	; DESCRIPTION:    Open all related QANs from an ARD/ERD in EMC2.
-	; NOTES:          Assumes you're starting at the top-left of the table of QANs.
-	;---------
-	openRelatedQANsFromTable() {
-		Send, {Tab} ; Reset field since they just typed over it.
-		Send, +{Tab}
-		
-		relatedQANsAry := EMC2.getRelatedQANsAry()
-		; Debug.popup("QANs found", relatedQANsAry)
-		
-		urlsAry := []
-		For _,qan in relatedQANsAry {
-			link := new ActionObjectEMC2(qan, "QAN").getLinkWeb()
-			if(link)
-				urlsAry.push(link)
-		}
-		; Debug.popup("URLs", urlsAry)
-		
-		numQANs := relatedQANsAry.length()
-		if(numQANs > 10) {
-			MsgBox, 4, Many QANs, We found %numQANs% QANs. Are you sure you want to open them all?
-			IfMsgBox, No
-				return
-		}
-		
-		For i,url in urlsAry
-			if(url)
-				Run(url)
 	}
 	
 	;---------

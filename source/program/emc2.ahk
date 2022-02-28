@@ -11,7 +11,7 @@
 	^+t::return   ; Block ^+t login from Hyperspace - it does very strange zoom-in things and other nonsense.
 	
 	; Link and record number things based on the current record.
-	!c:: EMC2.copyCurrentRecord()          ; Get ID
+	!c:: EpicLib.copyEMC2RecordIDFromText(WinGetTitle("A"))          ; Copy ID
 	!w:: EMC2.openCurrentRecordWeb()       ; Open web version of the current object.
 	!+w::EMC2.openCurrentRecordWebBasic()  ; Open "basic" web version (always EMC2 summary, even for Sherlock/Nova records) of the current object.
 	^+o::EMC2.openCurrentDLGInEpicStudio() ; Take DLG # and pop up the DLG in EpicStudio sidebar.
@@ -20,8 +20,6 @@
 	:X:qa.dbc:: EMC2.insertSmartText("DBC QA INSTRUCTIONS")
 	:X:qa.sdbc::EMC2.insertSmartText("DBC SIMPLE AND STRAIGHTFORWARD QA INSTRUCTIONS")
 	:X:qa.new:: EMC2.insertSmartText("QA INSTRUCTIONS - NEW CHANGES")
-	
-	:X:openall::EMC2.openRelatedQANsFromTable() ; Open all related QANs from an object in EMC2.
 #If
 
 ; Design open

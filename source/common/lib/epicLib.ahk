@@ -185,16 +185,15 @@ class EpicLib {
 	}
 	
 	
-	copyEMC2RecordIDFromSelection() {
-		text := SelectLib.getText()
+	copyEMC2RecordIDFromText(text) {
 		if(!text) {
-			Toast.ShowError("Could not copy EMC2 record ID from string", "Selection is blank")
+			Toast.ShowError("Could not copy EMC2 record ID from string", "String is blank")
 			return ""
 		}
 		
 		record := this.selectEMC2RecordFromString(text)
 		if(!record) {
-			Toast.ShowError("Could not copy EMC2 record ID from string", "No potential EMC2 record IDs found in selection: " text)
+			Toast.ShowError("Could not copy EMC2 record ID from string", "No potential EMC2 record IDs found in provided text: " text)
 			return ""
 		}
 		

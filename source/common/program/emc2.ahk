@@ -38,7 +38,7 @@ class EMC2 {
 	;                 Nova/Sherlock objects).
 	;---------
 	openCurrentRecordWebBasic() { ; GDB TODO is this really worth keeping around?
-		record := EpicLib.getBestEMC2RecordFromText(title)
+		record := EpicLib.getBestEMC2RecordFromText(WinGetActiveTitle())
 		new ActionObjectEMC2(record.id, record.ini).openWebBasic()
 	}
 	
@@ -46,7 +46,7 @@ class EMC2 {
 	; DESCRIPTION:    Open/focus the current DLG in EpicStudio.
 	;---------
 	openCurrentDLGInEpicStudio() {
-		record := EpicLib.getBestEMC2RecordFromText(title)
+		record := EpicLib.getBestEMC2RecordFromText(WinGetActiveTitle())
 		if(record.ini != "DLG" || record.id = "")
 			return
 		

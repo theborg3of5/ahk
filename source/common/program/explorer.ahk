@@ -54,7 +54,7 @@ class Explorer {
 	; DESCRIPTION:    Get an EMC2 object using the selected file's/current folder's path rather than the title.
 	; RETURNS:        A new ActionObjectEMC2 instance, or "" if it's not a special folder that links to an EMC2 object.
 	;---------
-	getSelectedFolderEMC2Object() {
+	getSelectedFolderEMC2Object() { ; GDB TODO could we do something with Functor objects to handle the various functions like this I've got around?
 		path := this.getSelectedPath()
 		if(path = "") {
 			Toast.ShowError("Could not get EMC2 object for selected folder", "Could not get selected folder path")

@@ -42,7 +42,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		; If we don't know the INI yet, assume the ID is a combined string (i.e. "DLG 123456" or
 		; "DLG 123456: WE DID SOME STUFF") and try to split it into its component parts.
 		if(id != "" && ini = "") {
-			match := EpicLib.getBestEMC2RecordFromString(id)
+			match := EpicLib.getBestEMC2RecordFromText(id)
 			if(match) {
 				ini   := match.ini
 				id    := match.id
@@ -71,7 +71,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		if(!Config.contextIsWork)
 			return false
 		
-		match := EpicLib.getBestEMC2RecordFromString(value)
+		match := EpicLib.getBestEMC2RecordFromText(value)
 		if(match) {
 			ini := match.ini
 			id  := match.id

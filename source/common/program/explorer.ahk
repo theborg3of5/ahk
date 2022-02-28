@@ -61,7 +61,7 @@ class Explorer {
 			return
 		}
 		
-		record := EpicLib.selectEMC2RecordFromTitle(path)
+		record := EpicLib.selectEMC2RecordFromText(path)
 		if(!record)
 			return ""
 		

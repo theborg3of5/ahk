@@ -70,6 +70,7 @@
 			HotkeyLib.waitForRelease()
 			
 			record := EpicLib.selectEMC2RecordFromString(clipboard)
+			record := EpicLib.selectEMC2RecordFromText(clipboard)
 			if(!record)
 				return
 			ini   := record.ini

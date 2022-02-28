@@ -177,7 +177,7 @@ class EpicLib {
 	}
 	
 	
-	getBestEMC2RecordFromString(text) {
+	getBestEMC2RecordFromText(text) {
 		this.extractEMC2RecordsFromText(text, exacts, possibles)
 		
 		; Return the first exact match, then the first possible match.
@@ -191,7 +191,7 @@ class EpicLib {
 			return ""
 		}
 		
-		record := this.selectEMC2RecordFromString(text)
+		record := this.selectEMC2RecordFromText(text)
 		if(!record) {
 			Toast.ShowError("Could not copy EMC2 record ID from string", "No potential EMC2 record IDs found in provided text: " text)
 			return ""
@@ -201,7 +201,7 @@ class EpicLib {
 	}
 	
 	
-	selectEMC2RecordFromString(text) {
+	selectEMC2RecordFromText(text) {
 		if(!this.extractEMC2RecordsFromText(text, exacts, possibles)) {
 			; No matches at all
 			Toast.ShowError("No potential EMC2 record IDs found in string: " text)

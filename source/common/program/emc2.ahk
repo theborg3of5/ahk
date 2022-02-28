@@ -31,7 +31,7 @@ class EMC2 {
 		title := title.removeFromEnd("EMC2")
 		title := title.clean(["-"])
 		
-		return EpicLib.getBestEMC2RecordFromString(title)
+		return EpicLib.getBestEMC2RecordFromText(title)
 	}
 	
 	;---------

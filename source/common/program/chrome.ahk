@@ -32,21 +32,6 @@
 	}
 	
 	;---------
-	; DESCRIPTION:    Open the EMC2 object on the current page up in the "proper" web version -
-	;                 Sherlock for SLGs, etc.
-	;---------
-	openCurrentEMC2ObjectWeb() {
-		new ActionObjectEMC2(Chrome.getTitle()).openWeb()
-	}
-	
-	;---------
-	; DESCRIPTION:    Open the EMC2 object on the current page up in EMC2.
-	;---------
-	openCurrentEMC2ObjectEdit() {
-		new ActionObjectEMC2(Chrome.getTitle()).openEdit()
-	}
-	
-	;---------
 	; DESCRIPTION:    Open the DLG from the current page in EpicStudio.
 	;---------
 	openCurrentDLGInEpicStudio() {

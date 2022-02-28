@@ -1,5 +1,24 @@
 ; Work-specific hotkeys
 
+; Universal open of EMC2 objects from title.
+; Note that some programs override this if they have special ways of providing the record string or INI/ID/title.
+$!e::getEMC2ObjectFromCurrentTitle().openEdit()
+$!w::getEMC2ObjectFromCurrentTitle().openWeb()
+	getEMC2ObjectFromCurrentTitle() {
+		; We have to check this directly instead of putting it under an #If directive, so that the various program-specific #If directives win.
+		if(!Config.contextIsWork) {
+			HotkeyLib.waitForRelease()
+			Send, % A_ThisHotkey.removeFromStart("$")
+			return ""
+		}
+		
+		record := EpicLib.selectEMC2RecordFromText(WinGetTitle("A"))
+		if(!record)
+			return ""
+		
+		return new ActionObjectEMC2(record.id, record.ini)
+	}
+
 #If Config.contextIsWork ; Any work machine =--
 	^!+d:: Send, % selectTLGId("Select EMC2 Record to Send").removeFromStart("P.").removeFromStart("Q.")
 	^!#d:: selectTLGActionObject("Select EMC2 Record to View").openWeb()
@@ -69,7 +88,6 @@
 		sendStandardEMC2ObjectString() {
 			HotkeyLib.waitForRelease()
 			
-			record := EpicLib.selectEMC2RecordFromString(clipboard)
 			record := EpicLib.selectEMC2RecordFromText(clipboard)
 			if(!record)
 				return

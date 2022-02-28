@@ -79,20 +79,6 @@ class EpicStudio {
 	}
 	
 	;---------
-	; DESCRIPTION:    Open the current DLG in web.
-	;---------
-	openCurrentDLGWeb() {
-		new ActionObjectEMC2(this.getCurrentDLG(), "DLG").openWeb()
-	}
-	
-	;---------
-	; DESCRIPTION:    Open the current DLG in EMC2.
-	;---------
-	openCurrentDLGEdit() {
-		new ActionObjectEMC2(this.getCurrentDLG(), "DLG").openEdit()
-	}
-	
-	;---------
 	; DESCRIPTION:    Run EpicStudio in debug mode, or continue debugging if we're already in it.
 	; PARAMETERS:
 	;  searchStringKey (I,REQ) - A key describing which search string to automatically search for in
@@ -145,30 +131,9 @@ class EpicStudio {
 	
 	; #PRIVATE#
 	
-	; Specific controls
-	static ClassNN_MainEditor            := "WindowsForms10.Window.8.app.0.141b42a_r9_ad163" ; Primary edit pane
-	static ClassNN_ObjectExplorerDLGEdit := "WindowsForms10.EDIT.app.0.141b42a_r9_ad13"      ; Object explorer DLG field
-	
 	; Debug window controls
 	static Debug_OtherProcessButton := "WindowsForms10.BUTTON.app.0.141b42a_r7_ad12" ; "Other Process" radio button
 	static Debug_OtherProcessField  := "Edit1" ; "Other Process" search field
-	
-	;---------
-	; DESCRIPTION:    Determine the DLG that we're currently working in, pulling from different locations depending on
-	;                 what's focused.
-	; RETURNS:        DLG ID if found, otherwise ""
-	;---------
-	getCurrentDLG() {
-		; If the editor is focused, prefer the DLG in the title (in case the Object Explorer DLG field is out of date).
-		if(ControlGetFocus("A") = this.ClassNN_MainEditor) {
-			dlgId := WinGetActiveTitle().firstBetweenStrings(" (DLG ",")")
-			if(dlgId)
-				return dlgId
-		}
-		
-		; If the sidebar is focused or the title has no DLG, use DLG field at the bottom of Object Explorer.
-		return ControlGetText(this.ClassNN_ObjectExplorerDLGEdit, "A").beforeString(" - ")
-	}
 	
 	;---------
 	; DESCRIPTION:    Determine whether EpicStudio is in debug mode right now.

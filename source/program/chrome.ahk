@@ -22,8 +22,6 @@
 	^!#c::Chrome.copyCodeSearchClientPath()
 	
 	; Open different objects based on the title.
-	!w::Chrome.openCurrentEMC2ObjectWeb()
-	!e::Chrome.openCurrentEMC2ObjectEdit()
 	^+o::Chrome.openCurrentDLGInEpicStudio()
 	
 	; Handling for file links

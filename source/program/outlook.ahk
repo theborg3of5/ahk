@@ -46,9 +46,9 @@
 	!e::new ActionObjectEMC2(SelectLib.getText()).openEdit()
 ; TLG calendar
 #If Outlook.isTLGCalendarActive()
-	!c::Outlook.copyEMC2ObjectIDFromTLG()
-	!w::Outlook.getSelectedTLGEventEMC2Object().openWeb()
-	!e::Outlook.getSelectedTLGEventEMC2Object().openEdit()
+	!c::Outlook.copyEMC2RecordIDFromTLG()
+	!w::Outlook.getEMC2ObjectFromTLG().openWeb()
+	!e::Outlook.getEMC2ObjectFromTLG().openEdit()
 #If
 
 ; Calendar folders

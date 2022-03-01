@@ -80,18 +80,8 @@
 					^!i - insert ID from window titles
 					Probably use EpicLib.extractEMC2Records for each title
 				x. TLG selector "FIND" or "GET" keyword
-				. Global edit/view from current window title
-				. Switch EpicStudio to use global edit/view from window title, rather than its own getCurrentDLG() (and callers) stuff.
-				. Consider adding an ActionObjectEMC2 function for copying + toasting (maybe for ActionObjectBase and other instances that make sense too?)
-					Maybe different ones for copying ID, INI ID, and INI ID - TITLE?
-						Need at least ID (can use INI/title in toast)
-						Callers:
-							EMC2
-								copyCurrentRecord()
-							Outlook
-								copyEMC2ObjectFromEvent()
-								copyEMC2ObjectFromTLG()
-								copyCurrentMessageTitle() (maybe)
+				x. Global edit/view from current window title
+				x. Switch EpicStudio to use global edit/view from window title, rather than its own getCurrentDLG() (and callers) stuff.
 				. Consider putting all of the EMC2 record-specific stuff in EpicLib, into a new library (EMC2RecordLib, maybe?)
 	
 */ ; --=

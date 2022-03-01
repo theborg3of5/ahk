@@ -43,6 +43,6 @@
 	^+s::Explorer.createRelativeShortcutToFile()
 	
 	; Open EMC2 objects based on the active folder name.
-	!w::Explorer.getSelectedFolderEMC2Object().openWeb()
-	!e::Explorer.getSelectedFolderEMC2Object().openEdit()
+	!w::Explorer.getEMC2ObjectFromSelectedFolder().openWeb()
+	!e::Explorer.getEMC2ObjectFromSelectedFolder().openEdit()
 #If

@@ -81,8 +81,8 @@ class Outlook {
 	;---------
 	; DESCRIPTION:    Copy the EMC2 record ID from the currently-selected TLG event to the clipboard.
 	;---------
-	copyEMC2ObjectIDFromTLG() {
-		record := this.getCurrentTLGRecord()
+	copyEMC2RecordIDFromTLG() {
+		record := this.getEMC2RecordFromTLG()
 		if(record)
 			ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
 	}
@@ -91,8 +91,8 @@ class Outlook {
 	; DESCRIPTION:    Get an EMC2 object using the selected TLG event's title.
 	; RETURNS:        A new ActionObjectEMC2 instance, or "" if we didn't find any valid EMC2 record.
 	;---------
-	getSelectedTLGEventEMC2Object() {
-		record := this.getCurrentTLGRecord()
+	getEMC2ObjectFromTLG() {
+		record := this.getEMC2RecordFromTLG()
 		if(!record)
 			return ""
 		
@@ -166,10 +166,10 @@ class Outlook {
 	}
 	
 	;---------
-	; DESCRIPTION:    Get the current EMC2 record encoded in the selected TLG event's title.
+	; DESCRIPTION:    Get the first EMC2 record encoded in the selected TLG event's title.
 	; RETURNS:        EpicRecord instance from the event (or "" if no event found).
 	;---------
-	getCurrentTLGRecord() {
+	getEMC2RecordFromTLG() {
 		tlgString := SelectLib.getText()
 		if(!tlgString)
 			return ""

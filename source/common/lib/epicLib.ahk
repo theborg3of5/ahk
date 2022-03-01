@@ -251,7 +251,7 @@ class EpicLib {
 		if(!data) ; User didn't pick an option
 			return ""
 		
-		return new EpicRecord(ini, data["ID"], data["TITLE"])
+		return new EpicRecord(data["INI"], data["ID"], data["TITLE"])
 	}
 	
 	;---------
@@ -349,38 +349,8 @@ class EpicLib {
 				possibles.push(new EpicRecord("", id, recordTitle, windowName))
 		}
 		
-		; origExacts := exacts.clone() ; GDB TODO remove
-		; origPossibles := possibles.clone()
-		
-		; GDB TODO consider handling these two with a Functor object approach - a DataLib function for removing duplicates, and a reference to a function that returns whether/which element to remove.
-		; Remove duplicate entries.
-		For i,exact1 in exacts.clone() {
-			For j,exact2 in exacts.clone() {
-				; Same element.
-				if(i = j)
-					Continue
-				
-				if(exact1.id = exact2.id) {
-					; If the titles (or title lengths) match too, just drop the later one.
-					if(exact1.title = exact2.title || exact1.title.length() = exact2.title.length())
-						exacts.removeAt(max(i, j))
-					
-					; Otherwise, keep the one with the shorter (and presumably nicer) title.
-					else if(exact1.title.length() > exact2.title.length())
-						exacts.removeAt(i)
-					else
-						exacts.removeAt(j)
-				}
-			}
-		}
-		; Filter out possibles for IDs we already have in exacts.
-		For _,exact in exacts.clone() {
-			For j,possible in possibles.clone() {
-				if(exact.id = possible.id)
-					possibles.removeAt(j)
-			}
-		}
-		; Debug.popup("textBits",textBits, "origExacts",origExacts, "origPossibles",origPossibles, "exacts",exacts, "possibles",possibles)
+		; Filter out duplicates.
+		this.removeEMC2RecordDuplicates(exacts, possibles)
 		
 		; Convert all exact maches' INIs.
 		For i,exact in exacts
@@ -391,9 +361,54 @@ class EpicLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Remove duplicates from the given arrays - there should only contain 1 EpicRecord instance with any
+	;                 given ID across both arrays, with exacts winning.
+	; PARAMETERS:
+	;  exacts    (IO,REQ) - Array of exact matches as EpicRecord instances, will be updated.
+	;  possibles (IO,REQ) - Array of potential matches as EpicRecord instances, will be updated.
+	; NOTES:          Titles are used to break ID ties - shorter title wins.
+	;---------
+	removeEMC2RecordDuplicates(ByRef exacts, ByRef possibles) {
+		; Filter out duplicates inside exacts.
+		exactsToKeep := {} ; {id: indexInExacts} ; We store the index so we can maintain the order (instead of sorting by ID)
+		For i,exact in exacts {
+			; New ID, store it off.
+			if(!exactsToKeep[exact.id]) {
+				exactsToKeep[exact.id] := i
+				Continue
+			}
+			
+			; ID already exists - decide whether to keep our stored index or replace it with the new one.
+			; Note: we're assuming each ID only goes with 1 INI, chances of both seem slim.
+			id := exact.id
+			storedExact := exacts[id].title
+			
+			; The new exact only wins if it has a shorter title.
+			if(exact.title.length() >= storedExact.title.length()) {
+				exactsToKeep[exact.id] := i
+				Continue
+			}
+			
+			; Otherwise, the stored one wins.
+		}
+		exactsTemp := []
+		For _,i in exactsToKeep
+			exactsTemp.push(exacts[i])
+		exacts := exactsTemp
+		
+		; Filter out possibles for IDs we already have in exacts (we don't really see duplicates within possibles).
+		possiblesTemp := []
+		For _,possible in possibles {
+			if(!exactsToKeep[possible.id])
+				possiblesTemp.push(possible)
+		}
+		possibles := possiblesTemp
+	}
+	
+	;---------
 	; DESCRIPTION:    Build a Selector and ask the user to pick from the matches we found.
 	; PARAMETERS:
-	;  exacts   (I,REQ) - Associative array of confirmed EpicRecord objects, from extractEMC2RecordsFromText.
+	;  exacts    (I,REQ) - Associative array of confirmed EpicRecord objects, from extractEMC2RecordsFromText.
 	;  possibles (I,REQ) - Associative array of potential EpicRecord objects, from extractEMC2RecordsFromText.
 	; RETURNS:        Data array from Selector.selectGui().
 	;---------

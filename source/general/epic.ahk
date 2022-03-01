@@ -126,6 +126,8 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 				if(!record)
 					return
 				recId := record.id
+				if(["PRJ", "QAN", "SLG"].contains(record.ini))
+					recId := record.ini.charAt(1) "." recId ; Add on the INI prefix so the ID goes in the right position.
 				
 				if(record.title)
 					data["NAME"] := record.title

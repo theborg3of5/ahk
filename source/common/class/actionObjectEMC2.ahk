@@ -96,6 +96,8 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	; RETURNS:        Link to either emc2summary or Nova/Sherlock (depending on the INI)
 	;---------
 	getLinkWeb() {
+		else if(this.isEditOnlyObject())
+			link := this.getLinkEdit()
 		if(this.isSherlockObject())
 			link := Config.private["SHERLOCK_BASE"]
 		else if(this.isNovaObject())
@@ -129,6 +131,14 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;---------
 	isNovaObject() {
 		return (this.ini = "DRN")
+	}
+	
+	;---------
+	; DESCRIPTION:    Certain objects don't actually have a web view - we'll redirect these to edit mode instead.
+	; RETURNS:        true/false
+	;---------
+	isEditOnlyObject() {
+		return ["ZCK", "ZPF"].contains(this.ini)
 	}
 	; #END#
 }

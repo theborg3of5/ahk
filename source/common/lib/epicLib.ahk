@@ -302,6 +302,7 @@ class EpicLib {
 		; Normal titles
 		For _,windowName in ["EMC2", "EpicStudio", "Visual Studio", "Explorer"] {
 			title := Config.windowInfo[windowName].getCurrTitle()
+			title := title.removeFromEnd(windowName).clean("-") ; Trim the window name off the end - we're gonna show it at the start anyways.
 			windows.push({windowName:windowName, title:title})
 		}
 		
@@ -315,7 +316,7 @@ class EpicLib {
 		return windows
 	}
 	
-	
+	; GDB TODO
 	extractEMC2RecordsFromText(text, ByRef exacts := "", ByRef possibles := "", windowName := "") {
 		exacts    := []
 		possibles := []
@@ -408,21 +409,21 @@ class EpicLib {
 	;---------
 	; DESCRIPTION:    Build a Selector and ask the user to pick from the matches we found.
 	; PARAMETERS:
-	;  exacts    (I,REQ) - Associative array of confirmed EpicRecord objects, from extractEMC2RecordsFromText.
-	;  possibles (I,REQ) - Associative array of potential EpicRecord objects, from extractEMC2RecordsFromText.
+	;  exacts    (I,REQ) - Array of confirmed EpicRecord objects, from extractEMC2RecordsFromText.
+	;  possibles (I,REQ) - Array of potential EpicRecord objects, from extractEMC2RecordsFromText.
 	; RETURNS:        Data array from Selector.selectGui().
 	;---------
 	selectFromEMC2RecordMatches(exacts, possibles) {
+		abbreviations := []
 		s := new Selector().setTitle("Select EMC2 Object to use:").addOverrideFields({1:"INI"})
 		
-		abbrevNums := {} ; {letter: lastUsedNumber}
 		s.addSectionHeader("Full matches")
 		For _,record in exacts
-			s.addChoice(this.buildChoiceFromEMC2Record(record, abbrevNums))
+			s.addChoice(this.buildChoiceFromEMC2Record(record, abbreviations))
 		
 		s.addSectionHeader("Potential IDs")
 		For _,record in possibles
-			s.addChoice(this.buildChoiceFromEMC2Record(record, abbrevNums))
+			s.addChoice(this.buildChoiceFromEMC2Record(record, abbreviations))
 		
 		return s.selectGui()
 	}
@@ -430,11 +431,12 @@ class EpicLib {
 	;---------
 	; DESCRIPTION:    Turn the provided EpicRecord object into a SelectorChoice to show to the user.
 	; PARAMETERS:
-	;  record      (I,REQ) - EpicRecord object to use.
-	;  abbrevNums (IO,REQ) - Associative array of abbreviation letters to counts, used to generate unique abbreviations. {letter: lastUsedNumber}
+	;  record         (I,REQ) - EpicRecord object to use.
+	;  abbreviations (IO,REQ) - Array of all abbreviations so far, used to avoid duplicates. We'll add the one we generates from
+	;                           this choice.
 	; RETURNS:        SelectorChoice instance describing the provided record.
 	;---------
-	buildChoiceFromEMC2Record(record, ByRef abbrevNums) {
+	buildChoiceFromEMC2Record(record, ByRef abbreviations) {
 		ini        := record.ini
 		id         := record.id
 		title      := record.title
@@ -449,14 +451,27 @@ class EpicLib {
 		if(title)
 			name .= " - " title
 		
-		; Abbreviation is INI first letter + a counter.
-		if(ini = "")
-			abbrevLetter := "u" ; Unknown INI
+		; Abbreviation comes from window name or INI.
+		if(windowName)
+			abbrev := windowName.sub(1, 2)
+		else if(ini)
+			abbrev := ini.charAt(1)
 		else
-			abbrevLetter := StringLower(ini.charAt(1))
-		abbrevNum := DataLib.forceNumber(abbrevNums[abbrevLetter]) + 1
-		abbrevNums[abbrevLetter] := abbrevNum
-		abbrev := abbrevLetter abbrevNum
+			abbrev := "u"
+		abbrev := StringLower(abbrev)
+		
+		; Add a counter to the abbreviation if needed.
+		while(abbreviations.contains(abbrev)) {
+			lastChar := abbrev.charAt(0)
+			if(lastChar.isNum()) {
+				abbrev := abbrev.removeFromEnd(lastChar)
+				counter := lastChar + 1
+			} else {
+				counter := 2
+			}
+			abbrev .= counter
+		}
+		abbreviations.push(abbrev)
 		
 		return new SelectorChoice({NAME:name, ABBREV:abbrev, INI:ini, ID:id, TITLE:title})
 	}

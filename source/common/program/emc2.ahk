@@ -37,7 +37,7 @@ class EMC2 {
 	; DESCRIPTION:    Open the current record in "basic" web mode (emc2summary, even for
 	;                 Nova/Sherlock objects).
 	;---------
-	openCurrentRecordWebBasic() { ; GDB TODO is this really worth keeping around?
+	openCurrentRecordWebBasic() {
 		record := EpicLib.getBestEMC2RecordFromText(WinGetActiveTitle())
 		new ActionObjectEMC2(record.id, record.ini).openWebBasic()
 	}

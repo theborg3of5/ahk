@@ -96,9 +96,9 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	; RETURNS:        Link to either emc2summary or Nova/Sherlock (depending on the INI)
 	;---------
 	getLinkWeb() {
-		else if(this.isEditOnlyObject())
+		if(this.isEditOnlyObject())
 			link := this.getLinkEdit()
-		if(this.isSherlockObject())
+		else if(this.isSherlockObject())
 			link := Config.private["SHERLOCK_BASE"]
 		else if(this.isNovaObject())
 			link := Config.private["NOVA_RELEASE_NOTE_BASE"]

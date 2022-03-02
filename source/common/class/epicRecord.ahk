@@ -48,14 +48,6 @@ class EpicRecord {
 	}
 	
 	;---------
-	; DESCRIPTION:    Create a new EpicRecord object, optionally parsing it from a string.
-	; PARAMETERS:
-	;  recordString (I,OPT) - String representing the record. See class header for supported
-	;                         formats. If not given, record will need to be initialized with
-	;                         one of the .initFrom*() functions.
-	;---------
-	
-	;---------
 	; DESCRIPTION:    Create a new EpicRecord object, filling in its properties.
 	; PARAMETERS:
 	;  ini   (I,OPT) - Record INI

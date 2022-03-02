@@ -140,7 +140,14 @@ class EpicLib {
 		return id.isNum()
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Checks whether the given INI and ID could plausibly be an EMC2 ID, based on whether we can map the
+	;                 INI to one we know, and the ID's format.
+	; PARAMETERS:
+	;  ini (I,REQ) - INI to consider
+	;  id  (I,REQ) - ID to consider
+	; RETURNS:        true/false
+	;---------
 	couldBeEMC2Record(ini, id) { ; Checks whether this is PLAUSIBLY an EMC2 INI/ID, based on INI and ID format - no guarantee that it exists.
 		; Need both INI and ID.
 		if(ini = "" || id = "")
@@ -176,7 +183,12 @@ class EpicLib {
 		return s.selectChoice(ini, "SUBTYPE") ; Silent selection - no popup.
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Extract all EMC2 records from the given string and pick the "best" one (that is, the first exact match, then the first possible match).
+	; PARAMETERS:
+	;  text (I,REQ) - The string to pull EMC2 record references out of.
+	; RETURNS:        EpicRecord representing the EMC2 record we picked, or "" if we couldn't find any.
+	;---------
 	getBestEMC2RecordFromText(text) {
 		this.extractEMC2RecordsFromText(text, exacts, possibles)
 		
@@ -184,23 +196,38 @@ class EpicLib {
 		return DataLib.coalesce(exacts[1], possibles[1])
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Extract all EMC2 records from the given string, prompt the user for which one to use, and put the resulting ID on the clipboard.
+	; PARAMETERS:
+	;  text (I,REQ) - The string to pull EMC2 record references out of.
+	; NOTES:          If there is exactly 1 "exact" match (valid INI and ID), we'll always return it without a popup (even
+	;                 if there are other potential matches with only a valid ID).
+	;---------
 	copyEMC2RecordIDFromText(text) {
 		if(!text) {
 			Toast.ShowError("Could not copy EMC2 record ID from string", "String is blank")
-			return ""
+			return
 		}
 		
 		record := this.selectEMC2RecordFromText(text)
 		if(!record) {
 			Toast.ShowError("Could not copy EMC2 record ID from string", "No potential EMC2 record IDs found in provided text: " text)
-			return ""
+			return
 		}
 		
 		ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Extract all EMC2 records from the given string and prompt the user if we find multiple, returning
+	;                 the result.
+	; PARAMETERS:
+	;  text (I,REQ) - The string to pull EMC2 record references out of.
+	; RETURNS:        "" if we didn't find any records or the user didn't pick one
+	;                 EpicRecord instance representing their choice if they did pick one
+	; NOTES:          If there is exactly 1 "exact" match (valid INI and ID), we'll always return it without a popup (even
+	;                 if there are other potential matches with only a valid ID).
+	;---------
 	selectEMC2RecordFromText(text) {
 		if(!this.extractEMC2RecordsFromText(text, exacts, possibles)) {
 			; No matches at all
@@ -221,7 +248,12 @@ class EpicLib {
 		return new EpicRecord(data["INI"], data["ID"], data["TITLE"])
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Check a set of titles (from a hard-coded set of windows) for EMC2 records and give the user the
+	;                 option to pick between all of them.
+	; RETURNS:        An EpicRecord instance describing the record the user picked, or "" if we couldn't find one or they
+	;                 didn't select one.
+	;---------
 	selectEMC2RecordFromUsefulTitles() {
 		windows := this.getUsefulEMC2RecordWindows()
 		; Debug.popup("windows",windows)
@@ -276,6 +308,7 @@ class EpicLib {
 	
 	; #PRIVATE#
 	
+	; [[ EMC2 Record Extraction/Selection ]] =--
 	emc2TypeSelector := "" ; Selector instance (performance cache)
 	
 	;---------
@@ -295,7 +328,10 @@ class EpicLib {
 		return s
 	}
 	
-	
+	;---------
+	; DESCRIPTION:    Get an array of windows that are likely to contain useful EMC2 record IDs.
+	; RETURNS:        Array of objects: {windowName: name of window from windows.tl, title: window's title}
+	;---------
 	getUsefulEMC2RecordWindows() {
 		windows := [] ; [ {windowName, title} ]
 		
@@ -316,7 +352,15 @@ class EpicLib {
 		return windows
 	}
 	
-	; GDB TODO
+	;---------
+	; DESCRIPTION:    Given a string, pull all described EMC2 records out and return them.
+	; PARAMETERS:
+	;  text       (I,REQ) - The string to extract records from.
+	;  exacts     (O,OPT) - "Exact" matches, where we have both a valid INI (or something representing an INI, like "design" or
+	;                       "x") and ID (numeric or with a special DLG prefix like "I").
+	;  possibles  (O,OPT) - Potential matches, where we only have a valid ID (user can enter the INI).
+	;  windowName (I,OPT) - If provided, we'll stamp this window name on EpicRecord.label for all returned matches.
+	;---------
 	extractEMC2RecordsFromText(text, ByRef exacts := "", ByRef possibles := "", windowName := "") {
 		exacts    := []
 		possibles := []
@@ -474,7 +518,7 @@ class EpicLib {
 		abbreviations.push(abbrev)
 		
 		return new SelectorChoice({NAME:name, ABBREV:abbrev, INI:ini, ID:id, TITLE:title})
-	}
+	} ; --=
 	; #END#
 }
 

@@ -96,19 +96,6 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectBase.getTypeSelector" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
-							;                 choices to only those matching the given type.
-							; PARAMETERS:
-							;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
-							; RETURNS:        An ActionObject Selector instance, filtered to the given type.
-							; SIDE EFFECTS:   Populates type subscript in .typeSelectors if it doesn't yet exist.
-							;---------">
-                <Param name="type" />
-            </Overload>
-        </KeyWord>
         <KeyWord name="ActionObjectBase.linkSelectedText" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -243,19 +230,6 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectCodeSearch.getTypeSelector" func="yes">
-            <Overload retVal="{ActionObjectBase}" descr="
-							;---------
-							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
-							;                 choices to only those matching the given type.
-							; PARAMETERS:
-							;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
-							; RETURNS:        An ActionObject Selector instance, filtered to the given type.
-							; SIDE EFFECTS:   Populates type subscript in .typeSelectors if it doesn't yet exist.
-							;---------">
-                <Param name="type" />
-            </Overload>
-        </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.linkSelectedText" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
@@ -379,20 +353,6 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectEMC2.convertToUsefulINI" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Convert the given &quot;INI&quot; into the useful version of itself.
-							; PARAMETERS:
-							;  ini (I,REQ) - The ini to convert, can be any of:
-							;                 - Normal INI (DLG)
-							;                 - Special INI that we want a different version of (ZQN => QAN)
-							;                 - Word that describes an INI (Design)
-							; RETURNS:        The useful form of the INI, or &quot;&quot; if we couldn't match the input to one.
-							;---------">
-                <Param name="ini" />
-            </Overload>
-        </KeyWord>
         <KeyWord name="ActionObjectEMC2.copyLink" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
@@ -439,19 +399,6 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectEMC2.getTypeSelector" func="yes">
-            <Overload retVal="{ActionObjectBase}" descr="
-							;---------
-							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
-							;                 choices to only those matching the given type.
-							; PARAMETERS:
-							;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
-							; RETURNS:        An ActionObject Selector instance, filtered to the given type.
-							; SIDE EFFECTS:   Populates type subscript in .typeSelectors if it doesn't yet exist.
-							;---------">
-                <Param name="type" />
-            </Overload>
-        </KeyWord>
         <KeyWord name="ActionObjectEMC2.id" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
@@ -469,13 +416,11 @@
         <KeyWord name="ActionObjectEMC2.isThisType" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Determine whether the given string must be this type of ActionObject.
+							; DESCRIPTION:    Determine whether the given string MUST be this type of ActionObject.
 							; PARAMETERS:
 							;  value (I,REQ) - The value to evaluate
-							;  ini  (IO,OPT) - If the value is an EMC2 record, the INI.
-							;                  If passed in we'll evaluate this instead of trying to pull it from value.
-							;  id   (IO,OPT) - If the value is an EMC2 record, the ID.
-							;                  If passed in we'll evaluate this instead of trying to pull it from value.
+							;  ini   (O,OPT) - If the value is an EMC2 record, the INI.
+							;  id    (O,OPT) - If the value is an EMC2 record, the ID.
 							; RETURNS:        true/false - whether the given value must be an EMC2 object.
 							; NOTES:          Must be effectively static - this is called before we decide what kind of object to return.
 							;---------">
@@ -560,14 +505,6 @@
                 <Param name="ByRef value" />
                 <Param name="ByRef subType" />
                 <Param name="popupTitle := &quot;&quot;" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="ActionObjectEMC2.standardEMC2String" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    The &quot;standard&quot; EMC2 object string
-							; RETURNS:        <INI> <ID> - <TITLE>
-							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.title" func="yes">
@@ -680,19 +617,6 @@
 							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
 							;                 overridden by the child class.
 							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="ActionObjectEpicStudio.getTypeSelector" func="yes">
-            <Overload retVal="{ActionObjectBase}" descr="
-							;---------
-							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
-							;                 choices to only those matching the given type.
-							; PARAMETERS:
-							;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
-							; RETURNS:        An ActionObject Selector instance, filtered to the given type.
-							; SIDE EFFECTS:   Populates type subscript in .typeSelectors if it doesn't yet exist.
-							;---------">
-                <Param name="type" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.linkSelectedText" func="yes">
@@ -826,19 +750,6 @@
 							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
 							;                 overridden by the child class.
 							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="ActionObjectHelpdesk.getTypeSelector" func="yes">
-            <Overload retVal="{ActionObjectBase}" descr="
-							;---------
-							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
-							;                 choices to only those matching the given type.
-							; PARAMETERS:
-							;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
-							; RETURNS:        An ActionObject Selector instance, filtered to the given type.
-							; SIDE EFFECTS:   Populates type subscript in .typeSelectors if it doesn't yet exist.
-							;---------">
-                <Param name="type" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.id" func="yes">
@@ -995,19 +906,6 @@
 							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
 							;                 overridden by the child class.
 							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="ActionObjectPath.getTypeSelector" func="yes">
-            <Overload retVal="{ActionObjectBase}" descr="
-							;---------
-							; DESCRIPTION:    Create a new Selector instance from the ActionObject TLS and filter its
-							;                 choices to only those matching the given type.
-							; PARAMETERS:
-							;  type (I,REQ) - The type to filter to, from ActionObject.Type_*
-							; RETURNS:        An ActionObject Selector instance, filtered to the given type.
-							; SIDE EFFECTS:   Populates type subscript in .typeSelectors if it doesn't yet exist.
-							;---------">
-                <Param name="type" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.isThisType" func="yes">
@@ -2917,91 +2815,6 @@
         <KeyWord name="Edit"/>
         <KeyWord name="Eject"/>
         <KeyWord name="Else"/>
-        <KeyWord name="EMC2Record" func="yes">
-            <Overload retVal="{EpicRecord}" descr="
-							;---------
-							; DESCRIPTION:    Create a new EpicRecord object, optionally parsing it from a string.
-							; PARAMETERS:
-							;  recordString (I,OPT) - String representing the record. See class header for supported
-							;                         formats. If not given, record will need to be initialized with
-							;                         one of the .initFrom*() functions.
-							;---------">
-                <Param name="ini := &quot;&quot;" />
-                <Param name="id := &quot;&quot;" />
-                <Param name="title := &quot;&quot;" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="EMC2Record.id" func="yes">
-            <Overload retVal="[Property] {EpicRecord}" descr="
-							;---------
-							; DESCRIPTION:    The ID for this record.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="EMC2Record.ini" func="yes">
-            <Overload retVal="[Property] {EpicRecord}" descr="
-							;---------
-							; DESCRIPTION:    The INI for this record.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="EMC2Record.initFromEMC2Title" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Initialize the record based on the current EMC2 window title.
-							; NOTES:          This will only get the INI and ID, never the title.
-							; RETURNS:        this
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="EMC2Record.initFromRecordString" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Initialize the record based on a string.
-							; PARAMETERS:
-							;  recordString (I,REQ) - String representing the record. See class header for supported
-							;                         formats.
-							; RETURNS:        this
-							;---------">
-                <Param name="recordString" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="EMC2Record.initFromTLGString" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Initialize the record based on a TLG string.
-							; PARAMETERS:
-							;  tlgString (I,REQ) - TLG string from Outlook TLG calendar.
-							; NOTES:          We assume there's only 1 record ID per string, so the first one will win.
-							; RETURNS:        this
-							;---------">
-                <Param name="tlgString" />
-            </Overload>
-        </KeyWord>
-        <KeyWord name="EMC2Record.recordString" func="yes">
-            <Overload retVal="[Property] {EpicRecord}" descr="
-							;---------
-							; DESCRIPTION:    Constructed string representing the record:
-							;                   If we have a title: TITLE [R INI ID]
-							;                   If we don't have a title: R INI ID
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="EMC2Record.standardEMC2String" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    The &quot;standard&quot; EMC2 object string
-							; RETURNS:        <INI> <ID> - <TITLE>
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="EMC2Record.title" func="yes">
-            <Overload retVal="[Property] {EpicRecord}" descr="
-							;---------
-							; DESCRIPTION:    The title for this record.
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="Enable"/>
         <KeyWord name="Enabled"/>
         <KeyWord name="End"/>
@@ -3046,6 +2859,21 @@
             </Overload>
         </KeyWord>
         <KeyWord name="EnvUpdate"/>
+        <KeyWord name="EpicLib.cleanEMC2RecordTitle" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Clean up and trim an EMC2 record's title.
+							; PARAMETERS:
+							;  title (I,REQ) - The title to clean.
+							;  ini   (I,OPT) - INI of the record if we should remove it.
+							;  id    (I,OPT) - ID  of the record if we should remove it.
+							; RETURNS:        The title, but with extraneous bits (like the INI, ID, and &quot;DBC&quot; prefix) removed.
+							;---------">
+                <Param name="title" />
+                <Param name="ini := &quot;&quot;" />
+                <Param name="id := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="EpicLib.convertToSourceRelativePath" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -3056,6 +2884,58 @@
 							; RETURNS:        Relative path with leading backslash.
 							;---------">
                 <Param name="path" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicLib.convertToUsefulEMC2INI" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Convert the given &quot;INI&quot; into the useful version of itself.
+							; PARAMETERS:
+							;  ini (I,REQ) - The ini to convert, can be any of:
+							;                 - Normal INI (DLG, zdq)
+							;                 - Special INI that we want a different version of (ZQN => QAN)
+							;                 - Word that describes an INI (Design, log, development log)
+							; RETURNS:        The useful form of the INI, or &quot;&quot; if we couldn't match the input to one.
+							;---------">
+                <Param name="ini" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicLib.copyEMC2RecordIDFromText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Extract all EMC2 records from the given string, prompt the user for which one to use, and put the resulting ID on the clipboard.
+							; PARAMETERS:
+							;  text (I,REQ) - The string to pull EMC2 record references out of.
+							; NOTES:          If there is exactly 1 &quot;exact&quot; match (valid INI and ID), we'll always return it without a popup (even
+							;                 if there are other potential matches with only a valid ID).
+							;---------">
+                <Param name="text" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicLib.couldBeEMC2ID" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether the given string COULD be an EMC2 record ID - these are numeric except certain DLGs
+							;                 that have prefixes (I, T, CS, etc).
+							; PARAMETERS:
+							;  id (I,REQ) - Possible ID to evaluate.
+							; RETURNS:        true if possibly an ID, false otherwise.
+							;---------">
+                <Param name="id" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicLib.couldBeEMC2Record" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Checks whether the given INI and ID could plausibly be an EMC2 ID, based on whether we can map the
+							;                 INI to one we know, and the ID's format.
+							; PARAMETERS:
+							;  ini (I,REQ) - INI to consider
+							;  id  (I,REQ) - ID to consider
+							; RETURNS:        true/false
+							;---------">
+                <Param name="ini" />
+                <Param name="id" />
             </Overload>
         </KeyWord>
         <KeyWord name="EpicLib.dropOffsetFromServerLocation" func="yes">
@@ -3087,6 +2967,17 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="EpicLib.getBestEMC2RecordFromText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Extract all EMC2 records from the given string and pick the &quot;best&quot; one (that is, the first exact match, then the first possible match).
+							; PARAMETERS:
+							;  text (I,REQ) - The string to pull EMC2 record references out of.
+							; RETURNS:        EpicRecord representing the EMC2 record we picked, or &quot;&quot; if we couldn't find any.
+							;---------">
+                <Param name="text" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="EpicLib.runHyperspace" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -3109,6 +3000,31 @@
                 <Param name="vdiId" />
             </Overload>
         </KeyWord>
+        <KeyWord name="EpicLib.selectEMC2RecordFromText" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Extract all EMC2 records from the given string and prompt the user if we find multiple, returning
+							;                 the result.
+							; PARAMETERS:
+							;  text (I,REQ) - The string to pull EMC2 record references out of.
+							; RETURNS:        &quot;&quot; if we didn't find any records or the user didn't pick one
+							;                 EpicRecord instance representing their choice if they did pick one
+							; NOTES:          If there is exactly 1 &quot;exact&quot; match (valid INI and ID), we'll always return it without a popup (even
+							;                 if there are other potential matches with only a valid ID).
+							;---------">
+                <Param name="text" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicLib.selectEMC2RecordFromUsefulTitles" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check a set of titles (from a hard-coded set of windows) for EMC2 records and give the user the
+							;                 option to pick between all of them.
+							; RETURNS:        An EpicRecord instance describing the record the user picked, or &quot;&quot; if we couldn't find one or they
+							;                 didn't select one.
+							;---------">
+            </Overload>
+        </KeyWord>
         <KeyWord name="EpicLib.splitServerLocation" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -3128,15 +3044,17 @@
         <KeyWord name="EpicRecord" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Create a new EpicRecord object, optionally parsing it from a string.
+							; DESCRIPTION:    Create a new EpicRecord object, filling in its properties.
 							; PARAMETERS:
-							;  recordString (I,OPT) - String representing the record. See class header for supported
-							;                         formats. If not given, record will need to be initialized with
-							;                         one of the .initFrom*() functions.
+							;  ini   (I,OPT) - Record INI
+							;  id    (I,OPT) - Record ID
+							;  title (I,OPT) - Record title
+							;  label (I,OPT) - Custom label to identify this record.
 							;---------">
                 <Param name="ini := &quot;&quot;" />
                 <Param name="id := &quot;&quot;" />
                 <Param name="title := &quot;&quot;" />
+                <Param name="label := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="EpicRecord.id" func="yes">
@@ -3163,6 +3081,13 @@
 							; RETURNS:        this
 							;---------">
                 <Param name="recordString" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicRecord.label" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    A custom label the caller adds to the record.
+							;---------">
             </Overload>
         </KeyWord>
         <KeyWord name="EpicRecord.recordString" func="yes">
@@ -5082,13 +5007,12 @@
         </KeyWord>
 		  <!-- *gdb - Move OnExit up to correct sorted spot -->
         <KeyWord name="Or"/>
-        <KeyWord name="Outlook.getMessageTitle" func="yes">
+        <KeyWord name="Outlook.getAllMessageTitles" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get the title for the email message in the specified window.
-							; RETURNS:        The title, cleaned up (RE:/FW: and any other odd characters removed)
+							; DESCRIPTION:    Get message titles from all Outlook windows (main or popups).
+							; RETURNS:        Array of found window titles.
 							;---------">
-                <Param name="titleString := &quot;A&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="Outlook.isNormalCalendarActive" func="yes">
@@ -6021,13 +5945,15 @@
 							; DESCRIPTION:    Add a single section header.
 							; PARAMETERS:
 							;  headerText       (I,REQ) - The text to use for the header.
-							;  firstChoiceIndex (I,REQ) - The index of the first choice that will be in this section.
+							;  firstChoiceIndex (I,OPT) - The index of the first choice that will be in this section. If not passed, the header will be added
+							;                             at the end of the current list of choices (that is, the next choice that's added will be the first
+							;                             in this section).
 							; RETURNS:
 							; SIDE EFFECTS:
 							; NOTES:
 							;---------">
                 <Param name="headerText" />
-                <Param name="firstChoiceIndex" />
+                <Param name="firstChoiceIndex := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="Selector.dataTableList" func="yes">
@@ -6966,7 +6892,7 @@
 							;---------
 							; DESCRIPTION:    Return a chunk of this string, given starting and ending positions.
 							; PARAMETERS:
-							;  startPos  (I,REQ) - Starting position
+							;  startPos  (I,REQ) - Starting position (1 is first char).
 							;  stopAtPos (I,REQ) - Ending position - return up to here, non-inclusive.
 							; RETURNS:        Chunk of this string specified.
 							;---------">

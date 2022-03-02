@@ -209,7 +209,7 @@ class Config {
 	;                    matchingNames[priority] := [name1, name2]
 	;---------
 	findAllMatchingWindowNames(titleString) {
-		exe   := WinGet("ProcessName", titleString)
+		exe   := WinGet("ProcessPath", titleString) ; Use full process path so win_exe values can match on full path if needed.
 		class := WinGetClass(titleString)
 		title := WinGetTitle(titleString)
 

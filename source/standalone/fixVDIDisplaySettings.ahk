@@ -6,7 +6,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
 
-pt := new ProgressToast("Fix VDI display settings")
+pt := new ProgressToast("Fix VDI display settings").blockingOn()
 
 ; Make sure to wait until the settings window is active (contains "Display settings" text)
 pt.nextStep("Waiting for settings window to be active")
@@ -45,7 +45,7 @@ Loop {
 	Send, {Down}
 }
 
-pt.blockingOn().finish()
+pt.finish()
 ExitApp
 
 Esc::ExitApp

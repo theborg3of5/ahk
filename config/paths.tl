@@ -39,6 +39,7 @@
 	AHK Source								AHK_SOURCE								<AHK_ROOT>\source
 	AHK Output								AHK_OUTPUT								<AHK_ROOT>\output
 	AHK Templates							AHK_TEMPLATE							<AHK_ROOT>\template
+	AHK Test									AHK_TEST									<AHK_ROOT>\test
 	Downloads								USER_DOWNLOADS							<USER_ROOT>\Downloads
 
 	; Dev

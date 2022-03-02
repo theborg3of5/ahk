@@ -130,7 +130,7 @@
 	:X:aconf:: sendFolderPath("AHK_CONFIG")
 	:X:aoutf:: sendFolderPath("AHK_OUTPUT")
 	:X:atempf::sendFolderPath("AHK_TEMPLATE")
-	:X:atf::   sendFolderPath("AHK_ROOT",   "test")
+	:X:atf::   sendFolderPath("AHK_TEST")
 	:X:apf::   sendFolderPath("AHK_SOURCE", "program")
 	:X:agf::   sendFolderPath("AHK_SOURCE", "general")
 	:X:astf::  sendFolderPath("AHK_SOURCE", "standalone")

@@ -24,8 +24,7 @@ styles["FONT_NAME"]        := "Segoe UI"
 styles["MARGIN_X"]         := 40
 styles["MARGIN_Y"]         := 20
 
-t := new Toast("Volume: " currentLevel "%", styles)
-t.blockingOn()
+t := new Toast("Volume: " currentLevel "%", styles).blockingOn()
 t.showForSeconds(1, VisualWindow.X_LeftEdge "+50", VisualWindow.Y_TopEdge "+30")
 
 ExitApp

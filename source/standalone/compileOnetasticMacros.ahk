@@ -35,7 +35,7 @@ global TemplateXML_Parameter := "<Param byref=""<PRM_IS_BYREF>"" name=""<PRM_NAM
 SetWorkingDir, % Config.path["ONETASTIC_MACROS"]
 
 ; Loop over the macro XML files (containing their inner XML) and compile them into full, importable macro XMLs
-pt := new ProgressToast("Compiling Onetastic macros")
+pt := new ProgressToast("Compiling Onetastic macros").blockingOn()
 Loop, Files, % "*.xml"
 {
 	if(A_LoopFileName.startsWith("."))
@@ -46,7 +46,7 @@ Loop, Files, % "*.xml"
 	macro := new OnetasticMacro(macroInnerXML)
 	FileLib.replaceFileWithString(Config.path["ONETASTIC_MACROS"] "\output\" A_LoopFileName, macro.generateXML())
 }
-pt.blockingOn().finish()
+pt.finish()
 
 
 ExitApp

@@ -141,24 +141,30 @@ class TextPopup {
 		Gui, Add, Button, Hidden Default x0 y0 gTextPopupGui_Close ; TextPopupGui_Close call on activate
 		
 		; Add hotkeys
-		this.addNotepadHotkey(guiId, content)
+		this.addContentHotkeys(guiId, content)
 		this.addScrollHotkeys()
 		
 		return guiId
 	}
 	
 	;---------
-	; DESCRIPTION:    Add a replacement hotkey for !v that just uses the entire content of the popup
-	;                 instead of requiring the user to select something. Or, if Notepad class isn't
-	;                 available, just put it on the clipboard and toast about it.
+	; DESCRIPTION:    Add hotkeys that deal with the entire content of the popup (copy or send over to notepad) so the
+	;                 user doesn't have to select-all themselves.
 	; PARAMETERS:
 	;  guiId   (I,REQ) - The GUI ID of the popup, to use to limit where the hotkey triggers.
-	;  content (I,REQ) - The full content to use when this hotkey is triggered.
+	;  content (I,REQ) - The full content to use when these hotkeys are triggered.
 	;---------
-	addNotepadHotkey(guiId, content) {
+	addContentHotkeys(guiId, content) {
 		Hotkey, IfWinActive, % "ahk_id " guiId
+		
+		; Copy to clipboard
+		hotkeyFunction := ObjBindMethod(ClipboardLib, "setAndToast", content, "popup content") ; ClipboardLib.setAndToast
+		Hotkey, !c, % hotkeyFunction
+		
+		; Send to new Notepad instance
 		hotkeyFunction := ObjBindMethod(Notepad, "openNewInstanceWithText", content) ; Notepad.openNewInstanceWithText
 		Hotkey, !v, % hotkeyFunction
+		
 		Hotkey, IfWinActive
 	}
 	

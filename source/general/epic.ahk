@@ -125,6 +125,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 				record := EpicLib.selectEMC2RecordFromUsefulTitles()
 				if(!record)
 					return
+				
 				recId := record.id
 				if(["PRJ", "QAN", "SLG"].contains(record.ini))
 					recId := record.ini.charAt(1) "." recId ; Add on the INI prefix so the ID goes in the right position.

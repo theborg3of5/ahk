@@ -295,14 +295,16 @@ class EpicLib {
 	; RETURNS:        The title, but with extraneous bits (like the INI, ID, and "DBC" prefix) removed.
 	;---------
 	cleanEMC2RecordTitle(title, ini := "", id := "") {
+		delims := ["-", "/", "\", ":"]
+		
 		; Take INI and ID (and anything in between) out if they're given.
 		iniAndID := ini title.firstBetweenStrings(ini, id) id
-		title := title.remove(iniAndID)
+		title := title.remove(iniAndID).clean(delims)
 		
 		; The "DBC" prefix isn't helpful when most of my records have it.
 		title := title.removeFromStart("DBC")
 		
-		return title.clean(["-", "/", "\", ":"])
+		return title.clean(delims)
 	}
 	
 	
@@ -429,7 +431,7 @@ class EpicLib {
 			storedExact := exacts[id].title
 			
 			; The new exact only wins if it has a shorter title.
-			if(exact.title.length() >= storedExact.title.length()) {
+			if(exact.title.length() < storedExact.title.length()) {
 				exactsToKeep[exact.id] := i
 				Continue
 			}

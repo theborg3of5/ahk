@@ -72,7 +72,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 			return false
 		
 		match := EpicLib.getBestEMC2RecordFromText(value)
-		if(match) {
+		if(match && match.ini != "") {
 			ini := match.ini
 			id  := match.id
 			return true

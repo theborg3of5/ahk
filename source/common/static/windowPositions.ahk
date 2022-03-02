@@ -73,7 +73,7 @@ class WindowPositions {
 			if(!this._positions)
 				this._positions := {}
 			if(!this._positions[preset]) {
-				presetPositions := new TableList(this.Filename_Config).filterByColumn("PRESET", preset).getRowsByColumn("NAME")
+				presetPositions := new TableList(this.Filename_Config).filterOutIfColumnNoMatch("PRESET", preset).getRowsByColumn("NAME")
 				
 				this._positions[preset] := {}
 				For name,positionAry in presetPositions

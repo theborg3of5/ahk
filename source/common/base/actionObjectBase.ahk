@@ -184,7 +184,7 @@ class ActionObjectBase {
 			
 		; Otherwise, create a new one.
 		s := new Selector("actionObject.tls")
-		s.dataTableList.filterByColumn("TYPE", type)
+		s.dataTableList.filterOutIfColumnNoMatch("TYPE", type)
 		
 		this.typeSelectors[type] := s ; Cache the value off for later use.
 		return s

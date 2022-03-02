@@ -165,7 +165,7 @@
 										 ["VALUE"]  := 1
 			
 			Filtering
-				The table can be filtered in-place with .filterByColumn and .filterOutEmptyForColumn. Notably, .filterByColumn never filters out rows with a blank value for the provided column - .filterOutEmptyForColumn can be used to get rid of those if needed.
+				The table can be filtered in-place with .filterOutIfColumn[No]Match and .filterOutIfColumnBlank. Notably, .filterOutIfColumn[No]Match never filters out rows with a blank value for the provided column - .filterOutIfColumnBlank can be used to get rid of those if needed.
 					
 				Example:
 					File:
@@ -175,8 +175,8 @@
 							Spotify  spot     C:\Spotify\Spotify.exe                       ASUS_LAPTOP
 							Firefox  fox      C:\Program Files\Firefox\firefox.exe
 					Code:
-;						tl := new TableList(filePath).filterByColumn("MACHINE", "HOME_DESKTOP")
-;						tl.filterOutEmptyForColumn("MACHINE")
+;						tl := new TableList(filePath).filterOutIfColumnNoMatch("MACHINE", "HOME_DESKTOP")
+;						tl.filterOutIfColumnBlank("MACHINE")
 ;						table := tl.getTable()
 					Result:
 						table[1, "NAME"]   = Spotify
@@ -257,7 +257,7 @@ class TableList {
 		
 		; Apply any automatic filters.
 		For _,filter in TableList.autoFilters
-			this.filterByColumn(filter["COLUMN"], filter["VALUE"])
+			this.filterOutIfColumnNoMatch(filter["COLUMN"], filter["VALUE"])
 	}
 	
 	;---------
@@ -282,70 +282,41 @@ class TableList {
 	}
 	
 	;---------
-	; DESCRIPTION:    Remove all rows that fail the provided filter.
+	; DESCRIPTION:    Remove all rows that do NOT have the given value (or blank) in the specified column.
 	; PARAMETERS:
 	;  filterColumn (I,REQ) - The column to check
-	;  filterValue  (I,REQ) - The value to check. In order to pass the filter (so to NOT be removed),
-	;                         a row must either have this value, or a blank value, for the filterColumn.
+	;  filterValue  (I,REQ) - The value to check
 	; RETURNS:        This object (for chaining)
+	; NOTES:          Rows with a blank value for the specified column will not be touched - use filterOutIfColumnBlank()
+	;                 to get rid of those if needed.
 	;---------
-	filterByColumn(filterColumn, filterValue) { ; Blank values always pass filter - callers can use filterOutEmptyForColumn() to get rid of those.
-		if(filterColumn = "")
-			return this
-		
-		newTable   := []
-		newHeaders := {} ; {firstRowNumberUnderHeader: headerText}
-		For oldIndex,row in this.table {
-			; If there's a header for this row, keep track of it until we can add it to an unfiltered
-			; row (or another header overwrites it because it has no unfiltered rows)
-			headerText := this._headers[oldIndex]
-			if(headerText != "")
-				currHeader := headerText
-			
-			if(this.rowPassesFilter(row, filterColumn, filterValue)) {
-				newIndex := newTable.push(row)
-				if(currHeader != "") {
-					newHeaders[newIndex] := currHeader
-					currHeader := "" ; We've saved the header, done.
-				}
-			}
-		}
-		
-		this.table    := newTable
-		this._headers := newHeaders
+	filterOutIfColumnNoMatch(filterColumn, filterValue) {
+		this.doFilterOnColumn(filterColumn, filterValue, true, true)
+		return this
+	}
+	
+	;---------
+	; DESCRIPTION:    Remove all rows that have the given value (or blank) in the specified column.
+	; PARAMETERS:
+	;  filterColumn (I,REQ) - The column to check
+	;  filterValue  (I,REQ) - The value to check
+	; RETURNS:        This object (for chaining)
+	; NOTES:          Rows with a blank value for the specified column will not be touched - use filterOutIfColumnBlank()
+	;                 to get rid of those if needed.
+	;---------
+	filterOutIfColumnMatch(filterColumn, filterValue) {
+		this.doFilterOnColumn(filterColumn, filterValue, false, true)
 		return this
 	}
 	
 	;---------
 	; DESCRIPTION:    Remove all rows from the table that have a blank value in the provided column.
 	; PARAMETERS:
-	;  column (I,REQ) - The column to remove rows based on.
+	;  filterColumn (I,REQ) - The column to check
 	; RETURNS:        This object (for chaining)
 	;---------
-	filterOutEmptyForColumn(column) {
-		if(column = "")
-			return this
-		
-		newTable   := []
-		newHeaders := {} ; {firstRowNumberUnderHeader: headerText}
-		For oldIndex,row in this.table {
-			; If there's a header for this row, keep track of it until we can add it to an unfiltered
-			; row (or another header overwrites it because it has no unfiltered rows)
-			headerText := this._headers[oldIndex]
-			if(headerText != "")
-				currHeader := headerText
-			
-			if(row[column] != "") {
-				newIndex := newTable.push(row)
-				if(currHeader != "") {
-					newHeaders[newIndex] := currHeader
-					currHeader := "" ; We've saved the header, done.
-				}
-			}
-		}
-		
-		this.table    := newTable
-		this._headers := newHeaders
+	filterOutIfColumnBlank(filterColumn) {
+		this.doFilterOnColumn(filterColumn, "", false, false)
 		return this
 	}
 	
@@ -653,28 +624,65 @@ class TableList {
 	}
 	
 	;---------
-	; DESCRIPTION:    Based on a filter (column and value to restrict to), determine whether the
-	;                 given row array passes that filter.
+	; DESCRIPTION:    Filter the table rows based on the given filter.
 	; PARAMETERS:
-	;  row           (I,REQ) - A row in the table. May be an array or string.
-	;  column        (I,OPT) - The column to filter on - we will check the value of this column
-	;                          (index) in the row array to see if it matches filterValue.
-	;  value         (I,OPT) - Only include rows which have this value (or blank) in their filter
-	;                          column pass.
-	; RETURNS:        True if we should exclude the row from the filtered table, false otherwise.
+	;  filterColumn   (I,REQ) - The column to filter on - we'll consider the value(s) in each row for this column.
+	;  filterValue    (I,REQ) - The value to filter based on.
+	;  includeMatches (I,REQ) - true to include rows that match the given value, false to exclude them instead. Defaults to true (include).
+	;  blanksAreWild  (I,OPT) - If true, blank values in the given column are treated as wildcards, so they stay in the table
+	;                           regardless of whether the filter is including or excluding matches. Defaults to true (blanks will
+	;                           always be included).
+	; SIDE EFFECTS:   Updates this.table and this._headers.
 	;---------
-	rowPassesFilter(row, filterColumn, filterValue) {
-		valueToCompare := row[filterColumn]
+	doFilterOnColumn(filterColumn, filterValue, includeMatches, blanksAreWild := true) {
+		if(filterColumn = "")
+			return
 		
-		; Blank values always pass
-		if(valueToCompare = "")
+		newTable   := []
+		newHeaders := {} ; {firstRowNumberUnderHeader: headerText}
+		For rowNum,row in this.table {
+			; If there's a header for this row, keep track of it until we can add it to an unfiltered
+			; row (or another header overwrites it because this one has no unfiltered rows)
+			headerText := this._headers[rowNum]
+			if(headerText != "")
+				currHeader := headerText
+			
+			rowIsMatch := this.rowMatchesFilter(row, filterColumn, filterValue, blanksAreWild)
+			if(includeMatches && rowIsMatch || !includeMatches && !rowIsMatch) {
+				newIndex := newTable.push(row)
+				if(currHeader != "") {
+					newHeaders[newIndex] := currHeader
+					currHeader := "" ; We've inserted the header, no longer need to hold it.
+				}
+			}
+		}
+		
+		this.table    := newTable
+		this._headers := newHeaders
+	}
+	
+	;---------
+	; DESCRIPTION:    Based on a filter (column and value to restrict to), determine whether the given row array passes
+	;                 that filter.
+	; PARAMETERS:
+	;  row           (I,REQ) - A row in the table. The value inside can be a string or array (to allow for multi-entry values).
+	;  filterColumn  (I,REQ) - The column to filter on - we will check the value of this column (index) in the row array to see if
+	;                          it matches filterValue.
+	;  filterValue   (I,REQ) - Only include rows which have this value (or possibly blank, see blanksAreWild parameter) in their
+	;                          filter column pass.
+	;  blanksAreWild (I,OPT) - If this is true, blank values are treated as wildcards and will always pass the filter.
+	; RETURNS:        true if the row passes the filter and can stay, false if it should be filtered out.
+	;---------
+	rowMatchesFilter(row, filterColumn, filterValue, blanksAreWild := true) {
+		value := row[filterColumn]
+		
+		if(blanksAreWild && value = "")
 			return true
 		
-		; Check the value
-		if(isObject(valueToCompare))
-			return valueToCompare.contains(filterValue)
+		if(isObject(value))
+			return value.contains(filterValue)
 		else
-			return (valueToCompare = filterValue)
+			return (value = filterValue)
 	}
 	
 	

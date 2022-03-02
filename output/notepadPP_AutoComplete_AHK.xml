@@ -7435,29 +7435,45 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="TableList.filterByColumn" func="yes">
+        <KeyWord name="TableList.filterOutIfColumnBlank" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Remove all rows that fail the provided filter.
+							; DESCRIPTION:    Remove all rows from the table that have a blank value in the provided column.
 							; PARAMETERS:
 							;  filterColumn (I,REQ) - The column to check
-							;  filterValue  (I,REQ) - The value to check. In order to pass the filter (so to NOT be removed),
-							;                         a row must either have this value, or a blank value, for the filterColumn.
 							; RETURNS:        This object (for chaining)
+							;---------">
+                <Param name="filterColumn" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="TableList.filterOutIfColumnMatch" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Remove all rows that have the given value (or blank) in the specified column.
+							; PARAMETERS:
+							;  filterColumn (I,REQ) - The column to check
+							;  filterValue  (I,REQ) - The value to check
+							; RETURNS:        This object (for chaining)
+							; NOTES:          Rows with a blank value for the specified column will not be touched - use filterOutIfColumnBlank()
+							;                 to get rid of those if needed.
 							;---------">
                 <Param name="filterColumn" />
                 <Param name="filterValue" />
             </Overload>
         </KeyWord>
-        <KeyWord name="TableList.filterOutEmptyForColumn" func="yes">
+        <KeyWord name="TableList.filterOutIfColumnNoMatch" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Remove all rows from the table that have a blank value in the provided column.
+							; DESCRIPTION:    Remove all rows that do NOT have the given value (or blank) in the specified column.
 							; PARAMETERS:
-							;  column (I,REQ) - The column to remove rows based on.
+							;  filterColumn (I,REQ) - The column to check
+							;  filterValue  (I,REQ) - The value to check
 							; RETURNS:        This object (for chaining)
+							; NOTES:          Rows with a blank value for the specified column will not be touched - use filterOutIfColumnBlank()
+							;                 to get rid of those if needed.
 							;---------">
-                <Param name="column" />
+                <Param name="filterColumn" />
+                <Param name="filterValue" />
             </Overload>
         </KeyWord>
         <KeyWord name="TableList.getColumnByColumn" func="yes">

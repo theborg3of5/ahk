@@ -323,7 +323,7 @@ class EpicLib {
 		
 		; Use ActionObject's TLS (filtered to EMC2-type types) for mapping INIs
 		s := new Selector("actionObject.tls")
-		s.dataTableList.filterByColumn("TYPE", ActionObject.Type_EMC2)
+		s.dataTableList.filterOutIfColumnNoMatch("TYPE", ActionObject.Type_EMC2)
 		
 		this.emc2TypeSelector := s ; Cache for future use
 		

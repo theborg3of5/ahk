@@ -25,7 +25,8 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	^!+#d::selectTLGActionObject("Select EMC2 Record to Edit").openEdit()
 	selectTLGId(title) {
 		s := new Selector("tlg.tls").setTitle(title).overrideFieldsOff()
-		s.dataTableList.filterOutEmptyForColumn("RECORD")
+		s.dataTableList.filterOutIfColumnBlank("RECORD")
+		s.dataTableList.filterOutIfColumnMatch("RECORD", "GET") ; Special keyword used for searching existing windows, can search for that with ^!i instead.
 		return s.selectGui("RECORD")
 	}
 	selectTLGActionObject(title) {
@@ -39,6 +40,9 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		} else if(recId.startsWith("Q.")) {
 			recId := recId.removeFromStart("Q.")
 			recINI := "QAN"
+		} else if(recId.startsWith("S.")) {
+			recId := recId.removeFromStart("S.")
+			recINI := "SLG"
 		} else {
 			recINI := "DLG"
 		}
@@ -114,7 +118,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	^!+t::
 		selectOutlookTLG() {
 			s := new Selector("tlg.tls").setTitle("Select EMC2 Record ID")
-			s.dataTableList.filterByColumn("OLD", "") ; Filter out old records (have a value in the OLD column)
+			s.dataTableList.filterOutIfColumnNoMatch("OLD", "") ; Filter out old records (have a value in the OLD column)
 			data := s.selectGui()
 			if(!data)
 				return

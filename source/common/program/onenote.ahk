@@ -200,9 +200,14 @@ class OneNote {
 		; If there's not an ID in place yet, update the recordText using the ID (we're assuming is) on the clipboard.
 		if(recordText.endsWith(" *")) {
 			newId := clipboard.clean()
-			if(!newId.sub(2).isNum()) { ; Safety check: ID should be numeric after first character (for SU DLGs)
-				Toast.ShowError("No record ID found", "Neither the line text nor the clipboard contained a valid record ID")
-				return
+			if(!EpicLib.couldBeEMC2ID(newId)) {
+				record := EpicLib.selectEMC2RecordFromUsefulTitles()
+				if(!record) {
+					Toast.ShowError("No record ID found", "Neither the line text nor the clipboard contained a valid record ID")
+					return
+				}
+				
+				newId := record.id
 			}
 			
 			SelectLib.selectTextWithinSelection(recordText) ; Whole line is already selected so we can use this

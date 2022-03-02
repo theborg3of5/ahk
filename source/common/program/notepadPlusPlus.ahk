@@ -83,10 +83,10 @@ class NotepadPlusPlus {
 			return
 		
 		if(varList = "") {
-			SendRaw, % functionName "()"
+			ClipboardLib.send(functionName "()")
 			Send, {Left} ; Get inside parens for user to enter the variables/labels themselves
 		} else {
-			SendRaw, % functionName "(" AHKCodeLib.generateDebugParams(varList) ")"
+			ClipboardLib.send(functionName "(" AHKCodeLib.generateDebugParams(varList) ")")
 		}
 	}
 	

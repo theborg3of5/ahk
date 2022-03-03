@@ -109,8 +109,8 @@ class Outlook {
 	; Folder names for different areas
 	static TLGFolder := "TLG"
 	static CalendarFolder := "Calendar"
-	static CalendarFolders := [this.TLGFolder, this.CalendarFolder]
-	static MailFolders := ["Inbox", "Wait", "Later Use", "Archive", "Sent Items", "Drafts", "Deleted Items"]
+	static CalendarFolders := [ Outlook.TLGFolder, Outlook.CalendarFolder ]
+	static MailFolders := [ "Inbox", "Wait", "Later Use", "Archive", "Sent Items", "Drafts", "Deleted Items" ]
 	
 	;---------
 	; DESCRIPTION:    Determine whether any of the folders in the given array are currently active.

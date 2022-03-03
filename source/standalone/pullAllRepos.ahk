@@ -15,8 +15,10 @@ gitRepos.push(Config.path["AHK_TEST"])
 
 For _,path in gitRepos {
 	t.nextStep("Updating " path)
+	
 	SetWorkingDir, path
-	Run("git pull")
+	result := RunLib.runReturn("git pull")
+	t.endStep(result.clean())
 }
 
 t.finish()

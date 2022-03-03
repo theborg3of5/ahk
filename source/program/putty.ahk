@@ -10,6 +10,8 @@
 	^l::
 		Send, !{Space}
 		Send, t ; Reset terminal
+		Sleep, 100
+		Send, {Enter} ; Show prompt
 	return
 	; Screen wipe and clear scrollback
 	^+l::
@@ -17,6 +19,8 @@
 		Send, t ; Reset terminal
 		Send, !{Space}
 		Send, l ; Clear scrollback
+		Sleep, 100
+		Send, {Enter} ; Show prompt
 	return
 	
 	; Scrolling (^PgUp/^PgDn scrolls one line at a time)

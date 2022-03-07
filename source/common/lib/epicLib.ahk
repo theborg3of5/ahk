@@ -471,7 +471,11 @@ class EpicLib {
 		For _,record in possibles
 			s.addChoice(this.buildChoiceFromEMC2Record(record, abbreviations))
 		
-		return s.selectGui()
+		data := s.selectGui()
+		if(data)
+			data["INI"] := EpicLib.convertToUsefulEMC2INI(data["INI"]) ; Convert INI before we return.
+		
+		return data
 	}
 	
 	;---------

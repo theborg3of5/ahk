@@ -43,7 +43,7 @@
 			EMC2							-					-					MAX		MAX		WORK
 			OneNote						-					-					MAX		MAX
 			Spotify						-					-					MAX		MAX		-				1
-			VMware Horizon Client	CENTERED			CENTERED			FULL		FULL		WORK
+			VMware Horizon Client	-					-					MAX		MAX		WORK
 			WebEx							CENTERED			CENTERED			1440		900		WORK
 	}
 	

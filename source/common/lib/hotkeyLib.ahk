@@ -7,7 +7,7 @@ class HotkeyLib {
 	; DESCRIPTION:    Release all modifier keys. This is useful when certain modifier keys get "stuck" down.
 	;---------
 	releaseAllModifiers() {
-		modifierKeys := ["LWin", "RWin", "LCtrl", "RCtrl", "LAlt", "RAlt", "LShift", "RShift"]
+		modifierKeys := ["LWin", "RWin", "Ctrl", "LCtrl", "RCtrl", "Alt", "LAlt", "RAlt", "Shift", "LShift", "RShift"]
 		For _,modifier in modifierKeys {
 			if(GetKeyState(modifier))
 				Send, {%modifier% Up}

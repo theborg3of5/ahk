@@ -64,6 +64,7 @@
 	::timeframe::time frame
 	::cahrge::charge
 	::fitler::filter
+	::hotsting::hotstring
 
 ; [[ Expansions ]] ---
 	::f'n::function
@@ -82,8 +83,9 @@
 	::ass'd::associated
 	::assoc'd::associated
 	::qai::QA Instructions
+	::cache''::Cach{U+E9} ; 0xE9=é
 	
-	:?:sync'ly::synchronously
+	:?:sync's::synchronous ; Allow in other words for asynchronously
 	
 	::.asig::and so it goes, and so it goes, and you're the only one who knows...
 	

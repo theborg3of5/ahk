@@ -1,6 +1,5 @@
 # New Ideas
 	Decide whether to keep EMC2.openCurrentRecordWebBasic() + ActionObjectEMC2.openWebBasic() - either get rid of them, or make them available outside of EMC2 as well (new hotkey or additional field in ActionObject selector).
-	EpicStudio debug: consider just using a single value of user:<EMP ID> instead of text name or workstation - seems to cut out the extra background stuff.
 	Do we want to create more specific client Codesearch types (for HSWeb only, etc.)?
 	Add some way to show info about a specific SVN revision # using TortoiseSVN
 		Would need to pick the repo somehow - maybe just default to stage 1, options for final or custom?

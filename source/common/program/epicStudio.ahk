@@ -79,54 +79,41 @@ class EpicStudio {
 	}
 	
 	;---------
-	; DESCRIPTION:    Run EpicStudio in debug mode, or continue debugging if we're already in it.
-	; PARAMETERS:
-	;  searchStringKey (I,REQ) - A key describing which search string to automatically search for in
-	;                            the attach process popup. See .doDebugSearch for options.
+	; DESCRIPTION:    Run EpicStudio in debug mode, adding in a search to find my processes.
 	;---------
-	runDebug(searchStringKey) {
-		; Don't try and debug again if ES is already doing so.
-		if(EpicStudio.isDebugging())
-			return
-		
-		WinWait, % Config.windowInfo["EpicStudio Attach to Process"].titleString, , 5
-		if(ErrorLevel)
-			return
-		
-		; Pick the radio button for "Other existing process:"
-		ControlSend,  % EpicStudio.Debug_OtherProcessButton, {Space}, A
-			
-		; There's already something plugged into the field (like a specific process ID), just focus the field and leave it be.
-		if(ControlGet("Line", 1, EpicStudio.Debug_OtherProcessField, "A")) {
-			ControlFocus, % EpicStudio.Debug_OtherProcessField, A
+	runDebug() {
+		; Pass the hotkey straight thru if we're already debugging.
+		if(EpicStudio.isDebugging()) {
+			Send, % A_ThisHotkey
 			return
 		}
 		
-		; Perform the search
-		this.doDebugSearch(searchStringKey)
+		; Get the debug popup open if it's not already.
+		popupTitleString := WindowLib.buildTitleString("EpicStudio.exe", "", "Attach to Process")
+		if(!WinActive(popupTitleString)) {
+			launchedPopup := true
+			Send, {F5} ; Launch debug window
+			WinWaitActive, % popupTitleString
+		}
+		
+		; If the "other process" search field isn't enabled, select the corresponding radio button to enable it.
+		filterField := EpicStudio.Debug_OtherProcessField
+		if(!ControlGet("Enabled", "", filterField, "A"))
+			ControlSend, % EpicStudio.Debug_OtherProcessButton, {Space}, A
+		
+		; Focus the search field (may already be focused, but we want a consistent starting point).
+		ControlFocus, % filterField, A
+		
+		; Plug in our normal filter, unless there's something different already in place (probably a process
+		; ID that we want to reuse).
+		normalFilter := "user:" Config.private["WORK_ID"]
+		if(!(launchedPopup && ControlGet("Line", 1, filterField, "A") != normalFilter))
+			ControlSetText, % filterField, % normalFilter, A
+		
+		; Submit the search.
+		ControlSend, % filterField, {Enter}, A
 	}
 	
-	;---------
-	; DESCRIPTION:    Generate a search string given a type, then search with it.
-	; PARAMETERS:
-	;  key (I,REQ) - A key describing the type of search string. Options: WORKSTATION, USER
-	;---------
-	doDebugSearch(key) {
-		if(!key)
-			return
-		
-		Switch key {
-			Case "WORKSTATION":
-				searchString := "ws:" Config.private["WORK_COMPUTER_NAME"]
-			Case "USER":
-				searchString := "user:" Config.private["WORK_USERNAME"]
-		}
-		if(!searchString)
-			return
-		
-		Send, % searchString
-		Send, {Enter} ; Submit search
-	}
 	
 	
 	; #PRIVATE#

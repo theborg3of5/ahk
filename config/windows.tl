@@ -47,7 +47,6 @@
 		
 				EpicStudio New Object Window		EpicStudio.exe				-									New Object
 				EpicStudio Tokenize String			EpicStudio.exe				-									Tokenize String
-				EpicStudio Attach to Process		EpicStudio.exe				-									Attach to Process
 				EpicStudio Bookmark Comment		EpicStudio.exe				-									Bookmark Comment
 				Onetastic Macro Editor				ONENOTE.EXE					Onetastic Window
 				PowerPoint Presenting				POWERPNT.EXE				screenClass						-														NO_PADDING
@@ -64,7 +63,7 @@
 				Cisco AnyConnect VPN					vpnui.exe					-									Cisco AnyConnect Secure Mobility Client
 				Discord									Discord.exe					-									-														NO_PADDING
 				EMC2										EMC2.+EpicD.+\.exe		ThunderRT6MDIForm				-														-					REGEX
-				EpicStudio								EpicStudio.exe				-									EpicStudio
+				EpicStudio								EpicStudio.exe
 				Everything								Everything.exe				EVERYTHING
 				Excel										EXCEL.EXE					-									-														NO_PADDING
 				Explorer									explorer.exe				CabinetWClass

@@ -1,4 +1,4 @@
-@WindowTitle(Resize active window to size:)
+﻿@WindowTitle(Resize active window to size:)
 @MinColumnWidth(350)
 
 ; WIDTH/HEIGHT can be special values from VisualWindow.Width_* and VisualWindow.Height_*

@@ -1,4 +1,4 @@
-@WindowTitle(Select Machine to set up:)
+﻿@WindowTitle(Select Machine to set up:)
 @MinColumnWidth(300)
 
 [	NAME				ABBREV						NEW_CONTEXT		NEW_MACHINE	]

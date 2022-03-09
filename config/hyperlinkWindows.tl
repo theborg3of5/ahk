@@ -1,4 +1,4 @@
-[	NAME								SET_PATH_METHOD	CLOSE_METHOD	LINK_POPUP							PATH_FIELD_CONTROL_ID	TAGGED_STRING_BASE	]
+﻿[	NAME								SET_PATH_METHOD	CLOSE_METHOD	LINK_POPUP							PATH_FIELD_CONTROL_ID	TAGGED_STRING_BASE	]
 
 ; EMC2 link popup and path field are the same across most EMC2 workflows.
 ~LINK_POPUP.replaceWith(HyperLink Parameters ahk_class ThunderRT6FormDC)|PATH_FIELD_CONTROL_ID.replaceWith(ThunderRT6TextBox1) {

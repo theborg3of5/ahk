@@ -1,4 +1,4 @@
-[		NAME							PATH																						MACHINE							PATH_TYPE	]
+﻿[		NAME							PATH																						MACHINE							PATH_TYPE	]
 
 ~PATH_TYPE.defaultTo(EXE) {
 	~PATH.addToStart(<PROGRAM_FILES_86>\) {

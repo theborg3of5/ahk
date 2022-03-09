@@ -1,4 +1,4 @@
-; These are all of the path tags that will be replaced when using Config.replacePathTags().
+﻿; These are all of the path tags that will be replaced when using Config.replacePathTags().
 
 [	NAME										KEY										PATH														CONTEXT	]
 

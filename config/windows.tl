@@ -1,4 +1,4 @@
-[				NAME										EXE							CLASS								TITLE													EDGE_TYPE		TITLE_MATCH_MODE		PRIORITY	]
+﻿[				NAME										EXE							CLASS								TITLE													EDGE_TYPE		TITLE_MATCH_MODE		PRIORITY	]
 
 ; Defaults across the board: window edges have padding, and title match mode is contains anywhere within.
 ~EDGE_TYPE.defaultTo(HAS_PADDING) | ~TITLE_MATCH_MODE.defaultTo(CONTAINS) {

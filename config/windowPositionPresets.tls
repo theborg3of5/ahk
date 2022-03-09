@@ -1,4 +1,4 @@
-@WindowTitle(Move/size windows to position preset:)
+﻿@WindowTitle(Move/size windows to position preset:)
 
 ; PRESET = PRESET from windowPositions.tl
 [	NAME								ABBREV	PRESET	]

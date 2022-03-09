@@ -201,6 +201,20 @@ class NotepadPlusPlus {
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    Convert the current clipboard value into a string value and insert it.
+	; SIDE EFFECTS:   Converts each newline into `n
+	;---------
+	sendClipboardAsString() {
+		QUOTE := """" ; A single double-quote character
+		
+		value := clipboard
+		value := value.replace("`n","``n")
+		value := QUOTE value QUOTE
+		
+		ClipboardLib.send(value)
+	}
+	
 	
 	; #PRIVATE#
 	

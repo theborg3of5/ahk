@@ -1,4 +1,4 @@
-﻿; All scripts with Unicode characters in them should be saved in UTF-8-BOM encoding, so that any Unicode characters inside them are handled appropriately.
+﻿; All scripts with Unicode characters in them should be saved in UTF-8-BOM encoding, so that any Unicode characters inside them are handled appropriately (per https://www.autohotkey.com/docs/FAQ.htm#nonascii ).
 
 #NoEnv                                        ; Don't use environment (OS-level) variables.
 #SingleInstance, Force                        ; Running this script while it's already running just replaces the existing instance.

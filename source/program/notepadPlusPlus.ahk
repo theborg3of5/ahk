@@ -33,4 +33,5 @@
 	:X:ahkclass::NotepadPlusPlus.sendClassTemplate()
 	:X:ahkto:: Send, Toast.ShowMedium(""){Left 2}
 	:X:ahketo::Send, Toast.ShowError(""){Left 2}
+	:X:.clipboard::NotepadPlusPlus.sendClipboardAsString()
 #If

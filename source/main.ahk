@@ -1,4 +1,6 @@
-﻿#NoEnv                                        ; Don't use environment (OS-level) variables.
+﻿; All scripts with Unicode characters in them should be saved in UTF-8-BOM encoding, so that any Unicode characters inside them are handled appropriately.
+
+#NoEnv                                        ; Don't use environment (OS-level) variables.
 #SingleInstance, Force                        ; Running this script while it's already running just replaces the existing instance.
 #Warn All                                     ; Show warnings, except for:
 #Warn UseUnsetLocal, Off                      ; 	Using local variables before they're set (using default values in a function triggers this)
@@ -19,7 +21,7 @@ SetScrollLockState, AlwaysOff                ; Turn off Scroll Lock so it can be
 SetNumLockState,    AlwaysOn                 ; Force NumLock to always stay on.
 SetDefaultMouseSpeed, 0                      ; Fasted mouse speed for mouse commands (MouseMove in particular)
 SetMouseDelay, 0                             ; Smallest possible delay after mouse movements/clicks
-FileEncoding, UTF-8-Raw                      ; Read files using UTF-8 encoding by default, but don't add a mark at the start of saved files to that effect.
+FileEncoding, UTF-8                          ; Read files using UTF-8 encoding by default.
 
 ; Sub scripts. Must be first to execute so they can spin off and be on their own.
 subFolder := A_ScriptDir "\sub\"

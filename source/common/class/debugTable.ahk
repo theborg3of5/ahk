@@ -1,4 +1,4 @@
-/* A debug class which generates a structured table of recursive information about the given values. =--
+﻿/* A debug class which generates a structured table of recursive information about the given values. =--
 		Note that this really only works with monospace fonts.
 	
 	=-- Motivation
@@ -194,13 +194,13 @@ class DebugTable extends TextTable {
 	convertWhitespace(value) {
 		; Replace tabs with an arrow made up of width-1 characters (same width as tabs in Notepad++), so it's
 		; the desired width but more visible and doesn't mess with the layout.
-		line := Chr(0x2015) ; ―
-		head := Chr(0x2192) ; →
+		line := "―" ; U+0x2015
+		head := "→" ; U+0x2192
 		arrow := StringLib.duplicate(line, NotepadPlusPlus.TabWidth - 1) head
 		value := value.replace(A_Tab, arrow)
 		
 		; Replace leading, trailing, and more than 1 space in a row with dots so they're more visible.
-		dot := Chr(0x00b7) ; ·
+		dot := "·" ; U+0x00B7
 		while(value.matchesRegEx("  +", match)) {  ; 2+ spaces in a row
 			replaceWith := StringLib.duplicate(dot, match.length()) ; Replace them with the same number of dots
 			value := value.replace(match, replaceWith)

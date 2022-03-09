@@ -27,10 +27,5 @@ return
 ; Send the clipboard as a list.
 ^#v::new FormattedList(Clipboard).sendList()
 
-; Send specific (Unicode) symbols
-#`;::
-	selectSymbol() {
-		code := new Selector("symbols.tls").selectGui("UNICODE")
-		if(code != "")
-			Send, % Chr("0x" code)
-	}
+; Send specific symbols
+#`;::Send, % new Selector("symbols.tls").selectGui("CHAR")

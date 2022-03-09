@@ -1,4 +1,4 @@
-/* This class takes a table of values and turns it into an aligned plain-text table. =--
+﻿/* This class takes a table of values and turns it into an aligned plain-text table. =--
 	NOTE: This only really works with a monospace font, as it aligns based on characters.
 	
 	Example Usage
@@ -128,22 +128,22 @@ class TextTable {
 				this.outerPaddingV := 0
 				
 			Case this.BorderType_Line:
-				this.borderH  := Chr(0x2500) ; ─
-				this.borderV  := Chr(0x2502) ; │
-				this.borderTL := Chr(0x250C) ; ┌
-				this.borderTR := Chr(0x2510) ; ┐
-				this.borderBL := Chr(0x2514) ; └
-				this.borderBR := Chr(0x2518) ; ┘
+				this.borderH  := "─" ; U+0x2500
+				this.borderV  := "│" ; U+0x2502
+				this.borderTL := "┌" ; U+0x250C
+				this.borderTR := "┐" ; U+0x2510
+				this.borderBL := "└" ; U+0x2514
+				this.borderBR := "┘" ; U+0x2518
 				this.outerPaddingH := 1
 				this.outerPaddingV := 0
 				
 			Case this.BorderType_BoldLine:
-				this.borderH  := Chr(0x2501) ; ━
-				this.borderV  := Chr(0x2503) ; ┃
-				this.borderTL := Chr(0x250F) ; ┏
-				this.borderTR := Chr(0x2513) ; ┓
-				this.borderBL := Chr(0x2517) ; ┗
-				this.borderBR := Chr(0x251B) ; ┛
+				this.borderH  := "━" ; U+0x2501
+				this.borderV  := "┃" ; U+0x2503
+				this.borderTL := "┏" ; U+0x250F
+				this.borderTR := "┓" ; U+0x2513
+				this.borderBL := "┗" ; U+0x2517
+				this.borderBR := "┛" ; U+0x251B
 				this.outerPaddingH := 1
 				this.outerPaddingV := 0
 		}

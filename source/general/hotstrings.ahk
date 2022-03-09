@@ -1,4 +1,4 @@
-; note to self: this must be in UTF-8 encoding.
+﻿; Various global hotstrings.
 
 #If !Config.windowIsGame()
 ; [[ Personal info ]] =--
@@ -83,13 +83,13 @@
 	::ass'd::associated
 	::assoc'd::associated
 	::qai::QA Instructions
-	::cache''::Cach{U+E9} ; 0xE9=é
+	::cache''::Caché
 	
 	:?:sync's::synchronous ; Allow in other words for asynchronously
 	
 	::.asig::and so it goes, and so it goes, and you're the only one who knows...
 	
-	::.shrug::{U+AF}\_({U+30C4})_/{U+AF} ; ¯\_(ツ)_/¯ - 0xAF=¯, 0x30C4=ツ
+	::.shrug::¯\_(ツ)_/¯
 
 ; [[ Date and time ]] ---
 	:X:idate::Send, % FormatTime(A_Now, "M/d/yy")

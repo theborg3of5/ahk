@@ -17,7 +17,7 @@ For _,path in gitRepos {
 	t.nextStep("Updating " path)
 	
 	SetWorkingDir, path
-	result := RunLib.runReturn("git pull")
+	result := RunLib.runReturn("git pull --rebase=true")
 	t.endStep(result.clean())
 }
 

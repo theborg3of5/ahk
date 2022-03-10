@@ -136,6 +136,10 @@ class WindowInfo {
 	; NOTES:          Blank values for this class' pieces are effectively wildcards - they match anything.
 	;---------
 	windowMatchesPieces(exe := "", class := "", title := "") {
+		; Since the input EXE is the full path, trim it down to just the EXE if we're doing an exact match.
+		if(this.titleMatchMode = TitleMatchMode.Exact)
+			SplitPath(exe, exe)
+		
 		; Check EXE, if we have it specified
 		if(this.exe && !TitleMatchMode.matches(exe, this.exe, this.titleMatchMode))
 			return false

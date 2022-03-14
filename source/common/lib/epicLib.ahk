@@ -379,7 +379,7 @@ class EpicLib {
 		}
 		
 		; Split up the text and look for potential IDs.
-		textBits := text.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", ".", "#"], " ").removeEmpties()
+		textBits := text.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", ".", "#", "`t"DLG 853131 - LBZ - Update Autocoding to Respect ICD-10 Effective Dates], " ").removeEmpties()
 		For i,id in textBits {
 			; Extract other potential info
 			ini := textBits[i - 1] ; INI is assumed to be the piece just before the ID.

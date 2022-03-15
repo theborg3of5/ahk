@@ -31,7 +31,9 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 	;---------
 	; DESCRIPTION:    Create a new reference to a CodeSearch object.
 	; PARAMETERS:
-	;  location (I,REQ) - Value representing the code location
+	;  location     (I,REQ) - Value representing the code location
+	;  locationType (I,OPT) - Type of CodeSearch location, from LocationType_* constants. If not given, we'll figure it out based
+	;                         on the format or by prompting the user.
 	;---------
 	__New(location, locationType := "") {
 		if(locationType = "")

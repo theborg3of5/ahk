@@ -6,10 +6,9 @@
 	
 	Example Usage
 ;		ao := new ActionObjectEMC2("DLG 123456")
-;		MsgBox, ao.getLinkWeb()      ; Link in web (emc2summary or Nova/Sherlock as appropriate)
-;		MsgBox, ao.getLinkWebBasic() ; Link in "basic" web (always emc2summary)
+;		MsgBox, ao.getLinkWeb()      ; Link in web (emc2summary or Sherlock as appropriate)
 ;		MsgBox, ao.getLinkEdit()     ; Link to edit in EMC2
-;		ao.openWeb()                 ; Open in web (emc2summary or Nova/Sherlock as appropriate)
+;		ao.openWeb()                 ; Open in web (emc2summary or Sherlock as appropriate)
 ;		ao.openEdit()                ; Open to edit in EMC2
 ;		
 ;		ao := new ActionObjectEMC2(123456) ; ID without an INI, user will be prompted for the INI
@@ -82,7 +81,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	
 	;---------
 	; DESCRIPTION:    Get a web link to the object.
-	; RETURNS:        Link to either emc2summary or Nova/Sherlock (depending on the INI)
+	; RETURNS:        Link to either emc2summary or Sherlock (depending on the INI)
 	;---------
 	getLinkWeb() {
 		if(this.isEditOnlyObject())

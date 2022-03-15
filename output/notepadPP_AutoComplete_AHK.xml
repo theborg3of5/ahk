@@ -171,7 +171,9 @@
 							;---------
 							; DESCRIPTION:    Create a new reference to a CodeSearch object.
 							; PARAMETERS:
-							;  location (I,REQ) - Value representing the code location
+							;  location     (I,REQ) - Value representing the code location
+							;  locationType (I,OPT) - Type of CodeSearch location, from LocationType_* constants. If not given, we'll figure it out based
+							;                         on the format or by prompting the user.
 							;---------">
                 <Param name="location" />
                 <Param name="locationType := &quot;&quot;" />
@@ -395,7 +397,7 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Get a web link to the object.
-							; RETURNS:        Link to either emc2summary or Nova/Sherlock (depending on the INI)
+							; RETURNS:        Link to either emc2summary or Sherlock (depending on the INI)
 							;---------">
             </Overload>
         </KeyWord>
@@ -478,14 +480,6 @@
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object, specifically in web mode.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="ActionObjectEMC2.openWebBasic" func="yes">
-            <Overload retVal="" descr="
-							;---------
-							; DESCRIPTION:    Open the EMC2 object in &quot;basic&quot; web - always emc2summary, even for
-							;                 Nova/Sherlock INIs.
 							;---------">
             </Overload>
         </KeyWord>
@@ -1004,6 +998,155 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.selectMissingInfo" func="yes">
+            <Overload retVal="{ActionObjectBase}" descr="
+							;---------
+							; DESCRIPTION:    Check whether the given value or subType is missing, and if it is, prompt the
+							;                 user with a Selector instance (filtered to the child's type) to get the info.
+							; PARAMETERS:
+							;  value      (IO,REQ) - The core value, will be updated if the user changes it in the Selector popup.
+							;  subType    (IO,REQ) - The subType, will be populated with a new value if the user selects one.
+							;  popupTitle  (I,OPT) - If you want to show a different title than the one in the ActionObject
+							;                        TLS, pass it here.
+							; RETURNS:        true if we have both pieces of info, false if something is missing.
+							; NOTES:          Should only be called by child instances.
+							;---------">
+                <Param name="ByRef value" />
+                <Param name="ByRef subType" />
+                <Param name="popupTitle := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Create a new reference to a CodeSearch object.
+							; PARAMETERS:
+							;  revision (I,REQ) - SVN revision to work with.
+							;  repoURL  (I,OPT) - URL for the SVN repository.
+							;---------">
+                <Param name="revision" />
+                <Param name="repoURL := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.ActionObjectType" func="yes">
+            <Overload retVal="[Property] {ActionObjectBase}" descr="
+							;---------
+							; DESCRIPTION:    What type of ActionObject the child class implements.
+							; NOTES:          Should be overridden by child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.copyLink" func="yes">
+            <Overload retVal="{ActionObjectBase}" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the object on the clipboard.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.copyLinkEdit" func="yes">
+            <Overload retVal="{ActionObjectBase}" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in edit mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.copyLinkWeb" func="yes">
+            <Overload retVal="{ActionObjectBase}" descr="
+							;---------
+							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.getLink" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Get the string to run to launch the repo-browser filtered to our chosen revision.
+							; RETURNS:        Runnable path/string.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.getLinkEdit" func="yes">
+            <Overload retVal="{ActionObjectBase}" descr="
+							;---------
+							; DESCRIPTION:    Get an edit link for the object. This just calls .getLink() unless it's
+							;                 overridden by the child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.getLinkWeb" func="yes">
+            <Overload retVal="{ActionObjectBase}" descr="
+							;---------
+							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
+							;                 overridden by the child class.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.linkSelectedText" func="yes">
+            <Overload retVal="{ActionObjectBase}" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it.
+							; PARAMETERS:
+							;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
+							;                           weren't able to link the selected text.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.linkSelectedTextEdit" func="yes">
+            <Overload retVal="{ActionObjectBase}" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+							;                 specifically in edit mode.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.linkSelectedTextWeb" func="yes">
+            <Overload retVal="{ActionObjectBase}" descr="
+							;---------
+							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+							;                 specifically in web mode.
+							;---------">
+                <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.open" func="yes">
+            <Overload retVal="{ActionObjectBase}" descr="
+							;---------
+							; DESCRIPTION:    Open the object.
+							; NOTES:          If you want to override this in a child class, consider overriding
+							;                 .openWeb/.openEdit as well - they don't come through here by default.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.openEdit" func="yes">
+            <Overload retVal="{ActionObjectBase}" descr="
+							;---------
+							; DESCRIPTION:    Open the object, specifically in edit mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.openWeb" func="yes">
+            <Overload retVal="{ActionObjectBase}" descr="
+							;---------
+							; DESCRIPTION:    Open the object, specifically in web mode.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.repoURL" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The URL for the repository that the revision is from.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.revision" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    SVN revision to work with.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.selectMissingInfo" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Check whether the given value or subType is missing, and if it is, prompt the

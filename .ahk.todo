@@ -1,12 +1,4 @@
 # New Ideas
-	Do we want to create more specific client Codesearch types (for HSWeb only, etc.)?
-	Add some way to show info about a specific SVN revision # using TortoiseSVN
-		Would need to pick the repo somehow - maybe just default to stage 1, options for final or custom?
-		Command line:
-			TortoiseProc.exe /command:log /path:"C:\EpicSource\10.2\App St1\" /closeonend:0 /startrev:4982286 /endrev:4982286
-		Alternative approach: use search
-			TortoiseProc.exe /command:log /path:"C:\EpicSource\10.2\App St1\" /closeonend:0 /findtype:8 /findstring:"4982286"
-				! This doesn't get us anything additional that's useful, though - we're looking at the full QA list of revisions here, not any specific object.
 	OneNote: some easier way to access list of quick access items? (for plugging them back into OneNote when it drops them)
 	If I end up using Hyperdrive often, add it as a new launch (probably on ^!#h)
 	Is there some way I could detect and show a warning when a modifier key gets stuck down?

@@ -6,8 +6,8 @@
 	
 	Example Usage
 ;		ao := new ActionObjectPath("F:\personal\eyobuddy") ; Local path or URL, user will be prompted for which it is
-;		MsgBox, ao.getLinkWeb()  ; Returns path (equivalent to .getLinkEdit())
-;		ao.openWeb()             ; Open path (equivalent to .openEdit())
+;		MsgBox, ao.getLink() ; Returns path
+;		ao.open()            ; Opens path (equivalent to .openEdit() or .openWeb())
 ;		
 ;		ao := new ActionObjectPath("google.com", ActionObjectPath.PathType_URL) ; Specify path type if known to avoid prompting
 ;		ao.openEdit() ; Run URL

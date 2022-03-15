@@ -32,76 +32,12 @@ class ActionObjectBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Open the object.
-	; NOTES:          If you want to override this in a child class, consider overriding
-	;                 .openWeb/.openEdit as well - they don't come through here by default.
-	;---------
-	open() {
-		this.doOpen(this.getLink())
-	}
-	;---------
-	; DESCRIPTION:    Open the object, specifically in web mode.
-	;---------
-	openWeb() {
-		this.doOpen(this.getLinkWeb())
-	}
-	;---------
-	; DESCRIPTION:    Open the object, specifically in edit mode.
-	;---------
-	openEdit() {
-		this.doOpen(this.getLinkEdit())
-	}
-	
-	;---------
-	; DESCRIPTION:    Put a link to the object on the clipboard.
-	;---------
-	copyLink() {
-		this.doCopyLink(this.getLink())
-	}
-	;---------
-	; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
-	;---------
-	copyLinkWeb() {
-		this.doCopyLink(this.getLinkWeb())
-	}
-	;---------
-	; DESCRIPTION:    Put a link to the object on the clipboard, specifically in edit mode.
-	;---------
-	copyLinkEdit() {
-		this.doCopyLink(this.getLinkEdit())
-	}
-	
-	;---------
-	; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it.
-	; PARAMETERS:
-	;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
-	;                           weren't able to link the selected text.
-	;---------
-	linkSelectedText(problemMessage := "Failed to link selected text") {
-		this.doLinkSelectedText(problemMessage, this.getLink())
-	}
-	;---------
-	; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
-	;                 specifically in web mode.
-	;---------
-	linkSelectedTextWeb(problemMessage := "Failed to link selected text") {
-		this.doLinkSelectedText(problemMessage, this.getLinkWeb())
-	}
-	;---------
-	; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
-	;                 specifically in edit mode.
-	;---------
-	linkSelectedTextEdit(problemMessage := "Failed to link selected text") {
-		this.doLinkSelectedText(problemMessage, this.getLinkEdit())
-	}
-	
-	;---------
 	; DESCRIPTION:    Get the link for the object.
-	; RETURNS:        Link to the web version of the object.
-	; NOTES:          Should be overridden by child class.
+	; RETURNS:        Link to the object.
+	; NOTES:          Should typically be overridden by child class, unless that child class doesn't want a link (or only
+	;                 wants web/edit-specific links).
 	;---------
 	getLink() {
-		Toast.ShowError("ActionObjectBase.getLink() called directly", ".getLink() is not implemented by this child ActionObject* class")
 		return ""
 	}
 	;---------
@@ -117,6 +53,92 @@ class ActionObjectBase {
 	;---------
 	getLinkEdit() {
 		return this.getLink()
+	}
+	
+	;---------
+	; DESCRIPTION:    Open the object.
+	; PARAMETERS:
+	;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+	; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+	;                 the web- and edit-specific functions will call thru any overriden logic.
+	;---------
+	open(link := "") {
+		if(!link)
+			link := this.getLink()
+		
+		if(link)
+			Run(link)
+	}
+	;---------
+	; DESCRIPTION:    Open the object, specifically in web mode.
+	;---------
+	openWeb() {
+		this.open(this.getLinkWeb())
+	}
+	;---------
+	; DESCRIPTION:    Open the object, specifically in edit mode.
+	;---------
+	openEdit() {
+		this.open(this.getLinkEdit())
+	}
+	
+	;---------
+	; DESCRIPTION:    Put a link to the object on the clipboard.
+	; PARAMETERS:
+	;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+	; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+	;                 the web- and edit-specific functions will call thru any overriden logic.
+	;---------
+	copyLink(link := "") {
+		if(!link)
+			link := this.getLink()
+		
+		ClipboardLib.setAndToast(link, "link")
+	}
+	;---------
+	; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
+	;---------
+	copyLinkWeb() {
+		this.copyLink(this.getLinkWeb())
+	}
+	;---------
+	; DESCRIPTION:    Put a link to the object on the clipboard, specifically in edit mode.
+	;---------
+	copyLinkEdit() {
+		this.copyLink(this.getLinkEdit())
+	}
+	
+	;---------
+	; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it.
+	; PARAMETERS:
+	;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
+	;                           weren't able to link the selected text.
+	;  link           (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+	; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+	;                 the web- and edit-specific functions will call thru any overriden logic.
+	;---------
+	linkSelectedText(problemMessage := "Failed to link selected text", link := "") {
+		if(!link)
+			link := this.getLink()
+		if(!link)
+			return
+		
+		if(!Hyperlinker.linkSelectedText(link, errorMessage))
+			ClipboardLib.setAndToastError(link, "link", problemMessage, errorMessage)
+	}
+	;---------
+	; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+	;                 specifically in web mode.
+	;---------
+	linkSelectedTextWeb(problemMessage := "Failed to link selected text") {
+		this.linkSelectedText(problemMessage, this.getLinkWeb())
+	}
+	;---------
+	; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
+	;                 specifically in edit mode.
+	;---------
+	linkSelectedTextEdit(problemMessage := "Failed to link selected text") {
+		this.linkSelectedText(problemMessage, this.getLinkEdit())
 	}
 	
 	;---------
@@ -188,38 +210,6 @@ class ActionObjectBase {
 		
 		this.typeSelectors[type] := s ; Cache the value off for later use.
 		return s
-	}
-	
-	;---------
-	; DESCRIPTION:    Open provided link to the object.
-	;  link (I,REQ) - Link to open.
-	;---------
-	doOpen(link) {
-		if(link)
-			Run(link)
-	}
-	
-	;---------
-	; DESCRIPTION:    Put the provided link to the object on the clipboard.
-	;  link (I,REQ) - Link to copy.
-	;---------
-	doCopyLink(link) {
-		ClipboardLib.setAndToast(link, "link")
-	}
-	
-	;---------
-	; DESCRIPTION:    Hyperlink the selected text with the provided link.
-	; PARAMETERS:
-	;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
-	;                           weren't able to link the selected text.
-	;  link           (I,REQ) - Link to apply to selected text.
-	;---------
-	doLinkSelectedText(problemMessage, link) {
-		if(!link)
-			return
-		
-		if(!Hyperlinker.linkSelectedText(link, errorMessage))
-			ClipboardLib.setAndToastError(link, "link", problemMessage, errorMessage)
 	}
 	; #END#
 }

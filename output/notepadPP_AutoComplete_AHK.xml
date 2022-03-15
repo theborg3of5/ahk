@@ -54,7 +54,12 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard.
+							; PARAMETERS:
+							;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectBase.copyLinkEdit" func="yes">
@@ -75,8 +80,9 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object.
-							; RETURNS:        Link to the web version of the object.
-							; NOTES:          Should be overridden by child class.
+							; RETURNS:        Link to the object.
+							; NOTES:          Should typically be overridden by child class, unless that child class doesn't want a link (or only
+							;                 wants web/edit-specific links).
 							;---------">
             </Overload>
         </KeyWord>
@@ -103,8 +109,12 @@
 							; PARAMETERS:
 							;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
 							;                           weren't able to link the selected text.
+							;  link           (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
                 <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectBase.linkSelectedTextEdit" func="yes">
@@ -129,9 +139,12 @@
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
-							; NOTES:          If you want to override this in a child class, consider overriding
-							;                 .openWeb/.openEdit as well - they don't come through here by default.
+							; PARAMETERS:
+							;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectBase.openEdit" func="yes">
@@ -191,7 +204,12 @@
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard.
+							; PARAMETERS:
+							;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.copyLinkEdit" func="yes">
@@ -239,8 +257,12 @@
 							; PARAMETERS:
 							;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
 							;                           weren't able to link the selected text.
+							;  link           (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
                 <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.linkSelectedTextEdit" func="yes">
@@ -295,9 +317,12 @@
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
-							; NOTES:          If you want to override this in a child class, consider overriding
-							;                 .openWeb/.openEdit as well - they don't come through here by default.
+							; PARAMETERS:
+							;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.openEdit" func="yes">
@@ -359,7 +384,12 @@
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard.
+							; PARAMETERS:
+							;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.copyLinkEdit" func="yes">
@@ -380,8 +410,9 @@
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object.
-							; RETURNS:        Link to the web version of the object.
-							; NOTES:          Should be overridden by child class.
+							; RETURNS:        Link to the object.
+							; NOTES:          Should typically be overridden by child class, unless that child class doesn't want a link (or only
+							;                 wants web/edit-specific links).
 							;---------">
             </Overload>
         </KeyWord>
@@ -438,8 +469,12 @@
 							; PARAMETERS:
 							;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
 							;                           weren't able to link the selected text.
+							;  link           (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
                 <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.linkSelectedTextEdit" func="yes">
@@ -464,9 +499,12 @@
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
-							; NOTES:          If you want to override this in a child class, consider overriding
-							;                 .openWeb/.openEdit as well - they don't come through here by default.
+							; PARAMETERS:
+							;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEMC2.openEdit" func="yes">
@@ -533,7 +571,12 @@
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard.
+							; PARAMETERS:
+							;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.copyLinkEdit" func="yes">
@@ -620,8 +663,12 @@
 							; PARAMETERS:
 							;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
 							;                           weren't able to link the selected text.
+							;  link           (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
                 <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.linkSelectedTextEdit" func="yes">
@@ -646,9 +693,12 @@
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
-							; NOTES:          If you want to override this in a child class, consider overriding
-							;                 .openWeb/.openEdit as well - they don't come through here by default.
+							; PARAMETERS:
+							;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectEpicStudio.openEdit" func="yes">
@@ -705,7 +755,12 @@
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard.
+							; PARAMETERS:
+							;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.copyLinkEdit" func="yes">
@@ -773,8 +828,12 @@
 							; PARAMETERS:
 							;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
 							;                           weren't able to link the selected text.
+							;  link           (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
                 <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.linkSelectedTextEdit" func="yes">
@@ -799,9 +858,12 @@
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
-							; NOTES:          If you want to override this in a child class, consider overriding
-							;                 .openWeb/.openEdit as well - they don't come through here by default.
+							; PARAMETERS:
+							;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectHelpdesk.openEdit" func="yes">
@@ -861,7 +923,12 @@
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard.
+							; PARAMETERS:
+							;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.copyLinkEdit" func="yes">
@@ -922,8 +989,12 @@
 							; PARAMETERS:
 							;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
 							;                           weren't able to link the selected text.
+							;  link           (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
                 <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.linkSelectedTextEdit" func="yes">
@@ -948,9 +1019,12 @@
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
-							; NOTES:          If you want to override this in a child class, consider overriding
-							;                 .openWeb/.openEdit as well - they don't come through here by default.
+							; PARAMETERS:
+							;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectPath.openEdit" func="yes">
@@ -1039,7 +1113,12 @@
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard.
+							; PARAMETERS:
+							;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectSVN.copyLinkEdit" func="yes">
@@ -1057,10 +1136,12 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectSVN.getLink" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
-							; DESCRIPTION:    Get the string to run to launch the repo-browser filtered to our chosen revision.
-							; RETURNS:        Runnable path/string.
+							; DESCRIPTION:    Get the link for the object.
+							; RETURNS:        Link to the object.
+							; NOTES:          Should typically be overridden by child class, unless that child class doesn't want a link (or only
+							;                 wants web/edit-specific links).
 							;---------">
             </Overload>
         </KeyWord>
@@ -1087,8 +1168,12 @@
 							; PARAMETERS:
 							;  problemMessage (I,OPT) - Problem message to include in the clipboard failure toast if we
 							;                           weren't able to link the selected text.
+							;  link           (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
                 <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectSVN.linkSelectedTextEdit" func="yes">
@@ -1110,11 +1195,9 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectSVN.open" func="yes">
-            <Overload retVal="{ActionObjectBase}" descr="
+            <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Open the object.
-							; NOTES:          If you want to override this in a child class, consider overriding
-							;                 .openWeb/.openEdit as well - they don't come through here by default.
+							; DESCRIPTION:    Open the given revision in the TortoiseSVN log window.
 							;---------">
             </Overload>
         </KeyWord>

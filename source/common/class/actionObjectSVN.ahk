@@ -39,18 +39,14 @@ class ActionObjectSVN extends ActionObjectBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Get the string to run to launch the repo-browser filtered to our chosen revision.
-	; RETURNS:        Runnable path/string.
+	; DESCRIPTION:    Open the given revision in the TortoiseSVN log window.
 	;---------
-	getLink() {
+	open() {
 		runString := "TortoiseProc.exe /command:log /path:""<REPO_URL>"" /closeonend:0 /startrev:<REVISION> /endrev:<REVISION>"
 		runString := runString.replaceTag("REVISION", this.revision)
 		runString := runString.replaceTag("REPO_URL", this.repoURL)
 		
-		return runString
+		Run(runString)
 	}
-	
-	
-	; #PRIVATE#
 	; #END#
 }

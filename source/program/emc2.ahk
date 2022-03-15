@@ -12,7 +12,6 @@
 	
 	; Link and record number things based on the current record.
 	!c:: EpicLib.copyEMC2RecordIDFromText(WinGetTitle("A")) ; Copy ID
-	!+w::EMC2.openCurrentRecordWebBasic()                   ; Open "basic" web version (always EMC2 summary, even for Sherlock/Nova records) of the current object.
 	^+o::EMC2.openCurrentDLGInEpicStudio()                  ; Take DLG # and pop up the DLG in EpicStudio sidebar.
 	
 	; SmartText hotstrings. Added to favorites to deal with duplicate/similar names.

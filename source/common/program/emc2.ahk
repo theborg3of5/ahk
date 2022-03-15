@@ -34,15 +34,6 @@ class EMC2 {
 	}
 	
 	;---------
-	; DESCRIPTION:    Open the current record in "basic" web mode (emc2summary, even for
-	;                 Nova/Sherlock objects).
-	;---------
-	openCurrentRecordWebBasic() {
-		record := EpicLib.getBestEMC2RecordFromText(WinGetActiveTitle())
-		new ActionObjectEMC2(record.id, record.ini).openWebBasic()
-	}
-	
-	;---------
 	; DESCRIPTION:    Open/focus the current DLG in EpicStudio.
 	;---------
 	openCurrentDLGInEpicStudio() {

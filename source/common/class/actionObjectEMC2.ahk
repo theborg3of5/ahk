@@ -10,7 +10,6 @@
 ;		MsgBox, ao.getLinkWebBasic() ; Link in "basic" web (always emc2summary)
 ;		MsgBox, ao.getLinkEdit()     ; Link to edit in EMC2
 ;		ao.openWeb()                 ; Open in web (emc2summary or Nova/Sherlock as appropriate)
-;		ao.openWebBasic()            ; Open in "basic" web (always emc2summary)
 ;		ao.openEdit()                ; Open to edit in EMC2
 ;		
 ;		ao := new ActionObjectEMC2(123456) ; ID without an INI, user will be prompted for the INI
@@ -82,16 +81,6 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	}
 	
 	;---------
-	; DESCRIPTION:    Open the EMC2 object in "basic" web - always emc2summary, even for
-	;                 Nova/Sherlock INIs.
-	;---------
-	openWebBasic() {
-		link := Config.private["EMC2_LINK_WEB_BASE"].replaceTags({"INI":this.ini, "ID":this.id})
-		if(link)
-			Run(link)
-	}
-	
-	;---------
 	; DESCRIPTION:    Get a web link to the object.
 	; RETURNS:        Link to either emc2summary or Nova/Sherlock (depending on the INI)
 	;---------
@@ -100,8 +89,6 @@ class ActionObjectEMC2 extends ActionObjectBase {
 			link := this.getLinkEdit()
 		else if(this.isSherlockObject())
 			link := Config.private["SHERLOCK_BASE"]
-		else if(this.isNovaObject())
-			link := Config.private["NOVA_RELEASE_NOTE_BASE"]
 		else
 			link := Config.private["EMC2_LINK_WEB_BASE"]
 		
@@ -124,13 +111,6 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;---------
 	isSherlockObject() {
 		return (this.ini = "SLG")
-	}
-	;---------
-	; DESCRIPTION:    Check whether this object can be opened in Nova (rather than emc2summary).
-	; RETURNS:        true/false
-	;---------
-	isNovaObject() {
-		return (this.ini = "DRN")
 	}
 	
 	;---------

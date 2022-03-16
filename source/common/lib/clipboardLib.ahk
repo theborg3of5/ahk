@@ -184,7 +184,7 @@ class ClipboardLib {
 	send(value) {
 		ClipboardLib.set(value, origClipboard)
 		Send, ^v   ; Paste the new value.
-		Sleep, 100 ; Needed to make sure clipboard isn't overwritten before we paste it.
+		Sleep, 500 ; Needed to make sure clipboard isn't overwritten before we paste it.
 		ClipboardLib.set(origClipboard)
 	}
 	

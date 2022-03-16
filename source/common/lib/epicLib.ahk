@@ -237,8 +237,10 @@ class EpicLib {
 		; DEBUG.POPUP("text",text, "exacts",exacts, "possibles",possibles)
 		
 		; Only 1 exact match, just return it directly (ignoring any possibles).
-		if(exacts.length() = 1)
+		if(exacts.length() = 1) {
+			exacts[1].ini := EpicLib.convertToUsefulEMC2INI(exacts[1].ini) ; Convert INI before we return.
 			return exacts[1]
+		}
 		
 		; Prompt the user (even if there's just 1 possible, this gives them the opportunity to enter the INI)
 		data := this.selectFromEMC2RecordMatches(exacts, possibles)

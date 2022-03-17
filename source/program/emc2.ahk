@@ -1,6 +1,16 @@
-; Change code formatting hotkey to something more universal in various windows.
+; SmartTextBox handling
 #If Config.isWindowActive("EMC2") || Config.isWindowActive("EMC2 DLG/XDS Issue Popup") || Config.isWindowActive("EMC2 QAN Notes") || Config.isWindowActive("EMC2 DRN Quick Review") || Config.isWindowActive("EMC2 XDS Content")
-	^+c::Send, ^e
+	^+c::Send, ^e ; Apply code formatting
+	^.:: ; Start bulleted list
+		Send, {Home}   ; Get to start of line if we're not already there (doesn't handle word wrapping)
+		Send, *{Space} ; Trigger automatic list creation
+		Send, {Escape} ; Get rid of the "undo automatic list" popup.
+	return
+	^/::
+		Send, {Home}    ; Get to start of line if we're not already there (doesn't handle word wrapping)
+		Send, 1.{Space} ; Trigger automatic list creation
+		Send, {Escape}  ; Get rid of the "undo automatic list" popup.
+	return
 #If
 
 ; Main EMC2 window

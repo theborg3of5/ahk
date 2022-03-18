@@ -23,6 +23,13 @@
 		Send, {Enter} ; Show prompt
 	return
 	
+	; Get out of Chronicles
+	^d::
+		Send, +{F7 3}     ; Get out of (potentially-nested) open records
+		Send, {PgDn 3}    ; Get out to main menu
+		Send, quit{Enter} ; Exit
+	return
+	
 	; Scrolling (^PgUp/^PgDn scrolls one line at a time)
 	^WheelUp::  Send, ^{PgUp}
 	^WheelDown::Send, ^{PgDn}

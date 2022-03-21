@@ -82,19 +82,15 @@ class EpicStudio {
 	; DESCRIPTION:    Run EpicStudio in debug mode, adding in a search to find my processes.
 	;---------
 	runDebug() {
-		; Pass the hotkey straight thru if we're already debugging.
-		if(EpicStudio.isDebugging()) {
-			Send, % A_ThisHotkey
+		; Don't do anything if we're already debugging.
+		if(EpicStudio.isDebugging())
 			return
-		}
 		
-		; Get the debug popup open if it's not already.
+		; Check whether the debug window is already open (the hotkey is pass-thru, but we're assuming this
+		; will fire before the popup actually opens).
 		popupTitleString := WindowLib.buildTitleString("EpicStudio.exe", "", "Attach to Process")
-		if(!WinActive(popupTitleString)) {
-			launchedPopup := true
-			Send, {F5} ; Launch debug window
-			WinWaitActive, % popupTitleString
-		}
+		launchedPopup := !WinActive(popupTitleString)
+		WinWaitActive, % popupTitleString
 		
 		; If the "other process" search field isn't enabled, select the corresponding radio button to enable it.
 		filterField := EpicStudio.Debug_OtherProcessField
@@ -134,11 +130,12 @@ class EpicStudio {
 		settings.titleMatchSpeed("Slow")
 		
 		; Match on text in the window for the main debugging targets
-		winId := WinActive("", Config.private["ES_PUTTY_EXE"])
-		if(!winId)
-			winId := WinActive("", Config.private["ES_HYPERSPACE_EXE"])
-		if(!winId)
-			winId := WinActive("", Config.private["ES_VB6_EXE"])
+		if(WinActive("", Config.private["ES_PUTTY_EXE"]))
+			isDebugging := true
+		else if(WinActive("", Config.private["ES_HYPERSPACE_EXE"]))
+			isDebugging := true
+		else if(WinActive("", Config.private["ES_VB6_EXE"]))
+			isDebugging := true
 		
 		settings.restore()
 		return isDebugging

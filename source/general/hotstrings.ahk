@@ -65,6 +65,8 @@
 	::cahrge::charge
 	::fitler::filter
 	::hotsting::hotstring
+	::propertly::properly
+	::everythign::everything
 
 ; [[ Expansions ]] ---
 	::f'n::function

@@ -98,9 +98,9 @@ buildTimerToast() {
 getTimerDisplayText() {
 	displayText := ""
 	
-	if(timerLabelText != "")
-		displayText .= timerLabelText ":`n"
 	displayText .= durationObj.displayTime
+	if(timerLabelText != "")
+		displayText := displayText.appendLine("[" timerLabelText "]")
 	
 	return displayText
 }

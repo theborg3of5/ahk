@@ -8,9 +8,16 @@ class EpicLib {
 	; PARAMETERS:
 	;  version     (I,REQ) - Dotted Hyperspace version
 	;  environment (I,OPT) - EpicComm ID for the environment to connect to.
+	;  timeZone    (I,OPT) - Time zone for the environment.
 	;---------
-	runHyperspace(version, environment) {
-		Run(Config.private["HYPERSPACE_BASE"].replaceTags({"VERSION":version, "VERSION_FLAT": version.remove(".") , "ENVIRONMENT":environment}))
+	runHyperspace(version, environment := "", timeZone := "") {
+		runString := Config.private["HYPERSPACE_BASE"]
+		runString := runString.replaceTag("VERSION",      version)
+		runString := runString.replaceTag("VERSION_FLAT", version.remove("."))
+		runString := runString.replaceTag("ENVIRONMENT",  environment)
+		runString := runString.replaceTag("TIME_ZONE",    timeZone)
+		
+		Run(runString)
 	}
 	
 	;---------

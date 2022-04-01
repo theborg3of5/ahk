@@ -1,6 +1,4 @@
 # New Ideas
-	Consider adding a time zone column to environments
-		Add onto Hyperspace launches with added parameter: TimeZone="Europe/Amsterdam"
 	OneNote: some easier way to access list of quick access items? (for plugging them back into OneNote when it drops them)
 	If I end up using Hyperdrive often, add it as a new launch (probably on ^!#h)
 	Is there some way I could detect and show a warning when a modifier key gets stuck down?

@@ -56,6 +56,13 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			if(data)
 				EpicLib.runHyperspace(data["VERSION"], data["COMM_ID"])
 		}
+		
+	^!#h::
+		selectHSWeb() {
+			data := new Selector("epicEnvironments.tls").setTitle("Launch Standalone HSWeb in Environment").selectGui()
+			if(data["HSWEB_URL"])
+				Run(data["HSWEB_URL"])
+		}
 	
 	^!+i::
 		selectEnvironmentId() {

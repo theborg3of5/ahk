@@ -225,9 +225,9 @@ class SelectorGui {
 	;  choice (I,REQ) - The choice to pull abbreviation and name from.
 	;---------
 	addChoiceToTable(flex, index, choice) {
-		flex.addCell(index     ")", 0,                            this.Widths["INDEX"],  "Right")
-		flex.addCell(choice.abbrev, this.Padding["INDEX_ABBREV"], this.Widths["ABBREV"])
-		flex.addCell(choice.name,   this.Padding["ABBREV_NAME"])
+		flex.addCell(index ")",            0,                            this.Widths["INDEX"],  "Right")
+		flex.addCell(choice.displayAbbrev, this.Padding["INDEX_ABBREV"], this.Widths["ABBREV"])
+		flex.addCell(choice.name,          this.Padding["ABBREV_NAME"])
 	}
 	
 	;---------

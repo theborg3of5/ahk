@@ -3211,9 +3211,11 @@
 							; PARAMETERS:
 							;  version     (I,REQ) - Dotted Hyperspace version
 							;  environment (I,OPT) - EpicComm ID for the environment to connect to.
+							;  timeZone    (I,OPT) - Time zone for the environment.
 							;---------">
                 <Param name="version" />
-                <Param name="environment" />
+                <Param name="environment := &quot;&quot;" />
+                <Param name="timeZone := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="EpicLib.runVDI" func="yes">
@@ -6284,25 +6286,25 @@
 							;                 Format:
 							;                  dataIn[LABEL] := VALUE
 							;                 Special subscripts:
-							;                  &quot;ABBREV&quot; - Abbreviation of choice, first one (the display one) later accessible via .abbrev
+							;                  &quot;ABBREV&quot; - Abbreviation of choice, first one (the display one) later accessible via .displayAbbrev
 							;                  &quot;NAME&quot;   - Name of choice, later accessible via .name
 							; RETURNS:        Reference to new SelectorChoice object
 							;---------">
                 <Param name="dataIn" />
             </Overload>
         </KeyWord>
-        <KeyWord name="SelectorChoice.abbrev" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    The (single) abbreviation to display for this choice. Note that if there were
-							;                 multiple abbreviations given as an array, this will just be the first one.
-							;---------">
-            </Overload>
-        </KeyWord>
         <KeyWord name="SelectorChoice.dataObject" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    The full data object for this choice.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="SelectorChoice.displayAbbrev" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The (first) abbreviation for the choice (the one we'll display next to the choice). Note that if
+							;                 there were multiple abbreviations given as an array, this will just be the first one.
 							;---------">
             </Overload>
         </KeyWord>

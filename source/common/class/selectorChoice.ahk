@@ -22,10 +22,10 @@ class SelectorChoice {
 	}
 	
 	;---------
-	; DESCRIPTION:    The (single) abbreviation to display for this choice. Note that if there were
-	;                 multiple abbreviations given as an array, this will just be the first one.
+	; DESCRIPTION:    The (first) abbreviation for the choice (the one we'll display next to the choice). Note that if
+	;                 there were multiple abbreviations given as an array, this will just be the first one.
 	;---------
-	abbrev {
+	displayAbbrev {
 		get {
 			abbrev := this.data["ABBREV"]
 			if(isObject(abbrev))
@@ -42,7 +42,7 @@ class SelectorChoice {
 	;                 Format:
 	;                  dataIn[LABEL] := VALUE
 	;                 Special subscripts:
-	;                  "ABBREV" - Abbreviation of choice, first one (the display one) later accessible via .abbrev
+	;                  "ABBREV" - Abbreviation of choice, first one (the display one) later accessible via .displayAbbrev
 	;                  "NAME"   - Name of choice, later accessible via .name
 	; RETURNS:        Reference to new SelectorChoice object
 	;---------

@@ -415,6 +415,9 @@ class Selector {
 	;                 overrides.
 	;---------
 	doSelectGui() {
+		if(!this.validateChoices())
+			return ""
+		
 		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this._minColumnWidth)
 		sGui.show(this._windowTitle, this.defaultOverrides)
 		
@@ -431,6 +434,52 @@ class Selector {
 			return choiceData.mergeFromObject(overrideData)
 		else
 			return overrideData
+	}
+	
+	;---------
+	; DESCRIPTION:    Do some sanity checks to make sure the given choices are valid.
+	; RETURNS:        true if all is well, false (and show popup) on error.
+	;---------
+	validateChoices() {
+		; Abbreviation checks:
+		;  - All choices must have an abbreviation
+		;  - No abbreviations may be repeated
+		empties         := [] ; [SelectorChoice]
+		duplicates      := {} ; { abbreviation: [SelectorChoice] }
+		choicesByAbbrev := {} ; { abbreviation: SelectorChoice }
+		For _,choice in this.choices {
+			choiceAbbrevs := choice.data["ABBREV"]
+			if(choiceAbbrevs = "") {
+				empties.push(choice)
+				Continue
+			}
+			
+			For _,abbrev in DataLib.forceArray(choiceAbbrevs) { ; forceArray because this could be an array or single value
+				; We've already seen this abbreviation.
+				if(choicesByAbbrev[abbrev]) {
+					if(!duplicates[abbrev])
+						duplicates[abbrev] := [ choicesByAbbrev[abbrev] ] ; The original choice with this abbreviation
+					duplicates[abbrev].push(choice) ; The offending duplicate(s)
+					Continue
+				}
+				
+				choicesByAbbrev[abbrev] := choice
+			}
+		}
+		
+		; All clear, no problems found.
+		if(DataLib.isNullOrEmpty(empties) && DataLib.isNullOrEmpty(duplicates))
+			return true
+		
+		; Build error message
+		table := new DebugTable("Choices with invalid abbreviations").setBorderType(TextTable.BorderType_BoldLine)
+		if(!DataLib.isNullOrEmpty(empties))
+			table.addLine("Blank", empties)
+		if(!DataLib.isNullOrEmpty(duplicates))
+			table.addLine("Duplicates", duplicates)
+		
+		new TextPopup(table).show()
+		return false
 	}
 	
 	;---------

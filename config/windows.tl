@@ -29,6 +29,7 @@
 				EMC2 DLG Email							-								-									E-mail Development Log
 				EMC2 DLG Issue Email					-								-									Email Issue
 				EMC2 DLG/XDS Issue Popup			-								-									Issue Response
+				EMC2 DLG/XDS Issue Popup			-								-									New Issue
 				EMC2 DLG Resubmit						-								-									Resubmit for
 				EMC2 DRN Quick Review				-								-									Quick Review -
 				EMC2 PRJ Readiness Notes			-								-									Readiness Notes

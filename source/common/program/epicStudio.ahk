@@ -79,6 +79,40 @@ class EpicStudio {
 	}
 	
 	;---------
+	; DESCRIPTION:    Wrap the current line in a top and bottom "border".
+	; PARAMETERS:
+	;  borderChar (I,REQ) - The character to use as the border (-, =, etc.)
+	;---------
+	wrapLineInCommentBorder(borderChar) {
+		if(borderChar = "")
+			return
+		
+		; Get the current line to determine the border's length
+		Send, {End} ; Get to the end of the line, removing any selection
+		line := SelectLib.getCleanFirstLine() ; Grab the line, ignore indentation
+		if(line = "") {
+			Toast.ShowError("Could not create border", "Could not get current line")
+			return
+		}
+		if(!line.startsWith(";")) {
+			Toast.ShowError("Could not create border", "Current line is not a comment")
+			return
+		}
+		
+		; Get content of line, rebuild it (to fix any spacing issues)
+		content := line.removeFromStart(";").withoutWhitespace()
+		newLine := "; " content
+		
+		; Generate border
+		borderLine := ";" StringLib.duplicate(borderChar, content.length() + 2) ; 1 char of overhang on each side
+		
+		; Generate new lines and replace the original
+		newLines := borderLine.appendLine("`t" newLine).appendLine("`t" borderLine)
+		Send, {Shift Down}{Home}{Shift Up}
+		ClipboardLib.send(newLines)
+	}
+	
+	;---------
 	; DESCRIPTION:    Run EpicStudio in debug mode, adding in a search to find my processes.
 	;---------
 	runDebug() {

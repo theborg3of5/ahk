@@ -21,7 +21,7 @@
 	; Generate and insert snippets
 	:X:.snip::MSnippets.insertSnippet()
 	
-	; Tiny snippet to either add something in the middle
+	; Tiny snippet to insert a string or variable (with linking _s) in the middle of something
 	::.qsplit:: ; Variable in the middle of a string
 		Send, % """__"""
 		Send, {Left 2}
@@ -30,6 +30,10 @@
 		Send, % "_""""_"
 		Send, {Left 2}
 	return
+	
+	; Comment "borders" that are sized to match the current line (plus 1 extra overhang)
+	^-::EpicStudio.wrapLineInCommentBorder("-")
+	^=::EpicStudio.wrapLineInCommentBorder("=")
 	
 	; Debug code strings
 	:X:gdblog::   ClipboardLib.send(Config.private["M_DEBUG_LOG"])

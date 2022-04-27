@@ -37,6 +37,9 @@
 	; Open function header edit window
 	^e::^F2
 	
+	; Open macro info edit window
+	^+e::Send, !fi ; File > Edit Macro Info...
+	
 	; Open XML window
 	^+o::Onetastic.openEditXMLPopup()
 	

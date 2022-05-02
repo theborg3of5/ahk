@@ -14,7 +14,13 @@ global allFunctionObjects := {} ; {name: OnetasticFunction}
 global TemplateXML_Macro := "
 	(
 		<?xml version=""1.0"" encoding=""utf-16""?>
-		<Macro name=""<MAC_NAME>"" category=""<MAC_CATEGORY>"" description=""<MAC_DESCRIPTION>"" version=""27"">
+		<Macro name=""<MAC_NAME>"" category=""<MAC_CATEGORY>"" description=""<MAC_DESCRIPTION>"" version=""30"">
+		<Metadata>
+			<Icon style=""<ICON_STYLE>"" name=""<ICON_NAME>"">
+				<Image size=""32"" type=""png""><ICON_32></Image>
+				<Image size=""64"" type=""png""><ICON_64></Image>
+			</Icon>
+		</Metadata>
 		<MAC_CODE>
 		<MAC_DEPENDENCIES>
 		</Macro>
@@ -127,7 +133,8 @@ class OnetasticMacro {
 	__New(innerXML) {
 		this.innerXML := innerXML
 		
-		this.loadMetadata(innerXML)
+		this.loadInfo(innerXML)
+		this.loadIcon(innerXML)
 		this.loadDependencies(innerXML)
 	}
 	
@@ -135,13 +142,29 @@ class OnetasticMacro {
 	; DESCRIPTION:    Generates the full "outer" XML for this macro, ready for importing.
 	;---------
 	generateXML() {
+		xml := TemplateXML_Macro
+		
+		; Info
+		xml := xml.replaceTag("MAC_NAME",        this.name)
+		xml := xml.replaceTag("MAC_CATEGORY",    this.category)
+		xml := xml.replaceTag("MAC_DESCRIPTION", this.description)
+		
+		; Icon
+		xml := xml.replaceTag("ICON_STYLE", this.iconStyle)
+		xml := xml.replaceTag("ICON_NAME",  this.iconName)
+		xml := xml.replaceTag("ICON_32",    this.iconHash32)
+		xml := xml.replaceTag("ICON_64",    this.iconHash64)
+		
+		; Inner code
+		xml := xml.replaceTag("MAC_CODE", this.innerXML)
+		
+		; Dependency functions
 		dependenciesOuterXML := ""
 		For _,name in this.dependencyNames {
 			fn := getFunction(name)
 			dependenciesOuterXML := dependenciesOuterXML.appendLine(fn.generateXML())
 		}
-		
-		xml := TemplateXML_Macro.replaceTags({"MAC_NAME":this.name, "MAC_CATEGORY":this.category, "MAC_DESCRIPTION":this.description, "MAC_CODE":this.innerXML, "MAC_DEPENDENCIES":dependenciesOuterXML})
+		xml := xml.replaceTag("MAC_DEPENDENCIES", dependenciesOuterXML)
 		
 		xml := StringLib.dropEmptyLines(xml)
 		return xml
@@ -153,20 +176,33 @@ class OnetasticMacro {
 	name            := ""
 	category        := "" ; Which menu the macro appears under
 	description     := ""
+	iconStyle       := ""
+	iconName        := ""
+	iconHash32      := ""
+	iconHash64      := ""
 	innerXML        := "" ; XML of macro contents (doesn't include <Macro> or dependency <Function> tags)
 	dependencyNames := "" ; [string]
 	
 	;---------
-	; DESCRIPTION:    Load various script information from the METADATA comment block at the top of the macro.
+	; DESCRIPTION:    Load various script information from the INFO comment block at the top of the macro.
 	; PARAMETERS:
 	;  innerXML (I,REQ) - Inner XML of the macro (that you'd get by grabbing its XML from the editor)
 	; SIDE EFFECTS:   Populates this.name, this.category, and this.description
 	;---------
-	loadMetadata(innerXML) {
-		metadataLines := getDocSectionLines(innerXML, "METADATA")
-		this.name        := metadataLines[1]
-		this.category    := metadataLines[2]
-		this.description := metadataLines[3]
+	loadInfo(innerXML) {
+		infoLines := getDocSectionLines(innerXML, "INFO")
+		this.name        := infoLines[1]
+		this.category    := infoLines[2]
+		this.description := infoLines[3]
+	}
+	
+	; GDB TODO
+	loadIcon(innerXML) {
+		iconLines := getDocSectionLines(innerXML, "ICON")
+		this.iconStyle  := iconLines[1]
+		this.iconName   := iconLines[2]
+		this.iconHash32 := iconLines[3]
+		this.iconHash64 := iconLines[4]
 	}
 	
 	;---------

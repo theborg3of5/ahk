@@ -196,7 +196,12 @@ class OnetasticMacro {
 		this.description := infoLines[3]
 	}
 	
-	; GDB TODO
+	;---------
+	; DESCRIPTION:    Load icon information from the ICON comment block at the top of the macro.
+	; PARAMETERS:
+	;  innerXML (I,REQ) - Inner XML of the macro (that you'd get by grabbing its XML from the editor)
+	; SIDE EFFECTS:   Populates this.icon* members
+	;---------
 	loadIcon(innerXML) {
 		iconLines := getDocSectionLines(innerXML, "ICON")
 		this.iconStyle  := iconLines[1]

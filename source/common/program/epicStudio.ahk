@@ -115,17 +115,23 @@ class EpicStudio {
 	;---------
 	; DESCRIPTION:    Run EpicStudio in debug mode, adding in a search to find my processes.
 	;---------
-	runDebug() {
-		; Don't do anything if we're already debugging.
+	launchDebug() {
+		; Don't do anything if we're already debugging (the F5 already passed thru).
 		if(EpicStudio.isDebugging())
 			return
 		
-		; Check whether the debug window is already open (the hotkey is pass-thru, but we're assuming this
-		; will fire before the popup actually opens).
-		popupTitleString := WindowLib.buildTitleString("EpicStudio.exe", "", "Attach to Process")
-		launchedPopup := !WinActive(popupTitleString)
-		WinWaitActive, % popupTitleString
+		WinWaitActive, % WindowLib.buildTitleString("EpicStudio.exe", "", "Attach to Process")
 		
+		this.runDebugSearch(true)
+	}
+	
+	;---------
+	; DESCRIPTION:    Run a debug search to find relevant processes to attach to.
+	; PARAMETERS:
+	;  keepExistingValue (I,OPT) - Set to true to keep any existing search values (useful if there's a process ID in there we want to
+	;                              reattach to, for example).
+	;---------
+	runDebugSearch(keepExistingValue := false) {
 		; If the "other process" search field isn't enabled, select the corresponding radio button to enable it.
 		filterField := EpicStudio.Debug_OtherProcessField
 		if(!ControlGet("Enabled", "", filterField, "A"))
@@ -134,11 +140,10 @@ class EpicStudio {
 		; Focus the search field (may already be focused, but we want a consistent starting point).
 		ControlFocus, % filterField, A
 		
-		; Plug in our normal filter, unless there's something different already in place (probably a process
-		; ID that we want to reuse).
-		normalFilter := "user:" Config.private["WORK_ID"]
-		if(!(launchedPopup && ControlGet("Line", 1, filterField, "A") != normalFilter))
-			ControlSetText, % filterField, % normalFilter, A
+		; Plug in our normal filter, unless there's an existing value and we want to keep those.
+		currentFilter := ControlGet("Line", 1, filterField, "A")
+		if(!keepExistingValue || currentFilter = "")
+			ControlSetText, % filterField, % "user:" Config.private["WORK_ID"], A
 		
 		; Submit the search.
 		ControlSend, % filterField, {Enter}, A

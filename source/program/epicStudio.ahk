@@ -42,5 +42,9 @@
 	:X:gdbsnap::  ClipboardLib.send(Config.private["M_DEBUG_SNAP_START"])
 	
 	; Debug, auto-search for workstation ID.
-	~F5::EpicStudio.runDebug()
+	~F5::EpicStudio.launchDebug()
+
+; Debug popup
+#If Config.isWindowActive("EpicStudio Debug Window")
+	F5::EpicStudio.runDebugSearch()
 #If

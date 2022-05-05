@@ -1,6 +1,4 @@
 # New Ideas
-	OneNote: some easier way to access list of quick access items? (for plugging them back into OneNote when it drops them)
-	If I end up using Hyperdrive often, add it as a new launch (probably on ^!#h)
 	Is there some way I could detect and show a warning when a modifier key gets stuck down?
 		Maybe start a timer when one of them is held down, and after 5s or so show a persistent toast that goes away when it's released?
 		Could take the physical vs. virtual state into account (GetKeyState(key) vs GetKeyState(key, "P")) - only care when virtually but not physically held

@@ -209,7 +209,6 @@ class OneNoteTodoPage {
 			return
 		
 		Send, ^{PgDn} ; Switch to (presumably) new page
-		OneNote.makeSubpage()
 		
 		; Make the current page have no background color.
 		Send, !w

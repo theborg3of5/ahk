@@ -40,6 +40,7 @@
 		Slack							https://app.slack.com/client/<SLACK_MAIN_ID>
 		Gmail							https://mail.google.com/mail/u/0/#inbox
 		Gmail							https://mail.google.com/mail/u/1/#inbox										WORK_LAPTOP
+		Teams							https://teams.microsoft.com
 	}
 	
 		Process Explorer			<PROGRAM_FILES>\Process Explorer\procexp.exe									WORK_LAPTOP

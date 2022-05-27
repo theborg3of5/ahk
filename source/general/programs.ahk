@@ -9,6 +9,7 @@
 ^!+m::Config.activateProgram("Messenger")
 ^!+n::Config.activateProgram("Notepad++")
 ^!#n::Config.runProgram("Notepad")
+^!#t::Config.runProgram("Teams")
 ^!#/::Config.activateProgram("AutoHotkey WinSpy")
 
 ; Some programs are work-specific
@@ -18,7 +19,6 @@
 	^!+v::Config.runProgram("VB6")
 	^!+y::Config.activateProgram("yEd")
 	^!#v::Config.runProgram("Visual Studio")
-	^!#t::Config.runProgram("Teams")
 #If
 
 ; Some programs are only available on specific machines

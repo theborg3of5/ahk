@@ -435,7 +435,8 @@ class EpicLib {
 			}
 			
 			; ID already exists - decide whether to keep our stored index or replace it with the new one.
-			; Note: we're assuming each ID only goes with 1 INI, chances of both seem slim.
+			; Note: we're assuming each ID only goes with 1 INI, chances of the same ID for multiple INIs in the
+			; same string seem slim.
 			id := exact.id
 			storedExact := exacts[id].title
 			
@@ -447,10 +448,12 @@ class EpicLib {
 			
 			; Otherwise, the stored one wins.
 		}
-		exactsTemp := []
+		
+		; Put the results back into exacts, in the original order (not the ID order found in exactsToKeep).
+		exactsTemp := {}
 		For _,i in exactsToKeep
-			exactsTemp.push(exacts[i])
-		exacts := exactsTemp
+			exactsTemp[i] := exacts[i]
+		exacts := exactsTemp.toValuesArray()
 		
 		; Filter out possibles for IDs we already have in exacts (we don't really see duplicates within possibles).
 		possiblesTemp := []

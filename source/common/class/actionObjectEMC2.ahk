@@ -84,21 +84,32 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	; RETURNS:        Link to either emc2summary or Sherlock (depending on the INI)
 	;---------
 	getLinkWeb() {
-		if(this.isEditOnlyObject())
+		ini := this.ini
+		
+		if(this.isEditOnlyObject() || this.isViewOnlyObject(ini)) ; These only work as edit-type links, so redirect them there.
 			link := this.getLinkEdit()
+		else if(this.isInternalOnlyObject(ini))
+			link := Config.private["SHERLOCK_INTERNAL_ONLY_BASE"]
 		else if(this.isSherlockObject())
 			link := Config.private["SHERLOCK_BASE"]
 		else
 			link := Config.private["EMC2_LINK_WEB_BASE"]
 		
-		return link.replaceTags({"INI":this.ini, "ID":this.id})
+		return link.replaceTags({"INI":ini, "ID":this.id})
 	}
 	;---------
 	; DESCRIPTION:    Get an edit link to the object.
 	; RETURNS:        Link to the object that opens it in EMC2.
 	;---------
 	getLinkEdit() {
-		return Config.private["EMC2_LINK_EDIT_BASE"].replaceTags({"INI":this.ini, "ID":this.id})
+		ini := this.ini
+		
+		if(this.isViewOnlyObject(ini))
+			link := Config.private["EMC2_LINK_EDIT_VIEW_ONLY_BASE"]
+		else
+			link := Config.private["EMC2_LINK_EDIT_BASE"]
+		
+		return link.replaceTags({"INI":ini, "ID":this.id})
 	}
 	
 	
@@ -110,6 +121,58 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;---------
 	isSherlockObject() {
 		return (this.ini = "SLG")
+	}
+	
+	;---------
+	; DESCRIPTION:    Check whether this object is an "internal-only" one that needs a special kind of web link (rather than emc2summary).
+	; PARAMETERS:
+	;  ini (IO,OPT) - The current INI. Will be replaced with the "real" INI if this is a special "internal-only" INI value
+	;                 (typically INI + "I").
+	; RETURNS:        true/false
+	;---------
+	isInternalOnlyObject(ByRef ini := "") {
+		if(ini = "SLGI") {
+			ini := "SLG"
+			return true
+		}
+		
+		return false
+	}
+	
+	;---------
+	; DESCRIPTION:    Check whether this object is an "view-only" one that needs a special kind of edit link.
+	; PARAMETERS:
+	;  ini (IO,OPT) - The current INI. Will be replaced with the "real" INI if this is a special "view-only" INI value
+	;                 (typically INI + "V").
+	; RETURNS:        true/false
+	;---------
+	isViewOnlyObject(ByRef ini := "") {
+		; Try to map the INI from a view-only INI to a "real" one
+		realINI := this.getRealViewOnlyRealINI(ini)
+		if(!realINI) ; It's not a view-only INI.
+			return false
+		
+		ini := realINI
+		return true
+	}
+	
+	;---------
+	; DESCRIPTION:    If the given INI is a "view-only" INI, return its corresponding "real" INI.
+	; PARAMETERS:
+	;  viewOnlyINI (I,REQ) - The INI to try and map.
+	; RETURNS:        The "real" INI if it's a "view-only" INI (i.e. QANV => QAN), "" if it's not.
+	; SIDE EFFECTS:   
+	; NOTES:          
+	;---------
+	getRealViewOnlyRealINI(viewOnlyINI) {
+		Switch viewOnlyINI {
+			Case "DLGV": return "DLG"
+			Case "QANV": return "QAN"
+			Case "XDSV": return "XDS"
+			Case "ZDQV": return "ZDQ"
+		}
+		
+		return "" ; Not a view-only INI.
 	}
 	
 	;---------

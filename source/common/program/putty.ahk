@@ -92,7 +92,8 @@ class Putty {
 		if(!command)
 			return
 		
-		command := command.replaceTags({"INI":ini, "ID":id})
+		command   := command.replaceTags({"INI":ini, "ID":id})
+		sendAfter := sendAfter.replaceTags({"INI":ini, "ID":id})
 		
 		if(!Config.isWindowActive("Putty"))
 			WindowActions.activateWindowByName("Putty")

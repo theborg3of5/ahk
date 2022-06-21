@@ -49,6 +49,7 @@
 	^a:: Putty.sendCommand("BRIDGES")
 	^e:: Putty.sendCommand("CHRONICLES")
 	^+s::Putty.sendCommand("CR_STATUS")
+	^+h::Putty.sendCommand("HB_FILERS")
 	^o:: Putty.sendCommand("HS_CONFIG")
 	^h:: Putty.sendCommand("HB")
 	^z:: Putty.sendCommand("LOOKITT")

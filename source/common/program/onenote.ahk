@@ -71,6 +71,9 @@ class OneNote {
 	createAndLinkDevPageInSpecificSection() {
 		this.runOnetasticWorkToolbarMacro("y2")
 	}
+	createAndLinkWorkplanPage() {
+		this.runOnetasticWorkToolbarMacro("y3")
+	}
 	
 	;---------
 	; DESCRIPTION:    Scroll left/right in the OneNote window (assuming it's under the mouse)

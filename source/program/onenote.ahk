@@ -51,13 +51,11 @@
 	return
 	
 	; Focus notebooks by index
-	!1::
-	!2::
-	!3::
-	!4::
-	!5::
-		OneNote.focusNotebookWithIndex(A_ThisHotkey.afterString("!"))
-	return
+	!1::OneNote.focusNotebookWithIndex(1)
+	!2::OneNote.focusNotebookWithIndex(2)
+	!3::OneNote.focusNotebookWithIndex(3)
+	!4::OneNote.focusNotebookWithIndex(4)
+	!5::OneNote.focusNotebookWithIndex(5)
 	
 	; Various specific commands based on the quick access toolbar.
 	$^+n::OneNote.newSubpage()
@@ -77,6 +75,7 @@
 	; Work-specific macros
 	^+a::OneNote.applyDevStructureToCurrentPage()
 	^+l::OneNote.createAndLinkDevPageInSpecificSection()
+	^+p::OneNote.createAndLinkWorkplanPage()
 	
 	; Link handling
 	!c::      OneNote.copyLinkToCurrentPage()

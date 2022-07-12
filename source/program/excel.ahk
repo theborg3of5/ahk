@@ -21,6 +21,9 @@
 		Send, {Enter} 	; Accept popup
 	return
 	
+	; New worksheet
+	^t::Send, +{F11}
+	
 	; Next/previous worksheet
 	^Tab::
 	XButton1::

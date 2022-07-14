@@ -32,6 +32,7 @@
 	Epic VDI Settings						EPIC_VDI_SETTINGS
 	Epic Environment TraceX Files		EPIC_HSWEB_TRACE
 	Epic Shared UX Resources			EPIC_UX_SHARED
+	Epic OneDrive Root					EPIC_ONEDRIVE_ROOT
 }
 
 	; General
@@ -43,8 +44,8 @@
 	Downloads								USER_DOWNLOADS							<USER_ROOT>\Downloads
 
 	; Dev
-	User Dev									USER_DEV									<USER_ROOT>\Dev
-	NotepadPlusPlus Sessions			NOTEPAD_PP_SESSIONS					<USER_ROOT>\Dev\NotepadPlusPlus Sessions
+	User Dev									USER_DEV									<USER_ROOT>\OneDrive - Epic\Dev
+	NotepadPlusPlus Sessions			NOTEPAD_PP_SESSIONS					<USER_ROOT>\OneDrive - Epic\Dev\NotepadPlusPlus Sessions
 	Onetastic Macros						ONETASTIC_MACROS						<USER_ROOT>\OnetasticMacros
 	Onetastic Functions					ONETASTIC_FUNCTIONS					<USER_ROOT>\OnetasticMacros\Functions
 
@@ -53,7 +54,7 @@
 	Epic Source Current S1				EPIC_SOURCE_S1							<EPIC_SOURCE_CURRENT>\App St1
 	VB6 Compile								VB6_COMPILE								<EPIC_SOURCE_CURRENT>\Compile
 	Transaction Diff						TX_DIFF									C:\Program Files\TransactionDiff
-	Transaction Diff Results			TX_DIFF_OUTPUT							<USER_ROOT>\Dev\TransactionDiffOutput
+	Transaction Diff Results			TX_DIFF_OUTPUT							<USER_ROOT>\OneDrive - Epic\Dev\TransactionDiffOutput
 	EpicStudio Global Highlights		EPICSTUDIO_GLOBAL_HIGHLIGHTS		<EPIC_PERSONAL>\EpicStudioGlobalHighlights
 	Epic Personal AHK						EPIC_PERSONAL_AHK						<EPIC_PERSONAL>\ahk
 }

@@ -12,9 +12,6 @@
 	!c::  Explorer.copySelectedPath()                 ; Current file (or folder if nothing selected)
 	^!#c::Explorer.copySelectedPathRelativeToSource() ; Current file (or folder if nothing selected), but drop the usual EpicSource stuff up through the DLG folder.
 	
-	; Hide/show hidden files
-	#h::Explorer.toggleHiddenFiles()
-	
 	; Show TortoiseSVN/TortoiseGit log for current selection (both have an "l" hotkey in the
 	; right-click menu, and appear only when the item is in that type of repo)
 	!l::
@@ -45,4 +42,9 @@
 	; Open EMC2 objects based on the active folder name.
 	!w::Explorer.getEMC2ObjectFromSelectedFolder().openWeb()
 	!e::Explorer.getEMC2ObjectFromSelectedFolder().openEdit()
+	
+	
+#If Config.isWindowActive("Explorer") || WinActive("ahk_class Progman ahk_exe explorer.exe")	; Explorer window or Desktop
+	; Hide/show hidden files
+	#h::Explorer.toggleHiddenFiles()
 #If

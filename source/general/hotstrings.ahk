@@ -84,6 +84,10 @@
 	::assoc'n::association
 	::ass'd::associated
 	::assoc'd::associated
+	::aass'n::auto-association
+	::aassoc'n::auto-association
+	::aass'd::auto-associated
+	::aassoc'd::auto-associated
 	::qai::QA Instructions
 	::cache''::Caché
 	

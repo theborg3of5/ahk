@@ -86,7 +86,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	getLinkWeb() {
 		ini := this.ini
 		
-		if(this.isEditOnlyObject() || this.isViewOnlyObject(ini)) ; These only work as edit-type links, so redirect them there.
+		if(this.isEditOnlyObject() || this.isViewOnlyObject(ini)) ; View-only objects only work as edit-type links, so redirect them there.
 			link := this.getLinkEdit()
 		else if(this.isInternalOnlyObject(ini))
 			link := Config.private["SHERLOCK_INTERNAL_ONLY_BASE"]

@@ -44,10 +44,10 @@ class ActionObjectHelpdesk extends ActionObjectBase {
 		if(!Config.contextIsWork)
 			return false
 		
-		if(!value.startsWith("HDR "))
+		if(!value.startsWithAnyOf(["HDR ", "helpdesk "], matchedINI))
 			return false
 		
-		id := value.removeFromStart("HDR ")
+		id := value.removeFromStart(matchedINI)
 		return true
 	}
 	

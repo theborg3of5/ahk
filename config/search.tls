@@ -8,7 +8,8 @@
 ~SEARCH_TYPE.replaceWith(WEB) {
 		Google								g						https://www.google.com/search?q=%s
 		Google Maps							gmap | gmaps		https://www.google.com/maps/preview?q=%s
-		Gmail									gm						https://mail.google.com/mail/u/0/#search/%s
+		Gmail									gm						https://mail.google.com/mail/u/0/#search/%s										-					-				HOME
+		Gmail									gm						https://mail.google.com/mail/u/1/#search/%s										-					-				WORK
 		Youtube								yt						https://www.youtube.com/results?search_query=%s
 		Steam									st						https://store.steampowered.com/search/?term=%s
 		AutoHotkey Docs					ahkd					https://cse.google.com/cse?cx=010629462602499112316:ywoq_rufgic&q=%s

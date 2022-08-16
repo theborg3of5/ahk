@@ -210,6 +210,7 @@ class NotepadPlusPlus {
 		
 		value := clipboard
 		value := value.replace("`n","``n")
+		value := StringLib.escapeCharUsingChar(value, QUOTE, QUOTE)
 		value := QUOTE value QUOTE
 		
 		ClipboardLib.send(value)

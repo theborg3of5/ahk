@@ -13,4 +13,6 @@
 	^#Right:: Send, ^!{Numpad2} ; Next subword
 	^#+Left:: Send, ^!{Numpad3} ; Extend selection previous
 	^#+Right::Send, ^!{Numpad4} ; Extend selection next
+	
+	:X:dbpop::VisualStudio.sendDebugCodeStringTS(clipboard) ; Debug popup
 #If

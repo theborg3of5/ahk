@@ -4,6 +4,7 @@
 ; Specific folders
  !+a::openPath("AHK_ROOT")
 $!+d::openPath("USER_DOWNLOADS")
+ !+s::openPath("EPIC_SOURCE")
  !+u::openPath("USER_ROOT")
 openPath(folderName) {
 	folderPath := Config.path[folderName]

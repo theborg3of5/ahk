@@ -93,7 +93,7 @@ class EpicLib {
 		latestVersion := 0.0
 		latestPath := ""
 		
-		Loop, Files, C:\EpicSource\*, D
+		Loop, Files, C:\EpicSource\*, D ; Don't try to use Config.path stuff here - we call this from inside.
 		{
 			; Only consider #[#].# folders
 			if(!A_LoopFileName.matchesRegEx("\d{1,2}\.\d"))

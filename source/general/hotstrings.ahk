@@ -90,6 +90,7 @@
 	::aassoc'd::auto-associated
 	::qai::QA Instructions
 	::cache''::Caché
+	::snuuz::snüz
 	
 	:?:sync's::synchronous ; Allow in other words for asynchronously
 	

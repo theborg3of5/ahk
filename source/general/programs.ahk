@@ -17,7 +17,6 @@
 	^!+e::Config.activateProgram("EMC2", "EMC2Update env=TRACKAPPTCP") ; EMC2 needs these parameters to start up correctly.
 	^!+s::Config.activateProgram("EpicStudio")
 	^!+v::Config.runProgram("VB6")
-	^!+y::Config.activateProgram("yEd")
 	^!#v::Config.runProgram("Visual Studio")
 #If
 

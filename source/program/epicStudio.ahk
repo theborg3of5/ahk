@@ -23,6 +23,7 @@
 	
 	; Tiny snippet to insert a string or variable (with linking _s) in the middle of something
 	::.qsplit:: ; Variable in the middle of a string
+	::.qs::
 		Send, % """__"""
 		Send, {Left 2}
 	return

@@ -23,6 +23,17 @@ class EMC2 {
 	}
 	
 	;---------
+	; DESCRIPTION:    Insert a specific SmartPhrase and select the final element in it.
+	; PARAMETERS:
+	;  phraseName (I,REQ) - The name of the phrase (to be sent with a . in front)
+	;---------
+	insertSmartPhrase(phraseName) {
+		HotkeyLib.waitForRelease() ; Held-down keys mess with the SmartPhrase butler, so wait for them to be released first.
+		Send, .%phraseName%{Tab}   ; Insert the SmartPhrase
+		Send, +{F2}                ; Select the last thing in it
+	}
+	
+	;---------
 	; DESCRIPTION:    Use the right-click menu to launch the currently-selected worklist item in web. Useful because we
 	;                 don't have title information to pull from when we're in a worklist.
 	;---------

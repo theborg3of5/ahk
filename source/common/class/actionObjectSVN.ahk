@@ -20,6 +20,7 @@ class ActionObjectSVN extends ActionObjectBase {
 	repoURL  := "" ; The URL for the repository that the revision is from.
 	; @GROUP-END@
 	
+	
 	;---------
 	; DESCRIPTION:    Create a new reference to a CodeSearch object.
 	; PARAMETERS:
@@ -29,10 +30,6 @@ class ActionObjectSVN extends ActionObjectBase {
 	__New(revision, repoURL := "") {
 		if(!this.selectMissingInfo(revision, repoURL))
 			return ""
-		
-		; Allow private tags that expand to full URLs.
-		if(repoURL != "")
-			repoURL := Config.replacePrivateTags(repoURL)
 		
 		this.revision := revision
 		this.repoURL  := repoURL

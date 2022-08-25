@@ -1,7 +1,5 @@
 # New Ideas
 	Could I use hotstrings to about stuff like (i.e. xxx) from capitalizing incorrectly?
-	Add some way to launch TortoiseSVN log viewer for a branch path + revision
-		"C:\Program Files\TortoiseSVN\bin\TortoiseProc.exe" /command:log /path:"<SVN_BRANCH_URL>" /findstring:"<REVISION>"
 	Add some way to launch directly into XDS history "mode"
 		Adding /1 (as the DAT) works to get me started ("older" takes me to the latest contact).
 	Clean out OneNote recurring todo stuff - no longer used

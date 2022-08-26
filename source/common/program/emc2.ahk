@@ -23,14 +23,13 @@ class EMC2 {
 	}
 	
 	;---------
-	; DESCRIPTION:    Insert a specific SmartPhrase and select the final element in it.
+	; DESCRIPTION:    Insert a specific SmartPhrase and select the first element in it.
 	; PARAMETERS:
 	;  phraseName (I,REQ) - The name of the phrase (to be sent with a . in front)
 	;---------
 	insertSmartPhrase(phraseName) {
 		HotkeyLib.waitForRelease() ; Held-down keys mess with the SmartPhrase butler, so wait for them to be released first.
-		Send, .%phraseName%{Tab}   ; Insert the SmartPhrase
-		Send, +{F2}                ; Select the last thing in it
+		Send, .%phraseName%{F2}    ; Insert the SmartPhrase, selecting the first field inside
 	}
 	
 	;---------

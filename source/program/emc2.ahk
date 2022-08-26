@@ -23,13 +23,18 @@
 	!c:: EpicLib.copyEMC2RecordIDFromText(WinGetTitle("A")) ; Copy ID
 	^+o::EMC2.openCurrentDLGInEpicStudio()                  ; Take DLG # and pop up the DLG in EpicStudio sidebar.
 	
-	; SmartText hotstrings. Added to favorites to deal with duplicate/similar names.
-	:X:qa.dbc:: EMC2.insertSmartText("DBC QA INSTRUCTIONS")
-	:X:qa.sdbc::EMC2.insertSmartText("DBC SIMPLE AND STRAIGHTFORWARD QA INSTRUCTIONS")
-	:X:qa.new:: EMC2.insertSmartText("QA INSTRUCTIONS - NEW CHANGES")
+	; SmartPhrase hotstrings.
+	:X:qa.dbc:: EMC2.insertSmartPhrase("DBCQA")
+	:X:qa.sdbc::EMC2.insertSmartPhrase("DBCQASIMPLE")
+	:X:qa.new:: EMC2.insertSmartPhrase("QANEW")
+	:X:qa.sec::
+		EMC2.insertSmartPhrase("SECTION")
+		Sleep, 750 ; Have to wait for phrase to finish inserting
+		Send, {Down}{Enter} ; Select and submit the only choice - a list that inserts the text.
+	return
 	
 	; De-emphasized "contact comment"
-	^8::EMC2.insertSmartPhrase("sidenote")
+	^8::EMC2.insertSmartPhrase("SIDENOTE")
 #If
 
 ; Worklist: use the currently-selected row to perform actions instead of the title.

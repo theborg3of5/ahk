@@ -2,6 +2,7 @@
 	Could I use hotstrings to about stuff like (i.e. xxx) from capitalizing incorrectly?
 	Add some way to launch directly into XDS history "mode"
 		Adding /1 (as the DAT) works to get me started ("older" takes me to the latest contact).
+		Alternative: make it a link on the XDS summary page with a UserScript?
 	Clean out OneNote recurring todo stuff - no longer used
 	Consider a "record macro" set of hotkeys (like Notepad++ has built-in).
 	Is there some way I could detect and show a warning when a modifier key gets stuck down?

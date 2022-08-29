@@ -59,26 +59,20 @@ class OneNote {
 	collapseToUnfinishedTags() {
 		this.runOnetasticToolbarMacro("y2")
 	}
-	createAndLinkPageInAnySection() {
+	createAndLinkPage() {
 		this.runOnetasticToolbarMacro("y3")
 	}
-	createAndLinkPageInSpecificSection() {
-		this.runOnetasticToolbarMacro("y4")
-	}
 	widenOutline() {
-		this.runOnetasticToolbarMacro("y5")
+		this.runOnetasticToolbarMacro("y4")
 	}
 	applyDevStructureToCurrentPage() {
 		this.runOnetasticWorkToolbarMacro("y1")
 	}
-	createAndLinkDevPageInAnySection() {
+	createAndLinkDevPage() {
 		this.runOnetasticWorkToolbarMacro("y2")
 	}
-	createAndLinkDevPageInSpecificSection() {
-		this.runOnetasticWorkToolbarMacro("y3")
-	}
 	createAndLinkWorkplanPage() {
-		this.runOnetasticWorkToolbarMacro("y4")
+		this.runOnetasticWorkToolbarMacro("y3")
 	}
 	
 	;---------

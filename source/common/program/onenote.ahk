@@ -43,11 +43,11 @@ class OneNote {
 		Send, !7 ; Onetastic Custom Styles
 		Send, {Enter} ; First one is my custom "Code" style.
 	}
-	runOnetasticToolbarMacro(keys) {
+	runOnetasticToolbarMacro(keys) { ; This is the dropdown one, not the submenu
 		Send, !8 ; Onetastic Toolbar macro set
 		Send, % keys
 	}
-	runOnetasticWorkToolbarMacro(keys) {
+	runOnetasticWorkToolbarMacro(keys) { ; This is the dropdown one, not the submenu
 		Send, !9 ; Onetastic Work Toolbar macro set
 		Send, % keys
 	}

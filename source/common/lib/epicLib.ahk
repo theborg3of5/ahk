@@ -144,7 +144,12 @@ class EpicLib {
 		if(id.startsWithAnyOf(["I", "T", "CS"], letter))
 			id := id.removeFromStart(letter)
 		
-		return id.isNum()
+		; IDs must be numeric (beyond the above special case).
+		if(!id.isNum())
+			return false
+		
+		; No record ID is going to be 3 digits or less.
+		return id >= 999
 	}
 	
 	;---------

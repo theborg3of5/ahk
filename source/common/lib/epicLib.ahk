@@ -277,6 +277,8 @@ class EpicLib {
 		}
 		; Debug.popup("allExacts",allExacts, "allPossibles",allPossibles)
 		
+		this.removeEMC2RecordDuplicates(allExacts, allPossibles)
+		
 		; No exacts or possibles
 		if(allExacts.length() + allPossibles.length() = 0) {
 			Toast.ShowError("No potential EMC2 record IDs found.")
@@ -427,26 +429,31 @@ class EpicLib {
 	removeEMC2RecordDuplicates(ByRef exacts, ByRef possibles) {
 		; Filter out duplicates inside exacts.
 		exactsToKeep := {} ; {id: indexInExacts} ; We store the index so we can maintain the order (instead of sorting by ID)
-		For i,exact in exacts {
+		For exactLn,exact in exacts {
+			id := exact.id
+			
 			; New ID, store it off.
-			if(!exactsToKeep[exact.id]) {
-				exactsToKeep[exact.id] := i
+			if(!exactsToKeep[id]) {
+				exactsToKeep[id] := exactLn
 				Continue
 			}
 			
 			; ID already exists - decide whether to keep our stored index or replace it with the new one.
 			; Note: we're assuming each ID only goes with 1 INI, chances of the same ID for multiple INIs in the
 			; same string seem slim.
-			id := exact.id
-			storedExact := exacts[id].title
+			storedLn := exactsToKeep[id]
+			storedExact := exacts[storedLn]
+			storedTitle := storedExact.title
 			
-			; The new exact only wins if it has a shorter title.
-			if(exact.title.length() < storedExact.title.length()) {
-				exactsToKeep[exact.id] := i
+			; The new exact only wins if it has a shorter title (and actually has a title).
+			title := exact.title
+			if(!title)
 				Continue
-			}
+			if(storedTitle && title.length() >= storedTitle.length())
+				Continue
 			
-			; Otherwise, the stored one wins.
+			; New exact wins, overwrite the old one.
+			exactsToKeep[id] := exactLn
 		}
 		
 		; Put the results back into exacts, in the original order (not the ID order found in exactsToKeep).

@@ -307,7 +307,7 @@ class Config {
 	; #PRIVATE#
 	
 	; Machines
-	static Machine_WorkLaptop  := "WORK_LAPTOP"  ; Work laptop
+	static Machine_WorkLaptop  := "WORK_DESKTOP" ; Work desktop
 	static Machine_WorkVDI     := "WORK_VDI"     ; Work VDI
 	static Machine_HomeDesktop := "HOME_DESKTOP" ; Home desktop
 	static Machine_HomeLaptop  := "HOME_LAPTOP"  ; Home laptop

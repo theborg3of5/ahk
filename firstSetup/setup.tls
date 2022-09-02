@@ -5,5 +5,5 @@
 
 	Home Desktop	desk | HOME_DESKTOP		HOME				HOME_DESKTOP
 	Home Laptop		hlap | HOME_LAPTOP		HOME				HOME_LAPTOP
-	Work Laptop		lap  | WORK_LAPTOP		WORK				WORK_LAPTOP
+	Work Laptop		lap  | WORK_DESKTOP		WORK				WORK_DESKTOP
 	Work VDI			vdi  | WORK_VDI			WORK				WORK_VDI

@@ -18,15 +18,15 @@
 		VMware Horizon Client	VMware\VMware Horizon View Client\vmware-view.exe
 	} ~PATH.addToStart(<PROGRAM_FILES>\) {
 		AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk
-		Chrome						Google\Chrome\Application\chrome.exe											WORK_LAPTOP
-		Chrome Messages			Google\Chrome\Application\chrome_proxy.exe 									WORK_LAPTOP
-		Chrome TickTick			Google\Chrome\Application\chrome_proxy.exe 									WORK_LAPTOP
+		Chrome						Google\Chrome\Application\chrome.exe											WORK_DESKTOP
+		Chrome Messages			Google\Chrome\Application\chrome_proxy.exe 									WORK_DESKTOP
+		Chrome TickTick			Google\Chrome\Application\chrome_proxy.exe 									WORK_DESKTOP
 		Everything					Everything\Everything.exe
 		Internet Explorer			Internet Explorer\iexplore.exe
 		KDiff							KDiff3\kdiff3.exe
 		Notepad++					Notepad++\notepad++.exe
-		OneNote						Microsoft Office\root\Office16\ONENOTE.EXE									WORK_LAPTOP
-		Outlook						Microsoft Office\root\Office16\OUTLOOK.EXE									WORK_LAPTOP
+		OneNote						Microsoft Office\root\Office16\ONENOTE.EXE									WORK_DESKTOP
+		Outlook						Microsoft Office\root\Office16\OUTLOOK.EXE									WORK_DESKTOP
 		TrueCrypt					TrueCrypt\TrueCrypt.exe
 		GrepWin						grepWin\grepWin.exe
 		yEd							yWorks\yEd\yEd.exe
@@ -39,20 +39,20 @@
 		Messenger					https://www.messenger.com
 		Slack							https://app.slack.com/client/<SLACK_MAIN_ID>
 		Gmail							https://mail.google.com/mail/u/0/#inbox
-		Gmail							https://mail.google.com/mail/u/1/#inbox										WORK_LAPTOP
+		Gmail							https://mail.google.com/mail/u/1/#inbox										WORK_DESKTOP
 		Teams							https://teams.microsoft.com
 	}
 	
-		Process Explorer			<PROGRAM_FILES>\Process Explorer\procexp.exe									WORK_LAPTOP
+		Process Explorer			<PROGRAM_FILES>\Process Explorer\procexp.exe									WORK_DESKTOP
 		Process Explorer			<EPIC_PERSONAL>\Programs\Process Explorer\procexp.exe						WORK_VDI
 		Process Explorer			<PROGRAM_FILES>\ProcessExplorer\procexp.exe
 	
-		EMC2							<EMC2_CURRENT_EXE>																	WORK_LAPTOP | WORK_VDI
+		EMC2							<EMC2_CURRENT_EXE>																	WORK_DESKTOP | WORK_VDI
 		GitHub Desktop				<USER_APPDATA_LOCAL>\GitHubDesktop\GitHubDesktop.exe
-		GrepWin						<USER_APPDATA_LOCAL>\Programs\grepWin\grepWin.exe							WORK_LAPTOP
+		GrepWin						<USER_APPDATA_LOCAL>\Programs\grepWin\grepWin.exe							WORK_DESKTOP
 		Slack							<USER_APPDATA_LOCAL>\slack\slack.exe											HOME_DESKTOP
 		Spotify						<USER_APPDATA>\Spotify\Spotify.exe
-		Teams							<USER_APPDATA_LOCAL>\Microsoft\Teams\current\Teams.exe					WORK_LAPTOP
+		Teams							<USER_APPDATA_LOCAL>\Microsoft\Teams\current\Teams.exe					WORK_DESKTOP
 		Telegram						<USER_APPDATA>\Telegram Desktop\Telegram.exe
 		Firefox Portable			S:\FirefoxPortable\FirefoxPortable.exe											HOME_DESKTOP
 	

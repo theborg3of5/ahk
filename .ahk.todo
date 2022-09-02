@@ -1,4 +1,6 @@
 # New Ideas
+	SelectorGui is very slow lately - could we speed it up somehow?
+		Might be a question of switching to built-in Gui positioning options as mentioned below?
 	Could I use hotstrings to about stuff like (i.e. xxx) from capitalizing incorrectly?
 	Clean out OneNote recurring todo stuff - no longer used
 	Consider a "record macro" set of hotkeys (like Notepad++ has built-in).
@@ -31,6 +33,27 @@
 		If I go through the trouble of doing this, also make index/abbreviation columns resize dynamically
 			Would need some way to figure out the max width of all text that WILL BE in a given column
 			OR: add all of one column, for the entire super-column, at once - then use xs+n to place the next column, etc.
+		Current functionality I'd want to duplicate:
+			Popup behavior
+				Size to contents (but ideally only to a point, then maybe scroll?)
+				No max/min buttons
+				Custom background/text colors
+				Grayed-out fields when default values (labels as "ghost" text, color changes live)
+				Enter to submit
+				Esc to cancel
+				Choice field focuses on startup
+			Content sizing
+				10px margin around main content
+				Specific padding between elements (5px index-abbrev, 10px abbrev-name, 5px between override fields, 30px between columns)
+				Dynamic widths for index/abbrev (if possible - current behavior is 25px index, 50px abbrev) and name (actually dynamic 	right now)
+				25px line height (on choices)
+				24px field height
+				First field width
+					If no overrides: full width
+					If overrides: index width + abbrev width (+ padding between)
+				Override field widths span remaining width equally
+				Sections (header + empty line at end)
+		Make sure to update Selector/SelectorGui documentation if stuff changes
 	Dynamically resize abbreviation column based on widest value?
 		To allow longer abbreviations
 		Is that going to get weird with SelectorGui+FlexTable interactions?

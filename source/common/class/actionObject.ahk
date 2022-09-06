@@ -67,6 +67,10 @@ class ActionObject {
 		} else if(ActionObjectPath.isThisType(this.value, pathType)) {
 			this.type    := this.Type_Path
 			this.subType := pathType
+			
+		} else if(ActionObjectSVN.isThisType(this.value, revisionNum)) {
+			this.type    := this.Type_SVN
+			this.value   := revisionNum
 		
 		} else if(ActionObjectEMC2.isThisType(this.value, ini, id)) {
 			this.type    := this.Type_EMC2

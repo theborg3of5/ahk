@@ -5,7 +5,7 @@
 	Note that several other operations are also available from the base class (.copyLink*(), .linkSelectedText*()).
 	
 	Example Usage
-;		ao := new ActionObjectSVN(1234567) ; Will prompt the user for the repository URL (or replaceable tag)
+;		ao := new ActionObjectSVN(1234567)
 ;		ao.open() ; Open in TortoiseSVN
 	
 */ ; --=
@@ -17,7 +17,6 @@ class ActionObjectSVN extends ActionObjectBase {
 	
 	; @GROUP@ 
 	revision := "" ; SVN revision to work with.
-	repoURL  := "" ; The URL for the repository that the revision is from.
 	; @GROUP-END@
 	
 	
@@ -25,25 +24,39 @@ class ActionObjectSVN extends ActionObjectBase {
 	; DESCRIPTION:    Create a new reference to a CodeSearch object.
 	; PARAMETERS:
 	;  revision (I,REQ) - SVN revision to work with.
-	;  repoURL  (I,OPT) - URL for the SVN repository.
 	;---------
-	__New(revision, repoURL := "") {
-		if(!this.selectMissingInfo(revision, repoURL))
-			return ""
-		
+	__New(revision) {
 		this.revision := revision
-		this.repoURL  := repoURL
 	}
 	
 	;---------
-	; DESCRIPTION:    Open the given revision in the TortoiseSVN log window.
+	; DESCRIPTION:    Determine whether the given string must be an SVN revision.
+	; PARAMETERS:
+	;  value       (I,REQ) - The value to evaluate
+	;  revisionNum (O,OPT) - If the value is a revision, the revision number
+	; RETURNS:        true/false - whether the given value must be an SVN revision.
 	;---------
-	open() {
-		runString := "TortoiseProc.exe /command:log /path:""<REPO_URL>"" /closeonend:0 /startrev:<REVISION> /endrev:<REVISION>"
-		runString := runString.replaceTag("REVISION", this.revision)
-		runString := runString.replaceTag("REPO_URL", this.repoURL)
+	isThisType(value, ByRef revisionNum := "") {
+		if(!Config.contextIsWork)
+			return false
 		
-		Run(runString)
+		if(!value.startsWithAnyOf(["svn ", "commit ", "revision "], matchedKeyword))
+			return false
+		
+		revisionNum := value.removeFromStart(matchedKeyword)
+		return true
+	}
+	
+	;---------
+	; DESCRIPTION:    Get a link to the revision.
+	; RETURNS:        Link to the SVN revision in the TortoiseSVN log window.
+	;---------
+	getLink() {
+		link := "tsvncmd:command:log?path:<EPIC_SVN_URL>?startrev:<REVISION>?endrev:<REVISION>"
+		link := Config.replacePrivateTags(link) ; Handles EPIC_SVN_URL
+		link := link.replaceTag("REVISION", this.revision)
+		
+		return link
 	}
 	; #END#
 }

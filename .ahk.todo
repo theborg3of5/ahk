@@ -1,6 +1,11 @@
 # New Ideas
 	SelectorGui is very slow lately - could we speed it up somehow?
 		Might be a question of switching to built-in Gui positioning options as mentioned below?
+	ActionObject: would it make sense to always compare the "first word" of the given value to the TLS?
+		Would make stuff like the helpdesk and SVN handling work without needing a separate function
+			SVN handling in particular would be nicer because we can get the repo URL from the TLS instead of having to get it out of privates.
+		Potentially tricky bit: pre-processing we do for EMC2 records (with their additional title and whatnot)
+			We could theoretically just run that a second time, though.
 	Could I use hotstrings to about stuff like (i.e. xxx) from capitalizing incorrectly?
 	Clean out OneNote recurring todo stuff - no longer used
 	Consider a "record macro" set of hotkeys (like Notepad++ has built-in).

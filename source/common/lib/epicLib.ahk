@@ -353,7 +353,7 @@ class EpicLib {
 	getUsefulEMC2RecordWindows() {
 		windows := [] ; [ {windowName, title} ]
 		
-		; Normal titles
+		; Normal titles (none of these can have the record title in them, so don't include that bit)
 		For _,windowName in ["EMC2", "EpicStudio", "Visual Studio", "Explorer"] {
 			title := Config.windowInfo[windowName].getCurrTitle()
 			title := title.removeFromEnd(windowName).clean("-") ; Trim the window name off the end - we're gonna show it at the start anyways.
@@ -371,6 +371,26 @@ class EpicLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Certain named windows will never have the EMC2 record title in them.
+	; PARAMETERS:
+	;  windowName (I,REQ) - The window name to check
+	; RETURNS:        true/false - can this window's title contain the EMC2 record title?
+	;---------
+	canWindowIncludeEMC2RecordTitle(windowName) {
+		; Not a named window - we don't know, so allow it.
+		if(!windowName)
+			return true
+		
+		; Certain windows will only ever include the INI/ID, never the record title.
+		noTitleWindows := ["EMC2", "EpicStudio", "Visual Studio", "Explorer", "VB6"]
+		if(noTitleWindows.contains(windowName))
+			return false
+		
+		; It could!
+		return true
+	}
+	
+	;---------
 	; DESCRIPTION:    Given a string, pull all described EMC2 records out and return them.
 	; PARAMETERS:
 	;  text       (I,REQ) - The string to extract records from.
@@ -378,6 +398,7 @@ class EpicLib {
 	;                       "x") and ID (numeric or with a special DLG prefix like "I").
 	;  possibles  (O,OPT) - Potential matches, where we only have a valid ID (user can enter the INI).
 	;  windowName (I,OPT) - If provided, we'll stamp this window name on EpicRecord.label for all returned matches.
+	;                       Can also affect whether we try to actually get the record title out of the given string.
 	;---------
 	extractEMC2RecordsFromText(text, ByRef exacts := "", ByRef possibles := "", windowName := "") {
 		exacts    := []
@@ -386,7 +407,7 @@ class EpicLib {
 		; Make sure the text is in a decent state to be parsed.
 		text := text.clean()
 		
-		; First, give EpicRecord's parsing logic a shot - since most titles are close to this format, it gives us the best chance at a nicer title.
+		; First, give EpicRecord's more-stringent parsing logic a shot - since most titles are close to this format, it gives us the best chance at a nicer title.
 		record := new EpicRecord().initFromRecordString(text)
 		if(this.couldBeEMC2Record(record.ini, record.id)) {
 			record.label := windowName
@@ -397,9 +418,12 @@ class EpicLib {
 		; Split up the text and look for potential IDs.
 		textBits := text.split([" ", ",", "-", "(", ")", "[", "]", "/", "\", ":", ".", "#", "`t"], " ").removeEmpties()
 		For i,id in textBits {
+			recordTitle := ""
+			
 			; Extract other potential info
 			ini := textBits[i - 1] ; INI is assumed to be the piece just before the ID.
-			recordTitle := this.cleanEMC2RecordTitle(text, ini, id)
+			if(this.canWindowIncludeEMC2RecordTitle(windowName)) ; Certain windows will never contain the record title - filter out the title here so it doesn't potentially "win" when there are duplicates.
+				recordTitle := this.cleanEMC2RecordTitle(text, ini, id)
 			
 			; Match: Valid INI + ID.
 			if(this.couldBeEMC2Record(ini, id)) {

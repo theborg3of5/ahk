@@ -107,7 +107,7 @@ class DebugTable extends TextTable {
 		; Special case: if the first parameter starts with a + character, treat it as a subtitle.
 		if(params[1].startsWith("+")) {
 			subtitle := params.removeAt(1).removeFromStart("+")
-			this.setTitle(this.title ": " subtitle)
+			this.setTitle(this.title.appendPiece(subtitle, ": "))
 		}
 		
 		Loop, % params.MaxIndex() // 2 {

@@ -1,4 +1,6 @@
 # New Ideas
+	Could we make linking hotkey more reliable by generating an (RTF?) link on the clipboard and pasting it, rather than relying on the linking popups?
+		Might only work in certain contexts.
 	SelectorGui is very slow lately - could we speed it up somehow?
 		Might be a question of switching to built-in Gui positioning options as mentioned below?
 	ActionObject: would it make sense to always compare the "first word" of the given value to the TLS?

@@ -44,8 +44,6 @@
 	Downloads								USER_DOWNLOADS							<USER_ROOT>\Downloads
 
 	; Dev
-	User Dev									USER_DEV									<USER_ROOT>\OneDrive - Epic\Dev
-	NotepadPlusPlus Sessions			NOTEPAD_PP_SESSIONS					<USER_ROOT>\OneDrive - Epic\Dev\NotepadPlusPlus Sessions
 	Onetastic Macros						ONETASTIC_MACROS						<USER_ROOT>\OnetasticMacros
 	Onetastic Functions					ONETASTIC_FUNCTIONS					<USER_ROOT>\OnetasticMacros\Functions
 
@@ -53,9 +51,12 @@
 	; Work
 	Epic Source								EPIC_SOURCE								C:\EpicSource
 	Epic Source Current S1				EPIC_SOURCE_S1							<EPIC_SOURCE_CURRENT>\App St1
+	User Dev									USER_DEV									<USER_ROOT>\OneDrive - Epic\Dev
+	NotepadPlusPlus Sessions			NOTEPAD_PP_SESSIONS					<USER_ROOT>\OneDrive - Epic\Dev\NotepadPlusPlus Sessions
 	VB6 Compile								VB6_COMPILE								<EPIC_SOURCE_CURRENT>\Compile
 	Transaction Diff						TX_DIFF									C:\Program Files\TransactionDiff
 	Transaction Diff Results			TX_DIFF_OUTPUT							<USER_ROOT>\OneDrive - Epic\Dev\TransactionDiffOutput
 	EpicStudio Global Highlights		EPICSTUDIO_GLOBAL_HIGHLIGHTS		<EPIC_PERSONAL>\EpicStudioGlobalHighlights
 	Epic Personal AHK						EPIC_PERSONAL_AHK						<EPIC_PERSONAL>\ahk
+	Specifics								USER_SPECIFICS							<USER_ROOT>\OneDrive - Epic\Specifics
 }

@@ -23,7 +23,7 @@ class SearchLib {
 		For _,subType in subTypesAry { ; For searching multiple at once.
 			Switch data["SEARCH_TYPE"] {
 				Case "WEB":        SearchLib.urlBase(subType, searchTerm)
-				Case "CODESEARCH": SearchLib.codeSearch(searchTerm, subType, data["APP_KEY"])
+				Case "CODESEARCH": Run(SearchLib.buildCodeSearchURL(subType, searchTerm, data["TYPE_FILTER"], data["APP_KEY"]))
 				Case "GURU":       SearchLib.guru(searchTerm)
 				Case "HUBBLE":     SearchLib.hubble(searchTerm, subType)
 				Case "WIKI":       SearchLib.epicWiki(searchTerm, subType) ; Epic wiki search.
@@ -36,37 +36,50 @@ class SearchLib {
 	;---------
 	; DESCRIPTION:    Search for a term using the given base URL.
 	; PARAMETERS:
-	;  searchBaseURL (I,REQ) - The "base" URL (with %s in place of the search term) to search with.
+	;  searchBaseURL (I,REQ) - The "base" URL (with <QUERY> in place of the search term) to search with.
 	;  searchTerm    (I,REQ) - The term to search for.
 	;---------
 	urlBase(searchBaseURL, searchTerm) {
 		searchTerm := SearchLib.escapeTermForRunURL(searchTerm)
-		url := searchBaseURL.replace("%s", searchTerm)
+		url := searchBaseURL.replaceTag("QUERY", searchTerm)
 		Run(url)
 	}
 
 	;---------
-	; DESCRIPTION:    Search for the given term/type/app with CodeSearch.
+	; DESCRIPTION:    Build a CodeSearch URL for the given term, type, app, etc.
 	; PARAMETERS:
-	;  searchTerm (I,REQ) - Text to search for.
-	;  searchType (I,REQ) - Type of search, from: Server, Client, Records, ProgPoint
-	;  appKey     (I,OPT) - App key (goes on the end of CS_APP_ID_ for a private value) to search only
-	;                       within that app's code. Defaults to all apps (no filter).
+	;  searchType          (I,REQ) - Type of search (routine/client/records/other)
+	;  searchTerm          (I,OPT) - Text to search for.
+	;  clientSearchSubType (I,OPT) - If the type of search is client, the subtype (number that filters to only scripts, only C#, etc.)
+	;  appKey              (I,OPT) - App key (goes on the end of CS_APP_ID_ for a private value) to search only
+	;                                within that app's code. Defaults to all apps (no filter).
+	;  action              (I,OPT) - If you're doing something other than searching, enter the action (param=x) here.
+	;                                Defaults to "search=1" for running searches.
+	;  nameFilter          (I,OPT) - File name to filter by (will be searched as "contains").
 	;---------
-	codeSearch(searchTerm, searchType, appKey := "") {
-		if(!searchType) ; Gotta know where to search.
+	buildCodeSearchURL(searchType, searchTerm, clientSearchSubType := "", appKey := "", action := "", nameFilter := "") {
+		if(!searchType) ; Gotta know how to search.
 			return ""
 		
-		searchTerm := SearchLib.escapeTermForRunURL(searchTerm)
-		if(appKey = "DBC") ; Only set this whole term if we have a key.
-			appCriteria := "&apps=" Config.private["CS_APP_ID_DBC"]
+		if(action = "")
+			action := "search=1"
+		
+		params := ""
+		if(searchTerm != "")
+			params .= "&a=" SearchLib.escapeTermForRunURL(searchTerm) ; Actual query
+		if(clientSearchSubType != "")
+			params .= "&showall=" clientSearchSubType ; Subtype of files to filter to for client searches
+		if(appKey = "DBC")
+			params .= "&apps=" Config.private["CS_APP_ID_DBC"] ; Apps to limit ownership to
+		if(nameFilter != "")
+			params .= "&namefilter=2&namefiltertext=" nameFilter ; Name filter (when searching by filename)
 		
 		url := Config.private["CS_BASE"]
+		url := url.replaceTag("ACTION",       action)
 		url := url.replaceTag("SEARCH_TYPE",  searchType)
-		url := url.replaceTag("APP_CRITERIA", appCriteria)
-		url := url.replaceTag("QUERY", "&a=" searchTerm)
+		url := url.replaceTag("OTHER_PARAMS", params)
 		
-		Run(url)
+		return url
 	}
 
 	;---------

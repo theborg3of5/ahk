@@ -1,53 +1,57 @@
 ﻿@WindowTitle(Select type of search)
 
-[		NAME									ABBREV				SUBTYPE																						SEARCH_TYPE		APP_KEY		CONTEXT		SEARCH_TERM	]
-(		0										0						0																								0					0				0				1				)
+[		NAME										ABBREV				SUBTYPE																								TYPE_FILTER		SEARCH_TYPE		APP_KEY		CONTEXT		SEARCH_TERM	]
+(		0											0						0																										0					0					0				0				1				)
 
 # Web
-; (SUBTYPE = <URL with %s for query>)
+; (SUBTYPE = <URL with <QUERY> for query>)
 ~SEARCH_TYPE.replaceWith(WEB) {
-		Google								g						https://www.google.com/search?q=%s
-		Google Maps							gmap | gmaps		https://www.google.com/maps/preview?q=%s
-		Gmail									gm						https://mail.google.com/mail/u/0/#search/%s										-					-				HOME
-		Gmail									gm						https://mail.google.com/mail/u/1/#search/%s										-					-				WORK
-		Youtube								yt						https://www.youtube.com/results?search_query=%s
-		Steam									st						https://store.steampowered.com/search/?term=%s
-		AutoHotkey Docs					ahkd					https://cse.google.com/cse?cx=010629462602499112316:ywoq_rufgic&q=%s
-		Translate Dutch > English		tde | detrans		https://translate.google.com/#nl/en/%s
-		Translate English > Dutch		ted | edtrans		https://translate.google.com/#en/nl/%s
+		Google									g						https://www.google.com/search?q=<QUERY>
+		Google Maps								gmap | gmaps		https://www.google.com/maps/preview?q=<QUERY>
+		Gmail										gm						https://mail.google.com/mail/u/0/#search/<QUERY>										-					-					-				HOME
+		Gmail										gm						https://mail.google.com/mail/u/1/#search/<QUERY>										-					-					-				WORK
+		Youtube									yt						https://www.youtube.com/results?search_query=<QUERY>
+		Steam										st						https://store.steampowered.com/search/?term=<QUERY>
+		AutoHotkey Docs						ahkd					https://cse.google.com/cse?cx=010629462602499112316:ywoq_rufgic&q=<QUERY>
+		Translate Dutch > English			tde | detrans		https://translate.google.com/#nl/en/<QUERY>
+		Translate English > Dutch			ted | edtrans		https://translate.google.com/#en/nl/<QUERY>
 	
-		Google Maps Hospital				gh						https://www.google.com/maps/dir/600+Highland+Avenue,+Madison,+WI/%s
+		Google Maps Hospital					gh						https://www.google.com/maps/dir/600+Highland+Avenue,+Madison,+WI/<QUERY>
 }
 
 # GrepWin
 ; (SUBTYPE = folder)
 ~SEARCH_TYPE.replaceWith(GREPWIN) {
-		AHK Root								ahkr					<AHK_ROOT>
-		AHK Source							ahks | ahkf			<AHK_SOURCE>
-		AHK Todo								ahkt					<AHK_SOURCE>																				-					-				-				GDB TODO
-		Onetastic Macros					ot						<ONETASTIC_MACROS>
-		XGDB Routines						x | xgdb				<EPIC_NFS_ASK>\XGDB
+		AHK Root									ahkr					<AHK_ROOT>
+		AHK Source								ahks | ahkf			<AHK_SOURCE>
+		AHK Todo									ahkt					<AHK_SOURCE>																						-					-					-				-				GDB TODO
+		Onetastic Macros						ot						<ONETASTIC_MACROS>
+		XGDB Routines							x | xgdb				<EPIC_NFS_ASK>\XGDB
 }
 
 # Other
-		Everything (file search)		e | ev				-																								EVERYTHING
+		Everything (file search)			e | ev				-																										-					EVERYTHING
 
 ~CONTEXT.replaceWith(WORK) {
 	~SEARCH_TYPE.replaceWith(CODESEARCH) {
 # ! Codesearch
-		Server								s						routine
-		Client								c						client
-		Server + Client					sc | cs				routine|client
-		Records								r						records
-		Other									o | p					other
-		All									a						routine|client|records|other
+		Database									d						routine
+		Client (all types)					c						client
+		Client (VB)								vb						client																								8
+		Client (all web)						w						client																								1
+		Client (web server)					ws						client																								4
+		Client (web client)					wc						client																								2
+		Database + Client (all types)		sc | cs				routine|client
+		Records									r						records
+		Other										o | p					other
+		All										a						routine|client|records|other
 		
 # Codesearch Specifics
-		Server DBC							sd						routine																						-					DBC
+		Server DBC								sd						routine																								-					-					DBC
 	}
 	
 # Other
-		Guru									gu						-																								GURU
-		DBC Wiki								d | dbc				DBC																							WIKI
-		Active QANs							q | qan				QAN																							HUBBLE
+		Guru										gu						-																										-					GURU
+		DBC Wiki									dbc					DBC																									-					WIKI
+		Active QANs								q | qan				QAN																									-					HUBBLE
 }

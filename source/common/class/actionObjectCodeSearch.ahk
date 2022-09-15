@@ -53,14 +53,10 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 	getLink() {
 		Switch this.locationType {
 			Case this.LocationType_Server:
-				EpicLib.splitServerLocation(this.location, routine, tag)
-				routine := StringLib.encodeForURL(routine)
-				tag     := StringLib.encodeForURL(tag)
-				
-				return Config.private["CS_SERVER_BASE"].replaceTags({"ROUTINE":routine, "TAG":tag})
+				return SearchLib.buildCodeSearchURL("routine", "", "", "", "name=" this.location)
 				
 			Case this.LocationType_Client:
-				return Config.private["CS_CLIENT_BASE"].replaceTag("FILENAME", this.location)
+				return SearchLib.buildCodeSearchURL("client", "", "", "", "", this.location)
 		}
 		
 		return ""

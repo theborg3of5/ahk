@@ -172,10 +172,14 @@ class WindowActions {
 	; PARAMETERS:
 	;  action      (I,REQ) - The action to perform, from WindowActions.Action_* constants.
 	;  name        (I,OPT) - The name of the window, as identified in windows.tl. Either this or titleString is required.
-	;  titleString (I,OPT) - A title string that identifies the window we want to perform the action on. Either this or name is
+	;  titleString (I,OPT) - A title string that identifies the window we want to perform the acton on. Either this or name is
 	;                        required.
 	;---------
 	windowAction(action, name := "", titleString := "") {
+		if(action != this.Action_Close && action != this.Action_Activate && action != this.Action_DeleteWord && Config.findWindowName(titleString) = "Telegram") {
+			Debug.toast("+Telegraming something in windowAction()", "titleString",titleString, "action",action, "Config.findWindowName(titleString)",Config.findWindowName(titleString), "this.Action_EscapeKey",this.Action_EscapeKey, "WindowActions.Action_Close",WindowActions.Action_Close)
+		}
+		
 		if(!action)
 			return
 		if(!titleString && !name)

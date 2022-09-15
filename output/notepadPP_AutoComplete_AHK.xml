@@ -1095,10 +1095,8 @@
 							; DESCRIPTION:    Create a new reference to a CodeSearch object.
 							; PARAMETERS:
 							;  revision (I,REQ) - SVN revision to work with.
-							;  repoURL  (I,OPT) - URL for the SVN repository.
 							;---------">
                 <Param name="revision" />
-                <Param name="repoURL := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectSVN.ActionObjectType" func="yes">
@@ -1136,12 +1134,10 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectSVN.getLink" func="yes">
-            <Overload retVal="{ActionObjectBase}" descr="
+            <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Get the link for the object.
-							; RETURNS:        Link to the object.
-							; NOTES:          Should typically be overridden by child class, unless that child class doesn't want a link (or only
-							;                 wants web/edit-specific links).
+							; DESCRIPTION:    Get a link to the revision.
+							; RETURNS:        Link to the SVN revision in the TortoiseSVN log window.
 							;---------">
             </Overload>
         </KeyWord>
@@ -1159,6 +1155,19 @@
 							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
 							;                 overridden by the child class.
 							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVN.isThisType" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether the given string must be an SVN revision.
+							; PARAMETERS:
+							;  value       (I,REQ) - The value to evaluate
+							;  revisionNum (O,OPT) - If the value is a revision, the revision number
+							; RETURNS:        true/false - whether the given value must be an SVN revision.
+							;---------">
+                <Param name="value" />
+                <Param name="ByRef revisionNum := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectSVN.linkSelectedText" func="yes">
@@ -1195,10 +1204,15 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectSVN.open" func="yes">
-            <Overload retVal="" descr="
+            <Overload retVal="{ActionObjectBase}" descr="
 							;---------
-							; DESCRIPTION:    Open the given revision in the TortoiseSVN log window.
+							; DESCRIPTION:    Open the object.
+							; PARAMETERS:
+							;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
+							; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
+							;                 the web- and edit-specific functions will call thru any overriden logic.
 							;---------">
+                <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="ActionObjectSVN.openEdit" func="yes">
@@ -1212,13 +1226,6 @@
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object, specifically in web mode.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="ActionObjectSVN.repoURL" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    The URL for the repository that the revision is from.
 							;---------">
             </Overload>
         </KeyWord>
@@ -5996,19 +6003,26 @@
             </Overload>
         </KeyWord>
         <KeyWord name="ScrollLock"/>
-        <KeyWord name="SearchLib.codeSearch" func="yes">
+        <KeyWord name="SearchLib.buildCodeSearchURL" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Search for the given term/type/app with CodeSearch.
+							; DESCRIPTION:    Build a CodeSearch URL for the given term, type, app, etc.
 							; PARAMETERS:
-							;  searchTerm (I,REQ) - Text to search for.
-							;  searchType (I,REQ) - Type of search, from: Server, Client, Records, ProgPoint
-							;  appKey     (I,OPT) - App key (goes on the end of CS_APP_ID_ for a private value) to search only
-							;                       within that app's code. Defaults to all apps (no filter).
+							;  searchType          (I,REQ) - Type of search (routine/client/records/other)
+							;  searchTerm          (I,OPT) - Text to search for.
+							;  clientSearchSubType (I,OPT) - If the type of search is client, the subtype (number that filters to only scripts, only C#, etc.)
+							;  appKey              (I,OPT) - App key (goes on the end of CS_APP_ID_ for a private value) to search only
+							;                                within that app's code. Defaults to all apps (no filter).
+							;  action              (I,OPT) - If you're doing something other than searching, enter the action (param=x) here.
+							;                                Defaults to &quot;search=1&quot; for running searches.
+							;  nameFilter          (I,OPT) - File name to filter by (will be searched as &quot;contains&quot;).
 							;---------">
-                <Param name="searchTerm" />
                 <Param name="searchType" />
+                <Param name="searchTerm" />
+                <Param name="clientSearchSubType := &quot;&quot;" />
                 <Param name="appKey := &quot;&quot;" />
+                <Param name="action := &quot;&quot;" />
+                <Param name="nameFilter := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="SearchLib.epicWiki" func="yes">
@@ -6081,7 +6095,7 @@
 							;---------
 							; DESCRIPTION:    Search for a term using the given base URL.
 							; PARAMETERS:
-							;  searchBaseURL (I,REQ) - The &quot;base&quot; URL (with %s in place of the search term) to search with.
+							;  searchBaseURL (I,REQ) - The &quot;base&quot; URL (with <QUERY> in place of the search term) to search with.
 							;  searchTerm    (I,REQ) - The term to search for.
 							;---------">
                 <Param name="searchBaseURL" />

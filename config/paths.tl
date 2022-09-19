@@ -33,6 +33,7 @@
 	Epic Environment TraceX Files		EPIC_HSWEB_TRACE
 	Epic Shared UX Resources			EPIC_UX_SHARED
 	Epic OneDrive Root					EPIC_ONEDRIVE_ROOT
+	Epic DBC Weekly Search Results	EPIC_WEEKLY_SEARCH_RESULTS
 }
 
 	; General

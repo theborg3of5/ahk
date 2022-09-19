@@ -39,4 +39,5 @@
 	DBC Design						dbcd		<EPIC_DBC_DESIGN>
 	DBC Partial Installers		dbcpi		<EPIC_DBC_PARTIAL_INSTALLERS>
 	Environment TraceX Files	etrace	<EPIC_HSWEB_TRACE>
+	Weekly Search Results		search	<EPIC_WEEKLY_SEARCH_RESULTS>
 }

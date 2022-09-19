@@ -166,12 +166,15 @@
 	; #PRIVATE#
 	
 	;---------
-	; DESCRIPTION:    Get the current tab's URL, using the Quick Copy URL extension:
-	;                 https://chrome.google.com/webstore/detail/quick-copy-url/pejnfjhmapcmemanpjfalfkmeblolhnj
+	; DESCRIPTION:    Get the current tab's URL, by copying it out of the address bar.
 	; RETURNS:        The current tab's URL
 	;---------
 	getRawURL() {
-		return ClipboardLib.getWithHotkey("!c") ; !c = "Copy the URL of your current tab" hotkey
+		Send, ^l ; Focus address bar
+		url := ClipboardLib.getWithHotkey("^c")
+		Send, {Esc} ; Unfocus address bar
+		
+		return url
 	}
 	
 	;---------

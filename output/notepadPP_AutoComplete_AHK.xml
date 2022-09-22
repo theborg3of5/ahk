@@ -1714,6 +1714,17 @@
                 <Param name="textToSave" />
             </Overload>
         </KeyWord>
+        <KeyWord name="ClipboardLib.copyCodeLocationRelativeToSource" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Grabs the path for the current file, trims it down to the bit inside the DLG/App * folder, adds any
+							;                 currently selected text as a function, and puts it on the clipboard.
+							; PARAMETERS:
+							;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
+							;---------">
+                <Param name="hotkeyKeys" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ClipboardLib.copyFilePathWithHotkey" func="yes">
             <Overload retVal="" descr="
 							;---------
@@ -3873,6 +3884,14 @@
             <Overload retVal="[Property]" descr="
 							;---------
 							; DESCRIPTION:    Space-delimited
+							; GROUP:          Formats for reading/writing lists
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="FormattedList.Format_Underscore" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Underscore-delimited
 							; GROUP:          Formats for reading/writing lists
 							;---------">
             </Overload>

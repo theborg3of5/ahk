@@ -11,7 +11,8 @@
 	
 	; Current file/folder operations
 	!c::  ClipboardLib.copyFilePathWithHotkey(  "!c")
-	^!#c::ClipboardLib.copyPathRelativeToSource("!c") ; Current file, but drop the usual EpicSource stuff up through the DLG folder.
+	!#c:: ClipboardLib.copyPathRelativeToSource("!c")         ; Current file path, but drop the usual EpicSource stuff up through the DLG folder.
+	^!#c::ClipboardLib.copyCodeLocationRelativeToSource("!c") ; Current file + selected text as a function, but drop the usual EpicSource stuff up through the DLG folder.
 	^+o::NotepadPlusPlus.openCurrentParentFolder()
 	
 	; For program scripts, swap to corresponding class script and back.

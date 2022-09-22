@@ -116,7 +116,38 @@ class ClipboardLib {
 		
 		path := EpicLib.convertToSourceRelativePath(path)
 		
-		ClipboardLib.setAndToast(path, "Source-relative path")
+		ClipboardLib.setAndToast(path, "source-relative path")
+	}
+	
+	;---------
+	; DESCRIPTION:    Grabs the path for the current file, trims it down to the bit inside the DLG/App * folder, adds any
+	;                 currently selected text as a function, and puts it on the clipboard.
+	; PARAMETERS:
+	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
+	;---------
+	copyCodeLocationRelativeToSource(hotkeyKeys) {
+		path := ClipboardLib.getWithHotkey(hotkeyKeys)
+		if(!path) {
+			Toast.ShowError("Could not copy source-relative path", "Failed to get file path")
+			return
+		}
+		
+		path := EpicLib.convertToSourceRelativePath(path)
+		if(!path)
+			return ; convertToSourceRelativePath should have already showed an error, so no need to do another here.
+		
+		; Function name will come from selected text (if any)
+		functionName := SelectLib.getText()
+		
+		; If no function, just use the path.
+		if(functionName = "" || functionName.contains("`n")) { ; If there's a newline then nothing was selected, we just copied the whole line.
+			ClipboardLib.setAndToast(path, "source-relative path")
+			return
+		}
+		
+		; Otherwise include the function.
+		path .= "::" functionName "()"
+		ClipboardLib.setAndToast(path, "source-relative full code location")
 	}
 	
 	;---------

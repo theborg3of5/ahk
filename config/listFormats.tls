@@ -6,5 +6,6 @@
 	Space-delimited					s			SPACE
 	Comma-delimited					c			COMMA
 	Comma-delimited with spaces	cs			COMMA_SPACED
+	Underscore_delimited				u			UNDERSCORE
 	Newline-delimited					nl			NEWLINE
 	OneNote Column						o			ONENOTE_COLUMN

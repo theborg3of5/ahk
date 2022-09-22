@@ -15,6 +15,7 @@ class FormattedList {
 	static Format_Space         := "SPACE"          ; Space-delimited
 	static Format_Commas        := "COMMA"          ; Comma-delimited (no space)
 	static Format_CommasSpaced  := "COMMA_SPACED"   ; Comma-delimited (with spaces)
+	static Format_Underscore    := "UNDERSCORE"     ; Underscore-delimited
 	static Format_NewLines      := "NEWLINE"        ; Newline-delimited
 	static Format_OneNoteColumn := "ONENOTE_COLUMN" ; OneNote columns (double-newline delimited)
 	; @GROUP-END@
@@ -213,6 +214,7 @@ class FormattedList {
 			Case this.Format_Space:        return this.listAry.join(" ")
 			Case this.Format_Commas:       return this.listAry.join(",")
 			Case this.Format_CommasSpaced: return this.listAry.join(", ")
+			Case this.Format_Underscore:   return this.listAry.join("_")
 			Case this.Format_NewLines:     return this.listAry.join("`n")
 			Default:                       return ""
 		}
@@ -230,7 +232,7 @@ class FormattedList {
 		
 		Switch format {
 			; Stuff that doesn't involve extra keys - just Send what comes out of .getListInFormat().
-			Case this.Format_Space,this.Format_Commas,this.Format_CommasSpaced,this.Format_NewLines:
+			Case this.Format_Space, this.Format_Commas, this.Format_CommasSpaced, this.Format_Underscore, this.Format_NewLines:
 				SendRaw, % this.getListInFormat(format)
 				return true
 				

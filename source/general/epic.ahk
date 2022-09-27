@@ -159,21 +159,42 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			else
 				dlgId := recId
 			
-			textToSend := Config.private["OUTLOOK_TLG_BASE"]
-			textToSend := textToSend.replaceTag("MESSAGE",  combinedMessage) ; Replace the message first in case it contains any of the following tags
-			textToSend := textToSend.replaceTag("TLP",      data["TLP"])
-			textToSend := textToSend.replaceTag("CUSTOMER", data["CUSTOMER"])
-			textToSend := textToSend.replaceTag("SLG",      slgId)
-			textToSend := textToSend.replaceTag("DLG",      dlgId)
-			textToSend := textToSend.replaceTag("PRJ",      prjId)
-			textToSend := textToSend.replaceTag("QAN",      qanId)
+			; Build the event title string
+			eventTitle := Config.private["OUTLOOK_TLG_BASE"]
+			eventTitle := eventTitle.replaceTag("MESSAGE",  combinedMessage) ; Replace the message first in case it contains any of the following tags
+			eventTitle := eventTitle.replaceTag("TLP",      data["TLP"])
+			eventTitle := eventTitle.replaceTag("CUSTOMER", data["CUSTOMER"])
+			eventTitle := eventTitle.replaceTag("SLG",      slgId)
+			eventTitle := eventTitle.replaceTag("DLG",      dlgId)
+			eventTitle := eventTitle.replaceTag("PRJ",      prjId)
+			eventTitle := eventTitle.replaceTag("QAN",      qanId)
+			
+			replaceExtraEventTitleSlashes(eventTitle)
 			
 			if(Outlook.isTLGCalendarActive()) {
-				SendRaw, % textToSend
+				SendRaw, % eventTitle
 				Send, {Enter}
 			} else {
-				ClipboardLib.setAndToastError(textToSend, "event string", "Outlook TLG calendar not focused.")
+				ClipboardLib.setAndToastError(eventTitle, "event string", "Outlook TLG calendar not focused.")
 			}
+		}
+		; We only need slashes before the last non-blank element before the comma (i.e. always 1 after the
+		; TLP, but after that we only need enough to put the last element in the right spot). Remove the
+		; extras to clean up the display.
+		replaceExtraEventTitleSlashes(ByRef title) {
+			idString := title.beforeString(", ")
+			message := title.afterString(", ")
+			
+			Loop {
+				if(!idString.endsWith("/")) ; Should only remove trailing slashes, not anything at the start or in the middle.
+					Break
+				if(idString.countMatches("/") <= 1) ; Keep at least one slash (after the TLP) for conditional formatting to use.
+					Break
+				idString := idString.removeFromEnd("/")
+			}
+			
+			; String it back together to return.
+			title := idString ", " message
 		}
 	
 	^!+r::

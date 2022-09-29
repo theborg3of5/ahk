@@ -2,8 +2,10 @@
 #If Config.isWindowActive("Word")
 	; Copy the current document location
 	!c::
-		Send, !1 ; Document location (quick access position #1, should select field)
-		ClipboardLib.copyFilePathWithHotkey("^c")
+		Send, !fi ; File > Info
+		Sleep, 250 ; Wait for File pane to finish appearing
+		ClipboardLib.copyFilePathWithHotkey("c") ; Copy Path
+		Send, {Esc} ; Close the File pane
 	return
 	
 	; Open (dialog, not screen)

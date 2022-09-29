@@ -1,4 +1,6 @@
 # New Ideas
+	Finish figuring out ActionObjectSVNLog stuff for DLG level
+		Could we have some way to put in at least a starting revision number?
 	Consider some (probably Selector-based) way to automatically generate the usual relative-path solution shortcuts in a DLG folder
 		Probably triggered by a hotkey in the DLG folder in Explorer
 		Selector of usual options - DBC, EyeCare (IProc), ChargeEntry, ChargeCapture, OrderingActivity

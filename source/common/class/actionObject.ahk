@@ -2,7 +2,7 @@
 #Include actionObjectEMC2.ahk
 #Include actionObjectEpicStudio.ahk
 #Include actionObjectHelpdesk.ahk
-#Include actionObjectSVN.ahk
+#Include actionObjectSVNLog.ahk
 #Include actionObjectPath.ahk
 
 /* Class that takes some text representing an object, and allows the caller to do something with it. This class itself mostly redirects to the child ActionObject* classes, based on the input (and prompting the user). =--
@@ -48,7 +48,7 @@ class ActionObject {
 	static Type_EpicStudio := "EPICSTUDIO"
 	static Type_EMC2       := "EMC2"
 	static Type_Helpdesk   := "HELPDESK"
-	static Type_SVN        := "SVN"
+	static Type_SVNLog     := "SVNLOG"
 	static Type_Path       := "PATH"
 	
 	value   := "" ; Value (the unique bit of info to act upon, like a path or identifier)
@@ -68,9 +68,10 @@ class ActionObject {
 			this.type    := this.Type_Path
 			this.subType := pathType
 			
-		} else if(ActionObjectSVN.isThisType(this.value, revisionNum)) {
-			this.type    := this.Type_SVN
-			this.value   := revisionNum
+		} else if(ActionObjectSVNLog.isThisType(this.value, filter, filterType)) {
+			this.type    := this.Type_SVNLog
+			this.subType := filterType
+			this.value   := filter
 		
 		} else if(ActionObjectEMC2.isThisType(this.value, ini, id)) {
 			this.type    := this.Type_EMC2
@@ -109,7 +110,7 @@ class ActionObject {
 			Case this.Type_EpicStudio: return new ActionObjectEpicStudio(this.value, this.subType)
 			Case this.Type_EMC2:       return new ActionObjectEMC2(      this.value, this.subType)
 			Case this.Type_Helpdesk:   return new ActionObjectHelpdesk(  this.value)
-			Case this.Type_SVN:        return new ActionObjectSVN(       this.value, this.subType)
+			Case this.Type_SVNLog:     return new ActionObjectSVNLog(    this.value, this.subType)
 			Case this.Type_Path:       return new ActionObjectPath(      this.value, this.subType)
 		}
 		

@@ -1089,17 +1089,19 @@
                 <Param name="popupTitle := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectSVN" func="yes">
+        <KeyWord name="ActionObjectSVNLog" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Create a new reference to a CodeSearch object.
 							; PARAMETERS:
-							;  revision (I,REQ) - SVN revision to work with.
+							;  filter     (I,REQ) - Filter value for the SVN log.
+							;  filterType (I,OPT) - Filter method for the SVN log.
 							;---------">
-                <Param name="revision" />
+                <Param name="filter" />
+                <Param name="filterType := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectSVN.ActionObjectType" func="yes">
+        <KeyWord name="ActionObjectSVNLog.ActionObjectType" func="yes">
             <Overload retVal="[Property] {ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    What type of ActionObject the child class implements.
@@ -1107,7 +1109,7 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectSVN.copyLink" func="yes">
+        <KeyWord name="ActionObjectSVNLog.copyLink" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard.
@@ -1119,21 +1121,51 @@
                 <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectSVN.copyLinkEdit" func="yes">
+        <KeyWord name="ActionObjectSVNLog.copyLinkEdit" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in edit mode.
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectSVN.copyLinkWeb" func="yes">
+        <KeyWord name="ActionObjectSVNLog.copyLinkWeb" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Put a link to the object on the clipboard, specifically in web mode.
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectSVN.getLink" func="yes">
+        <KeyWord name="ActionObjectSVNLog.filter" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    String to filter the SVN log by.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVNLog.filterType" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    The method to use to filter the SVN log.
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVNLog.FilterType_DLG" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    DLG in message
+							; GROUP:          Filter types
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVNLog.FilterType_Revision" func="yes">
+            <Overload retVal="[Property]" descr="
+							;---------
+							; DESCRIPTION:    Specific SVN commit/revision number
+							; GROUP:          Filter types
+							;---------">
+            </Overload>
+        </KeyWord>
+        <KeyWord name="ActionObjectSVNLog.getLink" func="yes">
             <Overload retVal="" descr="
 							;---------
 							; DESCRIPTION:    Get a link to the revision.
@@ -1141,7 +1173,7 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectSVN.getLinkEdit" func="yes">
+        <KeyWord name="ActionObjectSVNLog.getLinkEdit" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get an edit link for the object. This just calls .getLink() unless it's
@@ -1149,7 +1181,7 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectSVN.getLinkWeb" func="yes">
+        <KeyWord name="ActionObjectSVNLog.getLinkWeb" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get a web link for the object. This just calls .getLink() unless it's
@@ -1157,20 +1189,22 @@
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectSVN.isThisType" func="yes">
+        <KeyWord name="ActionObjectSVNLog.isThisType" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:    Determine whether the given string must be an SVN revision.
+							; DESCRIPTION:    Determine whether the given string must be an SVN log filter.
 							; PARAMETERS:
-							;  value       (I,REQ) - The value to evaluate
-							;  revisionNum (O,OPT) - If the value is a revision, the revision number
-							; RETURNS:        true/false - whether the given value must be an SVN revision.
+							;  value      (I,REQ) - The value to evaluate
+							;  filterType (O,OPT) - If the value is an SVN log filter, the filter type
+							;  filter     (O,OPT) - If the value is an SVN log filter, the filter value
+							; RETURNS:        true/false - whether the given value must be an SVN log filter.
 							;---------">
                 <Param name="value" />
-                <Param name="ByRef revisionNum := &quot;&quot;" />
+                <Param name="ByRef filterType := &quot;&quot;" />
+                <Param name="ByRef filter := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectSVN.linkSelectedText" func="yes">
+        <KeyWord name="ActionObjectSVNLog.linkSelectedText" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it.
@@ -1185,7 +1219,7 @@
                 <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectSVN.linkSelectedTextEdit" func="yes">
+        <KeyWord name="ActionObjectSVNLog.linkSelectedTextEdit" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
@@ -1194,7 +1228,7 @@
                 <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectSVN.linkSelectedTextWeb" func="yes">
+        <KeyWord name="ActionObjectSVNLog.linkSelectedTextWeb" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,
@@ -1203,7 +1237,7 @@
                 <Param name="problemMessage := &quot;Failed to link selected text&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectSVN.open" func="yes">
+        <KeyWord name="ActionObjectSVNLog.open" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object.
@@ -1215,28 +1249,21 @@
                 <Param name="link := &quot;&quot;" />
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectSVN.openEdit" func="yes">
+        <KeyWord name="ActionObjectSVNLog.openEdit" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object, specifically in edit mode.
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectSVN.openWeb" func="yes">
+        <KeyWord name="ActionObjectSVNLog.openWeb" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Open the object, specifically in web mode.
 							;---------">
             </Overload>
         </KeyWord>
-        <KeyWord name="ActionObjectSVN.revision" func="yes">
-            <Overload retVal="[Property]" descr="
-							;---------
-							; DESCRIPTION:    SVN revision to work with.
-							;---------">
-            </Overload>
-        </KeyWord>
-        <KeyWord name="ActionObjectSVN.selectMissingInfo" func="yes">
+        <KeyWord name="ActionObjectSVNLog.selectMissingInfo" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
 							; DESCRIPTION:    Check whether the given value or subType is missing, and if it is, prompt the

@@ -1,4 +1,8 @@
 # New Ideas
+	Consider some (probably Selector-based) way to automatically generate the usual relative-path solution shortcuts in a DLG folder
+		Probably triggered by a hotkey in the DLG folder in Explorer
+		Selector of usual options - DBC, EyeCare (IProc), ChargeEntry, ChargeCapture, OrderingActivity
+			Probably also an option to open the solutions folder (or just create a relative link to it?)
 	For ActionObjectCodeSearch, consider reading fileName.cs::functionName() and turning it into an appropriate link (function into search query, the rest into the name filter text like we already do).
 	Could we make linking hotkey more reliable by generating an (RTF?) link on the clipboard and pasting it, rather than relying on the linking popups?
 		Might only work in certain contexts.

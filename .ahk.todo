@@ -1,4 +1,7 @@
 # New Ideas
+	Figure out why escape-closing stops working after long enough
+		Happens to Telegram for sure, but also Explorer?
+		Based on debug toasts, I'm pretty sure it's no longer identifying windows by name properly - probably some sort of local variable gets dumped or overwritten?
 	Finish figuring out ActionObjectSVNLog stuff for DLG level
 		Could we have some way to put in at least a starting revision number?
 	Consider some (probably Selector-based) way to automatically generate the usual relative-path solution shortcuts in a DLG folder

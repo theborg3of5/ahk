@@ -176,10 +176,6 @@ class WindowActions {
 	;                        required.
 	;---------
 	windowAction(action, name := "", titleString := "") {
-		if(action != this.Action_Close && action != this.Action_Activate && action != this.Action_DeleteWord && Config.findWindowName(titleString) = "Telegram") {
-			Debug.toast("+Telegraming something in windowAction()", "titleString",titleString, "action",action, "Config.findWindowName(titleString)",Config.findWindowName(titleString), "this.Action_EscapeKey",this.Action_EscapeKey, "WindowActions.Action_Close",WindowActions.Action_Close)
-		}
-		
 		if(!action)
 			return
 		if(!titleString && !name)

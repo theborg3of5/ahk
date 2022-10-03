@@ -243,6 +243,12 @@ class OnetasticFunction {
 	;  innerXML (I,REQ) - Inner XML of the function (that you'd get by grabbing its XML from the editor)
 	;---------
 	__New(innerXML) {
+		; If the function already includes a <Function> tag, remove it - we're generating our own.
+		if(innerXML.contains("<Function name="""))
+			innerXML := innerXML.afterString("`r`n")
+		if(innerXML.contains("</Function>"))
+			innerXML := innerXML.beforeString("`r`n", true)
+		
 		this.innerXML := innerXML
 		
 		signature := getXMLCommentText(innerXML.firstLine()) ; We assume first line is signature

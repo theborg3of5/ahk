@@ -33,6 +33,11 @@
 	^+8::SendRaw, % "*" Config.private["INITIALS"] " " FormatTime(, "MM/yy") ; Insert contact comment
 	^!4::Send, ^!5 ; Use Header 5 instead of Header 4 - Header 4 is just an italicized Header 3, which isn't distinct enough for me.
 	
+	; Print preview
+	^!p::
+		Send, !fpr
+	return
+	
 	; Delete the entire current line
 	^d::
 		OneNote.escapePastePopup()

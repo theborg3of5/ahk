@@ -13,7 +13,7 @@
 	$Volume_Mute::DllCall("LockWorkStation")
 #If
 
-; Remap different keyboards
+; [[Keyboard mapping]]
 #If Config.machineIsWorkLaptop || Config.machineIsWorkVDI
 	; Extra buttons on the ergonomic keyboard as left/right clicks (disable them in MS mouse and keyboard)
 	Browser_Back::   HotkeyLib.sendCatchableKeys("{LButton}")
@@ -22,6 +22,7 @@
 	AppsKey::RWin ; No right windows key on these machines, so use the AppsKey (right-click key) instead.
 #If
 
+; [[Special hotkey handling]]
 ; Release all modifier keys, for cases when some might be "stuck" down.
 *#Space::HotkeyLib.releaseAllModifiers()
 

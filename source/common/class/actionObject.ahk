@@ -68,7 +68,7 @@ class ActionObject {
 			this.type    := this.Type_Path
 			this.subType := pathType
 			
-		} else if(ActionObjectSVNLog.isThisType(this.value, filter, filterType)) {
+		} else if(ActionObjectSVNLog.isThisType(this.value, filterType, filter)) {
 			this.type    := this.Type_SVNLog
 			this.subType := filterType
 			this.value   := filter

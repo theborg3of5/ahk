@@ -84,9 +84,11 @@ class ActionObjectSVNLog extends ActionObjectBase {
 				link := link.replaceTag("REVISION", this.filter)
 				
 			Case this.FilterType_DLG:
-				link := "tsvncmd:command:log?path:<EPIC_SVN_URL>?findstring:DLG=<DLG>?findtype:1?limit:10000" ; findtype:1 => Search messages only, limit:10000 => load 10000 revisions to start
-				link := Config.replacePrivateTags(link) ; Handles EPIC_SVN_URL
-				link := link.replaceTag("DLG", this.filter)
+				link := "tsvncmd:command:log?path:<EPIC_SVN_DLG_URL>?limit:100000?findstring:DLG=<DLG>?findtype:1"
+				link := Config.replacePrivateTags(link) ; Handles EPIC_SVN_DLG_URL
+				
+				dlgId := this.filter
+				link := link.replaceTags({"DLG":dlgId, "DLG_FIRST_4":dlgId.sub(1,4), "DLG_FIRST_2":dlgId.sub(1,2) }) ; DLG_FIRST_* are in EPIC_SVN_DLG_URL.
 		}
 		
 		return link

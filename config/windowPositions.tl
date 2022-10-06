@@ -6,7 +6,8 @@
 ~PRESET.defaultTo(NORMAL) {
 	~MONITOR.replaceWith(LEFT) {
 			Outlook						-					-					MAX		MAX		WORK
-		
+			; Work Explorer is a little further left to allow Outlook calendar pane to peek thru nicely.
+			Explorer						215				CENTERED			1440		900		WORK
 			Explorer						CENTERED			CENTERED			1440		900
 			GitHub Desktop				CENTERED			CENTERED			1440		900
 			GrepWin						CENTERED			CENTERED			1440		900

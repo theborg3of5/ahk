@@ -141,8 +141,12 @@ class Outlook {
 		value := value.removeFromStart("FW: ")
 		
 		; Do some special cleanup for EMC2 record titles, to make them easier for downstream logic to work with.
+		
 		; Project readiness is obviously about the PRJ in question
 		value := value.replace("PRJ Readiness ", "PRJ ") ; Needs to be slightly more specific - just removing "readiness" across the board is too broad.
+		
+		; Release note review is about the DRN
+		value := value.replace("Release Note Review: ", "DRN ")
 		
 		; EMC2 lock emails have stuff in a weird order: "EMC2 Lock: <title> [<ini>] <id> is locked"
 		if(value.startsWith("EMC2 Lock: ")) {

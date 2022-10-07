@@ -10,6 +10,7 @@
 			Probably also an option to open the solutions folder (or just create a relative link to it?)
 	For ActionObjectCodeSearch, consider reading fileName.cs::functionName() and turning it into an appropriate link (function into search query, the rest into the name filter text like we already do).
 		There's also a "Directory path" search field now that I might be able to use?
+			Interesting idea: if multiple files with same name, look thru file tree in Stage 1 and present Selector of the options?
 	Could we make linking hotkey more reliable by generating an (RTF?) link on the clipboard and pasting it, rather than relying on the linking popups?
 		Might only work in certain contexts.
 	SelectorGui is very slow lately - could we speed it up somehow?

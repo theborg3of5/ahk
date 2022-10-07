@@ -79,6 +79,25 @@ class Outlook {
 	}
 	
 	;---------
+	; DESCRIPTION:    Copy the EMC2 record ID from the currently-selected (non-TLG) calendar event to the clipboard.
+	;---------
+	copyEMC2RecordIDFromEvent() {
+		record := this.getEMC2RecordFromCalendarEvent()
+		if(record)
+			ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
+	}
+	
+	;---------
+	; DESCRIPTION:    Get an EMC2 object using the selected TLG event's title.
+	; RETURNS:        A new ActionObjectEMC2 instance, or "" if we didn't find any valid EMC2 record.
+	;---------
+	getEMC2ObjectFromCalendarEvent() {
+		eventTitle := SelectLib.getText()
+		eventTitle := this.cleanUpTitle(eventTitle)
+		return new ActionObjectEMC2(eventTitle)
+	}
+	
+	;---------
 	; DESCRIPTION:    Copy the EMC2 record ID from the currently-selected TLG event to the clipboard.
 	;---------
 	copyEMC2RecordIDFromTLG() {
@@ -143,7 +162,8 @@ class Outlook {
 		; Do some special cleanup for EMC2 record titles, to make them easier for downstream logic to work with.
 		
 		; Project readiness is obviously about the PRJ in question
-		value := value.replace("PRJ Readiness ", "PRJ ") ; Needs to be slightly more specific - just removing "readiness" across the board is too broad.
+		value := value.replace("PRJ Readiness ", "PRJ ")
+		value := value.replace("Project Readiness ", "PRJ ")
 		
 		; Release note review is about the DRN
 		value := value.replace("Release Note Review: ", "DRN ")

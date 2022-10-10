@@ -36,18 +36,27 @@
 	;---------
 	openCurrentDLGInEpicStudio() {
 		ao := new ActionObjectEMC2(Chrome.getTitle())
-		if(ao.ini != "DLG") {
-			Toast.ShowError("Failed to launch DLG in EpicStudio", "Object was not a DLG")
-			return
-		}
-		
-		if(ao.id = "") {
-			Toast.ShowError("Failed to launch DLG in EpicStudio", "No DLG ID found")
+		if(ao.ini != "DLG" || ao.id = "") {
+			Toast.ShowError("Failed to launch DLG in EpicStudio", "No suitable DLG ID found")
 			return
 		}
 		
 		Toast.ShowShort("Opening DLG in EpicStudio: " ao.id)
 		new ActionObjectEpicStudio(ao.id, ActionObjectEpicStudio.DescriptorType_DLG).open()
+	}
+	
+	;---------
+	; DESCRIPTION:    Open the DLG's client SVN log.
+	;---------
+	openClientSVNLog() {
+		ao := new ActionObjectEMC2(Chrome.getTitle())
+		if(ao.ini != "DLG" || ao.id = "") {
+			Toast.ShowError("Failed to launch DLG client SVN log", "No suitable DLG ID found")
+			return
+		}
+		
+		Toast.ShowShort("Launching client SVN log for DLG: " ao.id)
+		new ActionObjectSVNLog(ao.id, ActionObjectSVNLog.FilterType_DLG).open()
 	}
 	
 	;---------

@@ -23,6 +23,7 @@
 	
 	; Open different objects based on the title.
 	^+o::Chrome.openCurrentDLGInEpicStudio()
+	!r::Chrome.openClientSVNLog()
 	
 	; Handling for file links
 	^RButton::Chrome.copyLinkTarget() ; Copy

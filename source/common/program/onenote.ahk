@@ -39,44 +39,41 @@ class OneNote {
 	setZoomTo100Percent() {
 		Send, !6
 	}
-	
-	; Onetastic macros in specific, custom grouped, pinned order. =--
 	customStylesCode() {
-		Send, !h ; Home tab
-		Send, y1 ; Onetastic Custom Styles
+		Send, !7 ; Onetastic Custom Styles
 		Send, {Enter} ; First one is my custom "Code" style.
 	}
-	; Universal macros (Toolbar group)
+	runOnetasticToolbarMacro(keys) { ; This is the dropdown one, not the submenu
+		Send, !8 ; Onetastic Toolbar macro set
+		Send, % keys
+	}
+	runOnetasticWorkToolbarMacro(keys) { ; This is the dropdown one, not the submenu
+		Send, !9 ; Onetastic Work Toolbar macro set
+		Send, % keys
+	}
+	
+	; Named wrappers for specific toolbar macros, using quick access item + hotkeys
 	addSubLinesToSelectedLines() {
-		Send, !h ; Home tab
-		Send, y2
+		this.runOnetasticToolbarMacro("y1")
 	}
 	collapseToUnfinishedTags() {
-		Send, !h ; Home tab
-		Send, y3
+		this.runOnetasticToolbarMacro("y2")
 	}
 	createAndLinkPage() {
-		Send, !h ; Home tab
-		Send, y4
+		this.runOnetasticToolbarMacro("y3")
 	}
 	widenOutline() {
-		Send, !h ; Home tab
-		Send, y5
+		this.runOnetasticToolbarMacro("y4")
 	}
-	; Work-only macros (Work Toolbar group)
 	applyDevStructureToCurrentPage() {
-		Send, !h ; Home tab
-		Send, y6
+		this.runOnetasticWorkToolbarMacro("y1")
 	}
 	createAndLinkDevPage() {
-		Send, !h ; Home tab
-		Send, y7
+		this.runOnetasticWorkToolbarMacro("y2")
 	}
 	createAndLinkWorkplanPage() {
-		Send, !h ; Home tab
-		Send, y8
-	} ; --=
-	
+		this.runOnetasticWorkToolbarMacro("y3")
+	}
 	
 	;---------
 	; DESCRIPTION:    Scroll left/right in the OneNote window (assuming it's under the mouse)

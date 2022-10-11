@@ -229,9 +229,9 @@ class FileLib {
 		; so the parent of that is our actual common folder.
 		return FileLib.getParentFolder(overlapPath).appendIfMissing("\")
 	}
+	
+	
 	; #PRIVATE#
-	
-	
 	;---------
 	; DESCRIPTION:    Reduce the given path to a folder.
 	; PARAMETERS:

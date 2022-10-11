@@ -77,9 +77,11 @@ class Explorer {
 	createRelativeShortcutToFile() {
 		; Initial trigger
 		if(this._relativeTarget = "") {
-			targetPath := this.getRelativeShortcutTarget()
-			if(targetPath = "")
+			targetPath := this.getSelectedPath()
+			if(targetPath = "") {
+				Toast.ShowError("Failed to get path for relative shortcut")
 				return
+			}
 			
 			this.saveRelative(targetPath) ; Sets _relativeTarget
 			
@@ -120,14 +122,14 @@ class Explorer {
 		path := ClipboardLib.getWithHotkey(this.Hotkey_CopyCurrentFile)
 		if(path != "") {
 			pathType := "file path"
-			return path
+			return FileLib.cleanupPath(path)
 		}
 		
 		; If we didn't get anything, there probably wasn't a file selected - get the current folder instead.
 		path := ClipboardLib.getWithHotkey(this.Hotkey_CopyCurrentFolder)
 		if(path != "") {
 			pathType := "folder path"
-			return path
+			return FileLib.cleanupPath(path)
 		}
 		
 		; We couldn't find anything at all, no type.
@@ -135,21 +137,6 @@ class Explorer {
 	}
 	
 	; [[Relative shortcuts]] =--
-	;---------
-	; DESCRIPTION:    Get the relative shortcut target using the current file in Explorer.
-	; RETURNS:        The path to the current file (cleaned up).
-	;                 "" (and show an error toast) if we couldn't get it.
-	;---------
-	getRelativeShortcutTarget() {
-		path := ClipboardLib.getWithHotkey(Explorer.Hotkey_CopyCurrentFile)
-		if(path = "") {
-			Toast.ShowError("Failed to get file path for relative shortcut")
-			return ""
-		}
-		
-		return FileLib.cleanupPath(path)
-	}
-	
 	;---------
 	; DESCRIPTION:    Get the relative source folder from the current folder in Explorer.
 	; RETURNS:        The current folder (cleaned up and with a trailing backslash)

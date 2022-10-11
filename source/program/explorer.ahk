@@ -36,8 +36,9 @@
 		Send, n{Enter}
 	return
 	
-	; Relative shortcut creation
-	^+s::Explorer.createRelativeShortcutToFile()
+	; Shortcuts creation
+	^+s::Explorer.selectSolutionShortcut()       ; DLG solution shortcut
+	^!s::Explorer.createRelativeShortcutToFile() ; Relative shortcut
 	
 	; Open EMC2 objects based on the active folder name.
 	!w::Explorer.getEMC2ObjectFromSelectedFolder().openWeb()

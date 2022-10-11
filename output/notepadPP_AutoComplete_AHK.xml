@@ -3625,6 +3625,18 @@
                 <Param name="path" />
             </Overload>
         </KeyWord>
+        <KeyWord name="FileLib.isFolder" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Check whether a folder exists at the given path.
+							;                 Wrapper for folderExists with a more obvious name.
+							; PARAMETERS:
+							;  folderPath (I,REQ) - The path to check for a folder.
+							; RETURNS:        true if it exists, false otherwise.
+							;---------">
+                <Param name="path" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="FileLib.replaceFileWithString" func="yes">
             <Overload retVal="" descr="
 							;---------

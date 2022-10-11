@@ -98,6 +98,36 @@ class Explorer {
 		}
 	}
 	
+	;---------
+	; DESCRIPTION:    Create an (absolute) shortcut to one of a predefined set of HSWeb solutions.
+	;---------
+	selectSolutionShortcut() {
+		; Get current folder (absolute root)
+		currentFolder := FileLib.cleanupPath(ClipboardLib.getWithHotkey(this.Hotkey_CopyCurrentFolder))
+		if(currentFolder = "") {
+			Toast.ShowError("Failed to get current folder path")
+			return
+		}
+		solutionsFolder := currentFolder "\" Config.private["EPIC_HSWEB_SOLUTIONS"]
+		
+		; Prompt user for which solution they want
+		data := new Selector("solutionShortcuts.tls").selectGui()
+		if(!data)
+			return
+		name               := data["NAME"]
+		relativeTargetPath := data["PATH_IN_SOLUTIONS_FOLDER"]
+		
+		; Special case: open solutions folder
+		if(relativeTargetPath = "OPEN_FOLDER") {
+			Run(solutionsFolder)
+			return
+		}
+		
+		; Create shortcut
+		targetPath := solutionsFolder "\" relativeTargetPath
+		FileCreateShortcut, % targetPath, % currentFolder "\" name ".lnk", % currentFolder
+		Toast.ShowMedium("Created shortcut to " name " solution in current folder")
+	}
 	
 	; #PRIVATE#
 	

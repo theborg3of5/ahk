@@ -12,6 +12,16 @@ class FileLib {
 	folderExists(folderPath) {
 		return InStr(FileExist(folderPath), "D") ; Exists and is a directory
 	}
+	;---------
+	; DESCRIPTION:    Check whether a folder exists at the given path.
+	;                 Wrapper for folderExists with a more obvious name.
+	; PARAMETERS:
+	;  folderPath (I,REQ) - The path to check for a folder.
+	; RETURNS:        true if it exists, false otherwise.
+	;---------
+	isFolder(path) {
+		return this.folderExists(path)
+	}
 	
 	;---------
 	; DESCRIPTION:    Get the parent of the provided path.

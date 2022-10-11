@@ -90,8 +90,8 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 		if(this.descriptor.contains("^"))
 			return ActionObjectEpicStudio.DescriptorType_Routine
 		
-		; DLG IDs are (usually) entirely numeric, where routines are not.
-		if(this.descriptor.isNum())
+		; DLG IDs are (mostly) numeric, where routines are not.
+		if(EpicLib.couldBeEMC2ID(this.descriptor))
 			return ActionObjectEpicStudio.DescriptorType_DLG
 		
 		return ""

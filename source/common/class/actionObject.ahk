@@ -77,6 +77,10 @@ class ActionObject {
 			this.type    := this.Type_EMC2
 			this.subType := ini
 			this.value   := id
+		
+		} else if(ActionObjectCodeSearch.isThisType(this.value, locationType)) {
+			this.type    := this.Type_CodeSearch
+			this.subType := locationType
 		}
 	}
 	

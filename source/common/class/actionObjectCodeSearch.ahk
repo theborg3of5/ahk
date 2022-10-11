@@ -47,6 +47,27 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 	}
 	
 	;---------
+	; DESCRIPTION:    Determine whether the given string must be a CodeSearch code location.
+	; PARAMETERS:
+	;  value        (I,REQ) - The value to evaluate
+	;  locationType (O,OPT) - If the value is a code location, the location type
+	; RETURNS:        true/false - whether the given value must be a CodeSearch code location.
+	;---------
+	isThisType(value, ByRef locationType := "") {
+		if(!Config.contextIsWork)
+			return false
+		
+		; Other characters COULD match this, but this is the only one that's definitive.
+		if(value.contains("::")) {
+			locationType := this.LocationType_Client
+			; Not trying to split it up here, we'll do that when we actually create this object instead.
+			return true
+		}
+		
+		return false
+	}
+	
+	;---------
 	; DESCRIPTION:    Get a link in CodeSearch to the code location.
 	; RETURNS:        Link to CodeSearch for the code location.
 	;---------
@@ -56,7 +77,14 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 				return SearchLib.buildCodeSearchURL("routine", "", "", "", "name=" this.location)
 				
 			Case this.LocationType_Client:
-				return SearchLib.buildCodeSearchURL("client", "", "", "", "", this.location)
+				; Specific function handling - make the function (with opening paren) the search term.
+				searchTerm := ""
+				if(this.location.contains("::")) {
+					searchTerm := this.location.afterString("::").removeFromEnd(")") ; Drop closing paren
+					this.location := this.location.beforeString("::")
+				}
+				
+				return SearchLib.buildCodeSearchURL("client", searchTerm, "", "", "", this.location)
 		}
 		
 		return ""
@@ -77,7 +105,7 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 			return ActionObjectCodeSearch.LocationType_Server
 		
 		; Includes a file extension
-		if(location.contains("."))
+		if(location.containsAnyOf([".", "::"]))
 			return ActionObjectCodeSearch.LocationType_Client
 		
 		return ""

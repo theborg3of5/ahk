@@ -53,6 +53,7 @@ if(Config.machineIsWorkLaptop)
 #Include explorer.ahk
 #Include fastStoneImageViewer.ahk
 #Include greenshot.ahk
+#Include hyperdrive.ahk
 #Include hyperspace.ahk
 #Include internetExplorer.ahk
 #Include kdiff.ahk

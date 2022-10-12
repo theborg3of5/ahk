@@ -54,14 +54,21 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		selectHyperspace() {
 			data := new Selector("epicEnvironments.tls").setTitle("Launch Hyperspace in Environment").selectGui()
 			if(data)
-				EpicLib.runHyperspace(data["VERSION"], data["COMM_ID"])
+				EpicLib.runHyperspace(data["VERSION"], data["COMM_ID"], data["TIME_ZONE"])
 		}
 		
-	^!#h::
+	^+!#h::
 		selectHSWeb() {
 			data := new Selector("epicEnvironments.tls").setTitle("Launch Standalone HSWeb in Environment").selectGui()
 			if(data["HSWEB_URL"])
 				Run(data["HSWEB_URL"])
+		}
+	
+	^!#h::
+		selectHyperdrive() {
+			data := new Selector("epicEnvironments.tls").selectGui()
+			if(data)
+				EpicLib.runHyperdrive(data["COMM_ID"], data["TIME_ZONE"])
 		}
 	
 	^!+i::

@@ -76,6 +76,7 @@
 				Greenshot Image Editor				Greenshot.exe				-									Greenshot image editor
 				GrepWin									grepWin.exe
 				Hyperspace								EpicD.+\.exe				-									-														-					REGEX
+				Hyperdrive								Hyperdrive.exe
 				Internet Explorer						IEXPLORE.EXE
 				KDiff										kdiff3.exe					-									- KDiff3
 				Launchy									Launchy.exe

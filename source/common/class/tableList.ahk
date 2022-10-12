@@ -689,7 +689,6 @@ class TableList {
 	; #DEBUG#
 	
 	Debug_ToString(ByRef table) {
-		table.addLine("Chars",        this.chars)
 		table.addLine("Index labels", this.indexLabels)
 		table.addLine("Mods",         this.modSets)
 		table.addLine("Column info",  this._columnInfo)

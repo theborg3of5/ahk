@@ -21,6 +21,26 @@ class EpicLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Launch Hyperdrive for the given environment.
+	; PARAMETERS:
+	;  environment (I,OPT) - EpicComm ID for the environment to connect to (node in my custom _0Config.json config file).
+	;                        If not given, we'll just launch Hyperdrive to select an environment.
+	;  timezone    (I,OPT) - Time zone to use.
+	;---------
+	runHyperdrive(environment := "", timezone := "") {
+		; Only specify the file ID (which filters the available environments) if we're launching into a specific environment.
+		if(environment != "" && environment != "LAUNCH")
+			fileId := "_0"
+		
+		args := "-- ID=<FILE_ID> env=<ENVIRONMENT>" ; tz=<TIME_ZONE>"
+		args := args.replaceTag("FILE_ID"    , fileId)
+		args := args.replaceTag("ENVIRONMENT", environment)
+		; args := args.replaceTag("TIME_ZONE"  , timezone)
+		
+		Config.runProgram("Hyperdrive", args)
+	}
+	
+	;---------
 	; DESCRIPTION:    Open a VDI matching the given ID.
 	; PARAMETERS:
 	;  vdiId (I,REQ) - The ID of the VDI to open.

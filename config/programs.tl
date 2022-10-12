@@ -16,6 +16,7 @@
 		VB6							Microsoft Visual Studio\VB98\VB6.EXE
 		Visual Studio				Microsoft Visual Studio\2019\Professional\Common7\IDE\devenv.exe
 		VMware Horizon Client	VMware\VMware Horizon View Client\vmware-view.exe
+		Hyperdrive					Epic\Hyperdrive\VersionIndependent\Hyperspace.exe
 	} ~PATH.addToStart(<PROGRAM_FILES>\) {
 		AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk
 		Chrome						Google\Chrome\Application\chrome.exe											WORK_DESKTOP

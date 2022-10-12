@@ -1,4 +1,5 @@
 # New Ideas
+	TLP EMC2 info windows selector - consider filtering this specific case (not others like the insert-ID hotkey) to only windows which can return the title (just Chrome and Outlook, I think?)
 	Figure out why escape-closing stops working after long enough
 		Happens to Telegram for sure, but also Explorer?
 		Based on debug toasts, I'm pretty sure it's no longer identifying windows by name properly - probably some sort of local variable gets dumped or overwritten?

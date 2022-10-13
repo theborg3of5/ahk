@@ -6,7 +6,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
 
-HyperdriveConfigFilePath := "C:\Program Files (x86)\Epic\Hyperdrive\Config\_0Config.json"
+HyperdriveConfigFilePath := "C:\Program Files (x86)\Epic\Hyperdrive\Config\0Config.json"
 ConfigFileTemplate := "
 	(
 {

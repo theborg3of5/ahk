@@ -30,7 +30,7 @@ class EpicLib {
 	runHyperdrive(environment := "", timezone := "") {
 		; Only specify the file ID (which filters the available environments) if we're launching into a specific environment.
 		if(environment != "" && environment != "LAUNCH")
-			fileId := "_0"
+			fileId := "0"
 		
 		args := "-- ID=<FILE_ID> env=<ENVIRONMENT>" ; tz=<TIME_ZONE>"
 		args := args.replaceTag("FILE_ID"    , fileId)

@@ -27,10 +27,14 @@ EnvironmentTemplate := "
 		}
 	)"
 
+pt := new ProgressToast("Generating Hyperdrive environments config file").blockingOn()
+
 ; Read in our list of environments
+pt.nextStep("Reading in environments")
 tl := new TableList("epicEnvironments.tls").filterOutIfColumnBlank("HSWEB_URL") ; Filter out stuff without a URL
 ; Debug.popup("tl",tl)
 
+pt.nextStep("Generating environments XML")
 environments := ""
 For _,envData in tl.getTable() {
 	environment := EnvironmentTemplate.replaceTags(envData)
@@ -44,6 +48,8 @@ content := Config.replacePrivateTags(ConfigFileTemplate)
 content := content.replaceTag("ENVIRONMENTS", environments)
 ; Debug.popup("content",content)
 
+pt.nextStep("Writing to file")
 FileLib.replaceFileWithString(HyperdriveConfigFilePath, content)
 
+pt.finish()
 ExitApp

@@ -38,6 +38,7 @@
 	
 	; Debug code strings
 	:X:gdblog::   ClipboardLib.send(Config.private["M_DEBUG_LOG"])
+	:X:dbpop::    ClipboardLib.send(Config.private["M_DEBUG_LOG"])
 	:X:gdbbreak:: ClipboardLib.send(Config.private["M_DEBUG_BREAK"])
 	:X:gdbpbreak::ClipboardLib.send(Config.private["M_DEBUG_BREAK_PATIENT"])
 	:X:gdbsnap::  ClipboardLib.send(Config.private["M_DEBUG_SNAP_START"])

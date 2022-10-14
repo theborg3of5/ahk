@@ -29,6 +29,7 @@
 			Chrome						-					-					MAX		MAX
 			EpicStudio					-					-					MAX		MAX		WORK
 			Hyperspace					CENTERED			CENTERED			1920		1080		WORK
+			Hyperdrive					CENTERED			CENTERED			1920		1080		WORK
 			Notepad++					-					-					MAX		MAX
 			Process Explorer			CENTERED			CENTERED			1440		900
 			VB6							-					-					MAX		MAX		WORK

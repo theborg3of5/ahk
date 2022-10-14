@@ -135,9 +135,9 @@
 	}
 	
 	;---------
-	; DESCRIPTION:    Diff the selected help text using KDiff, stripping off line numbers and whitespace.
+	; DESCRIPTION:    Diff the selected multi-response item values using KDiff, stripping off line numbers and whitespace.
 	;---------
-	diffHelpText() {
+	diffMultiResponseValues() {
 		; Get input
 		inputText := StringLib.dropLeadingTrailing(SelectLib.getText(), ["`r", "`n"]) ; Drop outer newlines
 		if(inputText = "") {
@@ -146,7 +146,7 @@
 		}
 		
 		; If the string starts with a DAT, strip it off (since we'll split the blocks on the next one we find)
-		this.removeDatFromHelpText(inputText)
+		this.removeDatFromMultiResponseValues(inputText)
 		; If the first line is a line 0, drop it entirely
 		if(inputText.startsWith("0 "))
 			inputText := inputText.afterString("`n")
@@ -158,7 +158,7 @@
 		prevLineNum := 0
 		For _,line in inputText.split("`n", "`r ") {
 			; When we hit a DAT, drop it and swap to right block
-			if(this.removeDatFromHelpText(line)) {
+			if(this.removeDatFromMultiResponseValues(line)) {
 				outLines := rightLines
 				prevLineNum := 0
 				
@@ -177,7 +177,7 @@
 			prevLineNum := lineNum
 			line := line.removeFromStart(lineNum " ") ; Remove line number
 			
-			; Fake newlines
+			; Replace Ascii-based newlines
 			line := line.replace("<13><10>", "`n")
 			
 			outLines.push(line)
@@ -213,12 +213,12 @@
 	static ClassNN_ItemFilter := "ThunderRT6TextBox2"  ; The "Filter Items" field.
 	
 	;---------
-	; DESCRIPTION:    Check whether the given help text starts with a DAT, and if it does trim it off.
+	; DESCRIPTION:    Check whether the given multi-response item value starts with a DAT, and if it does trim it off.
 	; PARAMETERS:
 	;  text (IO,REQ) - The text to check and trim the DAT off of.
 	; RETURNS:        true/false - did the text start with a DAT?
 	;---------
-	removeDatFromHelpText(ByRef text) {
+	removeDatFromMultiResponseValues(ByRef text) {
 		firstWord := text.beforeString(" ")
 		if(firstWord.isNum() && firstWord.length() = 5) {
 			text := text.removeFromStart(firstWord " ")

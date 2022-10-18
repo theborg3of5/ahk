@@ -40,8 +40,10 @@ class OneNote {
 		Send, !6
 	}
 	customStylesCode() {
-		Send, !7 ; Onetastic Custom Styles
-		Send, {Enter} ; First one is my custom "Code" style.
+		Send, !7             ; Onetastic Custom Styles
+		Send, {Enter}        ; First one is my custom "Code" style.
+		Sleep, 100           ; Delay a tick, otherwise the down/up gets lost somehow?
+		SendPlay, {Down}{Up} ; Move cursor down and up so it becomes visible again (it disappears for some reason).
 	}
 	runOnetasticToolbarMacro(keys) { ; This is the dropdown one, not the submenu
 		Send, !8 ; Onetastic Toolbar macro set

@@ -4,18 +4,17 @@
 	;---------
 	; DESCRIPTION:    Add a record to Snapper in the given environment.
 	; PARAMETERS:
-	;  environment (I,OPT) - COMMID of the environment to get a URL for. If not given, we'll try to
-	;                        default from whatever's currently selected in Snapper.
-	;  ini         (I,OPT) - INI of the record(s) to launch. If this or idList is blank, both will
-	;                        be set to "X", which will show an error popup, but still connect
-	;                        Snapper to the chosen right environment.
-	;  idList      (I,OPT) - Comma-separated list of record IDs (or colon-separated ranges of IDs)
-	;                        to launch. If blank, both ini and idList will be treated as "X" as
-	;                        described above. Must be internal IDs, unless the string starts with "#".
+	;  environment (I,OPT) - COMMID of the environment to get a URL for. If not given, we'll try to default from whatever's
+	;                        currently selected in Snapper.
+	;  ini         (I,OPT) - INI of the record(s) to launch. If this or idList is blank, both will be set to "X", which will show
+	;                        an error popup, but still connect Snapper to the chosen right environment.
+	;  idList      (I,OPT) - Comma-separated list of record IDs (or colon-separated ranges of IDs) to launch. If blank, both ini
+	;                        and idList will be treated as "X" as described above. Must be internal IDs, unless the string starts
+	;                        with "#" (in which case it can be a name or external ID).
 	;---------
 	addRecords(environment := "", ini := "", idList := "") {
 		if(idList.startsWith("#")) {
-			this.addRecordWithExternalId(environment, ini, idList.removeFromStart("#"))
+			this.addRecordWithSearch(environment, ini, idList.removeFromStart("#"))
 			return
 		}
 		
@@ -74,14 +73,14 @@
 	}
 	
 	;---------
-	; DESCRIPTION:    Add a record to Snapper by external ID.
+	; DESCRIPTION:    Add a record to Snapper by searching for it (external ID, name).
 	; PARAMETERS:
 	;  environment (I,OPT) - COMMID of the environment to get a URL for. If not given, we'll try to
 	;                        default from whatever's currently selected in Snapper.
 	;  ini         (I,REQ) - INI of the record(s) to launch.
-	;  externalId  (I,REQ) - The external ID of the record.
+	;  searchQuery (I,REQ) - The external ID of the record.
 	;---------
-	addRecordWithExternalId(environment, ini, externalId) {
+	addRecordWithSearch(environment, ini, searchQuery) {
 		; Connect to environment (also launches Snapper if it's not already open)
 		Run(Snapper.buildURL(environment))
 		
@@ -92,7 +91,8 @@
 		
 		; Launch the add record popup
 		Send, !n
-		WinWaitActive, % Config.windowInfo["Snapper Add Records"].titleString
+		addWindowTitleString := Config.windowInfo["Snapper Add Records"].titleString
+		WinWaitActive, % addWindowTitleString
 		
 		; Plug in the INI
 		ControlSetText, ThunderRT6TextBox1, % ini, A
@@ -100,10 +100,15 @@
 		
 		; Plug in the ID
 		WindowLib.waitControlActive("ThunderRT6TextBox2")
-		ControlSetText, ThunderRT6TextBox2, % externalId, A
-		Send, {Enter} ; Submit
+		ControlSetText, ThunderRT6TextBox2, % searchQuery, A
+		Send, {Enter} ; Submit/search
 		
-		; Accept the popup
+		; If we get a search popup, pick the first result (should be the exact match based on sort order).
+		WindowLib.waitAnyOfWindowsActive([addWindowTitleString, "Record Select"])
+		if(WinActive("Record Select"))
+			Send, !a ; Accept the search popup
+		
+		; Accept the add record popup
 		WindowLib.waitControlActive("ThunderRT6TextBox3")
 		Send, !a ; Accept button
 	}

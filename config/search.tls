@@ -41,7 +41,7 @@
 		Client (all web)						w						client																								1
 		Client (web server)					ws						client																								4
 		Client (web client)					wc						client																								2
-		Database + Client (all types)		sc | cs				routine|client
+		Database + Client (all types)		dc | cd				routine|client
 		Records									r						records
 		Other										o | p					other
 		All										a						routine|client|records|other

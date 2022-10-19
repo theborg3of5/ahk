@@ -5,6 +5,23 @@
 		Based on debug toasts, I'm pretty sure it's no longer identifying windows by name properly - probably some sort of local variable gets dumped or overwritten?
 		Next step: add some sort of debug flag or something to try and see what's missing/going on in Config
 			Or: system.ahk::testFunc()
+			
+				---------------------------
+				main.ahk
+				---------------------------
+				titleString=A
+				exe=C:\Users\gborg\AppData\Roaming\Telegram Desktop\Telegram.exe	|	bestMatch.exe=Telegram.exe
+				class=Qt5154QWindowIcon															|	bestMatch.class=Qt5154QWindowIcon
+				title=Telegram (1)																|	bestMatch.title=
+				bestMatch.name=Telegram
+				(Config.windows)["Telegram"].name=Telegram
+				---------------------------
+				OK   
+				---------------------------
+				
+			Next: try debug flag of sorts again, so that we can try it with the "this" references in place
+		The "this" usages are my biggest suspect right now - from attached debugging, all of the members appear to be in place otherwise.
+
 	ActionObject: consider a "could be" sort of sense for filtering which things an input is
 		For example, something with a "^" could go to either EpicStudio or CodeSearch
 		Alternatively, group like inputs together in one merged class:

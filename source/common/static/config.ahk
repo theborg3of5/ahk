@@ -3,6 +3,8 @@
 class Config {
 	; #PUBLIC#
 	
+	debugOn := false
+	
 	;---------
 	; DESCRIPTION:    Whether this class has been initialized. Used to not show debug popups when
 	;                 it's not initialized, to cut down on popups on restart in high-traffic areas.
@@ -185,6 +187,21 @@ class Config {
 			
 			; This is the best match we've found so far
 			bestMatch := winInfo
+		}
+		
+		if(Config.debugOn) { ; GDB TODO remove
+			debugString := "findWindowInfo():"
+			debugString .= "`n" "titleString=" titleString
+			debugString .= "`n" "exe" "=" exe "`t`t`t|`t`t`t" "bestMatch.exe" "=" bestMatch.exe
+			debugString .= "`n" "class" "=" class "`t`t`t|`t`t`t" "bestMatch.class" "=" bestMatch.class
+			debugString .= "`n" "title" "=" title "`t`t`t|`t`t`t" "bestMatch.title" "=" bestMatch.title
+			debugString .= "`n" "bestMatch.name" "=" bestMatch.name
+			debugString .= "`n" "bestMatch.clone().name" "=" bestMatch.clone().name
+			debugString .= "`n" "(this.windows)[""Telegram""].name" "=" (this.windows)["Telegram"].name
+			debugString .= "`n" "(Config.windows)[""Telegram""].name" "=" (Config.windows)["Telegram"].name
+			debugString .= "`n" "(this._windows)[""Telegram""].name" "=" (this._windows)["Telegram"].name
+			debugString .= "`n" "(Config._windows)[""Telegram""].name" "=" (Config._windows)["Telegram"].name
+			MsgBox, % debugString
 		}
 		
 		return bestMatch.clone() ; Handles "" fine ("".clone() = "")

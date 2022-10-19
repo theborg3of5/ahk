@@ -37,33 +37,6 @@
 ; GDB TODO remove
 ^+!0::testFunc()
 testFunc() {
-	titleString := "A"
-	
-	exe   := WinGet("ProcessPath", titleString) ; Use full process path so win_exe values can match on full path if needed.
-	class := WinGetClass(titleString)
-	title := WinGetTitle(titleString)
-
-	bestMatch := ""
-	For _,winInfo in Config.windows {
-		if(!winInfo.windowMatchesPieces(exe, class, title))
-			Continue
-		
-		; If we already found another match, don't replace it unless the new match has a better (lower) priority
-		if((bestMatch != "") && bestMatch.priority < winInfo.priority)
-			Continue
-		
-		; This is the best match we've found so far
-		bestMatch := winInfo
-	}
-	
-	info := bestMatch.clone() ; Handles "" fine ("".clone() = "")
-	
-	debugString := "titleString=" titleString
-	debugString .= "`n" "exe" "=" exe "`t`t`t|`t`t`t" "bestMatch.exe" "=" bestMatch.exe
-	debugString .= "`n" "class" "=" class "`t`t`t|`t`t`t" "bestMatch.class" "=" bestMatch.class
-	debugString .= "`n" "title" "=" title "`t`t`t|`t`t`t" "bestMatch.title" "=" bestMatch.title
-	debugString .= "`n" "bestMatch.name" "=" bestMatch.name
-	debugString .= "`n" "(Config.windows)[""Telegram""].name" "=" (Config.windows)["Telegram"].name
-	
-	MsgBox, % debugString
+	Config.debugOn := !Config.debugOn
+	MsgBox, % "Config debug flag set to: " Config.debugOn
 }

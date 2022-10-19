@@ -172,7 +172,7 @@ class WindowActions {
 	; PARAMETERS:
 	;  action      (I,REQ) - The action to perform, from WindowActions.Action_* constants.
 	;  name        (I,OPT) - The name of the window, as identified in windows.tl. Either this or titleString is required.
-	;  titleString (I,OPT) - A title string that identifies the window we want to perform the acton on. Either this or name is
+	;  titleString (I,OPT) - A title string that identifies the window we want to perform the action on. Either this or name is
 	;                        required.
 	;---------
 	windowAction(action, name := "", titleString := "") {
@@ -189,6 +189,16 @@ class WindowActions {
 			titleString := WindowLib.getIdTitleString(titleString)
 		else
 			titleString := Config.windowInfo[name].idString
+		
+		if(Config.debugOn) { ; GDB TODO remove
+			debugString := "windowAction():"
+			debugString := "`n" "action=" action
+			debugString .= "`n" "name=" name
+			debugString .= "`n" "titleString=" titleString
+			debugString .= "`n" "this.actionOverrides[""Telegram""]=" this.actionOverrides["Telegram"]
+			debugString .= "`n" "WindowActions.actionOverrides[""Telegram""]=" WindowActions.actionOverrides["Telegram"]
+			MsgBox, % debugString
+		}
 		
 		this.performAction(action, titleString, this.actionOverrides[name])
 	}

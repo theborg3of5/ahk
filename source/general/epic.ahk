@@ -50,21 +50,21 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		return new ActionObjectEMC2(recId, recINI)
 	}
 	
-	^!+h::
+	^+!#h::
 		selectHyperspace() {
 			data := new Selector("epicEnvironments.tls").setTitle("Launch Hyperspace in Environment").selectGui()
 			if(data)
 				EpicLib.runHyperspace(data["VERSION"], data["COMM_ID"], data["TIME_ZONE"])
 		}
 		
-	^+!#h::
+	^!#h::
 		selectHSWeb() {
 			data := new Selector("epicEnvironments.tls").setTitle("Launch Standalone HSWeb in Environment").selectGui()
 			if(data["HSWEB_URL"])
 				Run(data["HSWEB_URL"])
 		}
 	
-	^!#h::
+	^!+h::
 		selectHyperdrive() {
 			data := new Selector("epicEnvironments.tls").selectGui()
 			if(data)

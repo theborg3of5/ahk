@@ -1,4 +1,8 @@
 # New Ideas
+	Heavily consider switching to VS Code for AHK editing (and debugging!)
+		Experiment, see if I can set up the basics
+		Also figure out my custom syntax highlighting + folding
+		Intellisense? If there's something build into the language consider using that, otherwise figure out how to build the right output to use.
 	TLP EMC2 info windows selector - consider filtering this specific case (not others like the insert-ID hotkey) to only windows which can return the title (just Chrome and Outlook, I think?)
 	Figure out why escape-closing stops working after long enough
 		Happens to Telegram for sure, but also Explorer?

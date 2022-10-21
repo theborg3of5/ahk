@@ -21,9 +21,8 @@
 	!#c::Chrome.copyTitleLink()
 	^!#c::Chrome.copyCodeSearchClientPath()
 	
-	; Open different objects based on the title.
+	; Open DLG in EpicStudio
 	^+o::Chrome.openCurrentDLGInEpicStudio()
-	!r::Chrome.openClientSVNLog()
 	
 	; Handling for file links
 	^RButton::Chrome.copyLinkTarget() ; Copy
@@ -39,4 +38,8 @@
 	!PgDn::!PgUp ; Reverse next/previous site hotkeys
 	!PgUp::!PgDn
 	!+l::Send, ^!h ; Open vault
+	
+#If Config.isWindowActive("Chrome") && WinActive("DLG ")
+	; Open client SVN log for a DLG.
+	!r::Chrome.openClientSVNLog()
 #If

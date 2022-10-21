@@ -250,6 +250,19 @@
 							;---------">
             </Overload>
         </KeyWord>
+        <KeyWord name="ActionObjectCodeSearch.isThisType" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Determine whether the given string must be a CodeSearch code location.
+							; PARAMETERS:
+							;  value        (I,REQ) - The value to evaluate
+							;  locationType (O,OPT) - If the value is a code location, the location type
+							; RETURNS:        true/false - whether the given value must be a CodeSearch code location.
+							;---------">
+                <Param name="value" />
+                <Param name="ByRef locationType := &quot;&quot;" />
+            </Overload>
+        </KeyWord>
         <KeyWord name="ActionObjectCodeSearch.linkSelectedText" func="yes">
             <Overload retVal="{ActionObjectBase}" descr="
 							;---------
@@ -3247,6 +3260,19 @@
 							; RETURNS:        EpicRecord representing the EMC2 record we picked, or &quot;&quot; if we couldn't find any.
 							;---------">
                 <Param name="text" />
+            </Overload>
+        </KeyWord>
+        <KeyWord name="EpicLib.runHyperdrive" func="yes">
+            <Overload retVal="" descr="
+							;---------
+							; DESCRIPTION:    Launch Hyperdrive for the given environment.
+							; PARAMETERS:
+							;  environment (I,OPT) - EpicComm ID for the environment to connect to (node in my custom _0Config.json config file).
+							;                        If not given, we'll just launch Hyperdrive to select an environment.
+							;  timezone    (I,OPT) - Time zone to use.
+							;---------">
+                <Param name="environment := &quot;&quot;" />
+                <Param name="timezone := &quot;&quot;" />
             </Overload>
         </KeyWord>
         <KeyWord name="EpicLib.runHyperspace" func="yes">
@@ -6627,14 +6653,13 @@
 							;---------
 							; DESCRIPTION:    Add a record to Snapper in the given environment.
 							; PARAMETERS:
-							;  environment (I,OPT) - COMMID of the environment to get a URL for. If not given, we'll try to
-							;                        default from whatever's currently selected in Snapper.
-							;  ini         (I,OPT) - INI of the record(s) to launch. If this or idList is blank, both will
-							;                        be set to &quot;X&quot;, which will show an error popup, but still connect
-							;                        Snapper to the chosen right environment.
-							;  idList      (I,OPT) - Comma-separated list of record IDs (or colon-separated ranges of IDs)
-							;                        to launch. If blank, both ini and idList will be treated as &quot;X&quot; as
-							;                        described above. Must be internal IDs, unless the string starts with &quot;#&quot;.
+							;  environment (I,OPT) - COMMID of the environment to get a URL for. If not given, we'll try to default from whatever's
+							;                        currently selected in Snapper.
+							;  ini         (I,OPT) - INI of the record(s) to launch. If this or idList is blank, both will be set to &quot;X&quot;, which will show
+							;                        an error popup, but still connect Snapper to the chosen right environment.
+							;  idList      (I,OPT) - Comma-separated list of record IDs (or colon-separated ranges of IDs) to launch. If blank, both ini
+							;                        and idList will be treated as &quot;X&quot; as described above. Must be internal IDs, unless the string starts
+							;                        with &quot;#&quot; (in which case it can be a name or external ID).
 							;---------">
                 <Param name="environment := &quot;&quot;" />
                 <Param name="ini := &quot;&quot;" />

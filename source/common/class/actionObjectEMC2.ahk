@@ -104,6 +104,8 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	getLinkEdit() {
 		ini := this.ini
 		
+		ini := this.convertDashedINI(ini)
+		
 		if(this.isViewOnlyObject(ini))
 			link := Config.private["EMC2_LINK_EDIT_VIEW_ONLY_BASE"]
 		else
@@ -181,6 +183,23 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;---------
 	isEditOnlyObject() {
 		return ["ZCK", "ZPF"].contains(this.ini)
+	}
+	
+	;---------
+	; DESCRIPTION:    If the given INI is a "dashed" INI (contains a hyphen), then return the "real" INI it goes to (for
+	;                 use in edit mode - EMC2 doesn't support dashed INIs).
+	; PARAMETERS:
+	;  ini (I,REQ) - The INI to check
+	; RETURNS:        The new INI
+	; NOTES:          This should more-or-less match EpicLib.flattenDashedINIs().
+	;---------
+	convertDashedINI(ini) {
+		Switch ini {
+			Case "PRJ-R": return "PRJ"
+			Case "DLG-I": return "DLG"
+		}
+		
+		return ini ; Default case, let the INI thru as normal
 	}
 	; #END#
 }

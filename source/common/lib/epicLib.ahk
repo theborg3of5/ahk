@@ -427,6 +427,9 @@ class EpicLib {
 		; Make sure the text is in a decent state to be parsed.
 		text := text.clean()
 		
+		; "Flatten" any dashed INIs (like PRJ-R) so that they don't get split up below.
+		text := this.flattenDashedINIs(text)
+		
 		; First, give EpicRecord's more-stringent parsing logic a shot - since most titles are close to this format, it gives us the best chance at a nicer title.
 		record := new EpicRecord().initFromRecordString(text)
 		if(this.couldBeEMC2Record(record.ini, record.id)) {
@@ -465,6 +468,20 @@ class EpicLib {
 		
 		; Debug.popup("textBits",textBits, "exacts",exacts, "possibles",possibles)
 		return (exacts.length() + possibles.length()) > 0
+	}
+	
+	;---------
+	; DESCRIPTION:    "Flatten" (remove dash) any INIs that contain a dash, so that they don't get split up.
+	; PARAMETERS:
+	;  text (I,REQ) - The text to consider
+	; RETURNS:        Same text, but with the dashes inside any known dashed INIs removed.
+	; NOTES:          This is undone by convertToUsefulEMC2INI().
+	;---------
+	flattenDashedINIs(text) {
+		text := text.replace("PRJ-R", "PRJR") ; Project Readiness
+		text := text.replace("DLG-I", "DLGI") ; DLG Issues
+		
+		return text
 	}
 	
 	;---------

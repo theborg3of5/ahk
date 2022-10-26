@@ -9,6 +9,9 @@
 		Also figure out my custom syntax highlighting + folding
 		Intellisense? If there's something build into the language consider using that, otherwise figure out how to build the right output to use.
 			Also special @NPP-TABLELIST and @GROUP stuff
+		Forks to look into:
+			https://github.com/mark-wiemer/vscode-autohotkey-plus-plus - AutoHotkey++
+			https://github.com/bhbbbbb/vscode-autohotkey-ahkdoc - AHKDoc (supposed to be like JSDoc, not sure how functional it is)
 	Consider switching scoping stuff to just use regions (which I've now added support for)
 		Note: can't nest regions (but can nest other folding stuff inside of them - so keep the =-- stuff to be able to do inside)
 	Look into OutputDebug command for debugging stuff - prints to the debugger console

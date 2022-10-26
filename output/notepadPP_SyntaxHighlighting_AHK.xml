@@ -28,17 +28,17 @@
             <Keywords name="Numbers, range"></Keywords>
             <Keywords name="Operators1">- ! % &quot; &amp; ( ) , . : ? ^ | ~ + &lt; = &gt;</Keywords>
             <Keywords name="Operators2"></Keywords>
-            <Keywords name="Folders in code1, open">{ ;BeginRegion</Keywords>
+            <Keywords name="Folders in code1, open">{</Keywords>
             <Keywords name="Folders in code1, middle"></Keywords>
-            <Keywords name="Folders in code1, close">} ;EndRegion</Keywords>
+            <Keywords name="Folders in code1, close">}</Keywords>
             <Keywords name="Folders in code2, open"></Keywords>
             <Keywords name="Folders in code2, middle"></Keywords>
             <Keywords name="Folders in code2, close"></Keywords>
-            <Keywords name="Folders in comment, open">=--</Keywords>
+            <Keywords name="Folders in comment, open">=-- region</Keywords>
             <!-- *gdb - Add a continue option (---) for comment folding + scope headers that act the same way -->
             <Keywords name="Folders in comment, middle">--- #PUBLIC# #INTERNAL# #PRIVATE# #DEBUG#</Keywords>
             <!-- *gdb - Add scope ending tag -->
-            <Keywords name="Folders in comment, close">--= #END#</Keywords>
+            <Keywords name="Folders in comment, close">--= #END# endregion</Keywords>
             <Keywords name="Keywords1">
 					break byref case catch class continue else exit exitapp finally for global gosub goto if ifequal ifexist ifgreater ifgreaterorequal ifinstring ifless iflessorequal ifmsgbox ifnotequal ifnotexist ifnotinstring ifwinactive ifwinexist ifwinnotactive ifwinnotexist local loop onexit pause return settimer sleep static suspend switch throw try until var while
 				</Keywords>

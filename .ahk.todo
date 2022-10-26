@@ -1,4 +1,8 @@
 # New Ideas
+	Consider hotstrings or something similar for Ninpo notes style
+		m/uL/R superscripted sides, directions (maybe just catch the capitalization and superscript it?)
+			Could either select + superscript hotkey, or try to send RTF (?) already-subscripted replacement
+		Probably overkill, but could add a selector of techniques/stances/etc. (that includes super/subscripting)
 	Heavily consider switching to VS Code for AHK editing (and debugging!)
 		Experiment, see if I can set up the basics
 		Also figure out my custom syntax highlighting + folding

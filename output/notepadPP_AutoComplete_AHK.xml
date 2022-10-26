@@ -3869,8 +3869,8 @@
         <KeyWord name="FlexTable.getTotalWidth" func="yes">
             <Overload retVal="" descr="
 							;---------
-							; DESCRIPTION:		Get the total width of the table
-							; RETURNS:			The total width of the table, from its starting point to the right edge of the last cell.
+							; DESCRIPTION:    Get the total width of the table
+							; RETURNS:        The total width of the table, from its starting point to the right edge of the last cell.
 							;---------">
             </Overload>
         </KeyWord>
@@ -5055,12 +5055,10 @@
         <KeyWord name="MonitorLib.workAreaForLocation" func="yes">
             <Overload retVal="[Property]" descr="
 							;---------
-							; DESCRIPTION:
+							; DESCRIPTION:    Get the bounds array for a specific monitor.
 							; PARAMETERS:
 							;  location (I,REQ) - The location of the monitor to get the work area bounds for, from MonitorLib.Location_*.
 							; RETURNS:        Bounds array for the requested monitor (see .getMonitorWorkBounds)
-							; SIDE EFFECTS:
-							; NOTES:
 							;---------">
                 <Param name="location" />
             </Overload>
@@ -6274,9 +6272,6 @@
 							;  firstChoiceIndex (I,OPT) - The index of the first choice that will be in this section. If not passed, the header will be added
 							;                             at the end of the current list of choices (that is, the next choice that's added will be the first
 							;                             in this section).
-							; RETURNS:
-							; SIDE EFFECTS:
-							; NOTES:
 							;---------">
                 <Param name="headerText" />
                 <Param name="firstChoiceIndex := &quot;&quot;" />

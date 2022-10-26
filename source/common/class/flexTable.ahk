@@ -170,8 +170,8 @@ class FlexTable {
 	}
 	
 	;---------
-	; DESCRIPTION:		Get the total width of the table
-	; RETURNS:			The total width of the table, from its starting point to the right edge of the last cell.
+	; DESCRIPTION:    Get the total width of the table
+	; RETURNS:        The total width of the table, from its starting point to the right edge of the last cell.
 	;---------
 	getTotalWidth() {
 		this.forceLastColumnToMinWidth()

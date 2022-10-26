@@ -175,7 +175,7 @@ class Config {
 		exe   := WinGet("ProcessPath", titleString) ; Use full process path so win_exe values can match on full path if needed.
 		class := WinGetClass(titleString)
 		title := WinGetTitle(titleString)
-
+		
 		bestMatch := ""
 		For _,winInfo in this.windows {
 			if(!winInfo.windowMatchesPieces(exe, class, title))
@@ -229,7 +229,7 @@ class Config {
 		exe   := WinGet("ProcessPath", titleString) ; Use full process path so win_exe values can match on full path if needed.
 		class := WinGetClass(titleString)
 		title := WinGetTitle(titleString)
-
+		
 		matchingNames := {}
 		For _,winInfo in this.windows {
 			if(winInfo.windowMatchesPieces(exe, class, title)) {
@@ -312,9 +312,10 @@ class Config {
 		if(!ahkExe)
 			return false
 		
-		For _,game in this.games
+		For _,game in this.games {
 			if(ahkExe = game["EXE"])
 				return true
+		}
 		
 		return false
 	}
@@ -468,9 +469,6 @@ class Config {
 	; DESCRIPTION:    Get an absolute path to a config file based on its relative path.
 	; PARAMETERS:
 	;  relativeConfigPath (I,REQ) - The path to the config file, from within the <root>\config\ folder. No leading backslash.
-	; RETURNS:        
-	; SIDE EFFECTS:   
-	; NOTES:          
 	;---------
 	getConfigPath(relativeConfigPath) {
 		return this.getRoot() "\config\" relativeConfigPath

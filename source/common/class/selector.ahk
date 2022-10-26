@@ -193,9 +193,6 @@ class Selector {
 	;  firstChoiceIndex (I,OPT) - The index of the first choice that will be in this section. If not passed, the header will be added
 	;                             at the end of the current list of choices (that is, the next choice that's added will be the first
 	;                             in this section).
-	; RETURNS:        
-	; SIDE EFFECTS:   
-	; NOTES:          
 	;---------
 	addSectionHeader(headerText, firstChoiceIndex := "") {
 		if(!this.sectionTitles)

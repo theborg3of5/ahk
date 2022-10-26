@@ -10,12 +10,10 @@ class MonitorLib {
 	; @GROUP-END@
 	
 	;---------
-	; DESCRIPTION:    
+	; DESCRIPTION:    Get the bounds array for a specific monitor.
 	; PARAMETERS:
 	;  location (I,REQ) - The location of the monitor to get the work area bounds for, from MonitorLib.Location_*.
 	; RETURNS:        Bounds array for the requested monitor (see .getMonitorWorkBounds)
-	; SIDE EFFECTS:   
-	; NOTES:          
 	;---------
 	workAreaForLocation[location] {
 		get {

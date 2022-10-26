@@ -163,8 +163,6 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	; PARAMETERS:
 	;  viewOnlyINI (I,REQ) - The INI to try and map.
 	; RETURNS:        The "real" INI if it's a "view-only" INI (i.e. QANV => QAN), "" if it's not.
-	; SIDE EFFECTS:   
-	; NOTES:          
 	;---------
 	getRealViewOnlyRealINI(viewOnlyINI) {
 		Switch viewOnlyINI {

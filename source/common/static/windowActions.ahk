@@ -324,9 +324,6 @@ class WindowActions {
 	;  method               (I,REQ) - Method to perform, from the Method_* constants.
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
-	; RETURNS:        
-	; SIDE EFFECTS:   
-	; NOTES:          
 	;---------
 	performSpecificMethod(method, titleString, windowActionSettings) {
 		Switch method {

@@ -23,7 +23,7 @@ class ActionObjectSVNLog extends ActionObjectBase {
 	static FilterType_DLG      := "DLG"      ; DLG in message
 	; @GROUP-END@
 	
-	; @GROUP@ 
+	; @GROUP@
 	filter     := "" ; String to filter the SVN log by.
 	filterType := "" ; The method to use to filter the SVN log.
 	; @GROUP-END@

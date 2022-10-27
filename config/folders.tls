@@ -3,8 +3,8 @@
 # General
 	Downloads						dl			<USER_DOWNLOADS>
 ~CONTEXT.replaceWith(WORK) {
-	Specifics						spec		<USER_ROOT>\OneDrive - Epic\Specifics
-	Shortcuts						sc			<USER_ROOT>\OneDrive - Epic\Shortcuts
+	Specifics						spec		<USER_ONEDRIVE>\Specifics
+	Shortcuts						sc			<USER_ONEDRIVE>\Shortcuts
 	Personal							pers		<EPIC_PERSONAL>
 	Public							pub		<EPIC_PERSONAL>\Public
 	QuickRef							qr			<USER_ROOT>\QuickRef

@@ -52,9 +52,9 @@
 	
 	~PATH.addToStart(<USER_APPDATA_LOCAL>\) {
 		GitHub Desktop				GitHubDesktop\GitHubDesktop.exe
-		GrepWin						Programs\grepWin\grepWin.exe							WORK_DESKTOP
-		Slack							slack\slack.exe											HOME_DESKTOP
-		Teams							Microsoft\Teams\current\Teams.exe					WORK_DESKTOP
+		GrepWin						Programs\grepWin\grepWin.exe														WORK_DESKTOP
+		Slack							slack\slack.exe																		HOME_DESKTOP
+		Teams							Microsoft\Teams\current\Teams.exe												WORK_DESKTOP
 		VS Code						Programs\Microsoft VS Code\Code.exe
 	}
 	
@@ -62,7 +62,7 @@
 		Spotify						Spotify\Spotify.exe
 		Telegram						Telegram Desktop\Telegram.exe
 	}
-		
+	
 		Firefox Portable			S:\FirefoxPortable\FirefoxPortable.exe											HOME_DESKTOP
 		EMC2							<EMC2_CURRENT_EXE>																	WORK_DESKTOP | WORK_VDI
 	

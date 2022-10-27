@@ -502,6 +502,7 @@ class Config {
 		tags["PROGRAM_FILES_86"]   := EnvGet("ProgramFiles(x86)")            ; C:\Program Files (x86)
 		tags["WINDOWS"]            := A_WinDir                               ; C:\Windows
 		tags["CMD"]                := A_ComSpec                              ; C:\Windows\system32\cmd.exe
+		tags["USER_ONEDRIVE"]      := EnvGet("ONEDRIVE")                     ; C:\Users\<UserName>\<OneDrive folder>
 		
 		tags["AHK_ROOT"]           := this.getRoot()
 		

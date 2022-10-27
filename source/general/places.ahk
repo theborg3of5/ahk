@@ -4,6 +4,7 @@
 ; Specific folders
  !+a::openPath("AHK_ROOT")
 $!+d::openPath("USER_DOWNLOADS")
+ !+o::openPath("USER_ONEDRIVE")
  !+s::openPath("EPIC_SOURCE")
  !+u::openPath("USER_ROOT")
 openPath(folderName) {
@@ -78,6 +79,5 @@ $^!+f::Run("http://feedly.com/i/latest") ; $ as Notepad++ highlight-all hotkey s
 	}
 
 ; OneNote Online
-!+o:: Run("https://www.onenote.com/notebooks")
 !+#t::Run(Config.private["ONENOTE_ONLINE_NOTEBOOK_DO"])
 ; --=

@@ -1,15 +1,28 @@
 New Ideas:
 	☐ Consider hotstrings or something similar for Ninpo notes style
-		m/uL/R superscripted sides, directions (maybe just catch the capitalization and superscript it?)
+		☐ m/uL/R superscripted sides, directions (maybe just catch the capitalization and superscript it?)
 			Could either select + superscript hotkey, or try to send RTF (?) already-subscripted replacement
-		Hotstrings for degree numbers (45 => 45°, 90 => 90°, 135, 180, 270, 360)
-		Probably overkill, but could add a selector of techniques/stances/etc. (that includes super/subscripting)
+		☐ Hotstrings for degree numbers (45 => 45°, 90 => 90°, 135, 180, 270, 360)
+		☐ Probably overkill, but could add a selector of techniques/stances/etc. (that includes super/subscripting)
 	☐ Heavily consider switching to VS Code for AHK editing (and debugging!)
-		Experiment, see if I can set up the basics
-		Also figure out my custom syntax highlighting + folding
-		Intellisense? If there's something build into the language consider using that, otherwise figure out how to build the right output to use.
-			Also special @NPP-TABLELIST and @GROUP stuff
-		Consider an extension to handle TODOs instead of my current weird format (search for "ext:todo" or just "todo" in general)
+		☐ Experiment, see if I can set up the basics
+		☐ Also figure out my custom syntax highlighting + folding
+		☐ Intellisense? If there's something build into the language consider using that, otherwise figure out how to build the right output to use.
+			Nothing built-in, but I could modify the extension to handle my headers
+				Options
+					☐ Just use whole header (probably sans lines)
+					☐ Alternatively, extract the useful bits and display it more nicely?
+						<DESCRIPTION>
+
+						<NOTES>
+
+						\- Param (I,REQ) - description
+						
+						SIDE EFFECTS: <SIDE EFFECTS>
+			☐ Also special @NPP-TABLELIST and @GROUP stuff
+		☐ Consider an extension to handle TODOs instead of my current weird format (search for "ext:todo" or just "todo" in general)
+			Trying out Todo+ here.
+	☐ Consider getting rid of NOTES bit of headers - just include it in the description instead.
 	☐ Consider switching scoping stuff to just use regions (which I've now added support for)
 		Note: can't nest regions (but can nest other folding stuff inside of them - so keep the =-- stuff to be able to do inside)
 	☐ Look into OutputDebug command for debugging stuff - prints to the debugger console

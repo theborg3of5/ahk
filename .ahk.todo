@@ -1,20 +1,20 @@
-# New Ideas
-	Consider hotstrings or something similar for Ninpo notes style
+New Ideas:
+	☐ Consider hotstrings or something similar for Ninpo notes style
 		m/uL/R superscripted sides, directions (maybe just catch the capitalization and superscript it?)
 			Could either select + superscript hotkey, or try to send RTF (?) already-subscripted replacement
 		Hotstrings for degree numbers (45 => 45°, 90 => 90°, 135, 180, 270, 360)
 		Probably overkill, but could add a selector of techniques/stances/etc. (that includes super/subscripting)
-	Heavily consider switching to VS Code for AHK editing (and debugging!)
+	☐ Heavily consider switching to VS Code for AHK editing (and debugging!)
 		Experiment, see if I can set up the basics
 		Also figure out my custom syntax highlighting + folding
 		Intellisense? If there's something build into the language consider using that, otherwise figure out how to build the right output to use.
 			Also special @NPP-TABLELIST and @GROUP stuff
 		Consider an extension to handle TODOs instead of my current weird format (search for "ext:todo" or just "todo" in general)
-	Consider switching scoping stuff to just use regions (which I've now added support for)
+	☐ Consider switching scoping stuff to just use regions (which I've now added support for)
 		Note: can't nest regions (but can nest other folding stuff inside of them - so keep the =-- stuff to be able to do inside)
-	Look into OutputDebug command for debugging stuff - prints to the debugger console
-	TLP EMC2 info windows selector - consider filtering this specific case (not others like the insert-ID hotkey) to only windows which can return the title (just Chrome and Outlook, I think?)
-	Figure out why escape-closing stops working after long enough
+	☐ Look into OutputDebug command for debugging stuff - prints to the debugger console
+	☐ TLP EMC2 info windows selector - consider filtering this specific case (not others like the insert-ID hotkey) to only windows which can return the title (just Chrome and Outlook, I think?)
+	☐ Figure out why escape-closing stops working after long enough
 		Happens to Telegram for sure, but also Explorer?
 		Based on debug toasts, I'm pretty sure it's no longer identifying windows by name properly - probably some sort of local variable gets dumped or overwritten?
 		Next step: add some sort of debug flag or something to try and see what's missing/going on in Config
@@ -35,46 +35,45 @@
 				
 			Next: try debug flag of sorts again, so that we can try it with the "this" references in place
 		The "this" usages are my biggest suspect right now - from attached debugging, all of the members appear to be in place otherwise.
-
-	ActionObject: consider a "could be" sort of sense for filtering which things an input is
+	☐ ActionObject: consider a "could be" sort of sense for filtering which things an input is
 		For example, something with a "^" could go to either EpicStudio or CodeSearch
-		Alternatively, group like inputs together in one merged class:
+		Alternatively, group like inputs together in one merged class
 			Keep ActionObjectEpicStudio for DLG case? Or maybe move into a special case of ActionObjectEMC2 instead?
 			EpicStudio database code + CodeSearch database code + CodeSearch client code => ActionObjectCodeLocation?
-	ActionObjectCodeSearch client: there's also a "Directory path" search field now that I might be able to use?
+	☐ ActionObjectCodeSearch client: there's also a "Directory path" search field now that I might be able to use?
 		Interesting idea: if multiple files with same name, look thru file tree in Stage 1 and present Selector of the options?
-	Could we make linking hotkey more reliable by generating an (RTF?) link on the clipboard and pasting it, rather than relying on the linking popups?
+	☐ Could we make linking hotkey more reliable by generating an (RTF?) link on the clipboard and pasting it, rather than relying on the linking popups?
 		Might only work in certain contexts.
-	SelectorGui is very slow lately - could we speed it up somehow?
+	☐ SelectorGui is very slow lately - could we speed it up somehow?
 		Might be a question of switching to built-in Gui positioning options as mentioned below?
-	ActionObject: would it make sense to always compare the "first word" of the given value to the TLS?
+	☐ ActionObject: would it make sense to always compare the "first word" of the given value to the TLS?
 		Would make stuff like the helpdesk and SVN handling work without needing a separate function
 			SVN handling in particular would be nicer because we can get the repo URL from the TLS instead of having to get it out of privates.
 		Potentially tricky bit: pre-processing we do for EMC2 records (with their additional title and whatnot)
 			We could theoretically just run that a second time, though.
-	Could I use hotstrings to about stuff like (i.e. xxx) from capitalizing incorrectly?
-	Clean out OneNote recurring todo stuff - no longer used
-	Consider a "record macro" set of hotkeys (like Notepad++ has built-in).
-	Is there some way I could detect and show a warning when a modifier key gets stuck down?
+	☐ Could I use hotstrings to about stuff like (i.e. xxx) from capitalizing incorrectly?
+	☐ Clean out OneNote recurring todo stuff - no longer used
+	☐ Consider a "record macro" set of hotkeys (like Notepad++ has built-in).
+	☐ Is there some way I could detect and show a warning when a modifier key gets stuck down?
 		Maybe start a timer when one of them is held down, and after 5s or so show a persistent toast that goes away when it's released?
 		Could take the physical vs. virtual state into account (GetKeyState(key) vs GetKeyState(key, "P")) - only care when virtually but not physically held
-	Consider adding something mover-sizer-based for closing windows (original had something like double-middle-click or something, I think?)
-	Config: is it worth keeping .Init()?
+	☐ Consider adding something mover-sizer-based for closing windows (original had something like double-middle-click or something, I think?)
+	☐ Config: is it worth keeping .Init()?
 		TableList automatic filters - where should those live?
 		.initDone/.isInitialized stuff - just used by debug, worth keeping?
 			Would it be better to have the "early" debug popup/toast show up based on whether CommonHotkeys has been initialized?
 				Would let us potentially make stuff that's NOT early specific to a type of script (i.e. only show it for the main script)
 			Could we just replace it with a public flag (or public setter to a private flag, whatever) on Debug, so that the script itself could decide where the cutover point is?
-	Consider switching zoom mute toggle over to a click target within the zoom window - would that avoid the "ding" sound?
-	CodeSearch: looks like the URL can include the full path now, could we use that to open in client instead of the search approach?
-	Re-examine how we run programs and such (RunLib.runAsUser stuff) - could it be the reason we have focus issues?
+	☐ Consider switching zoom mute toggle over to a click target within the zoom window - would that avoid the "ding" sound?
+	☐ CodeSearch: looks like the URL can include the full path now, could we use that to open in client instead of the search approach?
+	☐ Re-examine how we run programs and such (RunLib.runAsUser stuff) - could it be the reason we have focus issues?
 		Also, could we work around it with a WinWaitExist + WinActivate?
-	EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines
+	☐ EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments
-	
-# Selector
-	Re-examine SelectorGui/FlexTable - could we simplify out a lot of the extra logic using built-in Gui positioning options?
+
+Selector:
+	☐ Re-examine SelectorGui/FlexTable - could we simplify out a lot of the extra logic using built-in Gui positioning options?
 		https://www.autohotkey.com/docs/commands/Gui.htm#PosSize
 			Gui, Margin + AutoSize to avoid needing to keep track of a total height/width for the popup
 			wp/hp/x+n/y+n for sizing/positioning relative to last control
@@ -105,10 +104,10 @@
 				Override field widths span remaining width equally
 				Sections (header + empty line at end)
 		Make sure to update Selector/SelectorGui documentation if stuff changes
-	Dynamically resize abbreviation column based on widest value?
+	☐ Dynamically resize abbreviation column based on widest value?
 		To allow longer abbreviations
 		Is that going to get weird with SelectorGui+FlexTable interactions?
-	The @MinColumnWidth setting is currently used to make sure that field names show up - could we just handle that more automatically instead?
+	☐ The @MinColumnWidth setting is currently used to make sure that field names show up - could we just handle that more automatically instead?
 		Somehow measure the width a field would need to be to fit its description comfortably
 			Or does that happen automatically if you add it with a value?
 		Maybe include an additional buffer on the end?

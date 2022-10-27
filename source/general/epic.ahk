@@ -52,7 +52,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	
 	^+!#h::
 		selectHyperspace() {
-			data := new Selector("epicEnvironments.tls").setTitle("Launch Hyperspace in Environment").selectGui()
+			data := new Selector("epicEnvironments.tls").setTitle("Launch Classic Hyperspace in Environment").selectGui()
 			if(data)
 				EpicLib.runHyperspace(data["VERSION"], data["COMM_ID"], data["TIME_ZONE"])
 		}
@@ -66,7 +66,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	
 	^!+h::
 		selectHyperdrive() {
-			data := new Selector("epicEnvironments.tls").selectGui()
+			data := new Selector("epicEnvironments.tls").setTitle("Launch Hyperdrive in Environment").selectGui()
 			if(data)
 				EpicLib.runHyperdrive(data["COMM_ID"], data["TIME_ZONE"])
 		}

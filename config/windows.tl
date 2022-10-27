@@ -50,6 +50,7 @@
 				EpicStudio Tokenize String			EpicStudio.exe				-									Tokenize String
 				EpicStudio Bookmark Comment		EpicStudio.exe				-									Bookmark Comment
 				EpicStudio Debug Window				EpicStudio.exe				-									Attach to Process
+				MBuilder									MBuilder.exe
 				Onetastic Macro Editor				ONENOTE.EXE					Onetastic Window
 				PowerPoint Presenting				POWERPNT.EXE				screenClass						-														NO_PADDING
 				PowerPoint Presenter View			POWERPNT.EXE				PodiumParent					-														NO_PADDING

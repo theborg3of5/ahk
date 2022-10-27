@@ -58,6 +58,27 @@ class EMC2 {
 	}
 	
 	;---------
+	; DESCRIPTION:    Run linting for the current DLG using MBuilder.
+	;---------
+	openCurrentDLGInMBuilder() {
+		record := EpicLib.getBestEMC2RecordFromText(WinGetActiveTitle())
+		if(record.ini != "DLG" || record.id = "")
+			return
+		
+		t := new Toast("Opening DLG in MBuilder: " record.id).show()
+		Config.runProgram("MBuilder")
+		WinWaitActive, % Config.windowInfo["MBuilder"].titleString, , 10 ; 10-second timeout
+		if(ErrorLevel != 1) {
+			; Plug in the DLG ID.
+			Send, 2{Enter} ; Check for errors on a DLG's Routines
+			Sleep, 500
+			Send, % record.id
+			Send, {Enter}
+		}
+		t.close()
+	}
+	
+	;---------
 	; DESCRIPTION:    Send a list of DBC developer TLGs to a grid column (for emailing designs out for reviewers).
 	;---------
 	sendDBCDevIDs() {

@@ -10,14 +10,15 @@
 ^!+n::Config.activateProgram("Notepad++")
 ^!#n::Config.runProgram("Notepad")
 ^!#t::Config.runProgram("Teams")
+^!#v::Config.activateProgram("VS Code")
 ^!#/::Config.activateProgram("AutoHotkey WinSpy")
 
 ; Some programs are work-specific
 #If Config.contextIsWork
-	^!+e::Config.activateProgram("EMC2", "EMC2Update env=TRACKAPPTCP") ; EMC2 needs these parameters to start up correctly.
-	^!+s::Config.activateProgram("EpicStudio")
-	^!+v::Config.runProgram("VB6")
-	^!#v::Config.runProgram("Visual Studio")
+	^!+e:: Config.activateProgram("EMC2", "EMC2Update env=TRACKAPPTCP") ; EMC2 needs these parameters to start up correctly.
+	^!+s:: Config.activateProgram("EpicStudio")
+	^!#+v::Config.runProgram("VB6")
+	^!+v:: Config.runProgram("Visual Studio")
 #If
 
 ; Some programs are only available on specific machines

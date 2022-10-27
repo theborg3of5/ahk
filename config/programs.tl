@@ -50,14 +50,21 @@
 		Process Explorer			<EPIC_PERSONAL>\Programs\Process Explorer\procexp.exe						WORK_VDI
 		Process Explorer			<PROGRAM_FILES>\ProcessExplorer\procexp.exe
 	
-		EMC2							<EMC2_CURRENT_EXE>																	WORK_DESKTOP | WORK_VDI
-		GitHub Desktop				<USER_APPDATA_LOCAL>\GitHubDesktop\GitHubDesktop.exe
-		GrepWin						<USER_APPDATA_LOCAL>\Programs\grepWin\grepWin.exe							WORK_DESKTOP
-		Slack							<USER_APPDATA_LOCAL>\slack\slack.exe											HOME_DESKTOP
-		Spotify						<USER_APPDATA>\Spotify\Spotify.exe
-		Teams							<USER_APPDATA_LOCAL>\Microsoft\Teams\current\Teams.exe					WORK_DESKTOP
-		Telegram						<USER_APPDATA>\Telegram Desktop\Telegram.exe
+	~PATH_TYPE.addToStart(<USER_APPDATA_LOCAL>\) {
+		GitHub Desktop				GitHubDesktop\GitHubDesktop.exe
+		GrepWin						Programs\grepWin\grepWin.exe							WORK_DESKTOP
+		Slack							slack\slack.exe											HOME_DESKTOP
+		Teams							Microsoft\Teams\current\Teams.exe					WORK_DESKTOP
+		VS Code						Programs\Microsoft VS Code\Code.exe
+	}
+	
+	~PATH_TYPE.addToStart(<USER_APPDATA>\) {
+		Spotify						Spotify\Spotify.exe
+		Telegram						Telegram Desktop\Telegram.exe
+	}
+		
 		Firefox Portable			S:\FirefoxPortable\FirefoxPortable.exe											HOME_DESKTOP
+		EMC2							<EMC2_CURRENT_EXE>																	WORK_DESKTOP | WORK_VDI
 	
 ; Windows apps - PATH is the logical path, found using instructions here:
 ; https://answers.microsoft.com/en-us/windows/forum/windows_10-windows_store/starting-windows-10-store-app-from-the-command/836354c5-b5af-4d6c-b414-80e40ed14675)

@@ -50,7 +50,6 @@
 				EpicStudio Tokenize String			EpicStudio.exe				-									Tokenize String
 				EpicStudio Bookmark Comment		EpicStudio.exe				-									Bookmark Comment
 				EpicStudio Debug Window				EpicStudio.exe				-									Attach to Process
-				MBuilder									MBuilder.exe
 				Onetastic Macro Editor				ONENOTE.EXE					Onetastic Window
 				PowerPoint Presenting				POWERPNT.EXE				screenClass						-														NO_PADDING
 				PowerPoint Presenter View			POWERPNT.EXE				PodiumParent					-														NO_PADDING
@@ -81,6 +80,7 @@
 				Internet Explorer						IEXPLORE.EXE
 				KDiff										kdiff3.exe					-									- KDiff3
 				Launchy									Launchy.exe
+				MBuilder									MBuilder.exe
 				Messenger								Messenger.exe				-									Messenger											NO_PADDING		EXACT
 				Notepad									notepad.exe
 				Notepad++								notepad++.exe				Notepad++
@@ -106,6 +106,7 @@
 				VB6										VB6.exe						wndclass_desked_gsk
 				VMware Horizon Client				vmware-view.exe
 				Visual Studio							devenv.exe					-									(Administrator)
+				VS Code									Code.exe
 				WebEx										atmgr.exe					-									-														NO_PADDING
 				Windows Taskbar						explorer.exe				Shell_TrayWnd
 				Windows Taskbar Secondary			explorer.exe				Shell_SecondaryTrayWnd

@@ -1,25 +1,34 @@
 Switch to VS Code for AHK dev:
-	☐ Experiment, see if I can set up the basics
-	☐ Also figure out my custom syntax highlighting + folding
-	☐ Intellisense? If there's something build into the language consider using that, otherwise figure out how to build the right output to use.
-		Nothing built-in, but I could modify the extension to handle my headers
-			Options
-				☐ Just use whole header (probably sans lines)
-				☐ Alternatively, extract the useful bits and display it more nicely?
-					<DESCRIPTION>
-					
-					<NOTES>
+	✔ Experiment, see if I can set up the basics @done(22-10-27 13:32)
+	☐ Finding definitions
+		A lot of this works out of the box, but could I extend it to the more special cases?
+		☐ Better inheritance? (ActionObjectBase?)
+		☐ Special string/object/array bases
+	☐ Intellisense
+		The only built-in support is for a one-line comment above functions, not enough for me.
+		✔ Pull in entire header like notepad++ did @done(22-10-27 13:35)
+			Dynamically, that is (not via a compiled file, so it has trouble if it can't find the definition!)
+		☐ Would be nicer to trim it down to the useful bits only?
+			<DESCRIPTION>
+			
+			<NOTES>
 
-					\- Param (I,REQ) - description
-					
-					SIDE EFFECTS: <SIDE EFFECTS>
-		☐ Also special @NPP-TABLELIST and @GROUP stuff
-	☐ Consider an extension to handle TODOs instead of my current weird format (search for "ext:todo" or just "todo" in general)
+			\- Param (I,REQ) - description
+			
+			SIDE EFFECTS: <SIDE EFFECTS>
+		☐ @GROUP handling
+	☐ Custom syntax highlighting (for my custom classes)
+	✔ Consider an extension to handle TODOs instead of my current weird format (search for "ext:todo" or just "todo" in general) @done(22-10-27 13:37)
 		Trying out Todo+ here.
 	☐ Look into OutputDebug command for debugging stuff - prints to the debugger console
 
+Switch to VS Code for TL[S] files:
+	☐ General syntax highlighting
+	☐ Intellisense
+		☐ Ideally using existing @NPP-TABLELIST handling
+			Though I could also just generate separate intellisense files if need be (or create some and update them manually).
+
 New Ideas:
-	☐ Heavily consider switching to VS Code for AHK editing (and debugging!)
 	☐ Consider getting rid of NOTES bit of headers - just include it in the description instead.
 	☐ Consider hotstrings or something similar for Ninpo notes style
 		☐ m/uL/R superscripted sides, directions (maybe just catch the capitalization and superscript it?)

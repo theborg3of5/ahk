@@ -50,7 +50,7 @@
 		Process Explorer			<EPIC_PERSONAL>\Programs\Process Explorer\procexp.exe						WORK_VDI
 		Process Explorer			<PROGRAM_FILES>\ProcessExplorer\procexp.exe
 	
-	~PATH_TYPE.addToStart(<USER_APPDATA_LOCAL>\) {
+	~PATH.addToStart(<USER_APPDATA_LOCAL>\) {
 		GitHub Desktop				GitHubDesktop\GitHubDesktop.exe
 		GrepWin						Programs\grepWin\grepWin.exe							WORK_DESKTOP
 		Slack							slack\slack.exe											HOME_DESKTOP
@@ -58,7 +58,7 @@
 		VS Code						Programs\Microsoft VS Code\Code.exe
 	}
 	
-	~PATH_TYPE.addToStart(<USER_APPDATA>\) {
+	~PATH.addToStart(<USER_APPDATA>\) {
 		Spotify						Spotify\Spotify.exe
 		Telegram						Telegram Desktop\Telegram.exe
 	}

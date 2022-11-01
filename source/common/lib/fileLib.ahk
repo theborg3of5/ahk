@@ -85,31 +85,27 @@ class FileLib {
 		}
 		
 		; Convert paths to use mapped drive letters
-		table := new TableList("mappedDrives.tl").getTable()
-		For _,row in table {
+		mappedDrives := new TableList("mappedDrives.tl").getTable()
+		For _,row in mappedDrives {
 			if(path.contains(row["PATH"])) {
 				path := path.replaceOne(row["PATH"], row["DRIVE_LETTER"] ":")
 				Break ; Just match the first one.
 			}
 		}
 		
-		; Redirect old paths that have been moved.
-		dbcDesignFolder := Config.path["EPIC_DBC_DESIGN"] "\" ; Add trailing backslash
-		if(path.startsWith(dbcDesignFolder)) { ; Old design documents
-			childFolder := path.firstBetweenStrings(dbcDesignFolder, "\")
-			folderYear := childFolder.sub(1, 4)
-			
-			; If the folder doesn't start with a year, check if it ends with one (i.e. August 2018).
-			if(!folderYear.isNum())
-				folderYear := childFolder.sub(-3) ; Last 4 characters
-			
-			if(folderYear.isNum() && folderYear < 2020) { ; Year folders
-				path := path.replace(dbcDesignFolder, dbcDesignFolder "Older Design Documents\") ; Moved to subfolder
-				Toast.ShowMedium("Redirected path (old design document)")
+		; Try to redirect old paths that have been moved.
+		if(!FileExist(path)) {
+			movedFolders := new TableList("movedFolders.tl").getTable()
+			For _,row in movedFolders {
+				if(path.startsWith(row["OLD_FOLDER"])) {
+					path := path.replaceOne(row["OLD_FOLDER"], row["NEW_FOLDER"])
+					Toast.ShowMedium("Redirected path (" row["NAME"] ")")
+					Break
+				}
 			}
 		}
 		
-		; Debug.popup("Updated path",path, "Table",table)
+		; Debug.popup("path",path, "mappedDrives",mappedDrives, "movedFolders",movedFolders)
 		return path
 	}
 	

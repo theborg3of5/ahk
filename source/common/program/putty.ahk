@@ -4,6 +4,24 @@ class Putty {
 	static ChangeSettingsOption := 0x50 ; IDM_RECONF, found in Putty's source code in window.c: https://github.com/codexns/putty/blob/master/windows/window.c
 	
 	;---------
+	; DESCRIPTION:    Wipe the screen, optionally also clearing scrollback.
+	; PARAMETERS:
+	;  clearScrollback (I,OPT) - Set to true to also clear scrollback.
+	;---------
+	wipeScreen(clearScrollback := false) {
+		Send, !{Space} ; Open menu
+		Send, t        ; Reset terminal
+		
+		if(clearScrollback) {
+			Send, !{Space}
+			Send, l ; Clear scrollback
+		}
+		
+		Sleep, 100
+		Send, {Enter} ; Show prompt
+	}
+	
+	;---------
 	; DESCRIPTION:    Prompt for some text, then insert it (without overwriting) by inserting spaces.
 	;---------
 	insertArbitraryText() {

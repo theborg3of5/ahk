@@ -6,28 +6,18 @@
 	; Insert arbitrary text, inserting needed spaces to overwrite.
 	^i::Putty.insertArbitraryText()
 	
-	; Screen wipe
-	^l::
-		Send, !{Space}
-		Send, t ; Reset terminal
-		Sleep, 100
-		Send, {Enter} ; Show prompt
-	return
-	; Screen wipe and clear scrollback
-	^+l::
-		Send, !{Space}
-		Send, t ; Reset terminal
-		Send, !{Space}
-		Send, l ; Clear scrollback
-		Sleep, 100
-		Send, {Enter} ; Show prompt
-	return
+	; Screen wipes
+	^l::Putty.wipeScreen()
+	^+l::Putty.wipeScreen(true)
 	
 	; Get out of Chronicles
 	^d::
-		Send, +{F7 3}     ; Get out of (potentially-nested) open records
-		Send, {PgDn 3}    ; Get out to main menu
-		Send, quit{Enter} ; Exit
+		Send, +{F7 3}                ; Get out of (potentially-nested) open records
+		Send, {PgDn 3}               ; Get out to main menu
+		Send, quit{Enter}            ; Exit
+		Putty.sendCommand("LOOKITT") ; Get back into Lookitt (in case we left)
+		Sleep, 100
+		Putty.wipeScreen()           ; Wipe the screen
 	return
 	
 	; Scrolling (^PgUp/^PgDn scrolls one line at a time)

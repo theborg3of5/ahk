@@ -2,12 +2,6 @@
   "folders": [
 	{
 		"path": "."
-	},
-	{
-		"path": "..\\OneDrive - Epic\\Dev\\vscode-autohotkey-plus-plus"
-	},
-	{
-		"path": "..\\.vscode\\extensions\\mark-wiemer.vscode-autohotkey-plus-plus-3.0.0"
 	}
 ],
   "settings": {}

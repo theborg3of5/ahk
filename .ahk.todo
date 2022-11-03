@@ -30,6 +30,7 @@ Switch to VS Code for TL[S] files:
 			Though I could also just generate separate intellisense files if need be (or create some and update them manually).
 
 New Ideas:
+	☐ Performance improvement idea: could I "compile" the titleStrings for activating/identifying windows down to a simple object in Config, instead of having to call a function every time?
 	☐ Consider getting rid of NOTES bit of headers - just include it in the description instead.
 	☐ Consider hotstrings or something similar for Ninpo notes style
 		☐ m/uL/R superscripted sides, directions (maybe just catch the capitalization and superscript it?)

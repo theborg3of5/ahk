@@ -51,8 +51,9 @@ New Ideas:
 		☐ Hotstrings for degree numbers (45 => 45°, 90 => 90°, 135, 180, 270, 360)
 			Alternatively, just use "d" - 45d => 45°, 90d, etc.
 		☐ Probably overkill, but could add a selector of techniques/stances/etc. (that includes super/subscripting)
-	☐ Consider switching scoping stuff to just use regions (which I've now added support for)
+	☐ Consider switching scoping stuff to just use #regions (which I've now added support for)
 		Note: can't nest regions (but can nest other folding stuff inside of them - so keep the =-- stuff to be able to do inside)
+		Probably also switch [[]] headers to using the same?
 	☐ TLP EMC2 info windows selector - consider filtering this specific case (not others like the insert-ID hotkey) to only windows which can return the title (just Chrome and Outlook, I think?)
 	☐ Figure out why escape-closing stops working after long enough
 		Happens to Telegram for sure, but also Explorer?

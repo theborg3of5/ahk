@@ -38,12 +38,13 @@ Switch to VS Code for AHK dev:
 			☐ @GROUP handling
 			☐ If I get really deep into parsing headers for parameters, signatureProvider looks like the place to implement that.
 		☐ Custom syntax highlighting (for my custom classes)
-	☐ Consider changing overall folder structure for repos
-		☐ Move private repos out into a separate folder
-		☐ Maybe have a top-level ahk folder
-			☐ main, private, test subfolders
-		☐ Or, alternative: look into secrets or something similar for private stuff, to eliminate need for private repos
-			☐ If we go this route, make sure it's scalable - adding new "private" files should stay easy (put them in the right folder, or maybe list them in a config file)
+	Other VS Code-related changes:
+		☐ Consider changing overall folder structure for repos
+			☐ Move private repos out into a separate folder
+			☐ Maybe have a top-level ahk folder
+				☐ main, private, test subfolders
+			☐ Or, alternative: look into secrets or something similar for private stuff, to eliminate need for private repos
+				☐ If we go this route, make sure it's scalable - adding new "private" files should stay easy (put them in the right folder, or maybe list them in a config file)
 	
 Switch to VS Code for TL[S] files:
 	☐ General syntax highlighting

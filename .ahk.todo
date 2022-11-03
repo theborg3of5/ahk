@@ -1,5 +1,6 @@
 Switch to VS Code for AHK dev:
 	✔ Experiment, see if I can set up the basics @done(22-10-27 13:32)
+	☐ Figure out how to build extension with my own changes
 	☐ Finding definitions
 		A lot of this works out of the box, but could I extend it to the more special cases?
 		☐ Better inheritance? (ActionObjectBase?)

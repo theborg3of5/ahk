@@ -1,10 +1,21 @@
 Switch to VS Code for AHK dev:
 	✔ Experiment, see if I can set up the basics @done(22-10-27 13:32)
 	☐ Figure out how to build extension with my own changes
+		✔ Running from source @done(22-11-03 12:19)
+		☐ Compile to install on other machines
 	☐ Finding definitions
 		A lot of this works out of the box, but could I extend it to the more special cases?
-		☐ Better inheritance? (ActionObjectBase?)
-		☐ Special string/object/array bases
+		Looks like this probably lives (or should live) in defProvider?
+		Pieces that we don't seem to be handling well:
+			✔ Better inheritance? (ActionObjectBase?) @done(22-11-03 12:18)
+				Actually this is working fine - we're just hitting the multiple-matches issue.
+			☐ Multiple method matches (by name) - we just return the first, could we return multiple options?
+			☐ #Include'd files in other directories
+				Actually, this works fine if I include the full %A_LineFile%\..\ for the current directory
+					i.e. ..\base\actionObjectBase.ahk => %A_LineFile%\..\..\base\actionObjectBase.ahk (adding %A_LineFile%\..\)
+			☐ Special string/object/array bases
+	☐ Folding
+		☐ /**/ with ; inside
 	☐ Intellisense
 		The only built-in support is for a one-line comment above functions, not enough for me.
 		✔ Pull in entire header like notepad++ did @done(22-10-27 13:35)
@@ -18,6 +29,7 @@ Switch to VS Code for AHK dev:
 			
 			SIDE EFFECTS: <SIDE EFFECTS>
 		☐ @GROUP handling
+		☐ If I get really deep into parsing headers for parameters, signatureProvider looks like the place to implement that.
 	☐ Custom syntax highlighting (for my custom classes)
 	✔ Consider an extension to handle TODOs instead of my current weird format (search for "ext:todo" or just "todo" in general) @done(22-10-27 13:37)
 		Trying out Todo+ here.
@@ -30,6 +42,7 @@ Switch to VS Code for TL[S] files:
 			Though I could also just generate separate intellisense files if need be (or create some and update them manually).
 
 New Ideas:
+	☐ Consider renaming ActionObject to something more like ActionObjectRedirector (as it is it sounds like ActionObjectBase, but it's really just a redirector)
 	☐ Performance improvement idea: could I "compile" the titleStrings for activating/identifying windows down to a simple object in Config, instead of having to call a function every time?
 	☐ Consider getting rid of NOTES bit of headers - just include it in the description instead.
 	☐ Consider hotstrings or something similar for Ninpo notes style

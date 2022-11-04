@@ -53,6 +53,7 @@ Switch to VS Code for TL[S] files:
 	☐ Intellisense
 		☐ Ideally using existing @NPP-TABLELIST handling
 			Though I could also just generate separate intellisense files if need be (or create some and update them manually).
+	☐ Reformat script - switch to 4-character-width tabs (should just be a constant, I think?)
 
 Consider rearranging overall folder structure:
 	Current: ahk\

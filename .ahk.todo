@@ -1,5 +1,14 @@
 Switch to VS Code for AHK dev:
 	✔ Experiment, see if I can set up the basics @done(22-10-27 13:32)
+	Other VS Code-related changes:
+		☐ Consider changing overall folder structure for repos
+			✔ Or, alternative: look into secrets or something similar for private stuff, to eliminate need for private repos @done(22-11-03 21:16)
+				If we go this route, make sure it's scalable - adding new "private" files should stay easy (put them in the right folder, or maybe list them in a config file)
+				! Sounds like I'd have to manually encrypt/decrypt any time changes happen, and diffing becomes more of a pain too...so this option is no good.
+			☐ ahk/ > main, private, test?
+			☐ Just move ahkPrivate up to main root (same level as test, should theoretically make it appear in VS Code's repo list)
+			☐ Merge private/test repos?
+			☐ Or, just move private repo folder up to root (so it appears in commit list)
 	AHK-based features to bring over:
 		✔ Consider an extension to handle TODOs instead of my current weird format (search for "ext:todo" or just "todo" in general) @done(22-10-27 13:37)
 			Trying out Todo+ here.
@@ -38,13 +47,6 @@ Switch to VS Code for AHK dev:
 			☐ @GROUP handling
 			☐ If I get really deep into parsing headers for parameters, signatureProvider looks like the place to implement that.
 		☐ Custom syntax highlighting (for my custom classes)
-	Other VS Code-related changes:
-		☐ Consider changing overall folder structure for repos
-			☐ Move private repos out into a separate folder
-			☐ Maybe have a top-level ahk folder
-				☐ main, private, test subfolders
-			☐ Or, alternative: look into secrets or something similar for private stuff, to eliminate need for private repos
-				☐ If we go this route, make sure it's scalable - adding new "private" files should stay easy (put them in the right folder, or maybe list them in a config file)
 	
 Switch to VS Code for TL[S] files:
 	☐ General syntax highlighting
@@ -52,6 +54,105 @@ Switch to VS Code for TL[S] files:
 		☐ Ideally using existing @NPP-TABLELIST handling
 			Though I could also just generate separate intellisense files if need be (or create some and update them manually).
 
+Consider rearranging overall folder structure:
+	Current: ahk\
+		config\
+			ahkPrivate\
+				Various private TL[S]s
+			local\
+				settings.ini
+					✔ This doesn't need its own separate directory, just gitignore it intelligently or whatever. @done(22-11-03 22:00)
+		firstSetup\
+			firstSetup.ahk
+			setup.tls
+			✔ Move this elsewhere, but leave a relative shortcut to firstSetup.ahk in the root @done(22-11-03 22:00)
+		output\
+			notepadPP_* (auto-completion and syntax-highlighting stuff)
+				✔ Remove, no longer used with VS Code @done(22-11-03 22:00)
+		source\
+			common\
+				base\
+					Ancestors of classes
+						☐ Would these make more sense in a subfolder under class\, or even just as part of class\ itself?
+							Most are really only used by classes in that folder
+					StringBase/ArrayBase/ObjectBase
+						☐ These kind of make sense here, but if we're moving the others these should probably find a new home too.
+				class\
+					Various classes, happy with them as-is.
+				external\
+					commandFunctions.ahk
+					HTTPRequest.ahk
+				lib\
+					Various static library classes
+				program\
+					Program-specific classes
+				static\
+					Static classes (besides libraries)
+				common.ahk
+			general\
+				Non-program-specific hotkeys
+			program\
+				Program-specific hotkeys
+			standalone\
+				Scripts that run independently of main script
+			sub\
+				Scripts that run alongside the main script
+			main.ahk
+			main icons
+		template\
+			class.ahk
+				✔ Consider turning this one into a snippet @done(22-11-03 21:59)
+			includeCommon.ahk
+				✔ Make this part of firstSetup stuff @done(22-11-03 21:59)
+			settings.ini
+				✔ Make this part of firstSetup stuff @done(22-11-03 21:59)
+			notepadPP_*
+				✔ Remove, no longer used with VS Code @done(22-11-03 22:00)
+		test\
+			test.ahk + icons
+			iconTester + icons + subfolder
+				✔ Consider moving this to the standalone source folder @done(22-11-03 22:00)
+		.ahk.todo
+			✔ Move this into an admin folder or something @done(22-11-03 21:51)
+			✔ Rename to ahk.todo since I don't need it to sort to the top anymore @done(22-11-03 21:51)
+		ahk.code-workspace
+			✔ Move this into an admin folder or something @done(22-11-03 21:51)
+		Lib.lnk
+			☐ Add a path/folder selector option for this instead of keeping a shortcut
+	Ideas
+		☐ Move icons all into one folder?
+		☐ Move private repo up to top level
+	Want: ahk\
+		☐ admin\
+			☐ ahk.todo
+			☐ ahk.code-workspace
+			☐ class.ahk (or turn into snippet)
+		☐ config\
+			✔ Same files as now
+			☐ settings.ini
+		☐ source\
+			✔ Same structure as now
+			☐ firstSetup\
+				☐ firstSetup.ahk
+				☐ setup.ini
+				☐ includeCommon.ahk
+				☐ settings.ini (or just turn this one into a constant string)
+			☐ standalone\iconTester\
+				☐ iconTester.ahk
+				☐ tested icons go in this folder now (not an icons\ subfolder)
+		☐ icons\
+			☐ All icons for all scripts
+		☐ private\
+			Private repo, same contents as before
+		☐ test\
+			☐ test.ahk
+		☐ firstSetup.ahk.lnk (a relative shortcut)
+		☐ Remove now-unused stuff:
+			☐ output\*
+			☐ template\notepadPP_*
+			☐ Lib.lnk
+				☐ Add a path/folder selector option for this instead
+	
 New Ideas:
 	☐ Consider renaming ActionObject to something more like ActionObjectRedirector (as it is it sounds like ActionObjectBase, but it's really just a redirector)
 	☐ Performance improvement idea: could I "compile" the titleStrings for activating/identifying windows down to a simple object in Config, instead of having to call a function every time?

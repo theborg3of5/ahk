@@ -355,7 +355,7 @@ class Config {
 	setting[key] {
 		get {
 			if(!this._settings) {
-				settingsINIPath := this.getConfigPath("local\settings.ini")
+				settingsINIPath := this.getConfigPath("settings.ini")
 				
 				this._settings := {}
 				this._settings["MACHINE"]      := IniRead(settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from Config.Machine_* constants

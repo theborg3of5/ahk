@@ -4,8 +4,8 @@ Thumbs.db
 *.tmp
 *.exe
 
-# Ignore folders containing local config info
-config/local/
+# Ignore local config info
+config/settings.ini
 
 # Ignore folders containing other repositories
 test/

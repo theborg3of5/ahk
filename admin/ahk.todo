@@ -124,13 +124,13 @@ Consider rearranging overall folder structure:
 		☐ Move icons all into one folder?
 		☐ Move private repo up to top level
 	Want: ahk\
-		☐ admin\
-			☐ ahk.todo
-			☐ ahk.code-workspace
-			☐ class.ahk (or turn into snippet)
-		☐ config\
+		✔ admin\ @done(22-11-05 20:05)
+			✔ ahk.todo @done(22-11-05 19:52)
+			✔ ahk.code-workspace @done(22-11-05 19:53)
+			✔ class.ahk (or turn into snippet) @done(22-11-05 20:00)
+		✔ config\ @done(22-11-05 20:05)
 			✔ Same files as now
-			☐ settings.ini (just gitignore it)
+			✔ settings.ini (just gitignore it) @done(22-11-05 20:05)
 		☐ source\
 			✔ Same structure as now
 			☐ firstSetup\
@@ -153,7 +153,19 @@ Consider rearranging overall folder structure:
 			☐ template\notepadPP_*
 			☐ Lib.lnk
 				☐ Add a path/folder selector option for this instead
-	
+	Required updates
+		☐ Config-finding logic (in FileLib I think)
+		☐ settings.ini location + new gitignore
+		☐ References to templates
+			☐ class.ahk path for new ahk class hotstring
+			☐ firstSetup stuff for settings.ini/includeCommon.ahk
+		☐ Figure out a nice way to handle icons all living in 1 folder (assuming I do that)
+	Later updates
+		☐ Consider turning templates into snippets:
+			☐ class.ahk
+			☐ settings.ini
+			☐ includeCommon.ahk
+
 New Ideas:
 	☐ Consider renaming ActionObject to something more like ActionObjectRedirector (as it is it sounds like ActionObjectBase, but it's really just a redirector)
 	☐ Performance improvement idea: could I "compile" the titleStrings for activating/identifying windows down to a simple object in Config, instead of having to call a function every time?

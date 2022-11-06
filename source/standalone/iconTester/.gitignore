@@ -1,0 +1,6 @@
+# Ignore all icon files
+*.ico
+
+# ...except the two defaults that go with the script itself.
+!pictureWhite.ico
+!pictureRed.ico

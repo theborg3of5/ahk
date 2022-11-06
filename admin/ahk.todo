@@ -155,14 +155,14 @@ Consider rearranging overall folder structure:
 			☐ All icons for all scripts
 		☐ private\
 			Private repo, same contents as before
-		☐ test\
-			☐ test.ahk
+		✔ test\ @done(22-11-05 20:25)
+			✔ test.ahk @done(22-11-05 20:25)
 		✔ firstSetup.ahk.lnk (a relative shortcut) @done(22-11-05 20:17)
 		☐ Remove now-unused stuff:
 			☐ output\*
 			☐ template\notepadPP_*
-			☐ Lib.lnk
-				☐ Add a path/folder selector option for this instead
+			✔ Lib.lnk @done(22-11-05 20:24)
+				✔ Add a path/folder selector option for this instead @done(22-11-05 20:24)
 	Required updates
 		☐ Config-finding logic (in FileLib I think)
 		☐ settings.ini location + new gitignore

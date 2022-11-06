@@ -255,7 +255,7 @@ class Config {
 	;---------
 	path[key] {
 		get {
-			return (this.paths)[key] ; Parens are so it doesn't try to pass a parameter to the this.privates property.
+			return (this.paths)[key] ; Parens are so it doesn't try to pass a parameter to the this.paths property.
 		}
 	}
 	
@@ -355,7 +355,7 @@ class Config {
 	setting[key] {
 		get {
 			if(!this._settings) {
-				settingsINIPath := this.getConfigPath("settings.ini")
+				settingsINIPath := this.getPathInConfigFolder("settings.ini")
 				
 				this._settings := {}
 				this._settings["MACHINE"]      := IniRead(settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from Config.Machine_* constants
@@ -373,7 +373,7 @@ class Config {
 	privates {
 		get {
 			if(!this._privates)
-				this._privates := new TableList(this.getConfigPath("ahkPrivate\privates.tl")).getColumnByColumn("VALUE", "KEY")
+				this._privates := new TableList(this.getRoot() "\private\privates.tl").getColumnByColumn("VALUE", "KEY")
 			
 			return this._privates
 		}
@@ -388,7 +388,7 @@ class Config {
 			if(!this._windows) {
 				this._windows := {}
 				
-				windowsTable := new TableList(this.getConfigPath("windows.tl")).getTable()
+				windowsTable := new TableList(this.getPathInConfigFolder("windows.tl")).getTable()
 				For _,row in windowsTable {
 					winInfo := new WindowInfo(row)
 					name := winInfo.name
@@ -408,7 +408,7 @@ class Config {
 	paths {
 		get {
 			if(!this._paths) {
-				pathsAry := new TableList(this.getConfigPath("paths.tl")).getColumnByColumn("PATH", "KEY")
+				pathsAry := new TableList(this.getPathInConfigFolder("paths.tl")).getColumnByColumn("PATH", "KEY")
 				
 				; Grab special path tags from the system to replace in the ones we just read in.
 				systemPathTags := this.getSystemPathTags()
@@ -443,7 +443,7 @@ class Config {
 				this._programs := {}
 				
 				; Turn each row into a Program object.
-				programsTable := new TableList(this.getConfigPath("programs.tl")).getRowsByColumn("NAME", "MACHINE")
+				programsTable := new TableList(this.getPathInConfigFolder("programs.tl")).getRowsByColumn("NAME", "MACHINE")
 				For progName,row in programsTable
 					this._programs[progName] := new Program(row)
 			}
@@ -459,7 +459,7 @@ class Config {
 	games {
 		get {
 			if(!this._games)
-				this._games := new TableList(this.getConfigPath("games.tl")).getTable()
+				this._games := new TableList(this.getPathInConfigFolder("games.tl")).getTable()
 			
 			return this._games
 		}
@@ -470,7 +470,7 @@ class Config {
 	; PARAMETERS:
 	;  relativeConfigPath (I,REQ) - The path to the config file, from within the <root>\config\ folder. No leading backslash.
 	;---------
-	getConfigPath(relativeConfigPath) {
+	getPathInConfigFolder(relativeConfigPath) {
 		return this.getRoot() "\config\" relativeConfigPath
 	}
 	

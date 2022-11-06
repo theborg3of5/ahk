@@ -40,8 +40,7 @@
 		; General
 		AHK Config								AHK_CONFIG								<AHK_ROOT>\config
 		AHK Source								AHK_SOURCE								<AHK_ROOT>\source
-		AHK Output								AHK_OUTPUT								<AHK_ROOT>\output
-		AHK Templates							AHK_TEMPLATE							<AHK_ROOT>\template
+		AHK Private								AHK_PRIVATE								<AHK_ROOT>\private
 		AHK Test									AHK_TEST									<AHK_ROOT>\test
 		Downloads								USER_DOWNLOADS							<USER_ROOT>\Downloads
 

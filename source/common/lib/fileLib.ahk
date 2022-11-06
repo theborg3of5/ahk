@@ -113,8 +113,7 @@ class FileLib {
 	; DESCRIPTION:    Find the given config file, by searching the following places for it:
 	;                  * The current folder
 	;                  * The AHK root config folder
-	;                  * The \local\ folder inside the AHK root config folder
-	;                  * The \ahkPrivate\ folder inside the AHK root config folder
+	;                  * The AHK root private folder
 	; PARAMETERS:
 	;  path (I,REQ) - The filename or path to locate.
 	; RETURNS:        The absolute filepath, or "" if we couldn't find it.
@@ -127,14 +126,13 @@ class FileLib {
 		if(FileExist(path))
 			return path
 		
-		; Check the overall config folder.
-		configFolder := Config.path["AHK_CONFIG"]
-		if(FileExist(configFolder "\" path))            ; General config folder
-			return configFolder "\" path
-		if(FileExist(configFolder "\local\" path))      ; Local folder (not version-controlled) inside of config
-			return configFolder "\local\" path
-		if(FileExist(configFolder "\ahkPrivate\" path)) ; Private folder (separately version-controlled) inside of config
-			return configFolder "\ahkPrivate\" path
+		; Check our config folders
+		configPath := Config.path["AHK_CONFIG"] "\" path ; General config folder
+		if(FileExist(configPath))
+			return configPath
+		privatePath := Config.path["AHK_PRIVATE"] "\" path ; Private folder (separately version-controlled)
+		if(FileExist(privatePath))
+			return privatePath
 		
 		return ""
 	}

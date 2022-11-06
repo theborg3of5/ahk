@@ -9,4 +9,4 @@ config/settings.ini
 
 # Ignore folders containing other repositories
 test/
-config/ahkPrivate/
+private/

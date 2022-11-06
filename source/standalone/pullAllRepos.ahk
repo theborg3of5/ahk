@@ -10,7 +10,7 @@ t := new ProgressToast("Pulling all AHK Git repos").blockingOn()
 
 gitRepos := []
 gitRepos.push(Config.path["AHK_ROOT"])
-gitRepos.push(Config.path["AHK_CONFIG"] "\ahkPrivate")
+gitRepos.push(Config.path["AHK_PRIVATE"])
 gitRepos.push(Config.path["AHK_TEST"])
 
 For _,path in gitRepos {

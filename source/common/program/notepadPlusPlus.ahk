@@ -158,7 +158,7 @@ class NotepadPlusPlus {
 	; DESCRIPTION:    Insert a template of an AHK class (read from a template file) at the cursor.
 	;---------
 	sendClassTemplate() {
-		templateString := FileRead(Config.path["AHK_TEMPLATE"] "\class.ahk")
+		templateString := FileRead(Config.path["AHK_ROOT"] "\admin\class.ahk")
 		if(!templateString) {
 			Toast.ShowError("Could not insert AHK class template", "Could not read template file")
 			return

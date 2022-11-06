@@ -15,8 +15,8 @@ startupFolder  := ahkRootPath "\source"
 mainAHKPath    := startupFolder "\main.ahk"
 
 copyPaths := {}
-copyPaths["..\template\includeCommon.ahk"] := A_MyDocuments "\AutoHotkey\Lib\includeCommon.ahk"
-copyPaths["..\template\settings.ini"]      := ahkRootPath "\config\settings.ini"
+copyPaths["includeCommon.ahk"] := A_MyDocuments "\AutoHotkey\Lib\includeCommon.ahk"
+copyPaths["settings.ini"]      := ahkRootPath "\config\settings.ini"
 
 gitNames := []
 gitNames.Push(".git")

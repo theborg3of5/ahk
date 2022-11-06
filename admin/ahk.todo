@@ -136,8 +136,8 @@ Consider rearranging overall folder structure:
 			☐ firstSetup\
 				☐ firstSetup.ahk
 				☐ setup.ini
-				☐ includeCommon.ahk
-				☐ settings.ini (or just turn this one into a constant string)
+				✔ includeCommon.ahk @done(22-11-05 20:12)
+				✔ settings.ini (or just turn this one into a constant string) @done(22-11-05 20:12)
 			☐ standalone\iconTester\
 				☐ iconTester.ahk
 				☐ tested icons go in this folder now (not an icons\ subfolder)
@@ -157,7 +157,7 @@ Consider rearranging overall folder structure:
 		☐ Config-finding logic (in FileLib I think)
 		☐ settings.ini location + new gitignore
 		☐ References to templates
-			☐ class.ahk path for new ahk class hotstring
+			✔ class.ahk path for new ahk class hotstring (NotepadPlusPlus::sendClassTemplate()) @done(22-11-05 20:10)
 			☐ firstSetup stuff for settings.ini/includeCommon.ahk
 		☐ Figure out a nice way to handle icons all living in 1 folder (assuming I do that)
 	Later updates

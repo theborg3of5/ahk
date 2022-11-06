@@ -25,10 +25,10 @@ FileEncoding, UTF-8                          ; Read files using UTF-8 encoding b
 
 ; Sub scripts. Must be first to execute so they can spin off and be on their own.
 subFolder := A_ScriptDir "\sub\"
-Run(subFolder "vimBindings\vimBindings.ahk")
-Run(subFolder "windowMoverSizer\windowMoverSizer.ahk")
+Run(subFolder "vimBindings.ahk")
+Run(subFolder "windowMoverSizer.ahk")
 if(Config.machineIsWorkLaptop)
-	Run(subFolder "killUAC\killUAC.ahk")
+	Run(subFolder "killUAC.ahk")
 
 ; Include other scripts
 #Include %A_ScriptDir%\general\ ; General hotkeys.

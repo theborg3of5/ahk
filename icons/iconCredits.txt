@@ -1,0 +1,46 @@
+Yusuke Kamiyamane ( http://p.yusukekamiyamane.com/ ):
+	Original icons:
+		color.ico
+		hourglass.ico
+	My adaptations of icons by this artist:
+		colorRed.ico
+		moveSize.ico
+		moveSizeRed.ico
+
+Double J Design ( http://www.doublejdesign.co.uk/ )
+	Original icons (from https://www.iconfinder.com/iconsets/super-mono-reflection ):
+		controllerGreen.ico
+		controllerRed.ico
+
+bokuwatensai ( https://www.deviantart.com/bokuwatensai ):
+	Original icons (from Chrome Cursor Set - https://www.deviantart.com/bokuwatensai/art/Chrome-Cursor-Set-177736893 )
+		cross.cur
+
+WPZOOM ( https://www.wpzoom.com/ ):
+	My adaptations of icons by this artist:
+		mouseGreen.ico
+		mouseRed.ico
+
+Turbomilk ( http://turbomilk.com/ ):
+	Original icons:
+		shieldGreen.ico
+		shieldRed.ico
+
+Everaldo Coelho ( http://www.everaldo.com/ ):
+	Original icons:
+		vimPause.ico
+	My adaptations of icons by this artist:
+		vim.ico
+		vimSuspend.ico
+
+Sandro Pereira ( https://blog.sandro-pereira.com/ ):
+	Original icons (from https://findicons.com/pack/2297/super_mario ):
+		shellGreen.ico
+	My adaptations of icons by this artist:
+		shellRed.ico
+
+Unknown artist (can't figure out where I got these from, if they're yours please let me know!):
+	Original icons:
+		pictureWhite.ico
+	My adaptations of icons by this artist:
+		pictureRed.ico

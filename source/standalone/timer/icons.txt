@@ -1,4 +1,0 @@
-Icons
-
-hourglass.ico
-	Icon by Yusuke Kamiyamane (http://p.yusukekamiyamane.com/)

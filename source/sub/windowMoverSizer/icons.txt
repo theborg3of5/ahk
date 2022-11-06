@@ -1,6 +1,0 @@
-Icons
-
-moveSize.ico
-	Based on icon by Yusuke Kamiyamane (http://p.yusukekamiyamane.com/)
-moveSizeRed.ico
-	Based on icon by Yusuke Kamiyamane (http://p.yusukekamiyamane.com/)

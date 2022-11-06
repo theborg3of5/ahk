@@ -121,12 +121,13 @@ Consider rearranging overall folder structure:
 		Lib.lnk
 			✔ Add a path/folder selector option for this instead of keeping a shortcut @done(22-11-05 20:17)
 	Ideas
-		☐ Move icons all into one folder?
+		✔ Move icons all into one folder? @done(22-11-05 21:07)
 		☐ Move private repo up to top level
 		☐ Consider turning templates into snippets:
 			☐ class.ahk
 			☐ settings.ini
 			☐ includeCommon.ahk
+		☐ Consider moving timer's TLS into code since it's static (and then I can move timer out of its 2-file subfolder)
 		☐ Should we move source\common\base? Currently contains these:
 			Ancestors of classes
 				☐ Would these make more sense in a subfolder under class\, or even just as part of class\ itself?
@@ -151,8 +152,8 @@ Consider rearranging overall folder structure:
 			✔ standalone\iconTester\ @done(22-11-05 20:32)
 				✔ iconTester.ahk @done(22-11-05 20:32)
 				✔ tested icons go in this folder now (not an icons\ subfolder) @done(22-11-05 20:32)
-		☐ icons\
-			☐ All icons for all scripts
+		✔ icons\ @done(22-11-05 21:05)
+			✔ All icons for all scripts @done(22-11-05 21:05)
 		☐ private\
 			Private repo, same contents as before
 		✔ test\ @done(22-11-05 20:25)
@@ -163,13 +164,13 @@ Consider rearranging overall folder structure:
 			☐ template\notepadPP_*
 			✔ Lib.lnk @done(22-11-05 20:24)
 				✔ Add a path/folder selector option for this instead @done(22-11-05 20:24)
-	Required updates
+	Required updates:
 		☐ Config-finding logic (in FileLib I think)
-		☐ settings.ini location + new gitignore
-		☐ References to templates
+		✔ settings.ini location + new gitignore @done(22-11-05 21:06)
+		✔ References to templates @done(22-11-05 21:06)
 			✔ class.ahk path for new ahk class hotstring (NotepadPlusPlus::sendClassTemplate()) @done(22-11-05 20:10)
-			☐ firstSetup stuff for settings.ini/includeCommon.ahk
-		☐ Figure out a nice way to handle icons all living in 1 folder (assuming I do that)
+			✔ firstSetup stuff for settings.ini/includeCommon.ahk @done(22-11-05 21:06)
+		✔ Figure out a nice way to handle icons all living in 1 folder (assuming I do that) @done(22-11-05 21:06)
 
 New Ideas:
 	☐ Consider renaming ActionObject to something more like ActionObjectRedirector (as it is it sounds like ActionObjectBase, but it's really just a redirector)

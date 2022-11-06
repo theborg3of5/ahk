@@ -1,6 +1,0 @@
-Icons
-
-vimPause.ico
-	Icon by Everaldo Coelho (http://www.everaldo.com/)
-vim.ico, vimSuspend.ico
-	Based on icon by Everaldo Coelho (http://www.everaldo.com/)

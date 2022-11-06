@@ -59,7 +59,7 @@ class ScriptTrayInfo {
 			return
 		
 		iconPath := Config.path["AHK_ROOT"] "\icons\" newIcon
-		if(!FileExist(iconPath)) ; Fallback to icons in same directory ; GDB TODO do I want to keep this around?
+		if(!FileExist(iconPath)) ; Fallback to icons in same directory
 			iconPath := A_WorkingDir "\" newIcon
 
 		if(!FileExist(iconPath))

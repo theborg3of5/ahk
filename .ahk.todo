@@ -130,7 +130,7 @@ Consider rearranging overall folder structure:
 			☐ class.ahk (or turn into snippet)
 		☐ config\
 			✔ Same files as now
-			☐ settings.ini
+			☐ settings.ini (just gitignore it)
 		☐ source\
 			✔ Same structure as now
 			☐ firstSetup\

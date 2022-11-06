@@ -47,7 +47,8 @@ Switch to VS Code for AHK dev:
 			☐ @GROUP handling
 			☐ If I get really deep into parsing headers for parameters, signatureProvider looks like the place to implement that.
 		☐ Custom syntax highlighting (for my custom classes)
-	
+	☐ Get rid of updateNotepadPPSupport once I'm sure I won't need it anymore (currently shows how to parse my headers and such).
+
 Switch to VS Code for TL[S] files:
 	☐ General syntax highlighting
 	☐ Intellisense
@@ -56,7 +57,7 @@ Switch to VS Code for TL[S] files:
 	☐ Reformat script - switch to 4-character-width tabs (should just be a constant, I think?)
 
 Consider rearranging overall folder structure:
-	Current ahk\:
+	✔ Current ahk\: @done(22-11-05 21:30)
 		config\
 			ahkPrivate\
 				Various private TL[S]s
@@ -120,21 +121,7 @@ Consider rearranging overall folder structure:
 			✔ Move this into an admin folder or something @done(22-11-03 21:51)
 		Lib.lnk
 			✔ Add a path/folder selector option for this instead of keeping a shortcut @done(22-11-05 20:17)
-	Ideas:
-		✔ Move icons all into one folder? @done(22-11-05 21:07)
-		✔ Move private repo up to top level @done(22-11-05 21:29)
-		☐ Consider turning templates into snippets:
-			☐ class.ahk
-			☐ settings.ini
-			☐ includeCommon.ahk
-		☐ Consider moving timer's TLS into code since it's static (and then I can move timer out of its 2-file subfolder)
-		☐ Should we move source\common\base? Currently contains these:
-			Ancestors of classes
-				☐ Would these make more sense in a subfolder under class\, or even just as part of class\ itself?
-					Most are really only used by classes in that folder
-			StringBase/ArrayBase/ObjectBase
-				☐ These kind of make sense here, but if we're moving the others these should probably find a new home too.
-	Want ahk\:
+	✔ Want ahk\: @done(22-11-05 21:30)
 		✔ admin\ @done(22-11-05 20:05)
 			✔ ahk.todo @done(22-11-05 19:52)
 			✔ ahk.code-workspace @done(22-11-05 19:53)
@@ -159,9 +146,9 @@ Consider rearranging overall folder structure:
 		✔ test\ @done(22-11-05 20:25)
 			✔ test.ahk @done(22-11-05 20:25)
 		✔ firstSetup.ahk.lnk (a relative shortcut) @done(22-11-05 20:17)
-		☐ Remove now-unused stuff:
-			☐ output\*
-			☐ template\notepadPP_*
+		✔ Remove now-unused stuff: @done(22-11-05 21:30)
+			✔ output\* @done(22-11-05 21:30)
+			✔ template\notepadPP_* @done(22-11-05 21:30)
 			✔ Lib.lnk @done(22-11-05 20:24)
 				✔ Add a path/folder selector option for this instead @done(22-11-05 20:24)
 	✔ Required updates: @done(22-11-05 21:29)
@@ -171,6 +158,20 @@ Consider rearranging overall folder structure:
 			✔ class.ahk path for new ahk class hotstring (NotepadPlusPlus::sendClassTemplate()) @done(22-11-05 20:10)
 			✔ firstSetup stuff for settings.ini/includeCommon.ahk @done(22-11-05 21:06)
 		✔ Figure out a nice way to handle icons all living in 1 folder (assuming I do that) @done(22-11-05 21:06)
+	Ideas:
+		✔ Move icons all into one folder? @done(22-11-05 21:07)
+		✔ Move private repo up to top level @done(22-11-05 21:29)
+		☐ Consider turning templates into snippets:
+			☐ class.ahk
+			☐ settings.ini
+			☐ includeCommon.ahk
+		☐ Consider moving timer's TLS into code since it's static (and then I can move timer out of its 2-file subfolder)
+		☐ Should we move source\common\base? Currently contains these:
+			Ancestors of classes
+				☐ Would these make more sense in a subfolder under class\, or even just as part of class\ itself?
+					Most are really only used by classes in that folder
+			StringBase/ArrayBase/ObjectBase
+				☐ These kind of make sense here, but if we're moving the others these should probably find a new home too.
 
 New Ideas:
 	☐ Consider renaming ActionObject to something more like ActionObjectRedirector (as it is it sounds like ActionObjectBase, but it's really just a redirector)

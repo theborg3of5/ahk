@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="windows-1252"?>
-<NotepadPlus>
-    <AutoComplete language="TableList">
-        <Environment ignoreCase="yes" startFunc="(" stopFunc=")" paramSeparator="," terminal="" additionalWordChar="" />
-{{KEYWORDS}}
-    </AutoComplete>
-</NotepadPlus>

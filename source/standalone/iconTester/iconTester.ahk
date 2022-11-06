@@ -17,10 +17,6 @@ iconsAry := []
 iconsAry[0] := A_IconFile ; Entry 0 is the original icon for the script
 Loop, Files, *.ico
 {
-	; Ignore the default icons for the script.
-	if(A_LoopFileName = "pictureWhite.ico" || A_LoopFileName = "pictureRed.ico")
-		Continue
-	
 	iconsAry.push(A_LoopFileName)
 }
 

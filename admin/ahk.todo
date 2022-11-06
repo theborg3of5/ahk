@@ -141,16 +141,16 @@ Consider rearranging overall folder structure:
 		✔ config\ @done(22-11-05 20:05)
 			✔ Same files as now
 			✔ settings.ini (just gitignore it) @done(22-11-05 20:05)
-		☐ source\
+		✔ source\ @done(22-11-05 20:32)
 			✔ Same structure as now
 			✔ firstSetup\ @done(22-11-05 20:17)
 				✔ firstSetup.ahk @done(22-11-05 20:17)
 				✔ setup.ini @done(22-11-05 20:17)
 				✔ includeCommon.ahk @done(22-11-05 20:12)
 				✔ settings.ini (or just turn this one into a constant string) @done(22-11-05 20:12)
-			☐ standalone\iconTester\
-				☐ iconTester.ahk
-				☐ tested icons go in this folder now (not an icons\ subfolder)
+			✔ standalone\iconTester\ @done(22-11-05 20:32)
+				✔ iconTester.ahk @done(22-11-05 20:32)
+				✔ tested icons go in this folder now (not an icons\ subfolder) @done(22-11-05 20:32)
 		☐ icons\
 			☐ All icons for all scripts
 		☐ private\

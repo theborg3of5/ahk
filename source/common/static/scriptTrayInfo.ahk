@@ -57,8 +57,11 @@ class ScriptTrayInfo {
 		; Debug.popup("ScriptTrayInfo.updateTrayIcon","Start", "this.stateIcons",this.stateIcons, "newIcon",newIcon)
 		if(!newIcon)
 			return
-			
-		iconPath := A_WorkingDir "\" newIcon
+		
+		iconPath := Config.path["AHK_ROOT"] "\icons\" newIcon
+		if(!FileExist(iconPath)) ; Fallback to icons in same directory ; GDB TODO do I want to keep this around?
+			iconPath := A_WorkingDir "\" newIcon
+
 		if(!FileExist(iconPath))
 			return
 		

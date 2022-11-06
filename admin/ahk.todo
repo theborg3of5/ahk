@@ -74,10 +74,10 @@ Consider rearranging overall folder structure:
 			common\
 				base\
 					Ancestors of classes
-						☐ Would these make more sense in a subfolder under class\, or even just as part of class\ itself?
+						✔ Would these make more sense in a subfolder under class\, or even just as part of class\ itself? @done(22-11-05 20:18)
 							Most are really only used by classes in that folder
 					StringBase/ArrayBase/ObjectBase
-						☐ These kind of make sense here, but if we're moving the others these should probably find a new home too.
+						✔ These kind of make sense here, but if we're moving the others these should probably find a new home too. @done(22-11-05 20:18)
 				class\
 					Various classes, happy with them as-is.
 				external\
@@ -119,10 +119,20 @@ Consider rearranging overall folder structure:
 		ahk.code-workspace
 			✔ Move this into an admin folder or something @done(22-11-03 21:51)
 		Lib.lnk
-			☐ Add a path/folder selector option for this instead of keeping a shortcut
+			✔ Add a path/folder selector option for this instead of keeping a shortcut @done(22-11-05 20:17)
 	Ideas
 		☐ Move icons all into one folder?
 		☐ Move private repo up to top level
+		☐ Consider turning templates into snippets:
+			☐ class.ahk
+			☐ settings.ini
+			☐ includeCommon.ahk
+		☐ Should we move source\common\base? Currently contains these:
+			Ancestors of classes
+				☐ Would these make more sense in a subfolder under class\, or even just as part of class\ itself?
+					Most are really only used by classes in that folder
+			StringBase/ArrayBase/ObjectBase
+				☐ These kind of make sense here, but if we're moving the others these should probably find a new home too.
 	Want: ahk\
 		✔ admin\ @done(22-11-05 20:05)
 			✔ ahk.todo @done(22-11-05 19:52)
@@ -133,9 +143,9 @@ Consider rearranging overall folder structure:
 			✔ settings.ini (just gitignore it) @done(22-11-05 20:05)
 		☐ source\
 			✔ Same structure as now
-			☐ firstSetup\
-				☐ firstSetup.ahk
-				☐ setup.ini
+			✔ firstSetup\ @done(22-11-05 20:17)
+				✔ firstSetup.ahk @done(22-11-05 20:17)
+				✔ setup.ini @done(22-11-05 20:17)
 				✔ includeCommon.ahk @done(22-11-05 20:12)
 				✔ settings.ini (or just turn this one into a constant string) @done(22-11-05 20:12)
 			☐ standalone\iconTester\
@@ -147,7 +157,7 @@ Consider rearranging overall folder structure:
 			Private repo, same contents as before
 		☐ test\
 			☐ test.ahk
-		☐ firstSetup.ahk.lnk (a relative shortcut)
+		✔ firstSetup.ahk.lnk (a relative shortcut) @done(22-11-05 20:17)
 		☐ Remove now-unused stuff:
 			☐ output\*
 			☐ template\notepadPP_*
@@ -160,11 +170,6 @@ Consider rearranging overall folder structure:
 			✔ class.ahk path for new ahk class hotstring (NotepadPlusPlus::sendClassTemplate()) @done(22-11-05 20:10)
 			☐ firstSetup stuff for settings.ini/includeCommon.ahk
 		☐ Figure out a nice way to handle icons all living in 1 folder (assuming I do that)
-	Later updates
-		☐ Consider turning templates into snippets:
-			☐ class.ahk
-			☐ settings.ini
-			☐ includeCommon.ahk
 
 New Ideas:
 	☐ Consider renaming ActionObject to something more like ActionObjectRedirector (as it is it sounds like ActionObjectBase, but it's really just a redirector)

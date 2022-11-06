@@ -13,6 +13,7 @@
 # System
 	Startup							start		<USER_STARTUP>
 	Pinned Shortcuts				ps			<USER_APPDATA>\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar
+	AutoHotkey lib (documents)	ahkl		<USER_DOCUMENTS>\AutoHotkey\Lib
 
 # Development
 	Onetastic Macros				ot			<ONETASTIC_MACROS>

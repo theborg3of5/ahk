@@ -476,6 +476,8 @@ class Selector {
 			table.addLine("Duplicates", duplicates)
 		
 		new TextPopup(table).show()
+		if(this.filePath)
+			Run(this.filePath) ; Open file to fix it
 		return false
 	}
 	

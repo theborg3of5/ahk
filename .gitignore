@@ -6,7 +6,3 @@ Thumbs.db
 
 # Ignore local config info
 config/settings.ini
-
-# Ignore folders containing other repositories
-test/
-private/

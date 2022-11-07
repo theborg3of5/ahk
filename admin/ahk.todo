@@ -158,6 +158,17 @@ Consider rearranging overall folder structure:
 			✔ class.ahk path for new ahk class hotstring (NotepadPlusPlus::sendClassTemplate()) @done(22-11-05 20:10)
 			✔ firstSetup stuff for settings.ini/includeCommon.ahk @done(22-11-05 21:06)
 		✔ Figure out a nice way to handle icons all living in 1 folder (assuming I do that) @done(22-11-05 21:06)
+	☐ Problem: VS Code isn't picking up the nested repos properly (and it sounds like that's an open issue)
+		✘ Idea: have an ahk folder with all 3 repos at the same level inside @cancelled(22-11-07 08:34)
+			ahk/
+				main/
+				private/
+				test/
+			✘ don't like this because it doesn't make sense for most stuff to move into a "main" subfolder
+		☐ Idea: move private/test folders up alongside normal repo
+			ahk/
+			ahkPrivate/
+			ahkTest/
 	Ideas:
 		✔ Move icons all into one folder? @done(22-11-05 21:07)
 		✔ Move private repo up to top level @done(22-11-05 21:29)

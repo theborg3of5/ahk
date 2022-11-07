@@ -17,18 +17,26 @@ global COLINFO_START := TableList.Char_ColumnInfo_Start
 global COLINFO_END   := TableList.Char_ColumnInfo_End
 
 
-if(!GuiLib.showConfirmationPopup("Reformat all TL/TLS files in AHK root directory?"))
+if(!GuiLib.showConfirmationPopup("Reformat all TL/TLS files?"))
 	ExitApp
 
-; Loop over .tl and .tls files in the AHK root directory.
+progToast := new ProgressToast("Reformatting TL/TLS files").blockingOn()
+
+progToast.nextStep("Main repo")
 root := Config.path["AHK_ROOT"]
 Loop, Files, %root%\*.tl*, RF
 {
 	reformatFile(A_LoopFileFullPath)
 }
 
-Toast.BlockAndShowMedium("Reformatted all TL/TLS files in AHK root directory")
+progToast.nextStep("Private repo")
+root := Config.path["AHK_PRIVATE"]
+Loop, Files, %root%\*.tl*, RF
+{
+	reformatFile(A_LoopFileFullPath)
+}
 
+progToast.finish()
 ExitApp
 
 

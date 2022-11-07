@@ -6,7 +6,7 @@
 		AHK Root									AHK_ROOT
 		AHK Private								AHK_PRIVATE
 		AHK Test									AHK_TEST
-		
+
 		AppData (Roaming)						USER_APPDATA
 		AppData Local							USER_APPDATA_LOCAL
 		Command prompt path					CMD

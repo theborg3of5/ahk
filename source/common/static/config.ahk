@@ -372,8 +372,12 @@ class Config {
 	;---------
 	privates {
 		get {
-			if(!this._privates)
-				this._privates := new TableList(this.getRoot() "\private\privates.tl").getColumnByColumn("VALUE", "KEY")
+			if(!this._privates) {
+				; This has to be explicit (rather than using this.path["AHK_PRIVATE"] like everywhere else should) because we use privates when we're first getting paths.
+			 	privatesPath := FileLib.getParentFolder(this.getRoot()) "\ahkPrivate\privates.tl"
+				
+			 	this._privates := new TableList(privatesPath).getColumnByColumn("VALUE", "KEY")
+			}
 			
 			return this._privates
 		}
@@ -505,7 +509,13 @@ class Config {
 		tags["CMD"]                := A_ComSpec                              ; C:\Windows\system32\cmd.exe
 		tags["USER_ONEDRIVE"]      := EnvGet("ONEDRIVE")                     ; C:\Users\<UserName>\<OneDrive folder>
 		
-		tags["AHK_ROOT"]           := this.getRoot()
+		ahkRoot := this.getRoot()
+		tags["AHK_ROOT"] := ahkRoot
+		
+		; These repos live alongside the main one.
+		ahkRootParent := FileLib.getParentFolder(ahkRoot)
+		tags["AHK_PRIVATE"] := ahkRootParent "\ahkPrivate"
+		tags["AHK_TEST"]    := ahkRootParent "\ahkTest"
 		
 		tags["EPIC_SOURCE_CURRENT"] := EpicLib.findCurrentVersionSourceFolder()
 		tags["EMC2_CURRENT_EXE"]    := EpicLib.findCurrentEMC2Path()

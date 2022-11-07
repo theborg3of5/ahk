@@ -4,6 +4,9 @@
 
 		; Pass-throughs - paths which are retrieved/calculated in Config.getSystemPathTags(). These can also be used in this file.
 		AHK Root									AHK_ROOT
+		AHK Private								AHK_PRIVATE
+		AHK Test									AHK_TEST
+		
 		AppData (Roaming)						USER_APPDATA
 		AppData Local							USER_APPDATA_LOCAL
 		Command prompt path					CMD
@@ -40,8 +43,6 @@
 		; General
 		AHK Config								AHK_CONFIG								<AHK_ROOT>\config
 		AHK Source								AHK_SOURCE								<AHK_ROOT>\source
-		AHK Private								AHK_PRIVATE								<AHK_ROOT>\private
-		AHK Test									AHK_TEST									<AHK_ROOT>\test
 		Downloads								USER_DOWNLOADS							<USER_ROOT>\Downloads
 
 		; Dev

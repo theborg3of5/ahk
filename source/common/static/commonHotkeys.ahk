@@ -233,7 +233,7 @@ class CommonHotkeys {
 		settings := new TempSettings().detectHiddenWindows("On")
 		
 		standaloneWinId := WinExist(WindowLib.buildTitleString("AutoHotkey.exe", "AutoHotkey", Config.path["AHK_ROOT"] "\source\standalone\"))
-		testWinId       := WinExist(WindowLib.buildTitleString("AutoHotkey.exe", "AutoHotkey", Config.path["AHK_ROOT"] "\test\"))
+		testWinId       := WinExist(WindowLib.buildTitleString("AutoHotkey.exe", "AutoHotkey", Config.path["AHK_TEST"] "\"))
 		
 		settings.restore()
 		; Debug.popup("standaloneWinId",standaloneWinId, "testWinId",testWinId, "(standaloneWinId || testWinId)",(standaloneWinId || testWinId))

@@ -32,4 +32,4 @@
 	Command Functions						cf							common\external\commandFunctions.ahk
 	Hotstrings								h							general\hotstrings.ahk
 }
-	Test										t							<AHK_ROOT>\test\test.ahk
+	Test										t							<AHK_TEST>\test.ahk

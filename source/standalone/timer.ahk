@@ -62,7 +62,16 @@ getTimerInfo(durationString, labelText) {
 	}
 	
 	; If that wasn't sucessful, prompt the user (with a Selector popup) for the duration (and optionally the label).
-	s := new Selector("timer.tls")
+	s := new Selector().setTitle("Timer duration").addOverrideFields({ 1:"DURATION_STRING", 2:"LABEL" })
+	s.addChoice(new SelectorChoice({ NAME:"5 minutes" , ABBREV:"5m"  , DURATION_STRING:"5m"   }))
+	s.addChoice(new SelectorChoice({ NAME:"10 minutes", ABBREV:"10m" , DURATION_STRING:"10m"  }))
+	s.addChoice(new SelectorChoice({ NAME:"15 minutes", ABBREV:"15m" , DURATION_STRING:"15m"  }))
+	s.addChoice(new SelectorChoice({ NAME:"20 minutes", ABBREV:"20m" , DURATION_STRING:"20m"  }))
+	s.addChoice(new SelectorChoice({ NAME:"30 minutes", ABBREV:"30m" , DURATION_STRING:"30m"  }))
+	s.addChoice(new SelectorChoice({ NAME:"45 minutes", ABBREV:"45m" , DURATION_STRING:"45m"  }))
+	s.addChoice(new SelectorChoice({ NAME:"1 hour"    , ABBREV:"1h"  , DURATION_STRING:"1h"   }))
+	s.addChoice(new SelectorChoice({ NAME:"1.5 hours" , ABBREV:"1.5h", DURATION_STRING:"1.5h" }))
+	
 	infoAry := s.selectGui()
 	if(!infoAry)
 		return false

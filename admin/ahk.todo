@@ -174,11 +174,11 @@ Consider rearranging overall folder structure:
 	Ideas:
 		✔ Move icons all into one folder? @done(22-11-05 21:07)
 		✔ Move private repo up to top level @done(22-11-05 21:29)
+		✔ Consider moving timer's TLS into code since it's static (and then I can move timer out of its 2-file subfolder) @done(22-11-07 11:07)
 		☐ Consider turning templates into snippets:
 			☐ class.ahk
 			☐ settings.ini
 			☐ includeCommon.ahk
-		☐ Consider moving timer's TLS into code since it's static (and then I can move timer out of its 2-file subfolder)
 		☐ Should we move source\common\base? Currently contains these:
 			Ancestors of classes
 				☐ Would these make more sense in a subfolder under class\, or even just as part of class\ itself?

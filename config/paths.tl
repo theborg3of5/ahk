@@ -56,7 +56,6 @@
 		VB6 Compile								VB6_COMPILE								<EPIC_SOURCE_CURRENT>\Compile
 		Transaction Diff						TX_DIFF									C:\Program Files\TransactionDiff
 		EpicStudio Global Highlights		EPICSTUDIO_GLOBAL_HIGHLIGHTS		<EPIC_PERSONAL>\EpicStudioGlobalHighlights
-		Epic Personal AHK						EPIC_PERSONAL_AHK						<EPIC_PERSONAL>\ahk
 	
 	; OneDrive folders
 	~PATH.addToStart(<USER_ONEDRIVE>\) {

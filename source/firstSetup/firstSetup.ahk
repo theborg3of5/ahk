@@ -8,7 +8,7 @@ CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 progToast := new ProgressToast("First-time setup")
 
 ; Various paths needed throughout.
-ahkRootPath    := FileLib.getParentFolder(A_ScriptDir)
+ahkRootPath    := FileLib.getParentFolder(A_ScriptDir, 2)
 userPath       := EnvGet("HOMEDRIVE") EnvGet("HOMEPATH")
 tlSetupPath    := "setup.tls"
 startupFolder  := ahkRootPath "\source"

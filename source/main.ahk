@@ -74,6 +74,7 @@ if(Config.machineIsWorkLaptop)
 #Include tortoise.ahk
 #Include vb6.ahk
 #Include visualStudio.ahk
+#Include vsCode.ahk
 #Include wilma.ahk
 #Include word.ahk
 #Include zoom.ahk

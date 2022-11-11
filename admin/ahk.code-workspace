@@ -10,5 +10,8 @@
 		"path": "..\\..\\ahkTest"
 	}
 ],
-  "settings": {}
+"settings": {
+	"files.encoding": "utf8bom",
+	"files.autoGuessEncoding": false
+}
 }

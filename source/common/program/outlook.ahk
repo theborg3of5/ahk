@@ -35,6 +35,36 @@ class Outlook {
 	
 	
 	; #INTERNAL#
+
+	;---------
+	; DESCRIPTION:    Flag for whether dark mode is currently on.
+	;---------
+	darkModeOn := true
+	
+	;---------
+	; DESCRIPTION:    Determine whether the current screen is one of our mail folders.
+	; RETURNS:        true/false
+	;---------
+	toggleDarkMode() {
+		; Always on the "Home" ("Message" for email popup, but still same hotkey) tab.
+		Send, !h
+
+		; It's two separate buttons with the simplified/short ribbon, so we have to keep track ourselves.
+		this.darkModeOn := !this.darkModeOn
+
+		; Hotkeys differ based on the context as well.
+		if(Outlook.isMailMessagePopupActive()) {
+			if(this.darkModeOn)
+				Send, b1 ; Switch Background (to light mode)
+			else
+				Send, b2 ; Switch Background (to dark mode)
+		} else {
+			if(this.darkModeOn)
+				Send, y1 ; Switch Background (to light mode)
+			else
+				Send, y2 ; Switch Background (to dark mode)
+		}
+	}
 	
 	;---------
 	; DESCRIPTION:    Determine whether the current screen is one of our mail folders.

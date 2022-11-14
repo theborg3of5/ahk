@@ -80,6 +80,11 @@
 	::hier'l::hierarchical
 	::heir'l::hierarchical
 	::auth'n::authorization
+	::qai::QA Instructions
+	::cache''::Caché
+	::snuuz::snüz
+	::med'n::medication
+	
 	::ass'n::association
 	::assoc'n::association
 	::ass'd::associated
@@ -88,9 +93,7 @@
 	::aassoc'n::auto-association
 	::aass'd::auto-associated
 	::aassoc'd::auto-associated
-	::qai::QA Instructions
-	::cache''::Caché
-	::snuuz::snüz
+	:*0:ade::associated DBC episode
 	
 	:?:sync's::synchronous ; Allow in other words for asynchronously
 	

@@ -219,10 +219,10 @@ class CommonHotkeys {
 	;                 false otherwise.
 	;---------
 	isEditingThisScript() {
-		if(!WinActive("ahk_class Notepad++"))
+		if(!Config.isWindowActive("VS Code"))
 			return false
 		
-		return WinGetActiveTitle().contains(A_ScriptFullPath)
+		return WinGetActiveTitle().startsWith(A_ScriptFullPath)
 	}
 	
 	;---------

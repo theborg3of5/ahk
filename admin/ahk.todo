@@ -10,6 +10,8 @@ Switch to VS Code for AHK dev:
 			☐ NotepadPlusPlus.sendClipboardAsString
 			☐ NotepadPlusPlus.sendContinuationBlock
 			☐ Documentation headers (port to snippet?)
+			☐ settings.ini template (move to a string or just build choices like we did for timer?)
+			☐ includeCommon.ahk template (move to a string?)
 		☐ Look into OutputDebug command for debugging stuff - prints to the debugger console
 		☐ Editing stuff in notepad++ (editFiles TLS, +e selector option, etc.)
 			Some of this is probably just a question of changing the default editor for TL/TLS files
@@ -171,27 +173,15 @@ Consider rearranging overall folder structure:
 		✔ Move icons all into one folder? @done(22-11-05 21:07)
 		✔ Move private repo up to top level @done(22-11-05 21:29)
 		✔ Consider moving timer's TLS into code since it's static (and then I can move timer out of its 2-file subfolder) @done(22-11-07 11:07)
-		☐ Consider turning templates into snippets:
-			☐ class.ahk
-			☐ settings.ini
-			☐ includeCommon.ahk
-		☐ Should we move source\common\base? Currently contains these:
-			Ancestors of classes
-				☐ Would these make more sense in a subfolder under class\, or even just as part of class\ itself?
-					Most are really only used by classes in that folder
-			StringBase/ArrayBase/ObjectBase
-				☐ These kind of make sense here, but if we're moving the others these should probably find a new home too.
 
-New Ideas:
+Fixes / Cleanup:
+	☐ Should we move source\common\base? Currently contains these:
+		Ancestors of classes
+			☐ Would these make more sense in a subfolder under class\, or even just as part of class\ itself?
+				Most are really only used by classes in that folder
+		StringBase/ArrayBase/ObjectBase
+			☐ These kind of make sense here, but if we're moving the others these should probably find a new home too.
 	☐ Consider renaming ActionObject to something more like ActionObjectRedirector (as it is it sounds like ActionObjectBase, but it's really just a redirector)
-	☐ Performance improvement idea: could I "compile" the titleStrings for activating/identifying windows down to a simple object in Config, instead of having to call a function every time?
-	☐ Consider getting rid of NOTES bit of headers - just include it in the description instead.
-	☐ Consider hotstrings or something similar for Ninpo notes style
-		☐ m/uL/R superscripted sides, directions (maybe just catch the capitalization and superscript it?)
-			Could either select + superscript hotkey, or try to send RTF (?) already-subscripted replacement
-		☐ Hotstrings for degree numbers (45 => 45°, 90 => 90°, 135, 180, 270, 360)
-			Alternatively, just use "d" - 45d => 45°, 90d, etc.
-		☐ Probably overkill, but could add a selector of techniques/stances/etc. (that includes super/subscripting)
 	☐ Consider switching scoping stuff to just use #regions (which I've now added support for)
 		Note: can't nest regions (but can nest other folding stuff inside of them - so keep the =-- stuff to be able to do inside)
 		Probably also switch [[]] headers to using the same?
@@ -217,6 +207,16 @@ New Ideas:
 				
 			Next: try debug flag of sorts again, so that we can try it with the "this" references in place
 		The "this" usages are my biggest suspect right now - from attached debugging, all of the members appear to be in place otherwise.
+
+New Features / Scripts:
+	☐ Performance improvement idea: could I "compile" the titleStrings for activating/identifying windows down to a simple object in Config, instead of having to call a function every time?
+	☐ Consider getting rid of NOTES bit of headers - just include it in the description instead.
+	☐ Consider hotstrings or something similar for Ninpo notes style
+		☐ m/uL/R superscripted sides, directions (maybe just catch the capitalization and superscript it?)
+			Could either select + superscript hotkey, or try to send RTF (?) already-subscripted replacement
+		☐ Hotstrings for degree numbers (45 => 45°, 90 => 90°, 135, 180, 270, 360)
+			Alternatively, just use "d" - 45d => 45°, 90d, etc.
+		☐ Probably overkill, but could add a selector of techniques/stances/etc. (that includes super/subscripting)
 	☐ ActionObject: consider a "could be" sort of sense for filtering which things an input is
 		For example, something with a "^" could go to either EpicStudio or CodeSearch
 		Alternatively, group like inputs together in one merged class
@@ -253,47 +253,43 @@ New Ideas:
 	☐ EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments
-
-Selector:
-	☐ Re-examine SelectorGui/FlexTable - could we simplify out a lot of the extra logic using built-in Gui positioning options?
-		https://www.autohotkey.com/docs/commands/Gui.htm#PosSize
-			Gui, Margin + AutoSize to avoid needing to keep track of a total height/width for the popup
-			wp/hp/x+n/y+n for sizing/positioning relative to last control
-			x+m/y+m to use margin value
-			xs/ys for "sections" - looks like I could use xs to start a new "row" (use the same X-value as the start of the "section")
-				Can use +n/-n for these as well
-		If I go through the trouble of doing this, also make index/abbreviation columns resize dynamically
-			Would need some way to figure out the max width of all text that WILL BE in a given column
-			OR: add all of one column, for the entire super-column, at once - then use xs+n to place the next column, etc.
-		Current functionality I'd want to duplicate:
-			Popup behavior
-				Size to contents (but ideally only to a point, then maybe scroll?)
-				No max/min buttons
-				Custom background/text colors
-				Grayed-out fields when default values (labels as "ghost" text, color changes live)
-				Enter to submit
-				Esc to cancel
-				Choice field focuses on startup
-			Content sizing
-				10px margin around main content
-				Specific padding between elements (5px index-abbrev, 10px abbrev-name, 5px between override fields, 30px between columns)
-				Dynamic widths for index/abbrev (if possible - current behavior is 25px index, 50px abbrev) and name (actually dynamic 	right now)
-				25px line height (on choices)
-				24px field height
-				First field width
-					If no overrides: full width
-					If overrides: index width + abbrev width (+ padding between)
-				Override field widths span remaining width equally
-				Sections (header + empty line at end)
-		Make sure to update Selector/SelectorGui documentation if stuff changes
-	☐ Dynamically resize abbreviation column based on widest value?
-		To allow longer abbreviations
-		Is that going to get weird with SelectorGui+FlexTable interactions?
-	☐ The @MinColumnWidth setting is currently used to make sure that field names show up - could we just handle that more automatically instead?
-		Somehow measure the width a field would need to be to fit its description comfortably
-			Or does that happen automatically if you add it with a value?
-		Maybe include an additional buffer on the end?
-			Maybe make it optional with an overall setting?
-		What about column widths, in a new top-level line like we have for field order/whether to show?
-			Could potentially combine it with the existing () line - INDEX-WIDTH, where width is optional (and presumably in pixels?)
+	Rework Selector/FlexTable:
+		☐ Re-examine SelectorGui/FlexTable - could we simplify out a lot of the extra logic using built-in Gui positioning options?
+			https://www.autohotkey.com/docs/commands/Gui.htm#PosSize
+				Gui, Margin + AutoSize to avoid needing to keep track of a total height/width for the popup
+				wp/hp/x+n/y+n for sizing/positioning relative to last control
+				x+m/y+m to use margin value
+				xs/ys for "sections" - looks like I could use xs to start a new "row" (use the same X-value as the start of the "section")
+					Can use +n/-n for these as well
+			If I go through the trouble of doing this, also make index/abbreviation columns resize dynamically
+				Would need some way to figure out the max width of all text that WILL BE in a given column
+				OR: add all of one column, for the entire super-column, at once - then use xs+n to place the next column, etc.
+			Current functionality I'd want to duplicate:
+				Popup behavior
+					Size to contents (but ideally only to a point, then maybe scroll?)
+					No max/min buttons
+					Custom background/text colors
+					Grayed-out fields when default values (labels as "ghost" text, color changes live)
+					Enter to submit
+					Esc to cancel
+					Choice field focuses on startup
+				Content sizing
+					10px margin around main content
+					Specific padding between elements (5px index-abbrev, 10px abbrev-name, 5px between override fields, 30px between columns)
+					Dynamic widths for index/abbrev (if possible - current behavior is 25px index, 50px abbrev) and name (actually dynamic 	right now)
+					25px line height (on choices)
+					24px field height
+					First field width
+						If no overrides: full width
+						If overrides: index width + abbrev width (+ padding between)
+					Override field widths span remaining width equally
+					Sections (header + empty line at end)
+			Make sure to update Selector/SelectorGui documentation if stuff changes
+		☐ The @MinColumnWidth setting is currently used to make sure that field names show up - could we just handle that more automatically instead?
+			Somehow measure the width a field would need to be to fit its description comfortably
+				Or does that happen automatically if you add it with a value?
+			Maybe include an additional buffer on the end?
+				Maybe make it optional with an overall setting?
+			What about column widths, in a new top-level line like we have for field order/whether to show?
+				Could potentially combine it with the existing () line - INDEX-WIDTH, where width is optional (and presumably in pixels?)
 	

@@ -5,40 +5,16 @@ Switch to VS Code for AHK dev:
 			Trying out Todo+ here.
 		Notepad++ stuff:
 			✔ dbpop hotstring (ported to snippet!) @done(22-11-14 21:57)
-				From ahk.json:
-					"Debug popup": {
-						"prefix": "dbpop",
-						"body": "Debug.popup(${1/([^,]+)([,\\s]*)/\"$1\",$1${2:+, }/g}) ; $1", // This works using a capture group + global flag, as described here: https://stackoverflow.com/a/58228253
-						"description": "AHK debug popup"
-					},
-					"Debug popup (surround)": {
-						"prefix": "dbpops",
-						"body": "Debug.popup(${TM_SELECTED_TEXT/([^,]+)([,\\s]*)/\"$1\",$1${2:+, }/g}) ; $TM_SELECTED_TEXT", // This works using a capture group + global flag, as described here: https://stackoverflow.com/a/58228253
-						"description": "AHK debug popup"
-					},
-					"Debug reduce (surround)": {
-						"prefix": "dbpopr",
-						// "body": "${TM_CURRENT_LINE/(Debug\\.[^\\(]+)[^\\)]+\\)\\s;\\s([\\w\\d,]+)/$1--$2/g}", // This works using a capture group + global flag, as described here: https://stackoverflow.com/a/58228253
-						// "body": "${TM_CURRENT_LINE/(Debug\\.[^\\(]+\\()[^\\)]+\\)\\s*;\\s*([^,]+)([,\\s]*)/$1\"$2\",$2${3:+, }/g}", // This works using a capture group + global flag, as described here: https://stackoverflow.com/a/58228253
-						// "body": "${TM_CURRENT_LINE/(?:(Debug\\.[^\\(]+\\()[^\\)]*\\)\\s*;\\s*)*([^,]+)([,\\s]*)/$1\"$2\",$2${3:+, }/g}",
-						// "body": "${1:${TM_CURRENT_LINE/(?:(Debug\\.[^\\(]+\\()[^\\)]*\\)\\s*;\\s*)*([^,]+)([,\\s]*)/$1\"$2\",$2${3:+, }/g}} ; $1",
-						"body": "${TM_CURRENT_LINE/(?:(Debug\\.[^\\(]+\\()[^\\)]*\\)\\s*;\\s*)*([^,]+)([,\\s]*)/$1\"$2\",$2${3:+, }/g}) ; ${TM_CURRENT_LINE/Debug\\..+\\([^\\)]*\\)\\s*;\\s*(.+)/$1/g}",
-						"description": "AHK debug popup"
-					},
-				From keybindings.json:
-					{
-						"key": "ctrl+e",
-						"command": "editor.action.insertSnippet",
-						"when": "editorTextFocus",
-						"args": {
-							"langId": "ahk",
-							"name": "Debug reduce (surround)"
-						},
-					},
+				✔ Ported to snippet @done(22-11-14 21:57)
+				✔ Switched back @done(22-11-15 11:42)
 			✔ Ctrl+S to reload standalone scripts @done(22-11-14 22:18)
-			☐ Other debug popups/toasts, normal toasts, error toasts (from vsCode script)
+			☐ Create a vsCode class and move stuff we're keeping over
+				☐ dbpop
+				☐ Other debug popups/toasts, normal toasts, error toasts (from vsCode script)
 			☐ NotepadPlusPlus.sendClipboardAsString
 			☐ NotepadPlusPlus.sendContinuationBlock
+			☐ NotepadPlusPlus.toggleProgramAndClass
+			☐ NotepadPlusPlus.sendDocHeader
 			☐ Documentation headers (port to snippet?)
 			☐ settings.ini template (move to a string or just build choices like we did for timer?)
 			☐ includeCommon.ahk template (move to a string?)

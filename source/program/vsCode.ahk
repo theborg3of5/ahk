@@ -19,7 +19,7 @@
 	; Pause::NotepadPlusPlus.toggleProgramAndClass()
 	
 	; Redo the indentation for the selected documentation lines
-	^Enter::new AHKDocBlock().rewrapSelection()
+	; ^Enter::new AHKDocBlock().rewrapSelection() ; GDB TODO this isn't selecting the current line, seems like? Shouldn't it?
 	
 	; AHK debug strings
 	:X:dbpop::  NotepadPlusPlus.sendDebugCodeString("Debug.popup",      clipboard) ; Debug popup
@@ -28,7 +28,7 @@
 	^e::NotepadPlusPlus.editDebugLine() ; GDB TODO can we pull this off with snippets?
 	
 	; Other AHK dev strings
-	:X:`;`;`;::  NotepadPlusPlus.sendDocHeader()
+	:X:`;`;`;::NotepadPlusPlus.sendDocHeader()
 	; :X:ahkcont:: NotepadPlusPlus.sendContinuationBlock() ; GDB TODO doesn't work here, double text
 	:X:ahkto:: Send, Toast.ShowMedium(""){Left 2}
 	:X:ahketo::Send, Toast.ShowError(""){Left 2}

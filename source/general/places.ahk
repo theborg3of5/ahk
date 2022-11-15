@@ -62,12 +62,12 @@ sendCleanedUpPath(containingFolderOnly := false) {
 			return
 		}
 		
-		Config.runProgram("Notepad++", path)
+		Config.runProgram("VS Code", path)
 	}
 
 
 ; [[Websites]] ---
-$^!+f::Run("http://feedly.com/i/latest") ; $ as Notepad++ highlight-all hotkey sends these keys
+$^!+f::Run("http://feedly.com/i/latest") ; $ as Notepad++ highlight-all hotkey sends these keys ; GDB TODO is that worth worrying about anymore with the switch to VS Code?
 ^!#m:: Config.runProgram("Gmail")
 ^!+a::
 	openUsualSites() {

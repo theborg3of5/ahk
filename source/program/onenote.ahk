@@ -35,7 +35,7 @@
 	
 	; Print preview
 	^!p::
-		Send, !fpr
+		Send, !f1pr
 	return
 	
 	; Delete the entire current line

@@ -1,21 +1,15 @@
 Switch to VS Code for AHK dev:
 	✔ Experiment, see if I can set up the basics @done(22-10-27 13:32)
-	Other VS Code-related changes:
-		☐ Consider changing overall folder structure for repos
-			✔ Or, alternative: look into secrets or something similar for private stuff, to eliminate need for private repos @done(22-11-03 21:16)
-				If we go this route, make sure it's scalable - adding new "private" files should stay easy (put them in the right folder, or maybe list them in a config file)
-				! Sounds like I'd have to manually encrypt/decrypt any time changes happen, and diffing becomes more of a pain too...so this option is no good.
-			☐ ahk/ > main, private, test?
-			☐ Just move ahkPrivate up to main root (same level as test, should theoretically make it appear in VS Code's repo list)
-			☐ Merge private/test repos?
-			☐ Or, just move private repo folder up to root (so it appears in commit list)
 	AHK-based features to bring over:
 		✔ Consider an extension to handle TODOs instead of my current weird format (search for "ext:todo" or just "todo" in general): @done(22-10-27 13:37)
 			Trying out Todo+ here.
 		Notepad++ stuff:
-			☐ dbpop hotstring (port to snippet?)
+			✔ dbpop hotstring (ported to snippet!) @done(22-11-14 21:57)
+			✔ Ctrl+S to reload standalone scripts @done(22-11-14 22:18)
+			☐ Other debug popups/toasts, normal toasts, error toasts (from vsCode script)
+			☐ NotepadPlusPlus.sendClipboardAsString
+			☐ NotepadPlusPlus.sendContinuationBlock
 			☐ Documentation headers (port to snippet?)
-			☐ Ctrl+S to save
 		☐ Look into OutputDebug command for debugging stuff - prints to the debugger console
 		☐ Editing stuff in notepad++ (editFiles TLS, +e selector option, etc.)
 			Some of this is probably just a question of changing the default editor for TL/TLS files

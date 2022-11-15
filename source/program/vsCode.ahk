@@ -30,7 +30,6 @@
 	; Other AHK dev strings
 	:X:`;`;`;::  NotepadPlusPlus.sendDocHeader()
 	; :X:ahkcont:: NotepadPlusPlus.sendContinuationBlock() ; GDB TODO doesn't work here, double text
-	:X:ahkclass::NotepadPlusPlus.sendClassTemplate()
 	:X:ahkto:: Send, Toast.ShowMedium(""){Left 2}
 	:X:ahketo::Send, Toast.ShowError(""){Left 2}
 	:X:.clipboard::NotepadPlusPlus.sendClipboardAsString() ; GDB TODO needs an update to work properly with newlines (probably either a continuation section, or I'm not removing enough newlines?)

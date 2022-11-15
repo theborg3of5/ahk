@@ -97,6 +97,7 @@ Object(params*) {
 	#Include telegram.ahk
 	#Include vb6.ahk
 	#Include visualStudio.ahk
+	#Include vsCode.ahk
 	#Include zoom.ahk
 	
 #Include %A_LineFile%\..\static

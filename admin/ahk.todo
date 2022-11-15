@@ -18,6 +18,8 @@ Switch to VS Code for AHK dev:
 			☐ Documentation headers (port to snippet?)
 			☐ settings.ini template (move to a string or just build choices like we did for timer?)
 			☐ includeCommon.ahk template (move to a string?)
+			☐ Clear out the NotepadPlusPlus class
+				Probably very little that'll be left there - if only 1-2 things, may not even be worth a class anymore, just do inline functions instead.
 		☐ Look into OutputDebug command for debugging stuff - prints to the debugger console
 		☐ Editing stuff in notepad++ (editFiles TLS, +e selector option, etc.)
 			Some of this is probably just a question of changing the default editor for TL/TLS files

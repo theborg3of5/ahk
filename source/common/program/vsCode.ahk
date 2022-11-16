@@ -117,22 +117,22 @@ class VSCode {
 		this.sendAHKDebugCodeString(functionName, reducedParams)
 	}
 	
-	; ;--------- ; GDB TODO
-	; ; DESCRIPTION:    Insert an AHK function header based on the function defined on the line below
-	; ;                 the cursor.
-	; ; SIDE EFFECTS:   Selects the line below in order to process the parameters.
-	; ;---------
-	; sendDocHeader() {
-	; 	; Select the following line after this one to get parameter information
-	; 	Send, {Down}
-	; 	SelectLib.selectCurrentLine()
+	;---------
+	; DESCRIPTION:    Insert an AHK function header based on the function defined on the line below
+	;                 the cursor.
+	; SIDE EFFECTS:   Selects the line below in order to process the parameters.
+	;---------
+	sendDocHeader() {
+		; Select the following line after this one to get parameter information
+		Send, {Down}
+		SelectLib.selectCurrentLine()
 		
-	; 	defLine := SelectLib.getText().clean()
-	; 	Send, {Up}
+		defLine := SelectLib.getText().clean()
+		Send, {Up}
 		
-	; 	SendRaw, % AHKCodeLib.generateDocHeader(defLine)
-	; }
-	
+		SendRaw, % AHKCodeLib.generateDocHeader(defLine)
+	}
+
 	
 	; #PRIVATE#
 	static windowTitleSeparator := " - " ; Separator (window.titleSeparator) between elements of the window title (window.title)

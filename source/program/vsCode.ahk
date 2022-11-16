@@ -26,5 +26,5 @@
 	^e::		VSCode.editDebugLine()
 
 	; Other AHK dev strings
-	; :X:`;`;`;::VSCode.sendDocHeader()
+	:X:`;`;`;::VSCode.sendDocHeader()
 #If

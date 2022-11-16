@@ -479,6 +479,7 @@ class EpicLib {
 	;---------
 	flattenDashedINIs(text) {
 		text := text.replace("PRJ-R", "PRJR") ; Project Readiness
+		text := text.replace("XDS-I", "XDSI") ; Design Issues
 		text := text.replace("DLG-I", "DLGI") ; DLG Issues
 		
 		return text

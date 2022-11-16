@@ -194,6 +194,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	convertDashedINI(ini) {
 		Switch ini {
 			Case "PRJ-R": return "PRJ"
+			Case "XDS-I": return "XDS"
 			Case "DLG-I": return "DLG"
 		}
 		

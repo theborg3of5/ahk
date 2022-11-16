@@ -34,21 +34,21 @@ class VSCode {
 	; 	Run(parentFolder)
 	; }
 	
-	; ;--------- ; GDB TODO
-	; ; DESCRIPTION:    For program scripts, swap between the program script and its matching class script.
-	; ;---------
-	; toggleProgramAndClass() {
-	; 	currScriptPath := WinGetActiveTitle().beforeString(" - Notepad++", true).removeFromStart("*")
-	; 	SplitPath(currScriptPath, scriptName)
+	;---------
+	; DESCRIPTION:    For program scripts, swap between the program script and its matching class script.
+	;---------
+	toggleProgramAndClass() {
+		currScriptPath := WinGetActiveTitle().beforeString(this.windowTitleSeparator)
+		SplitPath(currScriptPath, scriptName)
 		
-	; 	if(currScriptPath.startsWith(Config.path["AHK_SOURCE"] "\program\"))
-	; 		matchingScriptPath := Config.path["AHK_SOURCE"] "\common\program\" scriptName
-	; 	else if(currScriptPath.startsWith(Config.path["AHK_SOURCE"] "\common\program\"))
-	; 		matchingScriptPath := Config.path["AHK_SOURCE"] "\program\" scriptName
+		if(currScriptPath.startsWith(Config.path["AHK_SOURCE"] "\program\"))
+			matchingScriptPath := Config.path["AHK_SOURCE"] "\common\program\" scriptName
+		else if(currScriptPath.startsWith(Config.path["AHK_SOURCE"] "\common\program\"))
+			matchingScriptPath := Config.path["AHK_SOURCE"] "\program\" scriptName
 		
-	; 	if(FileExist(matchingScriptPath))
-	; }
+		if(FileExist(matchingScriptPath))
 			Config.runProgram("VSCode", matchingScriptPath)
+	}
 	
 	; ;--------- ; GDB TODO
 	; ; DESCRIPTION:    Send a code string for defaulting a variable to a different value if it's false/blank.
@@ -206,7 +206,7 @@ class VSCode {
 	
 	; #PRIVATE#
 
-	windowTitleSeparator := " - " ; Separator (window.titleSeparator) between elements of the window title (window.title)
+	static windowTitleSeparator := " - " ; Separator (window.titleSeparator) between elements of the window title (window.title)
 	
 	; ;--------- ; GDB TODO
 	; ; DESCRIPTION:    Get the indentation from the current line (as the whitespace it is, not a count).

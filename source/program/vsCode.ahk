@@ -16,6 +16,7 @@
 	; ^+o::VSCode.openCurrentParentFolder()
 	
 	; For program scripts, swap to corresponding class script and back.
+	Pause::VSCode.toggleProgramAndClass()
 	
 	; Redo the indentation for the selected documentation lines
 	; ^Enter::new AHKDocBlock().rewrapSelection() ; GDB TODO this isn't selecting the current line, seems like? Shouldn't it?

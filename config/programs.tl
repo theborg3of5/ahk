@@ -55,7 +55,7 @@
 		GrepWin						Programs\grepWin\grepWin.exe														WORK_DESKTOP
 		Slack							slack\slack.exe																		HOME_DESKTOP
 		Teams							Microsoft\Teams\current\Teams.exe												WORK_DESKTOP
-		VS Code						Programs\Microsoft VS Code\Code.exe
+		VSCode						Programs\Microsoft VS Code\Code.exe
 	}
 	
 	~PATH.addToStart(<USER_APPDATA>\) {

@@ -62,7 +62,7 @@ sendCleanedUpPath(containingFolderOnly := false) {
 			return
 		}
 		
-		Config.runProgram("VS Code", path)
+		Config.runProgram("VSCode", path)
 	}
 
 

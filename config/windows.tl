@@ -106,7 +106,7 @@
 				VB6										VB6.exe						wndclass_desked_gsk
 				VMware Horizon Client				vmware-view.exe
 				Visual Studio							devenv.exe					-									(Administrator)
-				VS Code									Code.exe
+				VSCode									Code.exe
 				WebEx										atmgr.exe					-									-														NO_PADDING
 				Windows Taskbar						explorer.exe				Shell_TrayWnd
 				Windows Taskbar Secondary			explorer.exe				Shell_SecondaryTrayWnd

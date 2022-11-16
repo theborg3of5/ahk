@@ -219,7 +219,7 @@ class CommonHotkeys {
 	;                 false otherwise.
 	;---------
 	isEditingThisScript() {
-		if(!Config.isWindowActive("VS Code"))
+		if(!Config.isWindowActive("VSCode"))
 			return false
 		
 		return WinGetActiveTitle().startsWith(A_ScriptFullPath)

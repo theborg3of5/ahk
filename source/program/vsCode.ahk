@@ -1,4 +1,4 @@
-﻿#If Config.isWindowActive("VS Code")
+﻿#If Config.isWindowActive("VSCode")
 	; GDB TODO consider which of the below to re-enable and/or keep.
 	
 	; !f:: Send, ^!+f ; Use !f hotkey for highlighting with the first style (ControlSend so we don't trigger other hotkeys)
@@ -16,16 +16,15 @@
 	; ^+o::VSCode.openCurrentParentFolder()
 	
 	; For program scripts, swap to corresponding class script and back.
-	; Pause::VSCode.toggleProgramAndClass()
 	
 	; Redo the indentation for the selected documentation lines
 	; ^Enter::new AHKDocBlock().rewrapSelection() ; GDB TODO this isn't selecting the current line, seems like? Shouldn't it?
 	
 	; AHK debug strings
-	:X:dbpop::	VSCode.sendDebugCodeString("Debug.popup",      clipboard) ; Debug popup
-	:X:dbto::	VSCode.sendDebugCodeString("Debug.toast",      clipboard) ; Debug toast
-	:X:edbpop::	VSCode.sendDebugCodeString("Debug.popupEarly", clipboard) ; Debug popup that appears at startup
-	^e::		VSCode.editDebugLine() ; GDB TODO can we pull this off with snippets?
+	:X:dbpop::	VSCode.sendAHKDebugCodeString("Debug.popup",      clipboard) ; Debug popup
+	:X:dbto::	VSCode.sendAHKDebugCodeString("Debug.toast",      clipboard) ; Debug toast
+	:X:edbpop::	VSCode.sendAHKDebugCodeString("Debug.popupEarly", clipboard) ; Debug popup that appears at startup
+	^e::		VSCode.editDebugLine()
 	
 	; Other AHK dev strings
 	; :X:`;`;`;::VSCode.sendDocHeader()

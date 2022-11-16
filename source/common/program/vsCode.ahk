@@ -47,8 +47,8 @@ class VSCode {
 	; 		matchingScriptPath := Config.path["AHK_SOURCE"] "\program\" scriptName
 		
 	; 	if(FileExist(matchingScriptPath))
-	; 		Config.runProgram("Notepad++", matchingScriptPath)
 	; }
+			Config.runProgram("VSCode", matchingScriptPath)
 	
 	; ;--------- ; GDB TODO
 	; ; DESCRIPTION:    Send a code string for defaulting a variable to a different value if it's false/blank.
@@ -74,7 +74,7 @@ class VSCode {
 	;  functionName   (I,REQ) - Name of the function to send before the parameters.
 	;  defaultVarList (I,OPT) - Var list to default into the popup.
 	;---------
-	sendDebugCodeString(functionName, defaultVarList := "") {
+	sendAHKDebugCodeString(functionName, defaultVarList := "") {
 		if(functionName = "")
 			return
 		
@@ -114,7 +114,7 @@ class VSCode {
 		
 		paramsString := debugLine.allBetweenStrings("(", ")")
 		reducedParams := AHKCodeLib.reduceDebugParams(paramsString)
-		this.sendDebugCodeString(functionName, reducedParams)
+		this.sendAHKDebugCodeString(functionName, reducedParams)
 	}
 	
 	; ;--------- ; GDB TODO

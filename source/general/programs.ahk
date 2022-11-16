@@ -10,7 +10,7 @@
 ^!+n::Config.activateProgram("Notepad++")
 ^!#n::Config.runProgram("Notepad")
 ^!#t::Config.runProgram("Teams")
-^!#v::Config.activateProgram("VS Code")
+^!#v::Config.activateProgram("VSCode")
 ^!#/::Config.activateProgram("AutoHotkey WinSpy")
 
 ; Some programs are work-specific

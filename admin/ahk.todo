@@ -8,14 +8,13 @@ Switch to VS Code for AHK dev:
 				✔ Ported to snippet @done(22-11-14 21:57)
 				✔ Switched back @done(22-11-15 11:42)
 			✔ Ctrl+S to reload standalone scripts @done(22-11-14 22:18)
-			☐ Create a vsCode class and move stuff we're keeping over
-				☐ dbpop
-				☐ Other debug popups/toasts, normal toasts, error toasts (from vsCode script)
-			☐ NotepadPlusPlus.sendClipboardAsString
-			☐ NotepadPlusPlus.sendContinuationBlock
-			☐ NotepadPlusPlus.toggleProgramAndClass
-			☐ NotepadPlusPlus.sendDocHeader
-			☐ Documentation headers (port to snippet?)
+			✔ Create a vsCode class and move stuff we're keeping over @done(22-11-16 12:59)
+				✔ dbpop @done(22-11-16 12:59)
+				✔ Other debug popups/toasts, normal toasts, error toasts (from vsCode script) @done(22-11-16 12:59)
+			✔ NotepadPlusPlus.toggleProgramAndClass @done(22-11-16 12:59)
+			✔ NotepadPlusPlus.sendClipboardAsString @done(22-11-16 16:19)
+			✔ NotepadPlusPlus.sendContinuationBlock (now a snippet) @done(22-11-16 15:43)
+			☐ NotepadPlusPlus.sendDocHeader (port to snippet?)
 			☐ settings.ini template (move to a string or just build choices like we did for timer?)
 			☐ includeCommon.ahk template (move to a string?)
 			☐ Clear out the NotepadPlusPlus class

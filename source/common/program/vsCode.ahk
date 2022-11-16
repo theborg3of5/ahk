@@ -133,79 +133,8 @@ class VSCode {
 	; 	SendRaw, % AHKCodeLib.generateDocHeader(defLine)
 	; }
 	
-	; ;--------- ; GDB TODO
-	; ; DESCRIPTION:    Create a continuation block and put the cursor inside.
-	; ; NOTES:          Assumes that you're already at the end of the line where you want to start
-	; ;                 the block.
-	; ;---------
-	; sendContinuationBlock() {
-	; 	parentIndent := this.getCurrentLineIndent()
-		
-	; 	sectionBase := "
-	; 		(
-	; 			""
-	; 				`t(
-	; 					`t`t
-	; 				`t)""
-	; 		)"
-	; 	sectionString := sectionBase.replace("`n", "`n" parentIndent) ; Add parent's indent to each line (except the first one)
-		
-	; 	ClipboardLib.send(sectionString)
-	; 	Send, {Up}{End} ; Get into the new block
-	; }
-	
-	; ;--------- ; GDB TODO
-	; ; DESCRIPTION:    Send a code snippet.
-	; ; PARAMETERS:
-	; ;  snippetName (I,REQ) - The name of the snippet, see code for which are supported.
-	; ; NOTES:          The snippet will be inserted at the end of the current line
-	; ;---------
-	; sendSnippet(snippetName) {
-	; 	currentIndent := this.getCurrentLineIndent()
-		
-	; 	Switch snippetName {
-	; 		Case "if":
-	; 			snippet := "
-	; 				(
-	; 					if() {
-	; 						`t
-	; 					}
-	; 				)"
-	; 			snipString := snippet.replace("`n", "`n" currentIndent) ; Add indent to each line (except the first one)
-	; 			ClipboardLib.send(snipString)
-	; 			Send, {Up 2}{End}{Left 3} ; Inside the if parens
-				
-	; 		Case "for":
-	; 			snippet := "
-	; 				(
-	; 					For , in  {
-	; 						`t
-	; 					}
-	; 				)"
-	; 			snipString := snippet.replace("`n", "`n" currentIndent) ; Add indent to each line (except the first one)
-	; 			ClipboardLib.send(snipString)
-	; 			Send, {Up 2}{End}{Left 7} ; At the index spot
-	; 	}
-	; }
-	
-	; ;--------- ; GDB TODO
-	; ; DESCRIPTION:    Convert the current clipboard value into a string value and insert it.
-	; ; SIDE EFFECTS:   Converts each newline into `n
-	; ;---------
-	; sendClipboardAsString() {
-	; 	QUOTE := """" ; A single double-quote character
-		
-	; 	value := clipboard
-	; 	value := value.replace("`n","``n")
-	; 	value := StringLib.escapeCharUsingChar(value, QUOTE, QUOTE)
-	; 	value := QUOTE value QUOTE
-		
-	; 	ClipboardLib.send(value)
-	; }
-	
 	
 	; #PRIVATE#
-
 	static windowTitleSeparator := " - " ; Separator (window.titleSeparator) between elements of the window title (window.title)
 	
 	; ;--------- ; GDB TODO

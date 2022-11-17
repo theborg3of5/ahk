@@ -15,6 +15,19 @@ Switch to VS Code for AHK dev:
 			✔ NotepadPlusPlus.sendClipboardAsString @done(22-11-16 16:19)
 			✔ NotepadPlusPlus.sendContinuationBlock (now a snippet) @done(22-11-16 15:43)
 			☐ NotepadPlusPlus.sendDocHeader (port to snippet?)
+				Snippet attempt
+					"Function header": {
+						"prefix": "header",
+						"body": [
+							"",
+							"",
+							"${TM_CURRENT_LINE/(?:\\s*[^\\(\n]+\\(|,)\\s*(?:([^\\)\\s,]+)(\\s*:=\\s*[^,]+)*)?/${1}\n/g}\n",
+							"",
+							"",
+							"",
+						],
+						"description": "AHK function header"
+					}
 			☐ settings.ini template (move to a string or just build choices like we did for timer?)
 			☐ includeCommon.ahk template (move to a string?)
 			☐ Clear out the NotepadPlusPlus class

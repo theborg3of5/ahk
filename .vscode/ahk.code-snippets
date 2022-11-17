@@ -1,0 +1,84 @@
+{
+	"Class skeleton": {
+		"prefix": "ahkclass",
+		"body": [
+			"/* GDB TODO =--",
+			"\t",
+			"\tExample Usage",
+			";\t\tGDB TODO",
+			"\t",
+			"*/ ; --=",
+			"",
+			"class ${className} {",
+			"\t; #PUBLIC#",
+			"\t",
+			"\t;  - Constants",
+			"\t;  - staticMembers",
+			"\t;  - nonStaticMembers",
+			"\t;  - properties",
+			"\t;  - __New()",
+			"\t;  - otherFunctions",
+			"\t",
+			"\t",
+			"\t; #INTERNAL#",
+			"\t",
+			"\t;  - Constants",
+			"\t;  - staticMembers",
+			"\t;  - nonStaticMembers",
+			"\t;  - functions",
+			"\t",
+			"\t",
+			"\t; #PRIVATE#",
+			"\t",
+			"\t;  - Constants",
+			"\t;  - staticMembers",
+			"\t;  - nonStaticMembers",
+			"\t;  - functions",
+			"\t",
+			"\t",
+			"\t; #DEBUG#",
+			"\t",
+			"\tDebug_TypeName() {",
+			"\t\treturn \"${className}\"",
+			"\t}",
+			"\t",
+			"\tDebug_ToString(ByRef table) {",
+			"\t\ttable.addLine(\"GDB TODO\", this.GDBTODO)",
+			"\t}",
+			"\t; #END#",
+			"}",
+			""
+		],
+		"description": "The skeleton for a new AHK class"
+	},
+	"Continuation section": {
+		"prefix": "contsec",
+		"body": [
+			"\"",
+			"\t(",
+			"\t\t$1",
+			"\t)\""
+		],
+		"description": "Add a continuation section"
+	},
+	"Clipboard as value": {
+		"prefix": "clip",
+		"body": "\"${CLIPBOARD/(\")|(\r?\n)/${1:+\"\"}${2:+`n}/g}\"",
+		"description": "Send the clipboard as a value/expression, escaping quotes and newlines."
+	},
+	"Toast (medium)": {
+		"prefix": "toastmed",
+		"body": "Toast.ShowMedium(\"$1\")",
+		"description": "Insert an error toast."
+	},
+	"Error toast": {
+		"prefix": "errortoast",
+		"body": "Toast.ShowError(\"$1\")",
+		"description": "Insert an error toast."
+	},
+	"Default value": {
+		"prefix": "default",
+		"body": "${1:targetVar} := ${1:targetVar} ? ${1:targetVar} : ${2:defaultValue}",
+		"description": "Default a variable to a value (if it's false/empty)."
+	},
+}

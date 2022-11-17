@@ -1,30 +1,5 @@
 Switch to VS Code for AHK dev:
-	✔ Experiment, see if I can set up the basics @done(22-10-27 13:32)
 	AHK-based features to bring over:
-		✔ Consider an extension to handle TODOs instead of my current weird format (search for "ext:todo" or just "todo" in general): @done(22-10-27 13:37)
-			Trying out Todo+ here.
-		Notepad++ stuff:
-			✔ dbpop hotstring (ported to snippet!) @done(22-11-14 21:57)
-				✔ Ported to snippet @done(22-11-14 21:57)
-				✔ Switched back @done(22-11-15 11:42)
-			✔ Ctrl+S to reload standalone scripts @done(22-11-14 22:18)
-			✔ Create a vsCode class and move stuff we're keeping over @done(22-11-16 12:59)
-				✔ dbpop @done(22-11-16 12:59)
-				✔ Other debug popups/toasts, normal toasts, error toasts (from vsCode script) @done(22-11-16 12:59)
-			✔ NotepadPlusPlus.toggleProgramAndClass @done(22-11-16 12:59)
-			✔ NotepadPlusPlus.sendClipboardAsString @done(22-11-16 16:19)
-			✔ NotepadPlusPlus.sendContinuationBlock (now a snippet) @done(22-11-16 15:43)
-			✔ NotepadPlusPlus.sendDocHeader @done(22-11-16 21:43)
-				Decided against turning this one into a snippet for now - putting it off until I decide whether/how to rework my headers.
-			✔ sendDefaultingCodeString() (as a snippet) @done(22-11-16 21:57)
-			✔ Rewrapping selection (AHKDocBlock.rewrapSelection) @done(22-11-16 22:03)
-			✔ copyFilePathWithHotkey() @done(22-11-17 09:10)
-			✔ openCurrentParentFolder() @done(22-11-17 09:10)
-			✔ Clear out the NotepadPlusPlus class @done(22-11-17 09:45)
-				Probably very little that'll be left there - if only 1-2 things, may not even be worth a class anymore, just do inline functions instead.
-			☐ Should we put our snippets at the workspace level, so they're version-controlled?
-				☐ Does that let us use them in both repos?
-				☐ Does that interact poorly with automatic settings sync?
 		☐ Look into OutputDebug command for debugging stuff - prints to the debugger console
 		☐ Editing stuff in notepad++ (editFiles TLS, +e selector option, etc.)
 			Some of this is probably just a question of changing the default editor for TL/TLS files

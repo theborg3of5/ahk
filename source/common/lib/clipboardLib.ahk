@@ -86,6 +86,7 @@ class ClipboardLib {
 		return textFound
 	}
 	
+	;region File/folder path operations
 	;---------
 	; DESCRIPTION:    Copy a file path with the provided hotkeys, making sure that:
 	;                  * We wait long enough for the file to get onto the clipboard
@@ -149,6 +150,30 @@ class ClipboardLib {
 		path .= "::" functionName "()"
 		ClipboardLib.setAndToast(path, "source-relative full code location")
 	}
+
+	;---------
+	; DESCRIPTION:    Open the current file's parent folder in Explorer, using the path of the current folder.
+	; PARAMETERS:
+	;  copyFilePathHotkey (I,REQ) - The hotkey to copy the current file's full path in the active window.
+	;---------
+	openActiveFileParentFolder(copyFilePathHotkey) {
+		filePath := ClipboardLib.getWithHotkey(copyFilePathHotkey)
+		if(!filePath) {
+			Toast.ShowError("Could not open parent folder", "Failed to retrieve current file path")
+			return
+		}
+		
+		filePath := FileLib.cleanupPath(filePath)
+		parentFolder := FileLib.getParentFolder(filePath)
+		
+		if(!FileLib.folderExists(parentFolder)) {
+			Toast.ShowError("Could not open parent folder", "Folder does not exist: " parentFolder)
+			return
+		}
+		
+		Run(parentFolder)
+	}
+	;endregion File/folder path operations
 	
 	;---------
 	; DESCRIPTION:    Set the clipboard to the given value, and wait to make sure it applies before returning.

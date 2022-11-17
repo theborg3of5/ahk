@@ -1,12 +1,7 @@
 ﻿#If Config.isWindowActive("VSCode")
 	; Current file/folder operations
 	!c::ClipboardLib.copyFilePathWithHotkey("^+c") ; Custom hotkey for copyFilePath command
-	^!f::
-		openContainingFolder() {
-			; Yes, there's a built-in command for this, but it doesn't work consistently and take forever to happen.
-			filePath := ClipboardLib.getWithHotkey("^+c")
-			Run, % FileLib.getParentFolder(filePath)
-		}
+	^!f:: ClipboardLib.openActiveFileParentFolder("^+c") ; Yes, there's a built-in command for this, but it doesn't work consistently and take forever to happen.
 	
 	; For program scripts, swap to corresponding class script and back.
 	Pause::VSCode.toggleProgramAndClass()

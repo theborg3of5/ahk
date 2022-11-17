@@ -11,30 +11,6 @@ class NotepadPlusPlus {
 	; #INTERNAL#
 	
 	;---------
-	; DESCRIPTION:    Open the current file's parent folder in Explorer.
-	; NOTES:          We have to do this instead of using the native option, because the native
-	;                 option doesn't open it correctly (it opens a new window instead of adding a
-	;                 tab to QTTabBar).
-	;---------
-	openCurrentParentFolder() {
-		filePath := ClipboardLib.getWithHotkey("!c")
-		if(!filePath) {
-			Toast.ShowError("Could not open parent folder", "Failed to retrieve current file path")
-			return
-		}
-		
-		filePath := FileLib.cleanupPath(filePath)
-		parentFolder := FileLib.getParentFolder(filePath)
-		
-		if(!FileLib.folderExists(parentFolder)) {
-			Toast.ShowError("Could not open parent folder", "Folder does not exist: " parentFolder)
-			return
-		}
-		
-		Run(parentFolder)
-	}
-	
-	;---------
 	; DESCRIPTION:    For program scripts, swap between the program script and its matching class script.
 	;---------
 	toggleProgramAndClass() {

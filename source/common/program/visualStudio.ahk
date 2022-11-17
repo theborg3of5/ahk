@@ -2,23 +2,6 @@ class VisualStudio {
 	; #INTERNAL#
 	
 	;---------
-	; DESCRIPTION:    Opens the parent folder for the current file.
-	; NOTES:          This is preferable to the built-in open-containing-folder hotkey because the latter locks up Visual
-	;                 Studio and then claims that it fails (at least with QTTabBar in place).
-	;---------
-	openParentFolder() {
-		path := ClipboardLib.getWithHotkey(this.Hotkey_CopyCurrentFile)
-		if(path = "") {
-			Toast.ShowError("Failed to open parent folder", "Failed to get current file path")
-			return ""
-		}
-		path := FileLib.cleanupPath(path)
-		
-		parentFolder := FileLib.getParentFolder(path) ; Actually get the folder instead of the file
-		Run(parentFolder)
-	}
-	
-	;---------
 	; DESCRIPTION:    Send code to show a popup (in a ViewBehavior in TypeScript).
 	; PARAMETERS:
 	;  defaultVarList (I,OPT) - The default list of variables to use, shows in the popup.

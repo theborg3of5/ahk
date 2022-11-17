@@ -105,6 +105,9 @@
 		IniRead, v, % filePath, % section, % key
 		return v
 	}
+	IniWrite(filePath, section, key, value) { ; *gdb - Added
+		IniWrite, % value, % filePath, % section, % key
+	}
 	Input(Options = "", EndKeys = "", MatchList = "") {
 		Input, v, %Options%, %EndKeys%, %MatchList%
 		Return, v

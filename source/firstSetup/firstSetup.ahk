@@ -14,61 +14,33 @@ tlSetupPath    := "setup.tls"
 startupFolder  := ahkRootPath "\source"
 mainAHKPath    := startupFolder "\main.ahk"
 
-copyPaths := {}
-copyPaths["includeCommon.ahk"] := A_MyDocuments "\AutoHotkey\Lib\includeCommon.ahk"
-copyPaths["settings.ini"]      := ahkRootPath "\config\settings.ini"
-
-gitNames := []
-gitNames.Push(".git")
-gitNames.Push(".gitignore")
-gitNames.Push(".gitattributes")
-
 ; Check for command line arguments - which machine to use, and whether to suppress the "run now?" prompt.
 machineChoice := A_Args[1]
 useSlimMode   := A_Args[2]
 
-; Get info for the machine that we're setting up for (will drive specific values in settings.ini)
+; Settings INI file
 machineInfo := new Selector(tlSetupPath).select(machineChoice)
 if(!machineInfo)
 	ExitApp
-; Debug.popup("Machine Info Selected", machineInfo)
+progToast.nextStep("Creating settings file")
+iniPath := ahkRootPath "\config\settings.ini"
+IniWrite(iniPath, "Main", "CONTEXT", machineInfo["NEW_CONTEXT"])
+IniWrite(iniPath, "Main", "MACHINE", machineInfo["NEW_MACHINE"])
 
-; Pull the needed values from our selection.
-progToast.nextStep("Reading values from selection")
-tagsToReplace := {}
-tagsToReplace["AHK_ROOT"]     := ahkRootPath
-tagsToReplace["CONTEXT"]      := machineInfo["NEW_CONTEXT"]
-tagsToReplace["MACHINE"]      := machineInfo["NEW_MACHINE"]
-; Debug.popup("Finished tags to replace",tagsToReplace)
-
-; Loop over files we need to process and put places.
-progToast.nextStep("Processing files")
-For fromPath,toPath in copyPaths {
-	; Read it in.
-	fileContents := FileRead(fromPath)
-	
-	; Replace any placeholder tags in the file contents.
-	; Debug.popup("fromPath", fromPath, "toPath", toPath, "Starting contents", fileContents)
-	fileContents := fileContents.replaceTags(tagsToReplace)
-	; Debug.popup("fromPath",fromPath, "toPath",toPath, "Finished contents",fileContents)
-	
-	; Generate the folder path if needed.
-	containingFolder := FileLib.getParentFolder(toPath)
-	if(!FileExist(containingFolder))
-		FileCreateDir, %containingFolder%
-	
-	; Delete the file if it already exists.
-	if(FileExist(toPath))
-		FileDelete, %toPath%
-	
-	; Put the file where it's supposed to be.
-	FileAppend, %fileContents%, %toPath%
-}
+; Library pointer script
+progToast.nextStep("Setting up library pointer script")
+pointerContents := "
+	( LTrim
+		; This acts as a pointer that any file can find, which points to the correct location of the common folder and its scripts.
+		#Include " ahkRootPath "\source\common\common.ahk
+	)"
+pointerContents := pointerContents.replaceTag("AHK_ROOT", ahkRootPath)
+FileLib.replaceFileWithString(A_MyDocuments "\AutoHotkey\Lib\includeCommon.ahk", pointerContents)
 
 if(!useSlimMode) {
 	; Hide all .git system files and folders, for a cleaner appearance.
 	progToast.nextStep("Hiding .git files and folders")
-	For _,name in gitNames {
+	For _,name in [".git", ".gitignore", ".gitattributes"]] {
 		Loop, Files, %ahkRootPath%\*%name%, RDF
 		{
 			FileSetAttrib, +H, %A_LoopFileFullPath%

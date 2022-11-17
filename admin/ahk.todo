@@ -14,20 +14,8 @@ Switch to VS Code for AHK dev:
 			✔ NotepadPlusPlus.toggleProgramAndClass @done(22-11-16 12:59)
 			✔ NotepadPlusPlus.sendClipboardAsString @done(22-11-16 16:19)
 			✔ NotepadPlusPlus.sendContinuationBlock (now a snippet) @done(22-11-16 15:43)
-			☐ NotepadPlusPlus.sendDocHeader (port to snippet?)
-				Snippet attempt
-					"Function header": {
-						"prefix": "header",
-						"body": [
-							"",
-							"",
-							"${TM_CURRENT_LINE/(?:\\s*[^\\(\n]+\\(|,)\\s*(?:([^\\)\\s,]+)(\\s*:=\\s*[^,]+)*)?/${1}\n/g}\n",
-							"",
-							"",
-							"",
-						],
-						"description": "AHK function header"
-					}
+			✘ NotepadPlusPlus.sendDocHeader @cancelled(22-11-16 21:43)
+				Decided against this one for now - putting it off until I decide whether/how to rework my headers.
 			☐ settings.ini template (move to a string or just build choices like we did for timer?)
 			☐ includeCommon.ahk template (move to a string?)
 			☐ Clear out the NotepadPlusPlus class
@@ -112,7 +100,11 @@ Fixes / Cleanup:
 
 New Features / Scripts:
 	☐ Performance improvement idea: could I "compile" the titleStrings for activating/identifying windows down to a simple object in Config, instead of having to call a function every time?
-	☐ Consider getting rid of NOTES bit of headers - just include it in the description instead.
+	☐ Consider revamping AHK function headers:
+		☐ Consider getting rid of NOTES bit of headers - just include it in the description instead.
+		☐ Consider ditching the REQ/OPT for parameters - you can tell that easily from the signature.
+		☐ Consider ditching the I/O for parameters too, just make it obvious in the description
+		☐ Maybe we should switch over to a more jsdoc-like style?
 	☐ Consider hotstrings or something similar for Ninpo notes style
 		☐ m/uL/R superscripted sides, directions (maybe just catch the capitalization and superscript it?)
 			Could either select + superscript hotkey, or try to send RTF (?) already-subscripted replacement

@@ -130,77 +130,7 @@ class VSCode {
 		defLine := SelectLib.getText().clean()
 		Send, {Up}
 		
-		params := this.generateDocHeaderParams(defLine)
-		; Debug.popup("params",params)
-
-		Send, ^i
-		; First tabstop is the parameters section.
-		if(params)
-			Send, % params ; Plug in parameters
-		else
-			Send, {Delete} ; Remove section (including its newline) entirely.
-		Send, {Tab}
-	}
-
-	/*
-		"Function header": {
-			"prefix": "header",
-			"body": [
-				";---------",
-				// Newline inside default for parameters to make it easier to delete the section if not needed.
-				"; DESCRIPTION:    ${2:<description>}${1:\n<parameters>}",
-				"; RETURNS:        ${3:<returns>}",
-				"; SIDE EFFECTS:   ${4:<side effects>}",
-				";---------",
-			],
-			"description": "AHK function header"
-		}
-	*/
-
-	generateDocHeaderParams(defLine) {
-		; Get parameter info
-		AHKCodeLib.getDefLineParts(defLine, "", paramsAry)
-		paramInfos := []
-		For _,param in paramsAry {
-			; Input/output can be partially deduced by whether it's ByRef
-			if(param.startsWith("ByRef ")) {
-				inOut := "I/O" ; Could be either
-				param := param.removeFromStart("ByRef ")
-			} else {
-				inOut := "I" ; Can only be input
-			}
-			
-			; Required/optional can be deduced by whether there's a default specified
-			if(param.contains(" := ")) {
-				requirement := "OPT" ; Optional if there's a default
-				param := param.beforeString(" :=")
-			} else {
-				requirement := "REQ" ; Required if no default
-			}
-			
-			paramInfos.push({"NAME":param, "IN_OUT":inOut, "REQUIREMENT":requirement})
-		}
-		
-		
-		header := "`n; PARAMETERS:"
-		
-		; First figure out the longest parameter name so we can pad the others out appropriately.
-		maxParamLength := 0
-		For _,paramInfo in paramInfos
-			DataLib.updateMax(maxParamLength, paramInfo["NAME"].length())
-		
-		; Add a line for each parameter
-		For _,paramInfo in paramInfos {
-			padding := StringLib.getSpaces(maxParamLength - paramInfo["NAME"].length())
-			
-			line := AHKCodeLib.HeaderSingleParamBase
-			line := line.replaceTags(paramInfo)
-			line := line.replaceTag("PADDING", padding)
-			
-			header .= "`n" line
-		}
-
-		return header
+		SendRaw, % AHKCodeLib.generateDocHeader(defLine)
 	}
 
 	

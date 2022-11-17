@@ -50,23 +50,6 @@ class VSCode {
 			Config.runProgram("VSCode", matchingScriptPath)
 	}
 	
-	; ;--------- ; GDB TODO
-	; ; DESCRIPTION:    Send a code string for defaulting a variable to a different value if it's false/blank.
-	; ; PARAMETERS:
-	; ;  varName (I,OPT) - The name of the variable to work with. If not given, we'll prompt the user for it.
-	; ; SIDE EFFECTS:   Prompts the user for the default value.
-	; ;---------
-	; sendDefaultingCodeString(varName := "") {
-	; 	varAndDefault := InputBox("Enter variable and default value (comma-separated)", , , 500, 100, , , , , varName ", ")
-	; 	if(varAndDefault = "")
-	; 		return
-		
-	; 	varName      := varAndDefault.beforeString(",")
-	; 	defaultValue := varAndDefault.afterString(",").withoutWhitespace() ; Drop any leading space
-		
-	; 	SendRaw, % varName " := " varName " ? " varName " : " defaultValue
-	; }
-	
 	;---------
 	; DESCRIPTION:    Send a debug code string using the given function name, prompting the user for
 	;                 the list of parameters to use (in "varName",varName parameter pairs).
@@ -136,19 +119,5 @@ class VSCode {
 	
 	; #PRIVATE#
 	static windowTitleSeparator := " - " ; Separator (window.titleSeparator) between elements of the window title (window.title)
-	
-	; ;--------- ; GDB TODO
-	; ; DESCRIPTION:    Get the indentation from the current line (as the whitespace it is, not a count).
-	; ; RETURNS:        The whitespace that makes up the indentation.
-	; ; SIDE EFFECTS:   Ends up at the end of the current line, not where we started.
-	; ;---------
-	; getCurrentLineIndent() {
-	; 	Send, {Home}{Shift Down}{Home}{Shift Up} ; Start selecting at the start of the line to get the indentation
-	; 	indent := SelectLib.getText()
-	; 	Sleep, 100 ; Make sure Ctrl is up so we don't end up jumping to the end of the file.
-	; 	Send, {End} ; Get back to the end of the line
-		
-	; 	return indent
-	; }
 	; #END#
 }

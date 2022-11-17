@@ -78,6 +78,10 @@ class AHKDocBlock {
 	getDocFromSelection() {
 		selection := SelectLib.getText()
 		
+		; Whole line, including newline (VSCode ^c with nothing selected, probably) - actually select the whole line.
+		if(selection.endsWith("`n"))
+			Send, {End 2}{Shift Down}{Home 2}{Shift Up} ; End twice to get to end of wrapped line, Home twice to try and get indent too.
+
 		; Multiple lines - we can pull anything not selected in the first line, from the second line. We
 		; shouldn't mess with the selection because we don't know which direction we selected from - so trying
 		; to reselect might just mess with the last line.

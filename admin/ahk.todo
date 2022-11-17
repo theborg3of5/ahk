@@ -23,13 +23,15 @@ Switch to VS Code for AHK dev:
 			✔ Clear out the NotepadPlusPlus class @done(22-11-17 09:45)
 				Probably very little that'll be left there - if only 1-2 things, may not even be worth a class anymore, just do inline functions instead.
 			☐ Should we put our snippets at the workspace level, so they're version-controlled?
+				☐ Does that let us use them in both repos?
+				☐ Does that interact poorly with automatic settings sync?
 		☐ Look into OutputDebug command for debugging stuff - prints to the debugger console
 		☐ Editing stuff in notepad++ (editFiles TLS, +e selector option, etc.)
 			Some of this is probably just a question of changing the default editor for TL/TLS files
 	firstSetup cleanup:
 		✔ settings.ini template (move to a string) @done(22-11-17 10:34)
 		✔ includeCommon.ahk template (move to a string?) @done(22-11-17 10:34)
-		☐ setup.tls (consider building choices like we did for timer?)
+		✔ setup.tls (consider building choices like we did for timer?) @done(22-11-17 10:47)
 		☐ If firstSetup.ahk is the only file in the folder now, move it up a level, alongside main (and adjust folder paths in the script).
 	Update extension to enhance stuff for me:
 		☐ Figure out how to build extension with my own changes

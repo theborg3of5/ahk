@@ -19,16 +19,16 @@ machineChoice := A_Args[1]
 useSlimMode   := A_Args[2]
 
 ; Settings INI file
-machineInfo := new Selector(tlSetupPath).select(machineChoice)
+progToast.nextStep("Settings file")
+machineInfo := selectSettings(machineChoice)
 if(!machineInfo)
 	ExitApp
-progToast.nextStep("Creating settings file")
 iniPath := ahkRootPath "\config\settings.ini"
 IniWrite(iniPath, "Main", "CONTEXT", machineInfo["NEW_CONTEXT"])
 IniWrite(iniPath, "Main", "MACHINE", machineInfo["NEW_MACHINE"])
 
 ; Library pointer script
-progToast.nextStep("Setting up library pointer script")
+progToast.nextStep("Library pointer script")
 pointerContents := "
 	( LTrim
 		; This acts as a pointer that any file can find, which points to the correct location of the common folder and its scripts.
@@ -40,7 +40,7 @@ FileLib.replaceFileWithString(A_MyDocuments "\AutoHotkey\Lib\includeCommon.ahk",
 if(!useSlimMode) {
 	; Hide all .git system files and folders, for a cleaner appearance.
 	progToast.nextStep("Hiding .git files and folders")
-	For _,name in [".git", ".gitignore", ".gitattributes"]] {
+	For _,name in [".git", ".gitignore", ".gitattributes"] {
 		Loop, Files, %ahkRootPath%\*%name%, RDF
 		{
 			FileSetAttrib, +H, %A_LoopFileFullPath%
@@ -54,3 +54,13 @@ if(useSlimMode || GuiLib.showConfirmationPopup("Run now?"))
 	Run(mainAHKPath, startupFolder)
 
 ExitApp
+
+; Use a Selector to key into the settings we need.
+selectSettings(machineChoice) {
+	s := new Selector().setTitle("Select Machine to set up:")
+	s.addChoice(new SelectorChoice({ NAME:"Home Desktop" , ABBREV:["desk", "HOME_DESKTOP"], NEW_CONTEXT:"HOME", NEW_MACHINE:"HOME_DESKTOP" }))
+	s.addChoice(new SelectorChoice({ NAME:"Home Laptop"  , ABBREV:["hlap", "HOME_LAPTOP" ], NEW_CONTEXT:"HOME", NEW_MACHINE:"HOME_DESKTOP" }))
+	s.addChoice(new SelectorChoice({ NAME:"Work Desktop" , ABBREV:["work", "WORK_DESKTOP"], NEW_CONTEXT:"WORK", NEW_MACHINE:"WORK_DESKTOP" }))
+	s.addChoice(new SelectorChoice({ NAME:"Work VDI"     , ABBREV:["vdi" , "WORK_VDI"    ], NEW_CONTEXT:"WORK", NEW_MACHINE:"WORK_VDI"     }))
+	return s.select(machineChoice)
+}

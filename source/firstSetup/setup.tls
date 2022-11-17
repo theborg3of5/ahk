@@ -1,9 +1,0 @@
-﻿@WindowTitle(Select Machine to set up:)
-@MinColumnWidth(300)
-
-[	NAME				ABBREV						NEW_CONTEXT		NEW_MACHINE	]
-
-	Home Desktop	desk | HOME_DESKTOP		HOME				HOME_DESKTOP
-	Home Laptop		hlap | HOME_LAPTOP		HOME				HOME_LAPTOP
-	Work Desktop		work | WORK_DESKTOP		WORK				WORK_DESKTOP
-	Work VDI			vdi | WORK_VDI			WORK				WORK_VDI

@@ -9,6 +9,7 @@ FileEncoding, UTF-8          ; Read files in UTF-8 encoding by default to handle
 #Include <includeCommon>
 
 global MIN_COLUMN_PADDING := 1 ; At least 1 tab between columns
+global TAB_WIDTH := NotepadPlusPlus.TabWidth ; Match Notepad++ since that's where we're editing these
 
 ; Convenience constants that are shorter than referencing TableList constants directly.
 global MODEL_START   := TableList.Char_Model_Start
@@ -79,7 +80,7 @@ reformatRows(rows) {
 			
 			; Align the ending paren with the model row's ending bracket.
 			numSpacesShort := columnInfoClosePosition - getCharacterWidth(rowSoFar)
-			numTabsShort := Ceil(numSpacesShort / NotepadPlusPlus.TabWidth)
+			numTabsShort := Ceil(numSpacesShort / TAB_WIDTH)
 			
 			row := rowSoFar StringLib.getTabs(numTabsShort) COLINFO_END
 			newRows.push(row)
@@ -170,7 +171,7 @@ getDimensions(rows, ByRef normalIndentLevel, ByRef columnWidthsAry) {
 		
 		; Track size of each column (in tabs).
 		For columnIndex,value in splitRow(row) {
-			width := Ceil(value.length() / NotepadPlusPlus.TabWidth) + MIN_COLUMN_PADDING ; Width in tabs - ceiling means we'll get at least 1 FULL tab of padding
+			width := Ceil(value.length() / TAB_WIDTH) + MIN_COLUMN_PADDING ; Width in tabs - ceiling means we'll get at least 1 FULL tab of padding
 			columnWidthsAry[columnIndex] := DataLib.max(columnWidthsAry[columnIndex], width)
 		}
 	}
@@ -193,7 +194,7 @@ getCharacterWidth(stringToMeasure) {
 	Loop, Parse, % stringToMeasure
 	{
 		if(A_LoopField = A_Tab)
-			numChars += (NotepadPlusPlus.TabWidth - mod(numChars, NotepadPlusPlus.TabWidth)) ; Each tab brings us to the next tab stop
+			numChars += (TAB_WIDTH - mod(numChars, TAB_WIDTH)) ; Each tab brings us to the next tab stop
 		else
 			numChars++
 	}
@@ -212,7 +213,7 @@ fixColumnWidths(row, columnWidthsAry) {
 	
 	For columnIndex,value in splitRow(row) {
 		columnWidth := columnWidthsAry[columnIndex]
-		valueWidth := Floor(value.length() / NotepadPlusPlus.TabWidth) ; Width in tabs
+		valueWidth := Floor(value.length() / TAB_WIDTH) ; Width in tabs
 		newRow .= value StringLib.getTabs(columnWidth - valueWidth)
 	}
 	

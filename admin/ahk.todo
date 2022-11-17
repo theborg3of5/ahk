@@ -20,10 +20,10 @@ Switch to VS Code for AHK dev:
 			✔ Rewrapping selection (AHKDocBlock.rewrapSelection) @done(22-11-16 22:03)
 			✔ copyFilePathWithHotkey() @done(22-11-17 09:10)
 			✔ openCurrentParentFolder() @done(22-11-17 09:10)
+			✔ Clear out the NotepadPlusPlus class @done(22-11-17 09:45)
+				Probably very little that'll be left there - if only 1-2 things, may not even be worth a class anymore, just do inline functions instead.
 			☐ settings.ini template (move to a string or just build choices like we did for timer?)
 			☐ includeCommon.ahk template (move to a string?)
-			☐ Clear out the NotepadPlusPlus class
-				Probably very little that'll be left there - if only 1-2 things, may not even be worth a class anymore, just do inline functions instead.
 			☐ Should we put our snippets at the workspace level, so they're version-controlled?
 		☐ Look into OutputDebug command for debugging stuff - prints to the debugger console
 		☐ Editing stuff in notepad++ (editFiles TLS, +e selector option, etc.)
@@ -68,6 +68,9 @@ Switch to VS Code for TL[S] files:
 		☐ Ideally using existing @NPP-TABLELIST handling
 			Though I could also just generate separate intellisense files if need be (or create some and update them manually).
 	☐ Reformat script - switch to 4-character-width tabs (should just be a constant, I think?)
+		This is currently based on Notepad++'s TabWidth constant - switch over to the corresponding VSCode one (which is indeed 4).
+		☐ Switch Notepad++ to using 4-character-width tabs for consistency's sake
+		☐ Probably get rid of NotepadPlusPlus program class script - just move the one remaining function over (or even implement it in ClipboardLib or FileLib)
 
 Fixes / Cleanup:
 	☐ Should we move source\common\base? Currently contains these:

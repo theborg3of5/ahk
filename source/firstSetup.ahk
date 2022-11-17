@@ -3,14 +3,13 @@
 SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
-#Include %A_ScriptDir%\..\common\common.ahk
+#Include %A_ScriptDir%\common\common.ahk
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 progToast := new ProgressToast("First-time setup")
 
 ; Various paths needed throughout.
-ahkRootPath    := FileLib.getParentFolder(A_ScriptDir, 2)
+ahkRootPath    := FileLib.getParentFolder(A_ScriptDir, 1)
 userPath       := EnvGet("HOMEDRIVE") EnvGet("HOMEPATH")
-tlSetupPath    := "setup.tls"
 startupFolder  := ahkRootPath "\source"
 mainAHKPath    := startupFolder "\main.ahk"
 
@@ -34,7 +33,6 @@ pointerContents := "
 		; This acts as a pointer that any file can find, which points to the correct location of the common folder and its scripts.
 		#Include " ahkRootPath "\source\common\common.ahk
 	)"
-pointerContents := pointerContents.replaceTag("AHK_ROOT", ahkRootPath)
 FileLib.replaceFileWithString(A_MyDocuments "\AutoHotkey\Lib\includeCommon.ahk", pointerContents)
 
 if(!useSlimMode) {

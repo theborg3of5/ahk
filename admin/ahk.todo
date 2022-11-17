@@ -169,5 +169,3 @@ New Features / Scripts:
 				Maybe make it optional with an overall setting?
 			What about column widths, in a new top-level line like we have for field order/whether to show?
 				Could potentially combine it with the existing () line - INDEX-WIDTH, where width is optional (and presumably in pixels?)
-	
-Archive:

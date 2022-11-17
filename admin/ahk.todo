@@ -18,8 +18,8 @@ Switch to VS Code for AHK dev:
 				Decided against this one for now - putting it off until I decide whether/how to rework my headers.
 			✔ sendDefaultingCodeString() (as a snippet) @done(22-11-16 21:57)
 			✔ Rewrapping selection (AHKDocBlock.rewrapSelection) @done(22-11-16 22:03)
-			☐ copyFilePathWithHotkey()
-			☐ openCurrentParentFolder()
+			✔ copyFilePathWithHotkey() @done(22-11-17 09:10)
+			✔ openCurrentParentFolder() @done(22-11-17 09:10)
 			☐ settings.ini template (move to a string or just build choices like we did for timer?)
 			☐ includeCommon.ahk template (move to a string?)
 			☐ Clear out the NotepadPlusPlus class

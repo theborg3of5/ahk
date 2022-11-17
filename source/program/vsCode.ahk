@@ -1,15 +1,18 @@
 ﻿#If Config.isWindowActive("VSCode")
-	; GDB TODO consider which of the below to re-enable and/or keep.
-	
 	; Current file/folder operations
-	; !c::  ClipboardLib.copyFilePathWithHotkey(  "!c")
-	; ^+o::VSCode.openCurrentParentFolder()
+	!c::ClipboardLib.copyFilePathWithHotkey("^+c") ; Custom hotkey for copyFilePath command
+	^!f::
+		openContainingFolder() {
+			; Yes, there's a built-in command for this, but it doesn't work consistently and take forever to happen.
+			filePath := ClipboardLib.getWithHotkey("^+c")
+			Run, % FileLib.getParentFolder(filePath)
+		}
 	
 	; For program scripts, swap to corresponding class script and back.
 	Pause::VSCode.toggleProgramAndClass()
 	
 	; Redo the indentation for the selected documentation lines
-	^Enter::new AHKDocBlock().rewrapSelection()
+	^+Enter::new AHKDocBlock().rewrapSelection()
 	
 	; AHK debug strings
 	:X:dbpop::	VSCode.sendAHKDebugCodeString("Debug.popup",      clipboard) ; Debug popup

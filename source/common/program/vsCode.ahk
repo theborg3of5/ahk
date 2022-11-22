@@ -5,7 +5,7 @@ class VSCode {
 	;---------
 	; DESCRIPTION:    How many characters wide a tab is in VS Code.
 	;---------
-	static TabWidth := 4 ; GDB TODO probably switch many things over to use this
+	static TabWidth := 4
 	
 	
 	; #INTERNAL#

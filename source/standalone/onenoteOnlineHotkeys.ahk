@@ -8,11 +8,11 @@ DetectHiddenWindows, On
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
 ^+=::
-	Click, 379, 261
-	Click, 404, 328
+	Click, 428, 279
+	Click, 428, 340
 return
 
 ^=::
-	Click, 379, 261
-	Click, 411, 298 
+	Click, 428, 279
+	Click, 428, 310 
 return

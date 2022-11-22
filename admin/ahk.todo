@@ -38,10 +38,11 @@ Switch to VS Code for AHK dev:
 	☐ Get rid of updateNotepadPPSupport once I'm sure I won't need it anymore (currently shows how to parse my headers and such).
 
 Switch to VS Code for TL[S] files:
-	☐ General syntax highlighting
-	☐ Intellisense
-		☐ Ideally using existing @NPP-TABLELIST handling
+	✔ General syntax highlighting @done(22-11-21 21:41)
+	✔ Intellisense @done(22-11-21 21:41)
+		✔ Ideally using existing @NPP-TABLELIST handling @done(22-11-21 21:41)
 			Though I could also just generate separate intellisense files if need be (or create some and update them manually).
+			✔ Just hard-coded it into the syntax highlighting and snippets. @done(22-11-21 21:41)
 	☐ Reformat script - switch to 4-character-width tabs (should just be a constant, I think?)
 		This is currently based on Notepad++'s TabWidth constant - switch over to the corresponding VSCode one (which is indeed 4).
 		☐ Switch Notepad++ to using 4-character-width tabs for consistency's sake

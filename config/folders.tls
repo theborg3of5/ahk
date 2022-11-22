@@ -16,12 +16,12 @@
 	AutoHotkey lib (documents)		ahkl		<USER_DOCUMENTS>\AutoHotkey\Lib
 
 # Development
+	Dev									dev		<USER_DEV>
 	Onetastic Macros					ot			<ONETASTIC_MACROS>
 	NotepadPlusPlus Sessions		sess		<NOTEPAD_PP_SESSIONS>
 
 ~CONTEXT.replaceWith(WORK) {
 # Work Local
-	Dev									dev		<USER_DEV>
 	Templates							tp			<USER_DEV>\Templates
 	Transaction Diff Output			txdiff	<TX_DIFF_OUTPUT>
 	Compile								comp		<VB6_COMPILE>

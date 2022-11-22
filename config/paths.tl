@@ -46,6 +46,8 @@
 		Downloads								USER_DOWNLOADS							<USER_ROOT>\Downloads
 
 		; Dev
+		User Dev									USER_DEV							<USER_ONEDRIVE>\Dev					WORK
+		User Dev									USER_DEV							<USER_ROOT>\Dev					HOME
 		Onetastic Macros						ONETASTIC_MACROS						<USER_ROOT>\OnetasticMacros
 		Onetastic Functions					ONETASTIC_FUNCTIONS					<USER_ROOT>\OnetasticMacros\Functions
 
@@ -59,7 +61,6 @@
 	
 	; OneDrive folders
 	~PATH.addToStart(<USER_ONEDRIVE>\) {
-		User Dev									USER_DEV									Dev
 		NotepadPlusPlus Sessions			NOTEPAD_PP_SESSIONS					Dev\NotepadPlusPlus Sessions
 		Transaction Diff Results			TX_DIFF_OUTPUT							Dev\TransactionDiffOutput
 		Specifics								USER_SPECIFICS							Specifics

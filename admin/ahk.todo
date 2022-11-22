@@ -47,6 +47,7 @@ Switch to VS Code for TL[S] files:
 		This is currently based on Notepad++'s TabWidth constant - switch over to the corresponding VSCode one (which is indeed 4).
 		☐ Switch Notepad++ to using 4-character-width tabs for consistency's sake
 		☐ Probably get rid of NotepadPlusPlus program class script - just move the one remaining function over (or even implement it in ClipboardLib or FileLib)
+	☐ Editing directly from Selector (probably just changing .tl[s] file associations)
 
 Fixes / Cleanup:
 	☐ Should we move source\common\base? Currently contains these:

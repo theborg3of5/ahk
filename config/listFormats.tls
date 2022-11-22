@@ -1,11 +1,11 @@
 ﻿@MinColumnWidth(350)
 
-[	NAME									ABBREV	FORMAT	]
+[	NAME							ABBREV		FORMAT	]
 
-	Array									a			ARRAY
+	Array							a			ARRAY
 	Space-delimited					s			SPACE
 	Comma-delimited					c			COMMA
-	Comma-delimited with spaces	cs			COMMA_SPACED
-	Underscore_delimited				u			UNDERSCORE
-	Newline-delimited					nl			NEWLINE
-	OneNote Column						o			ONENOTE_COLUMN
+	Comma-delimited with spaces		cs			COMMA_SPACED
+	Underscore_delimited			u			UNDERSCORE
+	Newline-delimited				nl			NEWLINE
+	OneNote Column					o			ONENOTE_COLUMN

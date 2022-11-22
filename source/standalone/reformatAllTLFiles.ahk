@@ -9,7 +9,7 @@ FileEncoding, UTF-8          ; Read files in UTF-8 encoding by default to handle
 #Include <includeCommon>
 
 global MIN_COLUMN_PADDING := 1 ; At least 1 tab between columns
-global TAB_WIDTH := NotepadPlusPlus.TabWidth ; Match Notepad++ since that's where we're editing these
+global TAB_WIDTH := VSCode.TabWidth ; Match Notepad++ since that's where we're editing these
 
 ; Convenience constants that are shorter than referencing TableList constants directly.
 global MODEL_START   := TableList.Char_Model_Start

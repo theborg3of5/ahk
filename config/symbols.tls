@@ -1,14 +1,14 @@
 ﻿@WindowTitle(Symbol to insert:)
 
-[	NAME															ABBREV					CHAR	]
+[	NAME											ABBREV				CHAR	]
 
 # Symbols
-	✓ - Check mark												chk						✓
-	✗ - Ballot x												x							✗
-	← - Leftwards arrow										l | left					←
-	→ - Rightwards arrow										r | right				→
-	🡠 - Wide-headed leftwards light barb arrow		wl | lw					🡠
-	🡢 - Wide-headed rightwards light barb arrow		wr | rw					🡢
-	· - Middle dot 											dot						·
-	― - Horizontal bar										hline						―
-	° - Degree													d | deg | degree		°
+	✓ - Check mark									chk					✓
+	✗ - Ballot x									x					✗
+	← - Leftwards arrow								l | left			←
+	→ - Rightwards arrow							r | right			→
+	🡠 - Wide-headed leftwards light barb arrow		wl | lw				🡠
+	🡢 - Wide-headed rightwards light barb arrow	wr | rw				🡢
+	· - Middle dot 									dot					·
+	― - Horizontal bar								hline				―
+	° - Degree										d | deg | degree	°

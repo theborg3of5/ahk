@@ -4,24 +4,24 @@
 ; WIDTH/HEIGHT can be special values from VisualWindow.Width_* and VisualWindow.Height_*
 ; From AHK Active Window Info, these numbers should match the top set of w/h, not the client ones.
 
-[	NAME											ABBREV		WIDTH		HEIGHT	CONTEXT	]
-(	0												0				1			2			0			)
+[	NAME									ABBREV			WIDTH		HEIGHT		CONTEXT	]
+(	0										0				1			2			0		)
 
 # General sizes
-	FHD (1920x1080)							h | hd		1920		1080
+	FHD (1920x1080)							h | hd			1920		1080
 	Widescreen (1440x900)					w				1440		900
-	Standard (1280x1024)						sd				1280		1024
-	Small (800x600)							sm				800		600
+	Standard (1280x1024)					sd				1280		1024
+	Small (800x600)							sm				800			600
 
 # Specifics
-	Fake-maximized								fmax | fm	FULL		FULL
-	Semi-maximized (fits around time)	smax			1460		FULL		HOME
-	Quarter										q				HALF		HALF
-	Social										soc			950		750
+	Fake-maximized							fmax | fm		FULL		FULL
+	Semi-maximized (fits around time)		smax			1460		FULL		HOME
+	Quarter									q				HALF		HALF
+	Social									soc				950			750
 
 # Development
 ~CONTEXT.replaceWith(WORK) {
-	Minimum Hyperspace (2015-)				minOld		800		550
-	Minimum Hyperspace (2017+)				min			1280		768
+	Minimum Hyperspace (2015-)				minOld			800			550
+	Minimum Hyperspace (2017+)				min				1280		768
 	PuTTY on laptop screen					pl				1084		1050
 }

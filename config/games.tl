@@ -1,4 +1,4 @@
-﻿[	NAME				EXE	]
+﻿[	NAME			EXE	]
 
 	Insurgency		insurgency.exe
 	RainbowSix		RainbowSixGame.exe

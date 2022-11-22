@@ -1,35 +1,35 @@
 ﻿@WindowTitle(File to edit:)
 
-[	NAME										ABBREV					PATH	]
+[	NAME								ABBREV					PATH	]
 
 # Config
 ~PATH.addToStart(<AHK_CONFIG>\) {
-	Games										g							games.tl
-	Hyperlink windows						link						hyperlinkWindows.tl
-	Paths										path						paths.tl
-	Programs									prog						programs.tl
-	Settings									s							settings.ini
-	Windows									w  | win					windows.tl
+	Games								g						games.tl
+	Hyperlink windows					link					hyperlinkWindows.tl
+	Paths								path					paths.tl
+	Programs							prog					programs.tl
+	Settings							s						settings.ini
+	Windows								w  | win				windows.tl
 	Windows Actions						wa | wina				windowActions.tl
-	Window Positions						wp | winpos | pos		windowPositions.tl
+	Window Positions					wp | winpos | pos		windowPositions.tl
 }
 
 # Private
 ~PATH.addToStart(<AHK_PRIVATE>\) {
 	All current Epic environments		allenv					allCurrentEpicEnvironments.txt
-	OneNote recurring todos				todo						oneNoteRecurringTodos.tl
-	Private values							priv						privates.tl
-	Snapper ignore items					snap						snapperIgnoreItems.tls
-	Mapped drives							md							mappedDrives.tl
-	Moved folders							mf							movedFolders.tl
+	OneNote recurring todos				todo					oneNoteRecurringTodos.tl
+	Private values						priv					privates.tl
+	Snapper ignore items				snap					snapperIgnoreItems.tls
+	Mapped drives						md						mappedDrives.tl
+	Moved folders						mf						movedFolders.tl
 }
 
 # ! Code
 ~PATH.addToStart(<AHK_SOURCE>\) {
-	Main										m							main.ahk
-	Common									com						common\common.ahk
-	Config									con | conf				common\static\config.ahk
-	Command Functions						cf							common\external\commandFunctions.ahk
-	Hotstrings								h							general\hotstrings.ahk
+	Main								m						main.ahk
+	Common								com						common\common.ahk
+	Config								con | conf				common\static\config.ahk
+	Command Functions					cf						common\external\commandFunctions.ahk
+	Hotstrings							h						general\hotstrings.ahk
 }
-	Test										t							<AHK_TEST>\test.ahk
+	Test								t						<AHK_TEST>\test.ahk

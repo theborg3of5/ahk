@@ -1,17 +1,71 @@
 {
-  "folders": [
-	{
-		"path": ".."
-	},
-	{
-		"path": "..\\..\\ahkPrivate"
-	},
-	{
-		"path": "..\\..\\ahkTest"
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "..\\..\\ahkPrivate"
+		},
+		{
+			"path": "..\\..\\ahkTest"
+		}
+	],
+	"settings": {
+		"files.encoding": "utf8bom",
+		"files.autoGuessEncoding": false,
+		"editor.tokenColorCustomizations": {
+			"textMateRules": [
+				{
+					"scope": "source.tablelist keyword.operator",
+					"settings": {
+						"foreground": "#808080"
+					}
+				},
+				{
+					"scope": "source.tablelist support.function",
+					"settings": {
+						"foreground": "#9e9e9e"
+					}
+				},
+				{
+					"scope": "source.tablelist support.type",
+					"settings": {
+						"foreground": "#ffee00"
+					}
+				},
+				{
+					"scope": "source.tablelist variable.parameter",
+					"settings": {
+						"foreground": "#56d681"
+					}
+				},
+				{
+					"scope": "source.tablelist keyword.control",
+					"settings": {
+						"foreground": "#9f7cff"
+					}
+				},
+				{
+					"scope": "source.tablelist support.constant",
+					"settings": {
+						"foreground": "#ff00f2",
+						"fontStyle": "bold"
+					}
+				},
+				{
+					"scope": "source.tablelist entity.name.section",
+					"settings": {
+						"foreground": "#0080FF",
+						"fontStyle": "bold"
+					}
+				},
+				{
+					"scope": "source.tablelist meta.structure.columnDefRow",
+					"settings": {
+						"fontStyle": "bold"
+					}
+				},
+			]
+		},
 	}
-],
-"settings": {
-	"files.encoding": "utf8bom",
-	"files.autoGuessEncoding": false
-}
 }

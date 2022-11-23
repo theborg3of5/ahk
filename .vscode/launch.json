@@ -5,11 +5,18 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"name": "AHK Debug (Attach)",
 			"type":"autohotkey",
 			"request": "attach",
-			"name": "Attach",
 			"program": "${file}",
 			"stopOnEntry": false,
+		},
+		{
+			"name": "AHK Debug (Run)",
+			"type": "autohotkey",
+			"request": "launch",
+			"program": "${file}",
+			"args": []
 		}
 	]
 }

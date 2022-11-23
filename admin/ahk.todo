@@ -1,7 +1,7 @@
 Switch to VS Code for AHK dev:
-	AHK-based features to bring over:
-		☐ Look into OutputDebug command for debugging stuff - prints to the debugger console
-		☐ Editing stuff in notepad++ (editFiles TLS, +e selector option, etc.)
+	✔ AHK-based features to bring over: @done(22-11-23 13:59)
+		✔ Look into OutputDebug command for debugging stuff - prints to the debugger console @done(22-11-23 13:59)
+		✔ Editing stuff in notepad++ (editFiles TLS, +e selector option, etc.) @done(22-11-23 13:59)
 			Some of this is probably just a question of changing the default editor for TL/TLS files
 	Update extension to enhance stuff for me:
 		☐ Figure out how to build extension with my own changes
@@ -13,6 +13,7 @@ Switch to VS Code for AHK dev:
 			Pieces that we don't seem to be handling well:
 				✔ Better inheritance? (ActionObjectBase?) @done(22-11-03 12:18)
 					Actually this is working fine - we're just hitting the multiple-matches issue.
+				☐ Properties (i.e. blah[])
 				☐ Multiple method matches (by name) - we just return the first, could we return multiple options?
 				☐ #Include'd files in other directories
 					Actually, this works fine if I include the full %A_LineFile%\..\ for the current directory

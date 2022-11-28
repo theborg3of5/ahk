@@ -1,4 +1,22 @@
 {
+	"If block": {
+		"prefix": "if",
+		"body": [
+			"if(${1:condition}) {",
+			"\t$0",
+			"}"
+		],
+		"description": "Insert an if block"
+	},
+	"Function": {
+		"prefix": "function",
+		"body": [
+			"${1:functionName}(${2:parameters}) {",
+			"\t$0",
+			"}"
+		],
+		"description": "Insert a function."
+	},
 	"Class skeleton": {
 		"prefix": "ahkclass",
 		"body": [
@@ -56,7 +74,6 @@
 		"body": [
 			"\"",
 			"\t(",
-			"\t\t$1",
 			"\t)\""
 		],
 		"description": "Add a continuation section"
@@ -68,17 +85,24 @@
 	},
 	"Toast (medium)": {
 		"prefix": "toastmed",
-		"body": "Toast.ShowMedium(\"$1\")",
 		"description": "Insert an error toast."
 	},
 	"Error toast": {
 		"prefix": "errortoast",
-		"body": "Toast.ShowError(\"$1\")",
 		"description": "Insert an error toast."
 	},
 	"Default value": {
 		"prefix": "default",
 		"body": "${1:targetVar} := ${1:targetVar} ? ${1:targetVar} : ${2:defaultValue}",
 		"description": "Default a variable to a value (if it's false/empty)."
+	},
+	"Region": {
+		"prefix": "region",
+		"body": [
+			";region ${1:regionName}",
+			"$0",
+			";endregion ${1:regionName}"
+		],
+		"description": "Insert a collapsible region."
 	},
 }

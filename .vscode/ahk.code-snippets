@@ -74,6 +74,7 @@
 		"body": [
 			"\"",
 			"\t(",
+			"\t\t$0",
 			"\t)\""
 		],
 		"description": "Add a continuation section"
@@ -85,10 +86,12 @@
 	},
 	"Toast (medium)": {
 		"prefix": "toastmed",
+		"body": "Toast.ShowMedium(\"$1\")$0",
 		"description": "Insert an error toast."
 	},
 	"Error toast": {
 		"prefix": "errortoast",
+		"body": "Toast.ShowError(\"$1\")$0",
 		"description": "Insert an error toast."
 	},
 	"Default value": {

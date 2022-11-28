@@ -170,6 +170,31 @@ class FileLib {
 		if(newContents)
 			FileAppend, % newContents, % filePath
 	}
+
+	;---------
+	; DESCRIPTION:    Create the given folder path (and its parents) if it doesn't already exist.
+	; PARAMETERS:
+	;  folderPath  (I,REQ) - The path of the folder to check/create.
+	;  silentForce (I,OPT) - By default we'll prompt the user before creating anything - pass true here to suppress that.
+	; RETURNS:        true if the folder (already or newly) exists, false if we couldn't create it or the user declined.
+	;---------
+	createFolderIfNoExist(folderPath, silentForce := false) {
+		; Already exists, nothing to do.
+		if(FileLib.folderExists(folderPath))
+			return true
+		
+		; Check if the user wants us to create a folder.
+		if(!silentForce && !GuiLib.showConfirmationPopup("This folder does not exist:`n" folderPath "`n`nCreate it?", "Folder does not exist"))
+			return false ; User doesn't want us to create
+		
+		; Create the parent folder (recursively) if it doesn't already exist.
+		if(!FileLib.createFolderIfNoExist(FileLib.getParentFolder(folderPath), true))
+			return false ; Something went wrong creating the parent.
+
+		; Create the requested folder.
+		FileCreateDir, % folderPath
+		return (ErrorLevel = 0)
+	}
 	
 	;---------
 	; DESCRIPTION:    Send a file or folder path in a particular format.

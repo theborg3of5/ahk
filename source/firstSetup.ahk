@@ -33,7 +33,12 @@ pointerContents := "
 		; This acts as a pointer that any file can find, which points to the correct location of the common folder and its scripts.
 		#Include " ahkRootPath "\source\common\common.ahk
 	)"
-FileLib.replaceFileWithString(A_MyDocuments "\AutoHotkey\Lib\includeCommon.ahk", pointerContents)
+includeLibFolder := A_MyDocuments "\AutoHotkey\Lib"
+if(!FileLib.createFolderIfNoExist(includeLibFolder, true)) {
+	Toast.ShowError("AHK documents lib folder doesn't exist and we couldn't create it.")
+	ExitApp
+}
+FileLib.replaceFileWithString(includeLibFolder "\includeCommon.ahk", pointerContents)
 
 if(!useSlimMode) {
 	; Hide all .git system files and folders, for a cleaner appearance.

@@ -277,9 +277,13 @@ class DataLib {
 	}
 	
 	;---------
-	; DESCRIPTION:    Expand lists that can optionally contain numeric ranges (delimited by either
-	;                 colons or hyphens). For example:
-	;                  1,2:3,7,6-4 => [1, 2, 3, 7, 6, 5, 4]
+	; DESCRIPTION:    Expand comma-separated lists that can optionally contain numeric ranges.
+	;                 The ranges can be delimited by colons or hypens and can include other advanced operators (+/-/*, see getNumericRangeBits). Examples:
+	;                 	1:3			=> [1, 2, 3]
+	;                 	6-4			=> [6, 5, 4]
+	;                 	1:2:7		=> [1, 3, 5, 7]
+	;                 	5:1:+6		=> [5, 6, 7, 8, 9, 10, 11]
+	;                 	130:5:*45	=> [130, 135, 140, 145]
 	; PARAMETERS:
 	;  listString (I,REQ) - The list to expand.
 	; RETURNS:        The resulting array of expanded values.
@@ -305,30 +309,26 @@ class DataLib {
 	; #PRIVATE#
 	
 	;---------
-	; DESCRIPTION:    Expand a numeric range that's delimited by either a colon or a hyphen. For example:
-	;                  1:5 or 1-5 => [1, 2, 3, 4, 5]
+	; DESCRIPTION:    Expand a numeric range that's delimited by either colon(s) or a hyphen. Supported formats:
+	;                 	start-end
+	;                 	start:[step:]end
+	;                 See getNumericRangeBits for details.
 	; PARAMETERS:
 	;  rangeString (I,REQ) - The range to expand
 	; RETURNS:        The resulting array of numbers.
 	;---------
 	expandNumericRange(rangeString) {
-		splitAry := rangeString.split([":", "-"])
-		start := splitAry[1]
-		end   := splitAry[2]
+		DataLib.getNumericRangeBits(rangeString, start, step, end)
 		
 		; Non-numeric ranges are not allowed.
 		if(!start.isNum() || !end.isNum())
 			return [rangeString]
-		
+
+		; Special case: single-element range
 		if(start = end)
 			return [start] ; Single-element range
 		
-		if(start < end)
-			step := 1
-		else
-			step := -1
-		
-		numElements := abs(end - start) + 1
+		numElements := (abs(end - start) // step) + 1
 		rangeAry := []
 		currNum := start
 		Loop, %numElements% {
@@ -337,6 +337,70 @@ class DataLib {
 		}
 		
 		return rangeAry
+	}
+
+	;---------
+	; DESCRIPTION:    Pick out the parts of a potential numeric range.
+	;                 	Supported formats:
+	;                 		start-end
+	;                 		start:[step:]end
+	;                 	Pieces:
+	;                 		start	- Numeric start of the range.
+	;                 		step	- How much to increment each time. Defaults to 1.
+	;                 					step direction is always calculated based on start/end (positive if begin is smaller than end, etc.)
+	;                 		end		- Any of:
+	;                 					numeric		- Just a number
+	;                 					[+|-]num	- (not supported for hyphenated ranges) start +/- a number (+5 to specify start+5)
+	;                 					*num		- Replace the last few digits of start with the new one (*53 will be start with its last two digits replaced with 53)
+	; PARAMETERS:
+	;  rangeString  (I,REQ) - The string representing the range.
+	;  start       (IO,REQ) - The numeric start of the range.
+	;  step        (IO,REQ) - The step (increment/decrement value).
+	;  end         (IO,REQ) - The numeric end of the range (inclusive).
+	;---------
+	getNumericRangeBits(rangeString, ByRef start, ByRef step, ByRef end) {
+		; Advanced support for colon ranges: start:[step:]end
+		if(rangeString.contains(":")) {
+			splitAry := rangeString.split(":")
+			start := splitAry[1]
+			step  := splitAry[2]
+			end   := splitAry[3]
+
+			; If there's only 2 parts then the second part is actually the end.
+			if(end = "") {
+				end := step
+				step := ""
+			}
+
+			; End can start with a +/- to be relative to the start.
+			if(end.startsWith("+"))
+				end := start + end.removeFromStart("+")
+			else if(end.startsWith("-"))
+				end := start - end.removeFromStart("-")
+		}
+		
+		; Basic support for hyphenated range: start-end
+		if (rangeString.contains("-")) {
+			splitAry := rangeString.split("-")
+			start := splitAry[1]
+			step  := 1 ; We don't support a step value for hyphenated ranges, only start/end.
+			end   := splitAry[2]
+		}
+		
+		; End can also start with * to mean "replace the end of start with these numbers", i.e. 220:1:*35 => 220:1:235
+		if(end.startsWith("*")) {
+			suffix := end.afterString("*", true)
+			end := start.slice(1, start.length() - suffix.length() + 1) suffix
+		}
+		
+		; Default step is 1 (direction determined below)
+		if( (step = "") || (step = 0) )
+			step := 1
+		; Determine step direction based on start/end
+		if(start < end)
+			step := abs(step)
+		else
+			step := abs(step) * -1
 	}
 	; #END#
 }

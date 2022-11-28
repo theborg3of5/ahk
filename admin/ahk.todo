@@ -76,22 +76,6 @@ Fixes / Cleanup:
 		The "this" usages are my biggest suspect right now - from attached debugging, all of the members appear to be in place otherwise.
 
 New Features / Scripts:
-	☐ Add more options for specifying ranges (for use in Snapper selector, etc.)
-		☐ Allow abbreviating second half (might require that we ditch reverse ranges if we don't have some special character), for 1044481:1044482 :
-			✘ 1044481:2 @cancelled(22-11-28 12:23)
-				Too ambiguous.
-			✘ 1044481:>2 @cancelled(22-11-28 12:22)
-				Too hard to understand visually.
-			✘ 1044481::2 @cancelled(22-11-28 12:26)
-				Looks a lot like a for loop...and seems like I'll confuse myself way too quickly.
-			☐ 1044481:*2
-				Basically, go up to (the original number, but with the last X digits replaced with the provided ones).
-		☐ Specify how many to go up, for 1044481:1044485 :
-			☐ 1044481:1:5 (for-loop style)
-
-			☐ 1044481:+4
-
-			☐ 1044481::+4 (blank incrementor in middle implies +/- 1)
 	☐ Performance improvement idea: could I "compile" the titleStrings for activating/identifying windows down to a simple object in Config, instead of having to call a function every time?
 	☐ Consider revamping AHK function headers:
 		☐ Consider getting rid of NOTES bit of headers - just include it in the description instead.

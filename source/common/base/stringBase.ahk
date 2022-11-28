@@ -192,8 +192,8 @@ class StringBase {
 	;---------
 	; DESCRIPTION:    Return a chunk of this string, given starting and ending positions.
 	; PARAMETERS:
-	;  startPos  (I,REQ) - Starting position (1 is first char).
-	;  stopAtPos (I,REQ) - Ending position - return up to here, non-inclusive.
+	;  startPos      (I,REQ) - Starting position (1 is first char).
+	;  stopBeforePos (I,REQ) - Ending position - return up to here, non-inclusive.
 	; RETURNS:        Chunk of this string specified.
 	;---------
 	slice(startPos, stopAtPos) {

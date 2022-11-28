@@ -60,6 +60,14 @@ class ArrayBase {
 		index--
 		return this[index]
 	}
+
+	;---------
+	; DESCRIPTION:    Get the last element of this array.
+	; RETURNS:        The last element.
+	;---------
+	last() {
+		return this[this.length()]
+	}
 	
 	;---------
 	; DESCRIPTION:    Append the values from the given array to the end of this array.

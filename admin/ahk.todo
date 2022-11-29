@@ -41,6 +41,7 @@ Switch to VS Code for AHK dev:
 	☐ Get rid of updateNotepadPPSupport once I'm sure I won't need it anymore (currently shows how to parse my headers and such).
 
 Fixes / Cleanup:
+	☐ Clean out OneNote recurring todo stuff - no longer used
 	☐ Should we move source\common\base? Currently contains these:
 		Ancestors of classes
 			☐ Would these make more sense in a subfolder under class\, or even just as part of class\ itself?
@@ -105,7 +106,6 @@ New Features / Scripts:
 		Potentially tricky bit: pre-processing we do for EMC2 records (with their additional title and whatnot)
 			We could theoretically just run that a second time, though.
 	☐ Could I use hotstrings to about stuff like (i.e. xxx) from capitalizing incorrectly?
-	☐ Clean out OneNote recurring todo stuff - no longer used
 	☐ Consider a "record macro" set of hotkeys (like Notepad++ has built-in).
 	☐ Is there some way I could detect and show a warning when a modifier key gets stuck down?
 		Maybe start a timer when one of them is held down, and after 5s or so show a persistent toast that goes away when it's released?

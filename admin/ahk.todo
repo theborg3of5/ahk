@@ -42,6 +42,9 @@ Switch to VS Code for AHK dev:
 
 Fixes / Cleanup:
 	☐ Could we clean up/condense Teams messages so I can paste them into OneNote more nicely?
+		☐ Initial working draft
+		☐ Could we get it to also keep images? Those are dropped right now.
+		☐ Can we at least handle the message after an image? We're not extracting the sender name properly in that case.
 	☐ ^e hotkey for Debug.popup chokes on this one:
 		Debug.popup("block",block, "block.split(""\n\n["")",block.split("\n\n["))
 	☐ Clean out OneNote recurring todo stuff - no longer used

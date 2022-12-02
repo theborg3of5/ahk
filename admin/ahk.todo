@@ -41,6 +41,7 @@ Switch to VS Code for AHK dev:
 	☐ Get rid of updateNotepadPPSupport once I'm sure I won't need it anymore (currently shows how to parse my headers and such).
 
 Fixes / Cleanup:
+	☐ Could we clean up/condense Teams messages so I can paste them into OneNote more nicely?
 	☐ ^e hotkey for Debug.popup chokes on this one:
 		Debug.popup("block",block, "block.split(""\n\n["")",block.split("\n\n["))
 	☐ Clean out OneNote recurring todo stuff - no longer used

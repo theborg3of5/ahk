@@ -81,7 +81,7 @@
 	},
 	"Clipboard as value": {
 		"prefix": "clip",
-		"body": "\"${CLIPBOARD/(\")|(\r?\n)/${1:+\"\"}${2:+`n}/g}\"",
+		"body": "\"${CLIPBOARD/(\")|(\r)|(\n)/${1:+\"\"}${2:+`r}${3:+`n}/g}\"",
 		"description": "Send the clipboard as a value/expression, escaping quotes and newlines."
 	},
 	"Toast (medium)": {

@@ -324,7 +324,14 @@ class StringBase {
 	; RETURNS:        The first line of this string (everything up to the first newline)
 	;---------
 	firstLine() {
-		return this.beforeString("`n")
+		return this.beforeString("`r").beforeString("`n")
+	}
+
+	;---------
+	; DESCRIPTION:    Get the last line of this string.
+	;---------
+	lastLine() {
+		return this.afterString("`n", true)
 	}
 	
 	;---------

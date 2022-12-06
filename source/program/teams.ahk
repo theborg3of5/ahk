@@ -3,8 +3,16 @@
 	!z:: Send, ^+o ; Toggle video
 	!o:: Send, ^,  ; Settings
 	^+/::Send, ^.  ; Show hotkeys
-	^+c::clipboard := getCondensedTeamsConversation(SelectLib.getText())
+	^+c::copyCondensedTeamsConversation()
 #If
+
+;---------
+; DESCRIPTION:    Take messages copied from Teams, condense them, and put them back on the clipboard.
+;---------
+copyCondensedTeamsConversation() {
+	clipboard := getCondensedTeamsConversation(SelectLib.getText())
+	Toast.ShowMedium("Clipboard set to condensed Teams conversation")
+}
 
 ;---------
 ; DESCRIPTION:    Take messages copied from Teams and condense them into a more compact form for saving off.

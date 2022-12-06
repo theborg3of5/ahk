@@ -14,7 +14,6 @@
 		Snapper						Epic\Snapper\Snapper.exe
 		Thunder						Thunder\Thunder.exe
 		VB6							Microsoft Visual Studio\VB98\VB6.EXE
-		Visual Studio				Microsoft Visual Studio\2019\Professional\Common7\IDE\devenv.exe
 		VMware Horizon Client		VMware\VMware Horizon View Client\vmware-view.exe
 		Hyperdrive					Epic\Hyperdrive\VersionIndependent\Hyperspace.exe
 	} ~PATH.addToStart(<PROGRAM_FILES>\) {
@@ -25,12 +24,12 @@
 		Everything					Everything\Everything.exe
 		Internet Explorer			Internet Explorer\iexplore.exe
 		KDiff						KDiff3\kdiff3.exe
+		GrepWin						grepWin\grepWin.exe
 		Notepad++					Notepad++\notepad++.exe
 		OneNote						Microsoft Office\root\Office16\ONENOTE.EXE							WORK_DESKTOP
 		Outlook						Microsoft Office\root\Office16\OUTLOOK.EXE							WORK_DESKTOP
 		TrueCrypt					TrueCrypt\TrueCrypt.exe
-		GrepWin						grepWin\grepWin.exe
-		yEd							yWorks\yEd\yEd.exe
+		Visual Studio				Microsoft Visual Studio\2022\Professional\Common7\IDE\devenv.exe
 	} ~PATH.addToStart(<WINDOWS>\) {
 		Explorer					explorer.exe
 		Notepad						System32\notepad.exe

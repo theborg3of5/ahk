@@ -41,6 +41,7 @@ Switch to VS Code for AHK dev:
 	☐ Get rid of updateNotepadPPSupport once I'm sure I won't need it anymore (currently shows how to parse my headers and such).
 
 Fixes / Cleanup:
+	☐ TL[S] highlighting - hyphens are faded even when they're in the middle of a word
 	☐ Could we clean up/condense Teams messages so I can paste them into OneNote more nicely?
 		☐ Initial working draft
 		☐ Could we get it to also keep images? Those are dropped right now.

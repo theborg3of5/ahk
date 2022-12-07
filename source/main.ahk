@@ -27,7 +27,7 @@ FileEncoding, UTF-8                          ; Read files using UTF-8 encoding b
 subFolder := A_ScriptDir "\sub\"
 Run(subFolder "vimBindings.ahk")
 Run(subFolder "windowMoverSizer.ahk")
-if(Config.machineIsWorkLaptop)
+if(Config.machineIsWorkDesktop)
 	Run(subFolder "killUAC.ahk")
 
 ; Include other scripts

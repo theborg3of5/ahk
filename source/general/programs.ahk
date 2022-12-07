@@ -32,13 +32,13 @@
 		}
 		Config.runProgram("Firefox Portable")
 	return
-#If Config.machineIsHomeDesktop || Config.machineIsWorkLaptop || Config.machineIsHomeLaptop
+#If Config.machineIsHomeDesktop || Config.machineIsWorkDesktop || Config.machineIsHomeLaptop
 	#f::  Config.activateProgram("Everything")
 	#t::  Config.runProgram("Telegram")
 	!+g:: Config.activateProgram("GitHub Desktop")
 	^!+o::Config.activateProgram("OneNote")
 	^!+x::Config.activateProgram("Launchy")
-#If Config.machineIsWorkLaptop
+#If Config.machineIsWorkDesktop
 	^!+u::Config.activateProgram("Thunder")
 	^!#e::Config.activateProgram("Outlook")
 #If

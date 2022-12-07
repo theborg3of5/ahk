@@ -128,7 +128,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 				SendRaw, % record.id
 		}
 
-#If Config.machineIsWorkLaptop ; Main work laptop only (not other work machines) ---
+#If Config.machineIsWorkDesktop ; Main work desktop only (not other work machines) ---
 	^!+t::
 		selectOutlookTLG() {
 			s := new Selector("tlg.tls").setTitle("Select EMC2 Record ID")

@@ -42,6 +42,14 @@ Switch to VS Code for AHK dev:
 
 Fixes / Cleanup:
 	☐ TL[S] highlighting - hyphens are faded even when they're in the middle of a word
+	☐ Teams conversation condensing
+		☐ Handle quotes better
+			☐ Maybe recognize that it starts with a name, then compare the rest of the line to the lines I've already processed with that name?
+			☐ Reformat like this:
+				Gavin Borg | maybe convert the DAT to episodes in SetConsumerSpecificInputs^LNUORDDBCAssoc and add it to "AdditionalEpisodes" array there |
+		☐ Could we make selecting/copying a long conversation better?
+			☐ Maybe trigger it, then build up a buffer with each copy, then condense?
+				☐ Could show the last line in the buffer (ideally including the timestamp!) to make it easier to track your spot
 	☐ Could we clean up/condense Teams messages so I can paste them into OneNote more nicely?
 		☐ Initial working draft
 		☐ Could we get it to also keep images? Those are dropped right now.
@@ -84,11 +92,6 @@ Fixes / Cleanup:
 		The "this" usages are my biggest suspect right now - from attached debugging, all of the members appear to be in place otherwise.
 
 New Features / Scripts:
-	☐ Add a special generic dev/S1/Final choice to Hyperspace selector, that picks the VDI's versions
-		☐ How to determine the version?
-			☐ Look at latest installed version (I think I'm doing that already for some paths?)
-				Note: there's always a folder for the current version, but it doesn't appear to have the .exe in it.
-			☐ Startup script adds it in settings (assuming I have access to it somehow)?
 	☐ Add newline character display (`n and `r) to debug table
 	☐ Performance improvement idea: could I "compile" the titleStrings for activating/identifying windows down to a simple object in Config, instead of having to call a function every time?
 	☐ Consider revamping AHK function headers:

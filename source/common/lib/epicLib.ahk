@@ -2,6 +2,34 @@
 
 class EpicLib {
 	; #PUBLIC#
+
+	;---------
+	; DESCRIPTION:    Prompt the user to choose an internal Environment using a Selector.
+	; PARAMETERS:
+	;  selectorTitle (I,REQ) - The title for the Selector.
+	; RETURNS:        data array (null if the user didn't accept)
+	;---------
+	selectEpicEnvironment(selectorTitle) {
+		; Set up Selector
+		s := new Selector("epicEnvironments.tls")
+		if(selectorTitle != "")
+			s.setTitle(selectorTitle)
+		
+		; Show the popup and get user input
+		data := s.selectGui()
+		if(!data)
+			return ""
+
+		; Replace special tags found in some values.
+		latestLocalVersion := EpicLib.findLatestInstalledHyperspaceVersion()
+		latestLocalVersionFlat := latestLocalVersion.remove(".")
+
+		data["VERSION"]   := data["VERSION"].replaceTag(  "LATEST_LOCAL_VERSION",      latestLocalVersion)
+		data["COMM_ID"]   := data["COMM_ID"].replaceTag(  "LATEST_LOCAL_VERSION_FLAT", latestLocalVersionFlat)
+		data["HSWEB_URL"] := data["HSWEB_URL"].replaceTag("LATEST_LOCAL_VERSION_FLAT", latestLocalVersionFlat)
+
+		return data
+	}
 	
 	;---------
 	; DESCRIPTION:    Run Hyperspace locally for the given version and environment.
@@ -150,6 +178,28 @@ class EpicLib {
 		}
 			
 		return latestEMC2Folder "\Shared Files\EpicD" latestVersion.remove(".") ".exe"
+	}
+
+	;---------
+	; DESCRIPTION:    Find the latest version of Hyperspace that's currently installed.
+	; RETURNS:        Numeric version (i.e. 10.1)
+	;---------
+	findLatestInstalledHyperspaceVersion() {
+		latestVersion := 0.0
+
+		Loop, Files, C:\Program Files (x86)\Epic\v*.*, D
+		{
+			version := A_LoopFileName.removeFromStart("v")
+
+			; Only consider versions where there's an executable (aka the version is actually installed)
+			if(!FileExist(A_LoopFileLongPath "\Shared Files\EpicD" version.remove(".") ".exe"))
+				Continue
+			
+			if(version > latestVersion)
+				latestVersion := version
+		}
+
+		return latestVersion
 	}
 	
 	;---------

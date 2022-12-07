@@ -52,30 +52,30 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	
 	^+!#h::
 		selectHyperspace() {
-			data := new Selector("epicEnvironments.tls").setTitle("Launch Classic Hyperspace in Environment").selectGui()
+			data := EpicLib.selectEpicEnvironment("Launch Classic Hyperspace in Environment")
 			if(data)
 				EpicLib.runHyperspace(data["VERSION"], data["COMM_ID"], data["TIME_ZONE"])
 		}
 		
 	^!#h::
 		selectHSWeb() {
-			data := new Selector("epicEnvironments.tls").setTitle("Launch Standalone HSWeb in Environment").selectGui()
+			data := EpicLib.selectEpicEnvironment("Launch Standalone HSWeb in Environment")
 			if(data["HSWEB_URL"])
 				Run(data["HSWEB_URL"])
 		}
 	
 	^!+h::
 		selectHyperdrive() {
-			data := new Selector("epicEnvironments.tls").setTitle("Launch Hyperdrive in Environment").selectGui()
+			data := EpicLib.selectEpicEnvironment("Launch Hyperdrive in Environment")
 			if(data)
 				EpicLib.runHyperdrive(data["COMM_ID"], data["TIME_ZONE"])
 		}
 	
 	^!+i::
 		selectEnvironmentId() {
-			envId := new Selector("epicEnvironments.tls").selectGui("ENV_ID")
-			if(envId) {
-				Send, % envId
+			data := EpicLib.selectEpicEnvironment("Insert ID for Environment")
+			if(data["ENV_ID"]) {
+				Send, % data["ENV_ID"]
 				Send, {Enter} ; Submit it too.
 			}
 		}
@@ -206,7 +206,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	
 	^!+r::
 		selectThunder() {
-			data := new Selector("epicEnvironments.tls").setTitle("Launch Thunder Environment").selectGui()
+			data := EpicLib.selectEpicEnvironment("Launch Thunder for Environment")
 			if(!data)
 				return
 			
@@ -218,7 +218,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	
 	!+v::
 		selectVDI() {
-			data := new Selector("epicEnvironments.tls").setTitle("Launch VDI for Environment").selectGui()
+			data := EpicLib.selectEpicEnvironment("Launch VDI for Environment")
 			if(!data)
 				return
 			

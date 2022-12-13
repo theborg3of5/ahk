@@ -70,26 +70,34 @@ Fixes / Cleanup:
 	☐ TLP EMC2 info windows selector - consider filtering this specific case (not others like the insert-ID hotkey) to only windows which can return the title (just Chrome and Outlook, I think?)
 	☐ EMC2 info windows selector: consider adding abbreviations for windows that get filtered out by duplicates checking, to the kept result
 	☐ Figure out why escape-closing stops working after long enough
-		Happens to Telegram for sure, but also Explorer?
-		Based on debug toasts, I'm pretty sure it's no longer identifying windows by name properly - probably some sort of local variable gets dumped or overwritten?
-		Next step: add some sort of debug flag or something to try and see what's missing/going on in Config
-			Or: system.ahk::testFunc()
-			
-				---------------------------
-				main.ahk
-				---------------------------
-				titleString=A
-				exe=C:\Users\gborg\AppData\Roaming\Telegram Desktop\Telegram.exe	|	bestMatch.exe=Telegram.exe
-				class=Qt5154QWindowIcon															|	bestMatch.class=Qt5154QWindowIcon
-				title=Telegram (1)																|	bestMatch.title=
-				bestMatch.name=Telegram
-				(Config.windows)["Telegram"].name=Telegram
-				---------------------------
-				OK   
-				---------------------------
+		Initial digging:	
+			Happens to Telegram for sure, but also Explorer?
+			Based on debug toasts, I'm pretty sure it's no longer identifying windows by name properly - probably some sort of local variable gets dumped or overwritten?
+			Next step: add some sort of debug flag or something to try and see what's missing/going on in Config
+				Or: system.ahk::testFunc()
 				
-			Next: try debug flag of sorts again, so that we can try it with the "this" references in place
-		The "this" usages are my biggest suspect right now - from attached debugging, all of the members appear to be in place otherwise.
+					---------------------------
+					main.ahk
+					---------------------------
+					titleString=A
+					exe=C:\Users\gborg\AppData\Roaming\Telegram Desktop\Telegram.exe	|	bestMatch.exe=Telegram.exe
+					class=Qt5154QWindowIcon															|	bestMatch.class=Qt5154QWindowIcon
+					title=Telegram (1)																|	bestMatch.title=
+					bestMatch.name=Telegram
+					(Config.windows)["Telegram"].name=Telegram
+					---------------------------
+					OK   
+					---------------------------
+					
+				Next: try debug flag of sorts again, so that we can try it with the "this" references in place
+			The "this" usages are my biggest suspect right now - from attached debugging, all of the members appear to be in place otherwise.
+		Update 12/13/22:
+			Seems like we're not actually triggering the HOTKEY at all - or at least, we're not getting into Config.findWindowInfo()
+				I CAN get it to happen by getting a toast to appear (presumably because of how we identify toasts) using chrome.ahk's ctrl+right-click copy-link hotkey
+			Notably, we do have this.windows["Telegram"] as an object (at least, the .name property is populated and coming thru fine)
+				So "this" (at least in the context I was thinking) is NOT the culprit.
+			Added another hotkey (^+!9) to force Config.findWindowInfo() to trigger so we can better see what's going on there.
+			Also added a MsgBox (when debug is toggled on) to the actual Esc hotkey.
 
 New Features / Scripts:
 	☐ Add newline character display (`n and `r) to debug table

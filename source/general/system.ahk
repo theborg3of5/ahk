@@ -40,3 +40,7 @@ testFunc() {
 	Config.debugOn := !Config.debugOn
 	MsgBox, % "Config debug flag set to: " Config.debugOn
 }
+^+!9::testSearch()
+testSearch() {
+	Config.findWindowInfo("A")
+}

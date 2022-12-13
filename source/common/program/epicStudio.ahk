@@ -98,16 +98,25 @@ class EpicStudio {
 			Toast.ShowError("Could not create border", "Current line is not a comment")
 			return
 		}
+
+		; Ask the user how wide they want the "box" to be
+		width := InputBox("Enter comment box width", "How many characters wide do you want the borders to be?`n`nLeave blank to match (padded) width of text.")
 		
-		; Get content of line, rebuild it (to fix any spacing issues)
+		; Get content of line, re-indent as needed
 		content := line.removeFromStart(";").withoutWhitespace()
-		newLine := "; " content
+		if(width = "") {
+			width := content.length() + 2 ; 1 char of overhang on each side
+			indent := " "
+		} else {
+			indent := StringLib.duplicate(" ", (width - content.length()) // 2)
+		}
+		newLine := ";" indent content
 		
 		; Generate border
-		borderLine := ";" StringLib.duplicate(borderChar, content.length() + 2) ; 1 char of overhang on each side
+		borderLine := ";" StringLib.duplicate(borderChar, width)
 		
 		; Generate new lines and replace the original
-		newLines := borderLine.appendLine("`t" newLine).appendLine("`t" borderLine)
+		newLines := borderLine "`n`t" newLine "`n`t" borderLine
 		Send, {Shift Down}{Home}{Shift Up}
 		ClipboardLib.send(newLines)
 	}

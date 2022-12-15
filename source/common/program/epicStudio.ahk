@@ -77,6 +77,27 @@ class EpicStudio {
 		Send, % record.id
 		Send, {Enter 2}
 	}
+
+	;---------
+	; DESCRIPTION:    Add a contact comment, but also include the REVISIONS: header.
+	;---------
+	insertContactCommentWithHeader() {
+		; Figure out if we're already on a new line or if we need to insert one.
+		Send, {End}{Home}                 ; Get to start of line (after indentation)
+		Send, {Shift Down}{End}{Shift Up} ; Select line (not including indentation)
+		line := SelectLib.getText().withoutWhitespace()
+		; Send, {End}                       ; Leave cursor on end of line ; GDB TODO
+		
+		; Non-empty line: add a new line and select it
+		if(line != "" && line != ";") {
+			Send, {End}{Enter}
+			Send, {Shift Down}{Home}{Shift Up}
+		}
+
+		Send, `;
+		Send, {Space}REVISIONS:{Enter}{Space}
+		Send, ^8 ; Normal contact comment hotkey for EpicStudio
+	}
 	
 	;---------
 	; DESCRIPTION:    Wrap the current line in a top and bottom "border".

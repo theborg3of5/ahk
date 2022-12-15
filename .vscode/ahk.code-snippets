@@ -108,4 +108,14 @@
 		],
 		"description": "Insert a collapsible region."
 	},
+	"Switch select case": {
+		"prefix": "switch",
+		"body": [
+			"Switch ${1:value} {",
+			"\tCase ${2:caseValue}:",
+			"\t\t$0",
+			"}",
+		],
+		"description": "Insert a collapsible region."
+	},
 }

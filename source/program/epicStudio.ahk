@@ -31,6 +31,9 @@
 		Send, % "_""""_"
 		Send, {Left 2}
 	return
+
+	; Contact comment, but also include the REVISIONS: header.
+	^+8::EpicStudio.insertContactCommentWithHeader()
 	
 	; Comment "borders" that are sized to match the current line (plus 1 extra overhang)
 	^-::EpicStudio.wrapLineInCommentBorder("-")

@@ -2,6 +2,9 @@
 
 [	NAME								ABBREV					PATH	]
 
+# Admin
+	Todo								todo					<AHK_ROOT>\admin\ahk.todo
+
 # Config
 ~PATH.addToStart(<AHK_CONFIG>\) {
 	Games								g						games.tl
@@ -17,7 +20,6 @@
 # Private
 ~PATH.addToStart(<AHK_PRIVATE>\) {
 	All current Epic environments		allenv					allCurrentEpicEnvironments.txt
-	OneNote recurring todos				todo					oneNoteRecurringTodos.tl
 	Private values						priv					privates.tl
 	Snapper ignore items				snap					snapperIgnoreItems.tls
 	Mapped drives						md						mappedDrives.tl

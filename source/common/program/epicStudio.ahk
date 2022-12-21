@@ -122,6 +122,7 @@ class EpicStudio {
 
 		; Ask the user how wide they want the "box" to be
 		width := InputBox("Enter comment box width", "How many characters wide do you want the borders to be?`n`nLeave blank to match (padded) width of text.")
+		Sleep, 100 ; Make sure the InputBox has fully closed and EpicStudio has focus again.
 		
 		; Get content of line, re-indent as needed
 		content := line.removeFromStart(";").withoutWhitespace()

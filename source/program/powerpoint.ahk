@@ -4,7 +4,7 @@
 	; Copy the current document location
 	!c::
 		Send, !fi ; File > Info
-		Sleep, 250 ; Wait for File pane to finish appearing
+		Sleep, 1000 ; Wait for File pane to finish appearing
 		ClipboardLib.copyFilePathWithHotkey("c") ; Copy Path
 		Send, {Esc} ; Close the File pane
 	return

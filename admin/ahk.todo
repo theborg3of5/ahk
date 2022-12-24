@@ -1,3 +1,7 @@
+AHK 2.0 migration:
+	https://www.autohotkey.com/docs/v2/v2-changes.htm
+	☐ Read thru changelog and compile a list of probable updates/areas of concern
+
 Switch to VS Code for AHK dev:
 	✔ AHK-based features to bring over: @done(22-11-23 13:59)
 		✔ Look into OutputDebug command for debugging stuff - prints to the debugger console @done(22-11-23 13:59)

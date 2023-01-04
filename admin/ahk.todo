@@ -1,6 +1,5 @@
 AHK 2.0 migration:
-	https://www.autohotkey.com/docs/v2/v2-changes.htm
-	☐ Read thru changelog and compile a list of probable updates/areas of concern
+	✘ This list lives in the ahk-v2-migration branch now. @cancelled(23-01-04 10:41)
 
 Switch to VS Code for AHK dev:
 	✔ AHK-based features to bring over: @done(22-11-23 13:59)

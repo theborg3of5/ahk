@@ -1,0 +1,39 @@
+﻿https://www.autohotkey.com/docs/v2/v2-changes.htm
+☐ Read thru changelog and compile a list of probable updates/areas of concern
+
+Legacy syntax removed (https://www.autohotkey.com/docs/v2/v2-changes.htm#legacy-syntax-removed):
+	☐ All commands are now functions (drop the paren between command and params)
+		☐ Can probably get rid of commandFunctions.ahk
+	☐ All text now quoted
+	☐ No more percent-sign-wrapped variables (except for #Include)
+	☐ No more percent-sign prefix to force an expression
+	☐ Throw exceptions (or return values) instead of setting ErrorLevel
+	☐ Loop must be followed by another keyword (Files/Parse/Read/Reg), can't be quoted or a variable. Also no comma needed between.
+	Gosub removed:
+		☐ SetTimer and Hotkey now take function references instead
+		☐ Use parameters instead of A_ThisLabel
+		☐ Functions can go in the auto-execute section now!
+Hotkeys and (non-auto-replace) hotstrings now auto-define a (assume-local) function (https://www.autohotkey.com/docs/v2/v2-changes.htm#hotkey-and-hotstring-labels):
+	☐ Multi-line hotkeys need braces to enclose the body of the hotkey instead of "return"
+Names (https://www.autohotkey.com/docs/v2/v2-changes.htm#names):
+	☐ Func("MyFunc") => MyFunc
+	☐ SetTimer/Hotkey passing "MyFunc" => pass MyFunc
+	☐ Calling function by value: %myVar%() => myVar()
+	☐ To call function using just its name, use a double-deref (%MyFunc%() - https://www.autohotkey.com/docs/v2/Variables.htm#deref)
+		But: use function references instead of names if possible.
+	☐ Built-in classes have changed: https://www.autohotkey.com/docs/v2/ObjList.htm
+		Will be important for my StringBase/ArrayBase/ObjectBase stuff
+Scope (https://www.autohotkey.com/docs/v2/v2-changes.htm#scope):
+	☐ Super-global variables removed (except for built-in variables)
+	☐ Functions can now read (but not write) global variables without declaring them
+	☐ Force-local mode removed
+	☐ GuiLib stuff with dynamic globals will need updates:
+		☐ getLabelSizeForText
+		☐ create/getDynamicGlobal()
+	☐ Might be able to drop the "global varName" stuff at the start of a lot of standalone scripts' functions
+	☐ Can probably get rid of pseudo-array handling in DataLib - convertPseudoArrayToArray, rebaseVariadicAry
+Variables (https://www.autohotkey.com/docs/v2/v2-changes.htm#variables):
+	☐ Static variables now initialized on first use, instead of auto-executing
+		☐ Probably means I can simplify a lot of property "build it if not set yet" stuff in Config and other status classes
+Expressions (https://www.autohotkey.com/docs/v2/v2-changes.htm#expressions):
+	☐ 

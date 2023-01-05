@@ -1,39 +1,139 @@
-﻿https://www.autohotkey.com/docs/v2/v2-changes.htm
-☐ Read thru changelog and compile a list of probable updates/areas of concern
+﻿Review changes (https://www.autohotkey.com/docs/v2/v2-changes.htm):
+	Language (https://www.autohotkey.com/docs/v2/v2-changes.htm#language):
+		Legacy syntax removed (https://www.autohotkey.com/docs/v2/v2-changes.htm#legacy-syntax-removed):
+			☐ All commands are now functions (drop the paren between command and params)
+				☐ Can probably get rid of commandFunctions.ahk
+			☐ All text now quoted
+			☐ No more percent-sign-wrapped variables (except for #Include)
+			☐ No more percent-sign prefix to force an expression
+			☐ Throw exceptions (or return values) instead of setting ErrorLevel
+			☐ Loop must be followed by another keyword (Files/Parse/Read/Reg), can't be quoted or a variable. Also no comma needed between.
+			Gosub removed:
+				☐ SetTimer and Hotkey now take function references instead
+				☐ Use parameters instead of A_ThisLabel
+				☐ Functions can go in the auto-execute section now!
+		Hotkeys and (non-auto-replace) hotstrings now auto-define a (assume-local) function (https://www.autohotkey.com/docs/v2/v2-changes.htm#hotkey-and-hotstring-labels):
+			☐ Multi-line hotkeys need braces to enclose the body of the hotkey instead of "return"
+		Names (https://www.autohotkey.com/docs/v2/v2-changes.htm#names):
+			☐ Func("MyFunc") => MyFunc
+			☐ SetTimer/Hotkey passing "MyFunc" => pass MyFunc
+			☐ Calling function by value: %myVar%() => myVar()
+			☐ To call function using just its name, use a double-deref (%MyFunc%() - https://www.autohotkey.com/docs/v2/Variables.htm#deref)
+				But: use function references instead of names if possible.
+			☐ Built-in classes have changed: https://www.autohotkey.com/docs/v2/ObjList.htm
+				Will be important for my StringBase/ArrayBase/ObjectBase stuff
+		Scope (https://www.autohotkey.com/docs/v2/v2-changes.htm#scope):
+			☐ Super-global variables removed (except for built-in variables)
+			☐ Functions can now read (but not write) global variables without declaring them
+			☐ Force-local mode removed
+			☐ GuiLib stuff with dynamic globals will need updates:
+				☐ getLabelSizeForText
+				☐ create/getDynamicGlobal()
+			☐ Might be able to drop the "global varName" stuff at the start of a lot of standalone scripts' functions
+			☐ Can probably get rid of pseudo-array handling in DataLib - convertPseudoArrayToArray, rebaseVariadicAry
+		Variables (https://www.autohotkey.com/docs/v2/v2-changes.htm#variables):
+			☐ Static variables now initialized on first use, instead of auto-executing
+				☐ Probably means I can simplify a lot of property "build it if not set yet" stuff in Config and other status classes
+		Expressions (https://www.autohotkey.com/docs/v2/v2-changes.htm#expressions):
+			☐ START HERE NEXT
+		Objects (Misc) (https://www.autohotkey.com/docs/v2/v2-changes.htm#objects-misc):
+			☐ 
+		Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#functions):
+			☐ 
+		Nested Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#nested-functions):
+			☐ 
+		Uncategorized (https://www.autohotkey.com/docs/v2/v2-changes.htm#uncategorized):
+			☐ 
+		Continuation Sections (https://www.autohotkey.com/docs/v2/v2-changes.htm#continuation-sections):
+			☐ 
+		Continuation Lines (https://www.autohotkey.com/docs/v2/v2-changes.htm#continuation-lines):
+			☐ 
+		Types (https://www.autohotkey.com/docs/v2/v2-changes.htm#types):
+			☐ 
+	Objects (https://www.autohotkey.com/docs/v2/v2-changes.htm#objects):
+		☐ 
+		Primitive Values (https://www.autohotkey.com/docs/v2/v2-changes.htm#primitive-values):
+			☐ 
+		Properties and Methods (https://www.autohotkey.com/docs/v2/v2-changes.htm#properties-and-methods):
+			☐ 
+		Static/Class Variables (https://www.autohotkey.com/docs/v2/v2-changes.htm#staticclass-variables):
+			☐ 
+		Meta-Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#meta-functions):
+			☐ 
+		Array (https://www.autohotkey.com/docs/v2/v2-changes.htm#array):
+			☐ 
+		Map (https://www.autohotkey.com/docs/v2/v2-changes.htm#map):
+			☐ 
+		Enumeration (https://www.autohotkey.com/docs/v2/v2-changes.htm#enumeration):
+			☐ 
+		Bound Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#bound-functions):
+			☐ 
+		COM Objects (ComObject) (https://www.autohotkey.com/docs/v2/v2-changes.htm#com-objects-comobject):
+			☐ 
+		Default Property (https://www.autohotkey.com/docs/v2/v2-changes.htm#default-property):
+			☐ 
+		COM Calls (https://www.autohotkey.com/docs/v2/v2-changes.htm#com-calls):
+			☐ 
+	Library (https://www.autohotkey.com/docs/v2/v2-changes.htm#library):
+		Removed Commands (Details) (https://www.autohotkey.com/docs/v2/v2-changes.htm#removed-details):
+			☐ 
+		Modified Commands/Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#modified-commandsfunctions):
+			☐ 
+		New Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#new-functions):
+			☐ 
+		New Directives (https://www.autohotkey.com/docs/v2/v2-changes.htm#new-directives):
+			☐ 
+		Built-in Variables (https://www.autohotkey.com/docs/v2/v2-changes.htm#built-in-variables):
+			☐ 
+		Built-in Objects (https://www.autohotkey.com/docs/v2/v2-changes.htm#built-in-objects):
+			☐ 
+	Gui (https://www.autohotkey.com/docs/v2/v2-changes.htm#gui):
+		☐ 
+		Gui sub-commands (https://www.autohotkey.com/docs/v2/v2-changes.htm#gui-sub-commands):
+			☐ 
+		Events (https://www.autohotkey.com/docs/v2/v2-changes.htm#events):
+			☐ 
+		Removed (https://www.autohotkey.com/docs/v2/v2-changes.htm#removed):
+			☐ 
+		Control Options (https://www.autohotkey.com/docs/v2/v2-changes.htm#control-options):
+			☐ 
+		GuiControlGet (https://www.autohotkey.com/docs/v2/v2-changes.htm#guicontrolget):
+			☐ 
+		GuiControl (https://www.autohotkey.com/docs/v2/v2-changes.htm#guicontrol):
+			☐ 
+		Other Changes (https://www.autohotkey.com/docs/v2/v2-changes.htm#other-changes):
+			☐ 
+	Error Handling (https://www.autohotkey.com/docs/v2/v2-changes.htm#error-handling):
+		☐ 
+		Continuable Errors (https://www.autohotkey.com/docs/v2/v2-changes.htm#continuable-errors):
+			☐ 
+		ErrorLevel (https://www.autohotkey.com/docs/v2/v2-changes.htm#errorlevel):
+			☐ 
+		Expressions (https://www.autohotkey.com/docs/v2/v2-changes.htm#expressions-1):
+			☐ 
+		Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#functions-1):
+			☐ 
+		Catch (https://www.autohotkey.com/docs/v2/v2-changes.htm#catch):
+			☐ 
+	Keyboard, Mouse, Hotkeys and Hotstrings (https://www.autohotkey.com/docs/v2/v2-changes.htm#keyboard-mouse-hotkeys-and-hotstrings):
+		☐ 
+	Other (https://www.autohotkey.com/docs/v2/v2-changes.htm#other):
+		☐ 
+		Persistence (https://www.autohotkey.com/docs/v2/v2-changes.htm#persistence):
+			☐ 
+		Threads (https://www.autohotkey.com/docs/v2/v2-changes.htm#threads):
+			☐ 
+		Default Settings (https://www.autohotkey.com/docs/v2/v2-changes.htm#default-settings):
+			☐ 
+		✔ Command Line (https://www.autohotkey.com/docs/v2/v2-changes.htm#command-line): @done(23-01-05 12:22)
+			✔ Command line args are no longer a numbered pseudo-array, but a proper array in the A_Args built-in variable instead. @done(23-01-05 12:22)
 
-Legacy syntax removed (https://www.autohotkey.com/docs/v2/v2-changes.htm#legacy-syntax-removed):
-	☐ All commands are now functions (drop the paren between command and params)
-		☐ Can probably get rid of commandFunctions.ahk
-	☐ All text now quoted
-	☐ No more percent-sign-wrapped variables (except for #Include)
-	☐ No more percent-sign prefix to force an expression
-	☐ Throw exceptions (or return values) instead of setting ErrorLevel
-	☐ Loop must be followed by another keyword (Files/Parse/Read/Reg), can't be quoted or a variable. Also no comma needed between.
-	Gosub removed:
-		☐ SetTimer and Hotkey now take function references instead
-		☐ Use parameters instead of A_ThisLabel
-		☐ Functions can go in the auto-execute section now!
-Hotkeys and (non-auto-replace) hotstrings now auto-define a (assume-local) function (https://www.autohotkey.com/docs/v2/v2-changes.htm#hotkey-and-hotstring-labels):
-	☐ Multi-line hotkeys need braces to enclose the body of the hotkey instead of "return"
-Names (https://www.autohotkey.com/docs/v2/v2-changes.htm#names):
-	☐ Func("MyFunc") => MyFunc
-	☐ SetTimer/Hotkey passing "MyFunc" => pass MyFunc
-	☐ Calling function by value: %myVar%() => myVar()
-	☐ To call function using just its name, use a double-deref (%MyFunc%() - https://www.autohotkey.com/docs/v2/Variables.htm#deref)
-		But: use function references instead of names if possible.
-	☐ Built-in classes have changed: https://www.autohotkey.com/docs/v2/ObjList.htm
-		Will be important for my StringBase/ArrayBase/ObjectBase stuff
-Scope (https://www.autohotkey.com/docs/v2/v2-changes.htm#scope):
-	☐ Super-global variables removed (except for built-in variables)
-	☐ Functions can now read (but not write) global variables without declaring them
-	☐ Force-local mode removed
-	☐ GuiLib stuff with dynamic globals will need updates:
-		☐ getLabelSizeForText
-		☐ create/getDynamicGlobal()
-	☐ Might be able to drop the "global varName" stuff at the start of a lot of standalone scripts' functions
-	☐ Can probably get rid of pseudo-array handling in DataLib - convertPseudoArrayToArray, rebaseVariadicAry
-Variables (https://www.autohotkey.com/docs/v2/v2-changes.htm#variables):
-	☐ Static variables now initialized on first use, instead of auto-executing
-		☐ Probably means I can simplify a lot of property "build it if not set yet" stuff in Config and other status classes
-Expressions (https://www.autohotkey.com/docs/v2/v2-changes.htm#expressions):
-	☐ 
+Specific things to fix:
+	☐ VDI setup
+		☐ New installer
+	☐ Switch command line arguments from numbered pseudo-array to use A_Args (https://www.autohotkey.com/docs/v2/Variables.htm#Args) instead
+
+New ideas possible with v2:
+	☐ Better clipboard manipulation => sending RTF and/or HTML links directly with the clipboard
+		ClipboardAll: https://www.autohotkey.com/docs/v2/lib/ClipboardAll.htm
+		Could replace my hyperlinking stuff - just get the text, build the link, and overwrite the original text with the link

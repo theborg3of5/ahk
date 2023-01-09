@@ -35,21 +35,67 @@
 			☐ Static variables now initialized on first use, instead of auto-executing
 				☐ Probably means I can simplify a lot of property "build it if not set yet" stuff in Config and other status classes
 		Expressions (https://www.autohotkey.com/docs/v2/v2-changes.htm#expressions):
-			☐ START HERE NEXT
+			☐ Strings must now always be in quotes (single or double, doesn't matter which)
+				You can nest one type within the other ("this is a 'string'")
+				☐ Quotes should be escaped with backtick (`) (not doubled)
+			☐ (&& || and or) operators now all yield the "truthy" value instead of just true/false
+			☐ Auto-concatenation now always requires a space
+			☐ (= !=) are always case-insensitive
+			☐ New (== !==) operators are case-sensitive
+			☐ <> operator removed
+			☐ (// | ^ & << >>) now throw an exception for floating-point numbers
+			☐ Scientific notation now supported without a decimal point (but does still produce a floating-point number), i.e. 1e3 = 1000
+			☐ Function calls are more dynamic now - can call MyFunc() whether the function is named "MyFunc" or MyFunc is a variable containing the name
+			☐ Double-derefs now used to dereference VarRefs (ref := &var, value := %ref%)
+			☐ New "is" operator can check for class instances (https://www.autohotkey.com/docs/v2/Variables.htm#is)
+			☐ Keywords "contains" and "in" are reserved
+			☐ Address-of (&var) replaced with StrPtr(var)/ObjPtr(obj)
+			☐ &var is now "reference" operator, used for ByRef/OutputVar parameters
+			☐ The case-sensitive equality operators (== and !==) can be used to compare binary data. The other comparison operators only "see" up to the first binary zero.
+			☐ The * (deref) operator has been removed. Use NumGet instead.
+			☐ New fat-arrow functions (https://www.autohotkey.com/docs/v2/Variables.htm#fat-arrow)
+				Can also be used for getters/setters
 		Objects (Misc) (https://www.autohotkey.com/docs/v2/v2-changes.htm#objects-misc):
-			☐ 
+			☐ Properties and data are now separate (accessed with . and [], respectively)
+				Can use this in user-defined objects with an __Item property (https://www.autohotkey.com/docs/v2/Objects.htm#__Item)
+			☐ "base" has been split into "base" and "super":
+				☐ "super" calls the super-class (base of the prototype object) version of a method/property (https://www.autohotkey.com/docs/v2/Objects.htm#Custom_Classes_super)
+				☐ "base" is a property to get/set objects immediate base object (like ObjGetBase/ObjSetBase)
+			☐ new ClassName() => ClassName()
+			☐ Can use String(val) to convert to string (calls val.ToString())
 		Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#functions):
-			☐ 
+			☐ Can now use "unset" keyword (p := unset) or "?" suffix (p?) to make parameter "unset" (can catch with IsSet() function)
+			ByRef (https://www.autohotkey.com/docs/v2/v2-changes.htm#byref):
+				☐ ByRef parameters now declared with &param instead of ByRef param
+					Caller must pass with & prefix (&param) - can't sometimes pass a value instead now.
 		Nested Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#nested-functions):
-			☐ 
+			☐ Can do this now, closures and all (fat arrows too)
 		Uncategorized (https://www.autohotkey.com/docs/v2/v2-changes.htm#uncategorized):
-			☐ 
+			☐ #Include is now relative to the current file's directory by default
+			☐ Labels in a function have local scope (can only be used inside that function)
+			☐ for k,v in obj:
+				☐ k/v are now restored - can't use loop value after loop ends
+				☐ Variables can be omitted
+				☐ Up to 19 variables can be used (so like "for k,v,a,b in obj" I think?)
+			☐ Can now use else with loop/for/while/catch
+				Loops: called if 0 iterations
+				Catch: if no exception within try
 		Continuation Sections (https://www.autohotkey.com/docs/v2/v2-changes.htm#continuation-sections):
-			☐ 
-		Continuation Lines (https://www.autohotkey.com/docs/v2/v2-changes.htm#continuation-lines):
-			☐ 
+			☐ Smart LTrim
+				Counts leading spaces/tabs on first line below options, remove that indent from each line thereafter
+				Can mis spaces/tabs - only the first set is considered indentation
+			☐ Quotes automatically escaped if inside a quoted string
+			☐ Line continuation is more flexible now using parans/braces - if one is still open, the next line is joined until they balance out
+		✔ Continuation Lines (https://www.autohotkey.com/docs/v2/v2-changes.htm#continuation-lines): @done(23-01-09 14:07)
 		Types (https://www.autohotkey.com/docs/v2/v2-changes.htm#types):
-			☐ 
+			☐ All literal numbers are converted to binary at load time (and string representation discarded)
+			☐ "0" is now false
+			☐ (= !=) operators now compare numeric strings alphabetically (unless at least 1 variable is "pure numeric")
+			☐ (< <= > >=) can't be used with non-numeric strings anymore (throw an exception)
+			☐ Type(value) returns String/Integer/Float/<object name>
+			☐ Float(v)/Integer(v)/String(v) convert v to respective type (or throw an exception)
+				☐ Number(v) converts to Integer or Float
+				☐ String(v) calls .ToString() on objects
 	Objects (https://www.autohotkey.com/docs/v2/v2-changes.htm#objects):
 		☐ 
 		Primitive Values (https://www.autohotkey.com/docs/v2/v2-changes.htm#primitive-values):

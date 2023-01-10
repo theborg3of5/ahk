@@ -11,6 +11,7 @@
 
 	OneNote						POPUP_FIELD			ENTER			Link ahk_class NUIDialog		RICHEDIT60W2
 	Outlook						POPUP_FIELD			ENTER			ahk_class bosa_sdm_Mso96		RichEdit20W6
+	PowerPoint					POPUP_FIELD			ENTER			ahk_class bosa_sdm_Mso96		RichEdit20W6
 	Word						POPUP_FIELD			ENTER			ahk_class bosa_sdm_msword		RichEdit20W6
 
 	EMC2 PRJ Readiness Notes	WEB_FIELD			ALT_A

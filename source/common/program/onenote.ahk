@@ -206,7 +206,7 @@ class OneNote {
 		if(recordText.endsWith(" *")) {
 			newId := clipboard.clean()
 			if(!EpicLib.couldBeEMC2ID(newId)) {
-				record := EpicLib.selectEMC2RecordFromUsefulTitles()
+				record := EpicLib.selectEMC2RecordFromText(newId)
 				if(!record) {
 					Toast.ShowError("No record ID found", "Neither the line text nor the clipboard contained a valid record ID")
 					return

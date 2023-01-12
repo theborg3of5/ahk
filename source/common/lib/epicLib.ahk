@@ -335,10 +335,12 @@ class EpicLib {
 	;---------
 	; DESCRIPTION:    Check a set of titles (from a hard-coded set of windows) for EMC2 records and give the user the
 	;                 option to pick between all of them.
+	; PARAMETERS:
+	;  ignoreIfNoTitle (I,OPT) - Set to true to only consider results that include a title.
 	; RETURNS:        An EpicRecord instance describing the record the user picked, or "" if we couldn't find one or they
 	;                 didn't select one.
 	;---------
-	selectEMC2RecordFromUsefulTitles() {
+	selectEMC2RecordFromUsefulTitles(ignoreIfNoTitle := false) {
 		windows := this.getUsefulEMC2RecordWindows()
 		; Debug.popup("windows",windows)
 		
@@ -354,6 +356,21 @@ class EpicLib {
 		
 		this.removeEMC2RecordDuplicates(allExacts, allPossibles)
 		
+		if(ignoreIfNoTitle) {
+			tempAry := allExacts.clone()
+			allExacts := []
+			For _, record in tempAry {
+				if(!StringLib.isNullOrWhitespace(record.title))
+					allExacts.push(record)
+			}
+			tempAry := allPossibles.clone()
+			allPossibles := []
+			For _, record in tempAry {
+				if(!StringLib.isNullOrWhitespace(record.title))
+					allPossibles.push(record)
+			}
+		}
+
 		; No exacts or possibles
 		if(allExacts.length() + allPossibles.length() = 0) {
 			Toast.ShowError("No potential EMC2 record IDs found.")

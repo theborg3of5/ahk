@@ -70,7 +70,6 @@ Fixes / Cleanup:
 	☐ Consider switching scoping stuff to just use #regions (which I've now added support for)
 		Note: can't nest regions (but can nest other folding stuff inside of them - so keep the =-- stuff to be able to do inside)
 		Probably also switch [[]] headers to using the same?
-	☐ TLP EMC2 info windows selector - consider filtering this specific case (not others like the insert-ID hotkey) to only windows which can return the title (just Chrome and Outlook, I think?)
 	☐ EMC2 info windows selector: consider adding abbreviations for windows that get filtered out by duplicates checking, to the kept result
 	☐ Figure out why escape-closing stops working after long enough
 		Initial digging:	

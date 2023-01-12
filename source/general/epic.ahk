@@ -140,7 +140,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			; We can do an additional Selector popup to grab ID (and potentially title) from various window titles.
 			recId := data["RECORD"]
 			if(recId = "GET") {
-				record := EpicLib.selectEMC2RecordFromUsefulTitles()
+				record := EpicLib.selectEMC2RecordFromUsefulTitles(true) ; true - only want options with a title.
 				if(!record)
 					return
 				

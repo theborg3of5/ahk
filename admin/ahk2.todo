@@ -579,9 +579,36 @@
 			☐ Func.IsByRef() now works with bulit-in functions
 	Gui (https://www.autohotkey.com/docs/v2/v2-changes.htm#gui):
 		Inline:
-			☐ 
+			☐ Gui, GuiControl, GuiControlGet are replaced with Gui() (class) and Gui/GuiControl objects
+			☐ Pass around gui object instead of a name/number
+				☐ Has methods/properties to replace sub-commands
+				☐ .Add() to get a GuiControl object
+				☐ Store in object or retrieve using GuiCtrlFromHwnd(hwnd) to get it again later
+				☐ Passed as a parameter to event handlers
+			☐ Event handlers are now always functions that get parameters with info, no more built-in variables for that
+			☐ Controls can still be named, but it's just a name (not an associated variable anymore, so no need for global/static variables)
+				☐ Can get value via GuiCtrlObj.Value
+				☐ GuiObj.Submit() returns a new associative array using control names as keys
+				☐ vName option still exists but only sets name (not a variable)
+			☐ +HwndVarName => GuiCtrlObj.Hwnd
+			☐ "g-labels" and other gui event functions are no more - handlers must be registered using GuiObj/GuiControlObj.OnEvent()
+			☐ Arrays used wherever pip-delimited list was used before (like for ListBox items)
+			☐ Scripts can extend the Gui() class with their own stuff
 		Gui sub-commands (https://www.autohotkey.com/docs/v2/v2-changes.htm#gui-sub-commands):
-			☐ 
+			☐ Gui New => Gui()
+			☐ Gui Add => GuiObj.Add() or GuiObj.Add<ControlType>()
+			☐ Gui Show => GuiObj.Show()
+				☐ No Title parameter - specify as Gui() parameter or via GuiObj.Title property instead
+			☐ Gui Submit => GuiObj.Submit() (same except it now returns the values)
+			☐ Gui Destroy => GuiObj.Destroy()
+			☐ Gui Font => GuiObj.SetFont() (or GuiCtrlObj.SetFont() for a specific control)
+			☐ Gui Color => GuiObj.BackColor proeprty
+				☐ ControlColor (second parameter) no longer exists, use +Background option on individual controls instead.
+			☐ Gui Margin => GuiObj.MarginX/.MarginY properties
+			☐ Gui Menu => GuiObj.MenuBar returns object created with MenuBar()
+			☐ Gui Cancel/Hide/Minimize/Maximize/Restore => Gui methods with the same names
+			☐ Gui Flash => GuiObj.Flash() (use false instead of Off)
+			☐ Gui Tab => TabControl.UseTab()
 		Events (https://www.autohotkey.com/docs/v2/v2-changes.htm#events):
 			☐ 
 		Removed (https://www.autohotkey.com/docs/v2/v2-changes.htm#removed):

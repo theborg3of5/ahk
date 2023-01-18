@@ -60,10 +60,9 @@ class EpicLib {
 		if(environment != "" && environment != "LAUNCH")
 			fileId := "_" Config.private["WORK_ID"]
 		
-		args := "-- ID=<FILE_ID> env=<ENVIRONMENT>" ; tz=<TIME_ZONE>"
+		args := "-- ID=<FILE_ID> env=<ENVIRONMENT>"
 		args := args.replaceTag("FILE_ID"    , fileId)
 		args := args.replaceTag("ENVIRONMENT", environment)
-		; args := args.replaceTag("TIME_ZONE"  , timezone)
 		
 		Config.runProgram("Hyperdrive", args)
 	}

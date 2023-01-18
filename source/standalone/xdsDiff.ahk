@@ -8,8 +8,8 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include <includeCommon>
 
 ; Read in the raw files of narrative/content.
-rawLeft  := FileRead(Config.path["EPIC_NFS_ASK"] "\Diff\xdsDiffLeft.txt")
-rawRight := FileRead(Config.path["EPIC_NFS_ASK"] "\Diff\xdsDiffRight.txt")
+rawLeft  := FileRead(Config.path["EPIC_NFS_ASK"] "\temp\xdsDiffLeft.txt")
+rawRight := FileRead(Config.path["EPIC_NFS_ASK"] "\temp\xdsDiffRight.txt")
 
 ; Strip out all HTML tags.
 htmlRegEx := "<\/?(DIV|SPAN|A|OL|UL|IMG|H[1-6]|!--)[^>]*>|(\r\n)?<\/?LI[^>]*>"

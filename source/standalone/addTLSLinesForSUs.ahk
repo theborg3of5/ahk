@@ -46,7 +46,7 @@ For i, line in tlsLines {
 	line := line.beforeString("<TAB>", true) ; Drop environment name (only needed to find thunder ID)
 	line := line.replace("<TAB>", "`t") ; Plug in actual tabs
 
-	if(envName.startsWith("NETHERLANDS")) ; GDB TODO turn this into a flag somewhere, check the same thing as we use to build abbreviation (that uses commId containing "NL" right now)
+	if(envName.startsWith("NETHERLANDS")) ; GDB TODO turn this into a flag somewhere (still in AHK probably), check the same thing as we use to build abbreviation (that uses commId containing "NL" right now)
 		dbcLines.push(line)
 	else
 		normalLines.push(line)
@@ -70,7 +70,6 @@ For i, line in normalLines
 environmentLines.InsertAt(normalHeaderIndex + normalLines.length() + 1, "") ; Empty newline
 Debug.popup("environmentLines",environmentLines)
 
-; GDB TODO might need to explicitly use `r`n instead of just `n when writing back to the file
 FileLib.replaceFileWithString(environmentsFilePath, environmentLines.join("`r`n"))
 
 ; Reformat epicEnvironments TLS ; GDB TODO add option to reformat a specific file (as a command line argument probably?) instead of everything, without a prompt

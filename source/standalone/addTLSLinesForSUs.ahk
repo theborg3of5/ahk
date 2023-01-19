@@ -13,9 +13,6 @@ FileEncoding, UTF-8          ; Read files in UTF-8 encoding by default to handle
 
 progToast := new ProgressToast("Adding environment TLS lines for new SU version").blockingOn()
 
-
-
-
 progToast.nextStep("Reading file from database")
 tlsLines := FileLib.fileLinesToArray(Config.path["EPIC_NFS_ASK"] "\temp\tlsLinesForSUs.txt").removeEmpties() ; Drop leading newline
 
@@ -25,39 +22,27 @@ thunderIDs := getThunderIDsFromShortcuts()
 progToast.nextStep("Generating TLS lines")
 dbcLines := []
 normalLines := []
+versionShortName := ""
 For i, line in tlsLines {
-	; GDB TODO probably switch to just delimited data from database in file, handle all formatting/processing here instead
+	; First line is the version "short name" (that will prefix most names)
+	if(i = 1) {
+		versionNum       := line.beforeString("|")
+		versionShortName := line.afterString("|")
+		Continue
+	}
 	
-	lineBits := line.split("<TAB>")
-
-	; 1 is empty right now (we start with the delimiter)
-	name := lineBits[2]
-	abbrev := lineBits[3]
-	commId := lineBits[4]
-	denId := lineBits[5]
-	; 6 is ***** for thunder ID right now
-	vdiId := lineBits[7]
-	versionNum := lineBits[8]
-	webURL := lineBits[9]
-	envName := lineBits[10]
-
-	; GDB TODO add warning/error when there's no match (ideally showing both input and options we failed to match to)
-	line := line.replace("*****", thunderIDs[envName]) ; Replace thunder ID placeholder by matching on environment name
-	line := line.beforeString("<TAB>", true) ; Drop environment name (only needed to find thunder ID)
-	line := line.replace("<TAB>", "`t") ; Plug in actual tabs
-
-	if(envName.startsWith("NETHERLANDS")) ; GDB TODO turn this into a flag somewhere (still in AHK probably), check the same thing as we use to build abbreviation (that uses commId containing "NL" right now)
+	line := buildTLSLine(line, versionNum, versionShortName, thunderIDs, isDBC)
+	if(isDBC)
 		dbcLines.push(line)
 	else
 		normalLines.push(line)
 }
 Debug.popup("tlsLines",tlsLines, "thunderIDs",thunderIDs, "dbcLines",dbcLines, "normalLines",normalLines)
 
+; GDB TODO enhancement idea: check if the next (non-empty) line under each header matches (by name, first after indentation) what we're going to add, prompt user about replacing if so.
 progToast.nextStep("Adding lines to environments TLS")
 environmentsFilePath := FileLib.findConfigFilePath("epicEnvironments.tls")
 environmentLines := FileLib.fileLinesToArray(environmentsFilePath)
-
-; GDB TODO enhancement idea: check if the next (non-empty) line under each header matches (by name, first after indentation) what we're going to add, prompt user about replacing if so.
 
 dbcHeaderIndex := environmentLines.contains("# ! DBC SUs")
 For i, line in dbcLines
@@ -76,9 +61,6 @@ FileLib.replaceFileWithString(environmentsFilePath, environmentLines.join("`r`n"
 progToast.nextStep("Reformatting TLS file")
 Run("C:\Users\gborg\ahk\source\standalone\reformatAllTLFiles.ahk")
 
-
-
-
 progToast.finish()
 ExitApp
 
@@ -96,7 +78,66 @@ getThunderIDsFromShortcuts() {
 		name := A_LoopFileName.removeFromStart(namePrefix).removeFromEnd("." A_LoopFileExt)
 		thunderIDs[name] := thunderId
 	}
-	; Debug.popup("thunderIDs",thunderIDs)
 
 	return thunderIDs
 }
+
+buildTLSLine(dataLine, versionNum, versionShortName, thunderIDs, ByRef isDBC) {
+	shortMonth := versionShortName.beforeString(" ")
+	shortYear  := versionShortName.afterString(" ")
+
+	data := dataLine.split("|")
+	commId  := data[1]
+	denId   := data[2]
+	envName := data[3]
+	webURL  := data[4]
+
+	isDBC := commId.contains("NL")
+
+	; Display name is the version name + type of environment
+	if(commId.contains("DEV"))
+		typeName := "Dev"
+	else if(commId.contains("S1"))
+		typeName := "S1"
+	else if(commId.contains("S2"))
+		typeName := "Final"
+	name := versionShortName " " typeName
+
+	; Abbreviation
+	abbrev := buildAbbreviation(isDBC, typeName, shortMonth, shortYear, versionNum)
+
+	; Thunder ID (mapped from full environment name)
+	thunderId := thunderIDs[envName]
+
+	; VDI ID
+	if(typeName = "Final") ; Final environments have "stage 2" IDs
+		vdiSuffix := "st2"
+	else
+		vdiSuffix := "st1" ; Dev and Stage 1 both use "stage 1" IDs
+	vdiId := StringLower(shortMonth) shortYear vdiSuffix
+
+	return name "`t" abbrev "`t" commId "`t" denId "`t" thunderId "`t" vdiId "`t" versionNum "`t" webURL
+}
+
+buildAbbreviation(isDBC, typeName, shortMonth, shortYear, versionNum) {
+	; Prefix is determined by the type of environment, goes on both abbreviations
+	prefix := ""
+	; "d" prefix for DBC environments
+	if(isDBC)
+		prefix .= "d"
+	; "q"/"f" prefix for Stage 1/Final environments
+	if(typeName = "S1")
+		prefix .= "q"
+	else if(typeName = "Final")
+		prefix .= "f"
+	
+	; Date abbreviation is prefix + monthFirstLetter + year
+	dateAbbrev := prefix StringLower(shortMonth.charAt(1)) shortYear
+
+	; Version abbreviation is prefix + i + versionNumWithNoDot
+	versionAbbrev := prefix "i" versionNum.remove(".")
+	versionAbbrev := versionAbbrev.postPadToLength(6) ; Right-pad it so the pipes all line up
+
+	return versionAbbrev " | " dateAbbrev
+}
+

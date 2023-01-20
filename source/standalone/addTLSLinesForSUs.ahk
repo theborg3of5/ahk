@@ -43,7 +43,7 @@ FileLib.replaceFileWithString(environmentsFilePath, environmentLines.join("`r`n"
 
 ; Reformat epicEnvironments TLS ; GDB TODO add option to reformat a specific file (as a command line argument probably?) instead of everything, without a prompt
 progToast.nextStep("Reformatting TLS file")
-Run("C:\Users\gborg\ahk\source\standalone\reformatAllTLFiles.ahk")
+Run("C:\Users\gborg\ahk\source\standalone\reformatAllTLFiles.ahk " environmentsFilePath)
 
 progToast.finish()
 ExitApp

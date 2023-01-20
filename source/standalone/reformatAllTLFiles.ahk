@@ -17,6 +17,12 @@ global MODEL_END     := TableList.Char_Model_End
 global COLINFO_START := TableList.Char_ColumnInfo_Start
 global COLINFO_END   := TableList.Char_ColumnInfo_End
 
+; Silent mode: reformat just a single TL[S] file without confirmation.
+fileToReformat = %1% ; Input from command line
+if(fileToReformat) {
+	reformatFile(fileToReformat)
+	ExitApp
+}
 
 if(!GuiLib.showConfirmationPopup("Reformat all TL/TLS files?"))
 	ExitApp

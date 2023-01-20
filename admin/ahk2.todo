@@ -610,9 +610,29 @@
 			☐ Gui Flash => GuiObj.Flash() (use false instead of Off)
 			☐ Gui Tab => TabControl.UseTab()
 		Events (https://www.autohotkey.com/docs/v2/v2-changes.htm#events):
-			☐ 
+			☐ See for details on all events: https://www.autohotkey.com/docs/v2/lib/GuiOnEvent.htm#Events
+			☐ Size event passes 0/-1/1 (like WinGetMinMax) instead of 0/1/2
+			☐ ContextMenu event can be registered for each control or whole gui
+			☐ Dropfiles event swaps FileArray/Ctrl parameters
+			☐ Removed (detect with GuiCtrlObj.OnNotify() instead) control events for K/D/d/A/S/s/M/C/E, MonthCal's 1/2
+			☐ Control events don't pass event name as a parameter
+			☐ Custom's N/Normal events replaced with GuiCtrl.OnNotify()/GuiCtrl.OnCommand()
+			☐ Link's click event passes (ctrl, ID/index, HREF) instead of (ctrl, index, HREF or ID) and doesn't automatically open if a Click callback is registered
+			☐ ListView
+				☐ Click/DoubleClick/ContextMenu (from a right-click) now report item clicked (or 0 for none) instead of focused item
+				☐ I event split into multiple named events (except for f [de-focus] event)
+				☐ e (ItemEdit) event ignored if user cancels
+			☐ Slider's Change event raised more consistently (no longer ignores changes made by mouse wheel)
+			☐ BS_NOTIFY style now auto-added as needed for button, checkbox, radio controls (no longer applied by default to radio controls)
+			☐ Focus (formerly F) and LoseFocus (formerly f) are supported my more control types
+			☐ Setting edit control's text with Edit.Value/Edit.Text doesn't trigger change event (GuiControl used to)
+			☐ LV/TV.Add/Modify now suppress item-change events (now only triggered by user action or SendMessage)
 		Removed (https://www.autohotkey.com/docs/v2/v2-changes.htm#removed):
-			☐ 
+			☐ +Delimiter
+			☐ +HwndOutputVar (use GuiObj.Hwnd or GuiCtrl.Hwnd instead)
+			☐ +Label
+			☐ +LastFoundExist
+			☐ Gui GuiName: Default
 		Control Options (https://www.autohotkey.com/docs/v2/v2-changes.htm#control-options):
 			☐ 
 		GuiControlGet (https://www.autohotkey.com/docs/v2/v2-changes.htm#guicontrolget):

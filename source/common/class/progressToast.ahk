@@ -44,8 +44,7 @@ class ProgressToast extends Toast {
 	}
 	
 	;---------
-	; DESCRIPTION:    Finish the current step with a custom message. Useful if a step errored out and you don't want to
-	;                 show a normal doneText.
+	; DESCRIPTION:    Finish the current step with a custom message. Useful if you don't want to start a new step yet.
 	; PARAMETERS:
 	;  endText (I,REQ) - The custom text to finish the step with (goes after the ellipsis).
 	;---------

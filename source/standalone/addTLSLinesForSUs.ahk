@@ -8,53 +8,37 @@ FileEncoding, UTF-8          ; Read files in UTF-8 encoding by default to handle
 
 #Include <includeCommon>
 
-; if(!GuiLib.showConfirmationPopup("Reformat all TL/TLS files?"))
-; 	ExitApp
-
 progToast := new ProgressToast("Adding environment TLS lines for new SU version").blockingOn()
 
+; Read file from database
 progToast.nextStep("Reading file from database")
-tlsLines := FileLib.fileLinesToArray(Config.path["EPIC_NFS_ASK"] "\temp\tlsLinesForSUs.txt").removeEmpties() ; Drop leading newline
+suDataLines := FileLib.fileLinesToArray(Config.path["EPIC_NFS_ASK"] "\temp\suEnvironmentData.txt").removeEmpties() ; Drop leading newline
+if(suDataLines.length() = 0) {
+	Toast.BlockAndShowError("Can't add new TLS lines", "No data in database file")
+	ExitApp
+}
 
+; Read Thunder IDs from shortcuts
 progToast.nextStep("Reading Thunder IDs from shortcuts folder")
 thunderIDs := getThunderIDsFromShortcuts()
 
-progToast.nextStep("Generating TLS lines")
-dbcLines := []
-normalLines := []
-versionShortName := ""
-For i, line in tlsLines {
-	; First line is the version "short name" (that will prefix most names)
-	if(i = 1) {
-		versionNum       := line.beforeString("|")
-		versionShortName := line.afterString("|")
-		Continue
-	}
-	
-	line := buildTLSLine(line, versionNum, versionShortName, thunderIDs, isDBC)
-	if(isDBC)
-		dbcLines.push(line)
-	else
-		normalLines.push(line)
-}
-Debug.popup("tlsLines",tlsLines, "thunderIDs",thunderIDs, "dbcLines",dbcLines, "normalLines",normalLines)
+; Generate new TLS lines to insert
+progToast.nextStep("Generating new TLS lines")
+generateTLSLines(suDataLines, thunderIDs, dbcLines, normalLines, versionShortName)
 
-; GDB TODO enhancement idea: check if the next (non-empty) line under each header matches (by name, first after indentation) what we're going to add, prompt user about replacing if so.
-progToast.nextStep("Adding lines to environments TLS")
+; Read in existing TLS
+progToast.nextStep("Reading in existing environments")
 environmentsFilePath := FileLib.findConfigFilePath("epicEnvironments.tls")
 environmentLines := FileLib.fileLinesToArray(environmentsFilePath)
+if(!checkIfAlreadyAdded(environmentLines, versionShortName))
+	ExitApp
 
-dbcHeaderIndex := environmentLines.contains("# ! DBC SUs")
-For i, line in dbcLines
-	environmentLines.InsertAt(dbcHeaderIndex + i, line)
-environmentLines.InsertAt(dbcHeaderIndex + dbcLines.length() + 1, "") ; Empty newline
+; Add new lines to environments TLS
+progToast.nextStep("Inserting new TLS lines")
+insertTLSLines(environmentLines, dbcLines, normalLines)
 
-normalHeaderIndex := environmentLines.contains("# ! Normal SUs")
-For i, line in normalLines
-	environmentLines.InsertAt(normalHeaderIndex + i, line)
-environmentLines.InsertAt(normalHeaderIndex + normalLines.length() + 1, "") ; Empty newline
-Debug.popup("environmentLines",environmentLines)
-
+; Save result to file
+progToast.nextStep("Writing to TLS file")
 FileLib.replaceFileWithString(environmentsFilePath, environmentLines.join("`r`n"))
 
 ; Reformat epicEnvironments TLS ; GDB TODO add option to reformat a specific file (as a command line argument probably?) instead of everything, without a prompt
@@ -81,6 +65,28 @@ getThunderIDsFromShortcuts() {
 
 	return thunderIDs
 }
+
+
+generateTLSLines(suDataLines, thunderIDs, ByRef dbcLines, ByRef normalLines, ByRef versionShortName) {
+	dbcLines         := []
+	normalLines      := []
+	versionShortName := ""
+	
+	; First line is the version number + short name, for use across all TLS lines.
+	firstLine := suDataLines[1]
+	versionNum       := firstLine.beforeString("|")
+	versionShortName := firstLine.afterString("|")
+	suDataLines.removeAt(1)
+
+	For i, line in suDataLines {
+		line := buildTLSLine(line, versionNum, versionShortName, thunderIDs, isDBC)
+		if(isDBC)
+			dbcLines.push(line)
+		else
+			normalLines.push(line)
+	}
+}
+
 
 buildTLSLine(dataLine, versionNum, versionShortName, thunderIDs, ByRef isDBC) {
 	shortMonth := versionShortName.beforeString(" ")
@@ -141,3 +147,32 @@ buildAbbreviation(isDBC, typeName, shortMonth, shortYear, versionNum) {
 	return versionAbbrev " | " dateAbbrev
 }
 
+
+checkIfAlreadyAdded(environmentLines, versionShortName) {
+	matchingLine := ""
+	For _, line in environmentLines {
+		line := line.withoutWhitespace()
+		if(line.startsWith(versionShortName)) {
+			matchingLine := line
+			Break
+		}
+	}
+	
+	if(matchingLine != "")
+		return GuiLib.showConfirmationPopup("SU version """ versionShortName """ already appears in TLS: `n" matchingLine "`n`nDo you want to new TLS lines anyway?")
+	
+	return true
+}
+
+
+insertTLSLines(ByRef environmentLines, dbcLines, normalLines) {
+	headerIndex := environmentLines.contains("# ! DBC SUs")
+	For i, line in dbcLines
+		environmentLines.InsertAt(headerIndex + i, line)
+	environmentLines.InsertAt(headerIndex + dbcLines.length() + 1, "") ; Empty newline to space out from previous version
+
+	headerIndex := environmentLines.contains("# ! Normal SUs")
+	For i, line in normalLines
+		environmentLines.InsertAt(headerIndex + i, line)
+	environmentLines.InsertAt(headerIndex + normalLines.length() + 1, "") ; Empty newline to space out from previous version
+}

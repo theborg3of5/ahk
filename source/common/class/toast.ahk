@@ -71,15 +71,8 @@ class Toast {
 	;---------
 	ShowError(problemMessage, errorMessage := "", mitigationMessage := "") {
 		toastText := Toast.buildErrorText(problemMessage, errorMessage, mitigationMessage)
-		
-		overrides := {}
-		overrides["BACKGROUND_COLOR"] := "000000" ; Black
-		overrides["FONT_COLOR"]       := "CC9900" ; Dark yellow/gold
-		overrides["FONT_SIZE"]        := 22
-		overrides["MARGIN_X"]         := 6
-		overrides["MARGIN_Y"]         := 1
-		overrides["TEXT_ALIGN"]       := "Right"
-		
+		overrides := Toast.getErrorStyleOverrides()
+
 		Toast.ShowMedium(toastText, overrides)
 	}
 	
@@ -91,6 +84,20 @@ class Toast {
 	;---------
 	BlockAndShowMedium(text, styleOverrides := "") {
 		new Toast(text, styleOverrides).blockingOn().showForSeconds(2)
+	}
+
+	;---------
+	; DESCRIPTION:    Show a "blocking" error toast (that stope execution while it's shown) for a long time (5 seconds).
+	; PARAMETERS:
+	;  problemMessage    (I,REQ) - Text about what the problem is (what happened or weren't we able to do?)
+	;  errorMessage      (I,OPT) - Technical error text (what happened code-wise?)
+	;  mitigationMessage (I,OPT) - What we did instead (what did we do to make the failure less impactful?)
+	;---------
+	BlockAndShowError(problemMessage, errorMessage := "", mitigationMessage := "") {
+		toastText := Toast.buildErrorText(problemMessage, errorMessage, mitigationMessage)
+		overrides := Toast.getErrorStyleOverrides()
+
+		new Toast(toastText, overrides).blockingOn().showForSeconds(2)
 	}
 	; --=
 	
@@ -359,6 +366,23 @@ class Toast {
 		
 		; Merge in any overrides
 		return styles.mergeFromObject(styleOverrides)
+	}
+
+	;---------
+	; DESCRIPTION:    The style overrides we use for error toasts.
+	; RETURNS:        Associative array of style overrides
+	;---------
+	getErrorStyleOverrides() {
+		overrides := {}
+		
+		overrides["BACKGROUND_COLOR"] := "000000" ; Black
+		overrides["FONT_COLOR"]       := "CC9900" ; Dark yellow/gold
+		overrides["FONT_SIZE"]        := 22
+		overrides["MARGIN_X"]         := 6
+		overrides["MARGIN_Y"]         := 1
+		overrides["TEXT_ALIGN"]       := "Right"
+
+		return overrides
 	}
 	
 	;---------

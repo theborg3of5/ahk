@@ -634,37 +634,123 @@
 			☐ +LastFoundExist
 			☐ Gui GuiName: Default
 		Control Options (https://www.autohotkey.com/docs/v2/v2-changes.htm#control-options):
-			☐ 
+			☐ +/-Background more consistent - +Background<Color> and +BackgroundDefault (same as -Background) for all controls that support Gui Color now
+			☐ GuiObj.Add defaults to x+m/y+m when xp/yp/xp+0/yp+0 is used (so we don't put controls on top of each other anymore)
+				To get around it, specify "xp yp" together
+			☐ Can add to margin offset (x+m+10)
 		GuiControlGet (https://www.autohotkey.com/docs/v2/v2-changes.htm#guicontrolget):
-			☐ 
+			Empty sub-command (https://www.autohotkey.com/docs/v2/v2-changes.htm#empty-sub-command):
+				☐ Table of specific equivalents for GuiControlGet + empty sub-command, per control type
+				☐ GuiCtrl.Text returns display text, hidden text (same result as ControlGetText), or nothing at all
+				☐ ListBox Text/Value return an array instead of a pipe-delimited list now
+			Other sub-commands (https://www.autohotkey.com/docs/v2/v2-changes.htm#other-sub-commands):
+				☐ Pos => GuiCtrl.GetPos()
+				☐ Focus => GuiObj.FocusedCtrl (returns GuiControl object instead of ClassNN)
+				☐ FocusV => GuiObj.FocusedControl.Name
+				☐ Hwnd => GuiCtrl.Hwnd
+				☐ Enabled/Visible/Name => GuiCtrl properties of same name
 		GuiControl (https://www.autohotkey.com/docs/v2/v2-changes.htm#guicontrol):
-			☐ 
+			(Blank) and Text sub-commands (https://www.autohotkey.com/docs/v2/v2-changes.htm#blank-and-text-sub-commands):
+				☐ Table of equivalent properties/functions for GuiControl + control type
+			Other sub-commands (https://www.autohotkey.com/docs/v2/v2-changes.htm#other-sub-commands-1):
+				☐ Move => GuiCtrl.Move(x, y, w, h)
+				☐ MoveDraw => GuiCtrl.Move(x, y, w, h) + GuiCtrl.Redraw()
+				☐ Focus => GuiCtrl.Focus()
+					Focusing a button now temporarily sets it as the default
+				☐ Enable/Disable => set GuiCtrl.Enabled
+				☐ Hide/Show => set GuiCtrl.Visible
+				☐ Choose => GuiCtrl.Choose(n) (n is pure integer - [|n ||n] mode not supported, use ControlChoose instead)
+				☐ ChooseString => GuiCtrl.Choose(s) (s is NOT a pure integer, all matches are selected)
+				☐ Font => GuiCtrl.SetFont()
+				☐ +/-Option => GuiCtrl.Opt("+/-Option")
 		Other Changes (https://www.autohotkey.com/docs/v2/v2-changes.htm#other-changes):
-			☐ 
+			☐ Progress gui controls match system visual style better
+			☐ Default margins/control sizes (especially for buttons) may differ from v1 when DPI > 100%
+			☐ Picture controls don't delete their current image when they fail to set a new one
 	Error Handling (https://www.autohotkey.com/docs/v2/v2-changes.htm#error-handling):
 		Inline:
-			☐ 
+			☐ OnError now called for critical errors before exiting script
+			☐ Exception.What now contains function name (if function failed inside), blank for expression/control flow errors
+			☐ Exception objects can now be identified as instances of new Error class (or more specific subclasses)
+				☐ Also contain a Stack property with the stack trace
+			☐ Try/catch syntax now allows catching specific error classes while leaving others uncaught
 		Continuable Errors (https://www.autohotkey.com/docs/v2/v2-changes.htm#continuable-errors):
-			☐ 
+			☐ Most error dialogs will now allow the user to continue the current thread
+			☐ OnError callbacks now take a second parameter, one of:
+				Return: (returning -1 will continue the thread, 0/1 act as before)
+				Exit: Continuation not supported
+				ExitApp: Critical error
 		ErrorLevel (https://www.autohotkey.com/docs/v2/v2-changes.htm#errorlevel):
-			☐ 
+			☐ ErrorLevel is removed
+			☐ Most places that used this now just return the value differently
+			☐ Sort with U option doesn't return number of duplicates anymore
+			☐ Input replaced by InputHook
+			☐ InputBox returns object with .result and .value properties
+			☐ File functions' number of failures now go in exception.Extra property
+			☐ SendMessage timeout now throws a TimeoutError (or possibly TargetError/OSError) exception
+			☐ Run/Hotkey UseErrorLevel modes removed, use Try/Catch instead
 		Expressions (https://www.autohotkey.com/docs/v2/v2-changes.htm#expressions-1):
-			☐ 
+			☐ Lots of new load-time errors
+				☐ Empty parens (except for when calling a function)
+				☐ Prefix operator used on wrong side or without an operand (x!)
+				☐ Binary operator with <2 operands
+				☐ Ternary operator with <3 operands
+				☐ Assignment to a non-writable target (read-only property, etc.)
+			☐ Throw exceptions instead of ignoring the failure/returning an empty string
+				☐ Math on non-numeric values (number strings OK)
+				☐ Divide by 0 or other invalid/unsupported input (like (-1)**1.5)
+					Includes <</>> with non-(0-63) values and 0**0
+				☐ Failure to allocate memory for built-in function's return value, concatenation, or expression result
+				☐ Stack underflow (generally a syntax error)
+				☐ Assign to something not a variable (or array element)
+				☐ Assign to read-only variable
+				☐ Double-deref with empty name (like fn(%empty%))
+				☐ Failure to execute dynamic function call
+				☐ Method/property invocation fails when value doesn't implement method/property
+				☐ Object assignment fails because memory allocation failed
+			☐ +=/-=/--/++ don't treat empty variable as 0 anymore
 		Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#functions-1):
-			☐ 
+			☐ Throw exceptions on failure now
+			☐ In particular, functions with a WinTitle parameter throw if target window can't be found
 		Catch (https://www.autohotkey.com/docs/v2/v2-changes.htm#catch):
-			☐ 
+			☐ New syntax
+				try
+					<do a thing>
+				catch (TimeoutError[, TypeError][ as exceptionVarName])
+					<handle timeout>
+				(can also use "Any" to catch any type, parens above are optional)
+			☐ try without catch/finally treated like it has an empty catch block
+				Only catchses basic Error class, not specifics - have to specify catch(Any) to catch everything
+			☐ Can use "throw" to re-throw a caught exception inside catch block
+				Except within a nested try-catch
+			☐ Can include an "else" after last catch - that's executed if no exception thrown inside try block
 	Keyboard, Mouse, Hotkeys and Hotstrings (https://www.autohotkey.com/docs/v2/v2-changes.htm#keyboard-mouse-hotkeys-and-hotstrings):
-		☐ 
+		☐ "Return" and "Break" keywords removed, use "Enter" and "Pause" instead
+		☐ Shift+Backspace handled the same as Backspace now
+		☐ When multiple pairs of colons found in hotstring definition, FIRST pair is used instead of LAST pair
+			Example: ::3::::4 = 3 => ::4, not 3:: => 4 (the latter has to be ::3`:`:::4 now)
+		☐ Colons are no longer escaped in pairs, so you can escape a single one at the end of the hotstring trigger now
+			Example: ::5`:::6 for 5: => 6
+		☐ Hotstrings with continuation sections now default to Text mode instead of Raw mode
+		☐ Hotkeys now mask the Win/Alt key on release only if it's logically down and htokey needs it
+			Might mean my various ^+! hotkeys don't get "stuck" down anymore?
 	Other (https://www.autohotkey.com/docs/v2/v2-changes.htm#other):
 		Inline:
-			☐ 
+			☐ ForegroundLockTimeout setting no longer mucked with
+				Might be the culprit for my focus issues?
+			☐ RegEx newline matching defaults to catching `r, `n, and `r`n
+			☐ RegEx callout functions can now be variadic
+			☐ ListVars shows static (and global created within a function) variables separately
 		Persistence (https://www.autohotkey.com/docs/v2/v2-changes.htm#persistence):
-			☐ 
-		Threads (https://www.autohotkey.com/docs/v2/v2-changes.htm#threads):
-			☐ 
+			☐ Scripts are "persistent" if there's at least one hotkey/hotstring/gui/timer/hook defined/active, or Persistent() called
+				☐ Except, OnMessage doesn't make things automatically persistent
+		✔ Threads (https://www.autohotkey.com/docs/v2/v2-changes.htm#threads): @done(23-01-23 12:42)
 		Default Settings (https://www.autohotkey.com/docs/v2/v2-changes.htm#default-settings):
-			☐ 
+			✔ #NoEnv is default behavior @done(23-01-23 12:44)
+			✔ SendMode defaults to Input, not Event @done(23-01-23 12:44)
+			☐ Title matching mode defaults to 2 (contains) instead of 1 (starts with)
+			✔ #SingleInstance defaults to Prompt behavior now, #SingleInstance by itself is the new "Force" mode @done(23-01-23 12:48)
+			☐ CoordMode defaults to Client instead of Window
 		✔ Command Line (https://www.autohotkey.com/docs/v2/v2-changes.htm#command-line): @done(23-01-05 12:22)
 			✔ Command line args are no longer a numbered pseudo-array, but a proper array in the A_Args built-in variable instead. @done(23-01-05 12:22)
 
@@ -672,6 +758,12 @@ Specific things to fix:
 	☐ VDI setup
 		☐ New installer
 	☐ Switch command line arguments from numbered pseudo-array to use A_Args (https://www.autohotkey.com/docs/v2/Variables.htm#Args) instead
+	☐ Drop these from all scripts (they're the defaults now)
+		☐ #NoEnv
+		☐ SendMode, Input
+		☐ #SingleInstance, Force => #SingleInstance
+		☐ But, keep an eye out for scripts that specifically don't use them
+	☐ 
 
 New ideas possible with v2:
 	☐ Better clipboard manipulation => sending RTF and/or HTML links directly with the clipboard

@@ -19,6 +19,7 @@
 	; Copy title, stripping off the " - Google Chrome" at the end (and other special handling for specific pages like CodeSearch).
 	!c::Chrome.copyTitle()
 	!#c::Chrome.copyTitleLink()
+	^!c::EpicLib.copyEMC2RecordIDFromText(Chrome.getTitle())
 	^!#c::Chrome.copyCodeSearchClientPath()
 	
 	; Open DLG in EpicStudio

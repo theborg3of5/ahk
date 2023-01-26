@@ -57,7 +57,6 @@
 	::associatied::associated
 	::valiation::validation
 	::verpleedag::verpleegdag
-	::helptext::help text
 	::precendence::precedence
 	::abcense::absence
 	::voilates::violates
@@ -67,6 +66,10 @@
 	::hotsting::hotstring
 	::propertly::properly
 	::everythign::everything
+	
+#If !["EpicStudio", "Visual Studio", "VSCode", "VB6"].contains(Config.findWindowName("A"))
+	::helptext::help text
+#If
 
 ; [[ Expansions ]] ---
 	::f'n::function

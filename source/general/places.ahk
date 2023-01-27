@@ -5,7 +5,7 @@
  !+a::openPath("AHK_ROOT")
 $!+d::openPath("USER_DOWNLOADS")
  !+o::openPath("USER_ONEDRIVE")
- !+s::openPath("EPIC_SOURCE")
+ !+s::openPath("EPIC_SOURCE_S1")
  !+u::openPath("USER_ROOT")
 openPath(folderName) {
 	folderPath := Config.path[folderName]

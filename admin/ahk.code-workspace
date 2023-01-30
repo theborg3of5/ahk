@@ -8,6 +8,12 @@
 		},
 		{
 			"path": "..\\..\\ahkTest"
+		},
+		{
+			"path": "..\\..\\ahk2"
+		},
+		{
+			"path": "..\\..\\ahkTest2"
 		}
 	],
 	"settings": {

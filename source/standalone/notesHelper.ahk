@@ -8,7 +8,7 @@ DetectHiddenWindows, On
 ScriptTrayInfo.Init("AHK: Notes helper")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
-#If Config.isWindowActive("OneNote")
+; #If Config.isWindowActive("OneNote")
 
 ; Hotstrings for various people/directions
 :CB0*X?:mL::superscriptSides()
@@ -50,6 +50,16 @@ CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 :CB0*X?:bBO::superscriptSides()
 :CB0*X?:bBO::superscriptSides()
 
+; Degree hotstrings
+:B0*?X:45d::dToDegree()
+:B0*?X:90d::dToDegree()
+:B0*?X:135d::dToDegree()
+:B0*?X:180d::dToDegree()
+:B0*?X:225d::dToDegree()
+:B0*?X:270d::dToDegree()
+:B0*?X:315d::dToDegree()
+:B0*?X:360d::dToDegree()
+
 #If
 
 
@@ -61,4 +71,9 @@ superscriptSides() {
 	Send, ^+= ; Superscript
 	Send, {Right} ; Deselect, cursor back where it started
 	Send, ^+= ; Remove superscript
+}
+
+dToDegree() {
+	Send, {Backspace} ; Delete "d"
+	Send, °
 }

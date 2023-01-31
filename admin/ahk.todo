@@ -112,11 +112,12 @@ New Features / Scripts:
 		☐ Consider ditching the I/O for parameters too, just make it obvious in the description
 		☐ Maybe we should switch over to a more jsdoc-like style?
 	☐ Consider hotstrings or something similar for Ninpo notes style
-		☐ m/uL/R superscripted sides, directions (maybe just catch the capitalization and superscript it?)
+		✔ m/uL/R superscripted sides, directions (maybe just catch the capitalization and superscript it?) @done(23-01-31 14:25)
 			Could either select + superscript hotkey, or try to send RTF (?) already-subscripted replacement
-		☐ Hotstrings for degree numbers (45 => 45°, 90 => 90°, 135, 180, 270, 360)
+		✔ Hotstrings for degree numbers (45 => 45°, 90 => 90°, 135, 180, 270, 360) @done(23-01-31 14:26)
 			Alternatively, just use "d" - 45d => 45°, 90d, etc.
 		☐ Probably overkill, but could add a selector of techniques/stances/etc. (that includes super/subscripting)
+			Maybe not overkill? Could be a nice quick reference for abbreviations.
 	☐ ActionObject: consider a "could be" sort of sense for filtering which things an input is
 		For example, something with a "^" could go to either EpicStudio or CodeSearch
 		Alternatively, group like inputs together in one merged class

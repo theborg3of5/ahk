@@ -145,7 +145,7 @@ class WindowInfo {
 			return false
 		
 		; Check class, if we have it specified
-		if(this.class && (this.class != class))
+		if(this.class && !TitleMatchMode.matches(class, this.class, this.titleMatchMode))
 			return false
 		
 		; Title is checked based on titleMatchMode, if we have it specified

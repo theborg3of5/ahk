@@ -44,6 +44,7 @@ Switch to VS Code for AHK dev:
 	☐ Get rid of updateNotepadPPSupport once I'm sure I won't need it anymore (currently shows how to parse my headers and such).
 
 Fixes / Cleanup:
+	☐ Update Telegram matching so I don't have to update it with each new version
 	☐ TL[S] highlighting - hyphens are faded even when they're in the middle of a word
 	☐ Teams conversation condensing
 		☐ Handle quotes better

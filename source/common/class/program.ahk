@@ -37,7 +37,8 @@ class Program {
 	;---------
 	; DESCRIPTION:    Run this program with the given arguments.
 	; PARAMETERS:
-	;  args (I,OPT) - The command-line arguments to pass to the program when we run it.
+	;  args (I,OPT) - The command-line arguments to pass to the program when we run it. Only used for EXE-type paths (not
+	;                 windows apps or URLs).
 	; RETURNS:        false if we couldn't run the program, true otherwise.
 	;---------
 	run(args := "") {

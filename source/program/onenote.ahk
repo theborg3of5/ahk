@@ -101,5 +101,5 @@
 	:*X:.pqado::  OneNoteTodoPage.insertPQATodos()       ; Typical PQA list of todo sub-items
 	
 	; Update links for a dev structure section header
-	!+#n::OneNote.linkDevStructureSectionTitle()
+	!+#k::OneNote.linkDevStructureSectionTitle()
 #If

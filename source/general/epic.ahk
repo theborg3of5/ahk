@@ -102,24 +102,28 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		}
 	
 	; Turn clipboard into standard EMC2 string and send it.
-	!+n::
-		sendStandardEMC2ObjectString() {
-			HotkeyLib.waitForRelease()
-			
-			record := EpicLib.selectEMC2RecordFromText(clipboard)
-			if(!record)
-				return
-			ini   := record.ini
-			id    := record.id
-			title := record.title
-			
-			ClipboardLib.send(ini " " id " - " title) ; Can contain hotkey chars
-			
-			; Special case for OneNote: link the INI/ID as well.
-			if(Config.isWindowActive("OneNote"))
-				OneNote.linkEMC2ObjectInLine(ini, id)
-		}
-	
+	!+n:: sendStandardEMC2ObjectString()
+	!+#n::sendStandardEMC2ObjectString(true) ; ID only
+	sendStandardEMC2ObjectString(idOnly := false) {
+		HotkeyLib.waitForRelease()
+		
+		record := EpicLib.selectEMC2RecordFromText(clipboard)
+		if(!record)
+			return
+		ini   := record.ini
+		id    := record.id
+		title := record.title
+		
+		if(idOnly)
+			Send, % id
+		else
+			ClipboardLib.send(ini " " id " - " title) ; Must send with clipboard because it can contain hotkey chars
+		
+		; Special case for OneNote: link the INI/ID as well.
+		if(Config.isWindowActive("OneNote"))
+			OneNote.linkEMC2ObjectInLine(ini, id)
+	}
+
 	; Pull EMC2 record IDs from currently open window titles and prompt the user to send one.
 	^!i::
 		sendEMC2RecordID() {

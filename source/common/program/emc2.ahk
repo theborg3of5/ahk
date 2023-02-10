@@ -90,54 +90,5 @@ class EMC2 {
 			Send, {Enter}
 		}
 	}
-	
-	
-	; #PRIVATE#
-	
-	;---------
-	; DESCRIPTION:    Get an array of QAN IDs from the related QANs table on an EMC2 object.
-	; RETURNS:        Array of QAN IDs.
-	; NOTES:          This assumes that you're already in the first row of the related QANs table.
-	;---------
-	getRelatedQANsAry() {
-		if(!Config.isWindowActive("EMC2"))
-			return ""
-		
-		outAry := []
-		Loop {
-			; Select just the QAN ID
-			Send, {End}
-			Send, {Left}
-			Send, {Ctrl Down}{Shift Down}
-			Send, {Left}
-			Send, {Ctrl Up}
-			Send, {Right}
-			Send, {Shift Up}
-			
-			qanId := SelectLib.getText()
-			if(!qanId)
-				Break
-			
-			; Get to next column for version
-			Send, {Tab}
-			version := SelectLib.getText()
-			
-			; Avoid duplicate entries (for multiple versions
-			if(qanId != prevId)
-				outAry.push(qanId)
-			
-			; Loop quit condition - same QAN again (table ends on last filled row), also same version
-			if( (qanId = prevId) && (version = prevVersion) )
-				Break
-			prevId      := qanId
-			prevVersion := version
-			
-			; Get back to the first column and go down a row.
-			Send, +{Tab}
-			Send, {Down}
-		}
-		
-		return outAry
-	}
 	; #END#
 }

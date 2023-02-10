@@ -45,7 +45,11 @@ Switch to VS Code for AHK dev:
 
 Fixes / Cleanup:
 	☐ TL[S] highlighting - hyphens are faded even when they're in the middle of a word
-	☐ Teams conversation condensing
+	☐ Could we centralize the !w/!e hotkeys a little better?
+		☐ Maybe a have a central object where the various windows could somehow register that they get the title/EpicRecord in a certain way (BoundFunc-style)?
+		☐ Or, *even more simply*: maybe just a switch statement in the main hotkey function that checks which window is active
+	☐ Could we clean up/condense Teams messages so I can paste them into OneNote more nicely?
+		✔ Initial working draft @done(23-02-10 15:14)
 		☐ Handle quotes better
 			☐ Maybe recognize that it starts with a name, then compare the rest of the line to the lines I've already processed with that name?
 			☐ Reformat like this:
@@ -53,8 +57,6 @@ Fixes / Cleanup:
 		☐ Could we make selecting/copying a long conversation better?
 			☐ Maybe trigger it, then build up a buffer with each copy, then condense?
 				☐ Could show the last line in the buffer (ideally including the timestamp!) to make it easier to track your spot
-	☐ Could we clean up/condense Teams messages so I can paste them into OneNote more nicely?
-		☐ Initial working draft
 		☐ Could we get it to also keep images? Those are dropped right now.
 		☐ Can we at least handle the message after an image? We're not extracting the sender name properly in that case.
 	☐ ^e hotkey for Debug.popup chokes on this one:
@@ -102,6 +104,12 @@ Fixes / Cleanup:
 			Also added a MsgBox (when debug is toggled on) to the actual Esc hotkey.
 
 New Features / Scripts:
+	☐ Add a hotkey to open a DLG's issues page in web
+		!i is one option, but it's kind of top-level for such a specific use case?
+			Could limit to only when DLG open in EMC2 or Chrome, but Outlook would be nice too.
+		☐ Could I do a sort of "chording" thing here?
+			!w + i for issues, for example
+			Could also make revisions hotkey more generic that way
 	☐ Add a new ActionObject type for opening a DLG's client folder
 		Can assume most recent version found in source, and find the biggest dashed version.
 	☐ Add newline character display (`n and `r) to debug table

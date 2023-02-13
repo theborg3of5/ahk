@@ -202,17 +202,12 @@ class OneNote {
 		recordText := linkText.beforeString(" (")
 		editText   := linkText.firstBetweenStrings("(", ")")
 		
-		; If there's not an ID in place yet, update the recordText using the ID (we're assuming is) on the clipboard.
+		; If there's not an ID in place yet, try to update the recordText with an ID from the clipboard or open windows.
 		if(recordText.endsWith(" *")) {
-			newId := clipboard.clean()
-			if(!EpicLib.couldBeEMC2ID(newId)) {
-				record := EpicLib.selectEMC2RecordFromText(newId)
-				if(!record) {
-					Toast.ShowError("No record ID found", "Neither the line text nor the clipboard contained a valid record ID")
-					return
-				}
-				
-				newId := record.id
+			newId := this.getRecordIDToLink()
+			if(newId = "") {
+				Toast.ShowError("No record ID found", "No valid ID found in line text, clipboard, or useful window titles")
+				return
 			}
 			
 			SelectLib.selectTextWithinSelection(recordText) ; Whole line is already selected so we can use this
@@ -237,6 +232,29 @@ class OneNote {
 	; #PRIVATE#
 	
 	static TitleString_RightClickMenu := "ahk_class Net UI Tool Window"
+
+	;---------
+	; DESCRIPTION:    Try to get a record ID to use with EMC2 linking, using the clipboard and useful window titles.
+	; RETURNS:        New ID if we found it, "" otherwise.
+	;---------
+	getRecordIDToLink() {
+		; First, try the clipboard.
+		recordText := clipboard.clean()
+		if(EpicLib.couldBeEMC2ID(recordText)) {
+			return recordText
+		} else {
+			record := EpicLib.getBestEMC2RecordFromText(recordText)
+			if(record)
+				return record.id
+		}
+
+		; Next, offer options from the various open windows.
+		record := EpicLib.selectEMC2RecordFromUsefulTitles()
+		if(record)
+			return record.id
+
+		return ""
+	}
 	
 	;---------
 	; DESCRIPTION:    Get a link to the current page

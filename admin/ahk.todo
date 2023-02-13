@@ -1,6 +1,3 @@
-AHK 2.0 migration:
-	✘ This list lives in the ahk-v2-migration branch now. @cancelled(23-01-04 10:41)
-
 Switch to VS Code for AHK dev:
 	✔ AHK-based features to bring over: @done(22-11-23 13:59)
 		✔ Look into OutputDebug command for debugging stuff - prints to the debugger console @done(22-11-23 13:59)
@@ -48,6 +45,13 @@ Fixes / Cleanup:
 	☐ Could we centralize the !w/!e hotkeys a little better?
 		☐ Maybe a have a central object where the various windows could somehow register that they get the title/EpicRecord in a certain way (BoundFunc-style)?
 		☐ Or, *even more simply*: maybe just a switch statement in the main hotkey function that checks which window is active
+			☐ Could still have the _code_ live in the respective window's class, just a switch on window name/type
+				☐ Should this just be a generic mapping, then?
+					Active window name => class reference
+					getNamedWindowClass(name).funcName
+						☐ Will this crash if getNamedWindowClass returns ""/nothing?
+							☐ If so, can I handle it with AHKv1 try/catch stuff?
+					askNamedWindowToDo(actionConstant, moreInfoObj)
 	☐ Could we clean up/condense Teams messages so I can paste them into OneNote more nicely?
 		✔ Initial working draft @done(23-02-10 15:14)
 		☐ Handle quotes better
@@ -59,8 +63,6 @@ Fixes / Cleanup:
 				☐ Could show the last line in the buffer (ideally including the timestamp!) to make it easier to track your spot
 		☐ Could we get it to also keep images? Those are dropped right now.
 		☐ Can we at least handle the message after an image? We're not extracting the sender name properly in that case.
-	☐ ^e hotkey for Debug.popup chokes on this one:
-		Debug.popup("block",block, "block.split(""\n\n["")",block.split("\n\n["))
 	☐ Clean out OneNote recurring todo stuff - no longer used
 	☐ Should we move source\common\base? Currently contains these:
 		Ancestors of classes

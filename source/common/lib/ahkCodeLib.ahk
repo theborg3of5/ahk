@@ -255,14 +255,18 @@ class AHKCodeLib {
 		Loop, Parse, varList
 		{
 			char := A_LoopField
+
+			if(char = QUOTE)
+				openQuotes := !openQuotes ; Quotes close other quotes, so just swap between open and closed
 			
-			; Track open parens, brackets, and quotes.
-			Switch char {
-				Case "(":   openParens++
-				Case ")":   openParens--
-				Case "[":   openBrackets++
-				Case "]":   openBrackets--
-				Case QUOTE: openQuotes := !openQuotes ; Quotes close other quotes, so just swap between open and closed
+			; Track open parens and brackets (but only if quotes aren't currently open).
+			if(!openQuotes) {
+				Switch char {
+					Case "(":   openParens++
+					Case ")":   openParens--
+					Case "[":   openBrackets++
+					Case "]":   openBrackets--
+				}
 			}
 			
 			; Split on commas, but only if there are no open parens or quotes.

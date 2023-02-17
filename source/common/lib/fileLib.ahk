@@ -42,7 +42,7 @@ class FileLib {
 	}
 	
 	;---------
-	; DESCRIPTION:    Determine whether a given string is formatted like a file path.
+	; DESCRIPTION:    Determine whether a given string is formatted like a file path (Windows or Unix!)
 	; PARAMETERS:
 	;  path (I,REQ) - The string to check.
 	; RETURNS:        true/false - is the string a filepath?
@@ -54,6 +54,10 @@ class FileLib {
 		
 		; Filepath starting with a drive letter
 		if(path.sub(2, 2) = ":\")
+			return true
+
+		; Unix filepath (starst with a single forward slash)
+		if(path.startsWith("/") && !path.startsWith("//"))
 			return true
 		
 		; Unknown

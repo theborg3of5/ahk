@@ -39,12 +39,24 @@ openPath(folderName) {
 
 ; Send cleaned-up path (remove odd garbage from around path, switch to mapped network drives)
 !+p:: sendCleanedUpPath()
-!+#p::sendCleanedUpPath(true)
-sendCleanedUpPath(containingFolderOnly := false) {
+!+#p::sendCleanedUpPath(true) ; Flip between Unix and Windows paths (Windows on clipboard > Unix output)
+sendCleanedUpPath(mapToUnix := false) {
 	path := FileLib.cleanupPath(clipboard)
+
+	if(mapToUnix)
+		path := FileLib.mapWindowsPathToUnix(path)
+
+	; isUnix := FileLib.isUnixPath(path)
 	
-	if(containingFolderOnly)
-		path := FileLib.getParentFolder(path) "\" ; Remove last element at end, add trailing slash
+	; if(!isUnix && flipUnixWindows)
+
+	; if(flipUnixWindows)
+	; 	path := isUnix ? FileLib.mapUnixPathToWindows(path) : FileLib.mapWindowsPathToUnix(path)
+	; else
+	; 	path :- FileLib.mapUnixPathToWindows(
+
+	; if(containingFolderOnly)
+	; 	path := FileLib.getParentFolder(path) "\" ; Remove last element at end, add trailing slash
 	
 	SendRaw, % path
 }

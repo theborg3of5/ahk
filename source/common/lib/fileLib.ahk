@@ -61,7 +61,7 @@ class FileLib {
 	}
 
 	;---------
-	; DESCRIPTION:    Clean out unwanted garbage strings from paths and map path to any mapped network drives.
+	; DESCRIPTION:    Clean out unwanted garbage strings from paths, map to network drives, map from Unix to Windows paths.
 	; PARAMETERS:
 	;  path (I,REQ) - The path to clean.
 	; RETURNS:        The cleaned-up and mapped path.
@@ -104,9 +104,62 @@ class FileLib {
 				}
 			}
 		}
+
+		; Convert Unix paths to Windows (where we have the mappings available)
+		path := FileLib.mapUnixPathToWindows(path)
 		
 		; Debug.popup("path",path, "mappedDrives",mappedDrives, "movedFolders",movedFolders)
 		return path
+	}
+
+	;---------
+	; DESCRIPTION:    Check whether the given path is an (absolute) Unix path (as opposed to a Windows path).
+	; PARAMETERS:
+	;  path (I,REQ) - The path to check
+	; RETURNS:        true/false
+	;---------
+	isUnixPath(path) {
+		return path.startsWith("/")
+	}
+
+	;---------
+	; DESCRIPTION:    Map a Unix path to its Windows equivalent (where we have the mappings to do so).
+	; PARAMETERS:
+	;  unixPath (I,REQ) - The full Unix path (starting with /)
+	; RETURNS:        A Windows path if we mapped successfully, otherwise the original unixPath.
+	;---------
+	mapUnixPathToWindows(unixPath) {
+		; Must actually be a full Unix path, otherwise change nothing
+		if(!FileLib.isUnixPath(unixPath))
+			return unixPath
+
+		unixMappings := new TableList("unixFolderMappings.tl").getTable()
+		For _,map in unixMappings {
+			if(unixPath.startsWith(map["UNIX"])) {
+				unixPath := unixPath.replaceOne(map["UNIX"], map["WINDOWS"])
+				unixPath := unixPath.replace("/", "\") ; Flip any other slashes
+			}
+		}
+
+		return unixPath
+	}
+
+	;---------
+	; DESCRIPTION:    Map a Windows path to its Unix equivalent (where we have the mappings to do so).
+	; PARAMETERS:
+	;  windowsPath (I,REQ) - The full Windows path
+	; RETURNS:        A Unix path if we mapped successfully, otherwise the original windowsPath.
+	;---------
+	mapWindowsPathToUnix(windowsPath) {
+		unixMappings := new TableList("unixFolderMappings.tl").getTable()
+		For _,map in unixMappings {
+			if(windowsPath.startsWith(map["WINDOWS"])) {
+				windowsPath := windowsPath.replaceOne(map["WINDOWS"], map["UNIX"])
+				windowsPath := windowsPath.replace("\", "/") ; Flip any other slashes
+			}
+		}
+
+		return windowsPath
 	}
 	
 	;---------

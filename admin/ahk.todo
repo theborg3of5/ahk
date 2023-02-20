@@ -128,6 +128,7 @@ New Features / Scripts:
 			Alternatively, just use "d" - 45d => 45°, 90d, etc.
 		☐ Probably overkill, but could add a selector of techniques/stances/etc. (that includes super/subscripting)
 			Maybe not overkill? Could be a nice quick reference for abbreviations.
+		☐ Maybe a quick text-popup display of syntax/abbreviations?
 	☐ ActionObject: consider a "could be" sort of sense for filtering which things an input is
 		For example, something with a "^" could go to either EpicStudio or CodeSearch
 		Alternatively, group like inputs together in one merged class

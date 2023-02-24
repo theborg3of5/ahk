@@ -128,7 +128,7 @@
 		if(!itemsList)
 			return
 		
-		itemsAry := itemsList.split(",")
+		itemsAry := itemsList.split(",").removeEmpties()
 		For i,item in itemsAry {
 			if(i > 1)
 				excludeItemsString .= ","

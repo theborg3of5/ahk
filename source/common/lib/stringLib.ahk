@@ -326,5 +326,22 @@ class StringLib {
 		return overlap
 	}
 	
+	;---------
+	; DESCRIPTION:    Generate a "ten string" of the given length, for easy visualization of how long a string can be. A
+	;                 "ten string" is "1234567890" repeated to the given length, with a | just past the last character to
+	;                 show the edge.
+	;                 
+	;                 Examples:
+	;                   - 5  => 12345|
+	;                   - 15 => 123456789012345|
+	; PARAMETERS:
+	;  length (I,REQ) - How long the string should measure.
+	; RETURNS:        Generated string
+	;---------
+	getTenString(length) {
+		baseString := "1234567890"
+		return StringLib.duplicate(baseString, length // 10) baseString.sub(1, Mod(length, 10)) "|"
+	}
+	
 	; #END#
 }

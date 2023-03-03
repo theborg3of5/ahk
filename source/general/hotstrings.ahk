@@ -200,8 +200,7 @@ sendTenString() {
 	if(!length)
 		return
 	
-	baseString := "1234567890"
-	Send, % StringLib.duplicate(baseString, length // 10) baseString.sub(1, Mod(length, 10)) "|"
+	Send, % StringLib.getTenString(length)
 }
 
 sendFilePath(folderName, subPath := "") {

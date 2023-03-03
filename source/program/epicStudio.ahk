@@ -32,6 +32,13 @@
 		Send, {Left 2}
 	return
 
+	; Tag-length-measuring tens string.
+	::.taglen::
+		Send, {End}{Home 2} ; Get to very start of line (before indent)
+		Send, {Shift Down}{End}{Shift Up}{Delete} ; Select entire line and delete contents
+		Send, % "`t; " StringLib.getTenString(32).removeFromStart("123456") ; First 6 chars are the tab (width=4), semicolon, and space.
+	return
+
 	; Contact comment, but also include the REVISIONS: header.
 	^+8::EpicStudio.insertContactCommentWithHeader()
 	

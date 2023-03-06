@@ -133,9 +133,12 @@
 	:X:urf::  sendFolderPath("USER_ROOT")
 	:X:dsf::  sendFolderPath("USER_DESKTOP")
 	:X:specf::sendFolderPath("USER_SPECIFICS")
-	:X:dlf::  sendFolderPath("USER_DOWNLOADS")
 	:X:devf:: sendFolderPath("USER_DEV")
 	:X:zrzlf::sendFolderPath("USER_DEV", "zrzl")
+	
+#If !WinActive("ahk_class AutoHotkeyGUI") ; Don't do this in Selector popups (yes this catches more than that)
+	:X:dlf::  sendFolderPath("USER_DOWNLOADS")
+#If
 	
 	:X:otmf::sendFolderPath("ONETASTIC_MACROS")
 	:X:npsf::sendFolderPath("NOTEPAD_PP_SESSIONS")

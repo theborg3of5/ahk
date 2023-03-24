@@ -25,7 +25,7 @@ class Notepad {
 			return
 		}
 		
-		ControlSetText, Edit1, % text, A
+		ControlSetText, Edit1, % text, % titleString
 	}
 	; #END#
 }

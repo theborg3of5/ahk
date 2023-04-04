@@ -47,7 +47,7 @@
 		All									a					routine|client|records|other
 		
 # Codesearch Specifics
-		Server DBC							dd					routine																			-				-				DBC
+		Database DBC						dd					routine																			-				-				DBC
 	}
 	
 # Other

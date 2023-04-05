@@ -38,7 +38,7 @@
 		Send, {Shift Down}{End}{Shift Up} ; Select entire line
 		if(SelectLib.getCleanFirstLine())
 			Send, {Delete} ; Delete the contents (only needed if the line isn't completely empty, otherwise we lose the newline)
-		Send, % "`t; " StringLib.getTenString(32).removeFromStart("123456") ; First 6 chars are the tab (width=4), semicolon, and space.
+		Send, % "`t; " StringLib.getTenString(31).removeFromStart("123456") ; First 6 chars are the tab (width=4), semicolon, and space.
 	return
 
 	; Contact comment, but also include the REVISIONS: header.

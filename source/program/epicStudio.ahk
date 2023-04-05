@@ -35,7 +35,9 @@
 	; Tag-length-measuring tens string.
 	::.taglen::
 		Send, {End}{Home 2} ; Get to very start of line (before indent)
-		Send, {Shift Down}{End}{Shift Up}{Delete} ; Select entire line and delete contents
+		Send, {Shift Down}{End}{Shift Up} ; Select entire line
+		if(SelectLib.getCleanFirstLine())
+			Send, {Delete} ; Delete the contents (only needed if the line isn't completely empty, otherwise we lose the newline)
 		Send, % "`t; " StringLib.getTenString(32).removeFromStart("123456") ; First 6 chars are the tab (width=4), semicolon, and space.
 	return
 

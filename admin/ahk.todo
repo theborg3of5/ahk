@@ -106,6 +106,10 @@ Fixes / Cleanup:
 			Also added a MsgBox (when debug is toggled on) to the actual Esc hotkey.
 
 New Features / Scripts:
+	☐ Expand aidate, etc.'s date parsing to allow specifying a day of the week:
+		t+m = the coming monday (next monday if it's currently monday) [mtwrfsu]
+		t-m = the previous monday (last monday if it's currently monday)
+		t+2m = the monday 2 weeks out (1 week past t+m, I think?)
 	☐ Add a hotkey to open a DLG's issues page in web
 		!i is one option, but it's kind of top-level for such a specific use case?
 			Could limit to only when DLG open in EMC2 or Chrome, but Outlook would be nice too.

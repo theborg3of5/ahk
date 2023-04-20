@@ -199,6 +199,9 @@ class Outlook {
 		; Release note review is about the DRN
 		value := value.replace("Release Note Review: ", "DRN ")
 		value := value.replace("Revisions Made to Release Note: ", "DRN ")
+
+		; Special QAN processes
+		value := value.replace("RCA ", "QAN ")
 		
 		; EMC2 lock emails have stuff in a weird order: "EMC2 Lock: <title> [<ini>] <id> is locked"
 		if(value.startsWith("EMC2 Lock: ")) {

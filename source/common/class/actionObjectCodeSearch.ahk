@@ -74,7 +74,7 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 	getLink() {
 		Switch this.locationType {
 			Case this.LocationType_Server:
-				return SearchLib.buildCodeSearchURL("routine", "", "", "", "name=" this.location)
+				return SearchLib.buildCodeSearchURL("routine", "", "", "", "name=" this.location.replace("%", "%25")) ; Make sure to encode any % in the routine name
 				
 			Case this.LocationType_Client:
 				; Specific function handling - make the function (with opening paren) the search term.

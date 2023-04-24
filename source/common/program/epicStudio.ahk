@@ -42,6 +42,10 @@ class EpicStudio {
 		; Initial value copied potentially has the offset (tag+<offsetNum>) included, strip it off.
 		codeLocation := EpicLib.dropOffsetFromServerLocation(codeLocation)
 		
+		; If we got "routine^routine", just return "^routine".
+		if(codeLocation.beforeString("^") = codeLocation.afterString("^"))
+			codeLocation := "^" codeLocation.afterString("^")
+
 		; Set the clipboard value to our new (plain-text, no link) code location and notify the user.
 		ClipboardLib.setAndToast(codeLocation, "cleaned code location")
 	}

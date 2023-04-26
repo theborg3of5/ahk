@@ -85,6 +85,7 @@ Object(params*) {
 	#Include explorer.ahk
 	#Include hyperspace.ahk
 	#Include internetExplorer.ahk
+	#Include mBuilder.ahk
 	#Include mSnippets.ahk
 	#Include notepad.ahk
 	#Include onenote.ahk

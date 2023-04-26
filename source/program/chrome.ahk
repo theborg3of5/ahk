@@ -23,7 +23,7 @@
 	^!#c::Chrome.copyCodeSearchClientPath()
 	
 	; Open DLG in EpicStudio
-	^+o::Chrome.openCurrentDLGInEpicStudio()
+	^+o::EpicStudio.openCurrentDLG()
 	
 	; Handling for file links
 	^RButton::Chrome.copyLinkTarget() ; Copy
@@ -43,4 +43,5 @@
 #If Config.isWindowActive("Chrome") && WinActive("DLG ")
 	; Open client SVN log for a DLG.
 	!r::Chrome.openClientSVNLog()
+	^+m::MBuilder.lintCurrentDLG()
 #If

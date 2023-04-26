@@ -1,5 +1,40 @@
 #Include mSnippets.ahk
 class EpicStudio {
+	; #PUBLIC#
+
+	;---------
+	; DESCRIPTION:    Open the DLG found in the active window's title in EpicStudio.
+	;---------
+	openCurrentDLG() {
+		record := EpicLib.getBestEMC2RecordFromText(WinGetActiveTitle())
+		if(record.ini != "DLG" || record.id = "") {
+			Toast.ShowError("Could not open DLG in EpicStudio", "Record ID was blank or was not a DLG ID")
+			return
+		}
+		
+		this.openDLG(record.id)
+	}
+
+	;---------
+	; DESCRIPTION:    Open the given DLG in EpicStudio.
+	; PARAMETERS:
+	;  dlgId (I,REQ) - DLG ID
+	;---------
+	openDLG(dlgId) {
+		if(!dlgId) {
+			Toast.ShowError("Could not open DLG in EpicStudio", "DLG ID was blank")
+			return
+		}
+
+		t := new Toast("Opening DLG in EpicStudio: " dlgId).show()
+		
+		new ActionObjectEpicStudio(dlgId, ActionObjectEpicStudio.DescriptorType_DLG).openEdit()
+		WinWaitActive, % Config.windowInfo["EpicStudio"].titleString, , 10 ; 10-second timeout
+		
+		t.close()
+	}
+
+	
 	; #INTERNAL#
 	
 	;---------

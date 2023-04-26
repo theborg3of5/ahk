@@ -21,8 +21,8 @@
 	
 	; Link and record number things based on the current record.
 	!c:: EpicLib.copyEMC2RecordIDFromText(WinGetTitle("A")) ; Copy ID
-	^+o::EMC2.openCurrentDLGInEpicStudio()                  ; Take DLG # and pop up the DLG in EpicStudio sidebar.
-	^+b::EMC2.openCurrentDLGInMBuilder()                    ; Take DLG # and stick it into MBuilder linting.
+	^+o::EpicStudio.openCurrentDLG()                        ; Take DLG # and pop up the DLG in EpicStudio sidebar.
+	^+m::MBuilder.lintCurrentDLG()                          ; Take DLG # and stick it into MBuilder linting.
 	
 	; SmartPhrase hotstrings.
 	:X:qa.dbc:: EMC2.insertSmartPhrase("DBCQA")

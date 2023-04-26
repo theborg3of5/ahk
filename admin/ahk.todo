@@ -76,7 +76,8 @@ Fixes / Cleanup:
 		Probably also switch [[]] headers to using the same?
 	☐ EMC2 info windows selector: consider adding abbreviations for windows that get filtered out by duplicates checking, to the kept result
 	☐ Figure out why escape-closing stops working after long enough
-		Initial digging:	
+		! On hold until I convert over to AHKv2 - I suspect it will resolve a lot of things like this (or eliminate the need for them).
+		Initial digging:
 			Happens to Telegram for sure, but also Explorer?
 			Based on debug toasts, I'm pretty sure it's no longer identifying windows by name properly - probably some sort of local variable gets dumped or overwritten?
 			Next step: add some sort of debug flag or something to try and see what's missing/going on in Config
@@ -106,6 +107,12 @@ Fixes / Cleanup:
 			Also added a MsgBox (when debug is toggled on) to the actual Esc hotkey.
 
 New Features / Scripts:
+	☐ Expand mBuilder launching logic
+		☐ Standalone hotkey?
+			^+!#m might work.
+		☐ Make it another ActionObject?
+		✘ Could make it more generic like my current universal !e/!v hotkeys @cancelled(23-04-26 15:06)
+			Eh, not useful/global enough to justify that.
 	☐ Expand aidate, etc.'s date parsing to allow specifying a day of the week:
 		t+m = the coming monday (next monday if it's currently monday) [mtwrfsu]
 		t-m = the previous monday (last monday if it's currently monday)

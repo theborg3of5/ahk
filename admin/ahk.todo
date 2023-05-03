@@ -107,6 +107,8 @@ Fixes / Cleanup:
 			Also added a MsgBox (when debug is toggled on) to the actual Esc hotkey.
 
 New Features / Scripts:
+	☐ Grab EMC2 objects' titles when needed by scraping EMC2summary pages with HTTPRequest
+		Working prototype in test.ahk.
 	☐ Expand mBuilder launching logic
 		☐ Standalone hotkey?
 			^+!#m might work.

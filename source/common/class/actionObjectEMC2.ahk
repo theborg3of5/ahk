@@ -81,12 +81,16 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	
 	;---------
 	; DESCRIPTION:    Get a web link to the object.
+	; PARAMETERS:
+	;  forceBasic (I,OPT) - Set to true to always use the "basic" link style (ignore that an INI might be edit-only, view-only, internal-only, etc.).
 	; RETURNS:        Link to either emc2summary or Sherlock (depending on the INI)
 	;---------
-	getLinkWeb() {
+	getLinkWeb(forceBasic := false) {
 		ini := this.ini
 		
-		if(this.isEditOnlyObject() || this.isViewOnlyObject(ini)) ; View-only objects only work as edit-type links, so redirect them there.
+		if(forceBasic)
+			link := Config.private["EMC2_LINK_WEB_BASE"]
+		else if(this.isEditOnlyObject() || this.isViewOnlyObject(ini)) ; View-only objects only work as edit-type links, so redirect them there.
 			link := this.getLinkEdit()
 		else if(this.isInternalOnlyObject(ini))
 			link := Config.private["SHERLOCK_INTERNAL_ONLY_BASE"]

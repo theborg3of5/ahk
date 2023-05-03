@@ -6,7 +6,8 @@
 # Web
 ; (SUBTYPE = <URL with <QUERY> for query>)
 ~SEARCH_TYPE.replaceWith(WEB) {
-		Google								g					https://www.google.com/search?q=<QUERY>
+		Google								g					https://www.google.com/search?q=<QUERY>											-				-				-			HOME
+		Google								g					https://www.google.com/search?authuser=1&q=<QUERY>								-				-				-			WORK
 		Google Maps							gmap | gmaps		https://www.google.com/maps/preview?q=<QUERY>
 		Gmail								gm					https://mail.google.com/mail/u/0/#search/<QUERY>								-				-				-			HOME
 		Gmail								gm					https://mail.google.com/mail/u/1/#search/<QUERY>								-				-				-			WORK

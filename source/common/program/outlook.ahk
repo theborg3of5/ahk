@@ -112,7 +112,7 @@ class Outlook {
 	; DESCRIPTION:    Copy the EMC2 record ID from the currently-selected (non-TLG) calendar event to the clipboard.
 	;---------
 	copyEMC2RecordIDFromEvent() {
-		record := this.getEMC2RecordFromCalendarEvent()
+		record := this.getEMC2ObjectFromCalendarEvent()
 		if(record)
 			ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
 	}

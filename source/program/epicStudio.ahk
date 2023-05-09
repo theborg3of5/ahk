@@ -10,6 +10,12 @@
 	
 	; Treat ^Enter the same as Enter - I never want to insert a line before the current one.
 	^Enter::Send, {Enter}
+
+	; Use subword navigation with !#left/right, and keep !left/right for history navigation.
+	!Left::Send, ^+-
+	!Right::Send, ^+=
+	^#Left::Send, !{Left}
+	^#Right::Send, !{Right}
 	
 	; Copy current code location
 	!c:: EpicStudio.copyCleanCodeLocation()  ; Cleaned, just the actual location

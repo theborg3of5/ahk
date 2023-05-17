@@ -109,6 +109,16 @@ Fixes / Cleanup:
 New Features / Scripts:
 	☐ Grab EMC2 objects' titles when needed by scraping EMC2summary pages with HTTPRequest
 		Working prototype in test.ahk.
+		Potential use cases:
+			epicLib.ahk::getUsefulEMC2RecordWindows() < epic.ahk::sendEMC2RecordID()
+				Pull in titles from more windows (watch performance here!)
+				Can turn ignoreIfNoTitle into a flag for getting any missing titles
+			epicLib.ahk::getBestEMC2RecordFromText()
+				Only grabbing one object, so grabbing a missing title makes sense
+					Probably make it optional, though - probably an opt-in flag
+				Would mean that ActionObjectEMC2 needs to grab it itself less often (but still need to when given INI + ID but not title)
+			Standard EMC2 object string - automatically pull in title if missing
+			epic.ahk::selectOutlookTLG()
 	☐ Expand mBuilder launching logic
 		☐ Standalone hotkey?
 			^+!#m might work.

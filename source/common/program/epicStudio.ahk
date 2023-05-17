@@ -125,7 +125,6 @@ class EpicStudio {
 		Send, {End}{Home}                 ; Get to start of line (after indentation)
 		Send, {Shift Down}{End}{Shift Up} ; Select line (not including indentation)
 		line := SelectLib.getText().withoutWhitespace()
-		; Send, {End}                       ; Leave cursor on end of line ; GDB TODO
 		
 		; Non-empty line: add a new line and select it
 		if(line != "" && line != ";") {

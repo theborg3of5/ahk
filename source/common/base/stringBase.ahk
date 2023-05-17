@@ -28,17 +28,24 @@ class StringBase {
 		return IfIs(this, "alpha")
 	}
 	;---------
-	; DESCRIPTION:    Wrapper function for whether a string is numeric (excludes hexadecimal numbers and doesn't allow
-	;                 leading +/-).
+	; DESCRIPTION:    Wrapper function for whether a string is numeric (no hexadecimal numbers).
 	; RETURNS:        true/false
 	;---------
 	isNum() {
 		if(this = "")
 			return false
 		
-		if(this.contains("."))
-			return IfIs(this, "float")
-		
+		; Don't allow hexidecimal (with leading 0x, otherwise it doesn't match "number" anyway)
+		if(this.startsWith("0x"))
+			return false
+
+		return IfIs(this, "number")
+	}
+	;---------
+	; DESCRIPTION:    Wrapper functionf or whether a string contains only digits (no leading/trailing +/-, no hexidecimals, no decimals).
+	; RETURNS:        true/false
+	;---------
+	isDigits() {
 		return IfIs(this, "digit")
 	}
 	;---------
@@ -75,6 +82,20 @@ class StringBase {
 	;---------
 	charAt(pos) {
 		return this.sub(pos, 1)
+	}
+
+	;---------
+	; DESCRIPTION:    Return the first character of the string.
+	;---------
+	firstChar() {
+		return this.sub(1, 1)
+	}
+
+	;---------
+	; DESCRIPTION:    Return the last character of the string.
+	;---------
+	lastChar() {
+		return this.sub(this.length())
 	}
 	
 	;---------
@@ -137,6 +158,16 @@ class StringBase {
 		
 		return earliestMatchedPos
 	}
+
+	;---------
+	; DESCRIPTION:    Check whether this string matches any of the values in the given array.
+	; PARAMETERS:
+	;  needlesAry (I,REQ) - Array of values to check against.
+	; RETURNS:        Matching index, or "" if not found
+	;---------
+	isAnyOf(needlesAry) {
+		return needlesAry.contains(this)
+	}
 	
 	;---------
 	; DESCRIPTION:    Check whether this string starts with the provided string.
@@ -179,7 +210,8 @@ class StringBase {
 	; DESCRIPTION:    Wrapper for SubStr() - returns a chunk of this string.
 	; PARAMETERS:
 	;  startPos (I,REQ) - Position to start at (first character is position 1). Can be negative to count from end of string.
-	;  length   (I,OPT) - Number of characters to include. If left blank, we'll return the entire rest of the string.
+	;  length   (I,OPT) - Number of characters to include. If left blank, we'll return the entire rest of the string. If
+	;                     negative, we'll leave that many characters off the end of the string.
 	; RETURNS:        The chunk of this string specified.
 	;---------
 	sub(startPos, length := "") {

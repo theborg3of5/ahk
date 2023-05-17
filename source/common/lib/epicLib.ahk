@@ -214,7 +214,7 @@ class EpicLib {
 			id := id.removeFromStart(letter)
 		
 		; IDs must be numeric (beyond the above special case).
-		if(!id.isNum())
+		if(!id.isDigits())
 			return false
 		
 		; No record ID is going to be 3 digits or less.
@@ -257,7 +257,7 @@ class EpicLib {
 	;---------
 	convertToUsefulEMC2INI(ini) {
 		; Don't allow numeric "INIs" - they're just picking choices from the Selector, not converting a valid value.
-		if(ini.isNum())
+		if(ini.isDigits())
 			return ""
 		
 		s := this.getEMC2TypeSelector()

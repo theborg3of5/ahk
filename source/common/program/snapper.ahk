@@ -225,7 +225,7 @@
 	;---------
 	removeDatFromMultiResponseValues(ByRef text) {
 		firstWord := text.beforeString(" ")
-		if(firstWord.isNum() && firstWord.length() = 5) {
+		if(firstWord.isDigits() && firstWord.length() = 5) {
 			text := text.removeFromStart(firstWord " ")
 			return true
 		}

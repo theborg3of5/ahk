@@ -189,7 +189,7 @@ class Config {
 			bestMatch := winInfo
 		}
 		
-		if(Config.debugOn) { ; GDB TODO remove
+		if(Config.debugOn) { ; GDB TODO window cache debug issue
 			debugString := "findWindowInfo():"
 			debugString .= "`n" "titleString=" titleString
 			debugString .= "`n" "exe" "=" exe "`t`t`t|`t`t`t" "bestMatch.exe" "=" bestMatch.exe

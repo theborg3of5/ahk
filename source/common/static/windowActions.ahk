@@ -190,7 +190,7 @@ class WindowActions {
 		else
 			titleString := Config.windowInfo[name].idString
 		
-		if(Config.debugOn) { ; GDB TODO remove
+		if(Config.debugOn) { ; GDB TODO window cache debug issue
 			debugString := "windowAction():"
 			debugString := "`n" "action=" action
 			debugString .= "`n" "name=" name

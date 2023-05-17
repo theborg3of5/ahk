@@ -34,7 +34,7 @@
 #-::
 	return
 
-; GDB TODO remove
+; GDB TODO window cache debug issue
 ^+!0::testFunc()
 testFunc() {
 	Config.debugOn := !Config.debugOn

@@ -64,7 +64,7 @@ class RelativeDateTimeBase {
 	; PARAMETERS:
 	;  relativeString (I,REQ) - The relative date/time string, in format:
 	;                            <unitLetter><operator><shiftAmount>
-	;                           Where unitLetter is the letter fo the unit, operator is + or -, and
+	;                           Where unitLetter is the letter for the unit, operator is + or -, and
 	;                           shiftAmount is how many to add/subtract.
 	;---------
 	shiftByRelativeString(relativeString) {
@@ -74,7 +74,7 @@ class RelativeDateTimeBase {
 		
 		; Make shiftAmount match unit (because we have to use EnvAdd/+= for date/time math)
 		if(operator = "-")
-			shiftAmount := -shiftAmount
+			shiftAmount := operator shiftAmount ; Append instead of negating to preserve special day-of-week cases like "t+2m"
 		
 		this.doShift(shiftAmount, unit)
 	}

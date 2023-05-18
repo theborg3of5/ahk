@@ -113,6 +113,7 @@ New Features / Scripts:
 			epicLib.ahk::getUsefulEMC2RecordWindows() < epic.ahk::sendEMC2RecordID()
 				Pull in titles from more windows (watch performance here!)
 				Can turn ignoreIfNoTitle into a flag for getting any missing titles
+				Or, alternative idea: drop ignoreIfNoTitle flag, but wait to retrieve title until after specific record has been picked
 			epicLib.ahk::getBestEMC2RecordFromText()
 				Only grabbing one object, so grabbing a missing title makes sense
 					Probably make it optional, though - probably an opt-in flag

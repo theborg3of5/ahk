@@ -8,7 +8,8 @@
 ~SEARCH_TYPE.replaceWith(WEB) {
 		Google								g					https://www.google.com/search?q=<QUERY>											-				-				-			HOME
 		Google								g					https://www.google.com/search?authuser=1&q=<QUERY>								-				-				-			WORK
-		Google Maps							gmap | gmaps		https://www.google.com/maps/preview?q=<QUERY>
+		Google Maps							gmap | gmaps		https://www.google.com/maps/preview?q=<QUERY>									-				-				-			HOME
+		Google Maps							gmap | gmaps		https://www.google.com/maps/preview?q=<QUERY>&authuser=1						-				-				-			WORK
 		Gmail								gm					https://mail.google.com/mail/u/0/#search/<QUERY>								-				-				-			HOME
 		Gmail								gm					https://mail.google.com/mail/u/1/#search/<QUERY>								-				-				-			WORK
 		Youtube								yt					https://www.youtube.com/results?search_query=<QUERY>
@@ -16,8 +17,6 @@
 		AutoHotkey Docs						ahkd				https://cse.google.com/cse?cx=010629462602499112316:ywoq_rufgic&q=<QUERY>
 		Translate Dutch > English			tde | detrans		https://translate.google.com/#nl/en/<QUERY>
 		Translate English > Dutch			ted | edtrans		https://translate.google.com/#en/nl/<QUERY>
-	
-		Google Maps Hospital				gh					https://www.google.com/maps/dir/600+Highland+Avenue,+Madison,+WI/<QUERY>
 }
 
 # GrepWin

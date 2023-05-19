@@ -120,6 +120,35 @@ New Features / Scripts:
 				Would mean that ActionObjectEMC2 needs to grab it itself less often (but still need to when given INI + ID but not title)
 			Standard EMC2 object string - automatically pull in title if missing
 			epic.ahk::selectOutlookTLG()
+	☐ Allow multi-selection of selector options
+		☐ Would need to either:
+			☐ Make it configurable by caller - each caller would have to support it specially as the return format would be different.
+			☐ Update all callers to handle multiple-style format, all the time?
+		☐ Will want support for different "styles" of callers - single-column vs. data array return values
+		☐ Delimit with a plain space instead of a pipe - way easier to type that way!
+		Use cases:
+			SUs, multiple:
+				Putty sessions
+				Standalone hyperspace instances across multiple versions
+				TLG events
+			Edit config file - edit multiple
+			Search - multiple places (might replace current multi-cases)
+			Solution shortcuts - add multiple shortcuts
+			Folders - open multiple folders
+			Symbols - just send multiple
+		Specifically don't want to support for:
+			firstSetup machine
+			actionObject*
+			formattedList
+			mSnippets
+			puttyRecordEdit
+			puttyCommands
+			snapperIgnoreItems
+			phone
+			resize
+			hswebConsoleCommands
+			timer duration
+			transaction dump
 	☐ Expand mBuilder launching logic
 		☐ Standalone hotkey?
 			^+!#m might work.

@@ -10,9 +10,10 @@ class Telegram {
 		launchURL := this.ShareURLBase.replaceTag("URL", url)
 		Run(launchURL)
 		
-		WinWaitActive, % Config.windowInfo["Telegram"].titleString
+		WinWaitActive, % Config.windowInfo["Telegram"].idString
+		Sleep, 500 ; Give the share faux-popup time to appear.
 		
-		Telegram.focusNormalChat()
+		Send, {Down 2}{Enter} ; Select my target chat (the "Normal" one).
 	}
 	
 	

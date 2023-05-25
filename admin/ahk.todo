@@ -105,20 +105,6 @@ Fixes / Cleanup:
 				So "this" (at least in the context I was thinking) is NOT the culprit.
 			Added another hotkey (^+!9) to force Config.findWindowInfo() to trigger so we can better see what's going on there.
 			Also added a MsgBox (when debug is toggled on) to the actual Esc hotkey.
-	☐ Tweak MSnippets - allow entering more bits of data
-		In particular, why can't I enter the item number for index loops?
-		Current inputs (and => what I think they should be):
-			Array loop: arrayName | iterator1,iterator2...
-			ID loop: ini							=>	ini | idVar
-			DAT loop: ini							=>	ini | idVar,datVar
-			Regular index value: ini | iterator		=>	ini | item,iteratorVar[,dir]
-			Regular index ID: ini | iterator		=>	ini | item,iteratorVar[,dir]
-			Multiline item: ini | item				=>	ini | item[,idVar,datVar,lnVar]
-			Indexed list: arrayName | value1,value2...
-			Numbered list: <not supported>			=>	arrayName | value1,value2...
-		☐ Idea 1: keep ini/ary separate and just expand what value/var input can take
-		☐ Idea 2: combine into one bit input
-			I'm liking this better, what's the benefit of separating them? Just as easy to type a comma.
 
 New Features / Scripts:
 	☐ Grab EMC2 objects' titles when needed by scraping EMC2summary pages with HTTPRequest

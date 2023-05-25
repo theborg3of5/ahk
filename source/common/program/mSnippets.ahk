@@ -28,6 +28,9 @@ class MSnippets {
 		Switch data["TYPE"] {
 			Case "LOOP": snipString := MSnippets.buildMLoop(data, numIndents)
 			Case "LIST": snipString := MSnippets.buildList(data, numIndents)
+			Case "WIKI":
+				MSnippets.launchWiki(data)
+				return
 		}
 		
 		ClipboardLib.send(snipString) ; Better to send with the clipboard, otherwise we have to deal with EpicStudio adding in dot-levels itself.
@@ -74,6 +77,20 @@ class MSnippets {
 			Case "INDEX": return MSnippets.buildMListIndex(data, numIndents)
 		}
 	}
+
+	;---------
+	; DESCRIPTION:    Launch one or more specific wikis.
+	; PARAMETERS:
+	;  data (I,REQ) - Array of data. Important subscripts:
+	;                 	["SUBTYPE"] - Which wiki(s) we should launch.
+	;---------
+	launchWiki(data) {
+		Switch data["SUBTYPE"] {
+			Case "INDEX":
+				Run(Config.private["EPIC_WIKI_INDEX_GLOBALS"])
+				Run(Config.private["EPIC_WIKI_INDEX_APIS"])
+		}
+	}
 	
 	;---------
 	; DESCRIPTION:    Generate nested M for loops using the given data.
@@ -89,8 +106,8 @@ class MSnippets {
 		arrayName   := data["ARRAY_OR_INI"]
 		iteratorAry := data["VARS_OR_VALUES"].split(",")
 		
-		if(arrayName.startsWith("@") && !arrayName.endsWith("@"))
-			arrayName .= "@" ; End global references with the proper @ if they're not already.
+		if(arrayName.startsWith("@"))
+			arrayName := arrayName.appendIfMissing("@") ; End global references with the proper @ if they're not already.
 		
 		prevIterators := ""
 		for i,iterator in iteratorAry {

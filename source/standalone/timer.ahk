@@ -14,7 +14,7 @@ global timerLabelText
 
 ; Get any inputs from command line
 durationString = %1%
-labelText      = %2%
+labelText      = %2% %3% %4% %5% %6% %7% %8%
 
 if(!getTimerInfo(durationString, labelText))
 	ExitApp

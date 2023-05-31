@@ -161,6 +161,10 @@ New Features / Scripts:
 		☐ Could I do a sort of "chording" thing here?
 			!w + i for issues, for example
 			Could also make revisions hotkey more generic that way
+			☐ What's the actual workflow for this case, then?
+				Don't want to wait when I just want the object to open
+				Maybe a toast-based, non-blocking "panel" that can be triggered with individual character keys (b for objects, h for history, i for issues, etc.)?
+				Maybe always open the DLG, then try to close the extra tab before opening the new one (if we are opening a new one)?
 	☐ Add a new ActionObject type for opening a DLG's client folder
 		Can assume most recent version found in source, and find the biggest dashed version.
 	☐ Add newline character display (`n and `r) to debug table

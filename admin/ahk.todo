@@ -109,6 +109,11 @@ Fixes / Cleanup:
 New Features / Scripts:
 	☐ Grab EMC2 objects' titles when needed by scraping EMC2summary pages with HTTPRequest
 		Working prototype in test.ahk.
+		☐ Cleaner method: use a track-shadow report, like Link Magic does: https://wiki.epic.com/main/Testing_Tools/AutoHotkey/Scripts/Link_Magic#Sherlock_Support_Logs
+			Report basically returns starting/ending comment tags around the actual return value, AHK calls it via WinHTTPRequest.
+			☐ Existing "GenericShadowReport" option just takes a tag and returns the value - could use that and write the $$geti or whatever into the URL
+			☐ Or, write my own "get track record name" that uses nicer display names and defaults back to $$znam if needed
+			☐ With this, I could also expand handling for OneNote EMC2 record lines - can pull QAN + XDS + DLG and link them all (maybe even in the order I'd like based on record status!)
 		Potential use cases:
 			epicLib.ahk::getUsefulEMC2RecordWindows() < epic.ahk::sendEMC2RecordID()
 				Pull in titles from more windows (watch performance here!)
@@ -164,6 +169,7 @@ New Features / Scripts:
 			☐ What's the actual workflow for this case, then?
 				Don't want to wait when I just want the object to open
 				Maybe a toast-based, non-blocking "panel" that can be triggered with individual character keys (b for objects, h for history, i for issues, etc.)?
+					Could also allow triggering the "panel" manually in Chrome, or not re-opening-in-web if Chrome is already focused and has object open?
 				Maybe always open the DLG, then try to close the extra tab before opening the new one (if we are opening a new one)?
 	☐ Add a new ActionObject type for opening a DLG's client folder
 		Can assume most recent version found in source, and find the biggest dashed version.

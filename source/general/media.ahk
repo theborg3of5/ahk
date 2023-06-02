@@ -13,29 +13,16 @@
 		Toast.ShowMedium(muteMessage)
 	}
 
+; Media control
+^!Down:: Send, {Media_Play_Pause}
+^!Left:: Send, {Media_Prev}
+^!Right::Send, {Media_Next}
+^!Up::
+Media_Stop::
+	Config.runProgram("Spotify")
+return
+
 ; SoundSwitch handling
 #If Config.doesWindowExist("SoundSwitch")
 	^F12::SoundSwitch.toggleDevices()
-#If
-
-#If !Config.doesWindowExist("Spotify")
-	^!Up::
-	^!Down::
-	^!Left::
-	^!Right::
-	Media_Stop::
-	Media_Play_Pause::
-	Media_Prev::
-	Media_Next::
-		Config.runProgram("Spotify")
-	return
-#If Config.doesWindowExist("Spotify")
-	^!Up::
-	Media_Stop::
-		Config.runProgram("Spotify")
-	return
-	
-	^!Down:: Send, {Media_Play_Pause}
-	^!Left:: Send, {Media_Prev}
-	^!Right::Send, {Media_Next}
 #If

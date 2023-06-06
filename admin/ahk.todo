@@ -107,6 +107,9 @@ Fixes / Cleanup:
 			Also added a MsgBox (when debug is toggled on) to the actual Esc hotkey.
 
 New Features / Scripts:
+	☐ Add a hotkey that just toasts the name + ID of the EMC2 record (if any)
+		Alt+/ (conceptually Alt+?), maybe?
+		Would need either EMC2summary scraping from below, or whatever equivalent thing I end up doing with track shadow reports
 	☐ Grab EMC2 objects' titles when needed by scraping EMC2summary pages with HTTPRequest
 		Working prototype in test.ahk.
 		☐ Cleaner method: use a track-shadow report, like Link Magic does: https://wiki.epic.com/main/Testing_Tools/AutoHotkey/Scripts/Link_Magic#Sherlock_Support_Logs

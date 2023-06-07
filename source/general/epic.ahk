@@ -136,7 +136,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	^!+t::
 		selectOutlookTLG() {
 			s := new Selector("tlg.tls").setTitle("Select EMC2 Record ID")
-			s.dataTableList.filterOutIfColumnNoMatch("OLD", "") ; Filter out old records (have a value in the OLD column)
+			s.dataTableList.filterOutIfColumnNoMatch("IS_OLD", "") ; Filter out old records (have a value in the OLD column)
 			data := s.selectGui()
 			if(!data)
 				return
@@ -156,9 +156,12 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 					data["NAME"] := record.title
 			}
 			
-			; Message is a combination of a prefix, the name displayed in the Selector, and the user's entered message.
-			fullName := data["NAME_OUTPUT_PREFIX"] data["NAME"]
-			combinedMessage := fullName.appendPiece(data["MESSAGE"], " - ")
+			; Message is a combination of a few things
+			message := data["NAME_OUTPUT_PREFIX"] ; Start with any given prefix
+			if(data["IS_GENERIC"]) 
+				message .= data["MESSAGE"] ? data["MESSAGE"] : data["NAME"] ; Generic TLPs - use add the message, defaulting to the name.
+			else ; Everything else: 
+				message .= data["NAME"].appendPiece(data["MESSAGE"], " - ") ; Everything else: add name + message.
 			
 			; Record field can contain DLG (no prefix), PRJ (P.), QAN (Q.), or SLG (S.) IDs.
 			if(recId.startsWith("P."))
@@ -172,7 +175,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			
 			; Build the event title string
 			eventTitle := Config.private["OUTLOOK_TLG_BASE"]
-			eventTitle := eventTitle.replaceTag("MESSAGE",  combinedMessage) ; Replace the message first in case it contains any of the following tags
+			eventTitle := eventTitle.replaceTag("MESSAGE",  message) ; Replace the message first in case it contains any of the following tags
 			eventTitle := eventTitle.replaceTag("TLP",      data["TLP"])
 			eventTitle := eventTitle.replaceTag("CUSTOMER", data["CUSTOMER"])
 			eventTitle := eventTitle.replaceTag("SLG",      slgId)

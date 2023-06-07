@@ -209,10 +209,19 @@ class EpicStudio {
 		; Focus the search field (may already be focused, but we want a consistent starting point).
 		ControlFocus, % filterField, A
 		
-		; Plug in our normal filter, unless there's an existing value and we want to keep those.
+		; Keep the existing value if requested (unless it's blank).
 		currentFilter := ControlGet("Line", 1, filterField, "A")
-		if(!keepExistingValue || currentFilter = "")
-			ControlSetText, % filterField, % "user:" Config.private["WORK_ID"], A
+		if(keepExistingValue && currentFilter != "") {
+			ControlSend, % filterField, {Enter}, A
+			return
+		}
+
+		; Otherwise, cycle thru our normal filters.
+		filters := ["user:" Config.private["WORK_ID"], "user:" Config.private["WORK_USERNAME"]] ; Different environments use different values for whatever reason.
+		currIndex := filters.contains(currentFilter)
+		currIndex := DataLib.forceNumber(currIndex)
+		newIndex := mod(currIndex, filters.Length()) + 1 ; Mod current index and add 1 after because the array is base-1.
+		ControlSetText, % filterField, % filters[newIndex], A
 		
 		; Submit the search.
 		ControlSend, % filterField, {Enter}, A

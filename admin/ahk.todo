@@ -128,6 +128,7 @@ New Features / Scripts:
 				Would mean that ActionObjectEMC2 needs to grab it itself less often (but still need to when given INI + ID but not title)
 			Standard EMC2 object string - automatically pull in title if missing
 			epic.ahk::selectOutlookTLG()
+			TLG selector - get smarter about pulling in a usable record (if I'm pulling from an XDS, look for a DLG or at least PRJ to use instead)
 	☐ Allow multi-selection of selector options
 		☐ Would need to either:
 			☐ Make it configurable by caller - each caller would have to support it specially as the return format would be different.

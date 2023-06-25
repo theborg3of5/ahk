@@ -96,7 +96,7 @@
 				Slack							slack.exe				-							-											NO_PADDING
 				SoundSwitch						SoundSwitch.exe
 				Spotify							Spotify\.exe			Chrome_WidgetWin_0			(Spotify Premium)\|( - )					NO_PADDING		REGEX
-				Steam							Steam.exe				-							-											NO_PADDING
+				Steam							steamwebhelper.exe		-							-											NO_PADDING
 				Teams							Teams.exe				-							\| Microsoft Teams							NO_PADDING
 				Telegram						Telegram.exe			Qt[\d]+QWindowIcon			-											NO_PADDING		REGEX
 				Thunder							Thunder.exe				-							Thunder

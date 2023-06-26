@@ -116,6 +116,8 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		
 		if(idOnly)
 			Send, % id
+		else if(Config.isWindowActive("Chrome Workplans"))
+			ClipboardLib.send(title " - " ini " " id) ; Put title first for workplans
 		else
 			ClipboardLib.send(ini " " id " - " title) ; Must send with clipboard because it can contain hotkey chars
 		

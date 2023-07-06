@@ -103,7 +103,7 @@ class Explorer {
 	;---------
 	selectSolutionShortcut() {
 		; Get current folder (absolute root)
-		currentFolder := FileLib.cleanupPath(ClipboardLib.getWithHotkey(this.Hotkey_CopyCurrentFolder))
+		currentFolder := this.getCurrentFolder()
 		if(currentFolder = "") {
 			Toast.ShowError("Failed to get current folder path")
 			return
@@ -156,7 +156,7 @@ class Explorer {
 		}
 		
 		; If we didn't get anything, there probably wasn't a file selected - get the current folder instead.
-		path := ClipboardLib.getWithHotkey(this.Hotkey_CopyCurrentFolder)
+		path := this.getCurrentFolder()
 		if(path != "") {
 			pathType := "folder path"
 			return FileLib.cleanupPath(path)
@@ -164,6 +164,27 @@ class Explorer {
 		
 		; We couldn't find anything at all, no type.
 		return ""
+	}
+
+	;---------
+	; DESCRIPTION:    Get the path to the currently-open folder.
+	; RETURNS:        Folder path, or "" if we failed to get it for some reason.
+	;---------
+	getCurrentFolder() {
+		; Start with QTTabBar hotkey
+		path := ClipboardLib.getWithHotkey(this.Hotkey_CopyCurrentFolder)
+		
+		; Failed to get using QTTabBar hotkey - try to grab it manually instead.
+		if(path = "") {
+			Send, !d ; Select address bar
+			path := ClipboardLib.getWithHotkey("^c")
+		}
+		
+		; Clean up path if we got it.
+		if(path != "")
+			path := FileLib.cleanupPath(path)
+		
+		return path
 	}
 	
 	; [[Relative shortcuts]] =--
@@ -173,7 +194,7 @@ class Explorer {
 	;                 "" (and show an error toast) if we couldn't get it
 	;---------
 	getRelativeSourceFolder() {
-		path := ClipboardLib.getWithHotkey(Explorer.Hotkey_CopyCurrentFolder)
+		path := this.getCurrentFolder()
 		if(path = "") {
 			Toast.ShowError("Failed to get source folder path for relative shortcut")
 			return ""
@@ -189,7 +210,7 @@ class Explorer {
 	;---------
 	saveRelative(path) {
 		this._relativeTarget := path
-		this._relativeToast := new Toast("Ready to create relative shortcut to file:`n" path "`nPress ^+s again to create in that folder, Esc to cancel").show()
+		this._relativeToast := new Toast("Ready to create relative shortcut to file:`n" path "`nPress ^!s again to create in that folder, Esc to cancel").show()
 		boundFunc := ObjBindMethod(this, "cleanupRelative")
 		Hotkey, Escape, % boundFunc, On ; Hotkey to cancel out and not create anything
 	}

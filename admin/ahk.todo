@@ -129,6 +129,12 @@ New Features / Scripts:
 			Standard EMC2 object string - automatically pull in title if missing
 			epic.ahk::selectOutlookTLG()
 			TLG selector - get smarter about pulling in a usable record (if I'm pulling from an XDS, look for a DLG or at least PRJ to use instead)
+			AHK SU TLS lines - trigger via AHK
+				Prompt with search for adding to Thunder (automatically copy to clipboard)
+					Maybe even just wait to see the "Find an Environment" window and select the environments itself? (don't actually accept because wording could change)
+				Grab needed data via track-shadow report, do the rest of the current AHK stuff
+				Display info about what to rename Thunder environments (maybe put the common base onto the clipboard for me)
+				Display new line to add to getSyncEnvironments (automatically add to clipboard)
 	☐ Allow multi-selection of selector options
 		☐ Would need to either:
 			☐ Make it configurable by caller - each caller would have to support it specially as the return format would be different.

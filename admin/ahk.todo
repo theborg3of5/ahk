@@ -41,7 +41,6 @@ Switch to VS Code for AHK dev:
 	☐ Get rid of updateNotepadPPSupport once I'm sure I won't need it anymore (currently shows how to parse my headers and such).
 
 Fixes / Cleanup:
-	☐ TL[S] highlighting - hyphens are faded even when they're in the middle of a word
 	☐ Could we centralize the !w/!e hotkeys a little better?
 		☐ Maybe a have a central object where the various windows could somehow register that they get the title/EpicRecord in a certain way (BoundFunc-style)?
 		☐ Or, *even more simply*: maybe just a switch statement in the main hotkey function that checks which window is active

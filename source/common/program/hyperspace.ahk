@@ -41,19 +41,6 @@ class Hyperspace {
 		Send, {Space}
 	}
 	
-	;---------
-	; DESCRIPTION:    Grab the HTML from the current display in Hyperspace, save it off to a file
-	;                 and open it in IE for debugging.
-	; SIDE EFFECTS:   Modifies the local HTML debug output file.
-	;---------
-	openCurrentDisplayHTML() {
-		html := Hyperspace.getCurrentDisplayHTML()
-		filePath := Config.private["LOCAL_HTML_DEBUG_OUTPUT"]
-		FileDelete, %filePath%
-		FileAppend, %html%, %filePath%
-		Config.runProgram("Internet Explorer", filePath)
-	}
-	
 	
 	; #PRIVATE#
 	

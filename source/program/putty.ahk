@@ -20,7 +20,7 @@
 		Putty.wipeScreen()           ; Wipe the screen
 	return
 	
-	; Scrolling (^PgUp/^PgDn scrolls one line at a time)
+	; Scroll 1 line at a time
 	^WheelUp::  Send, ^{PgUp}
 	^WheelDown::Send, ^{PgDn}
 	

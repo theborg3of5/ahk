@@ -51,6 +51,7 @@ Fixes / Cleanup:
 						☐ Will this crash if getNamedWindowClass returns ""/nothing?
 							☐ If so, can I handle it with AHKv1 try/catch stuff?
 					askNamedWindowToDo(actionConstant, moreInfoObj)
+		☐ Could we do the same thing with my various copy (title/ID/code location) hotkeys?
 	☐ Could we clean up/condense Teams messages so I can paste them into OneNote more nicely?
 		✔ Initial working draft @done(23-02-10 15:14)
 		☐ Handle quotes better

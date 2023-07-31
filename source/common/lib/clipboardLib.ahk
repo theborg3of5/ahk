@@ -96,10 +96,30 @@ class ClipboardLib {
 	;---------
 	copyFilePath(hotkeyKeys) {
 		path := ClipboardLib.getWithHotkey(hotkeyKeys)
-		if(path)
-			path := FileLib.cleanupPath(path)
-		
+		if(!path) {
+			Toast.ShowError("Could not copy path", "Failed to get file path")
+			return
+		}
+
+		path := FileLib.cleanupPath(path)
 		ClipboardLib.setAndToast(path, "file path")
+	}
+	
+	;---------
+	; DESCRIPTION:    Grabs the path for the current file, trims it down to the bit inside the DLG/App * folder, and puts
+	;                 it on the clipboard.
+	; PARAMETERS:
+	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
+	;---------
+	copyFilePathRelativeToSource(hotkeyKeys) {
+		path := ClipboardLib.getWithHotkey(hotkeyKeys)
+		if(!path) {
+			Toast.ShowError("Could not copy source-relative path", "Failed to get file path")
+			return
+		}
+		
+		path := EpicLib.convertToSourceRelativePath(path)
+		ClipboardLib.setAndToast(path, "source-relative path")
 	}
 	
 	;---------
@@ -109,25 +129,7 @@ class ClipboardLib {
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
 	;---------
 	copyCodeLocationPath(hotkeyKeys) {
-		path := ClipboardLib.getWithHotkey(hotkeyKeys)
-		if(!path) {
-			Toast.ShowError("Could not copy path", "Failed to get file path")
-			return
-		}
-		path := FileLib.cleanupPath(path)
-		
-		; Function name will come from selected text (if any)
-		functionName := SelectLib.getText()
-		
-		; If no function, just use the path.
-		if(functionName = "" || functionName.contains("`n")) { ; If there's a newline then nothing was selected, we just copied the whole line.
-			ClipboardLib.setAndToast(path, "path")
-			return
-		}
-		
-		; Otherwise include the function.
-		path .= "::" functionName "()"
-		ClipboardLib.setAndToast(path, "path code location")
+		this.getCodeLocationCore(hotkeyKeys, this.CopyLocationType_Path)
 	}
 	
 	;---------
@@ -137,46 +139,7 @@ class ClipboardLib {
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
 	;---------
 	copyCodeLocationFile(hotkeyKeys) {
-		path := ClipboardLib.getWithHotkey(hotkeyKeys)
-		if(!path) {
-			Toast.ShowError("Could not copy path", "Failed to get file path")
-			return
-		}
-		path := FileLib.cleanupPath(path)
-
-		; Get just the file name
-		SplitPath(path, fileName)
-		
-		; Function name will come from selected text (if any)
-		functionName := SelectLib.getText()
-		
-		; If no function, just use the path.
-		if(functionName = "" || functionName.contains("`n")) { ; If there's a newline then nothing was selected, we just copied the whole line.
-			ClipboardLib.setAndToast(fileName, "file name")
-			return
-		}
-		
-		; Otherwise include the function.
-		fileName .= "::" functionName "()"
-		ClipboardLib.setAndToast(fileName, "file code location")
-	}
-	
-	;---------
-	; DESCRIPTION:    Grabs the path for the current file, trims it down to the bit inside the DLG/App * folder, and puts
-	;                 it on the clipboard.
-	; PARAMETERS:
-	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
-	;---------
-	copyPathRelativeToSource(hotkeyKeys) {
-		path := ClipboardLib.getWithHotkey(hotkeyKeys)
-		if(!path) {
-			Toast.ShowError("Could not copy source-relative path", "Failed to get file path")
-			return
-		}
-		
-		path := EpicLib.convertToSourceRelativePath(path)
-		
-		ClipboardLib.setAndToast(path, "source-relative path")
+		this.getCodeLocationCore(hotkeyKeys, this.CopyLocationType_File)
 	}
 	
 	;---------
@@ -186,32 +149,11 @@ class ClipboardLib {
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
 	;---------
 	copyCodeLocationRelativeToSource(hotkeyKeys) {
-		path := ClipboardLib.getWithHotkey(hotkeyKeys)
-		if(!path) {
-			Toast.ShowError("Could not copy source-relative path", "Failed to get file path")
-			return
-		}
-		
-		path := EpicLib.convertToSourceRelativePath(path)
-		if(!path)
-			return ; convertToSourceRelativePath should have already showed an error, so no need to do another here.
-		
-		; Function name will come from selected text (if any)
-		functionName := SelectLib.getText()
-		
-		; If no function, just use the path.
-		if(functionName = "" || functionName.contains("`n")) { ; If there's a newline then nothing was selected, we just copied the whole line.
-			ClipboardLib.setAndToast(path, "source-relative path")
-			return
-		}
-		
-		; Otherwise include the function.
-		path .= "::" functionName "()"
-		ClipboardLib.setAndToast(path, "source-relative full code location")
+		this.getCodeLocationCore(hotkeyKeys, this.CopyLocationType_SourceRelative)
 	}
 
 	;---------
-	; DESCRIPTION:    Open the current file's parent folder in Explorer, using the path of the current folder.
+	; DESCRIPTION:    Open the current file's parent folder in Explorer, using the path of the current file.
 	; PARAMETERS:
 	;  copyFilePathHotkey (I,REQ) - The hotkey to copy the current file's full path in the active window.
 	;---------
@@ -318,6 +260,10 @@ class ClipboardLib {
 	
 	
 	; #PRIVATE#
+
+	static CopyLocationType_Path           := "PATH"
+	static CopyLocationType_File           := "FILE"
+	static CopyLocationType_SourceRelative := "ES_RELATIVE"
 	
 	;---------
 	; DESCRIPTION:    Force the clipboard manager to store the current value, generally useful just
@@ -328,6 +274,47 @@ class ClipboardLib {
 			Ditto.saveCurrentClipboard()
 		else ; Otherwise, just wait a second for it to register normally.
 			Sleep, 1000
+	}
+
+	;---------
+	; DESCRIPTION:    Get the current code location using the given hotkeys and any currently-selected text.
+	; PARAMETERS:
+	;  hotkeyKeys (I,REQ) - Hotkeys to copy the current path to the clipboard.
+	;  pathType   (I,REQ) - What type of path you want, from ClipboardLib.CopyLocationType_* constants.
+	;---------
+	getCodeLocationCore(hotkeyKeys, pathType) {
+		; Function name comes from selected text (if any)
+		functionName := SelectLib.getText()
+		if(functionName.contains("`n")) ; If there's a newline then nothing was selected, we just copied the whole line.
+			functionName := ""
+		if(functionName != "")
+			functionName .= "()"
+		
+		; Get path and extract the piece we actually want.
+		path := ClipboardLib.getWithHotkey(hotkeyKeys)
+		if(!path) {
+			Toast.showError("Could not get code location", "Failed to get current path")
+			return
+		}
+		Switch pathType {
+			Case this.CopyLocationType_Path:
+				label := "path code location"
+				path := FileLib.cleanupPath(path)
+			Case this.CopyLocationType_File:
+				label := "file code location"
+				SplitPath(FileLib.cleanupPath(path), path) ; Get just the file name
+			Case this.CopyLocationType_SourceRelative:
+				label := "source-relative code location"
+				path := EpicLib.convertToSourceRelativePath(path)
+				if(!path)
+					return ; convertToSourceRelativePath should have already showed an error, so no need to do another here.	
+			Default:
+				Toast.showError("Could not get code location", "Invalid pathType: """ pathType """")
+				return
+		}
+
+		location := path.appendPiece(functionName, "::") ; path or path::functionName()
+		ClipboardLib.setAndToast(location, "path code location")
 	}
 	; #END#
 }

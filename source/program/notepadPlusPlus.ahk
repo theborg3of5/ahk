@@ -5,8 +5,8 @@
 	F6:: Send, ^w   ; Close with F6 hotkey, like we do for browsers.
 	
 	; Current file/folder operations
-	!c::  ClipboardLib.copyFilePathWithHotkey(          "!c")
-	!#c:: ClipboardLib.copyPathRelativeToSource(        "!c") ; Current file path, but drop the usual EpicSource stuff up through the DLG folder.
+	!c::  ClipboardLib.copyCodeLocationPath(            "!c")
+	!#c:: ClipboardLib.copyCodeLocationFile(            "!c")
 	^!#c::ClipboardLib.copyCodeLocationRelativeToSource("!c") ; Current file + selected text as a function, but drop the usual EpicSource stuff up through the DLG folder.
 	^!f:: ClipboardLib.openActiveFileParentFolder(      "!c")
 #If

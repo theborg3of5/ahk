@@ -1,7 +1,8 @@
 ﻿#If Config.isWindowActive("VSCode")
 	; Current file/folder operations
-	!c::  ClipboardLib.copyFilePathWithHotkey(    "^+c") ; Custom hotkey for copyFilePath command
-	^!f:: ClipboardLib.openActiveFileParentFolder("^+c") ; Yes, there's a built-in command for this, but it doesn't work consistently and take forever to happen.
+	!c::  ClipboardLib.copyCodeLocationPath(      VSCode.Hotkey_CopyCurrentFile)
+	!#c:: ClipboardLib.copyCodeLocationFile(      VSCode.Hotkey_CopyCurrentFile)
+	^!f:: ClipboardLib.openActiveFileParentFolder(VSCode.Hotkey_CopyCurrentFile) ; Yes, there's a built-in command for this, but it doesn't work consistently and take forever to happen.
 
 	; Block/column selection reminder
 	!#LButton::Toast.ShowShort("Column/block select in VSCode is Alt+Shift+Click.")

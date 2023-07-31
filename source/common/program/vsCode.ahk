@@ -9,6 +9,8 @@ class VSCode {
 	
 	
 	; #INTERNAL#
+
+	static Hotkey_CopyCurrentFile := "^+c" ; Custom hotkey for copyFilePath command
 	
 	;---------
 	; DESCRIPTION:    For program scripts, swap between the program script and its matching class script.

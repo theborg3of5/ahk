@@ -4,7 +4,7 @@
 	!c::
 		Send, !fi ; File > Info
 		Sleep, 1000 ; Wait for File pane to finish appearing
-		ClipboardLib.copyFilePathWithHotkey("c") ; Copy Path
+		ClipboardLib.copyFilePath("c") ; Copy Path
 		Send, {Esc} ; Close the File pane
 	return
 	

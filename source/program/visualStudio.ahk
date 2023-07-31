@@ -1,8 +1,9 @@
 ; Visual Studio hotkeys.
 #If Config.isWindowActive("Visual Studio")
 	; Copy current file/folder paths to clipboard
-	!c::  ClipboardLib.copyFilePathWithHotkey(          VisualStudio.Hotkey_CopyCurrentFile) ; Current file
-	^!#c::ClipboardLib.copyCodeLocationRelativeToSource(VisualStudio.Hotkey_CopyCurrentFile) ; Current file, but drop the usual EpicSource stuff up through the DLG folder and add the selected text as a function.
+	!c::  ClipboardLib.copyCodeLocationPath(            VisualStudio.Hotkey_CopyCurrentFile) ; Code location (full path)
+	!#c:: ClipboardLib.copyCodeLocationFile(            VisualStudio.Hotkey_CopyCurrentFile) ; Code location (file name only)
+	^!#c::ClipboardLib.copyCodeLocationRelativeToSource(VisualStudio.Hotkey_CopyCurrentFile) ; Code location (path from source)
 	^!f:: ClipboardLib.openActiveFileParentFolder(      VisualStudio.Hotkey_CopyCurrentFile)
 	
 	; Subword navigation, because I can't use the windows key in hotkeys otherwise

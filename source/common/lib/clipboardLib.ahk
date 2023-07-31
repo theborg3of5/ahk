@@ -94,12 +94,71 @@ class ClipboardLib {
 	; PARAMETERS:
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
 	;---------
-	copyFilePathWithHotkey(hotkeyKeys) {
+	copyFilePath(hotkeyKeys) {
 		path := ClipboardLib.getWithHotkey(hotkeyKeys)
 		if(path)
 			path := FileLib.cleanupPath(path)
 		
 		ClipboardLib.setAndToast(path, "file path")
+	}
+	
+	;---------
+	; DESCRIPTION:    Grabs the path for the current file, adds any currently selected text as a function, and puts it on
+	;                 the clipboard.
+	; PARAMETERS:
+	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
+	;---------
+	copyCodeLocationPath(hotkeyKeys) {
+		path := ClipboardLib.getWithHotkey(hotkeyKeys)
+		if(!path) {
+			Toast.ShowError("Could not copy path", "Failed to get file path")
+			return
+		}
+		path := FileLib.cleanupPath(path)
+		
+		; Function name will come from selected text (if any)
+		functionName := SelectLib.getText()
+		
+		; If no function, just use the path.
+		if(functionName = "" || functionName.contains("`n")) { ; If there's a newline then nothing was selected, we just copied the whole line.
+			ClipboardLib.setAndToast(path, "path")
+			return
+		}
+		
+		; Otherwise include the function.
+		path .= "::" functionName "()"
+		ClipboardLib.setAndToast(path, "path code location")
+	}
+	
+	;---------
+	; DESCRIPTION:    Grabs the path for the current file, adds any currently selected text as a function, and puts it on
+	;                 the clipboard.
+	; PARAMETERS:
+	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
+	;---------
+	copyCodeLocationFile(hotkeyKeys) {
+		path := ClipboardLib.getWithHotkey(hotkeyKeys)
+		if(!path) {
+			Toast.ShowError("Could not copy path", "Failed to get file path")
+			return
+		}
+		path := FileLib.cleanupPath(path)
+
+		; Get just the file name
+		SplitPath(path, fileName)
+		
+		; Function name will come from selected text (if any)
+		functionName := SelectLib.getText()
+		
+		; If no function, just use the path.
+		if(functionName = "" || functionName.contains("`n")) { ; If there's a newline then nothing was selected, we just copied the whole line.
+			ClipboardLib.setAndToast(fileName, "file name")
+			return
+		}
+		
+		; Otherwise include the function.
+		fileName .= "::" functionName "()"
+		ClipboardLib.setAndToast(fileName, "file code location")
 	}
 	
 	;---------

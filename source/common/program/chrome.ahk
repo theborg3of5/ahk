@@ -26,9 +26,21 @@
 		if(!Chrome.isCurrentPageCodeSearchClient())
 			return
 		
+		; Grab selected text (if any) as function
+		functionName := SelectLib.getText()
+
 		path := "\" Chrome.getRawURL().firstBetweenStrings("&name=", "&")
 		path := StringLib.decodeFromURL(path)
-		ClipboardLib.setAndToast(path, "source-relative file path")
+
+		; If no function, just use the path.
+		if(functionName = "" || functionName.contains("`n")) { ; If there's a newline then nothing was selected, we just copied the whole line.
+			ClipboardLib.setAndToast(path, "source-relative file path")
+			return
+		}
+		
+		; Otherwise include the function.
+		path .= "::" functionName "()"
+		ClipboardLib.setAndToast(path, "source-relative code location")
 	}
 	
 	;---------
@@ -84,7 +96,7 @@
 				if(function != "")
 					title .= "::" function "()"
 			} else { ; Server routines - <tag>^<routine>, or just <routine>
-				title := function.appendPiece(file, "^")
+				title := function "^" file ; Always include the ^
 			}
 		}
 		

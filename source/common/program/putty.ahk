@@ -92,34 +92,6 @@ class Putty {
 			Run(logFilePath)
 	}
 	
-	;---------
-	; DESCRIPTION:    Send a specific command to Putty.
-	; PARAMETERS:
-	;  key (I,OPT) - A key (from puttyCommands.tls) for which command to send. If left blank, we
-	;                will prompt the user for which command to send with a Selector popup.
-	;---------
-	sendCommand(key := "") {
-		data := new Selector("puttyCommands.tls").select(key)
-		if(!data)
-			return
-		
-		command   := data["COMMAND"]
-		sendAfter := data["SEND_AFTER"]
-		ini       := stringUpper(data["INI"])
-		id        := data["ID"]
-		if(!command)
-			return
-		
-		command   := command.replaceTags({"INI":ini, "ID":id})
-		sendAfter := sendAfter.replaceTags({"INI":ini, "ID":id})
-		
-		if(!Config.isWindowActive("Putty"))
-			WindowActions.activateWindowByName("Putty")
-		
-		SendRaw, % command
-		Send, % sendAfter
-	}
-	
 	
 	; #PRIVATE#
 	

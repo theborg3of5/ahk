@@ -37,6 +37,9 @@ tl := new TableList("epicEnvironments.tls").filterOutIfColumnBlank("HSWEB_URL") 
 pt.nextStep("Generating environments XML")
 environments := ""
 For _,envData in tl.getTable() {
+	if(envData["HSWEB_URL"].contains("<LATEST_LOCAL_VERSION"))
+		Continue
+	
 	environment := EnvironmentTemplate.replaceTags(envData)
 	; Debug.popup("envData",envData, "environment",environment)
 	

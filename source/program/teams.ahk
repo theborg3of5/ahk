@@ -3,7 +3,14 @@
 	!z:: Send, ^+o ; Toggle video
 	!o:: Send, ^,  ; Settings
 	^+/::Send, ^.  ; Show hotkeys
-	^+c::copyCondensedTeamsConversation()
+	
+	^+c:: ; Code formatting
+		teamsCodeFormatText() { ; Markdown-style, just wrap it in backticks.
+			text := SelectLib.getText()
+			SendRaw, ``%text%``
+		}
+	
+	^!c::copyCondensedTeamsConversation()
 #If
 
 ;---------

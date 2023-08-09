@@ -5,7 +5,7 @@
 	!2::!5 ; Error List
 	
 	; Line operations
-	$^d::EpicStudio.deleteLinePreservingClipboard()
+	$^d::EpicStudio.deleteLine()
 	^l:: EpicStudio.duplicateLine()
 	
 	; Treat ^Enter the same as Enter - I never want to insert a line before the current one.

@@ -38,17 +38,15 @@ class EpicStudio {
 	; #INTERNAL#
 	
 	;---------
-	; DESCRIPTION:    Delete the current line in EpicStudio, but preserve the clipboard (delete line
-	;                 hotkey puts the line on the clipboard)
+	; DESCRIPTION:    Delete the current line in EpicStudio. Note that we can't use the built-in hotkey because it
+	;                 overwrites the clipboard.
 	;---------
-	deleteLinePreservingClipboard() {
-		originalClipboard := clipboardAll ; Save off the entire clipboard
-		clipboard := ""                   ; Clear the clipboard (so we can wait for the new value)
-		
-		Send, ^d    ; Delete line hotkey in EpicStudio (also unfortunately overwrites the clipboard with deleted line)
-		ClipWait, 2 ; Wait for 2 seconds for clipboard to be overwritten
-		
-		clipboard := originalClipboard    ; Restore the original clipboard. Note we're using clipboard (not clipboardAll).
+	deleteLine() {
+		Send, {End}                              ; Start from end of line
+		Send, {Home 2}                           ; Get to very start of line (including indentation)
+		Send, {Shift Down}{End}{Right}{Shift Up} ; Select whole line including its following newline
+		Send, {Delete}                           ; Delete it
+		Send, {End}                              ; Finish on the end of the following line
 	}
 	
 	;---------

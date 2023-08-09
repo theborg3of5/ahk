@@ -325,6 +325,12 @@ class OneNote {
 		Click, Right
 		WinWaitActive, % OneNote.TitleString_RightClickMenu
 		Send, i ; Copy Link
+		WinWaitNotActive, % OneNote.TitleString_RightClickMenu, , 0.5
+		
+		; Special handling: if we didn't get anything, it might be because the special paste menu item was there (where there's an option for "Ink (I)").
+		; If that's the case, try getting to the second "i" option and submit it.
+		if(WinActive(OneNote.TitleString_RightClickMenu))
+			Send, i{Enter}
 	}
 	
 	;---------

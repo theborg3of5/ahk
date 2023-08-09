@@ -39,25 +39,13 @@ openPath(folderName) {
 
 ; Send cleaned-up path (remove odd garbage from around path, switch to mapped network drives)
 !+p:: sendCleanedUpPath()
-!+#p::sendCleanedUpPath(true) ; Flip between Unix and Windows paths (Windows on clipboard > Unix output)
+!+#p::sendCleanedUpPath(true) ; Force Unix path
 sendCleanedUpPath(mapToUnix := false) {
 	path := FileLib.cleanupPath(clipboard)
 
 	if(mapToUnix)
 		path := FileLib.mapWindowsPathToUnix(path)
 
-	; isUnix := FileLib.isUnixPath(path)
-	
-	; if(!isUnix && flipUnixWindows)
-
-	; if(flipUnixWindows)
-	; 	path := isUnix ? FileLib.mapUnixPathToWindows(path) : FileLib.mapWindowsPathToUnix(path)
-	; else
-	; 	path :- FileLib.mapUnixPathToWindows(
-
-	; if(containingFolderOnly)
-	; 	path := FileLib.getParentFolder(path) "\" ; Remove last element at end, add trailing slash
-	
 	SendRaw, % path
 }
 
@@ -85,7 +73,7 @@ $^!+f::Run("http://feedly.com/i/latest") ; $ as Notepad++ highlight-all hotkey s
 	openUsualSites() {
 		Config.runProgram("Gmail")
 		Sleep, 100
-		Run("http://old.reddit.com/")
+		Run("https://lemmy.world/")
 		Sleep, 100
 		Run("http://feedly.com/i/latest")
 	}

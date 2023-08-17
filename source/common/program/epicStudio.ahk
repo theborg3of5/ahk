@@ -187,9 +187,25 @@ class EpicStudio {
 		if(EpicStudio.isDebugging())
 			return
 		
+		; If this is a unit test routine, jump straight into that mode without trying to do a search.
+		currTitle := WinGetTitle(Config.windowInfo["EpicStudio"].titleString)
+		if(currTitle.startsWith(Config.private["M_UNIT_TEST_ROUTINE_PREFIX"])) {
+			; Immediate Window option should start selected
+			Control, Check, , % EpicStudio.Debug_UnitTestModeCheckbox, A ; Check Unit Test Mode box
+			Send, !a ; Accept the window
+
+			; If the breakpoint window appears, just accept it (copying over all breakpoints)
+			breakpointWindowTitle := "Breakpoint Selection"
+			WinWaitActive, % breakpointWindowTitle
+			if(WinActive(breakpointWindowTitle))
+				Send, {Enter}
+			
+			return
+		}
+
 		WinWaitActive, % WindowLib.buildTitleString("EpicStudio.exe", "", "Attach to Process")
 		
-		this.runDebugSearch(true)
+		this.runDebugSearch(true, isUnitTest)
 	}
 	
 	;---------
@@ -230,8 +246,9 @@ class EpicStudio {
 	; #PRIVATE#
 	
 	; Debug window controls
-	static Debug_OtherProcessButton := "WindowsForms10.BUTTON.app.0.141b42a_r7_ad12" ; "Other Process" radio button
-	static Debug_OtherProcessField  := "Edit1" ; "Other Process" search field
+	static Debug_OtherProcessButton   := "WindowsForms10.BUTTON.app.0.141b42a_r7_ad12" ; "Other Process" radio button
+	static Debug_OtherProcessField    := "Edit1" ; "Other Process" search field
+	static Debug_UnitTestModeCheckbox := "WindowsForms10.BUTTON.app.0.141b42a_r7_ad11" ; "Unit Test Mode" checkbox
 	
 	;---------
 	; DESCRIPTION:    Determine whether EpicStudio is in debug mode right now.

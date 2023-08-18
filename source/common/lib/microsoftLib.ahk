@@ -6,6 +6,7 @@ class MicrosoftLib {
 	; @GROUP@ Window styles ( https://www.autohotkey.com/docs/commands/SysGet.htm#Numeric )
 	static Style_Caption     := 0xC00000   ; The window has a caption - that is, a top bar + borders (WS_CAPTION)
 	static Style_CaptionHead := 0x400000   ; Window has a top bar (WS_DLGFRAME). Included in Style_Caption.
+	static Style_Disabled    := 0x8000000  ; Window is disabled (WS_DISABLED)
 	static Style_Sizable     := 0x40000    ; Window can be sized (WS_SIZEBOX/WS_THICKFRAME).
 	static Style_Visible     := 0x10000000 ; Window is visible (WS_VISIBLE)
 	; @GROUP-END@

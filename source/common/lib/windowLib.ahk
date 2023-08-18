@@ -71,6 +71,17 @@ class WindowLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Determine whether a window is disabled.
+	; PARAMETERS:
+	;  titleString (I,OPT) - Title string that identifies your chosen window.
+	;                        Defaults to the active window ("A").
+	; RETURNS:        true/false, whether the window is disabled.
+	;---------
+	isDisabled(titleString := "A") {
+		return this.hasStyle(MicrosoftLib.Style_Disabled, titleString)
+	}
+	
+	;---------
 	; DESCRIPTION:    Check whether a window has a particular style.
 	; PARAMETERS:
 	;  style       (I,REQ) - The style to check for.
@@ -152,6 +163,17 @@ class WindowLib {
 	;---------
 	addStyle(style, titleString := "A") {
 		WinSet, Style, % "+" style, % titleString
+	}
+	
+	;---------
+	; DESCRIPTION:    Remove a style from the given window.
+	; PARAMETERS:
+	;  style       (I,REQ) - The style to remove.
+	;  titleString (I,OPT) - Title string that identifies your chosen window.
+	;                        Defaults to the active window ("A").
+	;---------
+	removeStyle(style, titleString := "A") {
+		WinSet, Style, % "-" style, % titleString
 	}
 	
 	;---------

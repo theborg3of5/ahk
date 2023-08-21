@@ -13,8 +13,6 @@
 		Sleep, 500
 		Send, ={Enter} ; Same department at prompt, if it shows up (also hits info prompt if that shows up)
 	return
-	
-	^!c::Send, % Config.private["EPIC_HSWEB_CONSOLE_HOTKEY"]
 #If
 
 ; HSWeb Debug Console

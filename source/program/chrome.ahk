@@ -5,7 +5,7 @@
 		HotkeyLib.waitForRelease() ; Presumably needed because the triggering hotkey has alt in it.
 		Send, !e ; Main hamburger menu.
 		Sleep, 100
-		Send, s  ; Settings
+		Send, g  ; Settings
 	return
 	
 	; Extensions hotkey.

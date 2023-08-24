@@ -21,6 +21,14 @@
 		Send, {Right} ; First numbering format
 		Send, {Enter} ; Accept
 	return
+
+	; Switch ^f to be find, with forwarding moved to ^+f.
+	^f::
+		Send, ^g ; Launch Find and Replace window
+		WinWaitActive, % "Find and Replace"
+		Send, !d ; Switch to Find tab
+	return
+	^+f::Send, ^f
 	
 	; Toggle dark mode (not available as a command in non-editing message popup)
 	!d::Outlook.toggleDarkMode()

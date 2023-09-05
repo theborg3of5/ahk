@@ -10,10 +10,10 @@
 	
 	; Extensions hotkey.
 	^+e::
-		Send, !e ; Main hamburger menu.
+		Send, !e       ; Main hamburger menu
 		Sleep, 100
-		Send, l  ; More tools
-		Send, e  ; Extensions
+		Send, e{Enter} ; Extensions submenu
+		Send, {Enter}  ; Manage extensions
 	return
 	
 	; Copy title, stripping off the " - Google Chrome" at the end (and other special handling for specific pages like CodeSearch).

@@ -44,3 +44,7 @@ Unknown artist (can't figure out where I got these from, if they're yours please
 		pictureWhite.ico
 	My adaptations of icons by this artist:
 		pictureRed.ico
+
+Icons8
+	Original icons:
+		ninja.png, ninjaRed.png (https://icons8.com/icon/20806/ninja)

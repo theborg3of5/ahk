@@ -5,7 +5,7 @@ SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 DetectHiddenWindows, On
 
 #Include <includeCommon>
-ScriptTrayInfo.Init("AHK: Notes helper")
+ScriptTrayInfo.Init("AHK: Notes helper", "ninja.png", "ninjaRed.png")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 
 ; #If Config.isWindowActive("OneNote")

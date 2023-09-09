@@ -12,11 +12,14 @@ global t          ; Toast object for showing the current icon
 
 
 ; Find all icons in sub-folder, track their paths in an array by number
-SetWorkingDir, %A_ScriptDir%\icons
+SetWorkingDir, %A_ScriptDir%
 iconsAry := []
 iconsAry[0] := A_IconFile ; Entry 0 is the original icon for the script
-Loop, Files, *.ico
+Loop, Files, *.*
 {
+	if(A_LoopFileName = A_ScriptName)
+		Continue
+	
 	iconsAry.push(A_LoopFileName)
 }
 

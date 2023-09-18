@@ -1,5 +1,8 @@
 ﻿; Google Chrome hotkeys.
 #If Config.isWindowActive("Chrome")
+	; Block "close all tabs" hotkey
+	^+w::return
+
 	; Options hotkey.
 	!o::
 		HotkeyLib.waitForRelease() ; Presumably needed because the triggering hotkey has alt in it.

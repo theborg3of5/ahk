@@ -18,6 +18,7 @@ class FormattedList {
 	static Format_Underscore    := "UNDERSCORE"     ; Underscore-delimited
 	static Format_NewLines      := "NEWLINE"        ; Newline-delimited
 	static Format_OneNoteColumn := "ONENOTE_COLUMN" ; OneNote columns (double-newline delimited)
+	static Format_CustomDelim   := "CUSTOM_DELIM"   ; Custom delimiter
 	; @GROUP-END@
 	
 	;---------
@@ -44,11 +45,11 @@ class FormattedList {
 	;---------
 	getList(format := "") {
 		if(!format)
-			format := this.promptForFormat("Enter OUTPUT format for list")
+			format := this.promptForFormat("Enter OUTPUT format for list", customDelim)
 		if(!format)
 			return ""
 		
-		listInFormat := this.getListInFormat(format)
+		listInFormat := this.getListInFormat(format, customDelim)
 		if(listInFormat = "")
 			Toast.ShowError("Could not get list", "Format is not gettable: " format)
 		
@@ -62,11 +63,11 @@ class FormattedList {
 	;---------
 	sendList(format := "") {
 		if(!format)
-			format := this.promptForFormat("Enter OUTPUT format for list")
+			format := this.promptForFormat("Enter OUTPUT format for list", customDelim)
 		if(!format)
 			return
 		
-		if(!this.sendListInFormat(format))
+		if(!this.sendListInFormat(format, customDelim))
 			Toast.ShowError("Could not send list", "Format is not sendable: " format)
 	}
 	
@@ -165,11 +166,14 @@ class FormattedList {
 	;---------
 	; DESCRIPTION:    Prompt the user for an input or output format for the list.
 	; PARAMETERS:
-	;  title (I,REQ) - The title to prompt the user with.
+	;  title       (I,REQ) - The title to prompt the user with.
+	;  customDelim (O,OPT) - The custom delimiter the user entered (for use with Format_CustomDelim format).
 	; RETURNS:        The chosen format, should match a value from .Format_*
 	;---------
-	promptForFormat(title) {
-		return new Selector("listFormats.tls").setTitle(title).selectGui("FORMAT")
+	promptForFormat(title, ByRef customDelim := "") {
+		data := new Selector("listFormats.tls").setTitle(title).selectGui()
+		customDelim := data["CUSTOM_DELIM"]
+		return data["FORMAT"]
 	}
 	
 	;---------
@@ -202,10 +206,11 @@ class FormattedList {
 	;---------
 	; DESCRIPTION:    Return the list in the given format.
 	; PARAMETERS:
-	;  format (I,REQ) - The format (from .Format_*) to return the list in.
+	;  format      (I,REQ) - The format (from .Format_*) to return the list in.
+	;  customDelim (I,OPT) - If format is Format_CustomDelim, the custom delimiter to use.
 	; RETURNS:        The formatted list.
 	;---------
-	getListInFormat(format) {
+	getListInFormat(format, customDelim) {
 		if(!this.listAry || !format)
 			return ""
 		
@@ -216,6 +221,7 @@ class FormattedList {
 			Case this.Format_CommasSpaced: return this.listAry.join(", ")
 			Case this.Format_Underscore:   return this.listAry.join("_")
 			Case this.Format_NewLines:     return this.listAry.join("`n")
+			Case this.Format_CustomDelim:  return this.listAry.join(customDelim)
 			Default:                       return ""
 		}
 	}
@@ -223,17 +229,18 @@ class FormattedList {
 	;---------
 	; DESCRIPTION:    Send the list to the current window in a particular format.
 	; PARAMETERS:
-	;  format (I,REQ) - The format to use (.Format_*).
+	;  format      (I,REQ) - The format to use (.Format_*).
+	;  customDelim (I,OPT) - If format is Format_CustomDelim, the custom delimiter to use.
 	; RETURNS:        true if successful, false if something went wrong (like an unsupported format).
 	;---------
-	sendListInFormat(format) {
+	sendListInFormat(format, customDelim) {
 		if(!this.listAry || !format)
 			return true
 		
 		Switch format {
 			; Stuff that doesn't involve extra keys - just Send what comes out of .getListInFormat().
-			Case this.Format_Space, this.Format_Commas, this.Format_CommasSpaced, this.Format_Underscore, this.Format_NewLines:
-				SendRaw, % this.getListInFormat(format)
+			Case this.Format_Space, this.Format_Commas, this.Format_CommasSpaced, this.Format_Underscore, this.Format_NewLines, this.Format_CustomDelim:
+				SendRaw, % this.getListInFormat(format, customDelim)
 				return true
 				
 			; OneNote columns - send a down arrow keystroke between items.

@@ -1,6 +1,7 @@
 ﻿@MinColumnWidth(350)
 
-[	NAME							ABBREV		FORMAT	]
+[	NAME							ABBREV		FORMAT				CUSTOM_DELIM	]
+(	0								0			0					1				)
 
 	Array							a			ARRAY
 	Space-delimited					s			SPACE
@@ -9,3 +10,4 @@
 	Underscore_delimited			u			UNDERSCORE
 	Newline-delimited				nl			NEWLINE
 	OneNote Column					o			ONENOTE_COLUMN
+	Custom delimiter				cust		CUSTOM_DELIM

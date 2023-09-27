@@ -75,6 +75,14 @@ Fixes / Cleanup:
 		Note: can't nest regions (but can nest other folding stuff inside of them - so keep the =-- stuff to be able to do inside)
 		Probably also switch [[]] headers to using the same?
 	☐ EMC2 info windows selector: consider adding abbreviations for windows that get filtered out by duplicates checking, to the kept result
+	☐ Formatted list handling custom delimiter
+		☐ Consider supporting a custom delimiter on input side as well?
+			☐ Would need to handle it in determineListFormat() and onward, probably have to store it off somewhere
+				☐ Maybe wrap the list array in an object with an extra property?
+		☐ Consider an augmented version for M use (so I could enter ^ and get an actual delimiter of _"^"_)
+	☐ Formatted list handling - would it make sense to move delimiters into the TLS? That way the delimiter is just passed around for everything
+		☐ Main question is whether all formats will fit into that well enough - OneNote columns (with its custom sending logic) is the biggest question
+			☐ Then again, if that one is special already does it actually matter?
 	☐ Figure out why escape-closing stops working after long enough
 		! On hold until I convert over to AHKv2 - I suspect it will resolve a lot of things like this (or eliminate the need for them).
 		Initial digging:
@@ -157,7 +165,6 @@ New Features / Scripts:
 			formattedList
 			mSnippets
 			puttyRecordEdit
-			puttyCommands
 			snapperIgnoreItems
 			phone
 			resize

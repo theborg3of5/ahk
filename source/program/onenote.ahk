@@ -97,6 +97,7 @@
 	:*X:.todo::   OneNoteTodoPage.peekOtherTodos()       ; Peek at past/future todo items
 	:*X:.itodo::  OneNoteTodoPage.insertOtherTodos()     ; Insert past/future todo items
 	:*X:.devdo::  OneNoteTodoPage.insertDevTodos()       ; Typical dev list of todo sub-items
+	:*X:.pdevdo:: OneNoteTodoPage.insertDevPRJTodos()    ; Typical dev list of todo sub-items for a project log
 	:*X:.sudo::   OneNoteTodoPage.insertDevSUTodos()     ; Typical dev SU list of todo sub-items
 	:*X:.pqado::  OneNoteTodoPage.insertPQATodos()       ; Typical PQA list of todo sub-items
 	

@@ -490,6 +490,18 @@ class StringBase {
 	appendLine(lineToAdd) {
 		return this.appendPiece(lineToAdd, "`n")
 	}
+
+	;---------
+	; DESCRIPTION:    Check whether this string (assumed to be a list delimited by delimiter) contains a specific piece
+	; PARAMETERS:
+	;  needle    (I,REQ) - The piece to check for
+	;  delimiter (I,REQ) - The list delimiter
+	; RETURNS:        true/false - does this list contain the piece?
+	;---------
+	containsPiece(needle, delimiter) {
+		containerString := delimiter this delimiter ; Wrap the whole string in the delimiter so we can just check for (delim needle delim)
+		return this.contains(delimiter needle delimiter)
+	}
 	
 	;---------
 	; DESCRIPTION:    Repeat this string a certain number of times.

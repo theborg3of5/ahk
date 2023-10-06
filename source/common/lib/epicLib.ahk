@@ -203,14 +203,14 @@ class EpicLib {
 	
 	;---------
 	; DESCRIPTION:    Check whether the given string COULD be an EMC2 record ID - these are numeric except certain DLGs
-	;                 that have prefixes (I, T, CS, etc).
+	;                 that have prefixes (I, T, CS, R, etc).
 	; PARAMETERS:
 	;  id (I,REQ) - Possible ID to evaluate.
 	; RETURNS:        true if possibly an ID, false otherwise.
 	;---------
 	couldBeEMC2ID(id) {
 		; For special DLG IDs (SUs, TDE, searches, etc.), trim off leading letter so we recognize them as a numeric ID.
-		if(id.startsWithAnyOf(["I", "T", "CS"], letter))
+		if(id.startsWithAnyOf(["I", "T", "CS", "R"], letter))
 			id := id.removeFromStart(letter)
 		
 		; IDs must be numeric (beyond the above special case).

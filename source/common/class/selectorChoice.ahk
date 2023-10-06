@@ -42,8 +42,9 @@ class SelectorChoice {
 	;                 Format:
 	;                  dataIn[LABEL] := VALUE
 	;                 Special subscripts:
-	;                  "ABBREV" - Abbreviation of choice, first one (the display one) later accessible via .displayAbbrev
-	;                  "NAME"   - Name of choice, later accessible via .name
+	;                  "ABBREV" - Abbreviation of choice, can also be an array.
+	;                             The first one (the display one) will be available via .displayAbbrev
+	;                  "NAME"   - Name of choice, later available via .name
 	; RETURNS:        Reference to new SelectorChoice object
 	;---------
 	__New(dataIn) {

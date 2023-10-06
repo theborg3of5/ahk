@@ -25,7 +25,11 @@ class Outlook {
 		titles := []
 		
 		For _,windowId in WinGet("List", Config.windowInfo["Outlook"].titleString) {
-			title := this.getMessageTitle("ahk_id " windowId)
+			idString := "ahk_id " windowId
+			if(!WindowLib.isVisible(idString)) ; Skip hidden windows
+				Continue
+
+			title := this.getMessageTitle(idString)
 			if(title)
 				titles.push(title)
 		}
@@ -104,7 +108,9 @@ class Outlook {
 		title := ControlGetText(this.ClassNN_MailSubject_View, titleString) ; Most cases this control has the subject
 		if(title = Config.private["WORK_EMAIL"]) ; The exception is editing in a popup: we need to use a different control, but the original still exists with just my email in it.
 			title := ControlGetText(this.ClassNN_MailSubject_Edit, titleString) ; Yes, we could use the window title instead if we wanted, but this doesn't give us an extra suffix.
-		
+		if(title = "") ; If that didn't turn anything up, fall back to the window title.
+			title := WinGetTitle(titleString)
+
 		return this.cleanUpTitle(title)
 	}
 	

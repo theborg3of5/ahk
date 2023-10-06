@@ -1,8 +1,7 @@
 ; Various Epic utility functions.
 
 class EpicLib {
-	; #PUBLIC#
-
+	;region ==================== PUBLIC ====================
 	;---------
 	; DESCRIPTION:    Prompt the user to choose an internal Environment using a Selector.
 	; PARAMETERS:
@@ -408,11 +407,11 @@ class EpicLib {
 		
 		return title.clean(delims)
 	}
+	;endregion ==================== PUBLIC ====================
 	
 	
-	; #PRIVATE#
-	
-	; [[ EMC2 Record Extraction/Selection ]] =--
+	;region ==================== PRIVATE ====================
+	;region EMC2 Record Extraction/Selection
 	emc2TypeSelector := "" ; Selector instance (performance cache)
 	
 	;---------
@@ -574,9 +573,12 @@ class EpicLib {
 			; ID already exists - decide whether to keep our stored index or replace it with the new one.
 			; Note: we're assuming each ID only goes with 1 INI, chances of the same ID for multiple INIs in the
 			; same string seem slim.
-			storedLn := exactsToKeep[id]
-			storedExact := exacts[storedLn]
+			storedExactLn := exactsToKeep[id] ; Line number in exacts[]
+			storedExact := exacts[storedExactLn]
 			storedTitle := storedExact.title
+
+			; Either way, combine the two window names so we use both in any eventual popups.
+			storedExact.label := this.combineWindowNames(storedExact.label, exact.label)
 			
 			; The new exact only wins if it has a shorter title (and actually has a title).
 			title := exact.title
@@ -586,6 +588,7 @@ class EpicLib {
 				Continue
 			
 			; New exact wins, overwrite the old one.
+			exact.label := storedExact.label ; Pull the combined window names from the stored exact.
 			exactsToKeep[id] := exactLn
 		}
 		
@@ -602,6 +605,21 @@ class EpicLib {
 				possiblesTemp.push(possible)
 		}
 		possibles := possiblesTemp
+	}
+
+	;---------
+	; DESCRIPTION:    Combine two forward-slash-delimited lists of window names.
+	; PARAMETERS:
+	;  windowNames1 (I,REQ) - First set of window names
+	;  windowNames2 (I,REQ) - Second set of window names
+	; RETURNS:        Combined (with no duplicates) forward-slash-delimited list of window names.
+	;---------
+	combineWindowNames(windowNames1, windowNames2) {
+		; Combine both into an array and drop duplicates.
+		combinedNames := windowNames1.split("/").appendArray(windowNames2.split("/"))
+		combinedNames.removeDuplicates()
+		
+		return combinedNames.join("/")
 	}
 	
 	;---------
@@ -639,28 +657,30 @@ class EpicLib {
 	; RETURNS:        SelectorChoice instance describing the provided record.
 	;---------
 	buildChoiceFromEMC2Record(record, ByRef abbreviations) {
-		ini        := record.ini
-		id         := record.id
-		title      := record.title
-		windowName := record.label
+		ini         := record.ini
+		id          := record.id
+		title       := record.title
+		windowNames := record.label ; Can be a single name, or a /-delimited list.
 		
 		name := ""
-		if(windowName)
-			name .= windowName " - "
+		if(windowNames)
+			name .= windowNames " - "
 		if(ini)
 			name .= ini " "
 		name .= id
 		if(title)
 			name .= " - " title
 		
-		; Abbreviation comes from window name or INI.
-		if(windowName)
-			abbrev := windowName.sub(1, 2)
-		else if(ini)
-			abbrev := ini.charAt(1)
-		else
+		; Abbreviation comes from window name(s) or INI.
+		if(windowNames) {
+			abbrev := []
+			For _, windowName in windowNames.split("/")
+				abbrev.push(StringLower(windowName.sub(1, 2)))
+		} else if(ini) {
+			abbrev := StringLower(ini.charAt(1))
+		} else {
 			abbrev := "u"
-		abbrev := StringLower(abbrev)
+		}
 		
 		; Add a counter to the abbreviation if needed.
 		while(abbreviations.contains(abbrev)) {
@@ -676,8 +696,9 @@ class EpicLib {
 		abbreviations.push(abbrev)
 		
 		return new SelectorChoice({NAME:name, ABBREV:abbrev, INI:ini, ID:id, TITLE:title})
-	} ; --=
-	; #END#
+	}
+	;endregion EMC2 Record Extraction/Selection
+	;endregion ==================== PRIVATE ====================
 }
 
 

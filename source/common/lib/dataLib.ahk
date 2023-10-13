@@ -350,7 +350,7 @@ class DataLib {
 	;                 					step direction is always calculated based on start/end (positive if begin is smaller than end, etc.)
 	;                 		end		- Any of:
 	;                 					numeric		- Just a number
-	;                 					[+|-]num	- (not supported for hyphenated ranges) start +/- a number (+5 to specify start+5)
+	;                 					[+/-]num	- (not supported for hyphenated ranges) start +/- a number (+5 to specify start+5)
 	;                 					*num		- Replace the last few digits of start with the new one (*53 will be start with its last two digits replaced with 53)
 	; PARAMETERS:
 	;  rangeString  (I,REQ) - The string representing the range.

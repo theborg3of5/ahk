@@ -16,6 +16,7 @@
 ; Main EMC2 window
 #If Config.isWindowActive("EMC2")
 	^h:: Send, ^7 ; Make ^h for server object, similar to ^g for client object.
+	^+h::Send, ^h ; Keep access to the "find and replace" hotkey.
 	$F5::+F5      ; Make F5 work everywhere by mapping it to shift + F5.
 	^+t::return   ; Block ^+t login from Hyperspace - it does very strange zoom-in things and other nonsense.
 	

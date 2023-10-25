@@ -41,6 +41,7 @@ Switch to VS Code for AHK dev:
 	☐ Get rid of updateNotepadPPSupport once I'm sure I won't need it anymore (currently shows how to parse my headers and such).
 
 Fixes / Cleanup:
+	☐ Should I just add "FileEncoding, UTF-8" to my common script as well? Is there any instance where we _don't_ want that in place?
 	☐ Would Ctrl+Alt+A make more sense as my universal "run main AHK script" hotkey?
 	☐ Consider giving my launchStartupPrograms script a universal (Windows-based) hotkey
 		☐ Or, alternatively - just bite the bullet and make the programs in question actually start up on login (and get rid of launchStartupPrograms entirely).

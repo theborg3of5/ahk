@@ -30,6 +30,7 @@
 		TrueCrypt					TrueCrypt\TrueCrypt.exe
 		Visual Studio				Microsoft Visual Studio\2022\Professional\Common7\IDE\devenv.exe
 		VMware Horizon Client		VMware\VMware Horizon View Client\vmware-view.exe
+		VSCode						Microsoft VS Code\Code.exe
 	} ~PATH.addToStart(<WINDOWS>\) {
 		Explorer					explorer.exe
 		Notepad						System32\notepad.exe
@@ -54,7 +55,6 @@
 		GrepWin						Programs\grepWin\grepWin.exe										WORK_DESKTOP
 		Slack						slack\slack.exe														HOME_DESKTOP
 		Teams						Microsoft\Teams\current\Teams.exe									WORK_DESKTOP
-		VSCode						Programs\Microsoft VS Code\Code.exe
 	}
 	
 	~PATH.addToStart(<USER_APPDATA>\) {

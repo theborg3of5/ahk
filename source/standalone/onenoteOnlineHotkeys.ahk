@@ -1,11 +1,8 @@
-#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
-SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
-DetectHiddenWindows, On
+; Click specific buttons in Onenote's online interface with hotkeys that mirror the desktop version.
 
 #Include <includeCommon>
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
+DetectHiddenWindows, On
 
 ^+=::
 	Click, 428, 279

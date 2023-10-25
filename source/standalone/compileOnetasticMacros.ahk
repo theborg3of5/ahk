@@ -1,11 +1,6 @@
-#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
-SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
-#LTrim                       ; Trim left padding from continuation sections so they can be indented nicely for code.
+; Compile Onetastic macros from piecewise XML files (for shared functions, etc.) into a full XML that can be imported directly.
 
 #Include <includeCommon>
-
 
 ; Cache of function objects for performance
 global allFunctionObjects := {} ; {name: OnetasticFunction}
@@ -33,8 +28,6 @@ global TemplateXML_Function := "
 		</Function>
 	)"
 global TemplateXML_Parameter := "<Param byref=""<PRM_IS_BYREF>"" name=""<PRM_NAME>"" />"
-
-
 
 
 ; Start in the relevant folder.

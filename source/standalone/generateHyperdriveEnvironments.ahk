@@ -1,10 +1,7 @@
 ; Generate a Hyperdrive environments file from the environments we have configured for Hyperspace.
-#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
-SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
 
 #Include <includeCommon>
+#LTrim, Off
 
 HyperdriveConfigFilePath := "C:\Program Files (x86)\Epic\Hyperdrive\Config\_" Config.private["WORK_ID"] "Config.json"
 ConfigFileTemplate := "

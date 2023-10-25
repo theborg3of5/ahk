@@ -1,14 +1,10 @@
 ; Change the volume by a specific amount and show a toast with the new volume.
 ; Applies to the local machine even if remote desktop is fullscreen.
 
-#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
-SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
+#Include <includeCommon>
+#SingleInstance, Off ; Allow multiple instances of this script, so I can quickly turn the volume up/down multiple steps.
 #NoTrayIcon
 
-#Include <includeCommon>
-
-#SingleInstance, Off ; Allow multiple instances of this script, so I can quickly turn the volume up/down multiple steps.
 changeAmount = %1% ; Input from command line - handles both numbers and numbers with a +/- at the start.
 changeAmount := DataLib.forceNumber(changeAmount)
 if(changeAmount = 0)

@@ -1,9 +1,7 @@
-#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
-SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
+; Update Notepad++ language for AHK (including syntax highlighting for my own classes/special comments and auto-complete).
 
 #Include <includeCommon>
+#LTrim, Off
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 progToast := new ProgressToast("Update Notepad++ Support").blockingOn()
 

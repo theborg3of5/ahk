@@ -1,18 +1,14 @@
 ﻿; All scripts with Unicode characters in them should be saved in UTF-8-BOM encoding, so that any Unicode characters inside them are handled appropriately (per https://www.autohotkey.com/docs/FAQ.htm#nonascii ).
 
-#NoEnv                                        ; Don't use environment (OS-level) variables.
-#SingleInstance, Force                        ; Running this script while it's already running just replaces the existing instance.
 #Warn All                                     ; Show warnings, except for:
 #Warn UseUnsetLocal, Off                      ; 	Using local variables before they're set (using default values in a function triggers this)
 #Warn UseUnsetGlobal, Off                     ; 	Using global variables before they're set
-#LTrim                                        ; Trim whitespace from left of continuation sections (so they can be indented as I wish).
 #Hotstring *                                  ; Default option: hotstrings do not require an ending character. Use *0 to turn it off for hotstrings that as needed.
 
 #Include <includeCommon>
 ScriptTrayInfo.Init("AHK: Main Script", "shellGreen.ico", "shellRed.ico")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Main)
 
-SendMode, Input                              ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir, %A_ScriptDir%                 ; Ensures a consistent starting directory.
 DetectHiddenWindows, On                      ; Do search hidden windows
 SetTitleMatchMode, % TitleMatchMode.Contains ; Match text anywhere inside window titles

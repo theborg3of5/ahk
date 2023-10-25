@@ -1,12 +1,7 @@
 ﻿; Generate and add lines for a new SU version to the environments TLS file.
 
-#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
-SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
-FileEncoding, UTF-8          ; Read files in UTF-8 encoding by default to handle special characters.
-
 #Include <includeCommon>
+FileEncoding, UTF-8 ; Read files in UTF-8 encoding by default to handle special characters.
 
 progToast := new ProgressToast("Adding environment TLS lines for new SU version").blockingOn()
 

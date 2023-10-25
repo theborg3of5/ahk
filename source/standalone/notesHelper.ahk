@@ -1,14 +1,11 @@
-﻿#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
-SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
-DetectHiddenWindows, On
+﻿; Make the superscripting I do in my notes a little more automatic.
 
 #Include <includeCommon>
 ScriptTrayInfo.Init("AHK: Notes helper", "ninja.png", "ninjaRed.png")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
+DetectHiddenWindows, On
 
-; #If Config.isWindowActive("OneNote")
+#If Config.isWindowActive("OneNote")
 
 ; Hotstrings for various people/directions
 :CB0*X?:mL::superscriptSides()

@@ -1,9 +1,5 @@
-; Based on/inspired by KDE Mover Sizer: http://corz.org/windows/software/accessories/KDE-resizing-moving-for-Windows.php
-
-#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
-SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
+; Move and resize windows using modifier keys + clicking anywhere on the window.
+; Based on/inspired by AltDrag (https://stefansundin.github.io/altdrag/) and KDE Mover Sizer (http://corz.org/windows/software/accessories/KDE-resizing-moving-for-Windows.php)
 
 #Include <includeCommon>
 ScriptTrayInfo.Init("AHK: Move and resize windows", "moveSize.ico", "moveSizeRed.ico")

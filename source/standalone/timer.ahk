@@ -1,7 +1,4 @@
-#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
-SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir, %A_ScriptDir% ; Ensures a consistent starting directory.
+; Shows a persistent timer that counts down, fades out of view, and shows on hotkey.
 
 #Include <includeCommon>
 ScriptTrayInfo.Init("AHK: Timer", "hourglass.ico")

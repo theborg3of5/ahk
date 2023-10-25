@@ -1,6 +1,4 @@
-#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
-SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
+; Dump a string representation of a client data transaction in all current-version environments to files at once.
 
 #Include <includeCommon>
 

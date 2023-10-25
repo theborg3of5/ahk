@@ -1,7 +1,3 @@
-#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
-SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
-
 #Include <includeCommon>
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 progToast := new ProgressToast("Copy source to personal folder").blockingOn()
@@ -24,7 +20,7 @@ foldersDisplay := ""
 For source, destination in folders
 	foldersDisplay := foldersDisplay.appendLine(source " => " destination)
 confirmationMessage := "
-	( LTrim
+	(
 		Are you sure you want to replace the contents of these folders?
 
 		" foldersDisplay "

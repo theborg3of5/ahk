@@ -1,8 +1,16 @@
-; [[ Standard base replacement ]] =--
+;region Basic settings for all scripts
+#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
+#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
+#LTrim                       ; Trim whitespace from left of continuation sections (so they can be indented as I wish).
+SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
+SetWorkingDir, % A_ScriptDir ; Ensures a consistent starting directory.
+;endregion Basic settings for all scripts
+
+;region Standard base replacement
 #Include %A_LineFile%\..\base
-	#Include stringBase.ahk
-	#Include arrayBase.ahk
-	#Include objectBase.ahk
+#Include stringBase.ahk
+#Include arrayBase.ahk
+#Include objectBase.ahk
 
 ; Strings (technically all non-objects, since they all share a base class - see https://www.autohotkey.com/docs/Objects.htm#Pseudo_Properties )
 "".base.base := StringBase ; Can't replace the base itself, but can give the base a new base instead.
@@ -31,7 +39,7 @@ Object(params*) {
 	; Return the new object.
 	return objectInstance
 }
-; --=
+;endregion Standard base replacement
 
 ; [[ Includes ]] =--
 #Include %A_LineFile%\..\class

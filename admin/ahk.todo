@@ -43,6 +43,7 @@ Switch to VS Code for AHK dev:
 Fixes / Cleanup:
 	☐ Update search options for AHK folders, right now test and private aren't covered by root anymore
 		☐ Could I have grepWin cover multiple folders at once somehow?
+			Seems like yes - can pipe them together (the backslash button in grepWin does this)
 	☐ Could we centralize the !w/!e hotkeys a little better?
 		☐ Maybe a have a central object where the various windows could somehow register that they get the title/EpicRecord in a certain way (BoundFunc-style)?
 		☐ Or, *even more simply*: maybe just a switch statement in the main hotkey function that checks which window is active

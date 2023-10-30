@@ -35,10 +35,13 @@ For i, dataLine in dataLines
 ;     - Write two files, run this entire script twice (downside: needless double reformatting, having to launch it twice)
 ;  - Figure out how to deal with versionShortName stuff (used only to check whether version already exists - maybe we rely on a more generic "environment(s) already exist" check instead?)
 
+insertAtLineNum := 3 ; Add new lines to top, just after various headers ; GDB TODO different for SUs
+
 ; Add new lines to environments TLS
 progToast.nextStep("Adding new TLS lines")
 ; insertTLSLines(environmentLines, newLines) ; GDB TODO for SUs merge
-environmentLines.InsertAt(newLines, 1) ; Add to top of file
+; For i, line in newLines
+environmentLines.InsertAt(insertAtLineNum, newLines*)
 
 ; Save updated TLS lines to file
 progToast.nextStep("Writing to TLS file")
@@ -46,7 +49,7 @@ FileLib.replaceFileWithString(environmentsFilePath, environmentLines.join("`r`n"
 
 ; Launch the TLS for editing
 progToast.nextStep("Launching TLS file to edit")
-Config.runProgram("VSCode", environmentsFilePath)
+Config.runProgram("VSCode", "--goto " environmentsFilePath ":" insertAtLineNum) ; Focus the line we added to
 
 progToast.finish()
 return
@@ -121,14 +124,14 @@ getThunderIDsFromShortcuts() {
 ;  normalLines      (O,REQ) - New TLS lines for normal (non-DBC) SU environments
 ;  versionShortName (O,REQ) - The "short name" for the version we're dealing with (i.e. Feb 22)
 ;---------
-generateTLSLines(dataLines, thunderIDs, ByRef newLines) { ; GDB TODO remove
-	newLines := []
+; generateTLSLines(dataLines, thunderIDs, ByRef newLines) { ; GDB TODO remove
+; 	newLines := []
 	
-	For i, line in dataLines
-		newLines.push(buildTLSLine(line, versionNum, versionShortName, thunderIDs))
+; 	For i, line in dataLines
+; 		newLines.push(buildTLSLine(line, versionNum, versionShortName, thunderIDs))
 
-	return newLines
-}
+; 	return newLines
+; }
 
 ;---------
 ; DESCRIPTION:    Build a single new TLS line for an SU environment.
@@ -146,14 +149,18 @@ buildTLSLine(dataLine, thunderIDs) {
 	shortYear  := versionShortName.afterString(" ")
 
 	data := dataLine.split("|")
-	name       := data[1]
-	abbrev     := data[2]
-	commId     := data[3]
-	denId      := data[4]
-	vdiId      := data[5]
-	versionNum := data[6]
-	webURL     := data[7]
+	envName     := data[1]
+	displayName := data[2]
+	abbrev      := data[3]
+	commId      := data[4]
+	denId       := data[5]
+	vdiId       := data[6]
+	versionNum  := data[7]
+	webURL      := data[8]
 
+	; Display name defaults to the full environment name if not given.
+	displayName := displayName ? displayName : envName
+	
 	; ; Display name is the version name + type of environment
 	; if(commId.contains("DEV"))
 	; 	typeName := "Dev"
@@ -178,7 +185,7 @@ buildTLSLine(dataLine, thunderIDs) {
 	; 	vdiSuffix := "st1" ; Dev and Stage 1 both use "stage 1" IDs
 	; vdiId := StringLower(shortMonth) shortYear vdiSuffix
 
-	return envName "`t" abbrev "`t" commId "`t" denId "`t" thunderId "`t" vdiId "`t" versionNum "`t" webURL
+	return displayName "`t" abbrev "`t" commId "`t" denId "`t" thunderId "`t" vdiId "`t" versionNum "`t" webURL
 }
 
 ; GDB TODO doc

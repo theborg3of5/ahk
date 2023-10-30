@@ -502,6 +502,17 @@ class StringBase {
 		containerString := delimiter this delimiter ; Wrap the whole string in the delimiter so we can just check for (delim needle delim)
 		return this.contains(delimiter needle delimiter)
 	}
+
+	;---------
+	; DESCRIPTION:    Return a particular item from a delimited list.
+	; PARAMETERS:
+	;  pieceNum  (I,REQ) - The numeric position of the piece we want (first piece is index 1)
+	;  delimiter (I,REQ) - The list delimiter
+	; RETURNS:        The piece at the given index.
+	;---------
+	piece(pieceNum, delimiter) {
+		return this.split(delimiter)[pieceNum]
+	}
 	
 	;---------
 	; DESCRIPTION:    Repeat this string a certain number of times.

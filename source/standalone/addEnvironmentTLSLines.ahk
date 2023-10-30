@@ -1,4 +1,4 @@
-﻿; Generate and add lines for a new SU version to the environments TLS file.
+﻿; Generate and add a line for a specific environment to the environments TLS file.
 
 #Include <includeCommon>
 FileEncoding, UTF-8 ; Read files in UTF-8 encoding by default to handle special characters.
@@ -7,43 +7,49 @@ progToast := new ProgressToast("Adding environment TLS lines for new SU version"
 
 ; Read file from database
 progToast.nextStep("Reading file from database")
-suDataLines := FileLib.fileLinesToArray(Config.path["EPIC_NFS_ASK"] "\temp\suEnvironmentData.txt").removeEmpties() ; Drop leading newline
-if(suDataLines.length() = 0) {
+dataLines := FileLib.fileLinesToArray(Config.path["EPIC_NFS_ASK"] "\temp\environmentData.txt").removeEmpties() ; Drop any leading/trailing newlines
+if(dataLines.length() = 0) {
 	Toast.BlockAndShowError("Can't add new TLS lines", "No data in database file")
 	ExitApp
 }
 
 ; Read Thunder IDs from shortcuts
 progToast.nextStep("Reading Thunder IDs from shortcuts folder")
-thunderIDs := getThunderIDsFromShortcuts()
+thunderIDs := getThunderIDsFromShortcuts() ; GDB TODO consider expanding this to search all environment shortcuts by name[s] (maybe even SUs, actually? Since shortcuts have folder prefixes?)
 
 ; Generate new TLS lines to insert
 progToast.nextStep("Generating new TLS lines")
-generateTLSLines(suDataLines, thunderIDs, dbcLines, normalLines, versionShortName)
+generateTLSLines(suDataLines, thunderIDs, dbcLines, normalLines, versionShortName) ; GDB TODO newLines
 
 ; Read in existing TLS
 progToast.nextStep("Reading in existing environments")
 environmentsFilePath := FileLib.findConfigFilePath("epicEnvironments.tls")
 environmentLines := FileLib.fileLinesToArray(environmentsFilePath)
-if(!checkIfVersionExists(environmentLines, versionShortName))
-	ExitApp
+; if(!checkIfVersionExists(environmentLines, versionShortName)) ; GDB TODO check if environment already exists and warn/confirm if so
+; 	ExitApp
 
 ; Add new lines to environments TLS
-progToast.nextStep("Inserting new TLS lines")
-insertTLSLines(environmentLines, dbcLines, normalLines)
+progToast.nextStep("Adding new TLS lines")
+environmentLines.InsertAt(newLines, 1) ; Add to top of file
 
-; Save result to file
+; Save updated TLS lines to file
 progToast.nextStep("Writing to TLS file")
 FileLib.replaceFileWithString(environmentsFilePath, environmentLines.join("`r`n"))
 
-; Reformat epicEnvironments TLS
-progToast.nextStep("Reformatting TLS file")
-Run(Config.path["AHK_SOURCE"] "\standalone\reformatAllTLFiles.ahk " environmentsFilePath)
+; Launch the TLS for editing
+progToast.nextStep("Launching TLS file to edit")
+
 
 progToast.finish()
-ExitApp
+return
 
-
+; Wait for me to move the new line to the proper place in the environments TLS and save.
+^s::
+	if(GuiLib.showConfirmationPopup("Reformat environments TLS file?")) {
+		Run(Config.path["AHK_SOURCE"] "\standalone\reformatAllTLFiles.ahk " environmentsFilePath)
+	}
+	ExitApp
+return
 
 ;---------
 ; DESCRIPTION:    Pull the environment names and corresponding Thunder IDs from the "New for Export"
@@ -53,7 +59,7 @@ ExitApp
 getThunderIDsFromShortcuts() {
 	thunderIDs := {}
 
-	namePrefix := "New for Export "
+	; namePrefix := "New for Export " ; GDB TODO clean up
 	shortcutsFolder := Config.path["USER_ROOT"] "\Thunder Shortcuts"
 	Loop, Files, %shortcutsFolder%\%namePrefix%*.lnk
 	{
@@ -88,7 +94,7 @@ generateTLSLines(suDataLines, thunderIDs, ByRef dbcLines, ByRef normalLines, ByR
 	suDataLines.removeAt(1)
 
 	For i, line in suDataLines {
-		line := buildTLSLine(line, versionNum, versionShortName, thunderIDs, isDBC)
+		line := buildTLSLine(line, versionNum, versionShortName, thunderIDs, isDBC) ; isDBC is an output
 		if(isDBC)
 			dbcLines.push(line)
 		else
@@ -104,7 +110,7 @@ generateTLSLines(suDataLines, thunderIDs, ByRef dbcLines, ByRef normalLines, ByR
 ;  versionNum       (I,REQ) - The dotted version number (i.e. 10.4)
 ;  versionShortName (I,REQ) - The version "short" name (i.e. Feb 22)
 ;  thunderIDs       (I,REQ) - Associate array of { environmentName: thunderId }
-;  isDBC            (O,REQ) - true if this is a DBC environment, false otherwise.
+;  isDBC            (O,REQ) - Set to true if this is a DBC environment, false otherwise.
 ; RETURNS:        TLS line, broken up by tabs.
 ;---------
 buildTLSLine(dataLine, versionNum, versionShortName, thunderIDs, ByRef isDBC) {

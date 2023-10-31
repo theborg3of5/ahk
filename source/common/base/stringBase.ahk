@@ -506,11 +506,11 @@ class StringBase {
 	;---------
 	; DESCRIPTION:    Return a particular item from a delimited list.
 	; PARAMETERS:
-	;  pieceNum  (I,REQ) - The numeric position of the piece we want (first piece is index 1)
 	;  delimiter (I,REQ) - The list delimiter
+	;  pieceNum  (I,REQ) - The numeric position of the piece we want (first piece is index 1)
 	; RETURNS:        The piece at the given index.
 	;---------
-	piece(pieceNum, delimiter) {
+	piece(delimiter, pieceNum) {
 		return this.split(delimiter)[pieceNum]
 	}
 	

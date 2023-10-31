@@ -11,12 +11,4 @@
 	
 	; Save as is Ctrl+S
 	^+s::Send, ^s
-	
-	; Want to close on Esc, but also just unfocus search box if that's focused.
-	Escape::
-		if(ControlGetFocus("A") = "Edit2")
-			Send, {Tab}
-		else
-			WinClose
-	return
 #IfWinActive

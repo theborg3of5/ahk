@@ -3,7 +3,7 @@
 #Include <includeCommon>
 FileEncoding, UTF-8 ; Read files in UTF-8 encoding by default to handle special characters.
 
-progToast := new ProgressToast("Adding environment TLS lines for new SU version").blockingOn()
+progToast := new ProgressToast("Adding exported environment TLS lines").blockingOn()
 
 ; Read file from database
 progToast.nextStep("Reading file from database")
@@ -12,6 +12,9 @@ if(dataLines.length() = 0) {
 	Toast.BlockAndShowError("Can't add new TLS lines", "No data in database file")
 	ExitApp
 }
+addingEntireSUVersion := areAddingEntireSUVersion(dataLines)
+if(addingEntireSUVersion)
+	progToast.endStep("Done, found all SU environments for new version")
 
 ; Load existing environments
 progToast.nextStep("Reading in existing environments")
@@ -29,19 +32,16 @@ progToast.nextStep("Generating new TLS lines")
 newLines := []
 For i, dataLine in dataLines
 	newLines.push(buildTLSLine(dataLine, thunderIDs))
-; GDB TODO bits to handle for merge with SUs logic:
-;  - Handle DBC vs normal environments separately. Ideas for how:
-;     - Separate out DBC vs. normal environments with an extra newline or special-character line (maybe just a simple "-"), call above logic once per set
-;     - Write two files, run this entire script twice (downside: needless double reformatting, having to launch it twice)
-;  - Figure out how to deal with versionShortName stuff (used only to check whether version already exists - maybe we rely on a more generic "environment(s) already exist" check instead?)
-
-insertAtLineNum := 3 ; Add new lines to top, just after various headers ; GDB TODO different for SUs
 
 ; Add new lines to environments TLS
 progToast.nextStep("Adding new TLS lines")
-; insertTLSLines(environmentLines, newLines) ; GDB TODO for SUs merge
-; For i, line in newLines
-environmentLines.InsertAt(insertAtLineNum, newLines*)
+
+if(addingEntireSUVersion) {
+	firstNewEnvLine := insertSULines(environmentLines, newLines) ; SU environments go into (multiple) special spots
+} else {
+	firstNewEnvLine := 3 ; By default we add everything at the top, just after various headers
+	environmentLines.InsertAt(firstNewEnvLine, newLines*) ; Otherwise just add them all to the top
+}
 
 ; Save updated TLS lines to file
 progToast.nextStep("Writing to TLS file")
@@ -49,7 +49,7 @@ FileLib.replaceFileWithString(environmentsFilePath, environmentLines.join("`r`n"
 
 ; Launch the TLS for editing
 progToast.nextStep("Launching TLS file to edit")
-Config.runProgram("VSCode", "--goto " environmentsFilePath ":" insertAtLineNum) ; Focus the line we added to
+Config.runProgram("VSCode", "--goto " environmentsFilePath ":" firstNewEnvLine) ; Focus the line we added to
 
 progToast.finish()
 return
@@ -63,12 +63,29 @@ return
 return
 
 ; GDB TODO doc
+areAddingEntireSUVersion(dataLines) {
+	; Adding the entire version involves adding 5 environments (3 DBC + 2 Normal)
+	if(dataLines.length() != 5)
+		return false
+	
+	; Comm ID should start with "SU" + 3-digit version number
+	commId := dataLines[1].piece("^", 4)
+	if(!commId.startsWith("SU"))
+		return false
+	if(!commId.sub(3, 3).isNum())
+		return false
+	
+	; Not 100% guaranteed, but should be good enough to say this is the case.
+	return true
+}
+
+; GDB TODO doc
 handleDuplicateEnvironments(environmentLines, dataLines) {
 	; Build an index of our new environments by commId
 	newEnvironments := {}
 	For _, line in dataLines {
-		name   := line.piece(1, "^")
-		commId := line.piece(3, "^")
+		name   := line.piece("^", 1)
+		commId := line.piece("^", 3)
 		if(commId = "")
 			Continue
 
@@ -112,26 +129,6 @@ getThunderIDsFromShortcuts() {
 
 	return thunderIDs
 }
-
-;---------
-; DESCRIPTION:    Take the environment data from the database and use it go generate new environment TLS lines.
-; PARAMETERS:
-;  dataLines        (I,REQ) - Array of lines to process:
-;                             	First line: 		versionNum|versionShortName
-;                             	All other lines: 	commId|denId|envName|webURL
-;  thunderIDs       (I,REQ) - Associate array of { environmentName: thunderId }
-;  dbcLines         (O,REQ) - New TLS lines for DBC SU environments
-;  normalLines      (O,REQ) - New TLS lines for normal (non-DBC) SU environments
-;  versionShortName (O,REQ) - The "short name" for the version we're dealing with (i.e. Feb 22)
-;---------
-; generateTLSLines(dataLines, thunderIDs, ByRef newLines) { ; GDB TODO remove
-; 	newLines := []
-	
-; 	For i, line in dataLines
-; 		newLines.push(buildTLSLine(line, versionNum, versionShortName, thunderIDs))
-
-; 	return newLines
-; }
 
 ;---------
 ; DESCRIPTION:    Build a single new TLS line for an SU environment.
@@ -207,15 +204,58 @@ checkIfVersionExists(environmentLines, versionShortName) { ; GDB TODO remove
 ;  environmentLines (IO,REQ) - Array of environment TLS lines to add to.
 ;  dbcLines          (I,REQ) - Array of new DBC SU environment TLS lines to add
 ;  normalLines       (I,REQ) - Array of new non-DBC SU environment TLS lines to add
-;---------
-insertTLSLines(ByRef environmentLines, dbcLines, normalLines) { ; GDB TODO figure out SU merge
-	headerIndex := environmentLines.contains("# ! DBC SUs")
-	For i, line in dbcLines
-		environmentLines.InsertAt(headerIndex + i, line)
-	environmentLines.InsertAt(headerIndex + dbcLines.length() + 1, "") ; Empty newline to space out from previous version
+;--------- ; GDB TODO redoc
+insertSULines(ByRef environmentLines, newLines) {
+	dbcLines    := []
+	normalLines := []
+	
+	; Separate out DBC vs normal lines (as they get inserted in different spots).
+	For i, line in newLines {
+		commId := line.piece("`t", 3)
+		if(commId.contains("NL"))
+			dbcLines.push(line)
+		else
+			normalLines.push(line)
+	}
 
-	headerIndex := environmentLines.contains("# ! Normal SUs")
-	For i, line in normalLines
-		environmentLines.InsertAt(headerIndex + i, line)
-	environmentLines.InsertAt(headerIndex + normalLines.length() + 1, "") ; Empty newline to space out from previous version
+	; Add an extra empty line to the end of each to space them out from the previous (physically following) version
+	dbcLines.push("")
+	normalLines.push("")
+	
+	dbcHeaderIndex  := environmentLines.contains("# ! DBC SUs")
+	environmentLines.InsertAt(dbcHeaderIndex + 1, dbcLines*)
+	
+	normalHeaderIndex := environmentLines.contains("# ! Normal SUs")
+	environmentLines.InsertAt(normalHeaderIndex + 1, normalLines*)
+
+	; For i, line in dbcLines
+	; 	environmentLines.InsertAt(dbcHeaderIndex + i, line)
+	; environmentLines.InsertAt(dbcHeaderIndex + dbcLines.length() + 1, "") ; Empty newline to space out from previous version
+
+	; For i, line in normalLines
+	; 	environmentLines.InsertAt(normalHeaderIndex + i, line)
+	; environmentLines.InsertAt(normalHeaderIndex + normalLines.length() + 1, "") ; Empty newline to space out from previous version
+	
+	; ; DBC environments
+	; headerIndex := environmentLines.contains("# ! DBC SUs")
+	; firstNewLineIndex := headerIndex + 1
+	; Loop, 3 {
+	; 	line := newLines.RemoveAt(1) ; Pop each value off the front of the array as we go
+	; 	environmentLines.InsertAt(headerIndex + A_Index, line)
+	; }
+	
+	; For i, line in dbcLines {
+	; 	environmentLines.InsertAt(headerIndex + i, line)
+	; 	newLines.RemoveAt(i)
+	; }
+	; environmentLines.InsertAt(headerIndex + dbcLines.length() + 1, "") ; Empty newline to space out from previous (physically following) version
+
+	; ; Normal environments
+	; headerIndex := environmentLines.contains("# ! Normal SUs")
+	; For i, line in normalLines
+	; 	environmentLines.InsertAt(headerIndex + i, line)
+	; environmentLines.InsertAt(headerIndex + normalLines.length() + 1, "") ; Empty newline to space out from previous (physically following) version
+
+
+	return dbcHeaderIndex + 1
 }

@@ -67,8 +67,8 @@ handleDuplicateEnvironments(environmentLines, dataLines) {
 	; Build an index of our new environments by commId
 	newEnvironments := {}
 	For _, line in dataLines {
-		name   := line.piece(1, "|")
-		commId := line.piece(3, "|")
+		name   := line.piece(1, "^")
+		commId := line.piece(3, "^")
 		if(commId = "")
 			Continue
 
@@ -148,7 +148,7 @@ buildTLSLine(dataLine, thunderIDs) {
 	shortMonth := versionShortName.beforeString(" ")
 	shortYear  := versionShortName.afterString(" ")
 
-	data := dataLine.split("|")
+	data := dataLine.split("^")
 	envName     := data[1]
 	displayName := data[2]
 	abbrev      := data[3]
@@ -158,32 +158,11 @@ buildTLSLine(dataLine, thunderIDs) {
 	versionNum  := data[7]
 	webURL      := data[8]
 
-	; Display name defaults to the full environment name if not given.
-	displayName := displayName ? displayName : envName
+	displayName := displayName ? displayName : envName ; Display name defaults to the full environment name ; GDB TODO may not need if I pull a nicer one on database
+	abbrev := abbrev ? abbrev : "***" ; Abbreviation defaults to a placeholder
 	
-	; ; Display name is the version name + type of environment
-	; if(commId.contains("DEV"))
-	; 	typeName := "Dev"
-	; else if(commId.contains("S1"))
-	; 	typeName := "S1"
-	; else if(commId.contains("S2"))
-	; 	typeName := "Final"
-	; name := versionShortName " " typeName
-	
-	; ; Abbreviation
-	; isDBC := commId.contains("NL")
-	; abbrev := buildAbbreviation(isDBC, typeName, shortMonth, shortYear, versionNum)
-
 	; Thunder ID (mapped from full environment name)
 	thunderId := mapNameToThunderID(thunderIDs, envName)
-	; thunderId := thunderIDs[envName] ; GDB TODO handle folder names by looking for something that ENDS WITH the environment name
-
-	; ; VDI ID
-	; if(typeName = "Final") ; Final environments have "stage 2" IDs
-	; 	vdiSuffix := "st2"
-	; else
-	; 	vdiSuffix := "st1" ; Dev and Stage 1 both use "stage 1" IDs
-	; vdiId := StringLower(shortMonth) shortYear vdiSuffix
 
 	return displayName "`t" abbrev "`t" commId "`t" denId "`t" thunderId "`t" vdiId "`t" versionNum "`t" webURL
 }
@@ -196,38 +175,6 @@ mapNameToThunderID(thunderIDs, envName) {
 	}
 
 	return "***" ; If no match, use a placeholder.
-}
-
-;---------
-; DESCRIPTION:    Build the abbreviations string for the given info.
-; PARAMETERS:
-;  isDBC      (I,REQ) - true if this is a DBC environment, false otherwise.
-;  typeName   (I,REQ) - The name of the "type" of environment, from "Dev"/"S1"/"Final"
-;  shortMonth (I,REQ) - The short name of the version month (i.e. Feb)
-;  shortYear  (I,REQ) - The two-character year of the version (i.e. 22)
-;  versionNum (I,REQ) - The dotted version number (i.e. 10.4)
-; RETURNS:        Abbreviation string (abbrev1 | abbrev2)
-;---------
-buildAbbreviation(isDBC, typeName, shortMonth, shortYear, versionNum) { ; GDB TODO move to database
-	; Prefix is determined by the type of environment, goes on both abbreviations
-	prefix := ""
-	; "d" prefix for DBC environments
-	if(isDBC)
-		prefix .= "d"
-	; "q"/"f" prefix for Stage 1/Final environments
-	if(typeName = "S1")
-		prefix .= "q"
-	else if(typeName = "Final")
-		prefix .= "f"
-	
-	; Date abbreviation is prefix + monthFirstLetter + year
-	dateAbbrev := prefix StringLower(shortMonth.charAt(1)) shortYear
-
-	; Version abbreviation is prefix + i + versionNumWithNoDot
-	versionAbbrev := prefix "i" versionNum.remove(".")
-	versionAbbrev := versionAbbrev.postPadToLength(6) ; Right-pad it so the pipes all line up
-
-	return versionAbbrev " | " dateAbbrev
 }
 
 ;---------

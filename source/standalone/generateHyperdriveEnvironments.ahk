@@ -3,7 +3,7 @@
 #Include <includeCommon>
 #LTrim, Off
 
-HyperdriveConfigFilePath := "C:\Program Files (x86)\Epic\Hyperdrive\Config\_" Config.private["WORK_ID"] "Config.json"
+HyperdriveConfigFilePath := Config.private["HYPERDRIVE_CONFIG"] "_" Config.private["WORK_ID"] "Config.json"
 ConfigFileTemplate := "
 	(
 {

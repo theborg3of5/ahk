@@ -630,16 +630,16 @@ class EpicLib {
 	; RETURNS:        Data array from Selector.selectGui().
 	;---------
 	selectFromEMC2RecordMatches(exacts, possibles) {
-		abbreviations := []
+		allAbbrevs := []
 		s := new Selector().setTitle("Select EMC2 Object to use:").addOverrideFields({1:"INI"})
 		
 		s.addSectionHeader("Full matches")
 		For _,record in exacts
-			s.addChoice(this.buildChoiceFromEMC2Record(record, abbreviations))
+			s.addChoice(this.buildChoiceFromEMC2Record(record, allAbbrevs))
 		
 		s.addSectionHeader("Potential IDs")
 		For _,record in possibles
-			s.addChoice(this.buildChoiceFromEMC2Record(record, abbreviations))
+			s.addChoice(this.buildChoiceFromEMC2Record(record, allAbbrevs))
 		
 		data := s.selectGui()
 		if(data)
@@ -651,12 +651,12 @@ class EpicLib {
 	;---------
 	; DESCRIPTION:    Turn the provided EpicRecord object into a SelectorChoice to show to the user.
 	; PARAMETERS:
-	;  record         (I,REQ) - EpicRecord object to use.
-	;  abbreviations (IO,REQ) - Array of all abbreviations so far, used to avoid duplicates. We'll add the one we generates from
+	;  record      (I,REQ) - EpicRecord object to use.
+	;  allAbbrevs (IO,REQ) - Array of all allAbbrevs so far, used to avoid duplicates. We'll add the one we generates from
 	;                           this choice.
 	; RETURNS:        SelectorChoice instance describing the provided record.
 	;---------
-	buildChoiceFromEMC2Record(record, ByRef abbreviations) {
+	buildChoiceFromEMC2Record(record, ByRef allAbbrevs) {
 		ini         := record.ini
 		id          := record.id
 		title       := record.title
@@ -675,25 +675,12 @@ class EpicLib {
 		if(windowNames) {
 			abbrev := []
 			For _, windowName in windowNames.split("/")
-				abbrev.push(StringLower(windowName.sub(1, 2)))
+				abbrev.push(DataLib.forceUniqueValue(StringLower(windowName.sub(1, 2)), allAbbrevs))
 		} else if(ini) {
-			abbrev := StringLower(ini.charAt(1))
+			abbrev := DataLib.forceUniqueValue(StringLower(ini.charAt(1)), allAbbrevs)
 		} else {
-			abbrev := "u"
+			abbrev := DataLib.forceUniqueValue("u", allAbbrevs)
 		}
-		
-		; Add a counter to the abbreviation if needed.
-		while(abbreviations.contains(abbrev)) {
-			lastChar := abbrev.charAt(0)
-			if(lastChar.isNum()) {
-				abbrev := abbrev.removeFromEnd(lastChar)
-				counter := lastChar + 1
-			} else {
-				counter := 2
-			}
-			abbrev .= counter
-		}
-		abbreviations.push(abbrev)
 		
 		return new SelectorChoice({NAME:name, ABBREV:abbrev, INI:ini, ID:id, TITLE:title})
 	}

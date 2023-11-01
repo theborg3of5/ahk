@@ -275,6 +275,30 @@ class DataLib {
 	rebaseVariadicAry(paramAry) {
 		return Array(paramAry*)
 	}
+
+	;---------
+	; DESCRIPTION:    Force the give new value to be unique as compared to all already-existing values.
+	; PARAMETERS:
+	;  newValue  (I,REQ) - The new value we want to add.
+	;  allValues (I,REQ) - An array of all values we've added so far, that the new value must be different from.
+	; NOTES:          Counter is more string-based than truly numeric (I think we'll jump from 19 to 110).
+	;---------
+	forceUniqueValue(newValue, allValues) {
+		; Add a counter to the new value if needed.
+		while(allValues.contains(newValue)) {
+			lastChar := newValue.charAt(0)
+			if(lastChar.isNum()) {
+				newValue := newValue.removeFromEnd(lastChar)
+				counter := lastChar + 1
+			} else {
+				counter := 2 ; If the last character isn't a number, just add 2 to the end.
+			}
+			newValue .= counter
+		}
+		allValues.push(newValue)
+
+		return newValue
+	}
 	
 	;---------
 	; DESCRIPTION:    Expand comma-separated lists that can optionally contain numeric ranges.

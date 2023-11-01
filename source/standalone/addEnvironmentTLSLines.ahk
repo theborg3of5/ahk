@@ -1,6 +1,7 @@
 ﻿; Generate and add a line for a specific environment to the environments TLS file.
 
 #Include <includeCommon>
+CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 FileEncoding, UTF-8 ; Read files in UTF-8 encoding by default to handle special characters.
 
 progToast := new ProgressToast("Adding exported environment TLS lines").blockingOn()
@@ -54,6 +55,7 @@ Config.runProgram("VSCode", "--goto " environmentsFilePath ":" firstNewEnvLine) 
 progToast.finish()
 return
 
+
 ; Wait for me to move the new line to the proper place in the environments TLS and save, or to just close the file.
 ~^w::
 ~^s::
@@ -62,7 +64,8 @@ return
 	ExitApp
 return
 
-; GDB TODO doc
+
+; GDB doc
 areAddingEntireSUVersion(dataLines) {
 	; Adding the entire version involves adding 5 environments (3 DBC + 2 Normal)
 	if(dataLines.length() != 5)
@@ -85,7 +88,7 @@ handleDuplicateEnvironments(environmentLines, dataLines) {
 	newEnvironments := {}
 	For _, line in dataLines {
 		name   := line.piece("^", 1)
-		commId := line.piece("^", 3)
+		commId := line.piece("^", 4)
 		if(commId = "")
 			Continue
 
@@ -111,16 +114,15 @@ handleDuplicateEnvironments(environmentLines, dataLines) {
 }
 
 ;---------
-; DESCRIPTION:    Pull the environment names and corresponding Thunder IDs from the "New for Export"
-;                 environment folder, using the Launchy shortcuts.
+; DESCRIPTION:    Pull the environment names and corresponding Thunder IDs from Launchy shortcuts.
 ; RETURNS:        Associative array: { environmentName: thunderId }
+;                 Note that environmentName is the display name in Thunder (including any folder names!)
 ;---------
 getThunderIDsFromShortcuts() {
 	thunderIDs := {}
 
-	; namePrefix := "New for Export " ; GDB TODO clean up
 	shortcutsFolder := Config.path["USER_ROOT"] "\Thunder Shortcuts"
-	Loop, Files, %shortcutsFolder%\%namePrefix%*.lnk
+	Loop, Files, %shortcutsFolder%\*.lnk
 	{
 		FileGetShortcut(A_LoopFilePath, "", "", thunderId) ; Argument is the thunder ID we need
 		name := A_LoopFileName.removeFromStart(namePrefix).removeFromEnd("." A_LoopFileExt)
@@ -227,35 +229,6 @@ insertSULines(ByRef environmentLines, newLines) {
 	
 	normalHeaderIndex := environmentLines.contains("# ! Normal SUs")
 	environmentLines.InsertAt(normalHeaderIndex + 1, normalLines*)
-
-	; For i, line in dbcLines
-	; 	environmentLines.InsertAt(dbcHeaderIndex + i, line)
-	; environmentLines.InsertAt(dbcHeaderIndex + dbcLines.length() + 1, "") ; Empty newline to space out from previous version
-
-	; For i, line in normalLines
-	; 	environmentLines.InsertAt(normalHeaderIndex + i, line)
-	; environmentLines.InsertAt(normalHeaderIndex + normalLines.length() + 1, "") ; Empty newline to space out from previous version
-	
-	; ; DBC environments
-	; headerIndex := environmentLines.contains("# ! DBC SUs")
-	; firstNewLineIndex := headerIndex + 1
-	; Loop, 3 {
-	; 	line := newLines.RemoveAt(1) ; Pop each value off the front of the array as we go
-	; 	environmentLines.InsertAt(headerIndex + A_Index, line)
-	; }
-	
-	; For i, line in dbcLines {
-	; 	environmentLines.InsertAt(headerIndex + i, line)
-	; 	newLines.RemoveAt(i)
-	; }
-	; environmentLines.InsertAt(headerIndex + dbcLines.length() + 1, "") ; Empty newline to space out from previous (physically following) version
-
-	; ; Normal environments
-	; headerIndex := environmentLines.contains("# ! Normal SUs")
-	; For i, line in normalLines
-	; 	environmentLines.InsertAt(headerIndex + i, line)
-	; environmentLines.InsertAt(headerIndex + normalLines.length() + 1, "") ; Empty newline to space out from previous (physically following) version
-
 
 	return dbcHeaderIndex + 1
 }

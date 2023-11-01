@@ -36,9 +36,8 @@ For i, dataLine in dataLines
 
 ; Add new lines to environments TLS
 progToast.nextStep("Adding new TLS lines")
-
 if(addingEntireSUVersion) {
-	firstNewEnvLine := insertSULines(environmentLines, newLines) ; SU environments go into (multiple) special spots
+	firstNewEnvLine := insertSULines(environmentLines, newLines) ; SU environments go into (multiple) specific spots
 } else {
 	firstNewEnvLine := 3 ; By default we add everything at the top, just after various headers
 	environmentLines.InsertAt(firstNewEnvLine, newLines*) ; Otherwise just add them all to the top
@@ -65,7 +64,13 @@ return
 return
 
 
-; GDB doc
+;---------
+; DESCRIPTION:    Check whether we're adding an entire SU version of environments - this affects where we insert our
+;                 new TLS lines.
+; PARAMETERS:
+;  dataLines (I,REQ) - Array of new environment data lines from the database.
+; RETURNS:        true/false
+;---------
 areAddingEntireSUVersion(dataLines) {
 	; Adding the entire version involves adding 5 environments (3 DBC + 2 Normal)
 	if(dataLines.length() != 5)
@@ -82,7 +87,14 @@ areAddingEntireSUVersion(dataLines) {
 	return true
 }
 
-; GDB TODO doc
+;---------
+; DESCRIPTION:    Check whether we're trying to add environments that already exist in the TLS file (based on their
+;                 comm IDs), and check if the user wants to continue if so.
+; PARAMETERS:
+;  environmentLines (I,REQ) - Array of existing environment TLS lines
+;  dataLines        (I,REQ) - Array of new environment data lines from the database
+; RETURNS:        true if we're good to continue, false if we should exit.
+;---------
 handleDuplicateEnvironments(environmentLines, dataLines) {
 	; Build an index of our new environments by commId
 	newEnvironments := {}
@@ -133,22 +145,19 @@ getThunderIDsFromShortcuts() {
 }
 
 ;---------
-; DESCRIPTION:    Build a single new TLS line for an SU environment.
+; DESCRIPTION:    Build a single new TLS line for an environment.
 ; PARAMETERS:
 ;  dataLine         (I,REQ) - The line of environment data from the database. Format:
-;                             	commId|denId|envName|webURL ; GDB TODO redoc
-;  versionNum       (I,REQ) - The dotted version number (i.e. 10.4)
-;  versionShortName (I,REQ) - The version "short" name (i.e. Feb 22)
-;  thunderIDs       (I,REQ) - Associate array of { environmentName: thunderId }
-;  isDBC            (O,REQ) - Set to true if this is a DBC environment, false otherwise.
-; RETURNS:        TLS line, broken up by tabs.
+;                             	envDotTwo^displayName^abbrev^commId^denId^vdiId^versionNum^webURL
+;  thunderIDs       (I,REQ) - Associative array of { environmentName: thunderId }
+; RETURNS:        TLS line, broken up by (single - reformatting happens at the end) tabs.
 ;---------
 buildTLSLine(dataLine, thunderIDs) {
 	shortMonth := versionShortName.beforeString(" ")
 	shortYear  := versionShortName.afterString(" ")
 
 	data := dataLine.split("^")
-	envName     := data[1]
+	envDotTwo   := data[1]
 	displayName := data[2]
 	abbrev      := data[3]
 	commId      := data[4]
@@ -157,19 +166,25 @@ buildTLSLine(dataLine, thunderIDs) {
 	versionNum  := data[7]
 	webURL      := data[8]
 
-	displayName := displayName ? displayName : envName ; Display name defaults to the full environment name ; GDB TODO may not need if I pull a nicer one on database
 	abbrev := abbrev ? abbrev : "***" ; Abbreviation defaults to a placeholder
 	
 	; Thunder ID (mapped from full environment name)
-	thunderId := mapNameToThunderID(thunderIDs, envName)
+	thunderId := mapNameToThunderID(thunderIDs, envDotTwo)
 
 	return displayName "`t" abbrev "`t" commId "`t" denId "`t" thunderId "`t" vdiId "`t" versionNum "`t" webURL
 }
 
-; GDB TODO doc
-mapNameToThunderID(thunderIDs, envName) {
+;---------
+; DESCRIPTION:    Map the given environment name to the first matching thunder ID.
+; PARAMETERS:
+;  thunderIDs (I,REQ) - Associative array of { environmentName: thunderId }
+;  envDotTwo  (I,REQ) - Environment name (.2) to map
+; RETURNS:        Matching thunder ID, or a placeholder (***) if none found.
+; NOTES:          We use the first match that ends with the given name (.2).
+;---------
+mapNameToThunderID(thunderIDs, envDotTwo) {
 	For name, id in thunderIDs {
-		if(name.endsWith(envName))
+		if(name.endsWith(envDotTwo))
 			return id ; Just return the first match.
 	}
 
@@ -177,44 +192,20 @@ mapNameToThunderID(thunderIDs, envName) {
 }
 
 ;---------
-; DESCRIPTION:    Check whether the version already exists in the environments TLS,
-;                 and ask the user to confirm if they still want to add it.
-; PARAMETERS:
-;  environmentLines (I,REQ) - Array of TLS lines from the current environments TLS file.
-;  versionShortName (I,REQ) - The "short" name of the version (i.e. Feb 22)
-; RETURNS:        true if we can continue, false if we need to exit
-;---------
-checkIfVersionExists(environmentLines, versionShortName) { ; GDB TODO remove
-	matchingLine := ""
-	For _, line in environmentLines {
-		line := line.withoutWhitespace()
-		if(line.startsWith(versionShortName)) {
-			matchingLine := line
-			Break
-		}
-	}
-	
-	if(matchingLine != "")
-		return GuiLib.showConfirmationPopup("SU version """ versionShortName """ already appears in TLS: `n" matchingLine "`n`nDo you want to new TLS lines anyway?")
-	
-	return true
-}
-
-;---------
-; DESCRIPTION:    Insert the new TLS lines into an array of existing lines.
+; DESCRIPTION:    Insert the new SU environment TLS lines into an array of existing lines, in their proper locations.
 ; PARAMETERS:
 ;  environmentLines (IO,REQ) - Array of environment TLS lines to add to.
-;  dbcLines          (I,REQ) - Array of new DBC SU environment TLS lines to add
-;  normalLines       (I,REQ) - Array of new non-DBC SU environment TLS lines to add
-;--------- ; GDB TODO redoc
-insertSULines(ByRef environmentLines, newLines) {
+;  newLines          (I,REQ) - Array of new environment TLS lines to add
+; RETURNS:        Line number for the first environment we inserted
+;---------
+insertSULines(environmentLines, newLines) {
 	dbcLines    := []
 	normalLines := []
 	
 	; Separate out DBC vs normal lines (as they get inserted in different spots).
 	For i, line in newLines {
 		commId := line.piece("`t", 3)
-		if(commId.contains("NL"))
+		if(commId.contains("NL")) ; Assuming all DBC environments have "NL" in their comm ID
 			dbcLines.push(line)
 		else
 			normalLines.push(line)

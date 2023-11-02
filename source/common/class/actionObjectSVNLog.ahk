@@ -88,7 +88,10 @@ class ActionObjectSVNLog extends ActionObjectBase {
 				link := Config.replacePrivateTags(link) ; Handles EPIC_SVN_DLG_URL
 				
 				dlgId := this.filter
-				link := link.replaceTags({"DLG":dlgId, "DLG_FIRST_4":dlgId.sub(1,4), "DLG_FIRST_2":dlgId.sub(1,2) }) ; DLG_FIRST_* are in EPIC_SVN_DLG_URL.
+				dlgFirst23 := dlgId.sub(1, -4) ; First 2-3 digits (all but the last 4)
+				dlgFirst45 := dlgId.sub(1, -2) ; First 4-5 digits (all but the last 2)
+
+				link := link.replaceTags({"DLG":dlgId, "DLG_FIRST_4_5":dlgFirst45, "DLG_FIRST_2_3":dlgFirst23 }) ; DLG_FIRST_* are in EPIC_SVN_DLG_URL.
 		}
 		
 		return link

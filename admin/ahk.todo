@@ -131,6 +131,7 @@ New Features / Scripts:
 		☐ Cleaner method: use a track-shadow report, like Link Magic does: https://wiki.epic.com/main/Testing_Tools/AutoHotkey/Scripts/Link_Magic#Sherlock_Support_Logs
 			Report basically returns starting/ending comment tags around the actual return value, AHK calls it via WinHTTPRequest.
 			☐ Existing "GenericShadowReport" option just takes a tag and returns the value - could use that and write the $$geti or whatever into the URL
+				Example of how to do that: F:\EPIC\AutoHotKey\Experimental\mnaeger\Lib\TrackShadow.ahk
 			☐ Or, write my own "get track record name" that uses nicer display names and defaults back to $$znam if needed
 			☐ With this, I could also expand handling for OneNote EMC2 record lines - can pull QAN + XDS + DLG and link them all (maybe even in the order I'd like based on record status!)
 		Potential use cases:

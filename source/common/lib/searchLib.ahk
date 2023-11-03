@@ -25,7 +25,7 @@ class SearchLib {
 				Case "WEB":        SearchLib.urlBase(subType, searchTerm)
 				Case "CODESEARCH": Run(SearchLib.buildCodeSearchURL(subType, searchTerm, data["TYPE_FILTER"], data["APP_KEY"]))
 				Case "GURU":       SearchLib.guru(searchTerm)
-				Case "HUBBLE":     SearchLib.hubble(searchTerm, subType)
+				Case "HUBBLE":     SearchLib.hubble(searchTerm, subType, data["APP_KEY"])
 				Case "WIKI":       SearchLib.epicWiki(searchTerm, subType) ; Epic wiki search.
 				Case "GREPWIN":    SearchLib.grepWin(searchTerm, subType)
 				Case "EVERYTHING": SearchLib.everything(searchTerm)
@@ -70,7 +70,7 @@ class SearchLib {
 		if(clientSearchSubType != "")
 			params .= "&showall=" clientSearchSubType ; Subtype of files to filter to for client searches
 		if(appKey = "DBC")
-			params .= "&apps=" Config.private["CS_APP_ID_DBC"] ; Apps to limit ownership to
+			params .= "&apps=" Config.private["DBC_APP_ID"] ; Apps to limit ownership to
 		if(nameFilter != "")
 			params .= "&namefilter=2&namefiltertext=" nameFilter ; Name filter (when searching by filename)
 		
@@ -98,9 +98,10 @@ class SearchLib {
 	; PARAMETERS:
 	;  searchTerm (I,REQ) - Text to search for
 	;  searchType (I,REQ) - Type of search (basically the tab)
+	;  appKey     (I,OPT) - The app to restrict the search to
 	; SIDE EFFECTS:   Will also add additional filters depending on the tab
 	;---------
-	hubble(searchTerm, searchType) {
+	hubble(searchTerm, searchType, appKey := "") {
 		searchTerm := SearchLib.escapeTermForRunURL(searchTerm)
 		
 		url := Config.private["HUBBLE_SEARCH_BASE"]
@@ -108,7 +109,11 @@ class SearchLib {
 		
 		if(searchType = "QAN") {
 			url := url.replaceTag("SEARCH_TYPE", "zqn")
-			url := url.replaceTag("FILTERS", Config.private["HUBBLE_QAN_ACTIVE_FILTER"])
+			
+			filters := Config.private["HUBBLE_QAN_ACTIVE_FILTER"]
+			if(appKey = "DBC")
+				filters := filters.appendPiece(",", "'PrimaryApplicationID':!*('" Config.private["DBC_APP_ID"] "')*!")
+			url := url.replaceTag("FILTERS", filters)
 		}
 		
 		Run(url)

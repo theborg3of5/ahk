@@ -54,4 +54,5 @@
 		Guru								gu					-																				-				GURU
 		DBC Wiki							dbc					DBC																				-				WIKI
 		Active QANs							q | qan				QAN																				-				HUBBLE
+		Active QANs (DBC only)				dq | dqan | qand	QAN																				-				HUBBLE			DBC
 }

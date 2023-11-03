@@ -279,7 +279,7 @@ class StringLib {
 		line := ""
 		wrappedLines := []
 		For i,word in words {
-			potentialLine := line.appendPiece(word, " ")
+			potentialLine := line.appendPiece(" ", word)
 			lineLength := potentialLine.length()
 			
 			; We haven't exceeded our desired length yet. Just add the word and move on.

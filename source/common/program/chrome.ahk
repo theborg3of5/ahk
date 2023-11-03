@@ -138,7 +138,7 @@
 					url := url.replaceRegEx("&line=(\d+)", "&line=" lineNum)
 			} else { ; Server routines - link to exact tag + routine
 				function := SelectLib.getCleanFirstLine()
-				location := function.appendPiece(file, "^")
+				location := function.appendPiece("^", file)
 				url := new ActionObjectCodeSearch(location).getLink()
 				; Debug.popup("function",function, "file",file, "location",location, "url",url)
 			}

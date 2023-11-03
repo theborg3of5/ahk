@@ -40,7 +40,7 @@ For _,envData in tl.getTable() {
 	environment := EnvironmentTemplate.replaceTags(envData)
 	; Debug.popup("envData",envData, "environment",environment)
 	
-	environments := environments.appendPiece(environment, ",`n")
+	environments := environments.appendPiece(",`n", environment)
 }
 ; Debug.popup("environments",environments)
 

@@ -222,7 +222,7 @@ processAHKClasses(ByRef ahkClasses) {
 		if(parentName != "") {
 			For _,member in ahkClasses[parentName].members {
 				tempMember := member.clone()
-				tempMember.returns := tempMember.returns.appendPiece("{" parentName "}", " ") ; Add the parent name onto inherited members "returns" value.
+				tempMember.returns := tempMember.returns.appendPiece(" ", "{" parentName "}") ; Add the parent name onto inherited members "returns" value.
 				classObj.addMemberIfNew(tempMember)
 			}
 		}
@@ -378,7 +378,7 @@ updateSyntaxXML_AHK(templatePath, ahkClasses) {
 	classGroups := {}
 	For _,classObj in ahkClasses {
 		names := classGroups[classObj.group]
-		names := names.appendPiece(classObj.name, " ")
+		names := names.appendPiece(" ", classObj.name)
 		classGroups[classObj.group] := names
 	}
 	
@@ -409,7 +409,7 @@ updateSyntaxXML_TL(templatePath, tlMembers) {
 		}
 		
 		names := memberGroups[group]
-		names := names.appendPiece(name, " ")
+		names := names.appendPiece(" ", name)
 		memberGroups[group] := names
 	}
 	

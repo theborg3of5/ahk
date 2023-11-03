@@ -159,7 +159,7 @@ class AHKCodeLib {
 		For i,param in paramsAry {
 			label := StringLib.escapeCharUsingChar(param, QUOTE, QUOTE)
 			paramPair := QUOTE label QUOTE "," param
-			paramsString := paramsString.appendPiece(paramPair, ", ")
+			paramsString := paramsString.appendPiece(", ", paramPair)
 		}
 		
 		return paramsString

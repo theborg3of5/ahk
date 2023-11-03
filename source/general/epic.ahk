@@ -163,7 +163,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			if(data["IS_GENERIC"]) 
 				message .= data["MESSAGE"] ? data["MESSAGE"] : data["NAME"] ; Generic TLPs - use add the message, defaulting to the name.
 			else ; Everything else: 
-				message .= data["NAME"].appendPiece(data["MESSAGE"], " - ") ; Everything else: add name + message.
+				message .= data["NAME"].appendPiece(" - ", data["MESSAGE"]) ; Everything else: add name + message.
 			
 			; Record field can contain DLG (no prefix), PRJ (P.), QAN (Q.), or SLG (S.) IDs.
 			if(recId.startsWith("P."))

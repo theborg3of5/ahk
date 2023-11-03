@@ -200,11 +200,11 @@ class WindowLib {
 		outStr := ""
 		
 		if(winTitle) 
-			outStr := outStr.appendPiece(winTitle, " ") ; Title has to go first since it doesn't have an "ahk_" identifier to go with it.
+			outStr := outStr.appendPiece(" ", winTitle) ; Title has to go first since it doesn't have an "ahk_" identifier to go with it.
 		if(exeName)
-			outStr := outStr.appendPiece("ahk_exe " exeName, " ")
+			outStr := outStr.appendPiece(" ", "ahk_exe " exeName)
 		if(winClass)
-			outStr := outStr.appendPiece("ahk_class " winClass, " ")
+			outStr := outStr.appendPiece(" ", "ahk_class " winClass)
 		
 		return outStr
 	}

@@ -467,11 +467,11 @@ class StringBase {
 	;---------
 	; DESCRIPTION:    Append a piece to this string with a delimiter, but only add a delimiter if it's needed.
 	; PARAMETERS:
+	;  delimiter  (I,REQ) - Delimiter to add before the new piece (if applicable).
 	;  pieceToAdd (I,REQ) - Piece to add to the string
-	;  delimiter  (I,OPT) - Delimiter to add before the new piece (if applicable). Defaults to a comma (,).
 	; RETURNS:        The updated string.
 	;---------
-	appendPiece(pieceToAdd, delimiter := ",") {
+	appendPiece(delimiter, pieceToAdd) {
 		if(pieceToAdd = "")
 			return this
 		if(this = "")
@@ -488,7 +488,7 @@ class StringBase {
 	; RETURNS:        The updated string
 	;---------
 	appendLine(lineToAdd) {
-		return this.appendPiece(lineToAdd, "`n")
+		return this.appendPiece("`n", lineToAdd)
 	}
 
 	;---------

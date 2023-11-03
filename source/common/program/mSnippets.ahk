@@ -294,7 +294,7 @@ class MSnippets {
 			if(!index.isNum())
 				index := QUOTE index QUOTE ; Wrap non-numeric indices in quotes.
 			line := lineBase.replaceTags({"ARRAY_NAME":arrayGloName, "INDEX":index, "VALUE":value})
-			aryString := aryString.appendPiece(line, newLine)
+			aryString := aryString.appendPiece(newLine, line)
 		}
 		
 		return aryString
@@ -327,7 +327,7 @@ class MSnippets {
 			if(!value.isNum())
 				value := QUOTE value QUOTE ; Wrap non-numeric values in quotes.
 			line := lineBase.replaceTags({"ARRAY_NAME":arrayGloName, "INDEX":ln, "VALUE":value})
-			aryString := aryString.appendPiece(line, newLine)
+			aryString := aryString.appendPiece(newLine, line)
 		}
 		
 		return aryString

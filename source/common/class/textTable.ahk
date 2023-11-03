@@ -307,7 +307,7 @@ class TextTable {
 			
 			For columnIndex,value in row {
 				cellString := this.formatValue(value, columnIndex)
-				rowString := rowString.appendPiece(cellString, this.columnDividerString)
+				rowString := rowString.appendPiece(this.columnDividerString, cellString)
 			}
 			
 			rowString := padding rowString padding

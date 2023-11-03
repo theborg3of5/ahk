@@ -83,7 +83,7 @@ class AutoCompleteMember {
 			if(line.startsWith("NPP-RETURNS:")) {
 				linesToDelete.push(ln)
 				retVal := line.removeFromStart("NPP-RETURNS:").withoutWhitespace()
-				this.returns := this.returns.appendPiece(retVal, " ")
+				this.returns := this.returns.appendPiece(" ", retVal)
 			}
 		}
 		; Remove the lines for the NPP-* overrides as well

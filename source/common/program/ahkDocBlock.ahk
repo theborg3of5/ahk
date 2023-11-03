@@ -151,7 +151,7 @@ class AHKDocBlock {
 			}
 			line := line.withoutWhitespace() ; Drop any extra whitespace from start/end too, so we don't end up with extra spaces in the middle of the string.
 			
-			this.unwrappedContent := this.unwrappedContent.appendPiece(line, " ")
+			this.unwrappedContent := this.unwrappedContent.appendPiece(" ", line)
 		}
 	}
 	

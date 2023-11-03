@@ -27,7 +27,7 @@ Loop, Files, % "*.bits"
 			Continue
 		
 		line := "(" line ")" ; Wrap each bit in parens
-		regexString := regexString.appendPiece(line,"|")
+		regexString := regexString.appendPiece("|", line)
 	}
 	
 	; Generate the name of the compiled regex file from the base name of the original

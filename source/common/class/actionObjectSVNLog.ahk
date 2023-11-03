@@ -14,8 +14,7 @@
 */ ; --=
 
 class ActionObjectSVNLog extends ActionObjectBase {
-	; #PUBLIC#
-	
+	;region ==================== PUBLIC ====================
 	ActionObjectType := ActionObject.Type_SVNLog
 	
 	; @GROUP@ Filter types
@@ -84,17 +83,48 @@ class ActionObjectSVNLog extends ActionObjectBase {
 				link := link.replaceTag("REVISION", this.filter)
 				
 			Case this.FilterType_DLG:
-				link := "tsvncmd:command:log?path:<EPIC_SVN_DLG_URL>?limit:100000?findstring:DLG=<DLG>?findtype:1"
-				link := Config.replacePrivateTags(link) ; Handles EPIC_SVN_DLG_URL
-				
 				dlgId := this.filter
-				dlgFirst23 := dlgId.sub(1, -4) ; First 2-3 digits (all but the last 4)
-				dlgFirst45 := dlgId.sub(1, -2) ; First 4-5 digits (all but the last 2)
-
-				link := link.replaceTags({"DLG":dlgId, "DLG_FIRST_4_5":dlgFirst45, "DLG_FIRST_2_3":dlgFirst23 }) ; DLG_FIRST_* are in EPIC_SVN_DLG_URL.
+				link := "tsvncmd:command:log?path:" this.generateDLGBranchURL(dlgId) "?limit:100000?findstring:DLG=" dlgId "?findtype:1"
 		}
 		
 		return link
 	}
-	; #END#
+	;endregion ==================== PUBLIC ====================
+
+	;region ==================== PRIVATE ====================
+	;---------
+	; DESCRIPTION:    Generate the branch URL for the given DLG.
+	; PARAMETERS:
+	;  dlgId (I,REQ) - DLG ID
+	; RETURNS:        Branch URL, to the top level for the DLG (includes all rebranches below that)
+	;---------
+	generateDLGBranchURL(dlgId) {
+		isSU := dlgId.startsWith("I")
+
+		; Version prefix
+		if(isSU) {
+			if(dlgId.startsWith("I10"))
+				versionNum := dlgId.sub(2, 3) ; 3-digit version
+			else
+				versionNum := dlgId.sub(2, 2) ; 2-digit version
+			version := "I" versionNum
+			dlgNum := dlgId.removeFromStart(version) ; SUs' intermediate folders don't include the version prefix
+		} else {
+			version := "0" ; Current version just uses a 0
+		}
+		
+		; The intermediate folders are different sub-pieces of the DLG number (the DLG ID without any SU version prefix).
+		dlgNum := dlgId.removeFromStart(version) ; Cheating slightly here by assuming current-version DLGs won't start with a 0
+		dlgNumString := dlgNum ; Doing math on this below turns it into a number, so make a copy that retains any leading zeros.
+		last4 := (dlgNum // 10000) * 10000 ; DLG number with last 4 digits as zero
+		last2 := (dlgNum // 100) * 100     ; DLG number with last 2 digits as zero
+
+		if(isSU)
+			urlBase := Config.private["EPIC_SVN_DLG_BRANCH_URL_BASE_SU"]
+		else
+			urlBase := Config.private["EPIC_SVN_DLG_BRANCH_URL_BASE"]
+
+		return urlBase.replaceTags({VERSION:version, NUM_LAST_4:last4, NUM_LAST_2:last2, NUM:dlgNumString, DLG:dlgId})
+	}
+	;endregion ==================== PRIVATE ====================
 }

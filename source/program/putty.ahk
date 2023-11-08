@@ -34,6 +34,9 @@
 	
 	; Open up the current log file.
 	^+o::Putty.openCurrentLogFile()
+
+	; Send the clipboard as an (appropriately escaped) string.
+	:X:.clip::SendRaw, % EpicStudio.getClipboardAsMString()
 	
 	; Send specific commands
 	^z:: SendRaw, % Config.private["EPIC_LOOKITT"] "`n"

@@ -28,7 +28,7 @@
 			"*/ ; --=",
 			"",
 			"class ${className} {",
-			"\t; #PUBLIC#",
+			"\t;region ==================== PUBLIC ====================",
 			"\t",
 			"\t;  - Constants",
 			"\t;  - staticMembers",
@@ -38,7 +38,9 @@
 			"\t;  - otherFunctions",
 			"\t",
 			"\t",
-			"\t; #INTERNAL#",
+			"\t;endregion ================= PUBLIC ====================",
+			"\t",
+			"\t;region ==================== INTERNAL ==================",
 			"\t",
 			"\t;  - Constants",
 			"\t;  - staticMembers",
@@ -46,7 +48,9 @@
 			"\t;  - functions",
 			"\t",
 			"\t",
-			"\t; #PRIVATE#",
+			"\t;endregion ================= INTERNAL ==================",
+			"\t",
+			"\t;region ==================== PRIVATE ===================",
 			"\t",
 			"\t;  - Constants",
 			"\t;  - staticMembers",
@@ -54,7 +58,9 @@
 			"\t;  - functions",
 			"\t",
 			"\t",
-			"\t; #DEBUG#",
+			"\t;endregion ================= PRIVATE ===================",
+			"\t",
+			"\t;region ==================== DEBUG =====================",
 			"\t",
 			"\tDebug_TypeName() {",
 			"\t\treturn \"${className}\"",
@@ -63,7 +69,7 @@
 			"\tDebug_ToString(ByRef table) {",
 			"\t\ttable.addLine(\"GDB TODO\", this.GDBTODO)",
 			"\t}",
-			"\t; #END#",
+			"\t;endregion ================= DEBUG =====================",
 			"}",
 			""
 		],
@@ -107,6 +113,14 @@
 			";endregion ${1:regionName}"
 		],
 		"description": "Insert a collapsible region."
+	},
+	"Scope region": {
+		"prefix": "scope",
+		"body": [
+			";region ==================== ${1|PUBLIC ====================,PRIVATE ===================,INTERNAL ==================,DEBUG =====================|}",
+			";endregion ================= ${1}"
+		],
+		"description": "Insert a collapsible region to denote scope."
 	},
 	"Switch select case": {
 		"prefix": "switch",

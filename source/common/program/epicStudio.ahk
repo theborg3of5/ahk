@@ -1,7 +1,6 @@
 #Include mSnippets.ahk
 class EpicStudio {
-	; #PUBLIC#
-
+	;region ==================== PUBLIC ====================
 	;---------
 	; DESCRIPTION:    Open the DLG found in the active window's title in EpicStudio.
 	;---------
@@ -33,10 +32,18 @@ class EpicStudio {
 		
 		t.close()
 	}
-
 	
-	; #INTERNAL#
-	
+	getClipboardAsMString() {
+		clip := clipboard
+		
+		QUOTE := """" ; Double-quote character
+		clip := StringLib.escapeCharUsingChar(clip, QUOTE, QUOTE)
+		
+		return QUOTE clip QUOTE
+	}
+	;endregion ================= PUBLIC ====================
+		
+	;region ==================== INTERNAL ==================
 	;---------
 	; DESCRIPTION:    Delete the current line in EpicStudio. Note that we can't use the built-in hotkey because it
 	;                 overwrites the clipboard.
@@ -78,7 +85,7 @@ class EpicStudio {
 		; If we got "routine^routine", just return "^routine".
 		if(codeLocation.beforeString("^") = codeLocation.afterString("^"))
 			codeLocation := "^" codeLocation.afterString("^")
-
+		
 		; Set the clipboard value to our new (plain-text, no link) code location and notify the user.
 		ClipboardLib.setAndToast(codeLocation, "cleaned code location")
 	}
@@ -127,12 +134,12 @@ class EpicStudio {
 		; Non-empty line: add a new line and select it
 		if(line != "" && line != ";") {
 			Send, {End}{Enter}
-			Send, {Shift Down}{Home}{Shift Up}
-		}
-
-		Send, `;
-		Send, {Space}REVISIONS:{Enter}{Space}
-		Send, ^8 ; Normal contact comment hotkey for EpicStudio
+		Send, {Shift Down}{Home}{Shift Up}
+	}
+	
+	Send, `;
+	Send, {Space}REVISIONS:{Enter}{Space}
+	Send, ^8 ; Normal contact comment hotkey for EpicStudio
 	}
 	
 	;---------
@@ -153,30 +160,30 @@ class EpicStudio {
 		}
 		if(!line.startsWith(";")) {
 			Toast.ShowError("Could not create border", "Current line is not a comment")
-			return
-		}
-
-		; Ask the user how wide they want the "box" to be
-		width := InputBox("Enter comment box width", "How many characters wide do you want the borders to be?`n`nLeave blank to match (padded) width of text.")
-		Sleep, 100 ; Make sure the InputBox has fully closed and EpicStudio has focus again.
-		
-		; Get content of line, re-indent as needed
-		content := line.removeFromStart(";").withoutWhitespace()
-		if(width = "") {
-			width := content.length() + 2 ; 1 char of overhang on each side
-			indent := " "
-		} else {
-			indent := StringLib.duplicate(" ", (width - content.length()) // 2)
-		}
-		newLine := ";" indent content
-		
-		; Generate border
-		borderLine := ";" StringLib.duplicate(borderChar, width)
-		
-		; Generate new lines and replace the original
-		newLines := borderLine "`n`t" newLine "`n`t" borderLine
-		Send, {Shift Down}{Home}{Shift Up}
-		ClipboardLib.send(newLines)
+		return
+	}
+	
+	; Ask the user how wide they want the "box" to be
+	width := InputBox("Enter comment box width", "How many characters wide do you want the borders to be?`n`nLeave blank to match (padded) width of text.")
+	Sleep, 100 ; Make sure the InputBox has fully closed and EpicStudio has focus again.
+	
+	; Get content of line, re-indent as needed
+	content := line.removeFromStart(";").withoutWhitespace()
+	if(width = "") {
+		width := content.length() + 2 ; 1 char of overhang on each side
+		indent := " "
+	} else {
+		indent := StringLib.duplicate(" ", (width - content.length()) // 2)
+	}
+	newLine := ";" indent content
+	
+	; Generate border
+	borderLine := ";" StringLib.duplicate(borderChar, width)
+	
+	; Generate new lines and replace the original
+	newLines := borderLine "`n`t" newLine "`n`t" borderLine
+	Send, {Shift Down}{Home}{Shift Up}
+	ClipboardLib.send(newLines)
 	}
 	
 	;---------
@@ -193,7 +200,7 @@ class EpicStudio {
 			; Immediate Window option should start selected
 			Control, Check, , % EpicStudio.Debug_UnitTestModeCheckbox, A ; Check Unit Test Mode box
 			Send, !a ; Accept the window
-
+			
 			; If the breakpoint window appears, just accept it (copying over all breakpoints)
 			breakpointWindowTitle := "Breakpoint Selection"
 			WinWaitActive, % breakpointWindowTitle
@@ -229,7 +236,7 @@ class EpicStudio {
 			ControlSend, % filterField, {Enter}, A
 			return
 		}
-
+		
 		; Otherwise, cycle thru our normal filters.
 		filters := ["user:" Config.private["WORK_ID"], "user:" Config.private["WORK_USERNAME"]] ; Different environments use different values for whatever reason.
 		currIndex := filters.contains(currentFilter)
@@ -240,11 +247,9 @@ class EpicStudio {
 		; Submit the search.
 		ControlSend, % filterField, {Enter}, A
 	}
-	
-	
-	
-	; #PRIVATE#
-	
+	;endregion ================= INTERNAL ==================
+		
+	;region ==================== PRIVATE ===================
 	; Debug window controls
 	static Debug_OtherProcessButton   := "WindowsForms10.BUTTON.app.0.141b42a_r7_ad12" ; "Other Process" radio button
 	static Debug_OtherProcessField    := "Edit1" ; "Other Process" search field
@@ -287,5 +292,5 @@ class EpicStudio {
 		Toast.ShowError("Failed to get code location")
 		return false
 	}
-	; #END#
+	;endregion ================= PRIVATE ===================
 }

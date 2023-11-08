@@ -1,13 +1,7 @@
 ; Functions related to editing AHK scripts and their documentation.
 
 class AHKCodeLib {
-	; #PUBLIC#
-	
-	;---------
-	; DESCRIPTION:    How many spaces are treated as a tab for indentation purposes.
-	;---------
-	static SPACES_PER_TAB := 3
-	
+	;region ==================== PUBLIC ====================
 	;---------
 	; DESCRIPTION:    All of the keywords possibly contained in the documentation header, in the order they should be shown in.
 	; NOTES:          NPP-* and GROUP are used for auto-completion/syntax highlighting generation
@@ -193,10 +187,9 @@ class AHKCodeLib {
 		
 		return paramsAry.join(",")
 	}
+	;endregion ================= PUBLIC ====================
 	
-	
-	; #PRIVATE#
-	
+	;region ==================== PRIVATE ===================
 	static HeaderKeywordIndentStop := 18 ; How many characters over we should be from the start of the line (after indentation) for header values.
 	
 	; The structure for documenting a single parameter
@@ -282,6 +275,5 @@ class AHKCodeLib {
 		
 		return paramsAry
 	}
-	
-	; #END#
+	;endregion ================= PRIVATE ===================
 }

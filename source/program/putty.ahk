@@ -38,7 +38,7 @@
 	; Send the clipboard as an (appropriately escaped) string.
 	:X:.clip::SendRaw, % EpicStudio.getClipboardAsMString()
 	
-	; Send specific commands
+	; Send specific commands (extra spaces between quotes are purely for readability)
 	^z:: SendRaw, % Config.private["EPIC_LOOKITT"] "`n"
 	^e:: SendRaw, % "e " ; Chronicles
 	^s:: SendRaw, % ";set"   "`n"

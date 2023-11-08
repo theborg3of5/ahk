@@ -65,6 +65,8 @@
 	:X:gdbpbreak::ClipboardLib.send(Config.private["M_DEBUG_BREAK_PATIENT"])
 	:X:gdbsnap::  ClipboardLib.send(Config.private["M_DEBUG_SNAP_START"])
 	:X:.clip::    ClipboardLib.send(EpicStudio.getClipboardAsMString())
+
+	^+Enter::new AHKDocBlock().rewrapSelection(EpicStudio.TabWidth)
 	
 	; Debug, auto-search for workstation ID.
 	~F5::EpicStudio.launchDebug()

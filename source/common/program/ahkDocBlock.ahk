@@ -9,8 +9,7 @@
 */ ; --=
 
 class AHKDocBlock {
-	; #PUBLIC#
-	
+	;region ==================== PUBLIC ====================
 	;---------
 	; DESCRIPTION:    Create a new representation of a block of documentation.
 	; PARAMETERS:
@@ -34,10 +33,14 @@ class AHKDocBlock {
 	;---------
 	; DESCRIPTION:    Wrap the content and recombine it with our various bits of indentation to create our finished doc string.
 	; RETURNS:        The wrapped and indented string for this documentation block
+	; PARAMETERS:
+	;  tabWidth (I,REQ) - The width that tabs should be considered.
 	;---------
-	getWrappedString() {
-		wrappedContentLines := StringLib.wrapToWidth(this.unwrappedContent, 100)
+	getWrappedString(tabWidth) {
+		leadingWidth := (this.outerRest this.innerRest).width(tabWidth) ; Use the "rest" instead of the first line as the first line may not include indentation.
+		wrappedContentLines := StringLib.wrapToWidth(this.unwrappedContent, 100 - leadingWidth, tabWidth)
 		
+		; Rebuild each line with its leading indentation and keywords.
 		docString := ""
 		For i,line in wrappedContentLines {
 			if(i = 1)
@@ -53,15 +56,21 @@ class AHKDocBlock {
 	;---------
 	; DESCRIPTION:    Replace the selected documentation block (and potentially a little of its surroundings) with a
 	;                 rewrapped version of the same.
+	; PARAMETERS:
+	;  tabWidth (I,REQ) - The width that tabs should be considered.
 	;---------
-	rewrapSelection() {
+	rewrapSelection(tabWidth) {
 		this.initFromSelection()
-		ClipboardLib.send(this.getWrappedString())
+		Sleep, 500 ; Wait a tick to make sure the program we're copying from doesn't get mad about us using the clipboard a second time so quickly.
+		ClipboardLib.send(this.getWrappedString(tabWidth))
 	}
+	;endregion ================= PUBLIC ====================
 	
-	
-	; #PRIVATE#
-	
+	;region ==================== PRIVATE ===================
+	COMMENT_CHAR := ";" ; The comment character that's assumed to precede each line of the documentation in question.
+	WRAP_WIDTH := 100 ; The max width we want to (try and) keep all headers within.
+
+	tabWidth         := "" ; How many characters wide a tab should be considered.
 	outerFirst       := "" ; Tabs, semicolon, leading spaces for first line. Tracked separately for multi-line cases where first-line indent not selected, so we don't duplicate it.
 	outerRest        := "" ; Tabs, semicolon, leading spaces for other lines.
 	innerFirst       := "" ; Keyword + spaces for first line.
@@ -118,7 +127,7 @@ class AHKDocBlock {
 		docLines := docString.split("`n", "`r")
 		
 		; Get the outer chunk from the first line.
-		outerNeedle := "^\t*;\s+" ; Optional leading indent, comment character (;), spaces.
+		outerNeedle := "^\t*" this.COMMENT_CHAR "\s+" ; Optional leading indent, comment character, spaces.
 		docLines[1].matchesRegEx(outerNeedle, match)
 		this.outerFirst := match
 		
@@ -131,7 +140,7 @@ class AHKDocBlock {
 		}
 		
 		; The inner bit for the first line will be any header-specific keywords (like DESCRIPTION:) and their following whitespace.
-		this.innerFirst := this.getHeaderPrefix(docLines)
+		this.innerFirst := this.getKeywordStartChunk(docLines)
 		
 		; The rest of the lines just need to indent to match the first so the content continues in the same spot horizontally.
 		this.innerRest := StringLib.getSpaces(this.innerFirst.length())
@@ -160,14 +169,14 @@ class AHKDocBlock {
 	;                 DESCRIPTION: or parameter lines).
 	; PARAMETERS:
 	;  docLines (I,REQ) - Array of lines representing the documentation block
-	; RETURNS:        The found prefix, or "" if one not found
+	; RETURNS:        The found keyword (header keyword or parameter start), or "" if one not found
 	;---------
-	getHeaderPrefix(docLines) {
+	getKeywordStartChunk(docLines) {
 		; The prefix in question will only be on the first line, after the outer indent, so we can trim our search to just that.
 		docLine := docLines[1].removeFromStart(this.outerFirst)
 		
 		; Header keyword lines
-		needle := "^(" AHKCodeLib.HeaderKeywords.join("|") "):\s+" ; Starts with (^) any of the keywords followed by a colon (:) and 1+ spaces
+		needle := "^([A-Z\s]+):\s+" ; Starts with (^) any all-caps words (including spaces) followed by a colon (:) and 1+ spaces
 		if(docLine.matchesRegEx(needle, match))
 			return match
 		
@@ -177,10 +186,9 @@ class AHKDocBlock {
 		
 		return ""
 	}
+	;endregion ================= PRIVATE ===================
 	
-	
-	; #DEBUG#
-	
+	;region ==================== DEBUG =====================
 	Debug_ToString(ByRef table) {
 		table.addLine("Outer indent, first line",          this.outerFirst)
 		table.addLine("Outer indent, other lines",         this.outerRest)
@@ -188,7 +196,7 @@ class AHKDocBlock {
 		table.addLine("Inner indent, other lines",         this.innerRest)
 		table.addLine("Unwrapped content",                 this.unwrappedContent)
 	}
-	; #END#
+	;endregion ================= DEBUG =====================
 }
 
 ; Test cases: =--

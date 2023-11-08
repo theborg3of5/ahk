@@ -1,6 +1,12 @@
 #Include mSnippets.ahk
 class EpicStudio {
 	;region ==================== PUBLIC ====================
+	
+	;---------
+	; DESCRIPTION:    How many characters wide a tab is in EpicStudio.
+	;---------
+	static TabWidth := 4
+
 	;---------
 	; DESCRIPTION:    Open the DLG found in the active window's title in EpicStudio.
 	;---------

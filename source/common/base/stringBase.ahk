@@ -19,6 +19,25 @@ class StringBase {
 	length() {
 		return StrLen(this)
 	}
+
+	;---------
+	; DESCRIPTION:    How wide (in characters) the given string is, including any leading/trailing
+	;                 whitespace. Tabs are treated as some (configurable) number of spaces. If the string
+	;                 contains any newlines, they are treated as the start of a new line and we'll return
+	;                 the character length of the longest line.
+	; PARAMETERS:
+	;  tabWidth (I,OPT) - How many characters wide a tab should be considered.
+	; RETURNS:        The width of the string (max of any line).
+	;---------
+	width(tabWidth := 4) {
+		widestWidth := 0
+		For _, line in this.split("`n") {
+			width := line.replace("`t", StringLib.getSpaces(tabWidth)).length()
+			DataLib.updateMax(widestWidth, width)
+		}
+
+		return widestWidth
+	}
 	
 	;---------
 	; DESCRIPTION:    Wrapper for whether a string is alphabetic.

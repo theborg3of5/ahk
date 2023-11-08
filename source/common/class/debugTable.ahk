@@ -84,6 +84,11 @@
 
 class DebugTable extends TextTable {
 	; #PUBLIC#
+
+	;---------
+	; DESCRIPTION:    How many characters wide a tab should be considered.
+	;---------
+	static TabWidth := 4
 	
 	;---------
 	; DESCRIPTION:    Create a new DebugTable instance.
@@ -192,13 +197,11 @@ class DebugTable extends TextTable {
 	; RETURNS:        The converted string
 	;---------
 	convertWhitespace(value) {
-		TAB_WIDTH := 3
-
 		; Replace tabs with an arrow made up of width-1 characters (same width as tabs in Notepad++), so it's
 		; the desired width but more visible and doesn't mess with the layout.
 		line := "―" ; U+0x2015
 		head := "→" ; U+0x2192
-		arrow := StringLib.duplicate(line, TAB_WIDTH - 1) head
+		arrow := StringLib.duplicate(line, this.TabWidth - 1) head
 		value := value.replace(A_Tab, arrow)
 		
 		; Replace leading, trailing, and more than 1 space in a row with dots so they're more visible.

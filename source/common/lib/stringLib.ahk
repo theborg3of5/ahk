@@ -268,11 +268,12 @@ class StringLib {
 	; PARAMETERS:
 	;  inString             (I,REQ) - The string (without newlines) to wrap.
 	;  goalWidth            (I,REQ) - The width (in characters) that we should shoot for.
+	;  tabWidth             (I,REQ) - How many characters wide any tabs we encounter should be considered.
 	;  allowedFinalOverhang (I,OPT) - The number of characters of overhang that's allowed on the final line, to avoid an additional line
 	;                                 containing only a single short word.
 	; RETURNS:        The same string, wrapped to the goal width with newlines.
 	;---------
-	wrapToWidth(inString, goalWidth, allowedFinalOverhang := 25) {
+	wrapToWidth(inString, goalWidth, tabWidth, allowedFinalOverhang := 25) {
 		maxLastLineWidth := goalWidth + allowedFinalOverhang
 		words := inString.split(" ")
 		
@@ -280,7 +281,7 @@ class StringLib {
 		wrappedLines := []
 		For i,word in words {
 			potentialLine := line.appendPiece(" ", word)
-			lineLength := potentialLine.length()
+			lineLength := potentialLine.width()
 			
 			; We haven't exceeded our desired length yet. Just add the word and move on.
 			if(lineLength <= goalWidth) {

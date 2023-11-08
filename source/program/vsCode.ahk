@@ -11,7 +11,7 @@
 	Pause::VSCode.toggleProgramAndClass()
 	
 	; Redo the indentation for the selected documentation lines
-	^+Enter::new AHKDocBlock().rewrapSelection()
+	^+Enter::new AHKDocBlock().rewrapSelection(VSCode.TabWidth)
 	
 	; AHK debug strings
 	:X:dbpop::	VSCode.sendAHKDebugCodeString("Debug.popup",      clipboard) ; Debug popup

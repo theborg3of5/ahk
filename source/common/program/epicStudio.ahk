@@ -1,4 +1,5 @@
 #Include mSnippets.ahk
+#Include headerDocBlock.ahk
 class EpicStudio {
 	;region ==================== PUBLIC ====================
 	

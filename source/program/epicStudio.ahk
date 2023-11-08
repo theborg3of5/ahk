@@ -66,7 +66,8 @@
 	:X:gdbsnap::  ClipboardLib.send(Config.private["M_DEBUG_SNAP_START"])
 	:X:.clip::    ClipboardLib.send(EpicStudio.getClipboardAsMString())
 
-	^+Enter::new AHKDocBlock().rewrapSelection(EpicStudio.TabWidth)
+	; Redo the indentation for the selected documentation lines
+	^+Enter::new HeaderDocBlock().rewrapSelection(EpicStudio.TabWidth)
 	
 	; Debug, auto-search for workstation ID.
 	~F5::EpicStudio.launchDebug()

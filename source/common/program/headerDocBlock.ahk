@@ -1,14 +1,14 @@
 /* Class representing a block of documentation in AHK code, in Notepad++. =--
 	
 	Example Usage
-;		block := new AHKDocBlock().initFromSelection()
+;		block := new HeaderDocBlock().initFromSelection()
 ;		wrappedDoc := block.getWrappedString() ; Wrapped version of the selected documentation block
 
-;		new AHKDocBlock().rewrapSelection() ; Selects whole line if needed, then redoes wrapping, maintaining indentation appropriately
+;		new HeaderDocBlock().rewrapSelection() ; Selects whole line if needed, then redoes wrapping, maintaining indentation appropriately
 	
 */ ; --=
 
-class AHKDocBlock {
+class HeaderDocBlock {
 	;region ==================== PUBLIC ====================
 	;---------
 	; DESCRIPTION:    Create a new representation of a block of documentation.

@@ -1,4 +1,4 @@
-﻿#Include ahkDocBlock.ahk
+﻿#Include headerDocBlock.ahk
 class VSCode {
 	; #PUBLIC#
 	

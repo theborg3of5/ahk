@@ -180,12 +180,6 @@ New Features / Scripts:
 			hswebConsoleCommands
 			timer duration
 			transaction dump
-	☐ Expand mBuilder launching logic
-		☐ Standalone hotkey?
-			^+!#m might work.
-		☐ Make it another ActionObject?
-		✘ Could make it more generic like my current universal !e/!w hotkeys @cancelled(23-04-26 15:06)
-			Eh, not useful/global enough to justify that.
 	☐ Consider adding "chorded" EMC2 object opening keys (at least when opening in web, so all of these start with !w)?
 		☐ What's the actual workflow for this case, then?
 			Don't want to wait when I just want the object to open

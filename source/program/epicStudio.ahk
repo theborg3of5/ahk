@@ -24,6 +24,9 @@
 	; Link routine to currently open DLG in EMC2.
 	^+l::EpicStudio.linkRoutineToCurrentDLG()
 	
+	; Take DLG # and stick it into MBuilder linting.
+	^+m::MBuilder.lintCurrentDLG()
+
 	; Generate and insert snippets
 	:X:.snip::MSnippets.insertSnippet()
 

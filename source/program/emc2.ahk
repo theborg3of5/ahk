@@ -44,6 +44,15 @@
 	!w::EMC2.openCurrentWorklistItemWeb() ; Open the selected item in web.
 #If
 
+; DLG open
+#If Config.isWindowActive("EMC2 DLG")
+	!i::
+		openDLGIssues() {
+			record := EpicLib.getBestEMC2RecordFromText(WinGetTitle("A"))
+			new ActionObjectEMC2(record.id, "DLG-I").openWeb() ; Just use the ID that we got, override the INI with the issues-specific one.
+		}
+#If
+
 ; Design open
 #If Config.isWindowActive("EMC2 XDS")
 	; Disable Ctrl+Up/Down hotkeys, never hit these intentionally.

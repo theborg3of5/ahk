@@ -184,19 +184,20 @@ New Features / Scripts:
 		☐ Standalone hotkey?
 			^+!#m might work.
 		☐ Make it another ActionObject?
-		✘ Could make it more generic like my current universal !e/!v hotkeys @cancelled(23-04-26 15:06)
+		✘ Could make it more generic like my current universal !e/!w hotkeys @cancelled(23-04-26 15:06)
 			Eh, not useful/global enough to justify that.
-	☐ Add a hotkey to open a DLG's issues page in web
-		!i is one option, but it's kind of top-level for such a specific use case?
-			Could limit to only when DLG open in EMC2 or Chrome, but Outlook would be nice too.
-		☐ Could I do a sort of "chording" thing here?
-			!w + i for issues, for example
-			Could also make revisions hotkey more generic that way
-			☐ What's the actual workflow for this case, then?
-				Don't want to wait when I just want the object to open
-				Maybe a toast-based, non-blocking "panel" that can be triggered with individual character keys (b for objects, h for history, i for issues, etc.)?
-					Could also allow triggering the "panel" manually in Chrome, or not re-opening-in-web if Chrome is already focused and has object open?
-				Maybe always open the DLG, then try to close the extra tab before opening the new one (if we are opening a new one)?
+	☐ Consider adding "chorded" EMC2 object opening keys (at least when opening in web, so all of these start with !w)?
+		☐ What's the actual workflow for this case, then?
+			Don't want to wait when I just want the object to open
+			Maybe a toast-based, non-blocking "panel" that can be triggered with individual character keys (b for objects, h for history, i for issues, etc.)?
+				Could also allow triggering the "panel" manually in Chrome, or not re-opening-in-web if Chrome is already focused and has object open?
+			Maybe always open the DLG, then try to close the extra tab before opening the new one (if we are opening a new one)?	
+		Use cases:
+			☐ Issues (i)
+			☐ Revisions (r)
+			☐ Designs (x) - probably a selector if multiple found (would require track-shadow querying too)
+			☐ QANs (q) - probably a selector if multiple found (would require track-shadow querying too)
+			☐ More?
 	☐ Add a new ActionObject type for opening a DLG's client folder
 		Can assume most recent version found in source, and find the biggest dashed version.
 	☐ Add newline character display (`n and `r) to debug table

@@ -386,27 +386,6 @@ class EpicLib {
 		
 		return new EpicRecord(data["INI"], data["ID"], data["TITLE"])
 	}
-	
-	;---------
-	; DESCRIPTION:    Clean up and trim an EMC2 record's title.
-	; PARAMETERS:
-	;  title (I,REQ) - The title to clean.
-	;  ini   (I,OPT) - INI of the record if we should remove it.
-	;  id    (I,OPT) - ID  of the record if we should remove it.
-	; RETURNS:        The title, but with extraneous bits (like the INI, ID, and "DBC" prefix) removed.
-	;---------
-	cleanEMC2RecordTitle(title, ini := "", id := "") {
-		delims := ["-", "/", "\", ":"]
-		
-		; Take INI and ID (and anything in between) out if they're given.
-		iniAndID := ini title.firstBetweenStrings(ini, id) id
-		title := title.remove(iniAndID).clean(delims)
-		
-		; The "DBC" prefix isn't helpful when most of my records have it.
-		title := title.removeFromStart("DBC")
-		
-		return title.clean(delims)
-	}
 	;endregion ==================== PUBLIC ====================
 	
 	
@@ -533,6 +512,27 @@ class EpicLib {
 		
 		; Debug.popup("textBits",textBits, "exacts",exacts, "possibles",possibles)
 		return (exacts.length() + possibles.length()) > 0
+	}
+	
+	;---------
+	; DESCRIPTION:    Clean up and trim an EMC2 record's title.
+	; PARAMETERS:
+	;  title (I,REQ) - The title to clean.
+	;  ini   (I,OPT) - INI of the record if we should remove it.
+	;  id    (I,OPT) - ID  of the record if we should remove it.
+	; RETURNS:        The title, but with extraneous bits (like the INI, ID, and "DBC" prefix) removed.
+	;---------
+	cleanEMC2RecordTitle(title, ini := "", id := "") {
+		delims := ["-", "/", "\", ":"]
+		
+		; Take INI and ID (and anything in between) out if they're given.
+		iniAndID := ini title.firstBetweenStrings(ini, id) id
+		title := title.remove(iniAndID).clean(delims)
+		
+		; The "DBC" prefix isn't helpful when most of my records have it.
+		title := title.removeFromStart("DBC")
+		
+		return title.clean(delims)
 	}
 	
 	;---------

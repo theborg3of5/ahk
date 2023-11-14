@@ -90,8 +90,10 @@ class EpicStudio {
 		codeLocation := EpicLib.dropOffsetFromServerLocation(codeLocation)
 		
 		; If we got "routine^routine", just return "^routine".
-		if(codeLocation.beforeString("^") = codeLocation.afterString("^"))
-			codeLocation := "^" codeLocation.afterString("^")
+		tag     := codeLocation.beforeString("^")
+		routine := codeLocation.afterString("^")
+		if(tag = routine)
+			codeLocation := codeLocation.removeFromStart(tag)
 		
 		; Set the clipboard value to our new (plain-text, no link) code location and notify the user.
 		ClipboardLib.setAndToast(codeLocation, "cleaned code location")

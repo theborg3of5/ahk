@@ -104,7 +104,7 @@ class EpicLib {
 	dropOffsetFromServerLocation(serverLocation) {
 		this.splitServerLocation(serverLocation, routine, tag)
 		tag := tag.beforeString("+").beforeString("-")
-		return tag "^" routine
+		return tag.appendPiece("^", routine)
 	}
 	
 	;---------

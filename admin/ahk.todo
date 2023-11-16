@@ -170,6 +170,7 @@ New Features / Scripts:
 			Solution shortcuts - add multiple shortcuts
 			Folders - open multiple folders
 			Symbols - just send multiple
+			TLG - combining choices? (specific log + des = log's info but with TLP 12)
 		Specifically don't want to support for:
 			firstSetup machine
 			actionObject*

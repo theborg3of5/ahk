@@ -38,7 +38,7 @@ class HeaderDocBlock {
 	;---------
 	getWrappedString(tabWidth) {
 		leadingWidth := (this.outerRest this.innerRest).width(tabWidth) ; Use the "rest" instead of the first line as the first line may not include indentation.
-		wrappedContentLines := StringLib.wrapToWidth(this.unwrappedContent, 100 - leadingWidth, tabWidth)
+		wrappedContentLines := StringLib.wrapToWidth(this.unwrappedContent, WRAP_WIDTH - leadingWidth, tabWidth)
 		
 		; Rebuild each line with its leading indentation and keywords.
 		docString := ""

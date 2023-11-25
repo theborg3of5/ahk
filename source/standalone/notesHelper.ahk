@@ -85,7 +85,9 @@ superscriptSides() {
 	Send, {Shift Down}{Left %length%}{Shift Up} ; Select text
 	Send, ^+= ; Superscript
 	Send, {Right} ; Deselect, cursor back where it started
+	; Send, {Space} ; Distance from superscripted text - otherwise if there's already text after then OneNote de-superscripts what we just superscripted.
 	Send, ^+= ; Remove superscript
+	; Send, {Backspace} ; Remove the extra space from above
 }
 
 dToDegree() {

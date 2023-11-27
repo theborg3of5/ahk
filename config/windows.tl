@@ -14,6 +14,7 @@
 				Chrome TickTick					-						-							 - TickTick
 				Chrome Messages					-						-							Messages for web
 				Chrome Workplans				-						-							<NAME> - Week of \d{1,2}\/\d{1,2}\/\d{4}	-				REGEX
+				Chrome Hyperspace				-						-							– Hyperspace –								-				
 		}
 		
 		; EMC2 windows - we use RegEx match mode for EXE, so we can match any version (and also check the path for EMC2, to differentiate from Hyperspace).

@@ -44,7 +44,10 @@ Fixes / Cleanup:
 	☐ Should I just add "FileEncoding, UTF-8" to my common script as well? Is there any instance where we _don't_ want that in place?
 	☐ Would Ctrl+Alt+A make more sense as my universal "run main AHK script" hotkey?
 	☐ notesHelper - make superscript stuff work when I'm adding it onto the beginning of a word, too (right now it loses the subscript)
-		Best route is probably clipboard manipulation - WinClip (https://www.autohotkey.com/board/topic/74670-class-winclip-direct-clipboard-manipulations) or SetClipboardData (in my downloads folder) should be good starting points.
+		Best route is probably clipboard manipulation?
+			Good starting points:
+				WinClip (https://www.autohotkey.com/board/topic/74670-class-winclip-direct-clipboard-manipulations)
+				SetClipboardData (https://www.autohotkey.com/board/topic/7692-setclipboarddata-and-getclipboarddata-functions/) should be good starting points.
 	☐ Consider giving my launchStartupPrograms script a universal (Windows-based) hotkey
 		☐ Or, alternatively - just bite the bullet and make the programs in question actually start up on login (and get rid of launchStartupPrograms entirely).
 	☐ Does fixVDIDisplaySettings.ahk still work, and is it useful? Should we just get rid of it?

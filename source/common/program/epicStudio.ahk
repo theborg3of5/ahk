@@ -194,6 +194,26 @@ class EpicStudio {
 	Send, {Shift Down}{Home}{Shift Up}
 	ClipboardLib.send(newLines)
 	}
+
+	;---------
+	; DESCRIPTION:    Turn an outdated "NAME" line into a "SCOPE" line.
+	;---------
+	fixNameScope() {
+		; Select and retrieve the line.
+		Send, {Shift Down}{Home}{Shift Up} ; Selects up to (not including) the leading indent.
+		line := ClipboardLib.getWithHotkey("^c")
+		if(!line.contains("NAME")) {
+			Toast.ShowError("Could not fix name/scope line", "Line does not appear to be a name line")
+			return
+		}
+
+		; Find and format the scope.
+		scope := StringUpper(line.firstBetweenStrings("(",")"))
+		if(scope = "")
+			scope = "PRIVATE|INTERNAL|EPIC|PUBLIC"
+		
+		ClipboardLib.send("; SCOPE:        " scope)
+	}
 	
 	;---------
 	; DESCRIPTION:    Run EpicStudio in debug mode, adding in a search to find my processes.

@@ -33,6 +33,9 @@
 	; Fix typos that EpicStudio handles badly
 	:*0:d QUIT::d  QUIT
 	:*0:d q::d  q
+
+	; Turn an old name line into a scope line.
+	:X:.scope::EpicStudio.fixNameScope()
 	
 	; Tiny snippet to insert a string or variable (with linking _s) in the middle of something
 	::.qsplit:: ; Variable in the middle of a string

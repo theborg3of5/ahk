@@ -2,7 +2,8 @@
 #If Config.isWindowActive("EpicStudio")
 	; Remap some of the tools to get easier access to those I use often.
 	!1::!3 ; EZParse
-	!2::!5 ; Error List
+	!2::!4 ; MBuilderES
+	!3::!6 ; Error List
 	
 	; Line operations
 	$^d::EpicStudio.deleteLine()

@@ -157,6 +157,8 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 				if(record.title)
 					data["NAME"] := record.title
 			}
+			if(recId = "-") ; Placeholder I can manually enter to force a blank value.
+				recId := ""
 			
 			; Message is a combination of a few things
 			message := data["NAME_OUTPUT_PREFIX"] ; Start with any given prefix

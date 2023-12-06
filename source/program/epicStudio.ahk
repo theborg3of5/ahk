@@ -4,6 +4,7 @@
 	!1::!3 ; EZParse
 	!2::!4 ; MBuilderES
 	!3::!6 ; Error List
+	!8::!9 ; Item Expert
 	
 	; Line operations
 	$^d::EpicStudio.deleteLine()

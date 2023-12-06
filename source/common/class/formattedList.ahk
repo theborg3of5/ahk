@@ -196,7 +196,7 @@ class FormattedList {
 		listAry.removeEmpties()
 		
 		tempAry := []
-		For _,item in listAry.clone()
+		For _,item in listAry
 			tempAry.appendArray(DataLib.expandList(item))
 		listAry := tempAry
 		

@@ -352,7 +352,7 @@ class DataLib {
 		if(start = end)
 			return [start] ; Single-element range
 		
-		numElements := (abs(end - start) // step) + 1
+		numElements := (abs(end - start) // abs(step)) + 1
 		rangeAry := []
 		currNum := start
 		Loop, %numElements% {

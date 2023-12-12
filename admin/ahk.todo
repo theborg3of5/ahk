@@ -50,9 +50,6 @@ Fixes / Cleanup:
 	☐ Consider giving my launchStartupPrograms script a universal (Windows-based) hotkey
 		☐ Or, alternatively - just bite the bullet and make the programs in question actually start up on login (and get rid of launchStartupPrograms entirely).
 	☐ Does fixVDIDisplaySettings.ahk still work, and is it useful? Should we just get rid of it?
-	☐ Update search options for AHK folders, right now test and private aren't covered by root anymore
-		☐ Could I have grepWin cover multiple folders at once somehow?
-			Seems like yes - can pipe them together (the backslash button in grepWin does this)
 	☐ Is regeditToKey moot now? Can't we do something like this directly with regedit itself now?
 	☐ Could we centralize the !w/!e hotkeys a little better?
 		☐ Maybe a have a central object where the various windows could somehow register that they get the title/EpicRecord in a certain way (BoundFunc-style)?

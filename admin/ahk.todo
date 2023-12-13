@@ -47,8 +47,6 @@ Fixes / Cleanup:
 			Good starting points:
 				WinClip (https://www.autohotkey.com/board/topic/74670-class-winclip-direct-clipboard-manipulations)
 				SetClipboardData (https://www.autohotkey.com/board/topic/7692-setclipboarddata-and-getclipboarddata-functions/) should be good starting points.
-	☐ Consider giving my launchStartupPrograms script a universal (Windows-based) hotkey
-		☐ Or, alternatively - just bite the bullet and make the programs in question actually start up on login (and get rid of launchStartupPrograms entirely).
 	☐ Does fixVDIDisplaySettings.ahk still work, and is it useful? Should we just get rid of it?
 	☐ Is regeditToKey moot now? Can't we do something like this directly with regedit itself now?
 	☐ Could we centralize the !w/!e hotkeys a little better?

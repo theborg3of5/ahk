@@ -262,6 +262,29 @@ class EpicLib {
 		s := this.getEMC2TypeSelector()
 		return s.selectChoice(ini, "SUBTYPE") ; Silent selection - no popup.
 	}
+
+	;---------
+	; DESCRIPTION:    Build my "standard" EMC2 object string with ini/id/title.
+	; PARAMETERS:
+	;  record         (I,REQ) - EpicRecord instance with ini/id/title populated as needed.
+	;  startWithTitle (I,OPT) - Put the title at the start of the string instad of the end.
+	; RETURNS:        EMC2 object string
+	;---------
+	buildEMC2ObjectString(record, startWithTitle := false) {
+		if(!record)
+			return ""
+		ini   := record.ini
+		id    := record.id
+		title := record.title
+		
+		if(startWithTitle)
+			return record.title.appendPiece("-", ini " " id)
+		
+		if(title = "")
+			return ini " " id
+		
+		return ini " " id " - " title
+	}
 	
 	;---------
 	; DESCRIPTION:    Extract all EMC2 records from the given string and pick the "best" one (that is, the first exact match, then the first possible match).

@@ -134,12 +134,12 @@ class Outlook {
 	}
 	
 	;---------
-	; DESCRIPTION:    Copy the EMC2 record ID from the currently-selected TLG event to the clipboard.
+	; DESCRIPTION:    Copy the EMC2 object string from the currently-selected TLG event to the clipboard.
 	;---------
-	copyEMC2RecordIDFromTLG() {
+	copyEMC2ObjectStringFromTLG() {
 		record := this.getEMC2RecordFromTLG()
-		if(record)
-			ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
+		objectString := EpicLib.buildEMC2ObjectString(record)
+		ClipboardLib.setAndToast(objectString, "TLG event EMC2 object string")
 	}
 	
 	;---------
@@ -246,14 +246,16 @@ class Outlook {
 		
 		baseAry := Config.private["OUTLOOK_TLG_BASE"].split(["/", ","])
 		tlgAry  := tlgString.split(["/", ","])
+
+		; Grab title from the end (its actual index in the base string might vary)
+		title := tlgString.afterString(",").withoutWhitespace()
 		
-		recIDs := {}
 		For _,ini in ["SLG", "DLG", "PRJ", "QAN"] {
 			iniIndex := baseAry.contains("<" ini ">")
 			id := tlgAry[iniIndex]
-			
+
 			if(id != "")
-				return new EpicRecord(ini, id)
+				return new EpicRecord(ini, id, title)
 		}
 	}
 	; #END#

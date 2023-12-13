@@ -110,16 +110,15 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		record := EpicLib.selectEMC2RecordFromText(clipboard)
 		if(!record)
 			return
-		ini   := record.ini
-		id    := record.id
-		title := record.title
+		ini := record.ini
+		id  := record.id
 		
 		if(idOnly)
 			Send, % id
 		else if(Config.isWindowActive("Chrome Workplans"))
-			ClipboardLib.send(title " - " ini " " id) ; Put title first for workplans
+			ClipboardLib.send(EpicLib.buildEMC2ObjectString(record, true)) ; Put title first for workplans
 		else
-			ClipboardLib.send(ini " " id " - " title) ; Must send with clipboard because it can contain hotkey chars
+			ClipboardLib.send(EpicLib.buildEMC2ObjectString(record)) ; Must send with clipboard because it can contain hotkey chars
 		
 		; Special case for OneNote: link the INI/ID as well.
 		if(Config.isWindowActive("OneNote"))

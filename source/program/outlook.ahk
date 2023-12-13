@@ -51,7 +51,7 @@
 	!e::Outlook.getEMC2ObjectFromCalendarEvent().openEdit()
 ; TLG calendar
 #If Outlook.isTLGCalendarActive()
-	!c::Outlook.copyEMC2RecordIDFromTLG()
+	!c::Outlook.copyEMC2ObjectStringFromTLG()
 	!w::Outlook.getEMC2ObjectFromTLG().openWeb()
 	!e::Outlook.getEMC2ObjectFromTLG().openEdit()
 #If

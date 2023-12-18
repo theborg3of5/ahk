@@ -43,52 +43,21 @@ Switch to VS Code for AHK dev:
 Fixes / Cleanup:
 	☐ Audit launching hotkeys, consider standardizing to make them easier to remember?
 		Existing hotkeys:
-			Program/Command					Hotkey		Type				Notes
-			EMC2 Web						!w			specific action
-			EMC2 Edit						!e			specific action
-			EMC2 Select ID					^!+d		specific action
-			EMC2 Select Web					!+#d		specific action
-			EMC2 Select Edit				^!+#d		specific action
+			Program/Command					Hotkey		Type					Notes
 			Hyperspace VB					^!+#h		launch
 			Hyperspace Chrome				^!#h		launch
 			Hyperdrive						^!+h		launch
-			Environment ID					^!+i		specific action
-			Snapper							^!#s		launch
-			EMC2 insert current ID			!+i			specific action
-			TLG selector					^!+t		specific action
-			PuTTY selector					^!+r		launch
-			VDI selector					!+v			launch
+			Snapper							^!#s		launch					Consider swapping with EpicStudio (^!+s)
+			PuTTY selector					^!+r		launch					Consider switching to "p" ("r" was from Reflection and I might want to use it for Terminal [for "Run"] now)
+			VDI selector					!+v			launch					Consider stealing ^!+v from Visual Studio
 			Phone selector					#p			launch
-			Sleep							^!+#s		system
-			Lock							!#l			system
-			AHK root folder					!+a			folder/path
-			Downloads folder				!+d			folder/path
-			Onedrive folder					!+o			folder/path
-			Stage 1 source folder			!+s			folder/path
-			User folder						!+u			folder/path
-			Folder selector					^!+w		folder/path
-			Cleaned up path					!+p			folder/path
-			Cleaned up unix path			!+#p		folder/path
-			AHK edit selector				!+c			folder/path
-			Feedly site						^!+f		website
-			Gmail site						^+#m		website
-			All sites						^!+a		website
-			Online OneNote todo				!+#t		website
-			Find selector 					!+f			generic action
-			Hyperlink with clipboard link	^+k			generic action
-			Generic open web				^!#o		generic action
-			Generic open edit				^!+#o		generic action
-			Generic copy link web			^!#l		generic action
-			Generic copy link edit			^!+#l		generic action
-			Generic hyperlink web			^!#k		generic action
-			Generic hyperlink edit			^!+#k		generic action
 			Process explorer				!`			launch
 			Windows explorer				#e			launch
 			Chrome messages					#m			launch (webapp)
-			Slack							#s			launch (webapp)
-			Chrome TickTick					!+t			launch (webapp)
+			Slack							#s			launch (program/webapp)
+			Chrome TickTick					!+t			launch (webapp)			Consider stealing ^!+t from TLG
 			Chrome							^!+g		launch
-			Messenger						^!+m		launch
+			Messenger						^!+m		launch (program/web)
 			Notepad++						^!+n		launch
 			Notepad							^+#n		launch
 			Teams							^!#t		launch
@@ -97,24 +66,55 @@ Fixes / Cleanup:
 			EMC2							^+!e		launch
 			EpicStudio						^!+s		launch
 			VB6								^!#+v		launch
-			Visual Studio					^!+v		launch
-			Slack							^!+s		launch					Consider ditching the extra?
+			Visual Studio					^!+v		launch					Consider ditching, always launched from a solution
+			Slack							^!+s		launch					Consider ditching the extra and just use #s
 			Firefox*						^!#f		launch
 			Everything						#f			launch
 			Telegram						#t			launch
 			GitHub Desktop					!+g			launch
 			OneNote							^!+o		launch
-			Launchy							^!+x		launch
-			Thunder							^!+u		launch
+			Launchy							^!+x		launch					Consider ditching (never use)
+			Thunder							^!+u		launch					Consider ditching in favor of "launch" option (assuming launching on startup now works)
 			Outlook							^!#e		launch
 			Character selector				#;			launch/generic action
+			Feedly site						^!+f		launch/website
+			Gmail site						^+#m		launch/website
+			All sites						^!+a		launch/website
+			Online OneNote todo				!+#t		launch/website			Consider stealing !+t (if TickTick moves to something else)
+			AHK root folder					!+a			folder/path
+			Downloads folder				!+d			folder/path
+			Onedrive folder					!+o			folder/path
+			Stage 1 source folder			!+s			folder/path				Consider ditching (never use)
+			User folder						!+u			folder/path
+			Folder selector					^!+w		folder/path				Consider !+w (to match the other folder/path stuff)
+			Cleaned up path					!+p			folder/path
+			Cleaned up unix path			!+#p		folder/path
+			AHK edit selector				!+c			folder/path
+			EMC2 Web						!w			specific action
+			EMC2 Edit						!e			specific action
+			EMC2 Select ID					^!+d		specific action
+			EMC2 Select Web					!+#d		specific action
+			EMC2 Select Edit				^!+#d		specific action
+			Environment ID					^!+i		specific action
+			EMC2 insert current ID			!+i			specific action
+			TLG selector					^!+t		specific action			Consider making this a (much shorter) Outlook-specific hotkey - ^+t, maybe?
+			Find selector 					!+f			generic action
+			Hyperlink with clipboard link	^+k			generic action
+			Generic open web				^!#o		generic action
+			Generic open edit				^!+#o		generic action
+			Generic copy link web			^!#l		generic action
+			Generic copy link edit			^!+#l		generic action
+			Generic hyperlink web			^!#k		generic action
+			Generic hyperlink edit			^!+#k		generic action
+			Sleep							^!+#s		system
+			Lock							!#l			system
 		Ideas:
+			☐ ^!# => Preferred/more often used (than ^!+)
 			☐ ^!+ => Basic
-			☐ ^!# => More technical
 			☐ !+ => Web app or overflow
-			☐ ^!+# => Older/overflow (like VB/VB Hyperspace)
+			☐ ^!+# => Edit (EMC2), older (like VB/VB Hyperspace), or overflow
 			☐ # => More overflow?
-			☐ #+ => Window actions (center, "fix", resize selector, always on top)
+			✔ #+ => Window actions (center, "fix", resize selector, always on top) @done(23-12-18 09:21)
 	☐ Should I just add "FileEncoding, UTF-8" to my common script as well? Is there any instance where we _don't_ want that in place?
 	☐ notesHelper - make superscript stuff work when I'm adding it onto the beginning of a word, too (right now it loses the subscript)
 		Best route is probably clipboard manipulation?

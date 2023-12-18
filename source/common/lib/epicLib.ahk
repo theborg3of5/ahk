@@ -278,7 +278,7 @@ class EpicLib {
 		title := record.title
 		
 		if(startWithTitle)
-			return record.title.appendPiece("-", ini " " id)
+			return record.title.appendPiece(" - ", ini " " id)
 		
 		if(title = "")
 			return ini " " id

@@ -13,7 +13,7 @@
 				Chrome Join						-						-							Join
 				Chrome TickTick					-						-							 - TickTick
 				Chrome Messages					-						-							Messages for web
-				Chrome Workplans				-						-							<NAME> - Week of \d{1,2}\/\d{1,2}\/\d{4}	-				REGEX
+				Chrome Workplans				-						-							Week of \d{1,2}\/\d{1,2}\/\d{4}				-				REGEX
 				Chrome Hyperspace				-						-							– Hyperspace –								-				
 		}
 		

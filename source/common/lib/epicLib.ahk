@@ -74,6 +74,15 @@ class EpicLib {
 	runVDI(vdiId) {
 		Run(Config.private["VDI_BASE"].replaceTag("VDI_ID", vdiId))
 	}
+
+	;---------
+	; DESCRIPTION:    Launch an environment using Thunder.
+	; PARAMETERS:
+	;  environmentId (I,REQ) - Environment's DEN ID
+	;---------
+	runThunderForEnvironment(environmentId) {
+		Run(Config.private["THUNDER_ENV_URL_BASE"].replaceTag("ENV_ID", environmentId))
+	}
 	
 	;---------
 	; DESCRIPTION:    Split the given server location into tag and routine.

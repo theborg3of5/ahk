@@ -24,15 +24,11 @@ environmentLines := FileLib.fileLinesToArray(environmentsFilePath)
 if(!handleDuplicateEnvironments(environmentLines, dataLines))
 	ExitApp
 
-; Load Thunder IDs from shortcuts
-progToast.nextStep("Reading Thunder IDs from shortcuts folder")
-thunderIDs := getThunderIDsFromShortcuts()
-
 ; Generate new TLS lines to insert
 progToast.nextStep("Generating new TLS lines")
 newLines := []
 For i, dataLine in dataLines
-	newLines.push(buildTLSLine(dataLine, thunderIDs))
+	newLines.push(buildTLSLine(dataLine))
 
 ; Add new lines to environments TLS
 progToast.nextStep("Adding new TLS lines")
@@ -126,33 +122,13 @@ handleDuplicateEnvironments(environmentLines, dataLines) {
 }
 
 ;---------
-; DESCRIPTION:    Pull the environment names and corresponding Thunder IDs from Launchy shortcuts.
-; RETURNS:        Associative array: { environmentName: thunderId }
-;                 Note that environmentName is the display name in Thunder (including any folder names!)
-;---------
-getThunderIDsFromShortcuts() {
-	thunderIDs := {}
-
-	shortcutsFolder := Config.path["USER_ROOT"] "\Thunder Shortcuts"
-	Loop, Files, %shortcutsFolder%\*.lnk
-	{
-		FileGetShortcut(A_LoopFilePath, "", "", thunderId) ; Argument is the thunder ID we need
-		name := A_LoopFileName.removeFromStart(namePrefix).removeFromEnd("." A_LoopFileExt)
-		thunderIDs[name] := thunderId
-	}
-
-	return thunderIDs
-}
-
-;---------
 ; DESCRIPTION:    Build a single new TLS line for an environment.
 ; PARAMETERS:
-;  dataLine         (I,REQ) - The line of environment data from the database. Format:
-;                             	envDotTwo^displayName^abbrev^commId^denId^vdiId^versionNum^webURL
-;  thunderIDs       (I,REQ) - Associative array of { environmentName: thunderId }
+;  dataLine (I,REQ) - The line of environment data from the database. Format:
+;                     	envDotTwo^displayName^abbrev^commId^denId^vdiId^versionNum^webURL
 ; RETURNS:        TLS line, broken up by (single - reformatting happens at the end) tabs.
 ;---------
-buildTLSLine(dataLine, thunderIDs) {
+buildTLSLine(dataLine) {
 	shortMonth := versionShortName.beforeString(" ")
 	shortYear  := versionShortName.afterString(" ")
 
@@ -167,28 +143,8 @@ buildTLSLine(dataLine, thunderIDs) {
 	webURL      := data[8]
 
 	abbrev := abbrev ? abbrev : "***" ; Abbreviation defaults to a placeholder
-	
-	; Thunder ID (mapped from full environment name)
-	thunderId := mapNameToThunderID(thunderIDs, envDotTwo)
 
-	return displayName "`t" abbrev "`t" commId "`t" denId "`t" thunderId "`t" vdiId "`t" versionNum "`t" webURL
-}
-
-;---------
-; DESCRIPTION:    Map the given environment name to the first matching thunder ID.
-; PARAMETERS:
-;  thunderIDs (I,REQ) - Associative array of { environmentName: thunderId }
-;  envDotTwo  (I,REQ) - Environment name (.2) to map
-; RETURNS:        Matching thunder ID, or a placeholder (***) if none found.
-; NOTES:          We use the first match that ends with the given name (.2).
-;---------
-mapNameToThunderID(thunderIDs, envDotTwo) {
-	For name, id in thunderIDs {
-		if(name.endsWith(envDotTwo))
-			return id ; Just return the first match.
-	}
-
-	return "***" ; If no match, use a placeholder.
+	return displayName "`t" abbrev "`t" commId "`t" denId "`t" vdiId "`t" versionNum "`t" webURL
 }
 
 ;---------

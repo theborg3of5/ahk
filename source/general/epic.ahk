@@ -223,7 +223,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
 				Config.activateProgram("Thunder")
 			else
-				Config.runProgram("Thunder", data["THUNDER_ID"])
+				EpicLib.runThunderForEnvironment(data["ENV_ID"])
 		}
 	
 	!+v::

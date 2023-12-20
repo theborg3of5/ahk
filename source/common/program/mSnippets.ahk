@@ -106,10 +106,17 @@ class MSnippets {
 		arrayGloName := inputAry.RemoveAt(1)
 		iteratorAry  := inputAry
 
+		; Handle missing ending @ for globals
 		if(arrayGloName.startsWith("@"))
 			arrayGloName := arrayGloName.appendIfMissing("@") ; End global references with the proper @ if they're not already.
 		
-		prevIterators := ""
+		; Handle passing in leading subscripts that we're not iterating on (like ary(ln) => ary(ln,iterator,...) ),
+		; by moving those subscripts to prevIterators.
+		if(arrayGloName.endsWith(")")) {
+			prevIterators := arrayGloName.allBetweenStrings("(", ")") ","
+			arrayGloName := arrayGloName.beforeString("(")
+		}
+
 		for i,iterator in iteratorAry {
 			loopString .= Config.private["M_LOOP_ARRAY_BASE"].replaceTags({"ARRAY_NAME":arrayGloName, "ITERATOR":iterator, "PREV_ITERATORS":prevIterators})
 			

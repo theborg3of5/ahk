@@ -51,6 +51,8 @@
 	!e::Outlook.getEMC2ObjectFromCalendarEvent().openEdit()
 ; TLG calendar
 #If Outlook.isTLGCalendarActive()
+	^+t::Outlook.selectOutlookTLG()	
+
 	!c::Outlook.copyEMC2ObjectStringFromTLG()
 	!w::Outlook.getEMC2ObjectFromTLG().openWeb()
 	!e::Outlook.getEMC2ObjectFromTLG().openEdit()
@@ -58,7 +60,7 @@
 
 ; Calendar folders
 #If Config.isWindowActive("Outlook") && Outlook.isCurrentScreenCalendar()
-	; Shortcut to go to today on the calendar. (In desired, 3-day view.)
+	; Shortcut to go to today on the calendar (in desired, 3-day view)
 	^t::
 		; Go to today.
 		Send, !h

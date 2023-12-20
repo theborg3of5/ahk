@@ -44,24 +44,19 @@
 	☐ Audit launching hotkeys, consider standardizing to make them easier to remember?
 		Existing hotkeys:
 			  Program/Command					Hotkey		Type					Notes
-			✔ Windows Terminal					^!#r		launch					Add @done(23-12-20 10:18)
-			✘ PuTTY selector					^!+r		launch					Consider switching to "p" ("r" was from Reflection and I might want to use it for Terminal [for "Run"] now) @cancelled(23-12-20 09:53) cross-keyboard is annoying to switch to.
-			✔ VDI selector						!+v			launch					Consider stealing ^!+v from Visual Studio @done(23-12-20 09:54)
 			☐ Phone selector					#p			launch					Consider getting rid of this, never use anymore
-			☐ Chrome messages					#m			launch (webapp)			Switch to ^!#m
-			☐ Chrome TickTick					!+t			launch (webapp)			Switch to ^!+t
-			☐ Messenger							^!+m		launch (program/web)	Switch to ^+!#m
-			✔ Teams								^!#t		launch @done(23-12-20 10:18)
-			✔ Visual Studio						^!+v		launch					Consider ditching, always launched from a solution @done(23-12-20 09:54)
-			☐ Slack								^!+s		launch					Consider ditching the extra and just use #s
-			☐ GitHub Desktop					!+g			launch					Consider switching to ^!#g
-			☐ Launchy							^!+x		launch					Consider ditching (never use)
-			☐ Thunder							^!+u		launch					Consider ditching in favor of "launch" option (assuming launching on startup now works)
-			☐ Gmail site						^+#m		launch/website			Switch to ^+!m
-			☐ Online OneNote todo				!+#t		launch/website			Consider stealing !+t (if TickTick moves to something else)
-			☐ Stage 1 source folder				!+s			folder/path				Consider ditching (never use)
-			☐ Folder selector					^!+w		folder/path				Consider !+w (to match the other folder/path stuff)
-			☐ TLG selector						^!+t		specific action			Consider making this a (much shorter) Outlook-specific hotkey - ^+t, maybe?
+			✔ Chrome messages					#m			launch (webapp)			Switch to ^!#m @done(23-12-20 10:31)
+			✔ Chrome TickTick					!+t			launch (webapp)			Switch to ^!+t @done(23-12-20 10:31)
+			✔ Messenger							^!+m		launch (program/web)	Switch to ^+!#m @done(23-12-20 10:30)
+			✔ Slack								^!+s		launch					Consider ditching the extra and just use #s @done(23-12-20 10:32)
+			✔ GitHub Desktop					!+g			launch					Consider switching to ^!#g @done(23-12-20 10:33)
+			✔ Launchy							^!+x		launch					Consider ditching (never use) @done(23-12-20 10:35)
+			✔ Thunder							^!+u		launch					Consider ditching in favor of "launch" option (assuming launching on startup now works) @done(23-12-20 10:38)
+			✔ Gmail site						^+#m		launch/website			Switch to ^+!m @done(23-12-20 10:29)
+			✔ Online OneNote todo				!+#t		launch/website			Consider stealing !+t (if TickTick moves to something else) @done(23-12-20 10:40)
+			✔ Stage 1 source folder				!+s			folder/path				Consider ditching (never use) @done(23-12-20 10:39)
+			✔ Folder selector					^!+w		folder/path				Consider !+w (to match the other folder/path stuff) @done(23-12-20 10:29)
+			✔ TLG selector						^!+t		specific action			Consider making this a (much shorter) Outlook-specific hotkey - ^+t, maybe? @done(23-12-20 10:27)
 		Goals:
 			^!# => Preferred/more often used (than ^!+)
 			^!+, # => Basic

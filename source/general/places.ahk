@@ -2,11 +2,10 @@
 
 ; [[Local/Remote Paths]] =--
 ; Specific folders
- !+a::openPath("AHK_ROOT")
-$!+d::openPath("USER_DOWNLOADS")
- !+o::openPath("USER_ONEDRIVE")
- !+s::openPath("EPIC_SOURCE_S1")
- !+u::openPath("USER_ROOT")
+!+a::openPath("AHK_ROOT")
+!+d::openPath("USER_DOWNLOADS")
+!+o::openPath("USER_ONEDRIVE")
+!+u::openPath("USER_ROOT")
 openPath(folderName) {
 	folderPath := Config.path[folderName]
 	if(FileLib.folderExists(folderPath))
@@ -14,7 +13,7 @@ openPath(folderName) {
 }
 
 ; Open folder from list
-^!+w::
+!+w::
 	selectFolder() {
 		folderPath := new Selector("folders.tls").selectGui("PATH")
 		folderPath := Config.replacePathTags(folderPath)
@@ -66,18 +65,19 @@ sendCleanedUpPath(mapToUnix := false) {
 	}
 
 
-; [[Websites]] ---
-$^!+f::Run("http://feedly.com/i/latest") ; $ as Notepad++ highlight-all hotkey sends these keys ; GDB TODO is that worth worrying about anymore with the switch to VS Code?
-^!#m:: Config.runProgram("Gmail")
+;region Websites
+^!+f:: Run("http://feedly.com/i/latest")
+^!+m:: Config.runProgram("Gmail")
+^!+#m::Config.runProgram("Messenger")
 ^!+a::
-	openUsualSites() {
-		Config.runProgram("Gmail")
-		Sleep, 100
-		Run("https://lemmy.world/")
-		Sleep, 100
-		Run("http://feedly.com/i/latest")
-	}
+openUsualSites() {
+	Config.runProgram("Gmail")
+	Sleep, 100
+	Run("https://lemmy.world/")
+	Sleep, 100
+	Run("http://feedly.com/i/latest")
+}
 
 ; OneNote Online
-!+#t::Run(Config.private["ONENOTE_ONLINE_NOTEBOOK_DO"])
-; --=
+!+t::Run(Config.private["ONENOTE_ONLINE_NOTEBOOK_DO"])
+;endregion Websites

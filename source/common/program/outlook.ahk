@@ -57,7 +57,7 @@ class Outlook {
 		this.darkModeOn := !this.darkModeOn
 
 		; Hotkeys differ based on the context as well.
-		if(Outlook.isMailMessagePopupActive()) {
+		if(this.isMailMessagePopupActive()) {
 			if(this.darkModeOn)
 				Send, b1 ; Switch Background (to light mode)
 			else
@@ -152,6 +152,70 @@ class Outlook {
 			return ""
 		
 		return new ActionObjectEMC2(record.id, record.ini)
+	}
+
+	;---------
+	; DESCRIPTION:    Insert a TLG event into that calendar based on the user's selected TLP/record.
+	;---------
+	selectOutlookTLG() {
+		s := new Selector("tlg.tls").setTitle("Select EMC2 Record ID")
+		s.dataTableList.filterOutIfColumnNoMatch("IS_OLD", "") ; Filter out old records (have a value in the OLD column)
+		data := s.selectGui()
+		if(!data)
+			return
+		
+		; We can do an additional Selector popup to grab ID (and potentially title) from various window titles.
+		recId := data["RECORD"]
+		if(recId = "GET") {
+			record := EpicLib.selectEMC2RecordFromUsefulTitles(true) ; true - only want options with a title.
+			if(!record)
+				return
+			
+			recId := record.id
+			if(["PRJ", "QAN", "SLG"].contains(record.ini))
+				recId := record.ini.charAt(1) "." recId ; Add on the INI prefix so the ID goes in the right position.
+			
+			if(record.title)
+				data["NAME"] := record.title
+		}
+		if(recId = "-") ; Placeholder I can manually enter to force a blank value.
+			recId := ""
+		
+		; Message is a combination of a few things
+		message := data["NAME_OUTPUT_PREFIX"] ; Start with any given prefix
+		if(data["IS_GENERIC"]) 
+			message .= data["MESSAGE"] ? data["MESSAGE"] : data["NAME"] ; Generic TLPs - use add the message, defaulting to the name.
+		else ; Everything else: 
+			message .= data["NAME"].appendPiece(" - ", data["MESSAGE"]) ; Everything else: add name + message.
+		
+		; Record field can contain DLG (no prefix), PRJ (P.), QAN (Q.), or SLG (S.) IDs.
+		if(recId.startsWith("P."))
+			prjId := recId.removeFromStart("P.")
+		else if(recId.startsWith("Q."))
+			qanId := recId.removeFromStart("Q.")
+		else if(recId.startsWith("S."))
+			slgId := recId.removeFromStart("S.")
+		else
+			dlgId := recId
+		
+		; Build the event title string
+		eventTitle := Config.private["OUTLOOK_TLG_BASE"]
+		eventTitle := eventTitle.replaceTag("MESSAGE",  message) ; Replace the message first in case it contains any of the following tags
+		eventTitle := eventTitle.replaceTag("TLP",      data["TLP"])
+		eventTitle := eventTitle.replaceTag("CUSTOMER", data["CUSTOMER"])
+		eventTitle := eventTitle.replaceTag("SLG",      slgId)
+		eventTitle := eventTitle.replaceTag("DLG",      dlgId)
+		eventTitle := eventTitle.replaceTag("PRJ",      prjId)
+		eventTitle := eventTitle.replaceTag("QAN",      qanId)
+		
+		this.replaceExtraEventTitleSlashes(eventTitle)
+		
+		if(this.isTLGCalendarActive()) {
+			SendRaw, % eventTitle
+			Send, {Enter}
+		} else {
+			ClipboardLib.setAndToastError(eventTitle, "event string", "Outlook TLG calendar not focused.")
+		}
 	}
 	
 	
@@ -257,6 +321,31 @@ class Outlook {
 			if(id != "")
 				return new EpicRecord(ini, id, title)
 		}
+	}
+
+	;---------
+	; DESCRIPTION:    Reduce the extra slashes in the TLG event title for easier reading and a
+	;                 cleaner look. We only need slashes before the last non-blank element
+	;                 before the comma (i.e. always 1 after the TLP, but after that we only need
+	;                 enough to put the last element in the right spot). Remove the extras to
+	;                 clean up the display.
+	; PARAMETERS:
+	;  title (IO,REQ) - The event title to clean up
+	;---------
+	replaceExtraEventTitleSlashes(ByRef title) {
+		idString := title.beforeString(", ")
+		message := title.afterString(", ")
+		
+		Loop {
+			if(!idString.endsWith("/")) ; Should only remove trailing slashes, not anything at the start or in the middle.
+				Break
+			if(idString.countMatches("/") <= 1) ; Keep at least one slash (after the TLP) for conditional formatting to use.
+				Break
+			idString := idString.removeFromEnd("/")
+		}
+		
+		; String it back together to return.
+		title := idString ", " message
 	}
 	; #END#
 }

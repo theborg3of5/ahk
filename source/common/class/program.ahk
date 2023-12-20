@@ -4,9 +4,10 @@ class Program {
 	; #PUBLIC#
 	
 	; @GROUP@ Path types (affects how the path is run)
-	static PathType_EXE    := "EXE" ; A "normal" path to an executable
-	static PathType_WinApp := "APP" ; A windows app (fka universal app)
-	static PathType_URL    := "URL" ; A web URL
+	static PathType_COMMAND := "COMMAND" ; A command
+	static PathType_EXE     := "EXE"     ; A "normal" path to an executable
+	static PathType_WinApp  := "APP"     ; A windows app (fka universal app)
+	static PathType_URL     := "URL"     ; A web URL
 	; @GROUP-END@
 	
 	; @GROUP@
@@ -52,9 +53,13 @@ class Program {
 		
 		; Path type determines how we run the path
 		Switch this.pathType {
-			Case this.PathType_EXE:    RunLib.runAsUser(this.path, args)
-			Case this.PathType_URL:    Run(this.path) ; Must be run directly, since it's not a file that exists
-			Case this.PathType_WinApp: Run("explorer.exe " this.path) ; Must be run this way, not as user (possibly needs to be as admin)
+			Case this.PathType_COMMAND: Run(this.path.appendPiece(" ", args)) ; Must be run directly, since it's not a file that exists
+			Case this.PathType_EXE:     RunLib.runAsUser(this.path, args)
+			Case this.PathType_URL:     Run(this.path)                        ; Must be run directly, since it's not a file that exists
+			
+			; Windows apps - path is the logical path, found using instructions here:
+			; https://answers.microsoft.com/en-us/windows/forum/windows_10-windows_store/starting-windows-10-store-app-from-the-command/836354c5-b5af-4d6c-b414-80e40ed14675)
+			Case this.PathType_WinApp:  Run("explorer.exe " this.path)        ; Must be run this way, not as user (possibly needs to be as admin)
 		}
 		
 		return true

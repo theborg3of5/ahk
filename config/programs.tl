@@ -63,9 +63,8 @@
 		Firefox Portable			S:\FirefoxPortable\FirefoxPortable.exe								HOME_DESKTOP
 		EMC2						<EMC2_CURRENT_EXE>													WORK_DESKTOP | WORK_VDI
 	
-; Windows apps - PATH is the logical path, found using instructions here:
-; https://answers.microsoft.com/en-us/windows/forum/windows_10-windows_store/starting-windows-10-store-app-from-the-command/836354c5-b5af-4d6c-b414-80e40ed14675)
-	~PATH.addToStart(shell:appsFolder\) | ~PATH_TYPE.replaceWith(APP) {
-		Messenger					FACEBOOK.317180B0BB486_8xx8rvfyw5nnt!App							HOME_DESKTOP
+	; Programs that can be launched by commands
+	~PATH_TYPE.replaceWith(COMMAND) {
+		Windows Terminal			wt
 	}
 }

@@ -9,6 +9,7 @@
 ^!+m::Config.activateProgram("Messenger")
 ^!+n::Config.activateProgram("Notepad++")
 ^!#n::Config.runProgram("Notepad")
+^!#r::Config.activateProgram("Windows Terminal")
 ^!#t::Config.runProgram("Teams")
 ^!#v::Config.activateProgram("VSCode")
 ^!#/::Config.activateProgram("AutoHotkey WinSpy")
@@ -18,7 +19,6 @@
 	^!+e:: Config.activateProgram("EMC2", "EMC2Update env=TRACKAPPTCP") ; EMC2 needs these parameters to start up correctly.
 	^!+s:: Config.activateProgram("EpicStudio")
 	^!#+v::Config.runProgram("VB6")
-	^!+v:: Config.runProgram("Visual Studio")
 #If
 
 ; Some programs are only available on specific machines

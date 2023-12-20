@@ -1,4 +1,4 @@
-Switch to VS Code for AHK dev:
+* Switch to VS Code for AHK dev * :
 	✔ AHK-based features to bring over: @done(22-11-23 13:59)
 		✔ Look into OutputDebug command for debugging stuff - prints to the debugger console @done(22-11-23 13:59)
 		✔ Editing stuff in notepad++ (editFiles TLS, +e selector option, etc.) @done(22-11-23 13:59)
@@ -40,19 +40,19 @@ Switch to VS Code for AHK dev:
 		☐ Custom syntax highlighting (for my custom classes)
 	☐ Get rid of updateNotepadPPSupport once I'm sure I won't need it anymore (currently shows how to parse my headers and such).
 
-Fixes / Cleanup:
+* Fixes / Cleanup * :
 	☐ Audit launching hotkeys, consider standardizing to make them easier to remember?
-		☐ Also add ^!#r for Windows Terminal
 		Existing hotkeys:
 			  Program/Command					Hotkey		Type					Notes
-			☐ PuTTY selector					^!+r		launch					Consider switching to "p" ("r" was from Reflection and I might want to use it for Terminal [for "Run"] now)
-			☐ VDI selector						!+v			launch					Consider stealing ^!+v from Visual Studio
+			✔ Windows Terminal					^!#r		launch					Add @done(23-12-20 10:18)
+			✘ PuTTY selector					^!+r		launch					Consider switching to "p" ("r" was from Reflection and I might want to use it for Terminal [for "Run"] now) @cancelled(23-12-20 09:53) cross-keyboard is annoying to switch to.
+			✔ VDI selector						!+v			launch					Consider stealing ^!+v from Visual Studio @done(23-12-20 09:54)
 			☐ Phone selector					#p			launch					Consider getting rid of this, never use anymore
 			☐ Chrome messages					#m			launch (webapp)			Switch to ^!#m
 			☐ Chrome TickTick					!+t			launch (webapp)			Switch to ^!+t
 			☐ Messenger							^!+m		launch (program/web)	Switch to ^+!#m
-			☐ Teams								^!#t		launch
-			☐ Visual Studio						^!+v		launch					Consider ditching, always launched from a solution
+			✔ Teams								^!#t		launch @done(23-12-20 10:18)
+			✔ Visual Studio						^!+v		launch					Consider ditching, always launched from a solution @done(23-12-20 09:54)
 			☐ Slack								^!+s		launch					Consider ditching the extra and just use #s
 			☐ GitHub Desktop					!+g			launch					Consider switching to ^!#g
 			☐ Launchy							^!+x		launch					Consider ditching (never use)
@@ -149,7 +149,7 @@ Fixes / Cleanup:
 			Added another hotkey (^+!9) to force Config.findWindowInfo() to trigger so we can better see what's going on there.
 			Also added a MsgBox (when debug is toggled on) to the actual Esc hotkey.
 
-New Features / Scripts:
+* New Features / Scripts * :
 	☐ Give environment selector popups a custom icon in addition to custom title
 		Is this possible without changing the (main) overall script's icon?
 	☐ Add a hotkey that just toasts the name + ID of the EMC2 record (if any)

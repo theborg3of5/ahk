@@ -226,7 +226,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 				EpicLib.runThunderForEnvironment(data["ENV_ID"])
 		}
 	
-	!+v::
+	^!+v::
 		selectVDI() {
 			data := EpicLib.selectEpicEnvironment("Launch VDI for Environment")
 			if(!data)

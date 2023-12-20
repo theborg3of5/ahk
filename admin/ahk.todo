@@ -42,79 +42,33 @@ Switch to VS Code for AHK dev:
 
 Fixes / Cleanup:
 	☐ Audit launching hotkeys, consider standardizing to make them easier to remember?
+		☐ Also add ^!#r for Windows Terminal
 		Existing hotkeys:
 			  Program/Command					Hotkey		Type					Notes
-			✔ Hyperspace VB						^!+#h		launch @done(23-12-20 09:24)
-			✔ Hyperspace Chrome					^!#h		launch @done(23-12-20 09:24)
-			✔ Hyperdrive						^!+h		launch @done(23-12-20 09:24)
-			✔ Snapper							^!#s		launch @done(23-12-20 09:24)
 			☐ PuTTY selector					^!+r		launch					Consider switching to "p" ("r" was from Reflection and I might want to use it for Terminal [for "Run"] now)
 			☐ VDI selector						!+v			launch					Consider stealing ^!+v from Visual Studio
 			☐ Phone selector					#p			launch					Consider getting rid of this, never use anymore
-			✔ Process explorer					!`			launch @done(23-12-20 09:28)
-			✔ Windows explorer					#e			launch @done(23-12-20 09:28)
 			☐ Chrome messages					#m			launch (webapp)			Switch to ^!#m
-			✔ Slack								#s			launch (program/webapp) @done(23-12-20 09:40)
 			☐ Chrome TickTick					!+t			launch (webapp)			Switch to ^!+t
-			✔ Chrome							^!+g		launch @done(23-12-20 09:40)
 			☐ Messenger							^!+m		launch (program/web)	Switch to ^+!#m
-			✔ Notepad++							^!+n		launch @done(23-12-20 09:40)
-			✔ Notepad							^+#n		launch @done(23-12-20 09:40)
 			☐ Teams								^!#t		launch
-			✔ VSCode							^!#v		launch @done(23-12-20 09:40)
-			✔ AHK WinSpy						^+#/		launch @done(23-12-20 09:40)
-			✔ EMC2								^!+e		launch @done(23-12-20 09:40)
-			✔ EpicStudio						^!+s		launch @done(23-12-20 09:40)
-			✔ VB6								^!#+v		launch @done(23-12-20 09:40)
 			☐ Visual Studio						^!+v		launch					Consider ditching, always launched from a solution
 			☐ Slack								^!+s		launch					Consider ditching the extra and just use #s
-			✔ Firefox*							^!#f		launch @done(23-12-20 09:41)
-			✔ Everything						#f			launch @done(23-12-20 09:41)
-			✔ Telegram							#t			launch @done(23-12-20 09:41)
 			☐ GitHub Desktop					!+g			launch					Consider switching to ^!#g
-			✔ OneNote							^!+o		launch @done(23-12-20 09:41)
 			☐ Launchy							^!+x		launch					Consider ditching (never use)
 			☐ Thunder							^!+u		launch					Consider ditching in favor of "launch" option (assuming launching on startup now works)
-			✔ Outlook							^!#e		launch @done(23-12-20 09:41)
-			✔ Character selector				#;			launch/generic action @done(23-12-20 09:42)
-			✔ Feedly site						^!+f		launch/website @done(23-12-20 09:41)
 			☐ Gmail site						^+#m		launch/website			Switch to ^+!m
-			✔ All sites							^!+a		launch/website @done(23-12-20 09:41)
 			☐ Online OneNote todo				!+#t		launch/website			Consider stealing !+t (if TickTick moves to something else)
-			✔ AHK root folder					!+a			folder/path @done(23-12-20 09:26)
-			✔ Downloads folder					!+d			folder/path @done(23-12-20 09:26)
-			✔ Onedrive folder					!+o			folder/path @done(23-12-20 09:26)
 			☐ Stage 1 source folder				!+s			folder/path				Consider ditching (never use)
-			✔ User folder						!+u			folder/path @done(23-12-20 09:26)
 			☐ Folder selector					^!+w		folder/path				Consider !+w (to match the other folder/path stuff)
-			✔ Cleaned up path					!+p			folder/path @done(23-12-20 09:26)
-			✔ Cleaned up unix path				!+#p		folder/path @done(23-12-20 09:26)
-			✔ AHK edit selector					!+c			folder/path @done(23-12-20 09:26)
-			✔ EMC2 Web							!w			specific action @done(23-12-20 09:41)
-			✔ EMC2 Edit							!e			specific action @done(23-12-20 09:41)
-			✔ EMC2 Select ID					^!+d		specific action @done(23-12-20 09:41)
-			✔ EMC2 Select Web					!+#d		specific action @done(23-12-20 09:41)
-			✔ EMC2 Select Edit					^!+#d		specific action @done(23-12-20 09:41)
-			✔ Environment ID					^!+i		specific action @done(23-12-20 09:41)
-			✔ EMC2 insert current ID			^!i			specific action @done(23-12-20 09:41)
 			☐ TLG selector						^!+t		specific action			Consider making this a (much shorter) Outlook-specific hotkey - ^+t, maybe?
-			✔ Find selector 					!+f			generic action @done(23-12-20 09:26)
-			✔ Hyperlink with clipboard link		^+k			generic action @done(23-12-20 09:41)
-			✔ Generic open web					^!#o		generic action @done(23-12-20 09:41)
-			✔ Generic open edit					^!+#o		generic action @done(23-12-20 09:41)
-			✔ Generic copy link web				^!#l		generic action @done(23-12-20 09:41)
-			✔ Generic copy link edit			^!+#l		generic action @done(23-12-20 09:42)
-			✔ Generic hyperlink web				^!#k		generic action @done(23-12-20 09:42)
-			✔ Generic hyperlink edit			^!+#k		generic action @done(23-12-20 09:42)
-			✔ Sleep								^!+#s		system @done(23-12-20 09:42)
-			✔ Lock								!#l			system @done(23-12-20 09:42)
-		Ideas:
-			✔ ^!# => Preferred/more often used (than ^!+) @done(23-12-20 09:43)
-			✔ ^!+, # => Basic @done(23-12-20 09:43)
-			✔ !+ => Folder/path handlers @done(23-12-20 09:43)
-			✔ ^!+# => Edit (EMC2), older (like VB/VB Hyperspace) @done(23-12-20 09:43)
-			✔ #+ => Window actions (center, "fix", resize selector, always on top) @done(23-12-18 09:21)
-			✔ ^!, ^+ => Reserved for program-specific use @done(23-12-20 09:32)
+		Goals:
+			^!# => Preferred/more often used (than ^!+)
+			^!+, # => Basic
+			!+ => Folder/path handlers
+			^!+# => Edit (EMC2), older (like VB/VB Hyperspace)
+			#+ => Window actions (center, "fix", resize selector, always on top)
+			^!, ^+ => Reserved for program-specific use
 	☐ Should I just add "FileEncoding, UTF-8" to my common script as well? Is there any instance where we _don't_ want that in place?
 	☐ notesHelper - make superscript stuff work when I'm adding it onto the beginning of a word, too (right now it loses the subscript)
 		Best route is probably clipboard manipulation?

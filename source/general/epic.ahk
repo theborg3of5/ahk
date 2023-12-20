@@ -19,7 +19,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		return new ActionObjectEMC2(record.id, record.ini)
 	}
 
-#If Config.contextIsWork ; Any work machine =--
+#If Config.contextIsWork ; Any work machine
 	^!+d:: Send, % selectTLGId("Select EMC2 Record to Send").removeFromStart("P.").removeFromStart("Q.")
 	^!#d:: selectTLGActionObject("Select EMC2 Record to View").openWeb()
 	^!+#d::selectTLGActionObject("Select EMC2 Record to Edit").openEdit()
@@ -133,7 +133,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 				SendRaw, % record.id
 		}
 
-#If Config.machineIsWorkDesktop ; Main work desktop only (not other work machines) ---
+#If Config.machineIsWorkDesktop ; Main work desktop only
 	^!+r::
 		selectThunder() {
 			data := EpicLib.selectEpicEnvironment("Launch Thunder for Environment")
@@ -166,17 +166,4 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 				new VisualWindow("A").resizeMove(VisualWindow.Width_Full, VisualWindow.Height_Full, VisualWindow.X_Centered, VisualWindow.Y_Centered)
 			}
 		}
-	
-	#p::
-		selectPhone() {
-			selectedText := SelectLib.getCleanFirstLine()
-			
-			if(PhoneLib.isValidNumber(selectedText)) {
-				PhoneLib.call(selectedText)
-			} else {
-				data := new Selector("phone.tls").selectGui()
-				if(data)
-					PhoneLib.call(data["NUMBER"], data["NAME"])
-			}
-		}
-#If ; --=
+#If

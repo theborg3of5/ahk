@@ -41,29 +41,6 @@
 	☐ Get rid of updateNotepadPPSupport once I'm sure I won't need it anymore (currently shows how to parse my headers and such).
 
 * Fixes / Cleanup * :
-	☐ Audit launching hotkeys, consider standardizing to make them easier to remember?
-		Existing hotkeys:
-			  Program/Command					Hotkey		Type					Notes
-			☐ Phone selector					#p			launch					Consider getting rid of this, never use anymore
-			✔ Chrome messages					#m			launch (webapp)			Switch to ^!#m @done(23-12-20 10:31)
-			✔ Chrome TickTick					!+t			launch (webapp)			Switch to ^!+t @done(23-12-20 10:31)
-			✔ Messenger							^!+m		launch (program/web)	Switch to ^+!#m @done(23-12-20 10:30)
-			✔ Slack								^!+s		launch					Consider ditching the extra and just use #s @done(23-12-20 10:32)
-			✔ GitHub Desktop					!+g			launch					Consider switching to ^!#g @done(23-12-20 10:33)
-			✔ Launchy							^!+x		launch					Consider ditching (never use) @done(23-12-20 10:35)
-			✔ Thunder							^!+u		launch					Consider ditching in favor of "launch" option (assuming launching on startup now works) @done(23-12-20 10:38)
-			✔ Gmail site						^+#m		launch/website			Switch to ^+!m @done(23-12-20 10:29)
-			✔ Online OneNote todo				!+#t		launch/website			Consider stealing !+t (if TickTick moves to something else) @done(23-12-20 10:40)
-			✔ Stage 1 source folder				!+s			folder/path				Consider ditching (never use) @done(23-12-20 10:39)
-			✔ Folder selector					^!+w		folder/path				Consider !+w (to match the other folder/path stuff) @done(23-12-20 10:29)
-			✔ TLG selector						^!+t		specific action			Consider making this a (much shorter) Outlook-specific hotkey - ^+t, maybe? @done(23-12-20 10:27)
-		Goals:
-			^!# => Preferred/more often used (than ^!+)
-			^!+, # => Basic
-			!+ => Folder/path handlers
-			^!+# => Edit (EMC2), older (like VB/VB Hyperspace)
-			#+ => Window actions (center, "fix", resize selector, always on top)
-			^!, ^+ => Reserved for program-specific use
 	☐ Should I just add "FileEncoding, UTF-8" to my common script as well? Is there any instance where we _don't_ want that in place?
 	☐ notesHelper - make superscript stuff work when I'm adding it onto the beginning of a word, too (right now it loses the subscript)
 		Best route is probably clipboard manipulation?

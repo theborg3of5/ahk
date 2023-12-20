@@ -25,20 +25,9 @@ class MBuilder {
 			return
 		}
 
-		t := new Toast("Opening DLG in MBuilder: " dlgId).show()
-		
-		Config.runProgram("MBuilder")
-		WinWaitActive, % Config.windowInfo["MBuilder"].titleString, , 10 ; 10-second timeout
-		
-		if(ErrorLevel != 1) {
-			; Plug in the DLG ID.
-			Send, 2{Enter} ; Check for errors on a DLG's Routines
-			Sleep, 500
-			Send, % dlgId
-			Send, {Enter}
-		}
-		
-		t.close()
+		Toast.ShowShort("Linting DLG in MBuilder: " dlgId)
+
+		Run(Config.private["MBUILDER_URL_BASE"].replaceTags({"COMMAND":2, "ID":dlgId})) ; 2-Lint a DLG's Routines
 	}
 	; #END#
 }

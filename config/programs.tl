@@ -36,8 +36,6 @@
 		Notepad						System32\notepad.exe
 	}
 	
-		MBuilder					<PB_DEV_TOOLS>\OpenBestSolution\MBuilder.exe
-	
 	~PATH_TYPE.replaceWith(URL) {
 		Messenger					https://www.messenger.com
 		Slack						https://app.slack.com/client/<SLACK_MAIN_ID>

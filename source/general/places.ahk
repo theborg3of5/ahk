@@ -2,10 +2,10 @@
 
 ; [[Local/Remote Paths]] =--
 ; Specific folders
-!+a::openPath("AHK_ROOT")
-!+d::openPath("USER_DOWNLOADS")
-!+o::openPath("USER_ONEDRIVE")
-!+u::openPath("USER_ROOT")
+ !+a::openPath("AHK_ROOT")
+$!+d::openPath("USER_DOWNLOADS") ; $ because otherwise it conflicts with our Deluminate site-specific toggle hotkey in Chrome
+ !+o::openPath("USER_ONEDRIVE")
+ !+u::openPath("USER_ROOT")
 openPath(folderName) {
 	folderPath := Config.path[folderName]
 	if(FileLib.folderExists(folderPath))

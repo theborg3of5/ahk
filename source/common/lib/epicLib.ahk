@@ -346,7 +346,7 @@ class EpicLib {
 			Toast.ShowError("No potential EMC2 record IDs found in string: " text)
 			return ""
 		}
-		; DEBUG.POPUP("text",text, "exacts",exacts, "possibles",possibles)
+		; Debug.popup("text",text, "exacts",exacts, "possibles",possibles)
 		
 		; Only 1 exact match, just return it directly (ignoring any possibles).
 		if(exacts.length() = 1) {
@@ -577,7 +577,10 @@ class EpicLib {
 	flattenDashedINIs(text) {
 		text := text.replace("PRJ-R", "PRJR") ; Project Readiness
 		text := text.replace("XDS-I", "XDSI") ; Design Issues
-		text := text.replace("DLG-I", "DLGI") ; DLG Issues
+		
+		if(!text.afterString("DLG-I").firstChar().isNum()) { ; Make sure we're not mashing together DLG-I##### (SU DLG).
+			text := text.replace("DLG-I", "DLGI") ; DLG Issues
+		}
 		
 		return text
 	}

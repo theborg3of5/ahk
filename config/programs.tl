@@ -52,7 +52,6 @@
 		GitHub Desktop				GitHubDesktop\GitHubDesktop.exe
 		GrepWin						Programs\grepWin\grepWin.exe										WORK_DESKTOP
 		Slack						slack\slack.exe														HOME_DESKTOP
-		Teams						Microsoft\Teams\current\Teams.exe									WORK_DESKTOP
 	}
 	
 	~PATH.addToStart(<USER_APPDATA>\) {
@@ -66,5 +65,6 @@
 	; Programs that can be launched by commands
 	~PATH_TYPE.replaceWith(COMMAND) {
 		Windows Terminal			wt
+		Teams						ms-teams															WORK_DESKTOP
 	}
 }

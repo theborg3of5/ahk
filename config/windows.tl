@@ -99,7 +99,7 @@
 				SoundSwitch						SoundSwitch.exe
 				Spotify							Spotify\.exe			Chrome_WidgetWin_0			(Spotify Premium)\|( - )					NO_PADDING		REGEX
 				Steam							steamwebhelper.exe		-							-											NO_PADDING
-				Teams							ms-teams.exe			-							\| Microsoft Teams							NO_PADDING
+				Teams							ms-teams.exe			-							\| Microsoft Teams							
 				Telegram						Telegram.exe			Qt[\d]+QWindowIcon			-											NO_PADDING		REGEX
 				Thunder							Thunder.exe				-							Thunder
 				TortoiseGit						TortoiseGitProc.exe

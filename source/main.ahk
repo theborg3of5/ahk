@@ -12,7 +12,7 @@ CommonHotkeys.Init(CommonHotkeys.ScriptType_Main)
 SetWorkingDir, %A_ScriptDir%                 ; Ensures a consistent starting directory.
 DetectHiddenWindows, On                      ; Do search hidden windows
 SetTitleMatchMode, % TitleMatchMode.Contains ; Match text anywhere inside window titles
-SetCapsLockState,   AlwaysOff                ; Turn off Caps Lock so it can be used as a hotkey.
+SetCapsLockState,   AlwaysOff                ; Turn off Caps Lock so it can be used as a hotkey. Keep these three lock states in sync with afterUnsuspend() below.
 SetScrollLockState, AlwaysOff                ; Turn off Scroll Lock so it can be used as a hotkey.
 SetNumLockState,    AlwaysOn                 ; Force NumLock to always stay on.
 SetDefaultMouseSpeed, 0                      ; Fasted mouse speed for mouse commands (MouseMove in particular)
@@ -27,7 +27,8 @@ if(Config.machineIsWorkDesktop)
 	Run(subFolder "killUAC.ahk")
 
 ; Include other scripts
-#Include %A_ScriptDir%\general\ ; General hotkeys.
+;region General hotkeys
+#Include %A_ScriptDir%\general\
 #Include epic.ahk
 #Include hotstrings.ahk ; Must go after startup, but before hotkeys begin.
 #Include media.ahk
@@ -37,8 +38,9 @@ if(Config.machineIsWorkDesktop)
 #Include system.ahk
 #Include text.ahk
 #Include window.ahk
-
-#Include %A_ScriptDir%\program\ ; Program-specific hotkeys.
+;endregion General hotkeys
+;region Program-specific hotkeys
+#Include %A_ScriptDir%\program\
 #Include chrome.ahk
 #Include ciscoAnyConnect.ahk
 #Include ditto.ahk
@@ -74,6 +76,7 @@ if(Config.machineIsWorkDesktop)
 #Include wilma.ahk
 #Include word.ahk
 #Include zoom.ahk
+;endregion Program-specific hotkeys
 
 ; Before/after suspend hooks to allow *Lock keys to be hotkeys or ignored while script is active,
 ; but back to normal when script is suspended.

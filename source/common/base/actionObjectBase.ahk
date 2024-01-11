@@ -67,7 +67,7 @@ class ActionObjectBase {
 			link := this.getLink()
 		
 		if(link)
-			Run(link)
+			RunLib.runAsUser(link)
 	}
 	;---------
 	; DESCRIPTION:    Open the object, specifically in web mode.

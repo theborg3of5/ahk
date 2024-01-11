@@ -22,18 +22,13 @@ class RunLib {
 	}
 
 	;---------
-	; DESCRIPTION:    Run the given path as a non-elevated user.
+	; DESCRIPTION:    Run the given command as a non-elevated user.
 	; PARAMETERS:
-	;  path (I,REQ) - The path of the program to run.
-	;  args (I,OPT) - Parameters to pass to the program.
+	;  cmd  (I,REQ) - The command to run.
+	;  args (I,OPT) - Parameters to pass (if this is a filepath to a program).
 	;---------
-	runAsUser(path, args := "") {
-		if(!FileExist(path)) {
-			Toast.ShowError("Could not run path", "Does not exist: " path)
-			return
-		}
-		
-		RunLib.shellRun(path, args)
+	runAsUser(cmd, args := "") {
+		RunLib.shellRun(cmd, args)
 	}
 
 	;---------

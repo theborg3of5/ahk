@@ -477,7 +477,7 @@ class Selector {
 		
 		new TextPopup(table).show()
 		if(this.filePath)
-			Run(this.filePath) ; Open file to fix it
+			RunLib.runAsUser(this.filePath) ; Open file to fix it
 		return false
 	}
 	
@@ -503,7 +503,7 @@ class Selector {
 			; Edit action - open the current INI file for editing
 			if(commandChar = this.Char_Command_Edit) {
 				suppressData := true
-				Run(this.filePath)
+				RunLib.runAsUser(this.filePath)
 			}
 			
 			return ""

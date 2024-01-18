@@ -14,7 +14,7 @@
 				Chrome TickTick					-						-							 - TickTick
 				Chrome Messages					-						-							Messages for web
 				Chrome Workplans				-						-							Week of \d{1,2}\/\d{1,2}\/\d{4}				-				REGEX
-				Chrome Hyperspace				-						-							– Hyperspace –								-				
+				Chrome Hyperspace				-						-							– Hyperspace –								-
 		}
 		
 		; EMC2 windows - we use RegEx match mode for EXE, so we can match any version (and also check the path for EMC2, to differentiate from Hyperspace).
@@ -99,7 +99,7 @@
 				SoundSwitch						SoundSwitch.exe
 				Spotify							Spotify\.exe			Chrome_WidgetWin_0			(Spotify Premium)\|( - )					NO_PADDING		REGEX
 				Steam							steamwebhelper.exe		-							-											NO_PADDING
-				Teams							ms-teams.exe			-							\| Microsoft Teams							
+				Teams							ms-teams.exe			-							\| Microsoft Teams
 				Telegram						Telegram.exe			Qt[\d]+QWindowIcon			-											NO_PADDING		REGEX
 				Thunder							Thunder.exe				-							Thunder
 				TortoiseGit						TortoiseGitProc.exe

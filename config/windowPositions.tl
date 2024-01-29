@@ -7,7 +7,6 @@
 	~MONITOR.replaceWith(LEFT) {
 			Outlook						-				-				MAX			MAX			WORK
 			; Work Explorer is a little further left to allow Outlook calendar pane to peek thru nicely.
-			Explorer					215				CENTERED		1440		900			WORK
 			Explorer					CENTERED		CENTERED		1440		900
 			GitHub Desktop				CENTERED		CENTERED		1440		900
 			GrepWin						CENTERED		CENTERED		1440		900
@@ -15,6 +14,7 @@
 			Teams						CENTERED		CENTERED		1440		900			WORK
 			Chrome TickTick				RIGHT_EDGE		TOP_EDGE		1200		750
 			Putty						RIGHT_EDGE		TOP_EDGE		HALF		FULL		WORK
+			Windows Terminal			RIGHT_EDGE		TOP_EDGE		1440		FULL
 		
 # Social windows
 		~WIDTH.replaceWith(950) | ~HEIGHT.replaceWith(750) | ~X.replaceWith(RIGHT_EDGE) | ~Y.replaceWith(TOP_EDGE) {
@@ -49,7 +49,6 @@
 			VMware Horizon Client		-				-				MAX			MAX			WORK
 			WebEx						CENTERED		CENTERED		1440		900			WORK
 	}
-	
 	
 # Gaming presets - mostly quartered social windows on the non-gaming monitor
 	~WIDTH.defaultTo(HALF) | ~HEIGHT.defaultTo(HALF) | ~ACTIVATE.defaultTo(1) {

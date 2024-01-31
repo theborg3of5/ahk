@@ -162,11 +162,9 @@
 	:X:ssf::   sendFolderPath("USER_ROOT", "Screenshots")
 	:X:enfsf:: sendFolderPath("EPIC_NFS_3DAY")
 	:X:eunfsf::sendUnixFolderPath("EPIC_NFS_3DAY_UNIX")
-	:X:ecompf::sendFolderPath("VB6_COMPILE")
 	
 	; Epic - Source
-	:X:esf:: sendFolderPath("EPIC_SOURCE_S1")
-	:X:fesf::sendFilePath("EPIC_SOURCE_S1", Config.private["EPICDESKTOP_PROJECT"])
+	:X:esf::sendFolderPath("EPIC_SOURCE_S1")
 	
 	; URLs
 	:X:lpv::Send, % "chrome-extension://hdokiejnpimakedhajhdlcegeplioahd/vault.html"

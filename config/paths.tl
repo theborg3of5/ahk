@@ -53,9 +53,7 @@
 
 ~CONTEXT.replaceWith(WORK) {
 		; Work
-		Epic Source							EPIC_SOURCE						C:\EpicSource
-		Epic Source Current S1				EPIC_SOURCE_S1					<EPIC_SOURCE_CURRENT>\stage1
-		VB6 Compile							VB6_COMPILE						<EPIC_SOURCE_CURRENT>\Compile
+		Epic Source Current S1				EPIC_SOURCE_S1					C:\EpicSource\stage1
 		Transaction Diff					TX_DIFF							C:\Program Files\TransactionDiff
 		EpicStudio Global Highlights		EPICSTUDIO_GLOBAL_HIGHLIGHTS	<EPIC_PERSONAL>\EpicStudioGlobalHighlights
 	

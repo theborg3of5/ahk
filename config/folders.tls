@@ -24,7 +24,6 @@
 # Work Local
 	Templates						tp			<USER_DEV>\Templates
 	Transaction Diff Output			txdiff		<TX_DIFF_OUTPUT>
-	Compile							comp		<VB6_COMPILE>
 	EpicStudio Config				esc			<USER_APPDATA_LOCAL>\Epic Systems Corporation\EpicStudio
 	HSWeb TraceX Files				trace		<USER_TEMP>\<yyyy>-<MM>-<dd>
 	S1 Source						s1			<EPIC_SOURCE_S1>

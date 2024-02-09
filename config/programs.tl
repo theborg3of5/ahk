@@ -8,7 +8,7 @@
 		EpicStudio					EpicStudio\EpicStudio.exe
 		Foobar						foobar2000\foobar2000.exe
 		Launchy						Launchy\Launchy.exe
-		Notepad++					Notepad++\notepad++.exe												HOME_LAPTOP | WORK_VDI
+		Notepad++					Notepad++\notepad++.exe												HOME_LAPTOP
 		OneNote						Microsoft Office\root\Office16\ONENOTE.EXE
 		Putty						PuTTY\putty.exe
 		Snapper						Epic\Snapper\Snapper.exe

@@ -122,6 +122,10 @@
 			Also added a MsgBox (when debug is toggled on) to the actual Esc hotkey.
 
 * New Features / Scripts * :
+	☐ Update tensstring to add an extra line above with tens place value
+		Like:
+			         1         2         3
+			12345678901234567890123456789|
 	☐ Give environment selector popups a custom icon in addition to custom title
 		Is this possible without changing the (main) overall script's icon?
 	☐ Add a hotkey that just toasts the name + ID of the EMC2 record (if any)

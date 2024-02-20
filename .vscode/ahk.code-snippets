@@ -15,7 +15,7 @@
 			"\t$0",
 			"}"
 		],
-		"description": "Insert a function."
+		"description": "Insert a function"
 	},
 	"Class skeleton": {
 		"prefix": "ahkclass",
@@ -88,22 +88,22 @@
 	"Clipboard as value": {
 		"prefix": "clip",
 		"body": "\"${CLIPBOARD/(\")|(\r)|(\n)/${1:+\"\"}${2:+`r}${3:+`n}/g}\"",
-		"description": "Send the clipboard as a value/expression, escaping quotes and newlines."
+		"description": "Send the clipboard as a value/expression, escaping quotes and newlines"
 	},
 	"Toast (medium)": {
 		"prefix": "toastmed",
 		"body": "Toast.ShowMedium(\"$1\")$0",
-		"description": "Insert an error toast."
+		"description": "Insert an error toast"
 	},
 	"Error toast": {
 		"prefix": "errortoast",
 		"body": "Toast.ShowError(\"$1\")$0",
-		"description": "Insert an error toast."
+		"description": "Insert an error toast"
 	},
 	"Default value": {
 		"prefix": "default",
 		"body": "${1:targetVar} := ${1:targetVar} ? ${1:targetVar} : ${2:defaultValue}",
-		"description": "Default a variable to a value (if it's false/empty)."
+		"description": "Default a variable to a value (if it's false/empty)"
 	},
 	"Region": {
 		"prefix": "region",
@@ -112,7 +112,7 @@
 			"$0",
 			";endregion ${1:regionName}"
 		],
-		"description": "Insert a collapsible region."
+		"description": "Insert a collapsible region"
 	},
 	"Scope region": {
 		"prefix": "scope",
@@ -120,7 +120,7 @@
 			";region ==================== ${1|PUBLIC ====================,PRIVATE ===================,INTERNAL ==================,DEBUG =====================|}",
 			";endregion ================= ${1}"
 		],
-		"description": "Insert a collapsible region to denote scope."
+		"description": "Insert a collapsible region to denote scope"
 	},
 	"Switch select case": {
 		"prefix": "switch",
@@ -130,6 +130,6 @@
 			"\t\t$0",
 			"}",
 		],
-		"description": "Insert a collapsible region."
+		"description": "Insert a switch statement"
 	},
 }

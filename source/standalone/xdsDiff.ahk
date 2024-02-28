@@ -8,7 +8,7 @@ rawLeft  := FileRead(Config.path["EPIC_NFS_ASK"] "\temp\xdsDiffLeft.txt")
 rawRight := FileRead(Config.path["EPIC_NFS_ASK"] "\temp\xdsDiffRight.txt")
 
 ; Strip out all HTML tags.
-htmlRegEx := "<\/?(DIV|SPAN|TABLE|TBODY|TR|TD|A|OL|UL|IMG|H[1-6]|!--)[^>]*>|(\r\n)?<\/?LI[^>]*>"
+htmlRegEx := "i)<\/?(DIV|SPAN|TABLE|TBODY|TR|TD|A|OL|UL|IMG|H[1-6]|!--)[^>]*>|(\r\n)?<\/?LI[^>]*>" ; i = case-insensitive flag
 cleanLeft  := rawLeft.replaceRegEx(htmlRegEx,"")
 cleanRight := rawRight.replaceRegEx(htmlRegEx,"")
 

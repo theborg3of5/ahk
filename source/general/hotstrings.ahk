@@ -164,7 +164,7 @@
 	:X:eunfsf::sendUnixFolderPath("EPIC_NFS_3DAY_UNIX")
 	
 	; Epic - Source
-	:X:esf::sendFolderPath("EPIC_SOURCE_S1")
+	:X:esf::sendFolderPath("EPIC_SOURCE_CURRENT")
 	
 	; URLs
 	:X:lpv::Send, % "chrome-extension://hdokiejnpimakedhajhdlcegeplioahd/vault.html"

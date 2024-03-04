@@ -106,7 +106,7 @@ buildGui() {
 	settings.restore()
 	
 	; Set the cursor to a special cross that allows us to see the spot we're picking.
-	MicrosoftLib.setAllCursorsToIcon("cross.cur")
+	MicrosoftLib.setAllCursorsToIcon(Config.path["AHK_ROOT"] "\icons\" "cross.cur")
 }
 
 

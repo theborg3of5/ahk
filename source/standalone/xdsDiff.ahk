@@ -17,6 +17,6 @@ pathLeft  := A_Temp "\ahkDiffLeft.txt"
 pathRight := A_Temp "\ahkDiffRight.txt"
 FileLib.replaceFileWithString(pathLeft,  cleanLeft)
 FileLib.replaceFileWithString(pathRight, cleanRight)
-Config.runProgram("KDiff", pathLeft " " pathRight)
+Config.runProgram("WinMerge", pathLeft " " pathRight)
 
 ExitApp

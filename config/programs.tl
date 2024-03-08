@@ -32,6 +32,7 @@
 		VMware Horizon Client		VMware\VMware Horizon View Client\vmware-view.exe
 		VSCode						Microsoft VS Code\Code.exe
 		Windows Terminal			Windows Terminal\WindowsTerminal.exe								WORK_VDI
+		WinMerge					WinMerge\WinMergeU.exe
 	} ~PATH.addToStart(<WINDOWS>\) {
 		Explorer					explorer.exe
 		Notepad						System32\notepad.exe

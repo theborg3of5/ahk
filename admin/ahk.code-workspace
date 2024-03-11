@@ -67,5 +67,14 @@
 				},
 			]
 		},
+		"highlight.regexes": {
+			"(;(end)?region.*)": {
+				"decorations": [
+					{
+						"color": "#858585"
+					}
+				]
+			},
+		},
 	}
 }

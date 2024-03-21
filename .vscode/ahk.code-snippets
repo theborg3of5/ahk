@@ -2,7 +2,7 @@
 	"If block": {
 		"prefix": "if",
 		"body": [
-			"if(${1:condition}) {",
+			"if (${1:condition}) {",
 			"\t$0",
 			"}"
 		],
@@ -109,7 +109,6 @@
 		"prefix": "region",
 		"body": [
 			";region ${1:regionName}",
-			"$0",
 			";endregion ${1:regionName}"
 		],
 		"description": "Insert a collapsible region"

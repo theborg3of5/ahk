@@ -104,9 +104,9 @@ class VisualWindow {
 		this.prepWindow()
 		
 		this.convertSpecialWindowPositions(x, y, bounds)
-		if(x != "")
+		if (x != "")
 			this.mvLeftToX(x)
-		if(y != "")
+		if (y != "")
 			this.mvTopToY(y)
 		
 		this.applyPosition()
@@ -124,9 +124,9 @@ class VisualWindow {
 		this.prepWindow()
 		
 		shouldMax := this.convertSpecialWindowSizes(width, height, bounds)
-		if(width != "")
+		if (width != "")
 			this.rsToWidth(width)
-		if(height != "")
+		if (height != "")
 			this.rsToHeight(height)
 		
 		this.applyPosition(shouldMax)
@@ -148,15 +148,15 @@ class VisualWindow {
 		
 		; Resize should happen first as convertSpecialWindowPositions() uses updated (numeric) size in its calculations.
 		shouldMax := this.convertSpecialWindowSizes(width, height, bounds)
-		if(width != "")
+		if (width != "")
 			this.rsToWidth(width)
-		if(height != "")
+		if (height != "")
 			this.rsToHeight(height)
 		
 		this.convertSpecialWindowPositions(x, y, bounds)
-		if(x != "")
+		if (x != "")
 			this.mvLeftToX(x)
-		if(y != "")
+		if (y != "")
 			this.mvTopToY(y)
 		
 		this.applyPosition(shouldMax)
@@ -360,17 +360,17 @@ class VisualWindow {
 	calculateBorderOffsets() {
 		borderOffsets := {}
 		
-		if(Config.findWindowInfo(this.titleString).edgeType = WindowInfo.EdgeStyle_NoPadding) { ; Specific window has no padding
+		if (Config.findWindowInfo(this.titleString).edgeType = WindowInfo.EdgeStyle_NoPadding) { ; Specific window has no padding
 			offsetWidth  := 0
 			offsetHeight := 0
 		} else { ; Calculate the default padding based on the window's style
 			; Window with no caption style (no titlebar or borders)
-			if(!WindowLib.hasCaption(this.titleString)) {
+			if (!WindowLib.hasCaption(this.titleString)) {
 				offsetWidth  := 0
 				offsetHeight := 0
 			
 			; Windows with a caption that are NOT resizable
-			} else if(!WindowLib.isSizable(this.titleString)) {
+			} else if (!WindowLib.isSizable(this.titleString)) {
 				offsetWidth  := MicrosoftLib.FrameX_CaptionNoSizable- MicrosoftLib.BorderX
 				offsetHeight := MicrosoftLib.FrameY_CaptionNoSizable- MicrosoftLib.BorderY
 			
@@ -425,7 +425,7 @@ class VisualWindow {
 	;---------
 	prepWindow() {
 		; Restore minimized and maximized windows so we can move/resize them properly.
-		if(WindowLib.isMinimized(this.titleString) || WindowLib.isMaximized(this.titleString)) {
+		if (WindowLib.isMinimized(this.titleString) || WindowLib.isMaximized(this.titleString)) {
 			WinRestore, % this.titleString
 			this.updateToCurrentPosition()
 		}
@@ -441,7 +441,7 @@ class VisualWindow {
 		this.calcActualPosition(x, y, width, height) ; Add offsets back in
 		WinMove, % this.titleString, , x, y, width, height
 		
-		if(doMaximize)
+		if (doMaximize)
 			WinMaximize, % this.titleString
 	}
 	
@@ -494,7 +494,7 @@ class VisualWindow {
 	
 	; [[ Snapping ]] ---
 	mvSnap() {
-		if(!this.isSnapOn)
+		if (!this.isSnapOn)
 			return
 		
 		monitorBounds := MonitorLib.getWorkAreaForWindow(this.titleString) ; Should always be the monitor we're currently on, since we're snapping to the edges of that monitor
@@ -504,19 +504,19 @@ class VisualWindow {
 		bottomDistance := abs(this.bottomY - monitorBounds["BOTTOM"])
 		
 		; Snap to left or right edge of screen
-		if((leftDistance > 0) && (leftDistance <= this.snapDistance))
+		if ((leftDistance > 0) && (leftDistance <= this.snapDistance))
 			this.mvLeftToX(monitorBounds["LEFT"])
-		else if((rightDistance > 0) && (rightDistance <= this.snapDistance))
+		else if ((rightDistance > 0) && (rightDistance <= this.snapDistance))
 			this.mvRightToX(monitorBounds["RIGHT"])
 		
 		; Snap to top or bottom edge of screen
-		if((topDistance > 0) && (topDistance <= this.snapDistance))
+		if ((topDistance > 0) && (topDistance <= this.snapDistance))
 			this.mvTopToY(monitorBounds["TOP"])
-		else if((bottomDistance > 0) && (bottomDistance <= this.snapDistance))
+		else if ((bottomDistance > 0) && (bottomDistance <= this.snapDistance))
 			this.mvBottomToY(monitorBounds["BOTTOM"])
 	}
 	rsSnap(directionX, directionY) {
-		if(!this.isSnapOn)
+		if (!this.isSnapOn)
 			return
 		
 		monitorBounds := MonitorLib.getWorkAreaForWindow(this.titleString) ; Should always be the monitor we're currently on, since we're snapping to the edges of that monitor
@@ -526,22 +526,22 @@ class VisualWindow {
 		bottomDistance := abs(this.bottomY - monitorBounds["BOTTOM"])
 		
 		; Snap to left edge of screen
-		if(directionX = this.Resize_X_ToLeft) {
-			if((leftDistance > 0) && (leftDistance <= this.snapDistance))
+		if (directionX = this.Resize_X_ToLeft) {
+			if ((leftDistance > 0) && (leftDistance <= this.snapDistance))
 				this.rsLeftToX(monitorBounds["LEFT"])
 		; Snap to right edge of screen
-		} else if(directionX = this.Resize_X_ToRight) {
-			if((rightDistance > 0) && (rightDistance <= this.snapDistance))
+		} else if (directionX = this.Resize_X_ToRight) {
+			if ((rightDistance > 0) && (rightDistance <= this.snapDistance))
 				this.rsRightToX(monitorBounds["RIGHT"])
 		}
 		
 		; Snap to top edge of screen
-		if(directionY = this.Resize_Y_ToTop) {
-			if((topDistance > 0) && (topDistance <= this.snapDistance))
+		if (directionY = this.Resize_Y_ToTop) {
+			if ((topDistance > 0) && (topDistance <= this.snapDistance))
 				this.rsTopToY(monitorBounds["TOP"])
 		; Snap to bottom edge of screen
-		} else if(directionY = this.Resize_Y_ToBottom) {
-			if((bottomDistance > 0) && (bottomDistance <= this.snapDistance))
+		} else if (directionY = this.Resize_Y_ToBottom) {
+			if ((bottomDistance > 0) && (bottomDistance <= this.snapDistance))
 				this.rsBottomToY(monitorBounds["BOTTOM"])
 		}
 	}
@@ -562,7 +562,7 @@ class VisualWindow {
 		shouldMax := (width = this.Width_Maximize && height = this.Height_Maximize)
 		
 		; Default to the bounds of the monitor that the window is currently on for use with special values below.
-		if(!bounds)
+		if (!bounds)
 			bounds := MonitorLib.getWorkAreaForWindow(this.titleString)
 		
 		; Convert any special values, everything else is left alone.
@@ -596,8 +596,8 @@ class VisualWindow {
 	convertSpecialWindowPositions(ByRef x, ByRef y, bounds := "") {
 		; If our bounds will take us to another monitor, make sure x and y aren't blank (as that will make us
 		; skip moving the window entirely).
-		if(!MonitorLib.isWindowOnMonitor(this.titleString, bounds["MONITOR_INDEX"])) {
-			if(x = "" && y = "") {
+		if (!MonitorLib.isWindowOnMonitor(this.titleString, bounds["MONITOR_INDEX"])) {
+			if (x = "" && y = "") {
 				x := this.X_Centered
 				y := this.Y_Centered
 			}
@@ -608,18 +608,18 @@ class VisualWindow {
 	}
 	convertSpecialWindowX(x, bounds) {
 		; Respect blank values as "don't change this coordinate"
-		if(x = "")
+		if (x = "")
 			return ""
 		
 		specialValues := [ this.X_LeftEdge, this.X_RightEdge, this.X_Centered ]
-		if(!x.startsWithAnyOf(specialValues, match)) {
-			if(bounds)
+		if (!x.startsWithAnyOf(specialValues, match)) {
+			if (bounds)
 				x += bounds["LEFT"] ; If we were GIVEN specific bounds, numeric values are relative to them
 			return x
 		}
 		
 		; Default to the bounds of the monitor that the window is currently on for use with special values below.
-		if(!bounds)
+		if (!bounds)
 			bounds := MonitorLib.getWorkAreaForWindow(this.titleString)
 		
 		; Convert the special value.
@@ -632,7 +632,7 @@ class VisualWindow {
 		
 		; If there's an offset on the end, add that on.
 		offset := x.removeFromStart(match).removeFromStart("+") ; Strip off +, but leave - (as a negative sign)
-		if(offSet != "")
+		if (offSet != "")
 			newX += offset
 		
 		; Debug.popup("x",x, "specialValues",specialValues, "bounds",bounds, "match",match, "offset",offset, "newX",newX, "this",this)
@@ -640,18 +640,18 @@ class VisualWindow {
 	}
 	convertSpecialWindowY(y, bounds) {
 		; Respect blank values as "don't change this coordinate"
-		if(y = "")
+		if (y = "")
 			return ""
 		
 		specialValues := [ this.Y_TopEdge, this.Y_BottomEdge, this.Y_Centered]
-		if(!y.startsWithAnyOf(specialValues, match)) {
-			if(bounds)
+		if (!y.startsWithAnyOf(specialValues, match)) {
+			if (bounds)
 				y += bounds["TOP"] ; If we were GIVEN specific bounds, numeric values are relative to them
 			return y
 		}
 		
 		; Default to the bounds of the monitor that the window is currently on for use with special values below.
-		if(!bounds)
+		if (!bounds)
 			bounds := MonitorLib.getWorkAreaForWindow(this.titleString)
 		
 		; Convert the special value.
@@ -664,7 +664,7 @@ class VisualWindow {
 		
 		; If there's an offset on the end, add that on.
 		offset := y.removeFromStart(match).removeFromStart("+") ; Strip off +, but leave - (as a negative sign)
-		if(offSet != "")
+		if (offSet != "")
 			newY += offset
 		
 		; Debug.popup("y",y, "specialValues",specialValues, "bounds",bounds, "match",match, "offset",offset, "newY",newY, "this",this)

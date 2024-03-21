@@ -1,4 +1,4 @@
-/* Provides a way to interact with windows with AHK at the size/position that they appear to be. =--
+/* Provides a way to interact with windows with AHK at the size/position that they appear to be.
 	
 	In Windows 10, windows are not always the size that they appear for AHK - there is sometimes a wider, invisible border offset around them between, making them look smaller (and further right/down) than they appear. This class provides a way to move and resize a window as if it was the size which it appears, plus a few additional features to save on the math required to say, align a window's right edge to the side of the monitor.
 	
@@ -25,37 +25,31 @@
 ;		window := new VisualWindow("A") ; Create a new VisualWindow representing the active window ("A")
 ;		window.move(VisualWindow.X_Centered, VisualWindow.Y_Centered) ; Center window
 	
-*/ ; --=
+*/
 
 class VisualWindow {
-	; #PUBLIC#
-	
-	; @GROUP@ Special window position constants
+	;region ==================== PUBLIC ====================
+	;region Special window position constants
 	static X_LeftEdge   := "LEFT_EDGE"   ; Against left edge of screen
 	static X_RightEdge  := "RIGHT_EDGE"  ; Against right edge of screen
 	static X_Centered   := "CENTERED"    ; Horizontally centered
 	static Y_TopEdge    := "TOP_EDGE"    ; Against top edge of screen
 	static Y_BottomEdge := "BOTTOM_EDGE" ; Against bottom edge of screen
 	static Y_Centered   := "CENTERED"    ; Vertically centered
-	; @GROUP-END@
+	;endregion Special window position constants
+
+	;region Special window size constants
+	static Size_Maximize := "MAX" ; Maximize the window (using this for either width or height will override the other).
+	;endregion Special window size constants
 	
-	; @GROUP@ Special window size constants
-	static Width_Full      := "FULL" ; The full width of the monitor's working area (or other bounds, if given)
-	static Width_Half      := "HALF" ; Half of the full width of the monitor's working area (or other bounds, if given)
-	static Width_Maximize  := "MAX"  ; Maximize the window (must be used with .Height_Maximize).
-	static Height_Full     := "FULL" ; The full height of the monitor's working area (or other bounds, if given)
-	static Height_Half     := "HALF" ; Half of the full height of the monitor's working area (or other bounds, if given)
-	static Height_Maximize := "MAX"  ; Maximize the window (must be used with .Width_Maximize).
-	; @GROUP-END@
-	
-	; @GROUP@ Window position properties
+	;region Window position properties
 	leftX   := 0 ; The X coordinate of the visual left edge of the window
 	rightX  := 0 ; The X coordinate of the visual right edge of the window
 	topY    := 0 ; The Y coordinate of the visual top edge of the window
 	bottomY := 0 ; The Y coordinate of the visual bottom edge of the window
 	width   := 0 ; The visual width of the window
 	height  := 0 ; The visual height of the window
-	; @GROUP-END@
+	;endregion Window position properties
 	
 	;---------
 	; DESCRIPTION:    Create a new VisualWindow object to interact with a window as it appears.
@@ -90,7 +84,7 @@ class VisualWindow {
 		height := this.height + this.borderOffsets["BOTTOM"] + this.borderOffsets["TOP"]
 	}
 	
-	; [[ General movement/resizing (no snapping) ]] =--
+	;region General movement/resizing (no snapping)
 	;---------
 	; DESCRIPTION:    Move the window to the specified coordinates (without snapping).
 	; PARAMETERS:
@@ -116,8 +110,9 @@ class VisualWindow {
 	; PARAMETERS:
 	;  width  (I,OPT) - The width to resize to
 	;  height (I,OPT) - The height to resize to
-	;  bounds (I,OPT) - If specified, width and height will be treated as relative to these bounds. If not, special values
-	;                   from VisualWindow.Width_* or .Height_* will be calculated relative to the window's current monitor.
+	;  bounds (I,OPT) - If specified, width and height will be treated as relative to these bounds.
+	;                   If not, this will be filled with bounds from the window's current monitor
+	;                   and any relative values will be calculated relative to that.
 	; NOTES:          Does not support snapping.
 	;---------
 	resize(width := "", height := "", bounds := "") {
@@ -138,9 +133,9 @@ class VisualWindow {
 	;  height (I,OPT) - The height to resize to
 	;  x      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.X_* constants
 	;  y      (I,OPT) - The x coordinate to move to, or one of the VisualWindow.Y_* constants
-	;  bounds (I,OPT) - If specified, width/height/x/y will all be treated as relative to these bounds. If not, special
-	;                   values from VisualWindow.Width_*/.Height_*/.X_*/.Y_* will be calculated relative to the window's
-	;                   current monitor.
+	;  bounds (I,OPT) - If specified, width and height will be treated as relative to these bounds.
+	;                   If not, this will be filled with bounds from the window's current monitor
+	;                   and any relative values will be calculated relative to that.
 	; NOTES:          Does not support snapping.
 	;---------
 	resizeMove(width := "", height := "", x := "", y := "", bounds := "") {
@@ -161,9 +156,9 @@ class VisualWindow {
 		
 		this.applyPosition(shouldMax)
 	}
+	;endregion General movement/resizing (no snapping)
 	
-	
-	; [[ Movement based on corners (supports snapping) ]] ---
+	;region Movement based on corners (supports snapping)
 	;---------
 	; DESCRIPTION:    Move the top-left corner of the window to the given coordinate.
 	; PARAMETERS:
@@ -228,8 +223,9 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
+	;endregion Movement based on corners (supports snapping)
 	
-	; [[ Resizing based on corners (supports snapping) ]] ---
+	;region Resizing based on corners (supports snapping)
 	;---------
 	; DESCRIPTION:    Resize the window so that the top-left corner is in the given coordinate.
 	; PARAMETERS:
@@ -294,7 +290,7 @@ class VisualWindow {
 		
 		this.applyPosition()
 	}
-	; --=
+	;endregion Resizing based on corners (supports snapping)
 	
 	;---------
 	; DESCRIPTION:    Turn on snapping - the window will "snap" to the end of the monitor within a
@@ -338,10 +334,9 @@ class VisualWindow {
 		
 		return bounds
 	}
+	;endregion ================= PUBLIC ====================
 	
-	
-	; #PRIVATE#
-	
+	;region ==================== PRIVATE ===================
 	; Constants for which direction we're resizing in, for snapping purposes
 	static Resize_Y_ToTop    := "TOP"
 	static Resize_Y_ToBottom := "BOTTOM"
@@ -446,7 +441,7 @@ class VisualWindow {
 	}
 	
 	
-	; [[ Moving window so specific window edges are somewhere ]] =--
+	;region Moving window so specific window edges are somewhere
 	mvLeftToX(x) {
 		this.leftX  := x
 		this.rightX := x + this.width
@@ -463,8 +458,9 @@ class VisualWindow {
 		this.topY    := y - this.height
 		this.bottomY := y
 	}
+	;endregion Moving window so specific window edges are somewhere
 	
-	; [[ Resizing window so specific window edges are somewhere ]] ---
+	;region Resizing window so specific window edges are somewhere
 	rsLeftToX(x) {
 		this.leftX := x
 		this.width := this.rightX - x
@@ -481,8 +477,9 @@ class VisualWindow {
 		this.bottomY := y
 		this.height  := y - this.topY
 	}
+	;endregion Resizing window so specific window edges are somewhere
 	
-	; [[ Resizing window to a specific width/height (towards bottom-right corner) ]] ---
+	;region Resizing window to a specific width/height (towards bottom-right corner)
 	rsToWidth(width) {
 		this.width  := width
 		this.rightX := this.leftX + width
@@ -491,8 +488,9 @@ class VisualWindow {
 		this.height  := height
 		this.bottomY := this.topY + height
 	}
+	;endregion Resizing window to a specific width/height (towards bottom-right corner)
 	
-	; [[ Snapping ]] ---
+	;region Snapping
 	mvSnap() {
 		if (!this.isSnapOn)
 			return
@@ -545,39 +543,39 @@ class VisualWindow {
 				this.rsBottomToY(monitorBounds["BOTTOM"])
 		}
 	}
+	;endregion Snapping
 	
-	; [[ Special window sizes/positions (for window placement relative to monitor) ]] ---
+	;region Special window sizes/positions (for window placement relative to monitor)
 	;---------
-	; DESCRIPTION:    Convert the given strings into proper width/height values, supporting various special values
-	;                 (VisualWindow.Width_*/.Height_*).
+	; DESCRIPTION:    Convert the given strings into proper width/height values, supporting various
+	;                 special values (VisualWindow.Size_* and percentages).
 	; PARAMETERS:
 	;  width  (IO,REQ) - Width string. Will be replaced with the new (numeric or blank) width.
 	;  height (IO,REQ) - Height string. Will be replaced with the new (numeric or blank) height.
-	;  bounds  (I,OPT) - If specified, width and height will be treated as relative to these bounds. If not, this will be
-	;                    filled with bounds from the window's current monitor and special values from VisualWindow.Width_* or
-	;                    .Height_* will be calculated relative to that.
+	;  bounds  (I,OPT) - If specified, width and height will be treated as relative to these bounds.
+	;                    If not, this will be filled with bounds from the window's current monitor
+	;                    and any relative values will be calculated relative to that.
 	; RETURNS:        true/false - should we maximize this window?
 	;---------
 	convertSpecialWindowSizes(ByRef width, ByRef height, bounds := "") {
-		shouldMax := (width = this.Width_Maximize && height = this.Height_Maximize)
+		; Maximize was already checked before this function and will be applied later, so we can skip the resize.
+		if (width = this.Size_Maximize || height = this.Size_Maximize) {
+			width := ""
+			height := ""
+			return true
+		}
 		
 		; Default to the bounds of the monitor that the window is currently on for use with special values below.
 		if (!bounds)
 			bounds := MonitorLib.getWorkAreaForWindow(this.titleString)
 		
-		; Convert any special values, everything else is left alone.
-		Switch width {
-			Case this.Width_Full:      width := bounds["WIDTH"]
-			Case this.Width_Half:      width := bounds["WIDTH"] / 2
-			Case this.Width_Maximize:  width := "" ; Maximize was already checked before this function and will be applied later, so we can skip the resize.
-		}
-		Switch height {
-			Case this.Height_Full:     height := bounds["HEIGHT"]
-			Case this.Height_Half:     height := bounds["HEIGHT"] / 2
-			Case this.Height_Maximize: height := "" ; Maximize was already checked before this function and will be applied later, so we can skip the resize.
-		}
+		; Handle percentages
+		if (width.endsWith("%"))
+			width := bounds["WIDTH"] * ( width.removeFromEnd("%") / 100 )
+		if (height.endsWith("%"))
+			height := bounds["HEIGHT"] * ( height.removeFromEnd("%") / 100 )
 		
-		return shouldMax
+		return false ; Not maximizing, that was handled at the top.
 	}
 	
 	;---------
@@ -670,6 +668,6 @@ class VisualWindow {
 		; Debug.popup("y",y, "specialValues",specialValues, "bounds",bounds, "match",match, "offset",offset, "newY",newY, "this",this)
 		return newY
 	}
-	; --=
-	; #END#
+	;endregion Special window sizes/positions (for window placement relative to monitor)
+	;endregion ================= PRIVATE ===================
 }

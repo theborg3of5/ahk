@@ -1,7 +1,7 @@
 ﻿@WindowTitle(Resize active window to size:)
 @MinColumnWidth(350)
 
-; WIDTH/HEIGHT can be special values from VisualWindow.Width_* and VisualWindow.Height_*
+; WIDTH/HEIGHT can be percentages (include % suffix) or special MAX value from VIsualWindow.Size_Maximize.
 ; From AHK Active Window Info, these numbers should match the top set of w/h, not the client ones.
 
 [	NAME									ABBREV			WIDTH		HEIGHT		CONTEXT	]
@@ -14,9 +14,9 @@
 	Small (800x600)							sm				800			600
 
 # Specifics
-	Fake-maximized							fmax | fm		FULL		FULL
-	Semi-maximized (fits around time)		smax			1460		FULL		HOME
-	Quarter									q				HALF		HALF
+	Fake-maximized							fmax | fm		100%		100%
+	Semi-maximized (fits around time)		smax			1460		100%		HOME
+	Quarter									q				50%			50%
 	Social									soc				950			750
 
 # Development

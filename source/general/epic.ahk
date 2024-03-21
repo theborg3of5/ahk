@@ -163,7 +163,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 					return
 				
 				monitorWorkArea := MonitorLib.getWorkAreaForWindow(titleString)
-				new VisualWindow("A").resizeMove(VisualWindow.Width_Full, VisualWindow.Height_Full, VisualWindow.X_Centered, VisualWindow.Y_Centered)
+				new VisualWindow("A").resizeMove("100%", "100%", VisualWindow.X_Centered, VisualWindow.Y_Centered)
 			}
 		}
 #If

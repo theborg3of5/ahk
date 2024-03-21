@@ -45,7 +45,7 @@ $!q::WindowActions.minimizeWindow()
 		if(!data)
 			return
 		
-		new VisualWindow("A").resizeMove(data["WIDTH"], data["HEIGHT"], VisualWindow.X_Centered, VisualWindow.Y_Centered) ; Center resized window
+		new VisualWindow("A").resizeMove(data["WIDTH"], data["HEIGHT"], VisualWindow.X_Centered, VisualWindow.Y_Centered) ; Always center resized window
 	}
 
 ; "Fix" window position and size to match configuration TL

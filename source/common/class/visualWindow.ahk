@@ -573,7 +573,7 @@ class VisualWindow {
 		}
 		Switch height {
 			Case this.Height_Full:     height := bounds["HEIGHT"]
-			Case this.Width_Half:      height := bounds["HEIGHT"] / 2
+			Case this.Height_Half:     height := bounds["HEIGHT"] / 2
 			Case this.Height_Maximize: height := "" ; Maximize was already checked before this function and will be applied later, so we can skip the resize.
 		}
 		

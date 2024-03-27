@@ -34,6 +34,7 @@
 			Process Explorer			CENTERED		CENTERED		1440		900
 			VB6							-				-				MAX			MAX			WORK
 			Visual Studio				-				-				MAX			MAX			WORK
+			VSCode						-				-				MAX			MAX			WORK
 			Zoom						-				-				MAX			MAX			HOME
 	}
 	

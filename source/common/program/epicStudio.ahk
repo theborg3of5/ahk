@@ -227,7 +227,7 @@ class EpicStudio {
 		currTitle := WinGetTitle(Config.windowInfo["EpicStudio"].titleString)
 		if(currTitle.startsWith(Config.private["M_UNIT_TEST_ROUTINE_PREFIX"])) {
 			; Immediate Window option should start selected
-			Control, Check, , % EpicStudio.Debug_UnitTestModeCheckbox, A ; Check Unit Test Mode box
+			Control, Check, , % "Unit Test Mode", A ; Check Unit Test Mode box
 			Send, !a ; Accept the window
 			
 			; If the breakpoint window appears, just accept it (copying over all breakpoints)
@@ -254,7 +254,7 @@ class EpicStudio {
 		; If the "other process" search field isn't enabled, select the corresponding radio button to enable it.
 		filterField := EpicStudio.Debug_OtherProcessField
 		if(!ControlGet("Enabled", "", filterField, "A"))
-			ControlSend, % EpicStudio.Debug_OtherProcessButton, {Space}, A
+			ControlClick, % "Other existing process:", A ; Have to use ControlClick because this is the label (if we sent a space it would have to go to the radio button next to it).
 		
 		; Focus the search field (may already be focused, but we want a consistent starting point).
 		ControlFocus, % filterField, A
@@ -280,9 +280,7 @@ class EpicStudio {
 		
 	;region ==================== PRIVATE ===================
 	; Debug window controls
-	static Debug_OtherProcessButton   := "WindowsForms10.BUTTON.app.0.141b42a_r7_ad12" ; "Other Process" radio button
-	static Debug_OtherProcessField    := "Edit1" ; "Other Process" search field
-	static Debug_UnitTestModeCheckbox := "WindowsForms10.BUTTON.app.0.141b42a_r7_ad11" ; "Unit Test Mode" checkbox
+	static Debug_OtherProcessField := "Edit1" ; "Other Process" search field
 	
 	;---------
 	; DESCRIPTION:    Determine whether EpicStudio is in debug mode right now.

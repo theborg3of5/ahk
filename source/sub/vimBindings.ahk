@@ -1,4 +1,4 @@
-; Vim-style bindings for Chrome/Firefox.
+﻿; Vim-style bindings for Chrome/Firefox.
 
 #Include <includeCommon>
 ScriptTrayInfo.Init("AHK: Vim Bindings for Chrome/Firefox")
@@ -177,6 +177,7 @@ getExcludedTitles() {
 	titlesAry.push(" - Feedly")
 	titlesAry.push(" - Reddit")
 	titlesAry.push("Google Calendar - ")
+	titlesAry.push("– Hyperspace –")
 	return titlesAry
 }
 

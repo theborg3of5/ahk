@@ -72,6 +72,7 @@ Run(subFolder "windowMoverSizer.ahk")
 #Include visualStudio.ahk
 #Include vsCode.ahk
 #Include wilma.ahk
+#Include winMerge.ahk
 #Include word.ahk
 #Include zoom.ahk
 ;endregion Program-specific hotkeys

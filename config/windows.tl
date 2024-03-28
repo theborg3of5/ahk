@@ -113,6 +113,7 @@
 				Windows Taskbar					explorer.exe			Shell_TrayWnd
 				Windows Taskbar Secondary		explorer.exe			Shell_SecondaryTrayWnd
 				Windows Terminal				WindowsTerminal.exe
+				WinMerge						WinMergeU.exe
 				Word							WINWORD.EXE				-							-											NO_PADDING
 				Zoom							Zoom.exe				ZPContentViewWndClass
 	}

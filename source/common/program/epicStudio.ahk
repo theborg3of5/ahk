@@ -253,8 +253,10 @@ class EpicStudio {
 	runDebugSearch(keepExistingValue := false) {
 		; If the "other process" search field isn't enabled, select the corresponding radio button to enable it.
 		filterField := EpicStudio.Debug_OtherProcessField
-		if(!ControlGet("Enabled", "", filterField, "A"))
+		if(!ControlGet("Enabled", "", filterField, "A")) {
+			Sleep, 100
 			ControlClick, % "Other existing process:", A ; Have to use ControlClick because this is the label (if we sent a space it would have to go to the radio button next to it).
+		}
 		
 		; Focus the search field (may already be focused, but we want a consistent starting point).
 		ControlFocus, % filterField, A

@@ -53,6 +53,7 @@ return
 	~^l::
 	~^t::
 	~^f::
+	~^Space::
 		turnVimOffAuto()
 	return
 	

@@ -12,4 +12,18 @@
 
 	; Remove all synchronization points
 	!+s::Send, !mh
+
+	; Fix tab order (it's always MRU, but we can turn MRU back into the order they're in).
+	^+f::
+		fixWinMergeTabOrder() {
+			HotkeyLib.waitForRelease()
+			numTabs := 9
+
+			; Select each tab in reverse order.
+			Loop, % numTabs {
+				tabIndex := numTabs - A_Index + 1
+				Send, !w ; Window menu
+				Send, % tabIndex ; Tab index is just that number in the menu
+			}
+		}
 #If

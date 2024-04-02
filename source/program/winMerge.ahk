@@ -26,4 +26,10 @@
 				Send, % tabIndex ; Tab index is just that number in the menu
 			}
 		}
+	
+	; Toggle word wrap
+	^+7::
+		Send, !v ; View menu
+		Send, r  ; Wrap lines
+	return
 #If

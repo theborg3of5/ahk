@@ -10,7 +10,7 @@
 ^!#n::Config.runProgram("Notepad")
 ^!#r::Config.activateProgram("Windows Terminal", "--profile ""Git Bash"" --startingDirectory " Config.path["EPIC_SOURCE_CURRENT"])
 ^!#t::Config.runProgram("Teams")
-^!#v::Config.activateProgram("VSCode")
+^!#v::Config.activateProgram("VSCode", "--profile Default")
 ^!#/::Config.activateProgram("AutoHotkey WinSpy")
 
 ; Some programs are work-specific

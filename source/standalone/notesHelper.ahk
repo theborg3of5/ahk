@@ -8,6 +8,7 @@ DetectHiddenWindows, On
 #If Config.isWindowActive("OneNote")
 
 ; Hotstrings for various people/directions
+:CB0*X?:mm::superscriptSides(true)
 :CB0*X?:mL::superscriptSides()
 :CB0*X?:mR::superscriptSides()
 :CB0*X?:mBL::superscriptSides()
@@ -27,6 +28,7 @@ DetectHiddenWindows, On
 :CB0*X?:mDI::superscriptSides()
 :CB0*X?:mDO::superscriptSides()
 
+:CB0*X?:uu::superscriptSides(true)
 :CB0*X?:uL::superscriptSides()
 :CB0*X?:uR::superscriptSides()
 :CB0*X?:uBL::superscriptSides()
@@ -78,12 +80,18 @@ DetectHiddenWindows, On
 #If
 
 
-superscriptSides() {
+superscriptSides(removeLastChar := false) {
 	hotstring := A_ThisHotkey.afterString(":", true)
+	if (removeLastChar) {
+		hotstring := hotstring.sub(1, -1) ; Drop the last char
+		Send, {Backspace}
+	}
+	
 	length := hotstring.length()
 
 	Send, {Shift Down}{Left %length%}{Shift Up} ; Select text
 	Send, ^+= ; Superscript
+
 	Send, {Right} ; Deselect, cursor back where it started
 	; Send, {Space} ; Distance from superscripted text - otherwise if there's already text after then OneNote de-superscripts what we just superscripted.
 	Send, ^+= ; Remove superscript

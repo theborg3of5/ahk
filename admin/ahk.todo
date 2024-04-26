@@ -41,6 +41,15 @@
 	☐ Get rid of updateNotepadPPSupport once I'm sure I won't need it anymore (currently shows how to parse my headers and such).
 
 * Fixes / Cleanup * :
+	☐ Consider no longer running AHK as admin?
+		With VB6 retired, I don't think there's anything else that actually _needs_ to run as admin, right?
+		And running as admin is more annoying - more prompts and can't always interact with non-admin stuff properly.
+	☐ F2 for ***s
+		☐ Outlook: this works, as long as AHK is _not_ running as admin
+			myFindObjOutlook := ComObjActive("Outlook.Application").ActiveInspector.WordEditor.Application.Selection.Find
+			myFindObjOutlook.Wrap := 1
+			myFindObjOutlook.Execute("***") ; For Outlook
+		☐ Word: could we do something similar to above?
 	☐ Should I just add "FileEncoding, UTF-8" to my common script as well? Is there any instance where we _don't_ want that in place?
 	☐ notesHelper - make superscript stuff work when I'm adding it onto the beginning of a word, too (right now it loses the subscript)
 		Best route is probably clipboard manipulation?

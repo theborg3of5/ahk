@@ -80,8 +80,8 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 				; Specific function handling - make the function (with opening paren) the search term.
 				searchTerm := ""
 				if(this.location.contains("::")) {
-					searchTerm := this.location.afterString("::").removeFromEnd(")") ; Drop closing paren
-					this.location := this.location.beforeString("::")
+					this.location := this.location.afterString("::")
+					searchTerm := this.location.beforeString("::").removeFromEnd(")") ; Drop closing paren if it exists
 				}
 				
 				return SearchLib.buildCodeSearchURL("client", searchTerm, "", "", "", this.location)

@@ -313,7 +313,7 @@ class ClipboardLib {
 				return
 		}
 
-		location := path.appendPiece("::", functionName) ; path or path::functionName()
+		location := functionName.appendPiece("::", path) ; path or functionName()::path
 		ClipboardLib.setAndToast(location, label)
 	}
 	; #END#

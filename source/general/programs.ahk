@@ -1,6 +1,6 @@
 ; Hotkeys to run/activate various programs.
 
-!`::  Config.activateProgram("Process Explorer")
+!`::  Config.runProgram("Process Explorer")
 #e::  Config.activateProgram("Explorer", Explorer.ThisPCFolderUUID) ; Start up at "This PC" folder if we have to run it.
 #s::  Config.runProgram("Slack")
 ^!+g::Config.activateProgram("Chrome")

@@ -1,14 +1,12 @@
 class Explorer {
-	; #PUBLIC#
-	
+	;region ==================== PUBLIC ====================
 	;---------
 	; DESCRIPTION:    This is the UUID for the "This PC" folder that shows all drives.
 	;---------
 	static ThisPCFolderUUID := "::{20d04fe0-3aea-1069-a2d8-08002b30309d}"
+	;endregion ================= PUBLIC ====================
 	
-	
-	; #INTERNAL#
-	
+	;region ==================== INTERNAL ==================
 	;---------
 	; DESCRIPTION:    Toggle whether hidden files are visible in Explorer or not.
 	; NOTES:          Inspired by http://www.autohotkey.com/forum/post-342375.html#342375
@@ -127,10 +125,20 @@ class Explorer {
 		targetPath := currentFolder "\" relativeTargetPath
 		FileCreateShortcut, % targetPath, % currentFolder "\" name ".lnk", % currentFolder
 		Toast.ShowMedium("Created shortcut to " name " solution in current folder")
+
+		; Hide the various settings and readme files - I don't use them and they clutter up my shortcuts.
+		Loop, Files, %currentFolder%\*.*, F ; Only files
+		{
+			; Ignore shortcuts - I'm adding those.
+			if (A_LoopFileExt == "lnk")
+				Continue
+
+			FileSetAttrib, +H, %A_LoopFileFullPath%
+		}
 	}
-	
-	; #PRIVATE#
-	
+	;endregion ================= INTERNAL ==================
+
+	;region ==================== PRIVATE ===================
 	; Hotkeys (configured in QTTabBar)
 	static Hotkey_CopyCurrentFile   := "!c"
 	static Hotkey_CopyCurrentFolder := "^!c"
@@ -187,7 +195,7 @@ class Explorer {
 		return path
 	}
 	
-	; [[Relative shortcuts]] =--
+	;region Relative shortcuts
 	;---------
 	; DESCRIPTION:    Get the relative source folder from the current folder in Explorer.
 	; RETURNS:        The current folder (cleaned up and with a trailing backslash)
@@ -283,7 +291,6 @@ class Explorer {
 		
 		return sourceRelative targetRelative
 	}
-	; --=
-	
-	; #END#
+	;endregion Relative shortcuts
+	;endregion ================= PRIVATE ===================
 }

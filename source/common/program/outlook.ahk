@@ -158,7 +158,7 @@ class Outlook {
 	; DESCRIPTION:    Insert a TLG event into that calendar based on the user's selected TLP/record.
 	;---------
 	selectOutlookTLG() {
-		s := new Selector("tlg.tls").setTitle("Select EMC2 Record ID")
+		s := new Selector("tlg.tls").setTitle("Select EMC2 Record ID").setIcon(Config.getProgramPath("Outlook"))
 		s.dataTableList.filterOutIfColumnNoMatch("IS_OLD", "") ; Filter out old records (have a value in the OLD column)
 		data := s.selectGui()
 		if(!data)

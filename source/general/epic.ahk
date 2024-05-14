@@ -24,7 +24,10 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	^!#d:: selectTLGActionObject("Select EMC2 Record to View").openWeb()
 	^!+#d::selectTLGActionObject("Select EMC2 Record to Edit").openEdit()
 	selectTLGId(title) {
-		s := new Selector("tlg.tls").setTitle(title).overrideFieldsOff()
+		emc2Path := Config.getProgramPath("EMC2")
+		icon := FileLib.getParentFolder(emc2Path, 2) "\en-US\Images\emc2.ico" ; Icon is separate from the executable so we have to jump to it.
+
+		s := new Selector("tlg.tls").setTitle(title).setIcon(icon).overrideFieldsOff()
 		s.dataTableList.filterOutIfColumnBlank("RECORD")
 		s.dataTableList.filterOutIfColumnMatch("RECORD", "GET") ; Special keyword used for searching existing windows, can search for that with ^!i instead.
 		return s.selectGui("RECORD")
@@ -59,14 +62,14 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		
 	^!#h::
 		selectHSWeb() {
-			data := EpicLib.selectEpicEnvironment("Launch Standalone HSWeb in Environment")
+			data := EpicLib.selectEpicEnvironment("Launch Standalone HSWeb in Environment", Config.getProgramPath("Chrome"))
 			if(data["HSWEB_URL"])
 				Run(data["HSWEB_URL"])
 		}
 	
 	^!+h::
 		selectHyperdrive() {
-			data := EpicLib.selectEpicEnvironment("Launch Hyperdrive in Environment")
+			data := EpicLib.selectEpicEnvironment("Launch Hyperdrive in Environment", Config.getProgramPath("Hyperdrive"))
 			if(data)
 				EpicLib.runHyperdrive(data["COMM_ID"], data["TIME_ZONE"])
 		}
@@ -89,7 +92,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			if(record.ini && record.ini.length() != 3)
 				record := ""
 			
-			s := new Selector("epicEnvironments.tls").setTitle("Open Record(s) in Snapper in Environment")
+			s := new Selector("epicEnvironments.tls").setTitle("Open Record(s) in Snapper in Environment").setIcon(Config.getProgramPath("Snapper"))
 			s.addOverrideFields(["INI", "ID"]).setDefaultOverrides({"INI":record.ini, "ID":record.id}) ; Add fields for INI/ID and default in any values that we figured out
 			data := s.selectGui()
 			if(!data)
@@ -148,7 +151,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	
 	^!+v::
 		selectVDI() {
-			data := EpicLib.selectEpicEnvironment("Launch VDI for Environment")
+			data := EpicLib.selectEpicEnvironment("Launch VDI for Environment", Config.getProgramPath("VMware Horizon Client"))
 			if(!data)
 				return
 			

@@ -136,7 +136,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 #If Config.machineIsWorkDesktop ; Main work desktop only
 	^!+r::
 		selectThunder() {
-			data := EpicLib.selectEpicEnvironment("Launch Thunder for Environment")
+			data := EpicLib.selectEpicEnvironment("Launch Thunder for Environment", Config.getProgramPath("Thunder"))
 			if(!data)
 				return
 			

@@ -6,13 +6,16 @@ class EpicLib {
 	; DESCRIPTION:    Prompt the user to choose an internal Environment using a Selector.
 	; PARAMETERS:
 	;  selectorTitle (I,REQ) - The title for the Selector.
+	;  selectorIcon  (I,OPT) - The icon to use for the Selector popup.
 	; RETURNS:        data array (null if the user didn't accept)
 	;---------
-	selectEpicEnvironment(selectorTitle) {
+	selectEpicEnvironment(selectorTitle, selectorIcon := "") {
 		; Set up Selector
 		s := new Selector("epicEnvironments.tls")
 		if(selectorTitle != "")
 			s.setTitle(selectorTitle)
+		if(selectorIcon != "")
+			s.setIcon(selectorIcon)
 		
 		; Show the popup and get user input
 		data := s.selectGui()

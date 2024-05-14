@@ -162,6 +162,18 @@ class Selector {
 	}
 
 	;---------
+	; DESCRIPTION:    Set the popup's icon.
+	; PARAMETERS:
+	;  iconPath (I,REQ) - Path to the icon file (.exe, .ico, etc.)
+	; RETURNS:        this
+	; SIDE EFFECTS:   Sets the overall script's icon as well (but only as long as the popup is open).
+	;---------
+	setIcon(iconPath) {
+		this._iconPath := iconPath
+		return this
+	}
+	
+	;---------
 	; DESCRIPTION:    Add additional override fields to the popup shown to the user, and return whatever data
 	;                 they add (or is defaulted in) in the final return array.
 	; PARAMETERS:
@@ -335,13 +347,14 @@ class Selector {
 	static Char_Command_Edit := "e"
 	
 	_windowTitle     := "Please make a choice by either index or abbreviation:" ; The title of the window
-	_minColumnWidth  := 0     ; How wide (in pixels) each column must be, at a minimum.
-	choices          := ""    ; Array of visible choices the user can pick from (array of SelectorChoice objects).
-	sectionTitles    := ""    ; {choiceIndex: title} - Lines that will be displayed as titles (index matches the first choice that should be under this title)
-	overrideFields   := ""    ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers)
-	filePath         := ""    ; Where the file lives if we're reading one in.
-	defaultOverrides := ""    ; {columnLabel: value} - Default values to show in override fields, by column name
-	dataTL           := ""    ; TableList instance read from file, which we'll extract choice and other info from.
+	_iconPath        := "" ; The path of the icon to use while the popup is open
+	_minColumnWidth  := 0  ; How wide (in pixels) each column must be, at a minimum.
+	choices          := "" ; Array of visible choices the user can pick from (array of SelectorChoice objects).
+	sectionTitles    := "" ; {choiceIndex: title} - Lines that will be displayed as titles (index matches the first choice that should be under this title)
+	overrideFields   := "" ; {fieldIndex: label} - Mapping from override field indices => data labels (column headers)
+	filePath         := "" ; Where the file lives if we're reading one in.
+	defaultOverrides := "" ; {columnLabel: value} - Default values to show in override fields, by column name
+	dataTL           := "" ; TableList instance read from file, which we'll extract choice and other info from.
 	
 	;---------
 	; DESCRIPTION:    Read everything from the TLS file into a TableList instance and load most of
@@ -422,7 +435,7 @@ class Selector {
 		if(!this.validateChoices())
 			return ""
 		
-		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this._minColumnWidth)
+		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this._minColumnWidth, this._iconPath)
 		sGui.show(this._windowTitle, this.defaultOverrides)
 		
 		; User's choice is main data source

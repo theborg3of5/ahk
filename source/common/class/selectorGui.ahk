@@ -21,11 +21,12 @@ class SelectorGui {
 	;                           that should get override fields.
 	;  minColumnWidth (I,OPT) - Column width will never be smaller than the longest choice, 
 	;                           but will also not get smaller than this value. Defaults to 0.
+	;  iconPath       (I,OPT) - Path to an icon to show for the popup.
 	; RETURNS:        Reference to new SelectorGui object
 	;---------
-	__New(choices, sectionHeaders := "", overrideFields := "", minColumnWidth := 0) {
+	__New(choices, sectionHeaders := "", overrideFields := "", minColumnWidth := 0, iconPath := "") {
 		this.overrideFields := overrideFields
-		this.buildPopup(choices, sectionHeaders, minColumnWidth)
+		this.buildPopup(choices, sectionHeaders, minColumnWidth, iconPath)
 	}
 	
 	;---------
@@ -128,12 +129,13 @@ class SelectorGui {
 	;  sectionHeaders (I,REQ) - Associative array of section headers. Format:
 	;                            {firstRowUnderHeader: headerText}
 	;  minColumnWidth (I,REQ) - Minimum width (in px) that each column should be.
+	;  iconPath       (I,OPT) - Path to an icon to show for the popup.
 	;---------
-	buildPopup(choices, sectionHeaders, minColumnWidth) {
+	buildPopup(choices, sectionHeaders, minColumnWidth, iconPath := "") {
 		this.totalHeight += this.Margins["TOP"]
 		this.totalWidth  += this.Margins["LEFT"]
 		
-		this.createPopup()
+		this.createPopup(iconPath)
 		this.addChoices(choices, sectionHeaders, minColumnWidth)
 		this.addFields()
 		
@@ -144,12 +146,18 @@ class SelectorGui {
 	
 	;---------
 	; DESCRIPTION:    Create the actual popup and apply styles.
+	; PARAMETERS:
+	;  iconPath (I,OPT) - Path to an icon to show for the popup.
 	; SIDE EFFECTS:   Stores off the new gui's window handle and our new unique field ID/prefixes.
 	;---------
-	createPopup() {
+	createPopup(iconPath := "") {
+		; Set the provided icon (if any) before we create the gui - it uses the icon in effect when it's initially created.
+		settings := new TempSettings().trayIcon(iconPath)
+		
 		; Create gui and save off window handle
 		Gui, New, +HWNDguiId ; guiId := window handle
 		this.guiId := guiId
+		settings.restore() ; Restore original icon now that the gui's created
 		
 		; Other gui options
 		Gui, % "+Label" SelectorGui.Prefix_GuiSpecialLabels ; SelectorGui_ prefix for Gui* functions (GuiClose > SelectorGui_Close, etc.).

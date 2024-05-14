@@ -1,8 +1,7 @@
 ; A wrapper for temporarily changing different script-level settings, then restoring everything when you're finished.
 
 class TempSettings {
-	; #PUBLIC#
-	
+	;region ==================== PUBLIC ====================
 	;---------
 	; DESCRIPTION:    Restore all settings that were changed here, to their value just before the
 	;                 first time they were changed.
@@ -23,6 +22,8 @@ class TempSettings {
 			SetTitleMatchMode,   % this._titleMatchMode
 		if(this._titleMatchSpeed     != "")
 			SetTitleMatchMode,   % this._titleMatchSpeed
+		if(this._trayIcon            != "")
+			Menu, Tray, Icon,    % this._trayIcon, % this._trayIconNum
 		if(this._workingDirectory    != "")
 			SetWorkingDir,       % this._workingDirectory
 	}
@@ -35,7 +36,7 @@ class TempSettings {
 	; RETURNS:        this
 	;---------
 	coordMode(targetType, new) {
-		if(this._coordMode[targetType] != "")
+		if(this._coordMode[targetType] = "")
 			this._coordMode[targetType] := this.getCoordMode(targetType)
 		
 		CoordMode, % targetType, % new
@@ -49,7 +50,7 @@ class TempSettings {
 	; RETURNS:        this
 	;---------
 	detectHiddenWindows(new) {
-		if(this._detectHiddenWindows != "")
+		if(this._detectHiddenWindows = "")
 			this._detectHiddenWindows := A_DetectHiddenWindows
 		
 		DetectHiddenWindows, % new
@@ -63,7 +64,7 @@ class TempSettings {
 	; RETURNS:        this
 	;---------
 	sendLevel(new) {
-		if(this._sendLevel != "")
+		if(this._sendLevel = "")
 			this._sendLevel := A_SendLevel
 		
 		SendLevel, % new
@@ -78,7 +79,7 @@ class TempSettings {
 	; NOTES:          If you want to set the title match speed, use .titleMatchSpeed() instead.
 	;---------
 	titleMatchMode(new) {
-		if(this._titleMatchMode != "")
+		if(this._titleMatchMode = "")
 			this._titleMatchMode := A_TitleMatchMode
 		
 		SetTitleMatchMode, % new
@@ -92,10 +93,32 @@ class TempSettings {
 	; RETURNS:        this
 	;---------
 	titleMatchSpeed(new) {
-		if(this._titleMatchSpeed != "")
+		if(this._titleMatchSpeed = "")
 			this._titleMatchSpeed := A_TitleMatchModeSpeed
 		
 		SetTitleMatchMode, % new
+		return this
+	}
+	
+	;---------
+	; DESCRIPTION:    Set the tray icon.
+	; PARAMETERS:
+	;  newFile (I,REQ) - The path to the new tray icon.
+	;  newNum  (I,OPT) - The icon number (defaults to 1)
+	; RETURNS:        this
+	;---------
+	trayIcon(newFile, newNum := "") {
+		if(newFile = "")
+			return this
+		
+		if(newNum = "")
+			newNum := 1
+		if(this._trayIcon = "") {
+			this._trayIcon    := A_IconFile
+			this._trayIconNum := A_IconNumber
+		}
+		
+		Menu, Tray, Icon, % newFile, % newNum
 		return this
 	}
 	
@@ -106,21 +129,22 @@ class TempSettings {
 	; RETURNS:        this
 	;---------
 	workingDirectory(new) {
-		if(this._workingDirectory != "")
+		if(this._workingDirectory = "")
 			this._workingDirectory := A_WorkingDir
 		
 		SetWorkingDir, % new
 		return this
 	}
+	;endregion ================= PUBLIC ====================
 	
-	
-	; #PRIVATE#
-	
+	;region ==================== PRIVATE ===================
 	_coordMode           := {} ; {targetType: value}
 	_detectHiddenWindows := ""
 	_sendLevel           := ""
 	_titleMatchMode      := ""
 	_titleMatchSpeed     := ""
+	_trayIcon            := ""
+	_trayIconNum         := ""
 	_workingDirectory    := ""
 	
 	;---------
@@ -138,5 +162,5 @@ class TempSettings {
 			Case "Menu":    return A_CoordModeMenu
 		}
 	}
-	; #END#
+	;endregion ================= PRIVATE ===================
 }

@@ -135,8 +135,6 @@
 		Like:
 			         1         2         3
 			12345678901234567890123456789|
-	☐ Give environment selector popups a custom icon in addition to custom title
-		Is this possible without changing the (main) overall script's icon?
 	☐ Add a hotkey that just toasts the name + ID of the EMC2 record (if any)
 		Alt+/ (conceptually Alt+?), maybe?
 		Would need either EMC2summary scraping from below, or whatever equivalent thing I end up doing with track shadow reports

@@ -141,6 +141,7 @@ class Selector {
 		; Debug.popup("Selector.__New", "Finish", "Filepath", this.filePath, "State", this)
 	}
 	
+	;region Settings
 	;---------
 	; DESCRIPTION:    Turn off the override fields in the popup.
 	; RETURNS:        this
@@ -166,13 +167,14 @@ class Selector {
 	; PARAMETERS:
 	;  iconPath (I,REQ) - Path to the icon file (.exe, .ico, etc.)
 	; RETURNS:        this
-	; SIDE EFFECTS:   Sets the overall script's icon as well (but only as long as the popup is open).
 	;---------
 	setIcon(iconPath) {
 		this._iconPath := iconPath
 		return this
 	}
+	;endregion Settings
 	
+	;region Gui Changes
 	;---------
 	; DESCRIPTION:    Add additional override fields to the popup shown to the user, and return whatever data
 	;                 they add (or is defaulted in) in the final return array.
@@ -237,7 +239,9 @@ class Selector {
 		
 		return this.choices.length()
 	}
+	;endregion Gui Changes
 	
+	;region Selection entry points
 	;---------
 	; DESCRIPTION:    Show a popup to the user so they can select one of the choices we've prepared
 	;                 and enter any additional override information.
@@ -254,14 +258,17 @@ class Selector {
 		
 		data := this.doSelectGui()
 		
+		; If there's no result return "" so callers can just check !data
 		if(DataLib.isNullOrEmpty(data))
 			return ""
-		else if(returnColumn)
+		
+		; Return a specific column if requested
+		if(returnColumn)
 			return data[returnColumn]
-		else
-			return data
+		
+		return data
 	}
-	
+
 	;---------
 	; DESCRIPTION:    Programmatically select a choice from those we've prepared.
 	; PARAMETERS:
@@ -322,6 +329,7 @@ class Selector {
 		
 		return data
 	}
+	;endregion Selection entry points
 	
 	; @NPP-TABLELIST@
 	;---------

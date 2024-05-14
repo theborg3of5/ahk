@@ -168,6 +168,8 @@
 		☐ Would need to either:
 			☐ Make it configurable by caller - each caller would have to support it specially as the return format would be different.
 			☐ Update all callers to handle multiple-style format, all the time?
+			☐ Create new APIs (like adding a "multi" on the end) that describe what we expect to come back
+				Honestly, may be able to simplify/clarify existing entry points this way, too?
 		☐ Will want support for different "styles" of callers - single-column vs. data array return values
 		☐ Delimit with a plain space instead of a pipe - way easier to type that way!
 		Use cases:

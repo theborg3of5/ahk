@@ -1,9 +1,8 @@
 ; Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
 
 class Config {
-	; #PUBLIC#
-	
-	debugOn := false
+	;region ==================== PUBLIC ====================
+	debugOn := false ; GDB TODO window cache debug issue
 	
 	;---------
 	; DESCRIPTION:    Whether this class has been initialized. Used to not show debug popups when
@@ -28,7 +27,7 @@ class Config {
 	}
 	
 	
-	; [[ Privates ]] =--
+	;region Privates
 	;---------
 	; DESCRIPTION:    The private information from the privates file from initialization.
 	; PARAMETERS:
@@ -49,10 +48,10 @@ class Config {
 	replacePrivateTags(inputString) {
 		return inputString.replaceTags(this.privates)
 	}
+	;endregion Privates
 	
-	
-	; [[ Settings ]] ---
-	; [[ Current machine checks ]] =--
+	;region Settings
+	;region Current machine checks
 	;---------
 	; DESCRIPTION:    Which machine we're configured to act as, from the Machine_* constants in this class.
 	;---------
@@ -93,8 +92,9 @@ class Config {
 			return (this.machine = Config.Machine_HomeLaptop)
 		}
 	}
+	;endregion Current machine checks
 	
-	; [[ Current context checks ]] ---
+	;region Current context checks
 	;---------
 	; DESCRIPTION:    Which context we're configured to act as, from the Context_* constants in this class.
 	;---------
@@ -119,10 +119,10 @@ class Config {
 			return (this.context = Config.Context_Home)
 		}
 	}
-	; --=
+	;endregion Current context checks
+	;endregion Settings
 	
-	
-	; [[ Windows ]] ---
+	;region Windows
 	;---------
 	; DESCRIPTION:    Return the WindowInfo instance corresponding to the provided name.
 	; PARAMETERS:
@@ -245,9 +245,9 @@ class Config {
 			return ""
 		return matchingNames
 	}
+	;endregion Windows
 	
-	
-	; [[ Paths ]] ---
+	;region Paths
 	;---------
 	; DESCRIPTION:    A particular path from this class.
 	; PARAMETERS:
@@ -268,9 +268,9 @@ class Config {
 	replacePathTags(inputPath) {
 		return inputPath.replaceTags(this.paths)
 	}
+	;endregion Paths
 	
-	
-	; [[ Programs ]] ---
+	;region Programs
 	;---------
 	; DESCRIPTION:    Activate the window matching the specified name, running it if it doesn't yet exist.
 	; PARAMETERS:
@@ -298,9 +298,9 @@ class Config {
 		if(prog)
 			prog.run(args)
 	}
+	;endregion Programs
 	
-	
-	; [[ Games ]] ---
+	;region Games
 	;---------
 	; DESCRIPTION:    Check whether the specified window is a game (as identified in the games file passed in).
 	; PARAMETERS:
@@ -319,11 +319,10 @@ class Config {
 		
 		return false
 	}
-	; --=
+	;endregion Games
+	;endregion ================= PUBLIC ====================
 	
-	
-	; #PRIVATE#
-	
+	;region ==================== PRIVATE ===================
 	; Machines
 	static Machine_WorkDesktop := "WORK_DESKTOP" ; Work desktop
 	static Machine_WorkVDI     := "WORK_VDI"     ; Work VDI
@@ -522,5 +521,5 @@ class Config {
 		
 		return tags
 	}
-	; #END#
+	;endregion ================= PRIVATE ===================
 }

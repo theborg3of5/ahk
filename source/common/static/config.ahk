@@ -285,6 +285,7 @@ class Config {
 		else ; If it doesn't exist yet, we need to run the executable to make it happen.
 			this.runProgram(name, runArgs)
 	}
+
 	;---------
 	; DESCRIPTION:    Run the program matching the specified name.
 	; PARAMETERS:
@@ -297,6 +298,18 @@ class Config {
 		prog := this.program[name]
 		if(prog)
 			prog.run(args)
+	}
+
+	;---------
+	; DESCRIPTION:    Get the path for the named program.
+	; PARAMETERS:
+	;  name (I,REQ) - Name of the program we're interested in.
+	; RETURNS:        Full program path
+	;---------
+	getProgramPath(name) {
+		prog := this.program[name]
+		if(prog)
+			return prog.path
 	}
 	;endregion Programs
 	

@@ -477,7 +477,7 @@ class Selector {
 		
 		new TextPopup(table).show()
 		if(this.filePath)
-			RunLib.runAsUser(this.filePath) ; Open file to fix it
+			Config.runProgram("VSCode", "--profile Default " this.filePath) ; Open file to fix it
 		return false
 	}
 	
@@ -503,7 +503,7 @@ class Selector {
 			; Edit action - open the current INI file for editing
 			if(commandChar = this.Char_Command_Edit) {
 				suppressData := true
-				RunLib.runAsUser(this.filePath)
+				Config.runProgram("VSCode", "--profile Default " this.filePath)
 			}
 			
 			return ""

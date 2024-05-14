@@ -272,7 +272,7 @@ class EpicLib {
 			return ""
 		
 		s := this.getEMC2TypeSelector()
-		return s.selectChoice(ini, "SUBTYPE") ; Silent selection - no popup.
+		return s.selectSilent(ini, "SUBTYPE") ; Silent selection - no popup.
 	}
 
 	;---------

@@ -241,7 +241,65 @@ class Selector {
 	}
 	;endregion Gui Changes
 	
+	/* gdbtodo consider rearranging these entry points:
+		Code-wise, just have a single [private?] trySelect() with both a "silent" choice and a "noPrompt" flag
+		Wrappers:
+			prompt() - choiceString = "" (no param), noPrompt = false
+			selectSilent() - choiceString param, noPrompt = true
+	*/
+
 	;region Selection entry points
+	;gdbdoc
+	prompt(returnColumn := "") { ; gdbtodo switch over current callers to selectGui, make sure it all works properly
+		return this.doSelect("", returnColumn, false)
+	}
+
+	;gdbdoc
+	selectSilent(choiceString, returnColumn := "") {
+		return this.doSelect(choiceString, returnColumn, true)
+	}
+
+	;gdbdoc
+	select(choiceString, returnColumn := "") { ; gdbtodo rename to just select()
+		return this.doSelect(choiceString, returnColumn, false)
+	}
+
+	;gdbdoc
+	doSelect(choiceString, returnColumn := "", noPrompt := false) { ; gdbtodo move this to the private region
+		if(!this.loadChoicesFromData())
+			return ""
+		
+		; If something is given, try that silently first
+		if(choiceString)
+			data := this.parseChoice(choiceString)
+		
+		; If we got results (or if we didn't but we aren't allowed to prompt), we're done.
+		if(data || noPrompt)
+			return this.getReturnVal(data, returnColumn)
+
+		; Prompt the user.
+		data := this.doSelectGui()
+
+		return this.getReturnVal(data, returnColumn)
+	}
+
+	;gdbdoc
+	getReturnVal(data, returnColumn) { ; gdbtodo probably move this to the private region (along with doSelect)?
+		; If there's no result return "" so callers can just check !data
+		if(DataLib.isNullOrEmpty(data))
+			return ""
+
+		; If a specific column was requested, just return that
+		if(returnColumn)
+			return data[returnColumn]
+		
+		; Otherwise return the whole data array.
+		return data
+	}
+
+
+
+
 	;---------
 	; DESCRIPTION:    Show a popup to the user so they can select one of the choices we've prepared
 	;                 and enter any additional override information.
@@ -279,7 +337,7 @@ class Selector {
 	; RETURNS:        An array of data for the choice matching the given string. If the returnColumn parameter
 	;                 was specified, only the subscript matching that name will be returned.
 	;---------
-	selectChoice(choiceString, returnColumn := "") {
+	selectChoice(choiceString, returnColumn := "") { ; gdbremove just steal from header first
 		if(!choiceString)
 			return ""
 		
@@ -307,7 +365,7 @@ class Selector {
 	; RETURNS:        An array of data for the choice matching the given string. If the returnColumn
 	;                 parameter was specified, only the subscript matching that name will be returned.
 	;---------
-	select(choiceString := "", returnColumn := "") {
+	selectOld(choiceString := "", returnColumn := "") { ; gdbremove just steal from header first
 		if(!this.loadChoicesFromData())
 			return ""
 		

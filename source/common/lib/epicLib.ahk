@@ -725,5 +725,3 @@ class EpicLib {
 	;endregion EMC2 Record Extraction/Selection
 	;endregion ==================== PRIVATE ====================
 }
-
-

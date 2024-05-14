@@ -1,6 +1,5 @@
 ; Hotkeys for opening different locations, both local (folders) and remote (URLs).
 
-; [[Local/Remote Paths]] =--
 ; Specific folders
  !+a::openPath("AHK_ROOT")
 $!+d::openPath("USER_DOWNLOADS") ; $ because otherwise it conflicts with our Deluminate site-specific toggle hotkey in Chrome

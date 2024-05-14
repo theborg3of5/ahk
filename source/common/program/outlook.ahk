@@ -1,6 +1,5 @@
 class Outlook {
-	; #PUBLIC#
-	
+	;region ==================== PUBLIC ====================
 	;---------
 	; DESCRIPTION:    Check whether the TLG calendar is currently active.
 	; RETURNS:        true/false
@@ -36,10 +35,9 @@ class Outlook {
 		
 		return titles
 	}
+	;endregion ================= PUBLIC ====================
 	
-	
-	; #INTERNAL#
-
+	;region ==================== INTERNAL ==================
 	;---------
 	; DESCRIPTION:    Flag for whether dark mode is currently on.
 	;---------
@@ -217,10 +215,9 @@ class Outlook {
 			ClipboardLib.setAndToastError(eventTitle, "event string", "Outlook TLG calendar not focused.")
 		}
 	}
+	;endregion ================= INTERNAL ==================
 	
-	
-	; #PRIVATE#
-	
+	;region ==================== PRIVATE ===================
 	; The ClassNN for the control that contains the subject of the message. Should be the same for inline and popped-out messages.
 	static ClassNN_MailSubject_View := "RichEdit20WPT1" ; Most view and edit cases have the subject in this control
 	static ClassNN_MailSubject_Edit := "RichEdit20WPT5" ; This is for editing in a popup - subject is in a different control
@@ -347,5 +344,5 @@ class Outlook {
 		; String it back together to return.
 		title := idString ", " message
 	}
-	; #END#
+	;endregion ================= PRIVATE ===================
 }

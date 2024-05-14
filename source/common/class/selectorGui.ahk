@@ -8,8 +8,7 @@
 */ ; --=
 
 class SelectorGui {
-	; #PUBLIC#
-	
+	;region ==================== PUBLIC ====================
 	;---------
 	; DESCRIPTION:    Create a new SelectorGui instance.
 	; PARAMETERS:
@@ -66,10 +65,9 @@ class SelectorGui {
 	getOverrideData() {
 		return this.overrideData
 	}
+	;endregion ================= PUBLIC ====================
 	
-	
-	; #INTERNAL#
-	
+	;region ==================== INTERNAL ==================
 	;---------
 	; DESCRIPTION:    Update the font color of the given control so that it's "ghosted" if it's the initial value, and black otherwise.
 	; PARAMETERS:
@@ -90,10 +88,9 @@ class SelectorGui {
 		; Tell the edit control to update to match
 		GuiControl, Font, % controlId
 	}
+	;endregion ================= INTERNAL ==================
 	
-	
-	; #PRIVATE#
-	
+	;region ==================== PRIVATE ===================
 	; Special characters
 	static Char_NewColumn := "! " ; Space after is required
 	
@@ -374,10 +371,9 @@ class SelectorGui {
 				this.overrideData[label] := inputVal
 		}
 	}
+	;endregion ================= PRIVATE ===================
 	
-	
-	; #DEBUG#
-	
+	;region ==================== DEBUG =====================
 	Debug_ToString(ByRef table) {
 		table.addLine("Gui ID (handle)",            this.guiId)
 		table.addLine("Choice field var",           this.fieldVar_Choice)
@@ -389,11 +385,11 @@ class SelectorGui {
 		table.addLine("Total width",                this.totalWidth)
 		table.addLine("Choices table width",        this.choicesWidth)
 	}
-	; #END#
+	;endregion ================= DEBUG =====================
 }
 
-; GUI Events - these can't live in the class because they're only specified by name (via the +Label option on the gui).
-
+; These can't live in the class because they're only specified by name (via the +Label option on the gui).
+;region GUI events
 ; Window was closed
 SelectorGui_Close() {
 	Gui, Destroy
@@ -407,3 +403,4 @@ SelectorGui_Submit() {
 SelectorGui_OverrideFieldChanged() {
 	SelectorGui.updateOverrideField(A_Gui, A_GuiControl)
 }
+;endregion GUI events

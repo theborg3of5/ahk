@@ -1,20 +1,18 @@
 ; Class that represents a specific program and all the information needed to run it.
 
 class Program {
-	; #PUBLIC#
+	;region ==================== PUBLIC ====================
 	
-	; @GROUP@ Path types (affects how the path is run)
+	;region Path types (affect how the path is run)
 	static PathType_COMMAND := "COMMAND" ; A command
 	static PathType_EXE     := "EXE"     ; A "normal" path to an executable
 	static PathType_WinApp  := "APP"     ; A windows app (fka universal app)
 	static PathType_URL     := "URL"     ; A web URL
-	; @GROUP-END@
+	;endregion Path types (affect how the path is run)
 	
-	; @GROUP@
 	name     := "" ; Name of the program
 	path     := "" ; Full filepath to launch the program
 	pathType := "" ; The type of path from Program.PathType_*
-	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    Creates a new instance of Program.
@@ -64,5 +62,5 @@ class Program {
 		
 		return true
 	}
-	; #END#
+	;endregion ================= PUBLIC ====================
 }

@@ -14,25 +14,24 @@ openPath(folderName) {
 ; Open folder from list
 !+w::
 	selectFolder() {
-		folderPath := new Selector("folders.tls").setIcon(Config.getProgramPath("Explorer")).prompt("PATH")
-		folderPath := Config.replacePathTags(folderPath)
-		
-		if(folderPath = "")
-			return
-		folderPath := DateTimeLib.replaceTags(folderPath) ; For any date/time-based folder paths, use the current date/time.
-		
-		; If the folder doesn't exist, try to create it (with permission from user)
-		if(!FileLib.folderExists(folderPath)) {
-			if(!FileLib.folderExists(FileLib.getParentFolder(folderPath))) {
-				Toast.ShowError("Could not open chosen folder", "Neither the folder nor its parent folder exist.")
-				return ; Not going to try creating if not even the parent exists.
-			}
+		folderPaths := new Selector("folders.tls").setIcon(Config.getProgramPath("Explorer")).promptMulti("PATH")
+		For _, path in folderPaths {
+			path := Config.replacePathTags(path)
+			path := DateTimeLib.replaceTags(path) ; For any date/time-based folder paths, use the current date/time.
 			
-			if(GuiLib.showConfirmationPopup("This folder does not exist:`n" folderPath "`n`nCreate it?", "Folder does not exist"))
-				FileCreateDir, % folderPath
+			; If the folder doesn't exist, try to create it (with permission from user)
+			if(!FileLib.folderExists(path)) {
+				if(!FileLib.folderExists(FileLib.getParentFolder(path))) {
+					Toast.ShowError("Could not open chosen folder", "Neither the folder nor its parent folder exist.")
+					return ; Not going to try creating if not even the parent exists.
+				}
+				
+				if(GuiLib.showConfirmationPopup("This folder does not exist:`n" path "`n`nCreate it?", "Folder does not exist"))
+					FileCreateDir, % path
+			}
+			if(FileLib.folderExists(path))
+				Run(path)
 		}
-		if(FileLib.folderExists(folderPath))
-			Run(folderPath)
 	}
 
 ; Send cleaned-up path (remove odd garbage from around path, switch to mapped network drives)
@@ -50,17 +49,16 @@ sendCleanedUpPath(mapToUnix := false) {
 ; Selector to allow easy editing of config or code files that we edit often
 !+c::
 	selectEditFile() {
-		path := new Selector("editFiles.tls").setIcon(Config.getProgramPath("VSCode")).prompt("PATH")
-		if(!path)
-			return
-		
-		path := Config.replacePathTags(path)
-		if(!FileExist(path)) {
-			Toast.ShowError("Script does not exist: " path)
-			return
+		filePaths := new Selector("editFiles.tls").setIcon(Config.getProgramPath("VSCode")).promptMulti("PATH")
+		For _, path in filePaths {
+			path := Config.replacePathTags(path)
+			if(!FileExist(path)) {
+				Toast.ShowError("Script does not exist: " path)
+				return
+			}
+			
+			Config.runProgram("VSCode", path) ; gdbtodo pull this out into VSCode with profile parameter included
 		}
-		
-		Config.runProgram("VSCode", path)
 	}
 
 

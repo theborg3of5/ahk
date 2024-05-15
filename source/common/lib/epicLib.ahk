@@ -3,13 +3,13 @@
 class EpicLib {
 	;region ------------------------------ PUBLIC ------------------------------
 	;---------
-	; DESCRIPTION:    Prompt the user to choose an internal Environment using a Selector.
+	; DESCRIPTION:    Prompt the user to choose one or more internal environments using a Selector.
 	; PARAMETERS:
 	;  selectorTitle (I,REQ) - The title for the Selector.
 	;  selectorIcon  (I,OPT) - The icon to use for the Selector popup.
-	; RETURNS:        data array (null if the user didn't accept)
+	; RETURNS:        Array of environment data arrays (or null if the user didn't accept)
 	;---------
-	selectEpicEnvironment(selectorTitle, selectorIcon := "") {
+	selectEpicEnvironments(selectorTitle, selectorIcon := "") {
 		; Set up Selector
 		s := new Selector("epicEnvironments.tls")
 		if(selectorTitle != "")
@@ -18,19 +18,21 @@ class EpicLib {
 			s.setIcon(selectorIcon)
 		
 		; Show the popup and get user input
-		data := s.prompt()
-		if(!data)
+		environments := s.promptMulti()
+		if(!environments)
 			return ""
 
 		; Replace special tags found in some values.
 		latestLocalVersion := EpicLib.findLatestInstalledHyperspaceVersion()
 		latestLocalVersionFlat := latestLocalVersion.remove(".")
 
-		data["VERSION"]   := data["VERSION"].replaceTag(  "LATEST_LOCAL_VERSION",      latestLocalVersion)
-		data["COMM_ID"]   := data["COMM_ID"].replaceTag(  "LATEST_LOCAL_VERSION_FLAT", latestLocalVersionFlat)
-		data["HSWEB_URL"] := data["HSWEB_URL"].replaceTag("LATEST_LOCAL_VERSION_FLAT", latestLocalVersionFlat)
+		For _, env in environments {
+			env["VERSION"]   := env["VERSION"].replaceTag(  "LATEST_LOCAL_VERSION",      latestLocalVersion)
+			env["COMM_ID"]   := env["COMM_ID"].replaceTag(  "LATEST_LOCAL_VERSION_FLAT", latestLocalVersionFlat)
+			env["HSWEB_URL"] := env["HSWEB_URL"].replaceTag("LATEST_LOCAL_VERSION_FLAT", latestLocalVersionFlat)
+		}
 
-		return data
+		return environments
 	}
 	
 	;---------

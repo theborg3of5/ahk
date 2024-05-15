@@ -55,30 +55,30 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	
 	^+!#h::
 		selectHyperspace() {
-			data := EpicLib.selectEpicEnvironment("Launch Classic Hyperspace in Environment")
-			if(data)
-				EpicLib.runHyperspace(data["VERSION"], data["COMM_ID"], data["TIME_ZONE"])
+			environments := EpicLib.selectEpicEnvironments("Launch Classic Hyperspace in Environment")
+			For _, env in environments
+				EpicLib.runHyperspace(env["VERSION"], env["COMM_ID"], env["TIME_ZONE"])
 		}
 		
 	^!#h::
 		selectHSWeb() {
-			data := EpicLib.selectEpicEnvironment("Launch Standalone HSWeb in Environment", Config.getProgramPath("Chrome"))
-			if(data["HSWEB_URL"])
-				Run(data["HSWEB_URL"])
+			environments := EpicLib.selectEpicEnvironments("Launch Standalone HSWeb in Environment", Config.getProgramPath("Chrome"))
+			For _, env in environments
+				Run(env["HSWEB_URL"])
 		}
 	
 	^!+h::
 		selectHyperdrive() {
-			data := EpicLib.selectEpicEnvironment("Launch Hyperdrive in Environment", Config.getProgramPath("Hyperdrive"))
-			if(data)
-				EpicLib.runHyperdrive(data["COMM_ID"], data["TIME_ZONE"])
+			environments := EpicLib.selectEpicEnvironments("Launch Hyperdrive in Environment", Config.getProgramPath("Hyperdrive"))
+			For _, env in environments
+				EpicLib.runHyperdrive(env["COMM_ID"], env["TIME_ZONE"])
 		}
 	
 	^!+i::
 		selectEnvironmentId() {
-			data := EpicLib.selectEpicEnvironment("Insert ID for Environment")
-			if(data["ENV_ID"]) {
-				Send, % data["ENV_ID"]
+			environments := EpicLib.selectEpicEnvironments("Insert ID for Environment")
+			For _, env in environments {
+				Send, % env["ENV_ID"]
 				Send, {Enter} ; Submit it too.
 			}
 		}
@@ -94,14 +94,13 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			
 			s := new Selector("epicEnvironments.tls").setTitle("Open Record(s) in Snapper in Environment").setIcon(Config.getProgramPath("Snapper"))
 			s.addOverrideFields(["INI", "ID"]).setDefaultOverrides({"INI":record.ini, "ID":record.id}) ; Add fields for INI/ID and default in any values that we figured out
-			data := s.prompt()
-			if(!data)
-				return
-			
-			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
-				Config.runProgram("Snapper")
-			else
-				Snapper.addRecords(data["COMM_ID"], data["INI"], data["ID"]) ; data["ID"] can contain a list or range if that's what the user entered
+			environments := s.promptMulti() ; Each individual element is for a specific environment, which also includes any specified records.
+			For _, env in environments {
+				if(env["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
+					Config.runProgram("Snapper")
+				else
+					Snapper.addRecords(env["COMM_ID"], env["INI"], env["ID"]) ; env["ID"] can contain a list or range if that's what the user entered
+			}
 		}
 	
 	; Turn clipboard into standard EMC2 string and send it.
@@ -139,34 +138,31 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 #If Config.machineIsWorkDesktop ; Main work desktop only
 	^!+r::
 		selectThunder() {
-			data := EpicLib.selectEpicEnvironment("Launch Thunder for Environment", Config.getProgramPath("Thunder"))
-			if(!data)
-				return
-			
-			if(data["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
-				Config.activateProgram("Thunder")
-			else
-				EpicLib.runThunderForEnvironment(data["ENV_ID"])
+			environments := EpicLib.selectEpicEnvironments("Launch Thunder for Environment", Config.getProgramPath("Thunder"))
+			For _, env in environments {
+				if(env["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
+					Config.activateProgram("Thunder")
+				else
+					EpicLib.runThunderForEnvironment(env["ENV_ID"])
+			}
 		}
 	
 	^!+v::
 		selectVDI() {
-			data := EpicLib.selectEpicEnvironment("Launch VDI for Environment", Config.getProgramPath("VMware Horizon Client"))
-			if(!data)
-				return
-			
-			if(data["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.
-				Config.runProgram("VMware Horizon Client")
-			} else {
-				EpicLib.runVDI(data["VDI_ID"])
-				
-				; Also fake-maximize the window once it shows up.
-				WinWaitActive, ahk_exe vmware-view.exe, , 10, VMware Horizon Client ; Ignore the loading-type popup that happens initially with excluded title.
-				if(ErrorLevel) ; Set if we timed out or if somethign else went wrong.
-					return
-				
-				monitorWorkArea := MonitorLib.getWorkAreaForWindow(titleString)
-				new VisualWindow("A").resizeMove("100%", "100%", VisualWindow.X_Centered, VisualWindow.Y_Centered)
+			environments := EpicLib.selectEpicEnvironments("Launch VDI for Environment", Config.getProgramPath("VMware Horizon Client"))
+			For _, env in environments {
+				if(env["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.
+					Config.runProgram("VMware Horizon Client")
+				} else {
+					EpicLib.runVDI(env["VDI_ID"])
+					
+					; Also fake-maximize the window once it shows up.
+					if(environments.length() = 1) { ; But don't bother if we're dealing with multiple windows - just launch them all at once and I'll fix the size manually.
+						WinWaitActive, ahk_exe vmware-view.exe, , 10, VMware Horizon Client ; Ignore the loading-type popup that happens initially with excluded title.
+						if(!ErrorLevel) ; Set if we timed out or if somethign else went wrong.
+							WindowPositions.fixWindow()
+					}
+				}
 			}
 		}
 #If

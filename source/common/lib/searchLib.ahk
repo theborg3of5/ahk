@@ -11,24 +11,23 @@ class SearchLib {
 		text := SelectLib.getCleanFirstLine()
 		
 		s := new Selector("search.tls").setDefaultOverrides({"SEARCH_TERM":text})
-		data := s.prompt()
-		if(!data)
-			return
-		
-		searchTerm := data["SEARCH_TERM"]
-		if(searchTerm = "")
-			return
-		
-		subTypesAry := DataLib.forceArray(data["SUBTYPE"]) ; Force it to be an array so we can always loop over it.
-		For _,subType in subTypesAry { ; For searching multiple at once.
-			Switch data["SEARCH_TYPE"] {
-				Case "WEB":        SearchLib.urlBase(subType, searchTerm)
-				Case "CODESEARCH": Run(SearchLib.buildCodeSearchURL(subType, searchTerm, data["TYPE_FILTER"], data["APP_KEY"]))
-				Case "GURU":       SearchLib.guru(searchTerm)
-				Case "HUBBLE":     SearchLib.hubble(searchTerm, subType, data["APP_KEY"])
-				Case "WIKI":       SearchLib.epicWiki(searchTerm, subType) ; Epic wiki search.
-				Case "GREPWIN":    SearchLib.grepWin(searchTerm, subType)
-				Case "EVERYTHING": SearchLib.everything(searchTerm)
+		destinations := s.promptMulti() ; Each element is a search destination, but the search term is on each of them.
+		For _, dest in destinations {
+			searchTerm := dest["SEARCH_TERM"]
+			if(searchTerm = "")
+				return
+			
+			subTypesAry := DataLib.forceArray(dest["SUBTYPE"]) ; Force it to be an array so we can always loop over it.
+			For _,subType in subTypesAry { ; For searching multiple at once.
+				Switch dest["SEARCH_TYPE"] {
+					Case "WEB":        SearchLib.urlBase(subType, searchTerm)
+					Case "CODESEARCH": Run(SearchLib.buildCodeSearchURL(subType, searchTerm, dest["TYPE_FILTER"], dest["APP_KEY"]))
+					Case "GURU":       SearchLib.guru(searchTerm)
+					Case "HUBBLE":     SearchLib.hubble(searchTerm, subType, dest["APP_KEY"])
+					Case "WIKI":       SearchLib.epicWiki(searchTerm, subType) ; Epic wiki search.
+					Case "GREPWIN":    SearchLib.grepWin(searchTerm, subType)
+					Case "EVERYTHING": SearchLib.everything(searchTerm)
+				}
 			}
 		}
 	}

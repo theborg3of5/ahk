@@ -108,32 +108,32 @@ class Explorer {
 		}
 		
 		; Prompt user for which solution they want
-		data := new Selector("solutionShortcuts.tls").prompt()
-		if(!data)
-			return
-		name               := data["NAME"]
-		relativeTargetPath := data["PATH_IN_SOLUTIONS_FOLDER"]
-		exploreToPath      := data["EXPLORE_PATH"]
-		
-		; Special case: open solutions folder
-		if(exploreToPath != "") {
-			Run(currentFolder "\" exploreToPath)
-			return
-		}
-		
-		; Create shortcut
-		targetPath := currentFolder "\" relativeTargetPath
-		FileCreateShortcut, % targetPath, % currentFolder "\" name ".lnk", % currentFolder
-		Toast.ShowMedium("Created shortcut to " name " solution in current folder")
-
-		; Hide the various settings and readme files - I don't use them and they clutter up my shortcuts.
-		Loop, Files, %currentFolder%\*.*, F ; Only files
-		{
-			; Ignore shortcuts - I'm adding those.
-			if (A_LoopFileExt == "lnk")
-				Continue
-
-			FileSetAttrib, +H, %A_LoopFileFullPath%
+		shortcuts := new Selector("solutionShortcuts.tls").promptMulti()
+		For _, shortcut in shortcuts {
+			name               := shortcut["NAME"]
+			relativeTargetPath := shortcut["PATH_IN_SOLUTIONS_FOLDER"]
+			exploreToPath      := shortcut["EXPLORE_PATH"]
+			
+			; Special case: open solutions folder
+			if(exploreToPath != "") {
+				Run(currentFolder "\" exploreToPath)
+				return
+			}
+			
+			; Create shortcut
+			targetPath := currentFolder "\" relativeTargetPath
+			FileCreateShortcut, % targetPath, % currentFolder "\" name ".lnk", % currentFolder
+			Toast.ShowMedium("Created shortcut to " name " solution in current folder")
+	
+			; Hide the various settings and readme files - I don't use them and they clutter up my shortcuts.
+			Loop, Files, %currentFolder%\*.*, F ; Only files
+			{
+				; Ignore shortcuts - I'm adding those.
+				if (A_LoopFileExt == "lnk")
+					Continue
+	
+				FileSetAttrib, +H, %A_LoopFileFullPath%
+			}
 		}
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------

@@ -174,15 +174,16 @@
 		☐ Delimit with a plain space instead of a pipe - way easier to type that way!
 		Use cases:
 			SUs, multiple:
-				Putty sessions
-				Standalone hyperspace instances across multiple versions
-				TLG events
-			Edit config file - edit multiple
-			Search - multiple places (might replace current multi-cases)
-			Solution shortcuts - add multiple shortcuts
-			Folders - open multiple folders
-			Symbols - just send multiple
-			TLG - combining choices? (specific log + des = log's info but with TLP 12)
+				✔ Putty sessions @done(24-05-15 14:18)
+				✔ Standalone hyperspace instances across multiple versions @done(24-05-15 14:18)
+				☐ TLG events
+					☐ This one is probably better handled with a custom record ID (comma-separated)?
+			✔ Edit config file - edit multiple @done(24-05-15 14:30)
+			✔ Search - multiple places (might replace current multi-cases) @done(24-05-15 14:34)
+			✔ Solution shortcuts - add multiple shortcuts @done(24-05-15 14:37)
+			✔ Folders - open multiple folders @done(24-05-15 14:29)
+			✔ Symbols - just send multiple @done(24-05-15 14:31)
+			☐ TLG - combining choices? (specific log + des = log's info but with TLP 12)
 		Specifically don't want to support for:
 			firstSetup machine
 			actionObject*

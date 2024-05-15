@@ -165,26 +165,26 @@
 				Display info about what to rename Thunder environments (maybe put the common base onto the clipboard for me)
 				Display new line to add to getSyncEnvironments (automatically add to clipboard)
 	☐ Allow multi-selection of selector options
-		☐ Would need to either:
-			☐ Make it configurable by caller - each caller would have to support it specially as the return format would be different.
-			☐ Update all callers to handle multiple-style format, all the time?
-			☐ Create new APIs (like adding a "multi" on the end) that describe what we expect to come back
+		✔ Would need to either: @done(24-05-15 14:37)
+			✔ Make it configurable by caller - each caller would have to support it specially as the return format would be different. @done(24-05-15 14:38)
+			✔ Update all callers to handle multiple-style format, all the time? @done(24-05-15 14:38)
+			✔ Create new APIs (like adding a "multi" on the end) that describe what we expect to come back @done(24-05-15 14:38)
 				Honestly, may be able to simplify/clarify existing entry points this way, too?
-		☐ Will want support for different "styles" of callers - single-column vs. data array return values
-		☐ Delimit with a plain space instead of a pipe - way easier to type that way!
+		✔ Will want support for different "styles" of callers - single-column vs. data array return values @done(24-05-15 14:38)
+		✔ Delimit with a plain space instead of a pipe - way easier to type that way! @done(24-05-15 14:38)
 		Use cases:
-			SUs, multiple:
+			✔ SUs, multiple: @done(24-05-15 16:08)
 				✔ Putty sessions @done(24-05-15 14:18)
 				✔ Standalone hyperspace instances across multiple versions @done(24-05-15 14:18)
-				☐ TLG events
-					☐ This one is probably better handled with a custom record ID (comma-separated)?
+				✔ TLG events @done(24-05-15 16:08)
+					✔ This one is probably better handled with a custom record ID (comma-separated)? @done(24-05-15 16:08)
 			✔ Edit config file - edit multiple @done(24-05-15 14:30)
 			✔ Search - multiple places (might replace current multi-cases) @done(24-05-15 14:34)
 			✔ Solution shortcuts - add multiple shortcuts @done(24-05-15 14:37)
 			✔ Folders - open multiple folders @done(24-05-15 14:29)
 			✔ Symbols - just send multiple @done(24-05-15 14:31)
 			☐ TLG - combining choices? (specific log + des = log's info but with TLP 12)
-		Specifically don't want to support for:
+		✔ Specifically don't want to support for: @done(24-05-15 14:38)
 			firstSetup machine
 			actionObject*
 			formattedList

@@ -153,7 +153,7 @@ class Outlook {
 	}
 
 	;---------
-	; DESCRIPTION:    Insert a TLG event into that calendar based on the user's selected TLP/record.
+	; DESCRIPTION:    Insert TLG events into that calendar based on the user's selected TLP/record.
 	;---------
 	selectOutlookTLG() {
 		s := new Selector("tlg.tls").setTitle("Select EMC2 Record ID").setIcon(Config.getProgramPath("Outlook"))
@@ -162,9 +162,12 @@ class Outlook {
 		if(!data)
 			return
 		
+		; The user can specify multiple records, in which case we'll add a new DLG event per record.
+		userRecs := data["RECORD"].split([",", A_Space], A_Space)
+
 		; We can do an additional Selector popup to grab ID (and potentially title) from various window titles.
-		recId := data["RECORD"]
-		if(recId = "GET") {
+		getIdx := userRecs.contains("GET")
+		if(getIdx) {
 			record := EpicLib.selectEMC2RecordFromUsefulTitles(true) ; true - only want options with a title.
 			if(!record)
 				return
@@ -172,47 +175,28 @@ class Outlook {
 			recId := record.id
 			if(["PRJ", "QAN", "SLG"].contains(record.ini))
 				recId := record.ini.charAt(1) "." recId ; Add on the INI prefix so the ID goes in the right position.
+			userRecs[getIdx] := recId ; Plug it back into the array of IDs.
 			
+			; If there's a title, use that as the record name.
 			if(record.title)
 				data["NAME"] := record.title
 		}
-		if(recId = "-") ; Placeholder I can manually enter to force a blank value.
-			recId := ""
-		
-		; Message is a combination of a few things
-		message := data["NAME_OUTPUT_PREFIX"] ; Start with any given prefix
-		if(data["IS_GENERIC"]) 
-			message .= data["MESSAGE"] ? data["MESSAGE"] : data["NAME"] ; Generic TLPs - use add the message, defaulting to the name.
-		else ; Everything else: 
-			message .= data["NAME"].appendPiece(" - ", data["MESSAGE"]) ; Everything else: add name + message.
-		
-		; Record field can contain DLG (no prefix), PRJ (P.), QAN (Q.), or SLG (S.) IDs.
-		if(recId.startsWith("P."))
-			prjId := recId.removeFromStart("P.")
-		else if(recId.startsWith("Q."))
-			qanId := recId.removeFromStart("Q.")
-		else if(recId.startsWith("S."))
-			slgId := recId.removeFromStart("S.")
-		else
-			dlgId := recId
-		
-		; Build the event title string
-		eventTitle := Config.private["OUTLOOK_TLG_BASE"]
-		eventTitle := eventTitle.replaceTag("MESSAGE",  message) ; Replace the message first in case it contains any of the following tags
-		eventTitle := eventTitle.replaceTag("TLP",      data["TLP"])
-		eventTitle := eventTitle.replaceTag("CUSTOMER", data["CUSTOMER"])
-		eventTitle := eventTitle.replaceTag("SLG",      slgId)
-		eventTitle := eventTitle.replaceTag("DLG",      dlgId)
-		eventTitle := eventTitle.replaceTag("PRJ",      prjId)
-		eventTitle := eventTitle.replaceTag("QAN",      qanId)
-		
-		this.replaceExtraEventTitleSlashes(eventTitle)
-		
-		if(this.isTLGCalendarActive()) {
-			SendRaw, % eventTitle
-			Send, {Enter}
-		} else {
-			ClipboardLib.setAndToastError(eventTitle, "event string", "Outlook TLG calendar not focused.")
+
+		; If there's no records at all (probably a generic TLG event) then add a placeholder so we still get into the loop below.
+		if (userRecs.length() = 0)
+			userRecs.push("-")
+
+		; Build and send the events.
+		For i, recId in userRecs {
+			; Ensure the TLG calendar is focused before sending.
+			if(!this.isTLGCalendarActive()) {
+				t := new Toast("Outlook TLG calendar not focused, focus it to continue.").show()
+				WinWaitActive, % this.TLGFolder " - " Config.private["WORK_EMAIL"] " - Outlook"
+				t.close()
+			}
+
+			SendRaw, % this.buildTLGEventTitle(data, recId)
+			Send, {Enter}{Down}
 		}
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------
@@ -321,17 +305,59 @@ class Outlook {
 	}
 
 	;---------
+	; DESCRIPTION:    Build the title for a TLG event based on the given data.
+	; PARAMETERS:
+	;  data  (I,REQ) - Selector data array
+	;  recId (I,REQ) - Record ID (with a letter+. prefix if it's not a DLG, i.e. P.10000 for PRJ 10000)
+	; RETURNS:        TLG event title to use
+	;---------
+	buildTLGEventTitle(data, recId) {
+		; Placeholder I can manually enter to force a blank value.
+		if(recId = "-")
+			recId := ""
+		
+		; Record field can contain DLG (no prefix), PRJ (P.), QAN (Q.), or SLG (S.) IDs.
+		if(recId.startsWith("P."))
+			prjId := recId.removeFromStart("P.")
+		else if(recId.startsWith("Q."))
+			qanId := recId.removeFromStart("Q.")
+		else if(recId.startsWith("S."))
+			slgId := recId.removeFromStart("S.")
+		else
+			dlgId := recId
+
+		; Message is a combination of a few things
+		message := data["NAME_OUTPUT_PREFIX"] ; Start with the prefix (if any)
+		if(data["IS_GENERIC"]) 
+			message .= data["MESSAGE"] ? data["MESSAGE"] : data["NAME"] ; Generic TLPs: add the message, defaulting to the name.
+		else
+			message .= data["NAME"].appendPiece(" - ", data["MESSAGE"]) ; Everything else: add name + message.
+		
+		; Build the event title string
+		eventTitle := Config.private["OUTLOOK_TLG_BASE"]
+		eventTitle := eventTitle.replaceTag("MESSAGE",  message) ; Replace the message first in case it contains any of the following tags
+		eventTitle := eventTitle.replaceTag("TLP",      data["TLP"])
+		eventTitle := eventTitle.replaceTag("CUSTOMER", data["CUSTOMER"])
+		eventTitle := eventTitle.replaceTag("SLG",      slgId)
+		eventTitle := eventTitle.replaceTag("DLG",      dlgId)
+		eventTitle := eventTitle.replaceTag("PRJ",      prjId)
+		eventTitle := eventTitle.replaceTag("QAN",      qanId)
+		return this.replaceExtraEventTitleSlashes(eventTitle)
+	}
+
+	;---------
 	; DESCRIPTION:    Reduce the extra slashes in the TLG event title for easier reading and a
 	;                 cleaner look. We only need slashes before the last non-blank element
 	;                 before the comma (i.e. always 1 after the TLP, but after that we only need
 	;                 enough to put the last element in the right spot). Remove the extras to
 	;                 clean up the display.
 	; PARAMETERS:
-	;  title (IO,REQ) - The event title to clean up
+	;  title (I,REQ) - The event title to clean up
+	; RETURNS:        Cleaned-up event title
 	;---------
-	replaceExtraEventTitleSlashes(ByRef title) {
+	replaceExtraEventTitleSlashes(title) {
 		idString := title.beforeString(", ")
-		message := title.afterString(", ")
+		message  := title.afterString(", ")
 		
 		Loop {
 			if(!idString.endsWith("/")) ; Should only remove trailing slashes, not anything at the start or in the middle.
@@ -342,7 +368,7 @@ class Outlook {
 		}
 		
 		; String it back together to return.
-		title := idString ", " message
+		return idString ", " message
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------
 }

@@ -252,13 +252,12 @@ class Selector {
 	;                 parameter was specified, only the subscript matching that name will be returned.
 	;---------
 	prompt(returnColumn := "") {
-		; return this.doSelect("", returnColumn, false)
-		return this.doSelectMulti("", returnColumn, true)
+		return this.doSelect("", returnColumn, true)
 	}
 
 	;gdbdoc
 	promptMulti(returnColumn := "") {
-		return this.doSelectMulti("", returnColumn, true, true)
+		return this.doSelect("", returnColumn, true, true)
 	}
 
 	;---------
@@ -273,13 +272,12 @@ class Selector {
 	;                 was specified, only the subscript matching that name will be returned.
 	;---------
 	selectSilent(choiceString, returnColumn := "") {
-		; return this.doSelect(choiceString, returnColumn, true)
-		return this.doSelectMulti(choiceString, returnColumn, false)
+		return this.doSelect(choiceString, returnColumn, false)
 	}
 
 	;gdbdoc
 	selectSilentMulti(choiceString, returnColumn := "") {
-		return this.doSelectMulti(choiceString, returnColumn, false, true)
+		return this.doSelect(choiceString, returnColumn, false, true)
 	}
 
 	;---------
@@ -294,13 +292,12 @@ class Selector {
 	;                 parameter was specified, only the subscript matching that name will be returned.
 	;---------
 	select(choiceString, returnColumn := "") {
-		; return this.doSelect(choiceString, returnColumn, false)
-		return this.doSelectMulti(choiceString, returnColumn, true)
+		return this.doSelect(choiceString, returnColumn, true)
 	}
 
 	;gdbdoc
 	selectMulti(choiceString, returnColumn := "") {
-		return this.doSelectMulti(choiceString, returnColumn, true, true)
+		return this.doSelect(choiceString, returnColumn, true, true)
 	}
 	;endregion Perform Selection
 	
@@ -388,31 +385,11 @@ class Selector {
 	;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this
 	;                         name will be returned.
 	;  noPrompt     (I,OPT) - Set this to true to NOT prompt the user, even if we fail to find a
-	;                         choice using choiceString.
+	;                         choice using choiceString. ; gdbredoc several params
 	; RETURNS:        An array of data for the choice matching the given string. If the returnColumn
 	;                 parameter was specified, only the subscript matching that name will be returned.
 	;---------
-	doSelect(choiceString, returnColumn := "", noPrompt := false) { ; gdbtodo make noPrompt required (and perhaps flip order with returnColumn as such?)
-		if(!this.loadChoicesFromData())
-			return ""
-		
-		; If something is given, try that silently first
-		if(choiceString)
-			data := this.parseChoice(choiceString)
-		
-		; If we got results (or if we didn't but we aren't allowed to prompt), we're done.
-		if(data || noPrompt)
-			return this.getReturnVal(data, returnColumn)
-		
-		; Prompt the user.
-		data := this.doSelectGui() ; gdbtodo should I rename this with selectGui > prompt?
-
-		return this.getReturnVal(data, returnColumn)
-	}
-
-	;gdbdoc
-	; gdbtodo is it really worth a separate function here (versus just more APIs)?
-	doSelectMulti(query, returnColumn, allowPrompt, allowMultiInput := false) { ; gdbtodo consider allowing query to be an array?
+	doSelect(query, returnColumn, allowPrompt, allowMultiMatch := false) { ; gdbtodo consider allowing query to be an array? Updates would probably be in runQuery().
 		if(!this.loadChoicesFromData())
 			return ""
 		if(!this.validateChoices()) ; gdbtodo should this really just be built into loadChoicesFromData (or a wrapper around both)?
@@ -420,47 +397,47 @@ class Selector {
 		
 		; If something is given, try that silently first
 		if(query)
-			data := this.runQuery(query, allowMultiInput)
+			outputData := this.runQuery(query, allowMultiMatch)
 		
 		; If we got results (or if we didn't but we aren't allowed to prompt), we're done.
-		if(data || noPrompt)
-			return this.getReturnVal(data, returnColumn, allowMultiInput)
+		if(!DataLib.isNullOrEmpty(outputData) || !allowPrompt)
+			return this.getReturnVal(outputData, returnColumn, allowMultiMatch)
 
 		; Prompt the user.
 		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this._minColumnWidth, this._iconPath)
 		sGui.show(this._windowTitle, this.defaultOverrides)
-		outputData := this.runQuery(sGui.getChoiceQuery(), allowMultiInput, sGui.getOverrideData())
-		Debug.popup("queries",queries, "overrideData",overrideData, "outputData",outputData, "choiceData",choiceData, "returnColumn",returnColumn)
-		return this.getReturnVal(outputData, returnColumn, allowMultiInput)
+		outputData := this.runQuery(sGui.getChoiceQuery(), allowMultiMatch, sGui.getOverrideData())
+		return this.getReturnVal(outputData, returnColumn, allowMultiMatch)
 	}
 
 	;---------
 	; DESCRIPTION:    Constructs the return value from a selection entry point.
 	; PARAMETERS:
-	;  data         (I,REQ) - Data array with any matches ; gdbredoc rename if it's going to always be multi, doc differently otherwise
-	;  returnColumn (I,REQ) - If this parameter is given, only the data under the column with this
-	;                         name will be returned.
-	;  gdbdoc allowMultiInput
+	;  outputData      (I,REQ) - Array of match(es) - should be a single data array if
+	;                            allowMultiMatch=false, or an array of them if allowMultiMatch=true.
+	;  returnColumn    (I,REQ) - If this parameter is given, only the data under the column with
+	;                            this name will be returned.
+	;  allowMultiMatch (I,REQ) - Set this to 1 if we're allowing multiple matches (by splitting up the input).
 	; RETURNS:        No results         => ""
 	;                 returnColumn given => Specific value under that subscript
 	;                 Default            => Entire matched data array
 	;---------
-	getReturnVal(data, returnColumn, allowMultiInput := "") { ; gdbtodo make allowMultiInput required
-		; If there's no result return "" so callers can just check !data
-		if(DataLib.isNullOrEmpty(data))
+	getReturnVal(outputData, returnColumn, allowMultiMatch) {
+		; If there's no result return "" so callers can just check !outputData
+		if(DataLib.isNullOrEmpty(outputData))
 			return ""
 
 		; If a specific column was requested, just return that
 		if(returnColumn) {
-			if(allowMultiInput) {
-				return DataLib.getPropertyFromArrayChildren(data, returnColumn)
+			if(allowMultiMatch) {
+				return DataLib.getPropertyFromArrayChildren(outputData, returnColumn)
 			} else {
-				return data[returnColumn]
+				return outputData[returnColumn]
 			}
 		}
 		
-		; Otherwise return the whole data array.
-		return data
+		; Otherwise return the whole array.
+		return outputData
 	}
 	
 	;---------
@@ -488,35 +465,6 @@ class Selector {
 		}
 		
 		return true
-	}
-	
-	;---------
-	; DESCRIPTION:    Generate and show a popup to the user where they can select a
-	;                 choice and override specific data, then retrieving, processing,
-	;                 and merging that data as appropriate.
-	; RETURNS:        Merged array of data, which includes both the choice and any
-	;                 overrides.
-	;---------
-	doSelectGui() {
-		if(!this.validateChoices())
-			return ""
-		
-		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this._minColumnWidth, this._iconPath)
-		sGui.show(this._windowTitle, this.defaultOverrides)
-		
-		; User's choice is main data source
-		choiceData := this.parseChoice(sGui.getChoiceQuery(), suppressData)
-		if(suppressData)
-			return ""
-		
-		; Override fields can add to that too.
-		overrideData := sGui.getOverrideData()
-		
-		; Return the combination of the choice and overrides.
-		if(choiceData)
-			return choiceData.mergeFromObject(overrideData)
-		else
-			return overrideData
 	}
 	
 	;---------
@@ -568,43 +516,26 @@ class Selector {
 	}
 	
 	;---------
-	; DESCRIPTION:    Process a user's choice input, handling special commands or finding
-	;                 a choice matching the input. For matching against choices, the string
-	;                 must be either the index of the choice (for visible choices), or the
-	;                 abbreviation.
+	; DESCRIPTION:    Process a user's choice input, handling special commands or finding choice(s)
+	;                 matching the input. For matching against choices, the string must be either
+	;                 the index of the choice (for visible choices), or the abbreviation.
 	; PARAMETERS:
-	;  userChoiceString (I,REQ) - The string that the user typed in the choice field.
-	;  suppressData     (O,OPT) - Will be set to true if we should return empty data (like when the
-	;                             edit command is entered)
-	; RETURNS:        If we found a matching choice (and the input wasn't a command), the
-	;                 data array from that choice. Otherwise, "".
+	;  query           (I,REQ) - The string to search with. Can be a delimited string (with
+	;                            comma/period/space) of different queries to match against (like "1
+	;                            2" for the first and second choices).
+	;  allowMultiMatch (I,REQ) - Set to true to treat the query as a delimited string of different
+	;                            queries to match (delimited by , . or space).
+	;  overrideData    (I,OPT) - User-entered overrides to merge into any matched choices.
+	; RETURNS:        No match or overrideData   => "" ; gdbtodo could I just leave the empty array => "" conversion to getReturnVal instead of complicating things here?
+	;                 No match with overrideData => overrideData (or an array containing it, see below)
+	;                 Found match                => The match's data array (or an array of them, see below)
+	;                 Otherwise, the matching choice(s):
+	;                   allowMultiMatch=false => the data of the single choice matching the query.
+	;                   allowMultiMatch=true  => an array of matching choices' data (one per query piece).
 	;---------
-	parseChoice(userChoiceString, ByRef suppressData := "") {
-		suppressData := false
-		
-		; Command choice - edit ini, etc.
-		if(userChoiceString.startsWith(this.Char_CommandStart)) {
-			commandChar := userChoiceString.afterString(this.Char_CommandStart)
-			
-			; Edit action - open the current INI file for editing
-			if(commandChar = this.Char_Command_Edit) {
-				suppressData := true
-				Config.runProgram("VSCode", "--profile Default " this.filePath) ; gdbtodo would this make sense as a public function on my VSCode class, especially if I end up wanting to use it elsewhere? Could be AHK-specific since we want to force the profile with AHK stuff?
-			}
-			
-			return ""
-		
-		; Otherwise, we search through the data structure by both number and shortcut and look for a match.
-		} else {
-			return this.searchChoices(userChoiceString)
-		}
-	}
-
-	;gdbdoc
-	runQuery(query, allowMultiInput, overrideData := "") {
+	runQuery(query, allowMultiMatch, overrideData := "") {
 		outputData := []
 		For _, q in query.split(this.Char_MultiInputDelims, A_Space) {
-			
 			; Command choice - edit ini, etc.
 			if(q.startsWith(this.Char_CommandStart)) {
 				commandChar := q.afterString(this.Char_CommandStart)
@@ -631,8 +562,12 @@ class Selector {
 
 		; If we're not doing multi-input, then we should only return 1 match - there should
 		; theoretically only be 1, so just use the first one in the array.
-		if(!allowMultiInput)
+		if(!allowMultiMatch)
 			return outputData[1]
+
+		; Just return "" (not an empty array) if we found nothing.
+		if(DataLib.isNullOrEmpty(outputData))
+			return ""
 
 		return outputData
 	}

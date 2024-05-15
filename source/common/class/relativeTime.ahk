@@ -1,6 +1,6 @@
 #Include ..\base\relativeDateTimeBase.ahk
 
-/* Calculates and sends a time relative to the class's instantiation (or the user submitting their relative time string, if one not provided to the constructor). =--
+/* Calculates and sends a time relative to the class's instantiation (or the user submitting their relative time string, if one not provided to the constructor).
 	
 	Relative time string format
 		The relative time string is in this format:
@@ -21,7 +21,7 @@
 ;		newTime := rt.instant         ; Get the calculated instant
 ;		rt.SendInFormat("hh:mm:ss")   ; Send the calculated date in a specific format
 	
-*/ ; --=
+*/
 
 class RelativeTime extends RelativeDateTimeBase {
 	; #PUBLIC#

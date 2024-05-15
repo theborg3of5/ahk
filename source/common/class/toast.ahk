@@ -1,4 +1,4 @@
-/* Class that shows something like a toast notification. =--
+/* Class that shows something like a toast notification.
 	
 	Usage:
 		Create Toast instance
@@ -25,12 +25,12 @@
 ;		...
 ;		t.close() ; Toast is destroyed
 	
-*/ ; --=
+*/
 
 class Toast {
 	; #PUBLIC#
 	
-	; [[Static one-off "show a toast" methods]] =--
+	;region Static one-off "show a toast" methods
 	;---------
 	; DESCRIPTION:    Show a toast for a short time (1 second).
 	; PARAMETERS:
@@ -99,7 +99,7 @@ class Toast {
 
 		new Toast(toastText, overrides).blockingOn().showForSeconds(2)
 	}
-	; --=
+	;endregion Static one-off "show a toast" methods
 	
 	;---------
 	; DESCRIPTION:    Create a new Toast object.

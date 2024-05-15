@@ -1,6 +1,6 @@
 #Include ..\base\actionObjectBase.ahk
 
-/* Class for performing actions based on a code location in CodeSearch. =--
+/* Class for performing actions based on a code location in CodeSearch.
 	
 	Note that several other operations are also available from the base class (.copyLink*(), .linkSelectedText*()).
 	
@@ -11,7 +11,7 @@
 ;		
 ;		new ActionObjectCodeSearch("blah.cls").open() ; Opens a search page for the filename, since we can't know the right directory ID
 	
-*/ ; --=
+*/
 
 class ActionObjectCodeSearch extends ActionObjectBase {
 	; #PUBLIC#

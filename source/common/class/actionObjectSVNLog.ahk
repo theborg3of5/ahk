@@ -1,6 +1,6 @@
 #Include ..\base\actionObjectBase.ahk
 
-/* Class for performing actions based on an SVN log, filtered by something. =--
+/* Class for performing actions based on an SVN log, filtered by something.
 	
 	Note that several other operations are also available from the base class (.copyLink*(), .linkSelectedText*()).
 	
@@ -11,7 +11,7 @@
 ;		ao := new ActionObjectSVNLog(123456, ActionObjectSVNLog.FilterType_DLG)
 ;		ao.open() ; Open SVN log filtered to the given DLG's commits
 	
-*/ ; --=
+*/
 
 class ActionObjectSVNLog extends ActionObjectBase {
 	;region ------------------------------ PUBLIC ------------------------------
@@ -89,9 +89,9 @@ class ActionObjectSVNLog extends ActionObjectBase {
 		
 		return link
 	}
-	;endregion ==================== PUBLIC ====================
+	;endregion ------------------------------ PUBLIC ------------------------------
 
-	;region ------------------------------ PRIVATE ------------------------------=
+	;region ------------------------------ PRIVATE ------------------------------
 	;---------
 	; DESCRIPTION:    Generate the branch URL for the given DLG.
 	; PARAMETERS:
@@ -126,5 +126,5 @@ class ActionObjectSVNLog extends ActionObjectBase {
 
 		return urlBase.replaceTags({VERSION:version, NUM_LAST_4:last4, NUM_LAST_2:last2, NUM:dlgNumString, DLG:dlgId})
 	}
-	;endregion ==================== PRIVATE ====================
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

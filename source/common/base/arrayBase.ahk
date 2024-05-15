@@ -1,4 +1,4 @@
-/* Base class to override Array's default base with, so we can add these functions directly to arrays. =--
+/* Base class to override Array's default base with, so we can add these functions directly to arrays.
 	
 	NOTE: the functions here are only guaranteed to work on numeric arrays (though they technically exist on associative arrays initially created with []).
 	
@@ -6,7 +6,7 @@
 ;		ary := ["a", "b"]
 ;		str := ary.join() ; str = "a,b"
 	
-*/ ; --=
+*/
 
 class ArrayBase {
 	; #PUBLIC#

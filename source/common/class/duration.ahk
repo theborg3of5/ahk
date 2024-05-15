@@ -1,4 +1,4 @@
-/* Class for duration information, which takes in a string with a particular format. =--
+/* Class for duration information, which takes in a string with a particular format.
 	
 	Input string format:
 		1 or more of nU, where n is a number and U is a unit from the following list:
@@ -8,7 +8,7 @@
 	
 	You may add/subtract time using the same units with .addTime() and .subTime(), and can get the breakdown of time into hour/minute/second units with the corresponding properties.
 	
-*/ ; --=
+*/
 
 class Duration {
 	; #PUBLIC#

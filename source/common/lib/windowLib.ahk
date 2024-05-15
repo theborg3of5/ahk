@@ -3,7 +3,7 @@
 class WindowLib {
 	; #PUBLIC#
 	
-	; [[ Conditions ]] =--
+	;region Conditions
 	;---------
 	; DESCRIPTION:    Determine whether a window is maximized.
 	; PARAMETERS:
@@ -142,8 +142,9 @@ class WindowLib {
 		
 		return false
 	}
+	;endregion Conditions
 	
-	; [[ Actions/setters ]] ---
+	;region Actions/setters
 	;---------
 	; DESCRIPTION:    Make a window visible.
 	; PARAMETERS:
@@ -185,7 +186,7 @@ class WindowLib {
 	center(titleString := "A") {
 		new VisualWindow(titleString).move(VisualWindow.X_Centered, VisualWindow.Y_Centered)
 	}
-	; --=
+	;endregion Actions/setters
 	
 	;---------
 	; DESCRIPTION:    Build a title string that can be used to identify a window based on the given

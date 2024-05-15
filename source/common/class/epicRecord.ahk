@@ -1,4 +1,4 @@
-/* Class to represent a record in Epic, which can parse a string in a few different formats. =--
+/* Class to represent a record in Epic, which can parse a string in a few different formats.
 	
 	Supported string formats:
 		TITLE [R INI ID]
@@ -19,7 +19,7 @@
 ;		MsgBox, % record.id           ; 123456
 ;		MsgBox, % record.recordString ; R UCL 123456
 	
-*/ ; --=
+*/
 
 class EpicRecord {
 	; #PUBLIC#

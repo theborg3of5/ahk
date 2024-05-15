@@ -131,7 +131,7 @@ class WindowActions {
 	
 	; #PRIVATE#
 	
-	; [[Supported window actions]] =--
+	;region Supported window actions
 	static Action_Activate   := "ACTIVATE"    ; Activate the window
 	static Action_Backtick   := "BACKTICK"    ; Handle the backtick key being pressed
 	static Action_Close      := "CLOSE"       ; Close the window
@@ -139,15 +139,16 @@ class WindowActions {
 	static Action_EscapeKey  := "ESC"         ; Handle the escape key being pressed
 	static Action_Minimize   := "MIN"         ; Minimize the window
 	static Action_SelectAll  := "SELECT_ALL"  ; Select all of the current field
+	;endregion Supported window actions
 	
-	; [[Supported action methods]] ---
+	;region Supported action methods
 	static Method_Other             := "OTHER"        ; Special app-specific handling, defined in .performActionForOtherWindow
 	static Method_Minimize_Message  := "POST_MESSAGE" ; Minimize: send a windows message to do it
 	static Method_SelectAll_Home    := "HOME_END"     ; Select all using home/end keys
 	static Method_DeleteWord_Select := "SELECT"       ; Delete a word by selecting it
 	static Method_SendEsc           := "ESCAPE"       ; Send an escape keystroke
 	static Method_Run               := "RUN"          ; Run the named program
-	; --=
+	;endregion Supported action methods
 	
 	static _actionOverrides := "" ; {windowName: {action: method}}
 	

@@ -41,7 +41,7 @@ Object(params*) {
 }
 ;endregion Standard base replacement
 
-; [[ Includes ]] =--
+;region Includes
 #Include %A_LineFile%\..\class
 	#Include actionObject.ahk
 	#Include duration.ahk
@@ -119,8 +119,8 @@ Object(params*) {
 	#Include VA.ahk
 	#Include windowActions.ahk
 	#Include windowPositions.ahk
-; --=
+;endregion Includes
 
-; [[ Initialization ]] =--
+;region Initialization
 Config.Init()
-; --=
+;endregion Initialization

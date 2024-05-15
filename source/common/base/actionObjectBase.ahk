@@ -1,4 +1,4 @@
-/* Base class for type-specific ActionObject child classes. =--
+/* Base class for type-specific ActionObject child classes.
 	
 	This is intended to serve as a skeleton for those specific child classes, and should not be instantiated directly.
 	
@@ -11,7 +11,7 @@
 	Child classes may also use these functions:
 		selectMissingInfo - Check whether there's any required info (value and subType) missing, and if so, prompt the user with a filtered Selector popup to get that info.
 	
-*/ ; --=
+*/
 
 class ActionObjectBase {
 	; #PUBLIC#

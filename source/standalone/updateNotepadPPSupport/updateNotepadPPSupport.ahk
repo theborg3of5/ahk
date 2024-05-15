@@ -15,7 +15,7 @@ global ScopeStart_NonPublicScopes := ["; #INTERNAL#", "; #PRIVATE#", "; #DEBUG#"
 global ScopeEnd                   := "; #END#"
 
 
-; [[File paths]] =--
+;region File paths
 ; Auto-completion
 path_CompletionTemplate_AHK := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete_AHK.xml"
 path_CompletionTemplate_TL  := Config.path["AHK_TEMPLATE"] "\notepadPP_AutoComplete_TL.xml"
@@ -33,17 +33,17 @@ path_SyntaxOutput_TL     := Config.path["AHK_OUTPUT"]   "\notepadPP_SyntaxHighli
 path_CompletionActive_AHK := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\AutoHotkey.xml"
 path_CompletionActive_TL  := Config.path["PROGRAM_FILES"] "\Notepad++\autoCompletion\TableList.xml"
 path_SyntaxActive         := Config.path["USER_APPDATA"]  "\Notepad++\userDefineLang.xml" ; This file is for all user-defined languages
+;endregion File paths
 
-
-; [[ Extract data ]] ---
+;region Extract data
 progToast.nextStep("Extracting data from scripts")
 
 ahkClasses := []
 tlMembers  := []
 getDataFromScripts(ahkClasses, tlMembers)
+;endregion Extract data
 
-
-; [[ Auto-complete ]] ---
+;region Auto-complete
 progToast.nextStep("Updating auto-complete files")
 
 newXML := updateCompletionXML_AHK(path_CompletionTemplate_AHK, ahkClasses)
@@ -53,9 +53,9 @@ FileLib.replaceFileWithString(path_CompletionActive_AHK, newXML)
 newXML := updateCompletionXML_TL(path_CompletionTemplate_TL, tlMembers)
 FileLib.replaceFileWithString(path_CompletionOutput_TL, newXML)
 FileLib.replaceFileWithString(path_CompletionActive_TL, newXML)
+;endregion Auto-complete
 
-
-; [[ Syntax highlighting ]] ---
+;region Syntax highlighting
 progToast.nextStep("Updating syntax highlighting file (requires restart)")
 
 newXML_AHK := updateSyntaxXML_AHK(path_SyntaxTemplate_AHK, ahkClasses)
@@ -72,7 +72,7 @@ else
 updateLangInSyntaxXML(activeSyntaxXML, "AutoHotkey", newXML_AHK)
 updateLangInSyntaxXML(activeSyntaxXML, "TableList",  newXML_TL)
 FileLib.replaceFileWithString(path_SyntaxActive, activeSyntaxXML)
-; --=
+;endregion Syntax highlighting
 
 progToast.finish()
 ExitApp

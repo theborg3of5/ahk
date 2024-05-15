@@ -1,4 +1,4 @@
-/* Class representing a block of documentation in AHK code, in Notepad++. =--
+/* Class representing a block of documentation in AHK code, in Notepad++.
 	
 	Example Usage
 ;		block := new HeaderDocBlock().initFromSelection()
@@ -6,7 +6,7 @@
 
 ;		new HeaderDocBlock().rewrapSelection() ; Selects whole line if needed, then redoes wrapping, maintaining indentation appropriately
 	
-*/ ; --=
+*/
 
 class HeaderDocBlock {
 	;region ------------------------------ PUBLIC ------------------------------
@@ -199,7 +199,7 @@ class HeaderDocBlock {
 	;endregion ------------------------------ DEBUG ------------------------------
 }
 
-; Test cases: =--
+;region Test cases
 ; This is a short, single line with no indent.
 
 ; This is a short, single line with no indent, that will nonetheless need to wrap because it's just so long.
@@ -223,4 +223,4 @@ class HeaderDocBlock {
 	;  goalWidth            (I,REQ) - This will be a longer parameter description, which also keeps going, and going, and going for days upon days.
 	;  allowedFinalOverhang (I,OPT) - This will be a longer parameter description,
 	;                                 that has already been wrapped, but not very well - too short at the first line, and too long on the last.
-; --=
+;endregion Test cases

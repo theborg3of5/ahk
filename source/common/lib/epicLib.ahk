@@ -423,10 +423,10 @@ class EpicLib {
 		
 		return new EpicRecord(data["INI"], data["ID"], data["TITLE"])
 	}
-	;endregion ==================== PUBLIC ====================
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
 	
-	;region ------------------------------ PRIVATE ------------------------------=
+	;region ------------------------------ PRIVATE ------------------------------
 	;region EMC2 Record Extraction/Selection
 	emc2TypeSelector := "" ; Selector instance (performance cache)
 	
@@ -725,5 +725,5 @@ class EpicLib {
 		return new SelectorChoice({NAME:name, ABBREV:abbrev, INI:ini, ID:id, TITLE:title})
 	}
 	;endregion EMC2 Record Extraction/Selection
-	;endregion ==================== PRIVATE ====================
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

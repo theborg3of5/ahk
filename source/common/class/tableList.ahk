@@ -1,191 +1,189 @@
 #Include tableListMod.ahk
 
-/* Class that parses and processes a specially-formatted file. =--
-	=-- Motivation
-			The goal of the .tl/.tls file format is to allow the file to be formatted with tabs so that it looks like a table in plain text, regardless of the size of the contents.
+/* Class that parses and processes a specially-formatted file.
+	Motivation
+		The goal of the .tl/.tls file format is to allow the file to be formatted with tabs so that it looks like a table in plain text, regardless of the size of the contents.
+		
+		For example, say we want to store and reference a list of folder paths. A simple tab-delimited file might look something like this:
+			AHK Config	AHK_CONFIG	C:\ahk\config
+			AHK Source	AHK_SOURCE	C:\ahk\source
+			Downloads	DOWNLOADS	C:\Users\user\Downloads
+			VB6 Compile	VB6_COMPILE	C:\Users\user\Dev\Temp\Compile	WORK_LAPTOP
+			Music	MUSIC	C:\Users\user\Music	HOME_DESKTOP
+			Music	MUSIC	C:\Users\user\Music	HOME_LAPTOP
+			Music	MUSIC	D:\Music	WORK_LAPTOP
+		
+		There's a few non-desirable things here:
+			1. None of the columns align, because the content is different widths
+			2. You can't have comments, to make it more obvious what rows in the file represent
+			3. There's no way to reduce duplication (lots of "C:\Users\" above, and several lines that are nearly identical)
+		
+		Another option is an INI file, but that has issues of its own:
+			1. The file gets very tall (many lines) very quickly
+			2. There's no good way to see the values for all entities for a specific key
+		
+		So the goal is to have a file format that:
+			1. Can be formatted like a table - this allows us to see the value for each entity (row) for each column
+			2. Can be formatted so that columns are aligned nicely - without this, the table format is useless
+			3. Contains features that allow us to de-duplicate some of the data therein
+		
+	File Format
+		At its simplest, a TL file is a bunch of line which are tab-delimited, but each row can:
+			1. Be indented (tabs and spaces at the beginning of the line) as desired with no effect on data
+			2. Be indented WITHIN the line as desired - effectively, multiple tabs between columns are treated the same as a single tab
+		So for our paths example above, we can now do this (would normally be tabs between terms, but I'm replacing them with spaces in this documentation so your tab width doesn't matter):
+			AHK Config     AHK_CONFIG     C:\ahk\config
+			AHK Source     AHK_SOURCE     C:\ahk\source
+			Downloads      DOWNLOADS      C:\Users\user\Downloads
+			VB6 Compile    VB6_COMPILE    C:\Users\user\Dev\Temp\Compile   WORK_LAPTOP
+			Music          MUSIC          C:\Users\user\Music              HOME_DESKTOP
+			Music          MUSIC          C:\Users\user\Music              HOME_LAPTOP
+			Music          MUSIC          D:\Music                         WORK_LAPTOP
+		
+		We can also use comments, and add a model row (which this class will use as indices in the 2D array you get back):
+			[  NAME           ABBREV         PATH                             MACHINE	]
 			
-			For example, say we want to store and reference a list of folder paths. A simple tab-delimited file might look something like this:
-				AHK Config	AHK_CONFIG	C:\ahk\config
-				AHK Source	AHK_SOURCE	C:\ahk\source
-				Downloads	DOWNLOADS	C:\Users\user\Downloads
-				VB6 Compile	VB6_COMPILE	C:\Users\user\Dev\Temp\Compile	WORK_LAPTOP
-				Music	MUSIC	C:\Users\user\Music	HOME_DESKTOP
-				Music	MUSIC	C:\Users\user\Music	HOME_LAPTOP
-				Music	MUSIC	D:\Music	WORK_LAPTOP
-			
-			There's a few non-desirable things here:
-				1. None of the columns align, because the content is different widths
-				2. You can't have comments, to make it more obvious what rows in the file represent
-				3. There's no way to reduce duplication (lots of "C:\Users\" above, and several lines that are nearly identical)
-			
-			Another option is an INI file, but that has issues of its own:
-				1. The file gets very tall (many lines) very quickly
-				2. There's no good way to see the values for all entities for a specific key
-			
-			So the goal is to have a file format that:
-				1. Can be formatted like a table - this allows us to see the value for each entity (row) for each column
-				2. Can be formatted so that columns are aligned nicely - without this, the table format is useless
-				3. Contains features that allow us to de-duplicate some of the data therein
-			
-	--- File Format
-			At its simplest, a TL file is a bunch of line which are tab-delimited, but each row can:
-				1. Be indented (tabs and spaces at the beginning of the line) as desired with no effect on data
-				2. Be indented WITHIN the line as desired - effectively, multiple tabs between columns are treated the same as a single tab
-			So for our paths example above, we can now do this (would normally be tabs between terms, but I'm replacing them with spaces in this documentation so your tab width doesn't matter):
+			; AHK Folders
 				AHK Config     AHK_CONFIG     C:\ahk\config
 				AHK Source     AHK_SOURCE     C:\ahk\source
+			
+			; User Folders
 				Downloads      DOWNLOADS      C:\Users\user\Downloads
 				VB6 Compile    VB6_COMPILE    C:\Users\user\Dev\Temp\Compile   WORK_LAPTOP
+			
+			; Music variations per machine
 				Music          MUSIC          C:\Users\user\Music              HOME_DESKTOP
 				Music          MUSIC          C:\Users\user\Music              HOME_LAPTOP
 				Music          MUSIC          D:\Music                         WORK_LAPTOP
+		
+		We can also use the Mods feature (see "Mods" section below) to de-duplicate some info:
+			[  NAME           ABBREV         PATH              MACHINE	]
 			
-			We can also use comments, and add a model row (which this class will use as indices in the 2D array you get back):
-				[  NAME           ABBREV         PATH                             MACHINE	]
-				
-				; AHK Folders
-					AHK Config     AHK_CONFIG     C:\ahk\config
-					AHK Source     AHK_SOURCE     C:\ahk\source
-				
-				; User Folders
-					Downloads      DOWNLOADS      C:\Users\user\Downloads
-					VB6 Compile    VB6_COMPILE    C:\Users\user\Dev\Temp\Compile   WORK_LAPTOP
-				
-				; Music variations per machine
-					Music          MUSIC          C:\Users\user\Music              HOME_DESKTOP
-					Music          MUSIC          C:\Users\user\Music              HOME_LAPTOP
-					Music          MUSIC          D:\Music                         WORK_LAPTOP
+			; AHK Folders
+			~PATH.addToStart(C:\ahk\) {
+				AHK Config     AHK_CONFIG     config
+				AHK Source     AHK_SOURCE     source
+			}
 			
-			We can also use the Mods feature (see "Mods" section below) to de-duplicate some info:
-				[  NAME           ABBREV         PATH              MACHINE	]
+			; User Folders
+			~PATH.addToStart(C:\Users\user\) {
+				Downloads      DOWNLOADS      Downloads
+				VB6 Compile    VB6_COMPILE    Dev\Temp\Compile  WORK_LAPTOP
+			}
+			
+			; Music variations per machine
+			~PATH.addToEnd(\Music) {
+				Music          MUSIC          C:\Users\user     HOME_DESKTOP
+				Music          MUSIC          C:\Users\user     HOME_LAPTOP
+				Music          MUSIC          D:                WORK_LAPTOP
+			}
+		
+	Mods
+		A "Mod" (short for "modification") line allows you to apply the same changes to all following rows (until the mod(s) are cleared). They are formatted as follows:
+			* Individual mod strings (in format ~COLUMN.OPERATION(TEXT)) are separated by a pipe (|).
+			* The lines that a mod affects are wrapped in curly brackets:
+				* Any line that adds mods should end with an opening bracket ({)
+				* Closing brackets may be their own line, or may start another line (a la else-if statements).
+			* Like other lines, they can be indented as desired.
+			* Additional information about mod actions can be found in the TableListMod class.
+		
+		For example, these two files have the same result:
+			File A
+				[	NAME           TYPE     COLOR	VALUE	]
+					Apple          FRUIT    RED
+					Strawberry     FRUIT    RED		
+					Bell pepper    VEGGIE   RED
+					Radish         VEGGIE   RED		5
+					Cherry         FRUIT    RED		5
+			File B
+				[		NAME           TYPE     COLOR		VALUE	]
 				
-				; AHK Folders
-				~PATH.addToStart(C:\ahk\) {
-					AHK Config     AHK_CONFIG     config
-					AHK Source     AHK_SOURCE     source
+				~COLOR.replaceWith(RED) {
+					~TYPE.replaceWith(FRUIT) {
+						Apple
+						Strawberry
+						Cherry
+					} ~TYPE.replaceWith(VEGGIE) | ~VALUE.replaceWith(5) {
+						Bell pepper    VEGGIE
+						Radish         VEGGIE
+					}
 				}
-				
-				; User Folders
-				~PATH.addToStart(C:\Users\user\) {
-					Downloads      DOWNLOADS      Downloads
-					VB6 Compile    VB6_COMPILE    Dev\Temp\Compile  WORK_LAPTOP
-				}
-				
-				; Music variations per machine
-				~PATH.addToEnd(\Music) {
-					Music          MUSIC          C:\Users\user     HOME_DESKTOP
-					Music          MUSIC          C:\Users\user     HOME_LAPTOP
-					Music          MUSIC          D:                WORK_LAPTOP
-				}
+	
+	Special Characters
+		At the start of a row:
+			Ignore - ;
+				If the line starts with this character (ignoring any whitespace before that), the line is ignored and not added to the table.
 			
-	--- Mods
-			A "Mod" (short for "modification") line allows you to apply the same changes to all following rows (until the mod(s) are cleared). They are formatted as follows:
-				* Individual mod strings (in format ~COLUMN.OPERATION(TEXT)) are separated by a pipe (|).
-				* The lines that a mod affects are wrapped in curly brackets:
-					* Any line that adds mods should end with an opening bracket ({)
-					* Closing brackets may be their own line, or may start another line (a la else-if statements).
-				* Like other lines, they can be indented as desired.
-				* Additional information about mod actions can be found in the TableListMod class.
+			Model - [
+				This is the model row mentioned above - the 2D array that you get back will use these column headers as string indices into each "row" array.
+				The row should end with the corresponding ending character (a closing bracket)
 			
-				For example, these two files have the same result:
-					File A
-						[     NAME           TYPE     COLOR	]
-								Apple          FRUIT    RED
-								Strawberry     FRUIT    RED
-								Bell pepper    VEGGIE   RED
-								Radish         VEGGIE   RED
-								Cherry         FRUIT    RED
-					File B
-						[     NAME           TYPE     COLOR		VALUE	]
-						
-						~COLOR.replaceWith(RED) {
-							~TYPE.replaceWith(FRUIT) {
-								Apple
-								Strawberry
-								Cherry
-							} ~TYPE.replaceWith(VEGGIE) | ~VALUE.replaceWith(5) {
-								Bell pepper    VEGGIE
-								Radish         VEGGIE
-							}
-						}
+			Column info - (
+				Similar to the model row, this row stores information about each column as a whole. This will be stored separately from the normal rows, and can be retrieved via the .columnInfo property.
+				The row should end with the corresponding ending character (a closing paren)
 			
-	--- Special Characters
-			At the start of a row:
-				Ignore - ;
-					If the line starts with this character (ignoring any whitespace before that), the line is ignored and not added to the table.
-				
-				Model - [
-					This is the model row mentioned above - the 2D array that you get back will use these column headers as string indices into each "row" array.
-					The row should end with the corresponding ending character (a closing bracket)
-				
-				Column info - (
-					Similar to the model row, this row stores information about each column as a whole. This will be stored separately from the normal rows, and can be retrieved via the .columnInfo property.
-					The row should end with the corresponding ending character (a closing paren)
-				
-				Setting - @
-					Any row that begins with this is assumed to be of the form @SettingName(value). Settings can be accessed using the .settings property.
-				
-				Header - # (with a space after)
-					Any row starting with this will be added to the .headers property instead of the main table, with its index being that of the next row added to the table.
-				
-				Mods - ~ or }
-					A line which begins with either of these characters will be processed as a mod (see "Mods" section for details).
-					
-			Within a "normal" row (not started with any of the special characters above):
-				Placeholder - - (hyphen)
-					Having this allows you to have a truly empty value for a column in a given row (useful when optional columns are in the middle).
-				
-				Multi-entry - |
-					If this is included in a value for a column, the value for that row will be an array of the pipe-delimited values.
-					If you need to include this character in your actual value, simply escape it with backslash (i.e. \|)
+			Setting - @
+				Any row that begins with this is assumed to be of the form @SettingName(value). Settings can be accessed using the .settings property.
 			
-			Within a mod row (see "Mods" section for details):
-				Mod apply open - {
-					This should appear at the end of a mod row that's adding a new set of mods.
-				Mod apply close - }
-					This can appear at the start of the mod line instead of on its own line, for else-if-style bracketing.
+			Header - # (with a space after)
+				Any row starting with this will be added to the .headers property instead of the main table, with its index being that of the next row added to the table.
 			
-	--- Other features
-			Column info row
-				Using the column info character, you can provide information about each column as a whole. Just start a row with that character, and the caller can retrieve that info, indexed by column name, using the .columnInfo property.
-				Note that there should only be one column info row per file - if there are multiple, only the last one will be available via the property.
-				Example:
-					File:
-						[  NAME  ABBREV   VALUE	]
-						(  0     2        1		)
-						...
-					Code:
-;						tl := new TableList(filePath)
-;						table := tl.getTable()
-;						overrideIndex := tl.columnInfo
-					Result:
-						table does not include the column info row
-						overrideIndex["ABBREV"] := 2
-										 ["NAME"]   := 0
-										 ["VALUE"]  := 1
+			Mods - ~ or }
+				A line which begins with either of these characters will be processed as a mod (see "Mods" section for details).
+				
+		Within a "normal" row (not started with any of the special characters above):
+			Placeholder - - (hyphen)
+				Having this allows you to have a truly empty value for a column in a given row (useful when optional columns are in the middle).
 			
-			Filtering
-				The table can be filtered in-place with .filterOutIfColumn[No]Match and .filterOutIfColumnBlank. Notably, .filterOutIfColumn[No]Match never filters out rows with a blank value for the provided column - .filterOutIfColumnBlank can be used to get rid of those if needed.
-					
-				Example:
-					File:
-						[  NAME     ABBREV   PATH                                         MACHINE	]
-							Spotify  spot     C:\Program Files (x86)\Spotify\Spotify.exe   HOME_DESKTOP
-							Spotify  spot     C:\Program Files\Spotify\Spotify.exe         WORK_LAPTOP
-							Spotify  spot     C:\Spotify\Spotify.exe                       ASUS_LAPTOP
-							Firefox  fox      C:\Program Files\Firefox\firefox.exe
-					Code:
-;						tl := new TableList(filePath).filterOutIfColumnNoMatch("MACHINE", "HOME_DESKTOP")
-;						tl.filterOutIfColumnBlank("MACHINE")
-;						table := tl.getTable()
-					Result:
-						table[1, "NAME"]   = Spotify
-						table[1, "ABBREV"] = spot
-						table[1, "PATH"]   = C:\Program Files (x86)\Spotify\Spotify.exe
-						<"Firefox" line excluded because it was blank for this column>
-			
-	--=
-*/ ; --=
+			Multi-entry - |
+				If this is included in a value for a column, the value for that row will be an array of the pipe-delimited values.
+				If you need to include this character in your actual value, simply escape it with backslash (i.e. \|)
+		
+		Within a mod row (see "Mods" section for details):
+			Mod apply open - {
+				This should appear at the end of a mod row that's adding a new set of mods.
+			Mod apply close - }
+				This can appear at the start of the mod line instead of on its own line, for else-if-style bracketing.
+		
+	Other features
+		Column info row
+			Using the column info character, you can provide information about each column as a whole. Just start a row with that character, and the caller can retrieve that info, indexed by column name, using the .columnInfo property.
+			Note that there should only be one column info row per file - if there are multiple, only the last one will be available via the property.
+			Example:
+				File:
+					[  NAME  ABBREV   VALUE	]
+					(  0     2        1		)
+					...
+				Code:
+;					tl := new TableList(filePath)
+;					table := tl.getTable()
+;					overrideIndex := tl.columnInfo
+				Result:
+					table does not include the column info row
+					overrideIndex["ABBREV"] := 2
+										["NAME"]   := 0
+										["VALUE"]  := 1
+		
+		Filtering
+			The table can be filtered in-place with .filterOutIfColumn[No]Match and .filterOutIfColumnBlank. Notably, .filterOutIfColumn[No]Match never filters out rows with a blank value for the provided column - .filterOutIfColumnBlank can be used to get rid of those if needed.
+				
+			Example:
+				File:
+					[  NAME     ABBREV   PATH                                         MACHINE	]
+						Spotify  spot     C:\Program Files (x86)\Spotify\Spotify.exe   HOME_DESKTOP
+						Spotify  spot     C:\Program Files\Spotify\Spotify.exe         WORK_LAPTOP
+						Spotify  spot     C:\Spotify\Spotify.exe                       ASUS_LAPTOP
+						Firefox  fox      C:\Program Files\Firefox\firefox.exe
+				Code:
+;					tl := new TableList(filePath).filterOutIfColumnNoMatch("MACHINE", "HOME_DESKTOP")
+;					tl.filterOutIfColumnBlank("MACHINE")
+;					table := tl.getTable()
+				Result:
+					table[1, "NAME"]   = Spotify
+					table[1, "ABBREV"] = spot
+					table[1, "PATH"]   = C:\Program Files (x86)\Spotify\Spotify.exe
+					<"Firefox" line excluded because it was blank for this column>
+*/
 
 class TableList {
 	; #PUBLIC#

@@ -5,7 +5,7 @@
 #Include actionObjectSVNLog.ahk
 #Include actionObjectPath.ahk
 
-/* Class that takes some text representing an object, and allows the caller to do something with it. This class itself mostly redirects to the child ActionObject* classes, based on the input (and prompting the user). =--
+/* Class that takes some text representing an object, and allows the caller to do something with it. This class itself mostly redirects to the child ActionObject* classes, based on the input (and prompting the user).
 	
 	Example Usage
 ;		; Determine type based on input
@@ -16,7 +16,7 @@
 ;		ao := new ActionObject()
 ;		ao.linkSelectedTextWeb() ; Links the selected text with a link built from the specific ActionObject* class in question
 	
-*/ ; --=
+*/
 
 class ActionObject {
 	; #PUBLIC#

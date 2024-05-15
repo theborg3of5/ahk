@@ -20,12 +20,12 @@
 	"Class skeleton": {
 		"prefix": "ahkclass",
 		"body": [
-			"/* GDB TODO =--",
+			"/* GDB TODO ",
 			"\t",
 			"\tExample Usage",
 			";\t\tGDB TODO",
 			"\t",
-			"*/ ; --=",
+			"*/",
 			"",
 			"class ${className} {",
 			"\t;region ------------------------------ PUBLIC ------------------------------",

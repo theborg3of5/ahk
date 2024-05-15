@@ -1,59 +1,58 @@
-/* Class for placing text controls onto a GUI, in a special table where the whole table can wrap around to new columns. =--
-	=-- Concept:
-			If whole table, unconstrained would look like this:
-				1	2	3
-				4	5
-				6
-				7	8
-				9	10	11
-				12	13	14	15
-			We could break it up into multiple columns, like this:
-				1	2	3	|	7	8
-				4	5		|	9	10	11
-				6			|	12	13	14	15
+/* Class for placing text controls onto a GUI, in a special table where the whole table can wrap around to new columns.
+	Concept:
+		If whole table, unconstrained would look like this:
+			1	2	3
+			4	5
+			6
+			7	8
+			9	10	11
+			12	13	14	15
+		We could break it up into multiple columns, like this:
+			1	2	3	|	7	8
+			4	5		|	9	10	11
+			6			|	12	13	14	15
+	
+	Usage:
+		Create a new FlexTable instance
+		Start adding cells (.addCell)
+		Add new rows (.addRow) and break into new columns (.addColumn) as needed.
+	
+	Notes:
+		Cell width is not enforced at all - if given it will be used, and if not it will be calculated based on the label's contents (not relative to other rows).
+		The first column, and the first row per column, are implied and do not need to be explicitly added.
+		New columns will start <columnPadding> pixels away from the right-most edge of any cells added in the previous column.
+	
+	Example:
+		Code:
+;			flex := new FlexTable("Gui105") ; Start table at 0,0 in gui and use default properties.
+;											; First column and row are implied, so no need to add them
+;			flex.addCell("a")               ; First cell on first row, with calculated width to match contents
+;			flex.addCell("b", 10, 50)       ; Another cell on same row, starting 10px out from the previous one with a width of 50px
+;			flex.addCell("c")               ; Another cell on same row, starting at end of previous cell
+;			
+;			flex.addRow()                   ; New row (like hitting return in a text editor)
+;			flex.addHeaderCell("HEADER")    ; Special kind of cell with formatting (bold/underline)
+;			
+;			flex.addRow()                   ; New row
+;			flex.addCell("d")               ; First cell in row, calculated width
+;			flex.addCell("e")               ; Next cell in row, starting immediately after
+;			
+;			flex.addRow()
+;			flex.addCell("f")
+;			flex.addCell("g")
+;			
+;			flex.addColumn()
+;			flex.addHeaderCell("NEXT COLUMN HEADER")
+;			flex.addRow()
+;			flex.addCell("Right-aligned value", 0, 100, "Right")
 		
-	--- Usage:
-			Create a new FlexTable instance
-			Start adding cells (.addCell)
-			Add new rows (.addRow) and break into new columns (.addColumn) as needed.
-			
-	--- Notes:
-			Cell width is not enforced at all - if given it will be used, and if not it will be calculated based on the label's contents (not relative to other rows).
-			The first column, and the first row per column, are implied and do not need to be explicitly added.
-			New columns will start <columnPadding> pixels away from the right-most edge of any cells added in the previous column.
+		Result (ALL CAPS are bolded/underlined):
+			a		b			c			NEXT COLUMN HEADER
+			HEADER!							Right-aligned value
+			de
+			fg
 		
-	--- Example:
-			Code:
-;				flex := new FlexTable("Gui105") ; Start table at 0,0 in gui and use default properties.
-;														  ; First column and row are implied, so no need to add them
-;				flex.addCell("a")               ; First cell on first row, with calculated width to match contents
-;				flex.addCell("b", 10, 50)       ; Another cell on same row, starting 10px out from the previous one with a width of 50px
-;				flex.addCell("c")               ; Another cell on same row, starting at end of previous cell
-;				
-;				flex.addRow()                   ; New row (like hitting return in a text editor)
-;				flex.addHeaderCell("HEADER")    ; Special kind of cell with formatting (bold/underline)
-;				
-;				flex.addRow()                   ; New row
-;				flex.addCell("d")               ; First cell in row, calculated width
-;				flex.addCell("e")               ; Next cell in row, starting immediately after
-;				
-;				flex.addRow()
-;				flex.addCell("f")
-;				flex.addCell("g")
-;				
-;				flex.addColumn()
-;				flex.addHeaderCell("NEXT COLUMN HEADER")
-;				flex.addRow()
-;				flex.addCell("Right-aligned value", 0, 100, "Right")
-				
-			Result (ALL CAPS are bolded/underlined):
-				a	b			c			NEXT COLUMN HEADER
-				HEADER!						Right-aligned value
-				de
-				fg
-			
-	--=
-*/ ; --=
+*/
 
 class FlexTable {
 	; #PUBLIC#

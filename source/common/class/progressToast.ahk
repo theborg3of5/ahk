@@ -1,4 +1,4 @@
-/* A wrapper class around Toast for use in progress displays, which displays one "step" per line and completes them as you add more. =--
+/* A wrapper class around Toast for use in progress displays, which displays one "step" per line and completes them as you add more.
 	
 	Example Usage
 ;		progToast := new ProgressToast("Optional title")
@@ -8,7 +8,7 @@
 ;		progToast.endStep("failed") ; Finish Step 3 with a custom message because it errored out
 ;		progToast.finish("Totally finished!") ; End the toast with a final line of text
 	
-*/ ; --=
+*/
 
 class ProgressToast extends Toast {
 	; #PUBLIC#

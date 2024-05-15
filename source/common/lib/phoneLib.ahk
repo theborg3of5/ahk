@@ -1,7 +1,7 @@
 ; Phone number and calling-related functions.
 
 class PhoneLib {
-	;region ==================== PUBLIC ====================",
+	;region ------------------------------ PUBLIC ------------------------------",
 	;---------
 	; DESCRIPTION:    Format a local (10-digit) phone number with parens/spaces/dash.
 	; PARAMETERS:
@@ -14,5 +14,5 @@ class PhoneLib {
 		number := number.sub(-9) ; Last 10 chars only.
 		return "(" number.sub(1, 3) ") " number.sub(4, 3) "-" number.sub(7, 4)
 	}
-	;endregion ================= PUBLIC ====================",
+	;endregion ------------------------------ PUBLIC ------------------------------",
 }

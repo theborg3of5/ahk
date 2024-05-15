@@ -1,7 +1,7 @@
 ; Class that represents a specific program and all the information needed to run it.
 
 class Program {
-	;region ==================== PUBLIC ====================
+	;region ------------------------------ PUBLIC ------------------------------
 	
 	;region Path types (affect how the path is run)
 	static PathType_COMMAND := "COMMAND" ; A command
@@ -62,5 +62,5 @@ class Program {
 		
 		return true
 	}
-	;endregion ================= PUBLIC ====================
+	;endregion ------------------------------ PUBLIC ------------------------------
 }

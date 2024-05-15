@@ -9,7 +9,7 @@
 */ ; --=
 
 class HeaderDocBlock {
-	;region ==================== PUBLIC ====================
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Create a new representation of a block of documentation.
 	; PARAMETERS:
@@ -64,9 +64,9 @@ class HeaderDocBlock {
 		Sleep, 500 ; Wait a tick to make sure the program we're copying from doesn't get mad about us using the clipboard a second time so quickly.
 		ClipboardLib.send(this.getWrappedString(tabWidth))
 	}
-	;endregion ================= PUBLIC ====================
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	;region ==================== PRIVATE ===================
+	;region ------------------------------ PRIVATE ------------------------------
 	COMMENT_CHAR := ";" ; The comment character that's assumed to precede each line of the documentation in question.
 	WRAP_WIDTH := 100 ; The max width we want to (try and) keep all headers within.
 
@@ -186,9 +186,9 @@ class HeaderDocBlock {
 		
 		return ""
 	}
-	;endregion ================= PRIVATE ===================
+	;endregion ------------------------------ PRIVATE ------------------------------
 	
-	;region ==================== DEBUG =====================
+	;region ------------------------------ DEBUG ------------------------------
 	Debug_ToString(ByRef table) {
 		table.addLine("Outer indent, first line",          this.outerFirst)
 		table.addLine("Outer indent, other lines",         this.outerRest)
@@ -196,7 +196,7 @@ class HeaderDocBlock {
 		table.addLine("Inner indent, other lines",         this.innerRest)
 		table.addLine("Unwrapped content",                 this.unwrappedContent)
 	}
-	;endregion ================= DEBUG =====================
+	;endregion ------------------------------ DEBUG ------------------------------
 }
 
 ; Test cases: =--

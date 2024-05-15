@@ -8,7 +8,7 @@
 */ ; --=
 
 class SelectorGui {
-	;region ==================== PUBLIC ====================
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Create a new SelectorGui instance.
 	; PARAMETERS:
@@ -66,9 +66,9 @@ class SelectorGui {
 	getOverrideData() {
 		return this.overrideData
 	}
-	;endregion ================= PUBLIC ====================
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	;region ==================== INTERNAL ==================
+	;region ------------------------------ INTERNAL ------------------------------
 	;---------
 	; DESCRIPTION:    Update the font color of the given control so that it's "ghosted" if it's the initial value, and black otherwise.
 	; PARAMETERS:
@@ -89,9 +89,9 @@ class SelectorGui {
 		; Tell the edit control to update to match
 		GuiControl, Font, % controlId
 	}
-	;endregion ================= INTERNAL ==================
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	;region ==================== PRIVATE ===================
+	;region ------------------------------ PRIVATE ------------------------------
 	; Special characters
 	static Char_NewColumn := "! " ; Space after is required
 	
@@ -379,9 +379,9 @@ class SelectorGui {
 				this.overrideData[label] := inputVal
 		}
 	}
-	;endregion ================= PRIVATE ===================
+	;endregion ------------------------------ PRIVATE ------------------------------
 	
-	;region ==================== DEBUG =====================
+	;region ------------------------------ DEBUG ------------------------------
 	Debug_ToString(ByRef table) {
 		table.addLine("Gui ID (handle)",            this.guiId)
 		table.addLine("Choice field var",           this.fieldVar_Choice)
@@ -393,7 +393,7 @@ class SelectorGui {
 		table.addLine("Total width",                this.totalWidth)
 		table.addLine("Choices table width",        this.choicesWidth)
 	}
-	;endregion ================= DEBUG =====================
+	;endregion ------------------------------ DEBUG ------------------------------
 }
 
 ; These can't live in the class because they're only specified by name (via the +Label option on the gui).

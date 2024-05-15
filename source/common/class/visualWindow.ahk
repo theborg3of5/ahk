@@ -28,7 +28,7 @@
 */
 
 class VisualWindow {
-	;region ==================== PUBLIC ====================
+	;region ------------------------------ PUBLIC ------------------------------
 	;region Special window position constants
 	static X_LeftEdge   := "LEFT_EDGE"   ; Against left edge of screen
 	static X_RightEdge  := "RIGHT_EDGE"  ; Against right edge of screen
@@ -334,9 +334,9 @@ class VisualWindow {
 		
 		return bounds
 	}
-	;endregion ================= PUBLIC ====================
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	;region ==================== PRIVATE ===================
+	;region ------------------------------ PRIVATE ------------------------------
 	; Constants for which direction we're resizing in, for snapping purposes
 	static Resize_Y_ToTop    := "TOP"
 	static Resize_Y_ToBottom := "BOTTOM"
@@ -669,5 +669,5 @@ class VisualWindow {
 		return newY
 	}
 	;endregion Special window sizes/positions (for window placement relative to monitor)
-	;endregion ================= PRIVATE ===================
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

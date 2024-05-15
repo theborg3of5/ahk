@@ -113,7 +113,7 @@
 */
 
 class Selector {
-	;region ==================== PUBLIC ====================
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    The TableList instance that holds all data read from the file, available so
 	;                 that callers can apply filtering if needed. See TableList for available
@@ -310,9 +310,9 @@ class Selector {
 	;  minWidth (I,REQ) - The minimum width (in pixels).
 	;---------
 	; @NPP-TABLELIST-END@
-	;endregion ================= PUBLIC ====================
+	;endregion ------------------------------ PUBLIC ------------------------------
 
-	;region ==================== PRIVATE ===================
+	;region ------------------------------ PRIVATE ------------------------------
 	static Char_CommandStart := "+"
 	static Char_Command_Edit := "e"
 	
@@ -524,9 +524,9 @@ class Selector {
 		
 		return ""
 	}
-	;endregion ================= PRIVATE ===================
+	;endregion ------------------------------ PRIVATE ------------------------------
 	
-	;region ==================== DEBUG =====================
+	;region ------------------------------ DEBUG ------------------------------
 	Debug_ToString(ByRef table) {
 		table.addLine("Filepath",          this.filePath)
 		table.addLine("Window title",      this._windowTitle)
@@ -537,5 +537,5 @@ class Selector {
 		table.addLine("Section titles",    this.sectionTitles)
 		table.addLine("Data TableList",    this.dataTL)
 	}
-	;endregion ================= DEBUG =====================
+	;endregion ------------------------------ DEBUG ------------------------------
 }

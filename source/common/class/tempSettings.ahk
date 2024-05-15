@@ -1,7 +1,7 @@
 ; A wrapper for temporarily changing different script-level settings, then restoring everything when you're finished.
 
 class TempSettings {
-	;region ==================== PUBLIC ====================
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Restore all settings that were changed here, to their value just before the
 	;                 first time they were changed.
@@ -135,9 +135,9 @@ class TempSettings {
 		SetWorkingDir, % new
 		return this
 	}
-	;endregion ================= PUBLIC ====================
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	;region ==================== PRIVATE ===================
+	;region ------------------------------ PRIVATE ------------------------------
 	_coordMode           := {} ; {targetType: value}
 	_detectHiddenWindows := ""
 	_sendLevel           := ""
@@ -162,5 +162,5 @@ class TempSettings {
 			Case "Menu":    return A_CoordModeMenu
 		}
 	}
-	;endregion ================= PRIVATE ===================
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

@@ -1,7 +1,7 @@
 ; File and folder utility functions.
 
 class FileLib {
-	;region ==================== PUBLIC ====================
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Check whether a folder exists at the given path.
 	; PARAMETERS:
@@ -314,9 +314,9 @@ class FileLib {
 		; so the parent of that is our actual common folder.
 		return FileLib.getParentFolder(overlapPath).appendIfMissing("\")
 	}
-	;endregion ================= PUBLIC ====================
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	;region ==================== PRIVATE ===================
+	;region ------------------------------ PRIVATE ------------------------------
 	;---------
 	; DESCRIPTION:    Reduce the given path to a folder.
 	; PARAMETERS:
@@ -332,5 +332,5 @@ class FileLib {
 		
 		return folder.appendIfMissing("\")
 	}
-	;endregion ================= PRIVATE ===================
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

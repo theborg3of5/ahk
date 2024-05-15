@@ -1,7 +1,7 @@
 ; Various Epic utility functions.
 
 class EpicLib {
-	;region ==================== PUBLIC ====================
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Prompt the user to choose an internal Environment using a Selector.
 	; PARAMETERS:
@@ -424,7 +424,7 @@ class EpicLib {
 	;endregion ==================== PUBLIC ====================
 	
 	
-	;region ==================== PRIVATE ====================
+	;region ------------------------------ PRIVATE ------------------------------=
 	;region EMC2 Record Extraction/Selection
 	emc2TypeSelector := "" ; Selector instance (performance cache)
 	

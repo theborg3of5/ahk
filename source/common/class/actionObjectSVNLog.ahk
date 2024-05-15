@@ -14,7 +14,7 @@
 */ ; --=
 
 class ActionObjectSVNLog extends ActionObjectBase {
-	;region ==================== PUBLIC ====================
+	;region ------------------------------ PUBLIC ------------------------------
 	ActionObjectType := ActionObject.Type_SVNLog
 	
 	; @GROUP@ Filter types
@@ -91,7 +91,7 @@ class ActionObjectSVNLog extends ActionObjectBase {
 	}
 	;endregion ==================== PUBLIC ====================
 
-	;region ==================== PRIVATE ====================
+	;region ------------------------------ PRIVATE ------------------------------=
 	;---------
 	; DESCRIPTION:    Generate the branch URL for the given DLG.
 	; PARAMETERS:

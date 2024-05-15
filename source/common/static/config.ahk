@@ -1,7 +1,7 @@
 ; Config class which holds the various options and settings that go into this set of scripts' slightly different behavior in different situations.
 
 class Config {
-	;region ==================== PUBLIC ====================
+	;region ------------------------------ PUBLIC ------------------------------
 	debugOn := false ; GDB TODO window cache debug issue
 	
 	;---------
@@ -333,9 +333,9 @@ class Config {
 		return false
 	}
 	;endregion Games
-	;endregion ================= PUBLIC ====================
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	;region ==================== PRIVATE ===================
+	;region ------------------------------ PRIVATE ------------------------------
 	; Machines
 	static Machine_WorkDesktop := "WORK_DESKTOP" ; Work desktop
 	static Machine_WorkVDI     := "WORK_VDI"     ; Work VDI
@@ -534,5 +534,5 @@ class Config {
 		
 		return tags
 	}
-	;endregion ================= PRIVATE ===================
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

@@ -1,7 +1,7 @@
 #Include mSnippets.ahk
 #Include headerDocBlock.ahk
 class EpicStudio {
-	;region ==================== PUBLIC ====================
+	;region ------------------------------ PUBLIC ------------------------------
 	
 	;---------
 	; DESCRIPTION:    How many characters wide a tab is in EpicStudio.
@@ -48,9 +48,9 @@ class EpicStudio {
 		
 		return QUOTE clip QUOTE
 	}
-	;endregion ================= PUBLIC ====================
+	;endregion ------------------------------ PUBLIC ------------------------------
 		
-	;region ==================== INTERNAL ==================
+	;region ------------------------------ INTERNAL ------------------------------
 	;---------
 	; DESCRIPTION:    Delete the current line in EpicStudio. Note that we can't use the built-in hotkey because it
 	;                 overwrites the clipboard.
@@ -278,9 +278,9 @@ class EpicStudio {
 		; Submit the search.
 		ControlSend, % filterField, {Enter}, A
 	}
-	;endregion ================= INTERNAL ==================
+	;endregion ------------------------------ INTERNAL ------------------------------
 		
-	;region ==================== PRIVATE ===================
+	;region ------------------------------ PRIVATE ------------------------------
 	; Debug window controls
 	static Debug_OtherProcessField := "Edit1" ; "Other Process" search field
 	
@@ -321,5 +321,5 @@ class EpicStudio {
 		Toast.ShowError("Failed to get code location")
 		return false
 	}
-	;endregion ================= PRIVATE ===================
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

@@ -45,7 +45,7 @@ FileLib.replaceFileWithString(environmentsFilePath, environmentLines.join("`r`n"
 
 ; Launch the TLS for editing
 progToast.nextStep("Launching TLS file to edit")
-Config.runProgram("VSCode", "--goto " environmentsFilePath ":" firstNewEnvLine) ; Focus the line we added to
+VSCode.editScript("--goto " environmentsFilePath ":" firstNewEnvLine) ; Focus the line we added to
 
 progToast.finish()
 return

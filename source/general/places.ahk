@@ -57,7 +57,7 @@ sendCleanedUpPath(mapToUnix := false) {
 				return
 			}
 			
-			Config.runProgram("VSCode", path) ; gdbtodo pull this out into VSCode with profile parameter included
+			VSCode.editScript(path)
 		}
 	}
 

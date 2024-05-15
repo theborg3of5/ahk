@@ -530,7 +530,7 @@ class Selector {
 		
 		new TextPopup(table).show()
 		if(this.filePath)
-			Config.runProgram("VSCode", "--profile Default " this.filePath) ; Open file to fix it
+			VSCode.editScript(this.filePath) ; Open file to fix it
 		return false
 	}
 	
@@ -561,7 +561,7 @@ class Selector {
 				
 				; Edit action - open the current INI file for editing
 				if(commandChar = this.Char_Command_Edit)
-					Config.runProgram("VSCode", "--profile Default " this.filePath) ; gdbtodo would this make sense as a public function on my VSCode class, especially if I end up wanting to use it elsewhere? Could be AHK-specific since we want to force the profile with AHK stuff?
+					VSCode.editScript(this.filePath)
 				
 				return [] ; Bail out entirely, returning nothing.
 			}

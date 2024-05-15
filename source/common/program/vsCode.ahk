@@ -1,15 +1,22 @@
 ﻿#Include headerDocBlock.ahk
 class VSCode {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
-	; DESCRIPTION:    How many characters wide a tab is in VS Code.
+	; DESCRIPTION:    How many characters wide a tab is in VSCode.
 	;---------
 	static TabWidth := 4
-	
-	
-	; #INTERNAL#
 
+	;---------
+	; DESCRIPTION:    Edit an AHK-related file in the proper VSCode profile.
+	; PARAMETERS:
+	;  path (I,REQ) - Full path to the file to edit (can also include any other params you want to send).
+	;---------
+	editScript(path) {
+		Config.runProgram("VSCode", "--profile Default " path)
+	}
+	;endregion ------------------------------ PUBLIC ------------------------------
+	
+	;region ------------------------------ INTERNAL ------------------------------
 	static Hotkey_CopyCurrentFile := "^+c" ; Custom hotkey for copyFilePath command
 	
 	;---------
@@ -25,7 +32,7 @@ class VSCode {
 			matchingScriptPath := Config.path["AHK_SOURCE"] "\program\" scriptName
 		
 		if(FileExist(matchingScriptPath))
-			Config.runProgram("VSCode", matchingScriptPath)
+			this.editScript(matchingScriptPath)
 	}
 	
 	;---------
@@ -93,9 +100,10 @@ class VSCode {
 		
 		SendRaw, % AHKCodeLib.generateDocHeader(defLine)
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 
-	
-	; #PRIVATE#
-	static windowTitleSeparator := " - " ; Separator (window.titleSeparator) between elements of the window title (window.title)
-	; #END#
+	;region ------------------------------ PRIVATE ------------------------------
+	; Separator (window.titleSeparator) between elements of the window title (window.title)
+	static windowTitleSeparator := " - "
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

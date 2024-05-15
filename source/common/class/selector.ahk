@@ -252,12 +252,13 @@ class Selector {
 	;                 parameter was specified, only the subscript matching that name will be returned.
 	;---------
 	prompt(returnColumn := "") {
-		return this.doSelect("", returnColumn, false)
+		; return this.doSelect("", returnColumn, false)
+		return this.doSelectMulti("", returnColumn, true)
 	}
 
 	;gdbdoc
 	promptMulti(returnColumn := "") {
-		return this.doSelectMulti("", returnColumn, false)
+		return this.doSelectMulti("", returnColumn, true, true)
 	}
 
 	;---------
@@ -272,12 +273,13 @@ class Selector {
 	;                 was specified, only the subscript matching that name will be returned.
 	;---------
 	selectSilent(choiceString, returnColumn := "") {
-		return this.doSelect(choiceString, returnColumn, true)
+		; return this.doSelect(choiceString, returnColumn, true)
+		return this.doSelectMulti(choiceString, returnColumn, false)
 	}
 
 	;gdbdoc
 	selectSilentMulti(choiceString, returnColumn := "") {
-		return this.doSelectMulti(choiceString, returnColumn, true)
+		return this.doSelectMulti(choiceString, returnColumn, false, true)
 	}
 
 	;---------
@@ -292,12 +294,13 @@ class Selector {
 	;                 parameter was specified, only the subscript matching that name will be returned.
 	;---------
 	select(choiceString, returnColumn := "") {
-		return this.doSelect(choiceString, returnColumn, false)
+		; return this.doSelect(choiceString, returnColumn, false)
+		return this.doSelectMulti(choiceString, returnColumn, true)
 	}
 
 	;gdbdoc
 	selectMulti(choiceString, returnColumn := "") {
-		return this.doSelectMulti(choiceString, returnColumn, false)
+		return this.doSelectMulti(choiceString, returnColumn, true, true)
 	}
 	;endregion Perform Selection
 	
@@ -409,7 +412,7 @@ class Selector {
 
 	;gdbdoc
 	; gdbtodo is it really worth a separate function here (versus just more APIs)?
-	doSelectMulti(query, returnColumn := "", noPrompt := false) { ; gdbtodo probably turn choiceString into an array
+	doSelectMulti(query, returnColumn, allowPrompt, allowMultiInput := false) { ; gdbtodo consider allowing query to be an array?
 		if(!this.loadChoicesFromData())
 			return ""
 		if(!this.validateChoices()) ; gdbtodo should this really just be built into loadChoicesFromData (or a wrapper around both)?
@@ -417,18 +420,18 @@ class Selector {
 		
 		; If something is given, try that silently first
 		if(query)
-			data := this.runQuery(query, true)
+			data := this.runQuery(query, allowMultiInput)
 		
 		; If we got results (or if we didn't but we aren't allowed to prompt), we're done.
 		if(data || noPrompt)
-			return this.getReturnVal(data, returnColumn, true)
+			return this.getReturnVal(data, returnColumn, allowMultiInput)
 
 		; Prompt the user.
 		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this._minColumnWidth, this._iconPath)
 		sGui.show(this._windowTitle, this.defaultOverrides)
-		outputData := this.runQuery(sGui.getChoiceQuery(), true, sGui.getOverrideData())
+		outputData := this.runQuery(sGui.getChoiceQuery(), allowMultiInput, sGui.getOverrideData())
 		Debug.popup("queries",queries, "overrideData",overrideData, "outputData",outputData, "choiceData",choiceData, "returnColumn",returnColumn)
-		return this.getReturnVal(outputData, returnColumn, true)
+		return this.getReturnVal(outputData, returnColumn, allowMultiInput)
 	}
 
 	;---------

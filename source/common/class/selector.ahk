@@ -342,7 +342,7 @@ class Selector {
 	}
 	;endregion Perform Selection
 	
-	; gdbtodo are these actually used anymore, or did I build them into the VSCode extension?
+	; gdbtodo are these actually used anymore, or did I build them into the VSCode extension? see also the "NPP-TABLELIST" bit below.
 	; @NPP-TABLELIST@
 	;---------
 	; NPP-DEF-LINE:   WindowTitle(title)

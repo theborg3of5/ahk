@@ -20,38 +20,50 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	}
 
 #If Config.contextIsWork ; Any work machine
-	^!+d:: Send, % selectTLGId("Select EMC2 Record to Send").removeFromStart("P.").removeFromStart("Q.")
-	^!#d:: selectTLGActionObject("Select EMC2 Record to View").openWeb()
-	^!+#d::selectTLGActionObject("Select EMC2 Record to Edit").openEdit()
-	selectTLGId(title) {
+	;region TLG record IDs
+	^!+d::
+		sendTLGRecId() {
+			idList := ""
+			For _, recId in selectTLGRecIDs("Select EMC2 Record to Send")
+				idList := idList.appendPiece(", ", recId.removeFromStart("P.").removeFromStart("Q."))
+			Send, % idList
+		}
+	^!#d::
+		webTLGRecs() {
+			For _, ao in selectTLGActionObjects("Select EMC2 Record to View")
+				ao.openWeb()
+		}
+	^!+#d::
+		editTLGRecs() {
+			For _, ao in selectTLGActionObjects("Select EMC2 Record to Edit")
+				ao.openEdit()
+		}
+	
+	selectTLGRecIDs(title) {
 		emc2Path := Config.getProgramPath("EMC2")
 		icon := FileLib.getParentFolder(emc2Path, 2) "\en-US\Images\emc2.ico" ; Icon is separate from the executable so we have to jump to it.
 
 		s := new Selector("tlg.tls").setTitle(title).setIcon(icon).overrideFieldsOff()
 		s.dataTableList.filterOutIfColumnBlank("RECORD")
 		s.dataTableList.filterOutIfColumnMatch("RECORD", "GET") ; Special keyword used for searching existing windows, can search for that with ^!i instead.
-		return s.prompt("RECORD")
+		return s.promptMulti("RECORD")
 	}
-	selectTLGActionObject(title) {
-		recId := selectTLGId(title)
-		if(!recId)
-			return ""
-		
-		if(recId.startsWith("P.")) {
-			recId := recId.removeFromStart("P.")
-			recINI := "PRJ"
-		} else if(recId.startsWith("Q.")) {
-			recId := recId.removeFromStart("Q.")
-			recINI := "QAN"
-		} else if(recId.startsWith("S.")) {
-			recId := recId.removeFromStart("S.")
-			recINI := "SLG"
-		} else {
-			recINI := "DLG"
+	selectTLGActionObjects(title) {
+		actionObjects := []
+		For _, recId in selectTLGRecIDs(title) {
+			if(recId.startsWith("P."))
+				actionObjects.push(new ActionObjectEMC2(recId.removeFromStart("P."), "PRJ"))
+			else if(recId.startsWith("Q."))
+				actionObjects.push(new ActionObjectEMC2(recId.removeFromStart("Q."), "QAN"))
+			else if(recId.startsWith("S."))
+				actionObjects.push(new ActionObjectEMC2(recId.removeFromStart("S."), "SLG"))
+			else
+				actionObjects.push(new ActionObjectEMC2(recId, "DLG"))
 		}
 		
-		return new ActionObjectEMC2(recId, recINI)
+		return actionObjects
 	}
+	;endregion TLG record IDs
 	
 	^+!#h::
 		selectHyperspace() {

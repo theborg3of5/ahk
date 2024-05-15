@@ -1,4 +1,4 @@
-/* Class which represents a particular change (mod action) that should be made to a "row" array in a TableList. =--
+/* Class which represents a particular change (mod action) that should be made to a "row" array in a TableList.
 	
 	A mod action is defined by a string using a particular syntax:
 		~COLUMN.OPERATION(TEXT)
@@ -10,43 +10,42 @@
 		Result:
 			All rows which the mod is applied to will have the string "C:\users\" added to the beginning of their "PATH" column.
 	
-	Operations
-		The operation of a mod action determines how it changes the chosen column:
-			replaceWith
-				Replace the column.
-				Example:
-					Mod string
-						~COL.replaceWith(z)
-					Normal line (COL column)
-						AAA
-					Result
-						z
-			
-			addToStart
-				Prepend to the column (add to the beginning).
-				Example:
-					Mod string
-						~COL.addToStart(z)
-					Normal line (COL column)
-						AAA
-					Result
-						zAAA
-			
-			addToEnd
-				Append to the column (add to the end).
-				Example:
-					Mod string
-						~COL.addToEnd(z)
-					Normal line (COL column)
-						AAA
-					Result
-						AAAz
-	
-*/ ; --=
+	;region Operations
+	The operation of a mod action determines how it changes the chosen column:
+		replaceWith
+			Replace the column.
+			Example:
+				Mod string
+					~COL.replaceWith(z)
+				Normal line (COL column)
+					AAA
+				Result
+					z
+		
+		addToStart
+			Prepend to the column (add to the beginning).
+			Example:
+				Mod string
+					~COL.addToStart(z)
+				Normal line (COL column)
+					AAA
+				Result
+					zAAA
+		
+		addToEnd
+			Append to the column (add to the end).
+			Example:
+				Mod string
+					~COL.addToEnd(z)
+				Normal line (COL column)
+					AAA
+				Result
+					AAAz
+	;endregion Operations
+*/
 
 class TableListMod {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    The prefix character for mods, that comes just before the column to affect.
 	;---------
@@ -91,44 +90,12 @@ class TableListMod {
 		; Put the column back into the full row.
 		row[this.column] := newValue
 	}
-	
-	; @NPP-TABLELIST@
-	;---------
-	; NPP-DEF-LINE:   addToStart(text)
-	; DESCRIPTION:    Add the given text to the start of this column.
-	; PARAMETERS:
-	;  text (I,REQ) - Text to add to start.
-	;---------
-	
-	;---------
-	; NPP-DEF-LINE:   addToEnd(text)
-	; DESCRIPTION:    Add the given text to the end of this column.
-	; PARAMETERS:
-	;  text (I,REQ) - Text to add to end.
-	;---------
-	
-	;---------
-	; NPP-DEF-LINE:   replaceWith(text)
-	; DESCRIPTION:    Replace this column with the given value.
-	; PARAMETERS:
-	;  text (I,REQ) - Text to replace with.
-	;---------
-	
-	;---------
-	; NPP-DEF-LINE:   defaultTo(text)
-	; DESCRIPTION:    Set this column to the given value, but only if there's not already a value in place.
-	; PARAMETERS:
-	;  text (I,REQ) - Text to default in.
-	;---------
-	; @NPP-TABLELIST-END@
-	
-	
-	; #PRIVATE#
-	
+	;endregion ------------------------------ PUBLIC ------------------------------
+
+	;region ------------------------------ PRIVATE ------------------------------
 	column    := "" ; The name of the column to operate on
 	operation := "" ; The operation to perform
 	text      := "" ; The text to use
-	
 	
 	;---------
 	; DESCRIPTION:    Execute the mod on a single value.
@@ -137,7 +104,7 @@ class TableListMod {
 	; RETURNS:        The updated result.
 	;---------
 	executeOnce(value) {
-		; Each of these should have a matching stub + documentation in the (@)NPP-TABLELIST section.
+		; These map to the modOperation section in my TableList language definition.
 		Switch this.operation {
 			Case "addToStart":  return this.text value
 			Case "addToEnd":    return value this.text
@@ -145,5 +112,5 @@ class TableListMod {
 			Case "defaultTo":   return (value != "") ? value : this.text
 		}
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

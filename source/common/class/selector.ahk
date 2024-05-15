@@ -341,25 +341,6 @@ class Selector {
 		return this.getReturnVal(outputData, returnColumn, true) ; allowMulti=true
 	}
 	;endregion Perform Selection
-	
-	; gdbtodo are these actually used anymore, or did I build them into the VSCode extension? see also the "NPP-TABLELIST" bit below.
-	; @NPP-TABLELIST@
-	;---------
-	; NPP-DEF-LINE:   WindowTitle(title)
-	; NPP-RETURNS:    @
-	; DESCRIPTION:    If this is set, we'll show the given text as the window title (aka the caption).
-	; PARAMETERS:
-	;  title (I,REQ) - The title to use.
-	;---------
-	
-	;---------
-	; NPP-DEF-LINE:   MinColumnWidth(minWidth)
-	; NPP-RETURNS:    @
-	; DESCRIPTION:    If this is set, each super-column in the display will be at least this wide.
-	; PARAMETERS:
-	;  minWidth (I,REQ) - The minimum width (in pixels).
-	;---------
-	; @NPP-TABLELIST-END@
 	;endregion ------------------------------ PUBLIC ------------------------------
 
 	;region ------------------------------ PRIVATE ------------------------------
@@ -411,7 +392,7 @@ class Selector {
 	;---------
 	updateSettings(settings) {
 		For name,value in settings {
-			; The (@)NPP-TABLELIST section in this class should be kept up-to-date with all available settings.
+			; These map to the settingRow section in my TableList language definition.
 			Switch name {
 				Case "WindowTitle":    this._windowTitle := value
 				Case "MinColumnWidth": this._minColumnWidth := value

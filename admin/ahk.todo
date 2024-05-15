@@ -164,38 +164,6 @@
 				Grab needed data via track-shadow report, do the rest of the current AHK stuff
 				Display info about what to rename Thunder environments (maybe put the common base onto the clipboard for me)
 				Display new line to add to getSyncEnvironments (automatically add to clipboard)
-	✔ Allow multi-selection of selector options @done(24-05-15 16:18)
-		✔ Would need to either: @done(24-05-15 14:37)
-			✔ Make it configurable by caller - each caller would have to support it specially as the return format would be different. @done(24-05-15 14:38)
-			✔ Update all callers to handle multiple-style format, all the time? @done(24-05-15 14:38)
-			✔ Create new APIs (like adding a "multi" on the end) that describe what we expect to come back @done(24-05-15 14:38)
-				Honestly, may be able to simplify/clarify existing entry points this way, too?
-		✔ Will want support for different "styles" of callers - single-column vs. data array return values @done(24-05-15 14:38)
-		✔ Delimit with a plain space instead of a pipe - way easier to type that way! @done(24-05-15 14:38)
-		Use cases:
-			✔ SUs, multiple: @done(24-05-15 16:08)
-				✔ Putty sessions @done(24-05-15 14:18)
-				✔ Standalone hyperspace instances across multiple versions @done(24-05-15 14:18)
-				✔ TLG events @done(24-05-15 16:08)
-					✔ This one is probably better handled with a custom record ID (comma-separated)? @done(24-05-15 16:08)
-			✔ Edit config file - edit multiple @done(24-05-15 14:30)
-			✔ Search - multiple places (might replace current multi-cases) @done(24-05-15 14:34)
-			✔ Solution shortcuts - add multiple shortcuts @done(24-05-15 14:37)
-			✔ Folders - open multiple folders @done(24-05-15 14:29)
-			✔ Symbols - just send multiple @done(24-05-15 14:31)
-			✔ TLG - combining choices? (specific log + des = log's info but with TLP 12) @done(24-05-15 16:18)
-		✔ Specifically don't want to support for: @done(24-05-15 14:38)
-			firstSetup machine
-			actionObject*
-			formattedList
-			mSnippets
-			puttyRecordEdit
-			snapperIgnoreItems
-			phone
-			resize
-			hswebConsoleCommands
-			timer duration
-			transaction dump
 	☐ Consider adding "chorded" EMC2 object opening keys (at least when opening in web, so all of these start with !w)?
 		☐ What's the actual workflow for this case, then?
 			Don't want to wait when I just want the object to open
@@ -218,10 +186,6 @@
 		☐ Consider ditching the I/O for parameters too, just make it obvious in the description
 		☐ Maybe we should switch over to a more jsdoc-like style?
 	☐ Consider hotstrings or something similar for Ninpo notes style
-		✔ m/uL/R superscripted sides, directions (maybe just catch the capitalization and superscript it?) @done(23-01-31 14:25)
-			Could either select + superscript hotkey, or try to send RTF (?) already-subscripted replacement
-		✔ Hotstrings for degree numbers (45 => 45°, 90 => 90°, 135, 180, 270, 360) @done(23-01-31 14:26)
-			Alternatively, just use "d" - 45d => 45°, 90d, etc.
 		☐ Probably overkill, but could add a selector of techniques/stances/etc. (that includes super/subscripting)
 			Maybe not overkill? Could be a nice quick reference for abbreviations.
 		☐ Maybe a quick text-popup display of syntax/abbreviations?

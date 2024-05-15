@@ -108,7 +108,7 @@ class WindowPositions {
 			return true
 		
 		; Prompt for preset
-		preset := new Selector(this.Filename_PresetList).selectGui("PRESET")
+		preset := new Selector(this.Filename_PresetList).prompt("PRESET")
 		if(preset)
 			return true
 		

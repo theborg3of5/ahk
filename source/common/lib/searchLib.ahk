@@ -11,7 +11,7 @@ class SearchLib {
 		text := SelectLib.getCleanFirstLine()
 		
 		s := new Selector("search.tls").setDefaultOverrides({"SEARCH_TERM":text})
-		data := s.selectGui()
+		data := s.prompt()
 		if(!data)
 			return
 		

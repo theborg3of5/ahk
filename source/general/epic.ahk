@@ -30,7 +30,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		s := new Selector("tlg.tls").setTitle(title).setIcon(icon).overrideFieldsOff()
 		s.dataTableList.filterOutIfColumnBlank("RECORD")
 		s.dataTableList.filterOutIfColumnMatch("RECORD", "GET") ; Special keyword used for searching existing windows, can search for that with ^!i instead.
-		return s.selectGui("RECORD")
+		return s.prompt("RECORD")
 	}
 	selectTLGActionObject(title) {
 		recId := selectTLGId(title)
@@ -94,7 +94,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			
 			s := new Selector("epicEnvironments.tls").setTitle("Open Record(s) in Snapper in Environment").setIcon(Config.getProgramPath("Snapper"))
 			s.addOverrideFields(["INI", "ID"]).setDefaultOverrides({"INI":record.ini, "ID":record.id}) ; Add fields for INI/ID and default in any values that we figured out
-			data := s.selectGui()
+			data := s.prompt()
 			if(!data)
 				return
 			

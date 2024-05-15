@@ -56,7 +56,7 @@ class Putty {
 	
 		; If no previous values (or not using them), prompt the user for how/what to search.
 		if(searchType = "" || searchText = "") {
-			data := new Selector("puttyRecordEditSearch.tls").selectGui()
+			data := new Selector("puttyRecordEditSearch.tls").prompt()
 			searchType := data["SEARCH_TYPE"]
 			searchText := data["SEARCH_TEXT"]
 		}

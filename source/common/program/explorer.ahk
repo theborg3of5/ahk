@@ -108,7 +108,7 @@ class Explorer {
 		}
 		
 		; Prompt user for which solution they want
-		data := new Selector("solutionShortcuts.tls").selectGui()
+		data := new Selector("solutionShortcuts.tls").prompt()
 		if(!data)
 			return
 		name               := data["NAME"]

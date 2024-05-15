@@ -9,7 +9,7 @@
 
 	;region Selection
 	This class can be used in one of two ways:
-	1. Gui method (.selectGui())
+	1. Gui method (.prompt())
 			Show a popup containing the available choices and a field where the user can enter their selection using either the index or abbreviation of a choice. If override fields are visible (see "Data Override Fields" below) they can override specific information about that choice (or even submit the popup without a choice, only overrides) as well.
 			
 			The user may also enter the command character (+) followed by one of these letters to do something instead of picking a choice:
@@ -72,18 +72,18 @@
 	;region Gui Settings
 	Some settings related to the popup may be customized by specifying them in the TLS file (using the @ character, see "Settings" character above).
 
-	Note that these settings only have an effect on the popup shown by .selectGui().
+	Note that these settings only have an effect on the popup shown by .prompt().
 	
 	Available settings:
 		WindowTitle
-			This will be the title of the popup shown to the user. This setting may also be set using the title parameter of .selectGui().
+			This will be the title of the popup shown to the user. This setting may also be set using the title parameter of .prompt().
 		
 		MinColumnWidth
 			If this is set, each super-column in the popup will be that number of pixels wide at a minimum (each may be wider if the choices in that column are wider). See the FlexTable class for how super-columns work.
 	;endregion Gui Settings
 	
 	;region Data Override Fields
-	If an override field index row is specified in the TLS file, the popup shown by .selectGui() will include not only a choice field, but also fields for each column given a non-zero index in the override field index row. The fields are shown in the order specified by the row (i.e. 1 is first after the choice field, 2 is second, etc.). That the fields can be programmatically suppressed using the .overrideFieldsOff() function.
+	If an override field index row is specified in the TLS file, the popup shown by .prompt() will include not only a choice field, but also fields for each column given a non-zero index in the override field index row. The fields are shown in the order specified by the row (i.e. 1 is first after the choice field, 2 is second, etc.). That the fields can be programmatically suppressed using the .overrideFieldsOff() function.
 	These fields give a user the ability to override data from their selected choice (or submit the popup without a choice, only overrides). If the user changes the value of the field (it defaults to the column label), that value will be used instead of the selected choice's value for that column.
 	
 	Even if there is no override field index row in the TLS file, the .addOverrideFields() function may be used to add additional fields to the popup. The values from these fields will appear in the return array just like other override fields, under the subscript with their name.
@@ -98,7 +98,7 @@
 ;	s.addOverrideFields(["CONFIG_NAME", "CONFIG_NUM"])                  ; Two additional override fields for the popup.
 ;	s.setDefaultOverrides({CONFIG_NAME: "Windows"})                     ; Default a value of "Windows" into the "CONFIG_NAME" override field
 ;	
-;	data := s.selectGui()                                               ; Show the popup and retrieve the entire data array
+;	data := s.prompt()                                               ; Show the popup and retrieve the entire data array
 ;	MsgBox, % "Chosen config name: " data["CONFIG_NAME"]
 ;	MsgBox, % "Chosen config num: "  data["CONFIG_NUM"]
 	;endregion Popup example
@@ -180,7 +180,7 @@ class Selector {
 	;                 they add (or is defaulted in) in the final return array.
 	; PARAMETERS:
 	;  fieldsToAdd (I,REQ) - Numerically-indexed object of field names (treated the same as column names from choices) to add.
-	; NOTES:          This should be called after creating a new Selector object, but before calling .selectGui()/.select().
+	; NOTES:          This should be called after creating a new Selector object, but before calling .prompt()/.select().
 	;                 Default override values for these fields (if desired) can be set using the .setDefaultOverrides() function.
 	;---------
 	addOverrideFields(fieldsToAdd) {
@@ -200,7 +200,7 @@ class Selector {
 	;  defaultOverrides (I,REQ) - Associative array fo default overrides, format:
 	;                              {columnLabel: value}
 	; RETURNS:        this
-	; NOTES:          These overrides are only used if you do a user selection (.selectGui(), or
+	; NOTES:          These overrides are only used if you do a user selection (.prompt(), or
 	;                 .select() with a blank choiceString) - otherwise they are ignored.
 	;---------
 	setDefaultOverrides(defaultOverrides) {
@@ -260,7 +260,7 @@ class Selector {
 	}
 
 	;gdbdoc
-	select(choiceString, returnColumn := "") { ; gdbtodo rename to just select()
+	select(choiceString, returnColumn := "") {
 		return this.doSelect(choiceString, returnColumn, false)
 	}
 
@@ -278,7 +278,7 @@ class Selector {
 			return this.getReturnVal(data, returnColumn)
 
 		; Prompt the user.
-		data := this.doSelectGui()
+		data := this.doSelectGui() ; gdbtodo should I rename this with selectGui > prompt?
 
 		return this.getReturnVal(data, returnColumn)
 	}
@@ -358,7 +358,7 @@ class Selector {
 	;  choiceString (I,OPT) - The string to try and match against the given choices. If this is not
 	;                         blank, we'll match it against the index or abbreviation of the choices
 	;                         first. If that doesn't return anything or if this parameter was blank
-	;                         we'll call .selectGui() to show a popup to the user where they pick
+	;                         we'll call .prompt() to show a popup to the user where they pick
 	;                         their choice and enter any additional override information.
 	;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this name will
 	;                         be returned.
@@ -375,7 +375,7 @@ class Selector {
 		
 		; If we don't have a result yet, prompt the user.
 		if(!data)
-			data := this.doSelectGui()
+			data := this.doSelectGui() ; gdbtodo should I rename this along with selectGui?
 		
 		; If there's no result return "" so callers can just check !data
 		if(DataLib.isNullOrEmpty(data))

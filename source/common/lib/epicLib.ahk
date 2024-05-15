@@ -18,7 +18,7 @@ class EpicLib {
 			s.setIcon(selectorIcon)
 		
 		; Show the popup and get user input
-		data := s.selectGui()
+		data := s.prompt()
 		if(!data)
 			return ""
 
@@ -665,7 +665,7 @@ class EpicLib {
 	; PARAMETERS:
 	;  exacts    (I,REQ) - Array of confirmed EpicRecord objects, from extractEMC2RecordsFromText.
 	;  possibles (I,REQ) - Array of potential EpicRecord objects, from extractEMC2RecordsFromText.
-	; RETURNS:        Data array from Selector.selectGui().
+	; RETURNS:        Data array from Selector.prompt().
 	;---------
 	selectFromEMC2RecordMatches(exacts, possibles) {
 		allAbbrevs := []
@@ -679,7 +679,7 @@ class EpicLib {
 		For _,record in possibles
 			s.addChoice(this.buildChoiceFromEMC2Record(record, allAbbrevs))
 		
-		data := s.selectGui()
+		data := s.prompt()
 		if(data)
 			data["INI"] := EpicLib.convertToUsefulEMC2INI(data["INI"]) ; Convert INI before we return.
 		

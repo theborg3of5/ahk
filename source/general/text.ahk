@@ -28,4 +28,4 @@ return
 ^#v::new FormattedList(Clipboard).sendList()
 
 ; Send specific symbols
-#`;::Send, % new Selector("symbols.tls").selectGui("CHAR")
+#`;::Send, % new Selector("symbols.tls").prompt("CHAR")

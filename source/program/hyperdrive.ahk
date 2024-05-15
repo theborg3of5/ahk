@@ -19,7 +19,7 @@
 #If WinActive(Config.private["EPIC_HSWEB_CONSOLE_TITLESTRING"])
 	^r::
 		selectHSWebConsoleCommand() {
-			data := new Selector("hswebConsoleCommands.tls").selectGui()
+			data := new Selector("hswebConsoleCommands.tls").prompt()
 			if(!data)
 				return
 			

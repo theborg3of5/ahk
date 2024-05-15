@@ -168,7 +168,7 @@ class ActionObjectBase {
 		s.setDefaultOverrides({"VALUE":value})
 		if(popupTitle != "")
 			s.setTitle(popupTitle)
-		data := s.selectGui()
+		data := s.prompt()
 		
 		; Fail if we didn't get everything we needed.
 		if(!data)

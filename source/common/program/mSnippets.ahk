@@ -24,7 +24,7 @@ class MSnippets {
 		if(line = ";")
 			Send, {Backspace}
 		
-		data := new Selector("MSnippets.tls").selectGui()
+		data := new Selector("MSnippets.tls").prompt()
 		subType  := data["SUBTYPE"]
 		inputAry := data["VARS_AND_VALS"].split(",")
 

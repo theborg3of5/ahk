@@ -171,7 +171,7 @@ class FormattedList {
 	; RETURNS:        The chosen format, should match a value from .Format_*
 	;---------
 	promptForFormat(title, ByRef customDelim := "") {
-		data := new Selector("listFormats.tls").setTitle(title).selectGui()
+		data := new Selector("listFormats.tls").setTitle(title).prompt()
 		customDelim := data["CUSTOM_DELIM"]
 		return data["FORMAT"]
 	}

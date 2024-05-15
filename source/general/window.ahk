@@ -41,7 +41,7 @@ $!q::WindowActions.minimizeWindow()
 			return
 		}
 		
-		data := new Selector("resize.tls").selectGui()
+		data := new Selector("resize.tls").prompt()
 		if(!data)
 			return
 		

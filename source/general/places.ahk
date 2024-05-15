@@ -14,7 +14,7 @@ openPath(folderName) {
 ; Open folder from list
 !+w::
 	selectFolder() {
-		folderPath := new Selector("folders.tls").setIcon(Config.getProgramPath("Explorer")).selectGui("PATH")
+		folderPath := new Selector("folders.tls").setIcon(Config.getProgramPath("Explorer")).prompt("PATH")
 		folderPath := Config.replacePathTags(folderPath)
 		
 		if(folderPath = "")
@@ -50,7 +50,7 @@ sendCleanedUpPath(mapToUnix := false) {
 ; Selector to allow easy editing of config or code files that we edit often
 !+c::
 	selectEditFile() {
-		path := new Selector("editFiles.tls").setIcon(Config.getProgramPath("VSCode")).selectGui("PATH")
+		path := new Selector("editFiles.tls").setIcon(Config.getProgramPath("VSCode")).prompt("PATH")
 		if(!path)
 			return
 		

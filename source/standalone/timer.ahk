@@ -69,7 +69,7 @@ getTimerInfo(durationString, labelText) {
 	s.addChoice(new SelectorChoice({ NAME:"1 hour"    , ABBREV:"1h"  , DURATION_STRING:"1h"   }))
 	s.addChoice(new SelectorChoice({ NAME:"1.5 hours" , ABBREV:"1.5h", DURATION_STRING:"1.5h" }))
 	
-	infoAry := s.selectGui()
+	infoAry := s.prompt()
 	if(!infoAry)
 		return false
 	durationString := infoAry["DURATION_STRING"]

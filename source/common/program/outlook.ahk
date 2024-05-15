@@ -158,7 +158,7 @@ class Outlook {
 	selectOutlookTLG() {
 		s := new Selector("tlg.tls").setTitle("Select EMC2 Record ID").setIcon(Config.getProgramPath("Outlook"))
 		s.dataTableList.filterOutIfColumnNoMatch("IS_OLD", "") ; Filter out old records (have a value in the OLD column)
-		data := s.selectGui()
+		data := s.prompt()
 		if(!data)
 			return
 		

@@ -94,7 +94,7 @@ class ActionObject {
 			return
 		
 		s := new Selector("actionObject.tls").setDefaultOverrides({"VALUE":this.value})
-		data := s.selectGui()
+		data := s.prompt()
 		if(!data)
 			return
 		

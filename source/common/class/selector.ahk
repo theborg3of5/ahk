@@ -249,57 +249,6 @@ class Selector {
 	*/
 
 	;region Selection entry points
-	;gdbdoc
-	prompt(returnColumn := "") { ; gdbtodo switch over current callers to selectGui, make sure it all works properly
-		return this.doSelect("", returnColumn, false)
-	}
-
-	;gdbdoc
-	selectSilent(choiceString, returnColumn := "") {
-		return this.doSelect(choiceString, returnColumn, true)
-	}
-
-	;gdbdoc
-	select(choiceString, returnColumn := "") {
-		return this.doSelect(choiceString, returnColumn, false)
-	}
-
-	;gdbdoc
-	doSelect(choiceString, returnColumn := "", noPrompt := false) { ; gdbtodo move this to the private region
-		if(!this.loadChoicesFromData())
-			return ""
-		
-		; If something is given, try that silently first
-		if(choiceString)
-			data := this.parseChoice(choiceString)
-		
-		; If we got results (or if we didn't but we aren't allowed to prompt), we're done.
-		if(data || noPrompt)
-			return this.getReturnVal(data, returnColumn)
-
-		; Prompt the user.
-		data := this.doSelectGui() ; gdbtodo should I rename this with selectGui > prompt?
-
-		return this.getReturnVal(data, returnColumn)
-	}
-
-	;gdbdoc
-	getReturnVal(data, returnColumn) { ; gdbtodo probably move this to the private region (along with doSelect)?
-		; If there's no result return "" so callers can just check !data
-		if(DataLib.isNullOrEmpty(data))
-			return ""
-
-		; If a specific column was requested, just return that
-		if(returnColumn)
-			return data[returnColumn]
-		
-		; Otherwise return the whole data array.
-		return data
-	}
-
-
-
-
 	;---------
 	; DESCRIPTION:    Show a popup to the user so they can select one of the choices we've prepared
 	;                 and enter any additional override information.
@@ -307,85 +256,40 @@ class Selector {
 	;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this
 	;                         name will be returned.
 	; RETURNS:        An array of data as chosen/overridden by the user. If the returnColumn
-	;                 parameter was specified, only the subscript matching that name will be
-	;                 returned.
+	;                 parameter was specified, only the subscript matching that name will be returned.
 	;---------
-	selectGui(returnColumn := "") {
-		if(!this.loadChoicesFromData())
-			return ""
-		
-		data := this.doSelectGui()
-		
-		; If there's no result return "" so callers can just check !data
-		if(DataLib.isNullOrEmpty(data))
-			return ""
-		
-		; Return a specific column if requested
-		if(returnColumn)
-			return data[returnColumn]
-		
-		return data
+	prompt(returnColumn := "") {
+		return this.doSelect("", returnColumn, false)
 	}
 
 	;---------
-	; DESCRIPTION:    Programmatically select a choice from those we've prepared.
+	; DESCRIPTION:    Programmatically select a choice from those we've prepared, specifically NOT
+	;                 prompting the user if we don't find anything.
 	; PARAMETERS:
-	;  choiceString (I,REQ) - The string to try and match against the given choices. We will match this string
-	;                         against the index or abbreviation of the choice.
-	;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this name will
-	;                         be returned.
+	;  choiceString (I,REQ) - The string to try and match against the given choices. We will match
+	;                         this string against the index or abbreviation of the choice.
+	;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this
+	;                         name will be returned.
 	; RETURNS:        An array of data for the choice matching the given string. If the returnColumn parameter
 	;                 was specified, only the subscript matching that name will be returned.
 	;---------
-	selectChoice(choiceString, returnColumn := "") { ; gdbremove just steal from header first
-		if(!choiceString)
-			return ""
-		
-		if(!this.loadChoicesFromData())
-			return ""
-		
-		data := this.parseChoice(choiceString)
-		if(returnColumn)
-			return data[returnColumn]
-		else
-			return data
+	selectSilent(choiceString, returnColumn := "") {
+		return this.doSelect(choiceString, returnColumn, true)
 	}
-	
+
 	;---------
-	; DESCRIPTION:    Helper function that will try to run a silent selection based on the input,
-	;                 but if that fails it will prompt the user.
+	; DESCRIPTION:    Attempt to programmatically select a choice based on the given input, falling
+	;                 back to prompting the user if that fails.
 	; PARAMETERS:
-	;  choiceString (I,OPT) - The string to try and match against the given choices. If this is not
-	;                         blank, we'll match it against the index or abbreviation of the choices
-	;                         first. If that doesn't return anything or if this parameter was blank
-	;                         we'll call .prompt() to show a popup to the user where they pick
-	;                         their choice and enter any additional override information.
-	;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this name will
-	;                         be returned.
+	;  choiceString (I,REQ) - The string to try and match against the given choices. We will match
+	;                         this string against the index or abbreviation of the choice.
+	;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this
+	;                         name will be returned.
 	; RETURNS:        An array of data for the choice matching the given string. If the returnColumn
 	;                 parameter was specified, only the subscript matching that name will be returned.
 	;---------
-	selectOld(choiceString := "", returnColumn := "") { ; gdbremove just steal from header first
-		if(!this.loadChoicesFromData())
-			return ""
-		
-		; If something is given, try that silently first
-		if(choiceString)
-			data := this.parseChoice(choiceString)
-		
-		; If we don't have a result yet, prompt the user.
-		if(!data)
-			data := this.doSelectGui() ; gdbtodo should I rename this along with selectGui?
-		
-		; If there's no result return "" so callers can just check !data
-		if(DataLib.isNullOrEmpty(data))
-			return ""
-		
-		; Return a specific column if requested
-		if(returnColumn)
-			return data[returnColumn]
-		
-		return data
+	select(choiceString, returnColumn := "") {
+		return this.doSelect(choiceString, returnColumn, false)
 	}
 	;endregion Selection entry points
 	

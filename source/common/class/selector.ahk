@@ -240,13 +240,6 @@ class Selector {
 		return this.choices.length()
 	}
 	;endregion Gui Changes
-	
-	/* gdbtodo consider rearranging these entry points:
-		Code-wise, just have a single [private?] trySelect() with both a "silent" choice and a "noPrompt" flag
-		Wrappers:
-			prompt() - choiceString = "" (no param), noPrompt = false
-			selectSilent() - choiceString param, noPrompt = true
-	*/
 
 	;region Selection entry points
 	;---------
@@ -365,6 +358,61 @@ class Selector {
 				Case "MinColumnWidth": this._minColumnWidth := value
 			}
 		}
+	}
+
+	;---------
+	; DESCRIPTION:    Core logic to try and select a choice, potentially prompting the user.
+	; PARAMETERS:
+	;  choiceString (I,REQ) - The string to try and match against the given choices. We will match
+	;                         this string against the index or abbreviation of the choice.
+	;  returnColumn (I,OPT) - If this parameter is given, only the data under the column with this
+	;                         name will be returned.
+	;  noPrompt     (I,OPT) - Set this to true to NOT prompt the user, even if we fail to find a
+	;                         choice using choiceString.
+	; RETURNS:        An array of data for the choice matching the given string. If the returnColumn
+	;                 parameter was specified, only the subscript matching that name will be returned.
+	;---------
+	doSelect(choiceString, returnColumn := "", noPrompt := false) {
+		if(!this.loadChoicesFromData())
+			return ""
+		
+		; If something is given, try that silently first
+		if(choiceString)
+			data := this.parseChoice(choiceString)
+		
+		; If we got results (or if we didn't but we aren't allowed to prompt), we're done.
+		if(data || noPrompt)
+			return this.getReturnVal(data, returnColumn)
+
+		; Prompt the user.
+		data := this.doSelectGui() ; gdbtodo should I rename this with selectGui > prompt?
+
+		return this.getReturnVal(data, returnColumn)
+	}
+
+	;---------
+	; DESCRIPTION:    Constructs the return value from a selection entry point.
+	; PARAMETERS:
+	;  data         (I,REQ) - Data array with any matches
+	;  returnColumn (I,REQ) - If this parameter is given, only the data under the column with this
+	;                         name will be returned.
+	; RETURNS:        No results         => ""
+	;                 returnColumn given => Specific value under that subscript
+	;                 Default            => Entire matched data array
+	; SIDE EFFECTS:   
+	; NOTES:          
+	;---------
+	getReturnVal(data, returnColumn) {
+		; If there's no result return "" so callers can just check !data
+		if(DataLib.isNullOrEmpty(data))
+			return ""
+
+		; If a specific column was requested, just return that
+		if(returnColumn)
+			return data[returnColumn]
+		
+		; Otherwise return the whole data array.
+		return data
 	}
 	
 	;---------

@@ -241,7 +241,7 @@ class Selector {
 	}
 	;endregion Gui Changes
 
-	;region Selection entry points
+	;region Perform Selection
 	;---------
 	; DESCRIPTION:    Show a popup to the user so they can select one of the choices we've prepared
 	;                 and enter any additional override information.
@@ -253,6 +253,11 @@ class Selector {
 	;---------
 	prompt(returnColumn := "") {
 		return this.doSelect("", returnColumn, false)
+	}
+
+	;gdbdoc
+	promptMulti(returnColumn := "") {
+		return this.doSelectMulti("", returnColumn, false)
 	}
 
 	;---------
@@ -270,6 +275,11 @@ class Selector {
 		return this.doSelect(choiceString, returnColumn, true)
 	}
 
+	;gdbdoc
+	selectSilentMulti(choiceString, returnColumn := "") {
+		return this.doSelectMulti(choiceString, returnColumn, true)
+	}
+
 	;---------
 	; DESCRIPTION:    Attempt to programmatically select a choice based on the given input, falling
 	;                 back to prompting the user if that fails.
@@ -284,7 +294,12 @@ class Selector {
 	select(choiceString, returnColumn := "") {
 		return this.doSelect(choiceString, returnColumn, false)
 	}
-	;endregion Selection entry points
+
+	;gdbdoc
+	selectMulti(choiceString, returnColumn := "") {
+		return this.doSelectMulti(choiceString, returnColumn, false)
+	}
+	;endregion Perform Selection
 	
 	; @NPP-TABLELIST@
 	;---------
@@ -308,6 +323,8 @@ class Selector {
 	;region ------------------------------ PRIVATE ------------------------------
 	static Char_CommandStart := "+"
 	static Char_Command_Edit := "e"
+
+	static Char_MultiInputDelims := [".", ",", A_Space]
 	
 	_windowTitle     := "Please make a choice by either index or abbreviation:" ; The title of the window
 	_iconPath        := "" ; The path of the icon to use while the popup is open
@@ -372,7 +389,7 @@ class Selector {
 	; RETURNS:        An array of data for the choice matching the given string. If the returnColumn
 	;                 parameter was specified, only the subscript matching that name will be returned.
 	;---------
-	doSelect(choiceString, returnColumn := "", noPrompt := false) {
+	doSelect(choiceString, returnColumn := "", noPrompt := false) { ; gdbtodo make noPrompt required (and perhaps flip order with returnColumn as such?)
 		if(!this.loadChoicesFromData())
 			return ""
 		
@@ -383,33 +400,61 @@ class Selector {
 		; If we got results (or if we didn't but we aren't allowed to prompt), we're done.
 		if(data || noPrompt)
 			return this.getReturnVal(data, returnColumn)
-
+		
 		; Prompt the user.
 		data := this.doSelectGui() ; gdbtodo should I rename this with selectGui > prompt?
 
 		return this.getReturnVal(data, returnColumn)
 	}
 
+	;gdbdoc
+	; gdbtodo is it really worth a separate function here (versus just more APIs)?
+	doSelectMulti(query, returnColumn := "", noPrompt := false) { ; gdbtodo probably turn choiceString into an array
+		if(!this.loadChoicesFromData())
+			return ""
+		if(!this.validateChoices()) ; gdbtodo should this really just be built into loadChoicesFromData (or a wrapper around both)?
+			return ""
+		
+		; If something is given, try that silently first
+		if(query)
+			data := this.runQuery(query, true)
+		
+		; If we got results (or if we didn't but we aren't allowed to prompt), we're done.
+		if(data || noPrompt)
+			return this.getReturnVal(data, returnColumn, true)
+
+		; Prompt the user.
+		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this._minColumnWidth, this._iconPath)
+		sGui.show(this._windowTitle, this.defaultOverrides)
+		outputData := this.runQuery(sGui.getChoiceQuery(), true, sGui.getOverrideData())
+		Debug.popup("queries",queries, "overrideData",overrideData, "outputData",outputData, "choiceData",choiceData, "returnColumn",returnColumn)
+		return this.getReturnVal(outputData, returnColumn, true)
+	}
+
 	;---------
 	; DESCRIPTION:    Constructs the return value from a selection entry point.
 	; PARAMETERS:
-	;  data         (I,REQ) - Data array with any matches
+	;  data         (I,REQ) - Data array with any matches ; gdbredoc rename if it's going to always be multi, doc differently otherwise
 	;  returnColumn (I,REQ) - If this parameter is given, only the data under the column with this
 	;                         name will be returned.
+	;  gdbdoc allowMultiInput
 	; RETURNS:        No results         => ""
 	;                 returnColumn given => Specific value under that subscript
 	;                 Default            => Entire matched data array
-	; SIDE EFFECTS:   
-	; NOTES:          
 	;---------
-	getReturnVal(data, returnColumn) {
+	getReturnVal(data, returnColumn, allowMultiInput := "") { ; gdbtodo make allowMultiInput required
 		; If there's no result return "" so callers can just check !data
 		if(DataLib.isNullOrEmpty(data))
 			return ""
 
 		; If a specific column was requested, just return that
-		if(returnColumn)
-			return data[returnColumn]
+		if(returnColumn) {
+			if(allowMultiInput) {
+				return DataLib.getPropertyFromArrayChildren(data, returnColumn)
+			} else {
+				return data[returnColumn]
+			}
+		}
 		
 		; Otherwise return the whole data array.
 		return data
@@ -541,7 +586,7 @@ class Selector {
 			; Edit action - open the current INI file for editing
 			if(commandChar = this.Char_Command_Edit) {
 				suppressData := true
-				Config.runProgram("VSCode", "--profile Default " this.filePath)
+				Config.runProgram("VSCode", "--profile Default " this.filePath) ; gdbtodo would this make sense as a public function on my VSCode class, especially if I end up wanting to use it elsewhere? Could be AHK-specific since we want to force the profile with AHK stuff?
 			}
 			
 			return ""
@@ -550,6 +595,43 @@ class Selector {
 		} else {
 			return this.searchChoices(userChoiceString)
 		}
+	}
+
+	;gdbdoc
+	runQuery(query, allowMultiInput, overrideData := "") {
+		outputData := []
+		For _, q in query.split(this.Char_MultiInputDelims, A_Space) {
+			
+			; Command choice - edit ini, etc.
+			if(q.startsWith(this.Char_CommandStart)) {
+				commandChar := q.afterString(this.Char_CommandStart)
+				
+				; Edit action - open the current INI file for editing
+				if(commandChar = this.Char_Command_Edit)
+					Config.runProgram("VSCode", "--profile Default " this.filePath) ; gdbtodo would this make sense as a public function on my VSCode class, especially if I end up wanting to use it elsewhere? Could be AHK-specific since we want to force the profile with AHK stuff?
+				
+				return "" ; Bail out entirely, returning nothing.
+			}
+			
+			; Search for a match.
+			choiceData := this.searchChoices(q)
+			if(choiceData) {
+				choiceData.mergeFromObject(overrideData) ; Merge overrideData into each match
+				outputData.push(choiceData)
+			}
+		}
+
+		; If we didn't match anything but do have overrideData, treat overrideData like a matched
+		; choice (that's the one thing we'll return).
+		if(DataLib.isNullOrEmpty(outputData) && !DataLib.isNullOrEmpty(overrideData))
+			outputData.push(overrideData)
+
+		; If we're not doing multi-input, then we should only return 1 match - there should
+		; theoretically only be 1, so just use the first one in the array.
+		if(!allowMultiInput)
+			return outputData[1]
+
+		return outputData
 	}
 	
 	;---------

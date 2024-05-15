@@ -164,7 +164,7 @@
 				Grab needed data via track-shadow report, do the rest of the current AHK stuff
 				Display info about what to rename Thunder environments (maybe put the common base onto the clipboard for me)
 				Display new line to add to getSyncEnvironments (automatically add to clipboard)
-	☐ Allow multi-selection of selector options
+	✔ Allow multi-selection of selector options @done(24-05-15 16:18)
 		✔ Would need to either: @done(24-05-15 14:37)
 			✔ Make it configurable by caller - each caller would have to support it specially as the return format would be different. @done(24-05-15 14:38)
 			✔ Update all callers to handle multiple-style format, all the time? @done(24-05-15 14:38)
@@ -183,7 +183,7 @@
 			✔ Solution shortcuts - add multiple shortcuts @done(24-05-15 14:37)
 			✔ Folders - open multiple folders @done(24-05-15 14:29)
 			✔ Symbols - just send multiple @done(24-05-15 14:31)
-			☐ TLG - combining choices? (specific log + des = log's info but with TLP 12)
+			✔ TLG - combining choices? (specific log + des = log's info but with TLP 12) @done(24-05-15 16:18)
 		✔ Specifically don't want to support for: @done(24-05-15 14:38)
 			firstSetup machine
 			actionObject*

@@ -158,10 +158,15 @@ class Outlook {
 	selectOutlookTLG() {
 		s := new Selector("tlg.tls").setTitle("Select EMC2 Record ID").setIcon(Config.getProgramPath("Outlook"))
 		s.dataTableList.filterOutIfColumnNoMatch("IS_OLD", "") ; Filter out old records (have a value in the OLD column)
-		data := s.prompt()
-		if(!data)
+		events := s.promptMulti()
+		if(!events)
 			return
 		
+		; A second selection overrides the TLP (we use the first selection for everything else).
+		data := events[1]
+		if(events.length() = 2)
+			data["TLP"] := events[2]["TLP"]
+
 		; The user can specify multiple records, in which case we'll add a new DLG event per record.
 		userRecs := data["RECORD"].split([",", A_Space], A_Space)
 

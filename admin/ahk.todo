@@ -41,7 +41,19 @@
 	☐ Get rid of updateNotepadPPSupport once I'm sure I won't need it anymore (currently shows how to parse my headers and such).
 
 * Fixes / Cleanup * :
-	☐ Consider no longer running AHK as admin?
+	☐ Replace notepad++ workaround folding sections, scope, etc. with regions
+		✔ =-- @done(24-05-15 16:51)
+		✔ --= @done(24-05-15 16:51)
+		✔ --- @done(24-05-15 16:51)
+		☐ @GROUP@
+		☐ @GROUP-END@
+		☐ [[
+		☐ ]]
+		☐ #PUBLIC#
+		☐ #PRIVATE#
+		☐ #INTERNAL#
+		☐ #DEBUG#
+	✔ Consider no longer running AHK as admin? @done(24-05-15 16:51)
 		With VB6 retired, I don't think there's anything else that actually _needs_ to run as admin, right?
 		And running as admin is more annoying - more prompts and can't always interact with non-admin stuff properly.
 	☐ F2 for ***s
@@ -88,9 +100,6 @@
 		StringBase/ArrayBase/ObjectBase
 			☐ These kind of make sense here, but if we're moving the others these should probably find a new home too.
 	☐ Consider renaming ActionObject to something more like ActionObjectRedirector (as it is it sounds like ActionObjectBase, but it's really just a redirector)
-	☐ Consider switching scoping stuff to just use #regions (which I've now added support for)
-		Note: can't nest regions (but can nest other folding stuff inside of them - so keep the =-- stuff to be able to do inside)
-		Probably also switch [[]] headers to using the same?
 	☐ Formatted list handling custom delimiter
 		☐ Consider supporting a custom delimiter on input side as well?
 			☐ Would need to handle it in determineListFormat() and onward, probably have to store it off somewhere

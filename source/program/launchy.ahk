@@ -5,7 +5,7 @@
 	; Use Caps Lock as the trigger key.
 	CapsLock::
 		SetCapsLockState, AlwaysOff
-		Send, #n
+		Send, #{End}
 	return
 
 #If !Config.doesWindowExist("Launchy")

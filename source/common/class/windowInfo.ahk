@@ -1,14 +1,13 @@
 ; Data class to hold identifying information about a specific window.
 
 class WindowInfo {
-	; #PUBLIC#
-	
-	; @GROUP@ Window edge types (see VisualWindow class for what this means/how it's used).
+	;region ------------------------------ PUBLIC ------------------------------
+	;region Window edge types
+	; ee VisualWindow class for what these mean/how they're used
 	static EdgeStyle_HasPadding := "HAS_PADDING" ; The window has the standard padding around the edges.
 	static EdgeStyle_NoPadding  := "NO_PADDING"  ; The window has no padding around the edges.
-	; @GROUP-END@
+	;endregion Window edge types
 	
-	; @GROUP@
 	name           := "" ; Name of the window
 	exe            := "" ; EXE for the corresonding program
 	class          := "" ; AHK class of the window
@@ -16,7 +15,6 @@ class WindowInfo {
 	priority       := "" ; Priority of this WindowInfo instance versus others. Can be used to break a tie if multiple instances match a given window.
 	edgeType       := "" ; Edge type of the window (from WindowInfo.EdgeStyle_* constants)
 	titleMatchMode := "" ; The title match mode (from TitleMatchMode.*) to use when searching for this window
-	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    A string that can be used with WinActive() and the like to identify this
@@ -154,5 +152,5 @@ class WindowInfo {
 		
 		return true
 	}
-	; #END#
+	;endregion ------------------------------ PUBLIC ------------------------------
 }

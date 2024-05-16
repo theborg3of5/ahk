@@ -15,20 +15,17 @@
 */
 
 class ActionObjectEpicStudio extends ActionObjectBase {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	ActionObjectType := ActionObject.Type_EpicStudio
 	
-	; @GROUP@ Descriptor types
+	;region Descriptor types
 	static DescriptorType_Routine    := "ROUTINE" ; Server code location, including tag if applicable
 	static DescriptorType_RoutineCDE := "ROUTINE_CDE" ; Server code location, including tag if applicable - in CDE
 	static DescriptorType_DLG        := "DLG"     ; DLG, for opening in EpicStudio
-	; @GROUP-END@
+	;endregion Descriptor types
 	
-	; @GROUP@
 	descriptor     := "" ; Reference to object
 	descriptorType := "" ; Type of object (from DescriptorType_* constants)
-	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    Create a new reference to a server code object.
@@ -77,10 +74,9 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 		
 		return url
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	;---------
 	; DESCRIPTION:    Try to figure out what kind of descriptor we've been given based on its format.
 	; RETURNS:        Descriptor type from DescriptorType_* constants
@@ -96,5 +92,5 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 		
 		return ""
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

@@ -17,16 +17,12 @@
 */
 
 class ActionObjectEMC2 extends ActionObjectBase {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	ActionObjectType := ActionObject.Type_EMC2
 	
-	; @GROUP@
 	id    := "" ; ID of the object
 	ini   := "" ; INI for the object, from EMC2 subtypes in actionObject.tl
 	title := "" ; Title for the EMC2 object
-	; @GROUP-END@
-	
 	
 	;---------
 	; DESCRIPTION:    Create a new reference to an EMC2 object.
@@ -117,10 +113,9 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		
 		return link.replaceTags({"INI":ini, "ID":this.id})
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	;---------
 	; DESCRIPTION:    Check whether this object can be opened in Sherlock (rather than emc2summary).
 	; RETURNS:        true/false
@@ -204,5 +199,5 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		
 		return ini ; Default case, let the INI thru as normal
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

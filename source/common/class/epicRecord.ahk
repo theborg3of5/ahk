@@ -22,14 +22,11 @@
 */
 
 class EpicRecord {
-	; #PUBLIC#
-	
-	; @GROUP@
+	;region ------------------------------ PUBLIC ------------------------------
 	ini   := "" ; The INI for this record.
 	id    := "" ; The ID for this record.
 	title := "" ; The title for this record.
 	label := "" ; A custom label the caller adds to the record.
-	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    Constructed string representing the record:
@@ -77,10 +74,9 @@ class EpicRecord {
 		
 		return this
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	;---------
 	; DESCRIPTION:    Parse the given string to extract and store the record's identifying information.
 	; PARAMETERS:
@@ -142,5 +138,5 @@ class EpicRecord {
 		
 		; Debug.popup("recordString",recordString, "this",this)
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

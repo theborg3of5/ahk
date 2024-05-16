@@ -11,13 +11,13 @@
 */
 
 class Duration {
-	; #PUBLIC#
-	
-	; @GROUP@ Supported characters (see .unitConversionFactors for conversion factors)
+	;region ------------------------------ PUBLIC ------------------------------
+	;region Supported characters
+	; See .unitConversionFactors for conversion factors.
 	static Char_Hour   := "h" ; Hours
 	static Char_Minute := "m" ; Minutes
 	static Char_Second := "s" ; Seconds
-	; @GROUP-END@
+	;endregion Supported characters
 	
 	;---------
 	; DESCRIPTION:    Hours in this duration.
@@ -140,10 +140,9 @@ class Duration {
 	subTime(value, unitChar := "s") {
 		this.addTime(-value, unitChar)
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	; All supported units, from largest to smallest, with their conversion to seconds.
 	static unitConversionFactors := {Duration.Char_Hour:3600, Duration.Char_Minute:60, Duration.Char_Second:1} ; {unitChar: multiplierToSeconds}
 	
@@ -183,5 +182,5 @@ class Duration {
 		
 		; Debug.popup("this.durationTotalSeconds",this.durationTotalSeconds, "hours",hours, "minutes",minutes, "seconds",seconds)
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

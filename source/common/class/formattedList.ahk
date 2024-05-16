@@ -8,9 +8,8 @@
 */
 
 class FormattedList {
-	; #PUBLIC#
-	
-	; @GROUP@ Formats for reading/writing lists
+	;region ------------------------------ PUBLIC ------------------------------
+	;region Formats for reading/writing lists
 	static Format_Array         := "ARRAY"          ; Array
 	static Format_Space         := "SPACE"          ; Space-delimited
 	static Format_Commas        := "COMMA"          ; Comma-delimited (no space)
@@ -19,7 +18,7 @@ class FormattedList {
 	static Format_NewLines      := "NEWLINE"        ; Newline-delimited
 	static Format_OneNoteColumn := "ONENOTE_COLUMN" ; OneNote columns (double-newline delimited)
 	static Format_CustomDelim   := "CUSTOM_DELIM"   ; Custom delimiter
-	; @GROUP-END@
+	;endregion Formats for reading/writing lists
 	
 	;---------
 	; DESCRIPTION:    Create a new FormattedList object.
@@ -70,10 +69,9 @@ class FormattedList {
 		if(!this.sendListInFormat(format, customDelim))
 			Toast.ShowError("Could not send list", "Format is not sendable: " format)
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	; Special, internal-only list formats
 	static Format_Ambiguous     := "AMBIGUOUS"      ; Can't tell what the format is, so we'll have to ask the user.
 	static Format_UnknownSingle := "UNKNOWN_SINGLE" ; We don't know what the format is, but it looks like a single item only.
@@ -257,5 +255,5 @@ class FormattedList {
 		
 		return false
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

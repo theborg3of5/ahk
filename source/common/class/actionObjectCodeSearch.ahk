@@ -14,19 +14,16 @@
 */
 
 class ActionObjectCodeSearch extends ActionObjectBase {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	ActionObjectType := ActionObject.Type_CodeSearch
 	
-	; @GROUP@ Location types
+	;region Location types
 	static LocationType_Server := "SERVER" ; Server code location, including tag if applicable
 	static LocationType_Client := "CLIENT" ; Client filename
-	; @GROUP-END@
+	;endregion Location types
 	
-	; @GROUP@
 	location     := "" ; Code location to work with
 	locationType := "" ; Which type of code, server or client (from LocationType_* constants)
-	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    Create a new reference to a CodeSearch object.
@@ -89,10 +86,9 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 		
 		return ""
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	;---------
 	; DESCRIPTION:    Try to figure out what kind of location we've been given based on its format.
 	; PARAMETERS:
@@ -110,5 +106,5 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 		
 		return ""
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

@@ -186,9 +186,8 @@
 */
 
 class TableList {
-	; #PUBLIC#
-	
-	; @GROUP@ Special characters within a TableList file.
+	;region ------------------------------ PUBLIC ------------------------------
+	;region Special characters within a TableList file
 	static Char_Ignore           := ";"  ; Ignore (comment) character
 	static Char_Model_Start      := "["  ; The start of the model row
 	static Char_Model_End        := "]"  ; The end of the model row
@@ -201,7 +200,7 @@ class TableList {
 	static Char_Mod_Open         := "{"  ; The character which starts applying mods to rows.
 	static Char_Mod_Close        := "}"  ; The character which stops applying mods to rows.
 	static Char_MultiEscape      := "\"  ; Escape character used to include multi-entry character in normal values.
-	; @GROUP-END@
+	;endregion Special characters within a TableList file
 	
 	;---------
 	; DESCRIPTION:    Information about each column, from the column info row of the file (assuming
@@ -233,7 +232,6 @@ class TableList {
 			return this._headers
 		}
 	}
-	
 	
 	;---------
 	; DESCRIPTION:    Create a new TableList instance.
@@ -384,10 +382,9 @@ class TableList {
 		
 		return outputRows
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	static autoFilters := [] ; Array of {"COLUMN":filterColumn, "VALUE":filterValue} objects
 	
 	modSets     := [] ; Array of sets of mods, treated like a stack.
@@ -682,10 +679,9 @@ class TableList {
 		else
 			return (value = filterValue)
 	}
+	;endregion ------------------------------ PRIVATE ------------------------------
 	
-	
-	; #DEBUG#
-	
+	;region ------------------------------ DEBUG ------------------------------
 	Debug_ToString(ByRef table) {
 		table.addLine("Index labels", this.indexLabels)
 		table.addLine("Mods",         this.modSets)
@@ -694,5 +690,5 @@ class TableList {
 		table.addLine("Headers",      this._headers)
 		table.addLine("Table",        this.table)
 	}
-	; #END#
+	;endregion ------------------------------ DEBUG ------------------------------
 }

@@ -17,16 +17,13 @@ class ActionObjectSVNLog extends ActionObjectBase {
 	;region ------------------------------ PUBLIC ------------------------------
 	ActionObjectType := ActionObject.Type_SVNLog
 	
-	; @GROUP@ Filter types
+	;region Filter types
 	static FilterType_Revision := "REVISION" ; Specific SVN commit/revision number
 	static FilterType_DLG      := "DLG"      ; DLG in message
-	; @GROUP-END@
+	;endregion Filter types
 	
-	; @GROUP@
 	filter     := "" ; String to filter the SVN log by.
 	filterType := "" ; The method to use to filter the SVN log.
-	; @GROUP-END@
-	
 	
 	;---------
 	; DESCRIPTION:    Create a new reference to a CodeSearch object.

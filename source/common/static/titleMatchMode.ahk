@@ -1,13 +1,12 @@
 ; The title match mode
 class TitleMatchMode {
-	; #PUBLIC#
-	
-	; @GROUP@ Title match mode options
+	;region ------------------------------ PUBLIC ------------------------------
+	;region Title match mode options
 	static Start    := 1       ; The title must start with the string.
 	static Contains := 2       ; The title may contain the string anywhere inside.
 	static Exact    := 3       ; The title must exactly equal the string.
 	static RegEx    := "RegEx" ; The title must match the provided regex.
-	; @GROUP-END@
+	;endregion Title match mode options
 	
 	;---------
 	; DESCRIPTION:    Map a set of string values, to the actual numeric values that will work with SetTitleMatchMode.
@@ -40,15 +39,13 @@ class TitleMatchMode {
 			Case TitleMatchMode.RegEx:    return (haystack.matchesRegEx(needle) > 0)
 		}
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	; String versions of the match modes, for use in places that we can't use the constants at the top.
 	static MatchModeString_Start    := "START"
 	static MatchModeString_Contains := "CONTAINS"
 	static MatchModeString_Exact    := "EXACT"
 	static MatchModeString_RegEx    := "REGEX"
-	
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

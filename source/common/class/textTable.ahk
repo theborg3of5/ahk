@@ -37,12 +37,12 @@
 */
 
 class TextTable {
-	; #PUBLIC#
-	; @GROUP@ Border types
+	;region ------------------------------ PUBLIC ------------------------------
+	;region Border types
 	static BorderType_None     := "NONE"      ; No border
 	static BorderType_Line     := "LINE"      ; A thin line border using Unicode characters
 	static BorderType_BoldLine := "BOLD_LINE" ; A thick line border using Unicode characters
-	; @GROUP-END@
+	;endregion Border types
 	
 	;---------
 	; PARAMETERS:
@@ -226,9 +226,9 @@ class TextTable {
 		
 		return output
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	topTitle            := ""                 ; Title to show above the table.
 	bottomTitle         := ""                 ; Title to show below the table.
 	dataTable           := []                 ; Our 2-dimensional array of values.
@@ -422,5 +422,5 @@ class TextTable {
 			this._addRow(newRow)
 		}
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

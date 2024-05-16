@@ -15,19 +15,16 @@
 */
 
 class ActionObjectPath extends ActionObjectBase {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	ActionObjectType := ActionObject.Type_Path
 	
-	; @GROUP@ Path types
+	;region Path types
 	static PathType_FilePath := "FILEPATH" ; Local file path
 	static PathType_URL      := "URL"      ; URL
-	; @GROUP-END@
+	;endregion Path types
 	
-	; @GROUP@
 	path     := "" ; The path itself.
 	pathType := "" ; The type of path, from PathType_*.
-	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    Create a new reference to a path.
@@ -82,10 +79,9 @@ class ActionObjectPath extends ActionObjectBase {
 		
 		return this.path
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	;---------
 	; DESCRIPTION:    Determine the type of the given path.
 	; PARAMETERS:
@@ -118,5 +114,5 @@ class ActionObjectPath extends ActionObjectBase {
 				this.path := FileLib.cleanupPath(this.path)
 		}
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

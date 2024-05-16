@@ -1,13 +1,13 @@
 ; Library of helpful functions for dealing with monitors.
 
 class MonitorLib {
-	; #PUBLIC#
-	
-	; @GROUP@ Monitor locations (only 3 monitors in a horizontal line supported)
+	;region ------------------------------ PUBLIC ------------------------------
+	;region Monitor locations
+	; Only 3 monitors in a horizontal line supported.
 	static Location_Left   := "LEFT"   ; Left-most monitor
 	static Location_Middle := "MIDDLE" ; Center monitor
 	static Location_Right  := "RIGHT"  ; Right-most monitor
-	; @GROUP-END@
+	;endregion Monitor locations
 	
 	;---------
 	; DESCRIPTION:    Get the bounds array for a specific monitor.
@@ -155,10 +155,9 @@ class MonitorLib {
 		
 		return foundBounds
 	}
-	
-	
-	; #PRIVATE#
-	
+	;endregion ------------------------------ PUBLIC ------------------------------
+
+	;region ------------------------------ PRIVATE ------------------------------
 	static _workAreasByLocation := ""
 	
 	;---------
@@ -291,5 +290,5 @@ class MonitorLib {
 		
 		return false
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

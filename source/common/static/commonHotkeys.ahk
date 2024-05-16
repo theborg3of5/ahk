@@ -6,13 +6,13 @@
 */
 
 class CommonHotkeys {
-	; #PUBLIC#
-	
-	; @GROUP@ Different "types" of scripts, which get different sets of hotkeys
+	;region ------------------------------ PUBLIC ------------------------------
+	;region Script "types"
+	; Each gets a different set of hotkeys.
 	static ScriptType_Main       := 1 ; Main script
 	static ScriptType_Sub        := 2 ; Standalone scripts that the main script starts and that run alongside the main script
 	static ScriptType_Standalone := 3 ; One-off scripts, not connected to main script
-	; @GROUP-END@
+	;endregion Script "types"
 	
 	;---------
 	; DESCRIPTION:    Set up the common hotkeys.
@@ -82,10 +82,9 @@ class CommonHotkeys {
 	setExitFunc(funcObject) {
 		this.exitFunc := funcObject
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	static scriptType         := "" ; Type of script, from .ScriptType_* constants
 	static confirmExit        := false ; Whether to confirm before exiting
 	static confirmExitMessage := "Are you sure you want to exit this script?" ; Message to show when confirming an exit based on .confirmExit
@@ -239,17 +238,14 @@ class CommonHotkeys {
 		; Debug.popup("standaloneWinId",standaloneWinId, "testWinId",testWinId, "(standaloneWinId || testWinId)",(standaloneWinId || testWinId))
 		return !(standaloneWinId || testWinId)
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }
 
-;---------
-; DESCRIPTION:    Wrappers for CommonHotkeys.* functions that we can point hotkeys to directly.
-; NOTES:          We can technically point to the CommonHotkeys.* functions directly using
-;                 ObjBindMethod(), but that doesn't work with Suspend, Permit (to allow the hotkey
-;                 to work when the script is suspended). Some of these require that functionality,
-;                 so they're all out here for consistency's sake.
-;---------
-
+;region Wrappers for CommonHotkeys.* functions
+; These exist so we can point hotkeys to them directly.
+; We can technically point to the CommonHotkeys.* functions directly using ObjBindMethod(), but that
+; doesn't work with Suspend, Permit (to allow the hotkey to work when the script is suspended). Some
+; of these require that functionality, so they're all out here for consistency's sake.
 CommonHotkeys_doEmergencyExit() {
 	Suspend, Permit
 	CommonHotkeys.doEmergencyExit()
@@ -267,3 +263,4 @@ CommonHotkeys_doToggleSuspend() {
 	Suspend, Permit
 	CommonHotkeys.doToggleSuspend()
 }
+;endregion Wrappers for CommonHotkeys.* functions

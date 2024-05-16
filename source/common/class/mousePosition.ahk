@@ -8,12 +8,9 @@
 */
 
 class MousePosition {
-	; #PUBLIC#
-	
-	; @GROUP@
+	;region ------------------------------ PUBLIC ------------------------------
 	x := 0 ; X coordinate for the mouse at the time this instance was created.
 	y := 0 ; Y coordinate for the mouse at the time this instance was created.
-	; @GROUP-END@
 	
 	;---------
 	; DESCRIPTION:    Create a new MousePosition object which stores off the current mouse position.
@@ -37,5 +34,5 @@ class MousePosition {
 		distanceX := x - this.x
 		distanceY := y - this.y
 	}
-	; #END#
+	;endregion ------------------------------ PUBLIC ------------------------------
 }

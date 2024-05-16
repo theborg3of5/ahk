@@ -1,7 +1,6 @@
 ; Represents an entire class that we want to add auto-complete info for.
 class AutoCompleteClass {
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	name       := "" ; The class' name
 	parentName := "" ; The name of the class' parent (if it extends another class)
 	group      := "" ; The group (used for syntax highlighting)
@@ -71,5 +70,5 @@ class AutoCompleteClass {
 			xml := xml.appendLine(member.generateXML(this.name))
 		return xml
 	}
-	; #END#
+	;endregion ------------------------------ INTERNAL ------------------------------
 }

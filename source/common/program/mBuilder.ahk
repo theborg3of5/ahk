@@ -1,6 +1,5 @@
 class MBuilder {
-	; #PUBLIC#
-
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Run linting for the DLG found in the active window's title.
 	;---------
@@ -29,5 +28,5 @@ class MBuilder {
 
 		Run(Config.private["MBUILDER_URL_BASE"].replaceTags({"COMMAND":2, "ID":dlgId})) ; 2-Lint a DLG's Routines
 	}
-	; #END#
+	;endregion ------------------------------ PUBLIC ------------------------------
 }

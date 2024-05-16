@@ -1,6 +1,5 @@
 class Notepad {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Open a new instance of Notepad and set its content to the provided text.
 	; PARAMETERS:
@@ -27,5 +26,5 @@ class Notepad {
 		
 		ControlSetText, Edit1, % text, % titleString
 	}
-	; #END#
+	;endregion ------------------------------ PUBLIC ------------------------------
 }

@@ -1,8 +1,7 @@
 ; Class for adding a hyperlink to the currently-selected text.
 
 class Hyperlinker {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Link the selected text with the given URL/path.
 	; PARAMETERS:
@@ -32,10 +31,9 @@ class Hyperlinker {
 		
 		return Hyperlinker.doLink(path, windowLinkInfo, errorMessage)
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	; Methods for setting link information for the selected text
 	static Method_PopupField   := "POPUP_FIELD"   ; There's a popup with a field.
 	static Method_WebField     := "WEB_FIELD"     ; There's a web "popup".
@@ -256,5 +254,5 @@ class Hyperlinker {
 		if(closeMethod = Hyperlinker.CloseMethod_Alt_A)
 			Send, !a
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

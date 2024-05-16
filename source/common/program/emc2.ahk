@@ -1,6 +1,5 @@
 class EMC2 {
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	;---------
 	; DESCRIPTION:    Insert a specific SmartText in the current field.
 	; PARAMETERS:
@@ -55,5 +54,5 @@ class EMC2 {
 			Send, {Enter}
 		}
 	}
-	; #END#
+	;endregion ------------------------------ INTERNAL ------------------------------
 }

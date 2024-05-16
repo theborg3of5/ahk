@@ -1,6 +1,5 @@
 class VisualStudio {
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	;---------
 	; DESCRIPTION:    Send code to show a popup (in a ViewBehavior in TypeScript).
 	; PARAMETERS:
@@ -37,10 +36,10 @@ class VisualStudio {
 			ClipboardLib.send(code)
 		}
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	; Hotkeys
 	static Hotkey_CopyCurrentFile := "^+c"
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

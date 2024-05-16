@@ -12,8 +12,7 @@
 */
 
 class ActionObjectHelpdesk extends ActionObjectBase {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	ActionObjectType := ActionObject.Type_Helpdesk
 	
 	;---------
@@ -58,5 +57,5 @@ class ActionObjectHelpdesk extends ActionObjectBase {
 	getLink() {
 		return Config.private["HELPDESK_BASE"].replaceTag("ID", this.id)
 	}
-	; #END#
+	;endregion ------------------------------ PUBLIC ------------------------------
 }

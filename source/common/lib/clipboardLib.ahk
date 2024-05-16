@@ -1,8 +1,7 @@
 ; Clipboard-related helper functions.
 
 class ClipboardLib {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Copy something to the clipboard using the given hotkey, waiting for it to
 	;                 take and returning whether we actually got something.
@@ -257,10 +256,9 @@ class ClipboardLib {
 		ClipboardLib.set(origClipboard)
 		ClipboardLib.saveToManager()
 	}
-	
-	
-	; #PRIVATE#
+	;endregion ------------------------------ PUBLIC ------------------------------
 
+	;region ------------------------------ PRIVATE ------------------------------
 	static CopyLocationType_Path           := "PATH"
 	static CopyLocationType_File           := "FILE"
 	static CopyLocationType_SourceRelative := "ES_RELATIVE"
@@ -316,5 +314,5 @@ class ClipboardLib {
 		location := functionName.appendPiece("::", path) ; path or functionName()::path
 		ClipboardLib.setAndToast(location, label)
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

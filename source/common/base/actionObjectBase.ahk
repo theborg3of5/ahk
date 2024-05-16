@@ -14,8 +14,7 @@
 */
 
 class ActionObjectBase {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    What type of ActionObject the child class implements.
 	; NOTES:          Should be overridden by child class.
@@ -181,12 +180,10 @@ class ActionObjectBase {
 		value   := data["VALUE"]
 		return true
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	static typeSelectors := {} ; {ActionObject.Type_*: Selector}
-	
 	
 	;---------
 	; DESCRIPTION:    Get a Selector instance for the ActionObject TLS and filter its
@@ -211,5 +208,5 @@ class ActionObjectBase {
 		this.typeSelectors[type] := s ; Cache the value off for later use.
 		return s
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

@@ -116,8 +116,7 @@ getFunction(name) {
 
 ; Represents a single Onetastic macro.
 class OnetasticMacro {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Create a new object representing a Onetastic macro.
 	; PARAMETERS:
@@ -162,10 +161,9 @@ class OnetasticMacro {
 		xml := StringLib.dropEmptyLines(xml)
 		return xml
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	name            := ""
 	category        := "" ; Which menu the macro appears under
 	description     := ""
@@ -220,15 +218,15 @@ class OnetasticMacro {
 		
 		this.dependencyNames := allDependencyNames
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }
 
 
 ; Represents a single function in a Onetastic macro.
 class OnetasticFunction {
-	; #PUBLIC#
-	
-	dependencyNames := "" ; [string] Names of all function dependencies (recursively - what this function calls, what those called functions call, etc.)
+	;region ------------------------------ PUBLIC ------------------------------
+	; [string] Names of all function dependencies (recursively - what this function calls, what those called functions call, etc.)
+	dependencyNames := ""
 	
 	;---------
 	; DESCRIPTION:    Create a new Onetastic macro function object.
@@ -266,10 +264,9 @@ class OnetasticFunction {
 		xml := StringLib.dropEmptyLines(xml) ; Ensure there's no empty lines, as that'd cause the import to fail.
 		return xml
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	name := "" ; Name of this function
 	innerXML := "" ; XML of function contents (doesn't include <Function> or <Parameter> tags)
 	parameters := "" ; [OnetasticFunctionParameter]
@@ -307,14 +304,13 @@ class OnetasticFunction {
 		
 		this.dependencyNames := allDependencyNames
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }
 
 
 ; Represents a single parameter in a Onetastic macro function.
 class OnetasticFunctionParameter {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	name    := ""
 	isByRef := ""
 	
@@ -334,5 +330,5 @@ class OnetasticFunctionParameter {
 		byRefText := this.isByRef ? "true" : "false"
 		return TemplateXML_Parameter.replaceTags({"PRM_NAME":this.name, "PRM_IS_BYREF":byRefText})
 	}
-	; #END#
+	;endregion ------------------------------ PUBLIC ------------------------------
 }

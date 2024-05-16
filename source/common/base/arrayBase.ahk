@@ -9,8 +9,7 @@
 */
 
 class ArrayBase {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Check whether this array contains a particular value.
 	; PARAMETERS:
@@ -149,6 +148,5 @@ class ArrayBase {
 		
 		return this
 	}
-	
-	; #END#
+	;endregion ------------------------------ PUBLIC ------------------------------
 }

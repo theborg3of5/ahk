@@ -1,6 +1,5 @@
 ﻿class Chrome {
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	;---------
 	; DESCRIPTION:    Put the title of the current tab on the clipboard, with some special exceptions.
 	;---------
@@ -166,10 +165,9 @@
 	copyLinkTarget() {
 		ClipboardLib.setAndToast(this.getLinkTarget(), "link target")
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	;---------
 	; DESCRIPTION:    Get the current tab's URL, by copying it out of the address bar.
 	; RETURNS:        The current tab's URL
@@ -298,6 +296,5 @@
 	getCodeSearchSelectionLineNum() {
 		return Chrome.getElementText("window.getSelection().anchorNode.parentElement.closest(""tr"").firstElementChild")
 	}
-	
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

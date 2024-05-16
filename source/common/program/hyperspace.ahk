@@ -1,6 +1,5 @@
 class Hyperspace {
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	;---------
 	; DESCRIPTION:    Determine whether any version of Hyperspace is active.
 	; RETURNS:        true if a Hyperspace is active, false otherwise.
@@ -40,10 +39,9 @@ class Hyperspace {
 		
 		Send, {Space}
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	;---------
 	; DESCRIPTION:    Get the HTML from the current display in Hyperspace.
 	; RETURNS:        The HTML from the current display in Hyperspace.
@@ -60,5 +58,5 @@ class Hyperspace {
 		; Grab the HTML with HTMLGrabber hotkey.
 		SendPlay, , ^!+c
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

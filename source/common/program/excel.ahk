@@ -1,6 +1,5 @@
 class Excel {
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	;---------
 	; DESCRIPTION:    AutoFit the column widths for the entire sheet.
 	;---------
@@ -18,5 +17,5 @@ class Excel {
 		Send, ^b       ; Bold
 		Send, !wfr		; View tab > Freeze Panes > Freeze Top Row
 	}
-	; #END#
+	;endregion ------------------------------ INTERNAL ------------------------------
 }

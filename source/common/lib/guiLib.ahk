@@ -1,8 +1,7 @@
 ; Gui-related helper functions.
 
 class GuiLib {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Show the user a yes/no confirmation popup to the user.
 	; PARAMETERS:
@@ -86,6 +85,6 @@ class GuiLib {
 		local value := %varName%
 		return value
 	}
-	; #END#
+	;endregion ------------------------------ PUBLIC ------------------------------
 }
 

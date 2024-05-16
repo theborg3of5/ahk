@@ -1,7 +1,6 @@
 #Include oneNoteTodoPage.ahk
 class OneNote {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Select the current line and link the given EMC2 object (described by INI/ID).
 	; PARAMETERS:
@@ -16,10 +15,9 @@ class OneNote {
 		
 		Send, {End}
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	; Named wrappers quick access toolbar items.
 	newSubpage() {
 		Send, !1
@@ -224,10 +222,9 @@ class OneNote {
 		SelectLib.selectTextWithinSelection(editText)
 		ao.linkSelectedTextEdit("Failed to add EMC2 object edit link")
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	static TitleString_RightClickMenu := "ahk_class Net UI Tool Window"
 
 	;---------
@@ -338,5 +335,5 @@ class OneNote {
 		Send, {Enter} ; New line
 		Send, {Left}  ; Get back up to new blank line
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

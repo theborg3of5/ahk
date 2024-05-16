@@ -1,8 +1,7 @@
 ; Class to handle performing some window actions, supporting overrides for some windows/programs.
 
 class WindowActions {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Activate and show a window, respecting any custom overrides for the identified window.
 	; PARAMETERS:
@@ -127,10 +126,9 @@ class WindowActions {
 	backtickActionByName(name) {
 		this.windowAction(this.Action_Backtick, name)
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	;region Supported window actions
 	static Action_Activate   := "ACTIVATE"    ; Activate the window
 	static Action_Backtick   := "BACKTICK"    ; Handle the backtick key being pressed
@@ -354,5 +352,5 @@ class WindowActions {
 				Toast.ShowError("Could not perform method", "Method unknown: " method)
 		}
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

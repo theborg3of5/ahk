@@ -1,7 +1,6 @@
 ; Represents a single class member that we want to add auto-complete info for.
 class AutoCompleteMember {
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	name        := ""
 	returns     := ""
 	description := ""
@@ -44,10 +43,9 @@ class AutoCompleteMember {
 		
 		return xml
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	static ReturnValue_Property := "[Property]"
 	; <PARAMS_XML> has no indent/newline so each line of the params can indent itself the same.
 	; Always func="yes", because that allows us to get a popup with the info.
@@ -169,15 +167,14 @@ class AutoCompleteMember {
 		
 		return paramsXML
 	}
+	;endregion ------------------------------ PRIVATE ------------------------------
 	
-	
-	; #DEBUG#
-	
+	;region ------------------------------ DEBUG ------------------------------
 	Debug_ToString(ByRef table) {
 		table.addLine("Name",        this.name)
 		table.addLine("Returns",     this.returns)
 		table.addLine("Parameters",  this.paramsAry)
 		table.addLine("Description", this.description)
 	}
-	; #END#
+	;endregion ------------------------------ DEBUG ------------------------------
 }

@@ -28,8 +28,7 @@
 */
 
 class RelativeDate extends RelativeDateTimeBase {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Create a new representation of a date relative to right now.
 	; PARAMETERS:
@@ -39,10 +38,9 @@ class RelativeDate extends RelativeDateTimeBase {
 		this.loadCurrentDateTime()
 		this.shiftByRelativeString(relativeDate)
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	;---------
 	; DESCRIPTION:    Handle the actual date shift relative to today.
 	; PARAMETERS:
@@ -133,5 +131,5 @@ class RelativeDate extends RelativeDateTimeBase {
 		this.year += numToShift
 		this.updateInstantFromParts()
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

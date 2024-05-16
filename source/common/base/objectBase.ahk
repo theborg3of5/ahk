@@ -7,8 +7,7 @@
 */
 
 class ObjectBase {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Check whether this object contains a particular value.
 	; PARAMETERS:
@@ -59,5 +58,5 @@ class ObjectBase {
 			ary.push(value)
 		return ary
 	}
-	; #END#
+	;endregion ------------------------------ PUBLIC ------------------------------
 }

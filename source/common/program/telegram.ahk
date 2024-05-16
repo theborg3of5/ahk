@@ -1,6 +1,5 @@
 class Telegram {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Share the provided URL to Telegram and focus the normal chat.
 	; PARAMETERS:
@@ -15,20 +14,19 @@ class Telegram {
 		
 		Send, {Down 2}{Enter} ; Select my target chat (the "Normal" one).
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	;---------
 	; DESCRIPTION:    Focus the "Normal" chat that's the only one I use in Telegram.
 	;---------
 	focusNormalChat() {
 		Send, ^1
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	
-	; #PRIVATE#
-	
-	static ShareURLBase := "tg://msg_url?url=<URL>" ; Shares the given URL to telegram desktop, prompting you to pick a chat.
-	; #END#
+	;region ------------------------------ PRIVATE ------------------------------
+	; Shares the given URL to telegram desktop, prompting you to pick a chat.
+	static ShareURLBase := "tg://msg_url?url=<URL>"
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

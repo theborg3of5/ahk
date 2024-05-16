@@ -1,7 +1,6 @@
 ; Static class for inserting snippets of M code into EpicStudio.
 class MSnippets {
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	;---------
 	; DESCRIPTION:    Generate and insert an M snippet.
 	;---------
@@ -38,10 +37,9 @@ class MSnippets {
 		
 		ClipboardLib.send(snipString) ; Better to send with the clipboard, otherwise we have to deal with EpicStudio adding in dot-levels itself.
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	;---------
 	; DESCRIPTION:    Generate an M for loop with the given data.
 	; PARAMETERS:
@@ -354,5 +352,5 @@ class MSnippets {
 		
 		return outString
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

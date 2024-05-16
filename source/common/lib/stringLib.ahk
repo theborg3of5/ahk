@@ -1,8 +1,7 @@
 ; String manipulation functions.
 
 class StringLib {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Escape all instances of a character in the given string, with a specific character.
 	; PARAMETERS:
@@ -343,6 +342,5 @@ class StringLib {
 		baseString := "1234567890"
 		return StringLib.duplicate(baseString, length // 10) baseString.sub(1, Mod(length, 10)) "|"
 	}
-	
-	; #END#
+	;endregion ------------------------------ PUBLIC ------------------------------
 }

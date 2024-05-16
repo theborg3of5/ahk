@@ -1,7 +1,7 @@
 class Putty {
-	; #INTERNAL#
-	
-	static ChangeSettingsOption := 0x50 ; IDM_RECONF, found in Putty's source code in window.c: https://github.com/codexns/putty/blob/master/windows/window.c
+	;region ------------------------------ INTERNAL ------------------------------
+	; IDM_RECONF, found in Putty's source code in window.c: https://github.com/codexns/putty/blob/master/windows/window.c
+	static ChangeSettingsOption := 0x50
 	
 	;---------
 	; DESCRIPTION:    Wipe the screen, optionally also clearing scrollback.
@@ -91,10 +91,9 @@ class Putty {
 		if(logFilePath)
 			Run(logFilePath)
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	; For Home+F9 searching repeatedly.
 	static LastSearch_Type := ""
 	static LastSearch_Text := ""
@@ -123,5 +122,5 @@ class Putty {
 		Send, !c ; Cancel
 		return logFile
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

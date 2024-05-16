@@ -55,8 +55,7 @@
 */
 
 class FlexTable {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Create a new FlexTable instance.
 	; PARAMETERS:
@@ -176,10 +175,9 @@ class FlexTable {
 		this.forceLastColumnToMinWidth()
 		return this.xMax - this.xMin
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	guiId := ""
 	
 	; Top-left corner of table
@@ -236,10 +234,9 @@ class FlexTable {
 	makeGuiTheDefault() {
 		Gui, % this.guiId ":Default"
 	}
+	;endregion ------------------------------ PRIVATE ------------------------------
 	
-	
-	; #DEBUG#
-	
+	;region ------------------------------ DEBUG ------------------------------
 	Debug_ToString(ByRef table) {
 		table.addLine("Gui ID",           this.guiId)
 		table.addLine("Min X",            this.xMin)
@@ -250,5 +247,5 @@ class FlexTable {
 		table.addLine("Column padding",   this.columnPadding)
 		table.addLine("Min column width", this.minColumnWidth)
 	}
-	; #END#
+	;endregion ------------------------------ DEBUG ------------------------------
 }

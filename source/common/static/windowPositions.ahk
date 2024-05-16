@@ -3,8 +3,7 @@
 */
 
 class WindowPositions {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	static Preset_Default := "NORMAL" ; Default preset
 	static Filename_Config := "windowPositions.tl"
 	static Filename_PresetList := "windowPositionPresets.tls"
@@ -54,12 +53,11 @@ class WindowPositions {
 		}
 		pt.finish()
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
-	static _positions := "" ; Cache of window positions, {presetName: {windowName: WindowPosition}}
-	
+	;region ------------------------------ PRIVATE ------------------------------
+	; Cache of window positions, {presetName: {windowName: WindowPosition}}
+	static _positions := ""
 	
 	;---------
 	; DESCRIPTION:    Get the associative array of window positions for a particular preset.
@@ -83,7 +81,6 @@ class WindowPositions {
 			return this._positions[preset]
 		}
 	}
-		
 	
 	;---------
 	; DESCRIPTION:    Get the window position in the given preset for the named window.
@@ -183,6 +180,5 @@ class WindowPositions {
 			this.shouldActivate := positionAry["ACTIVATE"]
 		}
 	}
-	
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

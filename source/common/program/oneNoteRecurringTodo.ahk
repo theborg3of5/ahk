@@ -1,7 +1,6 @@
 ; This class represents a single recurring todo item, along with the timeframe filtering info that goes with it.
 class OneNoteRecurringTodo {
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	;---------
 	; DESCRIPTION:    Create a new recurring todo object.
 	; PARAMETERS:
@@ -48,16 +47,14 @@ class OneNoteRecurringTodo {
 		
 		return true
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	title         := "" ; Title for the todo item
 	date          := "" ; Numeric date or "LAST"
 	dayAbbrev     := "" ; All-caps abbreviation for the day of the week
 	monthAbbrev   := "" ; All-caps abbreviation for the month
 	numDayOfMonth := "" ; For the day of the week, which number that is within the month (i.e. 2 for 2nd Wednesday in the month).
-	
 	
 	;---------
 	; DESCRIPTION:    Check whether the provided instant matches the date/day/month/numDayOfMonth
@@ -116,5 +113,5 @@ class OneNoteRecurringTodo {
 		
 		return false
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

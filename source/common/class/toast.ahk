@@ -28,8 +28,7 @@
 */
 
 class Toast {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;region Static one-off "show a toast" methods
 	;---------
 	; DESCRIPTION:    Show a toast for a short time (1 second).
@@ -267,10 +266,9 @@ class Toast {
 		Gui, % this.guiId ":Destroy"
 		this.isGuiDestroyed := true
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	;---------
 	; DESCRIPTION:    Get the current text for this toast.
 	; RETURNS:        The current text.
@@ -297,10 +295,9 @@ class Toast {
 		GuiControl,     , % this.labelVarName, % newText
 		GuiControl, Move, % this.labelVarName, % "w" textWidth " h" textHeight
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	static ToastTitle := "[TOAST]"
 	
 	styles         := ""
@@ -484,5 +481,5 @@ class Toast {
 		
 		return text
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

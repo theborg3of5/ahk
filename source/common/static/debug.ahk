@@ -5,8 +5,7 @@
 */
 
 class Debug {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Display a popup of information about the information provided. See class documentation for
 	;                 information about how we handle labels, values, arrays, and objects.
@@ -93,5 +92,5 @@ class Debug {
 		
 		OutputDebug, % table.getText()
 	}
-	; #END#
+	;endregion ------------------------------ PUBLIC ------------------------------
 }

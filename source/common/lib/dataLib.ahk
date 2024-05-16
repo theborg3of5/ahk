@@ -1,8 +1,7 @@
 ; Data structure and manipulation functions.
 
 class DataLib {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Check whether the given value is an array, by checking whether its base class is ArrayBase (set in
 	;                 this script library in arrayBase.ahk).
@@ -328,10 +327,9 @@ class DataLib {
 		
 		return outAry
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	;---------
 	; DESCRIPTION:    Expand a numeric range that's delimited by either colon(s) or a hyphen. Supported formats:
 	;                 	start-end
@@ -426,5 +424,5 @@ class DataLib {
 		else
 			step := abs(step) * -1
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

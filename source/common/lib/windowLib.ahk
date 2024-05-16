@@ -1,8 +1,7 @@
 ; Library of helpful functions for examining and manipulating a window.
 
 class WindowLib {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;region Conditions
 	;---------
 	; DESCRIPTION:    Determine whether a window is maximized.
@@ -272,11 +271,9 @@ class WindowLib {
 		
 		return outText
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	waitGroupIndex := 0 ; Counter to give us a unique group name for waitAnyOfWindowsActive each time (since we can't delete a group or remove window "rules" from them)
-	
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

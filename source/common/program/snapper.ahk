@@ -1,6 +1,5 @@
 ﻿class Snapper {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Add a record to Snapper in the given environment.
 	; PARAMETERS:
@@ -28,10 +27,9 @@
 			ClipboardLib.setAndToastError(idList, "ID list", "Could not add records to Snapper", "Snapper claims to have popups open")
 		}
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	;---------
 	; DESCRIPTION:    Build a URL that will open something in Snapper.
 	; PARAMETERS:
@@ -210,10 +208,9 @@
 			Send, {Enter}
 		}
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	static ClassNN_RecordList := "ListView20WndClass1" ; The control which holds the list of records.
 	static ClassNN_ItemFilter := "ThunderRT6TextBox2"  ; The "Filter Items" field.
 	
@@ -266,5 +263,5 @@
 		
 		return commId
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

@@ -1,6 +1,5 @@
 class SoundSwitch {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Toggle both the playback and recording devices using SoundSwitch.
 	; SIDE EFFECTS:   If remote desktop is currently active, this will briefly activate the windows taskbar on the local
@@ -22,11 +21,11 @@ class SoundSwitch {
 		if(origIdString)
 			WinActivate, % origIdString
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	; Hotkeys configured in SoundSwitch
 	static Hotkey_SwitchPlaybackDevice  := "^{F12}"
 	static Hotkey_SwitchRecordingDevice := "^+{F12}"
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

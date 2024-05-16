@@ -5,8 +5,7 @@
 */
 
 class RelativeDateTimeBase {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    The calculated instant, based on the relative date string passed to the constructor.
 	;---------
@@ -32,10 +31,9 @@ class RelativeDateTimeBase {
 	sendInFormat(format) {
 		Send, % FormatTime(this._instant, format)
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	; The current value for different time units.
 	year    := ""
 	month   := ""
@@ -112,10 +110,9 @@ class RelativeDateTimeBase {
 	doShift(shiftAmount, unit) {
 		Toast.ShowError("RelativeDateTimeBase.doShift called", "The child class should override doShift().")
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	_instant := "" ; The actual timestamp that we calculate based on the relative date/time string.
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

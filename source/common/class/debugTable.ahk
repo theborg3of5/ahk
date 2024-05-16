@@ -82,8 +82,7 @@
 */
 
 class DebugTable extends TextTable {
-	; #PUBLIC#
-
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    How many characters wide a tab should be considered.
 	;---------
@@ -142,10 +141,9 @@ class DebugTable extends TextTable {
 		
 		return base.getText()
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	title := "" ; The title to show at the top (and bottom, if we get tall enough)
 	
 	;---------
@@ -233,5 +231,5 @@ class DebugTable extends TextTable {
 		; Otherwise just use the class name.
 		return value.__Class
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

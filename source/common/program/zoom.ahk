@@ -1,6 +1,5 @@
 class Zoom {
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	;---------
 	; DESCRIPTION:    Swap between gallery and speaker views.
 	;---------
@@ -22,15 +21,14 @@ class Zoom {
 		Send, % this.Hotkey_GalleryView
 		this.isGalleryView := true
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	static isGalleryView := true ; Most rooms I frequent start in gallery view.
 	
 	; Hotkeys configured in SoundSwitch
 	static Hotkey_SpeakerView := "!{F1}"
 	static Hotkey_GalleryView := "!{F2}"
 	
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

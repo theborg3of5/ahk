@@ -41,18 +41,18 @@
 	☐ Get rid of updateNotepadPPSupport once I'm sure I won't need it anymore (currently shows how to parse my headers and such).
 
 * Fixes / Cleanup * :
-	☐ Replace notepad++ workaround folding sections, scope, etc. with regions
+	✔ Replace notepad++ workaround folding sections, scope, etc. with regions @done(24-05-16 10:12)
 		✔ =-- @done(24-05-15 16:51)
 		✔ --= @done(24-05-15 16:51)
 		✔ --- @done(24-05-15 16:51)
-		☐ @GROUP@
-		☐ @GROUP-END@
-		☐ [[
-		☐ ]]
-		☐ #PUBLIC#
-		☐ #PRIVATE#
-		☐ #INTERNAL#
-		☐ #DEBUG#
+		✔ @GROUP@ @done(24-05-16 09:51)
+		✔ @GROUP-END@ @done(24-05-16 09:51)
+		✔ [[ / ]] @done(24-05-16 09:52)
+		✔ #PUBLIC# @done(24-05-16 10:12)
+		✔ #PRIVATE# @done(24-05-16 10:12)
+		✔ #INTERNAL# @done(24-05-16 10:12)
+		✔ #END# @done(24-05-16 10:12)
+		✔ #DEBUG# @done(24-05-16 09:52)
 	✔ Consider no longer running AHK as admin? @done(24-05-15 16:51)
 		With VB6 retired, I don't think there's anything else that actually _needs_ to run as admin, right?
 		And running as admin is more annoying - more prompts and can't always interact with non-admin stuff properly.

@@ -11,8 +11,7 @@
 */
 
 class ProgressToast extends Toast {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Create a new progress toast.
 	; PARAMETERS:
@@ -68,10 +67,9 @@ class ProgressToast extends Toast {
 		this.addLine(finishText)
 		this.showForSeconds(2)
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	isVisible := false ; Whether we've shown the toast yet.
 	currStepDoneText := "" ; The text to use to finish the currently-running step.
 	
@@ -99,5 +97,5 @@ class ProgressToast extends Toast {
 		doneText := this.currStepDoneText.removeFromEnd("...") ; Make sure the done text doesn't end with our separator, otherwise we could keep finishing it forever
 		this.appendText(doneText)
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

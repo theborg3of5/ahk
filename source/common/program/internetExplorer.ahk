@@ -1,6 +1,5 @@
 ﻿class InternetExplorer {
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	moveURLToDefaultBrowser(){
 		url := ControlGetText("Edit1", "A") ; Get URL from URL bar control
 		if(!url) {
@@ -51,9 +50,9 @@
 		ClipboardLib.copyWithFunction(ObjBindMethod(InternetExplorer, "getLinkTargetOnClipboard"))
 		ClipboardLib.toastNewValue("link target")
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	
-	; #PRIVATE#
+	;region ------------------------------ PRIVATE ------------------------------
 	static F12DevToolsTitleString := "ahk_class F12FrameWindow ahk_exe IEXPLORE.EXE"
 	static ClassNN_F12DevToolsToolbar := "Internet Explorer_Server8"
 	
@@ -65,6 +64,5 @@
 		Sleep, 100     ; Wait for right-click menu to appear
 		Send, t{Enter} ; Copy Shortcut
 	}
-	
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

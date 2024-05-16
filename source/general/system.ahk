@@ -1,6 +1,6 @@
 ; System-level hotkeys and overrides.
 
-; [[Lock/suspend]]
+;region Lock/suspend
 ; Call the Windows API function "SetSuspendState" to have the system suspend or hibernate.
 ; Parameter #1: Pass 1 instead of 0 to hibernate rather than suspend.
 ; Parameter #2: Pass 1 instead of 0 to suspend immediately rather than asking each application for permission.
@@ -12,8 +12,9 @@
 #If Config.machineIsHomeDesktop
 	$Volume_Mute::DllCall("LockWorkStation")
 #If
+;endregion Lock/suspend
 
-; [[Keyboard mapping]]
+;region Keyboard mapping
 #If Config.machineIsWorkDesktop || Config.machineIsWorkVDI
 	; Extra buttons on the ergonomic keyboard as left/right clicks (disable them in MS mouse and keyboard)
 	Browser_Back::   HotkeyLib.sendCatchableKeys("{LButton}")
@@ -21,8 +22,9 @@
 #If Config.machineIsHomeLaptop || Config.machineIsWorkDesktop || Config.machineIsWorkVDI
 	AppsKey::RWin ; No right windows key on these machines, so use the AppsKey (right-click key) instead.
 #If
+;endregion Keyboard mapping
 
-; [[Special hotkey handling]]
+;region Special hotkey handling
 ; Release all modifier keys, for cases when some might be "stuck" down.
 *#Space::HotkeyLib.releaseAllModifiers()
 
@@ -33,6 +35,7 @@
 #=:: ; Magnifier
 #-::
 	return
+;endregion Special hotkey handling
 
 ; GDB TODO window cache debug issue
 ^+!0::testFunc()

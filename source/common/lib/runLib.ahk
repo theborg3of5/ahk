@@ -1,8 +1,7 @@
 ; Utility functions for running scripts, commands, and other programs.
 
 class RunLib {
-	; #PUBLIC#
-
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Run a command with cmd.exe.
 	; PARAMETERS:
@@ -44,10 +43,9 @@ class RunLib {
 		stdout := exec.stdout.readall()
 		return stdout
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	/*
 		ShellRun by Lexikos
 			requires: AutoHotkey_L
@@ -99,5 +97,5 @@ class RunLib {
 			ObjRelease(ptlb)
 		}
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

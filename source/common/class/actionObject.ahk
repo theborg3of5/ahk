@@ -19,8 +19,7 @@
 */
 
 class ActionObject {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Determine the type of ActionObject class to use based on the type/value
 	;                 and return a new instance of that class.
@@ -39,10 +38,9 @@ class ActionObject {
 		; Debug.toast("ActionObject","All info determined", "this",this)
 		return this.getTypeSpecificObject()
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	; Type constants
 	static Type_CodeSearch := "CODESEARCH"
 	static Type_EpicStudio := "EPICSTUDIO"
@@ -121,5 +119,5 @@ class ActionObject {
 		Toast.ShowError("Unrecognized type", "ActionObject doesn't know what to do with this type: " this.type)
 		return ""
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

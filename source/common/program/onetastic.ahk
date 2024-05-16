@@ -1,6 +1,5 @@
 class Onetastic {
-	; #INTERNAL#
-
+	;region ------------------------------ INTERNAL ------------------------------
 	;---------
 	; DESCRIPTION:    Open the XML popup for the current macro or function.
 	;---------
@@ -26,5 +25,5 @@ class Onetastic {
 		if(xml)
 			Send, {Esc} ; Close the popup
 	}
-	; #END#
+	;endregion ------------------------------ INTERNAL ------------------------------
 }

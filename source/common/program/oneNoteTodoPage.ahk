@@ -2,8 +2,7 @@
 
 ; A helper class for all of the logic that goes into my OneNote organizational system.
 class OneNoteTodoPage {
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	;---------
 	; DESCRIPTION:    Collapse the todo page to different levels.
 	; SIDE EFFECTS:   Puts the cursor at the beginning of the first line under the "Today" header.
@@ -136,10 +135,9 @@ class OneNoteTodoPage {
 	insertPQATodos() {
 		this.sendItems(["Review", "Test"])
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	;---------
 	; DESCRIPTION:    For a "Do" todo page in OneNote, collapse it based on the given specifications.
 	; PARAMETERS:
@@ -432,7 +430,5 @@ class OneNoteTodoPage {
 			SendRaw, % item.text
 		}
 	}
-	
-	
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

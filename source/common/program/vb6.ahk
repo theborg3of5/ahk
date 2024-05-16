@@ -1,6 +1,5 @@
 class VB6 {
-	; #INTERNAL#
-	
+	;region ------------------------------ INTERNAL ------------------------------
 	;---------
 	; DESCRIPTION:    Add different variations on a contact comment at the current cursor position.
 	;                 These are specific wrappers that send different versions of a contact comment
@@ -81,10 +80,9 @@ class VB6 {
 		closeButtonY := window.topY   + 45 ; 10px from the top of the window
 		VB6.clickUsingMode(closeButtonX, closeButtonY, "Screen")
 	}
+	;endregion ------------------------------ INTERNAL ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	static ClassNN_ObjectComboBox    := "ComboBox1" ; Object dropdown in top-left
 	static ClassNN_ProcedureComboBox := "ComboBox2" ; Procedure dropdown in top-right
 	
@@ -158,5 +156,5 @@ class VB6 {
 		; Move the mouse back to its former position.
 		MouseMove, prevX, prevY
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

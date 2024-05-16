@@ -1,8 +1,7 @@
 ; Helper functions for hotkeys.
 
 class HotkeyLib {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Release all modifier keys. This is useful when certain modifier keys get "stuck" down.
 	;---------
@@ -43,10 +42,9 @@ class HotkeyLib {
 		Send, % keys
 		settings.restore()
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	;---------
 	; DESCRIPTION:    Given a character from a hotkey string, figure out the name of the corresponding key.
 	; PARAMETERS:
@@ -68,5 +66,5 @@ class HotkeyLib {
 			Default:          return hotkeyChar ; Otherwise, probably a letter or number.
 		}
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

@@ -10,8 +10,7 @@
 */
 
 class StringBase {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Wrapper for StrLen().
 	; RETURNS:        Length of string
@@ -621,10 +620,9 @@ class StringBase {
 		obj := StrSplit(this, delimiters, surroundingCharsToDrop)
 		return DataLib.convertObjectToArray(obj)
 	}
-	
-	
-	; #PRIVATE#
-	
+	;endregion ------------------------------ PUBLIC ------------------------------
+
+	;region ------------------------------ PRIVATE ------------------------------
 	;---------
 	; DESCRIPTION:    Get the portion of this string that is between the provided strings.
 	; PARAMETERS:
@@ -641,5 +639,5 @@ class StringBase {
 		; Trim off everything before (and including) the remaining instance (first or last depending on upToLastEndString) of the endString
 		return outStr.beforeString(endString, upToLastEndString)
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

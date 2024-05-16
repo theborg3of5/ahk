@@ -1,8 +1,7 @@
 ; Date and time utility functions.
 
 class DateTimeLib {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Replace tags matching different formats supported by FormatTime.
 	; PARAMETERS:
@@ -46,5 +45,5 @@ class DateTimeLib {
 		
 		return FormatTime(dateString, "dd") ; Date with leading 0 (matches A_DD)
 	}
-	; #END#
+	;endregion ------------------------------ PUBLIC ------------------------------
 }

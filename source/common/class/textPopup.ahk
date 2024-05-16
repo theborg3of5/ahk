@@ -15,8 +15,7 @@
 */
 
 class TextPopup {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Build and show a new popup, where the content comes from a TextTable.
 	; PARAMETERS:
@@ -41,10 +40,9 @@ class TextPopup {
 		; Wait for it to close (pausing the current script until that happens)
 		WinWaitClose, % "ahk_id " this.guiId
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	;  - Constants
 	static Prefix_GuiSpecialLabels := "TextPopupGui_" ; Used to have the gui call TextPopupGui_* functions instead of just Gui* ones
 	static Edit_ControlId := "Edit1"
@@ -247,7 +245,7 @@ class TextPopup {
 	scrollRight(count := 10) {
 		this.sendScrollMessages(MicrosoftLib.Message_HorizScroll, MicrosoftLib.ScrollBar_Right, count)
 	}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }
 
 

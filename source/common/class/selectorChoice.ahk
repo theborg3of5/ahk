@@ -1,8 +1,7 @@
 ; Representation of a single choice within a Selector object.
 
 class SelectorChoice {
-	; #PUBLIC#
-	
+	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    The full data object for this choice.
 	;---------
@@ -68,10 +67,9 @@ class SelectorChoice {
 		else
 			return (stringToTest = abbrev)
 	}
+	;endregion ------------------------------ PUBLIC ------------------------------
 	
-	
-	; #PRIVATE#
-	
+	;region ------------------------------ PRIVATE ------------------------------
 	data := {} ; {label: value}
-	; #END#
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

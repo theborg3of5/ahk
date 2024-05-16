@@ -1,6 +1,2 @@
 {
-	"files.exclude": {
-		"**/private": true,
-		"**/test": true
-	}
 }

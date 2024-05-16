@@ -56,6 +56,7 @@
 	✔ Consider no longer running AHK as admin? @done(24-05-15 16:51)
 		With VB6 retired, I don't think there's anything else that actually _needs_ to run as admin, right?
 		And running as admin is more annoying - more prompts and can't always interact with non-admin stuff properly.
+	☐ Reimplement Windows Explorer stuff for Windows 11/no QTTabBar
 	☐ F2 for ***s
 		☐ Outlook: this works, as long as AHK is _not_ running as admin
 			myFindObjOutlook := ComObjActive("Outlook.Application").ActiveInspector.WordEditor.Application.Selection.Find

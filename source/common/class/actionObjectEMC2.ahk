@@ -86,12 +86,14 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		
 		if(forceBasic)
 			link := Config.private["EMC2_LINK_WEB_BASE"]
-		else if(this.isEditOnlyObject() || this.isViewOnlyObject(ini)) ; View-only objects only work as edit-type links, so redirect them there.
+		else if(this.isEditOnlyObject() || this.isViewOnlyObject(ini)) ; View-only objects only work as edit-type links, so redirect them there. Also updates ini.
 			link := this.getLinkEdit()
-		else if(this.isInternalOnlyObject(ini))
+		else if(this.isInternalOnlyObject(ini)) ; Also updates ini.
 			link := Config.private["SHERLOCK_INTERNAL_ONLY_BASE"]
 		else if(this.isSherlockObject())
 			link := Config.private["SHERLOCK_BASE"]
+		else if(this.isObeliskObject())
+			link := Config.private["OBELISK_BASE"]
 		else
 			link := Config.private["EMC2_LINK_WEB_BASE"]
 		
@@ -122,6 +124,14 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;---------
 	isSherlockObject() {
 		return (this.ini = "SLG")
+	}
+
+	;---------
+	; DESCRIPTION:    CHeck whether this object can be opened in Obelisk (rather than emc2summary).
+	; RETURNS:        true/false
+	;---------
+	isObeliskObject() {
+		return (this.ini = "DRN")
 	}
 	
 	;---------

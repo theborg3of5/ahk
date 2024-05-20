@@ -327,20 +327,38 @@ class StringLib {
 	}
 	
 	;---------
-	; DESCRIPTION:    Generate a "ten string" of the given length, for easy visualization of how long a string can be. A
-	;                 "ten string" is "1234567890" repeated to the given length, with a | just past the last character to
-	;                 show the edge.
+	; DESCRIPTION:    Generate a "ten string" of the given length, for easy visualization of how
+	;                 long a string can be. A "ten string" is "1234567890" repeated to the given
+	;                 length, with a | just past the last character to show the edge.
+	;
+	;                 If the length is bigger than 10, an additional line will be included at the
+	;                 start that shows the tens digit at each 10th place.
 	;                 
 	;                 Examples:
 	;                   - 5  => 12345|
-	;                   - 15 => 123456789012345|
+	;                   - 15 =>          1     |
+	;                           123456789012345|
+	;                   - 30 =>          1         2         3|
+	;                           123456789012345678901234567890|
 	; PARAMETERS:
 	;  length (I,REQ) - How long the string should measure.
 	; RETURNS:        Generated string
 	;---------
-	getTenString(length) {
+	getTenString(length, noTensLine := false) {
 		baseString := "1234567890"
-		return StringLib.duplicate(baseString, length // 10) baseString.sub(1, Mod(length, 10)) "|"
+		onesLine := StringLib.duplicate(baseString, length // 10) baseString.sub(1, Mod(length, 10)) "|"
+
+		if(length <= 10 || noTensLine)
+			return onesLine
+
+		; For strings longer than 10 chars, add an additional line showing the tens place.
+		baseString := StringLib.duplicate(A_Space, 10)
+		Loop, % length // 10 {
+			tensDigit := A_Index
+			tensLine .= baseString.sub(1, -tensDigit.length()) tensDigit
+		}
+		tensLine .= baseString.sub(1, Mod(length, 10)) "|"
+		return tensLine.appendLine(onesLine)
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 }

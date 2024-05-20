@@ -175,9 +175,16 @@ return
 ;endregion Folders and paths
 
 ;region Useful strings
-:X:.tens::sendTenString()
+:X:.tens::
+	sendTenString() {
+		length := InputBox("Insert Ten-String", "How long can your text be?")
+		if(!length)
+			return
+		
+		ClipboardLib.send(StringLib.getTenString(length))
+	}
 ;endregion Useful strings
-#If
+#If ; gdbtodo this isn't closing anything anymore - other "if" above is superceding it
 
 ;region Helper functions
 sendArbitraryDate(format) {
@@ -199,14 +206,6 @@ sendArbitraryTime(format) {
 		return ""
 	
 	new RelativeTime(timeString).sendInFormat(format)
-}
-
-sendTenString() {
-	length := InputBox("Insert Ten-String", "How long can your text be?")
-	if(!length)
-		return
-	
-	Send, % StringLib.getTenString(length)
 }
 
 sendFilePath(folderName, subPath := "") {

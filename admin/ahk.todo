@@ -42,6 +42,7 @@
 
 * Fixes / Cleanup * :
 	☐ Reimplement Windows Explorer stuff for Windows 11/no QTTabBar
+	☐ Consider retiring game window handling - I don't really use it anymore.
 	☐ F2 for ***s
 		☐ Outlook: this works, as long as AHK is _not_ running as admin
 			myFindObjOutlook := ComObjActive("Outlook.Application").ActiveInspector.WordEditor.Application.Selection.Find
@@ -126,10 +127,6 @@
 			Also added a MsgBox (when debug is toggled on) to the actual Esc hotkey.
 
 * New Features / Scripts * :
-	☐ Update tensstring to add an extra line above with tens place value
-		Like:
-			         1         2         3
-			12345678901234567890123456789|
 	☐ Add a hotkey that just toasts the name + ID of the EMC2 record (if any)
 		Alt+/ (conceptually Alt+?), maybe?
 		Would need either EMC2summary scraping from below, or whatever equivalent thing I end up doing with track shadow reports

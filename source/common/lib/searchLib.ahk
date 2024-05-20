@@ -24,7 +24,7 @@ class SearchLib {
 					Case "GURU":       SearchLib.guru(searchTerm)
 					Case "HUBBLE":     SearchLib.hubble(searchTerm, subType, dest["APP_KEY"])
 					Case "WIKI":       SearchLib.epicWiki(searchTerm, subType) ; Epic wiki search.
-					Case "GREPWIN":    SearchLib.grepWin(searchTerm, subType)
+					Case "GREPWIN":    SearchLib.grepWin(searchTerm, subType, dest["IS_REGEX"])
 					Case "EVERYTHING": SearchLib.everything(searchTerm)
 				}
 			}
@@ -143,14 +143,15 @@ class SearchLib {
 	; PARAMETERS:
 	;  searchTerm   (I,REQ) - Text to search for.
 	;  pathToSearch (I,REQ) - Where to search files for the given term.
+	;  isRegex      (I,OPT) - Pass 1 to treat the search term as a regular expression.
 	;---------
-	grepWin(searchTerm, pathToSearch) {
+	grepWin(searchTerm, pathToSearch, isRegex := false) {
 		QUOTE := """" ; Double-quote character
 		
 		pathToSearch := Config.replacePathTags(pathToSearch) ; Escape any quotes in the search string
 		searchTerm := StringLib.escapeCharUsingChar(searchTerm, QUOTE)
 		
-		args := "/regex:no"
+		args := isRegex ? "/regex:yes" : "/regex:no"
 		args .= " /searchpath:" QUOTE pathToSearch " " QUOTE ; Extra space after path, otherwise trailing backslash escapes ending double quote
 		args .= " /searchfor:"  QUOTE searchTerm       QUOTE
 		args .= " /execute" ; Run it immediately if we got what to search for

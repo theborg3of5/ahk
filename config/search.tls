@@ -1,7 +1,7 @@
 ﻿@WindowTitle(Select type of search)
 
-[		NAME								ABBREV				SUBTYPE																			TYPE_FILTER		SEARCH_TYPE		APP_KEY		CONTEXT		SEARCH_TERM	]
-(		0									0					0																				0				0				0			0			1			)
+[		NAME								ABBREV				SUBTYPE																			TYPE_FILTER		SEARCH_TYPE		APP_KEY		CONTEXT		SEARCH_TERM		IS_REGEX	]
+(		0									0					0																				0				0				0			0			1				0			)
 
 # Web
 ; (SUBTYPE = <URL with <QUERY> for query>)
@@ -24,7 +24,7 @@
 ~SEARCH_TYPE.replaceWith(GREPWIN) {
 		AHK (all repos)						ahk					<AHK_ROOT>|<AHK_PRIVATE>|<AHK_TEST>
 		AHK Source							ahks | ahkf			<AHK_SOURCE>
-		AHK Todo							ahkt				<AHK_SOURCE>																	-				-				-			-			GDB TODO
+		AHK Todo							ahkt				<AHK_SOURCE>																	-				-				-			-			GDB[ ]?TODO		1
 		Onetastic Macros					ot					<ONETASTIC_MACROS>
 		XGDB Routines						x | xgdb			<EPIC_NFS_ASK>\XGDB																-				-				-			WORK
 }

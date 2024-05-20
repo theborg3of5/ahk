@@ -14,7 +14,27 @@
 	!w::Explorer.getEMC2ObjectFromSelectedFolder().openWeb()
 	!e::Explorer.getEMC2ObjectFromSelectedFolder().openEdit()
 	
-#If Config.isWindowActive("Explorer") || WinActive("ahk_class Progman ahk_exe explorer.exe")	; Explorer window or Desktop
+#If Config.isWindowActive("Explorer") || WinActive("ahk_class Progman ahk_exe explorer.exe") ; Explorer window or Desktop
 	; Hide/show hidden files
 	#h::Explorer.toggleHiddenFiles()
 #If
+
+#If Explorer.mouseIsOverTaskbar()
+	; Middle-click on taskbar buttons to close them.
+	$MButton::
+		closeWindowFromTaskbar() {
+			; Open up basic right-click menu to try and close the window.
+			Send, +{RButton}
+			Sleep, 100
+	
+			; VSCode is special and doesn't have a shift+right click menu (unless you switch its
+			; title bar to "native", which looks terrible).
+			if (Config.isWindowActive("VSCode")) {
+				Send, !{F4}
+				return
+			}
+	
+			Send, c ; Close
+		}
+#If
+

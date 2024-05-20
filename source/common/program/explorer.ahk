@@ -136,6 +136,15 @@ class Explorer {
 			}
 		}
 	}
+
+	;---------
+	; DESCRIPTION:    Check whether the mouse is over the taskbar.
+	; RETURNS:        true/false
+	;---------
+	mouseIsOverTaskbar() {
+		MouseGetPos("", "", "", controlUnderMouse)
+		return (controlUnderMouse == "MSTaskListWClass1")
+	}
 	;endregion ------------------------------ INTERNAL ------------------------------
 
 	;region ------------------------------ PRIVATE ------------------------------

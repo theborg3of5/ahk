@@ -205,6 +205,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 			Case "PRJ-R": return "PRJ"
 			Case "XDS-I": return "XDS"
 			Case "DLG-I": return "DLG"
+			Case "DLG-H": return "DLG"
 		}
 		
 		return ini ; Default case, let the INI thru as normal

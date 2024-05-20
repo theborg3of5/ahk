@@ -582,6 +582,7 @@ class EpicLib {
 	flattenDashedINIs(text) {
 		text := text.replace("PRJ-R", "PRJR") ; Project Readiness
 		text := text.replace("XDS-I", "XDSI") ; Design Issues
+		text := text.replace("DLG-H", "DLGH") ; DLG History
 		
 		if(!text.afterString("DLG-I").firstChar().isNum()) { ; Make sure we're not mashing together DLG-I##### (SU DLG).
 			text := text.replace("DLG-I", "DLGI") ; DLG Issues

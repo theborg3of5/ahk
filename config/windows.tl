@@ -21,7 +21,7 @@
 		~EXE.replaceWith(EMC2.+EpicD.+\.exe) | ~TITLE_MATCH_MODE.replaceWith(REGEX) {
 			; Different sections of the main EMC2 window.
 			~CLASS.replaceWith(ThunderRT6MDIForm) {
-				EMC2 DLG						-						-							DLG \d+
+				EMC2 DLG						-						-							DLG [I]?\d+
 				EMC2 PRJ						-						-							PRJ \d+
 				EMC2 QAN						-						-							QAN \d+
 				EMC2 XDS						-						-							XDS \d+

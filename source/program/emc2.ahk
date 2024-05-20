@@ -51,6 +51,11 @@
 			record := EpicLib.getBestEMC2RecordFromText(WinGetTitle("A"))
 			new ActionObjectEMC2(record.id, "DLG-I").openWeb() ; Just use the ID that we got, override the INI with the issues-specific one.
 		}
+	!h::
+		openDLGHistory() {
+			record := EpicLib.getBestEMC2RecordFromText(WinGetTitle("A"))
+			new ActionObjectEMC2(record.id, "DLG-H").openWeb() ; Just use the ID that we got, override the INI with the issues-specific one.
+		}
 #If
 
 ; Design open

@@ -41,7 +41,6 @@
 	☐ Get rid of updateNotepadPPSupport once I'm sure I won't need it anymore (currently shows how to parse my headers and such).
 
 * Fixes / Cleanup * :
-	☐ Reimplement Windows Explorer stuff for Windows 11/no QTTabBar
 	☐ Consider retiring game window handling - I don't really use it anymore.
 	☐ F2 for ***s
 		☐ Outlook: this works, as long as AHK is _not_ running as admin

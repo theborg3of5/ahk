@@ -139,9 +139,8 @@ class Explorer {
 	;endregion ------------------------------ INTERNAL ------------------------------
 
 	;region ------------------------------ PRIVATE ------------------------------
-	; Hotkeys (configured in QTTabBar)
-	static Hotkey_CopyCurrentFile   := "!c"
-	static Hotkey_CopyCurrentFolder := "^!c"
+	; Hotkeys
+	static Hotkey_CopyCurrentFile := "^+c" ; Built into Windows 11
 	
 	; Static state for relative shortcut generation.
 	static _relativeTarget := ""
@@ -170,7 +169,7 @@ class Explorer {
 			return FileLib.cleanupPath(path)
 		}
 		
-		; We couldn't find anything at all, no type.
+		; We couldn't find anything at all.
 		return ""
 	}
 
@@ -179,10 +178,10 @@ class Explorer {
 	; RETURNS:        Folder path, or "" if we failed to get it for some reason.
 	;---------
 	getCurrentFolder() {
-		; Start with QTTabBar hotkey
-		path := ClipboardLib.getWithHotkey(this.Hotkey_CopyCurrentFolder)
-		
-		; Failed to get using QTTabBar hotkey - try to grab it manually instead.
+		; Grab from window title
+		path := WinGetTitle("A")
+
+		; Grab from address bar
 		if(path = "") {
 			Send, !d ; Select address bar
 			path := ClipboardLib.getWithHotkey("^c")

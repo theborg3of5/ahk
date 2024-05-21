@@ -23,7 +23,7 @@
 	; LastPass loses all settings when it updates periodically, so I'm overriding the hotkeys here instead.
 	!PgDn::!PgUp ; Reverse next/previous site hotkeys
 	!PgUp::!PgDn
-	!+l::Send, ^!h ; Open vault
+	!+l::Run("https://lastpass.com/vault/") ; Just launch this directly, instead of relying on the extension being able to run on the current page.
 	
 ; Chrome hotkeys that do not apply in Hyperspace.
 #If Config.isWindowActive("Chrome") && !Config.isWindowActive("Chrome Hyperspace")

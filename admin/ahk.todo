@@ -42,6 +42,7 @@
 
 * Fixes / Cleanup * :
 	☐ Consider retiring game window handling - I don't really use it anymore.
+	☐ Clean out window definitions for EMC2 - a lot of them have fallen out of date (mostly the titles)
 	☐ F2 for ***s
 		☐ Outlook: this works, as long as AHK is _not_ running as admin
 			myFindObjOutlook := ComObjActive("Outlook.Application").ActiveInspector.WordEditor.Application.Selection.Find

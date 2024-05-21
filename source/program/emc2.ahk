@@ -65,8 +65,9 @@
 	^Up::  return
 #If
 
-; Design email window
-#If Config.isWindowActive("EMC2 XDS Email") || Config.isWindowActive("EMC2 DLG Email") || Config.isWindowActive("EMC2 XDS Submit")
+; Design/DLG email windows
+; #If Config.isWindowActive("EMC2 XDS Email") || Config.isWindowActive("EMC2 DLG Email") || Config.isWindowActive("EMC2 XDS Submit") ; gdbtodo clean up
+#IfWinActive, ahk_class ThunderRT6FormDC
 	:X:.dbcdevs::EMC2.sendDBCDevIDs()
 #If
 

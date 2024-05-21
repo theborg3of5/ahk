@@ -145,6 +145,21 @@ class Explorer {
 		MouseGetPos("", "", "", controlUnderMouse)
 		return (controlUnderMouse == "MSTaskListWClass1")
 	}
+
+	;---------
+	; DESCRIPTION:    Check whether the active window has a basic right-click menu (as opposed to
+	;                 some programs that suppress it somehow).
+	; RETURNS:        true/false
+	;---------
+	currentWindowHasNoBasicRightClickMenu() {
+		if(Config.isWindowActive("VSCode"))
+			return true
+		if(Config.isWindowActive("GitExtensions"))
+			return true
+		
+
+		return false
+	}
 	;endregion ------------------------------ INTERNAL ------------------------------
 
 	;region ------------------------------ PRIVATE ------------------------------

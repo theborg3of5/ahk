@@ -26,11 +26,11 @@
 			; Open up basic right-click menu to try and close the window.
 			Send, +{RButton}
 			Sleep, 100
-	
-			; VSCode is special and doesn't have a shift+right click menu (unless you switch its
-			; title bar to "native", which looks terrible).
-			if (Config.isWindowActive("VSCode")) {
-				Send, !{F4}
+
+			; Some windows don't have a shift+right click menu for some reason, so rely on the fact
+			; that shift+right-click focuses the window and just close it directly.
+			if (Explorer.currentWindowHasNoBasicRightClickMenu()) {
+				WindowActions.closeWindow("A")
 				return
 			}
 	

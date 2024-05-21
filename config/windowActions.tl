@@ -14,8 +14,8 @@
 	EMC2 XDS Email					-			-				HOME_END		SELECT
 	EMC2 XDS Open Design			-			-				-				SELECT
 	EMC2 XDS Submit					-			-				HOME_END		SELECT
-	Explorer						MIN			OTHER			-				-				-			-			ESCAPE
-	Explorer						MIN			-				-				-				-			-			ESCAPE		WORK_VDI
+	Explorer						MIN			OTHER			-				-				-			-			ESCAPE		HOME_DESKTOP
+	Explorer						MIN			-				-				-				-			-			ESCAPE
 	GitHub Desktop					CLOSE		-				-				-				-			-			ESCAPE
 	Messenger						MIN			-				-				-				-			-			ESCAPE		HOME_DESKTOP
 	Notepad							CLOSE

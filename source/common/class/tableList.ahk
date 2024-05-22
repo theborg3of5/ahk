@@ -278,7 +278,8 @@ class TableList {
 	}
 	
 	;---------
-	; DESCRIPTION:    Remove all rows that do NOT have the given value (or blank) in the specified column.
+	; DESCRIPTION:    Remove all rows whose specified column does NOT exactly match the given value
+	;                 (or blank).
 	; PARAMETERS:
 	;  filterColumn (I,REQ) - The column to check
 	;  filterValue  (I,REQ) - The value to check
@@ -287,12 +288,12 @@ class TableList {
 	;                 filterOutIfColumnBlank() to get rid of those if needed.
 	;---------
 	filterOutIfColumnNoMatch(filterColumn, filterValue) {
-		this.doFilterOnColumn(filterColumn, filterValue, true, true)
+		this.doFilterOnColumn(filterColumn, filterValue, true, true, false)
 		return this
 	}
 	
 	;---------
-	; DESCRIPTION:    Remove all rows that have the given value (or blank) in the specified column.
+	; DESCRIPTION:    Remove all rows whose specified column exactly matches the given value (or blank).
 	; PARAMETERS:
 	;  filterColumn (I,REQ) - The column to check
 	;  filterValue  (I,REQ) - The value to check
@@ -301,7 +302,7 @@ class TableList {
 	;                 to get rid of those if needed.
 	;---------
 	filterOutIfColumnMatch(filterColumn, filterValue) {
-		this.doFilterOnColumn(filterColumn, filterValue, false, true)
+		this.doFilterOnColumn(filterColumn, filterValue, false, true, false)
 		return this
 	}
 	
@@ -312,7 +313,37 @@ class TableList {
 	; RETURNS:        This object (for chaining)
 	;---------
 	filterOutIfColumnBlank(filterColumn) {
-		this.doFilterOnColumn(filterColumn, "", false, false)
+		this.doFilterOnColumn(filterColumn, "", false, false, false)
+		return this
+	}
+	
+	;---------
+	; DESCRIPTION:    Remove all rows whose specified column does NOT match the given regular
+	;                 expression (or blank).
+	; PARAMETERS:
+	;  filterColumn (I,REQ) - The column to check
+	;  filterRegEx  (I,REQ) - The regular expression to check
+	; RETURNS:        This object (for chaining)
+	; NOTES:          Rows with a blank value for the specified column will not be touched - use
+	;                 filterOutIfColumnBlank() to get rid of those if needed.
+	;---------
+	filterOutIfColumnNoMatchRegEx(filterColumn, filterRegEx) {
+		this.doFilterOnColumn(filterColumn, filterRegEx, true, true, true)
+		return this
+	}
+	
+	;---------
+	; DESCRIPTION:    Remove all rows whose specified column matches the given regular expression
+	;                 (or blank).
+	; PARAMETERS:
+	;  filterColumn (I,REQ) - The column to check
+	;  filterRegEx  (I,REQ) - The regular expression to check
+	; RETURNS:        This object (for chaining)
+	; NOTES:          Rows with a blank value for the specified column will not be touched - use filterOutIfColumnBlank()
+	;                 to get rid of those if needed.
+	;---------
+	filterOutIfColumnMatchRegEx(filterColumn, filterRegEx) {
+		this.doFilterOnColumn(filterColumn, filterRegEx, false, true, true)
 		return this
 	}
 	
@@ -324,6 +355,7 @@ class TableList {
 	;  tiebreakerColumn (I,OPT) - If multiple rows have the same value in indexColumn, this column
 	;                             will be used to break a tie. If a row has a blank value in this
 	;                             column, it will lose to a row that has a value in this column.
+	;                             Defaults to valueColumn.
 	; RETURNS:        Indexed array of values. Format:
 	;                   outputValues[indexColumnValue] := valueColumnValue
 	; NOTES:          Since the value in the index column is the new subscript, it's possible there
@@ -333,6 +365,8 @@ class TableList {
 	getColumnByColumn(valueColumn, indexColumn, tiebreakerColumn := "") {
 		if(valueColumn = "" || indexColumn = "")
 			return ""
+		if(tiebreakerColumn = "")
+			tiebreakerColumn := valueColumn
 		
 		rowsByColumn := this.getRowsByColumn(indexColumn, tiebreakerColumn)
 		
@@ -629,9 +663,10 @@ class TableList {
 	;  blanksAreWild  (I,REQ) - If true, blank values in the given column are treated as wildcards,
 	;                           so they stay in the table regardless of whether the filter is
 	;                           including or excluding matches.
+	;  valueIsRegEx   (I,REQ) - Pass true if filterValue is a regular expression.
 	; SIDE EFFECTS:   Updates this.table and this._headers.
 	;---------
-	doFilterOnColumn(filterColumn, filterValue, includeMatches, blanksAreWild) {
+	doFilterOnColumn(filterColumn, filterValue, includeMatches, blanksAreWild, valueIsRegEx) {
 		if(filterColumn = "")
 			return
 		
@@ -644,7 +679,7 @@ class TableList {
 			if(headerText != "")
 				currHeader := headerText
 			
-			rowIsMatch := this.rowMatchesFilter(row, filterColumn, filterValue, blanksAreWild)
+			rowIsMatch := this.rowMatchesFilter(row, filterColumn, filterValue, blanksAreWild, valueIsRegEx)
 			if(includeMatches && rowIsMatch || !includeMatches && !rowIsMatch) {
 				newIndex := newTable.push(row)
 				if(currHeader != "") {
@@ -668,20 +703,33 @@ class TableList {
 	;                          (index) in the row array to see if it matches filterValue.
 	;  filterValue   (I,REQ) - Only include rows which have this value (or possibly blank, see
 	;                          blanksAreWild parameter) in their filter column pass.
-	;  blanksAreWild (I,OPT) - If this is true, blank values are treated as wildcards and will
-	;                          always pass the filter.
+	;  blanksAreWild (I,REQ) - If this is true, blank values are treated as wildcards and will
+	;                          always be treated as if they pass the filter.
+	;  valueIsRegEx  (I,REQ) - Pass true if filterValue is a regular expression.
 	; RETURNS:        true if the row passes the filter and can stay, false if it should be filtered out.
 	;---------
-	rowMatchesFilter(row, filterColumn, filterValue, blanksAreWild := true) {
+	rowMatchesFilter(row, filterColumn, filterValue, blanksAreWild, valueIsRegEx) {
 		value := row[filterColumn]
 		
 		if(blanksAreWild && value = "")
 			return true
 		
-		if(isObject(value))
-			return value.contains(filterValue)
-		else
-			return (value = filterValue)
+		if (valueIsRegEx) {
+			if(isObject(value)) {
+				For _, childVal in value {
+					if(childVal.matchesRegEx(filterValue))
+						return true
+				}
+				return false
+			} else {
+				return value.matchesRegEx(filterValue)
+			}
+		} else {
+			if(isObject(value))
+				return value.contains(filterValue)
+			else
+				return (value = filterValue)
+		}
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------
 	

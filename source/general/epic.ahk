@@ -92,30 +92,17 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 					if (name.startsWith("App "))
 						Continue
 
-					; Categorize folders + massage names for display
-					if (name.startsWith("DLG-I")) {
-						cat    := "SUs"
-						; name   := name.replaceOne("DLG-", "DLG ")
-					; } else if (name.contains("-Merge-To-")) {
-					; 	cat    := "Merge"
-						; name   := name.beforeString("-Merge-To-") " (Merge)"
-						; name   := name.replaceOne("DLG-", "DLG ").beforeString("-Merge-To-") " (Merge)"
-					} else if (name.startsWith("DLG-")) {
-						cat    := "Current DLGs"
-						; name   := name.replaceOne("DLG-", "DLG ")
-					} else if (name = "st1" || name = "final") {
-						cat    := "Integration"
-					; 	name   := "Stage 1"
-					; 	abbrev := "s1"
-					; } else if (name = "final") {
-					; 	cat    := "Integration"
-					; 	name   := "Final"
-					; 	abbrev := "f"
-					} else {
-						cat    := "User Branches"
-					}
+					; Categorize folders
+					if (name.startsWith("DLG-I"))
+						cat := "SUs"
+					else if (name.startsWith("DLG-"))
+						cat := "Current DLGs"
+					else if (name = "st1" || name = "final")
+						cat := "Integration"
+					else
+						cat := "User Branches"
 
-
+					; Massage names for display
 					if (name = "st1") {
 						name   := "Stage 1"
 						abbrev := "s1"
@@ -123,12 +110,9 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 						name   := "Final"
 						abbrev := "f"
 					}
-
-					; Merge DLGs
-					if (name.contains("-Merge-To-"))
+					if (name.contains("-Merge-To-")) ; Merge DLGs
 						name := name.beforeString("-Merge-To-") " (Merge)"
-					; All DLGs
-					if (name.contains("DLG-")) {
+					if (name.contains("DLG-")) { ; All DLGs
 						dlgId := name.firstBetweenStrings("DLG-", "-")
 						
 						name := "DLG " dlgId
@@ -154,11 +138,10 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			; gdbtodo even if not, could do the same thing here - rather than passing a prefix, just set it above and have addFolderChoicesForType use the given as a default (but force it to be unique).
 			allAbbrevs := []
 
-			addFolderChoicesForType(s, folders, "Current DLGs",     "d", allAbbrevs)
-			; addFolderChoicesForType(s, folders, "Merge",       "m", allAbbrevs)
-			addFolderChoicesForType(s, folders, "User Branches",        "u", allAbbrevs)
-			addFolderChoicesForType(s, folders, "SUs",         "s", allAbbrevs)
-			addFolderChoicesForType(s, folders, "Integration", "i", allAbbrevs)
+			addFolderChoicesForType(s, folders, "Current DLGs",  "d", allAbbrevs)
+			addFolderChoicesForType(s, folders, "User Branches", "u", allAbbrevs)
+			addFolderChoicesForType(s, folders, "SUs",           "s", allAbbrevs)
+			addFolderChoicesForType(s, folders, "Integration",   "i", allAbbrevs)
 
 			path := s.prompt("PATH")
 			; Debug.popup("path",path)

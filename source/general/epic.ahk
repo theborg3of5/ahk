@@ -84,7 +84,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 					if (folderName.startsWith("App "))
 						Continue
 
-					; File folders under categories + massage names for display
+					; Categorize folders + massage names for display
 					if (folderName.startsWith("DLG-I")) {
 						folderCat    := "SUs"
 						folderName   := folderName.replaceOne("DLG-", "DLG ")
@@ -106,53 +106,14 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 						folderCat    := "User"
 					}
 
-					; ; Massage folder name for display
-					; if (folderName.contains("-Merge-To-")) ; Merge folders
-					; 	folderName := folderName.replaceOne("DLG-", "DLG ").beforeString("-Merge-To-") " (Merge)"
-					; else if (folderName.contains("DLG-")) ; DLG folders
-					; 	folderName := folderName.replaceOne("DLG-", "DLG ")
-					; else if (folderName = "st1") ; Stage 1
-					; 	folderName := "Stage 1"
-					; else if (folderName = "final") ; Final
-					; 	folderName := "Final"
-
 					folders[folderCat].push({ name:folderName, path:A_LoopFileLongPath, abbrev:folderAbbrev })
-
-					; ; Categorize folder and massage its name for display
-					; if (folderName.contains("-Merge-To-")) { ; Merge folders
-					; 	folderName := folderName.replaceOne("DLG-", "DLG ").beforeString("-Merge-To-")
-					; 	folders["DLG-MERGE"].push({ name:folderName, path:A_LoopFileLongPath })
-					; } else if (folderName.contains("DLG-")) { ; DLG folders
-					; 	folderName := folderName.replaceOne("DLG-", "DLG ")
-					; 	folders["DLG"].push({ name:folderName, path:A_LoopFileLongPath })
-					; } else if (folderName = "st1") { ; Stage 1
-					; 	folders["INT", "Stage 1"] := A_LoopFileLongPath
-					; } else if (folderName = "final") { ; Final
-					; 	folders["INT", "Final"] := A_LoopFileLongPath
-					; } else {
-					; 	folders["USER", folderName] := A_LoopFileLongPath
-					; }
-
-					; ; Massage folder name for display
-					; if (folderName.contains("-Merge-To-")) { ; Merge folders
-					; 	folderName := folderName.replaceOne("DLG-", "DLG ").beforeString("-Merge-To-")
-					; 	folders["DLG-MERGE", folderName] := A_LoopFileLongPath
-					; } else if (folderName.contains("DLG-")) { ; DLG folders
-					; 	folderName := folderName.replaceOne("DLG-", "DLG ")
-					; 	folders["DLG", folderName] := A_LoopFileLongPath
-					; } else if (folderName = "st1") { ; Stage 1
-					; 	folders["INT", "Stage 1"] := A_LoopFileLongPath
-					; } else if (folderName = "final") { ; Final
-					; 	folders["INT", "Final"] := A_LoopFileLongPath
-					; } else {
-					; 	folders["USER", folderName] := A_LoopFileLongPath
-					; }
-					
 				}
 			}
 			; Debug.popup("folders",folders)
 
 			s := new Selector().setTitle("Select branch folder to open:")
+			; gdbtodo could we move this into Selector itself? As in, it forces abbreviations to be unique when you add a choice (either specifically as part of .addChoice() or as part of loading the choices)?
+			; gdbtodo that would let us do away with the abbrevPrefix here - just set it as the abbreviation above and let Selector handle it for us.
 			allAbbrevs := []
 
 			addFolderChoicesForType(s, folders, "Current",     "d", allAbbrevs)
@@ -160,36 +121,6 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			addFolderChoicesForType(s, folders, "User",        "u", allAbbrevs)
 			addFolderChoicesForType(s, folders, "SUs",         "s", allAbbrevs)
 			addFolderChoicesForType(s, folders, "Integration", "i", allAbbrevs)
-
-			; s.addSectionHeader("Integration")
-			; s.addChoice(new SelectorChoice({ NAME:f.name, ABBREV:abbrev, PATH: f.path }))
-			; s.addChoice(new SelectorChoice({ NAME:f.name, ABBREV:abbrev, PATH: f.path }))
-
-			; addFolderChoicesForType(s, folders, "INTEGRATION", "s", allAbbrevs) ; GDB TODO add these manually with nicer abbreviations
-			; MERGE", "USER", "SU", "INTEGRATION
-
-			; if (folders["CURRENT"].length() > 0) {
-			; 	s.addSectionHeader("Current") ; gdbtodo maybe just do StringLower(index)?
-			; 	For _, f in folders["CURRENT"] {
-			; 		abbrev := DataLib.forceUniqueValue("d", allAbbrevs)
-			; 		s.addChoice(new SelectorChoice({ NAME:f.name, ABBREV:abbrev, PATH: f.path }))
-			; 	}
-			; }
-
-			; For _, type in ["CURRENT", "MERGE", "USER", "SU", "INTEGRATION"] {
-			; 	s.addSectionHeader("Full matches")
-			; }
-
-			; For type, f in folders {
-				
-			; 	s.addSectionHeader("Full matches")
-			; 	For _,record in exacts
-			; 		s.addChoice(this.buildChoiceFromEMC2Record(record, allAbbrevs))
-				
-			; 	s.addSectionHeader("Potential IDs")
-			; 	For _,record in possibles
-			; 		s.addChoice(this.buildChoiceFromEMC2Record(record, allAbbrevs))
-			; }
 
 			path := s.prompt("PATH")
 			; Debug.popup("path",path)

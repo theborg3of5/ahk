@@ -74,7 +74,6 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			knownDLGs := {} ; {dlgId: name}
 			For recId, data in tl.getRowsByColumn("RECORD", "NAME")
 				knownDLGs[recId] := { name:data["NAME_OUTPUT_PREFIX"] data["NAME"], abbrev:data["ABBREV"] }
-			; Debug.popup("knownDLGs",knownDLGs)
 			
 			; Find all branch folders in the versioned EpicSource folders.
 			folders := {} ; type => [ {name, path, abbrev} ]
@@ -88,75 +87,67 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 				Loop, Files, %versionFolderPath%\*, D
 				{
 					name := A_LoopFileName
-					; Ignore binary folders
-					if (name.startsWith("App "))
+					if (name.startsWith("App ")) ; Ignore binary folders
 						Continue
 
-					; Categorize folders
-					if (name.startsWith("DLG-I"))
-						cat := "SUs"
-					else if (name.startsWith("DLG-"))
-						cat := "Current DLGs"
-					else if (name = "st1" || name = "final")
-						cat := "Integration"
-					else
-						cat := "User Branches"
-
-					; Massage names for display
-					if (name = "st1") {
+					; Categorize folders, add basic abbreviations (which may be overridden)
+					if (name.startsWith("DLG-")) {
+						dlgId := name.firstBetweenStrings("DLG-", "-")
+						if (knownDLGs[dlgId]) {
+							cat    := "Known DLGs"
+							name   := "DLG " dlgId " - " knownDLGs[dlgId].name
+							abbrev := knownDLGs[dlgId].abbrev
+						} else if (name.startsWith("DLG-I")) {
+							cat    := "SUs"
+							name   := "DLG " dlgId
+							abbrev := "s"
+						} else {
+							cat    := "Current DLGs"
+							name   := "DLG " dlgId
+							abbrev := "d"
+						}
+					} else if (name = "st1") {
+						cat    := "Integration"
 						name   := "Stage 1"
 						abbrev := "s1"
 					} else if (name = "final") {
+						cat    := "Integration"
 						name   := "Final"
 						abbrev := "f"
+					} else {
+						cat    := "User Branches"
+						name   := name
+						abbrev := "u"
 					}
-					if (name.contains("-Merge-To-")) ; Merge DLGs
+
+					; Extra name cleanup
+					if (A_LoopFileName.contains("-Merge-To-")) ; Using original name since we're modifying the name var above
 						name := name.beforeString("-Merge-To-") " (Merge)"
-					if (name.contains("DLG-")) { ; All DLGs
-						dlgId := name.firstBetweenStrings("DLG-", "-")
-						
-						name := "DLG " dlgId
-						if (knownDLGs[dlgId]) {
-							name   .= " - " knownDLGs[dlgId].name
-							abbrev := knownDLGs[dlgId].abbrev
-						} else {
-							; name   := name.replaceOne("DLG-", "DLG ")
-							abbrev := ""
-						}
-					}
 
 					if(!folders[cat])
 						folders[cat] := []
 					folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
 				}
 			}
-			; Debug.popup("folders",folders)
 
 			s := new Selector().setTitle("Select branch folder to open:")
-			; gdbtodo could we move this into Selector itself? As in, it forces abbreviations to be unique when you add a choice (either specifically as part of .addChoice() or as part of loading the choices)?
-			; gdbtodo that would let us do away with the abbrevPrefix here - just set it as the abbreviation above and let Selector handle it for us.
-			; gdbtodo even if not, could do the same thing here - rather than passing a prefix, just set it above and have addFolderChoicesForType use the given as a default (but force it to be unique).
-			allAbbrevs := []
-
-			addFolderChoicesForType(s, folders, "Current DLGs",  "d", allAbbrevs)
-			addFolderChoicesForType(s, folders, "User Branches", "u", allAbbrevs)
-			addFolderChoicesForType(s, folders, "SUs",           "s", allAbbrevs)
-			addFolderChoicesForType(s, folders, "Integration",   "i", allAbbrevs)
+			addFolderChoicesForType(s, folders, "Known DLGs")
+			addFolderChoicesForType(s, folders, "Current DLGs")
+			addFolderChoicesForType(s, folders, "User Branches")
+			addFolderChoicesForType(s, folders, "SUs")
+			addFolderChoicesForType(s, folders, "Integration")
 
 			path := s.prompt("PATH")
-			; Debug.popup("path",path)
 			if(path)
 				Run(path)
 		}
-		addFolderChoicesForType(s, folders, type, abbrevPrefix, allAbbrevs) {
+		addFolderChoicesForType(s, folders, type) {
 			if (folders[type].length() <= 0)
 				return
 
 			s.addSectionHeader(type)
-			For _, f in folders[type] {
-				abbrev := f.abbrev ? f.abbrev : DataLib.forceUniqueValue(abbrevPrefix, allAbbrevs)
-				s.addChoice(new SelectorChoice({ NAME:f.name, ABBREV:abbrev, PATH: f.path }))
-			}
+			For _, f in folders[type]
+				s.addChoice(new SelectorChoice({ NAME: f.name, ABBREV: f.abbrev, PATH: f.path }))
 		}
 	
 	^+!#h::

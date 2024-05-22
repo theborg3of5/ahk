@@ -283,8 +283,8 @@ class TableList {
 	;  filterColumn (I,REQ) - The column to check
 	;  filterValue  (I,REQ) - The value to check
 	; RETURNS:        This object (for chaining)
-	; NOTES:          Rows with a blank value for the specified column will not be touched - use filterOutIfColumnBlank()
-	;                 to get rid of those if needed.
+	; NOTES:          Rows with a blank value for the specified column will not be touched - use
+	;                 filterOutIfColumnBlank() to get rid of those if needed.
 	;---------
 	filterOutIfColumnNoMatch(filterColumn, filterValue) {
 		this.doFilterOnColumn(filterColumn, filterValue, true, true)
@@ -420,8 +420,7 @@ class TableList {
 	
 	;---------
 	; DESCRIPTION:    Process a single line from the file. We will parse the line, determine which
-	;                 type it is, and store it in the correct place (along with any additional
-	;                 processing).
+	;                 type it is, and store it in the correct place (along with any additional processing).
 	; PARAMETERS:
 	;  row (I,REQ) - Line from the file (string).
 	;---------
@@ -451,8 +450,8 @@ class TableList {
 	}
 	
 	;---------
-	; DESCRIPTION:    Given a row representing a setting, store off the value of that setting
-	;                 for later use.
+	; DESCRIPTION:    Given a row representing a setting, store off the value of that setting for
+	;                 later use.
 	; PARAMETERS:
 	;  row (I,REQ) - Settings row that we're processing (string).
 	;---------
@@ -600,7 +599,8 @@ class TableList {
 	; DESCRIPTION:    Split a multi-entry value into an array.
 	; PARAMETERS:
 	;  value (I,REQ) - The value to split (assumed to contain Char_MultiEntry [pipe]).
-	; RETURNS:        Appropriately-split value, either a string (if value only contained escaped pipes) or an array.
+	; RETURNS:        Appropriately-split value, either a string (if value only contained escaped
+	;                 pipes) or an array.
 	; SIDE EFFECTS:   Unescapes any escaped pipes (after splitting on any non-escaped pipes).
 	;---------
 	splitMultiEntry(value) {
@@ -621,23 +621,25 @@ class TableList {
 	;---------
 	; DESCRIPTION:    Filter the table rows based on the given filter.
 	; PARAMETERS:
-	;  filterColumn   (I,REQ) - The column to filter on - we'll consider the value(s) in each row for this column.
+	;  filterColumn   (I,REQ) - The column to filter on - we'll consider the value(s) in each row
+	;                           for this column.
 	;  filterValue    (I,REQ) - The value to filter based on.
-	;  includeMatches (I,REQ) - true to include rows that match the given value, false to exclude them instead. Defaults to true (include).
-	;  blanksAreWild  (I,OPT) - If true, blank values in the given column are treated as wildcards, so they stay in the table
-	;                           regardless of whether the filter is including or excluding matches. Defaults to true (blanks will
-	;                           always be included).
+	;  includeMatches (I,REQ) - true to include rows that match the given value, false to exclude
+	;                           them instead. Defaults to true (include).
+	;  blanksAreWild  (I,REQ) - If true, blank values in the given column are treated as wildcards,
+	;                           so they stay in the table regardless of whether the filter is
+	;                           including or excluding matches.
 	; SIDE EFFECTS:   Updates this.table and this._headers.
 	;---------
-	doFilterOnColumn(filterColumn, filterValue, includeMatches, blanksAreWild := true) {
+	doFilterOnColumn(filterColumn, filterValue, includeMatches, blanksAreWild) {
 		if(filterColumn = "")
 			return
 		
 		newTable   := []
 		newHeaders := {} ; {firstRowNumberUnderHeader: headerText}
 		For rowNum,row in this.table {
-			; If there's a header for this row, keep track of it until we can add it to an unfiltered
-			; row (or another header overwrites it because this one has no unfiltered rows)
+			; If there's a header for this row, keep track of it until we can add it to an
+			; unfiltered row (or another header overwrites it because this one has no unfiltered rows)
 			headerText := this._headers[rowNum]
 			if(headerText != "")
 				currHeader := headerText
@@ -657,15 +659,17 @@ class TableList {
 	}
 	
 	;---------
-	; DESCRIPTION:    Based on a filter (column and value to restrict to), determine whether the given row array passes
-	;                 that filter.
+	; DESCRIPTION:    Based on a filter (column and value to restrict to), determine whether the
+	;                 given row array passes that filter.
 	; PARAMETERS:
-	;  row           (I,REQ) - A row in the table. The value inside can be a string or array (to allow for multi-entry values).
-	;  filterColumn  (I,REQ) - The column to filter on - we will check the value of this column (index) in the row array to see if
-	;                          it matches filterValue.
-	;  filterValue   (I,REQ) - Only include rows which have this value (or possibly blank, see blanksAreWild parameter) in their
-	;                          filter column pass.
-	;  blanksAreWild (I,OPT) - If this is true, blank values are treated as wildcards and will always pass the filter.
+	;  row           (I,REQ) - A row in the table. The value inside can be a string or array (to
+	;                          allow for multi-entry values).
+	;  filterColumn  (I,REQ) - The column to filter on - we will check the value of this column
+	;                          (index) in the row array to see if it matches filterValue.
+	;  filterValue   (I,REQ) - Only include rows which have this value (or possibly blank, see
+	;                          blanksAreWild parameter) in their filter column pass.
+	;  blanksAreWild (I,OPT) - If this is true, blank values are treated as wildcards and will
+	;                          always pass the filter.
 	; RETURNS:        true if the row passes the filter and can stay, false if it should be filtered out.
 	;---------
 	rowMatchesFilter(row, filterColumn, filterValue, blanksAreWild := true) {

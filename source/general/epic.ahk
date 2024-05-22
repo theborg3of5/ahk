@@ -67,9 +67,17 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 
 	!+e::
 		selectEpicSourceFolder() {
-			folders := { CURRENT:[], MERGE:[], USER:[], SU:[], INTEGRATION:[] } ; type => [ {name, path} ]
+			; Gather DLGs we already have nicer names for
+			tl := new TableList("tlg.tls")
+			tl.filterOutIfColumnBlank("RECORD")
+			tl.filterOutIfColumnNoMatchRegEx("RECORD", "^\d+$") ; Numbers only (so current-version DLGs)
+			knownDLGs := {} ; {dlgId: name}
+			For recId, data in tl.getRowsByColumn("RECORD", "NAME")
+				knownDLGs[recId] := { name:data["NAME_OUTPUT_PREFIX"] data["NAME"], abbrev:data["ABBREV"] }
+			; Debug.popup("knownDLGs",knownDLGs)
 			
 			; Find all branch folders in the versioned EpicSource folders.
+			folders := {} ; type => [ {name, path, abbrev} ]
 			Loop, Files, C:\EpicSource\*, D
 			{
 				; Only consider #[#].# folders
@@ -87,25 +95,54 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 					; Categorize folders + massage names for display
 					if (name.startsWith("DLG-I")) {
 						cat    := "SUs"
-						name   := name.replaceOne("DLG-", "DLG ")
-					} else if (name.contains("-Merge-To-")) {
-						cat    := "Merge"
-						name   := name.replaceOne("DLG-", "DLG ").beforeString("-Merge-To-") " (Merge)"
+						; name   := name.replaceOne("DLG-", "DLG ")
+					; } else if (name.contains("-Merge-To-")) {
+					; 	cat    := "Merge"
+						; name   := name.beforeString("-Merge-To-") " (Merge)"
+						; name   := name.replaceOne("DLG-", "DLG ").beforeString("-Merge-To-") " (Merge)"
 					} else if (name.startsWith("DLG-")) {
-						cat    := "Current"
-						name   := name.replaceOne("DLG-", "DLG ")
-					} else if (name = "st1") {
+						cat    := "Current DLGs"
+						; name   := name.replaceOne("DLG-", "DLG ")
+					} else if (name = "st1" || name = "final") {
 						cat    := "Integration"
+					; 	name   := "Stage 1"
+					; 	abbrev := "s1"
+					; } else if (name = "final") {
+					; 	cat    := "Integration"
+					; 	name   := "Final"
+					; 	abbrev := "f"
+					} else {
+						cat    := "User Branches"
+					}
+
+
+					if (name = "st1") {
 						name   := "Stage 1"
 						abbrev := "s1"
 					} else if (name = "final") {
-						cat    := "Integration"
 						name   := "Final"
 						abbrev := "f"
-					} else {
-						cat    := "User"
 					}
 
+					; Merge DLGs
+					if (name.contains("-Merge-To-"))
+						name := name.beforeString("-Merge-To-") " (Merge)"
+					; All DLGs
+					if (name.contains("DLG-")) {
+						dlgId := name.firstBetweenStrings("DLG-", "-")
+						
+						name := "DLG " dlgId
+						if (knownDLGs[dlgId]) {
+							name   .= " - " knownDLGs[dlgId].name
+							abbrev := knownDLGs[dlgId].abbrev
+						} else {
+							; name   := name.replaceOne("DLG-", "DLG ")
+							abbrev := ""
+						}
+					}
+
+					if(!folders[cat])
+						folders[cat] := []
 					folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
 				}
 			}
@@ -117,9 +154,9 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			; gdbtodo even if not, could do the same thing here - rather than passing a prefix, just set it above and have addFolderChoicesForType use the given as a default (but force it to be unique).
 			allAbbrevs := []
 
-			addFolderChoicesForType(s, folders, "Current",     "d", allAbbrevs)
-			addFolderChoicesForType(s, folders, "Merge",       "m", allAbbrevs)
-			addFolderChoicesForType(s, folders, "User",        "u", allAbbrevs)
+			addFolderChoicesForType(s, folders, "Current DLGs",     "d", allAbbrevs)
+			; addFolderChoicesForType(s, folders, "Merge",       "m", allAbbrevs)
+			addFolderChoicesForType(s, folders, "User Branches",        "u", allAbbrevs)
 			addFolderChoicesForType(s, folders, "SUs",         "s", allAbbrevs)
 			addFolderChoicesForType(s, folders, "Integration", "i", allAbbrevs)
 

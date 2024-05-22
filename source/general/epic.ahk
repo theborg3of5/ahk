@@ -6,14 +6,14 @@ $!e::getEMC2ObjectFromCurrentTitle().openEdit()
 $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	getEMC2ObjectFromCurrentTitle() {
 		; We have to check this directly instead of putting it under an #If directive, so that the various program-specific #If directives win.
-		if(!Config.contextIsWork) {
+		if (!Config.contextIsWork) {
 			HotkeyLib.waitForRelease()
 			Send, % A_ThisHotkey.removeFromStart("$")
 			return ""
 		}
 		
 		record := EpicLib.selectEMC2RecordFromText(WinGetTitle("A"))
-		if(!record)
+		if (!record)
 			return ""
 		
 		return new ActionObjectEMC2(record.id, record.ini)
@@ -51,11 +51,11 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	selectTLGActionObjects(title) {
 		actionObjects := []
 		For _, recId in selectTLGRecIDs(title) {
-			if(recId.startsWith("P."))
+			if (recId.startsWith("P."))
 				actionObjects.push(new ActionObjectEMC2(recId.removeFromStart("P."), "PRJ"))
-			else if(recId.startsWith("Q."))
+			else if (recId.startsWith("Q."))
 				actionObjects.push(new ActionObjectEMC2(recId.removeFromStart("Q."), "QAN"))
-			else if(recId.startsWith("S."))
+			else if (recId.startsWith("S."))
 				actionObjects.push(new ActionObjectEMC2(recId.removeFromStart("S."), "SLG"))
 			else
 				actionObjects.push(new ActionObjectEMC2(recId, "DLG"))
@@ -101,14 +101,14 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			record := new EpicRecord().initFromRecordString(selectedText)
 			
 			; Don't include invalid INIs (anything that's not 3 characters)
-			if(record.ini && record.ini.length() != 3)
+			if (record.ini && record.ini.length() != 3)
 				record := ""
 			
 			s := new Selector("epicEnvironments.tls").setTitle("Open Record(s) in Snapper in Environment").setIcon(Config.getProgramPath("Snapper"))
 			s.addOverrideFields(["INI", "ID"]).setDefaultOverrides({"INI":record.ini, "ID":record.id}) ; Add fields for INI/ID and default in any values that we figured out
 			environments := s.promptMulti() ; Each individual element is for a specific environment, which also includes any specified records.
 			For _, env in environments {
-				if(env["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
+				if (env["COMM_ID"] = "LAUNCH") ; Special keyword - just launch Snapper, not any specific environment.
 					Config.runProgram("Snapper")
 				else
 					Snapper.addRecords(env["COMM_ID"], env["INI"], env["ID"]) ; env["ID"] can contain a list or range if that's what the user entered
@@ -122,20 +122,20 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		HotkeyLib.waitForRelease()
 		
 		record := EpicLib.selectEMC2RecordFromText(clipboard)
-		if(!record)
+		if (!record)
 			return
 		ini := record.ini
 		id  := record.id
 		
-		if(idOnly)
+		if (idOnly)
 			Send, % id
-		else if(Config.isWindowActive("Chrome Workplans"))
+		else if (Config.isWindowActive("Chrome Workplans"))
 			ClipboardLib.send(EpicLib.buildEMC2ObjectString(record, true)) ; Put title first for workplans
 		else
 			ClipboardLib.send(EpicLib.buildEMC2ObjectString(record)) ; Must send with clipboard because it can contain hotkey chars
 		
 		; Special case for OneNote: link the INI/ID as well.
-		if(Config.isWindowActive("OneNote"))
+		if (Config.isWindowActive("OneNote"))
 			OneNote.linkEMC2ObjectInLine(ini, id)
 	}
 
@@ -143,7 +143,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	^!i::
 		sendEMC2RecordID() {
 			record := EpicLib.selectEMC2RecordFromUsefulTitles()
-			if(record)
+			if (record)
 				SendRaw, % record.id
 		}
 
@@ -152,7 +152,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		selectThunder() {
 			environments := EpicLib.selectEpicEnvironments("Launch Thunder for Environment", Config.getProgramPath("Thunder"))
 			For _, env in environments {
-				if(env["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
+				if (env["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
 					Config.activateProgram("Thunder")
 				else
 					EpicLib.runThunderForEnvironment(env["ENV_ID"])
@@ -163,15 +163,15 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		selectVDI() {
 			environments := EpicLib.selectEpicEnvironments("Launch VDI for Environment", Config.getProgramPath("VMware Horizon Client"))
 			For _, env in environments {
-				if(env["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.
+				if (env["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.
 					Config.runProgram("VMware Horizon Client")
 				} else {
 					EpicLib.runVDI(env["VDI_ID"])
 					
 					; Also fake-maximize the window once it shows up.
-					if(environments.length() = 1) { ; But don't bother if we're dealing with multiple windows - just launch them all at once and I'll fix the size manually.
+					if (environments.length() = 1) { ; But don't bother if we're dealing with multiple windows - just launch them all at once and I'll fix the size manually.
 						WinWaitActive, ahk_exe vmware-view.exe, , 10, VMware Horizon Client ; Ignore the loading-type popup that happens initially with excluded title.
-						if(!ErrorLevel) ; Set if we timed out or if somethign else went wrong.
+						if (!ErrorLevel) ; Set if we timed out or if somethign else went wrong.
 							WindowPositions.fixWindow()
 					}
 				}

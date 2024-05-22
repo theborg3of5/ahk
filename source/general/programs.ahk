@@ -8,7 +8,6 @@
 ^!+t::Config.activateProgram("Chrome TickTick", "--profile-directory=Default --app-id=cfammbeebmjdpoppachopcohfchgjapd")
 ^!#m::Config.activateProgram("Chrome Messages", "--profile-directory=Default --app-id=hpfldicfbfomlpcikngkocigghgafkph")
 ^!#n::Config.runProgram("Notepad")
-^!#r::Config.activateProgram("Windows Terminal", "--profile ""Git Bash"" --startingDirectory " Config.path["EPIC_SOURCE_CURRENT"])
 ^!#t::Config.runProgram("Teams")
 ^!#v::Config.activateProgram("VSCode", "--profile Default")
 ^!#/::Config.activateProgram("AutoHotkey WinSpy")

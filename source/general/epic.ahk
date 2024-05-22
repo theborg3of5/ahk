@@ -66,88 +66,23 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	;endregion TLG record IDs
 
 	!+e::
-		selectEpicSourceFolder() {
-			; Gather DLGs we already have nicer names for
-			tl := new TableList("tlg.tls")
-			tl.filterOutIfColumnBlank("RECORD")
-			tl.filterOutIfColumnNoMatchRegEx("RECORD", "^\d+$") ; Numbers only (so current-version DLGs)
-			knownDLGs := {} ; {dlgId: name}
-			For recId, data in tl.getRowsByColumn("RECORD", "NAME")
-				knownDLGs[recId] := { name:data["NAME_OUTPUT_PREFIX"] data["NAME"], abbrev:data["ABBREV"] }
-			
-			; Find all branch folders in the versioned EpicSource folders.
-			folders := {} ; type => [ {name, path, abbrev} ]
-			Loop, Files, C:\EpicSource\*, D
-			{
-				; Only consider #[#].# folders
-				if (!A_LoopFileName.matchesRegEx("\d{1,2}\.\d"))
-					Continue
-				
-				versionFolderPath := A_LoopFileLongPath
-				Loop, Files, %versionFolderPath%\*, D
-				{
-					name := A_LoopFileName
-					if (name.startsWith("App ")) ; Ignore binary folders
-						Continue
-
-					; Categorize folders, add basic abbreviations (which may be overridden)
-					if (name.startsWith("DLG-")) {
-						dlgId := name.firstBetweenStrings("DLG-", "-")
-						if (knownDLGs[dlgId]) {
-							cat    := "Known DLGs"
-							name   := "DLG " dlgId " - " knownDLGs[dlgId].name
-							abbrev := knownDLGs[dlgId].abbrev
-						} else if (name.startsWith("DLG-I")) {
-							cat    := "SUs"
-							name   := "DLG " dlgId
-							abbrev := "s"
-						} else {
-							cat    := "Current DLGs"
-							name   := "DLG " dlgId
-							abbrev := "d"
-						}
-					} else if (name = "st1") {
-						cat    := "Integration"
-						name   := "Stage 1"
-						abbrev := "s1"
-					} else if (name = "final") {
-						cat    := "Integration"
-						name   := "Final"
-						abbrev := "f"
-					} else {
-						cat    := "User Branches"
-						name   := name
-						abbrev := "u"
-					}
-
-					; Extra name cleanup
-					if (A_LoopFileName.contains("-Merge-To-")) ; Using original name since we're modifying the name var above
-						name := name.beforeString("-Merge-To-") " (Merge)"
-
-					if(!folders[cat])
-						folders[cat] := []
-					folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
-				}
-			}
-
-			s := new Selector().setTitle("Select branch folder to open:")
-			addFolderChoicesForType(s, folders, "Known DLGs")
-			addFolderChoicesForType(s, folders, "Current DLGs")
-			addFolderChoicesForType(s, folders, "User Branches")
-			addFolderChoicesForType(s, folders, "SUs")
-			addFolderChoicesForType(s, folders, "Integration")
-
-			path := s.prompt("PATH")
+		openEpicSourceFolder() {
+			path := EpicLib.selectEpicSourceFolder("Select branch folder to open:", Config.getProgramPath("Explorer"))
 			if(path)
 				Run(path)
 		}
-		addFolderChoicesForType(s, folders, type) {
-			if (folders[type].length() <= 0)
+	
+	^!#r::
+		openTerminalInEpicSourceFolder() {
+			path := EpicLib.selectEpicSourceFolder("Select branch folder to open in terminal:", "C:\Program Files\Git\git-bash.exe")
+			if(!path)
 				return
 
-			s.addSectionHeader(type)
-			For _, f in folders[type]
-				s.addChoice(new SelectorChoice({ NAME: f.name, ABBREV: f.abbrev, PATH: f.path }))
+			if(path = "LAUNCH")
+				path := Config.path["EPIC_SOURCE_CURRENT"]
+			
+			Config.activateProgram("Windows Terminal", "--profile ""Git Bash"" --startingDirectory " path)
+			
 		}
 	
 	^+!#h::

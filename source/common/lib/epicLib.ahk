@@ -423,6 +423,90 @@ class EpicLib {
 		
 		return new EpicRecord(data["INI"], data["ID"], data["TITLE"])
 	}
+	
+	;---------
+	; DESCRIPTION:    Ask the user to select from a list of DLG/branch folders.
+	; PARAMETERS:
+	;  title (I,REQ) - The title to use for the Selector popup.
+	;  icon  (I,REQ) - The icon to use for the Selector popup.
+	; RETURNS:        The path of the chosen folder (or "LAUNCH")
+	;---------
+	selectEpicSourceFolder(title, icon) {
+		; Gather DLGs we already have nicer names for
+		tl := new TableList("tlg.tls")
+		tl.filterOutIfColumnBlank("RECORD")
+		tl.filterOutIfColumnNoMatchRegEx("RECORD", "^\d+$") ; Numbers only (so current-version DLGs)
+		knownDLGs := {} ; {dlgId: name}
+		For recId, data in tl.getRowsByColumn("RECORD", "NAME")
+			knownDLGs[recId] := { name:data["NAME_OUTPUT_PREFIX"] data["NAME"], abbrev:data["ABBREV"] }
+		
+		; Find all branch folders in the versioned EpicSource folders.
+		folders := {} ; type => [ {name, path, abbrev} ]
+		Loop, Files, C:\EpicSource\*, D
+		{
+			; Only consider #[#].# folders
+			if (!A_LoopFileName.matchesRegEx("\d{1,2}\.\d"))
+				Continue
+			
+			versionFolderPath := A_LoopFileLongPath
+			Loop, Files, %versionFolderPath%\*, D
+			{
+				name := A_LoopFileName
+				if (name.startsWith("App ")) ; Ignore binary folders
+					Continue
+
+				; Categorize folders, add basic abbreviations (which may be overridden)
+				if (name.startsWith("DLG-")) {
+					dlgId := name.firstBetweenStrings("DLG-", "-")
+					if (knownDLGs[dlgId]) {
+						cat    := "Known DLGs"
+						name   := "DLG " dlgId " - " knownDLGs[dlgId].name
+						abbrev := knownDLGs[dlgId].abbrev
+					} else if (name.startsWith("DLG-I")) {
+						cat    := "SUs"
+						name   := "DLG " dlgId
+						abbrev := "s"
+					} else {
+						cat    := "Current DLGs"
+						name   := "DLG " dlgId
+						abbrev := "d"
+					}
+				} else if (name = "st1") {
+					cat    := "Integration"
+					name   := "Stage 1"
+					abbrev := "s1"
+				} else if (name = "final") {
+					cat    := "Integration"
+					name   := "Final"
+					abbrev := "f"
+				} else {
+					cat    := "User Branches"
+					name   := name
+					abbrev := "u"
+				}
+
+				; Extra name cleanup
+				if (A_LoopFileName.contains("-Merge-To-")) ; Using original name since we're modifying the name var above
+					name := name.beforeString("-Merge-To-") " (Merge)"
+
+				if(!folders[cat])
+					folders[cat] := []
+				folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
+			}
+		}
+
+		s := new Selector().setTitle(title).setIcon(icon)
+		this.addFolderChoicesForType(s, folders, "Known DLGs")
+		this.addFolderChoicesForType(s, folders, "Current DLGs")
+		this.addFolderChoicesForType(s, folders, "User Branches")
+		this.addFolderChoicesForType(s, folders, "SUs", true)
+		this.addFolderChoicesForType(s, folders, "Integration")
+		
+		s.addSectionHeader("Special")
+		s.addChoice(new SelectorChoice({ NAME: "Launch", ABBREV: "l", PATH: "LAUNCH" }))
+
+		return s.prompt("PATH")
+	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
 	
@@ -726,5 +810,26 @@ class EpicLib {
 		return new SelectorChoice({NAME:name, ABBREV:abbrev, INI:ini, ID:id, TITLE:title})
 	}
 	;endregion EMC2 Record Extraction/Selection
+	
+	;---------
+	; DESCRIPTION:    Add a set of DLG/branch folder choices to the given selector.
+	; PARAMETERS:
+	;  s              (I,REQ) - Selector instance
+	;  folders        (I,REQ) - Folders array, type => [ {name, path, abbrev} ]
+	;  type           (I,REQ) - The type to add choices for (index into folders object)
+	;  forceNewColumn (I,OPT) - Pass true to force a new column of choices with this set's header.
+	;---------
+	addFolderChoicesForType(s, folders, type, forceNewColumn := false) {
+		if (folders[type].length() <= 0)
+			return
+
+		if(forceNewColumn)
+			s.addSectionHeader("! " type) ; Start a new column
+		else
+			s.addSectionHeader(type)
+
+		For _, f in folders[type]
+			s.addChoice(new SelectorChoice({ NAME: f.name, ABBREV: f.abbrev, PATH: f.path }))
+	}
 	;endregion ------------------------------ PRIVATE ------------------------------
 }

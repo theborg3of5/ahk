@@ -79,34 +79,34 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 				versionFolderPath := A_LoopFileLongPath
 				Loop, Files, %versionFolderPath%\*, D
 				{
-					folderName := A_LoopFileName
+					name := A_LoopFileName
 					; Ignore binary folders
-					if (folderName.startsWith("App "))
+					if (name.startsWith("App "))
 						Continue
 
 					; Categorize folders + massage names for display
-					if (folderName.startsWith("DLG-I")) {
-						folderCat    := "SUs"
-						folderName   := folderName.replaceOne("DLG-", "DLG ")
-					} else if (folderName.contains("-Merge-To-")) {
-						folderCat    := "Merge"
-						folderName   := folderName.replaceOne("DLG-", "DLG ").beforeString("-Merge-To-") " (Merge)"
-					} else if (folderName.startsWith("DLG-")) {
-						folderCat    := "Current"
-						folderName   := folderName.replaceOne("DLG-", "DLG ")
-					} else if (folderName = "st1") {
-						folderCat    := "Integration"
-						folderName   := "Stage 1"
-						folderAbbrev := "s1"
-					} else if (folderName = "final") {
-						folderCat    := "Integration"
-						folderName   := "Final"
-						folderAbbrev := "f"
+					if (name.startsWith("DLG-I")) {
+						cat    := "SUs"
+						name   := name.replaceOne("DLG-", "DLG ")
+					} else if (name.contains("-Merge-To-")) {
+						cat    := "Merge"
+						name   := name.replaceOne("DLG-", "DLG ").beforeString("-Merge-To-") " (Merge)"
+					} else if (name.startsWith("DLG-")) {
+						cat    := "Current"
+						name   := name.replaceOne("DLG-", "DLG ")
+					} else if (name = "st1") {
+						cat    := "Integration"
+						name   := "Stage 1"
+						abbrev := "s1"
+					} else if (name = "final") {
+						cat    := "Integration"
+						name   := "Final"
+						abbrev := "f"
 					} else {
-						folderCat    := "User"
+						cat    := "User"
 					}
 
-					folders[folderCat].push({ name:folderName, path:A_LoopFileLongPath, abbrev:folderAbbrev })
+					folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
 				}
 			}
 			; Debug.popup("folders",folders)
@@ -114,6 +114,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			s := new Selector().setTitle("Select branch folder to open:")
 			; gdbtodo could we move this into Selector itself? As in, it forces abbreviations to be unique when you add a choice (either specifically as part of .addChoice() or as part of loading the choices)?
 			; gdbtodo that would let us do away with the abbrevPrefix here - just set it as the abbreviation above and let Selector handle it for us.
+			; gdbtodo even if not, could do the same thing here - rather than passing a prefix, just set it above and have addFolderChoicesForType use the given as a default (but force it to be unique).
 			allAbbrevs := []
 
 			addFolderChoicesForType(s, folders, "Current",     "d", allAbbrevs)

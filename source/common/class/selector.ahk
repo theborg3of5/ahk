@@ -467,7 +467,7 @@ class Selector {
 	loadChoicesFromData() {
 		; If choices have already been added (programmatically) and there's no TableList to pull from, we're done.
 		if(this.choices && !this.dataTL)
-			return true
+			return this.validateChoices()
 		
 		; Load the section headers
 		this.sectionTitles := this.dataTL.headers
@@ -491,47 +491,23 @@ class Selector {
 	; RETURNS:        true if all is well, false (and show popup) on error.
 	;---------
 	validateChoices() {
-		; Abbreviation checks:
-		;  - All choices must have an abbreviation
-		;  - No abbreviations may be repeated
-		empties         := [] ; [SelectorChoice]
-		duplicates      := {} ; { abbreviation: [SelectorChoice] }
-		choicesByAbbrev := {} ; { abbreviation: SelectorChoice }
-		For _,choice in this.choices {
-			choiceAbbrevs := choice.data["ABBREV"]
-			if(choiceAbbrevs = "") {
-				empties.push(choice)
-				Continue
-			}
-			
-			For _,abbrev in DataLib.forceArray(choiceAbbrevs) { ; forceArray because this could be an array or single value
-				; We've already seen this abbreviation.
-				if(choicesByAbbrev[abbrev]) {
-					if(!duplicates[abbrev])
-						duplicates[abbrev] := [ choicesByAbbrev[abbrev] ] ; The original choice with this abbreviation
-					duplicates[abbrev].push(choice) ; The offending duplicate(s)
-					Continue
-				}
-				
-				choicesByAbbrev[abbrev] := choice
-			}
+		; All choices must have a non-blank, unique abbreviation - if we see any violations of that
+		; then we'll just fix it.
+		abbrevsCache := []
+		For i,choice in this.choices {
+			allAbbrevs := choice.allAbbrevs
+
+			; Blank abbreviation - just give it an arbitrary one (incremented by forceUniqueValue below).
+			if(DataLib.isNullOrEmpty(allAbbrevs))
+				allAbbrevs := ["unset"]
+
+			; Ensure there are no duplicates by forcibly incrementing them.
+			For j, abbrev in allAbbrevs
+				allAbbrevs[j] := DataLib.forceUniqueValue(abbrev, abbrevsCache)
+			choice.allAbbrevs := allAbbrevs
 		}
-		
-		; All clear, no problems found.
-		if(DataLib.isNullOrEmpty(empties) && DataLib.isNullOrEmpty(duplicates))
-			return true
-		
-		; Build error message
-		table := new DebugTable("Choices with invalid abbreviations").setBorderType(TextTable.BorderType_BoldLine)
-		if(!DataLib.isNullOrEmpty(empties))
-			table.addLine("Blank", empties)
-		if(!DataLib.isNullOrEmpty(duplicates))
-			table.addLine("Duplicates", duplicates)
-		
-		new TextPopup(table).show()
-		if(this.filePath)
-			VSCode.editScript(this.filePath) ; Open file to fix it
-		return false
+
+		return true
 	}
 	
 	;---------

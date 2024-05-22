@@ -482,7 +482,7 @@ class EpicLib {
 				} else {
 					cat    := "User Branches"
 					name   := name
-					abbrev := "u"
+					abbrev := [ name.sub(1, 5), name ]
 				}
 
 				; Extra name cleanup

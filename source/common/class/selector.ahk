@@ -494,17 +494,17 @@ class Selector {
 		; All choices must have a non-blank, unique abbreviation - if we see any violations of that
 		; then we'll just fix it.
 		abbrevsCache := []
-		For i,choice in this.choices {
-			allAbbrevs := choice.allAbbrevs
+		For _,choice in this.choices {
+			choiceAbbrevs := choice.allAbbrevs
 
 			; Blank abbreviation - just give it an arbitrary one (incremented by forceUniqueValue below).
-			if(DataLib.isNullOrEmpty(allAbbrevs))
-				allAbbrevs := ["unset"]
+			if(choiceAbbrevs.length() = 0 || choiceAbbrevs[1] = "")
+				choiceAbbrevs := ["unset"]
 
 			; Ensure there are no duplicates by forcibly incrementing them.
-			For j, abbrev in allAbbrevs
-				allAbbrevs[j] := DataLib.forceUniqueValue(abbrev, abbrevsCache)
-			choice.allAbbrevs := allAbbrevs
+			For i, abbrev in choiceAbbrevs
+				choiceAbbrevs[i] := DataLib.forceUniqueValue(abbrev, abbrevsCache)
+			choice.allAbbrevs := choiceAbbrevs
 		}
 
 		return true

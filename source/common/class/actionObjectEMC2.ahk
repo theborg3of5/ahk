@@ -189,7 +189,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	; RETURNS:        true/false
 	;---------
 	isEditOnlyObject() {
-		return ["ZCK", "ZPF"].contains(this.ini)
+		return this.ini.isAnyOf(["ZCK", "ZPF"])
 	}
 	
 	;---------

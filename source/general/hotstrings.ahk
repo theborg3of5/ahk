@@ -69,7 +69,7 @@
 ::everythign::everything
 ;endregion Typo correction
 	
-#If !["EpicStudio", "Visual Studio", "VSCode", "VB6"].contains(Config.findWindowName("A"))
+#If !Config.findWindowName("A").isAnyOf(["EpicStudio", "Visual Studio", "VSCode", "VB6"])
 	::helptext::help text
 #If
 

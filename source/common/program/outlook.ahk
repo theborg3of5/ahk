@@ -178,7 +178,7 @@ class Outlook {
 				return
 			
 			recId := record.id
-			if(["PRJ", "QAN", "SLG"].contains(record.ini))
+			if (record.ini.isAnyOf(["PRJ", "QAN", "SLG"]))
 				recId := record.ini.charAt(1) "." recId ; Add on the INI prefix so the ID goes in the right position.
 			userRecs[getIdx] := recId ; Plug it back into the array of IDs.
 			

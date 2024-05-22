@@ -161,8 +161,8 @@
 				Result:
 					table does not include the column info row
 					overrideIndex["ABBREV"] := 2
-										["NAME"]   := 0
-										["VALUE"]  := 1
+					overrideIndex["NAME"]   := 0
+					overrideIndex["VALUE"]  := 1
 		
 		Filtering
 			The table can be filtered in-place with .filterOutIfColumn[No]Match and .filterOutIfColumnBlank. Notably, .filterOutIfColumn[No]Match never filters out rows with a blank value for the provided column - .filterOutIfColumnBlank can be used to get rid of those if needed.
@@ -367,7 +367,7 @@ class TableList {
 			return ""
 		if(tiebreakerColumn = "")
 			tiebreakerColumn := valueColumn
-		
+
 		rowsByColumn := this.getRowsByColumn(indexColumn, tiebreakerColumn)
 		
 		outputValues := {} ; {index: value}

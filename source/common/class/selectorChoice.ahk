@@ -26,11 +26,20 @@ class SelectorChoice {
 	;---------
 	displayAbbrev {
 		get {
-			abbrev := this.data["ABBREV"]
-			if(isObject(abbrev))
-				return abbrev[1]
-			else
-				return abbrev
+			return (this.allAbbrevs)[1]
+		}
+	}
+
+	;---------
+	; DESCRIPTION:    All abbreviations for the given choice. Always an array, even if there's just
+	;                 a single abbreviation.
+	;---------
+	allAbbrevs {
+		get {
+			return DataLib.forceArray(this.data["ABBREV"])
+		}
+		set {
+			this.data["ABBREV"] := DataLib.forceArray(value)
 		}
 	}
 	
@@ -48,6 +57,7 @@ class SelectorChoice {
 	;---------
 	__New(dataIn) {
 		this.data := dataIn
+		this.data["ABBREV"] := DataLib.forceArray(this.data["ABBREV"]) ; Force abbreviations to be an array internally
 	}
 	
 	;---------
@@ -63,7 +73,7 @@ class SelectorChoice {
 		
 		abbrev := this.data["ABBREV"]
 		if(isObject(abbrev))
-			return abbrev.contains(stringToTest)
+			return stringToTest.isAnyOf(abbrev)
 		else
 			return (stringToTest = abbrev)
 	}

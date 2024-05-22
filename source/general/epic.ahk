@@ -64,6 +64,148 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		return actionObjects
 	}
 	;endregion TLG record IDs
+
+	!+e::
+		selectEpicSourceFolder() {
+			folders := { CURRENT:[], MERGE:[], USER:[], SU:[], INTEGRATION:[] } ; type => [ {name, path} ]
+			
+			; Find all branch folders in the versioned EpicSource folders.
+			Loop, Files, C:\EpicSource\*, D
+			{
+				; Only consider #[#].# folders
+				if (!A_LoopFileName.matchesRegEx("\d{1,2}\.\d"))
+					Continue
+				
+				versionFolderPath := A_LoopFileLongPath
+				Loop, Files, %versionFolderPath%\*, D
+				{
+					folderName := A_LoopFileName
+					; Ignore binary folders
+					if (folderName.startsWith("App "))
+						Continue
+
+					; File folders under categories + massage names for display
+					if (folderName.startsWith("DLG-I")) {
+						folderCat    := "SUs"
+						folderName   := folderName.replaceOne("DLG-", "DLG ")
+					} else if (folderName.contains("-Merge-To-")) {
+						folderCat    := "Merge"
+						folderName   := folderName.replaceOne("DLG-", "DLG ").beforeString("-Merge-To-") " (Merge)"
+					} else if (folderName.startsWith("DLG-")) {
+						folderCat    := "Current"
+						folderName   := folderName.replaceOne("DLG-", "DLG ")
+					} else if (folderName = "st1") {
+						folderCat    := "Integration"
+						folderName   := "Stage 1"
+						folderAbbrev := "s1"
+					} else if (folderName = "final") {
+						folderCat    := "Integration"
+						folderName   := "Final"
+						folderAbbrev := "f"
+					} else {
+						folderCat    := "User"
+					}
+
+					; ; Massage folder name for display
+					; if (folderName.contains("-Merge-To-")) ; Merge folders
+					; 	folderName := folderName.replaceOne("DLG-", "DLG ").beforeString("-Merge-To-") " (Merge)"
+					; else if (folderName.contains("DLG-")) ; DLG folders
+					; 	folderName := folderName.replaceOne("DLG-", "DLG ")
+					; else if (folderName = "st1") ; Stage 1
+					; 	folderName := "Stage 1"
+					; else if (folderName = "final") ; Final
+					; 	folderName := "Final"
+
+					folders[folderCat].push({ name:folderName, path:A_LoopFileLongPath, abbrev:folderAbbrev })
+
+					; ; Categorize folder and massage its name for display
+					; if (folderName.contains("-Merge-To-")) { ; Merge folders
+					; 	folderName := folderName.replaceOne("DLG-", "DLG ").beforeString("-Merge-To-")
+					; 	folders["DLG-MERGE"].push({ name:folderName, path:A_LoopFileLongPath })
+					; } else if (folderName.contains("DLG-")) { ; DLG folders
+					; 	folderName := folderName.replaceOne("DLG-", "DLG ")
+					; 	folders["DLG"].push({ name:folderName, path:A_LoopFileLongPath })
+					; } else if (folderName = "st1") { ; Stage 1
+					; 	folders["INT", "Stage 1"] := A_LoopFileLongPath
+					; } else if (folderName = "final") { ; Final
+					; 	folders["INT", "Final"] := A_LoopFileLongPath
+					; } else {
+					; 	folders["USER", folderName] := A_LoopFileLongPath
+					; }
+
+					; ; Massage folder name for display
+					; if (folderName.contains("-Merge-To-")) { ; Merge folders
+					; 	folderName := folderName.replaceOne("DLG-", "DLG ").beforeString("-Merge-To-")
+					; 	folders["DLG-MERGE", folderName] := A_LoopFileLongPath
+					; } else if (folderName.contains("DLG-")) { ; DLG folders
+					; 	folderName := folderName.replaceOne("DLG-", "DLG ")
+					; 	folders["DLG", folderName] := A_LoopFileLongPath
+					; } else if (folderName = "st1") { ; Stage 1
+					; 	folders["INT", "Stage 1"] := A_LoopFileLongPath
+					; } else if (folderName = "final") { ; Final
+					; 	folders["INT", "Final"] := A_LoopFileLongPath
+					; } else {
+					; 	folders["USER", folderName] := A_LoopFileLongPath
+					; }
+					
+				}
+			}
+			; Debug.popup("folders",folders)
+
+			s := new Selector().setTitle("Select branch folder to open:")
+			allAbbrevs := []
+
+			addFolderChoicesForType(s, folders, "Current",     "d", allAbbrevs)
+			addFolderChoicesForType(s, folders, "Merge",       "m", allAbbrevs)
+			addFolderChoicesForType(s, folders, "User",        "u", allAbbrevs)
+			addFolderChoicesForType(s, folders, "SUs",         "s", allAbbrevs)
+			addFolderChoicesForType(s, folders, "Integration", "i", allAbbrevs)
+
+			; s.addSectionHeader("Integration")
+			; s.addChoice(new SelectorChoice({ NAME:f.name, ABBREV:abbrev, PATH: f.path }))
+			; s.addChoice(new SelectorChoice({ NAME:f.name, ABBREV:abbrev, PATH: f.path }))
+
+			; addFolderChoicesForType(s, folders, "INTEGRATION", "s", allAbbrevs) ; GDB TODO add these manually with nicer abbreviations
+			; MERGE", "USER", "SU", "INTEGRATION
+
+			; if (folders["CURRENT"].length() > 0) {
+			; 	s.addSectionHeader("Current") ; gdbtodo maybe just do StringLower(index)?
+			; 	For _, f in folders["CURRENT"] {
+			; 		abbrev := DataLib.forceUniqueValue("d", allAbbrevs)
+			; 		s.addChoice(new SelectorChoice({ NAME:f.name, ABBREV:abbrev, PATH: f.path }))
+			; 	}
+			; }
+
+			; For _, type in ["CURRENT", "MERGE", "USER", "SU", "INTEGRATION"] {
+			; 	s.addSectionHeader("Full matches")
+			; }
+
+			; For type, f in folders {
+				
+			; 	s.addSectionHeader("Full matches")
+			; 	For _,record in exacts
+			; 		s.addChoice(this.buildChoiceFromEMC2Record(record, allAbbrevs))
+				
+			; 	s.addSectionHeader("Potential IDs")
+			; 	For _,record in possibles
+			; 		s.addChoice(this.buildChoiceFromEMC2Record(record, allAbbrevs))
+			; }
+
+			path := s.prompt("PATH")
+			; Debug.popup("path",path)
+			if(path)
+				Run(path)
+		}
+		addFolderChoicesForType(s, folders, type, abbrevPrefix, allAbbrevs) {
+			if (folders[type].length() <= 0)
+				return
+
+			s.addSectionHeader(type)
+			For _, f in folders[type] {
+				abbrev := f.abbrev ? f.abbrev : DataLib.forceUniqueValue(abbrevPrefix, allAbbrevs)
+				s.addChoice(new SelectorChoice({ NAME:f.name, ABBREV:abbrev, PATH: f.path }))
+			}
+		}
 	
 	^+!#h::
 		selectHyperspace() {

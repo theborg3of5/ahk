@@ -67,21 +67,18 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 
 	!+e::
 		openEpicSourceFolder() {
-			path := EpicLib.selectEpicSourceFolder("Select branch folder to open:", Config.getProgramPath("Explorer"))
-			if(path)
+			For _, path in EpicLib.selectEpicSourceFolders("Select branch folder to open:", Config.getProgramPath("Explorer"))
 				Run(path)
 		}
 	
 	^!#r::
 		openTerminalInEpicSourceFolder() {
-			path := EpicLib.selectEpicSourceFolder("Select branch folder to open in terminal:", "C:\Program Files\Git\git-bash.exe")
-			if(!path)
-				return
-
-			if(path = "LAUNCH")
-				path := Config.path["EPIC_SOURCE_CURRENT"]
-			
-			Config.activateProgram("Windows Terminal", "--profile ""Git Bash"" --startingDirectory " path)
+			For _, path in EpicLib.selectEpicSourceFolders("Select branch folder to open in terminal:", "C:\Program Files\Git\git-bash.exe") {
+				if(path = "LAUNCH")
+					path := Config.path["EPIC_SOURCE_CURRENT"]
+				
+				Config.activateProgram("Windows Terminal", "--profile ""Git Bash"" --startingDirectory " path)
+			}
 			
 		}
 	

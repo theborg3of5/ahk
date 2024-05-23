@@ -429,9 +429,10 @@ class EpicLib {
 	; PARAMETERS:
 	;  title (I,REQ) - The title to use for the Selector popup.
 	;  icon  (I,REQ) - The icon to use for the Selector popup.
-	; RETURNS:        The path of the chosen folder (or "LAUNCH")
+	; RETURNS:        An array of paths for the chosen folders (one entry may be "LAUNCH" if that
+	;                 choice is selected)
 	;---------
-	selectEpicSourceFolder(title, icon) {
+	selectEpicSourceFolders(title, icon) {
 		; Gather DLGs we already have nicer names for
 		tl := new TableList("tlg.tls")
 		tl.filterOutIfColumnBlank("RECORD")
@@ -505,7 +506,7 @@ class EpicLib {
 		s.addSectionHeader("Special")
 		s.addChoice(new SelectorChoice({ NAME: "Launch", ABBREV: "l", PATH: "LAUNCH" }))
 
-		return s.prompt("PATH")
+		return s.promptMulti("PATH")
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	

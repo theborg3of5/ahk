@@ -79,7 +79,6 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 				
 				Config.activateProgram("Windows Terminal", "--profile ""Git Bash"" --startingDirectory " path)
 			}
-			
 		}
 	
 	^+!#h::

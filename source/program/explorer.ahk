@@ -13,6 +13,16 @@
 	; Open EMC2 objects based on the active folder name.
 	!w::Explorer.getEMC2ObjectFromSelectedFolder().openWeb()
 	!e::Explorer.getEMC2ObjectFromSelectedFolder().openEdit()
+
+	; Open Windows Terminal in the current directory.
+	!r::
+		openWindowsTerminalInCurrFolder() {
+			folderPath := Explorer.getCurrentFolder()
+			if(!folderPath)
+				return
+			
+			Config.activateProgram("Windows Terminal", "--profile ""Git Bash"" --startingDirectory " folderPath)
+		}
 	
 #If Config.isWindowActive("Explorer") || WinActive("ahk_class Progman ahk_exe explorer.exe") ; Explorer window or Desktop
 	; Hide/show hidden files

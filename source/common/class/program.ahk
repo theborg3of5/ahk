@@ -52,7 +52,7 @@ class Program {
 		; Path type determines how we run the path
 		Switch this.pathType {
 			Case this.PathType_COMMAND, this.PathType_EXE, this.PathType_URL:
-				RunLib.runAsUser(this.path, args)
+				Run(this.path.appendPiece(" ", args))
 			
 			; Windows apps - path is the logical path, found using instructions here:
 			; https://answers.microsoft.com/en-us/windows/forum/windows_10-windows_store/starting-windows-10-store-app-from-the-command/836354c5-b5af-4d6c-b414-80e40ed14675)

@@ -21,7 +21,7 @@ class RunLib {
 	}
 
 	;---------
-	; DESCRIPTION:    Run the given command as a non-elevated user.
+	; DESCRIPTION:    Run the given command as a non-elevated user, even if the script is running as admin.
 	; PARAMETERS:
 	;  cmd  (I,REQ) - The command to run.
 	;  args (I,OPT) - Parameters to pass (if this is a filepath to a program).

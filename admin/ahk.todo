@@ -214,8 +214,6 @@
 			Could we just replace it with a public flag (or public setter to a private flag, whatever) on Debug, so that the script itself could decide where the cutover point is?
 	☐ Consider switching zoom mute toggle over to a click target within the zoom window - would that avoid the "ding" sound?
 	☐ CodeSearch: looks like the URL can include the full path now, could we use that to open in client instead of the search approach?
-	☐ Re-examine how we run programs and such (RunLib.runAsUser stuff) - could it be the reason we have focus issues?
-		Also, could we work around it with a WinWaitExist + WinActivate?
 	☐ EpicStudio - add a diffing hotkey that makes it easier to do the same diff to a bunch of different routines
 		Could use existing ^d hotkey to get popup, then !e to focus environment and enter the chosen one
 		Initial submission would involve a selector popup of environments

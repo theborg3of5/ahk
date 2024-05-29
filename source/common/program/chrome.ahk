@@ -84,6 +84,10 @@
 		; SLGs in "basic" web mode just show the URL as the title - transform that into an EMC2 record string instead.
 		if(title.startsWith(Config.private["EMC2_SLG_TITLE_URL_START"]))
 			title := "SLG " title.removeFromStart(Config.private["EMC2_SLG_TITLE_URL_START"])
+
+		; Brainbow classes have a lot of extra cruft, clean it out.
+		if (title.endsWith(" - Brainbow"))
+			title := title.removeFromStart("Profile (").replace(") - Brainbow", " - Brainbow")
 		
 		if(this.isCurrentPageCodeSearch()) {
 			; Special handling for CodeSearch - just get the file name, plus the current selection as the function.

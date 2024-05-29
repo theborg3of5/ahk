@@ -312,27 +312,6 @@ class Config {
 			return prog.path
 	}
 	;endregion Programs
-	
-	;region Games
-	;---------
-	; DESCRIPTION:    Check whether the specified window is a game (as identified in the games file passed in).
-	; PARAMETERS:
-	;  titleString (I,OPT) - Title string that identifies the window in question. Defaults to the active window.
-	; RETURNS:        true if the specified window is a game, false otherwise.
-	;---------
-	windowIsGame(titleString := "A") {
-		ahkExe := WinGet("ProcessName", titleString)
-		if(!ahkExe)
-			return false
-		
-		For _,game in this.games {
-			if(ahkExe = game["EXE"])
-				return true
-		}
-		
-		return false
-	}
-	;endregion Games
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
 	;region ------------------------------ PRIVATE ------------------------------
@@ -355,7 +334,6 @@ class Config {
 	static _windows        := ""    ; {NAME: WindowInfo}
 	static _paths          := ""    ; {KEY: PATH}
 	static _programs       := ""    ; {NAME: Program}
-	static _games          := ""    ; [{NAME:name, EXE:exe}]
 	
 	
 	;---------
@@ -465,19 +443,6 @@ class Config {
 			}
 			
 			return this._programs[name]
-		}
-	}
-	
-	;---------
-	; DESCRIPTION:    Get the array of games from our games.tl file.
-	; SIDE EFFECTS:   Initializes this._games the first time this is called.
-	;---------
-	games {
-		get {
-			if(!this._games)
-				this._games := new TableList(this.getPathInConfigFolder("games.tl")).getTable()
-			
-			return this._games
 		}
 	}
 	

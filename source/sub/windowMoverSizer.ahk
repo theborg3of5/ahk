@@ -10,7 +10,7 @@ CoordMode, Mouse, Screen
 global SnappingDistance := 25 ; 25px
 
 ; Don't do anything while certain windows are active.
-#If !Config.windowIsGame() && !Config.isWindowActive("Remote Desktop") && !Config.isWindowActive("VMware Horizon Client")
+#If !Config.isWindowActive("Remote Desktop") && !Config.isWindowActive("VMware Horizon Client")
 
 	; Alt+Left Drag to move
 	!LButton::

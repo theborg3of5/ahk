@@ -59,7 +59,7 @@ $!q::WindowActions.minimizeWindow()
 #If
 
 ; Use the extra mouse buttons to switch tabs in various programs
-#If !Config.windowIsGame() && !Config.isWindowActive("Remote Desktop") && !Config.isWindowActive("VMware Horizon Client")
+#If !Config.isWindowActive("Remote Desktop") && !Config.isWindowActive("VMware Horizon Client")
 	XButton1::activateWindowUnderMouseAndSendKeys("^{Tab}")
 	XButton2::activateWindowUnderMouseAndSendKeys("^+{Tab}")
 	activateWindowUnderMouseAndSendKeys(keys) {

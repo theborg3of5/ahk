@@ -1,6 +1,5 @@
 ﻿; Various global hotstrings.
 
-#If !Config.windowIsGame()
 ;region Personal info
 :X:emaila:: Send, % Config.private["EMAIL"]
 :X:gemaila::Send, % Config.private["EMAIL_2"]

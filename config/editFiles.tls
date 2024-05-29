@@ -7,7 +7,6 @@
 
 # Config
 ~PATH.addToStart(<AHK_CONFIG>\) {
-	Games								g						games.tl
 	Hyperlink windows					link					hyperlinkWindows.tl
 	Paths								path					paths.tl
 	Programs							prog					programs.tl

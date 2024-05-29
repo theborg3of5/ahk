@@ -168,8 +168,6 @@
 			☐ Designs (x) - probably a selector if multiple found (would require track-shadow querying too)
 			☐ QANs (q) - probably a selector if multiple found (would require track-shadow querying too)
 			☐ More?
-	☐ Add a new ActionObject type for opening a DLG's client folder
-		Can assume most recent version found in source, and find the biggest dashed version.
 	☐ Add newline character display (`n and `r) to debug table
 	☐ Performance improvement idea: could I "compile" the titleStrings for activating/identifying windows down to a simple object in Config, instead of having to call a function every time?
 	☐ Consider revamping AHK function headers:

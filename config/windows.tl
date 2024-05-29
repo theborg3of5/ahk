@@ -1,4 +1,6 @@
-﻿[				NAME							EXE						CLASS						TITLE										EDGE_TYPE		TITLE_MATCH_MODE	PRIORITY	]
+﻿; Reminder: if you use REGEX, you'll need to escape pipes: | => \|
+
+[				NAME							EXE						CLASS						TITLE										EDGE_TYPE		TITLE_MATCH_MODE	PRIORITY	]
 
 ; Defaults across the board: window edges have padding, and title match mode is contains anywhere within.
 ~EDGE_TYPE.defaultTo(HAS_PADDING) | ~TITLE_MATCH_MODE.defaultTo(CONTAINS) {
@@ -21,31 +23,22 @@
 		~EXE.replaceWith(EMC2.+EpicD.+\.exe) | ~TITLE_MATCH_MODE.replaceWith(REGEX) {
 			; Different sections of the main EMC2 window.
 			~CLASS.replaceWith(ThunderRT6MDIForm) {
-				EMC2 DLG						-						-							DLG [I]?\d+
-				EMC2 PRJ						-						-							PRJ \d+
 				EMC2 QAN						-						-							QAN \d+
 				EMC2 XDS						-						-							XDS \d+
+				EMC2 DLG						-						-							DLG [I]?\d+
+				EMC2 PRJ						-						-							PRJ \d+
 			}
-			; Popups
-				EMC2 DLG Change Status			-						-							Change Decision:
-				EMC2 DLG Email					-						-							E-mail Development Log
-				EMC2 DLG Issue Email			-						-							Email Issue
-				EMC2 DLG/XDS Issue Popup		-						-							Issue Response
-				EMC2 DLG/XDS Issue Popup		-						-							New Issue
-				EMC2 DLG Resubmit				-						-							Resubmit for
-				EMC2 DRN Quick Review			-						-							Quick Review -
-				EMC2 PRJ Readiness Notes		-						-							Readiness Notes
-				EMC2 QAN Change Status			-						-							Change Note Status
-				EMC2 QAN Email					-						-							Send E-Mail
-				EMC2 QAN Email Notify			-						-							EMC2 - QA Note E-Mail Notification
-				EMC2 QAN Notes					-						-							Note details
 				EMC2 Worklist					-						-							^EMC2$
-				EMC2 XDS Approval				-						-							A Reviewer Approved
-				EMC2 XDS Wait for Changes		-						-							A Reviewer is Waiting for Changes
-				EMC2 XDS Email					-						-							E-Mail Design
-				EMC2 XDS Open Design			-						-							Open/New Design
-				EMC2 XDS Content				-						-							Magnify
-				EMC2 XDS Submit					-						-							Submit Design for Review
+
+			; Popups
+				EMC2 Email Popup				-						-							\[(I\|CS)?\d+\] .*
+
+				; Basic popups that need ctrl+backspace support
+				EMC2 XDS Open					-						-							Open/New Design
+				EMC2 DLG/QAN/PRJ Open			-						-							Open/Create (Log\|QA Note\|Project)
+
+				; Any popup (used to rope in popups that fail the generic EMC2 case below)
+				EMC2 Popup						-						ThunderRT6FormDC
 		}
 		
 				EpicStudio New Object Window	EpicStudio.exe			-							New Object
@@ -66,7 +59,7 @@
 				Chrome							chrome.exe				Chrome_WidgetWin_1			- Google Chrome
 				Cisco AnyConnect VPN			vpnui.exe				-							Cisco AnyConnect Secure Mobility Client
 				Discord							Discord.exe				-							-											NO_PADDING
-				EMC2							EMC2.+EpicD.+\.exe		ThunderRT6MDIForm			-											-				REGEX
+				EMC2							EMC2.+EpicD\d+\.exe		ThunderRT6MDIForm			-											-				REGEX
 				EpicStudio						EpicStudio.exe			-							EpicStudio
 				Everything						Everything.exe			EVERYTHING
 				Excel							EXCEL.EXE				-							-											NO_PADDING
@@ -78,7 +71,7 @@
 				Greenshot Capture				Greenshot.exe			-							Greenshot capture form
 				Greenshot Image Editor			Greenshot.exe			-							Greenshot image editor
 				GrepWin							grepWin.exe
-				Hyperspace						EpicD.+\.exe			-							-											-				REGEX
+				Hyperspace						EpicD\d+\.exe			-							-											-				REGEX
 				Hyperdrive						Hyperdrive.exe
 				Internet Explorer				IEXPLORE.EXE
 				KDiff							kdiff3.exe				-							- KDiff3

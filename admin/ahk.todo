@@ -42,7 +42,6 @@
 
 * Fixes / Cleanup * :
 	☐ Consider retiring game window handling - I don't really use it anymore.
-	☐ Clean out window definitions for EMC2 - a lot of them have fallen out of date (mostly the titles)
 	☐ Consider switching from Notepad to Notepad++ for quick notes - it doesn't have the lag problems and is honestly about as fast
 		Could even do a no-session, no-tab type of launch if that makes it faster?
 	☐ F2 for ***s

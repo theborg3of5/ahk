@@ -5,15 +5,8 @@
 	AutoHotkey						CLOSE		-				-				SELECT
 	AutoHotkey WinSpy				CLOSE
 	Cisco AnyConnect VPN			CLOSE
-	EMC2 DLG Email					CLOSE		-				-				SELECT
-	EMC2 DLG Issue Email			CLOSE		-				-				SELECT
-	EMC2 DLG Resubmit				-			-				-				SELECT
-	EMC2 QAN Email					CLOSE		-				HOME_END		SELECT
-	EMC2 QAN Email Notify			CLOSE		-				-				SELECT
-	EMC2 XDS Approval				-			-				HOME_END		SELECT
-	EMC2 XDS Email					-			-				HOME_END		SELECT
-	EMC2 XDS Open Design			-			-				-				SELECT
-	EMC2 XDS Submit					-			-				HOME_END		SELECT
+	EMC2 XDS Open					-			-				-				SELECT
+	EMC2 DLG/QAN/PRJ Open			-			-				-				SELECT
 	Explorer						MIN			OTHER			-				-				-			-			ESCAPE		HOME_DESKTOP
 	Explorer						MIN			-				-				-				-			-			ESCAPE
 	GitHub Desktop					CLOSE		-				-				-				-			-			ESCAPE

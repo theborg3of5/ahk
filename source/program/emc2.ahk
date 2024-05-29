@@ -1,5 +1,5 @@
 ; SmartTextBox handling
-#If Config.isWindowActive("EMC2") || Config.isWindowActive("EMC2 DLG/XDS Issue Popup") || Config.isWindowActive("EMC2 QAN Notes") || Config.isWindowActive("EMC2 DRN Quick Review") || Config.isWindowActive("EMC2 XDS Content")
+#If Config.isWindowActive("EMC2") || Config.isWindowActive("EMC2 Popup")
 	^+c::Send, ^e ; Apply code formatting
 	^.:: ; Start bulleted list
 		Send, {Home}   ; Get to start of line if we're not already there (doesn't handle word wrapping)
@@ -65,15 +65,14 @@
 	^Up::  return
 #If
 
-; Design/DLG email windows
-; #If Config.isWindowActive("EMC2 XDS Email") || Config.isWindowActive("EMC2 DLG Email") || Config.isWindowActive("EMC2 XDS Submit") ; gdbtodo clean up
-#IfWinActive, ahk_class ThunderRT6FormDC
-	:X:.dbcdevs::EMC2.sendDBCDevIDs()
-#If
-
 ; Lock/unlock hotkeys by INI
 #If Config.isWindowActive("EMC2 QAN") || Config.isWindowActive("EMC2 XDS")
 	^l::Send, !l
 #If Config.isWindowActive("EMC2 DLG")
 	^l::Send, !+{F5}
+#If
+
+; Email windows
+#If Config.isWindowActive("EMC2 Email Popup")
+	:X:.dbcdevs::EMC2.sendDBCDevIDs()
 #If

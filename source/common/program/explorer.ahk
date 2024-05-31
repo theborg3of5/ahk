@@ -114,9 +114,13 @@ class Explorer {
 			relativeTargetPath := shortcut["PATH_IN_SOLUTIONS_FOLDER"]
 			exploreToPath      := shortcut["EXPLORE_PATH"]
 			
-			; Special case: open solutions folder
-			if(exploreToPath != "") {
+			; Special cases
+			if (exploreToPath != "") { ; Open solutions folder
 				Run(currentFolder "\" exploreToPath)
+				return
+			}
+			if (relativeTargetPath = "HIDE") { ; Don't create a shortcut, just hide the dotfiles.
+				this.hideHSWebDotfiles(currentFolder)
 				return
 			}
 			
@@ -126,14 +130,7 @@ class Explorer {
 			Toast.ShowMedium("Created shortcut to " name " solution in current folder")
 	
 			; Hide the various settings and readme files - I don't use them and they clutter up my shortcuts.
-			Loop, Files, %currentFolder%\*.*, F ; Only files
-			{
-				; Ignore shortcuts - I'm adding those.
-				if (A_LoopFileExt == "lnk")
-					Continue
-	
-				FileSetAttrib, +H, %A_LoopFileFullPath%
-			}
+			this.hideHSWebDotfiles(currentFolder)
 		}
 	}
 
@@ -216,6 +213,27 @@ class Explorer {
 			path := FileLib.cleanupPath(path)
 		
 		return path
+	}
+
+	;---------
+	; DESCRIPTION:    Hide the various settings and readme files for HSWeb - I don't use them and
+	;                 they clutter up the view.
+	; PARAMETERS:
+	;  folderPath (I,REQ) - Full path to the folder you want to apply this to.
+	;---------
+	hideHSWebDotfiles(folderPath) {
+		; Mark files as hidden
+		Loop, Files, %folderPath%\*.*, F ; Only files
+		{
+			; Ignore shortcuts - I'm adding those.
+			if (A_LoopFileExt == "lnk")
+				Continue
+
+			FileSetAttrib, +H, %A_LoopFileFullPath%
+		}
+		
+		; Refresh to drop the hidden files out of view
+		Send, {F5}
 	}
 	
 	;region Relative shortcuts

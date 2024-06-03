@@ -42,7 +42,13 @@
 
 * Fixes / Cleanup * :
 	☐ Consider switching from Notepad to Notepad++ for quick notes - it doesn't have the lag problems and is honestly about as fast
-		Could even do a no-session, no-tab type of launch if that makes it faster?
+		☐ Could even do a no-session, no-tab type of launch if that makes it faster?
+			☐ Is it even worth it? Maybe better to just open a new tab (or if I'm wanting to dump in content, stick it in a temporary file and just open that)
+			☐ What would the CLI look like to launch?
+				https://npp-user-manual.org/docs/command-prompt/
+				C:\Program Files\Notepad++\notepad++.exe -nosession -multiInst -settingsDir="C:\Users\gborg\AppData\Roaming\Notepad++OneOff" -x-1345 -y180
+					-multiInst to allow launching multiple (though we will have tabs anyways, so maybe that's moot?)
+					-settingsDir needed to avoid messing with my normal (reloaded on startup) profile
 	☐ F2 for ***s
 		☐ Outlook: this works, as long as AHK is _not_ running as admin
 			myFindObjOutlook := ComObjActive("Outlook.Application").ActiveInspector.WordEditor.Application.Selection.Find

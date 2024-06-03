@@ -29,14 +29,14 @@
 				EMC2 PRJ						-						-							PRJ \d+
 			}
 				EMC2 Worklist					-						-							^EMC2$
-
+			
 			; Popups
 				EMC2 Email Popup				-						-							\[(I\|CS)?\d+\] .*
-
+			
 				; Basic popups that need ctrl+backspace support
 				EMC2 XDS Open					-						-							Open/New Design
 				EMC2 DLG/QAN/PRJ Open			-						-							Open/Create (Log\|QA Note\|Project)
-
+			
 				; Any popup (used to rope in popups that fail the generic EMC2 case below)
 				EMC2 Popup						-						ThunderRT6FormDC
 		}

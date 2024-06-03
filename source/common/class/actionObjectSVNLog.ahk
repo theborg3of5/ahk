@@ -51,7 +51,7 @@ class ActionObjectSVNLog extends ActionObjectBase {
 		if(!Config.contextIsWork)
 			return false
 		
-		if(value.startsWithAnyOf(["svn ", "commit ", "revision "], matchedKeyword)) {
+		if(value.startsWithAnyOf(["svn ", "revision "], matchedKeyword)) {
 			filterType := this.FilterType_Revision
 			filter := value.removeFromStart(matchedKeyword)
 			return true

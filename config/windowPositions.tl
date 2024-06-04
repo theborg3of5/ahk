@@ -30,7 +30,6 @@
 			EpicStudio					-				-				MAX			MAX			WORK
 			Hyperspace					CENTERED		CENTERED		1920		1080		WORK
 			Hyperdrive					CENTERED		CENTERED		1920		1080		WORK
-			Notepad++					-				-				MAX			MAX
 			Process Explorer			CENTERED		CENTERED		1440		900
 			VB6							-				-				MAX			MAX			WORK
 			Visual Studio				-				-				MAX			MAX			WORK
@@ -45,6 +44,7 @@
 		
 			Cisco AnyConnect VPN		LEFT_EDGE+25	300				-			-			HOME
 			EMC2						-				-				MAX			MAX			WORK
+			Notepad++					-				-				MAX			MAX
 			OneNote						-				-				MAX			MAX
 			Spotify						-				-				MAX			MAX			-			1
 			VMware Horizon Client		-				-				MAX			MAX			WORK

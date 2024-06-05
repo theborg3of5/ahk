@@ -23,6 +23,7 @@
 	Snapper ignore items				snap					snapperIgnoreItems.tls
 	Mapped drives						md						mappedDrives.tl
 	Moved folders						mf						movedFolders.tl
+	TLG/EMC2 records					tlg | emc2				tlg.tls
 }
 
 # ! Code

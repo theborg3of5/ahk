@@ -7,8 +7,8 @@
 	
 	; Specific windows within a program (overlap with their less-specific counterparts below).
 	~PRIORITY.replaceWith(0) {
-				AutoHotkey WinSpy				AutoHotkey.exe			AutoHotkeyGUI				Window Spy
-				AutoHotkey Toast				AutoHotkey.exe			AutoHotkeyGUI				[TOAST]										NO_PADDING
+				AutoHotkey WinSpy				-						AutoHotkeyGUI				Window Spy
+				AutoHotkey Toast				-						AutoHotkeyGUI				[TOAST]										NO_PADDING
 		
 		; Special Chrome windows
 		~EXE.replaceWith(chrome.exe) {
@@ -56,7 +56,7 @@
 	
 	; Most general form of various windows (specifics above should override).
 	~PRIORITY.replaceWith(1) {
-				AutoHotkey						AutoHotkey.exe			AutoHotkeyGUI				-
+				AutoHotkey						-						AutoHotkeyGUI				-
 				Chrome							chrome.exe				Chrome_WidgetWin_1			- Google Chrome
 				Cisco AnyConnect VPN			vpnui.exe				-							Cisco AnyConnect Secure Mobility Client
 				Discord							Discord.exe				-							-											NO_PADDING

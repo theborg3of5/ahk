@@ -53,7 +53,7 @@ progToast.finish()
 ; In slim mode, make sure any old instances are closed before running new ones.
 if(useSlimMode) {
 	; From https://www.autohotkey.com/board/topic/77272-close-all-ahk-scripts-except-one/
-	For process in ComObjGet("winmgmts:").ExecQuery("Select * from Win32_Process where name = 'Autohotkey.exe' and not CommandLine like '%" "firstSetup.ahk" "%' ")
+	For process in ComObjGet("winmgmts:").ExecQuery("Select * from Win32_Process where name LIKE 'Autohotkey%.exe' and not CommandLine like '%" "firstSetup.ahk" "%' ")
 		Process, Close, % process.ProcessId
 }
 

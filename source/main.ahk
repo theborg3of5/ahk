@@ -48,7 +48,6 @@ Run(subFolder "windowMoverSizer.ahk")
 #Include excel.ahk
 #Include explorer.ahk
 #Include fastStoneImageViewer.ahk
-#Include greenshot.ahk
 #Include hyperdrive.ahk
 #Include hyperspace.ahk
 #Include internetExplorer.ahk

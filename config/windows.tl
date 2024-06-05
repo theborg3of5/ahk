@@ -1,4 +1,4 @@
-﻿; Reminder: if you use REGEX, you'll need to escape pipes: | => \|
+; Reminder: if you use REGEX, you'll need to escape pipes: | => \|
 
 [				NAME							EXE						CLASS						TITLE										EDGE_TYPE		TITLE_MATCH_MODE	PRIORITY	]
 
@@ -68,8 +68,6 @@
 				Foobar							foobar2000.exe
 				GitExtensions					GitExtensions.exe
 				GitHub Desktop					GitHubDesktop.exe		-							-											NO_PADDING
-				Greenshot Capture				Greenshot.exe			-							Greenshot capture form
-				Greenshot Image Editor			Greenshot.exe			-							Greenshot image editor
 				GrepWin							grepWin.exe
 				Hyperspace						EpicD\d+\.exe			-							-											-				REGEX
 				Hyperdrive						Hyperdrive.exe

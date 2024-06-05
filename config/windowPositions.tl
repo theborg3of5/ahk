@@ -48,7 +48,6 @@
 			OneNote						-				-				MAX			MAX
 			Spotify						-				-				MAX			MAX			-			1
 			VMware Horizon Client		-				-				MAX			MAX			WORK
-			WebEx						CENTERED		CENTERED		1440		900			WORK
 	}
 	
 # Gaming presets - mostly quartered social windows on the non-gaming monitor

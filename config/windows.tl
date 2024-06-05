@@ -101,7 +101,6 @@
 				VMware Horizon Client			vmware-view.exe
 				Visual Studio					devenv.exe
 				VSCode							Code.exe
-				WebEx							atmgr.exe				-							-											NO_PADDING
 				Windows Taskbar					explorer.exe			Shell_TrayWnd
 				Windows Taskbar Secondary		explorer.exe			Shell_SecondaryTrayWnd
 				Windows Terminal				WindowsTerminal.exe

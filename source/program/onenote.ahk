@@ -94,8 +94,6 @@
 	^!t::         OneNoteTodoPage.collapseToTodayAll()   ; Today only, fully expanded
 	^+m::         OneNoteTodoPage.copyForToday()         ; New page for today
 	^+#m::        OneNoteTodoPage.copyForTomorrow()      ; New page for tomorrow
-	:*X:.todo::   OneNoteTodoPage.peekOtherTodos()       ; Peek at past/future todo items
-	:*X:.itodo::  OneNoteTodoPage.insertOtherTodos()     ; Insert past/future todo items
 	:*X:.devdo::  OneNoteTodoPage.insertDevTodos()       ; Typical dev list of todo sub-items
 	:*X:.pdevdo:: OneNoteTodoPage.insertDevPRJTodos()    ; Typical dev list of todo sub-items for a project log
 	:*X:.sudo::   OneNoteTodoPage.insertDevSUTodos()     ; Typical dev SU list of todo sub-items

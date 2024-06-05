@@ -1,5 +1,3 @@
-#Include oneNoteRecurringTodo.ahk
-
 ; A helper class for all of the logic that goes into my OneNote organizational system.
 class OneNoteTodoPage {
 	;region ------------------------------ INTERNAL ------------------------------
@@ -29,50 +27,6 @@ class OneNoteTodoPage {
 	;---------
 	copyForTomorrow() {
 		OneNoteTodoPage.copy(EnvAdd(A_Now, 1, "Days"))
-	}
-	
-	;---------
-	; DESCRIPTION:    Show a popup with the recurring todo items from a date range in the past or future.
-	; SIDE EFFECTS:   Prompts the user for the date range to view todos from.
-	;---------
-	peekOtherTodos() {
-		startDate := ""
-		endDate   := ""
-		this.promptOtherDateRange("Peek at todo items for date range", startDate, endDate)
-		todosByDate := this.getTodosForDateRange(startDate, endDate)
-		
-		tt := new TextTable("Recurring Todos Peek")
-		tt.addRow("Date range:", FormatTime(startDate, "ddd M/d") " - " FormatTime(endDate, "ddd M/d"))
-		For instant,todos in todosByDate {
-			tasksTable := new TextTable().setBorderType(TextTable.BorderType_Line)
-			For _,todo in todos
-				tasksTable.addRow(todo)
-			
-			tt.addRow(FormatTime(instant, "ddd M/d") ":", tasksTable.getText())
-		}
-		
-		new TextPopup(tt).show()
-	}
-	
-	;---------
-	; DESCRIPTION:    Insert todos from a date range in the past or future. Useful for missed days.
-	; SIDE EFFECTS:   Prompts the user for the date range to add todos from.
-	;---------
-	insertOtherTodos() {
-		startDate := ""
-		endDate   := ""
-		this.promptOtherDateRange("Insert todo items for date range", startDate, endDate)
-		
-		todosByDate := this.getTodosForDateRange(startDate, endDate)
-		
-		; Check whether we're already on a blank line or not.
-		Send, {Home} ; Start of line
-		Send, {Shift Down}{End}{Shift Up} ; Select to end of line
-		if(SelectLib.getFirstLine() != "")
-			OneNote.insertBlankLine()
-		
-		todoItems := DataLib.flattenObjectToArray(todosByDate)
-		OneNoteTodoPage.sendItems(todoItems)
 	}
 	
 	;---------
@@ -237,9 +191,8 @@ class OneNoteTodoPage {
 		Sleep, 1000                                    ; Wait for selection to take
 		Send, % OneNoteTodoPage.generateTitle(instant) ; Send title
 		
-		; Insert any applicable recurring todos
+		; Jump back to start
 		this.cursorToFirstTodayItem()
-		OneNoteTodoPage.sendRecurringTodos(instant)
 	}
 	
 	;---------
@@ -277,37 +230,6 @@ class OneNoteTodoPage {
 	}
 	
 	;---------
-	; DESCRIPTION:    Insert the todos for the date of the provided timestamp.
-	; PARAMETERS:
-	;  instant (I,REQ) - The instant to insert recurring todos for.
-	; SIDE EFFECTS:   Inserts a new line for the todos if you're on a non-blank line to start.
-	; NOTES:          The inserted todos may not only be for the day of the provided instant - in
-	;                 certain contexts, we will also check the surrounding weekdays (see
-	;                 .getRelatedDateRange for details).
-	;---------
-	sendRecurringTodos(instant) {
-		; Expand the range if needed
-		this.getRelatedDateRange(instant, startDate, endDate)
-		
-		; Get the matching todos
-		todosByDate := this.getTodosForDateRange(startDate, endDate)
-		; Debug.popup("todosByDate",todosByDate)
-		
-		; Bail if there's nothing to insert.
-		if(DataLib.isNullOrEmpty(todosByDate))
-			return
-			
-		; Check whether we're already on a blank line or not.
-		Send, {Home} ; Start of line
-		Send, {Shift Down}{End}{Shift Up} ; Select to end of line
-		if(SelectLib.getFirstLine() != "")
-			OneNote.insertBlankLine()
-		
-		todoItems := DataLib.flattenObjectToArray(todosByDate)
-		OneNoteTodoPage.sendItems(todoItems)
-	}
-	
-	;---------
 	; DESCRIPTION:    Expand the date range that we're considering to include related dates - for example, at home there's
 	;                 only one todo page per 5 consecutive weekdays, all bundled together.
 	; PARAMETERS:
@@ -336,63 +258,6 @@ class OneNoteTodoPage {
 			startDate := EnvAdd(instant, -(dayOfWeek - 2), "Days") ; Back to Monday
 			endDate   := EnvAdd(startDate, 4,              "Days") ; Out to Friday
 			return
-		}
-	}
-	
-	;---------
-	; DESCRIPTION:    Generate a 2D array of recurring todo items, divided up by date, for the given date range.
-	; PARAMETERS:
-	;  startDate (I,REQ) - Start date instant (inclusive)
-	;  endDate   (I,REQ) - End date instant (inclusive)
-	; RETURNS:        2D array of todo titles. Format:
-	;                   todosByDate[dateInstant][ln] := todoTitle
-	;---------
-	getTodosForDateRange(startDate, endDate) {
-		if(!Config.contextIsHome) ; These todos are only for at home, not work.
-			return
-		
-		table := new TableList("oneNoteRecurringTodos.tl").getTable()
-		todosByDate := {}
-		For _,todoAry in table {
-			todo := new OneNoteRecurringTodo(todoAry)
-			
-			; Loop through date range and check the todo against each
-			instant := startDate
-			while(instant <= endDate) {
-				if(todo.matchesInstant(instant)) {
-					if(!todosByDate[instant])
-						todosByDate[instant] := []
-					
-					todosByDate[instant].push(todo.title)
-				}
-				
-				instant += 1, Days
-			}
-		}
-		
-		return todosByDate
-	}
-	
-	;---------
-	; DESCRIPTION:    Ask the user for an edge date (where the new range will be between today and the edge date).
-	; PARAMETERS:
-	;  title     (I,REQ) - Title of the popup that will be shown asking the user for their edge date (the one besides today).
-	;  startDate (O,REQ) - Start date of the chosen range
-	;  endDate   (O,REQ) - End date of the chosen range
-	; NOTES:          Today is never included in the range - so it will either end yesterday (if the edge date is in the
-	;                 past) or start tomorrow (if the edge date is in the future).
-	;---------
-	promptOtherDateRange(title, ByRef startDate, ByRef endDate) {
-		dateString := InputBox(title, "Enter a relative date string to use all todos between today (exclusive) and that date (inclusive).", , 350, 150)
-		
-		; Figure out start/end of range
-		edgeDate := new RelativeDate(dateString).instant
-		if(edgeDate > A_Now) { ; Future dates, start with tomorrow
-			startDate := EnvAdd(A_Now, 1, "Days")
-			endDate   := edgeDate
-		} else if(edgeDate < A_Now) { ; Past dates, end with yesterday
-			startDate := edgeDate
-			endDate   := EnvAdd(A_Now, -1, "Days")
 		}
 	}
 	

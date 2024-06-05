@@ -85,7 +85,6 @@
 				☐ Could show the last line in the buffer (ideally including the timestamp!) to make it easier to track your spot
 		☐ Could we get it to also keep images? Those are dropped right now.
 		☐ Can we at least handle the message after an image? We're not extracting the sender name properly in that case.
-	☐ Clean out OneNote recurring todo stuff - no longer used
 	☐ Should we move source\common\base? Currently contains these:
 		Ancestors of classes
 			☐ Would these make more sense in a subfolder under class\, or even just as part of class\ itself?

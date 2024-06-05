@@ -1,4 +1,4 @@
-; Reminder: if you use REGEX, you'll need to escape pipes: | => \|
+﻿; Reminder: if you use REGEX, you'll need to escape pipes: | => \|
 
 [				NAME							EXE						CLASS						TITLE										EDGE_TYPE		TITLE_MATCH_MODE	PRIORITY	]
 
@@ -46,8 +46,8 @@
 				EpicStudio Bookmark Comment		EpicStudio.exe			-							Bookmark Comment
 				EpicStudio Debug Window			EpicStudio.exe			-							Attach to Process
 				Onetastic Macro Editor			ONENOTE.EXE				Onetastic Window
-				PowerPoint Presenting			POWERPNT.EXE			screenClass					-											NO_PADDING
-				PowerPoint Presenter View		POWERPNT.EXE			PodiumParent				-											NO_PADDING
+				PowerPoint Presenting			POWERPNT.EXE			screenClass
+				PowerPoint Presenter View		POWERPNT.EXE			PodiumParent
 				Snapper Add Records				Snapper.exe				-							Add a Record
 				TortoiseSVN Blame Popup			TortoiseProc.exe		-							 - Blame - TortoiseSVN
 				Zoom Default Meeting			Zoom.exe				ZPContentViewWndClass		Zoom										-				EXACT
@@ -62,7 +62,7 @@
 				EMC2							EMC2.+EpicD\d+\.exe		ThunderRT6MDIForm			-											-				REGEX
 				EpicStudio						EpicStudio.exe			-							EpicStudio
 				Everything						Everything.exe			EVERYTHING
-				Excel							EXCEL.EXE				-							-											NO_PADDING
+				Excel							EXCEL.EXE
 				Explorer						explorer.exe			CabinetWClass
 				Firefox Portable				firefox.exe
 				Foobar							foobar2000.exe
@@ -78,9 +78,9 @@
 				Messenger						Messenger.exe			-							Messenger									NO_PADDING		EXACT
 				Notepad							notepad.exe
 				Notepad++						notepad++.exe			Notepad++
-				OneNote							ONENOTE.EXE				Framework::CFrame			-											NO_PADDING
-				Outlook							OUTLOOK.EXE				rctrl_renwnd32				-											NO_PADDING
-				PowerPoint						POWERPNT.EXE			-							-											NO_PADDING
+				OneNote							ONENOTE.EXE				Framework::CFrame
+				Outlook							OUTLOOK.EXE				rctrl_renwnd32
+				PowerPoint						POWERPNT.EXE
 				Process Explorer				PROCEXP64.exe			PROCEXPL
 				Putty							putty.exe
 				Remote Desktop					mstsc.exe				TscShellContainerClass
@@ -89,10 +89,10 @@
 				Snapper							Snapper.exe				-							Snapper
 				Slack							slack.exe				-							-											NO_PADDING
 				SoundSwitch						SoundSwitch.exe
-				Spotify							Spotify\.exe			Chrome_WidgetWin_0			(Spotify Premium)\|( - )					NO_PADDING		REGEX
+				Spotify							Spotify\.exe			Chrome_WidgetWin_1			(Spotify Premium)\|( - )					NO_PADDING		REGEX
 				Steam							steamwebhelper.exe		-							-											NO_PADDING
 				Teams							ms-teams.exe			-							\| Microsoft Teams
-				Telegram						Telegram.exe			Qt[\d]+QWindowIcon			-											NO_PADDING		REGEX
+				Telegram						Telegram.exe			Qt[\d]+QWindowIcon			-											-				REGEX
 				Thunder							Thunder.exe				-							Thunder
 				TortoiseGit						TortoiseGitProc.exe
 				TortoiseSVN						TortoiseProc.exe
@@ -105,7 +105,7 @@
 				Windows Taskbar Secondary		explorer.exe			Shell_SecondaryTrayWnd
 				Windows Terminal				WindowsTerminal.exe
 				WinMerge						WinMergeU.exe
-				Word							WINWORD.EXE				-							-											NO_PADDING
+				Word							WINWORD.EXE
 				Zoom							Zoom.exe				ZPContentViewWndClass
 	}
 }

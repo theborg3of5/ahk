@@ -3,8 +3,7 @@
 ~PATH_TYPE.defaultTo(EXE) {
 	~PATH.addToStart(<PROGRAM_FILES_86>\) {
 		Chrome						Google\Chrome\Application\chrome.exe
-		Chrome Messages				Google\Chrome\Application\chrome_proxy.exe
-		Chrome TickTick				Google\Chrome\Application\chrome_proxy.exe
+		Chrome Proxy				Google\Chrome\Application\chrome_proxy.exe
 		EpicStudio					EpicStudio\EpicStudio.exe
 		Foobar						foobar2000\foobar2000.exe
 		Launchy						Launchy\Launchy.exe
@@ -18,8 +17,7 @@
 	} ~PATH.addToStart(<PROGRAM_FILES>\) {
 		AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk
 		Chrome						Google\Chrome\Application\chrome.exe								WORK_DESKTOP
-		Chrome Messages				Google\Chrome\Application\chrome_proxy.exe 							WORK_DESKTOP
-		Chrome TickTick				Google\Chrome\Application\chrome_proxy.exe 							WORK_DESKTOP
+		Chrome Proxy				Google\Chrome\Application\chrome_proxy.exe							WORK_DESKTOP
 		Everything					Everything\Everything.exe
 		Internet Explorer			Internet Explorer\iexplore.exe
 		KDiff						KDiff3\kdiff3.exe
@@ -64,6 +62,13 @@
 		Firefox Portable			S:\FirefoxPortable\FirefoxPortable.exe								HOME_DESKTOP
 		EMC2						<EMC2_CURRENT_EXE>													WORK_DESKTOP | WORK_VDI
 	
+	; Chrome apps
+	~PATH_TYPE.replaceWith(CHROME_APP) {
+		Beeper						kebihpkoclefnhgdieipmimdjhpdkbjc									WORK_DESKTOP | WORK_VDI
+		Chrome Messages				hpfldicfbfomlpcikngkocigghgafkph
+		TickTick					cfammbeebmjdpoppachopcohfchgjapd
+	}
+
 	; Programs that can be launched by commands
 	~PATH_TYPE.replaceWith(COMMAND) {
 		Windows Terminal			wt

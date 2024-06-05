@@ -1,12 +1,13 @@
 ; Hotkeys to run/activate various programs.
 
 !`::  Config.runProgram("Process Explorer")
+#b::  Config.activateProgram("Beeper")
 #e::  Config.activateProgram("Explorer", Explorer.ThisPCFolderUUID) ; Start up at "This PC" folder if we have to run it.
 #s::  Config.runProgram("Slack")
 ^!+g::Config.activateProgram("Chrome")
 ^!+n::Config.activateProgram("Notepad++")
-^!+t::Config.activateProgram("Chrome TickTick", "--profile-directory=Default --app-id=cfammbeebmjdpoppachopcohfchgjapd")
-^!#m::Config.activateProgram("Chrome Messages", "--profile-directory=Default --app-id=hpfldicfbfomlpcikngkocigghgafkph")
+^!+t::Config.activateProgram("TickTick")
+^!#m::Config.activateProgram("Chrome Messages")
 ^!#n::Config.runProgram("Notepad")
 ^!#t::Config.runProgram("Teams")
 ^!#v::Config.activateProgram("VSCode", "--profile Default")

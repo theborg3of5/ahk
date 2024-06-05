@@ -4,10 +4,11 @@ class Program {
 	;region ------------------------------ PUBLIC ------------------------------
 	
 	;region Path types (affect how the path is run)
-	static PathType_COMMAND := "COMMAND" ; A command
-	static PathType_EXE     := "EXE"     ; A "normal" path to an executable
-	static PathType_WinApp  := "APP"     ; A windows app (fka universal app)
-	static PathType_URL     := "URL"     ; A web URL
+	static PathType_COMMAND   := "COMMAND"    ; A command
+	static PathType_EXE       := "EXE"        ; A "normal" path to an executable
+	static PathType_WinApp    := "WIN_APP"    ; A windows app (fka universal app)
+	static PathType_URL       := "URL"        ; A web URL
+	static PathType_ChromeApp := "CHROME_APP" ; A Google Chrome app
 	;endregion Path types (affect how the path is run)
 	
 	name     := "" ; Name of the program
@@ -58,6 +59,9 @@ class Program {
 			; https://answers.microsoft.com/en-us/windows/forum/windows_10-windows_store/starting-windows-10-store-app-from-the-command/836354c5-b5af-4d6c-b414-80e40ed14675)
 			Case this.PathType_WinApp:
 				Run("explorer.exe " this.path)        ; Must be run this way, not as user (possibly needs to be as admin)
+
+			Case this.PathType_ChromeApp:
+				Config.runProgram("Chrome Proxy", "--profile-directory=Default --app-id=" this.path)
 		}
 		
 		return true

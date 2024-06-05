@@ -12,13 +12,14 @@
 			GrepWin						CENTERED		CENTERED		1440		900
 			Steam						CENTERED		CENTERED		1440		900			HOME
 			Teams						CENTERED		CENTERED		1440		900			WORK
-			Chrome TickTick				RIGHT_EDGE		TOP_EDGE		1200		750
+			TickTick					RIGHT_EDGE		TOP_EDGE		1200		750
 			Putty						RIGHT_EDGE		TOP_EDGE		50%			100%		WORK
 			Windows Terminal			RIGHT_EDGE		TOP_EDGE		1440		100%
 		
 # Social windows
 		~WIDTH.replaceWith(950) | ~HEIGHT.replaceWith(750) | ~X.replaceWith(RIGHT_EDGE) | ~Y.replaceWith(TOP_EDGE) {
 			Chrome Messages
+			Beeper
 			Messenger
 			Slack
 			Telegram
@@ -57,6 +58,7 @@
 			Slack						RIGHT_EDGE		BOTTOM_EDGE
 			Telegram					RIGHT_EDGE		TOP_EDGE
 			Chrome Messages				LEFT_EDGE		TOP_EDGE
+			Beeper						LEFT_EDGE		TOP_EDGE
 			Chrome						-				-				MAX			MAX
 		}
 		~PRESET.replaceWith(GAME_ON_MIDDLE) | ~MONITOR.replaceWith(LEFT) {
@@ -64,6 +66,7 @@
 			Slack						RIGHT_EDGE		BOTTOM_EDGE
 			Telegram					RIGHT_EDGE		TOP_EDGE
 			Chrome Messages				LEFT_EDGE		TOP_EDGE
+			Beeper						LEFT_EDGE		TOP_EDGE
 			Chrome						-				-				MAX			MAX
 		}
 	}

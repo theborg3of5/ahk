@@ -4,6 +4,7 @@
 
 	AutoHotkey						CLOSE		-				-				SELECT
 	AutoHotkey WinSpy				CLOSE
+	Beeper							CLOSE		-				-				-				-			-			ESCAPE
 	Cisco AnyConnect VPN			CLOSE
 	EMC2 XDS Open					-			-				-				SELECT
 	EMC2 DLG/QAN/PRJ Open			-			-				-				SELECT
@@ -27,7 +28,7 @@
 
 	; Web popups - close on Escape.
 	Chrome Join						CLOSE		-				-				-				-			-			ESCAPE
-	Chrome TickTick					CLOSE		-				-				-				-			-			ESCAPE
+	TickTick						CLOSE		-				-				-				-			-			ESCAPE
 	Chrome Messages					CLOSE		-				-				-				-			-			ESCAPE
 
 	; Windows taskbars - don't minimize.

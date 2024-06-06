@@ -35,9 +35,10 @@
 		closeWindowFromTaskbar() {
 			; Open up basic right-click menu to try and close the window.
 			Send, +{RButton}
-
+			
 			; Some windows don't have a shift+right click menu for some reason, so rely on the fact
 			; that shift+right-click focuses the window and just close it directly.
+			Sleep, 100 ; Give window a chance to get focus before we check
 			if (Explorer.currentWindowHasNoBasicRightClickMenu()) {
 				WindowActions.closeWindow("A")
 				return

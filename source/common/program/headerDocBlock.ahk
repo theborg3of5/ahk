@@ -21,7 +21,8 @@ class HeaderDocBlock {
 	}
 	
 	;---------
-	; DESCRIPTION:    Initialize this class using the selection, rather than passing in a string value to the constructor.
+	; DESCRIPTION:    Initialize this class using the selection, rather than passing in a string
+	;                 value to the constructor.
 	; RETURNS:        this
 	;---------
 	initFromSelection() {
@@ -31,7 +32,8 @@ class HeaderDocBlock {
 	}
 	
 	;---------
-	; DESCRIPTION:    Wrap the content and recombine it with our various bits of indentation to create our finished doc string.
+	; DESCRIPTION:    Wrap the content and recombine it with our various bits of indentation to
+	;                 create our finished doc string.
 	; RETURNS:        The wrapped and indented string for this documentation block
 	; PARAMETERS:
 	;  tabWidth (I,REQ) - The width that tabs should be considered.
@@ -54,8 +56,16 @@ class HeaderDocBlock {
 	}
 	
 	;---------
-	; DESCRIPTION:    Replace the selected documentation block (and potentially a little of its surroundings) with a
-	;                 rewrapped version of the same.
+	; DESCRIPTION:    Unwrap the content and recombine it with our various bits of indentation.
+	; RETURNS:        The unwrapped and indented string for this documentation block
+	;---------
+	getUnwrappedString() {
+		return this.outerFirst this.innerFirst this.unwrappedContent
+	}
+	
+	;---------
+	; DESCRIPTION:    Replace the selected documentation block (and potentially a little of its
+	;                 surroundings) with a rewrapped version of the same.
 	; PARAMETERS:
 	;  tabWidth (I,REQ) - The width that tabs should be considered.
 	;---------
@@ -63,6 +73,16 @@ class HeaderDocBlock {
 		this.initFromSelection()
 		Sleep, 500 ; Wait a tick to make sure the program we're copying from doesn't get mad about us using the clipboard a second time so quickly.
 		ClipboardLib.send(this.getWrappedString(tabWidth))
+	}
+	
+	;---------
+	; DESCRIPTION:    Replace the selected documentation block (and potentially a little of its
+	;                 surroundings) with an unwrapped version of the same.
+	;---------
+	unwrapSelection() {
+		this.initFromSelection()
+		Sleep, 500 ; Wait a tick to make sure the program we're copying from doesn't get mad about us using the clipboard a second time so quickly.
+		ClipboardLib.send(this.getUnwrappedString())
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
@@ -78,22 +98,24 @@ class HeaderDocBlock {
 	unwrappedContent := "" ; The actual content, collapsed to a single line.
 	
 	;---------
-	; DESCRIPTION:    Use the selected text (and potentialy select some of the surrounding text if needed) to get a
-	;                 documentation block that we can work with.
+	; DESCRIPTION:    Use the selected text (and potentialy select some of the surrounding text if
+	;                 needed) to get a documentation block that we can work with.
 	; RETURNS:        The located documentation block.
-	; SIDE EFFECTS:   Can select more of the surrounding text if we don't have everything we need to start with.
+	; SIDE EFFECTS:   Can select more of the surrounding text if we don't have everything we need to
+	;                 start with.
 	; NOTES:          Can be called with nothing selected to select everything we need, as a shortcut.
 	;---------
 	getDocFromSelection() {
 		selection := SelectLib.getText()
 		
-		; Whole line, including newline (VSCode ^c with nothing selected, probably) - actually select the whole line.
+		; Whole line, including newline (VSCode ^c with nothing selected, probably) - actually
+		; select the whole line.
 		if(selection.endsWith("`n"))
 			Send, {End 2}{Shift Down}{Home 2}{Shift Up} ; End twice to get to end of wrapped line, Home twice to try and get indent too.
 
-		; Multiple lines - we can pull anything not selected in the first line, from the second line. We
-		; shouldn't mess with the selection because we don't know which direction we selected from - so trying
-		; to reselect might just mess with the last line.
+		; Multiple lines - we can pull anything not selected in the first line, from the second
+		; line. We shouldn't mess with the selection because we don't know which direction we
+		; selected from - so trying to reselect might just mess with the last line.
 		if(selection.contains("`n"))
 			return selection
 		
@@ -101,8 +123,8 @@ class HeaderDocBlock {
 		if(selection.startsWith("`t"))
 			return selection
 		
-		; We can't get the indent from the current selection (which may be nothing), so reselect the whole
-		; line (including the indent).
+		; We can't get the indent from the current selection (which may be nothing), so reselect the
+		; whole line (including the indent).
 		Send, {End 2}{Shift Down}{Home 2}{Shift Up} ; End twice to get to end of wrapped line, Home twice to try and get indent too.
 		selection := SelectLib.getText()
 		
@@ -110,8 +132,8 @@ class HeaderDocBlock {
 		if(selection.startsWith("`t"))
 			return selection
 		
-		; Either a wrapped string, or no indent at start - either way, we can select one more chunk with Home
-		; and have everything.
+		; Either a wrapped string, or no indent at start - either way, we can select one more chunk
+		; with Home and have everything.
 		Send, {Shift Down}{Home}{Shift Up}
 		selection := SelectLib.getText()
 		
@@ -135,17 +157,22 @@ class HeaderDocBlock {
 		if(docLines[2] != "") { ; With a multi-line selection, we can use the second line and we're guaranteed to get the full indentation
 			docLines[2].matchesRegEx(outerNeedle, match)
 			this.outerRest := match ; Might include innerRest - if/when we can determine innerRest below, we'll remove it from outerRest.
-		} else { ; Otherwise, we just have to assume that the outer chunk for any new lines should match the old one (and it should if we got the whole line).
+		; Otherwise, we just have to assume that the outer chunk for any new lines should match the
+		; old one (and it should if we got the whole line).
+		} else {
 			this.outerRest := this.outerFirst
 		}
 		
-		; The inner bit for the first line will be any header-specific keywords (like DESCRIPTION:) and their following whitespace.
+		; The inner bit for the first line will be any header-specific keywords (like DESCRIPTION:)
+		; and their following whitespace.
 		this.innerFirst := this.getKeywordStartChunk(docLines)
 		
-		; The rest of the lines just need to indent to match the first so the content continues in the same spot horizontally.
+		; The rest of the lines just need to indent to match the first so the content continues in
+		; the same spot horizontally.
 		this.innerRest := StringLib.getSpaces(this.innerFirst.length())
 		
-		; If we fell back to the second line of the string to get outerRest, it might also contain innerRest - remove it if that's the case.
+		; If we fell back to the second line of the string to get outerRest, it might also contain
+		; innerRest - remove it if that's the case.
 		this.outerRest := this.outerRest.removeFromEnd(this.innerRest)
 		
 		; Content is what's left after the rest is removed

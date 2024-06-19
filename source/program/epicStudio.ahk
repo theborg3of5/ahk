@@ -75,6 +75,7 @@
 
 	; Redo the indentation for the selected documentation lines
 	^+Enter::new HeaderDocBlock().rewrapSelection(EpicStudio.TabWidth)
+	^+!Enter::new HeaderDocBlock().unwrapSelection()
 	
 	; Debug, auto-search for workstation ID.
 	~F5::EpicStudio.launchDebug()

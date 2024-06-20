@@ -264,6 +264,8 @@ class StringLib {
 	
 	;---------
 	; DESCRIPTION:    Wrap the given string to the provided dimensions.
+	;                 Doesn't handle multiple leading spaces (and possibly multiple spaces in general)
+	;                 very well.
 	; PARAMETERS:
 	;  inString             (I,REQ) - The string (without newlines) to wrap.
 	;  goalWidth            (I,REQ) - The width (in characters) that we should shoot for.

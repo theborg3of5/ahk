@@ -11,7 +11,7 @@
 	Pause::VSCode.toggleProgramAndClass()
 	
 	; Redo the indentation for the selected documentation lines
-	^+Enter::new HeaderDocBlock().rewrapSelection(VSCode.TabWidth)
+	^+Enter::new HeaderDocBlock().rewrapSelection()
 	^+!Enter::new HeaderDocBlock().unwrapSelection()
 	
 	; AHK debug strings

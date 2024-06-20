@@ -74,8 +74,8 @@
 	:X:.clip::    ClipboardLib.send(EpicStudio.getClipboardAsMString())
 
 	; Redo the indentation for the selected documentation lines
-	^+Enter::new HeaderDocBlock().rewrapSelection(EpicStudio.TabWidth)
-	^+!Enter::new HeaderDocBlock().unwrapSelection()
+	^+Enter:: EpicStudio.selectionToDocBlock().rewrapSelection()
+	^+!Enter::EpicStudio.selectionToDocBlock().unwrapSelection()
 	
 	; Debug, auto-search for workstation ID.
 	~F5::EpicStudio.launchDebug()

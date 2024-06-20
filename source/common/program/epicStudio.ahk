@@ -214,6 +214,17 @@ class EpicStudio {
 		
 		ClipboardLib.send("; SCOPE:        " scope)
 	}
+
+	;---------
+	; DESCRIPTION:    Turn the current selection into a HeaderDocBlock instance.
+	; RETURNS:        HeaderDocBlock instance
+	;---------
+	selectionToDocBlock() {
+		settings := new DocBlockSettings().setTabWidth(this.TabWidth).setCommentChar(";") ; Basic settings: tab width, comment character
+		settings.setIndentString(". ") ; Indentation is dot-space
+		settings.setLinePrefix("\t")   ; There's a tab at the start of every commented line
+		return new HeaderDocBlock(settings)
+	}
 	
 	;---------
 	; DESCRIPTION:    Run EpicStudio in debug mode, adding in a search to find my processes.

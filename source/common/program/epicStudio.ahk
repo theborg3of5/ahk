@@ -143,12 +143,12 @@ class EpicStudio {
 		; Non-empty line: add a new line and select it
 		if(line != "" && line != ";") {
 			Send, {End}{Enter}
-		Send, {Shift Down}{Home}{Shift Up}
-	}
-	
-	Send, `;
-	Send, {Space}REVISIONS:{Enter}{Space}
-	Send, ^8 ; Normal contact comment hotkey for EpicStudio
+			Send, {Shift Down}{Home}{Shift Up}
+		}
+		
+		Send, `;
+		Send, {Space}REVISIONS:{Enter}{Space}
+		Send, ^8 ; Normal contact comment hotkey for EpicStudio
 	}
 	
 	;---------
@@ -169,30 +169,30 @@ class EpicStudio {
 		}
 		if(!line.startsWith(";")) {
 			Toast.ShowError("Could not create border", "Current line is not a comment")
-		return
-	}
-	
-	; Ask the user how wide they want the "box" to be
-	width := InputBox("Enter comment box width", "How many characters wide do you want the borders to be?`n`nLeave blank to match (padded) width of text.")
-	Sleep, 100 ; Make sure the InputBox has fully closed and EpicStudio has focus again.
-	
-	; Get content of line, re-indent as needed
-	content := line.removeFromStart(";").withoutWhitespace()
-	if(width = "") {
-		width := content.length() + 2 ; 1 char of overhang on each side
-		indent := " "
-	} else {
-		indent := StringLib.duplicate(" ", (width - content.length()) // 2)
-	}
-	newLine := ";" indent content
-	
-	; Generate border
-	borderLine := ";" StringLib.duplicate(borderChar, width)
-	
-	; Generate new lines and replace the original
-	newLines := borderLine "`n`t" newLine "`n`t" borderLine
-	Send, {Shift Down}{Home}{Shift Up}
-	ClipboardLib.send(newLines)
+			return
+		}
+		
+		; Ask the user how wide they want the "box" to be
+		width := InputBox("Enter comment box width", "How many characters wide do you want the borders to be?`n`nLeave blank to match (padded) width of text.")
+		Sleep, 100 ; Make sure the InputBox has fully closed and EpicStudio has focus again.
+		
+		; Get content of line, re-indent as needed
+		content := line.removeFromStart(";").withoutWhitespace()
+		if(width = "") {
+			width := content.length() + 2 ; 1 char of overhang on each side
+			indent := " "
+		} else {
+			indent := StringLib.duplicate(" ", (width - content.length()) // 2)
+		}
+		newLine := ";" indent content
+		
+		; Generate border
+		borderLine := ";" StringLib.duplicate(borderChar, width)
+		
+		; Generate new lines and replace the original
+		newLines := borderLine "`n`t" newLine "`n`t" borderLine
+		Send, {Shift Down}{Home}{Shift Up}
+		ClipboardLib.send(newLines)
 	}
 
 	;---------

@@ -150,6 +150,7 @@ class HeaderDocBlock {
 	initFromDocString(docString) {
 		docLines := docString.split("`n", "`r")
 		
+		;region Initial extraction
 		; Get the outer chunk from the first line.
 		outerNeedle := "^" ; Must be the start of the line
 		if (this.settings.linePrefix)
@@ -158,15 +159,10 @@ class HeaderDocBlock {
 		docLines[1].matchesRegEx(outerNeedle, match)
 		this.outerFirst := match
 
-		; Figure out what the outer chunk should look like for subsequent lines.
+		; With a multi-line selection, we can use the second line and we're guaranteed to get the full indentation
 		if (docLines[2] != "") {
-			; With a multi-line selection, we can use the second line and we're guaranteed to get the full indentation
 			docLines[2].matchesRegEx(outerNeedle, match)
-			this.outerRest := match ; Might include innerRest - if/when we can determine innerRest below, we'll remove it from outerRest.
-		} else {
-			; Otherwise, we just have to assume that the outer chunk for any new lines should match the
-			; old one (and it should if we got the whole line).
-			this.outerRest := this.outerFirst
+			this.outerRest := match ; Might include innerRest - we'll clean that out later.
 		}
 		
 		; The inner bit for the first line will be any header-specific keywords (like DESCRIPTION:)
@@ -176,10 +172,17 @@ class HeaderDocBlock {
 		; The rest of the lines just need to indent to match the first so the content continues in
 		; the same spot horizontally.
 		this.innerRest := StringLib.getSpaces(this.innerFirst.length())
+		;endregion Initial extraction
 		
-		; If we fell back to the second line of the string to get outerRest, it might also contain
-		; innerRest - remove it if that's the case.
-		this.outerRest := this.outerRest.removeFromEnd(this.innerRest)
+		; Cleanup now that we know more
+		if (docLines[2] != "") {
+			; If we had (and presumably pulled outerRest from) a second line, we should now trim off innerRest
+			; (as it would have included it).
+			this.outerRest := this.outerRest.removeFromEnd(this.innerRest)
+		} else {
+			; Otherwise default from outerFirst, as it's the best info we have.
+			this.outerRest := this.outerFirst
+		}
 		
 		; Content is what's left after the rest is removed
 		For i,line in docLines {

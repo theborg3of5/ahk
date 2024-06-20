@@ -18,10 +18,10 @@ class HeaderDocBlock {
 	;  docString (I,OPT) - The block of documentation to process.
 	;---------
 	__New(settings := "", docString := "") {
-		if( settings )
+		if (settings)
 			this.settings := settings
 
-		if( docString != "" )
+		if (docString != "")
 			this.initFromDocString(docString)
 	}
 	
@@ -48,7 +48,7 @@ class HeaderDocBlock {
 		; Rebuild each line with its leading indentation and keywords.
 		docString := ""
 		For i,line in wrappedContentLines {
-			if( i = 1 )
+			if (i = 1)
 				line := this.outerFirst this.innerFirst line
 			else
 				line := this.outerRest this.innerRest line
@@ -112,17 +112,17 @@ class HeaderDocBlock {
 		
 		; Whole line, including newline (VSCode ^c with nothing selected, probably) - actually select the
 		; whole line.
-		if( selection.endsWith("`n") )
+		if (selection.endsWith("`n"))
 			Send, {End 2}{Shift Down}{Home 2}{Shift Up} ; End twice to get to end of wrapped line, Home twice to try and get indent/line prefix too.
 
 		; Multiple lines - we can pull anything not selected in the first line, from the second line. We
 		; shouldn't mess with the selection because we don't know which direction we selected from - so
 		; trying to reselect might just mess with the last line.
-		if( selection.contains("`n") )
+		if (selection.contains("`n"))
 			return selection
 		
 		; The line starts with indent or the line prefix - assume the user got it all.
-		if( selection.startsWith(this.settings.indent) || selection.startsWith(this.settings.linePrefix) )
+		if (selection.startsWith(this.settings.indent) || selection.startsWith(this.settings.linePrefix))
 			return selection
 		
 		; We can't get the indent from the current selection (which may be nothing), so reselect the whole
@@ -131,7 +131,7 @@ class HeaderDocBlock {
 		selection := SelectLib.getText()
 		
 		; We got the indent on the first try (non-wrapped line)
-		if( selection.startsWith(this.settings.indent) )
+		if (selection.startsWith(this.settings.indent))
 			return selection
 		
 		; Either a wrapped string, or no indent at start - either way, we can select one more chunk
@@ -152,14 +152,14 @@ class HeaderDocBlock {
 		
 		; Get the outer chunk from the first line.
 		outerNeedle := "^" ; Must be the start of the line
-		if( this.settings.linePrefix )
+		if (this.settings.linePrefix)
 			outerNeedle .= this.settings.linePrefix "?" ; Optional line prefix
 		outerNeedle .= "(" this.settings.indent ")*" this.settings.comment "\s*" ; 0+ indents, comment, 0+ spaces
 		docLines[1].matchesRegEx(outerNeedle, match)
 		this.outerFirst := match
 
 		; Figure out what the outer chunk should look like for subsequent lines.
-		if( docLines[2] != "" ) {
+		if (docLines[2] != "") {
 			; With a multi-line selection, we can use the second line and we're guaranteed to get the full indentation
 			docLines[2].matchesRegEx(outerNeedle, match)
 			this.outerRest := match ; Might include innerRest - if/when we can determine innerRest below, we'll remove it from outerRest.
@@ -184,7 +184,7 @@ class HeaderDocBlock {
 		; Content is what's left after the rest is removed
 		For i,line in docLines {
 			; Peel off the indentation, keywords, etc.
-			if( i = 1 ) {
+			if (i = 1) {
 				line := line.removeFromStart(this.outerFirst)
 				line := line.removeFromStart(this.innerFirst)
 			} else {
@@ -211,17 +211,17 @@ class HeaderDocBlock {
 		
 		; Header keyword lines
 		needle := "^([A-Z\s]+):\s+" ; Starts with (^) any all-caps words (including spaces) followed by a colon (:) and 1+ spaces
-		if( firstLine.matchesRegEx(needle, match) )
+		if (firstLine.matchesRegEx(needle, match))
 			return match
 		
 		; Parameter lines
-		if( firstLine.matchesRegEx(".*\((I|O|IO),(OPT|REQ)\) - ", match) ) ; Variable name + properties + leading hyphen and space
+		if (firstLine.matchesRegEx(".*\((I|O|IO),(OPT|REQ)\) - ", match)) ; Variable name + properties + leading hyphen and space
 			return match
 
 		; Array/subscript defs
 		needle := "^("  "[\w\d]*\([^\)]+\)"  "|"  """[^""]+"""  ")" ; Start with (^) array def (optional array name, open paren, subscripts, close paren) or subscript def (quote, subscript, quote)
 		needle .= "\s+[=-] "                                        ; Final indent, equals/dash, and final space
-		if( firstLine.matchesRegEx(needle, match) )
+		if (firstLine.matchesRegEx(needle, match))
 			return match
 		
 		return ""

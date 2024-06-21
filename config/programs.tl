@@ -49,6 +49,7 @@
 		Process Explorer			<PROGRAM_FILES>\ProcessExplorer\procexp.exe
 	
 	~PATH.addToStart(<USER_APPDATA_LOCAL>\) {
+		Beeper						Programs\beeper\Beeper.exe											HOME_DESKTOP
 		GitHub Desktop				GitHubDesktop\GitHubDesktop.exe
 		GrepWin						Programs\grepWin\grepWin.exe										WORK_DESKTOP
 		Slack						slack\slack.exe														HOME_DESKTOP
@@ -68,7 +69,7 @@
 		Chrome Messages				hpfldicfbfomlpcikngkocigghgafkph
 		TickTick					cfammbeebmjdpoppachopcohfchgjapd
 	}
-
+	
 	; Programs that can be launched by commands
 	~PATH_TYPE.replaceWith(COMMAND) {
 		Windows Terminal			wt

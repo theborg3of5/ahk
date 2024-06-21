@@ -1,6 +1,6 @@
 ﻿; Reminder: if you use REGEX, you'll need to escape pipes: | => \|
 
-[				NAME							EXE						CLASS						TITLE										EDGE_TYPE		TITLE_MATCH_MODE	PRIORITY	]
+[				NAME							EXE						CLASS						TITLE										EDGE_TYPE		TITLE_MATCH_MODE	MACHINE			PRIORITY	]
 
 ; Defaults across the board: window edges have padding, and title match mode is contains anywhere within.
 ~EDGE_TYPE.defaultTo(HAS_PADDING) | ~TITLE_MATCH_MODE.defaultTo(CONTAINS) {
@@ -13,7 +13,7 @@
 		; Special Chrome windows
 		~EXE.replaceWith(chrome.exe) {
 				Chrome Join						-						-							Join
-				Beeper							-						-							(Beeper)\|(Beeper \\| .+)					-				REGEX
+				Beeper							-						-							(Beeper)\|(Beeper \\| .+)					-				REGEX				WORK_DESKTOP
 				TickTick						-						-							 - TickTick
 				Chrome Messages					-						-							Messages for web
 				Chrome Workplans				-						-							Week of \d{1,2}\/\d{1,2}\/\d{4}				-				REGEX
@@ -57,6 +57,7 @@
 	; Most general form of various windows (specifics above should override).
 	~PRIORITY.replaceWith(1) {
 				AutoHotkey						-						AutoHotkeyGUI				-
+				Beeper							Beeper.exe				-							-											-				-					HOME_DESKTOP
 				Chrome							chrome.exe				Chrome_WidgetWin_1			- Google Chrome
 				Cisco AnyConnect VPN			vpnui.exe				-							Cisco AnyConnect Secure Mobility Client
 				Discord							Discord.exe				-							-											NO_PADDING

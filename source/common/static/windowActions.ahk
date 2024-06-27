@@ -146,6 +146,7 @@ class WindowActions {
 	static Method_DeleteWord_Select := "SELECT"       ; Delete a word by selecting it
 	static Method_SendEsc           := "ESCAPE"       ; Send an escape keystroke
 	static Method_Run               := "RUN"          ; Run the named program
+	static Method_None              := "NONE"         ; Do nothing
 	;endregion Supported action methods
 	
 	static _actionOverrides := "" ; {windowName: {action: method}}
@@ -347,6 +348,10 @@ class WindowActions {
 			; Send an Escape keystroke
 			Case this.Method_SendEsc:
 				Send, {Esc}
+
+			; Do nothing
+			Case this.Method_None:
+				return
 			
 			Default:
 				Toast.ShowError("Could not perform method", "Method unknown: " method)

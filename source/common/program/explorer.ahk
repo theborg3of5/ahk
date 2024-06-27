@@ -153,7 +153,8 @@ class Explorer {
 			return true
 		if(Config.isWindowActive("GitExtensions"))
 			return true
-		
+		if(Config.isWindowActive("Hyperdrive"))
+			return true
 
 		return false
 	}

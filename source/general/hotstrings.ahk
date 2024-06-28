@@ -20,6 +20,8 @@
 ;endregion Personal info
 
 ;region Typo correction
+;region Not typos while programming
+#If ! ( Config.isWindowActive("EpicStudio") || Config.isWindowActive("VSCode") || Config.isWindowActive("Visual Studio") )
 :*0:,3::<3
 ::<#::<3
 ::<43::<3
@@ -27,6 +29,9 @@
 ::;)_::;)
 :::)_:::)
 :::)(:::)
+#If
+;endregion Not typos while programming
+
 ::*shurgs*::*shrugs*
 ::mmgm::mmhm
 ::fwere::fewer

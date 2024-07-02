@@ -15,6 +15,7 @@
 		Youtube								yt					https://www.youtube.com/results?search_query=<QUERY>
 		Steam								st					https://store.steampowered.com/search/?term=<QUERY>
 		AutoHotkey Docs						ahkd				https://cse.google.com/cse?cx=010629462602499112316:ywoq_rufgic&q=<QUERY>
+		Nilesoft Shell Docs					ns  | nile			https://www.google.com/search?q=site:https://nilesoft.org/docs+<QUERY>
 		Translate Dutch > English			tde | detrans		https://translate.google.com/#nl/en/<QUERY>
 		Translate English > Dutch			ted | edtrans		https://translate.google.com/#en/nl/<QUERY>
 }

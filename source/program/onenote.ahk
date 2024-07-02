@@ -89,15 +89,15 @@
 	^MButton::OneNote.removeLinkUnderMouse()
 	
 	; Todo page handling
-	^t::          OneNoteTodoPage.collapseToTodayItems() ; Today only, item-level
-	^+t::         OneNoteTodoPage.collapseToAllItems()   ; All sections, item-level
-	^!t::         OneNoteTodoPage.collapseToTodayAll()   ; Today only, fully expanded
-	^+m::         OneNoteTodoPage.copyForToday()         ; New page for today
-	^+#m::        OneNoteTodoPage.copyForTomorrow()      ; New page for tomorrow
-	:*X:.devdo::  OneNoteTodoPage.insertDevTodos()       ; Typical dev list of todo sub-items
-	:*X:.pdevdo:: OneNoteTodoPage.insertDevPRJTodos()    ; Typical dev list of todo sub-items for a project log
-	:*X:.sudo::   OneNoteTodoPage.insertDevSUTodos()     ; Typical dev SU list of todo sub-items
-	:*X:.pqado::  OneNoteTodoPage.insertPQATodos()       ; Typical PQA list of todo sub-items
+	^t::        OneNoteTodoPage.collapseToTodayItems() ; Today only, item-level
+	^+t::       OneNoteTodoPage.collapseToAllItems()   ; All sections, item-level
+	^!t::       OneNoteTodoPage.collapseToTodayAll()   ; Today only, fully expanded
+	^+m::       OneNoteTodoPage.copyForToday()         ; New page for today
+	^+#m::      OneNoteTodoPage.copyForTomorrow()      ; New page for tomorrow
+	:*X:.devdo::OneNoteTodoPage.insertDevTodos()       ; Typical dev list of todo sub-items
+	:*X:.prjdo::OneNoteTodoPage.insertDevPRJTodos()    ; Typical dev list of todo sub-items for a project log
+	:*X:.sudo:: OneNoteTodoPage.insertDevSUTodos()     ; Typical dev SU list of todo sub-items
+	:*X:.pqado::OneNoteTodoPage.insertPQATodos()       ; Typical PQA list of todo sub-items
 	
 	; Update links for a dev structure section header
 	!+#k::OneNote.linkDevStructureSectionTitle()

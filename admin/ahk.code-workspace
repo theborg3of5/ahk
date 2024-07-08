@@ -13,5 +13,15 @@
 	"settings": {
 		"files.encoding": "utf8bom",
 		"files.autoGuessEncoding": false,
+	},
+	"extensions": {
+		"recommendations": [
+			"mark-wiemer.vscode-autohotkey-plus-plus",
+			"fabiospampinato.vscode-highlight",
+			"undefined_publisher.tablelist-lang",
+			"fabiospampinato.vscode-todo-plus",
+			"zero-plusplus.vscode-autohotkey-debug",
+			"thqby.vscode-autohotkey2-lsp"
+		]
 	}
 }

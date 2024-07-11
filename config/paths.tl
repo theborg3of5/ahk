@@ -53,8 +53,8 @@
 
 ~CONTEXT.replaceWith(WORK) {
 		; Work
-		Epic Source Current S1						EPIC_SOURCE_S1						<EPIC_SOURCE_CURRENT>\st1
-		Epic Source Current S1 Billing Solutions	EPIC_SOURCE_S1_BILL_SOLUTIONS		<EPIC_SOURCE_CURRENT>\st1\HSWeb\Solutions\Apps\Billing
+		Epic Source Current S1						EPIC_SOURCE_S1						<EPIC_SOURCE_CURRENT>\stage1
+		Epic Source Current S1 Billing Solutions	EPIC_SOURCE_S1_BILL_SOLUTIONS		<EPIC_SOURCE_CURRENT>\stage1\HSWeb\Solutions\Apps\Billing
 		Transaction Diff							TX_DIFF								C:\Program Files\TransactionDiff
 		EpicStudio Global Highlights				EPICSTUDIO_GLOBAL_HIGHLIGHTS		<EPIC_PERSONAL>\EpicStudioGlobalHighlights
 	

@@ -472,7 +472,7 @@ class EpicLib {
 						name   := "DLG " dlgId
 						abbrev := "d"
 					}
-				} else if (name = "st1") {
+				} else if (name = "stage1") {
 					cat    := "Integration"
 					name   := "Stage 1"
 					abbrev := "s1"

@@ -127,7 +127,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	}
 
 	;---------
-	; DESCRIPTION:    CHeck whether this object can be opened in Obelisk (rather than emc2summary).
+	; DESCRIPTION:    Check whether this object can be opened in Obelisk (rather than emc2summary).
 	; RETURNS:        true/false
 	;---------
 	isObeliskObject() {

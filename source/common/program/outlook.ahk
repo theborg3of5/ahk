@@ -162,10 +162,13 @@ class Outlook {
 		if(!events)
 			return
 		
-		; A second selection overrides the TLP (we use the first selection for everything else).
+		; A second selection overrides the TLP and defaults the message (we use the first selection for everything else).
 		data := events[1]
-		if(events.length() = 2)
+		if(events.length() = 2) {
 			data["TLP"] := events[2]["TLP"]
+			if (data["MESSAGE"] = "")
+				data["MESSAGE"] := events[2]["MESSAGE"]
+		}
 
 		; The user can specify multiple records, in which case we'll add a new DLG event per record.
 		userRecs := data["RECORD"].split([",", A_Space], A_Space)

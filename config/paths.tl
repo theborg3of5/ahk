@@ -1,6 +1,6 @@
 ﻿; These are all of the path tags that will be replaced when using Config.replacePathTags().
 
-[		NAME										KEY									PATH														CONTEXT	]
+[		NAME										KEY									PATH															CONTEXT	]
 
 		; Pass-throughs - paths which are retrieved/calculated in Config.getSystemPathTags(). These can also be used in this file.
 		AHK Root									AHK_ROOT
@@ -46,8 +46,8 @@
 		Downloads									USER_DOWNLOADS						<USER_ROOT>\Downloads
 
 		; Dev
-		User Dev									USER_DEV							<USER_ONEDRIVE>\Dev											WORK
-		User Dev									USER_DEV							<USER_ROOT>\Dev												HOME
+		User Dev									USER_DEV							<USER_ONEDRIVE>\Dev												WORK
+		User Dev									USER_DEV							<USER_ROOT>\Dev													HOME
 		Onetastic Macros							ONETASTIC_MACROS					<USER_ROOT>\OnetasticMacros
 		Onetastic Functions							ONETASTIC_FUNCTIONS					<USER_ROOT>\OnetasticMacros\Functions
 

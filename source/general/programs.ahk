@@ -1,7 +1,7 @@
 ; Hotkeys to run/activate various programs.
 
 !`::  Config.runProgram("Process Explorer")
-#b::  Config.activateProgram("Beeper")
+#b::  Config.runProgram("Beeper")
 #e::  Config.activateProgram("Explorer", Explorer.ThisPCFolderUUID) ; Start up at "This PC" folder if we have to run it.
 #s::  Config.runProgram("Slack")
 ^!+g::Config.activateProgram("Chrome")

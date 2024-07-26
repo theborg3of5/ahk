@@ -17,9 +17,9 @@
 			Windows Terminal			RIGHT_EDGE		TOP_EDGE		1440		100%
 		
 # Social windows
-		~WIDTH.replaceWith(950) | ~HEIGHT.replaceWith(750) | ~X.replaceWith(RIGHT_EDGE) | ~Y.replaceWith(TOP_EDGE) {
+		~WIDTH.defaultTo(950) | ~HEIGHT.defaultTo(750) | ~X.defaultTo(RIGHT_EDGE) | ~Y.defaultTo(TOP_EDGE) {
 			Chrome Messages
-			Beeper
+			Beeper						-				-				50%			100%
 			Messenger
 			Slack
 			Telegram

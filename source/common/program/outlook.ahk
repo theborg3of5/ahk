@@ -258,6 +258,7 @@ class Outlook {
 		; Release note review is about the DRN
 		value := value.replace("Release Note Review: ", "DRN ")
 		value := value.replace("Revisions Made to Release Note: ", "DRN ")
+		value := value.replace("Release Note ", "DRN ")
 
 		; Special QAN processes
 		value := value.replace("RCA ", "QAN ")

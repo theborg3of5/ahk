@@ -12,7 +12,8 @@ class VSCode {
 	;  path (I,REQ) - Full path to the file to edit (can also include any other params you want to send).
 	;---------
 	editScript(path) {
-		Config.runProgram("VSCode", "--profile Default " path)
+		; --wait: so that if we're opening VSCode exclusively to edit this, it closes on its own once the file is closed.
+		Config.runProgram("VSCode", "--wait --profile Default " path)
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	

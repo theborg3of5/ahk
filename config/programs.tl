@@ -33,7 +33,6 @@
 		WinMerge					WinMerge\WinMergeU.exe
 	} ~PATH.addToStart(<WINDOWS>\) {
 		Explorer					explorer.exe
-		Notepad						System32\notepad.exe
 	}
 	
 	~PATH_TYPE.replaceWith(URL) {

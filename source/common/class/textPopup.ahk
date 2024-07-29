@@ -146,7 +146,7 @@ class TextPopup {
 	}
 	
 	;---------
-	; DESCRIPTION:    Add hotkeys that deal with the entire content of the popup (copy or send over to notepad) so the
+	; DESCRIPTION:    Add hotkeys that deal with the entire content of the popup (copy or send over to Notepad++) so the
 	;                 user doesn't have to select-all themselves.
 	; PARAMETERS:
 	;  guiId   (I,REQ) - The GUI ID of the popup, to use to limit where the hotkey triggers.
@@ -159,8 +159,8 @@ class TextPopup {
 		hotkeyFunction := ObjBindMethod(ClipboardLib, "setAndToast", content, "popup content") ; ClipboardLib.setAndToast
 		Hotkey, !c, % hotkeyFunction
 		
-		; Send to new Notepad instance
-		hotkeyFunction := ObjBindMethod(Notepad, "openNewInstanceWithText", content) ; Notepad.openNewInstanceWithText
+		; Send to temp file and open in Notepad++
+		hotkeyFunction := ObjBindMethod(NotepadPlusPlus, "openTempText", content) ; NotepadPlusPlus.openTempText
 		Hotkey, !v, % hotkeyFunction
 		
 		Hotkey, IfWinActive

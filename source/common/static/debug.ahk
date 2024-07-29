@@ -53,15 +53,15 @@ class Debug {
 	}
 	
 	;---------
-	; DESCRIPTION:    Launch a new instance of Notepad with debug info about the given list of parameters.
+	; DESCRIPTION:    Open debug info about the given list of parameters in a temp file in Notepad++.
 	; PARAMETERS:
 	;  params* (I,REQ) - A variable number of arguments to display. For 1 argument, we will interpret it as a value (not a
 	;                    label), but for >1 arguments an even number of arguments should be passed in label,value pairs.
 	;---------
-	notepad(params*) {
+	tempFile(params*) {
 		table := new DebugTable().setBorderType(TextTable.BorderType_None)
 		table.addPairs(params*)
-		Notepad.openNewInstanceWithText(table.getText())
+		NotepadPlusPlus.openTempText(table.getText())
 	}
 	
 	;---------

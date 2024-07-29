@@ -23,15 +23,18 @@
 ^!#k:: new ActionObject(SelectLib.getText()).linkSelectedTextWeb()
 ^!#+k::new ActionObject(SelectLib.getText()).linkSelectedTextEdit()
 
-; Grab the selected text and pop it into a new Notepad window
+; Grab the selected text and pop it into a new Notepad++ window
 !v::
-	putSelectedTextIntoNewNotepadWindow() {
-		if(!GetKeyState("v", "P")) ; Check physical state so we can tell the difference between the keys being pressed vs. sent by keyboard macros.
+	selectedTextToNotepad() {
+		; Check physical state so we can tell the difference between the keys being pressed vs. sent by keyboard macros.
+		if(!GetKeyState("v", "P"))
 			return
 		
+		; Get the selected text to use
 		selectedText := SelectLib.getText()
 		if(selectedText = "")
 			return
-		
-		Notepad.openNewInstanceWithText(selectedText)
+
+		; Open it up in Notepad++
+		NotepadPlusPlus.openTempText(selectedText)
 	}

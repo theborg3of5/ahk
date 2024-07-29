@@ -78,7 +78,6 @@
 				Launchy							Launchy.exe
 				MBuilder						MBuilder.exe
 				Messenger						Messenger.exe			-							Messenger									NO_PADDING		EXACT
-				Notepad							notepad.exe
 				Notepad++						notepad++.exe			Notepad++
 				OneNote							ONENOTE.EXE				Framework::CFrame
 				Outlook							OUTLOOK.EXE				rctrl_renwnd32

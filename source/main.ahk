@@ -53,7 +53,6 @@ Run(subFolder "windowMoverSizer.ahk")
 #Include internetExplorer.ahk
 #Include kdiff.ahk
 #Include launchy.ahk
-#Include notepad.ahk
 #Include notepadPlusPlus.ahk
 #Include onenote.ahk
 #Include onetastic.ahk

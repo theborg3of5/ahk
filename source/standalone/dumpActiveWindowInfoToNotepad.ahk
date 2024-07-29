@@ -1,4 +1,4 @@
-; Dump a bunch of info about the active window into Notepad.
+; Dump a bunch of info about the active window into a temporary file and open that in Notepad++.
 
 #Include <includeCommon>
 
@@ -15,6 +15,6 @@ info.push("Tooltip Text",       WindowLib.getTooltipText())
 info.push("Current Control ID", ControlGetFocus("A"))
 info.push("VisualWindow",       new VisualWindow("A"))
 
-Debug.notepad(info*)
+Debug.tempFile(info*)
 
 ExitApp

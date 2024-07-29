@@ -8,7 +8,6 @@
 ^!+n::Config.activateProgram("Notepad++")
 ^!+t::Config.activateProgram("TickTick")
 ^!#m::Config.activateProgram("Chrome Messages")
-^!#n::Config.runProgram("Notepad")
 ^!#t::Config.runProgram("Teams")
 ^!#v::Config.activateProgram("VSCode", "--profile Default")
 ^!#/::Config.activateProgram("AutoHotkey WinSpy")
@@ -39,3 +38,6 @@
 #If Config.machineIsWorkDesktop
 	^!#e::Config.activateProgram("Outlook")
 #If
+
+; Open up a temporary file in Notepad++ as a scratchpad.
+^!#n::NotepadPlusPlus.openTempText("") ; Blank to clear it out

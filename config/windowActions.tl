@@ -12,7 +12,6 @@
 	Explorer						MIN			-				-				-				-			-			ESCAPE
 	GitHub Desktop					CLOSE		-				-				-				-			-			ESCAPE
 	Messenger						MIN			-				-				-				-			-			ESCAPE		HOME_DESKTOP
-	Notepad							CLOSE
 	Skype							CLOSE
 	Slack							CLOSE		-				-				-				-			RUN			ESCAPE		HOME_DESKTOP
 	Spotify							CLOSE		CLOSE			-				-				-			-			ESCAPE

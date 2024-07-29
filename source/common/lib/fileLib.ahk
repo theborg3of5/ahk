@@ -223,8 +223,7 @@ class FileLib {
 			return
 		
 		FileDelete, % filePath
-		if(newContents)
-			FileAppend, % newContents, % filePath
+		FileAppend, % newContents, % filePath
 	}
 
 	;---------
@@ -314,9 +313,53 @@ class FileLib {
 		; so the parent of that is our actual common folder.
 		return FileLib.getParentFolder(overlapPath).appendIfMissing("\")
 	}
+
+	;---------
+	; DESCRIPTION:    Replace the oldest temp file (of our circulating set of temp files) with the given text.
+	; PARAMETERS:
+	;  textToWrite (I,REQ) - The text to use
+	; RETURNS:        Path to the temp file we used.
+	;---------
+	writeToOldestTempFile(textToWrite) {
+		earliestPath := this.getOldestTempFile()
+		
+		this.replaceFileWithString(earliestPath, textToWrite)
+
+		return earliestPath
+	}
+
+	;---------
+	; DESCRIPTION:    Get the full path of the oldest temp file (or the first one that doesn't exist).
+	;                 We're assuming this is the least important of our circulating set of temp files.
+	; RETURNS:        Full filepath to the temp file
+	;---------
+	getOldestTempFile() {
+		earliestTime := A_Now
+		earliestPath := ""
+		Loop, % this.MAX_TEMP_FILES {
+			path := this.getTempFile(A_Index)
+
+			; If we haven't hit the max number of temp files yet, just create the next one in line.
+			if (!FileExist(path)) {
+				earliestPath := path
+				Break
+			}
+			
+			; Otherwise, keep track of the oldest one - that's the one we'll replace.
+			fileTime := FileGetTime(path)
+			if(fileTime < earliestTime) {
+				earliestTime := fileTime
+				earliestPath := path
+			}
+		}
+
+		return earliestPath
+	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
 	;region ------------------------------ PRIVATE ------------------------------
+	static MAX_TEMP_FILES := 5 ; The maximum number of temp files that we'll generate before reusing them.
+
 	;---------
 	; DESCRIPTION:    Reduce the given path to a folder.
 	; PARAMETERS:
@@ -331,6 +374,16 @@ class FileLib {
 			folder := FileLib.getParentFolder(path)
 		
 		return folder.appendIfMissing("\")
+	}
+
+	;---------
+	; DESCRIPTION:    Get the path to a specific temp file (used by getOldestTempFile).
+	; PARAMETERS:
+	;  num (I,REQ) - Numeric index of the file to use
+	; RETURNS:        Full filepath to the temp file with the given index        
+	;---------
+	getTempFile(num) {
+		return A_Temp "\ahkTemp" num ".txt"
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------
 }

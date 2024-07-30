@@ -7,8 +7,6 @@
 		☐ Figure out how to build extension with my own changes
 			✔ Running from source @done(22-11-03 12:19)
 			☐ Compile to install on other machines
-		☐ Region formatting
-			☐ Syntax-highlight them with a different name
 		☐ Finding definitions
 			A lot of this works out of the box, but could I extend it to the more special cases?
 			Looks like this probably lives (or should live) in defProvider?
@@ -21,8 +19,6 @@
 					Actually, this works fine if I include the full %A_LineFile%\..\ for the current directory
 						i.e. ..\base\actionObjectBase.ahk => %A_LineFile%\..\..\base\actionObjectBase.ahk (adding %A_LineFile%\..\)
 				☐ Special string/object/array bases
-		☐ Folding
-			☐ /**/ with ; inside
 		☐ Intellisense
 			The only built-in support is for a one-line comment above functions, not enough for me.
 			✔ Pull in entire header like notepad++ did @done(22-10-27 13:35)

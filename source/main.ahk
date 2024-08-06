@@ -40,7 +40,7 @@ Run(subFolder "windowMoverSizer.ahk")
 ;region Program-specific hotkeys
 #Include %A_ScriptDir%\program\
 #Include chrome.ahk
-#Include ciscoAnyConnect.ahk
+#Include ciscoVPN.ahk
 #Include ditto.ahk
 #Include emc2.ahk
 #Include epicStudio.ahk

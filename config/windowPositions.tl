@@ -43,7 +43,7 @@
 			OneNote						RIGHT_EDGE		CENTERED		1460		100%		HOME
 			Spotify						RIGHT_EDGE		CENTERED		1460		100%		HOME		1
 		
-			Cisco AnyConnect VPN		LEFT_EDGE+25	300				-			-			HOME
+			Cisco VPN					LEFT_EDGE+25	300				-			-			HOME
 			EMC2						-				-				MAX			MAX			WORK
 			Notepad++					-				-				MAX			MAX
 			OneNote						-				-				MAX			MAX

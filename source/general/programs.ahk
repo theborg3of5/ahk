@@ -24,7 +24,7 @@
 #If Config.machineIsHomeDesktop
 	^!#f::
 		; Safety check for VPN
-		if(Config.doesWindowExist("Cisco AnyConnect VPN")) {
+		if(Config.doesWindowExist("Cisco VPN")) {
 			MsgBox, VPN running!
 			return
 		}

@@ -5,7 +5,7 @@
 	AutoHotkey						CLOSE		-				-				SELECT
 	AutoHotkey WinSpy				CLOSE
 	Beeper							CLOSE		-				-				-				-			-			ESCAPE
-	Cisco AnyConnect VPN			CLOSE
+	Cisco VPN						CLOSE
 	EMC2 XDS Open					-			-				-				SELECT
 	EMC2 DLG/QAN/PRJ Open			-			-				-				SELECT
 	Explorer						MIN			OTHER			-				-				-			-			ESCAPE		HOME_DESKTOP

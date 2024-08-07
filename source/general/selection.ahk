@@ -24,7 +24,7 @@
 ^!#+k::new ActionObject(SelectLib.getText()).linkSelectedTextEdit()
 
 ; Grab the selected text and pop it into a new Notepad++ window
-!v::
+!#v::
 	selectedTextToNotepad() {
 		; Check physical state so we can tell the difference between the keys being pressed vs. sent by keyboard macros.
 		if(!GetKeyState("v", "P"))

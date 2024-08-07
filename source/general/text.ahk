@@ -1,5 +1,13 @@
 ; Hotkeys for getting/sending and manipulating text.
 
+; Populate the clipboard from an input box.
+!v::
+	setClipboard() {
+		text := InputBox("Set clipboard", "Enter text to set the clipboard to:")
+		if (text)
+			ClipboardLib.set(text)
+	}
+
 ; Send clipboard as plain text.
 ^!v::
 	HotkeyLib.waitForRelease()

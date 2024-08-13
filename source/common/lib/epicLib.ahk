@@ -453,7 +453,7 @@ class EpicLib {
 			Loop, Files, %versionFolderPath%\*, D
 			{
 				name := A_LoopFileName
-				if (name.startsWith("App ")) ; Ignore binary folders
+				if (name.startsWith("App ") || name.endsWith(" Bin")) ; Ignore binary folders
 					Continue
 
 				; Categorize folders, add basic abbreviations (which may be overridden)

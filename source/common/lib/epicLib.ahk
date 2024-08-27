@@ -468,7 +468,7 @@ class EpicLib {
 						name   := "DLG " dlgId
 						abbrev := "s"
 					} else {
-						cat    := "Current DLGs"
+						cat    := "Other Current DLGs"
 						name   := "DLG " dlgId
 						abbrev := "d"
 					}
@@ -498,7 +498,7 @@ class EpicLib {
 
 		s := new Selector().setTitle(title).setIcon(icon)
 		this.addFolderChoicesForType(s, folders, "Known DLGs")
-		this.addFolderChoicesForType(s, folders, "Current DLGs")
+		this.addFolderChoicesForType(s, folders, "Other Current DLGs")
 		this.addFolderChoicesForType(s, folders, "User Branches")
 		this.addFolderChoicesForType(s, folders, "SUs", true)
 		this.addFolderChoicesForType(s, folders, "Integration")

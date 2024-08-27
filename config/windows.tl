@@ -102,6 +102,7 @@
 				VMware Horizon Client			vmware-view.exe
 				Visual Studio					devenv.exe
 				VSCode							Code.exe
+				Windows Alt Tab					explorer.exe			XamlExplorerHostIslandWindow
 				Windows Taskbar					explorer.exe			Shell_TrayWnd
 				Windows Taskbar Secondary		explorer.exe			Shell_SecondaryTrayWnd
 				Windows Terminal				WindowsTerminal.exe

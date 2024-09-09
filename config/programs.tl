@@ -4,7 +4,6 @@
 	~PATH.addToStart(<PROGRAM_FILES_86>\) {
 		Chrome						Google\Chrome\Application\chrome.exe
 		Chrome Proxy				Google\Chrome\Application\chrome_proxy.exe
-		EpicStudio					EpicStudio\EpicStudio.exe
 		Foobar						foobar2000\foobar2000.exe
 		Launchy						Launchy\Launchy.exe
 		Notepad++					Notepad++\notepad++.exe												HOME_LAPTOP
@@ -16,6 +15,7 @@
 		Hyperdrive					Epic\Hyperdrive\VersionIndependent\Hyperspace.exe
 	} ~PATH.addToStart(<PROGRAM_FILES>\) {
 		AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk
+		EpicStudio					EpicStudio\EpicStudio.exe
 		Chrome						Google\Chrome\Application\chrome.exe								WORK_DESKTOP
 		Chrome Proxy				Google\Chrome\Application\chrome_proxy.exe							WORK_DESKTOP
 		Everything					Everything\Everything.exe

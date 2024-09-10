@@ -311,8 +311,6 @@ class EpicStudio {
 			isDebugging := true
 		else if(WinActive("", Config.private["ES_HYPERSPACE_EXE"]))
 			isDebugging := true
-		else if(WinActive("", Config.private["ES_VB6_EXE"]))
-			isDebugging := true
 		
 		settings.restore()
 		return isDebugging

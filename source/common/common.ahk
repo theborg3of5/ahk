@@ -103,7 +103,6 @@ Object(params*) {
 	#Include snapper.ahk
 	#Include soundSwitch.ahk
 	#Include telegram.ahk
-	#Include vb6.ahk
 	#Include visualStudio.ahk
 	#Include vsCode.ahk
 	#Include zoom.ahk

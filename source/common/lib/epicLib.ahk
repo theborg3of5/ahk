@@ -551,7 +551,6 @@ class EpicLib {
 			windows.push({windowName:"Chrome", title:title})
 		For i,title in Outlook.getAllMessageTitles() ; Outlook message titles
 			windows.push({windowName:"Outlook", title:title})
-		windows.push({windowName:"VB6", title:"DLG " VB6.getDLGIdFromProject()}) ; VB6 (sidebar title from project group)
 		
 		return windows
 	}
@@ -568,7 +567,7 @@ class EpicLib {
 			return true
 		
 		; Certain windows will only ever include the INI/ID, never the record title.
-		noTitleWindows := ["EMC2", "EpicStudio", "Visual Studio", "Explorer", "VB6"]
+		noTitleWindows := ["EMC2", "EpicStudio", "Visual Studio", "Explorer"]
 		if(noTitleWindows.contains(windowName))
 			return false
 		

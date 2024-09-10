@@ -11,7 +11,6 @@
 		Putty						PuTTY\putty.exe
 		Snapper						Epic\Snapper\Snapper.exe
 		Thunder						Thunder\Thunder.exe
-		VB6							Microsoft Visual Studio\VB98\VB6.EXE
 		Hyperdrive					Epic\Hyperdrive\VersionIndependent\Hyperspace.exe
 	} ~PATH.addToStart(<PROGRAM_FILES>\) {
 		AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk

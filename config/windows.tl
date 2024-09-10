@@ -98,7 +98,6 @@
 				TortoiseGit						TortoiseGitProc.exe
 				TortoiseSVN						TortoiseProc.exe
 				TrueCrypt						TrueCrypt.exe			CustomDlg
-				VB6								VB6.exe					wndclass_desked_gsk
 				VMware Horizon Client			vmware-view.exe
 				Visual Studio					devenv.exe
 				VSCode							Code.exe

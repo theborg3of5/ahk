@@ -66,7 +66,6 @@ Run(subFolder "windowMoverSizer.ahk")
 #Include teams.ahk
 #Include telegram.ahk
 #Include tortoise.ahk
-#Include vb6.ahk
 #Include visualStudio.ahk
 #Include vsCode.ahk
 #Include wilma.ahk

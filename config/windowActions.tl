@@ -18,7 +18,6 @@
 	Teams							CLOSE		CLOSE			-				-				-			-			ESCAPE
 	Telegram						CLOSE		CLOSE			-				-				-			RUN			ESCAPE
 	Thunder							CLOSE
-	VB6								-			POST_MESSAGE
 
 	; EpicStudio popups - handle Ctrl+Backspace.
 	EpicStudio New Object Window	-			-				-				SELECT

@@ -483,7 +483,7 @@ class EpicLib {
 				} else {
 					cat    := "User Branches"
 					name   := name
-					abbrev := [ name.sub(1, 5), name ]
+					abbrev := [ name.remove("-").sub(1, 5), name ]
 				}
 
 				; Extra name cleanup
@@ -496,10 +496,23 @@ class EpicLib {
 			}
 		}
 
+		; Also check the unversioned gitlab folder
+		Loop, Files, C:\EpicSource\gitlab\*, D
+		{
+			cat := "GitLab"
+			name := A_LoopFileName
+			abbrev := [ name.remove("-").sub(1, 5), name ]
+
+			if(!folders[cat])
+				folders[cat] := []
+			folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
+		}
+
 		s := new Selector().setTitle(title).setIcon(icon)
 		this.addFolderChoicesForType(s, folders, "Known DLGs")
 		this.addFolderChoicesForType(s, folders, "Other Current DLGs")
 		this.addFolderChoicesForType(s, folders, "User Branches")
+		this.addFolderChoicesForType(s, folders, "GitLab")
 		this.addFolderChoicesForType(s, folders, "SUs", true)
 		this.addFolderChoicesForType(s, folders, "Integration")
 		

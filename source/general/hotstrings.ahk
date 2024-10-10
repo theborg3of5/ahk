@@ -103,6 +103,7 @@
 ::aass'd::auto-associated
 ::aassoc'd::auto-associated
 :*0:ade::associated DBC episode
+::pri'n::prioritization
 
 :?:sync's::synchronous ; Allow in other words for asynchronously
 

@@ -14,6 +14,17 @@ class StringLib {
 		replaceString := escapeChar charToEscape
 		return inputString.replace(charToEscape, replaceString)
 	}
+
+	;---------
+	; DESCRIPTION:    Wrap the given string in quotes, escaping any double-quotes inside by doubling them.
+	; PARAMETERS:
+	;  inputString (I,REQ) - The string to wrap in quotes.
+	; RETURNS:        Quoted string
+	;---------
+	escapeAndQuote(inputString) {
+		QUOTE := """" ; A single double-quote character
+		return QUOTE this.escapeCharUsingChar(inputString, QUOTE, QUOTE) QUOTE
+	}
 	
 	;---------
 	; DESCRIPTION:    Determine whether the given string is empty or contains only whitespace.

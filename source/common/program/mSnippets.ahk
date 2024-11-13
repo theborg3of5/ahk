@@ -25,7 +25,7 @@ class MSnippets {
 		
 		data := new Selector("MSnippets.tls").prompt()
 		subType  := data["SUBTYPE"]
-		inputAry := data["VARS_AND_VALS"].split(",")
+		inputAry := AHKCodeLib.splitVarList(data["VARS_AND_VALS"])
 
 		Switch data["TYPE"] {
 			Case "LOOP":  snipString := MSnippets.buildMLoop(subType, inputAry, numIndents)

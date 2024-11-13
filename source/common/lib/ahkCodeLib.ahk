@@ -187,6 +187,56 @@ class AHKCodeLib {
 		
 		return paramsAry.join(",")
 	}
+	
+	;---------
+	; DESCRIPTION:    Manually split up the variable list by comma, so we can keep commas
+	;                 parens/quotes intact instead of splitting on them. This also drops any
+	;                 leading/trailing whitespace from each variable name.
+	; PARAMETERS:
+	;  varList (I,REQ) - Comma-separated list of parameters to generate the debug parameters for.
+	; RETURNS:        Array of variable names, split on commas.
+	;---------
+	splitVarList(varList) {
+		if(varList = "")
+			return []
+		
+		QUOTE := """" ; Double-quote character
+		paramsAry := []
+		
+		currentName  := ""
+		openParens   := 0
+		openBrackets := 0
+		openQuotes   := false
+		Loop, Parse, varList
+		{
+			char := A_LoopField
+
+			if(char = QUOTE)
+				openQuotes := !openQuotes ; Quotes close other quotes, so just swap between open and closed
+			
+			; Track open parens and brackets (but only if quotes aren't currently open).
+			if(!openQuotes) {
+				Switch char {
+					Case "(":   openParens++
+					Case ")":   openParens--
+					Case "[":   openBrackets++
+					Case "]":   openBrackets--
+				}
+			}
+			
+			; Split on commas, but only if there are no open parens or quotes.
+			if(char = "," && openParens = 0 && !openQuotes && !openBrackets) {
+				paramsAry.push(currentName.withoutWhitespace())
+				currentName := ""
+				Continue
+			}
+			
+			currentName .= char
+		}
+		paramsAry.push(currentName.withoutWhitespace())
+		
+		return paramsAry
+	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
 	;region ------------------------------ PRIVATE ------------------------------
@@ -224,56 +274,6 @@ class AHKCodeLib {
 		
 		; Property without parameters or member without a default value
 		return "OTHER"
-	}
-	
-	;---------
-	; DESCRIPTION:    Manually split up the variable list by comma, so we can keep commas
-	;                 parens/quotes intact instead of splitting on them. This also drops any
-	;                 leading/trailing whitespace from each variable name.
-	; PARAMETERS:
-	;  varList (I,REQ) - Comma-separated list of parameters to generate the debug parameters for.
-	; RETURNS:        Array of variable names, split on commas.
-	;---------
-	splitVarList(varList) {
-		if(varList = "")
-			return []
-		
-		QUOTE := """" ; Double-quote character
-		paramsAry := []
-		
-		currentName := ""
-		openParens   := 0
-		openBrackets := 0
-		openQuotes   := false
-		Loop, Parse, varList
-		{
-			char := A_LoopField
-
-			if(char = QUOTE)
-				openQuotes := !openQuotes ; Quotes close other quotes, so just swap between open and closed
-			
-			; Track open parens and brackets (but only if quotes aren't currently open).
-			if(!openQuotes) {
-				Switch char {
-					Case "(":   openParens++
-					Case ")":   openParens--
-					Case "[":   openBrackets++
-					Case "]":   openBrackets--
-				}
-			}
-			
-			; Split on commas, but only if there are no open parens or quotes.
-			if(char = "," && openParens = 0 && !openQuotes && !openBrackets) {
-				paramsAry.push(currentName.withoutWhitespace())
-				currentName := ""
-				Continue
-			}
-			
-			currentName .= char
-		}
-		paramsAry.push(currentName.withoutWhitespace())
-		
-		return paramsAry
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------
 }

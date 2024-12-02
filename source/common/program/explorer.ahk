@@ -210,8 +210,10 @@ class Explorer {
 		}
 		
 		; Clean up path if we got it.
-		if(path != "")
+		if(path != "") {
 			path := FileLib.cleanupPath(path)
+			path := path.removeFromEnd(" - File Explorer")
+		}
 		
 		return path
 	}

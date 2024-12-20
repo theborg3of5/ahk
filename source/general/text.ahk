@@ -5,7 +5,7 @@
 	setClipboard() {
 		text := InputBox("Set clipboard", "Enter text to set the clipboard to:")
 		if (text)
-			ClipboardLib.set(text)
+			ClipboardLib.setAndToast(text, "value")
 	}
 
 ; Send clipboard as plain text.

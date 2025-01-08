@@ -34,7 +34,6 @@
 			Process Explorer			CENTERED		CENTERED		1440		900
 			Visual Studio				-				-				MAX			MAX			WORK
 			VSCode						-				-				MAX			MAX			WORK
-			WinMerge					CENTERED		CENTERED		100%		100%
 			Zoom						-				-				MAX			MAX			HOME
 	}
 	

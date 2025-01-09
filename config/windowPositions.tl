@@ -1,4 +1,4 @@
-﻿; NAME = NAME from windows.tl
+; NAME = NAME from windows.tl
 ; X/Y/WIDTH/HEIGHT support special constant values from VisualWindow (i.e. RIGHT_EDGE for VisualWindow.X_RightEdge)
 
 [			NAME						X				Y				WIDTH		HEIGHT		CONTEXT		ACTIVATE	MONITOR		PRESET	]
@@ -28,6 +28,7 @@
 	
 	~MONITOR.replaceWith(MIDDLE) {
 			Chrome						-				-				MAX			MAX
+			Chrome Hyperspace			-				-				1920		1080		WORK
 			EpicStudio					-				-				MAX			MAX			WORK
 			Hyperspace					CENTERED		CENTERED		1920		1080		WORK
 			Hyperdrive					CENTERED		CENTERED		1920		1080		WORK

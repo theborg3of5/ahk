@@ -37,6 +37,7 @@
 	☐ Get rid of updateNotepadPPSupport once I'm sure I won't need it anymore (currently shows how to parse my headers and such).
 
 * Fixes / Cleanup * :
+	☐ TableList mods - review how we handle multiple mods - for example, it would be nice if when there's multiple .defaultTo options, the most specific (deepest, last) one wins?
 	☐ F2 for ***s
 		☐ Outlook: this works, as long as AHK is _not_ running as admin
 			myFindObjOutlook := ComObjActive("Outlook.Application").ActiveInspector.WordEditor.Application.Selection.Find

@@ -18,7 +18,6 @@
 		
 # Social windows
 		~WIDTH.defaultTo(950) | ~HEIGHT.defaultTo(750) | ~X.replaceWith(RIGHT_EDGE) | ~Y.replaceWith(TOP_EDGE) {
-			Chrome Messages
 			Beeper						-				-				50%			100%
 			Messenger
 			Slack
@@ -57,7 +56,6 @@
 			Messenger					LEFT_EDGE		BOTTOM_EDGE
 			Slack						RIGHT_EDGE		BOTTOM_EDGE
 			Telegram					RIGHT_EDGE		TOP_EDGE
-			Chrome Messages				LEFT_EDGE		TOP_EDGE
 			Beeper						LEFT_EDGE		TOP_EDGE
 			Chrome						-				-				MAX			MAX
 		}
@@ -65,7 +63,6 @@
 			Messenger					LEFT_EDGE		BOTTOM_EDGE
 			Slack						RIGHT_EDGE		BOTTOM_EDGE
 			Telegram					RIGHT_EDGE		TOP_EDGE
-			Chrome Messages				LEFT_EDGE		TOP_EDGE
 			Beeper						LEFT_EDGE		TOP_EDGE
 			Chrome						-				-				MAX			MAX
 		}

@@ -15,7 +15,6 @@
 				Chrome Join						-						-								Join
 				Beeper							-						-								(Beeper)\|(Beeper \\| .+)				-				REGEX				WORK_DESKTOP
 				TickTick						-						-								 - TickTick
-				Chrome Messages					-						-								Messages for web
 				Chrome Workplans				-						-								Week of \d{1,2}\/\d{1,2}\/\d{4}			-				REGEX
 				Chrome Hyperspace				-						-								– Hyperspace –
 		}

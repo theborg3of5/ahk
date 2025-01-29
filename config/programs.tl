@@ -64,7 +64,6 @@
 	; Chrome apps
 	~PATH_TYPE.replaceWith(CHROME_APP) {
 		Beeper						kebihpkoclefnhgdieipmimdjhpdkbjc									WORK_DESKTOP | WORK_VDI
-		Chrome Messages				hpfldicfbfomlpcikngkocigghgafkph
 		TickTick					cfammbeebmjdpoppachopcohfchgjapd
 	}
 	

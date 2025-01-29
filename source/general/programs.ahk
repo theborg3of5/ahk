@@ -7,9 +7,8 @@
 ^!+g::Config.activateProgram("Chrome")
 ^!+n::Config.activateProgram("Notepad++")
 ^!+t::Config.activateProgram("TickTick")
-^!#m::Config.activateProgram("Chrome Messages")
 ^!#t::Config.runProgram("Teams")
-^!#v::Config.activateProgram("VSCode", "--profile Default")
+^!#v::Config.runProgram("VSCode", "--profile Default")
 ^!#/::Config.activateProgram("AutoHotkey WinSpy")
 
 ; Some programs are work-specific

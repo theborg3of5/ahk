@@ -10,8 +10,10 @@ global durationObj
 global timerLabelText
 
 ; Get any inputs from command line
-durationString = %1%
-labelText      = %2% %3% %4% %5% %6% %7% %8%
+durationString := A_Args.RemoveAt(1)
+Loop, % A_Args.Length() {
+	labelText := labelText.appendPiece(" ", A_Args[A_Index])
+}
 
 if(!getTimerInfo(durationString, labelText))
 	ExitApp

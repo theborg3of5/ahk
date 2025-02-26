@@ -24,3 +24,5 @@ if(!PhoneLib.isValidNumber(numToCall))
 
 ; Otherwise make it so!
 PhoneLib.call(numToCall)
+
+ExitApp

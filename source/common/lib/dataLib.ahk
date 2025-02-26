@@ -125,6 +125,7 @@ class DataLib {
 		maxValue := DataLib.max(maxValue, newValue)
 	}
 	
+	;region Number conversions
 	;---------
 	; DESCRIPTION:    Convert the provided number into an integer.
 	; PARAMETERS:
@@ -155,7 +156,9 @@ class DataLib {
 		hexNum := "0x" hexNum
 		return DataLib.numToInteger(hexNum)
 	}
+	;endregion Number conversions
 	
+	;region Bitfield handling
 	;---------
 	; DESCRIPTION:    Check for a particular flag in a bitfield.
 	; PARAMETERS:
@@ -186,6 +189,7 @@ class DataLib {
 	bitFieldRemoveFlag(bitField, flag) {
 		return (bitField & ~flag)
 	}
+	;endregion Bitfield handling
 	
 	;---------
 	; DESCRIPTION:    Convert a pseudo-array into an actual array.

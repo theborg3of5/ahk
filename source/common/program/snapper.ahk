@@ -165,20 +165,28 @@
 				outLines := rightLines
 				prevLineNum := 0
 				
-				; Ignore the line if it's a line 0 (otherwise let it through normally)
+				; Ignore the line if it's the (top) line 0 (otherwise let it through normally)
 				if(line.startsWith("0 "))
 					Continue
 			}
+
+			; Related-multi handling: sublevel line 0s (i.e. 3,0)
+			if (line.matchesRegEx("\d,0")) {
+				prevLineNum := 0 ; Reset the line counter
+				Continue
+			}
 			
 			; Line number handling
-			lineNum := line.beforeString(" ")
+			lineLabel := line.beforeString(" ")
+			lineNum := lineLabel.afterString(",") ; Handle comma for related-multi lines
 			expectedNum := prevLineNum + 1
 			if(lineNum > expectedNum) { ; Add lines to fill in gap
 				Loop, % lineNum - expectedNum
 					outLines.push("")
 			}
 			prevLineNum := lineNum
-			line := line.removeFromStart(lineNum " ") ; Remove line number
+			; Remove line label (might include two numbers with a comma for related-multi)
+			line := line.removeFromStart(lineLabel).removeFromStart(" ") ; Remove space separately in case it doesn't exist (happens with blank lines)
 			
 			; Replace Ascii-based newlines
 			line := line.replace("<13><10>", "`n")

@@ -139,8 +139,9 @@ class Explorer {
 	; RETURNS:        true/false
 	;---------
 	mouseIsOverTaskbar() {
-		MouseGetPos("", "", "", controlUnderMouse)
-		return (controlUnderMouse == "MSTaskListWClass1")
+		MouseGetPos("", "", winId)
+		name := Config.findWindowName("ahk_id " winId)
+		return (name = "Windows Taskbar" || name = "Windows Taskbar Secondary")
 	}
 
 	;---------

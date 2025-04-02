@@ -33,28 +33,20 @@
 	; Middle-click on taskbar buttons to close them.
 	$MButton::
 		closeWindowFromTaskbar() {
-			; Open up basic right-click menu to try and close the window.
-			Send, +{RButton}
+			; Open up right-click menu
+			Send, {RButton}
+
+			; Wait for the right-click menu to appear (for up to 1 second)
+			WinWaitActive, % Config.windowInfo["Windows Taskbar Jump Menu"].titleString, , 1
 			
-			; Some windows don't have a shift+right click menu for some reason, so rely on the fact
-			; that shift+right-click focuses the window and just close it directly.
-			Sleep, 100 ; Give window a chance to get focus before we check
-			if (Explorer.currentWindowHasNoBasicRightClickMenu()) {
-				WindowActions.closeWindow("A")
-				return
-			}
-
-			; Wait up to 1 second for right-click menu to appear and get focus
-			WinWait, ahk_class #32768, , 1
-
 			; If it didn't (we timed out), show an error toast that this is probably a new
 			; window we should add to Explorer.currentWindowHasNoBasicRightClickMenu().
 			if (ErrorLevel = 1) {
-				Toast.ShowError("Failed to close window", "Shift-right-click menu did not appear", "Consider adding window to Explorer.currentWindowHasNoBasicRightClickMenu()")
+				Toast.ShowError("Failed to close window", "Jump menu did not appear within 1 second")
 				return
 			}
 	
-			Send, c ; Close
+			Send, {Up}{Enter}
 		}
 #If
 

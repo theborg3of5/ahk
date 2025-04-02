@@ -154,15 +154,19 @@
 		if(inputText.startsWith("0 "))
 			inputText := inputText.afterString("`n")
 		
-		; Split into 2 blocks to diff
-		leftLines  := []
-		rightLines := []
-		outLines := leftLines
+		; Split into 2-3 columns to diff
+		column := "LEFT" ; LEFT -> MIDDLE -> RIGHT
+		outLines := {"LEFT":[], "MIDDLE":[], "RIGHT":[]}
 		prevLineNum := 0
 		For _,line in inputText.split("`n", "`r ") {
-			; When we hit a DAT, drop it and swap to right block
+			; When we hit a DAT, drop it and move to the next column
 			if(this.removeDatFromMultiResponseValues(line)) {
-				outLines := rightLines
+				; Move to the next column
+				if (column = "LEFT")
+					column := "MIDDLE"
+				else if (column = "MIDDLE")
+					column := "RIGHT"
+				
 				prevLineNum := 0
 				
 				; Ignore the line if it's the (top) line 0 (otherwise let it through normally)
@@ -182,7 +186,7 @@
 			expectedNum := prevLineNum + 1
 			if(lineNum > expectedNum) { ; Add lines to fill in gap
 				Loop, % lineNum - expectedNum
-					outLines.push("")
+					outLines[column].push("")
 			}
 			prevLineNum := lineNum
 			; Remove line label (might include two numbers with a comma for related-multi)
@@ -191,15 +195,21 @@
 			; Replace Ascii-based newlines
 			line := line.replace("<13><10>", "`n")
 			
-			outLines.push(line)
+			outLines[column].push(line)
 		}
 		
-		; Put the blocks in files and diff it
-		pathLeft  := A_Temp "\ahkDiffLeft.txt"
-		pathRight := A_Temp "\ahkDiffRight.txt"
-		FileLib.replaceFileWithString(pathLeft,  leftLines.join("`n"))
-		FileLib.replaceFileWithString(pathRight, rightLines.join("`n"))
-		Config.runProgram("KDiff", pathLeft " " pathRight)
+		; Put the blocks in files
+		pathLeft   := A_Temp "\ahkDiffLeft.txt"
+		pathMiddle := A_Temp "\ahkDiffMiddle.txt"
+		FileLib.replaceFileWithString(pathLeft,   outLines["LEFT"].join("`n"))
+		FileLib.replaceFileWithString(pathMiddle, outLines["MIDDLE"].join("`n"))
+		if (!DataLib.isNullOrEmpty(outLines["RIGHT"])) {
+			pathRight  := A_Temp "\ahkDiffRight.txt"
+			FileLib.replaceFileWithString(pathRight,  outLines["RIGHT"].join("`n"))
+		}
+
+		; Diff it!
+		Config.runProgram("KDiff", pathLeft " " pathMiddle " " pathRight)
 	}
 	
 	;---------

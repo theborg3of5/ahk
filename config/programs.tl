@@ -7,7 +7,7 @@
 		Foobar						foobar2000\foobar2000.exe
 		Launchy						Launchy\Launchy.exe
 		Notepad++					Notepad++\notepad++.exe												HOME_LAPTOP
-		OneNote						Microsoft Office\root\Office16\ONENOTE.EXE
+;		OneNote						Microsoft Office\root\Office16\ONENOTE.EXE
 		Putty						PuTTY\putty.exe
 		Snapper						Epic\Snapper\Snapper.exe
 		Thunder						Thunder\Thunder.exe
@@ -22,7 +22,7 @@
 		KDiff						KDiff3\kdiff3.exe
 		GrepWin						grepWin\grepWin.exe
 		Notepad++					Notepad++\notepad++.exe
-		OneNote						Microsoft Office\root\Office16\ONENOTE.EXE							WORK_DESKTOP
+		OneNote						Microsoft Office\root\Office16\ONENOTE.EXE
 		Outlook						Microsoft Office\root\Office16\OUTLOOK.EXE							WORK_DESKTOP
 		TrueCrypt					TrueCrypt\TrueCrypt.exe
 		Visual Studio				Microsoft Visual Studio\2022\Professional\Common7\IDE\devenv.exe
@@ -51,6 +51,7 @@
 		GitHub Desktop				GitHubDesktop\GitHubDesktop.exe
 		GrepWin						Programs\grepWin\grepWin.exe										WORK_DESKTOP
 		Slack						slack\slack.exe														HOME_DESKTOP
+		VSCode						Programs\Microsoft VS Code\Code.exe									HOME_DESKTOP
 	}
 	
 	~PATH.addToStart(<USER_APPDATA>\) {

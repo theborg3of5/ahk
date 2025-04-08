@@ -59,7 +59,7 @@ class ActionObjectBase {
 	; PARAMETERS:
 	;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
 	; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
-	;                 the web- and edit-specific functions will call thru any overriden logic.
+	;                 the web- and edit-specific functions will call thru any overridden logic.
 	;---------
 	open(link := "") {
 		if(!link)
@@ -86,7 +86,7 @@ class ActionObjectBase {
 	; PARAMETERS:
 	;  link (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
 	; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
-	;                 the web- and edit-specific functions will call thru any overriden logic.
+	;                 the web- and edit-specific functions will call thru any overridden logic.
 	;---------
 	copyLink(link := "") {
 		if(!link)
@@ -114,7 +114,7 @@ class ActionObjectBase {
 	;                           weren't able to link the selected text.
 	;  link           (I,OPT) - If a link is given, we'll run it directly. Otherwise the link will come from this.getLink().
 	; NOTES:          Children that override this probably don't want to include the link parameter - it's only there so
-	;                 the web- and edit-specific functions will call thru any overriden logic.
+	;                 the web- and edit-specific functions will call thru any overridden logic.
 	;---------
 	linkSelectedText(problemMessage := "Failed to link selected text", link := "") {
 		if(!link)

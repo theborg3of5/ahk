@@ -1,10 +1,10 @@
 #Include actionObjectCodeSearch.ahk
 #Include actionObjectEMC2.ahk
 #Include actionObjectEpicStudio.ahk
-#Include actionObjectHelpdesk.ahk
 #Include actionObjectSVNLog.ahk
 #Include actionObjectTrackLab.ahk
 #Include actionObjectPath.ahk
+#Include actionObjectWebRecord.ahk
 
 /* Class that takes some text representing an object, and allows the caller to do something with it. This class itself mostly redirects to the child ActionObject* classes, based on the input (and prompting the user).
 	
@@ -46,10 +46,10 @@ class ActionObject {
 	static Type_CodeSearch := "CODESEARCH"
 	static Type_EpicStudio := "EPICSTUDIO"
 	static Type_EMC2       := "EMC2"
-	static Type_Helpdesk   := "HELPDESK"
 	static Type_SVNLog     := "SVNLOG"
 	static Type_TrackLab   := "TRACKLAB"
 	static Type_Path       := "PATH"
+	static Type_WebRecord  := "WEBRECORD"
 	
 	value   := "" ; Value (the unique bit of info to act upon, like a path or identifier)
 	type    := "" ; Determined type of ActionObject, from .Type_* constants
@@ -57,12 +57,12 @@ class ActionObject {
 	
 	;---------
 	; DESCRIPTION:    Try to determine the type of ActionObject that we'll need based on the input value.
-	; SIDE EFFECTS:   tryProcessAs* functions may set .value, .type, and .subType.
 	;---------
 	determineType() {
-		if(ActionObjectHelpdesk.isThisType(this.value, id)) {
-			this.type  := this.Type_Helpdesk
-			this.value := id
+		if(ActionObjectWebRecord.isThisType(this.value, subType, id)) {
+			this.type    := this.Type_WebRecord
+			this.subType := subType
+			this.value   := id
 			
 		} else if(ActionObjectPath.isThisType(this.value, pathType)) {
 			this.type    := this.Type_Path
@@ -119,9 +119,9 @@ class ActionObject {
 			Case this.Type_EpicStudio: return new ActionObjectEpicStudio(this.value, this.subType)
 			Case this.Type_EMC2:       return new ActionObjectEMC2(      this.value, this.subType)
 			Case this.Type_TrackLab:   return new ActionObjectTrackLab(  this.value, this.subType)
-			Case this.Type_Helpdesk:   return new ActionObjectHelpdesk(  this.value)
-			Case this.Type_SVNLog:     return new ActionObjectSVNLog(    this.value, this.subType)
 			Case this.Type_Path:       return new ActionObjectPath(      this.value, this.subType)
+			Case this.Type_SVNLog:     return new ActionObjectSVNLog(    this.value, this.subType)
+			Case this.Type_WebRecord:  return new ActionObjectWebRecord( this.value, this.subType)
 		}
 		
 		Toast.ShowError("Unrecognized type", "ActionObject doesn't know what to do with this type: " this.type)

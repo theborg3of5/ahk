@@ -2,9 +2,6 @@
 
 ~PATH_TYPE.defaultTo(EXE) {
 	~PATH.addToStart(<PROGRAM_FILES_86>\) {
-		Chrome						Google\Chrome\Application\chrome.exe
-		Chrome Proxy				Google\Chrome\Application\chrome_proxy.exe
-		Foobar						foobar2000\foobar2000.exe
 		Launchy						Launchy\Launchy.exe
 		Notepad++					Notepad++\notepad++.exe												HOME_LAPTOP
 ;		OneNote						Microsoft Office\root\Office16\ONENOTE.EXE
@@ -15,12 +12,10 @@
 	} ~PATH.addToStart(<PROGRAM_FILES>\) {
 		AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk
 		EpicStudio					EpicStudio\EpicStudio.exe
-		Chrome						Google\Chrome\Application\chrome.exe								WORK_DESKTOP
-		Chrome Proxy				Google\Chrome\Application\chrome_proxy.exe							WORK_DESKTOP
+		Chrome						Google\Chrome\Application\chrome.exe
 		Everything					Everything\Everything.exe
 		Internet Explorer			Internet Explorer\iexplore.exe
 		KDiff						KDiff3\kdiff3.exe
-		GrepWin						grepWin\grepWin.exe
 		Notepad++					Notepad++\notepad++.exe
 		OneNote						Microsoft Office\root\Office16\ONENOTE.EXE
 		Outlook						Microsoft Office\root\Office16\OUTLOOK.EXE							WORK_DESKTOP
@@ -47,9 +42,10 @@
 		Process Explorer			<PROGRAM_FILES>\ProcessExplorer\procexp.exe
 	
 	~PATH.addToStart(<USER_APPDATA_LOCAL>\) {
-		Beeper						Programs\beeper\Beeper.exe											HOME_DESKTOP
+		Beeper						Programs\BeeperTexts\Beeper.exe										HOME_DESKTOP
 		GitHub Desktop				GitHubDesktop\GitHubDesktop.exe
-		GrepWin						Programs\grepWin\grepWin.exe										WORK_DESKTOP
+		GrepWin						Programs\grepWin\grepWin.exe
+		GrepWin						Apps\grepWin\grepWin.exe											HOME_DESKTOP
 		Slack						slack\slack.exe														HOME_DESKTOP
 		VSCode						Programs\Microsoft VS Code\Code.exe									HOME_DESKTOP
 	}

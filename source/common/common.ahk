@@ -101,7 +101,6 @@ Object(params*) {
 	#Include outlook.ahk
 	#Include putty.ahk
 	#Include snapper.ahk
-	#Include soundSwitch.ahk
 	#Include telegram.ahk
 	#Include visualStudio.ahk
 	#Include vsCode.ahk

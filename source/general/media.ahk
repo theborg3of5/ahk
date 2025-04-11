@@ -21,8 +21,3 @@
 Media_Stop::
 	Config.runProgram("Spotify")
 return
-
-; SoundSwitch handling
-#If Config.doesWindowExist("SoundSwitch")
-	^F12::SoundSwitch.toggleDevices()
-#If

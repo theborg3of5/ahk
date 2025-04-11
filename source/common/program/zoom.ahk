@@ -26,7 +26,7 @@ class Zoom {
 	;region ------------------------------ PRIVATE ------------------------------
 	static isGalleryView := true ; Most rooms I frequent start in gallery view.
 	
-	; Hotkeys configured in SoundSwitch
+	; Hotkeys configured in Zoom
 	static Hotkey_SpeakerView := "!{F1}"
 	static Hotkey_GalleryView := "!{F2}"
 	

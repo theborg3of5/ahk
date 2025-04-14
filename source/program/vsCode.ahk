@@ -11,7 +11,7 @@
 	Pause::VSCode.toggleProgramAndClass()
 	
 	; Redo the indentation for the selected documentation lines
-	^+Enter::new HeaderDocBlock().rewrapSelection()
+	^+Enter:: new HeaderDocBlock().rewrapSelection()
 	^+!Enter::new HeaderDocBlock().unwrapSelection()
 	
 	; AHK debug strings
@@ -19,7 +19,7 @@
 	:X:dbto::	VSCode.sendAHKDebugCodeString("Debug.toast",      clipboard) ; Debug toast
 	:X:edbpop::	VSCode.sendAHKDebugCodeString("Debug.popupEarly", clipboard) ; Debug popup that appears at startup
 	:X:dbcon::	VSCode.sendAHKDebugCodeString("Debug.console",    clipboard) ; Debug console
-	^e::		VSCode.editDebugLine()
+	^+e::		VSCode.editDebugLine()
 
 	; Other AHK dev strings
 	:X:`;`;`;::VSCode.sendDocHeader()

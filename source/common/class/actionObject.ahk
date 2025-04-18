@@ -1,5 +1,6 @@
 #Include actionObjectCodeSearch.ahk
 #Include actionObjectEMC2.ahk
+#Include actionObjectEpicCode.ahk
 #Include actionObjectEpicStudio.ahk
 #Include actionObjectSVNLog.ahk
 #Include actionObjectTrackLab.ahk
@@ -44,6 +45,7 @@ class ActionObject {
 	;region ------------------------------ PRIVATE ------------------------------
 	; Type constants
 	static Type_CodeSearch := "CODESEARCH"
+	static Type_EpicCode   := "EPICCODE"
 	static Type_EpicStudio := "EPICSTUDIO"
 	static Type_EMC2       := "EMC2"
 	static Type_SVNLog     := "SVNLOG"
@@ -116,6 +118,7 @@ class ActionObject {
 		Switch this.type {
 			Case "":                   return "" ; No determined type, silent quit, return nothing
 			Case this.Type_CodeSearch: return new ActionObjectCodeSearch(this.value, this.subType)
+			Case this.Type_EpicCode:   return new ActionObjectEpicCode(  this.value, this.subType)
 			Case this.Type_EpicStudio: return new ActionObjectEpicStudio(this.value, this.subType)
 			Case this.Type_EMC2:       return new ActionObjectEMC2(      this.value, this.subType)
 			Case this.Type_TrackLab:   return new ActionObjectTrackLab(  this.value, this.subType)

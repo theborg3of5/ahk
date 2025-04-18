@@ -7,6 +7,8 @@
 	; Block/column selection reminder
 	!#LButton::Toast.ShowShort("Column/block select in VSCode is Alt+Shift+Click.")
 	
+; AHK-specific handling
+#If Config.isWindowActive("VSCode AHK")
 	; For program scripts, swap to corresponding class script and back.
 	Pause::VSCode.toggleProgramAndClass()
 	
@@ -19,7 +21,7 @@
 	:X:dbto::	VSCode.sendAHKDebugCodeString("Debug.toast",      clipboard) ; Debug toast
 	:X:edbpop::	VSCode.sendAHKDebugCodeString("Debug.popupEarly", clipboard) ; Debug popup that appears at startup
 	:X:dbcon::	VSCode.sendAHKDebugCodeString("Debug.console",    clipboard) ; Debug console
-	^+e::		VSCode.editDebugLine()
+	^e::		VSCode.editDebugLine()
 
 	; Other AHK dev strings
 	:X:`;`;`;::VSCode.sendDocHeader()

@@ -40,6 +40,11 @@
 				; Any popup (used to rope in popups that fail the generic EMC2 case below)
 				EMC2 Popup							-							ThunderRT6FormDC
 		}
+
+		; Specific VSCode profiles (we specifically put the profile name in the title)
+		~EXE.replaceWith(Code.exe) {
+				VSCode AHK							-							-												- AHK
+		}
 		
 				EpicStudio New Object Window		EpicStudio.exe				-												New Object
 				EpicStudio Tokenize String			EpicStudio.exe				-												Tokenize String

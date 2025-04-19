@@ -55,7 +55,7 @@
 				PowerPoint Presenter View			POWERPNT.EXE				PodiumParent
 				Snapper Add Records					Snapper.exe					-												Add a Record
 				TortoiseSVN Blame Popup				TortoiseProc.exe			-												 - Blame - TortoiseSVN
-				Zoom Default Meeting				Zoom.exe					ZPContentViewWndClass							Zoom									-				EXACT
+				Zoom Default Meeting				Zoom.exe					ConfMultiTabContentWndClass						Zoom									-				EXACT
 	}
 	
 	; Most general form of various windows (specifics above should override).
@@ -111,6 +111,6 @@
 				Windows Terminal					WindowsTerminal.exe
 				WinMerge							WinMergeU.exe
 				Word								WINWORD.EXE
-				Zoom								Zoom.exe					ZPContentViewWndClass
+				Zoom								Zoom.exe					ConfMultiTabContentWndClass
 	}
 }

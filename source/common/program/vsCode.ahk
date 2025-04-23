@@ -24,9 +24,13 @@ class VSCode {
 	; DESCRIPTION:    For program scripts, swap between the program script and its matching class script.
 	;---------
 	toggleProgramAndClass() {
-		currScriptPath := WinGetActiveTitle().beforeString(this.windowTitleSeparator)
-		SplitPath(currScriptPath, scriptName)
+		currScriptPath := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile)
+		if(!currScriptPath) {
+			Toast.showError("Could not get code location", "Failed to get current path")
+			return
+		}
 		
+		SplitPath(currScriptPath, scriptName)
 		if(currScriptPath.startsWith(Config.path["AHK_SOURCE"] "\program\"))
 			matchingScriptPath := Config.path["AHK_SOURCE"] "\common\program\" scriptName
 		else if(currScriptPath.startsWith(Config.path["AHK_SOURCE"] "\common\program\"))
@@ -102,9 +106,4 @@ class VSCode {
 		SendRaw, % AHKCodeLib.generateDocHeader(defLine)
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------
-
-	;region ------------------------------ PRIVATE ------------------------------
-	; Separator (window.titleSeparator) between elements of the window title (window.title)
-	static windowTitleSeparator := " - "
-	;endregion ------------------------------ PRIVATE ------------------------------
 }

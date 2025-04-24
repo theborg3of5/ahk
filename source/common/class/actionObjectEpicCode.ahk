@@ -8,6 +8,9 @@
 ;		ao := new ActionObjectEpicCode("tagName^routineName")
 ;		MsgBox, ao.getLinkEdit() ; Link in EpicCode
 ;		ao.openEdit()            ; Open in EpicCode
+;		
+;		ao := new ActionObjectEpicCode(123456) ; DLG ID
+;		ao.openEdit() ; Open DLG in EpicCode
 	
 */
 
@@ -18,6 +21,7 @@ class ActionObjectEpicCode extends ActionObjectBase {
 	;region Descriptor types
 	static DescriptorType_Routine    := "ROUTINE"     ; Server code location, including tag if applicable
 	static DescriptorType_RoutineCDE := "ROUTINE_CDE" ; Server code location, including tag if applicable - in CDE
+	static DescriptorType_DLG        := "DLG"         ; DLG, for opening in EpicCode
 	;endregion Descriptor types
 	
 	descriptor     := "" ; Reference to object
@@ -61,6 +65,10 @@ class ActionObjectEpicCode extends ActionObjectBase {
 				url := url.replaceTag("ROUTINE",     routine)
 				url := url.replaceTag("TAG",         tag)
 				url := url.replaceTag("ENVIRONMENT", environmentId)
+				
+			Case this.DescriptorType_DLG:
+				url := Config.private["EPICCODE_URL_BASE_DLG"]
+				url := url.replaceTag("DLG_ID", this.descriptor)
 		}
 		
 		return url
@@ -76,6 +84,10 @@ class ActionObjectEpicCode extends ActionObjectBase {
 		; Full server tag^routine
 		if(this.descriptor.contains("^"))
 			return ActionObjectEpicCode.DescriptorType_Routine
+		
+		; DLG IDs are (mostly) numeric, where routines are not.
+		if(EpicLib.couldBeEMC2ID(this.descriptor))
+			return ActionObjectEpicCode.DescriptorType_DLG
 		
 		return ""
 	}

@@ -13,6 +13,7 @@
 		AutoHotkey WinSpy			AutoHotkey\WindowSpy.ahk
 		EpicStudio					EpicStudio\EpicStudio.exe
 		Chrome						Google\Chrome\Application\chrome.exe
+		Chrome Proxy				Google\Chrome\Application\chrome_proxy.exe
 		Everything					Everything\Everything.exe
 		Internet Explorer			Internet Explorer\iexplore.exe
 		KDiff						KDiff3\kdiff3.exe
@@ -58,7 +59,7 @@
 		Firefox Portable			S:\FirefoxPortable\FirefoxPortable.exe								HOME_DESKTOP
 		EMC2						<EMC2_CURRENT_EXE>													WORK_DESKTOP | WORK_VDI
 	
-	; Chrome apps
+	; Chrome apps (run using "Chrome Proxy" from above)
 	~PATH_TYPE.replaceWith(CHROME_APP) {
 		Beeper						kebihpkoclefnhgdieipmimdjhpdkbjc									WORK_DESKTOP | WORK_VDI
 		TickTick					cfammbeebmjdpoppachopcohfchgjapd

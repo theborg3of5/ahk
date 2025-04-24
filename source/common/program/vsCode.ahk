@@ -105,5 +105,26 @@ class VSCode {
 		
 		SendRaw, % AHKCodeLib.generateDocHeader(defLine)
 	}
+	
+	;---------
+	; DESCRIPTION:    Put the current location in code (tag^routine) onto the clipboard, stripping
+	;                 off any offset ("+4" in "tag+4^routine") and the RTF link that EpicStudio adds.
+	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
+	;---------
+	copyCleanEpicCodeLocation() {
+		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile)
+		
+		; Initial value copied potentially has the offset (tag+<offsetNum>) included, strip it off.
+		codeLocation := EpicLib.dropOffsetFromServerLocation(codeLocation)
+		
+		; If we got "routine^routine", just return "^routine".
+		tag     := codeLocation.beforeString("^")
+		routine := codeLocation.afterString("^")
+		if(tag = routine)
+			codeLocation := codeLocation.removeFromStart(tag)
+		
+		; Set the clipboard value to our new (plain-text, no link) code location and notify the user.
+		ClipboardLib.setAndToast(codeLocation, "cleaned code location")
+	}
 	;endregion ------------------------------ INTERNAL ------------------------------
 }

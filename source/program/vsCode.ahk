@@ -1,13 +1,4 @@
-﻿#If Config.isWindowActive("VSCode")
-	; Current file/folder operations
-	!c::  ClipboardLib.copyCodeLocationPath(      VSCode.Hotkey_CopyCurrentFile)
-	!#c:: ClipboardLib.copyCodeLocationFile(      VSCode.Hotkey_CopyCurrentFile)
-	^!f:: ClipboardLib.openActiveFileParentFolder(VSCode.Hotkey_CopyCurrentFile) ; Yes, there's a built-in command for this, but it doesn't work consistently and take forever to happen.
-
-	; Block/column selection reminder
-	!#LButton::Toast.ShowShort("Column/block select in VSCode is Alt+Shift+Click.")
-	
-; AHK-specific handling
+﻿; AHK-specific handling
 #If Config.isWindowActive("VSCode AHK")
 	; For program scripts, swap to corresponding class script and back.
 	Pause::VSCode.toggleProgramAndClass()
@@ -25,4 +16,19 @@
 
 	; Other AHK dev strings
 	:X:`;`;`;::VSCode.sendDocHeader()
+	
+; EpicCode-specific handling
+#If Config.isWindowActive("VSCode EpicCode")
+	!c::VSCode.copyCleanEpicCodeLocation()
+
+; All profiles (unless overridden above)
+#If Config.isWindowActive("VSCode")
+	; Current file/folder operations
+	!c::  ClipboardLib.copyCodeLocationPath(      VSCode.Hotkey_CopyCurrentFile)
+	!#c:: ClipboardLib.copyCodeLocationFile(      VSCode.Hotkey_CopyCurrentFile)
+	^!f:: ClipboardLib.openActiveFileParentFolder(VSCode.Hotkey_CopyCurrentFile) ; Yes, there's a built-in command for this, but it doesn't work consistently and take forever to happen.
+
+	; Block/column selection reminder
+	!#LButton::Toast.ShowShort("Column/block select in VSCode is Alt+Shift+Click.")
+
 #If

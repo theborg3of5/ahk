@@ -44,6 +44,7 @@
 		; Specific VSCode profiles (we specifically put the profile name in the title)
 		~EXE.replaceWith(Code.exe) {
 				VSCode AHK							-							-												AHK - 
+				VSCode EpicCode						-							-												EpicCode - 
 		}
 		
 				EpicStudio New Object Window		EpicStudio.exe				-												New Object

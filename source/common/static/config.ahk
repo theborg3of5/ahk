@@ -296,8 +296,12 @@ class Config {
 		HotkeyLib.waitForRelease()
 		
 		prog := this.program[name]
-		if(prog)
-			prog.run(args)
+		if (!prog) {
+			Toast.ShowError("Program does not exist", name)
+			return
+		}
+		
+		prog.run(args)
 	}
 
 	;---------

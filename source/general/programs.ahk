@@ -4,6 +4,7 @@
 #b::  Config.runProgram("Beeper")
 #e::  Config.activateProgram("Explorer", Explorer.ThisPCFolderUUID) ; Start up at "This PC" folder if we have to run it.
 #s::  Config.runProgram("Slack")
+#p::  Config.activateProgram("MTPutty")
 ^!+g::Config.activateProgram("Chrome")
 ^!+n::Config.activateProgram("Notepad++")
 ^!+t::Config.activateProgram("TickTick")

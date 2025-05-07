@@ -273,6 +273,15 @@ class WindowActions {
 			Case "Explorer":
 				if(action = this.Action_Minimize)
 					Send, !q ; QTTabBar's min to tray hotkey
+			Case "Putty":
+				if (action = this.Action_Minimize) {
+					; If we're using MTPutty, minimize it instead of the Putty window itself (as doing the latter just
+					; minimizes it inside MTPutty)
+					if (Config.doesWindowExist("MTPutty"))
+						this.minimizeWindowByName("MTPutty")
+					else
+						WinMinimize, % titleString
+				}
 		}
 	}
 	

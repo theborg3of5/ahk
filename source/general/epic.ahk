@@ -168,8 +168,8 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		selectThunder() {
 			environments := EpicLib.selectEpicEnvironments("Launch Thunder for Environment", Config.getProgramPath("Thunder"))
 			For _, env in environments {
-				if (env["COMM_ID"] = "LAUNCH") ; Special keyword - just show Thunder itself, don't launch an environment.
-					Config.activateProgram("Thunder")
+				if (env["COMM_ID"] = "LAUNCH") ; Special keyword - launch MTPutty, not a specific Putty window.
+					Config.activateProgram("MTPutty")
 				else
 					EpicLib.runThunderForEnvironment(env["ENV_ID"])
 			}

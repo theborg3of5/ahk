@@ -58,4 +58,10 @@
 			Send, `;je{Enter} ; Launch the job list using the actual macro.
 			Send, % "eP" jobId "`n" ; Jump into examining the provided job.
 		}
+
+; MTPutty pass-throughs
+#If Config.isWindowActive("Putty") && Config.doesWindowExist("MTPutty")
+	; Attach all "orphaned" putty windows to MTPutty
+	$^+a::MTPutty.attachOrphanedPuttyWindows()
+	F2::MTPutty.fixPuttyTabTitle()
 #If

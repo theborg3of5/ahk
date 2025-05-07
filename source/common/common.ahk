@@ -95,6 +95,7 @@ Object(params*) {
 	#Include internetExplorer.ahk
 	#Include mBuilder.ahk
 	#Include mSnippets.ahk
+	#Include mtPutty.ahk
 	#Include notepadPlusPlus.ahk
 	#Include onenote.ahk
 	#Include onetastic.ahk

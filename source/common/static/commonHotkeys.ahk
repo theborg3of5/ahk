@@ -221,7 +221,7 @@ class CommonHotkeys {
 		if(!Config.isWindowActive("VSCode"))
 			return false
 		
-		return WinGetActiveTitle().startsWith(A_ScriptFullPath)
+		return WinGetActiveTitle().startsWith("AHK - " A_ScriptFullPath)
 	}
 	
 	;---------

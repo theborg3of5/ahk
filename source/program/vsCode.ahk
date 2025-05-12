@@ -31,4 +31,9 @@
 	; Block/column selection reminder
 	!#LButton::Toast.ShowShort("Column/block select in VSCode is Alt+Shift+Click.")
 
+	; Subword navigation (ctrl+win+left/right are stolen by Windows for virtual desktops otherwise)
+	^#Left::  Send, ^!{Numpad1} ; Previous subword
+	^#Right:: Send, ^!{Numpad2} ; Next subword
+	^#+Left:: Send, ^!{Numpad4} ; Select previous subword
+	^#+Right::Send, ^!{Numpad6} ; Select next subword
 #If

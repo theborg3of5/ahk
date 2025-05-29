@@ -13,7 +13,7 @@ class VSCode {
 	;---------
 	editScript(path) {
 		; --wait: so that if we're opening VSCode exclusively to edit this, it closes on its own once the file is closed.
-		Config.runProgram("VSCode", "--wait --profile Default " path)
+		Config.runProgram("VSCode", "--wait --profile AHK " path)
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	

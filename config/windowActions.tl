@@ -8,7 +8,6 @@
 	Cisco VPN						CLOSE
 	EMC2 XDS Open					-			-				-				SELECT
 	EMC2 DLG/QAN/PRJ Open			-			-				-				SELECT
-	Explorer						MIN			OTHER			-				-				-			-			ESCAPE		HOME_DESKTOP
 	Explorer						MIN			-				-				-				-			-			ESCAPE
 	GitHub Desktop					CLOSE		-				-				-				-			-			ESCAPE
 	Messenger						MIN			-				-				-				-			-			ESCAPE		HOME_DESKTOP

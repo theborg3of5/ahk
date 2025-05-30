@@ -29,7 +29,7 @@
 	#h::Explorer.toggleHiddenFiles()
 #If
 
-#If Explorer.mouseIsOverTaskbar() && Config.machineIsWorkDesktop
+#If Explorer.mouseIsOverTaskbar()
 	; Middle-click on taskbar buttons to close them.
 	$MButton::
 		closeWindowFromTaskbar() {

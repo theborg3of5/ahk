@@ -270,9 +270,6 @@ class WindowActions {
 			return ""
 		
 		Switch windowActionSettings["NAME"] {
-			Case "Explorer":
-				if(action = this.Action_Minimize)
-					Send, !q ; QTTabBar's min to tray hotkey
 			Case "Putty":
 				if (action = this.Action_Minimize) {
 					; If we're using MTPutty, minimize it instead of the Putty window itself (as doing the latter just

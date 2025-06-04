@@ -103,7 +103,7 @@ class WindowPositions {
 	;---------
 	handleParentWindows(titleString) {
 		; Putty windows should generally live inside MTPutty if it exists.
-		if (Config.doesWindowExist("MTPutty"))
+		if (Config.windowMatchesInfo(titleString, "Putty") && Config.doesWindowExist("MTPutty"))
 			return Config.windowInfo["MTPutty"].idString
 
 		return titleString

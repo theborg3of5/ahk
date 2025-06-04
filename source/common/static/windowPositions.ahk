@@ -18,6 +18,8 @@ class WindowPositions {
 		if(!this.validatePreset(preset))
 			return
 		
+		titleString := this.handleParentWindows(titleString)
+
 		position := this.findBestPositionMatch(titleString, preset)
 		if(!position)
 			return
@@ -91,6 +93,20 @@ class WindowPositions {
 	;---------
 	getPosition(preset, name) {
 		return this.positions[preset][name] ; Double brackets so we don't try to pass name as a second parameter to positions property.
+	}
+
+	;---------
+	; DESCRIPTION:    Swap out the title string with the window's parent if we should be sizing that instead.
+	; PARAMETERS:
+	;  titleString (I,REQ) - The title string of the window we're targeting.
+	; RETURNS:        titleString to use (might be the input, might be a parent window we should be sizing instead).
+	;---------
+	handleParentWindows(titleString) {
+		; Putty windows should generally live inside MTPutty if it exists.
+		if (Config.doesWindowExist("MTPutty"))
+			return Config.windowInfo["MTPutty"].idString
+
+		return titleString
 	}
 	
 	;---------

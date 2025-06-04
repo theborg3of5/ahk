@@ -83,13 +83,13 @@
 				Launchy								Launchy.exe
 				MBuilder							MBuilder.exe
 				Messenger							Messenger.exe				-												Messenger								NO_PADDING		EXACT
-				MTPutty								mtputty.exe					-												MTPuTTY
+				MTPutty								mtputty.exe					-												MTPuTTY									NO_PADDING
 				Notepad++							notepad++.exe				Notepad++
 				OneNote								ONENOTE.EXE					Framework::CFrame
 				Outlook								OUTLOOK.EXE					rctrl_renwnd32
 				PowerPoint							POWERPNT.EXE
 				Process Explorer					PROCEXP64.exe				PROCEXPL
-				Putty								putty.exe
+				Putty								putty.exe					-												-										-				EXACT
 				Remote Desktop						mstsc.exe					TscShellContainerClass
 				Remote Desktop Reconnecting			mstsc.exe					#32770
 				Skype								Skype.exe

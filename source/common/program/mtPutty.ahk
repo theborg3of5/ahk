@@ -25,15 +25,7 @@
 		; Currently focus stays on the top-level window - the user can hit the ^` hotkey to get back to the
 		; tab, but for some reason AHK can't.
 	}
-
 	;endregion ------------------------------ PUBLIC ------------------------------
-	
-	;region ------------------------------ INTERNAL ------------------------------
-	;  - Constants
-	;  - staticMembers
-	;  - nonStaticMembers
-	;  - functions
-	;endregion ------------------------------ INTERNAL ------------------------------
 	
 	;region ------------------------------ PRIVATE ------------------------------
 	;---------

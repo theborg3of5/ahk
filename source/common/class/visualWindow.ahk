@@ -378,8 +378,8 @@ class VisualWindow {
 	
 		borderOffsets["LEFT"]   := offsetWidth
 		borderOffsets["RIGHT"]  := offsetWidth
-		borderOffsets["TOP"]    := 0 ; Assuming the taskbar is on top (no offset), otherwise could use something like https://autohotkey.com/board/topic/91513-function-get-the-taskbar-location-win7/ to figure out where it is.
-		borderOffsets["BOTTOM"] := offsetHeight
+		borderOffsets["TOP"]    := offsetHeight
+		borderOffsets["BOTTOM"] := 0 ; Assuming the taskbar is on bottom (no offset), otherwise could use something like https://autohotkey.com/board/topic/91513-function-get-the-taskbar-location-win7/ to figure out where it is.
 		
 		return borderOffsets
 	}

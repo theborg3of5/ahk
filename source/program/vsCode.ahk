@@ -21,6 +21,9 @@
 #If Config.isWindowActive("VSCode EpicCode")
 	!c::VSCode.copyCleanEpicCodeLocation()
 
+	; Generate and insert snippets
+	:X:.snip::MSnippets.insertSnippet()
+
 ; All profiles (unless overridden above)
 #If Config.isWindowActive("VSCode")
 	; Current file/folder operations

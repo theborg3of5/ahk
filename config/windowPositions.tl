@@ -29,7 +29,6 @@
 	~MONITOR.replaceWith(MIDDLE) {
 			Chrome						-				-				MAX			MAX
 			Chrome Hyperspace			-				-				1920		1080		WORK
-			EpicStudio					-				-				MAX			MAX			WORK
 			Hyperspace					-				-				1920		1080		WORK
 			Hyperdrive					-				-				1920		1080		WORK
 			Process Explorer			-				-				1440		900
@@ -45,6 +44,7 @@
 		
 			Cisco VPN					LEFT_EDGE+25	300				-			-			HOME
 			EMC2						-				-				MAX			MAX			WORK
+			EpicStudio					-				-				MAX			MAX			WORK
 			Notepad++					-				-				MAX			MAX
 			OneNote						-				-				MAX			MAX
 			Spotify						-				-				MAX			MAX			-			1

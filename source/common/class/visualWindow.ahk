@@ -378,8 +378,8 @@ class VisualWindow {
 	
 		borderOffsets["LEFT"]   := offsetWidth
 		borderOffsets["RIGHT"]  := offsetWidth
-		borderOffsets["TOP"]    := offsetHeight
-		borderOffsets["BOTTOM"] := 0 ; Assuming the taskbar is on bottom (no offset), otherwise could use something like https://autohotkey.com/board/topic/91513-function-get-the-taskbar-location-win7/ to figure out where it is.
+		borderOffsets["TOP"]    := 0 ; Offset never seems to apply to the top for some reason
+		borderOffsets["BOTTOM"] := offsetHeight
 		
 		return borderOffsets
 	}

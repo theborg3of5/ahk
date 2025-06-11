@@ -298,14 +298,22 @@ class ClipboardLib {
 			Case this.CopyLocationType_Path:
 				label := "path code location"
 				path := FileLib.cleanupPath(path)
+
 			Case this.CopyLocationType_File:
 				label := "file code location"
-				SplitPath(FileLib.cleanupPath(path), path) ; Get just the file name
+				
+				; Get just the file name
+				if(path.startsWith("/"))
+					path := path.afterString("/", true)
+				else
+					SplitPath(FileLib.cleanupPath(path), path)
+
 			Case this.CopyLocationType_SourceRelative:
 				label := "source-relative code location"
 				path := EpicLib.convertToSourceRelativePath(path)
 				if(!path)
 					return ; convertToSourceRelativePath should have already showed an error, so no need to do another here.	
+				
 			Default:
 				Toast.showError("Could not get code location", "Invalid pathType: """ pathType """")
 				return

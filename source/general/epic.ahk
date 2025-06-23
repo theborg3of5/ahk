@@ -169,17 +169,32 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 			environments := EpicLib.selectEpicEnvironments("Launch Thunder for Environment", Config.getProgramPath("Thunder"))
 			if (!environments) ; If the user cancelled, just exit.
 				return
-
-			; Open MTPutty if needed
-			if (!Config.doesWindowExist("MTPutty"))
-				Config.runProgram("MTPutty")
-
-			For _, env in environments {
-				if (env["COMM_ID"] = "LAUNCH") ; Special keyword - launch MTPutty, not a specific Putty window.
-					Config.activateProgram("MTPutty")
-				else
-					EpicLib.runThunderForEnvironment(env["ENV_ID"])
+			
+			; Special keyword - launch Thunder, not a specific Putty window.
+			if (environments[1, "COMM_ID"] = "LAUNCH") {
+				Config.activateProgram("Thunder")
+				return
 			}
+			
+			; Open MTPutty if not already open
+			if (!Config.doesWindowExist("MTPutty"))
+				Config.activateProgram("MTPutty")
+
+			startCount := WindowLib.countMatchingWindows("$J: ahk_exe Putty.exe", TitleMatchMode.Contains)
+			For _, env in environments 
+				EpicLib.runThunderForEnvironment(env["ENV_ID"])
+
+			; Wait for the windows to initialize - otherwise their titles with $J don't come through
+			; even with fixPuttyTabTitle below.
+			Loop, 5 {
+				newCount := WindowLib.countMatchingWindows("$J: ahk_exe Putty.exe", TitleMatchMode.Contains)
+				if (newCount >= (startCount + environments.length()))
+					Break ; Windows are all initialized
+
+				Sleep, 1000 ; Wait for the window(s) to open/initialize
+			}
+			MTPutty.attachOrphanedPuttyWindows()
+			MTPutty.fixPuttyTabTitle() ; Only works for the focused tab, but I can do any others manually if needed.
 		}
 	
 	^!+v::

@@ -250,6 +250,25 @@ class WindowLib {
 		
 		return (ErrorLevel = 0) ; ErrorLevel = 1 if we timed out
 	}
+
+	;---------
+	; DESCRIPTION:    Count the number of windows matching the given title string.
+	; PARAMETERS:
+	;  titleString (I,REQ) - The title string to match against.
+	;  matchMode   (I,OPT) - An override TitleMatchMode to use for matching.
+	; RETURNS:        The number of windows matching the given title string.
+	;---------
+	countMatchingWindows(titleString, matchMode := "") {
+		if (matchMode)
+			settings := new TempSettings().titleMatchMode(matchMode)
+		
+		count := WinGet("Count", titleString)
+		
+		if (settings)
+			settings.restore()
+		
+		return count
+	}
 	
 	;---------
 	; DESCRIPTION:    Grab the tooltip(s) shown onscreen. Based on

@@ -22,8 +22,11 @@
 		Send, {F2}    ; Launch the rename window
 		Send, {Enter} ; Accept with blank value (restores default)
 		
-		; Currently focus stays on the top-level window - the user can hit the ^` hotkey to get back to the
-		; tab, but for some reason AHK can't.
+		; The user can hit the ^` hotkey to get back to the tab, but for some reason AHK can't, so 
+		; we resort to just clicking inside.
+		settings := new TempSettings().coordMode("Mouse", "Window")
+		Click, 100, 100
+		settings.restore()
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	

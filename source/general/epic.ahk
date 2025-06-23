@@ -167,6 +167,13 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	^!+r::
 		selectThunder() {
 			environments := EpicLib.selectEpicEnvironments("Launch Thunder for Environment", Config.getProgramPath("Thunder"))
+			if (!environments) ; If the user cancelled, just exit.
+				return
+
+			; Open MTPutty if needed
+			if (!Config.doesWindowExist("MTPutty"))
+				Config.runProgram("MTPutty")
+
 			For _, env in environments {
 				if (env["COMM_ID"] = "LAUNCH") ; Special keyword - launch MTPutty, not a specific Putty window.
 					Config.activateProgram("MTPutty")

@@ -24,6 +24,9 @@
 	; Generate and insert snippets
 	:X:.snip::MSnippets.insertSnippet()
 
+	; Pass this one through
+	$^!f::Send, ^!f
+
 ; All profiles (unless overridden above)
 #If Config.isWindowActive("VSCode")
 	; Current file/folder operations

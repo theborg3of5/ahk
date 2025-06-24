@@ -45,7 +45,6 @@
 
 ; Chrome hotkeys that only apply on a DLG.
 #If Config.isWindowActive("Chrome") && WinActive("DLG ")
-	^+o::EpicStudio.openCurrentDLG() ; Open DLG in EpicStudio
-	!r::Chrome.openClientSVNLog()    ; Open client SVN log for a DLG.
-	^+m::MBuilder.lintCurrentDLG()
+	^+o::VSCode.openCurrentDLG()   ; Open DLG in EpicCode.
+	!r::Chrome.openClientSVNLog()  ; Open client SVN log for a DLG.
 #If

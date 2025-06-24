@@ -15,6 +15,37 @@ class VSCode {
 		; --wait: so that if we're opening VSCode exclusively to edit this, it closes on its own once the file is closed.
 		Config.runProgram("VSCode", "--wait --profile AHK " path)
 	}
+
+	;---------
+	; DESCRIPTION:    Open the DLG found in the active window's title in EpicCode.
+	;---------
+	openCurrentDLG() {
+		record := EpicLib.getBestEMC2RecordFromText(WinGetActiveTitle())
+		if(record.ini != "DLG" || record.id = "") {
+			Toast.ShowError("Could not open DLG in EpicCode", "Record ID was blank or was not a DLG ID")
+			return
+		}
+		
+		this.openDLG(record.id)
+	}
+
+	;---------
+	; DESCRIPTION:    Open the given DLG in EpicCode.
+	; PARAMETERS:
+	;  dlgId (I,REQ) - DLG ID
+	;---------
+	openDLG(dlgId) {
+		if(!dlgId) {
+			Toast.ShowError("Could not open DLG in EpicCode", "DLG ID was blank")
+			return
+		}
+
+		t := new Toast("Opening DLG in EpicCode: " dlgId).show()
+		
+		new ActionObjectEpicCode(dlgId, ActionObjectEpicCode.DescriptorType_DLG).openEdit()
+		
+		t.close()
+	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
 	;region ------------------------------ INTERNAL ------------------------------

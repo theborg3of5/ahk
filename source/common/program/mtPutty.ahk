@@ -24,9 +24,7 @@
 		
 		; The user can hit the ^` hotkey to get back to the tab, but for some reason AHK can't, so 
 		; we resort to just clicking inside.
-		settings := new TempSettings().coordMode("Mouse", "Window")
-		Click, 100, 100
-		settings.restore()
+		MouseLib.clickAndReturn(100, 100, "Window")
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	

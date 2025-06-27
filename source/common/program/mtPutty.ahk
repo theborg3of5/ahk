@@ -1,7 +1,8 @@
 ﻿class MTPutty {
 	;region ------------------------------ PUBLIC ------------------------------
 	;---------
-	; DESCRIPTION:    Attach all orphaned PuTTY windows to the MTPutty window.
+	; DESCRIPTION:    Attach all orphaned PuTTY windows to the MTPutty window and rename the tab
+	; title on the last one.
 	;---------
 	attachOrphanedPuttyWindows() {
 		this.focusParentWindow()
@@ -11,6 +12,8 @@
 		Send, {Tab 2}                           ; Tab to window list
 		Send, {Home}{Shift Down}{End}{Shift Up} ; Select the whole thing
 		Send, {Enter}                           ; Submit
+
+		this.fixPuttyTabTitle() ; Fix the title too
 	}
 
 	;---------

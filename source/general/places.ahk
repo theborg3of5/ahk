@@ -48,7 +48,7 @@ sendCleanedUpPath(mapToUnix := false) {
 }
 
 ; Selector to allow easy editing of config or code files that we edit often
-!+c::
+$!+c::
 	selectEditFile() {
 		filePaths := new Selector("editFiles.tls").setIcon(Config.getProgramPath("VSCode")).promptMulti("PATH")
 		For _, path in filePaths {

@@ -49,7 +49,7 @@ class VSCode {
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
 	;region ------------------------------ INTERNAL ------------------------------
-	static Hotkey_CopyCurrentFile := "^+c" ; Custom hotkey for copyFilePath command
+	static Hotkey_CopyCurrentFile := "!+c" ; Built-in hotkey for copyFilePath command
 	
 	;---------
 	; DESCRIPTION:    For program scripts, swap between the program script and its matching class script.

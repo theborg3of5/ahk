@@ -157,5 +157,19 @@ class VSCode {
 		; Set the clipboard value to our new (plain-text, no link) code location and notify the user.
 		ClipboardLib.setAndToast(codeLocation, "cleaned code location")
 	}
+	
+	;---------
+	; DESCRIPTION:    Put the current routine onto the clipboard.
+	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
+	;---------
+	copyEpicRoutineName() {
+		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile)
+		
+		; Split off the routine
+		EpicLib.splitServerLocation(codeLocation, routine)
+		
+		; Set the clipboard value to the routine
+		ClipboardLib.setAndToast("^" routine, "routine name")
+	}
 	;endregion ------------------------------ INTERNAL ------------------------------
 }

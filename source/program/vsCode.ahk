@@ -19,7 +19,8 @@
 	
 ; EpicCode-specific handling
 #If Config.isWindowActive("VSCode EpicCode")
-	!c::VSCode.copyCleanEpicCodeLocation()
+	!c:: VSCode.copyCleanEpicCodeLocation()
+	!#c::VSCode.copyEpicRoutineName()
 
 	; Generate and insert snippets
 	:X:.snip::MSnippets.insertSnippet()

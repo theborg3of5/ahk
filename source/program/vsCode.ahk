@@ -28,6 +28,21 @@
 	; Pass this one through
 	$^!f::Send, ^!f
 
+	; Tiny snippet to insert a variable (with linking _s) in the middle of a string
+	::.qs::
+		Send, % """__"""
+		Send, {Left 2}
+	return
+	
+	; Tag-length-measuring tens string.
+	::.taglen::
+		Send, {End}{Home 2} ; Get to very start of line (before indent)
+		Send, {Shift Down}{End}{Shift Up} ; Select entire line
+		if(SelectLib.getCleanFirstLine())
+			Send, {Delete} ; Delete the contents (only needed if the line isn't completely empty, otherwise we lose the newline)
+		Send, % "`t; " StringLib.getTenString(31, true).removeFromStart("123456") ; First 6 chars are the tab (width=4), semicolon, and space.
+	return
+
 ; All profiles (unless overridden above)
 #If Config.isWindowActive("VSCode")
 	; Current file/folder operations

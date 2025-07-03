@@ -51,7 +51,7 @@
 		VSCode						Programs\Microsoft VS Code\Code.exe									HOME_DESKTOP
 		MTPutty						Programs\MTPuTTY\mtputty.exe
 	}
-
+	
 	~PATH.addToStart(<USER_APPDATA>\) {
 		Spotify						Spotify\Spotify.exe
 		Telegram					Telegram Desktop\Telegram.exe

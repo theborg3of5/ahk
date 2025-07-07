@@ -28,19 +28,12 @@
 	; Pass this one through
 	$^!f::Send, ^!f
 
-	; Tiny snippet to insert a variable (with linking _s) in the middle of a string
+	; Tiny snippet to insert a variable (with linking _s) in the middle of a string. This can't
+	; quite be a proper snippet because I often use it directly next to other characters (no
+	; spaces/newlines separating it so it can be treated as a snippet).
 	::.qs::
 		Send, % """__"""
 		Send, {Left 2}
-	return
-	
-	; Tag-length-measuring tens string.
-	::.taglen::
-		Send, {End}{Home 2} ; Get to very start of line (before indent)
-		Send, {Shift Down}{End}{Shift Up} ; Select entire line
-		if(SelectLib.getCleanFirstLine())
-			Send, {Delete} ; Delete the contents (only needed if the line isn't completely empty, otherwise we lose the newline)
-		Send, % "`t; " StringLib.getTenString(31, true).removeFromStart("123456") ; First 6 chars are the tab (width=4), semicolon, and space.
 	return
 
 ; All profiles (unless overridden above)

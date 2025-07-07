@@ -21,6 +21,8 @@ class ActionObjectEpicCode extends ActionObjectBase {
 	;region Descriptor types
 	static DescriptorType_Routine    := "ROUTINE"     ; Server code location, including tag if applicable
 	static DescriptorType_RoutineCDE := "ROUTINE_CDE" ; Server code location, including tag if applicable - in CDE
+	static DescriptorType_Global     := "GLOBAL"      ; Global (in DBC Dev)
+	static DescriptorType_GlobalCDE  := "GLOBAL_CDE"  ; Global (in CDE)
 	static DescriptorType_DLG        := "DLG"         ; DLG, for opening in EpicCode
 	;endregion Descriptor types
 	
@@ -66,6 +68,18 @@ class ActionObjectEpicCode extends ActionObjectBase {
 				url := url.replaceTag("TAG",         tag)
 				url := url.replaceTag("ENVIRONMENT", environmentId)
 				
+				Case this.DescriptorType_Global, this.DescriptorType_GlobalCDE:
+				globalName := this.descriptor.prependIfMissing("^") ; Leading caret is required for global names
+				
+				if(this.descriptorType = this.DescriptorType_Global)
+					environmentId := Config.private["DBC_DEV_ENV_ID"]
+				else if(this.descriptorType = this.DescriptorType_GlobalCDE)
+					environmentId := Config.private["CDE_ENV_ID"]
+				
+				url := Config.private["EPICCODE_URL_BASE_GLOBAL"]
+				url := url.replaceTag("GLONAME",        globalName)
+				url := url.replaceTag("ENVIRONMENT", environmentId)
+				
 			Case this.DescriptorType_DLG:
 				url := Config.private["EPICCODE_URL_BASE_DLG"]
 				url := url.replaceTag("DLG_ID", this.descriptor)
@@ -81,8 +95,8 @@ class ActionObjectEpicCode extends ActionObjectBase {
 	; RETURNS:        Descriptor type from DescriptorType_* constants
 	;---------
 	determineDescriptorType() {
-		; Full server tag^routine
-		if(this.descriptor.contains("^"))
+		; Full server tag^routine (at least one character before/after caret)
+		if(this.descriptor.sub(2, -1).contains("^"))
 			return ActionObjectEpicCode.DescriptorType_Routine
 		
 		; DLG IDs are (mostly) numeric, where routines are not.

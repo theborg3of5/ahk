@@ -25,7 +25,7 @@
 	; Generate and insert snippets
 	:X:.snip::MSnippets.insertSnippet()
 
-	; Pass this one through
+	; Pass this one through (it's for opening the parent folder below)
 	$^!f::Send, ^!f
 
 	; Tiny snippet to insert a variable (with linking _s) in the middle of a string. This can't

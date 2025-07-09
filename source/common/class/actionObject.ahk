@@ -85,6 +85,11 @@ class ActionObject {
 			this.subType := ini
 			this.value   := id
 		
+		} else if(ActionObjectEpicCode.isThisType(this.value, descriptorType, id)) {
+			this.type    := this.Type_EpicCode
+			this.subType := descriptorType
+			this.value   := id
+		
 		} else if(ActionObjectCodeSearch.isThisType(this.value, locationType)) {
 			this.type    := this.Type_CodeSearch
 			this.subType := locationType

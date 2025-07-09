@@ -48,6 +48,27 @@ class ActionObjectEpicCode extends ActionObjectBase {
 	}
 	
 	;---------
+	; DESCRIPTION:    Determine whether the given string must be this type of ActionObject.
+	; PARAMETERS:
+	;  value          (I,REQ) - The value to evaluate
+	;  descriptorType (O,OPT) - If the value is an EpicCode object, the type of descriptor (from ActionObjectEpicCode.DescriptorType_*)
+	;  id             (O,OPT) - If the value is an EpicCode object, the ID
+	; RETURNS:        true/false - whether the given value must be an EpicCode object.
+	;---------
+	isThisType(value, ByRef descriptorType := "", ByRef id := "") {
+		if(!Config.contextIsWork)
+			return false
+		
+		if(value.startsWith("G ")) {
+			descriptorType := this.DescriptorType_Global
+			id := value.removeFromStart("G ") ; Remove "G " prefix
+			return true
+		}
+		
+		return false
+	}
+	
+	;---------
 	; DESCRIPTION:    Get a link to the object (server code location) referenced by descriptor in EpicCode.
 	; RETURNS:        Link to EpicCode for the code location.
 	;---------
@@ -68,8 +89,9 @@ class ActionObjectEpicCode extends ActionObjectBase {
 				url := url.replaceTag("TAG",         tag)
 				url := url.replaceTag("ENVIRONMENT", environmentId)
 				
-				Case this.DescriptorType_Global, this.DescriptorType_GlobalCDE:
-				globalName := this.descriptor.prependIfMissing("^") ; Leading caret is required for global names
+			Case this.DescriptorType_Global, this.DescriptorType_GlobalCDE:
+				globalName := this.descriptor.removeFromStart("G ") ; Remove "G " prefix if present
+				globalName := globalName.prependIfMissing("^") ; Leading caret is required for global names
 				
 				if(this.descriptorType = this.DescriptorType_Global)
 					environmentId := Config.private["DBC_DEV_ENV_ID"]
@@ -102,6 +124,10 @@ class ActionObjectEpicCode extends ActionObjectBase {
 		; DLG IDs are (mostly) numeric, where routines are not.
 		if(EpicLib.couldBeEMC2ID(this.descriptor))
 			return ActionObjectEpicCode.DescriptorType_DLG
+
+		; Allow a "G" prefix for globals, e.g. "G ^globalName" or "G globalName"
+		if(this.descriptor.startsWith("G "))
+			return ActionObjectEpicCode.DescriptorType_Global
 		
 		return ""
 	}

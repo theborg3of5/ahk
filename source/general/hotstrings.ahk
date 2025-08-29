@@ -139,11 +139,11 @@ return
 :X:pff:: sendFolderPath("PROGRAM_FILES")
 :X:xpff::sendFolderPath("PROGRAM_FILES_86")
 
-:X:urf::  sendFolderPath("USER_ROOT")
-:X:dsf::  sendFolderPath("USER_DESKTOP")
-:X:specf::sendFolderPath("USER_SPECIFICS")
-:X:devf:: sendFolderPath("USER_DEV")
-:X:zrzlf::sendFolderPath("USER_DEV", "zrzl")
+:X:urf::    sendFolderPath("USER_ROOT")
+:X:dsf::    sendFolderPath("USER_DESKTOP")
+:X:speciff::sendFolderPath("USER_SPECIFICS")
+:X:devf::   sendFolderPath("USER_DEV")
+:X:zrzlf::  sendFolderPath("USER_DEV", "zrzl")
 	
 #If !WinActive("ahk_class AutoHotkeyGUI") ; Don't do this in Selector popups (yes this catches more than that)
 	:X:dlf::  sendFolderPath("USER_DOWNLOADS")

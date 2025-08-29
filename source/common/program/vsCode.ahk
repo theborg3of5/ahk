@@ -7,6 +7,22 @@ class VSCode {
 	static TabWidth := 4
 
 	;---------
+	; DESCRIPTION:    Activate the given VSCode profile, launching it if needed.
+	; PARAMETERS:
+	;  profileName   (I,REQ) - Name of the profile
+	;                          We assume that there's also a window name of "VSCode <profileName>"
+	;  workspacePath (I,OPT) - If it should launch with a specific workspace file, the full path to that file.
+	;---------
+	activateCode(profileName, workspacePath := "") {
+		windowName := "VSCode " profileName
+		
+		if (Config.doesWindowExist(windowName))
+			WindowActions.activateWindowByName(windowName)
+		else
+			Config.runProgram("VSCode", "--profile " profileName " " workspacePath)
+	}
+
+	;---------
 	; DESCRIPTION:    Edit an AHK-related file in the proper VSCode profile.
 	; PARAMETERS:
 	;  path (I,REQ) - Full path to the file to edit (can also include any other params you want to send).

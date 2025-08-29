@@ -8,6 +8,7 @@
 ^!+g::Config.activateProgram("Chrome")
 ^!+n::Config.activateProgram("Notepad++")
 ^!+t::Config.activateProgram("TickTick")
+^!#a::VSCode.activateCode("AHK", Config.path["AHK_ROOT"] "\admin\ahk.code-workspace")
 ^!#t::Config.runProgram("Teams")
 ^!#v::Config.runProgram("VSCode", "--profile Default")
 ^!#/::Config.activateProgram("AutoHotkey WinSpy")
@@ -15,7 +16,7 @@
 ; Some programs are work-specific
 #If Config.contextIsWork
 	^!+e:: Config.activateProgram("EMC2", "EMC2Update env=TRACKAPPTCP") ; EMC2 needs these parameters to start up correctly.
-	^!+s:: Config.activateProgram("EpicStudio")
+	^!+s:: VSCode.activateCode("EpicCode", Config.path["USER_ROOT"] "\EpicCode\EpicCode.code-workspace")
 	^!+u:: Config.activateProgram("Thunder")
 	^!#+v::Config.runProgram("Visual Studio")
 #If

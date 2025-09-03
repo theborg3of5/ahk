@@ -37,7 +37,7 @@ class OneNote {
 	setZoomTo100Percent() {
 		Send, !6
 	}
-	customStylesCode() {
+	customStylesCode() { ; With custom styles in their own tab, just called "Code"
 		Send, !7
 	}
 	runOnetasticToolbarMacro(keys) { ; This is the dropdown one, not the submenu

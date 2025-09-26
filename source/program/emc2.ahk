@@ -65,8 +65,10 @@
 #If
 
 ; Lock/unlock hotkeys by INI
-#If Config.isWindowActive("EMC2 QAN") || Config.isWindowActive("EMC2 XDS")
+#If Config.isWindowActive("EMC2 QAN")
 	^l::Send, !l
+#If Config.isWindowActive("EMC2 XDS")
+	^l::Send, ^+!i
 #If Config.isWindowActive("EMC2 DLG")
 	^l::Send, !+{F5}
 #If

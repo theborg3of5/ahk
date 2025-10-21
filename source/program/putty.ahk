@@ -63,5 +63,10 @@
 #If Config.isWindowActive("Putty") && Config.doesWindowExist("MTPutty")
 	; Attach all "orphaned" putty windows to MTPutty
 	$^+a::MTPutty.attachOrphanedPuttyWindows()
+	
+	; Rename tab to match window title
 	F2::MTPutty.fixPuttyTabTitle()
+
+	; Close tab
+	^w::Send, !{F4}
 #If

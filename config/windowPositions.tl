@@ -14,7 +14,7 @@
 			Teams						-				-				1440		900			WORK
 			TickTick					RIGHT_EDGE		TOP_EDGE		1200		750
 			Putty						RIGHT_EDGE		TOP_EDGE		1350		100%		WORK
-			MTPutty						RIGHT_EDGE		TOP_EDGE		1350		100%		WORK
+			MTPutty						RIGHT_EDGE		TOP_EDGE		1440		100%		WORK
 			Windows Terminal			RIGHT_EDGE		TOP_EDGE		1440		100%
 		
 # Social windows

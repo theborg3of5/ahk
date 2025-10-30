@@ -14,6 +14,9 @@
 ; Open - open a variety of different things based on the selected text.
 ^!#o:: new ActionObject(SelectLib.getText()).openWeb()
 ^!#+o::new ActionObject(SelectLib.getText()).openEdit()
+#o::   new ActionObject(SelectLib.getText()).openWeb()  ; Work keyboard blocks everything with #!o, so here are some alternatives.
+#+o::  new ActionObject(SelectLib.getText()).openEdit() 
+
 
 ; Copy link - copy links to a variety of different things based on the selected text.
 ^!#l:: new ActionObject(SelectLib.getText()).copyLinkWeb()

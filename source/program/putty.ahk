@@ -64,6 +64,9 @@
 	; Attach all "orphaned" putty windows to MTPutty
 	$^+a::MTPutty.attachOrphanedPuttyWindows()
 	
+	; Detach current tab
+	^+d::MTPutty.detachCurrentTab()
+
 	; Rename tab to match window title
 	F2::MTPutty.fixPuttyTabTitle()
 

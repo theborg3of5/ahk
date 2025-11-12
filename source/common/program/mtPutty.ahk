@@ -2,7 +2,7 @@
 	;region ------------------------------ PUBLIC ------------------------------
 	;---------
 	; DESCRIPTION:    Attach all orphaned PuTTY windows to the MTPutty window and rename the tab
-	; title on the last one.
+	;                 title on the last one.
 	;---------
 	attachOrphanedPuttyWindows() {
 		this.focusParentWindow()
@@ -14,6 +14,14 @@
 		Send, {Enter}                           ; Submit
 
 		this.fixPuttyTabTitle() ; Fix the title too
+	}
+
+	;---------
+	; DESCRIPTION:    Detach the current tab from MTPutty, turning it back into a standalone PuTTY window.
+	;---------
+	detachCurrentTab() {
+		this.focusParentWindow()
+		Send, ^+d ; Detach PuTTY session (configured in MTPutty)
 	}
 
 	;---------

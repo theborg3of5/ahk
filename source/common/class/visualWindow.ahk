@@ -439,6 +439,23 @@ class VisualWindow {
 		if (doMaximize)
 			WinMaximize, % this.titleString
 	}
+
+	;---------
+	; DESCRIPTION:    Check whether the window is bigger than the given bounds.
+	; PARAMETERS:
+	;  bounds (I,REQ) - The bounds (width/height required) to check against.
+	; RETURNS:        true/false - is the window bigger?
+	;---------
+	isBiggerThanBounds(bounds) {
+		if (!bounds)
+			return false
+		if (bounds["WIDTH"] >= this.width)
+			return false
+		if (bounds["HEIGHT"] >= this.height)
+			return false
+
+		return true
+	}
 	
 	
 	;region Moving window so specific window edges are somewhere
@@ -560,8 +577,13 @@ class VisualWindow {
 	convertSpecialWindowSizes(ByRef width, ByRef height, bounds := "") {
 		; Maximize was already checked before this function and will be applied later, so we can skip the resize.
 		if (width = this.Size_Maximize || height = this.Size_Maximize) {
-			width := ""
-			height := ""
+			; ...unless the window is too big to fit in the bounds, in which case we should resize
+			; it to fit inside first.
+			if (this.isBiggerThanBounds(bounds)) {
+				width  := 0.99 * bounds["WIDTH"]
+				height := 0.99 * bounds["HEIGHT"]
+			}
+
 			return true
 		}
 		

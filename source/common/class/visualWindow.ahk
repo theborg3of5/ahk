@@ -575,13 +575,15 @@ class VisualWindow {
 	; RETURNS:        true/false - should we maximize this window?
 	;---------
 	convertSpecialWindowSizes(ByRef width, ByRef height, bounds := "") {
-		; Maximize was already checked before this function and will be applied later, so we can skip the resize.
 		if (width = this.Size_Maximize || height = this.Size_Maximize) {
-			; ...unless the window is too big to fit in the bounds, in which case we should resize
-			; it to fit inside first.
 			if (this.isBiggerThanBounds(bounds)) {
+				; If the window is too big to fit in the bounds, we should size it down to fit first.
 				width  := 0.99 * bounds["WIDTH"]
 				height := 0.99 * bounds["HEIGHT"]
+			} else {
+				; Otherwise, maximize was already checked before this function and will be applied later, so we can skip the resize.
+				width  := ""
+				height := ""
 			}
 
 			return true

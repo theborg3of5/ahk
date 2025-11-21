@@ -449,12 +449,13 @@ class VisualWindow {
 	isBiggerThanBounds(bounds) {
 		if (!bounds)
 			return false
-		if (bounds["WIDTH"] >= this.width)
-			return false
-		if (bounds["HEIGHT"] >= this.height)
-			return false
 
-		return true
+		if (this.width > bounds["WIDTH"])
+			return true
+		if (this.height > bounds["HEIGHT"])
+			return true
+
+		return false
 	}
 	
 	

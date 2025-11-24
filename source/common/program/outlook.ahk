@@ -280,7 +280,7 @@ class Outlook {
 		
 		; Other strings that get mixed up in record titles
 		; Status updates
-		value := value.removeRegEx("\(.*(Reviewer|Developer|Changes Necessary).*\) ")
+		value := value.removeRegEx("\(.*(Reviewer|Developer|Changes Necessary|Submitted for Review).*\) ")
 		; SLGs
 		value := value.beforeString("--Assigned To: ")
 		; DLGs

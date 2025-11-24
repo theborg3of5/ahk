@@ -78,10 +78,13 @@ class Outlook {
 	
 	;---------
 	; DESCRIPTION:    Determine whether the current screen is one of our calendar folders.
+	; PARAMETERS:
+	;  checkExist (I,OPT) - Set to true to check whether the window exists (works even when Outlook
+	;                       isn't focused).
 	; RETURNS:        true/false
 	;---------
-	isCurrentScreenCalendar() {
-		return this.areAnyOfFoldersActive(this.CalendarFolders)
+	isCurrentScreenCalendar(checkExist := false) {
+		return this.areAnyOfFoldersActive(this.CalendarFolders, checkExist)
 	}
 	
 	;---------
@@ -103,6 +106,9 @@ class Outlook {
 	; RETURNS:        The title, cleaned up (RE:/FW: and any other odd characters removed)
 	;---------
 	getMessageTitle(titleString := "A") {
+		if (this.isCurrentScreenCalendar(true))
+			return "" ; A message title might bleed through from mail view, and we don't want that.
+
 		title := ControlGetText(this.ClassNN_MailSubject_View, titleString) ; Most cases this control has the subject
 		if(title = Config.private["WORK_EMAIL"]) ; The exception is editing in a popup: we need to use a different control, but the original still exists with just my email in it.
 			title := ControlGetText(this.ClassNN_MailSubject_Edit, titleString) ; Yes, we could use the window title instead if we wanted, but this doesn't give us an extra suffix.
@@ -226,16 +232,18 @@ class Outlook {
 	;  folders (I,REQ) - An array of folder names.
 	; RETURNS:        true if any of the folder names is the active one, false otherwise.
 	;---------
-	areAnyOfFoldersActive(folders) {
+	areAnyOfFoldersActive(folders, checkExist := false) {
 		For _,folderName in folders {
 			windowTitle := folderName " - " Config.private["WORK_EMAIL"] " - Outlook"
-			if(WinActive(windowTitle))
+			if (WinActive(windowTitle))
+				return true
+			if (checkExist && WinExist(windowTitle))
 				return true
 		}
 		
 		return false
 	}
-	
+
 	;---------
 	; DESCRIPTION:    Clean up the provided message title. Gets rid of garbage and massages certain EMC2 record titles to
 	;                 make it easier for downstream logic to handle them.

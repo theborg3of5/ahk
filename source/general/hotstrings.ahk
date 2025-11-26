@@ -188,6 +188,7 @@ return
 		
 		ClipboardLib.send(StringLib.getRulerString(length))
 	}
+:X:.clarity::ClipboardLib.send(StringLib.getRulerString("23=KB_SQL tbl,19=KB_SQL col,25=Clarity tbl,30=Clarity col"))
 ;endregion Useful strings
 #If ; gdbtodo this isn't closing anything anymore - other "if" above is superceding it
 

@@ -368,7 +368,8 @@ class StringLib {
 	; PARAMETERS:
 	;  rulersList (I,REQ) - Comma-separated list of ruler lengths that our "rulers" should appear at.
 	;                       Can optionally include "=label" on each length to show that label.
-	; RETURNS:        Generated string
+	; RETURNS:        Generated string (includes an extra newline on the end so your cursor ends up
+	;                 below the "ruler").
 	;---------
 	getRulerString(rulersList) {
 		baseString := "1234567890"
@@ -445,7 +446,7 @@ class StringLib {
 		outputLines.push(this.insertPipesForRulers(emptyLine, rulers)) ; Spacer line at the bottom (nicer pointers, looks like a ruler)
 		
 		; Debug.popup("outputLines",outputLines)
-		return outputLines.join("`n")
+		return outputLines.join("`n") "`n"
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 

@@ -354,18 +354,13 @@ class StringLib {
 	;                   - 30 =>          1         2         3|
 	;                           123456789012345678901234567890|
 	; PARAMETERS:
-	;  rulersList (I,REQ) - List of lengths that our "rulers" should fall at. gdbredoc
+	;  rulersList (I,REQ) - List of lengths that our "rulers" should fall at. gdbredoc this whole thing
 	; RETURNS:        Generated string
 	;---------
 	getTenString(rulersList, noTensLine := false) { ;gdbtodo consider renaming to "rulerString", and maybe change hotstring to .ruler?
 		baseString := "1234567890"
-		haveLabels := rulersList.contains("=")
+		haveExplicitLabels := rulersList.contains("=")
 
-		; We want to do all looping in reverse numeric order so we can build label lines from rightmost
-		; label to left (so we don't have to add pipes retroactively).
-		; Sort, rulersList, D`, N R ; Sort command works fine even with =label bits on the ends
-
-		; rulers := {} ; { len => { label, noPipe } }
 		rulers := []
 		For _, lengthString in rulersList.split(",", " ") {
 			chunks := lengthString.split("=")
@@ -378,129 +373,71 @@ class StringLib {
 			rulers.push( { len:len, label:label } )
 
 			DataLib.updateMax(maxLength, len)
-			; rulers[len] := { label:label }
 		}
 		
-		; maxLength := rulers.MaxIndex()
-		; Debug.popup("rulers",rulers, "maxLength",maxLength)
 		onesLine := StringLib.duplicate(baseString, maxLength // 10) baseString.sub(1, Mod(maxLength, 10))
 		emptyLine := StringLib.duplicate(A_Space, maxLength)
 		
-		; return onesLine
-
-		; lengthsList := new FormattedList(lengthsList).getList(FormattedList.Format_Commas) ; Turn it into comma-delimited if it's space or comma-space delimited
-		; Sort, lengthsList, D`, N ; Sort numerically (works even with =label bits on the ends)
-		; Debug.popup("lengthsList",lengthsList)
-
-		; maxLength := DataLib.max()
-
-		; return ""
-		if (!haveLabels) {
-			; Generate fake labels for the given rulers
-			For _, ruler in rulers
+		; Generate fake labels for any rulers without them
+		For _, ruler in rulers {
+			if (ruler.label = "")
 				ruler.label := ruler.len
-
-			; Also add special markers for every 10 for easier counting/measuring ;gdbtodo decide what to do for these
-			if (!noTensLine && rulers.length() = 1) { ; Only auto-add when there's a single ruler, not worth handling the interleaving with multiple
-				Loop {
-					num += 10
-					if ( (num + maxLength.length()) > maxLength)
-						Break
-
-					; rulers[num] := {label:num, noPipe:true}
-					rulers.push({len:num, label:num, noPipe:true})
-				}
-			}
-
-			; gdbtodo will have to resort, right? At least if there's multiple (unlabelled) rulers?
-			; Sort, rulersList, D`, N R ; Sort command works fine even with =label bits on the ends
-			; rulers := []
-			; For _, lengthString in rulersList.split(",", " ") {
-
-			haveLabels := true
-		}
-		
-		; onesLine := StringLib.duplicate(baseString, length // 10) baseString.sub(1, Mod(length, 10)) "|"
-		onesLine := this.addRulerPipesToLine(onesLine, rulers)
-
-
-		if (haveLabels) {
-			; Add labels above the ones line
-			labelLines := []
-			prevRulers := []
-
-			prevLeftEdge := 0
-
-			rulers := DataLib.sortArrayBySubProperty(rulers, "len", false) ; We want to loop in reverse order
-			For _, ruler in rulers {
-				; ; Mark the ones line at each ruler
-				; onesLine := onesLine.replaceCharAt(ruler.len + 1, "|")
-				; Debug.popup("ruler",ruler)
-
-				if (ruler.label) {
-
-					if (ruler.label.length() > ruler.len) {
-						;gdbtodo add special check for when label is too long to fit within its ruler's entire length
-						MsgBox, warning case
-					}
-
-					labelLeftEdge := ruler.len - ruler.label.length()
-
-					; Debug.popup("ruler",ruler, "labelLeftEdge",labelLeftEdge)
-
-					; Add to previous line instead of making a new one if it fits
-					if ( !prevLeftEdge || ruler.len < (prevLeftEdge - 1)) { ; prevLeftEdge-1 to require an extra space between this line and the previously-added label
-						labelLine := labelLines.Pop()
-						if (!labelLine)
-							labelLine := emptyLine
-						
-						newLabelLine := labelLine.replaceSlice(ruler.label "|", labelLeftEdge + 1, ruler.len + 1)
-
-						; Debug.popup("ruler",ruler, "prevLeftEdge",prevLeftEdge, "labelLine",labelLine, "newLabelLine",newLabelLine)
-
-						labelLines.push(newLabelLine)
-
-					; Otherwise add a new line
-					} else {
-						; Debug.popup("+New line", "ruler",ruler)
-						; Include a spacer line
-						labelLines.push(this.addRulerPipesToLine(emptyLine, prevRulers))
-						
-						; labelLine := StringLib.duplicate(A_Space, labelLeftEdge + 1) ruler.label "|"
-						labelLine := emptyLine.replaceSlice(ruler.label "|", labelLeftEdge + 1, ruler.len + 1)
-						; line := line.replaceCharAt(ruler.len + 1, "|")
-						labelLines.push(this.addRulerPipesToLine(labelLine, prevRulers))
-						
-					}
-					
-					; prevRulers[len] := ruler
-					prevRulers.push(ruler)
-					prevLeftEdge := labelLeftEdge
-				}
-			}
-
-			; Debug.popup("labelLines",labelLines, "onesLine",onesLine)
-			return labelLines.join("`n") "`n" onesLine "`n" this.addRulerPipesToLine(emptyLine, rulers)
-
-		; gdbtodo could we make this a special kind of auto-generated label?
-		; Something like:
-		;         10|        21|             <-- Edge case to not show 20 when the final length is 21-22 (otherwise it would conflict)
-		; 123456789012345678901|
-		} else if (!noTensLine && maxLength > 10) { 
-			; For strings longer than 10 chars, add an additional line showing the tens place.
-			baseString := StringLib.duplicate(A_Space, 10)
-			Loop, % maxLength // 10 {
-				tensDigit := A_Index
-				tensLine .= baseString.sub(1, -tensDigit.length()) tensDigit
-			}
-			tensLine .= baseString.sub(1, Mod(maxLength, 10)) "|"
 		}
 
-		if(maxLength <= 10 || noTensLine)
-			return onesLine
+		; When there's no explicit labels, also add special markers for every 10 for easier
+		; counting/measuring. We only do this when there's a single ruler, as handling the potential
+		; interleaving with multiple is more trouble than it's worth.
+		if (!noTensLine && !haveExplicitLabels && rulers.length() = 1) {
+			Loop {
+				num += 10
+				if ( (num + maxLength.length()) > maxLength)
+					Break
 
+				; rulers[num] := {label:num, noPipe:true}
+				rulers.push({len:num, label:num, noPipe:true})
+			}
+		}
+
+		; We want to loop in reverse numeric order by length, so we can build label lines from rightmost
+		; label to left (so we don't have to add pipes retroactively or worry about intersecting labels/pipes).
+		rulers := DataLib.sortArrayBySubProperty(rulers, "len", false)
 		
-		return tensLine.appendLine(onesLine)
+		outputLines := []
+		prevRulers := []
+		prevLeftEdge := 0
+		For _, ruler in rulers {
+			; labelLeftEdge := ruler.len - ruler.label.length() ; gdbremove
+
+			; First one always goes on a new line (but without a spacer)
+			if (!prevLeftEdge) {
+				; line := emptyLine.replaceSlice(ruler.label "|", labelLeftEdge + 1, ruler.len + 1)
+				line := this.addRulerToLine(ruler, emptyLine)
+				outputLines.push(line)
+
+			; Add to previous line instead of making a new one if it fits
+			} else if (ruler.len < (prevLeftEdge - 1)) { ; prevLeftEdge-1 to require an extra space between this line and the previously-added label
+				line := outputLines.Pop()
+				; line := line.replaceSlice(ruler.label "|", labelLeftEdge + 1, ruler.len + 1)
+				line := this.addRulerToLine(ruler, line)
+				outputLines.push(line)
+
+			; Otherwise add a new line
+			} else {
+				; Include a spacer line when there's an overlap to make it easier to read
+				outputLines.push(this.addRulerPipesToLine(emptyLine, prevRulers))
+				
+				; line := emptyLine.replaceSlice(ruler.label "|", labelLeftEdge + 1, ruler.len + 1)
+				line := this.addRulerToLine(ruler, emptyLine)
+				outputLines.push(this.addRulerPipesToLine(line, prevRulers))
+			}
+			
+			prevRulers.push(ruler) ; Keep track of previously-added rulers so we can include their pipes on following lines
+			; prevLeftEdge := labelLeftEdge
+			prevLeftEdge := ruler.len - ruler.label.length()
+		}
+		
+		; Debug.popup("outputLines",outputLines, "onesLine",onesLine)
+		return outputLines.join("`n") "`n" this.addRulerPipesToLine(onesLine, rulers) "`n" this.addRulerPipesToLine(emptyLine, rulers)
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 
@@ -512,5 +449,10 @@ class StringLib {
 		}
 
 		return line
+	}
+
+	addRulerToLine(ruler, line) {
+		labelLeftEdge := ruler.len - ruler.label.length()
+		return line.replaceSlice(ruler.label "|", labelLeftEdge + 1, ruler.len + 1)
 	}
 }

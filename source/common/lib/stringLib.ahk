@@ -402,47 +402,46 @@ class StringLib {
 		; label to left (so we don't have to add pipes retroactively or worry about intersecting labels/pipes).
 		rulers := DataLib.sortArrayBySubProperty(rulers, "len", false)
 		
-		outputLines := []
-		prevRulers := []
+		; Build labels and their pointer pipes
+		outputLines  := []
+		prevRulers   := []
 		prevLeftEdge := 0
 		For _, ruler in rulers {
-			; labelLeftEdge := ruler.len - ruler.label.length() ; gdbremove
-
 			; First one always goes on a new line (but without a spacer)
 			if (!prevLeftEdge) {
-				; line := emptyLine.replaceSlice(ruler.label "|", labelLeftEdge + 1, ruler.len + 1)
-				line := this.addRulerToLine(ruler, emptyLine)
-				outputLines.push(line)
+				line := emptyLine
 
-			; Add to previous line instead of making a new one if it fits
+			; If the label will fit on the previous line, add it there to save space
 			} else if (ruler.len < (prevLeftEdge - 1)) { ; prevLeftEdge-1 to require an extra space between this line and the previously-added label
-				line := outputLines.Pop()
-				; line := line.replaceSlice(ruler.label "|", labelLeftEdge + 1, ruler.len + 1)
-				line := this.addRulerToLine(ruler, line)
-				outputLines.push(line)
+				line := outputLines.Pop() ; Use previous line
 
 			; Otherwise add a new line
 			} else {
 				; Include a spacer line when there's an overlap to make it easier to read
-				outputLines.push(this.addRulerPipesToLine(emptyLine, prevRulers))
+				outputLines.push(this.insertPipesForRulers(emptyLine, prevRulers))
 				
-				; line := emptyLine.replaceSlice(ruler.label "|", labelLeftEdge + 1, ruler.len + 1)
-				line := this.addRulerToLine(ruler, emptyLine)
-				outputLines.push(this.addRulerPipesToLine(line, prevRulers))
+				line := emptyLine
 			}
 			
+
+			line := this.insertPipesForRulers(line, prevRulers)
+			line := this.insertRuler(ruler, line)
+			outputLines.push(line)
+			
 			prevRulers.push(ruler) ; Keep track of previously-added rulers so we can include their pipes on following lines
-			; prevLeftEdge := labelLeftEdge
 			prevLeftEdge := ruler.len - ruler.label.length()
 		}
+
+		outputLines.push(this.insertPipesForRulers(onesLine, rulers)) ; Ones line
+		outputLines.push(this.insertPipesForRulers(emptyLine, rulers)) ; Spacer line at the bottom (nicer pointers, looks like a ruler)
 		
-		; Debug.popup("outputLines",outputLines, "onesLine",onesLine)
-		return outputLines.join("`n") "`n" this.addRulerPipesToLine(onesLine, rulers) "`n" this.addRulerPipesToLine(emptyLine, rulers)
+		; Debug.popup("outputLines",outputLines)
+		return outputLines.join("`n")
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 
 
-	addRulerPipesToLine(line, rulers) {
+	insertPipesForRulers(line, rulers) {
 		For _, ruler in rulers {
 			if(!ruler.noPipe) ; Some rulers don't want pipes added
 				line := line.replaceCharAt(ruler.len + 1, "|")
@@ -451,7 +450,7 @@ class StringLib {
 		return line
 	}
 
-	addRulerToLine(ruler, line) {
+	insertRuler(ruler, line) {
 		labelLeftEdge := ruler.len - ruler.label.length()
 		return line.replaceSlice(ruler.label "|", labelLeftEdge + 1, ruler.len + 1)
 	}

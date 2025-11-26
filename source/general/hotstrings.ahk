@@ -180,13 +180,13 @@ return
 ;endregion Folders and paths
 
 ;region Useful strings
-:X:.tens::
-	sendTenString() {
+:X:.ruler::
+	sendRulerString() {
 		length := InputBox("Insert Ten-String", "How long can your text be?")
 		if(!length)
 			return
 		
-		ClipboardLib.send(StringLib.getTenString(length))
+		ClipboardLib.send(StringLib.getRulerString(length))
 	}
 ;endregion Useful strings
 #If ; gdbtodo this isn't closing anything anymore - other "if" above is superceding it

@@ -340,26 +340,40 @@ class StringLib {
 	}
 	
 	;---------
-	; DESCRIPTION:    Generate a "ten string" of the given length, for easy visualization of how
-	;                 long a string can be. A "ten string" is "1234567890" repeated to the given
-	;                 length, with a | just past the last character to show the edge.
+	; DESCRIPTION:    Generate a "ruler" of the given length, for easy visualization of how
+	;                 long a string can be. By default, we'll label each ruler with its length:
+	;                  5 =>     5|
+	;                       12345|
+	;                            |
 	;
-	;                 If the length is bigger than 10, an additional line will be included at the
-	;                 start that shows the tens digit at each 10th place.
-	;                 
-	;                 Examples:
-	;                   - 5  => 12345|
-	;                   - 15 =>          1     |
-	;                           123456789012345|
-	;                   - 30 =>          1         2         3|
-	;                           123456789012345678901234567890|
+	;                 If the (single, unlabelled) length is bigger than 12, we'll add (un-piped) labels
+	;                 for each 10:
+	;                  25 =>         10|       20|  25|
+	;                        1234567890123456789012345|
+    ;                                                 |
+	;
+	;                 Multiple rulers can be specified by separating them with commas:
+	;                  25,30,19 =>                  19|   25|  30|
+	;                              1234567890123456789|12345|7890|
+	;                                                 |     |    |
+	;
+	;                 Labels can be added to each ruler by appending "=label" to each length. If a label
+	;                 won't fit, we'll push it up onto a new line with a spacer (except for the first
+	;                 label, which we just truncate):
+	;                  5=Too long,15=Mid,30=This is longer but it's OK =>     This is longer but it's OK|
+	;                                                                                                   |
+	;                                                                     Too *|      Mid|              |
+	;                                                                     12345|789012345|78901234567890|
+	;                                                                          |         |              |
 	; PARAMETERS:
-	;  rulersList (I,REQ) - List of lengths that our "rulers" should fall at. gdbredoc this whole thing
+	;  rulersList (I,REQ) - Comma-separated list of ruler lengths that our "rulers" should appear at.
+	;                       Can optionally include "=label" on each length to show that label.
 	; RETURNS:        Generated string
 	;---------
-	getTenString(rulersList, noTensLine := false) { ;gdbtodo consider renaming to "rulerString", and maybe change hotstring to .ruler?
+	getRulerString(rulersList) {
 		baseString := "1234567890"
 		haveExplicitLabels := rulersList.contains("=")
+		outputLines  := []
 
 		rulers := []
 		For _, lengthString in rulersList.split(",", " ") {
@@ -374,26 +388,22 @@ class StringLib {
 
 			DataLib.updateMax(maxLength, len)
 		}
-		
-		onesLine := StringLib.duplicate(baseString, maxLength // 10) baseString.sub(1, Mod(maxLength, 10))
-		emptyLine := StringLib.duplicate(A_Space, maxLength)
-		
+
 		; Generate fake labels for any rulers without them
 		For _, ruler in rulers {
 			if (ruler.label = "")
 				ruler.label := ruler.len
 		}
-
+		
 		; When there's no explicit labels, also add special markers for every 10 for easier
 		; counting/measuring. We only do this when there's a single ruler, as handling the potential
 		; interleaving with multiple is more trouble than it's worth.
-		if (!noTensLine && !haveExplicitLabels && rulers.length() = 1) {
+		if (!haveExplicitLabels && rulers.length() = 1) {
 			Loop {
 				num += 10
 				if ( (num + maxLength.length()) > maxLength)
 					Break
-
-				; rulers[num] := {label:num, noPipe:true}
+				
 				rulers.push({len:num, label:num, noPipe:true})
 			}
 		}
@@ -402,37 +412,36 @@ class StringLib {
 		; label to left (so we don't have to add pipes retroactively or worry about intersecting labels/pipes).
 		rulers := DataLib.sortArrayBySubProperty(rulers, "len", false)
 		
+		; This is an empty line of the correct length that we'll start all our labels lines with
+		emptyLine := StringLib.duplicate(A_Space, maxLength)
+		
 		; Build labels and their pointer pipes
-		outputLines  := []
 		prevRulers   := []
 		prevLeftEdge := 0
 		For _, ruler in rulers {
-			; First one always goes on a new line (but without a spacer)
-			if (!prevLeftEdge) {
-				line := emptyLine
 
 			; If the label will fit on the previous line, add it there to save space
-			} else if (ruler.len < (prevLeftEdge - 1)) { ; prevLeftEdge-1 to require an extra space between this line and the previously-added label
-				line := outputLines.Pop() ; Use previous line
-
+			if (ruler.len < (prevLeftEdge - 1)) { ; Extra -1 to ensure there's a space of padding between previous label and new pipe
+				line := outputLines.Pop() ; Use previous line (remove it because we'll re-push it below)
 			; Otherwise add a new line
 			} else {
-				; Include a spacer line when there's an overlap to make it easier to read
-				outputLines.push(this.insertPipesForRulers(emptyLine, prevRulers))
-				
 				line := emptyLine
+				
+				; Include a spacer line when there's an overlap to make it easier to read
+				if (prevLeftEdge) ; But not for the first ruler
+					outputLines.push(this.insertPipesForRulers(emptyLine, prevRulers))
 			}
-			
-
-			line := this.insertPipesForRulers(line, prevRulers)
-			line := this.insertRuler(ruler, line)
+				
+			line := this.insertRuler(ruler, line) ; Add the current ruler label + pipe to the line
+			line := this.insertPipesForRulers(line, prevRulers) ; Add in pipes for any previously-added rulers
 			outputLines.push(line)
 			
 			prevRulers.push(ruler) ; Keep track of previously-added rulers so we can include their pipes on following lines
 			prevLeftEdge := ruler.len - ruler.label.length()
 		}
 
-		outputLines.push(this.insertPipesForRulers(onesLine, rulers)) ; Ones line
+		numsLine := StringLib.duplicate(baseString, maxLength // 10) baseString.sub(1, Mod(maxLength, 10))
+		outputLines.push(this.insertPipesForRulers(numsLine,  rulers)) ; Numbers with pipes
 		outputLines.push(this.insertPipesForRulers(emptyLine, rulers)) ; Spacer line at the bottom (nicer pointers, looks like a ruler)
 		
 		; Debug.popup("outputLines",outputLines)
@@ -440,7 +449,14 @@ class StringLib {
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 
-
+	;region ------------------------------ PRIVATE ------------------------------
+	;---------
+	; DESCRIPTION:    Overlay the pipes for the given rulers onto the given string.
+	; PARAMETERS:
+	;  line   (I,REQ) - Starting line to add pipes to.
+	;  rulers (I,REQ) - Array of rulers to add pipes for.
+	; RETURNS:        String with pipes added.
+	;---------
 	insertPipesForRulers(line, rulers) {
 		For _, ruler in rulers {
 			if(!ruler.noPipe) ; Some rulers don't want pipes added
@@ -450,8 +466,16 @@ class StringLib {
 		return line
 	}
 
+	;---------
+	; DESCRIPTION:    Add the given ruler's label and pipe to the given line.
+	; PARAMETERS:
+	;  ruler (I,REQ) - Ruler to add
+	;  line  (I,REQ) - Line to add the ruler to
+	; RETURNS:        String with ruler added.
+	;---------
 	insertRuler(ruler, line) {
 		labelLeftEdge := ruler.len - ruler.label.length()
 		return line.replaceSlice(ruler.label "|", labelLeftEdge + 1, ruler.len + 1)
 	}
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

@@ -61,6 +61,14 @@ class ArrayBase {
 	}
 
 	;---------
+	; DESCRIPTION:    Get the first element of this array.
+	; RETURNS:        The first element.
+	;---------
+	first() {
+		return this[1]
+	}
+
+	;---------
 	; DESCRIPTION:    Get the last element of this array.
 	; RETURNS:        The last element.
 	;---------

@@ -84,17 +84,16 @@ class DataLib {
 	;---------
 	; DESCRIPTION:    Find the numeric maximum of the given numbers.
 	; PARAMETERS:
-	;  nums* (I,REQ) - Variadic parameter - as many numbers as desired.
+	;  numbers* (I,REQ) - Variadic parameter - as many numbers as desired.
 	; RETURNS:        The numeric maximum of all given numbers.
 	;---------
-	max(nums*) {
-		; Debug.popup("Max", "Start", "Nums", nums)
-		max := nums[1]
-		For i,n in nums {
+	max(numbers*) {
+		; Debug.popup("Max", "Start", "Numbers", numbers)
+		For i,n in numbers {
 			if(!n.isNum()) ; Ignore non-numeric values
 				Continue
 			
-			if((max = "") || (max < n))
+			if((max = "") || (n > max))
 				max := n
 		}
 		
@@ -102,15 +101,34 @@ class DataLib {
 	}
 	
 	;---------
+	; DESCRIPTION:    Find the numeric minimum of the given numbers.
+	; PARAMETERS:
+	;  numbers* (I,REQ) - Variadic parameter - as many numbers as desired.
+	; RETURNS:        The numeric minimum of all given numbers.
+	;---------
+	min(numbers*) {
+		; Debug.popup("Min", "Start", "Numbers", numbers)
+		For i,n in numbers {
+			if(!n.isNum()) ; Ignore non-numeric values
+				Continue
+			
+			if((min = "") || (n < min))
+				min := n
+		}
+		
+		return min
+	}
+	
+	;---------
 	; DESCRIPTION:    Find the numeric sum of all elements.
 	; PARAMETERS:
-	;  nums* (I,REQ) - Variadic parameter - as many numbers as desired.
+	;  numbers* (I,REQ) - Variadic parameter - as many numbers as desired.
 	; RETURNS:        The total of all elements
 	; NOTES:          Any non-numeric indices will be treated as 0.
 	;---------
-	sum(nums*) {
+	sum(numbers*) {
 		total := 0
-		For _,n in nums
+		For _,n in numbers
 			total += DataLib.forceNumber(n)
 		return total
 	}
@@ -265,6 +283,43 @@ class DataLib {
 		
 		return propertyValues
 	}
+
+	;---------
+	; DESCRIPTION:    Sort the provided array of objects by the value of a given property inside those objects.	; DESCRIPTION:    Sort the provided array of objects by the value of a given property inside those objects.
+	; PARAMETERS:
+	;  objectsAry   (I,REQ) - Array of objects to sort.
+	;  propertyName (I,REQ) - Name of the property use for sorting.
+	;  ascending    (I,OPT) - true for ascending order, false for descending. Defaults to ascending.
+	; RETURNS:        Sorted array of objects
+	;---------
+	sortArrayBySubProperty(objectsAry, propertyName, ascending := true) {
+		objectsByProp := {} ; { propVal: [obj1, obj2, ...] }
+
+		For _, obj in objectsAry {
+			propVal := obj[propertyName]
+			if (propVal = "")
+				propVal := "<BLANK>"
+
+			if (!objectsByProp[propVal])
+				objectsByProp[propVal] := []
+
+			objectsByProp[propVal].push(obj)
+		}
+
+		aryByProp := DataLib.convertObjectToArray(objectsByProp) ; Builds array in ascending order
+		if (!ascending)
+			aryByProp := DataLib.reverseArray(aryByProp)
+		
+		sortedAry := []
+		For _, objectsWithValue in aryByProp {
+			For _, obj in objectsWithValue {
+				sortedAry.push(obj)
+			}
+		}
+		
+		; Debug.popup("objectsAry",objectsAry, "objectsByProp",objectsByProp, "aryByProp",aryByProp, "sortedAry",sortedAry)
+		return sortedAry
+	}
 	
 	;---------
 	; DESCRIPTION:    Variadic parameter arrays don't have the same base array as those created
@@ -277,6 +332,21 @@ class DataLib {
 	;---------
 	rebaseVariadicAry(paramAry) {
 		return Array(paramAry*)
+	}
+
+	;---------
+	; DESCRIPTION:    Reverse the order of elements in the given array.
+	; PARAMETERS:
+	;  inputAry (I,REQ) - The array to reverse
+	; RETURNS:        An array with the same elements, in reverse order.
+	;---------
+	reverseArray(inputAry) {
+		outputAry := []
+		
+		For _,el in inputAry
+			outputAry.insertAt(1, el)
+
+		return outputAry
 	}
 
 	;---------

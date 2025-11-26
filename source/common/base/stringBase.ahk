@@ -103,6 +103,17 @@ class StringBase {
 	}
 
 	;---------
+	; DESCRIPTION:    Replace the character at the given position (1-based).
+	; PARAMETERS:
+	;  pos     (I,REQ) - 1-based position of the character to replace.
+	;  newChar (I,REQ) - New character to replace it with
+	; RETURNS:        Updated string
+	;---------
+	replaceCharAt(pos, newChar) {
+		return this.sub(1, pos - 1) newChar this.sub(pos + 1)
+	}
+
+	;---------
 	; DESCRIPTION:    Return the first character of the string.
 	;---------
 	firstChar() {
@@ -238,6 +249,21 @@ class StringBase {
 		else
 			return SubStr(this, startPos, length)
 	}
+
+	;---------
+	; DESCRIPTION:    
+	; PARAMETERS:
+	;  replaceWith (I,REQ) - String to replace the specified portion with.
+	;  startPos    (I,REQ) - Position to start at (first character is position 1). Can be negative to
+	;                        count from end of string.
+	;  length      (I,OPT) - Number of characters to include. If left blank, we'll return the entire
+	;                        rest of the string. If negative, we'll leave that many characters off the
+	;                        end of the string.
+	; RETURNS:        Updated string
+	;---------
+	replaceSub(replaceWith, startPos, length := "") {
+		return this.sub(1, startPos - 1) replaceWith this.sub(startPos + length)
+	}
 	
 	;---------
 	; DESCRIPTION:    Return a chunk of this string, given starting and ending positions.
@@ -246,8 +272,20 @@ class StringBase {
 	;  stopBeforePos (I,REQ) - Ending position - return up to here, non-inclusive.
 	; RETURNS:        Chunk of this string specified.
 	;---------
-	slice(startPos, stopAtPos) {
-		return this.sub(startPos, stopAtPos - startPos)
+	slice(startPos, stopBeforePos) {
+		return this.sub(startPos, stopBeforePos - startPos)
+	}
+
+	;---------
+	; DESCRIPTION:    
+	; PARAMETERS:
+	;  replaceWith   (I,REQ) - String to replace the specified portion with.
+	;  startPos      (I,REQ) - Starting position (1 is first char).
+	;  stopBeforePos (I,REQ) - Ending position - return up to here, non-inclusive.
+	; RETURNS:        Updated string
+	;---------
+	replaceSlice(replaceWith, startPos, stopBeforePos) {
+		return this.sub(1, startPos - 1) replaceWith this.sub(stopBeforePos + 1)
 	}
 	
 	;---------

@@ -1,4 +1,4 @@
-﻿; Reminder: if you use REGEX, you'll need to escape pipes: | => \|
+﻿; Reminder: if you use REGEX, you'll need to escape pipes (and double-escape them if you mean a literal pipe): | => \|
 
 [				NAME							EXE							CLASS							TITLE									EDGE_TYPE		TITLE_MATCH_MODE	MACHINE			PRIORITY	]
 
@@ -13,7 +13,7 @@
 		; Special Chrome windows
 		~EXE.replaceWith(chrome.exe) {
 				Chrome Join						-							-								Join
-				Beeper							-							-								Element (\* )*|							-				REGEX				WORK_DESKTOP
+				Beeper							-							-								Element (\* )*\\| 						-				REGEX				WORK_DESKTOP
 				TickTick						-							-								 - TickTick
 				Chrome Workplans				-							-								Week of \d{1,2}\/\d{1,2}\/\d{4}			-				REGEX
 				Chrome Hyperspace				-							-								– Hyperspace –

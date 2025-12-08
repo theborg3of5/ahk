@@ -62,7 +62,8 @@
 	
 	; Chrome apps (run using "Chrome Proxy" from above)
 	~PATH_TYPE.replaceWith(CHROME_APP) {
-		Beeper						kebihpkoclefnhgdieipmimdjhpdkbjc									WORK_DESKTOP | WORK_VDI
+		; This one is actually element.io, the only "supported" Beeper web app
+		Beeper						ejhkdoiecgkmdpomoahkdihbcldkgjci									WORK_DESKTOP | WORK_VDI
 		TickTick					cfammbeebmjdpoppachopcohfchgjapd
 	}
 	

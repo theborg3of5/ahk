@@ -13,7 +13,7 @@
 		; Special Chrome windows
 		~EXE.replaceWith(chrome.exe) {
 				Chrome Join						-							-								Join
-				Beeper							-							-								(Beeper)\|(Beeper \\| .+)				-				REGEX				WORK_DESKTOP
+				Beeper							-							-								Element (\* )*|							-				REGEX				WORK_DESKTOP
 				TickTick						-							-								 - TickTick
 				Chrome Workplans				-							-								Week of \d{1,2}\/\d{1,2}\/\d{4}			-				REGEX
 				Chrome Hyperspace				-							-								– Hyperspace –

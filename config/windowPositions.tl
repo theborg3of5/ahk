@@ -19,7 +19,7 @@
 		
 # Social windows
 		~WIDTH.defaultTo(950) | ~HEIGHT.defaultTo(750) | ~X.replaceWith(RIGHT_EDGE) | ~Y.replaceWith(TOP_EDGE) {
-			Beeper						-				-				50%			100%
+			Beeper						-				-				65%			100%
 			Messenger
 			Slack
 			Telegram

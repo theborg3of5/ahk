@@ -22,8 +22,11 @@
 		Send, !r 		; Entire row
 		Send, {Enter} 	; Accept popup
 	return
-	
-	; New worksheet
+
+	; Insert table (alternate since ^t is used for new tab below)
+	!t::Send, ^t
+
+	; New worksheet (tab)
 	^t::Send, +{F11}
 	
 	; Next/previous worksheet

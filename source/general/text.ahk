@@ -10,9 +10,25 @@
 
 ; Send clipboard as plain text.
 ^!v::
-	HotkeyLib.waitForRelease()
-	Send, {Text}%Clipboard%
-return
+	sendUnwrappedPlainText() {
+		HotkeyLib.waitForRelease()
+
+		newText := Clipboard
+
+		; Unwrap by replacing all newlines with spaces
+		newText := newText.replace("`r`n"," ")
+		newText := newText.replace("`r"," ")
+		newText := newText.replace("`n"," ")
+
+		; Reduce multiple spaces to singles
+		while(newText.contains("  "))
+			newText := newText.replace("  ", " ")
+
+		; Drop leading/trailing spaces
+		newText := newText.withoutWhitespace()
+
+		Send, {Text}%newText%
+	}
 	
 ; Send a (newline-separated) text/URL combo from the clipboard as a link.
 ^+#k::

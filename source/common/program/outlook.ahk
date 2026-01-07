@@ -23,6 +23,11 @@ class Outlook {
 	getAllMessageTitles() {
 		titles := []
 		
+		; If the calendar view is active, skip getting message titles (to avoid finding hidden message
+		; titles that leak through).
+		if (this.isCurrentScreenCalendar(true))
+			return titles
+		
 		For _,windowId in WinGet("List", Config.windowInfo["Outlook"].titleString) {
 			idString := "ahk_id " windowId
 			if(!WindowLib.isVisible(idString)) ; Skip hidden windows
@@ -106,9 +111,6 @@ class Outlook {
 	; RETURNS:        The title, cleaned up (RE:/FW: and any other odd characters removed)
 	;---------
 	getMessageTitle(titleString := "A") {
-		if (this.isCurrentScreenCalendar(true))
-			return "" ; A message title might bleed through from mail view, and we don't want that.
-
 		title := ControlGetText(this.ClassNN_MailSubject_View, titleString) ; Most cases this control has the subject
 		if(title = Config.private["WORK_EMAIL"]) ; The exception is editing in a popup: we need to use a different control, but the original still exists with just my email in it.
 			title := ControlGetText(this.ClassNN_MailSubject_Edit, titleString) ; Yes, we could use the window title instead if we wanted, but this doesn't give us an extra suffix.

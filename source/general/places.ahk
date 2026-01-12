@@ -64,7 +64,7 @@ $!+c::
 
 
 ;region Websites
-^!+f:: Run("http://feedly.com/i/latest")
+$^!+f::Run("http://feedly.com/i/latest")
 ^!+m:: Config.runProgram("Gmail")
 ^!+#m::Config.runProgram("Messenger")
 ^!+a::

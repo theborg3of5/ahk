@@ -35,9 +35,9 @@ class Hyperlinker {
 	
 	;region ------------------------------ PRIVATE ------------------------------
 	; Methods for setting link information for the selected text
+	static Method_Clipboard    := "CLIPBOARD"     ; Use the clipboard to send the link
 	static Method_PopupField   := "POPUP_FIELD"   ; There's a popup with a field.
 	static Method_WebField     := "WEB_FIELD"     ; There's a web "popup".
-	static Method_TaggedString := "TAGGED_STRING" ; Text-based link, generate the "link" (typically markdown) from a string with <tags>
 	
 	; Methods for closing the linking popup (when applicable)
 	static CloseMethod_Enter := "ENTER" ; Pressing Enter
@@ -62,12 +62,6 @@ class Hyperlinker {
 	;                  ["PATH_FIELD_CONTROL_ID"] = If the method is Hyperlinker.Method_PopupField,
 	;                                              this is the control ID for the field where
 	;                                              the path goes.
-	;                  ["TAGGED_STRING_BASE"]    = If the method is Hyperlinker.Method_TaggedString,
-	;                                              this is the "base" string that describes the
-	;                                              format of the final linked string (that
-	;                                              includes both the selected text and the path).
-	;                                              It should include both <TEXT> and <PATH> tags
-	;                                              for those respective bits of data.
 	; PARAMETERS:
 	;  name (I,REQ) - Name of the window we're interested in
 	; SIDE EFFECTS:   Initializes the static this._windows array the first time it's called.
@@ -110,13 +104,29 @@ class Hyperlinker {
 		; Handle linking differently depending on the specified method.
 		setPathMethod := windowLinkInfo["SET_PATH_METHOD"]
 		Switch setPathMethod {
+			Case this.Method_Clipboard:    return Hyperlinker.linkWithClipboard(path, windowLinkInfo)
 			Case this.Method_PopupField:   return Hyperlinker.linkPopupField(path, windowLinkInfo)
 			Case this.Method_WebField:     return Hyperlinker.linkWebField(path, windowLinkInfo["CLOSE_METHOD"])
-			Case this.Method_TaggedString: return Hyperlinker.linkTaggedString(path, windowLinkInfo["TAGGED_STRING_BASE"])
 		}
 		
 		errorMessage := "Unsupported set path method: " setPathMethod
 		return false
+	}
+
+	;---------
+	; DESCRIPTION:    Replace the selected text with a hyperlink pointing to the given path.
+	; PARAMETERS:
+	;  path           (I,REQ) - The URL or file path to link to.
+	;  windowLinkInfo (I,REQ) - Array of linking-related info about the window matching the given
+	;                           name. See getWindowLinkInfo() for format.
+	; RETURNS:        true
+	;---------
+	linkWithClipboard(path, windowLinkInfo) {
+		; Set clipboard to hyperlink
+		selectedText := SelectLib.getText()
+		ClipboardLib.sendHyperlink(selectedText, path)
+		
+		return true
 	}
 	
 	;---------
@@ -212,35 +222,6 @@ class Hyperlinker {
 		actualValue := SelectLib.getText()
 		Send, {Right} ; Release the select all
 		return (actualValue = value)
-	}
-	
-	;---------
-	; DESCRIPTION:    Link the selected text by adding it to a structured string that also includes
-	;                 the path (i.e. markup-style links).
-	; PARAMETERS:
-	;  path             (I,REQ) - URL or file path to link to.
-	;  taggedStringBase (I,REQ) - The "base" string that describes the format of the final linked
-	;                             string (that includes both the selected text and the path). It
-	;                             should include both <TEXT> (for the selected text we're linking)
-	;                             and <PATH> (for the given path) tags.
-	; RETURNS:        True for success, False if something went wrong.
-	;---------
-	linkTaggedString(path, taggedStringBase) {
-		if(!taggedStringBase)
-			return false
-		
-		; Grab the text that we're going to add a link to, then delete it - we're going to replace it
-		; with the full link including both the text and the path.
-		textToLink := SelectLib.getText()
-		Send, {Backspace}
-		
-		; Build the full link string using the original text and path.
-		linkedText := taggedStringBase.replaceTags({"TEXT":textToLink, "PATH":path})
-		
-		; Send the link string to the field (no accept, that's it).
-		ClipboardLib.send(linkedText)
-		
-		return true
 	}
 	
 	;---------

@@ -218,6 +218,23 @@ class ClipboardLib {
 		ClipboardLib.set(newValue)
 		Toast.ShowError(problemMessage, errorMessage, "Clipboard set to " clipLabel ":`n" Clipboard)
 	}
+
+	;---------
+	; DESCRIPTION:    Set the clipboard to a hyperlink (in HTML format).
+	; PARAMETERS:
+	;  text          (I,REQ) - The link text (the caption that displays)
+	;  url           (I,REQ) - The URL the link should point to
+	;  origClipboard (O,OPT) - The original value of ClipboardAll (which is binary and contains
+	;                          everything, not just the text on the clipboard). This can be used to
+	;                          restore the clipboard later if needed.
+	;---------
+	setToHyperlink(text, url, ByRef origClipboard := "") {
+		; This must be a ByRef return parameter instead of returning directly, as it's a binary
+		; variable, which can't be returned directly (see https://www.autohotkey.com/boards/viewtopic.php?t=62209 ).
+		origClipboard := ClipboardAll ; Save off everything (images, formatting), not just the text (that's all that's in Clipboard)
+
+		SetClipboardHTML("<a href=""" url """>" text "</a>")
+	}
 	
 	;---------
 	; DESCRIPTION:    Show a toast about the clipboard's current state (basically whether it's set or not),
@@ -239,6 +256,19 @@ class ClipboardLib {
 	;---------
 	send(value) {
 		ClipboardLib.set(value, origClipboard)
+		Send, ^v   ; Paste the new value.
+		Sleep, 500 ; Needed to make sure clipboard isn't overwritten before we paste it.
+		ClipboardLib.set(origClipboard)
+	}
+
+	;---------
+	; DESCRIPTION:    Send a hyperlink using the clipboard, restoring the clipboard afterwards.
+	; PARAMETERS:
+	;  text (I,REQ) - The link text (the caption that displays)
+	;  url  (I,REQ) - The URL the link should point to
+	;---------
+	sendHyperlink(text, url) {
+		ClipboardLib.setToHyperlink(text, url, origClipboard)
 		Send, ^v   ; Paste the new value.
 		Sleep, 500 ; Needed to make sure clipboard isn't overwritten before we paste it.
 		ClipboardLib.set(origClipboard)

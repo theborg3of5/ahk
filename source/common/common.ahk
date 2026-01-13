@@ -65,6 +65,7 @@ Object(params*) {
 #Include %A_LineFile%\..\external
 	#Include commandFunctions.ahk
 	#Include HTTPRequest.ahk
+	#Include SetClipboardHTML.ahk
 	
 #Include %A_LineFile%\..\lib
 	#Include ahkCodeLib.ahk

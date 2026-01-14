@@ -219,22 +219,103 @@ class ClipboardLib {
 		Toast.ShowError(problemMessage, errorMessage, "Clipboard set to " clipLabel ":`n" Clipboard)
 	}
 
+	;region Clipboard format, links
 	;---------
-	; DESCRIPTION:    Set the clipboard to a hyperlink (in HTML format).
+	; DESCRIPTION:    Set the clipboard to a hyperlink (in HTML, RTF, and (fallback) plain-text formats).
 	; PARAMETERS:
 	;  text          (I,REQ) - The link text (the caption that displays)
-	;  url           (I,REQ) - The URL the link should point to
+	;  path          (I,REQ) - The location the link should point to
 	;  origClipboard (O,OPT) - The original value of ClipboardAll (which is binary and contains
 	;                          everything, not just the text on the clipboard). This can be used to
 	;                          restore the clipboard later if needed.
 	;---------
-	setToHyperlink(text, url, ByRef origClipboard := "") {
+	setToHyperlink(text, path, ByRef origClipboard := "") {
 		; This must be a ByRef return parameter instead of returning directly, as it's a binary
 		; variable, which can't be returned directly (see https://www.autohotkey.com/boards/viewtopic.php?t=62209 ).
 		origClipboard := ClipboardAll ; Save off everything (images, formatting), not just the text (that's all that's in Clipboard)
 
-		SetClipboardHTML("<a href=""" url """>" text "</a>")
+		DllCall("OpenClipboard", "Ptr", A_ScriptHwnd)
+		DllCall("EmptyClipboard")
+
+		; HTML format
+		fragment := "<a href=""" path """>" text "</a>"
+		content := this.buildClipboardHTML(fragment)
+		this.setClipboardForFormat(content, "HTML Format")
+		
+		; RTF format
+		fragment := "{\field{\*\fldinst HYPERLINK """ path """}{\fldrslt " text "}}"
+		content := "{\rtf1" fragment "}"
+		this.setClipboardForFormat(content, "Rich Text Format")
+		
+		; Plain-text format
+		CF_TEXT := 1 ; https://learn.microsoft.com/en-us/windows/win32/dataxchg/standard-clipboard-formats
+		content := text
+		this.setClipboardForFormat(content, CF_TEXT)
+
+		DllCall("CloseClipboard")
 	}
+
+	;---------
+	; DESCRIPTION:    Build HTML that can be set to the clipboard (so it can paste in HTML format).
+	;                 https://learn.microsoft.com/en-us/windows/win32/dataxchg/html-clipboard-format
+	; PARAMETERS:
+	;  fragment (I,REQ) - The HTML fragment to include.
+	; RETURNS:        HTML content compatible with the clipboard (in "HTML Format" format).
+	;---------
+	buildClipboardHTML(fragment) {
+		; Start all positions at zero (with the proper number of 0s), we have to measure them after the
+		; fragment is in place.
+		content := "
+			( Join`r`n
+				Version:1.0
+				StartHTML:0000000000
+				EndHTML:0000000000
+				StartFragment:0000000000
+				EndFragment:0000000000
+				<html><body><!--StartFragment--><FRAGMENT><!--EndFragment--></body></html>
+			)"
+		content := content.replaceTag("FRAGMENT", fragment)
+
+		; Measure the new start/end positions
+		htmlStart := content.contains("<html>") - 1
+		htmlEnd   := content.contains("</html>") + "</html>".length() - 1
+		fragStart := content.contains("<!--StartFragment-->") + "<!--StartFragment-->".length() - 1
+		fragEnd   := content.contains("<!--EndFragment-->") - 1
+		; Debug.popup("content",content, "htmlStart",htmlStart, "htmlEnd",htmlEnd, "fragStart",fragStart, "fragEnd",fragEnd)
+
+		; Replace the position placeholders
+		content := content.replaceOne("StartHTML:0000000000",     "StartHTML:"     htmlStart.prePadToLength(10, "0"))
+		content := content.replaceOne("EndHTML:0000000000",       "EndHTML:"       htmlEnd.prePadToLength(10, "0"))
+		content := content.replaceOne("StartFragment:0000000000", "StartFragment:" fragStart.prePadToLength(10, "0"))
+		content := content.replaceOne("EndFragment:0000000000",   "EndFragment:"   fragEnd.prePadToLength(10, "0"))
+
+		return content
+	}
+
+	;---------
+	; DESCRIPTION:    Set the clipboard to the given content for the given format.
+	;                 Clipboard should already be opened (and emptied if needed).
+	; PARAMETERS:
+	;  content (I,REQ) - The content to set on the clipboard.
+	;  format  (I,REQ) - The format on the clipboard to set (CF_TEXT, "HTML Format", etc).
+	;---------
+	setClipboardForFormat(content, format) {
+		; Build a global object with the content we want to plug in
+		gloSize := StrPut(content, "cp0")                                                           ; Calculated needed size
+		glo := DllCall("GlobalAlloc", "UInt", MicrosoftLib.GlobalAlloc_GHND, "Ptr", gloSize, "Ptr") ; Allocate memory
+		gloPointer := DllCall("GlobalLock", "Ptr", glo, "Ptr")                                      ; Lock memory and get pointer
+		StrPut(content, gloPointer, "cp0")                                                          ; Put content into global
+		DllCall("GlobalUnlock", "Ptr", glo)                                                         ; Unlock global
+
+		; If it's not a standard format (https://learn.microsoft.com/en-us/windows/win32/dataxchg/standard-clipboard-formats), 
+		; register the format first.
+		if (!format.isNum()) ; As a shortcut, just check for an integer (registered formats seem to generally be strings)
+			format := DllCall("RegisterClipboardFormat", "Str", format)
+		
+		; Actually set the clipboard
+		DllCall("SetClipboardData", "UInt", format, "Ptr", glo)
+	}
+	;endregion Clipboard format, links
 	
 	;---------
 	; DESCRIPTION:    Show a toast about the clipboard's current state (basically whether it's set or not),

@@ -60,6 +60,11 @@ class MicrosoftLib {
 	static SPI_SETCURSORS := 0x0057 ; Reload system cursors
 	;endregion Info options
 	
+	;region Global allocation flags
+	; For use with GlobalAlloc: https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-globalalloc
+	static GlobalAlloc_GHND := 0x42 ; GMEM_MOVEABLE + GMEM_ZEROINIT = Movable memory + initialized to zero
+	;endregion Global allocation flags
+	
 	;region Mouse cursor types
 	; For use with LoadCursorA: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadcursora
 	static IDC_ARROW       := 32512 ; Normal Select

@@ -44,7 +44,7 @@
 		textLen := text.length()
 		Send, {Shift Down}{Left %textLen%}{Shift Up}
 		
-		if(!Hyperlinker.linkSelectedText(url, errorMessage))
+		if(!SelectLib.linkSelectedText(url, errorMessage))
 			Toast.ShowError("Failed to link text", errorMessage)
 	}
 

@@ -7,7 +7,7 @@
 ^+k::
 	linkSelectedText() {
 		HotkeyLib.waitForRelease()
-		if(!Hyperlinker.linkSelectedText(Clipboard, errorMessage))
+		if(!SelectLib.linkSelectedText(Clipboard, errorMessage))
 			Toast.ShowError("Failed to link selected text", errorMessage)
 	}
 

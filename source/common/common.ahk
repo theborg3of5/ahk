@@ -113,7 +113,6 @@ Object(params*) {
 	#Include commonHotkeys.ahk
 	#Include debug.ahk
 	#Include enums.ahk
-	#Include hyperlinker.ahk
 	#Include scriptTrayInfo.ahk
 	#Include titleMatchMode.ahk
 	#Include VA.ahk

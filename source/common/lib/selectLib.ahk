@@ -63,5 +63,30 @@ class SelectLib {
 		Send, {Right %needleLen%} ; Select to end of needle.
 		Send, {Shift Up}
 	}
+
+	;---------
+	; DESCRIPTION:    Link the selected text with the given URL/path.
+	; PARAMETERS:
+	;  path         (I,REQ) - URL or file path to link to.
+	;  errorMessage (O,OPT) - Error message about what went wrong if we return False.
+	; RETURNS:        True if successful, False if something went wrong.
+	;---------
+	linkSelectedText(path, ByRef errorMessage := "") {
+		if(!path) {
+			errorMessage := "Path to link was blank"
+			return false
+		}
+		
+		path := FileLib.cleanupPath(path)
+		windowName := Config.findWindowName("A")
+		
+		; Special handling
+		if (Config.isWindowActive("OneNote")) ; OneNote can't handle double quotes in URLs for some reason, so encode them.
+			path := path.replace("""", "%22")
+		
+		selectedText := SelectLib.getText()
+		ClipboardLib.sendHyperlink(selectedText, path)
+		return true
+	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 }

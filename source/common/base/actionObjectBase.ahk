@@ -122,7 +122,7 @@ class ActionObjectBase {
 		if(!link)
 			return
 		
-		if(!Hyperlinker.linkSelectedText(link, errorMessage))
+		if(!SelectLib.linkSelectedText(link, errorMessage))
 			ClipboardLib.setAndToastError(link, "link", problemMessage, errorMessage)
 	}
 	;---------

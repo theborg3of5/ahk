@@ -346,10 +346,18 @@ class ClipboardLib {
 	; DESCRIPTION:    Send a hyperlink using the clipboard, restoring the clipboard afterwards.
 	; PARAMETERS:
 	;  text (I,REQ) - The link text (the caption that displays)
-	;  url  (I,REQ) - The URL the link should point to
+	;  path (I,REQ) - The location the link should point to
 	;---------
-	sendHyperlink(text, url) {
-		ClipboardLib.setToHyperlink(text, url, origClipboard)
+	sendHyperlink(text, path) {
+		if (!text || !path)
+			return
+
+		path := FileLib.cleanupPath(path)
+		; Special handling
+		if (Config.isWindowActive("OneNote")) ; OneNote can't handle double quotes in URLs for some reason, so encode them.
+			path := path.replace("""", "%22")
+
+		ClipboardLib.setToHyperlink(text, path, origClipboard)
 		Send, ^v   ; Paste the new value.
 		Sleep, 500 ; Needed to make sure clipboard isn't overwritten before we paste it.
 		ClipboardLib.set(origClipboard)

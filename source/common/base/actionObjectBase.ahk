@@ -122,8 +122,7 @@ class ActionObjectBase {
 		if(!link)
 			return
 		
-		if(!SelectLib.linkSelectedText(link, errorMessage))
-			ClipboardLib.setAndToastError(link, "link", problemMessage, errorMessage)
+		SelectLib.linkSelectedText(link)
 	}
 	;---------
 	; DESCRIPTION:    Get the link for the object, and hyperlink the selected text with it,

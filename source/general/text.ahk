@@ -38,14 +38,8 @@
 		value := clipboard.replace("`r`n", "`n") ; Replace `r`n with just `n to avoid counting/highlighting mishaps
 		text := value.beforeString("`n")
 		url  := value.afterString("`n")
-		
-		; Send and select the text
-		ClipboardLib.send(text)
-		textLen := text.length()
-		Send, {Shift Down}{Left %textLen%}{Shift Up}
-		
-		if(!SelectLib.linkSelectedText(url, errorMessage))
-			Toast.ShowError("Failed to link text", errorMessage)
+
+		ClipboardLib.sendHyperlink(text, url)
 	}
 
 ; Send the clipboard as a list.

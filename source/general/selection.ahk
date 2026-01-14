@@ -5,11 +5,9 @@
 
 ; Turn the selected text into a link to the URL on the clipboard.
 ^+k::
-	linkSelectedText() {
-		HotkeyLib.waitForRelease()
-		if(!SelectLib.linkSelectedText(Clipboard, errorMessage))
-			Toast.ShowError("Failed to link selected text", errorMessage)
-	}
+	HotkeyLib.waitForRelease()
+	SelectLib.linkSelectedText(Clipboard)
+return
 
 ; Open - open a variety of different things based on the selected text.
 ^!#o:: new ActionObject(SelectLib.getText()).openWeb()

@@ -67,6 +67,21 @@ class ActionObjectEpicCode extends ActionObjectBase {
 		
 		return false
 	}
+
+	;---------
+	; DESCRIPTION:    Open the object.
+	;                 This override exists so we can specifically focus EpicCode before trying to open
+	;                 stuff (because otherwise the wrong VSCode instance might pick up the request).
+	;---------
+	open(link := "") {
+		link := this.getLink()
+		if(!link)
+			return
+		
+		WindowActions.activateWindowByName("VSCode EpicCode")
+
+		Run(link)
+	}
 	
 	;---------
 	; DESCRIPTION:    Get a link to the object (server code location) referenced by descriptor in EpicCode.

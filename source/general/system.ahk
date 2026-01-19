@@ -16,9 +16,7 @@
 
 ;region Keyboard mapping
 #If Config.machineIsWorkDesktop || Config.machineIsWorkVDI
-	; Extra buttons on the ergonomic keyboard as left/right clicks (disable them in MS mouse and keyboard)
-	Browser_Back::   HotkeyLib.sendCatchableKeys("{LButton}")
-	Browser_Forward::HotkeyLib.sendCatchableKeys("{RButton}")
+	Launch_App2::return ; Disable oft-mistakenly-pressed calculator key on work keyboard
 #If Config.machineIsHomeLaptop || Config.machineIsWorkDesktop || Config.machineIsWorkVDI
 	AppsKey::RWin ; No right windows key on these machines, so use the AppsKey (right-click key) instead.
 #If

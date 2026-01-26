@@ -199,6 +199,11 @@ class WindowActions {
 			debugString .= "`n" "WindowActions.actionOverrides[""Telegram""]=" WindowActions.actionOverrides["Telegram"]
 			MsgBox, % debugString
 		}
+
+		if (WindowLib.isNoMoveSizeWindow(titleString)) {
+			Toast.ShowError("WindowActions: cannot touch window", "Window should not be moved or resized")
+			return
+		}
 		
 		this.performAction(action, titleString, this.actionOverrides[name])
 	}

@@ -17,7 +17,7 @@
 ;region Keyboard mapping
 #If Config.machineIsWorkDesktop || Config.machineIsWorkVDI
 	Launch_App2::return ; Disable oft-mistakenly-pressed calculator key on work keyboard
-#If Config.machineIsHomeLaptop || Config.machineIsWorkDesktop || Config.machineIsWorkVDI
+#If Config.machineIsHomeLaptop
 	AppsKey::RWin ; No right windows key on these machines, so use the AppsKey (right-click key) instead.
 #If
 ;endregion Keyboard mapping

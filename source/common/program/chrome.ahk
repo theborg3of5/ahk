@@ -38,7 +38,7 @@
 		}
 		
 		; Otherwise include the function.
-		location := functionName "()" "::" path
+		location := path "::" functionName "()"
 		ClipboardLib.setAndToast(location, "source-relative code location")
 	}
 	
@@ -94,10 +94,10 @@
 			file := title.beforeString("/")
 			function := SelectLib.getCleanFirstLine()
 			
-			if(this.isCurrentPageCodeSearchClient()) { ; Client files - <file>::<function>()
+			if(this.isCurrentPageCodeSearchClient()) { ; Client files - <function>()::<file>
 				title := file
 				if(function != "")
-					title := function "()" "::" title
+					title := title "::" function "()"
 			} else { ; Server routines - <tag>^<routine>, or just <routine>
 				title := function "^" file ; Always include the ^
 			}

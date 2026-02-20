@@ -99,7 +99,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		selectHyperdrive() {
 			environments := EpicLib.selectEpicEnvironments("Launch Hyperdrive in Environment", Config.getProgramPath("Hyperdrive"))
 			For _, env in environments
-				EpicLib.runHyperdrive(env["COMM_ID"], env["TIME_ZONE"])
+				EpicLib.runHyperdrive(env["HSWEB_URL"])
 		}
 	
 	^!+i::

@@ -55,20 +55,13 @@ class EpicLib {
 	;---------
 	; DESCRIPTION:    Launch Hyperdrive for the given environment.
 	; PARAMETERS:
-	;  environment (I,OPT) - EpicComm ID for the environment to connect to (node in my custom _0Config.json config file).
-	;                        If not given, we'll just launch Hyperdrive to select an environment.
-	;  timezone    (I,OPT) - Time zone to use.
+	;  hswebURL (I,OPT) - The HSWeb URL for the environment. If not given we'll just launch Hyperdrive
+	;                     (no specified environment or filters).
 	;---------
-	runHyperdrive(environment := "", timezone := "") {
-		; Only specify the file ID (which filters the available environments) if we're launching into a specific environment.
-		if(environment != "" && environment != "LAUNCH")
-			fileId := "_" Config.private["WORK_ID"]
+	runHyperdrive(hswebURL := "") {
+		url := Config.private["HYPERDRIVE_URL_BASE"].replaceTag("HSWEB_URL", hswebURL)
 		
-		args := "-- ID=<FILE_ID> env=<ENVIRONMENT>"
-		args := args.replaceTag("FILE_ID"    , fileId)
-		args := args.replaceTag("ENVIRONMENT", environment)
-		
-		Config.runProgram("Hyperdrive", args)
+		Run(url)
 	}
 	
 	;---------

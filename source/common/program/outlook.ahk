@@ -264,6 +264,7 @@ class Outlook {
 		value := value.replace("PRJ Readiness ", "PRJ ")
 		value := value.replace("Project Readiness ", "PRJ ")
 		value := value.replace("[Readiness Approval Request] ", "PRJ ")
+		value := value.replace("[Readiness Approved] ", "PRJ ")
 		
 		; Release note review is about the DRN
 		value := value.replace("Release Note Review: ", "DRN ")

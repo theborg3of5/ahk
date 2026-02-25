@@ -1,0 +1,771 @@
+﻿Review changes (https://www.autohotkey.com/docs/v2/v2-changes.htm):
+	Language (https://www.autohotkey.com/docs/v2/v2-changes.htm#language):
+		Legacy syntax removed (https://www.autohotkey.com/docs/v2/v2-changes.htm#legacy-syntax-removed):
+			☐ All commands are now functions (drop the paren between command and params)
+				☐ Can probably get rid of commandFunctions.ahk
+			☐ All text now quoted
+			☐ No more percent-sign-wrapped variables (except for #Include)
+			☐ No more percent-sign prefix to force an expression
+			☐ Throw exceptions (or return values) instead of setting ErrorLevel
+			☐ Loop must be followed by another keyword (Files/Parse/Read/Reg), can't be quoted or a variable. Also no comma needed between.
+			Gosub removed:
+				☐ SetTimer and Hotkey now take function references instead
+				☐ Use parameters instead of A_ThisLabel
+				☐ Functions can go in the auto-execute section now!
+		Hotkeys and (non-auto-replace) hotstrings now auto-define a (assume-local) function (https://www.autohotkey.com/docs/v2/v2-changes.htm#hotkey-and-hotstring-labels):
+			☐ Multi-line hotkeys need braces to enclose the body of the hotkey instead of "return"
+		Names (https://www.autohotkey.com/docs/v2/v2-changes.htm#names):
+			☐ Func("MyFunc") => MyFunc
+			☐ SetTimer/Hotkey passing "MyFunc" => pass MyFunc
+			☐ Calling function by value: %myVar%() => myVar()
+			☐ To call function using just its name, use a double-deref (%MyFunc%() - https://www.autohotkey.com/docs/v2/Variables.htm#deref)
+				But: use function references instead of names if possible.
+			☐ Built-in classes have changed: https://www.autohotkey.com/docs/v2/ObjList.htm
+				Will be important for my StringBase/ArrayBase/ObjectBase stuff
+		Scope (https://www.autohotkey.com/docs/v2/v2-changes.htm#scope):
+			☐ Super-global variables removed (except for built-in variables)
+			☐ Functions can now read (but not write) global variables without declaring them
+			☐ Force-local mode removed
+			☐ GuiLib stuff with dynamic globals will need updates:
+				☐ getLabelSizeForText
+				☐ create/getDynamicGlobal()
+			☐ Might be able to drop the "global varName" stuff at the start of a lot of standalone scripts' functions
+			☐ Can probably get rid of pseudo-array handling in DataLib - convertPseudoArrayToArray, rebaseVariadicAry
+		Variables (https://www.autohotkey.com/docs/v2/v2-changes.htm#variables):
+			☐ Static variables now initialized on first use, instead of auto-executing
+				☐ Probably means I can simplify a lot of property "build it if not set yet" stuff in Config and other status classes
+		Expressions (https://www.autohotkey.com/docs/v2/v2-changes.htm#expressions):
+			☐ Strings must now always be in quotes (single or double, doesn't matter which)
+				You can nest one type within the other ("this is a 'string'")
+				☐ Quotes should be escaped with backtick (`) (not doubled)
+			☐ (&& || and or) operators now all yield the "truthy" value instead of just true/false
+			☐ Auto-concatenation now always requires a space
+			☐ (= !=) are always case-insensitive
+			☐ New (== !==) operators are case-sensitive
+			☐ <> operator removed
+			☐ (// | ^ & << >>) now throw an exception for floating-point numbers
+			☐ Scientific notation now supported without a decimal point (but does still produce a floating-point number), i.e. 1e3 = 1000
+			☐ Function calls are more dynamic now - can call MyFunc() whether the function is named "MyFunc" or MyFunc is a variable containing the name
+			☐ Double-derefs now used to dereference VarRefs (ref := &var, value := %ref%)
+			☐ New "is" operator can check for class instances (https://www.autohotkey.com/docs/v2/Variables.htm#is)
+			☐ Keywords "contains" and "in" are reserved
+			☐ Address-of (&var) replaced with StrPtr(var)/ObjPtr(obj)
+			☐ &var is now "reference" operator, used for ByRef/OutputVar parameters
+			☐ The case-sensitive equality operators (== and !==) can be used to compare binary data. The other comparison operators only "see" up to the first binary zero.
+			☐ The * (deref) operator has been removed. Use NumGet instead.
+			☐ New fat-arrow functions (https://www.autohotkey.com/docs/v2/Variables.htm#fat-arrow)
+				Can also be used for getters/setters
+		Objects (Misc) (https://www.autohotkey.com/docs/v2/v2-changes.htm#objects-misc):
+			☐ Properties and data are now separate (accessed with . and [], respectively)
+				Can use this in user-defined objects with an __Item property (https://www.autohotkey.com/docs/v2/Objects.htm#__Item)
+			☐ "base" has been split into "base" and "super":
+				☐ "super" calls the super-class (base of the prototype object) version of a method/property (https://www.autohotkey.com/docs/v2/Objects.htm#Custom_Classes_super)
+				☐ "base" is a property to get/set objects immediate base object (like ObjGetBase/ObjSetBase)
+			☐ new ClassName() => ClassName()
+			☐ Can use String(val) to convert to string (calls val.ToString())
+		Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#functions):
+			☐ Can now use "unset" keyword (p := unset) or "?" suffix (p?) to make parameter "unset" (can catch with IsSet() function)
+			ByRef (https://www.autohotkey.com/docs/v2/v2-changes.htm#byref):
+				☐ ByRef parameters now declared with &param instead of ByRef param
+					Caller must pass with & prefix (&param) - can't sometimes pass a value instead now.
+		Nested Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#nested-functions):
+			☐ Can do this now, closures and all (fat arrows too)
+		Uncategorized (https://www.autohotkey.com/docs/v2/v2-changes.htm#uncategorized):
+			☐ #Include is now relative to the current file's directory by default
+			☐ Labels in a function have local scope (can only be used inside that function)
+			☐ for k,v in obj:
+				☐ k/v are now restored - can't use loop value after loop ends
+				☐ Variables can be omitted
+				☐ Up to 19 variables can be used (so like "for k,v,a,b in obj" I think?)
+			☐ Can now use else with loop/for/while/catch
+				Loops: called if 0 iterations
+				Catch: if no exception within try
+		Continuation Sections (https://www.autohotkey.com/docs/v2/v2-changes.htm#continuation-sections):
+			☐ Smart LTrim
+				Counts leading spaces/tabs on first line below options, remove that indent from each line thereafter
+				Can mis spaces/tabs - only the first set is considered indentation
+			☐ Quotes automatically escaped if inside a quoted string
+			☐ Line continuation is more flexible now using parans/braces - if one is still open, the next line is joined until they balance out
+		✔ Continuation Lines (https://www.autohotkey.com/docs/v2/v2-changes.htm#continuation-lines): @done(23-01-09 14:07)
+		Types (https://www.autohotkey.com/docs/v2/v2-changes.htm#types):
+			☐ All literal numbers are converted to binary at load time (and string representation discarded)
+			☐ "0" is now false
+			☐ (= !=) operators now compare numeric strings alphabetically (unless at least 1 variable is "pure numeric")
+			☐ (< <= > >=) can't be used with non-numeric strings anymore (throw an exception)
+			☐ Type(value) returns String/Integer/Float/<object name>
+			☐ Float(v)/Integer(v)/String(v) convert v to respective type (or throw an exception)
+				☐ Number(v) converts to Integer or Float
+				☐ String(v) calls .ToString() on objects
+	Objects (https://www.autohotkey.com/docs/v2/v2-changes.htm#objects):
+		Inline:
+			☐ All classes are now instances of "Class", exposing only methods/properties defined with the "static" keyword (plus nested classes)
+			☐ Class objects have a "Prototype" property that's the "base" of all instances of that class.
+			☐ Instantiation happens by calling the static "Call" method (MyClass.Call() or MyClass())
+				__New is still where initalization should live
+			☐ Original "Object" type split into Object/Array/Map (associative array)
+			☐ New Object type is root class for all objects (built-in and user-defined both!) except VarRefs and COM objects
+				Meaning: adding stuff to Object.Prototype adds it to all AHK objects
+			☐ Operator "is" expects a class ("x is y" => "x is an instance of y"), works with chained inheritance
+				☐ Can check for y itself use x.HasBase(y) or HasBase(x, y)
+			☐ User-defined classes can explicitly extend Object/Array/Map or other built-in classes
+			☐ "new" operator removed - just omit it (new MyClass() => MyClass()) now
+				☐ To create object based on another object (that's not a class) create it with {}/Object() and set its "base".
+			☐ GetCapacity/SetCapacity removed
+			☐ ObjHasKey() => ObjHasOwnProp()
+			☐ ObjNewEnum() => ObjOwnProps()
+			☐ ObjCount() => ObjOwnPropCount()
+			☐ Map has its own "Count" property
+			☐ ObjRawGet/ObjRawSet merged into GetOwnPropDesc/DefineProp
+			☐ Assigning to a class name is now an error (unless it's also a local variable - the default)
+		Primitive Values (https://www.autohotkey.com/docs/v2/v2-changes.htm#primitive-values):
+			☐ Now all act like objects using a prototype object from their type:
+				Any >
+					Object
+					Primitive >
+						String
+						Number >
+							Integer
+							Float
+		Properties and Methods (https://www.autohotkey.com/docs/v2/v2-changes.htm#properties-and-methods):
+			☐ New methods for dealing with properties and methods: DefineProp/DeleteProp/GetOwnPropDesc/HasOwnProp/OwnProps, GetMethod/HasProp/HasMethod
+			☐ Properties that don't accept parameters now pass those params to the object returned (or throw an error)
+			☐ Retrieving a non-existent property is an error, unless __get is defined
+			☐ Setting a non-existent property will generally create it
+			☐ Multi-dimension array "hacks" removed - can't do x.y[z]:=1 to create object in x.y, x[y,z] is an error unless x.__item handles two parameters (or x.__item.__item does,)
+			☐ get-only properties throw an error if you try to set to them
+			☐ DefineProp can determine what happens when a property is retrieved/set/called without any meta-functions
+			☐ {} object literals set "own property" values or the object's "base"
+		Static/Class Variables (https://www.autohotkey.com/docs/v2/v2-changes.htm#staticclass-variables):
+			☐ Static/class variable initializers now executed in the context of the __Init method (so "this" works)
+		Meta-Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#meta-functions):
+			☐ Method and property parameters passed as an Array
+		Array (https://www.autohotkey.com/docs/v2/v2-changes.htm#array):
+			☐ Now throws exceptions if you access out-of-range values
+			☐ Can set .Length to expand array if needed
+			☐ Must access elements with square brackets
+			☐ Negative values can be used to index in reverse
+			☐ HasKey => Has
+			☐ Length is a property now
+			☐ Can construct with Array(values*) or [values*]
+			☐ Variadic functions get an array of parameters
+			☐ For var in ary => var gets value, not key
+		Map (https://www.autohotkey.com/docs/v2/v2-changes.htm#map):
+			☐ Associative array like old Object
+			☐ HasKey => Has
+			☐ Count is now a property
+			☐ CaseSense property (string keys are case-sensitive by default)
+			☐ New Get method (has a Default parameter, and map.Default is returned after that)
+			☐ New Set method (takes a [key,value,key,value] array, doesn't call __Item, returns the map)
+			☐ New Clear method (removes all key-value pairs)
+			☐ Use square brackets to access elements
+			☐ Exceptions on trying to access unset keys (use Get() to provide a default value)
+			☐ Create with Map(Key, Value, ...)
+		Enumeration (https://www.autohotkey.com/docs/v2/v2-changes.htm#enumeration):
+			☐ _NewEnum() => __Enum(n) (n parameter is number of variables in for-loop, required)
+			☐ Next() => Call()
+		Bound Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#bound-functions):
+			☐ When calling a bound function, parameters passed by caller fill in any positions omitted when creating bound function
+		COM Objects (ComObject) (https://www.autohotkey.com/docs/v2/v2-changes.htm#com-objects-comobject):
+			☐ New COM wrapper objects (ComValue/ComObject/ComObjArray/ComValueRef)
+			☐ ComObjectCreate => ComObject(CLSID)
+			☐ ComObjParameter(vt, value) => ComValue(vt, value)
+			☐ ComObject(9, dsp, 1) => ComObjFromPtr(pdsp)
+		✔ Default Property (https://www.autohotkey.com/docs/v2/v2-changes.htm#default-property): @done(23-01-13 08:16)
+			(specific to COM objects)
+		✔ COM Calls (https://www.autohotkey.com/docs/v2/v2-changes.htm#com-calls): @done(23-01-13 08:17)
+			(specific to COM objects)
+	Library (https://www.autohotkey.com/docs/v2/v2-changes.htm#library):
+		Renamed Commands:
+			☐ ComObjCreate() => ComObject (now a class)
+			☐ ComObjParameter() => ComValue (now a class)
+			☐ DriveSpaceFree => DriveGetSpaceFree
+			☐ EnvAdd => DateAdd
+			☐ EnvSub => DateDiff
+			☐ FileCopyDir => DirCopy
+			☐ FileCreateDir => DirCreate
+			☐ FileMoveDir => DirMove
+			☐ FileRemoveDir => DirDelete
+			☐ FileSelectFile => FileSelect
+			☐ FileSelectFolder => DirSelect
+			☐ #If => #HotIf
+			☐ #IfTimeout => HotIfTimeout
+			☐ StringLower => StrLower/StrTitle
+			☐ StringUpper => StrUpper/StrTitle
+			☐ UrlDownloadToFile => Download
+			☐ WinMenuSelectItem => MenuSelect
+			☐ LV/TV/SB functions => methods of GuiControl
+			☐ File.__Handle => File.Handle
+		Removed Commands (full list inline, details: https://www.autohotkey.com/docs/v2/v2-changes.htm#removed-details):
+			☐ Asc() (use Ord)
+			☐ AutoTrim (use Trim)
+			☐ ComObjMissing() (write two consecutive commas instead)
+			☐ ComObjUnwrap() (use ComObjValue instead, and ObjAddRef if needed)
+			☐ ComObjEnwrap() (use ComObjFromPtr instead, and ObjAddRef if needed)
+			☐ ComObjError()
+			☐ ComObjXXX() where XXX is anything other than one of the explicitly defined ComObj functions (use ComObjActive, ComValue or ComObjFromPtr instead).
+			☐ ControlSendRaw (use ControlSend "{Raw}" or ControlSendText instead)
+			☐ EnvDiv
+			☐ EnvMult
+			☐ EnvUpdate (it is of very limited usefulness and can be replaced with a simple SendMessage)
+				SendMessage(0x1A, 0, StrPtr("Environment"), 0xFFFF)
+			☐ Exception (use Error or an appropriate subclass)
+			☐ FileReadLine (use a file-reading loop or FileOpen)
+			☐ Func (use a direct reference like MyFunc)
+			☐ Gosub
+			☐ Gui, GuiControl, GuiControlGet (see Gui)
+			☐ IfEqual
+			☐ IfExist
+			☐ IfGreater
+			☐ IfGreaterOrEqual
+			☐ IfInString
+			☐ IfLess
+			☐ IfLessOrEqual
+			☐ IfMsgBox (MsgBox now returns the button name)
+			☐ IfNotEqual
+			☐ IfNotExist
+			☐ IfNotInString
+			☐ IfWinActive
+			☐ IfWinExist
+			☐ IfWinNotActive
+			☐ IfWinNotExist
+			☐ If between/is/in/contains (but see isXXX)
+			☐ Input (use InputHook)
+			☐ IsFunc
+			☐ Menu (use the Menu/MenuBar class, TraySetIcon, A_IconTip, A_IconHidden and A_AllowMainWindow)
+			☐ MenuGetHandle (use Menu.Handle)
+			☐ MenuGetName (there are no menu names; MenuFromHandle is the closest replacement)
+			☐ Progress (use Gui)
+			☐ SendRaw (use Send "{Raw}" or SendText instead)
+			☐ SetBatchLines (-1 is now the default behaviour)
+			☐ SetEnv
+			☐ SetFormat (Format can be used to format a string)
+			☐ SoundGet/SoundSet (see Sound functions)
+			☐ SoundGetWaveVolume/SoundSetWaveVolume (slightly different behaviour to SoundGet/SoundSet regarding balance, but neither one preserves balance)
+			☐ SplashImage (use Gui)
+			☐ SplashTextOn/Off (use Gui)
+			☐ StringCaseSense
+				(!= =) always case-insensitive, (!== ==) always case-sensitive
+				Various functions now have a CaseSense parameter, too
+			☐ StringGetPos (use InStr)
+			☐ StringLeft
+			☐ StringLen
+			☐ StringMid
+			☐ StringRight
+			☐ StringTrimLeft
+			☐ StringTrimRight -- use SubStr in place of these commands.
+			☐ StringReplace (use StrReplace instead)
+			☐ StringSplit (use StrSplit instead)
+			☐ Transform
+			☐ VarSetCapacity (use a Buffer object for binary data/structs and VarSetStrCapacity for UTF-16 strings)
+			☐ WinGetActiveStats
+			☐ WinGetActiveTitle
+			☐ #CommentFlag
+			☐ #Delimiter
+			☐ #DerefChar
+			☐ #EscapeChar
+			☐ #HotkeyInterval (use A_HotkeyInterval)
+			☐ #HotkeyModifierTimeout (use A_HotkeyModifierTimeout)
+			☐ #IfWinActive, #IfWinExist, #IfWinNotActive, #IfWinNotExist (see #HotIf Optimization)
+			☐ #InstallKeybdHook (use the InstallKeybdHook function)
+			☐ #InstallMouseHook (use the InstallMouseHook function)
+			☐ #KeyHistory (use KeyHistory N)
+			☐ #LTrim
+			☐ #MaxHotkeysPerInterval (use A_MaxHotkeysPerInterval)
+			☐ #MaxMem (maximum capacity of each variable is now unlimited)
+			☐ #MenuMaskKey (use A_MenuMaskKey)
+			☐ #NoEnv (now default behaviour)
+		Modified Commands/Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#modified-commandsfunctions):
+			Inline:
+				☐ Chr(0) => binary 0
+				☐ ClipWait returns 0 on timeout, otherwise 1
+					Wait time of 0 is now shorter than 0.5
+				☐ 'Control' parameter for various control functions, SendMessage, PostMessage:
+					Can now be an HWND (must be a pure integer) or an object with an Hwnd property (like a GuiControl object)
+					No longer optional for most functions (except when we want to use the target window instead - replaces ahk_parent special value for ControlSend)
+				☐ ControlGetFocus gets control's HWND instead of ClassNN
+				☐ ControlMove/ControlGetPos/ControlClick
+					☐ Window coordinates => client coordinates
+					☐ Parameter order now consistent with other control functions
+				☐ CoordMode "Relative" value => "Window"
+				☐ EnvSet deletes environment variable if value omitted
+				☐ FileAppend defaults to no end-of-line translations
+					New Options parameter for FileRead/FileOpen replaces *Pnnn, *c options
+				☐ FileCopy/FileMove throw exceptions if no file found (and no wildcards in path)
+				☐ FileOpen throws exception if it fails to open the file
+				☐ File.ReadLine always supports `r/`n/`r`n as line endings (line ending no longer in return value)
+				☐ FileExist now ignores ./.. implied in every directory
+				☐ FileGetAttrib/A_LoopFileAttrib now include "L" for reparse points/symbolic links
+				☐ FileSelectFile (now FileSelect)
+					☐ Multi-select mode 4 removed
+					☐ Now returns an Array of (full) paths in multi-select mode instead of a newline-delimited string
+					☐ No longer defaults to a *.txt filter
+					☐ No longer strips spaces from filter pattern
+					☐ "D" option allows selecting a folder
+				☐ FileSetAttrib now overwrites if no +/-/^ prefix is specified (instead of doing nothing)
+				☐ FileSetAttrib/FileSetTime OperateOnFolders?/Recurse? parameters replaced with a Mode parameter (like loop files)
+				☐ GetKeyName returns non-Numpad names for ambiguous VK codes
+				☐ GetKeyState alweays returns 0 or 1
+				☐ GroupActivate now returns the HWND (or 0 if no matches)
+				☐ GroupAdd removed the Label parameter (use return value of GroupActivate instead)
+				☐ GroupDeactivate now selects windows differently
+				☐ Hotkey
+					☐ No longer defaults to script's bottom-most #HotIf (formerly #If)
+					☐ Callback parameter now requires a function object or hotkey name (no labels or function names anymore)
+					☐ UseErrorLevel option gone, throws exceptions on failure
+				☐ Hotkey/Hotstring support "S" option to exempt from Suspend (same as new #SuspendExempt)
+				☐ Hotkey If and other sub-commands replaced with individual functions (HotIf/HotIfWinActive/HotIfWinExist/HotIfWinNotActive/HotIfWinNotExist)
+				☐ #HotIf
+					☐ Implicitly creates a function with one parameter (ThisHotkey)
+					☐ Simple calls to WinActive/WinExist are optimized to be HotIfWinActive, etc.
+				☐ #KeyHistory N => KeyHistory N
+				☐ ImageSearch returns true (found) false (not found) or throws an exception
+				☐ IniDelete/IniRead/IniWrite set A_LastError to OS's GetLastError() result
+				☐ IniRead throws an exception if key/section/file not found (and no Default parameter specified)
+				☐ InputHook treats Shift+Backwspace the same as Backspace (previously `b)
+				☐ InputBox syntax has been overhauled (more in section below)
+				☐ InStr
+					☐ CaseSensitive Parameter => CaseSense
+					☐ If Occurrence negative, searches right-to-left
+					☐ No longer right-to-left for negative StartingPos with positive Occurrence (still right-to-left if StartingPos negative and Occurrence omitted)
+					☐ StartingPos of -1 is last char in v2 (it was the second last char in v1)
+				☐ KeyWait returns 0 on timeout, otherwise 1
+				☐ MouseClick[Drag] no longer affected by system setting for swapped mouse buttons ("Left" always primary now)
+				☐ MsgBox syntax changed (https://www.autohotkey.com/docs/v2/v2-changes.htm#msgbox)
+				☐ NumPut/NumGet no longer use address of variable's internal string buffer (but a Buffer object is probably better anyway)
+				☐ NumPut parameters reordered (https://www.autohotkey.com/docs/v2/lib/NumPut.htm)
+				☐ Object(obj) vs Object(ptr) => ObjPtrAddRef(obj) and ObjFromPtrAddRef(ptr)
+				☐ OnClipboardChange label => OnClipboardChange() function
+				☐ OnError takes a function object instead of a name
+				☐ OnExist command => OnExit() function
+				☐ OnMessage only accepts a function by reference now (OnMessage(x, MyFunc) to start, OnMessage(x, MyFunc, 0) to stop)
+				☐ Pause no longer exempt from #MaxThreadsPerHotkey, Pause() now only pauses current thread, Pause(0/1/-1) acts on underlying thread
+				☐ PixelSearch/PixelGetColor use RGB instead of BGR now (and throw an exception on error).
+				☐ PixelSearch returns true if color found, slow mode removed
+				☐ PostMessage see SendMessage below.
+				☐ Random reworked to make it easier to use
+				☐ RegExMatch:
+					☐ Options O and P removed - O (object) mode now mandatory
+					☐ Now supports enumeration (for loop)
+					☐ Syntax changed:
+						☐ match.groupName, groupName can no longer be any of Pos/Len/Name/Count/Mark
+						☐ Pos/Len/Name now both properties and methods
+						☐ Name now requires 1 parameter
+						☐ Count/Mark now only properties
+						☐ Value removed (use match.0 or match[] instead)
+				☐ RegisterCallback (now CallbackCreate):
+					☐ Function names => function objects
+					☐ Removed EventInfo parameter (use closure/bound function instead)
+					☐ Added CallbackFree(Address) to free the memory/release the object
+				☐ RegRead/RegWrite/RegDelete old syntax removed (must use RootKey\Key, not RootKey, Key) and handle looping better
+				☐ RegWrite
+					☐ Parameters reordered (Value first, like IniWrite)
+					☐ Blank/omitted ValueName deletes the default value instead of the key itself (use new RegDeleteKey to do the latter)
+				☐ RegRead
+					☐ Now has a Default parameter (like IniRead)
+					☐ Removed undocumented 5-parameter mode
+				☐ Run[Wait] no longer has UseEerrorLevel option, use try/catch instead
+				☐ Send (and variants) now interpret {LButton}/{RButton} consistently with hotkeys and Click (LButton is primary, even if buttons are swapped)
+				☐ SendMessage/PostMessage
+					☐ Now require wParam/lParam to be integers or objects with a Ptr property
+					☐ Need to use VarSetStrCapacity(&var, -1) to update variable's length like &var used to
+					☐ Throw exception on error
+				☐ SendMessage returns message reply
+				☐ SetTimer no longer supports label/function names, but it now takes expressions and functions can be referenced by name so usage will look similar (SetTimer MyFunc)
+				☐ Sort
+					☐ VarName param split into separate input/output params
+					☐ Usage: Output := Sort(Input [, Options, Function])
+					☐ Original order used to break a tie
+					☐ "C" option supports a suffix equivalent to CaseSense parameter of other functions (CLocale CLogical COn C1 COff C0)
+				☐ SoundGet/SoundSet
+					☐ Components/devices can be referenced by name and/or index
+					☐ Split into separate Volume/Mute functions (SoundGetMute, SoundGetVolume, etc.)
+					☐ New: SoundGetName, SoundGetInterface (device/component names, COM interfaces)
+				☐ StrGet: negative length, convert |length| number of characters (positive adds a binary 0 onto the end)
+				☐ StrGet/StrPut: Address parameter can be an object with Ptr/Size properties (like a Buffer!)
+				☐ StrPut's return value is in bytes (so it can be passed directly to Buffer())
+				☐ StrReplace now has a CaseSense parameter (moves OutputVarCount/Limit parameters out by one)
+				☐ Suspend no longer exempts its hotkey/hotstring from suspension - instead use #SuspendExempt or "S" option
+				☐ Switch is case-sensitive by default (with a new CaseSense parameter)
+				☐ SysGet now only has numeric sub-commands, others split into new functions (see Sub-Commands section below)
+				☐ TrayTip syntax changed:
+					☐ Now: TrayTip Text, Title, Options
+					☐ Options contains 1+ of: Iconx, Icon!, Iconi, Mute, or any numeric value
+					☐ Seconds parameter removed
+				☐ #Warn
+					☐ UseUnsetLocal/UseUnsetGlobal removed, now errors (use IsSet to avoid error, try/catch/OnError to handle it)
+					☐ VarUnset added, defaults to MsgBox (warns of first non-dynamic reference to each variable never used as target of direct, non-dynamic assignment)
+					☐ Unreachable handles Exit calls better
+					☐ ClassOverwrite removed (no longer possible)
+				☐ WinActivate sends {Alt up} after first failed attempt at activating a window (reduces flashing taskbar buttons)
+				☐ WinSetTitle/WinMove parameter order consistent with other Win* functions now
+				☐ WinTitle parameter of various functions can now accept an HWND (pure integer) or object with an Hwnd property (like a Gui object).
+					☐ This ignores DetectHiddenWindows
+				☐ WinMove no longer handles DEFAULT value, use blank/empty instead
+				☐ WinWait/WinWaitClose/WinWaitActive/WinWaitNotActive return non-zero if wait finished (no timeout), 0 is a shorter timeout than 0.5
+				☐ WinWait/WinWaitActive return HWND of found window
+				☐ WinWaitClose now sets last found window (so it it times out it returns false I can use WinExist() to find the last window it found).
+			Unsorted:
+				☐ Negative StartingPos for InStr/SubStr/RegExMatch/RegExReplace is a position from the end (-1 is last character, not -2)
+				☐ Functions which previously took (and variables that returned) On/Off[/Toggle] now take (return) 1/0/-1 instead:
+					☐ #UseHook
+					☐ #MaxThreadsBuffer
+					☐ ListLines
+					☐ ControlSetChecked
+					☐ ControlSetEnabled
+					☐ Pause
+					☐ Suspend
+					☐ WinSetAlwaysOnTop
+					☐ WinSetEnabled
+					☐ A_DetectHiddenWindows
+					☐ A_DetectHiddenText
+					☐ A_StoreCapsLockMode
+				☐ Now return a pure integer instead of a hexadecimal string:
+					☐ ControlGetExStyle
+					☐ ControlGetHwnd
+					☐ ControlGetStyle
+					☐ MouseGetPos
+					☐ WinActive
+					☐ WinExist
+					☐ WinGetID
+					☐ WinGetIDLast
+					☐ WinGetList (within the Array)
+					☐ WinGetStyle
+					☐ WinGetStyleEx
+					☐ WinGetControlsHwnd (within the Array)
+					☐ A_ScriptHwnd
+			DllCall (https://www.autohotkey.com/docs/v2/v2-changes.htm#dllcall):
+				☐ If type parameter is variable, always use content not name (unquoted type names no longer supported)
+				☐ AStr (no suffix) now input-only
+				<more, but I don't really use this>
+			Loop Sub-commands (https://www.autohotkey.com/docs/v2/v2-changes.htm#loop-sub-commands):
+				☐ Must be literal; no quotes and no variables
+				☐ Support OTB style
+				☐ Loop, FilePattern, IncludeFolders?, Recurse? => Loop Files, FilePattern, Mode
+				☐ Loop, RootKey, Key, IncludeSubkeys?, Recurse? => Loop Reg, RootKey\Key, Mode (A_LoopRegKey has root and sub keys, A_LoopRegSubKey removed)
+			InputBox (https://www.autohotkey.com/docs/v2/v2-changes.htm#inputbox):
+				☐ Obj := InputBox([Text, Title, Options, Default])
+					☐ Options are 0+ (space-delimited) of: x/y/w/h/T/Password (T is timeout)
+					☐ Width/height set size of client area, not window
+					☐ Title blank if Title is empty string (defaults to A_ScriptName only when completely omitted)
+					☐ Returns an object with .result ("OK"/"Cancel"/"Timeout") and .value
+			MsgBox (https://www.autohotkey.com/docs/v2/v2-changes.htm#msgbox):
+				☐ Result := MsgBox([Text, Title, Options])
+					☐ Options are 0+ (space-delimited) of:
+						☐ Iconx/Icon?/Icon!/Iconi - set the icon
+						☐ Default<n> sets nth button as default
+						☐ T<number> sets the timeout in seconds
+						☐ Owner<HWND> sets owner (overrides Gui +OwnDialogs option)
+						☐ Button choices: OK/OKCancel/AbortRetryIgnore/YesNoCancel/YesNo/RetryCancel/CancelTryAgainContinue (Mutually exclusive)
+							☐ Can also use the initials with slashes (AbortRetryIgnore = a/r/i) or without slashes (ari)
+					☐ Returns name of button (no spaces), same as IfMsgBox in v1
+				☐ Title blank if Title is empty string (defaults to A_ScriptName only when completely omitted)
+			Sub-Commands (https://www.autohotkey.com/docs/v2/v2-changes.htm#sub-commands):
+				☐ Broken into sub-functions:
+					☐ Control
+					☐ ControlGet
+					☐ Drive
+					☐ DriveGet
+					☐ WinGet
+					☐ WinSet
+					☐ Process
+				☐ ProcessExist/ProcessClose/ProcessWait/ProcessWaitClose return the PID (no more ErrorLevel)
+				☐ The above throw an exception on failure (for example if they can't find the control/window in question)
+				☐ HWNDs and styles are pure integers, not hexadecimal strings
+				☐ ControlChooseIndex allows 0 to deselect all items (replaces "Control Choose" but also supports Tab controls)
+				☐ "ControlGet Tab" merged into ControlGetIndex (also works with ListBox/ComboBox/DDL
+				☐ ControlGetItems replaces "Control GetList" for ListBox and ComboBox (returns an Array)
+				☐ ListViewGetContent replaces "ControlGet List" for ListView
+				☐ WinGetList, WinGetControls, WinGetControlsHWnd return arrays (not newline-delimited lists)
+				☐ WinSetTransparent treats "" as "off" (opaque?) rather than 0
+					☐ Abbreviated aliases like Topmost/Trans/FS/Cap removed
+				☐ SysGet subcommands split into new functions:
+					☐ MonitorGet(N, Left, Top, Right, Bottom)
+					☐ MonitorGetWorkArea(N, Left, Top, Right, Bottom)
+					☐ MonitorGetCount()
+					☐ MonitorGetPrimary()
+					☐ MonitorGetName(N)
+		New Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#new-functions):
+			☐ Buffer(Size, FillByte) - Buffer object with Size bytes of memory, initialized only if FIllByte is specified
+				.Ptr returns the address
+				.Size sets/returns size in bytes
+			☐ CaretGetPos([&X, &Y]) - retrieves current coordinates of caret (unlike A_CaretX/Y, ensures that X/Y match up)
+			☐ ClipboardAll([Data, Size]) - creates an object containing everything on the clipboard (can also take data previously retrieved from clipboard)
+				The methods of reading and writing clipboard file data are different.
+				The data format is the same, except that the data size is always 32-bit, so that the data is portable between 32-bit and 64-bit builds.
+			☐ ComCall(offset, comobj, ...) is equivalent to DllCall(NumGet(NumGet(comobj.ptr) + offset * A_Index), "ptr", comobj.ptr, ...), but with the return type defaulting to "hresult" rather than "int".
+			☐ ComObject (formerly ComObjCreate) and ComObjQuery now return a wrapper object even if an IID is specified. ComObjQuery permits the first parameter to be any object with a Ptr property.
+			☐ ControlGetClassNN returns the ClassNN of the specified control.
+			☐ [Control]SendText, equivalent to [Control]SendRaw but using {Text} mode instead of {Raw} mode.
+			☐ DirExist(Path), with usage similar to FileExist. Note that InStr(FileExist(Pattern), "D") only tells you whether the first matching file is a folder, not whether a folder exists.
+			☐ InstallKeybdHook(Install := true, Force := false) and InstallMouseHook(Install := true, Force := false) replace the corresponding directives, for increased flexibility.
+			☐ isXXX: The legacy command "if var is type" has been replaced with a series of functions: isAlnum, isAlpha, isDigit, isFloat, isInteger, isLower, isNumber, isSpace, isUpper, isXDigit. With the exception of isFloat, isInteger and isNumber, an exception is thrown if the parameter is not a string, as implicit conversion to string may cause counter-intuitive results.
+			☐ IsSet(var), IsSetRef(&var): Returns true if the variable has been assigned a value (even if that value is an empty string), otherwise false. If false, attempting to read the variable within an expression would throw an error.
+			☐ Menu()/MenuBar() returns a new Menu/MenuBar object, which has the following members corresponding to v1 Menu sub-commands. Methods: Add, AddStandard, Check, Delete, Disable, Enable, Insert, Rename, SetColor, SetIcon, Show, ToggleCheck, ToggleEnable, Uncheck. Properties: ClickCount, Default, Handle (replaces MenuGetHandle). A_TrayMenu also returns a Menu object. There is no UseErrorLevel mode, no global menu names, and no explicitly deleting the menu itself (that happens when all references are released; the Delete method is equivalent to v1 DeleteAll). Labels are not supported, only function objects. The AddStandard method adds the standard menu items and allows them to be individually modified as with custom items. Unlike v1, the Win32 menu is destroyed only when the object is deleted.
+			☐ MenuFromHandle(Handle) returns the Menu object corresponding to a Win32 menu handle, if it was created by AutoHotkey.
+			☐ Persistent(Persist := true) replaces the corresponding directive, increasing flexibility.
+			☐ RegDeleteKey("RootKey\SubKey") deletes a registry key. (RegDelete now only deletes values, except when omitting all parameters in a registry loop.)
+			☐ StrCompare(str1, str2 [, CaseSense := false]) returns -1 (str1 is less than str2), 0 (equal) or 1 (greater than). CaseSense can be "Locale".
+			☐ StrPtr(str) returns the address of a string. Unlike address-of in v1, it can be used with literal strings and temporary strings.
+			☐ SysGetIPAddresses() returns an array of IP addresses, equivalent to the A_IPAddress variables which have been removed. Each reference to A_IPAddress%N% retrieved all addresses but returned only one, so retrieving multiple addresses took exponentially longer than necessary. The returned array can have zero or more elements.
+			☐ TraySetIcon([FileName, IconNumber, Freeze]) replaces "Menu Tray, Icon".
+			☐ VarSetStrCapacity(&Var [, NewCapacity]) replaces the v1 VarSetCapacity, but is intended for use only with UTF-16 strings (such as to optimize repeated concatenation); therefore NewCapacity and the return value are in characters, not bytes.
+			☐ VerCompare(A, B) compares two version strings using the same algorithm as #Requires.
+			☐ WinGetClientPos([&X, &Y, &W, &H, WinTitle, ...]) retrieves the position and size of the window's client area, in screen coordinates.
+		New Directives (https://www.autohotkey.com/docs/v2/v2-changes.htm#new-directives):
+			☐ #DllLoad - loads a DLL/EXE before script starts executing
+		Built-in Variables (https://www.autohotkey.com/docs/v2/v2-changes.htm#built-in-variables):
+			Inline:
+				☐ A_TimeSincePriorHotkey returns "" instead of -1 when A_PriorHotkey is "" (same for A_TimeSinceThisHotkey and A_ThisHotkey)
+			Renamed:
+				☐ A_LoopFileFullPath => A_LoopFilePath
+				☐ A_LoopFileLongPath => A_LoopFileFullPath
+				☐ Clipboard => A_Clipboard
+			Removed:
+				☐ ClipboardAll (replaced with the ClipboardAll function)
+				☐ ComSpec (use A_ComSpec)
+				☐ ProgramFiles (use A_ProgramFiles)
+				☐ A_AutoTrim
+				☐ A_BatchLines
+				☐ A_CaretX, A_CaretY (use CaretGetPos)
+				☐ A_DefaultGui, A_DefaultListView, A_DefaultTreeView
+				☐ A_ExitReason
+				☐ A_FormatFloat
+				☐ A_FormatInteger
+				☐ A_Gui, A_GuiControl, A_GuiControlEvent, A_GuiEvent, A_GuiX, A_GuiY, A_GuiWidth, A_GuiHeight (all replaced with parameters of event handlers)
+				☐ A_IPAddress1, A_IPAddress2, A_IPAddress3, A_IPAddress4 (use SysGetIPAddresses)
+				☐ A_IsUnicode (v2 is always Unicode; it can be replaced with StrLen(Chr(0xFFFF)) or redefined with global A_IsUnicode := 1)
+				☐ A_StringCaseSense
+				☐ A_ThisLabel
+				☐ A_ThisMenu, A_ThisMenuItem, A_ThisMenuItemPos (use the menu item callback's parameters)
+				☐ A_LoopRegSubKey (A_LoopRegKey now contains the root key and subkey)
+				☐ True and False (still exist, but are now only keywords, not variables)
+			Added:
+				☐ A_AllowMainWindow (read/write; replaces "Menu Tray, MainWindow/NoMainWindow")
+				☐ A_HotkeyInterval (replaces #HotkeyInterval)
+				☐ A_HotkeyModifierTimeout (replaces #HotkeyModifierTimeout)
+				☐ A_InitialWorkingDir (see Default Settings further below)
+				☐ A_MaxHotkeysPerInterval (replaces #MaxHotkeysPerInterval)
+				☐ A_MenuMaskKey (replaces #MenuMaskKey)
+			Can now be assigned values:
+				☐ A_ControlDelay
+				☐ A_CoordMode
+				☐ A_DefaultMouseSpeed
+				☐ A_DetectHiddenText (also, it now returns 1 or 0 instead of "On" or "Off")
+				☐ A_DetectHiddenWindows (also, it now returns 1 or 0 instead of "On" or "Off")
+				☐ A_EventInfo
+				☐ A_FileEncoding (also, it now returns "CP0" in place of "", and allows the "CP" prefix to be omitted when assigning)
+				☐ A_IconHidden
+				☐ A_IconTip (also, it now always reflects the tooltip, even if it is default or empty)
+				☐ A_Index: For counted loops, modifying this affects how many iterations are performed. (The global nature of built-in variables means that an Enumerator function could set the index to be seen by a For loop.)
+				☐ A_KeyDelay
+				☐ A_KeyDelayPlay
+				☐ A_KeyDuration
+				☐ A_KeyDurationPlay
+				☐ A_LastError: Calls the Win32 SetLastError() function. Also, it now returns an unsigned value.
+				☐ A_ListLines
+				☐ A_MouseDelay
+				☐ A_MouseDelayPlay
+				☐ A_RegView
+				☐ A_ScriptName: Changes the default dialog title.
+				☐ A_SendLevel
+				☐ A_SendMode
+				☐ A_StoreCapsLockMode (also, it now returns 1 or 0 instead of "On" or "Off")
+				☐ A_TitleMatchMode
+				☐ A_TitleMatchModeSpeed
+				☐ A_WinDelay
+				☐ A_WorkingDir: Same as calling SetWorkingDir.
+		Built-in Objects (https://www.autohotkey.com/docs/v2/v2-changes.htm#built-in-objects):
+			☐ File.Tell() removed
+			☐ Func.IsByRef() now works with bulit-in functions
+	Gui (https://www.autohotkey.com/docs/v2/v2-changes.htm#gui):
+		Inline:
+			☐ Gui, GuiControl, GuiControlGet are replaced with Gui() (class) and Gui/GuiControl objects
+			☐ Pass around gui object instead of a name/number
+				☐ Has methods/properties to replace sub-commands
+				☐ .Add() to get a GuiControl object
+				☐ Store in object or retrieve using GuiCtrlFromHwnd(hwnd) to get it again later
+				☐ Passed as a parameter to event handlers
+			☐ Event handlers are now always functions that get parameters with info, no more built-in variables for that
+			☐ Controls can still be named, but it's just a name (not an associated variable anymore, so no need for global/static variables)
+				☐ Can get value via GuiCtrlObj.Value
+				☐ GuiObj.Submit() returns a new associative array using control names as keys
+				☐ vName option still exists but only sets name (not a variable)
+			☐ +HwndVarName => GuiCtrlObj.Hwnd
+			☐ "g-labels" and other gui event functions are no more - handlers must be registered using GuiObj/GuiControlObj.OnEvent()
+			☐ Arrays used wherever pip-delimited list was used before (like for ListBox items)
+			☐ Scripts can extend the Gui() class with their own stuff
+		Gui sub-commands (https://www.autohotkey.com/docs/v2/v2-changes.htm#gui-sub-commands):
+			☐ Gui New => Gui()
+			☐ Gui Add => GuiObj.Add() or GuiObj.Add<ControlType>()
+			☐ Gui Show => GuiObj.Show()
+				☐ No Title parameter - specify as Gui() parameter or via GuiObj.Title property instead
+			☐ Gui Submit => GuiObj.Submit() (same except it now returns the values)
+			☐ Gui Destroy => GuiObj.Destroy()
+			☐ Gui Font => GuiObj.SetFont() (or GuiCtrlObj.SetFont() for a specific control)
+			☐ Gui Color => GuiObj.BackColor proeprty
+				☐ ControlColor (second parameter) no longer exists, use +Background option on individual controls instead.
+			☐ Gui Margin => GuiObj.MarginX/.MarginY properties
+			☐ Gui Menu => GuiObj.MenuBar returns object created with MenuBar()
+			☐ Gui Cancel/Hide/Minimize/Maximize/Restore => Gui methods with the same names
+			☐ Gui Flash => GuiObj.Flash() (use false instead of Off)
+			☐ Gui Tab => TabControl.UseTab()
+		Events (https://www.autohotkey.com/docs/v2/v2-changes.htm#events):
+			☐ See for details on all events: https://www.autohotkey.com/docs/v2/lib/GuiOnEvent.htm#Events
+			☐ Size event passes 0/-1/1 (like WinGetMinMax) instead of 0/1/2
+			☐ ContextMenu event can be registered for each control or whole gui
+			☐ Dropfiles event swaps FileArray/Ctrl parameters
+			☐ Removed (detect with GuiCtrlObj.OnNotify() instead) control events for K/D/d/A/S/s/M/C/E, MonthCal's 1/2
+			☐ Control events don't pass event name as a parameter
+			☐ Custom's N/Normal events replaced with GuiCtrl.OnNotify()/GuiCtrl.OnCommand()
+			☐ Link's click event passes (ctrl, ID/index, HREF) instead of (ctrl, index, HREF or ID) and doesn't automatically open if a Click callback is registered
+			☐ ListView
+				☐ Click/DoubleClick/ContextMenu (from a right-click) now report item clicked (or 0 for none) instead of focused item
+				☐ I event split into multiple named events (except for f [de-focus] event)
+				☐ e (ItemEdit) event ignored if user cancels
+			☐ Slider's Change event raised more consistently (no longer ignores changes made by mouse wheel)
+			☐ BS_NOTIFY style now auto-added as needed for button, checkbox, radio controls (no longer applied by default to radio controls)
+			☐ Focus (formerly F) and LoseFocus (formerly f) are supported my more control types
+			☐ Setting edit control's text with Edit.Value/Edit.Text doesn't trigger change event (GuiControl used to)
+			☐ LV/TV.Add/Modify now suppress item-change events (now only triggered by user action or SendMessage)
+		Removed (https://www.autohotkey.com/docs/v2/v2-changes.htm#removed):
+			☐ +Delimiter
+			☐ +HwndOutputVar (use GuiObj.Hwnd or GuiCtrl.Hwnd instead)
+			☐ +Label
+			☐ +LastFoundExist
+			☐ Gui GuiName: Default
+		Control Options (https://www.autohotkey.com/docs/v2/v2-changes.htm#control-options):
+			☐ +/-Background more consistent - +Background<Color> and +BackgroundDefault (same as -Background) for all controls that support Gui Color now
+			☐ GuiObj.Add defaults to x+m/y+m when xp/yp/xp+0/yp+0 is used (so we don't put controls on top of each other anymore)
+				To get around it, specify "xp yp" together
+			☐ Can add to margin offset (x+m+10)
+		GuiControlGet (https://www.autohotkey.com/docs/v2/v2-changes.htm#guicontrolget):
+			Empty sub-command (https://www.autohotkey.com/docs/v2/v2-changes.htm#empty-sub-command):
+				☐ Table of specific equivalents for GuiControlGet + empty sub-command, per control type
+				☐ GuiCtrl.Text returns display text, hidden text (same result as ControlGetText), or nothing at all
+				☐ ListBox Text/Value return an array instead of a pipe-delimited list now
+			Other sub-commands (https://www.autohotkey.com/docs/v2/v2-changes.htm#other-sub-commands):
+				☐ Pos => GuiCtrl.GetPos()
+				☐ Focus => GuiObj.FocusedCtrl (returns GuiControl object instead of ClassNN)
+				☐ FocusV => GuiObj.FocusedControl.Name
+				☐ Hwnd => GuiCtrl.Hwnd
+				☐ Enabled/Visible/Name => GuiCtrl properties of same name
+		GuiControl (https://www.autohotkey.com/docs/v2/v2-changes.htm#guicontrol):
+			(Blank) and Text sub-commands (https://www.autohotkey.com/docs/v2/v2-changes.htm#blank-and-text-sub-commands):
+				☐ Table of equivalent properties/functions for GuiControl + control type
+			Other sub-commands (https://www.autohotkey.com/docs/v2/v2-changes.htm#other-sub-commands-1):
+				☐ Move => GuiCtrl.Move(x, y, w, h)
+				☐ MoveDraw => GuiCtrl.Move(x, y, w, h) + GuiCtrl.Redraw()
+				☐ Focus => GuiCtrl.Focus()
+					Focusing a button now temporarily sets it as the default
+				☐ Enable/Disable => set GuiCtrl.Enabled
+				☐ Hide/Show => set GuiCtrl.Visible
+				☐ Choose => GuiCtrl.Choose(n) (n is pure integer - [|n ||n] mode not supported, use ControlChoose instead)
+				☐ ChooseString => GuiCtrl.Choose(s) (s is NOT a pure integer, all matches are selected)
+				☐ Font => GuiCtrl.SetFont()
+				☐ +/-Option => GuiCtrl.Opt("+/-Option")
+		Other Changes (https://www.autohotkey.com/docs/v2/v2-changes.htm#other-changes):
+			☐ Progress gui controls match system visual style better
+			☐ Default margins/control sizes (especially for buttons) may differ from v1 when DPI > 100%
+			☐ Picture controls don't delete their current image when they fail to set a new one
+	Error Handling (https://www.autohotkey.com/docs/v2/v2-changes.htm#error-handling):
+		Inline:
+			☐ OnError now called for critical errors before exiting script
+			☐ Exception.What now contains function name (if function failed inside), blank for expression/control flow errors
+			☐ Exception objects can now be identified as instances of new Error class (or more specific subclasses)
+				☐ Also contain a Stack property with the stack trace
+			☐ Try/catch syntax now allows catching specific error classes while leaving others uncaught
+		Continuable Errors (https://www.autohotkey.com/docs/v2/v2-changes.htm#continuable-errors):
+			☐ Most error dialogs will now allow the user to continue the current thread
+			☐ OnError callbacks now take a second parameter, one of:
+				Return: (returning -1 will continue the thread, 0/1 act as before)
+				Exit: Continuation not supported
+				ExitApp: Critical error
+		ErrorLevel (https://www.autohotkey.com/docs/v2/v2-changes.htm#errorlevel):
+			☐ ErrorLevel is removed
+			☐ Most places that used this now just return the value differently
+			☐ Sort with U option doesn't return number of duplicates anymore
+			☐ Input replaced by InputHook
+			☐ InputBox returns object with .result and .value properties
+			☐ File functions' number of failures now go in exception.Extra property
+			☐ SendMessage timeout now throws a TimeoutError (or possibly TargetError/OSError) exception
+			☐ Run/Hotkey UseErrorLevel modes removed, use Try/Catch instead
+		Expressions (https://www.autohotkey.com/docs/v2/v2-changes.htm#expressions-1):
+			☐ Lots of new load-time errors
+				☐ Empty parens (except for when calling a function)
+				☐ Prefix operator used on wrong side or without an operand (x!)
+				☐ Binary operator with <2 operands
+				☐ Ternary operator with <3 operands
+				☐ Assignment to a non-writable target (read-only property, etc.)
+			☐ Throw exceptions instead of ignoring the failure/returning an empty string
+				☐ Math on non-numeric values (number strings OK)
+				☐ Divide by 0 or other invalid/unsupported input (like (-1)**1.5)
+					Includes <</>> with non-(0-63) values and 0**0
+				☐ Failure to allocate memory for built-in function's return value, concatenation, or expression result
+				☐ Stack underflow (generally a syntax error)
+				☐ Assign to something not a variable (or array element)
+				☐ Assign to read-only variable
+				☐ Double-deref with empty name (like fn(%empty%))
+				☐ Failure to execute dynamic function call
+				☐ Method/property invocation fails when value doesn't implement method/property
+				☐ Object assignment fails because memory allocation failed
+			☐ +=/-=/--/++ don't treat empty variable as 0 anymore
+		Functions (https://www.autohotkey.com/docs/v2/v2-changes.htm#functions-1):
+			☐ Throw exceptions on failure now
+			☐ In particular, functions with a WinTitle parameter throw if target window can't be found
+		Catch (https://www.autohotkey.com/docs/v2/v2-changes.htm#catch):
+			☐ New syntax
+				try
+					<do a thing>
+				catch (TimeoutError[, TypeError][ as exceptionVarName])
+					<handle timeout>
+				(can also use "Any" to catch any type, parens above are optional)
+			☐ try without catch/finally treated like it has an empty catch block
+				Only catchses basic Error class, not specifics - have to specify catch(Any) to catch everything
+			☐ Can use "throw" to re-throw a caught exception inside catch block
+				Except within a nested try-catch
+			☐ Can include an "else" after last catch - that's executed if no exception thrown inside try block
+	Keyboard, Mouse, Hotkeys and Hotstrings (https://www.autohotkey.com/docs/v2/v2-changes.htm#keyboard-mouse-hotkeys-and-hotstrings):
+		☐ "Return" and "Break" keywords removed, use "Enter" and "Pause" instead
+		☐ Shift+Backspace handled the same as Backspace now
+		☐ When multiple pairs of colons found in hotstring definition, FIRST pair is used instead of LAST pair
+			Example: ::3::::4 = 3 => ::4, not 3:: => 4 (the latter has to be ::3`:`:::4 now)
+		☐ Colons are no longer escaped in pairs, so you can escape a single one at the end of the hotstring trigger now
+			Example: ::5`:::6 for 5: => 6
+		☐ Hotstrings with continuation sections now default to Text mode instead of Raw mode
+		☐ Hotkeys now mask the Win/Alt key on release only if it's logically down and htokey needs it
+			Might mean my various ^+! hotkeys don't get "stuck" down anymore?
+	Other (https://www.autohotkey.com/docs/v2/v2-changes.htm#other):
+		Inline:
+			☐ ForegroundLockTimeout setting no longer mucked with
+				Might be the culprit for my focus issues?
+			☐ RegEx newline matching defaults to catching `r, `n, and `r`n
+			☐ RegEx callout functions can now be variadic
+			☐ ListVars shows static (and global created within a function) variables separately
+		Persistence (https://www.autohotkey.com/docs/v2/v2-changes.htm#persistence):
+			☐ Scripts are "persistent" if there's at least one hotkey/hotstring/gui/timer/hook defined/active, or Persistent() called
+				☐ Except, OnMessage doesn't make things automatically persistent
+		✔ Threads (https://www.autohotkey.com/docs/v2/v2-changes.htm#threads): @done(23-01-23 12:42)
+		Default Settings (https://www.autohotkey.com/docs/v2/v2-changes.htm#default-settings):
+			✔ #NoEnv is default behavior @done(23-01-23 12:44)
+			✔ SendMode defaults to Input, not Event @done(23-01-23 12:44)
+			☐ Title matching mode defaults to 2 (contains) instead of 1 (starts with)
+			✔ #SingleInstance defaults to Prompt behavior now, #SingleInstance by itself is the new "Force" mode @done(23-01-23 12:48)
+			☐ CoordMode defaults to Client instead of Window
+		✔ Command Line (https://www.autohotkey.com/docs/v2/v2-changes.htm#command-line): @done(23-01-05 12:22)
+			✔ Command line args are no longer a numbered pseudo-array, but a proper array in the A_Args built-in variable instead. @done(23-01-05 12:22)
+
+Specific things to fix:
+	☐ VDI setup
+		☐ New installer
+	☐ Switch command line arguments from numbered pseudo-array to use A_Args (https://www.autohotkey.com/docs/v2/Variables.htm#Args) instead
+	☐ Drop these from all scripts (they're the defaults now)
+		☐ #NoEnv
+		☐ SendMode, Input
+		☐ #SingleInstance, Force => #SingleInstance
+		☐ But, keep an eye out for scripts that specifically don't use them
+	☐ 
+
+New ideas possible with v2:
+	☐ Better clipboard manipulation => sending RTF and/or HTML links directly with the clipboard
+		ClipboardAll: https://www.autohotkey.com/docs/v2/lib/ClipboardAll.htm
+		Could replace my hyperlinking stuff - just get the text, build the link, and overwrite the original text with the link

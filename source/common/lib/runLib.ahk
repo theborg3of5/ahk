@@ -43,6 +43,35 @@ class RunLib {
 		stdout := exec.stdout.readall()
 		return stdout
 	}
+
+	;---------
+	; DESCRIPTION:    Check if the current script is running as admin, and re-run it as admin if not.
+	;                 Adapted from https://www.autohotkey.com/docs/v1/lib/Run.htm#RunAs
+	;---------
+	forceCurrScriptAdmin() {
+		runString := DllCall("GetCommandLine", "str")
+
+		; Already running as admin
+		if (A_IsAdmin)
+			return
+			
+		; Safety check: avoid an infinite loop by checking for the /restart flag we use below
+		if (RegExMatch(runString, " /restart(?!\S)"))
+			return
+
+		; We use the /restart flag to avoid the single instance prompt if the new instance starts before we
+		;  manage to exit here.
+		try
+		{
+			if A_IsCompiled
+				Run *RunAs "%A_ScriptFullPath%" /restart
+			else
+				Run *RunAs "%A_AhkPath%" /restart "%A_ScriptFullPath%"
+		}
+
+		; Once we run the admin instance, we should exit this one.
+		ExitApp
+	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
 	;region ------------------------------ PRIVATE ------------------------------

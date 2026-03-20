@@ -146,7 +146,7 @@ return
 :X:zrzlf::  sendFolderPath("USER_DEV", "zrzl")
 	
 #If !WinActive("ahk_class AutoHotkeyGUI") ; Don't do this in Selector popups (yes this catches more than that)
-	:X:dlf::  sendFolderPath("USER_DOWNLOADS")
+	:X:dlf::sendFolderPath("USER_DOWNLOADS")
 #If
 
 :X:otmf::sendFolderPath("ONETASTIC_MACROS")
@@ -190,7 +190,6 @@ return
 	}
 :X:.clarity::ClipboardLib.send(StringLib.getRulerString("23=KB_SQL tbl,19=KB_SQL col,25=Clarity tbl,30=Clarity col"))
 ;endregion Useful strings
-#If ; gdbtodo this isn't closing anything anymore - other "if" above is superceding it
 
 ;region Helper functions
 sendArbitraryDate(format) {

@@ -220,14 +220,21 @@ class ClipboardLib {
 	}
 
 	;region Clipboard format, links
-	;gdbdoc
+	;---------
+	; DESCRIPTION:    
+	; PARAMETERS:
+	;  markdownLinkedText (I,REQ) - String that includes markdown-style links
+	;  origClipboard      (O,OPT) - The original value of ClipboardAll (which is binary and contains
+	;                               everything, not just the text on the clipboard). This can be used to
+	;                               restore the clipboard later if needed.
+	;---------
 	setWithHyperlinks(markdownLinkedText, ByRef origClipboard := "") {
 		; This must be a ByRef return parameter instead of returning directly, as it's a binary
 		; variable, which can't be returned directly (see https://www.autohotkey.com/boards/viewtopic.php?t=62209 ).
 		origClipboard := ClipboardAll ; Save off everything (images, formatting), not just the text (that's all that's in Clipboard)
 
 		; Extract links (expected to be in markdown format, "[text](url)")
-		chunks := this.extractMarkdownLinks(markdownLinkedText)
+		chunks := StringLib.extractMarkdownLinks(markdownLinkedText)
 
 		DllCall("OpenClipboard", "Ptr", A_ScriptHwnd)
 		DllCall("EmptyClipboard")
@@ -260,64 +267,6 @@ class ClipboardLib {
 			fragment .= chunk.text
 		content := fragment
 		CF_TEXT := 1 ; https://learn.microsoft.com/en-us/windows/win32/dataxchg/standard-clipboard-formats
-		this.setClipboardForFormat(content, CF_TEXT)
-
-		DllCall("CloseClipboard")
-	}
-
-	;gdbdoc gdbtodo probably move to a different lib?
-	;gdbdoc call out that it cleans up paths/links
-	extractMarkdownLinks(inputText) {
-		chunks := [] ; [ { text: text, url: urlIfLink } ]
-		startPos := 1
-		while (pos := RegExMatch(inputText, "O)\[(.*?)\]\((.*?)\)", match, startPos)) {
-			preText := SubStr(inputText, startPos, pos - startPos)
-			if (preText != "")
-				chunks.push({text: preText})
-			
-			text := match[1]
-			url  := FileLib.cleanupPath(match[2])
-			chunks.push({text: text, url: url})
-			startPos := pos + match.len
-		}
-		; Add any remaining text after the last link
-		remainingText := SubStr(inputText, startPos)
-		if (remainingText != "")
-			chunks.push({text: remainingText})
-
-		return chunks
-	}
-
-	;---------
-	; DESCRIPTION:    Set the clipboard to a hyperlink (in HTML, RTF, and (fallback) plain-text formats).
-	; PARAMETERS:
-	;  text          (I,REQ) - The link text (the caption that displays)
-	;  path          (I,REQ) - The location the link should point to
-	;  origClipboard (O,OPT) - The original value of ClipboardAll (which is binary and contains
-	;                          everything, not just the text on the clipboard). This can be used to
-	;                          restore the clipboard later if needed.
-	;---------
-	setToHyperlink(text, path, ByRef origClipboard := "") {
-		; This must be a ByRef return parameter instead of returning directly, as it's a binary
-		; variable, which can't be returned directly (see https://www.autohotkey.com/boards/viewtopic.php?t=62209 ).
-		origClipboard := ClipboardAll ; Save off everything (images, formatting), not just the text (that's all that's in Clipboard)
-
-		DllCall("OpenClipboard", "Ptr", A_ScriptHwnd)
-		DllCall("EmptyClipboard")
-
-		; HTML format
-		fragment := "<a href=""" path """>" text "</a>"
-		content := this.buildClipboardHTML(fragment)
-		this.setClipboardForFormat(content, "HTML Format")
-		
-		; RTF format
-		fragment := "{\field{\*\fldinst HYPERLINK """ path """}{\fldrslt " text "}}"
-		content := "{\rtf1" fragment "}"
-		this.setClipboardForFormat(content, "Rich Text Format")
-		
-		; Plain-text format
-		CF_TEXT := 1 ; https://learn.microsoft.com/en-us/windows/win32/dataxchg/standard-clipboard-formats
-		content := text
 		this.setClipboardForFormat(content, CF_TEXT)
 
 		DllCall("CloseClipboard")

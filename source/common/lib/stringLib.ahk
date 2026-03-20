@@ -61,6 +61,45 @@ class StringLib {
 		; No match
 		return false
 	}
+
+	;---------
+	; DESCRIPTION:    Extract markdown-style links from a string into an array of objects.
+	;
+	;                 For example, this string:
+	;                  "one[two](https://www.google.com)three"
+	;                 Would return: [
+	;                  { text: "one" }
+	;                  { text: "two", url: "https://www.google.com" }
+	;                  { text: "three" }
+	;                 ]
+	; PARAMETERS:
+	;  inputText (I,REQ) - String that includes markdown-style links
+	; RETURNS:        Array of objects broken up by the links, where for each object:
+	;                  text = display text
+	;                  url  = link URL (for links only)
+	; SIDE EFFECTS:   
+	; NOTES:          
+	;---------
+	extractMarkdownLinks(inputText) {
+		chunks := [] ; [ { text: text, url: urlIfLink } ]
+		startPos := 1
+		while (pos := RegExMatch(inputText, "O)\[(.*?)\]\((.*?)\)", match, startPos)) {
+			preText := SubStr(inputText, startPos, pos - startPos)
+			if (preText != "")
+				chunks.push({text: preText})
+			
+			text := match[1]
+			url  := FileLib.cleanupPath(match[2])
+			chunks.push({text: text, url: url})
+			startPos := pos + match.len
+		}
+		; Add any remaining text after the last link
+		remainingText := SubStr(inputText, startPos)
+		if (remainingText != "")
+			chunks.push({text: remainingText})
+
+		return chunks
+	}
 	
 	;---------
 	; DESCRIPTION:    Determine how many spaces there are at the beginning of a string.

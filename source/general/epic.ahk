@@ -148,19 +148,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		else if (Config.isWindowActive("Chrome Workplans"))
 			ClipboardLib.send(EpicLib.buildEMC2ObjectString(record, true)) ; Put title first for workplans
 		else
-			; ClipboardLib.send(EpicLib.buildEMC2ObjectString(record)) ; Must send with clipboard because it can contain hotkey chars
-			; ClipboardLib.send(EpicLib.buildEMC2ObjectString(record)) ; Must send with clipboard because it can contain hotkey chars
-			sendLinkedEMC2ObjectString(record) ; gdbtodo finish cleanup
-		
-		; ; Special case for OneNote: link the INI/ID as well.
-		; if (Config.isWindowActive("OneNote"))
-		; 	OneNote.linkEMC2ObjectInLine(ini, id) ; gdbtodo probably ditch this? Look for more stuff to replace inside, too.
-	}
-	sendLinkedEMC2ObjectString(record) { ; gdbtodo finish cleanup
-		url := new ActionObjectEMC2(record.id, record.ini).getLinkWeb()
-		objectString := EpicLib.buildEMC2ObjectString(record)
-		objectString := objectString.replace(record.ini " " record.id, "[" record.ini " " record.id "](" url ")")
-		ClipboardLib.sendTextWithHyperlinks(objectString)
+			ClipboardLib.sendTextWithHyperlinks(EpicLib.buildLinkedEMC2ObjectString(record))
 	}
 
 	; Pull EMC2 record IDs from currently open window titles and prompt the user to send one.

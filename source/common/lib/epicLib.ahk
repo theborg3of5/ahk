@@ -274,29 +274,41 @@ class EpicLib {
 	; DESCRIPTION:    Build my "standard" EMC2 object string with ini/id/title.
 	; PARAMETERS:
 	;  record         (I,REQ) - EpicRecord instance with ini/id/title populated as needed.
-	;  startWithTitle (I,OPT) - Put the title at the start of the string instad of the end.
+	;  startWithTitle (I,OPT) - Put the title at the start of the string instead of the end.
+	;  doLink         (I,OPT) - Pass true to include a markdown-style link for the INI ID portion of the string.
 	; RETURNS:        EMC2 object string
 	;---------
-	buildEMC2ObjectString(record, startWithTitle := false) {
+	buildEMC2ObjectString(record, startWithTitle := false, doLink := false) {
 		if(!record)
 			return ""
 		ini   := record.ini
 		id    := record.id
 		title := record.title
+
+		iniID := ini " " id
+		if (doLink) {
+			url := new ActionObjectEMC2(id, ini).getLinkWeb()
+			iniID := "[" iniID "](" url ")"
+		}
 		
 		if(startWithTitle)
-			return record.title.appendPiece(" - ", ini " " id)
+			return record.title.appendPiece(" - ", iniID)
 		
 		if(title = "")
-			return ini " " id
+			return iniID
 		
-		return ini " " id " - " title
+		return iniID " - " title
 	}
 
-	buildLinkedEMC2ObjectString(record) { ;gdbtodo ditch or move stuff here
-		objectString := EpicLib.buildEMC2ObjectString(record)
-
-		
+	;---------
+	; DESCRIPTION:    Build my "standard" EMC2 object string, including a markdown-style link for the
+	;                 INI ID bit.
+	; PARAMETERS:
+	;  record (I,REQ) - EpicRecord instance with ini/id/title populated as needed.
+	; RETURNS:        EMC2 object string with markdown link
+	;---------
+	buildLinkedEMC2ObjectString(record) {
+		return this.buildEMC2ObjectString(record, false, true)
 	}
 	
 	;---------

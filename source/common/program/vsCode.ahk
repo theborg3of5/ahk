@@ -160,6 +160,7 @@ class VSCode {
 	;---------
 	copyCleanEpicCodeLocation() {
 		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile)
+		codeLocation := this.fixEpicCodeRoutine(codeLocation) ; Can be removed once copy-code-location command is fixed for Workspaces
 		
 		; Initial value copied potentially has the offset (tag+<offsetNum>) included, strip it off.
 		codeLocation := EpicLib.dropOffsetFromServerLocation(codeLocation)
@@ -180,6 +181,7 @@ class VSCode {
 	;---------
 	copyEpicRoutineName() {
 		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile)
+		codeLocation := this.fixEpicCodeRoutine(codeLocation) ; Can be removed once copy-code-location command is fixed for Workspaces
 		
 		; Split off the routine
 		EpicLib.splitServerLocation(codeLocation, routine)
@@ -188,4 +190,22 @@ class VSCode {
 		ClipboardLib.setAndToast("^" routine, "routine name")
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------
+
+	;region ------------------------------ PRIVATE ------------------------------
+	;---------
+	; DESCRIPTION:    Currently in Workspaces, the copy-code command includes the full routine file path
+	;                 (minus the extension). Until that's fixed, clean it out manually here.
+	; PARAMETERS:
+	;  codeLocation (I,REQ) - Code location to fix
+	; RETURNS:        Fixed code location
+	;---------
+	fixEpicCodeRoutine(codeLocation) {
+		tag     := codeLocation.beforeString("^")
+		routine := codeLocation.afterString("^")
+
+		routine := routine.afterString("/", true) ; Drop everything before the actual file/routine
+
+		return tag "^" routine
+	}
+	;endregion ------------------------------ PRIVATE ------------------------------
 }

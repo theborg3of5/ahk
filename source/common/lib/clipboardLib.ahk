@@ -220,6 +220,74 @@ class ClipboardLib {
 	}
 
 	;region Clipboard format, links
+	;gdbdoc
+	setWithHyperlinks(markdownLinkedText, ByRef origClipboard := "") {
+		; This must be a ByRef return parameter instead of returning directly, as it's a binary
+		; variable, which can't be returned directly (see https://www.autohotkey.com/boards/viewtopic.php?t=62209 ).
+		origClipboard := ClipboardAll ; Save off everything (images, formatting), not just the text (that's all that's in Clipboard)
+
+		; Extract links (expected to be in markdown format, "[text](url)")
+		chunks := this.extractMarkdownLinks(markdownLinkedText)
+
+		DllCall("OpenClipboard", "Ptr", A_ScriptHwnd)
+		DllCall("EmptyClipboard")
+
+		; HTML format
+		fragment := ""
+		For _, chunk in chunks {
+			if (chunk.url = "")
+				fragment .= chunk.text
+			else
+				fragment .= "<a href=""" chunk.url """>" chunk.text "</a>"
+		}
+		content := this.buildClipboardHTML(fragment)
+		this.setClipboardForFormat(content, "HTML Format")
+		
+		; RTF format
+		fragment := ""
+		For _, chunk in chunks {
+			if (chunk.url = "")
+				fragment .= chunk.text
+			else
+				fragment .= "{\field{\*\fldinst HYPERLINK """ chunk.url """}{\fldrslt " chunk.text "}}"
+		}
+		content := "{\rtf1" fragment "}"
+		this.setClipboardForFormat(content, "Rich Text Format")
+		
+		; Plain-text format
+		fragment := ""
+		For _, chunk in chunks ; Only the text of the link, drop the URL
+			fragment .= chunk.text
+		content := fragment
+		CF_TEXT := 1 ; https://learn.microsoft.com/en-us/windows/win32/dataxchg/standard-clipboard-formats
+		this.setClipboardForFormat(content, CF_TEXT)
+
+		DllCall("CloseClipboard")
+	}
+
+	;gdbdoc gdbtodo probably move to a different lib?
+	;gdbdoc call out that it cleans up paths/links
+	extractMarkdownLinks(inputText) {
+		chunks := [] ; [ { text: text, url: urlIfLink } ]
+		startPos := 1
+		while (pos := RegExMatch(inputText, "O)\[(.*?)\]\((.*?)\)", match, startPos)) {
+			preText := SubStr(inputText, startPos, pos - startPos)
+			if (preText != "")
+				chunks.push({text: preText})
+			
+			text := match[1]
+			url  := FileLib.cleanupPath(match[2])
+			chunks.push({text: text, url: url})
+			startPos := pos + match.len
+		}
+		; Add any remaining text after the last link
+		remainingText := SubStr(inputText, startPos)
+		if (remainingText != "")
+			chunks.push({text: remainingText})
+
+		return chunks
+	}
+
 	;---------
 	; DESCRIPTION:    Set the clipboard to a hyperlink (in HTML, RTF, and (fallback) plain-text formats).
 	; PARAMETERS:
@@ -352,12 +420,31 @@ class ClipboardLib {
 		if (!text || !path)
 			return
 
-		path := FileLib.cleanupPath(path)
 		; Special handling
 		if (Config.isWindowActive("OneNote")) ; OneNote can't handle double quotes in URLs for some reason, so encode them.
 			path := path.replace("""", "%22")
 
-		ClipboardLib.setToHyperlink(text, path, origClipboard)
+		ClipboardLib.setWithHyperlinks("[" text "](" path ")")
+		Send, ^v   ; Paste the new value.
+		Sleep, 500 ; Needed to make sure clipboard isn't overwritten before we paste it.
+		ClipboardLib.set(origClipboard)
+	}
+
+	;---------
+	; DESCRIPTION:    Send text that includes one or more hyperlinks using the clipboard, restoring the
+	;                 clipboard afterwards.
+	; PARAMETERS:
+	;  markdownLinkedText (I,REQ) - The text to send, with links encoded markdown-style: [text](url)
+	;---------
+	sendTextWithHyperlinks(markdownLinkedText) {
+		if (!markdownLinkedText)
+			return
+
+		; Special handling
+		if (Config.isWindowActive("OneNote")) ; OneNote can't handle double quotes in URLs for some reason, so encode them.
+			path := path.replace("""", "%22")
+
+		ClipboardLib.setWithHyperlinks(markdownLinkedText)
 		Send, ^v   ; Paste the new value.
 		Sleep, 500 ; Needed to make sure clipboard isn't overwritten before we paste it.
 		ClipboardLib.set(origClipboard)

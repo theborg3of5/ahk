@@ -292,6 +292,12 @@ class EpicLib {
 		
 		return ini " " id " - " title
 	}
+
+	buildLinkedEMC2ObjectString(record) { ;gdbtodo ditch or move stuff here
+		objectString := EpicLib.buildEMC2ObjectString(record)
+
+		
+	}
 	
 	;---------
 	; DESCRIPTION:    Extract all EMC2 records from the given string and pick the "best" one (that is, the first exact match, then the first possible match).

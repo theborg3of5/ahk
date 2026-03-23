@@ -54,12 +54,13 @@ class SelectLib {
 		if(!needleStartPos)
 			return
 		
-		; Debug.popup("io.selectTextWithinSelection","Finished processing", "Selection",selectedText, "Needle",needle, "Needle start position",needleStartPos, "Number of times to go right",numRight)
-		Send, {Left} ; Get to start of selection.
 		numRight := needleStartPos - 1
+		needleLen := needle.length()
+		; Debug.popup("io.selectTextWithinSelection","Finished processing", "Selection",selectedText, "Needle",needle, "Needle start position",needleStartPos, "Number of times to go right",numRight, "Needle length",needleLen)
+
+		Send, {Left} ; Get to start of selection.
 		Send, {Right %numRight%} ; Get to start of needle.
 		Send, {Shift Down}
-		needleLen := needle.length()
 		Send, {Right %needleLen%} ; Select to end of needle.
 		Send, {Shift Up}
 	}

@@ -184,6 +184,9 @@ class OneNote {
 	;---------
 	; DESCRIPTION:    The dev structure in question has section headers with an INI/ID, and a space
 	;                 for an edit link. Add links to both the INI/ID (web) and the edit spot.
+	;
+	;                 This may misbehave if the "edit" text is already a link - for some reason, OneNote
+	;                 always selects the entire link when selecting text with the keyboard.
 	;---------
 	linkDevStructureSectionTitle() {
 		HotkeyLib.waitForRelease()
@@ -198,6 +201,9 @@ class OneNote {
 		editText   := lineText.firstBetweenStrings("(", ")")
 		afterText  := lineText.afterString(")")
 
+		chunkToLink := lineText.firstBetweenStrings(" - ", ")") ")"
+		SelectLib.selectTextWithinSelection(chunkToLink) ; Whole line is already selected so we can use this
+
 		; If there's not an ID in place yet, try to update the recordText with an ID from the clipboard or open windows.
 		if(webText.endsWith(" *")) {
 			newId := this.getRecordIDToLink()
@@ -210,15 +216,11 @@ class OneNote {
 		}
 
 		ao := new ActionObjectEMC2(webText)
-		webURL  := ao.getLinkWeb()
-		editURL := ao.getLinkEdit()
+		webLink  := "[" webText  "](" ao.getLinkWeb()  ")"
+		editLink := "[" editText "](" ao.getLinkEdit() ")"
+		newChunk := webLink " (" editLink ")"
 
-		webLink  := "[" webText  "](" webURL  ")"
-		editLink := "[" editText "](" editURL ")"
-
-		newText := beforeText " - " webLink " (" editLink ")" afterText
-
-		ClipboardLib.sendTextWithHyperlinks(newText)
+		ClipboardLib.sendTextWithHyperlinks(newChunk)
 		Send, ^1  ; Restore checkbox
 		Send, ^!1 ; Restore Heading 1 style
 	}

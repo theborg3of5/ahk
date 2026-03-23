@@ -193,34 +193,34 @@ class OneNote {
 		if(lineText = "" || lineText = "`r`n") ; Selecting the whole line in OneNote gets us the newline, so treat just a newline as an empty case as well.
 			return
 		
-		linkText   := lineText.afterString(" - ")
-		recordText := linkText.beforeString(" (")
-		editText   := linkText.firstBetweenStrings("(", ")")
-		
+		beforeText := lineText.beforeString(" - ")
+		webText    := lineText.firstBetweenStrings(" - ", " (")
+		editText   := lineText.firstBetweenStrings("(", ")")
+		afterText  := lineText.afterString(")")
+
 		; If there's not an ID in place yet, try to update the recordText with an ID from the clipboard or open windows.
-		if(recordText.endsWith(" *")) {
+		if(webText.endsWith(" *")) {
 			newId := this.getRecordIDToLink()
 			if(newId = "") {
 				Toast.ShowError("No record ID found", "No valid ID found in line text, clipboard, or useful window titles")
 				return
 			}
 			
-			SelectLib.selectTextWithinSelection(recordText) ; Whole line is already selected so we can use this
-			recordText := recordText.removeFromEnd("*") newId
-			Send, % recordText
-			OneNote.selectLine() ; Re-select whole line so we can use SelectLib.selectTextWithinSelection() below
+			webText := webText.replace("*", newId)
 		}
-		
-		ao := new ActionObjectEMC2(recordText)
-		; Debug.popup("Line",lineText, "Record text",recordText, "Edit text",editText, "ao.ini",ao.ini, "ao.id",ao.id)
-		
-		SelectLib.selectTextWithinSelection(recordText)
-		ao.linkSelectedTextWeb("Failed to add EMC2 object web link")
-		
-		OneNote.selectLine() ; Re-select whole line so we can use SelectLib.selectTextWithinSelection() again
-		
-		SelectLib.selectTextWithinSelection(editText)
-		ao.linkSelectedTextEdit("Failed to add EMC2 object edit link")
+
+		ao := new ActionObjectEMC2(webText)
+		webURL  := ao.getLinkWeb()
+		editURL := ao.getLinkEdit()
+
+		webLink  := "[" webText  "](" webURL  ")"
+		editLink := "[" editText "](" editURL ")"
+
+		newText := beforeText " - " webLink " (" editLink ")" afterText
+
+		ClipboardLib.sendTextWithHyperlinks(newText)
+		Send, ^1  ; Restore checkbox
+		Send, ^!1 ; Restore Heading 1 style
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------
 	

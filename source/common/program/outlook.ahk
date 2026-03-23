@@ -144,8 +144,8 @@ class Outlook {
 	;---------
 	copyEMC2ObjectStringFromTLG() {
 		record := this.getEMC2RecordFromTLG()
-		objectString := EpicLib.buildEMC2ObjectString(record)
-		ClipboardLib.setAndToast(objectString, "TLG event EMC2 object string")
+		ClipboardLib.setWithHyperlinks(EpicLib.buildLinkedEMC2ObjectString(record))
+		ClipboardLib.toastNewValue("TLG event EMC2 object string")
 	}
 	
 	;---------

@@ -7,7 +7,6 @@
 
 # Config
 ~PATH.addToStart(<AHK_CONFIG>\) {
-	Hyperlink windows					link					hyperlinkWindows.tl
 	Paths								path					paths.tl
 	Programs							prog					programs.tl
 	Settings							s						settings.ini

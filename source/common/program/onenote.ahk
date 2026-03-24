@@ -1,22 +1,5 @@
 #Include oneNoteTodoPage.ahk
 class OneNote {
-	;region ------------------------------ PUBLIC ------------------------------
-	;---------
-	; DESCRIPTION:    Select the current line and link the given EMC2 object (described by INI/ID).
-	; PARAMETERS:
-	;  ini (I,REQ) - INI of the object to link
-	;  id  (I,REQ) - ID of the object to link
-	;---------
-	linkEMC2ObjectInLine(ini, id) {
-		this.selectLine(true) ; Select whole line but no newline/indent
-		SelectLib.selectTextWithinSelection(ini " " id) ; Select the INI and ID for linking
-		
-		new ActionObjectEMC2(id, ini).linkSelectedTextWeb("Failed to link EMC2 object text")
-		
-		Send, {End}
-	}
-	;endregion ------------------------------ PUBLIC ------------------------------
-	
 	;region ------------------------------ INTERNAL ------------------------------
 	; Named wrappers quick access toolbar items.
 	newSubpage() {

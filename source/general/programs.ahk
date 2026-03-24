@@ -15,7 +15,7 @@
 
 ; Some programs are work-specific
 #If Config.contextIsWork
-	^!+e:: Config.activateProgram("EMC2", "EMC2Update env=TRACKAPPTCP") ; EMC2 needs these parameters to start up correctly.
+	^!+e:: Config.activateProgram("EMC2", "EMC2Update") ; EMC2 needs this parameter to start up correctly.
 	^!+s:: VSCode.activateCode("EpicCode", Config.path["USER_ROOT"] "\EpicCode\EpicCode.code-workspace")
 	^!+u:: Config.activateProgram("Thunder")
 	^!#+v::Config.runProgram("Visual Studio")

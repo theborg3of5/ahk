@@ -512,7 +512,7 @@ class EpicLib {
 		{
 			cat := "GitLab"
 			name := A_LoopFileName
-			abbrev := [ name.remove("-").sub(1, 5), name ]
+			abbrev := this.buildAbbrevForRepoFolder(A_LoopFileName)
 
 			if(!folders[cat])
 				folders[cat] := []
@@ -524,8 +524,8 @@ class EpicLib {
 		{
 			cat := "CloudLab"
 			name := A_LoopFileName
-			abbrev := [ name.remove("-").sub(1, 5), name ]
-
+			abbrev := this.buildAbbrevForRepoFolder(A_LoopFileName, ["ao-", "agent-orchestration-"])
+			
 			if(!folders[cat])
 				folders[cat] := []
 			folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
@@ -535,10 +535,10 @@ class EpicLib {
 		this.addFolderChoicesForType(s, folders, "Known DLGs")
 		this.addFolderChoicesForType(s, folders, "Other Current DLGs")
 		this.addFolderChoicesForType(s, folders, "User Branches")
-		this.addFolderChoicesForType(s, folders, "GitLab")
-		this.addFolderChoicesForType(s, folders, "CloudLab")
 		this.addFolderChoicesForType(s, folders, "SUs", true)
 		this.addFolderChoicesForType(s, folders, "Integration")
+		this.addFolderChoicesForType(s, folders, "GitLab")
+		this.addFolderChoicesForType(s, folders, "CloudLab", true)
 		
 		s.addSectionHeader("Special")
 		s.addChoice(new SelectorChoice({ NAME: "Launch", ABBREV: "l", PATH: "LAUNCH" }))
@@ -848,6 +848,32 @@ class EpicLib {
 	}
 	;endregion EMC2 Record Extraction/Selection
 	
+	;---------
+	; DESCRIPTION:    Build a useful abbreviation for the given folder name, trying to include each
+	;                 hyphen-delimited piece.
+	; PARAMETERS:
+	;  folderName     (I,REQ) - The folder name to reduce
+	;  ignorePrefixes (I,OPT) - If you want to ignore certain prefixes, pass them here as an array
+	; RETURNS:        Abbreviation to use
+	;---------
+	buildAbbrevForRepoFolder(folderName, ignorePrefixes := "") {
+		; Drop agent-orchestration stuff
+		if(folderName.startsWithAnyOf(ignorePrefixes, prefix))
+			folderName := folderName.removeFromStart(prefix)
+		
+		; Take the reduced bits of each remaining piece
+		nameSplit := folderName.split("-")
+		abbrev := ""
+		For i, bit in nameSplit {
+			if (i = nameSplit.Count())
+				abbrev .= bit.sub(1, 4) ; Take a little more of the last bit since it's usually the most descriptive
+			else	
+				abbrev .= bit.sub(1, 1)
+		}
+
+		return abbrev
+	}
+
 	;---------
 	; DESCRIPTION:    Add a set of DLG/branch folder choices to the given selector.
 	; PARAMETERS:

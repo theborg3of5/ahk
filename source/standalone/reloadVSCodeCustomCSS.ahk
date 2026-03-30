@@ -31,9 +31,9 @@ moveMouseToBottomRightOffset(100, 60)
 waitForUserButton(pt)
 
 pt.nextStep("Waiting for ""corrupted"" notification (press Enter or click when it appears)")
-moveMouseToBottomRightOffset(100, 100) ; Gear icon
+moveMouseToBottomRightOffset(60, 100) ; Gear icon
 waitForUserButton(pt)
-moveMouseToBottomRightOffset(100, 120) ; Ignore option
+moveMouseToBottomRightOffset(100, 70) ; Ignore option
 waitForUserButton(pt)
 
 pt.nextStep("Exiting VSCode")

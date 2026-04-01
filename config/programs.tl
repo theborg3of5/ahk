@@ -52,6 +52,10 @@
 		MTPutty						Programs\MTPuTTY\mtputty.exe
 	}
 	
+	~PATH.addToStart(<USER_ROOT>\.local\bin\) {
+		Claude Code					claude.exe
+	}
+
 	~PATH.addToStart(<USER_APPDATA>\) {
 		Spotify						Spotify\Spotify.exe
 		Telegram					Telegram Desktop\Telegram.exe

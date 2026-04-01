@@ -15,6 +15,7 @@
 
 ; Some programs are work-specific
 #If Config.contextIsWork
+	^!+c:: Config.runProgram("Windows Terminal", "-p ""Git Bash"" -d C:\EpicSource\claude -- " Config.getProgramPath("Claude Code"))
 	^!+e:: Config.activateProgram("EMC2", "EMC2Update") ; EMC2 needs this parameter to start up correctly.
 	^!+s:: VSCode.activateCode("EpicCode", Config.path["USER_ROOT"] "\EpicCode\EpicCode.code-workspace")
 	^!+u:: Config.activateProgram("Thunder")

@@ -52,6 +52,7 @@ class EMC2 {
 		For _,id in IDs {
 			SendRaw, % id
 			Send, {Enter}
+			Sleep, 100
 		}
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------

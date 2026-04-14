@@ -74,11 +74,23 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		
 		return false
 	}
+
+	;---------
+	; DESCRIPTION:    Open the object, specifically in web mode.
+	;                 This override exists so we can pass through the EMC2-specific forceBasic flag.
+	; PARAMETERS:
+	;  forceBasic (I,OPT) - Set to true to always use the "basic" link style (ignore that an INI might
+	;                       be edit-only, view-only, internal-only, etc.).
+	;---------
+	openWeb(forceBasic := false) {
+		this.open(this.getLinkWeb(forceBasic))
+	}
 	
 	;---------
 	; DESCRIPTION:    Get a web link to the object.
 	; PARAMETERS:
-	;  forceBasic (I,OPT) - Set to true to always use the "basic" link style (ignore that an INI might be edit-only, view-only, internal-only, etc.).
+	;  forceBasic (I,OPT) - Set to true to always use the "basic" link style (ignore that an INI might
+	;                       be edit-only, view-only, internal-only, etc.).
 	; RETURNS:        Link to either emc2summary or Sherlock (depending on the INI)
 	;---------
 	getLinkWeb(forceBasic := false) {

@@ -4,6 +4,7 @@
 ; Note that some programs override this if they have special ways of providing the record string or INI/ID/title.
 $!e::getEMC2ObjectFromCurrentTitle().openEdit()
 $!w::getEMC2ObjectFromCurrentTitle().openWeb()
+!#w::getEMC2ObjectFromCurrentTitle().openWeb(true) ; forceBasic = 1
 	getEMC2ObjectFromCurrentTitle() {
 		; We have to check this directly instead of putting it under an #If directive, so that the various program-specific #If directives win.
 		if (!Config.contextIsWork) {

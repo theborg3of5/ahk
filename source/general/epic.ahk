@@ -76,7 +76,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		openTerminalInEpicSourceFolder() {
 			For _, path in EpicLib.selectEpicSourceFolders("Select branch folder to open in terminal:", "C:\Program Files\Git\git-bash.exe") {
 				if(path = "LAUNCH")
-					path := Config.path["EPIC_SOURCE_CURRENT"]
+					path := "C:\EpicSource"
 				
 				Config.runProgram("Windows Terminal", "--profile ""Git Bash"" --startingDirectory " path)
 			}

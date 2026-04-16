@@ -507,7 +507,7 @@ class EpicLib {
 			}
 		}
 
-		; Also check the unversioned gitlab folder
+		; Also pull from the gitlab folder
 		Loop, Files, C:\EpicSource\gitlab\*, D
 		{
 			cat := "GitLab"
@@ -519,7 +519,7 @@ class EpicLib {
 			folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
 		}
 
-		; Also check the unversioned cloudlab folder
+		; Also pull from the cloudlab folder
 		Loop, Files, C:\EpicSource\cloudlab\*, D
 		{
 			cat := "CloudLab"

@@ -48,11 +48,11 @@ Run(subFolder "windowMoverSizer.ahk")
 #Include excel.ahk
 #Include explorer.ahk
 #Include fastStoneImageViewer.ahk
+#Include flowLauncher.ahk
 #Include hyperdrive.ahk
 #Include hyperspace.ahk
 #Include internetExplorer.ahk
 #Include kdiff.ahk
-#Include launchy.ahk
 #Include notepadPlusPlus.ahk
 #Include onenote.ahk
 #Include onetastic.ahk

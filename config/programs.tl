@@ -2,7 +2,6 @@
 
 ~PATH_TYPE.defaultTo(EXE) {
 	~PATH.addToStart(<PROGRAM_FILES_86>\) {
-		Launchy						Launchy\Launchy.exe
 		Notepad++					Notepad++\notepad++.exe												HOME_LAPTOP
 ;		OneNote						Microsoft Office\root\Office16\ONENOTE.EXE
 		Putty						PuTTY\putty.exe
@@ -44,6 +43,7 @@
 	
 	~PATH.addToStart(<USER_APPDATA_LOCAL>\) {
 		Beeper						Programs\BeeperTexts\Beeper.exe										HOME_DESKTOP
+		Flow Launcher				FlowLauncher\Flow.Launcher.exe
 		GitHub Desktop				GitHubDesktop\GitHubDesktop.exe
 		GrepWin						Programs\grepWin\grepWin.exe
 		GrepWin						Apps\grepWin\grepWin.exe											HOME_DESKTOP

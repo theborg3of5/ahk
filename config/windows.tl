@@ -72,6 +72,7 @@
 				Excel							EXCEL.EXE
 				Explorer						explorer.exe				CabinetWClass
 				Firefox Portable				firefox.exe
+				Flow Launcher					Flow.Launcher.exe
 				Foobar							foobar2000.exe
 				GitExtensions					GitExtensions.exe
 				GitHub Desktop					GitHubDesktop.exe			-								-										NO_PADDING
@@ -80,7 +81,6 @@
 				Hyperdrive						Hyperdrive.exe
 				Internet Explorer				IEXPLORE.EXE
 				KDiff							kdiff3.exe					-								- KDiff3
-				Launchy							Launchy.exe
 				MBuilder						MBuilder.exe
 				Messenger						Messenger.exe				-								Messenger								NO_PADDING		EXACT
 				MTPutty							mtputty.exe					-								MTPuTTY									NO_PADDING

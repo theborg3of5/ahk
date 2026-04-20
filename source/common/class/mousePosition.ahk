@@ -16,7 +16,7 @@ class MousePosition {
 	; DESCRIPTION:    Create a new MousePosition object which stores off the current mouse position.
 	;---------
 	__New() {
-		MouseGetPos(x, y)
+		MouseGetPos(&x, &y)
 		this.x := x
 		this.y := y
 	}
@@ -28,8 +28,8 @@ class MousePosition {
 	;  distanceX (O,OPT) - The distance along the X axis (if the mouse moved to the right, this is positive)
 	;  distanceY (O,OPT) - The distance along the Y asix (if the mouse moved down, this is positive)
 	;---------
-	getDistanceFromCurrentPosition(ByRef distanceX, ByRef distanceY) {
-		MouseGetPos(x, y)
+	getDistanceFromCurrentPosition(&distanceX, &distanceY) {
+		MouseGetPos(&x, &y)
 		
 		distanceX := x - this.x
 		distanceY := y - this.y

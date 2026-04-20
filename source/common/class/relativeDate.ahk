@@ -92,7 +92,7 @@ class RelativeDate extends RelativeDateTimeBase {
 		if(numToShift = "")
 			return
 		
-		this._instant := EnvAdd(this._instant, numToShift, "Days") ; Use EnvAdd to add days (can't use += format because it doesn't support this.*-style variable names).
+		this._instant := DateAdd(this._instant, numToShift, "Days")
 		this.updatePartsFromInstant()
 	}
 

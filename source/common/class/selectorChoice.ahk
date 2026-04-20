@@ -72,7 +72,7 @@ class SelectorChoice {
 			return false
 		
 		abbrev := this.data["ABBREV"]
-		if(isObject(abbrev))
+		if(abbrev is Array)
 			return stringToTest.isAnyOf(abbrev)
 		else
 			return (stringToTest = abbrev)
@@ -80,6 +80,6 @@ class SelectorChoice {
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
 	;region ------------------------------ PRIVATE ------------------------------
-	data := {} ; {label: value}
+	data := Map() ; {label: value}
 	;endregion ------------------------------ PRIVATE ------------------------------
 }

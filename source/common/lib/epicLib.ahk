@@ -9,9 +9,9 @@ class EpicLib {
 	;  selectorIcon  (I,OPT) - The icon to use for the Selector popup.
 	; RETURNS:        Array of environment data arrays (or null if the user didn't accept)
 	;---------
-	selectEpicEnvironments(selectorTitle, selectorIcon := "") {
+	static selectEpicEnvironments(selectorTitle, selectorIcon := "") {
 		; Set up Selector
-		s := new Selector("epicEnvironments.tls")
+		s := Selector("epicEnvironments.tls")
 		if(selectorTitle != "")
 			s.setTitle(selectorTitle)
 		if(selectorIcon != "")
@@ -42,7 +42,7 @@ class EpicLib {
 	;  environment (I,OPT) - EpicComm ID for the environment to connect to.
 	;  timeZone    (I,OPT) - Time zone for the environment.
 	;---------
-	runHyperspace(version, environment := "", timeZone := "") {
+	static runHyperspace(version, environment := "", timeZone := "") {
 		runString := Config.private["HYPERSPACE_BASE"]
 		runString := runString.replaceTag("VERSION",      version)
 		runString := runString.replaceTag("VERSION_FLAT", version.remove("."))
@@ -58,7 +58,7 @@ class EpicLib {
 	;  hswebURL (I,OPT) - The HSWeb URL for the environment. If not given we'll just launch Hyperdrive
 	;                     (no specified environment or filters).
 	;---------
-	runHyperdrive(hswebURL := "") {
+	static runHyperdrive(hswebURL := "") {
 		url := Config.private["HYPERDRIVE_URL_BASE"].replaceTag("HSWEB_URL", hswebURL)
 		
 		Run(url)
@@ -69,7 +69,7 @@ class EpicLib {
 	; PARAMETERS:
 	;  vdiId (I,REQ) - The ID of the VDI to open.
 	;---------
-	runVDI(vdiId) {
+	static runVDI(vdiId) {
 		Run(Config.private["VDI_BASE"].replaceTag("VDI_ID", vdiId))
 	}
 
@@ -78,7 +78,7 @@ class EpicLib {
 	; PARAMETERS:
 	;  environmentId (I,REQ) - Environment's DEN ID
 	;---------
-	runThunderForEnvironment(environmentId) {
+	static runThunderForEnvironment(environmentId) {
 		Run(Config.private["THUNDER_ENV_URL_BASE"].replaceTag("ENV_ID", environmentId))
 	}
 	
@@ -91,11 +91,11 @@ class EpicLib {
 	; NOTES:          Any offset from a tag will be included in the tag return value (i.e.
 	;                 TAG+3^ROUTINE splits into routine=ROUTINE and tag=TAG+3).
 	;---------
-	splitServerLocation(serverLocation, ByRef routine := "", ByRef tag := "") {
+	static splitServerLocation(serverLocation, &routine := "", &tag := "") {
 		serverLocation := serverLocation.clean(["$", "(", ")"])
 		locationAry := serverLocation.split("^")
 		
-		maxIndex := locationAry.MaxIndex()
+		maxIndex := locationAry.Length
 		if(maxIndex > 1)
 			tag := locationAry[1]
 		routine := locationAry[maxIndex] ; Always the last piece (works whether there was a tag before it or not)
@@ -108,8 +108,8 @@ class EpicLib {
 	;  serverLocation (I,REQ) - The server location to drop the offset from.
 	; RETURNS:        The updated server code location.
 	;---------
-	dropOffsetFromServerLocation(serverLocation) {
-		this.splitServerLocation(serverLocation, routine, tag)
+	static dropOffsetFromServerLocation(serverLocation) {
+		this.splitServerLocation(serverLocation, &routine, &tag)
 		tag := tag.beforeString("+").beforeString("-")
 		return tag.appendPiece("^", routine)
 	}
@@ -121,7 +121,7 @@ class EpicLib {
 	;  path (I,REQ) - The path to convert.
 	; RETURNS:        Relative path with leading backslash.
 	;---------
-	convertToSourceRelativePath(path) {
+	static convertToSourceRelativePath(path) {
 		path := FileLib.cleanupPath(path)
 		
 		sourceRoot := Config.path["EPIC_SOURCE_CURRENT"] "\"
@@ -142,11 +142,11 @@ class EpicLib {
 	;                 folder for.
 	; RETURNS:        Full path to the current version's source folder (no trailing backslash).
 	;---------
-	findCurrentVersionSourceFolder() {
+	static findCurrentVersionSourceFolder() {
 		latestVersion := 0.0
 		latestPath := ""
 		
-		Loop, Files, C:\EpicSource\*, D ; Don't try to use Config.path stuff here - we call this from inside.
+		Loop Files, "C:\EpicSource\*", "D" ; Don't try to use Config.path stuff here - we call this from inside.
 		{
 			; Only consider #[#].# folders
 			if(!A_LoopFileName.matchesRegEx("\d{1,2}\.\d"))
@@ -165,11 +165,11 @@ class EpicLib {
 	; DESCRIPTION:    Finds the current path to the latest installed version of EMC2.
 	; RETURNS:        Full filepath (including the EpicD*.exe) for the latest installed version of EMC2.
 	;---------
-	findCurrentEMC2Path() {
+	static findCurrentEMC2Path() {
 		latestVersion := 0.0
 		latestEMC2Folder := ""
 		
-		Loop, Files, C:\Program Files (x86)\Epic\v*.*, D
+		Loop Files, "C:\Program Files (x86)\Epic\v*.*", "D"
 		{
 			; Only consider versions where there's an EMC2 directory
 			if(!FileLib.folderExists(A_LoopFileLongPath "\EMC2"))
@@ -189,10 +189,10 @@ class EpicLib {
 	; DESCRIPTION:    Find the latest version of Hyperspace that's currently installed.
 	; RETURNS:        Numeric version (i.e. 10.1)
 	;---------
-	findLatestInstalledHyperspaceVersion() {
+	static findLatestInstalledHyperspaceVersion() {
 		latestVersion := 0.0
 
-		Loop, Files, C:\Program Files (x86)\Epic\v*.*, D
+		Loop Files, "C:\Program Files (x86)\Epic\v*.*", "D"
 		{
 			version := A_LoopFileName.removeFromStart("v")
 
@@ -214,7 +214,7 @@ class EpicLib {
 	;  id (I,REQ) - Possible ID to evaluate.
 	; RETURNS:        true if possibly an ID, false otherwise.
 	;---------
-	couldBeEMC2ID(id) {
+	static couldBeEMC2ID(id) {
 		; For special DLG IDs (SUs, TDE, searches, etc.), trim off leading letter so we recognize them as a numeric ID.
 		if(id.startsWithAnyOf(["I", "T", "CS", "R"], letter))
 			id := id.removeFromStart(letter)
@@ -235,7 +235,7 @@ class EpicLib {
 	;  id  (I,REQ) - ID to consider
 	; RETURNS:        true/false
 	;---------
-	couldBeEMC2Record(ini, id) { ; Checks whether this is PLAUSIBLY an EMC2 INI/ID, based on INI and ID format - no guarantee that it exists.
+	static couldBeEMC2Record(ini, id) { ; Checks whether this is PLAUSIBLY an EMC2 INI/ID, based on INI and ID format - no guarantee that it exists.
 		; Need both INI and ID.
 		if(ini = "" || id = "")
 			return false
@@ -261,7 +261,7 @@ class EpicLib {
 	;                 - Word that describes an INI (Design, log, development log)
 	; RETURNS:        The useful form of the INI, or "" if we couldn't match the input to one.
 	;---------
-	convertToUsefulEMC2INI(ini) {
+	static convertToUsefulEMC2INI(ini) {
 		; Don't allow numeric "INIs" - they're just picking choices from the Selector, not converting a valid value.
 		if(ini.isDigits())
 			return ""
@@ -278,7 +278,7 @@ class EpicLib {
 	;  doLink         (I,OPT) - Pass true to include a markdown-style link for the INI ID portion of the string.
 	; RETURNS:        EMC2 object string
 	;---------
-	buildEMC2ObjectString(record, startWithTitle := false, doLink := false) {
+	static buildEMC2ObjectString(record, startWithTitle := false, doLink := false) {
 		if(!record)
 			return ""
 		ini   := record.ini
@@ -287,7 +287,7 @@ class EpicLib {
 
 		iniID := ini " " id
 		if (doLink) {
-			url := new ActionObjectEMC2(id, ini).getLinkWeb()
+			url := ActionObjectEMC2(id, ini).getLinkWeb()
 			iniID := "[" iniID "](" url ")"
 		}
 		
@@ -307,7 +307,7 @@ class EpicLib {
 	;  record (I,REQ) - EpicRecord instance with ini/id/title populated as needed.
 	; RETURNS:        EMC2 object string with markdown link
 	;---------
-	buildLinkedEMC2ObjectString(record) {
+	static buildLinkedEMC2ObjectString(record) {
 		return this.buildEMC2ObjectString(record, false, true)
 	}
 	
@@ -317,8 +317,8 @@ class EpicLib {
 	;  text (I,REQ) - The string to pull EMC2 record references out of.
 	; RETURNS:        EpicRecord representing the EMC2 record we picked, or "" if we couldn't find any.
 	;---------
-	getBestEMC2RecordFromText(text) {
-		this.extractEMC2RecordsFromText(text, exacts, possibles)
+	static getBestEMC2RecordFromText(text) {
+		this.extractEMC2RecordsFromText(text, &exacts, &possibles)
 		
 		; Return the first exact match, then the first possible match.
 		return DataLib.coalesce(exacts[1], possibles[1])
@@ -331,7 +331,7 @@ class EpicLib {
 	; NOTES:          If there is exactly 1 "exact" match (valid INI and ID), we'll always return it without a popup (even
 	;                 if there are other potential matches with only a valid ID).
 	;---------
-	copyEMC2RecordIDFromText(text) {
+	static copyEMC2RecordIDFromText(text) {
 		if(!text) {
 			Toast.ShowError("Could not copy EMC2 record ID from string", "String is blank")
 			return
@@ -356,8 +356,8 @@ class EpicLib {
 	; NOTES:          If there is exactly 1 "exact" match (valid INI and ID), we'll always return it without a popup (even
 	;                 if there are other potential matches with only a valid ID).
 	;---------
-	selectEMC2RecordFromText(text) {
-		if(!this.extractEMC2RecordsFromText(text, exacts, possibles)) {
+	static selectEMC2RecordFromText(text) {
+		if(!this.extractEMC2RecordsFromText(text, &exacts, &possibles)) {
 			; No matches at all
 			Toast.ShowError("No potential EMC2 record IDs found in string: " text)
 			return ""
@@ -365,7 +365,7 @@ class EpicLib {
 		; Debug.popup("text",text, "exacts",exacts, "possibles",possibles)
 		
 		; Only 1 exact match, just return it directly (ignoring any possibles).
-		if(exacts.length() = 1) {
+		if(exacts.Length = 1) {
 			exacts[1].ini := EpicLib.convertToUsefulEMC2INI(exacts[1].ini) ; Convert INI before we return.
 			return exacts[1]
 		}
@@ -375,9 +375,9 @@ class EpicLib {
 		if(!data) ; User didn't pick an option
 			return ""
 		
-		return new EpicRecord(data["INI"], data["ID"], data["TITLE"])
+		return EpicRecord(data["INI"], data["ID"], data["TITLE"])
 	}
-	
+
 	;---------
 	; DESCRIPTION:    Check a set of titles (from a hard-coded set of windows) for EMC2 records and give the user the
 	;                 option to pick between all of them.
@@ -386,21 +386,21 @@ class EpicLib {
 	; RETURNS:        An EpicRecord instance describing the record the user picked, or "" if we couldn't find one or they
 	;                 didn't select one.
 	;---------
-	selectEMC2RecordFromUsefulTitles(ignoreIfNoTitle := false) {
+	static selectEMC2RecordFromUsefulTitles(ignoreIfNoTitle := false) {
 		windows := this.getUsefulEMC2RecordWindows()
 		; Debug.popup("windows",windows)
 		
 		allExacts    := []
 		allPossibles := []
 		For _,window in windows {
-			if(this.extractEMC2RecordsFromText(window.title, exacts, possibles, window.windowName)) {
+			if(this.extractEMC2RecordsFromText(window.title, &exacts, &possibles, window.windowName)) {
 				allExacts.appendArray(exacts)
 				allPossibles.appendArray(possibles)
 			}
 		}
 		; Debug.popup("allExacts",allExacts, "allPossibles",allPossibles)
 		
-		this.removeEMC2RecordDuplicates(allExacts, allPossibles)
+		this.removeEMC2RecordDuplicates(&allExacts, &allPossibles)
 		
 		if(ignoreIfNoTitle) {
 			tempAry := allExacts.clone()
@@ -418,13 +418,13 @@ class EpicLib {
 		}
 
 		; No exacts or possibles
-		if(allExacts.length() + allPossibles.length() = 0) {
+		if(allExacts.Length + allPossibles.Length = 0) {
 			Toast.ShowError("No potential EMC2 record IDs found.")
 			return ""
 		}
 		
 		; Only 1 exact match, just return it directly (ignoring any possibles).
-		if(allExacts.length() = 1)
+		if(allExacts.Length = 1)
 			return allExacts[1]
 		
 		; Prompt the user (even if there's just 1 possible, this gives them the opportunity to enter the INI)
@@ -432,9 +432,9 @@ class EpicLib {
 		if(!data) ; User didn't pick an option
 			return ""
 		
-		return new EpicRecord(data["INI"], data["ID"], data["TITLE"])
+		return EpicRecord(data["INI"], data["ID"], data["TITLE"])
 	}
-	
+
 	;---------
 	; DESCRIPTION:    Ask the user to select from a list of DLG/branch folders.
 	; PARAMETERS:
@@ -443,25 +443,25 @@ class EpicLib {
 	; RETURNS:        An array of paths for the chosen folders (one entry may be "LAUNCH" if that
 	;                 choice is selected)
 	;---------
-	selectEpicSourceFolders(title, icon) {
+	static selectEpicSourceFolders(title, icon) {
 		; Gather DLGs we already have nicer names for
-		tl := new TableList("tlg.tls")
+		tl := TableList("tlg.tls")
 		tl.filterOutIfColumnBlank("RECORD")
 		tl.filterOutIfColumnNoMatchRegEx("RECORD", "^\d+$") ; Numbers only (so current-version DLGs)
-		knownDLGs := {} ; {dlgId: name}
+		knownDLGs := Map() ; {dlgId: name}
 		For recId, data in tl.getRowsByColumn("RECORD", "NAME")
 			knownDLGs[recId] := { name:data["NAME_OUTPUT_PREFIX"] data["NAME"], abbrev:data["ABBREV"] }
 		
 		; Find all branch folders in the versioned EpicSource folders.
-		folders := {} ; type => [ {name, path, abbrev} ]
-		Loop, Files, C:\EpicSource\*, D
+		folders := Map() ; type => [ {name, path, abbrev} ]
+		Loop Files, "C:\EpicSource\*", "D"
 		{
 			; Only consider #[#].# folders
 			if (!A_LoopFileName.matchesRegEx("\d{1,2}\.\d"))
 				Continue
 			
 			versionFolderPath := A_LoopFileLongPath
-			Loop, Files, %versionFolderPath%\*, D
+			Loop Files, versionFolderPath "\*", "D"
 			{
 				name := A_LoopFileName
 				if (name.startsWith("App ") || name.endsWith(" Bin")) ; Ignore binary folders
@@ -470,7 +470,7 @@ class EpicLib {
 				; Categorize folders, add basic abbreviations (which may be overridden)
 				if (name.startsWith("DLG-")) {
 					dlgId := name.firstBetweenStrings("DLG-", "-")
-					if (knownDLGs[dlgId]) {
+					if (knownDLGs.Has(dlgId)) {
 						cat    := "Known DLGs"
 						name   := "DLG " dlgId " - " knownDLGs[dlgId].name
 						abbrev := knownDLGs[dlgId].abbrev
@@ -501,37 +501,37 @@ class EpicLib {
 				if (A_LoopFileName.contains("-Merge-To-")) ; Using original name since we're modifying the name var above
 					name := name.beforeString("-Merge-To-") " (Merge)"
 
-				if(!folders[cat])
+				if(!folders.Has(cat))
 					folders[cat] := []
 				folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
 			}
 		}
 
 		; Also pull from the gitlab folder
-		Loop, Files, C:\EpicSource\gitlab\*, D
+		Loop Files, "C:\EpicSource\gitlab\*", "D"
 		{
 			cat := "GitLab"
 			name := A_LoopFileName
 			abbrev := this.buildAbbrevForRepoFolder(A_LoopFileName)
 
-			if(!folders[cat])
+			if(!folders.Has(cat))
 				folders[cat] := []
 			folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
 		}
 
 		; Also pull from the cloudlab folder
-		Loop, Files, C:\EpicSource\cloudlab\*, D
+		Loop Files, "C:\EpicSource\cloudlab\*", "D"
 		{
 			cat := "CloudLab"
 			name := A_LoopFileName
 			abbrev := this.buildAbbrevForRepoFolder(A_LoopFileName, ["ao-", "agent-orchestration-"])
 			
-			if(!folders[cat])
+			if(!folders.Has(cat))
 				folders[cat] := []
 			folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
 		}
 
-		s := new Selector().setTitle(title).setIcon(icon)
+		s := Selector().setTitle(title).setIcon(icon)
 		this.addFolderChoicesForType(s, folders, "Known DLGs")
 		this.addFolderChoicesForType(s, folders, "Other Current DLGs")
 		this.addFolderChoicesForType(s, folders, "User Branches")
@@ -539,13 +539,13 @@ class EpicLib {
 		this.addFolderChoicesForType(s, folders, "Integration")
 		
 		s.addSectionHeader("Claude")
-		s.addChoice(new SelectorChoice({ NAME: "Top", ABBREV: "c", PATH: "C:\EpicSource\claude" }))
+		s.addChoice(SelectorChoice(Map("NAME", "Top", "ABBREV", "c", "PATH", "C:\EpicSource\claude")))
 
 		this.addFolderChoicesForType(s, folders, "GitLab")
 		this.addFolderChoicesForType(s, folders, "CloudLab", true)
 		
 		s.addSectionHeader("Special")
-		s.addChoice(new SelectorChoice({ NAME: "Launch", ABBREV: "l", PATH: "LAUNCH" }))
+		s.addChoice(SelectorChoice(Map("NAME", "Launch", "ABBREV", "l", "PATH", "LAUNCH")))
 
 		return s.promptMulti("PATH")
 	}
@@ -554,18 +554,18 @@ class EpicLib {
 	
 	;region ------------------------------ PRIVATE ------------------------------
 	;region EMC2 Record Extraction/Selection
-	emc2TypeSelector := "" ; Selector instance (performance cache)
+	static emc2TypeSelector := "" ; Selector instance (performance cache)
 	
 	;---------
 	; DESCRIPTION:    Get a Selector instance you can use to map various INI-like strings to actual EMC2 INIs.
 	; RETURNS:        Selector instance
 	;---------
-	getEMC2TypeSelector() {
+	static getEMC2TypeSelector() {
 		if(this.emc2TypeSelector)
 			return this.emc2TypeSelector
 		
 		; Use ActionObject's TLS (filtered to EMC2-type types) for mapping INIs
-		s := new Selector("actionObject.tls")
+		s := Selector("actionObject.tls")
 		s.dataTableList.filterOutIfColumnNoMatch("TYPE", ActionObject.Type_EMC2)
 		
 		this.emc2TypeSelector := s ; Cache for future use
@@ -577,7 +577,7 @@ class EpicLib {
 	; DESCRIPTION:    Get an array of windows that are likely to contain useful EMC2 record IDs.
 	; RETURNS:        Array of objects: {windowName: name of window from windows.tl, title: window's title}
 	;---------
-	getUsefulEMC2RecordWindows() {
+	static getUsefulEMC2RecordWindows() {
 		windows := [] ; [ {windowName, title} ]
 		
 		; Normal titles (none of these can have the record title in them, so don't include that bit)
@@ -602,7 +602,7 @@ class EpicLib {
 	;  windowName (I,REQ) - The window name to check
 	; RETURNS:        true/false - can this window's title contain the EMC2 record title?
 	;---------
-	canWindowIncludeEMC2RecordTitle(windowName) {
+	static canWindowIncludeEMC2RecordTitle(windowName) {
 		; Not a named window - we don't know, so allow it.
 		if(!windowName)
 			return true
@@ -626,7 +626,7 @@ class EpicLib {
 	;  windowName (I,OPT) - If provided, we'll stamp this window name on EpicRecord.label for all returned matches.
 	;                       Can also affect whether we try to actually get the record title out of the given string.
 	;---------
-	extractEMC2RecordsFromText(text, ByRef exacts := "", ByRef possibles := "", windowName := "") {
+	static extractEMC2RecordsFromText(text, &exacts := "", &possibles := "", windowName := "") {
 		exacts    := []
 		possibles := []
 		
@@ -637,7 +637,7 @@ class EpicLib {
 		text := this.flattenDashedINIs(text)
 		
 		; First, give EpicRecord's more-stringent parsing logic a shot - since most titles are close to this format, it gives us the best chance at a nicer title.
-		record := new EpicRecord().initFromRecordString(text)
+		record := EpicRecord().initFromRecordString(text)
 		if(this.couldBeEMC2Record(record.ini, record.id)) {
 			record.label := windowName
 			record.title := this.cleanEMC2RecordTitle(record.title, record.ini, record.id)
@@ -656,24 +656,24 @@ class EpicLib {
 			
 			; Match: Valid INI + ID.
 			if(this.couldBeEMC2Record(ini, id)) {
-				exacts.push(new EpicRecord(ini, id, recordTitle, windowName))
+				exacts.push(EpicRecord(ini, id, recordTitle, windowName))
 				Continue
 			}
 			
 			; Possible: ID has potential, but no valid INI.
 			if(this.couldBeEMC2ID(id))
-				possibles.push(new EpicRecord("", id, recordTitle, windowName))
+				possibles.push(EpicRecord("", id, recordTitle, windowName))
 		}
 		
 		; Filter out duplicates.
-		this.removeEMC2RecordDuplicates(exacts, possibles)
+		this.removeEMC2RecordDuplicates(&exacts, &possibles)
 		
 		; Convert all exact maches' INIs.
 		For i,exact in exacts
 			exacts[i].ini := EpicLib.convertToUsefulEMC2INI(exact.ini)
 		
 		; Debug.popup("textBits",textBits, "exacts",exacts, "possibles",possibles)
-		return (exacts.length() + possibles.length()) > 0
+		return (exacts.Length + possibles.Length) > 0
 	}
 	
 	;---------
@@ -684,7 +684,7 @@ class EpicLib {
 	;  id    (I,OPT) - ID  of the record if we should remove it.
 	; RETURNS:        The title, but with extraneous bits (like the INI, ID, and "DBC" prefix) removed.
 	;---------
-	cleanEMC2RecordTitle(title, ini := "", id := "") {
+	static cleanEMC2RecordTitle(title, ini := "", id := "") {
 		delims := ["-", "/", "\", ":"]
 		
 		; Take INI and ID (and anything in between) out if they're given.
@@ -704,7 +704,7 @@ class EpicLib {
 	; RETURNS:        Same text, but with the dashes inside any known dashed INIs removed.
 	; NOTES:          This is undone by convertToUsefulEMC2INI().
 	;---------
-	flattenDashedINIs(text) {
+	static flattenDashedINIs(text) {
 		text := text.replace("PRJ-R", "PRJR") ; Project Readiness
 		text := text.replace("XDS-I", "XDSI") ; Design Issues
 		text := text.replace("DLG-H", "DLGH") ; DLG History
@@ -724,14 +724,14 @@ class EpicLib {
 	;  possibles (IO,REQ) - Array of potential matches as EpicRecord instances, will be updated.
 	; NOTES:          Titles are used to break ID ties - shorter title wins.
 	;---------
-	removeEMC2RecordDuplicates(ByRef exacts, ByRef possibles) {
+	static removeEMC2RecordDuplicates(&exacts, &possibles) {
 		; Filter out duplicates inside exacts.
-		exactsToKeep := {} ; {id: indexInExacts} ; We store the index so we can maintain the order (instead of sorting by ID)
+		exactsToKeep := Map() ; {id: indexInExacts} ; We store the index so we can maintain the order (instead of sorting by ID)
 		For exactLn,exact in exacts {
 			id := exact.id
 			
 			; New ID, store it off.
-			if(!exactsToKeep[id]) {
+			if(!exactsToKeep.Has(id)) {
 				exactsToKeep[id] := exactLn
 				Continue
 			}
@@ -750,7 +750,7 @@ class EpicLib {
 			title := exact.title
 			if(!title)
 				Continue
-			if(storedTitle && title.length() >= storedTitle.length())
+			if(storedTitle && StrLen(title) >= StrLen(storedTitle))
 				Continue
 			
 			; New exact wins, overwrite the old one.
@@ -759,7 +759,7 @@ class EpicLib {
 		}
 		
 		; Put the results back into exacts, in the original order (not the ID order found in exactsToKeep).
-		exactsTemp := {}
+		exactsTemp := Map()
 		For _,i in exactsToKeep
 			exactsTemp[i] := exacts[i]
 		exacts := exactsTemp.toValuesArray()
@@ -767,7 +767,7 @@ class EpicLib {
 		; Filter out possibles for IDs we already have in exacts (we don't really see duplicates within possibles).
 		possiblesTemp := []
 		For _,possible in possibles {
-			if(!exactsToKeep[possible.id])
+			if(!exactsToKeep.Has(possible.id))
 				possiblesTemp.push(possible)
 		}
 		possibles := possiblesTemp
@@ -780,7 +780,7 @@ class EpicLib {
 	;  windowNames2 (I,REQ) - Second set of window names
 	; RETURNS:        Combined (with no duplicates) forward-slash-delimited list of window names.
 	;---------
-	combineWindowNames(windowNames1, windowNames2) {
+	static combineWindowNames(windowNames1, windowNames2) {
 		; Combine both into an array and drop duplicates.
 		combinedNames := windowNames1.split("/").appendArray(windowNames2.split("/"))
 		combinedNames.removeDuplicates()
@@ -795,17 +795,17 @@ class EpicLib {
 	;  possibles (I,REQ) - Array of potential EpicRecord objects, from extractEMC2RecordsFromText.
 	; RETURNS:        Data array from Selector.prompt().
 	;---------
-	selectFromEMC2RecordMatches(exacts, possibles) {
+	static selectFromEMC2RecordMatches(exacts, possibles) {
 		abbrevsCache := []
-		s := new Selector().setTitle("Select EMC2 Object to use:").addOverrideFields({1:"INI"})
+		s := Selector().setTitle("Select EMC2 Object to use:").addOverrideFields(Map(1, "INI"))
 		
 		s.addSectionHeader("Full matches")
 		For _,record in exacts
-			s.addChoice(this.buildChoiceFromEMC2Record(record, abbrevsCache))
+			s.addChoice(this.buildChoiceFromEMC2Record(record, &abbrevsCache))
 		
 		s.addSectionHeader("Potential IDs")
 		For _,record in possibles
-			s.addChoice(this.buildChoiceFromEMC2Record(record, abbrevsCache))
+			s.addChoice(this.buildChoiceFromEMC2Record(record, &abbrevsCache))
 		
 		data := s.prompt()
 		if(data)
@@ -822,7 +822,7 @@ class EpicLib {
 	;                           this choice.
 	; RETURNS:        SelectorChoice instance describing the provided record.
 	;---------
-	buildChoiceFromEMC2Record(record, ByRef abbrevsCache) {
+	static buildChoiceFromEMC2Record(record, &abbrevsCache) {
 		ini         := record.ini
 		id          := record.id
 		title       := record.title
@@ -841,14 +841,14 @@ class EpicLib {
 		if(windowNames) {
 			abbrev := []
 			For _, windowName in windowNames.split("/")
-				abbrev.push(DataLib.forceUniqueValue(StringLower(windowName.sub(1, 2)), abbrevsCache))
+				abbrev.push(DataLib.forceUniqueValue(StrLower(windowName.sub(1, 2)), abbrevsCache))
 		} else if(ini) {
-			abbrev := DataLib.forceUniqueValue(StringLower(ini.charAt(1)), abbrevsCache)
+			abbrev := DataLib.forceUniqueValue(StrLower(ini.charAt(1)), abbrevsCache)
 		} else {
 			abbrev := DataLib.forceUniqueValue("u", abbrevsCache)
 		}
 		
-		return new SelectorChoice({NAME:name, ABBREV:abbrev, INI:ini, ID:id, TITLE:title})
+		return SelectorChoice(Map("NAME", name, "ABBREV", abbrev, "INI", ini, "ID", id, "TITLE", title))
 	}
 	;endregion EMC2 Record Extraction/Selection
 	
@@ -860,7 +860,7 @@ class EpicLib {
 	;  ignorePrefixes (I,OPT) - If you want to ignore certain prefixes, pass them here as an array
 	; RETURNS:        Abbreviation to use
 	;---------
-	buildAbbrevForRepoFolder(folderName, ignorePrefixes := "") {
+	static buildAbbrevForRepoFolder(folderName, ignorePrefixes := "") {
 		; Drop agent-orchestration stuff
 		if(folderName.startsWithAnyOf(ignorePrefixes, prefix))
 			folderName := folderName.removeFromStart(prefix)
@@ -869,7 +869,7 @@ class EpicLib {
 		nameSplit := folderName.split("-")
 		abbrev := ""
 		For i, bit in nameSplit {
-			if (i = nameSplit.Count())
+			if (i = nameSplit.Length)
 				abbrev .= bit.sub(1, 4) ; Take a little more of the last bit since it's usually the most descriptive
 			else	
 				abbrev .= bit.sub(1, 1)
@@ -886,8 +886,8 @@ class EpicLib {
 	;  type           (I,REQ) - The type to add choices for (index into folders object)
 	;  forceNewColumn (I,OPT) - Pass true to force a new column of choices with this set's header.
 	;---------
-	addFolderChoicesForType(s, folders, type, forceNewColumn := false) {
-		if (folders[type].length() <= 0)
+	static addFolderChoicesForType(s, folders, type, forceNewColumn := false) {
+		if (!folders.Has(type) || folders[type].Length <= 0)
 			return
 
 		if(forceNewColumn)
@@ -896,7 +896,7 @@ class EpicLib {
 			s.addSectionHeader(type)
 
 		For _, f in folders[type]
-			s.addChoice(new SelectorChoice({ NAME: f.name, ABBREV: f.abbrev, PATH: f.path }))
+			s.addChoice(SelectorChoice(Map("NAME", f.name, "ABBREV", f.abbrev, "PATH", f.path)))
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------
 }

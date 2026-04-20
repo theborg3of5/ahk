@@ -85,7 +85,7 @@ class WindowInfo {
 	; NOTES:          Blank values for this class' pieces are effectively wildcards - they match anything.
 	;---------
 	windowMatches(titleString) {
-		exe   := WinGet("ProcessName", titleString)
+		exe   := WinGetProcessName(titleString)
 		class := WinGetClass(titleString)
 		title := WinGetTitle(titleString)
 		return this.windowMatchesPieces(exe, class, title)
@@ -96,7 +96,7 @@ class WindowInfo {
 	; RETURNS:        The window ID if it matches, false otherwise.
 	;---------
 	isActive() {
-		settings := new TempSettings().titleMatchMode(this.titleMatchMode)
+		settings := TempSettings().titleMatchMode(this.titleMatchMode)
 		winId := WinActive(this.titleString)
 		settings.restore()
 		
@@ -108,7 +108,7 @@ class WindowInfo {
 	; RETURNS:        The matching window ID if one exists, false otherwise.
 	;---------
 	exists() {
-		ts := new TempSettings().titleMatchMode(this.titleMatchMode)
+		ts := TempSettings().titleMatchMode(this.titleMatchMode)
 		winId := WinExist(this.titleString)
 		ts.restore()
 		
@@ -136,7 +136,7 @@ class WindowInfo {
 	windowMatchesPieces(exe := "", class := "", title := "") {
 		; Since the input EXE is the full path, trim it down to just the EXE if we're doing an exact match.
 		if(this.titleMatchMode = TitleMatchMode.Exact)
-			SplitPath(exe, exe)
+			SplitPath(exe, &exe)
 		
 		; Check EXE, if we have it specified
 		if(this.exe && !TitleMatchMode.matches(exe, this.exe, this.titleMatchMode))

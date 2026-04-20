@@ -43,8 +43,9 @@ class FormattedList {
 	; RETURNS:        The list, in the chosen format.
 	;---------
 	getList(format := "") {
+		customDelim := ""
 		if(!format)
-			format := this.promptForFormat("Enter OUTPUT format for list", customDelim)
+			format := this.promptForFormat("Enter OUTPUT format for list", &customDelim)
 		if(!format)
 			return ""
 		
@@ -61,8 +62,9 @@ class FormattedList {
 	;  format (I,OPT) - Format to send the list in. If not given, we'll prompt the user for it.
 	;---------
 	sendList(format := "") {
+		customDelim := ""
 		if(!format)
-			format := this.promptForFormat("Enter OUTPUT format for list", customDelim)
+			format := this.promptForFormat("Enter OUTPUT format for list", &customDelim)
 		if(!format)
 			return
 		
@@ -113,7 +115,7 @@ class FormattedList {
 	;---------
 	determineListFormat(listObject) {
 		; Try to figure it out based on the list object itself.
-		if(isObject(listObject)) ; All objects are assumed to be arrays
+		if(listObject is Array) ; All objects are assumed to be arrays
 			format := this.Format_Array
 		else ; Everything else is assumed to be a string
 			format := this.determineFormatByDelimiters(listObject)
@@ -168,8 +170,8 @@ class FormattedList {
 	;  customDelim (O,OPT) - The custom delimiter the user entered (for use with Format_CustomDelim format).
 	; RETURNS:        The chosen format, should match a value from .Format_*
 	;---------
-	promptForFormat(title, ByRef customDelim := "") {
-		data := new Selector("listFormats.tls").setTitle(title).prompt()
+	promptForFormat(title, &customDelim := "") {
+		data := Selector("listFormats.tls").setTitle(title).prompt()
 		customDelim := data["CUSTOM_DELIM"]
 		return data["FORMAT"]
 	}
@@ -238,16 +240,16 @@ class FormattedList {
 		Switch format {
 			; Stuff that doesn't involve extra keys - just Send what comes out of .getListInFormat().
 			Case this.Format_Space, this.Format_Commas, this.Format_CommasSpaced, this.Format_Underscore, this.Format_NewLines, this.Format_CustomDelim:
-				SendRaw, % this.getListInFormat(format, customDelim)
+				SendText(this.getListInFormat(format, customDelim))
 				return true
 				
 			; OneNote columns - send a down arrow keystroke between items.
 			Case this.Format_OneNoteColumn:
 				For i,item in this.listAry {
-					SendRaw, % item
-					if(i < this.listAry.length()) {
-						SendPlay, {Down} ; SendPlay is required because OneNote doesn't reliably take {Down} keystrokes otherwise.
-						Sleep, 150 ; Required because otherwise the down keystrokes can get out of sync with the items.
+					SendText(item)
+					if(i < this.listAry.Length) {
+						SendPlay("{Down}") ; SendPlay is required because OneNote doesn't reliably take {Down} keystrokes otherwise.
+						Sleep(150) ; Required because otherwise the down keystrokes can get out of sync with the items.
 					}
 				}
 				return true

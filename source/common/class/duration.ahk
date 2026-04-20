@@ -24,7 +24,7 @@ class Duration {
 	;---------
 	hours {
 		get {
-			this.getUnitBreakdown(h)
+			this.getUnitBreakdown(&h)
 			return h
 		}
 	}
@@ -35,7 +35,7 @@ class Duration {
 	;---------
 	minutes {
 		get {
-			this.getUnitBreakdown("", m)
+			this.getUnitBreakdown(, &m)
 			return m
 		}
 	}
@@ -46,7 +46,7 @@ class Duration {
 	;---------
 	seconds {
 		get {
-			this.getUnitBreakdown("", "", s)
+			this.getUnitBreakdown(, , &s)
 			return s
 		}
 	}
@@ -62,7 +62,7 @@ class Duration {
 	;---------
 	displayTime {
 		get {
-			this.getUnitBreakdown(hours, minutes, seconds)
+			this.getUnitBreakdown(&hours, &minutes, &seconds)
 			
 			if(hours > 0)
 				return hours ":" minutes.prepadToLength(2, "0") ":" seconds.prepadToLength(2, "0") ; h:mm:ss
@@ -105,7 +105,7 @@ class Duration {
 	;---------
 	addTimeFromDurationString(durationString) {
 		currentNumber := ""
-		Loop, Parse, durationString
+		Loop Parse, durationString
 		{
 			if(Duration.isUnitChar(A_LoopField)) {
 				this.addTime(currentNumber, A_LoopField)
@@ -144,7 +144,7 @@ class Duration {
 	
 	;region ------------------------------ PRIVATE ------------------------------
 	; All supported units, from largest to smallest, with their conversion to seconds.
-	static unitConversionFactors := {Duration.Char_Hour:3600, Duration.Char_Minute:60, Duration.Char_Second:1} ; {unitChar: multiplierToSeconds}
+	static unitConversionFactors := Map("h", 3600, "m", 60, "s", 1) ; {unitChar: multiplierToSeconds}
 	
 	durationTotalSeconds := 0 ; The internal representation of all time (including hours, minutes, seconds)
 	
@@ -156,7 +156,7 @@ class Duration {
 	; RETURNS:        True if it's supported, False otherwise.
 	;---------
 	isUnitChar(char) {
-		return Duration.unitConversionFactors.HasKey(char)
+		return Duration.unitConversionFactors.Has(char)
 	}
 	
 	;---------
@@ -166,7 +166,7 @@ class Duration {
 	;  minutes (O,OPT) - The number of minutes in this Duration (excluding hours).
 	;  seconds (O,OPT) - The number of seconds in this Duration (excluding hours and minutes).
 	;---------
-	getUnitBreakdown(ByRef hours := "", ByRef minutes := "", ByRef seconds := "") {
+	getUnitBreakdown(&hours := "", &minutes := "", &seconds := "") {
 		remainingSeconds := this.durationTotalSeconds
 		
 		For unit,multiplier in Duration.unitConversionFactors {

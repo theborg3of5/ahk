@@ -48,7 +48,7 @@ class RelativeTime extends RelativeDateTimeBase {
 			unit := "m"
 		
 		; All of the time units (hours, minutes, seconds) are supported by EnvAdd(), so just use that.
-		this._instant := EnvAdd(this._instant, shiftAmount, unit) ; Can't use += format because it doesn't support this.*-style variable names.
+		this._instant := DateAdd(this._instant, shiftAmount, unit)
 		this.updatePartsFromInstant()
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------

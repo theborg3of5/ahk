@@ -59,18 +59,18 @@ class FlexTable {
 	;---------
 	; DESCRIPTION:    Create a new FlexTable instance.
 	; PARAMETERS:
-	;  guiId          (I,REQ) - ID of the GUI that we should add text controls to
+	;  guiObj         (I,REQ) - Gui object that we should add text controls to
 	;  x              (I,OPT) - X coordinate (in pixels) where the table should start. Defaults to 0 (left edge).
 	;  y              (I,OPT) - Y coordinate (in pixels) where the table should start. Defaults to 0 (top edge).
 	;  rowHeight      (I,OPT) - The height (in pixels) that a row should be in the table. Defaults to 25.
-	;  columnPadding  (I,OPT) - How much space (in pixels) should be between the end of the right-most 
+	;  columnPadding  (I,OPT) - How much space (in pixels) should be between the end of the right-most
 	;                           cell in the previous column, and a new column. Defaults to 30.
-	;  minColumnWidth (I,OPT) - Minimum width that a column must be (regardless of where 
+	;  minColumnWidth (I,OPT) - Minimum width that a column must be (regardless of where
 	;                           its right-most cell ends). Defaults to 0 (width of contents).
 	; RETURNS:        Reference to new FlexTable object
 	;---------
-	__New(guiId, x := 0, y := 0, rowHeight := 25, columnPadding := 30, minColumnWidth := 0) {
-		this.guiId          := guiId
+	__New(guiObj, x := 0, y := 0, rowHeight := 25, columnPadding := 30, minColumnWidth := 0) {
+		this.guiObj         := guiObj
 		this.rowHeight      := rowHeight
 		this.columnPadding  := columnPadding
 		this.minColumnWidth := minColumnWidth
@@ -94,22 +94,20 @@ class FlexTable {
 	; RETURNS:        Reference to new FlexTable object
 	;---------
 	addCell(cellText := "", leftPadding := "", width := "", extraProperties := "") {
-		this.makeGuiTheDefault()
-		
 		if(leftPadding)
 			this.addToX(leftPadding)
-		
+
 		propString := "x" this.xCurr " y" this.yCurr
 		if(width != "")
 			propString .= " w" width
 		if(extraProperties != "")
 			propString .= " " extraProperties
-		
+
 		displayText := StringLib.escapeCharUsingChar(cellText, "&", "&") ; Escape any ampersands in the string, as they'll otherwise turn the next character into an underlined hotkey.
-		Gui, Add, Text, % propString, % displayText
-		
+		this.guiObj.Add("Text", propString, displayText)
+
 		if(width = "")
-			GuiLib.getLabelSizeForText(cellText, width)
+			GuiLib.getLabelSizeForText(this.guiObj, cellText, &width)
 		this.addToX(width)
 	}
 	
@@ -124,11 +122,9 @@ class FlexTable {
 	; RETURNS:        Reference to new FlexTable object
 	;---------
 	addHeaderCell(titleText, leftPadding := "", width := "", extraProperties := "") {
-		this.makeGuiTheDefault()
-		
-		GuiLib.applyTitleFormat()
+		GuiLib.applyTitleFormat(this.guiObj)
 		this.addCell(titleText, leftPadding, width, extraProperties)
-		GuiLib.clearTitleFormat()
+		GuiLib.clearTitleFormat(this.guiObj)
 	}
 	
 	;---------
@@ -178,7 +174,7 @@ class FlexTable {
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
 	;region ------------------------------ PRIVATE ------------------------------
-	guiId := ""
+	guiObj := ""
 	
 	; Top-left corner of table
 	xMin := ""
@@ -227,18 +223,16 @@ class FlexTable {
 		this.yMax := DataLib.max(this.yMax, value)
 	}
 	
-	;---------
-	; DESCRIPTION:    Make the gui ID that we were given the default GUI (so 
-	;                 all of the relevant Gui, * commands apply to it)
-	;---------
-	makeGuiTheDefault() {
-		Gui, % this.guiId ":Default"
+	forceLastColumnToMinWidth() {
+		minRight := this.xCurrColumn + this.minColumnWidth
+		if(this.xMax < minRight)
+			this.xMax := minRight
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------
 	
 	;region ------------------------------ DEBUG ------------------------------
-	Debug_ToString(ByRef table) {
-		table.addLine("Gui ID",           this.guiId)
+	Debug_ToString(&table) {
+		table.addLine("Gui object",       this.guiObj)
 		table.addLine("Min X",            this.xMin)
 		table.addLine("Min Y",            this.yMin)
 		table.addLine("Max X",            this.xMax)

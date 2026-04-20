@@ -41,7 +41,7 @@ class ActionObjectPath extends ActionObjectBase {
 		if(pathType = "")
 			pathType := this.determinePathType(path)
 		
-		if(!this.selectMissingInfo(path, pathType))
+		if(!this.selectMissingInfo(&path, &pathType))
 			return
 		
 		this.path     := path
@@ -56,7 +56,7 @@ class ActionObjectPath extends ActionObjectBase {
 	;  pathType (O,OPT) - If the value is a path, the path type
 	; RETURNS:        true/false - whether the given value must be a path.
 	;---------
-	isThisType(value, ByRef pathType := "") {
+	static isThisType(value, &pathType := "") {
 		matchedPathType := this.determinePathType(value)
 		if(matchedPathType = "")
 			return false
@@ -88,7 +88,7 @@ class ActionObjectPath extends ActionObjectBase {
 	;  path (I,REQ) - The path itself.
 	; RETURNS:        The type of path, from PathType_* constants.
 	;---------
-	determinePathType(path) {
+	static determinePathType(path) {
 		if(StringLib.isURL(path))
 			return ActionObjectPath.PathType_URL
 		

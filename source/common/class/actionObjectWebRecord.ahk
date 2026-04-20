@@ -30,7 +30,7 @@ class ActionObjectWebRecord extends ActionObjectBase {
 	;  recordType (I,OPT) - The type of record, from ActionObjectWebRecord.RecordType_*. If not given, we'll try to 
 	;---------
 	__New(id, recordType := "") {
-		if(!this.selectMissingInfo(id, recordType))
+		if(!this.selectMissingInfo(&id, &recordType))
 			return ""
 		
 		this.id         := id
@@ -45,17 +45,17 @@ class ActionObjectWebRecord extends ActionObjectBase {
 	;  id         (O,OPT) - If the value is a web record, the ID
 	; RETURNS:        true/false - whether the given value must be a web record.
 	;---------
-	isThisType(value, ByRef recordType := "", ByRef id := "") {
+	static isThisType(value, &recordType := "", &id := "") {
 		if(!Config.contextIsWork)
 			return false
 		
-		if(value.startsWithAnyOf(["HDR ", "helpdesk "], matchedType)) {
+		if(value.startsWithAnyOf(["HDR ", "helpdesk "], &matchedType)) {
 			recordType := this.RecordType_Helpdesk
 			id := value.removeFromStart(matchedType)
 			return true
 		}
-		
-		if(value.startsWithAnyOf(["NullEx "], matchedType)) {
+
+		if(value.startsWithAnyOf(["NullEx "], &matchedType)) {
 			recordType := this.RecordType_NullEx
 			id := value.removeFromStart(matchedType)
 			return true

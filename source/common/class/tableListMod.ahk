@@ -73,7 +73,7 @@ class TableListMod {
 	;  row (IO,REQ) - Associative array of column names => column values for a single row.
 	;                 Will be updated according to the action described in this mod.
 	;---------
-	executeMod(ByRef row) {
+	executeMod(&row) {
 		columnValue := row[this.column]
 		
 		if(DataLib.isArray(columnValue)) {

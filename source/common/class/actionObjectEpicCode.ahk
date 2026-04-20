@@ -40,7 +40,7 @@ class ActionObjectEpicCode extends ActionObjectBase {
 		if(descriptorType = "")
 			descriptorType := this.determineDescriptorType()
 		
-		if(!this.selectMissingInfo(descriptor, descriptorType))
+		if(!this.selectMissingInfo(&descriptor, &descriptorType))
 			return ""
 		
 		this.descriptor     := descriptor
@@ -55,7 +55,7 @@ class ActionObjectEpicCode extends ActionObjectBase {
 	;  id             (O,OPT) - If the value is an EpicCode object, the ID
 	; RETURNS:        true/false - whether the given value must be an EpicCode object.
 	;---------
-	isThisType(value, ByRef descriptorType := "", ByRef id := "") {
+	static isThisType(value, &descriptorType := "", &id := "") {
 		if(!Config.contextIsWork)
 			return false
 		
@@ -92,7 +92,7 @@ class ActionObjectEpicCode extends ActionObjectBase {
 		
 		Switch this.descriptorType {
 			Case this.DescriptorType_Routine, this.DescriptorType_RoutineCDE:
-				EpicLib.splitServerLocation(this.descriptor, routine, tag)
+				EpicLib.splitServerLocation(this.descriptor, &routine, &tag)
 				
 				if(this.descriptorType = this.DescriptorType_Routine)
 					environmentId := Config.private["DBC_DEV_ENV_ID"]

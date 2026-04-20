@@ -40,12 +40,10 @@ class SelectorGui {
 	;                                column, this value is ignored and effectively dropped.
 	;---------
 	show(windowTitle, defaultOverrideData := "") {
-		Gui, % this.guiId ":Default"
-		
 		this.setDefaultOverrides(defaultOverrideData)
 		this.showPopup(windowTitle)
-		
-		this.saveUserInputs()
+		; saveUserInputs() is called from submitAndClose() before the gui is destroyed,
+		; so control values are read while they still exist.
 	}
 	
 	;---------
@@ -72,22 +70,18 @@ class SelectorGui {
 	;---------
 	; DESCRIPTION:    Update the font color of the given control so that it's "ghosted" if it's the initial value, and black otherwise.
 	; PARAMETERS:
-	;  guiId     (I,REQ) - The ID of the gui the control lives on
-	;  controlId (I,REQ) - The ID of the control to update
+	;  ctrl      (I,REQ) - The control object to update
+	;  fieldName (I,REQ) - The field name (label) for this override field
 	;---------
-	updateOverrideField(guiId, controlId) {
-		fieldName := controlId.removeFromStart(guiId SelectorGui.FieldVarSuffix_OverridesPrefix)
-		value := GuiControlGet("", controlId)
-		; Debug.popup("controlId",controlId, "guiId",guiId, "fieldName",fieldName, "value",value)
-		
-		; Set the overall gui font color - ghost if it's the default, black (default color) otherwise
+	updateOverrideField(ctrl, fieldName) {
+		value := ctrl.Value
+		; Debug.popup("fieldName",fieldName, "value",value)
+
+		; Set the font color - ghost if it's the default, black (default color) otherwise
 		if(fieldName = value)
-			Gui, Font, % "c" SelectorGui.FontColor_Ghost
+			ctrl.SetFont("c" SelectorGui.FontColor_Ghost)
 		else
-			Gui, Font, -c
-		
-		; Tell the edit control to update to match
-		GuiControl, Font, % controlId
+			ctrl.SetFont("-c")
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------
 	
@@ -95,25 +89,23 @@ class SelectorGui {
 	; Special characters
 	static Char_NewColumn := "! " ; Space after is required
 	
-	static Prefix_GuiSpecialLabels        := "SelectorGui_"
-	static FieldVarSuffix_Choice          := "Choice"
-	static FieldVarSuffix_OverridesPrefix := "Override"
 	static FontColor_Default              := "BDAE9D"
 	static FontColor_Ghost                := "BDAE9D"
-	
+
 	; GUI spacing/positioning constants
-	static Margins :=  {LEFT:10, RIGHT:10, TOP:10, BOTTOM:10}
-	static Padding :=  {INDEX_ABBREV:5, ABBREV_NAME:10, OVERRIDE_FIELDS:5, COLUMNS:30}
-	static Widths  :=  {INDEX:25, ABBREV:50} ; Other widths are calculated based on contents and available space
-	static Heights :=  {LINE:25, FIELD:24}
-	
-	guiId                    := "" ; Window handle for the gui
-	fieldVar_Choice          := "" ; Unique name (starting with this.guiId) for the choice field.
-	fieldVar_OverridesPrefix := "" ; Unique prefix (starting with this.guiId) for the override fields.
-	
+	static Margins :=  Map("LEFT",10, "RIGHT",10, "TOP",10, "BOTTOM",10)
+	static Padding :=  Map("INDEX_ABBREV",5, "ABBREV_NAME",10, "OVERRIDE_FIELDS",5, "COLUMNS",30)
+	static Widths  :=  Map("INDEX",25, "ABBREV",50) ; Other widths are calculated based on contents and available space
+	static Heights :=  Map("LINE",25, "FIELD",24)
+
+	guiObj                   := "" ; Gui object
+	guiId                    := "" ; Window handle for the gui (= this.guiObj.Hwnd)
+	choiceCtrl               := "" ; Control object for the choice field
+	overrideFieldCtrls       := "" ; Map of label => control object for override fields
+
 	overrideFields := "" ; Simple array of the names for the fields to add
 	choiceQuery    := "" ; What the user entered in the query (bottom-left) field
-	overrideData   := {} ; {label: inputValue}
+	overrideData   := Map() ; {label: inputValue}
 	
 	; Height and width for the gui as a whole
 	totalHeight   := 0
@@ -152,24 +144,29 @@ class SelectorGui {
 	;---------
 	createPopup(iconPath := "") {
 		; Set the provided icon (if any) before we create the gui - it uses the icon in effect when it's initially created.
-		settings := new TempSettings().trayIcon(iconPath)
-		
-		; Create gui and save off window handle
-		Gui, New, +HWNDguiId ; guiId := window handle
-		this.guiId := guiId
+		settings := TempSettings().trayIcon(iconPath)
+
+		; Create gui and save off gui object and window handle
+		this.guiObj := Gui()
+		this.guiId := this.guiObj.Hwnd
 		settings.restore() ; Restore original icon now that the gui's created
-		
+
+		; Event handlers (replaces +Label prefix approach)
+		this.guiObj.OnEvent("Close", (*) => this.guiObj.Destroy())
+		this.guiObj.OnEvent("Escape", (*) => this.guiObj.Destroy())
+
 		; Other gui options
-		Gui, % "+Label" SelectorGui.Prefix_GuiSpecialLabels ; SelectorGui_ prefix for Gui* functions (GuiClose > SelectorGui_Close, etc.).
-		Gui, -MinimizeBox -MaximizeBox ; Hide maximize/minimize icons
-		
-		; Names for global variables that we'll use for values of fields. This way they can be declared global and retrieved in the same way, without having to pre-define global variables.
-		this.fieldVar_Choice          := guiId SelectorGui.FieldVarSuffix_Choice
-		this.fieldVar_OverridesPrefix := guiId SelectorGui.FieldVarSuffix_OverridesPrefix
-		
-		Gui, Color, 2A211C
-		Gui, Font, % "s12 c" SelectorGui.FontColor_Default
-		Gui, Add, Button, Hidden Default +gSelectorGui_Submit ; Hidden button for {Enter} submission - calls into SelectorGui_Submit
+		this.guiObj.Opt("-MinimizeBox -MaximizeBox") ; Hide maximize/minimize icons
+
+		; Initialize override field control map
+		this.overrideFieldCtrls := Map()
+
+		this.guiObj.BackColor := "2A211C"
+		this.guiObj.SetFont("s12 c" SelectorGui.FontColor_Default)
+
+		; Hidden button for {Enter} submission
+		submitBtn := this.guiObj.Add("Button", "Hidden Default")
+		submitBtn.OnEvent("Click", (*) => this.submitAndClose())
 	}
 	
 	;---------
@@ -181,11 +178,11 @@ class SelectorGui {
 	;  minColumnWidth (I,REQ) - Minimum width (in px) that each column should be.
 	;---------
 	addChoices(choices, sectionHeaders, minColumnWidth) {
-		flex := new FlexTable(this.guiId, this.Margins["LEFT"], this.Margins["TOP"], this.Heights["LINE"], this.Padding["COLUMNS"], minColumnWidth)
+		flex := FlexTable(this.guiObj, this.Margins["LEFT"], this.Margins["TOP"], this.Heights["LINE"], this.Padding["COLUMNS"], minColumnWidth)
 		
 		isEmptyColumn := true
 		For i,choice in choices {
-			sectionTitle := sectionHeaders[i]
+			sectionTitle := (sectionHeaders && sectionHeaders.Has(i)) ? sectionHeaders[i] : ""
 			
 			; Add new column if needed
 			if(sectionTitle.startsWith(this.Char_NewColumn)) {
@@ -253,12 +250,12 @@ class SelectorGui {
 	; DESCRIPTION:    Add the choice field (bottom-left, always appears).
 	;---------
 	addChoiceField() {
-		Gui, Font, -c ; Revert the color back to system default (so it can match the edit fields, which use the system default background).
-		
+		this.guiObj.SetFont("-c") ; Revert the color back to system default (so it can match the edit fields, which use the system default background).
+
 		x := this.Margins["LEFT"] ; Lines up with first column's indices
 		y := this.totalHeight
 		w := this.calcChoiceFieldWidth()
-		this.addField(this.fieldVar_Choice, x, y, w, this.Heights["FIELD"])
+		this.choiceCtrl := this.addField(x, y, w, this.Heights["FIELD"])
 	}
 	
 	;---------
@@ -278,21 +275,21 @@ class SelectorGui {
 	;                 data regardless of the choice they pick.
 	;---------
 	addOverrideFields() {
-		Gui, Font, % "c" SelectorGui.FontColor_Ghost ; Start out gray (default, ghost-texty values) - SelectorGui_OverrideFieldChanged() will change it dynamically based on contents.
-		
+		this.guiObj.SetFont("c" SelectorGui.FontColor_Ghost) ; Start out gray (default, ghost-texty values) - updateOverrideField will change it dynamically based on contents.
+
 		; Where to start placing override fields - lines up with the first choice column's names.
 		xOverridesBlock := this.Margins["LEFT"] + this.Widths["INDEX"] + this.Padding["INDEX_ABBREV"] + this.Widths["ABBREV"] + this.Padding["ABBREV_NAME"]
 		; Total width available to the override fields - Fill the rest of the horizontal space under the choices table.
 		xChoicesRightEdge := this.Margins["LEFT"] + this.choicesWidth
 		wOverridesBlock := xChoicesRightEdge - xOverridesBlock
-		
+
 		x := xOverridesBlock
 		y := this.totalHeight
 		width := this.calcSingleOverrideFieldWidth(wOverridesBlock)
-		
+
 		For _,label in this.overrideFields {
-			varName := this.fieldVar_OverridesPrefix label
-			this.addField(varName, x, y, width, this.Heights["FIELD"], label, SelectorGui.Prefix_GuiSpecialLabels "OverrideFieldChanged") ; Default in the label, like ghost text, and bind any changes to SelectorGui_OverrideFieldChanged().
+			ctrl := this.addField(x, y, width, this.Heights["FIELD"], label, label) ; Default in the label, like ghost text, and bind changes to updateOverrideField.
+			this.overrideFieldCtrls[label] := ctrl
 			x += width + this.Padding["OVERRIDE_FIELDS"]
 		}
 	}
@@ -305,7 +302,7 @@ class SelectorGui {
 	; RETURNS:        The width that each override field should be.
 	;---------
 	calcSingleOverrideFieldWidth(overrideBlockWidth) {
-		numDataFields  := this.overrideFields.length()
+		numDataFields  := this.overrideFields.Count
 		widthForFields := overrideBlockWidth - ((numDataFields - 1) * this.Padding["OVERRIDE_FIELDS"])
 		return widthForFields / numDataFields
 	}
@@ -313,25 +310,23 @@ class SelectorGui {
 	;---------
 	; DESCRIPTION:    Add a single field to the popup with the provided information.
 	; PARAMETERS:
-	;  varName (I,REQ) - The name of the global variable to link to the field.
-	;  x       (I,REQ) - The x coordinate to add the control at.
-	;  y       (I,REQ) - The y coordinate to add the control at.
-	;  width   (I,REQ) - The field width
-	;  height  (I,REQ) - The field height
-	;  data    (I,OPT) - The data to pre-populate the field with
-	;  subGoto (I,OPT) - The label/function name to bind the field to (that will fire when changes
-	;                    are made to the field).
+	;  x         (I,REQ) - The x coordinate to add the control at.
+	;  y         (I,REQ) - The y coordinate to add the control at.
+	;  width     (I,REQ) - The field width
+	;  height    (I,REQ) - The field height
+	;  data      (I,OPT) - The data to pre-populate the field with
+	;  fieldName (I,OPT) - The field name (label) for this override field, used for change event binding.
+	; RETURNS:        The control object for the new field.
 	;---------
-	addField(varName, x, y, width, height, data := "", subGoto := "") {
-		GuiLib.createDynamicGlobal(varName) ; Declare the provided unique variable name as a global so we can use it for the control
-		
-		propString := "v" varName                                        ; Variable to save to on Gui, Submit
-		propString .= " x" x " y" y " w" width " h" height               ; Position/size
+	addField(x, y, width, height, data := "", fieldName := "") {
+		propString := "x" x " y" y " w" width " h" height               ; Position/size
 		propString .= " -E" MicrosoftLib.ExStyle_SunkenBorder " +Border" ; Styling - remove sunken border, add a normal border
-		if(subGoto)
-			propString .= " g" subGoto
-		
-		Gui, Add, Edit, % propString, % data
+
+		ctrl := this.guiObj.Add("Edit", propString, data)
+		if(fieldName)
+			ctrl.OnEvent("Change", (ctrl, *) => this.updateOverrideField(ctrl, fieldName))
+
+		return ctrl
 	}
 	
 	;---------
@@ -342,9 +337,11 @@ class SelectorGui {
 	; NOTES:          Assumes that the desired gui is the default.
 	;---------
 	setDefaultOverrides(defaultOverrideData) {
+		if(!defaultOverrideData)
+			return
 		For label,value in defaultOverrideData {
-			if(value != "")
-				GuiControl, , % label, % value ; Blank command (first parameter) = replace contents
+			if(value != "" && this.overrideFieldCtrls.Has(label))
+				this.overrideFieldCtrls[label].Value := value
 		}
 	}
 	
@@ -356,13 +353,14 @@ class SelectorGui {
 	; NOTES:          Assumes that the desired gui is the default.
 	;---------
 	showPopup(windowTitle) {
-		Gui, Show, % "h" this.totalHeight " w" this.totalWidth, % windowTitle
-		
+		this.guiObj.Title := windowTitle
+		this.guiObj.Show("h" this.totalHeight " w" this.totalWidth)
+
 		; Focus the choice field
-		GuiControl, Focus, % this.fieldVar_Choice
-		
+		this.choiceCtrl.Focus()
+
 		; Wait for gui to close
-		WinWaitClose, % "ahk_id " this.guiId
+		WinWaitClose("ahk_id " this.guiObj.Hwnd)
 	}
 	
 	;---------
@@ -370,11 +368,13 @@ class SelectorGui {
 	;---------
 	saveUserInputs() {
 		; Choice field
-		this.choiceQuery := GuiLib.getDynamicGlobal(this.fieldVar_Choice) ; Global value set by Gui, Submit
-		
+		this.choiceQuery := this.choiceCtrl.Value
+
 		; Override fields
 		For num,label in this.overrideFields {
-			inputVal := GuiLib.getDynamicGlobal(this.fieldVar_OverridesPrefix label) ; Global value set by Gui, Submit
+			if(!this.overrideFieldCtrls.Has(label))
+				continue
+			inputVal := this.overrideFieldCtrls[label].Value
 			if(inputVal && (inputVal != label))
 				this.overrideData[label] := inputVal
 		}
@@ -382,10 +382,10 @@ class SelectorGui {
 	;endregion ------------------------------ PRIVATE ------------------------------
 	
 	;region ------------------------------ DEBUG ------------------------------
-	Debug_ToString(ByRef table) {
+	Debug_ToString(&table) {
 		table.addLine("Gui ID (handle)",            this.guiId)
-		table.addLine("Choice field var",           this.fieldVar_Choice)
-		table.addLine("Override fields var prefix", this.fieldVar_OverridesPrefix)
+		table.addLine("Choice control",             this.choiceCtrl)
+		table.addLine("Override field controls",    this.overrideFieldCtrls)
 		table.addLine("Override fields",            this.overrideFields)
 		table.addLine("Choice query",               this.choiceQuery)
 		table.addLine("Override data",              this.overrideData)
@@ -394,21 +394,14 @@ class SelectorGui {
 		table.addLine("Choices table width",        this.choicesWidth)
 	}
 	;endregion ------------------------------ DEBUG ------------------------------
-}
 
-; These can't live in the class because they're only specified by name (via the +Label option on the gui).
-;region GUI events
-; Window was closed
-SelectorGui_Close() {
-	Gui, Destroy
+	;region ------------------------------ INTERNAL EVENT HANDLERS ------------------------------
+	;---------
+	; DESCRIPTION:    Submit the gui - save field values before destroying.
+	;---------
+	submitAndClose() {
+		this.saveUserInputs() ; Read control values while they still exist
+		this.guiObj.Destroy()
+	}
+	;endregion ------------------------------ INTERNAL EVENT HANDLERS ------------------------------
 }
-; Enter was pressed (which fires the hidden, default button)
-SelectorGui_Submit() {
-	Gui, Submit ; Actually saves edit controls' values to respective GuiIn* variables
-	Gui, Destroy
-}
-; One of the override fields changed
-SelectorGui_OverrideFieldChanged() {
-	SelectorGui.updateOverrideField(A_Gui, A_GuiControl)
-}
-;endregion GUI events

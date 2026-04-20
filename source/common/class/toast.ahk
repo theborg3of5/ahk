@@ -37,8 +37,8 @@ class Toast {
 	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be
 	;                           found in .getStyles().
 	;---------
-	ShowShort(text, styleOverrides := "") {
-		new Toast(text, styleOverrides).showForSeconds(1)
+	static ShowShort(text, styleOverrides := "") {
+		Toast(text, styleOverrides).showForSeconds(1)
 	}
 	
 	;---------
@@ -47,8 +47,8 @@ class Toast {
 	;  text           (I,REQ) - Text to include in the toast.
 	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be found in .getStyles().
 	;---------
-	ShowMedium(text, styleOverrides := "") {
-		new Toast(text, styleOverrides).showForSeconds(2)
+	static ShowMedium(text, styleOverrides := "") {
+		Toast(text, styleOverrides).showForSeconds(2)
 	}
 	
 	;---------
@@ -57,8 +57,8 @@ class Toast {
 	;  text           (I,REQ) - Text to include in the toast.
 	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be found in .getStyles().
 	;---------
-	ShowLong(text, styleOverrides := "") {
-		new Toast(text, styleOverrides).showForSeconds(5)
+	static ShowLong(text, styleOverrides := "") {
+		Toast(text, styleOverrides).showForSeconds(5)
 	}
 	
 	;---------
@@ -68,7 +68,7 @@ class Toast {
 	;  errorMessage      (I,OPT) - Technical error text (what happened code-wise?)
 	;  mitigationMessage (I,OPT) - What we did instead (what did we do to make the failure less impactful?)
 	;---------
-	ShowError(problemMessage, errorMessage := "", mitigationMessage := "") {
+	static ShowError(problemMessage, errorMessage := "", mitigationMessage := "") {
 		toastText := Toast.buildErrorText(problemMessage, errorMessage, mitigationMessage)
 		overrides := Toast.getErrorStyleOverrides()
 
@@ -81,8 +81,8 @@ class Toast {
 	;  toastText      (I,OPT) - The text to show in the toast.
 	;  styleOverrides (I,OPT) - Any style overrides that you'd like to make. Defaults can be found in .getStyles().
 	;---------
-	BlockAndShowMedium(text, styleOverrides := "") {
-		new Toast(text, styleOverrides).blockingOn().showForSeconds(2)
+	static BlockAndShowMedium(text, styleOverrides := "") {
+		Toast(text, styleOverrides).blockingOn().showForSeconds(2)
 	}
 
 	;---------
@@ -92,11 +92,11 @@ class Toast {
 	;  errorMessage      (I,OPT) - Technical error text (what happened code-wise?)
 	;  mitigationMessage (I,OPT) - What we did instead (what did we do to make the failure less impactful?)
 	;---------
-	BlockAndShowError(problemMessage, errorMessage := "", mitigationMessage := "") {
+	static BlockAndShowError(problemMessage, errorMessage := "", mitigationMessage := "") {
 		toastText := Toast.buildErrorText(problemMessage, errorMessage, mitigationMessage)
 		overrides := Toast.getErrorStyleOverrides()
 
-		new Toast(toastText, overrides).blockingOn().showForSeconds(2)
+		Toast(toastText, overrides).blockingOn().showForSeconds(2)
 	}
 	;endregion Static one-off "show a toast" methods
 	
@@ -180,11 +180,11 @@ class Toast {
 		
 		numMS := numSeconds * 1000
 		if(this.isBlocking) {
-			Sleep, % numMS
+			Sleep(numMS)
 			this.finishShow()
 		} else {
 			finishFunc := ObjBindMethod(this, "finishShow")
-			SetTimer, % finishFunc, % -numMS
+			SetTimer(finishFunc, -numMS)
 		}
 		
 		return this
@@ -214,7 +214,7 @@ class Toast {
 	;---------
 	setText(newText) {
 		; Save off the bounds of the toast's current monitor so when we move it with VisualWindow later, we can stay on that monitor.
-		currMonitorBounds := MonitorLib.getWorkAreaForWindow("ahk_id " this.guiId)
+		currMonitorBounds := MonitorLib.getWorkAreaForWindow("ahk_id " this.guiObj.Hwnd)
 		
 		this.setLabelText(newText)
 		this.move("", "", currMonitorBounds)
@@ -263,7 +263,7 @@ class Toast {
 			return
 		
 		this.hide()
-		Gui, % this.guiId ":Destroy"
+		this.guiObj.Destroy()
 		this.isGuiDestroyed := true
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
@@ -274,7 +274,7 @@ class Toast {
 	; RETURNS:        The current text.
 	;---------
 	getCurrentText() {
-		return GuiControlGet("", this.labelVarName)
+		return this.labelCtrl.Text
 	}
 	
 	;---------
@@ -286,14 +286,13 @@ class Toast {
 	;---------
 	setLabelText(newText) {
 		newText := StringLib.escapeCharUsingChar(newText, "&", "&")
-		Gui, % this.guiId ":Default"
-		
+
 		; Figure out how big the text control needs to be to fit its contents
-		GuiLib.getLabelSizeForText(newText, textWidth, textHeight)
-		
+		GuiLib.getLabelSizeForText(this.guiObj, newText, &textWidth, &textHeight)
+
 		; Update the text and width/height
-		GuiControl,     , % this.labelVarName, % newText
-		GuiControl, Move, % this.labelVarName, % "w" textWidth " h" textHeight
+		this.labelCtrl.Text := newText
+		this.labelCtrl.Move(, , textWidth, textHeight)
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------
 	
@@ -301,8 +300,9 @@ class Toast {
 	static ToastTitle := "[TOAST]"
 	
 	styles         := ""
-	guiId          := ""
-	labelVarName   := ""
+	guiObj         := ""
+	guiId          := "" ; = this.guiObj.Hwnd, kept for backward compat with title strings
+	labelCtrl      := "" ; Control object for the toast label
 	x              := ""
 	y              := ""
 	parentIdString := "" ; If this is set, we'll position relative to the window identified here for "special" coordinates.
@@ -319,25 +319,24 @@ class Toast {
 	; SIDE EFFECTS:   Updates members for window handle and label global variable name.
 	;---------
 	buildGui(styleOverrides := "") {
-		; Create gui and save off window handle
-		Gui, New, +HWNDguiId ; guiId := window handle
-		this.guiId := guiId
-		
+		; Create gui and save off gui object and window handle
+		this.guiObj := Gui()
+		this.guiId := this.guiObj.Hwnd
+
 		; Other gui options
-		Gui, -Caption ; No titlebar/menu or border
-		Gui, +AlwaysOnTop +ToolWindow ; Always on top, but don't show in taskbar
-		Gui, % "+E" MicrosoftLib.ExStyle_ClickThrough ; Can't be focused with a click (you "click through" to window underneath)
-		
+		this.guiObj.Opt("-Caption") ; No titlebar/menu or border
+		this.guiObj.Opt("+AlwaysOnTop +ToolWindow") ; Always on top, but don't show in taskbar
+		this.guiObj.Opt("+E" MicrosoftLib.ExStyle_ClickThrough) ; Can't be focused with a click (you "click through" to window underneath)
+
 		; Set formatting options
 		styles := this.getStyles(styleOverrides)
-		Gui, Color, % styles["BACKGROUND_COLOR"]
-		Gui, Font, % "c" styles["FONT_COLOR"] " s" styles["FONT_SIZE"], % styles["FONT_NAME"]
-		Gui, Margin, % styles["MARGIN_X"], % styles["MARGIN_Y"]
-		
+		this.guiObj.BackColor := styles["BACKGROUND_COLOR"]
+		this.guiObj.SetFont("c" styles["FONT_COLOR"] " s" styles["FONT_SIZE"], styles["FONT_NAME"])
+		this.guiObj.MarginX := styles["MARGIN_X"]
+		this.guiObj.MarginY := styles["MARGIN_Y"]
+
 		; Add label
-		this.labelVarName := this.guiId "Text" ; Come up with a unique variable we can use to reference the label (to change its contents if needed).
-		GuiLib.createDynamicGlobal(this.labelVarName) ; Declare the provided unique variable name as a global so we can use it for the control
-		Gui, Add, Text, % "v" this.labelVarName " " styles["TEXT_ALIGN"]
+		this.labelCtrl := this.guiObj.Add("Text", styles["TEXT_ALIGN"])
 	}
 	
 	;---------
@@ -350,8 +349,8 @@ class Toast {
 	; RETURNS:        Combined array of styles to use for the toast gui.
 	;---------
 	getStyles(styleOverrides := "") {
-		styles := {}
-		
+		styles := Map()
+
 		; Default styles
 		styles["BACKGROUND_COLOR"] := "2A211C" ; Dark gray
 		styles["FONT_COLOR"]       := "BDAE9D" ; Light gray
@@ -360,7 +359,7 @@ class Toast {
 		styles["MARGIN_X"]         := 5
 		styles["MARGIN_Y"]         := 0
 		styles["TEXT_ALIGN"]       := "Left"
-		
+
 		; Merge in any overrides
 		return styles.mergeFromObject(styleOverrides)
 	}
@@ -369,9 +368,9 @@ class Toast {
 	; DESCRIPTION:    The style overrides we use for error toasts.
 	; RETURNS:        Associative array of style overrides
 	;---------
-	getErrorStyleOverrides() {
-		overrides := {}
-		
+	static getErrorStyleOverrides() {
+		overrides := Map()
+
 		overrides["BACKGROUND_COLOR"] := "000000" ; Black
 		overrides["FONT_COLOR"]       := "CC9900" ; Dark yellow/gold
 		overrides["FONT_SIZE"]        := 22
@@ -394,35 +393,39 @@ class Toast {
 	;                   respective edge of that monitor.
 	;---------
 	move(x := "", y := "", bounds := "") {
-		settings := new TempSettings().detectHiddenWindows("On")
-		
+		settings := TempSettings().detectHiddenWindows("On")
+
 		; Default to current position, then bottom-right corner
 		x := DataLib.coalesce(x, this.x, VisualWindow.X_RightEdge)
 		y := DataLib.coalesce(y, this.y, VisualWindow.Y_BottomEdge)
-		
-		Gui, % this.guiId ":Default"
-		idString := "ahk_id " this.guiId
-		
+
+		idString := "ahk_id " this.guiObj.Hwnd
+
 		isWinHidden := !WindowLib.isVisible(idString)
-		if(isWinHidden)
-			Gui, Show, AutoSize NoActivate Hide, % this.ToastTitle ; Resize to size of contents, but keep toast hidden until after we move it to reduce flicker
-		else
-			Gui, Show, AutoSize NoActivate,      % this.ToastTitle ; Resize to size of contents
-		
+		if(isWinHidden) {
+			this.guiObj.Title := this.ToastTitle
+			this.guiObj.Show("AutoSize NoActivate Hide") ; Resize to size of contents, but keep toast hidden until after we move it to reduce flicker
+		} else {
+			this.guiObj.Title := this.ToastTitle
+			this.guiObj.Show("AutoSize NoActivate") ; Resize to size of contents
+		}
+
 		; If a parent is specified, use the bounds of that window instead of the toast's current monitor.
 		if(this.parentIdString != "")
-			bounds := new VisualWindow(this.parentIdString).getBounds()
-		
-		window := new VisualWindow(idString)
+			bounds := VisualWindow(this.parentIdString).getBounds()
+
+		window := VisualWindow(idString)
 		window.move(x, y, bounds)
-		
-		if(isWinHidden)
-			Gui, Show, NoActivate, % this.ToastTitle
-		
+
+		if(isWinHidden) {
+			this.guiObj.Title := this.ToastTitle
+			this.guiObj.Show("NoActivate")
+		}
+
 		; Store off new position
 		this.x := x
 		this.y := y
-		
+
 		settings.restore()
 	}
 	
@@ -442,17 +445,15 @@ class Toast {
 	;  opacity (I,REQ) - The opacity to end up at.
 	;---------
 	fadeToastToOpacity(opacity) {
-		Gui, % this.guiId ":Default"
-		
-		startOpacity := WinGet("Transparent", "ahk_id " this.guiId)
+		startOpacity := WinGetTransparent("ahk_id " this.guiObj.Hwnd)
 		if(startOpacity = "")
 			startOpacity := 0 ; If no transparency value set yet, we're fading in, so just use 0.
-		
+
 		numSteps := 10
 		stepSize := (opacity - startOpacity) / numSteps
-		Loop, %numSteps% {
-			WinSet, Transparent, % startOpacity + (A_Index * stepSize), % "ahk_id " this.guiId
-			Sleep, 10 ; 10ms between steps - can vary fade speed with number of steps
+		Loop numSteps {
+			WinSetTransparent(startOpacity + (A_Index * stepSize), "ahk_id " this.guiObj.Hwnd)
+			Sleep(10) ; 10ms between steps - can vary fade speed with number of steps
 		}
 	}
 	
@@ -470,7 +471,7 @@ class Toast {
 	; NOTES:          If any of the bits are missing, their respective line will not be included (for
 	;                 mitigationMessage, that includes the extra newline too).
 	;---------
-	buildErrorText(problemMessage, errorMessage, mitigationMessage) {
+	static buildErrorText(problemMessage, errorMessage, mitigationMessage) {
 		text := problemMessage
 		
 		if(errorMessage != "")

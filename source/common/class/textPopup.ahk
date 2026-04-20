@@ -25,28 +25,25 @@ class TextPopup {
 	__New(table) {
 		; Tell the table to have a nice thick outer border
 		table.setBorderType(TextTable.BorderType_BoldLine)
-		
+
 		; Set up and show popup
 		editSizes := this.calculateEditDimensions(table)
-		this.guiId := this.createPopup(editSizes, table)
+		this.createPopup(editSizes, table)
 	}
 	
 	;---------
 	; DESCRIPTION:    Show the popup and pause until it closes.
 	;---------
 	show() {
-		Gui, % this.guiId ":Show"
-		
+		this.guiObj.Show()
+
 		; Wait for it to close (pausing the current script until that happens)
-		WinWaitClose, % "ahk_id " this.guiId
+		WinWaitClose("ahk_id " this.guiObj.Hwnd)
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
 	;region ------------------------------ PRIVATE ------------------------------
 	;  - Constants
-	static Prefix_GuiSpecialLabels := "TextPopupGui_" ; Used to have the gui call TextPopupGui_* functions instead of just Gui* ones
-	static Edit_ControlId := "Edit1"
-	
 	static BackgroundColor       := "444444"
 	static FontColor             := "00FF00"
 	static FontName              := "Consolas"
@@ -54,9 +51,10 @@ class TextPopup {
 	static Edit_LineHeight       := 19 ; How many px tall each line is in the edit control
 	static Edit_CharWidth        := 9  ; How many px wide each character is in the edit control
 	static Edit_TotalMarginWidth := 8  ; How much extra space the edit control needs to cut off at character edges
-	
-	guiId        := "" ; Gui's window handle
-	editFieldVar := "" ; Unique ID for edit field, based on this.guiId
+
+	guiObj       := "" ; Gui object
+	guiId        := "" ; Gui's window handle (= this.guiObj.Hwnd)
+	editCtrl     := "" ; Control object for the edit field
 	
 	;---------
 	; DESCRIPTION:    Calculate the width and height of the edit field based on the content of the given TextTable.
@@ -79,7 +77,7 @@ class TextPopup {
 		editHeight := this.calcMaxSize(availableHeight, this.Edit_LineHeight, table.getHeight())
 		editWidth  := this.calcMaxSize(availableWidth,  this.Edit_CharWidth,  table.getWidth()) + this.Edit_TotalMarginWidth ; Add margin back on
 		
-		return {"WIDTH":editWidth, "HEIGHT":editHeight}
+		return Map("WIDTH",editWidth, "HEIGHT",editHeight)
 	}
 	
 	;---------
@@ -111,59 +109,58 @@ class TextPopup {
 	; RETURNS:        The guiId of the new popup (not yet shown)
 	;---------
 	createPopup(editSizes, table) {
-		; Create gui and save off window handle
-		Gui, New, +HWNDguiId ; guiId := window handle
-		
+		; Create gui and save off gui object and window handle
+		this.guiObj := Gui()
+		this.guiId := this.guiObj.Hwnd
+
+		; Event handlers (replaces +Label prefix approach)
+		this.guiObj.OnEvent("Close", (*) => this.guiObj.Destroy())
+		this.guiObj.OnEvent("Escape", (*) => this.guiObj.Destroy())
+
 		; Other gui options
-		Gui, % "+Label" this.Prefix_GuiSpecialLabels ; TextPopupGui_* functions instead of Gui*
-		Gui, -Caption +Border ; No titlebar/menu, but still have a border
-		
+		this.guiObj.Opt("-Caption +Border") ; No titlebar/menu, but still have a border
+
 		; Apply margins and colors
-		Gui, Margin, 0, 0
-		Gui, Color, % this.BackgroundColor
-		Gui, Font, % "c" this.FontColor " s" this.FontSize, % this.FontName
-		
-		; Initialize edit field variable
-		this.editFieldVar := guiId "TextEdit"
-		GuiLib.createDynamicGlobal(this.editFieldVar)
-		
+		this.guiObj.MarginX := 0
+		this.guiObj.MarginY := 0
+		this.guiObj.BackColor := this.BackgroundColor
+		this.guiObj.SetFont("c" this.FontColor " s" this.FontSize, this.FontName)
+
 		; Create and focus edit control (holds everything we display)
 		content := table.getText()
 		editProperties := "ReadOnly -WantReturn -E" MicrosoftLib.ExStyle_SunkenBorder ; Read-only, don't consume {Enter} keystroke, no thick border
 		editProperties .= " -VScroll -HScroll -Wrap w" editSizes["WIDTH"] " h" editSizes["HEIGHT"] ; No scrollbars, no wrapping, specific width/height
-		editProperties .= " v" this.editFieldVar
-		Gui, Add, Edit, % editProperties, % content
-		GuiControl, Focus, % this.editFieldVar
-		
+		this.editCtrl := this.guiObj.Add("Edit", editProperties, content)
+		this.editCtrl.Focus()
+
 		; Add hidden button to respond to {Enter} keystroke (because it's Default)
-		Gui, Add, Button, Hidden Default x0 y0 gTextPopupGui_Close ; TextPopupGui_Close call on activate
-		
+		closeBtn := this.guiObj.Add("Button", "Hidden Default x0 y0")
+		closeBtn.OnEvent("Click", (*) => this.guiObj.Destroy())
+
 		; Add hotkeys
-		this.addContentHotkeys(guiId, content)
+		this.addContentHotkeys(content)
 		this.addScrollHotkeys()
-		
-		return guiId
 	}
 	
 	;---------
 	; DESCRIPTION:    Add hotkeys that deal with the entire content of the popup (copy or send over to Notepad++) so the
 	;                 user doesn't have to select-all themselves.
 	; PARAMETERS:
-	;  guiId   (I,REQ) - The GUI ID of the popup, to use to limit where the hotkey triggers.
 	;  content (I,REQ) - The full content to use when these hotkeys are triggered.
 	;---------
-	addContentHotkeys(guiId, content) {
-		Hotkey, IfWinActive, % "ahk_id " guiId
-		
+	addContentHotkeys(content) {
+		winCondition := "ahk_id " this.guiObj.Hwnd
+		HotIfWinActive(winCondition)
+
 		; Copy to clipboard
 		hotkeyFunction := ObjBindMethod(ClipboardLib, "setAndToast", content, "popup content") ; ClipboardLib.setAndToast
-		Hotkey, !c, % hotkeyFunction
-		
+		Hotkey("!c", hotkeyFunction)
+
 		; Send to temp file and open in Notepad++
 		hotkeyFunction := ObjBindMethod(NotepadPlusPlus, "openTempText", content) ; NotepadPlusPlus.openTempText
-		Hotkey, !v, % hotkeyFunction
-		
-		Hotkey, IfWinActive
+		Hotkey("!v", hotkeyFunction)
+
+		HotIfWinActive()
 	}
 	
 	;---------
@@ -172,16 +169,16 @@ class TextPopup {
 	addScrollHotkeys() {
 		; Note: using a BoundFunc this way causes a small memory leak - the BoundFunc object is never released until the script exits. That said, it's insignificant enough that it shouldn't matter much in practice.
 		mouseIsOverEditField := ObjBindMethod(this, "mouseIsOverEditField")
-		Hotkey, If, % mouseIsOverEditField
-		
+		HotIf(mouseIsOverEditField)
+
 		; Each direction (up/down/left/right) has 2 hotkeys that go with it - the ones here and the
 		; same with Ctrl added, which does a "precise" scroll (1 line/character).
 		this.addScrollHotkeySet("WheelUp"   , "scrollUp")
 		this.addScrollHotkeySet("WheelDown" , "scrollDown")
 		this.addScrollHotkeySet("+WheelUp"  , "scrollLeft")
 		this.addScrollHotkeySet("+WheelDown", "scrollRight")
-		
-		Hotkey, If
+
+		HotIf()
 	}
 	
 	;---------
@@ -189,12 +186,13 @@ class TextPopup {
 	; RETURNS:        true/false
 	;---------
 	mouseIsOverEditField() {
-		MouseGetPos("", "", windowUnderMouse, varNameUnderMouse)
-		if(windowUnderMouse != this.guiId)
+		mouseWin := 0
+		mouseCtrl := 0
+		MouseGetPos(, , &mouseWin, &mouseCtrl, 2) ; 2 = return HWND for control
+		if(mouseWin != this.guiObj.Hwnd)
 			return false
-		
-		controlUnderMouse := GuiControlGet(this.guiId ":Name", varNameUnderMouse)
-		return (controlUnderMouse = this.editFieldVar)
+
+		return (mouseCtrl = this.editCtrl.Hwnd)
 	}
 	
 	;---------
@@ -210,11 +208,11 @@ class TextPopup {
 	addScrollHotkeySet(hotkeyString, methodName) {
 		; Basic scrolling hotkey (uses the default scroll amount from the named method)
 		scrollMethod := ObjBindMethod(this, methodName)
-		Hotkey, % hotkeyString, % scrollMethod
-		
+		Hotkey(hotkeyString, scrollMethod)
+
 		; Precise scrolling hotkey - 1 character or line at a time.
 		scrollMethodPrecise := ObjBindMethod(this, methodName, 1)
-		Hotkey, % "^" hotkeyString, % scrollMethodPrecise
+		Hotkey("^" hotkeyString, scrollMethodPrecise)
 	}
 	
 	;---------
@@ -225,11 +223,8 @@ class TextPopup {
 	;  count           (I,REQ) - How many messages to send (roughly how many lines/characters to scroll)
 	;---------
 	sendScrollMessages(scrollType, scrollDirection, count) {
-		controlId := this.Edit_ControlId
-		titleString := "ahk_id " this.guiId
-		
-		Loop, % count
-			SendMessage, % scrollType, % scrollDirection, , % controlId, % titleString
+		Loop count
+			SendMessage(scrollType, scrollDirection, , this.editCtrl, "ahk_id " this.guiObj.Hwnd)
 	}
 	
 	; Scroll in specific directions - by default, 3 lines up/down and 10 characters left/right.
@@ -246,10 +241,4 @@ class TextPopup {
 		this.sendScrollMessages(MicrosoftLib.Message_HorizScroll, MicrosoftLib.ScrollBar_Right, count)
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------
-}
-
-
-; Close label triggered by the hidden, default button in TextPopup.
-TextPopupGui_Close() {
-	Gui, Destroy
 }

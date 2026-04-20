@@ -191,8 +191,8 @@ class TextTable {
 	; RETURNS:        The current width of the table, including all columns and padding.
 	;---------
 	getWidth() {
-		bodyWidth    := this.borderV.length()  + this.outerPaddingH + this.getContentWidth() + this.outerPaddingH + this.borderV.length()
-		topLineWidth := this.borderTL.length() + 1                  + this.topTitle.length() + 1                  + this.borderTR.length() ; 1s for padding around title
+		bodyWidth    := StrLen(this.borderV)  + this.outerPaddingH + this.getContentWidth() + this.outerPaddingH + StrLen(this.borderV)
+		topLineWidth := StrLen(this.borderTL) + 1                  + StrLen(this.topTitle) + 1                  + StrLen(this.borderTR) ; 1s for padding around title
 		
 		return DataLib.max(bodyWidth, topLineWidth)
 	}
@@ -204,7 +204,7 @@ class TextTable {
 	getHeight() {
 		contentHeight      := this.getContentHeight()
 		outerPaddingHeight := this.outerPaddingV    * 2
-		bordersHeight      := this.borderH.length() * 2
+		bordersHeight      := StrLen(this.borderH) * 2
 		
 		return contentHeight + outerPaddingHeight + bordersHeight
 	}
@@ -260,7 +260,7 @@ class TextTable {
 			value := value.replace("`t", "{Tab}") ; We can't easily deal with the width of tabs, so replace them with something else instead
 			row[columnIndex] := value
 			
-			this.columnWidths[columnIndex] := DataLib.max(this.columnWidths[columnIndex], value.length())
+			this.columnWidths[columnIndex] := DataLib.max(this.columnWidths[columnIndex], StrLen(value))
 		}
 		
 		; Add the row to the table
@@ -313,7 +313,7 @@ class TextTable {
 			rowString := padding rowString padding
 			
 			; Pad out the right edge if the title was wider.
-			leftoverWidth := this.getInnerWidth() - rowString.length()
+			leftoverWidth := this.getInnerWidth() - StrLen(rowString)
 			rowString .= StringLib.getSpaces(leftoverWidth)
 			
 			if(this.borderV != "")
@@ -331,7 +331,7 @@ class TextTable {
 	;---------
 	getInnerWidth() {
 		bodyWidth    := this.outerPaddingH + this.getContentWidth() + this.outerPaddingH
-		topLineWidth := 1                  + this.topTitle.length() + 1                  ; 1s for padding around title
+		topLineWidth := 1                  + StrLen(this.topTitle) + 1                  ; 1s for padding around title
 		
 		return DataLib.max(bodyWidth, topLineWidth)
 	}
@@ -342,7 +342,7 @@ class TextTable {
 	;---------
 	getContentWidth() {
 		columnsWidth := DataLib.sum(this.columnWidths*)
-		dividersWidth := this.columnDividerString.length() * (this.columnWidths.count() - 1)
+		dividersWidth := StrLen(this.columnDividerString) * (this.columnWidths.Length - 1)
 		
 		return columnsWidth + dividersWidth
 	}
@@ -352,7 +352,7 @@ class TextTable {
 	; RETURNS:        Number of lines tall the content is.
 	;---------
 	getContentHeight() {
-		return this.dataTable.count()
+		return this.dataTable.Length
 	}
 	
 	;---------
@@ -364,7 +364,7 @@ class TextTable {
 	;---------
 	formatValue(value, columnIndex) {
 		width := this.columnWidths[columnIndex]
-		alignment := DataLib.coalesce(this.columnAlignments[columnIndex], this.defaultAlignment) ; Default to left-aligned
+		alignment := this.columnAlignments.Has(columnIndex) ? this.columnAlignments[columnIndex] : this.defaultAlignment
 		
 		Switch alignment {
 			Case TextAlignment.Left:   return value.postPadToLength(width)
@@ -383,7 +383,7 @@ class TextTable {
 	; NOTES:          If the leftover space is not evenly divisible, left side gets one extra space.
 	;---------
 	centerPadToLength(value, width) {
-		numSpacesNeeded := width - value.length()
+		numSpacesNeeded := width - StrLen(value)
 		numRightSpaces := numSpacesNeeded // 2 ; If there's an odd number, right gets one less (floor division)
 		numLeftSpaces := numSpacesNeeded - numRightSpaces
 		return StringLib.getSpaces(numLeftSpaces) value StringLib.getSpaces(numRightSpaces)
@@ -396,26 +396,27 @@ class TextTable {
 	;  originalRow (I,REQ) - The row to split
 	;---------
 	handleMultiLineValues(originalRow) {
-		numColumns := originalRow.count()
+		numColumns := originalRow.Length
 		
 		; Split the row up into a transposed table (columns, then rows)
 		flippedTable := []
 		maxNumLines := 0
 		For columnIndex,value in originalRow {
 			valueLines := value.split("`n", "`r") ; Drop carriage returns if they're in there too
-			DataLib.updateMax(maxNumLines, valueLines.count())
+			DataLib.updateMax(&maxNumLines, valueLines.Length)
 			flippedTable.push(valueLines)
 		}
 		
 		; Build each new row using a value from each column.
-		Loop, % maxNumLines {
+		Loop maxNumLines {
 			rowIndex := A_Index
 			newRow := []
-			
-			Loop, % numColumns {
+
+			Loop numColumns {
 				columnIndex := A_Index
 				
-				value := flippedTable[columnIndex, rowIndex]
+				columnValues := flippedTable[columnIndex]
+				value := (rowIndex <= columnValues.Length) ? columnValues[rowIndex] : ""
 				newRow.push(value)
 			}
 			

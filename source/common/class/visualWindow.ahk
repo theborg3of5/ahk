@@ -77,7 +77,7 @@ class VisualWindow {
 	;  width  (O,OPT) - Width of window
 	;  height (O,OPT) - Height of window
 	;---------
-	calcActualPosition(ByRef x := "", ByRef y := "", ByRef width := "", ByRef height := "") {
+	calcActualPosition(&x := "", &y := "", &width := "", &height := "") {
 		x      := this.leftX  - this.borderOffsets["LEFT"]
 		y      := this.topY   - this.borderOffsets["TOP"]
 		width  := this.width  + this.borderOffsets["LEFT"]   + this.borderOffsets["RIGHT"]
@@ -97,12 +97,12 @@ class VisualWindow {
 	move(x := "", y := "", bounds := "") {
 		this.prepWindow()
 		
-		this.convertSpecialWindowPositions(x, y, bounds)
+		this.convertSpecialWindowPositions(&x, &y, bounds)
 		if (x != "")
 			this.mvLeftToX(x)
 		if (y != "")
 			this.mvTopToY(y)
-		
+
 		this.applyPosition()
 	}
 	;---------
@@ -118,12 +118,12 @@ class VisualWindow {
 	resize(width := "", height := "", bounds := "") {
 		this.prepWindow()
 		
-		shouldMax := this.convertSpecialWindowSizes(width, height, bounds)
+		shouldMax := this.convertSpecialWindowSizes(&width, &height, bounds)
 		if (width != "")
 			this.rsToWidth(width)
 		if (height != "")
 			this.rsToHeight(height)
-		
+
 		this.applyPosition(shouldMax)
 	}
 	;---------
@@ -142,13 +142,13 @@ class VisualWindow {
 		this.prepWindow()
 		
 		; Resize should happen first as convertSpecialWindowPositions() uses updated (numeric) size in its calculations.
-		shouldMax := this.convertSpecialWindowSizes(width, height, bounds)
+		shouldMax := this.convertSpecialWindowSizes(&width, &height, bounds)
 		if (width != "")
 			this.rsToWidth(width)
 		if (height != "")
 			this.rsToHeight(height)
-		
-		this.convertSpecialWindowPositions(x, y, bounds)
+
+		this.convertSpecialWindowPositions(&x, &y, bounds)
 		if (x != "")
 			this.mvLeftToX(x)
 		if (y != "")
@@ -324,7 +324,7 @@ class VisualWindow {
 	;                 See .calcActualPosition() for the actual ones.
 	;---------
 	getBounds() {
-		bounds := {}
+		bounds := Map()
 		bounds["LEFT"]   := this.leftX
 		bounds["RIGHT"]  := this.rightX
 		bounds["TOP"]    := this.topY
@@ -353,7 +353,7 @@ class VisualWindow {
 	; RETURNS:        Associative array of offsets with "LEFT"/"RIGHT"/"TOP"/"BOTTOM" subscripts.
 	;---------
 	calculateBorderOffsets() {
-		borderOffsets := {}
+		borderOffsets := Map()
 		
 		if (Config.findWindowInfo(this.titleString).edgeType = WindowInfo.EdgeStyle_NoPadding) { ; Specific window has no padding
 			offsetWidth  := 0
@@ -388,8 +388,8 @@ class VisualWindow {
 	; DESCRIPTION:    Update this class' position/size members to match the current (visual) position and size of the window.
 	;---------
 	updateToCurrentPosition() {
-		WinGetPos, x, y, width, height, % this.titleString
-		this.convertActualToVisualPosition(x, y, width, height)
+		WinGetPos(&x, &y, &width, &height, this.titleString)
+		this.convertActualToVisualPosition(&x, &y, &width, &height)
 		
 		; Update various members with result
 		this.leftX   := x
@@ -408,7 +408,7 @@ class VisualWindow {
 	;  width  (IO,OPT) - Width of the window
 	;  height (IO,OPT) - Height of the window
 	;---------
-	convertActualToVisualPosition(ByRef x := "", ByRef y := "", ByRef width := "", ByRef height := "") {
+	convertActualToVisualPosition(&x := "", &y := "", &width := "", &height := "") {
 		x      := x      +  this.borderOffsets["LEFT"]
 		y      := y      +  this.borderOffsets["TOP"]
 		width  := width  - (this.borderOffsets["LEFT"]   + this.borderOffsets["RIGHT"])
@@ -421,7 +421,7 @@ class VisualWindow {
 	prepWindow() {
 		; Restore minimized and maximized windows so we can move/resize them properly.
 		if (WindowLib.isMinimized(this.titleString) || WindowLib.isMaximized(this.titleString)) {
-			WinRestore, % this.titleString
+			WinRestore(this.titleString)
 			this.updateToCurrentPosition()
 		}
 	}
@@ -433,11 +433,11 @@ class VisualWindow {
 	;  doMaximize (I,OPT) - true to maximize the window after we move it.
 	;---------
 	applyPosition(doMaximize := false) {
-		this.calcActualPosition(x, y, width, height) ; Add offsets back in
-		WinMove, % this.titleString, , x, y, width, height
-		
+		this.calcActualPosition(&x, &y, &width, &height) ; Add offsets back in
+		WinMove(x, y, width, height, this.titleString)
+
 		if (doMaximize)
-			WinMaximize, % this.titleString
+			WinMaximize(this.titleString)
 	}
 
 	;---------
@@ -575,7 +575,7 @@ class VisualWindow {
 	;                    and any relative values will be calculated relative to that.
 	; RETURNS:        true/false - should we maximize this window?
 	;---------
-	convertSpecialWindowSizes(ByRef width, ByRef height, bounds := "") {
+	convertSpecialWindowSizes(&width, &height, bounds := "") {
 		if (width = this.Size_Maximize || height = this.Size_Maximize) {
 			if (this.isBiggerThanBounds(bounds)) {
 				; If the window is too big to fit in the bounds, we should size it down to fit first.
@@ -616,7 +616,7 @@ class VisualWindow {
 	;                   "LEFT_EDGE"    (VisualWindow.X_LeftEdge)    => {left edge of the monitor}
 	;                   "RIGHT_EDGE+5" (VisualWindow.X_RightEdge+5) => {x so the right edge of the window is 5px from the right edge of the monitor}
 	;---------
-	convertSpecialWindowPositions(ByRef x, ByRef y, bounds := "") {
+	convertSpecialWindowPositions(&x, &y, bounds := "") {
 		; If our bounds will take us to another monitor, make sure x and y aren't blank (as that will make us
 		; skip moving the window entirely).
 		if (!MonitorLib.isWindowOnMonitor(this.titleString, bounds["MONITOR_INDEX"])) {
@@ -635,7 +635,7 @@ class VisualWindow {
 			return ""
 		
 		specialValues := [ this.X_LeftEdge, this.X_RightEdge, this.X_Centered ]
-		if (!x.startsWithAnyOf(specialValues, match)) {
+		if (!x.startsWithAnyOf(specialValues, &match)) {
 			if (bounds)
 				x += bounds["LEFT"] ; If we were GIVEN specific bounds, numeric values are relative to them
 			return x
@@ -667,7 +667,7 @@ class VisualWindow {
 			return ""
 		
 		specialValues := [ this.Y_TopEdge, this.Y_BottomEdge, this.Y_Centered]
-		if (!y.startsWithAnyOf(specialValues, match)) {
+		if (!y.startsWithAnyOf(specialValues, &match)) {
 			if (bounds)
 				y += bounds["TOP"] ; If we were GIVEN specific bounds, numeric values are relative to them
 			return y

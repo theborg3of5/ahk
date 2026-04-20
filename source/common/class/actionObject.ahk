@@ -61,36 +61,36 @@ class ActionObject {
 	; DESCRIPTION:    Try to determine the type of ActionObject that we'll need based on the input value.
 	;---------
 	determineType() {
-		if(ActionObjectWebRecord.isThisType(this.value, subType, id)) {
+		if(ActionObjectWebRecord.isThisType(this.value, &subType, &id)) {
 			this.type    := this.Type_WebRecord
 			this.subType := subType
 			this.value   := id
 			
-		} else if(ActionObjectPath.isThisType(this.value, pathType)) {
+		} else if(ActionObjectPath.isThisType(this.value, &pathType)) {
 			this.type    := this.Type_Path
 			this.subType := pathType
 		
-		} else if(ActionObjectTrackLab.isThisType(this.value, subType, id)) {
+		} else if(ActionObjectTrackLab.isThisType(this.value, &subType, &id)) {
 			this.type    := this.Type_TrackLab
 			this.subType := subType
 			this.value   := id
 			
-		} else if(ActionObjectSVNLog.isThisType(this.value, filterType, filter)) {
+		} else if(ActionObjectSVNLog.isThisType(this.value, &filterType, &filter)) {
 			this.type    := this.Type_SVNLog
 			this.subType := filterType
 			this.value   := filter
 		
-		} else if(ActionObjectEMC2.isThisType(this.value, ini, id)) {
+		} else if(ActionObjectEMC2.isThisType(this.value, &ini, &id)) {
 			this.type    := this.Type_EMC2
 			this.subType := ini
 			this.value   := id
 		
-		} else if(ActionObjectEpicCode.isThisType(this.value, descriptorType, id)) {
+		} else if(ActionObjectEpicCode.isThisType(this.value, &descriptorType, &id)) {
 			this.type    := this.Type_EpicCode
 			this.subType := descriptorType
 			this.value   := id
 		
-		} else if(ActionObjectCodeSearch.isThisType(this.value, locationType)) {
+		} else if(ActionObjectCodeSearch.isThisType(this.value, &locationType)) {
 			this.type    := this.Type_CodeSearch
 			this.subType := locationType
 		}
@@ -105,7 +105,7 @@ class ActionObject {
 		if(this.value != "" && this.type != "")
 			return
 		
-		s := new Selector("actionObject.tls").setDefaultOverrides({"VALUE":this.value})
+		s := Selector("actionObject.tls").setDefaultOverrides(Map("VALUE", this.value))
 		data := s.prompt()
 		if(!data)
 			return
@@ -122,14 +122,14 @@ class ActionObject {
 	getTypeSpecificObject() {
 		Switch this.type {
 			Case "":                   return "" ; No determined type, silent quit, return nothing
-			Case this.Type_CodeSearch: return new ActionObjectCodeSearch(this.value, this.subType)
-			Case this.Type_EpicCode:   return new ActionObjectEpicCode(  this.value, this.subType)
-			Case this.Type_EpicStudio: return new ActionObjectEpicStudio(this.value, this.subType)
-			Case this.Type_EMC2:       return new ActionObjectEMC2(      this.value, this.subType)
-			Case this.Type_TrackLab:   return new ActionObjectTrackLab(  this.value, this.subType)
-			Case this.Type_Path:       return new ActionObjectPath(      this.value, this.subType)
-			Case this.Type_SVNLog:     return new ActionObjectSVNLog(    this.value, this.subType)
-			Case this.Type_WebRecord:  return new ActionObjectWebRecord( this.value, this.subType)
+			Case this.Type_CodeSearch: return ActionObjectCodeSearch(this.value, this.subType)
+			Case this.Type_EpicCode:   return ActionObjectEpicCode(  this.value, this.subType)
+			Case this.Type_EpicStudio: return ActionObjectEpicStudio(this.value, this.subType)
+			Case this.Type_EMC2:       return ActionObjectEMC2(      this.value, this.subType)
+			Case this.Type_TrackLab:   return ActionObjectTrackLab(  this.value, this.subType)
+			Case this.Type_Path:       return ActionObjectPath(      this.value, this.subType)
+			Case this.Type_SVNLog:     return ActionObjectSVNLog(    this.value, this.subType)
+			Case this.Type_WebRecord:  return ActionObjectWebRecord( this.value, this.subType)
 		}
 		
 		Toast.ShowError("Unrecognized type", "ActionObject doesn't know what to do with this type: " this.type)

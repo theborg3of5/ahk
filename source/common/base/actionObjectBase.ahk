@@ -144,7 +144,7 @@ class ActionObjectBase {
 	; RETURNS:        true if we have both pieces of info, false if something is missing.
 	; NOTES:          Should only be called by child instances.
 	;---------
-	selectMissingInfo(ByRef value, ByRef subType, popupTitle := "") {
+	selectMissingInfo(&value, &subType, popupTitle := "") {
 		; ActionObjectType must be set by child to use this function.
 		if(this.ActionObjectType = "") {
 			Toast.ShowError("No ActionObjectType found", "ActionObject* child did not override ActionObjectType property")
@@ -176,7 +176,7 @@ class ActionObjectBase {
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
 	;region ------------------------------ PRIVATE ------------------------------
-	static typeSelectors := {} ; {ActionObject.Type_*: Selector}
+	static typeSelectors := Map() ; {ActionObject.Type_*: Selector}
 	
 	;---------
 	; DESCRIPTION:    Get a Selector instance for the ActionObject TLS and filter its
@@ -191,11 +191,11 @@ class ActionObjectBase {
 			return ""
 		
 		; If an instance already exists, just use that.
-		if(this.typeSelectors[type])
+		if(this.typeSelectors.Has(type) && this.typeSelectors[type])
 			return this.typeSelectors[type]
 			
 		; Otherwise, create a new one.
-		s := new Selector("actionObject.tls")
+		s := Selector("actionObject.tls")
 		s.dataTableList.filterOutIfColumnNoMatch("TYPE", type)
 		
 		this.typeSelectors[type] := s ; Cache the value off for later use.

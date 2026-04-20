@@ -185,9 +185,9 @@ class Selector {
 	;---------
 	addOverrideFields(fieldsToAdd) {
 		if(!this.overrideFields)
-			this.overrideFields := {}
-		
-		baseLength := this.overrideFields.count()
+			this.overrideFields := Map()
+
+		baseLength := this.overrideFields.Count
 		For i,label in fieldsToAdd
 			this.overrideFields[baseLength + i] := label
 		
@@ -218,9 +218,9 @@ class Selector {
 	;---------
 	addSectionHeader(headerText, firstChoiceIndex := "") {
 		if(!this.sectionTitles)
-			this.sectionTitles := {}
+			this.sectionTitles := Map()
 		if(firstChoiceIndex = "")
-			firstChoiceIndex := this.choices.length() + 1
+			firstChoiceIndex := this.choices.Length + 1
 		
 		this.sectionTitles[firstChoiceIndex] := headerText
 	}
@@ -237,7 +237,7 @@ class Selector {
 		
 		this.choices.push(choice)
 		
-		return this.choices.length()
+		return this.choices.Length
 	}
 	;endregion Gui Changes
 
@@ -367,14 +367,14 @@ class Selector {
 	;                 caller can still modify them by filtering the TableList via .dataTableList).
 	;---------
 	loadFromFile() {
-		tl := new TableList(this.filePath)
+		tl := TableList(this.filePath)
 		
 		this.updateSettings(tl.settings)
 		
 		; Special override field index row that tells us how we should arrange data inputs.
 		fieldIndices := tl.columnInfo
 		if(!DataLib.isNullOrEmpty(fieldIndices)) {
-			this.overrideFields := {}
+			this.overrideFields := Map()
 			For label,fieldIndex in fieldIndices {
 				if(fieldIndex > 0) ; Ignore data columns we don't want fields for (fieldIndex = 0)
 					this.overrideFields[fieldIndex] := label
@@ -425,7 +425,7 @@ class Selector {
 			return outputData
 
 		; Prompt the user.
-		sGui := new SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this._minColumnWidth, this._iconPath)
+		sGui := SelectorGui(this.choices, this.sectionTitles, this.overrideFields, this._minColumnWidth, this._iconPath)
 		sGui.show(this._windowTitle, this.defaultOverrides)
 		outputData := this.runQuery(sGui.getChoiceQuery(), sGui.getOverrideData())
 		return outputData
@@ -475,10 +475,10 @@ class Selector {
 		; Load the choices
 		this.choices := []
 		For _,row in this.dataTL.getTable()
-			this.addChoice(new SelectorChoice(row))
+			this.addChoice(SelectorChoice(row))
 		
 		; Show a warning and fail if we didn't actually manage to load any choices.
-		if(!this.choices.length()) {
+		if(!this.choices.Length) {
 			Toast.ShowError("Selector: no choices available", "No choices were found in the TableList instance")
 			return false
 		}
@@ -498,7 +498,7 @@ class Selector {
 			choiceAbbrevs := choice.allAbbrevs
 
 			; Blank abbreviation - just give it an arbitrary one (incremented by forceUniqueValue below).
-			if(choiceAbbrevs.length() = 0 || choiceAbbrevs[1] = "")
+			if(choiceAbbrevs.Length = 0 || choiceAbbrevs[1] = "")
 				choiceAbbrevs := ["unset"]
 
 			; Ensure there are no duplicates by forcibly incrementing them.
@@ -552,7 +552,7 @@ class Selector {
 
 		; If we didn't match anything but do have overrideData, treat overrideData like a matched
 		; choice (that's the one thing we'll return).
-		if( (outputData.length() = 0) && !DataLib.isNullOrEmpty(overrideData) )
+		if( (outputData.Length = 0) && !DataLib.isNullOrEmpty(overrideData) )
 			outputData.push(overrideData)
 
 		return outputData
@@ -581,7 +581,7 @@ class Selector {
 	;endregion ------------------------------ PRIVATE ------------------------------
 	
 	;region ------------------------------ DEBUG ------------------------------
-	Debug_ToString(ByRef table) {
+	Debug_ToString(&table) {
 		table.addLine("Filepath",          this.filePath)
 		table.addLine("Window title",      this._windowTitle)
 		table.addLine("Min column width",  this._minColumnWidth)

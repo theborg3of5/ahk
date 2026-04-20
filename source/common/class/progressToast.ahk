@@ -20,8 +20,8 @@ class ProgressToast extends Toast {
 	__New(title := "") {
 		if(title != "")
 			title .= ":"
-		
-		base.__New(title)
+
+		super.__New(title)
 	}
 	
 	;---------

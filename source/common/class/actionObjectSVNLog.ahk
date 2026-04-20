@@ -32,7 +32,7 @@ class ActionObjectSVNLog extends ActionObjectBase {
 	;  filterType (I,OPT) - Filter method for the SVN log.
 	;---------
 	__New(filter, filterType := "") {
-		if(!this.selectMissingInfo(filter, filterType))
+		if(!this.selectMissingInfo(&filter, &filterType))
 			return ""
 		
 		this.filter     := filter
@@ -47,17 +47,17 @@ class ActionObjectSVNLog extends ActionObjectBase {
 	;  filter     (O,OPT) - If the value is an SVN log filter, the filter value
 	; RETURNS:        true/false - whether the given value must be an SVN log filter.
 	;---------
-	isThisType(value, ByRef filterType := "", ByRef filter := "") {
+	static isThisType(value, &filterType := "", &filter := "") {
 		if(!Config.contextIsWork)
 			return false
 		
-		if(value.startsWithAnyOf(["svn ", "revision "], matchedKeyword)) {
+		if(value.startsWithAnyOf(["svn ", "revision "], &matchedKeyword)) {
 			filterType := this.FilterType_Revision
 			filter := value.removeFromStart(matchedKeyword)
 			return true
 		}
-		
-		if(value.startsWithAnyOf(["dsvn ", "svnd "], matchedKeyword)) {
+
+		if(value.startsWithAnyOf(["dsvn ", "svnd "], &matchedKeyword)) {
 			filterType := this.FilterType_DLG
 			filter := value.removeFromStart(matchedKeyword)
 			return true
@@ -121,7 +121,7 @@ class ActionObjectSVNLog extends ActionObjectBase {
 		else
 			urlBase := Config.private["EPIC_SVN_DLG_BRANCH_URL_BASE"]
 
-		return urlBase.replaceTags({VERSION:version, NUM_LAST_4:last4, NUM_LAST_2:last2, NUM:dlgNumString, DLG:dlgId})
+		return urlBase.replaceTags(Map("VERSION", version, "NUM_LAST_4", last4, "NUM_LAST_2", last2, "NUM", dlgNumString, "DLG", dlgId))
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------
 }

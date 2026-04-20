@@ -264,7 +264,7 @@ class TableList {
 	;                         column will pass and not be filtered out.
 	;---------
 	addAutomaticFilter(filterColumn, filterValue) {
-		filter := {"COLUMN":filterColumn, "VALUE":filterValue}
+		filter := Map("COLUMN", filterColumn, "VALUE", filterValue)
 		TableList.autoFilters.push(filter)
 	}
 	
@@ -370,7 +370,7 @@ class TableList {
 
 		rowsByColumn := this.getRowsByColumn(indexColumn, tiebreakerColumn)
 		
-		outputValues := {} ; {index: value}
+		outputValues := Map() ; {index: value}
 		For index,row in rowsByColumn
 			outputValues[index] := row[valueColumn]
 		
@@ -394,14 +394,14 @@ class TableList {
 		if(indexColumn = "")
 			return ""
 		
-		outputRows := {} ; {index: row}
+		outputRows := Map() ; {index: row}
 		For _,row in this.table {
 			rowIndex := row[indexColumn]
 			if(rowIndex = "") ; Rows with a blank index value are ignored
 				Continue
 			
 			; First row per index is always kept (but could get replaced)
-			if(outputRows[rowIndex] = "") {
+			if(!outputRows.Has(rowIndex) || outputRows[rowIndex] = "") {
 				outputRows[rowIndex] := row
 				Continue
 			}
@@ -409,7 +409,7 @@ class TableList {
 			; A new row can only replace an existing row if it "wins" in the tiebreaker column,
 			; by having a value when the existing row doesn't.
 			if(tiebreakerColumn != "") {
-				if(outputRows[rowIndex, tiebreakerColumn] = "" && row[tiebreakerColumn] != "") 
+				if(outputRows[rowIndex][tiebreakerColumn] = "" && row[tiebreakerColumn] != "")
 					outputRows[rowIndex] := row
 			}
 		}
@@ -425,9 +425,9 @@ class TableList {
 	table       := []
 	indexLabels := []
 	
-	_columnInfo := {} ; {columnName: value}
-	_settings   := {} ; {settingName: settingValue}
-	_headers    := {} ; {firstRowNumberUnderHeader: headerText}
+	_columnInfo := Map() ; {columnName: value}
+	_settings   := Map() ; {settingName: settingValue}
+	_headers    := Map() ; {firstRowNumberUnderHeader: headerText}
 	
 	;---------
 	; DESCRIPTION:    Given an array of lines from a file, parse out the data into internal structures.
@@ -523,7 +523,7 @@ class TableList {
 	;---------
 	processHeader(row) {
 		headerText := row.removeFromStart(this.Char_Header)
-		firstRowNumber := DataLib.forceNumber(this.table.MaxIndex()) + 1 ; First row that will be under this section header (the next one added)
+		firstRowNumber := this.table.Length + 1 ; First row that will be under this section header (the next one added)
 		this._headers[firstRowNumber] := headerText
 	}
 	
@@ -537,8 +537,8 @@ class TableList {
 		
 		rowAry.removeAt(1) ; Get rid of the leading "(" (and shift elements to fill).
 		rowAry.pop() ; Get rid of the ending ")"
-		this.applyIndexLabels(rowAry)
-		
+		this.applyIndexLabels(&rowAry)
+
 		this._columnInfo := rowAry
 	}
 	
@@ -563,7 +563,7 @@ class TableList {
 			row := row.removeFromEnd(this.Char_Mod_Open).withoutWhitespace()
 			newMods := []
 			For _,modString in row.split("|", A_Space)
-				newMods.push(new TableListMod(modString))
+				newMods.push(TableListMod(modString))
 			
 			; Add the set of new mods to our stack of them.
 			this.modSets.push(newMods)
@@ -577,7 +577,7 @@ class TableList {
 	;---------
 	processNormal(row) {
 		rowAry := row.split(A_Tab)
-		this.applyIndexLabels(rowAry)
+		this.applyIndexLabels(&rowAry)
 		
 		; If any of the values were a placeholder, remove them now.
 		For i,value in rowAry.clone() ; Clone since we're deleting things.
@@ -602,11 +602,11 @@ class TableList {
 	; PARAMETERS:
 	;  rowAry (IO,REQ) - Numerically-indexed array representing a row in the table.
 	;---------
-	applyIndexLabels(ByRef rowAry) {
+	applyIndexLabels(&rowAry) {
 		if(DataLib.isNullOrEmpty(this.indexLabels))
 			return
 		
-		rowObj := {}
+		rowObj := Map()
 		For i,value in rowAry {
 			idxLabel := this.indexLabels[i]
 			if(idxLabel)
@@ -622,10 +622,10 @@ class TableList {
 	; PARAMETERS:
 	;  rowAry (IO,REQ) - Array representing a row in the table. 
 	;---------
-	applyMods(ByRef rowAry) {
+	applyMods(rowAry) {
 		For _,modSet in this.modSets {
 			For _,mod in modSet
-				mod.executeMod(rowAry)
+				mod.executeMod(&rowAry)
 		}
 	}
 	
@@ -671,11 +671,11 @@ class TableList {
 			return
 		
 		newTable   := []
-		newHeaders := {} ; {firstRowNumberUnderHeader: headerText}
+		newHeaders := Map() ; {firstRowNumberUnderHeader: headerText}
 		For rowNum,row in this.table {
 			; If there's a header for this row, keep track of it until we can add it to an
 			; unfiltered row (or another header overwrites it because this one has no unfiltered rows)
-			headerText := this._headers[rowNum]
+			headerText := this._headers.Has(rowNum) ? this._headers[rowNum] : ""
 			if(headerText != "")
 				currHeader := headerText
 			
@@ -715,7 +715,7 @@ class TableList {
 			return true
 		
 		if (valueIsRegEx) {
-			if(isObject(value)) {
+			if(value is Array) {
 				For _, childVal in value {
 					if(childVal.matchesRegEx(filterValue))
 						return true
@@ -725,7 +725,7 @@ class TableList {
 				return value.matchesRegEx(filterValue)
 			}
 		} else {
-			if(isObject(value))
+			if(value is Array)
 				return value.contains(filterValue)
 			else
 				return (value = filterValue)
@@ -734,7 +734,7 @@ class TableList {
 	;endregion ------------------------------ PRIVATE ------------------------------
 	
 	;region ------------------------------ DEBUG ------------------------------
-	Debug_ToString(ByRef table) {
+	Debug_ToString(&table) {
 		table.addLine("Index labels", this.indexLabels)
 		table.addLine("Mods",         this.modSets)
 		table.addLine("Column info",  this._columnInfo)

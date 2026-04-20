@@ -113,7 +113,7 @@ class DebugTable extends TextTable {
 			this.setTitle(this.title.appendPiece(": ", subtitle))
 		}
 		
-		Loop, % params.MaxIndex() // 2 {
+		Loop params.Length // 2 {
 			label := params[A_Index * 2 - 1]
 			value := params[A_Index * 2]
 			this.addLine(label, value)
@@ -145,6 +145,21 @@ class DebugTable extends TextTable {
 	
 	;region ------------------------------ PRIVATE ------------------------------
 	title := "" ; The title to show at the top (and bottom, if we get tall enough)
+
+	;---------
+	; DESCRIPTION:    Get the count of elements in an object, handling Arrays (.Length) vs Maps (.Count)
+	;                 vs other objects (ObjOwnPropCount).
+	; PARAMETERS:
+	;  obj (I,REQ) - The object to count.
+	; RETURNS:        The number of elements/properties.
+	;---------
+	getObjectCount(obj) {
+		if(obj is Array)
+			return obj.Length
+		if(obj is Map)
+			return obj.Count
+		return ObjOwnPropCount(obj)
+	}
 	
 	;---------
 	; DESCRIPTION:    Set the title for this table. Will be used for the top title, and if the table is tall enough, the
@@ -166,18 +181,18 @@ class DebugTable extends TextTable {
 	;---------
 	buildValueDebugString(value) {
 		; Base case - not a complex object, just return the value to show.
-		if(!isObject(value))
+		if(!IsObject(value))
 			return this.convertWhitespace(value)
 		
 		; Just display the name if it's an empty object (like an empty array)
 		objName := this.getObjectName(value)
-		if(value.count() = 0)
+		if(this.getObjectCount(value) = 0)
 			return objName
 		
 		; Compile child values
-		childTable := new DebugTable(objName)
-		if(isFunc(value.Debug_ToString)) { ; If an object has its own debug logic, use that rather than looping.
-			value.Debug_ToString(childTable)
+		childTable := DebugTable(objName)
+		if(HasMethod(value, "Debug_ToString")) { ; If an object has its own debug logic, use that rather than looping.
+			value.Debug_ToString(&childTable)
 		} else {
 			For subLabel,subVal in value
 				childTable.addLine(subLabel, subVal)
@@ -204,7 +219,7 @@ class DebugTable extends TextTable {
 		; Replace leading, trailing, and more than 1 space in a row with dots so they're more visible.
 		dot := "·" ; U+0x00B7
 		while(value.matchesRegEx("  +", match)) {  ; 2+ spaces in a row
-			replaceWith := StringLib.duplicate(dot, match.length()) ; Replace them with the same number of dots
+			replaceWith := StringLib.duplicate(dot, StrLen(match)) ; Replace them with the same number of dots
 			value := value.replace(match, replaceWith)
 		}
 		if(value.startsWith(A_Space)) ; These come after in case there are 2 leading/trailing spaces (which this would make only 1, failing the above pattern).
@@ -224,9 +239,9 @@ class DebugTable extends TextTable {
 	getObjectName(value) {
 		; For simple arrays and objects, use a generic label and add the number of elements.
 		if(DataLib.isArray(value))
-			return "Array [" value.count() "]"
+			return "Array [" value.Length "]"
 		if(DataLib.isObject(value))
-			return "Object {" value.count() "}"
+			return "Object {" value.Count "}"
 		
 		; Otherwise just use the class name.
 		return value.__Class

@@ -38,7 +38,7 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 		if(descriptorType = "")
 			descriptorType := this.determineDescriptorType()
 		
-		if(!this.selectMissingInfo(descriptor, descriptorType))
+		if(!this.selectMissingInfo(&descriptor, &descriptorType))
 			return ""
 		
 		this.descriptor     := descriptor
@@ -55,7 +55,7 @@ class ActionObjectEpicStudio extends ActionObjectBase {
 		
 		Switch this.descriptorType {
 			Case this.DescriptorType_Routine, this.DescriptorType_RoutineCDE:
-				EpicLib.splitServerLocation(this.descriptor, routine, tag)
+				EpicLib.splitServerLocation(this.descriptor, &routine, &tag)
 				
 				if(this.descriptorType = this.DescriptorType_Routine)
 					environmentId := Config.private["DBC_DEV_ENV_ID"]

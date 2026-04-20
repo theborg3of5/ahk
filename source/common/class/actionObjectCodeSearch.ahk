@@ -36,7 +36,7 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 		if(locationType = "")
 			locationType := this.determineLocationType(location)
 		
-		if(!this.selectMissingInfo(location, locationType))
+		if(!this.selectMissingInfo(&location, &locationType))
 			return ""
 		
 		this.location     := location
@@ -50,7 +50,7 @@ class ActionObjectCodeSearch extends ActionObjectBase {
 	;  locationType (O,OPT) - If the value is a code location, the location type
 	; RETURNS:        true/false - whether the given value must be a CodeSearch code location.
 	;---------
-	isThisType(value, ByRef locationType := "") {
+	static isThisType(value, &locationType := "") {
 		if(!Config.contextIsWork)
 			return false
 		

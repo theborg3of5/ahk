@@ -38,7 +38,7 @@ class ActionObjectTrackLab extends ActionObjectBase {
 	;                    not given.
 	;---------
 	__New(id, subType := "") {
-		if(!this.selectMissingInfo(id, subType))
+		if(!this.selectMissingInfo(&id, &subType))
 			return ""
 		
 		this.id      := id
@@ -54,11 +54,11 @@ class ActionObjectTrackLab extends ActionObjectBase {
 	; RETURNS:        true/false - whether the given value must be a TrackLab object.
 	; NOTES:          Must be effectively static - this is called before we decide what kind of object to return.
 	;---------
-	isThisType(value, ByRef subType := "", ByRef id := "") {
+	static isThisType(value, &subType := "", &id := "") {
 		if(!Config.contextIsWork)
 			return false
 
-		if(value.startsWithAnyOf(["git ", "commit "], matchedPrefix)) {
+		if(value.startsWithAnyOf(["git ", "commit "], &matchedPrefix)) {
 			subType := this.SubType_ViewCommit
 			id := value.removeFromStart(matchedPrefix)
 			return true
@@ -78,17 +78,17 @@ class ActionObjectTrackLab extends ActionObjectBase {
 
 		Switch this.subType {
 			Case this.SubType_ViewCommit:
-				return Config.private["TRACKLAB_GIT_COMMIT"].replaceTags({ COMMIT: this.id })
+				return Config.private["TRACKLAB_GIT_COMMIT"].replaceTags(Map("COMMIT", this.id))
 			Case this.SubType_DLGBranch:
-				return Config.private["TRACKLAB_GIT_FILE_HISTORY"].replaceTags({ BRANCH: "dlg/" this.id, FILEPATH: "" })
+				return Config.private["TRACKLAB_GIT_FILE_HISTORY"].replaceTags(Map("BRANCH", "dlg/" this.id, "FILEPATH", ""))
 			Case this.SubType_FileHistory_S1:
-				return Config.private["TRACKLAB_GIT_FILE_HISTORY"].replaceTags({ BRANCH: stage1Branch, FILEPATH: this.id })
+				return Config.private["TRACKLAB_GIT_FILE_HISTORY"].replaceTags(Map("BRANCH", stage1Branch, "FILEPATH", this.id))
 			Case this.SubType_FileHistory_FINAL:
-			 	return Config.private["TRACKLAB_GIT_FILE_HISTORY"].replaceTags({ BRANCH: finalBranch, FILEPATH: this.id })
+			 	return Config.private["TRACKLAB_GIT_FILE_HISTORY"].replaceTags(Map("BRANCH", finalBranch, "FILEPATH", this.id))
 			Case this.SubType_FileBlame_S1:
-				return Config.private["TRACKLAB_GIT_FILE_BLAME"].replaceTags({ BRANCH: stage1Branch, FILEPATH: this.id })
+				return Config.private["TRACKLAB_GIT_FILE_BLAME"].replaceTags(Map("BRANCH", stage1Branch, "FILEPATH", this.id))
 			Case this.SubType_FileBlame_FINAL:
-				return Config.private["TRACKLAB_GIT_FILE_BLAME"].replaceTags({ BRANCH: finalBranch, FILEPATH: this.id })
+				return Config.private["TRACKLAB_GIT_FILE_BLAME"].replaceTags(Map("BRANCH", finalBranch, "FILEPATH", this.id))
 		}
 
 		return ""

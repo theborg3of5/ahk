@@ -29,7 +29,7 @@ class RelativeDateTimeBase {
 	;  format (I,REQ) - The format to send the date/time in, a la FormatTime().
 	;---------
 	sendInFormat(format) {
-		Send, % FormatTime(this._instant, format)
+		Send(FormatTime(this._instant, format))
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	

@@ -44,10 +44,10 @@ class ActionObjectEMC2 extends ActionObjectBase {
 			}
 		}
 		
-		if(!this.selectMissingInfo(id, ini, "Select INI and ID"))
+		if(!this.selectMissingInfo(&id, &ini, "Select INI and ID"))
 			return ""
 		
-		this.id    := StringUpper(id) ; Make sure ID is capitalized as EMC2 URLs fail on lowercase starting letters (i.e. i1234567)
+		this.id    := StrUpper(id) ; Make sure ID is capitalized as EMC2 URLs fail on lowercase starting letters (i.e. i1234567)
 		this.ini   := EpicLib.convertToUsefulEMC2INI(ini) ; Make sure we've got the proper INI (in case the caller passed in something that needs to be converted)
 		this.title := title
 	}
@@ -61,7 +61,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	; RETURNS:        true/false - whether the given value must be an EMC2 object.
 	; NOTES:          Must be effectively static - this is called before we decide what kind of object to return.
 	;---------
-	isThisType(value, ByRef ini := "", ByRef id := "") {
+	static isThisType(value, &ini := "", &id := "") {
 		if(!Config.contextIsWork)
 			return false
 		
@@ -98,9 +98,9 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		
 		if(forceBasic)
 			link := Config.private["EMC2_LINK_WEB_BASE"]
-		else if(this.isEditOnlyObject() || this.isViewOnlyObject(ini)) ; View-only objects only work as edit-type links, so redirect them there. Also updates ini.
+		else if(this.isEditOnlyObject() || this.isViewOnlyObject(&ini)) ; View-only objects only work as edit-type links, so redirect them there. Also updates ini.
 			link := this.getLinkEdit()
-		else if(this.isInternalOnlyObject(ini)) ; Also updates ini.
+		else if(this.isInternalOnlyObject(&ini)) ; Also updates ini.
 			link := Config.private["SHERLOCK_INTERNAL_ONLY_BASE"]
 		else if(this.isSherlockObject())
 			link := Config.private["SHERLOCK_BASE"]
@@ -109,7 +109,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		else
 			link := Config.private["EMC2_LINK_WEB_BASE"]
 		
-		return link.replaceTags({"INI":ini, "ID":this.id})
+		return link.replaceTags(Map("INI", ini, "ID", this.id))
 	}
 	;---------
 	; DESCRIPTION:    Get an edit link to the object.
@@ -120,12 +120,12 @@ class ActionObjectEMC2 extends ActionObjectBase {
 		
 		ini := this.convertDashedINI(ini)
 		
-		if(this.isViewOnlyObject(ini))
+		if(this.isViewOnlyObject(&ini))
 			link := Config.private["EMC2_LINK_EDIT_VIEW_ONLY_BASE"]
 		else
 			link := Config.private["EMC2_LINK_EDIT_BASE"]
 		
-		return link.replaceTags({"INI":ini, "ID":this.id})
+		return link.replaceTags(Map("INI", ini, "ID", this.id))
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
@@ -153,7 +153,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;                 (typically INI + "I").
 	; RETURNS:        true/false
 	;---------
-	isInternalOnlyObject(ByRef ini := "") {
+	isInternalOnlyObject(&ini := "") {
 		if(ini = "SLGI") {
 			ini := "SLG"
 			return true
@@ -169,7 +169,7 @@ class ActionObjectEMC2 extends ActionObjectBase {
 	;                 (typically INI + "V").
 	; RETURNS:        true/false
 	;---------
-	isViewOnlyObject(ByRef ini := "") {
+	isViewOnlyObject(&ini := "") {
 		; Try to map the INI from a view-only INI to a "real" one
 		realINI := this.getRealViewOnlyRealINI(ini)
 		if(!realINI) ; It's not a view-only INI.

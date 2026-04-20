@@ -7,7 +7,7 @@ class WindowActions {
 	; PARAMETERS:
 	;  titleString (I,REQ) - A title string identifying the window.
 	;---------
-	activateWindow(titleString := "A") {
+	static activateWindow(titleString := "A") {
 		this.windowAction(this.Action_Activate, "", titleString)
 	}
 	;---------
@@ -15,7 +15,7 @@ class WindowActions {
 	; PARAMETERS:
 	;  name (I,REQ) - The name of the window, as defined in windows.tl.
 	;---------
-	activateWindowByName(name) {
+	static activateWindowByName(name) {
 		this.windowAction(this.Action_Activate, name)
 	}
 	
@@ -24,7 +24,7 @@ class WindowActions {
 	; PARAMETERS:
 	;  titleString (I,REQ) - A title string representing the window.
 	;---------
-	closeWindow(titleString := "A") {
+	static closeWindow(titleString := "A") {
 		this.windowAction(this.Action_Close, "", titleString)
 	}
 	;---------
@@ -32,7 +32,7 @@ class WindowActions {
 	; PARAMETERS:
 	;  name (I,REQ) - The name of the window, as defined in windows.tl.
 	;---------
-	closeWindowByName(name) {
+	static closeWindowByName(name) {
 		this.windowAction(this.Action_Close, name)
 	}
 	
@@ -42,7 +42,7 @@ class WindowActions {
 	; PARAMETERS:
 	;  titleString (I,REQ) - A title string representing the window.
 	;---------
-	deleteWord(titleString := "A") {
+	static deleteWord(titleString := "A") {
 		this.windowAction(this.Action_DeleteWord, "", titleString)
 	}
 	;---------
@@ -51,7 +51,7 @@ class WindowActions {
 	; PARAMETERS:
 	;  name (I,REQ) - The name of the window, as defined in windows.tl.
 	;---------
-	deleteWordByName(name) {
+	static deleteWordByName(name) {
 		this.windowAction(this.Action_DeleteWord, name)
 	}
 	
@@ -61,7 +61,7 @@ class WindowActions {
 	; PARAMETERS:
 	;  titleString (I,REQ) - A title string representing the window.
 	;---------
-	escAction(titleString := "A") {
+	static escAction(titleString := "A") {
 		this.windowAction(this.Action_EscapeKey, "", titleString)
 	}
 	;---------
@@ -70,7 +70,7 @@ class WindowActions {
 	; PARAMETERS:
 	;  name (I,REQ) - The name of the window, as defined in windows.tl.
 	;---------
-	escActionByName(name) {
+	static escActionByName(name) {
 		this.windowAction(this.Action_EscapeKey, name)
 	}
 	
@@ -79,7 +79,7 @@ class WindowActions {
 	; PARAMETERS:
 	;  titleString (I,REQ) - A title string representing the window.
 	;---------
-	minimizeWindow(titleString := "A") {
+	static minimizeWindow(titleString := "A") {
 		this.windowAction(this.Action_Minimize, "", titleString)
 	}
 	;---------
@@ -87,7 +87,7 @@ class WindowActions {
 	; PARAMETERS:
 	;  name (I,REQ) - The name of the window, as defined in windows.tl.
 	;---------
-	minimizeWindowByName(name) {
+	static minimizeWindowByName(name) {
 		this.windowAction(this.Action_Minimize, name)
 	}
 	
@@ -96,7 +96,7 @@ class WindowActions {
 	; PARAMETERS:
 	;  titleString (I,REQ) - A title string representing the window.
 	;---------
-	selectAll(titleString := "A") {
+	static selectAll(titleString := "A") {
 		this.windowAction(this.Action_SelectAll, "", titleString)
 	}
 	;---------
@@ -104,7 +104,7 @@ class WindowActions {
 	; PARAMETERS:
 	;  name (I,REQ) - The name of the window, as defined in windows.tl.
 	;---------
-	selectAllByName(name) {
+	static selectAllByName(name) {
 		this.windowAction(WindowActions.Action_SelectAll, name)
 	}
 	
@@ -114,7 +114,7 @@ class WindowActions {
 	; PARAMETERS:
 	;  titleString (I,OPT) - A title string representing the window.
 	;---------
-	backtickAction(titleString := "A") {
+	static backtickAction(titleString := "A") {
 		this.windowAction(this.Action_Backtick, "", titleString)
 	}
 	;---------
@@ -123,7 +123,7 @@ class WindowActions {
 	; PARAMETERS:
 	;  name (I,REQ) - The name of the window, as defined in windows.tl.
 	;---------
-	backtickActionByName(name) {
+	static backtickActionByName(name) {
 		this.windowAction(this.Action_Backtick, name)
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
@@ -150,19 +150,18 @@ class WindowActions {
 	;endregion Supported action methods
 	
 	static _actionOverrides := "" ; {windowName: {action: method}}
-	
+
 	;---------
 	; DESCRIPTION:    Get an array of overrides for how to do actions for a particular named window.
 	; PARAMETERS:
 	;  name (I,REQ) - Name of the window we're interested in
 	; SIDE EFFECTS:   Initializes the static this._actionOverrides array the first time it's called.
 	;---------
-	actionOverrides[name] {
+	static actionOverrides[name] {
 		get {
-			; Initialize the overrides array the first time
-			if(!this._actionOverrides)
-				this._actionOverrides := new TableList("windowActions.tl").getRowsByColumn("NAME", "MACHINE")
-			
+			if !this._actionOverrides
+				this._actionOverrides := TableList("windowActions.tl").getRowsByColumn("NAME", "MACHINE")
+
 			return this._actionOverrides[name]
 		}
 	}
@@ -175,36 +174,35 @@ class WindowActions {
 	;  titleString (I,OPT) - A title string that identifies the window we want to perform the action on. Either this or name is
 	;                        required.
 	;---------
-	windowAction(action, name := "", titleString := "") {
-		if(!action)
+	static windowAction(action, name := "", titleString := "") {
+		if !action
 			return
-		if(!titleString && !name)
+		if !titleString && !name
 			return
-		
-		if(!name)
+
+		if !name
 			name := Config.findWindowName(titleString)
-		
-		; Identify the window we want to act upon with a titleString that uses its ID.
-		if(titleString)
+
+		if titleString
 			titleString := WindowLib.getIdTitleString(titleString)
 		else
 			titleString := Config.windowInfo[name].idString
-		
-		if(Config.debugOn) { ; GDB TODO window cache debug issue
+
+		if Config.debugOn { ; GDB TODO window cache debug issue
 			debugString := "windowAction():"
 			debugString := "`n" "action=" action
 			debugString .= "`n" "name=" name
 			debugString .= "`n" "titleString=" titleString
 			debugString .= "`n" "this.actionOverrides[""Telegram""]=" this.actionOverrides["Telegram"]
 			debugString .= "`n" "WindowActions.actionOverrides[""Telegram""]=" WindowActions.actionOverrides["Telegram"]
-			MsgBox, % debugString
+			MsgBox(debugString)
 		}
 
-		if (WindowLib.isNoMoveSizeWindow(titleString)) {
+		if WindowLib.isNoMoveSizeWindow(titleString) {
 			Toast.ShowError("WindowActions: cannot touch window", "Window should not be moved or resized")
 			return
 		}
-		
+
 		this.performAction(action, titleString, this.actionOverrides[name])
 	}
 	
@@ -215,26 +213,23 @@ class WindowActions {
 	;  titleString          (I,REQ) - A title string that identifies the window we want to perform the action on.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
 	;---------
-	performAction(action, titleString, windowActionSettings) {
-		if(!action || !titleString)
+	static performAction(action, titleString, windowActionSettings) {
+		if !action || !titleString
 			return
-		
+
 		method := windowActionSettings[action]
-		
-		; If we don't have a specific method, use the default for the action
-		if(method = "") {
+
+		if method = "" {
 			this.performDefaultMethod(action, titleString)
 			return
 		}
 		
-		; Special app-specific handling (for one-off methods that aren't usable elsewhere)
-		if(method = this.Method_Other) {
+		if method = this.Method_Other {
 			this.performActionForOtherWindow(action, titleString, windowActionSettings)
 			return
 		}
 		
-		; If the method is another action, fall through to that
-		if(this.isAction(method)) {
+		if this.isAction(method) {
 			this.performAction(method, titleString, windowActionSettings)
 			return
 		}
@@ -249,7 +244,7 @@ class WindowActions {
 	;  action (I,REQ) - Action string to check
 	; RETURNS:        true/false - is it an action?
 	;---------
-	isAction(action) {
+	static isAction(action) {
 		actions := []
 		actions.push(this.Action_Activate)
 		actions.push(this.Action_Backtick)
@@ -270,19 +265,17 @@ class WindowActions {
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
 	;---------
-	performActionForOtherWindow(action, titleString, windowActionSettings) {
-		if(!action)
+	static performActionForOtherWindow(action, titleString, windowActionSettings) {
+		if !action
 			return ""
-		
+
 		Switch windowActionSettings["NAME"] {
 			Case "Putty":
-				if (action = this.Action_Minimize) {
-					; If we're using MTPutty, minimize it instead of the Putty window itself (as doing the latter just
-					; minimizes it inside MTPutty)
-					if (Config.doesWindowExist("MTPutty"))
+				if action = this.Action_Minimize {
+					if Config.doesWindowExist("MTPutty")
 						this.minimizeWindowByName("MTPutty")
 					else
-						WinMinimize, % titleString
+						WinMinimize(titleString)
 				}
 		}
 	}
@@ -293,37 +286,30 @@ class WindowActions {
 	;  action      (I,REQ) - Action to perform, from Action_* constants.
 	;  titleString (I,REQ) - Title string identifying the window to act upon.
 	;---------
-	performDefaultMethod(action, titleString) {
+	static performDefaultMethod(action, titleString) {
 		Switch action {
-			; Show + activate the given window
 			Case this.Action_Activate:
-				WinShow,     % titleString
-				WinActivate, % titleString
-			
-			; React to backtick
+				WinShow(titleString)
+				WinActivate(titleString)
+
 			Case this.Action_Backtick:
-				Send, `` ; Just let the key through
-			
-			; Close the given window
+				Send("``")
+
 			Case this.Action_Close:
-				WinClose, % titleString
-			
-			; Backspace one word
+				WinClose(titleString)
+
 			Case this.Action_DeleteWord:
-				Send, ^{Backspace}
-			
-			; React to the escape key (generally to minimize or close the window)
+				Send("^{Backspace}")
+
 			Case this.Action_EscapeKey:
-				return ; Default is to do nothing.
-			
-			; Minimize the given window
+				return
+
 			Case this.Action_Minimize:
-				WinMinimize, % titleString
-			
-			; Select all
+				WinMinimize(titleString)
+
 			Case this.Action_SelectAll:
-				Send, ^a
-			
+				Send("^a")
+
 			Default:
 				Toast.ShowError("Could not perform method", "Unknown action: " action)
 		}
@@ -336,34 +322,28 @@ class WindowActions {
 	;  titleString          (I,REQ) - Title string identifying the window to act upon.
 	;  windowActionSettings (I,REQ) - Array of action override information for the window in question, from WindowActions.actionOverrides.
 	;---------
-	performSpecificMethod(method, titleString, windowActionSettings) {
+	static performSpecificMethod(method, titleString, windowActionSettings) {
 		Switch method {
-			; Run the named program
 			Case this.Method_Run:
 				Config.runProgram(windowActionSettings["NAME"])
-			
-			; Send a minimize message to the window
-			Case this.Method_Minimize_Message:
-				PostMessage, % MicrosoftLib.Message_WindowMenu, % SystemCommand_Minimize , , , % titleString
-			
-			; Select all using home/end keys
-			Case this.Method_SelectAll_Home:
-				Send, ^{Home}
-				Send, ^+{End}
-			
-			; Delete a work by selecting it
-			Case this.Method_DeleteWord_Select:
-				Send, ^+{Left}
-				Send, {Backspace}
-			
-			; Send an Escape keystroke
-			Case this.Method_SendEsc:
-				Send, {Esc}
 
-			; Do nothing
+			Case this.Method_Minimize_Message:
+				PostMessage(MicrosoftLib.Message_WindowMenu, SystemCommand_Minimize, , , titleString)
+
+			Case this.Method_SelectAll_Home:
+				Send("^{Home}")
+				Send("^+{End}")
+
+			Case this.Method_DeleteWord_Select:
+				Send("^+{Left}")
+				Send("{Backspace}")
+
+			Case this.Method_SendEsc:
+				Send("{Esc}")
+
 			Case this.Method_None:
 				return
-			
+
 			Default:
 				Toast.ShowError("Could not perform method", "Method unknown: " method)
 		}

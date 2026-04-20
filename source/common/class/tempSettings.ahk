@@ -10,22 +10,22 @@ class TempSettings {
 	;                 if you need to set/restore settings multiple times.
 	;---------
 	restore() {
-		For targetType,mode in this._coordMode {
-			CoordMode, % targetType, % mode
+		for targetType, mode in this._coordMode {
+			CoordMode(targetType, mode)
 		}
-		
-		if(this._detectHiddenWindows != "")
-			DetectHiddenWindows, % this._detectHiddenWindows
-		if(this._sendLevel           != "")
-			SendLevel,           % this._sendLevel
-		if(this._titleMatchMode      != "")
-			SetTitleMatchMode,   % this._titleMatchMode
-		if(this._titleMatchSpeed     != "")
-			SetTitleMatchMode,   % this._titleMatchSpeed
-		if(this._trayIcon            != "")
-			Menu, Tray, Icon,    % this._trayIcon, % this._trayIconNum
-		if(this._workingDirectory    != "")
-			SetWorkingDir,       % this._workingDirectory
+
+		if this._detectHiddenWindows != ""
+			DetectHiddenWindows(this._detectHiddenWindows)
+		if this._sendLevel != ""
+			SendLevel(this._sendLevel)
+		if this._titleMatchMode != ""
+			SetTitleMatchMode(this._titleMatchMode)
+		if this._titleMatchSpeed != ""
+			SetTitleMatchMode(this._titleMatchSpeed)
+		if this._trayIcon != ""
+			TraySetIcon(this._trayIcon, this._trayIconNum)
+		if this._workingDirectory != ""
+			A_WorkingDir := this._workingDirectory
 	}
 	
 	;---------
@@ -36,10 +36,10 @@ class TempSettings {
 	; RETURNS:        this
 	;---------
 	coordMode(targetType, new) {
-		if(this._coordMode[targetType] = "")
+		if !this._coordMode.Has(targetType)
 			this._coordMode[targetType] := this.getCoordMode(targetType)
-		
-		CoordMode, % targetType, % new
+
+		CoordMode(targetType, new)
 		return this
 	}
 	
@@ -50,10 +50,10 @@ class TempSettings {
 	; RETURNS:        this
 	;---------
 	detectHiddenWindows(new) {
-		if(this._detectHiddenWindows = "")
+		if this._detectHiddenWindows = ""
 			this._detectHiddenWindows := A_DetectHiddenWindows
-		
-		DetectHiddenWindows, % new
+
+		DetectHiddenWindows(new)
 		return this
 	}
 	
@@ -64,10 +64,10 @@ class TempSettings {
 	; RETURNS:        this
 	;---------
 	sendLevel(new) {
-		if(this._sendLevel = "")
+		if this._sendLevel = ""
 			this._sendLevel := A_SendLevel
-		
-		SendLevel, % new
+
+		SendLevel(new)
 		return this
 	}
 	
@@ -79,10 +79,10 @@ class TempSettings {
 	; NOTES:          If you want to set the title match speed, use .titleMatchSpeed() instead.
 	;---------
 	titleMatchMode(new) {
-		if(this._titleMatchMode = "")
+		if this._titleMatchMode = ""
 			this._titleMatchMode := A_TitleMatchMode
-		
-		SetTitleMatchMode, % new
+
+		SetTitleMatchMode(new)
 		return this
 	}
 	
@@ -93,10 +93,10 @@ class TempSettings {
 	; RETURNS:        this
 	;---------
 	titleMatchSpeed(new) {
-		if(this._titleMatchSpeed = "")
+		if this._titleMatchSpeed = ""
 			this._titleMatchSpeed := A_TitleMatchModeSpeed
-		
-		SetTitleMatchMode, % new
+
+		SetTitleMatchMode(new)
 		return this
 	}
 	
@@ -108,17 +108,17 @@ class TempSettings {
 	; RETURNS:        this
 	;---------
 	trayIcon(newFile, newNum := "") {
-		if(newFile = "")
+		if newFile = ""
 			return this
-		
-		if(newNum = "")
+
+		if newNum = ""
 			newNum := 1
-		if(this._trayIcon = "") {
+		if this._trayIcon = "" {
 			this._trayIcon    := A_IconFile
 			this._trayIconNum := A_IconNumber
 		}
-		
-		Menu, Tray, Icon, % newFile, % newNum
+
+		TraySetIcon(newFile, newNum)
 		return this
 	}
 	
@@ -129,16 +129,16 @@ class TempSettings {
 	; RETURNS:        this
 	;---------
 	workingDirectory(new) {
-		if(this._workingDirectory = "")
+		if this._workingDirectory = ""
 			this._workingDirectory := A_WorkingDir
-		
-		SetWorkingDir, % new
+
+		A_WorkingDir := new
 		return this
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
 	;region ------------------------------ PRIVATE ------------------------------
-	_coordMode           := {} ; {targetType: value}
+	_coordMode           := Map() ; {targetType: value}
 	_detectHiddenWindows := ""
 	_sendLevel           := ""
 	_titleMatchMode      := ""

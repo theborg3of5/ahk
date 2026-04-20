@@ -14,16 +14,16 @@ class WindowPositions {
 	;  titleString (I,OPT) - Title string identifying the window to fix, defaults to active window ("A").
 	;  preset      (I,OPT) - The preset to "fix" the window with regards to - a given window could have a different position per preset.
 	;---------
-	fixWindow(titleString := "A", preset := "NORMAL") { ; preset := Preset_Default
-		if(!this.validatePreset(preset))
+	static fixWindow(titleString := "A", preset := "NORMAL") { ; preset := Preset_Default
+		if !this.validatePreset(&preset)
 			return
-		
+
 		titleString := this.handleParentWindows(titleString)
 
 		position := this.findBestPositionMatch(titleString, preset)
-		if(!position)
+		if !position
 			return
-		
+
 		this.fixWindowPosition(titleString, position)
 	}
 	
@@ -32,25 +32,25 @@ class WindowPositions {
 	; PARAMETERS:
 	;  preset (I,OPT) - Name of the preset to apply. If not passed, user will get a Selector popup prompting them for one.
 	;---------
-	fixAllWindows(preset := "") {
-		if(!this.validatePreset(preset))
+	static fixAllWindows(preset := "") {
+		if !this.validatePreset(&preset)
 			return
-		
-		pt := new ProgressToast("Fixing window positions")
-		For name,position in this.positions[preset] {
+
+		pt := ProgressToast("Fixing window positions")
+		for name, position in this.positions[preset] {
 			pt.nextStep(name, "fixed")
 			winInfo := Config.windowInfo[name]
-			
-			if(WindowLib.isNoMoveSizeWindow("A")) {
+
+			if WindowLib.isNoMoveSizeWindow("A") {
 				pt.endStep("found but not movable")
-				Continue
+				continue
 			}
-			
-			if(!winInfo.exists()) {
+
+			if !winInfo.exists() {
 				pt.endStep("not found")
-				Continue
+				continue
 			}
-			
+
 			this.fixWindowPosition(winInfo.idString, position)
 		}
 		pt.finish()
@@ -68,18 +68,18 @@ class WindowPositions {
 	; RETURNS:        Associative array of WindowPosition objects by window name.
 	; SIDE EFFECTS:   Populates relevant subscript of this._positions cache if it's not already.
 	;---------
-	positions[preset] {
+	static positions[preset] {
 		get {
-			if(!this._positions)
-				this._positions := {}
-			if(!this._positions[preset]) {
-				presetPositions := new TableList(this.Filename_Config).filterOutIfColumnNoMatch("PRESET", preset).getRowsByColumn("NAME")
-				
-				this._positions[preset] := {}
-				For name,positionAry in presetPositions
-					this._positions[preset, name] := new this.WindowPosition(positionAry)
+			if !this._positions
+				this._positions := Map()
+			if !this._positions.Has(preset) {
+				presetPositions := TableList(this.Filename_Config).filterOutIfColumnNoMatch("PRESET", preset).getRowsByColumn("NAME")
+
+				this._positions[preset] := Map()
+				for name, positionAry in presetPositions
+					this._positions[preset][name] := this.WindowPosition(positionAry)
 			}
-			
+
 			return this._positions[preset]
 		}
 	}
@@ -91,8 +91,8 @@ class WindowPositions {
 	;  name   (I,REQ) - Window name
 	; RETURNS:        WindowPosition object matching the preset and window name.
 	;---------
-	getPosition(preset, name) {
-		return this.positions[preset][name] ; Double brackets so we don't try to pass name as a second parameter to positions property.
+	static getPosition(preset, name) {
+		return (this.positions[preset])[name]
 	}
 
 	;---------
@@ -101,7 +101,7 @@ class WindowPositions {
 	;  titleString (I,REQ) - The title string of the window we're targeting.
 	; RETURNS:        titleString to use (might be the input, might be a parent window we should be sizing instead).
 	;---------
-	handleParentWindows(titleString) {
+	static handleParentWindows(titleString) {
 		; Putty windows should generally live inside MTPutty if it exists.
 		if (Config.windowMatchesInfo(titleString, "Putty") && Config.doesWindowExist("MTPutty"))
 			return Config.windowInfo["MTPutty"].idString
@@ -115,17 +115,14 @@ class WindowPositions {
 	;  preset (IO,REQ) - The preset name. If blank, user will be prompted and the new value set here.
 	; RETURNS:        true/false - did we end up with a preset?
 	;---------
-	validatePreset(ByRef preset) {
-		; Have a preset
-		if(preset)
+	static validatePreset(&preset) {
+		if preset
 			return true
-		
-		; Prompt for preset
-		preset := new Selector(this.Filename_PresetList).prompt("PRESET")
-		if(preset)
+
+		preset := Selector(this.Filename_PresetList).prompt("PRESET")
+		if preset
 			return true
-		
-		; No preset given by caller or user.
+
 		return false
 	}
 	
@@ -136,9 +133,9 @@ class WindowPositions {
 	;  preset      (I,REQ) - Name of the preset to look within.
 	; RETURNS:        Matching WindowPosition object, or nothing if none found.
 	;---------
-	findBestPositionMatch(titleString, preset) {
-		For _,names in Config.findAllMatchingWindowNames(titleString) { ; Looping by priority
-			For _,name in names {
+	static findBestPositionMatch(titleString, preset) {
+		for _, names in Config.findAllMatchingWindowNames(titleString) {
+			for _, name in names {
 				position := this.getPosition(preset, name)
 				if(position)
 					return position
@@ -152,22 +149,20 @@ class WindowPositions {
 	;  titleString (I,REQ) - Title string identifying the window.
 	;  position    (I,REQ) - WindowPosition object to adjust the window to match.
 	;---------
-	fixWindowPosition(titleString, position) {
-		if(!position)
+	static fixWindowPosition(titleString, position) {
+		if !position
 			return
-		
-		if(position.shouldActivate) ; If the flag says to activate it, always do so.
+
+		if position.shouldActivate
 			Config.activateProgram(position.name)
-		
-		; Track initially-minimized windows so we can re-minimize them when we're done (VisualWindow.resizeMove will restore them).
+
 		startedMinimized := WindowLib.isMinimized(titleString)
-		
+
 		workArea := MonitorLib.workAreaForLocation[position.monitor]
-		new VisualWindow(titleString).resizeMove(position.width, position.height, position.x, position.y, workArea)
-		
-		; Put window into final state
-		if(startedMinimized) ; Otherwise, re-minimize the window if it started out that way.
-			WinMinimize, % titleString
+		VisualWindow(titleString).resizeMove(position.width, position.height, position.x, position.y, workArea)
+
+		if startedMinimized
+			WinMinimize(titleString)
 	}
 	
 	
@@ -183,9 +178,9 @@ class WindowPositions {
 		shouldActivate := "" ; Whether the window needs to be activated as part of "fixing" it
 		
 		__New(positionAry) {
-			if(!positionAry)
-				return ""
-			
+			if !positionAry
+				return
+
 			this.name    := positionAry["NAME"]
 			this.monitor := positionAry["MONITOR"]
 			this.width   := positionAry["WIDTH"]

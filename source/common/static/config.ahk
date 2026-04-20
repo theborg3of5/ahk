@@ -2,23 +2,23 @@
 
 class Config {
 	;region ------------------------------ PUBLIC ------------------------------
-	debugOn := false ; GDB TODO window cache debug issue
-	
+	static debugOn := false ; GDB TODO window cache debug issue
+
 	;---------
 	; DESCRIPTION:    Whether this class has been initialized. Used to not show debug popups when
 	;                 it's not initialized, to cut down on popups on restart in high-traffic areas.
 	;---------
-	isInitialized {
+	static isInitialized {
 		get {
 			return this.initDone
 		}
 	}
-	
-	
+
+
 	;---------
 	; DESCRIPTION:    Initialize this static config class. Loads information from various config files (see individual this.load* functions).
 	;---------
-	Init() {
+	static Init() {
 		; Add automatic context/machine filters to TableList.
 		TableList.addAutomaticFilter("CONTEXT", this.context)
 		TableList.addAutomaticFilter("MACHINE", this.machine)
@@ -33,19 +33,19 @@ class Config {
 	; PARAMETERS:
 	;  key(I,REQ) - The key to the bit of private info you want.
 	;---------
-	private[key] {
+	static private[key] {
 		get {
-			return (this.privates)[key] ; Parens are so it doesn't try to pass a parameter to the this.privates property.
+			return (this.privates)[key]
 		}
 	}
-	
+
 	;---------
 	; DESCRIPTION:    Replace any tags matching private keys, with those corresponding private values.
 	; PARAMETERS:
 	;  inputString (I,REQ) - The string to search and replace within.
 	; RETURNS:        The updated string
 	;---------
-	replacePrivateTags(inputString) {
+	static replacePrivateTags(inputString) {
 		return inputString.replaceTags(this.privates)
 	}
 	;endregion Privates
@@ -55,7 +55,7 @@ class Config {
 	;---------
 	; DESCRIPTION:    Which machine we're configured to act as, from the Machine_* constants in this class.
 	;---------
-	machine {
+	static machine {
 		get {
 			return this.setting["MACHINE"]
 		}
@@ -63,7 +63,7 @@ class Config {
 	;---------
 	; DESCRIPTION:    Work laptop machine.
 	;---------
-	machineIsWorkDesktop {
+	static machineIsWorkDesktop {
 		get {
 			return (this.machine = Config.Machine_WorkDesktop)
 		}
@@ -71,7 +71,7 @@ class Config {
 	;---------
 	; DESCRIPTION:    Work VDI machine.
 	;---------
-	machineIsWorkVDI {
+	static machineIsWorkVDI {
 		get {
 			return (this.machine = Config.Machine_WorkVDI)
 		}
@@ -79,7 +79,7 @@ class Config {
 	;---------
 	; DESCRIPTION:    Home desktop machine.
 	;---------
-	machineIsHomeDesktop {
+	static machineIsHomeDesktop {
 		get {
 			return (this.machine = Config.Machine_HomeDesktop)
 		}
@@ -87,7 +87,7 @@ class Config {
 	;---------
 	; DESCRIPTION:    Home laptop machine.
 	;---------
-	machineIsHomeLaptop {
+	static machineIsHomeLaptop {
 		get {
 			return (this.machine = Config.Machine_HomeLaptop)
 		}
@@ -98,7 +98,7 @@ class Config {
 	;---------
 	; DESCRIPTION:    Which context we're configured to act as, from the Context_* constants in this class.
 	;---------
-	context {
+	static context {
 		get {
 			return this.setting["CONTEXT"]
 		}
@@ -106,7 +106,7 @@ class Config {
 	;---------
 	; DESCRIPTION:    Work context
 	;---------
-	contextIsWork {
+	static contextIsWork {
 		get {
 			return (this.context = Config.Context_Work)
 		}
@@ -114,7 +114,7 @@ class Config {
 	;---------
 	; DESCRIPTION:    Home context
 	;---------
-	contextIsHome {
+	static contextIsHome {
 		get {
 			return (this.context = Config.Context_Home)
 		}
@@ -128,19 +128,19 @@ class Config {
 	; PARAMETERS:
 	;  name (I,REQ) - The name of the window to retrieve info for.
 	;---------
-	windowInfo[name] {
+	static windowInfo[name] {
 		get {
-			return (this.windows)[name].clone() ; Parens are so it doesn't try to pass a parameter to the this.windows property.
+			return (this.windows)[name].clone()
 		}
 	}
-	
+
 	;---------
 	; DESCRIPTION:    Check whether the named window is currently active.
 	; PARAMETERS:
 	;  name (I,REQ) - Name of the window to check for.
 	; RETURNS:        The window ID if it's active, otherwise false.
 	;---------
-	isWindowActive(name) {
+	static isWindowActive(name) {
 		return this.windowInfo[name].isActive()
 	}
 	
@@ -150,7 +150,7 @@ class Config {
 	;  name (I,REQ) - Name of the window to check for.
 	; RETURNS:        The window ID if it exists, otherwise false.
 	;---------
-	doesWindowExist(name) {
+	static doesWindowExist(name) {
 		return this.windowInfo[name].exists()
 	}
 	
@@ -161,7 +161,7 @@ class Config {
 	;  name        (I,REQ) - Name of the WindowInfo to compare it to
 	; RETURNS:        true/false - does it match?
 	;---------
-	windowMatchesInfo(titleString, name) {
+	static windowMatchesInfo(titleString, name) {
 		return this.windowInfo[name].windowMatches(titleString)
 	}
 	
@@ -171,25 +171,23 @@ class Config {
 	;  titleString (I,REQ) - Title string that identifies the window in question.
 	; RETURNS:        The WindowInfo instance matching the specified window.
 	;---------
-	findWindowInfo(titleString) {
-		exe   := WinGet("ProcessPath", titleString) ; Use full process path so win_exe values can match on full path if needed.
+	static findWindowInfo(titleString) {
+		exe   := WinGetProcessPath(titleString)
 		class := WinGetClass(titleString)
 		title := WinGetTitle(titleString)
-		
+
 		bestMatch := ""
-		For _,winInfo in this.windows {
-			if(!winInfo.windowMatchesPieces(exe, class, title))
-				Continue
-			
-			; If we already found another match, don't replace it unless the new match has a better (lower) priority
-			if((bestMatch != "") && bestMatch.priority < winInfo.priority)
-				Continue
-			
-			; This is the best match we've found so far
+		for _, winInfo in this.windows {
+			if !winInfo.windowMatchesPieces(exe, class, title)
+				continue
+
+			if (bestMatch != "") && bestMatch.priority < winInfo.priority
+				continue
+
 			bestMatch := winInfo
 		}
-		
-		if(Config.debugOn) { ; GDB TODO window cache debug issue
+
+		if Config.debugOn { ; GDB TODO window cache debug issue
 			debugString := "findWindowInfo():"
 			debugString .= "`n" "titleString=" titleString
 			debugString .= "`n" "exe" "=" exe "`t`t`t|`t`t`t" "bestMatch.exe" "=" bestMatch.exe
@@ -201,10 +199,10 @@ class Config {
 			debugString .= "`n" "(Config.windows)[""Telegram""].name" "=" (Config.windows)["Telegram"].name
 			debugString .= "`n" "(this._windows)[""Telegram""].name" "=" (this._windows)["Telegram"].name
 			debugString .= "`n" "(Config._windows)[""Telegram""].name" "=" (Config._windows)["Telegram"].name
-			MsgBox, % debugString
+			MsgBox(debugString)
 		}
-		
-		return bestMatch.clone() ; Handles "" fine ("".clone() = "")
+
+		return bestMatch.clone()
 	}
 	
 	;---------
@@ -213,7 +211,7 @@ class Config {
 	;  titleString (I,REQ) - Title string that identifies the window in question.
 	; RETURNS:        The NAME for the matched WindowInfo instance.
 	;---------
-	findWindowName(titleString) {
+	static findWindowName(titleString) {
 		winInfo := this.findWindowInfo(titleString)
 		return winInfo.name
 	}
@@ -225,23 +223,23 @@ class Config {
 	; RETURNS:        Array of WindowInfo names, divided up by priority:
 	;                    matchingNames[priority] := [name1, name2]
 	;---------
-	findAllMatchingWindowNames(titleString) {
-		exe   := WinGet("ProcessPath", titleString) ; Use full process path so win_exe values can match on full path if needed.
+	static findAllMatchingWindowNames(titleString) {
+		exe   := WinGetProcessPath(titleString)
 		class := WinGetClass(titleString)
 		title := WinGetTitle(titleString)
-		
-		matchingNames := {}
-		For _,winInfo in this.windows {
-			if(winInfo.windowMatchesPieces(exe, class, title)) {
+
+		matchingNames := Map()
+		for _, winInfo in this.windows {
+			if winInfo.windowMatchesPieces(exe, class, title) {
 				priority := winInfo.priority
-				if(!matchingNames[priority])
+				if !matchingNames.Has(priority)
 					matchingNames[priority] := [winInfo.name]
 				else
-					matchingNames[priority].push(winInfo.name)
+					matchingNames[priority].Push(winInfo.name)
 			}
 		}
-		
-		if(DataLib.isNullOrEmpty(matchingNames))
+
+		if DataLib.isNullOrEmpty(matchingNames)
 			return ""
 		return matchingNames
 	}
@@ -253,19 +251,19 @@ class Config {
 	; PARAMETERS:
 	;  key (I,REQ) - The key for the path you want.
 	;---------
-	path[key] {
+	static path[key] {
 		get {
-			return (this.paths)[key] ; Parens are so it doesn't try to pass a parameter to the this.paths property.
+			return (this.paths)[key]
 		}
 	}
-	
+
 	;---------
 	; DESCRIPTION:    Replace any tags matching path keys, with those corresponding paths.
 	; PARAMETERS:
 	;  inputString (I,REQ) - The string to search and replace within.
 	; RETURNS:        The updated string
 	;---------
-	replacePathTags(inputPath) {
+	static replacePathTags(inputPath) {
 		return inputPath.replaceTags(this.paths)
 	}
 	;endregion Paths
@@ -277,12 +275,12 @@ class Config {
 	;  name    (I,REQ) - The name of the window to activate.
 	;  runArgs (I,OPT) - If the window doesn't currently exist, we'll run the corresponding program with these parameters.
 	;---------
-	activateProgram(name, runArgs := "") { ; runArgs are only used if the program's window doesn't already exist (and we're therefore running it).
+	static activateProgram(name, runArgs := "") {
 		HotkeyLib.waitForRelease()
-		
-		if(this.doesWindowExist(name)) ; If the program is already running, go ahead and activate it.
+
+		if this.doesWindowExist(name)
 			WindowActions.activateWindowByName(name)
-		else ; If it doesn't exist yet, we need to run the executable to make it happen.
+		else
 			this.runProgram(name, runArgs)
 	}
 
@@ -292,15 +290,15 @@ class Config {
 	;  name (I,REQ) - The name of the program to run.
 	;  args (I,OPT) - The arguments to run the program with.
 	;---------
-	runProgram(name, args := "") {
+	static runProgram(name, args := "") {
 		HotkeyLib.waitForRelease()
-		
+
 		prog := this.program[name]
-		if (!prog) {
+		if !prog {
 			Toast.ShowError("Program does not exist", name)
 			return
 		}
-		
+
 		prog.run(args)
 	}
 
@@ -310,9 +308,9 @@ class Config {
 	;  name (I,REQ) - Name of the program we're interested in.
 	; RETURNS:        Full program path
 	;---------
-	getProgramPath(name) {
+	static getProgramPath(name) {
 		prog := this.program[name]
-		if(prog)
+		if prog
 			return prog.path
 	}
 	;endregion Programs
@@ -346,16 +344,16 @@ class Config {
 	;  key (I,REQ) - The key for the setting in question.
 	; SIDE EFFECTS:   Initializes this._settings from the INI file the first time this is called.
 	;---------
-	setting[key] {
+	static setting[key] {
 		get {
-			if(!this._settings) {
+			if !this._settings {
 				settingsINIPath := this.getPathInConfigFolder("settings.ini")
-				
-				this._settings := {}
-				this._settings["MACHINE"]      := IniRead(settingsINIPath, "Main", "MACHINE")         ; Which machine this is, from Config.Machine_* constants
-				this._settings["CONTEXT"]      := IniRead(settingsINIPath, "Main", "CONTEXT")         ; Which context this is, from Config.Context_* constants
+
+				this._settings := Map()
+				this._settings["MACHINE"] := IniRead(settingsINIPath, "Main", "MACHINE")
+				this._settings["CONTEXT"] := IniRead(settingsINIPath, "Main", "CONTEXT")
 			}
-			
+
 			return this._settings[key]
 		}
 	}
@@ -364,15 +362,15 @@ class Config {
 	; DESCRIPTION:    Get the associative array of private info from our privates.tl file.
 	; SIDE EFFECTS:   Initializes this._privates the first time this is called.
 	;---------
-	privates {
+	static privates {
 		get {
-			if(!this._privates) {
+			if !this._privates {
 				; This has to be explicit (rather than using this.path["AHK_PRIVATE"] like everywhere else should) because we use privates when we're first getting paths.
-			 	privatesPath := FileLib.getParentFolder(this.getRoot()) "\ahkPrivate\privates.tl"
-				
-			 	this._privates := new TableList(privatesPath).getColumnByColumn("VALUE", "KEY")
+				privatesPath := FileLib.getParentFolder(this.getRoot()) "\ahkPrivate\privates.tl"
+
+				this._privates := TableList(privatesPath).getColumnByColumn("VALUE", "KEY")
 			}
-			
+
 			return this._privates
 		}
 	}
@@ -381,20 +379,20 @@ class Config {
 	; DESCRIPTION:    Get the associative array of window info objects from our windows.tl file.
 	; SIDE EFFECTS:   Initializes this._windows the first time this is called.
 	;---------
-	windows {
+	static windows {
 		get {
-			if(!this._windows) {
-				this._windows := {}
-				
-				windowsTable := new TableList(this.getPathInConfigFolder("windows.tl")).getTable()
-				For _,row in windowsTable {
-					winInfo := new WindowInfo(row)
+			if !this._windows {
+				this._windows := Map()
+
+				windowsTable := TableList(this.getPathInConfigFolder("windows.tl")).getTable()
+				for _, row in windowsTable {
+					winInfo := WindowInfo(row)
 					name := winInfo.name
-					if(name)
+					if name
 						this._windows[name] := winInfo
 				}
 			}
-			
+
 			return this._windows
 		}
 	}
@@ -403,28 +401,25 @@ class Config {
 	; DESCRIPTION:    Get the associative array of paths from our paths.tl file.
 	; SIDE EFFECTS:   Initializes this._paths the first time this is called.
 	;---------
-	paths {
+	static paths {
 		get {
-			if(!this._paths) {
-				pathsAry := new TableList(this.getPathInConfigFolder("paths.tl")).getColumnByColumn("PATH", "KEY")
-				
-				; Grab special path tags from the system to replace in the ones we just read in.
+			if !this._paths {
+				pathsAry := TableList(this.getPathInConfigFolder("paths.tl")).getColumnByColumn("PATH", "KEY")
+
 				systemPathTags := this.getSystemPathTags()
-				
-				; Replace calculated and private path tags.
-				For key,path in pathsAry {
-					; Special case: for tags which are exclusively pass-throughs (blank path), just use the matching tag's value (from either path or private).
+
+				for key, path in pathsAry {
 					path := DataLib.coalesce(path, systemPathTags[key], this.private[key])
-					
+
 					path := path.replaceTags(systemPathTags)
 					path := this.replacePrivateTags(path)
-					
-					pathsAry[key] := path ; make sure to store it back in the actual array
+
+					pathsAry[key] := path
 				}
-				
+
 				this._paths := pathsAry
 			}
-			
+
 			return this._paths
 		}
 	}
@@ -435,17 +430,16 @@ class Config {
 	;  name (I,REQ) - The name of the program you want.
 	; SIDE EFFECTS:   Initializes this._programs the first time this is called.
 	;---------
-	program[name] {
+	static program[name] {
 		get {
-			if(!this._programs) {
-				this._programs := {}
-				
-				; Turn each row into a Program object.
-				programsTable := new TableList(this.getPathInConfigFolder("programs.tl")).getRowsByColumn("NAME", "MACHINE")
-				For progName,row in programsTable
-					this._programs[progName] := new Program(row)
+			if !this._programs {
+				this._programs := Map()
+
+				programsTable := TableList(this.getPathInConfigFolder("programs.tl")).getRowsByColumn("NAME", "MACHINE")
+				for progName, row in programsTable
+					this._programs[progName] := Program(row)
 			}
-			
+
 			return this._programs[name]
 		}
 	}
@@ -455,7 +449,7 @@ class Config {
 	; PARAMETERS:
 	;  relativeConfigPath (I,REQ) - The path to the config file, from within the <root>\config\ folder. No leading backslash.
 	;---------
-	getPathInConfigFolder(relativeConfigPath) {
+	static getPathInConfigFolder(relativeConfigPath) {
 		return this.getRoot() "\config\" relativeConfigPath
 	}
 	
@@ -463,7 +457,7 @@ class Config {
 	; DESCRIPTION:    Figure out the path to the root of this repository.
 	; RETURNS:        The absolute path to the repository root (the top-level folder), no trailing backslash.
 	;---------
-	getRoot() {
+	static getRoot() {
 		return FileLib.getParentFolder(A_LineFile, 4) ; Root path is 3 levels out, plus one to get out of file itself.
 	}
 	
@@ -472,9 +466,9 @@ class Config {
 	;                 strings (and will also be applied to other paths as we read them in).
 	; RETURNS:        Array of path tags, {KEY => PATH}
 	;---------
-	getSystemPathTags() {
-		tags := {}
-		
+	static getSystemPathTags() {
+		tags := Map()
+
 		tags["PROGRAM_DATA"]       := A_AppDataCommon                        ; C:\ProgramData
 		tags["USER_ROOT"]          := EnvGet("HOMEDRIVE") EnvGet("HOMEPATH") ; C:\Users\<UserName>
 		tags["USER_APPDATA_LOCAL"] := EnvGet("LOCALAPPDATA")                 ; C:\Users\<UserName>\AppData\Local

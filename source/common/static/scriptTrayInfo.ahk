@@ -16,18 +16,17 @@ class ScriptTrayInfo {
 	;  suspendedIcon (I,OPT) - The full path to the suspended icon - this will be used when the script
 	;                          is suspended using the common !#x hotkey (see CommonHotkeys).
 	;---------
-	Init(tooltipText, normalIcon := "", suspendedIcon := "") {
-		Menu, Tray, Tip, % tooltipText
-		
+	static Init(tooltipText, normalIcon := "", suspendedIcon := "") {
+		A_IconTip := tooltipText
+
 		; Keep suspend from changing it to the AHK default, so we can use our custom suspendedIcon instead.
-		if(suspendedIcon)
-			Menu, Tray, Icon, , , 1
-		
-		; Build states array from given icons
-		this.stateIcons := {}
-		this.stateIcons["A_IsSuspended", 0] := normalIcon
-		this.stateIcons["A_IsSuspended", 1] := suspendedIcon
-		
+		if suspendedIcon
+			TraySetIcon(, , true)
+
+		; Build states map from given icons. Keys are getter functions that return current state.
+		this.stateIcons := Map()
+		this.stateIcons[() => A_IsSuspended] := Map(0, normalIcon, 1, suspendedIcon)
+
 		this.updateTrayIcon()
 	}
 
@@ -40,9 +39,9 @@ class ScriptTrayInfo {
 	;                   	states["varName", varState] := iconPath
 	;                   See getIconForCurrentState() for a more in-depth explanation.
 	;---------
-	setStateIcons(states) {
-		Menu, Tray, Icon, , , 1 ; Assume that there will always be a path in here to a suspended icon we should use.
-		
+	static setStateIcons(states) {
+		TraySetIcon(, , true) ; Assume that there will always be a path in here to a suspended icon we should use.
+
 		this.stateIcons := states
 		this.updateTrayIcon()
 	}
@@ -51,56 +50,53 @@ class ScriptTrayInfo {
 	; DESCRIPTION:    Determine the icon that should be used for the script (based on the variables
 	;                 defined in the stateIcons array) and apply it.
 	;---------
-	updateTrayIcon() {
+	static updateTrayIcon() {
 		newIcon := this.getIconForCurrentState(this.stateIcons)
 		; Debug.popup("ScriptTrayInfo.updateTrayIcon","Start", "this.stateIcons",this.stateIcons, "newIcon",newIcon)
-		if(!newIcon)
+		if !newIcon
 			return
-		
+
 		iconPath := Config.path["AHK_ROOT"] "\icons\" newIcon
-		if(!FileExist(iconPath)) ; Fallback to icons in same directory
+		if !FileExist(iconPath) ; Fallback to icons in same directory
 			iconPath := A_WorkingDir "\" newIcon
 
-		if(!FileExist(iconPath))
+		if !FileExist(iconPath)
 			return
-		
-		Menu, Tray, Icon, % iconPath
+
+		TraySetIcon(iconPath)
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
 	;region ------------------------------ PRIVATE ------------------------------
-	static stateIcons := {} ; Associative array representing which icon to use in different situations - see .getIconForCurrentState() for explanation.
+	static stateIcons := Map() ; Map of getter functions to sub-Maps - see .getIconForCurrentState() for explanation.
 
 	;---------
-	; DESCRIPTION:    Recursively drill down into the given array and determine (based on the states
-	;                 of the variables named in that array) the matching icon.
+	; DESCRIPTION:    Recursively drill down into the given map and determine (based on the current
+	;                 state returned by getter functions) the matching icon.
 	; PARAMETERS:
-	;  stateIcons (I,REQ) - An array that dictates which icon we should use, based on the states of
-	;                       different variables. Format:
-	;                       	stateIcons["var1", 0]            := iconPath1
-	;                       	stateIcons["var1", 1, "var2", 0] := iconPath2
-	;                       	stateIcons["var1", 1, "var2", 1] := iconPath3
-	;                       	...
+	;  stateIcons (I,REQ) - A Map that dictates which icon we should use, based on the current values
+	;                       returned by getter functions. Format:
+	;                       	stateIcons[getterFunc] := Map(value1, iconOrSubMap, value2, iconOrSubMap, ...)
+	;                       Getter functions are fat-arrow closures like () => A_IsSuspended.
 	; RETURNS:        The icon (path) that matches the current state.
 	; NOTES:          An example:
-	;                 	Variables and desired icons to use:
-	;                 		suspended  - 0 or 1. If 1, show suspended.ico. Otherwise, check other states.
-	;                 		otherState - 0 or 1. If 1, show other.ico, otherwise show normal.ico.
-	;                 	Array that should be used:
-	;                 		stateIcons["suspended", 1]                  := "suspended.ico"
-	;                 		stateIcons["suspended", 0, "otherState", 1] := "other.ico"
-	;                 		stateIcons["suspended", 0, "otherState", 0] := "normal.ico"
+	;                 	stateIcons[() => A_IsSuspended] := Map(
+	;                 		1, "suspended.ico",
+	;                 		0, Map(
+	;                 			() => vimKeysOn, Map(0, "vimPause.ico", 1, "vim.ico")
+	;                 		)
+	;                 	)
 	;---------
-	getIconForCurrentState(stateIcons) {
-		if(!isObject(stateIcons))
+	static getIconForCurrentState(stateIcons) {
+		if !(stateIcons is Map)
 			return stateIcons
-		
-		; Doesn't really need to be a loop, but this lets us get the index (which is the variable name in question) and corresponding pieces easier.
-		For varName,states in stateIcons {
-			; Debug.popup("varName",varName, "states",states, "%varName%",%varName%, "states[%varName%]",states[%varName%])
-			return this.getIconForCurrentState(states[%varName%])
+
+		; Doesn't really need to be a loop, but this lets us get the getter function and corresponding sub-map easier.
+		for getter, states in stateIcons {
+			currentValue := getter()
+			return this.getIconForCurrentState(states[currentValue])
 		}
-		
+
 		return "" ; If we get to a state where there's no matching icon, just return "".
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------

@@ -16,26 +16,26 @@ class Debug {
 	;                 popups when debugging a function that it uses (from each of the different standlone scripts that
 	;                 run). If you need to show a popup before that point, you can use the .popupEarly() function instead.
 	;---------
-	popup(params*) {
+	static popup(params*) {
 		; Only start showing popups once Config is finished loading - popupEarly can be used if you want to show debug messages in these cases.
 		if(!Config.isInitialized)
 			return
 		
-		table := new DebugTable("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
+		table := DebugTable("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
 		table.addPairs(params*)
 		
-		new TextPopup(table).show()
+		TextPopup(table).show()
 	}
 	
 	;---------
 	; DESCRIPTION:    Same as .popup(), but will run before Config is initialized. See
 	;                 .popup() for details and parameters.
 	;---------
-	popupEarly(params*) {
-		table := new DebugTable("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
+	static popupEarly(params*) {
+		table := DebugTable("Debug Info").setBorderType(TextTable.BorderType_BoldLine)
 		table.addPairs(params*)
 		
-		new TextPopup(table).show()
+		TextPopup(table).show()
 	}
 	
 	;---------
@@ -45,11 +45,11 @@ class Debug {
 	;  params* (I,REQ) - A variable number of arguments to display. For 1 argument, we will interpret it as a value (not a
 	;                    label), but for >1 arguments an even number of arguments should be passed in label,value pairs.
 	;---------
-	copy(params*) {
-		table := new DebugTable().setBorderType(TextTable.BorderType_None)
+	static copy(params*) {
+		table := DebugTable().setBorderType(TextTable.BorderType_None)
 		table.addPairs(params*)
 		
-		clipboard := table.getText()
+		A_Clipboard := table.getText()
 	}
 	
 	;---------
@@ -58,8 +58,8 @@ class Debug {
 	;  params* (I,REQ) - A variable number of arguments to display. For 1 argument, we will interpret it as a value (not a
 	;                    label), but for >1 arguments an even number of arguments should be passed in label,value pairs.
 	;---------
-	tempFile(params*) {
-		table := new DebugTable().setBorderType(TextTable.BorderType_None)
+	static tempFile(params*) {
+		table := DebugTable().setBorderType(TextTable.BorderType_None)
 		table.addPairs(params*)
 		NotepadPlusPlus.openTempText(table.getText())
 	}
@@ -72,8 +72,8 @@ class Debug {
 	;  params* (I,REQ) - A variable number of arguments to display. For 1 argument, we will interpret it as a value (not a
 	;                    label), but for >1 arguments an even number of arguments should be passed in label,value pairs.
 	;---------
-	toast(params*) {
-		table := new DebugTable().setBorderType(TextTable.BorderType_BoldLine)
+	static toast(params*) {
+		table := DebugTable().setBorderType(TextTable.BorderType_BoldLine)
 		table.addPairs(params*)
 		
 		Toast.ShowLong(table.getText())
@@ -86,11 +86,11 @@ class Debug {
 	;  params* (I,REQ) - A variable number of arguments to display. For 1 argument, we will interpret it as a value (not a
 	;                    label), but for >1 arguments an even number of arguments should be passed in label,value pairs.
 	;---------
-	console(params*) {
-		table := new DebugTable().setBorderType(TextTable.BorderType_BoldLine)
+	static console(params*) {
+		table := DebugTable().setBorderType(TextTable.BorderType_BoldLine)
 		table.addPairs(params*)
 		
-		OutputDebug, % table.getText()
+		OutputDebug(table.getText())
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 }

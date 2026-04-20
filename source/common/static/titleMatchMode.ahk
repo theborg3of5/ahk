@@ -14,7 +14,7 @@ class TitleMatchMode {
 	;  stringMode (I,REQ) - String version of any match mode (see .MatchModeString_*).
 	; RETURNS:        Value from TitleMatchMode.* that can be used with SetTitleMatchMode.
 	;---------
-	convertFromString(stringMode) {
+	static convertFromString(stringMode) {
 		Switch stringMode {
 			Case this.MatchModeString_Start:    return this.Start
 			Case this.MatchModeString_Contains: return this.Contains
@@ -31,7 +31,7 @@ class TitleMatchMode {
 	;  matchMode (I,REQ) - The match mode to use, from TitleMatchMode.*
 	; RETURNS:        true/false - do the titles match?
 	;---------
-	matches(haystack, needle, matchMode) {
+	static matches(haystack, needle, matchMode) {
 		Switch matchMode {
 			Case TitleMatchMode.Start:    return haystack.startsWith(needle)
 			Case TitleMatchMode.Contains: return (haystack.contains(needle) > 0)

@@ -6,7 +6,7 @@ class SelectLib {
 	; DESCRIPTION:    Get the selected text using the clipboard.
 	; RETURNS:        The selected text.
 	;---------
-	getText() {
+	static getText() {
 		return ClipboardLib.getWithHotkey("^c")
 	}
 	
@@ -14,7 +14,7 @@ class SelectLib {
 	; DESCRIPTION:    Get the first line of the selected text.
 	; RETURNS:        The portion of the selected text before the first newline.
 	;---------
-	getFirstLine() {
+	static getFirstLine() {
 		return ClipboardLib.getWithHotkey("^c").firstLine()
 	}
 	
@@ -22,18 +22,18 @@ class SelectLib {
 	; DESCRIPTION:    Get the first line of the selected text, cleaned.
 	; RETURNS:        The cleaned first line of the selected text.
 	;---------
-	getCleanFirstLine() {
+	static getCleanFirstLine() {
 		return ClipboardLib.getWithHotkey("^c").firstLine().clean()
 	}
 	
 	;---------
 	; DESCRIPTION:    Select the current line of text.
 	;---------
-	selectCurrentLine() {
+	static selectCurrentLine() {
 		; Start with End as in some places, Home can put us in an inconsistent place relative to any
 		; indentation (i.e. hitting home when you're at the start of the line jumps to the start/end
 		; of the indentation).
-		Send, {End}{Shift Down}{Home}{Shift Up}
+		Send("{End}{Shift Down}{Home}{Shift Up}")
 	}
 	
 	;---------
@@ -41,7 +41,7 @@ class SelectLib {
 	; PARAMETERS:
 	;  needle (I,REQ) - The text to select.
 	;---------
-	selectTextWithinSelection(needle) {
+	static selectTextWithinSelection(needle) {
 		if(needle = "")
 			return
 		
@@ -55,14 +55,14 @@ class SelectLib {
 			return
 		
 		numRight := needleStartPos - 1
-		needleLen := needle.length()
+		needleLen := StrLen(needle)
 		; Debug.popup("io.selectTextWithinSelection","Finished processing", "Selection",selectedText, "Needle",needle, "Needle start position",needleStartPos, "Number of times to go right",numRight, "Needle length",needleLen)
 
-		Send, {Left} ; Get to start of selection.
-		Send, {Right %numRight%} ; Get to start of needle.
-		Send, {Shift Down}
-		Send, {Right %needleLen%} ; Select to end of needle.
-		Send, {Shift Up}
+		Send("{Left}") ; Get to start of selection.
+		Send("{Right " numRight "}") ; Get to start of needle.
+		Send("{Shift Down}")
+		Send("{Right " needleLen "}") ; Select to end of needle.
+		Send("{Shift Up}")
 	}
 
 	;---------
@@ -70,7 +70,7 @@ class SelectLib {
 	; PARAMETERS:
 	;  path         (I,REQ) - URL or file path to link to.
 	;---------
-	linkSelectedText(path) {
+	static linkSelectedText(path) {
 		ClipboardLib.sendHyperlink(SelectLib.getText(), path)
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------

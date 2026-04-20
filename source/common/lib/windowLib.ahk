@@ -10,8 +10,8 @@ class WindowLib {
 	;                        Defaults to the active window ("A").
 	; RETURNS:        true if the window is maximized, false otherwise.
 	;---------
-	isMaximized(titleString := "A") {
-		return (WinGet("MinMax", titleString) = 1)
+	static isMaximized(titleString := "A") {
+		return (WinGetMinMax(titleString) = 1)
 	}
 	
 	;---------
@@ -21,8 +21,8 @@ class WindowLib {
 	;                        Defaults to the active window ("A").
 	; RETURNS:        true if the window is minimized, false otherwise.
 	;---------
-	isMinimized(titleString := "A") {
-		return (WinGet("MinMax", titleString) = -1)
+	static isMinimized(titleString := "A") {
+		return (WinGetMinMax(titleString) = -1)
 	}
 	
 	;---------
@@ -32,7 +32,7 @@ class WindowLib {
 	;                        Defaults to the active window ("A").
 	; RETURNS:        true/false, whether the window is visible.
 	;---------
-	isVisible(titleString := "A") {
+	static isVisible(titleString := "A") {
 		return this.hasStyle(MicrosoftLib.Style_Visible, titleString)
 	}
 	
@@ -43,7 +43,7 @@ class WindowLib {
 	;                        Defaults to the active window ("A").
 	; RETURNS:        true/false, whether the window is always on top.
 	;---------
-	isAlwaysOnTop(titleString := "A") {
+	static isAlwaysOnTop(titleString := "A") {
 		return this.hasExStyle(MicrosoftLib.ExStyle_AlwaysOnTop, titleString)
 	}
 	
@@ -54,7 +54,7 @@ class WindowLib {
 	;                        Defaults to the active window ("A").
 	; RETURNS:        true/false, whether the window has the caption style.
 	;---------
-	hasCaption(titleString := "A") { ; Window with no caption style (no titlebar or borders)
+	static hasCaption(titleString := "A") { ; Window with no caption style (no titlebar or borders)
 		return this.hasStyle(MicrosoftLib.Style_Caption, titleString)
 	}
 	
@@ -65,7 +65,7 @@ class WindowLib {
 	;                        Defaults to the active window ("A").
 	; RETURNS:        true/false, whether the window is resizable.
 	;---------
-	isSizable(titleString := "A") {
+	static isSizable(titleString := "A") {
 		return this.hasStyle(MicrosoftLib.Style_Sizable, titleString)
 	}
 	
@@ -76,7 +76,7 @@ class WindowLib {
 	;                        Defaults to the active window ("A").
 	; RETURNS:        true/false, whether the window is disabled.
 	;---------
-	isDisabled(titleString := "A") {
+	static isDisabled(titleString := "A") {
 		return this.hasStyle(MicrosoftLib.Style_Disabled, titleString)
 	}
 	
@@ -88,8 +88,8 @@ class WindowLib {
 	;                        Defaults to the active window ("A").
 	; RETURNS:        true/false
 	;---------
-	hasStyle(style, titleString := "A") {
-		return DataLib.bitFieldHasFlag(WinGet("Style", titleString), style)
+	static hasStyle(style, titleString := "A") {
+		return DataLib.bitFieldHasFlag(WinGetStyle(titleString), style)
 	}
 	
 	;---------
@@ -100,16 +100,16 @@ class WindowLib {
 	;                          Defaults to the active window ("A").
 	; RETURNS:        true/false
 	;---------
-	hasExStyle(extendedStyle, titleString := "A") {
-		return DataLib.bitFieldHasFlag(WinGet("ExStyle", titleString), extendedStyle)
+	static hasExStyle(extendedStyle, titleString := "A") {
+		return DataLib.bitFieldHasFlag(WinGetExStyle(titleString), extendedStyle)
 	}
 	
 	;---------
 	; DESCRIPTION:    Get an ID-based title string to identify the window under the mouse with.
 	; RETURNS:        title string (that uses ahk_id) identifying the window under the mouse.
 	;---------
-	getIdTitleStringUnderMouse() {
-		MouseGetPos( , , winId)
+	static getIdTitleStringUnderMouse() {
+		MouseGetPos(, , &winId)
 		return "ahk_id " winId
 	}
 	
@@ -121,8 +121,8 @@ class WindowLib {
 	;                        Defaults to the active window ("A").
 	; RETURNS:        A title string that uniquely (using ahk_id) identifies only your chosen window.
 	;---------
-	getIdTitleString(titleString := "A") {
-		return "ahk_id " WinGet("ID", titleString)
+	static getIdTitleString(titleString := "A") {
+		return "ahk_id " WinGetID(titleString)
 	}
 	
 	;---------
@@ -131,7 +131,7 @@ class WindowLib {
 	;  titleString (I,REQ) - Title string identifying the window in question.
 	; RETURNS:        true if the window should be excluded, false otherwise.
 	;---------
-	isNoMoveSizeWindow(titleString) {
+	static isNoMoveSizeWindow(titleString) {
 		if(Config.windowMatchesInfo(titleString, "Windows Taskbar"))
 			return true
 		if(Config.windowMatchesInfo(titleString, "Windows Taskbar Secondary"))
@@ -152,7 +152,7 @@ class WindowLib {
 	;  titleString (I,OPT) - Title string that identifies your chosen window.
 	;                        Defaults to the active window ("A").
 	;---------
-	makeVisible(titleString := "A") {
+	static makeVisible(titleString := "A") {
 		this.addStyle(MicrosoftLib.Style_Visible, titleString)
 	}
 	
@@ -163,8 +163,8 @@ class WindowLib {
 	;  titleString (I,OPT) - Title string that identifies your chosen window.
 	;                        Defaults to the active window ("A").
 	;---------
-	addStyle(style, titleString := "A") {
-		WinSet, Style, % "+" style, % titleString
+	static addStyle(style, titleString := "A") {
+		WinSetStyle("+" style, titleString)
 	}
 	
 	;---------
@@ -174,8 +174,8 @@ class WindowLib {
 	;  titleString (I,OPT) - Title string that identifies your chosen window.
 	;                        Defaults to the active window ("A").
 	;---------
-	removeStyle(style, titleString := "A") {
-		WinSet, Style, % "-" style, % titleString
+	static removeStyle(style, titleString := "A") {
+		WinSetStyle("-" style, titleString)
 	}
 	
 	;---------
@@ -184,8 +184,8 @@ class WindowLib {
 	;  titleString (I,OPT) - Title string that identifies your chosen window.
 	;                        Defaults to the active window ("A").
 	;---------
-	center(titleString := "A") {
-		new VisualWindow(titleString).move(VisualWindow.X_Centered, VisualWindow.Y_Centered)
+	static center(titleString := "A") {
+		VisualWindow(titleString).move(VisualWindow.X_Centered, VisualWindow.Y_Centered)
 	}
 	;endregion Actions/setters
 	
@@ -198,7 +198,7 @@ class WindowLib {
 	;  winTitle (I,OPT) - Text that's part of the window title
 	; RETURNS:        Title string including all of the given criteria
 	;---------
-	buildTitleString(exeName := "", winClass := "", winTitle := "") {
+	static buildTitleString(exeName := "", winClass := "", winTitle := "") {
 		outStr := ""
 		
 		if(winTitle) 
@@ -220,11 +220,11 @@ class WindowLib {
 	;  timeout       (I,OPT) - Milliseconds to wait before timing out. Defaults to 1000ms.
 	; RETURNS:        true if the control became active, false if we timed out.
 	;---------
-	waitControlActive(waitControlId, titleString := "A", timeout := 1000) {
+	static waitControlActive(waitControlId, titleString := "A", timeout := 1000) {
 		startTime := A_TickCount
 		
 		Loop {
-			Sleep, 100
+			Sleep(100)
 			timeWaited := A_TickCount - startTime
 			controlId := ControlGetFocus(titleString)
 		} Until ( (controlId = waitControlId) || (timeWaited > timeout) )
@@ -239,16 +239,18 @@ class WindowLib {
 	;  timeout      (I,OPT) - The timeout to give up after.
 	; RETURNS:        true if one of the windows became active, false if we timed out.
 	;---------
-	waitAnyOfWindowsActive(titleStrings, timeout := "") {
+	static waitAnyOfWindowsActive(titleStrings, timeout := "") {
 		this.waitGroupIndex += 1
 		groupName := "WaitGroup" this.waitGroupIndex
 		
 		For _,titleString in titleStrings
-			GroupAdd, % groupName, % titleString
+			GroupAdd(groupName, titleString)
 		
-		WinWaitActive, % "ahk_group " groupName, , timeout
-		
-		return (ErrorLevel = 0) ; ErrorLevel = 1 if we timed out
+		try {
+			WinWaitActive("ahk_group " groupName, , timeout)
+			return true
+		}
+		return false
 	}
 
 	;---------
@@ -258,11 +260,12 @@ class WindowLib {
 	;  matchMode   (I,OPT) - An override TitleMatchMode to use for matching.
 	; RETURNS:        The number of windows matching the given title string.
 	;---------
-	countMatchingWindows(titleString, matchMode := "") {
+	static countMatchingWindows(titleString, matchMode := "") {
+		settings := ""
 		if (matchMode)
-			settings := new TempSettings().titleMatchMode(matchMode)
+			settings := TempSettings().titleMatchMode(matchMode)
 		
-		count := WinGet("Count", titleString)
+		count := WinGetCount(titleString)
 		
 		if (settings)
 			settings.restore()
@@ -275,16 +278,15 @@ class WindowLib {
 	;                 http://www.autohotkey.com/board/topic/53672-get-the-text-content-of-a-tool-tip-window/?p=336440
 	; RETURNS:        Tooltip text
 	;---------
-	getTooltipText() {
+	static getTooltipText() {
 		outText := ""
 		
 		; Allow partial matching on ahk_class. (tooltips_class32, WindowsForms10.tooltips_class32.app.0.2bf8098_r13_ad1 so far)
-		settings := new TempSettings().titleMatchMode(TitleMatchMode.RegEx)
-		WinGet, winIDs, LIST, ahk_class tooltips_class32
+		settings := TempSettings().titleMatchMode(TitleMatchMode.RegEx)
+		winIDs := WinGetList("ahk_class tooltips_class32")
 		settings.restore()
-		
-		Loop, %winIDs% {
-			currID := winIDs%A_Index%
+
+		For _, currID in winIDs {
 			tooltipText := ControlGetText( , "ahk_id " currID)
 			if(tooltipText != "")
 				outText := outText.appendLine(tooltipText)
@@ -295,6 +297,6 @@ class WindowLib {
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
 	;region ------------------------------ PRIVATE ------------------------------
-	waitGroupIndex := 0 ; Counter to give us a unique group name for waitAnyOfWindowsActive each time (since we can't delete a group or remove window "rules" from them)
+	static waitGroupIndex := 0 ; Counter to give us a unique group name for waitAnyOfWindowsActive each time (since we can't delete a group or remove window "rules" from them)
 	;endregion ------------------------------ PRIVATE ------------------------------
 }

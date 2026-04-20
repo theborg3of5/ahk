@@ -92,7 +92,7 @@ class MicrosoftLib {
 	; NOTES:          Logic based on SetSystemCursor() here: https://autohotkey.com/board/topic/32608-changing-the-system-cursor/
 	;                 You can restore cursors to their defaults with .restoreAllCursors() .
 	;---------
-	setAllCursorsToIcon(icon) {
+	static setAllCursorsToIcon(icon) {
 		cursorTypes := [ this.IDC_ARROW,    this.IDC_IBEAM,  this.IDC_WAIT,   this.IDC_CROSS,   this.IDC_UPARROW, this.IDC_SIZE, this.IDC_ICON,        this.IDC_SIZENWSE
 		               , this.IDC_SIZENESW, this.IDC_SIZEWE, this.IDC_SIZENS, this.IDC_SIZEALL, this.IDC_NO,      this.IDC_HAND, this.IDC_APPSTARTING, this.IDC_HELP ]
 		For _,type in cursorTypes {
@@ -105,7 +105,7 @@ class MicrosoftLib {
 	; DESCRIPTION:    Restore all mouse cursors to their default values.
 	; NOTES:          Based on RestoreCursors() here: https://autohotkey.com/board/topic/32608-changing-the-system-cursor/
 	;---------
-	restoreAllCursors() {
+	static restoreAllCursors() {
 		DllCall("SystemParametersInfo", "UInt",this.SPI_SETCURSORS, "UInt",0, "UInt",0, "UInt",0 )
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------

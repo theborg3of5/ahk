@@ -14,21 +14,21 @@ class AHKCodeLib {
 	;  defLine (I,REQ) - The definition line for the function to document, with the name and parameters.
 	; RETURNS:        The full text of the documentation header to insert.
 	;---------
-	generateDocHeader(defLine) {
+	static generateDocHeader(defLine) {
 		; Determine if it's a function/property or just a class member.
 		if(defLine.containsAnyOf(["(", "[", ":="], match)) {
 			if(match = ":=") ; We found the equals before any opening paren/bracket
-				return this.generateHeaderWithParts({"DESCRIPTION":"", "NOTES":""})
+				return this.generateHeaderWithParts(Map("DESCRIPTION", "", "NOTES", ""))
 		}
 		
 		; Get parameter info
-		AHKCodeLib.getDefLineParts(defLine, "", paramsAry)
+		AHKCodeLib.getDefLineParts(defLine, , &paramsAry)
 		paramInfos := []
 		For _,param in paramsAry {
 			; Input/output can be partially deduced by whether it's ByRef
-			if(param.startsWith("ByRef ")) {
+			if(param.startsWith("&")) {
 				inOut := "I/O" ; Could be either
-				param := param.removeFromStart("ByRef ")
+				param := param.removeFromStart("&")
 			} else {
 				inOut := "I" ; Can only be input
 			}
@@ -41,10 +41,10 @@ class AHKCodeLib {
 				requirement := "REQ" ; Required if no default
 			}
 			
-			paramInfos.push({"NAME":param, "IN_OUT":inOut, "REQUIREMENT":requirement})
+			paramInfos.push(Map("NAME", param, "IN_OUT", inOut, "REQUIREMENT", requirement))
 		}
 		
-		return AHKCodeLib.generateHeaderWithParts({"DESCRIPTION":"", "RETURNS":"", "SIDE EFFECTS":"", "NOTES": ""}, paramInfos)
+		return AHKCodeLib.generateHeaderWithParts(Map("DESCRIPTION", "", "RETURNS", "", "SIDE EFFECTS", "", "NOTES", ""), paramInfos)
 	}
 	
 	;---------
@@ -57,11 +57,11 @@ class AHKCodeLib {
 	;                       {"NAME":name, "IN_OUT":I/O/IO, "REQUIREMENT":REQ/OPT}
 	; RETURNS:        The generated header as a string
 	;---------
-	generateHeaderWithParts(parts, paramsAry := "") {
+	static generateHeaderWithParts(parts, paramsAry := "") {
 		header := ";---------"
 		For _,keyword in AHKCodeLib.HeaderKeywords { ; Go in order of this list of keywords
 			; Only include keywords from the parts parameter (except for the PARAMETERS keyword, which should only be included if paramsAry is given)
-			if(! (parts.hasKey(keyword) || (keyword = "PARAMETERS" && !DataLib.isNullOrEmpty(paramsAry))) )
+			if(! (parts.Has(keyword) || (keyword = "PARAMETERS" && !DataLib.isNullOrEmpty(paramsAry))) )
 				Continue
 			
 			if(keyword = "PARAMETERS") {
@@ -70,11 +70,11 @@ class AHKCodeLib {
 				; First figure out the longest parameter name so we can pad the others out appropriately.
 				maxParamLength := 0
 				For _,paramInfo in paramsAry
-					DataLib.updateMax(maxParamLength, paramInfo["NAME"].length())
+					DataLib.updateMax(&maxParamLength, StrLen(paramInfo["NAME"]))
 				
 				; Add a line for each parameter
 				For _,paramInfo in paramsAry {
-					padding := StringLib.getSpaces(maxParamLength - paramInfo["NAME"].length())
+					padding := StringLib.getSpaces(maxParamLength - StrLen(paramInfo["NAME"]))
 					
 					line := AHKCodeLib.HeaderSingleParamBase
 					line := line.replaceTags(paramInfo)
@@ -101,7 +101,7 @@ class AHKCodeLib {
 	;  paramsAry (O,OPT) - If the function/property has parameters, this is an array of them,
 	;                      including any "ByRef" or default values.
 	;---------
-	getDefLineParts(defLine, ByRef name := "", ByRef paramsAry := "") {
+	static getDefLineParts(defLine, &name := "", &paramsAry := "") {
 		; Trim off any indentation and the static modifier if it's there - we don't care here.
 		defLine := defLine.withoutWhitespace()
 		defLine := defLine.removeFromStart("static ")
@@ -134,7 +134,7 @@ class AHKCodeLib {
 	;                 	Input: var1,var2
 	;                 	Output: "var1",var1, "var2",var2
 	;---------
-	generateDebugParams(varList) {
+	static generateDebugParams(varList) {
 		if(varList = "")
 			return ""
 		
@@ -166,7 +166,7 @@ class AHKCodeLib {
 	;  debugParamList (I,REQ) - The list of paired parameters, originally from generateDebugParams.
 	; RETURNS:        A list of the original parameters.
 	;---------
-	reduceDebugParams(debugParamList) {
+	static reduceDebugParams(debugParamList) {
 		QUOTE := """" ; Double-quote character
 		debugParamsAry := AHKCodeLib.splitVarList(debugParamList)
 		paramsAry := []
@@ -196,7 +196,7 @@ class AHKCodeLib {
 	;  varList (I,REQ) - Comma-separated list of parameters to generate the debug parameters for.
 	; RETURNS:        Array of variable names, split on commas.
 	;---------
-	splitVarList(varList) {
+	static splitVarList(varList) {
 		if(varList = "")
 			return []
 		
@@ -207,7 +207,7 @@ class AHKCodeLib {
 		openParens   := 0
 		openBrackets := 0
 		openQuotes   := false
-		Loop, Parse, varList
+		Loop Parse, varList
 		{
 			char := A_LoopField
 
@@ -256,7 +256,7 @@ class AHKCodeLib {
 	;                 "PROPERTY" - Properties with square brackets
 	;                 "OTHER"    - Members or properties without square brackets
 	;---------
-	getDefLineType(defLine) {
+	static getDefLineType(defLine) {
 		; Member with a default value
 		if(defLine.containsAnyOf(["(", "[", ":="], match)) {
 			if(match = ":=") { ; We found the equals before any opening paren/bracket

@@ -9,7 +9,7 @@ class PhoneLib {
 	; RETURNS:        The formatted number, in format:
 	;                  (XXX) XXX-XXXX
 	;---------
-	formatNumber(input) { ; Only works for non-international phone numbers.
+	static formatNumber(input) { ; Only works for non-international phone numbers.
 		number := input.removeRegEx("[^0-9]") ; Strip everything except the digits.
 		number := number.sub(-9) ; Last 10 chars only.
 		return "(" number.sub(1, 3) ") " number.sub(4, 3) "-" number.sub(7, 4)
@@ -21,7 +21,7 @@ class PhoneLib {
 	;  number (I,REQ) - The string to evaluate
 	; RETURNS:        true/false - whether it's a valid phone number.
 	;---------
-	isValidNumber(number) {
+	static isValidNumber(number) {
 		if(!Config.contextIsWork)
 			return false
 		
@@ -34,7 +34,7 @@ class PhoneLib {
 	;  input (I,REQ) - The input string to parse.
 	; RETURNS:        The processed number, or "HANGUP" if that was passed in.
 	;---------
-	getRawNumber(input) {
+	static getRawNumber(input) {
 		; Special case - hang up
 		if(input = "HANGUP")
 			return input
@@ -43,7 +43,7 @@ class PhoneLib {
 		number := number.removeRegEx("[^0-9\+]") ; Strip out anything that's not a number (or plus)
 		number := number.replaceRegEx("\+", "011") ; + becomes country exit code (USA code here)
 		
-		Switch number.length() {
+		Switch StrLen(number) {
 			Case 4:  return "7"  number ; Old extension.
 			Case 5:  return      number ; Extension.
 			Case 7:  return      number ; Normal
@@ -63,7 +63,7 @@ class PhoneLib {
 	;  formattedNum (I,REQ) - An optionally-formatted phone number to call.
 	;  name         (I,OPT) - If this is given, we'll show a name above the formatted number.
 	;---------
-	call(formattedNum, name := "") {
+	static call(formattedNum, name := "") {
 		; Get the raw number (with leading digits as needed) to plug into the URL.
 		rawNumber := PhoneLib.getRawNumber(formattedNum)
 		if(rawNumber = "") {
@@ -81,7 +81,9 @@ class PhoneLib {
 			return
 		
 		; Dial with a web request.
-		HTTPRequest(url, In := "", Out := "")
+		whr := ComObject("WinHttp.WinHttpRequest.5.1")
+		whr.Open("GET", url, true)
+		whr.Send()
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
@@ -95,7 +97,7 @@ class PhoneLib {
 	;  name         (I,OPT) - An optional name to show above the formatted number.
 	; RETURNS:        true/false - whether the user said to continue making the call.
 	;---------
-	confirmCall(rawNum, formattedNum, name := "") {
+	static confirmCall(rawNum, formattedNum, name := "") {
 		if(!rawNum || !formattedNum)
 			return false
 		
@@ -121,7 +123,7 @@ class PhoneLib {
 	;  rawNumber (I,REQ) - The number to call, in a format (including 8, 81, etc. as needed) that WebDialer understands.
 	; RETURNS:        The finished URL to run to make the call.
 	;---------
-	buildWebDialerURL(rawNumber) {
+	static buildWebDialerURL(rawNumber) {
 		if(!rawNumber)
 			return ""
 		if(!Config.contextIsWork)

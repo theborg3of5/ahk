@@ -9,27 +9,24 @@ class GuiLib {
 	;  title   (I,OPT) - The title of the popup
 	; RETURNS:        true/false - whether the user clicked the "Yes" button.
 	;---------
-	showConfirmationPopup(message, title := "") {
-		MsgBoxButtons_YesNo := 4
-		MsgBox, % MsgBoxButtons_YesNo, % title, % message
-		IfMsgBox, Yes
-			return true
-		return false
+	static showConfirmationPopup(message, title := "") {
+		result := MsgBox(message, title, "YesNo")
+		return (result = "Yes")
 	}
 	
 	;---------
 	; DESCRIPTION:    Apply a title format (heavy weight, underline) for the next set of controls
 	;                 being added to the gui.
 	;---------
-	applyTitleFormat() {
-		Gui, Font, w600 underline ; Heavier weight (not quite bold), underline.
+	static applyTitleFormat(guiObj) {
+		guiObj.SetFont("w600 underline") ; Heavier weight (not quite bold), underline.
 	}
 	;---------
 	; DESCRIPTION:    Clear a title format (heavy weight, underline) for the next set of controls
 	;                 being added to the gui.
 	;---------
-	clearTitleFormat() {
-		Gui, Font, norm
+	static clearTitleFormat(guiObj) {
+		guiObj.SetFont("norm")
 	}
 	
 	;---------
@@ -43,48 +40,12 @@ class GuiLib {
 	; NOTES:          This assumes that the formatting/default gui for the text in question are
 	;                 already in effect.
 	;---------
-	getLabelSizeForText(text, ByRef width := "", ByRef height := "") {
-		global ; Needed for the dynamic variable used to reference the text control
-		
-		SizeMeasuringLabelUniqueId++
-		local varName := "Var" SizeMeasuringLabelUniqueId
-		
-		Gui, Add, Text, % "v" varName, % text
-		controlSize := GuiControlGet("Pos", varName)
-		width  := controlSize["W"]
-		height := controlSize["H"]
-		
-		GuiControl, Hide, % varName ; GuiControl, Delete not yet implemented, so just hide the temporary control.
+	static getLabelSizeForText(guiObj, text, &width := "", &height := "") {
+		ctrl := guiObj.Add("Text", , text)
+		ctrl.GetPos(, , &width, &height)
+		ctrl.Visible := false
 	}
 	
-	;---------
-	; DESCRIPTION:    Create a global to assign to a control so we can reference the control (with
-	;                 GuiControl, or get the value with .getDynamicGlobal) dynamically.
-	; PARAMETERS:
-	;  varName (I,REQ) - The name of the global variable to create.
-	; NOTES:          This basically exists to let us hide the static/global requirement for
-	;                 variables used by gui controls - as long as the global is only referenced
-	;                 via indirection, it won't be treated as a local variable in other functions.
-	;---------
-	createDynamicGlobal(varName) {
-		global
-		%varName% := ""
-	}
-	;---------
-	; DESCRIPTION:    Get the value of a control using the dynamic global (created with
-	;                 .createDynamicGlobal) that's assigned to it.
-	; PARAMETERS:
-	;  varName (I,REQ) - The name of the global variable to get the value of.
-	; RETURNS:        The value in the specified global (aka the value of the control).
-	; NOTES:          This basically exists to let us hide the static/global requirement for
-	;                 variables used by gui controls - as long as the global is only referenced
-	;                 via indirection, it won't be treated as a local variable in other functions.
-	;---------
-	getDynamicGlobal(varName) {
-		global
-		local value := %varName%
-		return value
-	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 }
 

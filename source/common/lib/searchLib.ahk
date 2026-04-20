@@ -6,10 +6,10 @@ class SearchLib {
 	; DESCRIPTION:    Run a generic search with the selected text, prompting the user for what kind
 	;                 of search it should be.
 	;---------
-	selectedTextPrompt() {
+	static selectedTextPrompt() {
 		text := SelectLib.getCleanFirstLine()
 		
-		s := new Selector("search.tls").setDefaultOverrides({"SEARCH_TERM":text})
+		s := Selector("search.tls").setDefaultOverrides(Map("SEARCH_TERM", text))
 		destinations := s.promptMulti() ; Each element is a search destination, but the search term is on each of them.
 		For _, dest in destinations {
 			searchTerm := dest["SEARCH_TERM"]
@@ -37,7 +37,7 @@ class SearchLib {
 	;  searchBaseURL (I,REQ) - The "base" URL (with <QUERY> in place of the search term) to search with.
 	;  searchTerm    (I,REQ) - The term to search for.
 	;---------
-	urlBase(searchBaseURL, searchTerm) {
+	static urlBase(searchBaseURL, searchTerm) {
 		searchTerm := SearchLib.escapeTermForRunURL(searchTerm)
 		url := searchBaseURL.replaceTag("QUERY", searchTerm)
 		Run(url)
@@ -55,7 +55,7 @@ class SearchLib {
 	;                                Defaults to "search=1" for running searches.
 	;  nameFilter          (I,OPT) - File name to filter by (will be searched as "contains").
 	;---------
-	buildCodeSearchURL(searchType, searchTerm, clientSearchSubType := "", appKey := "", action := "", nameFilter := "") {
+	static buildCodeSearchURL(searchType, searchTerm, clientSearchSubType := "", appKey := "", action := "", nameFilter := "") {
 		if(!searchType) ; Gotta know how to search.
 			return ""
 		
@@ -85,7 +85,7 @@ class SearchLib {
 	; PARAMETERS:
 	;  searchTerm (I,REQ) - Text to search for.
 	;---------
-	guru(searchTerm) {
+	static guru(searchTerm) {
 		searchTerm := SearchLib.escapeTermForRunURL(searchTerm)
 		url := Config.private["GURU_SEARCH_BASE"] searchTerm
 		Run(url)
@@ -99,7 +99,7 @@ class SearchLib {
 	;  appKey     (I,OPT) - The app to restrict the search to
 	; SIDE EFFECTS:   Will also add additional filters depending on the tab
 	;---------
-	hubble(searchTerm, searchType, appKey := "") {
+	static hubble(searchTerm, searchType, appKey := "") {
 		searchTerm := SearchLib.escapeTermForRunURL(searchTerm)
 		
 		url := Config.private["HUBBLE_SEARCH_BASE"]
@@ -123,7 +123,7 @@ class SearchLib {
 	;  searchTerm (I,REQ) - Text to search for.
 	;  category   (I,OPT) - Category to restrict search results to within the wiki.
 	;---------
-	epicWiki(searchTerm, category := "") {
+	static epicWiki(searchTerm, category := "") {
 		searchTerm := SearchLib.escapeTermForRunURL(searchTerm)
 		
 		url := Config.private["WIKI_SEARCH_BASE"]
@@ -145,7 +145,7 @@ class SearchLib {
 	;  pathToSearch (I,REQ) - Where to search files for the given term.
 	;  isRegex      (I,OPT) - Pass 1 to treat the search term as a regular expression.
 	;---------
-	grepWin(searchTerm, pathToSearch, isRegex := false) {
+	static grepWin(searchTerm, pathToSearch, isRegex := false) {
 		QUOTE := """" ; Double-quote character
 		
 		pathToSearch := Config.replacePathTags(pathToSearch) ; Escape any quotes in the search string
@@ -165,7 +165,7 @@ class SearchLib {
 	; PARAMETERS:
 	;  searchTerm (I,REQ) - Text to search for.
 	;---------
-	everything(searchTerm) {
+	static everything(searchTerm) {
 		Config.runProgram("Everything", "-search " searchTerm)
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
@@ -177,7 +177,7 @@ class SearchLib {
 	;  stringToEscape (I,REQ) - The string to escape.
 	; RETURNS:        The string, encoded and with double quotes escaped.
 	;---------
-	escapeTermForRunURL(stringToEscape) {
+	static escapeTermForRunURL(stringToEscape) {
 		QUOTE := """" ; Double-quote character
 		
 		encodedString := StringLib.encodeForURL(stringToEscape)

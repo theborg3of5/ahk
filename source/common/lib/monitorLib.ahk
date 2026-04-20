@@ -15,7 +15,7 @@ class MonitorLib {
 	;  location (I,REQ) - The location of the monitor to get the work area bounds for, from MonitorLib.Location_*.
 	; RETURNS:        Bounds array for the requested monitor (see .getMonitorWorkBounds)
 	;---------
-	workAreaForLocation[location] {
+	static workAreaForLocation[location] {
 		get {
 			if(location = "")
 				return ""
@@ -41,7 +41,7 @@ class MonitorLib {
 	; NOTES:          This working area excludes things like the taskbar - it's the full space that a
 	;                 window can occupy.
 	;---------
-	getWorkAreaForWindow(titleString) {
+	static getWorkAreaForWindow(titleString) {
 		winId := WinExist(titleString) ; Window handle
 		
 		; Get the monitor nearest to the window with the MonitorFromWindow function (https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-monitorfromwindow )
@@ -50,11 +50,11 @@ class MonitorLib {
 		
 		; Initialize MONITORINFO structure (https://docs.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-monitorinfo ) for return value from GetMonitorInfo
 		monitorInfoStructSize := 40                        ; MONITORINFO [40] = DWORD cbSize [4] + RECT rcMonitor [16] + RECT rcWork [16] + DWORD dwFlags [4]
-		VarSetCapacity(monitorInfo, monitorInfoStructSize) ; Set the size of the variable holding the MONITORINFO structure
-		NumPut(monitorInfoStructSize, monitorInfo)         ; Set the cbSize member of the MONITORINFO structure
+		monitorInfo := Buffer(monitorInfoStructSize, 0)          ; Set the size of the variable holding the MONITORINFO structure
+		NumPut("UInt", monitorInfoStructSize, monitorInfo)      ; Set the cbSize member of the MONITORINFO structure
 		
 		; GetMonitorInfo function (https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-getmonitorinfoa )
-		DllCall("GetMonitorInfo", "Ptr", monitorHandle, "Ptr", &monitorInfo)
+		DllCall("GetMonitorInfo", "Ptr", monitorHandle, "Ptr", monitorInfo)
 		
 		; MONITORINFO structure: RECT [16] = LONG left [4] + LONG top [4] + LONG right [4] + LONG bottom [4]
 		memOffsetLeft   := 20                 ; Start of RECT rcWork (DWORD cbSize [4] + RECT rcMonitor [16])
@@ -62,7 +62,7 @@ class MonitorLib {
 		memOffsetRight  := memOffsetTop   + 4 ; Top   + LONG top   [4]
 		memOffsetBottom := memOffsetRight + 4 ; Right + LONG right [4]
 		
-		workArea := {}
+		workArea := Map()
 		workArea["LEFT"]   := NumGet(monitorInfo, memOffsetLeft,   "Int")
 		workArea["TOP"]    := NumGet(monitorInfo, memOffsetTop,    "Int")
 		workArea["RIGHT"]  := NumGet(monitorInfo, memOffsetRight,  "Int")
@@ -80,7 +80,7 @@ class MonitorLib {
 	;  index       (I,REQ) - Index (according to AHK) of the monitor to check against.
 	; RETURNS:        true/false - is the window on the given monitor?
 	;---------
-	isWindowOnMonitor(titleString, index) {
+	static isWindowOnMonitor(titleString, index) {
 		return (this.getIndexForWindow(titleString) = index)
 	}
 	
@@ -92,7 +92,7 @@ class MonitorLib {
 	;  location    (I,REQ) - Location constant (from MonitorLib.Location_*) for which monitor location we're checking against.
 	; RETURNS:        true/false - is the window on the monitor with the given location?
 	;---------
-	isWindowOnMonitorWithLocation(titleString, location) {
+	static isWindowOnMonitorWithLocation(titleString, location) {
 		workArea := this.workAreaForLocation[location]
 		locationIndex := workArea["MONITOR_INDEX"]
 		
@@ -104,16 +104,17 @@ class MonitorLib {
 	; RETURNS:        The bounds of the monitor that the mouse is on.
 	; NOTES:          If the mouse is on the border between monitors, we will return the bottom-right most monitor.
 	;---------
-	getMouseMonitorBounds() {
-		settings := new TempSettings().coordMode("Mouse", "Screen")
-		MouseGetPos(mouseX, mouseY)
+	static getMouseMonitorBounds() {
+		settings := TempSettings().coordMode("Mouse", "Screen")
+		MouseGetPos(&mouseX, &mouseY)
 		settings.restore()
 		
 		partialMatches := []
 		
 		; Initial search - mouse must be within a monitor (not directly on an edge)
-		Loop, % SysGet("MonitorCount") {
-			bounds := SysGet("Monitor", A_Index)
+		Loop MonitorGetCount() {
+			MonitorGet(A_Index, &monLeft, &monTop, &monRight, &monBottom)
+			bounds := Map("LEFT", monLeft, "TOP", monTop, "RIGHT", monRight, "BOTTOM", monBottom)
 			; Debug.popup("Testing",, "mouseX",mouseX, "mouseY",mouseY, "bounds",bounds)
 			
 			if(mouseX < bounds["LEFT"])
@@ -143,7 +144,7 @@ class MonitorLib {
 		; Debug.popup("No exact match",, "mouseX",mouseX, "mouseY",mouseY, "partialMatches",partialMatches)
 		
 		; If we only matched a single monitor partially, we're just along one of the outer edges of that monitor.
-		if(partialMatches.count() = 1)
+		if(partialMatches.Length = 1)
 			return partialMatches[1]
 		
 		; If there were multiple, pick the lower-right-most monitor.
@@ -166,20 +167,20 @@ class MonitorLib {
 	;                 bounds come from .getWorkArea.
 	; NOTES:          Assumes there are only 3 monitors, and they're laid out in a horizontal line.
 	;---------
-	getWorkAreasByLocation() {
+	static getWorkAreasByLocation() {
 		if(this._workAreasByLocation)
 			return this._workAreasByLocation
 		
 		; First get monitors, sorted left-to-right.
-		monitorsByLeft := {}
-		Loop, % SysGet("MonitorCount") {
+		monitorsByLeft := Map()
+		Loop MonitorGetCount() {
 			currMon := MonitorLib.getWorkArea(A_Index)
 			monitorsByLeft[currMon["LEFT"]] := currMon
 		}
 		
 		; Slot the monitors into matching, labelled indices
 		monitorsInOrder := monitorsByLeft.toValuesArray()
-		areasByLocation := {}
+		areasByLocation := Map()
 		areasByLocation[ MonitorLib.Location_Left   ] := monitorsInOrder[1]
 		areasByLocation[ MonitorLib.Location_Middle ] := monitorsInOrder[2]
 		areasByLocation[ MonitorLib.Location_Right  ] := monitorsInOrder[3]
@@ -202,9 +203,10 @@ class MonitorLib {
 	;                    bounds["MONITOR_INDEX"] = Monitor index (according to AHK)
 	; NOTES:          This gives the monitor work area, not its total dimensions.
 	;---------
-	getWorkArea(index) {
+	static getWorkArea(index) {
 		; Gives us left/right/top/bottom info
-		bounds := SysGet("MonitorWorkArea", index)
+		MonitorGetWorkArea(index, &waLeft, &waTop, &waRight, &waBottom)
+		bounds := Map("LEFT", waLeft, "TOP", waTop, "RIGHT", waRight, "BOTTOM", waBottom)
 		
 		; Add width/height and monitor index (if not given)
 		this.addAdditionalBoundsInfo(bounds, index)
@@ -218,7 +220,7 @@ class MonitorLib {
 	;  titleString (I,REQ) - Title string representing the window.
 	; RETURNS:        The numeric index of the monitor that the window is on.
 	;---------
-	getIndexForWindow(titleString) {
+	static getIndexForWindow(titleString) {
 		workArea := this.getWorkAreaForWindow(titleString)
 		return workArea["MONITOR_INDEX"]
 	}
@@ -230,17 +232,19 @@ class MonitorLib {
 	;  index   (I,OPT) - If known, the index (according to AHK) of the monitor that these bounds represent. If blank, we'll
 	;                    loop through all monitors to determine which one exactly matches these bounds.
 	;---------
-	addAdditionalBoundsInfo(ByRef bounds, index := "") {
+	static addAdditionalBoundsInfo(bounds, index := "") {
 		; Calculate width and height for easier access.
 		bounds["WIDTH"]  := bounds["RIGHT"]  - bounds["LEFT"]
 		bounds["HEIGHT"] := bounds["BOTTOM"] - bounds["TOP"]
 		
 		; If we weren't given the index, try to match it against a monitor.
 		if(index = "") {
-			Loop, % SysGet("MonitorCount") {
+			Loop MonitorGetCount() {
 				; Check for a match on either work area or full bounds
-				if(this.boundsMatch(bounds, SysGet("MonitorWorkArea", A_Index))
-				|| this.boundsMatch(bounds, SysGet("Monitor",         A_Index))) {
+				MonitorGetWorkArea(A_Index, &waLeft, &waTop, &waRight, &waBottom)
+				MonitorGet(A_Index, &monLeft, &monTop, &monRight, &monBottom)
+				if(this.boundsMatch(bounds, Map("LEFT", waLeft, "TOP", waTop, "RIGHT", waRight, "BOTTOM", waBottom))
+				|| this.boundsMatch(bounds, Map("LEFT", monLeft, "TOP", monTop, "RIGHT", monRight, "BOTTOM", monBottom))) {
 					index := A_Index
 					Break
 				}
@@ -256,7 +260,7 @@ class MonitorLib {
 	;  boundsB (I,REQ) - Second set of bounds to check
 	; RETURNS:        true/false - are they the same?
 	;---------
-	boundsMatch(boundsA, boundsB) {
+	static boundsMatch(boundsA, boundsB) {
 		; Just check the 4 edges - width/height are calculated from these values, and this logic typically
 		; used to figure out index so we can't check that either.
 		if(boundsA["LEFT"]   != boundsB["LEFT"])
@@ -278,7 +282,7 @@ class MonitorLib {
 	;  secondBounds (I,REQ) - The second bounds object. Important subscripts are "RIGHT" and "BOTTOM".
 	; RETURNS:        true if the second bounds object is further right or bottom, false otherwise.
 	;---------
-	isSecondMoreLowerRight(firstBounds, secondBounds) {
+	static isSecondMoreLowerRight(firstBounds, secondBounds) {
 		if(firstBounds = "")
 			return true
 		

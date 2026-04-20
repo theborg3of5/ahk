@@ -38,7 +38,25 @@
 
 * Fixes / Cleanup * :
 	☐ Clean out unused stuff:
-		☐ transactionDump*.ahk (and its corresponding private config)
+		☐ internetExplorer
+		☐ epicStudio (and assorted related stuff like actionObjectEpicStudio, compileEpicStudioRegex)
+		☐ hyperspace
+		☐ mBuilder
+		☐ actionObjectTrackLab (probably combine this with actionObjectSVNLog?)
+		☐ commandFunctions (assuming migration eliminates need)
+		☐ onetastic (if we can replace with custom hotkeys, or just ditch entirely)
+			☐ compileOnetasticMacros (once I figure out switching dev editor to VSCode properly)
+		☐ notepad++ (clean out AHK stuff now that that all lives in VSCode)
+		☐ tortoise
+		☐ visualStudio
+		☐ wilma
+		☐ updateNotepadPPSupport
+		☐ changeVolume (?)
+		☐ fixVDIDisplaySettings
+		☐ generateHyperdriveEnvironments (and any associated configs/privates)
+		☐ pullAllRepos (it never worked as I wanted it to anyways)
+		☐ transactionDump, transactionDumpAllCurrent (plus corresponding private config)
+		☐ triggerOutlookQuickStep.ahk
 	☐ TableList mods - review how we handle multiple mods - for example, it would be nice if when there's multiple .defaultTo options, the most specific (deepest, last) one wins?
 	☐ F2 for ***s
 		☐ Outlook: this works, as long as AHK is _not_ running as admin

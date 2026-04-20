@@ -6,3 +6,9 @@ Thumbs.db
 
 # Ignore local config info
 config/settings.ini
+
+# Claude Code stuff
+.claude/projects/
+.claude/settings.local.json
+.claude/projects/
+.claude/repos/

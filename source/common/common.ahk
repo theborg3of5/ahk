@@ -1,45 +1,15 @@
 ;region Basic settings for all scripts
-#NoEnv                       ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance, Force       ; Running this script while it's already running just replaces the existing instance.
-#LTrim                       ; Trim whitespace from left of continuation sections (so they can be indented as I wish).
-SendMode, Input              ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir, % A_ScriptDir ; Ensures a consistent starting directory.
+#SingleInstance
+#LTrim
+A_WorkingDir := A_ScriptDir
 ;endregion Basic settings for all scripts
 
-;region Standard base replacement
+;region Prototype extensions (self-installing)
 #Include %A_LineFile%\..\base
 #Include stringBase.ahk
 #Include arrayBase.ahk
 #Include objectBase.ahk
-
-; Strings (technically all non-objects, since they all share a base class - see https://www.autohotkey.com/docs/Objects.htm#Pseudo_Properties )
-"".base.base := StringBase ; Can't replace the base itself, but can give the base a new base instead.
-
-; Arrays and Objects (based on https://autohotkey.com/board/topic/83081-ahk-l-customizing-object-and-array/ )
-; Redefine Array() to use our new ArrayBase base class
-Array(params*) {
-	; Since params is already an array of the parameters, just give it a
-	; new base object and return it. Using this method, ArrayBase.__New()
-	; is not called and any instance variables are not initialized.
-	params.base := ArrayBase
-	return params
-}
-; Redefine Object() to use our new ObjectBase base class
-Object(params*) {
-	; Create a new object derived from ObjectBase.
-	objectInstance := new ObjectBase
-	
-	; For each pair of parameters, store the key-value pair.
-	Loop, % params.MaxIndex() // 2 {
-		key   := params[A_Index * 2 - 1]
-		value := params[A_Index * 2]
-		objectInstance[key] := value
-	}
-	
-	; Return the new object.
-	return objectInstance
-}
-;endregion Standard base replacement
+;endregion Prototype extensions
 
 ;region Includes
 #Include %A_LineFile%\..\class

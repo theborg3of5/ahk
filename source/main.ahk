@@ -43,15 +43,12 @@ Run(subFolder "windowMoverSizer.ahk")
 #Include ciscoVPN.ahk
 #Include ditto.ahk
 #Include emc2.ahk
-#Include epicStudio.ahk
 #Include everything.ahk
 #Include excel.ahk
 #Include explorer.ahk
 #Include fastStoneImageViewer.ahk
 #Include flowLauncher.ahk
 #Include hyperdrive.ahk
-#Include hyperspace.ahk
-#Include internetExplorer.ahk
 #Include kdiff.ahk
 #Include notepadPlusPlus.ahk
 #Include onenote.ahk
@@ -65,10 +62,7 @@ Run(subFolder "windowMoverSizer.ahk")
 #Include sumatraPDF.ahk
 #Include teams.ahk
 #Include telegram.ahk
-#Include tortoise.ahk
-#Include visualStudio.ahk
 #Include vsCode.ahk
-#Include wilma.ahk
 #Include winMerge.ahk
 #Include word.ahk
 #Include zoom.ahk

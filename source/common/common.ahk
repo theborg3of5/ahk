@@ -63,7 +63,6 @@ Object(params*) {
 	#Include windowInfo.ahk
 
 #Include %A_LineFile%\..\external
-	#Include commandFunctions.ahk
 	#Include HTTPRequest.ahk
 	
 #Include %A_LineFile%\..\lib
@@ -89,12 +88,8 @@ Object(params*) {
 	#Include chrome.ahk
 	#Include ditto.ahk
 	#Include emc2.ahk
-	#Include epicStudio.ahk
 	#Include excel.ahk
 	#Include explorer.ahk
-	#Include hyperspace.ahk
-	#Include internetExplorer.ahk
-	#Include mBuilder.ahk
 	#Include mSnippets.ahk
 	#Include mtPutty.ahk
 	#Include notepadPlusPlus.ahk
@@ -104,7 +99,6 @@ Object(params*) {
 	#Include putty.ahk
 	#Include snapper.ahk
 	#Include telegram.ahk
-	#Include visualStudio.ahk
 	#Include vsCode.ahk
 	#Include zoom.ahk
 	

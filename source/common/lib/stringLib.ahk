@@ -10,7 +10,7 @@ class StringLib {
 	;  escapeChar   (I,OPT) - The escape character to use.
 	; RETURNS:        The string with all instances of the character escaped.
 	;---------
-	escapeCharUsingChar(inputString, charToEscape, escapeChar := "\") {
+	static escapeCharUsingChar(inputString, charToEscape, escapeChar := "\") {
 		replaceString := escapeChar charToEscape
 		return inputString.replace(charToEscape, replaceString)
 	}
@@ -21,7 +21,7 @@ class StringLib {
 	;  inputString (I,REQ) - The string to wrap in quotes.
 	; RETURNS:        Quoted string
 	;---------
-	escapeAndQuote(inputString) {
+	static escapeAndQuote(inputString) {
 		QUOTE := """" ; A single double-quote character
 		return QUOTE this.escapeCharUsingChar(inputString, QUOTE, QUOTE) QUOTE
 	}
@@ -32,14 +32,14 @@ class StringLib {
 	;  stringToCheck (I,REQ) - The string to analyze.
 	; RETURNS:        true if the string has nothing or nothing but whitespace.
 	;---------
-	isNullOrWhitespace(stringToCheck) {
-		if(stringToCheck = "")
+	static isNullOrWhitespace(stringToCheck) {
+		if stringToCheck = ""
 			return true
-		
+
 		cleanedString := stringToCheck.withoutWhitespace()
-		if(cleanedString = "")
+		if cleanedString = ""
 			return true
-		
+
 		return false
 	}
 	
@@ -49,16 +49,13 @@ class StringLib {
 	;  input (I,REQ) - The string to check.
 	; RETURNS:        true/false - is the string a URL?
 	;---------
-	isURL(input) {
-		; Full URLs
-		if(input.startsWithAnyOf(["http://", "https://"]))
+	static isURL(input) {
+		if input.startsWithAnyOf(["http://", "https://"])
 			return true
-		
-		; Partial URLs (www.google.com, similar)
-		if(input.startsWithAnyOf(["www.", "vpn.", "m."]))
+
+		if input.startsWithAnyOf(["www.", "vpn.", "m."])
 			return true
-		
-		; No match
+
 		return false
 	}
 
@@ -80,23 +77,22 @@ class StringLib {
 	; SIDE EFFECTS:   
 	; NOTES:          
 	;---------
-	extractMarkdownLinks(inputText) {
-		chunks := [] ; [ { text: text, url: urlIfLink } ]
+	static extractMarkdownLinks(inputText) {
+		chunks := []
 		startPos := 1
-		while (pos := RegExMatch(inputText, "O)\[(.*?)\]\((.*?)\)", match, startPos)) {
+		while (pos := RegExMatch(inputText, "\[(.*?)\]\((.*?)\)", &match, startPos)) {
 			preText := SubStr(inputText, startPos, pos - startPos)
-			if (preText != "")
-				chunks.push({text: preText})
-			
+			if preText != ""
+				chunks.Push({text: preText})
+
 			text := match[1]
 			url  := FileLib.cleanupPath(match[2])
-			chunks.push({text: text, url: url})
-			startPos := pos + match.len
+			chunks.Push({text: text, url: url})
+			startPos := pos + match.Len
 		}
-		; Add any remaining text after the last link
 		remainingText := SubStr(inputText, startPos)
-		if (remainingText != "")
-			chunks.push({text: remainingText})
+		if remainingText != ""
+			chunks.Push({text: remainingText})
 
 		return chunks
 	}
@@ -107,17 +103,16 @@ class StringLib {
 	;  line (I,REQ) - The line to count spaces for.
 	; RETURNS:        The number of spaces at the beginning of the line.
 	;---------
-	countLeadingSpaces(line) {
+	static countLeadingSpaces(line) {
 		numSpaces := 0
-		
-		Loop, Parse, line
-		{
-			if(A_LoopField = A_Space)
+
+		Loop Parse, line {
+			if A_LoopField = A_Space
 				numSpaces++
 			else
-				Break
+				break
 		}
-		
+
 		return numSpaces
 	}
 	
@@ -129,7 +124,7 @@ class StringLib {
 	;  numSpaces  (I,REQ) - The number of spaces to indent by.
 	; RETURNS:        The indented block
 	;---------
-	indentBlock(textBlock, numSpaces) {
+	static indentBlock(textBlock, numSpaces) {
 		indentText := StringLib.getSpaces(numSpaces)
 		newBlock := indentText textBlock ; Make sure to indent the first row, too
 		
@@ -144,32 +139,33 @@ class StringLib {
 	; RETURNS:        The resulting string
 	; SIDE EFFECTS:   Always removes leading/trailing whitespace.
 	;---------
-	dropLeadingTrailing(inString, removeStrings := "") {
+	static dropLeadingTrailing(inString, removeStrings := "") {
 		outStr := inString
-		
-		while(!isClean) {
+
+		Loop {
 			isClean := true
-			
-			; Always drop leading/trailing whitespace
+
 			noWhitespace := outStr.withoutWhitespace()
-			if(noWhitespace != outStr) {
+			if noWhitespace != outStr {
 				outStr := noWhitespace
 				isClean := false
 			}
-			
-			; Remove specific strings from start/end
-			For _,dropString in removeStrings {
-				if(outStr.startsWith(dropString)) {
+
+			for _, dropString in removeStrings {
+				if outStr.startsWith(dropString) {
 					outStr := outStr.removeFromStart(dropString)
 					isClean := false
 				}
-				if(outStr.endsWith(dropString)) {
+				if outStr.endsWith(dropString) {
 					outStr := outStr.removeFromEnd(dropString)
 					isClean := false
 				}
 			}
+
+			if isClean
+				break
 		}
-		
+
 		return outStr
 	}
 	
@@ -180,7 +176,7 @@ class StringLib {
 	; RETURNS:        The updated string.
 	; NOTES:          Only supports `n and `r`n line endings (which should cover most strings)
 	;---------
-	dropEmptyLines(inString) {
+	static dropEmptyLines(inString) {
 		newlineNeedle := "(`n|`r`n)" ; Newline or return + newline
 		
 		; Reduce any spots where there's multiple newlines in a row
@@ -198,7 +194,7 @@ class StringLib {
 	;  numToGet (I,REQ) - How many spaces to return.
 	; RETURNS:        As many spaces as requested.
 	;---------
-	getSpaces(numToGet) {
+	static getSpaces(numToGet) {
 		return StringLib.duplicate(A_Space, numToGet)
 	}
 	;---------
@@ -207,7 +203,7 @@ class StringLib {
 	;  numToGet (I,REQ) - How many tabs to return.
 	; RETURNS:        As many tabs as requested.
 	;---------
-	getTabs(numToGet) {
+	static getTabs(numToGet) {
 		return StringLib.duplicate(A_Tab, numToGet)
 	}
 	;---------
@@ -216,7 +212,7 @@ class StringLib {
 	;  numToGet (I,REQ) - How many newlines to return.
 	; RETURNS:        As many newlines as requested.
 	;---------
-	getNewlines(numToGet) {
+	static getNewlines(numToGet) {
 		return StringLib.duplicate("`n", numToGet)
 	}
 	;---------
@@ -225,7 +221,7 @@ class StringLib {
 	;  numToGet (I,REQ) - How many dots to return.
 	; RETURNS:        As many dots as requested.
 	;---------
-	getDots(numToGet) {
+	static getDots(numToGet) {
 		return StringLib.duplicate(".", numToGet)
 	}
 	
@@ -237,15 +233,15 @@ class StringLib {
 	;  numTimes    (I,REQ) - How many times to duplicate the string. 1 returns the same string.
 	; RETURNS:        A string with the given number of duplicates.
 	;---------
-	duplicate(stringToDup, numTimes) {
-		if(stringToDup = "" || numTimes < 1)
+	static duplicate(stringToDup, numTimes) {
+		if stringToDup = "" || numTimes < 1
 			return ""
-		
+
 		outStr := ""
-		
-		Loop, %numTimes%
+
+		Loop numTimes
 			outStr .= stringToDup
-		
+
 		return outStr
 	}
 	
@@ -259,8 +255,8 @@ class StringLib {
 	; NOTES:          If the difference between the length of the text and goal is odd, we'll bias
 	;                 to the left (1 extra padding char on the right).
 	;---------
-	padCenter(textToCenter, goalLength, padChar := " ") {
-		leftoverWidth := goalLength - textToCenter.length()
+	static padCenter(textToCenter, goalLength, padChar := " ") {
+		leftoverWidth := goalLength - StrLen(textToCenter)
 		leftSpace := leftoverWidth // 2
 		rightSpace := leftoverWidth - leftSpace ; Bias left if uneven leftover space
 		
@@ -273,24 +269,25 @@ class StringLib {
 	;  textToEncode (I,REQ) - The text to encode
 	; RETURNS:        The encoded text.
 	;---------
-	encodeForURL(textToEncode) {
+	static encodeForURL(textToEncode) {
 		currentText := textToEncode
-		
-		; Temporarily trim off any http/https/etc. (will add back on at end)
-		if(currentText.matchesRegEx("^\w+:/{0,2}", prefix))
+		prefix := ""
+
+		if currentText.matchesRegEx("^\w+:/{0,2}", &prefixMatch) {
+			prefix := prefixMatch[]
 			currentText := currentText.removeFromStart(prefix)
-		
-		; First replace any percents with the equivalent (since doing it later would also pick up anything else we've converted)
+		}
+
 		needle := "%"
 		replaceWith := "%" DataLib.numToHex(Asc("%"))
 		currentText := currentText.replace(needle, replaceWith)
-		
-		; Replace any other iffy characters with their encoded equivalents
-		while(currentText.matchesRegEx("i)[^\w\.~%]", charToReplace)) {
+
+		while currentText.matchesRegEx("i)[^\w\.~%]", &charMatch) {
+			charToReplace := charMatch[]
 			replaceWith := "%" DataLib.numToHex(Asc(charToReplace))
 			currentText := currentText.replace(charToReplace, replaceWith)
 		}
-		
+
 		return prefix currentText
 	}
 	
@@ -300,15 +297,16 @@ class StringLib {
 	;  textToDecode (I,REQ) - The text to decode.
 	; RETURNS:        The decoded text.
 	;---------
-	decodeFromURL(textToDecode) {
+	static decodeFromURL(textToDecode) {
 		outString := textToDecode
-		
-		while(outString.matchesRegEx("i)(?<=%)[\da-f]{1,2}", charCodeInHex)) {
+
+		while outString.matchesRegEx("i)(?<=%)[\da-f]{1,2}", &hexMatch) {
+			charCodeInHex := hexMatch[]
 			needle := "%" charCodeInHex
 			replaceWith := Chr(DataLib.hexToInteger(charCodeInHex))
 			outString := outString.replace(needle, replaceWith)
 		}
-		
+
 		return outString
 	}
 	
@@ -324,36 +322,31 @@ class StringLib {
 	;                                 containing only a single short word.
 	; RETURNS:        The same string, wrapped to the goal width with newlines.
 	;---------
-	wrapToWidth(inString, goalWidth, tabWidth, allowedFinalOverhang := 25) {
+	static wrapToWidth(inString, goalWidth, tabWidth, allowedFinalOverhang := 25) {
 		maxLastLineWidth := goalWidth + allowedFinalOverhang
 		words := inString.split(" ")
-		
+
 		line := ""
 		wrappedLines := []
-		For i,word in words {
+		for i, word in words {
 			potentialLine := line.appendPiece(" ", word)
 			lineLength := potentialLine.width()
-			
-			; We haven't exceeded our desired length yet. Just add the word and move on.
-			if(lineLength <= goalWidth) {
+
+			if lineLength <= goalWidth {
 				line := potentialLine
-				Continue
+				continue
 			}
-			
-			; We've exceeded the goal length, but this is the last word we need to add -
-			; allow it to stay on the same line if the new length will be within goal +
-			; allowed overhang.
-			if(lineLength <= maxLastLineWidth && i = words.length()) {
+
+			if lineLength <= maxLastLineWidth && i = words.Length {
 				line := potentialLine
-				Continue
+				continue
 			}
-			
-			; Save off our previous line and start the next one.
-			wrappedLines.push(line)
+
+			wrappedLines.Push(line)
 			line := word
 		}
-		wrappedLines.push(line) ; Get the last line as we finish
-		
+		wrappedLines.Push(line)
+
 		return wrappedLines
 	}
 	
@@ -365,16 +358,15 @@ class StringLib {
 	;  string2 (I,REQ) - The second string to compare
 	; RETURNS:        The longest string that both of the given ones start with.
 	;---------
-	findStringOverlapFromStart(string1, string2) {
+	static findStringOverlapFromStart(string1, string2) {
 		overlap := ""
-		
-		Loop, Parse, string1
-		{
-			if(A_LoopField != string2.charAt(A_Index))
-				Break
+
+		Loop Parse, string1 {
+			if A_LoopField != string2.charAt(A_Index)
+				break
 			overlap .= A_LoopField
 		}
-		
+
 		return overlap
 	}
 	
@@ -410,7 +402,7 @@ class StringLib {
 	; RETURNS:        Generated string (includes an extra newline on the end so your cursor ends up
 	;                 below the "ruler").
 	;---------
-	getRulerString(rulersList) {
+	static getRulerString(rulersList) {
 		baseString := "1234567890"
 		haveExplicitLabels := rulersList.contains("=")
 		outputLines  := []
@@ -421,12 +413,12 @@ class StringLib {
 			len   := chunks[1]
 			label := chunks[2]
 			
-			if (label.length() > len)
+			if StrLen(label) > len
 				label := label.sub(1, len - 1) "*" ; Truncate with marker
 
-			rulers.push( { len:len, label:label } )
+			rulers.Push( { len:len, label:label } )
 
-			DataLib.updateMax(maxLength, len)
+			DataLib.updateMax(&maxLength, len)
 		}
 
 		; Generate fake labels for any rulers without them
@@ -438,13 +430,14 @@ class StringLib {
 		; When there's no explicit labels, also add special markers for every 10 for easier
 		; counting/measuring. We only do this when there's a single ruler, as handling the potential
 		; interleaving with multiple is more trouble than it's worth.
-		if (!haveExplicitLabels && rulers.length() = 1) {
+		if !haveExplicitLabels && rulers.Length = 1 {
+			num := 0
 			Loop {
 				num += 10
-				if ( (num + maxLength.length()) > maxLength)
-					Break
-				
-				rulers.push({len:num, label:num, noPipe:true})
+				if (num + StrLen(maxLength)) > maxLength
+					break
+
+				rulers.Push({len:num, label:num, noPipe:true})
 			}
 		}
 
@@ -477,12 +470,12 @@ class StringLib {
 			outputLines.push(line)
 			
 			prevRulers.push(ruler) ; Keep track of previously-added rulers so we can include their pipes on following lines
-			prevLeftEdge := ruler.len - ruler.label.length()
+			prevLeftEdge := ruler.len - StrLen(ruler.label)
 		}
 
 		numsLine := StringLib.duplicate(baseString, maxLength // 10) baseString.sub(1, Mod(maxLength, 10))
-		outputLines.push(this.insertPipesForRulers(numsLine,  rulers)) ; Numbers with pipes
-		outputLines.push(this.insertPipesForRulers(emptyLine, rulers)) ; Spacer line at the bottom (nicer pointers, looks like a ruler)
+		outputLines.Push(this.insertPipesForRulers(numsLine,  rulers))
+		outputLines.Push(this.insertPipesForRulers(emptyLine, rulers))
 		
 		; Debug.popup("outputLines",outputLines)
 		return outputLines.join("`n") "`n"
@@ -497,9 +490,9 @@ class StringLib {
 	;  rulers (I,REQ) - Array of rulers to add pipes for.
 	; RETURNS:        String with pipes added.
 	;---------
-	insertPipesForRulers(line, rulers) {
-		For _, ruler in rulers {
-			if(!ruler.noPipe) ; Some rulers don't want pipes added
+	static insertPipesForRulers(line, rulers) {
+		for _, ruler in rulers {
+			if !ruler.noPipe
 				line := line.replaceCharAt(ruler.len + 1, "|")
 		}
 
@@ -513,8 +506,8 @@ class StringLib {
 	;  line  (I,REQ) - Line to add the ruler to
 	; RETURNS:        String with ruler added.
 	;---------
-	insertRuler(ruler, line) {
-		labelLeftEdge := ruler.len - ruler.label.length()
+	static insertRuler(ruler, line) {
+		labelLeftEdge := ruler.len - StrLen(ruler.label)
 		return line.replaceSlice(ruler.label "|", labelLeftEdge + 1, ruler.len + 1)
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------

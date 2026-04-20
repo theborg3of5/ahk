@@ -9,9 +9,8 @@ class RunLib {
 	;  workingDirectory (I,OPT) - The working directory to run the command in.
 	;  stayOpen         (I,OPT) - Set to true if you want the window to stay open after the command has run.
 	;---------
-	runCommand(commandToRun, workingDirectory := "", stayOpen := false) {
-		; Set /C or /K (command and close, or command and stay up) based on input.
-		if(stayOpen)
+	static runCommand(commandToRun, workingDirectory := "", stayOpen := false) {
+		if stayOpen
 			runString := A_ComSpec " /K " commandToRun
 		else
 			runString := A_ComSpec " /C " commandToRun
@@ -26,7 +25,7 @@ class RunLib {
 	;  cmd  (I,REQ) - The command to run.
 	;  args (I,OPT) - Parameters to pass (if this is a filepath to a program).
 	;---------
-	runAsUser(cmd, args := "") {
+	static runAsUser(cmd, args := "") {
 		RunLib.shellRun(cmd, args)
 	}
 
@@ -36,10 +35,10 @@ class RunLib {
 	;  command (I,REQ) - Command to run.
 	; RETURNS:        The output from the command, as passed to standard out.
 	;---------
-	runReturn(command) {
-		fullCommand := A_ComSpec . " /c """ . command . """"
-		shell := comobjcreate("wscript.shell")
-		exec := (shell.exec(fullCommand))
+	static runReturn(command) {
+		fullCommand := A_ComSpec . ' /c "' . command . '"'
+		shell := ComObject("wscript.shell")
+		exec := shell.exec(fullCommand)
 		stdout := exec.stdout.readall()
 		return stdout
 	}
@@ -48,29 +47,23 @@ class RunLib {
 	; DESCRIPTION:    Check if the current script is running as admin, and re-run it as admin if not.
 	;                 Adapted from https://www.autohotkey.com/docs/v1/lib/Run.htm#RunAs
 	;---------
-	forceCurrScriptAdmin() {
+	static forceCurrScriptAdmin() {
 		runString := DllCall("GetCommandLine", "str")
 
-		; Already running as admin
-		if (A_IsAdmin)
-			return
-			
-		; Safety check: avoid an infinite loop by checking for the /restart flag we use below
-		if (RegExMatch(runString, " /restart(?!\S)"))
+		if A_IsAdmin
 			return
 
-		; We use the /restart flag to avoid the single instance prompt if the new instance starts before we
-		;  manage to exit here.
-		try
-		{
+		if RegExMatch(runString, " /restart(?!\S)")
+			return
+
+		try {
 			if A_IsCompiled
-				Run *RunAs "%A_ScriptFullPath%" /restart
+				Run('*RunAs "' A_ScriptFullPath '" /restart')
 			else
-				Run *RunAs "%A_AhkPath%" /restart "%A_ScriptFullPath%"
+				Run('*RunAs "' A_AhkPath '" /restart "' A_ScriptFullPath '"')
 		}
 
-		; Once we run the admin instance, we should exit this one.
-		ExitApp
+		ExitApp()
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
@@ -96,31 +89,25 @@ class RunLib {
 			4 "Verb" (For example, pass "RunAs" to run as administrator)
 			5 Suggestion to the application about how to show its window - see the msdn link for possible values
 	*/
-	shellRun(prms*) {
-		shellWindows := ComObjCreate("{9BA05972-F6A8-11CF-A442-00A0C90A8F39}")
-		
-		desktop := shellWindows.Item(ComObj(19, 8)) ; VT_UI4, SCW_DESKTOP
-		
-		; Retrieve top-level browser object.
+	static shellRun(prms*) {
+		shellWindows := ComObject("{9BA05972-F6A8-11CF-A442-00A0C90A8F39}")
+
+		desktop := shellWindows.Item(ComValue(19, 8)) ; VT_UI4, SCW_DESKTOP
+
 		SID_STopLevelBrowser := "{4C96BE40-915C-11CF-99D3-00AA004AE837}"
 		IID_IShellBrowser    := "{000214E2-0000-0000-C000-000000000046}"
-		
-		if(ptlb := ComObjQuery(desktop, SID_STopLevelBrowser, IID_IShellBrowser)) {
-			; IShellBrowser.QueryActiveShellView -> IShellView
-			if(DllCall(NumGet(NumGet(ptlb + 0) + 15 * A_PtrSize), "ptr", ptlb, "ptr*", psv := 0) = 0) {
-				; Define IID_IDispatch.
-				VarSetCapacity(IID_IDispatch, 16)
-				NumPut(0x46000000000000C0, NumPut(0x20400, IID_IDispatch, "int64"), "int64")
-				
-				; IShellView.GetItemObject -> IDispatch (object which implements IShellFolderViewDual)
-				DllCall(NumGet(NumGet(psv + 0) + 15 * A_PtrSize), "ptr", psv, "uint", 0, "ptr", &IID_IDispatch, "ptr*", pdisp := 0)
-				
-				; Get Shell object.
-				shell := ComObj(9, pdisp, 1).Application
-				
-				; IShellDispatch2.ShellExecute
+
+		if ptlb := ComObjQuery(desktop, SID_STopLevelBrowser, IID_IShellBrowser) {
+			if DllCall(NumGet(NumGet(ptlb + 0) + 15 * A_PtrSize), "ptr", ptlb, "ptr*", &psv := 0) = 0 {
+				IID_IDispatch := Buffer(16)
+				NumPut("int64", 0x20400, "int64", 0x46000000000000C0, IID_IDispatch)
+
+				DllCall(NumGet(NumGet(psv + 0) + 15 * A_PtrSize), "ptr", psv, "uint", 0, "ptr", IID_IDispatch, "ptr*", &pdisp := 0)
+
+				shell := ComValue(9, pdisp, 1).Application
+
 				shell.ShellExecute(prms*)
-				
+
 				ObjRelease(psv)
 			}
 			ObjRelease(ptlb)

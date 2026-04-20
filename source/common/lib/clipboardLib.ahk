@@ -9,15 +9,17 @@ class ClipboardLib {
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy something to the clipboard.
 	; RETURNS:        true if we successfully copied something, false otherwise.
 	;---------
-	copyWithHotkey(hotkeyKeys) {
-		if(hotkeyKeys = "")
+	static copyWithHotkey(hotkeyKeys) {
+		if hotkeyKeys = ""
 			return
-		
-		Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
-		Send, % hotkeyKeys
-		ClipWait, 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
-		
-		return (ErrorLevel != 1)
+
+		A_Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
+		Send(hotkeyKeys)
+		try { ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
+			ClipWait(0.5)
+			return true
+		}
+		return false
 	}
 	;---------
 	; DESCRIPTION:    Get some text by copying it to the clipboard using the given hotkey.
@@ -25,20 +27,20 @@ class ClipboardLib {
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy something to the clipboard.
 	; RETURNS:        The copied text.
 	;---------
-	getWithHotkey(hotkeyKeys) {
-		if(hotkeyKeys = "")
+	static getWithHotkey(hotkeyKeys) {
+		if hotkeyKeys = ""
 			return ""
-		
+
 		; PuTTY auto-copies the selection to the clipboard, and ^c causes an interrupt, so do nothing.
-		if(Config.isWindowActive("Putty") && !WinActive("PuTTY Reconfiguration"))
-			return Clipboard
-		
-		origClipboard := ClipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
+		if Config.isWindowActive("Putty") && !WinActive("PuTTY Reconfiguration")
+			return A_Clipboard
+
+		origClipboard := ClipboardAll() ; Back up the clipboard since we're going to use it to get the selected text.
 		ClipboardLib.copyWithHotkey(hotkeyKeys)
-		
-		textFound := Clipboard
+
+		textFound := A_Clipboard
 		ClipboardLib.set(origClipboard) ; Restore the original clipboard.
-		
+
 		return textFound
 	}
 	
@@ -51,17 +53,19 @@ class ClipboardLib {
 	;                      to 0.5 seconds.
 	; RETURNS:        true if we successfully copied something, false otherwise.
 	;---------
-	copyWithFunction(boundFunc, timeout := "") {
-		if(!boundFunc)
+	static copyWithFunction(boundFunc, timeout := "") {
+		if !boundFunc
 			return
-		if(timeout = "")
+		if timeout = ""
 			timeout := 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
-		
-		Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
-		%boundFunc%()
-		ClipWait, % timeout
-		
-		return (ErrorLevel != 1)
+
+		A_Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
+		boundFunc.Call()
+		try {
+			ClipWait(timeout)
+			return true
+		}
+		return false
 	}
 	;---------
 	; DESCRIPTION:    Get some content using a BoundFunc object which copies something to the clipboard.
@@ -72,16 +76,16 @@ class ClipboardLib {
 	;                      to 0.5 seconds.
 	; RETURNS:        The copied content.
 	;---------
-	getWithFunction(boundFunc, timeout := "") { ; boundFunc is a BoundFunc object created with Func.Bind() or ObjBindMethod().
-		if(!boundFunc)
+	static getWithFunction(boundFunc, timeout := "") { ; boundFunc is a BoundFunc object created with Func.Bind() or ObjBindMethod().
+		if !boundFunc
 			return
-		
-		originalClipboard := ClipboardAll ; Back up the clipboard since we're going to use it to get the selected text.
+
+		originalClipboard := ClipboardAll() ; Back up the clipboard since we're going to use it to get the selected text.
 		ClipboardLib.copyWithFunction(boundFunc, timeout)
-		
-		textFound := Clipboard
-		Clipboard := originalClipboard    ; Restore the original clipboard. Note we're using Clipboard (not ClipboardAll).
-		
+
+		textFound := A_Clipboard
+		A_Clipboard := originalClipboard    ; Restore the original clipboard. Note we're using A_Clipboard (not ClipboardAll).
+
 		return textFound
 	}
 	
@@ -93,9 +97,9 @@ class ClipboardLib {
 	; PARAMETERS:
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
 	;---------
-	copyFilePath(hotkeyKeys) {
+	static copyFilePath(hotkeyKeys) {
 		path := ClipboardLib.getWithHotkey(hotkeyKeys)
-		if(!path) {
+		if !path {
 			Toast.ShowError("Could not copy path", "Failed to get file path")
 			return
 		}
@@ -110,9 +114,9 @@ class ClipboardLib {
 	; PARAMETERS:
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
 	;---------
-	copyFilePathRelativeToSource(hotkeyKeys) {
+	static copyFilePathRelativeToSource(hotkeyKeys) {
 		path := ClipboardLib.getWithHotkey(hotkeyKeys)
-		if(!path) {
+		if !path {
 			Toast.ShowError("Could not copy source-relative path", "Failed to get file path")
 			return
 		}
@@ -127,7 +131,7 @@ class ClipboardLib {
 	; PARAMETERS:
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
 	;---------
-	copyCodeLocationPath(hotkeyKeys) {
+	static copyCodeLocationPath(hotkeyKeys) {
 		this.getCodeLocationCore(hotkeyKeys, this.CopyLocationType_Path)
 	}
 	
@@ -137,7 +141,7 @@ class ClipboardLib {
 	; PARAMETERS:
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
 	;---------
-	copyCodeLocationFile(hotkeyKeys) {
+	static copyCodeLocationFile(hotkeyKeys) {
 		this.getCodeLocationCore(hotkeyKeys, this.CopyLocationType_File)
 	}
 	
@@ -147,7 +151,7 @@ class ClipboardLib {
 	; PARAMETERS:
 	;  hotkeyKeys (I,REQ) - The keys to send in order to copy the file's path to the clipboard.
 	;---------
-	copyCodeLocationRelativeToSource(hotkeyKeys) {
+	static copyCodeLocationRelativeToSource(hotkeyKeys) {
 		this.getCodeLocationCore(hotkeyKeys, this.CopyLocationType_SourceRelative)
 	}
 
@@ -156,9 +160,9 @@ class ClipboardLib {
 	; PARAMETERS:
 	;  copyFilePathHotkey (I,REQ) - The hotkey to copy the current file's full path in the active window.
 	;---------
-	openActiveFileParentFolder(copyFilePathHotkey) {
+	static openActiveFileParentFolder(copyFilePathHotkey) {
 		filePath := ClipboardLib.getWithHotkey(copyFilePathHotkey)
-		if(!filePath) {
+		if !filePath {
 			Toast.ShowError("Could not open parent folder", "Failed to retrieve current file path")
 			return
 		}
@@ -166,7 +170,7 @@ class ClipboardLib {
 		filePath := FileLib.cleanupPath(filePath)
 		parentFolder := FileLib.getParentFolder(filePath)
 		
-		if(!FileLib.folderExists(parentFolder)) {
+		if !FileLib.folderExists(parentFolder) {
 			Toast.ShowError("Could not open parent folder", "Folder does not exist: " parentFolder)
 			return
 		}
@@ -183,15 +187,17 @@ class ClipboardLib {
 	;                          everything, not just the text on the clipboard). This can be used to
 	;                          restore the clipboard later if needed.
 	;---------
-	set(value, ByRef origClipboard := "") {
+	static set(value, &origClipboard := "") {
 		; This must be a ByRef return parameter instead of returning directly, as it's a binary
 		; variable, which can't be returned directly (see https://www.autohotkey.com/boards/viewtopic.php?t=62209 ).
-		origClipboard := ClipboardAll ; Save off everything (images, formatting), not just the text (that's all that's in Clipboard)
-		
-		Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
-		if(!DataLib.isNullOrEmpty(value)) { ; Must use isNullOrEmpty as value could be binary
-			Clipboard := value
-			ClipWait, 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
+		origClipboard := ClipboardAll() ; Save off everything (images, formatting), not just the text (that's all that's in A_Clipboard)
+
+		A_Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
+		if !DataLib.isNullOrEmpty(value) { ; Must use isNullOrEmpty as value could be binary
+			A_Clipboard := value
+			try { ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
+				ClipWait(0.5)
+			}
 		}
 	}
 	
@@ -201,7 +207,7 @@ class ClipboardLib {
 	;  newValue  (I,REQ) - The value to put on the clipboard.
 	;  clipLabel (I,REQ) - The label to show in the toast for the thing on the clipboard.
 	;---------
-	setAndToast(newValue, clipLabel) {
+	static setAndToast(newValue, clipLabel) {
 		ClipboardLib.set(newValue)
 		ClipboardLib.toastNewValue(clipLabel)
 	}
@@ -214,9 +220,9 @@ class ClipboardLib {
 	;  problemMessage (I,REQ) - The problem that occurred.
 	;  errorMessage   (I,OPT) - What went wrong on a technical level.
 	;---------
-	setAndToastError(newValue, clipLabel, problemMessage, errorMessage := "") {
+	static setAndToastError(newValue, clipLabel, problemMessage, errorMessage := "") {
 		ClipboardLib.set(newValue)
-		Toast.ShowError(problemMessage, errorMessage, "Clipboard set to " clipLabel ":`n" Clipboard)
+		Toast.ShowError(problemMessage, errorMessage, "Clipboard set to " clipLabel ":`n" A_Clipboard)
 	}
 
 	;region Clipboard format, links
@@ -228,10 +234,10 @@ class ClipboardLib {
 	;                               everything, not just the text on the clipboard). This can be used to
 	;                               restore the clipboard later if needed.
 	;---------
-	setWithHyperlinks(markdownLinkedText, ByRef origClipboard := "") {
+	static setWithHyperlinks(markdownLinkedText, &origClipboard := "") {
 		; This must be a ByRef return parameter instead of returning directly, as it's a binary
 		; variable, which can't be returned directly (see https://www.autohotkey.com/boards/viewtopic.php?t=62209 ).
-		origClipboard := ClipboardAll ; Save off everything (images, formatting), not just the text (that's all that's in Clipboard)
+		origClipboard := ClipboardAll() ; Save off everything (images, formatting), not just the text (that's all that's in A_Clipboard)
 
 		; Extract links (expected to be in markdown format, "[text](url)")
 		chunks := StringLib.extractMarkdownLinks(markdownLinkedText)
@@ -279,7 +285,7 @@ class ClipboardLib {
 	;  fragment (I,REQ) - The HTML fragment to include.
 	; RETURNS:        HTML content compatible with the clipboard (in "HTML Format" format).
 	;---------
-	buildClipboardHTML(fragment) {
+	static buildClipboardHTML(fragment) {
 		; Start all positions at zero (with the proper number of 0s), we have to measure them after the
 		; fragment is in place.
 		content := "
@@ -295,8 +301,8 @@ class ClipboardLib {
 
 		; Measure the new start/end positions
 		htmlStart := content.contains("<html>") - 1
-		htmlEnd   := content.contains("</html>") + "</html>".length() - 1
-		fragStart := content.contains("<!--StartFragment-->") + "<!--StartFragment-->".length() - 1
+		htmlEnd   := content.contains("</html>") + StrLen("</html>") - 1
+		fragStart := content.contains("<!--StartFragment-->") + StrLen("<!--StartFragment-->") - 1
 		fragEnd   := content.contains("<!--EndFragment-->") - 1
 		; Debug.popup("content",content, "htmlStart",htmlStart, "htmlEnd",htmlEnd, "fragStart",fragStart, "fragEnd",fragEnd)
 
@@ -316,7 +322,7 @@ class ClipboardLib {
 	;  content (I,REQ) - The content to set on the clipboard.
 	;  format  (I,REQ) - The format on the clipboard to set (CF_TEXT, "HTML Format", etc).
 	;---------
-	setClipboardForFormat(content, format) {
+	static setClipboardForFormat(content, format) {
 		; Build a global object with the content we want to plug in
 		gloSize := StrPut(content, "cp0")                                                           ; Calculated needed size
 		glo := DllCall("GlobalAlloc", "UInt", MicrosoftLib.GlobalAlloc_GHND, "Ptr", gloSize, "Ptr") ; Allocate memory
@@ -340,11 +346,11 @@ class ClipboardLib {
 	; PARAMETERS:
 	;  clipLabel (I,REQ) - The label to show in the toast for the thing on the clipboard.
 	;---------
-	toastNewValue(clipLabel) {
-		if(Clipboard = "")
+	static toastNewValue(clipLabel) {
+		if A_Clipboard = ""
 			Toast.ShowError("Failed to get " clipLabel)
 		else
-			Toast.ShowMedium("Clipboard set to " clipLabel ":`n" Clipboard)
+			Toast.ShowMedium("Clipboard set to " clipLabel ":`n" A_Clipboard)
 	}
 	
 	;---------
@@ -352,10 +358,10 @@ class ClipboardLib {
 	; PARAMETERS:
 	;  value (I,REQ) - The text to send.
 	;---------
-	send(value) {
-		ClipboardLib.set(value, origClipboard)
-		Send, ^v   ; Paste the new value.
-		Sleep, 500 ; Needed to make sure clipboard isn't overwritten before we paste it.
+	static send(value) {
+		ClipboardLib.set(value, &origClipboard)
+		Send("^v")  ; Paste the new value.
+		Sleep(500)  ; Needed to make sure clipboard isn't overwritten before we paste it.
 		ClipboardLib.set(origClipboard)
 	}
 
@@ -365,7 +371,7 @@ class ClipboardLib {
 	;  text (I,REQ) - The link text (the caption that displays)
 	;  path (I,REQ) - The location the link should point to
 	;---------
-	sendHyperlink(text, path) {
+	static sendHyperlink(text, path) {
 		if (!text || !path)
 			return
 
@@ -373,9 +379,9 @@ class ClipboardLib {
 		if (Config.isWindowActive("OneNote")) ; OneNote can't handle double quotes in URLs for some reason, so encode them.
 			path := path.replace("""", "%22")
 
-		ClipboardLib.setWithHyperlinks("[" text "](" path ")")
-		Send, ^v   ; Paste the new value.
-		Sleep, 500 ; Needed to make sure clipboard isn't overwritten before we paste it.
+		ClipboardLib.setWithHyperlinks("[" text "](" path ")", &origClipboard)
+		Send("^v")  ; Paste the new value.
+		Sleep(500)  ; Needed to make sure clipboard isn't overwritten before we paste it.
 		ClipboardLib.set(origClipboard)
 	}
 
@@ -385,7 +391,7 @@ class ClipboardLib {
 	; PARAMETERS:
 	;  markdownLinkedText (I,REQ) - The text to send, with links encoded markdown-style: [text](url)
 	;---------
-	sendTextWithHyperlinks(markdownLinkedText) {
+	static sendTextWithHyperlinks(markdownLinkedText) {
 		if (!markdownLinkedText)
 			return
 
@@ -393,21 +399,21 @@ class ClipboardLib {
 		if (Config.isWindowActive("OneNote")) ; OneNote can't handle double quotes in URLs for some reason, so encode them.
 			path := path.replace("""", "%22")
 
-		ClipboardLib.setWithHyperlinks(markdownLinkedText)
-		Send, ^v   ; Paste the new value.
-		Sleep, 500 ; Needed to make sure clipboard isn't overwritten before we paste it.
+		ClipboardLib.setWithHyperlinks(markdownLinkedText, &origClipboard)
+		Send("^v")  ; Paste the new value.
+		Sleep(500)  ; Needed to make sure clipboard isn't overwritten before we paste it.
 		ClipboardLib.set(origClipboard)
 	}
-	
+
 	;---------
 	; DESCRIPTION:    Add something to the clipboard history, restoring the original clipboard value.
 	; PARAMETERS:
 	;  textToSave (I,REQ) - Text to add to the clipboard history.
 	;---------
-	addToHistory(textToSave) {
-		ClipboardLib.set(textToSave, origClipboard)
+	static addToHistory(textToSave) {
+		ClipboardLib.set(textToSave, &origClipboard)
 		ClipboardLib.saveToManager()
-		
+
 		ClipboardLib.set(origClipboard)
 		ClipboardLib.saveToManager()
 	}
@@ -422,11 +428,11 @@ class ClipboardLib {
 	; DESCRIPTION:    Force the clipboard manager to store the current value, generally useful just
 	;                 before you change the clipboard to something else.
 	;---------
-	saveToManager() {
-		if(Ditto) ; If the Ditto class exists we can use it to save to the clipboard with Ditto with no wait time.
+	static saveToManager() {
+		if IsSet(Ditto) ; If the Ditto class exists we can use it to save to the clipboard with Ditto with no wait time.
 			Ditto.saveCurrentClipboard()
 		else ; Otherwise, just wait a second for it to register normally.
-			Sleep, 1000
+			Sleep(1000)
 	}
 
 	;---------
@@ -435,17 +441,17 @@ class ClipboardLib {
 	;  hotkeyKeys (I,REQ) - Hotkeys to copy the current path to the clipboard.
 	;  pathType   (I,REQ) - What type of path you want, from ClipboardLib.CopyLocationType_* constants.
 	;---------
-	getCodeLocationCore(hotkeyKeys, pathType) {
+	static getCodeLocationCore(hotkeyKeys, pathType) {
 		; Function name comes from selected text (if any)
 		functionName := SelectLib.getText()
-		if(functionName.contains("`n")) ; If there's a newline then nothing was selected, we just copied the whole line.
+		if functionName.contains("`n") ; If there's a newline then nothing was selected, we just copied the whole line.
 			functionName := ""
-		if(functionName != "")
+		if functionName != ""
 			functionName .= "()"
-		
+
 		; Get path and extract the piece we actually want.
 		path := ClipboardLib.getWithHotkey(hotkeyKeys)
-		if(!path) {
+		if !path {
 			Toast.showError("Could not get code location", "Failed to get current path")
 			return
 		}
@@ -458,15 +464,15 @@ class ClipboardLib {
 				label := "file code location"
 				
 				; Get just the file name
-				if(path.startsWith("/"))
+				if path.startsWith("/")
 					path := path.afterString("/", true)
 				else
-					SplitPath(FileLib.cleanupPath(path), path)
+					SplitPath(FileLib.cleanupPath(path), &path)
 
 			Case this.CopyLocationType_SourceRelative:
 				label := "source-relative code location"
 				path := EpicLib.convertToSourceRelativePath(path)
-				if(!path)
+				if !path
 					return ; convertToSourceRelativePath should have already showed an error, so no need to do another here.	
 				
 			Default:

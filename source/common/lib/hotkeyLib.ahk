@@ -5,11 +5,11 @@ class HotkeyLib {
 	;---------
 	; DESCRIPTION:    Release all modifier keys. This is useful when certain modifier keys get "stuck" down.
 	;---------
-	releaseAllModifiers() {
+	static releaseAllModifiers() {
 		modifierKeys := ["LWin", "RWin", "Ctrl", "LCtrl", "RCtrl", "Alt", "LAlt", "RAlt", "Shift", "LShift", "RShift"]
-		For _,modifier in modifierKeys {
-			if(GetKeyState(modifier))
-				Send, {%modifier% Up}
+		for _, modifier in modifierKeys {
+			if GetKeyState(modifier)
+				Send("{" modifier " Up}")
 		}
 	}
 	
@@ -19,15 +19,14 @@ class HotkeyLib {
 	;  hotkeyString (I,OPT) - The hotkey to wait on. If not set, we'll use A_ThisHotkey to get the
 	;                         hotkey that triggered this function.
 	;---------
-	waitForRelease(hotkeyString := "") {
-		if(!hotkeyString)
+	static waitForRelease(hotkeyString := "") {
+		if !hotkeyString
 			hotkeyString := A_ThisHotkey
-		
-		Loop, Parse, hotkeyString
-		{
+
+		Loop Parse, hotkeyString {
 			keyName := HotkeyLib.getKeyNameFromHotkeyChar(A_LoopField)
-			if(keyName)
-				KeyWait, % keyName
+			if keyName
+				KeyWait(keyName)
 		}
 	}
 	
@@ -37,9 +36,9 @@ class HotkeyLib {
 	; PARAMETERS:
 	;  keys (I,REQ) - The keys to send, for use with the Send command.
 	;---------
-	sendCatchableKeys(keys) {
-		settings := new TempSettings().sendLevel(1) ; Level 1: keystrokes can be caught and handled by other hotkeys.
-		Send, % keys
+	static sendCatchableKeys(keys) {
+		settings := TempSettings().sendLevel(1)
+		Send(keys)
 		settings.restore()
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
@@ -52,8 +51,8 @@ class HotkeyLib {
 	; RETURNS:        The name of the hotkey character, suitable for use with Send or KeyWait.
 	; NOTES:          This isn't comprehensive - doesn't handle things like UP, for example.
 	;---------
-	getKeyNameFromHotkeyChar(hotkeyChar) {
-		if(!hotkeyChar)
+	static getKeyNameFromHotkeyChar(hotkeyChar) {
+		if !hotkeyChar
 			return ""
 		
 		Switch hotkeyChar {

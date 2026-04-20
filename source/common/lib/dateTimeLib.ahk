@@ -9,7 +9,7 @@ class DateTimeLib {
 	;  dateTime (I,OPT) - The date/time to use when replacing tags
 	; RETURNS:        The updated string
 	;---------
-	replaceTags(inString, instant := "") { ; instant defaults to A_Now (based on FormatTime's behavior)
+	static replaceTags(inString, instant := "") {
 		outString := inString
 		
 		; All formats supported by FormatTime
@@ -30,20 +30,18 @@ class DateTimeLib {
 	;  year     (I,OPT) - The year to check
 	; RETURNS:        The last date (with leading 0) in the given month.
 	;---------
-	getLastDateOfMonth(monthNum := "", year := "") {
-		; Default in today's month/year if either is not given
-		monthNum := monthNum ? monthNum : A_MM   ; Current month number (with leading 0, though that doesn't matter)
-		year     := year     ? year     : A_YYYY ; Current year
-		
-		; Get number of the next month
+	static getLastDateOfMonth(monthNum := "", year := "") {
+		monthNum := monthNum ? monthNum : A_MM
+		year     := year     ? year     : A_YYYY
+
 		nextMonthNum := monthNum + 1
-		if(nextMonthNum = 13) ; Wrap around at end of year
+		if nextMonthNum = 13
 			nextMonthNum := 1
-		
-		dateString := year nextMonthNum.prePadToLength(2, "0") ; First day of following month in YYYYMM format
-		dateString += -1, Days ; Go back a day to get to the last day of the given month
-		
-		return FormatTime(dateString, "dd") ; Date with leading 0 (matches A_DD)
+
+		dateString := year nextMonthNum.prePadToLength(2, "0") "01" ; First day of following month in YYYYMMDD format
+		dateString := DateAdd(dateString, -1, "Days")
+
+		return FormatTime(dateString, "dd")
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 }

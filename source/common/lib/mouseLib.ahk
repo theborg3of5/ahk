@@ -9,19 +9,20 @@ class MouseLib {
 	;  y         (I,REQ) - Y coordinate to click at.
 	;  coordMode (I,OPT) - The CoordMode to use for the click. If not specified, uses the current CoordMode.
 	;---------
-	clickAndReturn(x, y, coordMode := "") {
-		MouseGetPos(startX, startY)
+	static clickAndReturn(x, y, coordMode := "") {
+		MouseGetPos(&startX, &startY)
 
-		if (coordMode)
-			settings := new TempSettings().coordMode("Mouse", coordMode)
+		settings := ""
+		if coordMode
+			settings := TempSettings().coordMode("Mouse", coordMode)
 
-		MouseMove, % x, y ; Click doesn't seem to work properly for some reason, but MouseMove + Click does.
-		Click
-		
-		if (settings)
+		MouseMove(x, y)
+		Click()
+
+		if settings
 			settings.restore()
 
-		MouseMove, % startX, startY
+		MouseMove(startX, startY)
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 }

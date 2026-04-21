@@ -98,9 +98,10 @@ class VSCode {
 		if(functionName = "")
 			return
 
-		varList := InputBox( , "Enter variables to send debug string for", "w500 h100", defaultVarList).Value
-		if(ErrorLevel) ; Popup was cancelled or timed out
+		box := InputBox( , "Enter variables to send debug string for", "w500 h100", defaultVarList)
+		if(box.Result != "OK") ; Popup was cancelled or timed out
 			return
+		varList := box.Value
 
 		if(varList = "") {
 			ClipboardLib.send(functionName "()")

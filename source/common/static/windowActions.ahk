@@ -318,7 +318,7 @@ class WindowActions {
 				Config.runProgram(windowActionSettings["NAME"])
 
 			Case this.Method_Minimize_Message:
-				PostMessage(MicrosoftLib.Message_WindowMenu, SystemCommand_Minimize, , , titleString)
+				PostMessage(MicrosoftLib.Message_WindowMenu, MicrosoftLib.SystemCommand_Minimize, , , titleString)
 
 			Case this.Method_SelectAll_Home:
 				Send("^{Home}")

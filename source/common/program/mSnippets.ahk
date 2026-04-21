@@ -1,4 +1,4 @@
-; Static class for inserting snippets of M code into EpicStudio.
+; Static class for inserting snippets of M code into EpicCode.
 class MSnippets {
 	;region ------------------------------ INTERNAL ------------------------------
 	;---------
@@ -35,7 +35,7 @@ class MSnippets {
 				return
 		}
 		
-		ClipboardLib.send(snipString) ; Better to send with the clipboard, otherwise we have to deal with EpicStudio adding in dot-levels itself.
+		ClipboardLib.send(snipString) ; Better to send with the clipboard, otherwise we have to deal with editor adding in dot-levels itself.
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------
 	

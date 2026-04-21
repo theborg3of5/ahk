@@ -615,6 +615,19 @@ class EpicLib {
 		; It could!
 		return true
 	}
+
+	;---------
+	; DESCRIPTION:    Get the current clipboard contents as a string formatted for use in an
+	;                 M-style string (wrapped in quotes, with internal quotes escaped).
+	; RETURNS:        The clipboard, as an M string
+	;---------
+	static getClipboardAsMString() {
+		clip := A_Clipboard
+		
+		clip := StringLib.escapeCharUsingChar(clip, '"', '"')
+		
+		return '"' clip '"'
+	}
 	
 	;---------
 	; DESCRIPTION:    Given a string, pull all described EMC2 records out and return them.

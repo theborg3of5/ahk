@@ -1,4 +1,5 @@
 ;region Basic settings for all scripts
+#Requires AutoHotkey v2.0
 #SingleInstance
 SetWorkingDir(A_ScriptDir)
 ;endregion Basic settings for all scripts

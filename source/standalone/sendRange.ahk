@@ -1,7 +1,6 @@
 ﻿; Generate a Hyperdrive environments file from the environments we have configured for Hyperspace.
 
 #Include <includeCommon>
-#LTrim, Off
 
 ; This is from DataLib.getNumericRangeBits(), keep it up to date with that
 prompt := "
@@ -23,9 +22,10 @@ Supported formats:
     - *num: Replace the last few digits of start with the new one (*53 will be start with its last two digits replaced with 53)
 )"
 
-rangeString := InputBox("Enter range to send", prompt, , 1100, 375)
-if (rangeString = "")
+ib := InputBox(prompt, "Enter range to send", "w1100 h375")
+if (ib.Result = "Cancel" || ib.Value = "")
 	ExitApp
+rangeString := ib.Value
 
 rangeAry := DataLib.expandList(rangeString)
 if (DataLib.isNullOrEmpty(rangeAry)) {

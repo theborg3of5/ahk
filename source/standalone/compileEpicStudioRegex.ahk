@@ -12,10 +12,10 @@
 */
 
 ; Start in the relevant folder.
-SetWorkingDir, % Config.path["EPICSTUDIO_GLOBAL_HIGHLIGHTS"]
+A_WorkingDir := Config.path["EPICSTUDIO_GLOBAL_HIGHLIGHTS"]
 
 ; Loop over all .bits files and compile them into .regex files.
-Loop, Files, % "*.bits"
+Loop Files, "*.bits"
 {
 	regexString := ""
 	For _,line in FileLib.fileLinesToArray(A_LoopFileName) {
@@ -31,7 +31,7 @@ Loop, Files, % "*.bits"
 	}
 	
 	; Generate the name of the compiled regex file from the base name of the original
-	SplitPath(A_LoopFileName, "", "", "", baseName)
+	SplitPath(A_LoopFileName, , , , &baseName)
 	
 	; Overwrite the file if it exists
 	FileLib.replaceFileWithString(baseName ".regex", regexString)

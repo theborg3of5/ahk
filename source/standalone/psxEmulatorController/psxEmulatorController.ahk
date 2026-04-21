@@ -6,15 +6,15 @@ ScriptTrayInfo.Init("AHK: Controller Emulator", "controllerGreen.ico", "controll
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 CommonHotkeys.setSuspendTimerLabel("CheckInputState")
 
-SetTimer, CheckInputState, 100
+SetTimer(CheckInputState, 100)
 XInput_Init()
 
 
-CheckInputState:
+CheckInputState() {
 	if(!WinActive("ahk_class EPSX"))
 		return
-	
-	Loop, 4 {
+
+	Loop 4 {
 		controllerNum := A_Index - 1 ; Controllers are 0-3
 		if State := XInput_GetState(controllerNum) {
 			if(State.wButtons & XINPUT_GAMEPAD_DPAD_UP)
@@ -23,24 +23,24 @@ CheckInputState:
 				sendEmulatorKey("F4") ; Lock/unlock framerate
 		}
 	}
-return
+}
 
 
-#IfWinActive, ahk_class EPSX
-	Joy9::
+#HotIf WinActive("ahk_class EPSX")
+	Joy9:: {
 		sendEmulatorKey("F1") ; Save state
-	return
-	Joy10::
+	}
+	Joy10:: {
 		sendEmulatorKey("F3") ; Load state
-	return
-#IfWinActive
+	}
+#HotIf
 
 
 ; Emulator checks for key being down, not an actual keypress, so this is needed.
 sendEmulatorKey(key) {
 	; Debug.popup("Sending key", key)
-	SendInput, {%key% Down}
-	Sleep, 50
-	SendInput, {%key% Up}
-	Sleep, 100
+	Send("{" key " Down}")
+	Sleep(50)
+	Send("{" key " Up}")
+	Sleep(100)
 }

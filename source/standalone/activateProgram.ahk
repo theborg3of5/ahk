@@ -2,7 +2,7 @@
 
 #Include <includeCommon>
 
-progName = %1% ; Input from command line
+progName := A_Args.Has(1) ? A_Args[1] : "" ; Input from command line
 if(!progName)
 	ExitApp
 	

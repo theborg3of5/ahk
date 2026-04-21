@@ -3,7 +3,7 @@
 #Include <includeCommon>
 
 ; Cache of function objects for performance
-global allFunctionObjects := {} ; {name: OnetasticFunction}
+global allFunctionObjects := Map() ; {name: OnetasticFunction}
 
 ; XML templates to build compiled XML from
 global TemplateXML_Macro := "
@@ -31,18 +31,18 @@ global TemplateXML_Parameter := "<Param byref=""<PRM_IS_BYREF>"" name=""<PRM_NAM
 
 
 ; Start in the relevant folder.
-SetWorkingDir, % Config.path["ONETASTIC_MACROS"]
+A_WorkingDir := Config.path["ONETASTIC_MACROS"]
 
 ; Loop over the macro XML files (containing their inner XML) and compile them into full, importable macro XMLs
-pt := new ProgressToast("Compiling Onetastic macros").blockingOn()
-Loop, Files, % "*.xml"
+pt := ProgressToast("Compiling Onetastic macros").blockingOn()
+Loop Files, "*.xml"
 {
 	if(A_LoopFileName.startsWith("."))
 		Continue
 	
 	pt.nextStep(A_LoopFileName)
 	macroInnerXML := FileRead(A_LoopFileName)
-	macro := new OnetasticMacro(macroInnerXML)
+	macro := OnetasticMacro(macroInnerXML)
 	FileLib.replaceFileWithString(Config.path["ONETASTIC_MACROS"] "\output\" A_LoopFileName, macro.generateXML())
 }
 pt.finish()
@@ -107,7 +107,7 @@ getFunction(name) {
 			return ""
 		}
 		
-		allFunctionObjects[name] := new OnetasticFunction(FileRead(filepath))
+		allFunctionObjects[name] := OnetasticFunction(FileRead(filepath))
 	}
 	
 	return allFunctionObjects[name]
@@ -259,7 +259,7 @@ class OnetasticFunction {
 		
 		code := this.innerXML.replaceTag("CURRENT_MACHINE", Config.machine) ; Replace special CURRENT_MACHINE tag (which allows us to act differently on different machines with the same code)
 		
-		xml := TemplateXML_Function.replaceTags({"FUNC_NAME":this.name, "FUNC_PARAMS":paramsXML, "FUNC_CODE":code})
+		xml := TemplateXML_Function.replaceTags(Map("FUNC_NAME", this.name, "FUNC_PARAMS", paramsXML, "FUNC_CODE", code))
 		
 		xml := StringLib.dropEmptyLines(xml) ; Ensure there's no empty lines, as that'd cause the import to fail.
 		return xml
@@ -284,7 +284,7 @@ class OnetasticFunction {
 		
 		this.parameters := []
 		For _,paramText in paramsList.split(",", A_Space)
-			this.parameters.push(new OnetasticFunctionParameter(paramText))
+			this.parameters.push(OnetasticFunctionParameter(paramText))
 	}
 	
 	;---------
@@ -328,7 +328,7 @@ class OnetasticFunctionParameter {
 	;---------
 	generateXML() {
 		byRefText := this.isByRef ? "true" : "false"
-		return TemplateXML_Parameter.replaceTags({"PRM_NAME":this.name, "PRM_IS_BYREF":byRefText})
+		return TemplateXML_Parameter.replaceTags(Map("PRM_NAME", this.name, "PRM_IS_BYREF", byRefText))
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 }

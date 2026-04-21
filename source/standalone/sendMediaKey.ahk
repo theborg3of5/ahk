@@ -3,11 +3,11 @@
 #Include <includeCommon>
 #NoTrayIcon
 
-inputKeys = %1% ; Input from command line
+inputKeys := A_Args.Has(1) ? A_Args[1] : "" ; Input from command line
 if(!inputKeys)
 	ExitApp
 
 For _,key in inputKeys.split(",")
-	Send, {%key%}
+	Send("{" key "}")
 
 ExitApp

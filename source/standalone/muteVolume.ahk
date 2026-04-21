@@ -1,2 +1,2 @@
 
-SoundSet, 1, , mute
+SoundSetMute(1)

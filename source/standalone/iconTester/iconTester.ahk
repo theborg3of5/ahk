@@ -10,10 +10,10 @@ global t          ; Toast object for showing the current icon
 
 
 ; Find all icons in sub-folder, track their paths in an array by number
-SetWorkingDir, %A_ScriptDir%
+A_WorkingDir := A_ScriptDir
 iconsAry := []
 iconsAry[0] := A_IconFile ; Entry 0 is the original icon for the script
-Loop, Files, *.*
+Loop Files, "*.*"
 {
 	if(A_LoopFileName = A_ScriptName)
 		Continue
@@ -33,10 +33,8 @@ else
 
 ; Set current icon number and show the persistent Toast for the icons
 currentNum := 0
-t := new Toast().show(VisualWindow.X_RightEdge, VisualWindow.Y_TopEdge)
+t := Toast().show(VisualWindow.X_RightEdge, VisualWindow.Y_TopEdge)
 switchToIconWithNum(0)
-
-return
 
 
 ; Hotkeys to cycle back/forward through all icons in folder
@@ -65,7 +63,7 @@ switchToIconWithNum(num) {
 		Toast.ShowError("No icon found", "Icon " num " does not exist")
 		return
 	}
-	Menu, Tray, Icon, % iconPath
+	TraySetIcon(iconPath)
 	
 	; Update the current number, and the toast to match
 	currentNum := num

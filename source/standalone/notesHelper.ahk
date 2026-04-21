@@ -3,9 +3,9 @@
 #Include <includeCommon>
 ScriptTrayInfo.Init("AHK: Notes helper", "ninja.png", "ninjaRed.png")
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
-DetectHiddenWindows, On
+A_DetectHiddenWindows := true
 
-#If Config.isWindowActive("OneNote")
+#HotIf Config.isWindowActive("OneNote")
 
 ; Hotstrings for various people/directions
 :CB0*X?:mm::superscriptSides(true)
@@ -77,28 +77,28 @@ DetectHiddenWindows, On
 :B0*?X:315d::dToDegree()
 :B0*?X:360d::dToDegree()
 
-#If
+#HotIf
 
 
 superscriptSides(removeLastChar := false) {
 	hotstring := A_ThisHotkey.afterString(":", true)
 	if (removeLastChar) {
 		hotstring := hotstring.sub(1, -1) ; Drop the last char
-		Send, {Backspace}
+		Send("{Backspace}")
 	}
-	
-	length := hotstring.length()
 
-	Send, {Shift Down}{Left %length%}{Shift Up} ; Select text
-	Send, ^+= ; Superscript
+	length := StrLen(hotstring)
 
-	Send, {Right} ; Deselect, cursor back where it started
-	; Send, {Space} ; Distance from superscripted text - otherwise if there's already text after then OneNote de-superscripts what we just superscripted.
-	Send, ^+= ; Remove superscript
-	; Send, {Backspace} ; Remove the extra space from above
+	Send("{Shift Down}{Left " length "}{Shift Up}") ; Select text
+	Send("^+=") ; Superscript
+
+	Send("{Right}") ; Deselect, cursor back where it started
+	; Send("{Space}") ; Distance from superscripted text - otherwise if there's already text after then OneNote de-superscripts what we just superscripted.
+	Send("^+=") ; Remove superscript
+	; Send("{Backspace}") ; Remove the extra space from above
 }
 
 dToDegree() {
-	Send, {Backspace} ; Delete "d"
-	Send, °
+	Send("{Backspace}") ; Delete "d"
+	Send("°")
 }

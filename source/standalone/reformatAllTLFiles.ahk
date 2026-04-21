@@ -1,7 +1,7 @@
 ; Reformat all TL and TLS files in the AHK root folder and below, to my personally preferred standard.
 
 #Include <includeCommon>
-FileEncoding, UTF-8 ; Read files in UTF-8 encoding by default to handle special characters.
+A_FileEncoding := "UTF-8" ; Read files in UTF-8 encoding by default to handle special characters.
 
 global MIN_COLUMN_PADDING := 1 ; At least 1 tab between columns
 global TAB_WIDTH := VSCode.TabWidth ; Match VSCode since that's where we're editing these
@@ -13,7 +13,7 @@ global COLINFO_START := TableList.Char_ColumnInfo_Start
 global COLINFO_END   := TableList.Char_ColumnInfo_End
 
 ; Silent mode: reformat just a single TL[S] file without confirmation.
-fileToReformat = %1% ; Input from command line
+fileToReformat := A_Args.Has(1) ? A_Args[1] : "" ; Input from command line
 if(fileToReformat) {
 	reformatFile(fileToReformat)
 	ExitApp
@@ -22,18 +22,18 @@ if(fileToReformat) {
 if(!GuiLib.showConfirmationPopup("Reformat all TL/TLS files?"))
 	ExitApp
 
-progToast := new ProgressToast("Reformatting TL/TLS files").blockingOn()
+progToast := ProgressToast("Reformatting TL/TLS files").blockingOn()
 
 progToast.nextStep("Main repo")
 root := Config.path["AHK_ROOT"]
-Loop, Files, %root%\*.tl*, RF
+Loop Files, root "\*.tl*", "RF"
 {
 	reformatFile(A_LoopFileFullPath)
 }
 
 progToast.nextStep("Private repo")
 root := Config.path["AHK_PRIVATE"]
-Loop, Files, %root%\*.tl*, RF
+Loop Files, root "\*.tl*", "RF"
 {
 	reformatFile(A_LoopFileFullPath)
 }
@@ -52,7 +52,7 @@ reformatFile(filePath) {
 }
 
 reformatRows(rows) {
-	getDimensions(rows, normalIndentLevel, columnWidthsAry)
+	getDimensions(rows, &normalIndentLevel, &columnWidthsAry)
 	
 	modIndentLevel := 0
 	newRows := []
@@ -136,7 +136,7 @@ reformatRows(rows) {
 }
 
 ; Figure out our overall dimensions - column widths and indentation level for "normal" rows.
-getDimensions(rows, ByRef normalIndentLevel, ByRef columnWidthsAry) {
+getDimensions(rows, &normalIndentLevel, &columnWidthsAry) {
 	normalIndentLevel := 0
 	columnWidthsAry   := []
 	
@@ -151,20 +151,20 @@ getDimensions(rows, ByRef normalIndentLevel, ByRef columnWidthsAry) {
 		; Removing a mod set
 		if(isModClose(row)) {
 			numOpenMods--
-			DataLib.updateMax(normalIndentLevel, numOpenMods)
+			DataLib.updateMax(&normalIndentLevel, numOpenMods)
 			Continue
 		}
-		
+
 		; Adding a mod set
 		if(isModOpen(row)) {
 			numOpenMods++
-			DataLib.updateMax(normalIndentLevel, numOpenMods)
+			DataLib.updateMax(&normalIndentLevel, numOpenMods)
 			Continue
 		}
-		
+
 		; Model/column info rows - make sure "normal" indentation is at least 1 so we can separate the first column from the prefix.
 		if(isModel(row) || isColumnInfo(row)) {
-			DataLib.updateMax(normalIndentLevel, 1)
+			DataLib.updateMax(&normalIndentLevel, 1)
 			
 			; Remove the prefix/suffix so we can count the columns inside towards the column widths
 			row := removePrefixSuffix(row)
@@ -172,8 +172,11 @@ getDimensions(rows, ByRef normalIndentLevel, ByRef columnWidthsAry) {
 		
 		; Track size of each column (in tabs).
 		For columnIndex,value in splitRow(row) {
-			width := Ceil(value.length() / TAB_WIDTH) + MIN_COLUMN_PADDING ; Width in tabs - ceiling means we'll get at least 1 FULL tab of padding
-			columnWidthsAry[columnIndex] := DataLib.max(columnWidthsAry[columnIndex], width)
+			width := Ceil(StrLen(value) / TAB_WIDTH) + MIN_COLUMN_PADDING ; Width in tabs - ceiling means we'll get at least 1 FULL tab of padding
+			existing := (columnIndex <= columnWidthsAry.Length) ? columnWidthsAry[columnIndex] : 0
+			if(columnIndex > columnWidthsAry.Length)
+				columnWidthsAry.Length := columnIndex
+			columnWidthsAry[columnIndex] := DataLib.max(existing, width)
 		}
 	}
 }
@@ -192,7 +195,7 @@ splitRow(row) {
 getCharacterWidth(stringToMeasure) {
 	numChars := 0
 	
-	Loop, Parse, % stringToMeasure
+	Loop Parse, stringToMeasure
 	{
 		if(A_LoopField = A_Tab)
 			numChars += (TAB_WIDTH - mod(numChars, TAB_WIDTH)) ; Each tab brings us to the next tab stop

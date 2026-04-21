@@ -11,7 +11,7 @@ global timerLabelText
 
 ; Get any inputs from command line
 durationString := A_Args.RemoveAt(1)
-Loop, % A_Args.Length() {
+Loop A_Args.Length {
 	labelText := labelText.appendPiece(" ", A_Args[A_Index])
 }
 
@@ -25,23 +25,22 @@ toastObj := buildTimerToast()
 toastObj.show(VisualWindow.X_RightEdge "-10", VisualWindow.Y_TopEdge "+10")
 
 ; Start ticking once per second
-SetTimer, decrementTimer, 1000
+SetTimer(decrementTimer, 1000)
 
 ; Confirm before exiting with common close hotkey (!+x)
 CommonHotkeys.confirmExitOn("Stop the timer and exit?")
 
 ; Block until toast hides (3 seconds), so temp-show hotkey can't fire until it's hidden
 toastObj.blockingOn().showForSeconds(3).blockingOff()
-return
 
 
 ; Show timer for 3 seconds, then hide it again
-~^!Space::
+~^!Space:: {
 	toastObj.show()
 	HotkeyLib.waitForRelease()
-	Sleep, 3000 ; Use sleep instead of toastObj.showForSeconds() so toast doesn't hide until the hotkey is released.
+	Sleep(3000) ; Use sleep instead of toastObj.showForSeconds() so toast doesn't hide until the hotkey is released.
 	toastObj.hide()
-return
+}
 
 ;---------
 ; DESCRIPTION:    Gather the info we need to start the timer.
@@ -53,7 +52,7 @@ return
 ;---------
 getTimerInfo(durationString, labelText) {
 	; First try using the duration string we were given.
-	dur := New Duration(durationString)
+	dur := Duration(durationString)
 	if(!dur.isZero) {
 		durationObj    := dur
 		timerLabelText := labelText
@@ -61,15 +60,15 @@ getTimerInfo(durationString, labelText) {
 	}
 	
 	; If that wasn't sucessful, prompt the user (with a Selector popup) for the duration (and optionally the label).
-	s := new Selector().setTitle("Timer duration").addOverrideFields({ 1:"DURATION_STRING", 2:"LABEL" })
-	s.addChoice(new SelectorChoice({ NAME:"5 minutes" , ABBREV:"5m"  , DURATION_STRING:"5m"   }))
-	s.addChoice(new SelectorChoice({ NAME:"10 minutes", ABBREV:"10m" , DURATION_STRING:"10m"  }))
-	s.addChoice(new SelectorChoice({ NAME:"15 minutes", ABBREV:"15m" , DURATION_STRING:"15m"  }))
-	s.addChoice(new SelectorChoice({ NAME:"20 minutes", ABBREV:"20m" , DURATION_STRING:"20m"  }))
-	s.addChoice(new SelectorChoice({ NAME:"30 minutes", ABBREV:"30m" , DURATION_STRING:"30m"  }))
-	s.addChoice(new SelectorChoice({ NAME:"45 minutes", ABBREV:"45m" , DURATION_STRING:"45m"  }))
-	s.addChoice(new SelectorChoice({ NAME:"1 hour"    , ABBREV:"1h"  , DURATION_STRING:"1h"   }))
-	s.addChoice(new SelectorChoice({ NAME:"1.5 hours" , ABBREV:"1.5h", DURATION_STRING:"1.5h" }))
+	s := Selector().setTitle("Timer duration").addOverrideFields(Map(1,"DURATION_STRING", 2,"LABEL"))
+	s.addChoice(SelectorChoice(Map("NAME","5 minutes" , "ABBREV","5m"  , "DURATION_STRING","5m"  )))
+	s.addChoice(SelectorChoice(Map("NAME","10 minutes", "ABBREV","10m" , "DURATION_STRING","10m" )))
+	s.addChoice(SelectorChoice(Map("NAME","15 minutes", "ABBREV","15m" , "DURATION_STRING","15m" )))
+	s.addChoice(SelectorChoice(Map("NAME","20 minutes", "ABBREV","20m" , "DURATION_STRING","20m" )))
+	s.addChoice(SelectorChoice(Map("NAME","30 minutes", "ABBREV","30m" , "DURATION_STRING","30m" )))
+	s.addChoice(SelectorChoice(Map("NAME","45 minutes", "ABBREV","45m" , "DURATION_STRING","45m" )))
+	s.addChoice(SelectorChoice(Map("NAME","1 hour"    , "ABBREV","1h"  , "DURATION_STRING","1h"  )))
+	s.addChoice(SelectorChoice(Map("NAME","1.5 hours" , "ABBREV","1.5h", "DURATION_STRING","1.5h")))
 	
 	infoAry := s.prompt()
 	if(!infoAry)
@@ -78,7 +77,7 @@ getTimerInfo(durationString, labelText) {
 	labelText      := infoAry["LABEL"]
 	
 	; Try again with user input.
-	dur := New Duration(durationString)
+	dur := Duration(durationString)
 	if(!dur.isZero) {
 		durationObj    := dur
 		timerLabelText := labelText
@@ -95,7 +94,7 @@ getTimerInfo(durationString, labelText) {
 buildTimerToast() {
 	displayText := getTimerDisplayText()
 	overrides := getToastStyleOverrides("Right") ; Right-aligned (for displaying time)
-	return new Toast(displayText, overrides).persistentOn()
+	return Toast(displayText, overrides).persistentOn()
 }
 
 ;---------
@@ -120,8 +119,8 @@ getTimerDisplayText() {
 ; RETURNS:        Style overrides for use with Toast class.
 ;---------
 getToastStyleOverrides(labelAlignment) {
-	overrides := {}
-	
+	overrides := Map()
+
 	overrides["BACKGROUND_COLOR"] := "000000" ; Black
 	overrides["FONT_COLOR"]       := "00FF00" ; Green
 	overrides["FONT_SIZE"]        := 40
@@ -149,7 +148,7 @@ decrementTimer() {
 ; SIDE EFFECTS:   Destroys timer toast, stops requiring confirmation to exit with !+x hotkey.
 ;---------
 finishTimer() {
-	SetTimer, , Off ; Stop ticking
+	SetTimer(decrementTimer, 0) ; Stop ticking
 	toastObj.close()
 	
 	; Stop requiring confirmation to exit
@@ -158,12 +157,12 @@ finishTimer() {
 	; Play a sound to call out that time is up.
 	finishedSoundFile := Config.replacePathTags("<WINDOWS>\media\Windows Hardware Fail.wav")
 	if(FileExist(finishedSoundFile))
-		SoundPlay, % finishedSoundFile
+		SoundPlay(finishedSoundFile)
 		
 	; Show a persistent "finished" toast in the middle of the screen.
 	displayText := "Timer Finished"
 	if(timerLabelText != "")
 		displayText .= ":`n" timerLabelText
-	finishedToast := new Toast(displayText, getToastStyleOverrides("Center"))
+	finishedToast := Toast(displayText, getToastStyleOverrides("Center"))
 	finishedToast.show(VisualWindow.X_Centered, VisualWindow.Y_Centered)
 }

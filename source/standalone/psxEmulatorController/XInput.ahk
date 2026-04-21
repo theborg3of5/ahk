@@ -12,7 +12,7 @@
     Parameters:
         dll     -   The path or name of the XInput DLL to load.
 */
-XInput_Init(dll="xinput1_3")
+XInput_Init(dll:="xinput1_3")
 {
     global
     if _XInput_hm
@@ -62,7 +62,7 @@ XInput_Init(dll="xinput1_3")
     
     if !_XInput_hm
     {
-        MsgBox, Failed to initialize XInput: %dll%.dll not found.
+        MsgBox("Failed to initialize XInput: " dll ".dll not found.")
         return
     }
     
@@ -73,7 +73,7 @@ XInput_Init(dll="xinput1_3")
     if !(_XInput_GetState && _XInput_SetState && _XInput_GetCapabilities)
     {
         XInput_Term()
-        MsgBox, Failed to initialize XInput: function not found.
+        MsgBox("Failed to initialize XInput: function not found.")
         return
     }
 }
@@ -103,22 +103,21 @@ XInput_GetState(UserIndex)
 {
     global _XInput_GetState
     
-    VarSetCapacity(xiState,16)
+    xiState := Buffer(16, 0)
 
-    if ErrorLevel := DllCall(_XInput_GetState ,"uint",UserIndex ,"uint",&xiState)
+    if DllCall(_XInput_GetState ,"uint",UserIndex ,"ptr",xiState)
         return 0
-    
+
     return {
-    (Join,
-        dwPacketNumber: NumGet(xiState,  0, "UInt")
-        wButtons:       NumGet(xiState,  4, "UShort")
-        bLeftTrigger:   NumGet(xiState,  6, "UChar")
-        bRightTrigger:  NumGet(xiState,  7, "UChar")
-        sThumbLX:       NumGet(xiState,  8, "Short")
-        sThumbLY:       NumGet(xiState, 10, "Short")
-        sThumbRX:       NumGet(xiState, 12, "Short")
+        dwPacketNumber: NumGet(xiState,  0, "UInt"),
+        wButtons:       NumGet(xiState,  4, "UShort"),
+        bLeftTrigger:   NumGet(xiState,  6, "UChar"),
+        bRightTrigger:  NumGet(xiState,  7, "UChar"),
+        sThumbLX:       NumGet(xiState,  8, "Short"),
+        sThumbLY:       NumGet(xiState, 10, "Short"),
+        sThumbRX:       NumGet(xiState, 12, "Short"),
         sThumbRY:       NumGet(xiState, 14, "Short")
-    )}
+    }
 }
 
 /*
@@ -155,7 +154,7 @@ XInput_SetState(UserIndex, LeftMotorSpeed, RightMotorSpeed)
     Retrieves the capabilities and features of a connected controller.
     
     Parameters:
-        UserIndex   -   [in] Index of the user's controller. Can be a value in the range 0–3.
+        UserIndex   -   [in] Index of the user's controller. Can be a value in the range 0ï¿½3.
         Flags       -   [in] Input flags that identify the controller type.
                                 0   - All controllers.
                                 1   - XINPUT_FLAG_GAMEPAD: Xbox 360 Controllers only.
@@ -176,34 +175,31 @@ XInput_GetCapabilities(UserIndex, Flags)
 {
     global _XInput_GetCapabilities
     
-    VarSetCapacity(xiCaps,20)
-    
-    if ErrorLevel := DllCall(_XInput_GetCapabilities ,"uint",UserIndex ,"uint",Flags ,"ptr",&xiCaps)
+    xiCaps := Buffer(20, 0)
+
+    if DllCall(_XInput_GetCapabilities ,"uint",UserIndex ,"uint",Flags ,"ptr",xiCaps)
         return 0
-    
-    return,
-    (Join
+
+    return {
+        Type:                   NumGet(xiCaps,  0, "UChar"),
+        SubType:                NumGet(xiCaps,  1, "UChar"),
+        Flags:                  NumGet(xiCaps,  2, "UShort"),
+        Gamepad:
         {
-            Type:                   NumGet(xiCaps,  0, "UChar"),
-            SubType:                NumGet(xiCaps,  1, "UChar"),
-            Flags:                  NumGet(xiCaps,  2, "UShort"),
-            Gamepad:
-            {
-                wButtons:           NumGet(xiCaps,  4, "UShort"),
-                bLeftTrigger:       NumGet(xiCaps,  6, "UChar"),
-                bRightTrigger:      NumGet(xiCaps,  7, "UChar"),
-                sThumbLX:           NumGet(xiCaps,  8, "Short"),
-                sThumbLY:           NumGet(xiCaps, 10, "Short"),
-                sThumbRX:           NumGet(xiCaps, 12, "Short"),
-                sThumbRY:           NumGet(xiCaps, 14, "Short")
-            },
-            Vibration:
-            {
-                wLeftMotorSpeed:    NumGet(xiCaps, 16, "UShort"),
-                wRightMotorSpeed:   NumGet(xiCaps, 18, "UShort")
-            }
+            wButtons:           NumGet(xiCaps,  4, "UShort"),
+            bLeftTrigger:       NumGet(xiCaps,  6, "UChar"),
+            bRightTrigger:      NumGet(xiCaps,  7, "UChar"),
+            sThumbLX:           NumGet(xiCaps,  8, "Short"),
+            sThumbLY:           NumGet(xiCaps, 10, "Short"),
+            sThumbRX:           NumGet(xiCaps, 12, "Short"),
+            sThumbRY:           NumGet(xiCaps, 14, "Short")
+        },
+        Vibration:
+        {
+            wLeftMotorSpeed:    NumGet(xiCaps, 16, "UShort"),
+            wRightMotorSpeed:   NumGet(xiCaps, 18, "UShort")
         }
-    )
+    }
 }
 
 /*

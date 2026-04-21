@@ -2,14 +2,14 @@
 
 #Include <includeCommon>
 CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
-FileEncoding, UTF-8 ; Read files in UTF-8 encoding by default to handle special characters.
+A_FileEncoding := "UTF-8" ; Read files in UTF-8 encoding by default to handle special characters.
 
-progToast := new ProgressToast("Adding exported environment TLS lines").blockingOn()
+progToast := ProgressToast("Adding exported environment TLS lines").blockingOn()
 
 ; Read file from database
 progToast.nextStep("Reading file from database")
 dataLines := FileLib.fileLinesToArray(Config.path["EPIC_NFS_ASK"] "\temp\environmentData.txt").removeEmpties() ; Drop any leading/trailing newlines
-if(dataLines.length() = 0) {
+if(dataLines.Length = 0) {
 	Toast.BlockAndShowError("Can't add new TLS lines", "No data in database file")
 	ExitApp
 }
@@ -48,16 +48,15 @@ progToast.nextStep("Launching TLS file to edit")
 VSCode.editScript("--goto " environmentsFilePath ":" firstNewEnvLine) ; Focus the line we added to
 
 progToast.finish()
-return
 
 
 ; Wait for me to move the new line to the proper place in the environments TLS and save, or to just close the file.
 ~^w::
-~^s::
+~^s:: {
 	if(GuiLib.showConfirmationPopup("Reformat environments TLS file?"))
 		Run(Config.path["AHK_SOURCE"] "\standalone\reformatAllTLFiles.ahk " environmentsFilePath)
 	ExitApp
-return
+}
 
 
 ;---------
@@ -69,7 +68,7 @@ return
 ;---------
 areAddingEntireSUVersion(dataLines) {
 	; Adding the entire version involves adding 5 environments (3 DBC + 2 Normal)
-	if(dataLines.length() != 5)
+	if(dataLines.Length != 5)
 		return false
 	
 	; Comm ID should start with "SU" + 3-digit version number
@@ -93,7 +92,7 @@ areAddingEntireSUVersion(dataLines) {
 ;---------
 handleDuplicateEnvironments(environmentLines, dataLines) {
 	; Build an index of our new environments by commId
-	newEnvironments := {}
+	newEnvironments := Map()
 	For _, line in dataLines {
 		name   := line.piece("^", 1)
 		commId := line.piece("^", 4)
@@ -113,7 +112,7 @@ handleDuplicateEnvironments(environmentLines, dataLines) {
 	}
 
 	; Prompt with duplicates
-	if(duplicateEnvironments.length() > 0) {
+	if(duplicateEnvironments.Length > 0) {
 		if(!GuiLib.showConfirmationPopup("These environments already exist in the TLS, add them again?" "`n`n" duplicateEnvironments.join("`n")))
 			return false
 	}

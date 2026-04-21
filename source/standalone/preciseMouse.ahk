@@ -6,47 +6,47 @@ CommonHotkeys.Init(CommonHotkeys.ScriptType_Standalone)
 CommonHotkeys.setSuspendTimerLabel("HandleKeys")
 
 ; 200 hotkeys allowed per 2 seconds (to allow long holds for moving mouse further)
-#MaxHotkeysPerInterval, 200
-#HotkeyInterval, 2000
+#MaxHotkeysPerInterval 200
+#HotkeyInterval 2000
 
 ; Global flags/counts per arrow key
-global keyRunOnce := {"Left":false, "Right":false, "Up":false, "Down":false}
-global keyHeld    := {"Left":false, "Right":false, "Up":false, "Down":false}
-global keyCounts  := {"Left":0,     "Right":0,     "Up":0,     "Down":0}
+global keyRunOnce := Map("Left",false, "Right",false, "Up",false, "Down",false)
+global keyHeld    := Map("Left",false, "Right",false, "Up",false, "Down",false)
+global keyCounts  := Map("Left",0,     "Right",0,     "Up",0,     "Down",0)
 
 ; Show a toast with the controls.
-tt := new TextTable().setBorderType(TextTable.BorderType_Line).setColumnDivider(" ")
+tt := TextTable().setBorderType(TextTable.BorderType_Line).setColumnDivider(" ")
 tt.addRow("Space/Numpad0:", "Left mouse button")
 tt.addRow("Arrows:"       , "Move mouse")
 tt.addRow("Shift (hold):" , "Move slowly")
 tt.addRow("Alt (hold):"   , "Move quickly")
-new Toast(tt.getText()).showForSeconds(5)
+Toast(tt.getText()).showForSeconds(5)
 
-SetTimer, HandleKeys, 10
-HandleKeys:
+SetTimer(HandleKeys, 10)
+HandleKeys() {
 	; For keys held down, add to the counts too
 	For keyName,_ in keyCounts {
 		if(!keyHeld[keyName]) ; Only add to counts here if the key is being held down (so first just adds 1, not potentially multiple depending on the timer)
 			Continue
 		if(!GetKeyState(keyName, "P")) ; Check physical state - logical state is cleared by triggering hotkeys
 			Continue
-		
+
 		addToKeyCount(keyName)
 	}
-	
+
 	; Store off and clear key counts to make sure we're tracking any further updates that happen while we're handling the actual move
-	tempCounts := keyCounts.clone()
+	tempCounts := keyCounts.Clone()
 	For keyName,_ in keyCounts
 		keyCounts[keyName] := 0
-	
+
 	; Calculate actual x/y movement
 	moveX := tempCounts["Right"] - tempCounts["Left"]
 	moveY := tempCounts["Down"] - tempCounts["Up"]
-	
+
 	; Move the mouse
 	if(moveX != 0 || moveY != 0)
-		MouseMove, moveX, moveY, 0, R ; Speed of 0 moves mouse instantly, moving relative to current position
-return
+		MouseMove(moveX, moveY, 0, "R") ; Speed of 0 moves mouse instantly, moving relative to current position
+}
 
 ; Arrow keys (plus any modifiers) move the mouse in that direction. These can also be held down, see loop above.
 *Left:: arrowPressed("Left")
@@ -55,10 +55,10 @@ return
 *Down:: arrowPressed("Down")
 
 ; Releasing the hotkeys clears some flags used to tell what's held down.
-Left Up:: arrowReleased("Left")
+Left Up::arrowReleased("Left")
 Right Up::arrowReleased("Right")
-Up Up::   arrowReleased("Up")
-Down Up:: arrowReleased("Down")
+Up Up::arrowReleased("Up")
+Down Up::arrowReleased("Down")
 
 ; Both space and numpad 0 double as a click
 Space::  LButton

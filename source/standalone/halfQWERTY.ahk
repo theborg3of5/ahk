@@ -7,13 +7,13 @@ global mirrorKeys := buildMirrorKeys()
 
 
 ; These keys are optional, but they may help if you are typing on the left-hand side.
-CapsLock::Send, {BackSpace}
-Space & CapsLock::Send, {Enter}
+CapsLock::Send("{BackSpace}")
+Space & CapsLock::Send("{Enter}")
 
 ; If Spacebar didn't modify anything, send a real Space keystroke upon release.
-Space::
-	Send {Space}
-return
+Space:: {
+	Send("{Space}")
+}
 
 ; Mirror hotkeys
 Space & 1::
@@ -55,17 +55,17 @@ Space & n::
 Space & m::
 Space & ,::
 Space & .::
-Space & /::
+Space & /:: {
 	mirroredKey := getMirroredKeyFromHotkey(A_ThisHotkey)
 	; Debug.popup("Hotkey",A_ThisHotkey, "Mirrored key",mirroredKey)
-	
+
 	; {Blind} mode lets us use modifiers with whatever was pressed, too.
-	Send, {Blind}%mirroredKey%
-return
+	Send("{Blind}" mirroredKey)
+}
 
 
 buildMirrorKeys() {
-	keys := {}
+	keys := Map()
 	
 	; Put a "KEY_" in front of each character so that later on when we're retrieving a value, we can force the key to be a string.
 	keys["KEY_1"] := "0"

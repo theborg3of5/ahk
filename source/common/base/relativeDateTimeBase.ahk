@@ -26,10 +26,10 @@ class RelativeDateTimeBase {
 	;---------
 	; DESCRIPTION:    Send the relative date/time in a particular format.
 	; PARAMETERS:
-	;  format (I,REQ) - The format to send the date/time in, a la FormatTime().
+	;  formatStr (I,REQ) - The format to send the date/time in, a la FormatTime().
 	;---------
-	sendInFormat(format) {
-		Send(FormatTime(this._instant, format))
+	sendInFormat(formatStr) {
+		Send(FormatTime(this._instant, formatStr))
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	

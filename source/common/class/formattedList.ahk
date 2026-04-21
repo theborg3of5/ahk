@@ -42,16 +42,16 @@ class FormattedList {
 	;  format (I,OPT) - Format to get the list in. If not given, we'll prompt the user for it.
 	; RETURNS:        The list, in the chosen format.
 	;---------
-	getList(format := "") {
+	getList(formatToUse := "") {
 		customDelim := ""
-		if(!format)
-			format := this.promptForFormat("Enter OUTPUT format for list", &customDelim)
-		if(!format)
+		if(!formatToUse)
+			formatToUse := this.promptForFormat("Enter OUTPUT format for list", &customDelim)
+		if(!formatToUse)
 			return ""
 		
-		listInFormat := this.getListInFormat(format, customDelim)
+		listInFormat := this.getListInFormat(formatToUse, customDelim)
 		if(listInFormat = "")
-			Toast.ShowError("Could not get list", "Format is not gettable: " format)
+			Toast.ShowError("Could not get list", "Format is not gettable: " formatToUse)
 		
 		return listInFormat
 	}
@@ -59,17 +59,17 @@ class FormattedList {
 	;---------
 	; DESCRIPTION:    Send the list to the current window, in a certain format.
 	; PARAMETERS:
-	;  format (I,OPT) - Format to send the list in. If not given, we'll prompt the user for it.
+	;  formatToUse (I,OPT) - Format to send the list in. If not given, we'll prompt the user for it.
 	;---------
-	sendList(format := "") {
+	sendList(formatToUse := "") {
 		customDelim := ""
-		if(!format)
-			format := this.promptForFormat("Enter OUTPUT format for list", &customDelim)
-		if(!format)
+		if(!formatToUse)
+			formatToUse := this.promptForFormat("Enter OUTPUT format for list", &customDelim)
+		if(!formatToUse)
 			return
 		
-		if(!this.sendListInFormat(format, customDelim))
-			Toast.ShowError("Could not send list", "Format is not sendable: " format)
+		if(!this.sendListInFormat(formatToUse, customDelim))
+			Toast.ShowError("Could not send list", "Format is not sendable: " formatToUse)
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
@@ -83,25 +83,25 @@ class FormattedList {
 	;---------
 	; DESCRIPTION:    Read in the provided list object and store it in an internal (array) format.
 	; PARAMETERS:
-	;  listObject (I,REQ) - The list to determine the format of.
-	;  format     (I,OPT) - Format that the list is in (from .Format_* constants). If not
-	;                       given, we will try to determine it ourselves and prompt the user if we
-	;                       can't figure it out.
+	;  listObject  (I,REQ) - The list to determine the format of.
+	;  formatToUse (I,OPT) - Format that the list is in (from .Format_* constants). If not
+	;                        given, we will try to determine it ourselves and prompt the user if we
+	;                        can't figure it out.
 	; RETURNS:        true if we were successful, false if we couldn't determine the format (and
 	;                 the user didn't help).
 	; SIDE EFFECTS:   Populates .listAry with the array representation of the list
 	;---------
-	parseListObject(listObject, format) {
+	parseListObject(listObject, formatToUse) {
 		; If the incoming format wasn't given, try to figure it out.
-		if(!format)
-			format := this.determineListFormat(listObject)
+		if(!formatToUse)
+			formatToUse := this.determineListFormat(listObject)
 		
 		; Quit silently if the format was blanked out (user was prompted but didn't pick anything)
-		if(!format)
+		if(!formatToUse)
 			return false
 		
 		; Turn the list into an array.
-		this.listAry := this.convertListToArray(listObject, format)
+		this.listAry := this.convertListToArray(listObject, formatToUse)
 		; Debug.popup("this.listAry",this.listAry)
 		return true
 	}
@@ -116,15 +116,15 @@ class FormattedList {
 	determineListFormat(listObject) {
 		; Try to figure it out based on the list object itself.
 		if(listObject is Array) ; All objects are assumed to be arrays
-			format := this.Format_Array
+			formatToUse := this.Format_Array
 		else ; Everything else is assumed to be a string
-			format := this.determineFormatByDelimiters(listObject)
+			formatToUse := this.determineFormatByDelimiters(listObject)
 		
 		; If we can't tell, ask the user.
-		if(format = this.Format_Ambiguous)
-			format := this.promptForFormat("Enter INPUT format for list")
+		if(formatToUse = this.Format_Ambiguous)
+			formatToUse := this.promptForFormat("Enter INPUT format for list")
 		
-		return format
+		return formatToUse
 	}
 	
 	;---------
@@ -179,12 +179,12 @@ class FormattedList {
 	;---------
 	; DESCRIPTION:    Turn the list into our internal representation (an array) based on its format.
 	; PARAMETERS:
-	;  listObject (I,REQ) - The list to convert.
-	;  format     (I,REQ) - The format the list is in.
+	;  listObject  (I,REQ) - The list to convert.
+	;  formatToUse (I,REQ) - The format the list is in.
 	; RETURNS:        The array representation of the list
 	;---------
-	convertListToArray(listObject, format) {
-		Switch format {
+	convertListToArray(listObject, formatToUse) {
+		Switch formatToUse {
 			Case this.Format_Array:                           listAry := listObject
 			Case this.Format_UnknownSingle:                   listAry := [listObject] ; No idea of delimiter, but just one element so it doesn't matter.
 			Case this.Format_Space:                           listAry := listObject.split(" ", " `t")
@@ -206,15 +206,15 @@ class FormattedList {
 	;---------
 	; DESCRIPTION:    Return the list in the given format.
 	; PARAMETERS:
-	;  format      (I,REQ) - The format (from .Format_*) to return the list in.
-	;  customDelim (I,OPT) - If format is Format_CustomDelim, the custom delimiter to use.
+	;  formatToUse      (I,REQ) - The format (from .Format_*) to return the list in.
+	;  customDelim (I,OPT) - If formatToUse is Format_CustomDelim, the custom delimiter to use.
 	; RETURNS:        The formatted list.
 	;---------
-	getListInFormat(format, customDelim) {
-		if(!this.listAry || !format)
+	getListInFormat(formatToUse, customDelim) {
+		if(!this.listAry || !formatToUse)
 			return ""
 		
-		Switch format {
+		Switch formatToUse {
 			Case this.Format_Array:        return this.listAry
 			Case this.Format_Space:        return this.listAry.join(" ")
 			Case this.Format_Commas:       return this.listAry.join(",")
@@ -229,18 +229,18 @@ class FormattedList {
 	;---------
 	; DESCRIPTION:    Send the list to the current window in a particular format.
 	; PARAMETERS:
-	;  format      (I,REQ) - The format to use (.Format_*).
-	;  customDelim (I,OPT) - If format is Format_CustomDelim, the custom delimiter to use.
+	;  formatToUse      (I,REQ) - The format to use (.Format_*).
+	;  customDelim (I,OPT) - If formatToUse is Format_CustomDelim, the custom delimiter to use.
 	; RETURNS:        true if successful, false if something went wrong (like an unsupported format).
 	;---------
-	sendListInFormat(format, customDelim) {
-		if(!this.listAry || !format)
+	sendListInFormat(formatToUse, customDelim) {
+		if(!this.listAry || !formatToUse)
 			return true
 		
-		Switch format {
+		Switch formatToUse {
 			; Stuff that doesn't involve extra keys - just Send what comes out of .getListInFormat().
 			Case this.Format_Space, this.Format_Commas, this.Format_CommasSpaced, this.Format_Underscore, this.Format_NewLines, this.Format_CustomDelim:
-				SendText(this.getListInFormat(format, customDelim))
+				SendText(this.getListInFormat(formatToUse, customDelim))
 				return true
 				
 			; OneNote columns - send a down arrow keystroke between items.

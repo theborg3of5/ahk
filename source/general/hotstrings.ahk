@@ -192,21 +192,21 @@
 ;endregion Useful strings
 
 ;region Helper functions
-sendArbitraryDate(format) {
-	title := "Insert date in " '"' format.remove("``") '"' " format:"
+sendArbitraryDate(dateFormat) {
+	title := "Insert date in " '"' dateFormat.remove("``") '"' " format:"
 	dateString := InputBox(title, "Enter a relative date string to insert that date in the above format.", , 425, 125)
 	if(dateString = "")
 		return ""
 	
-	RelativeDate(dateString).sendInFormat(format)
+	RelativeDate(dateString).sendInFormat(dateFormat)
 }
-sendArbitraryTime(format) {
-	title := "Insert date in " '"' format.remove("``") '"' " format:"
+sendArbitraryTime(timeFormat) {
+	title := "Insert date in " '"' timeFormat.remove("``") '"' " format:"
 	timeString := InputBox(title, "Enter a relative time string to insert that time in the above format.", , 425, 125)
 	if(timeString = "")
 		return ""
 	
-	RelativeTime(timeString).sendInFormat(format)
+	RelativeTime(timeString).sendInFormat(timeFormat)
 }
 
 sendFilePath(folderName, subPath := "") {

@@ -319,10 +319,10 @@ class ClipboardLib {
 	; DESCRIPTION:    Set the clipboard to the given content for the given format.
 	;                 Clipboard should already be opened (and emptied if needed).
 	; PARAMETERS:
-	;  content (I,REQ) - The content to set on the clipboard.
-	;  format  (I,REQ) - The format on the clipboard to set (CF_TEXT, "HTML Format", etc).
+	;  content     (I,REQ) - The content to set on the clipboard.
+	;  formatToUse (I,REQ) - The format on the clipboard to set (CF_TEXT, "HTML Format", etc).
 	;---------
-	static setClipboardForFormat(content, format) {
+	static setClipboardForFormat(content, formatToUse) {
 		; Build a global object with the content we want to plug in
 		gloSize := StrPut(content, "cp0")                                                           ; Calculated needed size
 		glo := DllCall("GlobalAlloc", "UInt", MicrosoftLib.GlobalAlloc_GHND, "Ptr", gloSize, "Ptr") ; Allocate memory
@@ -332,11 +332,11 @@ class ClipboardLib {
 
 		; If it's not a standard format (https://learn.microsoft.com/en-us/windows/win32/dataxchg/standard-clipboard-formats), 
 		; register the format first.
-		if (!format.isNum()) ; As a shortcut, just check for an integer (registered formats seem to generally be strings)
-			format := DllCall("RegisterClipboardFormat", "Str", format)
+		if (!formatToUse.isNum()) ; As a shortcut, just check for an integer (registered formats seem to generally be strings)
+			formatToUse := DllCall("RegisterClipboardFormat", "Str", formatToUse)
 		
 		; Actually set the clipboard
-		DllCall("SetClipboardData", "UInt", format, "Ptr", glo)
+		DllCall("SetClipboardData", "UInt", formatToUse, "Ptr", glo)
 	}
 	;endregion Clipboard format, links
 	

@@ -15,9 +15,9 @@ class DateTimeLib {
 		; All formats supported by FormatTime
 		formatsAry := ["d","dd","ddd","dddd","M","MM","MMM","MMMM","y","yy","yyyy","gg","h","hh","H","HH","m","mm","s","ss","t","tt","","Time","ShortDate","LongDate","YearMonth","YDay","YDay0","WDay","YWeek"]
 		
-		For _,format in formatsAry {
-			dateTimeBit := FormatTime(instant, format)
-			outString := outString.replaceTag(format, dateTimeBit)
+		For _,formatToUse in formatsAry {
+			dateTimeBit := FormatTime(instant, formatToUse)
+			outString := outString.replaceTag(formatToUse, dateTimeBit)
 		}
 		
 		return outString

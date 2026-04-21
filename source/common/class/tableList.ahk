@@ -624,8 +624,8 @@ class TableList {
 	;---------
 	applyMods(rowAry) {
 		For _,modSet in this.modSets {
-			For _,mod in modSet
-				mod.executeMod(&rowAry)
+			For _,tlMod in modSet
+				tlMod.executeMod(&rowAry)
 		}
 	}
 	

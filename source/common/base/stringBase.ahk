@@ -140,7 +140,7 @@ class _StringExt {
 	;  outputVar   (O,OPT) - Output variable - receives a RegExMatchInfo object with the match details.
 	; RETURNS:        The position of the first match, 0 if nothing found.
 	;---------
-	matchesRegEx(needleRegEx, &outputVar?) {
+	matchesRegEx(needleRegEx, &outputVar := "") {
 		return RegExMatch(this, needleRegEx, &outputVar)
 	}
 
@@ -162,7 +162,7 @@ class _StringExt {
 	;  matchedNeedle (O,OPT) - The needle that we matched
 	; RETURNS:        The position of the first occurrence of any needle.
 	;---------
-	containsAnyOf(needlesAry, &matchedNeedle?) {
+	containsAnyOf(needlesAry, &matchedNeedle := "") {
 		earliestMatchedPos := 0
 
 		for _, needle in needlesAry {
@@ -170,8 +170,7 @@ class _StringExt {
 			if matchedPos {
 				if !earliestMatchedPos || matchedPos < earliestMatchedPos {
 					earliestMatchedPos := matchedPos
-					if IsSet(matchedNeedle)
-						matchedNeedle := needle
+					matchedNeedle := needle
 				}
 			}
 		}
@@ -215,11 +214,10 @@ class _StringExt {
 	;  matchedNeedle (O,OPT) - The first matching entry we found in the needlesAry.
 	; RETURNS:        True if this string starts with any of the provided check strings, False otherwise.
 	;---------
-	startsWithAnyOf(needlesAry, &matchedNeedle?) {
+	startsWithAnyOf(needlesAry, &matchedNeedle := "") {
 		for _, needle in needlesAry {
 			if this.startsWith(needle) {
-				if IsSet(matchedNeedle)
-					matchedNeedle := needle
+				matchedNeedle := needle
 				return true
 			}
 		}

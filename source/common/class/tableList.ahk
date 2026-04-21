@@ -494,11 +494,11 @@ class TableList {
 		if(!row)
 			return
 		
-		name  := row.beforeString("(")
+		settingName  := row.beforeString("(")
 		value := row.allBetweenStrings("(", ")")
-		; Debug.popup("TableList.processSetting","Pulled out data", "Name",name, "Value",value)
-		
-		this._settings[name] := value
+		; Debug.popup("TableList.processSetting","Pulled out data", "Name",settingName, "Value",value)
+
+		this._settings[settingName] := value
 	}
 	
 	;---------

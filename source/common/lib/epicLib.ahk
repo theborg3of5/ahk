@@ -448,12 +448,12 @@ class EpicLib {
 		tl := TableList("tlg.tls")
 		tl.filterOutIfColumnBlank("RECORD")
 		tl.filterOutIfColumnNoMatchRegEx("RECORD", "^\d+$") ; Numbers only (so current-version DLGs)
-		knownDLGs := Map() ; {dlgId: name}
+		knownDLGs := Map() ; {dlgId: { dlgName, abbrev }}
 		For recId, data in tl.getRowsByColumn("RECORD", "NAME")
-			knownDLGs[recId] := { name:data["NAME_OUTPUT_PREFIX"] data["NAME"], abbrev:data["ABBREV"] }
+			knownDLGs[recId] := { dlgName:data["NAME_OUTPUT_PREFIX"] data["NAME"], abbrev:data["ABBREV"] }
 		
 		; Find all branch folders in the versioned EpicSource folders.
-		folders := Map() ; type => [ {name, path, abbrev} ]
+		folders := Map() ; type => [ {folderName, path, abbrev} ]
 		Loop Files, "C:\EpicSource\*", "D"
 		{
 			; Only consider #[#].# folders
@@ -463,47 +463,47 @@ class EpicLib {
 			versionFolderPath := A_LoopFileLongPath
 			Loop Files, versionFolderPath "\*", "D"
 			{
-				name := A_LoopFileName
-				if (name.startsWith("App ") || name.endsWith(" Bin")) ; Ignore binary folders
+				folderName := A_LoopFileName
+				if (folderName.startsWith("App ") || folderName.endsWith(" Bin")) ; Ignore binary folders
 					Continue
 
 				; Categorize folders, add basic abbreviations (which may be overridden)
-				if (name.startsWith("DLG-")) {
-					dlgId := name.firstBetweenStrings("DLG-", "-")
+				if (folderName.startsWith("DLG-")) {
+					dlgId := folderName.firstBetweenStrings("DLG-", "-")
 					if (knownDLGs.Has(dlgId)) {
-						cat    := "Known DLGs"
-						name   := "DLG " dlgId " - " knownDLGs[dlgId].name
-						abbrev := knownDLGs[dlgId].abbrev
-					} else if (name.startsWith("DLG-I")) {
-						cat    := "SUs"
-						name   := "DLG " dlgId
-						abbrev := "s"
+						cat        := "Known DLGs"
+						folderName := "DLG " dlgId " - " knownDLGs[dlgId].dlgName
+						abbrev     := knownDLGs[dlgId].abbrev
+					} else if (folderName.startsWith("DLG-I")) {
+						cat        := "SUs"
+						folderName := "DLG " dlgId
+						abbrev     := "s"
 					} else {
-						cat    := "Other Current DLGs"
-						name   := "DLG " dlgId
-						abbrev := "d"
+						cat        := "Other Current DLGs"
+						folderName := "DLG " dlgId
+						abbrev     := "d"
 					}
-				} else if (name = "stage1") {
-					cat    := "Integration"
-					name   := "Stage 1"
-					abbrev := "s1"
-				} else if (name = "final") {
-					cat    := "Integration"
-					name   := "Final"
-					abbrev := "f"
+				} else if (folderName = "stage1") {
+					cat        := "Integration"
+					folderName := "Stage 1"
+					abbrev     := "s1"
+				} else if (folderName = "final") {
+					cat        := "Integration"
+					folderName := "Final"
+					abbrev     := "f"
 				} else {
-					cat    := "User Branches"
-					name   := name
-					abbrev := [ name.remove("-").sub(1, 5), name ]
+					cat        := "User Branches"
+					folderName := folderName
+					abbrev     := [ folderName.remove("-").sub(1, 5), folderName ]
 				}
 
 				; Extra name cleanup
-				if (A_LoopFileName.contains("-Merge-To-")) ; Using original name since we're modifying the name var above
-					name := name.beforeString("-Merge-To-") " (Merge)"
+				if (A_LoopFileName.contains("-Merge-To-")) ; Using original folderName since we're modifying the folderName var above
+					folderName := folderName.beforeString("-Merge-To-") " (Merge)"
 
 				if(!folders.Has(cat))
 					folders[cat] := []
-				folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
+				folders[cat].push({ folderName:folderName, path:A_LoopFileLongPath, abbrev:abbrev })
 			}
 		}
 
@@ -511,24 +511,24 @@ class EpicLib {
 		Loop Files, "C:\EpicSource\gitlab\*", "D"
 		{
 			cat := "GitLab"
-			name := A_LoopFileName
+			folderName := A_LoopFileName
 			abbrev := this.buildAbbrevForRepoFolder(A_LoopFileName)
 
 			if(!folders.Has(cat))
 				folders[cat] := []
-			folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
+			folders[cat].push({ folderName:folderName, path:A_LoopFileLongPath, abbrev:abbrev })
 		}
 
 		; Also pull from the cloudlab folder
 		Loop Files, "C:\EpicSource\cloudlab\*", "D"
 		{
 			cat := "CloudLab"
-			name := A_LoopFileName
+			folderName := A_LoopFileName
 			abbrev := this.buildAbbrevForRepoFolder(A_LoopFileName, ["ao-", "agent-orchestration-"])
 			
 			if(!folders.Has(cat))
 				folders[cat] := []
-			folders[cat].push({ name:name, path:A_LoopFileLongPath, abbrev:abbrev })
+			folders[cat].push({ folderName:folderName, path:A_LoopFileLongPath, abbrev:abbrev })
 		}
 
 		s := Selector().setTitle(title).setIcon(icon)
@@ -828,14 +828,14 @@ class EpicLib {
 		title       := record.title
 		windowNames := record.label ; Can be a single name, or a /-delimited list.
 		
-		name := ""
+		choiceName := ""
 		if(windowNames)
-			name .= windowNames " - "
+			choiceName .= windowNames " - "
 		if(ini)
-			name .= ini " "
-		name .= id
+			choiceName .= ini " "
+		choiceName .= id
 		if(title)
-			name .= " - " title
+			choiceName .= " - " title
 		
 		; Abbreviation comes from window name(s) or INI.
 		if(windowNames) {
@@ -848,7 +848,7 @@ class EpicLib {
 			abbrev := DataLib.forceUniqueValue("u", abbrevsCache)
 		}
 		
-		return SelectorChoice(Map("NAME", name, "ABBREV", abbrev, "INI", ini, "ID", id, "TITLE", title))
+		return SelectorChoice(Map("NAME", choiceName, "ABBREV", abbrev, "INI", ini, "ID", id, "TITLE", title))
 	}
 	;endregion EMC2 Record Extraction/Selection
 	
@@ -882,7 +882,7 @@ class EpicLib {
 	; DESCRIPTION:    Add a set of DLG/branch folder choices to the given selector.
 	; PARAMETERS:
 	;  s              (I,REQ) - Selector instance
-	;  folders        (I,REQ) - Folders array, type => [ {name, path, abbrev} ]
+	;  folders        (I,REQ) - Folders array, type => [ {folderName, path, abbrev} ]
 	;  type           (I,REQ) - The type to add choices for (index into folders object)
 	;  forceNewColumn (I,OPT) - Pass true to force a new column of choices with this set's header.
 	;---------
@@ -896,7 +896,7 @@ class EpicLib {
 			s.addSectionHeader(type)
 
 		For _, f in folders[type]
-			s.addChoice(SelectorChoice(Map("NAME", f.name, "ABBREV", f.abbrev, "PATH", f.path)))
+			s.addChoice(SelectorChoice(Map("NAME", f.folderName, "ABBREV", f.abbrev, "PATH", f.path)))
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------
 }

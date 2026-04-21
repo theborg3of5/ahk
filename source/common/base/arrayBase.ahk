@@ -153,7 +153,7 @@ class _ArrayExt {
 }
 
 ; Install all methods onto Array.Prototype
-for name in _ArrayExt.Prototype.OwnProps() {
-	if SubStr(name, 1, 2) != "__"
-		Array.Prototype.DefineProp(name, _ArrayExt.Prototype.GetOwnPropDesc(name))
+for propName in _ArrayExt.Prototype.OwnProps() {
+	if SubStr(propName, 1, 2) != "__"
+		Array.Prototype.DefineProp(propName, _ArrayExt.Prototype.GetOwnPropDesc(propName))
 }

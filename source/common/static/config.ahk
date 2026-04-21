@@ -124,43 +124,43 @@ class Config {
 	;---------
 	; DESCRIPTION:    Return the WindowInfo instance corresponding to the provided name.
 	; PARAMETERS:
-	;  name (I,REQ) - The name of the window to retrieve info for.
+	;  winName (I,REQ) - The name of the window to retrieve info for.
 	;---------
-	static windowInfo[name] {
+	static windowInfo[winName] {
 		get {
-			return (this.windows)[name].clone()
+			return (this.windows)[winName].clone()
 		}
 	}
 
 	;---------
 	; DESCRIPTION:    Check whether the named window is currently active.
 	; PARAMETERS:
-	;  name (I,REQ) - Name of the window to check for.
+	;  winName (I,REQ) - Name of the window to check for.
 	; RETURNS:        The window ID if it's active, otherwise false.
 	;---------
-	static isWindowActive(name) {
-		return this.windowInfo[name].isActive()
+	static isWindowActive(winName) {
+		return this.windowInfo[winName].isActive()
 	}
 	
 	;---------
 	; DESCRIPTION:    Check whether the named window currently exists.
 	; PARAMETERS:
-	;  name (I,REQ) - Name of the window to check for.
+	;  winName (I,REQ) - Name of the window to check for.
 	; RETURNS:        The window ID if it exists, otherwise false.
 	;---------
-	static doesWindowExist(name) {
-		return this.windowInfo[name].exists()
+	static doesWindowExist(winName) {
+		return this.windowInfo[winName].exists()
 	}
 	
 	;---------
 	; DESCRIPTION:    Check whether the given window matches the info with the provided name.
 	; PARAMETERS:
 	;  titleString (I,REQ) - Title string identifying the window to check
-	;  name        (I,REQ) - Name of the WindowInfo to compare it to
+	;  winName     (I,REQ) - Name of the WindowInfo to compare it to
 	; RETURNS:        true/false - does it match?
 	;---------
-	static windowMatchesInfo(titleString, name) {
-		return this.windowInfo[name].windowMatches(titleString)
+	static windowMatchesInfo(titleString, winName) {
+		return this.windowInfo[winName].windowMatches(titleString)
 	}
 	
 	;---------

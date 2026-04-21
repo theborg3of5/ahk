@@ -126,9 +126,9 @@ class FileLib {
 			return unixPath
 
 		unixMappings := TableList("unixFolderMappings.tl").getTable()
-		for _, map in unixMappings {
-			if unixPath.startsWith(map["UNIX"]) {
-				unixPath := unixPath.replaceOne(map["UNIX"], map["WINDOWS"])
+		for _, unixMap in unixMappings {
+			if unixPath.startsWith(unixMap["UNIX"]) {
+				unixPath := unixPath.replaceOne(unixMap["UNIX"], unixMap["WINDOWS"])
 				unixPath := unixPath.replace("/", "\")
 			}
 		}
@@ -144,9 +144,9 @@ class FileLib {
 	;---------
 	static mapWindowsPathToUnix(windowsPath) {
 		unixMappings := TableList("unixFolderMappings.tl").getTable()
-		for _, map in unixMappings {
-			if windowsPath.startsWith(map["WINDOWS"]) {
-				windowsPath := windowsPath.replaceOne(map["WINDOWS"], map["UNIX"])
+		for _, unixMap in unixMappings {
+			if windowsPath.startsWith(unixMap["WINDOWS"]) {
+				windowsPath := windowsPath.replaceOne(unixMap["WINDOWS"], unixMap["UNIX"])
 				windowsPath := windowsPath.replace("\", "/")
 			}
 		}

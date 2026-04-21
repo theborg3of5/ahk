@@ -32,7 +32,7 @@
 	; quite be a proper snippet because I often use it directly next to other characters (no
 	; spaces/newlines separating it so it can be treated as a snippet).
 	::.qs:: {
-		Send('"""__"""')
+		Send('"__"')
 		Send("{Left 2}")
 	}
 

@@ -110,7 +110,7 @@ class Explorer {
 		; Prompt user for which solution they want
 		shortcuts := Selector("solutionShortcuts.tls").promptMulti()
 		For _, shortcut in shortcuts {
-			name               := shortcut["NAME"]
+			shortcutName       := shortcut["NAME"]
 			relativeTargetPath := shortcut["PATH_IN_SOLUTIONS_FOLDER"]
 			exploreToPath      := shortcut["EXPLORE_PATH"]
 			
@@ -126,8 +126,8 @@ class Explorer {
 			
 			; Create shortcut
 			targetPath := currentFolder "\" relativeTargetPath
-			FileCreateShortcut(targetPath, currentFolder "\" name ".lnk", currentFolder)
-			Toast.ShowMedium("Created shortcut to " name " solution in current folder")
+			FileCreateShortcut(targetPath, currentFolder "\" shortcutName ".lnk", currentFolder)
+			Toast.ShowMedium("Created shortcut to " shortcutName " solution in current folder")
 	
 			; Hide the various settings and readme files - I don't use them and they clutter up my shortcuts.
 			Explorer.hideHSWebDotfiles(currentFolder)
@@ -140,8 +140,8 @@ class Explorer {
 	;---------
 	static mouseIsOverTaskbar() {
 		MouseGetPos(, , &winId)
-		name := Config.findWindowName("ahk_id " winId)
-		return (name = "Windows Taskbar" || name = "Windows Taskbar Secondary")
+		winName := Config.findWindowName("ahk_id " winId)
+		return (winName = "Windows Taskbar" || winName = "Windows Taskbar Secondary")
 	}
 
 	;---------
@@ -264,8 +264,8 @@ class Explorer {
 	static saveRelative(path) {
 		Explorer._relativeTarget := path
 		Explorer._relativeToast := Toast("Ready to create relative shortcut to file:`n" path "`nPress ^!s again to create in that folder, Esc to cancel").show()
-		boundFunc := ObjBindMethod(Explorer, "cleanupRelative")
-		Hotkey("Escape", boundFunc, "On") ; Hotkey to cancel out and not create anything
+		funcObj := ObjBindMethod(Explorer, "cleanupRelative")
+		Hotkey("Escape", funcObj, "On") ; Hotkey to cancel out and not create anything
 	}
 	
 	;---------

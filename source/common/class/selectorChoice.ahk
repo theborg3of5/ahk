@@ -14,7 +14,7 @@ class SelectorChoice {
 	;---------
 	; DESCRIPTION:    The display name for the given choice.
 	;---------
-	name {
+	displayName {
 		get {
 			return this.data["NAME"]
 		}
@@ -52,7 +52,7 @@ class SelectorChoice {
 	;                 Special subscripts:
 	;                  "ABBREV" - Abbreviation of choice, can also be an array.
 	;                             The first one (the display one) will be available via .displayAbbrev
-	;                  "NAME"   - Name of choice, later available via .name
+	;                  "NAME"   - Name of choice, later available via .displayName
 	; RETURNS:        Reference to new SelectorChoice object
 	;---------
 	__New(dataIn) {

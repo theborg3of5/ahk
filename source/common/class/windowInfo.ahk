@@ -8,9 +8,9 @@ class WindowInfo {
 	static EdgeStyle_NoPadding  := "NO_PADDING"  ; The window has no padding around the edges.
 	;endregion Window edge types
 	
-	name           := "" ; Name of the window
+	windowName     := "" ; Name of the window
 	exe            := "" ; EXE for the corresonding program
-	class          := "" ; AHK class of the window
+	ahkClass       := "" ; AHK class of the window
 	title          := "" ; Title of the window
 	priority       := "" ; Priority of this WindowInfo instance versus others. Can be used to break a tie if multiple instances match a given window.
 	edgeType       := "" ; Edge type of the window (from WindowInfo.EdgeStyle_* constants)
@@ -66,10 +66,10 @@ class WindowInfo {
 	;---------
 	__New(windowAry) {
 		; Replace any private tags lurking in these portions of info.
-		this.name  := Config.replacePrivateTags(windowAry["NAME"])
-		this.exe   := Config.replacePrivateTags(windowAry["EXE"])
-		this.class := Config.replacePrivateTags(windowAry["CLASS"])
-		this.title := Config.replacePrivateTags(windowAry["TITLE"])
+		this.windowName := Config.replacePrivateTags(windowAry["NAME"])
+		this.exe        := Config.replacePrivateTags(windowAry["EXE"])
+		this.ahkClass   := Config.replacePrivateTags(windowAry["CLASS"])
+		this.title      := Config.replacePrivateTags(windowAry["TITLE"])
 		
 		this.priority := windowAry["PRIORITY"]
 		this.edgeType := windowAry["EDGE_TYPE"]
@@ -143,7 +143,7 @@ class WindowInfo {
 			return false
 
 		; Check class, if we have it specified
-		if(this.class && !TitleMatchMode.matches(winClass, this.class, this.titleMatchMode))
+		if(this.ahkClass && !TitleMatchMode.matches(winClass, this.ahkClass, this.titleMatchMode))
 			return false
 		
 		; Title is checked based on titleMatchMode, if we have it specified

@@ -11,7 +11,7 @@ class Program {
 	static PathType_ChromeApp := "CHROME_APP" ; A Google Chrome app
 	;endregion Path types (affect how the path is run)
 	
-	name     := "" ; Name of the program
+	winName  := "" ; Name of the program
 	path     := "" ; Full filepath to launch the program
 	pathType := "" ; The type of path from Program.PathType_*
 	
@@ -25,7 +25,7 @@ class Program {
 	; RETURNS:        Reference to a new Program object
 	;---------
 	__New(programAry) {
-		this.name     := programAry["NAME"]
+		this.winName  := programAry["NAME"]
 		this.path     := programAry["PATH"]
 		this.pathType := programAry["PATH_TYPE"]
 		
@@ -45,7 +45,7 @@ class Program {
 		; Safety checks
 		if(this.pathType = this.PathType_EXE) {
 			if(!FileExist(this.path)) {
-				Toast.ShowError("Could not run " this.name, "Path does not exist: " this.path)
+				Toast.ShowError("Could not run " this.winName, "Path does not exist: " this.path)
 				return false
 			}
 		}

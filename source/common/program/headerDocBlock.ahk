@@ -222,7 +222,7 @@ class HeaderDocBlock {
 			return match
 
 		; Array/subscript defs
-		needle := "^("  "[\w\d]*\([^\)]+\)"  "|"  """[^""]+"""  ")" ; Start with (^) array def (optional array name, open paren, subscripts, close paren) or subscript def (quote, subscript, quote)
+		needle := '^('  '[\w\d]*\([^\)]+\)'  '|'  '"[^"]+"'  ')' ; Start with (^) array def (optional array name, open paren, subscripts, close paren) or subscript def (quote, subscript, quote)
 		needle .= "\s+[=-] "                                        ; Final indent, equals/dash, and final space
 		if (firstLine.matchesRegEx(needle, match))
 			return match

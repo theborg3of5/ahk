@@ -97,27 +97,27 @@ class AHKCodeLib {
 	; DESCRIPTION:    Extract the relevant information from a definition line.
 	; PARAMETERS:
 	;  defLine   (I,REQ) - The definition line for the function to document, with the name and parameters.
-	;  name      (O,OPT) - The name of the function/property/member.
+	;  defName   (O,OPT) - The name of the function/property/member.
 	;  paramsAry (O,OPT) - If the function/property has parameters, this is an array of them,
 	;                      including any "ByRef" or default values.
 	;---------
-	static getDefLineParts(defLine, &name := "", &paramsAry := "") {
+	static getDefLineParts(defLine, &defName := "", &paramsAry := "") {
 		; Trim off any indentation and the static modifier if it's there - we don't care here.
 		defLine := defLine.withoutWhitespace()
 		defLine := defLine.removeFromStart("static ")
 		
 		Switch AHKCodeLib.getDefLineType(defLine) {
 			Case "FUNCTION":
-				name := defLine.beforeString("(")
+				defName := defLine.beforeString("(")
 				paramsList := defLine.firstBetweenStrings("(", ")")
 			
 			Case "PROPERTY":
-				name := defLine.beforeString("[")
+				defName := defLine.beforeString("[")
 				if(defLine.contains("["))
 				paramsList := defLine.firstBetweenStrings("[", "]")
 			
 			Case "OTHER":
-				name := defLine.beforeString(" ") ; First space, before any brackets (for properties) or default values (for members).
+				defName := defLine.beforeString(" ") ; First space, before any brackets (for properties) or default values (for members).
 				paramsList := ""
 		}
 		

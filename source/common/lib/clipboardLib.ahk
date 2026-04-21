@@ -48,19 +48,19 @@ class ClipboardLib {
 	; DESCRIPTION:    Copy something using the provided functor object, but make sure that we actually
 	;                 get something on the clipboard.
 	; PARAMETERS:
-	;  boundFunc (I,REQ) - Functor object to run in order to copy something to the clipboard.
+	;  funcObj (I,REQ) - Functor object to run in order to copy something to the clipboard.
 	;  timeout   (I,OPT) - Timeout for the max length of time we should wait for the clipboard to contain the result. Defaults
 	;                      to 0.5 seconds.
 	; RETURNS:        true if we successfully copied something, false otherwise.
 	;---------
-	static copyWithFunction(boundFunc, timeout := "") {
-		if !boundFunc
+	static copyWithFunction(funcObj, timeout := "") {
+		if !funcObj
 			return
 		if timeout = ""
 			timeout := 0.5 ; Wait for the minimum time (0.5 seconds) for the clipboard to contain the new info.
 
 		A_Clipboard := "" ; Clear the clipboard so we can wait for it to actually be set
-		boundFunc.Call()
+		funcObj.Call()
 		try {
 			ClipWait(timeout)
 			return true
@@ -70,18 +70,18 @@ class ClipboardLib {
 	;---------
 	; DESCRIPTION:    Get some content using a BoundFunc object which copies something to the clipboard.
 	; PARAMETERS:
-	;  boundFunc (I,REQ) - A BoundFunc object created with Func().Bind() or ObjBindMethod(), which will
+	;  funcObj (I,REQ) - A BoundFunc object created with Func().Bind() or ObjBindMethod(), which will
 	;                      copy the desired content to the clipboard.
 	;  timeout   (I,OPT) - Timeout for the max length of time we should wait for the clipboard to contain the result. Defaults
 	;                      to 0.5 seconds.
 	; RETURNS:        The copied content.
 	;---------
-	static getWithFunction(boundFunc, timeout := "") { ; boundFunc is a BoundFunc object created with Func.Bind() or ObjBindMethod().
-		if !boundFunc
+	static getWithFunction(funcObj, timeout := "") { ; funcObj is a BoundFunc object created with Func.Bind() or ObjBindMethod().
+		if !funcObj
 			return
 
 		originalClipboard := ClipboardAll() ; Back up the clipboard since we're going to use it to get the selected text.
-		ClipboardLib.copyWithFunction(boundFunc, timeout)
+		ClipboardLib.copyWithFunction(funcObj, timeout)
 
 		textFound := A_Clipboard
 		A_Clipboard := originalClipboard    ; Restore the original clipboard. Note we're using A_Clipboard (not ClipboardAll).
@@ -251,7 +251,7 @@ class ClipboardLib {
 			if (chunk.url = "")
 				fragment .= chunk.text
 			else
-				fragment .= "<a href=""" chunk.url """>" chunk.text "</a>"
+				fragment .= '<a href="' chunk.url '">' chunk.text '</a>'
 		}
 		content := this.buildClipboardHTML(fragment)
 		this.setClipboardForFormat(content, "HTML Format")
@@ -262,7 +262,7 @@ class ClipboardLib {
 			if (chunk.url = "")
 				fragment .= chunk.text
 			else
-				fragment .= "{\field{\*\fldinst HYPERLINK """ chunk.url """}{\fldrslt " chunk.text "}}"
+				fragment .= '{\field{\*\fldinst HYPERLINK "' chunk.url '"}{\fldrslt ' chunk.text '}}'
 		}
 		content := "{\rtf1" fragment "}"
 		this.setClipboardForFormat(content, "Rich Text Format")
@@ -476,7 +476,7 @@ class ClipboardLib {
 					return ; convertToSourceRelativePath should have already showed an error, so no need to do another here.	
 				
 			Default:
-				Toast.showError("Could not get code location", "Invalid pathType: """ pathType '"')
+				Toast.showError("Could not get code location", 'Invalid pathType: "' pathType '"')
 				return
 		}
 

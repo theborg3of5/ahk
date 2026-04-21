@@ -64,7 +64,7 @@ class _MapExt {
 }
 
 ; Install all methods onto Map.Prototype
-for name in _MapExt.Prototype.OwnProps() {
-	if SubStr(name, 1, 2) != "__"
-		Map.Prototype.DefineProp(name, _MapExt.Prototype.GetOwnPropDesc(name))
+for propName in _MapExt.Prototype.OwnProps() {
+	if SubStr(propName, 1, 2) != "__"
+		Map.Prototype.DefineProp(propName, _MapExt.Prototype.GetOwnPropDesc(propName))
 }

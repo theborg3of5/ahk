@@ -91,15 +91,15 @@
 		
 		if(Chrome.isCurrentPageCodeSearch()) {
 			; Special handling for CodeSearch - just get the file name, plus the current selection as the function.
-			file := title.beforeString("/")
+			fileName := title.beforeString("/")
 			function := SelectLib.getCleanFirstLine()
 			
-			if(Chrome.isCurrentPageCodeSearchClient()) { ; Client files - <function>()::<file>
-				title := file
+			if(Chrome.isCurrentPageCodeSearchClient()) { ; Client files - <function>()::<fileName>
+				title := fileName
 				if(function != "")
 					title := title "::" function "()"
 			} else { ; Server routines - <tag>^<routine>, or just <routine>
-				title := function "^" file ; Always include the ^
+				title := function "^" fileName ; Always include the ^
 			}
 		}
 		
@@ -132,18 +132,18 @@
 		
 		if(Chrome.isCurrentPageCodeSearch()) {
 			title := WinGetActiveTitle().removeFromEnd(" - Google Chrome")
-			file := title.beforeString("/")
+			fileName := title.beforeString("/")
 			
 			; Client files should always have an extension
-			if(file.contains(".")) { ; Client files - use current URL but update the line # based on our selected line.
+			if(fileName.contains(".")) { ; Client files - use current URL but update the line # based on our selected line.
 				lineNum := Chrome.getCodeSearchSelectionLineNum()
 				if(lineNum != "")
 					url := url.replaceRegEx("&line=(\d+)", "&line=" lineNum)
 			} else { ; Server routines - link to exact tag + routine
 				function := SelectLib.getCleanFirstLine()
-				location := function.appendPiece("^", file)
+				location := function.appendPiece("^", fileName)
 				url := ActionObjectCodeSearch(location).getLink()
-				; Debug.popup("function",function, "file",file, "location",location, "url",url)
+				; Debug.popup("function",function, "fileName",fileName, "location",location, "url",url)
 			}
 		}
 		
@@ -197,7 +197,7 @@
 	}
 	
 	;---------
-	; DESCRIPTION:    Determine whether the current page is CodeSearch in client files, based on its title.
+	; DESCRIPTION:    Determi7ne whether the current page is CodeSearch in client files, based on its title.
 	;---------
 	static isCurrentPageCodeSearchClient() {
 		if(!Chrome.isCurrentPageCodeSearch())
@@ -298,7 +298,7 @@
 	; RETURNS:        Line number
 	;---------
 	static getCodeSearchSelectionLineNum() {
-		return Chrome.getElementText("window.getSelection().anchorNode.parentElement.closest(""tr"").firstElementChild")
+		return Chrome.getElementText('window.getSelection().anchorNode.parentElement.closest("tr").firstElementChild')
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------
 }

@@ -191,7 +191,7 @@ HTTPRequest( URL, byref In_POST__Out_Data="", byref In_Out_HEADERS="", Options="
 ; Step 2: Crack the url into its components. WinINet\InternetCrackURL limits the url to about 2060
 ; characters, which is unacceptable, especially for a function designed to service web APIs.
 
-	hbuffer := swp "parsing the URL: """ URL """`n" ; pre-generate the bad-url error
+	hbuffer := swp 'parsing the URL: "' URL '"`n' ; pre-generate the bad-url error
 
 ; Crack the scheme (setting it to 'http' if omitted, allowing a url like "www.***.com")
 	If ( pos := InStr( URL, "://" ) )
@@ -346,7 +346,7 @@ HTTPRequest( URL, byref In_POST__Out_Data="", byref In_Out_HEADERS="", Options="
 				}
 				Else Do_Callback_Func := A_LoopField
 				Do_Callback := IsFunc( Do_Callback_Func ) + 3 >> 2 = 1 ; OK if 1, 2, 3, or 4
-				cfc := "The callback function """ Do_Callback_Func """ returned 'CANCEL' to cancel the transaction. "
+				cfc := "The callback function '" Do_Callback_Func "' returned "CANCEL" to cancel the transaction. '
 			}
 		; Charset option: convert POST text's codepage before uploading it
 			Else If ( options = "CHARSET" )
@@ -435,7 +435,7 @@ HTTPRequest( URL, byref In_POST__Out_Data="", byref In_Out_HEADERS="", Options="
 				; The file does not exist, so make sure the folder it belong to DOES exist
 					If ( pos := InStr( output_file_path, "\", 0, 0 ) )
 					&& ! FileExist( SubStr( output_file_path, 1, pos - 1 ) )
-						MyErrors .= "The file path """ output_file_path """ is not valid. The folder can't be found.`n"
+						MyErrors .= 'The file path "' output_file_path '" is not valid. The folder can't be found.`n'
 				}
 				Else If InStr( file_ext, "D" )
 				{
@@ -465,10 +465,10 @@ HTTPRequest( URL, byref In_POST__Out_Data="", byref In_Out_HEADERS="", Options="
 					Upload_File_Path := A_LoopFileFullPath ; the file loop verifies that the target is a FILE
 				; CreateFile > http://msdn.microsoft.com/en-us/library/aa363858%28v=vs.85%29.aspx
 					If !( Do_File_Upload := DllCall( "CreateFile" W_A, Ptr, &Upload_File_Path, DW, 0x80000000, DW, 0, Ptr, 0, DW, 4, DW, 0, Ptr, 0, Ptr ) )
-						MyErrors .= swp "opening the file to upload """ Upload_File_Path """. 'CreateFile" W_A "' failed" sel ErrorLevel sle A_LastError "`n"
+						MyErrors .= swp 'opening the file to upload "' Upload_File_Path '". 'CreateFile" W_A "' failed" sel ErrorLevel sle A_LastError "`n"
 				; GetFileSizeEx > http://msdn.microsoft.com/en-us/library/aa364957%28v=vs.85%29.aspx
 					Else If !DllCall( "GetFileSizeEx", Ptr, Do_File_Upload, "Int64*", Content_Length )
-						MyErrors .= swp "determining the size of the file to upload """ Upload_File_Path """. 'GetFileSizeEx' failed" sel ErrorLevel sle A_LastError "`n"
+						MyErrors .= swp 'determining the size of the file to upload "' Upload_File_Path '". 'GetFileSizeEx' failed" sel ErrorLevel sle A_LastError "`n"
 					Break
 				}
 			}
@@ -558,7 +558,7 @@ HTTPRequest( URL, byref In_POST__Out_Data="", byref In_Out_HEADERS="", Options="
 				Loop
 					If !DllCall( "ReadFile", Ptr, Do_File_Upload, Ptr, &dbuffer, DW, Content_Length - rbuffer < 4096 ? Content_Length - rbuffer : 4096, DW "*", dtsz, Ptr, 0 )
 					{
-						MyErrors .= swp "reading from the file """ Upload_File_Path """. 'ReadFile' failed" sel ErrorLevel sle A_LastError "`n"
+						MyErrors .= swp 'reading from the file "' Upload_File_Path '". 'ReadFile' failed" sel ErrorLevel sle A_LastError "`n"
 						Break
 					}
 					Else If !DllCall( "Advapi32\CryptHashData", Ptr, hHash, Ptr, &dbuffer, DW, dtsz, DW, 0 )
@@ -670,7 +670,7 @@ HTTPRequest( URL, byref In_POST__Out_Data="", byref In_Out_HEADERS="", Options="
 	If ( MyErrors != "" )
 	{
 		If ( Do_File_Upload ) && !DllCall( "CloseHandle", Ptr, Do_File_Upload )
-			MyErrors .= swp "closing the file """ Upload_File_Path """. 'CloseHandle' failed" sel ErrorLevel sle A_LastError "`n"
+			MyErrors .= swp 'closing the file "' Upload_File_Path '". "CloseHandle" failed' sel ErrorLevel sle A_LastError "`n"
 		StringTrimRight, In_Out_HEADERS, MyErrors, 1
 		Return 0, ErrorLevel := Response_Code
 	}
@@ -757,7 +757,7 @@ HTTPRequest( URL, byref In_POST__Out_Data="", byref In_Out_HEADERS="", Options="
 				Else If !DllCall( "ReadFile", Ptr, Do_File_Upload, Ptr, pos := &dbuffer, DW, dbuffsz - size < 4096 ? dbuffsz - size : 4096, DW "*", dtsz, Ptr, 0 )
 				{
 					; Upload from a file AND we couldn't read from the file
-					MyErrors .= swp "reading from the file """ Upload_File_Path """. 'ReadFile' failed" sel ErrorLevel sle A_LastError "`n"
+					MyErrors .= swp 'reading from the file "' Upload_File_Path '". "ReadFile" failed' sel ErrorLevel sle A_LastError "`n"
 					Break
 				}
 
@@ -777,7 +777,7 @@ HTTPRequest( URL, byref In_POST__Out_Data="", byref In_Out_HEADERS="", Options="
 		; Close the file handle (if the data was uploaded from a file).
 		; CloseHandle > http://msdn.microsoft.com/en-us/library/ms724211%28v=vs.85%29.aspx
 			If ( Do_File_Upload ) && !DllCall( "CloseHandle", Ptr, Do_File_Upload )
-				MyErrors .= swp "closing the file """ Upload_File_Path """. 'CloseHandle' failed" sel ErrorLevel sle A_LastError "`n"
+				MyErrors .= swp 'closing the file "' Upload_File_Path '". "CloseHandle" failed' sel ErrorLevel sle A_LastError "`n"
 		}
 		; We're done uploading data, so end the request.
 		; HttpEndRequest > http://msdn.microsoft.com/en-us/library/aa384230%28v=VS.85%29.aspx
@@ -819,7 +819,7 @@ HTTPRequest( URL, byref In_POST__Out_Data="", byref In_Out_HEADERS="", Options="
 	{
 	; If we're downloading to a file, try to open the target file with GENERIC_WRITE (0x40000000) permission.
 		If ( Do_Download_To_File ) && !( Do_Download_To_File := DllCall( "CreateFile" W_A, Ptr, &output_file_path, DW, 0xC0000000, DW, 0, Ptr, 0, DW, 4, DW, 0, Ptr, 0, Ptr ) )
-			MyErrors .= swp "opening/creating the output file for writing data: """ output_file_path """. 'CreateFile" W_A "' failed" sel ErrorLevel sle A_LastError "`n"
+			MyErrors .= swp 'opening/creating the output file for writing data: "' output_file_path '". ' "'CreateFile" W_A "' failed" sel ErrorLevel sle A_LastError "`n"
 	; Then, if we're resuming a download, move the write-pointer to the end of the file.
 	; SetFilePointerEx > http://msdn.microsoft.com/en-us/library/aa365542%28v=VS.85%29.aspx
 		Else If ( Do_Download_Resume ) && !DllCall( "SetFilePointerEx", Ptr, Do_Download_To_File, "Int64", Do_Download_Resume, Ptr, 0, DW, 0 )
@@ -890,7 +890,7 @@ HTTPRequest( URL, byref In_POST__Out_Data="", byref In_Out_HEADERS="", Options="
 					MyErrors .= cfc size " bytes were downloaded.`n"
 			}
 			If ( Do_Download_To_File ) && !DllCall( "CloseHandle", Ptr, Do_Download_To_File )
-				MyErrors .= swp "closing the file """ output_file_path """. 'CloseHandle' failed" sel ErrorLevel sle A_LastError "`n"
+				MyErrors .= swp 'closing the file "' output_file_path '". "CloseHandle" failed' sel ErrorLevel sle A_LastError "`n"
 		}
 	}
 

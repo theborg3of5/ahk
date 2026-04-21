@@ -667,7 +667,7 @@ class _StringExt {
 }
 
 ; Install all methods onto String.Prototype
-for name in _StringExt.Prototype.OwnProps() {
-	if SubStr(name, 1, 2) != "__"
-		String.Prototype.DefineProp(name, _StringExt.Prototype.GetOwnPropDesc(name))
+for propName in _StringExt.Prototype.OwnProps() {
+	if SubStr(propName, 1, 2) != "__"
+		String.Prototype.DefineProp(propName, _StringExt.Prototype.GetOwnPropDesc(propName))
 }

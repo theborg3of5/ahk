@@ -229,7 +229,7 @@ class SelectorGui {
 	addChoiceToTable(flex, index, choice) {
 		flex.addCell(index ")",            0,                            this.Widths["INDEX"],  "Right")
 		flex.addCell(choice.displayAbbrev, this.Padding["INDEX_ABBREV"], this.Widths["ABBREV"])
-		flex.addCell(choice.name,          this.Padding["ABBREV_NAME"])
+		flex.addCell(choice.displayName,   this.Padding["ABBREV_NAME"])
 	}
 	
 	;---------

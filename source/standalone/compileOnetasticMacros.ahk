@@ -67,10 +67,10 @@ ExitApp
 ;                 Would give you ["functionA", "functionB"]
 ;---------
 getDocSectionLines(xml, sectionName) {
-	if(!xml.contains("<Comment text=""" sectionName """ />"))
+	if(!xml.contains('<Comment text="' sectionName '" />'))
 		return ""
 	
-	xml := xml.firstBetweenStrings("<Comment text=""" sectionName """ />", "<Comment text="""" />") ; <Comment text="" />
+	xml := xml.firstBetweenStrings('<Comment text="' sectionName '" />', '<Comment text="" />') ; <Comment text="" />
 	xmlLines := xml.split("`r`n")
 	
 	lines := []
@@ -88,7 +88,7 @@ getDocSectionLines(xml, sectionName) {
 ; RETURNS:        Text inside the comment, minus any leading/trailing whitespace.
 ;---------
 getXMLCommentText(xmlCommentLine) {
-	line := xmlCommentLine.firstBetweenStrings("<Comment text=""", """ />") ; Get the inner string
+	line := xmlCommentLine.firstBetweenStrings('<Comment text="', '" />') ; Get the inner string
 	return line.withoutWhitespace() ; Drop any leading/trailing whitespace
 }
 
@@ -235,7 +235,7 @@ class OnetasticFunction {
 	;---------
 	__New(innerXML) {
 		; If the function already includes a <Function> tag, remove it - we're generating our own.
-		if(innerXML.contains("<Function name="""))
+		if(innerXML.contains('<Function name="'))
 			innerXML := innerXML.afterString("`r`n")
 		if(innerXML.contains("</Function>"))
 			innerXML := innerXML.beforeString("`r`n", true)

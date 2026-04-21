@@ -324,10 +324,10 @@ class MSnippets {
 		newLine := MSnippets.getMNewLinePlusIndent(numIndents)
 		
 		aryString := lineBase.replaceTags(Map("ARRAY_NAME", arrayGloName, "INDEX", 0, "VALUE", valuesAry.Length))
-		For ln,value in valuesAry {
+		For i,value in valuesAry {
 			if(!value.isNum())
 				value := '"' value '"' ; Wrap non-numeric values in quotes.
-			line := lineBase.replaceTags(Map("ARRAY_NAME", arrayGloName, "INDEX", ln, "VALUE", value))
+			line := lineBase.replaceTags(Map("ARRAY_NAME", arrayGloName, "INDEX", i, "VALUE", value))
 			aryString := aryString.appendPiece(newLine, line)
 		}
 		

@@ -95,9 +95,9 @@ class MicrosoftLib {
 	static setAllCursorsToIcon(icon) {
 		cursorTypes := [ this.IDC_ARROW,    this.IDC_IBEAM,  this.IDC_WAIT,   this.IDC_CROSS,   this.IDC_UPARROW, this.IDC_SIZE, this.IDC_ICON,        this.IDC_SIZENWSE
 		               , this.IDC_SIZENESW, this.IDC_SIZEWE, this.IDC_SIZENS, this.IDC_SIZEALL, this.IDC_NO,      this.IDC_HAND, this.IDC_APPSTARTING, this.IDC_HELP ]
-		For _,type in cursorTypes {
+		For _,cursorType in cursorTypes {
 			cursorHandle := DllCall("LoadCursorFromFile", "Str",icon) ; We seem to need a new handle for each replacement
-			DllCall("SetSystemCursor", "UInt",cursorHandle, "Int",type)
+			DllCall("SetSystemCursor", "UInt",cursorHandle, "Int",cursorType)
 		}
 	}
 	

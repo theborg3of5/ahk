@@ -8,8 +8,6 @@ $^Backspace::WindowActions.deleteWord()
 
 ; Escape key will generally minimize or close things.
 ~Escape:: {
-	if(Config.debugOn) ; GDB TODO window cache debug issue
-		MsgBox("Escaping!")
 	WindowActions.escAction()
 	KeyWait("Esc", "T1") ; Ensures that we don't have fall-through window closing.
 }

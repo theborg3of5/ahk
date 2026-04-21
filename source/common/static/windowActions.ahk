@@ -188,16 +188,6 @@ class WindowActions {
 		else
 			titleString := Config.windowInfo[name].idString
 
-		if Config.debugOn { ; GDB TODO window cache debug issue
-			debugString := "windowAction():"
-			debugString := "`n" "action=" action
-			debugString .= "`n" "name=" name
-			debugString .= "`n" "titleString=" titleString
-			debugString .= "`n" "this.actionOverrides[""Telegram""]=" this.actionOverrides["Telegram"]
-			debugString .= "`n" "WindowActions.actionOverrides[""Telegram""]=" WindowActions.actionOverrides["Telegram"]
-			MsgBox(debugString)
-		}
-
 		if WindowLib.isNoMoveSizeWindow(titleString) {
 			Toast.ShowError("WindowActions: cannot touch window", "Window should not be moved or resized")
 			return

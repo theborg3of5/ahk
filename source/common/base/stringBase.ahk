@@ -619,8 +619,8 @@ class _StringExt {
 		stringsToTrim.Push(Chr(111)   "`t") ; Second level bullet (letter o)     + tab
 		stringsToTrim.Push(Chr(61607) "`t") ; Third level bullet (filled square) + tab
 
-		for _, string in additionalStringsToRemove
-			stringsToTrim.Push(string)
+		for _, str in additionalStringsToRemove
+			stringsToTrim.Push(str)
 
 		outStr := StringLib.dropLeadingTrailing(outStr, stringsToTrim)
 

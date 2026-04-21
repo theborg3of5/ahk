@@ -1,12 +1,12 @@
 /* Class representing a block of documentation in AHK code, for use in various IDEs.
 	Example Usage
-	;	block := new HeaderDocBlock().initFromSelection()
+	;	block := HeaderDocBlock().initFromSelection()
 	;	wrappedDoc := block.getWrappedString() ; Wrapped version of the selected documentation block
 
-	;	new HeaderDocBlock().rewrapSelection() ; Selects whole line if needed, then redoes wrapping, maintaining indentation appropriately
+	;	HeaderDocBlock().rewrapSelection() ; Selects whole line if needed, then redoes wrapping, maintaining indentation appropriately
 
-	;	settings := new DocBlockSettings().setTabWidth(4).setCommentChar("//")
-	;	new HeaderDocBlock(settings).unwrapSelection() ; Unwraps (collapses to single line) the given text
+	;	settings := DocBlockSettings().setTabWidth(4).setCommentChar("//")
+	;	HeaderDocBlock(settings).unwrapSelection() ; Unwraps (collapses to single line) the given text
 */
 class HeaderDocBlock {
 	;region ------------------------------ PUBLIC ------------------------------
@@ -72,7 +72,7 @@ class HeaderDocBlock {
 	;---------
 	rewrapSelection() {
 		this.initFromSelection()
-		Sleep, 500 ; Wait a tick to make sure the program we're copying from doesn't get mad about us using the clipboard a second time so quickly.
+		Sleep(500) ; Wait a tick to make sure the program we're copying from doesn't get mad about us using the clipboard a second time so quickly.
 		ClipboardLib.send(this.getWrappedString())
 	}
 	
@@ -82,7 +82,7 @@ class HeaderDocBlock {
 	;---------
 	unwrapSelection() {
 		this.initFromSelection()
-		Sleep, 500 ; Wait a tick to make sure the program we're copying from doesn't get mad about us using the clipboard a second time so quickly.
+		Sleep(500) ; Wait a tick to make sure the program we're copying from doesn't get mad about us using the clipboard a second time so quickly.
 		ClipboardLib.send(this.getUnwrappedString())
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
@@ -91,7 +91,7 @@ class HeaderDocBlock {
 	WRAP_WIDTH := 100 ; The max width we want to (try and) keep all headers within.
 	
 	; Default settings: 4-char-wide tabs, semicolon comment, tab indent, no line prefix
-	settings := new DocBlockSettings().setTabWidth(4).setCommentChar(";").setIndentString("\t").setLinePrefix("")
+	settings := DocBlockSettings().setTabWidth(4).setCommentChar(";").setIndentString("\t").setLinePrefix("")
 
 	outerFirst       := "" ; Line prefix, indent, comment, leading spaces for first line. Tracked separately for multi-line cases where first-line indent not selected, so we don't duplicate it.
 	outerRest        := "" ; Line prefix, indent, comment, leading spaces for other lines.
@@ -113,30 +113,30 @@ class HeaderDocBlock {
 		; Whole line, including newline (VSCode ^c with nothing selected, probably) - actually select the
 		; whole line.
 		if (selection.endsWith("`n"))
-			Send, {End 2}{Shift Down}{Home 2}{Shift Up} ; End twice to get to end of wrapped line, Home twice to try and get indent/line prefix too.
+			Send("{End 2}{Shift Down}{Home 2}{Shift Up}") ; End twice to get to end of wrapped line, Home twice to try and get indent/line prefix too.
 
 		; Multiple lines - we can pull anything not selected in the first line, from the second line. We
 		; shouldn't mess with the selection because we don't know which direction we selected from - so
 		; trying to reselect might just mess with the last line.
 		if (selection.contains("`n"))
 			return selection
-		
+
 		; The line starts with indent or the line prefix - assume the user got it all.
 		if (selection.startsWith(this.settings.indent) || selection.startsWith(this.settings.linePrefix))
 			return selection
-		
+
 		; We can't get the indent from the current selection (which may be nothing), so reselect the whole
 		; line (including the indent/line prefix).
-		Send, {End 2}{Shift Down}{Home 2}{Shift Up} ; End twice to get to end of wrapped line, Home twice to try and get indent/line prefix too.
+		Send("{End 2}{Shift Down}{Home 2}{Shift Up}") ; End twice to get to end of wrapped line, Home twice to try and get indent/line prefix too.
 		selection := SelectLib.getText()
-		
+
 		; We got the indent on the first try (non-wrapped line)
 		if (selection.startsWith(this.settings.indent))
 			return selection
-		
+
 		; Either a wrapped string, or no indent at start - either way, we can select one more chunk
 		; with Home and have everything.
-		Send, {Shift Down}{Home}{Shift Up}
+		Send("{Shift Down}{Home}{Shift Up}")
 		selection := SelectLib.getText()
 		
 		return selection
@@ -171,7 +171,7 @@ class HeaderDocBlock {
 		
 		; The rest of the lines just need to indent to match the first so the content continues in
 		; the same spot horizontally.
-		this.innerRest := StringLib.getSpaces(this.innerFirst.length())
+		this.innerRest := StringLib.getSpaces(StrLen(this.innerFirst))
 		;endregion Initial extraction
 		
 		; Cleanup now that we know more
@@ -232,7 +232,7 @@ class HeaderDocBlock {
 	;endregion ------------------------------ PRIVATE ------------------------------
 	
 	;region ------------------------------ DEBUG ------------------------------
-	Debug_ToString(ByRef table) {
+	Debug_ToString(&table) {
 		table.addLine("Outer indent, first line",          this.outerFirst)
 		table.addLine("Outer indent, other lines",         this.outerRest)
 		table.addLine("Inner indent/keywords, first line", this.innerFirst)

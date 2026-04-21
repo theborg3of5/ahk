@@ -3,7 +3,7 @@
 	;---------
 	; DESCRIPTION:    Put the title of the current tab on the clipboard, with some special exceptions.
 	;---------
-	copyTitle() {
+	static copyTitle() {
 		ClipboardLib.setAndToast(Chrome.getTitle(), "title")
 	}
 	
@@ -11,7 +11,7 @@
 	; DESCRIPTION:    Copy the title and URL of the current tab on the clipboard, with some special
 	;                 exceptions (see .getTitle() for details).
 	;---------
-	copyTitleLink() {
+	static copyTitleLink() {
 		title := Chrome.getTitle()
 		url   := Chrome.getURL()
 		ClipboardLib.setAndToast(title "`n" url, "title and URL")
@@ -21,7 +21,7 @@
 	; DESCRIPTION:    Copy the relative path to the current file for client CodeSearch.
 	; RETURNS:        Source-relative filepath with leading backslash
 	;---------
-	copyCodeSearchClientPath() {
+	static copyCodeSearchClientPath() {
 		if(!Chrome.isCurrentPageCodeSearchClient())
 			return
 		
@@ -45,13 +45,13 @@
 	;---------
 	; DESCRIPTION:    Open the DLG's client SVN log.
 	;---------
-	openClientSVNLog() {
+	static openClientSVNLog() {
 		record := EpicLib.getBestEMC2RecordFromText(WinGetActiveTitle())
 		if(record.ini != "DLG" || record.id = "")
 			return
 		
 		Toast.ShowShort("Launching client SVN log for DLG: " record.id)
-		new ActionObjectSVNLog(record.id, ActionObjectSVNLog.FilterType_DLG).open()
+		ActionObjectSVNLog(record.id, ActionObjectSVNLog.FilterType_DLG).open()
 	}
 	
 	;---------
@@ -62,7 +62,7 @@
 	; NOTES:          Some cases (most notably CodeSearch) will end up with something completely
 	;                 different from the title.
 	;---------
-	getTitle(titleString := "A") {
+	static getTitle(titleString := "A") {
 		title := WinGetTitle(titleString)
 		
 		; This suffix is never helpful.
@@ -89,12 +89,12 @@
 		if (title.endsWith(" - Brainbow"))
 			title := title.removeFromStart("Profile (").replace(") - Brainbow", " - Brainbow")
 		
-		if(this.isCurrentPageCodeSearch()) {
+		if(Chrome.isCurrentPageCodeSearch()) {
 			; Special handling for CodeSearch - just get the file name, plus the current selection as the function.
 			file := title.beforeString("/")
 			function := SelectLib.getCleanFirstLine()
 			
-			if(this.isCurrentPageCodeSearchClient()) { ; Client files - <function>()::<file>
+			if(Chrome.isCurrentPageCodeSearchClient()) { ; Client files - <function>()::<file>
 				title := file
 				if(function != "")
 					title := title "::" function "()"
@@ -110,11 +110,11 @@
 	; DESCRIPTION:    Get the (cleaned) titles of all Chrome windows.
 	; RETURNS:        Array of titles.
 	;---------
-	getAllWindowTitles() {
+	static getAllWindowTitles() {
 		titles := []
 		
-		For _,windowId in WinGet("List", Config.windowInfo["Chrome"].titleString) {
-			title := this.getTitle("ahk_id " windowId)
+		For _,windowId in WinGetList(Config.windowInfo["Chrome"].titleString) {
+			title := Chrome.getTitle("ahk_id " windowId)
 			if(title)
 				titles.push(title)
 		}
@@ -127,8 +127,8 @@
 	; RETURNS:        URL string
 	; NOTES:          Tweaks the URL somewhat for CodeSearch pages.
 	;---------
-	getURL() {
-		url := this.getRawURL()
+	static getURL() {
+		url := Chrome.getRawURL()
 		
 		if(Chrome.isCurrentPageCodeSearch()) {
 			title := WinGetActiveTitle().removeFromEnd(" - Google Chrome")
@@ -136,13 +136,13 @@
 			
 			; Client files should always have an extension
 			if(file.contains(".")) { ; Client files - use current URL but update the line # based on our selected line.
-				lineNum := this.getCodeSearchSelectionLineNum()
+				lineNum := Chrome.getCodeSearchSelectionLineNum()
 				if(lineNum != "")
 					url := url.replaceRegEx("&line=(\d+)", "&line=" lineNum)
 			} else { ; Server routines - link to exact tag + routine
 				function := SelectLib.getCleanFirstLine()
 				location := function.appendPiece("^", file)
-				url := new ActionObjectCodeSearch(location).getLink()
+				url := ActionObjectCodeSearch(location).getLink()
 				; Debug.popup("function",function, "file",file, "location",location, "url",url)
 			}
 		}
@@ -153,8 +153,8 @@
 	;---------
 	; DESCRIPTION:    Open the file-type link under the mouse.
 	;---------
-	openLinkTarget() {
-		path := this.getLinkTarget()
+	static openLinkTarget() {
+		path := Chrome.getLinkTarget()
 		if(path) {
 			Toast.ShowShort("Got link target, opening:`n" path)
 			Run(path)
@@ -166,8 +166,8 @@
 	;---------
 	; DESCRIPTION:    Copy the file-type link under the mouse, also showing the user a toast about it.
 	;---------
-	copyLinkTarget() {
-		ClipboardLib.setAndToast(this.getLinkTarget(), "link target")
+	static copyLinkTarget() {
+		ClipboardLib.setAndToast(Chrome.getLinkTarget(), "link target")
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------
 	
@@ -176,10 +176,10 @@
 	; DESCRIPTION:    Get the current tab's URL, by copying it out of the address bar.
 	; RETURNS:        The current tab's URL
 	;---------
-	getRawURL() {
-		Send, ^l ; Focus address bar
+	static getRawURL() {
+		Send("^l") ; Focus address bar
 		url := ClipboardLib.getWithHotkey("^c")
-		Send, {Esc} ; Unfocus address bar
+		Send("{Esc}") ; Unfocus address bar
 		
 		return url
 	}
@@ -187,7 +187,7 @@
 	;---------
 	; DESCRIPTION:    Determine whether the current page is CodeSearch, based on its title.
 	;---------
-	isCurrentPageCodeSearch() {
+	static isCurrentPageCodeSearch() {
 		; Only have CodeSearch at work
 		if(!Config.contextIsWork)
 			return false
@@ -199,7 +199,7 @@
 	;---------
 	; DESCRIPTION:    Determine whether the current page is CodeSearch in client files, based on its title.
 	;---------
-	isCurrentPageCodeSearchClient() {
+	static isCurrentPageCodeSearchClient() {
 		if(!Chrome.isCurrentPageCodeSearch())
 			return false
 		
@@ -211,7 +211,7 @@
 	; DESCRIPTION:    Get the (cleaned-up) path in the link currently under the mouse.
 	; RETURNS:        The cleaned-up path.
 	;---------
-	getLinkTarget() {
+	static getLinkTarget() {
 		path := ClipboardLib.getWithFunction(ObjBindMethod(Chrome, "getLinkTargetOnClipboard"))
 		return FileLib.cleanupPath(path)
 	}
@@ -219,10 +219,10 @@
 	;---------
 	; DESCRIPTION:    Copy the target of the link under the mouse to the clipboard.
 	;---------
-	getLinkTargetOnClipboard() {
-		Click, Right
-		Sleep, 500   ; Wait for right-click menu to appear
-		Send, e      ; Copy link address
+	static getLinkTargetOnClipboard() {
+		Click("Right")
+		Sleep(500)   ; Wait for right-click menu to appear
+		Send("e")      ; Copy link address
 	}
 	
 	;---------
@@ -231,7 +231,7 @@
 	;  jsElementCode (I,REQ) - JS code that will return the element you're interested in.
 	; NOTES:          Works using some JS code that temporarily selects the element in question and copies to the clipboard.
 	;---------
-	getElementText(jsElementCode) {
+	static getElementText(jsElementCode) {
 		return ClipboardLib.getWithFunction(ObjBindMethod(Chrome, "copyElementText", jsElementCode), 2) ; Wait for longer than the default 0.5 seconds, for bigger pages where the JS takes longer to run.
 	}
 	
@@ -241,7 +241,7 @@
 	;  querySelector (I,REQ) - JS code that will return the element you're interested in.
 	; NOTES:          Works using some JS code that temporarily selects the element in question and copies to the clipboard.
 	;---------
-	copyElementText(jsElementCode) {
+	static copyElementText(jsElementCode) {
 		copyElementTextJS := "
 			(
 				/* Get the element we want to copy from */
@@ -267,7 +267,7 @@
 		
 		jsCode := copyElementTextJS.replaceTag("JS_ELEMENT_CODE", jsElementCode)
 		
-		this.runJavascriptCode(jsCode) ; JS code will update the clipboard
+		Chrome.runJavascriptCode(jsCode) ; JS code will update the clipboard
 	}
 	
 	;---------
@@ -275,29 +275,29 @@
 	; PARAMETERS:
 	;  jsCode (I,REQ) - Javascript code to run. If it contains newlines, make sure any comments use /**/ instead of // (otherwise everything after will be treated as commented out)
 	;---------
-	runJavascriptCode(jsCode) {
+	static runJavascriptCode(jsCode) {
 		; Safety check to prevent us from just entering "javascript:" in the title bar, which navigates to a Google search.
 		if(jsCode = "") {
 			Toast.ShowError("Failed to run JS code", "Given code was blank")
 			return
 		}
-		
-		Send, ^l                  ; Focus address bar
-		Sleep, 100                ; Wait for it to get focus
-		
+
+		Send("^l")                  ; Focus address bar
+		Sleep(100)                ; Wait for it to get focus
+
 		; Paste in JS code
 		ClipboardLib.send("javascript") ; Need to split up the "javascript:" prefix because otherwise it gets stripped out on paste by Chrome.
 		ClipboardLib.send(":" jsCode)
-		
-		Sleep, 400                ; JS code doesn't run without this - not sure if because content not all in yet, or another safety measure (I suspect the latter)
-		Send, {Enter}             ; Submit
+
+		Sleep(400)                ; JS code doesn't run without this - not sure if because content not all in yet, or another safety measure (I suspect the latter)
+		Send("{Enter}")             ; Submit
 	}
 	
 	;---------
 	; DESCRIPTION:    Get the line number for your currently selected text in CodeSearch.
 	; RETURNS:        Line number
 	;---------
-	getCodeSearchSelectionLineNum() {
+	static getCodeSearchSelectionLineNum() {
 		return Chrome.getElementText("window.getSelection().anchorNode.parentElement.closest(""tr"").firstElementChild")
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------

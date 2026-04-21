@@ -11,7 +11,7 @@ class Explorer {
 	; DESCRIPTION:    Toggle whether hidden files are visible in Explorer or not.
 	; NOTES:          Inspired by http://www.autohotkey.com/forum/post-342375.html#342375
 	;---------
-	toggleHiddenFiles() {
+	static toggleHiddenFiles() {
 		REG_KEY_NAME   := "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 		REG_VALUE_NAME := "Hidden"
 		
@@ -26,15 +26,15 @@ class Explorer {
 		}
 		
 		; Set registry key for whether to show hidden files and refresh to apply.
-		RegWrite, REG_DWORD, % REG_KEY_NAME, % REG_VALUE_NAME, % newValue
-		Send, {F5}
+		RegWrite(newValue, "REG_DWORD", REG_KEY_NAME, REG_VALUE_NAME)
+		Send("{F5}")
 	}
 	
 	;---------
 	; DESCRIPTION:    Copy the current path (selected file, or folder if no file selected).
 	;---------
-	copySelectedPath() {
-		path := this.getSelectedPath(pathType)
+	static copySelectedPath() {
+		path := Explorer.getSelectedPath(&pathType)
 		ClipboardLib.setAndToast(path, pathType)
 	}
 	
@@ -42,8 +42,8 @@ class Explorer {
 	; DESCRIPTION:    Copy the current source-relative (relative to DLG-* or App * folder) path (selected file, or folder
 	;                 if no file selected).
 	;---------
-	copySelectedPathRelativeToSource() {
-		path := this.getSelectedPath(pathType)
+	static copySelectedPathRelativeToSource() {
+		path := Explorer.getSelectedPath(&pathType)
 		relativePath := EpicLib.convertToSourceRelativePath(path)
 		ClipboardLib.setAndToast(relativePath, "relative " pathType)
 	}
@@ -52,8 +52,8 @@ class Explorer {
 	; DESCRIPTION:    Get an EMC2 object using the selected file's/current folder's path rather than the title.
 	; RETURNS:        A new ActionObjectEMC2 instance, or "" if it's not a special folder that links to an EMC2 object.
 	;---------
-	getEMC2ObjectFromSelectedFolder() {
-		path := this.getSelectedPath()
+	static getEMC2ObjectFromSelectedFolder() {
+		path := Explorer.getSelectedPath()
 		if(path = "") {
 			Toast.ShowError("Could not get EMC2 object for selected folder", "Could not get selected folder path")
 			return
@@ -63,7 +63,7 @@ class Explorer {
 		if(!record)
 			return ""
 		
-		return new ActionObjectEMC2(record.id, record.ini)
+		return ActionObjectEMC2(record.id, record.ini)
 	}
 	
 	;---------
@@ -72,43 +72,43 @@ class Explorer {
 	;                 desired folder for the shortcut file.
 	; NOTES:          Calls into different logic depending on whether this is the first or second trigger.
 	;---------
-	createRelativeShortcutToFile() {
+	static createRelativeShortcutToFile() {
 		; Initial trigger
-		if(this._relativeTarget = "") {
-			targetPath := this.getSelectedPath()
+		if(Explorer._relativeTarget = "") {
+			targetPath := Explorer.getSelectedPath()
 			if(targetPath = "") {
 				Toast.ShowError("Failed to get path for relative shortcut")
 				return
 			}
 			
-			this.saveRelative(targetPath) ; Sets _relativeTarget
-			
+			Explorer.saveRelative(targetPath) ; Sets _relativeTarget
+
 		; Second trigger
 		} else {
-			sourceFolder := this.getRelativeSourceFolder()
+			sourceFolder := Explorer.getRelativeSourceFolder()
 			if(sourceFolder = "")
 				return
 			
-			targetPath := this._relativeTarget
-			this.cleanupRelative() ; Clears _relativeTarget
-				
-			this.createRelative(sourceFolder, targetPath)
+			targetPath := Explorer._relativeTarget
+			Explorer.cleanupRelative() ; Clears _relativeTarget
+
+			Explorer.createRelative(sourceFolder, targetPath)
 		}
 	}
 	
 	;---------
 	; DESCRIPTION:    Create an (absolute) shortcut to one of a predefined set of HSWeb solutions.
 	;---------
-	selectSolutionShortcut() {
+	static selectSolutionShortcut() {
 		; Get current folder (absolute root)
-		currentFolder := this.getCurrentFolder()
+		currentFolder := Explorer.getCurrentFolder()
 		if(currentFolder = "") {
 			Toast.ShowError("Failed to get current folder path")
 			return
 		}
 		
 		; Prompt user for which solution they want
-		shortcuts := new Selector("solutionShortcuts.tls").promptMulti()
+		shortcuts := Selector("solutionShortcuts.tls").promptMulti()
 		For _, shortcut in shortcuts {
 			name               := shortcut["NAME"]
 			relativeTargetPath := shortcut["PATH_IN_SOLUTIONS_FOLDER"]
@@ -120,17 +120,17 @@ class Explorer {
 				return
 			}
 			if (relativeTargetPath = "HIDE") { ; Don't create a shortcut, just hide the dotfiles.
-				this.hideHSWebDotfiles(currentFolder)
+				Explorer.hideHSWebDotfiles(currentFolder)
 				return
 			}
 			
 			; Create shortcut
 			targetPath := currentFolder "\" relativeTargetPath
-			FileCreateShortcut, % targetPath, % currentFolder "\" name ".lnk", % currentFolder
+			FileCreateShortcut(targetPath, currentFolder "\" name ".lnk", currentFolder)
 			Toast.ShowMedium("Created shortcut to " name " solution in current folder")
 	
 			; Hide the various settings and readme files - I don't use them and they clutter up my shortcuts.
-			this.hideHSWebDotfiles(currentFolder)
+			Explorer.hideHSWebDotfiles(currentFolder)
 		}
 	}
 
@@ -138,8 +138,8 @@ class Explorer {
 	; DESCRIPTION:    Check whether the mouse is over the taskbar.
 	; RETURNS:        true/false
 	;---------
-	mouseIsOverTaskbar() {
-		MouseGetPos("", "", winId)
+	static mouseIsOverTaskbar() {
+		MouseGetPos(, , &winId)
 		name := Config.findWindowName("ahk_id " winId)
 		return (name = "Windows Taskbar" || name = "Windows Taskbar Secondary")
 	}
@@ -149,7 +149,7 @@ class Explorer {
 	;                 some programs that suppress it somehow).
 	; RETURNS:        true/false
 	;---------
-	currentWindowHasNoBasicRightClickMenu() {
+	static currentWindowHasNoBasicRightClickMenu() {
 		if(Config.isWindowActive("VSCode"))
 			return true
 		if(Config.isWindowActive("GitExtensions"))
@@ -176,17 +176,17 @@ class Explorer {
 	;  pathType (O,OPT) - A name for the type of path ("file path" or "folder path") for display to the user.
 	; RETURNS:        Current absolute file path.
 	;---------
-	getSelectedPath(ByRef pathType := "") {
+	static getSelectedPath(&pathType := "") {
 		pathType := ""
-		
-		path := ClipboardLib.getWithHotkey(this.Hotkey_CopyCurrentFile)
+
+		path := ClipboardLib.getWithHotkey(Explorer.Hotkey_CopyCurrentFile)
 		if(path != "") {
 			pathType := "file path"
 			return FileLib.cleanupPath(path)
 		}
 		
 		; If we didn't get anything, there probably wasn't a file selected - get the current folder instead.
-		path := this.getCurrentFolder()
+		path := Explorer.getCurrentFolder()
 		if(path != "") {
 			pathType := "folder path"
 			return FileLib.cleanupPath(path)
@@ -200,13 +200,13 @@ class Explorer {
 	; DESCRIPTION:    Get the path to the currently-open folder.
 	; RETURNS:        Folder path, or "" if we failed to get it for some reason.
 	;---------
-	getCurrentFolder() {
+	static getCurrentFolder() {
 		; Grab from window title
 		path := WinGetTitle("A")
 
 		; Grab from address bar
 		if(path = "") {
-			Send, !d ; Select address bar
+			Send("!d") ; Select address bar
 			path := ClipboardLib.getWithHotkey("^c")
 		}
 		
@@ -225,19 +225,19 @@ class Explorer {
 	; PARAMETERS:
 	;  folderPath (I,REQ) - Full path to the folder you want to apply this to.
 	;---------
-	hideHSWebDotfiles(folderPath) {
+	static hideHSWebDotfiles(folderPath) {
 		; Mark files as hidden
-		Loop, Files, %folderPath%\*.*, F ; Only files
+		Loop Files, folderPath "\*.*", "F" ; Only files
 		{
 			; Ignore shortcuts - I'm adding those.
 			if (A_LoopFileExt == "lnk")
 				Continue
 
-			FileSetAttrib, +H, %A_LoopFileFullPath%
+			FileSetAttrib("+H", A_LoopFileFullPath)
 		}
-		
+
 		; Refresh to drop the hidden files out of view
-		Send, {F5}
+		Send("{F5}")
 	}
 	
 	;region Relative shortcuts
@@ -246,8 +246,8 @@ class Explorer {
 	; RETURNS:        The current folder (cleaned up and with a trailing backslash)
 	;                 "" (and show an error toast) if we couldn't get it
 	;---------
-	getRelativeSourceFolder() {
-		path := this.getCurrentFolder()
+	static getRelativeSourceFolder() {
+		path := Explorer.getCurrentFolder()
 		if(path = "") {
 			Toast.ShowError("Failed to get source folder path for relative shortcut")
 			return ""
@@ -261,21 +261,21 @@ class Explorer {
 	; PARAMETERS:
 	;  path (I,REQ) - The path to our eventual shortcut target.
 	;---------
-	saveRelative(path) {
-		this._relativeTarget := path
-		this._relativeToast := new Toast("Ready to create relative shortcut to file:`n" path "`nPress ^!s again to create in that folder, Esc to cancel").show()
-		boundFunc := ObjBindMethod(this, "cleanupRelative")
-		Hotkey, Escape, % boundFunc, On ; Hotkey to cancel out and not create anything
+	static saveRelative(path) {
+		Explorer._relativeTarget := path
+		Explorer._relativeToast := Toast("Ready to create relative shortcut to file:`n" path "`nPress ^!s again to create in that folder, Esc to cancel").show()
+		boundFunc := ObjBindMethod(Explorer, "cleanupRelative")
+		Hotkey("Escape", boundFunc, "On") ; Hotkey to cancel out and not create anything
 	}
 	
 	;---------
 	; DESCRIPTION:    Clean up when we no longer need the relative shortcut info.
 	;---------
-	cleanupRelative() {
-		this._relativeTarget := ""
-		this._relativeToast.close()
-		this._relativeToast  := ""
-		Hotkey, Escape, , Off
+	static cleanupRelative() {
+		Explorer._relativeTarget := ""
+		Explorer._relativeToast.close()
+		Explorer._relativeToast  := ""
+		Hotkey("Escape", "Off")
 	}
 	
 	;---------
@@ -284,12 +284,12 @@ class Explorer {
 	;  sourceFolder (I,REQ) - The folder where the new shortcut should live (with trailing backslash)
 	;  targetPath   (I,REQ) - The file the shortcut should point to
 	;---------
-	createRelative(sourceFolder, targetPath) {
+	static createRelative(sourceFolder, targetPath) {
 		; Find the relative path from source folder to target.
-		relativePath := this.getRelativePath(sourceFolder, targetPath)
-		
+		relativePath := Explorer.getRelativePath(sourceFolder, targetPath)
+
 		; Create the shortcut and let the user know.
-		this.createRelativeShortcut(sourceFolder, relativePath)
+		Explorer.createRelativeShortcut(sourceFolder, relativePath)
 		Toast.ShowShort("Created shortcuts!")
 	}
 	
@@ -300,13 +300,13 @@ class Explorer {
 	;  relativePath         (I,REQ) - The relative path to the target (no leading backslash), from the shortcut parent folder
 	;  shortcutName         (I,OPT) - The name the shortcut file should have 
 	;---------
-	createRelativeShortcut(shortcutParentFolder, relativePath, shortcutName := "") {
+	static createRelativeShortcut(shortcutParentFolder, relativePath, shortcutName := "") {
 		if(shortcutName = "")
-			SplitPath(relativePath, shortcutName)
+			SplitPath(relativePath, &shortcutName)
 		
 		shortcutFilePath := shortcutParentFolder shortcutName ".lnk"
 		args := "/c start """" ""%CD%\" relativePath """" ; %CD% is current directory
-		FileCreateShortcut, % A_ComSpec, % shortcutFilePath, , % args
+		FileCreateShortcut(A_ComSpec, shortcutFilePath, , args)
 	}
 	
 	;---------
@@ -316,7 +316,7 @@ class Explorer {
 	;  targetPath   (I,REQ) - The file the path should point to
 	; RETURNS:        A relative path, with no leading backslash.
 	;---------
-	getRelativePath(sourceFolder, targetPath) {
+	static getRelativePath(sourceFolder, targetPath) {
 		; Find the overlap (deepest common folder) between the source file and target folder
 		commonFolder := FileLib.findCommonFolder(sourceFolder, targetPath)
 		

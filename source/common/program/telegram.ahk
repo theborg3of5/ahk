@@ -5,14 +5,14 @@ class Telegram {
 	; PARAMETERS:
 	;  url (I,REQ) - The URL to share.
 	;---------
-	shareURL(url) {
+	static shareURL(url) {
 		launchURL := this.ShareURLBase.replaceTag("URL", url)
 		Run(launchURL)
-		
-		WinWaitActive, % Config.windowInfo["Telegram"].idString
-		Sleep, 500 ; Give the share faux-popup time to appear.
-		
-		Send, {Down 2}{Enter} ; Select my target chat (the "Normal" one).
+
+		WinWaitActive(Config.windowInfo["Telegram"].idString)
+		Sleep(500) ; Give the share faux-popup time to appear.
+
+		Send("{Down 2}{Enter}") ; Select my target chat (the "Normal" one).
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
@@ -20,8 +20,8 @@ class Telegram {
 	;---------
 	; DESCRIPTION:    Focus the "Normal" chat that's the only one I use in Telegram.
 	;---------
-	focusNormalChat() {
-		Send, ^1
+	static focusNormalChat() {
+		Send("^1")
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------
 	

@@ -5,34 +5,34 @@ class OneNoteTodoPage {
 	; DESCRIPTION:    Collapse the todo page to different levels.
 	; SIDE EFFECTS:   Puts the cursor at the beginning of the first line under the "Today" header.
 	;---------
-	collapseToTodayItems() {
+	static collapseToTodayItems() {
 		OneNoteTodoPage.collapse(true)
 	}
-	collapseToAllItems() {
+	static collapseToAllItems() {
 		OneNoteTodoPage.collapse(false)
 	}
-	collapseToTodayAll() {
+	static collapseToTodayAll() {
 		OneNoteTodoPage.collapse(true, true)
 	}
 	
 	;---------
 	; DESCRIPTION:    Make a copy of the current todo page and update it to be for today.
 	;---------
-	copyForToday() {
+	static copyForToday() {
 		OneNoteTodoPage.copy(A_Now)
 	}
 	
 	;---------
 	; DESCRIPTION:    Make a copy of the current todo page and update it to be for tomorrow.
 	;---------
-	copyForTomorrow() {
-		OneNoteTodoPage.copy(EnvAdd(A_Now, 1, "Days"))
+	static copyForTomorrow() {
+		OneNoteTodoPage.copy(DateAdd(A_Now, 1, "Days"))
 	}
 	
 	;---------
 	; DESCRIPTION:    Send the various sub-todos I add under most dev items.
 	;---------
-	insertDevTodos() {
+	static insertDevTodos() {
 		todos := []
 		todos.push({tag:1, text:"Submit design"})
 		todos.push({tag:1, text:"Dev comp"})
@@ -50,7 +50,7 @@ class OneNoteTodoPage {
 	;---------
 	; DESCRIPTION:    Send the various sub-todos I add under most dev project items.
 	;---------
-	insertDevPRJTodos() {
+	static insertDevPRJTodos() {
 		todos := []
 		todos.push({tag:1, text:"Submit design"})
 		todos.push({tag:1, text:"Dev comp"})
@@ -69,7 +69,7 @@ class OneNoteTodoPage {
 	;---------
 	; DESCRIPTION:    Send the various sub-todos I add under most dev SU items.
 	;---------
-	insertDevSUTodos() {
+	static insertDevSUTodos() {
 		todos := []
 		todos.push({tag:5, text:"Source logs to Stage 1"})
 		todos.push({tag:1, text:"Dev comp"})
@@ -86,8 +86,8 @@ class OneNoteTodoPage {
 	;---------
 	; DESCRIPTION:    Send the various sub-todos I add under most PQA items.
 	;---------
-	insertPQATodos() {
-		this.sendItems(["Review", "Test"])
+	static insertPQATodos() {
+		OneNoteTodoPage.sendItems(["Review", "Test"])
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------
 	
@@ -102,30 +102,30 @@ class OneNoteTodoPage {
 	;                      of headers).
 	; SIDE EFFECTS:   Puts the cursor at the beginning of the first line under the "Today" header.
 	;---------
-	collapse(todayOnly, expandAll := false) {
-		Send, ^{Home} ; Get to top-level ("Do") header so we affect the whole page
-		
+	static collapse(todayOnly, expandAll := false) {
+		Send("^{Home}") ; Get to top-level ("Do") header so we affect the whole page
+
 		if(expandAll)
-			Send, !+0 ; Show all items on all levels
+			Send("!+0") ; Show all items on all levels
 		else
-			Send, !+4 ; Item level in all sections (level 4)
-		
+			Send("!+4") ; Item level in all sections (level 4)
+
 		if(todayOnly)
-			Send, !+3 ; Collapse to headers under Today (which collapses headers under Today so only todos on level 4 are visible)
-		
-		this.cursorToFirstTodayItem()
+			Send("!+3") ; Collapse to headers under Today (which collapses headers under Today so only todos on level 4 are visible)
+
+		OneNoteTodoPage.cursorToFirstTodayItem()
 	}
 	
 	;---------
 	; DESCRIPTION:    Get to the first item under the second-level "Today" header.
 	;---------
-	cursorToFirstTodayItem() {
-		Send, ^{Home} ; Top-level ("Do") header
-		
+	static cursorToFirstTodayItem() {
+		Send("^{Home}") ; Top-level ("Do") header
+
 		; For some reason OneNote won't take {Down} keystrokes reliably, but getting to the end of the line
 		; and using {Right} seems to work instead.
-		Send, {End}{Right} ; End of "Do" line, right to following "Today" line
-		Send, {End}{Right} ; End of "Today" line, right to following item line
+		Send("{End}{Right}") ; End of "Do" line, right to following "Today" line
+		Send("{End}{Right}") ; End of "Today" line, right to following item line
 	}
 	
 	;---------
@@ -134,65 +134,69 @@ class OneNoteTodoPage {
 	;  instant (I,REQ) - The instant to update the new page to match.
 	; SIDE EFFECTS:   Sets a background color on the old page to help distinguish.
 	;---------
-	copy(instant) {
+	static copy(instant) {
 		; Change the page color before we leave, so it's noticeable if I end up there.
-		Send, !w
-		Send, pc
-		Send, {Enter}
-		
+		Send("!w")
+		Send("pc")
+		Send("{Enter}")
+
 		; Collapse to line level before I leave so it's easier to find stuff when looking back.
 		OneNoteTodoPage.collapseToAllItems()
-		
-		Send, ^!m                  ; Move or copy page
-		WinWaitActive, Move or Copy Pages
-		Sleep, 500                 ; Wait a half second for the popup to be input-ready
-		Send, Do                   ; Search for "Do" notebook, should automatically select first result (which should be the one we want)
-		Send, !c                   ; Copy button
-		WinWaitClose, Move or Copy Pages
-		
+
+		Send("^!m")                  ; Move or copy page
+		WinWaitActive("Move or Copy Pages")
+		Sleep(500)                 ; Wait a half second for the popup to be input-ready
+		Send("Do")                   ; Search for "Do" notebook, should automatically select first result (which should be the one we want)
+		Send("!c")                   ; Copy button
+		WinWaitClose("Move or Copy Pages")
+
 		; Wait for new page to appear.
 		; Give the user a chance to wait a little longer before continuing
 		; (for when OneNote takes a while to actually make the new page).
-		t := new Toast().show()
+		t := Toast().show()
 		Loop {
 			t.setText("Waiting for 2s, press space to keep waiting..." StringLib.getDots(A_Index - 1))
-			Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
-			endKey := ErrorLevel.removeFromStart("EndKey:")
+			ih := InputHook("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
+			ih.Start()
+			ih.Wait()
+			endKey := ih.EndKey
 			if(endKey = "Space")
 				Continue
-			
+
 			; Break out immediately if enter/escape were pressed.
 			if(endKey = "Enter" || endKey = "Escape")
 				Break
-			
+
 			t.setText("Waiting for 1s, press space to keep waiting..." StringLib.getDots(A_Index - 1))
-			Input("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
-			endKey := ErrorLevel.removeFromStart("EndKey:")
+			ih := InputHook("T1", "{Esc}{Enter}{Space}") ; Wait for 1 second (exit immediately if Escape/Enter/Space is pressed)
+			ih.Start()
+			ih.Wait()
+			endKey := ih.EndKey
 			if(endKey = "Space")
 				Continue
-			
+
 			Break
 		}
 		t.close()
-		
+
 		; Quit without doing anything else if they hit escape
 		if(endKey = "Escape")
 			return
-		
-		Send, ^{PgDn} ; Switch to (presumably) new page
-		
+
+		Send("^{PgDn}") ; Switch to (presumably) new page
+
 		; Make the current page have no background color.
-		Send, !w
-		Send, pc
-		Send, n
-		
+		Send("!w")
+		Send("pc")
+		Send("n")
+
 		; Update title
-		Send, ^+t                                      ; Select title (to replace with new day/date)
-		Sleep, 1000                                    ; Wait for selection to take
-		Send, % OneNoteTodoPage.generateTitle(instant) ; Send title
-		
+		Send("^+t")                                      ; Select title (to replace with new day/date)
+		Sleep(1000)                                    ; Wait for selection to take
+		Send(OneNoteTodoPage.generateTitle(instant)) ; Send title
+
 		; Jump back to start
-		this.cursorToFirstTodayItem()
+		OneNoteTodoPage.cursorToFirstTodayItem()
 	}
 	
 	;---------
@@ -203,7 +207,7 @@ class OneNoteTodoPage {
 	;                 in a home context, it will simply be the formatted date. If we're in a home
 	;                 context and it's a weekday, it will be a date range from Monday to Friday.
 	;---------
-	generateTitle(instant) {
+	static generateTitle(instant) {
 		; Do pages at work are always daily
 		if(Config.contextIsWork)
 			return FormatTime(instant, "M/d`, dddd")
@@ -218,10 +222,10 @@ class OneNoteTodoPage {
 			
 			; Weekdays are weekly
 			; Calculate datetimes for Monday and Friday to use, even if it's not currently Monday.
-			mondayDateTime := EnvAdd(instant, -(dayOfWeek - 2), "Days") ; If it's not Monday, get back to Monday's date.
+			mondayDateTime := DateAdd(instant, -(dayOfWeek - 2), "Days") ; If it's not Monday, get back to Monday's date.
 			mondayTitle := FormatTime(mondayDateTime, "M/d`, dddd")
 			
-			fridayDateTime := EnvAdd(mondayDateTime, 4, "Days")
+			fridayDateTime := DateAdd(mondayDateTime, 4, "Days")
 			fridayTitle := FormatTime(fridayDateTime, "M/d`, dddd")
 			
 			; Debug.popup("A_Now",A_Now, "instant",instant, "mondayDateTime",mondayDateTime, "mondayTitle",mondayTitle, "fridayDateTime",fridayDateTime, "fridayTitle",fridayTitle)
@@ -237,7 +241,7 @@ class OneNoteTodoPage {
 	;  startDate (O,REQ) - The start of the range that includes related dates
 	;  endDate   (O,REQ) - The end of the range that includes related dates
 	;---------
-	getRelatedDateRange(instant, ByRef startDate, ByRef endDate) {
+	static getRelatedDateRange(instant, &startDate, &endDate) {
 		; Start out with a 1-day range of our given instant.
 		startDate := instant
 		endDate   := instant
@@ -255,8 +259,8 @@ class OneNoteTodoPage {
 				return
 			
 			; Weekdays are one weekly page from Monday to Friday.
-			startDate := EnvAdd(instant, -(dayOfWeek - 2), "Days") ; Back to Monday
-			endDate   := EnvAdd(startDate, 4,              "Days") ; Out to Friday
+			startDate := DateAdd(instant, -(dayOfWeek - 2), "Days") ; Back to Monday
+			endDate   := DateAdd(startDate, 4,              "Days") ; Out to Friday
 			return
 		}
 	}
@@ -266,15 +270,15 @@ class OneNoteTodoPage {
 	; PARAMETERS:
 	;  items      (I,REQ) - Simple array of todo items to send.
 	;---------
-	sendItems(items) {
-		Send, ^0 ; Clear current tag (so we're definitely adding the to-do tag, not checking it off)
-		Send, ^1 ; To-do tag
-		
+	static sendItems(items) {
+		Send("^0") ; Clear current tag (so we're definitely adding the to-do tag, not checking it off)
+		Send("^1") ; To-do tag
+
 		For i,item in items {
 			if(i > 1)
-				Send, {Enter}
-			
-			SendRaw, % item
+				Send("{Enter}")
+
+			SendText(item)
 		}
 	}
 	
@@ -284,15 +288,15 @@ class OneNoteTodoPage {
 	;  items (I,REQ) - Array of item objects, format:
 	;                    items[ln] := {tag:tagNumber, text:itemText}
 	;---------
-	sendItemsWithTags(items) {
+	static sendItemsWithTags(items) {
 		For index,item in items {
 			if(index > 1)
-				Send, {Enter}
-			
-			Send, ^0 ; Clear tag
-			Send, % "^" item.tag ; Apply new tag
-			
-			SendRaw, % item.text
+				Send("{Enter}")
+
+			Send("^0") ; Clear tag
+			Send("^" item.tag) ; Apply new tag
+
+			SendText(item.text)
 		}
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------

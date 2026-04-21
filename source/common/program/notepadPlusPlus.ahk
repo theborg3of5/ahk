@@ -2,7 +2,7 @@
 class NotepadPlusPlus {
 	;region ------------------------------ PUBLIC ------------------------------
 
-	openTempText(text) {
+	static openTempText(text) {
 		; Stick the text in a file
 		tempPath := FileLib.writeToOldestTempFile(text)
 

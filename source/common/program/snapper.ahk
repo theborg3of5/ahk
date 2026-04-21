@@ -11,7 +11,7 @@
 	;                        and idList will be treated as "X" as described above. Must be internal IDs, unless the string starts
 	;                        with "#" (in which case it can be a name or external ID).
 	;---------
-	addRecords(environment := "", ini := "", idList := "") {
+	static addRecords(environment := "", ini := "", idList := "") {
 		if(idList.startsWith("#")) {
 			this.addRecordWithSearch(environment, ini, idList.removeFromStart("#"))
 			return
@@ -23,7 +23,7 @@
 		errorTitleString := "ahk_exe SnapperHandler.exe" ; The error popup that appears when Snapper has popups open or whatnot so it failed to add the new records.
 		WindowLib.waitAnyOfWindowsActive([Config.windowInfo["Snapper"].titleString, errorTitleString]) ; Wait on either Snapper or the error popup to become active
 		if(WinActive(errorTitleString)) {
-			Send, {Space} ; Close the error window
+			Send("{Space}") ; Close the error window
 			ClipboardLib.setAndToastError(idList, "ID list", "Could not add records to Snapper", "Snapper claims to have popups open")
 		}
 	}
@@ -43,7 +43,7 @@
 	;                        described above. Must be internal IDs.
 	; RETURNS:        URL to launch Snapper.
 	;---------
-	buildURL(environment := "", ini := "", idList := "") { ; idList is a comma-separated list of IDs
+	static buildURL(environment := "", ini := "", idList := "") { ; idList is a comma-separated list of IDs
 		if(!environment)
 			environment := Snapper.getCurrentEnvironment() ; Try to default from what Snapper has open right now if no environment given.
 		if(!environment)
@@ -56,7 +56,7 @@
 		
 		outURL := Config.private["SNAPPER_URL_BASE"]
 		idAry := DataLib.expandList(idList)
-		if(idAry.count() > 10)
+		if(idAry.Length > 10)
 			if(!GuiLib.showConfirmationPopup("You're trying to open more than 10 records in Snapper - are you sure you want to continue?", "Opening many records in Snapper"))
 				return ""
 		
@@ -78,69 +78,69 @@
 	;  ini         (I,REQ) - INI of the record(s) to launch.
 	;  searchQuery (I,REQ) - The external ID of the record.
 	;---------
-	addRecordWithSearch(environment, ini, searchQuery) {
+	static addRecordWithSearch(environment, ini, searchQuery) {
 		; Connect to environment (also launches Snapper if it's not already open)
 		Run(Snapper.buildURL(environment))
 		
 		; Close the "ini/id invalid" popup that comes from us using "X" for both.
-		WinWaitActive, ahk_exe Snapper.exe ahk_class #32770
-		WinClose, A
-		WinWaitActive, % Config.windowInfo["Snapper"].titleString
-		
+		WinWaitActive("ahk_exe Snapper.exe ahk_class #32770")
+		WinClose("A")
+		WinWaitActive(Config.windowInfo["Snapper"].titleString)
+
 		; Launch the add record popup
-		Send, !n
+		Send("!n")
 		addWindowTitleString := Config.windowInfo["Snapper Add Records"].titleString
-		WinWaitActive, % addWindowTitleString
-		
+		WinWaitActive(addWindowTitleString)
+
 		; Plug in the INI
-		ControlSetText, ThunderRT6TextBox1, % ini, A
-		Send, {Enter} ; Submit to enable Record (ID) field
-		
+		ControlSetText(ini, "ThunderRT6TextBox1", "A")
+		Send("{Enter}") ; Submit to enable Record (ID) field
+
 		; Plug in the ID
 		WindowLib.waitControlActive("ThunderRT6TextBox2")
-		ControlSetText, ThunderRT6TextBox2, % searchQuery, A
-		Send, {Enter} ; Submit/search
+		ControlSetText(searchQuery, "ThunderRT6TextBox2", "A")
+		Send("{Enter}") ; Submit/search
 		
 		; If we get a search popup, pick the first result (should be the exact match based on sort order).
 		WindowLib.waitAnyOfWindowsActive([addWindowTitleString, "Record Select"])
 		if(WinActive("Record Select"))
-			Send, !a ; Accept the search popup
-		
+			Send("!a") ; Accept the search popup
+
 		; Accept the add record popup
 		WindowLib.waitControlActive("ThunderRT6TextBox3")
-		Send, !a ; Accept button
+		Send("!a") ; Accept button
 	}
 	
 	;---------
 	; DESCRIPTION:    Send the text needed to ignore items that I've deemed unimportant (according
 	;                 to snapperIgnoreItems.tls) to Snapper and apply.
 	;---------
-	sendItemsToIgnore() {
+	static sendItemsToIgnore() {
 		; First, try to get the INI of the record ourselves.
-		ControlFocus, % Snapper.ClassNN_RecordList, A ; Focus the record list so we can copy from it to get the INI.
+		ControlFocus(Snapper.ClassNN_RecordList, "A") ; Focus the record list so we can copy from it to get the INI.
 		recordText := SelectLib.getText()
 		ini := recordText.sub(1, 3)
-		ControlFocus, % Snapper.ClassNN_ItemFilter, A ; Put focus back on the item filter field
-		
-		itemsList := new Selector("snapperIgnoreItems.tls").select(ini, "STATUS_ITEMS")
+		ControlFocus(Snapper.ClassNN_ItemFilter, "A") ; Put focus back on the item filter field
+
+		itemsList := Selector("snapperIgnoreItems.tls").select(ini, "STATUS_ITEMS")
 		if(!itemsList)
 			return
-		
+
 		itemsAry := itemsList.split(",").removeEmpties()
 		For i,item in itemsAry {
 			if(i > 1)
 				excludeItemsString .= ","
 			excludeItemsString .= "-" item
 		}
-		
-		Send, % excludeItemsString
-		Send, {Enter}
+
+		Send(excludeItemsString)
+		Send("{Enter}")
 	}
 	
 	;---------
 	; DESCRIPTION:    Diff the selected multi-response item values using KDiff, stripping off line numbers and whitespace.
 	;---------
-	diffMultiResponseValues() {
+	static diffMultiResponseValues() {
 		; Get input
 		inputText := StringLib.dropLeadingTrailing(SelectLib.getText(), ["`r", "`n"]) ; Drop outer newlines
 		if(inputText = "") {
@@ -149,18 +149,18 @@
 		}
 		
 		; If the string starts with a DAT, strip it off (since we'll split the blocks on the next one we find)
-		this.removeDatFromMultiResponseValues(inputText)
+		this.removeDatFromMultiResponseValues(&inputText)
 		; If the first line is a line 0, drop it entirely
 		if(inputText.startsWith("0 "))
 			inputText := inputText.afterString("`n")
 		
 		; Split into 2-3 columns to diff
 		column := "LEFT" ; LEFT -> MIDDLE -> RIGHT
-		outLines := {"LEFT":[], "MIDDLE":[], "RIGHT":[]}
+		outLines := Map("LEFT", [], "MIDDLE", [], "RIGHT", [])
 		prevLineNum := 0
 		For _,line in inputText.split("`n", "`r ") {
 			; When we hit a DAT, drop it and move to the next column
-			if(this.removeDatFromMultiResponseValues(line)) {
+			if(this.removeDatFromMultiResponseValues(&line)) {
 				; Move to the next column
 				if (column = "LEFT")
 					column := "MIDDLE"
@@ -185,7 +185,7 @@
 			lineNum := lineLabel.afterString(",") ; Handle comma for related-multi lines
 			expectedNum := prevLineNum + 1
 			if(lineNum > expectedNum) { ; Add lines to fill in gap
-				Loop, % lineNum - expectedNum
+				Loop lineNum - expectedNum
 					outLines[column].push("")
 			}
 			prevLineNum := lineNum
@@ -216,14 +216,14 @@
 	; DESCRIPTION:    In the add records popup, a user can enter comma-separated IDs and this will
 	;                 read them out, close the window and launch them all.
 	;---------
-	addMultipleRecordsFromAddPopup() {
+	static addMultipleRecordsFromAddPopup() {
 		url := Snapper.getURLFromAddRecordPopup()
 		if(url) {
-			Send, !c ; Close add record popup (can't use WinClose as that triggers validation on ID field)
-			WinWaitActive, Snapper
+			Send("!c") ; Close add record popup (can't use WinClose as that triggers validation on ID field)
+			WinWaitActive("Snapper")
 			Run(url)
 		} else {
-			Send, {Enter}
+			Send("{Enter}")
 		}
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------
@@ -238,9 +238,9 @@
 	;  text (IO,REQ) - The text to check and trim the DAT off of.
 	; RETURNS:        true/false - did the text start with a DAT?
 	;---------
-	removeDatFromMultiResponseValues(ByRef text) {
+	static removeDatFromMultiResponseValues(&text) {
 		firstWord := text.beforeString(" ")
-		if(firstWord.isDigits() && firstWord.length() = 5) {
+		if(firstWord.isDigits() && StrLen(firstWord) = 5) {
 			text := text.removeFromStart(firstWord " ")
 			return true
 		}
@@ -254,7 +254,7 @@
 	;                 IDs/ranges [colon-separated] of IDs) in the ID field.
 	; RETURNS:        URL that will open the listed records in Snapper.
 	;---------
-	getURLFromAddRecordPopup() {
+	static getURLFromAddRecordPopup() {
 		commId := Snapper.getCurrentEnvironment()
 		
 		titleString := Config.windowInfo["Snapper Add Records"].titleString
@@ -272,7 +272,7 @@
 	;                 drop-down.
 	; RETURNS:        COMMID of the current environment open in Snapper.
 	;---------
-	getCurrentEnvironment() {
+	static getCurrentEnvironment() {
 		if(!Config.windowInfo["Snapper"].exists())
 			return ""
 		

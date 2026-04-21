@@ -4,40 +4,40 @@ class Outlook {
 	; DESCRIPTION:    Check whether the TLG calendar is currently active.
 	; RETURNS:        true/false
 	;---------
-	isTLGCalendarActive() {
-		return this.areAnyOfFoldersActive([this.TLGFolder])
+	static isTLGCalendarActive() {
+		return Outlook.areAnyOfFoldersActive([Outlook.TLGFolder])
 	}
 	
 	;---------
 	; DESCRIPTION:    Check whether the normal calendar is currently active.
 	; RETURNS:        true/false
 	;---------
-	isNormalCalendarActive() {
-		return this.areAnyOfFoldersActive([this.CalendarFolder])
+	static isNormalCalendarActive() {
+		return Outlook.areAnyOfFoldersActive([Outlook.CalendarFolder])
 	}
 	
 	;---------
 	; DESCRIPTION:    Get message titles from all Outlook windows (main or popups).
 	; RETURNS:        Array of found window titles.
 	;---------
-	getAllMessageTitles() {
+	static getAllMessageTitles() {
 		titles := []
-		
+
 		; If the calendar view is active, skip getting message titles (to avoid finding hidden message
 		; titles that leak through).
-		if (this.isCurrentScreenCalendar(true))
+		if (Outlook.isCurrentScreenCalendar(true))
 			return titles
-		
-		For _,windowId in WinGet("List", Config.windowInfo["Outlook"].titleString) {
+
+		For _,windowId in WinGetList(Config.windowInfo["Outlook"].titleString) {
 			idString := "ahk_id " windowId
 			if(!WindowLib.isVisible(idString)) ; Skip hidden windows
 				Continue
 
-			title := this.getMessageTitle(idString)
+			title := Outlook.getMessageTitle(idString)
 			if(title)
 				titles.push(title)
 		}
-		
+
 		return titles
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
@@ -46,30 +46,30 @@ class Outlook {
 	;---------
 	; DESCRIPTION:    Flag for whether dark mode is currently on.
 	;---------
-	darkModeOn := true
+	static darkModeOn := true
 	
 	;---------
 	; DESCRIPTION:    Determine whether the current screen is one of our mail folders.
 	; RETURNS:        true/false
 	;---------
-	toggleDarkMode() {
+	static toggleDarkMode() {
 		; Always on the "Home" ("Message" for email popup, but still same hotkey) tab.
-		Send, !h
+		Send("!h")
 
 		; It's two separate buttons with the simplified/short ribbon, so we have to keep track ourselves.
-		this.darkModeOn := !this.darkModeOn
+		Outlook.darkModeOn := !Outlook.darkModeOn
 
 		; Hotkeys differ based on the context as well.
-		if(this.isMailMessagePopupActive()) {
-			if(this.darkModeOn)
-				Send, b1 ; Switch Background (to light mode)
+		if(Outlook.isMailMessagePopupActive()) {
+			if(Outlook.darkModeOn)
+				Send("b1") ; Switch Background (to light mode)
 			else
-				Send, b2 ; Switch Background (to dark mode)
+				Send("b2") ; Switch Background (to dark mode)
 		} else {
-			if(this.darkModeOn)
-				Send, y1 ; Switch Background (to light mode)
+			if(Outlook.darkModeOn)
+				Send("y1") ; Switch Background (to light mode)
 			else
-				Send, y2 ; Switch Background (to dark mode)
+				Send("y2") ; Switch Background (to dark mode)
 		}
 	}
 	
@@ -77,8 +77,8 @@ class Outlook {
 	; DESCRIPTION:    Determine whether the current screen is one of our mail folders.
 	; RETURNS:        true/false
 	;---------
-	isCurrentScreenMail() {
-		return this.areAnyOfFoldersActive(this.MailFolders)
+	static isCurrentScreenMail() {
+		return Outlook.areAnyOfFoldersActive(Outlook.MailFolders)
 	}
 	
 	;---------
@@ -88,19 +88,19 @@ class Outlook {
 	;                       isn't focused).
 	; RETURNS:        true/false
 	;---------
-	isCurrentScreenCalendar(checkExist := false) {
-		return this.areAnyOfFoldersActive(this.CalendarFolders, checkExist)
+	static isCurrentScreenCalendar(checkExist := false) {
+		return Outlook.areAnyOfFoldersActive(Outlook.CalendarFolders, checkExist)
 	}
 	
 	;---------
 	; DESCRIPTION:    Determine whether the current window is a mail message popup
 	; RETURNS:        The window ID/false
 	;---------
-	isMailMessagePopupActive() {
-		settings := new TempSettings().titleMatchMode(TitleMatchMode.Contains)
+	static isMailMessagePopupActive() {
+		settings := TempSettings().titleMatchMode(TitleMatchMode.Contains)
 		isMailMessage := WinActive("- Message (")
 		settings.restore()
-		
+
 		return isMailMessage
 	}
 	
@@ -110,21 +110,21 @@ class Outlook {
 	;  titleString (I,OPT) - Title string identifying the window to use. Defaults to active window ("A").
 	; RETURNS:        The title, cleaned up (RE:/FW: and any other odd characters removed)
 	;---------
-	getMessageTitle(titleString := "A") {
-		title := ControlGetText(this.ClassNN_MailSubject_View, titleString) ; Most cases this control has the subject
+	static getMessageTitle(titleString := "A") {
+		title := ControlGetText(Outlook.ClassNN_MailSubject_View, titleString) ; Most cases this control has the subject
 		if(title = Config.private["WORK_EMAIL"]) ; The exception is editing in a popup: we need to use a different control, but the original still exists with just my email in it.
-			title := ControlGetText(this.ClassNN_MailSubject_Edit, titleString) ; Yes, we could use the window title instead if we wanted, but this doesn't give us an extra suffix.
+			title := ControlGetText(Outlook.ClassNN_MailSubject_Edit, titleString) ; Yes, we could use the window title instead if we wanted, but this doesn't give us an extra suffix.
 		if(title = "") ; If that didn't turn anything up, fall back to the window title.
 			title := WinGetTitle(titleString)
 
-		return this.cleanUpTitle(title)
+		return Outlook.cleanUpTitle(title)
 	}
 	
 	;---------
 	; DESCRIPTION:    Copy the EMC2 record ID from the currently-selected (non-TLG) calendar event to the clipboard.
 	;---------
-	copyEMC2RecordIDFromEvent() {
-		record := this.getEMC2ObjectFromCalendarEvent()
+	static copyEMC2RecordIDFromEvent() {
+		record := Outlook.getEMC2ObjectFromCalendarEvent()
 		if(record)
 			ClipboardLib.setAndToast(record.id, "EMC2 " record.ini " ID")
 	}
@@ -133,17 +133,17 @@ class Outlook {
 	; DESCRIPTION:    Get an EMC2 object using the selected TLG event's title.
 	; RETURNS:        A new ActionObjectEMC2 instance, or "" if we didn't find any valid EMC2 record.
 	;---------
-	getEMC2ObjectFromCalendarEvent() {
+	static getEMC2ObjectFromCalendarEvent() {
 		eventTitle := SelectLib.getText()
-		eventTitle := this.cleanUpTitle(eventTitle)
-		return new ActionObjectEMC2(eventTitle)
+		eventTitle := Outlook.cleanUpTitle(eventTitle)
+		return ActionObjectEMC2(eventTitle)
 	}
 	
 	;---------
 	; DESCRIPTION:    Copy the EMC2 object string from the currently-selected TLG event to the clipboard.
 	;---------
-	copyEMC2ObjectStringFromTLG() {
-		record := this.getEMC2RecordFromTLG()
+	static copyEMC2ObjectStringFromTLG() {
+		record := Outlook.getEMC2RecordFromTLG()
 		ClipboardLib.setWithHyperlinks(EpicLib.buildLinkedEMC2ObjectString(record))
 		ClipboardLib.toastNewValue("TLG event EMC2 object string")
 	}
@@ -152,27 +152,27 @@ class Outlook {
 	; DESCRIPTION:    Get an EMC2 object using the selected TLG event's title.
 	; RETURNS:        A new ActionObjectEMC2 instance, or "" if we didn't find any valid EMC2 record.
 	;---------
-	getEMC2ObjectFromTLG() {
-		record := this.getEMC2RecordFromTLG()
+	static getEMC2ObjectFromTLG() {
+		record := Outlook.getEMC2RecordFromTLG()
 		if(!record)
 			return ""
-		
-		return new ActionObjectEMC2(record.id, record.ini)
+
+		return ActionObjectEMC2(record.id, record.ini)
 	}
 
 	;---------
 	; DESCRIPTION:    Insert TLG events into that calendar based on the user's selected TLP/record.
 	;---------
-	selectOutlookTLG() {
-		s := new Selector("tlg.tls").setTitle("Select EMC2 Record ID").setIcon(Config.getProgramPath("Outlook"))
+	static selectOutlookTLG() {
+		s := Selector("tlg.tls").setTitle("Select EMC2 Record ID").setIcon(Config.getProgramPath("Outlook"))
 		s.dataTableList.filterOutIfColumnNoMatch("IS_OLD", "") ; Filter out old records (have a value in the OLD column)
 		events := s.promptMulti()
 		if(!events)
 			return
-		
+
 		; A second selection overrides the TLP and defaults the message (we use the first selection for everything else).
 		data := events[1]
-		if(events.length() = 2) {
+		if(events.Length = 2) {
 			data["TLP"] := events[2]["TLP"]
 			if (data["MESSAGE"] = "")
 				data["MESSAGE"] := events[2]["MESSAGE"]
@@ -187,32 +187,32 @@ class Outlook {
 			record := EpicLib.selectEMC2RecordFromUsefulTitles(true) ; true - only want options with a title.
 			if(!record)
 				return
-			
+
 			recId := record.id
 			if (record.ini.isAnyOf(["PRJ", "QAN", "SLG"]))
 				recId := record.ini.charAt(1) "." recId ; Add on the INI prefix so the ID goes in the right position.
 			userRecs[getIdx] := recId ; Plug it back into the array of IDs.
-			
+
 			; If there's a title, use that as the record name.
 			if(record.title)
 				data["NAME"] := record.title
 		}
 
 		; If there's no records at all (probably a generic TLG event) then add a placeholder so we still get into the loop below.
-		if (userRecs.length() = 0)
+		if (userRecs.Length = 0)
 			userRecs.push("-")
 
 		; Build and send the events.
 		For i, recId in userRecs {
 			; Ensure the TLG calendar is focused before sending.
-			if(!this.isTLGCalendarActive()) {
-				t := new Toast("Outlook TLG calendar not focused, focus it to continue.").show()
-				WinWaitActive, % this.TLGFolder " - " Config.private["WORK_EMAIL"] " - Outlook"
+			if(!Outlook.isTLGCalendarActive()) {
+				t := Toast("Outlook TLG calendar not focused, focus it to continue.").show()
+				WinWaitActive(Outlook.TLGFolder " - " Config.private["WORK_EMAIL"] " - Outlook")
 				t.close()
 			}
 
-			SendRaw, % this.buildTLGEventTitle(data, recId)
-			Send, {Enter}{Down}
+			SendText(Outlook.buildTLGEventTitle(data, recId))
+			Send("{Enter}{Down}")
 		}
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------
@@ -234,7 +234,7 @@ class Outlook {
 	;  folders (I,REQ) - An array of folder names.
 	; RETURNS:        true if any of the folder names is the active one, false otherwise.
 	;---------
-	areAnyOfFoldersActive(folders, checkExist := false) {
+	static areAnyOfFoldersActive(folders, checkExist := false) {
 		For _,folderName in folders {
 			windowTitle := folderName " - " Config.private["WORK_EMAIL"] " - Outlook"
 			if (WinActive(windowTitle))
@@ -253,7 +253,7 @@ class Outlook {
 	;  value (I,REQ) - The message title to clean up.
 	; RETURNS:        Cleaned-up title
 	;---------
-	cleanUpTitle(value) {
+	static cleanUpTitle(value) {
 		; Remove reply/forward garbage, it's never helpful to include.
 		value := value.removeFromStart("RE: ")
 		value := value.removeFromStart("FW: ")
@@ -304,7 +304,7 @@ class Outlook {
 	; DESCRIPTION:    Get the first EMC2 record encoded in the selected TLG event's title.
 	; RETURNS:        EpicRecord instance from the event (or "" if no event found).
 	;---------
-	getEMC2RecordFromTLG() {
+	static getEMC2RecordFromTLG() {
 		tlgString := SelectLib.getText()
 		if(!tlgString)
 			return ""
@@ -320,7 +320,7 @@ class Outlook {
 			id := tlgAry[iniIndex]
 
 			if(id != "")
-				return new EpicRecord(ini, id, title)
+				return EpicRecord(ini, id, title)
 		}
 	}
 
@@ -331,7 +331,7 @@ class Outlook {
 	;  recId (I,REQ) - Record ID (with a letter+. prefix if it's not a DLG, i.e. P.10000 for PRJ 10000)
 	; RETURNS:        TLG event title to use
 	;---------
-	buildTLGEventTitle(data, recId) {
+	static buildTLGEventTitle(data, recId) {
 		; Placeholder I can manually enter to force a blank value.
 		if(recId = "-")
 			recId := ""
@@ -362,7 +362,7 @@ class Outlook {
 		eventTitle := eventTitle.replaceTag("DLG",      dlgId)
 		eventTitle := eventTitle.replaceTag("PRJ",      prjId)
 		eventTitle := eventTitle.replaceTag("QAN",      qanId)
-		return this.replaceExtraEventTitleSlashes(eventTitle)
+		return Outlook.replaceExtraEventTitleSlashes(eventTitle)
 	}
 
 	;---------
@@ -375,7 +375,7 @@ class Outlook {
 	;  title (I,REQ) - The event title to clean up
 	; RETURNS:        Cleaned-up event title
 	;---------
-	replaceExtraEventTitleSlashes(title) {
+	static replaceExtraEventTitleSlashes(title) {
 		idString := title.beforeString(", ")
 		message  := title.afterString(", ")
 		

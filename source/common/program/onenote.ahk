@@ -2,69 +2,69 @@
 class OneNote {
 	;region ------------------------------ INTERNAL ------------------------------
 	; Named wrappers quick access toolbar items.
-	newSubpage() {
-		Send, !1
+	static newSubpage() {
+		Send("!1")
 	}
-	promoteSubpage() {
-		Send, !2
+	static promoteSubpage() {
+		Send("!2")
 	}
-	makeSubpage() {
-		Send, !3
+	static makeSubpage() {
+		Send("!3")
 	}
-	deletePage() {
-		Send, !4
+	static deletePage() {
+		Send("!4")
 	}
-	meetingDetailsFromAnotherDay() {
-		Send, !5
+	static meetingDetailsFromAnotherDay() {
+		Send("!5")
 	}
-	setZoomTo100Percent() {
-		Send, !6
+	static setZoomTo100Percent() {
+		Send("!6")
 	}
-	customStylesCode() { ; With custom styles in their own tab, just called "Code"
-		Send, !7
+	static customStylesCode() { ; With custom styles in their own tab, just called "Code"
+		Send("!7")
 	}
-	runOnetasticToolbarMacro(keys) { ; This is the dropdown one, not the submenu
-		Send, !8 ; Onetastic Toolbar macro set
-		Send, % keys
+	static runOnetasticToolbarMacro(keys) { ; This is the dropdown one, not the submenu
+		Send("!8") ; Onetastic Toolbar macro set
+		Send(keys)
 	}
-	runOnetasticWorkToolbarMacro(keys) { ; This is the dropdown one, not the submenu
-		Send, !9 ; Onetastic Work Toolbar macro set
-		Send, % keys
+	static runOnetasticWorkToolbarMacro(keys) { ; This is the dropdown one, not the submenu
+		Send("!9") ; Onetastic Work Toolbar macro set
+		Send(keys)
 	}
 	
 	; Named wrappers for specific toolbar macros, using quick access item + hotkeys
-	addSubLinesToSelectedLines() {
-		this.runOnetasticToolbarMacro("y1")
+	static addSubLinesToSelectedLines() {
+		OneNote.runOnetasticToolbarMacro("y1")
 	}
-	collapseToUnfinishedTags() {
-		this.runOnetasticToolbarMacro("y2")
+	static collapseToUnfinishedTags() {
+		OneNote.runOnetasticToolbarMacro("y2")
 	}
-	createAndLinkPage() {
-		this.runOnetasticToolbarMacro("y3")
+	static createAndLinkPage() {
+		OneNote.runOnetasticToolbarMacro("y3")
 	}
-	widenOutline() {
-		this.runOnetasticToolbarMacro("y4")
+	static widenOutline() {
+		OneNote.runOnetasticToolbarMacro("y4")
 	}
-	applyDevStructureToCurrentPage() {
-		this.runOnetasticWorkToolbarMacro("y1")
+	static applyDevStructureToCurrentPage() {
+		OneNote.runOnetasticWorkToolbarMacro("y1")
 	}
-	createAndLinkDevPage() {
-		this.runOnetasticWorkToolbarMacro("y2")
+	static createAndLinkDevPage() {
+		OneNote.runOnetasticWorkToolbarMacro("y2")
 	}
-	createAndLinkWorkplanPage() {
-		this.runOnetasticWorkToolbarMacro("y3")
+	static createAndLinkWorkplanPage() {
+		OneNote.runOnetasticWorkToolbarMacro("y3")
 	}
 	
 	;---------
 	; DESCRIPTION:    Scroll left/right in the OneNote window (assuming it's under the mouse)
 	;---------
-	scrollLeft() {
-		MouseGetPos, , , winId, controlId, 1
-		SendMessage, MicrosoftLib.Message_HorizScroll, MicrosoftLib.ScrollBar_Left, , % controlId, % "ahk_id " winId
+	static scrollLeft() {
+		MouseGetPos(, , &winId, &controlId, 1)
+		SendMessage(MicrosoftLib.Message_HorizScroll, MicrosoftLib.ScrollBar_Left, , controlId, "ahk_id " winId)
 	}
-	scrollRight() {
-		MouseGetPos, , , winId, controlId, 1
-		SendMessage, MicrosoftLib.Message_HorizScroll, MicrosoftLib.ScrollBar_Right, , % controlId, % "ahk_id " winId
+	static scrollRight() {
+		MouseGetPos(, , &winId, &controlId, 1)
+		SendMessage(MicrosoftLib.Message_HorizScroll, MicrosoftLib.ScrollBar_Right, , controlId, "ahk_id " winId)
 	}
 	
 	;---------
@@ -72,12 +72,12 @@ class OneNote {
 	; PARAMETERS:
 	;  index (I,REQ) - The index of the notebook to focus (base 1)
 	;---------
-	focusNotebookWithIndex(index) {
+	static focusNotebookWithIndex(index) {
 		numTabs := index - 1
-		
-		Send, ^g ; Focus notebook bar
-		Send, {Tab %numTabs%}
-		Send, {Enter}{Escape} ; Select notebook, unfocus notebook bar
+
+		Send("^g") ; Focus notebook bar
+		Send("{Tab " numTabs "}")
+		Send("{Enter}{Escape}") ; Select notebook, unfocus notebook bar
 	}
 	
 	;---------
@@ -85,11 +85,11 @@ class OneNote {
 	;                 hotkeys that use the Control key, which sometimes causes the paste popup to
 	;                 appear afterwards (if we pasted recently).
 	;---------
-	escapePastePopup() {
+	static escapePastePopup() {
 		if(!ControlGet("Hwnd", , "OOCWindow1", A))
 			return
-		
-		Send, {Space}{Backspace}
+
+		Send("{Space}{Backspace}")
 	}
 	
 	;---------
@@ -97,18 +97,18 @@ class OneNote {
 	; PARAMETERS:
 	;  noIndentOrNewline (I,OPT) - Set this to true to leave the newline at the end of the line out of the selection.
 	;---------
-	selectLine(noIndentOrNewline := false) {
-		Send, {Home} ; Make sure the line isn't already selected, otherwise we select the whole parent.
-		Send, ^a     ; Select all - gets entire line, including indentation and newline at end.
-		
+	static selectLine(noIndentOrNewline := false) {
+		Send("{Home}") ; Make sure the line isn't already selected, otherwise we select the whole parent.
+		Send("^a")     ; Select all - gets entire line, including indentation and newline at end.
+
 		if(noIndentOrNewline)
-			Send, {Shift Down}{Left}{Shift Up} ; Deselect newline on end
+			Send("{Shift Down}{Left}{Shift Up}") ; Deselect newline on end
 	}
 	
 	;---------
 	; DESCRIPTION:    Confirm with the user that they want to delete the current page, then do so.
 	;---------
-	deletePageWithConfirm() {
+	static deletePageWithConfirm() {
 		; Confirmation to avoid accidental page deletion
 		if(GuiLib.showConfirmationPopup("Are you sure you want to delete this page?", "Delete page?"))
 			OneNote.deletePage()
@@ -117,14 +117,14 @@ class OneNote {
 	;---------
 	; DESCRIPTION:    Put a link to the current page on the clipboard.
 	;---------
-	copyLinkToCurrentPage() {
+	static copyLinkToCurrentPage() {
 		ClipboardLib.setAndToast(OneNote.getLinkToCurrentPage(), "page link")
 	}
 	
 	;---------
 	; DESCRIPTION:    Copy the current page's title and link to the clipboard.
 	;---------
-	copyTitleLinkToCurrentParagraph() {
+	static copyTitleLinkToCurrentParagraph() {
 		link := OneNote.getLinkToCurrentParagraph()
 		title := OneNote.getPageTitle()
 		
@@ -134,12 +134,12 @@ class OneNote {
 	;---------
 	; DESCRIPTION:    Copy the link for the text that's under the mouse (if any) to the clipboard.
 	;---------
-	copyLinkUnderMouse() {
+	static copyLinkUnderMouse() {
 		copyLinkFunction := ObjBindMethod(OneNote, "doCopyLinkUnderMouse")
 		if(!ClipboardLib.copyWithFunction(copyLinkFunction)) {
 			; If we clicked on something other than a link, the i option is "Link..." which will open the Link popup. Close it if it appeared.
 			if(WinActive("Link ahk_class NUIDialog ahk_exe ONENOTE.EXE"))
-				Send, {Esc}
+				Send("{Esc}")
 		}
 		
 		ClipboardLib.toastNewValue("link target")
@@ -148,20 +148,20 @@ class OneNote {
 	;---------
 	; DESCRIPTION:    Remove the link from the text that's under the mouse (if any).
 	;---------
-	removeLinkUnderMouse() {
-		Click, Right
-		WinWaitActive, % OneNote.TitleString_RightClickMenu
-		Send, r    ; Remove link
-		
+	static removeLinkUnderMouse() {
+		Click("Right")
+		WinWaitActive(OneNote.TitleString_RightClickMenu)
+		Send("r")    ; Remove link
+
 		; Go ahead and finish if the right-click menu is gone, we're done.
 		if(!WinActive(OneNote.TitleString_RightClickMenu))
 			return
-		
+
 		; If the right click menu is still open (probably because it wasn't a link and therefore
 		; there was no "r" option), give it a tick to close on its own, then close it.
-		Sleep, 100
+		Sleep(100)
 		if(WinActive(OneNote.TitleString_RightClickMenu))
-			Send, {Esc}
+			Send("{Esc}")
 	}
 	
 	;---------
@@ -171,7 +171,7 @@ class OneNote {
 	;                 This may misbehave if the "edit" text is already a link - for some reason, OneNote
 	;                 always selects the entire link when selecting text with the keyboard.
 	;---------
-	linkDevStructureSectionTitle() {
+	static linkDevStructureSectionTitle() {
 		HotkeyLib.waitForRelease()
 		
 		OneNote.selectLine()
@@ -189,7 +189,7 @@ class OneNote {
 
 		; If there's not an ID in place yet, try to update the recordText with an ID from the clipboard or open windows.
 		if(webText.endsWith(" *")) {
-			newId := this.getRecordIDToLink()
+			newId := OneNote.getRecordIDToLink()
 			if(newId = "") {
 				Toast.ShowError("No record ID found", "No valid ID found in line text, clipboard, or useful window titles")
 				return
@@ -198,14 +198,14 @@ class OneNote {
 			webText := webText.replace("*", newId)
 		}
 
-		ao := new ActionObjectEMC2(webText)
+		ao := ActionObjectEMC2(webText)
 		webLink  := "[" webText  "](" ao.getLinkWeb()  ")"
 		editLink := "[" editText "](" ao.getLinkEdit() ")"
 		newChunk := webLink " (" editLink ")"
 
 		ClipboardLib.sendTextWithHyperlinks(newChunk)
-		Send, ^1  ; Restore checkbox
-		Send, ^!1 ; Restore Heading 1 style
+		Send("^1")  ; Restore checkbox
+		Send("^!1") ; Restore Heading 1 style
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------
 	
@@ -216,9 +216,9 @@ class OneNote {
 	; DESCRIPTION:    Try to get a record ID to use with EMC2 linking, using the clipboard and useful window titles.
 	; RETURNS:        New ID if we found it, "" otherwise.
 	;---------
-	getRecordIDToLink() {
+	static getRecordIDToLink() {
 		; First, try the clipboard.
-		recordText := clipboard.clean()
+		recordText := A_Clipboard.clean()
 		if(EpicLib.couldBeEMC2ID(recordText)) {
 			return recordText
 		} else {
@@ -239,7 +239,7 @@ class OneNote {
 	; DESCRIPTION:    Get a link to the current page
 	; RETURNS:        The simple link to the current page, via OneNote (not online link).
 	;---------
-	getLinkToCurrentPage() {
+	static getLinkToCurrentPage() {
 		copiedLink := OneNote.getLinkToCurrentParagraph()
 		if(copiedLink = "") {
 			Toast.ShowError("Could not get paragraph link on clipboard")
@@ -256,10 +256,10 @@ class OneNote {
 	; DESCRIPTION:    Get the title of the current page.
 	; RETURNS:        The title of the current page.
 	;---------
-	getPageTitle() {
-		Send, ^+a                             ; Select page tab
+	static getPageTitle() {
+		Send("^+a")                            ; Select page tab
 		pageContent := SelectLib.getText() ; Copy entire page contents
-		Send, {Escape}                        ; Get back to the editing area
+		Send("{Escape}")                       ; Get back to the editing area
 		return pageContent.firstLine()        ; Title is the first line of the content
 	}
 	
@@ -267,7 +267,7 @@ class OneNote {
 	; DESCRIPTION:    Get the link to the current paragraph to the clipboard.
 	; RETURNS:        The link to the current paragraph.
 	;---------
-	getLinkToCurrentParagraph() {
+	static getLinkToCurrentParagraph() {
 		copyFunction := ObjBindMethod(OneNote, "copyLinkToCurrentParagraph")
 		copiedLink := ClipboardLib.getWithFunction(copyFunction)
 		
@@ -285,40 +285,40 @@ class OneNote {
 	;---------
 	; DESCRIPTION:    Copy a link to the current paragraph to the clipboard.
 	;---------
-	copyLinkToCurrentParagraph() {
-		Send, +{F10}
-		WinWaitActive, % OneNote.TitleString_RightClickMenu
-		Send, p
-		WinWaitNotActive, % OneNote.TitleString_RightClickMenu, , 0.5
-		
+	static copyLinkToCurrentParagraph() {
+		Send("+{F10}")
+		WinWaitActive(OneNote.TitleString_RightClickMenu)
+		Send("p")
+		WinWaitNotActive(OneNote.TitleString_RightClickMenu, , 0.5)
+
 		; Special handling: if we didn't get anything, it might be because the special paste menu item was there (where the only option is "Paste (P)").
 		; If that's the case, try getting to the second "p" option and submit it.
 		if(WinActive(OneNote.TitleString_RightClickMenu))
-			Send, p{Enter}
+			Send("p{Enter}")
 	}
 	
 	;---------
 	; DESCRIPTION:    Copy the link target under the mouse to the clipboard.
 	;---------
-	doCopyLinkUnderMouse() {
-		Click, Right
-		WinWaitActive, % OneNote.TitleString_RightClickMenu
-		Send, i ; Copy Link
-		WinWaitNotActive, % OneNote.TitleString_RightClickMenu, , 0.5
-		
+	static doCopyLinkUnderMouse() {
+		Click("Right")
+		WinWaitActive(OneNote.TitleString_RightClickMenu)
+		Send("i") ; Copy Link
+		WinWaitNotActive(OneNote.TitleString_RightClickMenu, , 0.5)
+
 		; Special handling: if we didn't get anything, it might be because the special paste menu item was there (where there's an option for "Ink (I)").
 		; If that's the case, try getting to the second "i" option and submit it.
 		if(WinActive(OneNote.TitleString_RightClickMenu))
-			Send, i{Enter}
+			Send("i{Enter}")
 	}
 	
 	;---------
 	; DESCRIPTION:    Insert a blank line on the current line and put the cursor on it.
 	;---------
-	insertBlankLine() {
-		Send, {Home}  ; Get to start of line
-		Send, {Enter} ; New line
-		Send, {Left}  ; Get back up to new blank line
+	static insertBlankLine() {
+		Send("{Home}")  ; Get to start of line
+		Send("{Enter}") ; New line
+		Send("{Left}")  ; Get back up to new blank line
 	}
 	;endregion ------------------------------ PRIVATE ------------------------------
 }

@@ -13,7 +13,7 @@ class VSCode {
 	;                          We assume that there's also a window name of "VSCode <profileName>"
 	;  workspacePath (I,OPT) - If it should launch with a specific workspace file, the full path to that file.
 	;---------
-	activateCode(profileName, workspacePath := "") {
+	static activateCode(profileName, workspacePath := "") {
 		windowName := "VSCode " profileName
 		
 		if (Config.doesWindowExist(windowName))
@@ -27,7 +27,7 @@ class VSCode {
 	; PARAMETERS:
 	;  path (I,REQ) - Full path to the file to edit (can also include any other params you want to send).
 	;---------
-	editScript(path) {
+	static editScript(path) {
 		; --wait: so that if we're opening VSCode exclusively to edit this, it closes on its own once the file is closed.
 		Config.runProgram("VSCode", "--wait --profile AHK " path)
 	}
@@ -35,7 +35,7 @@ class VSCode {
 	;---------
 	; DESCRIPTION:    Open the DLG found in the active window's title in EpicCode.
 	;---------
-	openCurrentDLG() {
+	static openCurrentDLG() {
 		record := EpicLib.getBestEMC2RecordFromText(WinGetActiveTitle())
 		if(record.ini != "DLG" || record.id = "") {
 			Toast.ShowError("Could not open DLG in EpicCode", "Record ID was blank or was not a DLG ID")
@@ -50,16 +50,16 @@ class VSCode {
 	; PARAMETERS:
 	;  dlgId (I,REQ) - DLG ID
 	;---------
-	openDLG(dlgId) {
+	static openDLG(dlgId) {
 		if(!dlgId) {
 			Toast.ShowError("Could not open DLG in EpicCode", "DLG ID was blank")
 			return
 		}
 
-		t := new Toast("Opening DLG in EpicCode: " dlgId).show()
-		
-		new ActionObjectEpicCode(dlgId, ActionObjectEpicCode.DescriptorType_DLG).openEdit()
-		
+		t := Toast("Opening DLG in EpicCode: " dlgId).show()
+
+		ActionObjectEpicCode(dlgId, ActionObjectEpicCode.DescriptorType_DLG).openEdit()
+
 		t.close()
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
@@ -70,14 +70,14 @@ class VSCode {
 	;---------
 	; DESCRIPTION:    For program scripts, swap between the program script and its matching class script.
 	;---------
-	toggleProgramAndClass() {
+	static toggleProgramAndClass() {
 		currScriptPath := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile)
 		if(!currScriptPath) {
 			Toast.showError("Could not get code location", "Failed to get current path")
 			return
 		}
 		
-		SplitPath(currScriptPath, scriptName)
+		SplitPath(currScriptPath, &scriptName)
 		if(currScriptPath.startsWith(Config.path["AHK_SOURCE"] "\program\"))
 			matchingScriptPath := Config.path["AHK_SOURCE"] "\common\program\" scriptName
 		else if(currScriptPath.startsWith(Config.path["AHK_SOURCE"] "\common\program\"))
@@ -94,17 +94,17 @@ class VSCode {
 	;  functionName   (I,REQ) - Name of the function to send before the parameters.
 	;  defaultVarList (I,OPT) - Var list to default into the popup.
 	;---------
-	sendAHKDebugCodeString(functionName, defaultVarList := "") {
+	static sendAHKDebugCodeString(functionName, defaultVarList := "") {
 		if(functionName = "")
 			return
-		
+
 		varList := InputBox("Enter variables to send debug string for", , , 500, 100, , , , , defaultVarList)
 		if(ErrorLevel) ; Popup was cancelled or timed out
 			return
-		
+
 		if(varList = "") {
 			ClipboardLib.send(functionName "()")
-			Send, {Left} ; Get inside parens for user to enter the variables/labels themselves
+			Send("{Left}") ; Get inside parens for user to enter the variables/labels themselves
 		} else {
 			ClipboardLib.send(functionName "(" AHKCodeLib.generateDebugParams(varList) ")")
 		}
@@ -113,22 +113,22 @@ class VSCode {
 	;---------
 	; DESCRIPTION:    Take an existing debug line and let the user edit and replace the parameters.
 	;---------
-	editDebugLine() {
-		Send, {End 2} ; Get to end, even if it's a wrapped line
-		Send, {Shift Down}
-		Send, {Home 2} ; Get to the start, even if it's a wrapped line (may also select indent)
-		Send, {Shift Up}
+	static editDebugLine() {
+		Send("{End 2}") ; Get to end, even if it's a wrapped line
+		Send("{Shift Down}")
+		Send("{Home 2}") ; Get to the start, even if it's a wrapped line (may also select indent)
+		Send("{Shift Up}")
 		debugLine := SelectLib.getText()
 		
 		; We don't want indentation, so if we got it, deselect it.
 		if(debugLine.startsWith("`t")) {
-			Send, {Shift Down}{Home}{Shift Up} ; Jumps to end of indentation
+			Send("{Shift Down}{Home}{Shift Up}") ; Jumps to end of indentation
 			debugLine := debugLine.withoutWhitespace()
 		}
 		
 		functionName := debugLine.beforeString("(")
 		if(!functionName.startsWith("Debug.")) { ; Don't edit non-debug lines
-			Send, {Right} ; Deselect line
+			Send("{Right}") ; Deselect line
 			return
 		}
 		
@@ -142,15 +142,15 @@ class VSCode {
 	;                 the cursor.
 	; SIDE EFFECTS:   Selects the line below in order to process the parameters.
 	;---------
-	sendDocHeader() {
+	static sendDocHeader() {
 		; Select the following line after this one to get parameter information
-		Send, {Down}
+		Send("{Down}")
 		SelectLib.selectCurrentLine()
 		
 		defLine := SelectLib.getText().clean()
-		Send, {Up}
-		
-		SendRaw, % AHKCodeLib.generateDocHeader(defLine)
+		Send("{Up}")
+
+		SendText(AHKCodeLib.generateDocHeader(defLine))
 	}
 	
 	;---------
@@ -158,7 +158,7 @@ class VSCode {
 	;                 off any offset ("+4" in "tag+4^routine") and the RTF link that EpicStudio adds.
 	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
 	;---------
-	copyCleanEpicCodeLocation() {
+	static copyCleanEpicCodeLocation() {
 		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile)
 		codeLocation := this.fixEpicCodeRoutine(codeLocation) ; Can be removed once copy-code-location command is fixed for Workspaces
 		
@@ -179,12 +179,12 @@ class VSCode {
 	; DESCRIPTION:    Put the current routine onto the clipboard.
 	; SIDE EFFECTS:   Shows a toast letting the user know what we put on the clipboard.
 	;---------
-	copyEpicRoutineName() {
+	static copyEpicRoutineName() {
 		codeLocation := ClipboardLib.getWithHotkey(VSCode.Hotkey_CopyCurrentFile)
 		codeLocation := this.fixEpicCodeRoutine(codeLocation) ; Can be removed once copy-code-location command is fixed for Workspaces
 		
 		; Split off the routine
-		EpicLib.splitServerLocation(codeLocation, routine)
+		EpicLib.splitServerLocation(codeLocation, &routine)
 		
 		; Set the clipboard value to the routine
 		ClipboardLib.setAndToast("^" routine, "routine name")
@@ -199,7 +199,7 @@ class VSCode {
 	;  codeLocation (I,REQ) - Code location to fix
 	; RETURNS:        Fixed code location
 	;---------
-	fixEpicCodeRoutine(codeLocation) {
+	static fixEpicCodeRoutine(codeLocation) {
 		tag     := codeLocation.beforeString("^")
 		routine := codeLocation.afterString("^")
 

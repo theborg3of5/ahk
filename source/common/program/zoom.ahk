@@ -3,7 +3,7 @@ class Zoom {
 	;---------
 	; DESCRIPTION:    Swap between gallery and speaker views.
 	;---------
-	toggleView() {
+	static toggleView() {
 		if(this.isGalleryView)
 			this.switchToSpeakerView()
 		else
@@ -13,12 +13,12 @@ class Zoom {
 	;---------
 	; DESCRIPTION:    Swap to specific views.
 	;---------
-	switchToSpeakerView() {
-		Send, % this.Hotkey_SpeakerView
+	static switchToSpeakerView() {
+		Send(this.Hotkey_SpeakerView)
 		this.isGalleryView := false
 	}
-	switchToGalleryView() {
-		Send, % this.Hotkey_GalleryView
+	static switchToGalleryView() {
+		Send(this.Hotkey_GalleryView)
 		this.isGalleryView := true
 	}
 	;endregion ------------------------------ INTERNAL ------------------------------

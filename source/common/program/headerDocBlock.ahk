@@ -156,12 +156,12 @@ class HeaderDocBlock {
 		if (this.settings.linePrefix)
 			outerNeedle .= this.settings.linePrefix "?" ; Optional line prefix
 		outerNeedle .= "(" this.settings.indent ")*" this.settings.comment "\s*" ; 0+ indents, comment, 0+ spaces
-		docLines[1].matchesRegEx(outerNeedle, match)
+		docLines[1].matchesRegEx(outerNeedle, &match)
 		this.outerFirst := match
 
 		; With a multi-line selection, we can use the second line and we're guaranteed to get the full indentation
 		if (docLines[2] != "") {
-			docLines[2].matchesRegEx(outerNeedle, match)
+			docLines[2].matchesRegEx(outerNeedle, &match)
 			this.outerRest := match ; Might include innerRest - we'll clean that out later.
 		}
 		
@@ -214,17 +214,17 @@ class HeaderDocBlock {
 		
 		; Header keyword lines
 		needle := "^([A-Z\s]+):\s+" ; Starts with (^) any all-caps words (including spaces) followed by a colon (:) and 1+ spaces
-		if (firstLine.matchesRegEx(needle, match))
+		if (firstLine.matchesRegEx(needle, &match))
 			return match
 		
 		; Parameter lines
-		if (firstLine.matchesRegEx(".*\((I|O|IO),(OPT|REQ)\) - ", match)) ; Variable name + properties + leading hyphen and space
+		if (firstLine.matchesRegEx(".*\((I|O|IO),(OPT|REQ)\) - ", &match)) ; Variable name + properties + leading hyphen and space
 			return match
 
 		; Array/subscript defs
 		needle := '^('  '[\w\d]*\([^\)]+\)'  '|'  '"[^"]+"'  ')' ; Start with (^) array def (optional array name, open paren, subscripts, close paren) or subscript def (quote, subscript, quote)
 		needle .= "\s+[=-] "                                        ; Final indent, equals/dash, and final space
-		if (firstLine.matchesRegEx(needle, match))
+		if (firstLine.matchesRegEx(needle, &match))
 			return match
 		
 		return ""

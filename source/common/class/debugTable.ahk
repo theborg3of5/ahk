@@ -218,7 +218,7 @@ class DebugTable extends TextTable {
 		
 		; Replace leading, trailing, and more than 1 space in a row with dots so they're more visible.
 		dot := "·" ; U+0x00B7
-		while(value.matchesRegEx("  +", match)) {  ; 2+ spaces in a row
+		while(value.matchesRegEx("  +", &match)) {  ; 2+ spaces in a row
 			replaceWith := StringLib.duplicate(dot, StrLen(match)) ; Replace them with the same number of dots
 			value := value.replace(match, replaceWith)
 		}

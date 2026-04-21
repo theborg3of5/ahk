@@ -6,7 +6,7 @@
 	:*:xD::(laugh) ; Change my laughing emoji
 
 	^+c:: ; Code formatting
-		teamsCodeFormatText() { ; Markdown-style, just wrap it in backticks.
+		teamsCodeFormatText(*) { ; Markdown-style, just wrap it in backticks.
 			text := SelectLib.getText()
 			SendText("``" text "``")
 		}

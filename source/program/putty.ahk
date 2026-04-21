@@ -49,7 +49,7 @@
 	^+h::SendText(";hstat" "`n")
 	^+e::SendText(";v"     "`n")
 	::;je :: ; Include a space so default use of macro (to jump into list) doesn't trigger this
-		examineJob() {
+		examineJob(*) {
 			; Prompt for process ID
 			jobId := InputBox("Enter process ID to look up", "Enter job process ID")
 			if(jobId = "")

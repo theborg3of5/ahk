@@ -23,19 +23,19 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 #HotIf Config.contextIsWork ; Any work machine
 	;region TLG record IDs
 	^!+d::
-		sendTLGRecId() {
+		sendTLGRecId(*) {
 			idList := ""
 			For _, recId in selectTLGRecIDs("Select EMC2 Record to Send")
 				idList := idList.appendPiece(", ", recId.removeFromStart("P.").removeFromStart("Q."))
 			Send(idList)
 		}
 	^!#d::
-		webTLGRecs() {
+		webTLGRecs(*) {
 			For _, ao in selectTLGActionObjects("Select EMC2 Record to View")
 				ao.openWeb()
 		}
 	^!+#d::
-		editTLGRecs() {
+		editTLGRecs(*) {
 			For _, ao in selectTLGActionObjects("Select EMC2 Record to Edit")
 				ao.openEdit()
 		}
@@ -67,13 +67,13 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 	;endregion TLG record IDs
 
 	!+e::
-		openEpicSourceFolder() {
+		openEpicSourceFolder(*) {
 			For _, path in EpicLib.selectEpicSourceFolders("Select branch folder to open:", Config.getProgramPath("Explorer"))
 				Run(path)
 		}
 	
 	^!#r::
-		openTerminalInEpicSourceFolder() {
+		openTerminalInEpicSourceFolder(*) {
 			For _, path in EpicLib.selectEpicSourceFolders("Select branch folder to open in terminal:", "C:\Program Files\Git\git-bash.exe") {
 				if(path = "LAUNCH")
 					path := "C:\EpicSource"
@@ -83,28 +83,28 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		}
 	
 	^+!#h::
-		selectHyperspace() {
+		selectHyperspace(*) {
 			environments := EpicLib.selectEpicEnvironments("Launch Classic Hyperspace in Environment")
 			For _, env in environments
 				EpicLib.runHyperspace(env["VERSION"], env["COMM_ID"], env["TIME_ZONE"])
 		}
 		
 	^!#h::
-		selectHSWeb() {
+		selectHSWeb(*) {
 			environments := EpicLib.selectEpicEnvironments("Launch Standalone HSWeb in Environment", Config.getProgramPath("Chrome"))
 			For _, env in environments
 				Run(env["HSWEB_URL"])
 		}
 	
 	^!+h::
-		selectHyperdrive() {
+		selectHyperdrive(*) {
 			environments := EpicLib.selectEpicEnvironments("Launch Hyperdrive in Environment", Config.getProgramPath("Hyperdrive"))
 			For _, env in environments
 				EpicLib.runHyperdrive(env["HSWEB_URL"])
 		}
 	
 	^!+i::
-		selectEnvironmentId() {
+		selectEnvironmentId(*) {
 			environments := EpicLib.selectEpicEnvironments("Insert ID for Environment")
 			For _, env in environments {
 				Send(env["ENV_ID"])
@@ -113,7 +113,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		}
 	
 	^!#s::
-		selectSnapper() {
+		selectSnapper(*) {
 			selectedText := SelectLib.getText()
 			record := EpicRecord().initFromRecordString(selectedText)
 			
@@ -154,7 +154,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 
 	; Pull EMC2 record IDs from currently open window titles and prompt the user to send one.
 	^!i::
-		sendEMC2RecordID() {
+		sendEMC2RecordID(*) {
 			record := EpicLib.selectEMC2RecordFromUsefulTitles()
 			if (record)
 				SendText(record.id)
@@ -162,7 +162,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 
 #HotIf Config.machineIsWorkDesktop ; Main work desktop only
 	^!+r::
-		selectThunder() {
+		selectThunder(*) {
 			environments := EpicLib.selectEpicEnvironments("Launch Thunder for Environment", Config.getProgramPath("Thunder"))
 			if (!environments) ; If the user cancelled, just exit.
 				return
@@ -196,7 +196,7 @@ $!w::getEMC2ObjectFromCurrentTitle().openWeb()
 		}
 	
 	^!+v::
-		selectVDI() {
+		selectVDI(*) {
 			environments := EpicLib.selectEpicEnvironments("Launch VDI for Environment", Config.getProgramPath("VMware Horizon Client"))
 			For _, env in environments {
 				if (env["COMM_ID"] = "LAUNCH") { ; Special keyword - just show VMWare itself, don't launch a specific VDI.

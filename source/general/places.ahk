@@ -14,7 +14,7 @@ openPath(folderName) {
 
 ; Open folder from list
 !+w::
-	selectFolder() {
+	selectFolder(*) {
 		folderPaths := Selector("folders.tls").setIcon(Config.getProgramPath("Explorer")).promptMulti("PATH")
 		For _, path in folderPaths {
 			path := Config.replacePathTags(path)
@@ -49,7 +49,7 @@ sendCleanedUpPath(mapToUnix := false) {
 
 ; Selector to allow easy editing of config or code files that we edit often
 $!+c::
-	selectEditFile() {
+	selectEditFile(*) {
 		filePaths := Selector("editFiles.tls").setIcon(Config.getProgramPath("VSCode")).promptMulti("PATH")
 		For _, path in filePaths {
 			path := Config.replacePathTags(path)
@@ -68,7 +68,7 @@ $^!+f::Run("http://feedly.com/i/latest")
 ^!+m:: Config.runProgram("Gmail")
 ^!+#m::Config.runProgram("Messenger")
 ^!+a::
-openUsualSites() {
+openUsualSites(*) {
 	Config.runProgram("Gmail")
 	Sleep(100)
 	Run("https://lemmy.world/")

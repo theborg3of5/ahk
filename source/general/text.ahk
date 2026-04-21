@@ -2,7 +2,7 @@
 
 ; Populate the clipboard from an input box.
 !v::
-	setClipboard() {
+	setClipboard(*) {
 		text := InputBox("Set clipboard", "Enter text to set the clipboard to:")
 		if (text)
 			ClipboardLib.setAndToast(text, "value")
@@ -10,7 +10,7 @@
 
 ; Send clipboard as plain text.
 ^!v::
-	sendUnwrappedPlainText() {
+	sendUnwrappedPlainText(*) {
 		HotkeyLib.waitForRelease()
 
 		newText := A_Clipboard
@@ -32,7 +32,7 @@
 	
 ; Send a (newline-separated) text/URL combo from the clipboard as a link.
 ^+#k::
-	sendLinkedTextFromClipboard() {
+	sendLinkedTextFromClipboard(*) {
 		HotkeyLib.waitForRelease()
 		
 		value := A_Clipboard.replace("`r`n", "`n") ; Replace `r`n with just `n to avoid counting/highlighting mishaps
@@ -47,7 +47,7 @@
 
 ; Send specific symbols
 #`;::
-	selectSymbols() {
+	selectSymbols(*) {
 		symbols := Selector("symbols.tls").promptMulti("CHAR")
 		For _, symbol in symbols
 			Send(symbol)

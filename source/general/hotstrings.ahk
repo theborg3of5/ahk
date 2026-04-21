@@ -181,7 +181,7 @@
 
 ;region Useful strings
 :X:.ruler::
-	sendRulerString() {
+	sendRulerString(*) {
 		length := InputBox("Insert Ten-String", "How long can your text be?")
 		if(!length)
 			return

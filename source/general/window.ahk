@@ -22,7 +22,7 @@ $!q::WindowActions.minimizeWindow()
 
 ; Sets current window to stay on top
 #+t::
-	toggleAlwaysOnTop() {
+	toggleAlwaysOnTop(*) {
 		WinSetAlwaysOnTop(-1, "A")
 		if(WindowLib.isAlwaysOnTop("A"))
 			Toast.ShowMedium("Window set to always on top").setParent("A")
@@ -35,7 +35,7 @@ $!q::WindowActions.minimizeWindow()
 
 ; Resize window
 #+r::
-	selectResize() {
+	selectResize(*) {
 		if(WindowLib.isNoMoveSizeWindow("A")) {
 			Toast.ShowError("Invalid window for resizing")
 			return

@@ -15,7 +15,7 @@
 
 	; Fix tab order (it's always MRU, but we can turn MRU back into the order they're in).
 	^+f::
-		fixWinMergeTabOrder() {
+		fixWinMergeTabOrder(*) {
 			HotkeyLib.waitForRelease()
 			numTabs := 9
 

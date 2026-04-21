@@ -6,7 +6,7 @@
 
 ; Toggle Mute.
 #Enter::
-	toggleMute() {
+	toggleMute(*) {
 		SoundSetMute(-1)
 		if(SoundGetMute())
 			muteMessage := "Volume muted"

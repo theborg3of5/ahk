@@ -18,7 +18,7 @@
 ; HSWeb Debug Console
 #HotIf WinActive(Config.private["EPIC_HSWEB_CONSOLE_TITLESTRING"])
 	^r::
-		selectHSWebConsoleCommand() {
+		selectHSWebConsoleCommand(*) {
 			data := Selector("hswebConsoleCommands.tls").prompt()
 			if(!data)
 				return

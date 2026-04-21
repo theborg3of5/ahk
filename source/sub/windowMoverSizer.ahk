@@ -14,7 +14,7 @@ global SnappingDistance := 25 ; 25px
 
 	; Alt+Left Drag to move
 	!LButton::
-		moveWindowUnderMouse() {
+		moveWindowUnderMouse(*) {
 			if(!dragWindowPrep(window, mouseStart))
 				return
 			
@@ -39,7 +39,7 @@ global SnappingDistance := 25 ; 25px
 
 	; Alt+Right Drag to resize
 	!RButton::
-		resizeWindowUnderMouse() {
+		resizeWindowUnderMouse(*) {
 			if(!dragWindowPrep(window, mouseStart))
 				return
 			
@@ -76,7 +76,7 @@ global SnappingDistance := 25 ; 25px
 	
 	; Alt+Middle Click to maximize/restore
 	!MButton::
-		maximizeRestoreWindowUnderMouse() {
+		maximizeRestoreWindowUnderMouse(*) {
 			titleString := WindowLib.getIdTitleStringUnderMouse()
 			
 			if(WindowLib.isMaximized(titleString))

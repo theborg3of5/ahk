@@ -16,7 +16,7 @@
 
 	; Open Windows Terminal in the current directory.
 	!r::
-		openWindowsTerminalInCurrFolder() {
+		openWindowsTerminalInCurrFolder(*) {
 			folderPath := Explorer.getCurrentFolder()
 			if(!folderPath)
 				return
@@ -32,7 +32,7 @@
 #HotIf Explorer.mouseIsOverTaskbar()
 	; Middle-click on taskbar buttons to close them.
 	$MButton::
-		closeWindowFromTaskbar() {
+		closeWindowFromTaskbar(*) {
 			; Open up right-click menu
 			Send("{RButton}")
 

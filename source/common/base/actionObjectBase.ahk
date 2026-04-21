@@ -157,7 +157,7 @@ class ActionObjectBase {
 		
 		; Use a type-filtered Selector to get any missing info.
 		s := this.getTypeSelector(this.ActionObjectType)
-		s.setDefaultOverrides({"VALUE":value})
+		s.setDefaultOverrides(Map("VALUE", value))
 		if(popupTitle != "")
 			s.setTitle(popupTitle)
 		data := s.prompt()

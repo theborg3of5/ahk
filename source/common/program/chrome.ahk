@@ -46,7 +46,7 @@
 	; DESCRIPTION:    Open the DLG's client SVN log.
 	;---------
 	static openClientSVNLog() {
-		record := EpicLib.getBestEMC2RecordFromText(WinGetActiveTitle())
+		record := EpicLib.getBestEMC2RecordFromText(WinGetTitle("A"))
 		if(record.ini != "DLG" || record.id = "")
 			return
 		
@@ -131,7 +131,7 @@
 		url := Chrome.getRawURL()
 		
 		if(Chrome.isCurrentPageCodeSearch()) {
-			title := WinGetActiveTitle().removeFromEnd(" - Google Chrome")
+			title := WinGetTitle("A").removeFromEnd(" - Google Chrome")
 			fileName := title.beforeString("/")
 			
 			; Client files should always have an extension
@@ -192,7 +192,7 @@
 		if(!Config.contextIsWork)
 			return false
 
-		title := WinGetActiveTitle().removeFromEnd(" - Google Chrome")
+		title := WinGetTitle("A").removeFromEnd(" - Google Chrome")
 		return title.endsWith(" - CodeSearch")
 	}
 	
@@ -203,7 +203,7 @@
 		if(!Chrome.isCurrentPageCodeSearch())
 			return false
 		
-		filename := WinGetActiveTitle().beforeString("/")
+		filename := WinGetTitle("A").beforeString("/")
 		return filename.contains(".") ; Client files should always have an extension
 	}
 	

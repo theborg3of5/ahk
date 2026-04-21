@@ -278,12 +278,12 @@ class StringLib {
 		}
 
 		needle := "%"
-		replaceWith := "%" DataLib.numToHex(Asc("%"))
+		replaceWith := "%" DataLib.numToHex(Ord("%"))
 		currentText := currentText.replace(needle, replaceWith)
 
 		while currentText.matchesRegEx("i)[^\w\.~%]", &charMatch) {
 			charToReplace := charMatch[]
-			replaceWith := "%" DataLib.numToHex(Asc(charToReplace))
+			replaceWith := "%" DataLib.numToHex(Ord(charToReplace))
 			currentText := currentText.replace(charToReplace, replaceWith)
 		}
 

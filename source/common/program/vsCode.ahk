@@ -36,7 +36,7 @@ class VSCode {
 	; DESCRIPTION:    Open the DLG found in the active window's title in EpicCode.
 	;---------
 	static openCurrentDLG() {
-		record := EpicLib.getBestEMC2RecordFromText(WinGetActiveTitle())
+		record := EpicLib.getBestEMC2RecordFromText(WinGetTitle("A"))
 		if(record.ini != "DLG" || record.id = "") {
 			Toast.ShowError("Could not open DLG in EpicCode", "Record ID was blank or was not a DLG ID")
 			return

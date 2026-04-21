@@ -196,7 +196,7 @@
 			☐ LV/TV/SB functions => methods of GuiControl
 			☐ File.__Handle => File.Handle
 		Removed Commands (full list inline, details: https://www.autohotkey.com/docs/v2/v2-changes.htm#removed-details):
-			☐ Asc() (use Ord)
+			✔ Asc() (use Ord) @done(26-04-21 13:18)
 			☐ AutoTrim (use Trim)
 			☐ ComObjMissing() (write two consecutive commas instead)
 			☐ ComObjUnwrap() (use ComObjValue instead, and ObjAddRef if needed)
@@ -258,7 +258,7 @@
 			☐ Transform
 			☐ VarSetCapacity (use a Buffer object for binary data/structs and VarSetStrCapacity for UTF-16 strings)
 			☐ WinGetActiveStats
-			☐ WinGetActiveTitle
+			✔ WinGetActiveTitle @done(26-04-21 13:22)
 			☐ #CommentFlag
 			☐ #Delimiter
 			☐ #DerefChar

@@ -117,7 +117,7 @@ class EpicRecord {
 			recordString := recordString.removeFromStart("R ") ; Trim off "R " at start if it's there.
 			this.ini := recordString.beforeString(" ")
 			recordString := recordString.afterString(" ") ; Trim off INI, we're done with it
-			if(recordString.containsAnyOf([":", "-", " "], matchedDelim)) {
+			if(recordString.containsAnyOf([":", "-", " "], &matchedDelim)) {
 				; ID is everything up to the first delimiter
 				this.id := recordString.beforeString(matchedDelim)
 				; Title is everything after

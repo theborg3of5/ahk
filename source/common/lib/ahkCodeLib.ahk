@@ -16,7 +16,7 @@ class AHKCodeLib {
 	;---------
 	static generateDocHeader(defLine) {
 		; Determine if it's a function/property or just a class member.
-		if(defLine.containsAnyOf(["(", "[", ":="], match)) {
+		if(defLine.containsAnyOf(["(", "[", ":="], &match)) {
 			if(match = ":=") ; We found the equals before any opening paren/bracket
 				return this.generateHeaderWithParts(Map("DESCRIPTION", "", "NOTES", ""))
 		}
@@ -255,7 +255,7 @@ class AHKCodeLib {
 	;---------
 	static getDefLineType(defLine) {
 		; Member with a default value
-		if(defLine.containsAnyOf(["(", "[", ":="], match)) {
+		if(defLine.containsAnyOf(["(", "[", ":="], &match)) {
 			if(match = ":=") { ; We found the equals before any opening paren/bracket
 				return "OTHER"
 			}

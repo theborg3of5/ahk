@@ -216,7 +216,7 @@ class EpicLib {
 	;---------
 	static couldBeEMC2ID(id) {
 		; For special DLG IDs (SUs, TDE, searches, etc.), trim off leading letter so we recognize them as a numeric ID.
-		if(id.startsWithAnyOf(["I", "T", "CS", "R"], letter))
+		if(id.startsWithAnyOf(["I", "T", "CS", "R"], &letter))
 			id := id.removeFromStart(letter)
 		
 		; IDs must be numeric (beyond the above special case).
@@ -862,7 +862,7 @@ class EpicLib {
 	;---------
 	static buildAbbrevForRepoFolder(folderName, ignorePrefixes := "") {
 		; Drop agent-orchestration stuff
-		if(folderName.startsWithAnyOf(ignorePrefixes, prefix))
+		if(folderName.startsWithAnyOf(ignorePrefixes, &prefix))
 			folderName := folderName.removeFromStart(prefix)
 		
 		; Take the reduced bits of each remaining piece

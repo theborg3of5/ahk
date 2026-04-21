@@ -287,7 +287,7 @@ class WindowLib {
 		settings.restore()
 
 		For _, currID in winIDs {
-			tooltipText := ControlGetText( , "ahk_id " currID)
+			tooltipText := ControlGetText("ahk_id " currID)
 			if(tooltipText != "")
 				outText := outText.appendLine(tooltipText)
 		}

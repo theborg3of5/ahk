@@ -3,7 +3,7 @@
 ###                                       HTTPRequest. Version: 2.49                                        ###
 ###############################################################################################################
 
-HTTPRequest. Copyright © 2011-2012 [VxE]. All rights reserved.
+HTTPRequest. Copyright ï¿½ 2011-2012 [VxE]. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that
 the following conditions are met:
@@ -641,7 +641,7 @@ HTTPRequest( URL, byref In_POST__Out_Data="", byref In_Out_HEADERS="", Options="
 			StringReplace, Accept_PtrArray, A_LoopField, `,, `n, A
 			Accept_Types .= Accept_PtrArray
 		}
-		Else Accept_Types .= """" A_LoopField """"
+		Else Accept_Types .= '"' A_LoopField '"'
 
 ; Then trim whitespace around the delimiters and count how many accept-types there are
 	Loop, Parse, Accept_Types, `n, %sws%

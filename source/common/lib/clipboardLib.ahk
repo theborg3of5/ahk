@@ -377,7 +377,7 @@ class ClipboardLib {
 
 		; Special handling
 		if (Config.isWindowActive("OneNote")) ; OneNote can't handle double quotes in URLs for some reason, so encode them.
-			path := path.replace("""", "%22")
+			path := path.replace('"', "%22")
 
 		ClipboardLib.setWithHyperlinks("[" text "](" path ")", &origClipboard)
 		Send("^v")  ; Paste the new value.
@@ -397,7 +397,7 @@ class ClipboardLib {
 
 		; Special handling
 		if (Config.isWindowActive("OneNote")) ; OneNote can't handle double quotes in URLs for some reason, so encode them.
-			path := path.replace("""", "%22")
+			path := path.replace('"', "%22")
 
 		ClipboardLib.setWithHyperlinks(markdownLinkedText, &origClipboard)
 		Send("^v")  ; Paste the new value.
@@ -476,7 +476,7 @@ class ClipboardLib {
 					return ; convertToSourceRelativePath should have already showed an error, so no need to do another here.	
 				
 			Default:
-				Toast.showError("Could not get code location", "Invalid pathType: """ pathType """")
+				Toast.showError("Could not get code location", "Invalid pathType: """ pathType '"')
 				return
 		}
 

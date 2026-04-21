@@ -305,7 +305,7 @@ class Explorer {
 			SplitPath(relativePath, &shortcutName)
 		
 		shortcutFilePath := shortcutParentFolder shortcutName ".lnk"
-		args := "/c start """" ""%CD%\" relativePath """" ; %CD% is current directory
+		args := '/c start "" "%CD%\" relativePath ""' ; %CD% is current directory
 		FileCreateShortcut(A_ComSpec, shortcutFilePath, , args)
 	}
 	

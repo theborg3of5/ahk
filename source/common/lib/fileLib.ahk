@@ -69,7 +69,7 @@ class FileLib {
 		if StringLib.isURL(path)
 			return path
 
-		path := path.clean([""""])
+		path := path.clean(['"'])
 
 		if path.matchesRegEx("file:\/+", &protocolMatch) {
 			protocol := protocolMatch[]

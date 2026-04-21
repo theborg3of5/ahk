@@ -139,7 +139,7 @@ class DebugTable extends TextTable {
 		if(this.getHeight() > 50)
 			this.setBottomTitle(this.title)
 		
-		return base.getText()
+		return super.getText()
 	}
 	;endregion ------------------------------ PUBLIC ------------------------------
 	
